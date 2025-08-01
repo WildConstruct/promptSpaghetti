@@ -1,26 +1,30 @@
 // Epic 16 Marketplace - Advanced Filters Component
 import React, { useState } from 'react';
 import './SearchBar.css';
-}
+
+
 interface FilterOptions {
   categories: string;,
-  tags: string;
-  priceRange: {
+  tags: string;,
+  priceRange: {,
   min?: number;
   max?: number;
-}
+
+
 };
   rating: number;,
-  complexity: 'beginner' | 'intermediate' | 'advanced' | 'all';
+  complexity: 'beginner' | 'intermediate' | 'advanced' | 'all';,
   compatibility: string;,
-  isFree: boolean | null;
+  isFree: boolean | null;,
   isAiGenerated: boolean | null;,
   sortBy: 'relevance' | 'price_asc' | 'price_desc' | 'rating' | 'popularity' | 'newest' | 'oldest';
-}
+
+
 interface AdvancedFiltersProps {
   filters: FilterOptions;,
   onFiltersChange: (filters: FilterOptions) => void;,
-}
+
+},
   availableCategories: Array<{ id: string; name: string }>;
   availableTags: string;
   className?: string;
@@ -134,7 +138,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   onClick={() => toggleCategory(category.id)}
                   className={`filter-chip ${
   filters.categories.includes(category.id) ? 'active' : '',
-}`}
+`}
                 >
                   {category.name}
                 </button>
@@ -151,7 +155,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   onClick={() => toggleTag(tag)}
                   className={`filter-chip ${
   filters.tags.includes(tag) ? 'active' : '',
-}`}
+`}
                 >
                   #{tag}
                 </button>
@@ -195,7 +199,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   onClick={() => updateFilter('rating', rating === filters.rating ? 0 : rating)}
                   className={`rating-button ${
   filters.rating >= rating ? 'active' : '',
-}`}
+`}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path
@@ -227,7 +231,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   onClick={() => updateFilter('complexity', level.value)}
                   className={`filter-chip ${
   filters.complexity === level.value ? 'active' : '',
-}`}
+`}
                 >
                   {level.label}
                 </button>
@@ -249,7 +253,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
                   onClick={() => toggleCompatibility(model)}
                   className={`filter-chip ${
   filters.compatibility.includes(model) ? 'active' : '',
-}`}
+`}
                 >
                   {model.replace('claude-', 'Claude ')}
                 </button>

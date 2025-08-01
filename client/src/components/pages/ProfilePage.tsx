@@ -2,45 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { ArrowLeft } from 'lucide-react';
-const ProfilePage: React.FC = () => {
-  const { user, updateUser } = useAuthStore();
-  const navigate = useNavigate();
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({)
-  name: user?.name || '',
-  email: user?.email || '',
-  displayName: user?.displayName || '',
-});
-  const handleSave = () => {
-    if (updateUser) {
-      updateUser({)
-  ...user,
-        ...formData
-      });
-    setIsEditing(false);
-  };
-  const handleCancel = () => {
-  setFormData({)
-  name: user?.name || '',
-  email: user?.email || '',
-  displayName: user?.displayName || '',
-});
-    setIsEditing(false);
-  };
-  return;
-    <div style={{
-  padding: '40px',
-  maxWidth: '800px',
-  margin: '0 auto',
-  backgroundColor: '#ffffff',
-  minHeight: '100vh',
-}}>
-      <div style={{
-  marginBottom: '32px',
-  borderBottom: '1px solid #e5e7eb',
-  paddingBottom: '16px',
-}}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+const ProfilePage = () => { return null; }>
           <button
             onClick={() => navigate('/')}
             style={{
@@ -55,7 +17,7 @@ const ProfilePage: React.FC = () => {
   fontSize: '14px',
   color: '#374151',
   textDecoration: 'none',
-}}
+
           >
             <ArrowLeft size={16} />
             Back to App
@@ -65,7 +27,7 @@ const ProfilePage: React.FC = () => {
   fontWeight: '700',
   color: '#111827',
   margin: 0,
-}}>
+}>
             User Profile
           </h1>
         </div>
@@ -73,7 +35,7 @@ const ProfilePage: React.FC = () => {
   color: '#6b7280',
   fontSize: '14px',
   margin: 0,
-}}>
+}>
           Manage your account information and preferences
         </p>
       </div>
@@ -83,12 +45,12 @@ const ProfilePage: React.FC = () => {
   borderRadius: '8px',
   padding: '24px',
   marginBottom: '24px',
-}}>
+}>
         <div style={{
   display: 'flex',
   alignItems: 'center',
   marginBottom: '24px',
-}}>
+}>
           <div style={{
   width: '80px',
   height: '80px',
@@ -101,7 +63,7 @@ const ProfilePage: React.FC = () => {
   fontSize: '28px',
   fontWeight: '600',
   marginRight: '20px',
-}}>
+}>
             {user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || 'U'}
           </div>
           <div>
@@ -110,14 +72,14 @@ const ProfilePage: React.FC = () => {
   fontWeight: '600',
   color: '#111827',
   margin: '0 0 4px 0',
-}}>
+}>
               {user?.displayName || user?.name || 'User'}
             </h3>
             <p style={{
   color: '#6b7280',
   fontSize: '14px',
   margin: '0 0 4px 0',
-}}>
+}>
               {user?.email || 'No email set'}
             </p>
             {user?.role && ()
@@ -128,7 +90,7 @@ const ProfilePage: React.FC = () => {
   borderRadius: '12px',
   fontSize: '12px',
   fontWeight: '500',
-}}>
+}>
                 {user.role}
               </span>
             )}
@@ -146,7 +108,7 @@ const ProfilePage: React.FC = () => {
   fontSize: '14px',
   cursor: 'pointer',
   fontWeight: '500',
-}}
+}
           >
             Edit Profile
           </button>
@@ -159,7 +121,7 @@ const ProfilePage: React.FC = () => {
   fontWeight: '500',
   color: '#374151',
   marginBottom: '4px',
-}}>
+}>
                 Display Name
               </label>
               <input
@@ -172,7 +134,7 @@ const ProfilePage: React.FC = () => {
   border: '1px solid #d1d5db',
   borderRadius: '6px',
   fontSize: '14px',
-}}
+}
                 placeholder="Your display name"
               />
             </div>
@@ -183,7 +145,7 @@ const ProfilePage: React.FC = () => {
   fontWeight: '500',
   color: '#374151',
   marginBottom: '4px',
-}}>
+}>
                 Full Name
               </label>
               <input
@@ -196,7 +158,7 @@ const ProfilePage: React.FC = () => {
   border: '1px solid #d1d5db',
   borderRadius: '6px',
   fontSize: '14px',
-}}
+}
                 placeholder="Your full name"
               />
             </div>
@@ -207,7 +169,7 @@ const ProfilePage: React.FC = () => {
   fontWeight: '500',
   color: '#374151',
   marginBottom: '4px',
-}}>
+}>
                 Email
               </label>
               <input
@@ -220,7 +182,7 @@ const ProfilePage: React.FC = () => {
   border: '1px solid #d1d5db',
   borderRadius: '6px',
   fontSize: '14px',
-}}
+}
                 placeholder="your.email@example.com"
               />
             </div>
@@ -236,7 +198,7 @@ const ProfilePage: React.FC = () => {
   fontSize: '14px',
   cursor: 'pointer',
   fontWeight: '500',
-}}
+}
               >
                 Save Changes
               </button>
@@ -251,7 +213,7 @@ const ProfilePage: React.FC = () => {
   fontSize: '14px',
   cursor: 'pointer',
   fontWeight: '500',
-}}
+}
               >
                 Cancel
               </button>
@@ -264,13 +226,13 @@ const ProfilePage: React.FC = () => {
   border: '1px solid #e5e7eb',
   borderRadius: '8px',
   padding: '24px',
-}}>
+}>
         <h3 style={{
   fontSize: '16px',
   fontWeight: '600',
   color: '#111827',
   marginBottom: '12px',
-}}>
+}>
           Account Information
         </h3>
         <div style={{ display: 'grid', gap: '12px' }}>

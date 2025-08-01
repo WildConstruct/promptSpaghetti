@@ -720,8 +720,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
                             });
                         }
                     }
-                }
-            }
+                } }
         };
     }
 }

@@ -30,7 +30,7 @@ export class QualityMetricsService extends EventEmitter {
     this.auditService = auditService;
     this.analyticsCollector = analyticsCollector;
     this.metricsCollector = metricsCollector;
-  }
+
   /**
    * Start the quality metrics collection service
    */
@@ -38,18 +38,18 @@ export class QualityMetricsService extends EventEmitter {
     if (!this.config.enabled) {
       console.log('Quality metrics collection is disabled');
       return;
-    }
+
     console.log('Starting Quality Metrics Service...');
     // Initialize database tables
     await this.initializeDatabase();
     // Start collection timers if real-time collection is enabled
     if (this.config.collectRealTime) {
       this.startRealTimeCollection();
-    }
+
     // Emit startup event
     this.emit('started', { timestamp: new Date() });
     console.log('Quality Metrics Service started successfully');
-  }
+
   /**
    * Stop the quality metrics collection service
    */
@@ -59,15 +59,15 @@ export class QualityMetricsService extends EventEmitter {
     if (this.collectionTimer) {
       clearInterval(this.collectionTimer);
       this.collectionTimer = undefined;
-    }
+
     if (this.aggregationTimer) {
       clearInterval(this.aggregationTimer);
       this.aggregationTimer = undefined;
-    }
+
     // Emit shutdown event
     this.emit('stopped', { timestamp: new Date() });
     console.log('Quality Metrics Service stopped');
-  }
+
   /**
    * Collect comprehensive quality metrics
    */
@@ -145,16 +145,16 @@ export class QualityMetricsService extends EventEmitter {
       // Cache metrics for fast retrieval
       if (this.config.cacheEnabled) {
         await this.cacheMetrics(metrics);
-      }
+
       // Emit metrics collected event
       this.emit('metricsCollected', metrics);
       return metrics;
-    } catch (error) {
+ catch (error) {
       console.error('Error collecting quality metrics:', error);
       this.emit('error', error);
       throw error;
-    }
-  }
+
+
   /**
    * Get current quality metrics (from cache if available)
    */
@@ -165,15 +165,15 @@ export class QualityMetricsService extends EventEmitter {
         const cached = await this.getCachedMetrics();
         if (cached) {
           return cached;
-        }
-      }
+
+
       // If not cached, collect fresh metrics
       return await this.collectQualityMetrics();
-    } catch (error) {
+ catch (error) {
       console.error('Error getting current metrics:', error);
       return null;
-    }
-  }
+
+
   /**
    * Get historical quality metrics
    */
@@ -192,11 +192,11 @@ export class QualityMetricsService extends EventEmitter {
       }));
       // Apply granularity aggregation if needed
       return this.aggregateMetricsByGranularity(metrics, granularity);
-    } catch (error) {
+ catch (error) {
       console.error('Error getting historical metrics:', error);
       return [];
-    }
-  }
+
+
   /**
    * Get quality trends for dashboard
    */
@@ -214,14 +214,14 @@ export class QualityMetricsService extends EventEmitter {
         case 'quarter':
           startDate.setMonth(endDate.getMonth() - 3);
           break;
-      }
+
       const historicalMetrics = await this.getHistoricalMetrics(startDate, endDate, 'day');
       return this.calculateTrendsFromHistorical(historicalMetrics);
-    } catch (error) {
+ catch (error) {
       console.error('Error getting quality trends:', error);
       return this.getEmptyTrends();
-    }
-  }
+
+
   /**
    * Get quality recommendations
    */
@@ -232,19 +232,19 @@ export class QualityMetricsService extends EventEmitter {
       if (category) {
         query += ' AND category = $2';
         params.push(category);
-      }
+
       if (priority) {
         query += ` AND priority = $${params.length + 1}`;
         params.push(priority);
-      }
+
       query += ' ORDER BY priority DESC, created_at DESC';
       const result = await this.databaseService.query(query, params);
       return result.rows.map(this.mapRowToRecommendation);
-    } catch (error) {
+ catch (error) {
       console.error('Error getting recommendations:', error);
       return [];
-    }
-  }
+
+
   /**
    * Get active quality alerts
    */
@@ -257,11 +257,11 @@ export class QualityMetricsService extends EventEmitter {
       `;
       const result = await this.databaseService.query(query);
       return result.rows.map(this.mapRowToAlert);
-    } catch (error) {
+ catch (error) {
       console.error('Error getting active alerts:', error);
       return [];
-    }
-  }
+
+
   /**
    * Acknowledge a quality alert
    */
@@ -282,11 +282,11 @@ export class QualityMetricsService extends EventEmitter {
         timestamp: new Date(),
       });
       this.emit('alertAcknowledged', { alertId, acknowledgedBy });
-    } catch (error) {
+ catch (error) {
       console.error('Error acknowledging alert:', error);
       throw error;
-    }
-  }
+
+
   /**
    * Update recommendation status
    */
@@ -307,11 +307,11 @@ export class QualityMetricsService extends EventEmitter {
         timestamp: new Date(),
       });
       this.emit('recommendationUpdated', { recommendationId, status, updatedBy });
-    } catch (error) {
+ catch (error) {
       console.error('Error updating recommendation status:', error);
       throw error;
-    }
-  }
+
+
   // =============================================================================
   // Private Methods - Data Collection
   // =============================================================================
@@ -321,7 +321,7 @@ export class QualityMetricsService extends EventEmitter {
       const coverageData = await this.readCoverageData();
       if (!coverageData) {
         return this.getDefaultTestCoverageMetrics();
-      }
+
       // Process coverage data
       const overall = {
         percentage: coverageData.total.lines.pct || 0,
@@ -350,11 +350,11 @@ export class QualityMetricsService extends EventEmitter {
         uncoveredCriticalPaths,
         coverageHotspots,
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error collecting test coverage metrics:', error);
       return this.getDefaultTestCoverageMetrics();
-    }
-  }
+
+
   async collectCodeQualityMetrics() {
     try {
       // This would integrate with actual code quality tools
@@ -417,11 +417,11 @@ export class QualityMetricsService extends EventEmitter {
         linting,
         technicalDebt,
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error collecting code quality metrics:', error);
       return this.getDefaultCodeQualityMetrics();
-    }
-  }
+
+
   async collectPerformanceMetrics() {
     try {
       // Get current performance metrics from MetricsCollector
@@ -463,11 +463,11 @@ export class QualityMetricsService extends EventEmitter {
         },
         loadTestResults: [],
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error collecting performance metrics:', error);
       return this.getDefaultPerformanceMetrics();
-    }
-  }
+
+
   async collectSecurityMetrics() {
     try {
       // This would integrate with security scanning tools
@@ -513,11 +513,11 @@ export class QualityMetricsService extends EventEmitter {
           lastSecurityReview: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
         },
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error collecting security metrics:', error);
       return this.getDefaultSecurityMetrics();
-    }
-  }
+
+
   async collectDocumentationMetrics() {
     try {
       // This would integrate with the documentation testing framework we just built
@@ -545,11 +545,11 @@ export class QualityMetricsService extends EventEmitter {
           maintenanceScore: 82,
         },
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error collecting documentation metrics:', error);
       return this.getDefaultDocumentationMetrics();
-    }
-  }
+
+
   async collectBuildHealthMetrics() {
     try {
       // This would integrate with CI/CD systems
@@ -591,11 +591,11 @@ export class QualityMetricsService extends EventEmitter {
           healthScore: 92,
         },
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error collecting build health metrics:', error);
       return this.getDefaultBuildHealthMetrics();
-    }
-  }
+
+
   // =============================================================================
   // Private Methods - Calculations and Analysis
   // =============================================================================
@@ -641,14 +641,14 @@ export class QualityMetricsService extends EventEmitter {
       componentScores,
       weights,
     };
-  }
+
   calculatePerformanceScore(performance) {
     // Normalize performance metrics to 0-100 score
     const responseTimeScore = Math.max(0, 100 - performance.responseTime.average / 10); // 10ms = 1 point penalty
     const errorRateScore = Math.max(0, 100 - performance.errorRates.overall * 20); // 1% error rate = 20 point penalty
     const throughputScore = Math.min(100, performance.throughput.requestsPerSecond); // Linear scoring up to 100 RPS
     return Math.round((responseTimeScore + errorRateScore + throughputScore) / 3);
-  }
+
   calculateSecurityScore(security) {
     // Heavily penalize critical and high vulnerabilities
     let score = 100;
@@ -659,7 +659,7 @@ export class QualityMetricsService extends EventEmitter {
     // Factor in compliance score
     score = (score + security.compliance.overallScore) / 2;
     return Math.max(0, Math.round(score));
-  }
+
   scoreToGrade(score) {
     if (score >= 97) return 'A+';
     if (score >= 93) return 'A';
@@ -669,14 +669,14 @@ export class QualityMetricsService extends EventEmitter {
     if (score >= 80) return 'C';
     if (score >= 70) return 'D';
     return 'F';
-  }
+
   scoreToStatus(score) {
     if (score >= 90) return 'excellent';
     if (score >= 80) return 'good';
     if (score >= 70) return 'fair';
     if (score >= 60) return 'poor';
     return 'critical';
-  }
+
   // =============================================================================
   // Private Methods - Utility and Helper Functions
   // =============================================================================
@@ -721,22 +721,22 @@ export class QualityMetricsService extends EventEmitter {
     ];
     for (const query of queries) {
       await this.databaseService.query(query);
-    }
-  }
+
+
   startRealTimeCollection() {
     // Start metrics collection timer
     this.collectionTimer = setInterval(() => this.collectAndEmitMetrics(), this.config.metricsInterval);
     // Start aggregation timer
     this.aggregationTimer = setInterval(() => this.performAggregation(), this.config.aggregationInterval);
-  }
+
   async collectAndEmitMetrics() {
     try {
       const metrics = await this.collectQualityMetrics();
       this.emit('realTimeMetrics', metrics);
-    } catch (error) {
+ catch (error) {
       console.error('Error in real-time metrics collection:', error);
-    }
-  }
+
+
   async performAggregation() {
     // Perform periodic data aggregation and cleanup
     try {
@@ -745,29 +745,29 @@ export class QualityMetricsService extends EventEmitter {
       cutoffDate.setDate(cutoffDate.getDate() - this.config.historicalRetention);
       await this.databaseService.query('DELETE FROM quality_metrics WHERE timestamp < $1', [cutoffDate]);
       this.emit('aggregationCompleted', { timestamp: new Date() });
-    } catch (error) {
+ catch (error) {
       console.error('Error in metrics aggregation:', error);
-    }
-  }
+
+
   async storeMetrics(metrics) {
     const query = `
       INSERT INTO quality_metrics (timestamp, overall_score, metrics_data)
       VALUES ($1, $2, $3)
     `;
     await this.databaseService.query(query, [metrics.timestamp, metrics.overall.score, JSON.stringify(metrics)]);
-  }
+
   async cacheMetrics(metrics) {
     const cacheKey = 'quality_metrics:current';
     await this.redisService.setex(cacheKey, this.config.cacheTTL, JSON.stringify(metrics));
-  }
+
   async getCachedMetrics() {
     const cacheKey = 'quality_metrics:current';
     const cached = await this.redisService.get(cacheKey);
     if (cached) {
       return JSON.parse(cached);
-    }
+
     return null;
-  }
+
   getActiveDataSources() {
     const sources = [];
     if (this.config.dataSources.testCoverage) sources.push('testCoverage');
@@ -777,7 +777,7 @@ export class QualityMetricsService extends EventEmitter {
     if (this.config.dataSources.documentation) sources.push('documentation');
     if (this.config.dataSources.buildHealth) sources.push('buildHealth');
     return sources;
-  }
+
   mapRowToRecommendation = row => {
     return {
       id: row.id,
@@ -821,10 +821,10 @@ export class QualityMetricsService extends EventEmitter {
       const coveragePath = path.join(process.cwd(), 'coverage', 'coverage-summary.json');
       const data = await fs.readFile(coveragePath, 'utf-8');
       return JSON.parse(data);
-    } catch {
+ catch {
       return null;
-    }
-  }
+
+
   extractPackageCoverage(_____coverageData) {
     // Extract package-level coverage from Jest coverage data
     return [
@@ -832,13 +832,13 @@ export class QualityMetricsService extends EventEmitter {
       { name: 'client/src', percentage: 78, linesTotal: 2800, linesCovered: 2184 },
       { name: 'server/src', percentage: 82, linesTotal: 1500, linesCovered: 1230 },
     ];
-  }
+
   extractComponentCoverage(_____coverageData) {
     return [
       { name: 'GraphEditor', type: 'component', percentage: 75, criticalPaths: 12, uncoveredPaths: 3 },
       { name: 'QualityMetricsService', type: 'service', percentage: 90, criticalPaths: 8, uncoveredPaths: 1 },
     ];
-  }
+
   async getCoverageTrends() {
     return {
       last7Days: [82, 83, 82, 84, 83, 85, 84],
@@ -846,10 +846,10 @@ export class QualityMetricsService extends EventEmitter {
       changeFromLastWeek: 2,
       changeFromLastMonth: 7,
     };
-  }
+
   identifyUncoveredCriticalPaths(_____coverageData) {
     return ['packages/core/runtime/advanced.ts:342-358', 'server/src/auth/AuthService.ts:125-140'];
-  }
+
   identifyCoverageHotspots(_____coverageData) {
     return [
       {
@@ -860,7 +860,7 @@ export class QualityMetricsService extends EventEmitter {
         reason: 'Core execution path with complex error handling',
       },
     ];
-  }
+
   // Default metrics methods
   getDefaultTestCoverageMetrics() {
     return {
@@ -879,7 +879,7 @@ export class QualityMetricsService extends EventEmitter {
       uncoveredCriticalPaths: [],
       coverageHotspots: [],
     };
-  }
+
   getDefaultCodeQualityMetrics() {
     return {
       complexity: {
@@ -893,7 +893,7 @@ export class QualityMetricsService extends EventEmitter {
       linting: { totalIssues: 0, errorCount: 0, warningCount: 0, ruleBreakdowns: [], trends: [] },
       technicalDebt: { totalMinutes: 0, breakdown: [], priority: 'low' },
     };
-  }
+
   getDefaultPerformanceMetrics() {
     return {
       responseTime: { average: 0, p50: 0, p90: 0, p95: 0, p99: 0 },
@@ -906,7 +906,7 @@ export class QualityMetricsService extends EventEmitter {
       errorRates: { overall: 0, by4xx: 0, by5xx: 0, trends: [] },
       loadTestResults: [],
     };
-  }
+
   getDefaultSecurityMetrics() {
     return {
       vulnerabilities: { total: 0, critical: 0, high: 0, medium: 0, low: 0, trends: [] },
@@ -915,7 +915,7 @@ export class QualityMetricsService extends EventEmitter {
       compliance: { frameworks: [], overallScore: 0, gaps: [] },
       accessControl: { privilegedAccounts: 0, dormantAccounts: 0, lastSecurityReview: new Date() },
     };
-  }
+
   getDefaultDocumentationMetrics() {
     return {
       coverage: { apiDocumentation: 0, codeDocumentation: 0, userGuides: 0, overall: 0 },
@@ -923,7 +923,7 @@ export class QualityMetricsService extends EventEmitter {
       completeness: { missingApiDocs: [], missingUserGuides: [], incompleteSections: [] },
       maintenance: { lastUpdated: new Date(), staleSections: [], maintenanceScore: 0 },
     };
-  }
+
   getDefaultBuildHealthMetrics() {
     return {
       builds: { successRate: 0, averageDuration: 0, failureReasons: [], trends: [] },
@@ -931,11 +931,11 @@ export class QualityMetricsService extends EventEmitter {
       deployments: { successRate: 0, frequency: 0, rollbackRate: 0, averageDeployTime: 0 },
       pipeline: { stages: [], bottlenecks: [], healthScore: 0 },
     };
-  }
+
   async calculateTrends() {
     // Calculate trends from historical data
     return this.getEmptyTrends();
-  }
+
   async generateRecommendations(metrics) {
     const recommendations = [];
     // Generate recommendations based on metrics
@@ -974,9 +974,9 @@ export class QualityMetricsService extends EventEmitter {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-    }
+
     return recommendations;
-  }
+
   async checkForAlerts(metrics) {
     const alerts = [];
     // Check for threshold breaches
@@ -992,16 +992,16 @@ export class QualityMetricsService extends EventEmitter {
         timestamp: new Date(),
         status: 'active',
       });
-    }
+
     return alerts;
-  }
+
   aggregateMetricsByGranularity(metrics, _____granularity) {
     // For now, return as-is. In a real implementation, this would aggregate data points
     return metrics;
-  }
+
   calculateTrendsFromHistorical(_____metrics) {
     return this.getEmptyTrends();
-  }
+
   getEmptyTrends() {
     const emptyTrendData = {
       daily: [],
@@ -1020,8 +1020,8 @@ export class QualityMetricsService extends EventEmitter {
       documentation: emptyTrendData,
       buildHealth: emptyTrendData,
     };
-  }
-}
+
+
 /**
  * Default configuration for Quality Metrics Service
  */

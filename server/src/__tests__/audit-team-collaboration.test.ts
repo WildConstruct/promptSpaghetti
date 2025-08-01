@@ -14,7 +14,7 @@ import {
   InvestigationCategory,
   TaskStatus,
   EvidenceType
-} from '../services/AuditTeamCollaborationService';
+ from '../services/AuditTeamCollaborationService';
 import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 
@@ -38,11 +38,11 @@ class MockDatabaseService {
     // Simple mock implementation for testing
     if (sql.includes('CREATE TABLE')) {
       return { rows: [], rowCount: 0 };
-    }
+
     
     if (sql.includes('CREATE INDEX')) {
       return { rows: [], rowCount: 0 };
-    }
+
     
     if (sql.includes('INSERT INTO investigations')) {
       const investigation = {
@@ -69,7 +69,7 @@ class MockDatabaseService {
       };
       this.tables.investigations.push(investigation);
       return { rows: [investigation], rowCount: 1 };
-    }
+
     
     if (sql.includes('INSERT INTO investigation_tasks')) {
       const task = {
@@ -89,7 +89,7 @@ class MockDatabaseService {
       };
       this.tables.investigation_tasks.push(task);
       return { rows: [task], rowCount: 1 };
-    }
+
     
     if (sql.includes('INSERT INTO evidence')) {
       const evidence = {
@@ -112,7 +112,7 @@ class MockDatabaseService {
       };
       this.tables.evidence.push(evidence);
       return { rows: [evidence], rowCount: 1 };
-    }
+
     
     if (sql.includes('INSERT INTO custody_chain')) {
       const custody = {
@@ -125,7 +125,7 @@ class MockDatabaseService {
       };
       this.tables.custody_chain.push(custody);
       return { rows: [custody], rowCount: 1 };
-    }
+
     
     if (sql.includes('INSERT INTO investigation_comments')) {
       const comment = {
@@ -142,7 +142,7 @@ class MockDatabaseService {
       };
       this.tables.investigation_comments.push(comment);
       return { rows: [comment], rowCount: 1 };
-    }
+
     
     if (sql.includes('INSERT INTO team_notifications')) {
       const notification = {
@@ -159,12 +159,12 @@ class MockDatabaseService {
       };
       this.tables.team_notifications.push(notification);
       return { rows: [notification], rowCount: 1 };
-    }
+
     
     if (sql.includes('SELECT * FROM investigations WHERE id =')) {
       const investigation = this.tables.investigations.find(i => i.id === params[0]);
       return { rows: investigation ? [investigation] : [], rowCount: investigation ? 1 : 0 };
-    }
+
     
     if (sql.includes('SELECT * FROM investigations') && sql.includes('ORDER BY created_at DESC')) {
       const investigations = [...this.tables.investigations];
@@ -174,11 +174,11 @@ class MockDatabaseService {
         rows: investigations.slice(offset, offset + limit), 
         rowCount: investigations.slice(offset, offset + limit).length 
       };
-    }
+
     
     if (sql.includes('SELECT COUNT(*) as total FROM investigations')) {
       return { rows: [{ total: this.tables.investigations.length }], rowCount: 1 };
-    }
+
     
     // Mock metrics queries
     if (sql.includes('COUNT(*) as total') && sql.includes('open_count')) {
@@ -188,52 +188,52 @@ class MockDatabaseService {
           open_count: this.tables.investigations.filter(i => 
             ['OPEN', 'IN_PROGRESS', 'AWAITING_REVIEW'].includes(i.status)
           ).length
-        }], 
+], 
         rowCount: 1 
       };
-    }
+
     
     if (sql.includes('overdue_count')) {
       return { rows: [{ overdue_count: 0 }], rowCount: 1 };
-    }
+
     
     if (sql.includes('assigned_to') && sql.includes('task_count')) {
       return { rows: [], rowCount: 0 };
-    }
+
     
     if (sql.includes('evidence_count')) {
       return { rows: [{ evidence_count: this.tables.evidence.length }], rowCount: 1 };
-    }
+
     
     if (sql.includes('avg_resolution_seconds')) {
       return { rows: [{ avg_resolution_seconds: 86400 }], rowCount: 1 }; // 1 day
-    }
+
     
     if (sql.includes('UPDATE investigations')) {
       return { rows: [], rowCount: 1 };
-    }
+
     
     return { rows: [], rowCount: 0 };
-  }
+
 
   getQueries() {
     return this.queries;
-  }
+
 
   clearQueries() {
     this.queries = [];
-  }
+
 
   getTables() {
     return this.tables;
-  }
+
 
   clearTables() {
     Object.keys(this.tables).forEach(key => {
       this.tables[key] = [];
     });
-  }
-}
+
+
 
 // Mock audit service
 class MockAuditService {
@@ -242,16 +242,16 @@ class MockAuditService {
   async logEvent(event: unknown): Promise<void> {
 
     this.events.push(event);
-  }
+
 
   getEvents() {
     return this.events;
-  }
+
 
   clearEvents() {
     this.events = [];
-  }
-}
+
+
 
 describe('AuditTeamCollaborationService', () => {
   let service: AuditTeamCollaborationService;
@@ -288,7 +288,7 @@ describe('AuditTeamCollaborationService', () => {
           }),
           expect.objectContaining({
             query: expect.stringContaining('CREATE TABLE IF NOT EXISTS evidence')
-  }
+
         ])
       );
     });
@@ -433,7 +433,7 @@ describe('AuditTeamCollaborationService', () => {
           complianceFrameworks: [],
           tags: [],
           metadata: {}
-  }
+
         {
           title: 'Compliance Investigation 1',
           category: InvestigationCategory.COMPLIANCE_VIOLATION,
@@ -449,12 +449,12 @@ describe('AuditTeamCollaborationService', () => {
           complianceFrameworks: [],
           tags: [],
           metadata: {}
-        }
+
       ];
 
       for (const inv of investigations) {
         await service.createInvestigation(inv);
-      }
+
 
       const result = await service.getInvestigations({
         category: InvestigationCategory.SECURITY_INCIDENT,
@@ -608,17 +608,17 @@ describe('AuditTeamCollaborationService', () => {
           type: EvidenceType.SCREENSHOT,
           title: 'Error Screenshot',
           fileName: 'error.png'
-  }
+
         {
           type: EvidenceType.DATABASE_QUERY,
           title: 'User Query Results',
           content: 'SELECT * FROM users WHERE...'
-  }
+
         {
           type: EvidenceType.EMAIL,
           title: 'Incident Report Email',
           content: 'Email content...'
-        }
+
       ];
 
       for (const evidenceType of evidenceTypes) {
@@ -632,7 +632,7 @@ describe('AuditTeamCollaborationService', () => {
 
         expect(evidence.type).toBe(evidenceType.type);
         expect(evidence.custodyChain).toHaveLength(1);
-      }
+
     });
   });
 
@@ -742,7 +742,7 @@ describe('AuditTeamCollaborationService', () => {
         const metrics = await service.getCollaborationMetrics(timeframe);
         expect(metrics).toBeDefined();
         expect(typeof metrics.investigationCount).toBe('number');
-      }
+
     });
   });
 

@@ -5,6 +5,7 @@
 import React from 'react';
 
 }
+}
 interface ComplianceDashboardProps {
     className?: string;
     autoRefresh?: boolean;
@@ -14,4 +15,5 @@ interface ComplianceDashboardProps {
 declare const ComplianceDashboard: React.FC<ComplianceDashboardProps>;
 export default ComplianceDashboard;
 //# sourceMappingURL=ComplianceDashboard.d.ts.map
+}
 }

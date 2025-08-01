@@ -13,8 +13,8 @@ import { DatabaseConnection } from '../database/connection';
 import { AuditService } from '../auth/AuditService';
 import { Role, Permission, User } from '../auth/types';
 
-}
-}
+
+
 export interface CloneRoleRequest {
   sourceRoleId: string;
   targetName: string;
@@ -26,25 +26,27 @@ export interface CloneRoleRequest {
   cloneMetadata?: {
     templateVersion?: string;
     customProperties?: Record<string, unknown>;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface CloneRoleResponse {
   success: boolean;
   clonedRole?: Role;
   error?: string;
   validationErrors?: string[];
   warnings?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CloneOperationResult {
   operationId: string;
   sourceRoleId: string;
@@ -54,23 +56,25 @@ export interface CloneOperationResult {
   permissionsCloned: number;
   permissionsSkipped: string[];
   conflicts: CloneConflict[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CloneConflict {
   type: 'permission_scope_mismatch' | 'permission_not_found' | 'scope_incompatible' | 'organization_mismatch';
   permissionId?: string;
   description: string;
   resolution: 'skip' | 'adjust' | 'manual_review';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RoleCloneHistory {
   roleId: string;
   cloneCount: number;
@@ -80,14 +84,15 @@ export interface RoleCloneHistory {
     roleName: string;
     clonedAt: Date;
     clonedBy: string;
-}
-}
-  }>;
+
+
+
+>;
   templateUsage?: {
     timesUsedAsTemplate: number;
     lastUsedAsTemplate: Date;
   };
-}
+
 
 export class RoleCloneService {
   constructor(
@@ -113,7 +118,7 @@ export class RoleCloneService {
           success: false,
           error: 'Source role not found'
         };
-      }
+
 
       // Validate clone request
       const validation = await this.validateCloneRequest(request, sourceRole);
@@ -123,7 +128,7 @@ export class RoleCloneService {
           validationErrors: validation.errors,
           warnings: validation.warnings
         };
-      }
+
 
       // Check for name conflicts
       const nameExists = await this.checkRoleNameExists(request.targetName, request.organizationId);
@@ -132,7 +137,7 @@ export class RoleCloneService {
           success: false,
           error: 'Role name already exists in the specified scope'
         };
-      }
+
 
       // Resolve permission conflicts
       const permissionResolution = await this.resolvePermissionConflicts(
@@ -186,8 +191,7 @@ export class RoleCloneService {
         clonedRole,
         warnings: validation.warnings
       };
-
-    } catch (error) {
+ catch (error) {
       await this.db.rollbackTransaction();
       
       await this.auditService.logError({
@@ -198,15 +202,15 @@ export class RoleCloneService {
           sourceRoleId: request.sourceRoleId,
           targetName: request.targetName,
           clonedBy
-        }
+
       });
 
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to clone role'
       };
-    }
-  }
+
+
 
   /**
    * Get clone history for a specific role
@@ -235,7 +239,7 @@ export class RoleCloneService {
       
       if (results.length === 0) {
         return null;
-      }
+
 
       const role = results[0];
       const clonedTo = results
@@ -255,13 +259,12 @@ export class RoleCloneService {
         templateUsage: {
           timesUsedAsTemplate: clonedTo.length,
           lastUsedAsTemplate: clonedTo.length > 0 ? clonedTo[0].clonedAt : new Date()
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       throw new Error(`Failed to get clone history: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get all roles that can be used as templates (commonly cloned roles)
@@ -282,11 +285,10 @@ export class RoleCloneService {
 
       const results = await this.db.query(query, [organizationId, limit]);
       return results.map(this.mapDatabaseRowToRole);
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get role templates: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Validate clone request before processing
@@ -302,31 +304,31 @@ export class RoleCloneService {
     // Validate target name
     if (!request.targetName.trim()) {
       errors.push('Target role name is required');
-    } else if (request.targetName.length < 3) {
+ else if (request.targetName.length < 3) {
       errors.push('Target role name must be at least 3 characters');
-    } else if (request.targetName.length > 100) {
+ else if (request.targetName.length > 100) {
       errors.push('Target role name must be less than 100 characters');
-    }
+
 
     // Validate description
     if (!request.targetDescription.trim()) {
       warnings.push('Role description is empty - consider adding a description');
-    }
+
 
     // Validate scope compatibility
     if (request.targetScope === 'global' && sourceRole.scope !== 'global') {
       warnings.push('Cloning non-global role to global scope - ensure permissions are appropriate');
-    }
+
 
     // Validate organization context
     if (request.targetScope === 'organization' && !request.organizationId) {
       errors.push('Organization ID is required for organization-scoped roles');
-    }
+
 
     // Validate permissions exist
     if (request.includePermissions.length === 0) {
       errors.push('At least one permission must be included in the clone');
-    }
+
 
     // Check permission compatibility with target scope
     for (const permissionId of request.includePermissions) {
@@ -334,22 +336,22 @@ export class RoleCloneService {
       if (!permission) {
         errors.push(`Permission ${permissionId} not found`);
         continue;
-      }
+
 
       // Check scope compatibility
       if (this.isPermissionScopeIncompatible(permission.scope, request.targetScope)) {
         warnings.push(
           `Permission "${permission.name}" has scope "${permission.scope}" which may be incompatible with target scope "${request.targetScope}"`
         );
-      }
-    }
+
+
 
     return {
       isValid: errors.length === 0,
       errors,
       warnings
     };
-  }
+
 
   /**
    * Resolve permission conflicts and scope issues
@@ -362,7 +364,7 @@ export class RoleCloneService {
     resolvedPermissions: string[];
     skippedPermissions: string[];
     conflicts: CloneConflict[];
-  }> {
+> {
 
     const resolvedPermissions: string[] = [];
     const skippedPermissions: string[] = [];
@@ -380,7 +382,7 @@ export class RoleCloneService {
           resolution: 'skip'
         });
         continue;
-      }
+
 
       // Check scope compatibility
       if (this.isPermissionScopeIncompatible(permission.scope, targetScope)) {
@@ -393,7 +395,7 @@ export class RoleCloneService {
           resolution: 'skip'
         });
         continue;
-      }
+
 
       // Check organization context for organization-scoped permissions
       if (permission.scope === 'organization' && !organizationId) {
@@ -405,17 +407,17 @@ export class RoleCloneService {
           resolution: 'skip'
         });
         continue;
-      }
+
 
       resolvedPermissions.push(permissionId);
-    }
+
 
     return {
       resolvedPermissions,
       skippedPermissions,
       conflicts
     };
-  }
+
 
   /**
    * Create the cloned role in the database
@@ -445,7 +447,7 @@ export class RoleCloneService {
         cloneCount: 0,
         templateVersion: request.cloneMetadata?.templateVersion,
         customProperties: request.cloneMetadata?.customProperties
-      }
+
     };
 
     // Insert role
@@ -478,10 +480,10 @@ export class RoleCloneService {
         INSERT INTO role_permissions (role_id, permission_id) VALUES ${permissionValues}
       `;
       await this.db.query(insertPermissionsQuery);
-    }
+
 
     return clonedRole;
-  }
+
 
   /**
    * Update clone metadata for the source role
@@ -493,7 +495,7 @@ export class RoleCloneService {
       'UPDATE roles SET clone_count = COALESCE(clone_count, 0) + 1 WHERE id = ?',
       [sourceRoleId]
     );
-  }
+
 
   /**
    * Record the clone operation for auditing and history
@@ -517,7 +519,7 @@ export class RoleCloneService {
       operation.permissionsSkipped.length,
       JSON.stringify(operation.conflicts)
     ]);
-  }
+
 
   /**
    * Helper method to check if permission scope is compatible with target role scope
@@ -530,7 +532,7 @@ export class RoleCloneService {
     
     // Permission scope should not be higher than role scope
     return permLevel > roleLevel;
-  }
+
 
   /**
    * Check if role name already exists
@@ -545,7 +547,7 @@ export class RoleCloneService {
     
     const result = await this.db.query(query, [name, organizationId]);
     return result[0].count > 0;
-  }
+
 
   /**
    * Get role by ID
@@ -565,10 +567,10 @@ export class RoleCloneService {
     
     if (results.length === 0) {
       return null;
-    }
+
     
     return this.mapDatabaseRowToRole(results[0]);
-  }
+
 
   /**
    * Get permission by ID
@@ -583,10 +585,10 @@ export class RoleCloneService {
     
     if (results.length === 0) {
       return null;
-    }
+
     
     return this.mapDatabaseRowToPermission(results[0]);
-  }
+
 
   /**
    * Map database row to Role object
@@ -607,9 +609,9 @@ export class RoleCloneService {
         clonedFrom: row.cloned_from,
         cloneCount: row.clone_count || 0,
         templateVersion: row.template_version
-      }
+
     };
-  }
+
 
   /**
    * Map database row to Permission object
@@ -624,7 +626,7 @@ export class RoleCloneService {
       description: row.description,
       category: row.category
     };
-  }
-}
+
+
 
 export default RoleCloneService;

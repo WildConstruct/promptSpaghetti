@@ -9,7 +9,7 @@ import {
   AccessLevel,
   ApprovalDecision,
   RequestStatus
-} from '../services/AccessRequestWorkflowService';
+ from '../services/AccessRequestWorkflowService';
 import { z } from 'zod';
 
 // Request schemas
@@ -68,29 +68,29 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 interface SubmitRequestBody extends AuthenticatedRequest {
   Body: z.infer<typeof SubmitRequestSchema>;
-}
+
 
 interface ApprovalDecisionBody extends AuthenticatedRequest {
   Params: { requestId: string };
   Body: z.infer<typeof ApprovalDecisionSchema>;
-}
+
 
 interface CancelRequestBody extends AuthenticatedRequest {
   Params: { requestId: string };
   Body: z.infer<typeof CancelRequestSchema>;
-}
+
 
 interface RequestDetailParams extends AuthenticatedRequest {
   Params: { requestId: string };
-}
+
 
 interface RequestListQuery extends AuthenticatedRequest {
   Querystring: z.infer<typeof RequestFiltersSchema>;
-}
+
 
 export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
   // Get the access request workflow service from the DI container
@@ -105,7 +105,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Valid authentication token required'
         });
-      }
+
 
       const token = authHeader.slice(7);
       const user = await fastify.jwt.verify(token) as any;
@@ -115,15 +115,15 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Invalid authentication token'
         });
-      }
+
 
       request.user = user;
-    } catch (error) {
+ catch (error) {
       return reply.code(401).send({
         error: 'Unauthorized',
         message: 'Authentication failed'
       });
-    }
+
   };
 
   // Rate limiting configuration
@@ -150,7 +150,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
             type: 'array',
             items: { type: 'string', enum: ['read', 'WRITE', 'DELETE', 'EXPORT', 'ADMIN'] },
             minItems: 1
-  }
+
           businessJustification: { type: 'string', minLength: 20 },
           urgency: { type: 'string', enum: ['LOW', 'NORMAL', 'HIGH', 'EMERGENCY'], default: 'NORMAL' },
           requestedAccess: { type: 'string', enum: ['read', 'read_write', 'full_access', 'admin'] },
@@ -162,24 +162,24 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
               duration: { type: 'number', minimum: 1, maximum: 365 },
               timezone: { type: 'string', default: 'UTC' },
               businessHoursOnly: { type: 'boolean', default: false }
-            }
-  }
+
+
           requiredBy: { type: 'string', format: 'date-time' },
           expiresAt: { type: 'string', format: 'date-time' },
           metadata: { type: 'object', default: {} }
-  }
+
         required: ['resourceId', 'resourceType', 'resourceDescription', 'requestedOperations', 'businessJustification', 'requestedAccess', 'timeframe']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             requestId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: SubmitRequestBody, reply: FastifyReply) => {
     try {
       const validatedBody = SubmitRequestSchema.parse(request.body);
@@ -196,22 +196,21 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         requestId: result.requestId,
         message: 'Access request submitted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error submitting access request:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to submit access request'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -226,18 +225,18 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-  }
+
         required: ['requestId']
-  }
+
       body: {
         type: 'object',
         properties: {
           decision: { type: 'string', enum: ['APPROVED', 'REJECTED', 'APPROVED_WITH_CONDITIONS'] },
           comments: { type: 'string' },
           conditions: { type: 'array', items: { type: 'string' } }
-  }
+
         required: ['decision']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -245,10 +244,10 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
             nextStage: { type: 'object' },
             completed: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: ApprovalDecisionBody, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
@@ -271,22 +270,21 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         completed: result.completed,
         message
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error processing approval decision:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to process approval decision'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -318,13 +316,13 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
                   submittedAt: { type: 'string', format: 'date-time' },
                   requiredBy: { type: 'string', format: 'date-time' },
                   currentStage: { type: 'object' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const requests = await accessRequestService.getPendingRequestsForApprover(request.user!.id);
@@ -345,14 +343,13 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           currentStage: req.currentStage
         }))
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting pending requests:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get pending requests'
       });
-    }
+
   });
 
   /**
@@ -367,9 +364,9 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-  }
+
         required: ['requestId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -394,8 +391,8 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
                 submittedAt: { type: 'string', format: 'date-time' },
                 requiredBy: { type: 'string', format: 'date-time' },
                 expiresAt: { type: 'string', format: 'date-time' }
-              }
-  }
+
+
             auditTrail: {
               type: 'array',
               items: {
@@ -406,13 +403,13 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
                   actorId: { type: 'string' },
                   action: { type: 'string' },
                   details: { type: 'object' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: RequestDetailParams, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
@@ -438,7 +435,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           submittedAt: details.request.submittedAt.toISOString(),
           requiredBy: details.request.requiredBy?.toISOString(),
           expiresAt: details.request.expiresAt?.toISOString()
-  }
+
         auditTrail: details.auditTrail.map(entry => ({
           entryId: entry.entryId,
           timestamp: entry.timestamp.toISOString(),
@@ -447,21 +444,20 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           details: entry.details
         }))
       });
-
-    } catch (error) {
+ catch (error) {
       if (error.message === 'Access request not found') {
         reply.code(404).send({
           error: 'Not Found',
           message: 'Access request not found'
         });
-      } else {
+ else {
         fastify.log.error('Error getting request details:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to get request details'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -476,26 +472,26 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-  }
+
         required: ['requestId']
-  }
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', minLength: 10 }
-  }
+
         required: ['reason']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: CancelRequestBody, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
@@ -511,22 +507,21 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Access request cancelled successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error cancelling access request:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to cancel access request'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -548,8 +543,8 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           submittedBefore: { type: 'string', format: 'date-time' },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -566,21 +561,21 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
                   urgency: { type: 'string' },
                   status: { type: 'string' },
                   submittedAt: { type: 'string', format: 'date-time' }
-                }
-              }
-  }
+
+
+
             pagination: {
               type: 'object',
               properties: {
                 limit: { type: 'integer' },
                 offset: { type: 'integer' },
                 total: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: RequestListQuery, reply: FastifyReply) => {
     try {
       const filters = RequestFiltersSchema.parse(request.query);
@@ -593,24 +588,23 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           limit: filters.limit,
           offset: filters.offset,
           total: 0
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid query parameters',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error getting request list:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to get request list'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -628,10 +622,10 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
             processedRequests: { type: 'number' },
             escalatedRequests: { type: 'number' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       // Check if user has admin role
@@ -640,7 +634,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Admin role required'
         });
-      }
+
 
       const result = await accessRequestService.processWorkflowTimeouts();
       
@@ -649,14 +643,13 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         escalatedRequests: result.escalatedRequests,
         message: `Processed ${result.processedRequests} timed out requests, escalated ${result.escalatedRequests}`
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error processing workflow timeouts:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to process workflow timeouts'
       });
-    }
+
   });
 
   /**
@@ -673,10 +666,10 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' },
             version: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     reply.send({
       status: 'healthy',
@@ -684,9 +677,8 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
       version: '1.0.0'
     });
   });
-}
+
 
 // Register the plugin
 export default async function (fastify: FastifyInstance) {
   await fastify.register(accessRequestWorkflowRoutes, { prefix: '/api/access-request-workflow' });
-}

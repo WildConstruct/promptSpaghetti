@@ -11,8 +11,8 @@ import { Node } from 'reactflow';
 import { RegionGroup as RegionGroupType, RegionGroupPreferences } from '../../types/CollaborationTypes';
 
 }
-interface RegionGroupsLayerProps {
-    nodes: Node[];
+}
+interface RegionGroupsLayerProps { nodes: Node[];
     regionGroups: RegionGroupType[];
     onRegionGroupsChange: (groups: RegionGroupType[]) => void;
     groupPreferences?: RegionGroupPreferences;
@@ -22,8 +22,7 @@ interface RegionGroupsLayerProps {
     readOnly?: boolean;
     canvasOffset?: {
         x: number;
-        y: number;
-
+        y: number }
 }
     };
     zoom?: number;

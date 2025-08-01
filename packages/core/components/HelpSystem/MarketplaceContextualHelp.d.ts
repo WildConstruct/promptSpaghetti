@@ -19,8 +19,8 @@ import { MarketplaceHelpContent } from './MarketplaceHelpOverlay';
 export type ContextualTriggerType = 'hover' | 'click' | 'focus' | 'scroll' | 'idle' | 'error' | 'success' | 'first-time' | 'struggle-detected' | 'feature-discovery';
 
 }
-export interface UserBehaviorContext {
-    currentPage: string;
+}
+export interface UserBehaviorContext { currentPage: string;
     previousPage?: string;
     timeOnPage: number;
     scrollDepth: number;
@@ -39,11 +39,10 @@ export interface UserBehaviorContext {
     helpRequestCount: number;
     taskCompletionRate: number;
     featureDiscoveryCount: number;
-    returnUserBehavior: boolean;
-
+    returnUserBehavior: boolean }
 }
-export interface ContextualHelpRule {
-    id: string;
+}
+export interface ContextualHelpRule { id: string;
     name: string;
     triggerType: ContextualTriggerType;
     conditions: {
@@ -51,7 +50,7 @@ export interface ContextualHelpRule {
         elementSelector?: string;
         userBehavior?: Partial<UserBehaviorContext>;
         timeThreshold?: number;
-        eventCount?: number;
+        eventCount?: number }
 }
     };
     helpContent: MarketplaceHelpContent;
@@ -59,6 +58,7 @@ export interface ContextualHelpRule {
     cooldownMinutes?: number;
     maxTriggers?: number;
 
+}
 }
 export interface MarketplaceContextualHelpProps {
     userId?: string;
@@ -78,4 +78,5 @@ export interface MarketplaceContextualHelpProps {
 export declare const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>;
 export default MarketplaceContextualHelp;
 //# sourceMappingURL=MarketplaceContextualHelp.d.ts.map
+}
 }

@@ -9,8 +9,8 @@ import { ReferrerPolicyService } from '../middleware/referrer-policy';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
-}
-}
+
+
 export interface ReferrerPolicyPluginOptions {
   enabled?: boolean;
   defaultPolicy?: 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'same-origin' | 'strict-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url';
@@ -18,9 +18,10 @@ export interface ReferrerPolicyPluginOptions {
   enableReporting?: boolean;
   maxViolationHistory?: number;
   cacheTimeout?: number;
-}
-}
-}
+
+
+
+
 
 async function referrerPolicyPlugin(
   fastify: FastifyInstance,
@@ -46,17 +47,18 @@ async function referrerPolicyPlugin(
   declare module 'fastify' {
     interface FastifyInstance {
       referrerPolicyService: ReferrerPolicyService;
-}
-}
-    }
-  }
+
+
+
+
+
 
   // Register the middleware if enabled
   if (options.enabled !== false) {
     await fastify.register(async function (fastify) {
       fastify.addHook('onRequest', referrerPolicyService.middleware());
     });
-  }
+
 
   // Register API routes for policy management
   await fastify.register(async function (fastify) {
@@ -71,15 +73,15 @@ async function referrerPolicyPlugin(
         
         if (result.success) {
           reply.status(201).send(result);
-        } else {
+ else {
           reply.status(400).send(result);
-        }
-      } catch (error) {
+
+ catch (error) {
         reply.status(500).send({
           success: false,
           message: 'Internal server error'
         });
-      }
+
     });
 
     // Update existing policy configuration
@@ -95,15 +97,15 @@ async function referrerPolicyPlugin(
         
         if (result.success) {
           reply.send(result);
-        } else {
+ else {
           reply.status(400).send(result);
-        }
-      } catch (error) {
+
+ catch (error) {
         reply.status(500).send({
           success: false,
           message: 'Internal server error'
         });
-      }
+
     });
 
     // Get policy statistics
@@ -124,12 +126,12 @@ async function referrerPolicyPlugin(
 
         const statistics = await referrerPolicyService.getStatistics(timeRange, filters);
         reply.send(statistics);
-      } catch (error) {
+ catch (error) {
         reply.status(500).send({
           error: 'Failed to get statistics',
           message: error.message
         });
-      }
+
     });
 
     // Get policy recommendations
@@ -143,12 +145,12 @@ async function referrerPolicyPlugin(
 
         const recommendations = await referrerPolicyService.getPolicyRecommendations(timeRange);
         reply.send({ recommendations });
-      } catch (error) {
+ catch (error) {
         reply.status(500).send({
           error: 'Failed to get recommendations',
           message: error.message
         });
-      }
+
     });
 
     // Health check endpoint
@@ -166,7 +168,7 @@ async function referrerPolicyPlugin(
   fastify.addHook('onClose', async () => {
     referrerPolicyService.destroy();
   });
-}
+
 
 export default fp(referrerPolicyPlugin, {
   name: 'referrer-policy',

@@ -65,12 +65,38 @@ export var SessionSecurityLevel;
             saltLength: number;
         }
     }
-    ;
-    // Session Data
 }
 ;
-activities: Array;
-rotationHistory: Array;
+;
+location: {
+    country ?  : string;
+    region ?  : string;
+    city ?  : string;
+    coordinates ?  : { lat: number, lon: number };
+}
+;
+security: {
+    isVpn: boolean;
+    isProxy: boolean;
+    riskScore: number;
+    trustLevel: 'low' | 'medium' | 'high',
+    ;
+}
+;
+;
+activities: Array < {
+    timestamp: Date,
+    action: string,
+    endpoint: string,
+    riskScore: number,
+    anomalyDetected: boolean
+} > ;
+rotationHistory: Array < {
+    timestamp: Date,
+    oldTokenHash: string,
+    newTokenHash: string,
+    reason: string
+} > ;
 ;
 securityFlags: {
     isSuspiciousLocation: boolean;
@@ -79,8 +105,16 @@ securityFlags: {
     hasProxy: boolean;
 }
 ;
+'warning' | 'critical';
+description: string;
+recommendation: string;
  > ;
-anomalies: Array;
+anomalies: Array < {
+    type: string,
+    severity: 'low' | 'medium' | 'high',
+    description: string,
+    confidence: number
+} > ;
 ;
 lastUpdated: Date;
 confidence: number;

@@ -27,7 +27,7 @@ export enum CategorizationType {
   PERMISSION = 'permission',
   ROLE = 'role',
   GENERAL = 'general'
-}
+
 
 export enum CategorizationStatus {
   PENDING = 'pending',
@@ -35,7 +35,7 @@ export enum CategorizationStatus {
   COMPLETED = 'completed',
   FAILED = 'failed',
   MANUAL_REVIEW = 'manual_review'
-}
+
 
 export enum ConfidenceLevel {
   VERY_LOW = 'very_low',   // 0-20%
@@ -43,10 +43,10 @@ export enum ConfidenceLevel {
   MEDIUM = 'medium',       // 41-60%
   HIGH = 'high',           // 61-80%
   VERY_HIGH = 'very_high'  // 81-100%
-}
 
-}
-}
+
+
+
 export interface CategorizationRequest {
   requestId: string;
   itemId: string;
@@ -57,12 +57,13 @@ export interface CategorizationRequest {
   priority: 'low' | 'medium' | 'high' | 'critical';
   context?: CategorizationContext;
   options?: CategorizationOptions;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CategorizationResult {
   requestId: string;
   itemId: string;
@@ -99,12 +100,13 @@ export interface CategorizationResult {
   tags: string[];
   metadata: Record<string, unknown>;
   reasoningChain: ReasoningStep[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CategorizationContext {
   organizationId?: string;
   userId?: string;
@@ -119,13 +121,14 @@ export interface CategorizationContext {
     region: string;
     country: string;
     timezone: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface CategorizationOptions {
   enableMLCategorization?: boolean;
   enableRuleBasedCategorization?: boolean;
@@ -136,12 +139,13 @@ export interface CategorizationOptions {
   customRules?: string[];
   excludeCategories?: string[];
   priorityCategories?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutoAssignment {
   assignmentType: 'user' | 'team' | 'role' | 'permission' | 'queue' | 'workflow';
   assignmentTarget: string;
@@ -149,23 +153,25 @@ export interface AutoAssignment {
   confidence: number;
   conditions?: AssignmentCondition[];
   metadata?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentCondition {
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'contains' | 'matches';
   value: any;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReasoningStep {
   stepId: string;
   stepType: 'rule_evaluation' | 'ml_inference' | 'data_analysis' | 'validation';
@@ -175,12 +181,13 @@ export interface ReasoningStep {
   confidence: number;
   processingTime: number;
   metadata?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CategorizationRule {
   ruleId: string;
   name: string;
@@ -212,46 +219,50 @@ export interface CategorizationRule {
     lastTriggered?: Date;
     successRate: number;
     averageConfidence: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface RuleTrigger {
   field: string;
   operator: string;
   value: any;
   weight: number; // 0-100
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleCondition {
   field: string;
   operator: string;
   value: any;
   logicalOperator?: 'AND' | 'OR';
   negate?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleAction {
   actionType: 'categorize' | 'assign' | 'flag' | 'escalate' | 'notify';
   parameters: Record<string, unknown>;
   conditions?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CategoryDefinition {
   categoryId: string;
   name: string;
@@ -282,8 +293,9 @@ export interface CategoryDefinition {
     itemsCategories: number;
     lastUsed?: Date;
     averageConfidence: number;
-}
-}
+
+
+
   };
   
   // ML Training
@@ -291,11 +303,11 @@ export interface CategoryDefinition {
     itemData: Record<string, unknown>;
     confidence: number;
     verified: boolean;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface CategorizationStats {
   totalRequests: number;
   processedRequests: number;
@@ -316,15 +328,16 @@ export interface CategorizationStats {
     category: string;
     count: number;
     averageConfidence: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Success metrics
   successRate: number;
   reviewRate: number;
   autoAssignmentRate: number;
-}
+
 
 // =============================================================================
 // Automated Categorization Service Implementation
@@ -346,7 +359,7 @@ export class AutomatedCategorizationService extends EventEmitter {
   ) {
     super();
     this.initialize();
-  }
+
 
   // =============================================================================
   // Core Categorization Operations
@@ -364,7 +377,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       priority?: 'low' | 'medium' | 'high' | 'critical';
       context?: CategorizationContext;
       categorizationOptions?: CategorizationOptions;
-    } = {}
+ = {}
   ): Promise<string> {
 
     try {
@@ -397,18 +410,17 @@ export class AutomatedCategorizationService extends EventEmitter {
           requestId,
           itemType,
           priority: request.priority
-        }
+
       });
 
       this.emit('categorization_requested', request);
 
       return requestId;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error submitting categorization request:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Process categorization request
@@ -449,37 +461,37 @@ export class AutomatedCategorizationService extends EventEmitter {
       if (request.options?.enableRuleBasedCategorization !== false) {
         const ruleResults = await this.performRuleBasedCategorization(request, reasoningChain);
         this.mergeCategorizationResults(result, ruleResults);
-      }
+
 
       // Step 2: ML-based categorization (if enabled and confidence is still low)
       if (request.options?.enableMLCategorization !== false && result.confidence < 70) {
         const mlResults = await this.performMLBasedCategorization(request, reasoningChain);
         this.mergeCategorizationResults(result, mlResults);
-      }
+
 
       // Step 3: Content-specific processing using MLFlaggingService
       if (request.itemType === CategorizationType.CONTENT) {
         const contentResults = await this.processContentCategorization(request, reasoningChain);
         this.mergeCategorizationResults(result, contentResults);
-      }
+
 
       // Step 4: User-specific processing
       if (request.itemType === CategorizationType.USER) {
         const userResults = await this.processUserCategorization(request, reasoningChain);
         this.mergeCategorizationResults(result, userResults);
-      }
+
 
       // Step 5: API Key-specific processing
       if (request.itemType === CategorizationType.API_KEY) {
         const keyResults = await this.processAPIKeyCategorization(request, reasoningChain);
         this.mergeCategorizationResults(result, keyResults);
-      }
+
 
       // Step 6: Task-specific processing
       if (request.itemType === CategorizationType.TASK) {
         const taskResults = await this.processTaskCategorization(request, reasoningChain);
         this.mergeCategorizationResults(result, taskResults);
-      }
+
 
       // Step 7: Determine confidence level
       result.confidenceLevel = this.getConfidenceLevel(result.confidence);
@@ -488,12 +500,12 @@ export class AutomatedCategorizationService extends EventEmitter {
       result.reviewRequired = this.shouldRequireReview(result, request);
       if (result.reviewRequired) {
         result.status = CategorizationStatus.MANUAL_REVIEW;
-      }
+
 
       // Step 9: Generate auto-assignments if enabled
       if (request.options?.autoAssign !== false && result.confidence >= 60) {
         result.suggestedAssignments = await this.generateAutoAssignments(result, request);
-      }
+
 
       // Step 10: Assess risk and compliance
       result.riskLevel = this.assessRiskLevel(result, request);
@@ -513,7 +525,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       // Execute auto-assignments if confidence is high enough
       if (request.options?.autoAssign !== false && result.confidence >= 80 && !result.reviewRequired) {
         await this.executeAutoAssignments(result.suggestedAssignments, request);
-      }
+
 
       await this.auditService.logAction({
         userId: request.requestedBy,
@@ -525,14 +537,13 @@ export class AutomatedCategorizationService extends EventEmitter {
           confidence: result.confidence,
           processingTime: result.processingTime,
           reviewRequired: result.reviewRequired
-        }
+
       });
 
       this.emit('categorization_completed', result);
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error processing categorization request:', error);
       
       const errorResult: CategorizationResult = {
@@ -565,8 +576,8 @@ export class AutomatedCategorizationService extends EventEmitter {
       this.emit('categorization_failed', { request, error, result: errorResult });
 
       return errorResult;
-    }
-  }
+
+
 
   // =============================================================================
   // Categorization Methods
@@ -597,14 +608,14 @@ export class AutomatedCategorizationService extends EventEmitter {
               confidence: (action.parameters.confidence || 80) + rule.confidenceBoost,
               source: `rule:${rule.ruleId}`
             });
-          }
-        }
+
+
 
         // Update rule usage
         rule.usage.timesTriggered++;
         rule.usage.lastTriggered = new Date();
-      }
-    }
+
+
 
     // Calculate primary category and overall confidence
     const primaryCategoryResult = this.selectPrimaryCategory(categories);
@@ -618,7 +629,7 @@ export class AutomatedCategorizationService extends EventEmitter {
         rulesApplied: rulesApplied.length,
         categoriesFound: categories.length,
         primaryCategory: primaryCategoryResult?.category
-  }
+
       confidence: primaryCategoryResult?.confidence || 0,
       processingTime: Date.now() - stepStart
     });
@@ -629,7 +640,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       rulesApplied,
       processingMethod: 'rule_based'
     };
-  }
+
 
   /**
    * Perform ML-based categorization
@@ -660,7 +671,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       mlModelsUsed: mlResults.modelsUsed,
       processingMethod: 'ml_based'
     };
-  }
+
 
   /**
    * Process content categorization using MLFlaggingService
@@ -714,14 +725,14 @@ export class AutomatedCategorizationService extends EventEmitter {
             securityFlags.push('data_leak_detected');
             riskLevel = 'critical';
             break;
-          }
-        }
+
+
         confidence = Math.max(80, flaggingResult.confidence * 100);
-      } else {
+ else {
         categories.push('safe_content');
         riskLevel = 'low';
         confidence = flaggingResult.confidence * 100;
-      }
+
 
       reasoningChain.push({
         stepId: crypto.randomUUID(),
@@ -733,7 +744,7 @@ export class AutomatedCategorizationService extends EventEmitter {
           categories,
           riskLevel,
           confidence
-  }
+
         confidence,
         processingTime: Date.now() - stepStart
       });
@@ -745,8 +756,7 @@ export class AutomatedCategorizationService extends EventEmitter {
         riskLevel,
         securityFlags
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error in content categorization:', error);
       return {
         primaryCategory: 'uncategorized',
@@ -754,8 +764,8 @@ export class AutomatedCategorizationService extends EventEmitter {
         riskLevel: 'high',
         securityFlags: ['processing_error']
       };
-    }
-  }
+
+
 
   /**
    * Process user categorization
@@ -778,25 +788,25 @@ export class AutomatedCategorizationService extends EventEmitter {
       // Suggest team assignments based on role
       const roleAssignments = this.getRoleBasedAssignments(userData.role);
       suggestedAssignments.push(...roleAssignments);
-    }
+
 
     // Categorize by department
     if (userData.department) {
       categories.push(`dept_${userData.department.toLowerCase()}`);
-    }
+
 
     // Categorize by experience level
     if (userData.experienceLevel) {
       categories.push(`exp_${userData.experienceLevel.toLowerCase()}`);
-    }
+
 
     // Categorize by location
     if (userData.location || request.context?.geographicalContext) {
       const location = userData.location || request.context?.geographicalContext?.country;
       if (location) {
         categories.push(`location_${location.toLowerCase().replace(/\s+/g, '_')}`);
-      }
-    }
+
+
 
     reasoningChain.push({
       stepId: crypto.randomUUID(),
@@ -814,7 +824,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       confidence,
       suggestedAssignments
     };
-  }
+
 
   /**
    * Process API key categorization
@@ -838,16 +848,16 @@ export class AutomatedCategorizationService extends EventEmitter {
       if (purpose.includes('dev') || purpose.includes('test')) {
         categories.push('development');
         riskLevel = 'low';
-      } else if (purpose.includes('prod') || purpose.includes('production')) {
+ else if (purpose.includes('prod') || purpose.includes('production')) {
         categories.push('production');
         riskLevel = 'high';
-      } else if (purpose.includes('admin') || purpose.includes('super')) {
+ else if (purpose.includes('admin') || purpose.includes('super')) {
         categories.push('administrative');
         riskLevel = 'critical';
-      } else {
+ else {
         categories.push('general');
-      }
-    }
+
+
 
     // Categorize by permissions/scopes
     if (keyData.scopes || keyData.permissions) {
@@ -856,11 +866,11 @@ export class AutomatedCategorizationService extends EventEmitter {
       if (scopes.includes('admin') || scopes.includes('write')) {
         categories.push('elevated_access');
         riskLevel = 'high';
-      } else if (scopes.includes('read')) {
+ else if (scopes.includes('read')) {
         categories.push('read_only');
         riskLevel = 'low';
-      }
-    }
+
+
 
     // Suggest access tier based on categorization
     if (categories.includes('administrative')) {
@@ -870,14 +880,14 @@ export class AutomatedCategorizationService extends EventEmitter {
         assignmentReason: 'Administrative API key requires admin role',
         confidence: 85
       });
-    } else if (categories.includes('production')) {
+ else if (categories.includes('production')) {
       suggestedAssignments.push({
         assignmentType: 'permission',
         assignmentTarget: 'prod_api_access',
         assignmentReason: 'Production API key requires production permissions',
         confidence: 80
       });
-    }
+
 
     reasoningChain.push({
       stepId: crypto.randomUUID(),
@@ -896,7 +906,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       riskLevel,
       suggestedAssignments
     };
-  }
+
 
   /**
    * Process task categorization
@@ -925,7 +935,7 @@ export class AutomatedCategorizationService extends EventEmitter {
           assignmentReason: 'Bug fix requires engineering team',
           confidence: 85
         });
-      } else if (text.includes('feature') || text.includes('implement')) {
+ else if (text.includes('feature') || text.includes('implement')) {
         categories.push('feature_development');
         suggestedAssignments.push({
           assignmentType: 'team',
@@ -933,7 +943,7 @@ export class AutomatedCategorizationService extends EventEmitter {
           assignmentReason: 'Feature development requires development team',
           confidence: 80
         });
-      } else if (text.includes('test') || text.includes('qa')) {
+ else if (text.includes('test') || text.includes('qa')) {
         categories.push('testing');
         suggestedAssignments.push({
           assignmentType: 'team',
@@ -941,7 +951,7 @@ export class AutomatedCategorizationService extends EventEmitter {
           assignmentReason: 'Testing task requires QA team',
           confidence: 90
         });
-      } else if (text.includes('doc') || text.includes('documentation')) {
+ else if (text.includes('doc') || text.includes('documentation')) {
         categories.push('documentation');
         suggestedAssignments.push({
           assignmentType: 'team',
@@ -949,7 +959,7 @@ export class AutomatedCategorizationService extends EventEmitter {
           assignmentReason: 'Documentation task requires technical writing team',
           confidence: 85
         });
-      } else if (text.includes('security') || text.includes('vulnerability')) {
+ else if (text.includes('security') || text.includes('vulnerability')) {
         categories.push('security');
         suggestedAssignments.push({
           assignmentType: 'team',
@@ -957,23 +967,23 @@ export class AutomatedCategorizationService extends EventEmitter {
           assignmentReason: 'Security task requires security team',
           confidence: 95
         });
-      }
-    }
+
+
 
     // Categorize by priority
     if (taskData.priority) {
       const priority = taskData.priority.toLowerCase();
       if (priority === 'critical' || priority === 'urgent') {
         categories.push('high_priority');
-      } else if (priority === 'low') {
+ else if (priority === 'low') {
         categories.push('low_priority');
-      }
-    }
+
+
 
     // Categorize by epic or story
     if (taskData.epic) {
       categories.push(`epic_${taskData.epic.toLowerCase().replace(/\s+/g, '_')}`);
-    }
+
 
     reasoningChain.push({
       stepId: crypto.randomUUID(),
@@ -991,7 +1001,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       confidence,
       suggestedAssignments
     };
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -1004,11 +1014,11 @@ export class AutomatedCategorizationService extends EventEmitter {
       await this.loadCategoryDefinitions();
       this.startProcessingLoop();
       console.log('✅ Automated Categorization Service initialized');
-    } catch (error) {
+ catch (error) {
       console.error('Error initializing categorization service:', error);
       throw error;
-    }
-  }
+
+
 
   private addToProcessingQueue(request: CategorizationRequest): void {
     // Insert request in priority order
@@ -1018,42 +1028,42 @@ export class AutomatedCategorizationService extends EventEmitter {
     
     if (insertIndex === -1) {
       this.processingQueue.push(request);
-    } else {
+ else {
       this.processingQueue.splice(insertIndex, 0, request);
-    }
+
     
     this.processNextRequest();
-  }
+
 
   private async processNextRequest(): Promise<void> {
 
     if (this.isProcessing || this.processingQueue.length === 0) {
       return;
-    }
+
 
     this.isProcessing = true;
     const request = this.processingQueue.shift()!;
 
     try {
       await this.processCategorizationRequest(request);
-    } catch (error) {
+ catch (error) {
       console.error('Error processing categorization request:', error);
-    } finally {
+ finally {
       this.isProcessing = false;
       setImmediate(() => this.processNextRequest());
-    }
-  }
+
+
 
   private getPriorityValue(priority: string): number {
     const values = { 'low': 1, 'medium': 2, 'high': 3, 'critical': 4 };
     return values[priority as keyof typeof values] || 2;
-  }
+
 
   private getApplicableRules(itemType: CategorizationType): CategorizationRule[] {
     return Array.from(this.categorizationRules.values())
       .filter(rule => rule.enabled && rule.itemType === itemType)
       .sort((a, b) => b.priority - a.priority);
-  }
+
 
   private async evaluateRule(
     rule: CategorizationRule,
@@ -1076,7 +1086,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       matches: triggerMatches && conditionMatches,
       confidence: triggerMatches && conditionMatches ? 80 + rule.confidenceBoost : 0
     };
-  }
+
 
   private evaluateCondition(fieldValue: any, operator: string, conditionValue: any): boolean {
     switch (operator) {
@@ -1090,8 +1100,8 @@ export class AutomatedCategorizationService extends EventEmitter {
     case 'contains': return String(fieldValue).toLowerCase().includes(String(conditionValue).toLowerCase());
     case 'matches': return new RegExp(conditionValue, 'i').test(String(fieldValue));
     default: return false;
-    }
-  }
+
+
 
   private selectPrimaryCategory(categories: Array<{ category: string; confidence: number; source: string }>): { category: string; confidence: number } | null {
     if (categories.length === 0) return null;
@@ -1099,43 +1109,43 @@ export class AutomatedCategorizationService extends EventEmitter {
     // Sort by confidence and select highest
     categories.sort((a, b) => b.confidence - a.confidence);
     return { category: categories[0].category, confidence: categories[0].confidence };
-  }
+
 
   private mergeCategorizationResults(target: CategorizationResult, source: Partial<CategorizationResult>): void {
     if (source.primaryCategory && source.confidence && source.confidence > target.confidence) {
       target.primaryCategory = source.primaryCategory;
       target.confidence = source.confidence;
-    }
+
     
     if (source.subcategories) {
       target.subcategories.push(...source.subcategories);
-    }
+
     
     if (source.suggestedAssignments) {
       target.suggestedAssignments.push(...source.suggestedAssignments);
-    }
+
     
     if (source.rulesApplied) {
       target.rulesApplied.push(...source.rulesApplied);
-    }
+
     
     if (source.mlModelsUsed) {
       target.mlModelsUsed.push(...source.mlModelsUsed);
-    }
+
 
     if (source.securityFlags) {
       target.securityFlags.push(...source.securityFlags);
-    }
+
 
     if (source.riskLevel && this.getRiskLevelValue(source.riskLevel) > this.getRiskLevelValue(target.riskLevel)) {
       target.riskLevel = source.riskLevel;
-    }
-  }
+
+
 
   private getRiskLevelValue(riskLevel: string): number {
     const values = { 'low': 1, 'medium': 2, 'high': 3, 'critical': 4 };
     return values[riskLevel as keyof typeof values] || 2;
-  }
+
 
   private getConfidenceLevel(confidence: number): ConfidenceLevel {
     if (confidence <= 20) return ConfidenceLevel.VERY_LOW;
@@ -1143,14 +1153,14 @@ export class AutomatedCategorizationService extends EventEmitter {
     if (confidence <= 60) return ConfidenceLevel.MEDIUM;
     if (confidence <= 80) return ConfidenceLevel.HIGH;
     return ConfidenceLevel.VERY_HIGH;
-  }
+
 
   private shouldRequireReview(result: CategorizationResult, request: CategorizationRequest): boolean {
     return request.options?.requireHumanReview === true ||
            result.confidence < (request.options?.confidenceThreshold || 70) ||
            result.riskLevel === 'critical' ||
            result.securityFlags.length > 0;
-  }
+
 
   private async generateAutoAssignments(
     result: CategorizationResult,
@@ -1163,10 +1173,10 @@ export class AutomatedCategorizationService extends EventEmitter {
     const categoryDef = this.categoryDefinitions.get(result.primaryCategory);
     if (categoryDef?.defaultAssignments) {
       assignments.push(...categoryDef.defaultAssignments);
-    }
+
     
     return assignments;
-  }
+
 
   private assessRiskLevel(
     result: CategorizationResult,
@@ -1176,7 +1186,7 @@ export class AutomatedCategorizationService extends EventEmitter {
     if (result.confidence < 50) return 'high';
     if (request.itemType === CategorizationType.API_KEY) return 'medium';
     return result.riskLevel || 'medium';
-  }
+
 
   private async assessComplianceFlags(result: CategorizationResult, request: CategorizationRequest): Promise<string[]> {
 
@@ -1184,19 +1194,19 @@ export class AutomatedCategorizationService extends EventEmitter {
     
     if (request.itemType === CategorizationType.CONTENT && result.primaryCategory === 'content_moderation') {
       flags.push('content_review_required');
-    }
+
     
     if (result.riskLevel === 'critical') {
       flags.push('high_risk_item');
-    }
+
     
     return flags;
-  }
+
 
   private async assessSecurityFlags(result: CategorizationResult, request: CategorizationRequest): Promise<string[]> {
 
     return result.securityFlags || [];
-  }
+
 
   private async executeAutoAssignments(assignments: AutoAssignment[], request: CategorizationRequest): Promise<void> {
 
@@ -1215,12 +1225,12 @@ export class AutomatedCategorizationService extends EventEmitter {
               reason: assignment.assignmentReason
             }
           );
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error('Error executing auto-assignment:', error);
-      }
-    }
-  }
+
+
+
 
   private getRoleBasedAssignments(role: string): AutoAssignment[] {
     const roleAssignments: Record<string, AutoAssignment[]> = {
@@ -1229,23 +1239,23 @@ export class AutomatedCategorizationService extends EventEmitter {
         assignmentTarget: 'development_team',
         assignmentReason: 'Developer role automatically assigned to development team',
         confidence: 90
-      }],
+],
       'admin': [{
         assignmentType: 'team',
         assignmentTarget: 'admin_team',
         assignmentReason: 'Admin role automatically assigned to admin team',
         confidence: 95
-      }],
+],
       'manager': [{
         assignmentType: 'team',
         assignmentTarget: 'management_team',
         assignmentReason: 'Manager role automatically assigned to management team',
         confidence: 85
-      }]
+]
     };
     
     return roleAssignments[role.toLowerCase()] || [];
-  }
+
 
   private async invokeMLCategorization(request: CategorizationRequest): Promise<any> {
 
@@ -1257,13 +1267,13 @@ export class AutomatedCategorizationService extends EventEmitter {
       confidence: 60,
       modelsUsed: ['general_classifier']
     };
-  }
+
 
   private startProcessingLoop(): void {
     setInterval(() => {
       this.processNextRequest();
     }, 1000); // Process every second
-  }
+
 
   // Database operations (placeholders)
   private async loadCategorizationRules(): Promise<void> { }
@@ -1276,7 +1286,7 @@ export class AutomatedCategorizationService extends EventEmitter {
 
     // Implementation would fetch from database
     return null;
-  }
+
 
   async getCategorizationStats(): Promise<CategorizationStats> {
 
@@ -1296,7 +1306,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       reviewRate: 0,
       autoAssignmentRate: 0
     };
-  }
-}
+
+
 
 export default AutomatedCategorizationService;

@@ -27,7 +27,7 @@ const SecurityMetricsSchema = {
     vulnerabilityTrend: { 
       type: 'array', 
       items: { type: 'number' }
-  }
+
     meanTimeToFix: { type: 'number' },
     vulnerabilityDensity: { type: 'number' },
     packageSecurity: {
@@ -37,13 +37,13 @@ const SecurityMetricsSchema = {
         outdated: { type: 'number' },
         vulnerable: { type: 'number' },
         riskScore: { type: 'number' }
-      }
-  }
+
+
     codeSecurityScore: { type: 'number' },
     infrastructureScore: { type: 'number' },
     complianceScore: { type: 'number' },
     securityDebt: { type: 'number' }
-  }
+
 };
 
 const SecurityVulnerabilitySchema = {
@@ -70,7 +70,7 @@ const SecurityVulnerabilitySchema = {
     assignee: { type: 'string' },
     dueDate: { type: 'string', format: 'date-time' },
     metadata: { type: 'object' }
-  }
+
 };
 
 const SecurityScanRequestSchema = {
@@ -79,9 +79,9 @@ const SecurityScanRequestSchema = {
     scanType: { 
       type: 'string', 
       enum: ['dependency', 'static', 'dynamic', 'infrastructure', 'compliance', 'comprehensive'] 
-  }
+
     options: { type: 'object' }
-  }
+
   required: ['scanType']
 };
 
@@ -91,7 +91,7 @@ const VulnerabilityUpdateSchema = {
     status: { type: 'string', enum: ['open', 'acknowledged', 'fixed', 'false_positive', 'risk_accepted'] },
     assignee: { type: 'string' },
     dueDate: { type: 'string', format: 'date-time' }
-  }
+
   required: ['status']
 };
 
@@ -129,22 +129,22 @@ export async function securityRoutes(fastify: FastifyInstance) {
         snyk: {
           enabled: !!process.env.SNYK_API_KEY,
           apiKey: process.env.SNYK_API_KEY
-  }
+
         sonarqube: {
           enabled: !!process.env.SONARQUBE_URL,
           serverUrl: process.env.SONARQUBE_URL,
           token: process.env.SONARQUBE_TOKEN
-  }
+
         owaspZap: {
           enabled: !!process.env.OWASP_ZAP_API_KEY,
           apiKey: process.env.OWASP_ZAP_API_KEY
-        }
-  }
+
+
       notifications: {
         email: process.env.SECURITY_ALERT_EMAILS ? process.env.SECURITY_ALERT_EMAILS.split(',') : [],
         webhook: process.env.SECURITY_WEBHOOK_URL,
         slackChannel: process.env.SECURITY_SLACK_CHANNEL
-      }
+
     };
     
     securityScanningService = new SecurityScanningService(
@@ -164,17 +164,16 @@ export async function securityRoutes(fastify: FastifyInstance) {
       
       if (result.summary.critical > 0 || result.summary.high > 5) {
         fastify.log.warn(`High-risk vulnerabilities detected in scan ${result.scanId}`);
-      }
+
     });
     
     securityScanningService.on('thresholdBreach', (alert) => {
       fastify.log.error(`Security threshold breach detected: ${JSON.stringify(alert)}`);
     });
-    
-  } catch (error) {
+ catch (error) {
     fastify.log.error('Failed to initialize Security Scanning Service:', error);
     // Continue without the service - routes will return appropriate errors
-  }
+
   
   // =============================================================================
   // GET /api/security/metrics - Get current security metrics
@@ -191,10 +190,10 @@ export async function securityRoutes(fastify: FastifyInstance) {
           properties: {
             error: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       if (!securityScanningService) {
@@ -202,7 +201,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Security Scanning Service is not available'
         });
-      }
+
       
       const metrics = await securityScanningService.getCurrentMetrics();
       
@@ -211,17 +210,16 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'No security metrics available. Run a scan first.'
         });
-      }
+
       
       return reply.send(metrics);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching security metrics:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch security metrics'
       });
-    }
+
   });
   
   // =============================================================================
@@ -232,8 +230,8 @@ export async function securityRoutes(fastify: FastifyInstance) {
     Body: {
       scanType: 'dependency' | 'static' | 'dynamic' | 'infrastructure' | 'compliance' | 'comprehensive';
       options?: any;
-    }
-  }>('/scan', {
+
+>('/scan', {
     schema: {
       description: 'Start a security scan',
       tags: ['Security'],
@@ -247,17 +245,17 @@ export async function securityRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             message: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!securityScanningService) {
@@ -265,7 +263,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Security Scanning Service is not available'
         });
-      }
+
       
       const { scanType, options = {} } = request.body;
       
@@ -276,7 +274,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Bad Request',
           message: `Invalid scan type. Must be one of: ${validScanTypes.join(', ')}`
         });
-      }
+
       
       const scanId = await securityScanningService.queueScan(scanType, options);
       
@@ -287,14 +285,13 @@ export async function securityRoutes(fastify: FastifyInstance) {
         message: 'Security scan queued successfully',
         timestamp: new Date().toISOString()
       });
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error starting security scan:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to start security scan'
       });
-    }
+
   });
   
   // =============================================================================
@@ -305,8 +302,8 @@ export async function securityRoutes(fastify: FastifyInstance) {
     Querystring: {
       limit?: number;
       scanType?: string;
-    }
-  }>('/scans', {
+
+>('/scans', {
     schema: {
       description: 'Get security scan history',
       tags: ['Security'],
@@ -315,8 +312,8 @@ export async function securityRoutes(fastify: FastifyInstance) {
         properties: {
           limit: { type: 'number', minimum: 1, maximum: 100 },
           scanType: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'array',
@@ -338,13 +335,13 @@ export async function securityRoutes(fastify: FastifyInstance) {
                   low: { type: 'number' },
                   info: { type: 'number' },
                   riskScore: { type: 'number' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!securityScanningService) {
@@ -352,7 +349,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Security Scanning Service is not available'
         });
-      }
+
       
       const { limit = 10, scanType } = request.query;
       
@@ -361,7 +358,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
       // Filter by scan type if provided
       if (scanType) {
         scans = scans.filter(scan => scan.scanType === scanType);
-      }
+
       
       // Return summary view without full vulnerability details
       const scanSummaries = scans.map(scan => ({
@@ -374,14 +371,13 @@ export async function securityRoutes(fastify: FastifyInstance) {
       }));
       
       return reply.send(scanSummaries);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching scan history:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch scan history'
       });
-    }
+
   });
   
   // =============================================================================
@@ -390,7 +386,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
   
   fastify.get<{
     Params: { scanId: string }
-  }>('/scans/:scanId', {
+>('/scans/:scanId', {
     schema: {
       description: 'Get detailed scan result',
       tags: ['Security'],
@@ -398,10 +394,10 @@ export async function securityRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           scanId: { type: 'string' }
-  }
+
         required: ['scanId']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       if (!securityScanningService) {
@@ -409,7 +405,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Security Scanning Service is not available'
         });
-      }
+
       
       const { scanId } = request.params;
       
@@ -421,17 +417,16 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'Scan not found'
         });
-      }
+
       
       return reply.send(scan);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching scan result:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch scan result'
       });
-    }
+
   });
   
   // =============================================================================
@@ -444,8 +439,8 @@ export async function securityRoutes(fastify: FastifyInstance) {
       severity?: 'critical' | 'high' | 'medium' | 'low' | 'info';
       type?: 'dependency' | 'code' | 'infrastructure' | 'configuration';
       limit?: number;
-    }
-  }>('/vulnerabilities', {
+
+>('/vulnerabilities', {
     schema: {
       description: 'Get security vulnerabilities with optional filtering',
       tags: ['Security'],
@@ -456,15 +451,15 @@ export async function securityRoutes(fastify: FastifyInstance) {
           severity: { type: 'string', enum: ['critical', 'high', 'medium', 'low', 'info'] },
           type: { type: 'string', enum: ['dependency', 'code', 'infrastructure', 'configuration'] },
           limit: { type: 'number', minimum: 1, maximum: 1000 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'array',
           items: SecurityVulnerabilitySchema
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       if (!securityScanningService) {
@@ -472,7 +467,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Security Scanning Service is not available'
         });
-      }
+
       
       const { status, severity, type, limit = 100 } = request.query;
       
@@ -481,24 +476,23 @@ export async function securityRoutes(fastify: FastifyInstance) {
       // Apply filters
       if (severity) {
         vulnerabilities = vulnerabilities.filter(vuln => vuln.severity === severity);
-      }
+
       
       if (type) {
         vulnerabilities = vulnerabilities.filter(vuln => vuln.type === type);
-      }
+
       
       // Apply limit
       vulnerabilities = vulnerabilities.slice(0, limit);
       
       return reply.send(vulnerabilities);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching vulnerabilities:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch vulnerabilities'
       });
-    }
+
   });
   
   // =============================================================================
@@ -512,7 +506,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
       assignee?: string;
       dueDate?: string;
     };
-  }>('/vulnerabilities/:id', {
+>('/vulnerabilities/:id', {
     schema: {
       description: 'Update vulnerability status',
       tags: ['Security'],
@@ -520,9 +514,9 @@ export async function securityRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string' }
-  }
+
         required: ['id']
-  }
+
       body: VulnerabilityUpdateSchema,
       response: {
         200: {
@@ -530,17 +524,17 @@ export async function securityRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!securityScanningService) {
@@ -548,7 +542,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Security Scanning Service is not available'
         });
-      }
+
       
       const { id } = request.params;
       const { status, assignee, dueDate } = request.body;
@@ -559,8 +553,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Vulnerability status updated successfully'
       });
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error updating vulnerability:', error);
       
       if (error instanceof Error && error.message.includes('not found')) {
@@ -568,13 +561,13 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'Vulnerability not found'
         });
-      }
+
       
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to update vulnerability status'
       });
-    }
+
   });
   
   // =============================================================================
@@ -587,8 +580,8 @@ export async function securityRoutes(fastify: FastifyInstance) {
       priority?: 'critical' | 'high' | 'medium' | 'low';
       status?: string;
       limit?: number;
-    }
-  }>('/recommendations', {
+
+>('/recommendations', {
     schema: {
       description: 'Get security improvement recommendations',
       tags: ['Security'],
@@ -599,8 +592,8 @@ export async function securityRoutes(fastify: FastifyInstance) {
           priority: { type: 'string', enum: ['critical', 'high', 'medium', 'low'] },
           status: { type: 'string' },
           limit: { type: 'number', minimum: 1, maximum: 100 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'array',
@@ -618,11 +611,11 @@ export async function securityRoutes(fastify: FastifyInstance) {
               relatedVulnerabilities: { type: 'array' },
               status: { type: 'string' },
               createdAt: { type: 'string', format: 'date-time' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!securityScanningService) {
@@ -630,7 +623,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Security Scanning Service is not available'
         });
-      }
+
       
       const { category, priority, status, limit = 50 } = request.query;
       
@@ -639,24 +632,23 @@ export async function securityRoutes(fastify: FastifyInstance) {
       // Apply filters
       if (category) {
         recommendations = recommendations.filter(rec => rec.category === category);
-      }
+
       
       if (priority) {
         recommendations = recommendations.filter(rec => rec.priority === priority);
-      }
+
       
       // Apply limit
       recommendations = recommendations.slice(0, limit);
       
       return reply.send(recommendations);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching recommendations:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch recommendations'
       });
-    }
+
   });
   
   // =============================================================================
@@ -667,8 +659,8 @@ export async function securityRoutes(fastify: FastifyInstance) {
     Querystring: {
       framework?: 'OWASP' | 'PCI-DSS' | 'SOC2' | 'GDPR' | 'HIPAA' | 'ISO27001';
       status?: 'compliant' | 'non_compliant' | 'partial' | 'not_applicable';
-    }
-  }>('/compliance', {
+
+>('/compliance', {
     schema: {
       description: 'Get compliance status for various security frameworks',
       tags: ['Security'],
@@ -677,8 +669,8 @@ export async function securityRoutes(fastify: FastifyInstance) {
         properties: {
           framework: { type: 'string', enum: ['OWASP', 'PCI-DSS', 'SOC2', 'GDPR', 'HIPAA', 'ISO27001'] },
           status: { type: 'string', enum: ['compliant', 'non_compliant', 'partial', 'not_applicable'] }
-        }
-  }
+
+
       response: {
         200: {
           type: 'array',
@@ -694,11 +686,11 @@ export async function securityRoutes(fastify: FastifyInstance) {
               recommendation: { type: 'string' },
               evidence: { type: 'string' },
               lastAssessed: { type: 'string', format: 'date-time' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!securityScanningService) {
@@ -706,7 +698,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Security Scanning Service is not available'
         });
-      }
+
       
       const { framework, status } = request.query;
       
@@ -718,28 +710,27 @@ export async function securityRoutes(fastify: FastifyInstance) {
       
       if (complianceScans.length === 0) {
         return reply.send([]);
-      }
+
       
       let compliance = complianceScans[0].compliance;
       
       // Apply filters
       if (framework) {
         compliance = compliance.filter(item => item.framework === framework);
-      }
+
       
       if (status) {
         compliance = compliance.filter(item => item.status === status);
-      }
+
       
       return reply.send(compliance);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching compliance data:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch compliance data'
       });
-    }
+
   });
   
   // =============================================================================
@@ -766,12 +757,12 @@ export async function securityRoutes(fastify: FastifyInstance) {
                 snyk: { type: 'boolean' },
                 sonarqube: { type: 'boolean' },
                 owaspZap: { type: 'boolean' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     const isAvailable = !!securityScanningService;
     let lastScan = null;
@@ -783,7 +774,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
         const scans = await securityScanningService.getScanHistory(1);
         if (scans.length > 0) {
           lastScan = scans[0].timestamp.toISOString();
-        }
+
         
         // Get enabled scan types from config
         enabledScanTypes = Object.entries(DEFAULT_SECURITY_SCAN_CONFIG.enabledScanTypes)
@@ -796,10 +787,10 @@ export async function securityRoutes(fastify: FastifyInstance) {
           sonarqube: !!process.env.SONARQUBE_URL,
           owaspZap: !!process.env.OWASP_ZAP_API_KEY
         };
-      } catch (error) {
+ catch (error) {
         // Handle gracefully
-      }
-    }
+
+
     
     const health = {
       status: isAvailable ? 'healthy' : 'unavailable',
@@ -830,7 +821,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
               type: 'metrics',
               data: metrics
             }));
-          }
+
         });
         
         // Listen for security events
@@ -842,7 +833,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
               scanType: result.scanType,
               summary: result.summary,
               timestamp: result.timestamp
-            }
+
           }));
         };
         
@@ -871,9 +862,9 @@ export async function securityRoutes(fastify: FastifyInstance) {
             securityScanningService.off('scanCompleted', handleScanCompleted);
             securityScanningService.off('thresholdBreach', handleThresholdBreach);
             securityScanningService.off('vulnerabilityUpdated', handleVulnerabilityUpdate);
-          }
+
         });
-      }
+
     });
   });
   
@@ -881,8 +872,8 @@ export async function securityRoutes(fastify: FastifyInstance) {
   fastify.addHook('onClose', async () => {
     if (securityScanningService) {
       await securityScanningService.stop();
-    }
+
   });
-}
+
 
 export default securityRoutes;

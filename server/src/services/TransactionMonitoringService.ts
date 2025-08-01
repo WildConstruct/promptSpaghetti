@@ -8,11 +8,11 @@ import {
   TransactionType,
   PaymentProvider,
   EscrowStatus
-} from '../marketplace/transaction.types.js';
+ from '../marketplace/transaction.types.js';
 import { DatabaseService } from '../database/database.service.js';
 
-}
-}
+
+
 export interface TransactionSearchFilters {
   userId?: string;
   status?: string;
@@ -22,18 +22,19 @@ export interface TransactionSearchFilters {
   maxAmount?: number;
   startDate?: Date;
   endDate?: Date;
-}
-}
+
+
+
   riskScore?: { min?: number; max?: number };
   hasFlags?: boolean;
   page?: number;
   limit?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-}
 
-}
-}
+
+
+
 export interface TransactionDetails extends Transaction {
   order?: Order;
   payment_intent?: PaymentIntent;
@@ -42,10 +43,10 @@ export interface TransactionDetails extends Transaction {
   user_name?: string;
   refund_requests?: unknown[];
   related_transactions?: Transaction[];
-}
 
-}
-}
+
+
+
 export interface TransactionSummary {
   totalTransactions: number;
   totalVolume: number;
@@ -58,18 +59,19 @@ export interface TransactionSummary {
     provider: PaymentProvider;
     count: number;
     volume: number;
-}
-}
-  }>;
+
+
+
+>;
   recentTrends: Array<{
     date: string;
     count: number;
     volume: number;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface AnomalyDetectionResult {
   transactionId: string;
   anomalyType: 'unusual_amount' | 'velocity_spike' | 'location_anomaly' | 'pattern_deviation';
@@ -78,12 +80,13 @@ export interface AnomalyDetectionResult {
   suggestedAction: string;
   confidence: number;
   detectedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TransactionAlert {
   id: string;
   transactionId: string;
@@ -95,9 +98,10 @@ export interface TransactionAlert {
   acknowledgedBy?: string;
   acknowledgedAt?: Date;
   createdAt: Date;
-}
-}
-}
+
+
+
+
 
 export class TransactionMonitoringService {
   private db: DatabaseService;
@@ -106,7 +110,7 @@ export class TransactionMonitoringService {
   constructor(fastify: FastifyInstance) {
     this.fastify = fastify;
     this.db = fastify.db;
-  }
+
 
   // =============================================
   // Transaction Search & Filtering
@@ -118,7 +122,7 @@ export class TransactionMonitoringService {
     page: number;
     limit: number;
     hasMore: boolean;
-  }> {
+> {
 
     const page = filters.page || 1;
     const limit = Math.min(filters.limit || 50, 100);
@@ -133,56 +137,56 @@ export class TransactionMonitoringService {
     if (filters.userId) {
       conditions.push('t.user_id = ?');
       params.push(filters.userId);
-    }
+
 
     if (filters.status) {
       conditions.push('t.status = ?');
       params.push(filters.status);
-    }
+
 
     if (filters.transactionType) {
       conditions.push('t.transaction_type = ?');
       params.push(filters.transactionType);
-    }
+
 
     if (filters.provider) {
       conditions.push('t.provider = ?');
       params.push(filters.provider);
-    }
+
 
     if (filters.minAmount) {
       conditions.push('t.amount_cents >= ?');
       params.push(filters.minAmount);
-    }
+
 
     if (filters.maxAmount) {
       conditions.push('t.amount_cents <= ?');
       params.push(filters.maxAmount);
-    }
+
 
     if (filters.startDate) {
       conditions.push('t.created_at >= ?');
       params.push(filters.startDate.toISOString());
-    }
+
 
     if (filters.endDate) {
       conditions.push('t.created_at <= ?');
       params.push(filters.endDate.toISOString());
-    }
+
 
     if (filters.riskScore?.min !== undefined) {
       conditions.push('t.risk_score >= ?');
       params.push(filters.riskScore.min);
-    }
+
 
     if (filters.riskScore?.max !== undefined) {
       conditions.push('t.risk_score <= ?');
       params.push(filters.riskScore.max);
-    }
+
 
     if (filters.hasFlags) {
       conditions.push('JSON_ARRAY_LENGTH(t.fraud_flags) > 0');
-    }
+
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
@@ -237,7 +241,7 @@ export class TransactionMonitoringService {
       limit,
       hasMore
     };
-  }
+
 
   async getTransactionDetails(transactionId: string): Promise<TransactionDetails | null> {
 
@@ -263,7 +267,7 @@ export class TransactionMonitoringService {
     if (result.length === 0) return null;
 
     return await this.enrichTransactionDetails(result[0]);
-  }
+
 
   private async enrichTransactionDetails(transaction: unknown): Promise<TransactionDetails> {
 
@@ -273,11 +277,11 @@ export class TransactionMonitoringService {
     
     if (transaction.order_billing_address) {
       transaction.order_billing_address = JSON.parse(transaction.order_billing_address);
-    }
+
 
     if (transaction.payment_intent_metadata) {
       transaction.payment_intent_metadata = JSON.parse(transaction.payment_intent_metadata);
-    }
+
 
     // Get risk assessment
     if (transaction.payment_intent_id) {
@@ -292,8 +296,8 @@ export class TransactionMonitoringService {
         risk.geo_location = JSON.parse(risk.geo_location || '{}');
         risk.velocity_checks = JSON.parse(risk.velocity_checks || '{}');
         transaction.risk_assessment = risk;
-      }
-    }
+
+
 
     // Get refund requests
     const refundResult = await this.db.query(
@@ -316,7 +320,7 @@ export class TransactionMonitoringService {
     }));
 
     return transaction;
-  }
+
 
   // =============================================
   // Transaction Analytics & Summary
@@ -335,12 +339,12 @@ export class TransactionMonitoringService {
     if (filters?.userId) {
       conditions.push('user_id = ?');
       params.push(filters.userId);
-    }
+
 
     if (filters?.provider) {
       conditions.push('provider = ?');
       params.push(filters.provider);
-    }
+
 
     const whereClause = `WHERE ${conditions.join(' AND ')}`;
 
@@ -405,7 +409,7 @@ export class TransactionMonitoringService {
       topProviders: providerResult,
       recentTrends: trendsResult
     };
-  }
+
 
   // =============================================
   // Transaction Modification & Actions
@@ -421,7 +425,7 @@ export class TransactionMonitoringService {
     const transaction = await this.getTransactionDetails(transactionId);
     if (!transaction) {
       throw new Error('Transaction not found');
-    }
+
 
     // Log the status change
     await this.db.query(`
@@ -444,7 +448,7 @@ export class TransactionMonitoringService {
     );
 
     this.fastify.log.info(`Transaction ${transactionId} status changed from ${transaction.status} to ${newStatus} by admin ${adminUserId}`);
-  }
+
 
   async addTransactionNote(
     transactionId: string, 
@@ -457,7 +461,7 @@ export class TransactionMonitoringService {
         transaction_id, admin_user_id, note, created_at
       ) VALUES (?, ?, ?, ?)
     `, [transactionId, adminUserId, note, new Date()]);
-  }
+
 
   async getTransactionNotes(transactionId: string): Promise<any[]> {
 
@@ -472,7 +476,7 @@ export class TransactionMonitoringService {
       WHERE tn.transaction_id = ?
       ORDER BY tn.created_at DESC
     `, [transactionId]);
-  }
+
 
   // =============================================
   // Risk & Fraud Analysis
@@ -482,12 +486,12 @@ export class TransactionMonitoringService {
     riskScore: number;
     riskFactors: string[];
     recommendations: string[];
-  }> {
+> {
 
     const transaction = await this.getTransactionDetails(transactionId);
     if (!transaction) {
       throw new Error('Transaction not found');
-    }
+
 
     let riskScore = transaction.risk_score || 0;
     const riskFactors: string[] = [...transaction.fraud_flags];
@@ -498,7 +502,7 @@ export class TransactionMonitoringService {
       riskScore += 15;
       riskFactors.push('high_amount_transaction');
       recommendations.push('Review transaction legitimacy');
-    }
+
 
     // New user risk
     const userAgeResult = await this.db.query(
@@ -511,7 +515,7 @@ export class TransactionMonitoringService {
       riskScore += 20;
       riskFactors.push('new_user_account');
       recommendations.push('Verify user identity');
-    }
+
 
     // Velocity check
     const recentTransactionsResult = await this.db.query(`
@@ -525,13 +529,13 @@ export class TransactionMonitoringService {
       riskScore += 25;
       riskFactors.push('high_velocity_transactions');
       recommendations.push('Review transaction velocity');
-    }
+
 
     if (recentActivity?.total_amount > 100000) { // $1000+
       riskScore += 20;
       riskFactors.push('high_velocity_amount');
       recommendations.push('Review spending velocity');
-    }
+
 
     // Failed payments history
     const failedPaymentsResult = await this.db.query(`
@@ -545,23 +549,23 @@ export class TransactionMonitoringService {
       riskScore += 15;
       riskFactors.push('multiple_failed_payments');
       recommendations.push('Check payment method validity');
-    }
+
 
     // Add general recommendations based on risk score
     if (riskScore > 70) {
       recommendations.push('Consider blocking transaction');
       recommendations.push('Contact customer for verification');
-    } else if (riskScore > 40) {
+ else if (riskScore > 40) {
       recommendations.push('Manual review recommended');
       recommendations.push('Monitor user activity closely');
-    }
+
 
     return {
       riskScore: Math.min(riskScore, 100),
       riskFactors: [...new Set(riskFactors)],
       recommendations: [...new Set(recommendations)]
     };
-  }
+
 
   async flagTransactionForReview(
     transactionId: string,
@@ -582,7 +586,7 @@ export class TransactionMonitoringService {
         transaction_id, admin_user_id, action, old_value, new_value, reason, created_at
       ) VALUES (?, ?, 'flag_added', null, ?, ?, ?)
     `, [transactionId, adminUserId, flagType, reason, new Date()]);
-  }
+
 
   async getTransactionFlags(transactionId: string): Promise<any[]> {
 
@@ -597,7 +601,7 @@ export class TransactionMonitoringService {
       WHERE tf.transaction_id = ?
       ORDER BY tf.created_at DESC
     `, [transactionId]);
-  }
+
 
   // =============================================
   // Export & Reporting
@@ -615,7 +619,7 @@ export class TransactionMonitoringService {
 
     if (format === 'json') {
       return JSON.stringify(transactions, null, 2);
-    }
+
 
     // CSV export
     const headers = [
@@ -636,7 +640,7 @@ export class TransactionMonitoringService {
     ]);
 
     return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-  }
+
 
   async generateTransactionReport(
     startDate: Date,
@@ -696,6 +700,5 @@ export class TransactionMonitoringService {
 
     default:
       throw new Error('Invalid report type');
-    }
-  }
-}
+
+

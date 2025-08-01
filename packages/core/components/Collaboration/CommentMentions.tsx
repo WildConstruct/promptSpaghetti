@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { User, Crown, Shield } from 'lucide-react';
-}
-interface MentionUser {
-  id: string;
+
+
+interface MentionUser { id: string;
   name: string;
   email?: string;
   avatar_url?: string;
@@ -11,68 +11,59 @@ interface MentionUser {
   interface CommentMentionsProps {
   workspaceId: string;
   query: string;
-  onSelect: (userId: string, userName: string) => void;
+  onSelect: (userId: string, userName: string) => void
   onClose: () => void;
   maxResults?: number;
-  const CommentMentions: React.FC<CommentMentionsProps> = ({ ),
-  workspaceId,
-  query,
-  onSelect,
-  onClose,
+  const CommentMentions: React.FC<CommentMentionsProps> = ({ );
+  workspaceId;
+  query;
+  onSelect;
+  onClose }
   maxResults = 10
-}
-}) => {
-  const [users, setUsers] = useState<MentionUser>([]);
+
+
+}) => { const [users, setUsers] = useState<MentionUser>([]);
   const [loading, setLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   // Fetch users matching the query
-  const fetchUsers = useCallback(async (searchQuery: string) => {,
+  const fetchUsers = useCallback(async (searchQuery: string) => {
   if (!searchQuery.trim()) {
   setUsers([]);
   return;
   setLoading(true);
   try {
   const params = new URLSearchParams({)
-  q: searchQuery,
-  limit: maxResults.toString(),
+  q: searchQuery
+  limit: maxResults.toString() }
 });
       const response = await fetch(`/api/workspaces/${workspaceId}/members/search?${params}`);}
-      if (response.ok) {
-        const data = await response.json();
+      if (response.ok) { const data = await response.json();
         setUsers(data.users || []);
-        setSelectedIndex(0);
-    } catch (err) {
-  console.error('Failed to fetch users for mentions:', err);
-  setUsers([]);
-} finally {
-      setLoading(false);
-  }, [workspaceId, maxResults]);
+        setSelectedIndex(0) } catch (err) { console.error('Failed to fetch users for mentions:', err);
+  setUsers([]) } finally { setLoading(false) }, [workspaceId, maxResults]);
   // Debounce search queries
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      fetchUsers(query);
-    }, 200);
+  useEffect(() => { const timeoutId = setTimeout(() => {
+      fetchUsers(query) }, 200);
     return () => clearTimeout(timeoutId);
   }, [query, fetchUsers]);
   // Handle keyboard navigation
-  useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {,
+  useEffect(() => { const handleKeyDown = (e: KeyboardEvent) => {
   if (users.length === 0) return;
   switch (e.key) {
-  case 'ArrowDown':,
+  case 'ArrowDown':
   e.preventDefault();
   setSelectedIndex(prev => Math.min(prev + 1, users.length - 1));
   break;
-  case 'ArrowUp':,
+  case 'ArrowUp':
   e.preventDefault();
   setSelectedIndex(prev => Math.max(prev - 1, 0));
   break;
-  case 'Enter':,
+  case 'Enter':
   e.preventDefault();
   if (users[selectedIndex]) {
   onSelect(users[selectedIndex].id, users[selectedIndex].name);
   break;
-  case 'Escape':,
+  case 'Escape': }
   e.preventDefault();
   onClose();
   break;
@@ -80,26 +71,24 @@ interface MentionUser {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [users, selectedIndex, onSelect, onClose]);
-  const getRoleIcon = (role?: string) => {
-  switch (role) {
-  case 'owner':,
+  const getRoleIcon = (role?: string) => { switch (role) {
+  case 'owner':
   return <Crown className="w-3 h-3 text-yellow-500" />;
-  case 'admin':,
+  case 'admin':
   return <Shield className="w-3 h-3 text-red-500" />;
-  default:,
+  default: }
   return <User className="w-3 h-3 text-gray-400" />;
 };
-  const getRoleColor = (role?: string) => {
-  switch (role) {
-  case 'owner':,
+  const getRoleColor = (role?: string) => { switch (role) {
+  case 'owner':
   return 'text-yellow-600';
-  case 'admin':,
+  case 'admin':
   return 'text-red-600';
-  case 'editor':,
+  case 'editor':
   return 'text-blue-600';
-  case 'viewer':,
+  case 'viewer':
   return 'text-gray-600';
-  default:,
+  default: }
   return 'text-gray-600';
 };
   if (loading) {
@@ -125,9 +114,9 @@ interface MentionUser {
         <button
           key={user.id}
           onClick={() => onSelect(user.id, user.name)}
-          className={`w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 transition-colors ${
-  index === selectedIndex ? 'bg-blue-50 border-l-4 border-l-blue-500' : '',
-}`}
+          className={ `w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 transition-colors ${
+  index === selectedIndex ? 'bg-blue-50 border-l-4 border-l-blue-500' : '' }
+`}
         >
           {/* Avatar */}
           <div className="relative flex-shrink-0">

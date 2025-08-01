@@ -72,7 +72,7 @@ const SAMPLE_REPORT_DATA = {
         { category: 'B', count: 16 },
         { category: 'C', count: 17 }
       ]
-    }
+
   ]
 };
 
@@ -90,9 +90,9 @@ class ReportExportTester {
         passed: 0,
         failed: 0,
         warnings: 0
-      }
+
     };
-  }
+
 
   /**
    * Run all export system tests
@@ -140,16 +140,15 @@ class ReportExportTester {
       this.displayTestSummary();
 
       return this.results;
-
-    } catch (error) {
+ catch (error) {
       console.error('\n❌ Report Export Tests Failed:', error.message);
       this.results.endTime = new Date();
       
       // Generate partial report
       await this.generateTestReport();
       throw error;
-    }
-  }
+
+
 
   /**
    * Setup test environment
@@ -160,24 +159,24 @@ class ReportExportTester {
     // Create output directory
     try {
       await fs.access(TEST_CONFIG.export.outputDir);
-    } catch (error) {
+ catch (error) {
       await fs.mkdir(TEST_CONFIG.export.outputDir, { recursive: true });
-    }
+
 
     // Check server availability
     try {
       const response = await fetch(`${TEST_CONFIG.server.baseUrl}/health`);
       if (!response.ok) {
         throw new Error(`Server not accessible: ${response.status}`);
-      }
+
       console.log('✅ Server is accessible');
-    } catch (error) {
+ catch (error) {
       console.warn('⚠️  Server might not be running:', error.message);
       console.log('   Make sure to start the server with: pnpm --filter server dev');
-    }
+
 
     console.log('✅ Test environment ready\n');
-  }
+
 
   /**
    * Test API endpoints
@@ -202,22 +201,22 @@ class ReportExportTester {
 
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
+
 
           const data = await response.json();
           if (!data.success) {
             throw new Error(`API Error: ${data.error || 'Unknown error'}`);
-          }
+
 
           return { status: response.status, dataLength: JSON.stringify(data).length };
         }
       );
 
       console.log(`   ${testResult.success ? '✅' : '❌'} ${endpoint.description}`);
-    }
+
 
     console.log('');
-  }
+
 
   /**
    * Test export formats
@@ -237,7 +236,7 @@ class ReportExportTester {
               includeCharts: true,
               includeRawData: true,
               compression: false
-            }
+
           };
 
           const response = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/export`, {
@@ -253,12 +252,12 @@ class ReportExportTester {
 
           if (!response.ok) {
             throw new Error(`Export failed: ${response.status} ${response.statusText}`);
-          }
+
 
           const result = await response.json();
           if (!result.success) {
             throw new Error(`Export error: ${result.error}`);
-          }
+
 
           return {
             exportId: result.data.id,
@@ -266,14 +265,14 @@ class ReportExportTester {
             size: result.data.size,
             processingTime: result.data.metadata.processingTime
           };
-        }
+
       );
 
       console.log(`   ${testResult.success ? '✅' : '❌'} ${format.toUpperCase()} export - ${testResult.success ? `${testResult.result?.processingTime}ms` : testResult.error}`);
-    }
+
 
     console.log('');
-  }
+
 
   /**
    * Test delivery methods
@@ -298,19 +297,19 @@ class ReportExportTester {
                 to: ['test@example.com'],
                 subject: 'Test Export Delivery',
                 message: 'This is a test export delivery via email.'
-              }
+
             };
-          } else if (delivery === 'webhook') {
+ else if (delivery === 'webhook') {
             exportConfig.delivery_config = {
               webhook: {
                 url: 'https://httpbin.org/post',
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
-                }
-              }
+
+
             };
-          }
+
 
           const response = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/export`, {
             method: 'POST',
@@ -325,22 +324,22 @@ class ReportExportTester {
 
           if (!response.ok) {
             throw new Error(`Delivery test failed: ${response.status} ${response.statusText}`);
-          }
+
 
           const result = await response.json();
           if (!result.success) {
             throw new Error(`Delivery error: ${result.error}`);
-          }
+
 
           return result.data;
-        }
+
       );
 
       console.log(`   ${testResult.success ? '✅' : '❌'} ${delivery} delivery`);
-    }
+
 
     console.log('');
-  }
+
 
   /**
    * Test export options and configuration
@@ -364,7 +363,7 @@ class ReportExportTester {
       {
         name: 'Raw data excluded',
         config: { format: 'html', delivery: 'file', options: { includeRawData: false } }
-      }
+
     ];
 
     for (const test of optionsTests) {
@@ -384,22 +383,22 @@ class ReportExportTester {
 
           if (!response.ok) {
             throw new Error(`Options test failed: ${response.status} ${response.statusText}`);
-          }
+
 
           const result = await response.json();
           if (!result.success) {
             throw new Error(`Options error: ${result.error}`);
-          }
+
 
           return result.data;
-        }
+
       );
 
       console.log(`   ${testResult.success ? '✅' : '❌'} ${test.name}`);
-    }
+
 
     console.log('');
-  }
+
 
   /**
    * Test bulk export
@@ -425,7 +424,7 @@ class ReportExportTester {
             name: 'Report 3',
             reportData: { ...SAMPLE_REPORT_DATA, metadata: { ...SAMPLE_REPORT_DATA.metadata, title: 'Bulk Test Report 3' } },
             config: { format: 'html', delivery: 'file' }
-          }
+
         ];
 
         const response = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/bulk-export`, {
@@ -439,30 +438,30 @@ class ReportExportTester {
               parallel: true,
               maxConcurrency: 2,
               failFast: false
-            }
+
           })
         });
 
         if (!response.ok) {
           throw new Error(`Bulk export failed: ${response.status} ${response.statusText}`);
-        }
+
 
         const result = await response.json();
         if (!result.success) {
           throw new Error(`Bulk export error: ${result.error}`);
-        }
+
 
         return {
           totalExports: result.data.totalExports,
           successfulExports: result.data.successfulExports,
           failedExports: result.data.failedExports
         };
-      }
+
     );
 
     console.log(`   ${testResult.success ? '✅' : '❌'} Bulk export - ${testResult.success ? `${testResult.result?.successfulExports}/${testResult.result?.totalExports} successful` : testResult.error}`);
     console.log('');
-  }
+
 
   /**
    * Test scheduled exports
@@ -483,7 +482,7 @@ class ReportExportTester {
             options: {
               includeCharts: true,
               includeRawData: true
-            }
+
           },
           schedule: {
             frequency: 'daily',
@@ -502,12 +501,12 @@ class ReportExportTester {
 
         if (!response.ok) {
           throw new Error(`Schedule creation failed: ${response.status} ${response.statusText}`);
-        }
+
 
         const result = await response.json();
         if (!result.success) {
           throw new Error(`Schedule error: ${result.error}`);
-        }
+
 
         // Test canceling the schedule
         const cancelResponse = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/schedules/${result.data.id}`, {
@@ -516,7 +515,7 @@ class ReportExportTester {
 
         if (!cancelResponse.ok) {
           console.warn('   ⚠️  Failed to cleanup test schedule');
-        }
+
 
         return result.data;
       }
@@ -524,7 +523,7 @@ class ReportExportTester {
 
     console.log(`   ${testResult.success ? '✅' : '❌'} Scheduled export creation and cleanup`);
     console.log('');
-  }
+
 
   /**
    * Test history and statistics
@@ -547,7 +546,7 @@ class ReportExportTester {
         name: 'Filtered History (CSV)',
         endpoint: '/api/reports/history?format=csv&limit=5',
         validator: (data) => Array.isArray(data)
-      }
+
     ];
 
     for (const test of tests) {
@@ -558,26 +557,26 @@ class ReportExportTester {
           
           if (!response.ok) {
             throw new Error(`Request failed: ${response.status} ${response.statusText}`);
-          }
+
 
           const result = await response.json();
           if (!result.success) {
             throw new Error(`API error: ${result.error}`);
-          }
+
 
           if (!test.validator(result.data)) {
             throw new Error('Data validation failed');
-          }
+
 
           return result.data;
         }
       );
 
       console.log(`   ${testResult.success ? '✅' : '❌'} ${test.name}`);
-    }
+
 
     console.log('');
-  }
+
 
   /**
    * Test preview functionality
@@ -604,12 +603,12 @@ class ReportExportTester {
 
           if (!response.ok) {
             throw new Error(`Preview failed: ${response.status} ${response.statusText}`);
-          }
+
 
           const result = await response.json();
           if (!result.success) {
             throw new Error(`Preview error: ${result.error}`);
-          }
+
 
           return {
             format: result.data.format,
@@ -617,14 +616,14 @@ class ReportExportTester {
             recordCount: result.data.metadata.recordCount,
             estimatedSize: result.data.metadata.estimatedSize
           };
-        }
+
       );
 
       console.log(`   ${testResult.success ? '✅' : '❌'} ${format.toUpperCase()} preview - ${testResult.success ? `${testResult.result?.previewLength} chars` : testResult.error}`);
-    }
+
 
     console.log('');
-  }
+
 
   /**
    * Run individual test with error handling
@@ -654,8 +653,7 @@ class ReportExportTester {
       this.results.summary.passed++;
 
       return testResult;
-
-    } catch (error) {
+ catch (error) {
       const duration = Date.now() - startTime;
       const testResult = {
         name: testName,
@@ -670,8 +668,8 @@ class ReportExportTester {
       this.results.summary.failed++;
 
       return testResult;
-    }
-  }
+
+
 
   /**
    * Generate comprehensive test report
@@ -703,7 +701,7 @@ class ReportExportTester {
     console.log('📄 Test reports generated:');
     console.log(`   JSON: ${jsonPath}`);
     console.log(`   HTML: ${htmlPath}`);
-  }
+
 
   /**
    * Generate HTML test report
@@ -780,7 +778,7 @@ class ReportExportTester {
     </div>
 </body>
 </html>`;
-  }
+
 
   /**
    * Display test summary
@@ -807,11 +805,11 @@ class ReportExportTester {
         .forEach(test => {
           console.log(`   • ${test.name}: ${test.error}`);
         });
-    }
+
 
     console.log(`\n📁 Test results saved to: ${TEST_CONFIG.export.outputDir}`);
-  }
-}
+
+
 
 /**
  * Main execution
@@ -825,19 +823,19 @@ async function runExportSystemTests(): Promise<void> {
     if (results.summary.failed === 0) {
       console.log('\n🎉 All tests passed! Report Export System is ready for production use.');
       process.exit(0);
-    } else {
+ else {
       console.log('\n⚠️  Some tests failed. Please review the results and fix issues before deployment.');
       process.exit(1);
-    }
-  } catch (error) {
+
+ catch (error) {
     console.error('\nTest execution failed:', error);
     process.exit(1);
-  }
-}
+
+
 
 // Run tests if called directly
 if (require.main === module) {
   runExportSystemTests().catch(console.error);
-}
+
 
 module.exports = { ReportExportTester, runExportSystemTests };

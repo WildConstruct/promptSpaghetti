@@ -7,60 +7,55 @@
 
 // Core performance management
 export { default as AdvancedCacheManager } from './AdvancedCacheManager';
-export type {
-  CacheConfig,
+export type { CacheConfig,
   CacheItem,
-  CacheMetrics,
+  CacheMetrics }
   EvictionStrategy
-} from './AdvancedCacheManager';
+ from './AdvancedCacheManager';
 
 export { default as LoadBalancer } from './LoadBalancer';
-export type {
-  LoadBalancerConfig,
+export type { LoadBalancerConfig,
   ModelInstance,
-  LoadBalancingRequest,
+  LoadBalancingRequest }
   LoadBalancingResult
-} from './LoadBalancer';
+ from './LoadBalancer';
 
 export { default as PerformanceMonitor } from './PerformanceMonitor';
-export type {
-  PerformanceMetrics,
+export type { PerformanceMetrics,
   PerformanceAlert,
   PerformanceThreshold,
   MonitoringConfig,
-  ModelPerformanceData,
+  ModelPerformanceData }
   PerformanceReport
-} from './PerformanceMonitor';
+ from './PerformanceMonitor';
 
 export { default as ResourceOptimizer } from './ResourceOptimizer';
-export type {
-  ResourceUsage,
+export type { ResourceUsage,
   OptimizationStrategy,
-  ResourceOptimizationConfig,
+  ResourceOptimizationConfig }
   ModelResourceProfile
-} from './ResourceOptimizer';
+ from './ResourceOptimizer';
 
 // Eviction strategies
-export {
-  LRUEvictionStrategy,
-  LFUEvictionStrategy,
+export { LRUEvictionStrategy,
+  LFUEvictionStrategy }
   AdaptiveEvictionStrategy
-} from './AdvancedCacheManager';
+ from './AdvancedCacheManager';
 
 // Type definitions for missing interfaces
-}
-interface CacheConfig {
-  maxSize: number;
+
+
+interface CacheConfig { maxSize: number;
   maxMemoryMB: number;
   defaultTTL: number;
   evictionPolicy: string;
   compressionEnabled: boolean;
-  persistToDisk: boolean;
-}
+  persistToDisk: boolean }
+},
   metrics: { enabled: boolean; reportingInterval?: number };
-}
-interface LoadBalancerConfig {
-  maxRetries: number;
+
+
+interface LoadBalancerConfig { maxRetries: number;
   strategy: string;
   healthCheckInterval?: number;
   failoverThreshold?: number;
@@ -92,44 +87,41 @@ interface LoadBalancerConfig {
   interface ResourceOptimizationConfig {
   enabled: boolean;
   monitoringInterval: number;
-  optimizationThresholds: {
+  optimizationThresholds: { }
   memoryUsage: number;
   cpuUsage: number;
   diskUsage: number;
   responseTime: number;
-}
+
+
 };
-  strategies: {
+  strategies: { ,
   memoryOptimization: boolean;
   cpuOptimization: boolean;
   cacheOptimization: boolean;
   modelCompression: boolean;
   modelPooling?: boolean;
-  requestBatching?: boolean;
-};
+  requestBatching?: boolean };
 
 // Utility functions for performance optimization
 
 // Performance analysis utilities
-export const analyzePerformanceMetrics = (metrics: PerformanceMetrics): {
+export const analyzePerformanceMetrics = (metrics: PerformanceMetrics): { ,
   averageResponseTime: number;
   successRateAverage: number;
   costTrend: 'increasing' | 'decreasing' | 'stable';
-  recommendations: string;
-} => {
-  if (metrics.length === 0) {
+  recommendations: string } => { if (metrics.length === 0) {
   return {
   averageResponseTime: 0,
   successRateAverage: 0,
   costTrend: 'stable',
-  recommendations: [],
+  recommendations: [] }
 };
   const averageResponseTime = metrics.reduce((sum, m) => sum + (m.averageResponseTime || 0), 0) / metrics.length;
   const successRateAverage = metrics.reduce((sum, m) => sum + (m.successRate || 0), 0) / metrics.length;
   // Determine cost trend
   let costTrend: 'increasing' | 'decreasing' | 'stable' = 'stable';
-  if (metrics.length >= 2) {
-  const recentCosts = metrics.slice(-5).map(m => m.totalCost || 0);
+  if (metrics.length >= 2) { const recentCosts = metrics.slice(-5).map(m => m.totalCost || 0);
   const earlyAvg = recentCosts.slice(;);
   0,
   Math.floor(recentCosts.length / 2)
@@ -151,32 +143,30 @@ export const analyzePerformanceMetrics = (metrics: PerformanceMetrics): {
   return {
   averageResponseTime,
   successRateAverage,
-  costTrend,
+  costTrend }
   recommendations
 };
 };
 
-export const calculateResourceEfficiency = (usage: ResourceUsage, performance: PerformanceMetrics): number => {
-  // Calculate efficiency score based on resource usage vs performance
+export const calculateResourceEfficiency = (usage: ResourceUsage, performance: PerformanceMetrics): number => { // Calculate efficiency score based on resource usage vs performance
   const memoryEfficiency = 1 - (usage.memory / 100);
   const cpuEfficiency = 1 - (usage.cpu / 100);
   const performanceScore = (performance.successRate || 0) * (1 / Math.max((performance.averageResponseTime || 1000) / 1000, 0.1));
-  return (memoryEfficiency * 0.3) + (cpuEfficiency * 0.3) + (performanceScore * 0.4);
-};
+  return (memoryEfficiency * 0.3) + (cpuEfficiency * 0.3) + (performanceScore * 0.4) };
 
-}
-export interface OptimizationCategories {
-  categories: {
-}
+
+export interface OptimizationCategories { categories: { }
+
+},
   caching: { score: number; recommendations: string };
     performance: { score: number; recommendations: string };
     resources: { score: number; recommendations: string };
   };
   priorityActions: string;
-}
+
 export cacheMetrics: { hitRate: number; memoryUsage?: number },
   performanceMetrics: PerformanceMetrics,
-  resourceUsage: ResourceUsage): OptimizationCategories => {,
+  resourceUsage: ResourceUsage): OptimizationCategories => { ,
   // Cache analysis
   const cacheScore = cacheMetrics.hitRate * 100;
   const cacheRecommendations: string = [];
@@ -209,7 +199,7 @@ export cacheMetrics: { hitRate: number; memoryUsage?: number },
   retryRate: 0,
   timestamp: Date.now(),
   windowStart: Date.now(),
-  windowEnd: Date.now(),
+  windowEnd: Date.now() }
 }) * 100;
   const overallScore = (cacheScore + performanceScore + resourceScore) / 3;
   // Priority actions
@@ -217,13 +207,12 @@ export cacheMetrics: { hitRate: number; memoryUsage?: number },
   if (cacheScore < 50) priorityActions.push('Optimize caching strategy');
   if (performanceScore < 80) priorityActions.push('Address performance issues');
   if (resourceScore < 60) priorityActions.push('Optimize resource usage');
-  return {
-    overallScore,
-    categories: {
+  return { overallScore,
+    categories: { }
   caching: { score: cacheScore, recommendations: cacheRecommendations },
       performance: { score: performanceScore, recommendations: perfAnalysis.recommendations },
       resources: { score: resourceScore, recommendations: ['Monitor resource utilization trends'] }
-  }
+
     priorityActions
   };
 };

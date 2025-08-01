@@ -4,8 +4,8 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface ExemptionRequest {
   requestId?: string;
   requestorId: string;
@@ -20,12 +20,13 @@ export interface ExemptionRequest {
   stakeholders: string[];
   requestDate?: Date;
   status?: ExemptionStatus;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExemptionRecord {
   id: string;
   requestId: string;
@@ -44,12 +45,13 @@ export interface ExemptionRecord {
   createdAt: Date;
   updatedAt: Date;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExemptionApproval {
   approverId: string;
   approvalType: ApprovalType;
@@ -57,12 +59,13 @@ export interface ExemptionApproval {
   comments: string;
   approvedAt?: Date;
   conditions?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExemptionReview {
   reviewId: string;
   reviewerId: string;
@@ -72,16 +75,17 @@ export interface ExemptionReview {
   recommendations: string[];
   nextReviewDate?: Date;
   complianceStatus: ComplianceStatus;
-}
-}
-}
+
+
+
+
 
 export enum ExemptionType {
   LEGAL_HOLD = 'LEGAL_HOLD',
   BUSINESS_CONTINUITY = 'BUSINESS_CONTINUITY',
   TECHNICAL_SYSTEM = 'TECHNICAL_SYSTEM',
   REGULATORY_COMPLIANCE = 'REGULATORY_COMPLIANCE'
-}
+
 
 export enum ExemptionStatus {
   DRAFT = 'DRAFT',
@@ -92,7 +96,7 @@ export enum ExemptionStatus {
   ACTIVE = 'ACTIVE',
   EXPIRED = 'EXPIRED',
   TERMINATED = 'TERMINATED'
-}
+
 
 export enum ApprovalType {
   BUSINESS = 'BUSINESS',
@@ -100,28 +104,28 @@ export enum ApprovalType {
   LEGAL = 'LEGAL',
   COMPLIANCE = 'COMPLIANCE',
   SECURITY = 'SECURITY'
-}
+
 
 export enum ApprovalStatus {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
   DENIED = 'DENIED',
   CONDITIONAL = 'CONDITIONAL'
-}
+
 
 export enum ReviewType {
   PERIODIC = 'PERIODIC',
   RENEWAL = 'RENEWAL',
   COMPLIANCE = 'COMPLIANCE',
   INCIDENT = 'INCIDENT'
-}
+
 
 export enum ComplianceStatus {
   COMPLIANT = 'COMPLIANT',
   NON_COMPLIANT = 'NON_COMPLIANT',
   PARTIAL_COMPLIANCE = 'PARTIAL_COMPLIANCE',
   UNDER_REVIEW = 'UNDER_REVIEW'
-}
+
 
 export class DataRetentionExemptionService {
   private db: DatabaseService;
@@ -130,7 +134,7 @@ export class DataRetentionExemptionService {
   constructor(db: DatabaseService, audit: AuditService) {
     this.db = db;
     this.audit = audit;
-  }
+
 
   /**
    * Submit a new exemption request
@@ -179,15 +183,14 @@ export class DataRetentionExemptionService {
           exemptionType: request.exemptionType,
           dataCategories: request.dataCategories,
           expectedDuration: request.expectedDuration
-        }
+
       });
 
       return {
         requestId,
         status: 'submitted'
       };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'EXEMPTION_REQUEST_ERROR',
         userId: request.requestorId,
@@ -197,12 +200,12 @@ export class DataRetentionExemptionService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Get exemption requests for review
@@ -218,7 +221,7 @@ export class DataRetentionExemptionService {
     `, [reviewerId, ApprovalStatus.PENDING]);
 
     return result.rows.map(this.mapToExemptionRecord);
-  }
+
 
   /**
    * Process exemption approval
@@ -249,20 +252,19 @@ export class DataRetentionExemptionService {
           approved: true,
           nextSteps: ['Exemption activated', 'Monitoring initiated', 'Stakeholders notified']
         };
-      } else if (approvalStatus.anyDenied) {
+ else if (approvalStatus.anyDenied) {
         await this.updateExemptionStatus(requestId, ExemptionStatus.DENIED);
         return {
           approved: false,
           nextSteps: ['Request denied', 'Requestor notified', 'Review process available']
         };
-      } else {
+ else {
         return {
           approved: false,
           nextSteps: [`Pending approvals: ${approvalStatus.pendingApprovals.join(', ')}`]
         };
-      }
 
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'EXEMPTION_APPROVAL_ERROR',
         userId: approverId,
@@ -273,12 +275,12 @@ export class DataRetentionExemptionService {
         metadata: {
           approvalType,
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Get active exemptions
@@ -298,23 +300,23 @@ export class DataRetentionExemptionService {
     if (filters?.exemptionType) {
       query += ` AND exemption_type = $${params.length + 1}`;
       params.push(filters.exemptionType);
-    }
+
 
     if (filters?.expiringBefore) {
       query += ` AND end_date < $${params.length + 1}`;
       params.push(filters.expiringBefore);
-    }
+
 
     if (filters?.dataCategory) {
       query += ` AND data_categories::text LIKE $${params.length + 1}`;
       params.push(`%${filters.dataCategory}%`);
-    }
+
 
     query += ' ORDER BY end_date ASC';
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapToExemptionRecord);
-  }
+
 
   /**
    * Schedule periodic reviews
@@ -324,7 +326,7 @@ export class DataRetentionExemptionService {
     const exemption = await this.getExemptionById(exemptionId);
     if (!exemption) {
       throw new Error('Exemption not found');
-    }
+
 
     const reviewDate = this.calculateNextReviewDate(exemption.exemptionType);
     
@@ -333,7 +335,7 @@ export class DataRetentionExemptionService {
         exemption_id, review_type, scheduled_date, status, created_at
       ) VALUES ($1, $2, $3, $4, NOW())
     `, [exemptionId, ReviewType.PERIODIC, reviewDate, 'SCHEDULED']);
-  }
+
 
   /**
    * Terminate exemption
@@ -363,8 +365,7 @@ export class DataRetentionExemptionService {
         success: true,
         metadata: { reason }
       });
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'EXEMPTION_TERMINATION_ERROR',
         userId: terminatedBy,
@@ -374,12 +375,12 @@ export class DataRetentionExemptionService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Generate compliance report
@@ -389,7 +390,7 @@ export class DataRetentionExemptionService {
     exemptionsByType: Record<ExemptionType, number>;
     reviewCompliance: ReviewComplianceMetrics;
     riskAssessment: RiskAssessment;
-  }> {
+> {
     const [summary, exemptionsByType, reviewMetrics] = await Promise.all([
       this.getComplianceSummary(startDate, endDate),
       this.getExemptionsByType(startDate, endDate),
@@ -404,7 +405,7 @@ export class DataRetentionExemptionService {
       reviewCompliance: reviewMetrics,
       riskAssessment
     };
-  }
+
 
   // Private helper methods
 
@@ -412,23 +413,23 @@ export class DataRetentionExemptionService {
 
     if (!request.requestorId) {
       throw new Error('Requestor ID is required');
-    }
+
 
     if (!request.dataCategories || request.dataCategories.length === 0) {
       throw new Error('At least one data category must be specified');
-    }
+
 
     if (!request.justification || request.justification.length < 50) {
       throw new Error('Detailed justification is required (minimum 50 characters)');
-    }
+
 
     if (!request.expectedDuration || request.expectedDuration <= new Date()) {
       throw new Error('Expected duration must be in the future');
-    }
+
 
     // Validate business reason based on exemption type
     await this.validateBusinessReason(request.exemptionType, request.businessReason);
-  }
+
 
   private async initializeApprovalWorkflow(requestId: string, exemptionType: ExemptionType): Promise<void> {
 
@@ -440,8 +441,8 @@ export class DataRetentionExemptionService {
           request_id, approver_id, approval_type, status, created_at
         ) VALUES ($1, $2, $3, $4, NOW())
       `, [requestId, approval.approverId, approval.type, ApprovalStatus.PENDING]);
-    }
-  }
+
+
 
   private getRequiredApprovals(exemptionType: ExemptionType): { approverId: string; type: ApprovalType }[] {
     switch (exemptionType) {
@@ -467,8 +468,8 @@ export class DataRetentionExemptionService {
       ];
     default:
       throw new Error(`Unknown exemption type: ${exemptionType}`);
-    }
-  }
+
+
 
   private calculateNextReviewDate(exemptionType: ExemptionType): Date {
     const now = new Date();
@@ -483,15 +484,15 @@ export class DataRetentionExemptionService {
       return new Date(now.getTime() + 12 * 30 * 24 * 60 * 60 * 1000); // 12 months
     default:
       return new Date(now.getTime() + 12 * 30 * 24 * 60 * 60 * 1000); // Default 12 months
-    }
-  }
+
+
 
   private async generateRequestId(): Promise<string> {
 
     const timestamp = Date.now();
     const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     return `EXE-${timestamp}-${random}`;
-  }
+
 
   private mapToExemptionRecord(row: unknown): ExemptionRecord {
     return {
@@ -513,100 +514,103 @@ export class DataRetentionExemptionService {
       updatedAt: row.updated_at,
       metadata: JSON.parse(row.metadata || '{}')
     };
-  }
+
 
   // Additional private methods would be implemented here...
   private async validateBusinessReason(_____type: ExemptionType, _____reason: string): Promise<void> {
 
     // Implementation for validating business reasons
-  }
+
 
   private async checkApprovalCompleteness(_____requestId: string): Promise<{
     allApproved: boolean;
     anyDenied: boolean;
     pendingApprovals: string[];
-  }> {
+> {
 
     // Implementation for checking approval status
     return { allApproved: false, anyDenied: false, pendingApprovals: [] };
-  }
+
 
   private async activateExemption(_____requestId: string): Promise<void> {
 
     // Implementation for activating exemption
-  }
+
 
   private async updateExemptionStatus(_____requestId: string, _____status: ExemptionStatus): Promise<void> {
 
     // Implementation for updating status
-  }
+
 
   private async getExemptionById(_____exemptionId: string): Promise<ExemptionRecord | null> {
 
     // Implementation for getting exemption by ID
     return null;
-  }
+
 
   private async processTerminatedExemptionData(_____exemptionId: string): Promise<void> {
 
     // Implementation for processing data after termination
-  }
+
 
   private async getComplianceSummary(_____startDate: Date, _____endDate: Date): Promise<ComplianceSummary> {
 
     // Implementation for compliance summary
     return {} as ComplianceSummary;
-  }
+
 
   private async getExemptionsByType(_____startDate: Date, _____endDate: Date): Promise<Record<ExemptionType, number>> {
     // Implementation for exemptions by type
     return {} as Record<ExemptionType, number>;
-  }
+
 
   private async getReviewComplianceMetrics(_____startDate: Date, _____endDate: Date): Promise<ReviewComplianceMetrics> {
 
     // Implementation for review compliance metrics
     return {} as ReviewComplianceMetrics;
-  }
+
 
   private async calculateRiskAssessment(): Promise<RiskAssessment> {
 
     // Implementation for risk assessment
     return {} as RiskAssessment;
-  }
-}
+
+
 
 // Supporting interfaces
-}
-}
+
+
+
 interface ComplianceSummary {
   totalExemptions: number;
   activeExemptions: number;
   expiredExemptions: number;
   terminatedExemptions: number;
   complianceRate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ReviewComplianceMetrics {
   scheduledReviews: number;
   completedReviews: number;
   overdueReviews: number;
   averageReviewTime: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RiskAssessment {
   overallRiskScore: number;
   highRiskExemptions: number;
   riskFactors: string[];
   mitigationRecommendations: string[];
-}
-}
-}
+
+
+

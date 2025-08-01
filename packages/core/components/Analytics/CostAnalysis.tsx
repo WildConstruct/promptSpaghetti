@@ -9,8 +9,7 @@ import { Alert, AlertDescription } from '../ui/Alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 import { DollarSign, TrendingUp, AlertCircle, PieChart, BarChart3 } from 'lucide-react';
-import { 
-  PieChart as RechartsPieChart,
+import { PieChart as RechartsPieChart,
   Pie,
   Cell,
   ResponsiveContainer,
@@ -18,42 +17,37 @@ import {
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
+  CartesianGrid }
   Tooltip
-} from 'recharts';
+ from 'recharts';
 /**
  * Budget card props
  */
-}
+
+
 interface BudgetCardProps {
   budget: unknown;
   usage: Error;
   onUpdate: (budgetId: string, updates: unknown) => void;
-/**
- * Budget card component
- */
-}
-const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  /**
+  * Budget card component
+  */
+
+
+const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => { const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({)
-  amount: budget.amount,
-  alertThresholds: budget.alertThresholds || [75, 90],
+  amount: budget.amount
+  alertThresholds: budget.alertThresholds || [75, 90] }
 });
-  const handleSave = () => {
-    onUpdate(budget.id, editForm);
-    setIsEditing(false);
-  };
-  const getStatusColor = (percentage: number) => {
-    if (percentage >= 90) return 'bg-red-500';
+  const handleSave = () => { onUpdate(budget.id, editForm);
+    setIsEditing(false) };
+  const getStatusColor = (percentage: number) => { if (percentage >= 90) return 'bg-red-500';
     if (percentage >= 75) return 'bg-yellow-500';
-    return 'bg-green-500';
-  };
-  const getStatusText = (percentage: number) => {
-    if (percentage >= 100) return 'Exceeded';
+    return 'bg-green-500' };
+  const getStatusText = (percentage: number) => { if (percentage >= 100) return 'Exceeded';
     if (percentage >= 90) return 'Critical';
     if (percentage >= 75) return 'Warning';
-    return 'On Track';
-  };
+    return 'On Track' };
   return;
     <Card className="budget-card">
       <CardHeader>
@@ -102,8 +96,8 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
                   <Input
                     type="number"
                     value={editForm.alertThresholds[0]}
-                    onChange={(e) => setEditForm(prev => ({ )
-                      ...prev, 
+                    onChange={ (e) => setEditForm(prev => ({ )
+                      ...prev }
                       alertThresholds: [parseFloat(e.target.value), prev.alertThresholds[1]] 
                     }))}
                     placeholder="Warning"
@@ -111,8 +105,8 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
                   <Input
                     type="number"
                     value={editForm.alertThresholds[1]}
-                    onChange={(e) => setEditForm(prev => ({ )
-                      ...prev, 
+                    onChange={ (e) => setEditForm(prev => ({ )
+                      ...prev }
                       alertThresholds: [prev.alertThresholds[0], parseFloat(e.target.value)] 
                     }))}
                     placeholder="Critical"
@@ -152,14 +146,16 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
 /**
  * Cost forecast chart props
  */
-}
+
+
 interface CostForecastChartProps {
   forecastData: unknown;
   loading: boolean;
-/**
- * Cost forecast chart component
- */
-}
+  /**
+  * Cost forecast chart component
+  */
+
+
 const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loading }) => {
   if (loading) {
     return;
@@ -187,11 +183,11 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
         </CardContent>
       </Card>
     );
-  const chartData = Array.from({ length: 30 }, (_, i) => ({)
+  const chartData = Array.from({ length: 30 }, (_, i) => ({ )
   day: i + 1,
   projected: forecastData.forecastedDailyCost * (i + 1),
   lower: forecastData.confidenceInterval.lower * (i + 1) / 30,
-  upper: forecastData.confidenceInterval.upper * (i + 1) / 30,
+  upper: forecastData.confidenceInterval.upper * (i + 1) / 30 }
 }));
   return;
     <Card>
@@ -228,8 +224,8 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" />
-                <YAxis tickFormatter={(value) => `$${value.toFixed(0)}`} />}
-                <Tooltip formatter={(value: number) => [`$${value.toFixed(2)}`, 'Cost']} />}
+                <YAxis tickFormatter={(value) => `${value.toFixed(0)}`} />}
+                <Tooltip formatter={(value: number) => [`${value.toFixed(2)}`, 'Cost']} />}
                 <Line
                   type="monotone"
                   dataKey="projected"
@@ -265,17 +261,17 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
  * Cost analysis props
  */
 
-}
-export interface CostAnalysisProps {
-  analyticsClient: AnalyticsClient;
-}
+
+export interface CostAnalysisProps { analyticsClient: AnalyticsClient }
+},
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
 /**
  * Cost analysis state
  */
-}
+
+
 interface CostAnalysisState {
   loading: boolean;
   costSummary: unknown;
@@ -287,22 +283,21 @@ interface CostAnalysisState {
   /**
   * Cost analysis component
   */
-}
-}
-export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
-  analyticsClient,
-  timeRange,
-  userId,
+
+
+export const CostAnalysis: React.FC<CostAnalysisProps> = ({ )
+  analyticsClient
+  timeRange
+  userId }
   organizationId
-}) => {
-  const [state, setState] = useState<CostAnalysisState>({)
-  loading: true,
-  costSummary: null,
-  forecast: null,
-  budgets: [],
-  budgetUsage: new Map(),
-  recommendations: [],
-  error: null,
+}) => { const [state, setState] = useState<CostAnalysisState>({)
+  loading: true
+  costSummary: null
+  forecast: null
+  budgets: []
+  budgetUsage: new Map()
+  recommendations: []
+  error: null }
 });
   /**
    * Load cost data
@@ -311,13 +306,12 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
       const [costResponse, forecastResponse, budgetsResponse, recommendationsResponse] = await Promise.all([)
-        analyticsClient.getCostSummary(timeRange, userId, organizationId),
-        analyticsClient.getCostForecast(30, userId, organizationId),
-        analyticsClient.getBudgets(userId, organizationId),
+        analyticsClient.getCostSummary(timeRange, userId, organizationId)
+        analyticsClient.getCostForecast(30, userId, organizationId)
+        analyticsClient.getBudgets(userId, organizationId)
         analyticsClient.getRecommendations(userId, organizationId)
       ]);
-      if (!costResponse.success) {
-        throw new Error(costResponse.error || 'Failed to load cost summary');
+      if (!costResponse.success) { throw new Error(costResponse.error || 'Failed to load cost summary');
       // Load budget usage for each budget
       const budgetUsageMap = new Map();
       if (budgetsResponse.success && budgetsResponse.data) {
@@ -325,24 +319,22 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
           try {
             const usageResponse = await analyticsClient.getBudgetUsage(budget.id);
             if (usageResponse.success) {
-              budgetUsageMap.set(budget.id, usageResponse.data);
-          } catch (error) {
+              budgetUsageMap.set(budget.id, usageResponse.data) } catch (error) {
             console.warn(`Failed to load usage for budget ${budget.id}:`, error);}
-      setState(prev => ({)
-  ...prev,
-  loading: false,
-  costSummary: costResponse.data,
-  forecast: forecastResponse.success ? forecastResponse.data : null,
-  budgets: budgetsResponse.success ? budgetsResponse.data : [],
-  budgetUsage: budgetUsageMap,
-  recommendations: recommendationsResponse.success ? recommendationsResponse.data : [],
+      setState(prev => ({ )
+  ...prev
+  loading: false
+  costSummary: costResponse.data
+  forecast: forecastResponse.success ? forecastResponse.data : null
+  budgets: budgetsResponse.success ? budgetsResponse.data : []
+  budgetUsage: budgetUsageMap
+  recommendations: recommendationsResponse.success ? recommendationsResponse.data : [] }
 }));
-    } catch (error) {
-  console.error('Failed to load cost data:', error);
+ catch (error) { console.error('Failed to load cost data:', error);
   setState(prev => ({)
-  ...prev,
-  loading: false,
-  error: error instanceof Error ? error.message : 'Failed to load cost data',
+  ...prev
+  loading: false
+  error: error instanceof Error ? error.message : 'Failed to load cost data' }
 }));
   }, [analyticsClient, timeRange, userId, organizationId]);
   /**
@@ -353,9 +345,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
       const response = await analyticsClient.createBudget(budgetData);
       if (response.success) {
         loadCostData(); // Refresh data
-    } catch (error) {
-  console.error('Failed to create budget:', error);
-}, [analyticsClient, loadCostData]);
+ catch (error) { console.error('Failed to create budget:', error) }, [analyticsClient, loadCostData]);
   /**
    * Update budget
    */
@@ -364,15 +354,11 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
       const response = await analyticsClient.updateBudget(budgetId, updates);
       if (response.success) {
         loadCostData(); // Refresh data
-    } catch (error) {
-  console.error('Failed to update budget:', error);
-}, [analyticsClient, loadCostData]);
+ catch (error) { console.error('Failed to update budget:', error) }, [analyticsClient, loadCostData]);
   /**
    * Load data on mount
    */
-  useEffect(() => {
-    loadCostData();
-  }, [loadCostData]);
+  useEffect(() => { loadCostData() }, [loadCostData]);
   if (state.loading) {
     return;
       <div className="cost-analysis">
@@ -402,9 +388,9 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
       </div>
     );
   const costSummary = state.costSummary || {};
-  const providerData = Array.from(costSummary.costByProvider || []).map(([provider, cost]) => ({)
+  const providerData = Array.from(costSummary.costByProvider || []).map(([provider, cost]) => ({ )
   name: provider,
-  value: cost,
+  value: cost }
 }));
   const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
   return;
@@ -492,7 +478,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />}
                           ))}
                         </Pie>
-                        <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />}
+                        <Tooltip formatter={(value: number) => `${value.toFixed(2)}`} />}
                       </RechartsPieChart>
                     </ResponsiveContainer>
                   </div>
@@ -534,19 +520,19 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
         <TabsContent value="budgets" className="space-y-6">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Budget Management</h3>
-            <Button onClick={() => {
+            <Button onClick={ () => {
   const name = prompt('Budget name:');
   const amount = prompt('Budget amount:');
   const period = prompt('Budget period (daily/weekly/monthly/yearly):');
   if (name && amount && period) {
   handleCreateBudget({)
-  name,
-  amount: parseFloat(amount),
-  period,
-  userId,
+  name
+  amount: parseFloat(amount)
+  period
+  userId }
   organizationId
 });
-            }}>
+}>
               Create Budget
             </Button>
           </div>

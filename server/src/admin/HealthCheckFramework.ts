@@ -22,14 +22,14 @@ export enum HealthStatus {
   DEGRADED = 'degraded',
   UNHEALTHY = 'unhealthy',
   UNKNOWN = 'unknown'
-}
+
 
 export enum HealthCheckPriority {
   CRITICAL = 'critical',
   HIGH = 'high',
   MEDIUM = 'medium',
   LOW = 'low'
-}
+
 
 export enum HealthCheckCategory {
   INFRASTRUCTURE = 'infrastructure',
@@ -40,10 +40,10 @@ export enum HealthCheckCategory {
   BACKUP = 'backup',
   CONFIGURATION = 'configuration',
   ADMIN_OPERATIONS = 'admin_operations'
-}
 
-}
-}
+
+
+
 export interface HealthCheck {
   id: string;
   name: string;
@@ -59,12 +59,13 @@ export interface HealthCheck {
   tags: string[];
   metadata: HealthCheckMetadata;
   execute: () => Promise<HealthCheckResult>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthCheckMetadata {
   version: string;
   maintainer: string;
@@ -72,51 +73,56 @@ export interface HealthCheckMetadata {
   alerting: AlertConfiguration;
   thresholds: HealthThresholds;
   customData: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertConfiguration {
   enabled: boolean;
   channels: AlertChannel[];
   cooldownPeriod: number; // minutes
   escalationRules: EscalationRule[];
   suppressDuringMaintenance: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms';
   target: string;
   priority: HealthCheckPriority;
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRule {
   triggerAfter: number; // minutes
   action: 'notify_senior' | 'create_incident' | 'auto_remediate';
   parameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthThresholds {
   responseTime: {
     warning: number;
     critical: number;
-}
-}
+
+
+
   };
   availability: {
     warning: number; // percentage
@@ -127,10 +133,10 @@ export interface HealthThresholds {
     critical: number; // percentage
   };
   custom: Record<string, { warning: number; critical: number }>;
-}
 
-}
-}
+
+
+
 export interface HealthCheckResult {
   checkId: string;
   status: HealthStatus;
@@ -140,12 +146,13 @@ export interface HealthCheckResult {
   duration: number; // milliseconds
   attempt: number;
   metadata: ResultMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthCheckDetails {
   measurements: Record<string, number>;
   diagnostics: Record<string, any>;
@@ -153,23 +160,25 @@ export interface HealthCheckDetails {
   recommendations: string[];
   affectedServices: string[];
   relatedIncidents: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DependencyStatus {
   dependencyId: string;
   status: HealthStatus;
   lastChecked: Date;
   impact: 'none' | 'low' | 'medium' | 'high' | 'critical';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResultMetadata {
   executionEnvironment: string;
   checkVersion: string;
@@ -177,12 +186,13 @@ export interface ResultMetadata {
   memoryUsage: number;
   networkLatency?: number;
   additionalContext: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthCheckSuite {
   suiteId: string;
   name: string;
@@ -191,12 +201,13 @@ export interface HealthCheckSuite {
   executionPolicy: ExecutionPolicy;
   reportingSettings: SuiteReportingSettings;
   schedule: ScheduleConfiguration;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionPolicy {
   concurrent: boolean;
   maxConcurrency: number;
@@ -204,36 +215,39 @@ export interface ExecutionPolicy {
   continueOnError: boolean;
   dependencyValidation: boolean;
   timeoutPolicy: 'individual' | 'suite';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SuiteReportingSettings {
   generateReport: boolean;
   reportFormat: 'json' | 'html' | 'xml';
   includeDetails: boolean;
   storageLocation: string;
   retentionDays: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScheduleConfiguration {
   enabled: boolean;
   cronExpression: string;
   timezone: string;
   maintenanceWindows: MaintenanceWindow[];
   adaptiveScheduling: AdaptiveSchedulingConfig;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MaintenanceWindow {
   id: string;
   startTime: Date;
@@ -241,79 +255,86 @@ export interface MaintenanceWindow {
   skipChecks: boolean;
   suppressAlerts: boolean;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AdaptiveSchedulingConfig {
   enabled: boolean;
   increaseFrequencyOnFailure: boolean;
   decreaseFrequencyOnSuccess: boolean;
   minInterval: number; // milliseconds
   maxInterval: number; // milliseconds
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthDashboard {
   dashboardId: string;
   name: string;
   widgets: DashboardWidget[];
   refreshInterval: number;
   accessControl: DashboardAccessControl;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DashboardWidget {
   widgetId: string;
   type: 'status_summary' | 'trend_chart' | 'alert_list' | 'dependency_map' | 'performance_metrics';
   title: string;
   configuration: WidgetConfiguration;
-}
-}
+
+
+
   size: { width: number; height: number };
   position: { x: number; y: number };
-}
 
-}
-}
+
+
+
 export interface WidgetConfiguration {
   dataSource: string;
   timeRange: string;
   filters: Record<string, any>;
   displayOptions: Record<string, any>;
   alerting: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DashboardAccessControl {
   public: boolean;
   roles: string[];
   users: string[];
   permissions: DashboardPermission[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DashboardPermission {
   principal: string;
   principalType: 'user' | 'role';
   permissions: ('view' | 'edit' | 'admin')[];
-}
-}
-}
+
+
+
+
 
 // ==========================================
 // HEALTH CHECK FRAMEWORK IMPLEMENTATION
@@ -334,7 +355,7 @@ export class HealthCheckFramework {
     this.initializeBuiltInHealthChecks();
     this.initializeDefaultSuites();
     this.initializeDefaultDashboards();
-  }
+
 
   // ==========================================
   // HEALTH CHECK REGISTRATION & MANAGEMENT
@@ -362,23 +383,23 @@ export class HealthCheckFramework {
         priority: healthCheck.priority,
         enabled: healthCheck.enabled,
         timestamp: new Date()
-      }
+
     });
 
     console.log(`Health check registered: ${healthCheck.id} (${healthCheck.name})`);
-  }
+
 
   async unregisterHealthCheck(checkId: string, reason: string): Promise<void> {
 
     const healthCheck = this.healthChecks.get(checkId);
     if (!healthCheck) {
       throw new Error(`Health check not found: ${checkId}`);
-    }
+
 
     // Cancel any active executions
     if (this.activeExecutions.has(checkId)) {
       this.activeExecutions.delete(checkId);
-    }
+
 
     // Remove from registry
     this.healthChecks.delete(checkId);
@@ -397,11 +418,11 @@ export class HealthCheckFramework {
         reason,
         historicalExecutions: history.length,
         timestamp: new Date()
-      }
+
     });
 
     console.log(`Health check unregistered: ${checkId} - ${reason}`);
-  }
+
 
   // ==========================================
   // HEALTH CHECK EXECUTION
@@ -412,19 +433,19 @@ export class HealthCheckFramework {
     const healthCheck = this.healthChecks.get(checkId);
     if (!healthCheck) {
       throw new Error(`Health check not found: ${checkId}`);
-    }
+
 
     if (!healthCheck.enabled) {
       return this.createSkippedResult(healthCheck, 'Health check is disabled');
-    }
+
 
     // Check if already executing
     if (this.activeExecutions.has(checkId)) {
       const activeExecution = this.activeExecutions.get(checkId);
       if (activeExecution) {
         return await activeExecution;
-      }
-    }
+
+
 
     // Execute with timeout and retry logic
     const executionPromise = this.executeWithRetry(healthCheck, attempt);
@@ -440,11 +461,10 @@ export class HealthCheckFramework {
       await this.processHealthCheckResult(healthCheck, result);
 
       return result;
-
-    } finally {
+ finally {
       this.activeExecutions.delete(checkId);
-    }
-  }
+
+
 
   private async executeWithRetry(healthCheck: HealthCheck, attempt: number): Promise<HealthCheckResult> {
 
@@ -464,8 +484,8 @@ export class HealthCheckFramework {
               currentAttempt,
               dependencyCheck.statuses
             );
-          }
-        }
+
+
 
         // Execute the health check with timeout
         const result = await Promise.race([
@@ -482,17 +502,16 @@ export class HealthCheckFramework {
         result.metadata = await this.generateResultMetadata(healthCheck);
 
         return result;
-
-      } catch (error) {
+ catch (error) {
         lastError = error as Error;
         console.warn(`Health check ${healthCheck.id} attempt ${currentAttempt} failed:`, error.message);
 
         // If not the last attempt, wait before retry
         if (currentAttempt < healthCheck.retryAttempts + 1) {
           await this.delay(healthCheck.retryDelay);
-        }
-      }
-    }
+
+
+
 
     // All attempts failed
     return this.createErrorResult(
@@ -501,14 +520,14 @@ export class HealthCheckFramework {
       startTime,
       healthCheck.retryAttempts + 1
     );
-  }
+
 
   async executeSuite(suiteId: string): Promise<HealthCheckResult[]> {
 
     const suite = this.healthCheckSuites.get(suiteId);
     if (!suite) {
       throw new Error(`Health check suite not found: ${suiteId}`);
-    }
+
 
     const startTime = performance.now();
     const results: HealthCheckResult[] = [];
@@ -523,7 +542,7 @@ export class HealthCheckFramework {
           checksCount: suite.checks.length,
           concurrent: suite.executionPolicy.concurrent,
           timestamp: new Date()
-        }
+
       });
 
       if (suite.executionPolicy.concurrent) {
@@ -537,7 +556,7 @@ export class HealthCheckFramework {
         concurrentResults.forEach((result, index) => {
           if (result.status === 'fulfilled') {
             results.push(result.value);
-          } else {
+ else {
             const checkId = suite.checks[index];
             const healthCheck = this.healthChecks.get(checkId);
             if (healthCheck) {
@@ -547,11 +566,10 @@ export class HealthCheckFramework {
                 startTime,
                 1
               ));
-            }
-          }
-        });
 
-      } else {
+
+        });
+ else {
         // Execute checks sequentially
         for (const checkId of suite.checks) {
           try {
@@ -562,22 +580,21 @@ export class HealthCheckFramework {
             if (suite.executionPolicy.failFast && result.status === HealthStatus.UNHEALTHY) {
               console.log(`Suite ${suiteId} stopping due to fail-fast policy after ${checkId} failed`);
               break;
-            }
 
-          } catch (error) {
+ catch (error) {
             if (suite.executionPolicy.continueOnError) {
               console.warn(`Suite ${suiteId} continuing after error in ${checkId}:`, error);
-            } else {
+ else {
               throw error;
-            }
-          }
-        }
-      }
+
+
+
+
 
       // Generate suite report if configured
       if (suite.reportingSettings.generateReport) {
         await this.generateSuiteReport(suite, results);
-      }
+
 
       // Audit suite execution completion
       await this.auditService.logAction({
@@ -591,12 +608,11 @@ export class HealthCheckFramework {
           unhealthyCount: results.filter(r => r.status === HealthStatus.UNHEALTHY).length,
           degradedCount: results.filter(r => r.status === HealthStatus.DEGRADED).length,
           timestamp: new Date()
-        }
+
       });
 
       return results;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         userId: 'system',
         action: 'health_check_suite_failed',
@@ -606,12 +622,12 @@ export class HealthCheckFramework {
           executionTime: performance.now() - startTime,
           partialResults: results.length,
           timestamp: new Date()
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   // ==========================================
   // DEPENDENCY VALIDATION
@@ -621,7 +637,7 @@ export class HealthCheckFramework {
     allHealthy: boolean;
     failedDependencies: string[];
     statuses: DependencyStatus[];
-  }> {
+> {
 
     const statuses: DependencyStatus[] = [];
     const failedDependencies: string[] = [];
@@ -637,7 +653,7 @@ export class HealthCheckFramework {
           impact: 'critical'
         });
         continue;
-      }
+
 
       try {
         const result = await this.executeHealthCheck(dependencyId);
@@ -652,9 +668,8 @@ export class HealthCheckFramework {
 
         if (result.status === HealthStatus.UNHEALTHY) {
           failedDependencies.push(dependencyId);
-        }
 
-      } catch (error) {
+ catch (error) {
         failedDependencies.push(dependencyId);
         statuses.push({
           dependencyId,
@@ -662,21 +677,21 @@ export class HealthCheckFramework {
           lastChecked: new Date(),
           impact: 'critical'
         });
-      }
-    }
+
+
 
     return {
       allHealthy: failedDependencies.length === 0,
       failedDependencies,
       statuses
     };
-  }
+
 
   private calculateDependencyImpact(priority: HealthCheckPriority, status: HealthStatus): 'none' | 'low' | 'medium' | 'high' | 'critical' {
     if (status === HealthStatus.HEALTHY) return 'none';
     if (status === HealthStatus.DEGRADED) {
       return priority === HealthCheckPriority.CRITICAL ? 'medium' : 'low';
-    }
+
     if (status === HealthStatus.UNHEALTHY) {
       switch (priority) {
       case HealthCheckPriority.CRITICAL: return 'critical';
@@ -684,10 +699,10 @@ export class HealthCheckFramework {
       case HealthCheckPriority.MEDIUM: return 'medium';
       case HealthCheckPriority.LOW: return 'low';
       default: return 'medium';
-      }
-    }
+
+
     return 'medium';
-  }
+
 
   // ==========================================
   // ALERTING AND NOTIFICATIONS
@@ -699,13 +714,13 @@ export class HealthCheckFramework {
     
     if (!alertConfig.enabled || result.status === HealthStatus.HEALTHY) {
       return;
-    }
+
 
     // Check cooldown period
     const lastAlert = await this.getLastAlertTime(healthCheck.id);
     if (lastAlert && (Date.now() - lastAlert.getTime()) < (alertConfig.cooldownPeriod * 60 * 1000)) {
       return;
-    }
+
 
     // Send alerts based on priority and channels
     for (const channel of alertConfig.channels) {
@@ -714,15 +729,15 @@ export class HealthCheckFramework {
       const shouldAlert = this.shouldSendAlert(channel.priority, healthCheck.priority, result.status);
       if (shouldAlert) {
         await this.sendAlert(channel, healthCheck, result);
-      }
-    }
+
+
 
     // Record alert time
     await this.recordAlertTime(healthCheck.id);
 
     // Process escalation rules
     await this.processEscalationRules(healthCheck, result, alertConfig.escalationRules);
-  }
+
 
   private shouldSendAlert(channelPriority: HealthCheckPriority, checkPriority: HealthCheckPriority, status: HealthStatus): boolean {
     const priorityOrder = {
@@ -739,10 +754,10 @@ export class HealthCheckFramework {
     if (checkPriorityLevel >= channelPriorityLevel) {
       return status === HealthStatus.UNHEALTHY || 
              (status === HealthStatus.DEGRADED && checkPriority !== HealthCheckPriority.LOW);
-    }
+
 
     return false;
-  }
+
 
   private async sendAlert(channel: AlertChannel, healthCheck: HealthCheck, result: HealthCheckResult): Promise<void> {
 
@@ -771,7 +786,7 @@ export class HealthCheckFramework {
       case 'sms':
         await this.sendSMSAlert(channel.target, alertPayload);
         break;
-      }
+
 
       // Audit alert sent
       await this.auditService.logAction({
@@ -784,10 +799,9 @@ export class HealthCheckFramework {
           status: result.status,
           priority: healthCheck.priority,
           timestamp: new Date()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error(`Failed to send alert via ${channel.type}:`, error);
       
       await this.auditService.logAction({
@@ -798,10 +812,10 @@ export class HealthCheckFramework {
           channel: channel.type,
           error: error.message,
           timestamp: new Date()
-        }
+
       });
-    }
-  }
+
+
 
   // ==========================================
   // RESULT CREATION HELPERS
@@ -819,7 +833,7 @@ export class HealthCheckFramework {
         recommendations: [],
         affectedServices: [],
         relatedIncidents: []
-  }
+
       timestamp: new Date(),
       duration: 0,
       attempt: 0,
@@ -829,9 +843,9 @@ export class HealthCheckFramework {
         systemLoad: 0,
         memoryUsage: 0,
         additionalContext: {}
-      }
+
     };
-  }
+
 
   private createUnhealthyResult(
     healthCheck: HealthCheck, 
@@ -851,7 +865,7 @@ export class HealthCheckFramework {
         recommendations: this.generateRecommendations(healthCheck, HealthStatus.UNHEALTHY),
         affectedServices: [],
         relatedIncidents: []
-  }
+
       timestamp: new Date(),
       duration: performance.now() - startTime,
       attempt,
@@ -861,9 +875,9 @@ export class HealthCheckFramework {
         systemLoad: process.cpuUsage().system / 1000000, // Convert to seconds
         memoryUsage: process.memoryUsage().heapUsed,
         additionalContext: {}
-      }
+
     };
-  }
+
 
   private createErrorResult(healthCheck: HealthCheck, message: string, startTime: number, attempt: number): HealthCheckResult {
     return {
@@ -881,7 +895,7 @@ export class HealthCheckFramework {
         ],
         affectedServices: [],
         relatedIncidents: []
-  }
+
       timestamp: new Date(),
       duration: performance.now() - startTime,
       attempt,
@@ -891,9 +905,9 @@ export class HealthCheckFramework {
         systemLoad: 0,
         memoryUsage: process.memoryUsage().heapUsed,
         additionalContext: { error: true }
-      }
+
     };
-  }
+
 
   // ==========================================
   // INITIALIZATION METHODS
@@ -902,17 +916,17 @@ export class HealthCheckFramework {
   private initializeBuiltInHealthChecks(): void {
     // System health checks will be registered here
     console.log('Health Check Framework initialized with built-in checks');
-  }
+
 
   private initializeDefaultSuites(): void {
     // Default health check suites will be created here
     console.log('Default health check suites initialized');
-  }
+
 
   private initializeDefaultDashboards(): void {
     // Default dashboards will be created here
     console.log('Default health dashboards initialized');
-  }
+
 
   // ==========================================
   // UTILITY METHODS
@@ -921,21 +935,21 @@ export class HealthCheckFramework {
   private async delay(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   private async validateHealthCheckConfiguration(healthCheck: HealthCheck): Promise<void> {
 
     if (!healthCheck.id || !healthCheck.name) {
       throw new Error('Health check must have id and name');
-    }
+
     if (healthCheck.timeout <= 0) {
       throw new Error('Health check timeout must be positive');
-    }
+
     if (healthCheck.interval <= 0) {
       throw new Error('Health check interval must be positive');
-    }
+
     // Additional validation logic...
-  }
+
 
   private addToExecutionHistory(checkId: string, result: HealthCheckResult): void {
     const history = this.executionHistory.get(checkId) || [];
@@ -944,10 +958,10 @@ export class HealthCheckFramework {
     // Keep only last 100 results
     if (history.length > 100) {
       history.splice(0, history.length - 100);
-    }
+
     
     this.executionHistory.set(checkId, history);
-  }
+
 
   private generateRecommendations(healthCheck: HealthCheck, status: HealthStatus): string[] {
     const recommendations: string[] = [];
@@ -958,11 +972,11 @@ export class HealthCheckFramework {
       
       if (healthCheck.priority === HealthCheckPriority.CRITICAL) {
         recommendations.push('Consider activating incident response procedures');
-      }
-    }
+
+
     
     return recommendations;
-  }
+
 
   private async generateResultMetadata(healthCheck: HealthCheck): Promise<ResultMetadata> {
 
@@ -977,61 +991,61 @@ export class HealthCheckFramework {
       additionalContext: {
         nodeVersion: process.version,
         platform: process.platform
-      }
+
     };
-  }
+
 
   // Placeholder methods for alerting (would be implemented with actual services)
   private async sendEmailAlert(target: string, payload: any): Promise<void> {
 
     console.log(`Would send email alert to ${target}:`, payload.checkName, payload.status);
-  }
+
 
   private async sendSlackAlert(target: string, payload: any): Promise<void> {
 
     console.log(`Would send Slack alert to ${target}:`, payload.checkName, payload.status);
-  }
+
 
   private async sendWebhookAlert(target: string, payload: any): Promise<void> {
 
     console.log(`Would send webhook alert to ${target}:`, payload.checkName, payload.status);
-  }
+
 
   private async sendSMSAlert(target: string, payload: any): Promise<void> {
 
     console.log(`Would send SMS alert to ${target}:`, payload.checkName, payload.status);
-  }
+
 
   // Placeholder methods for alert tracking
   private async getLastAlertTime(checkId: string): Promise<Date | null> {
 
     // Would query database for last alert time
     return null;
-  }
+
 
   private async recordAlertTime(checkId: string): Promise<void> {
 
     // Would record alert time in database
     console.log(`Recording alert time for ${checkId}`);
-  }
+
 
   private async processEscalationRules(healthCheck: HealthCheck, result: HealthCheckResult, rules: EscalationRule[]): Promise<void> {
 
     // Would process escalation rules
     console.log(`Processing escalation rules for ${healthCheck.id}`);
-  }
+
 
   private async archiveExecutionHistory(checkId: string, history: HealthCheckResult[]): Promise<void> {
 
     // Would archive execution history to long-term storage
     console.log(`Archiving execution history for ${checkId}: ${history.length} results`);
-  }
+
 
   private async generateSuiteReport(suite: HealthCheckSuite, results: HealthCheckResult[]): Promise<void> {
 
     // Would generate and store suite report
     console.log(`Generating suite report for ${suite.suiteId}: ${results.length} results`);
-  }
+
 
   // ==========================================
   // PUBLIC API METHODS
@@ -1040,7 +1054,7 @@ export class HealthCheckFramework {
   async getHealthCheck(checkId: string): Promise<HealthCheck | null> {
 
     return this.healthChecks.get(checkId) || null;
-  }
+
 
   async listHealthChecks(filters?: { category?: HealthCheckCategory; enabled?: boolean }): Promise<HealthCheck[]> {
 
@@ -1048,28 +1062,27 @@ export class HealthCheckFramework {
     
     if (filters?.category) {
       checks = checks.filter(check => check.category === filters.category);
-    }
+
     
     if (filters?.enabled !== undefined) {
       checks = checks.filter(check => check.enabled === filters.enabled);
-    }
+
     
     return checks;
-  }
+
 
   async getExecutionHistory(checkId: string, limit?: number): Promise<HealthCheckResult[]> {
 
     const history = this.executionHistory.get(checkId) || [];
     return limit ? history.slice(-limit) : history;
-  }
+
 
   async getHealthCheckSuite(suiteId: string): Promise<HealthCheckSuite | null> {
 
     return this.healthCheckSuites.get(suiteId) || null;
-  }
+
 
   async listHealthCheckSuites(): Promise<HealthCheckSuite[]> {
 
     return Array.from(this.healthCheckSuites.values());
-  }
-}
+

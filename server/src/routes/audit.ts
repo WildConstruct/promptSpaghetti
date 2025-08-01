@@ -10,11 +10,12 @@ import {
   AuditEventQuery,
   CreateComplianceReportRequest,
   AuditEvent
-} from '../database/audit-models';
+ from '../database/audit-models';
 
 // Request type definitions
-}
-}
+
+
+
 interface QueryAuditEventsRequest {
   Querystring: {
     startDate?: string;
@@ -38,56 +39,61 @@ interface QueryAuditEventsRequest {
     limit?: number;
     sortBy?: 'timestamp' | 'severity' | 'eventType' | 'actorEmail';
     sortOrder?: 'asc' | 'desc';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetStatisticsRequest {
   Querystring: {
     startDate?: string;
     endDate?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface CreateComplianceReportRequestBody {
   Body: CreateComplianceReportRequest;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ExportAuditLogsRequest {
   Querystring: AuditEventQuery & {
     format?: 'json' | 'csv' | 'xml' | 'pdf';
     includeMetadata?: boolean;
     includeIntegrityData?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetAuditTrailRequest {
   Params: {
     resourceType: string;
     resourceId: string;
-}
-}
+
+
+
   };
   Querystring: {
     limit?: number;
     page?: number;
   };
-}
+
 
 export async function auditRoutes(fastify: FastifyInstance) {
   const auditService: AuditService = fastify.auditService;
@@ -115,10 +121,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
           limit: { type: 'number', minimum: 1, maximum: 1000, default: 50 },
           sortBy: { type: 'string', enum: ['timestamp', 'severity', 'eventType', 'actorEmail'], default: 'timestamp' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
-        }
-  }
+
+
       security: [{ bearerAuth: [] }]
-    }
+
   }, async (request: FastifyRequest<QueryAuditEventsRequest>, reply: FastifyReply) => {
     try {
       // Parse comma-separated values
@@ -170,10 +176,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
           metadata: {
             queryParameters: query,
             resultCount: result.events.length
-  }
+
           complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.GDPR]
         });
-      }
+
 
       reply.send({
         success: true,
@@ -181,12 +187,12 @@ export async function auditRoutes(fastify: FastifyInstance) {
         pagination: result.pagination,
         summary: result.summary
       });
-    } catch (error: unknown) {
+ catch (error: unknown) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
-    }
+
   });
 
   // Get audit statistics
@@ -199,10 +205,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
         properties: {
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' }
-        }
-  }
+
+
       security: [{ bearerAuth: [] }]
-    }
+
   }, async (request: FastifyRequest<GetStatisticsRequest>, reply: FastifyReply) => {
     try {
       const startDate = request.query.startDate ? new Date(request.query.startDate) : undefined;
@@ -214,12 +220,12 @@ export async function auditRoutes(fastify: FastifyInstance) {
         success: true,
         data: statistics
       });
-    } catch (error: unknown) {
+ catch (error: unknown) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
-    }
+
   });
 
   // Generate compliance report
@@ -234,11 +240,11 @@ export async function auditRoutes(fastify: FastifyInstance) {
           reportType: { 
             type: 'string', 
             enum: ['access_report', 'change_report', 'security_report', 'retention_report'] 
-  }
+
           standard: { 
             type: 'string', 
             enum: Object.values(ComplianceStandard) 
-  }
+
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' },
           scope: {
@@ -247,13 +253,13 @@ export async function auditRoutes(fastify: FastifyInstance) {
               userIds: { type: 'array', items: { type: 'string' } },
               resourceTypes: { type: 'array', items: { type: 'string' } },
               eventTypes: { type: 'array', items: { type: 'string' } }
-            }
-  }
+
+
           format: { type: 'string', enum: ['json', 'pdf', 'csv', 'xml'], default: 'json' }
-        }
-  }
+
+
       security: [{ bearerAuth: [] }]
-    }
+
   }, async (request: FastifyRequest<CreateComplianceReportRequestBody>, reply: FastifyReply) => {
     try {
       const generatedBy = request.user?.id || 'system';
@@ -275,10 +281,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
             standard: report.standard,
             eventCount: report.events.length,
             violationCount: report.violations.length
-  }
+
           complianceStandards: [request.body.standard]
         });
-      }
+
 
       reply.code(201).send({
         success: true,
@@ -290,14 +296,14 @@ export async function auditRoutes(fastify: FastifyInstance) {
           generatedAt: report.generatedAt,
           format: report.format,
           violationCount: report.violations.length
-        }
+
       });
-    } catch (error: unknown) {
+ catch (error: unknown) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
-    }
+
   });
 
   // Export audit logs
@@ -314,10 +320,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
           format: { type: 'string', enum: ['json', 'csv', 'xml', 'pdf'], default: 'json' },
           includeMetadata: { type: 'boolean', default: true },
           includeIntegrityData: { type: 'boolean', default: false }
-        }
-  }
+
+
       security: [{ bearerAuth: [] }]
-    }
+
   }, async (request: FastifyRequest<ExportAuditLogsRequest>, reply: FastifyReply) => {
     try {
       const query: AuditEventQuery = {
@@ -344,10 +350,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
             eventCount: result.events.length,
             includeMetadata: request.query.includeMetadata,
             includeIntegrityData: request.query.includeIntegrityData
-  }
+
           complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.GDPR]
         });
-      }
+
 
       // Set appropriate content type and filename
       const timestamp = new Date().toISOString().split('T')[0];
@@ -381,17 +387,17 @@ export async function auditRoutes(fastify: FastifyInstance) {
             format: 'json',
             eventCount: result.events.length,
             query: request.query
-  }
+
           events: result.events,
           summary: result.summary
         });
-      }
-    } catch (error: unknown) {
+
+ catch (error: unknown) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
-    }
+
   });
 
   // Get audit trail for specific resource
@@ -404,18 +410,18 @@ export async function auditRoutes(fastify: FastifyInstance) {
         properties: {
           resourceType: { type: 'string' },
           resourceId: { type: 'string' }
-  }
+
         required: ['resourceType', 'resourceId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'number', minimum: 1, maximum: 1000, default: 100 },
           page: { type: 'number', minimum: 1, default: 1 }
-        }
-  }
+
+
       security: [{ bearerAuth: [] }]
-    }
+
   }, async (request: FastifyRequest<GetAuditTrailRequest>, reply: FastifyReply) => {
     try {
       const { resourceType, resourceId } = request.params;
@@ -442,15 +448,15 @@ export async function auditRoutes(fastify: FastifyInstance) {
             totalEvents: result.pagination.total,
             timeRange: result.summary.timeRange,
             uniqueActors: result.summary.uniqueActors
-          }
-        }
+
+
       });
-    } catch (error: unknown) {
+ catch (error: unknown) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred'
       });
-    }
+
   });
 
   // Get audit event types and metadata
@@ -458,7 +464,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
     schema: {
       description: 'Get audit system metadata (event types, categories, etc.)',
       tags: ['Audit']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     reply.send({
       success: true,
@@ -469,7 +475,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
         complianceStandards: Object.values(ComplianceStandard),
         supportedExportFormats: ['json', 'csv', 'xml', 'pdf'],
         supportedReportTypes: ['access_report', 'change_report', 'security_report', 'retention_report']
-      }
+
     });
   });
 
@@ -478,7 +484,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
     schema: {
       description: 'Check audit system health',
       tags: ['Audit']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Check basic functionality
@@ -491,25 +497,25 @@ export async function auditRoutes(fastify: FastifyInstance) {
           totalEvents: stats.totalEvents,
           eventsToday: stats.eventsToday,
           uniqueUsers: stats.uniqueUsers
-  }
+
         services: {
           database: 'connected',
           eventProcessing: 'active',
           compliance: 'enabled'
-        }
+
       };
 
       reply.send({
         success: true,
         data: health
       });
-    } catch (error: unknown) {
+ catch (error: unknown) {
       reply.code(503).send({
         success: false,
         error: 'Audit system unhealthy',
         details: error.message
       });
-    }
+
   });
 
   // Helper methods for export functionality (would be implemented)
@@ -517,17 +523,16 @@ export async function auditRoutes(fastify: FastifyInstance) {
 
     // CSV export implementation
     return 'CSV export not yet implemented';
-  }
+
 
   async function exportAsXML(events: AuditEvent[], options: Record<string, unknown>): Promise<string> {
 
     // XML export implementation
     return 'XML export not yet implemented';
-  }
+
 
   async function exportAsPDF(events: AuditEvent[], options: Record<string, unknown>): Promise<Buffer> {
 
     // PDF export implementation
     return Buffer.from('PDF export not yet implemented');
-  }
-}
+

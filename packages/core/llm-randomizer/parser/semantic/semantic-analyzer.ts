@@ -4,74 +4,58 @@
 import { GraphAST, NodeDefinitionAST, EdgeDefinitionAST, ParseError } from '../ast/ast-builder';
 import { Graph, Node, NodeTypeEnum } from '../../../graphSchema';
 
-}
-export interface SemanticError extends ParseError {
-  nodeId?: string;
+
+export interface SemanticError extends ParseError { nodeId?: string;
   errorCode: string;
   export interface ValidationContext {
   nodeIds: Set<string>;
   nodeMap: Map<string, NodeDefinitionAST>;
-  edgeMap: Map<string, Set<string>>; // source -> targets,
-  reverseEdgeMap: Map<string, Set<string>>; // target -> sources,
-  visitedNodes: Set<string>;
+  edgeMap: Map<string, Set<string>>; // source -> targets;
+  reverseEdgeMap: Map<string, Set<string>>; // target -> sources;
+  visitedNodes: Set<string> }
   currentPath: string;
-}
-}
-}
-export interface SemanticAnalysisResult {
-  graph: Graph | null;
+
+
+
+
+export interface SemanticAnalysisResult { graph: Graph | null }
   errors: SemanticError;
   warnings: SemanticError;
-}
-}
-export class SemanticAnalyzer {
-  private context: ValidationContext;
-  private errors: SemanticError = [];
-  private warnings: SemanticError = [];
-  constructor() {
-  this.context = {
-  nodeIds: new Set(),
-  nodeMap: new Map(),
-  edgeMap: new Map(),
-  reverseEdgeMap: new Map(),
-  visitedNodes: new Set(),
-  currentPath: [],
-};
+
+
+export class SemanticAnalyzer {};
   /**
    * Analyze AST and build validated Graph object
    */
-  analyze(ast: GraphAST): SemanticAnalysisResult {
-  this.reset();
+  analyze(ast: GraphAST): SemanticAnalysisResult { this.reset();
   try {
-  // Phase 1: Build context and validate basic structure,
+  // Phase 1: Build context and validate basic structure
   this.buildContext(ast);
-  // Phase 2: Validate semantics,
+  // Phase 2: Validate semantics
   this.validateSemantics(ast);
-  // Phase 3: Build Graph object if no critical errors,
+  // Phase 3: Build Graph object if no critical errors
   const graph = this.hasBlockingErrors() ? null : this.buildGraph(ast);
   return {
-  graph,
-  errors: this.errors,
-  warnings: this.warnings,
+  graph
+  errors: this.errors
+  warnings: this.warnings }
 };
-    } catch (error) {
-  this.addError('INTERNAL_ERROR', error instanceof Error ? error.message : 'Unknown error');
+ catch (error) { this.addError('INTERNAL_ERROR', error instanceof Error ? error.message : 'Unknown error');
   return {
-  graph: null,
-  errors: this.errors,
-  warnings: this.warnings,
+  graph: null
+  errors: this.errors
+  warnings: this.warnings }
 };
   /**
    * Reset analyzer state
    */
-  private reset(): void {
-  this.context = {
-  nodeIds: new Set(),
-  nodeMap: new Map(),
-  edgeMap: new Map(),
-  reverseEdgeMap: new Map(),
-  visitedNodes: new Set(),
-  currentPath: [],
+  private reset(): void { this.context = {
+  nodeIds: new Set()
+  nodeMap: new Map()
+  edgeMap: new Map()
+  reverseEdgeMap: new Map()
+  visitedNodes: new Set()
+  currentPath: [] }
 };
     this.errors = [];
     this.warnings = [];
@@ -83,7 +67,7 @@ export class SemanticAnalyzer {
     for (const node of ast.nodes) {
       if (this.context.nodeIds.has(node.id)) {
         this.addError('DUPLICATE_NODE_ID', `Duplicate node ID: ${node.id}`, node.id);}
-      } else {
+ else {
         this.context.nodeIds.add(node.id);
         this.context.nodeMap.set(node.id, node);
     // Build edge maps
@@ -206,9 +190,7 @@ export class SemanticAnalyzer {
         this.addError('INVALID_CHOICE_VALUE', `${node.nodeType} node ${node.id} choice ${index} missing string value`, node.id);}
       if (typeof choice.weight !== 'number' || choice.weight < 0) {
         this.addError('INVALID_CHOICE_WEIGHT', `${node.nodeType} node ${node.id} choice ${index} has invalid weight`, node.id);}
-      } else {
-        totalWeight += choice.weight;
-    });
+ else { totalWeight += choice.weight });
     if (totalWeight === 0) {
       this.addError('ZERO_TOTAL_WEIGHT', `${node.nodeType} node ${node.id} has zero total weight`, node.id);}
   /**
@@ -310,8 +292,7 @@ export class SemanticAnalyzer {
         const cycle = [...path, nodeId];
         this.addError('CYCLE_DETECTED', `Cycle detected: ${cycle.join(' -> ')}`, nodeId);}
         return true;
-      if (visited.has(nodeId)) {
-        return false;
+      if (visited.has(nodeId)) { return false;
       visited.add(nodeId);
       recursionStack.add(nodeId);
       const targets = this.context.edgeMap.get(nodeId);
@@ -320,15 +301,13 @@ export class SemanticAnalyzer {
           if (dfs(target, [...path, nodeId])) {
             return true;
       recursionStack.delete(nodeId);
-      return false;
-    };
-    for (const nodeId of this.context.nodeIds) {
-  if (!visited.has(nodeId)) {
+      return false };
+    for (const nodeId of this.context.nodeIds) { if (!visited.has(nodeId)) {
   dfs(nodeId, []);
   /**
   * Validate presence of output nodes
   */
-  private validateOutputNodes(): void {,
+  private validateOutputNodes(): void {
   const outputNodes = Array.from(this.context.nodeMap.values());
   .filter(node => node.nodeType === 'Output');
   if (outputNodes.length === 0) {
@@ -336,20 +315,18 @@ export class SemanticAnalyzer {
   /**
   * Detect unreachable nodes
   */
-  private detectUnreachableNodes(): void {,
+  private detectUnreachableNodes(): void {
   const reachable = new Set<string>();
   // Find root nodes (no inputs)
   const rootNodes = Array.from(this.context.nodeIds);
   .filter(nodeId => !this.context.reverseEdgeMap.has(nodeId));
   // DFS from root nodes
-  const dfs = (nodeId: string) => {,
+  const dfs = (nodeId: string) => { }
   if (reachable.has(nodeId)) return;
   reachable.add(nodeId);
   const targets = this.context.edgeMap.get(nodeId);
-  if (targets) {
-  for (const target of targets) {
-  dfs(target);
-};
+  if (targets) { for (const target of targets) {
+  dfs(target) };
     for (const rootId of rootNodes) {
       dfs(rootId);
     // Check for unreachable nodes
@@ -359,36 +336,32 @@ export class SemanticAnalyzer {
   /**
    * Build Graph object from validated AST
    */
-  private buildGraph(ast: GraphAST): Graph {
-  const nodes: Node = [];
+  private buildGraph(ast: GraphAST): Graph { const nodes: Node = [];
   for (const astNode of ast.nodes) {
   const node = this.buildNodeFromAST(astNode);
   if (node) {
   nodes.push(node);
   return {
-  nodes,
-  seed: Date.now() // Default seed,
+  nodes
+  seed: Date.now() // Default seed }
 };
   /**
    * Build Node object from AST node
    */
-  private buildNodeFromAST(astNode: NodeDefinitionAST): Node | null {
-  const baseNode = {
-  id: astNode.id,
-  type: astNode.nodeType as any,
-  inputs: astNode.inputs,
+  private buildNodeFromAST(astNode: NodeDefinitionAST): Node | null { const baseNode = {
+  id: astNode.id
+  type: astNode.nodeType as any
+  inputs: astNode.inputs }
 };
     // Add type-specific properties
     const properties = astNode.properties || {};
-    return {
-      ...baseNode,
+    return { ...baseNode }
       ...properties
-    } as Node;
+ as Node;
   /**
    * Helper methods
    */
-  private isValidNodeId(id: string): boolean {
-    return /^[a-zA-Z0-9_-]+$/.test(id);
+  private isValidNodeId(id: string): boolean { return /^[a-zA-Z0-9_-]+$/.test(id);
   private hasBlockingErrors(): boolean {
     return this.errors.some(error => )
       error.errorCode !== 'UNKNOWN_NODE_TYPE' && 
@@ -396,17 +369,16 @@ export class SemanticAnalyzer {
     );
   private addError(errorCode: string, message: string, nodeId?: string): void {
     this.errors.push({)
-  errorCode,
-      message,
-      nodeId,
-      position: { line: 0, column: 0, offset: 0 },
-      severity: 'error'
+  errorCode
+      message
+      nodeId }
+      position: { line: 0, column: 0, offset: 0 }
+      severity: 'error';
   });
-  private addWarning(errorCode: string, message: string, nodeId?: string): void {
-    this.warnings.push({)
-  errorCode,
-      message,
-      nodeId,
-      position: { line: 0, column: 0, offset: 0 },
-      severity: 'warning'
+  private addWarning(errorCode: string, message: string, nodeId?: string): void { this.warnings.push({)
+  errorCode
+      message
+      nodeId }
+      position: { line: 0, column: 0, offset: 0 }
+      severity: 'warning';
   });

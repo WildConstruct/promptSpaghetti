@@ -10,6 +10,7 @@
  */
 
 }
+}
 export interface ToggleCondition {
     id: string;
     toggleId: string;
@@ -39,8 +40,9 @@ export declare enum ConditionType {
     FEATURE_FLAG = "feature_flag"
 
 }
-export interface ConditionParameters {
-    userAttributes?: UserAttributeParams;
+}
+}
+export interface ConditionParameters { userAttributes?: UserAttributeParams;
     userSegments?: string[];
     percentage?: number;
     salt?: string;
@@ -58,20 +60,18 @@ export interface ConditionParameters {
     requiredToggles?: string[];
     conflictingToggles?: string[];
     customVariables?: Record<string, any>;
-    functions?: Record<string, Function>;
-
+    functions?: Record<string, Function> }
 }
-export interface UserAttributeParams {
-    attributes: Array<{
+}
+export interface UserAttributeParams { attributes: Array<{
         key: string;
         operator: ComparisonOperator;
-        value: any;
+        value: any }
 }
     }>;
     logic: 'AND' | 'OR';
 
-export declare enum ComparisonOperator {
-    EQUALS = "equals",
+export declare enum ComparisonOperator { EQUALS = "equals",
     NOT_EQUALS = "not_equals",
     GREATER_THAN = "greater_than",
     LESS_THAN = "less_than",
@@ -82,26 +82,24 @@ export declare enum ComparisonOperator {
     STARTS_WITH = "starts_with",
     ENDS_WITH = "ends_with",
     MATCHES_REGEX = "matches_regex",
-    IN_LIST = "in_list",
+    IN_LIST = "in_list" }
     NOT_IN_LIST = "not_in_list"
 
 }
-export interface ScheduleParams {
-    daysOfWeek?: number[];
+}
+export interface ScheduleParams { daysOfWeek?: number[];
     hoursOfDay?: number[];
     recurring?: boolean;
-    recurrencePattern?: 'daily' | 'weekly' | 'monthly';
-
+    recurrencePattern?: 'daily' | 'weekly' | 'monthly' }
 }
-export interface ExperimentParams {
-    experimentId: string;
+}
+export interface ExperimentParams { experimentId: string;
     variant: string;
     trafficAllocation: number;
-    stickiness?: 'user' | 'session' | 'device';
-
+    stickiness?: 'user' | 'session' | 'device' }
 }
-export interface ConditionMetadata {
-    category: string;
+}
+export interface ConditionMetadata { category: string;
     tags: string[];
     epic?: string;
     story?: string;
@@ -110,62 +108,55 @@ export interface ConditionMetadata {
     technicalNotes: string[];
     author: string;
     reviewedBy?: string;
-    reviewedAt?: Date;
-
+    reviewedAt?: Date }
 }
-export interface EvaluationContext {
-    user?: UserContext;
+}
+export interface EvaluationContext { user?: UserContext;
     request?: RequestContext;
     environment?: EnvironmentContext;
     toggles?: Record<string, boolean>;
     experiments?: Record<string, string>;
     timestamp?: Date;
-    customData?: Record<string, any>;
-
+    customData?: Record<string, any> }
 }
-export interface UserContext {
-    id: string;
+}
+export interface UserContext { id: string;
     email?: string;
     role?: string;
     segment?: string;
     attributes?: Record<string, any>;
     groups?: string[];
-    permissions?: string[];
-
+    permissions?: string[] }
 }
-export interface RequestContext {
-    ip?: string;
+}
+export interface RequestContext { ip?: string;
     userAgent?: string;
     country?: string;
     region?: string;
     city?: string;
     device?: DeviceInfo;
-    session?: SessionInfo;
-
+    session?: SessionInfo }
 }
-export interface DeviceInfo {
-    type: 'mobile' | 'tablet' | 'desktop' | 'unknown';
+}
+export interface DeviceInfo { type: 'mobile' | 'tablet' | 'desktop' | 'unknown';
     platform: string;
     browser?: string;
-    version?: string;
-
+    version?: string }
 }
-export interface SessionInfo {
-    id: string;
+}
+export interface SessionInfo { id: string;
     startTime: Date;
     duration: number;
-    pageViews: number;
-
+    pageViews: number }
 }
-export interface EnvironmentContext {
-    environment: 'development' | 'staging' | 'production';
+}
+export interface EnvironmentContext { environment: 'development' | 'staging' | 'production';
     region: string;
     timezone: string;
-    version: string;
-
+    version: string }
 }
-export interface ConditionEvaluationResult {
-    conditionId: string;
+}
+export interface ConditionEvaluationResult { conditionId: string;
     result: boolean;
     score?: number;
     reason: string;
@@ -173,13 +164,13 @@ export interface ConditionEvaluationResult {
     metadata: {
         evaluatedAt: Date;
         contextHash: string;
-        intermediateValues?: Record<string, any>;
+        intermediateValues?: Record<string, any> }
 }
     };
 
 }
-export interface ToggleEvaluationResult {
-    toggleId: string;
+}
+export interface ToggleEvaluationResult { toggleId: string;
     enabled: boolean;
     variant?: string;
     conditions: ConditionEvaluationResult[];
@@ -188,32 +179,28 @@ export interface ToggleEvaluationResult {
     metadata: {
         evaluatedAt: Date;
         totalExecutionTime: number;
-        cacheHit: boolean;
+        cacheHit: boolean }
 }
     };
 
 }
-export interface ToggleConditionsConfig {
-    evaluation: {
+}
+export interface ToggleConditionsConfig { evaluation: {
         enableCaching: boolean;
         cacheTimeToLive: number;
         maxConditionsPerToggle: number;
         evaluationTimeout: number;
-        strictMode: boolean;
+        strictMode: boolean }
 }
     };
-    security: {
-        allowCustomExpressions: boolean;
+    security: { allowCustomExpressions: boolean;
         maxExpressionComplexity: number;
         enableSecurityAudit: boolean;
-        blockedPatterns: string[];
-    };
-    rollout: {
-        defaultSalt: string;
+        blockedPatterns: string[] };
+    rollout: { defaultSalt: string;
         stickinessDuration: number;
         enableGradualRollout: boolean;
-        rolloutRateLimit: number;
-    };
+        rolloutRateLimit: number };
     experiments: {
         enableABTesting: boolean;
         defaultTrafficAllocation: number;

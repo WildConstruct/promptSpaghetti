@@ -5,8 +5,7 @@
  * Builds upon existing TemplatePreviewModal and EmbeddableContent infrastructure.
  */
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
-  EyeIcon,
+import { EyeIcon,
   ShareIcon,
   HeartIcon,
   StarIcon,
@@ -31,9 +30,9 @@ import {
   AdjustmentsHorizontalIcon,
   UserGroupIcon,
   FireIcon,
-  TrophyIcon,
+  TrophyIcon }
   ChatBubbleLeftIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 
 // Import existing types and components we'll extend
 import { Template } from './TemplatePreviewModal';
@@ -41,9 +40,8 @@ import { EmbedConfiguration, EmbedTheme, EmbedSize, EmbedFeatures } from '../emb
 
 // Enhanced types for embedded template previews
 
-}
-export interface EmbeddedTemplatePreviewProps {
-  template: Template;
+
+export interface EmbeddedTemplatePreviewProps { template: Template;
   embedConfig: EmbedConfiguration;
   showCustomization?: boolean;
   onCustomize?: (config: Partial<EmbedConfiguration>) => void;
@@ -60,70 +58,65 @@ export interface EmbeddedTemplatePreviewProps {
   showSocialActions?: boolean;
   showPurchaseButton?: boolean;
   maxWidth?: number;
-  maxHeight?: number;
-}
-}
-}
-export interface ShareMethod {
-  type: 'link' | 'embed' | 'social' | 'email' | 'copy';
+  maxHeight?: number }
+
+
+
+export interface ShareMethod { type: 'link' | 'embed' | 'social' | 'email' | 'copy';
   platform?: 'twitter' | 'linkedin' | 'facebook' | 'reddit' | 'discord';
-  customization?: EmbedCustomization;
-}
-}
-}
-export interface EmbedCustomization {
-  size: EmbedSize;
+  customization?: EmbedCustomization }
+
+
+
+export interface EmbedCustomization { size: EmbedSize;
   theme: EmbedTheme;
   features: EmbedFeatures;
   layout: EmbedLayout;
   branding: EmbedBranding;
-  social: EmbedSocialConfig;
-}
-}
-}
-export interface EmbedLayout {
-  orientation: 'horizontal' | 'vertical' | 'grid';
+  social: EmbedSocialConfig }
+
+
+
+export interface EmbedLayout { orientation: 'horizontal' | 'vertical' | 'grid';
   showHeader: boolean;
   showFooter: boolean;
   showSidebar: boolean;
   contentAlignment: 'left' | 'center' | 'right';
   spacing: 'tight' | 'normal' | 'loose';
   borderRadius: number;
-  shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl'
-}
-  }
-}
-export interface EmbedBranding {
-  showLogo: boolean;
+  shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl' }
+
+
+
+
+export interface EmbedBranding { showLogo: boolean;
   showTitle: boolean;
   showAuthor: boolean;
   showPoweredBy: boolean;
-  customColors?: {
+  customColors?: { }
   primary: string;
   secondary: string;
   accent: string;
   background: string;
   text: string;
-}
+
+
 };
-  customFonts?: {
-  heading: string;
-  body: string;
-};
-}
-}
-export interface EmbedSocialConfig {
-  showLikes: boolean;
+  customFonts?: { heading: string;
+  body: string };
+
+
+export interface EmbedSocialConfig { showLikes: boolean;
   showShares: boolean;
   showComments: boolean;
   showRating: boolean;
   showDownloads: boolean;
   enableInteraction: boolean;
   showAuthorInfo: boolean;
-  showStats: boolean;
-}
-}
-}
+  showStats: boolean }
+
+
+
 export interface PreviewSize {
   width: number;
   height: number;
@@ -131,29 +124,28 @@ export interface PreviewSize {
   icon: React.ComponentType<unknown>;
   description: string;
   // Predefined preview sizes
-}
-}
+
+
 export const PREVIEW_SIZES: PreviewSize = [
-  { width: 320, height: 568, label: 'Mobile', icon: DevicePhoneMobileIcon, description: 'iPhone/Android portrait' },
-  { width: 768, height: 1024, label: 'Tablet', icon: TabletIcon, description: 'iPad portrait' },
-  { width: 1024, height: 768, label: 'Tablet Landscape', icon: TabletIcon, description: 'iPad landscape' },
-  { width: 1200, height: 630, label: 'Desktop', icon: ComputerDesktopIcon, description: 'Standard desktop view' },
-  { width: 400, height: 600, label: 'Widget', icon: ArrowsPointingOutIcon, description: 'Sidebar widget' },
+  { width: 320, height: 568, label: 'Mobile', icon: DevicePhoneMobileIcon, description: 'iPhone/Android portrait' }
+  { width: 768, height: 1024, label: 'Tablet', icon: TabletIcon, description: 'iPad portrait' }
+  { width: 1024, height: 768, label: 'Tablet Landscape', icon: TabletIcon, description: 'iPad landscape' }
+  { width: 1200, height: 630, label: 'Desktop', icon: ComputerDesktopIcon, description: 'Standard desktop view' }
+  { width: 400, height: 600, label: 'Widget', icon: ArrowsPointingOutIcon, description: 'Sidebar widget' }
   { width: 800, height: 400, label: 'Banner', icon: PhotoIcon, description: 'Header banner' }
 ];
 
 // Embed code generation component
-export const EmbedCodeGenerator: React.FC<{,
+export const EmbedCodeGenerator: React.FC<{ ,
   template: Template;
   customization: EmbedCustomization;
-  onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
-}> = ({ template, customization, onCustomizationChange }) => {
+  onCustomizationChange: (updates: Partial<EmbedCustomization>) => void }> = ({ template, customization, onCustomizationChange }) => {
   const [activeTab, setActiveTab] = useState<'iframe' | 'javascript' | 'react'>('iframe');
   const [copied, setCopied] = useState(false);
   const embedCode = useMemo(() => {
     const baseUrl = `${window.location.origin}/embed/template/${template.id}`;}
-    const params = new URLSearchParams({)
-  theme: customization.theme.name,
+    const params = new URLSearchParams({ )
+  theme: customization.theme.name }
       size: `${customization.size.width}x${customization.size.height}`}
 },
   features: JSON.stringify(customization.features),
@@ -194,24 +186,24 @@ export const EmbedCodeGenerator: React.FC<{,
 <EmbeddedTemplatePreview
   template={{
     id: "${template.id}"}
-},
+
   title: "${template.title}"}
-},
+
   description: "${template.description}"}
-  }}
+
   embedConfig={{
     theme: "${customization.theme.name}"}
-},
+
   size: { width: ${customization.size.width}, height: ${customization.size.height} }
-},
+
   features: ${JSON.stringify(customization.features, null, 2)}
-},
+
   layout: ${JSON.stringify(customization.layout, null, 2)}
-},
+
   branding: ${JSON.stringify(customization.branding, null, 2)}
-},
+
   social: ${JSON.stringify(customization.social, null, 2)}
-  }}
+
   variant="standard"
   interactive={true}
   showSocialActions={true}
@@ -219,14 +211,10 @@ export const EmbedCodeGenerator: React.FC<{,
     default:
       return '';
   }, [template, customization, activeTab]);
-  const copyToClipboard = useCallback(async () => {
-    try {
+  const copyToClipboard = useCallback(async () => { try {
       await navigator.clipboard.writeText(embedCode);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-  console.error('Failed to copy code:', err);
-}, [embedCode]);
+      setTimeout(() => setCopied(false), 2000) } catch (err) { console.error('Failed to copy code:', err) }, [embedCode]);
   return;
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200">
@@ -242,18 +230,18 @@ export const EmbedCodeGenerator: React.FC<{,
         </div>
         <nav className="flex space-x-8 px-4">
           {[
-            { id: 'iframe', label: 'HTML (iframe)', description: 'Standard embed code' },
-            { id: 'javascript', label: 'JavaScript', description: 'Dynamic loading' },
+            { id: 'iframe', label: 'HTML (iframe)', description: 'Standard embed code' }
+            { id: 'javascript', label: 'JavaScript', description: 'Dynamic loading' }
             { id: 'react', label: 'React', description: 'Component usage' }
           ].map((tab) => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`py-3 px-1 border-b-2 font-medium text-sm ${
+              className={ `py-3 px-1 border-b-2 font-medium text-sm ${
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
             >
               {tab.label}
             </button>
@@ -270,12 +258,12 @@ export const EmbedCodeGenerator: React.FC<{,
 };
 
 // Customization panel component
-export const EmbedCustomizationPanel: React.FC<{,
+export const EmbedCustomizationPanel: React.FC<{ ,
   customization: EmbedCustomization;
-  onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
+  onCustomizationChange: (updates: Partial<EmbedCustomization>) => void }
   previewSize: PreviewSize;
   onPreviewSizeChange: (size: PreviewSize) => void;
-}> = ({ customization, onCustomizationChange, previewSize, onPreviewSizeChange }) => {
+> = ({ customization, onCustomizationChange, previewSize, onPreviewSizeChange }) => {
   const [activeSection, setActiveSection] = useState<'size' | 'theme' | 'layout' | 'features' | 'branding'>('size');
   const updateSize = useCallback((updates: Partial<EmbedSize>) => {
     onCustomizationChange({)
@@ -308,10 +296,10 @@ export const EmbedCustomizationPanel: React.FC<{,
         <h3 className="font-semibold text-gray-900 p-4">Customize Embed</h3>
         <nav className="flex space-x-6 px-4">
           {[
-            { id: 'size', label: 'Size', icon: ArrowsPointingOutIcon },
-            { id: 'theme', label: 'Theme', icon: PaintBrushIcon },
-            { id: 'layout', label: 'Layout', icon: AdjustmentsHorizontalIcon },
-            { id: 'features', label: 'Features', icon: Cog6ToothIcon },
+            { id: 'size', label: 'Size', icon: ArrowsPointingOutIcon }
+            { id: 'theme', label: 'Theme', icon: PaintBrushIcon }
+            { id: 'layout', label: 'Layout', icon: AdjustmentsHorizontalIcon }
+            { id: 'features', label: 'Features', icon: Cog6ToothIcon }
             { id: 'branding', label: 'Branding', icon: PaintBrushIcon }
           ].map((section) => {
             const Icon = section.icon;
@@ -319,11 +307,11 @@ export const EmbedCustomizationPanel: React.FC<{,
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id as any)}
-                className={`flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm ${
+                className={ `flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm ${
   activeSection === section.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
               >
                 <Icon className="h-4 w-4" />
                 {section.label}
@@ -343,9 +331,9 @@ export const EmbedCustomizationPanel: React.FC<{,
                   <button
                     key={size.label}
                     onClick={() => onPreviewSizeChange(size)}
-                    className={`flex items-center gap-3 p-3 border rounded-lg text-left hover:bg-gray-50 ${
-  previewSize.label === size.label ? 'border-blue-500 bg-blue-50' : 'border-gray-200',
-}`}
+                    className={ `flex items-center gap-3 p-3 border rounded-lg text-left hover:bg-gray-50 ${
+  previewSize.label === size.label ? 'border-blue-500 bg-blue-50' : 'border-gray-200' }
+`}
                   >
                     <Icon className="h-5 w-5 text-gray-600" />
                     <div>
@@ -391,9 +379,9 @@ export const EmbedCustomizationPanel: React.FC<{,
                 <button
                   key={theme}
                   onClick={() => updateTheme({ name: theme as any })}
-                  className={`p-3 border rounded-lg text-center capitalize ${
-  customization.theme.name === theme ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50',
-}`}
+                  className={ `p-3 border rounded-lg text-center capitalize ${
+  customization.theme.name === theme ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50' }
+`}
                 >
                   {theme}
                 </button>
@@ -408,20 +396,20 @@ export const EmbedCustomizationPanel: React.FC<{,
                     <input
                       type="color"
                       value={value}
-                      onChange={(e) => updateBranding({)
+                      onChange={ (e) => updateBranding({)
   customColors: {
-  ...customization.branding.customColors,
-  [key]: e.target.value,
+  ...customization.branding.customColors
+  [key]: e.target.value }
 })}
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
                     <input
                       type="text"
                       value={value}
-                      onChange={(e) => updateBranding({)
+                      onChange={ (e) => updateBranding({)
   customColors: {
-  ...customization.branding.customColors,
-  [key]: e.target.value,
+  ...customization.branding.customColors
+  [key]: e.target.value }
 })}
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
                     />
@@ -440,11 +428,11 @@ export const EmbedCustomizationPanel: React.FC<{,
                   <button
                     key={orientation}
                     onClick={() => updateLayout({ orientation: orientation as any })}
-                    className={`px-3 py-2 border rounded-md text-sm capitalize ${
+                    className={ `px-3 py-2 border rounded-md text-sm capitalize ${
   customization.layout.orientation === orientation
   ? 'border-blue-500 bg-blue-50 text-blue-700'
-  : 'border-gray-300 hover:bg-gray-50',
-}`}
+  : 'border-gray-300 hover:bg-gray-50' }
+`}
                   >
                     {orientation}
                   </button>
@@ -458,11 +446,11 @@ export const EmbedCustomizationPanel: React.FC<{,
                   <button
                     key={alignment}
                     onClick={() => updateLayout({ contentAlignment: alignment as any })}
-                    className={`px-3 py-2 border rounded-md text-sm capitalize ${
+                    className={ `px-3 py-2 border rounded-md text-sm capitalize ${
   customization.layout.contentAlignment === alignment
   ? 'border-blue-500 bg-blue-50 text-blue-700'
-  : 'border-gray-300 hover:bg-gray-50',
-}`}
+  : 'border-gray-300 hover:bg-gray-50' }
+`}
                   >
                     {alignment}
                   </button>
@@ -471,8 +459,8 @@ export const EmbedCustomizationPanel: React.FC<{,
             </div>
             <div className="space-y-3">
               {[
-                { key: 'showHeader', label: 'Show Header' },
-                { key: 'showFooter', label: 'Show Footer' },
+                { key: 'showHeader', label: 'Show Header' }
+                { key: 'showFooter', label: 'Show Footer' }
                 { key: 'showSidebar', label: 'Show Sidebar' }
               ].map((option) => ()
                 <label key={option.key} className="flex items-center gap-3">
@@ -511,9 +499,9 @@ export const EmbedCustomizationPanel: React.FC<{,
             <h4 className="font-medium text-gray-700 mb-3">Branding Options</h4>
             <div className="space-y-3">
               {[
-                { key: 'showLogo', label: 'Show Logo' },
-                { key: 'showTitle', label: 'Show Title' },
-                { key: 'showAuthor', label: 'Show Author' },
+                { key: 'showLogo', label: 'Show Logo' }
+                { key: 'showTitle', label: 'Show Title' }
+                { key: 'showAuthor', label: 'Show Author' }
                 { key: 'showPoweredBy', label: 'Show "Powered by" Link' }
               ].map((option) => ()
                 <label key={option.key} className="flex items-center gap-3">
@@ -535,77 +523,76 @@ export const EmbedCustomizationPanel: React.FC<{,
 };
 
 // Main embedded template preview component
-export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = ({)
-  template,
-  embedConfig,
-  showCustomization = false,
-  onCustomize,
-  onShare,
-  onPreview,
-  onPurchase,
-  onLike,
-  onRate,
-  className = '',
-  variant = 'standard',
-  interactive = true,
-  autoPlay = false,
-  showMetrics = true,
-  showSocialActions = true,
-  showPurchaseButton = true,
-  maxWidth,
+export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = ({ )
+  template
+  embedConfig
+  showCustomization = false
+  onCustomize
+  onShare
+  onPreview
+  onPurchase
+  onLike
+  onRate
+  className = ''
+  variant = 'standard'
+  interactive = true
+  autoPlay = false
+  showMetrics = true
+  showSocialActions = true
+  showPurchaseButton = true
+  maxWidth }
   maxHeight
 }) => {
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [previewSize, setPreviewSize] = useState<PreviewSize>(PREVIEW_SIZES[1]); // Default to tablet
   const [customization, setCustomization] = useState<EmbedCustomization>({)
-  size: { width: previewSize.width, height: previewSize.height, responsive: true },
-    theme: { name: 'light', colors: {}, fonts: {} },
-    features: {
-  showPreview: true,
-  showMetadata: true,
-  showActions: showSocialActions,
-  showComments: false,
-  enableInteraction: interactive,
-  enableSharing: true,
-  enablePurchase: showPurchaseButton,
-  showRating: true,
-},
-  layout: {
-  orientation: 'vertical',
-  showHeader: true,
-  showFooter: true,
-  showSidebar: false,
-  contentAlignment: 'center',
-  spacing: 'normal',
-  borderRadius: 8,
-  shadow: 'md',
-},
-  branding: {
-  showLogo: true,
-  showTitle: true,
-  showAuthor: true,
-  showPoweredBy: true,
+  size: { width: previewSize.width, height: previewSize.height, responsive: true }
+    theme: { name: 'light', colors: {}, fonts: {} }
+    features: { 
+  showPreview: true
+  showMetadata: true
+  showActions: showSocialActions
+  showComments: false
+  enableInteraction: interactive
+  enableSharing: true
+  enablePurchase: showPurchaseButton
+  showRating: true }
+
+  layout: { 
+  orientation: 'vertical'
+  showHeader: true
+  showFooter: true
+  showSidebar: false
+  contentAlignment: 'center'
+  spacing: 'normal'
+  borderRadius: 8
+  shadow: 'md' }
+
+  branding: { 
+  showLogo: true
+  showTitle: true
+  showAuthor: true
+  showPoweredBy: true
   customColors: {
-  primary: '#3B82F6',
-  secondary: '#64748B',
-  accent: '#10B981',
-  background: '#FFFFFF',
-  text: '#1F2937',
-},
-  social: {
-  showLikes: true,
-  showShares: true,
-  showComments: false,
-  showRating: true,
-  showDownloads: true,
-  enableInteraction: interactive,
-  showAuthorInfo: true,
-  showStats: showMetrics,
+  primary: '#3B82F6'
+  secondary: '#64748B'
+  accent: '#10B981'
+  background: '#FFFFFF'
+  text: '#1F2937' }
+
+  social: { 
+  showLikes: true
+  showShares: true
+  showComments: false
+  showRating: true
+  showDownloads: true
+  enableInteraction: interactive
+  showAuthorInfo: true
+  showStats: showMetrics }
 });
   // Update customization when preview size changes
-  useEffect(() => {
-    setCustomization(prev => ({)
-  ...prev,
+  useEffect(() => { setCustomization(prev => ({)
+  ...prev }
       size: { ...prev.size, width: previewSize.width, height: previewSize.height }
     }));
   }, [previewSize]);
@@ -617,15 +604,14 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
   const handleShare = useCallback((method: ShareMethod) => {
     onShare?.({ ...method, customization });
   }, [onShare, customization]);
-  const getVariantStyles = () => {
-  switch (variant) {
-  case 'compact':,
+  const getVariantStyles = () => { switch (variant) {
+  case 'compact':
   return 'p-3 text-sm';
-  case 'detailed':,
+  case 'detailed':
   return 'p-6 text-base';
-  case 'showcase':,
+  case 'showcase':
   return 'p-8 text-lg';
-  default:,
+  default: }
   return 'p-4 text-sm';
 };
   return;
@@ -674,20 +660,20 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
           </div>
           <div 
             className="border border-gray-300 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center"
-            style={{
-  maxWidth: maxWidth || 'none',
-  maxHeight: maxHeight || 'none',
-  minHeight: '400px',
-}}
+            style={ {
+  maxWidth: maxWidth || 'none'
+  maxHeight: maxHeight || 'none'
+  minHeight: '400px' }
+}
           >
             <div 
               className="bg-white border border-gray-200 rounded shadow-md overflow-hidden"
-              style={{
-  width: Math.min(customization.size.width, maxWidth || customization.size.width),
-  height: Math.min(customization.size.height, maxHeight || customization.size.height),
-  maxWidth: '100%',
-  maxHeight: '100%',
-}}
+              style={ {
+  width: Math.min(customization.size.width, maxWidth || customization.size.width)
+  height: Math.min(customization.size.height, maxHeight || customization.size.height)
+  maxWidth: '100%'
+  maxHeight: '100%' }
+
             >
               {/* Simulated embedded content */}
               <div className={`h-full flex flex-col ${getVariantStyles()}`}>}

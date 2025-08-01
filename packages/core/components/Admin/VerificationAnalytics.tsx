@@ -7,8 +7,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { 
-  BarChart3,
+import { BarChart3,
   TrendingUp,
   TrendingDown,
   Users,
@@ -22,122 +21,113 @@ import {
   RefreshCw,
   Eye,
   PieChart,
-  LineChart,
+  LineChart }
   Target
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
-export interface VerificationAnalyticsData {
-  period: {
+
+export interface VerificationAnalyticsData { period: { }
   start: Date;
   end: Date;
   label: string;
-}
+
+
 };
-  overview: {
+  overview: { ,
   totalRequests: number;
   approvedRequests: number;
   rejectedRequests: number;
   pendingRequests: number;
   averageProcessingTime: number; // hours,
-  approvalRate: number; // percentage,
+  approvalRate: number; // percentage }
 };
-  requestsByType: Array<{
+  requestsByType: Array<{ ,
   type: string;
   count: number;
   approvalRate: number;
-  averageProcessingTime: number;
-}>;
-  processingTrends: Array<{
+  averageProcessingTime: number }>;
+  processingTrends: Array<{ ,
   date: Date;
   requests: number;
   approved: number;
   rejected: number;
-  averageTime: number;
-}>;
-  trustScoreDistribution: Array<{
+  averageTime: number }>;
+  trustScoreDistribution: Array<{ ,
   range: string;
   count: number;
-  percentage: number;
-}>;
-  riskAnalysis: {
+  percentage: number }>;
+  riskAnalysis: { ,
   highRiskUsers: number;
   flaggedDocuments: number;
   fraudAttempts: number;
-  suspendedAccounts: number;
-};
-  performanceMetrics: {
+  suspendedAccounts: number };
+  performanceMetrics: { ,
   slaCompliance: number; // percentage,
   qualityScore: number; // 0-100,
   reviewerProductivity: number; // requests per hour,
-  systemUptime: number; // percentage,
+  systemUptime: number; // percentage }
 };
-}
-}
-export interface VerificationAnalyticsProps {
-  className?: string;
-}
-}
+
+
+export interface VerificationAnalyticsProps { className?: string }
+
 export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
   className = ''
-}) => {
-  const [selectedPeriod, setSelectedPeriod] = useState('last_30_days');
+}) => { const [selectedPeriod, setSelectedPeriod] = useState('last_30_days');
   const [_____selectedMetricType, _____setSelectedMetricType] = useState('overview');
   const [isLoading, setIsLoading] = useState(false);
   // Mock analytics data - in real implementation, this would come from API
   const [analyticsData] = useState<VerificationAnalyticsData>({)
   period: {
-  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-  end: new Date(),
-  label: 'Last 30 Days',
-},
-  overview: {
-  totalRequests: 1247,
-  approvedRequests: 987,
-  rejectedRequests: 203,
-  pendingRequests: 57,
-  averageProcessingTime: 4.2,
-  approvalRate: 79.2,
-},
-  requestsByType: [,
-      { type: 'Email Verification', count: 523, approvalRate: 94.3, averageProcessingTime: 1.2 },
-      { type: 'Phone Verification', count: 456, approvalRate: 91.7, averageProcessingTime: 2.1 },
-      { type: 'Government ID', count: 134, approvalRate: 67.9, averageProcessingTime: 8.4 },
-      { type: 'Professional Credentials', count: 89, approvalRate: 71.9, averageProcessingTime: 12.7 },
+  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  end: new Date()
+  label: 'Last 30 Days' }
+
+  overview: { 
+  totalRequests: 1247
+  approvedRequests: 987
+  rejectedRequests: 203
+  pendingRequests: 57
+  averageProcessingTime: 4.2
+  approvalRate: 79.2 }
+
+  requestsByType: [
+      { type: 'Email Verification', count: 523, approvalRate: 94.3, averageProcessingTime: 1.2 }
+      { type: 'Phone Verification', count: 456, approvalRate: 91.7, averageProcessingTime: 2.1 }
+      { type: 'Government ID', count: 134, approvalRate: 67.9, averageProcessingTime: 8.4 }
+      { type: 'Professional Credentials', count: 89, approvalRate: 71.9, averageProcessingTime: 12.7 }
       { type: 'Social Media', count: 45, approvalRate: 82.2, averageProcessingTime: 3.8 }
-    ],
-    processingTrends: Array.from({ length: 30 }, (_, i) => ({)
-  date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000),
-  requests: Math.floor(Math.random() * 50) + 20,
-  approved: Math.floor(Math.random() * 35) + 15,
-  rejected: Math.floor(Math.random() * 10) + 2,
-  averageTime: Math.random() * 6 + 2,
-})),
-    trustScoreDistribution: [,
-      { range: '90-100', count: 287, percentage: 23.0 },
-      { range: '80-89', count: 402, percentage: 32.2 },
-      { range: '70-79', count: 298, percentage: 23.9 },
-      { range: '60-69', count: 156, percentage: 12.5 },
+    ]
+    processingTrends: Array.from({ length: 30 }, (_, i) => ({ )
+  date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000)
+  requests: Math.floor(Math.random() * 50) + 20
+  approved: Math.floor(Math.random() * 35) + 15
+  rejected: Math.floor(Math.random() * 10) + 2
+  averageTime: Math.random() * 6 + 2 }
+}))
+    trustScoreDistribution: [
+      { range: '90-100', count: 287, percentage: 23.0 }
+      { range: '80-89', count: 402, percentage: 32.2 }
+      { range: '70-79', count: 298, percentage: 23.9 }
+      { range: '60-69', count: 156, percentage: 12.5 }
       { range: '0-59', count: 104, percentage: 8.3 }
-    ],
-    riskAnalysis: {
-  highRiskUsers: 23,
-  flaggedDocuments: 45,
-  fraudAttempts: 12,
-  suspendedAccounts: 8,
-},
-  performanceMetrics: {
-  slaCompliance: 94.7,
-  qualityScore: 87.3,
-  reviewerProductivity: 2.8,
-  systemUptime: 99.9,
+    ]
+    riskAnalysis: { 
+  highRiskUsers: 23
+  flaggedDocuments: 45
+  fraudAttempts: 12
+  suspendedAccounts: 8 }
+
+  performanceMetrics: { 
+  slaCompliance: 94.7
+  qualityScore: 87.3
+  reviewerProductivity: 2.8
+  systemUptime: 99.9 }
 });
-  const handleRefreshData = async () => {
-    setIsLoading(true);
+  const handleRefreshData = async () => { setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+      setIsLoading(false) }, 1000);
   };
   const renderOverviewMetrics = () => (;);
     <div className="overview-metrics">
@@ -227,21 +217,21 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
                 <div className="pie-chart">
                   <div 
                     className="pie-slice approved" 
-                    style={{
-  '--percentage': (analyticsData.overview.approvedRequests / analyticsData.overview.totalRequests * 100),
-} as React.CSSProperties}
+                    style={ {
+  '--percentage': (analyticsData.overview.approvedRequests / analyticsData.overview.totalRequests * 100) }
+ as React.CSSProperties}
                   ></div>
                   <div 
                     className="pie-slice rejected" 
-                    style={{
-  '--percentage': (analyticsData.overview.rejectedRequests / analyticsData.overview.totalRequests * 100),
-} as React.CSSProperties}
+                    style={ {
+  '--percentage': (analyticsData.overview.rejectedRequests / analyticsData.overview.totalRequests * 100) }
+ as React.CSSProperties}
                   ></div>
                   <div 
                     className="pie-slice pending" 
-                    style={{
-  '--percentage': (analyticsData.overview.pendingRequests / analyticsData.overview.totalRequests * 100),
-} as React.CSSProperties}
+                    style={ {
+  '--percentage': (analyticsData.overview.pendingRequests / analyticsData.overview.totalRequests * 100) }
+ as React.CSSProperties}
                   ></div>
                 </div>
               </div>
@@ -438,18 +428,18 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
         </div>
         {renderRiskAnalysis()}
       </div>
-      <style>{`
+      <style>{ `
         .verification-analytics {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
         .analytics-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
@@ -464,10 +454,10 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
   gap: 0.5rem;
           align-items: center;
         .period-select {
-          padding: 0.5rem;
+          padding: 0.5rem
   border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   background: white;
         .analytics-content {
           display: flex;
@@ -497,13 +487,13 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
   padding: 0.25rem 0.5rem;
           border-radius: 4px;
         .metric-trend.positive {
-          color: #059669;
+          color: #059669
   background: #d1fae5;
         .metric-trend.negative {
-          color: #dc2626;
+          color: #dc2626
   background: #fee2e2;
         .metric-trend.neutral {
-          color: #6b7280;
+          color: #6b7280
   background: #f3f4f6;
         .metric-content {
           text-align: center;
@@ -513,12 +503,12 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
   color: #1f2937;
           line-height: 1;
         .metric-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin-top: 0.5rem;
         .status-breakdown {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1rem;
         .chart-legend {
           display: flex;
@@ -546,13 +536,13 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
         .pie-chart {
           width: 120px;
   height: 120px;
-          border-radius: 50%;
-  background: conic-gradient(),
-            #10b981 0deg calc(var(--approved-percentage, 0) * 3.6deg),
+          border-radius: 50%
+  background: conic-gradient()
+            #10b981 0deg calc(var(--approved-percentage, 0) * 3.6deg)
             #ef4444 calc()
               var(--approved-percentage)
               0
-            ) * 3.6deg) calc((var(--approved-percentage, 0) + var(--rejected-percentage, 0)) * 3.6deg),
+            ) * 3.6deg) calc((var(--approved-percentage, 0) + var(--rejected-percentage, 0)) * 3.6deg)
             #f59e0b calc((var(--approved-percentage, 0) + var(--rejected-percentage, 0)) * 3.6deg) 360deg
           );
         .performance-metrics {
@@ -565,7 +555,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
   gap: 1rem;
         .performance-label {
           min-width: 120px;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #374151;
           font-weight: 500;
         .performance-bar {
@@ -575,7 +565,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
           border-radius: 4px;
   overflow: hidden;
         .performance-fill {
-          height: 100%;
+          height: 100%
   transition: width 0.3s ease;
         .performance-fill.sla {
           background: #10b981;
@@ -591,7 +581,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
   color: #1f2937;
         .analytics-grid {
           display: grid;
-          grid-template-columns: 2fr 1fr;
+          grid-template-columns: 2fr 1fr
   gap: 1rem;
         .type-analysis-table {
           display: flex;
@@ -599,17 +589,17 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
   gap: 0.5rem;
         .table-header {
           display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+          grid-template-columns: 2fr 1fr 1fr 1fr 1fr
   gap: 1rem;
-          padding: 0.75rem;
+          padding: 0.75rem
   background: #f9fafb;
           border-radius: 6px;
           font-weight: 600;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #374151;
         .table-row {
           display: grid;
-          grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+          grid-template-columns: 2fr 1fr 1fr 1fr 1fr
   gap: 1rem;
           padding: 0.75rem;
           border-bottom: 1px solid #e5e7eb;
@@ -617,7 +607,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
         .table-row:last-child {
           border-bottom: none;
         .table-cell {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #1f2937;
         .type-name {
           font-weight: 500;
@@ -650,15 +640,14 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
           border-radius: 10px;
   overflow: hidden;
         .range-fill {
-          height: 100%;
+          height: 100% }
   transition: width 0.3s ease;
-        .range-fill.range-0 { background: #10b981; }
-        .range-fill.range-1 { background: #3b82f6; }
-        .range-fill.range-2 { background: #f59e0b; }
-        .range-fill.range-3 { background: #ef4444; }
-        .range-fill.range-4 { background: #6b7280; }
-        .range-stats {
-          display: flex;
+        .range-fill.range-0 { background: #10b981 }
+        .range-fill.range-1 { background: #3b82f6 }
+        .range-fill.range-2 { background: #f59e0b }
+        .range-fill.range-3 { background: #ef4444 }
+        .range-fill.range-4 { background: #6b7280 }
+        .range-stats { display: flex;
           flex-direction: column;
           align-items: flex-end;
           min-width: 80px;
@@ -667,7 +656,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
           font-weight: 600;
   color: #1f2937;
         .range-percentage {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .risk-metrics {
           display: grid;
@@ -690,7 +679,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
           font-weight: 700;
   color: #1f2937;
         .risk-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .risk-alerts {
           display: flex;
@@ -723,14 +712,14 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
             flex-wrap: wrap;
           .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
-          .table-header,
+          .table-header
           .table-row {
-            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr
   gap: 0.5rem;
-          .table-header .header-cell:nth-child(4),
-          .table-header .header-cell:nth-child(5),
-          .table-row .table-cell:nth-child(4),
-          .table-row .table-cell:nth-child(5) {,
+          .table-header .header-cell:nth-child(4)
+          .table-header .header-cell:nth-child(5)
+          .table-row .table-cell:nth-child(4)
+          .table-row .table-cell:nth-child(5) { }
   display: none;
           .risk-metrics {
             grid-template-columns: 1fr;

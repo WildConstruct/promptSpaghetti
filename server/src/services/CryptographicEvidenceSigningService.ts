@@ -14,8 +14,8 @@ import { KeyManagementService, KeyUsageContext } from './KeyManagementService';
 import AuditEvidenceMapper from './AuditEvidenceMapper';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface EvidenceSigningRequest {
   evidenceId: string;
   evidenceType: string;
@@ -25,12 +25,13 @@ export interface EvidenceSigningRequest {
   metadata?: Record<string, any>;
   complianceFrameworks?: string[];
   signingPurpose: SigningPurpose;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceSignature {
   signatureId: string;
   evidenceId: string;
@@ -45,12 +46,13 @@ export interface EvidenceSignature {
   certificateChain?: string[];
   complianceContext: ComplianceContext;
   verificationMetadata: VerificationMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceContext {
   frameworks: string[];
   requirements: string[];
@@ -58,12 +60,13 @@ export interface ComplianceContext {
   retentionPeriod: number;
   jurisdiction: string;
   classification: DataClassification;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VerificationMetadata {
   created: Date;
   signerCertificate?: string;
@@ -72,23 +75,25 @@ export interface VerificationMetadata {
   integrity: boolean;
   authenticity: boolean;
   witnessSignatures?: WitnessSignature[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WitnessSignature {
   witnessId: string;
   signature: string;
   timestamp: Date;
   role: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SignatureVerificationResult {
   valid: boolean;
   signatureId: string;
@@ -104,47 +109,51 @@ export interface SignatureVerificationResult {
   warnings: string[];
   errors: string[];
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceValidationResult {
   frameworkCompliance: Record<string, boolean>;
   retentionCompliance: boolean;
   auditTrailComplete: boolean;
   regulatoryCompliance: boolean;
   recommendations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceBatch {
   batchId: string;
   evidenceItems: EvidenceSigningRequest[];
   batchSignature?: string;
   merkleRoot?: string;
   timestamp: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChainOfCustody {
   evidenceId: string;
   custodyEvents: CustodyEvent[];
   currentCustodian: string;
   integrityMaintained: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CustodyEvent {
   eventId: string;
   timestamp: Date;
@@ -154,9 +163,10 @@ export interface CustodyEvent {
   signature: string;
   witness?: string;
   reason: string;
-}
-}
-}
+
+
+
+
 
 // Enums
 export enum SigningPurpose {
@@ -167,7 +177,7 @@ export enum SigningPurpose {
   FORENSIC_EVIDENCE = 'forensic_evidence',
   QUALITY_ASSURANCE = 'quality_assurance',
   CERTIFICATION = 'certification'
-}
+
 
 export enum SignatureAlgorithm {
   RSA_PSS_SHA256 = 'rsa-pss-sha256',
@@ -175,7 +185,7 @@ export enum SignatureAlgorithm {
   ECDSA_P256_SHA256 = 'ecdsa-p256-sha256',
   ECDSA_P384_SHA384 = 'ecdsa-p384-sha384',
   Ed25519 = 'ed25519'
-}
+
 
 export enum HashAlgorithm {
   SHA256 = 'sha256',
@@ -183,21 +193,21 @@ export enum HashAlgorithm {
   SHA512 = 'sha512',
   SHA3_256 = 'sha3-256',
   SHA3_384 = 'sha3-384'
-}
+
 
 export enum EvidenceLevel {
   BASIC = 'basic',
   STANDARD = 'standard',
   ENHANCED = 'enhanced',
   MAXIMUM = 'maximum'
-}
+
 
 export enum DataClassification {
   PUBLIC = 'public',
   INTERNAL = 'internal',
   CONFIDENTIAL = 'confidential',
   RESTRICTED = 'restricted'
-}
+
 
 export enum KeyValidationStatus {
   VALID = 'valid',
@@ -205,7 +215,7 @@ export enum KeyValidationStatus {
   REVOKED = 'revoked',
   SUSPENDED = 'suspended',
   UNKNOWN = 'unknown'
-}
+
 
 export enum CertificateStatus {
   VALID = 'valid',
@@ -213,7 +223,7 @@ export enum CertificateStatus {
   REVOKED = 'revoked',
   SUSPENDED = 'suspended',
   NOT_YET_VALID = 'not_yet_valid'
-}
+
 
 export enum CustodyAction {
   CREATED = 'created',
@@ -222,7 +232,7 @@ export enum CustodyAction {
   MODIFIED = 'modified',
   ARCHIVED = 'archived',
   DESTROYED = 'destroyed'
-}
+
 
 /**
  * Cryptographic Evidence Signing Service
@@ -245,7 +255,7 @@ export class CryptographicEvidenceSigningService {
     this.keyManagementService = keyManagementService;
     this.evidenceMapper = evidenceMapper;
     this.auditService = auditService;
-  }
+
 
   /**
    * Sign individual evidence item with cryptographic signature
@@ -291,7 +301,7 @@ export class CryptographicEvidenceSigningService {
           retentionPeriod: this.calculateRetentionPeriod(request),
           jurisdiction: 'US',
           classification: this.classifyEvidence(request)
-  }
+
         verificationMetadata: {
           created: new Date(),
           signerCertificate: signature.certificate,
@@ -299,7 +309,7 @@ export class CryptographicEvidenceSigningService {
           integrity: true,
           authenticity: true,
           witnessSignatures: []
-        }
+
       };
 
       // Store signature
@@ -328,18 +338,17 @@ export class CryptographicEvidenceSigningService {
           algorithm: signature.algorithm,
           complianceFrameworks: request.complianceFrameworks,
           trailId
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: request.complianceFrameworks || ['ISO27001'],
           requirements: ['evidence_integrity', 'audit_trail'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return evidenceSignature;
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'EVIDENCE_SIGNING_FAILED',
         details: {
@@ -347,18 +356,18 @@ export class CryptographicEvidenceSigningService {
           error: error.message,
           signingPurpose: request.signingPurpose,
           collectorId: request.collectorId
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['ISO27001'],
           requirements: ['incident_response'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
       
       throw new Error(`Evidence signing failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Sign batch of evidence items with batch signature and Merkle tree
@@ -373,7 +382,7 @@ export class CryptographicEvidenceSigningService {
       for (const item of evidenceItems) {
         const signature = await this.signEvidence(item);
         signatures.push(signature);
-      }
+
       
       // Generate Merkle tree for batch integrity
       const merkleRoot = this.generateMerkleRoot(signatures.map(s => s.dataHash));
@@ -421,21 +430,20 @@ export class CryptographicEvidenceSigningService {
           evidenceCount: evidenceItems.length,
           merkleRoot,
           batchSignature: batchSignatureResult.signature
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['ISO27001'],
           requirements: ['batch_processing', 'integrity_controls'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
       
       return batch;
-      
-    } catch (error) {
+ catch (error) {
       throw new Error(`Evidence batch signing failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Verify evidence signature and integrity
@@ -461,12 +469,12 @@ export class CryptographicEvidenceSigningService {
             auditTrailComplete: false,
             regulatoryCompliance: false,
             recommendations: ['Signature not found']
-  }
+
           warnings: [],
           errors: ['Signature record not found'],
           metadata: {}
         };
-      }
+
 
       // Verify key status
       const keyStatus = await this.verifyKeyStatus(signature.keyId);
@@ -500,17 +508,17 @@ export class CryptographicEvidenceSigningService {
           hashAlgorithm: signature.hashAlgorithm,
           signerIdentity: signature.signerIdentity,
           purpose: signature.purpose
-        }
+
       };
 
       // Add warnings for expired or suspicious signatures
       if (keyStatus === KeyValidationStatus.EXPIRED) {
         result.warnings.push('Signing key has expired');
-      }
+
       
       if (!integrityCheck) {
         result.errors.push('Data integrity check failed - evidence may have been tampered with');
-      }
+
 
       await this.auditService.logEvent({
         eventType: 'EVIDENCE_SIGNATURE_VERIFIED',
@@ -521,18 +529,17 @@ export class CryptographicEvidenceSigningService {
           keyStatus,
           integrityCheck,
           authenticityCheck: signatureValid
-  }
+
         riskLevel: result.valid ? 'LOW' : 'HIGH',
         compliance: {
           frameworks: signature.complianceContext.frameworks,
           requirements: ['evidence_verification'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return result;
-      
-    } catch (error) {
+ catch (error) {
       return {
         valid: false,
         signatureId,
@@ -549,13 +556,13 @@ export class CryptographicEvidenceSigningService {
           auditTrailComplete: false,
           regulatoryCompliance: false,
           recommendations: []
-  }
+
         warnings: [],
         errors: [`Verification failed: ${error.message}`],
         metadata: {}
       };
-    }
-  }
+
+
 
   /**
    * Get all signatures for an evidence item
@@ -563,14 +570,14 @@ export class CryptographicEvidenceSigningService {
   getEvidenceSignatures(evidenceId: string): EvidenceSignature[] {
     return Array.from(this.signatures.values())
       .filter(signature => signature.evidenceId === evidenceId);
-  }
+
 
   /**
    * Get chain of custody for evidence
    */
   getChainOfCustody(evidenceId: string): ChainOfCustody | undefined {
     return this.chainOfCustody.get(evidenceId);
-  }
+
 
   /**
    * Transfer custody of evidence
@@ -586,7 +593,7 @@ export class CryptographicEvidenceSigningService {
     const custody = this.chainOfCustody.get(evidenceId);
     if (!custody) {
       throw new Error(`Chain of custody not found for evidence: ${evidenceId}`);
-    }
+
 
     const custodyEvent: CustodyEvent = {
       eventId: crypto.randomUUID(),
@@ -611,51 +618,51 @@ export class CryptographicEvidenceSigningService {
         reason,
         witness,
         eventId: custodyEvent.eventId
-  }
+
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['ISO27001'],
         requirements: ['chain_of_custody'],
         evidenceLevel: 'ENHANCED'
-      }
+
     });
-  }
+
 
   // Private helper methods
 
   private validateSigningRequest(request: EvidenceSigningRequest): void {
     if (!request.evidenceId || !request.evidenceType || !request.collectorId) {
       throw new Error('Missing required fields: evidenceId, evidenceType, and collectorId are required');
-    }
+
 
     if (!request.evidenceData) {
       throw new Error('Evidence data is required for signing');
-    }
+
 
     if (!Object.values(SigningPurpose).includes(request.signingPurpose)) {
       throw new Error(`Invalid signing purpose: ${request.signingPurpose}`);
-    }
-  }
+
+
 
   private normalizeEvidenceData(data: Record<string, unknown>): string {
     // Create canonical representation for consistent signing
     if (typeof data === 'string') {
       return data;
-    }
+
     
     // Sort object keys for consistent serialization
     const normalized = this.sortObjectDeep(data);
     return JSON.stringify(normalized);
-  }
+
 
   private sortObjectDeep(obj: unknown): unknown {
     if (obj === null || typeof obj !== 'object') {
       return obj;
-    }
+
     
     if (Array.isArray(obj)) {
       return obj.map(item => this.sortObjectDeep(item));
-    }
+
     
     const sorted: unknown = {};
     Object.keys(obj).sort().forEach(key => {
@@ -663,13 +670,13 @@ export class CryptographicEvidenceSigningService {
     });
     
     return sorted;
-  }
+
 
   private generateEvidenceHash(data: string, algorithm: HashAlgorithm): string {
     const hash = crypto.createHash(algorithm);
     hash.update(data, 'utf8');
     return hash.digest('hex');
-  }
+
 
   private async getSigningKey(request: EvidenceSigningRequest): Promise<unknown> {
 
@@ -686,7 +693,7 @@ export class CryptographicEvidenceSigningService {
 
     if (existingKeys.length > 0) {
       return existingKeys[0];
-    }
+
 
     // Create new signing key if none exists
     const securityLevel = this.determineSecurityLevel(request);
@@ -704,9 +711,9 @@ export class CryptographicEvidenceSigningService {
         frameworks: request.complianceFrameworks?.join(',') || 'ISO27001',
         classification: this.classifyEvidence(request),
         evidenceType: request.evidenceType
-      }
+
     });
-  }
+
 
   private createSignaturePayload(request: EvidenceSigningRequest, dataHash: string): string {
     const payload = {
@@ -720,14 +727,14 @@ export class CryptographicEvidenceSigningService {
     };
 
     return JSON.stringify(payload);
-  }
+
 
   private async generateSignature(payload: string, signingKey: unknown, request: EvidenceSigningRequest): Promise<{
     signature: string;
     algorithm: SignatureAlgorithm;
     certificate?: string;
     certificateChain?: string[];
-  }> {
+> {
 
     // Get key material for signing
     const keyMaterial = await this.keyManagementService.getKeyMaterial(
@@ -738,8 +745,8 @@ export class CryptographicEvidenceSigningService {
         additionalContext: {
           evidenceId: request.evidenceId,
           signingPurpose: request.signingPurpose
-        }
-      } as KeyUsageContext
+
+ as KeyUsageContext
     );
 
     // Determine signature algorithm based on key type and security requirements
@@ -756,12 +763,12 @@ export class CryptographicEvidenceSigningService {
         padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
         saltLength: crypto.constants.RSA_PSS_SALTLEN_DIGEST
       }, 'base64');
-    } else {
+ else {
       // Default to PKCS1 padding
       const sign = crypto.createSign('RSA-SHA256');
       sign.update(payload);
       signature = sign.sign(keyMaterial, 'base64');
-    }
+
 
     return {
       signature,
@@ -769,7 +776,7 @@ export class CryptographicEvidenceSigningService {
       certificate: signingKey.certificate,
       certificateChain: signingKey.certificateChain
     };
-  }
+
 
   private async initializeChainOfCustody(evidenceId: string, initialCustodian: string): Promise<void> {
 
@@ -783,13 +790,13 @@ export class CryptographicEvidenceSigningService {
         action: CustodyAction.CREATED,
         signature: await this.signCustodyEvent(evidenceId, 'system', initialCustodian, 'Evidence created'),
         reason: 'Initial evidence creation'
-      }],
+],
       currentCustodian: initialCustodian,
       integrityMaintained: true
     };
 
     this.chainOfCustody.set(evidenceId, custody);
-  }
+
 
   private async signCustodyEvent(evidenceId: string, from: string, to: string, reason: string): Promise<string> {
 
@@ -797,7 +804,7 @@ export class CryptographicEvidenceSigningService {
     const hash = crypto.createHash('sha256');
     hash.update(payload);
     return hash.digest('hex');
-  }
+
 
   private async verifyKeyStatus(keyId: string): Promise<KeyValidationStatus> {
 
@@ -806,17 +813,17 @@ export class CryptographicEvidenceSigningService {
       
       if (!keyInfo.isActive) {
         return KeyValidationStatus.REVOKED;
-      }
+
       
       if (keyInfo.expirationDate && new Date() > keyInfo.expirationDate) {
         return KeyValidationStatus.EXPIRED;
-      }
+
       
       return KeyValidationStatus.VALID;
-    } catch (error) {
+ catch (error) {
       return KeyValidationStatus.UNKNOWN;
-    }
-  }
+
+
 
   private async verifyCryptographicSignature(signature: EvidenceSignature, evidenceData?: any): Promise<boolean> {
 
@@ -830,8 +837,8 @@ export class CryptographicEvidenceSigningService {
           additionalContext: {
             signatureId: signature.signatureId,
             evidenceId: signature.evidenceId
-          }
-        } as KeyUsageContext
+
+ as KeyUsageContext
       );
 
       // Recreate signature payload
@@ -849,21 +856,20 @@ export class CryptographicEvidenceSigningService {
       verify.update(payload);
       
       return verify.verify(keyMaterial, signature.signature, 'base64');
-      
-    } catch (error) {
+ catch (error) {
       return false;
-    }
-  }
+
+
 
   private verifyDataIntegrity(evidenceData: unknown, expectedHash: string, algorithm: HashAlgorithm): boolean {
     try {
       const normalizedData = this.normalizeEvidenceData(evidenceData);
       const actualHash = this.generateEvidenceHash(normalizedData, algorithm);
       return actualHash === expectedHash;
-    } catch (error) {
+ catch (error) {
       return false;
-    }
-  }
+
+
 
   private async verifyComplianceRequirements(signature: EvidenceSignature): Promise<ComplianceValidationResult> {
 
@@ -872,7 +878,7 @@ export class CryptographicEvidenceSigningService {
     // Check each framework's requirements
     for (const framework of signature.complianceContext.frameworks) {
       frameworkCompliance[framework] = await this.validateFrameworkCompliance(signature, framework);
-    }
+
 
     const retentionCompliance = this.validateRetentionCompliance(signature);
     const auditTrailComplete = this.validateAuditTrail(signature);
@@ -884,7 +890,7 @@ export class CryptographicEvidenceSigningService {
       regulatoryCompliance: Object.values(frameworkCompliance).every(compliant => compliant),
       recommendations: this.generateComplianceRecommendations(signature, frameworkCompliance)
     };
-  }
+
 
   private generateMerkleRoot(hashes: string[]): string {
     if (hashes.length === 0) return '';
@@ -897,10 +903,10 @@ export class CryptographicEvidenceSigningService {
       const combined = crypto.createHash('sha256');
       combined.update(left + right);
       nextLevel.push(combined.digest('hex'));
-    }
+
 
     return this.generateMerkleRoot(nextLevel);
-  }
+
 
   // Utility methods
 
@@ -916,33 +922,33 @@ export class CryptographicEvidenceSigningService {
     };
     
     return mapping[purpose] || 'general_signing';
-  }
+
 
   private getComplianceRequirements(request: EvidenceSigningRequest): string[] {
     const requirements = ['evidence_integrity', 'digital_signatures'];
     
     if (request.signingPurpose === SigningPurpose.FORENSIC_EVIDENCE) {
       requirements.push('chain_of_custody', 'non_repudiation');
-    }
+
     
     if (request.complianceFrameworks?.includes('SOX')) {
       requirements.push('financial_controls', 'audit_trail');
-    }
+
     
     return requirements;
-  }
+
 
   private determineEvidenceLevel(request: EvidenceSigningRequest): EvidenceLevel {
     if (request.signingPurpose === SigningPurpose.FORENSIC_EVIDENCE) {
       return EvidenceLevel.MAXIMUM;
-    }
+
     
     if (request.signingPurpose === SigningPurpose.REGULATORY_FILING) {
       return EvidenceLevel.ENHANCED;
-    }
+
     
     return EvidenceLevel.STANDARD;
-  }
+
 
   private calculateRetentionPeriod(request: EvidenceSigningRequest): number {
     // Return retention period in days
@@ -950,48 +956,48 @@ export class CryptographicEvidenceSigningService {
     
     if (request.complianceFrameworks?.includes('SOX')) {
       return 2555; // 7 years for SOX
-    }
+
     
     if (request.complianceFrameworks?.includes('HIPAA')) {
       return 2190; // 6 years for HIPAA
-    }
+
     
     return basePeriod;
-  }
+
 
   private classifyEvidence(request: EvidenceSigningRequest): DataClassification {
     if (request.signingPurpose === SigningPurpose.FORENSIC_EVIDENCE) {
       return DataClassification.RESTRICTED;
-    }
+
     
     if (request.complianceFrameworks?.some(f => ['SOX', 'HIPAA', 'PCI_DSS'].includes(f))) {
       return DataClassification.CONFIDENTIAL;
-    }
+
     
     return DataClassification.INTERNAL;
-  }
+
 
   private determineSecurityLevel(request: EvidenceSigningRequest): 'low' | 'medium' | 'high' | 'maximum' {
     if (request.signingPurpose === SigningPurpose.FORENSIC_EVIDENCE) {
       return 'maximum';
-    }
+
     
     if (request.signingPurpose === SigningPurpose.REGULATORY_FILING) {
       return 'high';
-    }
+
     
     return 'medium';
-  }
+
 
   private selectSignatureAlgorithm(request: EvidenceSigningRequest): SignatureAlgorithm {
     const securityLevel = this.determineSecurityLevel(request);
     
     if (securityLevel === 'maximum') {
       return SignatureAlgorithm.RSA_PSS_SHA256; // More secure PSS padding
-    }
+
     
     return SignatureAlgorithm.RSA_PKCS1_SHA256; // Standard PKCS#1 v1.5
-  }
+
 
   private async validateFrameworkCompliance(signature: EvidenceSignature, framework: string): Promise<boolean> {
 
@@ -1005,19 +1011,19 @@ export class CryptographicEvidenceSigningService {
       return signature.complianceContext.retentionPeriod >= 2555; // 7 years
     default:
       return true;
-    }
-  }
+
+
 
   private validateRetentionCompliance(signature: EvidenceSignature): boolean {
     const requiredRetention = signature.complianceContext.retentionPeriod;
     const age = (Date.now() - signature.timestamp.getTime()) / (1000 * 60 * 60 * 24); // days
     return age <= requiredRetention;
-  }
+
 
   private validateAuditTrail(signature: EvidenceSignature): boolean {
     // Check if signature has proper audit trail
     return !!(signature.signatureId && signature.timestamp && signature.signerIdentity);
-  }
+
 
   private generateComplianceRecommendations(
     signature: EvidenceSignature,
@@ -1028,15 +1034,15 @@ export class CryptographicEvidenceSigningService {
     Object.entries(frameworkCompliance).forEach(([framework, compliant]) => {
       if (!compliant) {
         recommendations.push(`Review ${framework} compliance requirements for evidence signatures`);
-      }
+
     });
     
     if (signature.complianceContext.evidenceLevel === EvidenceLevel.BASIC) {
       recommendations.push('Consider upgrading to higher evidence level for better compliance coverage');
-    }
+
     
     return recommendations;
-  }
-}
+
+
 
 export default CryptographicEvidenceSigningService;

@@ -2,32 +2,34 @@
 // React component for managing API tokens with scope-based authorization
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-}
+
+
 interface ApiToken {
   id: string;,
-  name: string;
+  name: string;,
   scopes: string;,
-  expiresAt: string;
+  expiresAt: string;,
   createdAt: string;
   lastUsedAt?: string;
   revoked: boolean;
   interface ApiTokenStats {
   totalTokens: number;,
-  activeTokens: number;
+  activeTokens: number;,
   revokedTokens: number;,
-  expiredTokens: number;
+  expiredTokens: number;,
   recentlyUsed: unknown;
   interface Scope {
   name: string;,
-  description: string;
+  description: string;,
   category: string;
   interface ApiTokenManagerProps {
   onTokenCreated?: (token: ApiToken) => void;
   onTokenRevoked?: (tokenId: string) => void;
-  export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({,)
+  export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({),
   onTokenCreated,
   onTokenRevoked
-}
+
+
 }) => {
   const { user } = useAuth();
   const [tokens, setTokens] = useState<ApiToken>([]);
@@ -59,10 +61,10 @@ interface ApiToken {
         throw new Error('Failed to fetch tokens');
       const data = await response.json();
       setTokens(data.tokens);
-    } catch (error) {
+ catch (error) {
   console.error('Error fetching tokens:', error);
   setError('Failed to load API tokens');
-} finally {
+ finally {
       setLoading(false);
   };
   const fetchStats = async () => {
@@ -74,7 +76,7 @@ interface ApiToken {
       if (response.ok) {
         const data = await response.json();
         setStats(data);
-    } catch (error) {
+ catch (error) {
   console.error('Error fetching stats:', error);
 };
   const fetchAvailableScopes = async () => {
@@ -83,7 +85,7 @@ interface ApiToken {
       if (response.ok) {
         const data = await response.json();
         setAvailableScopes(data.scopes);
-    } catch (error) {
+ catch (error) {
   console.error('Error fetching scopes:', error);
 };
   const createToken = async () => {
@@ -99,11 +101,11 @@ interface ApiToken {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
   },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   name: tokenName,
   scopes: selectedScopes,
   expiresIn
-}
+
       });
       if (!response.ok) {
         const errorData = await response.json();
@@ -118,10 +120,10 @@ interface ApiToken {
       setSelectedScopes([]);
       setExpiresIn('90d');
       onTokenCreated?.(data);
-    } catch (error) {
+ catch (error) {
   console.error('Error creating token:', error);
   setError(error.message || 'Failed to create token');
-} finally {
+ finally {
       setCreating(false);
   };
   const revokeToken = async (tokenId: string) => {
@@ -143,10 +145,10 @@ interface ApiToken {
       ));
       await fetchStats();
       onTokenRevoked?.(tokenId);
-    } catch (error) {
+ catch (error) {
   console.error('Error revoking token:', error);
   setError('Failed to revoke token');
-} finally {
+ finally {
       setRevoking(null);
   };
   const handleScopeToggle = (scope: string) => {
@@ -348,7 +350,7 @@ interface ApiToken {
   : new Date(token.expiresAt) < new Date(),
   ? 'border-yellow-200 bg-yellow-50'
   : 'border-gray-200 bg-white',
-}`}
+`}
           >
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -389,7 +391,7 @@ interface ApiToken {
   revoking === token.id
   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
   : 'bg-red-50 text-red-700 hover:bg-red-100',
-}`}
+`}
                 >
                   {revoking === token.id ? 'Revoking...' : 'Revoke'}
                 </button>

@@ -1,16 +1,18 @@
 // Epic 11 Email Suggestions Component
 // Smart email suggestions for typo correction
 import React from 'react';
-}
+
+
 interface EmailSuggestionsProps {
   suggestion: string;,
   onAccept: (suggestion: string) => void;
   className?: string;
-  export const EmailSuggestions: React.FC<EmailSuggestionsProps> = ({,)
+  export const EmailSuggestions: React.FC<EmailSuggestionsProps> = ({),
   suggestion,
   onAccept,
   className = ''
-}
+
+
 }) => {
   if (!suggestion) {
     return null;

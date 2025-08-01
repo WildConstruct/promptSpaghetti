@@ -57,6 +57,14 @@ recommendations: {
     interventions: InterventionRecommendation;
 }
 ;
+range: {
+    min: number;
+    max: number;
+}
+;
+size: number;
+percentage: number;
+characteristics: string;
  > ;
 distribution: {
     mean: number;
@@ -495,7 +503,7 @@ export class CohortSegmentManager {
     }
     async analyzeCohortBehavior(cohort, users) {
         return {
-            commonPathways: [,
+            commonPathways: [
                 {
                     pathway: ['signup', 'onboarding', 'first_purchase'],
                     frequency: Math.floor(users.length * 0.6),
@@ -503,11 +511,12 @@ export class CohortSegmentManager {
                     averageTimeToComplete: 345600000, // 4 days,
                     averageValue: 25.0,
                     dropOffPoints: ['payment_page']
-                }],
+                }
+            ],
             dropOffAnalysis: {
                 totalDropOffs: Math.floor(users.length * 0.4),
                 dropOffRate: 0.4,
-                topDropOffPoints: [,
+                topDropOffPoints: [
                     {
                         stepId: 'payment_page',
                         stepName: 'Payment Page',
@@ -516,18 +525,20 @@ export class CohortSegmentManager {
                         averageTimeSpent: 120000, // 2 minutes,
                         commonExitActions: ['page_close', 'back_button'],
                         recoveryOpportunities: ['email_reminder', 'discount_offer']
-                    }],
-                recoveryOpportunities: [,
+                    }
+                ],
+                recoveryOpportunities: [
                     {
                         dropOffPoint: 'payment_page',
                         potentialRecovery: 0.15,
                         recommendedActions: ['Simplify checkout', 'Add trust signals'],
                         estimatedImpact: 0.08,
                         implementationComplexity: 'medium'
-                    }],
+                    }
+                ],
                 seasonalPatterns: [],
             },
-            engagementPatterns: [,
+            engagementPatterns: [
                 {
                     patternType: 'temporal',
                     pattern: 'weekend_browsing',
@@ -539,7 +550,7 @@ export class CohortSegmentManager {
                 }
             ],
             valueSegmentation: {
-                segments: [,
+                segments: [
                     {
                         name: 'High Value',
                         range: { min: 100, max: 1000 },
@@ -584,19 +595,19 @@ export class CohortSegmentManager {
                         users, : .slice(0, 10).map(userId => [userId, Math.random() * 0.5]),
                         lifetimeValueForecast: new Map(),
                         users, : .slice(0, 10).map(userId => [userId, 150 + Math.random() * 200]),
-                        optimalInterventionPoints: [,
+                        optimalInterventionPoints: [
                             {
                                 day: 7,
                                 userCount: Math.floor(users.length * 0.3),
                                 riskScore: 0.65,
                                 recommendedActions: ['Welcome email series', 'Onboarding tutorial'],
-                                expectedImpact: {
-                                    retentionImprovement: 0.15,
-                                    revenueImpact: 1250.0,
-                                    costOfIntervention: 200.0,
-                                    roi: 5.25
-                                }
-                            }]
+                                expectedImpact: {},
+                                retentionImprovement: 0.15,
+                                revenueImpact: 1250.0,
+                                costOfIntervention: 200.0,
+                                roi: 5.25
+                            }
+                        ]
                     },
                     async generateCohortComparison(cohort, options) {
                         return {
@@ -830,22 +841,22 @@ export class CohortSegmentManager {
                                                 lifecycle: SegmentAnalysisResult['lifecycle'], ['recommendations']:  > {
                                                     // Simplified implementation
                                                     return: {
-                                                        optimization: [,
+                                                        optimization: [
                                                             {
                                                                 area: 'conversion_rate',
                                                                 currentPerformance: performance.conversionMetrics.overallConversionRate,
                                                                 targetPerformance: 0.25,
                                                                 improvementPotential: 0.07,
                                                                 recommendedActions: ['Improve onboarding flow', 'Add social proof'],
-                                                                estimatedImpact: {
-                                                                    revenueImpact: 5000,
-                                                                    conversionImprovement: 0.07,
-                                                                    retentionImprovement: 0.05,
-                                                                },
-                                                                implementationEffort: 'medium',
-                                                                priority: 'high'
-                                                            }],
-                                                        targeting: [,
+                                                                estimatedImpact: {},
+                                                                revenueImpact: 5000,
+                                                                conversionImprovement: 0.07,
+                                                                retentionImprovement: 0.05,
+                                                            },
+                                                            implementationEffort, 'medium',
+                                                            priority, 'high'
+                                                        ],
+                                                        targeting: [
                                                             {
                                                                 channel: 'facebook',
                                                                 targetingCriteria: ['lookalike_audience', 'interest_filmmaking'],
@@ -855,8 +866,9 @@ export class CohortSegmentManager {
                                                                 estimatedRevenue: 3000,
                                                                 roi: 1.5,
                                                                 confidence: 0.8
-                                                            }],
-                                                        personalization: [,
+                                                            }
+                                                        ],
+                                                        personalization: [
                                                             {
                                                                 feature: 'homepage_content',
                                                                 personalizationType: 'content',
@@ -864,8 +876,9 @@ export class CohortSegmentManager {
                                                                 expectedImpact: 0.15,
                                                                 implementationComplexity: 'medium',
                                                                 dataRequirements: ['view_history', 'purchase_history']
-                                                            }],
-                                                        interventions: [,
+                                                            }
+                                                        ],
+                                                        interventions: [
                                                             {
                                                                 triggerCondition: 'no_activity_7_days',
                                                                 interventionType: 'email',
@@ -874,7 +887,8 @@ export class CohortSegmentManager {
                                                                 expectedResponse: 0.25,
                                                                 cost: 0.50,
                                                                 priority: 'medium'
-                                                            }]
+                                                            }
+                                                        ]
                                                     },
                                                     calculateSegmentOverlaps(segments) {
                                                         // Simplified implementation
@@ -907,34 +921,47 @@ export class CohortSegmentManager {
                                                         return `segment_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
                                                     }
                                                     // Additional interfaces for cross-segment analysis
-                                                },
-                                                interface, AnalysisOptions
-                                            }
+                                                }
+                                            },
+                                            interface, AnalysisOptions
                                         };
                                         {
                                             useCache ?  : boolean;
                                             includePredictions ?  : boolean;
                                             includeComparisons ?  : boolean;
                                         }
-                                        timeRange ?  : { start: number, end: number };
-                                        customMetrics ?  : string;
-                                    }
+                                    },
+                                    timeRange: { start: number, end: number },
+                                    customMetrics: string
                                 };
-                            }
+                            },
+                            interface, CrossSegmentInsights
                         };
-                        ;
+                        {
+                            segmentOverlaps: SegmentOverlap;
+                            performanceComparisons: PerformanceComparison;
+                            cohortTrends: CohortTrend;
+                            opportunityAnalysis: OptimizationOpportunity;
+                            recommendations: CrossSegmentRecommendation;
+                        }
                     }
-                },
-                interface, PerformanceComparison
-            }
+                }
+            },
+            interface, SegmentOverlap
         };
         {
             segmentIds: string;
-            metrics: Record;
-            significance: number;
-            insights: string;
+            overlapSize: number;
+            overlapPercentage: number;
+            characteristics: string;
+            performance: {
+                conversionRate: number;
+                retentionRate: number;
+                averageValue: number;
+            }
         }
     }
+    ;
 }
 export const createCohortSegmentManager = () => {
     return new CohortSegmentManager();

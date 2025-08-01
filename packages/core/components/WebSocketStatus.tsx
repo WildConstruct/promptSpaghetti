@@ -1,19 +1,19 @@
 import React from 'react';
 import { ConnectionState } from '../websocket/WebSocketClient';
-}
-interface WebSocketStatusProps {
-  connectionState: ConnectionState;
+
+
+interface WebSocketStatusProps { connectionState: ConnectionState;
   queuedMessages?: number;
   className?: string;
   showDetails?: boolean;
-  export const WebSocketStatus: React.FC<WebSocketStatusProps> = ({,)
-  connectionState,
-  queuedMessages = 0,
-  className = '',
+  export const WebSocketStatus: React.FC<WebSocketStatusProps> = ({);
+  connectionState;
+  queuedMessages = 0;
+  className = '' }
   showDetails = false
-}
-}) => {
-  const getStatusColor = (status: ConnectionState['status']): string => {,
+
+
+}) => { const getStatusColor = (status: ConnectionState['status']): string => {,
   switch (status) {
   case 'connected':,
   case 'authenticated':,
@@ -25,11 +25,10 @@ interface WebSocketStatusProps {
   return 'text-gray-500';
   case 'error':,
   return 'text-red-500';
-  default:,
+  default: }
   return 'text-gray-500';
 };
-  const getStatusIcon = (status: ConnectionState['status']): string => {
-  switch (status) {
+  const getStatusIcon = (status: ConnectionState['status']): string => { switch (status) {
   case 'connected':,
   case 'authenticated':,
   return '●';
@@ -40,11 +39,10 @@ interface WebSocketStatusProps {
   return '○';
   case 'error':,
   return '✕';
-  default:,
+  default: }
   return '○';
 };
-  const getStatusText = (status: ConnectionState['status']): string => {
-  switch (status) {
+  const getStatusText = (status: ConnectionState['status']): string => { switch (status) {
   case 'connected':,
   return 'Connected';
   case 'authenticated':,
@@ -57,14 +55,12 @@ interface WebSocketStatusProps {
   return 'Disconnected';
   case 'error':,
   return 'Connection Error';
-  default:,
+  default: }
   return 'Unknown'
-  };
-  const formatTime = (timestamp?: number): string => {
-    if (!timestamp) return 'Never';
+};
+  const formatTime = (timestamp?: number): string => { if (!timestamp) return 'Never';
     const date = new Date(timestamp);
-    return date.toLocaleTimeString();
-  };
+    return date.toLocaleTimeString() };
   return;
     <div className={`flex items-center space-x-2 ${className}`}>}
       <span 
@@ -108,18 +104,16 @@ interface WebSocketStatusProps {
 };
 
 // Compact version for status bars
-export const WebSocketStatusIcon: React.FC<{,
+export const WebSocketStatusIcon: React.FC<{ ,
   connectionState: ConnectionState;
-  onClick?: () => void;
-}> = ({ connectionState, onClick }) => {
-  const statusColor = {
+  onClick?: () => void }> = ({ connectionState, onClick }) => { const statusColor = {
   connected: '#10b981',
   authenticated: '#10b981',
   connecting: '#f59e0b',
   authenticating: '#f59e0b',
   disconnected: '#6b7280',
-  error: '#ef4444',
-}[connectionState.status];
+  error: '#ef4444' }
+[connectionState.status];
   return;
     <div 
       className="cursor-pointer" 
@@ -140,17 +134,16 @@ export const WebSocketStatusIcon: React.FC<{,
 };
 
 // Connection details modal/dropdown content
-export const WebSocketDetails: React.FC<{,
+export const WebSocketDetails: React.FC<{ ,
   connectionState: ConnectionState;
   queuedMessages?: number;
   onClearQueue?: () => void;
   onReconnect?: () => void;
-  onDisconnect?: () => void;
-}> = ({ )
+  onDisconnect?: () => void }> = ({ )
   connectionState, 
   queuedMessages = 0, 
   onClearQueue, 
-  onReconnect, 
+  onReconnect }
   onDisconnect 
 }) => {
   const isConnected = connectionState.status === 'connected' || connectionState.status === 'authenticated';
@@ -165,11 +158,11 @@ export const WebSocketDetails: React.FC<{,
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-600">Status:</span>
-            <span className={`font-medium ${
-  isConnected ? 'text-green-600' :,
-  connectionState.status === 'error' ? 'text-red-600' :,
+            <span className={ `font-medium ${
+  isConnected ? 'text-green-600' :
+  connectionState.status === 'error' ? 'text-red-600' : }
   'text-gray-600'
-}`}>
+`}>
               {connectionState.status}
             </span>
           </div>

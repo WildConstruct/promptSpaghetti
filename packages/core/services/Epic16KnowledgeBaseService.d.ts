@@ -8,8 +8,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface KnowledgeBaseArticle {
-    id: string;
+}
+export interface KnowledgeBaseArticle { id: string;
     title: string;
     slug: string;
     content: string;
@@ -51,53 +51,54 @@ export interface KnowledgeBaseArticle {
     analytics: ArticleAnalytics;
 
 export declare enum KnowledgeCategory {
-    GETTING_STARTED = "getting_started",
-    MARKETPLACE_GUIDE = "marketplace_guide",
-    TEMPLATE_CREATION = "template_creation",
-    SELLING_BUYING = "selling_buying",
-    COMMUNITY_HELP = "community_help",
-    TECHNICAL_DOCS = "technical_docs",
-    API_REFERENCE = "api_reference",
-    TROUBLESHOOTING = "troubleshooting",
-    BEST_PRACTICES = "best_practices",
-    POLICIES_LEGAL = "policies_legal",
-    BILLING_PAYMENTS = "billing_payments",
-    ACCOUNT_SECURITY = "account_security",
-    INTEGRATIONS = "integrations",
-    MOBILE_APP = "mobile_app",
+    GETTING_STARTED = "getting_started";
+    MARKETPLACE_GUIDE = "marketplace_guide";
+    TEMPLATE_CREATION = "template_creation";
+    SELLING_BUYING = "selling_buying";
+    COMMUNITY_HELP = "community_help";
+    TECHNICAL_DOCS = "technical_docs";
+    API_REFERENCE = "api_reference";
+    TROUBLESHOOTING = "troubleshooting";
+    BEST_PRACTICES = "best_practices";
+    POLICIES_LEGAL = "policies_legal";
+    BILLING_PAYMENTS = "billing_payments";
+    ACCOUNT_SECURITY = "account_security";
+    INTEGRATIONS = "integrations";
+    MOBILE_APP = "mobile_app";
     ADVANCED_FEATURES = "advanced_features"
 
 export declare enum ArticleType {
-    GUIDE = "guide",
-    TUTORIAL = "tutorial",
-    FAQ = "faq",
-    REFERENCE = "reference",
-    TROUBLESHOOTING = "troubleshooting",
-    HOW_TO = "how_to",
-    BEST_PRACTICE = "best_practice",
-    CASE_STUDY = "case_study",
-    VIDEO_GUIDE = "video_guide",
-    API_DOC = "api_doc",
-    CHANGELOG = "changelog",
+    GUIDE = "guide";
+    TUTORIAL = "tutorial";
+    FAQ = "faq";
+    REFERENCE = "reference";
+    TROUBLESHOOTING = "troubleshooting";
+    HOW_TO = "how_to";
+    BEST_PRACTICE = "best_practice";
+    CASE_STUDY = "case_study";
+    VIDEO_GUIDE = "video_guide";
+    API_DOC = "api_doc";
+    CHANGELOG = "changelog";
     POLICY = "policy"
 
 export declare enum ArticleStatus {
-    DRAFT = "draft",
-    UNDER_REVIEW = "under_review",
-    PUBLISHED = "published",
-    ARCHIVED = "archived",
-    NEEDS_UPDATE = "needs_update",
+    DRAFT = "draft";
+    UNDER_REVIEW = "under_review";
+    PUBLISHED = "published";
+    ARCHIVED = "archived";
+    NEEDS_UPDATE = "needs_update";
     DEPRECATED = "deprecated"
 
 export declare enum ReadingLevel {
-    BEGINNER = "beginner",
-    INTERMEDIATE = "intermediate",
-    ADVANCED = "advanced",
+    BEGINNER = "beginner";
+    INTERMEDIATE = "intermediate";
+    ADVANCED = "advanced" }
     EXPERT = "expert"
 
 }
-export interface ArticleSection {
-    id: string;
+}
+}
+export interface ArticleSection { id: string;
     title: string;
     content: string;
     order: number;
@@ -107,42 +108,39 @@ export interface ArticleSection {
     metadata: Record<string, any>;
 
 export declare enum SectionType {
-    TEXT = "text",
-    CODE = "code",
-    IMAGE = "image",
-    VIDEO = "video",
-    CHECKLIST = "checklist",
-    WARNING = "warning",
-    TIP = "tip",
-    NOTE = "note",
-    QUOTE = "quote",
-    TABLE = "table",
+    TEXT = "text";
+    CODE = "code";
+    IMAGE = "image";
+    VIDEO = "video";
+    CHECKLIST = "checklist";
+    WARNING = "warning";
+    TIP = "tip";
+    NOTE = "note";
+    QUOTE = "quote";
+    TABLE = "table" }
     INTERACTIVE = "interactive"
 
 }
-export interface ArticleAttachment {
-    id: string;
+}
+}
+export interface ArticleAttachment { id: string;
     name: string;
     description: string;
     url: string;
     type: string;
     size: number;
     downloadCount: number;
-    isPublic: boolean;
-
-
+    isPublic: boolean }
 }
-export interface ArticleRating {
-    userId: string;
+}
+export interface ArticleRating { userId: string;
     rating: number;
     comment?: string;
     timestamp: Date;
-    helpful: boolean;
-
-
+    helpful: boolean }
 }
-export interface ArticleFeedback {
-    id: string;
+}
+export interface ArticleFeedback { id: string;
     userId: string;
     type: FeedbackType;
     message: string;
@@ -152,76 +150,75 @@ export interface ArticleFeedback {
     resolved: boolean;
 
 export declare enum FeedbackType {
-    IMPROVEMENT = "improvement",
-    ERROR_REPORT = "error_report",
-    CONTENT_REQUEST = "content_request",
-    POSITIVE = "positive",
-    NEGATIVE = "negative",
+    IMPROVEMENT = "improvement";
+    ERROR_REPORT = "error_report";
+    CONTENT_REQUEST = "content_request";
+    POSITIVE = "positive";
+    NEGATIVE = "negative";
     QUESTION = "question"
 
 export declare enum FeedbackStatus {
-    NEW = "new",
-    ACKNOWLEDGED = "acknowledged",
-    IN_PROGRESS = "in_progress",
-    RESOLVED = "resolved",
+    NEW = "new";
+    ACKNOWLEDGED = "acknowledged";
+    IN_PROGRESS = "in_progress";
+    RESOLVED = "resolved" }
     REJECTED = "rejected"
 
 }
-export interface AccessibilityFeature {
-    type: AccessibilityType;
+}
+}
+export interface AccessibilityFeature { type: AccessibilityType;
     description: string;
     enabled: boolean;
 
 export declare enum AccessibilityType {
-    SCREEN_READER = "screen_reader",
-    HIGH_CONTRAST = "high_contrast",
-    LARGE_TEXT = "large_text",
-    KEYBOARD_NAV = "keyboard_navigation",
-    ALT_TEXT = "alt_text",
-    CAPTIONS = "captions",
+    SCREEN_READER = "screen_reader";
+    HIGH_CONTRAST = "high_contrast";
+    LARGE_TEXT = "large_text";
+    KEYBOARD_NAV = "keyboard_navigation";
+    ALT_TEXT = "alt_text";
+    CAPTIONS = "captions" }
     TRANSCRIPT = "transcript"
 
 }
-export interface InteractiveKBElement {
-    id: string;
+}
+}
+export interface InteractiveKBElement { id: string;
     type: InteractiveElementType;
     config: Record<string, any>;
     position: ElementPosition;
 
 export declare enum InteractiveElementType {
-    COLLAPSIBLE_SECTION = "collapsible_section",
-    TABBED_CONTENT = "tabbed_content",
-    ACCORDION = "accordion",
-    TOOLTIP = "tooltip",
-    MODAL = "modal",
-    CAROUSEL = "carousel",
-    INTERACTIVE_DEMO = "interactive_demo",
-    CODE_SANDBOX = "code_sandbox",
-    QUIZ = "quiz",
+    COLLAPSIBLE_SECTION = "collapsible_section";
+    TABBED_CONTENT = "tabbed_content";
+    ACCORDION = "accordion";
+    TOOLTIP = "tooltip";
+    MODAL = "modal";
+    CAROUSEL = "carousel";
+    INTERACTIVE_DEMO = "interactive_demo";
+    CODE_SANDBOX = "code_sandbox";
+    QUIZ = "quiz" }
     CHECKLIST = "checklist"
 
 }
-export interface ElementPosition {
-    sectionId: string;
-    order: number;
-    placement: 'before' | 'after' | 'replace' | 'inline';
-
-
 }
-export interface CodeExample {
-    id: string;
+}
+export interface ElementPosition { sectionId: string;
+    order: number;
+    placement: 'before' | 'after' | 'replace' | 'inline' }
+}
+}
+export interface CodeExample { id: string;
     language: string;
     title: string;
     description: string;
     code: string;
     output?: string;
     runnable: boolean;
-    githubLink?: string;
-
-
+    githubLink?: string }
 }
-export interface VideoContent {
-    id: string;
+}
+export interface VideoContent { id: string;
     title: string;
     description: string;
     url: string;
@@ -229,32 +226,26 @@ export interface VideoContent {
     duration: number;
     transcript?: string;
     captions?: string;
-    chapters: VideoChapter[];
-
-
+    chapters: VideoChapter[] }
 }
-export interface VideoChapter {
-    title: string;
+}
+export interface VideoChapter { title: string;
     startTime: number;
     endTime: number;
-    description?: string;
-
-
+    description?: string }
 }
-export interface ImageContent {
-    id: string;
+}
+export interface ImageContent { id: string;
     url: string;
     alt: string;
     caption?: string;
     width: number;
     height: number;
     format: string;
-    zoomable: boolean;
-
-
+    zoomable: boolean }
 }
-export interface ArticleAnalytics {
-    totalViews: number;
+}
+export interface ArticleAnalytics { totalViews: number;
     uniqueViews: number;
     averageReadTime: number;
     bounceRate: number;
@@ -270,39 +261,31 @@ export interface ArticleAnalytics {
     helpfulnessScore: number;
     accuracyScore: number;
     freshnessScore: number;
-    seoScore: number;
-
-
+    seoScore: number }
 }
-export interface SectionAnalytics {
-    sectionId: string;
+}
+export interface SectionAnalytics { sectionId: string;
     views: number;
     timeSpent: number;
-    exitRate: number;
-
-
+    exitRate: number }
 }
-export interface UserJourneyStep {
-    fromArticle?: string;
+}
+export interface UserJourneyStep { fromArticle?: string;
     toArticle?: string;
     timestamp: Date;
-    sessionId: string;
-
-
+    sessionId: string }
 }
-export interface KnowledgeBaseSearch {
-    query: string;
+}
+export interface KnowledgeBaseSearch { query: string;
     filters: SearchFilters;
     results: SearchResult[];
     suggestions: SearchSuggestion[];
     totalResults: number;
     searchTime: number;
-    didYouMean?: string;
-
-
+    didYouMean?: string }
 }
-export interface SearchFilters {
-    categories: KnowledgeCategory[];
+}
+export interface SearchFilters { categories: KnowledgeCategory[];
     types: ArticleType[];
     tags: string[];
     readingLevel: ReadingLevel[];
@@ -310,100 +293,91 @@ export interface SearchFilters {
     lastUpdated: DateRange;
     minRating: number;
     hasVideo: boolean;
-    hasCode: boolean;
-
-
+    hasCode: boolean }
 }
-export interface DateRange {
-    start?: Date;
-    end?: Date;
-
-
 }
-export interface SearchResult {
-    article: KnowledgeBaseArticle;
+export interface DateRange { start?: Date;
+    end?: Date }
+}
+}
+export interface SearchResult { article: KnowledgeBaseArticle;
     score: number;
     matchedSections: MatchedSection[];
     highlightedContent: string;
-    relevanceReason: string[];
-
-
+    relevanceReason: string[] }
 }
-export interface MatchedSection {
-    sectionId: string;
+}
+export interface MatchedSection { sectionId: string;
     title: string;
     matchScore: number;
-    highlightedText: string;
-
-
+    highlightedText: string }
 }
-export interface SearchSuggestion {
-    text: string;
+}
+export interface SearchSuggestion { text: string;
     type: SuggestionType;
     score: number;
     category?: KnowledgeCategory;
 
 export declare enum SuggestionType {
-    QUERY_COMPLETION = "query_completion",
-    SPELLING_CORRECTION = "spelling_correction",
-    RELATED_TOPIC = "related_topic",
+    QUERY_COMPLETION = "query_completion";
+    SPELLING_CORRECTION = "spelling_correction";
+    RELATED_TOPIC = "related_topic" }
     POPULAR_SEARCH = "popular_search"
 
 }
-export interface AIRecommendation {
-    articleId: string;
+}
+}
+export interface AIRecommendation { articleId: string;
     score: number;
     reason: RecommendationReason;
     context: RecommendationContext;
     personalizedFactors: PersonalizationFactor[];
 
 export declare enum RecommendationReason {
-    SIMILAR_CONTENT = "similar_content",
-    USER_BEHAVIOR = "user_behavior",
-    POPULAR_IN_CATEGORY = "popular_in_category",
-    FREQUENTLY_VIEWED_TOGETHER = "frequently_viewed_together",
-    BASED_ON_SEARCH = "based_on_search",
-    TRENDING = "trending",
+    SIMILAR_CONTENT = "similar_content";
+    USER_BEHAVIOR = "user_behavior";
+    POPULAR_IN_CATEGORY = "popular_in_category";
+    FREQUENTLY_VIEWED_TOGETHER = "frequently_viewed_together";
+    BASED_ON_SEARCH = "based_on_search";
+    TRENDING = "trending" }
     PERSONALIZED = "personalized"
 
 }
-export interface RecommendationContext {
-    currentArticleId?: string;
+}
+}
+export interface RecommendationContext { currentArticleId?: string;
     userSearchHistory: string[];
     viewedArticles: string[];
     userRole: string;
     userExperience: string;
-    timestamp: Date;
-
-
+    timestamp: Date }
 }
-export interface PersonalizationFactor {
-    type: PersonalizationType;
+}
+export interface PersonalizationFactor { type: PersonalizationType;
     weight: number;
     value: any;
 
 export declare enum PersonalizationType {
-    USER_ROLE = "user_role",
-    SKILL_LEVEL = "skill_level",
-    INTERESTS = "interests",
-    BEHAVIOR_PATTERN = "behavior_pattern",
-    LOCATION = "location",
-    DEVICE_TYPE = "device_type",
+    USER_ROLE = "user_role";
+    SKILL_LEVEL = "skill_level";
+    INTERESTS = "interests";
+    BEHAVIOR_PATTERN = "behavior_pattern";
+    LOCATION = "location";
+    DEVICE_TYPE = "device_type" }
     TIME_OF_DAY = "time_of_day"
 
 }
-export interface KnowledgeBaseConfig {
-    searchConfig: SearchConfig;
+}
+}
+export interface KnowledgeBaseConfig { searchConfig: SearchConfig;
     aiConfig: AIConfig;
     contentConfig: ContentConfig;
     analyticsConfig: AnalyticsConfig;
     localizationConfig: LocalizationConfig;
-    integrationConfig: IntegrationConfig;
-
-
+    integrationConfig: IntegrationConfig }
 }
-export interface SearchConfig {
-    enableAISearch: boolean;
+}
+export interface SearchConfig { enableAISearch: boolean;
     enableAutoComplete: boolean;
     enableSpellCheck: boolean;
     maxResults: number;
@@ -411,53 +385,43 @@ export interface SearchConfig {
     indexUpdateInterval: number;
     boostFactors: Record<string, number>;
     stopWords: string[];
-    synonyms: Record<string, string[]>;
-
-
+    synonyms: Record<string, string[]> }
 }
-export interface AIConfig {
-    enableRecommendations: boolean;
+}
+export interface AIConfig { enableRecommendations: boolean;
     enableContentGeneration: boolean;
     enableSentimentAnalysis: boolean;
     recommendationModel: string;
     confidenceThreshold: number;
     maxRecommendations: number;
-    personalizedWeight: number;
-
-
+    personalizedWeight: number }
 }
-export interface ContentConfig {
-    autoPublish: boolean;
+}
+export interface ContentConfig { autoPublish: boolean;
     requireReview: boolean;
     versionControl: boolean;
     maxFileSize: number;
     allowedFileTypes: string[];
     contentModeration: boolean;
-    duplicateDetection: boolean;
-
-
+    duplicateDetection: boolean }
 }
-export interface AnalyticsConfig {
-    trackingEnabled: boolean;
+}
+export interface AnalyticsConfig { trackingEnabled: boolean;
     retentionPeriod: number;
     anonymizeData: boolean;
     realTimeTracking: boolean;
     heatmapTracking: boolean;
-    performanceTracking: boolean;
-
-
+    performanceTracking: boolean }
 }
-export interface LocalizationConfig {
-    defaultLanguage: string;
+}
+export interface LocalizationConfig { defaultLanguage: string;
     supportedLanguages: string[];
     autoTranslation: boolean;
     translationService: string;
-    fallbackLanguage: string;
-
-
+    fallbackLanguage: string }
 }
-export interface IntegrationConfig {
-    crmIntegration: boolean;
+}
+export interface IntegrationConfig { crmIntegration: boolean;
     helpDeskIntegration: boolean;
     slackIntegration: boolean;
     discordIntegration: boolean;
@@ -504,24 +468,20 @@ export declare class Epic16KnowledgeBaseService extends EventEmitter {
     private getPersonalizationFactors;
     private getUserSession;
     private updateHelpfulnessScore;
-    private incrementVersion;
-
+    private incrementVersion }
 }
-export interface UserKBSession {
-    userId: string;
+}
+export interface UserKBSession { userId: string;
     sessionStart: Date;
     viewedArticles: Set<string>;
     searchHistory: SearchHistoryItem[];
-    preferences: UserKBPreferences;
-
-
+    preferences: UserKBPreferences }
 }
-export interface SearchHistoryItem {
-    query: string;
+}
+export interface SearchHistoryItem { query: string;
     timestamp: Date;
-    results: number;
-
-
+    results: number }
+}
 }
 export interface UserKBPreferences {
     favoriteCategories?: KnowledgeCategory[];
@@ -532,4 +492,5 @@ export interface UserKBPreferences {
 
 export default Epic16KnowledgeBaseService;
 //# sourceMappingURL=Epic16KnowledgeBaseService.d.ts.map
+}
 }

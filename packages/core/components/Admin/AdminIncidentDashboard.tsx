@@ -9,8 +9,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  AlertTriangle,
+import { AlertTriangle,
   Activity,
   Shield,
   Settings,
@@ -28,11 +27,10 @@ import {
   Filter as _Filter,
   Download as _Download,
   ChevronRight as _ChevronRight,
-  AlertCircle,
+  AlertCircle }
   Info as _Info
-} from 'lucide-react';
-import {
-  Epic17IncidentPlaybook as _Epic17IncidentPlaybook,
+ from 'lucide-react';
+import { Epic17IncidentPlaybook as _Epic17IncidentPlaybook,
   PlaybookCategory,
   Epic17System,
   PlaybookExecutionResult,
@@ -40,13 +38,13 @@ import {
   BusinessImpact,
   UserImpact,
   HealthCheckTrigger as _HealthCheckTrigger,
-  AlertTrigger as _AlertTrigger,
+  AlertTrigger as _AlertTrigger }
   MetricThreshold as _MetricThreshold
-} from '../../types/Epic17IncidentPlaybooks';
+ from '../../types/Epic17IncidentPlaybooks';
 import { ActionSeverity } from '../../types/EnforcementTypes';
-}
-interface AdminIncidentDashboardProps {
-  onPlaybookExecute?: (playbookId: string, options: ExecutionOptions) => Promise<void>;
+
+
+interface AdminIncidentDashboardProps { onPlaybookExecute?: (playbookId: string, options: ExecutionOptions) => Promise<void>;
   onIncidentCreate?: (incident: IncidentCreationData) => Promise<void>;
   className?: string;
   interface ExecutionOptions {
@@ -123,12 +121,12 @@ interface AdminIncidentDashboardProps {
   trend: 'increasing' | 'stable' | 'decreasing';
   severity: ActionSeverity;
   interface PerformanceMetrics {
-  mttr: number; // Mean Time To Recovery (minutes),
-  mtbf: number; // Mean Time Between Failures (hours),
-  playbookSuccessRate: number; // percentage,
-  automatedResolutionRate: number; // percentage,
-  escalationRate: number; // percentage,
-  userSatisfactionScore: number; // 1-5,
+  mttr: number; // Mean Time To Recovery (minutes);
+  mtbf: number; // Mean Time Between Failures (hours);
+  playbookSuccessRate: number; // percentage;
+  automatedResolutionRate: number; // percentage;
+  escalationRate: number; // percentage;
+  userSatisfactionScore: number; // 1-5;
   interface ActivityLog {
   id: string;
   timestamp: Date;
@@ -143,13 +141,13 @@ interface AdminIncidentDashboardProps {
   description: string;
   userId: string;
   data?: unknown;
-  export const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps> = ({,)
-  onPlaybookExecute,
-  onIncidentCreate,
+  export const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps> = ({);
+  onPlaybookExecute;
+  onIncidentCreate }
   className = ''
-}
-}) => {
-  // State management
+
+
+}) => { // State management
   const [dashboardState, setDashboardState] = useState<DashboardState | null>(null);
   const [selectedTab, setSelectedTab] = useState<'overview' | 'incidents' | 'playbooks' | 'systems' | 'analytics'>('overview');
   const [loading, setLoading] = useState(true);
@@ -157,15 +155,14 @@ interface AdminIncidentDashboardProps {
   const [_____filters, _____setFilters] = useState({)
   severity: [] as ActionSeverity,
   systems: [] as Epic17System,
-  timeRange: '24h' as '1h' | '24h' | '7d' | '30d',
+  timeRange: '24h' as '1h' | '24h' | '7d' | '30d' }
 });
   // Load dashboard data
-  const loadDashboardData = useCallback(async () => {
-  try {
+  const loadDashboardData = useCallback(async () => { try {
   setLoading(true);
   // Simulate API calls - would be replaced with actual service calls
   const mockDashboardState: DashboardState = {,
-  activeIncidents: [,
+  activeIncidents: [
   {
   id: 'INC-001',
   title: 'Feature Toggle System Degradation',
@@ -175,34 +172,31 @@ interface AdminIncidentDashboardProps {
   startTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
   assignedTo: 'admin-user-1',
   playbooks: ['feature-toggle-recovery'],
-  businessImpact: {
+  businessImpact: {,
   severity: 'high',
   affectedUsers: 15000,
   revenueImpact: 50000,
   reputationRisk: 'medium',
   complianceRisk: 'low',
-  description: 'Feature toggles not responding, affecting user experience',
+  description: 'Feature toggles not responding, affecting user experience' }
 },
-  userImpact: {
+  userImpact: {,
   adminUsers: { affected: true, count: 25, impactType: 'degraded_performance', severity: 'high', estimatedDuration: 60 },
               regularUsers: { affected: true, count: 15000, impactType: 'limited_functionality', severity: 'medium', estimatedDuration: 30 },
               externalUsers: { affected: false, count: 0, impactType: 'service_unavailable', severity: 'low', estimatedDuration: 0 },
               systemUsers: { affected: true, count: 5, impactType: 'service_unavailable', severity: 'high', estimatedDuration: 45 }
   },
-  timeline: [,
-              {
-  timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  timeline: [
+              { timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
   type: 'created',
   description: 'Incident created due to health check failure',
-  userId: 'system',
-}
-              {
-  timestamp: new Date(Date.now() - 110 * 60 * 1000),
+  userId: 'system' }
+
+              { timestamp: new Date(Date.now() - 110 * 60 * 1000),
   type: 'playbook_executed',
   description: 'Feature Toggle Recovery playbook executed',
-  userId: 'system'],
-  ],
-  playbookExecutions: [,
+  userId: 'system']],
+  playbookExecutions: [
   {
   executionId: 'EX-001',
   playbookId: 'feature-toggle-recovery',
@@ -214,7 +208,7 @@ interface AdminIncidentDashboardProps {
   endTime: new Date(Date.now() - 95 * 60 * 1000),
   triggeredBy: 'health-check-system',
   affectedSystems: ['feature_management']],
-  systemHealth: [,
+  systemHealth: [
   {
   system: 'feature_management',
   status: 'degraded',
@@ -223,20 +217,18 @@ interface AdminIncidentDashboardProps {
   responseTime: 450,
   errorRate: 2.3,
   alertCount: 3,
-  healthScore: 75,
-}
-          {
-  system: 'content_management',
+  healthScore: 75 }
+
+          { system: 'content_management',
   status: 'healthy',
   lastCheck: new Date(),
   uptime: 99.9,
   responseTime: 120,
   errorRate: 0.1,
   alertCount: 0,
-  healthScore: 98,
-}
-          {
-  system: 'user_permission_management',
+  healthScore: 98 }
+
+          { system: 'user_permission_management',
   status: 'healthy',
   lastCheck: new Date(),
   uptime: 99.7,
@@ -244,13 +236,13 @@ interface AdminIncidentDashboardProps {
   errorRate: 0.2,
   alertCount: 1,
   healthScore: 95],
-  alertsSummary: {
+  alertsSummary: {,
   total: 12,
   critical: 1,
   high: 3,
   medium: 5,
   low: 3,
-  recent: [,
+  recent: [
   {
   id: 'ALT-001',
   title: 'Feature toggle response time exceeded',
@@ -259,59 +251,46 @@ interface AdminIncidentDashboardProps {
   timestamp: new Date(Date.now() - 30 * 60 * 1000),
   acknowledged: true,
   playbookTriggered: true],
-  trends: [,
+  trends: [
   {
   system: 'feature_management',
   count: 8,
-  trend: 'increasing',
-  severity: 'high'];
-  },
-  performanceMetrics: {
+  trend: 'increasing' }
+  severity: 'high']
+
+  performanceMetrics: { ,
   mttr: 15.5,
   mtbf: 168,
   playbookSuccessRate: 92,
   automatedResolutionRate: 78,
   escalationRate: 12,
-  userSatisfactionScore: 4.2,
+  userSatisfactionScore: 4.2 }
 },
-  recentActivity: [,
-          {
-  id: 'ACT-001',
+  recentActivity: [
+          { id: 'ACT-001',
   timestamp: new Date(Date.now() - 15 * 60 * 1000),
   type: 'playbook_execution',
   description: 'Feature Toggle Recovery playbook completed successfully',
   severity: 'medium',
-  system: 'feature_management',
+  system: 'feature_management' }
   userId: 'system'];
-  };
+};
       setDashboardState(mockDashboardState);
-    } catch (error) {
-  console.error('Failed to load dashboard data:', error);
-} finally {
-      setLoading(false);
-  }, []);
-  const refreshDashboard = useCallback(async () => {
-    setRefreshing(true);
+ catch (error) { console.error('Failed to load dashboard data:', error) } finally { setLoading(false) }, []);
+  const refreshDashboard = useCallback(async () => { setRefreshing(true);
     await loadDashboardData();
-    setRefreshing(false);
-  }, [loadDashboardData]);
-  useEffect(() => {
-    loadDashboardData();
+    setRefreshing(false) }, [loadDashboardData]);
+  useEffect(() => { loadDashboardData();
     // Set up auto-refresh
     const interval = setInterval(refreshDashboard, 30000); // 30 seconds;
-    return () => clearInterval(interval);
-  }, [loadDashboardData, refreshDashboard]);
+    return () => clearInterval(interval) }, [loadDashboardData, refreshDashboard]);
   // Event handlers
-  const handlePlaybookExecute = async (playbookId: string, options: ExecutionOptions) => {
-    if (onPlaybookExecute) {
+  const handlePlaybookExecute = async (playbookId: string, options: ExecutionOptions) => { if (onPlaybookExecute) {
       await onPlaybookExecute(playbookId, options);
-      await refreshDashboard();
-  };
-  const handleIncidentCreate = async (incident: IncidentCreationData) => {
-    if (onIncidentCreate) {
+      await refreshDashboard() };
+  const handleIncidentCreate = async (incident: IncidentCreationData) => { if (onIncidentCreate) {
       await onIncidentCreate(incident);
-      await refreshDashboard();
-  };
+      await refreshDashboard() };
   if (loading) {
     return;
       <div className={`admin-incident-dashboard loading ${className}`}>}
@@ -444,11 +423,11 @@ interface AdminIncidentDashboardProps {
 };
 
 // Overview Tab Component
-const OverviewTab: React.FC<{,
+const OverviewTab: React.FC<{ ,
   dashboardState: DashboardState;
-  onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void>;
+  onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void> }
   onIncidentCreate: (incident: IncidentCreationData) => Promise<void>;
-}> = ({ dashboardState, onPlaybookExecute: _onPlaybookExecute, onIncidentCreate: _onIncidentCreate }) => {
+> = ({ dashboardState, onPlaybookExecute: _onPlaybookExecute, onIncidentCreate: _onIncidentCreate }) => {
   return;
     <div className="overview-tab">
       {/* Critical Alerts Section */}
@@ -528,12 +507,11 @@ const OverviewTab: React.FC<{,
 };
 
 // Supporting Components
-const IncidentCard: React.FC<{ incident: ActiveIncident }> = ({ incident }) => {
-  const severityColors = {
+const IncidentCard: React.FC<{ incident: ActiveIncident }> = ({ incident }) => { const severityColors = {
   critical: 'border-red-500 bg-red-50',
   high: 'border-orange-500 bg-orange-50',
   medium: 'border-yellow-500 bg-yellow-50',
-  low: 'border-blue-500 bg-blue-50',
+  low: 'border-blue-500 bg-blue-50' }
 };
   return;
     <div className={`incident-card ${severityColors[incident.severity]}`}>}
@@ -582,12 +560,11 @@ const AlertCard: React.FC<{ alert: Alert }> = ({ alert }) => {
     </div>
   );
 };
-const SystemHealthCard: React.FC<{ health: SystemHealthStatus }> = ({ health }) => {
-  const statusColors = {
+const SystemHealthCard: React.FC<{ health: SystemHealthStatus }> = ({ health }) => { const statusColors = {
   healthy: 'text-green-500 bg-green-50',
   degraded: 'text-yellow-500 bg-yellow-50',
   unhealthy: 'text-red-500 bg-red-50',
-  unknown: 'text-gray-500 bg-gray-50',
+  unknown: 'text-gray-500 bg-gray-50' }
 };
   return;
     <div className="system-health-card">
@@ -620,9 +597,9 @@ const SystemHealthCard: React.FC<{ health: SystemHealthStatus }> = ({ health }) 
 };
 const PlaybookExecutionCard: React.FC<{ execution: PlaybookExecution }> = ({ execution }) => {
   const statusIcons = {
-    running: <Play className="text-blue-500" size={16} />,
-    completed: <CheckCircle className="text-green-500" size={16} />,
-    failed: <XCircle className="text-red-500" size={16} />,
+    running: <Play className="text-blue-500" size={16} />
+    completed: <CheckCircle className="text-green-500" size={16} />
+    failed: <XCircle className="text-red-500" size={16} />
     cancelled: <Pause className="text-gray-500" size={16} />
   };
   return;
@@ -649,15 +626,15 @@ const PlaybookExecutionCard: React.FC<{ execution: PlaybookExecution }> = ({ exe
     </div>
   );
 };
-const MetricCard: React.FC<{,
+const MetricCard: React.FC<{ ,
   label: string;
   value: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: 'up' | 'down' | 'stable' }
   good: boolean;
-}> = ({ label, value, trend, good }) => {
+> = ({ label, value, trend, good }) => {
   const trendIcons = {
-    up: <ArrowUp className={good ? 'text-green-500' : 'text-red-500'} size={16} />,
-    down: <ArrowDown className={good ? 'text-green-500' : 'text-red-500'} size={16} />,
+    up: <ArrowUp className={good ? 'text-green-500' : 'text-red-500'} size={16} />
+    down: <ArrowDown className={good ? 'text-green-500' : 'text-red-500'} size={16} />
     stable: <div className="w-4 h-1 bg-gray-400" />;
   };
   return;
@@ -674,10 +651,9 @@ const MetricCard: React.FC<{,
 };
 
 // Placeholder components for other tabs
-const IncidentsTab: React.FC<{,
+const IncidentsTab: React.FC<{ ,
   incidents: ActiveIncident;
-  onIncidentCreate: (incident: IncidentCreationData) => Promise<void>;
-}> = ({ incidents, onIncidentCreate: _onIncidentCreate }) => {
+  onIncidentCreate: (incident: IncidentCreationData) => Promise<void> }> = ({ incidents, onIncidentCreate: _onIncidentCreate }) => {
   return;
     <div className="incidents-tab">
       <div className="tab-header">
@@ -692,10 +668,9 @@ const IncidentsTab: React.FC<{,
     </div>
   );
 };
-const PlaybooksTab: React.FC<{,
+const PlaybooksTab: React.FC<{ ,
   executions: PlaybookExecution;
-  onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void>;
-}> = ({ executions, onPlaybookExecute: _onPlaybookExecute }) => {
+  onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void> }> = ({ executions, onPlaybookExecute: _onPlaybookExecute }) => {
   return;
     <div className="playbooks-tab">
       <div className="tab-header">
@@ -710,10 +685,9 @@ const PlaybooksTab: React.FC<{,
     </div>
   );
 };
-const SystemsTab: React.FC<{,
+const SystemsTab: React.FC<{ ,
   systemHealth: SystemHealthStatus;
-  alertsSummary: AlertsSummary;
-}> = ({ systemHealth, alertsSummary }) => {
+  alertsSummary: AlertsSummary }> = ({ systemHealth, alertsSummary }) => {
   return;
     <div className="systems-tab">
       <div className="tab-header">
@@ -730,10 +704,9 @@ const SystemsTab: React.FC<{,
     </div>
   );
 };
-const AnalyticsTab: React.FC<{,
+const AnalyticsTab: React.FC<{ ,
   performanceMetrics: PerformanceMetrics;
-  recentActivity: ActivityLog;
-}> = ({ performanceMetrics, recentActivity: _recentActivity }) => {
+  recentActivity: ActivityLog }> = ({ performanceMetrics, recentActivity: _recentActivity }) => {
   return;
     <div className="analytics-tab">
       <div className="tab-header">

@@ -749,8 +749,9 @@ Promise < AccessDecision > {
                                                             {
                                                                 if (now - entry.timestamp.getTime() > entry.ttl) {
                                                                     this.decisionCache.delete(key);
-                                                                    createDecision(decision, 'PERMIT' | 'DENY' | 'INDETERMINATE');
-                                                                    reason: string,
+                                                                    createDecision(decision, 'PERMIT' | 'DENY' | 'INDETERMINATE'),
+                                                                        reason;
+                                                                    string,
                                                                         request;
                                                                     AccessRequest;
                                                                     AccessDecision;
@@ -832,8 +833,9 @@ Promise < AccessDecision > {
                                                                                         triggers: decision.monitoring,
                                                                                     };
                                                                                     ;
-                                                                                    emitSecurityAlert(type, SecurityAlert['type']);
-                                                                                    severity: SecurityAlert['severity'],
+                                                                                    emitSecurityAlert(type, SecurityAlert['type']),
+                                                                                        severity;
+                                                                                    SecurityAlert['severity'],
                                                                                         request;
                                                                                     AccessRequest,
                                                                                         description;

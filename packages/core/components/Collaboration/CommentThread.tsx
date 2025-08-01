@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { 
-  MessageCircle, 
+import { MessageCircle, 
   Reply, 
   MoreVertical, 
   Edit3, 
@@ -11,16 +10,16 @@ import {
   X,
   AtSign,
   Send,
-  Paperclip,
+  Paperclip }
   Smile
-} from 'lucide-react';
+ from 'lucide-react';
 import { useComments } from '../../hooks/useComments';
 import { CommentEditor } from './CommentEditor';
 import { CommentMentions } from './CommentMentions';
 import { Comment, CommentStatus } from '../../types/CommentTypes';
-}
-interface CommentThreadProps {
-  resourceId: string;
+
+
+interface CommentThreadProps { resourceId: string;
   resourceType: 'project' | 'resource' | 'node' | 'region';
   workspaceId?: string;
   userId: string;
@@ -31,104 +30,79 @@ interface CommentThreadProps {
   allowEditing?: boolean;
   allowModeration?: boolean;
   realTime?: boolean;
-  const CommentThread: React.FC<CommentThreadProps> = ({ ),
-  resourceId,
-  resourceType,
-  workspaceId,
-  userId,
-  targetData,
-  className,
-  maxHeight = '400px',
-  showReplies = true,
-  allowEditing = true,
-  allowModeration = false,
+  const CommentThread: React.FC<CommentThreadProps> = ({ );
+  resourceId;
+  resourceType;
+  workspaceId;
+  userId;
+  targetData;
+  className;
+  maxHeight = '400px';
+  showReplies = true;
+  allowEditing = true;
+  allowModeration = false }
   realTime = true
-}
-}) => {
-  const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set());
+
+
+}) => { const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set());
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const {
-    comments,
-    loading,
-    error,
-    stats,
-    createComment,
-    updateComment,
-    deleteComment,
-    resolveComment,
-    unresolveComment,
-    refreshComments,
+    comments
+    loading
+    error
+    stats
+    createComment
+    updateComment
+    deleteComment
+    resolveComment
+    unresolveComment
+    refreshComments }
     realTimeConnection
-  } = useComments({)
-  resourceId,
-    resourceType,
-    workspaceId,
-    userId,
+ = useComments({ )
+  resourceId
+    resourceType
+    workspaceId
+    userId }
     realTime
   });
-  const handleCreateComment = useCallback(async (content: string, mentions: string = []) => {
-  try {
+  const handleCreateComment = useCallback(async (content: string, mentions: string = []) => { try {
   await createComment({)
-  content,
-  mentions,
-  target_data: targetData,
+  content
+  mentions
+  target_data: targetData }
 });
       setShowNewComment(false);
-    } catch (err) {
-  console.error('Failed to create comment:', err);
-}, [createComment, targetData]);
-  const handleCreateReply = useCallback(async (parentId: string, content: string, mentions: string = []) => {
-  try {
+ catch (err) { console.error('Failed to create comment:', err) }, [createComment, targetData]);
+  const handleCreateReply = useCallback(async (parentId: string, content: string, mentions: string = []) => { try {
   await createComment({)
-  content,
-  mentions,
-  parent_id: parentId,
-  target_data: targetData,
+  content
+  mentions
+  parent_id: parentId
+  target_data: targetData }
 });
       setReplyingTo(null);
-    } catch (err) {
-  console.error('Failed to create reply:', err);
-}, [createComment, targetData]);
-  const handleUpdateComment = useCallback(async (commentId: string, content: string, mentions: string = []) => {
-    try {
+ catch (err) { console.error('Failed to create reply:', err) }, [createComment, targetData]);
+  const handleUpdateComment = useCallback(async (commentId: string, content: string, mentions: string = []) => { try {
       await updateComment(commentId, {)
-  content,
+  content }
         mentions
       });
       setEditingComment(null);
-    } catch (err) {
-  console.error('Failed to update comment:', err);
-}, [updateComment]);
-  const handleDeleteComment = useCallback(async (commentId: string) => {
-    if (!confirm('Are you sure you want to delete this comment?')) {
+ catch (err) { console.error('Failed to update comment:', err) }, [updateComment]);
+  const handleDeleteComment = useCallback(async (commentId: string) => { if (!confirm('Are you sure you want to delete this comment?')) {
       return;
     try {
-      await deleteComment(commentId);
-    } catch (err) {
-  console.error('Failed to delete comment:', err);
-}, [deleteComment]);
-  const handleResolveComment = useCallback(async (commentId: string) => {
-    try {
-      await resolveComment(commentId);
-    } catch (err) {
-  console.error('Failed to resolve comment:', err);
-}, [resolveComment]);
-  const handleUnresolveComment = useCallback(async (commentId: string) => {
-    try {
-      await unresolveComment(commentId);
-    } catch (err) {
-  console.error('Failed to unresolve comment:', err);
-}, [unresolveComment]);
-  const toggleReplies = (commentId: string) => {
-    setExpandedReplies(prev => {)
+      await deleteComment(commentId) } catch (err) { console.error('Failed to delete comment:', err) }, [deleteComment]);
+  const handleResolveComment = useCallback(async (commentId: string) => { try {
+      await resolveComment(commentId) } catch (err) { console.error('Failed to resolve comment:', err) }, [resolveComment]);
+  const handleUnresolveComment = useCallback(async (commentId: string) => { try {
+      await unresolveComment(commentId) } catch (err) { console.error('Failed to unresolve comment:', err) }, [unresolveComment]);
+  const toggleReplies = (commentId: string) => { setExpandedReplies(prev => {)
   const next = new Set(prev);
       if (next.has(commentId)) {
-        next.delete(commentId);
-      } else {
-        next.add(commentId);
-      return next;
-    });
+        next.delete(commentId) } else { next.add(commentId);
+      return next });
   };
   const renderComment = (comment: Comment, isReply = false) => {
     const isEditing = editingComment === comment.id;
@@ -302,12 +276,12 @@ interface CommentThreadProps {
           </div>
           <div className="flex items-center space-x-2">
             {/* Real-time connection indicator */}
-            {realTime && ()
+            { realTime && ()
               <div className={`w-2 h-2 rounded-full ${
-  realTimeConnection?.status === 'connected' ? 'bg-green-400' :,
-  realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' :,
+  realTimeConnection?.status === 'connected' ? 'bg-green-400' :
+  realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' : }
   'bg-red-400'
-}`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />}
+`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />}
             )}
             <button
               onClick={() => setShowNewComment(!showNewComment)}

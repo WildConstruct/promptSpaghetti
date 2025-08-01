@@ -6,6 +6,7 @@ import React from 'react';
 import { ActivityEventFilter } from '../../types/workspace';
 
 }
+}
 interface ActivityFiltersProps {
     filters: ActivityEventFilter;
     eventTypes: string[];
@@ -15,4 +16,5 @@ interface ActivityFiltersProps {
 export declare const ActivityFilters: React.FC<ActivityFiltersProps>;
 export default ActivityFilters;
 //# sourceMappingURL=ActivityFilters.d.ts.map
+}
 }

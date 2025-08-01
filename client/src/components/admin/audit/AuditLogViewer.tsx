@@ -39,7 +39,7 @@ import {
   ListItemText
   // Badge,
   // Divider
-} from '@mui/material';
+ from '@mui/material';
 import {
   Search as SearchIcon,
   FilterList as FilterIcon,
@@ -56,16 +56,17 @@ import {
   Refresh as RefreshIcon,
   GetApp as GetAppIcon,
   Assessment as AssessmentIcon
-} from '@mui/icons-material';
+ from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // Types
-}
+
+
 interface AuditEvent {
   id: string;,
-  eventType: string;
+  eventType: string;,
   category: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
   actorId?: string;
@@ -75,7 +76,7 @@ interface AuditEvent {
   resourceId?: string;
   resourceName?: string;
   action: string;,
-  description: string;
+  description: string;,
   outcome: 'success' | 'failure' | 'partial';
   beforeValue?: unknown;
   afterValue?: unknown;
@@ -87,32 +88,36 @@ interface AuditEvent {
   tags: string;,
   timestamp: Date;
   duration?: number;
-  error?: {
+  error?: {,
   code: string;,
   message: string;
-}
+
+
 };
-}
+
+
 interface AuditFilters {
   startDate?: Date;
   endDate?: Date;
   eventTypes: string;,
-  categories: string;
+  categories: string;,
   severities: string;,
-  outcomes: string;
+  outcomes: string;,
   actorEmails: string;,
-  resourceTypes: string;
+  resourceTypes: string;,
   searchTerm: string;
-}
+
+
+
 interface AuditStatistics {
   totalEvents: number;,
   eventsByCategory: Record<string, number>;
   eventsBySeverity: Record<string, number>;
   uniqueActors: number;,
-  eventsToday: number;
+  eventsToday: number;,
   eventsThisWeek: number;,
   securityEvents: number;
-const EVENT_CATEGORIES = [;
+  const EVENT_CATEGORIES = [
   'authentication',
   'authorization',
   'data_modification',
@@ -121,11 +126,12 @@ const EVENT_CATEGORIES = [;
   'compliance',
   'performance',
   'error'
-];
-const SEVERITIES = ['low', 'medium', 'high', 'critical'];
-// 
-const SEVERITY_CONFIG = {
-}
+  ];
+  const SEVERITIES = ['low', 'medium', 'high', 'critical'];
+  //
+  const SEVERITY_CONFIG = {
+
+},
   low: { color: 'info', icon: InfoIcon },
   medium: { color: 'warning', icon: WarningIcon },
   high: { color: 'error', icon: ErrorIcon },
@@ -137,175 +143,7 @@ const OUTCOME_CONFIG = {
   partial: { color: 'warning', icon: WarningIcon }
 };
 
-export const AuditLogViewer: React.FC = () => {
-  const [events, setEvents] = useState<AuditEvent>([]);
-  const [statistics, setStatistics] = useState<AuditStatistics | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [totalEvents, setTotalEvents] = useState(0);
-  // Filters
-  const [filters, setFilters] = useState<AuditFilters>({)
-  eventTypes: [],
-  categories: [],
-  severities: [],
-  outcomes: [],
-  actorEmails: [],
-  resourceTypes: [],
-  searchTerm: '',
-});
-  // UI State
-  const [selectedEvent, setSelectedEvent] = useState<AuditEvent | null>(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
-  // const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
-  const [exportMenuAnchor, setExportMenuAnchor] = useState<null | HTMLElement>(null);
-  useEffect(() => {
-    loadAuditEvents();
-    loadStatistics();
-  }, [page, rowsPerPage, filters]);
-  const loadAuditEvents = async () => {
-    setLoading(true);
-    try {
-      // Mock API call - replace with actual API
-      const mockEvents: AuditEvent = [
-        {
-          id: 'audit_1',
-          eventType: 'toggle_created',
-          category: 'data_modification',
-          severity: 'medium',
-          actorId: 'user_1',
-          actorEmail: 'admin@example.com',
-          actorName: 'Admin User',
-          resourceType: 'feature_toggle',
-          resourceId: 'toggle_1',
-          resourceName: 'New UI Features',
-          action: 'create',
-          description: 'Feature toggle "New UI Features" was created',
-          outcome: 'success',
-          afterValue: { name: 'New UI Features', enabled: false },
-          sessionId: 'session_123',
-          ipAddress: '192.168.1.100',
-          userAgent: 'Mozilla/5.0...',
-          metadata: { toggleType: 'boolean', claudeImpact: 'none' },
-          tags: ['feature', 'ui'],
-          timestamp: new Date(Date.now() - 60 * 60 * 1000);
-  }
-        {
-          id: 'audit_2',
-          eventType: 'login_failed',
-          category: 'authentication',
-          severity: 'high',
-          actorEmail: 'unknown@example.com',
-          resourceType: 'user',
-          action: 'login',
-          description: 'Failed login attempt for user unknown@example.com',
-          outcome: 'failure',
-          sessionId: 'session_456',
-          ipAddress: '203.0.113.42',
-          userAgent: 'Mozilla/5.0...',
-          metadata: { loginMethod: 'password', reason: 'invalid_credentials' },
-          tags: ['security', 'authentication'],
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          error: {
-  code: 'INVALID_CREDENTIALS',
-  message: 'Invalid email or password',
-}
-        {
-          id: 'audit_3',
-          eventType: 'schedule_executed',
-          category: 'system_configuration',
-          severity: 'medium',
-          actorId: 'system',
-          resourceType: 'schedule',
-          resourceId: 'schedule_1',
-          resourceName: 'Weekend Rollout',
-          action: 'execute',
-          description: 'Schedule "Weekend Rollout" was executed successfully',
-          outcome: 'success',
-          beforeValue: { enabled: false },
-          afterValue: { enabled: true },
-          changedFields: ['enabled'],
-          metadata: {
-  executionId: 'exec_1',
-  duration: 2500,
-  affectedUsers: 1250,
-  triggeredBy: 'scheduler',
-},
-  tags: ['schedule', 'automation'],
-          timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
-          duration: 2500];
-      setEvents(mockEvents);
-      setTotalEvents(mockEvents.length);
-    } catch (error) {
-  console.error('Failed to load audit events:', error);
-} finally {
-      setLoading(false);
-  };
-  const loadStatistics = async () => {
-  try {
-  // Mock statistics - replace with actual API
-  const mockStats: AuditStatistics = {,
-  totalEvents: 15423,
-  eventsByCategory: {
-  'data_modification': 5840,
-  'authentication': 3210,
-  'system_configuration': 2876,
-  'security': 1843,
-  'authorization': 1654,
-},
-  eventsBySeverity: {
-  'low': 8934,
-  'medium': 4521,
-  'high': 1756,
-  'critical': 212,
-},
-  uniqueActors: 156,
-        eventsToday: 342,
-        eventsThisWeek: 2108,
-        securityEvents: 89;
-  };
-      setStatistics(mockStats);
-    } catch (error) {
-  console.error('Failed to load statistics:', error);
-};
-  const handleFilterChange = (field: keyof AuditFilters, value: unknown) => {
-    setFilters(prev => ({ ...prev, [field]: value }));
-    setPage(0); // Reset to first page when filters change
-  };
-  const handleViewDetails = (event: AuditEvent) => {
-    setSelectedEvent(event);
-    setDetailsOpen(true);
-  };
-  const handleExport = async (format: 'json' | 'csv' | 'pdf') => {
-    try {
-      // Mock export - replace with actual API
-      console.log(`Exporting audit logs as ${format}`);}
-      setExportMenuAnchor(null);
-    } catch (error) {
-  console.error('Export failed:', error);
-};
-  const clearFilters = () => {
-  setFilters({)
-  eventTypes: [],
-  categories: [],
-  severities: [],
-  outcomes: [],
-  actorEmails: [],
-  resourceTypes: [],
-  searchTerm: '',
-});
-  };
-  //   //   if (ms < 1000) return `${ms}ms`;}
-  //   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;}
-  //   return `${(ms / 60000).toFixed(1)}m`;}
-  // };
-  const formatTimestamp = (timestamp: Date): string => {
-    return timestamp.toLocaleString();
-  };
-  const renderStatisticsCards = () => {
-    if (!statistics) return null;
-    return;
-      <Grid container spacing={2} sx={{ mb: 3 }}>
+export const AuditLogViewer = () => { return null; }>
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
@@ -388,7 +226,7 @@ export const AuditLogViewer: React.FC = () => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('searchTerm', e.target.value)}
             InputProps={{
               startAdornment: <SearchIcon sx={{ mr: 1, color: 'action.active' }} />
-            }}
+}
             size="small"
           />
         </Grid>
@@ -448,7 +286,7 @@ export const AuditLogViewer: React.FC = () => {
               onChange={(date: Date | null) => handleFilterChange('startDate', date)}
               slotProps={{
                 textField: { size: 'small', fullWidth: true }
-              }}
+}
             />
           </LocalizationProvider>
         </Grid>
@@ -460,7 +298,7 @@ export const AuditLogViewer: React.FC = () => {
               onChange={(date: Date | null) => handleFilterChange('endDate', date)}
               slotProps={{
                 textField: { size: 'small', fullWidth: true }
-              }}
+}
             />
           </LocalizationProvider>
         </Grid>
@@ -608,7 +446,7 @@ export const AuditLogViewer: React.FC = () => {
         onRowsPerPageChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setRowsPerPage(parseInt(e.target.value, 10));
           setPage(0);
-        }}
+}
       />
     </Paper>
   );

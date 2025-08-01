@@ -16,8 +16,7 @@
  * - Anti-brute force protection
  */
 import { EventEmitter } from 'events';
-export declare enum VerificationCodeType {
-    EMAIL_VERIFICATION = "email_verification",
+export declare enum VerificationCodeType { EMAIL_VERIFICATION = "email_verification",
     SMS_VERIFICATION = "sms_verification",
     TOTP_BACKUP = "totp_backup",
     PASSWORD_RESET = "password_reset",
@@ -45,34 +44,30 @@ export declare enum DeliveryChannel {
     EMAIL = "email",
     SMS = "sms",
     VOICE = "voice",
-    PUSH = "push",
+    PUSH = "push" }
     IN_APP = "in_app"
 
 }
-export interface VerificationCodeConfig {
-    defaultExpiration: number;
+}
+export interface VerificationCodeConfig { defaultExpiration: number;
     maxExpiration: number;
     retryLimit: number;
     rateLimitWindow: number;
     rateLimitCount: number;
     cleanupInterval: number;
     codeFormats: {
-        [key in VerificationCodeType]: CodeFormat;
+        [key in VerificationCodeType]: CodeFormat }
 }
     };
-    expirationTimes: {
-        [key in VerificationCodeType]: number;
-    };
-    retryLimits: {
-        [key in VerificationCodeType]: number;
-    };
+    expirationTimes: { [key in VerificationCodeType]: number };
+    retryLimits: { [key in VerificationCodeType]: number };
     enableSecurityLogging: boolean;
     antiEnumerationDelay: number;
     requireSecureDelivery: boolean;
 
 }
-export interface VerificationCode {
-    id: string;
+}
+export interface VerificationCode { id: string;
     userId: string;
     type: VerificationCodeType;
     format: CodeFormat;
@@ -97,19 +92,17 @@ export interface VerificationCode {
         deliveryAttempts?: number;
         deliveryStatus?: string;
         revocationReason?: string;
-        additionalContext?: Record<string, any>;
+        additionalContext?: Record<string, any> }
 }
     };
-    securityFlags: {
-        highRisk: boolean;
+    securityFlags: { highRisk: boolean;
         multipleAttempts: boolean;
         suspiciousActivity: boolean;
-        deviceMismatch: boolean;
-    };
+        deviceMismatch: boolean };
 
 }
-export interface CodeGenerationRequest {
-    userId: string;
+}
+export interface CodeGenerationRequest { userId: string;
     type: VerificationCodeType;
     deliveryChannel: DeliveryChannel;
     deliveryAddress: string;
@@ -117,48 +110,46 @@ export interface CodeGenerationRequest {
     userAgent: string;
     expirationMinutes?: number;
     maxAttempts?: number;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface CodeValidationRequest {
-    userId: string;
+}
+export interface CodeValidationRequest { userId: string;
     code: string;
     type: VerificationCodeType;
     ipAddress: string;
     userAgent: string;
-    deviceFingerprint?: string;
-
+    deviceFingerprint?: string }
 }
-export interface ValidationResult {
-    valid: boolean;
+}
+export interface ValidationResult { valid: boolean;
     codeData?: VerificationCode;
     reason?: string;
     attemptsRemaining?: number;
     securityWarnings?: string[];
-    riskScore?: number;
-
+    riskScore?: number }
 }
-export interface RateLimitData {
-    count: number;
+}
+export interface RateLimitData { count: number;
     resetTime: number;
     lastRequest: Date;
     violations: number;
 
 export declare enum SecurityEvent {
-    CODE_GENERATED = "code_generated",
-    CODE_VALIDATED = "code_validated",
-    CODE_USED = "code_used",
-    CODE_EXPIRED = "code_expired",
-    CODE_REVOKED = "code_revoked",
-    INVALID_CODE_ATTEMPT = "invalid_code_attempt",
-    RATE_LIMIT_EXCEEDED = "rate_limit_exceeded",
-    SUSPICIOUS_ACTIVITY = "suspicious_activity",
-    BRUTE_FORCE_DETECTED = "brute_force_detected",
+    CODE_GENERATED = "code_generated";
+    CODE_VALIDATED = "code_validated";
+    CODE_USED = "code_used";
+    CODE_EXPIRED = "code_expired";
+    CODE_REVOKED = "code_revoked";
+    INVALID_CODE_ATTEMPT = "invalid_code_attempt";
+    RATE_LIMIT_EXCEEDED = "rate_limit_exceeded";
+    SUSPICIOUS_ACTIVITY = "suspicious_activity";
+    BRUTE_FORCE_DETECTED = "brute_force_detected" }
     CODE_CLEANUP = "code_cleanup"
 
 }
-export interface CodeStatistics {
-    totalCodes: number;
+}
+}
+export interface CodeStatistics { totalCodes: number;
     activeCodes: number;
     usedCodes: number;
     expiredCodes: number;
@@ -184,7 +175,7 @@ export declare class VerificationCodeManager extends EventEmitter {
      */
     generateCode(request: CodeGenerationRequest): Promise<{
         code: string;
-        codeId: string;
+        codeId: string }
 }
     } | null>;
     /**
@@ -194,11 +185,9 @@ export declare class VerificationCodeManager extends EventEmitter {
     /**
      * Use a verification code (marks it as used)
      */
-    useCode(request: CodeValidationRequest): Promise<{
-        success: boolean;
+    useCode(request: CodeValidationRequest): Promise<{ success: boolean;
         codeData?: VerificationCode;
-        reason?: string;
-    }>;
+        reason?: string }>;
     /**
      * Revoke a specific verification code
      */

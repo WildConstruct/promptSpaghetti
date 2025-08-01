@@ -45,7 +45,19 @@ fine_tuning: {
     is_allowed_to_fine_tune: boolean;
     finetuning_requested: boolean;
     finetuning_state: string;
-    verification_attempts: Array;
+    verification_attempts: Array < {
+        text: string,
+        date_unix: number,
+        accepted: boolean,
+        similarity: number,
+        levenshtein_distance: number,
+        recording: {
+            recording_id: string,
+            mime_type: string,
+            size_bytes: number,
+            upload_date_unix: number
+        }
+    } > ;
     verification_failures: string;
     verification_attempts_count: number;
     slice_ids: string;
@@ -53,7 +65,13 @@ fine_tuning: {
         ;
         extra_text: string;
         request_time_unix: number;
-        files: Array;
+        files: Array < {
+            file_id: string,
+            file_name: string,
+            mime_type: string,
+            size_bytes: number,
+            upload_date_unix: number
+        } > ;
     }
     ;
 }
@@ -183,8 +201,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
                                                 text_length: text.length,
                                                 audio_length: this._estimateAudioDuration(text),
                                                 voice_settings: processedOptions.voice_settings,
-                                                generation_time: generationTime,
-                                            },
+                                                generation_time: generationTime, },
                                             usage: {
                                                 characters: text.length,
                                                 cost: this._calculateCost(text.length),
@@ -225,8 +242,9 @@ export class ElevenLabsAdapter extends BaseAIModel {
                                                                     await this._loadQuotaInfo();
                                                                     return this.quotaInfo;
                                                                     async;
-                                                                    createCustomVoice(name, string);
-                                                                    audioFiles: File,
+                                                                    createCustomVoice(name, string),
+                                                                        audioFiles;
+                                                                    File,
                                                                         description ?  : string,
                                                                         labels ?  : Record;
                                                                     Promise < ElevenLabsVoice > {
@@ -255,8 +273,9 @@ export class ElevenLabsAdapter extends BaseAIModel {
                                                                             await this._loadAvailableVoices();
                                                                             return newVoice;
                                                                             async;
-                                                                            cloneVoice(name, string);
-                                                                            audioSample: File,
+                                                                            cloneVoice(name, string),
+                                                                                audioSample;
+                                                                            File,
                                                                                 description ?  : string;
                                                                         } };
                                                                 } };
@@ -271,8 +290,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
                     }
                     finally {
                     }
-                }
-            } };
+                } } };
         Promise < ElevenLabsVoice > {
             return: this.createCustomVoice(name, [audioSample], description),
             async deleteVoice(voiceId) {
@@ -305,8 +323,9 @@ export class ElevenLabsAdapter extends BaseAIModel {
             throw new Error(`Failed to update voice settings: ${response.status} ${response.statusText} - ${errorData?.detail?.message || 'Unknown error'}`);
         }
         async;
-        generateWithStream(text, string);
-        voiceId: string,
+        generateWithStream(text, string),
+            voiceId;
+        string,
             options ?  : Partial;
         Promise < ReadableStream > {
             const: processedOptions = this._processOptions({ text, voice_id: voiceId, ...options }, text),

@@ -2,12 +2,13 @@
 // Administrative interface for creating, editing, and managing roles and permissions
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, ChevronRight, Edit, Trash2, Plus, Users, Shield, Settings, Filter, Search } from 'lucide-react';
-}
+
+
 interface Permission {
   id: string;,
-  roleId: string;
+  roleId: string;,
   resource: string;,
-  action: string;
+  action: string;,
   scope: 'global' | 'organization' | 'team' | 'own';
   conditions?: Record<string, unknown>;
   createdAt: string;
@@ -27,14 +28,16 @@ interface Permission {
   description?: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
-  permissions: {
+  permissions: {,
   resource: string;,
-  action: string;
+  action: string;,
   scope: 'global' | 'organization' | 'team' | 'own';
   conditions?: Record<string, unknown>;
-}
-}[];
-}
+
+
+[];
+
+
 interface RoleStats {
   totalRoles: number;,
   rolesByScope: Record<string, number>;
@@ -58,23 +61,24 @@ interface RoleStats {
   description: '',
   scope: 'global',
   permissions: [],
-}
+
+
 });
   // Permission templates for common role types
   const permissionTemplates = {
-    admin: [,
+    admin: [
       { resource: 'users', action: 'read', scope: 'global' as const },
       { resource: 'users', action: 'write', scope: 'global' as const },
       { resource: 'roles', action: 'read', scope: 'global' as const },
       { resource: 'roles', action: 'write', scope: 'global' as const },
       { resource: 'system', action: 'admin', scope: 'global' as const }
     ],
-    editor: [,
+    editor: [
       { resource: 'graphs', action: 'read', scope: 'global' as const },
       { resource: 'graphs', action: 'write', scope: 'own' as const },
       { resource: 'graphs', action: 'execute', scope: 'global' as const }
     ],
-    viewer: [,
+    viewer: [
       { resource: 'graphs', action: 'read', scope: 'global' as const },
       { resource: 'graphs', action: 'execute', scope: 'global' as const }
     ]
@@ -94,7 +98,7 @@ interface RoleStats {
 }),
         fetch('/api/auth/rbac/stats', {)
   credentials: 'include',
-}
+
       ]);
       if (rolesResponse.ok) {
         const rolesData = await rolesResponse.json();
@@ -102,9 +106,9 @@ interface RoleStats {
       if (statsResponse.ok) {
         const statsData = await statsResponse.json();
         setStats(statsData);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load RBAC data:', error);
-} finally {
+ finally {
       setLoading(false);
   }, [scopeFilter, searchQuery, organizationFilter]);
   const loadRoleDetails = async (roleId: string) => {
@@ -120,7 +124,7 @@ interface RoleStats {
   permissions: data.permissions,
   assignedUsers: data.assignedUsers,
 });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load role details:', error);
 };
   const handleCreateRole = async (e: React.FormEvent) => {
@@ -129,7 +133,7 @@ interface RoleStats {
   try {
   const response = await fetch('/api/auth/rbac/roles', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -144,13 +148,13 @@ interface RoleStats {
   permissions: [],
 });
         await loadData();
-      } else {
+ else {
         const error = await response.json();
         alert(error.message || 'Failed to create role');
-    } catch (error) {
+ catch (error) {
   console.error('Failed to create role:', error);
   alert('Failed to create role');
-} finally {
+ finally {
       setLoading(false);
   };
   const handleDeleteRole = async (roleId: string) => {
@@ -166,10 +170,10 @@ interface RoleStats {
         await loadData();
         if (selectedRole?.id === roleId) {
           setSelectedRole(null);
-      } else {
+ else {
         const error = await response.json();
         alert(error.message || 'Failed to delete role');
-    } catch (error) {
+ catch (error) {
   console.error('Failed to delete role:', error);
   alert('Failed to delete role');
 };
@@ -177,7 +181,7 @@ interface RoleStats {
     const newExpanded = new Set(expandedRoles);
     if (newExpanded.has(roleId)) {
       newExpanded.delete(roleId);
-    } else {
+ else {
       newExpanded.add(roleId);
       loadRoleDetails(roleId);
     setExpandedRoles(newExpanded);
@@ -191,7 +195,7 @@ interface RoleStats {
   const addPermission = () => {
     setFormData({)
   ...formData,
-      permissions: [,
+      permissions: [
         ...formData.permissions,
         { resource: '', action: '', scope: 'global' }
       ]
@@ -344,7 +348,7 @@ interface RoleStats {
   role.scope === 'global' ? 'bg-blue-100 text-blue-800' :,
   role.scope === 'organization' ? 'bg-green-100 text-green-800' :,
   'bg-yellow-100 text-yellow-800'
-}`}>
+`}>
                               {role.scope}
                             </span>
                             <span className="text-xs text-gray-500">
@@ -359,7 +363,7 @@ interface RoleStats {
                             setSelectedRole(null);
                             setEditing(true);
                             loadRoleDetails(role.id);
-                          }}
+}
                           className="text-gray-400 hover:text-blue-600"
                         >
                           <Edit className="w-4 h-4" />
@@ -391,7 +395,7 @@ interface RoleStats {
   permission.scope === 'organization' ? 'bg-green-100 text-green-800' :,
   permission.scope === 'team' ? 'bg-yellow-100 text-yellow-800' :,
   'bg-purple-100 text-purple-800'
-}`}>
+`}>
                                   {permission.scope}
                                 </span>
                               </div>
@@ -436,7 +440,7 @@ interface RoleStats {
   scope: 'global',
   permissions: [],
 });
-                }}
+}
                 className="text-gray-400 hover:text-gray-600"
               >
                 ×
@@ -580,7 +584,7 @@ interface RoleStats {
   scope: 'global',
   permissions: [],
 });
-                  }}
+}
                   className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Cancel

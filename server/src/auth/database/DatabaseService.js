@@ -21,7 +21,7 @@ export class DatabaseService {
     this.pool.on('error', err => {
       console.error('Unexpected error on idle client', err);
     });
-  }
+
   async query(text, params) {
     const start = Date.now();
     try {
@@ -29,9 +29,9 @@ export class DatabaseService {
       const duration = Date.now() - start;
       if (duration > 1000) {
         console.warn(`Slow query (${duration}ms):`, text);
-      }
+
       return result;
-    } catch (error) {
+ catch (error) {
       console.error('Database query error:', {
         query: text,
         params: params
@@ -40,8 +40,8 @@ export class DatabaseService {
         error: error instanceof Error ? error.message : String(error),
       });
       throw error;
-    }
-  }
+
+
   async transaction(callback) {
     const client = await this.pool.connect();
     try {
@@ -49,22 +49,22 @@ export class DatabaseService {
       const result = await callback(client);
       await client.query('COMMIT');
       return result;
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
   async healthCheck() {
     try {
       const result = await this.query('SELECT 1 as health');
       return result.rows.length > 0 && result.rows[0].health === 1;
-    } catch (error) {
+ catch (error) {
       console.error('Database health check failed:', error);
       return false;
-    }
-  }
+
+
   async initializeSchema() {
     try {
       const fs = require('fs');
@@ -77,14 +77,14 @@ export class DatabaseService {
         await client.query(schema);
       });
       console.log('Database schema initialized successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize database schema:', error);
       throw error;
-    }
-  }
+
+
   async close() {
     await this.pool.end();
-  }
+
   // Get connection pool statistics
   getPoolStats() {
     return {
@@ -92,11 +92,11 @@ export class DatabaseService {
       idleCount: this.pool.idleCount,
       waitingCount: this.pool.waitingCount,
     };
-  }
+
   // Get a client from the pool for manual transaction handling
   async getClient() {
     return await this.pool.connect();
-  }
+
   // User database operations for PasswordResetService
   async findUserByEmail(email) {
     const result = await this.query('SELECT * FROM users WHERE email = $1 AND status = $2', [
@@ -104,9 +104,9 @@ export class DatabaseService {
       'active',
     ]);
     return result.rows.length > 0 ? result.rows[0] : null;
-  }
+
   async findUserById(id) {
     const result = await this.query('SELECT * FROM users WHERE id = $1', [id]);
     return result.rows.length > 0 ? result.rows[0] : null;
-  }
-}
+
+

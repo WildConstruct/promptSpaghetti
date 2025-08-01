@@ -299,8 +299,9 @@ switch (operation.type) {
     default:
         throw new Error(`Cannot create inverse operation for type: ${operation.type}`);
 }
-createNodeDeleteInverse(operation, NodeAddOperation);
-id: string,
+createNodeDeleteInverse(operation, NodeAddOperation),
+    id;
+string,
     timestamp;
 Date;
 NodeDeleteOperation;
@@ -372,8 +373,7 @@ NodeDeleteOperation;
                         sessionId: operation.sessionId,
                         payload: {
                             edgeId: operation.payload.edge.id,
-                            snapshot: operation.payload.edge,
-                        },
+                            snapshot: operation.payload.edge, },
                         id: string,
                         timestamp: Date, EdgeAddOperation
                     };

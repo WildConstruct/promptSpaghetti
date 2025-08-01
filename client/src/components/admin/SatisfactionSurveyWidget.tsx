@@ -15,14 +15,17 @@ import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { AlertTriangle, TrendingUp, TrendingDown, Users, MessageSquare, Star } from 'lucide-react';
-}
+
+
 interface SatisfactionMetrics {
   overallScore: number;,
   npsScore: number,
   responseRate: number;,
   totalResponses: number,
   trendDirection: 'up' | 'down' | 'stable';
-}
+
+
+
 interface SatisfactionAlert {
   alertId: string;,
   alertType: string,
@@ -32,12 +35,13 @@ interface SatisfactionAlert {
   affectedUsers: number,
   triggeredAt: Date;,
   acknowledged: boolean;
-}
-interface RecentFeedback {
-}
-  positive: { text: string, user: string; timestamp: Date }[],
-  negative: { text: string, user: string; timestamp: Date }[],
-  suggestions: { text: string, user: string; timestamp: Date }[];
+
+
+
+interface RecentFeedback {},
+  positive: { text: string, user: string, timestamp: Date }[],
+  negative: { text: string, user: string, timestamp: Date }[],
+  suggestions: { text: string, user: string, timestamp: Date }[];
 
 // Currently unused but may be needed for future dashboard integration
 // interface SatisfactionDashboardData {}
@@ -45,37 +49,37 @@ interface RecentFeedback {
 
 //   summary: SatisfactionMetrics;
 //   realtime: {
-//     todayResponses: number;
-//     averageToday: number;
+  //     todayResponses: number;
+  //     averageToday: number;
 
-}
-//     hourlyTrend: { hour: number, score: number; responses: number }[];
+//     hourlyTrend: { hour: number, score: number, responses: number }[];
 //   };
 //   segments: {
-//     userType: { segment: string, satisfaction: number; count: number }[];
-//     geography: { region: string, satisfaction: number; count: number }[];
-//     tenure: { group: string, satisfaction: number; count: number }[];
+//     userType: { segment: string, satisfaction: number, count: number }[];
+//     geography: { region: string, satisfaction: number, count: number }[];
+//     tenure: { group: string, satisfaction: number, count: number }[];
 //   };
 //   features: {
-//     topRated: { feature: string, rating: number; responses: number }[];
-//     bottomRated: { feature: string, rating: number; responses: number }[];
-//     trending: { feature: string, change: number; current: number }[];
+//     topRated: { feature: string, rating: number, responses: number }[];
+//     bottomRated: { feature: string, rating: number, responses: number }[];
+//     trending: { feature: string, change: number, current: number }[];
 //   };
 //   alerts: SatisfactionAlert;
 //   recentFeedback: RecentFeedback;
 //   timestamp: Date;
 //   dataFreshness: number;
 // }
-}
+
+
 interface SatisfactionSurveyWidgetProps {
-  }
+
 
 className?: string;
   refreshInterval?: number;
   export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> = ({ ),
   className,
   refreshInterval = 30000
-}
+
 }) => {
   const [dashboardData, setDashboardData] = useState<{
   summary: SatisfactionMetrics;,
@@ -85,7 +89,7 @@ className?: string;
   alerts: SatisfactionAlert;,
   recentFeedback: RecentFeedback,
   dataFreshness: number;
-} | null>(null);
+ | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -97,12 +101,12 @@ className?: string;
       if (result.success) {
         setDashboardData(result.data);
         setError(null);
-      } else {
+ else {
         setError(result.error || 'Failed to load satisfaction data');
-    } catch (err) {
+ catch (err) {
   setError('Network error loading satisfaction data');
   console.error('Error fetching satisfaction dashboard:', err);
-} finally {
+ finally {
       setLoading(false);
   };
   // Setup periodic refresh
@@ -122,7 +126,7 @@ className?: string;
       if (response.ok) {
         // Refresh data to update alert status
         fetchDashboardData();
-    } catch (err) {
+ catch (err) {
   console.error('Error acknowledging alert:', err);
 };
   // Create new survey
@@ -137,7 +141,7 @@ className?: string;
       if (result.success) {
   // Handle successful survey creation
   console.log('Survey created:', result.data);
-} catch (err) {
+ catch (err) {
   console.error('Error creating survey:', err);
 };
   if (loading) {
@@ -386,7 +390,7 @@ className?: string;
   alert.severity === 'high' ? 'border-orange-300 bg-orange-50' :,
   alert.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :,
   'border-blue-300 bg-blue-50'
-}`}
+`}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
@@ -396,14 +400,14 @@ className?: string;
   alert.severity === 'high' ? 'text-orange-600' :,
   alert.severity === 'medium' ? 'text-yellow-600' :,
   'text-blue-600'
-}`} />
+`} />
                           <h4 className="font-medium">{alert.title}</h4>
                           <Badge variant={
   alert.severity === 'critical' ? 'destructive' :,
   alert.severity === 'high' ? 'destructive' :,
   alert.severity === 'medium' ? 'warning' :,
   'secondary'
-}>
+>
                             {alert.severity}
                           </Badge>
                         </div>

@@ -13,14 +13,14 @@ import {
   EdgeMatchResult,
   ChangeSummary,
   MatchType
-} from '../database/comparison-models.js';
+ from '../database/comparison-models.js';
 
 export class GraphComparisonService {
   private config: ComparisonConfig;
 
   constructor(config: ComparisonConfig) {
     this.config = config;
-  }
+
 
   /**
    * Main comparison algorithm - compares two graph versions
@@ -44,7 +44,7 @@ export class GraphComparisonService {
       algorithmSteps.push('Performing quick hash comparison');
       if (sourceSnapshot.structure_hash === targetSnapshot.structure_hash) {
         return this.createIdenticalComparison(sourceData, targetData, algorithmSteps, startTime);
-      }
+
 
       // Step 3: Node matching algorithm
       algorithmSteps.push('Executing node matching algorithm');
@@ -74,12 +74,11 @@ export class GraphComparisonService {
       );
 
       return comparison;
-
-    } catch (error) {
+ catch (error) {
       algorithmSteps.push(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
       throw new Error(`Graph comparison failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Create a normalized snapshot of graph data for comparison
@@ -135,7 +134,7 @@ export class GraphComparisonService {
       edge_count: graphData.edges.length,
       complexity_score: complexityScore,
       created_at: new Date(};
-  }
+
 
   /**
    * Advanced node matching algorithm using multiple similarity metrics
@@ -173,8 +172,8 @@ export class GraphComparisonService {
         });
         
         matchedTargets.add(targetNode.id);
-      }
-    }
+
+
 
     // Phase 2: Similarity-based matching for unmatched nodes
     const unmatchedSource = sourceNodes.filter(n => !targetMap.has(n.id));
@@ -190,8 +189,8 @@ export class GraphComparisonService {
         if (similarity >= this.config.node_similarity_threshold && 
             (!bestMatch || similarity > bestMatch.score)) {
           bestMatch = { node: targetNode, score: similarity };
-        }
-      }
+
+
 
       if (bestMatch) {
         matches.push({
@@ -209,7 +208,7 @@ export class GraphComparisonService {
         });
         
         matchedTargets.add(bestMatch.node.id);
-      } else {
+ else {
         // Mark as removed
         matches.push({
           id: '',
@@ -224,8 +223,8 @@ export class GraphComparisonService {
           visual_changes: {},
           created_at: new Date()
         });
-      }
-    }
+
+
 
     // Phase 3: Mark unmatched target nodes as added
     for (const targetNode of unmatchedTarget) {
@@ -243,11 +242,11 @@ export class GraphComparisonService {
           visual_changes: {},
           created_at: new Date()
         });
-      }
-    }
+
+
 
     return matches;
-  }
+
 
   /**
    * Edge matching algorithm based on node matches and edge properties
@@ -265,7 +264,7 @@ export class GraphComparisonService {
     nodeMatches.forEach(match => {
       if (match.source_node_id && match.target_node_id) {
         nodeIdMap.set(match.source_node_id, match.target_node_id);
-      }
+
     });
 
     const sourceMap = new Map(sourceEdges.map(e => [e.id, e]));
@@ -295,8 +294,8 @@ export class GraphComparisonService {
         });
         
         matchedTargets.add(targetEdge.id);
-      }
-    }
+
+
 
     // Phase 2: Connection-based matching
     const unmatchedSource = sourceEdges.filter(e => !targetMap.has(e.id));
@@ -312,8 +311,8 @@ export class GraphComparisonService {
         if (similarity >= this.config.edge_similarity_threshold && 
             (!bestMatch || similarity > bestMatch.score)) {
           bestMatch = { edge: targetEdge, score: similarity };
-        }
-      }
+
+
 
       if (bestMatch) {
         matches.push({
@@ -332,7 +331,7 @@ export class GraphComparisonService {
         });
         
         matchedTargets.add(bestMatch.edge.id);
-      } else {
+ else {
         matches.push({
           id: '',
           comparison_id: '',
@@ -347,8 +346,8 @@ export class GraphComparisonService {
           property_changes: {},
           created_at: new Date()
         });
-      }
-    }
+
+
 
     // Phase 3: Mark unmatched target edges as added
     for (const targetEdge of unmatchedTarget) {
@@ -367,11 +366,11 @@ export class GraphComparisonService {
           property_changes: {},
           created_at: new Date()
         });
-      }
-    }
+
+
 
     return matches;
-  }
+
 
   /**
    * Calculate similarity between two nodes based on comparison type
@@ -393,7 +392,7 @@ export class GraphComparisonService {
     // Type similarity (always important)
     if (sourceNode.type === targetNode.type) {
       score += 0.4;
-    }
+
     totalWeight += 0.4;
 
     // Property similarity
@@ -412,12 +411,12 @@ export class GraphComparisonService {
       );
       score += positionSimilarity * 0.2;
       totalWeight += 0.2;
-    } else {
+ else {
       totalWeight += 0.2;
-    }
+
 
     return totalWeight > 0 ? score / totalWeight : 0;
-  }
+
 
   /**
    * Calculate similarity between two edges
@@ -435,10 +434,10 @@ export class GraphComparisonService {
     
     if (sourceFrom === targetEdge.source && sourceTo === targetEdge.target) {
       score += 0.7;
-    } else if (sourceFrom === targetEdge.target && sourceTo === targetEdge.source) {
+ else if (sourceFrom === targetEdge.target && sourceTo === targetEdge.source) {
       // Reversed connection
       score += 0.5;
-    }
+
 
     // Property similarity
     const propSimilarity = this.calculatePropertySimilarity(
@@ -448,7 +447,7 @@ export class GraphComparisonService {
     score += propSimilarity * 0.3;
 
     return score;
-  }
+
 
   /**
    * Calculate property similarity between two objects
@@ -465,16 +464,16 @@ export class GraphComparisonService {
       if (key in obj1 && key in obj2) {
         if (this.deepEqual(obj1[key], obj2[key])) {
           matches++;
-        } else {
+ else {
           // Partial credit for different values of same key
           matches += 0.3;
-        }
-      }
+
+
       // No credit for missing keys
-    }
+
 
     return matches / allKeys.size;
-  }
+
 
   /**
    * Calculate position similarity for visual comparisons
@@ -483,7 +482,7 @@ export class GraphComparisonService {
     const distance = Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
     const maxDistance = 1000; // Assume viewport is roughly 1000x1000
     return Math.max(0, 1 - (distance / maxDistance));
-  }
+
 
   /**
    * Calculate overall graph similarity score
@@ -501,7 +500,7 @@ export class GraphComparisonService {
 
     const unchangedItems = totalItems - changes.total_changes;
     return Math.max(0, unchangedItems / totalItems);
-  }
+
 
   /**
    * Extract node properties for comparison
@@ -509,7 +508,7 @@ export class GraphComparisonService {
   private extractNodeProperties(node: Error): Record<string, any> {
     const { _____id, _____type, _____position, ...properties } = node;
     return { ...properties, ...(node.data || {}) };
-  }
+
 
   /**
    * Get property changes between two nodes
@@ -524,19 +523,19 @@ export class GraphComparisonService {
     for (const key of allKeys) {
       if (!(key in sourceProps)) {
         changes[key] = { type: 'added', value: targetProps[key] };
-      } else if (!(key in targetProps)) {
+ else if (!(key in targetProps)) {
         changes[key] = { type: 'removed', value: sourceProps[key] };
-      } else if (!this.deepEqual(sourceProps[key], targetProps[key])) {
+ else if (!this.deepEqual(sourceProps[key], targetProps[key])) {
         changes[key] = { 
           type: 'modified', 
           old_value: sourceProps[key], 
           new_value: targetProps[key] 
         };
-      }
-    }
+
+
     
     return changes;
-  }
+
 
   /**
    * Get property changes between two edges
@@ -551,19 +550,19 @@ export class GraphComparisonService {
     for (const key of allKeys) {
       if (!(key in sourceProps)) {
         changes[key] = { type: 'added', value: targetProps[key] };
-      } else if (!(key in targetProps)) {
+ else if (!(key in targetProps)) {
         changes[key] = { type: 'removed', value: sourceProps[key] };
-      } else if (!this.deepEqual(sourceProps[key], targetProps[key])) {
+ else if (!this.deepEqual(sourceProps[key], targetProps[key])) {
         changes[key] = { 
           type: 'modified', 
           old_value: sourceProps[key], 
           new_value: targetProps[key] 
         };
-      }
-    }
+
+
     
     return changes;
-  }
+
 
   /**
    * Check if node position has changed
@@ -572,7 +571,7 @@ export class GraphComparisonService {
     if (!sourceNode.position || !targetNode.position) return false;
     return sourceNode.position.x !== targetNode.position.x || 
            sourceNode.position.y !== targetNode.position.y;
-  }
+
 
   /**
    * Get visual changes between nodes
@@ -585,11 +584,11 @@ export class GraphComparisonService {
         old: sourceNode.position,
         new: targetNode.position
       };
-    }
+
     
     // Add other visual properties as needed
     return changes;
-  }
+
 
   /**
    * Calculate changes summary from matches
@@ -625,7 +624,7 @@ export class GraphComparisonService {
         summary.nodes_modified++;
         summary.properties_changed += Object.keys(match.property_changes).length;
         break;
-      }
+
     });
 
     // Count edge changes
@@ -642,14 +641,14 @@ export class GraphComparisonService {
         summary.edges_modified++;
         summary.properties_changed += Object.keys(match.property_changes).length;
         break;
-      }
+
     });
 
     summary.total_changes = summary.nodes_added + summary.nodes_removed + summary.nodes_modified +
                           summary.edges_added + summary.edges_removed + summary.edges_modified;
 
     return summary;
-  }
+
 
   /**
    * Calculate graph complexity score
@@ -665,7 +664,7 @@ export class GraphComparisonService {
     const typeComplexity = new Set(graphData.nodes.map(n => n.type)).size;
     
     return sizeComplexity + connectivityComplexity + typeComplexity;
-  }
+
 
   /**
    * Build the complete comparison result
@@ -724,11 +723,11 @@ export class GraphComparisonService {
           node_match_count: nodeMatches.length,
           edge_match_count: edgeMatches.length,
           similarity_score: similarity
-  }
+
         confidence_distribution: this.calculateConfidenceDistribution(nodeMatches, edgeMatches)
-      }
+
     };
-  }
+
 
   /**
    * Convert node match to node change format
@@ -742,7 +741,7 @@ export class GraphComparisonService {
       position_changed: match.position_changed,
       visual_changes: match.visual_changes
     };
-  }
+
 
   /**
    * Convert edge match to edge change format
@@ -756,7 +755,7 @@ export class GraphComparisonService {
       property_changes: [],
       connection_changed: false
     };
-  }
+
 
   /**
    * Create comparison result for identical graphs
@@ -819,7 +818,7 @@ export class GraphComparisonService {
       algorithmSteps,
       startTime
     );
-  }
+
 
   /**
    * Calculate confidence distribution for algorithm metadata
@@ -838,15 +837,15 @@ export class GraphComparisonService {
     allMatches.forEach(match => {
       if (match.confidence_score > 0.8) {
         distribution.high++;
-      } else if (match.confidence_score >= 0.5) {
+ else if (match.confidence_score >= 0.5) {
         distribution.medium++;
-      } else {
+ else {
         distribution.low++;
-      }
+
     });
 
     return distribution;
-  }
+
 
   /**
    * Utility functions
@@ -858,9 +857,9 @@ export class GraphComparisonService {
       const char = input.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32-bit integer
-    }
+
     return Math.abs(hash).toString(16).padStart(8, '0');
-  }
+
 
   private deepEqual(obj1: unknown, obj2: unknown): boolean {
     if (obj1 === obj2) return true;
@@ -875,11 +874,10 @@ export class GraphComparisonService {
       for (const key of keys1) {
         if (!keys2.includes(key) || !this.deepEqual(obj1[key], obj2[key])) {
           return false;
-        }
-      }
+
+
       return true;
-    }
+
     
     return false;
-  }
-}
+

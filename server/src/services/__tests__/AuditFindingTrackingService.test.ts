@@ -10,7 +10,7 @@ import {
   AuditFindingTracker,
   BusinessImpactAssessment,
   EscalationTrigger
-} from '../AuditFindingTrackingService';
+ from '../AuditFindingTrackingService';
 import { AuditWorkflowService, WorkflowFinding } from '../AuditWorkflowService';
 import { ComplianceReportingService } from '../ComplianceReportingService';
 import { AuditTeamCollaborationService } from '../AuditTeamCollaborationService';
@@ -47,7 +47,7 @@ describe('AuditFindingTrackingService', () => {
       estimatedEffort: 10,
       resources: [],
       approvalRequired: false
-  }
+
     riskScore: 75,
     businessImpact: 'high',
     regulatoryImplications: [],
@@ -238,7 +238,7 @@ describe('AuditFindingTrackingService', () => {
           oldStatus: FindingTrackingStatus.NEW,
           newStatus: FindingTrackingStatus.IN_PROGRESS,
           reason: 'Starting remediation'
-  }
+
       }));
     });
 
@@ -288,7 +288,7 @@ describe('AuditFindingTrackingService', () => {
           responseTime: 0,
           resolution: '',
           resolvedBy: ''
-  }
+
       }));
     });
 
@@ -307,7 +307,7 @@ describe('AuditFindingTrackingService', () => {
           escalationType: 'sla_breach',
           escalationLevel: 2,
           recipients: ['manager@company.com', 'director@company.com']
-  }
+
       }));
     });
 
@@ -336,7 +336,7 @@ describe('AuditFindingTrackingService', () => {
           dependencies: [],
           deliverables: ['assessment-report.pdf'],
           progress: 100
-  }
+
         {
           milestoneId: 'milestone-2', 
           name: 'Remediation Implementation',
@@ -346,7 +346,7 @@ describe('AuditFindingTrackingService', () => {
           dependencies: ['milestone-1'],
           deliverables: ['fix-implementation.md'],
           progress: 60
-        }
+
       ];
 
       await service.updateRemediationProgress(trackedFinding.findingId, {
@@ -381,7 +381,7 @@ describe('AuditFindingTrackingService', () => {
         userId: 'qa-engineer',
         metadata: expect.objectContaining({
           currentPhase: 'validation'
-  }
+
       }));
     });
 

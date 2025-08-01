@@ -12,8 +12,7 @@
  * - Audit trail and documentation
  */
 import { EventEmitter } from 'events';
-export declare enum BreachSeverity {
-    LOW = "low",
+export declare enum BreachSeverity { LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
@@ -43,12 +42,12 @@ export declare enum DataSubjectCategory {
     CUSTOMERS = "customers",
     PROSPECTS = "prospects",
     PARTNERS = "partners",
-    MINORS = "minors",
+    MINORS = "minors" }
     VULNERABLE_GROUPS = "vulnerable_groups"
 
 }
-export interface BreachIncident {
-    id: string;
+}
+export interface BreachIncident { id: string;
     title: string;
     description: string;
     detectedAt: Date;
@@ -60,7 +59,7 @@ export interface BreachIncident {
     dataSubjects: {
         category: DataSubjectCategory;
         count: number;
-        countries: string[];
+        countries: string[] }
 }
     }[];
     affectedSystems: string[];
@@ -77,18 +76,17 @@ export interface BreachIncident {
     complianceRequirements: ComplianceRequirement[];
     metadata: Record<string, any>;
 
-export declare enum IncidentStatus {
-    DETECTED = "detected",
-    INVESTIGATING = "investigating",
-    CONTAINED = "contained",
-    ERADICATING = "eradicating",
-    RECOVERING = "recovering",
-    LESSONS_LEARNED = "lessons_learned",
+export declare enum IncidentStatus { DETECTED = "detected"
+    INVESTIGATING = "investigating"
+    CONTAINED = "contained"
+    ERADICATING = "eradicating"
+    RECOVERING = "recovering"
+    LESSONS_LEARNED = "lessons_learned" }
     CLOSED = "closed"
 
 }
-export interface NotificationRecord {
-    id: string;
+}
+export interface NotificationRecord { id: string;
     type: NotificationType;
     recipient: string;
     channel: string;
@@ -97,103 +95,84 @@ export interface NotificationRecord {
     acknowledgedAt?: Date;
     content: string;
     status: 'pending' | 'sent' | 'delivered' | 'failed' | 'acknowledged';
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface EvidenceRecord {
-    id: string;
+}
+export interface EvidenceRecord { id: string;
     type: 'log' | 'screenshot' | 'document' | 'forensic' | 'witness';
     filename: string;
     hash: string;
     collectedAt: Date;
     collectedBy: string;
     description: string;
-    chainOfCustody: ChainOfCustodyEntry[];
-
+    chainOfCustody: ChainOfCustodyEntry[] }
 }
-export interface ChainOfCustodyEntry {
-    timestamp: Date;
+}
+export interface ChainOfCustodyEntry { timestamp: Date;
     action: 'collected' | 'transferred' | 'analyzed' | 'stored';
     person: string;
     location: string;
-    notes?: string;
-
+    notes?: string }
 }
-export interface TimelineEvent {
-    timestamp: Date;
+}
+export interface TimelineEvent { timestamp: Date;
     event: string;
     actor: string;
-    details: Record<string, any>;
-
+    details: Record<string, any> }
 }
-export interface RiskAssessment {
-    likelihood: 'low' | 'medium' | 'high';
+}
+export interface RiskAssessment { likelihood: 'low' | 'medium' | 'high';
     impact: 'low' | 'medium' | 'high';
     overallRisk: 'low' | 'medium' | 'high' | 'critical';
     factors: string[];
     recommendations: string[];
-    residualRisk: string;
-
+    residualRisk: string }
 }
-export interface ComplianceRequirement {
-    framework: 'GDPR' | 'NIST' | 'HIPAA' | 'PCI_DSS' | 'SOX';
+}
+export interface ComplianceRequirement { framework: 'GDPR' | 'NIST' | 'HIPAA' | 'PCI_DSS' | 'SOX';
     requirement: string;
     deadline: Date;
     status: 'pending' | 'in_progress' | 'completed' | 'overdue';
-    evidence?: string[];
-
+    evidence?: string[] }
 }
-export interface BreachNotificationConfig {
-    detection: {
+}
+export interface BreachNotificationConfig { detection: {
         enabled: boolean;
         autoClassification: boolean;
         riskThreshold: BreachSeverity;
-        monitoringSources: string[];
+        monitoringSources: string[] }
 }
     };
-    notifications: {
-        gdpr: {
+    notifications: { gdpr: {
             enabled: boolean;
             supervisoryAuthority: string;
             contactEmail: string;
             autoFile: boolean;
-            deadline: number;
-        };
-        internal: {
-            securityTeam: string[];
+            deadline: number };
+        internal: { securityTeam: string[];
             management: string[];
             legal: string[];
-            dpo: string;
-        };
-        external: {
-            customers: {
+            dpo: string };
+        external: { customers: {
                 enabled: boolean;
                 highRiskThreshold: BreachSeverity;
-                template: string;
-            };
-            media: {
-                enabled: boolean;
+                template: string };
+            media: { enabled: boolean;
                 criticalThreshold: BreachSeverity;
-                contactList: string[];
-            };
+                contactList: string[] };
         };
     };
-    automation: {
-        containmentActions: boolean;
+    automation: { containmentActions: boolean;
         evidenceCollection: boolean;
         reportGeneration: boolean;
-        statusUpdates: boolean;
-    };
-    compliance: {
-        frameworks: string[];
+        statusUpdates: boolean };
+    compliance: { frameworks: string[];
         auditLogging: boolean;
-        retentionPeriod: string;
-    };
+        retentionPeriod: string };
 /**
  * Automated breach notification and incident response service
  */
-export declare class BreachNotificationService extends EventEmitter {
-    private incidents;
+export declare class BreachNotificationService extends EventEmitter { private incidents;
     private config;
     private timers;
     constructor(config?: Partial<BreachNotificationConfig>);
@@ -210,8 +189,7 @@ export declare class BreachNotificationService extends EventEmitter {
         affectedSystems: string[];
         estimatedDataSubjects?: number;
         detectedBy?: string;
-        metadata?: Record<string, any>;
-    }): Promise<string>;
+        metadata?: Record<string, any> }): Promise<string>;
     /**
      * Update incident status and progress
      */
@@ -220,28 +198,24 @@ export declare class BreachNotificationService extends EventEmitter {
      * Send notification to specified recipients
      */
     sendNotification();
-      incidentId: string,
-      type: NotificationType,
-      recipients: string[],
+      incidentId: string
+      type: NotificationType
+      recipients: string[]
       template?: string
     ): Promise<NotificationRecord[]>;
     /**
      * Generate GDPR notification for supervisory authority
      */
-    generateGDPRNotification(incidentId: string): Promise<{
-        content: string;
+    generateGDPRNotification(incidentId: string): Promise<{ content: string;
         deadline: Date;
-        recipients: string[];
-    }>;
+        recipients: string[] }>;
     /**
      * Check GDPR compliance status
      */
-    checkGDPRCompliance(incidentId: string): {
-        compliant: boolean;
+    checkGDPRCompliance(incidentId: string): { compliant: boolean;
         timeRemaining: number;
         violations: string[];
-        actions: string[];
-    };
+        actions: string[] };
     /**
      * Generate incident report
      */
@@ -249,13 +223,12 @@ export declare class BreachNotificationService extends EventEmitter {
     /**
      * Get all incidents with optional filtering
      */
-    getIncidents(filter?: {)
+    getIncidents(filter?: { )
         status?: IncidentStatus;
         severity?: BreachSeverity;
         dateRange?: {
             start: Date;
-            end: Date;
-        };
+            end: Date };
         assignee?: string;
     }): BreachIncident[];
     private initiateIncidentResponse;

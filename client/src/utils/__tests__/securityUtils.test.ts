@@ -14,7 +14,7 @@ import {
   safeDom,
   validationPatterns,
   ClientRateLimiter
-} from '../securityUtils';
+ from '../securityUtils';
 
 // Mock DOM for testing
 const mockElement = {
@@ -40,7 +40,7 @@ describe('Security Utilities', () => {
   mockElement.innerHTML = '';
   // Mock window.location for URL validation tests
   Object.defineProperty(window, 'location', {)
-  value: {
+  value: {,
   origin: 'https://example.com',
   href: 'https://example.com',
 },
@@ -80,7 +80,7 @@ describe('Security Utilities', () => {
   expect(result).toBe('https://trusted-site.com/api');
 });
     it('should block dangerous schemes', () => {
-  const dangerousUrls = [;
+  const dangerousUrls = [
   'javascript:alert(1)',
   'data:text/html,<script>alert(1)</script>',
   'vbscript:msgbox(1)',
@@ -95,7 +95,7 @@ describe('Security Utilities', () => {
   expect(result).toBeNull();
 });
     it('should handle invalid URLs', () => {
-  const invalidUrls = [;
+  const invalidUrls = [
   'not-a-url',
   'http://',
   'https://',
@@ -135,7 +135,7 @@ describe('Security Utilities', () => {
       expect(invalidResult.errors[0]).toContain('invalid characters');
     });
     it('should block dangerous patterns', () => {
-  const dangerousInputs = [;
+  const dangerousInputs = [
   '<script>alert(1)</script>',
   'javascript:alert(1)',
   'vbscript:msgbox(1)',
@@ -207,7 +207,7 @@ describe('Security Utilities', () => {
   for (let i = 0; i < array.length; i++) {
   array[i] = Math.floor(Math.random() * 256);
   return array;
-}
+
     };
     beforeEach(() => {
   Object.defineProperty(global, 'crypto', {)
@@ -262,12 +262,12 @@ describe('Security Utilities', () => {
   });
   describe('Validation Patterns', () => {
     it('should validate email addresses', () => {
-      const validEmails = [;
+      const validEmails = [
         'user@example.com',
         'test.email+tag@domain.co.uk',
         'user123@sub.domain.org'
       ];
-      const invalidEmails = [;
+      const invalidEmails = [
         'invalid-email',
         '@domain.com',
         'user@',

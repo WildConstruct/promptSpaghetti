@@ -8,57 +8,51 @@ import { BaseEvent, EventMiddleware, EventPriority, EventCategory } from '../Eve
 /**
  * Enhanced logging middleware with different log levels
  */
-export declare const createLoggingMiddleware: (options?: {)
+export declare const createLoggingMiddleware: (options?: { )
     logLevel?: "debug" | "info" | "warn" | "error";
     includeMetadata?: boolean;
     filterCategories?: EventCategory[];
-    filterPriorities?: EventPriority[];
-}) => EventMiddleware;
+    filterPriorities?: EventPriority[] }) => EventMiddleware;
 /**
  * Advanced validation middleware
  */
-export declare const createValidationMiddleware: (options?: {)
+export declare const createValidationMiddleware: (options?: { )
     strictMode?: boolean;
     requiredFields?: string[];
-    customValidators?: Array<(event: BaseEvent) => string | null>;
-}) => EventMiddleware;
+    customValidators?: Array<(event: BaseEvent) => string | null> }) => EventMiddleware;
 /**
  * Rate limiting middleware with different strategies
  */
-export declare const createRateLimitMiddleware: (options: {)
+export declare const createRateLimitMiddleware: (options: { )
     maxEventsPerSecond?: number;
     maxEventsPerMinute?: number;
     maxEventsPerHour?: number;
     strategy?: "drop" | "delay" | "error";
     keyGenerator?: (event: BaseEvent) => string;
-    whitelist?: string[];
-}) => EventMiddleware;
+    whitelist?: string[] }) => EventMiddleware;
 /**
  * Event transformation middleware
  */
-export declare const createTransformMiddleware: (options: {)
+export declare const createTransformMiddleware: (options: { )
     transforms: Array<{
         condition: (event: BaseEvent) => boolean;
-        transform: (event: BaseEvent) => BaseEvent;
-    }>;
+        transform: (event: BaseEvent) => BaseEvent }>;
 }) => EventMiddleware;
 /**
  * Security middleware for sensitive data filtering
  */
-export declare const createSecurityMiddleware: (options?: {)
+export declare const createSecurityMiddleware: (options?: { )
     sensitiveFields?: string[];
     maskPattern?: string;
     logSensitiveAccess?: boolean;
-    allowedSources?: string[];
-}) => EventMiddleware;
+    allowedSources?: string[] }) => EventMiddleware;
 /**
  * Performance monitoring middleware
  */
-export declare const createPerformanceMiddleware: (options?: {)
+export declare const createPerformanceMiddleware: (options?: { )
     sampleRate?: number;
     slowEventThreshold?: number;
-    trackMemoryUsage?: boolean;
-}) => EventMiddleware;
+    trackMemoryUsage?: boolean }) => EventMiddleware;
 /**
  * Event deduplication middleware
  */
@@ -70,11 +64,10 @@ export declare const createDeduplicationMiddleware: (options: {)
 /**
  * Circuit breaker middleware
  */
-export declare const createCircuitBreakerMiddleware: (options: {)
+export declare const createCircuitBreakerMiddleware: (options: { )
     failureThreshold: number;
     resetTimeoutMs: number;
-    monitorWindowMs: number;
-}) => EventMiddleware;
+    monitorWindowMs: number }) => EventMiddleware;
 /**
  * Pre-configured middleware collections
  */

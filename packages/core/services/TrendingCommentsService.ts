@@ -6,8 +6,7 @@
  * 
  * Task: E16-1753114247017-86B04D - Implement trending comments
  */
-import {
-  TrendingComment,
+import { TrendingComment,
   CommentScore,
   CommentEngagement,
   TrendingResults,
@@ -20,9 +19,9 @@ import {
   CommentSortOrder,
   CommentEngagementType,
   validateGetTrendingCommentsRequest,
-  validateTrendingComment,
+  validateTrendingComment }
   validateCommentScore
-} from '../types/TrendingCommentsTypes';
+ from '../types/TrendingCommentsTypes';
 import { v4 as uuidv4 } from 'uuid';
 import CommentAnalyticsService from './CommentAnalyticsService';
 
@@ -33,14 +32,13 @@ export class TrendingCommentsService {
   private cacheEnabled: boolean;
   private scoreCache: Map<string, { score: CommentScore; timestamp: number }>;
   private trendingCache: Map<string, { results: TrendingResults; timestamp: number }>;
-  constructor(config: {)
+  constructor(config: { ) }
   baseUrl: string;
   algorithms?: TrendingAlgorithmConfig;
   defaultAlgorithm?: string;
   cacheEnabled?: boolean;
   cacheTTL?: number;
-}) {
-    this.baseUrl = config.baseUrl;
+}) { this.baseUrl = config.baseUrl;
     this.algorithms = new Map();
     this.defaultAlgorithm = config.defaultAlgorithm || 'default';
     this.cacheEnabled = config.cacheEnabled ?? true;
@@ -48,17 +46,12 @@ export class TrendingCommentsService {
     this.trendingCache = new Map();
     // Initialize with default algorithm if none provided
     if (!config.algorithms?.length) {
-      this.algorithms.set('default', this.getDefaultAlgorithmConfig());
-    } else {
-      config.algorithms.forEach(algorithm => {)
-  this.algorithms.set(algorithm.algorithmId, algorithm);
-      });
+      this.algorithms.set('default', this.getDefaultAlgorithmConfig()) } else { config.algorithms.forEach(algorithm => {)
+  this.algorithms.set(algorithm.algorithmId, algorithm) });
   /**
    * Get trending comments for a resource
    */
-  async getTrendingComments(request: GetTrendingCommentsRequest): Promise<TrendingCommentsResponse> {
-
-  const validatedRequest = validateGetTrendingCommentsRequest(request);
+  async getTrendingComments(request: GetTrendingCommentsRequest): Promise<TrendingCommentsResponse> { const validatedRequest = validateGetTrendingCommentsRequest(request);
   const startTime = Date.now();
   const requestId = uuidv4();
   // Check cache first
@@ -66,53 +59,50 @@ export class TrendingCommentsService {
   const cachedResults = this.getCachedTrendingResults(cacheKey);
   if (cachedResults && this.cacheEnabled) {
   return {
-  results: cachedResults,
+  results: cachedResults
   pagination: {
-  total: cachedResults.trendingComments.length,
-  limit: validatedRequest.limit,
-  offset: validatedRequest.offset,
-  hasMore: cachedResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit,
-},
-  meta: {
-  requestId,
-  processingTime: Date.now() - startTime,
-  cacheStatus: 'hit',
-  algorithm: this.defaultAlgorithm,
-  dataFreshness: Math.floor((Date.now() - cachedResults.generatedAt.getTime()) / 60000),
+  total: cachedResults.trendingComments.length
+  limit: validatedRequest.limit
+  offset: validatedRequest.offset
+  hasMore: cachedResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit }
+
+  meta: { requestId
+  processingTime: Date.now() - startTime
+  cacheStatus: 'hit'
+  algorithm: this.defaultAlgorithm
+  dataFreshness: Math.floor((Date.now() - cachedResults.generatedAt.getTime()) / 60000) }
 };
     // Calculate trending results
     const trendingResults = await this.calculateTrendingResults(validatedRequest);
     // Cache results
-    if (this.cacheEnabled) {
-  this.cacheTrendingResults(cacheKey, trendingResults);
+    if (this.cacheEnabled) { this.cacheTrendingResults(cacheKey, trendingResults);
   // Apply pagination
   const paginatedComments = trendingResults.trendingComments.slice(;);
-  validatedRequest.offset,
+  validatedRequest.offset
   validatedRequest.offset + validatedRequest.limit
   );
   return {
   results: {
-  ...trendingResults,
-  trendingComments: paginatedComments,
-},
-  pagination: {
-  total: trendingResults.trendingComments.length,
-  limit: validatedRequest.limit,
-  offset: validatedRequest.offset,
-  hasMore: trendingResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit,
-},
-  meta: {
-  requestId,
-  processingTime: Date.now() - startTime,
-  cacheStatus: 'miss',
-  algorithm: this.defaultAlgorithm,
-  dataFreshness: 0,
+  ...trendingResults
+  trendingComments: paginatedComments }
+
+  pagination: { 
+  total: trendingResults.trendingComments.length
+  limit: validatedRequest.limit
+  offset: validatedRequest.offset
+  hasMore: trendingResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit }
+
+  meta: { requestId
+  processingTime: Date.now() - startTime
+  cacheStatus: 'miss'
+  algorithm: this.defaultAlgorithm
+  dataFreshness: 0 }
 };
   /**
    * Calculate trending score for a single comment
    */
   async calculateCommentScore(comment: TrendingComment)
-    engagements: CommentEngagement,
+  engagements: CommentEngagement
     algorithmId?: string
   ): Promise<CommentScore> {
 
@@ -122,53 +112,51 @@ export class TrendingCommentsService {
     // Check cache first
     const cacheKey = `score:${comment.commentId}:${algorithmId || this.defaultAlgorithm}`;}
     const cachedScore = this.getCachedScore(cacheKey);
-    if (cachedScore && this.cacheEnabled) {
-  return cachedScore;
+    if (cachedScore && this.cacheEnabled) { return cachedScore;
   // Calculate engagement metrics
   const metrics = this.calculateEngagementMetrics(engagements);
   // Calculate individual score components
   const scores = {
-  engagementScore: this.calculateEngagementScore(metrics, algorithm),
-  recencyScore: this.calculateRecencyScore(comment.createdAt, algorithm),
-  qualityScore: this.calculateQualityScore(comment, algorithm),
-  controversyScore: this.calculateControversyScore(metrics, algorithm),
-  viralityScore: this.calculateViralityScore(engagements, algorithm),
-  helpfulnessScore: this.calculateHelpfulnessScore(metrics, algorithm),
-  authorityScore: this.calculateAuthorityScore(comment, algorithm),
-  trendingScore: 0 // Will be calculated from other scores,
+  engagementScore: this.calculateEngagementScore(metrics, algorithm)
+  recencyScore: this.calculateRecencyScore(comment.createdAt, algorithm)
+  qualityScore: this.calculateQualityScore(comment, algorithm)
+  controversyScore: this.calculateControversyScore(metrics, algorithm)
+  viralityScore: this.calculateViralityScore(engagements, algorithm)
+  helpfulnessScore: this.calculateHelpfulnessScore(metrics, algorithm)
+  authorityScore: this.calculateAuthorityScore(comment, algorithm)
+  trendingScore: 0 // Will be calculated from other scores }
 };
     // Calculate composite trending score
     scores.trendingScore = this.calculateTrendingScore(scores, algorithm);
     // Calculate trends
     const trends = this.calculateScoreTrends(engagements, comment.createdAt);
-    const commentScore: CommentScore = {,
-  commentId: comment.commentId,
-  calculatedAt: new Date(),
-  scores,
-  metrics,
+    const commentScore: CommentScore = { 
+  commentId: comment.commentId
+  calculatedAt: new Date()
+  scores
+  metrics }
   trends
 };
     // Validate and cache
     const validatedScore = validateCommentScore(commentScore);
-    if (this.cacheEnabled) {
-      this.cacheScore(cacheKey, validatedScore);
+    if (this.cacheEnabled) { this.cacheScore(cacheKey, validatedScore);
     return validatedScore;
   /**
    * Track comment engagement event
    */
   async trackEngagement(commentId: string)
-    userId: string,
-    engagementType: CommentEngagementType,
+  userId: string
+    engagementType: CommentEngagementType
     contextData?: Record<string, unknown>
   ): Promise<CommentEngagement> {
 
-    const engagement: CommentEngagement = {,
-  engagementId: uuidv4(),
-      commentId,
-      userId,
-      engagementType,
-      timestamp: new Date(),
-      weight: this.getEngagementWeight(engagementType),
+    const engagement: CommentEngagement = {
+  engagementId: uuidv4()
+      commentId
+      userId
+      engagementType
+      timestamp: new Date()
+      weight: this.getEngagementWeight(engagementType) }
       contextData: contextData || {}
     };
     // TODO: Store in database
@@ -180,22 +168,20 @@ export class TrendingCommentsService {
    * Get comment analytics for a resource
    */
   async getCommentAnalytics(((
-    resourceId: string,
+    resourceId: string
     timeRange: { start: Date; end: Date }
-  ): Promise<CommentAnalytics> {
-
-  const analyticsService = new CommentAnalyticsService(this.baseUrl);
+  ): Promise<CommentAnalytics> { const analyticsService = new CommentAnalyticsService(this.baseUrl);
   // Map timeRange to CommentableResourceType for analytics service
   const resourceType = this.inferResourceType(resourceId);
   try {
   const analytics = await analyticsService.getCommentAnalytics(;);
-  resourceId,
-  resourceType,
+  resourceId
+  resourceType
   {
-  startDate: timeRange.start,
+  startDate: timeRange.start }
   endDate: timeRange.end);
   return analytics;
-} catch (error) {
+ catch (error) {
       console.error('Failed to get comment analytics:', error);
       // Fallback to basic mock data if analytics service fails
       return this.getFallbackAnalytics(resourceId, timeRange);
@@ -209,43 +195,42 @@ export class TrendingCommentsService {
   /**
    * Fallback analytics data when service fails
    */
-  private getFallbackAnalytics(resourceId: string, timeRange: { start: Date; end: Date }): CommentAnalytics {
-  return {
-  resourceId,
-  timeRange,
+  private getFallbackAnalytics(resourceId: string, timeRange: { start: Date; end: Date }): CommentAnalytics { return {
+  resourceId
+  timeRange
   metrics: {
-  totalComments: 0,
-  totalEngagements: 0,
-  uniqueCommenters: 0,
-  averageCommentsPerUser: 0,
-  commentsGrowthRate: 0,
-  engagementRate: 0,
-  responseRate: 0,
-  moderationRate: 0,
-},
-  trends: {
-  commentVelocity: [],
-  engagementTrends: [],
-  sentimentTrends: [],
-  topicEvolution: [],
-},
+  totalComments: 0
+  totalEngagements: 0
+  uniqueCommenters: 0
+  averageCommentsPerUser: 0
+  commentsGrowthRate: 0
+  engagementRate: 0
+  responseRate: 0
+  moderationRate: 0 }
+
+  trends: { 
+  commentVelocity: []
+  engagementTrends: []
+  sentimentTrends: []
+  topicEvolution: [] }
+
   breakdowns: {
-  byEngagementType: {},
-        byUserType: {},
-        byTimeOfDay: Array(24).fill(0),
-        byDayOfWeek: Array(7).fill(0),
-        byLanguage: {},
-        bySentiment: {
-  positive: 0,
-  neutral: 0,
-  negative: 0,
-},
-  insights: {
-  mostEngagedTopics: [],
-  influentialCommenters: [],
-  emergingTrends: [],
-  contentRecommendations: [],
-  moderationAlerts: [],
+  byEngagementType: {}
+        byUserType: {}
+        byTimeOfDay: Array(24).fill(0)
+        byDayOfWeek: Array(7).fill(0)
+        byLanguage: {}
+        bySentiment: { 
+  positive: 0
+  neutral: 0
+  negative: 0 }
+
+  insights: { 
+  mostEngagedTopics: []
+  influentialCommenters: []
+  emergingTrends: []
+  contentRecommendations: []
+  moderationAlerts: [] }
 };
   /**
    * Update trending algorithm configuration
@@ -270,7 +255,7 @@ export class TrendingCommentsService {
         const mockEngagements = this.generateMockEngagements(comment.commentId);
         const score = await this.calculateCommentScore(comment, mockEngagements);
         return { ...comment, score };
-  }
+
     );
     // Filter by minimum score if specified
     const qualifiedComments = request.minScore ;
@@ -280,74 +265,70 @@ export class TrendingCommentsService {
     const sortedComments = this.sortComments(qualifiedComments, request.sortOrder);
     // Generate summary
     const summary = this.generateSummary(sortedComments);
-    return {
-  resourceId: request.resourceId,
-  resourceType: request.resourceType,
-  period: request.period,
-  algorithmUsed: this.defaultAlgorithm,
-  generatedAt: new Date(),
-  totalComments: mockComments.length,
-  qualifiedComments: qualifiedComments.length,
-  trendingComments: sortedComments,
-  summary,
+    return { resourceId: request.resourceId
+  resourceType: request.resourceType
+  period: request.period
+  algorithmUsed: this.defaultAlgorithm
+  generatedAt: new Date()
+  totalComments: mockComments.length
+  qualifiedComments: qualifiedComments.length
+  trendingComments: sortedComments
+  summary
   metadata: {
-  calculationTimeMs: 0,
-  cacheHit: false,
-  dataFreshness: 0,
-  algorithmVersion: '1.0.0',
+  calculationTimeMs: 0
+  cacheHit: false
+  dataFreshness: 0
+  algorithmVersion: '1.0.0' }
 };
-  private calculateEngagementMetrics(engagements: CommentEngagement) {
-  const metrics = {
-  totalLikes: 0,
-  totalDislikes: 0,
-  totalReplies: 0,
-  totalShares: 0,
-  totalHelpfulVotes: 0,
-  totalReports: 0,
-  replyEngagement: 0,
-  viewCount: 0,
-  uniqueEngagers: new Set<string>(),
+  private calculateEngagementMetrics(engagements: CommentEngagement) { const metrics = {
+  totalLikes: 0
+  totalDislikes: 0
+  totalReplies: 0
+  totalShares: 0
+  totalHelpfulVotes: 0
+  totalReports: 0
+  replyEngagement: 0
+  viewCount: 0
+  uniqueEngagers: new Set<string>() }
 };
-    engagements.forEach(engagement => {)
+    engagements.forEach(engagement => { )
   metrics.uniqueEngagers.add(engagement.userId);
   switch (engagement.engagementType) {
-  case 'like':,
+  case 'like':
   metrics.totalLikes++;
   break;
-  case 'dislike':,
+  case 'dislike':
   metrics.totalDislikes++;
   break;
-  case 'reply':,
+  case 'reply':
   metrics.totalReplies++;
   break;
-  case 'share':,
+  case 'share':
   metrics.totalShares++;
   break;
-  case 'helpful':,
+  case 'helpful':
   metrics.totalHelpfulVotes++;
   break;
-  case 'report':,
+  case 'report': }
   metrics.totalReports++;
   break;
 });
-    return {
-  totalLikes: metrics.totalLikes,
-  totalDislikes: metrics.totalDislikes,
-  totalReplies: metrics.totalReplies,
-  totalShares: metrics.totalShares,
-  totalHelpfulVotes: metrics.totalHelpfulVotes,
-  totalReports: metrics.totalReports,
-  replyEngagement: metrics.replyEngagement,
-  viewCount: metrics.viewCount,
-  uniqueEngagers: metrics.uniqueEngagers.size,
+    return { totalLikes: metrics.totalLikes
+  totalDislikes: metrics.totalDislikes
+  totalReplies: metrics.totalReplies
+  totalShares: metrics.totalShares
+  totalHelpfulVotes: metrics.totalHelpfulVotes
+  totalReports: metrics.totalReports
+  replyEngagement: metrics.replyEngagement
+  viewCount: metrics.viewCount
+  uniqueEngagers: metrics.uniqueEngagers.size }
 };
-  private calculateEngagementScore(metrics: any, algorithm: TrendingAlgorithmConfig): number {
-  const weights = {
-  like: 1,
-  reply: 2,
-  share: 3,
-  helpful: 2.5,
-  dislike: -0.5,
+  private calculateEngagementScore(metrics: any, algorithm: TrendingAlgorithmConfig): number { const weights = {
+  like: 1
+  reply: 2
+  share: 3
+  helpful: 2.5
+  dislike: -0.5 }
 };
     const score = (;);
       metrics.totalLikes * weights.like +
@@ -357,19 +338,15 @@ export class TrendingCommentsService {
       metrics.totalDislikes * weights.dislike
     );
     return Math.max(0, score);
-  private calculateRecencyScore(createdAt: Date, algorithm: TrendingAlgorithmConfig): number {
-  const hoursAge = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60);
+  private calculateRecencyScore(createdAt: Date, algorithm: TrendingAlgorithmConfig): number { const hoursAge = (Date.now() - createdAt.getTime()) / (1000 * 60 * 60);
   const halfLife = algorithm.parameters.timeDecayHalfLife;
-  // Exponential decay: score = 100 * (0.5)^(age/halfLife),
+  // Exponential decay: score = 100 * (0.5)^(age/halfLife)
   return 100 * Math.pow(0.5, hoursAge / halfLife);
-  private calculateQualityScore(comment: TrendingComment, algorithm: TrendingAlgorithmConfig): number {,
+  private calculateQualityScore(comment: TrendingComment, algorithm: TrendingAlgorithmConfig): number { }
   let score = 50; // Base score;
   // Length factor (sweet spot around 100-300 characters)
   const length = comment.content.length;
-  if (length >= 50 && length <= 500) {
-  score += 20;
-} else if (length < 20 || length > 1000) {
-  score -= 10;
+  if (length >= 50 && length <= 500) { score += 20 } else if (length < 20 || length > 1000) { score -= 10;
   // Has attachments
   if (comment.attachments.length > 0) {
   score += 15;
@@ -436,17 +413,14 @@ export class TrendingCommentsService {
   dailyGrowth: dailyEngagements,
   weeklyGrowth: weeklyEngagements,
   peakEngagementHour: this.findPeakEngagementHour(engagements),
-  velocityTrend: this.determineVelocityTrend(engagements),
+  velocityTrend: this.determineVelocityTrend(engagements) }
 };
-  private findPeakEngagementHour(engagements: CommentEngagement): number {
-    const hourCounts = Array(24).fill(0);
+  private findPeakEngagementHour(engagements: CommentEngagement): number { const hourCounts = Array(24).fill(0);
     engagements.forEach(engagement => {)
   const hour = engagement.timestamp.getHours();
-      hourCounts[hour]++;
-    });
+      hourCounts[hour]++ });
     return hourCounts.indexOf(Math.max(...hourCounts));
-  private determineVelocityTrend(engagements: CommentEngagement): 'accelerating' | 'steady' | 'declining' | 'stagnant' {
-    if (engagements.length < 6) return 'stagnant';
+  private determineVelocityTrend(engagements: CommentEngagement): 'accelerating' | 'steady' | 'declining' | 'stagnant' { if (engagements.length < 6) return 'stagnant';
     // Simple trend calculation based on recent vs older engagements
     const recent = engagements.filter(e => e.timestamp.getTime() > Date.now() - 2 * 60 * 60 * 1000).length;
     const older = engagements.filter(e => ;);
@@ -476,7 +450,7 @@ export class TrendingCommentsService {
         averageScore: 0,
         totalEngagements: 0,
         uniqueParticipants: 0,
-        conversationHealth: 'fair' as const,
+        conversationHealth: 'fair' as const }
         sentimentDistribution: { positive: 0, neutral: 0, negative: 0 },
         topHashtags: [],
         emergingTopics: [],
@@ -488,15 +462,14 @@ export class TrendingCommentsService {
     );
     const uniqueAuthors = new Set(comments.map(c => c.authorId)).size;
     const avgControversy = comments.reduce((sum, c) => sum + c.score.scores.controversyScore, 0) / comments.length;
-    return {
-  averageScore: totalScore / comments.length,
+    return { averageScore: totalScore / comments.length,
   totalEngagements,
   uniqueParticipants: uniqueAuthors,
   conversationHealth: this.assessConversationHealth(comments),
   sentimentDistribution: this.calculateSentimentDistribution(comments),
   topHashtags: this.extractTopHashtags(comments),
   emergingTopics: this.identifyEmergingTopics(comments),
-  controversyLevel: avgControversy > 30 ? 'high' : avgControversy > 15 ? 'medium' : 'low',
+  controversyLevel: avgControversy > 30 ? 'high' : avgControversy > 15 ? 'medium' : 'low' }
 };
   private assessConversationHealth(comments: TrendingComment): 'excellent' | 'good' | 'fair' | 'poor' {
     const avgQuality = comments.reduce((sum, c) => sum + c.score.scores.qualityScore, 0) / comments.length;
@@ -509,39 +482,34 @@ export class TrendingCommentsService {
     // Mock sentiment calculation - in real implementation would use NLP
     const total = comments.length;
     if (total === 0) return { positive: 0, neutral: 0, negative: 0 };
-    return {
-  positive: 0.65,
+    return { positive: 0.65,
   neutral: 0.25,
-  negative: 0.10,
+  negative: 0.10 }
 };
-  private extractTopHashtags(comments: TrendingComment): string {
-    const hashtagCounts = new Map<string, number>();
+  private extractTopHashtags(comments: TrendingComment): string { const hashtagCounts = new Map<string, number>();
     comments.forEach(comment => {)
   comment.hashtags.forEach(hashtag => {)
-  hashtagCounts.set(hashtag, (hashtagCounts.get(hashtag) || 0) + 1);
-      });
+  hashtagCounts.set(hashtag, (hashtagCounts.get(hashtag) || 0) + 1) });
     });
     return Array.from(hashtagCounts.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
       .map(([hashtag]) => hashtag);
-  private identifyEmergingTopics(comments: TrendingComment): string {
-  // Mock topic identification - would use NLP/ML in real implementation
+  private identifyEmergingTopics(comments: TrendingComment): string { // Mock topic identification - would use NLP/ML in real implementation
   return ['performance optimization', 'user experience', 'mobile support', 'accessibility'];
-  private getEngagementWeight(engagementType: CommentEngagementType): number {,
+  private getEngagementWeight(engagementType: CommentEngagementType): number {
   const weights = {
-  'like': 1,
-  'dislike': 1,
-  'reply': 2,
-  'share': 3,
-  'helpful': 2.5,
-  'report': 1,
+  'like': 1
+  'dislike': 1
+  'reply': 2
+  'share': 3
+  'helpful': 2.5
+  'report': 1 }
 };
     return weights[engagementType] || 1;
   private generateCacheKey(request: GetTrendingCommentsRequest): string {
     return `trending:${request.resourceId}:${request.resourceType}:${request.period}:${request.sortOrder}:${this.defaultAlgorithm}`;}
-  private getCachedTrendingResults(cacheKey: string): TrendingResults | null {
-  const cached = this.trendingCache.get(cacheKey);
+  private getCachedTrendingResults(cacheKey: string): TrendingResults | null { const cached = this.trendingCache.get(cacheKey);
   if (!cached) return null;
   // Check if cache is stale (15 minutes TTL)
   const isStale = Date.now() - cached.timestamp > 15 * 60 * 1000;
@@ -549,13 +517,12 @@ export class TrendingCommentsService {
   this.trendingCache.delete(cacheKey);
   return null;
   return cached.results;
-  private cacheTrendingResults(cacheKey: string, results: TrendingResults): void {,
+  private cacheTrendingResults(cacheKey: string, results: TrendingResults): void {
   this.trendingCache.set(cacheKey, {)
-  results,
-  timestamp: Date.now(),
+  results
+  timestamp: Date.now() }
 });
-  private getCachedScore(cacheKey: string): CommentScore | null {
-  const cached = this.scoreCache.get(cacheKey);
+  private getCachedScore(cacheKey: string): CommentScore | null { const cached = this.scoreCache.get(cacheKey);
   if (!cached) return null;
   // Check if cache is stale (5 minutes TTL)
   const isStale = Date.now() - cached.timestamp > 5 * 60 * 1000;
@@ -563,65 +530,63 @@ export class TrendingCommentsService {
   this.scoreCache.delete(cacheKey);
   return null;
   return cached.score;
-  private cacheScore(cacheKey: string, score: CommentScore): void {,
+  private cacheScore(cacheKey: string, score: CommentScore): void {
   this.scoreCache.set(cacheKey, {)
-  score,
-  timestamp: Date.now(),
+  score
+  timestamp: Date.now() }
 });
-  private invalidateCommentCaches(commentId: string): void {
-  // Remove all cache entries related to this comment
+  private invalidateCommentCaches(commentId: string): void { // Remove all cache entries related to this comment
   for (const [key] of this.scoreCache) {
   if (key.includes(commentId)) {
   this.scoreCache.delete(key);
-  private clearAllCaches(): void {,
+  private clearAllCaches(): void {
   this.scoreCache.clear();
   this.trendingCache.clear();
-  private getDefaultAlgorithmConfig(): TrendingAlgorithmConfig {,
+  private getDefaultAlgorithmConfig(): TrendingAlgorithmConfig {
   return {
-  algorithmId: 'default',
-  name: 'Default Trending Algorithm',
-  description: 'Balanced algorithm considering engagement, recency, and quality',
-  version: '1.0.0',
-  enabled: true,
+  algorithmId: 'default'
+  name: 'Default Trending Algorithm'
+  description: 'Balanced algorithm considering engagement, recency, and quality'
+  version: '1.0.0'
+  enabled: true
   weights: {
-  engagementWeight: 0.4,
-  recencyWeight: 0.25,
-  qualityWeight: 0.15,
-  authorityWeight: 0.1,
-  controversyWeight: 0.05,
-  viralityWeight: 0.05,
-},
-  parameters: {
-  timeDecayHalfLife: 24,
-  minEngagementThreshold: 3,
-  controversyBoostFactor: 1.2,
-  qualityThreshold: 60,
-  authorMinReputation: 0,
-  spamPenaltyFactor: 0.1,
-  maxCommentAge: 168,
-  boostNewAuthors: true,
-},
-  moderationRules: {
+  engagementWeight: 0.4
+  recencyWeight: 0.25
+  qualityWeight: 0.15
+  authorityWeight: 0.1
+  controversyWeight: 0.05
+  viralityWeight: 0.05 }
+
+  parameters: { 
+  timeDecayHalfLife: 24
+  minEngagementThreshold: 3
+  controversyBoostFactor: 1.2
+  qualityThreshold: 60
+  authorMinReputation: 0
+  spamPenaltyFactor: 0.1
+  maxCommentAge: 168
+  boostNewAuthors: true }
+
+  moderationRules: { 
   autoFlag: {
-  toxicityThreshold: 0.8,
-  spamThreshold: 0.7,
-  offTopicThreshold: 0.8,
-},
-  autoPromote: {
-  qualityThreshold: 90,
-  engagementThreshold: 20,
-  authorReputationThreshold: 500,
+  toxicityThreshold: 0.8
+  spamThreshold: 0.7
+  offTopicThreshold: 0.8 }
+
+  autoPromote: { 
+  qualityThreshold: 90
+  engagementThreshold: 20
+  authorReputationThreshold: 500 }
 };
   // Mock data generators for development
-  private generateMockComments(resourceId: string, resourceType: CommentableResourceType): TrendingComment {
-    const comments: TrendingComment = [];
+  private generateMockComments(resourceId: string, resourceType: CommentableResourceType): TrendingComment { const comments: TrendingComment = [];
     const commentCount = Math.floor(Math.random() * 20) + 5;
     for (let i = 0; i < commentCount; i++) {
       comments.push({)
   commentId: uuidv4(),
         resourceId,
         resourceType,
-        authorId: uuidv4(),
+        authorId: uuidv4() }
         authorDisplayName: `User${i + 1}`}
 },
   authorVerified: Math.random() > 0.8,
@@ -640,11 +605,10 @@ export class TrendingCommentsService {
         replyCount: Math.floor(Math.random() * 5),
         replyTree: [],
         visibility: 'public',
-        language: 'en'
+        language: 'en';
   });
     return comments;
-  private generateMockCommentContent(): string {
-    const contents = [;
+  private generateMockCommentContent(): string { const contents = [
       'This template is incredibly useful! I\'ve been looking for something like this for weeks.',
       'Great work on the design. The user experience is smooth and intuitive.',
       'Has anyone tried implementing this with the new API changes?',
@@ -676,7 +640,7 @@ export class TrendingCommentsService {
         userId: uuidv4(),
         engagementType: type,
         timestamp: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000),
-        weight: this.getEngagementWeight(type),
+        weight: this.getEngagementWeight(type) }
         contextData: {}
       });
     return engagements;

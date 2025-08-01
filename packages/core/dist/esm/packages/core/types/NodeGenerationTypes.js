@@ -59,6 +59,7 @@ rendering: {
 }
 ;
 ;
+;
 userPreferences: {
     defaultLayout: LayoutType;
     preferredSpacing: number;

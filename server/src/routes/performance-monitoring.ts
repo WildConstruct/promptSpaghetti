@@ -14,7 +14,7 @@ import PerformanceMonitoringService, {
   GaugeMetric,
   CounterMetric,
   HistogramMetric
-} from '../analytics/PerformanceMonitoringService';
+ from '../analytics/PerformanceMonitoringService';
 import { AnalyticsAuthorizationService } from '../analytics/AnalyticsAuthorization';
 
 // Metric Recording Schema
@@ -71,10 +71,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
           properties: {
             recorded: { type: 'boolean' },
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const metricData = request.body as z.infer<typeof MetricRecordingSchema>;
@@ -86,7 +86,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         return reply.code(401).send({
           error: 'Authentication required for metric recording'
         });
-      }
+
 
       const metric: BaseMetric = {
         ...metricData,
@@ -95,7 +95,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
           ...metricData.labels,
           userId: authContext.userId,
           source: 'api'
-        }
+
       };
 
       await performanceService.recordMetric(metric);
@@ -104,14 +104,13 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         recorded: true,
         timestamp: metric.timestamp
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Metric recording error:', error);
       return reply.code(500).send({
         error: 'Failed to record metric',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -129,10 +128,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
             business: { type: 'object' },
             infrastructure: { type: 'object' },
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const authContext = await authService.createAuthContextFromRequest(request);
@@ -142,7 +141,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Admin access required for system metrics'
         });
-      }
+
 
       const systemMetrics = await performanceService.getSystemMetrics();
 
@@ -150,14 +149,13 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         ...systemMetrics,
         timestamp: Date.now()
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('System metrics error:', error);
       return reply.code(500).send({
         error: 'Failed to retrieve system metrics',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -180,10 +178,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
             parentSpanId: { type: 'string' },
             baggage: { type: 'object' },
             flags: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { operationName, parentContext } = request.body as any;
@@ -195,19 +193,18 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         return reply.code(401).send({
           error: 'Authentication required for distributed tracing'
         });
-      }
+
 
       const traceContext = performanceService.startTrace(operationName, parentContext);
 
       return reply.code(201).send(traceContext);
-
-    } catch (error) {
+ catch (error) {
       console.error('Trace start error:', error);
       return reply.code(500).send({
         error: 'Failed to start trace',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -224,10 +221,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
           properties: {
             finished: { type: 'boolean' },
             spanId: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { spanId, tags, error } = request.body as z.infer<typeof SpanCompletionSchema>;
@@ -238,7 +235,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         return reply.code(401).send({
           error: 'Authentication required for distributed tracing'
         });
-      }
+
 
       await performanceService.finishSpan(spanId, tags, error);
 
@@ -246,14 +243,13 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         finished: true,
         spanId
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Trace finish error:', error);
       return reply.code(500).send({
         error: 'Failed to finish trace span',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -270,10 +266,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
           properties: {
             alertId: { type: 'string' },
             created: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const alertConfig = request.body as any;
@@ -285,7 +281,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Admin access required for alert management'
         });
-      }
+
 
       const alertId = await performanceService.createAlert(alertConfig);
 
@@ -293,14 +289,13 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         alertId,
         created: true
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Alert creation error:', error);
       return reply.code(500).send({
         error: 'Failed to create alert',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -317,10 +312,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
             alerts: { type: 'array' },
             count: { type: 'number' },
             severityCounts: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const authContext = await authService.createAuthContextFromRequest(request);
@@ -330,7 +325,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Admin access required for alert viewing'
         });
-      }
+
 
       const alerts = performanceService.getActiveAlerts();
       
@@ -344,14 +339,13 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         count: alerts.length,
         severityCounts
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Active alerts error:', error);
       return reply.code(500).send({
         error: 'Failed to retrieve active alerts',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -371,10 +365,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
             trends: { type: 'object' },
             recommendations: { type: 'array' },
             bottlenecks: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { startTime, endTime } = request.body as z.infer<typeof PerformanceReportRequestSchema>;
@@ -386,19 +380,18 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Admin access required for performance reports'
         });
-      }
+
 
       const report = await performanceService.generatePerformanceReport(startTime, endTime);
 
       return reply.send(report);
-
-    } catch (error) {
+ catch (error) {
       console.error('Performance report error:', error);
       return reply.code(500).send({
         error: 'Failed to generate performance report',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -419,10 +412,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
             alertsActive: { type: 'number' },
             tracesActive: { type: 'number' },
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const authContext = await authService.createAuthContextFromRequest(request);
@@ -432,7 +425,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Authentication required for observability metrics'
         });
-      }
+
 
       const observabilityMetrics = await performanceService.getObservabilityMetrics();
 
@@ -443,20 +436,19 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
           responseTime: observabilityMetrics.responseTime,
           timestamp: Date.now()
         });
-      }
+
 
       return reply.send({
         ...observabilityMetrics,
         timestamp: Date.now()
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Observability metrics error:', error);
       return reply.code(500).send({
         error: 'Failed to retrieve observability metrics',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -474,10 +466,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
             components: { type: 'object' },
             uptime: { type: 'number' },
             metrics: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const observabilityMetrics = await performanceService.getObservabilityMetrics();
@@ -495,23 +487,22 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
           alerting: criticalAlerts > 0 ? 'degraded' : 'healthy',
           tracing: observabilityMetrics.tracesActive > 0 ? 'healthy' : 'unknown',
           observability: status
-  }
+
         uptime: observabilityMetrics.uptime,
         metrics: {
           errorRate: observabilityMetrics.errorRate,
           responseTime: observabilityMetrics.responseTime.avg,
           throughput: observabilityMetrics.throughput,
           activeAlerts: observabilityMetrics.alertsActive
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Performance health check error:', error);
       return reply.code(500).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -532,10 +523,10 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
             bottlenecks: { type: 'array' },
             optimizationScore: { type: 'number' },
             prioritizedActions: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { timeRange } = request.query as any;
@@ -546,7 +537,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Admin access required for optimization recommendations'
         });
-      }
+
 
       // Calculate time range
       const timeRangeMs = {
@@ -554,7 +545,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         '6h': 6 * 60 * 60 * 1000,
         '24h': 24 * 60 * 60 * 1000,
         '7d': 7 * 24 * 60 * 60 * 1000
-      }[timeRange];
+[timeRange];
 
       const endTime = Date.now();
       const startTime = endTime - timeRangeMs;
@@ -586,15 +577,14 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
         optimizationScore,
         prioritizedActions
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Performance recommendations error:', error);
       return reply.code(500).send({
         error: 'Failed to generate performance recommendations',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}
+
 
 export default performanceMonitoringRoutes;

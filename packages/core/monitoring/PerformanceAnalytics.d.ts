@@ -8,11 +8,11 @@ import { PerformanceMonitor } from './PerformanceMonitor';
 import { EventEmitter } from 'events';
 
 }
-export interface PerformanceReport {
-    generatedAt: number;
+}
+export interface PerformanceReport { generatedAt: number;
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     summary: {
@@ -22,8 +22,7 @@ export interface PerformanceReport {
         efficiencyScore: number;
         recommendation: 'excellent' | 'good' | 'needs_attention' | 'critical'
   };
-    performance: {
-        averageExecutionTime: number;
+    performance: { averageExecutionTime: number;
         p50ExecutionTime: number;
         p95ExecutionTime: number;
         p99ExecutionTime: number;
@@ -31,71 +30,60 @@ export interface PerformanceReport {
             nodeId: string;
             nodeType: string;
             averageDuration: number;
-            executionCount: number;
-        }>;
+            executionCount: number }>;
     };
-    reliability: {
-        successRate: number;
+    reliability: { successRate: number;
         errorRate: number;
         mostReliableTypes: string[];
         leastReliableTypes: string[];
         errorPatterns: Array<{
             pattern: string;
             frequency: number;
-            affectedNodes: string[];
-        }>;
+            affectedNodes: string[] }>;
     };
-    efficiency: {
-        memoryEfficiency: number;
+    efficiency: { memoryEfficiency: number;
         cacheHitRate: number;
         contextOptimization: number;
         resourceWaste: number;
-        optimizationOpportunities: string[];
-    };
-    trends: {
-        performanceTrend: 'improving' | 'stable' | 'degrading';
+        optimizationOpportunities: string[] };
+    trends: { performanceTrend: 'improving' | 'stable' | 'degrading';
         trendConfidence: number;
         projectedImprovement: number;
         seasonalPatterns: Array<{
             period: string;
             impact: number;
-            description: string;
-        }>;
+            description: string }>;
     };
-    alerts: {
-        critical: number;
+    alerts: { critical: number;
         high: number;
         medium: number;
         low: number;
         topAlertTypes: Array<{
             type: string;
             frequency: number;
-            severity: string;
-        }>;
+            severity: string }>;
     };
 
 }
-export interface PerformanceBenchmark {
-    nodeType: string;
+}
+export interface PerformanceBenchmark { nodeType: string;
     target: {
         averageExecutionTime: number;
         maxExecutionTime: number;
         successRate: number;
-        memoryUsage: number;
+        memoryUsage: number }
 }
     };
-    current: {
-        averageExecutionTime: number;
+    current: { averageExecutionTime: number;
         maxExecutionTime: number;
         successRate: number;
-        memoryUsage: number;
-    };
+        memoryUsage: number };
     status: 'exceeds' | 'meets' | 'below' | 'critical';
     improvement: number;
 
 }
-export interface PerformanceInsight {
-    id: string;
+}
+export interface PerformanceInsight { id: string;
     timestamp: number;
     category: 'performance' | 'reliability' | 'efficiency' | 'cost';
     severity: 'info' | 'warning' | 'critical';
@@ -120,7 +108,7 @@ export declare class PerformanceAnalytics extends EventEmitter {
      */
     generateReport(timeRange?: {)
         start: number;
-        end: number;
+        end: number }
 }
     }): PerformanceReport;
     /**
@@ -142,20 +130,16 @@ export declare class PerformanceAnalytics extends EventEmitter {
     /**
      * Get historical reports
      */
-    getReportHistory(limit?: number): Array<{
-        timestamp: number;
-        report: PerformanceReport;
-    }>;
+    getReportHistory(limit?: number): Array<{ timestamp: number;
+        report: PerformanceReport }>;
     /**
      * Export analytics data
      */
-    exportData(): {
-        insights: PerformanceInsight[];
+    exportData(): { insights: PerformanceInsight[];
         benchmarks: PerformanceBenchmark[];
         reports: Array<{
             timestamp: number;
-            report: PerformanceReport;
-        }>;
+            report: PerformanceReport }>;
     };
     private initializeDefaultBenchmarks;
     private setupMonitoringListeners;

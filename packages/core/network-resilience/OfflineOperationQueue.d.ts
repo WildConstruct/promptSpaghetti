@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface QueuedOperation {
-    id: string;
+}
+export interface QueuedOperation { id: string;
     type: 'graph_update' | 'presence_update' | 'cursor_update' | 'selection_update' | 'activity_update';
     payload: any;
     timestamp: number;
@@ -13,11 +13,10 @@ export interface QueuedOperation {
     requiresOrder: boolean;
     dependencies?: string[];
     maxRetries: number;
-    expiresAt?: number;
-
+    expiresAt?: number }
 }
-export interface QueueMetrics {
-    totalOperations: number;
+}
+export interface QueueMetrics { totalOperations: number;
     pendingOperations: number;
     failedOperations: number;
     retryingOperations: number;
@@ -27,14 +26,14 @@ export interface QueueMetrics {
     queueSizeByPriority: {
         high: number;
         medium: number;
-        low: number;
+        low: number }
 }
     };
     operationsByType: Map<string, number>;
 
 }
-export interface OfflineQueueConfig {
-    maxQueueSize: number;
+}
+export interface OfflineQueueConfig { maxQueueSize: number;
     maxRetries: number;
     retryBackoffMs: number;
     maxBackoffMs: number;
@@ -46,7 +45,7 @@ export interface OfflineQueueConfig {
     priorityWeights: {
         high: number;
         medium: number;
-        low: number;
+        low: number }
 }
     };
 

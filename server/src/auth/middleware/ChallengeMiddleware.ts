@@ -13,15 +13,15 @@ import {
   ChallengeConfig,
   ChallengeRequest,
   ChallengeValidation
-} from '../types';
+ from '../types';
 import { RateLimiter } from '../../../../packages/core/security/RateLimiter';
 
 // ========================================
 // Middleware Configuration
 // ========================================
 
-}
-}
+
+
 export interface ChallengeMiddlewareConfig {
   challengeService: ChallengeService;
   rateLimiter?: RateLimiter;
@@ -29,8 +29,9 @@ export interface ChallengeMiddlewareConfig {
   defaultChallenge?: {
     type: ChallengeType;
     difficulty: ChallengeDifficulty;
-}
-}
+
+
+
   };
   bypassTokens?: string[]; // For testing/admin bypass
   trustProxy?: boolean;
@@ -39,10 +40,10 @@ export interface ChallengeMiddlewareConfig {
     challengeToken?: string;
     bypassToken?: string;
   };
-}
 
-}
-}
+
+
+
 export interface ChallengeRule {
   path: string | RegExp;
   method?: string | string[];
@@ -51,19 +52,21 @@ export interface ChallengeRule {
   difficulty?: ChallengeDifficulty;
   skipAuth?: boolean; // Skip if user is authenticated
   riskThreshold?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChallengeCondition {
   type: 'failedAttempts' | 'riskScore' | 'ipReputation' | 'timeWindow' | 'custom';
   threshold?: number;
   evaluate?: (request: FastifyRequest) => boolean;
-}
-}
-}
+
+
+
+
 
 // ========================================
 // Request Extensions
@@ -77,11 +80,12 @@ declare module 'fastify' {
       challengeId?: string;
       type?: ChallengeType;
       riskScore?: number;
-}
-}
+
+
+
     };
-  }
-}
+
+
 
 // ========================================
 // Challenge Middleware Implementation
@@ -95,7 +99,7 @@ export class ChallengeMiddleware {
   constructor(config: ChallengeMiddlewareConfig) {
     this.config = config;
     this.startCleanupTimer();
-  }
+
 
   /**
    * Main middleware function
@@ -108,19 +112,19 @@ export class ChallengeMiddleware {
         if (!rule) {
           request.challenge = { required: false, completed: true };
           return;
-        }
+
 
         // Check bypass token
         if (this.checkBypassToken(request)) {
           request.challenge = { required: false, completed: true };
           return;
-        }
+
 
         // Skip if authenticated and rule allows
         if (rule.skipAuth && this.isAuthenticated(request)) {
           request.challenge = { required: false, completed: true };
           return;
-        }
+
 
         // Extract client info
         const clientInfo = this.extractClientInfo(request);
@@ -132,7 +136,7 @@ export class ChallengeMiddleware {
         if (!this.shouldEnforceChallenge(rule, riskScore, request)) {
           request.challenge = { required: false, completed: true, riskScore };
           return;
-        }
+
 
         // Check for existing challenge solution
         const challengeSolution = this.extractChallengeSolution(request);
@@ -159,7 +163,7 @@ export class ChallengeMiddleware {
             // Reset failure count on success
             this.resetFailureCount(clientInfo.ipAddress);
             return;
-          } else {
+ else {
             // Invalid challenge - increment failure count
             this.incrementFailureCount(clientInfo.ipAddress);
             
@@ -172,8 +176,8 @@ export class ChallengeMiddleware {
               newChallengeRequired: result.remainingAttempts === 0
             });
             return;
-          }
-        }
+
+
 
         // Generate new challenge
         const challengeRequest: ChallengeRequest = {
@@ -184,7 +188,7 @@ export class ChallengeMiddleware {
             riskScore,
             previousFailures: this.getFailureCount(clientInfo.ipAddress),
             suspiciousActivity: riskScore > 0.7
-  }
+
           clientInfo
         };
 
@@ -198,18 +202,17 @@ export class ChallengeMiddleware {
             type: challenge.type,
             data: challenge.challenge,
             expiresAt: challenge.expiresAt
-  }
+
           message: 'Please complete the challenge to continue'
         });
-
-      } catch (error) {
+ catch (error) {
         request.log.error('Challenge middleware error:', error);
         
         // Fail open in case of errors
         request.challenge = { required: false, completed: true };
-      }
+
     };
-  }
+
 
   /**
    * Route handler for challenge generation
@@ -231,7 +234,7 @@ export class ChallengeMiddleware {
             action: 'manual_generation',
             riskScore,
             previousFailures: this.getFailureCount(clientInfo.ipAddress)
-  }
+
           clientInfo
         };
 
@@ -245,18 +248,17 @@ export class ChallengeMiddleware {
             data: challenge.challenge,
             expiresAt: challenge.expiresAt,
             maxAttempts: challenge.maxAttempts
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         request.log.error('Challenge generation error:', error);
         reply.status(500).send({
           success: false,
           error: 'Failed to generate challenge'
         });
-      }
+
     };
-  }
+
 
   /**
    * Route handler for challenge validation
@@ -273,7 +275,7 @@ export class ChallengeMiddleware {
             error: 'Missing challengeId or solution'
           });
           return;
-        }
+
 
         const clientInfo = this.extractClientInfo(request);
         
@@ -295,7 +297,7 @@ export class ChallengeMiddleware {
             token, // Client should include this in subsequent requests
             message: 'Challenge completed successfully'
           });
-        } else {
+ else {
           reply.status(401).send({
             success: false,
             valid: false,
@@ -303,17 +305,16 @@ export class ChallengeMiddleware {
             remainingAttempts: result.remainingAttempts,
             escalationRequired: result.escalationRequired
           });
-        }
 
-      } catch (error) {
+ catch (error) {
         request.log.error('Challenge validation error:', error);
         reply.status(500).send({
           success: false,
           error: 'Failed to validate challenge'
         });
-      }
+
     };
-  }
+
 
   // ========================================
   // Private Helper Methods
@@ -332,7 +333,7 @@ export class ChallengeMiddleware {
       if (rule.method) {
         const methods = Array.isArray(rule.method) ? rule.method : [rule.method];
         if (!methods.includes(request.method)) continue;
-      }
+
 
       // Check custom conditions
       if (rule.conditions) {
@@ -340,18 +341,18 @@ export class ChallengeMiddleware {
           this.evaluateCondition(condition, request)
         );
         if (!allConditionsMet) continue;
-      }
+
 
       return rule;
-    }
+
 
     return null;
-  }
+
 
   private evaluateCondition(condition: ChallengeCondition, request: FastifyRequest): boolean {
     if (condition.evaluate) {
       return condition.evaluate(request);
-    }
+
 
     switch (condition.type) {
     case 'failedAttempts':
@@ -365,30 +366,30 @@ export class ChallengeMiddleware {
       
     default:
       return false;
-    }
-  }
+
+
 
   private extractClientInfo(request: FastifyRequest): { 
     userAgent: string; 
     ipAddress: string; 
     fingerprint?: string;
-  } {
+ {
     return {
       userAgent: request.headers['user-agent'] || 'unknown',
       ipAddress: this.extractIP(request),
       fingerprint: request.headers['x-fingerprint'] as string
     };
-  }
+
 
   private extractIP(request: FastifyRequest): string {
     if (this.config.trustProxy) {
       const forwarded = request.headers['x-forwarded-for'];
       if (forwarded) {
         return (forwarded as string).split(',')[0].trim();
-      }
-    }
+
+
     return request.ip;
-  }
+
 
   private async calculateRiskScore(request: FastifyRequest, clientInfo: { ipAddress: string }): Promise<number> {
 
@@ -405,8 +406,8 @@ export class ChallengeMiddleware {
       const rateLimitInfo = await this.config.rateLimiter.getCurrentInfo({ ip: clientInfo.ipAddress });
       if (rateLimitInfo && rateLimitInfo.exceeded) {
         score += 0.3;
-      }
-    }
+
+
 
     // Factor 3: Time-based (rapid requests)
     const lastAttempt = this.ipLastAttempt.get(clientInfo.ipAddress);
@@ -414,29 +415,29 @@ export class ChallengeMiddleware {
       const timeSinceLastMs = Date.now() - lastAttempt.getTime();
       if (timeSinceLastMs < 1000) score += 0.2; // Less than 1 second
       else if (timeSinceLastMs < 5000) score += 0.1; // Less than 5 seconds
-    }
+
 
     // Factor 4: Missing headers
     if (!request.headers['user-agent']) score += 0.1;
     if (!request.headers['accept']) score += 0.1;
 
     return Math.min(1, score); // Cap at 1.0
-  }
+
 
   private shouldEnforceChallenge(rule: ChallengeRule, riskScore: number, request: FastifyRequest): boolean {
     // Check risk threshold
     if (rule.riskThreshold !== undefined) {
       return riskScore >= rule.riskThreshold;
-    }
+
 
     // Check custom conditions
     if (rule.conditions && rule.conditions.length > 0) {
       return true; // Conditions already evaluated in findMatchingRule
-    }
+
 
     // Default: enforce for high risk
     return riskScore > 0.5;
-  }
+
 
   private determineDifficulty(rule: ChallengeRule, riskScore: number): ChallengeDifficulty {
     if (rule.difficulty) return rule.difficulty;
@@ -445,29 +446,29 @@ export class ChallengeMiddleware {
     if (riskScore > 0.8) return ChallengeDifficulty.HARD;
     if (riskScore > 0.5) return ChallengeDifficulty.MEDIUM;
     return ChallengeDifficulty.EASY;
-  }
+
 
   private checkBypassToken(request: FastifyRequest): boolean {
     if (!this.config.bypassTokens || this.config.bypassTokens.length === 0) {
       return false;
-    }
+
 
     const headerName = this.config.customHeaders?.bypassToken || 'x-challenge-bypass';
     const token = request.headers[headerName] as string;
 
     return token ? this.config.bypassTokens.includes(token) : false;
-  }
+
 
   private isAuthenticated(request: FastifyRequest): boolean {
     // Check for JWT token or session
     const authHeader = request.headers.authorization;
     return !!(authHeader && authHeader.startsWith('Bearer '));
-  }
+
 
   private extractChallengeSolution(request: FastifyRequest): { 
     challengeId: string; 
     solution: string; 
-  } | null {
+ | null {
     const body = request.body as any;
     
     // Check body first
@@ -476,7 +477,7 @@ export class ChallengeMiddleware {
         challengeId: body.challengeId,
         solution: body.challengeSolution
       };
-    }
+
 
     // Check headers
     const challengeIdHeader = this.config.customHeaders?.challengeId || 'x-challenge-id';
@@ -487,32 +488,32 @@ export class ChallengeMiddleware {
 
     if (challengeId && solution) {
       return { challengeId, solution };
-    }
+
 
     return null;
-  }
+
 
   private generateChallengeToken(challengeId: string): string {
     // Simple token generation - in production, use proper JWT
     const timestamp = Date.now();
     const data = `${challengeId}:${timestamp}`;
     return Buffer.from(data).toString('base64');
-  }
+
 
   private incrementFailureCount(ip: string): void {
     const current = this.ipFailureCount.get(ip) || 0;
     this.ipFailureCount.set(ip, current + 1);
     this.ipLastAttempt.set(ip, new Date());
-  }
+
 
   private resetFailureCount(ip: string): void {
     this.ipFailureCount.delete(ip);
     this.ipLastAttempt.delete(ip);
-  }
+
 
   private getFailureCount(ip: string): number {
     return this.ipFailureCount.get(ip) || 0;
-  }
+
 
   private startCleanupTimer(): void {
     // Clean up old failure counts every hour
@@ -523,10 +524,10 @@ export class ChallengeMiddleware {
         if (lastAttempt < oneHourAgo) {
           this.ipFailureCount.delete(ip);
           this.ipLastAttempt.delete(ip);
-        }
-      }
+
+
     }, 60 * 60 * 1000);
-  }
-}
+
+
 
 export default ChallengeMiddleware;

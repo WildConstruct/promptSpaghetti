@@ -24,13 +24,36 @@ const initialState = {
         sortBy: 'timestamp',
         sortOrder: 'desc',
     }
-}, queryResult, lastQueryTime, 
-// Real-time State
-isStreamConnected, streamSubscriptionId, recentActivities, 
-// Filters and Preferences
-activeFilters, viewMode, sortBy, sortOrder, groupBy, 
-// Pagination
-currentPage, pageSize, hasNextPage, hasPreviousPage;
+};
+queryResult: null,
+    lastQueryTime;
+null,
+    // Real-time State
+    isStreamConnected;
+false,
+    streamSubscriptionId;
+null,
+    recentActivities;
+[],
+    // Filters and Preferences
+    activeFilters;
+{ }
+viewMode: 'list',
+    sortBy;
+'timestamp',
+    sortOrder;
+'desc',
+    groupBy;
+'none',
+    // Pagination
+    currentPage;
+1,
+    pageSize;
+50,
+    hasNextPage;
+false,
+    hasPreviousPage;
+false;
 ;
 // API Service Mock (replace with actual API integration)
 const activityApi = {
@@ -105,17 +128,17 @@ Promise < ActivityMetrics > {
             cancelled: 5,
         },
         activitiesOverTime: [],
-        topSources: [,
+        topSources: [
             { source: 'user-interface', count: 400, percentage: 40 },
             { source: 'api-gateway', count: 300, percentage: 30 },
             { source: 'background-service', count: 200, percentage: 20 }
         ],
-        topActions: [,
+        topActions: [
             { action: 'view_page', count: 200, percentage: 20 },
             { action: 'api_request', count: 150, percentage: 15 },
             { action: 'login', count: 100, percentage: 10 }
         ],
-        topUsers: [,
+        topUsers: [
             { userId: 'user1', userEmail: 'user1@example.com', count: 100, percentage: 10 },
             { userId: 'user2', userEmail: 'user2@example.com', count: 80, percentage: 8 }
         ],
@@ -135,14 +158,22 @@ Promise < ActivityMetrics > {
     ...initialState,
     // Data Actions
     setActivities: (activities) => set({ activities }),
-    addActivity: (activity) => set((state) => ({}), activities, [activity, ...state.activities], recentActivities, [activity, ...state.recentActivities.slice(0, 19)]) // Keep last 20,
+    addActivity: (activity) => set((state) => ({})),
+    activities: [activity, ...state.activities],
+    recentActivities: [activity, ...state.recentActivities.slice(0, 19)] // Keep last 20,
 });
 updateActivity: (id, updates) => set((state) => ({}), activities, state.activities.map(activity => ), activity.id === id ? { ...activity, ...updates } : activity),
     currentActivity;
 state.currentActivity?.id === id,
         ? { ...state.currentActivity, ...updates }
         : state.currentActivity;
-removeActivity: (id) => set((state) => ({}), activities, state.activities.filter(activity => activity.id !== id), selectedActivityIds, state.selectedActivityIds.filter(selectedId => selectedId !== id), currentActivity, state.currentActivity?.id === id ? null : state.currentActivity);
+removeActivity: (id) => set((state) => ({}));
+activities: state.activities.filter(activity => activity.id !== id),
+    selectedActivityIds;
+state.selectedActivityIds.filter(selectedId => selectedId !== id),
+    currentActivity;
+state.currentActivity?.id === id ? null : state.currentActivity,
+;
 setCurrentActivity: (activity) => set({ currentActivity: activity }),
     setMetrics;
 (metrics) => set({ metrics }),
@@ -150,7 +181,11 @@ setCurrentActivity: (activity) => set({ currentActivity: activity }),
     setQuery;
 (query) => set({ currentQuery: query }),
     updateQuery;
-(updates) => set((state) => ({}), currentQuery, { ...state.currentQuery, ...updates });
+(updates) => set((state) => ({}));
+currentQuery: {
+    state.currentQuery, ;
+    updates;
+}
 setQueryResult: (result) => set({ queryResult: result }),
     clearQuery;
 () => set({ currentQuery: initialState.currentQuery }),
@@ -168,12 +203,24 @@ removeFilter: (key) => set((state) => {
 () => set({ activeFilters: {} }),
     // Selection Actions
     selectActivity;
-(id) => set((state) => ({}), selectedActivityIds, state.selectedActivityIds.includes(id), state.selectedActivityIds, [...state.selectedActivityIds, id]);
-deselectActivity: (id) => set((state) => ({}), selectedActivityIds, state.selectedActivityIds.filter(selectedId => selectedId !== id));
-selectAllActivities: () => set((state) => ({}), selectedActivityIds, state.activities.map(activity => activity.id));
+(id) => set((state) => ({}));
+selectedActivityIds: state.selectedActivityIds.includes(id),
+        ? state.selectedActivityIds
+        : [...state.selectedActivityIds, id],
+;
+deselectActivity: (id) => set((state) => ({}));
+selectedActivityIds: state.selectedActivityIds.filter(selectedId => selectedId !== id),
+;
+selectAllActivities: () => set((state) => ({}));
+selectedActivityIds: state.activities.map(activity => activity.id),
+;
 clearSelection: () => set({ selectedActivityIds: [] }),
     toggleActivitySelection;
-(id) => set((state) => ({}), selectedActivityIds, state.selectedActivityIds.includes(id), state.selectedActivityIds.filter(selectedId => selectedId !== id), [...state.selectedActivityIds, id]);
+(id) => set((state) => ({}));
+selectedActivityIds: state.selectedActivityIds.includes(id),
+        ? state.selectedActivityIds.filter(selectedId => selectedId !== id)
+        : [...state.selectedActivityIds, id],
+;
 // View Actions
 setViewMode: (mode) => set({ viewMode: mode }),
     setSorting;
@@ -186,14 +233,20 @@ setViewMode: (mode) => set({ viewMode: mode }),
     setPageSize;
 (size) => set({ pageSize: size }),
     nextPage;
-() => set((state) => ({}), currentPage, state.hasNextPage ? state.currentPage + 1 : state.currentPage);
-previousPage: () => set((state) => ({}), currentPage, state.hasPreviousPage ? state.currentPage - 1 : state.currentPage);
+() => set((state) => ({}));
+currentPage: state.hasNextPage ? state.currentPage + 1 : state.currentPage,
+;
+previousPage: () => set((state) => ({}));
+currentPage: state.hasPreviousPage ? state.currentPage - 1 : state.currentPage,
+;
 // Real-time Actions
 setStreamConnected: (connected) => set({ isStreamConnected: connected }),
     setStreamSubscriptionId;
 (id) => set({ streamSubscriptionId: id }),
     addRecentActivity;
-(activity) => set((state) => ({}), recentActivities, [activity, ...state.recentActivities.slice(0, 19)]);
+(activity) => set((state) => ({}));
+recentActivities: [activity, ...state.recentActivities.slice(0, 19)],
+;
 clearRecentActivities: () => set({ recentActivities: [] }),
     // Async Actions
     loadActivities;

@@ -5,13 +5,9 @@ import { GraphEditor } from '../GraphEditor';
 import { Node, Edge } from 'reactflow';
 
 // Helper: clear localStorage before each test
-beforeEach(() => {
-  localStorage.clear();
-  jest.useFakeTimers();
-});
-afterEach(() => {
-  jest.useRealTimers();
-});
+beforeEach(() => { localStorage.clear();
+  jest.useFakeTimers() });
+afterEach(() => { jest.useRealTimers() });
 describe('GraphEditor autosave/restore/download integration', () => {
   const initialNodes: Node = [
     { id: '1', position: { x: 0, y: 0 }, data: { label: 'A' }, type: 'default' },
@@ -23,18 +19,17 @@ describe('GraphEditor autosave/restore/download integration', () => {
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     expect(localStorage.getItem('graphDraft')).toBeNull();
-    act(() => { jest.advanceTimersByTime(5000); });
+    act(() => { jest.advanceTimersByTime(5000) });
     const draft = localStorage.getItem('graphDraft');
     expect(draft).not.toBeNull();
     const parsed = JSON.parse(draft!);
     expect(parsed.nodes.length).toBe(2);
     expect(parsed.edges.length).toBe(0);
   });
-  it.skip('prompts to restore draft on load if present', async () => {
-    localStorage.setItem()
-      'graphDraft',
+  it.skip('prompts to restore draft on load if present', async () => { localStorage.setItem()
+      'graphDraft' }
       JSON.stringify({)
-  nodes: [{ id: '1', type: 'default', data: { label: 'Restored' }, position: { x: 0, y: 0 } }],
+  nodes: [{ id: '1', type: 'default', data: { label: 'Restored' }, position: { x: 0, y: 0 } }]
         edges: [];
   }
     );
@@ -45,13 +40,10 @@ describe('GraphEditor autosave/restore/download integration', () => {
     // Click Restore
     fireEvent.click(screen.getByText('Restore'));
     // Node label should update in DOM (after ReactFlow rerender)
-    await waitFor(() => {
-      expect(screen.getByText('Restored')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Restored')).toBeInTheDocument() });
   });
-  it.skip('removes draft and closes prompt when Dismiss is clicked', async () => {
-    localStorage.setItem()
-      'graphDraft',
+  it.skip('removes draft and closes prompt when Dismiss is clicked', async () => { localStorage.setItem()
+      'graphDraft' }
       JSON.stringify({ nodes: [{ id: 'x', type: 'default', data: {}, position: { x: 0, y: 0 } }], edges: [] })
     );
     render();
@@ -80,10 +72,8 @@ describe('GraphEditor autosave/restore/download integration', () => {
     expect(createObjectURL).toHaveBeenCalled();
     expect(appendChild).toHaveBeenCalled();
     // Simulate download finished
-    await waitFor(() => {
-      expect(removeChild).toHaveBeenCalled();
-      expect(revokeObjectURL).toHaveBeenCalled();
-    });
+    await waitFor(() => { expect(removeChild).toHaveBeenCalled();
+      expect(revokeObjectURL).toHaveBeenCalled() });
     appendChild.mockRestore();
     removeChild.mockRestore();
   });

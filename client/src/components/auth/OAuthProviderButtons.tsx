@@ -8,12 +8,12 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
-}
+
 export interface OAuthProvider {
   id: 'google' | 'github' | 'microsoft';,
-  name: string;
+  name: string;,
   icon: string;,
-  bgColor: string;
+  bgColor: string;,
   textColor: string;,
   hoverBgColor: string;
   const OAUTH_PROVIDERS: OAuthProvider = [
@@ -24,8 +24,9 @@ export interface OAuthProvider {
   bgColor: '#fff',
   textColor: '#333',
   hoverBgColor: '#f8f9fa',
-}
-}
+
+
+
   {
   id: 'github',
   name: 'GitHub',
@@ -33,7 +34,7 @@ export interface OAuthProvider {
   bgColor: '#333',
   textColor: '#fff',
   hoverBgColor: '#444',
-}
+
   {
   id: 'microsoft',
   name: 'Microsoft',
@@ -46,8 +47,9 @@ export interface OAuthProvider {
   onError?: (error: string) => void;
   onSuccess?: () => void;
   className?: string;
-}
-}
+
+
+
 export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
   mode = 'login',
   onError,
@@ -65,7 +67,7 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
       const currentReturnUrl = returnUrl || location.state?.from?.pathname || '/';
       // Get OAuth authorization URL from backend
       const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${API_BASE_URL}/auth/oauth/authorize?provider=${provider.id}&returnUrl=${encodeURIComponent(currentReturnUrl)}`, {},}
+      const response = await fetch(`${API_BASE_URL}/auth/oauth/authorize?provider=${provider.id}&returnUrl=${encodeURIComponent(currentReturnUrl)}`, {},},
   method: 'GET',
         headers: {
   'Content-Type': 'application/json',
@@ -80,7 +82,7 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
       sessionStorage.setItem('oauth_return_url', currentReturnUrl);
       // Redirect to OAuth provider
       window.location.href = url;
-    } catch (error) {
+ catch (error) {
       setLoadingProvider(null);
       const errorMessage = error instanceof Error ? error.message : `${provider.name} authentication failed`;}
       onError?.(errorMessage);
@@ -90,7 +92,7 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
     case 'register':
       return `Sign up with ${provider.name}`;}
     case 'link':
-      return `Link ${provider.name} account`;},}
+      return `Link ${provider.name} account`;},},
   default:
       return `Continue with ${provider.name}`;}
   };
@@ -103,13 +105,13 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
   fontSize: '14px',
   color: '#666',
   position: 'relative',
-}}>
+}>
           <span style={{
   backgroundColor: 'white',
   padding: '0 15px',
   position: 'relative',
   zIndex: 1,
-}}>
+}>
             or continue with
           </span>
           <div style={{
@@ -120,14 +122,14 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
   height: '1px',
   backgroundColor: '#e0e0e0',
   zIndex: 0,
-}} />
+} />
         </div>
       )}
       <div style={{
   display: 'flex',
   flexDirection: 'column',
   gap: '12px',
-}}>
+}>
         {OAUTH_PROVIDERS.map((provider) => ()
           <button
             key={provider.id}
@@ -150,15 +152,15 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
   transition: 'all 0.2s ease',
   textDecoration: 'none',
   gap: '12px',
-}}
+
             onMouseOver={(e) => {
               if (loadingProvider === null) {
                 e.currentTarget.style.backgroundColor = provider.hoverBgColor;
-            }}
+}
             onMouseOut={(e) => {
               if (loadingProvider === null) {
                 e.currentTarget.style.backgroundColor = provider.bgColor;
-            }}
+}
           >
             {loadingProvider === provider.id ? ()
               <>
@@ -169,7 +171,7 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
   borderTop: '2px solid transparent',
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
-}} />
+} />
                 Connecting...
               </>
             ) : ()
@@ -186,7 +188,7 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({)
   color: 'white',
   fontSize: '12px',
   fontWeight: 'bold',
-}}>
+}>
                   {provider.icon}
                 </div>
                 {getButtonText(provider)}

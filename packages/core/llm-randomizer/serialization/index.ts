@@ -2,16 +2,14 @@
 // Story 12.1 - Serialization Format Design
 // Public API exports for serialization system
 
-export {
-  GraphSerializer,
+export { GraphSerializer,
   SerializationMetadata,
   SerializationOptions,
   serializeGraph,
-  createDefaultMetadata,
-} from './serializer';
+  createDefaultMetadata }
+ from './serializer';
 
-export {
-  FormatValidator,
+export { FormatValidator,
   ValidationResult,
   ValidationError,
   ValidationWarning,
@@ -19,5 +17,5 @@ export {
   ParsedNode,
   ParsedEdge,
   validateFormat,
-  isValidFormat,
-} from './validator';
+  isValidFormat }
+ from './validator';

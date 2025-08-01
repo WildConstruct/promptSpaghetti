@@ -5,18 +5,16 @@
  */
 
 }
-export interface EmailTemplate {
-    subject: string;
+}
+export interface EmailTemplate { subject: string;
     htmlTemplate: string;
     textTemplate: string;
     variables: string[];
     description: string;
-    category: 'verification' | 'enrollment' | 'security' | 'notification';
-
-
+    category: 'verification' | 'enrollment' | 'security' | 'notification' }
 }
-export interface TemplateVariables {
-    displayName: string;
+}
+export interface TemplateVariables { displayName: string;
     emailAddress: string;
     expiryMinutes: string;
     code: string;
@@ -26,12 +24,10 @@ export interface TemplateVariables {
     companyName?: string;
     supportEmail?: string;
     locale?: string;
-    timezone?: string;
-
-
+    timezone?: string }
 }
-export interface TemplateRenderOptions {
-    minify?: boolean;
+}
+export interface TemplateRenderOptions { minify?: boolean;
     stripComments?: boolean;
     inlineCSS?: boolean;
     validateVariables?: boolean;
@@ -72,23 +68,20 @@ export declare class EmailTemplateManager {
      * Render an email template
      */
     renderTemplate();
-      templateName: string,
-      variables: TemplateVariables,
-      format?: 'html' | 'text',
+      templateName: string;
+      variables: TemplateVariables;
+      format?: 'html' | 'text' }
       options?: TemplateRenderOptions
-    ): {
-        subject: string;
-        content: string;
+    ): { subject: string;
+        content: string }
 }
     } | null;
     /**
      * Validate a template
      */
-    validateTemplate(templateName: string, variables: TemplateVariables): {
-        valid: boolean;
+    validateTemplate(templateName: string, variables: TemplateVariables): { valid: boolean;
         errors: string[];
-        warnings: string[];
-    };
+        warnings: string[] };
     /**
      * Preview a template with sample data
      */
@@ -114,8 +107,7 @@ export declare class EmailTemplateManager {
     private createMFAMethodRemovedTemplate;
     private createMFAMethodRemovedTextTemplate;
 
-export declare class TemplateTestUtils {
-    /**
+export declare class TemplateTestUtils { /**
      * Generate test data for template previews
      */
     static generateTestData(): TemplateVariables;
@@ -126,8 +118,7 @@ export declare class TemplateTestUtils {
         templateName: string;
         valid: boolean;
         errors: string[];
-        warnings: string[];
-    }[];
+        warnings: string[] }[];
 
 export default EmailTemplateManager;
 //# sourceMappingURL=EmailTemplateManager.d.ts.map

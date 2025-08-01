@@ -4,39 +4,37 @@ export type ViewMode = 'side-by-side' | 'overlay' | 'unified';
 export type HighlightMode = 'changes' | 'additions' | 'deletions' | 'all';
 
 }
-export interface GraphData {
-    id: string;
+}
+export interface GraphData { id: string;
     nodes: Array<{
         id: string;
         type: string;
         position: {
             x: number;
-            y: number;
+            y: number }
 }
         };
         data: Record<string, unknown>;
         [key: string]: unknown;
     }>;
-    edges: Array<{
-        id: string;
+    edges: Array<{ id: string;
         source: string;
         target: string;
         data?: Record<string, unknown>;
-        [key: string]: unknown;
-    }>;
+        [key: string]: unknown }>;
     metadata?: Record<string, unknown>;
 
 }
-export interface ChangeSummary {
-    total_changes: number;
+}
+export interface ChangeSummary { total_changes: number;
     nodes_added: number;
     nodes_removed: number;
     nodes_modified: number;
     edges_added: number;
     edges_removed: number;
     edges_modified: number;
-    properties_changed: number;
-
+    properties_changed: number }
+}
 }
 export interface NodeChange {
     id: string;
@@ -50,10 +48,12 @@ export interface NodeChange {
         new_value: unknown;
         change_type: 'added' | 'removed' | 'modified'
 }
+}
   }>;
     position_changed: boolean;
     visual_changes: Record<string, unknown>;
 
+}
 }
 export interface EdgeChange {
     id: string;
@@ -68,12 +68,13 @@ export interface EdgeChange {
         new_value: unknown;
         change_type: 'added' | 'removed' | 'modified'
 }
+}
   }>;
     connection_changed: boolean;
 
 }
-export interface NodeMatchResult {
-    id: string;
+}
+export interface NodeMatchResult { id: string;
     comparison_id: string;
     source_node_id?: string;
     target_node_id?: string;
@@ -83,11 +84,10 @@ export interface NodeMatchResult {
     property_changes: Record<string, unknown>;
     position_changed: boolean;
     visual_changes: Record<string, unknown>;
-    created_at: Date;
-
+    created_at: Date }
 }
-export interface EdgeMatchResult {
-    id: string;
+}
+export interface EdgeMatchResult { id: string;
     comparison_id: string;
     source_edge_id?: string;
     target_edge_id?: string;
@@ -98,11 +98,10 @@ export interface EdgeMatchResult {
     target_to_node?: string;
     confidence_score: number;
     property_changes: Record<string, unknown>;
-    created_at: Date;
-
+    created_at: Date }
 }
-export interface GraphComparison {
-    id: string;
+}
+export interface GraphComparison { id: string;
     source_version_id: string;
     target_version_id: string;
     comparison_type: ComparisonType;
@@ -119,24 +118,22 @@ export interface GraphComparison {
     property_diffs: Record<string, unknown>;
     comparison_duration_ms?: number;
     created_by?: string;
-    created_at: Date;
-
+    created_at: Date }
 }
-export interface DetailedComparison extends GraphComparison {
-    source_data: GraphData;
+}
+export interface DetailedComparison extends GraphComparison { source_data: GraphData;
     target_data: GraphData;
     node_matches: NodeMatchResult[];
     edge_matches: EdgeMatchResult[];
     algorithm_metadata: {
         steps_executed: string[];
         performance_metrics: Record<string, number>;
-        confidence_distribution: Record<string, number>;
-}
+        confidence_distribution: Record<string, number> }
     };
 
 }
-export interface VisualDiffSession {
-    id: string;
+}
+export interface VisualDiffSession { id: string;
     user_id: string;
     graph_id: string;
     comparison_id?: string;
@@ -149,73 +146,65 @@ export interface VisualDiffSession {
     filter_options: Record<string, unknown>;
     last_accessed: Date;
     expires_at: Date;
-    created_at: Date;
-
+    created_at: Date }
 }
-export interface CompareVersionsRequest {
-    source_version_id: string;
+}
+export interface CompareVersionsRequest { source_version_id: string;
     target_version_id: string;
     comparison_type?: ComparisonType;
-    include_details?: boolean;
-
+    include_details?: boolean }
 }
-export interface CreateDiffSessionRequest {
-    graph_id: string;
+}
+export interface CreateDiffSessionRequest { graph_id: string;
     source_version_id: string;
     target_version_id: string;
     view_mode?: ViewMode;
-    highlight_mode?: HighlightMode;
-
+    highlight_mode?: HighlightMode }
 }
-export interface UpdateDiffSessionRequest {
-    view_mode?: ViewMode;
+}
+export interface UpdateDiffSessionRequest { view_mode?: ViewMode;
     highlight_mode?: HighlightMode;
     zoom_level?: number;
     viewport_state?: Record<string, unknown>;
     show_unchanged?: boolean;
     show_metadata?: boolean;
-    filter_options?: Record<string, unknown>;
-
+    filter_options?: Record<string, unknown> }
 }
-export interface ComparisonConfig {
-    node_similarity_threshold: number;
+}
+export interface ComparisonConfig { node_similarity_threshold: number;
     edge_similarity_threshold: number;
     structural_weight: number;
     semantic_weight: number;
     visual_weight: number;
     max_comparison_time_ms: number;
     enable_caching: boolean;
-    cache_ttl_hours: number;
-
+    cache_ttl_hours: number }
 }
-export interface ComparisonStatistics {
-    total_comparisons: number;
+}
+export interface ComparisonStatistics { total_comparisons: number;
     avg_similarity: number;
     comparison_types: Record<string, number>;
     recent_comparisons: number;
     similarity_distribution: {
         high: number;
         medium: number;
-        low: number;
+        low: number }
 }
     };
 
 }
-export interface PaginationOptions {
-    page?: number;
-    limit?: number;
-
 }
-export interface PaginatedResult<T> {
-    data: T[];
+export interface PaginationOptions { page?: number;
+    limit?: number }
+}
+}
+export interface PaginatedResult<T> { data: T[];
     total: number;
     page: number;
     limit: number;
-    total_pages: number;
-
+    total_pages: number }
 }
-export interface ComparisonFilter {
-    graph_id?: string;
+export interface ComparisonFilter { graph_id?: string;
     source_version_id?: string;
     target_version_id?: string;
     comparison_type?: ComparisonType;
@@ -223,60 +212,52 @@ export interface ComparisonFilter {
     max_similarity?: number;
     created_after?: Date;
     created_before?: Date;
-    created_by?: string;
-
+    created_by?: string }
 }
-export interface ApiResponse<T> {
-    success: boolean;
+}
+export interface ApiResponse<T> { success: boolean;
     data?: T;
     error?: string;
     message?: string;
-    metadata?: Record<string, unknown>;
-
+    metadata?: Record<string, unknown> }
 }
-export interface BatchComparisonRequest {
-    comparisons: Array<{
+export interface BatchComparisonRequest { comparisons: Array<{
         source_version_id: string;
         target_version_id: string;
-        comparison_type?: ComparisonType;
+        comparison_type?: ComparisonType }
 }
     }>;
 
 }
-export interface BatchComparisonResult {
-    successful: Array<{
+}
+export interface BatchComparisonResult { successful: Array<{
         similarity_score: number;
         changes_summary: ChangeSummary;
         comparison_id: string;
         source_version_id: string;
-        target_version_id: string;
+        target_version_id: string }
 }
     }>;
-    failed: Array<{
-        error: string;
-    }>;
+    failed: Array<{ error: string }>;
     total_requested: number;
     successful_count: number;
     failed_count: number;
 
-export declare class ComparisonError extends Error {
-    code: string;
+export declare class ComparisonError extends Error { code: string;
     details?: Record<string, unknown> | undefined;
     constructor(message: string, code: string, details?: Record<string, unknown> | undefined);
 
 export declare class DiffSessionError extends Error {
     code: string;
     sessionId?: string | undefined;
-    constructor(message: string, code: string, sessionId?: string | undefined);
-
+    constructor(message: string, code: string, sessionId?: string | undefined) }
 }
-export interface ComparisonEvent {
-    type: 'comparison_started' | 'comparison_completed' | 'comparison_failed';
+export interface ComparisonEvent { type: 'comparison_started' | 'comparison_completed' | 'comparison_failed';
     comparison_id: string;
     user_id: string;
     timestamp: Date;
-    data?: Record<string, unknown>;
-
+    data?: Record<string, unknown> }
+}
 }
 export interface DiffSessionEvent {
     type: 'session_created' | 'session_updated' | 'session_expired';
@@ -286,4 +267,5 @@ export interface DiffSessionEvent {
     data?: Record<string, unknown>;
 
 //# sourceMappingURL=comparison.d.ts.map
+}
 }

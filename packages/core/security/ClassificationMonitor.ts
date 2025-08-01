@@ -16,17 +16,15 @@
  * - Historical data analysis
  */
 import { EventEmitter } from 'events';
-import { 
-  ClassificationLevel, 
+import { ClassificationLevel, 
   DataCategory, 
   ComplianceFramework,
-  ClassificationResult,
+  ClassificationResult }
   DataElement 
-} from './DataClassifier';
+ from './DataClassifier';
 
 // Monitoring Event Types
-export enum MonitoringEventType {
-  CLASSIFICATION_PERFORMED = 'classification_performed',
+export enum MonitoringEventType { CLASSIFICATION_PERFORMED = 'classification_performed',
   RULE_TRIGGERED = 'rule_triggered',
   COMPLIANCE_VIOLATION = 'compliance_violation',
   PERFORMANCE_WARNING = 'performance_warning',
@@ -37,7 +35,7 @@ export enum MonitoringEventType {
   export enum AlertSeverity {
   INFO = 'info',
   WARNING = 'warning',
-  ERROR = 'error',
+  ERROR = 'error' }
   CRITICAL = 'critical'
   // Monitoring Event
   export interface MonitoringEvent {
@@ -51,9 +49,10 @@ export enum MonitoringEventType {
   source: string;
   userId?: string;
   // Performance Metrics
-}
-}
-}
+
+
+
+
 export interface ClassificationPerformanceMetrics {
   totalClassifications: number;
   averageResponseTime: number;
@@ -65,25 +64,26 @@ export interface ClassificationPerformanceMetrics {
   queueDepth: number;
   lastUpdated: Date;
   // Classification Statistics
-}
-}
-}
-export interface ClassificationStatistics {
-  byLevel: Record<ClassificationLevel, number>;
+
+
+
+
+export interface ClassificationStatistics { byLevel: Record<ClassificationLevel, number>;
   byCategory: Record<DataCategory, number>;
   byComplianceFramework: Record<ComplianceFramework, number>;
   encryptionRequired: number;
   totalClassified: number;
   uniqueDataElements: number;
-  timeRange: {
+  timeRange: { }
   start: Date;
   end: Date;
-}
+
+
 };
 
 // Compliance Metrics
-}
-}
+
+
 export interface ComplianceMetrics {
   totalViolations: number;
   violationsByFramework: Record<ComplianceFramework, number>;
@@ -93,9 +93,10 @@ export interface ComplianceMetrics {
   resolvedViolations: number;
   pendingRemediation: number;
   // Anomaly Detection
-}
-}
-}
+
+
+
+
 export interface ClassificationAnomaly {
   id: string;
   type: 'volume' | 'pattern' | 'timing' | 'classification_change';
@@ -107,29 +108,29 @@ export interface ClassificationAnomaly {
   actualPattern: any;
   recommendation: string;
   // Alert Configuration
-}
-}
-}
-export interface AlertConfig {
-  enabled: boolean;
-  thresholds: {
+
+
+
+
+export interface AlertConfig { enabled: boolean;
+  thresholds: { }
   errorRate: number;
   responseTime: number;
   violationCount: number;
   anomalyConfidence: number;
-}
+
+
 };
-  channels: {
+  channels: { 
   email: boolean;
   webhook: boolean;
-  syslog: boolean;
-};
+  syslog: boolean };
   recipients: string;
   webhookUrl?: string;
 
 // Monitor Configuration
-}
-}
+
+
 export interface MonitorConfig {
   enableRealTimeMonitoring: boolean;
   enablePerformanceTracking: boolean;
@@ -142,10 +143,9 @@ export interface MonitorConfig {
   /**
   * Classification Monitoring Service
   */
-}
-}
-export class ClassificationMonitor extends EventEmitter {
-  private events: MonitoringEvent = [];
+
+
+export class ClassificationMonitor extends EventEmitter { private events: MonitoringEvent = [];
   private performanceMetrics!: ClassificationPerformanceMetrics;
   private statistics!: ClassificationStatistics;
   private complianceMetrics!: ComplianceMetrics;
@@ -158,7 +158,7 @@ export class ClassificationMonitor extends EventEmitter {
   private responseTimes: number = [];
   private classificationCounts: Map<string, number> = new Map();
   private errorCounts: Map<string, number> = new Map();
-  constructor(private config: MonitorConfig) {,
+  constructor(private config: MonitorConfig) {
   super();
   this.initializeMetrics();
   this.startMonitoring();
@@ -166,33 +166,32 @@ export class ClassificationMonitor extends EventEmitter {
   * Record a classification event
   */
   public recordClassification(dataElement: DataElement)
-  result: ClassificationResult,
-  responseTime: number): void {,
+  result: ClassificationResult
+  responseTime: number): void {
   if (!this.config.enableRealTimeMonitoring) return;
-  const event: MonitoringEvent = {,
-  id: this.generateEventId(),
-  type: MonitoringEventType.CLASSIFICATION_PERFORMED,
-  timestamp: new Date(),
-  dataId: dataElement.id,
-  classification: result,
+  const event: MonitoringEvent = {
+  id: this.generateEventId()
+  type: MonitoringEventType.CLASSIFICATION_PERFORMED
+  timestamp: new Date()
+  dataId: dataElement.id
+  classification: result
   metadata: {
-  fieldName: dataElement.fieldName,
-  dataType: dataElement.dataType,
-  source: dataElement.source,
-  responseTime,
-  matchedRuleCount: result.matchedRules.length,
-  confidence: result.confidence,
-},
-  severity: AlertSeverity.INFO,
-      source: 'classification_engine',
+  fieldName: dataElement.fieldName
+  dataType: dataElement.dataType
+  source: dataElement.source
+  responseTime
+  matchedRuleCount: result.matchedRules.length
+  confidence: result.confidence }
+
+  severity: AlertSeverity.INFO
+      source: 'classification_engine'
       userId: dataElement.context?.userId;
   };
     this.addEvent(event);
     this.updatePerformanceMetrics(responseTime);
     this.updateStatistics(result);
     // Check for anomalies
-    if (this.config.enableAnomalyDetection) {
-  this.checkForAnomalies(event);
+    if (this.config.enableAnomalyDetection) { this.checkForAnomalies(event);
   // Check for compliance violations
   if (this.config.enableComplianceMonitoring) {
   this.checkComplianceViolations(result, dataElement);
@@ -200,64 +199,63 @@ export class ClassificationMonitor extends EventEmitter {
   * Record a rule trigger event
   */
   public recordRuleTrigger(ruleId: string)
-  dataId: string,
-  metadata: Record<string, any>): void {,
-  const event: MonitoringEvent = {,
-  id: this.generateEventId(),
-  type: MonitoringEventType.RULE_TRIGGERED,
-  timestamp: new Date(),
-  dataId,
+  dataId: string
+  metadata: Record<string, any>): void {
+  const event: MonitoringEvent = {
+  id: this.generateEventId()
+  type: MonitoringEventType.RULE_TRIGGERED
+  timestamp: new Date()
+  dataId
   metadata: {
-  ruleId,
+  ruleId }
   ...metadata
-},
-  severity: AlertSeverity.INFO,
-      source: 'classification_rules'
+
+  severity: AlertSeverity.INFO
+      source: 'classification_rules';
   };
     this.addEvent(event);
   /**
    * Record a compliance violation
    */
   public recordComplianceViolation(dataId: string)
-    framework: ComplianceFramework,
-    violation: string,
-    severity: AlertSeverity = AlertSeverity.WARNING): void {,
-  const event: MonitoringEvent = {,
-  id: this.generateEventId(),
-  type: MonitoringEventType.COMPLIANCE_VIOLATION,
-  timestamp: new Date(),
-  dataId,
+  framework: ComplianceFramework
+    violation: string
+    severity: AlertSeverity = AlertSeverity.WARNING): void { 
+  const event: MonitoringEvent = {
+  id: this.generateEventId()
+  type: MonitoringEventType.COMPLIANCE_VIOLATION
+  timestamp: new Date()
+  dataId
   metadata: {
-  framework,
-  violation,
-  requiresRemediation: true,
-}
-      severity,
-      source: 'compliance_monitor'
+  framework
+  violation
+  requiresRemediation: true }
+
+      severity
+      source: 'compliance_monitor';
   };
     this.addEvent(event);
     this.updateComplianceMetrics(framework, violation);
-    if (severity === AlertSeverity.CRITICAL) {
-  this.triggerAlert(event);
+    if (severity === AlertSeverity.CRITICAL) { this.triggerAlert(event);
   /**
   * Record a performance warning
   */
   public recordPerformanceWarning(metric: string)
-  value: number,
-  threshold: number): void {,
-  const event: MonitoringEvent = {,
-  id: this.generateEventId(),
-  type: MonitoringEventType.PERFORMANCE_WARNING,
-  timestamp: new Date(),
-  dataId: 'system',
+  value: number
+  threshold: number): void {
+  const event: MonitoringEvent = {
+  id: this.generateEventId()
+  type: MonitoringEventType.PERFORMANCE_WARNING
+  timestamp: new Date()
+  dataId: 'system'
   metadata: {
-  metric,
-  value,
-  threshold,
-  percentageOver: ((value - threshold) / threshold) * 100,
-},
-  severity: AlertSeverity.WARNING,
-      source: 'performance_monitor'
+  metric
+  value
+  threshold
+  percentageOver: ((value - threshold) / threshold) * 100 }
+
+  severity: AlertSeverity.WARNING
+      source: 'performance_monitor';
   };
     this.addEvent(event);
     this.triggerAlert(event);
@@ -287,15 +285,14 @@ export class ClassificationMonitor extends EventEmitter {
   /**
    * Get detected anomalies
    */
-  public getAnomalies(limit?: number): ClassificationAnomaly {
-  const anomalies = Array.from(this.anomalies.values());
+  public getAnomalies(limit?: number): ClassificationAnomaly { const anomalies = Array.from(this.anomalies.values());
   .sort((a, b) => b.detectedAt.getTime() - a.detectedAt.getTime());
   return limit ? anomalies.slice(0, limit) : anomalies;
   /**
   * Get recent events
   */
   public getRecentEvents(limit: number = 100)
-  types?: MonitoringEventType): MonitoringEvent {,
+  types?: MonitoringEventType): MonitoringEvent {
   let events = this.events;
   if (types && types.length > 0) {
   events = events.filter(event => types.includes(event.type));
@@ -314,107 +311,98 @@ export class ClassificationMonitor extends EventEmitter {
   healthStatus: 'healthy' | 'warning' | 'critical';
   const healthStatus = this.calculateHealthStatus();
   return {
-  performance: this.getPerformanceMetrics(),
-  statistics: this.getStatistics(),
-  compliance: this.getComplianceMetrics(),
-  recentAnomalies: this.getAnomalies(5),
-  alerts: this.alertQueue.slice(-10),
+  performance: this.getPerformanceMetrics()
+  statistics: this.getStatistics()
+  compliance: this.getComplianceMetrics()
+  recentAnomalies: this.getAnomalies(5)
+  alerts: this.alertQueue.slice(-10) }
   healthStatus
 };
   /**
    * Export monitoring data
    */
-  public exportData(format: 'json' | 'csv' = 'json'): string {
-  const exportData = {
-  exportedAt: new Date(),
+  public exportData(format: 'json' | 'csv' = 'json'): string { const exportData = {
+  exportedAt: new Date()
   timeRange: {
-  start: this.events[0]?.timestamp || new Date(),
-  end: this.events[this.events.length - 1]?.timestamp || new Date(),
-},
-  events: this.events,
-      performance: this.performanceMetrics,
-      statistics: this.statistics,
-      compliance: this.complianceMetrics,
+  start: this.events[0]?.timestamp || new Date()
+  end: this.events[this.events.length - 1]?.timestamp || new Date() }
+
+  events: this.events
+      performance: this.performanceMetrics
+      statistics: this.statistics
+      compliance: this.complianceMetrics
       anomalies: Array.from(this.anomalies.values());
   };
-    if (format === 'json') {
-      return JSON.stringify(exportData, null, 2);
-    } else {
-  // CSV export would be implemented here
+    if (format === 'json') { return JSON.stringify(exportData, null, 2) } else { // CSV export would be implemented here
   return this.convertToCSV(exportData);
   // Private helper methods
-  private initializeMetrics(): void {,
+  private initializeMetrics(): void {
   this.performanceMetrics = {
-  totalClassifications: 0,
-  averageResponseTime: 0,
-  p95ResponseTime: 0,
-  p99ResponseTime: 0,
-  throughput: 0,
-  errorRate: 0,
-  cacheHitRate: 0,
-  queueDepth: 0,
-  lastUpdated: new Date(),
+  totalClassifications: 0
+  averageResponseTime: 0
+  p95ResponseTime: 0
+  p99ResponseTime: 0
+  throughput: 0
+  errorRate: 0
+  cacheHitRate: 0
+  queueDepth: 0
+  lastUpdated: new Date() }
 };
-    this.statistics = {
-  byLevel: {
-  [ClassificationLevel.PUBLIC]: 0,
-  [ClassificationLevel.INTERNAL]: 0,
-  [ClassificationLevel.CONFIDENTIAL]: 0,
-  [ClassificationLevel.RESTRICTED]: 0,
-},
-  byCategory: {
-  [DataCategory.PII]: 0,
-  [DataCategory.AUTHENTICATION]: 0,
-  [DataCategory.SYSTEM_CONFIG]: 0,
-  [DataCategory.OPERATIONAL]: 0,
-  [DataCategory.BUSINESS]: 0,
-},
-  byComplianceFramework: {
-  [ComplianceFramework.GDPR]: 0,
-  [ComplianceFramework.NIST]: 0,
-  [ComplianceFramework.HIPAA]: 0,
-  [ComplianceFramework.PCI_DSS]: 0,
-},
-  encryptionRequired: 0,
-      totalClassified: 0,
-      uniqueDataElements: 0,
-      timeRange: {
-  start: new Date(),
-  end: new Date(),
+    this.statistics = { byLevel: {
+  [ClassificationLevel.PUBLIC]: 0
+  [ClassificationLevel.INTERNAL]: 0
+  [ClassificationLevel.CONFIDENTIAL]: 0
+  [ClassificationLevel.RESTRICTED]: 0 }
+
+  byCategory: { [DataCategory.PII]: 0
+  [DataCategory.AUTHENTICATION]: 0
+  [DataCategory.SYSTEM_CONFIG]: 0
+  [DataCategory.OPERATIONAL]: 0
+  [DataCategory.BUSINESS]: 0 }
+
+  byComplianceFramework: { [ComplianceFramework.GDPR]: 0
+  [ComplianceFramework.NIST]: 0
+  [ComplianceFramework.HIPAA]: 0
+  [ComplianceFramework.PCI_DSS]: 0 }
+
+  encryptionRequired: 0
+      totalClassified: 0
+      uniqueDataElements: 0
+      timeRange: { 
+  start: new Date()
+  end: new Date() }
 };
-    this.complianceMetrics = {
-  totalViolations: 0,
+    this.complianceMetrics = { totalViolations: 0
   violationsByFramework: {
-  [ComplianceFramework.GDPR]: 0,
-  [ComplianceFramework.NIST]: 0,
-  [ComplianceFramework.HIPAA]: 0,
-  [ComplianceFramework.PCI_DSS]: 0,
-},
-  violationTypes: {},
-      complianceRate: 100,
-      criticalViolations: 0,
-      resolvedViolations: 0,
+  [ComplianceFramework.GDPR]: 0
+  [ComplianceFramework.NIST]: 0
+  [ComplianceFramework.HIPAA]: 0
+  [ComplianceFramework.PCI_DSS]: 0 }
+
+  violationTypes: {}
+      complianceRate: 100
+      criticalViolations: 0
+      resolvedViolations: 0
       pendingRemediation: 0;
   };
-  private startMonitoring(): void {
-  // Performance metrics aggregation
+  private startMonitoring(): void { // Performance metrics aggregation
   if (this.config.enablePerformanceTracking) {
   this.metricsTimer = setInterval()
-  () => this.aggregateMetrics(),
+  () => this.aggregateMetrics()
   this.config.aggregationIntervalMinutes * 60000
   );
   // Anomaly detection
   if (this.config.enableAnomalyDetection) {
   this.anomalyDetectionTimer = setInterval()
-  () => this.runAnomalyDetection(),
+  () => this.runAnomalyDetection()
   300000 // Every 5 minutes
   );
   // Cleanup old data
   this.cleanupTimer = setInterval()
-  () => this.cleanupOldData(),
+  () => this.cleanupOldData()
   3600000 // Every hour
   );
-  private addEvent(event: MonitoringEvent): void {,
+  private addEvent(event: MonitoringEvent): void {
   this.events.push(event);
   // Emit real-time event
   this.emit('monitoringEvent', event);
@@ -422,7 +410,7 @@ export class ClassificationMonitor extends EventEmitter {
   if (event.severity === AlertSeverity.ERROR || )
   event.severity === AlertSeverity.CRITICAL) {
   this.alertQueue.push(event);
-  private updatePerformanceMetrics(responseTime: number): void {,
+  private updatePerformanceMetrics(responseTime: number): void {
   this.responseTimes.push(responseTime);
   // Keep only recent response times (last 1000)
   if (this.responseTimes.length > 1000) {
@@ -442,21 +430,19 @@ export class ClassificationMonitor extends EventEmitter {
   );
   this.performanceMetrics.throughput = recentEvents.length;
   this.performanceMetrics.lastUpdated = new Date();
-  private updateStatistics(result: ClassificationResult): void {,
+  private updateStatistics(result: ClassificationResult): void { }
   this.statistics.byLevel[result.level]++;
   this.statistics.byCategory[result.category]++;
-  result.complianceRequirements.forEach(framework => {)
-  this.statistics.byComplianceFramework[framework]++;
-});
-    if (result.encryptionRequired) {
-      this.statistics.encryptionRequired++;
+  result.complianceRequirements.forEach(framework => { )
+  this.statistics.byComplianceFramework[framework]++ });
+    if (result.encryptionRequired) { this.statistics.encryptionRequired++;
     this.statistics.totalClassified++;
     this.classificationCounts.set()
-      result.level + ':' + result.category,
+      result.level + ':' + result.category
       (this.classificationCounts.get(result.level + ':' + result.category) || 0) + 1
     );
   private updateComplianceMetrics(((
-    framework: ComplianceFramework,
+    framework: ComplianceFramework
     violation: string
   ): void {
     this.complianceMetrics.totalViolations++;
@@ -477,14 +463,14 @@ export class ClassificationMonitor extends EventEmitter {
     ).length;
     if (recentCount > this.performanceMetrics.throughput * 2) {
       this.detectAnomaly({)
-  id: this.generateAnomalyId(),
-        type: 'volume',
-        description: 'Unusual spike in classification volume',
-        detectedAt: new Date(),
-        confidence: 85,
-        affectedDataIds: [event.dataId],
-        expectedPattern: { rate: this.performanceMetrics.throughput },
-        actualPattern: { rate: recentCount },
+  id: this.generateAnomalyId()
+        type: 'volume'
+        description: 'Unusual spike in classification volume'
+        detectedAt: new Date()
+        confidence: 85
+        affectedDataIds: [event.dataId] }
+        expectedPattern: { rate: this.performanceMetrics.throughput }
+        actualPattern: { rate: recentCount }
         recommendation: 'Investigate source of increased classification requests';
   });
     // Pattern anomaly detection
@@ -493,68 +479,64 @@ export class ClassificationMonitor extends EventEmitter {
       const expectedCount = this.classificationCounts.get(patternKey) || 0;
       const averageCount = Array.from(this.classificationCounts.values());
         .reduce((a, b) => a + b, 0) / this.classificationCounts.size;
-      if (expectedCount > averageCount * 3) {
-        this.detectAnomaly({)
-  id: this.generateAnomalyId(),
-          type: 'pattern',
+      if (expectedCount > averageCount * 3) { this.detectAnomaly({)
+  id: this.generateAnomalyId()
+          type: 'pattern' }
           description: `Unusual concentration of ${patternKey} classifications`}
-},
-  detectedAt: new Date(),
-          confidence: 75,
-          affectedDataIds: [event.dataId],
-          expectedPattern: { averageCount },
-          actualPattern: { count: expectedCount },
+
+  detectedAt: new Date()
+          confidence: 75
+          affectedDataIds: [event.dataId]
+          expectedPattern: { averageCount }
+          actualPattern: { count: expectedCount }
           recommendation: 'Review classification rules and data sources';
   });
   private checkComplianceViolations(((
-    result: ClassificationResult,
+    result: ClassificationResult
     dataElement: DataElement
-  ): void {
-  // Check for missing encryption on sensitive data
+  ): void { // Check for missing encryption on sensitive data
   if (result.level === ClassificationLevel.RESTRICTED && !result.encryptionRequired) {
   this.recordComplianceViolation()
-  dataElement.id,
-  ComplianceFramework.NIST,
-  'Restricted data must have encryption enabled',
+  dataElement.id
+  ComplianceFramework.NIST
+  'Restricted data must have encryption enabled'
   AlertSeverity.CRITICAL
   );
   // Check for PII without GDPR compliance
   if (result.category === DataCategory.PII && )
   !result.complianceRequirements.includes(ComplianceFramework.GDPR)) {
   this.recordComplianceViolation()
-  dataElement.id,
-  ComplianceFramework.GDPR,
-  'PII data must include GDPR compliance requirements',
+  dataElement.id
+  ComplianceFramework.GDPR
+  'PII data must include GDPR compliance requirements'
   AlertSeverity.WARNING
   );
-  private detectAnomaly(anomaly: ClassificationAnomaly): void {,
+  private detectAnomaly(anomaly: ClassificationAnomaly): void {
   this.anomalies.set(anomaly.id, anomaly);
-  const event: MonitoringEvent = {,
-  id: this.generateEventId(),
-  type: MonitoringEventType.ANOMALY_DETECTED,
-  timestamp: new Date(),
-  dataId: anomaly.affectedDataIds[0] || 'system',
+  const event: MonitoringEvent = {
+  id: this.generateEventId()
+  type: MonitoringEventType.ANOMALY_DETECTED
+  timestamp: new Date()
+  dataId: anomaly.affectedDataIds[0] || 'system'
   metadata: {
-  anomalyType: anomaly.type,
-  confidence: anomaly.confidence,
-  description: anomaly.description,
-},
-  severity: anomaly.confidence > 80 ? AlertSeverity.WARNING : AlertSeverity.INFO,
-      source: 'anomaly_detector'
+  anomalyType: anomaly.type
+  confidence: anomaly.confidence
+  description: anomaly.description }
+
+  severity: anomaly.confidence > 80 ? AlertSeverity.WARNING : AlertSeverity.INFO
+      source: 'anomaly_detector';
   };
     this.addEvent(event);
-    if (anomaly.confidence > this.config.alertConfig.thresholds.anomalyConfidence) {
-  this.triggerAlert(event);
-  private triggerAlert(event: MonitoringEvent): void {,
+    if (anomaly.confidence > this.config.alertConfig.thresholds.anomalyConfidence) { this.triggerAlert(event);
+  private triggerAlert(event: MonitoringEvent): void {
   if (!this.config.alertConfig.enabled) return;
   this.emit('alert', {)
-  event,
-  timestamp: new Date(),
-  channels: this.config.alertConfig.channels,
+  event
+  timestamp: new Date()
+  channels: this.config.alertConfig.channels }
 });
     // Send to configured channels
-    if (this.config.alertConfig.channels.webhook && this.config.alertConfig.webhookUrl) {
-      this.sendWebhookAlert(event);
+    if (this.config.alertConfig.channels.webhook && this.config.alertConfig.webhookUrl) { this.sendWebhookAlert(event);
   private sendWebhookAlert(event: MonitoringEvent): void {
     // Webhook implementation would go here
     console.log('Sending webhook alert:', event);
@@ -573,14 +555,14 @@ export class ClassificationMonitor extends EventEmitter {
     // Check thresholds
     if (this.performanceMetrics.errorRate > this.config.alertConfig.thresholds.errorRate) {
       this.recordPerformanceWarning()
-        'errorRate',
-        this.performanceMetrics.errorRate,
+        'errorRate'
+        this.performanceMetrics.errorRate
         this.config.alertConfig.thresholds.errorRate
       );
     if (this.performanceMetrics.averageResponseTime > this.config.alertConfig.thresholds.responseTime) {
       this.recordPerformanceWarning()
-        'responseTime',
-        this.performanceMetrics.averageResponseTime,
+        'responseTime'
+        this.performanceMetrics.averageResponseTime }
         this.config.alertConfig.thresholds.responseTime
       );
   private runAnomalyDetection(): void {
@@ -598,50 +580,41 @@ export class ClassificationMonitor extends EventEmitter {
   private calculateStatistics(events: MonitoringEvent): ClassificationStatistics {
     const stats = { ...this.statistics };
     // Reset counters
-    Object.keys(stats.byLevel).forEach(level => {)
-  stats.byLevel[level as ClassificationLevel] = 0;
-    });
-    Object.keys(stats.byCategory).forEach(category => {)
-  stats.byCategory[category as DataCategory] = 0;
-    });
-    Object.keys(stats.byComplianceFramework).forEach(framework => {)
-  stats.byComplianceFramework[framework as ComplianceFramework] = 0;
-    });
+    Object.keys(stats.byLevel).forEach(level => { )
+  stats.byLevel[level as ClassificationLevel] = 0 });
+    Object.keys(stats.byCategory).forEach(category => { )
+  stats.byCategory[category as DataCategory] = 0 });
+    Object.keys(stats.byComplianceFramework).forEach(framework => { )
+  stats.byComplianceFramework[framework as ComplianceFramework] = 0 });
     // Recalculate from filtered events
-    events.forEach(event => {)
+    events.forEach(event => { )
   if (event.classification) {
         stats.byLevel[event.classification.level]++;
         stats.byCategory[event.classification.category]++;
         event.classification.complianceRequirements.forEach(framework => {)
-  stats.byComplianceFramework[framework]++;
-        });
-        if (event.classification.encryptionRequired) {
-          stats.encryptionRequired++;
-    });
+  stats.byComplianceFramework[framework]++ });
+        if (event.classification.encryptionRequired) { stats.encryptionRequired++ });
     stats.totalClassified = events.length;
     stats.uniqueDataElements = new Set(events.map(e => e.dataId)).size;
-    if (events.length > 0) {
-  stats.timeRange = {
-  start: events[0].timestamp,
-  end: events[events.length - 1].timestamp,
+    if (events.length > 0) { stats.timeRange = {
+  start: events[0].timestamp
+  end: events[events.length - 1].timestamp }
 };
     return stats;
-  private convertToCSV(data: any): string {
-  // Simplified CSV conversion
-  const events = data.events.map((e: MonitoringEvent) => ({,)
-  id: e.id,
-  type: e.type,
-  timestamp: e.timestamp.toISOString(),
-  dataId: e.dataId,
-  severity: e.severity,
-  level: e.classification?.level || '',
-  category: e.classification?.category || '',
+  private convertToCSV(data: any): string { // Simplified CSV conversion
+  const events = data.events.map((e: MonitoringEvent) => ({)
+  id: e.id
+  type: e.type
+  timestamp: e.timestamp.toISOString()
+  dataId: e.dataId
+  severity: e.severity
+  level: e.classification?.level || ''
+  category: e.classification?.category || '' }
 }));
     const headers = Object.keys(events[0] || {}).join(',');
     const rows = events.map((e: any) => Object.values(e).join(','));
     return [headers, ...rows].join('\n');
-  private cleanupOldData(): void {
-  const cutoff = new Date(;);
+  private cleanupOldData(): void { const cutoff = new Date(;);
   Date.now() - this.config.retentionPeriodDays * 24 * 60 * 60 * 1000
   );
   // Remove old events
@@ -655,7 +628,7 @@ export class ClassificationMonitor extends EventEmitter {
   this.emit('cleanupCompleted', {)
   remainingEvents: this.events.length,
   remainingAnomalies: this.anomalies.size,
-  timestamp: new Date(),
+  timestamp: new Date() }
 });
   private generateEventId(): string {
     return `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}

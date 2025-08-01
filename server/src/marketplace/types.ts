@@ -7,28 +7,28 @@ export enum TemplateStatus {
   LISTED = 'listed',
   BLOCKED = 'blocked',
   ARCHIVED = 'archived'
-}
+
 
 export enum PurchaseStatus {
   PENDING = 'pending',
   SUCCEEDED = 'succeeded',
   FAILED = 'failed',
   REFUNDED = 'refunded'
-}
+
 
 export enum RefundReason {
   NOT_AS_DESCRIBED = 'not_as_described',
   CLAUDE_INCOMPAT = 'claude_incompat',
   CLAUDE_HALLUCINATION = 'claude_hallucination',
   OTHER = 'other'
-}
+
 
 export enum ModerationStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
   REJECTED = 'rejected',
   FLAGGED = 'flagged'
-}
+
 
 export enum EventType {
   VIEW = 'view',
@@ -38,17 +38,18 @@ export enum EventType {
   SHARE = 'share',
   RATING = 'rating',
   COMMENT = 'comment'
-}
+
 
 export enum SentimentType {
   POSITIVE = 'positive',
   NEGATIVE = 'negative',
   NEUTRAL = 'neutral'
-}
+
 
 // Base interfaces
-}
-}
+
+
+
 export interface MarketplaceTemplate {
   id: string;
   owner_id: string;
@@ -65,12 +66,13 @@ export interface MarketplaceTemplate {
   created_at: Date;
   updated_at: Date;
   search_vector?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateVersion {
   id: string;
   template_id: string;
@@ -84,12 +86,13 @@ export interface TemplateVersion {
   safety_score: number;
   s3_asset_key?: string;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MarketplacePurchase {
   id: string;
   buyer_id: string;
@@ -103,12 +106,13 @@ export interface MarketplacePurchase {
   escrow_released_at?: Date;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateReview {
   id: string;
   template_id: string;
@@ -122,12 +126,13 @@ export interface TemplateReview {
   moderation_reason?: string;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateCategory {
   id: string;
   name: string;
@@ -137,12 +142,13 @@ export interface TemplateCategory {
   sort_order: number;
   is_active: boolean;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MarketplaceEvent {
   id: string;
   event_type: EventType;
@@ -154,12 +160,13 @@ export interface MarketplaceEvent {
   ip_address?: string;
   user_agent?: string;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateCollection {
   id: string;
   name: string;
@@ -170,13 +177,15 @@ export interface TemplateCollection {
   tags: string[];
   created_at: Date;
   updated_at: Date;
-}
-}
-}
+
+
+
+
 
 // Extended interfaces with relations
-}
-}
+
+
+
 export interface TemplateWithStats extends MarketplaceTemplate {
   total_purchases: number;
   total_reviews: number;
@@ -193,10 +202,10 @@ export interface TemplateWithStats extends MarketplaceTemplate {
     email?: string;
     verified: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface PurchaseWithDetails extends MarketplacePurchase {
   template?: MarketplaceTemplate;
   version?: TemplateVersion;
@@ -205,10 +214,10 @@ export interface PurchaseWithDetails extends MarketplacePurchase {
     name: string;
     email?: string;
   };
-}
 
-}
-}
+
+
+
 export interface ReviewWithDetails extends TemplateReview {
   template?: MarketplaceTemplate;
   buyer?: {
@@ -217,11 +226,12 @@ export interface ReviewWithDetails extends TemplateReview {
     verified: boolean;
   };
   purchase?: MarketplacePurchase;
-}
+
 
 // Search and filter interfaces
-}
-}
+
+
+
 export interface SearchFilters {
   query?: string;
   categories?: string[];
@@ -235,12 +245,13 @@ export interface SearchFilters {
   is_featured?: boolean;
   page?: number;
   limit?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SearchResult {
   templates: TemplateWithStats[];
   total: number;
@@ -248,13 +259,14 @@ export interface SearchResult {
   limit: number;
   has_more: boolean;
   aggregations?: {
-}
-}
+
+
+
     categories: Array<{ name: string; count: number }>;
     price_ranges: Array<{ min: number; max: number; count: number }>;
     avg_ratings: Array<{ rating: number; count: number }>;
   };
-}
+
 
 // API request/response schemas using Zod
 export const CreateTemplateSchema = z.object({
@@ -314,8 +326,9 @@ export const CreatePurchaseSchema = z.object({
 });
 
 // Analytics interfaces
-}
-}
+
+
+
 export interface TemplateAnalytics {
   template_id: string;
   period_start: Date;
@@ -329,8 +342,9 @@ export interface TemplateAnalytics {
     avg_rating: number;
     total_reviews: number;
     refund_rate: number;
-}
-}
+
+
+
   };
   demographics?: {
     countries: Array<{ country: string; count: number }>;
@@ -340,10 +354,10 @@ export interface TemplateAnalytics {
     daily_views: Array<{ date: string; count: number }>;
     daily_purchases: Array<{ date: string; count: number }>;
   };
-}
 
-}
-}
+
+
+
 export interface CreatorAnalytics {
   creator_id: string;
   period_start: Date;
@@ -355,35 +369,38 @@ export interface CreatorAnalytics {
     total_purchases: number;
     avg_rating: number;
     total_reviews: number;
-}
-}
+
+
+
   };
   top_templates: Array<{
     template_id: string;
     title: string;
     revenue_cents: number;
     purchases: number;
-  }>;
+>;
   performance_trends: {
     monthly_revenue: Array<{ month: string; revenue_cents: number }>;
     monthly_purchases: Array<{ month: string; purchases: number }>;
   };
-}
+
 
 // Preview system interfaces
-}
-}
+
+
+
 export interface PreviewRequest {
   template_id: string;
   version_id?: string;
   user_input?: Record<string, any>;
   claude_model_override?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PreviewResponse {
   output: string;
   cost_estimate: number;
@@ -391,12 +408,13 @@ export interface PreviewResponse {
   token_usage: {
     input_tokens: number;
     output_tokens: number;
-}
-}
+
+
+
   };
   cached: boolean;
   redacted_sections: string[];
-}
+
 
 // Export all types
 export type {

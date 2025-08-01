@@ -7,7 +7,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
-}
+
+
 interface OAuthCallbackState {
   status: 'loading' | 'success' | 'error';,
   message: string;
@@ -16,7 +17,8 @@ interface OAuthCallbackState {
   const [state, setState] = useState<OAuthCallbackState>({)
   status: 'loading',
   message: 'Processing authentication...',
-}
+
+
 });
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -47,7 +49,7 @@ interface OAuthCallbackState {
   });
         // Exchange authorization code for tokens via backend
         const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-        const response = await fetch(`${API_BASE_URL}/auth/oauth/callback/${storedProvider}?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`, {},}
+        const response = await fetch(`${API_BASE_URL}/auth/oauth/callback/${storedProvider}?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`, {},},
   method: 'GET',
           headers: {
   'Content-Type': 'application/json',
@@ -78,7 +80,7 @@ interface OAuthCallbackState {
           const redirectUrl = storedReturnUrl || '/';
           navigate(redirectUrl, { replace: true });
         }, 2000);
-      } catch (error) {
+ catch (error) {
   console.error('OAuth callback error:', error);
   setState({)
   status: 'error',
@@ -114,7 +116,7 @@ interface OAuthCallbackState {
   borderTop: '4px solid transparent',
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
-}} />
+} />
       );
     case 'success':
       return;
@@ -128,7 +130,7 @@ interface OAuthCallbackState {
   justifyContent: 'center',
   color: 'white',
   fontSize: '20px',
-}}>
+}>
             ✓
         </div>
       );
@@ -144,7 +146,7 @@ interface OAuthCallbackState {
   justifyContent: 'center',
   color: 'white',
   fontSize: '20px',
-}}>
+}>
             ✕
         </div>
       );
@@ -163,7 +165,7 @@ interface OAuthCallbackState {
   justifyContent: 'center',
   backgroundColor: '#f8f9fa',
   padding: '20px',
-}}>
+}>
       <div style={{
   maxWidth: '400px',
   width: '100%',
@@ -172,7 +174,7 @@ interface OAuthCallbackState {
   boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
   padding: '40px',
   textAlign: 'center',
-}}>
+}>
         <div style={{ marginBottom: '20px' }}>
           {getStatusIcon()}
         </div>
@@ -181,7 +183,7 @@ interface OAuthCallbackState {
   fontWeight: 'bold',
   color: '#333',
   marginBottom: '16px',
-}}>
+}>
           {state.status === 'loading' && 'Authenticating...'}
           {state.status === 'success' && 'Authentication Successful!'}
           {state.status === 'error' && 'Authentication Failed'}
@@ -191,7 +193,7 @@ interface OAuthCallbackState {
   color: '#666',
   marginBottom: '20px',
   lineHeight: '1.5',
-}}>
+}>
           {state.message}
         </p>
         {state.provider && ()
@@ -199,7 +201,7 @@ interface OAuthCallbackState {
   fontSize: '14px',
   color: '#888',
   marginBottom: '20px',
-}}>
+}>
             Provider: {getProviderDisplayName(state.provider)}
           </p>
         )}
@@ -207,7 +209,7 @@ interface OAuthCallbackState {
           <div style={{
   fontSize: '14px',
   color: '#666',
-}}>
+}>
             Please wait while we complete your authentication...
           </div>
         )}
@@ -215,7 +217,7 @@ interface OAuthCallbackState {
           <div style={{
   fontSize: '14px',
   color: getStatusColor(),
-}}>
+}>
             Redirecting you to the application...
           </div>
         )}
@@ -223,7 +225,7 @@ interface OAuthCallbackState {
           <div style={{
   fontSize: '14px',
   color: '#666',
-}}>
+}>
             You will be redirected to the login page in a few seconds...
           </div>
         )}

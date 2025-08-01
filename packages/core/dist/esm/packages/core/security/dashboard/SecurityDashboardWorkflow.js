@@ -111,13 +111,26 @@ export const safeReload = () => {
     // Workflow store integration
     const { states, transitions, approvals, fetchStates, fetchTransitions, fetchApprovals, transitionResourceState, approveWorkflow, rejectWorkflow, acquireLock, releaseLock } = useWorkflowStore();
     // Configuration with defaults
-    const workflowConfig = useMemo(() => ({}), enableAutoTransitions, true, enableAutomatedActions, true, enableRealTimeUpdates, true, escalationThresholds, {
-        [SecuritySeverity.CRITICAL]: 15, // 15 minutes,
-        [SecuritySeverity.HIGH]: 60, // 1 hour,
-        [SecuritySeverity.MEDIUM]: 240, // 4 hours,
-        [SecuritySeverity.LOW]: 1440, // 24 hours,
-        [SecuritySeverity.INFO]: 4320 // 3 days,
-    }, autoApprovalRules, [,
+    const workflowConfig = useMemo(() => ({}));
+    enableAutoTransitions: true,
+        enableAutomatedActions;
+    true,
+        enableRealTimeUpdates;
+    true,
+        escalationThresholds;
+    {
+        [SecuritySeverity.CRITICAL];
+        15, // 15 minutes,
+            [SecuritySeverity.HIGH];
+        60, // 1 hour,
+            [SecuritySeverity.MEDIUM];
+        240, // 4 hours,
+            [SecuritySeverity.LOW];
+        1440, // 24 hours,
+            [SecuritySeverity.INFO];
+        4320; // 3 days,
+    }
+    autoApprovalRules: [
         {
             id: 'auto-block-known-malicious',
             name: 'Auto-block known malicious IPs',
@@ -125,7 +138,10 @@ export const safeReload = () => {
             maxSeverity: SecuritySeverity.HIGH,
             approvedActions: [SecurityActionType.BLOCK_IP],
             requiredRole: SecurityRole.SECURITY_ANALYST
-        }], complianceRequirements, [,
+        }
+    ],
+        complianceRequirements;
+    [
         {
             framework: 'GDPR',
             alertTypes: [SecurityEventType.DATA_BREACH, SecurityEventType.ACCESS_VIOLATION],
@@ -139,7 +155,10 @@ export const safeReload = () => {
             responseTimeMinutes: 240,
             requiredDocumentation: ['access_log', 'remediation_plan'],
             notificationRequired: false
-        }], ...config);
+        }
+    ],
+    ;
+    config;
 }
 [config];
 ;
@@ -197,10 +216,10 @@ Promise;
 {
     const baseConfig = {
         id: `security-dashboard-${type}-${Date.now()}` };
+    type,
+        title;
+    `Security ${type.charAt(0).toUpperCase() + type.slice(1)} Dashboard`;
 }
-type,
-    title;
-`Security ${type.charAt(0).toUpperCase() + type.slice(1)} Dashboard`;
 description: 'Real-time security monitoring and workflow management',
     layout;
 {
@@ -212,7 +231,7 @@ description: 'Real-time security monitoring and workflow management',
         responsive;
     true,
         breakpoints;
-    [,
+    [
         { name: 'mobile', minWidth: 0, columns: 1 },
         { name: 'tablet', minWidth: 768, columns: 6 },
         { name: 'desktop', minWidth: 1024, columns: 12 }
@@ -296,277 +315,294 @@ const createWidgetsForDashboard = (type, role) => {
             title: 'Active Security Alerts',
             position: { x: 0, y: 0, order: 1 },
             size: { width: 8, height: 4, resizable: true },
+            config: {},
+            showWorkflowStatus: true,
+            enableQuickActions: true,
+            maxRows: 50,
+            autoRefresh: true,
+        },
+        dataSource, {},
+        type, 'realtime',
+        source, 'security-events-stream',
+        endpoint, '/api/security/events/stream',
+        caching, { enabled: true, ttl: 30 }
+    ];
+}, permissions;
+{
+    id: 'workflow-status-overview',
+        type;
+    'workflow-status-chart',
+        category;
+    'metrics',
+        title;
+    'Incident Workflow Status',
+        position;
+    {
+        x: 8, y;
+        0, order;
+        2;
+    }
+    size: {
+        width: 4, height;
+        4, resizable;
+        true;
+    }
+    config: {
+        chartType: 'donut',
+            showPercentages;
+        true,
+            enableDrillDown;
+        true,
+        ;
+    }
+    dataSource: {
+        type: 'batch',
+            source;
+        'workflow-statistics',
+            endpoint;
+        '/api/workflow/statistics',
+            caching;
+        {
+            enabled: true, ttl;
+            300;
+        }
+    }
+    permissions: {
+        view: [role],
+            configure;
+        [SecurityRole.SECURITY_ADMIN],
+        ;
+        [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
+            drillDown;
+        [role],
+            dataAccess;
+        ['INTERNAL'];
+        ;
+        // Add role-specific widgets
+        if (role === SecurityRole.SECURITY_ADMIN || role === SecurityRole.SECURITY_ANALYST) {
+            commonWidgets.push({});
+            id: 'automated-actions-log',
+                type;
+            'automated-actions-timeline',
+                category;
+            'timelines',
+                title;
+            'Automated Response Actions',
+                position;
+            {
+                x: 0, y;
+                4, order;
+                3;
+            }
+            size: {
+                width: 6, height;
+                3, resizable;
+                true;
+            }
             config: {
-                showWorkflowStatus: true,
-                enableQuickActions: true,
-                maxRows: 50,
-                autoRefresh: true,
-            },
+                showExecutionDetails: true,
+                    enableActionApproval;
+                true,
+                    maxItems;
+                25,
+                ;
+            }
             dataSource: {
                 type: 'realtime',
-                source: 'security-events-stream',
-                endpoint: '/api/security/events/stream',
-                caching: { enabled: true, ttl: 30 }
-            },
+                    source;
+                'security-actions-stream',
+                    endpoint;
+                '/api/security/actions/stream',
+                    caching;
+                {
+                    enabled: true, ttl;
+                    60;
+                }
+            }
             permissions: {
-                view: [role],
-                configure: [SecurityRole.SECURITY_ADMIN],
-                export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-                drillDown: [role],
-                dataAccess: ['CONFIDENTIAL'],
+                view: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
+                    configure;
+                [SecurityRole.SECURITY_ADMIN],
+                ;
+                [SecurityRole.SECURITY_ADMIN],
+                    drillDown;
+                [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
+                    dataAccess;
+                ['CONFIDENTIAL'],
+                ;
             }
-        },
-        {
-            id: 'workflow-status-overview',
-            type: 'workflow-status-chart',
-            category: 'metrics',
-            title: 'Incident Workflow Status',
-            position: { x: 8, y: 0, order: 2 },
-            size: { width: 4, height: 4, resizable: true },
-            config: {
-                chartType: 'donut',
-                showPercentages: true,
-                enableDrillDown: true,
-            },
-            dataSource: {
-                type: 'batch',
-                source: 'workflow-statistics',
-                endpoint: '/api/workflow/statistics',
-                caching: { enabled: true, ttl: 300 }
-            },
-            permissions: {
-                view: [role],
-                configure: [SecurityRole.SECURITY_ADMIN],
-                export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-                drillDown: [role],
-                dataAccess: ['INTERNAL']
-            }
-        }
-    ];
-    // Add role-specific widgets
-    if (role === SecurityRole.SECURITY_ADMIN || role === SecurityRole.SECURITY_ANALYST) {
-        commonWidgets.push({});
-        id: 'automated-actions-log',
-            type;
-        'automated-actions-timeline',
-            category;
-        'timelines',
-            title;
-        'Automated Response Actions',
-            position;
-        {
-            x: 0, y;
-            4, order;
-            3;
-        }
-        size: {
-            width: 6, height;
-            3, resizable;
-            true;
-        }
-        config: {
-            showExecutionDetails: true,
-                enableActionApproval;
-            true,
-                maxItems;
-            25,
             ;
+            return commonWidgets;
         }
-        dataSource: {
-            type: 'realtime',
-                source;
-            'security-actions-stream',
-                endpoint;
-            '/api/security/actions/stream',
-                caching;
-            {
-                enabled: true, ttl;
-                60;
+        ;
+        // Initialize real-time event streaming
+        const initializeEventStreaming = useCallback(() => {
+            // WebSocket connection for real-time security events
+            const wsUrl = `ws://localhost:8000/ws/security/${workspaceId}`;
+        });
+        const ws = new WebSocket(wsUrl);
+        ws.onmessage = (event) => {
+            try {
+                const securityEvent = JSON.parse(event.data);
+                // Process incoming security event
+                processSecurityEvent(securityEvent);
+                // Notify parent component
+                onSecurityEvent?.(securityEvent);
             }
-        }
-        permissions: {
-            view: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-                configure;
-            [SecurityRole.SECURITY_ADMIN],
+            catch (error) {
+                console.error('Failed to process security event:', error);
+            }
             ;
-        }
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                setError('Real-time connection lost');
+            };
+            // Cleanup on unmount
+            return () => {
+                ws.close();
+            };
+        }, [workspaceId, onSecurityEvent];
+        ;
+        // Process incoming security events
+        const processSecurityEvent = async (event) => {
+            try {
+                // Add to events list
+                setSecurityEvents(prev => [event, ...prev.slice(0, 99)]); // Keep last 100 events
+                // Update active alerts
+                if (event.severity === SecuritySeverity.CRITICAL || event.severity === SecuritySeverity.HIGH) {
+                    setActiveAlerts(prev => [event, ...prev]);
+                    // Check for automated workflow transitions
+                    if (workflowConfig.enableAutoTransitions) {
+                        await evaluateAutoTransition(event);
+                        // Execute automated actions if enabled
+                        if (workflowConfig.enableAutomatedActions) {
+                            await executeAutomatedActions(event);
+                            // Check compliance requirements
+                            await checkComplianceRequirements(event);
+                        }
+                        try { }
+                        catch (error) {
+                            console.error('Failed to process security event:', error);
+                        }
+                        ;
+                        // Evaluate automatic workflow transitions
+                        const evaluateAutoTransition = async (event) => {
+                            try {
+                                // Find appropriate initial state for new security events
+                                const initialState = states.find(state => state.is_initial);
+                                if (!initialState)
+                                    return;
+                                // Create workflow resource for the security event
+                                const result = await transitionResourceState();
+                                ;
+                                event.id,
+                                    initialState.id,
+                                    'system',
+                                    {
+                                        comment: `Auto-created for ${event.type} event`
+                                    };
+                            }
+                            finally { }
+                            metadata: {
+                                securityEvent: event,
+                                    autoCreated;
+                                true,
+                                    timestamp;
+                                new Date().toISOString();
+                                ;
+                                if (result.success) {
+                                    // Update event with workflow state
+                                    setSecurityEvents(prev => );
+                                    prev.map(e => );
+                                    e.id === event.id
+                                        ? { ...e, workflowState: result.new_state_id }
+                                        : e;
+                                }
+                            }
+                        };
+                    }
+                }
+            }
+            finally {
+            }
+        };
+        ;
     }
-};
-[SecurityRole.SECURITY_ADMIN],
-    drillDown;
-[SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-    dataAccess;
-['CONFIDENTIAL'],
-;
-;
-return commonWidgets;
-;
-// Initialize real-time event streaming
-const initializeEventStreaming = useCallback(() => {
-    // WebSocket connection for real-time security events
-    const wsUrl = `ws://localhost:8000/ws/security/${workspaceId}`;
-});
-const ws = new WebSocket(wsUrl);
-ws.onmessage = (event) => {
-    try {
-        const securityEvent = JSON.parse(event.data);
-        // Process incoming security event
-        processSecurityEvent(securityEvent);
-        // Notify parent component
-        onSecurityEvent?.(securityEvent);
-    }
+    try { }
     catch (error) {
-        console.error('Failed to process security event:', error);
+        console.error('Failed to evaluate auto transition:', error);
     }
     ;
-    ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        setError('Real-time connection lost');
-    };
-    // Cleanup on unmount
-    return () => {
-        ws.close();
-    };
-}, [workspaceId, onSecurityEvent];
-;
-// Process incoming security events
-const processSecurityEvent = async (event) => {
-    try {
-        // Add to events list
-        setSecurityEvents(prev => [event, ...prev.slice(0, 99)]); // Keep last 100 events
-        // Update active alerts
-        if (event.severity === SecuritySeverity.CRITICAL || event.severity === SecuritySeverity.HIGH) {
-            setActiveAlerts(prev => [event, ...prev]);
-            // Check for automated workflow transitions
-            if (workflowConfig.enableAutoTransitions) {
-                await evaluateAutoTransition(event);
-                // Execute automated actions if enabled
-                if (workflowConfig.enableAutomatedActions) {
-                    await executeAutomatedActions(event);
-                    // Check compliance requirements
-                    await checkComplianceRequirements(event);
+    // Execute automated security actions
+    const executeAutomatedActions = async (event) => {
+        try {
+            const applicableRules = workflowConfig.autoApprovalRules.filter(rule => { });
+            // Check severity threshold
+            const severityOrder = [SecuritySeverity.INFO, SecuritySeverity.LOW, SecuritySeverity.MEDIUM, SecuritySeverity.HIGH, SecuritySeverity.CRITICAL];
+            if (severityOrder.indexOf(event.severity) > severityOrder.indexOf(rule.maxSeverity)) {
+                return false;
+                // Check conditions (simplified example)
+                return Object.entries(rule.conditions).every(([key, value]) => event.metadata[key] === value);
+            }
+            ;
+            for (const rule of applicableRules) {
+                for (const actionType of rule.approvedActions) {
+                    const action = {
+                        type: actionType,
+                        target: event.source,
+                        parameters: { eventId: event.id, reason: event.description },
+                        timestamp: new Date(),
+                        executedBy: 'system',
+                        status: 'pending'
+                    };
+                    // Execute the action (simplified example)
+                    await executeSecurityAction(action);
+                    // Update event with executed action
+                    event.automatedActions.push(action);
                 }
                 try { }
                 catch (error) {
-                    console.error('Failed to process security event:', error);
+                    console.error('Failed to execute automated actions:', error);
                 }
                 ;
-                // Evaluate automatic workflow transitions
-                const evaluateAutoTransition = async (event) => {
+                // Execute a specific security action
+                const executeSecurityAction = async (action) => {
                     try {
-                        // Find appropriate initial state for new security events
-                        const initialState = states.find(state => state.is_initial);
-                        if (!initialState)
-                            return;
-                        // Create workflow resource for the security event
-                        const result = await transitionResourceState();
-                        ;
-                        event.id,
-                            initialState.id,
-                            'system',
-                            {
-                                comment: `Auto-created for ${event.type} event`
-                            };
-                    }
-                    finally { }
-                    metadata: {
-                        securityEvent: event,
-                            autoCreated;
-                        true,
-                            timestamp;
-                        new Date().toISOString();
-                        ;
-                        if (result.success) {
-                            // Update event with workflow state
-                            setSecurityEvents(prev => );
-                            prev.map(e => );
-                            e.id === event.id
-                                ? { ...e, workflowState: result.new_state_id }
-                                : e;
+                        action.status = 'executing';
+                        switch (action.type) {
+                            case SecurityActionType.BLOCK_IP:
+                                // Call API to block IP
+                                await fetch('/api/security/actions/block-ip', {});
+                                method: 'POST',
+                                    headers;
+                                {
+                                    'Content-Type';
+                                    'application/json';
+                                }
+                                body: JSON.stringify({ ip: action.target, reason: action.parameters.reason });
                         }
+                        ;
+                        break;
+                    }
+                    finally {
                     }
                 };
             }
         }
-    }
-    finally {
-    }
-};
-;
-try { }
-catch (error) {
-    console.error('Failed to evaluate auto transition:', error);
-}
-;
-// Execute automated security actions
-const executeAutomatedActions = async (event) => {
-    try {
-        const applicableRules = workflowConfig.autoApprovalRules.filter(rule => { });
-        // Check severity threshold
-        const severityOrder = [SecuritySeverity.INFO, SecuritySeverity.LOW, SecuritySeverity.MEDIUM, SecuritySeverity.HIGH, SecuritySeverity.CRITICAL];
-        if (severityOrder.indexOf(event.severity) > severityOrder.indexOf(rule.maxSeverity)) {
-            return false;
-            // Check conditions (simplified example)
-            return Object.entries(rule.conditions).every(([key, value]) => event.metadata[key] === value);
+        finally {
         }
-        ;
-        for (const rule of applicableRules) {
-            for (const actionType of rule.approvedActions) {
-                const action = {
-                    type: actionType,
-                    target: event.source,
-                    parameters: { eventId: event.id, reason: event.description },
-                    timestamp: new Date(),
-                    executedBy: 'system',
-                    status: 'pending'
-                };
-                // Execute the action (simplified example)
-                await executeSecurityAction(action);
-                // Update event with executed action
-                event.automatedActions.push(action);
-            }
-            try { }
-            catch (error) {
-                console.error('Failed to execute automated actions:', error);
-            }
-            ;
-            // Execute a specific security action
-            const executeSecurityAction = async (action) => {
-                try {
-                    action.status = 'executing';
-                    switch (action.type) {
-                        case SecurityActionType.BLOCK_IP:
-                            // Call API to block IP
-                            await fetch('/api/security/actions/block-ip', {});
-                            method: 'POST',
-                                headers;
-                            {
-                                'Content-Type';
-                                'application/json';
-                            }
-                            body: JSON.stringify({ ip: action.target, reason: action.parameters.reason });
-                    }
-                    ;
-                    break;
-                }
-                finally {
-                }
-            };
-        }
+    };
+    SecurityActionType.DISABLE_ACCOUNT;
+    // Call API to disable account
+    await fetch('/api/security/actions/disable-account', {});
+    method: 'POST',
+        headers;
+    {
+        'Content-Type';
+        'application/json';
     }
-    finally {
-    }
-};
-SecurityActionType.DISABLE_ACCOUNT;
-// Call API to disable account
-await fetch('/api/security/actions/disable-account', {});
-method: 'POST',
-    headers;
-{
-    'Content-Type';
-    'application/json';
+    body: JSON.stringify({ account: action.target, reason: action.parameters.reason });
 }
-body: JSON.stringify({ account: action.target, reason: action.parameters.reason });
 ;
 break;
 SecurityActionType.NOTIFY_TEAM;
@@ -698,7 +734,7 @@ try {
                     }
                     try { }
                     catch (error) {
-                        console.error(`Failed to ${action},)}
+                        console.error(`Failed to ${action})},
   workflow:`, error);
                     }
                     throw error;

@@ -8,250 +8,239 @@ import { FunnelVisualization } from '../FunnelVisualization';
 import { FunnelConfiguration } from '../FunnelConfiguration';
 import { FunnelComparison } from '../FunnelComparison';
 import { FunnelSegmentation } from '../FunnelSegmentation';
-import { 
-  ConversionFunnelDefinition,
+import { ConversionFunnelDefinition,
   ConversionStep,
-  UserSegment,
+  UserSegment }
   ConversionCohort
-} from '../../../analytics/ConversionDataModel';
+ from '../../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../../analytics/ConversionAnalyticsInfrastructure';
 
 // Mock analytics infrastructure
-const mockAnalyticsInfrastructure = {
-  processConversionEvent: jest.fn().mockResolvedValue([]),
+const mockAnalyticsInfrastructure = { processConversionEvent: jest.fn().mockResolvedValue([]) }
   processBatch: jest.fn().mockResolvedValue({ totalEvents: 0, processedCount: 0, errorCount: 0, duration: 0, stageResults: [] }),
   queryMetrics: jest.fn().mockResolvedValue([]),
-  getRealTimeMetrics: jest.fn().mockResolvedValue({,)
+  getRealTimeMetrics: jest.fn().mockResolvedValue({ );
   funnelId: 'test-funnel',
   timestamp: Date.now(),
-  metrics: {
+  metrics: {,
   activeUsers: 100,
   conversionsLastHour: 15,
   conversionRate: 15.0,
   averageTimeToConvert: 3600000,
-  topDropOffStep: 'step-2',
+  topDropOffStep: 'step-2' }
 }),
-  exportData: jest.fn().mockResolvedValue({,)
+  exportData: jest.fn().mockResolvedValue({ );
   exportId: 'export-123',
-  status: 'pending',
+  status: 'pending' }
 }),
-  getHealthStatus: jest.fn().mockResolvedValue({,)
+  getHealthStatus: jest.fn().mockResolvedValue({);
   processing: { healthy: true, uptime: Date.now(), metrics: { errorRate: 0, averageLatency: 0 } },
     metrics: { healthy: true, uptime: Date.now(), metrics: { errorRate: 0, averageLatency: 0 } },
     dataWarehouse: { healthy: true, uptime: Date.now(), metrics: { errorRate: 0, averageLatency: 0 } },
     api: { healthy: true, uptime: Date.now(), metrics: { errorRate: 0, averageLatency: 0 } }
-  }
-} as jest.Mocked<ConversionAnalyticsInfrastructure>;
+
+ as jest.Mocked<ConversionAnalyticsInfrastructure>;
 
 // Mock funnel definition
-const mockFunnelDefinition: ConversionFunnelDefinition = {,
-  id: 'test-funnel',
-  name: 'Test Marketplace Funnel',
-  description: 'Test funnel for marketplace conversion',
-  category: 'acquisition',
-  version: '1.0.0',
+const mockFunnelDefinition: ConversionFunnelDefinition = { 
+  id: 'test-funnel'
+  name: 'Test Marketplace Funnel'
+  description: 'Test funnel for marketplace conversion'
+  category: 'acquisition'
+  version: '1.0.0'
   configuration: {
-  timeWindow: 86400000,
-  allowBacktracking: false,
-  requireSequentialSteps: true,
-  enableParallelPaths: false,
-  dropOffGracePeriod: 300000,
-},
-  steps: [,
-    {
-  id: 'step-1',
-  name: 'Landing Page',
-  description: 'User lands on marketplace',
-  order: 1,
-  type: 'entry_point',
-  isRequired: true,
-  isTerminal: false,
+  timeWindow: 86400000
+  allowBacktracking: false
+  requireSequentialSteps: true
+  enableParallelPaths: false
+  dropOffGracePeriod: 300000 }
+
+  steps: [
+    { id: 'step-1'
+  name: 'Landing Page'
+  description: 'User lands on marketplace'
+  order: 1
+  type: 'entry_point'
+  isRequired: true
+  isTerminal: false
   eventCriteria: {
-  eventType: 'page_view',
-  propertyMatchers: [],
-},
-  conditions: [],
-      timeConstraints: {},
-      successMetrics: {
-  expectedCompletionRate: 90,
-  averageTimeToComplete: 30000,
-  criticalSuccessFactors: [],
-},
-  branches: [],
-      metadata: {
-  businessValue: 1,
-  complexity: 'low',
-  dependencies: [],
-  optimizationOpportunities: [],
-}
-    {
-  id: 'step-2',
-  name: 'Template Browse',
-  description: 'User browses templates',
-  order: 2,
-  type: 'engagement',
-  isRequired: true,
-  isTerminal: false,
+  eventType: 'page_view'
+  propertyMatchers: [] }
+
+  conditions: []
+      timeConstraints: {}
+      successMetrics: { 
+  expectedCompletionRate: 90
+  averageTimeToComplete: 30000
+  criticalSuccessFactors: [] }
+
+  branches: []
+      metadata: { 
+  businessValue: 1
+  complexity: 'low'
+  dependencies: []
+  optimizationOpportunities: [] }
+
+    { id: 'step-2'
+  name: 'Template Browse'
+  description: 'User browses templates'
+  order: 2
+  type: 'engagement'
+  isRequired: true
+  isTerminal: false
   eventCriteria: {
-  eventType: 'template_browse',
-  propertyMatchers: [],
-},
-  conditions: [],
-      timeConstraints: {},
-      successMetrics: {
-  expectedCompletionRate: 70,
-  averageTimeToComplete: 120000,
-  criticalSuccessFactors: [],
-},
-  branches: [],
-      metadata: {
-  businessValue: 2,
-  complexity: 'medium',
-  dependencies: [],
-  optimizationOpportunities: [],
-}
-    {
-  id: 'step-3',
-  name: 'Template Purchase',
-  description: 'User purchases template',
-  order: 3,
-  type: 'conversion',
-  isRequired: true,
-  isTerminal: true,
+  eventType: 'template_browse'
+  propertyMatchers: [] }
+
+  conditions: []
+      timeConstraints: {}
+      successMetrics: { 
+  expectedCompletionRate: 70
+  averageTimeToComplete: 120000
+  criticalSuccessFactors: [] }
+
+  branches: []
+      metadata: { 
+  businessValue: 2
+  complexity: 'medium'
+  dependencies: []
+  optimizationOpportunities: [] }
+
+    { id: 'step-3'
+  name: 'Template Purchase'
+  description: 'User purchases template'
+  order: 3
+  type: 'conversion'
+  isRequired: true
+  isTerminal: true
   eventCriteria: {
-  eventType: 'template_purchased',
-  propertyMatchers: [],
-},
-  conditions: [],
-      timeConstraints: {},
-      successMetrics: {
-  expectedCompletionRate: 15,
-  averageTimeToComplete: 300000,
-  criticalSuccessFactors: [],
-},
-  branches: [],
-      metadata: {
-  businessValue: 10,
-        complexity: 'high',
-        dependencies: [],
-        optimizationOpportunities: []],
-  conditionalPaths: [],
+  eventType: 'template_purchased'
+  propertyMatchers: [] }
+
+  conditions: []
+      timeConstraints: {}
+      successMetrics: { 
+  expectedCompletionRate: 15
+  averageTimeToComplete: 300000
+  criticalSuccessFactors: [] }
+
+  branches: []
+      metadata: { 
+  businessValue: 10
+        complexity: 'high'
+        dependencies: []
+        optimizationOpportunities: []]
+  conditionalPaths: []
   successCriteria: {
   primary: {;
-  stepId: 'step-3',
-      requirements: { operator: 'AND', conditions: [] },
-      weight: 1.0;
-  },
-  secondary: [],
+  stepId: 'step-3' }
+      requirements: { operator: 'AND', conditions: [] }
+      weight: 1.0
+
+  secondary: []
     scoreCalculation: { method: 'weighted' }
-  },
-  analytics: {
-  enableRealTimeTracking: true,
-  retentionPeriod: 90,
-  cohortTrackingEnabled: true,
-  segmentationRules: [],
-},
-  metadata: {
-  createdAt: Date.now(),
-  updatedAt: Date.now(),
-  createdBy: 'test-user',
-  tags: ['marketplace', 'conversion'],
-  businessContext: 'Test marketplace conversion funnel',
-  expectedConversionRate: 15,
+
+  analytics: { 
+  enableRealTimeTracking: true
+  retentionPeriod: 90
+  cohortTrackingEnabled: true
+  segmentationRules: [] }
+
+  metadata: { 
+  createdAt: Date.now()
+  updatedAt: Date.now()
+  createdBy: 'test-user'
+  tags: ['marketplace', 'conversion']
+  businessContext: 'Test marketplace conversion funnel'
+  expectedConversionRate: 15 }
 };
 
 // Mock segments and cohorts
 const mockSegments: UserSegment = [
-  {
-  id: 'segment-1',
-  name: 'Premium Users',
-  description: 'Users with premium accounts',
+  { id: 'segment-1'
+  name: 'Premium Users'
+  description: 'Users with premium accounts'
   definition: {
-  rules: [],
-  operator: 'AND',
-  updateFrequency: 'daily',
-  isStatic: false,
-},
-  state: {
-  currentSize: 1500,
-  lastUpdated: Date.now(),
-  growthRate: 5.2,
-  churnRate: 2.1,
-  status: 'active',
-},
-  performance: {
-  averageConversionRate: 25.8,
-  averageTimeToConvert: 72000000,
-  averageLifetimeValue: 1250,
-  engagementScore: 8.5,
-  retentionRate: 92.3,
-  behaviorPatterns: [],
-},
-  funnelMetrics: new Map(),
-    metadata: {
-  businessValue: 'high',
-      targetingPriority: 10,
+  rules: []
+  operator: 'AND'
+  updateFrequency: 'daily'
+  isStatic: false }
+
+  state: { 
+  currentSize: 1500
+  lastUpdated: Date.now()
+  growthRate: 5.2
+  churnRate: 2.1
+  status: 'active' }
+
+  performance: { 
+  averageConversionRate: 25.8
+  averageTimeToConvert: 72000000
+  averageLifetimeValue: 1250
+  engagementScore: 8.5
+  retentionRate: 92.3
+  behaviorPatterns: [] }
+
+  funnelMetrics: new Map()
+    metadata: { 
+  businessValue: 'high'
+      targetingPriority: 10 }
       customAttributes: {}
 ];
 const mockCohorts: ConversionCohort = [
-  {
-    id: 'cohort-1',
-    name: 'January 2024 Cohort',
-    description: 'Users who joined in January 2024',
+  { id: 'cohort-1'
+    name: 'January 2024 Cohort'
+    description: 'Users who joined in January 2024'
     definition: {
-  criteriaEvent: 'user_registered',
-      criteriaConditions: { operator: 'AND', conditions: [] },
-      timeWindow: 2592000000;
-  },
-  analysis: {
-  retentionPeriods: [7, 14, 30, 60, 90],
-  analysisWindow: 90,
-  metricCalculations: [],
-},
-  state: {
-  currentSize: 2500,
-  creationDate: Date.now() - 5184000000,
-  lastAnalysisDate: Date.now(),
-  status: 'active',
-  completionRate: 18.5,
-},
-  performance: {
-  conversionRates: [],
-  retentionRates: [],
-  averageTimeToConvert: 86400000,
-  topDropOffPoints: [],
+  criteriaEvent: 'user_registered' }
+      criteriaConditions: { operator: 'AND', conditions: [] }
+      timeWindow: 2592000000
+
+  analysis: { 
+  retentionPeriods: [7, 14, 30, 60, 90]
+  analysisWindow: 90
+  metricCalculations: [] }
+
+  state: { 
+  currentSize: 2500
+  creationDate: Date.now() - 5184000000
+  lastAnalysisDate: Date.now()
+  status: 'active'
+  completionRate: 18.5 }
+
+  performance: { 
+  conversionRates: []
+  retentionRates: []
+  averageTimeToConvert: 86400000
+  topDropOffPoints: []
   valueMetrics: {
-  totalRevenue: 125000,
-  averageOrderValue: 50,
-  lifetimeValue: 85,
-  revenuePerUser: 50,
-  costPerAcquisition: 25,
-  returnOnInvestment: 2.0,
-},
-  metadata: {
-  businessContext: 'First cohort of 2024',
-      hypothesis: 'New year users have higher conversion intent',
-      expectedOutcome: 'Higher than average conversion rate',
-      tags: ['2024', 'new-year'],
+  totalRevenue: 125000
+  averageOrderValue: 50
+  lifetimeValue: 85
+  revenuePerUser: 50
+  costPerAcquisition: 25
+  returnOnInvestment: 2.0 }
+
+  metadata: { 
+  businessContext: 'First cohort of 2024'
+      hypothesis: 'New year users have higher conversion intent'
+      expectedOutcome: 'Higher than average conversion rate'
+      tags: ['2024', 'new-year']
       owner: 'test-user'];
 describe('FunnelVisualization', () => {
   const defaultProps = {
-    funnelDefinition: mockFunnelDefinition,
-    analyticsInfrastructure: mockAnalyticsInfrastructure,
-    timeRange: { start: Date.now() - 86400000, end: Date.now() },
-    segments: mockSegments,
+    funnelDefinition: mockFunnelDefinition
+    analyticsInfrastructure: mockAnalyticsInfrastructure }
+    timeRange: { start: Date.now() - 86400000, end: Date.now() }
+    segments: mockSegments
     cohorts: mockCohorts;
   };
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   describe('Component Rendering', () => {
     it('should render funnel visualization with proper structure', async () => {
       render(<FunnelVisualization {...defaultProps} />);
-      await waitFor(() => {
-        expect(screen.getByText('Test Marketplace Funnel')).toBeInTheDocument();
-        expect(screen.getByText('Test funnel for marketplace conversion')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Test Marketplace Funnel')).toBeInTheDocument();
+        expect(screen.getByText('Test funnel for marketplace conversion')).toBeInTheDocument() });
     });
     it('should display loading state initially', () => {
       render(<FunnelVisualization {...defaultProps} />);
@@ -259,32 +248,26 @@ describe('FunnelVisualization', () => {
     });
     it('should render funnel steps correctly', async () => {
       render(<FunnelVisualization {...defaultProps} />);
-      await waitFor(() => {
-        expect(screen.getByText('Landing Page')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Landing Page')).toBeInTheDocument();
         expect(screen.getByText('Template Browse')).toBeInTheDocument();
-        expect(screen.getByText('Template Purchase')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Template Purchase')).toBeInTheDocument() });
     });
     it('should display summary metrics', async () => {
       render(<FunnelVisualization {...defaultProps} />);
-      await waitFor(() => {
-        expect(screen.getByText('Total Entries')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Total Entries')).toBeInTheDocument();
         expect(screen.getByText('Overall Conversion Rate')).toBeInTheDocument();
         expect(screen.getByText('Total Conversions')).toBeInTheDocument();
         expect(screen.getByText('Average Time to Convert')).toBeInTheDocument();
-        expect(screen.getByText('Total Value')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Total Value')).toBeInTheDocument() });
     });
   });
   describe('Configuration Controls', () => {
     it('should render configuration controls', async () => {
       render(<FunnelVisualization {...defaultProps} />);
-      await waitFor(() => {
-        expect(screen.getByLabelText('Display Mode')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByLabelText('Display Mode')).toBeInTheDocument();
         expect(screen.getByLabelText('Color Scheme')).toBeInTheDocument();
         expect(screen.getByLabelText('Refresh Interval')).toBeInTheDocument();
-        expect(screen.getByLabelText('Enable Animations')).toBeInTheDocument();
-      });
+        expect(screen.getByLabelText('Enable Animations')).toBeInTheDocument() });
     });
     it('should handle display mode changes', async () => {
       const onConfigChange = jest.fn();
@@ -322,28 +305,22 @@ describe('FunnelVisualization', () => {
   describe('Filters', () => {
     it('should render filter controls', async () => {
       render(<FunnelVisualization {...defaultProps} />);
-      await waitFor(() => {
-        expect(screen.getByText('Filters')).toBeInTheDocument();
-        expect(screen.getByText('Add Filter +')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Filters')).toBeInTheDocument();
+        expect(screen.getByText('Add Filter +')).toBeInTheDocument() });
     });
     it('should allow adding segment filters', async () => {
       render(<FunnelVisualization {...defaultProps} />);
-      await waitFor(() => {
-        const addFilterButton = screen.getByText('Add Filter +');
+      await waitFor(() => { const addFilterButton = screen.getByText('Add Filter +');
         fireEvent.click(addFilterButton);
         expect(screen.getByText('Segments')).toBeInTheDocument();
-        expect(screen.getByText('Premium Users')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Premium Users')).toBeInTheDocument() });
     });
     it('should allow adding cohort filters', async () => {
       render(<FunnelVisualization {...defaultProps} />);
-      await waitFor(() => {
-        const addFilterButton = screen.getByText('Add Filter +');
+      await waitFor(() => { const addFilterButton = screen.getByText('Add Filter +');
         fireEvent.click(addFilterButton);
         expect(screen.getByText('Cohorts')).toBeInTheDocument();
-        expect(screen.getByText('January 2024 Cohort')).toBeInTheDocument();
-      });
+        expect(screen.getByText('January 2024 Cohort')).toBeInTheDocument() });
     });
   });
   describe('Step Interactions', () => {
@@ -355,12 +332,10 @@ describe('FunnelVisualization', () => {
           onStepClick={onStepClick}
         />
       );
-      await waitFor(() => {
-        const stepElement = screen.getByText('Landing Page').closest('.step-bar');
+      await waitFor(() => { const stepElement = screen.getByText('Landing Page').closest('.step-bar');
         if (stepElement) {
           fireEvent.click(stepElement);
-          expect(onStepClick).toHaveBeenCalled();
-      });
+          expect(onStepClick).toHaveBeenCalled() });
     });
   });
   describe('Real-time Updates', () => {
@@ -372,22 +347,17 @@ describe('FunnelVisualization', () => {
           realTimeUpdates={true}
         />
       );
-      await waitFor(() => {
-        expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalledTimes(1);
-      });
+      await waitFor(() => { expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalledTimes(1) });
       // Fast-forward time to trigger update
       jest.advanceTimersByTime(30000);
-      await waitFor(() => {
-        expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalledTimes(2);
-      });
+      await waitFor(() => { expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalledTimes(2) });
       jest.useRealTimers();
     });
   });
-  describe('Error Handling', () => {
-  it('should handle analytics infrastructure errors', async () => {
+  describe('Error Handling', () => { it('should handle analytics infrastructure errors', async () => {
   const errorInfrastructure = {
-  ...mockAnalyticsInfrastructure,
-  queryMetrics: jest.fn().mockRejectedValue(new Error('Network error')),
+  ...mockAnalyticsInfrastructure
+  queryMetrics: jest.fn().mockRejectedValue(new Error('Network error')) }
 };
       render();
         <FunnelVisualization 
@@ -395,16 +365,13 @@ describe('FunnelVisualization', () => {
           analyticsInfrastructure={errorInfrastructure}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Error Loading Funnel')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Error Loading Funnel')).toBeInTheDocument();
         expect(screen.getByText('Network error')).toBeInTheDocument();
-        expect(screen.getByText('Retry')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Retry')).toBeInTheDocument() });
     });
-    it('should allow retrying after error', async () => {
-  const errorInfrastructure = {
-  ...mockAnalyticsInfrastructure,
-  queryMetrics: jest.fn(),
+    it('should allow retrying after error', async () => { const errorInfrastructure = {
+  ...mockAnalyticsInfrastructure
+  queryMetrics: jest.fn() }
   .mockRejectedValueOnce(new Error('Network error'))
   .mockResolvedValue([])
 };
@@ -414,13 +381,9 @@ describe('FunnelVisualization', () => {
           analyticsInfrastructure={errorInfrastructure}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Retry')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Retry')).toBeInTheDocument() });
       fireEvent.click(screen.getByText('Retry'));
-      await waitFor(() => {
-        expect(errorInfrastructure.queryMetrics).toHaveBeenCalledTimes(2);
-      });
+      await waitFor(() => { expect(errorInfrastructure.queryMetrics).toHaveBeenCalledTimes(2) });
     });
   });
   describe('Comparison Mode', () => {
@@ -431,32 +394,27 @@ describe('FunnelVisualization', () => {
           comparisonMode="time_period"
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Comparison Analysis')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Comparison Analysis')).toBeInTheDocument() });
     });
   });
   describe('Insights Generation', () => {
     it('should display insights when available', async () => {
       render(<FunnelVisualization {...defaultProps} />);
-      await waitFor(() => {
-        expect(screen.getByText('Funnel Insights')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Funnel Insights')).toBeInTheDocument();
         expect(screen.getByText('Biggest Drop-off Points')).toBeInTheDocument();
         expect(screen.getByText('Conversion Opportunities')).toBeInTheDocument();
-        expect(screen.getByText('Performance Trends')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Performance Trends')).toBeInTheDocument() });
     });
   });
 });
-describe('FunnelConfiguration', () => {
-  const configProps = {
+describe('FunnelConfiguration', () => { const configProps = {
   initialFunnel: {
-  name: 'Test Funnel',
-  description: 'Test Description',
-  category: 'acquisition' as const,
-},
-  templates: [],
-    availableEvents: [],
+  name: 'Test Funnel'
+  description: 'Test Description'
+  category: 'acquisition' as const }
+
+  templates: []
+    availableEvents: []
     availableProperties: [];
   };
   describe('Basic Configuration', () => {
@@ -542,71 +500,60 @@ describe('FunnelConfiguration', () => {
     });
   });
 });
-describe('FunnelComparison', () => {
-  const comparisonProps = {
-  analyticsInfrastructure: mockAnalyticsInfrastructure,
-  primaryFunnel: mockFunnelDefinition,
-  comparisonMode: 'time_period' as const,
+describe('FunnelComparison', () => { const comparisonProps = {
+  analyticsInfrastructure: mockAnalyticsInfrastructure
+  primaryFunnel: mockFunnelDefinition
+  comparisonMode: 'time_period' as const
   comparisonConfig: {
-  mode: 'time_period' as const,
+  mode: 'time_period' as const
   baseline: {
-  id: 'baseline',
-  name: 'Last Month',
-  description: 'Previous month performance',
-},
-  comparison: {
-  id: 'comparison',
-  name: 'This Month',
-  description: 'Current month performance',
-},
-  timeRange: { start: Date.now() - 2592000000, end: Date.now() },
-      significanceLevel: 0.05,
-      minimumSampleSize: 100,
-      includeStatisticalTests: true,
+  id: 'baseline'
+  name: 'Last Month'
+  description: 'Previous month performance' }
+
+  comparison: { 
+  id: 'comparison'
+  name: 'This Month'
+  description: 'Current month performance' }
+
+  timeRange: { start: Date.now() - 2592000000, end: Date.now() }
+      significanceLevel: 0.05
+      minimumSampleSize: 100
+      includeStatisticalTests: true
       autoGenerateInsights: true;
   };
   describe('Component Rendering', () => {
     it('should render comparison interface', async () => {
       render(<FunnelComparison {...comparisonProps} />);
-      await waitFor(() => {
-        expect(screen.getByText('Funnel Comparison')).toBeInTheDocument();
-        expect(screen.getByText('Last Month vs This Month')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Funnel Comparison')).toBeInTheDocument();
+        expect(screen.getByText('Last Month vs This Month')).toBeInTheDocument() });
     });
     it('should display comparison summary metrics', async () => {
       render(<FunnelComparison {...comparisonProps} />);
-      await waitFor(() => {
-        expect(screen.getByText('Overall Conversion Rate')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Overall Conversion Rate')).toBeInTheDocument();
         expect(screen.getByText('Total Conversions')).toBeInTheDocument();
         expect(screen.getByText('Average Time to Convert')).toBeInTheDocument();
-        expect(screen.getByText('Total Value')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Total Value')).toBeInTheDocument() });
     });
     it('should show view mode controls', async () => {
       render(<FunnelComparison {...comparisonProps} />);
-      await waitFor(() => {
-        expect(screen.getByText('Overview')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Overview')).toBeInTheDocument();
         expect(screen.getByText('Detailed')).toBeInTheDocument();
-        expect(screen.getByText('Statistical')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Statistical')).toBeInTheDocument() });
     });
   });
   describe('View Modes', () => {
     it('should switch between view modes', async () => {
       render(<FunnelComparison {...comparisonProps} />);
-      await waitFor(() => {
-        const detailedButton = screen.getByText('Detailed');
+      await waitFor(() => { const detailedButton = screen.getByText('Detailed');
         fireEvent.click(detailedButton);
-        expect(detailedButton).toHaveClass('active');
-      });
+        expect(detailedButton).toHaveClass('active') });
     });
   });
   describe('Insights', () => {
     it('should display generated insights', async () => {
       render(<FunnelComparison {...comparisonProps} />);
-      await waitFor(() => {
-        expect(screen.getByText('Key Insights')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Key Insights')).toBeInTheDocument() });
     });
   });
   describe('Export Functionality', () => {
@@ -618,20 +565,17 @@ describe('FunnelComparison', () => {
           onExportRequest={onExportRequest}
         />
       );
-      await waitFor(() => {
-        const exportButton = screen.getByText('Export Report');
+      await waitFor(() => { const exportButton = screen.getByText('Export Report');
         fireEvent.click(exportButton);
-        expect(onExportRequest).toHaveBeenCalled();
-      });
+        expect(onExportRequest).toHaveBeenCalled() });
     });
   });
 });
-describe('FunnelSegmentation', () => {
-  const segmentationProps = {
-    analyticsInfrastructure: mockAnalyticsInfrastructure,
-    funnelId: 'test-funnel',
-    timeRange: { start: Date.now() - 86400000, end: Date.now() },
-    availableSegments: mockSegments,
+describe('FunnelSegmentation', () => { const segmentationProps = {
+    analyticsInfrastructure: mockAnalyticsInfrastructure
+    funnelId: 'test-funnel' }
+    timeRange: { start: Date.now() - 86400000, end: Date.now() }
+    availableSegments: mockSegments
     availableCohorts: mockCohorts;
   };
   describe('Component Rendering', () => {
@@ -661,10 +605,8 @@ describe('FunnelSegmentation', () => {
     it('should allow toggling segments', () => {
       render(<FunnelSegmentation {...segmentationProps} />);
       const segmentCard = screen.getByText('Premium Users').closest('.segment-card');
-      if (segmentCard) {
-        fireEvent.click(segmentCard);
-        expect(segmentCard).toHaveClass('active');
-    });
+      if (segmentCard) { fireEvent.click(segmentCard);
+        expect(segmentCard).toHaveClass('active') });
   });
   describe('Cohort Selection', () => {
     it('should switch to cohort view', () => {
@@ -697,11 +639,9 @@ describe('FunnelSegmentation', () => {
       render(<FunnelSegmentation {...segmentationProps} />);
       // Add a segment filter
       const segmentCard = screen.getByText('Premium Users').closest('.segment-card');
-      if (segmentCard) {
-        fireEvent.click(segmentCard);
+      if (segmentCard) { fireEvent.click(segmentCard);
         expect(screen.getByText('Active Filters')).toBeInTheDocument();
-        expect(screen.getByText('Premium Users')).toBeInTheDocument();
-    });
+        expect(screen.getByText('Premium Users')).toBeInTheDocument() });
   });
   describe('Segment Analysis', () => {
     it('should call analytics infrastructure when segments are active', async () => {
@@ -714,11 +654,9 @@ describe('FunnelSegmentation', () => {
       );
       // Add a segment filter
       const segmentCard = screen.getByText('Premium Users').closest('.segment-card');
-      if (segmentCard) {
-        fireEvent.click(segmentCard);
+      if (segmentCard) { fireEvent.click(segmentCard);
         await waitFor(() => {
-          expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalled();
-        });
+          expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalled() });
     });
   });
 });
@@ -752,21 +690,20 @@ describe('Integration Tests', () => {
     );
     // Add a segment filter
     const segmentCard = screen.getByText('Premium Users').closest('.segment-card');
-    if (segmentCard) {
-  fireEvent.click(segmentCard);
+    if (segmentCard) { fireEvent.click(segmentCard);
   await waitFor(() => {
   expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalledWith()
   expect.objectContaining({)
-  funnelId: 'test-funnel',
-  metrics: expect.arrayContaining(['conversion_rate', 'user_count', 'revenue']),
-  filters: expect.arrayContaining([),
+  funnelId: 'test-funnel'
+  metrics: expect.arrayContaining(['conversion_rate', 'user_count', 'revenue'])
+  filters: expect.arrayContaining([)
   expect.objectContaining({)
-  field: 'userContext.segmentIds',
-  operator: 'contains',
-  value: 'segment-1',
-}
+  field: 'userContext.segmentIds'
+  operator: 'contains'
+  value: 'segment-1' }
+
             ])
-  }
+
         );
       });
   });

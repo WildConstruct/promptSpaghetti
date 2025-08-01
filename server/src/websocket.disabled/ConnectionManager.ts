@@ -92,6 +92,7 @@ export class ConnectionManager extends EventEmitter {
    * Authenticate a connection
    */
   async authenticateConnection(connectionId: string, authPayload: AuthPayload): Promise<boolean> {
+
     try {
       if (!this.config.enableAuthentication) {
         // Skip authentication if disabled

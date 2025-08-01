@@ -11,6 +11,7 @@ import { SecurityEvent, CrossSystemAlertingSystem } from './AlertingSystem';
 import { SecurityAnalyticsMonitor } from '../monitoring/SecurityAnalyticsMonitor';
 
 }
+}
 export interface SecurityIncident {
     id: string;
     title: string;
@@ -35,6 +36,7 @@ export interface SecurityIncident {
         businessImpact: string;
         dataClassification: 'public' | 'internal' | 'confidential' | 'restricted'
 }
+}
   };
     timeline: IncidentTimelineEntry[];
     actions: IncidentAction[];
@@ -46,18 +48,17 @@ export interface SecurityIncident {
     postIncidentReviewCompleted: boolean;
 
 }
-export interface IncidentTimelineEntry {
-    id: string;
+}
+export interface IncidentTimelineEntry { id: string;
     timestamp: number;
     type: 'detection' | 'triage' | 'escalation' | 'action' | 'communication' | 'containment' | 'resolution';
     actor: string;
     description: string;
     details?: any;
-    automated: boolean;
-
+    automated: boolean }
 }
-export interface IncidentAction {
-    id: string;
+}
+export interface IncidentAction { id: string;
     type: 'containment' | 'eradication' | 'recovery' | 'investigation' | 'communication' | 'documentation';
     title: string;
     description: string;
@@ -68,11 +69,10 @@ export interface IncidentAction {
     createdAt: number;
     completedAt?: number;
     result?: string;
-    dependencies?: string[];
-
+    dependencies?: string[] }
 }
-export interface Evidence {
-    id: string;
+}
+export interface Evidence { id: string;
     type: 'log_file' | 'screenshot' | 'network_capture' | 'system_state' | 'forensic_image' | 'document' | 'artifact';
     name: string;
     description: string;
@@ -84,13 +84,13 @@ export interface Evidence {
         handler: string;
         timestamp: number;
         action: 'collected' | 'analyzed' | 'transferred' | 'archived';
-        notes?: string;
+        notes?: string }
 }
     }>;
 
 }
-export interface Communication {
-    id: string;
+}
+export interface Communication { id: string;
     type: 'internal' | 'external' | 'regulatory' | 'customer' | 'media' | 'law_enforcement';
     audience: string[];
     subject: string;
@@ -100,13 +100,13 @@ export interface Communication {
     channel: 'email' | 'phone' | 'meeting' | 'document' | 'portal' | 'other';
     acknowledged?: Array<{
         recipient: string;
-        acknowledgedAt: number;
+        acknowledgedAt: number }
 }
     }>;
 
 }
-export interface IncidentResponseProcedure {
-    id: string;
+}
+export interface IncidentResponseProcedure { id: string;
     name: string;
     description: string;
     category: SecurityIncident['category'];
@@ -114,18 +114,16 @@ export interface IncidentResponseProcedure {
     triggerConditions: {
         eventTypes: SecurityEvent['type'][];
         severityThreshold: SecurityEvent['severity'];
-        customRules: string[];
+        customRules: string[] }
 }
     };
     phases: IncidentResponsePhase[];
     automatedActions: AutomatedResponseAction[];
     communicationTemplates: CommunicationTemplate[];
-    complianceRequirements: {
-        framework: string;
+    complianceRequirements: { framework: string;
         reportingTimeline: number;
         requiredActions: string[];
-        documentationRequirements: string[];
-    }[];
+        documentationRequirements: string[] }[];
     createdBy: string;
     createdAt: number;
     lastUpdated: number;
@@ -134,8 +132,8 @@ export interface IncidentResponseProcedure {
     approvedBy?: string;
 
 }
-export interface IncidentResponsePhase {
-    id: string;
+}
+export interface IncidentResponsePhase { id: string;
     name: string;
     description: string;
     order: number;
@@ -145,15 +143,15 @@ export interface IncidentResponsePhase {
     timeBounds?: {
         minimum?: number;
         maximum?: number;
-        typical?: number;
+        typical?: number }
 }
     };
     dependencies?: string[];
     triggers?: string[];
 
 }
-export interface ResponseStep {
-    id: string;
+}
+export interface ResponseStep { id: string;
     title: string;
     description: string;
     type: 'manual' | 'automated' | 'decision' | 'verification';
@@ -167,18 +165,17 @@ export interface ResponseStep {
     verificationCriteria?: string[];
     rollbackInstructions?: string;
     estimatedDuration: number;
-    dependencies?: string[];
-
+    dependencies?: string[] }
 }
-export interface AutomatedResponseAction {
-    id: string;
+}
+export interface AutomatedResponseAction { id: string;
     name: string;
     description: string;
     type: 'containment' | 'isolation' | 'blocking' | 'notification' | 'data_collection' | 'analysis';
     trigger: {
         automatic: boolean;
         requiresApproval: boolean;
-        conditions: string[];
+        conditions: string[] }
 }
     };
     script: string;
@@ -190,8 +187,8 @@ export interface AutomatedResponseAction {
     testMode: boolean;
 
 }
-export interface CommunicationTemplate {
-    id: string;
+}
+export interface CommunicationTemplate { id: string;
     name: string;
     type: Communication['type'];
     audience: string;
@@ -202,7 +199,7 @@ export interface CommunicationTemplate {
         name: string;
         description: string;
         required: boolean;
-        defaultValue?: string;
+        defaultValue?: string }
 }
     }>;
     timing: 'immediate' | 'hourly' | 'daily' | 'milestone' | 'resolution';
@@ -210,8 +207,8 @@ export interface CommunicationTemplate {
     conditions?: string[];
 
 }
-export interface TroubleshootingWorkflow {
-    id: string;
+}
+export interface TroubleshootingWorkflow { id: string;
     name: string;
     description: string;
     category: string;
@@ -225,11 +222,10 @@ export interface TroubleshootingWorkflow {
     createdAt: number;
     lastUpdated: number;
     successRate: number;
-    averageResolutionTime: number;
-
+    averageResolutionTime: number }
 }
-export interface DiagnosticStep {
-    id: string;
+}
+export interface DiagnosticStep { id: string;
     title: string;
     description: string;
     type: 'check' | 'test' | 'query' | 'analysis' | 'measurement';
@@ -241,7 +237,7 @@ export interface DiagnosticStep {
     nextSteps: Array<{
         condition: string;
         nextStepId: string;
-        confidence: number;
+        confidence: number }
 }
     }>;
     successIndicators: string[];
@@ -249,8 +245,8 @@ export interface DiagnosticStep {
     timeoutSeconds: number;
 
 }
-export interface DecisionNode {
-    id: string;
+}
+export interface DecisionNode { id: string;
     question: string;
     type: 'boolean' | 'multiple_choice' | 'numeric' | 'text';
     options?: string[];
@@ -258,7 +254,7 @@ export interface DecisionNode {
         condition: string;
         nextNodeId?: string;
         solutionId?: string;
-        escalate?: boolean;
+        escalate?: boolean }
 }
     }>;
     helpText?: string;
@@ -266,8 +262,8 @@ export interface DecisionNode {
     automationSupport?: boolean;
 
 }
-export interface Solution {
-    id: string;
+}
+export interface Solution { id: string;
     title: string;
     description: string;
     category: string;
@@ -277,7 +273,7 @@ export interface Solution {
         description: string;
         type: 'action' | 'verification' | 'rollback';
         script?: string;
-        manual?: boolean;
+        manual?: boolean }
 }
     }>;
     effectiveness: number;
@@ -291,56 +287,45 @@ export interface Solution {
     lastUsed?: number;
 
 }
-export interface IncidentResponseConfig {
-    responseTeams: {
+}
+export interface IncidentResponseConfig { responseTeams: {
         primary: string[];
         secondary: string[];
         escalation: string[];
-        external: string[];
+        external: string[] }
 }
     };
-    slaTargets: {
-        detection: number;
+    slaTargets: { detection: number;
         acknowledgment: number;
         triage: number;
         containment: number;
-        resolution: number;
-    };
-    notifications: {
-        immediate: string[];
+        resolution: number };
+    notifications: { immediate: string[];
         escalation: string[];
         resolution: string[];
-        external: string[];
-    };
-    integrations: {
-        ticketing: {
+        external: string[] };
+    integrations: { ticketing: {
             enabled: boolean;
             system: 'jira' | 'servicenow' | 'remedy';
             autoCreate: boolean;
-            syncUpdates: boolean;
-        };
-        siem: {
-            enabled: boolean;
+            syncUpdates: boolean };
+        siem: { enabled: boolean;
             endpoint: string;
-            autoEnrichment: boolean;
-        };
+            autoEnrichment: boolean };
         chatOps: {
             enabled: boolean;
             channels: string[];
             platform: 'slack' | 'teams' | 'discord'
   };
     };
-    compliance: {
-        frameworks: string[];
+    compliance: { frameworks: string[];
         autoReporting: boolean;
         reportingChannels: string[];
-        retentionPeriod: number;
-    };
+        retentionPeriod: number };
 /**
  * Security Incident Response Service
  */
-export declare class SecurityIncidentResponseService extends EventEmitter {
-    private config;
+export declare class SecurityIncidentResponseService extends EventEmitter { private config;
     private alertingSystem;
     private securityMonitor;
     private activeIncidents;
@@ -377,8 +362,7 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
         success: boolean;
         solutionId?: string;
         nextSteps: string[];
-        recommendations: string[];
-    }>;
+        recommendations: string[] }>;
     /**
      * Get incident details
      */
@@ -386,50 +370,43 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
     /**
      * List incidents with filtering
      */
-    listIncidents(filters?: {)
+    listIncidents(filters?: { )
         status?: SecurityIncident['status'];
         severity?: SecurityIncident['severity'];
         category?: SecurityIncident['category'];
         assignedTo?: string;
         dateRange?: {
             start: number;
-            end: number;
-        };
+            end: number };
     }): SecurityIncident[];
     /**
      * Generate incident response report
      */
-    generateIncidentReport(incidentId: string, reportType?: 'executive' | 'technical' | 'compliance' | 'post_incident'): {
-        incident: SecurityIncident;
+    generateIncidentReport(incidentId: string, reportType?: 'executive' | 'technical' | 'compliance' | 'post_incident'): { incident: SecurityIncident;
         summary: {
             timeToDetection: number;
             timeToContainment: number;
             timeToResolution: number;
             actionsCompleted: number;
             evidenceCollected: number;
-            communicationsSent: number;
-        };
+            communicationsSent: number };
         timeline: IncidentTimelineEntry[];
         recommendations: string[];
-        complianceStatus: {
-            framework: string;
+        complianceStatus: { framework: string;
             compliant: boolean;
-            gaps: string[];
-        }[];
+            gaps: string[] }[];
     };
     /**
      * Get response metrics and analytics
      */
-    getResponseMetrics(): typeof this.responseMetrics & {
-        activeIncidents: number;
+    getResponseMetrics(): typeof this.responseMetrics & { activeIncidents: number;
         incidentsByStatus: Record<SecurityIncident['status'], number>;
         incidentsBySeverity: Record<SecurityIncident['severity'], number>;
         incidentsByCategory: Record<SecurityIncident['category'], number>;
         averageMetrics: {
             detectionTime: number;
             responseTime: number;
-            resolutionTime: number;
-        };
+            resolutionTime: number };
     };
     private setupEventListeners;
     private handleSecurityAlert;

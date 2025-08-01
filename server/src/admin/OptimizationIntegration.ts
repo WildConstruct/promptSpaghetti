@@ -19,8 +19,8 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import optimizationConfig from './optimization-config.json';
 
-}
-}
+
+
 export interface OptimizationIntegrationConfig {
   enabled: boolean;
   enableWebDashboard: boolean;
@@ -29,9 +29,10 @@ export interface OptimizationIntegrationConfig {
   dashboardPath: string;
   cliPath: string;
   updateInterval: number; // milliseconds
-}
-}
-}
+
+
+
+
 
 /**
  * Optimization Tools Integration Service
@@ -64,7 +65,7 @@ export class OptimizationIntegration {
     this.redisService = dependencies.redisService;
     this.auditService = dependencies.auditService;
     this.performanceMonitor = dependencies.performanceMonitor;
-  }
+
 
   /**
    * Initialize optimization tools integration
@@ -74,7 +75,7 @@ export class OptimizationIntegration {
     if (!this.config.enabled) {
       console.log('⏭️  Optimization tools disabled in configuration');
       return;
-    }
+
 
     console.log('🔧 Initializing Optimization Tools Integration...');
 
@@ -85,28 +86,27 @@ export class OptimizationIntegration {
       // Initialize web dashboard if enabled
       if (this.config.enableWebDashboard) {
         await this.initializeWebDashboard();
-      }
+
       
       // Initialize CLI tools if enabled
       if (this.config.enableCLI) {
         await this.initializeCLITools();
-      }
+
       
       // Setup auto-optimization if enabled
       if (this.config.enableAutoOptimization) {
         await this.setupAutoOptimization();
-      }
+
       
       // Setup integration monitoring
       await this.setupIntegrationMonitoring();
       
       console.log('✅ Optimization Tools Integration initialized successfully');
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize Optimization Tools Integration:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Register optimization routes with Fastify server
@@ -118,7 +118,7 @@ export class OptimizationIntegration {
     if (this.optimizationDashboard) {
       this.optimizationDashboard.registerRoutes(server);
       console.log(`📊 Optimization dashboard routes registered at ${this.config.dashboardPath}`);
-    }
+
 
     // Register main optimization status endpoint
     server.get('/api/admin/optimization/status', async (request, reply) => {
@@ -128,12 +128,12 @@ export class OptimizationIntegration {
           success: true,
           data: status
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     // Register optimization configuration endpoint
@@ -147,12 +147,12 @@ export class OptimizationIntegration {
           autoOptimization: this.config.enableAutoOptimization,
           categories: optimizationConfig.optimizationCategories,
           quickActions: optimizationConfig.quickActions
-        }
+
       });
     });
 
     console.log('🔗 Optimization integration routes registered');
-  }
+
 
   /**
    * Get optimization integration status
@@ -168,30 +168,30 @@ export class OptimizationIntegration {
           optimizationService: 'active',
           webDashboard: this.optimizationDashboard ? 'active' : 'disabled',
           cliTools: this.optimizationCLI ? 'active' : 'disabled'
-  }
+
         lastUpdate: new Date(),
         version: optimizationConfig.optimizationTools.version
-  }
+
       system: {
         healthScore: dashboardData.systemHealth.overallScore,
         activeOptimizations: dashboardData.optimization.activeOptimizations,
         totalRecommendations: dashboardData.recommendations.total,
         activePolicies: dashboardData.policies.activePolicies
-  }
+
       performance: {
         performanceGain: dashboardData.optimization.impactMetrics.performanceGain,
         costSavings: dashboardData.optimization.impactMetrics.costSavings,
         efficiencyImprovement: dashboardData.optimization.impactMetrics.efficiencyImprovement
-  }
+
       configuration: {
         updateInterval: this.config.updateInterval,
         autoOptimization: this.config.enableAutoOptimization,
         categories: Object.keys(optimizationConfig.optimizationCategories).length,
         policies: optimizationConfig.defaultPolicies.length,
         profiles: optimizationConfig.defaultProfiles.length
-      }
+
     };
-  }
+
 
   /**
    * Shutdown optimization tools integration
@@ -204,10 +204,10 @@ export class OptimizationIntegration {
     if (this.optimizationService) {
       // The service doesn't have a stop method in the current implementation
       // but would be added for proper cleanup
-    }
+
     
     console.log('✅ Optimization Tools Integration shut down successfully');
-  }
+
 
   // Private initialization methods
 
@@ -231,7 +231,7 @@ export class OptimizationIntegration {
     await this.loadDefaultConfiguration();
     
     console.log('✅ Optimization Service initialized');
-  }
+
 
   /**
    * Initialize web dashboard
@@ -250,7 +250,7 @@ export class OptimizationIntegration {
     );
     
     console.log('✅ Web Dashboard initialized');
-  }
+
 
   /**
    * Initialize CLI tools
@@ -262,7 +262,7 @@ export class OptimizationIntegration {
     this.optimizationCLI = new OptimizationCLI(this.optimizationService);
     
     console.log('✅ CLI Tools initialized');
-  }
+
 
   /**
    * Setup auto-optimization
@@ -282,7 +282,7 @@ export class OptimizationIntegration {
     }, this.config.updateInterval);
     
     console.log('✅ Auto-Optimization configured');
-  }
+
 
   /**
    * Setup integration monitoring
@@ -313,13 +313,13 @@ export class OptimizationIntegration {
       
       if (event.result.success) {
         this.performanceMonitor.recordMetric('optimizations_successful', 1);
-      } else {
+ else {
         this.performanceMonitor.recordMetric('optimizations_failed', 1);
-      }
+
     });
     
     console.log('✅ Integration Monitoring configured');
-  }
+
 
   /**
    * Load default configuration from config file
@@ -334,31 +334,30 @@ export class OptimizationIntegration {
         try {
           await this.optimizationService.createOptimizationPolicy(policyConfig, 'system');
           console.log(`📋 Created default policy: ${policyConfig.name}`);
-        } catch (error) {
+ catch (error) {
           if (!error.message.includes('already exists')) {
             console.warn(`⚠️  Failed to create policy ${policyConfig.name}:`, error.message);
-          }
-        }
-      }
+
+
+
       
       // Create default profiles
       for (const profileConfig of optimizationConfig.defaultProfiles) {
         try {
           await this.optimizationService.createOptimizationProfile(profileConfig);
           console.log(`⚙️  Created default profile: ${profileConfig.name}`);
-        } catch (error) {
+ catch (error) {
           if (!error.message.includes('already exists')) {
             console.warn(`⚠️  Failed to create profile ${profileConfig.name}:`, error.message);
-          }
-        }
-      }
+
+
+
       
       console.log('✅ Default configuration loaded');
-      
-    } catch (error) {
+ catch (error) {
       console.warn('⚠️  Some default configuration items could not be loaded:', error.message);
-    }
-  }
+
+
 
   /**
    * Handle auto-optimization alerts
@@ -390,15 +389,14 @@ export class OptimizationIntegration {
           );
           
           console.log(`⚡ Auto-applied optimization: ${recommendation.title}`);
-        } catch (error) {
+ catch (error) {
           console.error(`❌ Failed to auto-apply optimization ${recommendation.title}:`, error.message);
-        }
-      }
-      
-    } catch (error) {
+
+
+ catch (error) {
       console.error('❌ Error handling auto-optimization alert:', error.message);
-    }
-  }
+
+
 
   /**
    * Perform periodic optimizations
@@ -411,11 +409,10 @@ export class OptimizationIntegration {
       
       // Check for expired recommendations and clean them up
       // This would be implemented in the optimization service
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error performing periodic optimizations:', error.message);
-    }
-  }
+
+
 
   /**
    * Check service health
@@ -437,14 +434,13 @@ export class OptimizationIntegration {
         // Trigger emergency optimizations if enabled
         if (this.config.enableAutoOptimization) {
           // This could trigger emergency optimization procedures
-        }
-      }
-      
-    } catch (error) {
+
+
+ catch (error) {
       console.error('❌ Error checking service health:', error.message);
-    }
-  }
-}
+
+
+
 
 /**
  * Factory function to create and initialize optimization integration
@@ -462,7 +458,7 @@ export async function createOptimizationIntegration(
   const integration = new OptimizationIntegration(config, dependencies);
   await integration.initialize();
   return integration;
-}
+
 
 /**
  * Default configuration for optimization integration

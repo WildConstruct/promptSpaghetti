@@ -68,7 +68,7 @@ export enum CollaborationEventType {
   SYNC_PERFORMANCE_MEASURED = 'sync_performance_measured',
   USER_EXPERIENCE_RATING = 'user_experience_rating',
   PERFORMANCE_ISSUE_DETECTED = 'performance_issue_detected'
-}
+
 
 // Common collaboration context schema
 export const CollaborationContextSchema = z.object({
@@ -97,7 +97,7 @@ export const CollaborativeSessionStartEventSchema = z.object({
     deviceType: z.enum(['desktop', 'tablet', 'mobile']),
     connectionQuality: z.enum(['excellent', 'good', 'poor', 'unknown']),
     previousSessionExists: z.boolean()
-  }
+
 });
 
 export const UserPresenceUpdateEventSchema = z.object({
@@ -114,7 +114,7 @@ export const UserPresenceUpdateEventSchema = z.object({
     lastActivity: z.date(),
     presenceDuration: z.number(), // Time in this presence state
     activityType: z.enum(['editing', 'viewing', 'commenting', 'navigating']).optional()
-  }
+
 });
 
 // Conflict Resolution Events
@@ -134,7 +134,7 @@ export const ConflictResolutionEventSchema = z.object({
     automatedResolution: z.boolean(),
     userInterventionRequired: z.boolean(),
     dataIntegrityMaintained: z.boolean()
-  }
+
 });
 
 // Communication Events
@@ -156,7 +156,7 @@ export const CommentEventSchema = z.object({
     isReply: z.boolean(),
     threadDepth: z.number(), // Depth of conversation
     resolutionMethod: z.enum(['auto', 'manual', 'timeout']).optional()
-  }
+
 });
 
 // Review and Approval Events
@@ -186,7 +186,7 @@ export const ReviewEventSchema = z.object({
     actualReviewTime: z.number().optional(),
     feedbackProvided: z.boolean().optional(),
     revisionsRequired: z.boolean().optional()
-  }
+
 });
 
 // Workspace Management Events
@@ -207,7 +207,7 @@ export const WorkspaceEventSchema = z.object({
     workspaceTemplate: z.string().optional(), // If created from template
     onboardingCompleted: z.boolean().optional(),
     billingTier: z.enum(['free', 'pro', 'enterprise']).optional()
-  }
+
 });
 
 // Performance and Quality Metrics
@@ -235,7 +235,7 @@ export const CollaborationMetricsEventSchema = z.object({
     }).optional(),
     geographicRegion: z.string().optional(),
     serverRegion: z.string().optional()
-  }
+
 });
 
 // Activity and Engagement Metrics
@@ -255,7 +255,7 @@ export const ActivityEngagementEventSchema = z.object({
     userSatisfactionRating: z.number().min(1).max(5).optional(),
     feedbackCategory: z.enum(['performance', 'usability', 'features', 'reliability']).optional(),
     improvementSuggestion: z.string().optional()
-  }
+
 });
 
 // Union type for all collaboration events
@@ -278,7 +278,7 @@ export const EPIC_23_SUCCESS_CRITERIA = {
   USER_SATISFACTION_TARGET: 4.0, // out of 5
   CONCURRENT_COLLABORATOR_TARGET: 50, // users per workspace
   SESSION_RELIABILITY_TARGET: 0.999 // 99.9% uptime
-} as const;
+ as const;
 
 // Telemetry event validation schemas
 export const CollaborationTelemetrySchemas = {

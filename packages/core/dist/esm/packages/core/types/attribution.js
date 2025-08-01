@@ -186,8 +186,9 @@ export const AttributionStatsResponseSchema = z.object({
     collaborativeChanges: z.number().int(),
     anonymousChanges: z.number().int(),
 }), byAuthor;
-(z.object({}));
-authorId: z.string().uuid().optional(),
+(z.object({}),
+    authorId);
+z.string().uuid().optional(),
     authorName;
 z.string().optional(),
     authorType;
@@ -254,8 +255,9 @@ optional();
 export const ContributorStatsResponseSchema = z.object({
     contributors: z.array(z.object({}), authorId, z.string().uuid().optional(), authorName, z.string().optional(), authorType, AuthorTypeSchema, totalChanges, z.number().int(), firstContribution, z.date(), lastContribution, z.date(), activePeriods, z.array(z.object({}), period, z.date(), changes, z.number().int()))
 }), expertise;
-(z.object({}));
-resourceType: ResourceTypeSchema,
+(z.object({}),
+    resourceType);
+ResourceTypeSchema,
     changes;
 z.number().int(),
     percentage;
@@ -282,6 +284,9 @@ z.number().int(),
 ;
 optional();
 ;
+;
+filters: AttributionFilter;
+totalDataPoints: number;
 ;
  > ;
 collaborationPatterns: {

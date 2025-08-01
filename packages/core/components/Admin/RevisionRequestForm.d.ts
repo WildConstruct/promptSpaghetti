@@ -10,6 +10,7 @@ import React from 'react';
 import { RevisionRequestFormData, RevisionContentType } from '../../types/RevisionRequestTypes';
 
 }
+}
 interface RevisionRequestFormProps {
     initialData?: Partial<RevisionRequestFormData>;
     contentType?: RevisionContentType;
@@ -23,4 +24,5 @@ interface RevisionRequestFormProps {
 export declare const RevisionRequestForm: React.FC<RevisionRequestFormProps>;
 export default RevisionRequestForm;
 //# sourceMappingURL=RevisionRequestForm.d.ts.map
+}
 }

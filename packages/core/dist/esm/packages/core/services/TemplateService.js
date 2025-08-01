@@ -145,8 +145,9 @@ export class LocalTemplateStorage {
                                                              * Create template from current graph data
                                                              */
                                                             async;
-                                                            createFromGraph(nodes, Node);
-                                                            edges: Edge,
+                                                            createFromGraph(nodes, Node),
+                                                                edges;
+                                                            Edge,
                                                                 saveData;
                                                             TemplateSaveData,
                                                                 author;

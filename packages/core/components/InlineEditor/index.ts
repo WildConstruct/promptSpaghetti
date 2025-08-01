@@ -4,33 +4,30 @@
 export { InlineNodeEditor } from './InlineNodeEditor';
 export type { InlineNodeEditorProps } from './InlineNodeEditor';
 
-export {
-  InlineEditorManager,
+export { InlineEditorManager,
   InlineEditorProvider,
   useInlineEditor,
-  useInlineEditorContext,
-} from './InlineEditorManager';
+  useInlineEditorContext }
+ from './InlineEditorManager';
 export type { InlineEditorManagerProps } from './InlineEditorManager';
 
 export { InlineEditableNode, withInlineEditing } from './InlineEditableNode';
 export type { InlineEditableNodeProps } from './InlineEditableNode';
 
-export {
-  GraphEditorWithInlineEditing,
+export { GraphEditorWithInlineEditing,
   useGraphWithInlineEditing,
-  createInlineEditingGraph,
-} from './GraphEditorIntegration';
+  createInlineEditingGraph }
+ from './GraphEditorIntegration';
 export type { GraphEditorWithInlineEditingProps } from './GraphEditorIntegration';
 
 // Story 4.2: Rich Text Editor Integration
 export { RichTextEditor, NodeSpecificRichEditor } from './RichTextEditor';
-export {
-  WeightedChoiceEditor,
+export { WeightedChoiceEditor,
   ConcatEditor,
   VariableEditor,
   ConditionalEditor,
-  OutputEditor,
-} from './NodeSpecificEditors';
+  OutputEditor }
+ from './NodeSpecificEditors';
 
 // Story 4.3: Multi-Node Batch Editing
 export { BatchNodeEditor } from './BatchNodeEditor';

@@ -3,50 +3,48 @@ import { WorkspaceId, ProjectId, UserId, ResourceId, NotificationType, Notificat
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
 }
-export interface NotificationChannel {
-    type: 'in_app' | 'email' | 'slack' | 'webhook';
-    enabled: boolean;
-    config: Record<string, unknown>;
-
 }
-export interface NotificationPreferences {
-    userId: UserId;
+export interface NotificationChannel { type: 'in_app' | 'email' | 'slack' | 'webhook';
+    enabled: boolean;
+    config: Record<string, unknown> }
+}
+}
+export interface NotificationPreferences { userId: UserId;
     channels: NotificationChannel[];
     filters: NotificationFilter[];
     digest: {
         enabled: boolean;
         frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
-        time?: string;
+        time?: string }
 }
     };
 
 }
-export interface NotificationFilter {
-    type: 'workspace' | 'project' | 'activity_type' | 'user';
-    value: string;
-    action: 'include' | 'exclude';
-
 }
-export interface NotificationTemplate {
-    type: NotificationType;
+export interface NotificationFilter { type: 'workspace' | 'project' | 'activity_type' | 'user';
+    value: string;
+    action: 'include' | 'exclude' }
+}
+}
+export interface NotificationTemplate { type: NotificationType;
     channels: {
         [channel: string]: {
             subject: string;
             body: string;
-            metadata?: Record<string, unknown>;
+            metadata?: Record<string, unknown> }
 }
         };
     };
 
 }
-export interface NotificationContext {
-    workspaceId: WorkspaceId;
+}
+export interface NotificationContext { workspaceId: WorkspaceId;
     projectId?: ProjectId;
     resourceId?: ResourceId;
     actorUserId: UserId;
     targetUserIds: UserId[];
-    data: Record<string, unknown>;
-
+    data: Record<string, unknown> }
+}
 }
 export interface NotificationDelivery {
     id: string;
@@ -100,4 +98,5 @@ export declare class WorkspaceNotificationSystem extends EventEmitter {
     shutdown(): Promise<void>;
 
 //# sourceMappingURL=notification-system.d.ts.map
+}
 }

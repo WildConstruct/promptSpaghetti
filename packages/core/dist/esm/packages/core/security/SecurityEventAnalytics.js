@@ -38,6 +38,26 @@ export var RiskLevel;
         SYSTEM_COMPROMISE = 'system_compromise',
         COMPLIANCE_VIOLATION = 'compliance_violation';
 }
+loginTimes: {
+    hour: number;
+    frequency: number;
+}
+[];
+ipAddresses: {
+    ip: string;
+    frequency: number;
+}
+[];
+devices: {
+    deviceId: string;
+    frequency: number;
+}
+[];
+actions: {
+    action: string;
+    frequency: number;
+}
+[];
 ;
 riskProfile: {
     baselineRisk: number;
@@ -393,7 +413,7 @@ export class SecurityEventAnalytics extends EventEmitter {
                                                 description;
                                             'Multiple failed login attempts detected across accounts',
                                                 indicators;
-                                            [,
+                                            [
                                                 'Multiple account lockouts',
                                                 'Failed authentication attempts',
                                                 'Short time intervals between attempts'
@@ -411,7 +431,7 @@ export class SecurityEventAnalytics extends EventEmitter {
                                                 relatedEvents;
                                             failedLogins.map(log => log.id),
                                                 mitigationStrategies;
-                                            [,
+                                            [
                                                 'Implement progressive delays',
                                                 'Enable CAPTCHA verification',
                                                 'Monitor source IP addresses',
@@ -437,7 +457,7 @@ export class SecurityEventAnalytics extends EventEmitter {
                                                 description;
                                             'Unusual administrative actions detected',
                                                 indicators;
-                                            [,
+                                            [
                                                 'Emergency unlock usage',
                                                 'Administrative overrides',
                                                 'Elevated privilege usage'
@@ -455,7 +475,7 @@ export class SecurityEventAnalytics extends EventEmitter {
                                                 relatedEvents;
                                             suspiciousActions.map(log => log.id),
                                                 mitigationStrategies;
-                                            [,
+                                            [
                                                 'Review admin access controls',
                                                 'Implement just-in-time admin access',
                                                 'Enable admin action auditing',
@@ -492,7 +512,7 @@ export class SecurityEventAnalytics extends EventEmitter {
                                                 description;
                                             'Unusual data access patterns detected',
                                                 indicators;
-                                            [,
+                                            [
                                                 'High volume data access',
                                                 'Off-hours access',
                                                 'Unusual data queries'
@@ -510,7 +530,7 @@ export class SecurityEventAnalytics extends EventEmitter {
                                                 relatedEvents;
                                             events.map(log => log.id),
                                                 mitigationStrategies;
-                                            [,
+                                            [
                                                 'Implement data loss prevention (DLP)',
                                                 'Monitor data access patterns',
                                                 'Restrict bulk data access',
@@ -542,7 +562,7 @@ export class SecurityEventAnalytics extends EventEmitter {
                                                 description;
                                             'User behavior significantly deviates from established baseline',
                                                 indicators;
-                                            [,
+                                            [
                                                 'Behavioral deviation',
                                                 'Unusual access patterns',
                                                 'Policy violations'
@@ -560,7 +580,7 @@ export class SecurityEventAnalytics extends EventEmitter {
                                                 relatedEvents;
                                             activities.slice(-10).map(log => log.id), // Last 10 events
                                                 mitigationStrategies;
-                                            [,
+                                            [
                                                 'Enhanced user monitoring',
                                                 'Access privilege review',
                                                 'Security awareness training',
@@ -809,19 +829,19 @@ evidence: {
     }
 }
 recommendations: {
-    immediate: [,
+    immediate: [
         'Initiate incident response procedures',
         'Review critical security events',
         'Implement additional monitoring'
     ],
         shortTerm;
-    [,
+    [
         'Conduct security assessment',
         'Update security policies',
         'Enhance threat detection'
     ],
         longTerm;
-    [,
+    [
         'Implement security orchestration',
         'Enhance automated response',
         'Regular security reviews'

@@ -8,6 +8,7 @@
 import React from 'react';
 
 }
+}
 export interface CreatorAttributionDashboardProps {
     userId: string;
     onTemplateClick?: (templateId: string) => void;
@@ -18,4 +19,5 @@ export interface CreatorAttributionDashboardProps {
 export declare const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardProps>;
 export default CreatorAttributionDashboard;
 //# sourceMappingURL=CreatorAttributionDashboard.d.ts.map
+}
 }

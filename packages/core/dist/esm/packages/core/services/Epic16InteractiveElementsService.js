@@ -578,8 +578,8 @@ Promise < InteractiveElement | null > {
                                         }
                                 }
                             }
-                            export default Epic16InteractiveElementsService;
                         }
+                        export default Epic16InteractiveElementsService;
                     }
                 }
             }

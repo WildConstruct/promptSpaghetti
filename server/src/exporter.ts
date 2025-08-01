@@ -176,7 +176,7 @@ export const GeneratorBundleSchema = z.object({
       type: z.literal('modifier_chain'),
       base: z.string(),
       mods: z.array(z.string())
-  }
+
   ])),
   entry_points: z.object({
     default: z.string(),
@@ -309,14 +309,14 @@ function extractControlNetParameters(graph: Graph): Partial<ControlNetParameters
             position: [0, 0, 5],
             rotation: [0, 0, 0]
           };
-        }
+
         
         // Extract camera values from variable nodes
         if (key.includes('fov') && typeof node.value === 'number') {
           controlNetParams.cameraParameters.fov = node.value;
-        }
-      }
-    }
+
+
+
     
     // Check for animation-related configurations
     if (node.type === 'Sequential' && node.sequence && node.sequence.length > 1) {
@@ -329,7 +329,7 @@ function extractControlNetParameters(graph: Graph): Partial<ControlNetParameters
           parameters: { text: item }
         }))
       };
-    }
+
     
     // Look for edge detection hints in node names/descriptions
     if (node.id.toLowerCase().includes('edge') || node.id.toLowerCase().includes('canny')) {
@@ -340,7 +340,7 @@ function extractControlNetParameters(graph: Graph): Partial<ControlNetParameters
         lowThreshold: 100,
         highThreshold: 200
       };
-    }
+
     
     // Look for depth-related hints
     if (node.id.toLowerCase().includes('depth') || node.id.toLowerCase().includes('3d')) {
@@ -349,11 +349,11 @@ function extractControlNetParameters(graph: Graph): Partial<ControlNetParameters
         strength: 1.0,
         preprocessor: 'depth_midas'
       };
-    }
+
   });
   
   return controlNetParams;
-}
+
 
 /**
  * Epic 8.6 Task 3: Extract scene data from graph nodes
@@ -365,18 +365,18 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
       position: { x: 0, y: 0, z: 5 },
       angle: { pitch: 0, yaw: 0, roll: 0 },
       distance: 5
-  }
+
     lighting: {
       timeOfDay: 'noon',
       weather: 'clear',
       mood: 'bright'
-  }
+
     environment: {
       setting: 'interior-studio',
       atmosphere: 'calm',
       scale: 'medium',
       props: []
-    }
+
   };
 
   // Extract scene data from variable nodes
@@ -389,32 +389,32 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
       if (key.includes('camera') || key.includes('position')) {
         if (key.includes('x') && typeof value === 'number') {
           sceneData.camera!.position.x = value;
-        }
+
         if (key.includes('y') && typeof value === 'number') {
           sceneData.camera!.position.y = value;
-        }
+
         if (key.includes('z') && typeof value === 'number') {
           sceneData.camera!.position.z = value;
-        }
-      }
+
+
 
       // Camera angles
       if (key.includes('angle') || key.includes('rotation')) {
         if (key.includes('pitch') && typeof value === 'number') {
           sceneData.camera!.angle.pitch = Math.max(-90, Math.min(90, value));
-        }
+
         if (key.includes('yaw') && typeof value === 'number') {
           sceneData.camera!.angle.yaw = Math.max(-180, Math.min(180, value));
-        }
+
         if (key.includes('roll') && typeof value === 'number') {
           sceneData.camera!.angle.roll = Math.max(-180, Math.min(180, value));
-        }
-      }
+
+
 
       // Distance
       if (key.includes('distance') && typeof value === 'number') {
         sceneData.camera!.distance = Math.max(0.1, Math.min(1000, value));
-      }
+
 
       // Lighting conditions
       if (key.includes('time') || key.includes('lighting')) {
@@ -426,9 +426,9 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
             else if (keyword === 'blue') sceneData.lighting!.timeOfDay = 'blue-hour';
             else sceneData.lighting!.timeOfDay = keyword as 'golden-hour' | 'blue-hour' | 'dawn' | 'dusk' | 'noon' | 'midnight';
             break;
-          }
-        }
-      }
+
+
+
 
       // Weather
       if (key.includes('weather')) {
@@ -438,9 +438,9 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
           if (stringValue.includes(keyword)) {
             sceneData.lighting!.weather = keyword as 'clear' | 'cloudy' | 'overcast' | 'foggy' | 'rainy' | 'stormy' | 'snowy';
             break;
-          }
-        }
-      }
+
+
+
 
       // Mood/atmosphere
       if (key.includes('mood') || key.includes('atmosphere')) {
@@ -450,9 +450,9 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
           if (stringValue.includes(keyword)) {
             sceneData.lighting!.mood = keyword as 'dramatic' | 'peaceful' | 'romantic' | 'mysterious' | 'energetic' | 'melancholic';
             break;
-          }
-        }
-      }
+
+
+
 
       // Environment setting
       if (key.includes('setting') || key.includes('location')) {
@@ -466,16 +466,16 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
           if (stringValue.includes(keyword.replace('-', '')) || stringValue.includes(keyword)) {
             sceneData.environment!.setting = keyword as any;
             break;
-          }
-        }
-      }
+
+
+
 
       // Props
       if (key.includes('prop') && typeof value === 'string') {
         if (!sceneData.environment!.props) sceneData.environment!.props = [];
         sceneData.environment!.props.push(value);
-      }
-    }
+
+
 
     // Extract scene hints from node names and content
     const nodeId = node.id.toLowerCase();
@@ -485,30 +485,30 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
     if (nodeId.includes('pan') || nodeContent.includes('pan')) {
       if (!sceneData.camera!.movement) sceneData.camera!.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
       sceneData.camera!.movement.type = 'pan';
-    }
+
     if (nodeId.includes('dolly') || nodeContent.includes('dolly')) {
       if (!sceneData.camera!.movement) sceneData.camera!.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
       sceneData.camera!.movement.type = 'dolly';
-    }
+
 
     // Lighting hints from node content
     if (nodeContent.includes('dramatic') || nodeContent.includes('cinematic')) {
       sceneData.lighting!.mood = 'dramatic';
-    }
+
     if (nodeContent.includes('soft') || nodeContent.includes('gentle')) {
       sceneData.lighting!.mood = 'soft';
-    }
+
 
     // Scale hints
     if (nodeContent.includes('close') || nodeContent.includes('intimate')) {
       sceneData.environment!.scale = 'intimate';
-    }
+
     if (nodeContent.includes('wide') || nodeContent.includes('vast')) {
       sceneData.environment!.scale = 'wide';
-    }
+
     if (nodeContent.includes('epic') || nodeContent.includes('grand')) {
       sceneData.environment!.scale = 'epic';
-    }
+
   });
 
   // Generate scene metadata if we have enough information
@@ -525,10 +525,10 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
       takeNumber: 1,
       notes: 'Auto-generated scene data from graph variables'
     };
-  }
+
 
   return sceneData;
-}
+
 
 /**
  * Converts a graph to a generator bundle format
@@ -547,7 +547,7 @@ export function graphToBundle(
     targetPipeline?: 'stable-diffusion' | 'midjourney' | 'dalle' | 'custom';
     // Epic 8.6 Task 3: Scene data integration options
     includeSceneData?: boolean;
-  }
+
 ): GeneratorBundle {
   // Create default metadata with Epic 8.6 VFX enhancements
   const metadata = {
@@ -558,13 +558,13 @@ export function graphToBundle(
     debug: {
       seed: typeof graph.seed === 'number' ? graph.seed : undefined,
       originGraphGuid: undefined // Could be added as an optional parameter if needed
-  }
+
     // Epic 8.6: VFX pipeline metadata
     vfx: options.controlNetEnabled ? {
       exportFormat: 'controlnet-compatible' as const,
       targetPipeline: options.targetPipeline || 'stable-diffusion',
       compatibilityVersion: '1.0.0'
-    } : undefined
+ : undefined
   };
 
   // Initialize bundle structure
@@ -575,7 +575,7 @@ export function graphToBundle(
     entry_points: {
       default: 'main',
       alternatives: []
-  }
+
     seed: typeof graph.seed === 'number' ? graph.seed : undefined
   };
 
@@ -590,25 +590,25 @@ export function graphToBundle(
         strength: 1.0,
         startStep: 0,
         endStep: 1000
-  }
+
       depthMaps: extractedParams.depthMaps || {
         enabled: false,
         strength: 1.0,
         preprocessor: 'depth_midas'
-  }
+
       edgeDetection: extractedParams.edgeDetection || {
         enabled: false,
         strength: 1.0,
         preprocessor: 'canny',
         lowThreshold: 100,
         highThreshold: 200
-  }
+
       animationSequence: extractedParams.animationSequence || {
         frameCount: 1,
         fps: 24,
         interpolationMethod: 'linear',
         keyframes: []
-  }
+
       cameraParameters: extractedParams.cameraParameters || {
         fov: 70,
         aspectRatio: 1.777, // 16:9
@@ -616,13 +616,13 @@ export function graphToBundle(
         farPlane: 1000,
         position: [0, 0, 5],
         rotation: [0, 0, 0]
-  }
+
       billboardProjection: extractedParams.billboardProjection || {
         enabled: false,
         targetResolution: [1920, 1080]
-      }
+
     };
-  }
+
 
   // Find all variable declarations in the graph
   const variables: Record<string, any> = {};
@@ -635,11 +635,11 @@ export function graphToBundle(
     
     if (node.type === 'SetVariable') {
       variables[node.key] = node.value;
-    }
+
     
     if (node.type === 'Output') {
       outputNodes.push(node);
-    }
+
   });
 
   // Add variables to bundle
@@ -658,8 +658,8 @@ export function graphToBundle(
     // If there are multiple output nodes, add them as alternatives
     if (outputNodes.length > 1) {
       bundle.entry_points.alternatives = outputNodes.slice(1).map(n => n.id);
-    }
-  }
+
+
 
   // Epic 8.6 Task 3: Extract and integrate scene data if enabled
   if (options.includeSceneData) {
@@ -668,11 +668,11 @@ export function graphToBundle(
     // Only include scene data if meaningful data was found
     if (extractedSceneData.metadata) {
       bundle.sceneData = extractedSceneData as SceneData;
-    }
-  }
+
+
   
   return bundle;
-}
+
 
 /**
  * Epic 8.6: Enhanced VFX-focused export function
@@ -693,7 +693,7 @@ export function graphToVFXBundle(
     includeSceneData: true, // Epic 8.6 Task 3: Always include scene data in VFX exports
     targetPipeline: options.targetPipeline || 'stable-diffusion'
   });
-}
+
 
 /**
  * Epic 8.6: Validate ControlNet compatibility
@@ -703,7 +703,7 @@ export function validateVFXCompatibility(graph: Graph): {
   compatible: boolean;
   features: string[];
   recommendations: string[];
-} {
+ {
   const features: string[] = [];
   const recommendations: string[] = [];
   
@@ -771,14 +771,14 @@ export function validateVFXCompatibility(graph: Graph): {
         or depth/edge hints
       ) for better ControlNet compatibility'
     );
-  }
+
   
   return {
     compatible,
     features,
     recommendations
   };
-}
+
 
 /**
  * Epic 8.6 Task 3: Generate scene-to-prompt data flow
@@ -789,7 +789,7 @@ export function generateScenePromptFlow(sceneData: SceneData): {
   lightingPrompt: string;
   environmentPrompt: string;
   fullPrompt: string;
-} {
+ {
   const prompts = {
     cameraPrompt: '',
     lightingPrompt: '',
@@ -820,13 +820,13 @@ export function generateScenePromptFlow(sceneData: SceneData): {
       
       if (lens.aperture < 2.8) prompts.cameraPrompt += 'shallow depth of field, ';
       else if (lens.aperture > 8) prompts.cameraPrompt += 'deep focus, ';
-    }
+
 
     // Camera movement
     if (movement?.type && movement.type !== 'static') {
       prompts.cameraPrompt += `${movement.type} camera movement, `;
-    }
-  }
+
+
 
   // Lighting prompt generation  
   if (sceneData.lighting) {
@@ -843,8 +843,8 @@ export function generateScenePromptFlow(sceneData: SceneData): {
     if (keyLight?.intensity) {
       if (keyLight.intensity > 80) prompts.lightingPrompt += 'strong key light, ';
       else if (keyLight.intensity < 40) prompts.lightingPrompt += 'soft key light, ';
-    }
-  }
+
+
 
   // Environment prompt generation
   if (sceneData.environment) {
@@ -865,8 +865,8 @@ export function generateScenePromptFlow(sceneData: SceneData): {
     // Props
     if (props.length > 0) {
       prompts.environmentPrompt += `featuring ${props.join(', ')}, `;
-    }
-  }
+
+
 
   // Combine all prompts
   prompts.fullPrompt = [
@@ -884,7 +884,7 @@ export function generateScenePromptFlow(sceneData: SceneData): {
   });
 
   return prompts;
-}
+
 
 /**
  * Epic 8.6 Task 3: Create a complete scene-aware export
@@ -910,10 +910,10 @@ export function graphToSceneAwareBundle(
       ...bundle,
       scenePromptFlow
     };
-  }
+
   
   return bundle;
-}
+
 
 /**
  * Convert a node to its corresponding grammar rule in the GeneratorBundle format
@@ -934,14 +934,14 @@ function convertNodeToRule(node: Node, nodeMap: Map<string, Node>): Record<strin
         type: 'sequential',
         items: node.inputs
       };
-    }
+
     return ['']; // Empty concat gives empty string
       
   case 'Output':
     // Output nodes reference their input
     if (node.inputs && node.inputs.length > 0) {
       return [node.inputs[0]];
-    }
+
     return [''];
       
   case 'Include':
@@ -959,8 +959,8 @@ function convertNodeToRule(node: Node, nodeMap: Map<string, Node>): Record<strin
   default:
     // For unknown node types, return empty
     return [''];
-  }
-}
+
+
 
 /**
  * Validates a GeneratorBundle against the schema
@@ -971,10 +971,10 @@ export function validateGeneratorBundle(bundle: Record<string, unknown>): boolea
   try {
     GeneratorBundleSchema.parse(bundle);
     return true;
-  } catch (error) {
+ catch (error) {
     return false;
-  }
-}
+
+
 
 /**
  * Converts a GeneratorBundle back to a Graph format
@@ -985,7 +985,7 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
   // Validate the bundle first
   if (!validateGeneratorBundle(bundle)) {
     throw new Error('Invalid GeneratorBundle format');
-  }
+
   
   // Initialize the graph structure
   const graph: Graph = {
@@ -1017,7 +1017,7 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
     if (node) {
       graph.nodes.push(node);
       createdNodeIds.add(ruleId);
-    }
+
   });
   
   // Process connections between nodes
@@ -1028,15 +1028,15 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
       const node = graph.nodes.find(n => n.id === ruleId);
       if (node) {
         node.inputs = references;
-      }
-    }
+
+
   });
   
   // Ensure at least one output node exists
   ensureOutputNode(graph, bundle.entry_points.default);
   
   return graph;
-}
+
 
 /**
  * Converts a grammar rule to a node in the graph
@@ -1052,7 +1052,7 @@ function convertRuleToNode(id: string, rule: Record<string, unknown>): Node | nu
         weight: item.weight || 1
       }))
     };
-  }
+
   
   // Handle simple array rule (can be Output or Include depending on content)
   if (Array.isArray(rule) && rule.length > 0 && typeof rule[0] === 'string') {
@@ -1060,7 +1060,7 @@ function convertRuleToNode(id: string, rule: Record<string, unknown>): Node | nu
       id,
       type: 'Output'
     };
-  }
+
   
   // Handle include rule
   if (!Array.isArray(rule) && typeof rule === 'object' && '$include' in rule) {
@@ -1069,7 +1069,7 @@ function convertRuleToNode(id: string, rule: Record<string, unknown>): Node | nu
       type: 'Include',
       name: rule.$include
     };
-  }
+
   
   // Handle sequential rule (Concat)
   if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'sequential') {
@@ -1077,7 +1077,7 @@ function convertRuleToNode(id: string, rule: Record<string, unknown>): Node | nu
       id,
       type: 'Concat'
     };
-  }
+
   
   // Handle conditional rule
   if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'conditional') {
@@ -1090,7 +1090,7 @@ function convertRuleToNode(id: string, rule: Record<string, unknown>): Node | nu
         weight: 1 // Equal weights as a default
       }))
     };
-  }
+
   
   // Handle modifier chain (simplify to concat for now)
   if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'modifier_chain') {
@@ -1098,12 +1098,12 @@ function convertRuleToNode(id: string, rule: Record<string, unknown>): Node | nu
       id,
       type: 'Concat'
     };
-  }
+
   
   // Unknown rule type
   console.warn(`Unsupported rule type for ID ${id}:`, rule);
   return null;
-}
+
 
 /**
  * Find references to other nodes in a rule
@@ -1114,24 +1114,24 @@ function findNodeReferences(rule: Record<string, unknown>): string[] {
   // Handle sequential rule
   if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'sequential') {
     return rule.items || [];
-  }
+
   
   // Handle array rule that references other rules
   if (Array.isArray(rule)) {
     rule.forEach(item => {
       if (typeof item === 'string' && !item.startsWith('$')) {
         refs.push(item);
-      }
+
     });
-  }
+
   
   // Handle modifier chain
   if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'modifier_chain') {
     if (rule.base) refs.push(rule.base);
-  }
+
   
   return refs;
-}
+
 
 /**
  * Ensures that at least one output node exists for the entry point
@@ -1146,7 +1146,7 @@ function ensureOutputNode(graph: Graph, entryPointId: string): void {
       id: entryPointId,
       type: 'Output'
     });
-  } else {
+ else {
     // If node exists but isn't an output, add an output node that references it
     const isOutput = graph.nodes.some(n => n.id === entryPointId && n.type === 'Output');
     if (!isOutput) {
@@ -1156,8 +1156,8 @@ function ensureOutputNode(graph: Graph, entryPointId: string): void {
         type: 'Output',
         inputs: [entryPointId]
       });
-    }
-  }
+
+
   
   // Make sure at least one output node exists in the graph
   const hasOutput = graph.nodes.some(n => n.type === 'Output');
@@ -1166,34 +1166,37 @@ function ensureOutputNode(graph: Graph, entryPointId: string): void {
       id: 'default_output',
       type: 'Output'
     });
-  }
-}
+
+
 
 /**
  * Epic 8.5: Export Results for Film Industry
  * Professional export system with VFX-ready formats
  */
-}
-}
+
+
+
 export interface ExportRequest {
   format: string;
   data: Record<string, unknown>;
   options: Record<string, unknown>;
   filename: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExportResult {
   type: 'text' | 'binary';
   data: Record<string, unknown>;
   mimeType: string;
   shouldDownload?: boolean;
-}
-}
-}
+
+
+
+
 
 export async function exportResults(request: ExportRequest): Promise<ExportResult> {
 
@@ -1244,8 +1247,8 @@ export async function exportResults(request: ExportRequest): Promise<ExportResul
     
   default:
     throw new Error(`Unsupported export format: ${format}`);
-  }
-}
+
+
 
 // Fountain Script Export
 function exportFountainScript(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1266,8 +1269,8 @@ FADE IN:
       
       if (options.filmOptions?.includeDirectorNotes) {
         fountainContent += `[[Director's Note: Generated with seed ${result.seed}]]\n\n`;
-      }
-    }
+
+
   });
 
   fountainContent += 'FADE OUT.\n\nTHE END';
@@ -1278,7 +1281,7 @@ FADE IN:
     mimeType: 'text/plain',
     shouldDownload: true
   };
-}
+
 
 // Final Draft Export
 function exportFinalDraftScript(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1305,8 +1308,8 @@ function exportFinalDraftScript(data: Record<string, unknown>, options: Record<s
       <Text>[[Director's Note: Generated with seed ${result.seed}]]</Text>
     </Paragraph>
 `;
-      }
-    }
+
+
   });
 
   fdxContent += `  </Content>
@@ -1318,7 +1321,7 @@ function exportFinalDraftScript(data: Record<string, unknown>, options: Record<s
     mimeType: 'application/xml',
     shouldDownload: true
   };
-}
+
 
 // ControlNet JSON Export
 function exportControlNetJSON(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1348,7 +1351,7 @@ function exportControlNetJSON(data: Record<string, unknown>, options: Record<str
         processor_res: 512,
         threshold_a: 100,
         threshold_b: 200
-  }
+
       metadata: result.metadata || {}
     })),
     exportedAt: new Date().toISOString()
@@ -1360,7 +1363,7 @@ function exportControlNetJSON(data: Record<string, unknown>, options: Record<str
     mimeType: 'application/json',
     shouldDownload: true
   };
-}
+
 
 // Stable Diffusion Bundle Export
 function exportStableDiffusionBundle(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1374,13 +1377,13 @@ function exportStableDiffusionBundle(data: Record<string, unknown>, options: Rec
         pipeline: data.vfxData?.pipeline,
         resolution: data.vfxData?.resolution,
         exportOptions: options
-  }
+
       'metadata.json': {
         exportedAt: new Date().toISOString(),
         resultCount: data.results.length,
         source: 'PromptScape Epic 8.5'
-      }
-    }
+
+
   };
 
   return {
@@ -1388,7 +1391,7 @@ function exportStableDiffusionBundle(data: Record<string, unknown>, options: Rec
     data: JSON.stringify(bundleData),
     mimeType: 'application/zip'
   };
-}
+
 
 // Scene Data Export
 function exportSceneData(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1403,11 +1406,11 @@ function exportSceneData(data: Record<string, unknown>, options: Record<string, 
         position: { x: 0, y: 0, z: 5 },
         angle: { pitch: 0, yaw: 0, roll: 0 },
         fov: 70
-  }
+
       lighting: {
         timeOfDay: 'noon',
         mood: 'cinematic'
-  }
+
       metadata: result.metadata || {}
     })),
     exportedAt: new Date().toISOString()
@@ -1419,7 +1422,7 @@ function exportSceneData(data: Record<string, unknown>, options: Record<string, 
     mimeType: 'application/json',
     shouldDownload: true
   };
-}
+
 
 // CSV Analysis Export
 function exportCSVAnalysis(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1440,7 +1443,7 @@ function exportCSVAnalysis(data: Record<string, unknown>, options: Record<string
     mimeType: 'text/csv',
     shouldDownload: true
   };
-}
+
 
 // Complete JSON Export
 function exportCompleteJSON(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1457,7 +1460,7 @@ function exportCompleteJSON(data: Record<string, unknown>, options: Record<strin
     mimeType: 'application/json',
     shouldDownload: true
   };
-}
+
 
 // Professional Report Export (would generate PDF in real implementation)
 function exportProfessionalReport(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1476,8 +1479,8 @@ function exportProfessionalReport(data: Record<string, unknown>, options: Record
           (sum: number,
           r: any
         ) => sum + (r.executionTimeMs || 0), 0) / data.results.length
-      }
-  }
+
+
     results: data.results,
     recommendations: [
       'Results show consistent generation quality',
@@ -1491,7 +1494,7 @@ function exportProfessionalReport(data: Record<string, unknown>, options: Record
     data: JSON.stringify(reportData),
     mimeType: 'application/pdf'
   };
-}
+
 
 // Creative Brief Export (would generate DOCX in real implementation)
 function exportCreativeBrief(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1519,7 +1522,7 @@ function exportCreativeBrief(data: Record<string, unknown>, options: Record<stri
     data: JSON.stringify(briefData),
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   };
-}
+
 
 // === EPIC 8.6 TASK 7: HYBRID PROMPTING EXPORT FUNCTIONS ===
 
@@ -1560,7 +1563,7 @@ async function exportHybridPrompting(
         includeHollywoodProtocol: options?.includeHollywood !== false,
         quality: options?.quality || 'production',
         targetAudience: options?.targetAudience || 'mixed_crew'
-      }
+
     );
 
     return {
@@ -1569,7 +1572,7 @@ async function exportHybridPrompting(
       mimeType: 'application/json',
       shouldDownload: true
     };
-  } catch (error) {
+ catch (error) {
     // Fallback to basic hybrid structure
     const fallbackData = {
       metadata: {
@@ -1577,13 +1580,13 @@ async function exportHybridPrompting(
         version: '1.0.0',
         timestamp: new Date().toISOString(),
         format: 'wild-construct-hybrid-v1'
-  }
+
       hybridPrompting: {
         mars: {
           framework: 'MARS-v1.0',
           tags: 'Basic MARS structure not available - analysis service error',
           structured: 'Structured format generation failed'
-  }
+
         zada: {
           approach: 'screenplay-style',
           variants: [
@@ -1593,9 +1596,9 @@ async function exportHybridPrompting(
               content: `Director's Note: ${data.results?.[0]?.output || 'Generated content'}`,
               accessibility_level: 'director',
               human_readable_score: 8
-            }
+
           ]
-  }
+
         hollywood: {
           protocol: 'reproducibility-v1',
           seeds: {
@@ -1607,10 +1610,10 @@ async function exportHybridPrompting(
               generator_version: '1.0.0',
               node_version_map: {},
               schema_version: 'wild-construct-v1'
-            }
-          }
-        }
-  }
+
+
+
+
       original_data: data
     };
 
@@ -1620,8 +1623,8 @@ async function exportHybridPrompting(
       mimeType: 'application/json',
       shouldDownload: true
     };
-  }
-}
+
+
 
 /**
  * Epic 8.6 Task 7: MARS Framework Export - VFX Professional Format
@@ -1668,8 +1671,8 @@ async function exportMARSFramework(
           movement: marsData.tags.CAM.movement,
           lens: marsData.tags.CAM.lens,
           depth_of_field: marsData.tags.CAM.depth_of_field
-        }
-  }
+
+
       subject: {
         tag: `[SUBJ:${marsData.tags.SUBJ.primary}:${marsData.tags.SUBJ.emotion}:${marsData.tags.SUBJ.blocking}]`,
         breakdown: {
@@ -1678,8 +1681,8 @@ async function exportMARSFramework(
           interaction: marsData.tags.SUBJ.interaction,
           emotion: marsData.tags.SUBJ.emotion,
           blocking: marsData.tags.SUBJ.blocking
-        }
-  }
+
+
       effects: {
         tag: `[FX:${marsData.tags.FX.lighting}:${marsData.tags.FX.color_grade}:${marsData.tags.FX.atmosphere}]`,
         breakdown: {
@@ -1688,8 +1691,8 @@ async function exportMARSFramework(
           atmosphere: marsData.tags.FX.atmosphere,
           special_fx: marsData.tags.FX.special_fx,
           post_processing: marsData.tags.FX.post_processing
-        }
-  }
+
+
       focal: {
         tag: `!FOCAL[${marsData.tags.FOCAL.primary_focus}]`,
         breakdown: {
@@ -1697,8 +1700,8 @@ async function exportMARSFramework(
           secondary_focus: marsData.tags.FOCAL.secondary_focus,
           background_treatment: marsData.tags.FOCAL.background_treatment,
           visual_hierarchy: marsData.tags.FOCAL.visual_hierarchy
-        }
-  }
+
+
       // ControlNet Integration
       controlnet_mapping: marsData.structured.controlnet_mapping,
       
@@ -1708,7 +1711,7 @@ async function exportMARSFramework(
         controlnet_workflow: 'Map pose_guidance for character animation, depth_hints for 3D integration',
         recommended_tools: ['ControlNet', 'Stable Diffusion', 'Midjourney', 'DALL-E'],
         technical_requirements: 'Ensure pose data matches character rig, depth maps align with scene geometry'
-  }
+
       // Original prompt for reference
       original_prompt: data.results?.[0]?.output || '',
       variables_used: data.variables || {}
@@ -1720,7 +1723,7 @@ async function exportMARSFramework(
       mimeType: 'application/json',
       shouldDownload: true
     };
-  } catch (error) {
+ catch (error) {
     // Fallback MARS format
     const fallbackMARS = {
       format: 'MARS-VFX-Framework-v1.0-fallback',
@@ -1730,7 +1733,7 @@ async function exportMARSFramework(
       error: 'MARS analysis service unavailable, using fallback structure',
       vfx_notes: {
         note: 'This is a fallback MARS structure. For full analysis, please retry when services are available.'
-      }
+
     };
 
     return {
@@ -1739,8 +1742,8 @@ async function exportMARSFramework(
       mimeType: 'application/json',
       shouldDownload: true
     };
-  }
-}
+
+
 
 /**
  * Epic 8.6 Task 7: Zada Natural Language Export - Director-Friendly Format
@@ -1782,7 +1785,7 @@ async function exportZadaNaturalLanguage(
         shot_description: zadaData.director_friendly.shot_description,
         mood_direction: zadaData.director_friendly.mood_direction,
         reference_notes: zadaData.director_friendly.reference_notes
-  }
+
       // Multiple Natural Language Variants
       variants: zadaData.variants.map(variant => ({
         id: variant.variant_id,
@@ -1801,14 +1804,14 @@ async function exportZadaNaturalLanguage(
         variables_context: data.variables || {},
         accessibility_focus: 'Converts technical prompts into natural, director-friendly language',
         target_audience: options?.targetAudience || 'Creative team members without technical AI background'
-  }
+
       // Usage Guidelines
       usage_notes: {
         director_workflow: 'Use screenplay_style for storyboard discussions',
         crew_communication: 'Share variants with different crew members based on accessibility_level',
         iteration_process: 'Modify mood_direction and reference_notes for creative iterations',
         technical_bridge: 'Use alongside MARS framework for complete VFX pipeline integration'
-      }
+
     };
 
     // Format as readable document
@@ -1849,15 +1852,15 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
         mimeType: 'text/markdown',
         shouldDownload: true
       };
-    } else {
+ else {
       return {
         type: 'text',
         data: JSON.stringify(zadaExport, null, 2),
         mimeType: 'application/json',
         shouldDownload: true
       };
-    }
-  } catch (error) {
+
+ catch (error) {
     // Fallback Zada format
     const originalPrompt = data.results?.[0]?.output || '';
     const fallbackZada = {
@@ -1869,7 +1872,7 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
         shot_description: 'Natural shot featuring the described elements with professional cinematic composition',
         mood_direction: 'Create an authentic, engaging atmosphere that serves the story',
         reference_notes: 'Focus on natural lighting and authentic character moments'
-  }
+
       variants: [
         {
           id: 'fallback-screenplay',
@@ -1877,7 +1880,7 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
           accessibility_level: 'director',
           human_readable_score: 8,
           content: `A screenplay-style interpretation of: ${originalPrompt}`
-        }
+
       ],
       
       error: 'Zada natural language generation service unavailable, using fallback structure',
@@ -1890,8 +1893,8 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
       mimeType: 'application/json',
       shouldDownload: true
     };
-  }
-}
+
+
 
 /**
  * Epic 8.7 Task 5: Shared Graph Export Functions
@@ -1924,7 +1927,7 @@ async function exportSharedGraph(
         id: options?.authorId || 'anonymous',
         name: options?.authorName || 'Anonymous User',
         email: options?.authorEmail
-      }
+
     };
     
     // Prepare metadata
@@ -1934,7 +1937,7 @@ async function exportSharedGraph(
       versionControl: {
         tags: options?.tags || [],
         branch: options?.branch || 'main'
-      }
+
     };
     
     // Create shared graph
@@ -1953,8 +1956,7 @@ async function exportSharedGraph(
       shouldDownload: true,
       filename: `shared-graph-${sharedGraph.metadata.exportId}.json`
     };
-    
-  } catch (error) {
+ catch (error) {
     // Fallback shared format
     const fallbackSharedGraph = {
       metadata: {
@@ -1965,44 +1967,44 @@ async function exportSharedGraph(
         author: {
           id: 'fallback',
           name: 'Unknown'
-  }
+
         versionControl: {
           version: 1,
           changes: ['Fallback export due to service error'],
           tags: []
-  }
+
         sharing: {
           permissions: 'read_only',
           collaborators: []
-        }
-  }
+
+
       graph: {
         nodes: data.graph?.nodes || [],
         edges: data.graph?.edges || [],
         settings: {
           canvasPosition: { x: 0, y: 0, zoom: 1 },
           readonly: true
-        }
-  }
+
+
       annotations: {
         connectionLabels: [],
         stickyNotes: [],
         nodeLabels: [],
         regions: [],
         comments: []
-  }
+
       collaboration: {
         changeHistory: [],
         conflicts: [],
         lastSync: new Date().toISOString(),
         syncStatus: 'offline'
-  }
+
       compatibility: {
         minVersion: '1.0.0',
         features: ['basic-sharing'],
         warnings: ['Generated in fallback mode due to service error'],
         errors: [error instanceof Error ? error.message : 'Unknown error']
-  }
+
       error: 'Sharing service unavailable, using fallback format'
     };
     
@@ -2013,8 +2015,8 @@ async function exportSharedGraph(
       shouldDownload: true,
       filename: 'shared-graph-fallback.json'
     };
-  }
-}
+
+
 
 /**
  * Export in collaboration format with version control
@@ -2050,8 +2052,8 @@ async function exportCollaborationFormat(
         versionControl: {
           tags: ['collaboration', ...(options?.tags || [])],
           branch: options?.branch || 'collaboration'
-        }
-  }
+
+
       {
         includeHistory: true,
         includeComments: true,
@@ -2060,7 +2062,7 @@ async function exportCollaborationFormat(
           id: options?.authorId || 'collaborator',
           name: options?.authorName || 'Team Member',
           email: options?.authorEmail
-        }
+
       }
     );
     
@@ -2074,12 +2076,12 @@ async function exportCollaborationFormat(
         commentSystem: true,
         permissionManagement: true,
         changeTracking: true
-  }
+
       usage: {
         importInstructions: 'Use Wild Construct import function or share URL',
         supportedClients: ['Wild Construct Web', 'Wild Construct Desktop'],
         apiVersion: '1.0.0'
-      }
+
     };
     
     return {
@@ -2089,8 +2091,7 @@ async function exportCollaborationFormat(
       shouldDownload: true,
       filename: `collaboration-${sharedGraph.metadata.exportId}.json`
     };
-    
-  } catch (error) {
+ catch (error) {
     // Fallback collaboration format
     const fallbackFormat = {
       metadata: {
@@ -2099,7 +2100,7 @@ async function exportCollaborationFormat(
         timestamp: new Date().toISOString(),
         title: options?.title || 'Collaboration Export (Fallback)',
         format: 'collaboration-fallback'
-  }
+
       graph: data.graph || { nodes: [], edges: [] },
       collaborationFeatures: {
         realTimeSync: false,
@@ -2109,7 +2110,7 @@ async function exportCollaborationFormat(
         permissionManagement: false,
         changeTracking: false,
         fallbackMode: true
-  }
+
       error: error instanceof Error ? error.message : 'Collaboration service unavailable'
     };
     
@@ -2120,8 +2121,8 @@ async function exportCollaborationFormat(
       shouldDownload: true,
       filename: 'collaboration-fallback.json'
     };
-  }
-}
+
+
 
 /**
  * Extract connection labels from edges
@@ -2136,10 +2137,10 @@ function extractConnectionLabels(edges: Array<Record<string, unknown>>): Array<R
       position: {
         type: edge.labelPosition,
         offset: edge.labelOffset
-  }
+
       visible: edge.showLabel ?? true
     }));
-}
+
 
 /**
  * Extract node labels and annotations
@@ -2155,7 +2156,7 @@ function extractNodeLabels(nodes: Array<Record<string, unknown>>): Array<Record<
   })).filter(label => 
     label.label || label.description || label.tags.length > 0 || label.notes
   );
-}
+
 
 // Utility function to escape XML content
 function escapeXml(unsafe: string): string {
@@ -2167,6 +2168,6 @@ function escapeXml(unsafe: string): string {
     case '\'': return '&apos;';
     case '"': return '&quot;';
     default: return c;
-    }
+
   });
-}
+

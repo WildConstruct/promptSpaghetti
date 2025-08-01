@@ -11,7 +11,7 @@ import {
   TemporaryAccessGrantService,
   GrantCreationRequest,
   GrantRevocationRequest
-} from '../TemporaryAccessGrantService';
+ from '../TemporaryAccessGrantService';
 import { AuditService } from '../../auth/services/AuditService';
 import { DataAccessControlService } from '../DataAccessControlService';
 import { AccessRequestWorkflowService } from '../AccessRequestWorkflowService';
@@ -19,7 +19,7 @@ import {
   DataClassificationLevel,
   DataOperation,
   OperationContext
-} from '../../../../packages/core/types/DataClassification';
+ from '../../../../packages/core/types/DataClassification';
 
 // Mock the dependencies
 jest.mock('../../auth/services/AuditService');
@@ -42,7 +42,7 @@ describe('TemporaryAccessGrantService', () => {
       country: 'US',
       region: 'CA',
       city: 'San Francisco'
-    }
+
   };
 
   beforeEach(() => {
@@ -81,19 +81,19 @@ describe('TemporaryAccessGrantService', () => {
             limit: 10,
             window: 3600,
             burstAllowed: false
-          }]
-        }],
+]
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'doc-public-*',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
           timezone: 'UTC',
@@ -103,7 +103,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: true,
           maxExtensions: 2,
           extensionDuration: 8 // 8 hours
-  }
+
         conditions: [{
           type: 'MFA_REQUIRED',
           specification: {
@@ -111,13 +111,13 @@ describe('TemporaryAccessGrantService', () => {
             validation: [],
             dependencies: [],
             conflictsWith: []
-  }
+
           required: true,
           enforced: true,
           fallbackBehavior: 'DENY',
           verificationRequired: true,
           reVerificationInterval: 60 // 1 hour
-        }],
+],
         businessJustification: 'Need access to public documents for analysis',
         technicalJustification: 'Testing data processing pipeline',
         urgency: 'MEDIUM'
@@ -162,7 +162,7 @@ describe('TemporaryAccessGrantService', () => {
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() - 1000), // Past time
           timezone: 'UTC',
@@ -172,7 +172,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: false,
           maxExtensions: 0,
           extensionDuration: 0
-  }
+
         businessJustification: 'Invalid test',
         technicalJustification: 'Testing invalid scenario',
         urgency: 'LOW'
@@ -193,18 +193,18 @@ describe('TemporaryAccessGrantService', () => {
           resourcePatterns: ['sensitive-*'],
           exclusions: [],
           rateLimits: []
-        }],
+],
         accessScope: {
           type: 'GLOBAL',
           targets: [{
             type: 'CLASSIFICATION',
             value: 'RESTRICTED',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'ALL_DESCENDANTS',
           cascadingPermissions: true
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
           timezone: 'UTC',
@@ -214,7 +214,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: false,
           maxExtensions: 0,
           extensionDuration: 0
-  }
+
         businessJustification: 'Emergency data cleanup required',
         technicalJustification: 'Critical system maintenance',
         urgency: 'CRITICAL'
@@ -246,18 +246,18 @@ describe('TemporaryAccessGrantService', () => {
           resourcePatterns: ['conf-*'],
           exclusions: [],
           rateLimits: []
-        }],
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'conf-*',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
           timezone: 'UTC',
@@ -267,7 +267,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: true,
           maxExtensions: 1,
           extensionDuration: 4
-  }
+
         businessJustification: 'Document processing',
         technicalJustification: 'Content management system update',
         urgency: 'HIGH'
@@ -292,7 +292,7 @@ describe('TemporaryAccessGrantService', () => {
             auditorId: 'activator-789'
   }
         );
-      }
+
     });
 
     it('should reject activation of expired grant', async () => {
@@ -305,18 +305,18 @@ describe('TemporaryAccessGrantService', () => {
           resourcePatterns: ['pub-*'],
           exclusions: [],
           rateLimits: []
-        }],
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'pub-*',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() - 1000), // Expired
           timezone: 'UTC',
@@ -326,7 +326,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: false,
           maxExtensions: 0,
           extensionDuration: 0
-  }
+
         businessJustification: 'Expired test',
         technicalJustification: 'Testing expiration',
         urgency: 'LOW'
@@ -356,23 +356,23 @@ describe('TemporaryAccessGrantService', () => {
             limit: 5,
             window: 3600,
             burstAllowed: false
-          }]
-        }],
+]
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'doc-*',
             metadata: {}
-          }],
+],
           exclusions: [{
             type: 'RESOURCE_PATTERN',
             value: 'doc-secret-*',
             metadata: {}
-          }],
+],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
           timezone: 'UTC',
@@ -382,7 +382,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: true,
           maxExtensions: 2,
           extensionDuration: 8
-  }
+
         businessJustification: 'Data analysis project',
         technicalJustification: 'Research pipeline',
         urgency: 'MEDIUM'
@@ -451,7 +451,7 @@ describe('TemporaryAccessGrantService', () => {
           `doc-test-${i}`,
           testContext
         );
-      }
+
 
       // The 6th request should be blocked by rate limit
       const result = await service.validateAccess(
@@ -498,18 +498,18 @@ describe('TemporaryAccessGrantService', () => {
           resourcePatterns: ['doc-*'],
           exclusions: [],
           rateLimits: []
-        }],
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'doc-*',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
           timezone: 'UTC',
@@ -519,7 +519,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: true,
           maxExtensions: 1,
           extensionDuration: 4
-  }
+
         businessJustification: 'Testing revocation',
         technicalJustification: 'Revocation test case',
         urgency: 'LOW'
@@ -603,18 +603,18 @@ describe('TemporaryAccessGrantService', () => {
           resourcePatterns: ['doc-*'],
           exclusions: [],
           rateLimits: []
-        }],
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'doc-*',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours
           timezone: 'UTC',
@@ -624,7 +624,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: true,
           maxExtensions: 2,
           extensionDuration: 4
-  }
+
         businessJustification: 'Testing extension',
         technicalJustification: 'Extension test case',
         urgency: 'LOW'
@@ -705,18 +705,18 @@ describe('TemporaryAccessGrantService', () => {
           resourcePatterns: ['doc-*'],
           exclusions: [],
           rateLimits: []
-        }],
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'doc-*',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 2 * 60 * 60 * 1000),
           timezone: 'UTC',
@@ -726,7 +726,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: false,
           maxExtensions: 0,
           extensionDuration: 0
-  }
+
         businessJustification: 'Non-extendable grant',
         technicalJustification: 'Testing non-extendable scenario',
         urgency: 'LOW'
@@ -760,19 +760,19 @@ describe('TemporaryAccessGrantService', () => {
           dataClassification: 'PUBLIC' as DataClassificationLevel,
           operation: 'read' as DataOperation,
           urgency: 'LOW' as const
-  }
+
         {
           granteeId: 'user-456',
           dataClassification: 'CONFIDENTIAL' as DataClassificationLevel,
           operation: 'WRITE' as DataOperation,
           urgency: 'HIGH' as const
-  }
+
         {
           granteeId: 'user-789',
           dataClassification: 'RESTRICTED' as DataClassificationLevel,
           operation: 'DELETE' as DataOperation,
           urgency: 'CRITICAL' as const
-        }
+
       ];
 
       for (const req of requests) {
@@ -785,18 +785,18 @@ describe('TemporaryAccessGrantService', () => {
             resourcePatterns: ['doc-*'],
             exclusions: [],
             rateLimits: []
-          }],
+],
           accessScope: {
             type: 'RESOURCE_SPECIFIC',
             targets: [{
               type: 'RESOURCE_PATTERN',
               value: 'doc-*',
               metadata: {}
-            }],
+],
             exclusions: [],
             inheritanceLevel: 'NONE',
             cascadingPermissions: false
-  }
+
           timeWindow: {
             endTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
             timezone: 'UTC',
@@ -806,14 +806,14 @@ describe('TemporaryAccessGrantService', () => {
             extendable: true,
             maxExtensions: 1,
             extensionDuration: 4
-  }
+
           businessJustification: 'Testing search functionality',
           technicalJustification: 'Search test case',
           urgency: req.urgency
         };
 
         await service.createTemporaryGrant(grantRequest, 'granter-456', testContext);
-      }
+
     });
 
     it('should search grants by grantee', async () => {
@@ -903,18 +903,18 @@ describe('TemporaryAccessGrantService', () => {
           resourcePatterns: ['doc-*'],
           exclusions: [],
           rateLimits: []
-        }],
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'doc-*',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 1000), // Very short duration
           timezone: 'UTC',
@@ -924,7 +924,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: false,
           maxExtensions: 0,
           extensionDuration: 0
-  }
+
         businessJustification: 'Event testing',
         technicalJustification: 'Testing event emission',
         urgency: 'LOW'
@@ -940,7 +940,7 @@ describe('TemporaryAccessGrantService', () => {
       
       if (grant.status === 'ACTIVE') {
         expect(events).toContain('activated');
-      }
+
     });
   });
 
@@ -957,7 +957,7 @@ describe('TemporaryAccessGrantService', () => {
           country: '',
           region: '',
           city: ''
-        }
+
       };
 
       const grantRequest: GrantCreationRequest = {
@@ -969,18 +969,18 @@ describe('TemporaryAccessGrantService', () => {
           resourcePatterns: ['doc-*'],
           exclusions: [],
           rateLimits: []
-        }],
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'doc-*',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
           timezone: 'UTC',
@@ -990,7 +990,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: false,
           maxExtensions: 0,
           extensionDuration: 0
-  }
+
         businessJustification: 'Error handling test',
         technicalJustification: 'Testing error scenarios',
         urgency: 'LOW'
@@ -1017,18 +1017,18 @@ describe('TemporaryAccessGrantService', () => {
           resourcePatterns: ['doc-*'],
           exclusions: [],
           rateLimits: []
-        }],
+],
         accessScope: {
           type: 'RESOURCE_SPECIFIC',
           targets: [{
             type: 'RESOURCE_PATTERN',
             value: 'doc-*',
             metadata: {}
-          }],
+],
           exclusions: [],
           inheritanceLevel: 'NONE',
           cascadingPermissions: false
-  }
+
         timeWindow: {
           endTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
           timezone: 'UTC',
@@ -1038,7 +1038,7 @@ describe('TemporaryAccessGrantService', () => {
           extendable: false,
           maxExtensions: 0,
           extensionDuration: 0
-  }
+
         businessJustification: 'Concurrency test',
         technicalJustification: 'Testing concurrent validation',
         urgency: 'LOW'

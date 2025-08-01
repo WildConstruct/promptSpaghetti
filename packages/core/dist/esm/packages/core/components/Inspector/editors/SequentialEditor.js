@@ -27,8 +27,7 @@ const handleWeightChange = (index, weight) => {
     const newWeights = [...weights];
     newWeights[index] = Math.max(0, weight);
     onChange({});
-    patternConfig: {
-    }
+    patternConfig: { }
 };
 patternConfig,
     weights;
@@ -38,8 +37,7 @@ newWeights,
 ;
 const handleAllowRepeatsChange = (value) => {
     onChange({});
-    patternConfig: {
-    }
+    patternConfig: { }
 };
 patternConfig,
     allowRepeats;
@@ -50,24 +48,12 @@ Boolean(value),
 const handleNameChange = (value) => {
     onChange({ name: value, label: value });
 };
-const patternOptions = [];
-{
-    value: 'linear', label;
-    'Linear - Sequential order, stops at end';
-}
-{
-    value: 'cyclical', label;
-    'Cyclical - Cycles through infinitely';
-}
-{
-    value: 'random', label;
-    'Random - Random selection';
-}
-{
-    value: 'weighted', label;
-    'Weighted - Probability-based selection';
-}
-;
+const patternOptions = [
+    { value: 'linear', label: 'Linear - Sequential order, stops at end' },
+    { value: 'cyclical', label: 'Cyclical - Cycles through infinitely' },
+    { value: 'random', label: 'Random - Random selection' },
+    { value: 'weighted', label: 'Weighted - Probability-based selection' }
+];
 // Contextual help for the sequence name field
 const { wrapWithHelp: wrapNameHelp } = useContextualHelp({});
 id: 'sequential-sequence-name',

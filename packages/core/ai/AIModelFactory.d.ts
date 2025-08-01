@@ -4,25 +4,23 @@
  *
  * Factory for creating and managing AI model adapters
  */
-import { 
-  BaseAIModel,
+import { BaseAIModel,
   AIModelType,
   AIModelProvider,
   ModelConfiguration,
   AIModelFactory as IAIModelFactory,
-  ModelCapabilities,
+  ModelCapabilities }
   ModelMetadata
 } from './BaseAIModel';
 import { HTTPRequestMapping } from './adapters/GenericHTTPAdapter';
 
 }
-export interface FactoryConfig {
-    defaultTimeout?: number;
+}
+export interface FactoryConfig { defaultTimeout?: number;
     defaultRetries?: number;
     enableLogging?: boolean;
-    logLevel?: 'debug' | 'info' | 'warn' | 'error';
-
-
+    logLevel?: 'debug' | 'info' | 'warn' | 'error' }
+}
 }
 export interface ModelRegistration {
     id: string;
@@ -63,4 +61,5 @@ export declare class AIModelFactory implements IAIModelFactory {
 
 export default AIModelFactory;
 //# sourceMappingURL=AIModelFactory.d.ts.map
+}
 }

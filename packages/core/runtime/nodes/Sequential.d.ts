@@ -4,6 +4,7 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeData, Valida
  */
 
 }
+}
 export interface SequencePatternConfig {
     /** For weighted pattern: weights corresponding to sequence items */
     weights?: number[];
@@ -16,6 +17,8 @@ export interface SequencePatternConfig {
  */
 
 }
+}
+}
 export interface SequencePattern {
     type: 'linear' | 'cyclical' | 'random' | 'weighted';
     getNext(sequence: string[], state: SequenceState, ctx: AdvancedExecutionContext): string;
@@ -24,8 +27,9 @@ export interface SequencePattern {
  */
 
 }
-export interface SequenceState {
-    /** Current index in the sequence */
+}
+}
+export interface SequenceState { /** Current index in the sequence */
     index: number;
     /** History of returned values */
     history: string[];
@@ -102,8 +106,8 @@ export declare class SequentialNode extends AdvancedRuntimeNode<string> {
  * Factory function for creating Sequential nodes
  */
 export declare function createSequentialNode(id: string)
-  sequence: string[],
-  patternType?: SequencePattern['type'],
+  sequence: string[];
+  patternType?: SequencePattern['type'] }
   patternConfig?: SequencePatternConfig
 ): SequentialNode;
 /**
@@ -113,6 +117,7 @@ export declare     readonly createCyclicalPattern: () => SequencePattern;
     readonly createRandomPattern: () => SequencePattern;
     readonly createWeightedPattern: (weights: number[]) => SequencePattern;
     readonly resetSequenceState: (node: SequentialNode, ctx: AdvancedExecutionContext) => void;
+}
 }
 };
 //# sourceMappingURL=Sequential.d.ts.map

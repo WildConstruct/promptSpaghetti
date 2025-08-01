@@ -7,8 +7,8 @@
  */
 
 }
-export interface CommunityContent {
-    id: string;
+}
+export interface CommunityContent { id: string;
     type: 'article' | 'tutorial' | 'case-study' | 'guide' | 'documentation';
     title: string;
     subtitle?: string;
@@ -18,48 +18,42 @@ export interface CommunityContent {
         html?: string;
         summary: string;
         tableOfContents?: ContentSection[];
-        metadata: ContentMetadata;
+        metadata: ContentMetadata }
 }
     };
     media: ContentMediaAttachment[];
     category: string;
     tags: string[];
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-    seo: {
-        metaTitle: string;
+    seo: { metaTitle: string;
         metaDescription: string;
         keywords: string[];
-        canonicalUrl?: string;
-    };
-    editorial: {
-        status: 'draft' | 'review' | 'approved' | 'published' | 'archived';
+        canonicalUrl?: string };
+    editorial: { status: 'draft' | 'review' | 'approved' | 'published' | 'archived';
         assignedEditor?: string;
         reviewNotes?: string;
         publishSchedule?: string;
-        lastReview?: string;
-    };
+        lastReview?: string };
 
 }
-export interface ContentSection {
-    id: string;
+}
+export interface ContentSection { id: string;
     title: string;
     level: number;
     anchor: string;
-    children?: ContentSection[];
-
+    children?: ContentSection[] }
 }
-export interface ContentMetadata {
-    readingTime: number;
+}
+export interface ContentMetadata { readingTime: number;
     wordCount: number;
     lastSignificantUpdate: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     prerequisites: string[];
     learningObjectives: string[];
-    relatedContent: string[];
-
+    relatedContent: string[] }
 }
-export interface ContentMediaAttachment {
-    id: string;
+}
+export interface ContentMediaAttachment { id: string;
     type: 'image' | 'video' | 'audio' | 'document' | 'interactive';
     url: string;
     thumbnailUrl?: string;
@@ -71,15 +65,15 @@ export interface ContentMediaAttachment {
     mimeType?: string;
     dimensions?: {
         width: number;
-        height: number;
+        height: number }
 }
     };
     duration?: number;
     position: number;
 
 }
-export interface ContentVersion {
-    id: string;
+}
+export interface ContentVersion { id: string;
     content_id: string;
     version_number: string;
     version_tag?: string;
@@ -108,11 +102,10 @@ export interface ContentVersion {
     feedback_score: number;
     quality_metrics: ContentQualityScore;
     plagiarism_check?: PlagiarismResult;
-    fact_check?: FactCheckResult;
-
+    fact_check?: FactCheckResult }
 }
-export interface ReviewFeedback {
-    id: string;
+}
+export interface ReviewFeedback { id: string;
     reviewer_id: string;
     reviewer_name: string;
     review_date: string;
@@ -121,73 +114,67 @@ export interface ReviewFeedback {
     comment: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     status: 'open' | 'addressed' | 'dismissed';
-    resolution?: string;
-
+    resolution?: string }
 }
-export interface ContentContributor {
-    user_id: string;
+}
+export interface ContentContributor { user_id: string;
     name: string;
     role: 'author' | 'co-author' | 'editor' | 'reviewer' | 'illustrator' | 'fact-checker';
     contribution: string;
     contribution_date: string;
-    attribution_visible: boolean;
-
+    attribution_visible: boolean }
 }
-export interface ContentQualityScore {
-    overall_score: number;
+}
+export interface ContentQualityScore { overall_score: number;
     dimensions: {
         accuracy: number;
         clarity: number;
         completeness: number;
         usefulness: number;
         originality: number;
-        engagement: number;
+        engagement: number }
 }
     };
-    automated_checks: {
-        grammar_score: number;
+    automated_checks: { grammar_score: number;
         readability_score: number;
         seo_score: number;
-        formatting_score: number;
-    };
-    editorial_assessment?: {
-        content_quality: number;
+        formatting_score: number };
+    editorial_assessment?: { content_quality: number;
         factual_accuracy: number;
         style_consistency: number;
-        target_audience_fit: number;
-    };
+        target_audience_fit: number };
 
 }
-export interface PlagiarismResult {
-    overall_similarity: number;
+}
+export interface PlagiarismResult { overall_similarity: number;
     sources_found: Array<{
         url: string;
         similarity: number;
         matched_text: string;
-        context: string;
+        context: string }
 }
     }>;
     confidence_level: number;
     check_date: string;
 
 }
-export interface FactCheckResult {
-    overall_accuracy: number;
+}
+export interface FactCheckResult { overall_accuracy: number;
     claims_checked: number;
     claims_verified: number;
     disputed_claims: Array<{
         claim: string;
         status: 'verified' | 'disputed' | 'false' | 'unverifiable';
         sources: string[];
-        explanation: string;
+        explanation: string }
 }
     }>;
     check_date: string;
     checker_id?: string;
 
 }
-export interface ContentImportOptions {
-    format: 'markdown' | 'html' | 'docx' | 'pdf' | 'notion' | 'confluence';
+}
+export interface ContentImportOptions { format: 'markdown' | 'html' | 'docx' | 'pdf' | 'notion' | 'confluence';
     source: string | File | ArrayBuffer;
     merge_strategy?: 'replace' | 'merge' | 'create_version';
     preserve_formatting?: boolean;
@@ -202,11 +189,10 @@ export interface ContentImportOptions {
     run_quality_checks?: boolean;
     assign_reviewer?: string;
     target_status?: 'draft' | 'review';
-    import_notes?: string;
-
+    import_notes?: string }
 }
-export interface ContentExportOptions {
-    format: 'markdown' | 'html' | 'pdf' | 'docx' | 'epub' | 'content_bundle';
+}
+export interface ContentExportOptions { format: 'markdown' | 'html' | 'pdf' | 'docx' | 'epub' | 'content_bundle';
     include_version_history?: boolean;
     include_media?: boolean;
     include_metadata?: boolean;
@@ -222,18 +208,18 @@ export interface ContentExportOptions {
     styling?: {
         theme?: string;
         custom_css?: string;
-        include_toc?: boolean;
+        include_toc?: boolean }
 }
     };
 
 }
-export interface ContentVersionDiff {
-    content_changes: Array<{
+}
+export interface ContentVersionDiff { content_changes: Array<{
         section: string;
         change_type: 'added' | 'removed' | 'modified';
         old_content?: string;
         new_content?: string;
-        line_number?: number;
+        line_number?: number }
 }
     }>;
     metadata_changes: Array<{
@@ -242,27 +228,19 @@ export interface ContentVersionDiff {
         new_value: unknown;
         change_type: 'added' | 'removed' | 'modified'
   }>;
-    media_changes: Array<{
-        media_id: string;
+    media_changes: Array<{ media_id: string;
         change_type: 'added' | 'removed' | 'modified';
         old_media?: ContentMediaAttachment;
-        new_media?: ContentMediaAttachment;
-    }>;
-    structure_changes: {
-        sections_added: number;
+        new_media?: ContentMediaAttachment }>;
+    structure_changes: { sections_added: number;
         sections_removed: number;
         sections_reordered: number;
-        toc_changes: boolean;
-    };
-    editorial_changes: {
-        status_change?: {
+        toc_changes: boolean };
+    editorial_changes: { status_change?: {
             from: string;
-            to: string;
-        };
-        reviewer_change?: {
-            from?: string;
-            to?: string;
-        };
+            to: string };
+        reviewer_change?: { from?: string;
+            to?: string };
         feedback_added: number;
         feedback_resolved: number;
     };
@@ -289,41 +267,34 @@ export declare class ContentVersionManager {
         review_notes?: string;
         priority?: 'low' | 'normal' | 'high' | 'urgent'
   }): Promise<ContentVersion>;
-    publishVersion(versionId: string, options?: {)
+    publishVersion(versionId: string, options?: { )
         release_notes?: string;
         visibility?: 'private' | 'team' | 'community' | 'public';
         publish_date?: string;
-        notify_subscribers?: boolean;
-    }): Promise<ContentVersion>;
+        notify_subscribers?: boolean }): Promise<ContentVersion>;
     addReviewFeedback();
-      versionId: string,
-      feedback: Omit<ReviewFeedback,
+      versionId: string
+      feedback: Omit<ReviewFeedback
       'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>
     ): Promise<ReviewFeedback>;
     resolveFeedback(versionId: string, feedbackId: string, resolution: string): Promise<void>;
     getReviewHistory(versionId: string): Promise<ReviewFeedback[]>;
     addContributor(versionId: string, contributor: Omit<ContentContributor, 'contribution_date'>): Promise<void>;
-    getCollaborationHistory(contentId?: string): Promise<Array<{
-        version_id: string;
+    getCollaborationHistory(contentId?: string): Promise<Array<{ version_id: string;
         version_number: string;
         contributors: ContentContributor[];
         created_at: string;
-        change_summary: string;
-    }>>;
-    importContent(options: ContentImportOptions): Promise<{
-        success: boolean;
+        change_summary: string }>>;
+    importContent(options: ContentImportOptions): Promise<{ success: boolean;
         imported_version: ContentVersion;
         warnings: string[];
         errors: string[];
-        quality_score?: ContentQualityScore;
-    }>;
-    exportContent(versionId: string, options: ContentExportOptions): Promise<{
-        download_url?: string;
+        quality_score?: ContentQualityScore }>;
+    exportContent(versionId: string, options: ContentExportOptions): Promise<{ download_url?: string;
         file_data?: ArrayBuffer;
         filename: string;
         size: number;
-        format: string;
-    }>;
+        format: string }>;
     compareVersions(fromVersionId: string, toVersionId: string): Promise<{
         from_version: ContentVersion;
         to_version: ContentVersion;
@@ -331,28 +302,24 @@ export declare class ContentVersionManager {
         similarity_score: number;
         change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite'
   }>;
-    getVersionHistory(options?: {)
+    getVersionHistory(options?: { )
         include_drafts?: boolean;
         branch_name?: string;
         limit?: number;
         offset?: number;
-        contributor_id?: string;
-    }): Promise<{
-        versions: ContentVersion[];
-        total: number;
-    }>;
-    runQualityAssessment(versionId: string, options?: {)
+        contributor_id?: string }): Promise<{ versions: ContentVersion[];
+        total: number }>;
+    runQualityAssessment(versionId: string, options?: { )
         include_plagiarism_check?: boolean;
         include_fact_check?: boolean;
         include_grammar_check?: boolean;
-        include_seo_analysis?: boolean;
-    }): Promise<ContentQualityScore>;
+        include_seo_analysis?: boolean }): Promise<ContentQualityScore>;
     private generateNextVersion;
     private calculateQualityMetrics;
 
 }
-export interface ContentBundle {
-    format_version: string;
+}
+export interface ContentBundle { format_version: string;
     created_at: string;
     created_by: string;
     content: ContentVersion;
@@ -365,7 +332,7 @@ export interface ContentBundle {
         examples?: Array<{
             name: string;
             description: string;
-            preview: string;
+            preview: string }
 }
         }>;
     };

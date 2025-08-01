@@ -6,78 +6,85 @@
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
 
-}
+
 export interface Permission {
   id: string;,
-  name: string;
+  name: string;,
   resource: string;,
   action: string;
   conditions?: Record<string, any>;
-}
-}
-}
+
+
+
+
+
 export interface Role {
   id: string;,
-  name: string;
+  name: string;,
   permissions: Permission;,
   level: number;
-}
-}
-}
+
+
+
+
+
 export interface User {
   id: string;,
-  roles: Role;
+  roles: Role;,
   permissions: Permission;
-}
+
+
+
 interface UsePermissionsReturn {
   user: User | null;,
-  loading: boolean;
+  loading: boolean;,
   error: string | null;,
   hasPermission: (resource: string, action: string) => boolean;,
   hasRole: (roleName: string) => boolean;,
   hasAnyRole: (roleNames: string) => boolean;,
   hasAllRoles: (roleNames: string) => boolean;,
-}
+
+},
   canAccess: (requiredPermissions: Array<{ resource: string; action: string }>) => boolean;
   getHighestRole: () => Role | null;,
   refreshPermissions: () => Promise<void>;
 
 // Define standard permission resources and actions
-}
+
 export const PERMISSIONS = {
-  USERS: {
+  USERS: {,
   VIEW: 'users:view',
   CREATE: 'users:create',
   UPDATE: 'users:update',
   DELETE: 'users:delete',
   MANAGE_ROLES: 'users:manage_roles',
 },
-  FEATURE_TOGGLES: {
+  FEATURE_TOGGLES: {,
   VIEW: 'feature_toggles:view',
   CREATE: 'feature_toggles:create',
   UPDATE: 'feature_toggles:update',
   DELETE: 'feature_toggles:delete',
   TOGGLE: 'feature_toggles:toggle',
 },
-  POLICIES: {
+  POLICIES: {,
   VIEW: 'policies:view',
   CREATE: 'policies:create',
   UPDATE: 'policies:update',
   DELETE: 'policies:delete',
   ASSIGN: 'policies:assign',
 },
-  ANALYTICS: {
+  ANALYTICS: {,
   VIEW: 'analytics:view',
   EXPORT: 'analytics:export',
 },
-  AUDIT: {
+  AUDIT: {,
   VIEW: 'audit:view',
   EXPORT: 'audit:export',
 },
-  SYSTEM: {
+  SYSTEM: {,
   SETTINGS: 'system:settings',
   MONITORING: 'system:monitoring',
-} as const;
+ as const;
 
 export const ROLES = {
   SUPER_ADMIN: 'super_admin',
@@ -85,17 +92,17 @@ export const ROLES = {
   MODERATOR: 'moderator',
   ANALYST: 'analyst',
   VIEWER: 'viewer',
-} as const;
+ as const;
 
 // Mock user data - replace with actual API call
 const mockUser: User = {,
   id: 'user123',
-  roles: [,
+  roles: [
     {
       id: 'admin',
       name: 'Administrator',
       level: 80,
-      permissions: [,
+      permissions: [
         { id: '1', name: 'View Users', resource: 'users', action: 'view' },
         { id: '2', name: 'Create Users', resource: 'users', action: 'create' },
         { id: '3', name: 'Update Users', resource: 'users', action: 'update' },
@@ -125,9 +132,9 @@ export const usePermissions = (): UsePermissionsReturn => {
       // In a real implementation, this would be an API call
       await new Promise(resolve => setTimeout(resolve, 100));
       setUser(mockUser);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load permissions');
-} finally {
+ finally {
       setLoading(false);
   }, []);
   // Check if user has a specific permission
@@ -185,34 +192,38 @@ export const usePermissions = (): UsePermissionsReturn => {
 };
 
 // Permission checking helper components
-}
+
+
 interface PermissionGateProps {
   resource: string;,
-  action: string;
+  action: string;,
   children: React.ReactNode;
   fallback?: React.ReactNode;
-  export const PermissionGate: React.FC<PermissionGateProps> = ({,)
+  export const PermissionGate: React.FC<PermissionGateProps> = ({),
   resource,
   action,
   children,
   fallback = null
-}
+
+
 }) => {
   const { hasPermission } = usePermissions();
   return hasPermission(resource, action) ? <>{children}</> : <>{fallback}</>;
 };
-}
+
+
 interface RoleGateProps {
   roles: string | string;
   requireAll?: boolean;
   children: React.ReactNode;
   fallback?: React.ReactNode;
-  export const RoleGate: React.FC<RoleGateProps> = ({,)
+  export const RoleGate: React.FC<RoleGateProps> = ({),
   roles,
   requireAll = false,
   children,
   fallback = null
-}
+
+
 }) => {
   const { hasRole, hasAnyRole, hasAllRoles } = usePermissions();
   const roleNames = Array.isArray(roles) ? roles : [roles];

@@ -5,20 +5,21 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { RandomizerParameters, ParameterPreset, ValidationResult, ComplexityLevel, StylePreference, LLMProvider } from '../parameters/parameter-schema';
 import { ParameterManager } from '../parameters/parameter-manager';
 import { RandomizerWorkflow } from '../workflow/randomizer-workflow';
-}
-interface RandomizerPanelProps {
-  onGraphGenerated?: (graph: any) => void;
+
+
+interface RandomizerPanelProps { onGraphGenerated?: (graph: any) => void;
   onError?: (error: Error) => void;
   className?: string;
   initialParameters?: Partial<RandomizerParameters>;
-/**
- * Main randomizer panel component
- */
-export const RandomizerPanel: React.FC<RandomizerPanelProps> = ({)
-  onGraphGenerated,
-  onError,
-  className = '',
-}
+  /**
+  * Main randomizer panel component
+  */
+  export const RandomizerPanel: React.FC<RandomizerPanelProps> = ({);
+  onGraphGenerated;
+  onError;
+  className = '' }
+
+
   initialParameters = {}
 }) => {
   // State management
@@ -39,63 +40,49 @@ export const RandomizerPanel: React.FC<RandomizerPanelProps> = ({)
   const history = useMemo(() => parameterManager.getHistory(), [parameterManager]);
   const historyStats = useMemo(() => parameterManager.getHistoryStats(), [parameterManager]);
   // Validate parameters on change
-  useEffect(() => {
-    const result = parameterManager.validateParameters(parameters);
-    setValidation(result);
-  }, [parameters, parameterManager]);
+  useEffect(() => { const result = parameterManager.validateParameters(parameters);
+    setValidation(result) }, [parameters, parameterManager]);
   // Handle parameter changes
   const updateParameter = useCallback(<K extends keyof RandomizerParameters>(;);
-    key: K,
-    value: RandomizerParameters[K]) => {,
+    key: K
+    value: RandomizerParameters[K]) => {
     setParameters(prev => ({ ...prev, [key]: value }));
   }, []);
   // Handle preset selection
-  const selectPreset = useCallback((presetId: string) => {
-    const preset = parameterManager.getPreset(presetId);
+  const selectPreset = useCallback((presetId: string) => { const preset = parameterManager.getPreset(presetId);
     if (preset) {
       setParameters(preset.parameters);
-      setSelectedPreset(presetId);
-  }, [parameterManager]);
+      setSelectedPreset(presetId) }, [parameterManager]);
   // Handle generation
-  const handleGenerate = useCallback(async () => {
-  if (!validation.isValid) return;
+  const handleGenerate = useCallback(async () => { if (!validation.isValid) return;
   try {
   setIsGenerating(true);
   setGenerationProgress('Preparing generation...');
   const completeParameters = parameterManager.createCompleteParameters(parameters);
   setGenerationProgress('Generating with LLM...');
   const result = await workflow.generateGraph(completeParameters, {)
-  onProgress: (message: string) => setGenerationProgress(message),
+  onProgress: (message: string) => setGenerationProgress(message) }
 });
-      if (result.success && result.graph) {
-        // Add to history
+      if (result.success && result.graph) { // Add to history
         parameterManager.addToHistory()
-          completeParameters,
-          true,
-          result.metadata?.generationTime,
+          completeParameters
+          true
+          result.metadata?.generationTime }
           result.errors?.length || 0
         );
         onGraphGenerated?.(result.graph);
         setGenerationProgress('Generation complete!');
         setTimeout(() => setGenerationProgress(''), 2000);
-      } else {
-        throw new Error(result.errors?.[0]?.message || 'Generation failed');
-    } catch (error) {
-  console.error('Generation error:', error);
+ else { throw new Error(result.errors?.[0]?.message || 'Generation failed') } catch (error) { console.error('Generation error:', error);
   // Add failed attempt to history
   if (parameters.purpose) {
   const completeParameters = parameterManager.createCompleteParameters(parameters);
   parameterManager.addToHistory(completeParameters, false);
   onError?.(error instanceof Error ? error : new Error('Unknown error'));
   setGenerationProgress('Generation failed');
-  setTimeout(() => setGenerationProgress(''), 3000);
-} finally {
-      setIsGenerating(false);
-  }, [parameters, validation, parameterManager, workflow, onGraphGenerated, onError]);
+  setTimeout(() => setGenerationProgress(''), 3000) } finally { setIsGenerating(false) }, [parameters, validation, parameterManager, workflow, onGraphGenerated, onError]);
   // Get suggestions
-  const suggestions = useMemo(() => {
-    return parameterManager.getSuggestions(parameters);
-  }, [parameters, parameterManager]);
+  const suggestions = useMemo(() => { return parameterManager.getSuggestions(parameters) }, [parameters, parameterManager]);
   return;
     <div className={`randomizer-panel ${className}`}>}
       {/* Header */}

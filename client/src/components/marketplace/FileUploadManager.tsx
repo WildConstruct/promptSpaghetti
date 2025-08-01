@@ -2,19 +2,20 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import './FileUploadManager.css';
-}
+
+
 interface UploadedFile {
   id: string;,
-  file_type: 'graph_json' | 'prompt_yaml' | 'asset_file' | 'documentation';
+  file_type: 'graph_json' | 'prompt_yaml' | 'asset_file' | 'documentation';,
   filename: string;,
-  file_size: number;
+  file_size: number;,
   mime_type: string;,
-  validation_status: 'pending' | 'valid' | 'invalid';
+  validation_status: 'pending' | 'valid' | 'invalid';,
   validation_errors: string;,
   uploaded_at: string;
   interface FileUploadManagerProps {
   submissionId: string;,
-  files: UploadedFile;
+  files: UploadedFile;,
   onFileUploaded: (file: UploadedFile) => void;,
   onFileRemoved: (fileId: string) => void;
   const FILE_TYPE_LABELS = {
@@ -22,7 +23,8 @@ interface UploadedFile {
   prompt_yaml: 'Prompt YAML',
   asset_file: 'Asset File',
   documentation: 'Documentation',
-}
+
+
 };
 const FILE_TYPE_DESCRIPTIONS = {
   graph_json: 'JSON file containing your template\'s graph structure',
@@ -84,10 +86,10 @@ export const FileUploadManager: React.FC<FileUploadManagerProps> = ({)
       if (validationResponse.ok) {
         finalFile = await validationResponse.json();
       onFileUploaded(finalFile);
-    } catch (error) {
+ catch (error) {
       console.error('Upload failed:', error);
       setErrors(prev => [...prev, `Failed to upload ${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`]);}
-    } finally {
+ finally {
       setUploadingFiles(prev => {)
   const newSet = new Set(prev);
         newSet.delete(uploadKey);
@@ -112,7 +114,7 @@ export const FileUploadManager: React.FC<FileUploadManagerProps> = ({)
       });
       if (response.ok) {
         onFileRemoved(fileId);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to remove file:', error);
 };
   const formatFileSize = (bytes: number): string => {
@@ -132,7 +134,7 @@ export const FileUploadManager: React.FC<FileUploadManagerProps> = ({)
   const error = validateFile(file, fileType);
   if (error) {
   setErrors(prev => [...prev, error]);
-} else {
+ else {
           uploadFile(file, fileType);
       });
     }, [fileType]);

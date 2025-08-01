@@ -5,8 +5,8 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { DataAccessControlService } from './DataAccessControlService';
 
-}
-}
+
+
 export interface AuditWorkflow {
   id: string;
   name: string;
@@ -23,12 +23,13 @@ export interface AuditWorkflow {
   createdAt: Date;
   updatedAt: Date;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowStep {
   stepId: string;
   name: string;
@@ -45,24 +46,26 @@ export interface WorkflowStep {
   nextSteps: string[];
   approvalRequired: boolean;
   reviewRequirements: ReviewRequirement[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TriggerCondition {
   conditionType: TriggerType;
   parameters: Record<string, any>;
   frequency?: string; // cron expression for scheduled workflows
   threshold?: number;
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceItem {
   id: string;
   type: EvidenceType;
@@ -72,23 +75,25 @@ export interface EvidenceItem {
   collectedBy: string;
   collectedAt: Date;
   verificationStatus: VerificationStatus;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewRequirement {
   reviewType: ReviewType;
   requiredRole: string;
   criteria: string[];
   signOffRequired: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowExecution {
   executionId: string;
   workflowId: string;
@@ -101,12 +106,13 @@ export interface WorkflowExecution {
   evidence: EvidenceItem[];
   reports: AuditReport[];
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowFinding {
   id: string;
   severity: FindingSeverity;
@@ -120,12 +126,13 @@ export interface WorkflowFinding {
   status: FindingStatus;
   identifiedBy: string;
   identifiedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationAction {
   actionId: string;
   description: string;
@@ -134,12 +141,13 @@ export interface RemediationAction {
   status: ActionStatus;
   evidence?: string[];
   completedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AuditReport {
   reportId: string;
   workflowExecutionId: string;
@@ -154,9 +162,10 @@ export interface AuditReport {
   approvedBy?: string;
   approvedAt?: Date;
   distribution: string[];
-}
-}
-}
+
+
+
+
 
 export enum WorkflowType {
   COMPLIANCE_AUDIT = 'COMPLIANCE_AUDIT',
@@ -167,7 +176,7 @@ export enum WorkflowType {
   PENETRATION_TEST = 'PENETRATION_TEST',
   RISK_ASSESSMENT = 'RISK_ASSESSMENT',
   VENDOR_AUDIT = 'VENDOR_AUDIT'
-}
+
 
 export enum WorkflowStatus {
   DRAFT = 'DRAFT',
@@ -176,7 +185,7 @@ export enum WorkflowStatus {
   SUSPENDED = 'SUSPENDED',
   COMPLETED = 'COMPLETED',
   ARCHIVED = 'ARCHIVED'
-}
+
 
 export enum StepType {
   DATA_COLLECTION = 'DATA_COLLECTION',
@@ -187,7 +196,7 @@ export enum StepType {
   APPROVAL = 'APPROVAL',
   REMEDIATION = 'REMEDIATION',
   VERIFICATION = 'VERIFICATION'
-}
+
 
 export enum StepStatus {
   PENDING = 'PENDING',
@@ -195,7 +204,7 @@ export enum StepStatus {
   COMPLETED = 'COMPLETED',
   BLOCKED = 'BLOCKED',
   SKIPPED = 'SKIPPED'
-}
+
 
 export enum TriggerType {
   SCHEDULED = 'SCHEDULED',
@@ -203,14 +212,14 @@ export enum TriggerType {
   THRESHOLD_BASED = 'THRESHOLD_BASED',
   MANUAL = 'MANUAL',
   COMPLIANCE_DATE = 'COMPLIANCE_DATE'
-}
+
 
 export enum WorkflowPriority {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
-}
+
 
 export enum EvidenceType {
   DOCUMENT = 'DOCUMENT',
@@ -220,21 +229,21 @@ export enum EvidenceType {
   INTERVIEW_NOTES = 'INTERVIEW_NOTES',
   TEST_RESULTS = 'TEST_RESULTS',
   METRICS = 'METRICS'
-}
+
 
 export enum VerificationStatus {
   PENDING = 'PENDING',
   VERIFIED = 'VERIFIED',
   REJECTED = 'REJECTED',
   NEEDS_CLARIFICATION = 'NEEDS_CLARIFICATION'
-}
+
 
 export enum ReviewType {
   TECHNICAL = 'TECHNICAL',
   BUSINESS = 'BUSINESS',
   LEGAL = 'LEGAL',
   COMPLIANCE = 'COMPLIANCE'
-}
+
 
 export enum ExecutionStatus {
   INITIATED = 'INITIATED',
@@ -242,14 +251,14 @@ export enum ExecutionStatus {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
   CANCELLED = 'CANCELLED'
-}
+
 
 export enum FindingSeverity {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
-}
+
 
 export enum FindingCategory {
   TECHNICAL = 'TECHNICAL',
@@ -257,35 +266,35 @@ export enum FindingCategory {
   POLICY = 'POLICY',
   COMPLIANCE = 'COMPLIANCE',
   SECURITY = 'SECURITY'
-}
+
 
 export enum FindingStatus {
   OPEN = 'OPEN',
   IN_REMEDIATION = 'IN_REMEDIATION',
   RESOLVED = 'RESOLVED',
   ACCEPTED_RISK = 'ACCEPTED_RISK'
-}
+
 
 export enum ActionStatus {
   ASSIGNED = 'ASSIGNED',
   IN_PROGRESS = 'IN_PROGRESS',
   COMPLETED = 'COMPLETED',
   OVERDUE = 'OVERDUE'
-}
+
 
 export enum ReportType {
   EXECUTIVE_SUMMARY = 'EXECUTIVE_SUMMARY',
   DETAILED_FINDINGS = 'DETAILED_FINDINGS',
   COMPLIANCE_REPORT = 'COMPLIANCE_REPORT',
   REMEDIATION_PLAN = 'REMEDIATION_PLAN'
-}
+
 
 export enum ComplianceStatus {
   COMPLIANT = 'COMPLIANT',
   NON_COMPLIANT = 'NON_COMPLIANT',
   PARTIALLY_COMPLIANT = 'PARTIALLY_COMPLIANT',
   NOT_APPLICABLE = 'NOT_APPLICABLE'
-}
+
 
 export class AuditWorkflowService {
   private db: DatabaseService;
@@ -300,7 +309,7 @@ export class AuditWorkflowService {
     this.db = db;
     this.audit = audit;
     this.accessControl = accessControl;
-  }
+
 
   /**
    * Create a new audit workflow
@@ -348,12 +357,11 @@ export class AuditWorkflowService {
           workflowType: workflow.workflowType,
           name: workflow.name,
           stepsCount: workflow.steps.length
-        }
+
       });
 
       return { workflowId };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'AUDIT_WORKFLOW_CREATION_ERROR',
         userId: workflow.createdBy,
@@ -363,12 +371,12 @@ export class AuditWorkflowService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Start workflow execution
@@ -381,11 +389,11 @@ export class AuditWorkflowService {
       const workflow = await this.getWorkflow(workflowId);
       if (!workflow) {
         throw new Error('Workflow not found');
-      }
+
 
       if (workflow.status !== WorkflowStatus.ACTIVE) {
         throw new Error('Workflow is not active');
-      }
+
 
       // Create execution record
       await this.db.query(`
@@ -408,7 +416,7 @@ export class AuditWorkflowService {
       // Start first step
       if (workflow.steps.length > 0) {
         await this.startWorkflowStep(executionId, workflow.steps[0].stepId);
-      }
+
 
       // Log execution start
       await this.audit.logSecurityEvent({
@@ -421,12 +429,11 @@ export class AuditWorkflowService {
         metadata: {
           workflowId,
           workflowType: workflow.workflowType
-        }
+
       });
 
       return { executionId };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'AUDIT_WORKFLOW_EXECUTION_ERROR',
         userId: triggeredBy,
@@ -436,12 +443,12 @@ export class AuditWorkflowService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Submit evidence for a workflow step
@@ -458,14 +465,14 @@ export class AuditWorkflowService {
       const execution = await this.getWorkflowExecution(executionId);
       if (!execution) {
         throw new Error('Workflow execution not found');
-      }
+
 
       // Validate step exists and is active
       const workflow = await this.getWorkflow(execution.workflowId);
       const step = workflow?.steps.find(s => s.stepId === stepId);
       if (!step) {
         throw new Error('Workflow step not found');
-      }
+
 
       // Create evidence record
       const evidenceItem: EvidenceItem = {
@@ -495,12 +502,11 @@ export class AuditWorkflowService {
           executionId,
           stepId,
           evidenceType: evidence.type
-        }
+
       });
 
       return { evidenceId };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'AUDIT_EVIDENCE_SUBMISSION_ERROR',
         userId: evidence.collectedBy,
@@ -510,12 +516,12 @@ export class AuditWorkflowService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Complete a workflow step
@@ -532,12 +538,12 @@ export class AuditWorkflowService {
       const execution = await this.getWorkflowExecution(executionId);
       if (!execution) {
         throw new Error('Workflow execution not found');
-      }
+
 
       const workflow = await this.getWorkflow(execution.workflowId);
       if (!workflow) {
         throw new Error('Workflow not found');
-      }
+
 
       // Update step status
       const updatedSteps = workflow.steps.map(step => {
@@ -549,7 +555,7 @@ export class AuditWorkflowService {
             findings,
             nextSteps
           };
-        }
+
         return step;
       });
 
@@ -570,10 +576,10 @@ export class AuditWorkflowService {
       // Start next step if available
       if (nextStep) {
         await this.startWorkflowStep(executionId, nextStep.stepId);
-      } else {
+ else {
         // Complete workflow execution
         await this.completeWorkflowExecution(executionId);
-      }
+
 
       // Log step completion
       await this.audit.logSecurityEvent({
@@ -587,12 +593,11 @@ export class AuditWorkflowService {
           stepId,
           findingsCount: findings.length,
           nextStepId: nextStep?.stepId
-        }
+
       });
 
       return { nextStepId: nextStep?.stepId };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'AUDIT_WORKFLOW_STEP_COMPLETION_ERROR',
         userId: completedBy,
@@ -602,12 +607,12 @@ export class AuditWorkflowService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Generate audit report
@@ -624,12 +629,12 @@ export class AuditWorkflowService {
       const execution = await this.getWorkflowExecution(executionId);
       if (!execution) {
         throw new Error('Workflow execution not found');
-      }
+
 
       const workflow = await this.getWorkflow(execution.workflowId);
       if (!workflow) {
         throw new Error('Workflow not found');
-      }
+
 
       // Generate report content
       const report: AuditReport = {
@@ -679,12 +684,11 @@ export class AuditWorkflowService {
           executionId,
           reportType,
           findingsCount: report.findings.length
-        }
+
       });
 
       return { reportId, reportContent: report };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'AUDIT_REPORT_GENERATION_ERROR',
         userId: generatedBy,
@@ -694,12 +698,12 @@ export class AuditWorkflowService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Get active workflows
@@ -719,23 +723,23 @@ export class AuditWorkflowService {
     if (filters?.workflowType) {
       query += ` AND workflow_type = $${params.length + 1}`;
       params.push(filters.workflowType);
-    }
+
 
     if (filters?.assignee) {
       query += ` AND assignees::text LIKE $${params.length + 1}`;
       params.push(`%${filters.assignee}%`);
-    }
+
 
     if (filters?.priority) {
       query += ` AND priority = $${params.length + 1}`;
       params.push(filters.priority);
-    }
+
 
     query += ' ORDER BY priority DESC, created_at ASC';
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapToAuditWorkflow);
-  }
+
 
   /**
    * Get workflow execution status
@@ -748,10 +752,10 @@ export class AuditWorkflowService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapToWorkflowExecution(result.rows[0]);
-  }
+
 
   // Private helper methods
 
@@ -759,25 +763,25 @@ export class AuditWorkflowService {
 
     if (!workflow.name || workflow.name.length < 3) {
       throw new Error('Workflow name must be at least 3 characters');
-    }
+
 
     if (!workflow.steps || workflow.steps.length === 0) {
       throw new Error('Workflow must have at least one step');
-    }
+
 
     if (!workflow.assignees || workflow.assignees.length === 0) {
       throw new Error('Workflow must have at least one assignee');
-    }
+
 
     // Validate step dependencies
     for (const step of workflow.steps) {
       for (const depId of step.dependencies) {
         if (!workflow.steps.find(s => s.stepId === depId)) {
           throw new Error(`Step dependency ${depId} not found`);
-        }
-      }
-    }
-  }
+
+
+
+
 
   private async startWorkflowStep(executionId: string, stepId: string): Promise<void> {
 
@@ -786,7 +790,7 @@ export class AuditWorkflowService {
       SET status = $1, start_date = NOW()
       WHERE execution_id = $2 AND step_id = $3
     `, [StepStatus.IN_PROGRESS, executionId, stepId]);
-  }
+
 
   private findNextEligibleStep(steps: WorkflowStep[], completedStepIndex: number): WorkflowStep | undefined {
     for (let i = completedStepIndex + 1; i < steps.length; i++) {
@@ -797,10 +801,10 @@ export class AuditWorkflowService {
       
       if (dependenciesMet) {
         return step;
-      }
-    }
+
+
     return undefined;
-  }
+
 
   private async completeWorkflowExecution(executionId: string): Promise<void> {
 
@@ -809,7 +813,7 @@ export class AuditWorkflowService {
       SET status = $1, end_date = NOW(), progress = 100
       WHERE execution_id = $2
     `, [ExecutionStatus.COMPLETED, executionId]);
-  }
+
 
   private generateReportTitle(workflow: AuditWorkflow, reportType: ReportType): string {
     const typeMap = {
@@ -820,7 +824,7 @@ export class AuditWorkflowService {
     };
 
     return `${typeMap[reportType]} - ${workflow.name}`;
-  }
+
 
   private async generateReportSummary(execution: WorkflowExecution, workflow: AuditWorkflow): Promise<string> {
 
@@ -830,7 +834,7 @@ export class AuditWorkflowService {
 
     return `Audit workflow "${workflow.name}" completed with ${totalFindings} findings identified. ` +
            `${criticalFindings} critical and ${highFindings} high severity issues require immediate attention.`;
-  }
+
 
   private async generateRecommendations(findings: WorkflowFinding[]): Promise<string[]> {
 
@@ -841,7 +845,7 @@ export class AuditWorkflowService {
     });
 
     return [...new Set(recommendations)]; // Remove duplicates
-  }
+
 
   private async calculateComplianceStatus(findings: WorkflowFinding[]): Promise<ComplianceStatus> {
 
@@ -850,12 +854,12 @@ export class AuditWorkflowService {
 
     if (criticalFindings.length > 0) {
       return ComplianceStatus.NON_COMPLIANT;
-    } else if (highFindings.length > 0) {
+ else if (highFindings.length > 0) {
       return ComplianceStatus.PARTIALLY_COMPLIANT;
-    } else {
+ else {
       return ComplianceStatus.COMPLIANT;
-    }
-  }
+
+
 
   private async determineReportDistribution(workflow: AuditWorkflow, reportType: ReportType): Promise<string[]> {
 
@@ -863,30 +867,30 @@ export class AuditWorkflowService {
     
     if (reportType === ReportType.EXECUTIVE_SUMMARY) {
       distribution.push('executive-team', 'audit-committee');
-    }
+
     
     return [...new Set(distribution)];
-  }
+
 
   private async generateWorkflowId(): Promise<string> {
 
     return `WF-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async generateExecutionId(): Promise<string> {
 
     return `EX-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async generateEvidenceId(): Promise<string> {
 
     return `EV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async generateReportId(): Promise<string> {
 
     return `RPT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async getWorkflow(workflowId: string): Promise<AuditWorkflow | null> {
 
@@ -896,10 +900,10 @@ export class AuditWorkflowService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapToAuditWorkflow(result.rows[0]);
-  }
+
 
   private mapToAuditWorkflow(row: unknown): AuditWorkflow {
     return {
@@ -919,7 +923,7 @@ export class AuditWorkflowService {
       updatedAt: row.updated_at,
       metadata: JSON.parse(row.metadata || '{}')
     };
-  }
+
 
   private mapToWorkflowExecution(row: unknown): WorkflowExecution {
     return {
@@ -935,5 +939,4 @@ export class AuditWorkflowService {
       reports: JSON.parse(row.reports || '[]'),
       metadata: JSON.parse(row.metadata || '{}')
     };
-  }
-}
+

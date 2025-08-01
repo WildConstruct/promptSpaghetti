@@ -117,7 +117,7 @@ const sampleCategories = [
     isActive: true,
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date()
-  }
+
 ];
 
 // Populate mock databases
@@ -145,19 +145,19 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
     if (parentId !== null) {
       const parentIdNum = parentId === 'null' ? null : parseInt(parentId);
       categories = categories.filter(cat => cat.parentId === parentIdNum);
-    }
+
 
     // Filter by active status
     if (isActive !== null) {
       const activeFilter = isActive === 'true';
       categories = categories.filter(cat => cat.isActive === activeFilter);
-    }
+
 
     // Sort by sortOrder, then by name
     categories.sort((a, b) => {
       if (a.sortOrder !== b.sortOrder) {
         return a.sortOrder - b.sortOrder;
-      }
+
       return a.name.localeCompare(b.name);
     });
 
@@ -171,12 +171,12 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
         const categoryData = { ...cat, children: [] };
         if (includeStats) {
           categoryData.stats = mockCategoryStats.get(cat.id);
-        }
+
         categoryMap.set(cat.id, categoryData);
         
         if (cat.parentId === null) {
           rootCategories.push(categoryData);
-        }
+
       });
 
       // Second pass: build parent-child relationships
@@ -186,8 +186,8 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           const child = categoryMap.get(cat.id);
           if (parent && child) {
             parent.children.push(child);
-          }
-        }
+
+
       });
 
       return res(
@@ -197,14 +197,14 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           total: categories.length
         })
       );
-    }
+
 
     // Return flat list
     const responseCategories = categories.map(cat => {
       const categoryData = { ...cat };
       if (includeStats) {
         categoryData.stats = mockCategoryStats.get(cat.id);
-      }
+
       return categoryData;
     });
 
@@ -231,7 +231,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Category not found'
         })
       );
-    }
+
 
     const url = new URL(req.url);
     const includeStats = url.searchParams.get('stats') === 'true';
@@ -241,14 +241,14 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
 
     if (includeStats) {
       responseCategory.stats = mockCategoryStats.get(categoryId);
-    }
+
 
     if (includeChildren) {
       const children = Array.from(mockCategories.values())
         .filter(cat => cat.parentId === categoryId)
         .sort((a, b) => a.sortOrder - b.sortOrder);
       responseCategory.children = children;
-    }
+
 
     return res(
       ctx.status(200),
@@ -270,7 +270,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
             message: 'Category name is required'
           })
         );
-      }
+
 
       // Check name uniqueness
       const existingCategory = Array.from(mockCategories.values())
@@ -284,7 +284,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
             message: 'Category name already exists'
           })
         );
-      }
+
 
       // Generate slug from name
       const slug = categoryData.slug || categoryData.name
@@ -304,7 +304,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
             message: 'Category slug already exists'
           })
         );
-      }
+
 
       // Validate parent category if provided
       if (categoryData.parentId) {
@@ -317,8 +317,8 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
               message: 'Parent category not found'
             })
           );
-        }
-      }
+
+
 
       const newCategory = {
         id: mockCategories.size + 1,
@@ -354,8 +354,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Category created successfully'
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -363,7 +362,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Category creation failed'
         })
       );
-    }
+
   }),
 
   // PUT /api/categories/:id - Update category
@@ -380,7 +379,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Category not found'
         })
       );
-    }
+
 
     try {
       const updates = await req.json();
@@ -398,8 +397,8 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
               message: 'Category name already exists'
             })
           );
-        }
-      }
+
+
 
       // Validate parent category change
       if (updates.parentId !== undefined) {
@@ -411,7 +410,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
               message: 'Category cannot be its own parent'
             })
           );
-        }
+
 
         if (updates.parentId && !mockCategories.get(updates.parentId)) {
           return res(
@@ -421,7 +420,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
               message: 'Parent category not found'
             })
           );
-        }
+
 
         // Check for circular references
         let currentParentId = updates.parentId;
@@ -434,11 +433,11 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
                 message: 'Circular parent-child relationship detected'
               })
             );
-          }
+
           const parentCategory = mockCategories.get(currentParentId);
           currentParentId = parentCategory ? parentCategory.parentId : null;
-        }
-      }
+
+
 
       const updatedCategory = {
         ...category,
@@ -457,8 +456,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Category updated successfully'
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -466,7 +464,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Category update failed'
         })
       );
-    }
+
   }),
 
   // DELETE /api/categories/:id - Delete category
@@ -483,7 +481,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Category not found'
         })
       );
-    }
+
 
     // Check if category has children
     const hasChildren = Array.from(mockCategories.values())
@@ -497,7 +495,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Cannot delete category with child categories'
         })
       );
-    }
+
 
     // Check if category has templates (mock check)
     const stats = mockCategoryStats.get(categoryId);
@@ -509,7 +507,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Cannot delete category with existing templates'
         })
       );
-    }
+
 
     mockCategories.delete(categoryId);
     mockCategoryStats.delete(categoryId);
@@ -536,7 +534,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Category not found'
         })
       );
-    }
+
 
     const stats = mockCategoryStats.get(categoryId);
     
@@ -559,7 +557,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
             message: 'Category orders must be an array'
           })
         );
-      }
+
 
       // Update sort orders
       categoryOrders.forEach(({ id, sortOrder }) => {
@@ -568,7 +566,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           category.sortOrder = sortOrder;
           category.updatedAt = new Date();
           mockCategories.set(id, category);
-        }
+
       });
 
       return res(
@@ -577,8 +575,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Categories reordered successfully'
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -586,7 +583,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
           message: 'Category reordering failed'
         })
       );
-    }
+
   }),
 
   // GET /api/categories/tree - Get full category tree
@@ -608,7 +605,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
       
       if (cat.parentId === null) {
         rootCategories.push(categoryData);
-      }
+
     });
 
     // Build parent-child relationships
@@ -618,8 +615,8 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
         const child = categoryMap.get(cat.id);
         if (parent && child) {
           parent.children.push(child);
-        }
-      }
+
+
     });
 
     // Sort all levels
@@ -628,7 +625,7 @@ export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true'
       cats.forEach(cat => {
         if (cat.children && cat.children.length > 0) {
           sortCategories(cat.children);
-        }
+
       });
     };
 
@@ -661,4 +658,3 @@ export function resetCategoryData() {
       lastUpdated: faker.date.recent({ days: 7 })
     });
   });
-}

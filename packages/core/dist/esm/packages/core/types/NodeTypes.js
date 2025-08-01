@@ -16,7 +16,7 @@ export function createBaseNodeData(id, label) {
         tags: [],
         includeMetadata: false,
         transformations: [],
-        contextHints: []
+        contextHints: [],
     };
 }
 export function createWeightedChoiceNodeData(id, label = 'Weighted Choice') {
@@ -24,7 +24,7 @@ export function createWeightedChoiceNodeData(id, label = 'Weighted Choice') {
         ...createBaseNodeData(id, label),
         type: 'WeightedChoice',
         choices: [],
-        weights: []
+        weights: [],
     };
 }
 export function createConcatNodeData(id, label = 'Concat') {
@@ -34,7 +34,7 @@ export function createConcatNodeData(id, label = 'Concat') {
         separator: ' ',
         joinMode: 'space',
         trimInputs: true,
-        preserveOrder: true
+        preserveOrder: true,
     };
 }
 export function createOutputNodeData(id, label = 'Output') {
@@ -43,7 +43,7 @@ export function createOutputNodeData(id, label = 'Output') {
         type: 'Output',
         template: '',
         format: 'text',
-        destination: 'stdout'
+        destination: 'stdout',
     };
 }
 export function createIncludeNodeData(id, label = 'Include') {
@@ -51,7 +51,7 @@ export function createIncludeNodeData(id, label = 'Include') {
         ...createBaseNodeData(id, label),
         type: 'Include',
         name: '',
-        includeType: 'template'
+        includeType: 'template',
     };
 }
 export function createSetVariableNodeData(id, label = 'Set Variable') {
@@ -63,7 +63,7 @@ export function createSetVariableNodeData(id, label = 'Set Variable') {
         variableType: 'auto',
         scope: 'global',
         persistent: false,
-        allowOverwrite: true
+        allowOverwrite: true,
     };
 }
 export function createGetVariableNodeData(id, label = 'Get Variable') {
@@ -74,7 +74,7 @@ export function createGetVariableNodeData(id, label = 'Get Variable') {
         defaultValue: '',
         variableType: 'auto',
         scope: 'global',
-        required: false
+        required: false,
     };
 }
 export function createSubjectNodeData(id, label = 'Subject') {
@@ -85,7 +85,7 @@ export function createSubjectNodeData(id, label = 'Subject') {
         grammaticalPerson: 'third',
         allowPronouns: false,
         pronouns: [],
-        baseForm: ''
+        baseForm: '',
     };
 }
 export function createActionNodeData(id, label = 'Action') {
@@ -97,7 +97,7 @@ export function createActionNodeData(id, label = 'Action') {
         mood: 'indicative',
         requiresObject: false,
         intensity: 'medium',
-        adverbVariations: []
+        adverbVariations: [],
     };
 }
 // Factory function dispatcher
@@ -125,11 +125,10 @@ export function createNodeData(type, id, label) {
             // Fallback for unimplemented types
             return {
                 ...createBaseNodeData(id, label || type),
-                type: type
+                type: type,
             };
     }
 }
-// Convert UI node data to runtime-compatible format
 export function serializeForRuntime(nodeData) {
     if (!isRuntimeNodeType(nodeData.type)) {
         // UI-only nodes cannot be serialized for runtime
@@ -137,7 +136,7 @@ export function serializeForRuntime(nodeData) {
     }
     const base = {
         id: nodeData.id,
-        type: nodeData.type
+        type: nodeData.type,
     };
     switch (nodeData.type) {
         case 'WeightedChoice':
@@ -145,7 +144,7 @@ export function serializeForRuntime(nodeData) {
                 ...base,
                 choices: nodeData.choices.map((choice, index) => ({
                     value: choice,
-                    weight: nodeData.weights[index] || 1
+                    weight: nodeData.weights[index] || 1,
                 }))
             };
         case 'Concat':
@@ -155,18 +154,18 @@ export function serializeForRuntime(nodeData) {
         case 'Include':
             return {
                 ...base,
-                name: nodeData.name
+                name: nodeData.name,
             };
         case 'SetVariable':
             return {
                 ...base,
                 key: nodeData.variableName,
-                value: nodeData.value
+                value: nodeData.value,
             };
         case 'GetVariable':
             return {
                 ...base,
-                key: nodeData.variableName
+                key: nodeData.variableName,
             };
         default:
             return base;
@@ -195,18 +194,18 @@ export function deserializeFromRuntime(runtimeData) {
         case 'Include':
             return {
                 ...createIncludeNodeData(id),
-                name: runtimeData.name || ''
+                name: runtimeData.name || '',
             };
         case 'SetVariable':
             return {
                 ...createSetVariableNodeData(id),
                 variableName: runtimeData.key || '',
-                value: runtimeData.value || ''
+                value: runtimeData.value || '',
             };
         case 'GetVariable':
             return {
                 ...createGetVariableNodeData(id),
-                variableName: runtimeData.key || ''
+                variableName: runtimeData.key || '',
             };
         default:
             return null;

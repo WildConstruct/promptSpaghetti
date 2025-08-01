@@ -22,7 +22,7 @@ import {
   EyeOff,
   Play,
   Pause
-} from 'lucide-react';
+ from 'lucide-react';
 import { Badge } from '../common/Badge';
 import './ToggleParametersManager.css';
 
@@ -34,7 +34,7 @@ export enum ToggleType {
   SEGMENTATION = 'segmentation'
   interface ToggleParametersProps {
   toggleId: string;,
-  toggleType: ToggleType;
+  toggleType: ToggleType;,
   currentValue: Record<string, unknown>;
   onParametersChange: (value: Record<string, unknown>) => void;
   onSave?: () => void;
@@ -44,61 +44,68 @@ export enum ToggleType {
   saltKey?: string;
   gradualRollout?: {
   enabled: boolean;,
-  startPercentage: number;
+  startPercentage: number;,
   endPercentage: number;,
-  durationHours: number;
+  durationHours: number;,
   incrementSize: number;
-}
+
+
 };
-}
+
+
 interface MultivariateVariant {
   key: string;,
-  value: Error;
+  value: Error;,
   percentage: number;
-  description?: string;
+  description?: string,
   enabled: boolean;
   interface MultivariateParams {
   variants: MultivariateVariant;
   saltKey?: string;
-  defaultVariant?: string;
+  defaultVariant?: string,
   trafficAllocation: number;
   interface ScheduledParams {
   enabled: boolean;
   startTime?: string;
-  endTime?: string;
+  endTime?: string,
   timezone: string;
   recurrence?: {
   type: 'none' | 'daily' | 'weekly' | 'monthly';,
   interval: number;
   daysOfWeek?: number;
   dayOfMonth?: number;
-}
+
+
 };
   overrideOnHolidays?: boolean;
-}
+
+
 interface SegmentationRule {
   id: string;,
-  attribute: string;
+  attribute: string;,
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'starts_with' | 'ends_with';,
-  value: Error;
+  value: Error;,
   logicalOperator: 'AND' | 'OR';,
   enabled: boolean;
   interface SegmentationParams {
   rules: SegmentationRule;,
-  defaultValue: Error;
+  defaultValue: Error;,
   evaluationMode: 'first_match' | 'all_rules' | 'weighted';,
   fallbackBehavior: 'default' | 'disable' | 'error';
-  export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({,)
+
+
+export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({),
   toggleId: _toggleId, // eslint-disable-line @typescript-eslint/no-unused-vars,
   toggleType,
   currentValue,
   onParametersChange,
   onSave,
   readonly = false
-}
+
+
 }) => {
   const [parameters, setParameters] = useState<Record<string, unknown>>(currentValue);
-  const [validation, setValidation] = useState<{ isValid: boolean; errors: string }>({ isValid: true, errors: [] });
+  const [validation, setValidation] = useState<{ isValid: boolean, errors: string }>({ isValid: true, errors: [] });
   const [previewMode, setPreviewMode] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   useEffect(() => {
@@ -146,7 +153,7 @@ interface SegmentationRule {
   errors.push('At least one segmentation rule is required');
   isValid = false;
   break;
-} catch {
+ catch {
       errors.push('Invalid parameter configuration');
       isValid = false;
     setValidation({ isValid, errors });
@@ -177,9 +184,9 @@ interface SegmentationRule {
                   max="100"
                   step="0.1"
                   value={params.percentage || 0}
-                  onChange={(e) => handleParametersUpdate({)
+                  onChange={(e) => handleParametersUpdate({
   ...params,
-  percentage: parseFloat(e.target.value),
+  percentage: parseFloat(e.target.value)
 })}
                   disabled={readonly}
                   className="percentage-slider"
@@ -190,9 +197,9 @@ interface SegmentationRule {
                   max="100"
                   step="0.1"
                   value={params.percentage || 0}
-                  onChange={(e) => handleParametersUpdate({)
+                  onChange={(e) => handleParametersUpdate({
   ...params,
-  percentage: parseFloat(e.target.value) || 0,
+  percentage: parseFloat(e.target.value) || 0
 })}
                   disabled={readonly}
                   className="percentage-number"
@@ -205,9 +212,9 @@ interface SegmentationRule {
               <input
                 type="text"
                 value={params.saltKey || ''}
-                onChange={(e) => handleParametersUpdate({)
+                onChange={(e) => handleParametersUpdate({
   ...params,
-  saltKey: e.target.value,
+  saltKey: e.target.value
 })}
                 placeholder="Custom salt for consistent user assignment"
                 disabled={readonly}
@@ -230,7 +237,7 @@ interface SegmentationRule {
                 <input
                   type="checkbox"
                   checked={params.gradualRollout?.enabled || false}
-                  onChange={(e) => handleParametersUpdate({)
+                  onChange={(e) => handleParametersUpdate({
   ...params,
   gradualRollout: {
   ...params.gradualRollout,
@@ -238,7 +245,7 @@ interface SegmentationRule {
   startPercentage: params.gradualRollout?.startPercentage || 0,
   endPercentage: params.gradualRollout?.endPercentage || params.percentage || 100,
   durationHours: params.gradualRollout?.durationHours || 24,
-  incrementSize: params.gradualRollout?.incrementSize || 10,
+  incrementSize: params.gradualRollout?.incrementSize || 10
 })}
                   disabled={readonly}
                 />
@@ -255,11 +262,11 @@ interface SegmentationRule {
                       min="0"
                       max="100"
                       value={params.gradualRollout?.startPercentage || 0}
-                      onChange={(e) => handleParametersUpdate({)
+                      onChange={(e) => handleParametersUpdate({
   ...params,
   gradualRollout: {
   ...params.gradualRollout!,
-  startPercentage: parseFloat(e.target.value) || 0,
+  startPercentage: parseFloat(e.target.value) || 0
 })}
                       disabled={readonly}
                       className="form-control"
@@ -272,11 +279,11 @@ interface SegmentationRule {
                       min="0"
                       max="100"
                       value={params.gradualRollout?.endPercentage || 100}
-                      onChange={(e) => handleParametersUpdate({)
+                      onChange={(e) => handleParametersUpdate({
   ...params,
   gradualRollout: {
   ...params.gradualRollout!,
-  endPercentage: parseFloat(e.target.value) || 100,
+  endPercentage: parseFloat(e.target.value) || 100
 })}
                       disabled={readonly}
                       className="form-control"
@@ -290,11 +297,11 @@ interface SegmentationRule {
                       type="number"
                       min="1"
                       value={params.gradualRollout?.durationHours || 24}
-                      onChange={(e) => handleParametersUpdate({)
+                      onChange={(e) => handleParametersUpdate({
   ...params,
   gradualRollout: {
   ...params.gradualRollout!,
-  durationHours: parseInt(e.target.value) || 24,
+  durationHours: parseInt(e.target.value) || 24
 })}
                       disabled={readonly}
                       className="form-control"
@@ -307,11 +314,11 @@ interface SegmentationRule {
                       min="1"
                       max="100"
                       value={params.gradualRollout?.incrementSize || 10}
-                      onChange={(e) => handleParametersUpdate({)
+                      onChange={(e) => handleParametersUpdate({
   ...params,
   gradualRollout: {
   ...params.gradualRollout!,
-  incrementSize: parseInt(e.target.value) || 10,
+  incrementSize: parseInt(e.target.value) || 10
 })}
                       disabled={readonly}
                       className="form-control"
@@ -335,25 +342,25 @@ interface SegmentationRule {
         percentage: 0,
         enabled: true;
   };
-      handleParametersUpdate({)
+      handleParametersUpdate({
   ...params,
-  variants: [...(params.variants || []), newVariant],
+  variants: [...(params.variants || []), newVariant]
 });
     };
     const updateVariant = (index: number, updatedVariant: MultivariateVariant) => {
   const newVariants = [...(params.variants || [])];
   newVariants[index] = updatedVariant;
-  handleParametersUpdate({)
+  handleParametersUpdate({
   ...params,
-  variants: newVariants,
+  variants: newVariants
 });
     };
     const removeVariant = (index: number) => {
   const newVariants = [...(params.variants || [])];
   newVariants.splice(index, 1);
-  handleParametersUpdate({)
+  handleParametersUpdate({
   ...params,
-  variants: newVariants,
+  variants: newVariants
 });
     };
     const totalPercentage = params.variants?.reduce((sum, v) => sum + (v.enabled ? v.percentage : 0), 0) || 0;
@@ -370,16 +377,16 @@ interface SegmentationRule {
             </div>
           </div>
           <div className="variants-list">
-            {params.variants?.map((variant, index) => ()
+            {params.variants?.map((variant, index) => (
               <div key={index} className={`variant-item ${!variant.enabled ? 'disabled' : ''}`}>}
                 <div className="variant-header">
                   <div className="variant-toggle">
                     <input
                       type="checkbox"
                       checked={variant.enabled}
-                      onChange={(e) => updateVariant(index, {)
+                      onChange={(e) => updateVariant(index, {
   ...variant,
-  enabled: e.target.checked,
+  enabled: e.target.checked
 })}
                       disabled={readonly}
                     />
@@ -388,9 +395,9 @@ interface SegmentationRule {
                     <input
                       type="text"
                       value={variant.key}
-                      onChange={(e) => updateVariant(index, {)
+                      onChange={(e) => updateVariant(index, {
   ...variant,
-  key: e.target.value,
+  key: e.target.value
 })}
                       placeholder="Variant key"
                       disabled={readonly}
@@ -404,9 +411,9 @@ interface SegmentationRule {
                       max="100"
                       step="0.1"
                       value={variant.percentage}
-                      onChange={(e) => updateVariant(index, {)
+                      onChange={(e) => updateVariant(index, {
   ...variant,
-  percentage: parseFloat(e.target.value) || 0,
+  percentage: parseFloat(e.target.value) || 0
 })}
                       disabled={readonly || !variant.enabled}
                       className="form-control"
@@ -432,10 +439,10 @@ interface SegmentationRule {
                         try {
                           // Try to parse as JSON
                           value = JSON.parse(e.target.value);
-                        } catch {
+ catch {
                           // Keep as string if not valid JSON
                         updateVariant(index, { ...variant, value });
-                      }}
+}
                       placeholder="Variant value (JSON or string)"
                       disabled={readonly || !variant.enabled}
                       className="form-control"
@@ -447,9 +454,9 @@ interface SegmentationRule {
                     <input
                       type="text"
                       value={variant.description || ''}
-                      onChange={(e) => updateVariant(index, {)
+                      onChange={(e) => updateVariant(index, {
   ...variant,
-  description: e.target.value,
+  description: e.target.value
 })}
                       placeholder="Variant description"
                       disabled={readonly || !variant.enabled}
@@ -474,15 +481,15 @@ interface SegmentationRule {
               <label>Default Variant</label>
               <select
                 value={params.defaultVariant || ''}
-                onChange={(e) => handleParametersUpdate({)
+                onChange={(e) => handleParametersUpdate({
   ...params,
-  defaultVariant: e.target.value,
+  defaultVariant: e.target.value
 })}
                 disabled={readonly}
                 className="form-control"
               >
                 <option value="">No default</option>
-                {params.variants?.filter(v => v.enabled).map(variant => ()
+                {params.variants?.filter(v => v.enabled).map(variant => (
                   <option key={variant.key} value={variant.key}>
                     {variant.key}
                   </option>
@@ -496,9 +503,9 @@ interface SegmentationRule {
                 min="0"
                 max="100"
                 value={params.trafficAllocation || 100}
-                onChange={(e) => handleParametersUpdate({)
+                onChange={(e) => handleParametersUpdate({
   ...params,
-  trafficAllocation: parseFloat(e.target.value) || 100,
+  trafficAllocation: parseFloat(e.target.value) || 100
 })}
                 disabled={readonly}
                 className="form-control"
@@ -526,9 +533,9 @@ interface SegmentationRule {
               <input
                 type="checkbox"
                 checked={params.enabled || false}
-                onChange={(e) => handleParametersUpdate({)
+                onChange={(e) => handleParametersUpdate({
   ...params,
-  enabled: e.target.checked,
+  enabled: e.target.checked
 })}
                 disabled={readonly}
               />
@@ -543,9 +550,9 @@ interface SegmentationRule {
                   <input
                     type="datetime-local"
                     value={params.startTime || ''}
-                    onChange={(e) => handleParametersUpdate({)
+                    onChange={(e) => handleParametersUpdate({
   ...params,
-  startTime: e.target.value,
+  startTime: e.target.value
 })}
                     disabled={readonly}
                     className="form-control"
@@ -556,9 +563,9 @@ interface SegmentationRule {
                   <input
                     type="datetime-local"
                     value={params.endTime || ''}
-                    onChange={(e) => handleParametersUpdate({)
+                    onChange={(e) => handleParametersUpdate({
   ...params,
-  endTime: e.target.value,
+  endTime: e.target.value
 })}
                     disabled={readonly}
                     className="form-control"
@@ -569,9 +576,9 @@ interface SegmentationRule {
                 <label>Timezone</label>
                 <select
                   value={params.timezone || 'UTC'}
-                  onChange={(e) => handleParametersUpdate({)
+                  onChange={(e) => handleParametersUpdate({
   ...params,
-  timezone: e.target.value,
+  timezone: e.target.value
 })}
                   disabled={readonly}
                   className="form-control"
@@ -593,12 +600,12 @@ interface SegmentationRule {
                   <label>Recurrence Type</label>
                   <select
                     value={params.recurrence?.type || 'none'}
-                    onChange={(e) => handleParametersUpdate({)
+                    onChange={(e) => handleParametersUpdate({
   ...params,
   recurrence: {
   ...params.recurrence,
   type: e.target.value as 'none' | 'daily' | 'weekly' | 'monthly',
-  interval: params.recurrence?.interval || 1,
+  interval: params.recurrence?.interval || 1
 })}
                     disabled={readonly}
                     className="form-control"
@@ -616,11 +623,11 @@ interface SegmentationRule {
                       type="number"
                       min="1"
                       value={params.recurrence?.interval || 1}
-                      onChange={(e) => handleParametersUpdate({)
+                      onChange={(e) => handleParametersUpdate({
   ...params,
   recurrence: {
   ...params.recurrence!,
-  interval: parseInt(e.target.value) || 1,
+  interval: parseInt(e.target.value) || 1
 })}
                       disabled={readonly}
                       className="form-control"
@@ -649,25 +656,25 @@ interface SegmentationRule {
         logicalOperator: 'AND',
         enabled: true;
   };
-      handleParametersUpdate({)
+      handleParametersUpdate({
   ...params,
-  rules: [...(params.rules || []), newRule],
+  rules: [...(params.rules || []), newRule]
 });
     };
     const updateRule = (index: number, updatedRule: SegmentationRule) => {
   const newRules = [...(params.rules || [])];
   newRules[index] = updatedRule;
-  handleParametersUpdate({)
+  handleParametersUpdate({
   ...params,
-  rules: newRules,
+  rules: newRules
 });
     };
     const removeRule = (index: number) => {
   const newRules = [...(params.rules || [])];
   newRules.splice(index, 1);
-  handleParametersUpdate({)
+  handleParametersUpdate({
   ...params,
-  rules: newRules,
+  rules: newRules
 });
     };
     return;
@@ -683,9 +690,9 @@ interface SegmentationRule {
                 <label>Evaluation Mode</label>
                 <select
                   value={params.evaluationMode || 'first_match'}
-                  onChange={(e) => handleParametersUpdate({)
+                  onChange={(e) => handleParametersUpdate({
   ...params,
-  evaluationMode: e.target.value as 'first_match' | 'all_rules' | 'weighted',
+  evaluationMode: e.target.value as 'first_match' | 'all_rules' | 'weighted'
 })}
                   disabled={readonly}
                   className="form-control"
@@ -699,9 +706,9 @@ interface SegmentationRule {
                 <label>Fallback Behavior</label>
                 <select
                   value={params.fallbackBehavior || 'default'}
-                  onChange={(e) => handleParametersUpdate({)
+                  onChange={(e) => handleParametersUpdate({
   ...params,
-  fallbackBehavior: e.target.value as 'default' | 'disable' | 'error',
+  fallbackBehavior: e.target.value as 'default' | 'disable' | 'error'
 })}
                   disabled={readonly}
                   className="form-control"
@@ -721,13 +728,13 @@ interface SegmentationRule {
                   let value = e.target.value;
                   try {
                     value = JSON.parse(e.target.value);
-                  } catch {
+ catch {
   // Keep as string
-  handleParametersUpdate({)
+  handleParametersUpdate({
   ...params,
-  defaultValue: value,
+  defaultValue: value
 });
-                }}
+}
                 placeholder="Default value when no rules match"
                 disabled={readonly}
                 className="form-control"
@@ -736,16 +743,16 @@ interface SegmentationRule {
           </div>
           <div className="rules-list">
             <h4>Segmentation Rules</h4>
-            {params.rules?.map((rule, index) => ()
+            {params.rules?.map((rule, index) => (
               <div key={rule.id} className={`rule-item ${!rule.enabled ? 'disabled' : ''}`}>}
                 <div className="rule-header">
                   <div className="rule-toggle">
                     <input
                       type="checkbox"
                       checked={rule.enabled}
-                      onChange={(e) => updateRule(index, {)
+                      onChange={(e) => updateRule(index, {
   ...rule,
-  enabled: e.target.checked,
+  enabled: e.target.checked
 })}
                       disabled={readonly}
                     />
@@ -754,9 +761,9 @@ interface SegmentationRule {
                     <div className="logical-operator">
                       <select
                         value={rule.logicalOperator}
-                        onChange={(e) => updateRule(index, {)
+                        onChange={(e) => updateRule(index, {
   ...rule,
-  logicalOperator: e.target.value as 'AND' | 'OR',
+  logicalOperator: e.target.value as 'AND' | 'OR'
 })}
                         disabled={readonly || !rule.enabled}
                         className="form-control small"
@@ -782,9 +789,9 @@ interface SegmentationRule {
                       <input
                         type="text"
                         value={rule.attribute}
-                        onChange={(e) => updateRule(index, {)
+                        onChange={(e) => updateRule(index, {
   ...rule,
-  attribute: e.target.value,
+  attribute: e.target.value
 })}
                         placeholder="user.id, organization.plan, etc."
                         disabled={readonly || !rule.enabled}
@@ -795,9 +802,9 @@ interface SegmentationRule {
                       <label>Operator</label>
                       <select
                         value={rule.operator}
-                        onChange={(e) => updateRule(index, {)
+                        onChange={(e) => updateRule(index, {
   ...rule,
-  operator: e.target.value as 'equals' | 'not_equals' | 'in' | 'not_in' | 'contains' | 'not_contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'greater_equal' | 'less_equal',
+  operator: e.target.value as 'equals' | 'not_equals' | 'in' | 'not_in' | 'contains' | 'not_contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'greater_equal' | 'less_equal'
 })}
                         disabled={readonly || !rule.enabled}
                         className="form-control"
@@ -822,10 +829,10 @@ interface SegmentationRule {
                           let value = e.target.value;
                           try {
                             value = JSON.parse(e.target.value);
-                          } catch {
+ catch {
                             // Keep as string
                           updateRule(index, { ...rule, value });
-                        }}
+}
                         placeholder="Comparison value"
                         disabled={readonly || !rule.enabled}
                         className="form-control"
@@ -920,7 +927,7 @@ interface SegmentationRule {
         <div className="validation-errors">
           <AlertTriangle size={16} />
           <div className="error-list">
-            {validation.errors.map((error, index) => ()
+            {validation.errors.map((error, index) => (
               <div key={index} className="error-item">{error}</div>
             ))}
           </div>

@@ -76,7 +76,7 @@ describe('PasswordBreachService', () => {
         headers: new Headers({
           'X-API-Version': '3',
           'Content-Length': '20'
-  }
+
       };
       
       mockFetch.mockResolvedValue(mockResponse as Response);
@@ -90,7 +90,7 @@ describe('PasswordBreachService', () => {
             'User-Agent': 'SecurePasswordChecker/1.0',
             'Add-Padding': 'true',
             'X-Request-ID': expect.any(String)
-  }
+
   }
       );
     });
@@ -135,7 +135,7 @@ describe('PasswordBreachService', () => {
         setTimeout(() => resolve({
           ok: true,
           text: () => Promise.resolve('')
-        } as Response), 10000); // 10 second delay
+ as Response), 10000); // 10 second delay
       }));
 
       const result = await service.checkPasswordBreach('testpassword', undefined, { timeout: 100 });

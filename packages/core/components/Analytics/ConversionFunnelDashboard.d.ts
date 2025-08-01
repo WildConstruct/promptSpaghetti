@@ -6,11 +6,11 @@
 import React from 'react';
 
 }
-export interface ConversionFunnelDashboardProps {
-    conversionData: unknown;
+}
+export interface ConversionFunnelDashboardProps { conversionData: unknown;
     timeRange: {
         startTime: number;
-        endTime: number;
+        endTime: number }
 }
     };
     loading: boolean;

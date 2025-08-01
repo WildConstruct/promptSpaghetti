@@ -20,10 +20,10 @@ jest.mock('child_process');
 const mockFs = fs as jest.Mocked<typeof fs>;
 
 // Import the PluginLoader (assuming it exists based on the architecture)
-// Note: This test file will guide the implementation if the class doesn't exist yet
-}
-interface PluginLoader {
-  loadPlugin(source: string): Promise<any>;
+// Note: This test file will guide the implementation if the class doesn't exist yet;
+
+
+interface PluginLoader { loadPlugin(source: string): Promise<any>;
   activatePlugin(pluginId: string): Promise<boolean>;
   deactivatePlugin(pluginId: string): Promise<boolean>;
   unloadPlugin(pluginId: string): Promise<boolean>;
@@ -32,37 +32,31 @@ interface PluginLoader {
   listPlugins(): any;
   clearCache(): Promise<void>;
   validatePlugin(plugin: unknown): boolean;
+  // Mock plugin data for testing
+  const mockPluginManifest = {
+  id: 'test-plugin';
+  name: 'Test Plugin';
+  version: '1.0.0';
+  description: 'Test plugin for unit testing';
+  main: 'index' }
 
-// Mock plugin data for testing
-const mockPluginManifest = {
-  id: 'test-plugin',
-  name: 'Test Plugin',
-  version: '1.0.0',
-  description: 'Test plugin for unit testing',
-  main: 'index',
-}
+},
   dependencies: {},
-  engines: {
-  node: '>=14.0.0',
+  engines: { ,
+  node: '>=14.0.0' }
 },
   permissions: ['read', 'write'],
   author: 'Test Author';
   };
 const mockPluginCode = `;
-module.exports = {
-  name: 'Test Plugin',
-  version: '1.0.0',
-  activate() {
-  console.log('Plugin activated');
-  return true;
-}
-  deactivate() {
-    console.log('Plugin deactivated');
-    return true;
-};
+module.exports = { name: 'Test Plugin',
+  version: '1.0.0' }
+  activate() { console.log('Plugin activated');
+  return true }
+  deactivate() { console.log('Plugin deactivated');
+    return true };
 `;
-describe('Epic 24.2 - PluginLoader Unit Tests', () => {
-  let pluginLoader: unknown; // Will be properly typed when PluginLoader class exists,
+describe('Epic 24.2 - PluginLoader Unit Tests', () => { let pluginLoader: unknown; // Will be properly typed when PluginLoader class exists,
   let mockCacheDir: string;
   beforeEach(() => {
   jest.clearAllMocks();
@@ -72,35 +66,30 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
   mockFs.readdir.mockResolvedValue(['plugin1', 'plugin2'] as any as unknown as unknown);
   mockFs.stat.mockResolvedValue({ )
   isDirectory: ( as unknown as unknown) => true,
-  isFile: () => false,
-} as any);
+  isFile: () => false }
+ as any);
     mockFs.mkdir.mockResolvedValue(undefined as unknown as unknown);
     mockFs.writeFile.mockResolvedValue(undefined as unknown as unknown);
     mockFs.access.mockResolvedValue(undefined as unknown as unknown);
     // Initialize PluginLoader (mock implementation for now)
-    pluginLoader = {
-  loadPlugin: jest.fn<unknown, unknown>(),
-  activatePlugin: jest.fn<unknown, unknown>(),
-  deactivatePlugin: jest.fn<unknown, unknown>(),
-  unloadPlugin: jest.fn<unknown, unknown>(),
-  reloadPlugin: jest.fn<unknown, unknown>(),
-  getPluginStatus: jest.fn<unknown, unknown>(),
-  listPlugins: jest.fn<unknown, unknown>(),
-  clearCache: jest.fn<unknown, unknown>(),
-  validatePlugin: jest.fn<unknown, unknown>(),
+    pluginLoader = { loadPlugin: jest.fn<unknown, unknown>()
+  activatePlugin: jest.fn<unknown, unknown>()
+  deactivatePlugin: jest.fn<unknown, unknown>()
+  unloadPlugin: jest.fn<unknown, unknown>()
+  reloadPlugin: jest.fn<unknown, unknown>()
+  getPluginStatus: jest.fn<unknown, unknown>()
+  listPlugins: jest.fn<unknown, unknown>()
+  clearCache: jest.fn<unknown, unknown>()
+  validatePlugin: jest.fn<unknown, unknown>() }
 };
   });
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  describe('1. Plugin Loading from Different Sources', () => {
-    it('should load plugin from filesystem path', async () => {
+  afterEach(() => { jest.restoreAllMocks() });
+  describe('1. Plugin Loading from Different Sources', () => { it('should load plugin from filesystem path', async () => {
       const pluginPath = '/plugins/test-plugin';
       mockFs.readFile.mockImplementationOnce((filepath) => {
         if (filepath.toString().includes('package.json')) {
           return Promise.resolve(Buffer.from(JSON.stringify(mockPluginManifest)));
-        return Promise.resolve(Buffer.from(mockPluginCode));
-      });
+        return Promise.resolve(Buffer.from(mockPluginCode)) });
       pluginLoader.loadPlugin.mockImplementationOnce(async (source: string) => {
         expect(source).toBe(pluginPath);
         return { ...mockPluginManifest, status: 'loaded' };
@@ -111,16 +100,15 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(result.status).toBe('loaded');
       expect(pluginLoader.loadPlugin).toHaveBeenCalledWith(pluginPath);
     });
-    it('should load plugin from npm package name', async () => {
-  const npmPackage = 'test-plugin-npm';
-  pluginLoader.loadPlugin.mockImplementationOnce(async (source: string) => {,
+    it('should load plugin from npm package name', async () => { const npmPackage = 'test-plugin-npm';
+  pluginLoader.loadPlugin.mockImplementationOnce(async (source: string) => {
   expect(source).toBe(npmPackage);
   // Simulate npm install and loading
   return {
-  ...mockPluginManifest,
-  id: npmPackage,
-  source: 'npm',
-  status: 'loaded',
+  ...mockPluginManifest
+  id: npmPackage
+  source: 'npm'
+  status: 'loaded' }
 };
       });
       const result = await pluginLoader.loadPlugin(npmPackage);
@@ -128,15 +116,14 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(result.source).toBe('npm');
       expect(result.status).toBe('loaded');
     });
-    it('should load plugin from git repository URL', async () => {
-  const gitUrl = 'https://github.com/test/plugin.git';
-  pluginLoader.loadPlugin.mockImplementationOnce(async (source: string) => {,
+    it('should load plugin from git repository URL', async () => { const gitUrl = 'https://github.com/test/plugin.git';
+  pluginLoader.loadPlugin.mockImplementationOnce(async (source: string) => {
   expect(source).toBe(gitUrl);
   return {
-  ...mockPluginManifest,
-  source: 'git',
-  gitUrl,
-  status: 'loaded',
+  ...mockPluginManifest
+  source: 'git'
+  gitUrl
+  status: 'loaded' }
 };
       });
       const result = await pluginLoader.loadPlugin(gitUrl);
@@ -144,15 +131,14 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(result.source).toBe('git');
       expect(result.gitUrl).toBe(gitUrl);
     });
-    it('should load plugin from HTTP URL', async () => {
-  const httpUrl = 'https://example.com/plugin.zip';
-  pluginLoader.loadPlugin.mockImplementationOnce(async (source: string) => {,
+    it('should load plugin from HTTP URL', async () => { const httpUrl = 'https://example.com/plugin.zip';
+  pluginLoader.loadPlugin.mockImplementationOnce(async (source: string) => {
   expect(source).toBe(httpUrl);
   return {
-  ...mockPluginManifest,
-  source: 'url',
-  downloadUrl: httpUrl,
-  status: 'loaded',
+  ...mockPluginManifest
+  source: 'url'
+  downloadUrl: httpUrl
+  status: 'loaded' }
 };
       });
       const result = await pluginLoader.loadPlugin(httpUrl);
@@ -160,22 +146,18 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(result.source).toBe('url');
       expect(result.downloadUrl).toBe(httpUrl);
     });
-    it('should handle plugin loading errors gracefully', async () => {
-      const invalidPath = '/invalid/plugin/path';
+    it('should handle plugin loading errors gracefully', async () => { const invalidPath = '/invalid/plugin/path';
       pluginLoader.loadPlugin.mockRejectedValueOnce()
         new Error('Plugin not found')
       );
       await expect(pluginLoader.loadPlugin(invalidPath))
-        .rejects.toThrow('Plugin not found');
-    });
-    it('should validate plugin manifest during loading', async () => {
-      pluginLoader.validatePlugin.mockReturnValueOnce(false);
+        .rejects.toThrow('Plugin not found') });
+    it('should validate plugin manifest during loading', async () => { pluginLoader.validatePlugin.mockReturnValueOnce(false);
       pluginLoader.loadPlugin.mockRejectedValueOnce()
         new Error('Invalid plugin manifest')
       );
       await expect(pluginLoader.loadPlugin('/invalid/plugin'))
-        .rejects.toThrow('Invalid plugin manifest');
-    });
+        .rejects.toThrow('Invalid plugin manifest') });
   });
   describe('2. Plugin Lifecycle Management', () => {
     beforeEach(() => {
@@ -185,24 +167,19 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
         { ...mockPluginManifest, status: 'loaded' }
       ] as unknown as unknown as unknown as unknown as unknown);
     });
-    it('should activate loaded plugin successfully', async () => {
-      pluginLoader.activatePlugin.mockResolvedValueOnce(true);
+    it('should activate loaded plugin successfully', async () => { pluginLoader.activatePlugin.mockResolvedValueOnce(true);
       pluginLoader.getPluginStatus
         .mockReturnValueOnce('loaded')
         .mockReturnValueOnce('active');
       const result = await pluginLoader.activatePlugin('test-plugin');
       expect(result).toBe(true);
-      expect(pluginLoader.activatePlugin).toHaveBeenCalledWith('test-plugin');
-    });
-    it('should deactivate active plugin successfully', async () => {
-      pluginLoader.getPluginStatus.mockReturnValue('active' as unknown as unknown as unknown as unknown as unknown);
+      expect(pluginLoader.activatePlugin).toHaveBeenCalledWith('test-plugin') });
+    it('should deactivate active plugin successfully', async () => { pluginLoader.getPluginStatus.mockReturnValue('active' as unknown as unknown as unknown as unknown as unknown);
       pluginLoader.deactivatePlugin.mockResolvedValueOnce(true);
       const result = await pluginLoader.deactivatePlugin('test-plugin');
       expect(result).toBe(true);
-      expect(pluginLoader.deactivatePlugin).toHaveBeenCalledWith('test-plugin');
-    });
-    it('should unload plugin and clean up resources', async () => {
-  pluginLoader.unloadPlugin.mockImplementationOnce(async (pluginId: string) => {,
+      expect(pluginLoader.deactivatePlugin).toHaveBeenCalledWith('test-plugin') });
+    it('should unload plugin and clean up resources', async () => { pluginLoader.unloadPlugin.mockImplementationOnce(async (pluginId: string) => { }
   expect(pluginId).toBe('test-plugin');
   // Simulate cleanup operations
   return true;
@@ -211,8 +188,7 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(result).toBe(true);
       expect(pluginLoader.unloadPlugin).toHaveBeenCalledWith('test-plugin');
     });
-    it('should reload plugin by unloading and reloading', async () => {
-  pluginLoader.reloadPlugin.mockImplementationOnce(async (pluginId: string) => {,
+    it('should reload plugin by unloading and reloading', async () => { pluginLoader.reloadPlugin.mockImplementationOnce(async (pluginId: string) => { }
   expect(pluginId).toBe('test-plugin');
   // Simulate unload -> load -> activate cycle
   return true;
@@ -221,32 +197,26 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(result).toBe(true);
       expect(pluginLoader.reloadPlugin).toHaveBeenCalledWith('test-plugin');
     });
-    it('should prevent activating plugin with unsatisfied dependencies', async () => {
-      pluginLoader.activatePlugin.mockRejectedValueOnce()
+    it('should prevent activating plugin with unsatisfied dependencies', async () => { pluginLoader.activatePlugin.mockRejectedValueOnce()
         new Error('Dependency "missing-dependency" not found')
       );
       await expect(pluginLoader.activatePlugin('dependent-plugin'))
-        .rejects.toThrow('Dependency "missing-dependency" not found');
-    });
-    it('should handle plugin activation failures gracefully', async () => {
-  pluginLoader.activatePlugin.mockRejectedValueOnce()
+        .rejects.toThrow('Dependency "missing-dependency" not found') });
+    it('should handle plugin activation failures gracefully', async () => { pluginLoader.activatePlugin.mockRejectedValueOnce()
   new Error('Plugin activation failed: runtime error'));
   await expect(pluginLoader.activatePlugin('failing-plugin'))
-  .rejects.toThrow('Plugin activation failed: runtime error');
-});
+  .rejects.toThrow('Plugin activation failed: runtime error') });
   });
-  describe('3. Plugin State Management', () => {
-    it('should track plugin states accurately', () => {
+  describe('3. Plugin State Management', () => { it('should track plugin states accurately', () => {
       const states = ['unloaded', 'loaded', 'active', 'error'];
       states.forEach(state => {)
   pluginLoader.getPluginStatus.mockReturnValueOnce(state);
-        expect(pluginLoader.getPluginStatus('test-plugin')).toBe(state);
-      });
+        expect(pluginLoader.getPluginStatus('test-plugin')).toBe(state) });
     });
     it('should list all plugins with their current states', () => {
-      const mockPlugins = [;
-        { ...mockPluginManifest, id: 'plugin-1', status: 'loaded' },
-        { ...mockPluginManifest, id: 'plugin-2', status: 'active' },
+      const mockPlugins = [
+        { ...mockPluginManifest, id: 'plugin-1', status: 'loaded' }
+        { ...mockPluginManifest, id: 'plugin-2', status: 'active' }
         { ...mockPluginManifest, id: 'plugin-3', status: 'error' }
       ];
       pluginLoader.listPlugins.mockReturnValueOnce(mockPlugins);
@@ -273,31 +243,25 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(pluginLoader.getPluginStatus('test-plugin')).toBe('active');
     });
   });
-  describe('4. Plugin Caching System', () => {
-    it('should cache loaded plugins to filesystem', async () => {
+  describe('4. Plugin Caching System', () => { it('should cache loaded plugins to filesystem', async () => {
       pluginLoader.clearCache.mockImplementationOnce(async () => {
         // Simulate cache clearing operations
-        expect(mockFs.rmdir || mockFs.rm).toBeTruthy();
-      });
+        expect(mockFs.rmdir || mockFs.rm).toBeTruthy() });
       await pluginLoader.clearCache();
       expect(pluginLoader.clearCache).toHaveBeenCalled();
     });
-    it('should validate cached plugins on startup', async () => {
-      mockFs.readdir.mockResolvedValueOnce(['cached-plugin'] as any);
+    it('should validate cached plugins on startup', async () => { mockFs.readdir.mockResolvedValueOnce(['cached-plugin'] as any);
       mockFs.readFile.mockResolvedValueOnce()
         Buffer.from(JSON.stringify(mockPluginManifest))
       );
       pluginLoader.validatePlugin.mockReturnValueOnce(true);
       // This would be called during PluginLoader initialization
-      expect(pluginLoader.validatePlugin).toBeDefined();
-    });
-    it('should handle cache corruption gracefully', async () => {
-      mockFs.readFile.mockRejectedValueOnce(new Error('Corrupted cache'));
+      expect(pluginLoader.validatePlugin).toBeDefined() });
+    it('should handle cache corruption gracefully', async () => { mockFs.readFile.mockRejectedValueOnce(new Error('Corrupted cache'));
       pluginLoader.clearCache.mockResolvedValueOnce(undefined);
       // Should clear corrupted cache and continue
       await pluginLoader.clearCache();
-      expect(pluginLoader.clearCache).toHaveBeenCalled();
-    });
+      expect(pluginLoader.clearCache).toHaveBeenCalled() });
   });
   describe('5. Plugin Validation and Security', () => {
     it('should validate plugin manifest structure', () => {
@@ -309,26 +273,23 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(pluginLoader.validatePlugin(validPlugin)).toBe(true);
       expect(pluginLoader.validatePlugin(invalidPlugin)).toBe(false);
     });
-    it('should validate plugin permissions', () => {
-  const pluginWithInvalidPermissions = {
-  ...mockPluginManifest,
-  permissions: ['admin', 'system'] // Invalid permissions,
+    it('should validate plugin permissions', () => { const pluginWithInvalidPermissions = {
+  ...mockPluginManifest
+  permissions: ['admin', 'system'] // Invalid permissions }
 };
       pluginLoader.validatePlugin.mockReturnValueOnce(false);
       expect(pluginLoader.validatePlugin(pluginWithInvalidPermissions)).toBe(false);
     });
-    it('should check version compatibility', () => {
-  const incompatiblePlugin = {
-  ...mockPluginManifest,
+    it('should check version compatibility', () => { const incompatiblePlugin = {
+  ...mockPluginManifest
   engines: {
-  node: '>=20.0.0' // Incompatible version,
+  node: '>=20.0.0' // Incompatible version }
 };
       pluginLoader.validatePlugin.mockReturnValueOnce(false);
       expect(pluginLoader.validatePlugin(incompatiblePlugin)).toBe(false);
     });
-    it('should sandbox plugin execution', async () => {
-  // This test would verify that plugins are executed in isolated contexts
-  pluginLoader.activatePlugin.mockImplementationOnce(async (pluginId: string) => {,
+    it('should sandbox plugin execution', async () => { // This test would verify that plugins are executed in isolated contexts
+  pluginLoader.activatePlugin.mockImplementationOnce(async (pluginId: string) => { }
   // Simulate sandboxed activation
   expect(pluginId).toBe('sandboxed-plugin');
   return true;
@@ -337,36 +298,28 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(result).toBe(true);
     });
   });
-  describe('6. Error Handling and Recovery', () => {
-  it('should handle plugin runtime errors during activation', async () => {
+  describe('6. Error Handling and Recovery', () => { it('should handle plugin runtime errors during activation', async () => {
   pluginLoader.activatePlugin.mockRejectedValueOnce()
   new Error('Plugin runtime error: undefined method'));
   await expect(pluginLoader.activatePlugin('error-plugin'))
-  .rejects.toThrow('Plugin runtime error: undefined method');
-});
-    it('should recover from plugin crashes', async () => {
-      // Simulate plugin crash
+  .rejects.toThrow('Plugin runtime error: undefined method') });
+    it('should recover from plugin crashes', async () => { // Simulate plugin crash
       pluginLoader.getPluginStatus.mockReturnValueOnce('error');
       // Should be able to reload after crash
       pluginLoader.reloadPlugin.mockResolvedValueOnce(true);
       pluginLoader.getPluginStatus.mockReturnValueOnce('loaded');
       const reloadResult = await pluginLoader.reloadPlugin('crashed-plugin');
       expect(reloadResult).toBe(true);
-      expect(pluginLoader.getPluginStatus('crashed-plugin')).toBe('loaded');
-    });
-    it('should clean up resources when plugin fails to load', async () => {
-      pluginLoader.loadPlugin.mockRejectedValueOnce()
+      expect(pluginLoader.getPluginStatus('crashed-plugin')).toBe('loaded') });
+    it('should clean up resources when plugin fails to load', async () => { pluginLoader.loadPlugin.mockRejectedValueOnce()
         new Error('Loading failed')
       );
       // Should call cleanup operations
       pluginLoader.unloadPlugin.mockResolvedValueOnce(true);
       try {
-        await pluginLoader.loadPlugin('/failing/plugin');
-      } catch (error) {
-        // Cleanup should be called even on failure
+        await pluginLoader.loadPlugin('/failing/plugin') } catch (error) { // Cleanup should be called even on failure
         await pluginLoader.unloadPlugin('failing-plugin');
-        expect(pluginLoader.unloadPlugin).toHaveBeenCalled();
-    });
+        expect(pluginLoader.unloadPlugin).toHaveBeenCalled() });
     it('should prevent memory leaks during plugin lifecycle', async () => {
       const initialMemoryUsage = process.memoryUsage();
       // Load and unload plugin multiple times
@@ -397,16 +350,13 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       expect(results).toHaveLength(3);
       expect(pluginLoader.loadPlugin).toHaveBeenCalledTimes(3);
     });
-    it('should prevent race conditions during state transitions', async () => {
-  // Simulate concurrent activation attempts
-  pluginLoader.activatePlugin.mockImplementation(async (pluginId: string) => {,
+    it('should prevent race conditions during state transitions', async () => { // Simulate concurrent activation attempts
+  pluginLoader.activatePlugin.mockImplementation(async (pluginId: string) => { }
   // Check if already activating
   const status = pluginLoader.getPluginStatus(pluginId);
-  if (status === 'activating') {
-  throw new Error('Plugin already activating');
+  if (status === 'activating') { throw new Error('Plugin already activating');
   return new Promise(resolve => {)
-  setTimeout(() => resolve(true), 50);
-});
+  setTimeout(() => resolve(true), 50) });
       });
       pluginLoader.getPluginStatus
         .mockReturnValueOnce('loaded')  // First call succeeds

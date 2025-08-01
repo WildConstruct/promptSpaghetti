@@ -180,7 +180,7 @@ export class PolicyUpdateWorkflowService {
   constructor(db, audit) {
     this.db = db;
     this.audit = audit;
-  }
+
   /**
    * Submit a new policy update request
    */
@@ -246,7 +246,7 @@ export class PolicyUpdateWorkflowService {
         },
       });
       return { requestId };
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'POLICY_UPDATE_REQUEST_ERROR',
         userId: request.requestorId,
@@ -259,8 +259,8 @@ export class PolicyUpdateWorkflowService {
         },
       });
       throw error;
-    }
-  }
+
+
   /**
    * Process approval decision
    */
@@ -269,7 +269,7 @@ export class PolicyUpdateWorkflowService {
       const request = await this.getPolicyUpdateRequest(requestId);
       if (!request) {
         throw new Error('Policy update request not found');
-      }
+
       // Update approver decision
       const updatedWorkflow = await this.updateApproverDecision(
         request.approvalWorkflow,
@@ -285,19 +285,19 @@ export class PolicyUpdateWorkflowService {
           // Reject the entire request
           await this.rejectPolicyUpdate(requestId, 'Rejected during approval process');
           return { workflowComplete: true, approved: false };
-        }
+
         // Move to next stage or complete workflow
         const nextStageIndex = updatedWorkflow.currentStageIndex + 1;
         if (nextStageIndex < updatedWorkflow.stages.length) {
           // Start next stage
           updatedWorkflow.currentStageIndex = nextStageIndex;
           await this.startApprovalStage(requestId, updatedWorkflow.stages[nextStageIndex]);
-        } else {
+ else {
           // Workflow complete - approve the update
           await this.approvePolicyUpdate(requestId);
           return { workflowComplete: true, approved: true };
-        }
-      }
+
+
       // Update workflow in database
       await this.db.query(
         `
@@ -308,7 +308,7 @@ export class PolicyUpdateWorkflowService {
         [JSON.stringify(updatedWorkflow), requestId]
       );
       return { workflowComplete: false, approved: false };
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'POLICY_APPROVAL_PROCESSING_ERROR',
         userId: approverId,
@@ -321,8 +321,8 @@ export class PolicyUpdateWorkflowService {
         },
       });
       throw error;
-    }
-  }
+
+
   /**
    * Deploy approved policy update
    */
@@ -332,7 +332,7 @@ export class PolicyUpdateWorkflowService {
       const request = await this.getPolicyUpdateRequest(requestId);
       if (!request || request.status !== UpdateStatus.APPROVED) {
         throw new Error('Policy update not approved for deployment');
-      }
+
       // Create new policy version
       const policyVersion = await this.createPolicyVersion(request);
       // Validate deployment configuration
@@ -379,7 +379,7 @@ export class PolicyUpdateWorkflowService {
         },
       });
       return { deploymentId };
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'POLICY_DEPLOYMENT_ERROR',
         userId: 'system',
@@ -392,8 +392,8 @@ export class PolicyUpdateWorkflowService {
         },
       });
       throw error;
-    }
-  }
+
+
   /**
    * Get pending approvals for a user
    */
@@ -408,7 +408,7 @@ export class PolicyUpdateWorkflowService {
       [UpdateStatus.UNDER_REVIEW, `%"approverId":"${approverId}"%`]
     );
     return result.rows.map(this.mapToPolicyUpdateRequest);
-  }
+
   /**
    * Get policy update history
    */
@@ -422,22 +422,22 @@ export class PolicyUpdateWorkflowService {
       [policyId]
     );
     return result.rows.map(this.mapToPolicyUpdateRequest);
-  }
+
   // Private helper methods
   async validateUpdateRequest(request) {
     if (!request.policyId) {
       throw new Error('Policy ID is required');
-    }
+
     if (!request.changes || request.changes.length === 0) {
       throw new Error('At least one change must be specified');
-    }
+
     if (!request.justification || request.justification.length < 50) {
       throw new Error('Detailed justification is required (minimum 50 characters)');
-    }
+
     if (!request.effectiveDate || request.effectiveDate <= new Date()) {
       throw new Error('Effective date must be in the future');
-    }
-  }
+
+
   async enhanceImpactAssessment(assessment, changes) {
     // Analyze changes to enhance impact assessment
     const breakingChanges = changes.filter(c => c.breakingChange);
@@ -454,7 +454,7 @@ export class PolicyUpdateWorkflowService {
         riskLevel: breakingChanges.length > 0 ? RiskLevel.HIGH : assessment.riskAssessment.riskLevel,
       },
     };
-  }
+
   async determineApprovalWorkflow(policyType, priority, impactAssessment) {
     const stages = [];
     // Always require legal review for policy changes
@@ -497,7 +497,7 @@ export class PolicyUpdateWorkflowService {
         status: StageStatus.PENDING,
         conditions: [],
       });
-    }
+
     // Add technical review for system-impacting changes
     if (impactAssessment.systemImpact.affectedSystems.length > 0) {
       stages.push({
@@ -517,7 +517,7 @@ export class PolicyUpdateWorkflowService {
         status: StageStatus.PENDING,
         conditions: [],
       });
-    }
+
     return {
       workflowId: `WF-${Date.now()}`,
       stages,
@@ -530,19 +530,19 @@ export class PolicyUpdateWorkflowService {
         autoEscalate: true,
       },
     };
-  }
+
   async startApprovalWorkflow(requestId, workflow) {
     if (workflow.stages.length > 0) {
       await this.startApprovalStage(requestId, workflow.stages[0]);
-    }
-  }
+
+
   async startApprovalStage(requestId, stage) {
     stage.status = StageStatus.IN_PROGRESS;
     stage.startedAt = new Date();
     // Notify approvers
     for (const approver of stage.approvers) {
       await this.notifyApprover(requestId, approver);
-    }
+
     await this.db.query(
       `
       UPDATE policy_update_requests 
@@ -551,13 +551,13 @@ export class PolicyUpdateWorkflowService {
     `,
       [UpdateStatus.UNDER_REVIEW, requestId]
     );
-  }
+
   async updateApproverDecision(workflow, approverId, decision, comments) {
     const currentStage = workflow.stages[workflow.currentStageIndex];
     const approver = currentStage.approvers.find(a => a.approverId === approverId);
     if (!approver) {
       throw new Error('Approver not found in current stage');
-    }
+
     approver.decision = decision;
     approver.comments = comments;
     approver.decidedAt = new Date();
@@ -566,7 +566,7 @@ export class PolicyUpdateWorkflowService {
         ? ApprovalStatus.APPROVED
         : ApprovalStatus.REJECTED;
     return workflow;
-  }
+
   async checkStageCompletion(stage) {
     const approvals = stage.approvers.filter(a => a.status === ApprovalStatus.APPROVED);
     const rejections = stage.approvers.filter(a => a.status === ApprovalStatus.REJECTED);
@@ -582,8 +582,8 @@ export class PolicyUpdateWorkflowService {
         return approvals.length >= stage.requiredApprovals || rejections.length > 0;
       default:
         return false;
-    }
-  }
+
+
   async rejectPolicyUpdate(requestId, reason) {
     await this.db.query(
       `
@@ -593,7 +593,7 @@ export class PolicyUpdateWorkflowService {
     `,
       [UpdateStatus.REJECTED, reason, requestId]
     );
-  }
+
   async approvePolicyUpdate(requestId) {
     await this.db.query(
       `
@@ -603,7 +603,7 @@ export class PolicyUpdateWorkflowService {
     `,
       [UpdateStatus.APPROVED, requestId]
     );
-  }
+
   async createPolicyVersion(request) {
     const versionId = await this.generateVersionId();
     const version = request.proposedVersion;
@@ -645,12 +645,12 @@ export class PolicyUpdateWorkflowService {
       ]
     );
     return policyVersion;
-  }
+
   async validateDeploymentConfig(config) {
     if (!config.targetEnvironments || config.targetEnvironments.length === 0) {
       throw new Error('At least one target environment must be specified');
-    }
-  }
+
+
   async executeDeployment(deployment) {
     // Implementation for executing the deployment
     // This would handle the actual rollout strategy
@@ -662,26 +662,26 @@ export class PolicyUpdateWorkflowService {
     `,
       [DeploymentStatus.COMPLETED, deployment.deploymentId]
     );
-  }
+
   async notifyApprover(_____requestId, _____approver) {
     // Implementation for sending notifications to approvers
-  }
+
   generateChangelog(changes) {
     return changes.map(change => `${change.changeType}: ${change.section} - ${change.rationale}`).join('\n');
-  }
+
   async calculateContentHash(content) {
     // Simple hash for demo - in production would use proper cryptographic hash
     return Buffer.from(content).toString('base64').slice(0, 32);
-  }
+
   async generateRequestId() {
     return `PUR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   async generateVersionId() {
     return `PV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   async generateDeploymentId() {
     return `PD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   async getPolicyUpdateRequest(requestId) {
     const result = await this.db.query(
       `
@@ -691,9 +691,9 @@ export class PolicyUpdateWorkflowService {
     );
     if (result.rows.length === 0) {
       return null;
-    }
+
     return this.mapToPolicyUpdateRequest(result.rows[0]);
-  }
+
   mapToPolicyUpdateRequest(row) {
     return {
       requestId: row.request_id,
@@ -716,5 +716,5 @@ export class PolicyUpdateWorkflowService {
       submittedAt: row.submitted_at,
       metadata: JSON.parse(row.metadata || '{}'),
     };
-  }
-}
+
+

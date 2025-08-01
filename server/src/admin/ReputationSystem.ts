@@ -15,8 +15,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface UserReputation {
   userId: string;
   reputationId: string;
@@ -32,8 +32,9 @@ export interface UserReputation {
     templatePerformance: number; // 0-200
     verificationStatus: number; // 0-200
     platformContributions: number; // 0-200
-}
-}
+
+
+
   };
   
   // Verification Status
@@ -104,10 +105,10 @@ export interface UserReputation {
     moderatorNotes?: string;
     restrictionLevel?: RestrictionLevel;
   };
-}
 
-}
-}
+
+
+
 export interface UserBadge {
   badgeId: string;
   badgeType: BadgeType;
@@ -124,12 +125,13 @@ export interface UserBadge {
   // Metadata
   criteria: BadgeCriteria;
   rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReputationMetrics {
   // System Overview
   totalUsers: number;
@@ -139,8 +141,9 @@ export interface ReputationMetrics {
     medium: number;
     low: number;
     veryLow: number;
-}
-}
+
+
+
   };
   
   // Verification Statistics
@@ -186,10 +189,10 @@ export interface ReputationMetrics {
     increasedUserTrust: number;
     qualityImprovement: number;
   };
-}
 
-}
-}
+
+
+
 export interface ReputationAlert {
   alertId: string;
   userId: string;
@@ -216,9 +219,10 @@ export interface ReputationAlert {
   assignedTo?: string;
   priority: number;
   escalated: boolean;
-}
-}
-}
+
+
+
+
 
 // Supporting Types
 export type ReputationLevel = 'newcomer' | 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
@@ -253,34 +257,36 @@ export type ReputationAlertType =
   | 'negative_feedback_spike'
   | 'bot_behavior_detected';
 
-}
-}
+
+
 export interface BadgeCriteria {
   requirements: Array<{
     metric: string;
     operator: 'gte' | 'lte' | 'eq' | 'gt' | 'lt';
     value: number;
     timeframe?: string;
-}
-}
-  }>;
-  additionalConditions?: string[];
-}
 
-}
-}
+
+
+>;
+  additionalConditions?: string[];
+
+
+
+
 export interface ReputationHistoryPoint {
   timestamp: Date;
   overallScore: number;
   level: ReputationLevel;
   changeReason: string;
   componentChanges: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReputationConfig {
   // Score Calculation Weights
   weights: {
@@ -289,8 +295,9 @@ export interface ReputationConfig {
     templatePerformance: number;
     verificationStatus: number;
     platformContributions: number;
-}
-}
+
+
+
   };
   
   // Thresholds
@@ -315,7 +322,7 @@ export interface ReputationConfig {
     fraudRiskThreshold: number;
     disputeRateThreshold: number;
   };
-}
+
 
 /**
  * User Reputation System Service
@@ -353,7 +360,7 @@ export class ReputationSystem extends EventEmitter {
     this.databaseService = dependencies.databaseService;
     this.redisService = dependencies.redisService;
     this.auditService = dependencies.auditService;
-  }
+
 
   /**
    * Initialize reputation system
@@ -378,7 +385,7 @@ export class ReputationSystem extends EventEmitter {
     this.startAlertMonitoring();
     
     console.log('✅ User Reputation System initialized successfully');
-  }
+
 
   /**
    * Calculate or recalculate user reputation
@@ -391,8 +398,8 @@ export class ReputationSystem extends EventEmitter {
       const timeSinceCalculation = Date.now() - existingReputation.lastCalculated.getTime();
       if (timeSinceCalculation < 24 * 60 * 60 * 1000) { // 24 hours
         return existingReputation;
-      }
-    }
+
+
 
     console.log(`🔄 Calculating reputation for user: ${userId}`);
 
@@ -456,12 +463,12 @@ export class ReputationSystem extends EventEmitter {
         level: reputationLevel,
         badges: badges.length,
         riskScore: riskAssessment.fraudRiskScore
-  }
+
       timestamp: new Date()
-    } as any);
+ as any);
 
     return reputation;
-  }
+
 
   /**
    * Award badge to user
@@ -476,7 +483,7 @@ export class ReputationSystem extends EventEmitter {
     const badgeDefinition = this.badgeDefinitions.get(badgeType);
     if (!badgeDefinition) {
       throw new Error(`Badge type ${badgeType} not found`);
-    }
+
 
     // Check if user already has this badge
     const userReputation = await this.getUserReputation(userId);
@@ -489,10 +496,10 @@ export class ReputationSystem extends EventEmitter {
         existingBadge.earnedAt = new Date();
         await this.storeUserReputation(userReputation);
         return existingBadge;
-      } else {
+ else {
         throw new Error(`User ${userId} already has badge ${badgeType}`);
-      }
-    }
+
+
 
     const badge: UserBadge = {
       badgeId: `badge_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -530,14 +537,14 @@ export class ReputationSystem extends EventEmitter {
         badgeType,
         badgeName: badge.name,
         level: badge.level
-  }
+
       timestamp: new Date()
-    } as any);
+ as any);
 
     console.log(`🏅 Awarded badge ${badgeType} to user ${userId}`);
 
     return badge;
-  }
+
 
   /**
    * Get user reputation
@@ -548,18 +555,18 @@ export class ReputationSystem extends EventEmitter {
     const cachedReputation = this.reputationCache.get(userId);
     if (cachedReputation) {
       return cachedReputation;
-    }
+
 
     // Try to load from database
     const storedReputation = await this.loadUserReputation(userId);
     if (storedReputation) {
       this.reputationCache.set(userId, storedReputation);
       return storedReputation;
-    }
+
 
     // Calculate new reputation
     return await this.calculateUserReputation(userId);
-  }
+
 
   /**
    * Get reputation metrics for admin dashboard
@@ -583,7 +590,7 @@ export class ReputationSystem extends EventEmitter {
       badgeStats,
       systemImpact
     };
-  }
+
 
   /**
    * Get active reputation alerts
@@ -597,16 +604,16 @@ export class ReputationSystem extends EventEmitter {
 
     if (severity) {
       alerts = alerts.filter(alert => severity.includes(alert.severity));
-    }
+
 
     if (alertType) {
       alerts = alerts.filter(alert => alertType.includes(alert.alertType));
-    }
+
 
     return alerts
       .filter(alert => alert.status === 'active')
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  }
+
 
   /**
    * Update verification status
@@ -638,12 +645,12 @@ export class ReputationSystem extends EventEmitter {
         verificationType,
         verified,
         newLevel: reputation.verification.verificationLevel
-  }
+
       timestamp: new Date()
-    } as any);
+ as any);
 
     this.emit('verification_updated', { userId, verificationType, verified });
-  }
+
 
   /**
    * Flag user for review
@@ -691,7 +698,7 @@ export class ReputationSystem extends EventEmitter {
     await this.storeReputationAlert(alert);
 
     this.emit('user_flagged', { userId, reason, flaggedBy, restrictionLevel });
-  }
+
 
   // Private implementation methods
 
@@ -766,8 +773,8 @@ export class ReputationSystem extends EventEmitter {
     
     for (const schema of schemas) {
       await this.databaseService.query(schema);
-    }
-  }
+
+
 
   /**
    * Load badge definitions
@@ -786,9 +793,9 @@ export class ReputationSystem extends EventEmitter {
             requirements: [
               { metric: 'registration_date', operator: 'lt', value: Date.parse('2024-01-01') }
             ]
-          }
-        }
-  }
+
+
+
       {
         badgeType: 'verified_creator',
         badge: {
@@ -800,9 +807,9 @@ export class ReputationSystem extends EventEmitter {
               { metric: 'identity_verified', operator: 'eq', value: 1 },
               { metric: 'templates_created', operator: 'gte', value: 1 }
             ]
-          }
-        }
-  }
+
+
+
       {
         badgeType: 'template_master',
         badge: {
@@ -814,9 +821,9 @@ export class ReputationSystem extends EventEmitter {
               { metric: 'templates_created', operator: 'gte', value: 10 },
               { metric: 'average_template_rating', operator: 'gte', value: 4.0 }
             ]
-          }
-        }
-  }
+
+
+
       {
         badgeType: 'review_expert',
         badge: {
@@ -828,9 +835,9 @@ export class ReputationSystem extends EventEmitter {
               { metric: 'reviews_given', operator: 'gte', value: 25 },
               { metric: 'review_helpfulness_score', operator: 'gte', value: 4.0 }
             ]
-          }
-        }
-  }
+
+
+
       {
         badgeType: 'trusted_buyer',
         badge: {
@@ -842,9 +849,9 @@ export class ReputationSystem extends EventEmitter {
               { metric: 'total_purchases', operator: 'gte', value: 10 },
               { metric: 'dispute_rate', operator: 'lte', value: 0.05 }
             ]
-          }
-        }
-      }
+
+
+
     ];
 
     for (const { badgeType, badge } of defaultBadges) {
@@ -858,10 +865,10 @@ export class ReputationSystem extends EventEmitter {
         criteria: badge.criteria!,
         rarity: badge.rarity!
       });
-    }
+
 
     console.log(`🏅 Loaded ${this.badgeDefinitions.size} badge definitions`);
-  }
+
 
   // Additional helper methods for reputation calculation, data gathering, etc.
   // Due to length constraints, showing the core structure and key methods.
@@ -872,18 +879,18 @@ export class ReputationSystem extends EventEmitter {
 
     // Gather all user data needed for reputation calculation
     return {};
-  }
+
 
   private async calculateComponentScores(userData: any): Promise<any> {
 
     // Calculate individual component scores
     return {};
-  }
+
 
   private calculateOverallScore(componentScores: any): number {
     // Calculate weighted overall score
     return 0;
-  }
+
 
   private determineReputationLevel(score: number): ReputationLevel {
     // Determine reputation level based on score
@@ -893,19 +900,19 @@ export class ReputationSystem extends EventEmitter {
     if (score >= 400) return 'silver';
     if (score >= 200) return 'bronze';
     return 'newcomer';
-  }
+
 
   private async calculateRiskAssessment(userData: any, componentScores: any): Promise<any> {
 
     // Calculate fraud risk and trustworthiness
     return {};
-  }
+
 
   private async checkEarnedBadges(userId: string, userData: any, componentScores: any): Promise<UserBadge[]> {
 
     // Check which badges user has earned
     return [];
-  }
+
 
   private async getVerificationStatus(userId: string): Promise<UserReputation['verification']> {
 
@@ -919,52 +926,52 @@ export class ReputationSystem extends EventEmitter {
       windsurfVerified: false,
       verificationLevel: 'unverified'
     };
-  }
+
 
   private calculateVerificationLevel(verification: any): VerificationLevel {
     // Calculate verification level based on completed verifications
     return 'unverified';
-  }
+
 
   private async getReputationHistory(userId: string): Promise<ReputationHistoryPoint[]> {
 
     // Get reputation history from database
     return [];
-  }
+
 
   private async storeUserReputation(reputation: UserReputation): Promise<void> {
 
     // Store reputation in database
-  }
+
 
   private async loadUserReputation(userId: string): Promise<UserReputation | null> {
 
     // Load reputation from database
     return null;
-  }
+
 
   private async loadExistingReputations(): Promise<void> {
 
     // Load recent reputations into cache
-  }
+
 
   private startPeriodicProcessing(): void {
     // Setup periodic reputation recalculation
-  }
+
 
   private startAlertMonitoring(): void {
     // Setup alert monitoring
-  }
+
 
   private async checkReputationAlerts(reputation: UserReputation): Promise<void> {
 
     // Check for reputation-based alerts
-  }
+
 
   private async storeReputationAlert(alert: ReputationAlert): Promise<void> {
 
     // Store alert in database
-  }
+
 
   // Dashboard metrics methods
   private async getTotalUsersCount(): Promise<number> { return 0; }
@@ -974,4 +981,3 @@ export class ReputationSystem extends EventEmitter {
   private async getRiskAnalysis(): Promise<any> { return {}; }
   private async getBadgeStats(): Promise<any> { return {}; }
   private async getSystemImpact(): Promise<any> { return {}; }
-}

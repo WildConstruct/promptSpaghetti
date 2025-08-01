@@ -14,7 +14,8 @@ import { useAuthStore } from '../../stores/authStore';
 /**
  * Authentication middleware configuration
  */
-}
+
+
 interface AuthMiddlewareConfig {
   /** Enable automatic token refresh */
   autoRefresh?: boolean;
@@ -41,7 +42,8 @@ interface AuthMiddlewareConfig {
   sessionTimeout: 1800000, // 30 minutes,
   publicRoutes: ['/login', '/register', '/reset-password', '/verify-email', '/unauthorized', '/auth/callback'],
   debug: process.env.NODE_ENV === 'development',
-}
+
+
 };
 
 // =============================================================================
@@ -109,16 +111,18 @@ class SessionActivityTracker {
 /**
  * Authentication middleware props
  */
-}
+
+
 interface AuthenticationMiddlewareProps {
   children: React.ReactNode;
   config?: AuthMiddlewareConfig;
-/**
- * Global authentication middleware component
- */
-export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> = ({)
+  /**
+  * Global authentication middleware component
+  */
+  export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> = ({),
   children,
-}
+
+
   config = {}
 }) => {
   const fullConfig = useMemo(() => ({ ...DEFAULT_CONFIG, ...config }), [config]);
@@ -130,7 +134,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
     refreshTokens,
     logout,
     checkAuthStatus
-  } = useAuthStore();
+ = useAuthStore();
   // Refs for intervals and tracking
   const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const sessionCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -179,7 +183,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
       // Start session timeout monitoring
       if (fullConfig.sessionMonitoring) {
         startSessionTimeoutMonitoring();
-    } else if (!isAuthenticated && !isCurrentRoutePublic) {
+ else if (!isAuthenticated && !isCurrentRoutePublic) {
       // User is not authenticated but trying to access protected route
       log('Unauthenticated access attempt', { route: location.pathname });
       // Try to restore authentication from stored tokens
@@ -188,11 +192,11 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
           log('Authentication restoration failed, redirecting to login');
           navigate('/login');
       });
-    } else if (isAuthenticated && isCurrentRoutePublic) {
+ else if (isAuthenticated && isCurrentRoutePublic) {
       // Authenticated user on public route - stop monitoring but don't logout
       log('Authenticated user on public route', { route: location.pathname });
       stopMonitoring();
-    } else {
+ else {
       // Unauthenticated user on public route - normal state
       log('Public route access', { route: location.pathname });
       stopMonitoring();
@@ -218,9 +222,9 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
           if (!success) {
             log('Token refresh failed, logging out');
             handleForceLogout('Token refresh failed');
-          } else {
+ else {
             log('Token refresh successful');
-        } catch (error) {
+ catch (error) {
           log('Token refresh error', error);
           handleForceLogout('Token refresh error');
     }, fullConfig.refreshInterval);
@@ -273,7 +277,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
     if (reason.includes('timeout')) {
       // Could integrate with a toast/notification system here
       alert('Your session has expired due to inactivity. Please log in again.');
-    } else if (reason.includes('refresh')) {
+ else if (reason.includes('refresh')) {
       alert('Your session has expired. Please log in again.');
     // Navigate to login
     navigate('/login');
@@ -289,7 +293,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
     const handleVisibilityChange = () => {
       if (document.hidden) {
         log('Page became hidden');
-      } else {
+ else {
         log('Page became visible');
         // Reset activity tracker when page becomes visible
         if (activityTrackerRef.current && isAuthenticated) {
@@ -325,7 +329,7 @@ export const AuthenticationMiddleware: React.FC<AuthenticationMiddlewareProps> =
  */
 export function useAuthMiddlewareStatus(): {
   isMonitoring: boolean;,
-  lastActivity: number;
+  lastActivity: number;,
   timeSinceLastActivity: number;
   const [lastActivity, setLastActivity] = React.useState(Date.now());
   const [isMonitoring, setIsMonitoring] = React.useState(false);

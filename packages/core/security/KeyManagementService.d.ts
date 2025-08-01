@@ -15,8 +15,7 @@
  * - Backup and recovery integration
  */
 import { EventEmitter } from 'events';
-export declare enum KeyType {
-    SYMMETRIC = "symmetric",
+export declare enum KeyType { SYMMETRIC = "symmetric",
     ASYMMETRIC_RSA = "asymmetric_rsa",
     ASYMMETRIC_ECDSA = "asymmetric_ecdsa",
     ASYMMETRIC_ECDH = "asymmetric_ecdh",
@@ -66,12 +65,12 @@ export declare enum KeyAlgorithm {
     HMAC_SHA256 = "hmac-sha256",
     HMAC_SHA512 = "hmac-sha512",
     PBKDF2_SHA256 = "pbkdf2-sha256",
-    SCRYPT = "scrypt",
+    SCRYPT = "scrypt" }
     ARGON2ID = "argon2id"
 
 }
-export interface KeyMetadata {
-    id: string;
+}
+export interface KeyMetadata { id: string;
     name: string;
     type: KeyType;
     purpose: KeyPurpose;
@@ -101,48 +100,43 @@ export interface KeyMetadata {
     compressed: boolean;
     checksumSHA256: string;
     tags: Record<string, string>;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface CryptographicKey {
-    metadata: KeyMetadata;
+}
+export interface CryptographicKey { metadata: KeyMetadata;
     keyData?: Buffer;
     publicKey?: Buffer;
     privateKey?: Buffer;
     wrappedKeyData?: Buffer;
-    derivationParameters?: KeyDerivationParameters;
-
+    derivationParameters?: KeyDerivationParameters }
 }
-export interface KeyDerivationParameters {
-    algorithm: KeyAlgorithm;
+}
+export interface KeyDerivationParameters { algorithm: KeyAlgorithm;
     salt: Buffer;
     iterations?: number;
     memoryFactor?: number;
     parallelism?: number;
     keyLength: number;
-    additionalData?: Buffer;
-
+    additionalData?: Buffer }
 }
-export interface KeyAccessPolicy {
-    requireMultiAuth: boolean;
+}
+export interface KeyAccessPolicy { requireMultiAuth: boolean;
     minApprovals: number;
     timeRestrictions?: {
         allowedHours: number[];
         allowedDays: number[];
-        timezone: string;
+        timezone: string }
 }
     };
-    locationRestrictions?: {
-        allowedCountries: string[];
-        allowedNetworks: string[];
-    };
+    locationRestrictions?: { allowedCountries: string[];
+        allowedNetworks: string[] };
     requireSecureChannel: boolean;
     maxConcurrentAccess: number;
     sessionTimeout: number;
 
 }
-export interface KeyAuditEvent {
-    id: string;
+}
+export interface KeyAuditEvent { id: string;
     timestamp: Date;
     event: 'created' | 'accessed' | 'modified' | 'rotated' | 'revoked' | 'expired' | 'backed_up' | 'restored';
     userId: string;
@@ -150,11 +144,10 @@ export interface KeyAuditEvent {
     ipAddress: string;
     userAgent?: string;
     details: Record<string, any>;
-    riskScore: number;
-
+    riskScore: number }
 }
-export interface KeyGenerationOptions {
-    type: KeyType;
+}
+export interface KeyGenerationOptions { type: KeyType;
     purpose: KeyPurpose;
     algorithm: KeyAlgorithm;
     keySize?: number;
@@ -166,19 +159,17 @@ export interface KeyGenerationOptions {
     parentKeyId?: string;
     derivationParams?: Partial<KeyDerivationParameters>;
     metadata?: Record<string, any>;
-    tags?: Record<string, string>;
-
+    tags?: Record<string, string> }
 }
-export interface KeyRotationOptions {
-    forceRotation?: boolean;
+}
+export interface KeyRotationOptions { forceRotation?: boolean;
     gracePeriodDays?: number;
     notifyUsers?: boolean;
     automatedRotation?: boolean;
-    rotationReason?: string;
-
+    rotationReason?: string }
 }
-export interface KeySearchCriteria {
-    type?: KeyType;
+}
+export interface KeySearchCriteria { type?: KeyType;
     purpose?: KeyPurpose;
     status?: KeyStatus;
     tier?: StorageTier;
@@ -187,11 +178,10 @@ export interface KeySearchCriteria {
     expiringBefore?: Date;
     tags?: Record<string, string>;
     authorizedUser?: string;
-    complianceLevel?: string;
-
+    complianceLevel?: string }
 }
-export interface KeyManagementConfig {
-    defaultTier: StorageTier;
+}
+export interface KeyManagementConfig { defaultTier: StorageTier;
     hotCacheSize: number;
     warmStorageEncryption: boolean;
     coldStorageLocation: string;
@@ -211,27 +201,27 @@ export interface KeyManagementConfig {
     alertThresholds: {
         keyUsageRate: number;
         failureRate: number;
-        responseTime: number;
+        responseTime: number }
 }
     };
 
 }
-export interface HSMConfiguration {
-    provider: 'aws-cloudhsm' | 'azure-keyvault' | 'gcp-hsm' | 'pkcs11';
+}
+export interface HSMConfiguration { provider: 'aws-cloudhsm' | 'azure-keyvault' | 'gcp-hsm' | 'pkcs11';
     endpoint: string;
     credentials: {
         username?: string;
         password?: string;
         certificatePath?: string;
-        tokenPath?: string;
+        tokenPath?: string }
 }
     };
     keySlots: number[];
     partitionLabel?: string;
 
 }
-export interface KeyPerformanceMetrics {
-    operationsPerSecond: number;
+}
+export interface KeyPerformanceMetrics { operationsPerSecond: number;
     averageResponseTime: number;
     errorRate: number;
     cacheHitRate: number;
@@ -275,9 +265,9 @@ export declare class KeyManagementService extends EventEmitter {
      * Derive a key from a parent key
      */
     deriveKey();
-      parentKeyId: string,
-      derivationParams: KeyDerivationParameters,
-      requesterId: string,
+      parentKeyId: string;
+      derivationParams: KeyDerivationParameters;
+      requesterId: string }
     ): Promise<CryptographicKey>;
     /**
      * Search keys by criteria
@@ -333,4 +323,5 @@ export declare class KeyManagementService extends EventEmitter {
 
 export default KeyManagementService;
 //# sourceMappingURL=KeyManagementService.d.ts.map
+}
 }

@@ -6,23 +6,21 @@
  * with batch operations, templates, and automated classification
  */
 import React from 'react';
-import { 
-  DataClassification,
+import { DataClassification,
   ClassificationContext,
-  ClassificationRule,
+  ClassificationRule }
   ValidationResult
 } from '../../types/DataClassification';
 
 }
-interface DataElement {
-    id: string;
+}
+interface DataElement { id: string;
     name: string;
     type: string;
     content?: string;
     metadata?: Record<string, any>;
-    existingClassification?: DataClassification;
-
-
+    existingClassification?: DataClassification }
+}
 }
 interface BulkClassificationToolsProps {
     dataElements: DataElement[];
@@ -34,4 +32,5 @@ interface BulkClassificationToolsProps {
 export declare const BulkClassificationTools: React.FC<BulkClassificationToolsProps>;
 export default BulkClassificationTools;
 //# sourceMappingURL=BulkClassificationTools.d.ts.map
+}
 }

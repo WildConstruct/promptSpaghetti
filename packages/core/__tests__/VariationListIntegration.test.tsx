@@ -3,27 +3,24 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { WeightedChoiceEditor } from '../components/Inspector/editors/WeightedChoiceEditor';
 
 // Mock the graph store
-jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({,)
+jest.mock('../graphStore', () => ({ )
+  useGraphStore: () => ({);
   addVariation: jest.fn(),
   removeVariation: jest.fn(),
   updateVariation: jest.fn(),
-  reorderVariations: jest.fn(),
-}
+  reorderVariations: jest.fn() }
+
 }));
-describe('VariationList Integration with Editors', () => {
-  const mockNodeData = {
+describe('VariationList Integration with Editors', () => { const mockNodeData = {
   id: 'test-choice-node',
   type: 'WeightedChoice' as const,
   label: 'Test Choice',
   choices: ['Option A', 'Option B'],
   weights: [1, 2],
-  variations: [],
+  variations: [] }
 };
   const mockOnChange = jest.fn();
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   it('renders WeightedChoiceEditor with enhanced VariationList', () => {
     render();
       <WeightedChoiceEditor
@@ -56,9 +53,9 @@ describe('VariationList Integration with Editors', () => {
     fireEvent.change(addInput, { target: { value: 'Option C' } });
     fireEvent.click(screen.getByRole('button', { name: /add/i }));
     // Verify onChange was called with the updated choices
-    expect(mockOnChange).toHaveBeenCalledWith({)
-  choices: ['Option A', 'Option B', 'Option C'],
-  weights: [1, 2, 1],
+    expect(mockOnChange).toHaveBeenCalledWith({ )
+  choices: ['Option A', 'Option B', 'Option C']
+  weights: [1, 2, 1] }
 });
   });
   it('supports quick entry mode toggle', () => {
@@ -77,11 +74,10 @@ describe('VariationList Integration with Editors', () => {
     expect(screen.getByPlaceholderText(/Enter variations separated by commas/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Add All/i })).toBeInTheDocument();
   });
-  it('shows variation count in the interface', () => {
-  const nodeDataWithChoices = {
-  ...mockNodeData,
-  choices: ['A', 'B', 'C'],
-  weights: [1, 1, 1],
+  it('shows variation count in the interface', () => { const nodeDataWithChoices = {
+  ...mockNodeData
+  choices: ['A', 'B', 'C']
+  weights: [1, 1, 1] }
 };
     render();
       <WeightedChoiceEditor

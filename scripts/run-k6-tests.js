@@ -84,8 +84,8 @@ const k6Config = {
         { duration: '3m', target: 0 }        // Ramp down
       ],
       description: 'Find the breaking point by increasing request rate'
-    }
-  }
+
+
 };
 
 class K6TestRunner {
@@ -105,7 +105,7 @@ class K6TestRunner {
       details: [],
       timestamp: Date.now()
     };
-  }
+
 
   /**
    * Check if K6 is installed
@@ -114,12 +114,12 @@ class K6TestRunner {
     try {
       execSync('k6 version', { stdio: 'pipe' });
       return true;
-    } catch (error) {
+ catch (error) {
       console.error(`${colors.red}Error: K6 is not installed or not in PATH${colors.reset}`);
       console.log(`${colors.yellow}Install K6: https://k6.io/docs/getting-started/installation/${colors.reset}`);
       return false;
-    }
-  }
+
+
 
   /**
    * Check if server is running
@@ -130,16 +130,16 @@ class K6TestRunner {
       if (response.ok) {
         console.log(`${colors.green}✅ Server is running at ${this.options.serverUrl}${colors.reset}`);
         return true;
-      } else {
+ else {
         console.error(`${colors.red}❌ Server health check failed: ${response.status}${colors.reset}`);
         return false;
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error(`${colors.red}❌ Cannot connect to server at ${this.options.serverUrl}${colors.reset}`);
       console.log(`${colors.yellow}Start the server with: pnpm dev:server${colors.reset}`);
       return false;
-    }
-  }
+
+
 
   /**
    * Find available K6 test files
@@ -150,7 +150,7 @@ class K6TestRunner {
     if (!fs.existsSync(testDir)) {
       console.error(`${colors.red}Error: K6 test directory not found: ${testDir}${colors.reset}`);
       return [];
-    }
+
 
     const files = fs.readdirSync(testDir)
       .filter(file => file.endsWith('.js'))
@@ -162,7 +162,7 @@ class K6TestRunner {
     });
 
     return files;
-  }
+
 
   /**
    * Generate K6 options for scenario
@@ -178,7 +178,7 @@ class K6TestRunner {
     };
 
     return JSON.stringify(options, null, 2);
-  }
+
 
   /**
    * Create temporary K6 config file
@@ -209,22 +209,22 @@ export function setup() {
   const response = http.get(BASE_URL + '/health');
   if (response.status !== 200) {
     throw new Error('Server health check failed');
-  }
+
   
   return { startTime: Date.now() };
-}
+
 
 // Teardown function (runs once at the end)
 export function teardown(data: any): void {
   const duration = Date.now() - data.startTime;
   console.log('✅ K6 test completed in', duration + 'ms');
-}
+
 `;
 
     const configPath = path.join(process.cwd(), 'k6-config.js');
     fs.writeFileSync(configPath, configContent);
     return configPath;
-  }
+
 
   /**
    * Run K6 test
@@ -238,7 +238,7 @@ export function teardown(data: any): void {
     const outputDir = path.join(process.cwd(), k6Config.outputDir);
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
-    }
+
 
     const outputFile = path.join(outputDir, `k6-${scenario}-${Date.now()}.json`);
     const configFile = this.createK6Config(scenario);
@@ -262,21 +262,20 @@ export function teardown(data: any): void {
       // Parse results
       if (fs.existsSync(outputFile)) {
         this.results.details = this.parseK6Results(outputFile);
-      }
+
 
       // Clean up
       if (fs.existsSync(configFile)) {
         fs.unlinkSync(configFile);
-      }
+
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       console.error(`${colors.red}K6 test failed: ${error.message}${colors.reset}`);
       this.results.passed = false;
       return false;
-    }
-  }
+
+
 
   /**
    * Execute K6 command
@@ -292,11 +291,11 @@ export function teardown(data: any): void {
         if (code === 0) {
           console.log(`${colors.green}✅ K6 test completed successfully${colors.reset}`);
           resolve(true);
-        } else {
+ else {
           console.error(`${colors.red}❌ K6 test failed with exit code ${code}${colors.reset}`);
           this.results.passed = false;
           resolve(false);
-        }
+
       });
 
       k6Process.on('error', (error) => {
@@ -304,7 +303,7 @@ export function teardown(data: any): void {
         reject(error);
       });
     });
-  }
+
 
   /**
    * Parse K6 JSON results
@@ -320,11 +319,11 @@ export function teardown(data: any): void {
       this.results.summary = summary;
       
       return results;
-    } catch (error) {
+ catch (error) {
       console.warn(`Warning: Failed to parse K6 results: ${error.message}`);
       return [];
-    }
-  }
+
+
 
   /**
    * Extract summary metrics from K6 results
@@ -365,7 +364,7 @@ export function teardown(data: any): void {
       : 0;
 
     return summary;
-  }
+
 
   /**
    * Generate test report
@@ -389,7 +388,7 @@ export function teardown(data: any): void {
       console.log(`  Avg Response Time: ${Math.round(this.results.summary.avgResponseTime)}ms`);
       console.log(`  P95 Response Time: ${Math.round(this.results.summary.p95ResponseTime)}ms`);
       console.log();
-    }
+
 
     // Performance thresholds check
     const summary = this.results.summary;
@@ -398,10 +397,10 @@ export function teardown(data: any): void {
       console.log(`  ${summary.p95ResponseTime <= 500 ? '✅' : '❌'} P95 Response Time: ${Math.round(summary.p95ResponseTime)}ms (threshold: 500ms)`);
       console.log(`  ${(summary.failedRequests / summary.totalRequests) <= 0.1 ? '✅' : '❌'} Error Rate: ${((summary.failedRequests / summary.totalRequests) * 100).toFixed(2)}% (threshold: 10%)`);
       console.log();
-    }
+
 
     console.log(`${colors.bright}=================${colors.reset}\n`);
-  }
+
 
   /**
    * Run all scenarios
@@ -418,18 +417,18 @@ export function teardown(data: any): void {
       if (!success && this.options.exitOnFailure) {
         console.error(`${colors.red}Stopping due to failure in ${scenario} scenario${colors.reset}`);
         break;
-      }
+
 
       // Wait between scenarios
       if (scenario !== scenarios[scenarios.length - 1]) {
         console.log(`${colors.yellow}Waiting 10 seconds before next scenario...${colors.reset}\n`);
         await new Promise(resolve => setTimeout(resolve, 10000));
-      }
-    }
+
+
 
     return results;
-  }
-}
+
+
 
 // CLI interface
 async function main(): Promise<void> {
@@ -486,27 +485,27 @@ Examples:
         `);
       process.exit(0);
       break;
-    }
-  }
+
+
 
   const runner = new K6TestRunner(options);
 
   // Check K6 installation
   if (!runner.checkK6Installation()) {
     process.exit(1);
-  }
+
 
   // Check server health
   if (!(await runner.checkServerHealth())) {
     process.exit(1);
-  }
+
 
   // Find test files
   const testFiles = runner.findTestFiles();
   if (testFiles.length === 0) {
     console.error(`${colors.red}No K6 test files found${colors.reset}`);
     process.exit(1);
-  }
+
 
   // Determine which test to run
   const targetTest = testFile ? 
@@ -520,26 +519,25 @@ Examples:
     if (runAll) {
       const results = await runner.runAllScenarios(targetTest);
       success = Object.values(results).every(r => r.success);
-    } else {
+ else {
       success = await runner.runTest(targetTest, scenario);
-    }
+
 
     runner.generateReport();
 
     if (!success && options.exitOnFailure !== false) {
       process.exit(1);
-    }
+
 
     console.log(`${colors.green}K6 testing completed successfully!${colors.reset}`);
-
-  } catch (error) {
+ catch (error) {
     console.error(`${colors.red}K6 testing failed: ${error.message}${colors.reset}`);
     process.exit(1);
-  }
-}
+
+
 
 if (require.main === module) {
   main();
-}
+
 
 module.exports = K6TestRunner;

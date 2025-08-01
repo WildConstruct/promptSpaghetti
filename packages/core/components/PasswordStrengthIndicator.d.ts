@@ -4,15 +4,14 @@
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 import React from 'react';
-import { 
-  PasswordComplexityValidator,
-  PasswordValidationResult,
+import { PasswordComplexityValidator,
+  PasswordValidationResult }
   PasswordValidationContext
 } from '../auth/PasswordComplexityValidator';
 
 }
-export interface PasswordStrengthIndicatorProps {
-    password: string;
+}
+export interface PasswordStrengthIndicatorProps { password: string;
     context?: PasswordValidationContext;
     validator?: PasswordComplexityValidator;
     showDetails?: boolean;
@@ -23,12 +22,10 @@ export interface PasswordStrengthIndicatorProps {
     theme?: 'light' | 'dark' | 'auto';
     className?: string;
     onValidationChange?: (result: PasswordValidationResult) => void;
-    debounceMs?: number;
-
-
+    debounceMs?: number }
 }
-export interface PasswordStrengthDisplayProps {
-    result: PasswordValidationResult;
+}
+export interface PasswordStrengthDisplayProps { result: PasswordValidationResult;
     showDetails: boolean;
     showSuggestions: boolean;
     showCrackTime: boolean;
@@ -38,17 +35,16 @@ export interface PasswordStrengthDisplayProps {
 
 export declare const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>;
 export declare const usePasswordStrength: ()
-  password: string,
-  context?: PasswordValidationContext,
+  password: string;
+  context?: PasswordValidationContext }
   validator?: PasswordComplexityValidator
-) => {
-    result: PasswordValidationResult | null;
+) => { result: PasswordValidationResult | null;
     isValidating: boolean;
     isValid: boolean;
     score: number;
     strength: "strong" | "weak" | "good" | "very-weak" | "fair" | "very-strong";
     suggestions: string[];
-    errors: string[];
+    errors: string[] }
 }
 };
 export type { PasswordStrengthIndicatorProps, PasswordStrengthDisplayProps };

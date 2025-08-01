@@ -5,35 +5,30 @@
 import { ExtensionPointCategory } from './ExtensionPointRegistry';
 
 }
-export interface VisualizationOptions {
-    format?: 'mermaid' | 'graphviz' | 'json';
+}
+export interface VisualizationOptions { format?: 'mermaid' | 'graphviz' | 'json';
     includeInternal?: boolean;
     groupByCategory?: boolean;
     showDependencies?: boolean;
     showInterfaces?: boolean;
-    theme?: 'light' | 'dark';
-
-
+    theme?: 'light' | 'dark' }
 }
-export interface ExtensionPointNode {
-    id: string;
+}
+export interface ExtensionPointNode { id: string;
     name: string;
     category: ExtensionPointCategory;
     priority: string;
     lifecycle: string;
     interfaces: string[];
     dependencies: string[];
-    location: string;
-
-
+    location: string }
 }
-export interface ExtensionPointEdge {
-    source: string;
+}
+export interface ExtensionPointEdge { source: string;
     target: string;
     type: 'dependency' | 'interface' | 'inheritance';
-    label?: string;
-
-
+    label?: string }
+}
 }
 export interface ExtensionPointGraph {
     nodes: ExtensionPointNode[];
@@ -87,4 +82,5 @@ export declare class ExtensionPointVisualizer {
 
 export declare const extensionPointVisualizer: ExtensionPointVisualizer;
 //# sourceMappingURL=ExtensionPointVisualizer.d.ts.map
+}
 }

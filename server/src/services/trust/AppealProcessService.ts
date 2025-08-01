@@ -62,8 +62,8 @@ export type AppealDecision = 'approve' | 'partially_approve' | 'deny' | 'dismiss
 // Core Appeal Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface AppealEvidence {
   evidence_id: string;
   evidence_type: AppealEvidenceType;
@@ -75,12 +75,13 @@ export interface AppealEvidence {
   submitted_at: Date;
   submitted_by: string;
   verification_status: 'pending' | 'verified' | 'disputed' | 'rejected';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AppealTimeline {
   event_id: string;
   timestamp: Date;
@@ -90,12 +91,13 @@ export interface AppealTimeline {
   description: string;
   details?: Record<string, any>;
   public_visible: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AppealReviewCriteria {
   policy_adherence: number;      // 1-10 scale
   evidence_quality: number;      // 1-10 scale
@@ -103,12 +105,13 @@ export interface AppealReviewCriteria {
   proportionality: number;       // 1-10 scale
   precedent_consistency: number; // 1-10 scale
   risk_assessment: number;       // 1-10 scale
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AppealDecisionRationale {
   primary_reasoning: string;
   supporting_factors: string[];
@@ -117,12 +120,13 @@ export interface AppealDecisionRationale {
   policy_references: string[];
   risk_considerations: string[];
   recommended_actions?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Appeal {
   appeal_id: string;
   appellant_id: string;
@@ -179,12 +183,13 @@ export interface Appeal {
   allow_resubmission: boolean;
   resubmission_count: number;
   max_resubmissions: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AppealFilters {
   status?: AppealStatus;
   category?: AppealCategory;
@@ -193,16 +198,17 @@ export interface AppealFilters {
   date_range?: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   escalation_level?: number;
   limit?: number;
   offset?: number;
-}
 
-}
-}
+
+
+
 export interface AppealStatistics {
   total_appeals: number;
   by_status: Record<AppealStatus, number>;
@@ -214,15 +220,16 @@ export interface AppealStatistics {
     sla_compliance_rate: number;
     approval_rate: number;
     satisfaction_score: number;
-}
-}
+
+
+
   };
   workload_distribution: Record<ReviewerRole, number>;
   trend_data: {
     daily_submissions: Record<string, number>;
     resolution_rates: Record<string, number>;
   };
-}
+
 
 // =============================================================================
 // Appeal Process Service Implementation
@@ -244,7 +251,7 @@ export class AppealProcessService {
     this.auditService = auditService;
     this.trustScoreService = trustScoreService;
     this.policyService = policyService;
-  }
+
 
   // =============================================================================
   // Appeal Submission and Management
@@ -316,7 +323,7 @@ export class AppealProcessService {
         actor_type: 'user',
         description: 'Appeal submitted for review',
         public_visible: true
-      }],
+],
       
       follow_up_required: false,
       allow_resubmission: true,
@@ -331,8 +338,8 @@ export class AppealProcessService {
     if (appealData.initial_evidence?.length) {
       for (const evidence of appealData.initial_evidence) {
         await this.addEvidence(appealId, evidence);
-      }
-    }
+
+
 
     // Auto-assign to appropriate reviewer
     await this.autoAssignReviewer(appealId);
@@ -346,7 +353,7 @@ export class AppealProcessService {
         category: appealData.category,
         original_decision: appealData.original_decision_id,
         priority
-  }
+
       severity: 'info'
     });
 
@@ -354,7 +361,7 @@ export class AppealProcessService {
     await this.sendAppealNotifications(appealId, 'submitted');
 
     return appealId;
-  }
+
 
   /**
    * Get appeal by ID with full details
@@ -367,11 +374,11 @@ export class AppealProcessService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     return this.mapRowToAppeal(row);
-  }
+
 
   /**
    * Update appeal status and details
@@ -386,7 +393,7 @@ export class AppealProcessService {
     const appeal = await this.getAppeal(appealId);
     if (!appeal) {
       throw new Error(`Appeal not found: ${appealId}`);
-    }
+
 
     // Update status
     await this.db.query(`
@@ -407,7 +414,7 @@ export class AppealProcessService {
 
     // Send notifications on status change
     await this.sendAppealNotifications(appealId, 'status_changed');
-  }
+
 
   /**
    * Assign appeal to reviewer
@@ -434,8 +441,8 @@ export class AppealProcessService {
     const appeal = await this.getAppeal(appealId);
     if (appeal?.status === 'submitted') {
       await this.updateAppealStatus(appealId, 'under_review', reviewerId);
-    }
-  }
+
+
 
   /**
    * Add evidence to an appeal
@@ -478,7 +485,7 @@ export class AppealProcessService {
     });
 
     return evidenceId;
-  }
+
 
   /**
    * Make a decision on an appeal
@@ -494,7 +501,7 @@ export class AppealProcessService {
     const appeal = await this.getAppeal(appealId);
     if (!appeal) {
       throw new Error(`Appeal not found: ${appealId}`);
-    }
+
 
     // Calculate resolution time
     const resolutionTimeHours = (Date.now() - appeal.submitted_at.getTime()) / (1000 * 60 * 60);
@@ -506,7 +513,7 @@ export class AppealProcessService {
     case 'partially_approve': finalStatus = 'partially_approved'; break;
     case 'deny': finalStatus = 'denied'; break;
     case 'dismiss': finalStatus = 'dismissed'; break;
-    }
+
 
     // Update appeal with decision
     await this.db.query(`
@@ -519,7 +526,7 @@ export class AppealProcessService {
     // Store review criteria if provided
     if (reviewCriteria) {
       await this.storeReviewCriteria(appealId, reviewCriteria);
-    }
+
 
     // Add timeline event
     await this.addTimelineEvent(appealId, {
@@ -543,13 +550,13 @@ export class AppealProcessService {
         decision,
         resolution_time_hours: resolutionTimeHours,
         appellant_id: appeal.appellant_id
-  }
+
       severity: decision === 'approve' ? 'warning' : 'info'
     });
 
     // Send notifications
     await this.sendAppealNotifications(appealId, 'decision_made');
-  }
+
 
   /**
    * List appeals with filtering
@@ -563,36 +570,36 @@ export class AppealProcessService {
     if (filters.status) {
       conditions.push(`status = $${params.length + 1}`);
       params.push(filters.status);
-    }
+
 
     if (filters.category) {
       conditions.push(`category = $${params.length + 1}`);
       params.push(filters.category);
-    }
+
 
     if (filters.priority) {
       conditions.push(`priority = $${params.length + 1}`);
       params.push(filters.priority);
-    }
+
 
     if (filters.assigned_reviewer) {
       conditions.push(`assigned_reviewer_id = $${params.length + 1}`);
       params.push(filters.assigned_reviewer);
-    }
+
 
     if (filters.escalation_level !== undefined) {
       conditions.push(`escalation_level = $${params.length + 1}`);
       params.push(filters.escalation_level);
-    }
+
 
     if (filters.date_range) {
       conditions.push(`submitted_at BETWEEN $${params.length + 1} AND $${params.length + 2}`);
       params.push(filters.date_range.start, filters.date_range.end);
-    }
+
 
     if (conditions.length > 0) {
       whereClause = `WHERE ${conditions.join(' AND ')}`;
-    }
+
 
     const result = await this.db.query(`
       SELECT *, COUNT(*) OVER() AS total_count
@@ -606,7 +613,7 @@ export class AppealProcessService {
     const total = result.rows.length > 0 ? parseInt(result.rows[0].total_count) : 0;
 
     return { appeals, total };
-  }
+
 
   /**
    * Get appeal statistics and metrics
@@ -619,7 +626,7 @@ export class AppealProcessService {
     if (timeRange) {
       dateFilter = 'WHERE submitted_at BETWEEN $1 AND $2';
       params.push(timeRange.start, timeRange.end);
-    }
+
 
     // Get overall statistics
     const statsResult = await this.db.query(`
@@ -668,14 +675,14 @@ export class AppealProcessService {
         sla_compliance_rate: 0, // Would calculate based on target vs actual resolution
         approval_rate: totalAppeals > 0 ? (parseInt(stats.approved_count) / totalAppeals * 100) : 0,
         satisfaction_score: parseFloat(stats.avg_satisfaction) || 0
-  }
+
       workload_distribution: {} as Record<ReviewerRole, number>,
       trend_data: {
         daily_submissions: {},
         resolution_rates: {}
-      }
+
     };
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -705,8 +712,8 @@ export class AppealProcessService {
     // Store initial timeline event
     for (const event of appeal.timeline) {
       await this.addTimelineEvent(appeal.appeal_id, event);
-    }
-  }
+
+
 
   private async addTimelineEvent(appealId: string, event: Partial<AppealTimeline>): Promise<void> {
 
@@ -730,7 +737,7 @@ export class AppealProcessService {
       event.actor_id, event.actor_type, event.description,
       JSON.stringify(event.details || {}), event.public_visible || false
     ]);
-  }
+
 
   private mapRowToAppeal(row: unknown): Appeal {
     return {
@@ -770,7 +777,7 @@ export class AppealProcessService {
       resubmission_count: row.resubmission_count || 0,
       max_resubmissions: row.max_resubmissions || 3
     };
-  }
+
 
   private async calculateAppealPriority(
     decisionType: string,
@@ -781,22 +788,22 @@ export class AppealProcessService {
     // High priority for financial or safety impacts
     if (category === 'transaction_block' || category === 'account_restriction') {
       return 'high';
-    }
+
     
     // Medium priority for enforcement actions
     if (category === 'enforcement_action' || category === 'policy_violation') {
       return 'medium';
-    }
+
     
     // Urgent for anything mentioning safety, financial harm, etc.
     if (impactStatement?.toLowerCase().includes('financial') || 
         impactStatement?.toLowerCase().includes('safety') ||
         impactStatement?.toLowerCase().includes('urgent')) {
       return 'urgent';
-    }
+
     
     return 'medium';
-  }
+
 
   private async determineReviewComplexity(appealData: unknown): Promise<'simple' | 'standard' | 'complex' | 'critical'> {
 
@@ -805,7 +812,7 @@ export class AppealProcessService {
     if (appealData.category === 'enforcement_action') return 'complex';
     if (appealData.category === 'trust_score') return 'standard';
     return 'standard';
-  }
+
 
   private calculateSLATarget(priority: AppealPriority, complexity: string): number {
     // SLA targets in hours
@@ -817,7 +824,7 @@ export class AppealProcessService {
     };
     
     return targets[priority][complexity] || 72;
-  }
+
 
   private async autoAssignReviewer(appealId: string): Promise<void> {
 
@@ -826,8 +833,8 @@ export class AppealProcessService {
     if (availableReviewers.length > 0) {
       const reviewer = availableReviewers[0];
       await this.assignReviewer(appealId, reviewer.id, reviewer.role);
-    }
-  }
+
+
 
   private async getAvailableReviewers(): Promise<Array<{ id: string; role: ReviewerRole }>> {
     // Would query reviewer availability and workload
@@ -835,7 +842,7 @@ export class AppealProcessService {
       { id: 'reviewer-tier1-001', role: 'tier1' },
       { id: 'reviewer-tier2-001', role: 'tier2' }
     ];
-  }
+
 
   private async executeDecisionActions(appealId: string, decision: AppealDecision, _____appeal: Appeal): Promise<void> {
 
@@ -843,14 +850,14 @@ export class AppealProcessService {
     if (decision === 'approve' || decision === 'partially_approve') {
       console.log(`Executing reversal actions for approved appeal: ${appealId}`);
       // Implementation would depend on original decision type
-    }
-  }
+
+
 
   private async sendAppealNotifications(appealId: string, event: string): Promise<void> {
 
     // Would send email/in-app notifications to appellant and reviewers
     console.log(`Sending notifications for appeal ${appealId}, event: ${event}`);
-  }
+
 
   private async storeReviewCriteria(appealId: string, criteria: AppealReviewCriteria): Promise<void> {
 
@@ -858,5 +865,4 @@ export class AppealProcessService {
       INSERT INTO appeal_review_criteria (appeal_id, criteria_data, created_at)
       VALUES ($1, $2, NOW())
     `, [appealId, JSON.stringify(criteria)]);
-  }
-}
+

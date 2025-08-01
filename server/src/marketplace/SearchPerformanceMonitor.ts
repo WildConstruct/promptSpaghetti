@@ -18,8 +18,8 @@ import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 import { SearchAnalyticsService } from './SearchAnalyticsService';
 
-}
-}
+
+
 interface PerformanceAlert {
   id: string;
   type: 'performance' | 'availability' | 'error_rate' | 'user_experience';
@@ -32,12 +32,13 @@ interface PerformanceAlert {
   timestamp: Date;
   resolved: boolean;
   actions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface HealthCheck {
   service: string;
   status: 'healthy' | 'degraded' | 'unhealthy';
@@ -45,20 +46,22 @@ interface HealthCheck {
   message: string;
   timestamp: Date;
   details?: any;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface PerformanceMetrics {
   searchLatency: {
     p50: number;
     p95: number;
     p99: number;
     avg: number;
-}
-}
+
+
+
   };
   throughput: {
     requestsPerSecond: number;
@@ -84,10 +87,10 @@ interface PerformanceMetrics {
     redisHealth: string;
     cacheHitRate: number;
   };
-}
 
-}
-}
+
+
+
 interface OptimizationRecommendation {
   category: 'index' | 'query' | 'cache' | 'infrastructure';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -97,9 +100,10 @@ interface OptimizationRecommendation {
   effort: string;
   actions: string[];
   estimatedImprovement: string;
-}
-}
-}
+
+
+
+
 
 @Injectable()
 export class SearchPerformanceMonitor {
@@ -120,7 +124,7 @@ export class SearchPerformanceMonitor {
     });
 
     this.startMonitoring();
-  }
+
 
   /**
    * Start continuous monitoring
@@ -128,7 +132,7 @@ export class SearchPerformanceMonitor {
   startMonitoring(): void {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
-    }
+
 
     // Monitor every 30 seconds
     this.monitoringInterval = setInterval(async () => {
@@ -138,7 +142,7 @@ export class SearchPerformanceMonitor {
     }, 30000);
 
     console.log('Search performance monitoring started');
-  }
+
 
   /**
    * Stop monitoring
@@ -147,9 +151,9 @@ export class SearchPerformanceMonitor {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = null;
-    }
+
     console.log('Search performance monitoring stopped');
-  }
+
 
   /**
    * Get current performance metrics
@@ -181,11 +185,11 @@ export class SearchPerformanceMonitor {
         userExperience: userExperienceMetrics,
         infrastructure: infrastructureHealth
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get current metrics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get active performance alerts
@@ -216,11 +220,11 @@ export class SearchPerformanceMonitor {
         resolved: row.resolved,
         actions: row.actions || []
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get active alerts:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Get optimization recommendations
@@ -247,7 +251,7 @@ export class SearchPerformanceMonitor {
           ],
           estimatedImprovement: '30-50% latency reduction'
         });
-      }
+
 
       // Analyze error rate issues
       if (metrics.errorRate.rate > 0.05) {
@@ -266,7 +270,7 @@ export class SearchPerformanceMonitor {
           ],
           estimatedImprovement: 'Reduce error rate to <1%'
         });
-      }
+
 
       // Analyze cache performance
       if (metrics.infrastructure.cacheHitRate < 0.7) {
@@ -284,7 +288,7 @@ export class SearchPerformanceMonitor {
           ],
           estimatedImprovement: '20-30% latency improvement'
         });
-      }
+
 
       // Analyze user experience
       if (metrics.userExperience.clickThroughRate < 0.3) {
@@ -303,17 +307,17 @@ export class SearchPerformanceMonitor {
           ],
           estimatedImprovement: 'Increase CTR to 35-40%'
         });
-      }
+
 
       return recommendations.sort((a, b) => {
         const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
         return priorityOrder[b.priority] - priorityOrder[a.priority];
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get optimization recommendations:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Perform comprehensive health checks
@@ -337,7 +341,7 @@ export class SearchPerformanceMonitor {
         timestamp: new Date(),
         details: elasticsearchHealth.details
       });
-    } catch (error) {
+ catch (error) {
       healthChecks.push({
         service: 'elasticsearch',
         status: 'unhealthy',
@@ -345,7 +349,7 @@ export class SearchPerformanceMonitor {
         message: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date()
       });
-    }
+
 
     // PostgreSQL health check
     try {
@@ -360,7 +364,7 @@ export class SearchPerformanceMonitor {
         message: `Database responding in ${responseTime}ms`,
         timestamp: new Date()
       });
-    } catch (error) {
+ catch (error) {
       healthChecks.push({
         service: 'postgresql',
         status: 'unhealthy',
@@ -368,7 +372,7 @@ export class SearchPerformanceMonitor {
         message: error instanceof Error ? error.message : 'Database connection failed',
         timestamp: new Date()
       });
-    }
+
 
     // Redis health check
     try {
@@ -383,7 +387,7 @@ export class SearchPerformanceMonitor {
         message: `Redis responding in ${responseTime}ms`,
         timestamp: new Date()
       });
-    } catch (error) {
+ catch (error) {
       healthChecks.push({
         service: 'redis',
         status: 'unhealthy',
@@ -391,17 +395,17 @@ export class SearchPerformanceMonitor {
         message: error instanceof Error ? error.message : 'Redis connection failed',
         timestamp: new Date()
       });
-    }
+
 
     return healthChecks;
-  }
+
 
   /**
    * Register alert callback
    */
   registerAlertCallback(type: string, callback: Function): void {
     this.alertCallbacks.set(type, callback);
-  }
+
 
   /**
    * Trigger alert
@@ -440,13 +444,13 @@ export class SearchPerformanceMonitor {
           timestamp: new Date(),
           resolved: false
         });
-      }
+
 
       console.warn(`Alert triggered: ${alert.title} (${alert.severity})`);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to trigger alert:', error);
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -470,11 +474,11 @@ export class SearchPerformanceMonitor {
         p99: parseFloat(row.p99 || '0'),
         avg: parseFloat(row.avg || '0')
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get latency metrics:', error);
       return { p50: 0, p95: 0, p99: 0, avg: 0 };
-    }
-  }
+
+
 
   private async getThroughputMetrics(): Promise<PerformanceMetrics['throughput']> {
 
@@ -492,11 +496,11 @@ export class SearchPerformanceMonitor {
         requestsPerSecond: parseFloat(row.requests_per_second || '0'),
         requestsPerMinute: parseInt(row.requests_per_minute || '0')
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get throughput metrics:', error);
       return { requestsPerSecond: 0, requestsPerMinute: 0 };
-    }
-  }
+
+
 
   private async getErrorMetrics(): Promise<PerformanceMetrics['errorRate']> {
 
@@ -506,7 +510,7 @@ export class SearchPerformanceMonitor {
       count: 5,
       total: 250
     };
-  }
+
 
   private async getSuccessMetrics(): Promise<PerformanceMetrics['searchSuccess']> {
 
@@ -524,11 +528,11 @@ export class SearchPerformanceMonitor {
         successRate: parseFloat(row.success_rate || '0'),
         zeroResultsRate: parseFloat(row.zero_results_rate || '0')
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get success metrics:', error);
       return { successRate: 0, zeroResultsRate: 0 };
-    }
-  }
+
+
 
   private async getUserExperienceMetrics(): Promise<PerformanceMetrics['userExperience']> {
 
@@ -557,11 +561,11 @@ export class SearchPerformanceMonitor {
         abandonmentRate: parseFloat(abandonmentResult.rows[0]?.abandonment_rate || '0'),
         sessionDuration: 180 // Mock data - would calculate from actual session data
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get user experience metrics:', error);
       return { clickThroughRate: 0, abandonmentRate: 0, sessionDuration: 0 };
-    }
-  }
+
+
 
   private async getInfrastructureHealth(): Promise<PerformanceMetrics['infrastructure']> {
 
@@ -576,7 +580,7 @@ export class SearchPerformanceMonitor {
         redisHealth: 'green',
         cacheHitRate: hitRate
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get infrastructure health:', error);
       return {
         elasticsearchHealth: 'unknown',
@@ -584,8 +588,8 @@ export class SearchPerformanceMonitor {
         redisHealth: 'unknown',
         cacheHitRate: 0
       };
-    }
-  }
+
+
 
   private async checkElasticsearchHealth(): Promise<{ status: 'healthy' | 'degraded' | 'unhealthy'; message: string; details?: any }> {
 
@@ -599,9 +603,9 @@ export class SearchPerformanceMonitor {
         number_of_nodes: 3,
         active_primary_shards: 5,
         active_shards: 15
-      }
+
     };
-  }
+
 
   private async checkPerformanceAlerts(): Promise<void> {
 
@@ -619,7 +623,7 @@ export class SearchPerformanceMonitor {
         threshold: 1000,
         actions: ['Check Elasticsearch cluster', 'Optimize slow queries', 'Scale search infrastructure']
       });
-    } else if (metrics.searchLatency.p95 > 500) {
+ else if (metrics.searchLatency.p95 > 500) {
       await this.triggerAlert({
         type: 'performance',
         severity: 'warning',
@@ -630,7 +634,7 @@ export class SearchPerformanceMonitor {
         threshold: 500,
         actions: ['Monitor search performance', 'Review recent queries']
       });
-    }
+
 
     // Check error rate alerts
     if (metrics.errorRate.rate > 0.1) {
@@ -644,7 +648,7 @@ export class SearchPerformanceMonitor {
         threshold: 0.1,
         actions: ['Check service health', 'Review error logs', 'Scale infrastructure']
       });
-    }
+
 
     // Check user experience alerts
     if (metrics.userExperience.clickThroughRate < 0.2) {
@@ -658,8 +662,8 @@ export class SearchPerformanceMonitor {
         threshold: 0.2,
         actions: ['Analyze search relevance', 'Review result ranking', 'A/B test improvements']
       });
-    }
-  }
+
+
 
   private async updateMetrics(): Promise<void> {
 
@@ -679,10 +683,10 @@ export class SearchPerformanceMonitor {
       });
       
       await this.redis.expire(metricsKey, 3600); // Keep for 1 hour
-    } catch (error) {
+ catch (error) {
       console.error('Failed to update metrics:', error);
-    }
-  }
+
+
 
   private parseCacheHitRate(infoString: string): number {
     // Parse Redis INFO stats to calculate hit rate
@@ -695,15 +699,14 @@ export class SearchPerformanceMonitor {
       for (const line of lines) {
         if (line.startsWith('keyspace_hits:')) {
           hits = parseInt(line.split(':')[1]);
-        } else if (line.startsWith('keyspace_misses:')) {
+ else if (line.startsWith('keyspace_misses:')) {
           misses = parseInt(line.split(':')[1]);
-        }
-      }
+
+
 
       const total = hits + misses;
       return total > 0 ? hits / total : 0;
-    } catch (error) {
+ catch (error) {
       return 0;
-    }
-  }
-}
+
+

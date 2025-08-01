@@ -3,132 +3,152 @@ import { EventEmitter } from 'events';
 export class ContextValidationFramework extends EventEmitter {
     config;
     rules;
-    validationHistory = [];
-    constructor(config = {}) {
-        super();
-        this.config = {
-            enableVariableValidation: true,
-            enableStateValidation: true,
-            enableCacheValidation: true,
-            enablePerformanceValidation: true,
-            enableSecurityValidation: true,
-            maxVariableCount: 1000,
-            maxDepth: 50,
-            maxCacheSize: 10000,
-            warningThreshold: 70,
-            errorThreshold: 50,
-            ...config
-        };
-        this.rules = new Map();
-        this.initializeDefaultRules();
-        /**
-         * Validate execution context comprehensively
-         */
-        async;
-        validateContext(context, AdvancedExecutionContext);
-        config ?  : AdvancedNodeConfig;
-        Promise < ContextValidationResult > {
-            const: startTime = performance.now(),
-            const: errors, string = [],
-            const: warnings, string = [],
-            const: recommendations, string = [],
-            let, totalScore = 0,
-            let, totalWeight = 0,
-            const: contextHealth = {
-                variableIntegrity: 0,
-                stateConsistency: 0,
-                cacheEfficiency: 0,
-                memoryUsage: 0,
-            },
-            try: {
-                console, : .log('DEBUG: Starting validation, rules count:', this.rules.size),
-                : .rules
-            }
-        };
-        {
-            totalWeight += rule.weight;
-            console.log(`DEBUG: Rule ${name} has weight ${rule.weight}`);
-        }
-        // Second pass: Execute all validation rules and apply penalties
-        for (const [name, rule] of this.rules) {
-            try {
-                const ruleResult = rule.validate(context, config);
-                const weightedScore = ruleResult.score * rule.weight;
-                console.log(`DEBUG: Rule ${name}, passed: ${ruleResult.passed}, score: ${ruleResult.score}`);
-            }
-            finally {
-            }
-            totalScore += weightedScore;
-            // Categorize results
-            if (!ruleResult.passed) {
-                if (rule.category === 'critical') {
-                    errors.push(ruleResult.message || `Critical validation failed: ${name}`);
-                }
-                // Critical failures should drastically impact the score
-                // For critical security failures like missing PRNG, apply severe penalty
-                if (name === 'prng_security') {
-                    // PRNG security is absolutely critical - apply maximum penalty
-                    const penalty = totalWeight * 100;
-                    console.log(`DEBUG: PRNG penalty applied - totalWeight: ${totalWeight}, penalty: ${penalty}, score before: ${totalScore}`);
-                }
-                totalScore -= penalty;
-                console.log(`DEBUG: Score after PRNG penalty: ${totalScore}`);
-            }
-        }
-        {
-            // Other critical failures get significant but not total penalty
-            totalScore -= rule.weight * 75;
-        }
-        if (rule.category === 'warning') {
-            warnings.push(ruleResult.message || `Warning: ${name}`);
-        }
-        // Add recommendations based on rule results
-        if (ruleResult.score < 80 && ruleResult.details?.recommendation) {
-            recommendations.push(ruleResult.details.recommendation);
-            // Update context health metrics
-            this.updateContextHealth(contextHealth, name, ruleResult);
-        }
-        try { }
-        catch (error) {
-            errors.push(`Validation rule '${name}' failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        }
-        // Calculate final score
-        const finalScore = totalWeight > 0 ? Math.max(0, totalScore / totalWeight) : 0;
-        const valid = errors.length === 0 && finalScore >= this.config.errorThreshold;
-        // Add global recommendations
-        if (finalScore < this.config.warningThreshold) {
-            recommendations.push('Consider optimizing context configuration for better performance');
-            const result = {
-                valid,
-                errors,
-                warnings,
-                score: finalScore,
-                recommendations,
-                contextHealth
-            };
-            // Record validation
-            this.recordValidation(context, result);
-            // Emit events
-            this.emit('context_validated', {});
-            contextId: context.executionMeta?.executionId || 'unknown',
-                result,
-                validationTime;
-            performance.now() - startTime,
-            ;
-        }
-        ;
-        return result;
-    }
-    catch(error) {
-        const errorResult = {
-            valid: false,
-            errors: [`Context validation framework error: ${error instanceof Error ? error.message : 'Unknown error'}`] };
-    }
-    warnings;
-    score;
-    recommendations;
-    contextHealth;
+    validationHistory;
+    number;
+    contextId;
+    result;
 }
+ > ;
+[];
+constructor(config, (Partial) = {});
+{
+    super();
+    this.config = {
+        enableVariableValidation: true,
+        enableStateValidation: true,
+        enableCacheValidation: true,
+        enablePerformanceValidation: true,
+        enableSecurityValidation: true,
+        maxVariableCount: 1000,
+        maxDepth: 50,
+        maxCacheSize: 10000,
+        warningThreshold: 70,
+        errorThreshold: 50,
+        ...config
+    };
+    this.rules = new Map();
+    this.initializeDefaultRules();
+    /**
+     * Validate execution context comprehensively
+     */
+    async;
+    validateContext(context, AdvancedExecutionContext);
+    config ?  : AdvancedNodeConfig;
+    Promise < ContextValidationResult > {
+        const: startTime = performance.now(),
+        const: errors, string = [],
+        const: warnings, string = [],
+        const: recommendations, string = [],
+        let, totalScore = 0,
+        let, totalWeight = 0,
+        const: contextHealth = {
+            variableIntegrity: 0,
+            stateConsistency: 0,
+            cacheEfficiency: 0,
+            memoryUsage: 0,
+        },
+        try: {
+            console, : .log('DEBUG: Starting validation, rules count:', this.rules.size),
+            : .rules
+        }
+    };
+    {
+        totalWeight += rule.weight;
+        console.log(`DEBUG: Rule ${name} has weight ${rule.weight}`);
+    }
+    // Second pass: Execute all validation rules and apply penalties
+    for (const [name, rule] of this.rules) {
+        try {
+            const ruleResult = rule.validate(context, config);
+            const weightedScore = ruleResult.score * rule.weight;
+            console.log(`DEBUG: Rule ${name}, passed: ${ruleResult.passed}, score: ${ruleResult.score}`);
+        }
+        finally {
+        }
+        totalScore += weightedScore;
+        // Categorize results
+        if (!ruleResult.passed) {
+            if (rule.category === 'critical') {
+                errors.push(ruleResult.message || `Critical validation failed: ${name}`);
+            }
+            // Critical failures should drastically impact the score
+            // For critical security failures like missing PRNG, apply severe penalty
+            if (name === 'prng_security') {
+                // PRNG security is absolutely critical - apply maximum penalty
+                const penalty = totalWeight * 100;
+                console.log(`DEBUG: PRNG penalty applied - totalWeight: ${totalWeight}, penalty: ${penalty}, score before: ${totalScore}`);
+            }
+            totalScore -= penalty;
+            console.log(`DEBUG: Score after PRNG penalty: ${totalScore}`);
+        }
+    }
+    {
+        // Other critical failures get significant but not total penalty
+        totalScore -= rule.weight * 75;
+    }
+    if (rule.category === 'warning') {
+        warnings.push(ruleResult.message || `Warning: ${name}`);
+    }
+    // Add recommendations based on rule results
+    if (ruleResult.score < 80 && ruleResult.details?.recommendation) {
+        recommendations.push(ruleResult.details.recommendation);
+        // Update context health metrics
+        this.updateContextHealth(contextHealth, name, ruleResult);
+    }
+    try { }
+    catch (error) {
+        errors.push(`Validation rule '${name}' failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+    // Calculate final score
+    const finalScore = totalWeight > 0 ? Math.max(0, totalScore / totalWeight) : 0;
+    const valid = errors.length === 0 && finalScore >= this.config.errorThreshold;
+    // Add global recommendations
+    if (finalScore < this.config.warningThreshold) {
+        recommendations.push('Consider optimizing context configuration for better performance');
+        const result = {
+            valid,
+            errors,
+            warnings,
+            score: finalScore,
+            recommendations,
+            contextHealth
+        };
+        // Record validation
+        this.recordValidation(context, result);
+        // Emit events
+        this.emit('context_validated', {});
+        contextId: context.executionMeta?.executionId || 'unknown',
+            result,
+            validationTime;
+        performance.now() - startTime,
+        ;
+    }
+    ;
+    return result;
+}
+try { }
+catch (error) {
+    const errorResult = {
+        valid: false,
+        errors: [`Context validation framework error: ${error instanceof Error ? error.message : 'Unknown error'}`] };
+}
+warnings: [],
+    score;
+0,
+    recommendations;
+['Check context validation configuration'],
+    contextHealth;
+{
+    variableIntegrity: 0,
+        stateConsistency;
+    0,
+        cacheEfficiency;
+    0,
+        memoryUsage;
+    0,
+    ;
+}
+;
 this.emit('validation_error', {});
 contextId: context.executionMeta?.executionId || 'unknown',
     error,
@@ -170,7 +190,12 @@ getValidationStatistics();
     averageScore: number;
     errorRate: number;
     warningRate: number;
-    recentValidations: Array;
+    recentValidations: Array < {
+        contextId: string,
+        score: number,
+        timestamp: number,
+        valid: boolean
+    } > ;
     const total = this.validationHistory.length;
     if (total === 0) {
         return {
@@ -571,8 +596,7 @@ getValidationStatistics();
                             prng: () => Math.random(),
                             executionMeta: {
                                 startTime: Date.now(),
-                                executionId: `test-${Math.random().toString(36).substr(2, 9)}`
-                            }
+                                executionId: `test-${Math.random().toString(36).substr(2, 9)}` }
                         },
                             nodeExecutionOrder;
                         [],

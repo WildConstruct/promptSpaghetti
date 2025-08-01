@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { ExtensionValidationResult } from './interfaces/ExtensionInterfaces';
 
 // Extension Manifest Schema
-export const ExtensionManifestSchema = z.object({)
+export const ExtensionManifestSchema = z.object({ )
   // Basic Information
   manifest_version: z.literal('1.0'),
   id: z.string().min(1).max(100).regex(/^[a-z0-9-]+$/),
@@ -14,19 +14,19 @@ export const ExtensionManifestSchema = z.object({)
   version: z.string().regex(/^\d+\.\d+\.\d+$/),
   description: z.string().min(1).max(500),
   // Author Information
-  author: z.object({,)
+  author: z.object({);
   name: z.string().min(1).max(100),
   email: z.string().email().optional(),
-  url: z.string().url().optional(),
+  url: z.string().url().optional() }
 }),
   // Extension Type and Main Entry
   extension_type: z.enum(['node', 'ui', 'transform', 'storage']),
   main: z.string().min(1),
   // Dependencies
-  dependencies: z.object({,)
+  dependencies: z.object({ );
   system: z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
   extensions: z.record(z.string().regex(/^[>=<~^]?\d+\.\d+\.\d+$/)).optional(),
-  npm: z.record(z.string()).optional(),
+  npm: z.record(z.string()).optional() }
 }).optional(),
   // Permissions
   permissions: z.array(z.enum([),
@@ -40,43 +40,43 @@ export const ExtensionManifestSchema = z.object({)
     'extensions-api'
   ])).optional(),
   // Capabilities
-  capabilities: z.object({,)
+  capabilities: z.object({ );
   provides: z.array(z.string()).optional(),
   requires: z.array(z.string()).optional(),
-  optional: z.array(z.string()).optional(),
+  optional: z.array(z.string()).optional() }
 }).optional(),
   // UI Configuration
-  ui: z.object({,)
+  ui: z.object({ );
   icon: z.string().optional(),
   category: z.string().optional(),
   themes: z.array(z.string()).optional(),
   css: z.array(z.string()).optional(),
-  components: z.record(z.string()).optional(),
+  components: z.record(z.string()).optional() }
 }).optional(),
   // Runtime Configuration
-  runtime: z.object({,)
+  runtime: z.object({ );
   node_types: z.array(z.string()).optional(),
   transforms: z.array(z.string()).optional(),
   storage_providers: z.array(z.string()).optional(),
-  background_tasks: z.array(z.string()).optional(),
+  background_tasks: z.array(z.string()).optional() }
 }).optional(),
   // Build and Development
-  build: z.object({,)
+  build: z.object({ );
   output_dir: z.string().default('dist'),
   entry_point: z.string().optional(),
   externals: z.array(z.string()).optional(),
-  assets: z.array(z.string()).optional(),
+  assets: z.array(z.string()).optional() }
 }).optional(),
   // Activation Events
   activation_events: z.array(z.string()).optional(),
   // Configuration Schema
-  configuration: z.object({,)
+  configuration: z.object({ );
   schema: z.record(z.any()).optional(),
   defaults: z.record(z.any()).optional(),
-  ui_schema: z.record(z.any()).optional(),
+  ui_schema: z.record(z.any()).optional() }
 }).optional(),
   // Metadata
-  metadata: z.object({,)
+  metadata: z.object({ );
   license: z.string().optional(),
   repository: z.string().url().optional(),
   homepage: z.string().url().optional(),
@@ -84,30 +84,30 @@ export const ExtensionManifestSchema = z.object({)
   keywords: z.array(z.string()).optional(),
   categories: z.array(z.string()).optional(),
   changelog: z.string().optional(),
-  readme: z.string().optional(),
+  readme: z.string().optional() }
 }).optional(),
   // Compatibility
-  compatibility: z.object({,)
+  compatibility: z.object({ );
   min_system_version: z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
   max_system_version: z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
   platforms: z.array(z.enum(['web', 'desktop', 'server'])).optional(),
-  browsers: z.record(z.string()).optional(),
+  browsers: z.record(z.string()).optional() }
 }).optional(),
   // Security
-  security: z.object({,)
+  security: z.object({ );
   content_security_policy: z.string().optional(),
-  sandbox: z.object({,)
+  sandbox: z.object({);
   enabled: z.boolean().default(true),
-  permissions: z.array(z.string()).optional(),
+  permissions: z.array(z.string()).optional() }
 }).optional(),
     trusted_domains: z.array(z.string()).optional();
   }).optional(),
   // Publishing
-  publishing: z.object({,)
+  publishing: z.object({ );
   private: z.boolean().default(false),
   registry: z.string().url().optional(),
   access: z.enum(['public', 'private', 'restricted']).default('public'),
-  tags: z.array(z.string()).optional(),
+  tags: z.array(z.string()).optional() }
 }).optional()
 });
 
@@ -119,14 +119,13 @@ export class ExtensionManifestParser {
   private static instance: ExtensionManifestParser;
   private cache: Map<string, ExtensionManifest> = new Map();
   private constructor() {}
-  public static getInstance(): ExtensionManifestParser {
-  if (!ExtensionManifestParser.instance) {
+  public static getInstance(): ExtensionManifestParser { if (!ExtensionManifestParser.instance) {
   ExtensionManifestParser.instance = new ExtensionManifestParser();
   return ExtensionManifestParser.instance;
   /**
   * Parse manifest from JSON string
   */
-  public parseManifest(jsonString: string): ParseResult<ExtensionManifest> {,
+  public parseManifest(jsonString: string): ParseResult<ExtensionManifest> {
   try {
   // Parse JSON
   const rawManifest = JSON.parse(jsonString);
@@ -134,74 +133,67 @@ export class ExtensionManifestParser {
   const result = ExtensionManifestSchema.safeParse(rawManifest);
   if (!result.success) {
   return {
-  success: false,
-  error: 'Schema validation failed',
+  success: false
+  error: 'Schema validation failed'
   details: result.error.issues.map(issue => ({)
-  path: issue.path.join('.'),
-  message: issue.message,
-  code: issue.code,
+  path: issue.path.join('.')
+  message: issue.message
+  code: issue.code }
 }))
         };
       // Additional validation
       const additionalValidation = this.validateManifestLogic(result.data);
-      if (!additionalValidation.valid) {
-  return {
-  success: false,
-  error: 'Logical validation failed',
+      if (!additionalValidation.valid) { return {
+  success: false
+  error: 'Logical validation failed'
   details: additionalValidation.errors.map(error => ({)
-  path: '',
-  message: error,
-  code: 'custom',
+  path: ''
+  message: error
+  code: 'custom' }
 }))
         };
-      return {
-  success: true,
-  data: result.data,
+      return { success: true
+  data: result.data }
 };
-    } catch (error) {
-  return {
-  success: false,
-  error: 'JSON parsing failed',
-  details: [{,
-  path: '',
-  message: error.message,
-  code: 'json_parse_error',
-}]
+ catch (error) { return {
+  success: false
+  error: 'JSON parsing failed'
+  details: [{
+  path: ''
+  message: error.message
+  code: 'json_parse_error' }
+]
       };
   /**
    * Parse manifest from file path
    */
-  public async parseManifestFromFile(filePath: string): Promise<ParseResult<ExtensionManifest>> {
-  try {
+  public async parseManifestFromFile(filePath: string): Promise<ParseResult<ExtensionManifest>> { try {
   // Check cache first
   if (this.cache.has(filePath)) {
   return {
-  success: true,
-  data: this.cache.get(filePath)!,
+  success: true
+  data: this.cache.get(filePath)! }
 };
       // Read file (this would use fs in a real implementation)
       const fileContent = await this.readFile(filePath);
       // Parse manifest
       const result = this.parseManifest(fileContent);
       // Cache if successful
-      if (result.success) {
-        this.cache.set(filePath, result.data);
-      return result;
-    } catch (error) {
-  return {
-  success: false,
-  error: 'File reading failed',
-  details: [{,
-  path: filePath,
-  message: error.message,
-  code: 'file_read_error',
-}]
+      if (result.success) { this.cache.set(filePath, result.data);
+      return result } catch (error) { return {
+  success: false
+  error: 'File reading failed'
+  details: [{
+  path: filePath
+  message: error.message
+  code: 'file_read_error' }
+]
       };
   /**
    * Validate manifest dependencies
    */
   public validateDependencies(manifest: ExtensionManifest)
-    availableExtensions: Map<string, ExtensionManifest>
+  availableExtensions: Map<string, ExtensionManifest>
   ): ExtensionValidationResult {
     const errors: string = [];
     const warnings: string = [];
@@ -216,17 +208,16 @@ export class ExtensionManifestParser {
           continue;
         if (!this.satisfiesVersionRange(depExtension.version, versionRange)) {
           errors.push(`Dependency ${depId} version ${depExtension.version} does not satisfy ${versionRange}`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0
+  errors }
   warnings
 };
   /**
    * Check compatibility with system
    */
   public checkCompatibility(manifest: ExtensionManifest)
-    systemVersion: string,
-    platform: string): ExtensionValidationResult {,
+  systemVersion: string
+    platform: string): ExtensionValidationResult {
     const errors: string = [];
     const warnings: string = [];
     if (!manifest.compatibility) {
@@ -242,78 +233,71 @@ export class ExtensionManifestParser {
     if (manifest.compatibility.platforms) {
       if (!manifest.compatibility.platforms.includes(platform as any)) {
         errors.push(`Platform ${platform} is not supported`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0,
+  errors }
   warnings
 };
   /**
    * Generate manifest template
    */
-  public generateManifestTemplate(options: ManifestTemplateOptions): ExtensionManifest {
-  const template: ExtensionManifest = {,
+  public generateManifestTemplate(options: ManifestTemplateOptions): ExtensionManifest { const template: ExtensionManifest = {,
   manifest_version: '1.0',
   id: options.id,
   name: options.name,
   version: options.version || '1.0.0',
   description: options.description || 'Extension description',
-  author: {
+  author: {,
   name: options.author || 'Author Name',
   email: options.authorEmail,
-  url: options.authorUrl,
+  url: options.authorUrl }
 },
   extension_type: options.extensionType,
       main: options.main || 'index.js',
-      dependencies: {
-  system: options.systemVersion || '1.0.0',
+      dependencies: { ,
+  system: options.systemVersion || '1.0.0' }
 },
   permissions: options.permissions || [],
-      capabilities: {
+      capabilities: { ,
   provides: options.provides || [],
-  requires: options.requires || [],
+  requires: options.requires || [] }
 },
-  metadata: {
+  metadata: { ,
   license: options.license || 'MIT',
   keywords: options.keywords || [],
-  categories: options.categories || [],
+  categories: options.categories || [] }
 },
-  compatibility: {
+  compatibility: { ,
   min_system_version: options.minSystemVersion || '1.0.0',
-  platforms: options.platforms || ['web'],
+  platforms: options.platforms || ['web'] }
 },
-  security: {
-  sandbox: {
-  enabled: true,
+  security: { ,
+  sandbox: {,
+  enabled: true }
 };
     // Add type-specific configurations
-    switch (options.extensionType) {
-  case 'node':,
+    switch (options.extensionType) { case 'node':,
   template.runtime = {
-  node_types: options.nodeTypes || [],
+  node_types: options.nodeTypes || [] }
 };
       break;
     case 'ui':
-      template.ui = {
-        category: options.uiCategory || 'general',
+      template.ui = { category: options.uiCategory || 'general' }
         components: options.uiComponents || {}
       };
       break;
     case 'transform':
-      template.runtime = {
-  transforms: options.transforms || [],
+      template.runtime = { transforms: options.transforms || [] }
 };
       break;
     case 'storage':
-      template.runtime = {
-  storage_providers: options.storageProviders || [],
+      template.runtime = { storage_providers: options.storageProviders || [] }
 };
       break;
     return template;
   /**
    * Clear cache
    */
-  public clearCache(): void {
-  this.cache.clear();
+  public clearCache(): void { this.cache.clear();
   /**
   * Private helper methods
   */
@@ -334,7 +318,7 @@ export class ExtensionManifestParser {
   warnings.push('file-system-write permission typically requires file-system-read permission');
   return {
   valid: errors.length === 0,
-  errors,
+  errors }
   warnings
 };
   private satisfiesVersionRange(version: string, range: string): boolean {
@@ -379,20 +363,19 @@ export class ExtensionManifestParser {
     return Promise.resolve('{}');
 
 // Extension Manifest Validator
-export class ExtensionManifestValidator {
-  private static instance: ExtensionManifestValidator;
+export class ExtensionManifestValidator { private static instance: ExtensionManifestValidator;
   private parser: ExtensionManifestParser;
   private constructor() {
   this.parser = ExtensionManifestParser.getInstance();
-  public static getInstance(): ExtensionManifestValidator {,
+  public static getInstance(): ExtensionManifestValidator {
   if (!ExtensionManifestValidator.instance) {
   ExtensionManifestValidator.instance = new ExtensionManifestValidator();
   return ExtensionManifestValidator.instance;
   /**
   * Comprehensive manifest validation
   */
-  public validateManifest((manifest: ExtensionManifest,
-  context: ValidationContext): ExtensionValidationResult {,
+  public validateManifest((manifest: ExtensionManifest
+  context: ValidationContext): ExtensionValidationResult {
   const errors: string = [];
   const warnings: string = [];
   // Schema validation (already done during parsing)
@@ -413,15 +396,15 @@ export class ExtensionManifestValidator {
   errors.push(...securityValidation.errors);
   warnings.push(...securityValidation.warnings);
   return {
-  valid: errors.length === 0,
-  errors,
+  valid: errors.length === 0
+  errors }
   warnings
 };
   /**
    * Validate manifest permissions
    */
   private validatePermissions(((
-    manifest: ExtensionManifest,
+    manifest: ExtensionManifest
     grantedPermissions: string
   ): ExtensionValidationResult {
     const errors: string = [];
@@ -435,9 +418,8 @@ export class ExtensionManifestValidator {
       const dangerousPermissions = ['file-system-write', 'network'];
       if (dangerousPermissions.includes(permission)) {
         warnings.push(`Dangerous permission requested: ${permission}`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0
+  errors }
   warnings
 };
   /**
@@ -450,34 +432,32 @@ export class ExtensionManifestValidator {
       warnings.push('No security configuration specified');
       return { valid: true, errors: [], warnings: [] };
     // Validate CSP
-    if (manifest.security.content_security_policy) {
-  if (!this.isValidCSP(manifest.security.content_security_policy)) {
+    if (manifest.security.content_security_policy) { if (!this.isValidCSP(manifest.security.content_security_policy)) {
   errors.push('Invalid Content Security Policy');
   // Validate sandbox settings
   if (manifest.security.sandbox) {
   if (!manifest.security.sandbox.enabled) {
   warnings.push('Sandbox is disabled - this may be a security risk');
   return {
-  valid: errors.length === 0,
-  errors,
+  valid: errors.length === 0
+  errors }
   warnings
 };
-  private isValidCSP(csp: string): boolean {
-  // Basic CSP validation (in a real implementation, use proper CSP parser)
+  private isValidCSP(csp: string): boolean { // Basic CSP validation (in a real implementation, use proper CSP parser)
   return csp.includes('default-src') || csp.includes('script-src');
   // Types and Interfaces
   interface ParseResult<T> {
   success: boolean;
   data?: T;
   error?: string;
-  details?: Array<{
+  details?: Array<{ }
   path: string;
   message: string;
   code: string;
-}>;
-}
-interface ManifestTemplateOptions {
-  id: string;
+>;
+
+
+interface ManifestTemplateOptions { id: string;
   name: string;
   version?: string;
   description?: string;
@@ -499,15 +479,13 @@ interface ManifestTemplateOptions {
   uiCategory?: string;
   uiComponents?: Record<string, string>;
   transforms?: string;
-  storageProviders?: string;
-}
-interface ValidationContext {
-  systemVersion: string;
+  storageProviders?: string }
+
+
+interface ValidationContext { systemVersion: string;
   platform: string;
   availableExtensions: Map<string, ExtensionManifest>;
   grantedPermissions: string;
-
-// Export singletons
-export const extensionManifestParser = ExtensionManifestParser.getInstance();
-export const extensionManifestValidator = ExtensionManifestValidator.getInstance();
-}
+  // Export singletons
+  export const extensionManifestParser = ExtensionManifestParser.getInstance();
+  export const extensionManifestValidator = ExtensionManifestValidator.getInstance() }

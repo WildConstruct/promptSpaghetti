@@ -6,26 +6,30 @@
 import { performanceMonitor } from '../performanceMonitor';
 import { validateUrl, validateInput, generateCSRFToken, ClientRateLimiter } from '../securityUtils';
 import { memoryUtils, WeakCache } from '../memoryOptimization';
-}
+
+
 interface TestResult {
   name: string;,
-  category: 'security' | 'performance' | 'memory' | 'integration';
+  category: 'security' | 'performance' | 'memory' | 'integration';,
   passed: boolean;,
   duration: number;
   error?: string;
   details?: Record<string, unknown>;
-}
+
+
+
 interface TestSuiteResult {
   totalTests: number;,
-  passedTests: number;
+  passedTests: number;,
   failedTests: number;,
   totalDuration: number;
-}
+
+},
   categories: Record<string, { passed: number; failed: number; duration: number }>;
   results: TestResult;
   coverage?: {
   security: number;,
-  performance: number;
+  performance: number;,
   memory: number;,
   integration: number;
 };
@@ -38,7 +42,7 @@ class QualityTestRunner {
   console.log('🧪 Starting comprehensive quality improvement tests...');
   this.results = [];
   // Run test categories in parallel for efficiency
-  const testPromises = [;
+  const testPromises = [
   this.runSecurityTests(),
   this.runPerformanceTests(),
   this.runMemoryTests(),
@@ -50,30 +54,30 @@ class QualityTestRunner {
   * Security utilities tests
   */
   private async runSecurityTests(): Promise<void> {,
-  const tests = [;
+  const tests = [
   {
   name: 'URL Validation - Safe URLs',
   test: () => {,
-  const safeUrls = [;
+  const safeUrls = [
   '/dashboard',
   'https://example.com/api',
   '/api/users?id=123'
   ];
   return safeUrls.every(url => validateUrl(url) !== null);
-}
+
       {
   name: 'URL Validation - Dangerous URLs',
   test: () => {,
-  const dangerousUrls = [;
+  const dangerousUrls = [
   'javascript:alert(1)',
   'data:text/html,<script>alert(1)</script>',
   'vbscript:msgbox(1)'];
   return dangerousUrls.every(url => validateUrl(url) === null);
-}
+
       {
   name: 'Input Validation - XSS Prevention',
   test: () => {,
-  const maliciousInputs = [;
+  const maliciousInputs = [
   '<script>alert(1)</script>',
   'javascript:alert(1)',
   'onload=alert(1)',
@@ -83,7 +87,7 @@ class QualityTestRunner {
   const result = validateInput(input);
   return !result.isValid && result.errors.some(e => e.includes('dangerous'));
 });
-  }
+
       {
   name: 'CSRF Token Generation',
   test: () => {,
@@ -93,7 +97,7 @@ class QualityTestRunner {
   token2.length === 64 &&
   token1 !== token2 &&
   /^[a-f0-9]+$/.test(token1);
-}
+
       {
         name: 'Rate Limiting Functionality',
         test: () => {,
@@ -110,7 +114,7 @@ class QualityTestRunner {
   * Performance monitoring tests
   */
   private async runPerformanceTests(): Promise<void> {,
-  const tests = [;
+  const tests = [
   {
   name: 'Performance Measurement',
   test: () => {,
@@ -122,7 +126,7 @@ class QualityTestRunner {
   return 'success';
   );
   return executed && result === 'success';
-}
+
       {
   name: 'Async Performance Measurement',
   test: async () => {,
@@ -135,7 +139,7 @@ class QualityTestRunner {
   return 'async-success';
   );
   return executed && result === 'async-success';
-}
+
       {
         name: 'API Call Tracking',
         test: async () => {,
@@ -146,7 +150,7 @@ class QualityTestRunner {
             mockApiCall
           );
           return result.data === 'test';
-  }
+
       {
   name: 'Performance Statistics',
   test: () => {,
@@ -168,7 +172,7 @@ class QualityTestRunner {
    */
   private async runMemoryTests(): Promise<void> {
 
-    const tests = [;
+    const tests = [
       {
         name: 'WeakCache Functionality',
         test: () => {,
@@ -177,7 +181,7 @@ class QualityTestRunner {
           cache.set(key, 'test-value');
           return cache.get(key) === 'test-value' &&
                  cache.has(key) === true;
-  }
+
       {
         name: 'Deep Equality Check',
         test: () => {,
@@ -186,7 +190,7 @@ class QualityTestRunner {
           const obj3 = { a: 1, b: { c: 3 } };
           return memoryUtils.deepEqual(obj1, obj2) &&
                  !memoryUtils.deepEqual(obj1, obj3);
-  }
+
       {
         name: 'Shallow Equality Check',
         test: () => {,
@@ -195,7 +199,7 @@ class QualityTestRunner {
           const obj3 = { a: 1, b: 3 };
           return memoryUtils.shallowEqual(obj1, obj2) &&
                  !memoryUtils.shallowEqual(obj1, obj3);
-  }
+
       {
         name: 'Stable Reference Creation',
         test: () => {,
@@ -213,7 +217,7 @@ class QualityTestRunner {
    */
   private async runIntegrationTests(): Promise<void> {
 
-    const tests = [;
+    const tests = [
       {
         name: 'Security + Performance Integration',
         test: () => {,
@@ -224,7 +228,7 @@ class QualityTestRunner {
             validateUrl(`/test-url-${i}`);}
           const duration = performance.now() - startTime;
           return duration < 100; // Should complete in under 100ms
-  }
+
       {
         name: 'Memory + Performance Integration',
         test: () => {,
@@ -237,7 +241,7 @@ class QualityTestRunner {
           });
           const duration = performance.now() - startTime;
           return duration < 50; // Should be fast due to caching
-  }
+
       {
   name: 'Cross-Utility Error Handling',
   test: () => {,
@@ -247,9 +251,9 @@ class QualityTestRunner {
   validateUrl(undefined as any);
   memoryUtils.deepEqual(null, undefined);
   return true;
-} catch (error) {
+ catch (error) {
             return false; // Should not throw
-  }
+
       {
         name: 'Resource Cleanup Integration',
         test: () => {,
@@ -280,7 +284,7 @@ class QualityTestRunner {
         details: { executionTime: duration }
       });
       console.log(`${result ? '✅' : '❌'} ${name} (${duration.toFixed(2)}ms)`);}
-    } catch (error) {
+ catch (error) {
       const duration = performance.now() - startTime;
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       this.results.push({)
@@ -307,7 +311,7 @@ class QualityTestRunner {
         categories[result.category] = { passed: 0, failed: 0, duration: 0 };
       if (result.passed) {
         categories[result.category].passed++;
-      } else {
+ else {
         categories[result.category].failed++;
       categories[result.category].duration += result.duration;
     });
@@ -390,7 +394,7 @@ export async function runTestsWithExitCode(): Promise<void> {
   if (report.failedTests > 0) {
     console.error(`\n❌ ${report.failedTests} tests failed`);}
     process.exit(1);
-  } else {
+ else {
     console.log(`\n✅ All ${report.totalTests} tests passed!`);}
     process.exit(0);
 

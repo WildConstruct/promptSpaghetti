@@ -7,152 +7,146 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 import { PiggyBank, Clock, Zap, Target, ArrowRight } from 'lucide-react';
-}
-interface SavingsInputs {
-  // Usage patterns
-  monthlyUsage: number; // number of times template/manual prompts used per month,
-  projectDuration: number; // months to analyze,
+
+
+interface SavingsInputs { // Usage patterns
+  monthlyUsage: number; // number of times template/manual prompts used per month;
+  projectDuration: number; // months to analyze;
   // Template scenario
-  templateTokens: number; // average tokens per template use,
-  templateAccuracy: number; // accuracy rate (0-100%),
-  templateSetupTime: number; // minutes to set up and use template,
+  templateTokens: number; // average tokens per template use;
+  templateAccuracy: number; // accuracy rate (0-100%);
+  templateSetupTime: number; // minutes to set up and use template;
   // Manual scenario
-  manualTokens: number; // average tokens per manual prompt,
-  manualAccuracy: number; // accuracy rate (0-100%),
-  manualCreationTime: number; // minutes to create manual prompt,
-  manualIterations: number; // average iterations needed,
+  manualTokens: number; // average tokens per manual prompt;
+  manualAccuracy: number; // accuracy rate (0-100%);
+  manualCreationTime: number; // minutes to create manual prompt;
+  manualIterations: number; // average iterations needed;
   // Cost factors
-  claudeTokenCost: number; // cost per 1K tokens,
-  hourlyLabourCost: number; // cost per hour for human time,
-  revisionCost: number; // cost of revision cycles,
+  claudeTokenCost: number; // cost per 1K tokens;
+  hourlyLabourCost: number; // cost per hour for human time;
+  revisionCost: number; // cost of revision cycles;
   // Quality factors
-  templateQualityScore: number; // 1-10 quality score,
-  manualQualityScore: number; // 1-10 quality score,
+  templateQualityScore: number; // 1-10 quality score;
+  manualQualityScore: number; // 1-10 quality score;
   interface SavingsBreakdown {
-  tokenSavings: {
+  tokenSavings: { }
   templateTokenCost: number;
   manualTokenCost: number;
   netTokenSavings: number;
   tokenEfficiency: number;
-}
+
+
 };
-  timeSavings: {
+  timeSavings: { ,
   templateTimeSpent: number;
   manualTimeSpent: number;
   netTimeSavings: number;
-  timeEfficiency: number;
-};
-  qualitySavings: {
+  timeEfficiency: number };
+  qualitySavings: { ,
   templateQualityValue: number;
   manualQualityValue: number;
-  qualityImprovement: number;
-};
-  totalSavings: {
+  qualityImprovement: number };
+  totalSavings: { ,
   monthlySavings: number;
   yearlySavings: number;
   totalProjectSavings: number;
-  savingsPerUse: number;
-};
-  productivity: {
+  savingsPerUse: number };
+  productivity: { ,
   productivityGain: number;
   capacityIncrease: number;
-  errorReduction: number;
-};
-}
-interface SavingsEstimationProps {
-  className?: string;
+  errorReduction: number };
+
+
+interface SavingsEstimationProps { className?: string;
   onSavingsChange?: (savings: SavingsBreakdown) => void;
   comparisonMode?: 'detailed' | 'summary';
   industryPreset?: 'content' | 'development' | 'marketing' | 'research';
-  export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({,)
-  className = '',
-  onSavingsChange,
-  comparisonMode = 'detailed',
+  export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({);
+  className = '';
+  onSavingsChange;
+  comparisonMode = 'detailed' }
   industryPreset
-}
-}) => {
-  const [inputs, setInputs] = useState<SavingsInputs>({)
-  monthlyUsage: 25,
-  projectDuration: 12,
-  templateTokens: 1200,
-  templateAccuracy: 95,
-  templateSetupTime: 5,
-  manualTokens: 2000,
-  manualAccuracy: 75,
-  manualCreationTime: 45,
-  manualIterations: 2.5,
-  claudeTokenCost: 0.015,
-  hourlyLabourCost: 75,
-  revisionCost: 25,
-  templateQualityScore: 8.5,
-  manualQualityScore: 6.5,
+
+
+}) => { const [inputs, setInputs] = useState<SavingsInputs>({)
+  monthlyUsage: 25
+  projectDuration: 12
+  templateTokens: 1200
+  templateAccuracy: 95
+  templateSetupTime: 5
+  manualTokens: 2000
+  manualAccuracy: 75
+  manualCreationTime: 45
+  manualIterations: 2.5
+  claudeTokenCost: 0.015
+  hourlyLabourCost: 75
+  revisionCost: 25
+  templateQualityScore: 8.5
+  manualQualityScore: 6.5 }
 });
   // Industry presets
-  const industryPresets = {
-  content: {
-  monthlyUsage: 40,
-  templateTokens: 800,
-  templateAccuracy: 92,
-  templateSetupTime: 3,
-  manualTokens: 1500,
-  manualAccuracy: 70,
-  manualCreationTime: 35,
-  manualIterations: 3,
-  hourlyLabourCost: 65,
-  templateQualityScore: 8.2,
-  manualQualityScore: 6.0,
-},
-  development: {
-  monthlyUsage: 60,
-  templateTokens: 1500,
-  templateAccuracy: 98,
-  templateSetupTime: 8,
-  manualTokens: 2500,
-  manualAccuracy: 80,
-  manualCreationTime: 60,
-  manualIterations: 2,
-  hourlyLabourCost: 95,
-  templateQualityScore: 9.0,
-  manualQualityScore: 7.0,
-},
-  marketing: {
-  monthlyUsage: 30,
-  templateTokens: 1000,
-  templateAccuracy: 90,
-  templateSetupTime: 4,
-  manualTokens: 1800,
-  manualAccuracy: 65,
-  manualCreationTime: 40,
-  manualIterations: 3.5,
-  hourlyLabourCost: 70,
-  templateQualityScore: 8.0,
-  manualQualityScore: 5.5,
-},
-  research: {
-  monthlyUsage: 20,
-  templateTokens: 2000,
-  templateAccuracy: 96,
-  templateSetupTime: 10,
-  manualTokens: 3000,
-  manualAccuracy: 85,
-  manualCreationTime: 75,
-  manualIterations: 2,
-  hourlyLabourCost: 85,
-  templateQualityScore: 9.2,
-  manualQualityScore: 7.5,
+  const industryPresets = { content: {
+  monthlyUsage: 40
+  templateTokens: 800
+  templateAccuracy: 92
+  templateSetupTime: 3
+  manualTokens: 1500
+  manualAccuracy: 70
+  manualCreationTime: 35
+  manualIterations: 3
+  hourlyLabourCost: 65
+  templateQualityScore: 8.2
+  manualQualityScore: 6.0 }
+
+  development: { 
+  monthlyUsage: 60
+  templateTokens: 1500
+  templateAccuracy: 98
+  templateSetupTime: 8
+  manualTokens: 2500
+  manualAccuracy: 80
+  manualCreationTime: 60
+  manualIterations: 2
+  hourlyLabourCost: 95
+  templateQualityScore: 9.0
+  manualQualityScore: 7.0 }
+
+  marketing: { 
+  monthlyUsage: 30
+  templateTokens: 1000
+  templateAccuracy: 90
+  templateSetupTime: 4
+  manualTokens: 1800
+  manualAccuracy: 65
+  manualCreationTime: 40
+  manualIterations: 3.5
+  hourlyLabourCost: 70
+  templateQualityScore: 8.0
+  manualQualityScore: 5.5 }
+
+  research: { 
+  monthlyUsage: 20
+  templateTokens: 2000
+  templateAccuracy: 96
+  templateSetupTime: 10
+  manualTokens: 3000
+  manualAccuracy: 85
+  manualCreationTime: 75
+  manualIterations: 2
+  hourlyLabourCost: 85
+  templateQualityScore: 9.2
+  manualQualityScore: 7.5 }
 };
   // Load industry preset
-  useEffect(() => {
-    if (industryPreset && industryPresets[industryPreset]) {
+  useEffect(() => { if (industryPreset && industryPresets[industryPreset]) {
       const preset = industryPresets[industryPreset];
       setInputs(prev => ({)
-  ...prev,
+  ...prev }
         ...preset
       }));
   }, [industryPreset]);
   // Calculate savings breakdown
-  const savingsBreakdown: SavingsBreakdown = useMemo(() => {
-  const totalUsage = inputs.monthlyUsage * inputs.projectDuration;
+  const savingsBreakdown: SavingsBreakdown = useMemo(() => { const totalUsage = inputs.monthlyUsage * inputs.projectDuration;
   // Token costs
   const templateTokenCost = (inputs.templateTokens / 1000) * inputs.claudeTokenCost * totalUsage;
   const manualTokenCost = (inputs.manualTokens / 1000) * inputs.claudeTokenCost * totalUsage * inputs.manualIterations;
@@ -178,53 +172,46 @@ interface SavingsEstimationProps {
   const productivityGain = timeEfficiency;
   const capacityIncrease = manualTimeHours > 0 ? ((manualTimeHours - templateTimeHours) / manualTimeHours) * 100 : 0;
   const errorReduction = ((inputs.templateAccuracy - inputs.manualAccuracy) / inputs.manualAccuracy) * 100;
-  const breakdown: SavingsBreakdown = {,
+  const breakdown: SavingsBreakdown = {
   tokenSavings: {
-  templateTokenCost,
-  manualTokenCost,
-  netTokenSavings,
+  templateTokenCost
+  manualTokenCost
+  netTokenSavings }
   tokenEfficiency
-},
-  timeSavings: {
-  templateTimeSpent: templateTimeCost,
-  manualTimeSpent: manualTimeCost,
-  netTimeSavings,
+
+  timeSavings: { 
+  templateTimeSpent: templateTimeCost
+  manualTimeSpent: manualTimeCost
+  netTimeSavings }
   timeEfficiency
-},
-  qualitySavings: {
-        templateQualityValue,
-        manualQualityValue,
+
+  qualitySavings: { templateQualityValue
+        manualQualityValue }
         qualityImprovement
-  },
-  totalSavings: {
-        monthlySavings,
-        yearlySavings,
-        totalProjectSavings,
+
+  totalSavings: { monthlySavings
+        yearlySavings
+        totalProjectSavings }
         savingsPerUse
-  },
-  productivity: {
-        productivityGain,
-        capacityIncrease,
+
+  productivity: { productivityGain
+        capacityIncrease }
         errorReduction
     };
     return breakdown;
   }, [inputs]);
   // Notify parent of changes
-  useEffect(() => {
-    onSavingsChange?.(savingsBreakdown);
-  }, [savingsBreakdown, onSavingsChange]);
-  const handleInputChange = (field: keyof SavingsInputs, value: number) => {
-  setInputs(prev => ({)
-  ...prev,
-  [field]: value,
+  useEffect(() => { onSavingsChange?.(savingsBreakdown) }, [savingsBreakdown, onSavingsChange]);
+  const handleInputChange = (field: keyof SavingsInputs, value: number) => { setInputs(prev => ({)
+  ...prev
+  [field]: value }
 }));
   };
-  const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('en-US', {)
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
+  const formatCurrency = (amount: number) => { return new Intl.NumberFormat('en-US', {)
+  style: 'currency'
+  currency: 'USD'
+  minimumFractionDigits: 2
+  maximumFractionDigits: 2 }
 }).format(amount);
   };
   const formatPercentage = (value: number) => {

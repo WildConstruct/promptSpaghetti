@@ -3,61 +3,56 @@
  * Task: T-1752989143997-938 - Implement email-based verification
  * Epic 19: Authentication Enhancement & Security Hardening
  */
-import { 
-  EmailConfiguration,
+import { EmailConfiguration,
   EmailVerification,
   MFAVerificationRequest,
   MFAVerificationResponse,
-  MFAEnrollmentRequest,
+  MFAEnrollmentRequest }
   MFAEnrollmentResponse
 } from '../types/MFATypes';
 }
-interface EmailMFAConfig {
-    encryption: {
+}
+interface EmailMFAConfig { encryption: {
         algorithm: 'aes-256-gcm';
         keyDerivation: 'pbkdf2';
-        iterations: number;
+        iterations: number }
 }
     };
-    templates: {
-        verificationCode: string;
-        enrollmentCode: string;
-    };
-    rateLimit: {
-        maxDailyEmails: number;
-        cooldownMinutes: number;
-    };
+    templates: { verificationCode: string;
+        enrollmentCode: string };
+    rateLimit: { maxDailyEmails: number;
+        cooldownMinutes: number };
 }
-interface EmailTemplate {
-    subject: string;
+}
+interface EmailTemplate { subject: string;
     htmlTemplate: string;
     textTemplate: string;
-    variables: string[];
+    variables: string[] }
 }
-interface EmailSendResult {
-    messageId: string;
+}
+interface EmailSendResult { messageId: string;
     status: 'sent' | 'failed';
     error?: string;
-    timestamp: Date;
+    timestamp: Date }
 }
-interface RiskAssessmentContext {
-    ipAddress: string;
+}
+interface RiskAssessmentContext { ipAddress: string;
     userAgent: string;
     location?: string;
     deviceFingerprint?: string;
-    previousAttempts: number;
+    previousAttempts: number }
 }
-interface EmailService {
-    sendEmail(to: string, template: EmailTemplate, variables: Record<string, string>): Promise<EmailSendResult>;
+}
+interface EmailService { sendEmail(to: string, template: EmailTemplate, variables: Record<string, string>): Promise<EmailSendResult>;
     validateEmailAddress(email: string): Promise<boolean>;
     checkEmailReputation(email: string): Promise<{
         valid: boolean;
-        risk: number;
+        risk: number }
 }
     }>;
 }
-interface EmailMFAStorage {
-    saveConfiguration(config: EmailConfiguration): Promise<void>;
+}
+interface EmailMFAStorage { saveConfiguration(config: EmailConfiguration): Promise<void>;
     getConfiguration(userId: string): Promise<EmailConfiguration | null>;
     getConfigurationById(configId: string): Promise<EmailConfiguration | null>;
     updateConfiguration(configId: string, updates: Partial<EmailConfiguration>): Promise<void>;
@@ -68,7 +63,7 @@ interface EmailMFAStorage {
     deleteVerification(verificationId: string): Promise<void>;
     getRateLimitState(userId: string, action: string): Promise<{
         count: number;
-        windowStart: Date;
+        windowStart: Date }
 }
     } | null>;
     updateRateLimitState(userId: string, action: string, count: number): Promise<void>;

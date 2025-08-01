@@ -8,29 +8,21 @@ import { DocumentUpload } from '../DocumentUpload';
 
 // Mock File constructor
 global.File = class MockFile {
-  constructor(parts, filename, properties = {}) {
-    this.parts = parts;
+  constructor(parts, filename, properties = {}) { this.parts = parts;
     this.name = filename;
     this.size = properties.size || parts.join('').length;
     this.type = properties.type || 'text/plain';
-    this.lastModified = Date.now();
-} as any;
+    this.lastModified = Date.now() } as any;
 
 // Mock FileReader
-global.FileReader = class MockFileReader {
-  readAsDataURL = jest.fn<unknown, unknown>();
+global.FileReader = class MockFileReader { readAsDataURL = jest.fn<unknown, unknown>();
   result = 'data:image/png;base64,test';
   onload = null;
-  onerror = null;
-} as any;
+  onerror = null } as any;
 const mockOnFilesChange = jest.fn<unknown, unknown>();
-const defaultProps = {
-  onFilesChange: mockOnFilesChange,
-};
-describe('DocumentUpload', () => {
-  beforeEach(() => {
-    mockOnFilesChange.mockClear();
-  });
+const defaultProps = {};
+describe('DocumentUpload', () => { beforeEach(() => {
+    mockOnFilesChange.mockClear() });
   describe('Basic Rendering', () => {
     test('renders upload area with default text', () => {
       render(<DocumentUpload {...defaultProps} />);
@@ -56,22 +48,18 @@ describe('DocumentUpload', () => {
       const file = new File(['test content'], 'test.pdf', { type: 'application/pdf' });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, file);
-      await waitFor(() => {
-        expect(mockOnFilesChange).toHaveBeenCalledWith([file]);
-      });
+      await waitFor(() => { expect(mockOnFilesChange).toHaveBeenCalledWith([file]) });
     });
     test('handles multiple file selection', async () => {
       const user = userEvent.setup();
       render(<DocumentUpload {...defaultProps} />);
-      const files = [;
-        new File(['content1'], 'test1.pdf', { type: 'application/pdf' }),
+      const files = [
+        new File(['content1'], 'test1.pdf', { type: 'application/pdf' })
         new File(['content2'], 'test2.jpg', { type: 'image/jpeg' })
       ];
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, files);
-      await waitFor(() => {
-        expect(mockOnFilesChange).toHaveBeenCalledWith(files);
-      });
+      await waitFor(() => { expect(mockOnFilesChange).toHaveBeenCalledWith(files) });
     });
     test('validates file types', async () => {
       const user = userEvent.setup();
@@ -79,40 +67,34 @@ describe('DocumentUpload', () => {
       const invalidFile = new File(['content'], 'test.txt', { type: 'text/plain' });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, [invalidFile]);
-      await waitFor(() => {
-        expect(screen.getByText(/File type text\/plain is not supported/)).toBeInTheDocument();
-        expect(mockOnFilesChange).not.toHaveBeenCalled();
-      });
+      await waitFor(() => { expect(screen.getByText(/File type text\/plain is not supported/)).toBeInTheDocument();
+        expect(mockOnFilesChange).not.toHaveBeenCalled() });
     });
     test('validates file sizes', async () => {
       const user = userEvent.setup();
       render(<DocumentUpload {...defaultProps} maxFileSize={1} />); // 1MB limit
       const largeContent = 'x'.repeat(2 * 1024 * 1024); // 2MB content;
       const largeFile = new File([largeContent], 'large.pdf', { )
-        type: 'application/pdf',
+        type: 'application/pdf' }
         size: 2 * 1024 * 1024;
   });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, [largeFile]);
-      await waitFor(() => {
-        expect(screen.getByText(/exceeds limit of 1MB/)).toBeInTheDocument();
-        expect(mockOnFilesChange).not.toHaveBeenCalled();
-      });
+      await waitFor(() => { expect(screen.getByText(/exceeds limit of 1MB/)).toBeInTheDocument();
+        expect(mockOnFilesChange).not.toHaveBeenCalled() });
     });
     test('enforces maximum file count', async () => {
       const user = userEvent.setup();
       render(<DocumentUpload {...defaultProps} maxFiles={2} />);
-      const files = [;
-        new File(['1'], 'test1.pdf', { type: 'application/pdf' }),
-        new File(['2'], 'test2.pdf', { type: 'application/pdf' }),
+      const files = [
+        new File(['1'], 'test1.pdf', { type: 'application/pdf' })
+        new File(['2'], 'test2.pdf', { type: 'application/pdf' })
         new File(['3'], 'test3.pdf', { type: 'application/pdf' })
       ];
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, files);
-      await waitFor(() => {
-        expect(screen.getByText(/Maximum of 2 files allowed/)).toBeInTheDocument();
-        expect(mockOnFilesChange).toHaveBeenCalledWith([files[0], files[1]]);
-      });
+      await waitFor(() => { expect(screen.getByText(/Maximum of 2 files allowed/)).toBeInTheDocument();
+        expect(mockOnFilesChange).toHaveBeenCalledWith([files[0], files[1]]) });
     });
     test('prevents duplicate files', async () => {
       const user = userEvent.setup();
@@ -122,16 +104,12 @@ describe('DocumentUpload', () => {
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       // Upload first file
       await user.upload(input, [file1]);
-      await waitFor(() => {
-        expect(mockOnFilesChange).toHaveBeenCalledWith([file1]);
-      });
+      await waitFor(() => { expect(mockOnFilesChange).toHaveBeenCalledWith([file1]) });
       mockOnFilesChange.mockClear();
       // Try to upload duplicate
       await user.upload(input, [file2]);
-      await waitFor(() => {
-        expect(screen.getByText(/test.pdf is already added/)).toBeInTheDocument();
-        expect(mockOnFilesChange).not.toHaveBeenCalled();
-      });
+      await waitFor(() => { expect(screen.getByText(/test.pdf is already added/)).toBeInTheDocument();
+        expect(mockOnFilesChange).not.toHaveBeenCalled() });
     });
   });
   describe('Drag and Drop', () => {
@@ -160,9 +138,7 @@ describe('DocumentUpload', () => {
       fireEvent.drop(uploadArea, {)
   dataTransfer: { files: [file] }
       });
-      await waitFor(() => {
-        expect(mockOnFilesChange).toHaveBeenCalledWith([file]);
-      });
+      await waitFor(() => { expect(mockOnFilesChange).toHaveBeenCalledWith([file]) });
     });
     test('ignores drops when disabled', () => {
       render(<DocumentUpload {...defaultProps} disabled={true} />);
@@ -179,16 +155,14 @@ describe('DocumentUpload', () => {
       const user = userEvent.setup();
       render(<DocumentUpload {...defaultProps} />);
       const file = new File(['content'], 'test-document.pdf', { )
-        type: 'application/pdf',
+        type: 'application/pdf' }
         size: 1024 ;
   });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, [file]);
-      await waitFor(() => {
-        expect(screen.getByText('Selected Files (1)')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Selected Files (1)')).toBeInTheDocument();
         expect(screen.getByText('test-document.pdf')).toBeInTheDocument();
-        expect(screen.getByText('1 KB')).toBeInTheDocument();
-      });
+        expect(screen.getByText('1 KB')).toBeInTheDocument() });
     });
     test('allows removing selected files', async () => {
       const user = userEvent.setup();
@@ -196,23 +170,20 @@ describe('DocumentUpload', () => {
       const file = new File(['content'], 'test.pdf', { type: 'application/pdf' });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, [file]);
-      await waitFor(() => {
-        expect(screen.getByText('test.pdf')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('test.pdf')).toBeInTheDocument() });
       // Click remove button
       const removeButton = screen.getByTitle('Remove file');
       fireEvent.click(removeButton);
       expect(mockOnFilesChange).toHaveBeenCalledWith([]);
       expect(screen.queryByText('test.pdf')).not.toBeInTheDocument();
     });
-    test('displays existing files', () => {
-      const existingFiles = [;
+    test('displays existing files', () => { const existingFiles = [
         {
-          id: 'file1',
-          name: 'existing.pdf',
-          size: 2048,
-          type: 'application/pdf',
-          url: 'https://example.com/file1',
+          id: 'file1'
+          name: 'existing.pdf'
+          size: 2048
+          type: 'application/pdf'
+          url: 'https://example.com/file1' }
           uploadedAt: new Date('2023-01-01')];
       render(<DocumentUpload {...defaultProps} existingFiles={existingFiles} />);
       expect(screen.getByText('Previously Uploaded (1)')).toBeInTheDocument();
@@ -223,58 +194,49 @@ describe('DocumentUpload', () => {
     test('shows correct file icons for different types', async () => {
       const user = userEvent.setup();
       render(<DocumentUpload {...defaultProps} />);
-      const files = [;
-        new File(['image'], 'image.jpg', { type: 'image/jpeg' }),
+      const files = [
+        new File(['image'], 'image.jpg', { type: 'image/jpeg' })
         new File(['pdf'], 'document.pdf', { type: 'application/pdf' })
       ];
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, files);
-      await waitFor(() => {
-        // Check that file icons are displayed (emojis in this case)
+      await waitFor(() => { // Check that file icons are displayed (emojis in this case)
         const fileItems = screen.getAllByText(/🖼️|📄/);
-        expect(fileItems.length).toBeGreaterThan(0);
-      });
+        expect(fileItems.length).toBeGreaterThan(0) });
     });
   });
   describe('File Size Formatting', () => {
     test('formats file sizes correctly', async () => {
       const user = userEvent.setup();
       render(<DocumentUpload {...defaultProps} />);
-      const files = [;
-        new File(['x'.repeat(1024)], 'small.txt', {
-  type: 'image/jpeg',
-  size: 1024,
-}),
-        new File(['x'.repeat(1024 * 1024)], 'medium.txt', {
-  type: 'image/jpeg',
-  size: 1024 * 1024,
-}
+      const files = [
+        new File(['x'.repeat(1024)], 'small.txt', { type: 'image/jpeg'
+  size: 1024 }
+})
+        new File(['x'.repeat(1024 * 1024)], 'medium.txt', { type: 'image/jpeg'
+  size: 1024 * 1024 }
+
       ];
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, files);
-      await waitFor(() => {
-        expect(screen.getByText('1 KB')).toBeInTheDocument();
-        expect(screen.getByText('1 MB')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('1 KB')).toBeInTheDocument();
+        expect(screen.getByText('1 MB')).toBeInTheDocument() });
     });
   });
   describe('Error Handling', () => {
     test('displays multiple error messages', async () => {
       const user = userEvent.setup();
       render(<DocumentUpload {...defaultProps} />);
-      const files = [;
+      const files = [
         new File(['content'], 'invalid.txt', { type: 'text/plain' }), // Invalid type
-        new File(['x'.repeat(20 * 1024 * 1024)], 'large.pdf', {
-  type: 'application/pdf',
-  size: 20 * 1024 * 1024,
+        new File(['x'.repeat(20 * 1024 * 1024)], 'large.pdf', { type: 'application/pdf'
+  size: 20 * 1024 * 1024 }
 }) // Too large
       ];
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, files);
-      await waitFor(() => {
-        expect(screen.getByText(/File type text\/plain is not supported/)).toBeInTheDocument();
-        expect(screen.getByText(/exceeds limit/)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/File type text\/plain is not supported/)).toBeInTheDocument();
+        expect(screen.getByText(/exceeds limit/)).toBeInTheDocument() });
     });
     test('clears errors when new valid files are selected', async () => {
       const user = userEvent.setup();
@@ -283,15 +245,11 @@ describe('DocumentUpload', () => {
       // First upload invalid file
       const invalidFile = new File(['content'], 'invalid.txt', { type: 'text/plain' });
       await user.upload(input, [invalidFile]);
-      await waitFor(() => {
-        expect(screen.getByText(/not supported/)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/not supported/)).toBeInTheDocument() });
       // Then upload valid file
       const validFile = new File(['content'], 'valid.pdf', { type: 'application/pdf' });
       await user.upload(input, [validFile]);
-      await waitFor(() => {
-        expect(mockOnFilesChange).toHaveBeenCalledWith([validFile]);
-      });
+      await waitFor(() => { expect(mockOnFilesChange).toHaveBeenCalledWith([validFile]) });
     });
   });
   describe('Custom Configuration', () => {
@@ -301,9 +259,7 @@ describe('DocumentUpload', () => {
       const pdfFile = new File(['content'], 'test.pdf', { type: 'application/pdf' });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, [pdfFile]);
-      await waitFor(() => {
-        expect(screen.getByText(/application\/pdf is not supported/)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/application\/pdf is not supported/)).toBeInTheDocument() });
     });
     test('respects custom max file size', () => {
       render(<DocumentUpload {...defaultProps} maxFileSize={5} />);
@@ -327,11 +283,9 @@ describe('DocumentUpload', () => {
       const file = new File(['content'], 'test.pdf', { type: 'application/pdf' });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, [file]);
-      await waitFor(() => {
-        const removeButton = screen.getByTitle('Remove file');
+      await waitFor(() => { const removeButton = screen.getByTitle('Remove file');
         expect(removeButton).toBeInTheDocument();
-        expect(removeButton).toHaveAttribute('title', 'Remove file');
-      });
+        expect(removeButton).toHaveAttribute('title', 'Remove file') });
     });
   });
 });

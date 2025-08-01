@@ -7,8 +7,8 @@ import crypto from 'crypto';
 import { EventEmitter } from 'events';
 import jwt from 'jsonwebtoken';
 
-}
-}
+
+
 export interface SessionConfig {
   sessionDuration: number; // seconds
   refreshTokenDuration: number; // seconds
@@ -25,8 +25,9 @@ export interface SessionConfig {
     sameSite: 'strict' | 'lax' | 'none';
     domain?: string;
     path: string;
-}
-}
+
+
+
   };
   sessionRotation: {
     enabled: boolean;
@@ -40,10 +41,10 @@ export interface SessionConfig {
     timeoutDuration: number; // seconds
     extendOnActivity: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface Session {
   id: string;
   userId: string;
@@ -56,9 +57,10 @@ export interface Session {
     previousTokens?: Array<{
       token: string;
       validUntil: Date;
-}
-}
-    }>;
+
+
+
+>;
   };
   
   metadata: {
@@ -103,10 +105,10 @@ export interface Session {
     errorCount: number;
     suspiciousActivities: number;
   };
-}
 
-}
-}
+
+
+
 export interface DeviceProfile {
   id: string;
   userId: string;
@@ -119,8 +121,9 @@ export interface DeviceProfile {
     registeredFrom: string;
     verificationMethod: 'email' | 'sms' | 'push' | 'manual';
     verifiedAt?: Date;
-}
-}
+
+
+
   };
   
   trustInfo: {
@@ -135,7 +138,7 @@ export interface DeviceProfile {
     createdAt: Date;
     endedAt?: Date;
     endReason?: string;
-  }>;
+>;
   
   metadata: {
     platform: string;
@@ -146,12 +149,12 @@ export interface DeviceProfile {
     locationHistory: Array<{
       location: string;
       timestamp: Date;
-    }>;
+>;
   };
-}
 
-}
-}
+
+
+
 export interface SessionActivity {
   sessionId: string;
   timestamp: Date;
@@ -161,9 +164,10 @@ export interface SessionActivity {
   statusCode?: number;
   responseTime?: number;
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export class EnhancedSessionService extends EventEmitter {
   private config: SessionConfig;
@@ -178,7 +182,7 @@ export class EnhancedSessionService extends EventEmitter {
     super();
     this.config = config;
     this.startMaintenanceTasks();
-  }
+
 
   /**
    * Create a new session with enhanced security
@@ -193,7 +197,7 @@ export class EnhancedSessionService extends EventEmitter {
       mfaVerified?: boolean;
       scopes?: string[];
       impersonatedBy?: string;
-    }
+
   ): Promise<{
     session: Session;
     tokens: {
@@ -202,7 +206,7 @@ export class EnhancedSessionService extends EventEmitter {
       csrfToken: string;
     };
     cookieOptions: any;
-  }> {
+> {
 
     // Validate concurrent sessions
     await this.validateConcurrentSessions(userId);
@@ -225,7 +229,7 @@ export class EnhancedSessionService extends EventEmitter {
         sessionToken: tokens.sessionToken,
         refreshToken: tokens.refreshToken,
         csrfToken: tokens.csrfToken
-  }
+
       metadata: {
         createdAt: new Date(),
         lastActivity: new Date(),
@@ -235,25 +239,25 @@ export class EnhancedSessionService extends EventEmitter {
         ipAddress: context.ipAddress,
         deviceFingerprint: context.deviceFingerprint,
         geolocation: context.geolocation
-  }
+
       security: {
         mfaVerified: context.mfaVerified || false,
         riskScore: securityAssessment.riskScore,
         trustLevel: securityAssessment.trustLevel,
         securityFlags: securityAssessment.flags,
         encryptionVersion: 1
-  }
+
       permissions: {
         scopes: context.scopes || ['basic'],
         restrictions: securityAssessment.restrictions,
         impersonating: context.impersonatedBy
-  }
+
       status: 'active',
       analytics: {
         requestCount: 0,
         errorCount: 0,
         suspiciousActivities: 0
-      }
+
     };
     
     // Store session
@@ -289,7 +293,7 @@ export class EnhancedSessionService extends EventEmitter {
       tokens,
       cookieOptions
     };
-  }
+
 
   /**
    * Validate session with comprehensive security checks
@@ -307,7 +311,7 @@ export class EnhancedSessionService extends EventEmitter {
     session?: Session;
     reason?: string;
     requiresAction?: string[];
-  }> {
+> {
 
     // Check if token is blacklisted
     if (this.blacklistedTokens.has(sessionToken)) {
@@ -315,18 +319,18 @@ export class EnhancedSessionService extends EventEmitter {
         valid: false,
         reason: 'Token has been revoked'
       };
-    }
+
     
     // Decode and verify JWT
     let decoded: any;
     try {
       decoded = jwt.verify(sessionToken, this.config.jwtSecret);
-    } catch (error) {
+ catch (error) {
       return {
         valid: false,
         reason: 'Invalid or expired token'
       };
-    }
+
     
     // Get session
     const session = this.sessions.get(decoded.sessionId);
@@ -335,7 +339,7 @@ export class EnhancedSessionService extends EventEmitter {
         valid: false,
         reason: 'Session not found'
       };
-    }
+
     
     // Check session status
     if (session.status !== 'active') {
@@ -343,7 +347,7 @@ export class EnhancedSessionService extends EventEmitter {
         valid: false,
         reason: `Session is ${session.status}`
       };
-    }
+
     
     // Check expiration
     if (session.metadata.expiresAt <= new Date()) {
@@ -352,21 +356,21 @@ export class EnhancedSessionService extends EventEmitter {
         valid: false,
         reason: 'Session has expired'
       };
-    }
+
     
     // Validate device and context
     const contextValidation = await this.validateSessionContext(session, context);
     if (!contextValidation.valid) {
       return contextValidation;
-    }
+
     
     // Check inactivity timeout
     if (this.config.inactivityTimeout.enabled) {
       const inactivityCheck = this.checkInactivityTimeout(session);
       if (!inactivityCheck.valid) {
         return inactivityCheck;
-      }
-    }
+
+
     
     // Update last activity
     session.metadata.lastActivity = new Date();
@@ -376,14 +380,14 @@ export class EnhancedSessionService extends EventEmitter {
     if (this.shouldRotateSession(session)) {
       session.status = 'rotating';
       this.emit('sessionRotationRequired', { sessionId: session.id });
-    }
+
     
     return {
       valid: true,
       session,
       requiresAction: this.getRequiredActions(session)
     };
-  }
+
 
   /**
    * Refresh session with token rotation
@@ -393,7 +397,7 @@ export class EnhancedSessionService extends EventEmitter {
     context: {
       ipAddress: string;
       userAgent: string;
-    }
+
   ): Promise<{
     success: boolean;
     session?: Session;
@@ -403,18 +407,18 @@ export class EnhancedSessionService extends EventEmitter {
       csrfToken: string;
     };
     reason?: string;
-  }> {
+> {
 
     // Verify refresh token
     let decoded: any;
     try {
       decoded = jwt.verify(refreshToken, this.config.jwtSecret);
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         reason: 'Invalid refresh token'
       };
-    }
+
     
     const session = this.sessions.get(decoded.sessionId);
     if (!session) {
@@ -422,7 +426,7 @@ export class EnhancedSessionService extends EventEmitter {
         success: false,
         reason: 'Session not found'
       };
-    }
+
     
     // Check if refresh token matches
     if (session.tokens.refreshToken !== refreshToken) {
@@ -432,7 +436,7 @@ export class EnhancedSessionService extends EventEmitter {
         success: false,
         reason: 'Token mismatch - session revoked for security'
       };
-    }
+
     
     // Check refresh token expiration
     if (session.metadata.refreshExpiresAt <= new Date()) {
@@ -440,7 +444,7 @@ export class EnhancedSessionService extends EventEmitter {
         success: false,
         reason: 'Refresh token has expired'
       };
-    }
+
     
     // Rotate tokens
     const newTokens = await this.rotateSessionTokens(session);
@@ -466,7 +470,7 @@ export class EnhancedSessionService extends EventEmitter {
       session,
       tokens: newTokens
     };
-  }
+
 
   /**
    * Implement session expiration with grace periods
@@ -487,12 +491,12 @@ export class EnhancedSessionService extends EventEmitter {
           if (validPreviousTokens.length > 0) {
             // Still in grace period
             continue;
-          }
-        }
+
+
         
         // Expire the session
         await this.expireSession(sessionId);
-      }
+
       
       // Check inactivity timeout warning
       if (this.config.inactivityTimeout.enabled) {
@@ -505,10 +509,10 @@ export class EnhancedSessionService extends EventEmitter {
             userId: session.userId,
             remainingTime: this.config.inactivityTimeout.timeoutDuration * 1000 - timeSinceActivity
           });
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Revoke session with reason tracking
@@ -520,7 +524,7 @@ export class EnhancedSessionService extends EventEmitter {
   ): Promise<{
     success: boolean;
     message: string;
-  }> {
+> {
 
     const session = this.sessions.get(sessionId);
     if (!session) {
@@ -528,14 +532,14 @@ export class EnhancedSessionService extends EventEmitter {
         success: false,
         message: 'Session not found'
       };
-    }
+
     
     // Blacklist all tokens
     this.blacklistedTokens.add(session.tokens.sessionToken);
     this.blacklistedTokens.add(session.tokens.refreshToken);
     if (session.tokens.previousTokens) {
       session.tokens.previousTokens.forEach(pt => this.blacklistedTokens.add(pt.token));
-    }
+
     
     // Update session status
     session.status = 'revoked';
@@ -547,15 +551,15 @@ export class EnhancedSessionService extends EventEmitter {
       if (sessionHistory) {
         sessionHistory.endedAt = new Date();
         sessionHistory.endReason = reason;
-      }
-    }
+
+
     
     // Remove from active sessions
     this.sessions.delete(sessionId);
     const userSessions = this.userSessions.get(session.userId);
     if (userSessions) {
       userSessions.delete(sessionId);
-    }
+
     
     await this.logSessionActivity(sessionId, 'logout', {
       reason,
@@ -573,7 +577,7 @@ export class EnhancedSessionService extends EventEmitter {
       success: true,
       message: 'Session revoked successfully'
     };
-  }
+
 
   /**
    * Get all active sessions for a user
@@ -587,9 +591,9 @@ export class EnhancedSessionService extends EventEmitter {
       location?: string;
       current: boolean;
       trustLevel: string;
-    }>;
+>;
     deviceCount: number;
-  }> {
+> {
     const userSessionIds = this.userSessions.get(userId) || new Set();
     const sessions = [];
     
@@ -606,14 +610,14 @@ export class EnhancedSessionService extends EventEmitter {
           current: false, // Would be set based on current request
           trustLevel: session.security.trustLevel
         });
-      }
-    }
+
+
     
     return {
       sessions,
       deviceCount: new Set(sessions.map(s => s.deviceName)).size
     };
-  }
+
 
   /**
    * Implement secure cookie configuration
@@ -631,15 +635,15 @@ export class EnhancedSessionService extends EventEmitter {
     // Add additional security based on trust level
     if (session.security.trustLevel === 'untrusted') {
       baseOptions.sameSite = 'strict';
-    }
+
 
     // Add partitioned attribute for Chrome's CHIPS
     if (this.config.secureCookie.secure) {
       (baseOptions as any).partitioned = true;
-    }
+
 
     return baseOptions;
-  }
+
 
   // Private helper methods
 
@@ -658,9 +662,9 @@ export class EnhancedSessionService extends EventEmitter {
       
       if (oldestSession) {
         await this.revokeSession(oldestSession.id, 'max_sessions_exceeded');
-      }
-    }
-  }
+
+
+
 
   private async getOrCreateDeviceProfile(
     userId: string,
@@ -673,7 +677,7 @@ export class EnhancedSessionService extends EventEmitter {
     
     if (existingDevice) {
       return existingDevice;
-    }
+
     
     const newDevice: DeviceProfile = {
       id: this.generateDeviceId(),
@@ -685,13 +689,13 @@ export class EnhancedSessionService extends EventEmitter {
         registeredAt: new Date(),
         registeredFrom: context.ipAddress,
         verificationMethod: 'manual'
-  }
+
       trustInfo: {
         trusted: false,
         trustLevel: 0,
         lastVerified: new Date(),
         verificationCount: 0
-  }
+
       sessionHistory: [],
       metadata: {
         platform: this.detectPlatform(context.userAgent),
@@ -700,12 +704,12 @@ export class EnhancedSessionService extends EventEmitter {
         lastSeen: new Date(),
         lastIpAddress: context.ipAddress,
         locationHistory: []
-      }
+
     };
     
     this.deviceProfiles.set(newDevice.id, newDevice);
     return newDevice;
-  }
+
 
   private async assessSecurityContext(
     userId: string,
@@ -716,7 +720,7 @@ export class EnhancedSessionService extends EventEmitter {
     trustLevel: Session['security']['trustLevel'];
     flags: string[];
     restrictions: string[];
-  }> {
+> {
 
     let riskScore = 0;
     const flags = [];
@@ -727,26 +731,26 @@ export class EnhancedSessionService extends EventEmitter {
       riskScore += 30;
       flags.push('new_device');
       restrictions.push('limited_api_access');
-    }
+
     
     // Untrusted device penalty
     if (!device.trustInfo.trusted) {
       riskScore += 20;
       flags.push('untrusted_device');
-    }
+
     
     // No MFA penalty
     if (!context.mfaVerified) {
       riskScore += 25;
       flags.push('no_mfa');
       restrictions.push('no_sensitive_operations');
-    }
+
     
     // Suspicious location
     if (context.geolocation && this.isSuspiciousLocation(userId, context.geolocation)) {
       riskScore += 15;
       flags.push('suspicious_location');
-    }
+
     
     // Calculate trust level
     let trustLevel: Session['security']['trustLevel'] = 'verified';
@@ -760,13 +764,13 @@ export class EnhancedSessionService extends EventEmitter {
       flags,
       restrictions
     };
-  }
+
 
   private generateSecureTokens(userId: string, deviceId: string, security: any): {
     sessionToken: string;
     refreshToken: string;
     csrfToken: string;
-  } {
+ {
     const sessionId = this.generateSessionId();
     const now = Math.floor(Date.now() / 1000);
     
@@ -780,7 +784,7 @@ export class EnhancedSessionService extends EventEmitter {
       security: {
         trustLevel: security.trustLevel,
         riskScore: security.riskScore
-      }
+
     };
     
     const refreshPayload = {
@@ -797,19 +801,19 @@ export class EnhancedSessionService extends EventEmitter {
       refreshToken: jwt.sign(refreshPayload, this.config.jwtSecret),
       csrfToken: crypto.randomBytes(32).toString('hex')
     };
-  }
+
 
   private async rotateSessionTokens(session: Session): Promise<{
     sessionToken: string;
     refreshToken: string;
     csrfToken: string;
-  }> {
+> {
 
     // Store previous tokens if configured
     if (this.config.sessionRotation.keepPreviousValid) {
       if (!session.tokens.previousTokens) {
         session.tokens.previousTokens = [];
-      }
+
       
       session.tokens.previousTokens.push({
         token: session.tokens.sessionToken,
@@ -820,7 +824,7 @@ export class EnhancedSessionService extends EventEmitter {
       session.tokens.previousTokens = session.tokens.previousTokens.filter(
         pt => pt.validUntil > new Date()
       );
-    }
+
     
     // Generate new tokens
     const newTokens = this.generateSecureTokens(
@@ -835,7 +839,7 @@ export class EnhancedSessionService extends EventEmitter {
     session.tokens.csrfToken = newTokens.csrfToken;
     
     return newTokens;
-  }
+
 
   private async storeSession(session: Session): Promise<void> {
 
@@ -844,13 +848,13 @@ export class EnhancedSessionService extends EventEmitter {
     const userSessions = this.userSessions.get(session.userId) || new Set();
     userSessions.add(session.id);
     this.userSessions.set(session.userId, userSessions);
-  }
+
 
   private async validateSessionContext(session: Session, context: any): Promise<{
     valid: boolean;
     session?: Session;
     reason?: string;
-  }> {
+> {
 
     // Validate device fingerprint if required
     if (this.config.requireDeviceFingerprint && session.metadata.deviceFingerprint) {
@@ -860,8 +864,8 @@ export class EnhancedSessionService extends EventEmitter {
           valid: false,
           reason: 'Device fingerprint mismatch'
         };
-      }
-    }
+
+
     
     // Validate IP address for high-security sessions
     if (session.security.trustLevel === 'verified' && session.metadata.ipAddress !== context.ipAddress) {
@@ -869,15 +873,15 @@ export class EnhancedSessionService extends EventEmitter {
         valid: false,
         reason: 'IP address change detected for high-security session'
       };
-    }
+
     
     return { valid: true, session };
-  }
+
 
   private checkInactivityTimeout(session: Session): {
     valid: boolean;
     reason?: string;
-  } {
+ {
     const inactivityDuration = Date.now() - session.metadata.lastActivity.getTime();
     
     if (inactivityDuration > this.config.inactivityTimeout.timeoutDuration * 1000) {
@@ -885,40 +889,40 @@ export class EnhancedSessionService extends EventEmitter {
         valid: false,
         reason: 'Session timed out due to inactivity'
       };
-    }
+
     
     return { valid: true };
-  }
+
 
   private shouldRotateSession(session: Session): boolean {
     if (!this.config.sessionRotation.enabled) {
       return false;
-    }
+
     
     const rotationDue = session.metadata.rotatedAt 
       ? Date.now() - session.metadata.rotatedAt.getTime() > this.config.sessionRotation.rotationInterval * 1000
       : Date.now() - session.metadata.createdAt.getTime() > this.config.sessionRotation.rotationInterval * 1000;
     
     return rotationDue;
-  }
+
 
   private getRequiredActions(session: Session): string[] {
     const actions = [];
     
     if (!session.security.mfaVerified) {
       actions.push('verify_mfa');
-    }
+
     
     if (session.security.trustLevel === 'untrusted') {
       actions.push('verify_device');
-    }
+
     
     if (session.status === 'rotating') {
       actions.push('refresh_token');
-    }
+
     
     return actions;
-  }
+
 
   private async expireSession(sessionId: string): Promise<void> {
 
@@ -935,7 +939,7 @@ export class EnhancedSessionService extends EventEmitter {
       sessionId,
       userId: session.userId
     });
-  }
+
 
   private async logSessionActivity(
     sessionId: string,
@@ -956,15 +960,15 @@ export class EnhancedSessionService extends EventEmitter {
     // Keep only recent activities
     if (activities.length > 100) {
       activities.splice(0, activities.length - 100);
-    }
+
     
     this.sessionActivities.set(sessionId, activities);
-  }
+
 
   private generateDeviceFingerprint(context: any): string {
     const data = `${context.userAgent}-${context.ipAddress}`;
     return crypto.createHash('sha256').update(data).digest('hex');
-  }
+
 
   private generateDeviceName(userAgent: string): string {
     // Simple device name extraction - would use a proper UA parser
@@ -972,14 +976,14 @@ export class EnhancedSessionService extends EventEmitter {
     if (userAgent.includes('Firefox')) return 'Firefox Browser';
     if (userAgent.includes('Safari')) return 'Safari Browser';
     return 'Unknown Browser';
-  }
+
 
   private detectDeviceType(userAgent: string): DeviceProfile['deviceType'] {
     if (userAgent.includes('Mobile')) return 'mobile';
     if (userAgent.includes('Tablet')) return 'tablet';
     if (userAgent.includes('API')) return 'api';
     return 'desktop';
-  }
+
 
   private detectPlatform(userAgent: string): string {
     if (userAgent.includes('Windows')) return 'Windows';
@@ -988,23 +992,23 @@ export class EnhancedSessionService extends EventEmitter {
     if (userAgent.includes('Android')) return 'Android';
     if (userAgent.includes('iOS')) return 'iOS';
     return 'Unknown';
-  }
+
 
   private detectOSVersion(userAgent: string): string {
     // Simple OS version detection - would use a proper UA parser
     return 'Unknown';
-  }
+
 
   private isSuspiciousLocation(userId: string, geolocation: any): boolean {
     // Would implement actual location anomaly detection
     return false;
-  }
+
 
   private startMaintenanceTasks(): void {
     this.maintenanceInterval = setInterval(() => {
       this.performMaintenance();
     }, 60 * 1000); // Every minute
-  }
+
 
   private async performMaintenance(): Promise<void> {
 
@@ -1018,21 +1022,20 @@ export class EnhancedSessionService extends EventEmitter {
     for (const [sessionId, activities] of this.sessionActivities.entries()) {
       if (!this.sessions.has(sessionId)) {
         this.sessionActivities.delete(sessionId);
-      }
-    }
-  }
+
+
+
 
   private generateSessionId(): string {
     return `SES-${Date.now()}-${crypto.randomBytes(16).toString('hex')}`;
-  }
+
 
   private generateDeviceId(): string {
     return `DEV-${Date.now()}-${crypto.randomBytes(8).toString('hex')}`;
-  }
+
 
   destroy(): void {
     if (this.maintenanceInterval) {
       clearInterval(this.maintenanceInterval);
-    }
-  }
-}
+
+

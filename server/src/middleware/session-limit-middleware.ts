@@ -10,8 +10,8 @@ import { SessionLimitManager, SessionEnforcementAction } from '../services/Sessi
 import { SessionService } from '../auth/services/SessionService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface SessionLimitMiddlewareOptions {
   enableSessionLimits: boolean;
   skipPaths: string[];
@@ -20,13 +20,14 @@ export interface SessionLimitMiddlewareOptions {
   notificationWebhooks: {
     onViolation?: string;
     onEnforcement?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface RequestSessionContext {
   userId?: string;
   sessionId?: string;
@@ -37,9 +38,10 @@ export interface RequestSessionContext {
   ipAddress?: string;
   country?: string;
   userAgent?: string;
-}
-}
-}
+
+
+
+
 
 export class SessionLimitMiddleware {
   private sessionLimitManager: SessionLimitManager;
@@ -57,7 +59,7 @@ export class SessionLimitMiddleware {
     this.sessionService = sessionService;
     this.auditService = auditService;
     this.options = options;
-  }
+
   
   /**
    * Main middleware function for session limit enforcement
@@ -68,12 +70,12 @@ export class SessionLimitMiddleware {
       // Skip if session limits are disabled
       if (!this.options.enableSessionLimits) {
         return;
-      }
+
       
       // Skip certain paths
       if (this.shouldSkipPath(request.url)) {
         return;
-      }
+
       
       // Extract session context from request
       const sessionContext = this.extractSessionContext(request);
@@ -81,13 +83,13 @@ export class SessionLimitMiddleware {
       // Skip if no user context available
       if (!sessionContext.userId) {
         return;
-      }
+
       
       // Check admin bypass
       if (this.options.adminBypassEnabled && sessionContext.isAdmin) {
         await this.logAdminBypass(sessionContext, request);
         return;
-      }
+
       
       // Perform session limit check
       const limitCheck = await this.sessionLimitManager.canCreateSession(
@@ -100,7 +102,7 @@ export class SessionLimitMiddleware {
           userAgent: sessionContext.userAgent,
           isAdmin: sessionContext.isAdmin,
           isPremium: sessionContext.isPremium
-        }
+
       );
       
       if (!limitCheck.allowed) {
@@ -111,29 +113,28 @@ export class SessionLimitMiddleware {
           reply
         );
         return;
-      }
+
       
       // If this is a session creation request, perform additional checks
       if (this.isSessionCreationRequest(request)) {
         await this.handleSessionCreation(sessionContext, request);
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       console.error('Session limit middleware error:', error);
       
       if (this.options.gracefulDegradation) {
         // Log error and continue
         await this.logMiddlewareError(error, request);
         return;
-      } else {
+ else {
         // Fail the request
         reply.status(500).send({
           error: 'Session limit check failed',
           code: 'SESSION_LIMIT_ERROR'
         });
-      }
-    }
-  }
+
+
+
   
   /**
    * Middleware for WebSocket connections
@@ -148,7 +149,7 @@ export class SessionLimitMiddleware {
     try {
       if (!this.options.enableSessionLimits) {
         return { allowed: true };
-      }
+
       
       const limitCheck = await this.sessionLimitManager.canCreateSession(userId, {
         ipAddress: metadata.ipAddress,
@@ -168,7 +169,7 @@ export class SessionLimitMiddleware {
             connectionId,
             reason: limitCheck.reason,
             conflictingSessions: limitCheck.conflictingSessions
-  }
+
           ipAddress: metadata.ipAddress,
           userAgent: metadata.userAgent,
           severity: 'warning'
@@ -179,23 +180,22 @@ export class SessionLimitMiddleware {
           reason: limitCheck.reason,
           action: limitCheck.action
         };
-      }
+
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('WebSocket session limit enforcement error:', error);
       
       if (this.options.gracefulDegradation) {
         return { allowed: true };
-      } else {
+ else {
         return {
           allowed: false,
           reason: 'Session limit check failed'
         };
-      }
-    }
-  }
+
+
+
   
   /**
    * Middleware for API token validation
@@ -209,7 +209,7 @@ export class SessionLimitMiddleware {
     try {
       if (!this.options.enableSessionLimits) {
         return { allowed: true };
-      }
+
       
       // API tokens have different limits - check API-specific limits
       const apiLimitCheck = await this.checkAPITokenLimits(userId, tokenId, metadata);
@@ -222,29 +222,28 @@ export class SessionLimitMiddleware {
             tokenId,
             reason: apiLimitCheck.reason,
             metadata
-  }
+
           ipAddress: metadata.ipAddress,
           severity: 'warning'
         });
         
         return apiLimitCheck;
-      }
+
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('API token session limit enforcement error:', error);
       
       if (this.options.gracefulDegradation) {
         return { allowed: true };
-      } else {
+ else {
         return {
           allowed: false,
           reason: 'API token limit check failed'
         };
-      }
-    }
-  }
+
+
+
   
   /**
    * Real-time session monitoring middleware
@@ -265,15 +264,14 @@ export class SessionLimitMiddleware {
       if (!sessionValidation.valid) {
         await this.handleSessionTermination(sessionId, userId, sessionValidation.reason || 'Session invalid');
         return;
-      }
+
       
       // Check for suspicious activity patterns
       await this.checkSuspiciousActivity(sessionId, userId, activityType);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Session monitoring error:', error);
-    }
-  }
+
+
   
   /**
    * Graceful session termination with user notification
@@ -301,21 +299,19 @@ export class SessionLimitMiddleware {
               sessionId,
               reason,
               gracePeriodMinutes
-  }
+
             sessionId,
             severity: 'info'
           });
-          
-        } catch (error) {
+ catch (error) {
           console.error('Error terminating session after grace period:', error);
-        }
+
       }, gracePeriodMinutes * 60 * 1000);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error in graceful session termination:', error);
       throw error;
-    }
-  }
+
+
   
   private extractSessionContext(request: FastifyRequest): RequestSessionContext {
     // Extract from authentication context (assuming it's set by auth middleware)
@@ -333,17 +329,17 @@ export class SessionLimitMiddleware {
       country: headers['x-country'] as string || this.getCountryFromIP(request),
       userAgent: headers['user-agent'] as string
     };
-  }
+
   
   private shouldSkipPath(path: string): boolean {
     return this.options.skipPaths.some(skipPath => {
       if (skipPath.includes('*')) {
         const pattern = skipPath.replace(/\*/g, '.*');
         return new RegExp(`^${pattern}$`).test(path);
-      }
+
       return path === skipPath;
     });
-  }
+
   
   private isSessionCreationRequest(request: FastifyRequest): boolean {
     // Detect if this is a login/session creation request
@@ -355,7 +351,7 @@ export class SessionLimitMiddleware {
       (method === 'POST' && path.includes('/auth/session')) ||
       (method === 'POST' && path.includes('/auth/refresh'))
     );
-  }
+
   
   private async handleLimitViolation(
     sessionContext: RequestSessionContext,
@@ -376,7 +372,7 @@ export class SessionLimitMiddleware {
           timestamp: new Date()
         }
       );
-    }
+
     
     // Handle different types of violations
     if (limitCheck.action) {
@@ -389,8 +385,8 @@ export class SessionLimitMiddleware {
               sessionId,
               'Session terminated due to concurrent session limit'
             );
-          }
-        }
+
+
           
         // Allow new session
         reply.header('X-Session-Action', 'terminated_conflicting');
@@ -417,8 +413,8 @@ export class SessionLimitMiddleware {
           details: limitCheck.action.details
         });
         return;
-      }
-    }
+
+
     
     // Default: deny the request
     reply.status(429).send({
@@ -427,7 +423,7 @@ export class SessionLimitMiddleware {
       message: limitCheck.reason,
       retryAfter: limitCheck.gracePeriodMinutes ? limitCheck.gracePeriodMinutes * 60 : 300
     });
-  }
+
   
   private async handleSessionCreation(
     sessionContext: RequestSessionContext,
@@ -443,12 +439,12 @@ export class SessionLimitMiddleware {
         deviceFingerprint: sessionContext.deviceFingerprint,
         country: sessionContext.country,
         userAgent: sessionContext.userAgent
-  }
+
       ipAddress: sessionContext.ipAddress,
       userAgent: sessionContext.userAgent,
       severity: 'info'
     });
-  }
+
   
   private async checkAPITokenLimits(
     userId: string,
@@ -461,7 +457,7 @@ export class SessionLimitMiddleware {
     
     // Placeholder implementation
     return { allowed: true };
-  }
+
   
   private async checkSuspiciousActivity(
     sessionId: string,
@@ -488,12 +484,12 @@ export class SessionLimitMiddleware {
           activityType,
           requestCount: rapidRequests.length,
           timeWindow: '5 minutes'
-  }
+
         sessionId,
         severity: 'warning'
       });
-    }
-  }
+
+
   
   private async handleSessionTermination(
     sessionId: string,
@@ -505,7 +501,7 @@ export class SessionLimitMiddleware {
     
     // Notify user
     await this.notifyUserSessionTermination(userId, sessionId, reason, 0);
-  }
+
   
   private async notifyUserSessionTermination(
     userId: string,
@@ -527,11 +523,11 @@ export class SessionLimitMiddleware {
         sessionId,
         reason,
         gracePeriodMinutes
-  }
+
       sessionId,
       severity: 'info'
     });
-  }
+
   
   private async logAdminBypass(
     sessionContext: RequestSessionContext,
@@ -545,12 +541,12 @@ export class SessionLimitMiddleware {
         path: request.url,
         method: request.method,
         ipAddress: sessionContext.ipAddress
-  }
+
       ipAddress: sessionContext.ipAddress,
       userAgent: sessionContext.userAgent,
       severity: 'info'
     });
-  }
+
   
   private async logMiddlewareError(error: unknown, request: FastifyRequest): Promise<void> {
 
@@ -563,10 +559,10 @@ export class SessionLimitMiddleware {
         error: error.message,
         path: request.url,
         method: request.method
-  }
+
       severity: 'error'
     });
-  }
+
   
   private getClientIP(request: FastifyRequest): string {
     const forwarded = request.headers['x-forwarded-for'] as string;
@@ -574,20 +570,20 @@ export class SessionLimitMiddleware {
     
     if (forwarded) {
       return forwarded.split(',')[0].trim();
-    }
+
     
     if (realIP) {
       return realIP;
-    }
+
     
     return request.socket.remoteAddress || 'unknown';
-  }
+
   
   private getCountryFromIP(request: FastifyRequest): string {
     // This would integrate with a GeoIP service
     // For now, return a placeholder
     return request.headers['cf-ipcountry'] as string || 'unknown';
-  }
+
   
   private async sendWebhookNotification(
     webhookUrl: string,
@@ -599,12 +595,11 @@ export class SessionLimitMiddleware {
       // Implementation for webhook notifications
       // This would make an HTTP POST to the webhook URL
       console.log(`Sending webhook notification to ${webhookUrl}:`, { eventType, data });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error sending webhook notification:', error);
-    }
-  }
-}
+
+
+
 
 /**
  * Factory function to create the middleware
@@ -639,4 +634,3 @@ export function createSessionLimitMiddleware(
     monitorActiveSession: middleware.monitorActiveSession.bind(middleware),
     terminateSessionGracefully: middleware.terminateSessionGracefully.bind(middleware)
   };
-}

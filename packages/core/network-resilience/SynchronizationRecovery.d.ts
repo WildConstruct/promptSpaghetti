@@ -1,16 +1,15 @@
 import { EventEmitter } from 'events';
 
 }
-export interface DocumentState {
-    version: number;
+}
+export interface DocumentState { version: number;
     checksum: string;
     lastModified: number;
     operations: DocumentOperation[];
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface DocumentOperation {
-    id: string;
+}
+export interface DocumentOperation { id: string;
     type: 'create' | 'update' | 'delete' | 'move';
     target: 'node' | 'edge' | 'property';
     targetId: string;
@@ -19,53 +18,49 @@ export interface DocumentOperation {
     timestamp: number;
     userId: string;
     version: number;
-    dependencies?: string[];
-
+    dependencies?: string[] }
 }
-export interface SyncDelta {
-    operations: DocumentOperation[];
+}
+export interface SyncDelta { operations: DocumentOperation[];
     fromVersion: number;
     toVersion: number;
     conflicts: ConflictInfo[];
     metadata: {
         operationCount: number;
         estimatedSize: number;
-        compression?: string;
+        compression?: string }
 }
     };
 
 }
-export interface ConflictInfo {
-    id: string;
+}
+export interface ConflictInfo { id: string;
     type: 'concurrent_edit' | 'version_mismatch' | 'dependency_missing' | 'data_corruption';
     operation1: DocumentOperation;
     operation2?: DocumentOperation;
     description: string;
     resolutionOptions: ConflictResolution[];
     autoResolvable: boolean;
-    severity: 'low' | 'medium' | 'high' | 'critical';
-
+    severity: 'low' | 'medium' | 'high' | 'critical' }
 }
-export interface ConflictResolution {
-    strategy: 'mine' | 'theirs' | 'merge' | 'manual';
+}
+export interface ConflictResolution { strategy: 'mine' | 'theirs' | 'merge' | 'manual';
     description: string;
     result?: any;
-    confidence: number;
-
+    confidence: number }
 }
-export interface SyncProgress {
-    phase: 'detecting' | 'downloading' | 'applying' | 'validating' | 'completed' | 'failed';
+}
+export interface SyncProgress { phase: 'detecting' | 'downloading' | 'applying' | 'validating' | 'completed' | 'failed';
     totalOperations: number;
     processedOperations: number;
     currentOperation?: DocumentOperation;
     estimatedTimeRemaining?: number;
     bytesTransferred?: number;
     bytesTotal?: number;
-    errors: Error[];
-
+    errors: Error[] }
 }
-export interface RecoveryConfig {
-    maxDeltaSize: number;
+}
+export interface RecoveryConfig { maxDeltaSize: number;
     maxOperationsPerBatch: number;
     checksumValidation: boolean;
     conflictDetection: boolean;
@@ -75,11 +70,10 @@ export interface RecoveryConfig {
     maxRecoveryTime: number;
     enableDependencyTracking: boolean;
     validateIntegrity: boolean;
-    backupBeforeRecovery: boolean;
-
+    backupBeforeRecovery: boolean }
 }
-export interface RecoveryStats {
-    totalRecoveries: number;
+}
+export interface RecoveryStats { totalRecoveries: number;
     successfulRecoveries: number;
     failedRecoveries: number;
     averageRecoveryTime: number;
@@ -100,9 +94,9 @@ export declare class SynchronizationRecovery extends EventEmitter {
      * Start synchronization recovery for a document
      */
     startRecovery();
-      documentId: string,
-      localState: DocumentState,
-      serverStateProvider: (),
+      documentId: string;
+      localState: DocumentState;
+      serverStateProvider: () }
     ) => Promise<DocumentState>): Promise<SyncDelta>;
     /**
      * Calculate differential sync between local and server state
@@ -202,4 +196,5 @@ export declare class SynchronizationRecovery extends EventEmitter {
     private chunkArray;
 
 //# sourceMappingURL=SynchronizationRecovery.d.ts.map
+}
 }

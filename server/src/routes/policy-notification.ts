@@ -17,7 +17,7 @@ import {
   NotificationSeverity,
   AudienceTargetType,
   NotificationStatus
-} from '../services/PolicyNotificationService';
+ from '../services/PolicyNotificationService';
 
 // Request/Response Schemas
 const SendNotificationRequestSchema = z.object({
@@ -201,7 +201,7 @@ const UpdatePreferencesRequestSchema = z.object({
         enabled: z.boolean(),
         frequency: z.enum(['HOURLY', 'DAILY', 'WEEKLY']),
         time: z.string().optional()
-  }
+
     }),
     quietHours: z.object({
       enabled: z.boolean(),
@@ -227,7 +227,7 @@ const UpdatePreferencesRequestSchema = z.object({
       enabled: z.boolean(),
       criteria: z.record(z.any())
     }))
-  }
+
 });
 
 export async function policyNotificationRoutes(fastify: FastifyInstance) {
@@ -242,7 +242,7 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof SendNotificationRequestSchema>;
-  }>('/send', {
+>('/send', {
     schema: {
       description: 'Send policy notification to specified audience',
       tags: ['Policy Notifications'],
@@ -259,20 +259,20 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
                 notificationId: { type: 'string' },
                 status: { type: 'string' },
                 estimatedDelivery: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('notification:send')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const notification = {
@@ -290,17 +290,16 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
             notificationId: result.notificationId,
             status: 'SENT',
             estimatedDelivery: new Date(Date.now() + 5 * 60 * 1000).toISOString() // 5 minutes
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error sending notification:', error);
         reply.code(500).send({
           error: 'Failed to send notification',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -309,7 +308,7 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
    */
   fastify.put<{
     Body: z.infer<typeof UpdatePreferencesRequestSchema>;
-  }>('/preferences', {
+>('/preferences', {
     schema: {
       description: 'Update user notification preferences',
       tags: ['Policy Notifications'],
@@ -325,15 +324,15 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
               properties: {
                 updated: { type: 'boolean' },
                 effectiveDate: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { userId, preferences } = request.body;
@@ -345,17 +344,16 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
           data: {
             updated: result.updated,
             effectiveDate: new Date().toISOString()
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error updating preferences:', error);
         reply.code(500).send({
           error: 'Failed to update preferences',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -364,7 +362,7 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Params: { notificationId: string };
-  }>('/:notificationId', {
+>('/:notificationId', {
     schema: {
       description: 'Get notification delivery status and details',
       tags: ['Policy Notifications'],
@@ -373,22 +371,22 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           notificationId: { type: 'string' }
-  }
+
         required: ['notificationId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { notificationId } = request.params;
@@ -399,15 +397,14 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
           success: true,
           data: notification
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error getting notification status:', error);
         reply.code(500).send({
           error: 'Failed to get notification status',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -421,7 +418,7 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
       channel?: string;
       framework?: string;
     };
-  }>('/analytics', {
+>('/analytics', {
     schema: {
       description: 'Get notification delivery analytics and insights',
       tags: ['Policy Notifications'],
@@ -433,8 +430,8 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
           policyId: { type: 'string' },
           channel: { type: 'string' },
           framework: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -447,20 +444,20 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
                 trends: { type: 'array' },
                 channels: { type: 'object' },
                 compliance: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('notification:analytics:view')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const filters = request.query;
@@ -471,14 +468,12 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
           success: true,
           data: analytics
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error getting delivery analytics:', error);
         reply.code(500).send({
           error: 'Failed to get delivery analytics',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
-}

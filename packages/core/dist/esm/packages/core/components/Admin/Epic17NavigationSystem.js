@@ -11,7 +11,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Shield, ToggleLeft, ChevronRight, ChevronDown, Search, Star, Clock, Menu, X, ArrowLeft, HelpCircle } from 'lucide-react';
+import { Shield, ToggleLeft, Users, FileText, ShoppingCart, BarChart3, Settings, Key, ScrollText, ChevronRight, ChevronDown, Search, Star, Clock, Menu, X, ArrowLeft, Bell, HelpCircle, Zap } from 'lucide-react';
 import { useEpic17Authorization } from '../../../client/src/hooks/useEpic17Authorization';
 [];
 badge ?  : NavigationBadge;
@@ -24,201 +24,565 @@ metadata: {
     tags: string;
 }
 ;
-export const Epic17NavigationSystem = ({
-    currentSection = 'overview',
-    onSectionChange,
-    variant = 'sidebar',
-    showBreadcrumbs = true,
-    showQuickActions = true,
-    enableSearch = true
-});
 {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const { canAccess, userRoles, availableSections } = useEpic17Authorization();
-    // Navigation state
-    const [state, setState] = useState({});
-    expandedSections: new Set(['feature-management', 'user-management']),
-        pinnedItems;
-    new Set(['feature-toggles', 'user-accounts']),
-        recentItems;
-    [],
-        favoriteItems;
-    new Set(['feature-toggles', 'permissions']),
-        searchQuery;
-    '',
-        mobileMenuOpen;
-    false,
-    ;
-}
-;
-// Filter navigation items based on permissions
-const availableNavItems = useMemo(() => {
-    const filterItems = (items) => {
-        return items.filter(item => { });
-        // For now, return all items - in full implementation would check permissions
-        return true;
-    };
-}).map(item => ({}), ...item, children, item.children ? filterItems(item.children) : undefined);
-;
-;
-return filterItems(EPIC17_NAVIGATION);
-[canAccess];
-;
-// Generate navigation context
-const navigationContext = useMemo(() => {
-    const pathSegments = location.pathname.split('/').filter(Boolean);
-    const currentPath = location.pathname;
-    // Find current item
-    const findCurrentItem = (items, segments) => {
-        for (const item of items) {
-            if (item.path === currentPath)
-                return item;
-            if (item.children) {
-                const found = findCurrentItem(item.children, segments);
-                if (found)
-                    return found;
-                return null;
+    id: 'feature-management',
+        label;
+    'Feature Management',
+        description;
+    'Feature toggles and rollout controls',
+        icon;
+    ToggleLeft,
+        path;
+    '/admin/features',
+        children;
+    [
+        {
+            id: 'feature-toggles',
+            label: 'Feature Toggles',
+            description: 'Manage feature flags and rollouts',
+            icon: ToggleLeft,
+            path: '/admin/features/toggles',
+            badge: { type: 'count', value: 12, color: 'blue' },
+            metadata: {},
+            category: 'feature_toggles',
+            priority: 90,
+            riskLevel: 'high',
+            epic: '17.1',
+            tags: ['toggles', 'rollouts', 'features'],
+        },
+        {
+            id: 'toggle-dependencies',
+            label: 'Dependencies',
+            description: 'Manage toggle dependencies and conflicts',
+            icon: Zap,
+            path: '/admin/features/dependencies',
+            metadata: {},
+            category: 'dependencies',
+            priority: 85,
+            riskLevel: 'high',
+            tags: ['dependencies', 'conflicts', 'analysis'],
+        },
+        {
+            id: 'toggle-conditions',
+            label: 'Conditions',
+            description: 'Advanced targeting and conditions',
+            icon: Settings,
+            path: '/admin/features/conditions',
+            metadata: {},
+            category: 'conditions',
+            priority: 80,
+            riskLevel: 'medium',
+            tags: ['conditions', 'targeting', 'rules']
+        }
+    ],
+        metadata;
+    {
+        category: 'feature_management',
+            priority;
+        95,
+            riskLevel;
+        'high',
+            epic;
+        '17.1',
+            tags;
+        ['features', 'management'],
+        ;
+    }
+    {
+        id: 'user-management',
+            label;
+        'User Management',
+            description;
+        'User accounts and permissions',
+            icon;
+        Users,
+            path;
+        '/admin/users',
+            children;
+        [
+            {
+                id: 'user-accounts',
+                label: 'User Accounts',
+                description: 'Manage user accounts and profiles',
+                icon: Users,
+                path: '/admin/users/accounts',
+                badge: { type: 'count', value: 1247, color: 'green' },
+                metadata: {},
+                category: 'user_accounts',
+                priority: 80,
+                riskLevel: 'critical',
+                tags: ['users', 'accounts', 'profiles'],
+            },
+            {
+                id: 'permissions',
+                label: 'Permissions',
+                description: 'Role-based access control',
+                icon: Shield,
+                path: '/admin/users/permissions',
+                badge: { type: 'alert', value: '!', color: 'yellow', pulse: true },
+                metadata: {},
+                category: 'permissions',
+                priority: 85,
+                riskLevel: 'critical',
+                tags: ['permissions', 'rbac', 'security'],
+            },
+            {
+                id: 'activity-monitoring',
+                label: 'Activity Monitoring',
+                description: 'User activity and behavior tracking',
+                icon: BarChart3,
+                path: '/admin/users/activity',
+                metadata: {},
+                category: 'monitoring',
+                priority: 70,
+                riskLevel: 'medium',
+                tags: ['activity', 'monitoring', 'analytics']
             }
+        ],
+            metadata;
+        {
+            category: 'user_management',
+                priority;
+            90,
+                riskLevel;
+            'critical',
+                epic;
+            '17.3',
+                tags;
+            ['users', 'permissions'],
             ;
-            const currentItem = findCurrentItem(availableNavItems, pathSegments);
-            // Generate breadcrumbs
-            const breadcrumbs = [
-                { label: 'Admin', path: '/admin', icon: Shield, active: false }
-            ];
-            if (currentItem) {
-                // Add parent breadcrumbs
-                const parentPath = currentItem.path.split('/').slice(0, -1).join('/');
-                if (parentPath !== '/admin') {
-                    breadcrumbs.push({});
-                    label: 'Section',
-                        path;
-                    parentPath,
-                        active;
-                    false,
+        }
+        {
+            id: 'content-management',
+                label;
+            'Content Management',
+                description;
+            'Content moderation and publishing',
+                icon;
+            FileText,
+                path;
+            '/admin/content',
+                children;
+            [
+                {
+                    id: 'content-review',
+                    label: 'Content Review',
+                    description: 'Moderate and review content',
+                    icon: FileText,
+                    path: '/admin/content/review',
+                    badge: { type: 'count', value: 23, color: 'red', pulse: true },
+                    metadata: {},
+                    category: 'content_review',
+                    priority: 75,
+                    riskLevel: 'medium',
+                    tags: ['content', 'review', 'moderation'],
+                },
+                {
+                    id: 'content-categories',
+                    label: 'Categories',
+                    description: 'Manage content categories and tags',
+                    icon: Settings,
+                    path: '/admin/content/categories',
+                    metadata: {},
+                    category: 'categories',
+                    priority: 60,
+                    riskLevel: 'low',
+                    tags: ['categories', 'taxonomy', 'organization']
+                }
+            ],
+                metadata;
+            {
+                category: 'content_management',
+                    priority;
+                75,
+                    riskLevel;
+                'medium',
+                    epic;
+                '17.2',
+                    tags;
+                ['content', 'moderation'],
+                ;
+            }
+            {
+                id: 'marketplace',
+                    label;
+                'Marketplace Admin',
+                    description;
+                'Marketplace management and transactions',
+                    icon;
+                ShoppingCart,
+                    path;
+                '/admin/marketplace',
+                    children;
+                [
+                    {
+                        id: 'template-review',
+                        label: 'Template Review',
+                        description: 'Review and approve templates',
+                        icon: FileText,
+                        path: '/admin/marketplace/review',
+                        badge: { type: 'count', value: 8, color: 'purple' },
+                        metadata: {},
+                        category: 'template_review',
+                        priority: 70,
+                        riskLevel: 'medium',
+                        tags: ['templates', 'review', 'approval'],
+                    },
+                    {
+                        id: 'transactions',
+                        label: 'Transactions',
+                        description: 'Monitor transactions and payments',
+                        icon: BarChart3,
+                        path: '/admin/marketplace/transactions',
+                        metadata: {},
+                        category: 'transactions',
+                        priority: 65,
+                        riskLevel: 'high',
+                        tags: ['transactions', 'payments', 'monitoring']
+                    }
+                ],
+                    metadata;
+                {
+                    category: 'marketplace',
+                        priority;
+                    70,
+                        riskLevel;
+                    'medium',
+                        epic;
+                    '17.5',
+                        tags;
+                    ['marketplace', 'commerce'],
                     ;
                 }
+                {
+                    id: 'system',
+                        label;
+                    'System Configuration',
+                        description;
+                    'System settings and configuration',
+                        icon;
+                    Settings,
+                        path;
+                    '/admin/system',
+                        children;
+                    [
+                        {
+                            id: 'api-management',
+                            label: 'API Management',
+                            description: 'Manage API keys and rate limits',
+                            icon: Key,
+                            path: '/admin/system/api',
+                            metadata: {},
+                            category: 'api_management',
+                            priority: 60,
+                            riskLevel: 'high',
+                            tags: ['api', 'keys', 'rate-limiting'],
+                        },
+                        {
+                            id: 'integrations',
+                            label: 'Integrations',
+                            description: 'Third-party integrations and webhooks',
+                            icon: Zap,
+                            path: '/admin/system/integrations',
+                            metadata: {},
+                            category: 'integrations',
+                            priority: 55,
+                            riskLevel: 'medium',
+                            tags: ['integrations', 'webhooks', 'third-party']
+                        }
+                    ],
+                        metadata;
+                    {
+                        category: 'system_configuration',
+                            priority;
+                        65,
+                            riskLevel;
+                        'high',
+                            epic;
+                        '17.4',
+                            tags;
+                        ['system', 'configuration'],
+                        ;
+                    }
+                    {
+                        id: 'analytics',
+                            label;
+                        'Analytics & Monitoring',
+                            description;
+                        'System analytics and performance monitoring',
+                            icon;
+                        BarChart3,
+                            path;
+                        '/admin/analytics',
+                            children;
+                        [
+                            {
+                                id: 'dashboards',
+                                label: 'Dashboards',
+                                description: 'System health and performance dashboards',
+                                icon: BarChart3,
+                                path: '/admin/analytics/dashboards',
+                                metadata: {},
+                                category: 'dashboards',
+                                priority: 50,
+                                riskLevel: 'low',
+                                tags: ['dashboards', 'metrics', 'performance'],
+                            },
+                            {
+                                id: 'alerts',
+                                label: 'Alerts',
+                                description: 'System alerts and notifications',
+                                icon: Bell,
+                                path: '/admin/analytics/alerts',
+                                badge: { type: 'status', value: 'OK', color: 'green' },
+                                metadata: {},
+                                category: 'alerts',
+                                priority: 65,
+                                riskLevel: 'medium',
+                                tags: ['alerts', 'notifications', 'monitoring']
+                            }
+                        ],
+                            metadata;
+                        {
+                            category: 'analytics',
+                                priority;
+                            60,
+                                riskLevel;
+                            'low',
+                                epic;
+                            '17.4',
+                                tags;
+                            ['analytics', 'monitoring'],
+                            ;
+                        }
+                        {
+                            id: 'audit',
+                                label;
+                            'Audit & Security',
+                                description;
+                            'Audit logs and security monitoring',
+                                icon;
+                            ScrollText,
+                                path;
+                            '/admin/audit',
+                                badge;
+                            {
+                                type: 'info', value;
+                                'New', color;
+                                'blue';
+                            }
+                            metadata: {
+                                category: 'audit_security',
+                                    priority;
+                                85,
+                                    riskLevel;
+                                'critical',
+                                    tags;
+                                ['audit', 'security', 'compliance'];
+                                ;
+                            }
+                            export const Epic17NavigationSystem = ({
+                                currentSection = 'overview',
+                                onSectionChange,
+                                variant = 'sidebar',
+                                showBreadcrumbs = true,
+                                showQuickActions = true,
+                                enableSearch = true
+                            });
+                            {
+                                const location = useLocation();
+                                const navigate = useNavigate();
+                                const { canAccess, userRoles, availableSections } = useEpic17Authorization();
+                                // Navigation state
+                                const [state, setState] = useState({});
+                                expandedSections: new Set(['feature-management', 'user-management']),
+                                    pinnedItems;
+                                new Set(['feature-toggles', 'user-accounts']),
+                                    recentItems;
+                                [],
+                                    favoriteItems;
+                                new Set(['feature-toggles', 'permissions']),
+                                    searchQuery;
+                                '',
+                                    mobileMenuOpen;
+                                false,
+                                ;
+                            }
+                            ;
+                            // Filter navigation items based on permissions
+                            const availableNavItems = useMemo(() => {
+                                const filterItems = (items) => {
+                                    return items.filter(item => { });
+                                    // For now, return all items - in full implementation would check permissions
+                                    return true;
+                                };
+                            }).map(item => ({}), ...item, children, item.children ? filterItems(item.children) : undefined);
+                        }
+                        ;
+                    }
+                    ;
+                    return filterItems(EPIC17_NAVIGATION);
+                }
+                [canAccess];
+                ;
+                // Generate navigation context
+                const navigationContext = useMemo(() => {
+                    const pathSegments = location.pathname.split('/').filter(Boolean);
+                    const currentPath = location.pathname;
+                    // Find current item
+                    const findCurrentItem = (items, segments) => {
+                        for (const item of items) {
+                            if (item.path === currentPath)
+                                return item;
+                            if (item.children) {
+                                const found = findCurrentItem(item.children, segments);
+                                if (found)
+                                    return found;
+                                return null;
+                            }
+                            ;
+                            const currentItem = findCurrentItem(availableNavItems, pathSegments);
+                            // Generate breadcrumbs
+                            const breadcrumbs = [
+                                { label: 'Admin', path: '/admin', icon: Shield, active: false }
+                            ];
+                            if (currentItem) {
+                                // Add parent breadcrumbs
+                                const parentPath = currentItem.path.split('/').slice(0, -1).join('/');
+                                if (parentPath !== '/admin') {
+                                    breadcrumbs.push({});
+                                    label: 'Section',
+                                        path;
+                                    parentPath,
+                                        active;
+                                    false,
+                                    ;
+                                }
+                            }
+                        }
+                    };
+                });
+                breadcrumbs.push({});
+                label: currentItem.label,
+                    path;
+                currentItem.path,
+                    icon;
+                currentItem.icon,
+                    active;
+                true,
+                ;
             }
+            ;
+            return {
+                currentPath,
+                currentSection: currentItem?.id || 'overview',
+                parentSections: [],
+                breadcrumbs,
+                availableActions: generateQuickActions(currentItem),
+            };
         }
-    };
-});
-breadcrumbs.push({});
-label: currentItem.label,
-    path;
-currentItem.path,
-    icon;
-currentItem.icon,
-    active;
-true,
-;
-;
-return {
-    currentPath,
-    currentSection: currentItem?.id || 'overview',
-    parentSections: [],
-    breadcrumbs,
-    availableActions: generateQuickActions(currentItem),
-};
-[location.pathname, availableNavItems];
-;
-// Generate quick actions based on current context
-const generateQuickActions = (currentItem) => {
-    const baseActions = [
-        {
-            id: 'search',
-            label: 'Search',
-            description: 'Search across all admin sections',
-            icon: Search,
-            action: () => setState(prev => ({ ...prev, searchQuery: '' })),
-            shortcut: 'Ctrl+K',
-            category: 'primary',
-            enabled: true
-        },
-        {
-            id: 'help',
-            label: 'Help & Documentation',
-            description: 'Access help and documentation',
-            icon: HelpCircle,
-            action: () => window.open('/docs/epic17', '_blank'),
-            category: 'secondary',
-            enabled: true
-        }
-    ];
-    // Add context-specific actions
-    if (currentItem?.id === 'feature-toggles') {
-        baseActions.unshift({});
-        id: 'create-toggle',
-            label;
-        'Create Toggle',
-            description;
-        'Create a new feature toggle',
-            icon;
-        ToggleLeft,
-            action;
-        () => navigate('/admin/features/toggles/create'),
-            shortcut;
-        'Ctrl+N',
-            category;
-        'primary',
-            enabled;
-        true,
+        [location.pathname, availableNavItems];
         ;
+        // Generate quick actions based on current context
+        const generateQuickActions = (currentItem) => {
+            const baseActions = [
+                {
+                    id: 'search',
+                    label: 'Search',
+                    description: 'Search across all admin sections',
+                    icon: Search,
+                    action: () => setState(prev => ({ ...prev, searchQuery: '' })),
+                    shortcut: 'Ctrl+K',
+                    category: 'primary',
+                    enabled: true
+                },
+                {
+                    id: 'help',
+                    label: 'Help & Documentation',
+                    description: 'Access help and documentation',
+                    icon: HelpCircle,
+                    action: () => window.open('/docs/epic17', '_blank'),
+                    category: 'secondary',
+                    enabled: true
+                }
+            ];
+            // Add context-specific actions
+            if (currentItem?.id === 'feature-toggles') {
+                baseActions.unshift({});
+                id: 'create-toggle',
+                    label;
+                'Create Toggle',
+                    description;
+                'Create a new feature toggle',
+                    icon;
+                ToggleLeft,
+                    action;
+                () => navigate('/admin/features/toggles/create'),
+                    shortcut;
+                'Ctrl+N',
+                    category;
+                'primary',
+                    enabled;
+                true,
+                ;
+            }
+            ;
+            return baseActions;
+        };
+        // Handle navigation item click
+        const handleNavItemClick = useCallback((item, event) => {
+            event.preventDefault();
+            if (item.children && item.children.length > 0) {
+                // Toggle expansion for items with children
+                setState(prev => ({}), ...prev, expandedSections, prev.expandedSections.has(item.id))
+                    ? new Set([...prev.expandedSections].filter(id => id !== item.id))
+                    : new Set([...prev.expandedSections, item.id]),
+                ;
+            }
+        });
+    }
+    {
+        // Navigate to item
+        navigate(item.path);
+        onSectionChange?.(item.id);
+        // Add to recent items
+        setState(prev => ({}), ...prev, recentItems, [
+            {
+                id: item.id,
+                label: item.label,
+                path: item.path,
+                timestamp: new Date(),
+                icon: item.icon,
+            },
+            ...prev.recentItems.filter(r => r.id !== item.id).slice(0, 9)
+        ]);
     }
     ;
-    return baseActions;
-};
-// Handle navigation item click
-const handleNavItemClick = useCallback((item, event) => {
-    event.preventDefault();
-    if (item.children && item.children.length > 0) {
-        // Toggle expansion for items with children
-        setState(prev => ({}), ...prev, expandedSections, prev.expandedSections.has(item.id))
-            ? new Set([...prev.expandedSections].filter(id => id !== item.id))
-            : new Set([...prev.expandedSections, item.id]),
-        ;
+    // Close mobile menu if open
+    if (variant === 'mobile') {
+        setState(prev => ({ ...prev, mobileMenuOpen: false }));
     }
-});
-{
-    // Navigate to item
-    navigate(item.path);
-    onSectionChange?.(item.id);
-    // Add to recent items
-    setState(prev => ({}), ...prev, recentItems, [,
-        {
-            id: item.id,
-            label: item.label,
-            path: item.path,
-            timestamp: new Date(),
-            icon: item.icon,
-        },
-        ...prev.recentItems.filter(r => r.id !== item.id).slice(0, 9)
-    ]);
-}
-;
-// Close mobile menu if open
-if (variant === 'mobile') {
-    setState(prev => ({ ...prev, mobileMenuOpen: false }));
-}
-[navigate, onSectionChange, variant];
-;
-// Render navigation badge
-const renderBadge = (badge) => {
-    const colorClasses = {
-        blue: 'bg-blue-500 text-white',
-        green: 'bg-green-500 text-white',
-        yellow: 'bg-yellow-500 text-yellow-900',
-        red: 'bg-red-500 text-white',
-        purple: 'bg-purple-500 text-white',
-        gray: 'bg-gray-500 text-white',
-    };
-    return;
-    _jsx("span", { className: `
+    [navigate, onSectionChange, variant];
+    ;
+    // Render navigation badge
+    const renderBadge = (badge) => {
+        const colorClasses = {
+            blue: 'bg-blue-500 text-white',
+            green: 'bg-green-500 text-white',
+            yellow: 'bg-yellow-500 text-yellow-900',
+            red: 'bg-red-500 text-white',
+            purple: 'bg-purple-500 text-white',
+            gray: 'bg-gray-500 text-white',
+        };
+        return;
+        _jsx("span", { className: `
           px-2 py-1 rounded-full text-xs font-medium
           ${colorClasses[badge.color]}
           ${badge.pulse ? 'animate-pulse' : ''}
         `, children: badge.value });
-};
-;
+    };
+    ;
+}
 ;
 // Render navigation item
 const renderNavItem = (item, level = 0) => {

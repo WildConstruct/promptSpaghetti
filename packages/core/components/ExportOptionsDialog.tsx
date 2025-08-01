@@ -9,64 +9,50 @@ import React, { useState, useMemo } from 'react';
 import { ResultExportService, ExportFormat, ResultExportOptions } from '../services/ResultExportService';
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 import { professionalColors } from '../styles/professional-design-system';
-}
-interface ExportOptionsDialogProps {
-  open: boolean;
+
+
+interface ExportOptionsDialogProps { open: boolean;
   onClose: () => void;
   results: PreviewResultWithPath;
   selectedIndices?: number;
   exportType: 'individual' | 'batch' | 'comparison';
   individualIndex?: number;
   onExport: (format: ExportFormat, options: ResultExportOptions) => Promise<void>;
-  sourceGraph?: unknown;
-}
-}
+  sourceGraph?: unknown }
 
-export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
-  open,
-  onClose,
-  results,
-  selectedIndices = [],
-  exportType,
-  individualIndex,
-  onExport,
+
+
+export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({ open
+  onClose
+  results
+  selectedIndices = []
+  exportType
+  individualIndex
+  onExport }
   sourceGraph
-}) => {
-  const exportService = new ResultExportService();
+}) => { const exportService = new ResultExportService();
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('json-simple');
   const [options, setOptions] = useState<ResultExportOptions>({
-    format: 'json-simple',
-    includeMetadata: true,
-    includeExecutionPaths: false,
-    includeDebugInfo: false
-  });
+  format: 'json-simple'
+  includeMetadata: true
+  includeExecutionPaths: false
+  includeDebugInfo: false }
+});
   const [isExporting, setIsExporting] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
-  const availableFormats = useMemo(() => {
-    return exportService.getAvailableFormats().filter(format => {
+  const [validationErrors, setValidationErrors] = useState<string>([]);
+  const availableFormats = useMemo(() => { return exportService.getAvailableFormats().filter(format => {
       if (exportType === 'individual') {
-        return format.supportsIndividual;
-      } else if (exportType === 'batch') {
-        return format.supportsBatch;
-      }
+        return format.supportsIndividual } else if (exportType === 'batch') { return format.supportsBatch }
       return format.supportsBatch; // comparison uses batch support
     });
   }, [exportType]);
-  const exportResults = useMemo(() => {
-    if (exportType === 'individual' && typeof individualIndex === 'number') {
-      return [results[individualIndex]].filter(Boolean);
-    } else if (exportType === 'batch') {
-      return selectedIndices.map(index => results[index]).filter(Boolean);
-    }
+  const exportResults = useMemo(() => { if (exportType === 'individual' && typeof individualIndex === 'number') {
+      return [results[individualIndex]].filter(Boolean) } else if (exportType === 'batch') { return selectedIndices.map(index => results[index]).filter(Boolean) }
     return results;
   }, [results, exportType, individualIndex, selectedIndices]);
-  const sizeEstimate = useMemo(() => {
-    if (exportResults.length === 0) return null;
-    return exportService.estimateExportSize(exportResults, selectedFormat, options);
-  }, [exportResults, selectedFormat, options]);
-  const formatInfo = useMemo(() => {
-    return availableFormats.find(f => f.format === selectedFormat);
-  }, [availableFormats, selectedFormat]);
+  const sizeEstimate = useMemo(() => { if (exportResults.length === 0) return null;
+    return exportService.estimateExportSize(exportResults, selectedFormat, options) }, [exportResults, selectedFormat, options]);
+  const formatInfo = useMemo(() => { return availableFormats.find(f => f.format === selectedFormat) }, [availableFormats, selectedFormat]);
   const handleFormatChange = (format: ExportFormat) => {
     setSelectedFormat(format);
     setOptions(prev => ({ ...prev, format }));
@@ -82,70 +68,64 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
       for (let i = 0; i < keys.length - 1; i++) {
         if (!current[keys[i]]) current[keys[i]] = {};
         current = current[keys[i]];
-      }
+
       current[keys[keys.length - 1]] = value;
       return newOptions;
     });
   };
-  const handleExport = async () => {
-    const errors = exportService.validateExportOptions(selectedFormat, options);
+  const handleExport = async () => { const errors = exportService.validateExportOptions(selectedFormat, options);
     if (errors.length > 0) {
       setValidationErrors(errors);
       return;
     setIsExporting(true);
     try {
       await onExport(selectedFormat, options);
-      onClose();
-    } catch (error) {
-  console.error('Export failed:', error);
-  setValidationErrors(['Export failed: ' + (error instanceof Error ? error.message : 'Unknown error')]);
-} finally {
-      setIsExporting(false);
-  };
+      onClose() } catch (error) { console.error('Export failed:', error);
+  setValidationErrors(['Export failed: ' + (error instanceof Error ? error.message : 'Unknown error')]) } finally { setIsExporting(false) };
   if (!open) return null;
   return;
-    <div style={{
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100vw',
-  height: '100vh',
-  background: 'rgba(0,0,0,0.5)',
-  zIndex: 2000,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}}>
-      <div style={{
-  background: professionalColors.background.elevated,
-  borderRadius: 12,
-  padding: 24,
-  minWidth: 600,
-  maxWidth: 800,
-  maxHeight: '90vh',
-  overflow: 'auto',
-  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)',
-  color: professionalColors.text.primary,
-}}>
+    <div style={ {
+  position: 'fixed'
+  top: 0
+  left: 0
+  width: '100vw'
+  height: '100vh'
+  background: 'rgba(0,0,0,0.5)'
+  zIndex: 2000
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center' }
+}>
+      <div style={ {
+  background: professionalColors.background.elevated
+  borderRadius: 12
+  padding: 24
+  minWidth: 600
+  maxWidth: 800
+  maxHeight: '90vh'
+  overflow: 'auto'
+  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)'
+  color: professionalColors.text.primary }
+}>
         {/* Header */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 20,
-          paddingBottom: 16,
-          borderBottom: `1px solid ${professionalColors.border.subtle}`,
-        }}>
+        <div style={ {
+          display: 'flex'
+          justifyContent: 'space-between'
+          alignItems: 'center'
+          marginBottom: 20
+          paddingBottom: 16 }
+          borderBottom: `1px solid ${professionalColors.border.subtle}`
+}>
           <h2 style={{ margin: 0, fontSize: 18, fontWeight: 600 }}>
             Export Options
           </h2>
-          <div style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 12,
-  fontSize: 12,
-  color: professionalColors.text.secondary,
-}}>
+          <div style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 12
+  fontSize: 12
+  color: professionalColors.text.secondary }
+}>
             <span>📊 {exportType === 'individual' ? '1 result' : `${exportResults.length} results`}</span>
             {sizeEstimate && (
               <span>💾 ~{sizeEstimate.estimatedSize}{sizeEstimate.unit}</span>
@@ -153,104 +133,104 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
           </div>
         </div>
         {/* Validation Errors */}
-        {validationErrors.length > 0 && (
+        { validationErrors.length > 0 && (
           <div style={{
-  background: '#fef2f2',
-  border: '1px solid #fecaca',
-  borderRadius: 6,
-  padding: 12,
-  marginBottom: 16,
-}}>
+  background: '#fef2f2'
+  border: '1px solid #fecaca'
+  borderRadius: 6
+  padding: 12
+  marginBottom: 16 }
+}>
             {validationErrors.map((error, index) => (
-              <div key={index} style={{
-  color: '#dc2626',
-  fontSize: 12,
-  marginBottom: index < validationErrors.length - 1 ? 6 : 0,
-}}>
+              <div key={index} style={ {
+  color: '#dc2626'
+  fontSize: 12
+  marginBottom: index < validationErrors.length - 1 ? 6 : 0 }
+}>
                 ⚠️ {error}
               </div>
             ))}
           </div>
         )}
         {/* Size Warning */}
-        {sizeEstimate?.warning && (
+        { sizeEstimate?.warning && (
           <div style={{
-  background: '#fffbeb',
-  border: '1px solid #fed7aa',
-  borderRadius: 6,
-  padding: 12,
-  marginBottom: 16,
-  color: '#92400e',
-  fontSize: 12,
-}}>
+  background: '#fffbeb'
+  border: '1px solid #fed7aa'
+  borderRadius: 6
+  padding: 12
+  marginBottom: 16
+  color: '#92400e'
+  fontSize: 12 }
+}>
             ⚡ {sizeEstimate.warning}
           </div>
         )}
         {/* Format Selection */}
         <div style={{ marginBottom: 20 }}>
-          <label style={{
-  display: 'block',
-  marginBottom: 8,
-  fontSize: 14,
-  fontWeight: 500,
-  color: professionalColors.text.primary,
-}}>
+          <label style={ {
+  display: 'block'
+  marginBottom: 8
+  fontSize: 14
+  fontWeight: 500
+  color: professionalColors.text.primary }
+}>
             Export Format
           </label>
-          <div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-  gap: 8,
-}}>
+          <div style={ {
+  display: 'grid'
+  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))'
+  gap: 8 }
+}>
             {availableFormats.map((format) => (
               <div
                 key={format.format}
                 onClick={() => handleFormatChange(format.format)}
-                style={{
-  padding: 12,
+                style={ {
+  padding: 12
   border: selectedFormat === format.format
-    ? '2px solid #4d7cff'
-    : '1px solid #e5e7eb',
-  borderRadius: 6,
-  cursor: 'pointer',
-  background: selectedFormat === format.format ? '#f0f4ff' : '#fff',
-  transition: 'all 0.2s',
-}}
+  ? '2px solid #4d7cff'
+  : '1px solid #e5e7eb'
+  borderRadius: 6
+  cursor: 'pointer'
+  background: selectedFormat === format.format ? '#f0f4ff' : '#fff'
+  transition: 'all 0.2s' }
+
               >
-                <div style={{
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'flex-start',
-  marginBottom: 4,
-}}>
+                <div style={ {
+  display: 'flex'
+  justifyContent: 'space-between'
+  alignItems: 'flex-start'
+  marginBottom: 4 }
+}>
                   <div style={{ fontSize: 14, fontWeight: 500 }}>{format.name}</div>
-                  <div style={{
-  fontSize: 10,
-  padding: '2px 6px',
-  borderRadius: 4,
+                  <div style={ {
+  fontSize: 10
+  padding: '2px 6px'
+  borderRadius: 4
   background: {
-  text: '#e5e7eb',
-  data: '#dbeafe',
-  film: '#fef3c7',
-  vfx: '#f3e8ff',
-  analysis: '#ecfdf5',
-}[format.category],
-                    color: {
-  text: '#374151',
-  data: '#1e40af',
-  film: '#92400e',
-  vfx: '#7c3aed',
-  analysis: '#065f46',
-}[format.category]
-                  }}>
+  text: '#e5e7eb'
+  data: '#dbeafe'
+  film: '#fef3c7'
+  vfx: '#f3e8ff'
+  analysis: '#ecfdf5' }
+[format.category]
+                    color: { 
+  text: '#374151'
+  data: '#1e40af'
+  film: '#92400e'
+  vfx: '#7c3aed'
+  analysis: '#065f46' }
+[format.category]
+}>
                     {format.category.toUpperCase()}
                   </div>
                 </div>
-                <div style={{
-  fontSize: 11,
-  color: professionalColors.text.secondary,
-  lineHeight: 1.4,
-}}>
+                <div style={ {
+  fontSize: 11
+  color: professionalColors.text.secondary
+  lineHeight: 1.4 }
+}>
                   {format.description}
                 </div>
               </div>
@@ -258,28 +238,28 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
           </div>
         </div>
         {/* Format-specific Options */}
-        {formatInfo && (
+        { formatInfo && (
           <div style={{
-  background: '#f8fafc',
-  border: '1px solid #e2e8f0',
-  borderRadius: 6,
-  padding: 16,
-  marginBottom: 20,
-}}>
-            <h3 style={{
-  margin: '0 0 12px 0',
-  fontSize: 14,
-  fontWeight: 500,
-}}>
+  background: '#f8fafc'
+  border: '1px solid #e2e8f0'
+  borderRadius: 6
+  padding: 16
+  marginBottom: 20 }
+}>
+            <h3 style={ {
+  margin: '0 0 12px 0'
+  fontSize: 14
+  fontWeight: 500 }
+}>
               {formatInfo.name} Options
             </h3>
             {/* Basic Options */}
-            <div style={{
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: 12,
-  marginBottom: 16,
-}}>
+            <div style={ {
+  display: 'grid'
+  gridTemplateColumns: '1fr 1fr'
+  gap: 12
+  marginBottom: 16 }
+}>
               <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
                 <input
                   type="checkbox"
@@ -428,17 +408,17 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
           </div>
         )}
         {/* Actions */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingTop: 16,
+        <div style={ {
+          display: 'flex'
+          justifyContent: 'space-between'
+          alignItems: 'center'
+          paddingTop: 16 }
           borderTop: `1px solid ${professionalColors.border.subtle}`
-        }}>
-          <div style={{
-  fontSize: 11,
-  color: professionalColors.text.secondary,
-}}>
+}>
+          <div style={ {
+  fontSize: 11
+  color: professionalColors.text.secondary }
+}>
             {exportType === 'individual' 
               ? `Exporting result ${(individualIndex || 0) + 1} of ${results.length}`
               : exportType === 'batch'
@@ -449,45 +429,45 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
             <button
               onClick={onClose}
               disabled={isExporting}
-              style={{
-  padding: '8px 16px',
-  background: 'transparent',
-  border: '1px solid #d1d5db',
-  borderRadius: 4,
-  cursor: isExporting ? 'not-allowed' : 'pointer',
-  fontSize: 12,
-  color: professionalColors.text.secondary,
-}}
+              style={ {
+  padding: '8px 16px'
+  background: 'transparent'
+  border: '1px solid #d1d5db'
+  borderRadius: 4
+  cursor: isExporting ? 'not-allowed' : 'pointer'
+  fontSize: 12
+  color: professionalColors.text.secondary }
+
             >
               Cancel
             </button>
             <button
               onClick={handleExport}
               disabled={isExporting || validationErrors.length > 0}
-              style={{
-  padding: '8px 16px',
-  background: isExporting || validationErrors.length > 0 ? '#9ca3af' : '#4d7cff',
-  color: '#fff',
-  border: 'none',
-  borderRadius: 4,
-  cursor: isExporting || validationErrors.length > 0 ? 'not-allowed' : 'pointer',
-  fontSize: 12,
-  fontWeight: 500,
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-}}
+              style={ {
+  padding: '8px 16px'
+  background: isExporting || validationErrors.length > 0 ? '#9ca3af' : '#4d7cff'
+  color: '#fff'
+  border: 'none'
+  borderRadius: 4
+  cursor: isExporting || validationErrors.length > 0 ? 'not-allowed' : 'pointer'
+  fontSize: 12
+  fontWeight: 500
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8 }
+
             >
-              {isExporting ? (
+              { isExporting ? (
                 <>
                   <div style={{
-  width: 12,
-  height: 12,
-  border: '2px solid transparent',
-  borderTop: '2px solid #fff',
-  borderRadius: '50%',
-  animation: 'spin 1s linear infinite',
-}} />
+  width: 12
+  height: 12
+  border: '2px solid transparent'
+  borderTop: '2px solid #fff'
+  borderRadius: '50%'
+  animation: 'spin 1s linear infinite' }
+} />
                   Exporting...
                 </>
               ) : (
@@ -500,11 +480,11 @@ export const ExportOptionsDialog: React.FC<ExportOptionsDialogProps> = ({
         </div>
       </div>
       {/* CSS Animation */}
-      <style>{`
+      <style>{ `
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
+          0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
+
       `}</style>
     </div>
   );

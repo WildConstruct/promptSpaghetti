@@ -6,8 +6,7 @@
  * revenue sharing, collaborations, and attribution claims.
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Users,
+import { Users,
   DollarSign,
   FileText,
   Award,
@@ -18,20 +17,19 @@ import {
   Clock,
   ExternalLink,
   Edit,
-  Eye,
+  Eye }
   Share2
-} from 'lucide-react';
-import {
-  CreatorDashboardResponse,
-  TemplateAttributionResponse,
+ from 'lucide-react';
+import { CreatorDashboardResponse,
+  TemplateAttributionResponse }
   MarketplaceAttributionAnalytics
-} from '../../types/marketplaceAttribution';
+ from '../../types/marketplaceAttribution';
 
 // =============================================================================
 // Component Types
 // =============================================================================
 
-}
+
 export interface CreatorAttributionDashboardProps {
   userId: string;
   onTemplateClick?: (templateId: string) => void;
@@ -56,13 +54,13 @@ export interface CreatorAttributionDashboardProps {
   // =============================================================================
   // Creator Attribution Dashboard Component
   // =============================================================================
-}
-}
-export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardProps> = ({)
-  userId,
-  onTemplateClick,
-  onCollaborationClick,
-  onSettingsClick,
+
+
+export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardProps> = ({ )
+  userId
+  onTemplateClick
+  onCollaborationClick
+  onSettingsClick }
   className = ''
 }) => {
   // State management
@@ -84,8 +82,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   headers: {
           'Authorization': `Bearer ${getAuthToken()}`}
       });
-      if (!response.ok) {
-  throw new Error('Failed to load creator dashboard');
+      if (!response.ok) { throw new Error('Failed to load creator dashboard');
   const data = await response.json();
   if (data.success) {
   setDashboard(data);
@@ -96,66 +93,54 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   pendingRevenue: data.templates.reduce((sum: number, t: unknown) => sum + t.revenue.pending, 0),
   collaborations: data.collaborations.length,
   activeClaims: 0, // Would be calculated from claims data,
-  verificationRate: data.profile.attributionReputation.accuracyScore,
+  verificationRate: data.profile.attributionReputation.accuracyScore }
 };
         setStats(calculatedStats);
         // Calculate top performers
         const performers: TemplatePerformance = data.templates
-          .map((template: Error) => ({,)
+          .map((template: Error) => ({ );
   templateId: template.templateId,
   title: template.title,
   views: template.performance.views,
   purchases: template.performance.purchases,
   revenue: template.revenue.total,
   rating: template.performance.rating,
-  trend: template.performance.purchases > 10 ? 'up' : 'stable' as const,
+  trend: template.performance.purchases > 10 ? 'up' : 'stable' as const }
 }))
           .sort((a: TemplatePerformance, b: TemplatePerformance) => b.revenue - a.revenue)
           .slice(0, 5);
         setTopPerformers(performers);
-      } else {
-        throw new Error(data.error || 'Failed to load dashboard');
-    } catch (error) {
-  console.error('Failed to fetch creator dashboard:', error);
-  setError(error instanceof Error ? error.message : 'Unknown error occurred');
-} finally {
-      setLoading(false);
-  }, [userId]);
-  useEffect(() => {
-    fetchDashboard();
-  }, [fetchDashboard]);
+ else { throw new Error(data.error || 'Failed to load dashboard') } catch (error) { console.error('Failed to fetch creator dashboard:', error);
+  setError(error instanceof Error ? error.message : 'Unknown error occurred') } finally { setLoading(false) }, [userId]);
+  useEffect(() => { fetchDashboard() }, [fetchDashboard]);
   // =============================================================================
   // UI Rendering Methods
   // =============================================================================
-  const renderStatsCards = () => {
-  if (!stats) return null;
-  const statCards = [;
+  const renderStatsCards = () => { if (!stats) return null;
+  const statCards = [
   {
   icon: FileText,
   label: 'Templates Created',
   value: stats.totalTemplates.toString(),
   subtext: 'Active templates',
-  color: 'blue',
-}
-      {
-        icon: DollarSign,
-        label: 'Total Revenue',
+  color: 'blue' }
+
+      { icon: DollarSign,
+        label: 'Total Revenue' }
         value: `$${(stats.totalRevenue / 100).toFixed(2)}`}
 },
   subtext: `$${(stats.pendingRevenue / 100).toFixed(2)} pending`}
 },
-  color: 'green'
-  }
-      {
-  icon: Users,
+  color: 'green';
+
+      { icon: Users,
   label: 'Collaborations',
   value: stats.collaborations.toString(),
   subtext: 'Active partnerships',
-  color: 'purple',
-}
-      {
-        icon: Award,
-        label: 'Verification Rate',
+  color: 'purple' }
+
+      { icon: Award,
+        label: 'Verification Rate' }
         value: `${stats.verificationRate.toFixed(1)}%`}
 },
   subtext: 'Attribution accuracy',
@@ -242,11 +227,11 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
                         {Array.from({ length: 5 }, (_, i) => ()
                           <span
                             key={i}
-                            className={`text-xs ${
+                            className={ `text-xs ${
   i < Math.floor(template.performance.rating)
   ? 'text-yellow-400'
-  : 'text-gray-300',
-}`}
+  : 'text-gray-300' }
+`}
                           >
                             ★
                           </span>
@@ -295,13 +280,13 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
                 <div className="flex-1">
                   <div className="flex items-center">
                     <h4 className="text-sm font-medium text-gray-900">{collaboration.title}</h4>
-                    <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
+                    <span className={ `ml-2 px-2 py-1 text-xs rounded-full ${
   collaboration.status === 'active'
   ? 'bg-green-100 text-green-800'
-  : collaboration.status === 'completed',
+  : collaboration.status === 'completed'
   ? 'bg-blue-100 text-blue-800'
-  : 'bg-yellow-100 text-yellow-800',
-}`}>
+  : 'bg-yellow-100 text-yellow-800' }
+`}>
                       {collaboration.status}
                     </span>
                   </div>
@@ -365,9 +350,9 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
                     ${(template.revenue / 100).toFixed(2)}
                   </p>
                   <div className="flex items-center mt-1">
-                    <TrendingUp className={`w-4 h-4 ${
-  template.trend === 'up' ? 'text-green-500' : 'text-gray-400',
-}`} />
+                    <TrendingUp className={ `w-4 h-4 ${
+  template.trend === 'up' ? 'text-green-500' : 'text-gray-400' }
+`} />
                     <span className="text-xs text-gray-500 ml-1">
                       {template.rating.toFixed(1)} ★
                     </span>
@@ -482,19 +467,19 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
       <div className="border-b border-gray-200 mb-8">
         <nav className="-mb-px flex space-x-8">
           {[
-            { id: 'overview', label: 'Overview', icon: TrendingUp },
-            { id: 'templates', label: 'Templates', icon: FileText },
-            { id: 'collaborations', label: 'Collaborations', icon: Users },
+            { id: 'overview', label: 'Overview', icon: TrendingUp }
+            { id: 'templates', label: 'Templates', icon: FileText }
+            { id: 'collaborations', label: 'Collaborations', icon: Users }
             { id: 'analytics', label: 'Analytics', icon: Award }
           ].map((tab) => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center py-2 px-1 border-b-2 font-medium text-sm ${
+              className={ `flex items-center py-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
             >
               <tab.icon className="w-4 h-4 mr-2" />
               {tab.label}

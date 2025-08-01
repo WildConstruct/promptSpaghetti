@@ -153,13 +153,13 @@ describe('Policy Versioning API', () => {
               {
                 title: 'Content Guidelines',
                 content: 'All content must be appropriate and high-quality.'
-  }
+
               {
                 title: 'Prohibited Content',
                 content: 'No offensive or copyrighted material is allowed.'
-              }
+
             ]
-  }
+
           contentType: 'json',
           changeType: 'create',
           changeSummary: 'Initial version of the content policy',
@@ -388,17 +388,17 @@ describe('Policy Versioning API', () => {
             {
               title: 'Content Guidelines',
               content: 'All content must be appropriate, high-quality, and original.'
-  }
+
             {
               title: 'Prohibited Content',
               content: 'No offensive, copyrighted, or spam material is allowed.'
-  }
+
             {
               title: 'Content Review Process',
               content: 'All content undergoes automated and manual review.'
-            }
+
           ]
-  }
+
         changeType: 'update',
         changeSummary: 'Added content review process and improved guidelines'
       };
@@ -439,7 +439,7 @@ describe('Policy Versioning API', () => {
             removedSections: expect.any(Number),
             modifiedSections: expect.any(Number),
             totalChanges: expect.any(Number)
-          }
+
         });
 
         // Verify that changes were detected
@@ -646,7 +646,7 @@ describe('Policy Versioning API', () => {
         payload: {
           title: 'Large Policy Version',
           content: largeContent
-        }
+
       });
 
       // Should either succeed or fail gracefully (not crash)

@@ -7,8 +7,8 @@
 import { ValidationResult, AdvancedNodeData } from '../runtime/advanced';
 
 }
-export interface NodeValidationConfig {
-    /** Enable strict type checking */
+}
+export interface NodeValidationConfig { /** Enable strict type checking */
     strictTypeValidation: boolean;
     /** Enable security validation (injection attacks, dangerous operations) */
     securityValidation: boolean;
@@ -21,8 +21,8 @@ export interface NodeValidationConfig {
     /** Maximum memory usage per node (bytes) */
     maxMemoryUsage: number;
     /** Maximum execution time per node (milliseconds) */
-    maxExecutionTime: number;
-
+    maxExecutionTime: number }
+}
 }
 export interface NodeValidationResult extends ValidationResult {
     /** Security-specific validation results */
@@ -33,12 +33,10 @@ export interface NodeValidationResult extends ValidationResult {
 }
   };
     /** Performance-specific validation results */
-    performance: {
-        passed: boolean;
+    performance: { passed: boolean;
         issues: PerformanceIssue[];
         estimatedMemoryUsage: number;
-        estimatedExecutionTime: number;
-    };
+        estimatedExecutionTime: number };
     /** Type safety validation results */
     typeSafety: {
         passed: boolean;
@@ -46,30 +44,26 @@ export interface NodeValidationResult extends ValidationResult {
         compatibility: 'full' | 'partial' | 'incompatible'
   };
     /** Schema validation results */
-    schema: {
-        passed: boolean;
-        schemaErrors: string[];
-    };
+    schema: { passed: boolean;
+        schemaErrors: string[] };
 
 }
-export interface SecurityThreat {
-    type: 'injection' | 'eval' | 'prototype_pollution' | 'xss' | 'unsafe_function' | 'dangerous_import';
+}
+export interface SecurityThreat { type: 'injection' | 'eval' | 'prototype_pollution' | 'xss' | 'unsafe_function' | 'dangerous_import';
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     location: string;
-    recommendation: string;
-
+    recommendation: string }
 }
-export interface PerformanceIssue {
-    type: 'memory' | 'execution_time' | 'infinite_loop' | 'inefficient_algorithm';
+}
+export interface PerformanceIssue { type: 'memory' | 'execution_time' | 'infinite_loop' | 'inefficient_algorithm';
     severity: 'low' | 'medium' | 'high';
     description: string;
     impact: string;
-    suggestion: string;
-
+    suggestion: string }
 }
-export interface TypeError {
-    expected: string;
+}
+export interface TypeError { expected: string;
     actual: string;
     field: string;
     description: string;
@@ -154,7 +148,7 @@ export declare class NodeValidationUtils {
      */
     static estimateNodePerformance(nodeData: AdvancedNodeData): {
         memory: number;
-        time: number;
+        time: number }
 }
     };
     /**

@@ -13,7 +13,7 @@ import {
   DisputeManagementService,
   DisputeCreationRequest,
   DisputeUpdateRequest
-} from '../services/dispute/DisputeManagementService';
+ from '../services/dispute/DisputeManagementService';
 import {
   DisputeType,
   DisputeCategory,
@@ -21,10 +21,10 @@ import {
   DisputeOutcome,
   DisputeSearchCriteria,
   DisputeEvidence
-} from '../../../packages/core/types/DisputeTypes';
+ from '../../../packages/core/types/DisputeTypes';
 
-}
-}
+
+
 export interface CreateDisputeRequest {
   transactionId: string;
   type: DisputeType;
@@ -43,13 +43,14 @@ export interface CreateDisputeRequest {
     description: string;
     content: string;
     category?: string;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 export interface UpdateDisputeRequest {
   status?: DisputeStatus;
   assignedTo?: string;
@@ -61,24 +62,26 @@ export interface UpdateDisputeRequest {
     description: string;
     content: string;
     category?: string;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 export interface ResolveDisputeRequest {
   outcome: DisputeOutcome;
   finalAmount: number;
   reason: string;
   notes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AddEvidenceRequest {
   evidence: Array<{
     type: string;
@@ -87,13 +90,14 @@ export interface AddEvidenceRequest {
     content: string;
     attachments?: string[];
     category?: string;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 export interface CreateResponseRequest {
   responseType: 'accept' | 'contest' | 'partial_accept';
   argument: string;
@@ -103,17 +107,18 @@ export interface CreateResponseRequest {
     description: string;
     content: string;
     category?: string;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 export class DisputeAdminController {
   private disputeService: DisputeManagementService;
 
   constructor(disputeService: DisputeManagementService) {
     this.disputeService = disputeService;
-  }
+
 
   // =============================================================================
   // Dispute Management Endpoints
@@ -136,11 +141,11 @@ export class DisputeAdminController {
         dateRange: query.fromDate && query.toDate ? {
           from: new Date(query.fromDate),
           to: new Date(query.toDate)
-        } : undefined,
+ : undefined,
         amountRange: query.minAmount && query.maxAmount ? {
           min: parseFloat(query.minAmount),
           max: parseFloat(query.maxAmount)
-        } : undefined,
+ : undefined,
         sortBy: query.sortBy || 'createdAt',
         sortOrder: query.sortOrder || 'desc',
         limit: query.limit ? parseInt(query.limit) : 50,
@@ -157,16 +162,16 @@ export class DisputeAdminController {
           limit: criteria.limit || 50,
           offset: criteria.offset || 0,
           pages: Math.ceil(result.total / (criteria.limit || 50))
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch disputes',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * GET /admin/disputes/:disputeId
@@ -181,20 +186,20 @@ export class DisputeAdminController {
           success: false,
           error: 'Dispute not found'
         });
-      }
+
 
       reply.code(200).send({
         success: true,
         data: dispute
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch dispute',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * POST /admin/disputes
@@ -210,7 +215,7 @@ export class DisputeAdminController {
           success: false,
           error: 'Missing required fields: transactionId, type, category, amount, description'
         });
-      }
+
 
       const disputeRequest: DisputeCreationRequest = {
         transactionId: body.transactionId,
@@ -234,14 +239,14 @@ export class DisputeAdminController {
         data: dispute,
         message: 'Dispute created successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to create dispute',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * PUT /admin/disputes/:disputeId
@@ -271,14 +276,14 @@ export class DisputeAdminController {
         data: updatedDispute,
         message: 'Dispute updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to update dispute',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * POST /admin/disputes/:disputeId/resolve
@@ -295,7 +300,7 @@ export class DisputeAdminController {
           success: false,
           error: 'Missing required fields: outcome, finalAmount, reason'
         });
-      }
+
 
       const resolution = await this.disputeService.resolveDispute(
         disputeId,
@@ -310,14 +315,14 @@ export class DisputeAdminController {
         data: resolution,
         message: 'Dispute resolved successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to resolve dispute',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Evidence Management Endpoints
@@ -337,7 +342,7 @@ export class DisputeAdminController {
           success: false,
           error: 'No evidence provided'
         });
-      }
+
 
       const evidence = await this.disputeService.addEvidence(
         disputeId,
@@ -350,14 +355,14 @@ export class DisputeAdminController {
         data: evidence,
         message: 'Evidence added successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to add evidence',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * PUT /admin/disputes/:disputeId/evidence/:evidenceId/verify
@@ -379,14 +384,14 @@ export class DisputeAdminController {
         success: true,
         message: `Evidence ${verified ? 'verified' : 'rejected'} successfully`
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to verify evidence',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Response Management Endpoints
@@ -407,7 +412,7 @@ export class DisputeAdminController {
           success: false,
           error: 'Missing required fields: responseType, argument'
         });
-      }
+
 
       const response = await this.disputeService.createDisputeResponse(
         disputeId,
@@ -422,14 +427,14 @@ export class DisputeAdminController {
         data: response,
         message: 'Response created successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to create response',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * POST /admin/disputes/responses/:responseId/submit
@@ -445,14 +450,14 @@ export class DisputeAdminController {
         success: true,
         message: 'Response submitted successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to submit response',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Analytics and Metrics Endpoints
@@ -467,7 +472,7 @@ export class DisputeAdminController {
       const period = query.fromDate && query.toDate ? {
         startDate: new Date(query.fromDate),
         endDate: new Date(query.toDate)
-      } : undefined;
+ : undefined;
 
       const metrics = await this.disputeService.getDisputeMetrics(period);
       
@@ -475,14 +480,14 @@ export class DisputeAdminController {
         success: true,
         data: metrics
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch dispute metrics',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * GET /admin/disputes/analytics
@@ -496,7 +501,7 @@ export class DisputeAdminController {
           success: false,
           error: 'Date range is required: fromDate and toDate'
         });
-      }
+
 
       const period = {
         startDate: new Date(query.fromDate),
@@ -509,14 +514,14 @@ export class DisputeAdminController {
         success: true,
         data: analytics
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to generate dispute analytics',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * GET /admin/disputes/dashboard
@@ -542,7 +547,7 @@ export class DisputeAdminController {
         break;
       default:
         startDate.setDate(endDate.getDate() - 30);
-      }
+
 
       const [
         metrics,
@@ -568,7 +573,7 @@ export class DisputeAdminController {
           sortBy: 'createdAt',
           sortOrder: 'desc',
           limit: 10
-  }
+
       ]);
 
       reply.code(200).send({
@@ -579,16 +584,16 @@ export class DisputeAdminController {
           activeDisputes: activeDisputes.disputes,
           urgentDisputes: urgentDisputes.disputes,
           period: { startDate, endDate }
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch dashboard data',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // System Status and Health Endpoints
@@ -607,31 +612,31 @@ export class DisputeAdminController {
           database: 'healthy',
           trustScoring: 'healthy',
           enforcement: 'healthy'
-  }
+
         metrics: {
           uptime: process.uptime(),
           memoryUsage: process.memoryUsage(),
           version: process.version
-  }
+
         disputeSystemStatus: {
           processingQueue: 'normal',
           responseTime: 'good',
           errorRate: 'low'
-        }
+
       };
 
       reply.code(200).send({
         success: true,
         data: health
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch system health',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * GET /admin/disputes/enums
@@ -672,14 +677,14 @@ export class DisputeAdminController {
         success: true,
         data: enums
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch enums',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Utility Methods
@@ -712,5 +717,4 @@ export class DisputeAdminController {
     // System and Health
     fastify.get('/admin/disputes/health', controller.getSystemHealth.bind(controller));
     fastify.get('/admin/disputes/enums', controller.getDisputeEnums.bind(controller));
-  }
-}
+

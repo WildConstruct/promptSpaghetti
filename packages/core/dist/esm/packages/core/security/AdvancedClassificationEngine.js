@@ -8,7 +8,11 @@
 import { EventEmitter } from 'events';
 import { DataClassifier, ClassificationLevel, DataCategory, ComplianceFramework, ClassificationPolicyManager } from './DataClassifier';
  > ;
-temporalTrends: Array;
+temporalTrends: Array < {
+    timestamp: Date,
+    count: number,
+    avgConfidence: number
+} > ;
 lastUpdated: Date;
 ;
 environmentContext: {
@@ -21,6 +25,18 @@ environmentContext: {
 dataFlow ?  : DataFlow;
 parentClassification ?  : string;
  > ;
+contextualFactors: Array < {
+    factor: string,
+    impact: number,
+    description: string
+} > ;
+riskScore: number;
+remediation: Array < {
+    action: string,
+    priority: 'low' | 'medium' | 'high' | 'critical',
+    description: string,
+    automated: boolean
+} > ;
 workflowsTriggered: string;
 reviewRequired: boolean;
 reviewReason ?  : string;
@@ -166,7 +182,12 @@ void {
 };
 ;
 async;
-trainMLModel(modelId, string, trainingData, (Array));
+trainMLModel(modelId, string, trainingData, Array < {
+    data: DataElement,
+    expectedClassification: ClassificationLevel,
+    context: ClassificationContext
+} >
+);
 Promise < { accuracy: number, metrics: (Record) } > {
     const: model = this.mlModels.get(modelId),
     if(, model) {
@@ -249,10 +270,8 @@ Promise < void  > {
             DataFlow;
             {
                 return Array.from(this.dataFlows.values());
-                generateComplianceReport(((framework, dateRange) => 
-                // This would analyze classifications within the date range
-                // For now, return a mock report structure
-                ));
+                generateComplianceReport(((framework, dateRange) => ) > );
+                recommendations: string;
                 // This would analyze classifications within the date range
                 // For now, return a mock report structure
                 return {
@@ -261,7 +280,7 @@ Promise < void  > {
                     totalClassifications: this.analytics.totalClassifications,
                     compliantClassifications: Math.floor(this.analytics.totalClassifications * 0.95),
                     violations: [], // Would be populated with actual violations,
-                    recommendations: [,
+                    recommendations: [
                         'Consider automated encryption for all RESTRICTED data',
                         'Implement additional access controls for CONFIDENTIAL data',
                         'Review retention policies for PII data'
@@ -297,8 +316,9 @@ Promise < void  > {
                 console.warn(`ML model ${modelId} prediction failed:`, error);
             }
             return predictions;
-            analyzeContextualFactors(data, DataElement);
-            context: ClassificationContext,
+            analyzeContextualFactors(data, DataElement),
+                context;
+            ClassificationContext,
                 baseResult;
             ClassificationResult;
             EnhancedClassificationResult['contextualFactors'];
@@ -358,8 +378,9 @@ Promise < void  > {
                 }
                 ;
                 return factors;
-                calculateRiskScore(baseResult, ClassificationResult);
-                mlPredictions: EnhancedClassificationResult['mlPredictions'],
+                calculateRiskScore(baseResult, ClassificationResult),
+                    mlPredictions;
+                EnhancedClassificationResult['mlPredictions'],
                     contextualFactors;
                 EnhancedClassificationResult['contextualFactors'];
                 number;
@@ -401,8 +422,9 @@ Promise < void  > {
                                     case ClassificationLevel.RESTRICTED: return 90;
                                     default:
                                         return 30;
-                                        shouldRequireReview(result, ClassificationResult);
-                                        riskScore: number,
+                                        shouldRequireReview(result, ClassificationResult),
+                                            riskScore;
+                                        number,
                                             context;
                                         ClassificationContext;
                                         boolean;
@@ -433,8 +455,9 @@ Promise < void  > {
                                                         if (result.complianceRequirements.length > 0)
                                                             return 'Compliance-sensitive data detected';
                                                         return 'Manual review required by policy';
-                                                        generateRemediationActions(result, ClassificationResult);
-                                                        riskScore: number,
+                                                        generateRemediationActions(result, ClassificationResult),
+                                                            riskScore;
+                                                        number,
                                                             context;
                                                         ClassificationContext;
                                                         EnhancedClassificationResult['remediation'];
@@ -535,8 +558,9 @@ Promise < void  > {
                                                                         return result.reviewRequired;
                                                                     default:
                                                                         return false;
-                                                                        evaluateWorkflowConditions(workflow, ClassificationWorkflow);
-                                                                        result: EnhancedClassificationResult,
+                                                                        evaluateWorkflowConditions(workflow, ClassificationWorkflow),
+                                                                            result;
+                                                                        EnhancedClassificationResult,
                                                                             context;
                                                                         ClassificationContext;
                                                                         boolean;
@@ -575,8 +599,9 @@ Promise < void  > {
                                                                                                 default:
                                                                                                     return false;
                                                                                                     async;
-                                                                                                    executeWorkflowAction(action, WorkflowAction);
-                                                                                                    result: EnhancedClassificationResult,
+                                                                                                    executeWorkflowAction(action, WorkflowAction),
+                                                                                                        result;
+                                                                                                    EnhancedClassificationResult,
                                                                                                         context;
                                                                                                     ClassificationContext;
                                                                                                     Promise < void  > {
@@ -602,8 +627,9 @@ Promise < void  > {
                                                                                                     await this.executeAutoRemediateAction(action, result, context);
                                                                                                     break;
                                                                                                     async;
-                                                                                                    executeNotifyAction(action, WorkflowAction);
-                                                                                                    result: EnhancedClassificationResult,
+                                                                                                    executeNotifyAction(action, WorkflowAction),
+                                                                                                        result;
+                                                                                                    EnhancedClassificationResult,
                                                                                                         context;
                                                                                                     ClassificationContext;
                                                                                                     Promise < void  > {
@@ -620,8 +646,9 @@ Promise < void  > {
                                                                                 }
                                                                                 ;
                                                                                 async;
-                                                                                executeEncryptAction(action, WorkflowAction);
-                                                                                result: EnhancedClassificationResult,
+                                                                                executeEncryptAction(action, WorkflowAction),
+                                                                                    result;
+                                                                                EnhancedClassificationResult,
                                                                                     context;
                                                                                 ClassificationContext;
                                                                                 Promise < void  > {
@@ -633,8 +660,9 @@ Promise < void  > {
                                                                                 };
                                                                                 ;
                                                                                 async;
-                                                                                executeQuarantineAction(action, WorkflowAction);
-                                                                                result: EnhancedClassificationResult,
+                                                                                executeQuarantineAction(action, WorkflowAction),
+                                                                                    result;
+                                                                                EnhancedClassificationResult,
                                                                                     context;
                                                                                 ClassificationContext;
                                                                                 Promise < void  > {
@@ -647,8 +675,9 @@ Promise < void  > {
                                                                         }
                                                                         ;
                                                                         async;
-                                                                        executeAuditLogAction(action, WorkflowAction);
-                                                                        result: EnhancedClassificationResult,
+                                                                        executeAuditLogAction(action, WorkflowAction),
+                                                                            result;
+                                                                        EnhancedClassificationResult,
                                                                             context;
                                                                         ClassificationContext;
                                                                         Promise < void  > {
@@ -662,8 +691,9 @@ Promise < void  > {
                                                                         };
                                                                         ;
                                                                         async;
-                                                                        executeEscalateAction(action, WorkflowAction);
-                                                                        result: EnhancedClassificationResult,
+                                                                        executeEscalateAction(action, WorkflowAction),
+                                                                            result;
+                                                                        EnhancedClassificationResult,
                                                                             context;
                                                                         ClassificationContext;
                                                                         Promise < void  > {
@@ -677,8 +707,9 @@ Promise < void  > {
                                                                         };
                                                                         ;
                                                                         async;
-                                                                        executeAutoRemediateAction(action, WorkflowAction);
-                                                                        result: EnhancedClassificationResult,
+                                                                        executeAutoRemediateAction(action, WorkflowAction),
+                                                                            result;
+                                                                        EnhancedClassificationResult,
                                                                             context;
                                                                         ClassificationContext;
                                                                         Promise < void  > {
@@ -709,8 +740,9 @@ Promise < void  > {
                                                                             {
                                                                                 return parseInt(crypto.createHash('md5').update(source).digest('hex').substring(0, 8), 16) % 1000;
                                                                                 async;
-                                                                                performTraining(model, MLClassificationModel);
-                                                                                features: Record < string,
+                                                                                performTraining(model, MLClassificationModel),
+                                                                                    features;
+                                                                                Record < string,
                                                                                     number > [],
                                                                                     trainingData;
                                                                                 any;
@@ -754,8 +786,9 @@ Promise < void  > {
                                                                                         default:
                                                                                             return 1;
                                                                                             async;
-                                                                                            makePrediction(model, MLClassificationModel);
-                                                                                            features: Record;
+                                                                                            makePrediction(model, MLClassificationModel),
+                                                                                                features;
+                                                                                            Record;
                                                                                             Promise < { classification: ClassificationLevel, confidence: number } > {
                                                                                                 // Simulate ML prediction
                                                                                                 const: randomValue = Math.random(),
@@ -855,7 +888,7 @@ Promise < void  > {
                                                                                                                             name: 'High Risk Data Alert',
                                                                                                                             description: 'Alert security team when high-risk data is detected',
                                                                                                                             triggers: [{ type: 'threshold_exceeded', conditions: { riskScore: 80 } }],
-                                                                                                                            actions: [,
+                                                                                                                            actions: [
                                                                                                                                 { type: 'notify', parameters: { recipient: 'security-team', priority: 'high' }, timeout: 5000 },
                                                                                                                                 { type: 'audit_log', parameters: { event: 'high_risk_data_detected' }, timeout: 1000 }
                                                                                                                             ],
@@ -868,7 +901,7 @@ Promise < void  > {
                                                                                                                             name: 'PII Data Protection',
                                                                                                                             description: 'Automatically protect PII data with encryption and access controls',
                                                                                                                             triggers: [{ type: 'classification_complete', conditions: { category: 'pii' } }],
-                                                                                                                            actions: [,
+                                                                                                                            actions: [
                                                                                                                                 { type: 'encrypt', parameters: { type: 'aes-256-gcm' }, timeout: 10000 },
                                                                                                                                 { type: 'audit_log', parameters: { event: 'pii_data_protected' }, timeout: 1000 }
                                                                                                                             ],
@@ -881,7 +914,7 @@ Promise < void  > {
                                                                                                                             name: 'Compliance Review Required',
                                                                                                                             description: 'Escalate compliance-sensitive data for manual review',
                                                                                                                             triggers: [{ type: 'compliance_violation', conditions: {} }],
-                                                                                                                            actions: [,
+                                                                                                                            actions: [
                                                                                                                                 { type: 'escalate', parameters: { level: 'compliance-officer', assignee: 'compliance-team' }, timeout: 15000 },
                                                                                                                                 { type: 'audit_log', parameters: { event: 'compliance_review_required' }, timeout: 1000 }
                                                                                                                             ],

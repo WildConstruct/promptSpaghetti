@@ -17,7 +17,7 @@ import {
   ScheduleStatus,
   ScheduleAction,
   RecurrenceType
-} from '../database/scheduling-models';
+ from '../database/scheduling-models';
 
 // Modification Types and Interfaces
 export type ModificationType = 
@@ -36,8 +36,8 @@ export type ModificationSeverity = 'low' | 'medium' | 'high' | 'critical';
 
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'auto_approved';
 
-}
-}
+
+
 export interface ModificationRequest {
   scheduleId: string;
   modificationType: ModificationType;
@@ -61,12 +61,13 @@ export interface ModificationRequest {
   // Notifications
   notifyAffectedUsers?: boolean;
   notificationChannels?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModificationResult {
   id: string;
   requestId: string;
@@ -104,25 +105,27 @@ export interface ModificationResult {
     code: string;
     message: string;
     recoverable: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ChangeDetail {
   field: string;
   action: 'added' | 'modified' | 'removed';
   oldValue?: unknown;
   newValue?: unknown;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImpactAnalysis {
   severity: ModificationSeverity;
   riskScore: number; // 0-100
@@ -139,24 +142,26 @@ export interface ImpactAnalysis {
   recommendations: string[];
   requiresApproval: boolean;
   suggestedTestingPlan?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AffectedComponent {
   type: 'feature_toggle' | 'schedule' | 'execution' | 'user_group' | 'system';
   id: string;
   name: string;
   impactLevel: 'low' | 'medium' | 'high';
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskFactor {
   id: string;
   category: 'timing' | 'conflicts' | 'dependencies' | 'business' | 'technical';
@@ -165,12 +170,13 @@ export interface RiskFactor {
   likelihood: number; // 0-100
   impact: number; // 0-100
   mitigation?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackPlan {
   id: string;
   canRollback: boolean;
@@ -178,12 +184,13 @@ export interface RollbackPlan {
   timeWindow: number; // minutes
   prerequisites: string[];
   risks: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackStep {
   order: number;
   action: string;
@@ -191,12 +198,13 @@ export interface RollbackStep {
   automated: boolean;
   reversible: boolean;
   estimatedTime: number; // seconds
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BatchModificationRequest {
   scheduleIds: string[];
   modificationType: ModificationType;
@@ -213,12 +221,13 @@ export interface BatchModificationRequest {
   requireIndividualApproval?: boolean;
   requireBatchApproval?: boolean;
   skipImpactAnalysis?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BatchModificationResult {
   id: string;
   totalSchedules: number;
@@ -236,24 +245,26 @@ export interface BatchModificationResult {
   executionTimeMs: number;
   timestamp: string;
   parallelExecution: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModificationHistory {
   scheduleId: string;
   modifications: HistoryEntry[];
   totalModifications: number;
   firstModified: string;
   lastModified: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HistoryEntry {
   id: string;
   modificationType: ModificationType;
@@ -264,9 +275,10 @@ export interface HistoryEntry {
   approvalStatus: ApprovalStatus;
   rollbackId?: string;
   version: string;
-}
-}
-}
+
+
+
+
 
 export class ScheduleModificationService {
   constructor(
@@ -303,7 +315,7 @@ export class ScheduleModificationService {
         return await this.createPendingApprovalResult(
           requestId, schedule, request, impactAnalysis, conflicts, changesSummary, startTime
         );
-      }
+
       
       // 7. Apply the modifications
       const result = await this.applyModifications(
@@ -314,12 +326,11 @@ export class ScheduleModificationService {
       await this.logModification(result);
       
       return result;
-      
-    } catch (error) {
+ catch (error) {
       console.error(`Schedule modification failed for ${request.scheduleId}:`, error);
       return this.createErrorResult(requestId, request, error as Error, startTime);
-    }
-  }
+
+
 
   async modifyMultipleSchedules(request: BatchModificationRequest): Promise<BatchModificationResult> {
 
@@ -352,9 +363,9 @@ export class ScheduleModificationService {
         // Stop on first error if requested
         if (request.stopOnFirstError && batchResults.some(r => r.status === 'failed')) {
           break;
-        }
-      }
-    } else {
+
+
+ else {
       // Process sequentially
       for (const req of individualRequests) {
         const result = await this.modifySchedule(req);
@@ -362,9 +373,9 @@ export class ScheduleModificationService {
 
         if (request.stopOnFirstError && result.status === 'failed') {
           break;
-        }
-      }
-    }
+
+
+
 
     // Analyze batch results
     const successful = results.filter(r => r.status === 'success').length;
@@ -396,7 +407,7 @@ export class ScheduleModificationService {
     await this.logBatchModification(batchResult);
 
     return batchResult;
-  }
+
 
   // Impact Analysis
   async analyzeModificationImpact(
@@ -420,7 +431,7 @@ export class ScheduleModificationService {
         impact: 60,
         mitigation: 'Validate timing against dependent schedules'
       });
-    }
+
 
     // Analyze action changes
     if (request.changes.action) {
@@ -434,7 +445,7 @@ export class ScheduleModificationService {
         impact: 80,
         mitigation: 'Review business impact with stakeholders'
       });
-    }
+
 
     // Analyze recurrence changes
     if (request.changes.recurrence) {
@@ -448,7 +459,7 @@ export class ScheduleModificationService {
         impact: 50,
         mitigation: 'Validate new pattern against capacity'
       });
-    }
+
 
     // Check for active status
     if (schedule.status === ScheduleStatus.ACTIVE) {
@@ -460,19 +471,19 @@ export class ScheduleModificationService {
         impactLevel: 'high',
         description: 'Active schedule modification affects running operations'
       });
-    }
+
 
     // Get future executions count
     const futureExecutions = await this.estimateFutureExecutions(schedule);
     if (futureExecutions > 10) {
       riskScore += 15;
-    }
+
 
     // Estimate affected users (mock calculation)
     const usersAffected = Math.floor(Math.random() * 100) + 10;
     if (usersAffected > 50) {
       riskScore += 10;
-    }
+
 
     // Check for conflicts
     const conflicts = await this.detectModificationConflicts(schedule, request);
@@ -490,13 +501,13 @@ export class ScheduleModificationService {
     if (riskScore > 60) {
       recommendations.push('Consider staging this change in a test environment first');
       recommendations.push('Schedule modification during low-usage periods');
-    }
+
     if (conflicts.length > 0) {
       recommendations.push('Review and resolve schedule conflicts before applying');
-    }
+
     if (futureExecutions > 50) {
       recommendations.push('Monitor execution metrics after modification');
-    }
+
 
     return {
       severity,
@@ -510,7 +521,7 @@ export class ScheduleModificationService {
       recommendations,
       requiresApproval: riskScore > 50 || severity === 'high' || severity === 'critical'
     };
-  }
+
 
   // Conflict Detection
   private async detectModificationConflicts(
@@ -523,7 +534,7 @@ export class ScheduleModificationService {
     // Only check for conflicts if timing is being modified
     if (!request.changes.startTime && !request.changes.endTime) {
       return conflicts;
-    }
+
 
     // Get other schedules for the same toggle
     const relatedSchedules = await this.schedulingDAO.getSchedulesByToggle(schedule.toggleId);
@@ -532,7 +543,7 @@ export class ScheduleModificationService {
       if (otherSchedule.id === schedule.id || 
           otherSchedule.status === ScheduleStatus.CANCELLED) {
         continue;
-      }
+
 
       // Check for time overlap with new times
       const newStartTime = request.changes.startTime ? 
@@ -561,14 +572,14 @@ export class ScheduleModificationService {
             suggestedResolution: {
               action: 'adjust_timing',
               details: 'Consider adjusting the modification timing to avoid overlap'
-            }
+
           });
-        }
-      }
-    }
+
+
+
 
     return conflicts;
-  }
+
 
   // Modification Application
   private async applyModifications(
@@ -613,7 +624,7 @@ export class ScheduleModificationService {
           executionTimeMs: Date.now() - startTime,
           version: '1.0.0'
         };
-      }
+
 
       // Apply changes immediately
       const updatedSchedule = await this.schedulingDAO.updateSchedule(
@@ -623,17 +634,17 @@ export class ScheduleModificationService {
 
       if (!updatedSchedule) {
         throw new Error('Failed to update schedule');
-      }
+
 
       // Recalculate next execution if timing changed
       if (request.changes.startTime || request.changes.recurrence) {
         await this.recalculateNextExecution(updatedSchedule);
-      }
+
 
       // Send notifications if requested
       if (request.notifyAffectedUsers) {
         await this.sendModificationNotifications(updatedSchedule, request);
-      }
+
 
       return {
         id: `mod_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -655,11 +666,10 @@ export class ScheduleModificationService {
         executionTimeMs: Date.now() - startTime,
         version: '1.0.0'
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to apply modifications: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   // Helper Methods
   private async validateModificationRequest(request: ModificationRequest): Promise<FeatureToggleSchedule> {
@@ -667,34 +677,34 @@ export class ScheduleModificationService {
     const schedule = await this.schedulingDAO.getSchedule(request.scheduleId);
     if (!schedule) {
       throw new Error(`Schedule with ID ${request.scheduleId} not found`);
-    }
+
 
     if (schedule.status === ScheduleStatus.COMPLETED) {
       throw new Error('Cannot modify completed schedule');
-    }
+
 
     if (schedule.status === ScheduleStatus.CANCELLED) {
       throw new Error('Cannot modify cancelled schedule');
-    }
+
 
     // Validate specific changes
     if (request.changes.startTime) {
       const startTime = new Date(request.changes.startTime);
       if (startTime <= new Date()) {
         throw new Error('New start time must be in the future');
-      }
-    }
+
+
 
     if (request.changes.endTime && request.changes.startTime) {
       const startTime = new Date(request.changes.startTime);
       const endTime = new Date(request.changes.endTime);
       if (endTime <= startTime) {
         throw new Error('End time must be after start time');
-      }
-    }
+
+
 
     return schedule;
-  }
+
 
   private shouldRequireApproval(request: ModificationRequest, impact: ImpactAnalysis): boolean {
     if (request.approvalRequired) return true;
@@ -704,7 +714,7 @@ export class ScheduleModificationService {
            impact.severity === 'critical' || 
            impact.severity === 'high' ||
            impact.riskScore > 70;
-  }
+
 
   private generateChangesSummary(
     schedule: FeatureToggleSchedule, 
@@ -725,11 +735,11 @@ export class ScheduleModificationService {
           newValue,
           description: this.getChangeDescription(field, oldValue, newValue)
         });
-      }
-    }
+
+
 
     return summary;
-  }
+
 
   private getChangeDescription(field: string, oldValue: Error, newValue: Error): string {
     switch (field) {
@@ -745,8 +755,8 @@ export class ScheduleModificationService {
       return `Priority changed from ${oldValue} to ${newValue}`;
     default:
       return `${field} updated`;
-    }
-  }
+
+
 
   private async estimateFutureExecutions(schedule: FeatureToggleSchedule): Promise<number> {
 
@@ -768,17 +778,17 @@ export class ScheduleModificationService {
         return Math.floor(timeSpan / (30 * 24 * 60 * 60 * 1000 * interval));
       default:
         return 10; // Default estimate
-      }
-    }
+
+
     
     return 1;
-  }
+
 
   private checkTimeOverlap(start1: Date, end1: Date | undefined, start2: Date, end2: Date | undefined): boolean {
     const effectiveEnd1 = end1 || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
     const effectiveEnd2 = end2 || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
     return start1 < effectiveEnd2 && start2 < effectiveEnd1;
-  }
+
 
   private checkActionConflict(action1: ScheduleAction, action2: ScheduleAction): boolean {
     const conflictingActions = [
@@ -789,14 +799,14 @@ export class ScheduleModificationService {
     return conflictingActions.some(([a1, a2]) => 
       (action1 === a1 && action2 === a2) || (action1 === a2 && action2 === a1)
     );
-  }
+
 
   private calculateConflictSeverity(action1: ScheduleAction, action2: ScheduleAction): 'low' | 'medium' | 'high' | 'critical' {
     if (action1 === ScheduleAction.DISABLE || action2 === ScheduleAction.DISABLE) {
       return 'critical';
-    }
+
     return 'high';
-  }
+
 
   private createRollbackPlan(schedule: FeatureToggleSchedule, request: ModificationRequest): RollbackPlan {
     const steps: RollbackStep[] = [];
@@ -813,7 +823,7 @@ export class ScheduleModificationService {
           reversible: true,
           estimatedTime: 5
         });
-      }
+
     });
 
     return {
@@ -824,7 +834,7 @@ export class ScheduleModificationService {
       prerequisites: ['No active executions'],
       risks: ['May affect scheduled operations']
     };
-  }
+
 
   private createMinimalImpactAnalysis(): ImpactAnalysis {
     return {
@@ -839,7 +849,7 @@ export class ScheduleModificationService {
       recommendations: [],
       requiresApproval: false
     };
-  }
+
 
   private async createPendingApprovalResult(
     requestId: string,
@@ -872,7 +882,7 @@ export class ScheduleModificationService {
       executionTimeMs: Date.now() - startTime,
       version: '1.0.0'
     };
-  }
+
 
   private createErrorResult(
     requestId: string,
@@ -901,9 +911,9 @@ export class ScheduleModificationService {
         code: 'MODIFICATION_ERROR',
         message: error.message,
         recoverable: true
-      }
+
     };
-  }
+
 
   private generateAggregateImpact(results: ModificationResult[]): ImpactAnalysis {
     const allAnalyses = results.map(r => r.impactAnalysis);
@@ -923,13 +933,13 @@ export class ScheduleModificationService {
       recommendations: ['Monitor batch modification impact closely', 'Test in staging environment first'],
       requiresApproval: allAnalyses.some(a => a.requiresApproval)
     };
-  }
+
 
   private async detectBatchConflicts(results: ModificationResult[]): Promise<ScheduleConflict[]> {
 
     // Detect conflicts between modified schedules in the same batch
     return results.flatMap(r => r.conflictsDetected);
-  }
+
 
   private async scheduleDelayedModification(
     schedule: FeatureToggleSchedule,
@@ -946,10 +956,10 @@ export class ScheduleModificationService {
           changes: request.changes,
           requestedBy: request.requestedBy,
           reason: request.reason
-        }
-      }
+
+
     }, request.requestedBy);
-  }
+
 
   private async recalculateNextExecution(schedule: FeatureToggleSchedule): Promise<void> {
 
@@ -959,7 +969,7 @@ export class ScheduleModificationService {
       id: schedule.id,
       lastModified: new Date()
     }, 'system');
-  }
+
 
   private async sendModificationNotifications(
     schedule: FeatureToggleSchedule,
@@ -968,7 +978,7 @@ export class ScheduleModificationService {
 
     console.log(`Sending modification notifications for schedule ${schedule.id}`);
     // This would integrate with notification service
-  }
+
 
   // Logging Methods
   private async logModification(result: ModificationResult): Promise<void> {
@@ -981,7 +991,7 @@ export class ScheduleModificationService {
       changesCount: result.changesSummary.length,
       executionTimeMs: result.executionTimeMs
     });
-  }
+
 
   private async logBatchModification(result: BatchModificationResult): Promise<void> {
 
@@ -992,7 +1002,7 @@ export class ScheduleModificationService {
       failed: result.failed,
       executionTimeMs: result.executionTimeMs
     });
-  }
+
 
   // Public API for retrieving modification history
   async getModificationHistory(scheduleId: string): Promise<ModificationHistory> {
@@ -1006,7 +1016,7 @@ export class ScheduleModificationService {
       firstModified: new Date().toISOString(),
       lastModified: new Date().toISOString()
     };
-  }
-}
+
+
 
 export default ScheduleModificationService;

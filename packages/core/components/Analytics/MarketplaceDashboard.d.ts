@@ -7,6 +7,7 @@
 import React from 'react';
 
 }
+}
 export interface MarketplaceDashboardProps {
     userId?: number;
     userRole?: 'director' | 'producer' | 'creator' | 'admin';
@@ -16,4 +17,5 @@ export interface MarketplaceDashboardProps {
 export declare const MarketplaceDashboard: React.FC<MarketplaceDashboardProps>;
 export default MarketplaceDashboard;
 //# sourceMappingURL=MarketplaceDashboard.d.ts.map
+}
 }

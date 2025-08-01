@@ -7,18 +7,17 @@
 import React from 'react';
 
 }
-export interface PolicyRule {
-    id: string;
+}
+export interface PolicyRule { id: string;
     name: string;
     description: string;
     condition: string;
     action: string;
     enabled: boolean;
-    priority: number;
-
+    priority: number }
 }
-export interface MarketplacePolicyTemplate {
-    templateId: string;
+}
+export interface MarketplacePolicyTemplate { templateId: string;
     name: string;
     description: string;
     category: 'creator' | 'buyer' | 'template' | 'transaction' | 'system';
@@ -28,10 +27,11 @@ export interface MarketplacePolicyTemplate {
     configurable: {
         thresholds: Record<string, number>;
         timeframes: Record<string, number>;
-        actions: string[];
+        actions: string[] }
 }
     };
 
+}
 }
 export interface MarketplacePolicyConfigProps {
     className?: string;
@@ -39,4 +39,5 @@ export interface MarketplacePolicyConfigProps {
 export declare const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps>;
 export default MarketplacePolicyConfig;
 //# sourceMappingURL=MarketplacePolicyConfig.d.ts.map
+}
 }

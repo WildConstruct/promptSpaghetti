@@ -3,23 +3,20 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { PreviewSection } from '../../../components/Inspector/PreviewSection';
 
 // Mock the nodeDataUtils module
-jest.mock('../../../utils/nodeDataUtils', () => ({)
+jest.mock('../../../utils/nodeDataUtils', () => ({ )
   getRandomVariation: jest.fn(),
-  hasVariations: jest.fn(),
+  hasVariations: jest.fn() }
 }));
 const mockGetRandomVariation = require('../../../utils/nodeDataUtils').getRandomVariation;
 const mockHasVariations = require('../../../utils/nodeDataUtils').hasVariations;
-describe('PreviewSection', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+describe('PreviewSection', () => { beforeEach(() => {
+    jest.clearAllMocks() });
   const createMockNode = (type: string, data: any = {}) => ({)
   id: `test-${type}`}
-}
     type,
-    data: {
+    data: {,
   label: `Test ${type}`}
-}
+
       ...data
   });
   describe('Basic Rendering', () => {
@@ -43,127 +40,96 @@ describe('PreviewSection', () => {
       expect(screen.getByText('No preview available')).toBeInTheDocument();
     });
   });
-  describe('Node Types with Variations', () => {
-  it('displays variations with highlight info', async () => {
+  describe('Node Types with Variations', () => { it('displays variations with highlight info', async () => {
   const node = createMockNode('Subject', {)
-  variations: ['cat', 'dog', 'bird'],
+  variations: ['cat', 'dog', 'bird'] }
 });
       mockHasVariations.mockReturnValue(true);
       render(<PreviewSection node={node} />);
-      await waitFor(() => {
-        expect(screen.getByText('cat')).toBeInTheDocument();
-        expect(screen.getByText('Variation 1 of 3')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('cat')).toBeInTheDocument();
+        expect(screen.getByText('Variation 1 of 3')).toBeInTheDocument() });
     });
-    it('uses getRandomVariation for nodes with variations', async () => {
-  const node = createMockNode('Action', {)
-  variations: ['run', 'jump', 'fly'],
+    it('uses getRandomVariation for nodes with variations', async () => { const node = createMockNode('Action', {)
+  variations: ['run', 'jump', 'fly'] }
 });
       mockHasVariations.mockReturnValue(true);
       mockGetRandomVariation.mockReturnValue('jump');
       render(<PreviewSection node={node} />);
-      await waitFor(() => {
-        expect(screen.getByText('jump')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('jump')).toBeInTheDocument() });
     });
-    it('generates multiple examples with different variations', async () => {
-  const node = createMockNode('Subject', {)
-  variations: ['apple', 'banana', 'cherry'],
+    it('generates multiple examples with different variations', async () => { const node = createMockNode('Subject', {)
+  variations: ['apple', 'banana', 'cherry'] }
 });
       mockHasVariations.mockReturnValue(true);
       render(<PreviewSection node={node} />);
       // Change number of examples to 5
       const examplesInput = screen.getByDisplayValue('3');
       fireEvent.change(examplesInput, { target: { value: '5' } });
-      await waitFor(() => {
-        // Should have 5 example blocks
+      await waitFor(() => { // Should have 5 example blocks
         const exampleDivs = screen.getAllByText(/apple|banana|cherry/);
-        expect(exampleDivs).toHaveLength(5);
-      });
+        expect(exampleDivs).toHaveLength(5) });
     });
   });
-  describe('Node Types without Variations', () => {
-  it('renders WeightedChoice options correctly', async () => {
+  describe('Node Types without Variations', () => { it('renders WeightedChoice options correctly', async () => {
   const node = createMockNode('WeightedChoice', {)
-  options: ['red', 'blue', 'green'],
+  options: ['red', 'blue', 'green'] }
 });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
-      await waitFor(() => {
-        expect(screen.getByText('red')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('red')).toBeInTheDocument() });
     });
-    it('renders Concat with delimiter', async () => {
-  const node = createMockNode('Concat', {)
-  delimiter: ' - ',
+    it('renders Concat with delimiter', async () => { const node = createMockNode('Concat', {)
+  delimiter: ' - ' }
 });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
-      await waitFor(() => {
-        expect(screen.getAllByText('[Child 1] - [Child 2] - [Child 3]')).toHaveLength(3);
-      });
+      await waitFor(() => { expect(screen.getAllByText('[Child 1] - [Child 2] - [Child 3]')).toHaveLength(3) });
     });
-    it('renders Output with prompt', async () => {
-  const node = createMockNode('Output', {)
-  prompt: 'Generate a story about adventure',
+    it('renders Output with prompt', async () => { const node = createMockNode('Output', {)
+  prompt: 'Generate a story about adventure' }
 });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
-      await waitFor(() => {
-        expect(screen.getAllByText('Generate a story about adventure')).toHaveLength(3);
-      });
+      await waitFor(() => { expect(screen.getAllByText('Generate a story about adventure')).toHaveLength(3) });
     });
-    it('renders SetVariable correctly', async () => {
-  const node = createMockNode('SetVariable', {)
-  name: 'mood',
-  value: 'happy',
+    it('renders SetVariable correctly', async () => { const node = createMockNode('SetVariable', {)
+  name: 'mood'
+  value: 'happy' }
 });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
-      await waitFor(() => {
-        expect(screen.getAllByText('mood = happy')).toHaveLength(3);
-      });
+      await waitFor(() => { expect(screen.getAllByText('mood = happy')).toHaveLength(3) });
     });
-    it('renders GetVariable correctly', async () => {
-  const node = createMockNode('GetVariable', {)
-  name: 'score',
+    it('renders GetVariable correctly', async () => { const node = createMockNode('GetVariable', {)
+  name: 'score' }
 });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
-      await waitFor(() => {
-        expect(screen.getAllByText('score = [current value]')).toHaveLength(3);
-      });
+      await waitFor(() => { expect(screen.getAllByText('score = [current value]')).toHaveLength(3) });
     });
-    it('handles missing data gracefully', async () => {
-  const node = createMockNode('WeightedChoice', {)
-  options: [],
+    it('handles missing data gracefully', async () => { const node = createMockNode('WeightedChoice', {)
+  options: [] }
 });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
-      await waitFor(() => {
-        expect(screen.getAllByText('No options defined')).toHaveLength(3);
-      });
+      await waitFor(() => { expect(screen.getAllByText('No options defined')).toHaveLength(3) });
     });
   });
-  describe('Interactive Controls', () => {
-  it('updates number of examples when input changes', async () => {
+  describe('Interactive Controls', () => { it('updates number of examples when input changes', async () => {
   const node = createMockNode('WeightedChoice', {)
-  options: ['test'],
+  options: ['test'] }
 });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
       const examplesInput = screen.getByDisplayValue('3');
       fireEvent.change(examplesInput, { target: { value: '7' } });
-      await waitFor(() => {
-        expect(screen.getByDisplayValue('7')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByDisplayValue('7')).toBeInTheDocument();
         // Should generate 7 examples
         const examples = screen.getAllByText('test');
-        expect(examples).toHaveLength(7);
-      });
+        expect(examples).toHaveLength(7) });
     });
-    it('refreshes examples when refresh button is clicked', async () => {
-  const node = createMockNode('WeightedChoice', {)
-  options: ['option1', 'option2'],
+    it('refreshes examples when refresh button is clicked', async () => { const node = createMockNode('WeightedChoice', {)
+  options: ['option1', 'option2'] }
 });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
@@ -171,10 +137,8 @@ describe('PreviewSection', () => {
       // Click refresh multiple times to ensure it's working
       fireEvent.click(refreshButton);
       fireEvent.click(refreshButton);
-      await waitFor(() => {
-        // The examples should still be present (may be same due to deterministic seed)
-        expect(screen.getAllByText(/option1|option2/)).toHaveLength(3);
-      });
+      await waitFor(() => { // The examples should still be present (may be same due to deterministic seed)
+        expect(screen.getAllByText(/option1|option2/)).toHaveLength(3) });
     });
     it('enforces min/max values for number of examples', () => {
       const node = createMockNode('WeightedChoice');
@@ -225,18 +189,13 @@ describe('PreviewSection', () => {
       const node = createMockNode('UnknownType');
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
-      await waitFor(() => {
-        expect(screen.getAllByText('Preview for UnknownType not implemented')).toHaveLength(3);
-      });
+      await waitFor(() => { expect(screen.getAllByText('Preview for UnknownType not implemented')).toHaveLength(3) });
     });
-    it('handles errors in variation processing', async () => {
-  const node = createMockNode('Subject', {)
-  variations: ['test'],
+    it('handles errors in variation processing', async () => { const node = createMockNode('Subject', {)
+  variations: ['test'] }
 });
       mockHasVariations.mockReturnValue(true);
-      mockGetRandomVariation.mockImplementation(() => {
-        throw new Error('Test error');
-      });
+      mockGetRandomVariation.mockImplementation(() => { throw new Error('Test error') });
       // Should not crash the component
       expect(() => render(<PreviewSection node={node} />)).not.toThrow();
     });

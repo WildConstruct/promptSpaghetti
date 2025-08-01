@@ -55,8 +55,9 @@ export class Epic16HelpIntegrationArchitecture {
                 * Architecture for seamless transitions between graph editing and marketplace
                 */
                 async;
-                handleSystemTransition(fromContext, 'graph-editor' | 'marketplace');
-                toContext: 'graph-editor' | 'marketplace',
+                handleSystemTransition(fromContext, 'graph-editor' | 'marketplace'),
+                    toContext;
+                'graph-editor' | 'marketplace',
                     userId;
                 string,
                     preserveHelp;
@@ -80,8 +81,9 @@ export class Epic16HelpIntegrationArchitecture {
                      * Integration with Epic 16 support escalation system
                      */
                     async;
-                    escalateToSupport(helpSession, HelpSession);
-                    escalationReason: string,
+                    escalateToSupport(helpSession, HelpSession),
+                        escalationReason;
+                    string,
                         additionalContext ?  : Record;
                     Promise < MarketplaceTicket > {
                         // Create support ticket with integrated context
@@ -201,10 +203,9 @@ export class Epic16HelpIntegrationArchitecture {
                 title: 'Welcome to the Prompt Template Marketplace',
                 content: 'Discover professional AI prompt templates created by the community',
                 level: 'beginner',
-                context: {
-                    triggerElements: ['marketplace-home'],
-                    actions: ['first-visit'],
-                }
+                context: {},
+                triggerElements: ['marketplace-home'],
+                actions: ['first-visit'],
             },
             {
                 id: 'template-search-help',
@@ -213,26 +214,24 @@ export class Epic16HelpIntegrationArchitecture {
                 content: 'Use advanced search filters to find templates that match your specific needs',
                 filmTerminology: 'Like finding the right script or storyboard template for your project',
                 level: 'intermediate',
-                context: {
-                    triggerElements: ['search-input', 'filter-panel'],
-                    actions: ['search-initiated'],
-                }
+                context: {},
+                triggerElements: ['search-input', 'filter-panel'],
+                actions: ['search-initiated'],
             },
             {
                 id: 'purchase-workflow',
                 type: 'professional-workflow',
                 title: 'Template Purchase & Import',
                 content: 'Complete your purchase and seamlessly import templates into your workflow',
-                actionItems: [,
+                actionItems: [
                     'Review template preview and ratings',
                     'Complete secure checkout process',
                     'Import template directly into graph editor'
                 ],
                 level: 'intermediate',
-                context: {
-                    triggerElements: ['purchase-button', 'checkout-form'],
-                    actions: ['purchase-initiated'],
-                }
+                context: {},
+                triggerElements: ['purchase-button', 'checkout-form'],
+                actions: ['purchase-initiated'],
             },
             {
                 id: 'template-publishing',
@@ -241,10 +240,9 @@ export class Epic16HelpIntegrationArchitecture {
                 content: 'Publish your created templates to help the community and earn revenue',
                 filmTerminology: 'Like sharing your production techniques with other filmmakers',
                 level: 'advanced',
-                context: {
-                    triggerElements: ['publish-template'],
-                    actions: ['export-to-marketplace']
-                }
+                context: {},
+                triggerElements: ['publish-template'],
+                actions: ['export-to-marketplace']
             }
         ];
         // Index marketplace help content
@@ -292,8 +290,9 @@ export class Epic16HelpIntegrationArchitecture {
                 if (content) {
                     transitionContent.push(content);
                     return transitionContent;
-                    prioritizeHelpContent(content, HelpContent);
-                    context: IntegratedHelpSystem,
+                    prioritizeHelpContent(content, HelpContent),
+                        context;
+                    IntegratedHelpSystem,
                         userProfile;
                     UserProfile;
                     HelpContent;
@@ -356,7 +355,7 @@ export class Epic16HelpIntegrationArchitecture {
     Current Progress:
     - Session Step: ${session.currentStep}/${session.totalSteps}
     - Completed Actions: ${session.completedActions.join(', ')}
-    - Time in Session: ${Date.now() - session.startTime.getTime()}ms},}
+    - Time in Session: ${Date.now() - session.startTime.getTime()}ms},},
   Context:
     ${JSON.stringify(session.context, null, 2)}
     Additional Context:
@@ -387,8 +386,8 @@ export class Epic16HelpIntegrationArchitecture {
                                         // =============================================================================
                                     }
                                 }
-                                export default Epic16HelpIntegrationArchitecture;
                             }
+                            export default Epic16HelpIntegrationArchitecture;
                         }
                     }
                 }

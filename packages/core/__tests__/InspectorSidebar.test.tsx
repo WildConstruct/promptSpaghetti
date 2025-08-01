@@ -21,29 +21,23 @@ class TestErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return <div data-testid="error-boundary">Error: {this.state.error?.message}</div>;
     return this.props.children;
-describe('InspectorSidebar - Enhanced Testing', () => {
-  const schema = z.object({)
+describe('InspectorSidebar - Enhanced Testing', () => { const schema = z.object({)
   label: z.string().default('Default Label'),
   value: z.number().default(0),
-  description: z.string().optional(),
+  description: z.string().optional() }
 });
-  const node = {
-  id: 'n1',
+  const node = { id: 'n1',
   type: 'TestNode',
-  data: {
+  data: {,
   label: 'Test Label',
   value: 5,
-  description: 'Test description',
+  description: 'Test description' }
 },
   position: { x: 0, y: 0 }
   };
-  beforeEach(() => {
-    jest.clearAllMocks();
-    jest.useFakeTimers();
-  });
-  afterEach(() => {
-    jest.useRealTimers();
-  });
+  beforeEach(() => { jest.clearAllMocks();
+    jest.useFakeTimers() });
+  afterEach(() => { jest.useRealTimers() });
   describe('Basic Functionality', () => {
     it('renders form fields for schema', () => {
       render();
@@ -103,11 +97,10 @@ describe('InspectorSidebar - Enhanced Testing', () => {
         );
       }).not.toThrow();
     });
-    it('handles malformed node data', () => {
-  const malformedNode = {
-  ...node,
-  data: null,
-} as any;
+    it('handles malformed node data', () => { const malformedNode = {
+  ...node
+  data: null }
+ as any;
       expect(() => {
         render();
           <InspectorSidebar node={malformedNode} schema={schema} onChange={() => {}} />
@@ -122,10 +115,8 @@ describe('InspectorSidebar - Enhanced Testing', () => {
         );
       }).not.toThrow();
     });
-    it('handles onChange errors gracefully', async () => {
-      const handleChange = jest.fn(() => {
-        throw new Error('onChange error');
-      });
+    it('handles onChange errors gracefully', async () => { const handleChange = jest.fn(() => {
+        throw new Error('onChange error') });
       const user = userEvent.setup();
       const onError = jest.fn<unknown, unknown>();
       render();
@@ -138,10 +129,9 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       // Should handle error gracefully
       expect(onError).toHaveBeenCalled();
     });
-    it('handles schema validation errors', async () => {
-  const strictSchema = z.object({)
+    it('handles schema validation errors', async () => { const strictSchema = z.object({)
   label: z.string().min(10, 'Must be at least 10 characters'),
-  value: z.number().positive('Must be positive'),
+  value: z.number().positive('Must be positive') }
 });
       const user = userEvent.setup();
       render();
@@ -177,9 +167,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       // Should not call onChange until debounce period
       expect(handleChange).not.toHaveBeenCalled();
       // Fast forward time
-      act(() => {
-        jest.advanceTimersByTime(300);
-      });
+      act(() => { jest.advanceTimersByTime(300) });
       // Now onChange should be called once
       expect(handleChange).toHaveBeenCalledTimes(1);
     });
@@ -194,33 +182,31 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       const startTime = performance.now();
       // Multiple concurrent changes
       await Promise.all([)
-        user.type(labelInput, 'x'),
-        user.type(valueInput, '1'),
-        user.type(labelInput, 'y'),
+        user.type(labelInput, 'x')
+        user.type(valueInput, '1')
+        user.type(labelInput, 'y')
         user.type(valueInput, '2')
       ]);
       const endTime = performance.now();
       // Should handle efficiently
       expect(endTime - startTime).toBeLessThan(100);
     });
-    it('efficiently renders complex schemas', () => {
-  const complexSchema = z.object({)
-  field1: z.string(),
-  field2: z.number(),
-  field3: z.boolean(),
-  field4: z.array(z.string()),
-  field5: z.object({,)
-  nested1: z.string(),
-  nested2: z.number(),
-}
+    it('efficiently renders complex schemas', () => { const complexSchema = z.object({)
+  field1: z.string()
+  field2: z.number()
+  field3: z.boolean()
+  field4: z.array(z.string())
+  field5: z.object({)
+  nested1: z.string()
+  nested2: z.number() }
+
       });
-      const complexNode = {
-        ...node,
+      const complexNode = { ...node
         data: {
-  field1: 'test',
-          field2: 123,
-          field3: true,
-          field4: ['a', 'b'],
+  field1: 'test'
+          field2: 123
+          field3: true
+          field4: ['a', 'b'] }
           field5: { nested1: 'nested', nested2: 456 }
       };
       const startTime = performance.now();
@@ -259,12 +245,11 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       await user.tab();
       expect(document.activeElement).toBe(screen.getByLabelText('value'));
     });
-    it('follows TypeScript strict mode', () => {
-  // Test proper TypeScript usage
+    it('follows TypeScript strict mode', () => { // Test proper TypeScript usage
   const strictProps = {
-  node: node as const,
-  schema: schema,
-  onChange: jest.fn<unknown, unknown>() as (data: Record<string, any>) => void,
+  node: node as const
+  schema: schema
+  onChange: jest.fn<unknown, unknown>() as (data: Record<string, any>) => void }
 };
       expect(() => {
         render(<InspectorSidebar {...strictProps} />);
@@ -277,9 +262,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       // Should cleanup without errors
       expect(() => unmount()).not.toThrow();
       // Advance timers after unmount - should not cause errors
-      act(() => {
-        jest.advanceTimersByTime(1000);
-      });
+      act(() => { jest.advanceTimersByTime(1000) });
     });
   });
   describe('Data Type Handling', () => {
@@ -305,12 +288,10 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       await user.type(input, '123.45');
       expect(handleChange).toHaveBeenCalledWith({ value: 123.45 });
     });
-    it('handles boolean inputs correctly', async () => {
-  const booleanSchema = z.object({)
-  isEnabled: z.boolean().default(false),
+    it('handles boolean inputs correctly', async () => { const booleanSchema = z.object({)
+  isEnabled: z.boolean().default(false) }
 });
-      const booleanNode = {
-        ...node,
+      const booleanNode = { ...node }
         data: { isEnabled: false }
       };
       const handleChange = jest.fn<unknown, unknown>();
@@ -326,9 +307,8 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       await user.click(checkbox);
       expect(handleChange).toHaveBeenCalledWith({ isEnabled: true });
     });
-    it('handles optional fields correctly', () => {
-      const nodeWithoutOptional = {
-        ...node,
+    it('handles optional fields correctly', () => { const nodeWithoutOptional = {
+        ...node }
         data: { label: 'Test', value: 5 } // No description
       };
       expect(() => {
@@ -356,11 +336,10 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(input).toBeInTheDocument();
     });
   });
-  describe('Edge Cases', () => {
-    it('handles extremely long string values', async () => {
+  describe('Edge Cases', () => { it('handles extremely long string values', async () => {
       const longValue = 'x'.repeat(10000);
       const nodeWithLongValue = {
-        ...node,
+        ...node }
         data: { ...node.data, label: longValue }
       };
       render();
@@ -373,10 +352,9 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       const input = screen.getByLabelText('label') as HTMLInputElement;
       expect(input.value).toBe(longValue);
     });
-    it('handles special characters and unicode', () => {
-      const specialValue = '🎉 Special: <>&"\'\\n\\t 中文 العربية';
+    it('handles special characters and unicode', () => { const specialValue = '🎉 Special: <>&"\'\\n\\t 中文 العربية';
       const nodeWithSpecialChars = {
-        ...node,
+        ...node }
         data: { ...node.data, label: specialValue }
       };
       render();

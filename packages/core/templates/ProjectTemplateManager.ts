@@ -3,20 +3,20 @@
  * Manages project templates with versioning, categorization, and sharing capabilities
  */
 
-}
-export interface ProjectTemplate {
-  id: string;
+
+export interface ProjectTemplate { id: string;
   name: string;
   description: string;
   category: string;
   tags: string;
   version: string;
   preview_image?: string;
-  author: {
+  author: { }
   id: string;
   name: string;
   avatar?: string;
-}
+
+
 };
   created_at: string;
   updated_at: string;
@@ -29,80 +29,64 @@ export interface ProjectTemplate {
   variables: TemplateVariable;
   customization_points: CustomizationPoint;
   // Metadata
-  complexity_level: 'beginner' | 'intermediate' | 'advanced';
+  complexity_level: 'beginner' | 'intermediate' | 'advanced';,
   estimated_time: number; // minutes
   prerequisites: string;
   learning_objectives: string;
-}
-}
-export interface TemplateVariable {
-  id: string;
+
+
+export interface TemplateVariable { id: string;
   name: string;
   label: string;
   type: 'text' | 'number' | 'boolean' | 'select' | 'textarea';
   description: string;
   default_value: any;
   required: boolean;
-  validation?: {
+  validation?: { }
   min?: number;
   max?: number;
   pattern?: string;
   options?: string;
-}
+
+
 };
-}
-}
-export interface CustomizationPoint {
-  id: string;
+
+
+export interface CustomizationPoint { id: string;
   name: string;
   type: 'node_properties' | 'graph_structure' | 'styling' | 'behavior';
   target_nodes: string;
   properties: string;
   description: string;
-  ui_component: 'input' | 'select' | 'color_picker' | 'slider' | 'toggle'
-}
-  }
-}
-export interface TemplateCategory {
-  id: string;
+  ui_component: 'input' | 'select' | 'color_picker' | 'slider' | 'toggle' }
+
+
+
+
+export interface TemplateCategory { id: string;
   name: string;
   description: string;
   icon: string;
   color: string;
-  parent_id?: string;
-}
-}
-}
-export interface TemplateUsageAnalytics {
-  template_id: string;
+  parent_id?: string }
+
+
+
+export interface TemplateUsageAnalytics { template_id: string;
   total_uses: number;
   unique_users: number;
   success_rate: number;
   average_rating: number;
   completion_rate: number;
   most_used_customizations: string;
-  trend_data: {
+  trend_data: { }
   date: string;
   uses: number;
-}
-}[];
-}
-export class ProjectTemplateManager {
-  private templates = new Map<string, ProjectTemplate>();
-  private categories = new Map<string, TemplateCategory>();
-  private analytics = new Map<string, TemplateUsageAnalytics>();
-  constructor(private apiClient: any) {,
-  this.initializeDefaultCategories();
-  // Template Management
-  async createTemplate(template: Omit<ProjectTemplate, 'id' | 'created_at' | 'updated_at' | 'usage_count' | 'rating'>): Promise<ProjectTemplate> {,
-  const newTemplate: ProjectTemplate = {,
-  ...template,
-  id: crypto.randomUUID(),
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-  usage_count: 0,
-  rating: 0,
-};
+
+
+[];
+
+export class ProjectTemplateManager {};
     // Validate template structure
     this.validateTemplate(newTemplate);
     // Store template
@@ -115,10 +99,9 @@ export class ProjectTemplateManager {
     const template = this.templates.get(id);
     if (!template) {
       throw new Error(`Template ${id} not found`);}
-    const updatedTemplate = {
-  ...template,
-  ...updates,
-  updated_at: new Date().toISOString(),
+    const updatedTemplate = { ...template
+  ...updates
+  updated_at: new Date().toISOString() }
 };
     this.validateTemplate(updatedTemplate);
     this.templates.set(id, updatedTemplate);
@@ -133,7 +116,7 @@ export class ProjectTemplateManager {
     this.analytics.delete(id);
     await this.apiClient.delete(`/api/templates/${id}`);}
   // Template Discovery
-  async searchTemplates(criteria: {)
+  async searchTemplates(criteria: { )
   query?: string;
   category?: string;
   tags?: string;
@@ -142,10 +125,7 @@ export class ProjectTemplateManager {
   min_rating?: number;
   sort_by?: 'popularity' | 'rating' | 'newest' | 'name';
   limit?: number;
-  offset?: number;
-}): Promise<{ templates: ProjectTemplate; total: number }> {
-
-  let filteredTemplates = Array.from(this.templates.values());
+  offset?: number }): Promise<{ templates: ProjectTemplate; total: number }> { let filteredTemplates = Array.from(this.templates.values());
   // Apply filters
   if (criteria.query) {
   const query = criteria.query.toLowerCase();
@@ -174,7 +154,7 @@ export class ProjectTemplateManager {
   const paginatedTemplates = filteredTemplates.slice(offset, offset + limit);
   return {
   templates: paginatedTemplates,
-  total: filteredTemplates.length,
+  total: filteredTemplates.length }
 };
   async getFeaturedTemplates(): Promise<ProjectTemplate> {
 
@@ -276,11 +256,9 @@ export class ProjectTemplateManager {
     this.analytics.set(templateId, fetchedAnalytics);
     return fetchedAnalytics;
   // Category Management
-  async createCategory(category: Omit<TemplateCategory, 'id'>): Promise<TemplateCategory> {
-
-  const newCategory: TemplateCategory = {,
-  ...category,
-  id: crypto.randomUUID(),
+  async createCategory(category: Omit<TemplateCategory, 'id'>): Promise<TemplateCategory> { const newCategory: TemplateCategory = {
+  ...category
+  id: crypto.randomUUID() }
 };
     this.categories.set(newCategory.id, newCategory);
     await this.apiClient.post('/api/template-categories', newCategory);
@@ -317,32 +295,29 @@ export class ProjectTemplateManager {
       dataStr = dataStr.replace(new RegExp(placeholder, 'g'), String(value));
     graphData = JSON.parse(dataStr);
     // Apply customization points
-    for (const point of template.customization_points) {
-  if (customizations[point.id] !== undefined) {
+    for (const point of template.customization_points) { if (customizations[point.id] !== undefined) {
   this.applyCustomizationPoint(graphData, point, customizations[point.id]);
   return graphData;
-  private applyCustomizationPoint(graphData: any, point: CustomizationPoint, value: any): void {,
+  private applyCustomizationPoint(graphData: any, point: CustomizationPoint, value: any): void {
   // Apply customization based on type
   switch (point.type) {
-  case 'node_properties':,
+  case 'node_properties':
   this.updateNodeProperties(graphData, point.target_nodes, point.properties, value);
   break;
-  case 'graph_structure':,
+  case 'graph_structure':
   this.updateGraphStructure(graphData, point, value);
   break;
-  case 'styling':,
+  case 'styling':
   this.updateStyling(graphData, point.target_nodes, value);
   break;
-  case 'behavior':,
+  case 'behavior':
   this.updateBehavior(graphData, point.target_nodes, value);
   break;
-  private updateNodeProperties(graphData: any, nodeIds: string, properties: string, value: any): void {,
+  private updateNodeProperties(graphData: any, nodeIds: string, properties: string, value: any): void {
   if (!graphData.nodes) return;
-  graphData.nodes.forEach((node: any) => {,
-  if (nodeIds.includes(node.id)) {
-  properties.forEach(prop => {)
-  node[prop] = value;
-});
+  graphData.nodes.forEach((node: any) => { }
+  if (nodeIds.includes(node.id)) { properties.forEach(prop => {)
+  node[prop] = value });
     });
   private updateGraphStructure(graphData: any, point: CustomizationPoint, value: any): void {
     // Implementation depends on specific graph structure modifications
@@ -359,25 +334,24 @@ export class ProjectTemplateManager {
       if (nodeIds.includes(node.id)) {
         node.behavior = { ...node.behavior, ...value };
     });
-  private sortTemplates(templates: ProjectTemplate, sortBy: string): void {
-  switch (sortBy) {
-  case 'popularity':,
+  private sortTemplates(templates: ProjectTemplate, sortBy: string): void { switch (sortBy) {
+  case 'popularity':
   templates.sort((a, b) => b.usage_count - a.usage_count);
   break;
-  case 'rating':,
+  case 'rating':
   templates.sort((a, b) => b.rating - a.rating);
   break;
-  case 'newest':,
+  case 'newest':
   templates.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   break;
-  case 'name':,
+  case 'name':
   templates.sort((a, b) => a.name.localeCompare(b.name));
   break;
-  private buildCategoryTree(category: TemplateCategory, allCategories: TemplateCategory): any {,
+  private buildCategoryTree(category: TemplateCategory, allCategories: TemplateCategory): any {
   const children = allCategories.filter(c => c.parent_id === category.id);
   return {
-  ...category,
-  children: children.map(child => this.buildCategoryTree(child, allCategories)),
+  ...category
+  children: children.map(child => this.buildCategoryTree(child, allCategories)) }
 };
   private async recordTemplateUsage(templateId: string): Promise<void> {
 
@@ -396,66 +370,59 @@ export class ProjectTemplateManager {
 
     const response = await this.apiClient.get(`/api/users/${userId}/template-analytics`);}
     return response.data;
-  private convertToYaml(template: ProjectTemplate): string {
-  // Convert template to YAML format
+  private convertToYaml(template: ProjectTemplate): string { // Convert template to YAML format
   // This would use a YAML library in a real implementation
   return JSON.stringify(template, null, 2); // Placeholder
-  private parseYamlTemplate(yamlData: string): ProjectTemplate {,
+  private parseYamlTemplate(yamlData: string): ProjectTemplate {
   // Parse YAML template data
   // This would use a YAML library in a real implementation
   return JSON.parse(yamlData); // Placeholder
-  private createTemplateBundle(template: ProjectTemplate): string {,
+  private createTemplateBundle(template: ProjectTemplate): string {
   // Create a complete template bundle with all dependencies
   const bundle = {
-  template,
-  dependencies: this.extractDependencies(template),
+  template
+  dependencies: this.extractDependencies(template)
   metadata: {
-  created_at: new Date().toISOString(),
-  version: '1.0.0',
+  created_at: new Date().toISOString()
+  version: '1.0.0' }
 };
     return JSON.stringify(bundle, null, 2);
-  private extractFromBundle(bundleData: string): ProjectTemplate {
-  const bundle = JSON.parse(bundleData);
+  private extractFromBundle(bundleData: string): ProjectTemplate { const bundle = JSON.parse(bundleData);
   return bundle.template;
-  private extractDependencies(template: ProjectTemplate): any {,
+  private extractDependencies(template: ProjectTemplate): any {
   // Extract any dependencies needed for the template
   return [];
-  private initializeDefaultCategories(): void {,
+  private initializeDefaultCategories(): void {
   const defaultCategories: TemplateCategory = [
   {
-  id: 'workflow',
-  name: 'Workflow Templates',
-  description: 'Pre-built workflow patterns and processes',
-  icon: 'workflow',
-  color: '#3B82F6',
-}
-      {
-  id: 'data-processing',
-  name: 'Data Processing',
-  description: 'Templates for data transformation and analysis',
-  icon: 'database',
-  color: '#10B981',
-}
-      {
-  id: 'automation',
-  name: 'Automation',
-  description: 'Automated task and process templates',
-  icon: 'robot',
-  color: '#F59E0B',
-}
-      {
-  id: 'content',
-  name: 'Content Generation',
-  description: 'Templates for content creation and management',
-  icon: 'document',
-  color: '#8B5CF6',
-}
-      {
-  id: 'analysis',
-  name: 'Analysis & Reporting',
-  description: 'Templates for analysis and reporting workflows',
-  icon: 'chart',
+  id: 'workflow'
+  name: 'Workflow Templates'
+  description: 'Pre-built workflow patterns and processes'
+  icon: 'workflow'
+  color: '#3B82F6' }
+
+      { id: 'data-processing'
+  name: 'Data Processing'
+  description: 'Templates for data transformation and analysis'
+  icon: 'database'
+  color: '#10B981' }
+
+      { id: 'automation'
+  name: 'Automation'
+  description: 'Automated task and process templates'
+  icon: 'robot'
+  color: '#F59E0B' }
+
+      { id: 'content'
+  name: 'Content Generation'
+  description: 'Templates for content creation and management'
+  icon: 'document'
+  color: '#8B5CF6' }
+
+      { id: 'analysis'
+  name: 'Analysis & Reporting'
+  description: 'Templates for analysis and reporting workflows'
+  icon: 'chart' }
   color: '#EF4444'];
-  defaultCategories.forEach(category => {)
-  this.categories.set(category.id, category);
-});
+  defaultCategories.forEach(category => { )
+  this.categories.set(category.id, category) });

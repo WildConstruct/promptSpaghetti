@@ -14,8 +14,8 @@ import { AuditService } from '../auth/services/AuditService';
 import { DataRetentionFrameworkService } from '../services/DataRetentionFrameworkService';
 import { DataCategory } from '../types/DataRetentionPeriods';
 
-}
-}
+
+
 export interface StoragePool {
   poolId: string;
   name: string;
@@ -36,9 +36,10 @@ export interface StoragePool {
   lastOptimized?: Date;
   healthStatus: HealthStatus;
   tags: string[];
-}
-}
-}
+
+
+
+
 
 export enum StorageType {
   HOT = 'hot',           // Frequently accessed data
@@ -47,7 +48,7 @@ export enum StorageType {
   ARCHIVE = 'archive',   // Long-term archival
   BACKUP = 'backup',     // Backup and disaster recovery
   TEMP = 'temp'          // Temporary processing data
-}
+
 
 export enum StorageTier {
   PREMIUM = 'premium',   // High-performance SSD
@@ -55,7 +56,7 @@ export enum StorageTier {
   ECONOMY = 'economy',   // High-capacity HDD
   ARCHIVE = 'archive',   // Tape/cloud archive
   GLACIER = 'glacier'    // Deep archive
-}
+
 
 export enum PerformanceClass {
   ULTRA_HIGH = 'ultra_high',  // < 1ms latency
@@ -63,7 +64,7 @@ export enum PerformanceClass {
   MEDIUM = 'medium',          // < 100ms latency  
   LOW = 'low',                // < 1s latency
   ARCHIVE = 'archive'         // Minutes/hours latency
-}
+
 
 export enum HealthStatus {
   HEALTHY = 'healthy',
@@ -71,10 +72,10 @@ export enum HealthStatus {
   CRITICAL = 'critical',
   MAINTENANCE = 'maintenance',
   OFFLINE = 'offline'
-}
 
-}
-}
+
+
+
 export interface StorageQuota {
   quotaId: string;
   resourceType: ResourceType;
@@ -90,9 +91,10 @@ export interface StorageQuota {
   lastChecked: Date;
   quotaExceeded: boolean;
   exemptions: QuotaExemption[];
-}
-}
-}
+
+
+
+
 
 export enum ResourceType {
   USER = 'user',
@@ -103,10 +105,10 @@ export enum ResourceType {
   ANALYTICS = 'analytics',
   AUDIT = 'audit',
   BACKUP = 'backup'
-}
 
-}
-}
+
+
+
 export interface QuotaExemption {
   exemptionId: string;
   reason: string;
@@ -114,12 +116,13 @@ export interface QuotaExemption {
   expiresAt?: Date;
   additionalStorage: number; // GB
   createdAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StorageOptimization {
   optimizationId: string;
   type: OptimizationType;
@@ -134,9 +137,10 @@ export interface StorageOptimization {
   parameters: OptimizationParameters;
   results?: OptimizationResults;
   errors: string[];
-}
-}
-}
+
+
+
+
 
 export enum OptimizationType {
   COMPRESSION = 'compression',
@@ -146,10 +150,10 @@ export enum OptimizationType {
   MIGRATION = 'migration',
   CONSOLIDATION = 'consolidation',
   REBALANCING = 'rebalancing'
-}
 
-}
-}
+
+
+
 export interface OptimizationTarget {
   targetType: 'pool' | 'category' | 'user' | 'system' | 'global';
   targetId?: string;
@@ -157,9 +161,10 @@ export interface OptimizationTarget {
   storageTypes: StorageType[];
   ageThreshold?: number; // days
   accessThreshold?: number; // days since last access
-}
-}
-}
+
+
+
+
 
 export enum OptimizationStatus {
   SCHEDULED = 'scheduled',
@@ -168,10 +173,10 @@ export enum OptimizationStatus {
   FAILED = 'failed',
   CANCELLED = 'cancelled',
   PAUSED = 'paused'
-}
 
-}
-}
+
+
+
 export interface OptimizationParameters {
   compressionAlgorithm?: 'gzip' | 'lz4' | 'zstd';
   compressionLevel?: number;
@@ -181,12 +186,13 @@ export interface OptimizationParameters {
   migrationStrategy?: 'immediate' | 'gradual' | 'scheduled';
   preserveAccess?: boolean;
   notifyUsers?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OptimizationResults {
   filesProcessed: number;
   storageFreed: number; // GB
@@ -197,24 +203,26 @@ export interface OptimizationResults {
   duplicatesRemoved: number;
   errorCount: number;
   performanceImpact: PerformanceImpact;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceImpact {
   cpuUsage: number; // percentage
   memoryUsage: number; // GB
   ioOperations: number;
   networkTraffic: number; // GB
   duration: number; // seconds
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StorageMetrics {
   timestamp: Date;
   totalCapacity: number; // GB
@@ -230,12 +238,13 @@ export interface StorageMetrics {
   healthScore: number; // 0-100
   alertCount: number;
   poolMetrics: StoragePoolMetrics[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StoragePoolMetrics {
   poolId: string;
   capacity: number;
@@ -247,12 +256,13 @@ export interface StoragePoolMetrics {
   latency: number; // ms
   errorRate: number; // percentage
   healthScore: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StorageAlert {
   alertId: string;
   type: AlertType;
@@ -269,9 +279,10 @@ export interface StorageAlert {
   actionsTaken: string[];
   suppressed: boolean;
   suppressedUntil?: Date;
-}
-}
-}
+
+
+
+
 
 export enum AlertType {
   QUOTA_EXCEEDED = 'quota_exceeded',
@@ -282,17 +293,17 @@ export enum AlertType {
   RETENTION_VIOLATION = 'retention_violation',
   COST_THRESHOLD = 'cost_threshold',
   REPLICATION_FAILURE = 'replication_failure'
-}
+
 
 export enum AlertSeverity {
   INFO = 'info',
   WARNING = 'warning',
   CRITICAL = 'critical',
   EMERGENCY = 'emergency'
-}
 
-}
-}
+
+
+
 export interface StorageReport {
   reportId: string;
   reportType: ReportType;
@@ -304,9 +315,10 @@ export interface StorageReport {
   recommendations: string[];
   nextActions: string[];
   exportFormats: ExportFormat[];
-}
-}
-}
+
+
+
+
 
 export enum ReportType {
   USAGE = 'usage',
@@ -316,20 +328,21 @@ export enum ReportType {
   PERFORMANCE = 'performance',
   CAPACITY_PLANNING = 'capacity_planning',
   HEALTH = 'health'
-}
 
-}
-}
+
+
+
 export interface ReportPeriod {
   start: Date;
   end: Date;
   granularity: 'hour' | 'day' | 'week' | 'month';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportSummary {
   totalStorage: number;
   storageGrowth: number;
@@ -339,16 +352,17 @@ export interface ReportSummary {
   healthScore: number;
   criticalIssues: number;
   recommendationCount: number;
-}
-}
-}
+
+
+
+
 
 export enum ExportFormat {
   PDF = 'pdf',
   CSV = 'csv',
   EXCEL = 'excel',
   JSON = 'json'
-}
+
 
 export class StorageManagementService {
   private db: Database;
@@ -370,7 +384,7 @@ export class StorageManagementService {
     // Start background monitoring and optimization
     this.startBackgroundMonitoring();
     this.startOptimizationScheduler();
-  }
+
 
   // =============================================================================
   // Storage Pool Management
@@ -404,12 +418,12 @@ export class StorageManagementService {
         name: pool.name,
         storageType: pool.storageType,
         capacity: pool.capacity
-  }
+
       severity: 'info'
     });
 
     return pool;
-  }
+
 
   /**
    * Get all storage pools with filtering
@@ -419,7 +433,7 @@ export class StorageManagementService {
     tier?: StorageTier;
     isActive?: boolean;
     healthStatus?: HealthStatus;
-  } = {}): Promise<StoragePool[]> {
+ = {}): Promise<StoragePool[]> {
 
     let query = `
       SELECT * FROM storage_pools 
@@ -432,31 +446,31 @@ export class StorageManagementService {
       query += ` AND storage_type = $${paramIndex}`;
       params.push(filters.storageType);
       paramIndex++;
-    }
+
 
     if (filters.tier) {
       query += ` AND tier = $${paramIndex}`;
       params.push(filters.tier);
       paramIndex++;
-    }
+
 
     if (filters.isActive !== undefined) {
       query += ` AND is_active = $${paramIndex}`;
       params.push(filters.isActive);
       paramIndex++;
-    }
+
 
     if (filters.healthStatus) {
       query += ` AND health_status = $${paramIndex}`;
       params.push(filters.healthStatus);
       paramIndex++;
-    }
+
 
     query += ' ORDER BY created_at DESC';
 
     const result = await this.db.query(query, params);
     return result.rows.map(row => this.hydrateStoragePool(row));
-  }
+
 
   /**
    * Update storage pool configuration
@@ -472,7 +486,7 @@ export class StorageManagementService {
     const currentPool = await this.getStoragePool(poolId);
     if (!currentPool) {
       throw new Error(`Storage pool not found: ${poolId}`);
-    }
+
 
     const updateData: any = { updated_at: new Date() };
     
@@ -502,12 +516,12 @@ export class StorageManagementService {
       details: {
         poolId,
         updates: Object.keys(updateData)
-  }
+
       severity: 'info'
     });
 
     return await this.getStoragePool(poolId) as StoragePool;
-  }
+
 
   // =============================================================================
   // Storage Quota Management  
@@ -538,7 +552,7 @@ export class StorageManagementService {
     // Check for immediate quota violations
     if (quota.quotaExceeded) {
       await this.handleQuotaViolation(quota);
-    }
+
 
     await this.auditService.logEvent({
       userId: createdBy,
@@ -548,12 +562,12 @@ export class StorageManagementService {
         resourceType: quota.resourceType,
         resourceId: quota.resourceId,
         maxStorage: quota.maxStorage
-  }
+
       severity: 'info'
     });
 
     return quota;
-  }
+
 
   /**
    * Check and enforce storage quotas
@@ -580,14 +594,14 @@ export class StorageManagementService {
         if (isExceeded) {
           violations.push(quota);
           await this.handleQuotaViolation(quota);
-        }
-      }
-    }
+
+
+
 
     if (violations.length > 0) {
       console.log(`⚠️ Found ${violations.length} quota violations`);
-    }
-  }
+
+
 
   // =============================================================================
   // Storage Optimization
@@ -630,12 +644,12 @@ export class StorageManagementService {
         type,
         targetType: target.targetType,
         estimatedSavings: optimization.estimatedSavings
-  }
+
       severity: 'info'
     });
 
     return optimization;
-  }
+
 
   /**
    * Execute storage optimization
@@ -647,11 +661,11 @@ export class StorageManagementService {
     const optimization = await this.getOptimization(optimizationId);
     if (!optimization) {
       throw new Error(`Optimization not found: ${optimizationId}`);
-    }
+
 
     if (optimization.status !== OptimizationStatus.SCHEDULED) {
       throw new Error(`Optimization not in schedulable state: ${optimization.status}`);
-    }
+
 
     // Update status to running
     optimization.status = OptimizationStatus.RUNNING;
@@ -671,8 +685,7 @@ export class StorageManagementService {
       await this.updateOptimization(optimization);
 
       console.log(`✅ Optimization completed: ${results.storageFreed}GB freed`);
-
-    } catch (error) {
+ catch (error) {
       optimization.status = OptimizationStatus.FAILED;
       optimization.completedAt = new Date();
       optimization.errors.push(error instanceof Error ? error.message : 'Unknown error');
@@ -680,10 +693,10 @@ export class StorageManagementService {
       await this.updateOptimization(optimization);
       
       throw error;
-    }
+
 
     return optimization;
-  }
+
 
   /**
    * Get optimization recommendations
@@ -695,7 +708,7 @@ export class StorageManagementService {
     priority: 'high' | 'medium' | 'low';
     description: string;
     impact: string;
-  }>> {
+>> {
     console.log('💡 Generating optimization recommendations');
 
     const recommendations = [];
@@ -711,7 +724,7 @@ export class StorageManagementService {
         description: 'Enable compression for warm storage data',
         impact: 'Significant storage savings with minimal performance impact'
       });
-    }
+
 
     // Check for archival opportunities  
     const oldData = await this.findOldData(90); // 90+ days old
@@ -724,7 +737,7 @@ export class StorageManagementService {
         description: 'Archive data older than 90 days',
         impact: 'Moderate storage savings with longer access times for old data'
       });
-    }
+
 
     // Check for cleanup opportunities
     const duplicates = await this.findDuplicateData();
@@ -737,10 +750,10 @@ export class StorageManagementService {
         description: 'Remove duplicate files and data blocks',
         impact: 'Moderate savings by eliminating redundant data'
       });
-    }
+
 
     return recommendations;
-  }
+
 
   // =============================================================================
   // Storage Monitoring and Alerts
@@ -757,8 +770,8 @@ export class StorageManagementService {
       const cached = this.metricsCache.get(cacheKey);
       if (cached && Date.now() - cached.timestamp.getTime() < 300000) { // 5 minutes
         return cached;
-      }
-    }
+
+
 
     console.log('📊 Calculating current storage metrics');
 
@@ -790,7 +803,7 @@ export class StorageManagementService {
 
     this.metricsCache.set(cacheKey, metrics);
     return metrics;
-  }
+
 
   /**
    * Generate storage report
@@ -830,12 +843,12 @@ export class StorageManagementService {
         reportId,
         reportType,
         period: period.granularity
-  }
+
       severity: 'info'
     });
 
     return report;
-  }
+
 
   // =============================================================================
   // Background Monitoring and Processing
@@ -851,13 +864,13 @@ export class StorageManagementService {
         await this.monitorStorageHealth();
         await this.enforceStorageQuotas();
         await this.processAlerts();
-      } catch (error) {
+ catch (error) {
         console.error('Background monitoring error:', error);
-      }
+
     }, 5 * 60 * 1000); // 5 minutes
 
     console.log('🔄 Started background storage monitoring');
-  }
+
 
   /**
    * Start optimization scheduler
@@ -867,13 +880,13 @@ export class StorageManagementService {
     setInterval(async () => {
       try {
         await this.processOptimizationQueue();
-      } catch (error) {
+ catch (error) {
         console.error('Optimization scheduler error:', error);
-      }
+
     }, 10 * 60 * 1000); // 10 minutes
 
     console.log('⚙️ Started optimization scheduler');
-  }
+
 
   /**
    * Monitor storage health
@@ -900,10 +913,10 @@ export class StorageManagementService {
             threshold: 80,
             currentValue: metrics.healthScore
           });
-        }
-      }
-    }
-  }
+
+
+
+
 
   // =============================================================================
   // Private Helper Methods
@@ -911,19 +924,19 @@ export class StorageManagementService {
 
   private generatePoolId(): string {
     return `pool-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateQuotaId(): string {
     return `quota-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateOptimizationId(): string {
     return `opt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateReportId(): string {
     return `rpt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private hydrateStoragePool(row: any): StoragePool {
     return {
@@ -947,7 +960,7 @@ export class StorageManagementService {
       healthStatus: row.health_status,
       tags: JSON.parse(row.tags || '[]')
     };
-  }
+
 
   // Actual implementation methods
   private async getStoragePool(poolId: string): Promise<StoragePool | null> {
@@ -959,10 +972,10 @@ export class StorageManagementService {
     
     if (result.rows.length === 0) {
       return null;
-    }
+
     
     return this.hydrateStoragePool(result.rows[0]);
-  }
+
   private async storeStoragePool(pool: StoragePool): Promise<void> {
 
     await this.db.query(`
@@ -978,7 +991,7 @@ export class StorageManagementService {
       pool.costPerGB, pool.location, pool.isActive, pool.createdAt,
       pool.healthStatus, JSON.stringify(pool.tags)
     ]);
-  }
+
   private async storeStorageQuota(quota: StorageQuota): Promise<void> {}
   private async getAllActiveQuotas(): Promise<StorageQuota[]> { return []; }
   private async calculateCurrentUsage(resourceType: ResourceType, resourceId: string): Promise<number> { return 0; }
@@ -999,7 +1012,7 @@ export class StorageManagementService {
       optimization.results ? JSON.stringify(optimization.results) : null,
       optimization.createdAt, optimization.completedAt, optimization.error
     ]);
-  }
+
   private async getOptimization(optimizationId: string): Promise<StorageOptimization | null> {
 
     const result = await this.db.query(
@@ -1009,7 +1022,7 @@ export class StorageManagementService {
     
     if (result.rows.length === 0) {
       return null;
-    }
+
     
     const row = result.rows[0];
     return {
@@ -1026,7 +1039,7 @@ export class StorageManagementService {
       completedAt: row.completed_at,
       error: row.error
     };
-  }
+
   private async updateOptimization(optimization: StorageOptimization): Promise<void> {}
   private async performOptimization(optimization: StorageOptimization): Promise<OptimizationResults> {
 
@@ -1045,9 +1058,9 @@ export class StorageManagementService {
         ioOperations: 5000,
         networkTraffic: 10,
         duration: 1800
-      }
+
     };
-  }
+
   private async estimateOptimizationSavings(type: OptimizationType, target: OptimizationTarget, parameters: OptimizationParameters): Promise<number> { return 100; }
   private calculateCostSavings(storageFreed: number): number { return storageFreed * 0.1; }
   private async findOldData(ageDays: number): Promise<{ size: number }> { return { size: 150 }; }
@@ -1066,7 +1079,7 @@ export class StorageManagementService {
       errorRate: 0.1,
       healthScore: 95
     };
-  }
+
   private async calculateGrowthRate(): Promise<number> { return 10; }
   private async calculateCompressionRatio(): Promise<number> { return 0.65; }
   private async calculateDeduplicationRatio(): Promise<number> { return 0.85; }
@@ -1087,23 +1100,22 @@ export class StorageManagementService {
       criticalIssues: 1,
       recommendationCount: 5
     };
-  }
+
   private async generateReportDetails(reportType: ReportType, period: ReportPeriod): Promise<any> { return {}; }
   private async generateReportRecommendations(reportType: ReportType, details: any): Promise<string[]> {
 
     return ['Enable compression for warm storage', 'Archive data older than 90 days', 'Implement deduplication']; 
-  }
+
   private generateNextActions(recommendations: string[]): string[] {
     return recommendations.slice(0, 3).map(rec => `Action: ${rec}`);
-  }
+
   private async storeStorageReport(report: StorageReport): Promise<void> {}
   private async processOptimizationQueue(): Promise<void> {}
   private assessPoolHealth(pool: StoragePool, metrics: StoragePoolMetrics): HealthStatus {
     if (metrics.healthScore > 90) return HealthStatus.HEALTHY;
     if (metrics.healthScore > 70) return HealthStatus.WARNING;
     return HealthStatus.CRITICAL;
-  }
+
   private async updatePoolHealthStatus(poolId: string, healthStatus: HealthStatus): Promise<void> {}
   private async createStorageAlert(alert: Omit<StorageAlert, 'alertId' | 'triggeredAt' | 'actionsTaken' | 'suppressed'>): Promise<void> {}
   private async processAlerts(): Promise<void> {}
-}

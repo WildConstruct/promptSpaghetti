@@ -14,9 +14,9 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Node, Edge } from 'reactflow';
 import { RealTimePreviewIntegration } from '../RealTimePreview/RealTimePreviewIntegration';
 import { PreviewVariant } from '../../hooks/useRealTimePreview';
-}
-interface DirectorPreviewToolbarProps {
-  nodes: Node;
+
+
+interface DirectorPreviewToolbarProps { nodes: Node;
   edges: Edge;
   // Preview state
   isPreviewOpen: boolean;
@@ -26,17 +26,17 @@ interface DirectorPreviewToolbarProps {
   // Director preferences
   className?: string;
   compactMode?: boolean;
-  export const DirectorPreviewToolbar: React.FC<DirectorPreviewToolbarProps> = ({,)
-  nodes,
-  edges,
-  isPreviewOpen,
-  onPreviewToggle,
-  onHighlightPath,
-  className = '',
+  export const DirectorPreviewToolbar: React.FC<DirectorPreviewToolbarProps> = ({);
+  nodes;
+  edges;
+  isPreviewOpen;
+  onPreviewToggle;
+  onHighlightPath;
+  className = '' }
   compactMode = false
-}
-}) => {
-  // State for director controls
+
+
+}) => { // State for director controls
   const [realTimeEnabled, setRealTimeEnabled] = useState(true);
   const [previewCount, setPreviewCount] = useState(3);
   const [autoRefresh, setAutoRefresh] = useState(true);
@@ -44,25 +44,22 @@ interface DirectorPreviewToolbarProps {
   const [currentVariants, setCurrentVariants] = useState<PreviewVariant>([]);
   const [lastError, setLastError] = useState<string | null>(null);
   // Handle preview updates from real-time system
-  const handlePreviewUpdate = useCallback((variants: PreviewVariant) => {,
+  const handlePreviewUpdate = useCallback((variants: PreviewVariant) => { }
   setCurrentVariants(variants);
   setLastError(null); // Clear errors on successful update
 }, []);
   // Handle errors from preview system
-  const handlePreviewError = useCallback((error: string) => {
-    setLastError(error);
-  }, []);
+  const handlePreviewError = useCallback((error: string) => { setLastError(error) }, []);
   // Calculate graph complexity metrics for directors
-  const graphMetrics = useMemo(() => {
-    const nodeCount = nodes.length;
+  const graphMetrics = useMemo(() => { const nodeCount = nodes.length;
     const edgeCount = edges.length;
     const complexity = Math.round((nodeCount * 2 + edgeCount) / 3);
     // Estimate generation time based on complexity
     const estimatedTime = Math.min(Math.max(complexity * 50, 100), 2000);
     return {
-      nodeCount,
-      edgeCount,
-      complexity,
+      nodeCount
+      edgeCount
+      complexity }
       estimatedTime
     };
   }, [nodes, edges]);
@@ -176,29 +173,29 @@ interface DirectorPreviewToolbarProps {
               </label>
               {/* Epic 7.3 - Advanced Settings Button */}
               <button
-                onClick={() => {
+                onClick={ () => {
   // Trigger Alt+S keyboard shortcut to open settings modal
   const event = new KeyboardEvent('keydown', {)
-  key: 's',
-  altKey: true,
-  bubbles: true,
+  key: 's'
+  altKey: true
+  bubbles: true }
 });
                   document.dispatchEvent(event);
-                }}
+
                 className="setting-control"
-                style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: '6px',
-  padding: '6px 10px',
-  backgroundColor: 'transparent',
-  border: '1px solid #666',
-  borderRadius: '4px',
-  color: '#fff',
-  fontSize: '12px',
-  cursor: 'pointer',
-  transition: 'all 0.2s ease',
-}}
+                style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: '6px'
+  padding: '6px 10px'
+  backgroundColor: 'transparent'
+  border: '1px solid #666'
+  borderRadius: '4px'
+  color: '#fff'
+  fontSize: '12px'
+  cursor: 'pointer'
+  transition: 'all 0.2s ease' }
+
                 title="Open Advanced Settings (Alt+S)"
               >
                 <span>⚙️</span>
@@ -237,7 +234,7 @@ interface DirectorPreviewToolbarProps {
           onError={handlePreviewError}
         />
       )}
-      <style>{`
+      <style>{ `
         .director-preview-toolbar {
           background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
           border: 1px solid #444;
@@ -279,7 +276,7 @@ interface DirectorPreviewToolbarProps {
           align-items: center;
   gap: 6px;
           background: linear-gradient(135deg, #444 0%, #555 100%);
-          border: 1px solid #666;
+          border: 1px solid #666
   color: #fff;
           padding: 8px 16px;
           border-radius: 6px;
@@ -287,7 +284,7 @@ interface DirectorPreviewToolbarProps {
           transition: all 0.2s ease;
           font-size: 13px;
           font-weight: 500;
-        .preview-btn:hover {,
+        .preview-btn:hover {
   background: linear-gradient(135deg, #555 0%, #666 100%);
           border-color: #777;
         .preview-btn.active {
@@ -311,19 +308,19 @@ interface DirectorPreviewToolbarProps {
           border-radius: 8px;
   position: relative;
           transition: background 0.2s ease;
-        .toggle-slider::after {,
-  content: '';
-          position: absolute;
+        .toggle-slider::after {
+  content: ''
+  position: absolute;
   width: 12px;
-          height: 12px;
+  height: 12px;
   background: #fff;
-          border-radius: 50%;
+          border-radius: 50%
   top: 2px;
           left: 2px;
   transition: transform 0.2s ease;
         .toggle-control input[type="checkbox"]:checked + .toggle-slider {
           background: #ffd700;
-        .toggle-control input[type="checkbox"]:checked + .toggle-slider::after {,
+        .toggle-control input[type="checkbox"]:checked + .toggle-slider::after {
   transform: translateX(16px);
         .count-selector {
           display: flex;
@@ -331,9 +328,9 @@ interface DirectorPreviewToolbarProps {
   gap: 6px;
           font-size: 13px;
         .count-select {
-          background: #333;
+          background: #333
   border: 1px solid #555;
-          color: #fff;
+          color: #fff
   padding: 4px 8px;
           border-radius: 4px;
           font-size: 12px;
@@ -381,7 +378,7 @@ interface DirectorPreviewToolbarProps {
         .error-dismiss {
           background: none;
   border: none;
-          color: #ff6b6b;
+          color: #ff6b6b
   cursor: pointer;
           padding: 0;
   width: 16px;
@@ -389,9 +386,9 @@ interface DirectorPreviewToolbarProps {
   display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 50%;
+          border-radius: 50%
   transition: background 0.2s ease;
-        .error-dismiss:hover {,
+        .error-dismiss:hover { }
   background: rgba(255, 107, 107, 0.2);
       `}</style>
     </div>

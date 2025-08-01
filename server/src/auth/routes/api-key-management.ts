@@ -59,15 +59,16 @@ const AVAILABLE_SCOPES = [
   '*' // Full access (super admin only)
 ];
 
-}
-}
+
+
 interface ApiKeyManagementRouteContext {
   databaseService: DatabaseService;
   auditService: AuditService;
   rateLimitService: RateLimitService;
-}
-}
-}
+
+
+
+
 
 export async function apiKeyManagementRoutes(
   fastify: FastifyInstance,
@@ -98,13 +99,13 @@ export async function apiKeyManagementRoutes(
                   name: { type: 'string' },
                   description: { type: 'string' },
                   category: { type: 'string' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const scopeDescriptions = {
       'read:user': { description: 'Read user profile information', category: 'user' },
@@ -133,7 +134,7 @@ export async function apiKeyManagementRoutes(
   // Create new API key
   fastify.post<{
     Body: z.infer<typeof createApiKeySchema>;
-  }>('/api-keys', {
+>('/api-keys', {
     preHandler: [fastify.authenticate],
     schema: {
       body: createApiKeySchema,
@@ -154,14 +155,14 @@ export async function apiKeyManagementRoutes(
                 createdAt: { type: 'string' },
                 rateLimits: { type: 'object' },
                 status: { type: 'string' }
-              }
-  }
+
+
             rawKey: { type: 'string' },
             warning: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = request.body as z.infer<typeof createApiKeySchema>;
@@ -174,7 +175,7 @@ export async function apiKeyManagementRoutes(
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       // Validate scopes
       const invalidScopes = body.scopes.filter(scope => !AVAILABLE_SCOPES.includes(scope));
@@ -184,7 +185,7 @@ export async function apiKeyManagementRoutes(
           message: `Invalid scopes: ${invalidScopes.join(', ')}`,
           availableScopes: AVAILABLE_SCOPES
         });
-      }
+
 
       // Check permissions for admin scopes
       const hasAdminRole = userRoles.includes('super_admin') || userRoles.includes('admin');
@@ -196,7 +197,7 @@ export async function apiKeyManagementRoutes(
           error: 'Forbidden',
           message: 'Administrator privileges required for admin scopes'
         });
-      }
+
 
       // Create API key
       const createRequest: CreateApiKeyRequest = {
@@ -223,18 +224,17 @@ export async function apiKeyManagementRoutes(
           createdAt: apiKey.createdAt.toISOString(),
           rateLimits: apiKey.rateLimits,
           status: apiKey.status
-  }
+
         rawKey,
         warning: 'Store this API key securely. It will not be shown again.'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Create API key error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: error instanceof Error ? error.message : 'Failed to create API key'
       });
-    }
+
   });
 
   // Get user's API keys
@@ -245,8 +245,8 @@ export async function apiKeyManagementRoutes(
         type: 'object',
         properties: {
           includeInactive: { type: 'boolean', default: false }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -267,14 +267,14 @@ export async function apiKeyManagementRoutes(
                   lastUsedAt: { type: 'string' },
                   rateLimits: { type: 'object' },
                   metadata: { type: 'object' }
-                }
-              }
-  }
+
+
+
             count: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -285,7 +285,7 @@ export async function apiKeyManagementRoutes(
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       const apiKeys = await apiKeyService.getUserApiKeys(userId, { includeInactive });
 
@@ -305,20 +305,19 @@ export async function apiKeyManagementRoutes(
         })),
         count: apiKeys.length
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get API keys error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve API keys'
       });
-    }
+
   });
 
   // Validate API key
   fastify.post<{
     Body: { apiKey: string } & z.infer<typeof validateApiKeySchema>;
-  }>('/api-keys/validate', {
+>('/api-keys/validate', {
     schema: {
       body: {
         type: 'object',
@@ -326,9 +325,9 @@ export async function apiKeyManagementRoutes(
           apiKey: { type: 'string' },
           requiredScope: { type: 'string' },
           ipAddress: { type: 'string' }
-  }
+
         required: ['apiKey']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -339,10 +338,10 @@ export async function apiKeyManagementRoutes(
             scopes: { type: 'array', items: { type: 'string' } },
             rateLimitStatus: { type: 'object' },
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { apiKey, requiredScope, ipAddress } = request.body as any;
@@ -355,20 +354,19 @@ export async function apiKeyManagementRoutes(
       );
 
       return reply.send(validationResult);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Validate API key error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to validate API key'
       });
-    }
+
   });
 
   // Rotate API key
   fastify.post<{
     Body: z.infer<typeof rotateApiKeySchema>;
-  }>('/api-keys/rotate', {
+>('/api-keys/rotate', {
     preHandler: [fastify.authenticate],
     schema: {
       body: rotateApiKeySchema,
@@ -384,8 +382,8 @@ export async function apiKeyManagementRoutes(
                 newKeyId: { type: 'string' },
                 rotatedAt: { type: 'string' },
                 rotationCount: { type: 'number' }
-              }
-  }
+
+
             newApiKey: {
               type: 'object',
               properties: {
@@ -395,14 +393,14 @@ export async function apiKeyManagementRoutes(
                 scopes: { type: 'array', items: { type: 'string' } },
                 expiresAt: { type: 'string' },
                 createdAt: { type: 'string' }
-              }
-  }
+
+
             rawKey: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { keyId } = request.body as z.infer<typeof rotateApiKeySchema>;
@@ -414,7 +412,7 @@ export async function apiKeyManagementRoutes(
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       // Verify key ownership
       const userKeys = await apiKeyService.getUserApiKeys(userId);
@@ -425,7 +423,7 @@ export async function apiKeyManagementRoutes(
           error: 'API Key Not Found',
           message: 'API key not found or does not belong to user'
         });
-      }
+
 
       const rotationResult = await apiKeyService.rotateApiKey(keyId, rotatedBy);
 
@@ -434,7 +432,7 @@ export async function apiKeyManagementRoutes(
           error: 'Rotation Failed',
           message: 'Failed to rotate API key. Key may be inactive or invalid.'
         });
-      }
+
 
       const { newApiKey, rawKey } = rotationResult;
 
@@ -445,7 +443,7 @@ export async function apiKeyManagementRoutes(
           newKeyId: newApiKey.keyId,
           rotatedAt: new Date().toISOString(),
           rotationCount: newApiKey.metadata.rotationCount
-  }
+
         newApiKey: {
           keyId: newApiKey.keyId,
           keyPrefix: newApiKey.keyPrefix,
@@ -453,24 +451,23 @@ export async function apiKeyManagementRoutes(
           scopes: newApiKey.scopes,
           expiresAt: newApiKey.expiresAt?.toISOString(),
           createdAt: newApiKey.createdAt.toISOString()
-  }
+
         rawKey,
         message: 'API key rotated successfully. Old key will be revoked in 24 hours.'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Rotate API key error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: error instanceof Error ? error.message : 'Failed to rotate API key'
       });
-    }
+
   });
 
   // Revoke API key
   fastify.post<{
     Body: z.infer<typeof revokeApiKeySchema>;
-  }>('/api-keys/revoke', {
+>('/api-keys/revoke', {
     preHandler: [fastify.authenticate],
     schema: {
       body: revokeApiKeySchema,
@@ -481,10 +478,10 @@ export async function apiKeyManagementRoutes(
             success: { type: 'boolean' },
             message: { type: 'string' },
             revokedAt: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { keyId, reason } = request.body as z.infer<typeof revokeApiKeySchema>;
@@ -496,7 +493,7 @@ export async function apiKeyManagementRoutes(
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       // Verify key ownership
       const userKeys = await apiKeyService.getUserApiKeys(userId, { includeInactive: true });
@@ -507,14 +504,14 @@ export async function apiKeyManagementRoutes(
           error: 'API Key Not Found',
           message: 'API key not found or does not belong to user'
         });
-      }
+
 
       if (targetKey.status === 'revoked') {
         return reply.status(400).send({
           error: 'Key Already Revoked',
           message: 'API key has already been revoked'
         });
-      }
+
 
       const success = await apiKeyService.revokeApiKey(keyId, revokedBy, reason);
 
@@ -523,21 +520,20 @@ export async function apiKeyManagementRoutes(
           error: 'Revocation Failed',
           message: 'Failed to revoke API key'
         });
-      }
+
 
       return reply.send({
         success: true,
         message: 'API key revoked successfully',
         revokedAt: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Revoke API key error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: error instanceof Error ? error.message : 'Failed to revoke API key'
       });
-    }
+
   });
 
   // Get API key statistics
@@ -558,12 +554,12 @@ export async function apiKeyManagementRoutes(
                 keysUsedLast24Hours: { type: 'number' },
                 topScopes: { type: 'array' },
                 averageKeyAge: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -573,19 +569,18 @@ export async function apiKeyManagementRoutes(
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       const statistics = await apiKeyService.getStatistics(userId);
 
       return reply.send({ statistics });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get API key statistics error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve API key statistics'
       });
-    }
+
   });
 
   // Admin: Get global API key statistics (requires admin role)
@@ -601,8 +596,8 @@ export async function apiKeyManagementRoutes(
             error: 'Forbidden',
             message: 'Administrator privileges required'
           });
-        }
-      }
+
+
     ],
     schema: {
       response: {
@@ -619,13 +614,13 @@ export async function apiKeyManagementRoutes(
                 keysUsedLast24Hours: { type: 'number' },
                 topScopes: { type: 'array' },
                 averageKeyAge: { type: 'number' }
-              }
-  }
+
+
             timestamp: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const globalStatistics = await apiKeyService.getStatistics(); // No userId = global stats
@@ -634,14 +629,13 @@ export async function apiKeyManagementRoutes(
         globalStatistics,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get global API key statistics error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve global API key statistics'
       });
-    }
+
   });
 
   // Admin: Get all API keys (requires admin role)
@@ -657,8 +651,8 @@ export async function apiKeyManagementRoutes(
             error: 'Forbidden',
             message: 'Administrator privileges required'
           });
-        }
-      }
+
+
     ],
     schema: {
       querystring: {
@@ -669,8 +663,8 @@ export async function apiKeyManagementRoutes(
           offset: { type: 'number', minimum: 0, default: 0 },
           sortBy: { type: 'string', enum: ['createdAt', 'lastUsedAt', 'totalCalls'], default: 'createdAt' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -683,12 +677,12 @@ export async function apiKeyManagementRoutes(
                 limit: { type: 'number' },
                 offset: { type: 'number' },
                 hasMore: { type: 'boolean' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { status, limit, offset, sortBy, sortOrder } = request.query as any;
@@ -702,14 +696,13 @@ export async function apiKeyManagementRoutes(
       });
 
       return reply.send(result);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get all API keys error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve all API keys'
       });
-    }
+
   });
 
   // Admin: Get usage metrics for all keys (requires admin role)
@@ -725,17 +718,17 @@ export async function apiKeyManagementRoutes(
             error: 'Forbidden',
             message: 'Administrator privileges required'
           });
-        }
-      }
+
+
     ],
     schema: {
       querystring: {
         type: 'object',
         properties: {
           timeRange: { type: 'string', enum: ['1h', '24h', '7d', '30d'], default: '24h' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { timeRange } = request.query as any;
@@ -743,14 +736,13 @@ export async function apiKeyManagementRoutes(
       const metrics = await apiKeyService.getUsageMetrics(timeRange || '24h');
       
       return reply.send({ metrics });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get usage metrics error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve usage metrics'
       });
-    }
+
   });
 
   // Admin: Get real-time security alerts (requires admin role)
@@ -766,22 +758,21 @@ export async function apiKeyManagementRoutes(
             error: 'Forbidden',
             message: 'Administrator privileges required'
           });
-        }
-      }
+
+
     ]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const alerts = await apiKeyService.getSecurityAlerts();
       
       return reply.send({ alerts });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get security alerts error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve security alerts'
       });
-    }
+
   });
 
   // Admin: Revoke API key with reason (requires admin role)
@@ -797,8 +788,8 @@ export async function apiKeyManagementRoutes(
             error: 'Forbidden',
             message: 'Administrator privileges required'
           });
-        }
-      }
+
+
     ],
     schema: {
       body: {
@@ -806,10 +797,10 @@ export async function apiKeyManagementRoutes(
         properties: {
           keyId: { type: 'string' },
           reason: { type: 'string' }
-  }
+
         required: ['keyId', 'reason']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { keyId, reason } = request.body as any;
@@ -823,21 +814,20 @@ export async function apiKeyManagementRoutes(
           error: 'Revocation Failed',
           message: 'Failed to revoke API key'
         });
-      }
+
 
       return reply.send({
         success: true,
         message: 'API key revoked successfully',
         revokedAt: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Admin revoke API key error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: error instanceof Error ? error.message : 'Failed to revoke API key'
       });
-    }
+
   });
 
   // Admin: Suspend API key (requires admin role)
@@ -853,8 +843,8 @@ export async function apiKeyManagementRoutes(
             error: 'Forbidden',
             message: 'Administrator privileges required'
           });
-        }
-      }
+
+
     ],
     schema: {
       body: {
@@ -863,10 +853,10 @@ export async function apiKeyManagementRoutes(
           keyId: { type: 'string' },
           reason: { type: 'string' },
           duration: { type: 'string' } // e.g., '24h', '7d', 'permanent'
-  }
+
         required: ['keyId', 'reason']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { keyId, reason, duration } = request.body as any;
@@ -880,7 +870,7 @@ export async function apiKeyManagementRoutes(
           error: 'Suspension Failed',
           message: 'Failed to suspend API key'
         });
-      }
+
 
       return reply.send({
         success: true,
@@ -888,14 +878,13 @@ export async function apiKeyManagementRoutes(
         suspendedAt: new Date().toISOString(),
         duration: duration || 'permanent'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Admin suspend API key error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: error instanceof Error ? error.message : 'Failed to suspend API key'
       });
-    }
+
   });
 
   // Admin: Update rate limits for API key (requires admin role)
@@ -911,8 +900,8 @@ export async function apiKeyManagementRoutes(
             error: 'Forbidden',
             message: 'Administrator privileges required'
           });
-        }
-      }
+
+
     ],
     schema: {
       body: {
@@ -925,13 +914,13 @@ export async function apiKeyManagementRoutes(
               requestsPerMinute: { type: 'number', minimum: 1 },
               requestsPerHour: { type: 'number', minimum: 1 },
               requestsPerDay: { type: 'number', minimum: 1 }
-  }
+
             required: ['requestsPerMinute', 'requestsPerHour', 'requestsPerDay']
-          }
-  }
+
+
         required: ['keyId', 'rateLimits']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { keyId, rateLimits } = request.body as any;
@@ -945,21 +934,20 @@ export async function apiKeyManagementRoutes(
           error: 'Update Failed',
           message: 'Failed to update rate limits'
         });
-      }
+
 
       return reply.send({
         success: true,
         message: 'Rate limits updated successfully',
         updatedAt: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Admin update rate limits error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: error instanceof Error ? error.message : 'Failed to update rate limits'
       });
-    }
+
   });
 
   // Admin: Bulk operations on API keys (requires admin role)
@@ -975,8 +963,8 @@ export async function apiKeyManagementRoutes(
             error: 'Forbidden',
             message: 'Administrator privileges required'
           });
-        }
-      }
+
+
     ],
     schema: {
       body: {
@@ -985,10 +973,10 @@ export async function apiKeyManagementRoutes(
           operation: { type: 'string', enum: ['revoke', 'suspend', 'rate_limit'] },
           keyIds: { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 100 },
           parameters: { type: 'object' } // Operation-specific parameters
-  }
+
         required: ['operation', 'keyIds']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { operation, keyIds, parameters } = request.body as any;
@@ -1010,14 +998,13 @@ export async function apiKeyManagementRoutes(
         results: result.results,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Admin bulk operation error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: error instanceof Error ? error.message : 'Failed to perform bulk operation'
       });
-    }
+
   });
 
   // Health check for API key management service
@@ -1043,8 +1030,7 @@ export async function apiKeyManagementRoutes(
           'Advanced usage analytics and reporting'
         ]
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('API key management health check failed:', error);
       return reply.status(503).send({
         status: 'unhealthy',
@@ -1052,6 +1038,5 @@ export async function apiKeyManagementRoutes(
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
-}

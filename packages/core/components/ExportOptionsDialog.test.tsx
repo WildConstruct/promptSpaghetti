@@ -10,102 +10,94 @@ import { PreviewResultWithPath } from '../types/ExecutionPath';
 import { ExportFormat } from '../services/ResultExportService';
 
 // Mock the ResultExportService
-jest.mock('../services/ResultExportService', () => ({)
-  ResultExportService: jest.fn<unknown, unknown>().mockImplementation(() => ({,)
-  getAvailableFormats: () => [,
+jest.mock('../services/ResultExportService', () => ({ )
+  ResultExportService: jest.fn<unknown, unknown>().mockImplementation(() => ({)
+  getAvailableFormats: () => [
   {
-  format: 'json-simple',
-  name: 'JSON (Simple)',
-  description: 'Basic JSON with output and seed information',
-  category: 'data',
-  supportsIndividual: true,
-  supportsBatch: true,
-}
-      {
-  format: 'json-complete',
-  name: 'JSON (Complete)',
-  description: 'Full JSON with execution paths, metadata, and debug info',
-  category: 'data',
-  supportsIndividual: true,
-  supportsBatch: true,
-}
-      {
-  format: 'csv-analysis',
-  name: 'CSV Analysis',
-  description: 'Tabular data with performance and variance metrics',
-  category: 'analysis',
-  supportsIndividual: false,
-  supportsBatch: true,
-}
-      {
-  format: 'fountain-script',
-  name: 'Fountain Script',
-  description: 'Industry-standard screenplay format',
-  category: 'film',
-  supportsIndividual: true,
-  supportsBatch: true,
-}
-      {
-  format: 'controlnet-json',
-  name: 'ControlNet JSON',
-  description: 'VFX-ready format for Stable Diffusion ControlNet',
-  category: 'vfx',
-  supportsIndividual: true,
-  supportsBatch: true],
-  validateExportOptions: jest.fn(() => []),
-  estimateExportSize: jest.fn(() => ({,)
-  estimatedSize: 15,
-  unit: 'KB',
-  warning: undefined,
+  format: 'json-simple'
+  name: 'JSON (Simple)'
+  description: 'Basic JSON with output and seed information'
+  category: 'data'
+  supportsIndividual: true
+  supportsBatch: true }
+
+      { format: 'json-complete'
+  name: 'JSON (Complete)'
+  description: 'Full JSON with execution paths, metadata, and debug info'
+  category: 'data'
+  supportsIndividual: true
+  supportsBatch: true }
+
+      { format: 'csv-analysis'
+  name: 'CSV Analysis'
+  description: 'Tabular data with performance and variance metrics'
+  category: 'analysis'
+  supportsIndividual: false
+  supportsBatch: true }
+
+      { format: 'fountain-script'
+  name: 'Fountain Script'
+  description: 'Industry-standard screenplay format'
+  category: 'film'
+  supportsIndividual: true
+  supportsBatch: true }
+
+      { format: 'controlnet-json'
+  name: 'ControlNet JSON'
+  description: 'VFX-ready format for Stable Diffusion ControlNet'
+  category: 'vfx'
+  supportsIndividual: true
+  supportsBatch: true]
+  validateExportOptions: jest.fn(() => [])
+  estimateExportSize: jest.fn(() => ({)
+  estimatedSize: 15
+  unit: 'KB'
+  warning: undefined }
 }))
   }))
 }));
 const mockResults: PreviewResultWithPath = [
-  {
-  seed: 12345,
-  output: 'First test result',
-  executionTimeMs: 100,
-  usedNodeIds: ['node1', 'node2'],
-  usedEdgeIds: [],
+  { seed: 12345
+  output: 'First test result'
+  executionTimeMs: 100
+  usedNodeIds: ['node1', 'node2']
+  usedEdgeIds: []
   executionPath: {
-  id: 'exec_1',
-  seed: 12345,
-  startTime: Date.now() - 1000,
-  endTime: Date.now(),
-  totalExecutionTime: 100,
-  steps: [],
-  finalOutput: 'First test result',
-  nodeExecutionOrder: ['node1', 'node2'],
-  randomizationPoints: [],
-}
-  {
-  seed: 67890,
-  output: 'Second test result',
-  executionTimeMs: 150,
-  usedNodeIds: ['node1', 'node2'],
-  usedEdgeIds: [],
+  id: 'exec_1'
+  seed: 12345
+  startTime: Date.now() - 1000
+  endTime: Date.now()
+  totalExecutionTime: 100
+  steps: []
+  finalOutput: 'First test result'
+  nodeExecutionOrder: ['node1', 'node2']
+  randomizationPoints: [] }
+
+  { seed: 67890
+  output: 'Second test result'
+  executionTimeMs: 150
+  usedNodeIds: ['node1', 'node2']
+  usedEdgeIds: []
   executionPath: {
-  id: 'exec_2',
-  seed: 67890,
-  startTime: Date.now() - 1000,
-  endTime: Date.now(),
-  totalExecutionTime: 150,
-  steps: [],
-  finalOutput: 'Second test result',
-  nodeExecutionOrder: ['node1', 'node2'],
+  id: 'exec_2'
+  seed: 67890
+  startTime: Date.now() - 1000
+  endTime: Date.now()
+  totalExecutionTime: 150
+  steps: []
+  finalOutput: 'Second test result'
+  nodeExecutionOrder: ['node1', 'node2']
   randomizationPoints: []];
   describe('ExportOptionsDialog', () => {
   const defaultProps = {
-  open: true,
-  onClose: jest.fn<unknown, unknown>(),
-  results: mockResults,
-  selectedIndices: [0, 1],
-  exportType: 'batch' as const,
-  onExport: jest.fn<unknown, unknown>(),
+  open: true
+  onClose: jest.fn<unknown, unknown>()
+  results: mockResults
+  selectedIndices: [0, 1]
+  exportType: 'batch' as const
+  onExport: jest.fn<unknown, unknown>() }
 };
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   describe('Basic Rendering', () => {
     it('should render dialog when open', () => {
       render(<ExportOptionsDialog {...defaultProps} />);
@@ -227,14 +219,13 @@ const mockResults: PreviewResultWithPath = [
       fireEvent.click(jsonCompleteCard!);
       expect(screen.getByText('⚠️ Test validation error')).toBeInTheDocument();
     });
-    it('should display size warnings when present', () => {
-  const mockService = require('../services/ResultExportService').ResultExportService;
+    it('should display size warnings when present', () => { const mockService = require('../services/ResultExportService').ResultExportService;
   const mockInstance = new mockService();
   mockInstance.estimateExportSize.mockReturnValue({)
-  estimatedSize: 5000,
-  unit: 'KB',
-  warning: 'Large export size - consider reducing options',
-} as unknown);
+  estimatedSize: 5000
+  unit: 'KB'
+  warning: 'Large export size - consider reducing options' }
+ as unknown);
       render(<ExportOptionsDialog {...defaultProps} />);
       expect(screen.getByText('⚡ Large export size - consider reducing options')).toBeInTheDocument();
     });
@@ -258,14 +249,13 @@ const mockResults: PreviewResultWithPath = [
       );
       const exportButton = screen.getByText(/Export JSON \(Simple\)/);
       fireEvent.click(exportButton);
-      await waitFor(() => {
-  expect(mockOnExport).toHaveBeenCalledWith()
-  'json-simple',
+      await waitFor(() => { expect(mockOnExport).toHaveBeenCalledWith()
+  'json-simple'
   expect.objectContaining({)
-  format: 'json-simple',
-  includeMetadata: true,
-  includeExecutionPaths: false,
-  includeDebugInfo: false,
+  format: 'json-simple'
+  includeMetadata: true
+  includeExecutionPaths: false
+  includeDebugInfo: false }
 }
         );
       });
@@ -282,9 +272,7 @@ const mockResults: PreviewResultWithPath = [
       fireEvent.click(exportButton);
       expect(screen.getByText('Exporting...')).toBeInTheDocument();
       expect(exportButton.closest('button')).toBeDisabled();
-      await waitFor(() => {
-        expect(screen.queryByText('Exporting...')).not.toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.queryByText('Exporting...')).not.toBeInTheDocument() });
     });
     it('should close dialog after successful export', async () => {
       const mockOnExport = jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown);
@@ -298,9 +286,7 @@ const mockResults: PreviewResultWithPath = [
       );
       const exportButton = screen.getByText(/Export JSON \(Simple\)/);
       fireEvent.click(exportButton);
-      await waitFor(() => {
-        expect(mockOnClose).toHaveBeenCalled();
-      });
+      await waitFor(() => { expect(mockOnClose).toHaveBeenCalled() });
     });
     it('should handle export errors gracefully', async () => {
       const mockOnExport = jest.fn<unknown, unknown>().mockRejectedValue(new Error('Export failed'));
@@ -312,9 +298,7 @@ const mockResults: PreviewResultWithPath = [
       );
       const exportButton = screen.getByText(/Export JSON \(Simple\)/);
       fireEvent.click(exportButton);
-      await waitFor(() => {
-  expect(screen.getByText('⚠️ Export failed: Export failed')).toBeInTheDocument();
-});
+      await waitFor(() => { expect(screen.getByText('⚠️ Export failed: Export failed')).toBeInTheDocument() });
       // Dialog should remain open
       expect(screen.getByText('Export Options')).toBeInTheDocument();
     });
@@ -400,11 +384,11 @@ const mockResults: PreviewResultWithPath = [
       const exportButton = screen.getByText(/Export Fountain Script/);
       fireEvent.click(exportButton);
       expect(defaultProps.onExport).toHaveBeenCalledWith()
-        'fountain-script',
-        expect.objectContaining({)
-  filmOptions: expect.objectContaining({,)
-  includeDirectorNotes: false,
-}
+        'fountain-script'
+        expect.objectContaining({ )
+  filmOptions: expect.objectContaining({);
+  includeDirectorNotes: false }
+
   }
       );
     });
@@ -430,10 +414,9 @@ const mockResults: PreviewResultWithPath = [
       );
       expect(screen.getByText('0 results')).toBeInTheDocument();
     });
-    it('should handle missing execution paths in results', () => {
-  const resultsWithoutPaths = mockResults.map(result => ({)
-  ...result,
-  executionPath: undefined,
+    it('should handle missing execution paths in results', () => { const resultsWithoutPaths = mockResults.map(result => ({)
+  ...result
+  executionPath: undefined }
 }));
       render();
         <ExportOptionsDialog

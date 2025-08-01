@@ -1,3 +1,37 @@
+ > ;
+skill_outcomes: Array < {
+    domain: SkillDomain,
+    target_level: SkillLevel,
+    competencies: string
+} > ;
+marketplace_context: {
+    user_roles: ('buyer' | 'seller' | 'creator' | 'contributor' | 'admin')[];
+    template_types: string;
+    use_cases: string;
+    business_objectives: string;
+}
+;
+integration_points: {
+    requires_real_templates: boolean;
+    requires_marketplace_account: boolean;
+    requires_payment_setup: boolean;
+    requires_community_profile: boolean;
+}
+;
+success_metrics: {
+    completion_threshold: number; // percentage,
+    time_limit_minutes ?  : number;
+    accuracy_threshold ?  : number;
+    engagement_score_target ?  : number;
+}
+;
+adaptive_elements: {
+    personalizes_to_role: boolean;
+    adjusts_to_skill_level: boolean;
+    recommends_next_tutorials: boolean;
+    integrates_user_data: boolean;
+}
+;
 ;
 feedback_mechanism: {
     immediate_feedback: boolean;
@@ -292,8 +326,9 @@ catch (error) {
     // Tutorial Execution and Progress
     // ====================================
     async;
-    startTutorial(userId, string);
-    tutorialId: string,
+    startTutorial(userId, string),
+        tutorialId;
+    string,
         context;
     TutorialExecutionContext;
     Promise < TutorialSession > {

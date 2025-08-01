@@ -25,8 +25,9 @@ import {
   Filter,
   Flag,
   Eye
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface ReputationMetrics {
   totalUsers: number;,
   reputationDistribution: {
@@ -35,7 +36,8 @@ interface ReputationMetrics {
   medium: number;,
   low: number,
   veryLow: number;
-}
+
+
 };
   verificationStats: {
   identityVerified: number,
@@ -48,7 +50,7 @@ interface ReputationMetrics {
   averageTrustScore: number,
     trendDirection: 'improving' | 'stable' | 'declining';,
   monthlyChange: number,
-    topReputationUsers: Array<{ userId: string, username: string; score: number }>;
+    topReputationUsers: Array<{ userId: string, username: string, score: number }>;
   };
   riskAnalysis: {
   highRiskUsers: number,
@@ -63,7 +65,8 @@ interface ReputationMetrics {
   totalBadgesAwarded: number,
     mostPopularBadges: Array<{ badgeType: string, count: number }>;
   };
-}
+
+
 interface ReputationAlert {
   alertId: string;,
   userId: string,
@@ -96,23 +99,25 @@ interface ReputationAlert {
   verificationRate: number;,
   activeAlerts: number,
   criticalAlerts: number;
-}
+
+
 };
   metrics: ReputationMetrics;,
   alerts: ReputationAlert,
   recentActivity: unknown;,
   systemHealth: unknown,
   lastUpdated: Date;
-}
+
+
 interface ReputationDashboardProps {
-  }
+
 
 className?: string;
   refreshInterval?: number;
   export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
   className,
   refreshInterval = 60000
-}
+
 }) => {
   const [dashboardData, setDashboardData] = useState<ReputationDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -138,7 +143,7 @@ className?: string;
   achievementCount: number;,
   verificationLevel: string,
   overallTrustScore: number;
-}>>([]);
+>>([]);
   // Fetch dashboard data
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -147,12 +152,12 @@ className?: string;
       if (result.success) {
         setDashboardData(result.data);
         setError(null);
-      } else {
+ else {
         setError(result.error || 'Failed to load reputation data');
-    } catch (err) {
+ catch (err) {
   setError('Network error loading reputation data');
   console.error('Error fetching reputation dashboard:', err);
-} finally {
+ finally {
       setLoading(false);
   }, []);
   // Search users
@@ -168,7 +173,7 @@ className?: string;
       const result = await response.json();
       if (result.success) {
         setUserSearchResults(result.data);
-    } catch (err) {
+ catch (err) {
   console.error('Error searching users:', err);
 }, [searchQuery, searchFilters]);
   // Fetch leaderboard
@@ -178,7 +183,7 @@ className?: string;
       const result = await response.json();
       if (result.success) {
         setLeaderboard(result.data);
-    } catch (err) {
+ catch (err) {
   console.error('Error fetching leaderboard:', err);
 }, []);
   // Handle user flag/unflag
@@ -194,7 +199,7 @@ className?: string;
         // Refresh user search results
         searchUsers();
         fetchDashboardData();
-    } catch (err) {
+ catch (err) {
   console.error('Error flagging user:', err);
 }, [searchUsers, fetchDashboardData]);
   // Handle reputation recalculation
@@ -208,7 +213,7 @@ className?: string;
         // Refresh data
         searchUsers();
         fetchDashboardData();
-    } catch (err) {
+ catch (err) {
   console.error('Error recalculating reputation:', err);
 }, [searchUsers, fetchDashboardData]);
   // Handle alert acknowledgment
@@ -222,7 +227,7 @@ className?: string;
       });
       if (response.ok) {
         fetchDashboardData();
-    } catch (err) {
+ catch (err) {
   console.error('Error acknowledging alert:', err);
 }, [fetchDashboardData]);
   // Setup periodic refresh
@@ -351,7 +356,7 @@ className?: string;
   alert.severity === 'high' ? 'bg-orange-50 border-l-4 border-orange-500' :,
   alert.severity === 'medium' ? 'bg-yellow-50 border-l-4 border-yellow-500' :,
   'bg-blue-50 border-l-4 border-blue-500'
-}`}
+`}
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
@@ -360,7 +365,7 @@ className?: string;
   alert.severity === 'high' ? 'text-orange-600' :,
   alert.severity === 'medium' ? 'text-yellow-600' :,
   'text-blue-600'
-}`} />
+`} />
                         <span className="font-medium text-sm">{alert.title}</span>
                         <Badge variant={alert.severity === 'critical' ? 'destructive' : 'secondary'}>
                           {alert.severity}
@@ -403,7 +408,7 @@ className?: string;
               <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
                 <Select value={searchFilters.reputationLevel} onValueChange={(value) => 
                   setSearchFilters(prev => ({ ...prev, reputationLevel: value }))
-                }>
+>
                   <SelectTrigger>
                     <SelectValue placeholder="Reputation Level" />
                   </SelectTrigger>
@@ -419,7 +424,7 @@ className?: string;
                 </Select>
                 <Select value={searchFilters.verificationLevel} onValueChange={(value) => 
                   setSearchFilters(prev => ({ ...prev, verificationLevel: value }))
-                }>
+>
                   <SelectTrigger>
                     <SelectValue placeholder="Verification Level" />
                   </SelectTrigger>
@@ -434,7 +439,7 @@ className?: string;
                 </Select>
                 <Select value={searchFilters.flagged} onValueChange={(value) => 
                   setSearchFilters(prev => ({ ...prev, flagged: value }))
-                }>
+>
                   <SelectTrigger>
                     <SelectValue placeholder="Flag Status" />
                   </SelectTrigger>
@@ -449,7 +454,7 @@ className?: string;
                   onClick={() => {
                     setSearchQuery('');
                     setSearchFilters({ reputationLevel: '', verificationLevel: '', riskLevel: '', flagged: '' });
-                  }}
+}
                   className="flex items-center gap-2"
                 >
                   <Filter className="w-4 h-4" />
@@ -470,7 +475,7 @@ className?: string;
   user.reputationLevel === 'platinum' ? 'secondary' :,
   user.reputationLevel === 'gold' ? 'default' :,
   'outline'
-}>
+>
                           {user.reputationLevel}
                         </Badge>
                         {user.flagged && <Badge variant="destructive">Flagged</Badge>}
@@ -512,7 +517,7 @@ className?: string;
                           onClick={() => {
   const reason = prompt('Enter reason for flagging:');
   if (reason) handleFlagUser(user.userId, reason);
-}}
+}
                         >
                           <Flag className="w-4 h-4" />
                         </Button>
@@ -570,7 +575,7 @@ className?: string;
   alert.severity === 'high' ? 'border-orange-300 bg-orange-50' :,
   alert.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :,
   'border-blue-300 bg-blue-50'
-}`}
+`}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
@@ -580,14 +585,14 @@ className?: string;
   alert.severity === 'high' ? 'text-orange-600' :,
   alert.severity === 'medium' ? 'text-yellow-600' :,
   'text-blue-600'
-}`} />
+`} />
                           <h4 className="font-medium">{alert.title}</h4>
                           <Badge variant={
   alert.severity === 'critical' ? 'destructive' :,
   alert.severity === 'high' ? 'destructive' :,
   alert.severity === 'medium' ? 'warning' :,
   'secondary'
-}>
+>
                             {alert.severity}
                           </Badge>
                           {alert.escalated && <Badge variant="destructive">Escalated</Badge>}
@@ -652,7 +657,7 @@ className?: string;
   user.reputationLevel === 'diamond' ? 'default' :,
   user.reputationLevel === 'platinum' ? 'secondary' :,
   'outline'
-}>
+>
                           {user.reputationLevel}
                         </Badge>
                       </div>

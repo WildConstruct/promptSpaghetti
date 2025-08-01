@@ -15,7 +15,7 @@ async function analyzeLintIssues(): Promise<void> {
     execSync('pnpm lint', { stdio: 'pipe' });
     console.log('✅ No linting issues found!');
     return;
-  } catch (error) {
+ catch (error) {
     const output = String(error.stdout || error.stderr || '');
     
     // Extract error patterns
@@ -60,13 +60,13 @@ async function analyzeLintIssues(): Promise<void> {
       const percentage = ((count / totalProblems) * 100).toFixed(1);
       console.log(`   ${category.padEnd(25)} ${count.toString().padStart(6)} (${percentage}%)`);
       categorizedCount += count;
-    }
+
     
     const uncategorized = totalProblems - categorizedCount;
     if (uncategorized > 0) {
       const percentage = ((uncategorized / totalProblems) * 100).toFixed(1);
       console.log(`   ${'Other/Complex Issues'.padEnd(25)} ${uncategorized.toString().padStart(6)} (${percentage}%)`);
-    }
+
     
     console.log('\n🎯 RECOMMENDED ACTIONS:');
     
@@ -96,8 +96,8 @@ async function analyzeLintIssues(): Promise<void> {
           break;
         default:
           console.log('   📋 Manual review required');
-      }
-    }
+
+
     
     // Progressive improvement strategy
     console.log('\n📋 PROGRESSIVE IMPROVEMENT STRATEGY:');
@@ -124,16 +124,16 @@ async function analyzeLintIssues(): Promise<void> {
       console.log(`\n⚡ QUICK WINS AVAILABLE:`);
       console.log(`   ~${autoFixableCount} auto-fixable issues remaining`);
       console.log(`   Could reduce to ~${(totalProblems - autoFixableCount).toLocaleString()} problems`);
-    }
-  }
-}
+
+
+
 
 async function main(): Promise<void> {
   await analyzeLintIssues();
-}
+
 
 if (require.main === module) {
   main().catch(console.error);
-}
+
 
 module.exports = { analyzeLintIssues };

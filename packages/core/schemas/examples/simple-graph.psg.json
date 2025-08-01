@@ -1,0 +1,272 @@
+{
+  "fileType": "psg",
+  "formatVersion": "2.0.0",
+  "metadata": {
+    "name": "Simple Medieval Character Generator",
+    "description": "A basic example showing inline editing capabilities",
+    "version": "1.0.0",
+    "createdAt": "2025-08-01T10:00:00.000Z",
+    "lastModified": "2025-08-01T10:00:00.000Z",
+    "author": "Epic 1 Team",
+    "collaborators": [],
+    "tags": ["example", "medieval", "demo"],
+    "category": "character-generator",
+    "fileFormatVersion": "2.0.0",
+    "isTemplate": false,
+    "demoContent": true
+  },
+  "settings": {
+    "autoSave": true,
+    "autoSaveInterval": 30,
+    "undoStackSize": 50,
+    "gridEnabled": true,
+    "gridSize": 20,
+    "snapToGrid": false,
+    "showMinimap": true,
+    "theme": "auto",
+    "inlineEditingEnabled": true,
+    "autoFocusOnCreate": true,
+    "showValidationInline": true,
+    "editOnDoubleClick": true,
+    "execution": {
+      "defaultSeed": 12345,
+      "timeout": 5000,
+      "maxDepth": 100,
+      "enableCaching": true,
+      "parallelExecution": false
+    },
+    "enableAnimations": true,
+    "renderOptimization": true,
+    "lazyLoadNodes": false
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "node-1",
+        "type": "TextBlock",
+        "position": { "x": 100, "y": 100 },
+        "data": {
+          "value": "A ",
+          "editState": {
+            "isEditing": false,
+            "isDirty": false,
+            "validationErrors": []
+          },
+          "isValid": true,
+          "isLocked": false,
+          "previewMode": "auto"
+        },
+        "label": "Article",
+        "description": "The article 'A' prefix",
+        "tags": ["prefix"],
+        "createdAt": "2025-08-01T10:00:00.000Z",
+        "updatedAt": "2025-08-01T10:00:00.000Z"
+      },
+      {
+        "id": "node-2",
+        "type": "WeightedChoice",
+        "position": { "x": 300, "y": 100 },
+        "data": {
+          "value": [
+            {
+              "id": "option-1",
+              "text": "brave",
+              "weight": 40,
+              "color": "#ff6b6b"
+            },
+            {
+              "id": "option-2",
+              "text": "cunning",
+              "weight": 30,
+              "color": "#4ecdc4"
+            },
+            {
+              "id": "option-3",
+              "text": "wise",
+              "weight": 30,
+              "color": "#45b7d1"
+            }
+          ],
+          "editState": {
+            "isEditing": false,
+            "isDirty": false,
+            "validationErrors": []
+          },
+          "isValid": true,
+          "isLocked": false,
+          "previewMode": "auto",
+          "normalizeWeights": true,
+          "showPercentages": true,
+          "allowAddRemove": true,
+          "minOptions": 2
+        },
+        "label": "Adjective",
+        "description": "Character trait adjective",
+        "tags": ["adjective", "trait"],
+        "createdAt": "2025-08-01T10:00:00.000Z",
+        "updatedAt": "2025-08-01T10:00:00.000Z"
+      },
+      {
+        "id": "node-3",
+        "type": "WeightedChoice",
+        "position": { "x": 500, "y": 100 },
+        "data": {
+          "value": [
+            {
+              "id": "option-1",
+              "text": "knight",
+              "weight": 50
+            },
+            {
+              "id": "option-2",
+              "text": "wizard",
+              "weight": 30
+            },
+            {
+              "id": "option-3",
+              "text": "rogue",
+              "weight": 20
+            }
+          ],
+          "editState": {
+            "isEditing": false,
+            "isDirty": false,
+            "validationErrors": []
+          },
+          "isValid": true,
+          "isLocked": false,
+          "previewMode": "auto",
+          "normalizeWeights": true,
+          "showPercentages": true,
+          "allowAddRemove": true,
+          "minOptions": 2
+        },
+        "label": "Class",
+        "description": "Character class",
+        "tags": ["class", "profession"],
+        "createdAt": "2025-08-01T10:00:00.000Z",
+        "updatedAt": "2025-08-01T10:00:00.000Z"
+      },
+      {
+        "id": "node-4",
+        "type": "Concat",
+        "position": { "x": 400, "y": 300 },
+        "data": {
+          "value": {
+            "separator": " ",
+            "trimInputs": true
+          },
+          "editState": {
+            "isEditing": false,
+            "isDirty": false,
+            "validationErrors": []
+          },
+          "isValid": true,
+          "isLocked": false,
+          "previewMode": "auto"
+        },
+        "label": "Combiner",
+        "description": "Combines all parts with spaces",
+        "tags": ["combiner"],
+        "createdAt": "2025-08-01T10:00:00.000Z",
+        "updatedAt": "2025-08-01T10:00:00.000Z"
+      },
+      {
+        "id": "node-5",
+        "type": "Output",
+        "position": { "x": 400, "y": 500 },
+        "data": {
+          "value": "",
+          "editState": {
+            "isEditing": false,
+            "isDirty": false,
+            "validationErrors": []
+          },
+          "isValid": true,
+          "isLocked": true,
+          "previewMode": "auto"
+        },
+        "label": "Result",
+        "description": "Final character description",
+        "tags": ["output"],
+        "createdAt": "2025-08-01T10:00:00.000Z",
+        "updatedAt": "2025-08-01T10:00:00.000Z"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge-1",
+        "source": "node-1",
+        "target": "node-4",
+        "type": "default",
+        "animated": false
+      },
+      {
+        "id": "edge-2",
+        "source": "node-2",
+        "target": "node-4",
+        "type": "default",
+        "animated": false
+      },
+      {
+        "id": "edge-3",
+        "source": "node-3",
+        "target": "node-4",
+        "type": "default",
+        "animated": false
+      },
+      {
+        "id": "edge-4",
+        "source": "node-4",
+        "target": "node-5",
+        "type": "default",
+        "animated": true,
+        "style": {
+          "stroke": "#10b981",
+          "strokeWidth": 2
+        }
+      }
+    ],
+    "state": {
+      "selectedNodes": [],
+      "selectedEdges": [],
+      "copiedNodes": [],
+      "viewport": {
+        "x": 0,
+        "y": 0,
+        "zoom": 1
+      },
+      "isExecuting": false
+    }
+  },
+  "medievalDemo": {
+    "presets": [
+      {
+        "id": "preset-1",
+        "name": "Hero Generator",
+        "description": "Generate heroic character descriptions",
+        "nodeData": {
+          "node-2": {
+            "value": [
+              { "id": "option-1", "text": "valiant", "weight": 50 },
+              { "id": "option-2", "text": "noble", "weight": 30 },
+              { "id": "option-3", "text": "legendary", "weight": 20 }
+            ]
+          }
+        }
+      }
+    ],
+    "examples": [
+      {
+        "id": "example-1",
+        "title": "Basic Character",
+        "prompt": "Generate a character",
+        "expectedOutput": [
+          "A brave knight",
+          "A cunning wizard",
+          "A wise rogue"
+        ]
+      }
+    ]
+  }
+}

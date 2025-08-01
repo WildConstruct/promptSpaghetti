@@ -6,8 +6,8 @@ import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
-}
-}
+
+
 export interface AnomalyPattern {
   id: string;
   name: string;
@@ -21,24 +21,26 @@ export interface AnomalyPattern {
     fieldMatches?: Record<string, string | RegExp>;
     aggregateType: 'count' | 'rate' | 'distinct_count' | 'average';
     comparisonOperator: '>' | '<' | '>=' | '<=' | '==' | '!=';
-}
-}
+
+
+
   };
   actions: AnomalyAction[];
-}
 
-}
-}
+
+
+
 export interface AnomalyAction {
   type: 'notify' | 'block_ip' | 'disable_account' | 'require_2fa' | 'create_incident';
   config: Record<string, unknown>;
   delay?: number; // Delay in seconds before executing
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AnomalyEvent {
   id: string;
   patternId: string;
@@ -52,8 +54,9 @@ export interface AnomalyEvent {
     ipAddress?: string;
     sessionId?: string;
     resource?: string;
-}
-}
+
+
+
   };
   eventData: unknown[];
   description: string;
@@ -61,10 +64,10 @@ export interface AnomalyEvent {
   resolvedAt?: Date;
   resolvedBy?: string;
   falsePositive: boolean;
-}
 
-}
-}
+
+
+
 export interface AnomalyDetectionConfig {
   enabled: boolean;
   checkIntervalSeconds: number;
@@ -74,15 +77,16 @@ export interface AnomalyDetectionConfig {
     webhook?: string;
     email?: string[];
     slack?: string;
-}
-}
+
+
+
   };
   responseConfig: {
     autoBlock: boolean;
     autoDisable: boolean;
     requireManualReview: boolean;
   };
-}
+
 
 export class AnomalyDetectionService extends EventEmitter {
   private db: DatabaseService;
@@ -103,13 +107,13 @@ export class AnomalyDetectionService extends EventEmitter {
     this.redis = redis;
     this.auditService = auditService;
     this.config = config;
-  }
+
 
   async start(): Promise<void> {
 
     if (this.isRunning) {
       return;
-    }
+
 
     this.isRunning = true;
     
@@ -126,23 +130,23 @@ export class AnomalyDetectionService extends EventEmitter {
     );
 
     console.log('Anomaly Detection Service started');
-  }
+
 
   async stop(): Promise<void> {
 
     if (!this.isRunning) {
       return;
-    }
+
 
     this.isRunning = false;
     
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
       this.checkInterval = undefined;
-    }
+
 
     console.log('Anomaly Detection Service stopped');
-  }
+
 
   private async initializeTables(): Promise<void> {
 
@@ -205,7 +209,7 @@ export class AnomalyDetectionService extends EventEmitter {
       CREATE INDEX IF NOT EXISTS idx_anomaly_events_severity ON anomaly_events(severity);
       CREATE INDEX IF NOT EXISTS idx_anomaly_events_resolved ON anomaly_events(resolved);
     `);
-  }
+
 
   private async loadPatterns(): Promise<void> {
 
@@ -239,8 +243,8 @@ export class AnomalyDetectionService extends EventEmitter {
         JSON.stringify(pattern.conditions),
         JSON.stringify(pattern.actions)
       ]);
-    }
-  }
+
+
 
   private getDefaultPatterns(): AnomalyPattern[] {
     return [
@@ -256,21 +260,21 @@ export class AnomalyDetectionService extends EventEmitter {
           events: ['login_failed'],
           aggregateType: 'count',
           comparisonOperator: '>='
-  }
+
         actions: [
           {
             type: 'block_ip',
             config: { duration: 3600 } // 1 hour
-  }
+
           {
             type: 'notify',
             config: { 
               message: 'Brute force attack detected',
               channels: ['security', 'ops']
-            }
-          }
+
+
         ]
-  }
+
       {
         id: 'credential-stuffing',
         name: 'Credential Stuffing Detection',
@@ -283,21 +287,21 @@ export class AnomalyDetectionService extends EventEmitter {
           events: ['login_failed'],
           aggregateType: 'distinct_count',
           comparisonOperator: '>='
-  }
+
         actions: [
           {
             type: 'block_ip',
             config: { duration: 7200 } // 2 hours
-  }
+
           {
             type: 'create_incident',
             config: { 
               priority: 'high',
               category: 'credential_stuffing'
-            }
-          }
+
+
         ]
-  }
+
       {
         id: 'suspicious-privilege-escalation',
         name: 'Suspicious Privilege Escalation',
@@ -310,25 +314,25 @@ export class AnomalyDetectionService extends EventEmitter {
           events: ['role_changed', 'permission_granted'],
           aggregateType: 'count',
           comparisonOperator: '>='
-  }
+
         actions: [
           {
             type: 'disable_account',
             config: { reason: 'Suspicious privilege escalation detected' }
-  }
+
           {
             type: 'require_2fa',
             config: { enforceImmediate: true }
-  }
+
           {
             type: 'notify',
             config: { 
               urgency: 'critical',
               escalate: true
-            }
-          }
+
+
         ]
-  }
+
       {
         id: 'anomalous-data-access',
         name: 'Anomalous Data Access Pattern',
@@ -341,17 +345,17 @@ export class AnomalyDetectionService extends EventEmitter {
           events: ['data_access', 'export_requested'],
           aggregateType: 'count',
           comparisonOperator: '>='
-  }
+
         actions: [
           {
             type: 'notify',
             config: { 
               message: 'Unusual data access pattern detected',
               requireReview: true
-            }
-          }
+
+
         ]
-  }
+
       {
         id: 'geographic-anomaly',
         name: 'Geographic Location Anomaly',
@@ -365,23 +369,23 @@ export class AnomalyDetectionService extends EventEmitter {
           fieldMatches: { 'details.newLocation': 'true' },
           aggregateType: 'count',
           comparisonOperator: '>='
-  }
+
         actions: [
           {
             type: 'require_2fa',
             config: { temporary: true, duration: 86400 } // 24 hours
-  }
+
           {
             type: 'notify',
             config: { 
               user: true,
               message: 'Login from new location detected'
-            }
-          }
+
+
         ]
-      }
+
     ];
-  }
+
 
   private async performAnomalyCheck(): Promise<void> {
 
@@ -391,12 +395,12 @@ export class AnomalyDetectionService extends EventEmitter {
       
       for (const pattern of patterns) {
         await this.checkPattern(pattern);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error during anomaly check:', error);
       this.emit('error', error);
-    }
-  }
+
+
 
   private async getEnabledPatterns(): Promise<AnomalyPattern[]> {
 
@@ -417,7 +421,7 @@ export class AnomalyDetectionService extends EventEmitter {
       conditions: row.conditions,
       actions: row.actions
     }));
-  }
+
 
   private async checkPattern(pattern: AnomalyPattern): Promise<void> {
 
@@ -434,12 +438,12 @@ export class AnomalyDetectionService extends EventEmitter {
         
         if (this.evaluateThreshold(triggerValue, pattern.threshold, pattern.conditions.comparisonOperator)) {
           await this.createAnomalyEvent(pattern, triggerValue, row);
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       console.error(`Error checking pattern ${pattern.id}:`, error);
-    }
-  }
+
+
 
   private buildAnomalyQuery(pattern: AnomalyPattern, windowStart: Date): { sql: string; params: unknown[] } {
     const events = pattern.conditions.events.map(e => `'${e}'`).join(', ');
@@ -469,23 +473,23 @@ export class AnomalyDetectionService extends EventEmitter {
         if (value instanceof RegExp) {
           sql += ` AND details->>'${field}' ~ $${paramIndex}`;
           params.push(value.source);
-        } else {
+ else {
           sql += ` AND details->>'${field}' = $${paramIndex}`;
           params.push(value);
-        }
+
         paramIndex++;
-      }
-    }
+
+
 
     // Group by appropriate fields based on aggregate type
     if (pattern.conditions.aggregateType === 'distinct_count') {
       sql += ' GROUP BY ip_address';
-    } else {
+ else {
       sql += ' GROUP BY ip_address, user_id, session_id';
-    }
+
 
     return { sql, params };
-  }
+
 
   private extractTriggerValue(row: unknown, aggregateType: string): number {
     const record = row as Record<string, unknown>;
@@ -503,8 +507,8 @@ export class AnomalyDetectionService extends EventEmitter {
       return parseFloat(record.event_count as string); // Simplified
     default:
       return 0;
-    }
-  }
+
+
 
   private evaluateThreshold(value: number, threshold: number, operator: string): boolean {
     switch (operator) {
@@ -515,8 +519,8 @@ export class AnomalyDetectionService extends EventEmitter {
     case '==': return value === threshold;
     case '!=': return value !== threshold;
     default: return false;
-    }
-  }
+
+
 
   private async createAnomalyEvent(
     pattern: AnomalyPattern, 
@@ -538,7 +542,7 @@ export class AnomalyDetectionService extends EventEmitter {
 
     if (recentSimilar.rows.length > 0) {
       return recentSimilar.rows[0].id; // Don't create duplicate
-    }
+
 
     const affectedEntities = {
       userId: record.user_id as string,
@@ -580,7 +584,7 @@ export class AnomalyDetectionService extends EventEmitter {
     });
 
     return anomalyEventId;
-  }
+
 
   private async executeActions(
     actions: AnomalyAction[], 
@@ -603,14 +607,14 @@ export class AnomalyDetectionService extends EventEmitter {
         // Execute action with optional delay
         if (action.delay) {
           setTimeout(() => this.performAction(action, affectedEntities, actionLogId), action.delay * 1000);
-        } else {
+ else {
           await this.performAction(action, affectedEntities, actionLogId);
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error(`Failed to execute action ${action.type}:`, error);
-      }
-    }
-  }
+
+
+
 
   private async performAction(
     action: AnomalyAction, 
@@ -635,7 +639,7 @@ export class AnomalyDetectionService extends EventEmitter {
       case 'create_incident':
         await this.createIncident(action.config, affectedEntities);
         break;
-      }
+
 
       // Mark action as executed
       await this.db.query(`
@@ -643,8 +647,7 @@ export class AnomalyDetectionService extends EventEmitter {
         SET status = 'executed', executed_at = NOW()
         WHERE id = $1
       `, [actionLogId]);
-
-    } catch (error) {
+ catch (error) {
       // Mark action as failed
       await this.db.query(`
         UPDATE anomaly_actions_log 
@@ -653,8 +656,8 @@ export class AnomalyDetectionService extends EventEmitter {
       `, [actionLogId, error instanceof Error ? error.message : String(error)]);
       
       throw error;
-    }
-  }
+
+
 
   private async blockIP(ipAddress: string, config: Record<string, unknown>): Promise<void> {
 
@@ -669,7 +672,7 @@ export class AnomalyDetectionService extends EventEmitter {
     }));
 
     console.log(`Blocked IP ${ipAddress} for ${duration} seconds`);
-  }
+
 
   private async disableAccount(userId: string, config: Record<string, unknown>): Promise<void> {
 
@@ -682,7 +685,7 @@ export class AnomalyDetectionService extends EventEmitter {
     `, [userId, reason]);
 
     console.log(`Disabled account ${userId}: ${reason}`);
-  }
+
 
   private async requireTwoFactor(userId: string, config: Record<string, unknown>): Promise<void> {
 
@@ -695,16 +698,16 @@ export class AnomalyDetectionService extends EventEmitter {
         reason: 'Security anomaly detected',
         config
       }));
-    } else {
+ else {
       await this.db.query(`
         UPDATE users 
         SET two_factor_required = true 
         WHERE id = $1
       `, [userId]);
-    }
+
 
     console.log(`Required 2FA for user ${userId}`);
-  }
+
 
   private async sendNotification(config: Record<string, unknown>, affectedEntities: Record<string, unknown>): Promise<void> {
 
@@ -716,7 +719,7 @@ export class AnomalyDetectionService extends EventEmitter {
     });
 
     console.log('Notification sent:', config);
-  }
+
 
   private async createIncident(config: Record<string, unknown>, affectedEntities: Record<string, unknown>): Promise<void> {
 
@@ -735,7 +738,7 @@ export class AnomalyDetectionService extends EventEmitter {
     ]);
 
     console.log('Security incident created:', config);
-  }
+
 
   async getAnomalyEvents(filters: {
     severity?: string;
@@ -743,7 +746,7 @@ export class AnomalyDetectionService extends EventEmitter {
     patternId?: string;
     limit?: number;
     offset?: number;
-  } = {}): Promise<AnomalyEvent[]> {
+ = {}): Promise<AnomalyEvent[]> {
 
     let sql = 'SELECT * FROM anomaly_events WHERE 1=1';
     const params: unknown[] = [];
@@ -753,19 +756,19 @@ export class AnomalyDetectionService extends EventEmitter {
       sql += ` AND severity = $${paramIndex}`;
       params.push(filters.severity);
       paramIndex++;
-    }
+
 
     if (filters.resolved !== undefined) {
       sql += ` AND resolved = $${paramIndex}`;
       params.push(filters.resolved);
       paramIndex++;
-    }
+
 
     if (filters.patternId) {
       sql += ` AND pattern_id = $${paramIndex}`;
       params.push(filters.patternId);
       paramIndex++;
-    }
+
 
     sql += ' ORDER BY timestamp DESC';
 
@@ -773,12 +776,12 @@ export class AnomalyDetectionService extends EventEmitter {
       sql += ` LIMIT $${paramIndex}`;
       params.push(filters.limit);
       paramIndex++;
-    }
+
 
     if (filters.offset) {
       sql += ` OFFSET $${paramIndex}`;
       params.push(filters.offset);
-    }
+
 
     const result = await this.db.query(sql, params);
     
@@ -798,7 +801,7 @@ export class AnomalyDetectionService extends EventEmitter {
       resolvedBy: row.resolved_by,
       falsePositive: row.false_positive
     }));
-  }
+
 
   async resolveAnomaly(
     anomalyId: string, 
@@ -811,7 +814,7 @@ export class AnomalyDetectionService extends EventEmitter {
       SET resolved = true, resolved_at = NOW(), resolved_by = $2, false_positive = $3
       WHERE id = $1
     `, [anomalyId, resolvedBy, falsePositive]);
-  }
+
 
   async getAnomalyStatistics(): Promise<Record<string, unknown>> {
     const stats = await this.db.query(`
@@ -827,5 +830,4 @@ export class AnomalyDetectionService extends EventEmitter {
     `);
 
     return stats.rows[0];
-  }
-}
+

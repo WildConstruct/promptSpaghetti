@@ -130,9 +130,9 @@ describe('WeightVisualizationPanel', () => {
   });
   it('calculates correct statistics', () => {
     const balancedOptions: WeightControlOption = [
-      { id: '1', text: 'A', weight: 2 },
-      { id: '2', text: 'B', weight: 2 },
-      { id: '3', text: 'C', weight: 2 },
+      { id: '1', text: 'A', weight: 2 }
+      { id: '2', text: 'B', weight: 2 }
+      { id: '3', text: 'C', weight: 2 }
       { id: '4', text: 'D', weight: 2 }
     ];
     render();
@@ -146,8 +146,8 @@ describe('WeightVisualizationPanel', () => {
   });
   it('identifies unbalanced distributions', () => {
     const unbalancedOptions: WeightControlOption = [
-      { id: '1', text: 'A', weight: 10 },
-      { id: '2', text: 'B', weight: 1 },
+      { id: '1', text: 'A', weight: 10 }
+      { id: '2', text: 'B', weight: 1 }
       { id: '3', text: 'C', weight: 1 }
     ];
     render();
@@ -216,9 +216,9 @@ describe('WeightVisualizationPanel', () => {
 describe('WeightVisualizationPanel Statistics', () => {
   it('calculates entropy correctly for balanced distribution', () => {
     const balancedOptions: WeightControlOption = [
-      { id: '1', text: 'A', weight: 1 },
-      { id: '2', text: 'B', weight: 1 },
-      { id: '3', text: 'C', weight: 1 },
+      { id: '1', text: 'A', weight: 1 }
+      { id: '2', text: 'B', weight: 1 }
+      { id: '3', text: 'C', weight: 1 }
       { id: '4', text: 'D', weight: 1 }
     ];
     render();
@@ -233,8 +233,8 @@ describe('WeightVisualizationPanel Statistics', () => {
   });
   it('identifies dominant options correctly', () => {
     const dominantOptions: WeightControlOption = [
-      { id: '1', text: 'Dominant', weight: 8 },
-      { id: '2', text: 'Minor', weight: 1 },
+      { id: '1', text: 'Dominant', weight: 8 }
+      { id: '2', text: 'Minor', weight: 1 }
       { id: '3', text: 'Minor2', weight: 1 }
     ];
     render();

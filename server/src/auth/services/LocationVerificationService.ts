@@ -5,7 +5,7 @@ import { GeolocationService, GeolocationData } from './GeolocationService';
 import { 
   VerificationThresholdService, 
   VerificationRequirement 
-} from '../../services/VerificationThresholdService';
+ from '../../services/VerificationThresholdService';
 import { ChallengeService } from './ChallengeService';
 import { 
   VerificationCodeManager, 
@@ -13,14 +13,14 @@ import {
   DeliveryChannel,
   CodeGenerationRequest,
   CodeValidationRequest 
-} from '../../../../packages/core/security/VerificationCodeManager';
+ from '../../../../packages/core/security/VerificationCodeManager';
 import { EmailService } from './EmailService';
 import { AuditService } from './AuditService';
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
-}
-}
+
+
 export interface LocationContext {
   userId: string;
   ipAddress: string;
@@ -31,13 +31,14 @@ export interface LocationContext {
     country?: string;
     city?: string;
     timezone?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface LocationChallengeRequirement {
   required: boolean;
   challengeId?: string;
@@ -50,9 +51,10 @@ export interface LocationChallengeRequirement {
   deliveryMethod?: 'email' | 'sms' | 'totp' | 'manual_review';
   gracePeriodHours?: number;
   message?: string;
-}
-}
-}
+
+
+
+
 
 export enum LocationChallengeType {
   EMAIL_VERIFICATION = 'email_verification',
@@ -61,10 +63,10 @@ export enum LocationChallengeType {
   MULTIPLE_FACTOR = 'multiple_factor',
   MANUAL_REVIEW = 'manual_review',
   ADMIN_APPROVAL = 'admin_approval'
-}
 
-}
-}
+
+
+
 export interface LocationVerificationAttempt {
   id: string;
   userId: string;
@@ -87,13 +89,14 @@ export interface LocationVerificationAttempt {
     reasons: string[];
     deliveryMethod?: string;
     gracePeriodApplied?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface LocationVerificationConfig {
   // Risk thresholds for different challenge types
   emailVerificationThreshold: number;      // 30 - Low risk
@@ -120,9 +123,10 @@ export interface LocationVerificationConfig {
   enableTOTPVerification: boolean;
   enableManualReview: boolean;
   enableGracePeriods: boolean;
-}
-}
-}
+
+
+
+
 
 export class LocationVerificationService {
   private config: LocationVerificationConfig;
@@ -157,7 +161,7 @@ export class LocationVerificationService {
       enableGracePeriods: true,
       ...config
     };
-  }
+
 
   /**
    * Assess if location verification is required for a login attempt
@@ -171,7 +175,7 @@ export class LocationVerificationService {
         context.geoLocation ? {
           'cf-ipcountry': context.geoLocation.country,
           'cf-timezone': context.geoLocation.timezone
-        } : undefined
+ : undefined
       );
 
       // Track login location and get analysis
@@ -192,8 +196,8 @@ export class LocationVerificationService {
             reasons: [`Grace period active until ${gracePeriod.expiresAt?.toLocaleString()}`],
             gracePeriodHours: gracePeriod.remainingHours
           };
-        }
-      }
+
+
 
       // Assess verification requirement using existing service
       const verificationReq = await this.verificationThresholdService.checkVerificationRequired({
@@ -215,19 +219,18 @@ export class LocationVerificationService {
           riskLevel: this.getRiskLevel(verificationReq.riskScore),
           reasons: ['Location verification not required']
         };
-      }
+
 
       // Generate appropriate challenge based on risk level
       return await this.generateLocationChallenge(context, verificationReq, geoData, locationAnalysis);
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         userId: context.userId,
         action: 'location_verification_error',
         details: {
           error: error instanceof Error ? error.message : 'Unknown error',
           ipAddress: context.ipAddress
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -244,8 +247,8 @@ export class LocationVerificationService {
         deliveryMethod: 'email',
         message: 'Additional verification required for your security'
       };
-    }
-  }
+
+
 
   /**
    * Verify a location challenge response
@@ -260,29 +263,29 @@ export class LocationVerificationService {
     blocked?: boolean;
     gracePeriodSet?: boolean;
     message?: string;
-  }> {
+> {
 
     try {
       // Get verification attempt
       const attempt = await this.getVerificationAttempt(challengeId);
       if (!attempt) {
         return { success: false, message: 'Invalid or expired verification challenge' };
-      }
+
 
       // Check if attempt has expired
       if (attempt.expiresAt < new Date()) {
         await this.updateVerificationAttempt(challengeId, { status: 'expired' });
         return { success: false, message: 'Verification challenge has expired' };
-      }
+
 
       // Check if attempt is already completed or failed
       if (attempt.status === 'completed') {
         return { success: true, message: 'Already verified' };
-      }
+
 
       if (attempt.status === 'failed') {
         return { success: false, blocked: true, message: 'Verification failed - contact support' };
-      }
+
 
       // Verify the response based on challenge type
       let verificationResult = { success: false, message: 'Invalid verification code' };
@@ -305,7 +308,7 @@ export class LocationVerificationService {
             success: validationResult.valid,
             message: validationResult.reason || 'Invalid verification code'
           };
-        }
+
         break;
 
       case LocationChallengeType.TOTP_VERIFICATION:
@@ -319,7 +322,7 @@ export class LocationVerificationService {
 
       default:
         verificationResult = { success: false, message: 'Unsupported challenge type' };
-      }
+
 
       // Update attempt count
       const newAttempts = attempt.attempts + 1;
@@ -348,7 +351,7 @@ export class LocationVerificationService {
             challengeType: attempt.challengeType,
             attempts: newAttempts,
             gracePeriodSet
-  }
+
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           sessionId: context.sessionId,
@@ -360,7 +363,7 @@ export class LocationVerificationService {
           gracePeriodSet,
           message: 'Location verified successfully' 
         };
-      } else {
+ else {
         // Handle failed attempt
         if (remainingAttempts === 0) {
           // Mark as failed
@@ -378,7 +381,7 @@ export class LocationVerificationService {
               challengeType: attempt.challengeType,
               totalAttempts: newAttempts,
               reason: 'max_attempts_exceeded'
-  }
+
             ipAddress: context.ipAddress,
             userAgent: context.userAgent,
             sessionId: context.sessionId,
@@ -390,7 +393,7 @@ export class LocationVerificationService {
             blocked: true,
             message: 'Maximum verification attempts exceeded' 
           };
-        } else {
+ else {
           // Update attempt count
           await this.updateVerificationAttempt(challengeId, {
             attempts: newAttempts
@@ -401,16 +404,16 @@ export class LocationVerificationService {
             remainingAttempts,
             message: verificationResult.message || `Invalid code. ${remainingAttempts} attempts remaining.`
           };
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       await this.auditService.logEvent({
         userId: context.userId,
         action: 'location_verification_error',
         details: {
           challengeId,
           error: error instanceof Error ? error.message : 'Unknown error'
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -418,8 +421,8 @@ export class LocationVerificationService {
       });
 
       return { success: false, message: 'Verification service error' };
-    }
-  }
+
+
 
   /**
    * Get user's location verification history
@@ -437,7 +440,7 @@ export class LocationVerificationService {
     `, [userId, limit]);
 
     return result.rows.map(row => this.mapDatabaseRowToAttempt(row));
-  }
+
 
   /**
    * Check if location challenge is required
@@ -449,25 +452,25 @@ export class LocationVerificationService {
     // Always require verification for new locations
     if (locationAnalysis.isNewLocation) {
       return true;
-    }
+
 
     // Require verification based on risk score thresholds
     if (verificationReq.riskScore >= this.config.emailVerificationThreshold) {
       return true;
-    }
+
 
     // Require verification for suspicious indicators
     if (locationAnalysis.suspiciousIndicators.length > 0) {
       return true;
-    }
+
 
     // Require verification if explicitly required
     if (verificationReq.required) {
       return true;
-    }
+
 
     return false;
-  }
+
 
   /**
    * Generate appropriate location challenge based on risk level
@@ -489,19 +492,19 @@ export class LocationVerificationService {
       challengeType = LocationChallengeType.MANUAL_REVIEW;
       deliveryMethod = 'manual_review';
       expiry = this.config.manualReviewExpiry;
-    } else if (riskScore >= this.config.totpVerificationThreshold && this.config.enableTOTPVerification) {
+ else if (riskScore >= this.config.totpVerificationThreshold && this.config.enableTOTPVerification) {
       challengeType = LocationChallengeType.TOTP_VERIFICATION;
       deliveryMethod = 'totp';
       expiry = this.config.totpCodeExpiry;
-    } else if (riskScore >= this.config.smsVerificationThreshold && this.config.enableSMSVerification) {
+ else if (riskScore >= this.config.smsVerificationThreshold && this.config.enableSMSVerification) {
       challengeType = LocationChallengeType.SMS_VERIFICATION;
       deliveryMethod = 'sms';
       expiry = this.config.smsCodeExpiry;
-    } else {
+ else {
       challengeType = LocationChallengeType.EMAIL_VERIFICATION;
       deliveryMethod = 'email';
       expiry = this.config.emailCodeExpiry;
-    }
+
 
     // Generate challenge ID
     const challengeId = this.generateChallengeId();
@@ -528,7 +531,7 @@ export class LocationVerificationService {
         reasons: this.buildChallengeReasons(verificationReq, locationAnalysis),
         deliveryMethod,
         gracePeriodApplied: false
-      }
+
     };
 
     // Generate verification code if needed
@@ -553,7 +556,7 @@ export class LocationVerificationService {
         metadata: {
           challengeId,
           location: `${geoData.city}, ${geoData.country}`
-        }
+
       });
 
       if (verificationCode) {
@@ -562,8 +565,8 @@ export class LocationVerificationService {
 
         // Send verification email/SMS
         await this.sendVerificationMessage(context, geoData, verificationCode, challengeType);
-      }
-    }
+
+
 
     // Store verification attempt
     await this.storeVerificationAttempt(attempt);
@@ -579,7 +582,7 @@ export class LocationVerificationService {
         deliveryMethod,
         location: `${geoData.city}, ${geoData.country}`,
         reasons: attempt.metadata.reasons
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       sessionId: context.sessionId,
@@ -598,7 +601,7 @@ export class LocationVerificationService {
       deliveryMethod: deliveryMethod as any,
       message: this.buildChallengeMessage(challengeType, geoData)
     };
-  }
+
 
   /**
    * Send verification message (email or SMS)
@@ -617,17 +620,17 @@ export class LocationVerificationService {
           city: geoData.city,
           country: geoData.country,
           region: geoData.region
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         expiryMinutes: Math.floor(this.config.emailCodeExpiry / (60 * 1000)),
         timestamp: new Date()
       });
-    } else if (challengeType === LocationChallengeType.SMS_VERIFICATION) {
+ else if (challengeType === LocationChallengeType.SMS_VERIFICATION) {
       // SMS implementation would go here
       console.log(`SMS verification not yet implemented: ${verificationCode.code}`);
-    }
-  }
+
+
 
   /**
    * Build challenge reasons array
@@ -640,30 +643,30 @@ export class LocationVerificationService {
 
     if (locationAnalysis.isNewLocation) {
       reasons.push('New login location detected');
-    }
+
 
     if (locationAnalysis.suspiciousIndicators.includes('vpn_detected')) {
       reasons.push('VPN usage detected');
-    }
+
 
     if (locationAnalysis.suspiciousIndicators.includes('tor_exit_node')) {
       reasons.push('Tor network usage detected');
-    }
+
 
     if (locationAnalysis.suspiciousIndicators.includes('proxy_detected')) {
       reasons.push('Proxy usage detected');
-    }
+
 
     if (verificationReq.riskScore >= 70) {
       reasons.push('High risk score detected');
-    }
+
 
     if (reasons.length === 0) {
       reasons.push('Additional security verification required');
-    }
+
 
     return reasons;
-  }
+
 
   /**
    * Build user-friendly challenge message
@@ -685,8 +688,8 @@ export class LocationVerificationService {
       return `We detected a high-risk login from ${location}. Your account is under manual review.`;
     default:
       return `We detected a login from ${location}. Additional verification is required.`;
-    }
-  }
+
+
 
   // Additional helper methods would be implemented here...
 
@@ -694,27 +697,27 @@ export class LocationVerificationService {
     active: boolean;
     expiresAt?: Date;
     remainingHours?: number;
-  }> {
+> {
 
     // Implementation for checking grace period
     return { active: false };
-  }
+
 
   private async setLocationGracePeriod(userId: string, geoData: GeolocationData): Promise<boolean> {
 
     // Implementation for setting grace period
     return true;
-  }
+
 
   private async verifyTOTPCode(userId: string, code: string): Promise<{ success: boolean; message?: string }> {
 
     // Would integrate with TOTP service
     return { success: false, message: 'TOTP verification not implemented' };
-  }
+
 
   private generateChallengeId(): string {
     return `loc_challenge_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async getVerificationAttempt(challengeId: string): Promise<LocationVerificationAttempt | null> {
 
@@ -723,7 +726,7 @@ export class LocationVerificationService {
     `, [challengeId]);
 
     return result.rows.length > 0 ? this.mapDatabaseRowToAttempt(result.rows[0]) : null;
-  }
+
 
   private async storeVerificationAttempt(attempt: LocationVerificationAttempt): Promise<void> {
 
@@ -749,7 +752,7 @@ export class LocationVerificationService {
       attempt.expiresAt,
       JSON.stringify(attempt.metadata)
     ]);
-  }
+
 
   private async updateVerificationAttempt(
     challengeId: string,
@@ -763,17 +766,17 @@ export class LocationVerificationService {
     if (updates.status !== undefined) {
       setClause.push(`status = $${paramIndex++}`);
       values.push(updates.status);
-    }
+
 
     if (updates.attempts !== undefined) {
       setClause.push(`attempts = $${paramIndex++}`);
       values.push(updates.attempts);
-    }
+
 
     if (updates.completedAt !== undefined) {
       setClause.push(`completed_at = $${paramIndex++}`);
       values.push(updates.completedAt);
-    }
+
 
     values.push(challengeId);
 
@@ -782,7 +785,7 @@ export class LocationVerificationService {
       SET ${setClause.join(', ')}
       WHERE challenge_id = $${paramIndex}
     `, values);
-  }
+
 
   private mapDatabaseRowToAttempt(row: any): LocationVerificationAttempt {
     return {
@@ -802,7 +805,7 @@ export class LocationVerificationService {
       completedAt: row.completed_at,
       metadata: JSON.parse(row.metadata)
     };
-  }
+
 
   /**
    * Initialize database schema for location verification
@@ -843,7 +846,7 @@ export class LocationVerificationService {
       CREATE INDEX IF NOT EXISTS idx_location_verification_challenge 
       ON location_verification_attempts(challenge_id);
     `);
-  }
+
 
   /**
    * Get risk level from risk score
@@ -853,5 +856,4 @@ export class LocationVerificationService {
     if (riskScore >= 60) return 'high';
     if (riskScore >= 40) return 'medium';
     return 'low';
-  }
-}
+

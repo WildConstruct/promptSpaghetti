@@ -6,18 +6,17 @@
  * with batch operations, templates, and automated classification
  */
 import React, { useState, useMemo } from 'react';
-import {
-  DataClassification,
+import { DataClassification,
   DataClassificationLevel,
   ClassificationContext,
   ClassificationRule,
   ValidationResult,
-  CLASSIFICATION_LEVELS,
+  CLASSIFICATION_LEVELS }
   ClassificationCondition
-} from '../../types/DataClassification';
-}
-interface DataElement {
-  id: string;
+ from '../../types/DataClassification';
+
+
+interface DataElement { id: string;
   name: string;
   type: string;
   content?: string;
@@ -35,95 +34,91 @@ interface DataElement {
   description: string;
   classification: DataClassificationLevel;
   rationale: string;
-  criteria: {
+  criteria: { }
   dataTypes: string;
   namePatterns: string;
   contentPatterns: string;
-}
+
+
 };
-}
-interface BulkOperationState {
-  selectedElements: Set<string>;
+
+
+interface BulkOperationState { selectedElements: Set<string>;
   operationType: 'manual' | 'template' | 'rules' | 'ai';
   selectedTemplate?: ClassificationTemplate;
   manualClassification?: DataClassificationLevel;
   rationale: string;
   dataOwner: string;
   processing: boolean;
-  results: Map<string, DataClassification | string>; // string for errors
-const DEFAULT_TEMPLATES: ClassificationTemplate = [
+  results: Map<string, DataClassification | string>; // string for errors;
+  const DEFAULT_TEMPLATES: ClassificationTemplate = [
   {
-    id: 'pii-template',
-    name: 'Personal Information',
-    description: 'For data containing personal identifiable information',
-    classification: 'CONFIDENTIAL',
-    rationale: 'Contains personal information requiring protection',
-    criteria: {
-  dataTypes: ['personal', 'customer', 'employee'],
-      namePatterns: ['*email*', '*phone*', '*ssn*', '*name*', '*address*'],
-}
-      contentPatterns: ['\\b\\d{3}-\\d{2}-\\d{4}\\b', '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2
-}\\b']
-  }
-  {
-    id: 'financial-template',
+  id: 'pii-template';
+  name: 'Personal Information';
+  description: 'For data containing personal identifiable information';
+  classification: 'CONFIDENTIAL';
+  rationale: 'Contains personal information requiring protection';
+  criteria: {;
+  dataTypes: ['personal', 'customer', 'employee'];
+  namePatterns: ['*email*', '*phone*', '*ssn*', '*name*', '*address*'] }
+
+},
+  contentPatterns: ['\\b\\d{3}-\\d{2}-\\d{4}\\b', '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2
+\\b']
+
+  { id: 'financial-template',
     name: 'Financial Information',
     description: 'For financial and payment data',
     classification: 'RESTRICTED',
     rationale: 'Financial data requires highest protection level',
-    criteria: {
+    criteria: {,
   dataTypes: ['financial', 'payment', 'banking'],
-      namePatterns: ['*account*', '*card*', '*payment*', '*bank*', '*credit*'],
+      namePatterns: ['*account*', '*card*', '*payment*', '*bank*', '*credit*'] }
       contentPatterns: ['\\b\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b']
-  }
-  {
-  id: 'public-template',
+
+  { id: 'public-template',
   name: 'Public Information',
   description: 'For publicly available information',
   classification: 'PUBLIC',
   rationale: 'Information intended for public consumption',
-  criteria: {
+  criteria: {,
   dataTypes: ['public', 'marketing', 'documentation'],
   namePatterns: ['*public*', '*marketing*', '*docs*', '*help*'],
-  contentPatterns: [],
-}
-  {
-  id: 'internal-template',
+  contentPatterns: [] }
+
+  { id: 'internal-template',
   name: 'Internal Business',
   description: 'For internal business information',
   classification: 'INTERNAL',
   rationale: 'Internal business information for employee use',
-  criteria: {
+  criteria: {,
   dataTypes: ['internal', 'business', 'operational'],
   namePatterns: ['*internal*', '*business*', '*operational*', '*metrics*'],
   contentPatterns: []];
-  export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = ({,)
-  dataElements,
-  classificationRules = [],
-  onBulkClassification,
-  onValidationResults,
+  export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = ({)
+  dataElements
+  classificationRules = []
+  onBulkClassification
+  onValidationResults }
   context
-}) => {
-  const [state, setState] = useState<BulkOperationState>({)
-  selectedElements: new Set(),
-  operationType: 'manual',
-  rationale: '',
-  dataOwner: context?.dataOwner || '',
-  processing: false,
-  results: new Map(),
+}) => { const [state, setState] = useState<BulkOperationState>({)
+  selectedElements: new Set()
+  operationType: 'manual'
+  rationale: ''
+  dataOwner: context?.dataOwner || ''
+  processing: false
+  results: new Map() }
 });
   const [templates] = useState<ClassificationTemplate>(DEFAULT_TEMPLATES);
   const [currentUser] = useState('current-user'); // TODO: Get from auth context
   const [showPreview, setShowPreview] = useState(false);
   // Filter and categorize data elements
-  const categorizedElements = useMemo(() => {
-    const unclassified = dataElements.filter(el => !el.existingClassification);
+  const categorizedElements = useMemo(() => { const unclassified = dataElements.filter(el => !el.existingClassification);
     const classified = dataElements.filter(el => el.existingClassification);
     const byType = dataElements.reduce((acc, el) => {
       if (!acc[el.type]) acc[el.type] = [];
       acc[el.type].push(el);
-      return acc;
-    }, {} as Record<string, DataElement>);
+      return acc }, {} as Record<string, DataElement>);
     return { unclassified, classified, byType };
   }, [dataElements]);
   // Auto-suggest classifications based on templates and rules
@@ -132,33 +127,27 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
     elements.forEach(element => {)
   let bestMatch: { classification: DataClassificationLevel; confidence: number; reason: string } | null = null;
       // Check templates
-      for (const template of templates) {
-        let score = 0;
+      for (const template of templates) { let score = 0;
         // Check data type match
         if (template.criteria.dataTypes.includes(element.type.toLowerCase())) {
           score += 30;
         // Check name patterns
         const nameMatches = template.criteria.namePatterns.some(pattern => {)
   const regex = new RegExp(pattern.replace('*', '.*'), 'i');
-          return regex.test(element.name);
-        });
+          return regex.test(element.name) });
         if (nameMatches) score += 40;
         // Check content patterns
-        if (element.content) {
-          const contentMatches = template.criteria.contentPatterns.some(pattern => {)
+        if (element.content) { const contentMatches = template.criteria.contentPatterns.some(pattern => {)
   const regex = new RegExp(pattern, 'i');
-            return regex.test(element.content!);
-          });
+            return regex.test(element.content!) });
           if (contentMatches) score += 30;
-        if (score > 0 && (!bestMatch || score > bestMatch.confidence)) {
-          bestMatch = {
-            classification: template.classification,
-            confidence: score,
+        if (score > 0 && (!bestMatch || score > bestMatch.confidence)) { bestMatch = {
+            classification: template.classification
+            confidence: score }
             reason: `Matches template: ${template.name} (${score}% confidence)`}
           };
       // Check classification rules
-      for (const rule of classificationRules) {
-        let ruleScore = 0;
+      for (const rule of classificationRules) { let ruleScore = 0;
         for (const condition of rule.conditions) {
           switch (condition.type) {
           case 'FIELD_NAME':
@@ -174,29 +163,24 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
         const ruleConfidence = Math.min(100, ruleScore);
         if (ruleConfidence > (bestMatch?.confidence || 0)) {
           bestMatch = {
-            classification: rule.classification,
-            confidence: ruleConfidence,
+            classification: rule.classification
+            confidence: ruleConfidence }
             reason: `Matches rule: ${rule.name} (${ruleConfidence}% confidence)`}
           };
-      if (bestMatch) {
-        suggestions.set(element.id, bestMatch);
-    });
+      if (bestMatch) { suggestions.set(element.id, bestMatch) });
     return suggestions;
   };
-  const handleElementSelection = (elementId: string, selected: boolean) => {
-    setState(prev => {)
+  const handleElementSelection = (elementId: string, selected: boolean) => { setState(prev => {)
   const newSelected = new Set(prev.selectedElements);
       if (selected) {
-        newSelected.add(elementId);
-      } else {
+        newSelected.add(elementId) } else {
         newSelected.delete(elementId);
       return { ...prev, selectedElements: newSelected };
     });
   };
-  const handleSelectAll = (elementIds: string) => {
-  setState(prev => ({)
-  ...prev,
-  selectedElements: new Set([...prev.selectedElements, ...elementIds]),
+  const handleSelectAll = (elementIds: string) => { setState(prev => ({)
+  ...prev
+  selectedElements: new Set([...prev.selectedElements, ...elementIds]) }
 }));
   };
   const handleDeselectAll = () => {
@@ -230,29 +214,28 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
         rationale = 'Default classification';
       return {
         id: `class-${element.id}-${Date.now()}`}
-},
-  dataElement: element.id,
-        classification,
-        rationale,
-        dataOwner: state.dataOwner,
-        classifiedBy: currentUser,
-        classificationDate: new Date(),
-        reviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-        approvals: [],
+
+  dataElement: element.id
+        classification
+        rationale
+        dataOwner: state.dataOwner
+        classifiedBy: currentUser
+        classificationDate: new Date()
+        reviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+        approvals: []
         metadata: {
   businessJustification: `Bulk classification using ${state.operationType} method`}
-},
-  riskAssessment: 'Risk assessment pending individual review',
-          regulatoryRequirements: context?.regulatoryScope || [],
-          dataLineage: [element.type],
+
+  riskAssessment: 'Risk assessment pending individual review'
+          regulatoryRequirements: context?.regulatoryScope || []
+          dataLineage: [element.type]
           relatedClassifications: [];
   };
     });
   };
   const handleApplyClassifications = async () => {
     setState(prev => ({ ...prev, processing: true }));
-    try {
-  const classifications = generatePreview();
+    try { const classifications = generatePreview();
   // Validate classifications
   const validationResults: ValidationResult = classifications.map(classification => {)
   const errors: string = [];
@@ -267,27 +250,25 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
   valid: errors.length === 0,
   errors,
   warnings,
-  recommendations: state.operationType === 'ai' ? ['Review AI-generated classifications manually'] : [],
+  recommendations: state.operationType === 'ai' ? ['Review AI-generated classifications manually'] : [] }
 };
       });
       onValidationResults?.(validationResults);
       if (validationResults.every(result => result.valid)) {
         onBulkClassification(classifications);
         setState(prev => ({ ...prev, selectedElements: new Set(), processing: false }));
-      } else {
+ else {
         setState(prev => ({ ...prev, processing: false }));
         alert('Some classifications have validation errors. Please review and correct them.');
-    } catch (error) {
+ catch (error) {
       console.error('Error applying bulk classifications:', error);
       setState(prev => ({ ...prev, processing: false }));
       alert('Error applying classifications. Please try again.');
   };
-  const suggestions = useMemo(() => {
-    const selectedElements = Array.from(state.selectedElements);
+  const suggestions = useMemo(() => { const selectedElements = Array.from(state.selectedElements);
       .map(id => dataElements.find(el => el.id === id))
       .filter(Boolean) as DataElement;
-    return getSuggestedClassifications(selectedElements);
-  }, [state.selectedElements, dataElements, templates, classificationRules]);
+    return getSuggestedClassifications(selectedElements) }, [state.selectedElements, dataElements, templates, classificationRules]);
   return;
     <div className="bulk-classification-tools bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
       <div className="mb-6">
@@ -316,20 +297,20 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
         <label className="block text-sm font-medium text-gray-700 mb-3">Classification Method</label>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { value: 'manual', label: 'Manual Assignment', desc: 'Apply same classification to all selected' },
-            { value: 'template', label: 'Template-Based', desc: 'Use predefined classification templates' },
-            { value: 'rules', label: 'Rule-Based', desc: 'Apply classification rules automatically' },
+            { value: 'manual', label: 'Manual Assignment', desc: 'Apply same classification to all selected' }
+            { value: 'template', label: 'Template-Based', desc: 'Use predefined classification templates' }
+            { value: 'rules', label: 'Rule-Based', desc: 'Apply classification rules automatically' }
             { value: 'ai', label: 'AI Suggestion', desc: 'Use intelligent pattern matching' }
           ].map(method => ()
             <button
               key={method.value}
               type="button"
               onClick={() => setState(prev => ({ ...prev, operationType: method.value as any }))}
-              className={`p-3 text-left border-2 rounded-lg transition-colors ${
+              className={ `p-3 text-left border-2 rounded-lg transition-colors ${
   state.operationType === method.value
   ? 'border-blue-500 bg-blue-50 text-blue-700'
-  : 'border-gray-200 hover:border-gray-300',
-}`}
+  : 'border-gray-200 hover:border-gray-300' }
+`}
             >
               <div className="font-medium">{method.label}</div>
               <div className="text-xs text-gray-600 mt-1">{method.desc}</div>
@@ -377,23 +358,23 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
                 key={template.id}
                 type="button"
                 onClick={() => setState(prev => ({ ...prev, selectedTemplate: template }))}
-                className={`p-3 text-left border rounded-lg transition-colors ${
+                className={ `p-3 text-left border rounded-lg transition-colors ${
   state.selectedTemplate?.id === template.id
   ? 'border-blue-500 bg-blue-50'
-  : 'border-gray-200 hover:border-gray-300',
-}`}
+  : 'border-gray-200 hover:border-gray-300' }
+`}
               >
                 <div className="flex justify-between items-center">
                   <div>
                     <div className="font-medium">{template.name}</div>
                     <div className="text-sm text-gray-600">{template.description}</div>
                   </div>
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${
-  template.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :,
-  template.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :,
-  template.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :,
+                  <span className={ `px-2 py-1 rounded text-xs font-medium ${
+  template.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :
+  template.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
+  template.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' : }
   'bg-red-100 text-red-800'
-}`}>
+`}>
                     {template.classification}
                   </span>
                 </div>
@@ -448,9 +429,9 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
             return;
               <div
                 key={element.id}
-                className={`p-3 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 ${
-  isSelected ? 'bg-blue-50' : '',
-}`}
+                className={ `p-3 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 ${
+  isSelected ? 'bg-blue-50' : '' }
+`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -473,13 +454,13 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {element.existingClassification && ()
+                    { element.existingClassification && ()
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
-  element.existingClassification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :,
-  element.existingClassification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :,
-  element.existingClassification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :,
+  element.existingClassification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :
+  element.existingClassification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
+  element.existingClassification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' : }
   'bg-red-100 text-red-800'
-}`}>
+`}>
                         {element.existingClassification.classification}
                       </span>
                     )}
@@ -528,12 +509,12 @@ const DEFAULT_TEMPLATES: ClassificationTemplate = [
                     <div className="font-medium text-sm">{classification.dataElement}</div>
                     <div className="text-xs text-gray-600">{classification.rationale}</div>
                   </div>
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${
-  classification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :,
-  classification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :,
-  classification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :,
+                  <span className={ `px-2 py-1 rounded text-xs font-medium ${
+  classification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :
+  classification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
+  classification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' : }
   'bg-red-100 text-red-800'
-}`}>
+`}>
                     {classification.classification}
                   </span>
                 </div>

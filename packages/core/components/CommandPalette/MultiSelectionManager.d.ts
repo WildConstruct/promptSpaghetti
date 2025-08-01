@@ -8,26 +8,25 @@ import React from 'react';
 import { Node, Edge } from 'reactflow';
 
 }
-export interface SelectionRect {
-    startX: number;
+}
+export interface SelectionRect { startX: number;
     startY: number;
     currentX: number;
     currentY: number;
-    active: boolean;
-
-
+    active: boolean }
 }
-export interface MultiSelectionManagerProps {
-    nodes: Node[];
+}
+export interface MultiSelectionManagerProps { nodes: Node[];
     edges: Edge[];
     selectedNodes: Node[];
     selectedEdges: Edge[];
     onNodesSelect: (nodes: Node[]) => void;
     onEdgesSelect: (edges: Edge[]) => void;
-    onSelectionChange: (selection: {),
+    onSelectionChange: (selection: {) }
         nodes: Node[];
         edges: Edge[];
 
+}
 }
     }) => void;
     theme?: 'light' | 'dark' | 'cinema';

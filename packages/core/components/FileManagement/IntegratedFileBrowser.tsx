@@ -3,63 +3,55 @@
  */
 import React, { useState } from 'react';
 
-}
-interface FileItem {
-  id: string;
+interface FileItem { id: string;
   name: string;
   size: number;
   lastModified: Date;
-  type: 'file' | 'folder';
-}
-}
+  type: 'file' | 'folder' }
 
-}
-interface IntegratedFileBrowserProps {
-  isOpen: boolean;
+
+interface IntegratedFileBrowserProps { isOpen: boolean;
   onClose: () => void;
-  onFileSelect?: (file: FileItem) => void;
-}
-}
+  onFileSelect?: (file: FileItem) => void }
 
-const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
-  isOpen,
-  onClose,
+
+const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({ isOpen
+  onClose }
   onFileSelect
-}) => {
-  const [files] = useState<FileItem[]>([
-    {
-      id: '1',
-      name: 'example.psg',
-      size: 1024,
-      lastModified: new Date(),
-      type: 'file'
-    }
+}) => { const [files] = useState<FileItem>([
+  {
+  id: '1'
+  name: 'example.psg'
+  size: 1024
+  lastModified: new Date()
+  type: 'file' }
+
   ]);
 
   if (!isOpen) return null;
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 10000
-    }}>
-      <div style={{
-        backgroundColor: 'white',
-        padding: '24px',
-        borderRadius: '8px',
-        minWidth: '600px',
-        maxWidth: '90vw',
-        maxHeight: '80vh',
-        overflow: 'auto'
-      }}>
+    <div style={ {
+  position: 'fixed'
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  zIndex: 10000 }
+}>
+      <div style={ {
+  backgroundColor: 'white'
+  padding: '24px'
+  borderRadius: '8px'
+  minWidth: '600px'
+  maxWidth: '90vw'
+  maxHeight: '80vh'
+  overflow: 'auto' }
+}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h2>File Browser</h2>
           <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer' }}>
@@ -87,14 +79,14 @@ const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({
                 <div
                   key={file.id}
                   onClick={() => onFileSelect?.(file)}
-                  style={{
-                    padding: '12px',
-                    borderBottom: '1px solid #eee',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px'
-                  }}
+                  style={ {
+  padding: '12px'
+  borderBottom: '1px solid #eee'
+  cursor: 'pointer'
+  display: 'flex'
+  alignItems: 'center'
+  gap: '12px' }
+}
                   onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
                   onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                 >

@@ -19,10 +19,10 @@ interface UnifiedSearchSystemProps<T = unknown> {
   // Field configuration
   availableFields?: Array<{
   key: string;,
-  label: string;
+  label: string;,
   type: 'text' | 'number' | 'date' | 'boolean' | 'select';
   options?: string,
-}>;
+>;
   // UI customization
   placeholder?: string;
   showFilterPanel?: boolean;
@@ -56,7 +56,7 @@ const SearchSystemInternal = <T = unknown,>({)
   renderItem,
   renderEmptyState,
   className = ''
-}: Omit<UnifiedSearchSystemProps<T>, 'children'>) => {
+: Omit<UnifiedSearchSystemProps<T>, 'children'>) => {
   const {
     query,
     // results, // Commented out unused variable
@@ -67,7 +67,7 @@ const SearchSystemInternal = <T = unknown,>({)
     setError,
     addToHistory,
     isQueryEmpty
-  } = useSearch();
+ = useSearch();
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   // Perform search
@@ -103,10 +103,10 @@ const SearchSystemInternal = <T = unknown,>({)
       if (searchQuery.text || searchQuery.filters.length > 0 || searchQuery.sorts.length > 0) {
         addToHistory(searchQuery);
       setHasSearched(true);
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Search failed';
   setError(errorMessage);
-} finally {
+ finally {
       setLoading(false);
   }, [searchFunction, initialData, setResults, setLoading, setError, onSearchComplete, addToHistory, query]);
   // Handle search trigger
@@ -132,18 +132,18 @@ const SearchSystemInternal = <T = unknown,>({)
 });
   }, [initialData, hasSearched, searchFunction, setResults]);
   return;
-    <div className={`unified-search-system ${className}`} style={{},}
+    <div className={`unified-search-system ${className}`} style={{},},
   width: '100%',
       display: 'flex',
       flexDirection: 'column',
       gap: '16px';
-  }}>
+}>
       {/* Search Header */}
       <div style={{
   display: 'flex',
   gap: '12px',
   alignItems: 'flex-start',
-}}>
+}>
         {/* Search Bar */}
         <div style={{ flex: 1 }}>
           <SearchBar

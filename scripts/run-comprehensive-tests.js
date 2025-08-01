@@ -31,7 +31,7 @@ class ComprehensiveTestRunner {
         failedTests: 0,
         skippedTests: 0,
         overallSuccessRate: 0
-      }
+
     };
     
     this.config = {
@@ -45,7 +45,7 @@ class ComprehensiveTestRunner {
       failFast: false,
       maxParallelism: 4
     };
-  }
+
 
   async run(options: any = {}): Promise<void> {
     this.config = { ...this.config, ...options };
@@ -60,41 +60,40 @@ class ComprehensiveTestRunner {
       // Run test suites in order
       if (this.config.runUnit) {
         await this.runUnitTests();
-      }
+
       
       if (this.config.runIntegration) {
         await this.runIntegrationTests();
-      }
+
       
       if (this.config.runEdgeCases) {
         await this.runEdgeCaseTests();
-      }
+
       
       if (this.config.runPerformance) {
         await this.runPerformanceTests();
-      }
+
       
       if (this.config.runE2E) {
         await this.runE2ETests();
-      }
+
       
       // Post-test analysis
       if (this.config.runReliabilityAnalysis) {
         await this.runReliabilityAnalysis();
-      }
+
       
       await this.validateCoverage();
       
       if (this.config.generateReports) {
         await this.generateReports();
-      }
+
       
       this.displaySummary();
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Test execution failed:'), error.message);
       process.exit(1);
-    }
+
     
     this.results.endTime = Date.now();
     this.results.duration = this.results.endTime - this.results.startTime;
@@ -102,7 +101,7 @@ class ComprehensiveTestRunner {
     // Exit with appropriate code
     const success = this.results.summary.overallSuccessRate >= 0.95;
     process.exit(success ? 0 : 1);
-  }
+
 
   async validateEnvironment(): Promise<void> {
     console.log(chalk.cyan('🔍 Validating test environment...'));
@@ -112,7 +111,7 @@ class ComprehensiveTestRunner {
       const nodeVersion = process.version;
       if (!nodeVersion.startsWith('v18') && !nodeVersion.startsWith('v20')) {
         console.warn(chalk.yellow(`⚠️ Node.js ${nodeVersion} may not be fully supported`));
-      }
+
       
       // Check dependencies
       const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
@@ -121,8 +120,8 @@ class ComprehensiveTestRunner {
       for (const dep of requiredDeps) {
         if (!packageJson.devDependencies[dep] && !packageJson.dependencies[dep]) {
           throw new Error(`Required dependency ${dep} not found`);
-        }
-      }
+
+
       
       // Check test directories
       const testDirs = ['tests', '__tests__', 'src/__tests__'];
@@ -130,15 +129,14 @@ class ComprehensiveTestRunner {
       
       if (foundDirs.length === 0) {
         console.warn(chalk.yellow('⚠️ No test directories found'));
-      }
+
       
       console.log(chalk.green('✅ Environment validation passed'));
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Environment validation failed:'), error.message);
       throw error;
-    }
-  }
+
+
 
   async runUnitTests(): Promise<void> {
     console.log(chalk.cyan('\n📋 Running unit tests...'));
@@ -159,15 +157,14 @@ class ComprehensiveTestRunner {
       this.updateSummary(result);
       
       console.log(chalk.green(`✅ Unit tests completed: ${result.passed}/${result.total} passed in ${result.duration}ms`));
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Unit tests failed:'), error.message);
       
       if (this.config.failFast) {
         throw error;
-      }
-    }
-  }
+
+
+
 
   async runIntegrationTests(): Promise<void> {
     console.log(chalk.cyan('\n🔗 Running integration tests...'));
@@ -188,15 +185,14 @@ class ComprehensiveTestRunner {
       this.updateSummary(result);
       
       console.log(chalk.green(`✅ Integration tests completed: ${result.passed}/${result.total} passed in ${result.duration}ms`));
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Integration tests failed:'), error.message);
       
       if (this.config.failFast) {
         throw error;
-      }
-    }
-  }
+
+
+
 
   async runEdgeCaseTests(): Promise<void> {
     console.log(chalk.cyan('\n⚠️  Running edge case tests...'));
@@ -222,7 +218,7 @@ class ComprehensiveTestRunner {
           'authentication': { passed: 6, failed: 1 },
           'api-validation': { passed: 5, failed: 1 },
           'runtime-execution': { passed: 4, failed: 0 }
-        }
+
       };
       
       this.results.testSuites.edgeCases = result;
@@ -235,15 +231,14 @@ class ComprehensiveTestRunner {
         const status = stats.failed === 0 ? chalk.green('✅') : chalk.yellow('⚠️');
         console.log(`  ${status} ${category}: ${stats.passed}/${stats.passed + stats.failed}`);
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Edge case tests failed:'), error.message);
       
       if (this.config.failFast) {
         throw error;
-      }
-    }
-  }
+
+
+
 
   async runPerformanceTests(): Promise<void> {
     console.log(chalk.cyan('\n⚡ Running performance tests...'));
@@ -255,7 +250,7 @@ class ComprehensiveTestRunner {
       if (!fs.existsSync('playwright.config.ts')) {
         console.warn(chalk.yellow('⚠️ Playwright config not found, skipping performance tests'));
         return;
-      }
+
       
       const output = execSync('npx playwright test', {
         encoding: 'utf8',
@@ -270,15 +265,14 @@ class ComprehensiveTestRunner {
       this.updateSummary(result);
       
       console.log(chalk.green(`✅ Performance tests completed: ${result.passed}/${result.total} passed in ${result.duration}ms`));
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Performance tests failed:'), error.message);
       
       if (this.config.failFast) {
         throw error;
-      }
-    }
-  }
+
+
+
 
   async runE2ETests(): Promise<void> {
     console.log(chalk.cyan('\n🌐 Running E2E tests...'));
@@ -303,15 +297,14 @@ class ComprehensiveTestRunner {
       this.updateSummary(result);
       
       console.log(chalk.green(`✅ E2E tests completed: ${result.passed}/${result.total} passed in ${result.duration}ms`));
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ E2E tests failed:'), error.message);
       
       if (this.config.failFast) {
         throw error;
-      }
-    }
-  }
+
+
+
 
   async runReliabilityAnalysis(): Promise<void> {
     console.log(chalk.cyan('\n🔬 Running reliability analysis...'));
@@ -333,11 +326,10 @@ class ComprehensiveTestRunner {
       console.log(chalk.green('✅ Reliability analysis completed'));
       console.log(`  📊 Success rate: ${(reliabilityReport.overallSuccessRate * 100).toFixed(1)}%`);
       console.log(`  ⚠️ Flaky tests: ${reliabilityReport.flakyTests}`);
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Reliability analysis failed:'), error.message);
-    }
-  }
+
+
 
   async validateCoverage() {
     console.log(chalk.cyan('\n📊 Validating test coverage...'));
@@ -364,22 +356,21 @@ class ComprehensiveTestRunner {
           
           if (actual < threshold) {
             coverageValid = false;
-          }
+
         });
         
         if (!coverageValid) {
           console.warn(chalk.yellow('⚠️ Coverage thresholds not met'));
-        } else {
+ else {
           console.log(chalk.green('✅ All coverage thresholds met'));
-        }
-        
-      } else {
+
+ else {
         console.warn(chalk.yellow('⚠️ Coverage report not found'));
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error(chalk.red('❌ Coverage validation failed:'), error.message);
-    }
-  }
+
+
 
   async generateReports() {
     console.log(chalk.cyan('\n📄 Generating test reports...'));
@@ -388,7 +379,7 @@ class ComprehensiveTestRunner {
       const reportsDir = 'test-reports';
       if (!fs.existsSync(reportsDir)) {
         fs.mkdirSync(reportsDir);
-      }
+
       
       // Generate JSON report
       const jsonReport = {
@@ -414,11 +405,10 @@ class ComprehensiveTestRunner {
       );
       
       console.log(chalk.green('✅ Test reports generated in test-reports/'));
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Report generation failed:'), error.message);
-    }
-  }
+
+
 
   parseJestOutput(output) {
     // Simplified Jest output parsing
@@ -434,16 +424,16 @@ class ComprehensiveTestRunner {
           failed: parseInt(matches[2]) - parseInt(matches[1]),
           skipped: 0
         };
-      }
-    }
+
+
     
     return { total: 0, passed: 0, failed: 0, skipped: 0 };
-  }
+
 
   parsePlaywrightOutput(output) {
     // Simplified Playwright output parsing
     return { total: 5, passed: 4, failed: 1, skipped: 0 };
-  }
+
 
   updateSummary(result) {
     this.results.summary.totalTests += result.total;
@@ -455,7 +445,7 @@ class ComprehensiveTestRunner {
       this.results.summary.totalTests > 0 
         ? this.results.summary.passedTests / this.results.summary.totalTests 
         : 0;
-  }
+
 
   displaySummary() {
     console.log(chalk.blue('\n📊 Comprehensive Test Summary'));
@@ -485,18 +475,18 @@ class ComprehensiveTestRunner {
       console.log(`  Functions: ${this.results.coverage.functions.pct}%`);
       console.log(`  Branches: ${this.results.coverage.branches.pct}%`);
       console.log(`  Statements: ${this.results.coverage.statements.pct}%`);
-    }
+
     
     // Final verdict
     console.log('═'.repeat(60));
     if (summary.overallSuccessRate >= 0.95) {
       console.log(chalk.green('🎉 All tests passed! System is ready for deployment.'));
-    } else if (summary.overallSuccessRate >= 0.90) {
+ else if (summary.overallSuccessRate >= 0.90) {
       console.log(chalk.yellow('⚠️ Some tests failed. Review and address issues before deployment.'));
-    } else {
+ else {
       console.log(chalk.red('❌ Significant test failures. Deployment not recommended.'));
-    }
-  }
+
+
 
   generateHTMLReport(data) {
     return `
@@ -560,8 +550,8 @@ class ComprehensiveTestRunner {
 </body>
 </html>
     `;
-  }
-}
+
+
 
 // CLI interface
 if (require.main === module) {
@@ -578,7 +568,7 @@ if (require.main === module) {
       options.runE2E = false;
       options.runPerformance = false;
       options.runEdgeCases = false;
-    }
+
   });
   
   const runner = new ComprehensiveTestRunner();
@@ -586,6 +576,6 @@ if (require.main === module) {
     console.error(chalk.red('Test execution failed:'), error);
     process.exit(1);
   });
-}
+
 
 module.exports = ComprehensiveTestRunner;

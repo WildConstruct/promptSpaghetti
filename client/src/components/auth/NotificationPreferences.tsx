@@ -2,56 +2,60 @@
 // Comprehensive notification preferences with multi-channel support
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-}
+
+
 interface NotificationPreferences {
-  email: {
+  email: {,
   enabled: boolean;,
-  frequency: 'immediate' | 'daily' | 'weekly' | 'never';
-  types: {
+  frequency: 'immediate' | 'daily' | 'weekly' | 'never';,
+  types: {,
   security: boolean;,
-  system: boolean;
+  system: boolean;,
   updates: boolean;,
   marketing: boolean;
-}
+
+
 };
   };
-  inApp: {
+  inApp: {,
   enabled: boolean;
-  types: {
+  types: {,
   security: boolean;,
-  system: boolean;
+  system: boolean;,
   updates: boolean;,
   mentions: boolean;
 };
   };
-  push: {
+  push: {,
   enabled: boolean;
-  types: {
+  types: {,
   security: boolean;,
-  system: boolean;
+  system: boolean;,
   updates: boolean;,
   mentions: boolean;
 };
   };
-  quietHours: {
+  quietHours: {,
   enabled: boolean;
   start: string;,
-  end: string;
+  end: string;,
   timezone: string;
 };
-}
+
+
 interface NotificationPreferencesProps {
   onPreferencesUpdate?: (preferences: NotificationPreferences) => void;
-  export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({,)
+  export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({),
   onPreferencesUpdate
-}
+
+
 }) => {
   const { user } = useAuth();
   const [preferences, setPreferences] = useState<NotificationPreferences | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const timezones = [;
+  const timezones = [
     'UTC',
     'America/New_York',
     'America/Los_Angeles',
@@ -79,10 +83,10 @@ interface NotificationPreferencesProps {
         throw new Error('Failed to fetch notification preferences');
       const data = await response.json();
       setPreferences(data.preferences);
-    } catch (error) {
+ catch (error) {
   console.error('Error fetching notification preferences:', error);
   setError('Failed to load notification preferences');
-} finally {
+ finally {
       setLoading(false);
   };
   const updatePreferences = async (updates: Partial<NotificationPreferences>) => {
@@ -104,16 +108,16 @@ interface NotificationPreferencesProps {
       const data = await response.json();
       setPreferences(data.preferences);
       onPreferencesUpdate?.(data.preferences);
-    } catch (error) {
+ catch (error) {
   console.error('Error updating notification preferences:', error);
   setError('Failed to update notification preferences');
-} finally {
+ finally {
       setSaving(false);
   };
   const handleChannelToggle = (channel: keyof NotificationPreferences, enabled: boolean) => {
   if (!preferences) return;
   updatePreferences({)
-  [channel]: {
+  [channel]: {,
   ...preferences[channel],
   enabled
 });
@@ -126,7 +130,7 @@ interface NotificationPreferencesProps {
   updatePreferences({)
   [channel]: {
   ...preferences[channel],
-  types: {
+  types: {,
   ...preferences[channel].types,
   [type]: enabled,
 });
@@ -134,7 +138,7 @@ interface NotificationPreferencesProps {
   const handleFrequencyChange = (frequency: 'immediate' | 'daily' | 'weekly' | 'never') => {
   if (!preferences) return;
   updatePreferences({)
-  email: {
+  email: {,
   ...preferences.email,
   frequency
 });
@@ -142,7 +146,7 @@ interface NotificationPreferencesProps {
   const handleQuietHoursToggle = (enabled: boolean) => {
   if (!preferences) return;
   updatePreferences({)
-  quietHours: {
+  quietHours: {,
   ...preferences.quietHours,
   enabled
 });
@@ -150,7 +154,7 @@ interface NotificationPreferencesProps {
   const handleQuietHoursChange = (field: string, value: string) => {
   if (!preferences) return;
   updatePreferences({)
-  quietHours: {
+  quietHours: {,
   ...preferences.quietHours,
   [field]: value,
 });

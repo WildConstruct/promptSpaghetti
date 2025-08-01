@@ -3,43 +3,39 @@
 import React from 'react';
 import { Clock, User, X } from 'lucide-react';
 import { LockQueue } from '../types/locking';
-}
-interface LockQueueVisualizationProps {
-  queue: LockQueue;
+
+
+interface LockQueueVisualizationProps { queue: LockQueue;
   onRemoveFromQueue: (queueId: string) => void;
-  export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({,)
-  queue,
+  export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({);
+  queue }
   onRemoveFromQueue
-}
-}) => {
-  const groupedQueue = queue.reduce((acc, item) => {
+
+
+}) => { const groupedQueue = queue.reduce((acc, item) => {
     if (!acc[item.resource_id]) {
       acc[item.resource_id] = [];
     acc[item.resource_id].push(item);
-    return acc;
-  }, {} as Record<string, LockQueue>);
+    return acc }, {} as Record<string, LockQueue>);
   const formatWaitTime = (minutes: number) => {
     if (minutes < 60) return `${minutes}m`;}
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
     return `${hours}h ${remainingMinutes}m`;}
   };
-  const getPriorityColor = (priority: number) => {
-  switch (priority) {
+  const getPriorityColor = (priority: number) => { switch (priority) {
   case 1: return 'bg-red-100 text-red-800 border-red-200';
   case 2: return 'bg-orange-100 text-orange-800 border-orange-200';
   case 3: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
   case 4: return 'bg-blue-100 text-blue-800 border-blue-200';
-  default: return 'bg-gray-100 text-gray-800 border-gray-200';
-};
-  const getPriorityLabel = (priority: number) => {
-  switch (priority) {
+  default: return 'bg-gray-100 text-gray-800 border-gray-200' };
+  const getPriorityLabel = (priority: number) => { switch (priority) {
   case 1: return 'Critical';
   case 2: return 'High';
   case 3: return 'Medium';
   case 4: return 'Low';
-  default: return 'Normal'
-  };
+  default: return 'Normal' }
+};
   if (queue.length === 0) {
     return;
       <div className="text-center py-8">

@@ -229,34 +229,34 @@ _jsxs("div", { className: `verification-queue ${className}`, children: ["}", _js
     ,
         _jsx("style", { children: `
         .verification-queue {
-          max-width: 1400px;
+          max-width: 1400px;,
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem;,
   display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1.5rem;
         .queue-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         .header-actions {
-          display: flex;
+          display: flex;,
   gap: 0.5rem;
         .queue-content {
           display: grid;
-          grid-template-columns: 1fr 400px;
+          grid-template-columns: 1fr 400px;,
   gap: 1.5rem;
         .content-main {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .content-sidebar {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .details-header {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 1rem;
         .details-grid {
           display: grid;
@@ -264,38 +264,38 @@ _jsxs("div", { className: `verification-queue ${className}`, children: ["}", _js
           gap: 1rem;
         .detail-item {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.25rem;
         .detail-label {
-          font-size: 0.75rem;
+          font-size: 0.75rem;,
   color: #6b7280;
           font-weight: 500;
         .detail-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #1f2937;
           font-weight: 600;
         .profile-grid, .data-grid, .metadata-grid {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.75rem;
         .profile-item, .data-item, .metadata-item {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.75rem;
-          padding: 0.75rem;
+          padding: 0.75rem;,
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .profile-label, .data-label, .metadata-label {
-          font-weight: 500;
+          font-weight: 500;,
   color: #374151;
           min-width: 100px;
         .profile-value, .data-value, .metadata-value {
-          color: #1f2937;
+          color: #1f2937;,
   flex: 1;
         .document-images, .credentials-list, .portfolio-list, .profiles-list {
           margin-top: 1rem;
         .document-images h4, .credentials-list h4, .portfolio-list h4 {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin-bottom: 0.75rem;
         .images-grid {
@@ -305,50 +305,50 @@ _jsxs("div", { className: `verification-queue ${className}`, children: ["}", _js
         .image-item {
           display: flex;
           flex-direction: column;
-          align-items: center;
+          align-items: center;,
   gap: 0.5rem;
-          padding: 1rem;
+          padding: 1rem;,
   border: 1px solid #e5e7eb;
           border-radius: 6px;
           text-align: center;
         .credential-item, .portfolio-item, .profile-item {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.75rem;
-          padding: 0.75rem;
+          padding: 0.75rem;,
   border: 1px solid #e5e7eb;
           border-radius: 6px;
           margin-bottom: 0.5rem;
         .credential-info, .portfolio-info, .profile-info {
-          flex: 1;
+          flex: 1;,
   display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.25rem;
         .credential-title, .portfolio-title, .profile-platform {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .credential-details, .portfolio-details, .profile-url, .profile-followers {
-          font-size: 0.75rem;
+          font-size: 0.75rem;,
   color: #6b7280;
         .data-dump {
-          background: #f9fafb;
+          background: #f9fafb;,
   padding: 1rem;
           border-radius: 6px;
           font-size: 0.75rem;
           overflow-x: auto;
         .review-form {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.5rem;
         .form-group label {
-          font-weight: 500;
+          font-weight: 500;,
   color: #374151;
         .form-select, .form-textarea {
-          padding: 0.5rem;
+          padding: 0.5rem;,
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
@@ -358,36 +358,36 @@ _jsxs("div", { className: `verification-queue ${className}`, children: ["}", _js
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .confidence-slider {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.75rem;
         .slider {
           flex: 1;
         .confidence-value {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           min-width: 40px;
         .form-checkboxes {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.5rem;
         .checkbox-label {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.5rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   cursor: pointer;
         .action-buttons {
           margin-top: 1rem;
         .submit-button {
-          width: 100%;
+          width: 100%;,
   background: #059669;
           border-color: #059669;
         .submit-button:hover:not(:disabled) {,
   background: #047857;
           border-color: #047857;
         .submit-button:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+  opacity: 0.5;,
+  cursor: not-allowed;
         @media (max-width: 1024px) {
           .queue-content {
             grid-template-columns: 1fr;
@@ -396,7 +396,7 @@ _jsxs("div", { className: `verification-queue ${className}`, children: ["}", _js
         @media (max-width: 768px) {
           .queue-header {
             flex-direction: column;
-            align-items: stretch;
+            align-items: stretch;,
   gap: 1rem;
           .details-grid {
             grid-template-columns: 1fr;

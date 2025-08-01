@@ -7,7 +7,7 @@ import React, { ComponentType } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
-}
+
 export interface RouteProtectionOptions {
   requireAuth?: boolean;
   requiredRoles?: string;
@@ -15,8 +15,9 @@ export interface RouteProtectionOptions {
   redirectTo?: string;
   loadingComponent?: React.ComponentType;
   unauthorizedComponent?: React.ComponentType;
-}
-}
+
+
+
 export function withRouteProtection<P extends object>()
   WrappedComponent: ComponentType<P>,
   options: RouteProtectionOptions = {}
@@ -27,7 +28,7 @@ export function withRouteProtection<P extends object>()
   redirectTo = '/login',
   loadingComponent: LoadingComponent,
   unauthorizedComponent: UnauthorizedComponent,
-} = options;
+ = options;
   const ProtectedComponent: React.FC<P> = (props) => {
     const { isAuthenticated, user, isLoading } = useAuthStore();
     const location = useLocation();
@@ -42,7 +43,7 @@ export function withRouteProtection<P extends object>()
   alignItems: 'center',
   height: '100vh',
   flexDirection: 'column',
-}}>
+}>
           <div style={{ fontSize: '18px', marginBottom: '10px' }}>Loading...</div>
           <div>Checking authentication status...</div>
         </div>

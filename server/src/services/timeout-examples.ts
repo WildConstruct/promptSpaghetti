@@ -24,7 +24,7 @@ import {
   createEmailIntegration,
   createAPIIntegration,
   createHealthCheckIntegration
-} from './timeout-integrations';
+ from './timeout-integrations';
 import {
   withDatabaseTimeout,
   withRedisTimeout,
@@ -32,7 +32,7 @@ import {
   withAuthTimeout,
   withFileTimeout,
   withEmailTimeout
-} from '../middleware/timeout-middleware';
+ from '../middleware/timeout-middleware';
 import nodemailer from 'nodemailer';
 
 /**
@@ -43,13 +43,13 @@ export class WorkspaceServiceWithTimeout {
 
   constructor(private db: Database) {
     this.dbIntegration = createDatabaseIntegration(db);
-  }
+
 
   // Original method without timeout handling
   async getWorkspaceOriginal(workspaceId: number) {
     const stmt = this.db.prepare('SELECT * FROM workspaces WHERE id = ?');
     return stmt.get(workspaceId);
-  }
+
 
   // Enhanced method with timeout handling
   async getWorkspace(workspaceId: number) {
@@ -61,10 +61,10 @@ export class WorkspaceServiceWithTimeout {
 
     if (!result.success) {
       throw new Error(`Failed to get workspace: ${result.error?.message}`);
-    }
+
 
     return result.data?.[0];
-  }
+
 
   // Transaction with timeout and fallback
   async createWorkspaceWithFallback(workspaceData: unknown, readOnlyDb?: Database) {
@@ -76,10 +76,10 @@ export class WorkspaceServiceWithTimeout {
 
     if (!result.success) {
       throw new Error(`Failed to create workspace: ${result.error?.message}`);
-    }
+
 
     return result.data;
-  }
+
 
   // Complex transaction with timeout
   async updateWorkspaceWithHistory(workspaceId: number, updates: unknown) {
@@ -101,17 +101,17 @@ export class WorkspaceServiceWithTimeout {
           WHERE id = ?
         `);
         return updateStmt.run(updates.name, updates.description, new Date().toISOString(), workspaceId);
-  }
+
       `update_workspace_${workspaceId}`
     );
 
     if (!result.success) {
       throw new Error(`Failed to update workspace: ${result.error?.message}`);
-    }
+
 
     return result.data;
-  }
-}
+
+
 
 /**
  * Example 2: Redis Operations with Timeout
@@ -122,7 +122,7 @@ export class CacheServiceWithTimeout {
 
   constructor(private redis: RedisService) {
     this.redisIntegration = createRedisIntegration(redis);
-  }
+
 
   // Cache with Redis fallback to in-memory
   async getCachedData(key: string, generator: () => Promise<unknown>, ttl: number = 3600) {
@@ -137,10 +137,10 @@ export class CacheServiceWithTimeout {
       console.warn(`Cache operation failed: ${result.error?.message}`);
       // Fallback to direct generation
       return generator();
-    }
+
 
     return result.data;
-  }
+
 
   // Publish with timeout
   async publishEvent(event: string, data: Record<string, unknown>) {
@@ -153,34 +153,20 @@ export class CacheServiceWithTimeout {
     if (!result.success) {
       console.error(`Failed to publish event: ${result.error?.message}`);
       // Could implement local event handling as fallback
-    }
+
 
     return result.success;
-  }
-}
+
+
 
 /**
  * Example 3: Authentication with Timeout
  */
-export class AuthServiceWithTimeout {
-  private authIntegration: AuthTimeoutIntegration;
+export class AuthServiceWithTimeout {};
 
-  constructor() {
-    this.authIntegration = createAuthIntegration();
-  }
-
-  // Login with timeout
-  @withAuthTimeout('login')
-  async login(username: string, password: string) {
-    // Simulate authentication logic
-    await this.simulateAuthDelay(2000);
-    
-    if (username === 'admin' && password === 'password') {
-      return { token: 'jwt-token', user: { id: 1, username } };
-    }
     
     throw new Error('Invalid credentials');
-  }
+
 
   // CAPTCHA verification with timeout
   async verifyCaptcha(token: string) {
@@ -190,22 +176,22 @@ export class AuthServiceWithTimeout {
         // Simulate external CAPTCHA verification
         await this.simulateAuthDelay(1000);
         return captchaToken.length > 10; // Simple validation
-  }
+
       `captcha_${token.substring(0, 8)}`
     );
 
     if (!result.success) {
       throw new Error(`CAPTCHA verification failed: ${result.error?.message}`);
-    }
+
 
     return result.data;
-  }
+
 
   private simulateAuthDelay(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-}
+
+
 
 /**
  * Example 4: File Operations with Timeout
@@ -215,7 +201,7 @@ export class FileServiceWithTimeout {
 
   constructor() {
     this.fileIntegration = createFileIntegration();
-  }
+
 
   // File upload with timeout
   @withFileTimeout('upload')
@@ -223,7 +209,7 @@ export class FileServiceWithTimeout {
     // Simulate file upload
     await this.simulateFileOperation(5000);
     return { path: destination, size: file.size, uploaded: true };
-  }
+
 
   // File processing with timeout
   async processFile(filePath: string) {
@@ -232,22 +218,22 @@ export class FileServiceWithTimeout {
         // Simulate intensive file processing
         await this.simulateFileOperation(10000);
         return { processed: true, outputPath: `${filePath}.processed` };
-  }
+
       `process_${filePath.split('/').pop()}`
     );
 
     if (!result.success) {
       throw new Error(`File processing failed: ${result.error?.message}`);
-    }
+
 
     return result.data;
-  }
+
 
   private simulateFileOperation(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-}
+
+
 
 /**
  * Example 5: Email Operations with Timeout
@@ -262,7 +248,7 @@ export class EmailServiceWithTimeout {
   ) {
     this.emailIntegration = createEmailIntegration(transporter);
     this.fallbackTransporter = fallbackTransporter;
-  }
+
 
   // Send email with timeout and fallback
   async sendNotificationEmail(to: string, subject: string, content: string) {
@@ -280,10 +266,10 @@ export class EmailServiceWithTimeout {
 
     if (!result.success) {
       throw new Error(`Email sending failed: ${result.error?.message}`);
-    }
+
 
     return result.data;
-  }
+
 
   // Email verification with timeout
   @withEmailTimeout('verify')
@@ -291,12 +277,12 @@ export class EmailServiceWithTimeout {
     try {
       await this.transporter.verify();
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Email verification failed:', error);
       return false;
-    }
-  }
-}
+
+
+
 
 /**
  * Example 6: External API with Timeout
@@ -306,7 +292,7 @@ export class ExternalAPIServiceWithTimeout {
 
   constructor() {
     this.apiIntegration = createAPIIntegration();
-  }
+
 
   // Webhook with timeout
   async sendWebhook(url: string, payload: unknown) {
@@ -318,10 +304,10 @@ export class ExternalAPIServiceWithTimeout {
 
     if (!result.success) {
       throw new Error(`Webhook failed: ${result.error?.message}`);
-    }
+
 
     return result.data;
-  }
+
 
   // API call with fallback endpoints
   async fetchUserData(userId: number) {
@@ -336,11 +322,11 @@ export class ExternalAPIServiceWithTimeout {
 
     if (!result.success) {
       throw new Error(`Failed to fetch user data: ${result.error?.message}`);
-    }
+
 
     return result.data;
-  }
-}
+
+
 
 /**
  * Example 7: Health Check with Timeout
@@ -350,7 +336,7 @@ export class HealthCheckServiceWithTimeout {
 
   constructor() {
     this.healthIntegration = createHealthCheckIntegration();
-  }
+
 
   // Comprehensive health check
   async performHealthCheck(
@@ -371,12 +357,12 @@ export class HealthCheckServiceWithTimeout {
           status: result.database.success ? 'healthy' : 'unhealthy',
           responseTime: result.database.totalTime,
           error: result.database.error?.message
-  }
+
         redis: {
           status: result.redis.success ? 'healthy' : 'unhealthy',
           responseTime: result.redis.totalTime,
           error: result.redis.error?.message
-  }
+
         externalServices: Object.entries(result.externalServices).reduce((acc, [url, result]) => {
           acc[url] = {
             status: result.success ? 'healthy' : 'unhealthy',
@@ -385,11 +371,11 @@ export class HealthCheckServiceWithTimeout {
           };
           return acc;
         }, {} as any)
-  }
+
       timeoutManager: result.timeoutManagerHealth
     };
-  }
-}
+
+
 
 /**
  * Example 8: Manual Timeout Usage
@@ -404,7 +390,7 @@ export class ManualTimeoutExample {
         // Custom database operation
         await this.simulateOperation(3000);
         return { rows: [], affectedRows: 0 };
-  }
+
       'database',
       'query',
       `custom_query_${Date.now()}`
@@ -413,10 +399,10 @@ export class ManualTimeoutExample {
     if (!result.success) {
       console.error('Custom operation failed:', result.error?.message);
       throw result.error;
-    }
+
 
     return result.data;
-  }
+
 
   // Operation with fallback
   async primaryWithFallback() {
@@ -425,24 +411,24 @@ export class ManualTimeoutExample {
         // Primary operation that might fail
         await this.simulateOperation(5000);
         throw new Error('Primary failed');
-  }
+
       async () => {
         // Fallback operation
         await this.simulateOperation(1000);
         return { fallback: true, data: 'fallback data' };
-  }
+
       'api',
       'authentication'
     );
 
     return result.data;
-  }
+
 
   private simulateOperation(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-}
+
+
 
 /**
  * Example 9: Fastify Route Integration
@@ -465,7 +451,7 @@ export function exampleRouteWithTimeout(fastify: unknown) {
         circuitBreakerOpen: result.circuitBreakerOpen
       });
       return;
-    }
+
 
     return result.data;
   });
@@ -476,7 +462,7 @@ export function exampleRouteWithTimeout(fastify: unknown) {
       async () => {
         // Primary data source
         return { primary: true, data: 'primary data' };
-  }
+
       async () => {
         // Fallback data source
         return { primary: false, data: 'fallback data' };
@@ -485,7 +471,7 @@ export function exampleRouteWithTimeout(fastify: unknown) {
 
     return result.data;
   });
-}
+
 
 /**
  * Example 10: Configuration-based Usage
@@ -496,13 +482,13 @@ export function setupTimeoutManagerWithConfig() {
     database: {
       query: 15000, // 15 seconds for queries
       transaction: 45000 // 45 seconds for transactions
-  }
+
     redis: {
       operation: 8000 // 8 seconds for Redis operations
-  }
+
     api: {
       webhook: 20000 // 20 seconds for webhooks
-    }
+
   };
 
   // Custom retry configuration
@@ -528,4 +514,3 @@ export function setupTimeoutManagerWithConfig() {
     retryConfig,
     circuitBreakerConfig
   };
-}

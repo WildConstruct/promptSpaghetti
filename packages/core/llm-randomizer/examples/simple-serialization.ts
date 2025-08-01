@@ -5,39 +5,36 @@ import { validateFormat } from '../serialization/validator';
 import { Graph } from '../../graphSchema';
 
 // Example: Simple greeting generator
-const simpleGraph: Graph = {,
-  nodes: [,
+const simpleGraph: Graph = { ,
+  nodes: [
     {
       id: 'greeting_choice',
-      type: 'WeightedChoice',
-      choices: [,
+      type: 'WeightedChoice' }
+      choices: [
         { value: 'Hello', weight: 0.4 },
         { value: 'Hi', weight: 0.3 },
         { value: 'Greetings', weight: 0.3 }
       ]
-  }
-    {
-  id: 'name_var',
+
+    { id: 'name_var',
   type: 'GetVariable',
-  key: 'user_name',
-}
-    {
-  id: 'greeting_concat',
+  key: 'user_name' }
+
+    { id: 'greeting_concat',
   type: 'Concat',
-  inputs: ['greeting_choice', 'name_var'],
-}
-    {
-  id: 'final_output',
-  type: 'Output',
+  inputs: ['greeting_choice', 'name_var'] }
+
+    { id: 'final_output',
+  type: 'Output' }
   inputs: ['greeting_concat']];
-  };
+};
 
 // Serialize the graph
-const serialized = GraphSerializer.serialize(simpleGraph, {)
+const serialized = GraphSerializer.serialize(simpleGraph, { )
   name: 'Simple Greeting Generator',
   description: 'Generates personalized greetings',
   author: 'claude-agent',
-  created: new Date().toISOString(),
+  created: new Date().toISOString() }
 });
 console.log('=== LLM-Friendly Serialized Format ===');
 console.log(serialized);

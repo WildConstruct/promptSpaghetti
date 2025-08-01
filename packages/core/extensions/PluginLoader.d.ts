@@ -11,49 +11,42 @@ import { DependencyGraph, LoadOrder } from './DependencyResolver';
 import { PluginSandbox } from './PluginSandbox';
 
 }
-export interface PluginSource {
-    type: 'filesystem' | 'npm' | 'git' | 'url' | 'registry';
+}
+export interface PluginSource { type: 'filesystem' | 'npm' | 'git' | 'url' | 'registry';
     location: string;
     version?: string;
     credentials?: {
         token?: string;
         username?: string;
-        password?: string;
-
+        password?: string }
 }
     };
-    options?: {
-        cache?: boolean;
+    options?: { cache?: boolean;
         timeout?: number;
-        allowPrerelease?: boolean;
-    };
+        allowPrerelease?: boolean };
 
 }
-export interface LoadedPlugin {
-    manifest: ExtensionManifest;
+}
+export interface LoadedPlugin { manifest: ExtensionManifest;
     source: PluginSource;
     exports: any;
     sandbox: PluginSandbox;
     loadedAt: Date;
     dependencies: string[];
     status: 'loaded' | 'active' | 'inactive' | 'error';
-    error?: Error;
-
-
+    error?: Error }
 }
-export interface PluginLoadOptions {
-    enableSandbox: boolean;
+}
+export interface PluginLoadOptions { enableSandbox: boolean;
     allowRemoteSources: boolean;
     maxConcurrentLoads: number;
     cacheDirectory?: string;
     skipDependencyResolution?: boolean;
     developmentMode?: boolean;
-    permissionsCheck?: boolean;
-
-
+    permissionsCheck?: boolean }
 }
-export interface PluginRegistry {
-    plugins: Map<string, LoadedPlugin>;
+}
+export interface PluginRegistry { plugins: Map<string, LoadedPlugin>;
     manifests: Map<string, ExtensionManifest>;
     dependencyGraph: DependencyGraph;
     loadOrder: LoadOrder;
@@ -98,7 +91,7 @@ export declare class PluginLoader {
     checkForUpdates(): Promise<Array<{
         pluginId: string;
         currentVersion: string;
-        availableVersion: string;
+        availableVersion: string }
 }
     }>>;
     /**

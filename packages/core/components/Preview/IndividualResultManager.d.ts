@@ -8,6 +8,7 @@
 import React from 'react';
 
 }
+}
 interface IndividualResultManagerProps {
     visible?: boolean;
     onClose?: () => void;
@@ -19,4 +20,5 @@ interface IndividualResultManagerProps {
 export declare const IndividualResultManager: React.FC<IndividualResultManagerProps>;
 export default IndividualResultManager;
 //# sourceMappingURL=IndividualResultManager.d.ts.map
+}
 }

@@ -15,8 +15,9 @@ import {
   UserContext,
   Permission,
   Role
-} from '../../packages/core/services/Epic17AuthorizationService';
-}
+ from '../../packages/core/services/Epic17AuthorizationService';
+
+
 interface UseEpic17AuthorizationOptions {
   enableCaching?: boolean;
   strictMode?: boolean;
@@ -30,31 +31,32 @@ interface UseEpic17AuthorizationOptions {
   checkMultiplePermissions: (checks: PermissionCheck) => Promise<Map<string, boolean>>;
   // User data
   userRoles: string;,
-  userPermissions: Permission;
+  userPermissions: Permission;,
   availableSections: AdminSection;
   // Authorization results
   lastAuthorizationResult: AuthorizationResult | null;,
-  isAuthorizing: boolean;
+  isAuthorizing: boolean;,
   authorizationError: string | null;
   // Management functions
   refreshPermissions: () => Promise<void>;,
   clearCache: () => void;
   interface PermissionCheck {
   id: string;,
-  resource: ResourceType;
+  resource: ResourceType;,
   action: string;
   resourceId?: string;
   context?: Partial<AuthorizationContext>;
   interface AdminSection {
   id: string;,
-  label: string;
+  label: string;,
   description: string;,
-  icon: string;
-  requiredPermissions: {
+  icon: string;,
+  requiredPermissions: {,
   resource: ResourceType;,
   actions: string;
-}
-}[];
+
+
+[];
   riskLevel: 'low' | 'medium' | 'high' | 'critical';,
   category: string;
 
@@ -65,85 +67,85 @@ const EPIC17_ADMIN_SECTIONS: AdminSection = [
     label: 'Feature Toggles',
     description: 'Manage feature flags and rollouts',
     icon: 'ToggleLeft',
-    requiredPermissions: [,
+    requiredPermissions: [
       { resource: ResourceType.FEATURE_TOGGLE, actions: ['read', 'list'] }
     ],
     riskLevel: 'high',
     category: 'feature_management';
-  }
+
   {
     id: 'users',
     label: 'User Management',
     description: 'Manage users and permissions',
     icon: 'Users',
-    requiredPermissions: [,
+    requiredPermissions: [
       { resource: ResourceType.USER_ACCOUNT, actions: ['read', 'list', 'manage'] }
     ],
     riskLevel: 'critical',
     category: 'user_management';
-  }
+
   {
     id: 'content',
     label: 'Content Management',
     description: 'Moderate and manage content',
     icon: 'FileText',
-    requiredPermissions: [,
+    requiredPermissions: [
       { resource: ResourceType.CONTENT_ITEM, actions: ['read', 'list', 'moderate'] }
     ],
     riskLevel: 'medium',
     category: 'content_management';
-  }
+
   {
     id: 'api-management',
     label: 'API Management',
     description: 'Manage API keys and access control',
     icon: 'Key',
-    requiredPermissions: [,
+    requiredPermissions: [
       { resource: ResourceType.API_KEY, actions: ['read', 'list', 'manage'] }
     ],
     riskLevel: 'high',
     category: 'api_management';
-  }
+
   {
     id: 'marketplace',
     label: 'Marketplace Admin',
     description: 'Review templates and transactions',
     icon: 'ShoppingCart',
-    requiredPermissions: [,
+    requiredPermissions: [
       { resource: ResourceType.MARKETPLACE_ITEM, actions: ['read', 'list', 'moderate'] }
     ],
     riskLevel: 'medium',
     category: 'marketplace';
-  }
+
   {
     id: 'analytics',
     label: 'Analytics & Monitoring',
     description: 'View system metrics and health',
     icon: 'BarChart3',
-    requiredPermissions: [,
+    requiredPermissions: [
       { resource: ResourceType.DASHBOARD, actions: ['read', 'view'] },
       { resource: ResourceType.REPORT, actions: ['read', 'generate'] }
     ],
     riskLevel: 'low',
     category: 'analytics';
-  }
+
   {
     id: 'system',
     label: 'System Configuration',
     description: 'Configure system settings',
     icon: 'Settings',
-    requiredPermissions: [,
+    requiredPermissions: [
       { resource: ResourceType.SYSTEM_CONFIG, actions: ['read', 'write', 'manage'] }
     ],
     riskLevel: 'critical',
     category: 'system_admin';
-  }
+
   {
     id: 'audit-logs',
     label: 'Audit Logs',
     description: 'View system audit trail and security logs',
     icon: 'ScrollText',
-    requiredPermissions: [,
+    requiredPermissions: [
       { resource: ResourceType.AUDIT_LOG, actions: ['read', 'list', 'export'] }
     ],
     riskLevel: 'high',
@@ -155,22 +157,22 @@ let authorizationServiceInstance: Epic17AuthorizationService | null = null;
 function getAuthorizationService(): Epic17AuthorizationService {
   if (!authorizationServiceInstance) {
   authorizationServiceInstance = new Epic17AuthorizationService({)
-  evaluation: {
+  evaluation: {,
   enableCaching: true,
   cacheTimeToLive: 300, // 5 minutes,
   evaluationTimeout: 1000,
   strictMode: true,
 },
-  audit: {
+  audit: {,
   enableAuditLogging: true,
   logLevel: 'detailed',
   auditAllDecisions: true,
 },
-  permissions: {
+  permissions: {,
   defaultDenyMode: true,
   inheritanceEnabled: true,
 },
-  security: {
+  security: {,
   requireMfaForHighRisk: true,
   sessionValidation: true,
 });
@@ -196,7 +198,7 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
   roles: user.roles || [],
   groups: user.groups || [],
   permissions: userPermissions,
-  attributes: {
+  attributes: {,
   firstName: user.firstName,
   lastName: user.lastName,
   department: user.department,
@@ -220,7 +222,7 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
       try {
         const permissions = await authService.getUserPermissions(userContext.id);
         setUserPermissions(permissions);
-      } catch (error) {
+ catch (error) {
   console.error('Failed to load user permissions:', error);
   setUserPermissions([]);
 };
@@ -238,10 +240,10 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
     try {
       const result = await authService.hasPermission(userContext, resource, action, resourceId);
       return result;
-    } catch (error) {
+ catch (error) {
   setAuthorizationError(error instanceof Error ? error.message : 'Authorization check failed');
   return false;
-} finally {
+ finally {
       setIsAuthorizing(false);
   }, [authService, userContext]);
   // Section access checking
@@ -269,21 +271,21 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
       const authContext: AuthorizationContext = {,
   user: userContext,
         action,
-        environment: {
+        environment: {,
   environment: 'production', // Default
           region: process.env.REACT_APP_REGION || 'us-west-2',
           version: process.env.REACT_APP_VERSION || '1.0.0',
           featureFlags: {}
-  }
+
         ...context
       };
       const result = await authService.authorize(authContext);
       setLastAuthorizationResult(result);
       return result.granted;
-    } catch (error) {
+ catch (error) {
   setAuthorizationError(error instanceof Error ? error.message : 'Authorization check failed');
   return false;
-} finally {
+ finally {
       setIsAuthorizing(false);
   }, [authService, userContext]);
   // Bulk permission checking
@@ -301,19 +303,19 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
             id: check.resourceId,
             attributes: {},
             tags: [];
-  } : undefined,
+ : undefined,
           action: check.action,
-          environment: {
+          environment: {,
   environment: 'production',
             region: 'us-west-2',
             version: '1.0.0',
             featureFlags: {}
-  }
+
           ...check.context
         };
         const result = await authService.authorize(context);
         results.set(check.id, result.granted);
-      } catch (error) {
+ catch (error) {
         results.set(check.id, false);
     });
     await Promise.all(authPromises);
@@ -331,7 +333,7 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
       const permissions = await authService.getUserPermissions(userContext.id);
       setUserPermissions(permissions);
       setAuthorizationError(null);
-    } catch (error) {
+ catch (error) {
   setAuthorizationError(error instanceof Error ? error.message : 'Failed to refresh permissions');
 }, [authService, userContext]);
   // Clear authorization cache
@@ -365,20 +367,22 @@ export const useEpic17Authorization = (options: UseEpic17AuthorizationOptions = 
 /**
  * Higher-order component for protecting routes with Epic 17 authorization
  */
-}
+
+
 interface ProtectedRouteProps {
   children: React.ReactNode;,
-  requiredResource: ResourceType;
+  requiredResource: ResourceType;,
   requiredAction: string;
   resourceId?: string;
   fallback?: React.ReactNode;
-  export const Epic17ProtectedRoute: React.FC<ProtectedRouteProps> = ({,)
+  export const Epic17ProtectedRoute: React.FC<ProtectedRouteProps> = ({),
   children,
   requiredResource,
   requiredAction,
   resourceId,
   fallback = React.createElement('div', null, 'Access Denied')
-}
+
+
 }) => {
   const { hasPermission, isAuthorizing } = useEpic17Authorization();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);

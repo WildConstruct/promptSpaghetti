@@ -6,9 +6,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FilePreview } from './FilePreview';
 import { PSGFile } from '../../projectManager';
-}
-interface HoverPreviewProps {
-  /** File data to preview */
+
+
+interface HoverPreviewProps { /** File data to preview */
   file: PSGFile;
   /** Target element to position relative to */
   targetElement?: Element;
@@ -18,13 +18,14 @@ interface HoverPreviewProps {
   onClick?: (file: PSGFile) => void;
   /** Children to render as trigger */
   children: React.ReactNode;
-  export const HoverPreview: React.FC<HoverPreviewProps> = ({,)
-  file,
-  targetElement,
-  delay = 300,
-  onClick,
+  export const HoverPreview: React.FC<HoverPreviewProps> = ({);
+  file;
+  targetElement;
+  delay = 300;
+  onClick }
   children
-}
+
+
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -60,8 +61,7 @@ interface HoverPreviewProps {
     return { x, y };
   }, []);
   // Handle mouse enter
-  const handleMouseEnter = useCallback(() => {
-    // Clear any hide timeout
+  const handleMouseEnter = useCallback(() => { // Clear any hide timeout
     if (hideTimeoutRef.current) {
       clearTimeout(hideTimeoutRef.current);
       hideTimeoutRef.current = null;
@@ -71,51 +71,36 @@ interface HoverPreviewProps {
       if (element) {
         const pos = calculatePosition(element);
         setPosition(pos);
-        setIsVisible(true);
-    }, delay);
+        setIsVisible(true) }, delay);
   }, [calculatePosition, delay, targetElement]);
   // Handle mouse leave
-  const handleMouseLeave = useCallback(() => {
-    // Clear any show timeout
+  const handleMouseLeave = useCallback(() => { // Clear any show timeout
     if (showTimeoutRef.current) {
       clearTimeout(showTimeoutRef.current);
       showTimeoutRef.current = null;
     // Set hide timeout with small delay to allow moving to preview
     hideTimeoutRef.current = setTimeout(() => {
-      setIsVisible(false);
-    }, 100);
+      setIsVisible(false) }, 100);
   }, []);
   // Handle focus (for keyboard accessibility)
-  const handleFocus = useCallback(() => {
-    handleMouseEnter();
-  }, [handleMouseEnter]);
+  const handleFocus = useCallback(() => { handleMouseEnter() }, [handleMouseEnter]);
   // Handle blur
-  const handleBlur = useCallback(() => {
-    handleMouseLeave();
-  }, [handleMouseLeave]);
+  const handleBlur = useCallback(() => { handleMouseLeave() }, [handleMouseLeave]);
   // Handle preview click
-  const handlePreviewClick = useCallback(() => {
-    onClick?.(file);
-    setIsVisible(false);
-  }, [onClick, file]);
+  const handlePreviewClick = useCallback(() => { onClick?.(file);
+    setIsVisible(false) }, [onClick, file]);
   // Handle preview mouse enter (prevent hiding)
-  const handlePreviewMouseEnter = useCallback(() => {
-    if (hideTimeoutRef.current) {
+  const handlePreviewMouseEnter = useCallback(() => { if (hideTimeoutRef.current) {
       clearTimeout(hideTimeoutRef.current);
-      hideTimeoutRef.current = null;
-  }, []);
+      hideTimeoutRef.current = null }, []);
   // Handle preview mouse leave
-  const handlePreviewMouseLeave = useCallback(() => {
-    setIsVisible(false);
-  }, []);
+  const handlePreviewMouseLeave = useCallback(() => { setIsVisible(false) }, []);
   // Cleanup timeouts on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(() => { return () => {
       if (showTimeoutRef.current) {
         clearTimeout(showTimeoutRef.current);
       if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current);
-    };
+        clearTimeout(hideTimeoutRef.current) };
   }, []);
   return;
     <>
@@ -135,20 +120,20 @@ interface HoverPreviewProps {
         <div
           ref={previewRef}
           className="absolute"
-          style={{
-            position: 'fixed',
+          style={ {
+            position: 'fixed' }
             left: `${position.x}px`}
-},
+
   top: `${position.y}px`}
-},
-  zIndex: 10000,
-            backgroundColor: 'white',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
-            borderRadius: '8px',
-            border: '1px solid #e5e5e5',
-            maxWidth: '350px',
+
+  zIndex: 10000
+            backgroundColor: 'white'
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)'
+            borderRadius: '8px'
+            border: '1px solid #e5e5e5'
+            maxWidth: '350px'
             animation: 'fadeIn 0.15s ease-out';
-  }}
+
           onMouseEnter={handlePreviewMouseEnter}
           onMouseLeave={handlePreviewMouseLeave}
           onClick={handlePreviewClick}
@@ -177,14 +162,12 @@ interface HoverPreviewProps {
 };
 
 // Memoized component for performance
-const MemoizedHoverPreview = React.memo(HoverPreview, (prevProps, nextProps) => {
-  return;
+const MemoizedHoverPreview = React.memo(HoverPreview, (prevProps, nextProps) => { return;
     prevProps.file.id === nextProps.file.id &&
     prevProps.file.lastModified.getTime() === nextProps.file.lastModified.getTime() &&
     prevProps.delay === nextProps.delay &&
     prevProps.onClick === nextProps.onClick
-  );
-});
+  ) });
 MemoizedHoverPreview.displayName = 'HoverPreview';
 
 export default HoverPreview;

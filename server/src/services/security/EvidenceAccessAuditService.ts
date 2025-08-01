@@ -14,18 +14,21 @@ import { EvidenceVersioningService } from '../EvidenceVersioningService';
 import { DatabaseService } from '../../auth/database/DatabaseService';
 // import { UserAccessTransparencyService } from '../../../packages/core/security/UserAccessTransparency';
 // Mock interface for now to avoid import issues
-}
-}
+
+
+
 interface UserAccessTransparencyService {
   recordDataAccess(userId: string, evidenceId: string, action: string, timestamp: Date): Promise<void>;
-}
-}
-}
+
+
+
+
 import crypto from 'crypto';
 
 // Core audit trail data structures
-}
-}
+
+
+
 export interface EvidenceAccessAuditEntry {
   id: string;
   timestamp: Date;
@@ -40,8 +43,9 @@ export interface EvidenceAccessAuditEntry {
     permissions: string[];
     ipAddress: string;
     userAgent: string;
-}
-}
+
+
+
   };
   
   resource: {
@@ -92,7 +96,7 @@ export interface EvidenceAccessAuditEntry {
   processingTime: number;
   errorDetails?: string;
   metadata: Record<string, any>;
-}
+
 
 export enum EvidenceAccessAction {
   READ = 'READ',
@@ -105,7 +109,7 @@ export enum EvidenceAccessAction {
   VERSION = 'VERSION',
   BACKUP = 'BACKUP',
   RESTORE = 'RESTORE'
-}
+
 
 export enum EvidenceAccessOutcome {
   SUCCESS = 'SUCCESS',
@@ -113,10 +117,10 @@ export enum EvidenceAccessOutcome {
   ERROR = 'ERROR',
   PARTIAL = 'PARTIAL',
   TIMEOUT = 'TIMEOUT'
-}
 
-}
-}
+
+
+
 export interface AuditTrailQuery {
   evidenceId?: string;
   userId?: string;
@@ -128,12 +132,13 @@ export interface AuditTrailQuery {
   limit?: number;
   offset?: number;
   includeDeleted?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AuditTrailReport {
   summary: {
     totalAccesses: number;
@@ -141,8 +146,9 @@ export interface AuditTrailReport {
     riskDistribution: Record<string, number>;
     actionDistribution: Record<string, number>;
     outcomeDistribution: Record<string, number>;
-}
-}
+
+
+
   };
   entries: EvidenceAccessAuditEntry[];
   insights: {
@@ -153,7 +159,7 @@ export interface AuditTrailReport {
   };
   exportTimestamp: Date;
   queryContext: AuditTrailQuery;
-}
+
 
 export class EvidenceAccessAuditService {
   private auditService: AuditService;
@@ -174,7 +180,7 @@ export class EvidenceAccessAuditService {
     this.evidenceVersioningService = evidenceVersioningService;
     this.databaseService = databaseService;
     this.userAccessTransparency = userAccessTransparency;
-  }
+
 
   /**
    * Records an evidence access event with comprehensive audit trail
@@ -212,28 +218,28 @@ export class EvidenceAccessAuditService {
           permissions: context.subject.permissions?.map(p => p.name) || [],
           ipAddress: context.environment.sourceIP || 'unknown',
           userAgent: context.environment.userAgent || 'unknown'
-  }
+
         resource: {
           evidenceType: evidenceMetadata.type,
           classificationLevel: evidenceMetadata.classification,
           sensitivityScore: evidenceMetadata.sensitivityScore,
           dataLocation: evidenceMetadata.location,
           complianceFrameworks: evidenceMetadata.complianceFrameworks || []
-  }
+
         action: {
           type: action,
           operation: context.action.operation || action,
           intent: (context.action.metadata as any)?.intent || 'user_requested',
           parameters: additionalMetadata,
           resultSize: additionalMetadata.resultSize
-  }
+
         environment: {
           applicationContext: context.environment.applicationId || 'web',
           networkZone: 'internal',
           deviceType: context.environment.deviceType || 'unknown',
           securityLevel: 'standard',
           geoLocation: context.environment.geolocation?.country
-  }
+
         outcome,
         risk: riskAssessment,
         
@@ -258,7 +264,7 @@ export class EvidenceAccessAuditService {
           ...additionalMetadata,
           auditVersion: '1.0',
           serviceVersion: process.env.npm_package_version || 'unknown'
-        }
+
       };
       
       // Calculate chain hash if previous entries exist
@@ -273,7 +279,7 @@ export class EvidenceAccessAuditService {
       // Trigger real-time monitoring alerts if high risk
       if (riskAssessment.level === 'HIGH' || riskAssessment.level === 'CRITICAL') {
         await this.triggerSecurityAlert(auditEntry);
-      }
+
       
       // Log to central audit service
       await (this.auditService as any).log({
@@ -285,12 +291,11 @@ export class EvidenceAccessAuditService {
           riskLevel: riskAssessment.level,
           correlationId,
           sensitivityScore: evidenceMetadata.sensitivityScore
-        }
+
       });
       
       return auditEntry;
-      
-    } catch (error) {
+ catch (error) {
       // Ensure audit failures don't break the main operation
       console.error('Evidence access audit failed:', error);
       
@@ -303,12 +308,12 @@ export class EvidenceAccessAuditService {
         metadata: {
           error: error instanceof Error ? error.message : 'Unknown error',
           correlationId
-        }
+
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Retrieves audit trail for specific evidence or user
@@ -324,37 +329,37 @@ export class EvidenceAccessAuditService {
       if (query.evidenceId) {
         whereClause += ' AND evidence_id = $' + (params.length + 1);
         params.push(query.evidenceId);
-      }
+
       
       if (query.userId) {
         whereClause += ' AND subject_user_id = $' + (params.length + 1);
         params.push(query.userId);
-      }
+
       
       if (query.action) {
         whereClause += ' AND action_type = $' + (params.length + 1);
         params.push(query.action);
-      }
+
       
       if (query.outcome) {
         whereClause += ' AND outcome = $' + (params.length + 1);
         params.push(query.outcome);
-      }
+
       
       if (query.riskLevel) {
         whereClause += ' AND risk_level = $' + (params.length + 1);
         params.push(query.riskLevel);
-      }
+
       
       if (query.dateFrom) {
         whereClause += ' AND timestamp >= $' + (params.length + 1);
         params.push(query.dateFrom);
-      }
+
       
       if (query.dateTo) {
         whereClause += ' AND timestamp <= $' + (params.length + 1);
         params.push(query.dateTo);
-      }
+
       
       const limit = query.limit || 100;
       const offset = query.offset || 0;
@@ -367,11 +372,10 @@ export class EvidenceAccessAuditService {
       `, [...params, limit, offset]);
       
       return result.rows.map(row => this.mapRowToAuditEntry(row));
-      
-    } finally {
+ finally {
       connection.release();
-    }
-  }
+
+
 
   /**
    * Generates comprehensive audit trail report with analytics
@@ -390,7 +394,7 @@ export class EvidenceAccessAuditService {
       exportTimestamp: new Date(),
       queryContext: query
     };
-  }
+
 
   /**
    * Verifies audit trail integrity using chain hashing
@@ -399,7 +403,7 @@ export class EvidenceAccessAuditService {
     isValid: boolean;
     brokenChains: string[];
     verificationReport: Record<string, any>;
-  }> {
+> {
     const auditEntries = await this.getAuditTrail({ evidenceId });
     const brokenChains: string[] = [];
     let previousHash = '';
@@ -409,10 +413,10 @@ export class EvidenceAccessAuditService {
       
       if (entry.chainHash !== expectedChainHash) {
         brokenChains.push(entry.id);
-      }
+
       
       previousHash = entry.chainHash || '';
-    }
+
     
     return {
       isValid: brokenChains.length === 0,
@@ -421,9 +425,9 @@ export class EvidenceAccessAuditService {
         totalEntries: auditEntries.length,
         verifiedEntries: auditEntries.length - brokenChains.length,
         integrityScore: ((auditEntries.length - brokenChains.length) / auditEntries.length) * 100
-      }
+
     };
-  }
+
 
   // Private helper methods
 
@@ -435,7 +439,7 @@ export class EvidenceAccessAuditService {
     location: string;
     complianceFrameworks: string[];
     legalHold: boolean;
-  }> {
+> {
 
     // Integrate with existing evidence services
     return {
@@ -447,7 +451,7 @@ export class EvidenceAccessAuditService {
       complianceFrameworks: ['GDPR', 'SOX'],
       legalHold: false
     };
-  }
+
 
   private async assessAccessRisk(
     context: AccessControlContext,
@@ -459,7 +463,7 @@ export class EvidenceAccessAuditService {
       location: string;
       complianceFrameworks: string[];
       legalHold: boolean;
-  }
+
     action: EvidenceAccessAction
   ): Promise<EvidenceAccessAuditEntry['risk']> {
 
@@ -484,12 +488,12 @@ export class EvidenceAccessAuditService {
     if (context.environment.sourceIP && !this.isInternalIP(context.environment.sourceIP)) {
       riskScore += 20;
       factors.push('external_access');
-    }
+
     
     if (this.isOutsideBusinessHours()) {
       riskScore += 15;
       factors.push('outside_business_hours');
-    }
+
     
     // Determine risk level
     let level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -499,13 +503,13 @@ export class EvidenceAccessAuditService {
     else level = 'CRITICAL';
     
     return { level, score: riskScore, factors, mitigations };
-  }
+
 
   private async createContentHash(data: Record<string, unknown>): Promise<string> {
 
     const content = JSON.stringify(data, Object.keys(data).sort());
     return crypto.createHash('sha256').update(content).digest('hex');
-  }
+
 
   private async calculateChainHash(
     entry: EvidenceAccessAuditEntry,
@@ -521,7 +525,7 @@ export class EvidenceAccessAuditService {
         dateFrom: new Date(entry.timestamp.getTime() - 1000) // 1 second before current
       });
       previousHash = recentEntries[0]?.chainHash || 'genesis';
-    }
+
     
     const chainData = {
       previousHash,
@@ -530,7 +534,7 @@ export class EvidenceAccessAuditService {
     };
     
     return crypto.createHash('sha256').update(JSON.stringify(chainData)).digest('hex');
-  }
+
 
   private async storeAuditEntry(entry: EvidenceAccessAuditEntry): Promise<void> {
 
@@ -573,10 +577,10 @@ export class EvidenceAccessAuditService {
         entry.retentionPeriod, JSON.stringify(entry.complianceFlags), entry.legalHold,
         entry.processingTime, entry.errorDetails, JSON.stringify(entry.metadata)
       ]);
-    } finally {
+ finally {
       connection.release();
-    }
-  }
+
+
 
   private async updateUserAccessTransparency(entry: EvidenceAccessAuditEntry): Promise<void> {
 
@@ -587,7 +591,7 @@ export class EvidenceAccessAuditService {
       entry.action.type,
       entry.timestamp
     );
-  }
+
 
   private async triggerSecurityAlert(entry: EvidenceAccessAuditEntry): Promise<void> {
 
@@ -598,7 +602,7 @@ export class EvidenceAccessAuditService {
       riskLevel: entry.risk.level,
       factors: entry.risk.factors
     });
-  }
+
 
   private calculateRetentionPeriod(classification: string, riskLevel: string): number {
     const baseRetention = {
@@ -616,7 +620,7 @@ export class EvidenceAccessAuditService {
     };
     
     return (baseRetention[classification] || 365) * (riskMultiplier[riskLevel] || 1);
-  }
+
 
   private determineComplianceFlags(evidenceMetadata: {
     complianceFrameworks: string[];
@@ -626,14 +630,14 @@ export class EvidenceAccessAuditService {
     
     if (evidenceMetadata.complianceFrameworks && Array.isArray(evidenceMetadata.complianceFrameworks) && evidenceMetadata.complianceFrameworks.includes('GDPR')) {
       flags.push('GDPR_TRACKED');
-    }
+
     
     if (action === EvidenceAccessAction.EXPORT) {
       flags.push('DATA_EXPORT');
-    }
+
     
     return flags;
-  }
+
 
   private mapRowToAuditEntry(row: unknown): EvidenceAccessAuditEntry {
     // Map database row to audit entry object
@@ -649,35 +653,35 @@ export class EvidenceAccessAuditService {
         permissions: JSON.parse(row.subject_permissions || '[]'),
         ipAddress: row.subject_ip_address,
         userAgent: row.subject_user_agent
-  }
+
       resource: {
         evidenceType: row.resource_evidence_type,
         classificationLevel: row.resource_classification_level,
         sensitivityScore: row.resource_sensitivity_score,
         dataLocation: row.resource_data_location,
         complianceFrameworks: JSON.parse(row.resource_compliance_frameworks || '[]')
-  }
+
       action: {
         type: row.action_type,
         operation: row.action_operation,
         intent: row.action_intent,
         parameters: JSON.parse(row.action_parameters || '{}'),
         resultSize: row.action_result_size
-  }
+
       environment: {
         applicationContext: row.environment_application_context,
         networkZone: row.environment_network_zone,
         deviceType: row.environment_device_type,
         securityLevel: row.environment_security_level,
         geoLocation: row.environment_geo_location
-  }
+
       outcome: row.outcome,
       risk: {
         level: row.risk_level,
         score: row.risk_score,
         factors: JSON.parse(row.risk_factors || '[]'),
         mitigations: JSON.parse(row.risk_mitigations || '[]')
-  }
+
       contentHash: row.content_hash,
       chainHash: row.chain_hash,
       correlationId: row.correlation_id,
@@ -689,7 +693,7 @@ export class EvidenceAccessAuditService {
       errorDetails: row.error_details,
       metadata: JSON.parse(row.metadata || '{}')
     };
-  }
+
 
   private calculateAuditSummary(entries: EvidenceAccessAuditEntry[]): AuditTrailReport['summary'] {
     const uniqueUsers = new Set(entries.map(e => e.subject.userId)).size;
@@ -716,7 +720,7 @@ export class EvidenceAccessAuditService {
       actionDistribution,
       outcomeDistribution
     };
-  }
+
 
   private async analyzeAuditInsights(entries: EvidenceAccessAuditEntry[]): Promise<AuditTrailReport['insights']> {
 
@@ -729,24 +733,23 @@ export class EvidenceAccessAuditService {
     const highRiskAccesses = entries.filter(e => e.risk.level === 'HIGH' || e.risk.level === 'CRITICAL');
     if (highRiskAccesses.length > entries.length * 0.1) {
       suspiciousPatterns.push(`High risk access pattern detected: ${highRiskAccesses.length} high-risk accesses`);
-    }
+
     
     // Performance analysis
     const slowAccesses = entries.filter(e => e.processingTime > 5000);
     if (slowAccesses.length > 0) {
       performanceAlerts.push(`${slowAccesses.length} slow audit operations (>5s) detected`);
-    }
+
     
     return { suspiciousPatterns, complianceIssues, performanceAlerts, recommendations };
-  }
+
 
   private isInternalIP(ip: string): boolean {
     // Simplified internal IP check
     return ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.16.');
-  }
+
 
   private isOutsideBusinessHours(): boolean {
     const hour = new Date().getHours();
     return hour < 8 || hour > 18;
-  }
-}
+

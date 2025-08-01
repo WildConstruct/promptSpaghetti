@@ -96,26 +96,30 @@ export class AnalyticsAuthorizationService {
             enabled;
         true,
             rules;
-        [,
+        [
             {
                 id: 'user-self-access',
-                condition: {
-                    userMatch: 'self',
-                    requiredPermissions: [AnalyticsPermission.VIEW_EVENTS],
-                },
-                action: 'allow'
+                condition: {},
+                userMatch: 'self',
+                requiredPermissions: [AnalyticsPermission.VIEW_EVENTS],
             },
-            {
-                id: 'user-other-deny',
-                condition: {
-                    userMatch: 'any',
-                    requiredPermissions: [AnalyticsPermission.VIEW_EVENTS],
-                },
-                action: 'deny'
-            }];
+            action, 'allow'
+        ];
     }
+}
+{
+    id: 'user-other-deny',
+        condition;
+    {
+        userMatch: 'any',
+            requiredPermissions;
+        [AnalyticsPermission.VIEW_EVENTS],
+        ;
+    }
+    action: 'deny';
     ;
 }
+;
 // Organization Policy - Organization members can access org data
 this.addPolicy({});
 id: 'organization-policy',
@@ -128,15 +132,15 @@ id: 'organization-policy',
     enabled;
 true,
     rules;
-[,
+[
     {
         id: 'org-member-access',
-        condition: {
-            organizationMatch: 'self',
-            requiredPermissions: [AnalyticsPermission.VIEW_ORGANIZATION_ANALYTICS],
-        },
-        action: 'allow'
-    }];
+        condition: {},
+        organizationMatch: 'self',
+        requiredPermissions: [AnalyticsPermission.VIEW_ORGANIZATION_ANALYTICS],
+    },
+    action, 'allow'
+];
 ;
 // Admin Policy - Admins can access all data
 this.addPolicy({});
@@ -150,15 +154,15 @@ id: 'admin-policy',
     enabled;
 true,
     rules;
-[,
+[
     {
         id: 'admin-full-access',
-        condition: {
-            requiredRoles: ['admin', 'super_admin'],
-            requiredPermissions: [AnalyticsPermission.VIEW_ALL_EVENTS],
-        },
-        action: 'allow'
-    }];
+        condition: {},
+        requiredRoles: ['admin', 'super_admin'],
+        requiredPermissions: [AnalyticsPermission.VIEW_ALL_EVENTS],
+    },
+    action, 'allow'
+];
 ;
 // Sensitive Data Policy - Restricts access to sensitive information
 this.addPolicy({});
@@ -172,26 +176,24 @@ id: 'sensitive-data-policy',
     enabled;
 true,
     rules;
-[,
+[
     {
         id: 'sensitive-data-redaction',
-        condition: {
-            severities: ['critical', 'error'],
-            requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA],
-        },
-        action: 'allow',
-        fields: {
-            redacted: ['data.password', 'data.token', 'data.apiKey', 'data.secret'],
-        }
+        condition: {},
+        severities: ['critical', 'error'],
+        requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA],
     },
+    action, 'allow',
+    fields, {},
+    redacted, ['data.password', 'data.token', 'data.apiKey', 'data.secret'],
     {
         id: 'security-events-restriction',
-        condition: {
-            eventTypes: ['security_event', 'fraud_detection'],
-            requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA],
-        },
-        action: 'deny'
-    }];
+        condition: {},
+        eventTypes: ['security_event', 'fraud_detection'],
+        requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA],
+    },
+    action, 'deny'
+];
 ;
 // Integration Policy - Controls integration analytics access
 this.addPolicy({});
@@ -205,15 +207,15 @@ id: 'integration-policy',
     enabled;
 true,
     rules;
-[,
+[
     {
         id: 'integration-access',
-        condition: {
-            categories: ['integration'],
-            requiredPermissions: [AnalyticsPermission.VIEW_INTEGRATION_ANALYTICS],
-        },
-        action: 'allow'
-    }];
+        condition: {},
+        categories: ['integration'],
+        requiredPermissions: [AnalyticsPermission.VIEW_INTEGRATION_ANALYTICS],
+    },
+    action, 'allow'
+];
 ;
 /**
  * Authorize event publication

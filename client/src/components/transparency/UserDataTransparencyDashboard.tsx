@@ -15,18 +15,18 @@ import {
   CardDescription,
   CardHeader,
   CardTitle
-} from '@/components/ui/card';
+ from '@/components/ui/card';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger
-} from '@/components/ui/tabs';
+ from '@/components/ui/tabs';
 import {
   Alert,
   AlertDescription,
   AlertTitle
-} from '@/components/ui/alert';
+ from '@/components/ui/alert';
 import {
   Badge,
   Button,
@@ -50,7 +50,7 @@ import {
   SelectTrigger,
   SelectValue,
   Input
-} from '@/components/ui';
+ from '@/components/ui';
 import {
   Eye,
   Download,
@@ -72,84 +72,86 @@ import {
   ExternalLink,
   Search,
   BarChart3
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
+
 interface UserDataInventory {
   userId: string;,
-  generatedAt: Date;
+  generatedAt: Date;,
   dataCategories: DataCategory;,
-  totalDataPoints: number;
+  totalDataPoints: number;,
   sensitiveDataCount: number;,
-  retentionSummary: RetentionSummary;
+  retentionSummary: RetentionSummary;,
   thirdPartySharing: ThirdPartySharing;,
-  complianceStatus: ComplianceStatus;
+  complianceStatus: ComplianceStatus;,
   privacyScore: PrivacyScore;
   interface DataCategory {
   category: string;,
-  description: string;
+  description: string;,
   classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';,
-  dataPoints: DataPoint;
+  dataPoints: DataPoint;,
   lawfulBasis: LawfulBasis;,
-  retentionPeriod: RetentionPeriod;
+  retentionPeriod: RetentionPeriod;,
   processingPurposes: ProcessingPurpose;,
-  thirdPartyAccess: boolean;
+  thirdPartyAccess: boolean;,
   userControl: 'none' | 'limited' | 'moderate' | 'full';
   interface DataPoint {
   id: string;,
-  fieldName: string;
+  fieldName: string;,
   dataType: 'PERSONAL' | 'SENSITIVE' | 'FINANCIAL' | 'HEALTH' | 'BIOMETRIC' | 'BEHAVIORAL';,
-  source: string;
+  source: string;,
   collectedAt: Date;,
-  lastAccessed: Date;
+  lastAccessed: Date;,
   accessCount: number;,
   consentStatus: ConsentStatus;
   interface UserAccessActivity {
   timestamp: Date;,
-  activityType: string;
-  actor: {
+  activityType: string;,
+  actor: {,
   type: 'USER' | 'SYSTEM' | 'THIRD_PARTY' | 'ADMIN';,
   name: string;
   role?: string;
-}
+
+
 };
-  dataAccessed: {
+  dataAccessed: {,
   dataType: string;
   classification: string;,
-  operation: string;
+  operation: string;,
   recordCount: number;
-}[];
+[];
   purpose: string;,
-  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  location: {
-  country: string;
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';,
+  location: {;
+  country: string;,
   withinEU: boolean;
 };
 
-}
+
 interface PrivacyScore {
   overall: number;,
-  categories: {
+  categories: {,
   dataMinimization: number;,
-  consentHealth: number;
+  consentHealth: number;,
   securityPosture: number;,
-  thirdPartyRisk: number;
+  thirdPartyRisk: number;,
   retentionCompliance: number;,
   userControl: number;
-}
+
+
 };
-  trends: Array<{
+  trends: Array<{,
   metric: string;
   change: number;,
   direction: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-}>;
-  recommendations: Array<{
+>;
+  recommendations: Array<{,
   category: string;
   title: string;,
-  description: string;
+  description: string;,
   impact: 'LOW' | 'MEDIUM' | 'HIGH';,
   userAction: boolean;
-}>;
+>;
 
 const UserDataTransparencyDashboard: React.FC = () => {
   const [inventory, setInventory] = useState<UserDataInventory | null>(null);
@@ -166,9 +168,9 @@ const UserDataTransparencyDashboard: React.FC = () => {
       const response = await fetch('/api/transparency/inventory');
       const data = await response.json();
       setInventory(data);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to fetch inventory:', error);
-} finally {
+ finally {
       setLoading(false);
 
   }, []);
@@ -178,7 +180,7 @@ const UserDataTransparencyDashboard: React.FC = () => {
       const response = await fetch(`/api/transparency/activities?range=${timeRange}&type=${filterType}&search=${searchTerm}`);}
       const data = await response.json();
       setActivities(data);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to fetch activities:', error);
 }, [timeRange, filterType, searchTerm]);
   useEffect(() => {
@@ -195,14 +197,14 @@ const UserDataTransparencyDashboard: React.FC = () => {
       a.download = `my-data.${format}`;}
       a.click();
       window.URL.revokeObjectURL(url);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to download data:', error);
 };
   const handleDeleteData = async (categoryId: string) => {
     try {
       await fetch(`/api/transparency/delete/${categoryId}`, { method: 'DELETE' });}
       fetchInventory(); // Refresh
-    } catch (error) {
+ catch (error) {
   console.error('Failed to delete data:', error);
 };
   const getClassificationColor = (classification: string): string => {

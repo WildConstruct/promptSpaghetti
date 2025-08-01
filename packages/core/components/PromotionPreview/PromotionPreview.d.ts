@@ -8,62 +8,55 @@
  */
 import React from 'react';
 }
-interface PromotionSlot {
-    id: string;
+}
+interface PromotionSlot { id: string;
     name: string;
     type: string;
     location: string;
     dimensions: {
         width: number;
-        height: number;
+        height: number }
 }
     };
     traffic_allocation: number;
     priority: number;
 }
-interface PromotionPreviewData {
-    schedule: {
+}
+interface PromotionPreviewData { schedule: {
         id: string;
         title: string;
         promotion_type: string;
         slot: PromotionSlot;
         start_date: Date;
         end_date: Date;
-        status: string;
+        status: string }
 }
     };
-    content: Array<{
-        id: string;
+    content: Array<{ id: string;
         title: string;
         category: string;
         thumbnail: string;
         rating: number;
         downloads: number;
-        performance_score: number;
-    }>;
-    rotation_config: {
-        pattern: string;
+        performance_score: number }>;
+    rotation_config: { pattern: string;
         duration_per_content?: number;
         click_threshold?: number;
-        performance_threshold?: number;
-    };
-    predicted_performance: {
-        estimated_impressions: number;
+        performance_threshold?: number };
+    predicted_performance: { estimated_impressions: number;
         estimated_ctr: number;
         estimated_conversions: number;
         estimated_revenue: number;
-        confidence_level: number;
-    };
-    ab_test_config?: {
-        test_name: string;
+        confidence_level: number };
+    ab_test_config?: { test_name: string;
         variants: Array<{
             id: string;
             name: string;
             traffic_split: number;
-            content_ids: string[];
-        }>;
+            content_ids: string[] }>;
     };
 
+}
 }
 export interface PromotionPreviewProps {
     promotionData?: PromotionPreviewData;
@@ -76,4 +69,5 @@ export interface PromotionPreviewProps {
 export declare const PromotionPreview: React.FC<PromotionPreviewProps>;
 export default PromotionPreview;
 //# sourceMappingURL=PromotionPreview.d.ts.map
+}
 }

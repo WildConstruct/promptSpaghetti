@@ -20,7 +20,7 @@ export interface LocalizationConfig {
   translationFormat: 'json' | 'yaml' | 'po' | 'xliff';
   /** Right-to-left language support */
   rtlLanguages: string[];
-}
+
 
 export interface DocumentationTranslation {
   /** Language code */
@@ -46,7 +46,7 @@ export interface DocumentationTranslation {
     /** Example prompts and descriptions */
     examples: Record<string, string>;
   };
-}
+
 
 export interface CulturalAdaptation {
   /** Language/region code */
@@ -78,7 +78,7 @@ export interface CulturalAdaptation {
     currencyFormat: string;
     timeFormat: '12h' | '24h';
   };
-}
+
 
 export interface LocalizationMetrics {
   /** Translation coverage statistics */
@@ -106,7 +106,7 @@ export interface LocalizationMetrics {
     /** Regional distribution of users */
     regionDistribution: Record<string, number>;
   };
-}
+
 
 /**
  * Comprehensive localization strategy implementation for prompt targeting documentation
@@ -120,7 +120,7 @@ export class DocumentationLocalizationStrategy {
   constructor(config: LocalizationConfig) {
     this.config = config;
     this.metrics = this.initializeMetrics();
-  }
+
 
   /**
    * Initialize default localization configuration
@@ -141,7 +141,7 @@ export class DocumentationLocalizationStrategy {
       translationFormat: 'json',
       rtlLanguages: ['ar', 'he', 'fa', 'ur']
     };
-  }
+
 
   /**
    * Load translation for specific language
@@ -149,18 +149,18 @@ export class DocumentationLocalizationStrategy {
   async loadTranslation(language: string): Promise<DocumentationTranslation> {
     if (this.translations.has(language)) {
       return this.translations.get(language)!;
-    }
+
 
     try {
       // In a real implementation, this would load from translation files
       const translation = await this.fetchTranslationFromSource(language);
       this.translations.set(language, translation);
       return translation;
-    } catch (error) {
+ catch (error) {
       console.warn(`Failed to load translation for ${language}, falling back to ${this.config.fallbackLanguage}`);
       return this.loadTranslation(this.config.fallbackLanguage);
-    }
-  }
+
+
 
   /**
    * Get localized string with fallback support
@@ -179,26 +179,26 @@ export class DocumentationLocalizationStrategy {
         // Fallback to primary language
         const fallbackTranslation = await this.loadTranslation(this.config.fallbackLanguage);
         localizedString = fallbackTranslation.content[section][key];
-      }
+
 
       if (!localizedString) {
         console.warn(`Missing translation for key: ${key} in section: ${section}`);
         return key; // Return key as fallback
-      }
+
 
       // Apply interpolations
       if (interpolations) {
         Object.entries(interpolations).forEach(([placeholder, value]) => {
           localizedString = localizedString.replace(new RegExp(`{{${placeholder}}}`, 'g'), value);
         });
-      }
+
 
       return localizedString;
-    } catch (error) {
+ catch (error) {
       console.error(`Localization error for key ${key}:`, error);
       return key;
-    }
-  }
+
+
 
   /**
    * Load cultural adaptation for specific locale
@@ -206,12 +206,12 @@ export class DocumentationLocalizationStrategy {
   async loadCulturalAdaptation(locale: string): Promise<CulturalAdaptation> {
     if (this.culturalAdaptations.has(locale)) {
       return this.culturalAdaptations.get(locale)!;
-    }
+
 
     const adaptation = await this.fetchCulturalAdaptationFromSource(locale);
     this.culturalAdaptations.set(locale, adaptation);
     return adaptation;
-  }
+
 
   /**
    * Get platform-specific prompt guidelines for a locale
@@ -219,7 +219,7 @@ export class DocumentationLocalizationStrategy {
   async getPlatformGuidelines(locale: string, platform: string): Promise<string[]> {
     const adaptation = await this.loadCulturalAdaptation(locale);
     return adaptation.platformPreferences.considerations[platform] || [];
-  }
+
 
   /**
    * Validate prompt content for cultural sensitivity
@@ -228,7 +228,7 @@ export class DocumentationLocalizationStrategy {
     isValid: boolean;
     warnings: string[];
     suggestions: string[];
-  }> {
+> {
     const adaptation = await this.loadCulturalAdaptation(locale);
     const warnings: string[] = [];
     const suggestions: string[] = [];
@@ -237,23 +237,23 @@ export class DocumentationLocalizationStrategy {
     for (const restriction of adaptation.promptGuidelines.restrictions) {
       if (content.toLowerCase().includes(restriction.toLowerCase())) {
         warnings.push(`Content may be culturally inappropriate: "${restriction}"`);
-      }
-    }
+
+
 
     // Check communication style
     const isFormal = this.detectFormalLanguage(content);
     if (adaptation.promptGuidelines.communicationStyle === 'formal' && !isFormal) {
       suggestions.push('Consider using more formal language for this locale');
-    } else if (adaptation.promptGuidelines.communicationStyle === 'informal' && isFormal) {
+ else if (adaptation.promptGuidelines.communicationStyle === 'informal' && isFormal) {
       suggestions.push('Consider using more casual language for this locale');
-    }
+
 
     return {
       isValid: warnings.length === 0,
       warnings,
       suggestions
     };
-  }
+
 
   /**
    * Generate localized documentation bundle
@@ -271,7 +271,7 @@ export class DocumentationLocalizationStrategy {
       version: string;
       completionPercentage: number;
     };
-  }> {
+> {
     const translation = await this.loadTranslation(language);
     const adaptation = await this.loadCulturalAdaptation(language);
 
@@ -287,9 +287,9 @@ export class DocumentationLocalizationStrategy {
         generatedAt: new Date().toISOString(),
         version: translation.metadata.version,
         completionPercentage: translation.metadata.completionPercentage
-      }
+
     };
-  }
+
 
   /**
    * Update localization metrics
@@ -300,25 +300,25 @@ export class DocumentationLocalizationStrategy {
       const existingLang = this.metrics.usage.popularLanguages.find(l => l.language === language);
       if (existingLang) {
         existingLang.requests++;
-      } else {
+ else {
         this.metrics.usage.popularLanguages.push({ language, requests: 1 });
-      }
-    }
+
+
 
     // Update quality metrics
     if (action === 'issue') {
       this.metrics.quality.reportedIssues++;
-    }
+
 
     if (action === 'rating' && value !== undefined) {
       const currentRating = this.metrics.quality.userRatings[language] || 0;
       this.metrics.quality.userRatings[language] = 
         currentRating === 0 ? value : (currentRating + value) / 2;
-    }
+
 
     // Sort popular languages
     this.metrics.usage.popularLanguages.sort((a, b) => b.requests - a.requests);
-  }
+
 
   /**
    * Get comprehensive localization report
@@ -333,7 +333,7 @@ export class DocumentationLocalizationStrategy {
     coverage: LocalizationMetrics['coverage'];
     quality: LocalizationMetrics['quality'];
     recommendations: string[];
-  } {
+ {
     const totalLanguages = this.config.supportedLanguages.length;
     const averageCompletion = Object.values(this.metrics.coverage.byLanguage)
       .reduce((sum, completion) => sum + completion, 0) / totalLanguages;
@@ -349,11 +349,11 @@ export class DocumentationLocalizationStrategy {
     // Generate recommendations based on metrics
     if (averageCompletion < 80) {
       recommendations.push('Focus on completing translations for core languages (>80% completion target)');
-    }
+
     
     if (criticalIssues > 10) {
       recommendations.push('Address pending translation reviews and reported issues');
-    }
+
 
     const lowRatedLanguages = Object.entries(this.metrics.quality.userRatings)
       .filter(([_, rating]) => rating < 3.0)
@@ -361,7 +361,7 @@ export class DocumentationLocalizationStrategy {
     
     if (lowRatedLanguages.length > 0) {
       recommendations.push(`Improve translation quality for: ${lowRatedLanguages.join(', ')}`);
-    }
+
 
     return {
       summary: {
@@ -374,7 +374,7 @@ export class DocumentationLocalizationStrategy {
       quality: this.metrics.quality,
       recommendations
     };
-  }
+
 
   // Private helper methods
 
@@ -393,9 +393,9 @@ export class DocumentationLocalizationStrategy {
       usage: {
         popularLanguages: [],
         regionDistribution: {}
-      }
+
     };
-  }
+
 
   private async fetchTranslationFromSource(language: string): Promise<DocumentationTranslation> {
     // Mock implementation - in reality would fetch from translation management system
@@ -413,9 +413,9 @@ export class DocumentationLocalizationStrategy {
         messages: {},
         ui: {},
         examples: {}
-      }
+
     };
-  }
+
 
   private async fetchCulturalAdaptationFromSource(locale: string): Promise<CulturalAdaptation> {
     // Mock implementation with some default cultural adaptations
@@ -427,14 +427,14 @@ export class DocumentationLocalizationStrategy {
           considerations: {
             'openai': ['Use polite, formal language', 'Avoid direct criticism'],
             'midjourney': ['Respect traditional art styles', 'Be mindful of cultural symbols']
-          }
+
         },
         promptGuidelines: {
           communicationStyle: 'formal',
           culturalSensitivity: ['Avoid direct confrontation', 'Use honorific language'],
           commonPatterns: ['はじめに', 'について', 'お願いします'],
           restrictions: ['controversial political topics']
-        }
+
       },
       'ar': {
         platformPreferences: {
@@ -442,15 +442,15 @@ export class DocumentationLocalizationStrategy {
           restricted: ['midjourney'], // Due to image generation restrictions
           considerations: {
             'openai': ['Use respectful language', 'Be mindful of religious content']
-          }
+
         },
         promptGuidelines: {
           communicationStyle: 'formal',
           culturalSensitivity: ['Respect religious practices', 'Use appropriate greetings'],
           commonPatterns: ['بسم الله', 'إن شاء الله', 'جزاك الله خيرا'],
           restrictions: ['explicit content', 'alcohol references']
-        }
-      }
+
+
     };
 
     const base: CulturalAdaptation = {
@@ -471,11 +471,11 @@ export class DocumentationLocalizationStrategy {
         numberFormat: '1,234.56',
         currencyFormat: '$1,234.56',
         timeFormat: '24h'
-      }
+
     };
 
     return { ...base, ...defaultAdaptations[locale] } as CulturalAdaptation;
-  }
+
 
   private detectFormalLanguage(content: string): boolean {
     const formalIndicators = ['please', 'kindly', 'would you', 'could you', 'thank you'];
@@ -490,17 +490,17 @@ export class DocumentationLocalizationStrategy {
     ).length;
 
     return formalCount > informalCount;
-  }
+
 
   private async generateLocalizedApiReference(language: string): Promise<string> {
     // Mock implementation
     return `API Reference (${language})`;
-  }
+
 
   private async generateLocalizedTutorials(language: string): Promise<string[]> {
     // Mock implementation
     return [`Tutorial 1 (${language})`, `Tutorial 2 (${language})`];
-  }
+
 
   private async generateLocalizedExamples(
     language: string, 
@@ -512,15 +512,15 @@ export class DocumentationLocalizationStrategy {
         title: `Example 1 (${language})`,
         content: `Culturally adapted example for ${adaptation.locale}`,
         code: `// Example code (${language})`
-      }
+
     ];
-  }
+
 
   private async generateLocalizedTroubleshooting(language: string): Promise<string[]> {
     // Mock implementation
     return [`Troubleshooting item 1 (${language})`];
-  }
-}
+
+
 
 /**
  * Default localization strategy instance
@@ -539,7 +539,7 @@ export     }
   formatTextForRTL(text: string, language: string, config: LocalizationConfig): string {
     if (config.rtlLanguages.includes(language)) {
       return `\u202E${text}\u202C`; // Right-to-left override
-    }
+
     return text;
   },
 
@@ -568,7 +568,7 @@ export     }
       'ar': 'العربية'
     };
     return names[code] || code;
-  }
+
 };
 
 export default DocumentationLocalizationStrategy;

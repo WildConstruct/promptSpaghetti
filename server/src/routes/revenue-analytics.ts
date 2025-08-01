@@ -14,14 +14,15 @@ import {
   RevenueAnalytics,
   RevenueOptimizationInsights,
   RevenueAttributionAnalysis 
-} from '../marketplace/RevenueAnalyticsService';
+ from '../marketplace/RevenueAnalyticsService';
 import { AnalyticsService } from '../marketplace/analytics.service';
 import { TimeRange } from '../marketplace/analytics.types';
 import { Database } from '../database';
 
 // Request type definitions
-}
-}
+
+
+
 interface GenerateAnalyticsRequest {
   Querystring: {
     timeRange?: TimeRange;
@@ -30,43 +31,46 @@ interface GenerateAnalyticsRequest {
     includeForecasting?: boolean;
     includeOptimization?: boolean;
     granularity?: 'daily' | 'weekly' | 'monthly';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface CreatorRevenueRequest {
   Params: {
     creatorId: string;
-}
-}
+
+
+
   };
   Querystring: {
     timeRange?: TimeRange;
     includeAttribution?: boolean;
     includeForecasting?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface TemplateRevenueRequest {
   Params: {
     templateId: string;
-}
-}
+
+
+
   };
   Querystring: {
     timeRange?: TimeRange;
     compareWith?: string; // comma-separated template IDs
     includeOptimization?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface RevenueComparisonRequest {
   Body: {
     templateIds: string[];
@@ -74,38 +78,41 @@ interface RevenueComparisonRequest {
     timeRange?: TimeRange;
     comparisonType: 'templates' | 'creators' | 'categories';
     metrics?: string[]; // specific metrics to compare
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface RevenueForecastRequest {
   Querystring: {
     horizon?: number; // days to forecast
     confidence?: number; // confidence level (0.8, 0.9, 0.95)
     includeSeasonality?: boolean;
     includeEvents?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface RevenueOptimizationRequest {
   Params: {
     templateId?: string;
     creatorId?: string;
-}
-}
+
+
+
   };
   Querystring: {
     optimizationType?: 'pricing' | 'marketing' | 'content' | 'all';
     timeframe?: 'short' | 'medium' | 'long';
   };
-}
+
 
 export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
   // Initialize services (in production, these would be properly dependency-injected)
@@ -133,35 +140,35 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D,
               description: 'Time range for revenue analysis'
-  }
+
             startDate: { 
               type: 'string',
               format: 'date',
               description: 'Custom start date (YYYY-MM-DD)'
-  }
+
             endDate: { 
               type: 'string',
               format: 'date',
               description: 'Custom end date (YYYY-MM-DD)'
-  }
+
             includeForecasting: { 
               type: 'boolean', 
               default: true,
               description: 'Include revenue forecasting analysis'
-  }
+
             includeOptimization: { 
               type: 'boolean', 
               default: true,
               description: 'Include revenue optimization insights'
-  }
+
             granularity: { 
               type: 'string',
               enum: ['daily', 'weekly', 'monthly'],
               default: 'weekly',
               description: 'Data granularity for analysis'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -170,11 +177,11 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               analytics: { type: 'object' },
               analysisMetadata: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<GenerateAnalyticsRequest>, reply: FastifyReply) => {
       try {
         const { 
@@ -183,7 +190,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           endDate,
           includeForecasting = true,
           includeOptimization = true
-        } = request.query;
+ = request.query;
 
         console.log(`💰 Generating revenue analytics for timeRange: ${timeRange}`);
         const startTime = Date.now();
@@ -214,16 +221,14 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           analysisMetadata,
           message: `Revenue analytics generated successfully (${analysisTime}ms)`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Revenue analytics generation failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Revenue analytics generation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -240,8 +245,8 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           required: ['creatorId'],
           properties: {
             creatorId: { type: 'string', description: 'Creator ID' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           properties: {
@@ -249,19 +254,19 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-  }
+
             includeAttribution: { 
               type: 'boolean', 
               default: true,
               description: 'Include revenue attribution analysis'
-  }
+
             includeForecasting: { 
               type: 'boolean', 
               default: true,
               description: 'Include revenue forecasting'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -269,11 +274,11 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               creatorAnalytics: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<CreatorRevenueRequest>, reply: FastifyReply) => {
       try {
         const { creatorId } = request.params;
@@ -291,16 +296,14 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           creatorAnalytics,
           message: 'Creator revenue analytics generated successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Creator revenue analytics failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Creator analytics generation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -317,8 +320,8 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           required: ['templateId'],
           properties: {
             templateId: { type: 'string', description: 'Template ID' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           properties: {
@@ -326,18 +329,18 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-  }
+
             compareWith: { 
               type: 'string',
               description: 'Comma-separated template IDs to compare with'
-  }
+
             includeOptimization: { 
               type: 'boolean', 
               default: true,
               description: 'Include optimization recommendations'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -346,11 +349,11 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               templateAnalytics: { type: 'object' },
               comparison: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<TemplateRevenueRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -371,7 +374,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
             compareTemplateIds,
             timeRange
           );
-        }
+
 
         reply.code(200).send({
           success: true,
@@ -379,16 +382,14 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           comparison,
           message: 'Template revenue analytics generated successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Template revenue analytics failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Template analytics generation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -409,26 +410,26 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               maximum: 365,
               default: 90,
               description: 'Number of days to forecast'
-  }
+
             confidence: { 
               type: 'number',
               minimum: 0.8,
               maximum: 0.99,
               default: 0.9,
               description: 'Confidence level for forecasting'
-  }
+
             includeSeasonality: { 
               type: 'boolean', 
               default: true,
               description: 'Include seasonal patterns in forecast'
-  }
+
             includeEvents: { 
               type: 'boolean', 
               default: true,
               description: 'Include known events in forecast'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -437,11 +438,11 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               forecast: { type: 'object' },
               forecastMetadata: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<RevenueForecastRequest>, reply: FastifyReply) => {
       try {
         const { 
@@ -449,7 +450,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           confidence = 0.9,
           includeSeasonality = true,
           includeEvents = true 
-        } = request.query;
+ = request.query;
 
         console.log(`🔮 Generating revenue forecast for ${horizon} days`);
 
@@ -475,16 +476,14 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           forecastMetadata,
           message: `Revenue forecast generated for ${horizon} days with ${confidence * 100}% confidence`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Revenue forecasting failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Revenue forecasting failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -502,13 +501,13 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
             templateId: { 
               type: 'string',
               description: 'Template ID for template-specific optimization'
-  }
+
             creatorId: { 
               type: 'string',
               description: 'Creator ID for creator-specific optimization'
-            }
-          }
-  }
+
+
+
         querystring: {
           type: 'object',
           properties: {
@@ -517,15 +516,15 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               enum: ['pricing', 'marketing', 'content', 'all'],
               default: 'all',
               description: 'Type of optimization insights'
-  }
+
             timeframe: { 
               type: 'string',
               enum: ['short', 'medium', 'long'],
               default: 'medium',
               description: 'Optimization timeframe'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -535,11 +534,11 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               recommendations: { type: 'array' },
               projectedImpact: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<RevenueOptimizationRequest>, reply: FastifyReply) => {
       try {
         const { templateId, creatorId } = request.params;
@@ -553,16 +552,16 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
             templateId,
             { type: optimizationType, timeframe }
           );
-        } else if (creatorId) {
+ else if (creatorId) {
           optimization = await revenueService.getCreatorOptimizationInsights(
             creatorId,
             { type: optimizationType, timeframe }
           );
-        } else {
+ else {
           optimization = await revenueService.getMarketplaceOptimizationInsights(
             { type: optimizationType, timeframe }
           );
-        }
+
 
         reply.code(200).send({
           success: true,
@@ -571,16 +570,14 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           projectedImpact: optimization.projectedImpact,
           message: 'Revenue optimization insights generated successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Revenue optimization failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Revenue optimization failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -600,29 +597,29 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               type: 'array',
               items: { type: 'string' },
               description: 'Template IDs to compare'
-  }
+
             creatorIds: { 
               type: 'array',
               items: { type: 'string' },
               description: 'Creator IDs to compare'
-  }
+
             timeRange: { 
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-  }
+
             comparisonType: { 
               type: 'string',
               enum: ['templates', 'creators', 'categories'],
               description: 'Type of comparison to perform'
-  }
+
             metrics: { 
               type: 'array',
               items: { type: 'string' },
               description: 'Specific metrics to compare'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -631,11 +628,11 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               comparison: { type: 'object' },
               insights: { type: 'array' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<RevenueComparisonRequest>, reply: FastifyReply) => {
       try {
         const { 
@@ -644,7 +641,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           timeRange = TimeRange.LAST_30D,
           comparisonType,
           metrics
-        } = request.body;
+ = request.body;
 
         console.log(`📊 Performing ${comparisonType} revenue comparison`);
 
@@ -672,7 +669,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           break;
         default:
           throw new Error(`Unsupported comparison type: ${comparisonType}`);
-        }
+
 
         // Generate insights based on comparison
         const insights = await revenueService.generateComparisonInsights(comparison);
@@ -683,16 +680,14 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           insights,
           message: `${comparisonType} revenue comparison completed successfully`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Revenue comparison failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Revenue comparison failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -712,9 +707,9 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               enum: ['1h', '6h', '24h'],
               default: '24h',
               description: 'Time window for real-time metrics'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -723,11 +718,11 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               realtimeMetrics: { type: 'object' },
               lastUpdated: { type: 'string' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { window = '24h' } = request.query as any;
@@ -742,15 +737,12 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           lastUpdated: new Date().toISOString(),
           message: `Real-time revenue metrics retrieved for ${window} window`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Real-time revenue metrics failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Real-time metrics retrieval failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
-}

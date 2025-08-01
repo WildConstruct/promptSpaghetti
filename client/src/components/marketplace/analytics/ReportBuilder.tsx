@@ -6,27 +6,29 @@ import {
   TimeRange,
   AggregationType,
   DashboardLayout
-} from '../../../types/analytics';
+ from '../../../types/analytics';
 import { QueryBuilder } from './QueryBuilder';
 import { VisualizationConfig } from './VisualizationConfig';
 import { ScheduleConfig } from './ScheduleConfig';
 import { ReportPreview } from './ReportPreview';
 import { analyticsService } from '../../../services/analyticsService';
 import './ReportBuilder.css';
-}
+
+
 interface ReportBuilderProps {
   creatorId: string;
   existingReport?: CustomReport;
   onSave?: (report: CustomReport) => void;
   onCancel?: () => void;
   className?: string;
-  export const ReportBuilder: React.FC<ReportBuilderProps> = ({,)
+  export const ReportBuilder: React.FC<ReportBuilderProps> = ({),
   creatorId,
   existingReport,
   onSave,
   onCancel,
   className = ''
-}
+
+
 }) => {
   const [step, setStep] = useState<'query' | 'visualization' | 'schedule' | 'preview'>('query');
   const [reportName, setReportName] = useState(existingReport?.name || '');
@@ -69,10 +71,10 @@ interface ReportBuilderProps {
   limit: 10 // Limit preview data,
 });
       setPreviewData(data);
-    } catch (err) {
+ catch (err) {
   console.error('Failed to load preview data:', err);
   setError(err instanceof Error ? err.message : 'Failed to load preview data');
-} finally {
+ finally {
       setLoading(false);
   }, [query, creatorId]);
   // Load preview data when entering preview step
@@ -132,11 +134,11 @@ interface ReportBuilderProps {
   const reportData: Partial<CustomReport> = {,
   name: reportName,
   description: reportDescription || undefined,
-  configuration: {
-  query: {
+  configuration: {,
+  query: {,
   ...query,
   creator_id: creatorId,
-}
+
           visualization,
           refresh_interval: visualization.chart_type === 'table' ? undefined : 300 // 5 minutes;
   },
@@ -146,13 +148,13 @@ interface ReportBuilderProps {
       let savedReport: CustomReport;
       if (existingReport) {
         savedReport = await analyticsService.updateCustomReport(existingReport.id, reportData);
-      } else {
+ else {
         savedReport = await analyticsService.createCustomReport(reportData);
       onSave?.(savedReport);
-    } catch (err) {
+ catch (err) {
   console.error('Failed to save report:', err);
   setError(err instanceof Error ? err.message : 'Failed to save report');
-} finally {
+ finally {
       setSaving(false);
   };
   // Get step title

@@ -16,6 +16,8 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
+import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
+import { ConnectionToast, useToast } from './ConnectionToast';
 import './Epic1GraphEditor.css';
 
 export interface Epic1GraphEditorProps {
@@ -39,6 +41,9 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   const [nodes, setNodes, onNodesChange] = useNodesState<EditableNodeData>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  
+  // Toast system for error messages
+  const { toasts, showToast, dismissToast } = useToast();
 
   // Handle node data updates (from inline editing)
   const handleNodeEdit = useCallback((nodeId: string, newValue: string) => {
@@ -91,18 +96,10 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
     [setEdges]
   );
 
-  // Connection validation
-  const isValidConnection = useCallback((connection: Connection) => {
-    // Basic validation - prevent self-connections
-    if (connection.source === connection.target) return false;
-    
-    // Additional validation rules can be added here
-    // For example, Output nodes shouldn't have outgoing connections
-    const sourceNode = nodes.find(n => n.id === connection.source);
-    if (sourceNode?.type === 'output') return false;
-    
-    return true;
-  }, [nodes]);
+  // Use connection validation hook with error handling
+  const { isValidConnection } = useConnectionValidation(nodes, edges, (error) => {
+    showToast('error', error);
+  });
 
   // Notify parent of changes
   React.useEffect(() => {
@@ -166,7 +163,19 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
             Click any node to edit • Tab/Shift+Tab to navigate • Enter to confirm • Escape to cancel
           </div>
         </Panel>
+
+        {/* Connection validation feedback */}
+        <ConnectionFeedback nodes={nodes} edges={edges} />
       </ReactFlow>
+
+      {/* Toast notifications */}
+      {toasts.map((toast) => (
+        <ConnectionToast
+          key={toast.id}
+          message={toast}
+          onDismiss={() => dismissToast(toast.id)}
+        />
+      ))}
     </div>
   );
 };

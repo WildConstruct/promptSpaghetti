@@ -563,14 +563,14 @@ export class MemoryRateLimitStore {
                                                                                                      */
                                                                                                     static extractIP(headers) {
                                                                                                         // Check common proxy headers
-                                                                                                        const possibleHeaders = [];
-                                                                                                        'cf-connecting-ip', // Cloudflare
+                                                                                                        const possibleHeaders = [
+                                                                                                            'cf-connecting-ip', // Cloudflare
                                                                                                             'x-forwarded-for', // Standard proxy header
                                                                                                             'x-real-ip', // Nginx
                                                                                                             'x-client-ip', // Apache
                                                                                                             'true-client-ip', // Cloudflare Enterprise
-                                                                                                            'fastly-client-ip'; // Fastly
-                                                                                                        ;
+                                                                                                            'fastly-client-ip' // Fastly
+                                                                                                        ];
                                                                                                         for (const header of possibleHeaders) {
                                                                                                             const value = headers[header];
                                                                                                             if (value) {

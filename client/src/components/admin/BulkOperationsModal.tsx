@@ -3,21 +3,23 @@ import React, { useState } from 'react';
 import { X, Play, Pause, Archive, AlertTriangle, CheckCircle } from 'lucide-react';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { ValidationMessage } from '../common/ValidationMessage';
-}
+
+
 interface BulkOperationsModalProps {
   isOpen: boolean;,
   onClose: () => void,
   selectedToggleIds: string;,
   onComplete: () => void;
   type BulkOperation = 'enable' | 'disable' | 'archive';
-  }
+
+
 
 export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
   isOpen,
   onClose,
   selectedToggleIds,
   onComplete
-}
+
 }) => {
   const [operation, setOperation] = useState<BulkOperation>('enable');
   const [reason, setReason] = useState('');
@@ -26,7 +28,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
   const [results, setResults] = useState<{
     success: string;,
   failed: Array<{ id: string, error: string }>;
-  } | null>(null);
+ | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   if (!isOpen) return null;
   const operationConfig = {
@@ -87,7 +89,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
   method,
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
             'Content-Type': 'application/json'
   },
   body: body ? JSON.stringify(body) : undefined;
@@ -96,7 +98,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
           const error = await response.json();
           throw new Error(error.error || `HTTP ${response.status}`);}
         success.push(toggleId);
-      } catch (error) {
+ catch (error) {
   failed.push({
   id: toggleId,
   error: error instanceof Error ? error.message : 'Unknown error'

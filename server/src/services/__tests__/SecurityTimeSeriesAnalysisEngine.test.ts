@@ -11,7 +11,7 @@ import {
   TimeSeriesAnalysisResult,
   SecurityTimeSeriesAnomaly,
   TimeSeriesCorrelation 
-} from '../SecurityTimeSeriesAnalysisEngine';
+ from '../SecurityTimeSeriesAnalysisEngine';
 import { SecurityAPIIntegrationPlatform } from '../SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../SecurityPolicyAnalysisEngine';
 import { SecurityPatternRecognitionEngine } from '../SecurityPatternRecognitionEngine';
@@ -36,24 +36,24 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
       getPlatformMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         api_calls: { total_requests: 30000, successful_requests: 29700 },
         security_analytics: { threats_detected: 65, detection_accuracy_percent: 99 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPolicyEngine = {
       on: jest.fn<unknown[], unknown>(),
       analyzePolicyImpact: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_analysis: { overall_risk_score: 40 },
         validation_results: { validation_passed: true }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPatternEngine = {
       on: jest.fn<unknown[], unknown>(),
       recognizePatterns: jest.fn<unknown[], unknown>().mockResolvedValue({
         patterns_discovered: { new_patterns: [] },
         analysis_id: 'pattern_analysis_123'
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     // Setup configuration
     config = {
@@ -66,7 +66,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         trend_analysis_enabled: true,
         seasonal_analysis_enabled: true,
         correlation_analysis_enabled: true
-  }
+
       time_series_algorithms: {
         statistical_methods: ['arima', 'sarima', 'holt_winters', 'linear_regression'],
         machine_learning_models: ['lstm', 'gru', 'transformer', 'random_forest'],
@@ -75,7 +75,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         anomaly_detection_algorithms: ['isolation_forest', 'local_outlier_factor', 'one_class_svm', 'lstm_autoencoder'],
         forecasting_algorithms: ['prophet', 'arima', 'lstm', 'exponential_smoothing'],
         seasonality_detection_methods: ['fft', 'acf', 'stl_decomposition', 'x13_arima']
-  }
+
       data_processing: {
         sampling_intervals: ['1m', '5m', '15m', '1h', '1d', '1w'],
         aggregation_methods: ['mean', 'sum', 'max', 'min', 'median', 'std'],
@@ -84,7 +84,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         missing_data_handling: ['interpolation', 'forward_fill', 'backward_fill', 'mean_imputation'],
         outlier_detection_methods: ['iqr', 'z_score', 'modified_z_score', 'isolation_forest'],
         data_validation_enabled: true
-  }
+
       security_metrics: {
         threat_volumes: true,
         attack_frequencies: true,
@@ -94,7 +94,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         compliance_metrics: true,
         user_behavior_metrics: true,
         system_performance_metrics: true
-  }
+
       forecasting_capabilities: {
         short_term_forecasting: true,
         medium_term_forecasting: true,
@@ -104,7 +104,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         uncertainty_quantification: true,
         adaptive_forecasting: true,
         multi_horizon_forecasting: true
-  }
+
       alerting_thresholds: {
         anomaly_sensitivity: 0.05,
         trend_change_threshold: 0.15,
@@ -112,7 +112,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         seasonal_anomaly_threshold: 0.10,
         correlation_change_threshold: 0.25,
         risk_escalation_threshold: 0.30
-      }
+
     };
 
     // Setup sample time series data
@@ -126,8 +126,8 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           data_frequency: 'daily',
           source_systems: ['siem', 'ids'],
           tags: ['security', 'threats']
-        }
-  }
+
+
       {
         name: 'Attack Frequency Series',
         type: 'attack_frequency',
@@ -137,8 +137,8 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           data_frequency: 'hourly',
           source_systems: ['firewall', 'waf'],
           tags: ['security', 'attacks']
-        }
-  }
+
+
       {
         name: 'Risk Score Series',
         type: 'risk_score',
@@ -148,8 +148,8 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           data_frequency: 'daily',
           source_systems: ['risk_engine'],
           tags: ['risk', 'scoring']
-        }
-      }
+
+
     ];
 
     engine = new SecurityTimeSeriesAnalysisEngine(
@@ -163,7 +163,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
   afterEach(async () => {
     if (engine) {
       await engine.shutdown();
-    }
+
   });
 
   function generateMockDataPoints(count: number, baseValue: number, variance: number): any[] {
@@ -181,12 +181,12 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           quality_indicators: ['validated'],
           tags: ['test'],
           context: {}
-        }
+
       });
-    }
+
     
     return points;
-  }
+
 
   describe('Initialization', () => {
     it('should initialize successfully', async () => {
@@ -555,8 +555,8 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           const currentSeverity = severityOrder[anomalies[i].anomaly_details.severity];
           const nextSeverity = severityOrder[anomalies[i + 1].anomaly_details.severity];
           expect(currentSeverity).toBeGreaterThanOrEqual(nextSeverity);
-        }
-      }
+
+
     });
 
     it('should handle anomaly detection for non-existent series', async () => {
@@ -706,7 +706,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         time_range: {
           start: Date.now() - 86400000 * 30,
           end: Date.now()
-  }
+
         include_forecasts: true,
         include_anomalies: true,
         include_correlations: true
@@ -741,7 +741,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         time_range: {
           start: Date.now() - 86400000 * 7,
           end: Date.now()
-        }
+
       };
 
       const report = await engine.generateAnalyticsReport(options);
@@ -934,7 +934,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           metrics: { threat_volume: 150, attack_frequency: 25 }
         });
         // Should not throw
-      }
+
     });
 
     it('should handle policy engine events', async () => {
@@ -947,7 +947,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           metrics: { compliance_score: 0.85 }
         });
         // Should not throw
-      }
+
     });
 
     it('should handle pattern engine events', async () => {
@@ -960,7 +960,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           patterns_discovered: { new_patterns: [] }
         });
         // Should not throw
-      }
+
     });
   });
 
@@ -972,7 +972,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           ...config.analysis_settings,
           anomaly_detection_enabled: false,
           correlation_analysis_enabled: false
-        }
+
       };
 
       const engineWithLimitedAnalysis = new SecurityTimeSeriesAnalysisEngine(
@@ -998,7 +998,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           ...config.forecasting_capabilities,
           medium_term_forecasting: false,
           long_term_forecasting: false
-        }
+
       };
 
       const engineWithShortTermOnly = new SecurityTimeSeriesAnalysisEngine(
@@ -1030,7 +1030,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           ...config.security_metrics,
           user_behavior_metrics: false,
           system_performance_metrics: false
-        }
+
       };
 
       const engineWithRestrictedMetrics = new SecurityTimeSeriesAnalysisEngine(

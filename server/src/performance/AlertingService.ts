@@ -12,8 +12,8 @@ import EventEmitter from 'events';
 import nodemailer from 'nodemailer';
 import { WebhookClient } from '@slack/webhook';
 
-}
-}
+
+
 export interface AlertConfig {
   id: string;
   name: string;
@@ -26,12 +26,13 @@ export interface AlertConfig {
   cooldownMinutes: number;
   enabled: boolean;
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms';
   config: {
@@ -39,13 +40,14 @@ export interface AlertChannel {
     slackWebhookUrl?: string;
     webhookUrl?: string;
     smsNumbers?: string[];
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface Alert {
   id: string;
   configId: string;
@@ -61,31 +63,34 @@ export interface Alert {
   acknowledgedAt?: Date;
   escalatedTo?: string;
   context: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationPolicy {
   id: string;
   name: string;
   rules: EscalationRule[];
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRule {
   afterMinutes: number;
   severity: string[];
   channels: AlertChannel[];
   assignTo?: string;
-}
-}
-}
+
+
+
+
 
 export class AlertingService extends EventEmitter {
   private alertConfigs: Map<string, AlertConfig> = new Map();
@@ -100,7 +105,7 @@ export class AlertingService extends EventEmitter {
     super();
     this.setupEmailTransporter();
     this.startEscalationProcessor();
-  }
+
 
   /**
    * Configure email transport for alert notifications
@@ -113,13 +118,13 @@ export class AlertingService extends EventEmitter {
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS
-      }
+
     };
 
     if (emailConfig.auth.user && emailConfig.auth.pass) {
       this.emailTransporter = nodemailer.createTransporter(emailConfig);
-    }
-  }
+
+
 
   /**
    * Add or update alert configuration
@@ -127,7 +132,7 @@ export class AlertingService extends EventEmitter {
   addAlertConfig(config: AlertConfig): void {
     this.alertConfigs.set(config.id, config);
     this.emit('configAdded', config);
-  }
+
 
   /**
    * Remove alert configuration
@@ -135,7 +140,7 @@ export class AlertingService extends EventEmitter {
   removeAlertConfig(configId: string): void {
     this.alertConfigs.delete(configId);
     this.emit('configRemoved', configId);
-  }
+
 
   /**
    * Add escalation policy
@@ -143,7 +148,7 @@ export class AlertingService extends EventEmitter {
   addEscalationPolicy(policy: EscalationPolicy): void {
     this.escalationPolicies.set(policy.id, policy);
     this.emit('policyAdded', policy);
-  }
+
 
   /**
    * Check metric against all alert configurations
@@ -158,13 +163,13 @@ export class AlertingService extends EventEmitter {
         
         if (isTriggered) {
           await this.triggerAlert(config, value, context);
-        } else {
+ else {
           // Check if we should resolve an existing alert
           await this.maybeResolveAlert(configId);
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Evaluate alert condition
@@ -178,19 +183,19 @@ export class AlertingService extends EventEmitter {
       case 'lte': return value <= threshold;
       case 'eq': return value === threshold;
       default: return false;
-      }
-    }
+
+
 
     if (typeof value === 'string' && typeof threshold === 'string') {
       switch (condition) {
       case 'eq': return value === threshold;
       case 'contains': return value.includes(threshold);
       default: return false;
-      }
-    }
+
+
 
     return false;
-  }
+
 
   /**
    * Trigger an alert
@@ -203,7 +208,7 @@ export class AlertingService extends EventEmitter {
     const lastAlert = this.cooldownTracker.get(alertKey);
     if (lastAlert && Date.now() - lastAlert.getTime() < config.cooldownMinutes * 60 * 1000) {
       return;
-    }
+
 
     // Check if alert already exists and not resolved
     const existingAlert = Array.from(this.activeAlerts.values()).find(
@@ -215,7 +220,7 @@ export class AlertingService extends EventEmitter {
       existingAlert.value = value;
       existingAlert.timestamp = new Date();
       existingAlert.context = { ...existingAlert.context, ...context };
-    } else {
+ else {
       // Create new alert
       const alert: Alert = {
         id: `${config.id}-${Date.now()}`,
@@ -232,7 +237,7 @@ export class AlertingService extends EventEmitter {
 
       this.activeAlerts.set(alert.id, alert);
       this.alertHistory.push(alert);
-    }
+
 
     // Send notifications
     await this.sendNotifications(config, value, context);
@@ -241,7 +246,7 @@ export class AlertingService extends EventEmitter {
     this.cooldownTracker.set(alertKey, new Date());
     
     this.emit('alertTriggered', { config, value, context });
-  }
+
 
   /**
    * Resolve an alert if conditions are no longer met
@@ -259,11 +264,11 @@ export class AlertingService extends EventEmitter {
       const config = this.alertConfigs.get(configId);
       if (config) {
         await this.sendResolutionNotifications(config, activeAlert);
-      }
+
       
       this.emit('alertResolved', activeAlert);
-    }
-  }
+
+
 
   /**
    * Send alert notifications through configured channels
@@ -287,13 +292,13 @@ export class AlertingService extends EventEmitter {
         case 'sms':
           await this.sendSMSAlert(channel, config, message);
           break;
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error(`Failed to send ${channel.type} alert:`, error);
         this.emit('notificationError', { channel, error });
-      }
-    }
-  }
+
+
+
 
   /**
    * Send email alert
@@ -310,7 +315,7 @@ export class AlertingService extends EventEmitter {
     };
 
     await this.emailTransporter.sendMail(mailOptions);
-  }
+
 
   /**
    * Send Slack alert
@@ -331,22 +336,22 @@ export class AlertingService extends EventEmitter {
           title: 'Severity',
           value: config.severity.toUpperCase(),
           short: true
-  }
+
         {
           title: 'Metric',
           value: config.metric,
           short: true
-  }
+
         {
           title: 'Threshold',
           value: config.threshold.toString(),
           short: true
-  }
+
         {
           title: 'Timestamp',
           value: new Date().toISOString(),
           short: true
-        }
+
       ],
       footer: 'Performance Monitoring',
       ts: Math.floor(Date.now() / 1000)
@@ -356,7 +361,7 @@ export class AlertingService extends EventEmitter {
       text: `Performance Alert: ${config.name}`,
       attachments: [attachment]
     });
-  }
+
 
   /**
    * Send webhook alert
@@ -376,21 +381,21 @@ export class AlertingService extends EventEmitter {
         message,
         timestamp: new Date().toISOString(),
         context
-      }
+
     };
 
     const response = await fetch(channel.config.webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-  }
+
       body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
       throw new Error(`Webhook failed with status ${response.status}`);
-    }
-  }
+
+
 
   /**
    * Send SMS alert (placeholder - integrate with SMS service)
@@ -399,7 +404,7 @@ export class AlertingService extends EventEmitter {
 
     // Integrate with SMS service like Twilio
     console.log(`SMS Alert would be sent to ${channel.config.smsNumbers}: ${message}`);
-  }
+
 
   /**
    * Send resolution notifications
@@ -419,14 +424,14 @@ export class AlertingService extends EventEmitter {
               text: message,
               footer: 'Performance Monitoring',
               ts: Math.floor(Date.now() / 1000)
-            }]
+]
           });
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error('Failed to send resolution notification:', error);
-      }
-    }
-  }
+
+
+
 
   /**
    * Generate alert message
@@ -439,7 +444,7 @@ export class AlertingService extends EventEmitter {
            `Condition: ${config.condition}\n` +
            `Severity: ${config.severity}\n` +
            `Description: ${config.description}`;
-  }
+
 
   /**
    * Generate HTML email content
@@ -477,7 +482,7 @@ export class AlertingService extends EventEmitter {
         </body>
       </html>
     `;
-  }
+
 
   /**
    * Get color for severity level
@@ -489,8 +494,8 @@ export class AlertingService extends EventEmitter {
     case 'critical': return '#ff4d4f';
     case 'emergency': return '#a61e4d';
     default: return '#666666';
-    }
-  }
+
+
 
   /**
    * Start escalation processor
@@ -499,7 +504,7 @@ export class AlertingService extends EventEmitter {
     setInterval(async () => {
       await this.processEscalations();
     }, 60 * 1000); // Check every minute
-  }
+
 
   /**
    * Process escalations for unresolved alerts
@@ -528,11 +533,11 @@ export class AlertingService extends EventEmitter {
             await this.escalateAlert(alert, rule);
             alert.escalatedTo = rule.assignTo || 'escalation-team';
             break;
-          }
-        }
-      }
-    }
-  }
+
+
+
+
+
 
   /**
    * Escalate alert according to escalation rule
@@ -559,16 +564,16 @@ export class AlertingService extends EventEmitter {
               text: escalationMessage,
               footer: 'Performance Monitoring - Escalation',
               ts: Math.floor(Date.now() / 1000)
-            }]
+]
           });
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error('Failed to send escalation notification:', error);
-      }
-    }
+
+
     
     this.emit('alertEscalated', { alert, rule });
-  }
+
 
   /**
    * Acknowledge alert
@@ -580,23 +585,23 @@ export class AlertingService extends EventEmitter {
       alert.acknowledgedAt = new Date();
       this.emit('alertAcknowledged', alert);
       return true;
-    }
+
     return false;
-  }
+
 
   /**
    * Get active alerts
    */
   getActiveAlerts(): Alert[] {
     return Array.from(this.activeAlerts.values()).filter(alert => !alert.resolved);
-  }
+
 
   /**
    * Get alert history
    */
   getAlertHistory(limit: number = 100): Alert[] {
     return this.alertHistory.slice(-limit);
-  }
+
 
   /**
    * Get alert statistics
@@ -622,7 +627,7 @@ export class AlertingService extends EventEmitter {
       acknowledgmentRate: total > 0 ? (acknowledged / total) * 100 : 0,
       severityBreakdown: severityCounts
     };
-  }
+
 
   /**
    * Enable or disable alerting
@@ -630,7 +635,7 @@ export class AlertingService extends EventEmitter {
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
     this.emit('enabledChanged', enabled);
-  }
+
 
   /**
    * Test alert configuration
@@ -643,12 +648,12 @@ export class AlertingService extends EventEmitter {
     try {
       await this.sendNotifications(config, 'TEST_VALUE', { test: true });
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Test alert failed:', error);
       return false;
-    }
-  }
-}
+
+
+
 
 // Export singleton instance
 export const alertingService = new AlertingService();

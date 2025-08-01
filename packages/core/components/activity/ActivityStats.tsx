@@ -3,31 +3,31 @@
  * Statistics dashboard for workspace activity
  */
 import React, { useState } from 'react';
-}
-interface ActivityStatsData {
-  total_events: number;
-  events_by_type: Record<string, number>;
-}
+
+
+interface ActivityStatsData { total_events: number;
+  events_by_type: Record<string, number> }
+
   events_by_day: Array<{ date: string; count: number }>;
   most_active_users: Array<{ user_id: string; count: number }>;
-}
-interface ActivityStatsProps {
-  stats: ActivityStatsData;
+
+
+interface ActivityStatsProps { stats: ActivityStatsData;
   workspaceId: string;
   className?: string;
-  export const ActivityStats: React.FC<ActivityStatsProps> = ({,)
-  stats,
-  workspaceId,
+  export const ActivityStats: React.FC<ActivityStatsProps> = ({);
+  stats;
+  workspaceId }
   className = ''
-}
-}) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'types' | 'timeline' | 'users'>('overview');
+
+
+}) => { const [activeTab, setActiveTab] = useState<'overview' | 'types' | 'timeline' | 'users'>('overview');
   const topEventTypes = Object.entries(stats.events_by_type);
   .sort(([ a], [ b]) => b - a)
   .slice(0, 5);
   const recentDays = stats.events_by_day.slice(-7);
   const maxDayCount = Math.max(...recentDays.map(d => d.count), 1);
-  const formatEventType = (type: string) => {,
+  const formatEventType = (type: string) => { }
   return type.replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 };
   return;

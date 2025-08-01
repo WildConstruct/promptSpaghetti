@@ -1,3 +1,10 @@
+/**
+ * State Middleware System
+ * REFACTOR-006: Advanced State Management & Data Flow Architecture
+ *
+ * Middleware pipeline for state transformations and validations
+ */
+import { ValidationError } from '../containers/BaseStateContainer';
 // Validation middleware
 export class ValidationMiddleware {
     name = 'validation';
@@ -112,8 +119,9 @@ if (allErrors.length > 0 && this.options.failOnError !== false) {
                                     metric.memoryAfter = this.getMemoryUsage();
                                     // Log performance if slow
                                     if (metric.duration > 100) { // 100ms threshold
-                                        console.warn(`Slow state update detected:`, {});
-                                        changeType: change.type,
+                                        console.warn(`Slow state update detected:`, {}),
+                                            changeType;
+                                        change.type,
                                             duration;
                                         metric.duration,
                                             memoryDelta;
@@ -236,8 +244,9 @@ if (allErrors.length > 0 && this.options.failOnError !== false) {
                                 try {
                                     const newState = transformer(transformedState, change);
                                     if (this.options.logTransformations) {
-                                        console.log('State transformation applied:', {});
-                                        transformer: transformer.name,
+                                        console.log('State transformation applied:', {}),
+                                            transformer;
+                                        transformer.name,
                                             hasChanges;
                                         newState !== transformedState,
                                         ;
@@ -340,46 +349,46 @@ if (allErrors.length > 0 && this.options.failOnError !== false) {
                     }
                 }
             }
-            // Error classes
-            export class ValidationError extends Error {
-                violations;
-                constructor(message, violations) {
-                    super(message);
-                    this.violations = violations;
-                    this.name = 'ValidationError';
-                    export class SecurityViolationError extends Error {
-                        violations;
-                        constructor(message, violations) {
-                            super(message);
-                            this.violations = violations;
-                            this.name = 'SecurityViolationError';
-                            // Default middleware configurations
-                            export const createDefaultMiddleware = () => [
-                                MiddlewareFactory.createSecurityMiddleware([]),
-                                {
-                                    name: 'no-script-injection',
-                                    severity: 'CRITICAL',
-                                    message: 'Script injection detected',
-                                    condition: (state, change) => { },
-                                    const: payload = JSON.stringify(change.payload),
-                                    return: /<script|javascript:|data:text\/html/.test(payload)
-                                },
-                                {
-                                    name: 'sensitive-data-protection',
-                                    severity: 'HIGH',
-                                    message: 'Sensitive data detected in payload',
-                                    condition: (state, change) => {
-                                        const payload = JSON.stringify(change.payload).toLowerCase();
-                                        return /password|secret|token|key|credential/.test(payload);
-                                    }
-                                }
-                            ], { blockOnViolation: , true: , logViolations: , true:  }, MiddlewareFactory, createPerformanceMiddleware;
-                            (),
-                                MiddlewareFactory.createCachingMiddleware();
-                            ;
+        }
+    }
+}
+// Error classes
+export class ValidationError extends Error {
+    violations;
+    constructor(message, violations) {
+        super(message);
+        this.violations = violations;
+        this.name = 'ValidationError';
+        export class SecurityViolationError extends Error {
+            violations;
+            constructor(message, violations) {
+                super(message);
+                this.violations = violations;
+                this.name = 'SecurityViolationError';
+                // Default middleware configurations
+                export const createDefaultMiddleware = () => [
+                    MiddlewareFactory.createSecurityMiddleware([]),
+                    {
+                        name: 'no-script-injection',
+                        severity: 'CRITICAL',
+                        message: 'Script injection detected',
+                        condition: (state, change) => { },
+                        const: payload = JSON.stringify(change.payload),
+                        return: /<script|javascript:|data:text\/html/.test(payload)
+                    },
+                    {
+                        name: 'sensitive-data-protection',
+                        severity: 'HIGH',
+                        message: 'Sensitive data detected in payload',
+                        condition: (state, change) => {
+                            const payload = JSON.stringify(change.payload).toLowerCase();
+                            return /password|secret|token|key|credential/.test(payload);
                         }
                     }
-                }
+                ], { blockOnViolation: , true: , logViolations: , true:  }, MiddlewareFactory, createPerformanceMiddleware;
+                (),
+                    MiddlewareFactory.createCachingMiddleware();
+                ;
             }
         }
     }

@@ -8,8 +8,8 @@ import { AuditService } from './AuditService';
 import { DatabaseService } from '../database/DatabaseService';
 import { CertificatePinningManager, loadPinConfigFromEnv } from '../../security/tls-config';
 
-}
-}
+
+
 export interface OAuthProviderConfig {
   clientId: string;
   clientSecret: string;
@@ -24,13 +24,14 @@ export interface OAuthProviderConfig {
     name: string;
     picture?: string;
     verified?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface OAuthStateData {
   provider: OAuthProvider;
   returnUrl?: string;
@@ -38,9 +39,10 @@ export interface OAuthStateData {
   createdAt: Date;
   ipAddress?: string;
   userAgent?: string;
-}
-}
-}
+
+
+
+
 
 export class OAuthService {
   private config: AuthConfig;
@@ -72,7 +74,7 @@ export class OAuthService {
     this.pinnedFetch = this.certificatePinningManager.createPinnedFetch();
     
     this.initializeProviders();
-  }
+
 
   /**
    * Enhanced redirect URI validation following OAuth 2.1 security best practices
@@ -94,7 +96,7 @@ export class OAuthService {
           severity: 'MEDIUM'
         });
         return false;
-      }
+
       
       // Prevent path traversal attacks - check the normalized URL
       try {
@@ -109,8 +111,8 @@ export class OAuthService {
             severity: 'HIGH'
           });
           return false;
-        }
-      } catch (urlError) {
+
+ catch (urlError) {
         // If URL parsing fails, treat as path traversal for security
         if (requestedUri.includes('..') || requestedUri.includes('/./')) {
           this.auditService.logEvent({
@@ -119,8 +121,8 @@ export class OAuthService {
             severity: 'HIGH'
           });
           return false;
-        }
-      }
+
+
       
       // Additional security checks
       try {
@@ -135,19 +137,19 @@ export class OAuthService {
             severity: 'HIGH'
           });
           return false;
-        }
+
         
         return true;
-      } catch (error) {
+ catch (error) {
         this.auditService.logEvent({
           eventType: 'OAUTH_INVALID_REDIRECT_URI',
           details: { requestedUri, error: error.message },
           severity: 'MEDIUM'
         });
         return false;
-      }
+
     });
-  }
+
 
   /**
    * PKCE downgrade protection following OAuth 2.1 security requirements
@@ -166,7 +168,7 @@ export class OAuthService {
         severity: 'HIGH'
       });
       throw new Error('PKCE is required for public clients (OAuth 2.1 compliance)');
-    }
+
     
     // For existing clients that support PKCE, prevent downgrade attacks
     // Only apply to public clients to allow confidential clients legacy support
@@ -179,9 +181,9 @@ export class OAuthService {
           severity: 'HIGH'
         });
         throw new Error('PKCE downgrade attempt detected - client supports PKCE but none provided');
-      }
-    }
-  }
+
+
+
 
   /**
    * Check if a client has PKCE capability based on registration
@@ -191,7 +193,7 @@ export class OAuthService {
     // Implementation would check client configuration
     // For now, assume all clients support PKCE (OAuth 2.1 best practice)
     return true;
-  }
+
 
   /**
    * Enhanced authorization URL generation with security improvements
@@ -206,18 +208,18 @@ export class OAuthService {
     const config = this.providerConfigs.get(provider);
     if (!config) {
       throw new Error(`OAuth provider not configured: ${provider}`);
-    }
+
 
     // Validate PKCE requirements
     if (clientId) {
       this.validatePkceRequirement(clientId, codeChallenge);
-    }
+
 
     // Validate redirect URI against registered URIs
     const registeredUris = [config.redirectUri]; // In production, this would come from client registration
     if (!this.validateRedirectUriStrict(registeredUris, config.redirectUri)) {
       throw new Error('Invalid redirect URI configuration');
-    }
+
 
     const params = new URLSearchParams({
       response_type: 'code',
@@ -228,7 +230,7 @@ export class OAuthService {
       ...(codeChallenge && { 
         code_challenge: codeChallenge,
         code_challenge_method: 'S256' 
-  }
+
     });
     
     const authUrl = `${config.authorizationUrl}?${params.toString()}`;
@@ -241,12 +243,12 @@ export class OAuthService {
         clientId: config.clientId,
         scopes: config.scopes,
         pkceUsed: !!codeChallenge
-  }
+
       severity: 'LOW'
     });
     
     return authUrl;
-  }
+
 
   private initializeProviders(): void {
     // Google OAuth Configuration
@@ -264,7 +266,7 @@ export class OAuthService {
         name: 'name',
         picture: 'picture',
         verified: 'verified_email'
-      }
+
     });
 
     // GitHub OAuth Configuration
@@ -281,7 +283,7 @@ export class OAuthService {
         email: 'email',
         name: 'name',
         picture: 'avatar_url'
-      }
+
     });
 
     // Microsoft OAuth Configuration
@@ -298,9 +300,9 @@ export class OAuthService {
         email: 'mail',
         name: 'displayName',
         picture: 'photo'
-      }
+
     });
-  }
+
 
   async generateAuthorizationUrl(
     provider: OAuthProvider,
@@ -311,7 +313,7 @@ export class OAuthService {
     const providerConfig = this.providerConfigs.get(provider);
     if (!providerConfig) {
       throw new Error(`Unsupported OAuth provider: ${provider}`);
-    }
+
 
     // Generate state parameter for CSRF protection
     const state = await this.generateOAuthState(provider, returnUrl, context);
@@ -328,9 +330,9 @@ export class OAuthService {
     if (provider === 'google') {
       params.append('access_type', 'offline');
       params.append('prompt', 'consent');
-    } else if (provider === 'microsoft') {
+ else if (provider === 'microsoft') {
       params.append('response_mode', 'query');
-    }
+
 
     const authUrl = `${providerConfig.authorizationUrl}?${params.toString()}`;
 
@@ -341,14 +343,14 @@ export class OAuthService {
         provider,
         returnUrl,
         state
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
     });
 
     return { url: authUrl, state };
-  }
+
 
   async handleCallback(
     provider: OAuthProvider,
@@ -362,7 +364,7 @@ export class OAuthService {
       const stateData = await this.validateOAuthState(state);
       if (stateData.provider !== provider) {
         throw new Error('Invalid OAuth state: provider mismatch');
-      }
+
 
       // Exchange authorization code for tokens
       const oauthTokens = await this.exchangeCodeForTokens(provider, code);
@@ -388,7 +390,7 @@ export class OAuthService {
           provider,
           isNewUser,
           oauthId: userInfo.id
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -400,25 +402,25 @@ export class OAuthService {
           accessToken,
           refreshToken,
           expiresAt: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
-  }
+
         isNewUser
       };
-    } catch (error) {
+ catch (error) {
       // Log failed OAuth callback
       await this.auditService.logEvent({
         action: 'oauth_callback_failed',
         details: {
           provider,
           error: error.message
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
       });
 
       throw error;
-    }
-  }
+
+
 
   async linkAccount(
     userId: string,
@@ -438,7 +440,7 @@ export class OAuthService {
       const existingLink = await this.getOAuthAccountByProviderAndId(provider, userInfo.id);
       if (existingLink && existingLink.user_id !== userId) {
         throw new Error('This account is already linked to another user');
-      }
+
 
       // Link the account
       await this.linkOAuthAccount(userId, provider, userInfo, oauthTokens);
@@ -450,27 +452,27 @@ export class OAuthService {
         details: {
           provider,
           oauthId: userInfo.id
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
       });
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         userId,
         action: 'oauth_account_linking_failed',
         details: {
           provider,
           error: error.message
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
       });
 
       throw error;
-    }
-  }
+
+
 
   async unlinkAccount(
     userId: string,
@@ -483,7 +485,7 @@ export class OAuthService {
       const user = await this.userService.getUserById(userId);
       if (!user) {
         throw new Error('User not found');
-      }
+
 
       const oauthAccounts = await this.getUserOAuthAccounts(userId);
       const hasPassword = user.passwordHash !== null;
@@ -491,7 +493,7 @@ export class OAuthService {
 
       if (!hasPassword && !hasOtherOAuthAccounts) {
         throw new Error('Cannot unlink the only authentication method. Please set a password first.');
-      }
+
 
       // Remove OAuth account link
       await this.dbService.query(`
@@ -508,22 +510,22 @@ export class OAuthService {
         userAgent: context.userAgent,
         severity: 'info'
       });
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         userId,
         action: 'oauth_account_unlinking_failed',
         details: {
           provider,
           error: error.message
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
       });
 
       throw error;
-    }
-  }
+
+
 
   async getUserOAuthAccounts(userId: string): Promise<any[]> {
 
@@ -535,14 +537,14 @@ export class OAuthService {
     `, [userId]);
 
     return result.rows;
-  }
+
 
   private async exchangeCodeForTokens(provider: OAuthProvider, code: string): Promise<OAuthTokenResponse> {
 
     const providerConfig = this.providerConfigs.get(provider);
     if (!providerConfig) {
       throw new Error(`Unsupported OAuth provider: ${provider}`);
-    }
+
 
     const params = new URLSearchParams({
       client_id: providerConfig.clientId,
@@ -554,43 +556,43 @@ export class OAuthService {
     // Provider-specific parameters
     if (provider === 'google' || provider === 'microsoft') {
       params.append('grant_type', 'authorization_code');
-    }
+
 
     const response = await this.pinnedFetch(providerConfig.tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json'
-  }
+
       body: params.toString()
     });
 
     if (!response.ok) {
       const error = await response.text();
       throw new Error(`OAuth token exchange failed: ${error}`);
-    }
+
 
     return await response.json();
-  }
+
 
   private async getUserInfo(provider: OAuthProvider, accessToken: string): Promise<OAuthUserInfo> {
 
     const providerConfig = this.providerConfigs.get(provider);
     if (!providerConfig) {
       throw new Error(`Unsupported OAuth provider: ${provider}`);
-    }
+
 
     const response = await this.pinnedFetch(providerConfig.userInfoUrl, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Accept': 'application/json'
-      }
+
     });
 
     if (!response.ok) {
       const error = await response.text();
       throw new Error(`OAuth user info fetch failed: ${error}`);
-    }
+
 
     const rawUserInfo = await response.json();
     const mapping = providerConfig.userInfoMapping;
@@ -603,7 +605,7 @@ export class OAuthService {
       picture: mapping.picture ? rawUserInfo[mapping.picture] : undefined,
       verified: mapping.verified ? rawUserInfo[mapping.verified] : true
     };
-  }
+
 
   private async findOrCreateUser(
     provider: OAuthProvider,
@@ -617,14 +619,14 @@ export class OAuthService {
       const user = await this.userService.getUserById(existingOAuthAccount.user_id);
       if (user) {
         return { user, isNewUser: false };
-      }
-    }
+
+
 
     // Check if user exists by email
     const existingUser = await this.userService.getUserByEmail(userInfo.email);
     if (existingUser) {
       return { user: existingUser, isNewUser: false };
-    }
+
 
     // Create new user
     const user = await this.userService.createUser({
@@ -637,7 +639,7 @@ export class OAuthService {
     });
 
     return { user, isNewUser: true };
-  }
+
 
   private async linkOAuthAccount(
     userId: string,
@@ -666,7 +668,7 @@ export class OAuthService {
         userId,
         provider
       ]);
-    } else {
+ else {
       // Create new account link
       await this.dbService.query(`
         INSERT INTO oauth_accounts (
@@ -684,8 +686,8 @@ export class OAuthService {
         tokens.refresh_token,
         tokens.expires_in ? new Date(Date.now() + tokens.expires_in * 1000) : null
       ]);
-    }
-  }
+
+
 
   private async getOAuthAccountByProviderAndId(provider: OAuthProvider, oauthId: string): Promise<any> {
 
@@ -695,7 +697,7 @@ export class OAuthService {
     `, [provider, oauthId]);
 
     return result.rows[0];
-  }
+
 
   private async generateOAuthState(
     provider: OAuthProvider,
@@ -726,7 +728,7 @@ export class OAuthService {
     ]);
 
     return state;
-  }
+
 
   private async validateOAuthState(state: string): Promise<OAuthStateData> {
 
@@ -737,7 +739,7 @@ export class OAuthService {
 
     if (result.rows.length === 0) {
       throw new Error('Invalid or expired OAuth state');
-    }
+
 
     // Delete used state
     await this.dbService.query(`
@@ -745,7 +747,7 @@ export class OAuthService {
     `, [state]);
 
     return JSON.parse(result.rows[0].data);
-  }
+
 
   /**
    * Get certificate pinning status and statistics
@@ -754,18 +756,17 @@ export class OAuthService {
     enabled: boolean;
     statistics: any;
     pinnedDomains: string[];
-    } {
+ {
     return {
       enabled: this.certificatePinningManager.getConfig().enabled,
       statistics: this.certificatePinningManager.getStatistics(),
       pinnedDomains: this.certificatePinningManager.getConfig().pinnedDomains
     };
-  }
+
 
   /**
    * Validate all OAuth provider certificate pins
    */
   async validateOAuthCertificatePins(): Promise<{ valid: boolean; results: Record<string, any> }> {
     return await this.certificatePinningManager.validateAllPins();
-  }
-}
+

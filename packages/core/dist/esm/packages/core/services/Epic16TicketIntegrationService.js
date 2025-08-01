@@ -90,8 +90,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
                 slack: { enabled: false, webhookUrl: '', channel: '', mentionRoles: [] },
                 discord: { enabled: false, webhookUrl: '', serverId: '', channelId: '', roleMapping: {} },
                 email: { enabled: false, smtpHost: '', smtpPort: 587, username: '', password: '', fromAddress: '', templates: {} },
-                webhook: { enabled: false, endpoints: [], retryPolicy: { maxRetries: 3, backoffStrategy: 'exponential', baseDelay: 1000, maxDelay: 30000 } }
-            },
+                webhook: { enabled: false, endpoints: [], retryPolicy: { maxRetries: 3, backoffStrategy: 'exponential', baseDelay: 1000, maxDelay: 30000 } } },
             notifications: {
                 enabled: true,
                 channels: ['email', 'slack'],

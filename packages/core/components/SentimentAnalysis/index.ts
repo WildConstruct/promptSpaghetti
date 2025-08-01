@@ -10,8 +10,7 @@
 export { SentimentDashboard } from './SentimentDashboard';
 
 // Re-export types for convenience
-export type {
-  SentimentAnalysis,
+export type { SentimentAnalysis,
   SentimentAnalytics,
   SentimentAnalysisConfig,
   AnalyzeSentimentRequest,
@@ -20,8 +19,8 @@ export type {
   EmotionType,
   ToxicityLevel,
   FeedbackSourceType,
-  AnalysisModelType,
-} from '../../types/SentimentAnalysisTypes';
+  AnalysisModelType }
+ from '../../types/SentimentAnalysisTypes';
 
 // Re-export service for convenience
 export { SentimentAnalysisService } from '../../services/SentimentAnalysisService';

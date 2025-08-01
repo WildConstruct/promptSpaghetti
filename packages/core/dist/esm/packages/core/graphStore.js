@@ -1,6 +1,41 @@
 import { create } from 'zustand';
 import { addVariationToNode, removeVariationFromNode, updateVariationInNode, reorderVariationsInNode, mergeNodeData, } from './utils/nodeDataUtils';
 import { DEFAULT_NODE_LABEL_PREFERENCES, DEFAULT_REGION_GROUP_PREFERENCES, DEFAULT_CONNECTION_ANNOTATION_PREFERENCES, } from './types/CollaborationTypes';
+saveProject: (options) => Promise;
+loadProject: () => Promise;
+// Project operations (server-based)
+saveProjectToServer: ();
+options: SaveProjectOptions & { userId: number };
+Promise;
+loadProjectFromServer: (projectId, userId) => Promise;
+updateProjectOnServer: ();
+projectId: string,
+    options;
+SaveProjectOptions & { userId: number };
+Promise;
+deleteProjectFromServer: (projectId, userId) => Promise;
+listUserProjects: (userId, query) => Promise;
+// Common project operations
+newProject: () => void ;
+setCurrentProject: (metadata) => void ;
+updateProjectSettings: (settings) => void ;
+markProjectSaved: () => void ;
+markProjectModified: () => void ;
+// Graph state operations
+getGraphData: () => { nodes: Node; edges: Edge; };
+loadGraphData: (nodes, edges) => void ;
+// Template operations
+saveAsTemplate: ();
+templateData: TemplateSaveData,
+    author;
+string;
+Promise;
+applyTemplate: ();
+templateId: string,
+    options;
+TemplateInstantiationOptions;
+Promise;
+getTemplateCompatibleData: () => GraphData;
 export const useGraphStore = create((set, get) => ({
     // Initial state
     nodes: [],
@@ -221,5 +256,5 @@ export const useGraphStore = create((set, get) => ({
         // All complex methods have been commented out for ESBuild compatibility
         // This includes region groups, connection labels, project operations, and template methods
         // Close main store object
-    },
+     },
 })); // Close object literal, close function parameter, close create call

@@ -104,8 +104,9 @@ void {
     // Check for compliance violations
     if (this.config.enableComplianceMonitoring) {
         this.checkComplianceViolations(result, dataElement);
-        recordRuleTrigger(ruleId, string);
-        dataId: string,
+        recordRuleTrigger(ruleId, string),
+            dataId;
+        string,
             metadata;
         Record;
         void {
@@ -143,8 +144,9 @@ void {
                 if(severity) { } } === AlertSeverity.CRITICAL };
         {
             this.triggerAlert(event);
-            recordPerformanceWarning(metric, string);
-            value: number,
+            recordPerformanceWarning(metric, string),
+                value;
+            number,
                 threshold;
             number;
             void {

@@ -243,7 +243,7 @@ export class SecurityEventLoggingPolicyEngine {
         true,
             detection_rules;
         {
-            conditions: [,
+            conditions: [
                 { field: 'failed_attempts', operator: 'gte', value: 5 },
                 { field: 'time_window', operator: 'lte', value: 300000 } // 5 minutes
             ],
@@ -295,7 +295,7 @@ export class SecurityEventLoggingPolicyEngine {
         true,
             detection_rules;
         {
-            conditions: [,
+            conditions: [
                 { field: 'request_payload', operator: 'contains', value: 'sql_injection_pattern' },
                 { field: 'request_payload', operator: 'contains', value: 'xss_pattern', logic: 'or' },
                 { field: 'request_payload', operator: 'contains', value: 'command_injection_pattern', logic: 'or' }
@@ -348,7 +348,7 @@ export class SecurityEventLoggingPolicyEngine {
         true,
             detection_rules;
         {
-            conditions: [,
+            conditions: [
                 { field: 'suspicious_traffic_pattern', operator: 'eq', value: true },
                 { field: 'known_attack_signature', operator: 'eq', value: true, logic: 'or' },
                 { field: 'anomalous_port_scan', operator: 'eq', value: true, logic: 'or' }
@@ -402,7 +402,7 @@ export class SecurityEventLoggingPolicyEngine {
         true,
             detection_rules;
         {
-            conditions: [,
+            conditions: [
                 { field: 'change_management_bypassed', operator: 'eq', value: true },
                 { field: 'segregation_duties_violated', operator: 'eq', value: true, logic: 'or' },
                 { field: 'unauthorized_production_access', operator: 'eq', value: true, logic: 'or' }
@@ -455,7 +455,7 @@ export class SecurityEventLoggingPolicyEngine {
         true,
             detection_rules;
         {
-            conditions: [,
+            conditions: [
                 { field: 'request_type', operator: 'eq', value: 'access' },
                 { field: 'request_type', operator: 'eq', value: 'rectification', logic: 'or' },
                 { field: 'request_type', operator: 'eq', value: 'erasure', logic: 'or' },
@@ -509,7 +509,7 @@ export class SecurityEventLoggingPolicyEngine {
         true,
             detection_rules;
         {
-            conditions: [,
+            conditions: [
                 { field: 'impact_level', operator: 'gte', value: 3 },
                 { field: 'data_sensitivity', operator: 'eq', value: 'high', logic: 'or' },
                 { field: 'system_criticality', operator: 'eq', value: 'critical', logic: 'or' }
@@ -562,7 +562,7 @@ export class SecurityEventLoggingPolicyEngine {
         true,
             detection_rules;
         {
-            conditions: [,
+            conditions: [
                 { field: 'security_scan_failed', operator: 'eq', value: true },
                 { field: 'vulnerable_dependencies', operator: 'gt', value: 0, logic: 'or' },
                 { field: 'security_gate_bypassed', operator: 'eq', value: true, logic: 'or' }
@@ -616,7 +616,7 @@ export class SecurityEventLoggingPolicyEngine {
         true,
             detection_rules;
         {
-            conditions: [,
+            conditions: [
                 { field: 'anomaly_score', operator: 'gte', value: 0.8 },
                 { field: 'deviation_threshold', operator: 'gte', value: 3.0, logic: 'and' },
                 { field: 'confidence_level', operator: 'gte', value: 0.7, logic: 'and' }

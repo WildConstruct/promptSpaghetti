@@ -7,65 +7,47 @@
  */
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 
-}
-export interface VarianceMetrics {
-  overallVariance: 'low' | 'medium' | 'high';
-  varianceScore: number; // 0-1 scale,
-  diversityMetrics: {
+
+export interface VarianceMetrics { overallVariance: 'low' | 'medium' | 'high';
+  varianceScore: number; // 0-1 scale;
+  diversityMetrics: { }
   outputLengthVariance: number;
   vocabularyDiversity: number;
   structuralDiversity: number;
   executionPathDiversity: number;
-}
+
+
 };
-  creativeRange: {
+  creativeRange: { ,
   uniqueElements: string;
   commonElements: string;
   repetitionRate: number;
-  creativityScore: number;
-};
+  creativityScore: number };
   suggestions: VarianceSuggestion;
-}
-}
-export interface VarianceSuggestion {
-  type: 'increase' | 'decrease' | 'optimize';
+
+
+export interface VarianceSuggestion { type: 'increase' | 'decrease' | 'optimize' }
   category: 'weights' | 'structure' | 'content' | 'execution';
   message: string;
   impact: 'low' | 'medium' | 'high';
   actionable: boolean;
-}
-}
-}
-export interface DiversityIndicator {
-  metric: string;
+
+
+
+
+export interface DiversityIndicator { metric: string;
   value: number;
-  level: 'low' | 'medium' | 'high';
+  level: 'low' | 'medium' | 'high' }
   description: string;
   color: string;
-}
-}
-export class VarianceAnalysisService {
-  /**
-  * Analyzes variance across multiple preview results
-  */
-  analyzeVariance(results: PreviewResultWithPath): VarianceMetrics {,
-  if (results.length < 2) {
-  return this.createMinimalVariance();
-  const outputs = results.map(r => r.output || '').filter(Boolean);
-  const executionPaths = results.map(r => r.executionPath).filter(Boolean);
-  // Calculate diversity metrics
-  const diversityMetrics = {
-  outputLengthVariance: this.calculateLengthVariance(outputs),
-  vocabularyDiversity: this.calculateVocabularyDiversity(outputs),
-  structuralDiversity: this.calculateStructuralDiversity(outputs),
-  executionPathDiversity: this.calculateExecutionPathDiversity(executionPaths),
-};
+
+
+export class VarianceAnalysisService {};
     // Calculate creative range metrics
-    const creativeRange = {
-  uniqueElements: this.extractUniqueElements(outputs),
+    const creativeRange = { uniqueElements: this.extractUniqueElements(outputs),
   commonElements: this.extractCommonElements(outputs),
   repetitionRate: this.calculateRepetitionRate(outputs),
-  creativityScore: this.calculateCreativityScore(outputs, executionPaths),
+  creativityScore: this.calculateCreativityScore(outputs, executionPaths) }
 };
     // Calculate overall variance score
     const varianceScore = this.calculateOverallVarianceScore(diversityMetrics, creativeRange);
@@ -77,113 +59,107 @@ export class VarianceAnalysisService {
       overallVariance,
       executionPaths
     );
-    return {
-      overallVariance,
+    return { overallVariance,
       varianceScore,
       diversityMetrics,
-      creativeRange,
+      creativeRange }
       suggestions
     };
   /**
    * Creates diversity indicators for UI display
    */
-  createDiversityIndicators(metrics: VarianceMetrics): DiversityIndicator {
-  const indicators: DiversityIndicator = [];
+  createDiversityIndicators(metrics: VarianceMetrics): DiversityIndicator { const indicators: DiversityIndicator = [];
   // Output Length Variance
   indicators.push({)
   metric: 'Length Variance',
   value: metrics.diversityMetrics.outputLengthVariance,
   level: this.categorizeMetric(metrics.diversityMetrics.outputLengthVariance, 0.2, 0.6),
   description: 'Variation in output length across results',
-  color: this.getMetricColor(metrics.diversityMetrics.outputLengthVariance, 0.2, 0.6),
+  color: this.getMetricColor(metrics.diversityMetrics.outputLengthVariance, 0.2, 0.6) }
 });
     // Vocabulary Diversity
-    indicators.push({)
+    indicators.push({ )
   metric: 'Vocabulary Diversity',
   value: metrics.diversityMetrics.vocabularyDiversity,
   level: this.categorizeMetric(metrics.diversityMetrics.vocabularyDiversity, 0.3, 0.7),
   description: 'Uniqueness of words and phrases used',
-  color: this.getMetricColor(metrics.diversityMetrics.vocabularyDiversity, 0.3, 0.7),
+  color: this.getMetricColor(metrics.diversityMetrics.vocabularyDiversity, 0.3, 0.7) }
 });
     // Structural Diversity
-    indicators.push({)
+    indicators.push({ )
   metric: 'Structural Diversity',
   value: metrics.diversityMetrics.structuralDiversity,
   level: this.categorizeMetric(metrics.diversityMetrics.structuralDiversity, 0.25, 0.65),
   description: 'Variation in sentence structure and format',
-  color: this.getMetricColor(metrics.diversityMetrics.structuralDiversity, 0.25, 0.65),
+  color: this.getMetricColor(metrics.diversityMetrics.structuralDiversity, 0.25, 0.65) }
 });
     // Execution Path Diversity
-    if (metrics.diversityMetrics.executionPathDiversity > 0) {
-  indicators.push({)
+    if (metrics.diversityMetrics.executionPathDiversity > 0) { indicators.push({)
   metric: 'Path Diversity',
   value: metrics.diversityMetrics.executionPathDiversity,
   level: this.categorizeMetric(metrics.diversityMetrics.executionPathDiversity, 0.3, 0.8),
   description: 'Variation in execution paths taken',
-  color: this.getMetricColor(metrics.diversityMetrics.executionPathDiversity, 0.3, 0.8),
+  color: this.getMetricColor(metrics.diversityMetrics.executionPathDiversity, 0.3, 0.8) }
 });
     // Creativity Score
-    indicators.push({)
+    indicators.push({ )
   metric: 'Creativity Score',
   value: metrics.creativeRange.creativityScore,
   level: this.categorizeMetric(metrics.creativeRange.creativityScore, 0.4, 0.75),
   description: 'Overall creative uniqueness and originality',
-  color: this.getMetricColor(metrics.creativeRange.creativityScore, 0.4, 0.75),
+  color: this.getMetricColor(metrics.creativeRange.creativityScore, 0.4, 0.75) }
 });
     return indicators;
   /**
    * Gets variance level styling information
    */
-  getVarianceLevelInfo(level: 'low' | 'medium' | 'high') {
-  const info = {
-  low: {
+  getVarianceLevelInfo(level: 'low' | 'medium' | 'high') { const info = {
+  low: {,
   color: '#ef4444',
   background: '#fef2f2',
   border: '#fecaca',
   icon: '🔴',
-  description: 'Results are very similar - consider adding more randomization',
+  description: 'Results are very similar - consider adding more randomization' }
 },
-  medium: {
+  medium: { ,
   color: '#f59e0b',
   background: '#fffbeb',
   border: '#fed7aa',
   icon: '🟡',
-  description: 'Good balance of consistency and variety',
+  description: 'Good balance of consistency and variety' }
 },
-  high: {
+  high: { ,
   color: '#10b981',
   background: '#f0fdf4',
   border: '#bbf7d0',
   icon: '🟢',
-  description: 'High creative diversity - excellent range of outputs',
+  description: 'High creative diversity - excellent range of outputs' }
 };
     return info[level];
-  private createMinimalVariance(): VarianceMetrics {
-  return {
+  private createMinimalVariance(): VarianceMetrics { return {
   overallVariance: 'low',
   varianceScore: 0,
-  diversityMetrics: {
+  diversityMetrics: {,
   outputLengthVariance: 0,
   vocabularyDiversity: 0,
   structuralDiversity: 0,
-  executionPathDiversity: 0,
+  executionPathDiversity: 0 }
 },
-  creativeRange: {
+  creativeRange: { ,
   uniqueElements: [],
   commonElements: [],
   repetitionRate: 1,
-  creativityScore: 0,
+  creativityScore: 0 }
 },
-  suggestions: [{,
+  suggestions: [{ ,
   type: 'increase',
   category: 'content',
   message: 'Add more results to analyze variance effectively',
   impact: 'high',
-  actionable: true,
-}]
+  actionable: true }
+]
     };
-  private calculateLengthVariance(outputs: string): number {
-  if (outputs.length < 2) return 0;
+  private calculateLengthVariance(outputs: string): number { if (outputs.length < 2) return 0;
   const lengths = outputs.map(o => o.length);
   const mean = lengths.reduce((a, b) => a + b, 0) / lengths.length;
   const variance = lengths.reduce((acc, len) => acc + Math.pow(len - mean, 2), 0) / lengths.length;
@@ -213,7 +189,7 @@ export class VarianceAnalysisService {
   return {
   sentenceCount: sentences.length,
   avgSentenceLength: Math.round(avgSentenceLength),
-  punctuationDensity: Math.round(punctuationDensity * 100),
+  punctuationDensity: Math.round(punctuationDensity * 100) }
   paragraphs
 };
     });
@@ -233,32 +209,28 @@ export class VarianceAnalysisService {
     });
     const uniquePaths = new Set(pathSignatures.filter(Boolean));
     return pathSignatures.length > 0 ? uniquePaths.size / pathSignatures.length : 0;
-  private extractUniqueElements(outputs: string): string {
-    const wordFrequency = new Map<string, number>();
+  private extractUniqueElements(outputs: string): string { const wordFrequency = new Map<string, number>();
     outputs.forEach(output => {)
   const words = output.toLowerCase();
         .replace(/[^\w\s]/g, ' ')
         .split(/\s+/)
         .filter(word => word.length > 3);
       words.forEach(word => {)
-  wordFrequency.set(word, (wordFrequency.get(word) || 0) + 1);
-      });
+  wordFrequency.set(word, (wordFrequency.get(word) || 0) + 1) });
     });
     // Return words that appear in only one output
     return Array.from(wordFrequency.entries())
       .filter(([_, count]) => count === 1)
       .map(([word, _]) => word)
       .slice(0, 20); // Limit to top 20 unique elements
-  private extractCommonElements(outputs: string): string {
-    const wordFrequency = new Map<string, number>();
+  private extractCommonElements(outputs: string): string { const wordFrequency = new Map<string, number>();
     outputs.forEach(output => {)
   const words = new Set(output.toLowerCase();
         .replace(/[^\w\s]/g, ' ')
         .split(/\s+/)
         .filter(word => word.length > 3));
       words.forEach(word => {)
-  wordFrequency.set(word, (wordFrequency.get(word) || 0) + 1);
-      });
+  wordFrequency.set(word, (wordFrequency.get(word) || 0) + 1) });
     });
     // Return words that appear in most outputs
     const threshold = Math.ceil(outputs.length * 0.7);
@@ -267,8 +239,7 @@ export class VarianceAnalysisService {
       .sort(([_, a], [__, b]) => b - a)
       .map(([word, _]) => word)
       .slice(0, 10); // Limit to top 10 common elements
-  private calculateRepetitionRate(outputs: string): number {
-  if (outputs.length < 2) return 1;
+  private calculateRepetitionRate(outputs: string): number { if (outputs.length < 2) return 1;
   const totalComparisons = outputs.length * (outputs.length - 1) / 2;
   let similaritySum = 0;
   for (let i = 0; i < outputs.length; i++) {
@@ -288,9 +259,9 @@ export class VarianceAnalysisService {
   const {
   outputLengthVariance,
   vocabularyDiversity,
-  structuralDiversity,
+  structuralDiversity }
   executionPathDiversity
-} = diversityMetrics;
+ = diversityMetrics;
     const { creativityScore } = creativeRange;
     // Weighted combination of all metrics
     return;
@@ -300,11 +271,10 @@ export class VarianceAnalysisService {
       executionPathDiversity * 0.15 +
       creativityScore * 0.15
     );
-  private categorizeVariance(score: number): 'low' | 'medium' | 'high' {
-  if (score < 0.3) return 'low';
+  private categorizeVariance(score: number): 'low' | 'medium' | 'high' { if (score < 0.3) return 'low';
   if (score < 0.7) return 'medium';
   return 'high';
-  private generateVarianceSuggestions(diversityMetrics: VarianceMetrics['diversityMetrics'])
+  private generateVarianceSuggestions(diversityMetrics: VarianceMetrics['diversityMetrics']),
   creativeRange: VarianceMetrics['creativeRange'],
   overallVariance: 'low' | 'medium' | 'high',
   executionPaths: any): VarianceSuggestion {,
@@ -316,47 +286,42 @@ export class VarianceAnalysisService {
   category: 'content',
   message: 'Consider adding more varied vocabulary or synonyms to increase word diversity',
   impact: 'medium',
-  actionable: true,
+  actionable: true }
 });
-    if (diversityMetrics.structuralDiversity < 0.25) {
-  suggestions.push({)
+    if (diversityMetrics.structuralDiversity < 0.25) { suggestions.push({)
   type: 'increase',
   category: 'structure',
   message: 'Try varying sentence length and structure patterns for more diverse outputs',
   impact: 'medium',
-  actionable: true,
+  actionable: true }
 });
-    if (diversityMetrics.executionPathDiversity < 0.3 && executionPaths.length > 0) {
-  suggestions.push({)
+    if (diversityMetrics.executionPathDiversity < 0.3 && executionPaths.length > 0) { suggestions.push({)
   type: 'increase',
   category: 'weights',
   message: 'Adjust weight distributions to create more varied execution paths',
   impact: 'high',
-  actionable: true,
+  actionable: true }
 });
-    if (creativeRange.repetitionRate > 0.8) {
-  suggestions.push({)
+    if (creativeRange.repetitionRate > 0.8) { suggestions.push({)
   type: 'increase',
   category: 'content',
   message: 'Results show high repetition - consider adding more randomization or variation',
   impact: 'high',
-  actionable: true,
+  actionable: true }
 });
-    if (overallVariance === 'high' && creativeRange.creativityScore > 0.8) {
-  suggestions.push({)
+    if (overallVariance === 'high' && creativeRange.creativityScore > 0.8) { suggestions.push({)
   type: 'optimize',
   category: 'execution',
   message: 'Excellent creative diversity! Current settings provide optimal variance',
   impact: 'low',
-  actionable: false,
+  actionable: false }
 });
-    if (overallVariance === 'low') {
-  suggestions.push({)
+    if (overallVariance === 'low') { suggestions.push({)
   type: 'increase',
   category: 'weights',
   message: 'Low variance detected - try adjusting weights or adding more randomization nodes',
   impact: 'high',
-  actionable: true,
+  actionable: true }
 });
     return suggestions.slice(0, 5); // Limit to top 5 suggestions
   private calculateArrayVariance(values: number): number {

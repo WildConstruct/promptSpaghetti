@@ -19,8 +19,7 @@ import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
 // Fingerprinting Types
-export enum FingerprintType {
-  BASIC = 'basic',
+export enum FingerprintType { BASIC = 'basic',
   ENHANCED = 'enhanced',
   COMPREHENSIVE = 'comprehensive'
   export enum RiskLevel {
@@ -38,12 +37,12 @@ export enum FingerprintType {
   export interface DeviceFingerprint {
   id: string;
   type: FingerprintType;
-  confidence: number; // 0-100,
+  confidence: number; // 0-100;
   createdAt: Date;
   lastSeen: Date;
   seenCount: number;
   // Basic fingerprint data
-  basic: {
+  basic: { }
   userAgent: string;
   language: string;
   platform: string;
@@ -51,18 +50,19 @@ export enum FingerprintType {
   doNotTrack: boolean;
   timezone: string;
   timezoneOffset: number;
-}
+
+
 };
   // Enhanced fingerprint data
-  enhanced: {
-  screen: {
+  enhanced: { ,
+  screen: { }
   width: number;
   height: number;
   colorDepth: number;
   pixelRatio: number;
   orientation: string;
 };
-    browser: {
+    browser: { ,
   name: string;
   version: string;
   engine: string;
@@ -71,72 +71,64 @@ export enum FingerprintType {
   product?: string;
   productSub?: string;
   vendor?: string;
-  vendorSub?: string;
-};
-    plugins: Array<{
+  vendorSub?: string };
+    plugins: Array<{ ,
   name: string;
   filename: string;
   description: string;
-  version?: string;
-}>;
+  version?: string }>;
     fonts: string;
-  webgl: {;
+  webgl: { ;
   vendor: string;
   renderer: string;
   version: string;
   shadingLanguageVersion: string;
   extensions: string;
-  parameters: Record<string, any>;
-};
-    canvas: {
+  parameters: Record<string, any> };
+    canvas: { ,
   fingerprint: string;
   geometry: string;
-  text: string;
-};
-    audio: {
+  text: string };
+    audio: { ,
   fingerprint: string;
   sampleRate: number;
   channelCount: number;
-  contextState: string;
-};
+  contextState: string };
   };
   // Comprehensive fingerprint data
-  comprehensive: {
-  hardware: {
+  comprehensive: { ,
+  hardware: {,
   cpuCores: number;
   memory: number;
   touchSupport: boolean;
   sensors: string;
   bluetooth: boolean;
   usb: boolean;
-  webrtc: {
+  webrtc: { }
   supported: boolean;
   localCandidates: string;
   stunServers: string;
 };
     };
-    network: {
+    network: { ,
   connectionType: string;
   downlink?: number;
   effectiveType?: string;
   rtt?: number;
-  saveData?: boolean;
-};
-    permissions: {
+  saveData?: boolean };
+    permissions: { ,
   camera: string;
   microphone: string;
   location: string;
   notifications: string;
-  persistentStorage: string;
-};
-    storage: {
+  persistentStorage: string };
+    storage: { ,
   localStorage: boolean;
   sessionStorage: boolean;
   indexedDB: boolean;
   webSQL: boolean;
-  quota: number;
-};
-    features: {
+  quota: number };
+    features: { ,
   webAssembly: boolean;
   serviceWorker: boolean;
   webWorker: boolean;
@@ -144,20 +136,18 @@ export enum FingerprintType {
   webGL: boolean;
   webGL2: boolean;
   webVR: boolean;
-  webXR: boolean;
-};
+  webXR: boolean };
   };
 
 // Location Data
-}
-}
-export interface LocationData {
-  id: string;
+
+
+export interface LocationData { id: string;
   timestamp: Date;
   source: 'ip' | 'gps' | 'wifi' | 'cell' | 'manual';
-  accuracy: number; // meters,
-  confidence: number; // 0-100,
-  coordinates: {
+  accuracy: number; // meters;
+  confidence: number; // 0-100;
+  coordinates: { }
   latitude: number;
   longitude: number;
   altitude?: number;
@@ -165,9 +155,10 @@ export interface LocationData {
   altitudeAccuracy?: number;
   heading?: number;
   speed?: number;
-}
+
+
 };
-  address: {
+  address: { ,
   country: string;
   countryCode: string;
   region: string;
@@ -175,9 +166,8 @@ export interface LocationData {
   city: string;
   postalCode?: string;
   street?: string;
-  district?: string;
-};
-  network: {
+  district?: string };
+  network: { ,
   ipAddress: string;
   isp: string;
   organization?: string;
@@ -187,40 +177,37 @@ export interface LocationData {
   proxyDetected: boolean;
   torDetected: boolean;
   hostingProvider: boolean;
-  datacenter: boolean;
-};
-  metadata: {
+  datacenter: boolean };
+  metadata: { ,
   language: string;
   currency: string;
   callingCode: string;
   flag?: string;
   population?: number;
-  area?: number;
-};
+  area?: number };
 
 // Risk Assessment
-}
-}
-export interface RiskAssessment {
-  deviceId: string;
+
+
+export interface RiskAssessment { deviceId: string;
   overallRisk: RiskLevel;
-  riskScore: number; // 0-100,
-  factors: Array<{
+  riskScore: number; // 0-100;
+  factors: Array<{;
   category: string;
   factor: string;
-  impact: number; // -100 to +100,
-  confidence: number; // 0-100,
+  impact: number; // -100 to +100;
+  confidence: number; // 0-100 }
   description: string;
-}
-}>;
+
+
+>;
   recommendations: string;
   timestamp: Date;
 
 // Fingerprint Collection Context
-}
-}
-export interface FingerprintContext {
-  ipAddress: string;
+
+
+export interface FingerprintContext { ipAddress: string;
   userAgent: string;
   acceptLanguage?: string;
   acceptEncoding?: string;
@@ -232,7 +219,7 @@ export interface FingerprintContext {
   cfConnectingIp?: string;
   headers: Record<string, string>;
   // Client-side data (would be collected via JavaScript)
-  clientData?: {
+  clientData?: { }
   screen?: any;
   navigator?: any;
   plugins?: any;
@@ -243,19 +230,19 @@ export interface FingerprintContext {
   storage?: any;
   permissions?: any;
   network?: any;
-}
+
+
 };
 /**
  * Comprehensive device fingerprinting and location service
  */
-}
-export class DeviceFingerprintingService extends EventEmitter {
-  private fingerprints: Map<string, DeviceFingerprint> = new Map();
+
+export class DeviceFingerprintingService extends EventEmitter { private fingerprints: Map<string, DeviceFingerprint> = new Map();
   private locations: Map<string, LocationData> = new Map();
   private riskAssessments: Map<string, RiskAssessment> = new Map();
   private ipLocationCache: Map<string, LocationData> = new Map();
   constructor();
-    private readonly geoipApiKey?: string,
+    private readonly geoipApiKey?: string
     private readonly fraudDetectionEnabled: boolean = true
     super();
     this.startCleanupTimer();
@@ -263,7 +250,7 @@ export class DeviceFingerprintingService extends EventEmitter {
    * Generate comprehensive device fingerprint
    */
   public async generateFingerprint(((
-    context: FingerprintContext,
+    context: FingerprintContext }
     type: FingerprintType = FingerprintType.ENHANCED
   ): Promise<DeviceFingerprint> {
 
@@ -274,16 +261,16 @@ export class DeviceFingerprintingService extends EventEmitter {
       existing.seenCount++;
       this.emit('fingerprintSeen', { fingerprint: existing, context });
       return existing;
-    const fingerprint: DeviceFingerprint = {,
-  id: fingerprintId,
-  type,
-  confidence: 0,
-  createdAt: new Date(),
-  lastSeen: new Date(),
-  seenCount: 1,
-  basic: this.generateBasicFingerprint(context),
-  enhanced: this.generateEnhancedFingerprint(context),
-  comprehensive: this.generateComprehensiveFingerprint(context),
+    const fingerprint: DeviceFingerprint = { 
+  id: fingerprintId
+  type
+  confidence: 0
+  createdAt: new Date()
+  lastSeen: new Date()
+  seenCount: 1
+  basic: this.generateBasicFingerprint(context)
+  enhanced: this.generateEnhancedFingerprint(context)
+  comprehensive: this.generateComprehensiveFingerprint(context) }
 };
     fingerprint.confidence = this.calculateFingerprintConfidence(fingerprint, type);
     this.fingerprints.set(fingerprintId, fingerprint);
@@ -293,11 +280,9 @@ export class DeviceFingerprintingService extends EventEmitter {
    * Get location data from IP address and other sources
    */
   public async getLocationData(
-    ipAddress: string,
+    ipAddress: string
     additionalContext?: any
-  ): Promise<LocationData> {
-
-    // Check cache first
+  ): Promise<LocationData> { // Check cache first
     const cached = this.ipLocationCache.get(ipAddress);
     if (cached && this.isLocationDataFresh(cached)) {
       return cached;
@@ -305,7 +290,7 @@ export class DeviceFingerprintingService extends EventEmitter {
     // Enhance with additional context if available
     if (additionalContext?.coordinates) {
       location.coordinates = {
-        ...location.coordinates,
+        ...location.coordinates }
         ...additionalContext.coordinates
       };
       location.source = 'gps';
@@ -322,10 +307,9 @@ export class DeviceFingerprintingService extends EventEmitter {
    * Assess risk based on fingerprint and location
    */
   public assessRisk(fingerprint: DeviceFingerprint)
-    location: LocationData,
+  location: LocationData
     userId?: string
-  ): RiskAssessment {
-  const factors: RiskAssessment['factors'] = [];
+  ): RiskAssessment { const factors: RiskAssessment['factors'] = [];
   let riskScore = 0;
   // Analyze device characteristics
   factors.push(...this.analyzeDeviceRisk(fingerprint));
@@ -339,13 +323,13 @@ export class DeviceFingerprintingService extends EventEmitter {
   riskScore = Math.max(0, Math.min(100, riskScore));
   const overallRisk = this.determineRiskLevel(riskScore);
   const recommendations = this.generateRecommendations(factors, overallRisk);
-  const assessment: RiskAssessment = {,
-  deviceId: fingerprint.id,
-  overallRisk,
-  riskScore,
-  factors,
-  recommendations,
-  timestamp: new Date(),
+  const assessment: RiskAssessment = {
+  deviceId: fingerprint.id
+  overallRisk
+  riskScore
+  factors
+  recommendations
+  timestamp: new Date() }
 };
     this.riskAssessments.set(fingerprint.id, assessment);
     if (overallRisk === RiskLevel.HIGH || overallRisk === RiskLevel.CRITICAL) {
@@ -382,54 +366,47 @@ export class DeviceFingerprintingService extends EventEmitter {
     const fingerprints = Array.from(this.fingerprints.values());
     const assessments = Array.from(this.riskAssessments.values());
     const locations = Array.from(this.ipLocationCache.values());
-    const riskDistribution = {
-  [RiskLevel.LOW]: 0,
-  [RiskLevel.MEDIUM]: 0,
-  [RiskLevel.HIGH]: 0,
-  [RiskLevel.CRITICAL]: 0,
+    const riskDistribution = { [RiskLevel.LOW]: 0
+  [RiskLevel.MEDIUM]: 0
+  [RiskLevel.HIGH]: 0
+  [RiskLevel.CRITICAL]: 0 }
 };
-    assessments.forEach(assessment => {)
-  riskDistribution[assessment.overallRisk]++;
-    });
+    assessments.forEach(assessment => { )
+  riskDistribution[assessment.overallRisk]++ });
     const countryCounts: Record<string, number> = {};
-    locations.forEach(location => {)
-  countryCounts[location.address.country] = (countryCounts[location.address.country] || 0) + 1;
-    });
+    locations.forEach(location => { )
+  countryCounts[location.address.country] = (countryCounts[location.address.country] || 0) + 1 });
     const topCountries = Object.entries(countryCounts);
       .map(([country, count]) => ({ country, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
-    const deviceTypes = {
-  [DeviceType.DESKTOP]: 0,
-  [DeviceType.MOBILE]: 0,
-  [DeviceType.TABLET]: 0,
-  [DeviceType.EMBEDDED]: 0,
-  [DeviceType.UNKNOWN]: 0,
+    const deviceTypes = { [DeviceType.DESKTOP]: 0
+  [DeviceType.MOBILE]: 0
+  [DeviceType.TABLET]: 0
+  [DeviceType.EMBEDDED]: 0
+  [DeviceType.UNKNOWN]: 0 }
 };
-    fingerprints.forEach(fp => {)
+    fingerprints.forEach(fp => { )
   const deviceType = this.determineDeviceType(fp);
-      deviceTypes[deviceType]++;
-    });
+      deviceTypes[deviceType]++ });
     const avgConfidence = fingerprints.length > 0 ;
       ? fingerprints.reduce((sum, fp) => sum + fp.confidence, 0) / fingerprints.length 
       : 0;
-    return {
-  totalFingerprints: fingerprints.length,
-  uniqueDevices: new Set(fingerprints.map(fp => fp.id)).size,
-  riskDistribution,
-  topCountries,
-  deviceTypes,
+    return { totalFingerprints: fingerprints.length
+  uniqueDevices: new Set(fingerprints.map(fp => fp.id)).size
+  riskDistribution
+  topCountries
+  deviceTypes }
   avgConfidence
 };
   // Private helper methods
-  private calculateFingerprintId(context: FingerprintContext): string {
-    const components = [;
-      context.userAgent,
-      context.acceptLanguage || '',
-      context.ipAddress,
-      JSON.stringify(context.clientData?.screen || {}),
-      JSON.stringify(context.clientData?.canvas || {}),
-      JSON.stringify(context.clientData?.webgl || {}),
+  private calculateFingerprintId(context: FingerprintContext): string { const components = [
+      context.userAgent
+      context.acceptLanguage || ''
+      context.ipAddress }
+      JSON.stringify(context.clientData?.screen || {})
+      JSON.stringify(context.clientData?.canvas || {})
+      JSON.stringify(context.clientData?.webgl || {})
       JSON.stringify(context.clientData?.audio || {})
     ];
     return crypto
@@ -437,108 +414,104 @@ export class DeviceFingerprintingService extends EventEmitter {
       .update(components.join('|'))
       .digest('hex')
       .substring(0, 32);
-  private generateBasicFingerprint(context: FingerprintContext): DeviceFingerprint['basic'] {
-  const ua = this.parseUserAgent(context.userAgent);
+  private generateBasicFingerprint(context: FingerprintContext): DeviceFingerprint['basic'] { const ua = this.parseUserAgent(context.userAgent);
   return {
-  userAgent: context.userAgent,
-  language: context.acceptLanguage?.split(',')[0] || 'en-US',
-  platform: ua.platform || 'unknown',
-  cookieEnabled: true, // Would be detected client-side,
-  doNotTrack: context.headers['dnt'] === '1',
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  timezoneOffset: new Date().getTimezoneOffset(),
+  userAgent: context.userAgent
+  language: context.acceptLanguage?.split(',')[0] || 'en-US'
+  platform: ua.platform || 'unknown'
+  cookieEnabled: true, // Would be detected client-side
+  doNotTrack: context.headers['dnt'] === '1'
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  timezoneOffset: new Date().getTimezoneOffset() }
 };
   private generateEnhancedFingerprint(context: FingerprintContext): DeviceFingerprint['enhanced'] {
     const ua = this.parseUserAgent(context.userAgent);
     const clientData = context.clientData || {};
-    return {
-  screen: {
-  width: clientData.screen?.width || 1920,
-  height: clientData.screen?.height || 1080,
-  colorDepth: clientData.screen?.colorDepth || 24,
-  pixelRatio: clientData.screen?.pixelRatio || 1,
-  orientation: clientData.screen?.orientation || 'landscape-primary',
-},
-  browser: {
-  name: ua.browser || 'unknown',
-  version: ua.browserVersion || '1.0',
-  engine: ua.engine || 'unknown',
-  engineVersion: ua.engineVersion || '1.0',
-  buildId: clientData.navigator?.buildID,
-  product: clientData.navigator?.product,
-  productSub: clientData.navigator?.productSub,
-  vendor: clientData.navigator?.vendor,
-  vendorSub: clientData.navigator?.vendorSub,
-},
-  plugins: clientData.plugins || [],
-      fonts: clientData.fonts || [],
-      webgl: clientData.webgl || {,
-  vendor: 'unknown',
-        renderer: 'unknown',
-        version: 'unknown',
-        shadingLanguageVersion: 'unknown',
-        extensions: [],
+    return { screen: {
+  width: clientData.screen?.width || 1920
+  height: clientData.screen?.height || 1080
+  colorDepth: clientData.screen?.colorDepth || 24
+  pixelRatio: clientData.screen?.pixelRatio || 1
+  orientation: clientData.screen?.orientation || 'landscape-primary' }
+
+  browser: { 
+  name: ua.browser || 'unknown'
+  version: ua.browserVersion || '1.0'
+  engine: ua.engine || 'unknown'
+  engineVersion: ua.engineVersion || '1.0'
+  buildId: clientData.navigator?.buildID
+  product: clientData.navigator?.product
+  productSub: clientData.navigator?.productSub
+  vendor: clientData.navigator?.vendor
+  vendorSub: clientData.navigator?.vendorSub }
+
+  plugins: clientData.plugins || []
+      fonts: clientData.fonts || []
+      webgl: clientData.webgl || { 
+  vendor: 'unknown'
+        renderer: 'unknown'
+        version: 'unknown'
+        shadingLanguageVersion: 'unknown'
+        extensions: [] }
         parameters: {}
-  },
-  canvas: clientData.canvas || {,
-  fingerprint: 'unknown',
-  geometry: 'unknown',
-  text: 'unknown',
-},
-  audio: clientData.audio || {,
-  fingerprint: 'unknown',
-  sampleRate: 44100,
-  channelCount: 2,
-  contextState: 'suspended',
+
+  canvas: clientData.canvas || { 
+  fingerprint: 'unknown'
+  geometry: 'unknown'
+  text: 'unknown' }
+
+  audio: clientData.audio || { 
+  fingerprint: 'unknown'
+  sampleRate: 44100
+  channelCount: 2
+  contextState: 'suspended' }
 };
   private generateComprehensiveFingerprint(context: FingerprintContext): DeviceFingerprint['comprehensive'] {
     const clientData = context.clientData || {};
-    return {
-  hardware: {
-  cpuCores: clientData.navigator?.hardwareConcurrency || 4,
-  memory: clientData.navigator?.deviceMemory || 8,
-  touchSupport: clientData.navigator?.maxTouchPoints > 0 || false,
-  sensors: [],
-  bluetooth: false,
-  usb: false,
+    return { hardware: {
+  cpuCores: clientData.navigator?.hardwareConcurrency || 4
+  memory: clientData.navigator?.deviceMemory || 8
+  touchSupport: clientData.navigator?.maxTouchPoints > 0 || false
+  sensors: []
+  bluetooth: false
+  usb: false
   webrtc: {
-  supported: false,
-  localCandidates: [],
-  stunServers: [],
-},
-  network: {
-  connectionType: clientData.network?.connection?.effectiveType || 'unknown',
-  downlink: clientData.network?.connection?.downlink,
-  effectiveType: clientData.network?.connection?.effectiveType,
-  rtt: clientData.network?.connection?.rtt,
-  saveData: clientData.network?.connection?.saveData,
-},
-  permissions: {
-  camera: 'prompt',
-  microphone: 'prompt',
-  location: 'prompt',
-  notifications: 'prompt',
-  persistentStorage: 'prompt',
-},
-  storage: {
-  localStorage: true,
-  sessionStorage: true,
-  indexedDB: true,
-  webSQL: false,
-  quota: 0,
-},
-  features: {
-  webAssembly: true,
-  serviceWorker: true,
-  webWorker: true,
-  webRTC: true,
-  webGL: true,
-  webGL2: false,
-  webVR: false,
-  webXR: false,
+  supported: false
+  localCandidates: []
+  stunServers: [] }
+
+  network: { 
+  connectionType: clientData.network?.connection?.effectiveType || 'unknown'
+  downlink: clientData.network?.connection?.downlink
+  effectiveType: clientData.network?.connection?.effectiveType
+  rtt: clientData.network?.connection?.rtt
+  saveData: clientData.network?.connection?.saveData }
+
+  permissions: { 
+  camera: 'prompt'
+  microphone: 'prompt'
+  location: 'prompt'
+  notifications: 'prompt'
+  persistentStorage: 'prompt' }
+
+  storage: { 
+  localStorage: true
+  sessionStorage: true
+  indexedDB: true
+  webSQL: false
+  quota: 0 }
+
+  features: { 
+  webAssembly: true
+  serviceWorker: true
+  webWorker: true
+  webRTC: true
+  webGL: true
+  webGL2: false
+  webVR: false
+  webXR: false }
 };
-  private calculateFingerprintConfidence(fingerprint: DeviceFingerprint, type: FingerprintType): number {
-  let confidence = 30; // Base confidence;
+  private calculateFingerprintConfidence(fingerprint: DeviceFingerprint, type: FingerprintType): number { let confidence = 30; // Base confidence;
   // Browser and platform specificity
   if (fingerprint.basic.userAgent.length > 50) confidence += 10;
   if (fingerprint.enhanced.browser.name !== 'unknown') confidence += 10;
@@ -556,46 +529,44 @@ export class DeviceFingerprintingService extends EventEmitter {
   confidence += Math.min(10, fingerprint.enhanced.plugins.length);
   confidence += Math.min(5, fingerprint.enhanced.fonts.length / 10);
   return Math.min(100, confidence);
-  private async fetchLocationFromIp(ipAddress: string): Promise<LocationData> {,
+  private async fetchLocationFromIp(ipAddress: string): Promise<LocationData> {
   // In a real implementation, this would call a GeoIP service
   // For now, return a mock location based on IP patterns
-  const location: LocationData = {,
-  id: crypto.randomUUID(),
-  timestamp: new Date(),
-  source: 'ip',
-  accuracy: 50000, // 50km accuracy for IP-based location,
-  confidence: 75,
+  const location: LocationData = {
+  id: crypto.randomUUID()
+  timestamp: new Date()
+  source: 'ip'
+  accuracy: 50000, // 50km accuracy for IP-based location
+  confidence: 75
   coordinates: {
-  latitude: this.mockLatitudeFromIp(ipAddress),
-  longitude: this.mockLongitudeFromIp(ipAddress),
-  accuracy: 50000,
-},
-  address: {
-  country: this.mockCountryFromIp(ipAddress),
-  countryCode: this.mockCountryCodeFromIp(ipAddress),
-  region: 'Unknown Region',
-  regionCode: 'XX',
-  city: 'Unknown City',
-  postalCode: '00000',
-},
-  network: {
-  ipAddress,
-  isp: 'Unknown ISP',
-  timezone: 'UTC',
-  vpnDetected: this.detectVpn(ipAddress),
-  proxyDetected: this.detectProxy(ipAddress),
-  torDetected: this.detectTor(ipAddress),
-  hostingProvider: this.detectHostingProvider(ipAddress),
-  datacenter: this.detectDatacenter(ipAddress),
-},
-  metadata: {
-  language: 'en',
-  currency: 'USD',
-  callingCode: '+1',
+  latitude: this.mockLatitudeFromIp(ipAddress)
+  longitude: this.mockLongitudeFromIp(ipAddress)
+  accuracy: 50000 }
+
+  address: { 
+  country: this.mockCountryFromIp(ipAddress)
+  countryCode: this.mockCountryCodeFromIp(ipAddress)
+  region: 'Unknown Region'
+  regionCode: 'XX'
+  city: 'Unknown City'
+  postalCode: '00000' }
+
+  network: { ipAddress
+  isp: 'Unknown ISP'
+  timezone: 'UTC'
+  vpnDetected: this.detectVpn(ipAddress)
+  proxyDetected: this.detectProxy(ipAddress)
+  torDetected: this.detectTor(ipAddress)
+  hostingProvider: this.detectHostingProvider(ipAddress)
+  datacenter: this.detectDatacenter(ipAddress) }
+
+  metadata: { 
+  language: 'en'
+  currency: 'USD'
+  callingCode: '+1' }
 };
     return location;
-  private isLocationDataFresh(location: LocationData): boolean {
-  const maxAge = 24 * 60 * 60 * 1000; // 24 hours;
+  private isLocationDataFresh(location: LocationData): boolean { const maxAge = 24 * 60 * 60 * 1000; // 24 hours;
   return Date.now() - location.timestamp.getTime() < maxAge;
   private analyzeDeviceRisk(fingerprint: DeviceFingerprint): RiskAssessment['factors'] {,
   const factors: RiskAssessment['factors'] = [];
@@ -606,66 +577,60 @@ export class DeviceFingerprintingService extends EventEmitter {
   factor: 'no_plugins',
   impact: 15,
   confidence: 80,
-  description: 'No browser plugins detected, possible headless browser',
+  description: 'No browser plugins detected, possible headless browser' }
 });
     // Check for suspicious user agent
-    if (fingerprint.basic.userAgent.includes('bot') || fingerprint.basic.userAgent.includes('crawler')) {
-  factors.push({)
+    if (fingerprint.basic.userAgent.includes('bot') || fingerprint.basic.userAgent.includes('crawler')) { factors.push({)
   category: 'device',
   factor: 'bot_user_agent',
   impact: 40,
   confidence: 95,
-  description: 'User agent indicates automated browser',
+  description: 'User agent indicates automated browser' }
 });
     // Check screen resolution
     const { width, height } = fingerprint.enhanced.screen;
-    if (width === 1024 && height === 768) {
-  factors.push({)
+    if (width === 1024 && height === 768) { factors.push({)
   category: 'device',
   factor: 'common_resolution',
   impact: 5,
   confidence: 60,
-  description: 'Very common screen resolution',
+  description: 'Very common screen resolution' }
 });
     return factors;
-  private analyzeLocationRisk(location: LocationData): RiskAssessment['factors'] {
-  const factors: RiskAssessment['factors'] = [];
+  private analyzeLocationRisk(location: LocationData): RiskAssessment['factors'] { const factors: RiskAssessment['factors'] = [];
   if (location.network.vpnDetected) {
   factors.push({)
   category: 'location',
   factor: 'vpn_detected',
   impact: 20,
   confidence: 85,
-  description: 'VPN usage detected',
+  description: 'VPN usage detected' }
 });
-    if (location.network.proxyDetected) {
-  factors.push({)
+    if (location.network.proxyDetected) { factors.push({)
   category: 'location',
   factor: 'proxy_detected',
   impact: 15,
   confidence: 80,
-  description: 'Proxy server detected',
+  description: 'Proxy server detected' }
 });
-    if (location.network.torDetected) {
-  factors.push({)
+    if (location.network.torDetected) { factors.push({)
   category: 'location',
   factor: 'tor_detected',
   impact: 35,
   confidence: 95,
-  description: 'Tor network usage detected',
+  description: 'Tor network usage detected' }
 });
-    if (location.network.datacenter) {
-  factors.push({)
+    if (location.network.datacenter) { factors.push({)
   category: 'location',
   factor: 'datacenter_ip',
   impact: 25,
   confidence: 90,
-  description: 'IP address belongs to a datacenter',
+  description: 'IP address belongs to a datacenter' }
 });
     return factors;
-  private analyzeBehavioralRisk(userId: string)
-    fingerprint: DeviceFingerprint,
-    location: LocationData): RiskAssessment['factors'] {,
+  private analyzeBehavioralRisk(userId: string),
+  fingerprint: DeviceFingerprint,
+    location: LocationData): RiskAssessment['factors'] { ,
   const factors: RiskAssessment['factors'] = [];
   // Check if this is a new device for the user
   const userFingerprints = Array.from(this.fingerprints.values());
@@ -676,38 +641,31 @@ export class DeviceFingerprintingService extends EventEmitter {
   factor: 'new_device',
   impact: 10,
   confidence: 90,
-  description: 'First time seeing this device for this user',
+  description: 'First time seeing this device for this user' }
 });
     // Check for location consistency
     const userLocations = Array.from(this.ipLocationCache.values());
       .filter(loc => this.isUserLocation(userId, loc.network.ipAddress));
-    if (userLocations.length > 0) {
-  const avgDistance = this.calculateAverageDistance(location, userLocations);
+    if (userLocations.length > 0) { const avgDistance = this.calculateAverageDistance(location, userLocations);
   if (avgDistance > 1000) { // More than 1000km from usual locations
   factors.push({)
   category: 'behavioral',
   factor: 'unusual_location',
   impact: 15,
   confidence: 75,
-  description: 'Login from unusual geographic location',
+  description: 'Login from unusual geographic location' }
 });
     return factors;
-  private determineRiskLevel(riskScore: number): RiskLevel {
-  if (riskScore >= 80) return RiskLevel.CRITICAL;
+  private determineRiskLevel(riskScore: number): RiskLevel { if (riskScore >= 80) return RiskLevel.CRITICAL;
   if (riskScore >= 60) return RiskLevel.HIGH;
   if (riskScore >= 40) return RiskLevel.MEDIUM;
   return RiskLevel.LOW;
   private generateRecommendations((factors: RiskAssessment['factors'],
-  riskLevel: RiskLevel): string {,
+  riskLevel: RiskLevel): string { }
   const recommendations: string = [];
-  if (riskLevel === RiskLevel.CRITICAL) {
-  recommendations.push('Block access and require manual verification');
-  recommendations.push('Enable enhanced monitoring for this device');
-} else if (riskLevel === RiskLevel.HIGH) {
-      recommendations.push('Require additional authentication factors');
-      recommendations.push('Monitor subsequent activities closely');
-    } else if (riskLevel === RiskLevel.MEDIUM) {
-  recommendations.push('Consider step-up authentication');
+  if (riskLevel === RiskLevel.CRITICAL) { recommendations.push('Block access and require manual verification');
+  recommendations.push('Enable enhanced monitoring for this device') } else if (riskLevel === RiskLevel.HIGH) { recommendations.push('Require additional authentication factors');
+      recommendations.push('Monitor subsequent activities closely') } else if (riskLevel === RiskLevel.MEDIUM) { recommendations.push('Consider step-up authentication');
   recommendations.push('Track device behavior patterns');
   // Specific recommendations based on factors
   if (factors.some(f => f.factor === 'vpn_detected')) {
@@ -715,23 +673,16 @@ export class DeviceFingerprintingService extends EventEmitter {
   if (factors.some(f => f.factor === 'new_device')) {
   recommendations.push('Send device registration notification to user');
   return [...new Set(recommendations)]; // Remove duplicates
-  private determineDeviceType(fingerprint: DeviceFingerprint): DeviceType {,
+  private determineDeviceType(fingerprint: DeviceFingerprint): DeviceType { }
   const ua = fingerprint.basic.userAgent.toLowerCase();
   const screen = fingerprint.enhanced.screen;
   // Check user agent first for more accurate detection
-  if (ua.includes('tablet') || ua.includes('ipad')) {
-  return DeviceType.TABLET;
-} else if (ua.includes('mobile') || ua.includes('iphone')) {
-      return DeviceType.MOBILE;
+  if (ua.includes('tablet') || ua.includes('ipad')) { return DeviceType.TABLET } else if (ua.includes('mobile') || ua.includes('iphone')) { return DeviceType.MOBILE;
     // Fallback to screen size detection
     if (screen.width <= 767) {
-      return DeviceType.MOBILE;
-    } else if (screen.width <= 1024) {
-      return DeviceType.TABLET;
-    } else {
-  return DeviceType.DESKTOP;
+      return DeviceType.MOBILE } else if (screen.width <= 1024) { return DeviceType.TABLET } else { return DeviceType.DESKTOP;
   // Mock helper methods (would be replaced with real implementations)
-  private parseUserAgent(userAgent: string): any {,
+  private parseUserAgent(userAgent: string): any { }
   // Simplified user agent parsing
   const ua = userAgent.toLowerCase();
   let browser = 'unknown';
@@ -743,12 +694,12 @@ export class DeviceFingerprintingService extends EventEmitter {
   const match = ua.match(/chrome\/([0-9.]+)/);
   browserVersion = match ? match[1] : '1.0';
   engine = 'Blink'
-  } else if (ua.includes('firefox')) {
+ else if (ua.includes('firefox')) {
   browser = 'Firefox';
   const match = ua.match(/firefox\/([0-9.]+)/);
   browserVersion = match ? match[1] : '1.0';
   engine = 'Gecko'
-  } else if (ua.includes('safari')) {
+ else if (ua.includes('safari')) {
       browser = 'Safari';
       engine = 'WebKit';
     if (ua.includes('windows')) platform = 'Windows';
@@ -757,8 +708,7 @@ export class DeviceFingerprintingService extends EventEmitter {
     else if (ua.includes('android')) platform = 'Android';
     else if (ua.includes('ios')) platform = 'iOS';
     return { browser, browserVersion, engine, platform };
-  private mockLatitudeFromIp(ip: string): number {
-  // Generate consistent but fake latitude based on IP
+  private mockLatitudeFromIp(ip: string): number { // Generate consistent but fake latitude based on IP
   const hash = crypto.createHash('md5').update(ip + 'lat').digest('hex');
   const num = parseInt(hash.substring(0, 8), 16);
   return ((num % 180) - 90) + (Math.random() - 0.5) * 10;
@@ -798,10 +748,10 @@ export class DeviceFingerprintingService extends EventEmitter {
   private isUserLocation(userId: string, ipAddress: string): boolean {,
   // This would check user location history in a real implementation
   return Math.random() < 0.5; // Mock: 50% chance this is a known user location,
-  private calculateAverageDistance(location: LocationData, userLocations: LocationData): number {,
+  private calculateAverageDistance(location: LocationData, userLocations: LocationData): number { }
   // Simplified distance calculation
   if (userLocations.length === 0) return 0;
-  const distances = userLocations.map(ul => {)
+  const distances = userLocations.map(ul => { )
   const lat1 = location.coordinates.latitude;
   const lon1 = location.coordinates.longitude;
   const lat2 = ul.coordinates.latitude;
@@ -811,19 +761,15 @@ export class DeviceFingerprintingService extends EventEmitter {
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
+  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+  Math.sin(dLon/2) * Math.sin(dLon/2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
-});
+  return R * c });
     return distances.reduce((sum, d) => sum + d, 0) / distances.length;
-  private startCleanupTimer(): void {
-    // Clean up old data every hour
+  private startCleanupTimer(): void { // Clean up old data every hour
     setInterval(() => {
-      this.cleanupOldData();
-    }, 60 * 60 * 1000);
-  private cleanupOldData(): void {
-  const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days;
+      this.cleanupOldData() }, 60 * 60 * 1000);
+  private cleanupOldData(): void { const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days;
   const cutoff = new Date(Date.now() - maxAge);
   // Clean up old fingerprints
   for (const [id, fingerprint] of this.fingerprints) {
@@ -836,7 +782,7 @@ export class DeviceFingerprintingService extends EventEmitter {
   this.ipLocationCache.delete(ip);
   this.emit('cleanupCompleted', {)
   remainingFingerprints: this.fingerprints.size,
-  remainingLocations: this.ipLocationCache.size,
+  remainingLocations: this.ipLocationCache.size }
 });
 
 // Export default instance

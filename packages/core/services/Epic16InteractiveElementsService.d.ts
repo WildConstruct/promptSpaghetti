@@ -8,8 +8,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface InteractiveElement {
-    id: string;
+}
+export interface InteractiveElement { id: string;
     type: InteractiveElementType;
     name: string;
     description: string;
@@ -28,54 +28,55 @@ export interface InteractiveElement {
     dependencies: string[];
 
 export declare enum InteractiveElementType {
-    LIVE_CHAT = "live_chat",
-    REAL_TIME_NOTIFICATIONS = "real_time_notifications",
-    ACTIVITY_FEED = "activity_feed",
-    COLLABORATIVE_EDITOR = "collaborative_editor",
-    PROGRESS_BAR = "progress_bar",
-    ACHIEVEMENT_UNLOCK = "achievement_unlock",
-    LEADERBOARD = "leaderboard",
-    POINTS_SYSTEM = "points_system",
-    BADGE_COLLECTION = "badge_collection",
-    STREAK_TRACKER = "streak_tracker",
-    RATING_SYSTEM = "rating_system",
-    REVIEW_WIDGET = "review_widget",
-    SOCIAL_SHARING = "social_sharing",
-    USER_PROFILES = "user_profiles",
-    FOLLOW_SYSTEM = "follow_system",
-    MENTION_SYSTEM = "mention_system",
-    QUICK_PREVIEW = "quick_preview",
-    COMPARISON_TOOL = "comparison_tool",
-    WISHLIST = "wishlist",
-    SHOPPING_CART = "shopping_cart",
-    CHECKOUT_FLOW = "checkout_flow",
-    PRICE_TRACKER = "price_tracker",
-    INTERACTIVE_DEMO = "interactive_demo",
-    CODE_PLAYGROUND = "code_playground",
-    TEMPLATE_CUSTOMIZER = "template_customizer",
-    LIVE_PREVIEW = "live_preview",
-    DRAG_DROP_BUILDER = "drag_drop_builder",
-    DISCUSSION_FORUM = "discussion_forum",
-    Q_A_SYSTEM = "q_a_system",
-    VOTING_SYSTEM = "voting_system",
-    MODERATION_TOOLS = "moderation_tools",
-    EVENT_CALENDAR = "event_calendar",
-    FEEDBACK_WIDGET = "feedback_widget",
-    SURVEY_MODAL = "survey_modal",
-    NPS_WIDGET = "nps_widget",
-    HELP_TOOLTIP = "help_tooltip",
+    LIVE_CHAT = "live_chat";
+    REAL_TIME_NOTIFICATIONS = "real_time_notifications";
+    ACTIVITY_FEED = "activity_feed";
+    COLLABORATIVE_EDITOR = "collaborative_editor";
+    PROGRESS_BAR = "progress_bar";
+    ACHIEVEMENT_UNLOCK = "achievement_unlock";
+    LEADERBOARD = "leaderboard";
+    POINTS_SYSTEM = "points_system";
+    BADGE_COLLECTION = "badge_collection";
+    STREAK_TRACKER = "streak_tracker";
+    RATING_SYSTEM = "rating_system";
+    REVIEW_WIDGET = "review_widget";
+    SOCIAL_SHARING = "social_sharing";
+    USER_PROFILES = "user_profiles";
+    FOLLOW_SYSTEM = "follow_system";
+    MENTION_SYSTEM = "mention_system";
+    QUICK_PREVIEW = "quick_preview";
+    COMPARISON_TOOL = "comparison_tool";
+    WISHLIST = "wishlist";
+    SHOPPING_CART = "shopping_cart";
+    CHECKOUT_FLOW = "checkout_flow";
+    PRICE_TRACKER = "price_tracker";
+    INTERACTIVE_DEMO = "interactive_demo";
+    CODE_PLAYGROUND = "code_playground";
+    TEMPLATE_CUSTOMIZER = "template_customizer";
+    LIVE_PREVIEW = "live_preview";
+    DRAG_DROP_BUILDER = "drag_drop_builder";
+    DISCUSSION_FORUM = "discussion_forum";
+    Q_A_SYSTEM = "q_a_system";
+    VOTING_SYSTEM = "voting_system";
+    MODERATION_TOOLS = "moderation_tools";
+    EVENT_CALENDAR = "event_calendar";
+    FEEDBACK_WIDGET = "feedback_widget";
+    SURVEY_MODAL = "survey_modal";
+    NPS_WIDGET = "nps_widget";
+    HELP_TOOLTIP = "help_tooltip";
     GUIDED_TOUR = "guided_tour"
 
 export declare enum ElementStatus {
-    DRAFT = "draft",
-    ACTIVE = "active",
-    PAUSED = "paused",
-    ARCHIVED = "archived",
+    DRAFT = "draft";
+    ACTIVE = "active";
+    PAUSED = "paused";
+    ARCHIVED = "archived" }
     ERROR = "error"
 
 }
-export interface ElementConfiguration {
-    theme: ElementTheme;
+}
+}
+export interface ElementConfiguration { theme: ElementTheme;
     layout: ElementLayout;
     animations: AnimationConfig;
     behavior: BehaviorConfig;
@@ -89,11 +90,10 @@ export interface ElementConfiguration {
     webhooks: WebhookConfig[];
     custom_css: string;
     custom_js: string;
-    template_overrides: Record<string, string>;
-
+    template_overrides: Record<string, string> }
 }
-export interface ElementTheme {
-    primary_color: string;
+}
+export interface ElementTheme { primary_color: string;
     secondary_color: string;
     accent_color: string;
     background_color: string;
@@ -102,27 +102,24 @@ export interface ElementTheme {
     border_radius: number;
     shadow: string;
     font_family: string;
-    font_size: number;
-
+    font_size: number }
 }
-export interface ElementLayout {
-    position: 'fixed' | 'absolute' | 'relative' | 'static';
+}
+export interface ElementLayout { position: 'fixed' | 'absolute' | 'relative' | 'static';
     placement: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center' | 'inline';
     width: number | 'auto' | string;
     height: number | 'auto' | string;
     z_index: number;
     responsive: boolean;
-    breakpoints: ResponsiveBreakpoint[];
-
+    breakpoints: ResponsiveBreakpoint[] }
 }
-export interface ResponsiveBreakpoint {
-    screen_size: 'mobile' | 'tablet' | 'desktop' | 'large';
+}
+export interface ResponsiveBreakpoint { screen_size: 'mobile' | 'tablet' | 'desktop' | 'large';
     min_width: number;
-    overrides: Partial<ElementLayout>;
-
+    overrides: Partial<ElementLayout> }
 }
-export interface AnimationConfig {
-    entrance: AnimationType;
+}
+export interface AnimationConfig { entrance: AnimationType;
     exit: AnimationType;
     hover: AnimationType;
     transition_duration: number;
@@ -130,20 +127,21 @@ export interface AnimationConfig {
     stagger_delay: number;
 
 export declare enum AnimationType {
-    NONE = "none",
-    FADE = "fade",
-    SLIDE_UP = "slide_up",
-    SLIDE_DOWN = "slide_down",
-    SLIDE_LEFT = "slide_left",
-    SLIDE_RIGHT = "slide_right",
-    SCALE = "scale",
-    ROTATE = "rotate",
-    BOUNCE = "bounce",
+    NONE = "none";
+    FADE = "fade";
+    SLIDE_UP = "slide_up";
+    SLIDE_DOWN = "slide_down";
+    SLIDE_LEFT = "slide_left";
+    SLIDE_RIGHT = "slide_right";
+    SCALE = "scale";
+    ROTATE = "rotate";
+    BOUNCE = "bounce" }
     ELASTIC = "elastic"
 
 }
-export interface BehaviorConfig {
-    auto_trigger: boolean;
+}
+}
+export interface BehaviorConfig { auto_trigger: boolean;
     trigger_delay: number;
     auto_dismiss: boolean;
     dismiss_delay: number;
@@ -151,88 +149,78 @@ export interface BehaviorConfig {
     escape_key_dismiss: boolean;
     max_interactions: number;
     cooldown_period: number;
-    frequency_cap: FrequencyCap;
-
+    frequency_cap: FrequencyCap }
 }
-export interface FrequencyCap {
-    enabled: boolean;
+}
+export interface FrequencyCap { enabled: boolean;
     max_per_session: number;
     max_per_day: number;
     max_per_week: number;
-    reset_on_engagement: boolean;
-
+    reset_on_engagement: boolean }
 }
-export interface InteractionConfig {
-    click_tracking: boolean;
+}
+export interface InteractionConfig { click_tracking: boolean;
     hover_tracking: boolean;
     scroll_tracking: boolean;
     time_tracking: boolean;
     conversion_tracking: boolean;
-    custom_events: CustomEventConfig[];
-
+    custom_events: CustomEventConfig[] }
 }
-export interface CustomEventConfig {
-    name: string;
+}
+export interface CustomEventConfig { name: string;
     trigger: string;
     data: Record<string, any>;
-    callback?: string;
-
+    callback?: string }
 }
-export interface PersistenceConfig {
-    state_persistence: boolean;
+}
+export interface PersistenceConfig { state_persistence: boolean;
     user_preferences: boolean;
     interaction_history: boolean;
     local_storage: boolean;
     session_storage: boolean;
-    database_sync: boolean;
-
+    database_sync: boolean }
 }
-export interface CachingConfig {
-    enabled: boolean;
+}
+export interface CachingConfig { enabled: boolean;
     ttl: number;
     strategy: 'memory' | 'localStorage' | 'sessionStorage' | 'redis';
-    invalidation_keys: string[];
-
+    invalidation_keys: string[] }
 }
-export interface AccessibilityConfig {
-    aria_labels: Record<string, string>;
+}
+export interface AccessibilityConfig { aria_labels: Record<string, string>;
     keyboard_navigation: boolean;
     screen_reader_support: boolean;
     high_contrast_mode: boolean;
     reduced_motion: boolean;
     focus_management: boolean;
-    semantic_markup: boolean;
-
+    semantic_markup: boolean }
 }
-export interface ApiEndpointConfig {
-    name: string;
+}
+export interface ApiEndpointConfig { name: string;
     url: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
     headers: Record<string, string>;
     auth_required: boolean;
     rate_limit: number;
     timeout: number;
-    retry_config: RetryConfig;
-
+    retry_config: RetryConfig }
 }
-export interface RetryConfig {
-    max_attempts: number;
+}
+export interface RetryConfig { max_attempts: number;
     backoff_strategy: 'linear' | 'exponential' | 'fixed';
     base_delay: number;
-    max_delay: number;
-
+    max_delay: number }
 }
-export interface WebhookConfig {
-    name: string;
+}
+export interface WebhookConfig { name: string;
     url: string;
     events: string[];
     headers: Record<string, string>;
     secret: string;
-    retry_config: RetryConfig;
-
+    retry_config: RetryConfig }
 }
-export interface ElementState {
-    current_state: string;
+}
+export interface ElementState { current_state: string;
     properties: Record<string, any>;
     user_data: Record<string, any>;
     session_data: Record<string, any>;
@@ -242,20 +230,18 @@ export interface ElementState {
     error_state: ElementError | null;
     render_time: number;
     interaction_count: number;
-    last_interaction: Date | null;
-
+    last_interaction: Date | null }
 }
-export interface ElementError {
-    code: string;
+}
+export interface ElementError { code: string;
     message: string;
     details: Record<string, any>;
     timestamp: Date;
     user_id?: string;
-    context: Record<string, any>;
-
+    context: Record<string, any> }
 }
-export interface Interaction {
-    id: string;
+}
+export interface Interaction { id: string;
     type: InteractionType;
     user_id: string;
     timestamp: Date;
@@ -265,38 +251,37 @@ export interface Interaction {
     duration: number;
 
 export declare enum InteractionType {
-    CLICK = "click",
-    HOVER = "hover",
-    SCROLL = "scroll",
-    KEYBOARD = "keyboard",
-    TOUCH = "touch",
-    VOICE = "voice",
-    GESTURE = "gesture",
-    API_CALL = "api_call",
+    CLICK = "click";
+    HOVER = "hover";
+    SCROLL = "scroll";
+    KEYBOARD = "keyboard";
+    TOUCH = "touch";
+    VOICE = "voice";
+    GESTURE = "gesture";
+    API_CALL = "api_call" }
     CUSTOM = "custom"
 
 }
-export interface InteractionContext {
-    page_url: string;
+}
+}
+export interface InteractionContext { page_url: string;
     referrer: string;
     user_agent: string;
     screen_resolution: string;
     viewport_size: string;
     device_type: 'desktop' | 'mobile' | 'tablet';
     session_id: string;
-    ab_test_variant: string | null;
-
+    ab_test_variant: string | null }
 }
-export interface InteractionResult {
-    success: boolean;
+}
+export interface InteractionResult { success: boolean;
     error?: string;
     conversion: boolean;
     data: Record<string, any>;
-    next_action?: string;
-
+    next_action?: string }
 }
-export interface ElementAnalytics {
-    total_impressions: number;
+}
+export interface ElementAnalytics { total_impressions: number;
     unique_users: number;
     total_interactions: number;
     interaction_rate: number;
@@ -316,60 +301,60 @@ export interface ElementAnalytics {
     daily_stats: DailyStats[];
     hourly_distribution: number[];
     geographical_distribution: Record<string, number>;
-    device_distribution: Record<string, number>;
-
+    device_distribution: Record<string, number> }
 }
-export interface DailyStats {
-    date: string;
+}
+export interface DailyStats { date: string;
     impressions: number;
     interactions: number;
     conversions: number;
     unique_users: number;
-    error_count: number;
-
+    error_count: number }
 }
-export interface TargetContext {
-    type: TargetType;
+}
+export interface TargetContext { type: TargetType;
     rules: TargetRule[];
     operator: 'AND' | 'OR';
     weight: number;
 
 export declare enum TargetType {
-    USER_ATTRIBUTE = "user_attribute",
-    BEHAVIORAL = "behavioral",
-    GEOGRAPHIC = "geographic",
-    TEMPORAL = "temporal",
-    DEVICE = "device",
-    CONTENT = "content",
+    USER_ATTRIBUTE = "user_attribute";
+    BEHAVIORAL = "behavioral";
+    GEOGRAPHIC = "geographic";
+    TEMPORAL = "temporal";
+    DEVICE = "device";
+    CONTENT = "content" }
     CUSTOM = "custom"
 
 }
-export interface TargetRule {
-    field: string;
+}
+}
+export interface TargetRule { field: string;
     operator: ComparisonOperator;
     value: any;
     case_sensitive: boolean;
 
 export declare enum ComparisonOperator {
-    EQUALS = "equals",
-    NOT_EQUALS = "not_equals",
-    CONTAINS = "contains",
-    NOT_CONTAINS = "not_contains",
-    STARTS_WITH = "starts_with",
-    ENDS_WITH = "ends_with",
-    GREATER_THAN = "greater_than",
-    LESS_THAN = "less_than",
-    GREATER_EQUAL = "greater_equal",
-    LESS_EQUAL = "less_equal",
-    IN = "in",
-    NOT_IN = "not_in",
-    REGEX = "regex",
-    EXISTS = "exists",
+    EQUALS = "equals";
+    NOT_EQUALS = "not_equals";
+    CONTAINS = "contains";
+    NOT_CONTAINS = "not_contains";
+    STARTS_WITH = "starts_with";
+    ENDS_WITH = "ends_with";
+    GREATER_THAN = "greater_than";
+    LESS_THAN = "less_than";
+    GREATER_EQUAL = "greater_equal";
+    LESS_EQUAL = "less_equal";
+    IN = "in";
+    NOT_IN = "not_in";
+    REGEX = "regex";
+    EXISTS = "exists" }
     NOT_EXISTS = "not_exists"
 
 }
-export interface ElementTrigger {
-    id: string;
+}
+}
+export interface ElementTrigger { id: string;
     type: TriggerType;
     conditions: TriggerCondition[];
     delay: number;
@@ -377,56 +362,55 @@ export interface ElementTrigger {
     cooldown: number;
 
 export declare enum TriggerType {
-    PAGE_LOAD = "page_load",
-    TIME_DELAY = "time_delay",
-    SCROLL_DEPTH = "scroll_depth",
-    USER_ACTION = "user_action",
-    API_EVENT = "api_event",
-    CUSTOM_EVENT = "custom_event",
-    EXIT_INTENT = "exit_intent",
-    IDLE_TIME = "idle_time",
+    PAGE_LOAD = "page_load";
+    TIME_DELAY = "time_delay";
+    SCROLL_DEPTH = "scroll_depth";
+    USER_ACTION = "user_action";
+    API_EVENT = "api_event";
+    CUSTOM_EVENT = "custom_event";
+    EXIT_INTENT = "exit_intent";
+    IDLE_TIME = "idle_time" }
     ELEMENT_VISIBLE = "element_visible"
 
 }
-export interface TriggerCondition {
-    field: string;
-    operator: ComparisonOperator;
-    value: any;
-
 }
-export interface ElementCondition {
-    id: string;
+}
+export interface TriggerCondition { field: string;
+    operator: ComparisonOperator;
+    value: any }
+}
+}
+export interface ElementCondition { id: string;
     name: string;
     expression: string;
     variables: Record<string, any>;
-    active: boolean;
-
+    active: boolean }
 }
-export interface ElementIntegration {
-    type: IntegrationType;
+}
+export interface ElementIntegration { type: IntegrationType;
     config: Record<string, any>;
     enabled: boolean;
     last_sync: Date | null;
     sync_status: 'success' | 'error' | 'pending';
 
 export declare enum IntegrationType {
-    ANALYTICS = "analytics",
-    CRM = "crm",
-    EMAIL = "email",
-    SMS = "sms",
-    WEBHOOK = "webhook",
-    DATABASE = "database",
-    CACHE = "cache",
-    CDN = "cdn",
-    SEARCH = "search",
+    ANALYTICS = "analytics";
+    CRM = "crm";
+    EMAIL = "email";
+    SMS = "sms";
+    WEBHOOK = "webhook";
+    DATABASE = "database";
+    CACHE = "cache";
+    CDN = "cdn";
+    SEARCH = "search" }
     AI_ML = "ai_ml"
 
 }
-export interface LiveChatElement extends InteractiveElement {
-    type: InteractiveElementType.LIVE_CHAT;
-    config: ElementConfiguration & {,
-        chat_config: {
-            max_users: number;
+}
+}
+export interface LiveChatElement extends InteractiveElement { type: InteractiveElementType.LIVE_CHAT;
+    config: ElementConfiguration & { }
+        chat_config: { max_users: number;
             message_history: number;
             typing_indicators: boolean;
             file_uploads: boolean;
@@ -435,64 +419,56 @@ export interface LiveChatElement extends InteractiveElement {
             profanity_filter: boolean;
             rate_limiting: {
                 messages_per_minute: number;
-                chars_per_message: number;
-}
+                chars_per_message: number }
             };
         };
     };
 
 }
-export interface ProgressBarElement extends InteractiveElement {
-    type: InteractiveElementType.PROGRESS_BAR;
-    config: ElementConfiguration & {,
-        progress_config: {
-            min_value: number;
+}
+export interface ProgressBarElement extends InteractiveElement { type: InteractiveElementType.PROGRESS_BAR;
+    config: ElementConfiguration & { }
+        progress_config: { min_value: number;
             max_value: number;
             step_size: number;
             show_percentage: boolean;
             show_labels: boolean;
             animated: boolean;
             color_thresholds: ColorThreshold[];
-            milestones: Milestone[];
-        };
+            milestones: Milestone[] };
     };
 
 }
-export interface ColorThreshold {
-    threshold: number;
-    color: string;
-    label?: string;
-
 }
-export interface Milestone {
-    value: number;
+export interface ColorThreshold { threshold: number;
+    color: string;
+    label?: string }
+}
+}
+export interface Milestone { value: number;
     label: string;
     icon?: string;
-    reward?: string;
-
+    reward?: string }
 }
-export interface QuickPreviewElement extends InteractiveElement {
-    type: InteractiveElementType.QUICK_PREVIEW;
-    config: ElementConfiguration & {,
-        preview_config: {
-            preview_type: 'modal' | 'tooltip' | 'sidebar' | 'inline';
+}
+export interface QuickPreviewElement extends InteractiveElement { type: InteractiveElementType.QUICK_PREVIEW;
+    config: ElementConfiguration & { }
+        preview_config: { preview_type: 'modal' | 'tooltip' | 'sidebar' | 'inline';
             auto_load: boolean;
             lazy_load: boolean;
             max_content_size: number;
             supported_formats: string[];
             zoom_enabled: boolean;
             download_enabled: boolean;
-            sharing_enabled: boolean;
-}
+            sharing_enabled: boolean }
         };
     };
 
 }
-export interface InteractiveDemo extends InteractiveElement {
-    type: InteractiveElementType.INTERACTIVE_DEMO;
-    config: ElementConfiguration & {,
-        demo_config: {
-            auto_start: boolean;
+}
+export interface InteractiveDemo extends InteractiveElement { type: InteractiveElementType.INTERACTIVE_DEMO;
+    config: ElementConfiguration & { }
+        demo_config: { auto_start: boolean;
             allow_skip: boolean;
             show_controls: boolean;
             highlight_elements: boolean;
@@ -500,13 +476,12 @@ export interface InteractiveDemo extends InteractiveElement {
             subtitles: boolean;
             replay_enabled: boolean;
             completion_tracking: boolean;
-            steps: DemoStep[];
-        };
+            steps: DemoStep[] };
     };
 
 }
-export interface DemoStep {
-    id: string;
+}
+export interface DemoStep { id: string;
     title: string;
     description: string;
     target_element: string;
@@ -542,18 +517,17 @@ export declare class Epic16InteractiveElementsService extends EventEmitter {
     private calculateConversionRate;
     private getContextFieldValue;
     private compareValues;
-    private evaluateExpression;
-
+    private evaluateExpression }
 }
-export interface ActivationContext {
-    userId: string;
+}
+export interface ActivationContext { userId: string;
     sessionId: string;
     pageUrl: string;
     userAgent: string;
     timestamp: Date;
     userAttributes: Record<string, any>;
-    requestContext: Record<string, any>;
-
+    requestContext: Record<string, any> }
+}
 }
 export interface UserSession {
     userId: string;
@@ -565,4 +539,5 @@ export interface UserSession {
 
 export default Epic16InteractiveElementsService;
 //# sourceMappingURL=Epic16InteractiveElementsService.d.ts.map
+}
 }

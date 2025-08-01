@@ -7,8 +7,7 @@
 /**
  * Advanced Security Analyzer with ML-inspired threat detection
  */
-export declare class AdvancedSecurityAnalyzer {
-    private readonly learningEngine;
+export declare class AdvancedSecurityAnalyzer { private readonly learningEngine;
     private readonly patternCache;
     /**
      * Analyze input using advanced pattern detection
@@ -29,19 +28,15 @@ export declare class AdvancedSecurityAnalyzer {
     private calculateRiskScore;
     private getCacheKey;
     private buildResult;
-    private calculateConfidence;
-
+    private calculateConfidence }
 }
-export interface SecurityAnalysisResult {
-    isSecure: boolean;
+export interface SecurityAnalysisResult { isSecure: boolean;
     riskScore: number;
     threatsDetected: string[];
-    confidence: number;
-
-
+    confidence: number }
 }
-export interface SecurityMetrics {
-    patternsAnalyzed: number;
+}
+export interface SecurityMetrics { patternsAnalyzed: number;
     cacheSize: number;
     learningDataPoints: number;
     version: string;
@@ -54,7 +49,7 @@ export declare     /**
     /**
      * Get security analysis details
      */
-    getAnalysis: (input: string) => SecurityAnalysisResult;
+    getAnalysis: (input: string) => SecurityAnalysisResult }
 }
 };
 //# sourceMappingURL=advanced-security.d.ts.map

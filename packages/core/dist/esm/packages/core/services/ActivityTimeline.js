@@ -30,7 +30,12 @@ sortBy ?  : 'timestamp' | 'impact' | 'duration';
 sortDirection ?  : 'asc' | 'desc';
 ;
 // User engagement
-mostActiveUsers: Array;
+mostActiveUsers: Array < {
+    userId: string,
+    displayName: string,
+    eventCount: number,
+    lastActivity: Date
+} > ;
 // Performance insights
 averageExecutionTime: number;
 errorRate: number;
@@ -152,8 +157,9 @@ export class ActivityTimelineService {
          * Track performance event
          */
         async;
-        trackPerformance(operation, string);
-        duration: number,
+        trackPerformance(operation, string),
+            duration;
+        number,
             success;
         boolean,
             details;
@@ -187,8 +193,9 @@ this.calculatePerformanceImpact(duration, success),
  * Track collaboration event
  */
 async;
-trackCollaboration(action, string);
-collaborators: string,
+trackCollaboration(action, string),
+    collaborators;
+string,
     resource;
 string,
     details;
@@ -447,8 +454,8 @@ ActivityEvent;
                                                                                     /**
                                                                                     * Start a new user session
                                                                                     */
-                                                                                    startSession(userId, string, clientInfo, ClientInfo, context ?  : {});
-                                                                                    workspaceId ?  : string;
+                                                                                    startSession(userId, string, clientInfo, ClientInfo, context ?  : {}),
+                                                                                        workspaceId ?  : string;
                                                                                     projectId ?  : string;
                                                                                     location ?  : GeolocationInfo;
                                                                                 }, ActivitySession
@@ -658,8 +665,9 @@ ActivityEvent;
                                                                                 },
                                                                                 emitActivity(event) {
                                                                                     // Integration point with external systems
-                                                                                    console.debug('Activity tracked:', {});
-                                                                                    id: event.id,
+                                                                                    console.debug('Activity tracked:', {}),
+                                                                                        id;
+                                                                                    event.id,
                                                                                         type;
                                                                                     event.type,
                                                                                         action;

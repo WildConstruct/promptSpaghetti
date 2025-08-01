@@ -8,36 +8,33 @@ import FilePreview from '../FilePreview';
 import { projectManager } from '../../../projectManager';
 
 // Mock the projectManager
-jest.mock('../../../projectManager', () => ({)
-  projectManager: {
+jest.mock('../../../projectManager', () => ({ )
+  projectManager: {,
   generateThumbnail: jest.fn(),
-  getMockFile: jest.fn(),
+  getMockFile: jest.fn() }
 }));
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
-describe('FilePreview Component', () => {
-  const mockFile = {
-  id: 'test-file-1',
-  name: 'test-graph.psg',
-  path: '/projects/test/test-graph.psg',
-  size: 1024,
-  lastModified: new Date('2025-01-15T10:00:00Z'),
-  nodeCount: 15,
+describe('FilePreview Component', () => { const mockFile = {
+  id: 'test-file-1'
+  name: 'test-graph.psg'
+  path: '/projects/test/test-graph.psg'
+  size: 1024
+  lastModified: new Date('2025-01-15T10:00:00Z')
+  nodeCount: 15
   metadata: {
-  title: 'Test Graph',
-  description: 'A test graph for unit testing',
-  tags: ['test', 'graph'],
-  author: 'Test User',
-  version: '1.0.0',
-  created: new Date('2025-01-10T10:00:00Z'),
-  thumbnail: 'data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=',
-},
+  title: 'Test Graph'
+  description: 'A test graph for unit testing'
+  tags: ['test', 'graph']
+  author: 'Test User'
+  version: '1.0.0'
+  created: new Date('2025-01-10T10:00:00Z')
+  thumbnail: 'data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=' }
+
   isFavorite: false;
   };
   const mockThumbnail = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjgwIj48L3N2Zz4=';
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockProjectManager.generateThumbnail.mockResolvedValue(mockThumbnail);
-  });
+  beforeEach(() => { jest.clearAllMocks();
+    mockProjectManager.generateThumbnail.mockResolvedValue(mockThumbnail) });
   describe('Compact Mode', () => {
     it('renders file preview in compact mode', () => {
       render(<FilePreview file={mockFile} mode="compact" />);
@@ -83,15 +80,12 @@ describe('FilePreview Component', () => {
   describe('Thumbnail Generation', () => {
     it('generates and displays thumbnail', async () => {
       render(<FilePreview file={mockFile} mode="full" />);
-      await waitFor(() => {
-        expect(mockProjectManager.generateThumbnail).toHaveBeenCalledWith(mockFile);
-      });
+      await waitFor(() => { expect(mockProjectManager.generateThumbnail).toHaveBeenCalledWith(mockFile) });
       const thumbnail = screen.getByAltText('test-graph.psg preview');
       expect(thumbnail).toHaveAttribute('src', mockThumbnail);
     });
-    it('uses cached thumbnail if available', () => {
-      const fileWithThumbnail = {
-        ...mockFile,
+    it('uses cached thumbnail if available', () => { const fileWithThumbnail = {
+        ...mockFile }
         metadata: { ...mockFile.metadata, thumbnail: mockThumbnail }
       };
       render(<FilePreview file={fileWithThumbnail} mode="full" />);
@@ -102,9 +96,7 @@ describe('FilePreview Component', () => {
     it('handles thumbnail generation error gracefully', async () => {
       mockProjectManager.generateThumbnail.mockRejectedValue(new Error('Thumbnail generation failed'));
       render(<FilePreview file={mockFile} mode="full" />);
-      await waitFor(() => {
-        expect(mockProjectManager.generateThumbnail).toHaveBeenCalledWith(mockFile);
-      });
+      await waitFor(() => { expect(mockProjectManager.generateThumbnail).toHaveBeenCalledWith(mockFile) });
       // Should still render without throwing error
       expect(screen.getByText('Test Graph')).toBeInTheDocument();
     });
@@ -142,28 +134,25 @@ describe('FilePreview Component', () => {
       expect(screen.getByText('0 B')).toBeInTheDocument();
     });
   });
-  describe('Missing Metadata Handling', () => {
-    it('handles missing title gracefully', () => {
+  describe('Missing Metadata Handling', () => { it('handles missing title gracefully', () => {
       const fileWithoutTitle = {
-        ...mockFile,
+        ...mockFile }
         metadata: { ...mockFile.metadata, title: undefined }
       };
       render(<FilePreview file={fileWithoutTitle} mode="full" />);
       // Should use filename when title is missing
       expect(screen.getByText('test-graph.psg')).toBeInTheDocument();
     });
-    it('handles empty tags array', () => {
-      const fileWithoutTags = {
-        ...mockFile,
+    it('handles empty tags array', () => { const fileWithoutTags = {
+        ...mockFile }
         metadata: { ...mockFile.metadata, tags: [] }
       };
       render(<FilePreview file={fileWithoutTags} mode="full" />);
       // Should not crash and still render other metadata
       expect(screen.getByText('Test Graph')).toBeInTheDocument();
     });
-    it('handles missing description', () => {
-      const fileWithoutDescription = {
-        ...mockFile,
+    it('handles missing description', () => { const fileWithoutDescription = {
+        ...mockFile }
         metadata: { ...mockFile.metadata, description: undefined }
       };
       render(<FilePreview file={fileWithoutDescription} mode="full" />);
@@ -181,14 +170,10 @@ describe('FilePreview Component', () => {
     });
     it('regenerates thumbnail only when file changes', async () => {
       const { rerender } = render(<FilePreview file={mockFile} mode="full" />);
-      await waitFor(() => {
-        expect(mockProjectManager.generateThumbnail).toHaveBeenCalledTimes(1);
-      });
+      await waitFor(() => { expect(mockProjectManager.generateThumbnail).toHaveBeenCalledTimes(1) });
       const newFile = { ...mockFile, id: 'different-file' };
       rerender(<FilePreview file={newFile} mode="full" />);
-      await waitFor(() => {
-        expect(mockProjectManager.generateThumbnail).toHaveBeenCalledTimes(2);
-      });
+      await waitFor(() => { expect(mockProjectManager.generateThumbnail).toHaveBeenCalledTimes(2) });
     });
   });
   describe('Accessibility', () => {
@@ -210,20 +195,18 @@ describe('FilePreview Component', () => {
       expect(handleClick).toHaveBeenCalledWith(mockFile);
     });
   });
-  describe('Error Boundaries', () => {
-  it('handles invalid date objects', () => {
+  describe('Error Boundaries', () => { it('handles invalid date objects', () => {
   const fileWithInvalidDate = {
-  ...mockFile,
-  lastModified: new Date('invalid-date'),
+  ...mockFile
+  lastModified: new Date('invalid-date') }
 };
       expect(() => {
         render(<FilePreview file={fileWithInvalidDate} mode="compact" />);
       }).not.toThrow();
     });
-    it('handles missing metadata object', () => {
-  const fileWithoutMetadata = {
-  ...mockFile,
-  metadata: undefined as any,
+    it('handles missing metadata object', () => { const fileWithoutMetadata = {
+  ...mockFile
+  metadata: undefined as any }
 };
       expect(() => {
         render(<FilePreview file={fileWithoutMetadata} mode="full" />);

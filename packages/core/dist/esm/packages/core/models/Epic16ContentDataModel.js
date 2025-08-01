@@ -125,8 +125,9 @@ export var TemplateStatus;
             z.array(z.string()).default([]),
                 // Preferences
                 preferences;
-            z.object({});
-            emailNotifications: z.boolean().default(true),
+            z.object({}),
+                emailNotifications;
+            z.boolean().default(true),
                 marketingEmails;
             z.boolean().default(false),
                 publicProfile;

@@ -21,7 +21,7 @@ export type IODataType =
  * Input/Output port definition for advanced nodes
  */
 
-}
+
 export interface IOPortDefinition {
   /** Unique identifier for this port */
   id: string;
@@ -42,9 +42,10 @@ export interface IOPortDefinition {
   /**
   * Validation constraints for I/O ports
   */
-}
-}
-}
+
+
+
+
 export interface IOConstraints {
   /** Minimum value (for numbers) */
   min?: number;
@@ -63,9 +64,10 @@ export interface IOConstraints {
   /**
   * Input/Output port specification for a node type
   */
-}
-}
-}
+
+
+
+
 export interface IOSpec {
   /** Input port definitions */
   inputs: IOPortDefinition;
@@ -74,9 +76,10 @@ export interface IOSpec {
   /**
   * Resolved input values for node execution
   */
-}
-}
-}
+
+
+
+
 export interface ResolvedInputs {
   /** Direct input values by port ID */
   values: Map<string, any>;
@@ -85,26 +88,27 @@ export interface ResolvedInputs {
   /**
   * Metadata about how an input was resolved
   */
-}
-}
-}
-export interface IOResolutionMetadata {
-  /** Whether the value came from a connection or default */
+
+
+
+
+export interface IOResolutionMetadata { /** Whether the value came from a connection or default */
   source: 'connection' | 'default' | 'computed';
   /** Original connected node ID (if from connection) */
   sourceNodeId?: string;
   /** Type coercion performed */
-  typeCoercion?: {
+  typeCoercion?: { }
   from: IODataType;
   to: IODataType;
-}
+
+
 };
   /** Validation warnings */
   warnings: string;
 /**
  * Advanced Input/Output handler for Epic 7 nodes
  */
-}
+
 export class AdvancedIOHandler {
   constructor(private spec: IOSpec) {}
   /**
@@ -121,21 +125,20 @@ export class AdvancedIOHandler {
           errors.push(`Required input '${inputDef.label}' (${inputDef.id}) is missing`);}
           continue;
       // Validate input value if present
-      if (value !== undefined && value !== null) {
-  const validationResult = this.validateValue(value, inputDef);
+      if (value !== undefined && value !== null) { const validationResult = this.validateValue(value, inputDef);
   errors.push(...validationResult.errors);
   warnings.push(...validationResult.warnings);
   return {
-  valid: errors.length === 0,
-  errors,
+  valid: errors.length === 0
+  errors }
   warnings
 };
   /**
    * Resolve inputs from connected nodes and apply defaults
    */
   resolveInputs();
-    connectedInputs: Map<string, any>,
-    ___nodeId: string): ResolvedInputs {,
+    connectedInputs: Map<string, any>
+    ___nodeId: string): ResolvedInputs {
     const values = new Map<string, any>();
     const metadata = new Map<string, IOResolutionMetadata>();
     for (const inputDef of this.spec.inputs) {
@@ -143,35 +146,32 @@ export class AdvancedIOHandler {
       if (connectedValue !== undefined) {
         // Use connected value with potential type coercion
         const { value, coercion, warnings } = this.coerceValue()
-          connectedValue, 
+          connectedValue
           inputDef.dataType
         );
         values.set(inputDef.id, value);
-        metadata.set(inputDef.id, {)
-  source: 'connection',
-  sourceNodeId: 'unknown', // Would be resolved by engine,
-  typeCoercion: coercion,
+        metadata.set(inputDef.id, { )
+  source: 'connection'
+  sourceNodeId: 'unknown', // Would be resolved by engine
+  typeCoercion: coercion }
   warnings
 });
-      } else if (inputDef.defaultValue !== undefined) {
-  // Use default value
+ else if (inputDef.defaultValue !== undefined) { // Use default value
   values.set(inputDef.id, inputDef.defaultValue);
   metadata.set(inputDef.id, {)
-  source: 'default',
-  warnings: [],
+  source: 'default'
+  warnings: [] }
 });
-      } else if (inputDef.required) {
-        // Missing required input - this should be caught by validation
+ else if (inputDef.required) { // Missing required input - this should be caught by validation
         metadata.set(inputDef.id, {)
-  source: 'default',
+  source: 'default' }
           warnings: [`Missing required input: ${inputDef.label}`]}
         });
     return { values, metadata };
   /**
    * Validate and format output values according to output specification
    */
-  validateOutputs(outputs: Map<string, any>): ValidationResult {
-  const errors: string = [];
+  validateOutputs(outputs: Map<string, any>): ValidationResult { const errors: string = [];
   const warnings: string = [];
   for (const outputDef of this.spec.outputs) {
   const value = outputs.get(outputDef.id);
@@ -180,8 +180,8 @@ export class AdvancedIOHandler {
   errors.push(...validationResult.errors);
   warnings.push(...validationResult.warnings);
   return {
-  valid: errors.length === 0,
-  errors,
+  valid: errors.length === 0
+  errors }
   warnings
 };
   /**
@@ -207,13 +207,12 @@ export class AdvancedIOHandler {
       );
       return { valid: false, errors, warnings };
     // Constraint validation
-    if (portDef.constraints) {
-  const constraintResult = this.validateConstraints(value, portDef.constraints);
+    if (portDef.constraints) { const constraintResult = this.validateConstraints(value, portDef.constraints);
   errors.push(...constraintResult.errors);
   warnings.push(...constraintResult.warnings);
   return {
-  valid: errors.length === 0,
-  errors,
+  valid: errors.length === 0
+  errors }
   warnings
 };
   /**
@@ -271,13 +270,12 @@ export class AdvancedIOHandler {
     if (constraints.allowedValues && !constraints.allowedValues.includes(value)) {
       errors.push(`Value '${value}' is not in allowed values: ${constraints.allowedValues.join(', ')}`);}
     // Custom validation
-    if (constraints.customValidator) {
-  const customResult = constraints.customValidator(value);
+    if (constraints.customValidator) { const customResult = constraints.customValidator(value);
   errors.push(...customResult.errors);
   warnings.push(...customResult.warnings);
   return {
   valid: errors.length === 0,
-  errors,
+  errors }
   warnings
 };
   /**
@@ -296,14 +294,13 @@ export class AdvancedIOHandler {
     if (originalType === targetType || targetType === 'any') {
       return { value, warnings };
     // Attempt type coercion
-    try {
-      const coercedValue = this.performCoercion(value, originalType, targetType);
+    try { const coercedValue = this.performCoercion(value, originalType, targetType);
       return {
-        value: coercedValue,
+        value: coercedValue }
         coercion: { from: originalType, to: targetType },
         warnings: [`Type coerced from ${originalType} to ${targetType}`]}
       };
-    } catch (error) {
+ catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       warnings.push(`Type coercion failed: ${errorMessage}`);}
       return { value, warnings };
@@ -370,92 +367,86 @@ export class IOSpecBuilder {
   /**
    * Add an output port
    */
-  addOutput(definition: Omit<IOPortDefinition, 'id'> & { id: string }): IOSpecBuilder {
-    this.outputs.push(definition);
+  addOutput(definition: Omit<IOPortDefinition, 'id'> & { id: string }): IOSpecBuilder { this.outputs.push(definition);
     return this;
   /**
    * Add a standard text input
    */
   addTextInput();
-    id: string, 
-    label: string, 
-    required: boolean = false, 
+    id: string
+    label: string
+    required: boolean = false
     defaultValue?: string
   ): IOSpecBuilder {
     return this.addInput({)
-  id,
-      label,
-      dataType: 'string',
-      required,
-      defaultValue,
+  id
+      label
+      dataType: 'string'
+      required
+      defaultValue }
       description: `Text input for ${label.toLowerCase()}`}
     });
   /**
    * Add a standard number input
    */
   addNumberInput();
-    id: string, 
-    label: string, 
-    required: boolean = false, 
-    min?: number, 
-    max?: number,
+    id: string
+    label: string
+    required: boolean = false
+    min?: number
+    max?: number
     defaultValue?: number
-  ): IOSpecBuilder {
-    return this.addInput({)
-  id,
-      label,
-      dataType: 'number',
-      required,
-      defaultValue,
-      constraints: { min, max },
+  ): IOSpecBuilder { return this.addInput({)
+  id
+      label
+      dataType: 'number'
+      required
+      defaultValue }
+      constraints: { min, max }
       description: `Numeric input for ${label.toLowerCase()}`}
     });
   /**
    * Add a standard choice input
    */
   addChoiceInput();
-    id: string, 
-    label: string, 
-    allowedValues: unknown, 
-    required: boolean = false,
+    id: string
+    label: string
+    allowedValues: unknown
+    required: boolean = false
     defaultValue?: unknown
-  ): IOSpecBuilder {
-    return this.addInput({)
-  id,
-      label,
-      dataType: 'choice',
-      required,
-      defaultValue,
-      constraints: { allowedValues },
+  ): IOSpecBuilder { return this.addInput({)
+  id
+      label
+      dataType: 'choice'
+      required
+      defaultValue }
+      constraints: { allowedValues }
       description: `Choice input for ${label.toLowerCase()}`}
     });
   /**
    * Add a standard text output
    */
-  addTextOutput(id: string, label: string): IOSpecBuilder {
-    return this.addOutput({)
-  id,
-      label,
-      dataType: 'string',
-      required: true,
+  addTextOutput(id: string, label: string): IOSpecBuilder { return this.addOutput({)
+  id
+      label
+      dataType: 'string'
+      required: true }
       description: `Text output for ${label.toLowerCase()}`}
     });
   /**
    * Build the final I/O specification
    */
-  build(): IOSpec {
-  return {
-  inputs: [...this.inputs],
-  outputs: [...this.outputs],
+  build(): IOSpec { return {
+  inputs: [...this.inputs]
+  outputs: [...this.outputs] }
 };
   /**
    * Create a basic single-input, single-output spec
    */
   static createSimple(((
-    inputLabel: string = 'Input',
+    inputLabel: string = 'Input'
     outputLabel: string = 'Output'
-  ): IOSpec {
-    return new IOSpecBuilder()
+  ): IOSpec { return new IOSpecBuilder()
       .addTextInput('input', inputLabel, false, '')
       .addTextOutput('output', outputLabel)
       .build();
@@ -463,7 +454,7 @@ export class IOSpecBuilder {
    * Create a multi-input, single-output spec
    */
   static createMultiInput(((
-    inputLabels: string,
+    inputLabels: string }
     outputLabel: string = 'Output'
   ): IOSpec {
     const builder = new IOSpecBuilder();

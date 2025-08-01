@@ -1,15 +1,15 @@
 import { DataSource, HistoricalQuery, QueryResult } from '../external-data/DataSourceManager';
 }
-interface UseExternalDataImportProps {
-    autoRefresh?: boolean;
+}
+interface UseExternalDataImportProps { autoRefresh?: boolean;
     refreshInterval?: number;
     enableRealTimeUpdates?: boolean;
     cacheStrategy?: 'aggressive' | 'conservative' | 'disabled';
     onError?: (error: Error) => void;
-    onSuccess?: (results: QueryResult[]) => void;
+    onSuccess?: (results: QueryResult[]) => void }
 }
-interface ExternalDataImportState {
-    isLoading: boolean;
+}
+interface ExternalDataImportState { isLoading: boolean;
     hasError: boolean;
     error: Error | null;
     lastQuery: HistoricalQuery | null;
@@ -17,10 +17,10 @@ interface ExternalDataImportState {
     availableDataSources: DataSource[];
     enabledSourcesCount: number;
     cacheHitRate: number;
-    lastUpdateTime: string | null;
+    lastUpdateTime: string | null }
 }
-interface UseExternalDataImportReturn {
-    state: ExternalDataImportState;
+}
+interface UseExternalDataImportReturn { state: ExternalDataImportState;
     queryData: (query: HistoricalQuery, sourceIds?: string[]) => Promise<QueryResult[]>;
     refreshData: () => Promise<void>;
     clearCache: () => void;
@@ -31,30 +31,27 @@ interface UseExternalDataImportReturn {
     getDataSource: (sourceId: string) => DataSource | null;
     startRealTimeUpdates: () => void;
     stopRealTimeUpdates: () => void;
-    validateQuery: (query: HistoricalQuery) => {,
+    validateQuery: (query: HistoricalQuery) => { }
         valid: boolean;
         errors: string[];
+}
 }
     };
     getQuerySuggestions: (partial: Partial<HistoricalQuery>) => string[];
     exportResults: (format: 'json' | 'csv') => string;
 
 export declare const useExternalDataImport: ({ autoRefresh, refreshInterval, enableRealTimeUpdates, cacheStrategy, onError, onSuccess }?: UseExternalDataImportProps) => UseExternalDataImportReturn;
-export declare const useQueryBuilder: () => {
-    query: Partial<HistoricalQuery>;
+export declare const useQueryBuilder: () => { query: Partial<HistoricalQuery>;
     isValid: boolean;
     validationErrors: string[];
     updateQuery: (updates: Partial<HistoricalQuery>) => void;
     resetQuery: () => void;
-    buildQuery: () => HistoricalQuery | null;
-};
-export declare const useCacheManagement: () => {
-    cacheStats: {
+    buildQuery: () => HistoricalQuery | null };
+export declare const useCacheManagement: () => { cacheStats: {
         size: number;
         hitRate: number;
         lastCleanup: string;
-        entries: number;
-    };
+        entries: number };
     getCacheStats: () => void;
     clearCache: () => void;
     optimizeCache: () => void;

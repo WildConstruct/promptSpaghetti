@@ -9,8 +9,8 @@
 import React from 'react';
 
 }
-export interface CommentSubmissionData {
-    content: string;
+}
+export interface CommentSubmissionData { content: string;
     contentType: 'text' | 'markdown' | 'rich';
     resourceId: string;
     resourceType: 'template' | 'project' | 'user' | 'marketplace_item';
@@ -19,21 +19,19 @@ export interface CommentSubmissionData {
     mentions: string[];
     hashtags: string[];
     attachments: CommentAttachment[];
-    metadata?: Record<string, unknown>;
-
+    metadata?: Record<string, unknown> }
 }
-export interface CommentAttachment {
-    id: string;
+}
+export interface CommentAttachment { id: string;
     name: string;
     type: 'image' | 'file' | 'link' | 'code';
     url: string;
     size?: number;
     preview?: string;
-    metadata?: Record<string, unknown>;
-
+    metadata?: Record<string, unknown> }
 }
-export interface CommentSubmissionConfig {
-    enableRichText: boolean;
+}
+export interface CommentSubmissionConfig { enableRichText: boolean;
     enableMarkdown: boolean;
     enableAttachments: boolean;
     enableMentions: boolean;
@@ -51,10 +49,11 @@ export interface CommentSubmissionConfig {
     moderationSettings: {
         requireApproval: boolean;
         enableAutoModeration: boolean;
-        flagSuspiciousContent: boolean;
+        flagSuspiciousContent: boolean }
 }
     };
 
+}
 }
 export interface CommentSubmissionFormProps {
     resourceId: string;
@@ -74,4 +73,5 @@ export interface CommentSubmissionFormProps {
 export declare const CommentSubmissionForm: React.FC<CommentSubmissionFormProps>;
 export default CommentSubmissionForm;
 //# sourceMappingURL=CommentSubmissionForm.d.ts.map
+}
 }

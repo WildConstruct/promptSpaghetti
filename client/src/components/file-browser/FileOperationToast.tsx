@@ -10,15 +10,16 @@
 import React, { useEffect, useState } from 'react';
 import { FileOperation, FileUploadProgress } from './types';
 
-}
+
 export interface FileOperationToastProps {
   operations: FileOperation;
   uploads?: FileUploadProgress;
   onClose: (operationId: string) => void;
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   className?: string;
-}
-}
+
+
+
 export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   operations,
   uploads = [],
@@ -82,7 +83,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
     case 'move': return `Moving ${filename}`;}
     case 'copy': return `Copying ${filename}`;}
     case 'delete': return `Deleting ${filename}`;}
-    case 'update': return `Updating ${filename}`;},}
+    case 'update': return `Updating ${filename}`;},},
   default: return `Processing ${filename}`;}
   };
   const renderProgressBar = (progress: number) => (;);
@@ -94,7 +95,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   borderRadius: '2px',
   overflow: 'hidden',
   marginTop: '8px',
-}}
+}
     >
       <div
         style={{
@@ -103,7 +104,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   height: '100%',
           backgroundColor: '#007bff',
           transition: 'width 0.3s ease';
-  }}
+
       />
     </div>
   );
@@ -125,7 +126,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
           pointerEvents: 'auto',
           animation: 'slideIn 0.3s ease-out';
-  }}
+
       >
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
           <div style={{ fontSize: '16px' }}>
@@ -137,7 +138,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   fontWeight: '500',
   color: '#333',
   marginBottom: '4px',
-}}>
+}>
               {getOperationText(operation)}
             </div>
             {operation.status === 'error' && operation.error && ()
@@ -145,7 +146,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   fontSize: '12px',
   color: '#dc3545',
   marginTop: '4px',
-}}>
+}>
                 {operation.error}
               </div>
             )}
@@ -170,7 +171,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-}}
+
                 title="Dismiss"
               >
                 ✕
@@ -194,7 +195,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   maxWidth: '400px',
   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
   pointerEvents: 'auto',
-}}
+
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div style={{ fontSize: '16px' }}>⬆️</div>
@@ -204,14 +205,14 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   fontWeight: '500',
   color: '#333',
   marginBottom: '4px',
-}}>
+}>
             Uploading {upload.filename}
           </div>
           <div style={{
   fontSize: '12px',
   color: '#666',
   marginBottom: '6px',
-}}>
+}>
             {upload.progress}% complete
           </div>
           {renderProgressBar(upload.progress)}
@@ -220,7 +221,7 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({)
   fontSize: '12px',
   color: '#dc3545',
   marginTop: '4px',
-}}>
+}>
               {upload.error}
             </div>
           )}

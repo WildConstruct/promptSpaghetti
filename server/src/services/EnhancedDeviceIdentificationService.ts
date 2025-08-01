@@ -8,8 +8,8 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import crypto from 'crypto';
 
-}
-}
+
+
 export interface EnhancedDeviceProfile {
   deviceId: string;
   fingerprint: string;
@@ -25,8 +25,9 @@ export interface EnhancedDeviceProfile {
     behavior: BehaviorProfile;
     network: NetworkProfile;
     security: SecurityProfile;
-}
-}
+
+
+
   };
   
   // Trust factors
@@ -57,10 +58,10 @@ export interface EnhancedDeviceProfile {
     dataQuality: number;
     collectionErrors: string[];
   };
-}
 
-}
-}
+
+
+
 export interface BrowserProfile {
   userAgent: string;
   userAgentParsed: {
@@ -69,8 +70,9 @@ export interface BrowserProfile {
     os: string;
     osVersion: string;
     device: string;
-}
-}
+
+
+
   };
   language: string;
   languages: string[];
@@ -79,10 +81,10 @@ export interface BrowserProfile {
   mimeTypes: string[];
   doNotTrack: boolean;
   cookieEnabled: boolean;
-}
 
-}
-}
+
+
+
 export interface HardwareProfile {
   screenResolution: string;
   screenColorDepth: number;
@@ -93,29 +95,31 @@ export interface HardwareProfile {
   gpu: {
     vendor: string;
     renderer: string;
-}
-}
+
+
+
   };
   battery: {
     level: number | null;
     charging: boolean | null;
   };
-}
 
-}
-}
+
+
+
 export interface BehaviorProfile {
   mouseMovement: MouseBehavior;
   keyboardDynamics: KeyboardBehavior;
   touchBehavior: TouchBehavior;
   scrollBehavior: ScrollBehavior;
   interactionPatterns: InteractionPattern[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NetworkProfile {
   ipAddress: string;
   ipHistory: string[];
@@ -126,12 +130,13 @@ export interface NetworkProfile {
   vpnDetected: boolean;
   proxyDetected: boolean;
   torDetected: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityProfile {
   canvasFingerprint: string;
   webglFingerprint: string;
@@ -142,12 +147,13 @@ export interface SecurityProfile {
   incognitoDetected: boolean;
   automationDetected: boolean;
   spoofingDetected: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserAssociation {
   userId: string;
   firstSeen: Date;
@@ -155,47 +161,51 @@ export interface UserAssociation {
   loginCount: number;
   verified: boolean;
   trustLevel: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LocationHistory {
   geolocation: GeolocationData;
   firstSeen: Date;
   lastSeen: Date;
   frequency: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FingerprintHistory {
   fingerprint: string;
   components: unknown;
   firstSeen: Date;
   lastSeen: Date;
   transitionReason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityEvent {
   eventId: string;
   type: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   timestamp: Date;
   details: unknown;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AnomalyReport {
   anomalyId: string;
   type: 'fingerprint_change' | 'location_jump' | 'behavior_deviation' | 'security_violation';
@@ -207,97 +217,107 @@ export interface AnomalyReport {
     newValue?: unknown;
     deviation?: number;
     recommendation?: string;
-}
-}
+
+
+
   };
-}
+
 
 // Behavioral biometrics interfaces
-}
-}
+
+
+
 export interface MouseBehavior {
   averageSpeed: number;
   averageAcceleration: number;
   clickPatterns: ClickPattern[];
   movementPatterns: MovementPattern[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyboardBehavior {
   typingSpeed: number;
   dwellTime: number;    // Time key is held
   flightTime: number;   // Time between keystrokes
   patterns: KeystrokePattern[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TouchBehavior {
   touchPressure: number[];
   touchArea: number[];
   swipeVelocity: number[];
   multiTouchPatterns: unknown[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScrollBehavior {
   scrollSpeed: number;
   scrollAcceleration: number;
   scrollPatterns: unknown[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClickPattern {
   averageInterval: number;
   doubleClickSpeed: number;
   rightClickRatio: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MovementPattern {
   curvature: number;
   jitter: number;
   straightness: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeystrokePattern {
   digraph: string;  // Two-key combination
   averageTime: number;
   standardDeviation: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface InteractionPattern {
   action: string;
   frequency: number;
   timing: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeviceIdentificationConfig {
   // Trust scoring weights
   trustWeights: {
@@ -307,8 +327,9 @@ export interface DeviceIdentificationConfig {
     locationStability: number;
     securityEvents: number;
     verificationLevel: number;
-}
-}
+
+
+
   };
   
   // Thresholds
@@ -335,7 +356,7 @@ export interface DeviceIdentificationConfig {
     behaviorDataTTL: number;
     anomalyDataTTL: number;
   };
-}
+
 
 export class EnhancedDeviceIdentificationService {
   private config: DeviceIdentificationConfig;
@@ -356,29 +377,29 @@ export class EnhancedDeviceIdentificationService {
         locationStability: 0.15,
         securityEvents: 0.15,
         verificationLevel: 0.10
-  }
+
       thresholds: {
         highTrust: 80,
         mediumTrust: 60,
         lowTrust: 40,
         suspiciousChange: 30,
         criticalAnomaly: 50
-  }
+
       features: {
         behavioralBiometrics: true,
         machineLearnin
         : false,
         crossDeviceLinking: true,
         realTimeMonitoring: true
-  }
+
       cache: {
         deviceProfileTTL: 3600,        // 1 hour
         behaviorDataTTL: 300,          // 5 minutes
         anomalyDataTTL: 86400          // 24 hours
-  }
+
       ...config
     };
-  }
+
 
   /**
    * Process device identification request
@@ -396,14 +417,14 @@ export class EnhancedDeviceIdentificationService {
     trustDecision: TrustDecision;
     anomalies: AnomalyReport[];
     recommendations: string[];
-  }> {
+> {
 
     try {
       // Check cache first
       const cachedProfile = await this.getCachedDeviceProfile(request.fingerprint);
       if (cachedProfile && !this.requiresUpdate(cachedProfile)) {
         return this.processExistingDevice(cachedProfile, request);
-      }
+
 
       // Get or create device profile
       const deviceProfile = await this.getOrCreateDeviceProfile(request);
@@ -414,7 +435,7 @@ export class EnhancedDeviceIdentificationService {
       // Analyze behavior if enabled
       if (this.config.features.behavioralBiometrics && request.behaviorData) {
         await this.analyzeBehavior(deviceProfile, request.behaviorData);
-      }
+
       
       // Detect anomalies
       const anomalies = await this.detectAnomalies(deviceProfile, request);
@@ -443,20 +464,20 @@ export class EnhancedDeviceIdentificationService {
         anomalies,
         recommendations
       };
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         action: 'device_identification_error',
         details: {
           fingerprint: request.fingerprint,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: request.ipAddress,
         severity: 'error'
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Get device trust score
@@ -465,7 +486,7 @@ export class EnhancedDeviceIdentificationService {
     trustScore: number;
     factors: Record<string, number>;
     riskLevel: string;
-  }> {
+> {
     const deviceProfile = await this.getDeviceProfile(fingerprint);
     if (!deviceProfile) {
       return {
@@ -473,7 +494,7 @@ export class EnhancedDeviceIdentificationService {
         factors: {},
         riskLevel: 'critical'
       };
-    }
+
 
     const trustScore = await this.calculateTrustScore(deviceProfile);
     const factors = await this.getTrustFactorBreakdown(deviceProfile);
@@ -483,7 +504,7 @@ export class EnhancedDeviceIdentificationService {
       factors,
       riskLevel: this.getRiskLevel(trustScore)
     };
-  }
+
 
   /**
    * Link device to user
@@ -511,8 +532,8 @@ export class EnhancedDeviceIdentificationService {
     if (deviceProfile) {
       await this.updateUserAssociations(deviceProfile);
       await this.cacheDeviceProfile(deviceProfile);
-    }
-  }
+
+
 
   /**
    * Get device history for user
@@ -531,11 +552,11 @@ export class EnhancedDeviceIdentificationService {
       const profile = await this.getDeviceProfile(row.device_fingerprint);
       if (profile) {
         devices.push(profile);
-      }
-    }
+
+
 
     return devices;
-  }
+
 
   /**
    * Mark device as trusted/untrusted
@@ -563,13 +584,13 @@ export class EnhancedDeviceIdentificationService {
         trusted,
         trustLevel,
         reason
-  }
+
       severity: 'info'
     });
 
     // Clear cache
     await this.redis.del(`device_profile:${fingerprint}`);
-  }
+
 
   /**
    * Detect device cloning
@@ -578,7 +599,7 @@ export class EnhancedDeviceIdentificationService {
     possibleCloning: boolean;
     indicators: string[];
     relatedDevices: string[];
-  }> {
+> {
 
     // Check for devices with similar fingerprints
     const result = await this.db.query(`
@@ -598,7 +619,7 @@ export class EnhancedDeviceIdentificationService {
     if (result.rows.length > 0) {
       indicators.push('Duplicate canvas fingerprint detected');
       relatedDevices.push(...result.rows.map(r => r.fingerprint));
-    }
+
 
     // Check for rapid location changes
     const locationHistory = await this.db.query(`
@@ -618,16 +639,16 @@ export class EnhancedDeviceIdentificationService {
         
         if (loc1.country !== loc2.country && timeDiff < 60) {
           indicators.push(`Impossible travel: ${loc2.country} to ${loc1.country} in ${timeDiff} minutes`);
-        }
-      }
-    }
+
+
+
 
     return {
       possibleCloning: indicators.length > 0,
       indicators,
       relatedDevices
     };
-  }
+
 
   // Private helper methods
 
@@ -637,10 +658,10 @@ export class EnhancedDeviceIdentificationService {
     
     if (!profile) {
       profile = await this.createNewDeviceProfile(request);
-    }
+
     
     return profile;
-  }
+
 
   private async createNewDeviceProfile(request: unknown): Promise<EnhancedDeviceProfile> {
 
@@ -669,7 +690,7 @@ export class EnhancedDeviceIdentificationService {
         locationStability: 100,
         securityEvents: 0,
         verificationLevel: 0
-  }
+
       history: {
         users: [],
         locations: [{
@@ -677,29 +698,29 @@ export class EnhancedDeviceIdentificationService {
           firstSeen: now,
           lastSeen: now,
           frequency: 1
-        }],
+],
         fingerprints: [{
           fingerprint: request.fingerprint,
           components: request.components,
           firstSeen: now,
           lastSeen: now
-        }],
+],
         securityEvents: []
-  }
+
       anomalies: [],
       metadata: {
         lastUpdated: now,
         updateCount: 1,
         dataQuality: 100,
         collectionErrors: []
-      }
+
     };
 
     // Store in database
     await this.storeDeviceProfile(profile);
     
     return profile;
-  }
+
 
   private async getDeviceProfile(fingerprint: string): Promise<EnhancedDeviceProfile | null> {
 
@@ -709,7 +730,7 @@ export class EnhancedDeviceIdentificationService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     
@@ -728,18 +749,18 @@ export class EnhancedDeviceIdentificationService {
         locations: await this.getLocationHistory(fingerprint),
         fingerprints: await this.getFingerprintHistory(row.device_id),
         securityEvents: await this.getSecurityEvents(fingerprint)
-  }
+
       anomalies: await this.getRecentAnomalies(fingerprint),
       metadata: {
         lastUpdated: row.last_updated,
         updateCount: row.update_count,
         dataQuality: row.data_quality || 100,
         collectionErrors: JSON.parse(row.collection_errors || '[]')
-      }
+
     };
 
     return profile;
-  }
+
 
   private parseDeviceComponents(components: unknown): EnhancedDeviceProfile['components'] {
     return {
@@ -753,7 +774,7 @@ export class EnhancedDeviceIdentificationService {
         mimeTypes: components.mimeTypes || [],
         doNotTrack: components.doNotTrack || false,
         cookieEnabled: components.cookieEnabled || false
-  }
+
       hardware: {
         screenResolution: components.screenResolution || '',
         screenColorDepth: components.screenColorDepth || 0,
@@ -764,19 +785,19 @@ export class EnhancedDeviceIdentificationService {
         gpu: {
           vendor: components.webglVendor || '',
           renderer: components.webglRenderer || ''
-  }
+
         battery: {
           level: components.batteryLevel || null,
           charging: components.charging || null
-        }
-  }
+
+
       behavior: {
         mouseMovement: { averageSpeed: 0, averageAcceleration: 0, clickPatterns: [], movementPatterns: [] },
         keyboardDynamics: { typingSpeed: 0, dwellTime: 0, flightTime: 0, patterns: [] },
         touchBehavior: { touchPressure: [], touchArea: [], swipeVelocity: [], multiTouchPatterns: [] },
         scrollBehavior: { scrollSpeed: 0, scrollAcceleration: 0, scrollPatterns: [] },
         interactionPatterns: []
-  }
+
       network: {
         ipAddress: components.ipAddress || '',
         ipHistory: [],
@@ -787,7 +808,7 @@ export class EnhancedDeviceIdentificationService {
         vpnDetected: false,
         proxyDetected: false,
         torDetected: false
-  }
+
       security: {
         canvasFingerprint: components.canvasFingerprint || '',
         webglFingerprint: components.webglFingerprint || '',
@@ -798,9 +819,9 @@ export class EnhancedDeviceIdentificationService {
         incognitoDetected: components.isIncognito || false,
         automationDetected: components.isBot || false,
         spoofingDetected: components.spoofingDetected || false
-      }
+
     };
-  }
+
 
   private parseUserAgent(userAgent: string): unknown {
     // Simple user agent parsing - in production use a library like ua-parser-js
@@ -812,7 +833,7 @@ export class EnhancedDeviceIdentificationService {
         osVersion: '0',
         device: 'Desktop'
       };
-    }
+
     
     const browser = userAgent.match(/(Chrome|Firefox|Safari|Edge)\/([0-9.]+)/);
     const os = userAgent.match(/(Windows NT|Mac OS X|Linux|Android|iOS) ([0-9._]+)/);
@@ -824,7 +845,7 @@ export class EnhancedDeviceIdentificationService {
       osVersion: os?.[2] || '0',
       device: userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'
     };
-  }
+
 
   private async detectAnomalies(profile: EnhancedDeviceProfile, request: unknown): Promise<AnomalyReport[]> {
 
@@ -847,10 +868,10 @@ export class EnhancedDeviceIdentificationService {
             newValue: request.fingerprint,
             deviation: changeScore,
             recommendation: 'Require additional authentication'
-          }
+
         });
-      }
-    }
+
+
     
     // Check for location jumps
     const lastLocation = profile.history.locations[profile.history.locations.length - 1];
@@ -877,10 +898,10 @@ export class EnhancedDeviceIdentificationService {
             newValue: `${currentGeo.city}, ${currentGeo.country}`,
             deviation: speed,
             recommendation: 'Block access and notify user'
-          }
+
         });
-      }
-    }
+
+
     
     // Check for security violations
     if (request.components.spoofingDetected) {
@@ -892,12 +913,12 @@ export class EnhancedDeviceIdentificationService {
         details: {
           description: 'Device fingerprint spoofing detected',
           recommendation: 'Require multi-factor authentication'
-        }
+
       });
-    }
+
     
     return anomalies;
-  }
+
 
   private calculateFingerprintChangeScore(oldComponents: unknown, newComponents: unknown): number {
     let changeScore = 0;
@@ -914,11 +935,11 @@ export class EnhancedDeviceIdentificationService {
     for (const [key, weight] of Object.entries(weights)) {
       if (oldComponents[key] !== newComponents[key]) {
         changeScore += weight;
-      }
-    }
+
+
     
     return changeScore;
-  }
+
 
   private calculateDistance(coord1: unknown, coord2: unknown): number {
     const R = 6371; // Earth's radius in km
@@ -932,11 +953,11 @@ export class EnhancedDeviceIdentificationService {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     
     return R * c;
-  }
+
 
   private toRad(degrees: number): number {
     return degrees * (Math.PI / 180);
-  }
+
 
   private async calculateTrustScore(profile: EnhancedDeviceProfile): Promise<number> {
 
@@ -946,10 +967,10 @@ export class EnhancedDeviceIdentificationService {
     let score = 0;
     for (const [factor, value] of Object.entries(factors)) {
       score += value * this.config.trustWeights[factor as keyof typeof this.config.trustWeights];
-    }
+
     
     return Math.round(Math.max(0, Math.min(100, score)));
-  }
+
 
   private async calculateTrustFactors(profile: EnhancedDeviceProfile): Promise<typeof profile.trustFactors> {
 
@@ -964,13 +985,13 @@ export class EnhancedDeviceIdentificationService {
       securityEvents: Math.max(0, 100 - profile.history.securityEvents.length * 10),
       verificationLevel: this.calculateVerificationLevel(profile)
     };
-  }
+
 
   private calculateConsistencyScore(profile: EnhancedDeviceProfile): number {
     // Check how stable the fingerprint has been
     const changes = profile.history.fingerprints.length - 1;
     return Math.max(0, 100 - changes * 20);
-  }
+
 
   private calculateLocationStability(profile: EnhancedDeviceProfile): number {
     const locations = profile.history.locations.length;
@@ -978,7 +999,7 @@ export class EnhancedDeviceIdentificationService {
     
     // Higher score for fewer locations
     return Math.max(0, 100 - (locations - 1) * 15);
-  }
+
 
   private calculateVerificationLevel(profile: EnhancedDeviceProfile): number {
     let level = 0;
@@ -991,14 +1012,14 @@ export class EnhancedDeviceIdentificationService {
     if (profile.trustScore >= 90) level += 20;
     
     return Math.min(100, level);
-  }
+
 
   private getRiskLevel(trustScore: number): EnhancedDeviceProfile['riskLevel'] {
     if (trustScore >= this.config.thresholds.highTrust) return 'low';
     if (trustScore >= this.config.thresholds.mediumTrust) return 'medium';
     if (trustScore >= this.config.thresholds.lowTrust) return 'high';
     return 'critical';
-  }
+
 
   private async makeTrustDecision(
     profile: EnhancedDeviceProfile,
@@ -1014,7 +1035,7 @@ export class EnhancedDeviceIdentificationService {
         reason: 'Critical security anomalies detected',
         requiresAction: ['manual_review', 'notify_user']
       };
-    }
+
     
     if (profile.riskLevel === 'critical' || highAnomalies.length > 1) {
       return {
@@ -1022,7 +1043,7 @@ export class EnhancedDeviceIdentificationService {
         reason: 'High risk device',
         requiresAction: ['mfa', 'email_verification']
       };
-    }
+
     
     if (profile.riskLevel === 'high' || highAnomalies.length === 1) {
       return {
@@ -1030,14 +1051,14 @@ export class EnhancedDeviceIdentificationService {
         reason: 'Elevated risk detected',
         requiresAction: ['increased_logging', 'rate_limiting']
       };
-    }
+
     
     return {
       decision: 'allow',
       reason: 'Device trust acceptable',
       requiresAction: []
     };
-  }
+
 
   private generateRecommendations(
     profile: EnhancedDeviceProfile,
@@ -1049,29 +1070,29 @@ export class EnhancedDeviceIdentificationService {
     if (profile.trustScore < 40) {
       recommendations.push('Require multi-factor authentication for this device');
       recommendations.push('Monitor all activities from this device closely');
-    }
+
     
     // Based on anomalies
     if (anomalies.some(a => a.type === 'fingerprint_change')) {
       recommendations.push('Verify device ownership through email confirmation');
-    }
+
     
     if (anomalies.some(a => a.type === 'location_jump')) {
       recommendations.push('Check for VPN or proxy usage');
       recommendations.push('Consider temporary access restriction');
-    }
+
     
     // Based on history
     if (profile.history.securityEvents.length > 3) {
       recommendations.push('Consider permanent device ban');
-    }
+
     
     if (profile.history.users.length > 5) {
       recommendations.push('Investigate potential device sharing');
-    }
+
     
     return recommendations;
-  }
+
 
   // Database operations
   
@@ -1092,7 +1113,7 @@ export class EnhancedDeviceIdentificationService {
       JSON.stringify(profile.trustFactors),
       profile.metadata.dataQuality
     ]);
-  }
+
 
   private async updateDeviceComponents(profile: EnhancedDeviceProfile, request: unknown): Promise<void> {
 
@@ -1110,7 +1131,7 @@ export class EnhancedDeviceIdentificationService {
       profile.metadata.updateCount,
       profile.fingerprint
     ]);
-  }
+
 
   private async getUserAssociations(fingerprint: string): Promise<UserAssociation[]> {
 
@@ -1128,7 +1149,7 @@ export class EnhancedDeviceIdentificationService {
       verified: row.verified,
       trustLevel: row.trust_level
     }));
-  }
+
 
   private async getLocationHistory(fingerprint: string): Promise<LocationHistory[]> {
 
@@ -1145,7 +1166,7 @@ export class EnhancedDeviceIdentificationService {
       lastSeen: row.last_seen,
       frequency: row.frequency
     }));
-  }
+
 
   private async getFingerprintHistory(deviceId: string): Promise<FingerprintHistory[]> {
 
@@ -1163,7 +1184,7 @@ export class EnhancedDeviceIdentificationService {
       lastSeen: row.last_seen,
       transitionReason: row.transition_reason
     }));
-  }
+
 
   private async getSecurityEvents(fingerprint: string): Promise<SecurityEvent[]> {
 
@@ -1181,7 +1202,7 @@ export class EnhancedDeviceIdentificationService {
       timestamp: row.timestamp,
       details: JSON.parse(row.details)
     }));
-  }
+
 
   private async getRecentAnomalies(fingerprint: string): Promise<AnomalyReport[]> {
 
@@ -1199,7 +1220,7 @@ export class EnhancedDeviceIdentificationService {
       timestamp: row.timestamp,
       details: JSON.parse(row.details)
     }));
-  }
+
 
   // Caching methods
   
@@ -1208,9 +1229,9 @@ export class EnhancedDeviceIdentificationService {
     const cached = await this.redis.get(`device_profile:${fingerprint}`);
     if (cached) {
       return JSON.parse(cached);
-    }
+
     return null;
-  }
+
 
   private async cacheDeviceProfile(profile: EnhancedDeviceProfile): Promise<void> {
 
@@ -1219,7 +1240,7 @@ export class EnhancedDeviceIdentificationService {
       this.config.cache.deviceProfileTTL,
       JSON.stringify(profile)
     );
-  }
+
 
   private requiresUpdate(profile: EnhancedDeviceProfile): boolean {
     const lastUpdated = typeof profile.metadata.lastUpdated === 'string' 
@@ -1227,17 +1248,17 @@ export class EnhancedDeviceIdentificationService {
       : profile.metadata.lastUpdated;
     const age = Date.now() - lastUpdated.getTime();
     return age > this.config.cache.deviceProfileTTL * 1000;
-  }
+
 
   // Utility methods
   
   private generateDeviceId(): string {
     return `dev_${Date.now()}_${crypto.randomBytes(8).toString('hex')}`;
-  }
+
 
   private generateAnomalyId(): string {
     return `anom_${Date.now()}_${crypto.randomBytes(8).toString('hex')}`;
-  }
+
 
   private async logDeviceIdentification(
     profile: EnhancedDeviceProfile,
@@ -1255,24 +1276,24 @@ export class EnhancedDeviceIdentificationService {
         riskLevel: profile.riskLevel,
         decision: decision.decision,
         anomalyCount: profile.anomalies.length
-  }
+
       ipAddress: request.ipAddress,
       sessionId: request.sessionId,
       severity: 'info'
     });
-  }
+
 
   private async updateUserAssociations(profile: EnhancedDeviceProfile): Promise<void> {
 
     profile.history.users = await this.getUserAssociations(profile.fingerprint);
-  }
+
 
   private async analyzeBehavior(profile: EnhancedDeviceProfile, _____behaviorData: unknown): Promise<void> {
 
     // Placeholder for behavioral analysis
     // Would implement mouse movement, keyboard dynamics, etc.
     console.log('Analyzing behavior for device:', profile.deviceId);
-  }
+
 
   private async processExistingDevice(
     profile: EnhancedDeviceProfile,
@@ -1291,7 +1312,7 @@ export class EnhancedDeviceIdentificationService {
       anomalies,
       recommendations
     };
-  }
+
 
   private async getTrustFactorBreakdown(profile: EnhancedDeviceProfile): Promise<Record<string, number>> {
     const factors = await this.calculateTrustFactors(profile);
@@ -1300,10 +1321,10 @@ export class EnhancedDeviceIdentificationService {
     for (const [factor, value] of Object.entries(factors)) {
       const weight = this.config.trustWeights[factor as keyof typeof this.config.trustWeights];
       breakdown[factor] = value * weight;
-    }
+
     
     return breakdown;
-  }
+
 
   /**
    * Initialize database schema
@@ -1367,15 +1388,15 @@ export class EnhancedDeviceIdentificationService {
       CREATE INDEX IF NOT EXISTS idx_location_history_fingerprint 
       ON device_location_history(device_fingerprint);
     `);
-  }
-}
 
-}
-}
+
+
+
+
 export interface TrustDecision {
   decision: 'allow' | 'monitor' | 'challenge' | 'block';
   reason: string;
   requiresAction: string[];
-}
-}
-}
+
+
+

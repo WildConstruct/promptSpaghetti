@@ -60,7 +60,7 @@ export const FunnelTimeTracking = ({
                 funnelId: funnelDefinition.id,
                 startDate: timeRange.start,
                 endDate: timeRange.end,
-                metrics: [,
+                metrics: [
                     'conversion_rate',
                     'time_to_convert',
                     'velocity',
@@ -69,8 +69,9 @@ export const FunnelTimeTracking = ({
                     'temporal_patterns'
                 ],
                 groupBy: ['funnel_step', selectedTimeframe],
-                filters: [,
-                    ...segments.map(segment => ({}), field, 'userContext.segmentIds', operator, 'contains', value, segment.id)]
+                filters: [
+                    ...segments.map(segment => ({}), field, 'userContext.segmentIds', operator, 'contains', value, segment.id)
+                ]
             };
         }
         finally { }
@@ -172,24 +173,12 @@ if (loading) {
 }
 {
     const timeframes = ['hour', 'day', 'week', 'month'];
-    const views = [];
-    {
-        key: 'timeline', label;
-        'Timeline';
-    }
-    {
-        key: 'trends', label;
-        'Trends';
-    }
-    {
-        key: 'seasonality', label;
-        'Seasonality';
-    }
-    {
-        key: 'anomalies', label;
-        'Anomalies';
-    }
-    ;
+    const views = [
+        { key: 'timeline', label: 'Timeline' },
+        { key: 'trends', label: 'Trends' },
+        { key: 'seasonality', label: 'Seasonality' },
+        { key: 'anomalies', label: 'Anomalies' }
+    ];
     return;
     _jsx("div", { className: "time-tracking-header", children: _jsxs("div", { className: "header-info", children: [_jsxs("h3", { children: ["Time-based Performance: ", funnelDefinition.name] }), _jsx("p", { children: "Comprehensive temporal analysis of funnel performance and user behavior" }), _jsxs("div", { className: "real-time-metrics", children: [_jsxs("div", { className: "metric", children: [_jsx("span", { className: "label", children: "Current Conversion Rate" }), _jsxs("span", { className: "value", children: [realTimeMetrics.currentConversionRate.toFixed(2), "%"] })] }), _jsxs("div", { className: "metric", children: [_jsx("span", { className: "label", children: "Active Users" }), _jsx("span", { className: "value", children: realTimeMetrics.activeUsers.toLocaleString() })] }), _jsxs("div", { className: "metric", children: [_jsx("span", { className: "label", children: "Velocity" }), _jsxs("span", { className: "value", children: [realTimeMetrics.currentVelocity.toFixed(1), "/hr"] })] }), _jsxs("div", { className: "metric", children: [_jsx("span", { className: "label", children: "24h Conversions" }), _jsx("span", { className: "value", children: realTimeMetrics.conversionsLast24Hours.toLocaleString() })] }), realTimeMetrics.alertsActive > 0 && ()
                             < div, " className=\"metric alert\">", _jsx("span", { className: "label", children: "Active Alerts" }), _jsx("span", { className: "value", children: realTimeMetrics.alertsActive })] }), ")}"] }) })
@@ -475,13 +464,14 @@ Promise < TimeTrackingData > {
     }
     stepMetrics: funnelDefinition.steps.map((step, stepIndex) => ({}), stepId, step.id, stepName, step.name, entries, 1000 - (stepIndex * 150) + Math.floor(Math.random() * 50), conversions, 850 - (stepIndex * 150) + Math.floor(Math.random() * 50), conversionRate, 85 - (stepIndex * 10) + Math.random() * 5, averageTimeSpent, 60000 + (stepIndex * 30000) + Math.random() * 30000, dropOffs, 150 + Math.floor(Math.random() * 50), dropOffRate, 15 + (stepIndex * 5) + Math.random() * 5, revenue, 500 + Math.random() * 200);
 }
-environmentalFactors: [,
+environmentalFactors: [
     {
         factor: 'Server load',
         value: 50 + Math.random() * 30,
         impact: Math.random() > 0.7 ? 'negative' : 'neutral',
         confidence: 0.8
-    }];
+    }
+];
 ;
 // Generate trend analysis
 const trendAnalysis = [
@@ -493,7 +483,7 @@ const trendAnalysis = [
         significance: 0.023,
         confidence: 0.85,
         forecast: [],
-        insights: [,
+        insights: [
             {
                 type: 'opportunity',
                 title: 'Sustained Conversion Improvement',
@@ -501,7 +491,7 @@ const trendAnalysis = [
                 impact: 15,
                 urgency: 'medium',
                 actionable: true,
-                recommendedActions: [,
+                recommendedActions: [
                     'Continue current optimization strategies',
                     'Document successful changes for replication'
                 ]
@@ -515,25 +505,27 @@ const seasonalPatterns = [
         pattern: 'weekly',
         description: 'Higher conversion rates on weekdays, lower on weekends',
         strength: 0.65,
-        peaks: [,
+        peaks: [
             {
                 period: 'Tuesday',
                 value: 18.5,
                 consistency: 0.8,
                 duration: 1,
                 contributingFactors: ['Business user engagement']
-            }],
-        troughs: [,
+            }
+        ],
+        troughs: [
             {
                 period: 'Sunday',
                 value: 12.3,
                 consistency: 0.7,
                 duration: 1,
                 contributingFactors: ['Lower traffic volume']
-            }],
+            }
+        ],
         businessImpact: 12.5,
         reliability: 0.75,
-        recommendations: [,
+        recommendations: [
             {
                 type: 'marketing',
                 title: 'Optimize weekend campaigns',
@@ -541,7 +533,8 @@ const seasonalPatterns = [
                 timing: 'Weekly',
                 expectedImpact: 8,
                 implementation: ['Update ad scheduling', 'Create weekend-specific content']
-            }]
+            }
+        ]
     }
 ];
 // Generate anomalies
@@ -558,14 +551,15 @@ const anomalies = [
         actualValue: 12.3,
         deviation: 2.8,
         confidence: 0.92,
-        possibleCauses: [,
+        possibleCauses: [
             {
                 category: 'technical',
                 description: 'Template loading performance degradation',
                 likelihood: 0.75,
                 evidence: ['Increased page load times', 'Error rate spike'],
                 investigationSteps: ['Check server metrics', 'Review CDN performance']
-            }],
+            }
+        ],
         businessImpact: 1500,
         autoResolved: false,
         investigationStatus: 'pending'
@@ -609,56 +603,59 @@ return {
         lateAbandonment: 30,
         averageTimeBeforeAbandonment: 180000,
         peakAbandonmentTime: 240000,
-    }, temporalPatterns, [,
+    }, temporalPatterns, [
         {
             pattern: 'Extended browsing before conversion',
             frequency: 35,
             impact: 12,
             timeframe: 'Step completion',
             description: 'Users spend 3x longer browsing before converting'
-        }])
+        }
+    ])
 };
 conversionVelocity: performanceTimeline.map(point => ({}), timestamp, point.timestamp, period, point.period, averageConversionTime, point.overallMetrics.averageTimeToConvert, conversionVelocity, point.overallMetrics.totalConversions / 24, // per hour,
 velocityTrend, Math.random() > 0.5 ? 'accelerating' : 'stable', stepVelocities, point.stepMetrics.map(step => ({}), stepId, step.stepId, stepName, step.stepName, averageProcessingTime, step.averageTimeSpent, throughput, step.conversions / 24, efficiency, step.conversionRate / (step.averageTimeSpent / 60000), bottleneckSeverity, step.conversionRate < 70 ? 'moderate' : 'minor')),
     bottleneckAnalysis;
 point.stepMetrics,
         .filter(step => step.conversionRate < 70)
-        .map(step => ({}), stepId, step.stepId, stepName, step.stepName, bottleneckType, 'conversion', severity, 100 - step.conversionRate, impact, step.dropOffs, solutions, [,
+        .map(step => ({}), stepId, step.stepId, stepName, step.stepName, bottleneckType, 'conversion', severity, 100 - step.conversionRate, impact, step.dropOffs, solutions, [
         {
             title: 'Optimize step UX',
             description: 'Improve user experience for this step',
             effort: 'medium',
             expectedImprovement: 15,
             implementationTime: 7
-        }]);
-comparativePeriods: [,
+        }
+    ]);
+comparativePeriods: [
     {
         baselinePeriod: { start: now - dayMs * 60, end: now - dayMs * 30, label: 'Previous Month' },
         comparisonPeriod: { start: now - dayMs * 30, end: now, label: 'Current Month' },
-        overallComparison: {
+        overallComparison: {},
+        metric: 'conversion_rate',
+        baselineValue: 14.2,
+        comparisonValue: 16.8,
+        changeAbsolute: 2.6,
+        changeRelative: 18.3,
+        significance: 0.012,
+        confidence: 0.95,
+        direction: 'improvement',
+    },
+    stepComparisons, [],
+    significantChanges, [
+        {
+            stepId: 'step-2',
+            stepName: 'Template Browse',
             metric: 'conversion_rate',
-            baselineValue: 14.2,
-            comparisonValue: 16.8,
-            changeAbsolute: 2.6,
-            changeRelative: 18.3,
-            significance: 0.012,
-            confidence: 0.95,
-            direction: 'improvement',
-        },
-        stepComparisons: [],
-        significantChanges: [,
-            {
-                stepId: 'step-2',
-                stepName: 'Template Browse',
-                metric: 'conversion_rate',
-                changeType: 'improvement',
-                magnitude: 'moderate',
-                significance: 0.025,
-                businessImpact: 850,
-                possibleReasons: ['UX improvements', 'Better template organization']
-            }],
-        insights: []
-    }],
+            changeType: 'improvement',
+            magnitude: 'moderate',
+            significance: 0.025,
+            businessImpact: 850,
+            possibleReasons: ['UX improvements', 'Better template organization']
+        }
+    ],
+    insights, []
+],
     realTimeMetrics;
 {
     currentConversionRate: 16.8,

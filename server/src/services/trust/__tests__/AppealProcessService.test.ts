@@ -15,7 +15,7 @@ import {
   AppealPriority,
   AppealDecision,
   Appeal
-} from '../AppealProcessService';
+ from '../AppealProcessService';
 import { Database } from '../../../database';
 import { AuditService } from '../../../auth/services/AuditService';
 
@@ -39,11 +39,11 @@ describe('AppealProcessService', () => {
     mockDatabase = {
       getClient: jest.fn<unknown[], unknown>().mockResolvedValue(mockClient as unknown as unknown as unknown as unknown as unknown),
       query: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     mockAuditService = {
       logEvent: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     // Create service instance
     appealService = new AppealProcessService(mockDatabase, mockAuditService);
@@ -231,7 +231,7 @@ describe('AppealProcessService', () => {
         appeal_id: appealId,
         status: 'submitted',
         appellant_id: 'user-12345'
-      } as Appeal;
+ as Appeal;
 
       jest.spyOn(
         appealService,
@@ -310,7 +310,7 @@ describe('AppealProcessService', () => {
       const existingAppeal = {
         appeal_id: appealId,
         status: 'submitted' as AppealStatus
-      } as Appeal;
+ as Appeal;
 
       jest.spyOn(
         appealService,
@@ -366,7 +366,7 @@ describe('AppealProcessService', () => {
         appeal_id: appealId,
         appellant_id: 'user-12345',
         submitted_at: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
-      } as Appeal;
+ as Appeal;
 
       jest.spyOn(
         appealService,
@@ -441,7 +441,7 @@ describe('AppealProcessService', () => {
           appeal_id: appealId,
           appellant_id: 'user-12345',
           submitted_at: new Date()
-        } as Appeal;
+ as Appeal;
 
         jest.spyOn(
           appealService,
@@ -480,7 +480,7 @@ describe('AppealProcessService', () => {
         // Reset mocks for next iteration
         jest.clearAllMocks();
         mockDatabase.query.mockResolvedValue({ rows: [] } as unknown as unknown as unknown as unknown as unknown);
-      }
+
     });
   });
 
@@ -502,14 +502,14 @@ describe('AppealProcessService', () => {
           category: 'enforcement_action',
           priority: 'high',
           total_count: '2'
-  }
+
         {
           appeal_id: 'appeal-002',
           status: 'under_review',
           category: 'enforcement_action',
           priority: 'high',
           total_count: '2'
-        }
+
       ];
 
       mockDatabase.query.mockResolvedValue({ rows: mockAppealsData } as unknown as unknown as unknown as unknown as unknown);

@@ -135,8 +135,9 @@ export class SessionTimeoutController extends EventEmitter {
     this.scheduleTimeout(sessionId);
     this.emit('sessionInitialized', { sessionId, state });
     return state;
-    recordActivity(sessionId, string);
-    activity: Omit;
+    recordActivity(sessionId, string),
+        activity;
+    Omit;
     void {
         const: state = this.sessionStates.get(sessionId),
         if(, state) { }

@@ -7,8 +7,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface PricingModel {
-    id: string;
+}
+export interface PricingModel { id: string;
     name: string;
     description: string;
     type: 'usage_based' | 'tiered' | 'flat_rate' | 'value_based' | 'dynamic';
@@ -24,64 +24,57 @@ export interface PricingModel {
         strategy: 'maximize_revenue' | 'maximize_adoption' | 'competitive' | 'value_based';
         sensitivityAnalysis: boolean;
         priceElasticity?: number;
-        competitorTracking: boolean;
+        competitorTracking: boolean }
 }
     };
-    filmIndustryConfig?: {
-        studioTierMultiplier: number;
+    filmIndustryConfig?: { studioTierMultiplier: number;
         productionScaleFactors: Record<'indie' | 'mid_budget' | 'blockbuster', number>;
         contentTypeMultipliers: Record<'script' | 'storyboard' | 'concept_art' | 'marketing', number>;
-        seasonalAdjustments: SeasonalPricing[];
-    };
+        seasonalAdjustments: SeasonalPricing[] };
     createdAt: number;
     updatedAt: number;
     isActive: boolean;
 
 }
-export interface PricingTier {
-    id: string;
+}
+export interface PricingTier { id: string;
     name: string;
     minUsage: number;
     maxUsage: number | null;
     pricePerUnit: number;
     features: string[];
-    discountPercentage?: number;
-
+    discountPercentage?: number }
 }
-export interface UsageMetric {
-    metric: 'api_calls' | 'nodes_processed' | 'execution_time' | 'storage_gb' | 'users';
+}
+export interface UsageMetric { metric: 'api_calls' | 'nodes_processed' | 'execution_time' | 'storage_gb' | 'users';
     displayName: string;
     unit: string;
     pricePerUnit: number;
     includedAmount: number;
-    overageRate?: number;
-
+    overageRate?: number }
 }
-export interface VolumeDiscount {
-    minQuantity: number;
+}
+export interface VolumeDiscount { minQuantity: number;
     discountPercentage: number;
-    description: string;
-
+    description: string }
 }
-export interface SeasonalPricing {
-    period: 'q1' | 'q2' | 'q3' | 'q4' | 'awards_season' | 'festival_season';
+}
+export interface SeasonalPricing { period: 'q1' | 'q2' | 'q3' | 'q4' | 'awards_season' | 'festival_season';
     multiplier: number;
-    description: string;
-
+    description: string }
 }
-export interface PricingCalculationRequest {
-    modelId: string;
+}
+export interface PricingCalculationRequest { modelId: string;
     usage: Record<string, number>;
     userTier?: 'individual' | 'studio' | 'enterprise';
     productionType?: 'indie' | 'mid_budget' | 'blockbuster';
     contentType?: 'script' | 'storyboard' | 'concept_art' | 'marketing';
     duration?: number;
     priority?: 'standard' | 'rush' | 'emergency';
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface PricingCalculationResult {
-    totalPrice: number;
+}
+export interface PricingCalculationResult { totalPrice: number;
     currency: string;
     breakdown: PricingBreakdown[];
     discounts: PricingDiscount[];
@@ -92,53 +85,47 @@ export interface PricingCalculationResult {
         demandPrediction: 'low' | 'medium' | 'high';
         competitivePosition: 'below_market' | 'at_market' | 'above_market';
         recommendedAdjustment?: number;
-        confidenceScore: number;
+        confidenceScore: number }
 }
     };
-    industryInsights?: {
-        seasonalImpact: number;
+    industryInsights?: { seasonalImpact: number;
         studioTierImpact: number;
         productionScaleImpact: number;
-        marketTrends: string[];
-    };
+        marketTrends: string[] };
     createdAt: number;
     validUntil: number;
 
 }
-export interface PricingBreakdown {
-    component: string;
+}
+export interface PricingBreakdown { component: string;
     description: string;
     quantity: number;
     unitPrice: number;
     subtotal: number;
-    multipliers?: PricingMultiplier[];
-
+    multipliers?: PricingMultiplier[] }
 }
-export interface PricingMultiplier {
-    type: 'demand' | 'complexity' | 'urgency' | 'seasonal' | 'studio_tier' | 'volume';
+}
+export interface PricingMultiplier { type: 'demand' | 'complexity' | 'urgency' | 'seasonal' | 'studio_tier' | 'volume';
     factor: number;
-    description: string;
-
+    description: string }
 }
-export interface PricingDiscount {
-    type: 'volume' | 'loyalty' | 'promotional' | 'seasonal' | 'industry';
+}
+export interface PricingDiscount { type: 'volume' | 'loyalty' | 'promotional' | 'seasonal' | 'industry';
     amount: number;
     percentage: number;
-    description: string;
-
+    description: string }
 }
-export interface Tax {
-    type: 'vat' | 'sales_tax' | 'entertainment_tax';
+}
+export interface Tax { type: 'vat' | 'sales_tax' | 'entertainment_tax';
     rate: number;
     amount: number;
-    jurisdiction: string;
-
+    jurisdiction: string }
 }
-export interface PricingAnalytics {
-    modelId: string;
+}
+export interface PricingAnalytics { modelId: string;
     period: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     totalRevenue: number;
@@ -158,15 +145,14 @@ export interface PricingAnalytics {
     seasonalPerformance: Record<string, number>;
 
 }
-export interface UsagePattern {
-    pattern: string;
+}
+export interface UsagePattern { pattern: string;
     frequency: number;
     averageValue: number;
-    trendDirection: 'up' | 'down' | 'stable';
-
+    trendDirection: 'up' | 'down' | 'stable' }
 }
-export interface PricingOptimizationConfig {
-    enableAI: boolean;
+}
+export interface PricingOptimizationConfig { enableAI: boolean;
     optimizationFrequency: 'realtime' | 'hourly' | 'daily' | 'weekly';
     priceUpdateThreshold: number;
     competitorTrackingEnabled: boolean;
@@ -179,14 +165,13 @@ export interface PricingOptimizationConfig {
         studioTierAdjustments: boolean;
         productionCycleTracking: boolean;
         festivalSeasonOptimization: boolean;
-        awardsSeasonPremium: boolean;
+        awardsSeasonPremium: boolean }
 }
     };
 /**
  * AI-driven pricing optimization engine for film industry applications
  */
-export declare class PricingOptimizer extends EventEmitter {
-    private models;
+export declare class PricingOptimizer extends EventEmitter { private models;
     private analytics;
     private config;
     private optimizationInterval?;
@@ -211,8 +196,7 @@ export declare class PricingOptimizer extends EventEmitter {
      */
     getAnalytics(modelId: string, period?: {)
         start: number;
-        end: number;
-    }): PricingAnalytics | null;
+        end: number }): PricingAnalytics | null;
     /**
      * Run AI-driven pricing optimization
      */
@@ -254,52 +238,50 @@ export declare class PricingOptimizer extends EventEmitter {
     private assessImplementationRisk;
 
 }
-export interface DemandForecast {
-    period: number;
+}
+export interface DemandForecast { period: number;
     expectedDemandChange: number;
     confidence: number;
     factors: Array<{
         name: string;
-        impact: number;
+        impact: number }
 }
     }>;
 
 }
-export interface CompetitiveAnalysis {
-    position: 'below_market' | 'at_market' | 'above_market';
+}
+export interface CompetitiveAnalysis { position: 'below_market' | 'at_market' | 'above_market';
     competitorCount: number;
     averagePrice: number;
     priceRange: {
         min: number;
-        max: number;
+        max: number }
 }
     };
     marketShare: number;
     differentiationFactors: string[];
 
 }
-export interface OptimizationRecommendation {
-    type: 'price_increase' | 'price_decrease' | 'dynamic_pricing' | 'tier_adjustment';
+}
+export interface OptimizationRecommendation { type: 'price_increase' | 'price_decrease' | 'dynamic_pricing' | 'tier_adjustment';
     confidence: number;
     expectedImpact: number;
     description: string;
-    suggestedChange: number;
-
+    suggestedChange: number }
 }
-export interface MarketConditions {
-    demandLevel: 'low' | 'medium' | 'high';
+}
+export interface MarketConditions { demandLevel: 'low' | 'medium' | 'high';
     competitiveIntensity: 'low' | 'medium' | 'high';
     seasonality: 'low' | 'medium' | 'high';
-    economicIndicators: Record<string, number>;
-
+    economicIndicators: Record<string, number> }
 }
-export interface PricingOptimizationResult {
-    modelId: string;
+}
+export interface PricingOptimizationResult { modelId: string;
     recommendations: MarketOptimizationRecommendation[];
     expectedImpact: number;
     confidence: number;
-    implementationRisk: 'low' | 'medium' | 'high';
-
+    implementationRisk: 'low' | 'medium' | 'high' }
+}
 }
 export interface MarketOptimizationRecommendation {
     type: 'competitive_alignment' | 'demand_optimization' | 'seasonal_adjustment' | 'tier_restructure';
@@ -310,4 +292,5 @@ export interface MarketOptimizationRecommendation {
 
 export default PricingOptimizer;
 //# sourceMappingURL=PricingOptimizer.d.ts.map
+}
 }

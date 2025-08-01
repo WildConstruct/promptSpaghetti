@@ -42,20 +42,20 @@ export const ExtensionManagerPanel = ({ className = '', onClose, initialView = '
                     !ext.author?.toLowerCase().includes(query)) {
                     return false;
                 }
-            }
-            // Type filter
-            if (filterOptions.type !== 'all' && ext.extension_type !== filterOptions.type) {
-                return false;
-            }
-            // Status filter (only for installed extensions)
-            if (currentView === 'installed' && filterOptions.status !== 'all') {
-                const status = getExtensionStatus(ext.id);
-                if (filterOptions.status === 'enabled' && !status.enabled)
+                // Type filter
+                if (filterOptions.type !== 'all' && ext.extension_type !== filterOptions.type) {
                     return false;
-                if (filterOptions.status === 'disabled' && status.enabled)
-                    return false;
+                }
+                // Status filter (only for installed extensions)
+                if (currentView === 'installed' && filterOptions.status !== 'all') {
+                    const status = getExtensionStatus(ext.id);
+                    if (filterOptions.status === 'enabled' && !status.enabled)
+                        return false;
+                    if (filterOptions.status === 'disabled' && status.enabled)
+                        return false;
+                }
+                return true;
             }
-            return true;
         });
         // Sort extensions
         filtered.sort((a, b) => {

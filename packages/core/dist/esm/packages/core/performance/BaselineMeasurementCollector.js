@@ -32,79 +32,74 @@ export class BaselineMeasurementCollector {
             cpuUsage: process.cpuUsage(),
         };
     }
-    ;
-    /**
-     * Initialize performance benchmarks based on actual system capabilities
-     */
-    initializeBenchmarks() {
-        this.benchmarks = [
-            // Core Engine Performance Benchmarks
-            {
-                name: 'Simple Graph Execution',
-                category: BaselineCategory.CORE_ENGINE,
-                type: MeasurementType.DURATION,
-                unit: 'ms',
-                measurement: () => this.measureSimpleGraphExecution(),
-                tags: ['core', 'execution', 'basic'],
-            },
-            {
-                name: 'Complex Graph Execution',
-                category: BaselineCategory.CORE_ENGINE,
-                type: MeasurementType.DURATION,
-                unit: 'ms',
-                measurement: () => this.measureComplexGraphExecution(),
-                tags: ['core', 'execution', 'complex'],
-            },
-            {
-                name: 'Graph Execution Throughput',
-                category: BaselineCategory.CORE_ENGINE,
-                type: MeasurementType.THROUGHPUT,
-                unit: 'ops/sec',
-                measurement: () => this.measureExecutionThroughput(),
-                tags: ['core', 'throughput'],
-            }
-            // Memory Usage Benchmarks
-            ,
-            // Memory Usage Benchmarks
-            {
-                name: 'Graph Memory Usage',
-                category: BaselineCategory.MEMORY_USAGE,
-                type: MeasurementType.MEMORY,
-                unit: 'MB',
-                measurement: () => this.measureGraphMemoryUsage(),
-                tags: ['memory', 'graph'],
-            },
-            {
-                name: 'Peak Heap Usage',
-                category: BaselineCategory.MEMORY_USAGE,
-                type: MeasurementType.MEMORY,
-                unit: 'MB',
-                measurement: () => this.measurePeakHeapUsage(),
-                tags: ['memory', 'heap'],
-            }
-            // Build Performance Benchmarks
-            ,
-            // Build Performance Benchmarks
-            {
-                name: 'TypeScript Compilation',
-                category: BaselineCategory.BUILD_PERFORMANCE,
-                type: MeasurementType.DURATION,
-                unit: 's',
-                measurement: () => this.measureTypeScriptCompilation(),
-                tags: ['build', 'typescript']
-            }
-        ];
-        /**
-         * Measure simple graph execution performance
-         */
-    }
+}
+;
+initializeBenchmarks();
+void {
+    this: .benchmarks = [
+        // Core Engine Performance Benchmarks
+        {
+            name: 'Simple Graph Execution',
+            category: BaselineCategory.CORE_ENGINE,
+            type: MeasurementType.DURATION,
+            unit: 'ms',
+            measurement: () => this.measureSimpleGraphExecution(),
+            tags: ['core', 'execution', 'basic'],
+        },
+        {
+            name: 'Complex Graph Execution',
+            category: BaselineCategory.CORE_ENGINE,
+            type: MeasurementType.DURATION,
+            unit: 'ms',
+            measurement: () => this.measureComplexGraphExecution(),
+            tags: ['core', 'execution', 'complex'],
+        },
+        {
+            name: 'Graph Execution Throughput',
+            category: BaselineCategory.CORE_ENGINE,
+            type: MeasurementType.THROUGHPUT,
+            unit: 'ops/sec',
+            measurement: () => this.measureExecutionThroughput(),
+            tags: ['core', 'throughput'],
+        }
+        // Memory Usage Benchmarks
+        ,
+        // Memory Usage Benchmarks
+        {
+            name: 'Graph Memory Usage',
+            category: BaselineCategory.MEMORY_USAGE,
+            type: MeasurementType.MEMORY,
+            unit: 'MB',
+            measurement: () => this.measureGraphMemoryUsage(),
+            tags: ['memory', 'graph'],
+        },
+        {
+            name: 'Peak Heap Usage',
+            category: BaselineCategory.MEMORY_USAGE,
+            type: MeasurementType.MEMORY,
+            unit: 'MB',
+            measurement: () => this.measurePeakHeapUsage(),
+            tags: ['memory', 'heap'],
+        }
+        // Build Performance Benchmarks
+        ,
+        // Build Performance Benchmarks
+        {
+            name: 'TypeScript Compilation',
+            category: BaselineCategory.BUILD_PERFORMANCE,
+            type: MeasurementType.DURATION,
+            unit: 's',
+            measurement: () => this.measureTypeScriptCompilation(),
+            tags: ['build', 'typescript']
+        }
+    ],
     /**
      * Measure simple graph execution performance
      */
     async measureSimpleGraphExecution() {
         // Create a simple graph for testing
         const simpleGraph = {
-            nodes: [,
+            nodes: [
                 { id: 'output1', type: 'output', data: { text: 'Hello World' } }
             ],
             edges: []
@@ -122,19 +117,19 @@ export class BaselineMeasurementCollector {
     /**
      * Measure complex graph execution performance
      */
+    ,
+    /**
+     * Measure complex graph execution performance
+     */
     async measureComplexGraphExecution() {
         // Create a complex graph for testing
         const complexGraph = {
             nodes: Array.from({ length: 20 }, (_, i) => ({}), id, `node${i}`)
         };
-    }
-    type;
-}
- % 4 === 0 ? 'weightedChoice' : 'concat',
-    data;
-{
-    variations: [`Variation ${i}A`, `Variation ${i}B`];
-}
+    },
+    type: i % 4 === 0 ? 'weightedChoice' : 'concat',
+    data: { variations: [`Variation ${i}A`, `Variation ${i}B`] }
+};
 edges: Array.from({ length: 15 }, (_, i) => ({}), id, `edge${i}`, source, `node${i}`, target, `node${i + 1}`);
 ;
 const { duration } = await measureExecution('complex-graph-execution', async () => {
@@ -227,7 +222,7 @@ for (let i = 0; i < iterations; i++) {
 }
 try { }
 catch (error) {
-    console.warn(`  Iteration ${i + 1},)}
+    console.warn(`  Iteration ${i + 1})},
   failed: ${error}`);
 }
 if (measurements.length > 0) {

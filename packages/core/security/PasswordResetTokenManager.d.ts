@@ -16,8 +16,7 @@
  * - Configurable security policies
  */
 import { EventEmitter } from 'events';
-export declare enum TokenType {
-    PASSWORD_RESET = "password_reset",
+export declare enum TokenType { PASSWORD_RESET = "password_reset",
     EMAIL_VERIFICATION = "email_verification",
     ACCOUNT_RECOVERY = "account_recovery",
     TWO_FACTOR_SETUP = "two_factor_setup",
@@ -27,7 +26,7 @@ export declare enum TokenStatus {
     ACTIVE = "active",
     USED = "used",
     EXPIRED = "expired",
-    REVOKED = "revoked",
+    REVOKED = "revoked" }
     INVALID = "invalid"
 
 export declare enum SecurityLevel {
@@ -36,8 +35,8 @@ export declare enum SecurityLevel {
     MAXIMUM = "maximum"
 
 }
-export interface TokenConfig {
-    defaultExpiration: number;
+}
+export interface TokenConfig { defaultExpiration: number;
     maxExpiration: number;
     tokenLength: number;
     hashRounds: number;
@@ -48,11 +47,10 @@ export interface TokenConfig {
     antiEnumerationDelay: number;
     enableAuditLogging: boolean;
     requireEmailVerification: boolean;
-    allowMultipleTokens: boolean;
-
+    allowMultipleTokens: boolean }
 }
-export interface ResetToken {
-    id: string;
+}
+export interface ResetToken { id: string;
     userId: string;
     email: string;
     type: TokenType;
@@ -70,7 +68,7 @@ export interface ResetToken {
         requestSource?: string;
         deviceFingerprint?: string;
         locationData?: any;
-        additionalContext?: Record<string, any>;
+        additionalContext?: Record<string, any> }
 }
     };
     usageCount: number;
@@ -78,45 +76,44 @@ export interface ResetToken {
     revocationReason?: string;
 
 }
-export interface TokenRequest {
-    userId: string;
+}
+export interface TokenRequest { userId: string;
     email: string;
     type: TokenType;
     ipAddress: string;
     userAgent: string;
     expirationMinutes?: number;
     securityLevel?: SecurityLevel;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface TokenValidation {
-    valid: boolean;
+}
+export interface TokenValidation { valid: boolean;
     token?: ResetToken;
     reason?: string;
     securityEvents?: string[];
-    riskScore?: number;
-
+    riskScore?: number }
 }
-export interface RateLimitData {
-    count: number;
+}
+export interface RateLimitData { count: number;
     resetTime: number;
     lastRequest: Date;
     violationCount: number;
 
 export declare enum SecurityEvent {
-    TOKEN_CREATED = "token_created",
-    TOKEN_VALIDATED = "token_validated",
-    TOKEN_USED = "token_used",
-    TOKEN_EXPIRED = "token_expired",
-    TOKEN_REVOKED = "token_revoked",
-    INVALID_TOKEN_ATTEMPT = "invalid_token_attempt",
-    RATE_LIMIT_EXCEEDED = "rate_limit_exceeded",
-    SUSPICIOUS_ACTIVITY = "suspicious_activity",
+    TOKEN_CREATED = "token_created";
+    TOKEN_VALIDATED = "token_validated";
+    TOKEN_USED = "token_used";
+    TOKEN_EXPIRED = "token_expired";
+    TOKEN_REVOKED = "token_revoked";
+    INVALID_TOKEN_ATTEMPT = "invalid_token_attempt";
+    RATE_LIMIT_EXCEEDED = "rate_limit_exceeded";
+    SUSPICIOUS_ACTIVITY = "suspicious_activity" }
     TOKEN_CLEANUP = "token_cleanup"
 
 }
-export interface AuditLogEntry {
-    id: string;
+}
+}
+export interface AuditLogEntry { id: string;
     event: SecurityEvent;
     timestamp: Date;
     userId?: string;
@@ -125,11 +122,10 @@ export interface AuditLogEntry {
     userAgent: string;
     details: Record<string, any>;
     riskScore: number;
-    sessionId?: string;
-
+    sessionId?: string }
 }
-export interface TokenStatistics {
-    totalTokens: number;
+}
+export interface TokenStatistics { totalTokens: number;
     activeTokens: number;
     usedTokens: number;
     expiredTokens: number;
@@ -143,14 +139,13 @@ export interface TokenStatistics {
     cleanupStats: {
         lastCleanup: Date;
         tokensRemoved: number;
-        auditLogsRemoved: number;
+        auditLogsRemoved: number }
 }
     };
 /**
  * Comprehensive password reset token management service
  */
-export declare class PasswordResetTokenManager extends EventEmitter {
-    private tokens;
+export declare class PasswordResetTokenManager extends EventEmitter { private tokens;
     private rateLimits;
     private auditLog;
     private config;
@@ -161,8 +156,7 @@ export declare class PasswordResetTokenManager extends EventEmitter {
      */
     generateToken(request: TokenRequest): Promise<{
         token: string;
-        tokenId: string;
-    } | null>;
+        tokenId: string } | null>;
     /**
      * Validate a password reset token
      */
@@ -170,11 +164,9 @@ export declare class PasswordResetTokenManager extends EventEmitter {
     /**
      * Use a password reset token (marks it as used)
      */
-    useToken(tokenValue: string, ipAddress: string, userAgent: string): Promise<{
-        success: boolean;
+    useToken(tokenValue: string, ipAddress: string, userAgent: string): Promise<{ success: boolean;
         token?: ResetToken;
-        reason?: string;
-    }>;
+        reason?: string }>;
     /**
      * Revoke a specific token
      */

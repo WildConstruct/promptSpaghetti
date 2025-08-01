@@ -8,8 +8,7 @@ import { GraphOperation, HistoryEntry, GraphSnapshot, UndoResult, RedoResult } f
 /**
  * Operation history manager for undo/redo functionality
  */
-export declare class OperationHistory {
-    private maxSize;
+export declare class OperationHistory { private maxSize;
     private undoStack;
     private redoStack;
     private historyPointer;
@@ -52,8 +51,7 @@ export declare class OperationHistory {
     getHistorySummary(): {
         undoCount: number;
         redoCount: number;
-        currentIndex: number;
-    };
+        currentIndex: number };
     /**
      * Get description of what would be undone
      */

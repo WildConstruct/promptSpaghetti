@@ -18,45 +18,41 @@ import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 export type MarketplaceHelpContentType = 'marketplace-discovery' | 'template-browsing' | 'purchase-flow' | 'template-preview' | 'rating-system' | 'creator-onboarding' | 'community-features' | 'profile-management' | 'monetization' | 'marketplace-navigation';
 
 }
-export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
-    type: HelpContentType | MarketplaceHelpContentType;
+}
+export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> { type: HelpContentType | MarketplaceHelpContentType;
     marketplaceContext: {
         page?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
         userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
         templateCategory?: string;
         purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
-        features?: string[];
-    };
+        features?: string[] };
 
 }
-export interface MarketplaceHelpOverlayProps {
-    currentPage?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
+}
+export interface MarketplaceHelpOverlayProps { currentPage?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
     userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
     selectedTemplate?: {
         id: string;
         category: string;
         type: string;
-        isPremium: boolean;
+        isPremium: boolean }
 }
     };
     cartItems?: number;
     purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
-    forumContext?: {
-        category: string;
+    forumContext?: { category: string;
         hasPosted: boolean;
-        reputation: number;
-    };
+        reputation: number };
     showMarketplaceHelp?: boolean;
     enableGuidedTours?: boolean;
     helpComplexity?: 'beginner' | 'advanced';
     coreHelpManager?: HelpContentManager;
     onHelpInteraction?: (action: string, context: Record<string, any>) => void;
     onTourCompleted?: (tourId: string) => void;
-    onFeedbackSubmitted?: (feedback: {)
+    onFeedbackSubmitted?: (feedback: { )
         rating: number;
         comment: string;
-        context: string;
-    }) => void;
+        context: string }) => void;
 
 export declare const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps>;
 export default MarketplaceHelpOverlay;

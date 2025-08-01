@@ -164,7 +164,7 @@ ep.priority,
     lifecycle;
 ep.lifecycle,
     keywords;
-[,
+[
     ep.name.toLowerCase(),
     ep.category,
     ep.priority,

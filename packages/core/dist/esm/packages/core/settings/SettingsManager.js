@@ -13,7 +13,7 @@ const DEFAULT_SETTINGS = {
     seed: {
         enabled: false,
         history: [],
-        autoGenerate: true
+        autoGenerate: true,
     },
     temperature: {
         enabled: false,

@@ -8,6 +8,7 @@ import React from 'react';
 import { MarketplaceTicket, Epic16TicketIntegrationService } from '../../services/Epic16TicketIntegrationService';
 
 }
+}
 interface TicketDetailsViewProps {
     ticket: MarketplaceTicket;
     ticketService: Epic16TicketIntegrationService;
@@ -19,4 +20,5 @@ interface TicketDetailsViewProps {
 export declare const TicketDetailsView: React.FC<TicketDetailsViewProps>;
 export default TicketDetailsView;
 //# sourceMappingURL=TicketDetailsView.d.ts.map
+}
 }

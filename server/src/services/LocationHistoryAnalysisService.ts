@@ -6,8 +6,8 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import { LocationData } from './LocationDetectionService';
 
-}
-}
+
+
 export interface LocationCluster {
   id: string;
   label: 'home' | 'work' | 'frequent' | 'occasional';
@@ -16,8 +16,9 @@ export interface LocationCluster {
     longitude: number;
     country: string;
     city: string;
-}
-}
+
+
+
   };
   radius: number; // in kilometers
   accessCount: number;
@@ -27,10 +28,10 @@ export interface LocationCluster {
   riskScore: number; // 0-100 scale
   isVerified: boolean;
   verificationMethod?: 'user_confirmed' | 'pattern_analysis' | 'device_correlation';
-}
 
-}
-}
+
+
+
 export interface TravelPattern {
   routeId: string;
   origin: LocationCluster;
@@ -43,13 +44,14 @@ export interface TravelPattern {
     unusualSpeed: boolean;
     impossibleTiming: boolean;
     frequencyAnomaly: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface UserLocationProfile {
   userId: string;
   clusters: LocationCluster[];
@@ -59,8 +61,9 @@ export interface UserLocationProfile {
     predictabilityScore: number; // 0-100, higher = more predictable
     riskScore: number; // 0-100, overall location-based risk
     anomalyCount: number;
-}
-}
+
+
+
   };
   insights: {
     primaryLocation?: LocationCluster;
@@ -71,10 +74,10 @@ export interface UserLocationProfile {
   };
   lastAnalyzed: Date;
   profileVersion: string;
-}
 
-}
-}
+
+
+
 export interface LocationAnomaly {
   id: string;
   userId: string;
@@ -88,8 +91,9 @@ export interface LocationAnomaly {
     travelTime?: number;
     distanceFromExpected?: number;
     riskFactors: string[];
-}
-}
+
+
+
   };
   resolved: boolean;
   falsePositive: boolean;
@@ -99,10 +103,10 @@ export interface LocationAnomaly {
     resolution: string;
     preventFutureAlerts: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface LocationRiskAssessment {
   overall: number;
   factors: {
@@ -112,16 +116,17 @@ export interface LocationRiskAssessment {
     frequencyAnomalies: number;
     geopoliticalRisk: number;
     networkRisk: number;
-}
-}
+
+
+
   };
   recommendations: string[];
   actionRequired: boolean;
   suggestedActions: string[];
-}
 
-}
-}
+
+
+
 export interface LocationHistoryAnalysisConfig {
   enabled: boolean;
   
@@ -131,8 +136,9 @@ export interface LocationHistoryAnalysisConfig {
     maxDistanceKm: number;
     minTimeForHomeDetection: number; // days
     confidenceThreshold: number;
-}
-}
+
+
+
   };
   
   // Travel analysis
@@ -165,7 +171,7 @@ export interface LocationHistoryAnalysisConfig {
     analysisCacheTtl: number;
     batchAnalysisSize: number;
   };
-}
+
 
 export class LocationHistoryAnalysisService {
   private db: DatabaseService;
@@ -183,7 +189,7 @@ export class LocationHistoryAnalysisService {
     this.redis = redis;
     this.auditService = auditService;
     this.config = config;
-  }
+
 
   async initialize(): Promise<void> {
 
@@ -194,7 +200,7 @@ export class LocationHistoryAnalysisService {
     await this.loadProfileCache();
     
     console.log('Location History Analysis Service initialized');
-  }
+
 
   private async initializeAnalysisTables(): Promise<void> {
 
@@ -291,7 +297,7 @@ export class LocationHistoryAnalysisService {
       CREATE INDEX IF NOT EXISTS idx_location_anomalies_resolved ON location_anomalies(resolved);
       CREATE INDEX IF NOT EXISTS idx_location_anomalies_type ON location_anomalies(anomaly_type);
     `);
-  }
+
 
   private async loadProfileCache(): Promise<void> {
 
@@ -310,8 +316,8 @@ export class LocationHistoryAnalysisService {
         version: profile.profile_version,
         lastAnalyzed: profile.last_analyzed
       }));
-    }
-  }
+
+
 
   async analyzeUserLocationHistory(userId: string, forceRefresh = false): Promise<UserLocationProfile> {
 
@@ -328,16 +334,16 @@ export class LocationHistoryAnalysisService {
         
         if (lastAnalyzed > stalenessThreshold) {
           return await this.getStoredProfile(userId);
-        }
-      }
-    }
+
+
+
 
     // Get user's location history
     const locationHistory = await this.getUserLocationHistory(userId);
     
     if (locationHistory.length === 0) {
       throw new Error('Insufficient location history for analysis');
-    }
+
 
     // Perform comprehensive analysis
     const clusters = await this.performLocationClustering(userId, locationHistory);
@@ -367,18 +373,18 @@ export class LocationHistoryAnalysisService {
         clustersFound: clusters.length,
         travelPatternsFound: travelPatterns.length,
         overallRiskScore: riskMetrics.riskScore
-  }
+
       severity: 'info'
     });
 
     return profile;
-  }
+
 
   private async getUserLocationHistory(userId: string): Promise<Array<{
     location: LocationData;
     accessTime: Date;
     accessCount: number;
-  }>> {
+>> {
     const result = await this.db.query(`
       SELECT 
         ip_address, country, country_code, region, city,
@@ -408,11 +414,11 @@ export class LocationHistoryAnalysisService {
         isVpn: row.is_vpn,
         isTor: row.is_tor,
         isMalicious: row.is_malicious
-  }
+
       accessTime: row.last_access,
       accessCount: row.access_count
     }));
-  }
+
 
   private async performLocationClustering(
     userId: string,
@@ -434,7 +440,7 @@ export class LocationHistoryAnalysisService {
       
       if (processedLocations.has(locationKey)) {
         continue;
-      }
+
 
       // Find nearby locations that could be part of this cluster
       const nearbyLocations = locationHistory.filter(other => {
@@ -483,7 +489,7 @@ export class LocationHistoryAnalysisService {
             longitude: centerLon,
             country: locationEntry.location.country || 'Unknown',
             city: locationEntry.location.city || 'Unknown'
-  }
+
           radius: Math.max(...nearbyLocations.map(loc => 
             this.calculateDistance(centerLat, centerLon, loc.location.latitude!, loc.location.longitude!)
           )),
@@ -502,11 +508,11 @@ export class LocationHistoryAnalysisService {
           const key = `${loc.location.latitude},${loc.location.longitude}`;
           processedLocations.add(key);
         });
-      }
-    }
+
+
 
     return clusters;
-  }
+
 
   private determineClusterLabel(
     locations: Array<{location: LocationData; accessTime: Date; accessCount: number}>,
@@ -526,17 +532,17 @@ export class LocationHistoryAnalysisService {
       // High frequency, long-term location
       if (eveningAccess > businessAccess) {
         return 'home';
-      } else if (businessAccess > eveningAccess * 1.5) {
+ else if (businessAccess > eveningAccess * 1.5) {
         return 'work';
-      } else {
+ else {
         return 'frequent';
-      }
-    } else if (totalAccess >= 5) {
+
+ else if (totalAccess >= 5) {
       return 'frequent';
-    } else {
+ else {
       return 'occasional';
-    }
-  }
+
+
 
   private calculateClusterRiskScore(
     locations: Array<{location: LocationData; accessTime: Date; accessCount: number}>
@@ -563,7 +569,7 @@ export class LocationHistoryAnalysisService {
     riskScore += (unusualHourAccess / locations.length) * 20;
 
     return Math.min(100, Math.round(riskScore));
-  }
+
 
   private async analyzeTravelPatterns(
     userId: string,
@@ -577,7 +583,7 @@ export class LocationHistoryAnalysisService {
       travelTimes: number[];
       origin: LocationCluster;
       destination: LocationCluster;
-    }>();
+>();
 
     // Sort location history by time
     const sortedHistory = locationHistory.sort((a, b) => a.accessTime.getTime() - b.accessTime.getTime());
@@ -602,13 +608,13 @@ export class LocationHistoryAnalysisService {
             origin: currentCluster,
             destination: nextCluster
           });
-        }
+
 
         const route = travelRoutes.get(routeKey)!;
         route.count++;
         route.travelTimes.push(travelTime);
-      }
-    }
+
+
 
     // Convert routes to travel patterns
     for (const [routeId, route] of travelRoutes) {
@@ -644,11 +650,11 @@ export class LocationHistoryAnalysisService {
         };
 
         patterns.push(pattern);
-      }
-    }
+
+
 
     return patterns;
-  }
+
 
   private findNearestCluster(location: LocationData, clusters: LocationCluster[]): LocationCluster | null {
     let nearestCluster: LocationCluster | null = null;
@@ -665,11 +671,11 @@ export class LocationHistoryAnalysisService {
       if (distance <= cluster.radius && distance < minDistance) {
         minDistance = distance;
         nearestCluster = cluster;
-      }
-    }
+
+
 
     return nearestCluster;
-  }
+
 
   private determineTravelMethods(distance: number, avgTravelTimeMinutes: number): string[] {
     const methods: string[] = [];
@@ -677,18 +683,18 @@ export class LocationHistoryAnalysisService {
 
     if (speedKmh < 5) {
       methods.push('walking');
-    } else if (speedKmh < 25) {
+ else if (speedKmh < 25) {
       methods.push('ground');
-    } else if (speedKmh < 120) {
+ else if (speedKmh < 120) {
       methods.push('highway');
-    } else if (speedKmh < 900) {
+ else if (speedKmh < 900) {
       methods.push('air');
-    } else {
+ else {
       methods.push('unknown');
-    }
+
 
     return methods;
-  }
+
 
   private detectTravelAnomalies(
     distance: number,
@@ -698,7 +704,7 @@ export class LocationHistoryAnalysisService {
     unusualSpeed: boolean;
     impossibleTiming: boolean;
     frequencyAnomaly: boolean;
-  } {
+ {
     const maxReasonableSpeed = this.config.travelAnalysis.maxReasonableSpeedKmh;
     const minTravelTime = travelTimes.length > 0 ? Math.min(...travelTimes) : avgTravelTime;
     const maxSpeedKmh = (distance / minTravelTime) * 60;
@@ -708,7 +714,7 @@ export class LocationHistoryAnalysisService {
       impossibleTiming: minTravelTime < 5 && distance > 10, // Less than 5 minutes for > 10km
       frequencyAnomaly: travelTimes.some(time => Math.abs(time - avgTravelTime) > avgTravelTime * 2)
     };
-  }
+
 
   private calculateTravelRiskScore(
     route: {count: number; travelTimes: number[]},
@@ -729,7 +735,7 @@ export class LocationHistoryAnalysisService {
     if (distance > 1000) riskScore += 10;
 
     return Math.min(100, riskScore);
-  }
+
 
   private async calculateRiskMetrics(
     userId: string,
@@ -763,7 +769,7 @@ export class LocationHistoryAnalysisService {
       riskScore,
       anomalyCount
     };
-  }
+
 
   private async getRecentAnomalyCount(userId: string): Promise<number> {
 
@@ -776,7 +782,7 @@ export class LocationHistoryAnalysisService {
     `, [userId]);
 
     return parseInt(result.rows[0].count);
-  }
+
 
   private async generateLocationInsights(
     clusters: LocationCluster[],
@@ -819,7 +825,7 @@ export class LocationHistoryAnalysisService {
       timeZoneComplexity,
       locationDiversity
     };
-  }
+
 
   private getTimezoneFromLocation(location: {country: string; city: string}): string {
     // Simplified timezone mapping - in production, use a proper timezone library
@@ -832,7 +838,7 @@ export class LocationHistoryAnalysisService {
     };
 
     return timezoneMap[location.country] || 'UTC';
-  }
+
 
   private async storeUserProfile(profile: UserLocationProfile): Promise<void> {
 
@@ -884,7 +890,7 @@ export class LocationHistoryAnalysisService {
         cluster.lastSeen, cluster.confidence, cluster.riskScore,
         cluster.isVerified, cluster.verificationMethod
       ]);
-    }
+
 
     // Store travel patterns
     for (const pattern of profile.travelPatterns) {
@@ -906,8 +912,8 @@ export class LocationHistoryAnalysisService {
         pattern.averageTravelTime, JSON.stringify(pattern.typicalTravelMethods),
         pattern.riskScore, JSON.stringify(pattern.anomalies)
       ]);
-    }
-  }
+
+
 
   private async getStoredProfile(userId: string): Promise<UserLocationProfile> {
 
@@ -917,7 +923,7 @@ export class LocationHistoryAnalysisService {
 
     if (result.rows.length === 0) {
       throw new Error('No stored profile found');
-    }
+
 
     const row = result.rows[0];
     return {
@@ -929,7 +935,7 @@ export class LocationHistoryAnalysisService {
       lastAnalyzed: row.last_analyzed,
       profileVersion: row.profile_version
     };
-  }
+
 
   async assessLocationRisk(userId: string, currentLocation: LocationData): Promise<LocationRiskAssessment> {
 
@@ -949,11 +955,11 @@ export class LocationHistoryAnalysisService {
     // Calculate location novelty
     if (!nearestCluster) {
       factors.locationNovelty = 80; // Completely new location
-    } else if (nearestCluster.confidence < 0.5) {
+ else if (nearestCluster.confidence < 0.5) {
       factors.locationNovelty = 40; // Low confidence cluster
-    } else {
+ else {
       factors.locationNovelty = Math.max(0, 30 - (nearestCluster.confidence * 30));
-    }
+
 
     // Calculate network risk
     if (currentLocation.isMalicious) factors.networkRisk = 90;
@@ -965,13 +971,13 @@ export class LocationHistoryAnalysisService {
     const highRiskCountries = ['XX', 'YY']; // Would be configurable
     if (highRiskCountries.includes(currentLocation.countryCode || '')) {
       factors.geopoliticalRisk = 50;
-    }
+
 
     // Calculate temporal anomalies
     const currentHour = new Date().getHours();
     if ((currentHour >= 2 && currentHour <= 5) && nearestCluster?.label !== 'home') {
       factors.temporalAnomalies = 40;
-    }
+
 
     // Calculate overall risk
     overall = Math.round(
@@ -987,17 +993,17 @@ export class LocationHistoryAnalysisService {
     if (factors.locationNovelty > 50) {
       recommendations.push('Verify this is a legitimate access from the new location');
       suggestedActions.push('Send location verification email');
-    }
+
 
     if (factors.networkRisk > 60) {
       recommendations.push('Monitor for suspicious activity due to anonymization service usage');
       suggestedActions.push('Require additional authentication factors');
-    }
+
 
     if (overall > 70) {
       recommendations.push('Consider temporary account restrictions');
       suggestedActions.push('Flag for manual security review');
-    }
+
 
     return {
       overall: Math.min(100, overall),
@@ -1006,7 +1012,7 @@ export class LocationHistoryAnalysisService {
       actionRequired: overall > 60,
       suggestedActions
     };
-  }
+
 
   async detectLocationAnomalies(userId: string): Promise<LocationAnomaly[]> {
 
@@ -1043,36 +1049,36 @@ export class LocationHistoryAnalysisService {
           location,
           context: {
             riskFactors: riskAssessment.recommendations
-  }
+
           resolved: false,
           falsePositive: false
         };
 
         anomalies.push(anomaly);
-      }
-    }
+
+
 
     // Store anomalies in database
     for (const anomaly of anomalies) {
       await this.storeAnomaly(anomaly);
-    }
+
 
     return anomalies;
-  }
+
 
   private classifyAnomalyType(riskAssessment: LocationRiskAssessment): LocationAnomaly['anomalyType'] {
     if (riskAssessment.factors.locationNovelty > 50) return 'new_location';
     if (riskAssessment.factors.travelPatternDeviation > 50) return 'travel_anomaly';
     if (riskAssessment.factors.temporalAnomalies > 30) return 'unusual_timing';
     return 'risk_escalation';
-  }
+
 
   private determineSeverity(riskScore: number): LocationAnomaly['severity'] {
     if (riskScore >= 90) return 'critical';
     if (riskScore >= 70) return 'high';
     if (riskScore >= 50) return 'medium';
     return 'low';
-  }
+
 
   private async storeAnomaly(anomaly: LocationAnomaly): Promise<void> {
 
@@ -1086,7 +1092,7 @@ export class LocationHistoryAnalysisService {
       anomaly.severity, anomaly.description, anomaly.detectedAt,
       JSON.stringify(anomaly.location), JSON.stringify(anomaly.context)
     ]);
-  }
+
 
   private calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     // Haversine formula for calculating distance between two points on Earth
@@ -1098,11 +1104,11 @@ export class LocationHistoryAnalysisService {
               Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-  }
+
 
   private toRadians(degrees: number): number {
     return degrees * (Math.PI / 180);
-  }
+
 
   async getLocationStatistics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<Record<string, unknown>> {
     const timeframes = {
@@ -1152,5 +1158,4 @@ export class LocationHistoryAnalysisService {
       anomalies: anomalyStats.rows[0],
       generatedAt: new Date().toISOString()
     };
-  }
-}
+

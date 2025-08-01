@@ -85,62 +85,43 @@ const OPERATORS_BY_TYPE = {
     enum: ['eq', 'ne', 'in', 'not_in'],
     array: ['contains', 'in', 'not_in'],
 };
-const ACTION_TYPES = [];
-{
-    type: 'notification',
-        name;
-    'Send Notification',
-        description;
-    'Send alert notification to configured channels',
-        icon;
-    '📢',
-    ;
-}
-{
-    type: 'containment',
-        name;
-    'Automated Containment',
-        description;
-    'Automatically block IPs, lock accounts, or isolate systems',
-        icon;
-    '🛡️',
-    ;
-}
-{
-    type: 'escalation',
-        name;
-    'Escalate Alert',
-        description;
-    'Escalate to security team or management',
-        icon;
-    '🚨',
-    ;
-}
-{
-    type: 'logging',
-        name;
-    'Enhanced Logging',
-        description;
-    'Capture additional forensic data',
-        icon;
-    '📝',
-    ;
-}
-{
-    type: 'webhook',
-        name;
-    'Webhook Call',
-        description;
-    'Call external webhook with alert data',
-        icon;
-    '🔗';
-    ;
-    /**
-    * Main Alert Rule Builder Component
-    */
-    export const AlertRuleBuilder, AlertRule;
-    onRulesChange: (rules) => void ;
-}
+const ACTION_TYPES = [
+    {
+        type: 'notification',
+        name: 'Send Notification',
+        description: 'Send alert notification to configured channels',
+        icon: '📢',
+    },
+    {
+        type: 'containment',
+        name: 'Automated Containment',
+        description: 'Automatically block IPs, lock accounts, or isolate systems',
+        icon: '🛡️',
+    },
+    {
+        type: 'escalation',
+        name: 'Escalate Alert',
+        description: 'Escalate to security team or management',
+        icon: '🚨',
+    },
+    {
+        type: 'logging',
+        name: 'Enhanced Logging',
+        description: 'Capture additional forensic data',
+        icon: '📝',
+    },
+    {
+        type: 'webhook',
+        name: 'Webhook Call',
+        description: 'Call external webhook with alert data',
+        icon: '🔗'
+    }
+];
+/**
+* Main Alert Rule Builder Component
+*/
+export const AlertRuleBuilder, AlertRule;
+onRulesChange: (rules) => void ;
  > ;
 ({ alertRules, onRulesChange }) => {
     const [_____selectedRule, setSelectedRule] = useState(null);

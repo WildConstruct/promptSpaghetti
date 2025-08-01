@@ -434,8 +434,9 @@ export class AuditManagementAPI {
                                                                      * POST /api/audit/export
                                                                      */
                                                                     async;
-                                                                    exportAuditData(request, {});
-                                                                    format: 'csv' | 'json' | 'pdf';
+                                                                    exportAuditData(request, {}),
+                                                                        format;
+                                                                    'csv' | 'json' | 'pdf';
                                                                     query ?  : AuditQueryRequestType;
                                                                     include_metadata ?  : boolean;
                                                                 }, Promise() {

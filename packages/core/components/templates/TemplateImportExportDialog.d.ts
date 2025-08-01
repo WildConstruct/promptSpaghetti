@@ -7,8 +7,8 @@ import { TemplateImportResult } from '../../templates/TemplateVersionManager';
 import { ProjectTemplate } from '../../templates/ProjectTemplateManager';
 
 }
-interface TemplateImportExportDialogProps {
-    isOpen: boolean;
+}
+interface TemplateImportExportDialogProps { isOpen: boolean;
     onClose: () => void;
     mode: 'import' | 'export';
     template?: ProjectTemplate;
@@ -16,7 +16,7 @@ interface TemplateImportExportDialogProps {
     onExportComplete?: (result: Record<string, unknown>) => void;
     className?: string;
 
-export declare const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProps>;
+export declare const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProps> }
 }
 export {};
 //# sourceMappingURL=TemplateImportExportDialog.d.ts.map

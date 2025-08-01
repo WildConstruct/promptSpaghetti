@@ -14,8 +14,8 @@ import { ReputationSystem, UserReputation, UserBadge, BadgeType, RestrictionLeve
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface ReputationDashboardAPI {
   // User Reputation Management
   getUserReputation(userId: string): Promise<UserReputation>;
@@ -37,12 +37,13 @@ export interface ReputationDashboardAPI {
   // Bulk Operations
   bulkRecalculate(userIds: string[]): Promise<any>;
   exportReputationData(filters: any): Promise<any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReputationAPIRequest {
   // User Management
   userId?: string;
@@ -61,12 +62,13 @@ export interface ReputationAPIRequest {
   // Bulk Operations
   userIds?: string[];
   batchSize?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReputationAPIResponse {
   success: boolean;
   data?: any;
@@ -76,10 +78,11 @@ export interface ReputationAPIResponse {
     processedCount?: number;
     failedCount?: number;
     processingTime?: number;
-}
-}
+
+
+
   };
-}
+
 
 /**
  * Reputation Dashboard API
@@ -101,7 +104,7 @@ export class ReputationDashboardAPI {
     this.reputationSystem = reputationSystem;
     this.databaseService = dependencies.databaseService;
     this.auditService = dependencies.auditService;
-  }
+
 
   /**
    * Register reputation dashboard routes with Fastify
@@ -153,7 +156,7 @@ export class ReputationDashboardAPI {
     // Real-time endpoints
     server.get('/api/admin/reputation/realtime/stats', this.handleRealtimeStats.bind(this));
     server.get('/api/admin/reputation/health', this.handleSystemHealth.bind(this));
-  }
+
 
   /**
    * Get user reputation
@@ -168,13 +171,13 @@ export class ReputationDashboardAPI {
         success: true,
         data: reputation
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Recalculate user reputation
@@ -195,13 +198,13 @@ export class ReputationDashboardAPI {
         data: reputation,
         message: 'Reputation recalculated successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Update user verification status
@@ -232,19 +235,19 @@ export class ReputationDashboardAPI {
           `Verification ${verificationType} ${verified ? 'approved' : 'rejected'}: ${notes}`,
           adminUserId
         );
-      }
+
       
       return reply.code(200).send({
         success: true,
         message: 'Verification status updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Flag user for review
@@ -272,13 +275,13 @@ export class ReputationDashboardAPI {
         success: true,
         message: 'User flagged for review successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Award badge to user
@@ -307,13 +310,13 @@ export class ReputationDashboardAPI {
         data: badge,
         message: `Badge ${badgeType} awarded successfully`
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get reputation dashboard
@@ -335,7 +338,7 @@ export class ReputationDashboardAPI {
           verificationRate: metrics.verificationStats.verificationRate,
           activeAlerts: alerts.length,
           criticalAlerts: alerts.filter(a => a.severity === 'critical').length
-  }
+
         metrics,
         alerts: alerts.slice(0, 10), // Latest 10 alerts
         recentActivity,
@@ -348,18 +351,18 @@ export class ReputationDashboardAPI {
         data: dashboard,
         metadata: {
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message,
         metadata: {
           processingTime: Date.now() - startTime
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Search users by reputation criteria
@@ -395,15 +398,15 @@ export class ReputationDashboardAPI {
           limit: filters.limit,
           offset: filters.offset,
           hasMore: (filters.offset || 0) + users.length < totalCount
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get reputation leaderboard
@@ -426,15 +429,15 @@ export class ReputationDashboardAPI {
           timeframe,
           limit,
           generatedAt: new Date()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Handle bulk reputation recalculation
@@ -455,7 +458,7 @@ export class ReputationDashboardAPI {
           success: false,
           error: 'userIds array is required'
         });
-      }
+
       
       // Process in batches
       const results = await this.processBulkRecalculation(userIds, batchSize, adminUserId);
@@ -465,13 +468,13 @@ export class ReputationDashboardAPI {
         data: results,
         message: `Bulk recalculation completed for ${results.processedCount} users`
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Export reputation data
@@ -505,7 +508,7 @@ export class ReputationDashboardAPI {
       default:
         responseData = exportData;
         contentType = 'application/json';
-      }
+
       
       // Audit export
       await this.auditService.logActivity({
@@ -515,23 +518,22 @@ export class ReputationDashboardAPI {
           format,
           recordCount: Array.isArray(exportData) ? exportData.length : 0,
           includePersonalData
-  }
+
         timestamp: new Date()
-      } as any);
+ as any);
       
       return reply
         .code(200)
         .header('Content-Type', contentType)
         .header('Content-Disposition', `attachment; filename="reputation-data-${Date.now()}.${format}"`)
         .send(responseData);
-        
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get real-time reputation statistics
@@ -544,21 +546,21 @@ export class ReputationDashboardAPI {
           lastHour: await this.getCalculationCount('1 hour'),
           today: await this.getCalculationCount('24 hours'),
           thisWeek: await this.getCalculationCount('7 days')
-  }
+
         verificationRequests: {
           pending: await this.getPendingVerificationCount(),
           processedToday: await this.getVerificationProcessedCount('24 hours')
-  }
+
         alerts: {
           active: await this.getActiveAlertCount(),
           critical: await this.getCriticalAlertCount(),
           unassigned: await this.getUnassignedAlertCount()
-  }
+
         systemHealth: {
           reputationSystemHealth: await this.getReputationSystemHealthScore(),
           averageCalculationTime: await this.getAverageCalculationTime(),
           errorRate: await this.getCalculationErrorRate()
-  }
+
         timestamp: new Date()
       };
       
@@ -566,13 +568,13 @@ export class ReputationDashboardAPI {
         success: true,
         data: stats
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -583,9 +585,9 @@ export class ReputationDashboardAPI {
     const userId = (request as any).user?.id || (request as any).userId;
     if (!userId) {
       throw new Error('User authentication required');
-    }
+
     return userId;
-  }
+
 
   /**
    * Validate admin permissions
@@ -596,14 +598,14 @@ export class ReputationDashboardAPI {
     // For now, just check if user exists
     if (!userId) {
       throw new Error('Administrative permissions required');
-    }
+
     
     // TODO: Implement proper permission checking
     // const hasPermission = await this.checkUserPermission(userId, permission);
     // if (!hasPermission) {
     //   throw new Error(`Insufficient permissions for action: ${permission}`);
     // }
-  }
+
 
   /**
    * Search users by reputation criteria
@@ -621,27 +623,27 @@ export class ReputationDashboardAPI {
     if (filters.reputationLevel && filters.reputationLevel.length > 0) {
       query += ` AND ur.reputation_level IN (${filters.reputationLevel.map(() => '?').join(',')})`;
       params.push(...filters.reputationLevel);
-    }
+
     
     if (filters.minScore !== undefined) {
       query += ' AND ur.overall_trust_score >= ?';
       params.push(filters.minScore);
-    }
+
     
     if (filters.maxScore !== undefined) {
       query += ' AND ur.overall_trust_score <= ?';
       params.push(filters.maxScore);
-    }
+
     
     if (filters.flagged) {
       query += ' AND JSON_EXTRACT(ur.admin_notes, \'$.flagged\') = ?';
       params.push(filters.flagged);
-    }
+
     
     if (filters.search) {
       query += ' AND (u.username LIKE ? OR u.email LIKE ?)';
       params.push(`%${filters.search}%`, `%${filters.search}%`);
-    }
+
     
     query += ' ORDER BY ur.overall_trust_score DESC LIMIT ? OFFSET ?';
     params.push(filters.limit || 50, filters.offset || 0);
@@ -663,7 +665,7 @@ export class ReputationDashboardAPI {
       adminNotes: row.admin_notes ? JSON.parse(row.admin_notes) : null,
       lastCalculated: new Date(row.last_calculated)
     }));
-  }
+
 
   /**
    * Get reputation leaderboard
@@ -690,28 +692,28 @@ export class ReputationDashboardAPI {
       achievementCount: row.achievement_count,
       verificationLevel: row.verification_level
     }));
-  }
+
 
   // Additional placeholder methods for unimplemented functionality
   private async handleUnflagUser(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
   
   private async handleRevokeBadge(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
   
   private async handleGetBadgeDefinitions(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
   
   private async handleCreateBadgeDefinition(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   // Additional helper methods with placeholder implementations
   private async getRecentReputationActivity(): Promise<any[]> { return []; }
@@ -744,10 +746,10 @@ export class ReputationDashboardAPI {
     try {
       const metrics = await this.reputationSystem.getReputationMetrics();
       return reply.code(200).send({ success: true, data: metrics });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({ success: false, error: error.message });
-    }
-  }
+
+
 
   private async handleGetAlerts(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
@@ -758,65 +760,65 @@ export class ReputationDashboardAPI {
         query.alertType ? [query.alertType] : undefined
       );
       return reply.code(200).send({ success: true, data: alerts });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({ success: false, error: error.message });
-    }
-  }
+
+
 
   private async handleGetTrends(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleGetFraudAnalysis(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleBulkVerify(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleAssignAlert(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleResolveAlert(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleEscalateAlert(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleGetVerificationQueue(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleApproveVerification(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleRejectVerification(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleGetConfig(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleUpdateConfig(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
 
   private async handleSystemHealth(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
@@ -826,7 +828,6 @@ export class ReputationDashboardAPI {
         status: 'healthy',
         uptime: process.uptime(),
         timestamp: new Date()
-      }
+
     });
-  }
-}
+

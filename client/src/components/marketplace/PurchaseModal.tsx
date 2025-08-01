@@ -4,10 +4,11 @@ import { PriceDisplay } from './PriceDisplay';
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './PurchaseModal.css';
-}
+
+
 interface PurchaseModalProps {
   template: Error;,
-  onClose: () => void;
+  onClose: () => void;,
   onComplete: (success: boolean) => void;
   className?: string;
   interface PaymentMethod {
@@ -16,12 +17,13 @@ interface PurchaseModalProps {
   last4?: string;
   brand?: string;
   is_default: boolean;
-  export const PurchaseModal: React.FC<PurchaseModalProps> = ({,)
+  export const PurchaseModal: React.FC<PurchaseModalProps> = ({),
   template,
   onClose,
   onComplete,
   className = ''
-}
+
+
 }) => {
   const [step, setStep] = useState<'confirm' | 'payment' | 'processing' | 'success' | 'error'>('confirm');
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod>([]);
@@ -47,16 +49,16 @@ interface PurchaseModalProps {
   const defaultMethod = methods.find((method: PaymentMethod) => method.is_default);
   if (defaultMethod) {
   setSelectedPaymentMethod(defaultMethod.id);
-} else if (methods.length > 0) {
+ else if (methods.length > 0) {
           setSelectedPaymentMethod(methods[0].id);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load payment methods:', error);
 };
   const handleConfirm = () => {
     if (template.price_cents === 0) {
       // Free template, proceed directly to purchase
       handlePurchase();
-    } else {
+ else {
       // Paid template, show payment step
       setStep('payment');
   };
@@ -72,11 +74,11 @@ interface PurchaseModalProps {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`}
   },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   template_id: template.id,
   version_id: template.current_version_id,
   payment_method_id: template.price_cents > 0 ? selectedPaymentMethod : undefined,
-}
+
       });
       if (response.ok) {
         const purchase = await response.json();
@@ -86,19 +88,19 @@ interface PurchaseModalProps {
           setTimeout(() => {
             onComplete(true);
           }, 2000);
-        } else {
+ else {
           // Handle payment processing for paid templates
           await processPayment(purchase);
-      } else {
+ else {
         const errorData = await response.json();
         setError(errorData.error || 'Purchase failed');
         setStep('error');
-    } catch (_err) {
+ catch (_err) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.debug('Purchase error:', _err);
   setError('Purchase failed. Please try again.');
   setStep('error');
-} finally {
+ finally {
       setLoading(false);
   };
   const processPayment = async (_purchase: unknown) => {
@@ -113,7 +115,7 @@ interface PurchaseModalProps {
   setTimeout(() => {
   onComplete(true);
 }, 2000);
-    } catch (error) {
+ catch (error) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.error('Payment processing failed:', error);
   setError('Payment processing failed');

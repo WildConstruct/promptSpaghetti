@@ -14,18 +14,15 @@ import { extensionInterfaceValidator } from './ExtensionInterfaceValidator';
 export class ExtensionInterfaceDocumentationGenerator {
   private static instance: ExtensionInterfaceDocumentationGenerator;
   private constructor() {}
-  public static getInstance(): ExtensionInterfaceDocumentationGenerator {
-  if (!ExtensionInterfaceDocumentationGenerator.instance) {
+  public static getInstance(): ExtensionInterfaceDocumentationGenerator { if (!ExtensionInterfaceDocumentationGenerator.instance) {
   ExtensionInterfaceDocumentationGenerator.instance = new ExtensionInterfaceDocumentationGenerator();
   return ExtensionInterfaceDocumentationGenerator.instance;
   /**
   * Generate complete interface documentation
   */
-  public generateInterfaceDocumentation(extensionType?: string): string {,
+  public generateInterfaceDocumentation(extensionType?: string): string { }
   let documentation = this.generateHeaderSection();
-  if (extensionType) {
-  documentation += this.generateTypeSpecificDocumentation(extensionType);
-} else {
+  if (extensionType) { documentation += this.generateTypeSpecificDocumentation(extensionType) } else {
       documentation += this.generateCompleteDocumentation();
     documentation += this.generateFooterSection();
     return documentation;
@@ -150,50 +147,47 @@ export class ExtensionInterfaceDocumentationGenerator {
   /**
    * Generate troubleshooting guide
    */
-  public generateTroubleshootingGuide(): string {
-  let guide = '# Extension Interface Troubleshooting Guide\n\n';
+  public generateTroubleshootingGuide(): string { let guide = '# Extension Interface Troubleshooting Guide\n\n';
   guide += '## Common Issues\n\n';
-  const commonIssues = [;
+  const commonIssues = [
   {
   issue: 'Extension validation fails',
-  causes: [,
+  causes: [
   'Missing required methods',
   'Incorrect method signatures',
   'Invalid property types',
   'Missing required properties'
   ],
-  solutions: [,
+  solutions: [
   'Check that all BaseExtension methods are implemented',
   'Verify method signatures match the interface',
-  'Ensure all properties have correct types',
+  'Ensure all properties have correct types' }
   'Review the interface documentation'
   ]
-}
-      {
-  issue: 'Extension fails to initialize',
-  causes: [,
+
+      { issue: 'Extension fails to initialize',
+  causes: [
   'Missing dependencies',
   'Insufficient permissions',
   'Configuration errors',
   'Runtime errors in initialize method'
   ],
-  solutions: [,
+  solutions: [
   'Check dependency list and ensure all dependencies are available',
   'Verify required permissions are granted',
-  'Validate extension configuration',
+  'Validate extension configuration' }
   'Add error handling to initialize method'
   ]
-}
-      {
-        issue: 'Extension health checks fail',
-        causes: [,
+
+      { issue: 'Extension health checks fail',
+        causes: [
           'Incorrect health status format',
           'Missing health check methods',
           'Runtime errors in health methods'
         ],
-        solutions: [,
+        solutions: [
           'Ensure getHealthStatus returns proper object format',
-          'Implement isHealthy and getHealthStatus methods',
+          'Implement isHealthy and getHealthStatus methods' }
           'Add error handling to health check methods'
         ]
     ];
@@ -234,8 +228,7 @@ export class ExtensionInterfaceDocumentationGenerator {
     return '# Extension Interface Documentation\n\n' +
            `Generated on: ${new Date().toISOString()}\n\n` +}
            'This document provides comprehensive information about the extension interface system.\n\n';
-  private generateFooterSection(): string {
-  return '\n---\n\n' +
+  private generateFooterSection(): string { return '\n---\n\n' +
   '**Note**: This documentation is auto-generated. For the latest information, ' +,
   'please refer to the TypeScript interface definitions.\n\n';
   private generateCompleteDocumentation(): string {,
@@ -258,45 +251,38 @@ export class ExtensionInterfaceDocumentationGenerator {
   documentation += '- **dependencies**: string - Required extension dependencies\n';
   documentation += '- **permissions**: string - Required permissions\n\n';
   documentation += '### Methods\n\n';
-  const methods = [;
+  const methods = [
   {
   name: 'initialize',
-  signature: 'initialize(): Promise<void>',
-  description: 'Initialize the extension. Called once when the extension is first loaded.',
-}
-      {
-  name: 'activate',
-  signature: 'activate(): Promise<void>',
-  description: 'Activate the extension. Called when the extension should start functioning.',
-}
-      {
-  name: 'deactivate',
-  signature: 'deactivate(): Promise<void>',
-  description: 'Deactivate the extension. Called when the extension should stop functioning.',
-}
-      {
-  name: 'dispose',
-  signature: 'dispose(): Promise<void>',
-  description: 'Dispose of the extension. Called when the extension is being removed.',
-}
-      {
-  name: 'getConfiguration',
-  signature: 'getConfiguration(): any',
-  description: 'Get the current extension configuration.',
-}
-      {
-  name: 'setConfiguration',
-  signature: 'setConfiguration(config: any): void',
-  description: 'Set the extension configuration.',
-}
-      {
-  name: 'isHealthy',
-  signature: 'isHealthy(): boolean',
-  description: 'Check if the extension is healthy.',
-}
-      {
-        name: 'getHealthStatus',
-        signature: 'getHealthStatus(): ExtensionHealthStatus',
+  signature: 'initialize(): Promise<void>'
+  description: 'Initialize the extension. Called once when the extension is first loaded.' }
+
+      { name: 'activate'
+  signature: 'activate(): Promise<void>'
+  description: 'Activate the extension. Called when the extension should start functioning.' }
+
+      { name: 'deactivate'
+  signature: 'deactivate(): Promise<void>'
+  description: 'Deactivate the extension. Called when the extension should stop functioning.' }
+
+      { name: 'dispose'
+  signature: 'dispose(): Promise<void>'
+  description: 'Dispose of the extension. Called when the extension is being removed.' }
+
+      { name: 'getConfiguration'
+  signature: 'getConfiguration(): any'
+  description: 'Get the current extension configuration.' }
+
+      { name: 'setConfiguration'
+  signature: 'setConfiguration(config: any): void'
+  description: 'Set the extension configuration.' }
+
+      { name: 'isHealthy'
+  signature: 'isHealthy(): boolean'
+  description: 'Check if the extension is healthy.' }
+
+      { name: 'getHealthStatus'
+        signature: 'getHealthStatus(): ExtensionHealthStatus' }
         description: 'Get detailed health status information.'];
     for (const method of methods) {
       documentation += `#### ${method.name}\n\n`;}
@@ -312,131 +298,113 @@ export class ExtensionInterfaceDocumentationGenerator {
     documentation += `**Capabilities**: ${info.capabilities.join(', ')}\n\n`;}
     // Type-specific methods
     documentation += '### Type-Specific Methods\n\n';
-    switch (type) {
-  case 'node':,
+    switch (type) { case 'node':
   documentation += this.generateNodeExtensionMethods();
   break;
-  case 'ui':,
+  case 'ui':
   documentation += this.generateUIExtensionMethods();
   break;
-  case 'transform':,
+  case 'transform':
   documentation += this.generateTransformExtensionMethods();
   break;
-  case 'storage':,
+  case 'storage':
   documentation += this.generateStorageExtensionMethods();
   break;
   return documentation;
-  private generateNodeExtensionMethods(): string {,
-  const methods = [;
+  private generateNodeExtensionMethods(): string {
+  const methods = [
   {
-  name: 'getNodeDefinitions',
-  signature: 'getNodeDefinitions(): NodeDefinition',
-  description: 'Get all node definitions provided by this extension.',
-}
-      {
-  name: 'createNodeInstance',
-  signature: 'createNodeInstance(nodeType: string, nodeId: string, config: any): RuntimeNode',
-  description: 'Create a new instance of a node.',
-}
-      {
-  name: 'validateNodeConfig',
-  signature: 'validateNodeConfig(nodeType: string, config: any): ExtensionValidationResult',
-  description: 'Validate node configuration.',
-}
-      {
-  name: 'getNodeSchema',
-  signature: 'getNodeSchema(nodeType: string): ZodSchema<any>',
-  description: 'Get the configuration schema for a node type.',
-}
-      {
-  name: 'supportsAdvancedNodes',
-  signature: 'supportsAdvancedNodes(): boolean',
+  name: 'getNodeDefinitions'
+  signature: 'getNodeDefinitions(): NodeDefinition'
+  description: 'Get all node definitions provided by this extension.' }
+
+      { name: 'createNodeInstance'
+  signature: 'createNodeInstance(nodeType: string, nodeId: string, config: any): RuntimeNode'
+  description: 'Create a new instance of a node.' }
+
+      { name: 'validateNodeConfig'
+  signature: 'validateNodeConfig(nodeType: string, config: any): ExtensionValidationResult'
+  description: 'Validate node configuration.' }
+
+      { name: 'getNodeSchema'
+  signature: 'getNodeSchema(nodeType: string): ZodSchema<any>'
+  description: 'Get the configuration schema for a node type.' }
+
+      { name: 'supportsAdvancedNodes'
+  signature: 'supportsAdvancedNodes(): boolean'
   description: 'Check if the extension supports advanced node features.'];
   return this.formatMethods(methods);
-  private generateUIExtensionMethods(): string {,
-  const methods = [;
+  private generateUIExtensionMethods(): string {
+  const methods = [
   {
-  name: 'getComponentDefinitions',
-  signature: 'getComponentDefinitions(): UIComponentDefinition',
-  description: 'Get all UI component definitions provided by this extension.',
-}
-      {
-  name: 'createComponentInstance',
-  signature: 'createComponentInstance(componentId: string, props: any): React.ComponentType',
-  description: 'Create a new instance of a UI component.',
-}
-      {
-  name: 'getThemeContributions',
-  signature: 'getThemeContributions(): ThemeContribution',
-  description: 'Get theme contributions from this extension.',
-}
-      {
-  name: 'getCommandContributions',
-  signature: 'getCommandContributions(): CommandContribution',
-  description: 'Get command contributions from this extension.',
-}
-      {
-  name: 'getMenuContributions',
-  signature: 'getMenuContributions(): MenuContribution',
-  description: 'Get menu contributions from this extension.',
-}
-      {
-  name: 'getKeybindingContributions',
-  signature: 'getKeybindingContributions(): KeybindingContribution',
+  name: 'getComponentDefinitions'
+  signature: 'getComponentDefinitions(): UIComponentDefinition'
+  description: 'Get all UI component definitions provided by this extension.' }
+
+      { name: 'createComponentInstance'
+  signature: 'createComponentInstance(componentId: string, props: any): React.ComponentType'
+  description: 'Create a new instance of a UI component.' }
+
+      { name: 'getThemeContributions'
+  signature: 'getThemeContributions(): ThemeContribution'
+  description: 'Get theme contributions from this extension.' }
+
+      { name: 'getCommandContributions'
+  signature: 'getCommandContributions(): CommandContribution'
+  description: 'Get command contributions from this extension.' }
+
+      { name: 'getMenuContributions'
+  signature: 'getMenuContributions(): MenuContribution'
+  description: 'Get menu contributions from this extension.' }
+
+      { name: 'getKeybindingContributions'
+  signature: 'getKeybindingContributions(): KeybindingContribution'
   description: 'Get keybinding contributions from this extension.'];
   return this.formatMethods(methods);
-  private generateTransformExtensionMethods(): string {,
-  const methods = [;
+  private generateTransformExtensionMethods(): string {
+  const methods = [
   {
-  name: 'getTransformDefinitions',
-  signature: 'getTransformDefinitions(): TransformDefinition',
-  description: 'Get all transform definitions provided by this extension.',
-}
-      {
-  name: 'createTransformInstance',
-  signature: 'createTransformInstance(transformId: string, config: any): DataTransform',
-  description: 'Create a new instance of a data transform.',
-}
-      {
-  name: 'validateTransformConfig',
-  signature: 'validateTransformConfig(transformId: string, config: any): ExtensionValidationResult',
-  description: 'Validate transform configuration.',
-}
-      {
-  name: 'getTransformSchema',
-  signature: 'getTransformSchema(transformId: string): ZodSchema<any>',
-  description: 'Get the configuration schema for a transform.',
-}
-      {
-  name: 'supportsPipeline',
-  signature: 'supportsPipeline(): boolean',
+  name: 'getTransformDefinitions'
+  signature: 'getTransformDefinitions(): TransformDefinition'
+  description: 'Get all transform definitions provided by this extension.' }
+
+      { name: 'createTransformInstance'
+  signature: 'createTransformInstance(transformId: string, config: any): DataTransform'
+  description: 'Create a new instance of a data transform.' }
+
+      { name: 'validateTransformConfig'
+  signature: 'validateTransformConfig(transformId: string, config: any): ExtensionValidationResult'
+  description: 'Validate transform configuration.' }
+
+      { name: 'getTransformSchema'
+  signature: 'getTransformSchema(transformId: string): ZodSchema<any>'
+  description: 'Get the configuration schema for a transform.' }
+
+      { name: 'supportsPipeline'
+  signature: 'supportsPipeline(): boolean'
   description: 'Check if the extension supports transform pipelines.'];
   return this.formatMethods(methods);
-  private generateStorageExtensionMethods(): string {,
-  const methods = [;
+  private generateStorageExtensionMethods(): string {
+  const methods = [
   {
-  name: 'getStorageProviders',
-  signature: 'getStorageProviders(): StorageProviderDefinition',
-  description: 'Get all storage provider definitions from this extension.',
-}
-      {
-  name: 'createStorageProvider',
-  signature: 'createStorageProvider(providerId: string, config: any): StorageProvider',
-  description: 'Create a new instance of a storage provider.',
-}
-      {
-  name: 'validateStorageConfig',
-  signature: 'validateStorageConfig(providerId: string, config: any): ExtensionValidationResult',
-  description: 'Validate storage provider configuration.',
-}
-      {
-  name: 'getStorageSchema',
-  signature: 'getStorageSchema(providerId: string): ZodSchema<any>',
-  description: 'Get the configuration schema for a storage provider.',
-}
-      {
-        name: 'supportsMigration',
-        signature: 'supportsMigration(): boolean',
+  name: 'getStorageProviders'
+  signature: 'getStorageProviders(): StorageProviderDefinition'
+  description: 'Get all storage provider definitions from this extension.' }
+
+      { name: 'createStorageProvider'
+  signature: 'createStorageProvider(providerId: string, config: any): StorageProvider'
+  description: 'Create a new instance of a storage provider.' }
+
+      { name: 'validateStorageConfig'
+  signature: 'validateStorageConfig(providerId: string, config: any): ExtensionValidationResult'
+  description: 'Validate storage provider configuration.' }
+
+      { name: 'getStorageSchema'
+  signature: 'getStorageSchema(providerId: string): ZodSchema<any>'
+  description: 'Get the configuration schema for a storage provider.' }
+
+      { name: 'supportsMigration'
+        signature: 'supportsMigration(): boolean' }
         description: 'Check if the extension supports storage migration.'];
     return this.formatMethods(methods);
   private formatMethods(methods: { name: string; signature: string; description: string }[]): string {

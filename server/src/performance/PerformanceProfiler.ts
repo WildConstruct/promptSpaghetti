@@ -18,20 +18,22 @@ import { join } from 'path';
 /**
  * Performance metrics collection interfaces
  */
-}
-}
+
+
+
 export interface CPUMetrics {
   user: number;
   system: number;
   total: number;
   percentage: number;
   loadAverage: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MemoryMetrics {
   rss: number;
   heapTotal: number;
@@ -39,12 +41,13 @@ export interface MemoryMetrics {
   external: number;
   arrayBuffers: number;
   heapUtilization: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DatabaseMetrics {
   connectionCount: number;
   activeQueries: number;
@@ -52,12 +55,13 @@ export interface DatabaseMetrics {
   slowQueries: number;
   errorCount: number;
   connectionPoolUtilization: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApplicationMetrics {
   requestsPerSecond: number;
   averageResponseTime: number;
@@ -66,12 +70,13 @@ export interface ApplicationMetrics {
   eventLoopLag: number;
   gcFrequency: number;
   gcDuration: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemMetrics {
   diskUsage: number;
   networkIO: {
@@ -79,15 +84,16 @@ export interface SystemMetrics {
     bytesOut: number;
     packetsIn: number;
     packetsOut: number;
-}
-}
+
+
+
   };
   fileDescriptors: number;
   threadCount: number;
-}
 
-}
-}
+
+
+
 export interface PerformanceSnapshot {
   timestamp: number;
   cpu: CPUMetrics;
@@ -96,12 +102,13 @@ export interface PerformanceSnapshot {
   application: ApplicationMetrics;
   system: SystemMetrics;
   customMetrics: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProfilingConfig {
   sampleInterval: number; // milliseconds
   databaseEnabled: boolean;
@@ -114,10 +121,11 @@ export interface ProfilingConfig {
     memoryUsage: number;
     responseTime: number;
     errorRate: number;
-}
-}
+
+
+
   };
-}
+
 
 /**
  * Performance Profiler Class
@@ -150,13 +158,13 @@ export class PerformanceProfiler extends EventEmitter {
         memoryUsage: 85, // %
         responseTime: 2000, // ms
         errorRate: 5 // %
-  }
+
       ...config
     };
 
     this.setupOutputDirectory();
     this.initializeGCTracking();
-  }
+
 
   /**
    * Start performance profiling
@@ -166,7 +174,7 @@ export class PerformanceProfiler extends EventEmitter {
     if (this.isRunning) {
       console.warn('Performance profiling is already running');
       return;
-    }
+
 
     console.log('🔍 Starting performance profiling...');
     
@@ -182,11 +190,11 @@ export class PerformanceProfiler extends EventEmitter {
     if (this.config.databaseEnabled) {
       try {
         await this.initializeDatabaseMetrics();
-      } catch (error) {
+ catch (error) {
         console.warn('Failed to initialize database metrics:', error);
         this.config.databaseEnabled = false;
-      }
-    }
+
+
 
     // Start periodic sampling
     this.intervalId = setInterval(() => {
@@ -202,7 +210,7 @@ export class PerformanceProfiler extends EventEmitter {
     });
 
     console.log(`✅ Performance profiling started (sampling every ${this.config.sampleInterval}ms)`);
-  }
+
 
   /**
    * Stop performance profiling
@@ -212,7 +220,7 @@ export class PerformanceProfiler extends EventEmitter {
     if (!this.isRunning) {
       console.warn('Performance profiling is not running');
       return this.snapshots;
-    }
+
 
     console.log('⏹️  Stopping performance profiling...');
 
@@ -221,7 +229,7 @@ export class PerformanceProfiler extends EventEmitter {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
-    }
+
 
     // Take final snapshot
     await this.collectSnapshot();
@@ -241,7 +249,7 @@ export class PerformanceProfiler extends EventEmitter {
     await this.generateReport();
 
     return this.snapshots;
-  }
+
 
   /**
    * Collect performance snapshot
@@ -267,18 +275,17 @@ export class PerformanceProfiler extends EventEmitter {
       // Trim snapshots if exceeding max
       if (this.snapshots.length > this.config.maxSnapshots) {
         this.snapshots = this.snapshots.slice(-this.config.maxSnapshots);
-      }
+
 
       // Check for performance alerts
       this.checkPerformanceAlerts(snapshot);
 
       this.emit('snapshot_collected', snapshot);
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to collect performance snapshot:', error);
       this.emit('snapshot_error', error);
-    }
-  }
+
+
 
   /**
    * Collect CPU metrics
@@ -294,10 +301,10 @@ export class PerformanceProfiler extends EventEmitter {
       if (process.platform !== 'win32') {
         const os = require('os');
         loadAverage = os.loadavg();
-      }
-    } catch (error) {
+
+ catch (error) {
       console.warn('Failed to get load average:', error);
-    }
+
 
     // Calculate CPU percentage (simplified)
     const percentage = Math.min(100, (totalCPU / 1000000) * 100); // Convert microseconds to percentage
@@ -309,7 +316,7 @@ export class PerformanceProfiler extends EventEmitter {
       percentage,
       loadAverage
     };
-  }
+
 
   /**
    * Collect memory metrics
@@ -326,7 +333,7 @@ export class PerformanceProfiler extends EventEmitter {
       arrayBuffers: memory.arrayBuffers || 0,
       heapUtilization
     };
-  }
+
 
   /**
    * Collect database metrics
@@ -342,7 +349,7 @@ export class PerformanceProfiler extends EventEmitter {
         errorCount: 0,
         connectionPoolUtilization: 0
       };
-    }
+
 
     try {
       // This would integrate with your specific database monitoring
@@ -357,7 +364,7 @@ export class PerformanceProfiler extends EventEmitter {
         errorCount: stats.errors || 0,
         connectionPoolUtilization: stats.poolUtilization || 0
       };
-    } catch (error) {
+ catch (error) {
       console.warn('Failed to collect database metrics:', error);
       return {
         connectionCount: 0,
@@ -367,8 +374,8 @@ export class PerformanceProfiler extends EventEmitter {
         errorCount: 0,
         connectionPoolUtilization: 0
       };
-    }
-  }
+
+
 
   /**
    * Collect application metrics
@@ -397,7 +404,7 @@ export class PerformanceProfiler extends EventEmitter {
       gcFrequency: this.gcStats?.frequency || 0,
       gcDuration: this.gcStats?.duration || 0
     };
-  }
+
 
   /**
    * Collect system metrics
@@ -411,7 +418,7 @@ export class PerformanceProfiler extends EventEmitter {
         fileDescriptors: 0,
         threadCount: 0
       };
-    }
+
 
     try {
       let diskUsage = 0;
@@ -424,18 +431,18 @@ export class PerformanceProfiler extends EventEmitter {
         try {
           const df = execSync('df -h / | tail -1 | awk \'{print $5}\'', { encoding: 'utf8' });
           diskUsage = parseInt(df.replace('%', '')) || 0;
-        } catch (error) {
+ catch (error) {
           console.warn('Failed to get disk usage:', error);
-        }
+
 
         // Get file descriptor count
         try {
           const lsof = execSync(`lsof -p ${process.pid} | wc -l`, { encoding: 'utf8' });
           fileDescriptors = parseInt(lsof) || 0;
-        } catch (error) {
+ catch (error) {
           console.warn('Failed to get file descriptor count:', error);
-        }
-      }
+
+
 
       return {
         diskUsage,
@@ -443,7 +450,7 @@ export class PerformanceProfiler extends EventEmitter {
         fileDescriptors,
         threadCount
       };
-    } catch (error) {
+ catch (error) {
       console.warn('Failed to collect system metrics:', error);
       return {
         diskUsage: 0,
@@ -451,8 +458,8 @@ export class PerformanceProfiler extends EventEmitter {
         fileDescriptors: 0,
         threadCount: 0
       };
-    }
-  }
+
+
 
   /**
    * Track HTTP request metrics
@@ -463,8 +470,8 @@ export class PerformanceProfiler extends EventEmitter {
     
     if (isError) {
       this.errorCounter++;
-    }
-  }
+
+
 
   /**
    * Add custom metric
@@ -473,8 +480,8 @@ export class PerformanceProfiler extends EventEmitter {
     if (this.snapshots.length > 0) {
       const lastSnapshot = this.snapshots[this.snapshots.length - 1];
       lastSnapshot.customMetrics[key] = value;
-    }
-  }
+
+
 
   /**
    * Check for performance alerts
@@ -485,30 +492,30 @@ export class PerformanceProfiler extends EventEmitter {
     // CPU usage alert
     if (snapshot.cpu.percentage > this.config.alertThresholds.cpuUsage) {
       alerts.push(`High CPU usage: ${snapshot.cpu.percentage.toFixed(1)}%`);
-    }
+
 
     // Memory usage alert
     if (snapshot.memory.heapUtilization > this.config.alertThresholds.memoryUsage) {
       alerts.push(`High memory usage: ${snapshot.memory.heapUtilization.toFixed(1)}%`);
-    }
+
 
     // Response time alert
     if (snapshot.application.averageResponseTime > this.config.alertThresholds.responseTime) {
       alerts.push(`High response time: ${snapshot.application.averageResponseTime.toFixed(0)}ms`);
-    }
+
 
     // Error rate alert
     if (snapshot.application.errorRate > this.config.alertThresholds.errorRate) {
       alerts.push(`High error rate: ${snapshot.application.errorRate.toFixed(1)}%`);
-    }
+
 
     if (alerts.length > 0) {
       this.emit('performance_alert', {
         timestamp: snapshot.timestamp,
         alerts
       });
-    }
-  }
+
+
 
   /**
    * Generate performance report
@@ -518,7 +525,7 @@ export class PerformanceProfiler extends EventEmitter {
     if (this.snapshots.length === 0) {
       console.warn('No snapshots to generate report');
       return;
-    }
+
 
     const report = {
       metadata: {
@@ -527,7 +534,7 @@ export class PerformanceProfiler extends EventEmitter {
         duration: Date.now() - this.startTime,
         snapshotCount: this.snapshots.length,
         sampleInterval: this.config.sampleInterval
-  }
+
       summary: this.generateSummaryMetrics(),
       snapshots: this.snapshots,
       recommendations: this.generateRecommendations()
@@ -540,7 +547,7 @@ export class PerformanceProfiler extends EventEmitter {
     
     console.log(`📊 Performance report generated: ${filepath}`);
     this.emit('report_generated', { filepath, report });
-  }
+
 
   /**
    * Generate summary metrics
@@ -557,22 +564,22 @@ export class PerformanceProfiler extends EventEmitter {
         average: this.average(cpuValues),
         max: Math.max(...cpuValues),
         min: Math.min(...cpuValues)
-  }
+
       memory: {
         average: this.average(memoryValues),
         max: Math.max(...memoryValues),
         min: Math.min(...memoryValues)
-  }
+
       responseTime: {
         average: this.average(responseTimeValues),
         max: Math.max(...responseTimeValues),
         min: Math.min(...responseTimeValues)
-  }
+
       totalRequests: this.requestCounter,
       totalErrors: this.errorCounter,
       overallErrorRate: this.requestCounter > 0 ? (this.errorCounter / this.requestCounter) * 100 : 0
     };
-  }
+
 
   /**
    * Generate performance recommendations
@@ -585,22 +592,22 @@ export class PerformanceProfiler extends EventEmitter {
 
     if (summary.cpu.average > 70) {
       recommendations.push('Consider CPU optimization: high average CPU usage detected');
-    }
+
 
     if (summary.memory.average > 80) {
       recommendations.push('Consider memory optimization: high memory utilization detected');
-    }
+
 
     if (summary.responseTime.average > 1000) {
       recommendations.push('Consider response time optimization: slow average response times detected');
-    }
+
 
     if (summary.overallErrorRate > 3) {
       recommendations.push('Investigate error handling: elevated error rate detected');
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Utility methods
@@ -608,8 +615,8 @@ export class PerformanceProfiler extends EventEmitter {
   private setupOutputDirectory(): void {
     if (!existsSync(this.config.outputDirectory)) {
       mkdirSync(this.config.outputDirectory, { recursive: true });
-    }
-  }
+
+
 
   private initializeGCTracking(): void {
     if (!this.config.gcMetricsEnabled) return;
@@ -618,17 +625,17 @@ export class PerformanceProfiler extends EventEmitter {
       // Basic GC tracking
       this.gcStats = { frequency: 0, duration: 0 };
       // More advanced GC metrics would require native modules
-    } catch (error) {
+ catch (error) {
       console.warn('Failed to initialize GC tracking:', error);
-    }
-  }
+
+
 
   private async initializeDatabaseMetrics(): Promise<void> {
 
     // This would initialize database connection for metrics collection
     // Implementation depends on your database setup
     console.log('Database metrics initialized');
-  }
+
 
   private async queryDatabaseStats(): Promise<any> {
 
@@ -641,11 +648,11 @@ export class PerformanceProfiler extends EventEmitter {
       errors: 0,
       poolUtilization: Math.random() * 50
     };
-  }
+
 
   private average(values: number[]): number {
     return values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
-  }
+
 
   /**
    * Get current performance stats
@@ -662,5 +669,4 @@ export class PerformanceProfiler extends EventEmitter {
       errorRate: latest.application.errorRate,
       requestsPerSecond: latest.application.requestsPerSecond
     };
-  }
-}
+

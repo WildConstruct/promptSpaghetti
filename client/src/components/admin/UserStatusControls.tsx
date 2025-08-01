@@ -11,10 +11,10 @@ import React, { useState, useCallback } from 'react';
 // User Status Types
 export type UserStatus = 'active' | 'suspended' | 'deleted' | 'locked' | 'pending_activation';
 
-}
+
 export interface UserStatusInfo {
   userId: string;,
-  email: string;
+  email: string;,
   name: string;,
   currentStatus: UserStatus;
   lastStatusChange?: string;
@@ -26,27 +26,30 @@ export interface UserStatusInfo {
   lastLogin?: string;
   createdAt: string;,
   roles: string;
-}
-}
-}
+
+
+
+
+
 export interface StatusChangeRequest {
   userId: string;,
-  newStatus: UserStatus;
+  newStatus: UserStatus;,
   reason: string;
   expiresAt?: string; // For temporary suspensions/locks,
   notifyUser?: boolean;
   bulkOperation?: boolean;
   interface UserStatusControlsProps {
   users: UserStatusInfo;,
-  selectedUserIds: string;
+  selectedUserIds: string;,
   currentUserRole: string;,
   onStatusChange: (request: StatusChangeRequest) => Promise<void>;,
   onBulkStatusChange: (requests: StatusChangeRequest) => Promise<void>;,
   onRefresh: () => void;
   isLoading?: boolean;
   className?: string;
-}
-}
+
+
+
 export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   users,
   selectedUserIds,
@@ -78,31 +81,31 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   };
   // Status configurations
   const statusConfigs = {
-  active: {
+  active: {,
   label: 'Active',
   color: '#10b981',
   icon: '✅',
   description: 'User can access the system normally',
 },
-  suspended: {
+  suspended: {,
   label: 'Suspended',
   color: '#f59e0b',
   icon: '⏸️',
   description: 'User access temporarily disabled',
 },
-  deleted: {
+  deleted: {,
   label: 'Deleted',
   color: '#ef4444',
   icon: '🗑️',
   description: 'Account soft-deleted (retained for compliance)',
 },
-  locked: {
+  locked: {,
   label: 'Locked',
   color: '#dc2626',
   icon: '🔒',
   description: 'Account locked due to security concerns',
 },
-  pending_activation: {
+  pending_activation: {,
   label: 'Pending',
   color: '#6b7280',
   icon: '⏳',
@@ -143,10 +146,10 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
       setShowStatusModal(false);
       setSelectedUser(null);
       onRefresh();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to change user status:', error);
   // Error handling would show notification here
-} finally {
+ finally {
       setIsSubmitting(false);
   }, [selectedUser, newStatus, statusReason, expiresAt, notifyUser, onStatusChange, onRefresh]);
   // Submit bulk status change
@@ -165,9 +168,9 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
       await onBulkStatusChange(requests);
       setShowBulkModal(false);
       onRefresh();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to perform bulk status change:', error);
-} finally {
+ finally {
       setIsSubmitting(false);
   }, [selectedUsers, newStatus, statusReason, expiresAt, notifyUser, onBulkStatusChange, onRefresh]);
   // Status Badge Component
@@ -191,7 +194,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
         fontSize: isSmall ? '11px' : '12px',
         fontWeight: '500',
         color: config.color;
-  }}>
+}>
         <span>{config.icon}</span>
         <span>{config.label}</span>
       </span>
@@ -205,7 +208,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   <tr style={{
   backgroundColor: isSelected ? '#dbeafe' : '#FFFFFF',
   borderBottom: '1px solid #f3f4f6',
-}}>
+}>
         <td style={{ padding: '12px 16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div>
@@ -258,7 +261,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '4px',
   fontSize: '11px',
   cursor: 'pointer',
-}}
+}
                 title="Activate user"
               >
                 Activate
@@ -275,7 +278,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '4px',
   fontSize: '11px',
   cursor: 'pointer',
-}}
+}
                 title="Suspend user"
               >
                 Suspend
@@ -292,7 +295,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '4px',
   fontSize: '11px',
   cursor: 'pointer',
-}}
+}
                 title="Lock user"
               >
                 Lock
@@ -318,7 +321,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 1000,
-}}>
+}>
         <div style={{
   backgroundColor: '#FFFFFF',
   borderRadius: '8px',
@@ -326,7 +329,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   width: '480px',
   maxWidth: '90vw',
   boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-}}>
+}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>
             Change User Status
           </h3>
@@ -353,7 +356,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '6px',
   fontSize: '14px',
   backgroundColor: '#FFFFFF',
-}}
+}
             >
               {Object.entries(statusConfigs).map(([status, config]) => ()
                 <option key={status} value={status} disabled={!canChangeStatus(status as UserStatus, currentUserRole)}>
@@ -379,7 +382,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   fontSize: '14px',
   resize: 'vertical',
   fontFamily: 'inherit',
-}}
+}
             />
           </div>
           {['suspended', 'locked'].includes(newStatus) && ()
@@ -397,7 +400,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   border: '1px solid #d1d5db',
   borderRadius: '6px',
   fontSize: '14px',
-}}
+}
               />
               <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
                 Leave empty for permanent status change
@@ -428,7 +431,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer',
-}}
+}
             >
               Cancel
             </button>
@@ -443,7 +446,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '6px',
   fontSize: '14px',
   cursor: statusReason.trim() ? 'pointer' : 'not-allowed',
-}}
+
             >
               {isSubmitting ? 'Changing Status...' : 'Change Status'}
             </button>
@@ -467,7 +470,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 1000,
-}}>
+}>
         <div style={{
   backgroundColor: '#FFFFFF',
   borderRadius: '8px',
@@ -475,7 +478,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   width: '480px',
   maxWidth: '90vw',
   boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-}}>
+}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>
             Bulk Status Change
           </h3>
@@ -501,7 +504,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '6px',
   fontSize: '14px',
   backgroundColor: '#FFFFFF',
-}}
+}
             >
               {Object.entries(statusConfigs).map(([status, config]) => ()
                 <option key={status} value={status} disabled={!canChangeStatus(status as UserStatus, currentUserRole)}>
@@ -527,7 +530,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   fontSize: '14px',
   resize: 'vertical',
   fontFamily: 'inherit',
-}}
+}
             />
           </div>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
@@ -542,7 +545,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer',
-}}
+}
             >
               Cancel
             </button>
@@ -557,7 +560,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '6px',
   fontSize: '14px',
   cursor: statusReason.trim() ? 'pointer' : 'not-allowed',
-}}
+
             >
               {isSubmitting ? 'Changing Status...' : `Change ${selectedUsers.length} Users`}
             </button>
@@ -576,7 +579,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   padding: '16px 20px',
   borderBottom: '1px solid #f3f4f6',
   backgroundColor: '#f9fafb',
-}}>
+}>
         <div>
           <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
             User Status Management
@@ -597,7 +600,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   fontSize: '12px',
   cursor: 'pointer',
   color: '#374151',
-}}
+}
           >
             {isLoading ? '⟳ Refreshing...' : '🔄 Refresh'}
           </button>
@@ -612,7 +615,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   borderRadius: '6px',
   fontSize: '12px',
   cursor: 'pointer',
-}}
+}
             >
               Bulk Change ({selectedUserIds.length})
             </button>
@@ -658,7 +661,7 @@ export const UserStatusControls: React.FC<UserStatusControlsProps> = ({)
   padding: '40px 20px',
   textAlign: 'center',
   color: '#6b7280',
-}}>
+}>
           <div style={{ fontSize: '48px', marginBottom: '16px' }}>👥</div>
           <div style={{ fontSize: '16px', fontWeight: '500', marginBottom: '8px' }}>No Users Found</div>
           <div style={{ fontSize: '14px' }}>Users will appear here once they are loaded.</div>

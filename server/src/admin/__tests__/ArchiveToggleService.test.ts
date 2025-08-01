@@ -29,18 +29,21 @@ import { ArchiveType, ArchiveCategory, DataClassification } from '../ArchiveMana
 // Mock implementations
 class MockDatabaseService extends EventEmitter {
   async query(sql: string, params?: any[]): Promise<any> {
+
     return { rows: [], rowCount: 0 };
   }
 }
 
 class MockAuditService extends EventEmitter {
   async logAction(action: any): Promise<void> {
+
     return Promise.resolve();
   }
 }
 
 class MockArchiveManagementService extends EventEmitter {
   async createArchive(...args: any[]): Promise<any> {
+
     return { id: 'mock-archive-id', name: 'Mock Archive' };
   }
 }

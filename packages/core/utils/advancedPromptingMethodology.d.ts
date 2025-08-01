@@ -1,8 +1,8 @@
 import { VariableSuggestion } from './templateParser';
 
 }
-export interface ZadaTemplateComponent {
-    category: 'time_setting' | 'actions' | 'locations' | 'characters' | 'cinematography';
+}
+export interface ZadaTemplateComponent { category: 'time_setting' | 'actions' | 'locations' | 'characters' | 'cinematography';
     name: string;
     description: string;
     template: string;
@@ -14,18 +14,14 @@ export interface ZadaTemplateComponent {
 export declare export declare const parseMarsFramework: (template: string) => {
     tags: MarsTag[];
     conflicts: string[];
-    suggestions: string[];
+    suggestions: string[] }
 }
 };
-export declare const createHybridTemplate: (naturalTemplate: string, marsFramework?: boolean) => {
-    hybrid: string;
+export declare const createHybridTemplate: (naturalTemplate: string, marsFramework?: boolean) => { hybrid: string;
     structure: any;
-    variables: string[];
-};
+    variables: string[] };
 export declare const getMarsAutocompletions: (context: string, currentInput: string) => VariableSuggestion[];
-export declare const getTemplatePatternLibrary: () => {
-    zada: ZadaTemplateComponent[];
+export declare const getTemplatePatternLibrary: () => { zada: ZadaTemplateComponent[];
     mars: MarsTag[];
-    hybridExamples: string[];
-};
+    hybridExamples: string[] };
 //# sourceMappingURL=advancedPromptingMethodology.d.ts.map

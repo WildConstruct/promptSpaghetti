@@ -8,6 +8,7 @@
 import React from 'react';
 
 }
+}
 interface ConnectionAnnotationsLayerProps {
     canEdit?: boolean;
     showTooltips?: boolean;
@@ -17,4 +18,5 @@ interface ConnectionAnnotationsLayerProps {
 export declare const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProps>;
 export default ConnectionAnnotationsLayer;
 //# sourceMappingURL=ConnectionAnnotationsLayer.d.ts.map
+}
 }

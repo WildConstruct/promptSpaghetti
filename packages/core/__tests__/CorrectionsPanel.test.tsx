@@ -5,35 +5,24 @@ import { CorrectionsPanel } from '../CorrectionsPanel';
 import { useCorrectionsStore } from '../correctionsStore';
 
 // Mock the corrections store
-jest.mock('../correctionsStore', () => ({)
-  useCorrectionsStore: jest.fn<unknown, unknown>(),
-  useCorrectionsEnabled: jest.fn(() => true),
-  DEFAULT_CORRECTION_RULES: [,
+jest.mock('../correctionsStore', () => ({ )
+  useCorrectionsStore: jest.fn<unknown, unknown>()
+  useCorrectionsEnabled: jest.fn(() => true)
+  DEFAULT_CORRECTION_RULES: [
   {
-  name: 'Fix Double Spaces',
-  description: 'Remove double spaces',
-  findPattern: '  +',
-  replaceWith: ' ',
-  isRegex: true,
-  isActive: true,
+  name: 'Fix Double Spaces'
+  description: 'Remove double spaces'
+  findPattern: '  +'
+  replaceWith: ' '
+  isRegex: true
+  isActive: true }
   priority: 1];
-  }));
-const mockStore = {
-  rules: [] as any,
-  addRule: jest.fn<unknown, unknown>(),
-  updateRule: jest.fn<unknown, unknown>(),
-  deleteRule: jest.fn<unknown, unknown>(),
-  toggleRule: jest.fn<unknown, unknown>(),
-  reorderRules: jest.fn<unknown, unknown>(),
-  clearAllRules: jest.fn<unknown, unknown>(),
-  applyCorrections: jest.fn((text) => text),
-};
-beforeEach(() => {
-  // Reset mock calls but keep the functions
+}));
+const mockStore = {};
+beforeEach(() => { // Reset mock calls but keep the functions
   Object.values(mockStore).forEach(fn => {)
   if (jest.isMockFunction(fn)) {
-      fn.mockClear();
-  });
+      fn.mockClear() });
   (useCorrectionsStore as unknown as jest.Mock).mockReturnValue(mockStore as unknown as unknown as unknown as unknown);
 });
 describe('CorrectionsPanel', () => {
@@ -62,37 +51,33 @@ describe('CorrectionsPanel', () => {
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     const testTextarea = screen.getByPlaceholderText('Enter text to test corrections...');
     fireEvent.change(testTextarea, { target: { value: 'This is a test' } });
-    await waitFor(() => {
-      expect(screen.getByText('This is a TEST')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('This is a TEST')).toBeInTheDocument() });
   });
-  it('should display rules count', () => {
-    mockStore.rules = [
+  it('should display rules count', () => { mockStore.rules = [
       {
-        id: '1',
-        name: 'Test Rule',
-        findPattern: 'test',
-        replaceWith: 'TEST',
-        isRegex: false,
-        isActive: true,
-        priority: 1,
-        createdAt: new Date(),
+        id: '1'
+        name: 'Test Rule'
+        findPattern: 'test'
+        replaceWith: 'TEST'
+        isRegex: false
+        isActive: true
+        priority: 1
+        createdAt: new Date() }
         updatedAt: new Date()];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     expect(screen.getByText('Correction Rules (1)')).toBeInTheDocument();
   });
-  it('should render rule items', () => {
-    mockStore.rules = [
+  it('should render rule items', () => { mockStore.rules = [
       {
-        id: '1',
-        name: 'Test Rule',
-        description: 'Test description',
-        findPattern: 'test',
-        replaceWith: 'TEST',
-        isRegex: false,
-        isActive: true,
-        priority: 1,
-        createdAt: new Date(),
+        id: '1'
+        name: 'Test Rule'
+        description: 'Test description'
+        findPattern: 'test'
+        replaceWith: 'TEST'
+        isRegex: false
+        isActive: true
+        priority: 1
+        createdAt: new Date() }
         updatedAt: new Date()];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     expect(screen.getByText('Test Rule')).toBeInTheDocument();
@@ -100,33 +85,31 @@ describe('CorrectionsPanel', () => {
     expect(screen.getByText('test')).toBeInTheDocument();
     expect(screen.getByText('TEST')).toBeInTheDocument();
   });
-  it('should display regex badge for regex rules', () => {
-    mockStore.rules = [
+  it('should display regex badge for regex rules', () => { mockStore.rules = [
       {
-        id: '1',
-        name: 'Regex Rule',
-        findPattern: '\\s+',
-        replaceWith: ' ',
-        isRegex: true,
-        isActive: true,
-        priority: 1,
-        createdAt: new Date(),
+        id: '1'
+        name: 'Regex Rule'
+        findPattern: '\\s+'
+        replaceWith: ' '
+        isRegex: true
+        isActive: true
+        priority: 1
+        createdAt: new Date() }
         updatedAt: new Date()];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     expect(screen.getByText('REGEX')).toBeInTheDocument();
   });
-  it('should toggle rule when checkbox is clicked', async () => {
-    // Explicitly set rules in mockStore
+  it('should toggle rule when checkbox is clicked', async () => { // Explicitly set rules in mockStore
     mockStore.rules = [
       {
-        id: '1',
-        name: 'Test Rule',
-        findPattern: 'test',
-        replaceWith: 'TEST',
-        isRegex: false,
-        isActive: true,
-        priority: 1,
-        createdAt: new Date(),
+        id: '1'
+        name: 'Test Rule'
+        findPattern: 'test'
+        replaceWith: 'TEST'
+        isRegex: false
+        isActive: true
+        priority: 1
+        createdAt: new Date() }
         updatedAt: new Date()];
     // Debug to see if the component is rendering properly
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -147,9 +130,7 @@ describe('CorrectionsPanel', () => {
     fireEvent.click(ruleCheckbox!);
     fireEvent.change(ruleCheckbox!, { target: { checked: false } });
     // Wait for any async operations
-    await waitFor(() => {
-      expect(mockStore.toggleRule).toHaveBeenCalled();
-    });
+    await waitFor(() => { expect(mockStore.toggleRule).toHaveBeenCalled() });
     // Verify the store method was called with the correct rule ID
     expect(mockStore.toggleRule).toHaveBeenCalledWith('1');
   });
@@ -168,14 +149,14 @@ describe('CorrectionsPanel', () => {
       target: { value: 'replace' }
     });
     fireEvent.click(screen.getByText('Add Rule'));
-    expect(mockStore.addRule).toHaveBeenCalledWith({)
-  name: 'New Rule',
-  description: 'New description',
-  findPattern: 'find',
-  replaceWith: 'replace',
-  isRegex: false,
-  isActive: true,
-  priority: 1,
+    expect(mockStore.addRule).toHaveBeenCalledWith({ )
+  name: 'New Rule'
+  description: 'New description'
+  findPattern: 'find'
+  replaceWith: 'replace'
+  isRegex: false
+  isActive: true
+  priority: 1 }
 });
   });
   it('should disable add button when required fields are missing', () => {
@@ -191,36 +172,34 @@ describe('CorrectionsPanel', () => {
     });
     expect(addButton).not.toBeDisabled();
   });
-  it('should allow editing rules', () => {
-    mockStore.rules = [
+  it('should allow editing rules', () => { mockStore.rules = [
       {
-        id: '1',
-        name: 'Test Rule',
-        findPattern: 'test',
-        replaceWith: 'TEST',
-        isRegex: false,
-        isActive: true,
-        priority: 1,
-        createdAt: new Date(),
+        id: '1'
+        name: 'Test Rule'
+        findPattern: 'test'
+        replaceWith: 'TEST'
+        isRegex: false
+        isActive: true
+        priority: 1
+        createdAt: new Date() }
         updatedAt: new Date()];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     fireEvent.click(screen.getByText('Edit'));
     expect(screen.getByText('Edit Rule')).toBeInTheDocument();
   });
-  it('should allow deleting rules with confirmation', () => {
-    // Mock window.confirm
+  it('should allow deleting rules with confirmation', () => { // Mock window.confirm
     const originalConfirm = window.confirm;
     window.confirm = jest.fn(() => true);
     mockStore.rules = [
       {
-        id: '1',
-        name: 'Test Rule',
-        findPattern: 'test',
-        replaceWith: 'TEST',
-        isRegex: false,
-        isActive: true,
-        priority: 1,
-        createdAt: new Date(),
+        id: '1'
+        name: 'Test Rule'
+        findPattern: 'test'
+        replaceWith: 'TEST'
+        isRegex: false
+        isActive: true
+        priority: 1
+        createdAt: new Date() }
         updatedAt: new Date()];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     fireEvent.click(screen.getByText('Delete'));
@@ -243,38 +222,36 @@ describe('CorrectionsPanel', () => {
     fireEvent.click(screen.getByText('Clear All'));
     expect(mockStore.clearAllRules).toHaveBeenCalled();
   });
-  it('should update rule in edit modal', () => {
-    mockStore.rules = [
+  it('should update rule in edit modal', () => { mockStore.rules = [
       {
-        id: '1',
-        name: 'Test Rule',
-        findPattern: 'test',
-        replaceWith: 'TEST',
-        isRegex: false,
-        isActive: true,
-        priority: 1,
-        createdAt: new Date(),
+        id: '1'
+        name: 'Test Rule'
+        findPattern: 'test'
+        replaceWith: 'TEST'
+        isRegex: false
+        isActive: true
+        priority: 1
+        createdAt: new Date() }
         updatedAt: new Date()];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     fireEvent.click(screen.getByText('Edit'));
     const nameInput = screen.getByDisplayValue('Test Rule');
     fireEvent.change(nameInput, { target: { value: 'Updated Rule' } });
     fireEvent.click(screen.getByText('Save'));
-    expect(mockStore.updateRule).toHaveBeenCalledWith('1', expect.objectContaining({)
-  name: 'Updated Rule',
+    expect(mockStore.updateRule).toHaveBeenCalledWith('1', expect.objectContaining({ )
+  name: 'Updated Rule' }
 }));
   });
-  it('should cancel edit modal', () => {
-    mockStore.rules = [
+  it('should cancel edit modal', () => { mockStore.rules = [
       {
-        id: '1',
-        name: 'Test Rule',
-        findPattern: 'test',
-        replaceWith: 'TEST',
-        isRegex: false,
-        isActive: true,
-        priority: 1,
-        createdAt: new Date(),
+        id: '1'
+        name: 'Test Rule'
+        findPattern: 'test'
+        replaceWith: 'TEST'
+        isRegex: false
+        isActive: true
+        priority: 1
+        createdAt: new Date() }
         updatedAt: new Date()];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     fireEvent.click(screen.getByText('Edit'));

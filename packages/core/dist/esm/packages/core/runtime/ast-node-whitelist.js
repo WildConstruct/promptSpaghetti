@@ -187,10 +187,10 @@ void {
 };
 {
     const propertyName = node.property.name;
-    const dangerousProperties = [];
-    'constructor', 'prototype', '__proto__', '__defineGetter__', '__defineSetter__',
-        '__lookupGetter__', '__lookupSetter__', 'valueOf', 'toString';
-    ;
+    const dangerousProperties = [
+        'constructor', 'prototype', '__proto__', '__defineGetter__', '__defineSetter__',
+        '__lookupGetter__', '__lookupSetter__', 'valueOf', 'toString'
+    ];
     if (dangerousProperties.includes(propertyName)) {
         blockedNodes.push({});
         nodeType: node.type,
@@ -202,8 +202,9 @@ void {
 }
 position: node.loc?.start;
 ;
-validateCallExpression(node, acorn.Node & {});
-callee: acorn.Node,
+validateCallExpression(node, acorn.Node & {}),
+    callee;
+acorn.Node,
     arguments;
 acorn.Node,
 ;
@@ -234,14 +235,14 @@ void {
     if(, node) { }, : .value === 'string'
 };
 {
-    const dangerousPatterns = [];
-    /eval\s*\(/;
-    /Function\s*\(/;
-    /constructor/,
+    const dangerousPatterns = [
+        /eval\s*\(/,
+        /Function\s*\(/,
+        /constructor/,
         /__proto__/,
         /\<script/i,
-        /javascript:/i;
-    ;
+        /javascript:/i
+    ];
     for (const pattern of dangerousPatterns) {
         if (pattern.test(node.value)) {
             blockedNodes.push({});

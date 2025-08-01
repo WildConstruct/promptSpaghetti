@@ -14,21 +14,22 @@ import {
   ComplianceFramework,
   ComplianceReportType,
   ReportingPeriod
-} from '../services/compliance/StandardComplianceReportingService';
+ from '../services/compliance/StandardComplianceReportingService';
 import { 
   ComplianceReportValidationService,
   ValidationConfigurationFactory 
-} from '../services/compliance/ComplianceReportValidationService';
+ from '../services/compliance/ComplianceReportValidationService';
 import { 
   ComplianceQualityAssurance 
-} from '../services/compliance/ComplianceQualityAssurance';
+ from '../services/compliance/ComplianceQualityAssurance';
 import { 
   ComplianceReportScheduler 
-} from '../services/compliance/ComplianceReportScheduler';
+ from '../services/compliance/ComplianceReportScheduler';
 
 // Request/Response type definitions
-}
-}
+
+
+
 interface GenerateReportRequest {
   Body: {
     framework: ComplianceFramework;
@@ -41,38 +42,41 @@ interface GenerateReportRequest {
       focusOnTrends?: boolean;
       includeFinancialImpact?: boolean;
       customSections?: string[];
-}
-}
+
+
+
     };
   };
-}
 
-}
-}
+
+
+
 interface ValidateReportRequest {
   Body: {
     reportId?: string;
     report?: any;
     validationLevel?: 'basic' | 'standard' | 'comprehensive';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface QualityAssessmentRequest {
   Body: {
     reportId: string;
     assessorId: string;
     assessmentLevel?: 'basic' | 'standard' | 'comprehensive';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ScheduleReportRequest {
   Body: {
     name: string;
@@ -86,8 +90,9 @@ interface ScheduleReportRequest {
       startDate: string;
       endDate?: string;
       executionTime: string;
-}
-}
+
+
+
     };
     recipients: Array<{
       name: string;
@@ -98,13 +103,13 @@ interface ScheduleReportRequest {
         securityLevel: string;
         language: string;
       };
-    }>;
+>;
     deliveryOptions: {
       methods: Array<{
         type: string;
         configuration: any;
         priority: number;
-      }>;
+>;
       encryption: {
         enabled: boolean;
         algorithm?: string;
@@ -120,7 +125,7 @@ interface ScheduleReportRequest {
     isActive: boolean;
     createdBy: string;
   };
-}
+
 
 export async function complianceReportsRoutes(fastify: FastifyInstance) {
   // Initialize services
@@ -154,11 +159,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             framework: { 
               type: 'string',
               enum: Object.values(ComplianceFramework)
-  }
+
             reportType: { 
               type: 'string',
               enum: Object.values(ComplianceReportType)
-  }
+
             period: {
               type: 'object',
               required: ['startDate', 'endDate', 'periodType'],
@@ -168,9 +173,9 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
                 periodType: { 
                   type: 'string', 
                   enum: ['monthly', 'quarterly', 'annual', 'custom'] 
-                }
-              }
-  }
+
+
+
             options: {
               type: 'object',
               properties: {
@@ -180,10 +185,10 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
                 focusOnTrends: { type: 'boolean' },
                 includeFinancialImpact: { type: 'boolean' },
                 customSections: { type: 'array', items: { type: 'string' } }
-              }
-            }
-          }
-  }
+
+
+
+
         response: {
           200: {
             type: 'object',
@@ -193,11 +198,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               report: { type: 'object' },
               generationTime: { type: 'number' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<GenerateReportRequest>, reply: FastifyReply) => {
       try {
         const startTime = Date.now();
@@ -229,16 +234,14 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           generationTime,
           message: `${framework} ${reportType} report generated successfully`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Report generation failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Report generation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -259,13 +262,13 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               type: 'string', 
               enum: ['basic', 'standard', 'comprehensive'],
               default: 'standard'
-            }
-  }
+
+
           oneOf: [
             { required: ['reportId'] },
             { required: ['report'] }
           ]
-  }
+
         response: {
           200: {
             type: 'object',
@@ -273,11 +276,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               validationResult: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<ValidateReportRequest>, reply: FastifyReply) => {
       try {
         const { reportId, report, validationLevel = 'standard' } = request.body;
@@ -286,11 +289,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
         if (reportId) {
           // In production, fetch report from database
           throw new Error('Report retrieval by ID not implemented');
-        } else if (report) {
+ else if (report) {
           reportToValidate = report;
-        } else {
+ else {
           throw new Error('Either reportId or report object must be provided');
-        }
+
 
         console.log(`🔍 Validating report with ${validationLevel} validation`);
 
@@ -304,16 +307,14 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           validationResult,
           message: `Report validation completed: ${validationResult.validationLevel}`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Report validation failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Report validation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -335,9 +336,9 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               type: 'string', 
               enum: ['basic', 'standard', 'comprehensive'],
               default: 'standard'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -345,11 +346,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               assessment: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<QualityAssessmentRequest>, reply: FastifyReply) => {
       try {
         const { reportId, assessorId, assessmentLevel = 'standard' } = request.body;
@@ -379,16 +380,14 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           assessment,
           message: `Quality assessment completed: ${assessment.qualityLevel} (${assessment.qualityScore}%)`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Quality assessment failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Quality assessment failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -409,11 +408,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             framework: { 
               type: 'string',
               enum: Object.values(ComplianceFramework)
-  }
+
             reportType: { 
               type: 'string',
               enum: Object.values(ComplianceReportType)
-  }
+
             schedule: {
               type: 'object',
               required: ['frequency', 'timezone', 'startDate', 'executionTime'],
@@ -421,18 +420,18 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
                 frequency: { 
                   type: 'string',
                   enum: ['daily', 'weekly', 'monthly', 'quarterly', 'annually', 'custom']
-  }
+
                 cronExpression: { type: 'string' },
                 timezone: { type: 'string' },
                 startDate: { type: 'string', format: 'date' },
                 endDate: { type: 'string', format: 'date' },
                 executionTime: { type: 'string', pattern: '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$' }
-              }
-  }
+
+
             isActive: { type: 'boolean', default: true },
             createdBy: { type: 'string' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -440,11 +439,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               scheduleId: { type: 'string' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<ScheduleReportRequest>, reply: FastifyReply) => {
       try {
         const scheduleData = request.body;
@@ -460,7 +459,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             ...scheduleData.schedule,
             startDate: new Date(scheduleData.schedule.startDate),
             endDate: scheduleData.schedule.endDate ? new Date(scheduleData.schedule.endDate) : undefined
-  }
+
           recipients: scheduleData.recipients.map(r => ({
             ...r,
             id: crypto.randomUUID()
@@ -476,16 +475,14 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           scheduleId,
           message: `Report schedule created successfully: ${scheduleId}`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Schedule creation failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Schedule creation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -504,8 +501,8 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             reportType: { type: 'string' },
             isActive: { type: 'boolean' },
             createdBy: { type: 'string' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -514,11 +511,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               schedules: { type: 'array' },
               total: { type: 'number' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const filter = request.query as any;
@@ -533,16 +530,14 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           total: schedules.length,
           message: `Retrieved ${schedules.length} report schedules`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Failed to retrieve schedules:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to retrieve schedules',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -559,8 +554,8 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           required: ['scheduleId'],
           properties: {
             scheduleId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           properties: {
@@ -570,10 +565,10 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
                 startDate: { type: 'string', format: 'date' },
                 endDate: { type: 'string', format: 'date' },
                 periodType: { type: 'string' }
-              }
-            }
-          }
-  }
+
+
+
+
         response: {
           200: {
             type: 'object',
@@ -581,11 +576,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               executionId: { type: 'string' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { scheduleId } = request.params as { scheduleId: string };
@@ -597,7 +592,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           ...overridePeriod,
           startDate: new Date(overridePeriod.startDate),
           endDate: new Date(overridePeriod.endDate)
-        } : undefined;
+ : undefined;
 
         const executionId = await scheduler.executeSchedule(scheduleId, period);
 
@@ -606,16 +601,14 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           executionId,
           message: `Schedule execution initiated: ${executionId}`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Schedule execution failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Schedule execution failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -632,14 +625,14 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           required: ['scheduleId'],
           properties: {
             scheduleId: { type: 'string' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           properties: {
             historyLimit: { type: 'number', default: 50 }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -648,11 +641,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               status: { type: 'object' },
               executionHistory: { type: 'array' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { scheduleId } = request.params as { scheduleId: string };
@@ -669,16 +662,14 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           executionHistory,
           message: `Schedule status retrieved for: ${scheduleId}`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Failed to get schedule status:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to get schedule status',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -695,8 +686,8 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           required: ['reportId'],
           properties: {
             reportId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['format'],
@@ -704,7 +695,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             format: { 
               type: 'string', 
               enum: ['pdf', 'excel', 'json', 'html', 'docx'] 
-  }
+
             options: {
               type: 'object',
               properties: {
@@ -713,12 +704,12 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
                 watermark: { type: 'string' },
                 password: { type: 'string' },
                 digitallySign: { type: 'boolean' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { reportId } = request.params as { reportId: string };
@@ -744,15 +735,12 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           .header('Content-Type', contentTypes[format as keyof typeof contentTypes])
           .header('Content-Disposition', `attachment; filename="compliance-report-${reportId}.${format}"`)
           .send(exportedData);
-
-      } catch (error) {
+ catch (error) {
         console.error('Report export failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Report export failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
-}

@@ -11,6 +11,7 @@
 import React from 'react';
 
 }
+}
 interface HealthDashboardProps {
     refreshInterval?: number;
     autoRefresh?: boolean;
@@ -20,4 +21,5 @@ interface HealthDashboardProps {
 export declare const HealthDashboard: React.FC<HealthDashboardProps>;
 export default HealthDashboard;
 //# sourceMappingURL=HealthDashboard.d.ts.map
+}
 }

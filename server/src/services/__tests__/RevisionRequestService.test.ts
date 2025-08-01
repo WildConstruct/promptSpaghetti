@@ -18,7 +18,7 @@ import {
   RevisionRequestReviewFormData,
   RevisionRequestSearchQuery,
   DEFAULT_REVISION_REQUEST_CONFIG
-} from '../../../../packages/core/types/RevisionRequestTypes';
+ from '../../../../packages/core/types/RevisionRequestTypes';
 
 // Mock Database
 jest.mock('../../database/connection', () => ({
@@ -85,7 +85,7 @@ describe('RevisionRequestService', () => {
   beforeEach(() => {
     mockDb = {
       query: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
     service = new RevisionRequestService(mockDb);
   });
 
@@ -135,7 +135,7 @@ describe('RevisionRequestService', () => {
           complexity_score: 40,
           created_at: '2024-01-15T08:00:00Z',
           updated_at: '2024-01-15T08:00:00Z'
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
@@ -170,7 +170,7 @@ describe('RevisionRequestService', () => {
           urgency_score: 100,
           complexity_score: 90
           // ... other fields
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
@@ -239,7 +239,7 @@ describe('RevisionRequestService', () => {
           complexity_score: 40,
           created_at: '2024-01-15T08:00:00Z',
           updated_at: '2024-01-15T09:00:00Z'
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
@@ -288,7 +288,7 @@ describe('RevisionRequestService', () => {
           type: 'content_update',
           created_at: '2024-01-15T08:00:00Z',
           updated_at: '2024-01-15T09:00:00Z'
-  }
+
         {
           id: 'rev_2',
           title: 'Request 2',
@@ -300,7 +300,7 @@ describe('RevisionRequestService', () => {
           type: 'feature_enhancement',
           created_at: '2024-01-14T08:00:00Z',
           updated_at: '2024-01-15T10:00:00Z'
-        }
+
       ]
     };
 
@@ -316,7 +316,7 @@ describe('RevisionRequestService', () => {
       mockDb.query.mockImplementation((query: string) => {
         if (query.includes('COUNT(*) OVER()')) {
           return Promise.resolve(mockSearchResults as unknown);
-        }
+
         return Promise.resolve(mockAggregationResults as unknown);
       });
     });
@@ -443,7 +443,7 @@ describe('RevisionRequestService', () => {
           reviewer_id: 'reviewer_456',
           updated_at: '2024-01-15T10:00:00Z'
           // ... other fields
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
@@ -499,7 +499,7 @@ describe('RevisionRequestService', () => {
           reviewer_name: 'Jane Reviewer',
           status: 'under_review',
           assigned_at: '2024-01-15T10:00:00Z'
-        }]
+]
       };
 
       const mockTimelineResult = {
@@ -508,7 +508,7 @@ describe('RevisionRequestService', () => {
           event_type: 'assigned_to_reviewer',
           actor_name: 'Admin User',
           description: 'Assigned to reviewer: Jane Reviewer'
-        }]
+]
       };
 
       mockDb.query
@@ -542,7 +542,7 @@ describe('RevisionRequestService', () => {
           review_notes: 'Looks good, approved for implementation',
           approval_notes: 'All requirements met',
           completed_at: '2024-01-15T12:00:00Z'
-        }]
+]
       };
 
       mockDb.query
@@ -576,7 +576,7 @@ describe('RevisionRequestService', () => {
           review_notes: 'Requirements not clear',
           rejection_reason: 'Insufficient detail in requested changes',
           completed_at: '2024-01-15T12:00:00Z'
-        }]
+]
       };
 
       mockDb.query
@@ -606,7 +606,7 @@ describe('RevisionRequestService', () => {
           id: 'rev_test_123',
           status: 'additional_info_requested',
           review_notes: 'Please provide more details about the color specifications'
-        }]
+]
       };
 
       mockDb.query
@@ -659,7 +659,7 @@ describe('RevisionRequestService', () => {
           mime_type: 'image/png',
           uploaded_by: 'user_123',
           uploaded_at: '2024-01-15T11:00:00Z'
-        }]
+]
       };
 
       const mockTimelineResult = {
@@ -700,7 +700,7 @@ describe('RevisionRequestService', () => {
           evidence_type: 'screenshot',
           title: 'Current Color Scheme',
           uploaded_at: '2024-01-15T11:00:00Z'
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
@@ -721,7 +721,7 @@ describe('RevisionRequestService', () => {
           id: 'ev_test_123',
           revision_request_id: 'rev_test_123',
           title: 'Old Screenshot'
-        }]
+]
       };
 
       mockDb.query
@@ -749,7 +749,7 @@ describe('RevisionRequestService', () => {
           content: 'This looks great, when can we expect implementation?',
           is_internal: false,
           created_at: '2024-01-15T13:00:00Z'
-        }]
+]
       };
 
       mockDb.query
@@ -783,13 +783,13 @@ describe('RevisionRequestService', () => {
             content: 'First comment',
             is_internal: false,
             created_at: '2024-01-15T13:00:00Z'
-  }
+
           {
             id: 'comment_2',
             content: 'Internal note',
             is_internal: true,
             created_at: '2024-01-15T14:00:00Z'
-          }
+
         ]
       };
 
@@ -813,7 +813,7 @@ describe('RevisionRequestService', () => {
           content: 'Public comment',
           is_internal: false,
           created_at: '2024-01-15T13:00:00Z'
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
@@ -839,9 +839,9 @@ describe('RevisionRequestService', () => {
               pending_requests: '15',
               overdue_requests: '3',
               average_completion_time: '24.5'
-            }]
-          } as unknown);
-        }
+]
+ as unknown);
+
         return Promise.resolve({ rows: [] } as unknown);
       });
 
@@ -865,7 +865,7 @@ describe('RevisionRequestService', () => {
           total_completed: '20',
           avg_completion_hours: '16.5',
           on_time_rate: '0.85'
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown);
@@ -891,13 +891,13 @@ describe('RevisionRequestService', () => {
             reviewer_name: 'Reviewer One',
             total_assigned: '15',
             total_completed: '12'
-  }
+
           {
             reviewer_id: 'reviewer_2',
             reviewer_name: 'Reviewer Two',
             total_assigned: '20',
             total_completed: '18'
-          }
+
         ]
       };
 
@@ -921,7 +921,7 @@ describe('RevisionRequestService', () => {
         pagination: { page: 1, pageSize: 10000, total: 1, totalPages: 1 },
         aggregations: {} as any,
         filters: { count: 0, filters: [] }
-      } as unknown as unknown);
+ as unknown as unknown);
     });
 
     it('should export revision requests in CSV format', async () => {
@@ -981,7 +981,7 @@ describe('RevisionRequestService', () => {
         rows: [{
           id: 'rev_malformed'
           // Missing required fields
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(malformedResult as unknown as unknown);
@@ -1012,21 +1012,21 @@ describe('RevisionRequestService', () => {
       // Mock create request
       mockDb.query.mockResolvedValueOnce({
         rows: [{ id: 'rev_new_123', status: 'draft' }]
-      } as unknown);
+ as unknown);
 
       // Mock submit request
       mockDb.query
         .mockResolvedValueOnce({ rows: [{ id: 'timeline_123' }] } as unknown)
         .mockResolvedValueOnce({
           rows: [{ id: 'rev_new_123', status: 'submitted' }]
-        } as unknown);
+ as unknown);
 
       // Mock assign reviewer
       mockDb.query
         .mockResolvedValueOnce({ rows: [{ id: 'timeline_124' }] } as unknown)
         .mockResolvedValueOnce({
           rows: [{ id: 'rev_new_123', status: 'under_review', reviewer_id: 'reviewer_456' }]
-        } as unknown);
+ as unknown);
 
       // Create request
       const createdRequest = await service.createRevisionRequest(
@@ -1069,7 +1069,7 @@ describe('RevisionRequestService Integration', () => {
   beforeEach(() => {
     mockDb = {
       query: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
     service = new RevisionRequestService(mockDb);
   });
 
@@ -1083,16 +1083,16 @@ describe('RevisionRequestService Integration', () => {
             { id: 'rev_2', status: 'under_review', priority: 'medium', content_type: 'graph', total_count: '3' },
             { id: 'rev_3', status: 'approved', priority: 'high', content_type: 'template', total_count: '3' }
           ]
-        } as unknown);
-      }
+ as unknown);
+
       if (query.includes('GROUP BY')) {
         return Promise.resolve({
           rows: [
             { status: 'submitted', priority: 'high', type: 'content_update', content_type: 'template', count: '2' },
             { status: 'under_review', priority: 'medium', type: 'feature_enhancement', content_type: 'graph', count: '1' }
           ]
-        } as unknown);
-      }
+ as unknown);
+
       return Promise.resolve({ rows: [] } as unknown);
     });
 
@@ -1118,9 +1118,9 @@ describe('RevisionRequestService Integration', () => {
             total_requests: '3',
             completed_requests: '1',
             pending_requests: '2'
-          }]
-        } as unknown);
-      }
+]
+ as unknown);
+
       return Promise.resolve({ rows: [] } as unknown);
     });
 

@@ -9,8 +9,8 @@ import TokenInfluenceAnalyzer, { TokenInfluenceResult, TokenInfluence } from './
 import { AnalyticsCollector } from './AnalyticsCollector';
 import { logger } from '../utils/logger';
 
-}
-}
+
+
 export interface PromptAnalysisResult {
   prompt: string;
   analysis: {
@@ -18,8 +18,9 @@ export interface PromptAnalysisResult {
     structure: StructuralAnalysis;
     quality: QualityMetrics;
     optimization: OptimizationRecommendations;
-}
-}
+
+
+
   };
   summary: {
     overallScore: number;
@@ -32,10 +33,10 @@ export interface PromptAnalysisResult {
     analysisTime: number;
     version: string;
   };
-}
 
-}
-}
+
+
+
 export interface StructuralAnalysis {
   tokenCount: number;
   sentenceCount: number;
@@ -44,12 +45,13 @@ export interface StructuralAnalysis {
   readabilityScore: number;
   keyPhrases: KeyPhrase[];
   semanticClusters: SemanticCluster[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QualityMetrics {
   clarity: number;          // 0-1, how clear and specific the prompt is
   completeness: number;     // 0-1, how complete the instructions are
@@ -57,46 +59,50 @@ export interface QualityMetrics {
   specificity: number;      // 0-1, how specific vs generic the prompt is
   actionability: number;    // 0-1, how actionable the instructions are
   overallQuality: number;   // 0-1, weighted combination
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OptimizationRecommendations {
   suggestions: Suggestion[];
   alternativeVersions: AlternativeVersion[];
   tokenOptimizations: TokenOptimization[];
   structuralImprovements: StructuralImprovement[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyPhrase {
   phrase: string;
   importance: number;
   category: 'instruction' | 'context' | 'constraint' | 'example';
   positions: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SemanticCluster {
   id: string;
   tokens: string[];
   centroid: string;
   coherence: number;
   importance: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Suggestion {
   type: 'add' | 'remove' | 'modify' | 'reorder';
   priority: 'high' | 'medium' | 'low';
@@ -104,43 +110,47 @@ export interface Suggestion {
   reasoning: string;
   expectedImprovement: number;
   targetTokens?: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlternativeVersion {
   version: string;
   changes: string[];
   expectedScore: number;
   confidenceLevel: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TokenOptimization {
   position: number;
   currentToken: string;
   suggestedToken: string;
   improvement: number;
   reasoning: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StructuralImprovement {
   issue: string;
   severity: 'critical' | 'major' | 'minor';
   solution: string;
   impact: number;
-}
-}
-}
+
+
+
+
 
 class PromptAnalyzer {
   private tokenInfluenceAnalyzer: TokenInfluenceAnalyzer;
@@ -150,14 +160,14 @@ class PromptAnalyzer {
   constructor(analyticsCollector: AnalyticsCollector) {
     this.analyticsCollector = analyticsCollector;
     this.tokenInfluenceAnalyzer = TokenInfluenceAnalyzer.getInstance(analyticsCollector);
-  }
+
 
   static getInstance(analyticsCollector: AnalyticsCollector): PromptAnalyzer {
     if (!PromptAnalyzer.instance) {
       PromptAnalyzer.instance = new PromptAnalyzer(analyticsCollector);
-    }
+
     return PromptAnalyzer.instance;
-  }
+
 
   /**
    * Perform comprehensive prompt analysis
@@ -169,7 +179,7 @@ class PromptAnalyzer {
       includeInfluence?: boolean;
       includeOptimizations?: boolean;
       analysisDepth?: 'basic' | 'detailed' | 'comprehensive';
-    } = {}
+ = {}
   ): Promise<PromptAnalysisResult> {
 
     const startTime = Date.now();
@@ -196,7 +206,7 @@ class PromptAnalyzer {
         analysisPromises.push(
           this.tokenInfluenceAnalyzer.analyzeLIME(prompt, predictionFunction)
         );
-      }
+
 
       const [structure, quality, tokenInfluence] = await Promise.all(analysisPromises);
 
@@ -215,7 +225,7 @@ class PromptAnalyzer {
           structure,
           quality
         );
-      }
+
 
       // Create summary
       const summary = this.createSummary(prompt, tokenInfluence, structure, quality, optimization);
@@ -227,13 +237,13 @@ class PromptAnalyzer {
           structure,
           quality,
           optimization
-  }
+
         summary,
         timestamp: startTime,
         metadata: {
           analysisTime: Date.now() - startTime,
           version: '1.0.0'
-        }
+
       };
 
       // Track analytics
@@ -247,14 +257,14 @@ class PromptAnalyzer {
       });
 
       return result;
-    } catch (error) {
+ catch (error) {
       logger.error('Prompt analysis failed', {
         error: error instanceof Error ? error.message : String(error),
         analysisTime: Date.now() - startTime
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Analyze prompt structure and composition
@@ -292,7 +302,7 @@ class PromptAnalyzer {
       keyPhrases,
       semanticClusters
     };
-  }
+
 
   /**
    * Analyze prompt quality metrics
@@ -321,7 +331,7 @@ class PromptAnalyzer {
       actionability,
       overallQuality
     };
-  }
+
 
   private assessClarity(prompt: string): number {
     // Assess clarity based on various factors
@@ -339,7 +349,7 @@ class PromptAnalyzer {
     if (prompt.split(/\s+/).length > 100) score -= 0.1; // Too verbose
 
     return Math.max(0, Math.min(1, score));
-  }
+
 
   private assessCompleteness(prompt: string): number {
     let score = 0.3; // Base score
@@ -358,7 +368,7 @@ class PromptAnalyzer {
     if (hasExamples) score += 0.1;
 
     return Math.max(0, Math.min(1, score));
-  }
+
 
   private assessConsistency(prompt: string): number {
     let score = 0.7; // Base score (assume mostly consistent)
@@ -376,8 +386,8 @@ class PromptAnalyzer {
     for (const [term1, term2] of contradictions) {
       if (prompt.toLowerCase().includes(term1) && prompt.toLowerCase().includes(term2)) {
         score -= 0.15;
-      }
-    }
+
+
 
     // Check for tense consistency
     const pastTense = /\b\w+ed\b/g.test(prompt);
@@ -388,7 +398,7 @@ class PromptAnalyzer {
     if (tenseCount > 1) score -= 0.1;
 
     return Math.max(0, Math.min(1, score));
-  }
+
 
   private assessSpecificity(prompt: string): number {
     let score = 0.3; // Base score
@@ -397,7 +407,7 @@ class PromptAnalyzer {
     const specificWords = ['exactly', 'precisely', 'specifically', 'particular', 'detailed'];
     const quantifiers = prompt.match(/\b\d+\b/g) || [];
     const technicalTerms = prompt.match(/[A-Z]{2
-}/g) || []; // Acronyms
+/g) || []; // Acronyms
     
     score += Math.min(0.2, specificWords.filter(word => 
       prompt.toLowerCase().includes(word)).length * 0.05);
@@ -410,7 +420,7 @@ class PromptAnalyzer {
       prompt.toLowerCase().includes(word)).length * 0.08);
 
     return Math.max(0, Math.min(1, score));
-  }
+
 
   private assessActionability(prompt: string): number {
     let score = 0.2; // Base score
@@ -429,20 +439,20 @@ class PromptAnalyzer {
     // Clear instructions
     if (/\bstep\s*\d+/i.test(prompt) || /\bfirst\b.*\bsecond\b/i.test(prompt)) {
       score += 0.2; // Sequential instructions
-    }
+
 
     // Format specifications
     if (/\b(bullet|numbered|table|paragraph|section)\b/i.test(prompt)) {
       score += 0.1;
-    }
+
 
     // Deliverable clarity
     if (/\bprovide\s+\w+\b|\binclude\s+\w+\b/i.test(prompt)) {
       score += 0.1;
-    }
+
 
     return Math.max(0, Math.min(1, score));
-  }
+
 
   private calculateReadabilityScore(prompt: string, tokenCount: number, sentenceCount: number): number {
     // Simplified Flesch Reading Ease score
@@ -457,7 +467,7 @@ class PromptAnalyzer {
     
     // Normalize to 0-1 range
     return Math.max(0, Math.min(1, score / 100));
-  }
+
 
   private estimateSyllableCount(text: string): number {
     // Simple syllable estimation
@@ -466,7 +476,7 @@ class PromptAnalyzer {
       const syllables = word.replace(/[^aeiouy]/g, '').length || 1;
       return total + syllables;
     }, 0);
-  }
+
 
   private extractKeyPhrases(prompt: string, tokens: string[]): KeyPhrase[] {
     const phrases: KeyPhrase[] = [];
@@ -484,23 +494,23 @@ class PromptAnalyzer {
             category: this.categorizePhrases(phrase),
             positions: [i]
           });
-        }
-      }
-    }
+
+
+
 
     // Deduplicate and sort by importance
     const uniquePhrases = phrases.reduce((acc, phrase) => {
       const existing = acc.find(p => p.phrase === phrase.phrase);
       if (existing) {
         existing.positions.push(...phrase.positions);
-      } else {
+ else {
         acc.push(phrase);
-      }
+
       return acc;
     }, [] as KeyPhrase[]);
 
     return uniquePhrases.sort((a, b) => b.importance - a.importance).slice(0, 10);
-  }
+
 
   private calculatePhraseImportance(phrase: string): number {
     const importantWords = [
@@ -512,7 +522,7 @@ class PromptAnalyzer {
     const importantCount = words.filter(word => importantWords.includes(word)).length;
     
     return Math.min(1, importantCount / words.length + 0.1);
-  }
+
 
   private categorizePhrases(phrase: string): 'instruction' | 'context' | 'constraint' | 'example' {
     const lower = phrase.toLowerCase();
@@ -521,7 +531,7 @@ class PromptAnalyzer {
     if (/\b(example|instance|such as|like)\b/.test(lower)) return 'example';
     if (/\b(must|should|don't|avoid|limit)\b/.test(lower)) return 'constraint';
     return 'context';
-  }
+
 
   private identifySemanticClusters(tokens: string[]): SemanticCluster[] {
     // Simple clustering based on word categories
@@ -540,8 +550,8 @@ class PromptAnalyzer {
       
       if (matchingTokens.length > 0) {
         clusters.set(category, matchingTokens);
-      }
-    }
+
+
 
     return Array.from(clusters.entries()).map(([category, tokens], index) => ({
       id: `cluster_${index}`,
@@ -550,12 +560,12 @@ class PromptAnalyzer {
       coherence: tokens.length / 10, // Simple coherence measure
       importance: this.calculateClusterImportance(tokens)
     }));
-  }
+
 
   private calculateClusterImportance(tokens: string[]): number {
     // Higher importance for larger, more specific clusters
     return Math.min(1, tokens.length / 5 + 0.2);
-  }
+
 
   private async generateOptimizationRecommendations(
     prompt: string,
@@ -578,7 +588,7 @@ class PromptAnalyzer {
         reasoning: 'Clarity score is below optimal threshold',
         expectedImprovement: 0.3
       });
-    }
+
 
     if (quality.completeness < 0.7) {
       suggestions.push({
@@ -588,7 +598,7 @@ class PromptAnalyzer {
         reasoning: 'Missing key instruction components',
         expectedImprovement: 0.2
       });
-    }
+
 
     // Generate token-level optimizations from influence analysis
     if (tokenInfluence) {
@@ -605,7 +615,7 @@ class PromptAnalyzer {
           reasoning: 'Low influence token that could be optimized'
         });
       });
-    }
+
 
     // Structural improvements
     if (structure.complexity === 'complex' && structure.tokenCount > 80) {
@@ -615,7 +625,7 @@ class PromptAnalyzer {
         solution: 'Break into simpler, more focused instructions',
         impact: 0.25
       });
-    }
+
 
     if (structure.averageTokensPerSentence > 25) {
       structuralImprovements.push({
@@ -624,7 +634,7 @@ class PromptAnalyzer {
         solution: 'Use shorter, more direct sentences',
         impact: 0.15
       });
-    }
+
 
     // Generate alternative versions
     alternativeVersions.push({
@@ -640,7 +650,7 @@ class PromptAnalyzer {
       tokenOptimizations,
       structuralImprovements
     };
-  }
+
 
   private generateAlternativeVersion(prompt: string, style: string): string {
     // Simple alternative generation - in production use more sophisticated methods
@@ -653,8 +663,8 @@ class PromptAnalyzer {
         .trim();
     default:
       return prompt;
-    }
-  }
+
+
 
   private createSummary(
     prompt: string,
@@ -686,7 +696,7 @@ class PromptAnalyzer {
       weaknesses,
       keyTokens
     };
-  }
+
 
   private trackPromptAnalysis(result: PromptAnalysisResult): void {
     this.analyticsCollector.trackEvent({
@@ -702,9 +712,9 @@ class PromptAnalyzer {
         strengthsCount: result.summary.strengths.length,
         weaknessesCount: result.summary.weaknesses.length,
         optimizationCount: result.analysis.optimization.suggestions.length
-      }
+
     });
-  }
-}
+
+
 
 export default PromptAnalyzer;

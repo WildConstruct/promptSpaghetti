@@ -6,8 +6,9 @@ export type UserId = string;
 /**
  * Graph entity structure
  */
-}
-}
+
+
+
 export interface Graph {
   id: GraphId;
   name: string;
@@ -16,15 +17,17 @@ export interface Graph {
   version: number;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
+
+
+
+
 
 /**
  * User entity structure
  */
-}
-}
+
+
+
 export interface User {
   id: UserId;
   email: string;
@@ -35,20 +38,22 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   lastLoginAt?: Date;
-}
-}
-}
+
+
+
+
 
 /**
  * Create user request
  */
-}
-}
+
+
+
 export interface CreateUserRequest {
   email: string;
   name: string;
   password: string;
   organizationId?: string;
-}
-}
-}
+
+
+

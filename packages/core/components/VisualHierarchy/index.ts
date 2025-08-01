@@ -5,8 +5,7 @@
  * providing consistent visual cues, typography, spacing, and accessibility.
  */
 
-export {
-  // Core design tokens
+export { // Core design tokens
   TypographyScale,
   HierarchyColors,
   SpacingScale,
@@ -28,20 +27,18 @@ export {
   // Props interfaces
   type HierarchyHeaderProps,
   type HierarchyFieldProps,
-  type ComplexityIndicatorProps,
-} from './HierarchyDesignSystem';
+  type ComplexityIndicatorProps }
+ from './HierarchyDesignSystem';
 
 // Re-export enhanced progressive disclosure component
-export {
-  ProgressiveDisclosureSection,
-  type ProgressiveDisclosureSectionProps,
-} from '../Inspector/ProgressiveDisclosureSection';
+export { ProgressiveDisclosureSection,
+  type ProgressiveDisclosureSectionProps }
+ from '../Inspector/ProgressiveDisclosureSection';
 
 // Demo component for testing and documentation
 export { VisualHierarchyDemoEditor } from '../Inspector/editors/VisualHierarchyDemoEditor';
 
-export default {
-  TypographyScale,
+export default { TypographyScale,
   HierarchyColors,
   SpacingScale,
   ComponentSizes,
@@ -52,5 +49,5 @@ export default {
   ComplexityIndicator,
   AccessibilityUtils,
   ProgressiveDisclosureSection,
-  VisualHierarchyDemoEditor,
+  VisualHierarchyDemoEditor }
 };

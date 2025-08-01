@@ -21,8 +21,8 @@ import { Plus } from 'lucide-react';
 import React from 'react';
 
 }
-export interface TutorialStep {
-    id: string;
+}
+export interface TutorialStep { id: string;
     title: string;
     description: string;
     content: TutorialContent;
@@ -35,20 +35,18 @@ export interface TutorialStep {
     validation?: StepValidation;
     hints: TutorialHint[];
     resources: TutorialResource[];
-    metadata: StepMetadata;
-
+    metadata: StepMetadata }
 }
-export interface TutorialContent {
-    format: 'text' | 'html' | 'markdown' | 'video' | 'interactive' | 'mixed';
+}
+export interface TutorialContent { format: 'text' | 'html' | 'markdown' | 'video' | 'interactive' | 'mixed';
     primary: string;
     secondary?: string;
     media?: MediaContent[];
     interactive?: InteractiveElement[];
-    code?: CodeExample[];
-
+    code?: CodeExample[] }
 }
-export interface MediaContent {
-    id: string;
+}
+export interface MediaContent { id: string;
     type: 'image' | 'video' | 'audio' | 'animation';
     url: string;
     thumbnailUrl?: string;
@@ -56,91 +54,81 @@ export interface MediaContent {
     caption?: string;
     duration?: number;
     autoplay?: boolean;
-    controls?: boolean;
-
+    controls?: boolean }
 }
-export interface InteractiveElement {
-    id: string;
+}
+export interface InteractiveElement { id: string;
     type: 'hotspot' | 'overlay' | 'tooltip' | 'modal' | 'form' | 'simulation';
     position?: {
         x: number;
-        y: number;
+        y: number }
 }
     };
-    size?: {
-        width: number;
-        height: number;
-    };
+    size?: { width: number;
+        height: number };
     trigger: 'click' | 'hover' | 'auto' | 'manual';
     content: string;
     action?: string;
 
 }
-export interface CodeExample {
-    id: string;
+}
+export interface CodeExample { id: string;
     language: string;
     code: string;
     explanation?: string;
     executable?: boolean;
-    expectedOutput?: string;
-
+    expectedOutput?: string }
 }
-export interface StepValidation {
-    type: 'automatic' | 'manual' | 'quiz' | 'checklist';
+}
+export interface StepValidation { type: 'automatic' | 'manual' | 'quiz' | 'checklist';
     criteria: ValidationCriteria[];
     feedback: {
         success: string;
         failure: string;
-        partial: string;
+        partial: string }
 }
     };
-    retries: {
-        allowed: number;
-        unlimited: boolean;
-    };
+    retries: { allowed: number;
+        unlimited: boolean };
 
 }
-export interface ValidationCriteria {
-    id: string;
+}
+export interface ValidationCriteria { id: string;
     description: string;
     type: 'condition' | 'function' | 'user_input';
     condition?: string;
     function?: string;
-    weight: number;
-
+    weight: number }
 }
-export interface TutorialHint {
-    id: string;
+}
+export interface TutorialHint { id: string;
     content: string;
     type: 'tip' | 'warning' | 'info' | 'encouragement';
     trigger: 'manual' | 'timer' | 'struggle' | 'request';
     delay?: number;
-    priority: number;
-
+    priority: number }
 }
-export interface TutorialResource {
-    id: string;
+}
+export interface TutorialResource { id: string;
     title: string;
     type: 'documentation' | 'video' | 'article' | 'example' | 'tool';
     url?: string;
     content?: string;
     description: string;
-    tags: string[];
-
+    tags: string[] }
 }
-export interface StepMetadata {
-    difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+}
+export interface StepMetadata { difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     category: string;
     tags: string[];
     estimatedTime: number;
     completionRate: number;
     averageScore: number;
     commonMistakes: string[];
-    tips: string[];
-
+    tips: string[] }
 }
-export interface Tutorial {
-    id: string;
+}
+export interface Tutorial { id: string;
     title: string;
     description: string;
     category: string;
@@ -151,65 +139,58 @@ export interface Tutorial {
     navigation: NavigationConfig;
     accessibility: AccessibilityConfig;
     analytics: AnalyticsConfig;
-    metadata: TutorialMetadata;
-
+    metadata: TutorialMetadata }
 }
-export interface LearningObjectives {
-    primary: string[];
+}
+export interface LearningObjectives { primary: string[];
     secondary: string[];
     outcomes: string[];
-    assessments: Assessment[];
-
+    assessments: Assessment[] }
 }
-export interface Assessment {
-    id: string;
+}
+export interface Assessment { id: string;
     type: 'quiz' | 'practical' | 'project' | 'peer_review';
     title: string;
     description: string;
     passingScore: number;
-    questions?: QuizQuestion[];
-
+    questions?: QuizQuestion[] }
 }
-export interface QuizQuestion {
-    id: string;
+}
+export interface QuizQuestion { id: string;
     type: 'multiple_choice' | 'true_false' | 'short_answer' | 'code';
     question: string;
     options?: string[];
     correctAnswer: string | string[];
     explanation: string;
-    points: number;
-
+    points: number }
 }
-export interface NavigationConfig {
-    allowBackward: boolean;
+}
+export interface NavigationConfig { allowBackward: boolean;
     allowForward: boolean;
     allowJumping: boolean;
     showProgress: boolean;
     showStepList: boolean;
     autoAdvance: boolean;
-    autoAdvanceDelay?: number;
-
+    autoAdvanceDelay?: number }
 }
-export interface AccessibilityConfig {
-    screenReaderSupport: boolean;
+}
+export interface AccessibilityConfig { screenReaderSupport: boolean;
     keyboardNavigation: boolean;
     highContrast: boolean;
     reducedMotion: boolean;
     audioDescriptions: boolean;
     closedCaptions: boolean;
-    fontSize: 'small' | 'medium' | 'large' | 'extra-large';
-
+    fontSize: 'small' | 'medium' | 'large' | 'extra-large' }
 }
-export interface AnalyticsConfig {
-    trackProgress: boolean;
+}
+export interface AnalyticsConfig { trackProgress: boolean;
     trackEngagement: boolean;
     trackPerformance: boolean;
     trackDropoff: boolean;
-    anonymize: boolean;
-
+    anonymize: boolean }
 }
-export interface TutorialMetadata {
-    author: string;
+}
+export interface TutorialMetadata { author: string;
     version: string;
     language: string;
     tags: string[];
@@ -219,11 +200,10 @@ export interface TutorialMetadata {
     lastModified: Date;
     isPublished: boolean;
     rating: number;
-    reviewCount: number;
-
+    reviewCount: number }
 }
-export interface TutorialProgress {
-    tutorialId: string;
+}
+export interface TutorialProgress { tutorialId: string;
     userId: string;
     currentStepId: string;
     completedSteps: string[];
@@ -236,19 +216,17 @@ export interface TutorialProgress {
     score: number;
     attempts: Record<string, number>;
     bookmarks: string[];
-    notes: TutorialNote[];
-
+    notes: TutorialNote[] }
 }
-export interface TutorialNote {
-    id: string;
+}
+export interface TutorialNote { id: string;
     stepId: string;
     content: string;
     timestamp: Date;
-    isPrivate: boolean;
-
+    isPrivate: boolean }
 }
-export interface TutorialPlayerProps {
-    tutorial: Tutorial;
+}
+export interface TutorialPlayerProps { tutorial: Tutorial;
     progress?: TutorialProgress;
     onStepComplete: (stepId: string, score?: number) => void;
     onTutorialComplete: (finalScore: number, completionTime: number) => void;
@@ -256,33 +234,32 @@ export interface TutorialPlayerProps {
     onExit: () => void;
     className?: string;
 
-export declare const TutorialPlayer: React.FC<TutorialPlayerProps>;
+export declare const TutorialPlayer: React.FC<TutorialPlayerProps> }
 }
-interface TutorialStepContentProps {
-    step: TutorialStep;
+}
+interface TutorialStepContentProps { step: TutorialStep;
     isPlaying: boolean;
     settings: unknown;
     onComplete: (score?: number) => void;
-    onPlayPause: () => void;
+    onPlayPause: () => void }
 }
-interface TutorialStepListProps {
-    steps: TutorialStep[];
+}
+interface TutorialStepListProps { steps: TutorialStep[];
     currentStepIndex: number;
     completedSteps: string[];
-    onStepSelect: (index: number) => void;
+    onStepSelect: (index: number) => void }
 }
-interface TutorialResourcesProps {
-    resources: TutorialResource[];
-    onResourceClick: (resource: TutorialResource) => void;
 }
-interface TutorialSettingsProps {
-    settings: unknown;
+interface TutorialResourcesProps { resources: TutorialResource[];
+    onResourceClick: (resource: TutorialResource) => void }
+}
+}
+interface TutorialSettingsProps { settings: unknown;
     onSettingsChange: (settings: unknown) => void;
-    onClose: () => void;
-
+    onClose: () => void }
 }
-export interface TutorialBrowserProps {
-    tutorials: Tutorial[];
+}
+export interface TutorialBrowserProps { tutorials: Tutorial[];
     onTutorialSelect: (tutorial: Tutorial) => void;
     onTutorialCreate: () => void;
     className?: string;
@@ -294,7 +271,7 @@ declare const _default: {
     TutorialStepContent: React.FC<TutorialStepContentProps>;
     TutorialStepList: React.FC<TutorialStepListProps>;
     TutorialResources: React.FC<TutorialResourcesProps>;
-    TutorialSettings: React.FC<TutorialSettingsProps>;
+    TutorialSettings: React.FC<TutorialSettingsProps> }
 }
 };
 export default _default;

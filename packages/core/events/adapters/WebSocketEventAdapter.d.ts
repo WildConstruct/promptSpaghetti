@@ -9,8 +9,7 @@ import { CollaborationEventType, EnhancedCollaborationService } from '../../coll
 /**
  * WebSocket Event Adapter Class
  */
-export declare class WebSocketEventAdapter {
-    private collaborationService?;
+export declare class WebSocketEventAdapter { private collaborationService?;
     private subscribedEventTypes;
     constructor(collaborationService?: EnhancedCollaborationService);
     /**
@@ -43,22 +42,19 @@ export declare class WebSocketEventAdapter {
     getStats(): {
         subscribedEventTypes: number;
         hasCollaborationService: boolean;
-        eventBusStats: any;
-    };
+        eventBusStats: any };
     /**
      * Clean up adapter resources
      */
     cleanup(): void;
 
 export declare const webSocketAdapter: WebSocketEventAdapter;
-export declare const webSocketUtils: {
-    /**
+export declare const webSocketUtils: { /**
      * Get WebSocket message type for event type
      */
     getWebSocketType: (eventType: string) => WSMessageType | null;
     /**
      * Get event type for WebSocket message type
      */
-    getEventType: (wsType: WSMessageType) => string;
-};
+    getEventType: (wsType: WSMessageType) => string };
 //# sourceMappingURL=WebSocketEventAdapter.d.ts.map

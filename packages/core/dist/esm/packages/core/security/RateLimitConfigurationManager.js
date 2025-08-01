@@ -347,14 +347,14 @@ boolean;
                                                     description;
                                                 'Lenient rate limits for development environment',
                                                     rules;
-                                                [,
+                                                [
                                                     {
                                                         id: 'dev-api',
                                                         name: 'API Endpoints',
                                                         description: 'General API rate limit for development',
                                                         enabled: true,
                                                         priority: 100,
-                                                        conditions: [,
+                                                        conditions: [
                                                             { type: 'endpoint', operator: 'startsWith', value: '/api' }
                                                         ],
                                                         windowMs: 60000, // 1 minute
@@ -385,14 +385,14 @@ boolean;
                                                     description;
                                                 'Strict rate limits for production environment',
                                                     rules;
-                                                [,
+                                                [
                                                     {
                                                         id: 'auth-strict',
                                                         name: 'Authentication Endpoints',
                                                         description: 'Strict limits for auth endpoints',
                                                         enabled: true,
                                                         priority: 1000,
-                                                        conditions: [,
+                                                        conditions: [
                                                             { type: 'endpoint', operator: 'in', values: ['/api/auth/login', '/api/auth/register', '/api/auth/reset'] }
                                                         ],
                                                         windowMs: 900000, // 15 minutes
@@ -408,7 +408,7 @@ boolean;
                                                         description: 'General API rate limits',
                                                         enabled: true,
                                                         priority: 100,
-                                                        conditions: [,
+                                                        conditions: [
                                                             { type: 'endpoint', operator: 'startsWith', value: '/api' }
                                                         ],
                                                         windowMs: 900000, // 15 minutes
@@ -768,14 +768,14 @@ boolean;
                                                                         id: 'web-app',
                                                                         name: 'Web Application',
                                                                         description: 'Standard rate limits for web applications',
-                                                                        rules: [,
+                                                                        rules: [
                                                                             {
                                                                                 id: 'auth-endpoints',
                                                                                 name: 'Authentication',
                                                                                 description: 'Rate limit for login/register endpoints',
                                                                                 enabled: true,
                                                                                 priority: 1000,
-                                                                                conditions: [,
+                                                                                conditions: [
                                                                                     { type: 'endpoint', operator: 'regex', value: '/(login|register|forgot-password)' }
                                                                                 ],
                                                                                 windowMs: 900000, // 15 minutes
@@ -791,7 +791,7 @@ boolean;
                                                                                 description: 'General API rate limiting',
                                                                                 enabled: true,
                                                                                 priority: 500,
-                                                                                conditions: [,
+                                                                                conditions: [
                                                                                     { type: 'endpoint', operator: 'startsWith', value: '/api' }
                                                                                 ],
                                                                                 windowMs: 900000, // 15 minutes
@@ -805,7 +805,7 @@ boolean;
                                                                                 description: 'Lenient limits for static assets',
                                                                                 enabled: true,
                                                                                 priority: 100,
-                                                                                conditions: [,
+                                                                                conditions: [
                                                                                     { type: 'endpoint', operator: 'regex', value: '\\.(css|js|png|jpg|gif|svg|ico)$' }
                                                                                 ],
                                                                                 windowMs: 60000, // 1 minute
@@ -829,14 +829,14 @@ boolean;
                                                                                 id: 'api-service',
                                                                                 name: 'API Service',
                                                                                 description: 'Rate limits optimized for API services',
-                                                                                rules: [,
+                                                                                rules: [
                                                                                     {
                                                                                         id: 'free-tier',
                                                                                         name: 'Free Tier Users',
                                                                                         description: 'Limits for free tier users',
                                                                                         enabled: true,
                                                                                         priority: 1000,
-                                                                                        conditions: [,
+                                                                                        conditions: [
                                                                                             { type: 'header', operator: 'equals', field: 'x-api-tier', value: 'free' }
                                                                                         ],
                                                                                         windowMs: 3600000, // 1 hour
@@ -851,7 +851,7 @@ boolean;
                                                                                         description: 'Limits for premium tier users',
                                                                                         enabled: true,
                                                                                         priority: 800,
-                                                                                        conditions: [,
+                                                                                        conditions: [
                                                                                             { type: 'header', operator: 'equals', field: 'x-api-tier', value: 'premium' }
                                                                                         ],
                                                                                         windowMs: 3600000, // 1 hour

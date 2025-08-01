@@ -11,7 +11,7 @@ import { getFavoritesManager } from '../FavoritesManager';
 jest.mock('../FavoritesManager');
 
 // Mock react-icons to avoid issues in test environment
-jest.mock('react-icons/fi', () => ({)
+jest.mock('react-icons/fi', () => ({ )
   FiSearch: () => <div data-testid="search-icon">Search</div>,
   FiStar: () => <div data-testid="star-icon">Star</div>,
   FiX: () => <div data-testid="x-icon">X</div>,
@@ -26,41 +26,36 @@ jest.mock('react-icons/fi', () => ({)
   FiZap: () => <div data-testid="zap-icon">Zap</div>,
   FiCpu: () => <div data-testid="cpu-icon">CPU</div>,
   FiCode: () => <div data-testid="code-icon">Code</div>,
-  FiFolder: () => <div data-testid="folder-icon">Folder</div>,
+  FiFolder: () => <div data-testid="folder-icon">Folder</div> }
 }));
 
 // Mock nodes for testing
 const mockNodes: NodeMeta = [
-  {
-  id: 'Subject',
+  { id: 'Subject',
   label: 'Character',
   icon: '👤',
   category: 'content',
-  tooltip: 'Define characters, people, or entities in your content',
-}
-  {
-  id: 'WeightedChoice',
+  tooltip: 'Define characters, people, or entities in your content' }
+
+  { id: 'WeightedChoice',
   label: 'Random Selection',
   icon: '🎲',
   category: 'flow',
-  tooltip: 'Choose randomly from multiple options with different likelihood',
-}
-  {
-  id: 'Conditional',
+  tooltip: 'Choose randomly from multiple options with different likelihood' }
+
+  { id: 'Conditional',
   label: 'If/Then',
   icon: '🔀',
   category: 'advanced',
-  tooltip: 'Choose different creative paths based on conditions',
-}
-  {
-  id: 'Output',
+  tooltip: 'Choose different creative paths based on conditions' }
+
+  { id: 'Output',
   label: 'Result',
   icon: '📝',
   category: 'output',
-  tooltip: 'Final generated content ready for use',
-}
-  {
-    id: 'SetVariable',
+  tooltip: 'Final generated content ready for use' }
+
+  { id: 'SetVariable',
     label: 'Store Value',
     icon: '💾',
     category: 'memory',
@@ -68,22 +63,19 @@ const mockNodes: NodeMeta = [
 
 // Mock favorites manager
 const mockFavoritesManager = {
-  getFavorites: jest.fn(() => []),
+  getFavorites: jest.fn(() => []) }
   addChangeListener: jest.fn(() => () => {}),
   toggleFavorite: jest.fn<unknown, unknown>()
 };
 (getFavoritesManager as jest.Mock).mockReturnValue(mockFavoritesManager as unknown);
-describe('TabbedPalette', () => {
-  const defaultProps = {
-  nodes: mockNodes,
-  collapsed: false,
-  onToggle: jest.fn<unknown, unknown>(),
-  onDragStart: jest.fn<unknown, unknown>(),
+describe('TabbedPalette', () => { const defaultProps = {
+  nodes: mockNodes
+  collapsed: false
+  onToggle: jest.fn<unknown, unknown>()
+  onDragStart: jest.fn<unknown, unknown>() }
 };
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockFavoritesManager.getFavorites.mockReturnValue([] as unknown);
-  });
+  beforeEach(() => { jest.clearAllMocks();
+    mockFavoritesManager.getFavorites.mockReturnValue([] as unknown) });
   describe('Basic Rendering', () => {
     test('should render palette with default props', () => {
       render(<TabbedPalette {...defaultProps} />);
@@ -106,9 +98,8 @@ describe('TabbedPalette', () => {
     });
     test('should render all nodes in expanded view', () => {
       render(<TabbedPalette {...defaultProps} />);
-      mockNodes.forEach(node => {)
-  expect(screen.getByText(node.label)).toBeInTheDocument();
-      });
+      mockNodes.forEach(node => { )
+  expect(screen.getByText(node.label)).toBeInTheDocument() });
     });
   });
   describe('Collapsed State', () => {
@@ -136,10 +127,9 @@ describe('TabbedPalette', () => {
       render(<TabbedPalette {...defaultProps} onDragStart={onDragStart} />);
       const nodeElement = screen.getByText('Character').closest('[draggable="true"]');
       expect(nodeElement).toBeInTheDocument();
-      if (nodeElement) {
-  fireEvent.dragStart(nodeElement, {)
+      if (nodeElement) { fireEvent.dragStart(nodeElement, {)
   dataTransfer: {
-  setData: jest.fn<unknown, unknown>(),
+  setData: jest.fn<unknown, unknown>() }
 });
         expect(onDragStart).toHaveBeenCalledWith('Subject');
     });
@@ -176,10 +166,8 @@ describe('TabbedPalette', () => {
       render(<TabbedPalette {...defaultProps} showSearch={true} />);
       const searchInput = screen.getByPlaceholderText('Search nodes...');
       await user.type(searchInput, 'test');
-      await waitFor(() => {
-        // Should show search results section
-        expect(screen.queryByText('Search Results')).toBeInTheDocument();
-      });
+      await waitFor(() => { // Should show search results section
+        expect(screen.queryByText('Search Results')).toBeInTheDocument() });
     });
     test('should clear search when X button is clicked', async () => {
       const user = userEvent.setup();
@@ -188,19 +176,15 @@ describe('TabbedPalette', () => {
       await user.type(searchInput, 'test');
       const clearButton = screen.getByTestId('x-icon').closest('button');
       expect(clearButton).toBeInTheDocument();
-      if (clearButton) {
-        await user.click(clearButton);
-        expect(searchInput).toHaveValue('');
-    });
+      if (clearButton) { await user.click(clearButton);
+        expect(searchInput).toHaveValue('') });
     test('should handle empty search results', async () => {
       const user = userEvent.setup();
       render(<TabbedPalette {...defaultProps} showSearch={true} />);
       const searchInput = screen.getByPlaceholderText('Search nodes...');
       await user.type(searchInput, 'nonexistentnode');
-      await waitFor(() => {
-        // Should not crash and should handle empty results gracefully
-        expect(searchInput).toHaveValue('nonexistentnode');
-      });
+      await waitFor(() => { // Should not crash and should handle empty results gracefully
+        expect(searchInput).toHaveValue('nonexistentnode') });
     });
   });
   describe('Favorites System', () => {
@@ -219,10 +203,8 @@ describe('TabbedPalette', () => {
       render(<TabbedPalette {...defaultProps} showFavorites={true} />);
       const starButton = screen.getAllByTestId('star-icon')[0].closest('button');
       expect(starButton).toBeInTheDocument();
-      if (starButton) {
-        await user.click(starButton);
-        expect(mockFavoritesManager.toggleFavorite).toHaveBeenCalled();
-    });
+      if (starButton) { await user.click(starButton);
+        expect(mockFavoritesManager.toggleFavorite).toHaveBeenCalled() });
     test('should not show favorite buttons when favorites disabled', () => {
       render(<TabbedPalette {...defaultProps} showFavorites={false} />);
       expect(screen.queryByTestId('star-icon')).not.toBeInTheDocument();
@@ -231,9 +213,7 @@ describe('TabbedPalette', () => {
       const { rerender } = render(<TabbedPalette {...defaultProps} showFavorites={true} />);
       // Simulate favorites change
       const changeListener = mockFavoritesManager.addChangeListener.mock.calls[0][0];
-      act(() => {
-        changeListener(['Subject']);
-      });
+      act(() => { changeListener(['Subject']) });
       rerender(<TabbedPalette {...defaultProps} showFavorites={true} />);
       expect(screen.getByText('Favorites')).toBeInTheDocument();
     });
@@ -255,11 +235,9 @@ describe('TabbedPalette', () => {
       render(<TabbedPalette {...defaultProps} />);
       const categoryHeader = screen.getByText('Content Building').closest('[role="button"]');
       expect(categoryHeader).toBeInTheDocument();
-      if (categoryHeader) {
-        await user.click(categoryHeader);
+      if (categoryHeader) { await user.click(categoryHeader);
         // Should toggle collapsed state
-        expect(screen.getByTestId('chevron-right')).toBeInTheDocument();
-    });
+        expect(screen.getByTestId('chevron-right')).toBeInTheDocument() });
     test('should support keyboard navigation for categories', async () => {
       const user = userEvent.setup();
       render(<TabbedPalette {...defaultProps} />);
@@ -320,11 +298,9 @@ describe('TabbedPalette', () => {
       render(<TabbedPalette {...defaultProps} />);
       const nodeElement = screen.getByText('Character').closest('[aria-describedby]');
       expect(nodeElement).toBeInTheDocument();
-      if (nodeElement) {
-        const tooltipId = nodeElement.getAttribute('aria-describedby');
+      if (nodeElement) { const tooltipId = nodeElement.getAttribute('aria-describedby');
         const tooltipElement = screen.getByText('Define characters, people, or entities in your content');
-        expect(tooltipElement).toHaveAttribute('id', tooltipId);
-    });
+        expect(tooltipElement).toHaveAttribute('id', tooltipId) });
   });
   describe('Performance and Edge Cases', () => {
     test('should handle empty nodes array', () => {
@@ -332,14 +308,13 @@ describe('TabbedPalette', () => {
       expect(screen.getByLabelText('Enhanced Node Palette')).toBeInTheDocument();
       expect(screen.queryByText('Content Building')).not.toBeInTheDocument();
     });
-    test('should handle nodes with missing properties', () => {
-  const incompleteNodes: NodeMeta = [
+    test('should handle nodes with missing properties', () => { const incompleteNodes: NodeMeta = [
   {
-  id: 'incomplete',
-  label: '',
-  icon: '',
-  tooltip: '',
-} as NodeMeta
+  id: 'incomplete'
+  label: ''
+  icon: ''
+  tooltip: '' }
+ as NodeMeta
       ];
       render(<TabbedPalette {...defaultProps} nodes={incompleteNodes} />);
       // Should not crash
@@ -387,9 +362,7 @@ describe('TabbedPalette', () => {
       const searchInput = screen.getByPlaceholderText('Search nodes...');
       await user.type(searchInput, 'node');
       // Should limit search results (hard to test exact count without knowing search implementation)
-      await waitFor(() => {
-        expect(searchInput).toHaveValue('node');
-      });
+      await waitFor(() => { expect(searchInput).toHaveValue('node') });
     });
     test('should call onToggle when collapse button is clicked', async () => {
       const user = userEvent.setup();

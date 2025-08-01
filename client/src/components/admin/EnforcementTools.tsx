@@ -37,8 +37,9 @@ import {
   Info,
   Zap,
   Download
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface EnforcementAction {
   actionId: string;,
   entityType: 'user' | 'template' | 'transaction',
@@ -58,9 +59,11 @@ interface EnforcementAction {
   reversedAt: Date;,
   reversedBy: string,
   reason: string;
-}
+
+
 };
-}
+
+
 interface EnforcementPolicy {
   policyId: string;,
   name: string,
@@ -71,7 +74,8 @@ interface EnforcementPolicy {
   suspend: number;,
   restrict: number,
   flag: number;
-}
+
+
 };
     riskFactorRules?: {
   criticalRiskCount: number;,
@@ -95,7 +99,8 @@ interface EnforcementPolicy {
   verifiedUsers: boolean,
   whitelistedEntities: string;
 };
-}
+
+
 interface ViolationReport {
   reportId: string;,
   type: 'fraud' | 'abuse' | 'violation' | 'security' | 'quality',
@@ -115,9 +120,11 @@ interface ViolationReport {
   reason: string,
   resolvedBy: string;,
   resolvedAt: Date;
-}
+
+
 };
-}
+
+
 interface EnforcementStats {
   totalActions: number;,
   pendingReviews: number,
@@ -131,7 +138,8 @@ interface EnforcementStats {
   flags: number;,
   blocks: number,
   quarantines: number;
-}
+
+
 };
   severityBreakdown: {
   low: number,
@@ -146,13 +154,13 @@ interface EnforcementStats {
   avgResolutionTime: number;
 };
 
-}
+
 export interface EnforcementToolsProps {
-  }
+
 
 className?: string;
-}
-}
+
+
 export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className }) => {
   const [error, setError] = useState<string | null>(null);
   // Data state
@@ -193,10 +201,10 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
       const reviewsResponse = await fetch('/api/admin/enforcement/actions?review_required=true&limit=15');
       const reviewsResult = await reviewsResponse.json();
       if (reviewsResult.success) setPendingReviews(reviewsResult.data);
-    } catch (err) {
+ catch (err) {
   setError('Failed to load enforcement data');
   console.error('Error loading enforcement data:', err);
-} finally {
+ finally {
       setLoading(false);
   };
   // Apply manual enforcement action
@@ -216,7 +224,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
   severity: manualActionSeverity,
   reason: manualActionReason,
   triggeredBy: 'manual_review'
-}
+
       });
       const result = await response.json();
       if (result.success) {
@@ -226,12 +234,12 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
         setManualActionReason('');
         setManualActionSeverity('medium');
         await loadEnforcementData();
-      } else {
+ else {
         setError(result.error || 'Failed to apply manual action');
-    } catch (err) {
+ catch (err) {
   setError('Error applying manual action');
   console.error('Error applying manual action:', err);
-} finally {
+ finally {
       setLoading(false);
   };
   // Approve enforcement action
@@ -243,7 +251,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
   });
       if (response.ok) {
         await loadEnforcementData();
-    } catch (err) {
+ catch (err) {
   console.error('Error approving action:', err);
 };
   // Reverse enforcement action
@@ -257,7 +265,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
       });
       if (response.ok) {
         await loadEnforcementData();
-    } catch (err) {
+ catch (err) {
   console.error('Error reversing action:', err);
 };
   // Update policy
@@ -271,7 +279,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
   });
       if (response.ok) {
         await loadEnforcementData();
-    } catch (err) {
+ catch (err) {
   console.error('Error updating policy:', err);
 };
   useEffect(() => {
@@ -499,7 +507,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                   setSelectedSeverity('');
                   setSelectedActionType('');
                   setSelectedEntityType('');
-                }}>
+}>
                   <Filter className="w-4 h-4 mr-1" />
                   Clear
                 </Button>
@@ -562,7 +570,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                             <Button size="sm" variant="outline" onClick={() => {
   const reason = prompt('Enter reason for reversal:');
   if (reason) reverseAction(action.actionId, reason);
-}}>
+}>
                               <XCircle className="w-4 h-4 mr-1" />
                               Reject
                             </Button>
@@ -572,7 +580,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                           <Button size="sm" variant="outline" onClick={() => {
   const reason = prompt('Enter reason for reversal:');
   if (reason) reverseAction(action.actionId, reason);
-}}>
+}>
                             <RotateCcw className="w-4 h-4 mr-1" />
                             Reverse
                           </Button>
@@ -618,7 +626,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                         <Button size="sm" variant="outline" onClick={() => {
   const reason = prompt('Enter reason for rejection:');
   if (reason) reverseAction(action.actionId, reason);
-}}>
+}>
                           <XCircle className="w-4 h-4 mr-1" />
                           Reject
                         </Button>
@@ -789,7 +797,7 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
                     setManualActionTarget('');
                     setManualActionType('');
                     setManualActionReason('');
-                  }}>
+}>
                     Clear Form
                   </Button>
                 </div>

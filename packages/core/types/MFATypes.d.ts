@@ -3,8 +3,7 @@
  * Comprehensive TypeScript types for Multi-Factor Authentication system
  */
 import { z } from 'zod';
-export declare enum MFAMethodType {
-    TOTP = "totp",
+export declare enum MFAMethodType { TOTP = "totp",
     EMAIL = "email",
     SMS = "sms"
 
@@ -19,12 +18,12 @@ export declare enum MFAVerificationResult {
     INVALID_CODE = "invalid_code",
     EXPIRED = "expired",
     RATE_LIMITED = "rate_limited",
-    METHOD_DISABLED = "method_disabled",
+    METHOD_DISABLED = "method_disabled" }
     USER_LOCKED = "user_locked"
 
 }
-export interface BaseMFAConfiguration {
-    id: string;
+}
+export interface BaseMFAConfiguration { id: string;
     userId: string;
     methodType: MFAMethodType;
     status: MFAMethodStatus;
@@ -34,45 +33,38 @@ export interface BaseMFAConfiguration {
     updatedAt: Date;
     lastUsedAt?: Date;
     failedAttempts: number;
-    lockedUntil?: Date;
-
+    lockedUntil?: Date }
 }
-export interface TOTPConfiguration extends BaseMFAConfiguration {
-    methodType: MFAMethodType.TOTP;
+}
+export interface TOTPConfiguration extends BaseMFAConfiguration { methodType: MFAMethodType.TOTP;
     encryptedSecret: string;
     algorithm: 'SHA1' | 'SHA256';
     digits: 6 | 8;
     period: 30;
     qrCodeUrl?: string;
     qrCodeExpiresAt?: Date;
-    backupCodesGenerated: boolean;
-
+    backupCodesGenerated: boolean }
 }
-export interface TOTPSecret {
-    secret: string;
+export interface TOTPSecret { secret: string;
     qrCodeDataUrl: string;
     manualEntryKey: string;
     issuer: string;
-    accountName: string;
-
+    accountName: string }
 }
-export interface TOTPEnrollmentData {
-    configurationId: string;
+}
+export interface TOTPEnrollmentData { configurationId: string;
     secret: TOTPSecret;
     backupCodes: string[];
-    expiresAt: Date;
-
+    expiresAt: Date }
 }
-export interface EmailConfiguration extends BaseMFAConfiguration {
-    methodType: MFAMethodType.EMAIL;
+}
+export interface EmailConfiguration extends BaseMFAConfiguration { methodType: MFAMethodType.EMAIL;
     emailAddress: string;
     isVerified: boolean;
     verificationSentAt?: Date;
-    verificationExpiresAt?: Date;
-
+    verificationExpiresAt?: Date }
 }
-export interface EmailVerification {
-    id: string;
+export interface EmailVerification { id: string;
     userId: string;
     emailAddress: string;
     encryptedToken: string;
@@ -82,22 +74,22 @@ export interface EmailVerification {
         ipAddress: string;
         userAgent: string;
         location?: string;
-        riskScore: number;
+        riskScore: number }
 }
     };
 
 }
-export interface SMSConfiguration extends BaseMFAConfiguration {
-    methodType: MFAMethodType.SMS;
+}
+export interface SMSConfiguration extends BaseMFAConfiguration { methodType: MFAMethodType.SMS;
     phoneNumber: string;
     countryCode: string;
     isVerified: boolean;
     carrierInfo?: {
         carrier: string;
         lineType: 'mobile' | 'landline' | 'voip';
-        riskScore: number;
-    };
+        riskScore: number };
 
+}
 }
 export interface SMSVerification {
     id: string;
@@ -113,11 +105,12 @@ export interface SMSVerification {
         carrierResponse?: string;
         deliveryStatus?: 'sent' | 'delivered' | 'failed'
 }
+}
   };
 
 }
-export interface BackupCode {
-    id: string;
+}
+export interface BackupCode { id: string;
     userId: string;
     codeHash: string;
     isUsed: boolean;
@@ -125,32 +118,30 @@ export interface BackupCode {
     usedFrom?: {
         ipAddress: string;
         userAgent: string;
-        location?: string;
+        location?: string }
 }
     };
     createdAt: Date;
 
 }
-export interface BackupCodeSet {
-    userId: string;
+}
+export interface BackupCodeSet { userId: string;
     codes: string[];
     generatedAt: Date;
-    expiresAt: Date;
-
+    expiresAt: Date }
 }
-export interface MFAChallenge {
-    id: string;
+}
+export interface MFAChallenge { id: string;
     userId: string;
     methodType: MFAMethodType;
     challengeData: string;
     expiresAt: Date;
     attempts: number;
     maxAttempts: number;
-    createdAt: Date;
-
+    createdAt: Date }
 }
-export interface MFAVerificationAttempt {
-    id: string;
+}
+export interface MFAVerificationAttempt { id: string;
     userId: string;
     methodType: MFAMethodType;
     success: boolean;
@@ -162,13 +153,13 @@ export interface MFAVerificationAttempt {
     metadata?: {
         codeLength?: number;
         timeSkew?: number;
-        riskScore?: number;
+        riskScore?: number }
 }
     };
 
 }
-export interface MFASession {
-    id: string;
+}
+export interface MFASession { id: string;
     userId: string;
     isVerified: boolean;
     verifiedMethods: MFAMethodType[];
@@ -176,30 +167,27 @@ export interface MFASession {
     createdAt: Date;
     lastVerifiedAt?: Date;
     ipAddress: string;
-    userAgent: string;
-
+    userAgent: string }
 }
-export interface RateLimitRule {
-    action: string;
+}
+export interface RateLimitRule { action: string;
     userLimit: number;
     userWindow: number;
     ipLimit: number;
     ipWindow: number;
     globalLimit: number;
-    globalWindow: number;
-
+    globalWindow: number }
 }
-export interface RateLimitState {
-    userId?: string;
+}
+export interface RateLimitState { userId?: string;
     ipAddress?: string;
     action: string;
     count: number;
     windowStart: Date;
-    blockedUntil?: Date;
-
+    blockedUntil?: Date }
 }
-export interface SecurityEvent {
-    id: string;
+}
+export interface SecurityEvent { id: string;
     userId?: string;
     eventType: 'suspicious_activity' | 'rate_limit_exceeded' | 'brute_force' | 'geo_anomaly';
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -209,7 +197,7 @@ export interface SecurityEvent {
         userAgent?: string;
         location?: string;
         methodType?: MFAMethodType;
-        attemptCount?: number;
+        attemptCount?: number }
 }
     };
     createdAt: Date;
@@ -217,33 +205,28 @@ export interface SecurityEvent {
     resolvedAt?: Date;
 
 }
-export interface UserMFAProfile {
-    userId: string;
+}
+export interface UserMFAProfile { userId: string;
     isEnabled: boolean;
     hasAnyMethodConfigured: boolean;
     primaryMethod?: MFAMethodType;
     configuredMethods: MFAMethodType[];
     lastUsed?: {
         methodType: MFAMethodType;
-        timestamp: Date;
+        timestamp: Date }
 }
     };
-    securityMetrics: {
-        totalAttempts: number;
+    securityMetrics: { totalAttempts: number;
         successfulAttempts: number;
         failedAttempts: number;
         lastFailedAttempt?: Date;
         accountLocked: boolean;
-        lockedUntil?: Date;
-    };
-    preferences: {
-        defaultMethod: MFAMethodType;
+        lockedUntil?: Date };
+    preferences: { defaultMethod: MFAMethodType;
         backupMethodEnabled: boolean;
-        securityNotifications: boolean;
-    };
+        securityNotifications: boolean };
 
-export declare const TOTPConfigurationSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const TOTPConfigurationSchema: z.ZodObject<{ id: z.ZodString;
     userId: z.ZodString;
     methodType: z.ZodLiteral<MFAMethodType.TOTP>;
     status: z.ZodNativeEnum<typeof MFAMethodStatus>;
@@ -258,9 +241,7 @@ export declare const TOTPConfigurationSchema: z.ZodObject<{
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     lastUsedAt: z.ZodOptional<z.ZodDate>;
-    lockedUntil: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    lockedUntil: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: MFAMethodStatus;
@@ -275,9 +256,7 @@ export declare const TOTPConfigurationSchema: z.ZodObject<{
     backupCodesGenerated: boolean;
     failedAttempts: number;
     lastUsedAt?: Date | undefined;
-    lockedUntil?: Date | undefined;
-}, {
-    id: string;
+    lockedUntil?: Date | undefined }, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: MFAMethodStatus;
@@ -292,10 +271,8 @@ export declare const TOTPConfigurationSchema: z.ZodObject<{
     backupCodesGenerated: boolean;
     failedAttempts: number;
     lastUsedAt?: Date | undefined;
-    lockedUntil?: Date | undefined;
-}>;
-export declare const EmailConfigurationSchema: z.ZodObject<{
-    id: z.ZodString;
+    lockedUntil?: Date | undefined }>;
+export declare const EmailConfigurationSchema: z.ZodObject<{ id: z.ZodString;
     userId: z.ZodString;
     methodType: z.ZodLiteral<MFAMethodType.EMAIL>;
     status: z.ZodNativeEnum<typeof MFAMethodStatus>;
@@ -307,9 +284,7 @@ export declare const EmailConfigurationSchema: z.ZodObject<{
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     lastUsedAt: z.ZodOptional<z.ZodDate>;
-    lockedUntil: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    lockedUntil: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: MFAMethodStatus;
@@ -321,9 +296,7 @@ export declare const EmailConfigurationSchema: z.ZodObject<{
     emailAddress: string;
     isVerified: boolean;
     lastUsedAt?: Date | undefined;
-    lockedUntil?: Date | undefined;
-}, {
-    id: string;
+    lockedUntil?: Date | undefined }, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: MFAMethodStatus;
@@ -335,10 +308,8 @@ export declare const EmailConfigurationSchema: z.ZodObject<{
     emailAddress: string;
     isVerified: boolean;
     lastUsedAt?: Date | undefined;
-    lockedUntil?: Date | undefined;
-}>;
-export declare const SMSConfigurationSchema: z.ZodObject<{
-    id: z.ZodString;
+    lockedUntil?: Date | undefined }>;
+export declare const SMSConfigurationSchema: z.ZodObject<{ id: z.ZodString;
     userId: z.ZodString;
     methodType: z.ZodLiteral<MFAMethodType.SMS>;
     status: z.ZodNativeEnum<typeof MFAMethodStatus>;
@@ -351,9 +322,7 @@ export declare const SMSConfigurationSchema: z.ZodObject<{
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     lastUsedAt: z.ZodOptional<z.ZodDate>;
-    lockedUntil: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    lockedUntil: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: MFAMethodStatus;
@@ -366,9 +335,7 @@ export declare const SMSConfigurationSchema: z.ZodObject<{
     phoneNumber: string;
     countryCode: string;
     lastUsedAt?: Date | undefined;
-    lockedUntil?: Date | undefined;
-}, {
-    id: string;
+    lockedUntil?: Date | undefined }, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: MFAMethodStatus;
@@ -381,10 +348,8 @@ export declare const SMSConfigurationSchema: z.ZodObject<{
     phoneNumber: string;
     countryCode: string;
     lastUsedAt?: Date | undefined;
-    lockedUntil?: Date | undefined;
-}>;
-export declare const MFAVerificationAttemptSchema: z.ZodObject<{
-    id: z.ZodString;
+    lockedUntil?: Date | undefined }>;
+export declare const MFAVerificationAttemptSchema: z.ZodObject<{ id: z.ZodString;
     userId: z.ZodString;
     methodType: z.ZodNativeEnum<typeof MFAMethodType>;
     success: z.ZodBoolean;
@@ -392,9 +357,7 @@ export declare const MFAVerificationAttemptSchema: z.ZodObject<{
     ipAddress: z.ZodString;
     userAgent: z.ZodString;
     attemptedAt: z.ZodDate;
-    processingTimeMs: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    processingTimeMs: z.ZodNumber }, "strip", z.ZodTypeAny, { id: string;
     success: boolean;
     userId: string;
     result: MFAVerificationResult;
@@ -402,9 +365,7 @@ export declare const MFAVerificationAttemptSchema: z.ZodObject<{
     userAgent: string;
     methodType: MFAMethodType;
     attemptedAt: Date;
-    processingTimeMs: number;
-}, {
-    id: string;
+    processingTimeMs: number }, { id: string;
     success: boolean;
     userId: string;
     result: MFAVerificationResult;
@@ -412,8 +373,7 @@ export declare const MFAVerificationAttemptSchema: z.ZodObject<{
     userAgent: string;
     methodType: MFAMethodType;
     attemptedAt: Date;
-    processingTimeMs: number;
-}>;
+    processingTimeMs: number }>;
 export declare function isTOTPConfiguration(config: BaseMFAConfiguration): config is TOTPConfiguration;
 export declare function isEmailConfiguration(config: BaseMFAConfiguration): config is EmailConfiguration;
 export declare function isSMSConfiguration(config: BaseMFAConfiguration): config is SMSConfiguration;
@@ -427,37 +387,33 @@ export declare const MFA_DATABASE_TABLES: {
   };
 
 }
-export interface MFAEnrollmentRequest {
-    methodType: MFAMethodType;
+}
+export interface MFAEnrollmentRequest { methodType: MFAMethodType;
     displayName: string;
     emailAddress?: string;
-    phoneNumber?: string;
-
+    phoneNumber?: string }
 }
-export interface MFAEnrollmentResponse {
-    configurationId: string;
+}
+export interface MFAEnrollmentResponse { configurationId: string;
     methodType: MFAMethodType;
     enrollmentData?: TOTPEnrollmentData;
     requiresVerification: boolean;
-    expiresAt: Date;
-
+    expiresAt: Date }
 }
-export interface MFAVerificationRequest {
-    configurationId: string;
+}
+export interface MFAVerificationRequest { configurationId: string;
     code: string;
-    backupCode?: boolean;
-
+    backupCode?: boolean }
 }
-export interface MFAVerificationResponse {
-    success: boolean;
+}
+export interface MFAVerificationResponse { success: boolean;
     result: MFAVerificationResult;
     remainingAttempts?: number;
     lockoutDuration?: number;
-    nextMethodSuggested?: MFAMethodType;
-
+    nextMethodSuggested?: MFAMethodType }
 }
-export interface MFAListResponse {
-    configurations: BaseMFAConfiguration[];
+}
+export interface MFAListResponse { configurations: BaseMFAConfiguration[];
     profile: UserMFAProfile;
     availableBackupCodes: number;
 
@@ -466,30 +422,23 @@ export declare const MFA_CONSTANTS: {
         readonly SECRET_LENGTH: 32;
         readonly QR_CODE_EXPIRY: 300;
         readonly BACKUP_CODE_COUNT: 10;
-        readonly MAX_CLOCK_SKEW: 90;
+        readonly MAX_CLOCK_SKEW: 90 }
 }
     };
-    readonly EMAIL: {
-        readonly TOKEN_EXPIRY: 600;
+    readonly EMAIL: { readonly TOKEN_EXPIRY: 600;
         readonly MAX_DAILY_SENDS: 5;
-        readonly RATE_LIMIT_WINDOW: 3600;
-    };
-    readonly SMS: {
-        readonly CODE_EXPIRY: 300;
+        readonly RATE_LIMIT_WINDOW: 3600 };
+    readonly SMS: { readonly CODE_EXPIRY: 300;
         readonly MAX_DAILY_SENDS: 3;
-        readonly CODE_LENGTH: 6;
-    };
-    readonly SECURITY: {
-        readonly MAX_FAILED_ATTEMPTS: 5;
+        readonly CODE_LENGTH: 6 };
+    readonly SECURITY: { readonly MAX_FAILED_ATTEMPTS: 5;
         readonly LOCKOUT_DURATION: 900;
-        readonly SESSION_DURATION: 3600;
-    };
+        readonly SESSION_DURATION: 3600 };
 };
-declare const _default: {
-    MFAMethodType: typeof MFAMethodType;
+declare const _default: { MFAMethodType: typeof MFAMethodType;
     MFAMethodStatus: typeof MFAMethodStatus;
     MFAVerificationResult: typeof MFAVerificationResult;
-    TOTPConfigurationSchema: z.ZodObject<{,
+    TOTPConfigurationSchema: z.ZodObject<{ }
         id: z.ZodString;
         userId: z.ZodString;
         methodType: z.ZodLiteral<MFAMethodType.TOTP>;
@@ -506,8 +455,7 @@ declare const _default: {
         updatedAt: z.ZodDate;
         lastUsedAt: z.ZodOptional<z.ZodDate>;
         lockedUntil: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: MFAMethodStatus;
@@ -522,9 +470,7 @@ declare const _default: {
         backupCodesGenerated: boolean;
         failedAttempts: number;
         lastUsedAt?: Date | undefined;
-        lockedUntil?: Date | undefined;
-    }, {
-        id: string;
+        lockedUntil?: Date | undefined }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: MFAMethodStatus;
@@ -539,9 +485,8 @@ declare const _default: {
         backupCodesGenerated: boolean;
         failedAttempts: number;
         lastUsedAt?: Date | undefined;
-        lockedUntil?: Date | undefined;
-    }>;
-    EmailConfigurationSchema: z.ZodObject<{,
+        lockedUntil?: Date | undefined }>;
+    EmailConfigurationSchema: z.ZodObject<{ ,
         id: z.ZodString;
         userId: z.ZodString;
         methodType: z.ZodLiteral<MFAMethodType.EMAIL>;
@@ -554,9 +499,7 @@ declare const _default: {
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         lastUsedAt: z.ZodOptional<z.ZodDate>;
-        lockedUntil: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        lockedUntil: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: MFAMethodStatus;
@@ -568,9 +511,7 @@ declare const _default: {
         emailAddress: string;
         isVerified: boolean;
         lastUsedAt?: Date | undefined;
-        lockedUntil?: Date | undefined;
-    }, {
-        id: string;
+        lockedUntil?: Date | undefined }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: MFAMethodStatus;
@@ -582,9 +523,8 @@ declare const _default: {
         emailAddress: string;
         isVerified: boolean;
         lastUsedAt?: Date | undefined;
-        lockedUntil?: Date | undefined;
-    }>;
-    SMSConfigurationSchema: z.ZodObject<{,
+        lockedUntil?: Date | undefined }>;
+    SMSConfigurationSchema: z.ZodObject<{ ,
         id: z.ZodString;
         userId: z.ZodString;
         methodType: z.ZodLiteral<MFAMethodType.SMS>;
@@ -598,9 +538,7 @@ declare const _default: {
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         lastUsedAt: z.ZodOptional<z.ZodDate>;
-        lockedUntil: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        lockedUntil: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: MFAMethodStatus;
@@ -613,9 +551,7 @@ declare const _default: {
         phoneNumber: string;
         countryCode: string;
         lastUsedAt?: Date | undefined;
-        lockedUntil?: Date | undefined;
-    }, {
-        id: string;
+        lockedUntil?: Date | undefined }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: MFAMethodStatus;
@@ -628,9 +564,8 @@ declare const _default: {
         phoneNumber: string;
         countryCode: string;
         lastUsedAt?: Date | undefined;
-        lockedUntil?: Date | undefined;
-    }>;
-    MFAVerificationAttemptSchema: z.ZodObject<{,
+        lockedUntil?: Date | undefined }>;
+    MFAVerificationAttemptSchema: z.ZodObject<{ ,
         id: z.ZodString;
         userId: z.ZodString;
         methodType: z.ZodNativeEnum<typeof MFAMethodType>;
@@ -639,9 +574,7 @@ declare const _default: {
         ipAddress: z.ZodString;
         userAgent: z.ZodString;
         attemptedAt: z.ZodDate;
-        processingTimeMs: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        processingTimeMs: z.ZodNumber }, "strip", z.ZodTypeAny, { id: string;
         success: boolean;
         userId: string;
         result: MFAVerificationResult;
@@ -649,9 +582,7 @@ declare const _default: {
         userAgent: string;
         methodType: MFAMethodType;
         attemptedAt: Date;
-        processingTimeMs: number;
-    }, {
-        id: string;
+        processingTimeMs: number }, { id: string;
         success: boolean;
         userId: string;
         result: MFAVerificationResult;
@@ -659,8 +590,7 @@ declare const _default: {
         userAgent: string;
         methodType: MFAMethodType;
         attemptedAt: Date;
-        processingTimeMs: number;
-    }>;
+        processingTimeMs: number }>;
     isTOTPConfiguration: typeof isTOTPConfiguration;
     isEmailConfiguration: typeof isEmailConfiguration;
     isSMSConfiguration: typeof isSMSConfiguration;
@@ -672,28 +602,20 @@ declare const _default: {
         readonly MFA_RATE_LIMITS: "mfa_rate_limits";
         readonly MFA_SECURITY_EVENTS: "mfa_security_events"
   };
-    MFA_CONSTANTS: {
-        readonly TOTP: {
+    MFA_CONSTANTS: { readonly TOTP: {
             readonly SECRET_LENGTH: 32;
             readonly QR_CODE_EXPIRY: 300;
             readonly BACKUP_CODE_COUNT: 10;
-            readonly MAX_CLOCK_SKEW: 90;
-        };
-        readonly EMAIL: {
-            readonly TOKEN_EXPIRY: 600;
+            readonly MAX_CLOCK_SKEW: 90 };
+        readonly EMAIL: { readonly TOKEN_EXPIRY: 600;
             readonly MAX_DAILY_SENDS: 5;
-            readonly RATE_LIMIT_WINDOW: 3600;
-        };
-        readonly SMS: {
-            readonly CODE_EXPIRY: 300;
+            readonly RATE_LIMIT_WINDOW: 3600 };
+        readonly SMS: { readonly CODE_EXPIRY: 300;
             readonly MAX_DAILY_SENDS: 3;
-            readonly CODE_LENGTH: 6;
-        };
-        readonly SECURITY: {
-            readonly MAX_FAILED_ATTEMPTS: 5;
+            readonly CODE_LENGTH: 6 };
+        readonly SECURITY: { readonly MAX_FAILED_ATTEMPTS: 5;
             readonly LOCKOUT_DURATION: 900;
-            readonly SESSION_DURATION: 3600;
-        };
+            readonly SESSION_DURATION: 3600 };
     };
 };
 export default _default;

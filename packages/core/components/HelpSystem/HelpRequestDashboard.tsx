@@ -5,127 +5,108 @@
  * knowledge base integration, and real-time analytics.
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  HelpRequest,
+import { HelpRequest,
   HelpRequestType,
   HelpCategory,
   HelpPriority,
   HelpRequestStatus,
-  Epic16HelpRequestService,
+  Epic16HelpRequestService }
   KnowledgeBaseArticle
-} from '../../services/Epic16HelpRequestService';
-}
-interface HelpRequestDashboardProps {
-  helpService: Epic16HelpRequestService;
+ from '../../services/Epic16HelpRequestService';
+
+
+interface HelpRequestDashboardProps { helpService: Epic16HelpRequestService;
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
-  onRequestSelect?: (request: HelpRequest) => void;
-}
-interface HelpRequestFilters {
-  status: HelpRequestStatus;
+  onRequestSelect?: (request: HelpRequest) => void }
+
+
+interface HelpRequestFilters { status: HelpRequestStatus;
   category: HelpCategory;
   priority: HelpPriority;
   type: HelpRequestType;
-  assignedTo?: string;
-}
+  assignedTo?: string }
+
   dateRange?: { start: Date; end: Date };
   searchQuery: string;
 
-export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
-  helpService,
-  userId,
-  userRole,
+export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({ )
+  helpService
+  userId
+  userRole }
   onRequestSelect
-}) => {
-  // State management
+}) => { // State management
   const [requests, setRequests] = useState<HelpRequest>([]);
   const [selectedRequest, setSelectedRequest] = useState<HelpRequest | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<HelpRequestFilters>({)
-  status: [],
-  category: [],
-  priority: [],
-  type: [],
-  searchQuery: '',
+  status: []
+  category: []
+  priority: []
+  type: []
+  searchQuery: '' }
 });
-  const [pagination, setPagination] = useState({)
-  page: 0,
-  limit: 25,
-  total: 0,
-  hasMore: false,
+  const [pagination, setPagination] = useState({ )
+  page: 0
+  limit: 25
+  total: 0
+  hasMore: false }
 });
   const [_____showCreateModal, setShowCreateModal] = useState(false);
   const [analytics, setAnalytics] = useState<unknown>(null);
   const [knowledgeBase, setKnowledgeBase] = useState<KnowledgeBaseArticle>([]);
   // Load help requests
-  const loadRequests = useCallback(async () => {
-  setLoading(true);
+  const loadRequests = useCallback(async () => { setLoading(true);
   setError(null);
   try {
   const filterCriteria = {
-  status: filters.status.length > 0 ? filters.status : undefined,
-  category: filters.category.length > 0 ? filters.category : undefined,
-  priority: filters.priority.length > 0 ? filters.priority : undefined,
-  assignedTo: filters.assignedTo,
-  dateRange: filters.dateRange,
-  limit: pagination.limit,
-  offset: pagination.page * pagination.limit,
+  status: filters.status.length > 0 ? filters.status : undefined
+  category: filters.category.length > 0 ? filters.category : undefined
+  priority: filters.priority.length > 0 ? filters.priority : undefined
+  assignedTo: filters.assignedTo
+  dateRange: filters.dateRange
+  limit: pagination.limit
+  offset: pagination.page * pagination.limit }
 };
       const result = await helpService.getHelpRequests(filterCriteria);
       setRequests(result.requests);
-      setPagination(prev => ({)
-  ...prev,
-  total: result.total,
-  hasMore: result.hasMore,
+      setPagination(prev => ({ )
+  ...prev
+  total: result.total
+  hasMore: result.hasMore }
 }));
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load help requests');
-} finally {
-      setLoading(false);
-  }, [helpService, filters, pagination.page, pagination.limit]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load help requests') } finally { setLoading(false) }, [helpService, filters, pagination.page, pagination.limit]);
   // Load analytics
-  const loadAnalytics = useCallback(async () => {
-  try {
+  const loadAnalytics = useCallback(async () => { try {
   const timeRange = {
-  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days,
-  end: new Date(),
+  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
+  end: new Date() }
 };
       const analyticsData = await helpService.getAnalytics(timeRange);
       setAnalytics(analyticsData);
-    } catch (err) {
-  console.error('Failed to load analytics:', err);
-}, [helpService]);
+ catch (err) { console.error('Failed to load analytics:', err) }, [helpService]);
   // Load knowledge base articles
-  const loadKnowledgeBase = useCallback(async () => {
-  try {
+  const loadKnowledgeBase = useCallback(async () => { try {
   const articles = await helpService.searchKnowledgeBase({)
-  query: '',
-  limit: 10,
+  query: ''
+  limit: 10 }
 });
       setKnowledgeBase(articles);
-    } catch (err) {
-  console.error('Failed to load knowledge base:', err);
-}, [helpService]);
+ catch (err) { console.error('Failed to load knowledge base:', err) }, [helpService]);
   // Effects
-  useEffect(() => {
-    loadRequests();
-  }, [loadRequests]);
-  useEffect(() => {
-    loadAnalytics();
-    loadKnowledgeBase();
-  }, [loadAnalytics, loadKnowledgeBase]);
+  useEffect(() => { loadRequests() }, [loadRequests]);
+  useEffect(() => { loadAnalytics();
+    loadKnowledgeBase() }, [loadAnalytics, loadKnowledgeBase]);
   // Filter requests based on search query
-  const filteredRequests = useMemo(() => {
-    if (!filters.searchQuery) return requests;
+  const filteredRequests = useMemo(() => { if (!filters.searchQuery) return requests;
     const query = filters.searchQuery.toLowerCase();
     return requests.filter(request =>)
       request.title.toLowerCase().includes(query) ||
       request.description.toLowerCase().includes(query) ||
       request.id.toLowerCase().includes(query) ||
       request.tags.some(tag => tag.toLowerCase().includes(query))
-    );
-  }, [requests, filters.searchQuery]);
+    ) }, [requests, filters.searchQuery]);
   // Handle request status update
   const handleStatusUpdate = async (requestId: string, newStatus: HelpRequestStatus) => {
     try {
@@ -135,48 +116,38 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
         const updatedRequest = requests.find(r => r.id === requestId);
         if (updatedRequest) {
           setSelectedRequest({ ...updatedRequest, status: newStatus });
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to update request status');
-};
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to update request status') };
   // Handle request escalation
-  const handleEscalation = async (requestId: string, reason: string) => {
-    try {
+  const handleEscalation = async (requestId: string, reason: string) => { try {
       await helpService.escalateRequest(requestId, reason, userId);
-      await loadRequests();
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to escalate request');
-};
+      await loadRequests() } catch (err) { setError(err instanceof Error ? err.message : 'Failed to escalate request') };
   // Handle knowledge base search
   const searchKnowledgeBase = async (query: string) => {
     try {
       const results = await helpService.searchKnowledgeBase({ query, limit: 5 });
       setKnowledgeBase(results);
-    } catch (err) {
-  console.error('Knowledge base search failed:', err);
-};
+ catch (err) { console.error('Knowledge base search failed:', err) };
   // Reset filters
-  const resetFilters = () => {
-  setFilters({)
-  status: [],
-  category: [],
-  priority: [],
-  type: [],
-  searchQuery: '',
+  const resetFilters = () => { setFilters({)
+  status: []
+  category: []
+  priority: []
+  type: []
+  searchQuery: '' }
 });
     setPagination(prev => ({ ...prev, page: 0 }));
   };
   // Render status badge
-  const renderStatusBadge = (status: HelpRequestStatus) => {
-  const colors = {
-  [HelpRequestStatus.SUBMITTED]: 'bg-blue-100 text-blue-800',
-  [HelpRequestStatus.TRIAGED]: 'bg-purple-100 text-purple-800',
-  [HelpRequestStatus.AUTO_SUGGESTED]: 'bg-yellow-100 text-yellow-800',
-  [HelpRequestStatus.IN_PROGRESS]: 'bg-orange-100 text-orange-800',
-  [HelpRequestStatus.PENDING_USER]: 'bg-gray-100 text-gray-800',
-  [HelpRequestStatus.ESCALATED]: 'bg-red-500 text-white',
-  [HelpRequestStatus.RESOLVED]: 'bg-green-100 text-green-800',
-  [HelpRequestStatus.CLOSED]: 'bg-gray-300 text-gray-700',
-  [HelpRequestStatus.REOPENED]: 'bg-red-100 text-red-800',
+  const renderStatusBadge = (status: HelpRequestStatus) => { const colors = {
+  [HelpRequestStatus.SUBMITTED]: 'bg-blue-100 text-blue-800'
+  [HelpRequestStatus.TRIAGED]: 'bg-purple-100 text-purple-800'
+  [HelpRequestStatus.AUTO_SUGGESTED]: 'bg-yellow-100 text-yellow-800'
+  [HelpRequestStatus.IN_PROGRESS]: 'bg-orange-100 text-orange-800'
+  [HelpRequestStatus.PENDING_USER]: 'bg-gray-100 text-gray-800'
+  [HelpRequestStatus.ESCALATED]: 'bg-red-500 text-white'
+  [HelpRequestStatus.RESOLVED]: 'bg-green-100 text-green-800'
+  [HelpRequestStatus.CLOSED]: 'bg-gray-300 text-gray-700'
+  [HelpRequestStatus.REOPENED]: 'bg-red-100 text-red-800' }
 };
     return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
@@ -185,13 +156,12 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
     );
   };
   // Render priority badge
-  const renderPriorityBadge = (priority: HelpPriority) => {
-  const colors = {
+  const renderPriorityBadge = (priority: HelpPriority) => { const colors = {
   [HelpPriority.LOW]: 'bg-gray-100 text-gray-800',
   [HelpPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
   [HelpPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
   [HelpPriority.URGENT]: 'bg-orange-100 text-orange-800',
-  [HelpPriority.CRITICAL]: 'bg-red-500 text-white',
+  [HelpPriority.CRITICAL]: 'bg-red-500 text-white' }
 };
     return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
@@ -358,7 +328,7 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
                           ? [...filters.status, status]
                           : filters.status.filter(s => s !== status);
                         setFilters({ ...filters, status: newStatus });
-                      }}
+
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <span className="ml-2 text-sm text-gray-600">
@@ -381,7 +351,7 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
                           ? [...filters.priority, priority]
                           : filters.priority.filter(p => p !== priority);
                         setFilters({ ...filters, priority: newPriority });
-                      }}
+
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <span className="ml-2 text-sm text-gray-600 capitalize">
@@ -404,7 +374,7 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
                           ? [...filters.category, category]
                           : filters.category.filter(c => c !== category);
                         setFilters({ ...filters, category: newCategory });
-                      }}
+
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <span className="ml-2 text-sm text-gray-600">
@@ -457,10 +427,9 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
                   <HelpRequestListItem
                     key={request.id}
                     request={request}
-                    onSelect={() => {
+                    onSelect={ () => {
                       setSelectedRequest(request);
-                      onRequestSelect?.(request);
-                    }}
+                      onRequestSelect?.(request) }}
                     onStatusUpdate={handleStatusUpdate}
                     onEscalate={handleEscalation}
                     currentUserId={userId}
@@ -504,30 +473,30 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
 };
 
 // Help Request List Item Component
-}
-interface HelpRequestListItemProps {
-  request: HelpRequest;
+
+
+interface HelpRequestListItemProps { request: HelpRequest;
   onSelect: () => void;
-  onStatusUpdate: (requestId: string, newStatus: HelpRequestStatus) => void;
-  onEscalate: (requestId: string, reason: string) => void;
+  onStatusUpdate: (requestId: string, newStatus: HelpRequestStatus) => void
+  onEscalate: (requestId: string, reason: string) => void
   currentUserId: string;
   userRole: 'user' | 'agent' | 'admin';
   selected: boolean;
-  renderStatusBadge: (status: HelpRequestStatus) => React.ReactNode;
+  renderStatusBadge: (status: HelpRequestStatus) => React.ReactNode
   renderPriorityBadge: (priority: HelpPriority) => React.ReactNode;
-  const HelpRequestListItem: React.FC<HelpRequestListItemProps> = ({,)
-  request,
-  onSelect,
-  onStatusUpdate,
-  onEscalate,
-  currentUserId,
-  userRole,
-  selected,
-  renderStatusBadge,
+  const HelpRequestListItem: React.FC<HelpRequestListItemProps> = ({);
+  request;
+  onSelect;
+  onStatusUpdate;
+  onEscalate;
+  currentUserId;
+  userRole;
+  selected;
+  renderStatusBadge }
   renderPriorityBadge
-}
-}) => {
-  const [showActions, setShowActions] = useState(false);
+
+
+}) => { const [showActions, setShowActions] = useState(false);
   const canModify = userRole === 'admin' || userRole === 'agent';
   const isOverdue = request.sla.responseTime.deadline < new Date() && !request.firstResponseAt;
   const isSLAWarning = request.sla.responseTime.deadline.getTime() - Date.now() < (60 * 60 * 1000); // 1 hour warning;
@@ -537,8 +506,8 @@ interface HelpRequestListItemProps {
   'knowledge_base': '📚',
   'community': '👥',
   'support_agent': '👨‍💼',
-  'specialist': '🎯',
-}[routingStrategy] || '❓';
+  'specialist': '🎯' }
+[routingStrategy] || '❓';
   return;
     <div
       className={`relative p-4 hover:bg-gray-50 cursor-pointer ${selected ? 'bg-blue-50 border-l-4 border-blue-500' : ''} ${isOverdue ? 'bg-red-50' : isSLAWarning ? 'bg-yellow-50' : ''}`}
@@ -594,47 +563,43 @@ interface HelpRequestListItemProps {
             <span className="ml-2">Est. Resolution: {request.routingDecision.estimatedResolutionTime}min</span>
           </div>
         </div>
-        {canModify && ()
+        { canModify && ()
           <div className="flex items-center space-x-1">
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setShowActions(!showActions);
-              }}
+                setShowActions(!showActions) }}
               className="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100"
             >
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
               </svg>
             </button>
-            {showActions && ()
+            { showActions && ()
               <div className="absolute right-4 top-12 z-10 bg-white border border-gray-200 rounded-md shadow-lg py-1 min-w-32">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     onStatusUpdate(request.id, HelpRequestStatus.IN_PROGRESS);
-                    setShowActions(false);
-                  }}
+                    setShowActions(false) }}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Start Progress
                 </button>
                 <button
-                  onClick={(e) => {
+                  onClick={ (e) => {
                     e.stopPropagation();
                     onStatusUpdate(request.id, HelpRequestStatus.RESOLVED);
-                    setShowActions(false);
-                  }}
+                    setShowActions(false) }}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Mark Resolved
                 </button>
                 <button
-                  onClick={(e) => {
+                  onClick={ (e) => {
                     e.stopPropagation();
                     onEscalate(request.id, 'Manual escalation');
-                    setShowActions(false);
-                  }}
+                    setShowActions(false) }}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Escalate

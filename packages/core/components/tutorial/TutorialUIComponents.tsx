@@ -19,8 +19,7 @@ import { Plus } from 'lucide-react';
  * - Analytics and engagement tracking
  */
 import React, { useState, useCallback, useMemo } from 'react';
-import {
-  Play,
+import { Play,
   Pause,
   Square,
   SkipForward,
@@ -68,23 +67,22 @@ import {
   Navigation,
   Compass,
   Map,
-  Route,
+  Route }
   Flag
-} from 'lucide-react';
+ from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 
 // Core tutorial interfaces
 
-}
-export interface TutorialStep {
-  id: string;
+
+export interface TutorialStep { id: string;
   title: string;
   description: string;
   content: TutorialContent;
   type: 'information' | 'interaction' | 'quiz' | 'practice' | 'checkpoint' | 'branch';
-  duration?: number; // estimated minutes,
+  duration?: number; // estimated minutes }
   isRequired: boolean;
   isSkippable: boolean;
   prerequisites: string;
@@ -93,21 +91,21 @@ export interface TutorialStep {
   hints: TutorialHint;
   resources: TutorialResource;
   metadata: StepMetadata;
-}
-}
-}
-export interface TutorialContent {
-  format: 'text' | 'html' | 'markdown' | 'video' | 'interactive' | 'mixed';
-  primary: string; // Main content,
-  secondary?: string; // Additional content,
+
+
+
+
+export interface TutorialContent { format: 'text' | 'html' | 'markdown' | 'video' | 'interactive' | 'mixed';
+  primary: string; // Main content;
+  secondary?: string; // Additional content }
   media?: MediaContent;
   interactive?: InteractiveElement;
   code?: CodeExample;
-}
-}
-}
-export interface MediaContent {
-  id: string;
+
+
+
+
+export interface MediaContent { id: string;
   type: 'image' | 'video' | 'audio' | 'animation';
   url: string;
   thumbnailUrl?: string;
@@ -115,79 +113,73 @@ export interface MediaContent {
   caption?: string;
   duration?: number;
   autoplay?: boolean;
-  controls?: boolean;
-}
-}
-}
-export interface InteractiveElement {
-  id: string;
-  type: 'hotspot' | 'overlay' | 'tooltip' | 'modal' | 'form' | 'simulation';
-}
+  controls?: boolean }
+
+
+
+export interface InteractiveElement { id: string;
+  type: 'hotspot' | 'overlay' | 'tooltip' | 'modal' | 'form' | 'simulation' }
+
   position?: { x: number; y: number };
   size?: { width: number; height: number };
-  trigger: 'click' | 'hover' | 'auto' | 'manual';
+  trigger: 'click' | 'hover' | 'auto' | 'manual';,
   content: string;
   action?: string;
-}
-}
-export interface CodeExample {
-  id: string;
+
+
+export interface CodeExample { id: string;
   language: string;
   code: string;
   explanation?: string;
   executable?: boolean;
-  expectedOutput?: string;
-}
-}
-}
-export interface StepValidation {
-  type: 'automatic' | 'manual' | 'quiz' | 'checklist';
+  expectedOutput?: string }
+
+
+
+export interface StepValidation { type: 'automatic' | 'manual' | 'quiz' | 'checklist';
   criteria: ValidationCriteria;
-  feedback: {
+  feedback: { }
   success: string;
   failure: string;
   partial: string;
-}
+
+
 };
-  retries: {
+  retries: { ,
   allowed: number;
-  unlimited: boolean;
-};
-}
-}
-export interface ValidationCriteria {
-  id: string;
+  unlimited: boolean };
+
+
+export interface ValidationCriteria { id: string;
   description: string;
   type: 'condition' | 'function' | 'user_input';
   condition?: string;
   function?: string;
-  weight: number;
-}
-}
-}
-export interface TutorialHint {
-  id: string;
+  weight: number }
+
+
+
+export interface TutorialHint { id: string;
   content: string;
-  type: 'tip' | 'warning' | 'info' | 'encouragement';
+  type: 'tip' | 'warning' | 'info' | 'encouragement' }
   trigger: 'manual' | 'timer' | 'struggle' | 'request';
   delay?: number;
   priority: number;
-}
-}
-}
-export interface TutorialResource {
-  id: string;
+
+
+
+
+export interface TutorialResource { id: string;
   title: string;
   type: 'documentation' | 'video' | 'article' | 'example' | 'tool';
   url?: string;
   content?: string;
   description: string;
-  tags: string;
-}
-}
-}
-export interface StepMetadata {
-  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  tags: string }
+
+
+
+export interface StepMetadata { difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert' }
   category: string;
   tags: string;
   estimatedTime: number;
@@ -195,87 +187,82 @@ export interface StepMetadata {
   averageScore: number;
   commonMistakes: string;
   tips: string;
-}
-}
-}
-export interface Tutorial {
-  id: string;
+
+
+
+
+export interface Tutorial { id: string;
   title: string;
   description: string;
   category: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  estimatedDuration: number; // minutes,
+  estimatedDuration: number; // minutes }
   steps: TutorialStep;
   learning: LearningObjectives;
   navigation: NavigationConfig;
   accessibility: AccessibilityConfig;
   analytics: AnalyticsConfig;
   metadata: TutorialMetadata;
-}
-}
-}
-export interface LearningObjectives {
-  primary: string;
+
+
+
+
+export interface LearningObjectives { primary: string;
   secondary: string;
   outcomes: string;
-  assessments: Assessment;
-}
-}
-}
-export interface Assessment {
-  id: string;
+  assessments: Assessment }
+
+
+
+export interface Assessment { id: string;
   type: 'quiz' | 'practical' | 'project' | 'peer_review';
   title: string;
   description: string;
   passingScore: number;
-  questions?: QuizQuestion;
-}
-}
-}
-export interface QuizQuestion {
-  id: string;
+  questions?: QuizQuestion }
+
+
+
+export interface QuizQuestion { id: string;
   type: 'multiple_choice' | 'true_false' | 'short_answer' | 'code';
   question: string;
   options?: string;
-  correctAnswer: string | string;
+  correctAnswer: string | string }
   explanation: string;
   points: number;
-}
-}
-}
-export interface NavigationConfig {
-  allowBackward: boolean;
+
+
+
+
+export interface NavigationConfig { allowBackward: boolean;
   allowForward: boolean;
   allowJumping: boolean;
   showProgress: boolean;
   showStepList: boolean;
   autoAdvance: boolean;
-  autoAdvanceDelay?: number;
-}
-}
-}
-export interface AccessibilityConfig {
-  screenReaderSupport: boolean;
+  autoAdvanceDelay?: number }
+
+
+
+export interface AccessibilityConfig { screenReaderSupport: boolean;
   keyboardNavigation: boolean;
   highContrast: boolean;
   reducedMotion: boolean;
   audioDescriptions: boolean;
   closedCaptions: boolean;
-  fontSize: 'small' | 'medium' | 'large' | 'extra-large';
-}
-}
-}
-export interface AnalyticsConfig {
-  trackProgress: boolean;
+  fontSize: 'small' | 'medium' | 'large' | 'extra-large' }
+
+
+
+export interface AnalyticsConfig { trackProgress: boolean;
   trackEngagement: boolean;
   trackPerformance: boolean;
   trackDropoff: boolean;
-  anonymize: boolean;
-}
-}
-}
-export interface TutorialMetadata {
-  author: string;
+  anonymize: boolean }
+
+
+
+export interface TutorialMetadata { author: string;
   version: string;
   language: string;
   tags: string;
@@ -285,12 +272,11 @@ export interface TutorialMetadata {
   lastModified: Date;
   isPublished: boolean;
   rating: number;
-  reviewCount: number;
-}
-}
-}
-export interface TutorialProgress {
-  tutorialId: string;
+  reviewCount: number }
+
+
+
+export interface TutorialProgress { tutorialId: string;
   userId: string;
   currentStepId: string;
   completedSteps: string;
@@ -303,10 +289,10 @@ export interface TutorialProgress {
   score: number;
   attempts: Record<string, number>;
   bookmarks: string;
-  notes: TutorialNote;
-}
-}
-}
+  notes: TutorialNote }
+
+
+
 export interface TutorialNote {
   id: string;
   stepId: string;
@@ -314,73 +300,59 @@ export interface TutorialNote {
   timestamp: Date;
   isPrivate: boolean;
   // Main Tutorial Component
-}
-}
-}
-export interface TutorialPlayerProps {
-  tutorial: Tutorial;
+
+
+
+
+export interface TutorialPlayerProps { tutorial: Tutorial;
   progress?: TutorialProgress;
   onStepComplete: (stepId: string, score?: number) => void;
-  onTutorialComplete: (finalScore: number, completionTime: number) => void;
-  onProgressSave: (progress: Partial<TutorialProgress>) => void;
+  onTutorialComplete: (finalScore: number, completionTime: number) => void
+  onProgressSave: (progress: Partial<TutorialProgress>) => void }
   onExit: () => void;
   className?: string;
-}
-}
-export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
-  tutorial,
-  progress,
-  onStepComplete,
-  onTutorialComplete,
-  onProgressSave,
-  onExit,
+
+
+export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ )
+  tutorial
+  progress
+  onStepComplete
+  onTutorialComplete
+  onProgressSave
+  onExit }
   className = ''
-}) => {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+}) => { const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showStepList, setShowStepList] = useState(false);
   const [showResources, setShowResources] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [userSettings, setUserSettings] = useState({)
-  fontSize: 'medium' as const,
-  reducedMotion: false,
-  autoplay: true,
-  showHints: true,
+  fontSize: 'medium' as const
+  reducedMotion: false
+  autoplay: true
+  showHints: true }
 });
   const currentStep = tutorial.steps[currentStepIndex];
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === tutorial.steps.length - 1;
       const total = tutorial.steps.length;
-    return {
-  completed,
-  total,
-  percentage: (completed / total) * 100,
+    return { completed
+  total
+  percentage: (completed / total) * 100 }
 };
   }, [progress, tutorial.steps.length]);
-  const handleStepNavigation = useCallback((direction: 'next' | 'previous', stepIndex?: number) => {
-    if (stepIndex !== undefined) {
-      setCurrentStepIndex(stepIndex);
-    } else if (direction === 'next' && !isLastStep) {
-      setCurrentStepIndex(prev => prev + 1);
-    } else if (direction === 'previous' && !isFirstStep) {
-      setCurrentStepIndex(prev => prev - 1);
-  }, [isFirstStep, isLastStep]);
-  const handleStepComplete = useCallback((score?: number) => {
-    onStepComplete(currentStep.id, score);
+  const handleStepNavigation = useCallback((direction: 'next' | 'previous', stepIndex?: number) => { if (stepIndex !== undefined) {
+      setCurrentStepIndex(stepIndex) } else if (direction === 'next' && !isLastStep) { setCurrentStepIndex(prev => prev + 1) } else if (direction === 'previous' && !isFirstStep) { setCurrentStepIndex(prev => prev - 1) }, [isFirstStep, isLastStep]);
+  const handleStepComplete = useCallback((score?: number) => { onStepComplete(currentStep.id, score);
     if (!isLastStep) {
       if (tutorial.navigation.autoAdvance) {
         setTimeout(() => {
-          handleStepNavigation('next');
-        }, tutorial.navigation.autoAdvanceDelay || 2000);
-    } else {
-      // Tutorial completed
+          handleStepNavigation('next') }, tutorial.navigation.autoAdvanceDelay || 2000);
+ else { // Tutorial completed
       const finalScore = 85; // Calculate based on progress;
       const completionTime = Date.now() - (progress?.startTime.getTime() || Date.now());
-      onTutorialComplete(finalScore, completionTime);
-  }, [currentStep.id, isLastStep, onStepComplete, onTutorialComplete, tutorial.navigation, progress, handleStepNavigation]);
-  const handlePlayPause = useCallback(() => {
-    setIsPlaying(!isPlaying);
-  }, [isPlaying]);
+      onTutorialComplete(finalScore, completionTime) }, [currentStep.id, isLastStep, onStepComplete, onTutorialComplete, tutorial.navigation, progress, handleStepNavigation]);
+  const handlePlayPause = useCallback(() => { setIsPlaying(!isPlaying) }, [isPlaying]);
   return;
     <div className={`tutorial-player ${className}`}>}
       <div className="tutorial-header">
@@ -465,7 +437,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
               resources={currentStep.resources}
               onResourceClick={(resource) => {
                 // Handle resource click
-              }}
+}
             />
           </div>
         )}
@@ -503,20 +475,21 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
 };
 
 // Tutorial Progress Bar Component
-}
-interface TutorialProgressBarProps {
-  current: number;
+
+
+interface TutorialProgressBarProps { current: number;
   total: number;
   completedSteps: string;
   steps: TutorialStep;
   onStepClick: (index: number) => void;
-  const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({,)
-  current,
-  total,
-  completedSteps,
-  steps,
+  const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({);
+  current;
+  total;
+  completedSteps;
+  steps }
   onStepClick
-}
+
+
 }) => {
   const progressPercentage = (current / total) * 100;
   return;
@@ -553,40 +526,36 @@ interface TutorialProgressBarProps {
 };
 
 // Tutorial Step Content Component
-}
-interface TutorialStepContentProps {
-  step: TutorialStep;
+
+
+interface TutorialStepContentProps { step: TutorialStep;
   isPlaying: boolean;
   settings: unknown;
   onComplete: (score?: number) => void;
   onPlayPause: () => void;
-  const TutorialStepContent: React.FC<TutorialStepContentProps> = ({,)
-  step,
-  isPlaying,
-  settings,
-  onComplete,
+  const TutorialStepContent: React.FC<TutorialStepContentProps> = ({);
+  step;
+  isPlaying;
+  settings;
+  onComplete }
   onPlayPause
-}
-}) => {
-  const [showHints, setShowHints] = useState(false);
+
+
+}) => { const [showHints, setShowHints] = useState(false);
   const [currentHintIndex, setCurrentHintIndex] = useState(0);
   const [validationResult, setValidationResult] = useState<{
   passed: boolean;
   score?: number;
-  feedback?: string;
-} | null>(null);
-  const handleValidateStep = useCallback(async () => {
-  // Simulate step validation
+  feedback?: string } | null>(null);
+  const handleValidateStep = useCallback(async () => { // Simulate step validation
   const passed = Math.random() > 0.3; // 70% pass rate;
   const score = passed ? Math.floor(Math.random() * 30) + 70 : Math.floor(Math.random() * 60) + 10;
   setValidationResult({)
   passed,
   score,
-  feedback: passed ? 'Great job! You completed this step successfully.' : 'Not quite right. Try again!',
+  feedback: passed ? 'Great job! You completed this step successfully.' : 'Not quite right. Try again!' }
 });
-    if (passed) {
-      onComplete(score);
-  }, [onComplete]);
+    if (passed) { onComplete(score) }, [onComplete]);
   const renderContent = () => {
     switch (step.content.format) {
     case 'text':
@@ -631,7 +600,7 @@ interface TutorialStepContentProps {
                 element={element}
                 onInteraction={() => {
                   // Handle interaction
-                }}
+}
               />
             ))}
           </div>
@@ -708,7 +677,7 @@ interface TutorialStepContentProps {
             example={codeExample}
             onExecute={() => {
               // Handle code execution
-            }}
+}
           />
         ))}
       </div>
@@ -781,18 +750,19 @@ interface TutorialStepContentProps {
 };
 
 // Tutorial Step List Component
-}
-interface TutorialStepListProps {
-  steps: TutorialStep;
+
+
+interface TutorialStepListProps { steps: TutorialStep;
   currentStepIndex: number;
   completedSteps: string;
   onStepSelect: (index: number) => void;
-  const TutorialStepList: React.FC<TutorialStepListProps> = ({,)
-  steps,
-  currentStepIndex,
-  completedSteps,
+  const TutorialStepList: React.FC<TutorialStepListProps> = ({);
+  steps;
+  currentStepIndex;
+  completedSteps }
   onStepSelect
-}
+
+
 }) => {
   return;
     <div className="tutorial-step-list">
@@ -835,14 +805,15 @@ interface TutorialStepListProps {
 };
 
 // Tutorial Resources Component
-}
-interface TutorialResourcesProps {
-  resources: TutorialResource;
+
+
+interface TutorialResourcesProps { resources: TutorialResource;
   onResourceClick: (resource: TutorialResource) => void;
-  const TutorialResources: React.FC<TutorialResourcesProps> = ({,)
-  resources,
+  const TutorialResources: React.FC<TutorialResourcesProps> = ({);
+  resources }
   onResourceClick
-}
+
+
 }) => {
   return;
     <div className="tutorial-resources">
@@ -878,16 +849,17 @@ interface TutorialResourcesProps {
 };
 
 // Tutorial Settings Component
-}
-interface TutorialSettingsProps {
-  settings: unknown;
-  onSettingsChange: (settings: unknown) => void;
+
+
+interface TutorialSettingsProps { settings: unknown;
+  onSettingsChange: (settings: unknown) => void
   onClose: () => void;
-  const TutorialSettings: React.FC<TutorialSettingsProps> = ({,)
-  settings,
-  onSettingsChange,
+  const TutorialSettings: React.FC<TutorialSettingsProps> = ({);
+  settings;
+  onSettingsChange }
   onClose
-}
+
+
 }) => {
   return;
     <div className="tutorial-settings-overlay">
@@ -968,29 +940,28 @@ interface TutorialSettingsProps {
 };
 
 // Interactive Element Renderer
-}
-interface InteractiveElementProps {
-  element: InteractiveElement;
+
+
+interface InteractiveElementProps { element: InteractiveElement;
   onInteraction: () => void;
-  const InteractiveElement: React.FC<InteractiveElementProps> = ({,)
-  element,
+  const InteractiveElement: React.FC<InteractiveElementProps> = ({);
+  element }
   onInteraction
-}
-}) => {
-  const [isActive, setIsActive] = useState(false);
+
+
+}) => { const [isActive, setIsActive] = useState(false);
   const handleTrigger = () => {
     setIsActive(true);
-    onInteraction();
-  };
+    onInteraction() };
   return;
     <div
       className={`interactive-element ${element.type} ${isActive ? 'active' : ''}`}
-      style={{
-  left: element.position?.x,
-  top: element.position?.y,
-  width: element.size?.width,
-  height: element.size?.height,
-}}
+      style={ {
+  left: element.position?.x
+  top: element.position?.y
+  width: element.size?.width
+  height: element.size?.height }
+
       onClick={element.trigger === 'click' ? handleTrigger : undefined}
       onMouseEnter={element.trigger === 'hover' ? handleTrigger : undefined}
     >
@@ -1028,14 +999,15 @@ interface InteractiveElementProps {
 };
 
 // Media Content Renderer
-}
-interface MediaContentRendererProps {
-  media: MediaContent;
+
+
+interface MediaContentRendererProps { media: MediaContent;
   settings: unknown;
-  const MediaContentRenderer: React.FC<MediaContentRendererProps> = ({,)
-  media,
+  const MediaContentRenderer: React.FC<MediaContentRendererProps> = ({);
+  media }
   settings
-}
+
+
 }) => {
   return;
     <div className="media-content">
@@ -1071,14 +1043,15 @@ interface MediaContentRendererProps {
 };
 
 // Code Example Renderer
-}
-interface CodeExampleRendererProps {
-  example: CodeExample;
+
+
+interface CodeExampleRendererProps { example: CodeExample;
   onExecute: () => void;
-  const CodeExampleRenderer: React.FC<CodeExampleRendererProps> = ({,)
-  example,
+  const CodeExampleRenderer: React.FC<CodeExampleRendererProps> = ({);
+  example }
   onExecute
-}
+
+
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return;
@@ -1131,38 +1104,33 @@ interface CodeExampleRendererProps {
 
 // Tutorial Browser Component
 
-}
-export interface TutorialBrowserProps {
-  tutorials: Tutorial;
-  onTutorialSelect: (tutorial: Tutorial) => void;
+
+export interface TutorialBrowserProps { tutorials: Tutorial;
+  onTutorialSelect: (tutorial: Tutorial) => void }
   onTutorialCreate: () => void;
   className?: string;
-}
-}
-export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
-  tutorials,
-  onTutorialSelect,
-  onTutorialCreate,
+
+
+export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({ )
+  tutorials
+  onTutorialSelect
+  onTutorialCreate }
   className = ''
-}) => {
-  const [searchQuery, setSearchQuery] = useState('');
+}) => { const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [sortBy, setSortBy] = useState<'title' | 'difficulty' | 'duration' | 'rating'>('title');
   const categories = useMemo(() => {
     const cats = Array.from(new Set(tutorials.map(t => t.category)));
-    return ['all', ...cats];
-  }, [tutorials]);
+    return ['all', ...cats] }, [tutorials]);
   const difficulties = ['all', 'beginner', 'intermediate', 'advanced', 'expert'];
-  const filteredTutorials = useMemo(() => {
-    return tutorials
+  const filteredTutorials = useMemo(() => { return tutorials
       .filter(tutorial => {)
   const matchesSearch = tutorial.title.toLowerCase().includes(searchQuery.toLowerCase()) ||;
                             tutorial.description.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = selectedCategory === 'all' || tutorial.category === selectedCategory;
         const matchesDifficulty = selectedDifficulty === 'all' || tutorial.difficulty === selectedDifficulty;
-        return matchesSearch && matchesCategory && matchesDifficulty;
-  }
+        return matchesSearch && matchesCategory && matchesDifficulty }
       .sort((a, b) => {
         switch (sortBy) {
         case 'title':
@@ -1254,14 +1222,15 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
 };
 
 // Tutorial Card Component
-}
-interface TutorialCardProps {
-  tutorial: Tutorial;
+
+
+interface TutorialCardProps { tutorial: Tutorial;
   onClick: () => void;
-  const TutorialCard: React.FC<TutorialCardProps> = ({,)
-  tutorial,
+  const TutorialCard: React.FC<TutorialCardProps> = ({);
+  tutorial }
   onClick
-}
+
+
 }) => {
   return;
     <Card className="tutorial-card" onClick={onClick}>
@@ -1305,11 +1274,10 @@ interface TutorialCardProps {
   );
 };
 
-export default {
-  TutorialPlayer,
+export default { TutorialPlayer,
   TutorialBrowser,
   TutorialStepContent,
   TutorialStepList,
-  TutorialResources,
+  TutorialResources }
   TutorialSettings
 };

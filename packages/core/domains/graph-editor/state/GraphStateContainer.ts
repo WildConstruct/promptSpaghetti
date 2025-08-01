@@ -4,71 +4,64 @@
  * 
  * Domain-specific state management for graph editing functionality
  */
-import { 
-  BaseStateContainer,
+import { BaseStateContainer,
   StateChange,
-  ValidationResult,
+  ValidationResult }
   ValidationError
-} from '../../../state/containers/BaseStateContainer';
+ from '../../../state/containers/BaseStateContainer';
 import { DomainStateContainer, DomainStateChange } from '../../../state/orchestration/StateOrchestrator';
 import { GraphSchema } from '../../types/GraphTypes';
 
 // Graph state interface
 
-}
-export interface GraphState {
-  // Core graph data
+
+export interface GraphState { // Core graph data
   nodes: Record<string, GraphNode>;
   edges: Record<string, GraphEdge>;
   metadata: GraphMetadata;
   // UI state
-  selection: {
+  selection: { }
   selectedNodes: string;
   selectedEdges: string;
   isMultiSelect: boolean;
-}
+
+
 };
   // View state
-  viewport: {
+  viewport: { 
   x: number;
   y: number;
-  zoom: number;
-};
+  zoom: number };
   // Execution state
-  execution: {
+  execution: { 
   isRunning: boolean;
   currentNodeId?: string;
   results: Record<string, any>;
-  errors: ExecutionError;
-};
+  errors: ExecutionError };
   // History and undo/redo
-  history: {
+  history: { 
   canUndo: boolean;
   canRedo: boolean;
   currentIndex: number;
-  maxSize: number;
-};
+  maxSize: number };
   // Collaboration state
-  collaboration: {
+  collaboration: { 
   isConnected: boolean;
   activeUsers: CollaboratorInfo;
-  cursors: Record<string, CursorPosition>;
-};
+  cursors: Record<string, CursorPosition> };
   // Performance metrics
-  performance: {
+  performance: { 
   nodeCount: number;
   edgeCount: number;
   lastRenderTime: number;
-  memoryUsage: number;
-};
+  memoryUsage: number };
 
 // Supporting interfaces
-}
-}
-export interface GraphNode {
-  id: string;
-  type: string;
-}
+
+
+export interface GraphNode { id: string;
+  type: string }
+
   position: { x: number; y: number };
   data: Record<string, any>;
   width?: number;
@@ -77,16 +70,13 @@ export interface GraphNode {
   dragging?: boolean;
   style?: Record<string, any>;
   className?: string;
-  metadata?: {
-  created: number;
+  metadata?: { created: number;
   modified: number;
   author?: string;
-  version?: number;
-};
-}
-}
-export interface GraphEdge {
-  id: string;
+  version?: number };
+
+
+export interface GraphEdge { id: string;
   source: string;
   target: string;
   sourceHandle?: string;
@@ -97,16 +87,16 @@ export interface GraphEdge {
   className?: string;
   animated?: boolean;
   selected?: boolean;
-  metadata?: {
+  metadata?: { }
   created: number;
   modified: number;
   author?: string;
-}
+
+
 };
-}
-}
-export interface GraphMetadata {
-  id: string;
+
+
+export interface GraphMetadata { id: string;
   name: string;
   description?: string;
   version: string;
@@ -116,36 +106,35 @@ export interface GraphMetadata {
   tags: string;
   isPublic: boolean;
   schema: GraphSchema;
-  settings: {
+  settings: { }
   snapToGrid: boolean;
   gridSize: number;
   showGrid: boolean;
   nodeSpacing: number;
   autoLayout: boolean;
-}
+
+
 };
-}
-}
-export interface ExecutionError {
-  id: string;
+
+
+export interface ExecutionError { id: string;
   nodeId: string;
   message: string;
   type: 'runtime' | 'validation' | 'network';
   timestamp: number;
-  stack?: string;
-}
-}
-}
-export interface CollaboratorInfo {
-  id: string;
+  stack?: string }
+
+
+
+export interface CollaboratorInfo { id: string;
   name: string;
   avatar?: string;
   color: string;
   isActive: boolean;
-  lastSeen: number;
-}
-}
-}
+  lastSeen: number }
+
+
+
 export interface CursorPosition {
   userId: string;
   x: number;
@@ -153,8 +142,8 @@ export interface CursorPosition {
   nodeId?: string;
   timestamp: number;
   // Graph operations
-}
-}
+
+
 export type GraphOperation = 
   | { type: 'ADD_NODE'; node: GraphNode }
   | { type: 'UPDATE_NODE'; nodeId: string; updates: Partial<GraphNode> }
@@ -173,7 +162,7 @@ export type GraphOperation =
 
 // Transaction context for batch operations
 
-}
+
 export interface GraphTransaction {
   id: string;
   operations: GraphOperation;
@@ -181,24 +170,23 @@ export interface GraphTransaction {
   userId?: string;
   description?: string;
   // Graph state container implementation
-}
-}
+
+
 export class GraphStateContainer extends BaseStateContainer<GraphState> implements DomainStateContainer {
   private transactionQueue: GraphTransaction = [];
   private activeTransaction?: GraphTransaction;
   private nodePositionCache = new Map<string, { x: number; y: number }>();
   private validationCache = new Map<string, ValidationResult>();
-  constructor(initialGraph?: Partial<GraphState>) {
-  super({)
-  enableValidation: true,
-  enableHistory: true,
-  maxHistorySize: 200,
-  enablePersistence: true,
-  persistenceKey: 'graph-editor-state',
-  enableDebug: true,
-  enableDevTools: true,
-  enableTimeTravel: true,
-  enablePerformanceProfiling: true,
+  constructor(initialGraph?: Partial<GraphState>) { super({)
+  enableValidation: true
+  enableHistory: true
+  maxHistorySize: 200
+  enablePersistence: true
+  persistenceKey: 'graph-editor-state'
+  enableDebug: true
+  enableDevTools: true
+  enableTimeTravel: true
+  enablePerformanceProfiling: true }
 });
     // Initialize with provided graph or empty state
     if (initialGraph) {
@@ -207,56 +195,56 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
   // Abstract method implementations
   getInitialState(): GraphState {
     return {
-      nodes: {},
-      edges: {},
-      metadata: {
-  id: this.generateId(),
-        name: 'Untitled Graph',
-        version: '1.0.0',
-        created: Date.now(),
-        modified: Date.now(),
-        author: 'Unknown',
-        tags: [],
-        isPublic: false,
-        schema: { version: '1.0', nodeTypes: [], edgeTypes: [] },
-        settings: {
-  snapToGrid: true,
-  gridSize: 20,
-  showGrid: true,
-  nodeSpacing: 100,
-  autoLayout: false,
-},
-  selection: {
-  selectedNodes: [],
-  selectedEdges: [],
-  isMultiSelect: false,
-},
-  viewport: {
-  x: 0,
-  y: 0,
-  zoom: 1,
-},
-  execution: {
-  isRunning: false,
-        results: {},
-        errors: [];
-  },
-  history: {
-  canUndo: false,
-  canRedo: false,
-  currentIndex: 0,
-  maxSize: 100,
-},
-  collaboration: {
-  isConnected: false,
-        activeUsers: [],
+      nodes: {}
+      edges: {}
+      metadata: { 
+  id: this.generateId()
+        name: 'Untitled Graph'
+        version: '1.0.0'
+        created: Date.now()
+        modified: Date.now()
+        author: 'Unknown'
+        tags: []
+        isPublic: false }
+        schema: { version: '1.0', nodeTypes: [], edgeTypes: [] }
+        settings: { 
+  snapToGrid: true
+  gridSize: 20
+  showGrid: true
+  nodeSpacing: 100
+  autoLayout: false }
+
+  selection: { 
+  selectedNodes: []
+  selectedEdges: []
+  isMultiSelect: false }
+
+  viewport: { 
+  x: 0
+  y: 0
+  zoom: 1 }
+
+  execution: { 
+  isRunning: false }
+        results: {}
+        errors: []
+
+  history: { 
+  canUndo: false
+  canRedo: false
+  currentIndex: 0
+  maxSize: 100 }
+
+  collaboration: { 
+  isConnected: false
+        activeUsers: [] }
         cursors: {}
-  },
-  performance: {
-  nodeCount: 0,
-  edgeCount: 0,
-  lastRenderTime: 0,
-  memoryUsage: 0,
+
+  performance: { 
+  nodeCount: 0
+  edgeCount: 0
+  lastRenderTime: 0
+  memoryUsage: 0 }
 };
   validateState(state: GraphState): ValidationResult {
     const errors: ValidationError = [];
@@ -266,18 +254,18 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
   if (!node.id || !node.type) {
         errors.push({)
   field: `nodes.${node.id}`}
-},
-  message: 'Node must have id and type',
-          value: node,
-          code: 'INVALID_NODE'
+
+  message: 'Node must have id and type'
+          value: node
+          code: 'INVALID_NODE';
   });
       if (!node.position || typeof node.position.x !== 'number' || typeof node.position.y !== 'number') {
         errors.push({)
   field: `nodes.${node.id}.position`}
-},
-  message: 'Node must have valid position coordinates',
-          value: node.position,
-          code: 'INVALID_POSITION'
+
+  message: 'Node must have valid position coordinates'
+          value: node.position
+          code: 'INVALID_POSITION';
   });
     });
     // Validate edges
@@ -285,109 +273,102 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
   if (!edge.id || !edge.source || !edge.target) {
         errors.push({)
   field: `edges.${edge.id}`}
-},
-  message: 'Edge must have id, source, and target',
-          value: edge,
-          code: 'INVALID_EDGE'
+
+  message: 'Edge must have id, source, and target'
+          value: edge
+          code: 'INVALID_EDGE';
   });
       // Check if source and target nodes exist
       if (!state.nodes[edge.source]) {
         errors.push({)
   field: `edges.${edge.id}.source`}
-},
-  message: 'Edge source node does not exist',
-          value: edge.source,
-          code: 'MISSING_SOURCE_NODE'
+
+  message: 'Edge source node does not exist'
+          value: edge.source
+          code: 'MISSING_SOURCE_NODE';
   });
       if (!state.nodes[edge.target]) {
         errors.push({)
   field: `edges.${edge.id}.target`}
-},
-  message: 'Edge target node does not exist',
-          value: edge.target,
-          code: 'MISSING_TARGET_NODE'
+
+  message: 'Edge target node does not exist'
+          value: edge.target
+          code: 'MISSING_TARGET_NODE';
   });
     });
     // Validate selection consistency
-    state.selection.selectedNodes.forEach(nodeId => {)
+    state.selection.selectedNodes.forEach(nodeId => { )
   if (!state.nodes[nodeId]) {
         warnings.push({)
-  field: 'selection.selectedNodes',
+  field: 'selection.selectedNodes' }
           message: `Selected node ${nodeId} does not exist`}
-},
+
   suggestion: 'Remove from selection';
   });
     });
-    state.selection.selectedEdges.forEach(edgeId => {)
+    state.selection.selectedEdges.forEach(edgeId => { )
   if (!state.edges[edgeId]) {
         warnings.push({)
-  field: 'selection.selectedEdges',
+  field: 'selection.selectedEdges' }
           message: `Selected edge ${edgeId} does not exist`}
-},
+
   suggestion: 'Remove from selection';
   });
     });
     // Check for cycles (warning only)
-    if (this.detectCycles(state)) {
-  warnings.push({)
-  field: 'graph',
-  message: 'Graph contains cycles',
-  suggestion: 'Consider removing cyclic dependencies',
+    if (this.detectCycles(state)) { warnings.push({)
+  field: 'graph'
+  message: 'Graph contains cycles'
+  suggestion: 'Consider removing cyclic dependencies' }
 });
     // Performance validation
     const nodeCount = Object.keys(state.nodes).length;
     const edgeCount = Object.keys(state.edges).length;
-    if (nodeCount > 1000) {
-      warnings.push({)
-  field: 'performance',
+    if (nodeCount > 1000) { warnings.push({)
+  field: 'performance' }
         message: `Large number of nodes (${nodeCount})`}
-},
+
   suggestion: 'Consider using virtualization for better performance';
   });
-    if (edgeCount > 2000) {
-      warnings.push({)
-  field: 'performance',
+    if (edgeCount > 2000) { warnings.push({)
+  field: 'performance' }
         message: `Large number of edges (${edgeCount})`}
-},
+
   suggestion: 'Consider simplifying the graph structure';
   });
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0
+  errors }
   warnings
 };
-  getDomainName(): string {
-  return 'graph-editor';
+  getDomainName(): string { return 'graph-editor';
   // Graph-specific operations
-  async applyOperation(operation: GraphOperation, userId?: string): Promise<void> {,
-  const change: StateChange<GraphState> = {,
-  id: this.generateChangeId(),
-  timestamp: Date.now(),
-  type: operation.type,
-  payload: operation,
-  userId,
-  source: 'local',
+  async applyOperation(operation: GraphOperation, userId?: string): Promise<void> {
+  const change: StateChange<GraphState> = {
+  id: this.generateChangeId()
+  timestamp: Date.now()
+  type: operation.type
+  payload: operation
+  userId
+  source: 'local' }
 };
     this.setState(prevState => this.applyOperationToState(prevState, operation), change);
-  async applyTransaction(transaction: GraphTransaction): Promise<void> {
-
-  this.activeTransaction = transaction;
+  async applyTransaction(transaction: GraphTransaction): Promise<void> { this.activeTransaction = transaction;
   try {
   // Apply all operations in the transaction atomically
   const finalState = transaction.operations.reduce(;);
-  (state, operation) => this.applyOperationToState(state, operation),
+  (state, operation) => this.applyOperationToState(state, operation)
   this.getState()
   );
-  const change: StateChange<GraphState> = {,
-  id: transaction.id,
-  timestamp: transaction.timestamp,
-  type: 'BATCH_OPERATION',
-  payload: transaction,
-  userId: transaction.userId,
-  source: 'local',
+  const change: StateChange<GraphState> = {
+  id: transaction.id
+  timestamp: transaction.timestamp
+  type: 'BATCH_OPERATION'
+  payload: transaction
+  userId: transaction.userId
+  source: 'local' }
 };
       this.setState(() => finalState, change);
-    } finally {
+ finally {
       this.activeTransaction = undefined;
   private applyOperationToState(state: GraphState, operation: GraphOperation): GraphState {
     const newState = { ...state };
@@ -397,9 +378,8 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         newState.performance.nodeCount = Object.keys(newState.nodes).length;
         break;
       case 'UPDATE_NODE':
-        if (state.nodes[operation.nodeId]) {
-          newState.nodes = {
-            ...state.nodes,
+        if (state.nodes[operation.nodeId]) { newState.nodes = {
+            ...state.nodes }
             [operation.nodeId]: { ...state.nodes[operation.nodeId], ...operation.updates }
           };
         break;
@@ -419,9 +399,8 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         newState.performance.edgeCount = Object.keys(newState.edges).length;
         break;
       case 'UPDATE_EDGE':
-        if (state.edges[operation.edgeId]) {
-          newState.edges = {
-            ...state.edges,
+        if (state.edges[operation.edgeId]) { newState.edges = {
+            ...state.edges }
             [operation.edgeId]: { ...state.edges[operation.edgeId], ...operation.updates }
           };
         break;
@@ -431,61 +410,54 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         newState.performance.edgeCount = Object.keys(newState.edges).length;
         break;
       case 'SELECT_NODES':
-        newState.selection = {
-  ...state.selection,
-  selectedNodes: operation.append ,
+        newState.selection = { ...state.selection
+  selectedNodes: operation.append 
   ? [...state.selection.selectedNodes, ...operation.nodeIds]
-  : operation.nodeIds,
-  selectedEdges: operation.append ? state.selection.selectedEdges : [],
+  : operation.nodeIds
+  selectedEdges: operation.append ? state.selection.selectedEdges : [] }
 };
         break;
       case 'SELECT_EDGES':
-        newState.selection = {
-  ...state.selection,
-  selectedEdges: operation.append ,
+        newState.selection = { ...state.selection
+  selectedEdges: operation.append 
   ? [...state.selection.selectedEdges, ...operation.edgeIds]
-  : operation.edgeIds,
-  selectedNodes: operation.append ? state.selection.selectedNodes : [],
+  : operation.edgeIds
+  selectedNodes: operation.append ? state.selection.selectedNodes : [] }
 };
         break;
       case 'CLEAR_SELECTION':
-        newState.selection = {
-  ...state.selection,
-  selectedNodes: [],
-  selectedEdges: [],
+        newState.selection = { ...state.selection
+  selectedNodes: []
+  selectedEdges: [] }
 };
         break;
       case 'UPDATE_VIEWPORT':
         newState.viewport = { ...state.viewport, ...operation.viewport };
         break;
       case 'START_EXECUTION':
-        newState.execution = {
-  ...state.execution,
-  isRunning: true,
-  currentNodeId: operation.nodeId,
-  errors: [],
+        newState.execution = { ...state.execution
+  isRunning: true
+  currentNodeId: operation.nodeId
+  errors: [] }
 };
         break;
       case 'EXECUTION_RESULT':
-        newState.execution = {
-          ...state.execution,
+        newState.execution = { ...state.execution }
           results: { ...state.execution.results, [operation.nodeId]: operation.result }
         };
         break;
       case 'EXECUTION_ERROR':
-        newState.execution = {
-  ...state.execution,
-  isRunning: false,
-  errors: [...state.execution.errors, operation.error],
+        newState.execution = { ...state.execution
+  isRunning: false
+  errors: [...state.execution.errors, operation.error] }
 };
         break;
       case 'UPDATE_COLLABORATION':
         newState.collaboration = { ...state.collaboration, ...operation.updates };
         break;
     // Update modification timestamp
-    newState.metadata = {
-  ...newState.metadata,
-  modified: Date.now(),
+    newState.metadata = { ...newState.metadata
+  modified: Date.now() }
 };
     return newState;
   // DomainStateContainer interface implementation
@@ -517,48 +489,43 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
     // Rollback cross-domain transaction
     this.emit('transactionRolledBack', { transactionId, domain: this.getDomainName() });
   // Graph-specific query methods
-  getSelectedNodes(): GraphNode {
-  return this.state.selection.selectedNodes
+  getSelectedNodes(): GraphNode { return this.state.selection.selectedNodes
   .map(id => this.state.nodes[id])
   .filter(Boolean);
-  getSelectedEdges(): GraphEdge {,
+  getSelectedEdges(): GraphEdge {
   return this.state.selection.selectedEdges
   .map(id => this.state.edges[id])
   .filter(Boolean);
-  getNodeById(nodeId: string): GraphNode | undefined {,
+  getNodeById(nodeId: string): GraphNode | undefined {
   return this.state.nodes[nodeId];
-  getEdgeById(edgeId: string): GraphEdge | undefined {,
+  getEdgeById(edgeId: string): GraphEdge | undefined {
   return this.state.edges[edgeId];
-  getConnectedNodes(nodeId: string): GraphNode {,
+  getConnectedNodes(nodeId: string): GraphNode { }
   const connectedNodeIds = new Set<string>();
-  Object.values(this.state.edges).forEach(edge => {)
+  Object.values(this.state.edges).forEach(edge => { )
   if (edge.source === nodeId) {
   connectedNodeIds.add(edge.target);
   if (edge.target === nodeId) {
-  connectedNodeIds.add(edge.source);
-});
+  connectedNodeIds.add(edge.source) });
     return Array.from(connectedNodeIds)
       .map(id => this.state.nodes[id])
       .filter(Boolean);
   getExecutionResults(): Record<string, any> {
     return { ...this.state.execution.results };
   // Utility methods
-  private detectCycles(state: GraphState): boolean {
-  // Simplified cycle detection using DFS
+  private detectCycles(state: GraphState): boolean { // Simplified cycle detection using DFS
   const visited = new Set<string>();
   const recStack = new Set<string>();
-  const hasCycleDFS = (nodeId: string): boolean => {,
+  const hasCycleDFS = (nodeId: string): boolean => { }
   if (recStack.has(nodeId)) return true;
   if (visited.has(nodeId)) return false;
   visited.add(nodeId);
   recStack.add(nodeId);
   const outgoingEdges = Object.values(state.edges).filter(edge => edge.source === nodeId);
-  for (const edge of outgoingEdges) {
-  if (hasCycleDFS(edge.target)) {
+  for (const edge of outgoingEdges) { if (hasCycleDFS(edge.target)) {
   return true;
   recStack.delete(nodeId);
-  return false;
-};
+  return false };
     for (const nodeId of Object.keys(state.nodes)) {
       if (!visited.has(nodeId) && hasCycleDFS(nodeId)) {
         return true;
@@ -571,28 +538,24 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         current[keys[i]] = {};
       current = current[keys[i]];
     current[keys[keys.length - 1]] = value;
-  private setupEventHandlers(): void {
-    // Set up internal event handlers
+  private setupEventHandlers(): void { // Set up internal event handlers
     this.on('stateChanged', (event) => {
       // Update performance metrics
       this.updatePerformanceMetrics();
       // Emit domain-specific events
-      this.emitDomainEvents(event);
-    });
-  private updatePerformanceMetrics(): void {
-  const state = this.getState();
+      this.emitDomainEvents(event) });
+  private updatePerformanceMetrics(): void { const state = this.getState();
   const now = performance.now();
   this.setState(prevState => ({)
   ...prevState,
-  performance: {
+  performance: {,
   ...prevState.performance,
   nodeCount: Object.keys(state.nodes).length,
   edgeCount: Object.keys(state.edges).length,
   lastRenderTime: now,
-  memoryUsage: this.estimateMemoryUsage(state),
+  memoryUsage: this.estimateMemoryUsage(state) }
 }));
-  private estimateMemoryUsage(state: GraphState): number {
-  // Rough estimate of memory usage
+  private estimateMemoryUsage(state: GraphState): number { // Rough estimate of memory usage
   return JSON.stringify(state).length * 2; // Approximate bytes
   private emitDomainEvents(event: any): void {,
   // Emit specific events based on the change type
@@ -601,13 +564,12 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
   this.emit('graphStructureChanged', {)
   domain: this.getDomainName(),
   nodeCount: Object.keys(this.state.nodes).length,
-  edgeCount: Object.keys(this.state.edges).length,
+  edgeCount: Object.keys(this.state.edges).length }
 });
-    if (changeType?.startsWith('SELECT_')) {
-  this.emit('selectionChanged', {)
+    if (changeType?.startsWith('SELECT_')) { this.emit('selectionChanged', {)
   domain: this.getDomainName(),
   selectedNodes: this.state.selection.selectedNodes,
-  selectedEdges: this.state.selection.selectedEdges,
+  selectedEdges: this.state.selection.selectedEdges }
 });
   private generateId(): string {
     return `graph_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}

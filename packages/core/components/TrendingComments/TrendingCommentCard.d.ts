@@ -10,6 +10,7 @@ import React from 'react';
 import { TrendingComment } from '../../types/TrendingCommentsTypes';
 
 }
+}
 interface TrendingCommentCardProps {
     comment: TrendingComment;
     rank: number;
@@ -20,4 +21,5 @@ interface TrendingCommentCardProps {
 export declare const TrendingCommentCard: React.FC<TrendingCommentCardProps>;
 export default TrendingCommentCard;
 //# sourceMappingURL=TrendingCommentCard.d.ts.map
+}
 }

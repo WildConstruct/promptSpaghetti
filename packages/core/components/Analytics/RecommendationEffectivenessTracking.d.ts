@@ -8,123 +8,108 @@ import React from 'react';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 }
-export interface RecommendationEffectivenessTrackingProps {
-    analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
+export interface RecommendationEffectivenessTrackingProps { analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     trackingConfig: EffectivenessTrackingConfig;
     onEffectivenessAlert?: (alert: EffectivenessAlert) => void;
     onPerformanceInsight?: (insight: PerformanceInsight) => void;
-    onExport?: (data: EffectivenessTrackingExportData) => void;
-
+    onExport?: (data: EffectivenessTrackingExportData) => void }
 }
-export interface EffectivenessTrackingConfig {
-    algorithms: TrackedAlgorithm[];
+}
+export interface EffectivenessTrackingConfig { algorithms: TrackedAlgorithm[];
     metrics: EffectivenessMetric[];
     benchmarks: PerformanceBenchmark[];
     reporting: ReportingConfig;
-    alerting: AlertingConfig;
-
+    alerting: AlertingConfig }
 }
-export interface RecommendationSystemMetrics {
-    algorithmId: string;
+}
+export interface RecommendationSystemMetrics { algorithmId: string;
     algorithmName: string;
     version: string;
     timestamp: number;
     metrics: MetricValue[];
     contextualMetrics: ContextualMetric[];
     businessImpact: BusinessImpactMetrics;
-    userSegmentPerformance: SegmentPerformance[];
-
+    userSegmentPerformance: SegmentPerformance[] }
 }
-export interface MetricValue {
-    metricId: string;
+}
+export interface MetricValue { metricId: string;
     name: string;
     value: number;
     benchmark: number;
     variance: number;
     trend: TrendData;
-    confidence: number;
-
+    confidence: number }
 }
-export interface ContextualMetric {
-    context: RecommendationContext;
+}
+export interface ContextualMetric { context: RecommendationContext;
     metrics: MetricValue[];
     sampleSize: number;
-    significance: number;
-
+    significance: number }
 }
-export interface RecommendationContext {
-    deviceType: 'desktop' | 'mobile' | 'tablet';
+}
+export interface RecommendationContext { deviceType: 'desktop' | 'mobile' | 'tablet';
     timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
     userType: 'new' | 'returning' | 'premium';
     contentCategory: string;
-    sessionType: 'browsing' | 'searching' | 'purchasing';
-
+    sessionType: 'browsing' | 'searching' | 'purchasing' }
 }
-export interface BusinessImpactMetrics {
-    revenueImpact: number;
+}
+export interface BusinessImpactMetrics { revenueImpact: number;
     conversionLift: number;
     engagementIncrease: number;
     retentionImprovement: number;
     costEfficiency: number;
     customerSatisfaction: number;
 
-export declare const RecommendationEffectivenessTracking: React.FC<RecommendationEffectivenessTrackingProps>;
-
+export declare const RecommendationEffectivenessTracking: React.FC<RecommendationEffectivenessTrackingProps> }
 }
-export interface TrackedAlgorithm {
-    algorithmId: string;
+}
+export interface TrackedAlgorithm { algorithmId: string;
     name: string;
     version: string;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface EffectivenessMetric {
-    metricId: string;
+}
+export interface EffectivenessMetric { metricId: string;
     name: string;
     type: 'accuracy' | 'business' | 'user_experience';
     weight: number;
-    target: number;
-
+    target: number }
 }
-export interface PerformanceBenchmark {
-    metricId: string;
+}
+export interface PerformanceBenchmark { metricId: string;
     benchmark: number;
-    source: 'internal' | 'industry' | 'target';
-
+    source: 'internal' | 'industry' | 'target' }
 }
-export interface ReportingConfig {
-    frequency: 'hourly' | 'daily' | 'weekly';
+}
+export interface ReportingConfig { frequency: 'hourly' | 'daily' | 'weekly';
     recipients: string[];
-    includeInsights: boolean;
-
+    includeInsights: boolean }
 }
-export interface AlertingConfig {
-    enabled: boolean;
+}
+export interface AlertingConfig { enabled: boolean;
     thresholds: AlertThreshold[];
-    channels: string[];
-
+    channels: string[] }
 }
-export interface AlertThreshold {
-    metricId: string;
+}
+export interface AlertThreshold { metricId: string;
     condition: 'above' | 'below' | 'change';
     value: number;
-    severity: 'low' | 'medium' | 'high';
-
+    severity: 'low' | 'medium' | 'high' }
 }
-export interface TrendData {
-    direction: 'increasing' | 'decreasing' | 'stable';
+}
+export interface TrendData { direction: 'increasing' | 'decreasing' | 'stable';
     strength: number;
-    duration: number;
-
+    duration: number }
 }
-export interface SegmentPerformance {
-    segment: string;
+}
+export interface SegmentPerformance { segment: string;
     metrics: MetricValue[];
-    sampleSize: number;
-
+    sampleSize: number }
 }
-export interface EffectivenessAlert {
-    alertId: string;
+}
+export interface EffectivenessAlert { alertId: string;
     algorithmId: string;
     type: string;
     severity: 'low' | 'medium' | 'high';
@@ -133,32 +118,28 @@ export interface EffectivenessAlert {
     threshold: number;
     actualValue: number;
     timestamp: number;
-    actionRequired: boolean;
-
+    actionRequired: boolean }
 }
-export interface PerformanceInsight {
-    insightId: string;
+}
+export interface PerformanceInsight { insightId: string;
     type: string;
     message: string;
     algorithms: string[];
     impact: 'low' | 'medium' | 'high';
     confidence: number;
-    recommendations: string[];
-
+    recommendations: string[] }
 }
-export interface EffectivenessTrackingExportData {
-    algorithmMetrics: RecommendationSystemMetrics[];
+}
+export interface EffectivenessTrackingExportData { algorithmMetrics: RecommendationSystemMetrics[];
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
-    summary: {
-        totalAlgorithms: number;
+    summary: { totalAlgorithms: number;
         bestPerforming: string;
         averageCTR: number;
-        totalRevenueImpact: number;
-    };
+        totalRevenueImpact: number };
     exportTimestamp: number;
 
 export default RecommendationEffectivenessTracking;

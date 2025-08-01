@@ -22,7 +22,7 @@ import {
   ArchiveStatus,
   ValidationStatus,
   ArchiveSortField
-} from '../admin/ArchiveManagementService';
+ from '../admin/ArchiveManagementService';
 
 // Validation schemas
 const ArchiveTypeSchema = z.enum([
@@ -236,13 +236,13 @@ export async function archiveManagementRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof CreateArchiveSchema>
-  }>('/', {
+>('/', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'create',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -271,9 +271,9 @@ export async function archiveManagementRoutes(
             complianceRequirements: archiveData.complianceRequirements,
             validateOnCreate: archiveData.validateOnCreate,
             notifyOnComplete: archiveData.notifyOnComplete
-  }
+
           priority: archiveData.priority
-        }
+
       );
 
       return reply.code(201).send({
@@ -287,11 +287,10 @@ export async function archiveManagementRoutes(
           createdAt: archiveRecord.createdAt,
           expiresAt: archiveRecord.expiresAt,
           estimatedProcessingTime: '5-15 minutes' // This would be calculated based on source size
-  }
+
         message: 'Archive creation initiated successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating archive:', error);
       
       if (error instanceof z.ZodError) {
@@ -300,14 +299,14 @@ export async function archiveManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to create archive',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -320,14 +319,14 @@ export async function archiveManagementRoutes(
       includeMetadata?: boolean; 
       includeValidationResults?: boolean;
       includeAccessLog?: boolean;
-    }
-  }>('/:archiveId', {
+
+>('/:archiveId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -350,7 +349,7 @@ export async function archiveManagementRoutes(
           success: false,
           error: 'Archive not found'
         });
-      }
+
 
       // Log archive access
       await archiveService.logAccess(archiveId, user.id, 'view_metadata', {
@@ -362,8 +361,7 @@ export async function archiveManagementRoutes(
         success: true,
         data: archive
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting archive:', error);
       
       return reply.code(500).send({
@@ -371,7 +369,7 @@ export async function archiveManagementRoutes(
         error: 'Failed to get archive',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -380,13 +378,13 @@ export async function archiveManagementRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof ArchiveQuerySchema>
-  }>('/query', {
+>('/query', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -396,7 +394,7 @@ export async function archiveManagementRoutes(
       // Restrict query to user's archives unless they're an admin
       if (!user.isSuperAdmin && !query.createdBy) {
         query.createdBy = user.id;
-      }
+
 
       const result = await archiveService.queryArchives(query);
 
@@ -409,11 +407,10 @@ export async function archiveManagementRoutes(
             limit: query.limit,
             offset: query.offset,
             hasMore: result.hasMore
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       console.error('Error querying archives:', error);
       
       if (error instanceof z.ZodError) {
@@ -422,14 +419,14 @@ export async function archiveManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to query archives',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -439,13 +436,13 @@ export async function archiveManagementRoutes(
   fastify.post<{
     Params: z.infer<typeof ArchiveIdSchema>;
     Body: z.infer<typeof RestoreRequestSchema>
-  }>('/:archiveId/restore', {
+>('/:archiveId/restore', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'restore',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -464,7 +461,7 @@ export async function archiveManagementRoutes(
           reason: restoreData.reason,
           notifyOnComplete: restoreData.notifyOnComplete,
           expiresAt: restoreData.expiresAt
-        }
+
       );
 
       return reply.code(202).send({
@@ -476,11 +473,10 @@ export async function archiveManagementRoutes(
           status: 'requested',
           estimatedTime: this.calculateEstimatedRestoreTime(restoreData.restoreType),
           trackingUrl: `/api/archives/${archiveId}/restore/${restoreId}`
-  }
+
         message: 'Archive restoration requested successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error requesting restore:', error);
       
       if (error instanceof z.ZodError) {
@@ -489,14 +485,14 @@ export async function archiveManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to request restore',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -505,13 +501,13 @@ export async function archiveManagementRoutes(
    */
   fastify.get<{
     Params: { archiveId: string; restoreId: string }
-  }>('/:archiveId/restore/:restoreId', {
+>('/:archiveId/restore/:restoreId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -525,14 +521,13 @@ export async function archiveManagementRoutes(
           success: false,
           error: 'Restore request not found'
         });
-      }
+
 
       return reply.send({
         success: true,
         data: restoreRequest
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting restore request:', error);
       
       return reply.code(500).send({
@@ -540,7 +535,7 @@ export async function archiveManagementRoutes(
         error: 'Failed to get restore request',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -550,13 +545,13 @@ export async function archiveManagementRoutes(
   fastify.delete<{
     Params: z.infer<typeof ArchiveIdSchema>;
     Body: { reason?: string; forceDelete?: boolean }
-  }>('/:archiveId', {
+>('/:archiveId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'delete',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -573,8 +568,7 @@ export async function archiveManagementRoutes(
         success: true,
         message: 'Archive deleted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error deleting archive:', error);
       
       return reply.code(500).send({
@@ -582,7 +576,7 @@ export async function archiveManagementRoutes(
         error: 'Failed to delete archive',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -591,13 +585,13 @@ export async function archiveManagementRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof RetentionPolicySchema>
-  }>('/retention-policies', {
+>('/retention-policies', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'manage_retention_policies',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -611,8 +605,7 @@ export async function archiveManagementRoutes(
         data: policy,
         message: 'Retention policy created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating retention policy:', error);
       
       if (error instanceof z.ZodError) {
@@ -621,14 +614,14 @@ export async function archiveManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to create retention policy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -641,14 +634,14 @@ export async function archiveManagementRoutes(
       category?: string;
       archiveType?: string;
       detailed?: boolean;
-    }
-  }>('/statistics', {
+
+>('/statistics', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'read_statistics',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -672,10 +665,9 @@ export async function archiveManagementRoutes(
         metadata: {
           generatedAt: new Date().toISOString(),
           period: query.period || 'all_time'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting archive statistics:', error);
       
       return reply.code(500).send({
@@ -683,7 +675,7 @@ export async function archiveManagementRoutes(
         error: 'Failed to get archive statistics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -692,13 +684,13 @@ export async function archiveManagementRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof BulkArchiveOperationSchema>
-  }>('/bulk', {
+>('/bulk', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'bulk_operations',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -725,11 +717,10 @@ export async function archiveManagementRoutes(
           operation: bulkOperation.operation,
           status: 'queued',
           estimatedTime: result.estimatedTime
-  }
+
         message: `Bulk operation queued: ${bulkOperation.operation} on ${bulkOperation.archiveIds.length} archives`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error performing bulk operation:', error);
       
       if (error instanceof z.ZodError) {
@@ -738,14 +729,14 @@ export async function archiveManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to perform bulk operation',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -758,7 +749,7 @@ export async function archiveManagementRoutes(
         resource: 'archives',
         action: 'read_health',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -776,7 +767,7 @@ export async function archiveManagementRoutes(
             processingQueue: health.processingQueue,
             retentionPolicies: health.retentionPolicies,
             validation: health.validation
-  }
+
           metrics: {
             totalArchives: health.metrics.totalArchives,
             healthyArchives: health.metrics.healthyArchives,
@@ -786,18 +777,17 @@ export async function archiveManagementRoutes(
             averageCompressionRatio: health.metrics.averageCompressionRatio,
             queuedJobs: health.metrics.queuedJobs,
             processingJobs: health.metrics.processingJobs
-  }
-          recommendations: health.recommendations || []
-        }
-      });
 
-    } catch (error) {
+          recommendations: health.recommendations || []
+
+      });
+ catch (error) {
       return reply.code(503).send({
         success: false,
         error: 'Archive management system unhealthy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -810,14 +800,14 @@ export async function archiveManagementRoutes(
       validationType?: string; 
       forceValidation?: boolean;
       priority?: number;
-    }
-  }>('/:archiveId/validate', {
+
+>('/:archiveId/validate', {
     preHandler: fastify.requirePermission([
       {
         resource: 'archives',
         action: 'validate',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -847,11 +837,10 @@ export async function archiveManagementRoutes(
           validationType,
           status: 'queued',
           estimatedTime: validationJob.estimatedTime
-  }
+
         message: 'Archive validation scheduled successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error scheduling validation:', error);
       
       return reply.code(500).send({
@@ -859,7 +848,7 @@ export async function archiveManagementRoutes(
         error: 'Failed to schedule validation',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Helper method for calculating estimated restore time
@@ -877,6 +866,5 @@ export async function archiveManagementRoutes(
       return '5-30 minutes';
     default:
       return '5-15 minutes';
-    }
-  }
-}
+
+

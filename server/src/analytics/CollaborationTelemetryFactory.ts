@@ -12,15 +12,16 @@ import { CollaborationTelemetryService, CollaborationTelemetryServiceConfig } fr
 import { getDatabase } from '../database/connection';
 import { AnalyticsDAO } from '../database/analytics-dao';
 
-}
-}
+
+
 export interface CollaborationTelemetrySetup {
   telemetryService: CollaborationTelemetryService;
   analyticsCollector: AnalyticsCollector;
   analyticsWebSocketServer: AnalyticsWebSocketServer;
-}
-}
-}
+
+
+
+
 
 export class CollaborationTelemetryFactory {
   
@@ -93,12 +94,11 @@ export class CollaborationTelemetryFactory {
         analyticsCollector,
         analyticsWebSocketServer
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize collaboration telemetry system:', error);
       throw new Error(`Collaboration telemetry initialization failed: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Create telemetry routes for server integration
@@ -113,14 +113,14 @@ export class CollaborationTelemetryFactory {
             success: true,
             data: dashboardData
           });
-        } catch (error) {
+ catch (error) {
           reply.code(500).send({
             success: false,
             error: 'Failed to retrieve collaboration dashboard',
             details: error instanceof Error ? error.message : String(error)
           });
-        }
-  }
+
+
       // Epic 23 status endpoint
       '/api/collaboration/epic23/status': async (request: any, reply: any) => {
         try {
@@ -129,14 +129,14 @@ export class CollaborationTelemetryFactory {
             success: true,
             data: statusData
           });
-        } catch (error) {
+ catch (error) {
           reply.code(500).send({
             success: false,
             error: 'Failed to retrieve Epic 23 status',
             details: error instanceof Error ? error.message : String(error)
           });
-        }
-  }
+
+
       // Health check for telemetry system
       '/api/collaboration/telemetry/health': async (request: any, reply: any) => {
         try {
@@ -147,26 +147,26 @@ export class CollaborationTelemetryFactory {
               telemetryService: setup.telemetryService ? 'active' : 'inactive',
               analyticsCollector: setup.analyticsCollector ? 'active' : 'inactive',
               analyticsWebSocket: setup.analyticsWebSocketServer ? 'active' : 'inactive'
-  }
+
             metrics: {
               // Add any health metrics here
-            }
+
           };
 
           reply.send({
             success: true,
             data: health
           });
-        } catch (error) {
+ catch (error) {
           reply.code(500).send({
             success: false,
             error: 'Telemetry health check failed',
             details: error instanceof Error ? error.message : String(error)
           });
-        }
-      }
+
+
     };
-  }
+
 
   /**
    * Cleanup all telemetry resources
@@ -183,10 +183,10 @@ export class CollaborationTelemetryFactory {
       await setup.analyticsWebSocketServer.stop();
 
       console.log('✅ Collaboration telemetry cleanup completed');
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error during telemetry cleanup:', error);
-    }
-  }
+
+
 
   /**
    * Create configuration from environment variables
@@ -200,7 +200,7 @@ export class CollaborationTelemetryFactory {
       enablePerformanceTracking: process.env.EPIC23_PERFORMANCE_TRACKING !== 'false',
       enableConflictTracking: process.env.EPIC23_CONFLICT_TRACKING !== 'false'
     };
-  }
+
 
   /**
    * Validate telemetry configuration
@@ -209,15 +209,15 @@ export class CollaborationTelemetryFactory {
     if (config.latencyMeasurementInterval && config.latencyMeasurementInterval < 1000) {
       console.warn('⚠️ Latency measurement interval is too low, recommend >= 1000ms');
       return false;
-    }
+
 
     if (config.sessionHeartbeatInterval && config.sessionHeartbeatInterval < 5000) {
       console.warn('⚠️ Session heartbeat interval is too low, recommend >= 5000ms');
       return false;
-    }
+
 
     return true;
-  }
+
 
   /**
    * Log telemetry system information
@@ -231,7 +231,7 @@ export class CollaborationTelemetryFactory {
     console.log('  Performance Tracking:', config.enablePerformanceTracking ?? true);
     console.log('  Conflict Tracking:', config.enableConflictTracking ?? true);
     console.log('');
-  }
-}
+
+
 
 export default CollaborationTelemetryFactory;

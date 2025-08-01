@@ -8,11 +8,12 @@ import { AdvancedFilters } from './AdvancedFilters';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './MarketplaceHome.css';
-}
+
+
 interface MarketplaceHomeProps {
   className?: string;
 
-}
+
 export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = '' }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -38,7 +39,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
     searchTemplates,
     loadCategories,
     loadFeaturedTemplates
-  } = useMarketplace();
+ = useMarketplace();
   useEffect(() => {
     // Load initial data
     loadCategories();
@@ -232,7 +233,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
 };
                   // Load more templates by appending to existing results
                   searchTemplates(filters, true); // true indicates append mode
-                }}
+
                 className="load-more-button"
                 disabled={loading}
               >

@@ -4,50 +4,43 @@
  */
 
 }
-export interface HistoricalDataPoint {
-    timestamp: Date;
+}
+export interface HistoricalDataPoint { timestamp: Date;
     value: number;
     baseline: number;
     deviation: number;
     status: 'compliant' | 'warning' | 'non_compliant';
     framework: string;
     category: string;
-    metric: string;
-
+    metric: string }
 }
-export interface ComplianceTrendReport {
-    reportId: string;
+}
+export interface ComplianceTrendReport { reportId: string;
     generatedAt: Date;
     period: {
         startDate: Date;
         endDate: Date;
-        duration: string;
+        duration: string }
 }
     };
     framework: string;
-    summary: {
-        totalDataPoints: number;
+    summary: { totalDataPoints: number;
         averageCompliance: number;
         bestPerformingMetric: string;
         worstPerformingMetric: string;
         improvementTrend: 'positive' | 'negative' | 'stable';
-        criticalIncidents: number;
-    };
-    metrics: {
-        name: string;
+        criticalIncidents: number };
+    metrics: { name: string;
         currentValue: number;
         historicalAverage: number;
         trendDirection: 'up' | 'down' | 'stable';
         volatility: number;
         complianceRate: number;
-        recommendations: string[];
-    }[];
-    keyEvents: {
-        date: Date;
+        recommendations: string[] }[];
+    keyEvents: { date: Date;
         event: string;
         impact: 'positive' | 'negative' | 'neutral';
-        description: string;
-    }[];
+        description: string }[];
     periodicComparison: {
         currentPeriod: number;
         previousPeriod: number;
@@ -56,33 +49,31 @@ export interface ComplianceTrendReport {
   };
 
 }
-export interface ComplianceForecasting {
-    baselineId: string;
+}
+export interface ComplianceForecasting { baselineId: string;
     forecastHorizon: number;
     predictedValues: {
         date: Date;
         predictedValue: number;
         confidenceInterval: {
             lower: number;
-            upper: number;
+            upper: number }
 }
         };
         riskLevel: 'low' | 'medium' | 'high'
   }[];
     forecastAccuracy: number;
     assumptions: string[];
-    riskFactors: {
-        factor: string;
+    riskFactors: { factor: string;
         impact: 'high' | 'medium' | 'low';
-        likelihood: number;
-    }[];
+        likelihood: number }[];
 
 }
-export interface ComplianceAuditTrail {
-    auditId: string;
+}
+export interface ComplianceAuditTrail { auditId: string;
     auditPeriod: {
         startDate: Date;
-        endDate: Date;
+        endDate: Date }
 }
     };
     framework: string;
@@ -99,8 +90,7 @@ export interface ComplianceAuditTrail {
     certificationStatus?: 'certified' | 'conditionally_certified' | 'not_certified';
     nextAuditDue: Date;
 
-export declare class ComplianceHistoricalAnalyzer {
-    private historicalData;
+export declare class ComplianceHistoricalAnalyzer { private historicalData;
     private trendReports;
     private auditTrails;
     constructor();
@@ -134,8 +124,7 @@ export declare class ComplianceHistoricalAnalyzer {
             totalDataPoints: number;
             dateRange: {
                 earliest: Date;
-                latest: Date;
-            };
+                latest: Date };
         };
         data: HistoricalDataPoint[];
     };

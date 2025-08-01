@@ -2,7 +2,7 @@
 // Director-friendly template parsing system for {variable} syntax
 placeholder: string; // Full placeholder text {name},
 startIndex: number; // Start position in template,
-endIndex: number; // End position in template
+endIndex: number; // End position in template,
 isValid: boolean; // Whether the variable name is valid
 inferredType ?  : VariableType; // Auto-inferred type from context
 defaultValue ?  : string; // Default value based on type inference

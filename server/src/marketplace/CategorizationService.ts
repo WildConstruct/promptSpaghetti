@@ -19,8 +19,8 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
-}
-}
+
+
 export interface Category {
   id: string;
   name: string;
@@ -43,8 +43,9 @@ export interface Category {
     totalDownloads: number;
     averageRating: number;
     trendingScore: number;
-}
-}
+
+
+
   };
   
   // Configuration
@@ -65,10 +66,10 @@ export interface Category {
     keywords: string[];         // For classification
     aliases: string[];          // Alternative names
   };
-}
 
-}
-}
+
+
+
 export interface Tag {
   id: string;
   name: string;
@@ -89,34 +90,36 @@ export interface Tag {
   createdAt: Date;
   approved: boolean;
   suggestedBy?: 'ai' | 'user' | 'admin';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationResult {
   primaryCategory: {
     id: string;
     name: string;
     confidence: number;
     reasoning: string;
-}
-}
+
+
+
   };
   
   secondaryCategories: Array<{
     id: string;
     name: string;
     confidence: number;
-  }>;
+>;
   
   suggestedTags: Array<{
     name: string;
     type: Tag['type'];
     confidence: number;
     source: 'content' | 'similar' | 'trending';
-  }>;
+>;
   
   complexity: 'beginner' | 'intermediate' | 'advanced';
   qualityScore: number;        // 0-1 overall quality assessment
@@ -125,28 +128,30 @@ export interface ClassificationResult {
     type: 'duplicate' | 'low_quality' | 'miscategorized' | 'inappropriate';
     confidence: number;
     reason: string;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface CategoryTree {
   categories: Category[];
   totalCount: number;
   maxDepth: number;
   lastUpdated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CategoryAnalytics {
   category: Category;
   performance: {
     growth: {
-}
-}
+
+
+
       templates: { current: number; previous: number; change: number };
       downloads: { current: number; previous: number; change: number };
       ratings: { current: number; previous: number; change: number };
@@ -156,7 +161,7 @@ export interface CategoryAnalytics {
       title: string;
       downloads: number;
       rating: number;
-    }>;
+>;
     userEngagement: {
       viewsPerTemplate: number;
       downloadRate: number;
@@ -167,14 +172,14 @@ export interface CategoryAnalytics {
       templates: number;
       downloads: number;
       rating: number;
-    }>;
+>;
   };
   recommendations: {
     optimization: string[];
     content: string[];
     structure: string[];
   };
-}
+
 
 @Injectable()
 export class CategorizationService {
@@ -189,7 +194,7 @@ export class CategorizationService {
       maxRetriesPerRequest: 3,
       keyPrefix: 'categorization:'
     });
-  }
+
 
   /**
    * Get complete category tree with statistics
@@ -202,7 +207,7 @@ export class CategorizationService {
       
       if (cached) {
         return JSON.parse(cached);
-      }
+
 
       const query = `
         WITH RECURSIVE category_hierarchy AS (
@@ -261,10 +266,10 @@ export class CategorizationService {
           if (parent) {
             parent.children.push(category);
             category.parent = parent;
-          }
-        } else {
+
+ else {
           rootCategories.push(category);
-        }
+
       });
 
       const tree: CategoryTree = {
@@ -278,11 +283,11 @@ export class CategorizationService {
       await this.redis.setex(cacheKey, 600, JSON.stringify(tree));
 
       return tree;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get category tree:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Automatically classify template content
@@ -319,18 +324,18 @@ export class CategorizationService {
           name: 'General',
           confidence: 0.5,
           reasoning: 'Default category assigned due to unclear content classification'
-  }
+
         secondaryCategories: categoryResults.slice(1, 4),
         suggestedTags: tagResults,
         complexity,
         qualityScore,
         flags
       };
-    } catch (error) {
+ catch (error) {
       console.error('Classification failed:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get or create tags with intelligent suggestions
@@ -355,20 +360,20 @@ export class CategorizationService {
         if (!tag) {
           // Create new tag with AI classification
           tag = await this.createTag(tagName, context);
-        } else {
+ else {
           // Update usage statistics
           await this.updateTagUsage(tag.id);
-        }
+
         
         results.push(tag);
-      }
+
 
       return results;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get or create tags:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get category analytics and performance insights
@@ -382,7 +387,7 @@ export class CategorizationService {
       const category = await this.getCategoryById(categoryId);
       if (!category) {
         throw new Error('Category not found');
-      }
+
 
       const intervalMap = {
         '7d': '7 days',
@@ -412,14 +417,14 @@ export class CategorizationService {
           topTemplates,
           userEngagement: engagementData,
           trends: trendsData
-  }
+
         recommendations
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get category analytics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Suggest category reorganization and optimization
@@ -432,8 +437,8 @@ export class CategorizationService {
       target: string;
       reason: string;
       impact: string;
-    }>;
-  }> {
+>;
+> {
     try {
       const tree = await this.getCategoryTree(true);
       const allCategories = this.flattenCategoryTree(tree.categories);
@@ -461,11 +466,11 @@ export class CategorizationService {
         oversaturated,
         suggested: suggestions
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to suggest category optimization:', error);
       throw error;
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -478,7 +483,7 @@ export class CategorizationService {
     language: string;
     wordCount: number;
     readability: number;
-  }> {
+> {
 
     // Simplified content analysis - would integrate with NLP service
     const text = (title + ' ' + description).toLowerCase();
@@ -494,20 +499,20 @@ export class CategorizationService {
       wordCount: words.length,
       readability: this.calculateReadability(text)
     };
-  }
+
 
   private extractKeywords(words: string[]): string[] {
     // Simplified keyword extraction
     const stopWords = new Set(['the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by']);
     return [...new Set(words.filter(word => !stopWords.has(word)))]
       .slice(0, 10);
-  }
+
 
   private extractTopics(words: string[]): string[] {
     // Simplified topic extraction
     const topicWords = ['business', 'marketing', 'technical', 'creative', 'education', 'automation', 'design'];
     return topicWords.filter(topic => words.some(word => word.includes(topic)));
-  }
+
 
   private analyzeSentiment(text: string): number {
     // Simplified sentiment analysis
@@ -518,7 +523,7 @@ export class CategorizationService {
     const negative = negativeWords.filter(word => text.includes(word)).length;
     
     return (positive - negative) / Math.max(positive + negative, 1);
-  }
+
 
   private analyzeComplexity(text: string): number {
     // Simplified complexity analysis based on text characteristics
@@ -528,7 +533,7 @@ export class CategorizationService {
     
     // Normalize to 0-1 scale
     return Math.min(avgWordsPerSentence / 20, 1);
-  }
+
 
   private analyzeQuality(text: string, title: string, description: string): number {
     let score = 0.5; // Base score
@@ -545,7 +550,7 @@ export class CategorizationService {
     if (description.includes('\n') || description.includes('.')) score += 0.1;
     
     return Math.min(score, 1);
-  }
+
 
   private calculateReadability(text: string): number {
     // Simplified readability score
@@ -555,14 +560,14 @@ export class CategorizationService {
     
     // Higher score = more readable (shorter sentences)
     return Math.max(0, 1 - (avgWordsPerSentence - 10) / 20);
-  }
+
 
   private async suggestCategories(analysis: any): Promise<Array<{
     id: string;
     name: string;
     confidence: number;
     reasoning: string;
-  }>> {
+>> {
     // Simplified category suggestion based on keywords and topics
     const suggestions = [];
     
@@ -574,7 +579,7 @@ export class CategorizationService {
         confidence: 0.8,
         reasoning: 'Content contains business-related keywords and topics'
       });
-    }
+
     
     // Technical content
     if (analysis.topics.includes('technical') || analysis.keywords.some((k: string) => ['code', 'api', 'technical'].includes(k))) {
@@ -584,17 +589,17 @@ export class CategorizationService {
         confidence: 0.7,
         reasoning: 'Content appears to be technical in nature'
       });
-    }
+
     
     return suggestions.slice(0, 5);
-  }
+
 
   private async suggestTags(analysis: any, existingTags?: string[]): Promise<Array<{
     name: string;
     type: Tag['type'];
     confidence: number;
     source: 'content' | 'similar' | 'trending';
-  }>> {
+>> {
     const suggestions = [];
     
     // Content-based tags
@@ -606,27 +611,27 @@ export class CategorizationService {
           confidence: 0.6,
           source: 'content' as const
         });
-      }
-    }
+
+
     
     return suggestions;
-  }
+
 
   private assessComplexity(analysis: any): 'beginner' | 'intermediate' | 'advanced' {
     if (analysis.complexity < 0.3) return 'beginner';
     if (analysis.complexity < 0.7) return 'intermediate';
     return 'advanced';
-  }
+
 
   private calculateQualityScore(analysis: any): number {
     return analysis.quality;
-  }
+
 
   private async detectContentFlags(analysis: any): Promise<Array<{
     type: 'duplicate' | 'low_quality' | 'miscategorized' | 'inappropriate';
     confidence: number;
     reason: string;
-  }>> {
+>> {
     const flags = [];
     
     if (analysis.quality < 0.3) {
@@ -635,10 +640,10 @@ export class CategorizationService {
         confidence: 0.8,
         reason: 'Content appears to be low quality based on text analysis'
       });
-    }
+
     
     return flags;
-  }
+
 
   private mapRowToCategory(row: any): Category {
     return {
@@ -658,14 +663,14 @@ export class CategorizationService {
         totalDownloads: parseInt(row.total_downloads) || 0,
         averageRating: parseFloat(row.average_rating) || 0,
         trendingScore: parseFloat(row.trending_score) || 0
-  }
+
       config: {
         featured: row.featured || false,
         visible: row.visible !== false,
         searchable: row.searchable !== false,
         autoClassification: row.auto_classification !== false,
         requireApproval: row.require_approval || false
-  }
+
       metadata: {
         createdAt: row.created_at,
         updatedAt: row.updated_at,
@@ -673,9 +678,9 @@ export class CategorizationService {
         sortOrder: row.sort_order || 0,
         keywords: row.keywords || [],
         aliases: row.aliases || []
-      }
+
     };
-  }
+
 
   private async getCategoryById(categoryId: string): Promise<Category | null> {
 
@@ -684,7 +689,7 @@ export class CategorizationService {
     `;
     const result = await this.pool.query(query, [categoryId]);
     return result.rows.length > 0 ? this.mapRowToCategory(result.rows[0]) : null;
-  }
+
 
   private async getTagByName(name: string): Promise<Tag | null> {
 
@@ -693,7 +698,7 @@ export class CategorizationService {
     `;
     const result = await this.pool.query(query, [name]);
     return result.rows.length > 0 ? this.mapRowToTag(result.rows[0]) : null;
-  }
+
 
   private async createTag(name: string, context?: any): Promise<Tag> {
 
@@ -708,7 +713,7 @@ export class CategorizationService {
     
     const result = await this.pool.query(query, [name, slug, type]);
     return this.mapRowToTag(result.rows[0]);
-  }
+
 
   private async updateTagUsage(tagId: string): Promise<void> {
 
@@ -717,7 +722,7 @@ export class CategorizationService {
       SET usage_count = usage_count + 1 
       WHERE id = $1
     `, [tagId]);
-  }
+
 
   private mapRowToTag(row: any): Tag {
     return {
@@ -735,7 +740,7 @@ export class CategorizationService {
       approved: row.approved !== false,
       suggestedBy: row.suggested_by
     };
-  }
+
 
   private classifyTagType(name: string, context?: any): Tag['type'] {
     const functionalKeywords = ['api', 'function', 'method', 'tool', 'utility'];
@@ -749,14 +754,14 @@ export class CategorizationService {
     if (industryKeywords.some(keyword => lowerName.includes(keyword))) return 'industry';
     
     return 'topical';
-  }
+
 
   private slugify(text: string): string {
     return text
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
-  }
+
 
   private flattenCategoryTree(categories: Category[]): Category[] {
     const result: Category[] = [];
@@ -766,13 +771,13 @@ export class CategorizationService {
         result.push(cat);
         if (cat.children.length > 0) {
           traverse(cat.children);
-        }
-      }
-    }
+
+
+
     
     traverse(categories);
     return result;
-  }
+
 
   private async getCategoryGrowthData(categoryId: string, interval: string): Promise<any> {
 
@@ -782,13 +787,13 @@ export class CategorizationService {
       downloads: { current: 1200, previous: 1000, change: 20.0 },
       ratings: { current: 4.2, previous: 4.0, change: 5.0 }
     };
-  }
+
 
   private async getCategoryTopTemplates(categoryId: string, limit: number): Promise<any[]> {
 
     // Simplified top templates
     return [];
-  }
+
 
   private async getCategoryEngagementData(categoryId: string, interval: string): Promise<any> {
 
@@ -798,13 +803,13 @@ export class CategorizationService {
       downloadRate: 0.15,
       ratingParticipation: 0.08
     };
-  }
+
 
   private async getCategoryTrendsData(categoryId: string, interval: string): Promise<any[]> {
 
     // Simplified trends data
     return [];
-  }
+
 
   private async generateCategoryRecommendations(category: Category, growth: any, engagement: any): Promise<any> {
 
@@ -813,12 +818,12 @@ export class CategorizationService {
       content: ['Need more beginner-level templates', 'Consider adding video tutorials'],
       structure: ['Consider creating subcategories', 'Merge with related categories']
     };
-  }
+
 
   private async generateOptimizationSuggestions(all: Category[], underutilized: Category[], oversaturated: Category[]): Promise<any[]> {
 
     return [];
-  }
+
 
   /**
    * Cleanup resources
@@ -828,8 +833,7 @@ export class CategorizationService {
     try {
       await this.redis.quit();
       console.log('CategorizationService destroyed successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Error during CategorizationService destruction:', error);
-    }
-  }
-}
+
+

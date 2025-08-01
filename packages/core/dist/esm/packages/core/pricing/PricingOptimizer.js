@@ -409,8 +409,9 @@ return {
         historicalData: analytics,
     }
 };
-applyIndustryAdjustments(model, PricingModel);
-request: PricingCalculationRequest,
+applyIndustryAdjustments(model, PricingModel),
+    request;
+PricingCalculationRequest,
     result;
 PricingCalculationResult;
 PricingCalculationResult;
@@ -499,8 +500,9 @@ return {
     totalPrice: adjustedPrice,
     industryInsights
 };
-applyDiscountsAndTaxes(model, PricingModel);
-request: PricingCalculationRequest,
+applyDiscountsAndTaxes(model, PricingModel),
+    request;
+PricingCalculationRequest,
     result;
 PricingCalculationResult;
 PricingCalculationResult;
@@ -723,8 +725,9 @@ PricingCalculationResult;
             break;
             model.updatedAt = Date.now();
             async;
-            generateMarketBasedRecommendations(params, {});
-            model: PricingModel;
+            generateMarketBasedRecommendations(params, {}),
+                model;
+            PricingModel;
             analytics: PricingAnalytics;
             competitivePosition: CompetitiveAnalysis;
             demandForecast: DemandForecast;
@@ -767,7 +770,7 @@ PricingCalculationResult;
                         period: params.forecastPeriodDays,
                         expectedDemandChange: baselineGrowth * seasonalImpact,
                         confidence: 0.75,
-                        factors: [,
+                        factors: [
                             { name: 'seasonal', impact: seasonalImpact - 1 },
                             { name: 'growth_trend', impact: baselineGrowth }
                         ]
@@ -818,23 +821,17 @@ PricingCalculationResult;
                         return Math.min(2.0, Math.max(0.1, analytics.demandSensitivity));
                         // Supporting interfaces
                     }
-                    factors: Array;
                 }
             },
-            interface, CompetitiveAnalysis
+            factors: (Array)
         };
-        {
-            position: 'below_market' | 'at_market' | 'above_market';
-            competitorCount: number;
-            averagePrice: number;
-        }
-        priceRange: {
-            min: number;
-            max: number;
-        }
-        ;
-        marketShare: number;
-        differentiationFactors: string;
     }
 }
+priceRange: {
+    min: number;
+    max: number;
+}
+;
+marketShare: number;
+differentiationFactors: string;
 export default PricingOptimizer;

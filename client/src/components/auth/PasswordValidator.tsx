@@ -17,49 +17,55 @@ import {
   // Lock, // Unused
   Zap
   // Clock // Unused
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
+
 export interface PasswordPolicy {
   minLength: number;,
-  maxLength: number;
+  maxLength: number;,
   requireUppercase: boolean;,
-  requireLowercase: boolean;
+  requireLowercase: boolean;,
   requireNumbers: boolean;,
-  requireSpecialChars: boolean;
+  requireSpecialChars: boolean;,
   forbidCommonPasswords: boolean;,
-  forbidPersonalInfo: boolean;
+  forbidPersonalInfo: boolean;,
   maxConsecutiveChars: number;,
-  minUniqueChars: number;
+  minUniqueChars: number;,
   forbidRepeatingPatterns: boolean;
-}
-}
-}
+
+
+
+
+
 export interface UserContext {
   email?: string;
   firstName?: string;
   lastName?: string;
   username?: string;
   previousPasswords?: string;
-}
-}
-}
+
+
+
+
+
 export interface ValidationResult {
   isValid: boolean;,
   score: number; // 0-100,
   strength: 'very-weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very-strong';,
-  checks: ValidationCheck;
+  checks: ValidationCheck;,
   suggestions: string;,
-  estimatedCrackTime: string;
+  estimatedCrackTime: string;,
   entropy: number;
-}
-}
-}
+
+
+
+
+
 export interface ValidationCheck {
   id: string;,
-  label: string;
+  label: string;,
   passed: boolean;,
-  required: boolean;
+  required: boolean;,
   weight: number;
   message?: string;
   interface PasswordValidatorProps {
@@ -84,9 +90,10 @@ export interface ValidationCheck {
   maxConsecutiveChars: 3,
   minUniqueChars: 8,
   forbidRepeatingPatterns: true,
-}
+
+
 };
-const COMMON_PASSWORDS = [;
+const COMMON_PASSWORDS = [
   'password', 'password123', '123456', '123456789', 'qwerty', 'abc123',
   'password1', 'admin', 'welcome', 'letmein', 'monkey', 'dragon',
   'passw0rd', 'Password1', 'iloveyou', 'princess', 'rockyou'
@@ -99,7 +106,7 @@ const STRENGTH_CONFIG = {
   'strong': { color: 'green', label: 'Strong', min: 80 },
   'very-strong': { color: 'green', label: 'Very Strong', min: 95 }
 };
-}
+
 export function PasswordValidator({)
   password,
   policy: customPolicy,
@@ -110,7 +117,7 @@ export function PasswordValidator({)
   showPassword = false,
   onValidationChange,
   className = ''
-}: PasswordValidatorProps) {
+: PasswordValidatorProps) {
   const [showPasswordVisible, setShowPasswordVisible] = useState(showPassword);
   const policy = useMemo(() => ({ ...DEFAULT_POLICY, ...customPolicy }), [customPolicy]);
   const validationResult = useMemo(() => {
@@ -220,7 +227,7 @@ export function PasswordValidator({)
       )}
     </div>
   );
-function validatePassword(password: string, )
+function validatePassword(password: string);
   policy: PasswordPolicy, 
   userContext?: UserContext
 ): ValidationResult {
@@ -306,7 +313,7 @@ function validatePassword(password: string, )
   else suggestions.push('Avoid common passwords and dictionary words');
   // Personal info check
   if (userContext && policy.forbidPersonalInfo) {
-  const personalInfo = [;
+  const personalInfo = [
   userContext.email?.split('@')[0],
   userContext.firstName,
   userContext.lastName,
@@ -396,12 +403,12 @@ function hasConsecutiveChars(password: string, maxConsecutive: number): boolean 
     if (password[i] === password[i - 1]) {
       count++;
       if (count > maxConsecutive) return true;
-    } else {
+ else {
       count = 1;
   return false;
 function hasRepeatingPatterns(password: string): boolean {
   // Check for keyboard patterns, sequences, and simple repeating patterns
-  const patterns = [;
+  const patterns = [
     'qwerty', 'asdfgh', 'zxcvbn', 'qwertyuiop', 'asdfghjkl', 'zxcvbnm',
     'abcdef', '123456', '987654', 'abc123', '123abc'
   ];

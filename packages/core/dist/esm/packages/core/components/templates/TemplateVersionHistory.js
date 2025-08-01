@@ -129,10 +129,10 @@ export const TemplateVersionHistory = ({ _____templateId, onVersionSelect }) => 
                                 from_version: versions.find(v => v.id === selectedArray[0]),
                                 to_version: versions.find(v => v.id === selectedArray[1]),
                                 diff: {
-                                    metadata_changes: [,
+                                    metadata_changes: [
                                         { field: 'name', old_value: 'Old Name', new_value: 'New Name', change_type: 'modified' }
                                     ],
-                                    variable_changes: [,
+                                    variable_changes: [
                                         { variable_id: 'var-1', change_type: 'added', new_variable: { id: 'var-1', name: 'new_var' } }
                                     ],
                                     customization_changes: [],
@@ -152,8 +152,7 @@ export const TemplateVersionHistory = ({ _____templateId, onVersionSelect }) => 
                                     },
                                     migration_required: false,
                                     migration_complexity: 'simple',
-                                    estimated_migration_time: 5
-                                }
+                                    estimated_migration_time: 5 }
                             };
                             try { }
                             catch (error) {

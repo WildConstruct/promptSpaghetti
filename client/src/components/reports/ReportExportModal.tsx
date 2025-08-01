@@ -27,36 +27,40 @@ import {
   CheckCircle, 
   AlertCircle,
   Loader2
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Types
-}
+
+
 interface ReportData {
-  metadata: {
+  metadata: {,
   title: string;,
-  description: string;
+  description: string;,
   generatedAt: Date;,
-  generatedBy: string;
+  generatedBy: string;,
   version: string;
-}
+
+
 };
   summary: Record<string, unknown>;
   data: Array<Record<string, unknown>>;
-}
+
+
 interface ExportConfig {
   format: 'pdf' | 'excel' | 'csv' | 'json' | 'xml' | 'html';,
   delivery: 'file' | 'email' | 'webhook' | 'api';
   filename?: string;
-  options?: {
+  options?: {,
   includeCharts?: boolean;
   includeRawData?: boolean;
   compression?: boolean;
   encryption?: boolean;
   password?: string;
-}
+
+
 };
   delivery_config?: {
-  email?: {
+  email?: {,
   to: string;,
   subject: string;
   message?: string;
@@ -67,7 +71,8 @@ interface ExportConfig {
   method?: 'POST' | 'PUT';
 };
   };
-}
+
+
 interface ExportStatus {
   id: string;,
   status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -76,21 +81,22 @@ interface ExportStatus {
   downloadUrl?: string;
   interface ReportExportModalProps {
   isOpen: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   reportData: ReportData | null;
   title?: string;
-  export const ReportExportModal: React.FC<ReportExportModalProps> = ({,)
+  export const ReportExportModal: React.FC<ReportExportModalProps> = ({),
   isOpen,
   onClose,
   reportData,
   title = 'Export Report'
-}
+
+
 }) => {
   const [activeTab, setActiveTab] = useState('export');
   const [exportConfig, setExportConfig] = useState<ExportConfig>({)
   format: 'pdf',
   delivery: 'file',
-  options: {
+  options: {,
   includeCharts: true,
   includeRawData: true,
   compression: false,
@@ -143,7 +149,7 @@ interface ExportStatus {
   body: JSON.stringify({),
   reportData,
   config: exportConfig,
-}
+
       });
       clearInterval(progressInterval);
       if (!response.ok) {
@@ -155,13 +161,13 @@ interface ExportStatus {
   progress: 100,
   downloadUrl: result.data.downloadUrl,
 });
-    } catch (error) {
+ catch (error) {
   setExportStatus({)
   id: 'error-' + Date.now(),
   status: 'failed',
   error: error instanceof Error ? error.message : 'Export failed',
 });
-    } finally {
+ finally {
       setIsExporting(false);
   };
   // Handle scheduled export
@@ -170,27 +176,27 @@ interface ExportStatus {
   try {
   const response = await fetch('/api/reports/schedule', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   name: scheduleName,
   description: scheduleDescription,
   reportQuery: 'dynamic', // Would be replaced with actual query,
   exportConfig,
-  schedule: {
+  schedule: {,
   frequency: scheduleFrequency,
   time: scheduleTime,
   dayOfWeek: scheduleDayOfWeek,
 },
   enabled: true;
-  }
+
       });
       if (!response.ok) {
         throw new Error(`Scheduling failed: ${response.statusText}`);}
       // Show success and switch to export tab
       setActiveTab('export');
-    } catch (error) {
+ catch (error) {
   console.error('Failed to schedule export:', error);
 };
   // Handle download
@@ -198,7 +204,7 @@ interface ExportStatus {
     if (exportStatus?.downloadUrl) {
       window.open(exportStatus.downloadUrl, '_blank');
   };
-  const formatOptions = [;
+  const formatOptions = [
     { value: 'pdf', label: 'PDF Document', icon: FileText },
     { value: 'excel', label: 'Excel Spreadsheet', icon: FileText },
     { value: 'csv', label: 'CSV File', icon: FileText },
@@ -206,7 +212,7 @@ interface ExportStatus {
     { value: 'xml', label: 'XML Document', icon: FileText },
     { value: 'html', label: 'HTML Report', icon: FileText }
   ];
-  const deliveryOptions = [;
+  const deliveryOptions = [
     { value: 'file', label: 'File Download', icon: Download },
     { value: 'email', label: 'Email Delivery', icon: Mail },
     { value: 'webhook', label: 'Webhook', icon: Webhook }
@@ -330,13 +336,13 @@ interface ExportStatus {
                       onChange={(e) => {
   const emails = e.target.value.split(',').map(email => email.trim());
   updateExportConfig({)
-  delivery_config: {
+  delivery_config: {,
   ...exportConfig.delivery_config,
-  email: {
+  email: {,
   ...exportConfig.delivery_config?.email,
   to: emails,
 });
-                      }}
+}
                     />
                   </div>
                   <div className="space-y-2">
@@ -346,14 +352,14 @@ interface ExportStatus {
                       placeholder="Report Export"
                       onChange={(e) => {
   updateExportConfig({)
-  delivery_config: {
+  delivery_config: {,
   ...exportConfig.delivery_config,
-  email: {
+  email: {,
   ...exportConfig.delivery_config?.email,
   to: exportConfig.delivery_config?.email?.to || [],
   subject: e.target.value,
 });
-                      }}
+}
                     />
                   </div>
                 </div>
@@ -364,15 +370,15 @@ interface ExportStatus {
                     placeholder="Please find the attached report..."
                     onChange={(e) => {
   updateExportConfig({)
-  delivery_config: {
+  delivery_config: {,
   ...exportConfig.delivery_config,
-  email: {
+  email: {,
   ...exportConfig.delivery_config?.email,
   to: exportConfig.delivery_config?.email?.to || [],
   subject: exportConfig.delivery_config?.email?.subject || '',
   message: e.target.value,
 });
-                    }}
+
                   />
                 </div>
               </div>

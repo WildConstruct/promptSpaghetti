@@ -44,8 +44,8 @@ export type ActionType =
 // Policy Structure Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface PolicyMetadata {
   id: string;
   name: string;
@@ -62,12 +62,13 @@ export interface PolicyMetadata {
   tags: string[];
   category?: string;
   subcategory?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyScope {
   scope_type: PolicyScope;
   scope_criteria: {
@@ -78,23 +79,24 @@ export interface PolicyScope {
     trust_score_ranges?: {
       min?: number;
       max?: number;
-}
-}
+
+
+
     };
     custom_filters?: Array<{
       field: string;
       operator: ConditionOperator;
       value: Error;
-    }>;
+>;
   };
   exceptions?: {
     entity_ids?: string[];
     conditions?: PolicyCondition[];
   };
-}
 
-}
-}
+
+
+
 export interface PolicyCondition {
   id: string;
   name: string;
@@ -107,12 +109,13 @@ export interface PolicyCondition {
   group?: string;
   logical_operator?: 'AND' | 'OR';
   weight?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyAction {
   id: string;
   type: ActionType;
@@ -128,8 +131,9 @@ export interface PolicyAction {
     max_attempts: number;
     retry_delay: number;
     backoff_factor: number;
-}
-}
+
+
+
   };
   notifications?: {
     admin: boolean;
@@ -137,10 +141,10 @@ export interface PolicyAction {
     webhook?: string;
     email_template?: string;
   };
-}
 
-}
-}
+
+
+
 export interface PolicyRule {
   id: string;
   name: string;
@@ -155,32 +159,34 @@ export interface PolicyRule {
     max_triggers: number;
     time_window: number; // seconds
     cooldown_period: number; // seconds
-}
-}
+
+
+
   };
   audit_settings: {
     log_evaluations: boolean;
     log_actions: boolean;
     include_context: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface PolicyConfiguration {
   global_settings: {
     default_severity: PolicySeverity;
     auto_execution_enabled: boolean;
     audit_enabled: boolean;
     notification_enabled: boolean;
-}
-}
+
+
+
   };
   thresholds: Record<string, {
     warning: number;
     critical: number;
     severe: number;
-  }>;
+>;
   timeouts: {
     evaluation_timeout: number;
     action_timeout: number;
@@ -192,14 +198,14 @@ export interface PolicyConfiguration {
     notifications_per_hour: number;
   };
   feature_flags: Record<string, boolean>;
-}
+
 
 // =============================================================================
 // Complete Policy Definition
 // =============================================================================
 
-}
-}
+
+
 export interface Policy {
   metadata: PolicyMetadata;
   scope: PolicyScope;
@@ -209,8 +215,9 @@ export interface Policy {
     required_policies?: string[];
     conflicting_policies?: string[];
     prerequisite_conditions?: PolicyCondition[];
-}
-}
+
+
+
   };
   compliance?: {
     regulatory_framework: string[];
@@ -227,10 +234,10 @@ export interface Policy {
       throughput_requirements: number;
     };
   };
-}
 
-}
-}
+
+
+
 export interface PolicyTestCase {
   id: string;
   name: string;
@@ -239,22 +246,23 @@ export interface PolicyTestCase {
   expected_conditions: Array<{
     condition_id: string;
     expected_result: boolean;
-}
-}
-  }>;
+
+
+
+>;
   expected_actions: Array<{
     action_id: string;
     should_trigger: boolean;
-  }>;
+>;
   test_type: 'unit' | 'integration' | 'performance' | 'security';
-}
+
 
 // =============================================================================
 // Policy Evaluation Context
 // =============================================================================
 
-}
-}
+
+
 export interface PolicyEvaluationContext {
   timestamp: Date;
   entity_type: 'user' | 'template' | 'transaction' | 'system';
@@ -266,8 +274,9 @@ export interface PolicyEvaluationContext {
     session_id?: string;
     ip_address?: string;
     user_agent?: string;
-}
-}
+
+
+
   };
   environment: {
     region: string;
@@ -276,10 +285,10 @@ export interface PolicyEvaluationContext {
   };
   context_data: Record<string, any>;
   parent_evaluation_id?: string;
-}
 
-}
-}
+
+
+
 export interface PolicyEvaluationResult {
   evaluation_id: string;
   policy_id: string;
@@ -291,9 +300,10 @@ export interface PolicyEvaluationResult {
     met: boolean;
     value: Error;
     evaluation_time: number;
-}
-}
-  }>;
+
+
+
+>;
   actions_triggered: Array<{
     action_id: string;
     triggered: boolean;
@@ -301,19 +311,19 @@ export interface PolicyEvaluationResult {
     execution_time?: number;
     result?: unknown;
     error?: string;
-  }>;
+>;
   overall_result: 'pass' | 'fail' | 'partial' | 'error';
   execution_time: number;
   memory_usage?: number;
   debug_info?: unknown;
-}
+
 
 // =============================================================================
 // Policy Template System
 // =============================================================================
 
-}
-}
+
+
 export interface PolicyTemplate {
   template_id: string;
   name: string;
@@ -333,29 +343,30 @@ export interface PolicyTemplate {
       max?: number;
       pattern?: string;
       options?: unknown[];
-}
-}
+
+
+
     };
-  }>;
+>;
   examples: Array<{
     name: string;
     description: string;
     parameter_values: Record<string, any>;
-  }>;
+>;
   documentation: {
     usage_guide: string;
     best_practices: string[];
     common_pitfalls: string[];
     related_templates: string[];
   };
-}
+
 
 // =============================================================================
 // Policy Management Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface PolicyVersion {
   version_id: string;
   policy_id: string;
@@ -367,16 +378,17 @@ export interface PolicyVersion {
     old_value: Error;
     new_value: Error;
     change_type: 'create' | 'update' | 'delete';
-}
-}
-  }>;
+
+
+
+>;
   change_summary: string;
   rollback_available: boolean;
   deployment_status: 'draft' | 'staged' | 'deployed' | 'rolled_back';
-}
 
-}
-}
+
+
+
 export interface PolicyDeployment {
   deployment_id: string;
   policy_id: string;
@@ -394,26 +406,27 @@ export interface PolicyDeployment {
       percentage: number;
       duration: number;
       success_criteria: PolicyCondition[];
-}
-}
-    }>;
+
+
+
+>;
   };
   health_checks: Array<{
     name: string;
     status: 'passing' | 'failing' | 'unknown';
     last_check: Date;
     error_message?: string;
-  }>;
+>;
   metrics: {
     evaluations_per_second: number;
     success_rate: number;
     error_rate: number;
     average_execution_time: number;
   };
-}
 
-}
-}
+
+
+
 export interface PolicyAuditLog {
   audit_id: string;
   policy_id: string;
@@ -423,8 +436,9 @@ export interface PolicyAuditLog {
     type: 'user' | 'system' | 'api';
     id: string;
     name?: string;
-}
-}
+
+
+
   };
   details: {
     event_data: Record<string, unknown>;
@@ -442,21 +456,22 @@ export interface PolicyAuditLog {
     retention_required: boolean;
     classification: string;
   };
-}
+
 
 // =============================================================================
 // Policy Analytics and Reporting
 // =============================================================================
 
-}
-}
+
+
 export interface PolicyMetrics {
   policy_id: string;
   time_period: {
     start_date: Date;
     end_date: Date;
-}
-}
+
+
+
   };
   evaluation_metrics: {
     total_evaluations: number;
@@ -489,10 +504,10 @@ export interface PolicyMetrics {
     cost_savings?: number;
     user_satisfaction_impact?: number;
   };
-}
 
-}
-}
+
+
+
 export interface PolicyRecommendation {
   recommendation_id: string;
   policy_id: string;
@@ -506,9 +521,10 @@ export interface PolicyRecommendation {
     current_value: Error;
     suggested_value: Error;
     impact: string;
-}
-}
-  }>;
+
+
+
+>;
   expected_benefits: string[];
   implementation_effort: 'low' | 'medium' | 'high';
   risk_assessment: {
@@ -518,7 +534,7 @@ export interface PolicyRecommendation {
   };
   generated_at: Date;
   expires_at?: Date;
-}
+
 
 // =============================================================================
 // Policy Data Access Layer
@@ -529,7 +545,7 @@ export class PolicyDataService {
 
   constructor(database: Database) {
     this.db = database;
-  }
+
 
   // Policy CRUD Operations
   async createPolicy(policy: Policy): Promise<string> {
@@ -586,14 +602,13 @@ export class PolicyDataService {
 
       await client.query('COMMIT');
       return policyId;
-      
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getPolicy(policyId: string): Promise<Policy | null> {
 
@@ -607,11 +622,11 @@ export class PolicyDataService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     return this.mapRowToPolicy(row);
-  }
+
 
   async updatePolicy(policyId: string, updates: Partial<Policy>, updatedBy: string): Promise<void> {
 
@@ -628,7 +643,7 @@ export class PolicyDataService {
           if (value !== undefined && key !== 'id' && key !== 'created_at' && key !== 'created_by') {
             params.push(value);
             setClause.push(`${key} = $${params.length}`);
-          }
+
         });
         
         if (setClause.length > 0) {
@@ -642,8 +657,8 @@ export class PolicyDataService {
             SET ${setClause.join(', ')}
             WHERE id = $${params.length}
           `, params);
-        }
-      }
+
+
 
       // Update policy data if provided
       if (updates.scope || updates.rules || updates.configuration || updates.dependencies || updates.compliance || updates.testing) {
@@ -663,22 +678,22 @@ export class PolicyDataService {
             JSON.stringify(updates.testing || existing.testing || {}),
             policyId
           ]);
-        }
-      }
+
+
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async deletePolicy(policyId: string): Promise<void> {
 
     await this.db.query('DELETE FROM policies WHERE id = $1', [policyId]);
-  }
+
 
   async listPolicies(filters: {
     type?: PolicyType;
@@ -686,7 +701,7 @@ export class PolicyDataService {
     category?: string;
     limit?: number;
     offset?: number;
-  } = {}): Promise<{ policies: Policy[]; total: number }> {
+ = {}): Promise<{ policies: Policy[]; total: number }> {
 
     let whereClause = '';
     const params: unknown[] = [];
@@ -695,21 +710,21 @@ export class PolicyDataService {
     if (filters.type) {
       conditions.push(`p.type = $${params.length + 1}`);
       params.push(filters.type);
-    }
+
 
     if (filters.status) {
       conditions.push(`p.status = $${params.length + 1}`);
       params.push(filters.status);
-    }
+
 
     if (filters.category) {
       conditions.push(`p.category = $${params.length + 1}`);
       params.push(filters.category);
-    }
+
 
     if (conditions.length > 0) {
       whereClause = `WHERE ${conditions.join(' AND ')}`;
-    }
+
 
     const result = await this.db.query(`
       SELECT p.*, pd.scope_data, pd.rules_data, pd.configuration_data,
@@ -726,7 +741,7 @@ export class PolicyDataService {
     const total = result.rows.length > 0 ? parseInt(result.rows[0].total_count) : 0;
 
     return { policies, total };
-  }
+
 
   // Policy Evaluation
   async evaluatePolicy(policyId: string, context: PolicyEvaluationContext): Promise<PolicyEvaluationResult> {
@@ -734,7 +749,7 @@ export class PolicyDataService {
     const policy = await this.getPolicy(policyId);
     if (!policy) {
       throw new Error(`Policy not found: ${policyId}`);
-    }
+
 
     const evaluationId = `eval-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const startTime = Date.now();
@@ -764,10 +779,10 @@ export class PolicyDataService {
 
         if (ruleResult.overall_result === 'fail') {
           result.overall_result = 'fail';
-        } else if (ruleResult.overall_result === 'partial' && result.overall_result === 'pass') {
+ else if (ruleResult.overall_result === 'partial' && result.overall_result === 'pass') {
           result.overall_result = 'partial';
-        }
-      }
+
+
 
       result.execution_time = Date.now() - startTime;
 
@@ -775,13 +790,12 @@ export class PolicyDataService {
       await this.logPolicyEvaluation(result);
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       result.overall_result = 'error';
       result.execution_time = Date.now() - startTime;
       throw error;
-    }
-  }
+
+
 
   // Analytics and Metrics
   async getPolicyMetrics(policyId: string, timeRange: { start: Date; end: Date }): Promise<PolicyMetrics> {
@@ -809,14 +823,14 @@ export class PolicyDataService {
         average_execution_time: parseFloat(row.avg_execution_time) || 0,
         max_execution_time: parseFloat(row.max_execution_time) || 0,
         evaluations_per_hour: 0 // Calculate based on time range
-  }
+
       action_metrics: {
         total_actions: 0,
         successful_actions: 0,
         failed_actions: 0,
         actions_by_type: {} as Record<ActionType, number>,
         false_positive_rate: 0
-  }
+
       performance_metrics: {
         throughput: 0,
         latency_p50: 0,
@@ -824,14 +838,14 @@ export class PolicyDataService {
         latency_p99: 0,
         memory_usage: 0,
         error_rate: 0
-  }
+
       business_impact: {
         entities_protected: 0,
         violations_prevented: 0,
         compliance_score: 0
-      }
+
     };
-  }
+
 
   // Private helper methods
   private mapRowToPolicy(row: unknown): Policy {
@@ -852,7 +866,7 @@ export class PolicyDataService {
         tags: JSON.parse(row.tags || '[]'),
         category: row.category,
         subcategory: row.subcategory
-  }
+
       scope: JSON.parse(row.scope_data || '{}'),
       rules: JSON.parse(row.rules_data || '[]'),
       configuration: JSON.parse(row.configuration_data || '{}'),
@@ -860,7 +874,7 @@ export class PolicyDataService {
       compliance: JSON.parse(row.compliance || '{}'),
       testing: JSON.parse(row.testing || '{}')
     };
-  }
+
 
   private async evaluateRule(
     rule: PolicyRule,
@@ -880,15 +894,15 @@ export class PolicyDataService {
         value: context.context_data[condition.field],
         evaluation_time: Date.now()
       });
-    }
+
 
     // Determine if rule should trigger based on condition_logic
     let ruleShouldTrigger = false;
     if (rule.condition_logic === 'ALL') {
       ruleShouldTrigger = conditionsMetResults.every(c => c.met);
-    } else if (rule.condition_logic === 'ANY') {
+ else if (rule.condition_logic === 'ANY') {
       ruleShouldTrigger = conditionsMetResults.some(c => c.met);
-    }
+
 
     // Execute actions if rule triggers
     if (ruleShouldTrigger) {
@@ -904,7 +918,7 @@ export class PolicyDataService {
             execution_time: Date.now() - startTime,
             result
           });
-        } catch (error) {
+ catch (error) {
           actionsTriggeredResults.push({
             action_id: action.id,
             triggered: true,
@@ -912,16 +926,16 @@ export class PolicyDataService {
             execution_time: Date.now() - startTime,
             error: error.message
           });
-        }
-      }
-    }
+
+
+
 
     return {
       conditions_met: conditionsMetResults,
       actions_triggered: actionsTriggeredResults,
       overall_result: ruleShouldTrigger ? 'fail' : 'pass'
     };
-  }
+
 
   private evaluateCondition(condition: PolicyCondition, context: PolicyEvaluationContext): boolean {
     const fieldValue = this.getFieldValue(condition.field, context);
@@ -942,8 +956,8 @@ export class PolicyDataService {
       return Array.isArray(conditionValue) && conditionValue.length === 2 
           && fieldValue >= conditionValue[0] && fieldValue <= conditionValue[1];
     default: return false;
-    }
-  }
+
+
 
   private getFieldValue(field: string, context: PolicyEvaluationContext): unknown {
     const parts = field.split('.');
@@ -952,17 +966,17 @@ export class PolicyDataService {
     for (const part of parts) {
       value = value?.[part];
       if (value === undefined) break;
-    }
+
     
     return value;
-  }
+
 
   private async executeAction(action: PolicyAction, context: PolicyEvaluationContext): Promise<unknown> {
 
     // Placeholder for action execution
     console.log(`Executing action: ${action.type}`, { action, context });
     return { success: true, timestamp: new Date() };
-  }
+
 
   private async logPolicyEvaluation(result: PolicyEvaluationResult): Promise<void> {
 
@@ -991,8 +1005,8 @@ export class PolicyDataService {
       JSON.stringify(result.conditions_met),
       JSON.stringify(result.actions_triggered)
     ]);
-  }
-}
+
+
 
 // =============================================================================
 // Policy Builder Utilities
@@ -1008,34 +1022,34 @@ export class PolicyBuilder {
       rules: [],
       configuration: {} as PolicyConfiguration
     };
-  }
+
 
   setMetadata(metadata: Partial<PolicyMetadata>): PolicyBuilder {
     this.policy.metadata = { ...this.policy.metadata!, ...metadata };
     return this;
-  }
+
 
   setScope(scope: PolicyScope): PolicyBuilder {
     this.policy.scope = scope;
     return this;
-  }
+
 
   addRule(rule: PolicyRule): PolicyBuilder {
     this.policy.rules!.push(rule);
     return this;
-  }
+
 
   setConfiguration(config: PolicyConfiguration): PolicyBuilder {
     this.policy.configuration = config;
     return this;
-  }
+
 
   build(): Policy {
     if (!this.policy.metadata?.id || !this.policy.metadata?.name) {
       throw new Error('Policy must have metadata with id and name');
-    }
+
     return this.policy as Policy;
-  }
+
 
   // Convenience methods for common policy patterns
   static createEnforcementPolicy(name: string, trustThreshold: number): PolicyBuilder {
@@ -1052,7 +1066,7 @@ export class PolicyBuilder {
         updated_at: new Date(),
         effective_date: new Date(),
         tags: ['enforcement', 'trust-score']
-  }
+
       .addRule({
         id: 'trust-threshold-rule',
         name: 'Trust Score Threshold',
@@ -1067,7 +1081,7 @@ export class PolicyBuilder {
           value: trustThreshold,
           data_type: 'number',
           required: true
-        }],
+],
         actions: [{
           id: 'restrict-action',
           type: 'restrict',
@@ -1077,14 +1091,13 @@ export class PolicyBuilder {
           parameters: {
             restriction_type: 'limited_access',
             duration: 86400 // 24 hours
-          }
-        }],
+
+],
         condition_logic: 'ALL',
         audit_settings: {
           log_evaluations: true,
           log_actions: true,
           include_context: true
-        }
+
       });
-  }
-}
+

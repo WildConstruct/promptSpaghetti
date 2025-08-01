@@ -9,7 +9,12 @@ data: Record;
 [key, string];
 unknown;
  > ;
-edges: Array;
+edges: Array < {
+    id: string,
+    source: string,
+    target: string,
+    data: (Record),
+    [key]: string, unknown } > ;
 metadata ?  : Record;
  > ;
 position_changed: boolean;
@@ -19,7 +24,9 @@ connection_changed: boolean;
 ;
  > ;
  > ;
-failed: Array;
+failed: Array < {
+    error: string
+} > ;
 total_requested: number;
 successful_count: number;
 failed_count: number;

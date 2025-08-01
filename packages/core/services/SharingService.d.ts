@@ -7,15 +7,13 @@
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
 import { ShareConfig, ShareAnalyticsEvent, ShareMetrics, CreateShareRequest, ShareResponse, ShareCollection, SocialIntegration, SharePermission } from '../types/sharingTypes';
-export declare class SharingService {
-    private baseUrl;
+export declare class SharingService { private baseUrl;
     private analyticsEnabled;
     private socialIntegrations;
     constructor(config: {)
         baseUrl: string;
         analyticsEnabled?: boolean;
-        socialIntegrations?: SocialIntegration[];
-    });
+        socialIntegrations?: SocialIntegration[] });
     /**
      * Create a new share configuration and link
      */
@@ -39,10 +37,9 @@ export declare class SharingService {
     /**
      * Get sharing metrics for a resource
      */
-    getShareMetrics(shareLinkId: string, timeRange: {)
+    getShareMetrics(shareLinkId: string, timeRange: { )
         start: Date;
-        end: Date;
-    }): Promise<ShareMetrics>;
+        end: Date }): Promise<ShareMetrics>;
     /**
      * Create a collection of shareable resources
      */
@@ -58,15 +55,13 @@ export declare class SharingService {
     /**
      * Get share analytics dashboard data
      */
-    getShareDashboard(userId: string): Promise<{
-        totalShares: number;
+    getShareDashboard(userId: string): Promise<{ totalShares: number;
         totalViews: number;
         topPerformers: Array<{
             resourceId: string;
             title: string;
             views: number;
-            shares: number;
-        }>;
+            shares: number }>;
         recentActivity: ShareAnalyticsEvent[];
     }>;
     private generateShortCode;

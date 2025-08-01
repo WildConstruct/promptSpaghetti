@@ -2,54 +2,46 @@
  * Comprehensive tests for SecureCodeGenerator and VerificationCodeFactory
  */
 import crypto from 'crypto';
-import { 
-  SecureCodeGenerator, 
+import { SecureCodeGenerator, 
   VerificationCodeFactory,
   CodeUtils,
-  VerificationCodeData,
+  VerificationCodeData }
   ValidationResult
-} from '../CodeGenerator';
-describe('SecureCodeGenerator', () => {
-  let generator: SecureCodeGenerator;
+ from '../CodeGenerator';
+describe('SecureCodeGenerator', () => { let generator: SecureCodeGenerator;
   beforeEach(() => {
-  generator = new SecureCodeGenerator();
-});
+  generator = new SecureCodeGenerator() });
   describe('Code Generation', () => {
     test('should generate numeric codes of correct length', () => {
       const code = generator.generateCode({ length: 6, format: 'numeric' });
       expect(code).toMatch(/^\d{6}$/);
       expect(code.length).toBe(6);
     });
-    test('should generate alphanumeric codes without ambiguous characters', () => {
-  const code = generator.generateCode({ )
+    test('should generate alphanumeric codes without ambiguous characters', () => { const code = generator.generateCode({ )
   length: 8,
   format: 'alphanumeric',
-  excludeAmbiguous: true,
+  excludeAmbiguous: true }
 });
       expect(code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{8}$/);
       expect(code.length).toBe(8);
       // Should not contain ambiguous characters
       expect(code).not.toMatch(/[0O1IL]/);
     });
-    test('should generate alphabetic codes', () => {
-  const code = generator.generateCode({ )
+    test('should generate alphabetic codes', () => { const code = generator.generateCode({ )
   length: 4,
-  format: 'alphabetic',
+  format: 'alphabetic' }
 });
       expect(code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ]{4}$/);
       expect(code.length).toBe(4);
     });
-    test('should use custom alphabet', () => {
-  const customAlphabet = 'ABCD1234';
+    test('should use custom alphabet', () => { const customAlphabet = 'ABCD1234';
   const code = generator.generateCode({)
   length: 6,
-  format: 'numeric', // This should be ignored when customAlphabet is provided,
+  format: 'numeric', // This should be ignored when customAlphabet is provided }
   customAlphabet
 });
       expect(code.length).toBe(6);
-      for (const char of code) {
-        expect(customAlphabet).toContain(char);
-    });
+      for (const char of code) { expect(customAlphabet).toContain(char) });
     test('should generate unique codes', () => {
       const codes = new Set();
       // Generate 1000 codes - should all be unique with high probability
@@ -70,14 +62,12 @@ describe('SecureCodeGenerator', () => {
         generator.generateCode({ customAlphabet: 'A' }); // Too few characters
       }).toThrow('Custom alphabet must contain at least 2 characters');
     });
-    test('should emit generation events', (done) => {
-      generator.on('codeGenerated', (event) => {
+    test('should emit generation events', (done) => { generator.on('codeGenerated', (event) => {
         expect(event).toHaveProperty('length', 6);
         expect(event).toHaveProperty('format', 'numeric');
         expect(event).toHaveProperty('timestamp');
         expect(event.timestamp).toBeInstanceOf(Date);
-        done();
-      });
+        done() });
       generator.generateCode({ length: 6, format: 'numeric' });
     });
   });
@@ -91,28 +81,23 @@ describe('SecureCodeGenerator', () => {
         expect(code).not.toMatch(/[0O1IL]/); // No ambiguous characters
       });
     });
-    test('should generate unique recovery codes', () => {
-      const codes = generator.generateRecoveryCodes(10);
+    test('should generate unique recovery codes', () => { const codes = generator.generateRecoveryCodes(10);
       const uniqueCodes = new Set(codes);
-      expect(uniqueCodes.size).toBe(10);
-    });
-    test('should emit recovery code generation events', (done) => {
-      generator.on('recoveryCodesGenerated', (event) => {
+      expect(uniqueCodes.size).toBe(10) });
+    test('should emit recovery code generation events', (done) => { generator.on('recoveryCodesGenerated', (event) => {
         expect(event).toHaveProperty('count', 10);
         expect(event).toHaveProperty('timestamp');
-        done();
-      });
+        done() });
       generator.generateRecoveryCodes(10);
     });
   });
-  describe('Verification Code Creation', () => {
-    test('should create verification code with all required properties', async () => {
+  describe('Verification Code Creation', () => { test('should create verification code with all required properties', async () => {
       const code = '123456';
       const userId = 'user123';
       const purpose = 'email_verification';
       const verificationCode = await generator.createVerificationCode(;);
         code, 
-        userId, 
+        userId }
         purpose
       );
       expect(verificationCode).toHaveProperty('id');
@@ -135,14 +120,13 @@ describe('SecureCodeGenerator', () => {
       expect(code1.salt).not.toBe(code2.salt);
       expect(code1.codeHash).not.toBe(code2.codeHash); // Different due to different salts
     });
-    test('should respect custom expiration and max attempts', async () => {
-      const verificationCode = await generator.createVerificationCode(;);
+    test('should respect custom expiration and max attempts', async () => { const verificationCode = await generator.createVerificationCode(;);
         '123456',
         'user123',
         'test',
         {
           expirationMinutes: 30,
-          maxAttempts: 3,
+          maxAttempts: 3 }
           metadata: { custom: 'data' }
       );
       const expectedExpiry = new Date(Date.now() + 30 * 60 * 1000);
@@ -152,31 +136,26 @@ describe('SecureCodeGenerator', () => {
       expect(verificationCode.metadata).toEqual({ custom: 'data' });
     });
   });
-  describe('Code Validation', () => {
-  let verificationCode: VerificationCodeData;
+  describe('Code Validation', () => { let verificationCode: VerificationCodeData;
   const testCode = '123456';
   beforeEach(async () => {
   verificationCode = await generator.createVerificationCode()
   testCode,
-  'user123',
+  'user123' }
   'test'
   );
 });
-    test('should validate correct code', async () => {
-      const result = await generator.validateCode(testCode, verificationCode);
+    test('should validate correct code', async () => { const result = await generator.validateCode(testCode, verificationCode);
       expect(result.valid).toBe(true);
       expect(result.code?.used).toBe(true);
       expect(result.code?.attempts).toBe(1);
-      expect(result.attemptsRemaining).toBe(4);
-    });
-    test('should reject incorrect code', async () => {
-      const result = await generator.validateCode('wrong', verificationCode);
+      expect(result.attemptsRemaining).toBe(4) });
+    test('should reject incorrect code', async () => { const result = await generator.validateCode('wrong', verificationCode);
       expect(result.valid).toBe(false);
       expect(result.reason).toBe('invalid');
       expect(result.code?.used).toBe(false);
       expect(result.code?.attempts).toBe(1);
-      expect(result.attemptsRemaining).toBe(4);
-    });
+      expect(result.attemptsRemaining).toBe(4) });
     test('should reject used code', async () => {
       // First validation - should succeed
       await generator.validateCode(testCode, verificationCode);
@@ -187,20 +166,18 @@ describe('SecureCodeGenerator', () => {
       expect(result.valid).toBe(false);
       expect(result.reason).toBe('used');
     });
-    test('should reject expired code', async () => {
-  const expiredCode = {
+    test('should reject expired code', async () => { const expiredCode = {
   ...verificationCode,
-  expiresAt: new Date(Date.now() - 1000) // 1 second ago,
+  expiresAt: new Date(Date.now() - 1000) // 1 second ago }
 };
       const result = await generator.validateCode(testCode, expiredCode);
       expect(result.valid).toBe(false);
       expect(result.reason).toBe('expired');
     });
-    test('should enforce rate limiting', async () => {
-  const codeWithLowLimit = {
+    test('should enforce rate limiting', async () => { const codeWithLowLimit = {
   ...verificationCode,
   maxAttempts: 2,
-  attempts: 2,
+  attempts: 2 }
 };
       const result = await generator.validateCode(testCode, codeWithLowLimit);
       expect(result.valid).toBe(false);
@@ -224,13 +201,12 @@ describe('SecureCodeGenerator', () => {
       expect(result.code?.attempts).toBe(3);
       expect(result.code?.used).toBe(true);
     });
-    test('should perform constant-time validation', async () => {
-      const times: number = [];
+    test('should perform constant-time validation', async () => { const times: number = [];
       // Test validation times for correct and incorrect codes
       for (let i = 0; i < 10; i++) {
         const start = Date.now();
         await generator.validateCode(i % 2 === 0 ? testCode : 'wrong', {)
-  ...verificationCode,
+  ...verificationCode }
           id: `test-${i}` // Different ID to avoid used code issue}
         });
         times.push(Date.now() - start);
@@ -246,50 +222,46 @@ describe('SecureCodeGenerator', () => {
       expect(generator.validateCodeFormat('123456', 'numeric')).toEqual({ valid: true });
       expect(generator.validateCodeFormat('12 34 56', 'numeric')).toEqual({ valid: true });
       expect(generator.validateCodeFormat('123-456', 'numeric')).toEqual({ valid: true });
-      expect(generator.validateCodeFormat('123abc', 'numeric')).toEqual({)
+      expect(generator.validateCodeFormat('123abc', 'numeric')).toEqual({ )
   valid: false,
-  reason: 'Invalid character \'A\' in code',
+  reason: 'Invalid character \'A\' in code' }
 });
     });
     test('should validate alphanumeric codes', () => {
       expect(generator.validateCodeFormat('ABC234', 'alphanumeric')).toEqual({ valid: true });
       expect(generator.validateCodeFormat('AB-C2-34', 'alphanumeric')).toEqual({ valid: true });
-      expect(generator.validateCodeFormat('ABC0123', 'alphanumeric')).toEqual({)
+      expect(generator.validateCodeFormat('ABC0123', 'alphanumeric')).toEqual({ )
   valid: false,
-  reason: 'Invalid character \'0\' in code',
+  reason: 'Invalid character \'0\' in code' }
 });
-      expect(generator.validateCodeFormat('ABC1234', 'alphanumeric')).toEqual({)
+      expect(generator.validateCodeFormat('ABC1234', 'alphanumeric')).toEqual({ )
   valid: false,
-  reason: 'Invalid character \'1\' in code',
-});
-    });
-    test('should validate length constraints', () => {
-  expect(generator.validateCodeFormat('12', 'numeric')).toEqual({)
-  valid: false,
-  reason: 'Code length must be between 4 and 12 characters',
-});
-      expect(generator.validateCodeFormat('1234567890123', 'numeric')).toEqual({)
-  valid: false,
-  reason: 'Code length must be between 4 and 12 characters',
+  reason: 'Invalid character \'1\' in code' }
 });
     });
-    test('should handle invalid input', () => {
-  expect(generator.validateCodeFormat('', 'numeric')).toEqual({)
+    test('should validate length constraints', () => { expect(generator.validateCodeFormat('12', 'numeric')).toEqual({)
   valid: false,
-  reason: 'Code must be a non-empty string',
+  reason: 'Code length must be between 4 and 12 characters' }
 });
-      expect(generator.validateCodeFormat(null as any, 'numeric')).toEqual({)
+      expect(generator.validateCodeFormat('1234567890123', 'numeric')).toEqual({ )
   valid: false,
-  reason: 'Code must be a non-empty string',
+  reason: 'Code length must be between 4 and 12 characters' }
+});
+    });
+    test('should handle invalid input', () => { expect(generator.validateCodeFormat('', 'numeric')).toEqual({)
+  valid: false,
+  reason: 'Code must be a non-empty string' }
+});
+      expect(generator.validateCodeFormat(null as any, 'numeric')).toEqual({ )
+  valid: false,
+  reason: 'Code must be a non-empty string' }
 });
     });
   });
 });
-describe('VerificationCodeFactory', () => {
-  let factory: VerificationCodeFactory;
+describe('VerificationCodeFactory', () => { let factory: VerificationCodeFactory;
   beforeEach(() => {
-  factory = new VerificationCodeFactory();
-});
+  factory = new VerificationCodeFactory() });
   describe('Email Verification Codes', () => {
     test('should create email verification code', async () => {
       const { code, data } = await factory.createEmailVerificationCode()
@@ -360,34 +332,26 @@ describe('VerificationCodeFactory', () => {
     });
   });
 });
-describe('CodeUtils', () => {
-  describe('formatCodeForDisplay', () => {
+describe('CodeUtils', () => { describe('formatCodeForDisplay', () => {
     test('should format codes with default separator', () => {
       expect(CodeUtils.formatCodeForDisplay('12345678')).toBe('1234-5678');
-      expect(CodeUtils.formatCodeForDisplay('123456789012')).toBe('1234-5678-9012');
-    });
-    test('should format codes with custom separator', () => {
-      expect(CodeUtils.formatCodeForDisplay('12345678', ' ', 4)).toBe('1234 5678');
-      expect(CodeUtils.formatCodeForDisplay('123456', '_', 2)).toBe('12_34_56');
-    });
+      expect(CodeUtils.formatCodeForDisplay('123456789012')).toBe('1234-5678-9012') });
+    test('should format codes with custom separator', () => { expect(CodeUtils.formatCodeForDisplay('12345678', ' ', 4)).toBe('1234 5678');
+      expect(CodeUtils.formatCodeForDisplay('123456', '_', 2)).toBe('12_34_56') });
   });
-  describe('cleanUserInput', () => {
-    test('should clean and normalize user input', () => {
+  describe('cleanUserInput', () => { test('should clean and normalize user input', () => {
       expect(CodeUtils.cleanUserInput('123 456')).toBe('123456');
       expect(CodeUtils.cleanUserInput('123-456')).toBe('123456');
       expect(CodeUtils.cleanUserInput('abc def')).toBe('ABCDEF');
-      expect(CodeUtils.cleanUserInput('  a-b c  ')).toBe('ABC');
-    });
+      expect(CodeUtils.cleanUserInput('  a-b c  ')).toBe('ABC') });
   });
-  describe('generateSecureToken', () => {
-    test('should generate secure tokens', () => {
+  describe('generateSecureToken', () => { test('should generate secure tokens', () => {
       const token1 = CodeUtils.generateSecureToken();
       const token2 = CodeUtils.generateSecureToken();
       expect(token1).toHaveLength(43); // Base64url encoded 32 bytes ≈ 43 chars
       expect(token2).toHaveLength(43);
       expect(token1).not.toBe(token2);
-      expect(token1).toMatch(/^[A-Za-z0-9_-]+$/);
-    });
+      expect(token1).toMatch(/^[A-Za-z0-9_-]+$/) });
     test('should generate tokens of custom length', () => {
       const token = CodeUtils.generateSecureToken(16);
       expect(token).toHaveLength(22); // Base64url encoded 16 bytes ≈ 22 chars
@@ -401,11 +365,9 @@ describe('CodeUtils', () => {
     });
   });
 });
-describe('Security Properties', () => {
-  let generator: SecureCodeGenerator;
+describe('Security Properties', () => { let generator: SecureCodeGenerator;
   beforeEach(() => {
-  generator = new SecureCodeGenerator();
-});
+  generator = new SecureCodeGenerator() });
   test('should use cryptographically secure random generation', () => {
     // Mock crypto.randomBytes to ensure it's being called
     const originalRandomBytes = crypto.randomBytes;
@@ -416,14 +378,13 @@ describe('Security Properties', () => {
     // Restore original function
     crypto.randomBytes = originalRandomBytes;
   });
-  test('should use timing-safe comparison for validation', async () => {
-    // Mock crypto.timingSafeEqual to ensure it's being called
+  test('should use timing-safe comparison for validation', async () => { // Mock crypto.timingSafeEqual to ensure it's being called
     const originalTimingSafeEqual = crypto.timingSafeEqual;
     const mockTimingSafeEqual = jest.fn().mockImplementation(originalTimingSafeEqual);
     crypto.timingSafeEqual = mockTimingSafeEqual;
     const verificationCode = await generator.createVerificationCode(;);
       '123456',
-      'user123',
+      'user123' }
       'test'
     );
     await generator.validateCode('123456', verificationCode);
@@ -437,12 +398,10 @@ describe('Security Properties', () => {
     expect(numericEntropy).toBeGreaterThan(19); // > 19 bits (adequate for temporary codes)
     expect(alphanumericEntropy).toBeGreaterThan(38); // > 38 bits (good for longer-lived codes)
   });
-  test('should properly salt hashes', async () => {
-    const code = '123456';
+  test('should properly salt hashes', async () => { const code = '123456';
     const code1 = await generator.createVerificationCode(code, 'user1', 'test');
     const code2 = await generator.createVerificationCode(code, 'user2', 'test');
     // Same input code should produce different hashes due to different salts
     expect(code1.codeHash).not.toBe(code2.codeHash);
-    expect(code1.salt).not.toBe(code2.salt);
-  });
+    expect(code1.salt).not.toBe(code2.salt) });
 });

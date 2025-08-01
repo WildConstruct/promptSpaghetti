@@ -7,22 +7,24 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus, LucideIcon } from 'lucide-react';
 
-}
+
 export interface MetricData {
   value: string | number;,
   label: string;
-  trend?: {
+  trend?: {,
   value: number;
   label?: string;
   direction: 'up' | 'down' | 'neutral';
-}
+
+
 };
   target?: {
   value: number;
   label?: string;
 };
   format?: 'number' | 'percentage' | 'currency' | 'duration';
-}
+
+
 interface MetricsCardProps {
   title: string;,
   metrics: MetricData;
@@ -33,41 +35,42 @@ interface MetricsCardProps {
   className?: string;
   onClick?: () => void;
   const variantConfigs = {
-  default: {
+  default: {,
   background: '#ffffff',
   border: '#e5e7eb',
   iconColor: '#6b7280',
-}
+
+
 },
-  success: {
+  success: {,
   background: '#f0fdf4',
   border: '#bbf7d0',
   iconColor: '#16a34a',
 },
-  warning: {
+  warning: {,
   background: '#fffbeb',
   border: '#fed7aa',
   iconColor: '#d97706',
 },
-  error: {
+  error: {,
   background: '#fef2f2',
   border: '#fecaca',
   iconColor: '#dc2626',
 };
 const sizeConfigs = {
-  small: {
+  small: {,
   padding: '16px',
   titleSize: '14px',
   valueSize: '20px',
   labelSize: '12px',
 },
-  medium: {
+  medium: {,
   padding: '20px',
   titleSize: '16px',
   valueSize: '28px',
   labelSize: '14px',
 },
-  large: {
+  large: {,
   padding: '24px',
   titleSize: '18px',
   valueSize: '36px',
@@ -111,7 +114,7 @@ const getTrendColor = (direction: 'up' | 'down' | 'neutral') => {
   default:,
   return '#6b7280';
 };
-}
+
 export const MetricsCard: React.FC<MetricsCardProps> = ({)
   title,
   metrics,
@@ -138,14 +141,14 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '120px';
-  }}
+
       >
         <div style={{
   display: 'flex',
   alignItems: 'center',
   gap: '8px',
   color: '#6b7280',
-}}>
+}>
           <div
             style={{
   width: '16px',
@@ -154,7 +157,7 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
   borderTop: '2px solid transparent',
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
-}}
+}
           />
           Loading...
         </div>
@@ -172,18 +175,18 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
         cursor: onClick ? 'pointer' : 'default',
         transition: 'all 0.2s ease',
         boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-      }}
+
       onClick={onClick}
       onMouseOver={(e) => {
         if (onClick) {
           e.currentTarget.style.transform = 'translateY(-2px)';
           e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-      }}
+}
       onMouseOut={(e) => {
         if (onClick) {
           e.currentTarget.style.transform = 'translateY(0)';
           e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-      }}
+}
     >
       {/* Header */}
       <div style={{
@@ -191,13 +194,13 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
   alignItems: 'center',
   justifyContent: 'space-between',
   marginBottom: '16px',
-}}>
+}>
         <h3 style={{
   margin: 0,
   fontSize: sizeConfig.titleSize,
   fontWeight: '600',
   color: '#111827',
-}}>
+}>
           {title}
         </h3>
         {Icon && ()
@@ -210,7 +213,7 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
             backgroundColor: `${variantConfig.iconColor}15`}
 },
   borderRadius: '6px';
-  }}>
+}>
             <Icon size={18} style={{ color: variantConfig.iconColor }} />
           </div>
         )}
@@ -225,12 +228,12 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
   alignItems: 'baseline',
   gap: '8px',
   marginBottom: '4px',
-}}>
+}>
               <span style={{
   fontSize: sizeConfig.valueSize,
   fontWeight: '700',
   color: '#111827',
-}}>
+}>
                 {formatValue(metric.value, metric.format)}
               </span>
               {metric.trend && ()
@@ -241,7 +244,7 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
   fontSize: '12px',
   fontWeight: '500',
   color: getTrendColor(metric.trend.direction),
-}}>
+}>
                   {React.createElement(getTrendIcon(metric.trend.direction), { size: 12 })}
                   {Math.abs(metric.trend.value)}%
                   {metric.trend.label && ()
@@ -257,7 +260,7 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
   fontSize: sizeConfig.labelSize,
   color: '#6b7280',
   fontWeight: '500',
-}}>
+}>
               {metric.label}
             </div>
             {/* Target Progress */}
@@ -266,12 +269,12 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
   marginTop: '8px',
   fontSize: '12px',
   color: '#6b7280',
-}}>
+}>
                 <div style={{
   display: 'flex',
   justifyContent: 'space-between',
   marginBottom: '4px',
-}}>
+}>
                   <span>Target: {formatValue(metric.target.value, metric.format)}</span>
                   <span>
                     {Math.round((Number(metric.value) / metric.target.value) * 100)}%
@@ -283,14 +286,14 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({)
   backgroundColor: '#e5e7eb',
   borderRadius: '2px',
   overflow: 'hidden',
-}}>
+}>
                   <div style={{
                     width: `${Math.min((Number(metric.value) / metric.target.value) * 100, 100)}%`}
 },
   height: '100%',
                     backgroundColor: variantConfig.iconColor,
                     transition: 'width 0.3s ease';
-  }} />
+} />
                 </div>
               </div>
             )}

@@ -12,8 +12,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Slider } from '../ui/Slider';
-import { 
-  Film, 
+import { Film, 
   Palette, 
   Clock, 
   Globe, 
@@ -31,111 +30,107 @@ import {
   Sun,
   Users,
   Map,
-  Brush,
+  Brush }
   Zap
-} from 'lucide-react';
+ from 'lucide-react';
 
 // VFX Pipeline Data Types
 
-}
-export interface VFXScene {
-  id: string;
+
+export interface VFXScene { id: string;
   name: string;
   historicalPeriod: string;
   region: string;
-  timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
+  timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night' }
   weather: string;
   characters: VFXCharacter;
   assets: VFXAsset;
   composition: SceneComposition;
   accuracy: HistoricalAccuracyMetrics;
-}
-}
-}
-export interface VFXCharacter {
-  id: string;
+
+
+
+
+export interface VFXCharacter { id: string;
   name: string;
-  type: 'crowd' | 'hero' | 'background';
+  type: 'crowd' | 'hero' | 'background' }
   period: string;
   culture: string;
   accuracy: number;
   clothing: string;
-}
+
+},
   position: { x: number; y: number; z: number };
-}
-}
-export interface VFXAsset {
-  id: string;
+
+
+export interface VFXAsset { id: string;
   name: string;
-  type: 'building' | 'prop' | 'terrain' | 'vegetation' | 'texture';
+  type: 'building' | 'prop' | 'terrain' | 'vegetation' | 'texture' }
   period: string;
   region: string;
   accuracy: number;
   materials: MaterialProperty;
   lod: number;
-}
-}
-}
-export interface MaterialProperty {
-  name: string;
+
+
+
+
+export interface MaterialProperty { name: string;
   type: 'diffuse' | 'roughness' | 'metallic' | 'normal' | 'displacement';
   value: number;
-  historicallyAccurate: boolean;
-}
-}
-}
+  historicallyAccurate: boolean }
+
+
+
 export interface SceneComposition {
   cameraPosition: { x: number; y: number; z: number };
   focalLength: number;
   depth: number;
   layers: SceneLayer;
-}
-}
-export interface SceneLayer {
-  id: string;
+
+
+export interface SceneLayer { id: string;
   name: string;
-  type: 'foreground' | 'midground' | 'background';
+  type: 'foreground' | 'midground' | 'background' }
   opacity: number;
   elements: string;
-}
-}
-}
-export interface HistoricalAccuracyMetrics {
-  overall: number;
+
+
+
+
+export interface HistoricalAccuracyMetrics { overall: number;
   architecture: number;
   clothing: number;
   technology: number;
   culture: number;
   timeline: number;
   expertValidated: boolean;
-  violations: AccuracyViolation;
-}
-}
-}
-export interface AccuracyViolation {
-  type: 'anachronism' | 'cultural' | 'architectural' | 'technological';
+  violations: AccuracyViolation }
+
+
+
+export interface AccuracyViolation { type: 'anachronism' | 'cultural' | 'architectural' | 'technological' }
   severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   element: string;
   suggestion: string;
-}
-}
-}
-export interface VFXPipelineVisualizerProps {
-  scene?: VFXScene;
+
+
+
+
+export interface VFXPipelineVisualizerProps { scene?: VFXScene;
   scenes?: VFXScene;
   realTimeUpdate?: boolean;
   showControls?: boolean;
   onSceneUpdate?: (scene: VFXScene) => void;
-  className?: string;
-}
-}
-export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
-  scene,
-  scenes = [],
-  realTimeUpdate = true,
-  showControls = true,
-  onSceneUpdate,
+  className?: string }
+
+export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({ )
+  scene
+  scenes = []
+  realTimeUpdate = true
+  showControls = true
+  onSceneUpdate }
   className = ''
 }) => {
   const [activeView, setActiveView] = useState<'scene' | 'accuracy' | 'assets' | 'timeline'>('scene');
@@ -145,8 +140,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
   const [animationSpeed, setAnimationSpeed] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   // Enhanced 3D Scene Visualization
-  const SceneVisualization3D: React.FC<{ scene: VFXScene }> = ({ scene }) => {
-  const canvasWidth = 600;
+  const SceneVisualization3D: React.FC<{ scene: VFXScene }> = ({ scene }) => { const canvasWidth = 600;
   const canvasHeight = 400;
   // Calculate 3D positions for isometric projection
   const project3DToIsometric = useCallback((x: number, y: number, z: number) => {,
@@ -154,7 +148,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
   const isoY = (x + z) * Math.sin(Math.PI / 6) - y;
   return {
   x: canvasWidth / 2 + isoX * 2,
-  y: canvasHeight / 2 + isoY * 2,
+  y: canvasHeight / 2 + isoY * 2 }
 };
     }, []);
     return;
@@ -202,10 +196,10 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               </g>
               {/* Assets */}
               <g className="scene-assets">
-                {scene.assets.map((asset, index) => {
+                { scene.assets.map((asset, index) => {
                   const pos = project3DToIsometric(;);
-                    (index % 5) * 100 - 200,
-                    0,
+                    (index % 5) * 100 - 200
+                    0 }
                     Math.floor(index / 5) * 80 - 100
                   );
                   const color = asset.accuracy > 90 ? '#10b981' :
@@ -252,10 +246,10 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               </g>
               {/* Characters */}
               <g className="scene-characters">
-                {scene.characters.map((character, index) => {
+                { scene.characters.map((character, index) => {
                   const pos = project3DToIsometric(;);
-                    character.position.x || (index * 60 - 120),
-                    character.position.y || 0,
+                    character.position.x || (index * 60 - 120)
+                    character.position.y || 0 }
                     character.position.z || (index * 30 - 60)
                   );
                   const color = character.type === 'hero' ? '#3b82f6' :
@@ -326,28 +320,24 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
   };
   // Historical Accuracy Dashboard
   const HistoricalAccuracyDashboard: React.FC<{ scene: VFXScene }> = ({ scene }) => {
-    const accuracyMetrics = [;
-      { label: 'Architecture', value: scene.accuracy.architecture, icon: <Map className="w-4 h-4" /> },
-      { label: 'Clothing', value: scene.accuracy.clothing, icon: <Users className="w-4 h-4" /> },
-      { label: 'Technology', value: scene.accuracy.technology, icon: <Zap className="w-4 h-4" /> },
-      { label: 'Culture', value: scene.accuracy.culture, icon: <Globe className="w-4 h-4" /> },
+    const accuracyMetrics = [
+      { label: 'Architecture', value: scene.accuracy.architecture, icon: <Map className="w-4 h-4" /> }
+      { label: 'Clothing', value: scene.accuracy.clothing, icon: <Users className="w-4 h-4" /> }
+      { label: 'Technology', value: scene.accuracy.technology, icon: <Zap className="w-4 h-4" /> }
+      { label: 'Culture', value: scene.accuracy.culture, icon: <Globe className="w-4 h-4" /> }
       { label: 'Timeline', value: scene.accuracy.timeline, icon: <Clock className="w-4 h-4" /> }
     ];
-    const getAccuracyColor = (value: number) => {
-      if (value >= 90) return 'text-green-600 bg-green-100';
+    const getAccuracyColor = (value: number) => { if (value >= 90) return 'text-green-600 bg-green-100';
       if (value >= 80) return 'text-blue-600 bg-blue-100';
       if (value >= 70) return 'text-yellow-600 bg-yellow-100';
       if (value >= 60) return 'text-orange-600 bg-orange-100';
-      return 'text-red-600 bg-red-100';
-    };
-    const getSeverityColor = (severity: string) => {
-  switch (severity) {
+      return 'text-red-600 bg-red-100' };
+    const getSeverityColor = (severity: string) => { switch (severity) {
   case 'critical': return 'bg-red-100 text-red-800';
   case 'high': return 'bg-orange-100 text-orange-800';
   case 'medium': return 'bg-yellow-100 text-yellow-800';
   case 'low': return 'bg-blue-100 text-blue-800';
-  default: return 'bg-gray-100 text-gray-800';
-};
+  default: return 'bg-gray-100 text-gray-800' };
     return;
       <div className="space-y-6">
         {/* Overall Accuracy Score */}
@@ -493,14 +483,13 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   // Real-time Performance Metrics Visualization
-  const PerformanceMetricsVisualizer: React.FC<{ scene: VFXScene }> = ({ scene }) => {
-  const [metrics, _____setMetrics] = useState({)
+  const PerformanceMetricsVisualizer: React.FC<{ scene: VFXScene }> = ({ scene }) => { const [metrics, _____setMetrics] = useState({)
   renderTime: Math.random() * 120 + 80, // 80-200ms,
   memoryUsage: Math.random() * 40 + 20, // 20-60%,
   polyCount: scene.assets.length * 125000,
   textureMemory: scene.assets.length * 25, // MB,
   frameRate: 24 + Math.random() * 16, // 24-40 FPS,
-  loadingProgress: 100,
+  loadingProgress: 100 }
 });
     return;
       <Card>
@@ -535,10 +524,10 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               <div className="text-lg font-bold text-orange-900">{metrics.memoryUsage.toFixed(1)}%</div>
               <div className="w-full bg-orange-200 rounded-full h-2 mt-2">
                 <div 
-                  className={`h-2 rounded-full transition-all duration-500 ${
-  metrics.memoryUsage > 80 ? 'bg-red-600' :,
-  metrics.memoryUsage > 60 ? 'bg-orange-600' : 'bg-green-600',
-}`}
+                  className={ `h-2 rounded-full transition-all duration-500 ${
+  metrics.memoryUsage > 80 ? 'bg-red-600' :
+  metrics.memoryUsage > 60 ? 'bg-orange-600' : 'bg-green-600' }
+`}
                   style={{ width: `${metrics.memoryUsage}%` }}
                 />
               </div>
@@ -563,10 +552,10 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                 <span className="text-sm font-medium text-green-900">Frame Rate</span>
               </div>
               <div className="text-lg font-bold text-green-900">{metrics.frameRate.toFixed(1)} FPS</div>
-              <div className={`text-xs mt-1 ${
-  metrics.frameRate >= 30 ? 'text-green-700' :,
-  metrics.frameRate >= 24 ? 'text-yellow-700' : 'text-red-700',
-}`}>
+              <div className={ `text-xs mt-1 ${
+  metrics.frameRate >= 30 ? 'text-green-700' :
+  metrics.frameRate >= 24 ? 'text-yellow-700' : 'text-red-700' }
+`}>
                 {metrics.frameRate >= 30 ? 'Excellent' : 
                   metrics.frameRate >= 24 ? 'Good' : 'Poor'}
               </div>
@@ -599,19 +588,16 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   // Character Crowd Visualization
-  const CrowdVisualization: React.FC<{ characters: VFXCharacter }> = ({ characters }) => {
-    const crowdStats = useMemo(() => {
+  const CrowdVisualization: React.FC<{ characters: VFXCharacter }> = ({ characters }) => { const crowdStats = useMemo(() => {
       const typeDistribution = characters.reduce((acc, char) => {
         acc[char.type] = (acc[char.type] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+        return acc }, {} as Record<string, number>);
       const avgAccuracy = characters.reduce((sum, char) => sum + char.accuracy, 0) / characters.length;
-      return {
-  total: characters.length,
-  types: typeDistribution,
-  avgAccuracy,
-  cultures: [...new Set(characters.map(c => c.culture))],
-  periods: [...new Set(characters.map(c => c.period))],
+      return { total: characters.length
+  types: typeDistribution
+  avgAccuracy
+  cultures: [...new Set(characters.map(c => c.culture))]
+  periods: [...new Set(characters.map(c => c.period))] }
 };
     }, [characters]);
     return;
@@ -696,14 +682,13 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   // Timeline Visualization for VFX workflow
-  const TimelineVisualization: React.FC<{ scenes: VFXScene }> = ({ scenes }) => {
-  const timelineItems = scenes.map((scene, index) => ({)
+  const TimelineVisualization: React.FC<{ scenes: VFXScene }> = ({ scenes }) => { const timelineItems = scenes.map((scene, index) => ({)
   id: scene.id,
   name: scene.name,
   period: scene.historicalPeriod,
   accuracy: scene.accuracy.overall,
   status: scene.accuracy.expertValidated ? 'completed' : 'in-progress',
-  position: index,
+  position: index }
 }));
     return;
       <Card>
@@ -755,17 +740,16 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               {timelineItems.map((item, index) => ()
                 <div 
                   key={item.id} 
-                  className={`flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all ${
-  selectedScene?.id === item.id ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 hover:bg-gray-100',
-}`}
-                  onClick={() => {
+                  className={ `flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all ${
+  selectedScene?.id === item.id ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 hover:bg-gray-100' }
+`}
+                  onClick={ () => {
                     const scene = scenes.find(s => s.id === item.id);
-                    if (scene) setSelectedScene(scene);
-                  }}
+                    if (scene) setSelectedScene(scene) }}
                 >
-                  <div className={`w-4 h-4 rounded-full flex-shrink-0 ${
-  item.status === 'completed' ? 'bg-green-500' : 'bg-yellow-500',
-}`} />
+                  <div className={ `w-4 h-4 rounded-full flex-shrink-0 ${
+  item.status === 'completed' ? 'bg-green-500' : 'bg-yellow-500' }
+`} />
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900">{item.name}</h4>
                     <p className="text-sm text-gray-600">{item.period}</p>
@@ -785,22 +769,19 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   // Asset Relationship Graph Visualization
-  const AssetRelationshipGraph: React.FC<{ assets: VFXAsset }> = ({ assets }) => {
-    const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
+  const AssetRelationshipGraph: React.FC<{ assets: VFXAsset }> = ({ assets }) => { const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
     const assetCategories = useMemo(() => {
       return assets.reduce((acc, asset) => {
         if (!acc[asset.type]) acc[asset.type] = [];
         acc[asset.type].push(asset);
-        return acc;
-      }, {} as Record<string, VFXAsset>);
+        return acc }, {} as Record<string, VFXAsset>);
     }, [assets]);
-    const getCategoryColor = (type: string) => {
-  const colors = {
-  building: '#3b82f6',
-  prop: '#10b981',
-  terrain: '#f59e0b',
-  vegetation: '#22c55e',
-  texture: '#8b5cf6',
+    const getCategoryColor = (type: string) => { const colors = {
+  building: '#3b82f6'
+  prop: '#10b981'
+  terrain: '#f59e0b'
+  vegetation: '#22c55e'
+  texture: '#8b5cf6' }
 };
       return colors[type as keyof typeof colors] || '#6b7280';
     };
@@ -824,10 +805,10 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                   key={type} 
                   className="p-3 rounded-lg border-2 border-gray-200 hover:border-gray-300 cursor-pointer transition-colors"
                   onClick={() => setSelectedAsset(selectedAsset === type ? null : type)}
-                  style={{ 
-                    borderColor: selectedAsset === type ? getCategoryColor(type) : undefined,
+                  style={ { 
+                    borderColor: selectedAsset === type ? getCategoryColor(type) : undefined }
                     backgroundColor: selectedAsset === type ? `${getCategoryColor(type)}10` : undefined}
-                  }}
+
                 >
                   <div className="text-center">
                     <div 
@@ -873,9 +854,9 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                         {asset.materials.slice(0, 3).map((material, idx) => ()
                           <div 
                             key={idx}
-                            className={`w-3 h-3 rounded-full border ${
-  material.historicallyAccurate ? 'bg-green-500' : 'bg-orange-500',
-}`}
+                            className={ `w-3 h-3 rounded-full border ${
+  material.historicallyAccurate ? 'bg-green-500' : 'bg-orange-500' }
+`}
                             title={`${material.name}: ${material.historicallyAccurate ? 'Accurate' : 'Review needed'}`}
                           />
                         ))}
@@ -978,7 +959,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
           <TimelineVisualization scenes={scenes} />
         </TabsContent>
       </Tabs>
-      <style>{`
+      <style>{ `
         .vfx-pipeline-visualizer {
           max-width: 1200px;
   margin: 0 auto;
@@ -990,11 +971,10 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
         .accuracy-indicator {
           animation: pulse-accuracy 2s ease-in-out infinite;
         @keyframes pulse-accuracy {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; }
-        .timeline-item {
-          transition: all 0.3s ease;
-        .timeline-item:hover {,
+          0%, 100% { opacity: 1 }
+          50% { opacity: 0.7 }
+        .timeline-item { transition: all 0.3s ease;
+        .timeline-item:hover { }
   transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         @media (max-width: 768px) {

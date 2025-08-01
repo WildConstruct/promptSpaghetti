@@ -8,34 +8,30 @@ import React from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import './ErrorState.css';
 
-}
-export interface ErrorStateProps {
-  error?: string | Error;
+
+export interface ErrorStateProps { error?: string | Error;
   title?: string;
   description?: string;
   onRetry?: () => void;
   retryText?: string;
   showIcon?: boolean;
   variant?: 'default' | 'minimal' | 'detailed';
-  className?: string;
-}
-}
-export const ErrorState: React.FC<ErrorStateProps> = ({)
-  error,
-  title = 'Something went wrong',
-  description,
-  onRetry,
-  retryText = 'Try Again',
-  showIcon = true,
-  variant = 'default',
+  className?: string }
+
+export const ErrorState: React.FC<ErrorStateProps> = ({ )
+  error
+  title = 'Something went wrong'
+  description
+  onRetry
+  retryText = 'Try Again'
+  showIcon = true
+  variant = 'default' }
   className = ''
-}) => {
-  const errorMessage = error instanceof Error ? error.message : error;
+}) => { const errorMessage = error instanceof Error ? error.message : error;
   const getDescription = () => {
   if (description) return description;
   if (errorMessage) return errorMessage;
-  return 'An unexpected error occurred while loading the dashboard.';
-};
+  return 'An unexpected error occurred while loading the dashboard.' };
   const renderMinimal = () => (;);
     <div className={`error-state minimal ${className}`}>}
       <div className="error-content">
@@ -110,12 +106,11 @@ export const ErrorState: React.FC<ErrorStateProps> = ({)
       </div>
     </div>
   );
-  switch (variant) {
-  case 'minimal':,
+  switch (variant) { case 'minimal':,
   return renderMinimal();
   case 'detailed':,
   return renderDetailed();
-  default:,
+  default: }
   return renderDefault();
 };
 

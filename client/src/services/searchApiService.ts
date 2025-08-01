@@ -8,7 +8,8 @@
 import { SearchQuery, SearchResult, FilterCondition, SortCondition } from '../components/search/SearchContext';
 
 // Backend API types
-}
+
+
 interface TemplateSearchQuery {
   q?: string;
   categories?: string;
@@ -25,58 +26,65 @@ interface TemplateSearchQuery {
   sortBy?: 'relevance' | 'newest' | 'oldest' | 'rating' | 'popular' | 'trending';
   page?: number;
   limit?: number;
-}
+
+
+
 interface TemplateSearchResponse {
   success: boolean;,
-  data: {;
+  data: {;,
   templates: Template;,
   total: number;
-    aggregations?: {
-}
-      categories: Array<{ name: string; count: number }>;
+  aggregations?: {,
+
+},
+  categories: Array<{ name: string; count: number }>;
       price_ranges: Array<{ min: number; max: number; count: number }>;
       avg_ratings: Array<{ rating: number; count: number }>;
       tags: Array<{ name: string; count: number }>;
     };
     executionTime?: number;
   };
-}
+
+
 interface Template {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  tags: string;
+  tags: string;,
   price_cents: number;,
-  avg_rating: number;
+  avg_rating: number;,
   total_reviews: number;,
-  total_purchases: number;
+  total_purchases: number;,
   categories: string;,
-  owner_name: string;
+  owner_name: string;,
   owner_verified: boolean;,
-  is_ai_generated: boolean;
+  is_ai_generated: boolean;,
   claude_compat: string;
   featured_at?: string;
   created_at: string;,
   updated_at: string;
   interface AutocompleteResponse {
   success: boolean;,
-  data: {
+  data: {,
   query: string;,
   suggestions: string;
-}
+
+
 };
-}
+
+
 interface TrendingResponse {
   success: boolean;,
-  data: {
+  data: {,
   timeframe: string;,
-  category: string | null;
-  trending: Array<{
+  category: string | null;,
+  trending: Array<{,
   query: string;,
   count: number;
   growth?: number;
-}
-}>;
+
+
+>;
   };
 class SearchApiService {
   private baseUrl: string;
@@ -99,19 +107,19 @@ class SearchApiService {
   case 'categories':,
   if (filter.operator === 'in' && filter.values) {
   backendQuery.categories = filter.values as string;
-} else if (filter.operator === 'equals') {
+ else if (filter.operator === 'equals') {
   backendQuery.categories = [filter.value as string];
   break;
   case 'tags':,
   if (filter.operator === 'in' && filter.values) {
   backendQuery.tags = filter.values as string;
-} else if (filter.operator === 'equals') {
+ else if (filter.operator === 'equals') {
   backendQuery.tags = [filter.value as string];
   break;
   case 'complexity':,
   if (filter.operator === 'in' && filter.values) {
   backendQuery.complexity = filter.values as ('beginner' | 'intermediate' | 'advanced')[];
-} else if (filter.operator === 'equals') {
+ else if (filter.operator === 'equals') {
   backendQuery.complexity = [filter.value as 'beginner' | 'intermediate' | 'advanced'];
   break;
   case 'rating':,
@@ -134,18 +142,18 @@ class SearchApiService {
   if (filter.operator === 'between' && filter.values && filter.values.length === 2) {
   backendQuery.priceMin = filter.values[0] as number;
   backendQuery.priceMax = filter.values[1] as number;
-} else if (filter.operator === 'greater') {
+ else if (filter.operator === 'greater') {
             backendQuery.priceMin = filter.value as number;
-          } else if (filter.operator === 'less') {
+ else if (filter.operator === 'less') {
   backendQuery.priceMax = filter.value as number;
   break;
   case 'date':,
   if (filter.operator === 'between' && filter.values && filter.values.length === 2) {
   backendQuery.dateStart = (filter.values[0] as Date).toISOString();
   backendQuery.dateEnd = (filter.values[1] as Date).toISOString();
-} else if (filter.operator === 'greater') {
+ else if (filter.operator === 'greater') {
             backendQuery.dateStart = (filter.value as Date).toISOString();
-          } else if (filter.operator === 'less') {
+ else if (filter.operator === 'less') {
             backendQuery.dateEnd = (filter.value as Date).toISOString();
           break;
     });
@@ -166,9 +174,9 @@ class SearchApiService {
   default:,
   backendQuery.sortBy = 'relevance';
   break;
-} else if (searchQuery.text) {
+ else if (searchQuery.text) {
       backendQuery.sortBy = 'relevance';
-    } else {
+ else {
   backendQuery.sortBy = 'newest';
   return backendQuery;
   /**
@@ -181,23 +189,23 @@ class SearchApiService {
   facets: response.data.aggregations ? {,
   categories: response.data.aggregations.categories,
   tags: response.data.aggregations.tags,
-  ratings: response.data.aggregations.avg_ratings.map(r => ({,)
+  ratings: response.data.aggregations.avg_ratings.map(r => ({),
   value: r.rating.toString(),
   count: r.count,
 })),
-        price_ranges: response.data.aggregations.price_ranges.map(p => ({,)
+        price_ranges: response.data.aggregations.price_ranges.map(p => ({);
   value: `${p.min}-${p.max === Infinity ? '∞' : p.max}`}
 },
   count: p.count;
   }))
-      } : undefined,
+ : undefined,
       executionTime: response.data.executionTime;
   };
   /**
    * Search templates using the backend API
    */
-  async searchTemplates(searchQuery: SearchQuery,)
-    page: number = 1,
+  async searchTemplates(searchQuery: SearchQuery);
+  page: number = 1,
     limit: number = 20): Promise<SearchResult<Template>> {,
     try {
       const backendQuery = this.convertSearchQuery(searchQuery, page, limit);
@@ -207,7 +215,7 @@ class SearchApiService {
         if (value !== undefined && value !== null) {
           if (Array.isArray(value)) {
             value.forEach(v => queryParams.append(key, v.toString()));
-          } else {
+ else {
             queryParams.append(key, value.toString());
       });
       const response = await fetch(`${this.baseUrl}/templates?${queryParams}`);}
@@ -217,7 +225,7 @@ class SearchApiService {
       if (!data.success) {
         throw new Error('Search request was unsuccessful');
       return this.convertSearchResult(data);
-    } catch (error) {
+ catch (error) {
   console.error('Search templates error:', error);
   throw error;
   /**
@@ -236,13 +244,13 @@ class SearchApiService {
       if (!data.success) {
         throw new Error('Autocomplete request was unsuccessful');
       return data.data.suggestions;
-    } catch (error) {
+ catch (error) {
       console.error('Autocomplete error:', error);
       return []; // Return empty array on error for graceful degradation
   /**
    * Get trending searches
    */
-  async getTrendingSearches(timeframe: '1h' | '24h' | '7d' | '30d' = '24h',)
+  async getTrendingSearches(timeframe: '1h' | '24h' | '7d' | '30d' = '24h')
     category?: string,
     limit: number = 10): Promise<Array<{ query: string; count: number; growth?: number }>> {
   try {
@@ -259,7 +267,7 @@ class SearchApiService {
       if (!data.success) {
         throw new Error('Trending searches request was unsuccessful');
       return data.data.trending;
-    } catch (error) {
+ catch (error) {
       console.error('Trending searches error:', error);
       return []; // Return empty array on error for graceful degradation
   /**
@@ -279,11 +287,11 @@ class SearchApiService {
           query,
           position,
           searchId
-  }
+
       });
       if (!response.ok) {
         console.warn(`Click tracking failed: ${response.status} ${response.statusText}`);}
-    } catch (error) {
+ catch (error) {
       console.warn('Click tracking error:', error);
       // Don't throw - click tracking failure shouldn't break the UI
   /**
@@ -301,7 +309,7 @@ class SearchApiService {
   body: JSON.stringify({),
           name,
           searchQuery
-  }
+
       });
       if (!response.ok) {
         throw new Error(`Save search failed: ${response.status} ${response.statusText}`);}
@@ -309,20 +317,20 @@ class SearchApiService {
       if (!data.success) {
         throw new Error(data.error || 'Save search was unsuccessful');
       return data.data;
-    } catch (error) {
+ catch (error) {
   console.error('Save search error:', error);
   throw error;
   /**
   * Get user's saved searches
   */
-  async getSavedSearches(): Promise<Array<{
+  async getSavedSearches(): Promise<Array<{,
   id: string;,
-  name: string;
+  name: string;,
   searchQuery: SearchQuery;,
-  createdAt: string;
+  createdAt: string;,
   lastUsed: string;,
   useCount: number;
-}>> {
+>> {
     try {
       const response = await fetch(`${this.baseUrl}/saved`);}
       if (!response.ok) {
@@ -331,7 +339,7 @@ class SearchApiService {
       if (!data.success) {
         throw new Error('Get saved searches was unsuccessful');
       return data.data.savedSearches;
-    } catch (error) {
+ catch (error) {
       console.error('Get saved searches error:', error);
       return []; // Return empty array on error
   /**
@@ -349,7 +357,7 @@ class SearchApiService {
       const data = await response.json();
       if (!data.success) {
         throw new Error(data.error || 'Delete saved search was unsuccessful');
-    } catch (error) {
+ catch (error) {
       console.error('Delete saved search error:', error);
       throw error;
 

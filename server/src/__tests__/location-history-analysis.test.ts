@@ -4,7 +4,7 @@
 import { 
   LocationHistoryAnalysisService,
   LocationHistoryAnalysisConfig
-} from '../services/LocationHistoryAnalysisService';
+ from '../services/LocationHistoryAnalysisService';
 
 describe('LocationHistoryAnalysisService', () => {
   let analysisService: LocationHistoryAnalysisService;
@@ -41,30 +41,30 @@ describe('LocationHistoryAnalysisService', () => {
         maxDistanceKm: 5,
         minTimeForHomeDetection: 7,
         confidenceThreshold: 0.6
-  }
+
       travelAnalysis: {
         enabled: true,
         maxReasonableSpeedKmh: 1000,
         minTravelDistanceKm: 10,
         anomalyDetectionSensitivity: 'medium'
-  }
+
       riskScoring: {
         noveltyWeight: 0.3,
         frequencyWeight: 0.2,
         geopoliticalWeight: 0.2,
         temporalWeight: 0.3
-  }
+
       anomalyDetection: {
         enabled: true,
         sensitivityLevel: 0.7,
         falsePositiveThreshold: 0.2,
         autoResolveAfterDays: 30
-  }
+
       cache: {
         profileCacheTtl: 3600,
         analysisCacheTtl: 1800,
         batchAnalysisSize: 50
-      }
+
     };
 
     analysisService = new LocationHistoryAnalysisService(
@@ -134,10 +134,10 @@ describe('LocationHistoryAnalysisService', () => {
           city: 'San Francisco',
           latitude: 37.7749,
           longitude: -122.4194
-  }
+
         accessTime: new Date('2024-01-01T09:00:00Z'),
         accessCount: 50
-  }
+
       {
         location: {
           ipAddress: '1.1.1.2',
@@ -145,10 +145,10 @@ describe('LocationHistoryAnalysisService', () => {
           city: 'San Francisco',
           latitude: 37.7849, // Close to first location
           longitude: -122.4094
-  }
+
         accessTime: new Date('2024-01-01T10:00:00Z'),
         accessCount: 30
-  }
+
       {
         location: {
           ipAddress: '2.2.2.2',
@@ -156,10 +156,10 @@ describe('LocationHistoryAnalysisService', () => {
           city: 'New York',
           latitude: 40.7128,
           longitude: -74.0060
-  }
+
         accessTime: new Date('2024-01-01T18:00:00Z'),
         accessCount: 25
-      }
+
     ];
 
     beforeEach(() => {
@@ -177,7 +177,7 @@ describe('LocationHistoryAnalysisService', () => {
               access_count: entry.accessCount
             }))
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
     });
@@ -219,7 +219,7 @@ describe('LocationHistoryAnalysisService', () => {
               access_count: entry.accessCount
             }))
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -253,10 +253,10 @@ describe('LocationHistoryAnalysisService', () => {
           isProxy: true,
           isTor: true,
           isMalicious: true
-  }
+
         accessTime: new Date('2024-01-01T02:00:00Z'), // Unusual hour
         accessCount: 5
-      }];
+];
 
       mockDb.query.mockImplementation((query) => {
         if (query.includes('user_location_history')) {
@@ -274,7 +274,7 @@ describe('LocationHistoryAnalysisService', () => {
               access_count: entry.accessCount
             }))
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -283,7 +283,7 @@ describe('LocationHistoryAnalysisService', () => {
       if (profile.clusters.length > 0) {
         const riskCluster = profile.clusters[0];
         expect(riskCluster.riskScore).toBeGreaterThan(50); // Should be high risk
-      }
+
     });
   });
 
@@ -295,17 +295,17 @@ describe('LocationHistoryAnalysisService', () => {
           location: { latitude: 37.7749, longitude: -122.4194, city: 'San Francisco' },
           accessTime: new Date('2024-01-01T08:00:00Z'),
           accessCount: 10
-  }
+
         {
           location: { latitude: 40.7128, longitude: -74.0060, city: 'New York' },
           accessTime: new Date('2024-01-01T14:00:00Z'), // 6 hours later
           accessCount: 5
-  }
+
         {
           location: { latitude: 37.7749, longitude: -122.4194, city: 'San Francisco' },
           accessTime: new Date('2024-01-02T08:00:00Z'), // Next day
           accessCount: 10
-        }
+
       ];
 
       mockDb.query.mockImplementation((query) => {
@@ -321,7 +321,7 @@ describe('LocationHistoryAnalysisService', () => {
               access_count: entry.accessCount
             }))
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -338,12 +338,12 @@ describe('LocationHistoryAnalysisService', () => {
           location: { latitude: 37.7749, longitude: -122.4194, city: 'San Francisco' },
           accessTime: new Date('2024-01-01T08:00:00Z'),
           accessCount: 10
-  }
+
         {
           location: { latitude: 51.5074, longitude: -0.1278, city: 'London' },
           accessTime: new Date('2024-01-01T08:05:00Z'), // 5 minutes later, impossible
           accessCount: 5
-        }
+
       ];
 
       mockDb.query.mockImplementation((query) => {
@@ -359,7 +359,7 @@ describe('LocationHistoryAnalysisService', () => {
               access_count: entry.accessCount
             }))
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -368,7 +368,7 @@ describe('LocationHistoryAnalysisService', () => {
       if (profile.travelPatterns.length > 0) {
         const pattern = profile.travelPatterns[0];
         expect(pattern.anomalies.impossibleTiming || pattern.anomalies.unusualSpeed).toBe(true);
-      }
+
     });
 
     it('should determine travel methods based on speed', async () => {
@@ -409,9 +409,9 @@ describe('LocationHistoryAnalysisService', () => {
               insights: {},
               last_analyzed: new Date(),
               profile_version: '1.0'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -446,9 +446,9 @@ describe('LocationHistoryAnalysisService', () => {
               insights: {},
               last_analyzed: new Date(),
               profile_version: '1.0'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -479,9 +479,9 @@ describe('LocationHistoryAnalysisService', () => {
               insights: {},
               last_analyzed: new Date(),
               profile_version: '1.0'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -505,9 +505,9 @@ describe('LocationHistoryAnalysisService', () => {
               latitude: 0,
               longitude: 0,
               last_access: new Date()
-            }]
+]
           });
-        }
+
         if (query.includes('user_location_profiles')) {
           return Promise.resolve({
             rows: [{
@@ -518,9 +518,9 @@ describe('LocationHistoryAnalysisService', () => {
               insights: {},
               last_analyzed: new Date(),
               profile_version: '1.0'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
     });
@@ -573,9 +573,9 @@ describe('LocationHistoryAnalysisService', () => {
               longitude: -122.4194,
               last_access: new Date(),
               access_count: 10
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -611,9 +611,9 @@ describe('LocationHistoryAnalysisService', () => {
               insights: {},
               last_analyzed: cachedProfile.lastAnalyzed,
               profile_version: '1.0'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -635,9 +635,9 @@ describe('LocationHistoryAnalysisService', () => {
               longitude: -122.4194,
               last_access: new Date(),
               access_count: 10
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -659,9 +659,9 @@ describe('LocationHistoryAnalysisService', () => {
               avg_risk_score: '45.5',
               avg_mobility_score: '60.2',
               avg_predictability_score: '75.8'
-            }]
+]
           });
-        }
+
         if (query.includes('user_location_clusters')) {
           return Promise.resolve({
             rows: [{
@@ -671,9 +671,9 @@ describe('LocationHistoryAnalysisService', () => {
               frequent_clusters: '85',
               verified_clusters: '150',
               avg_confidence: '0.78'
-            }]
+]
           });
-        }
+
         if (query.includes('location_anomalies')) {
           return Promise.resolve({
             rows: [{
@@ -682,9 +682,9 @@ describe('LocationHistoryAnalysisService', () => {
               high_anomalies: '5',
               resolved_anomalies: '8',
               false_positives: '3'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -713,7 +713,7 @@ describe('LocationHistoryAnalysisService', () => {
       mockDb.query.mockImplementation((query) => {
         if (query.includes('user_location_history')) {
           return Promise.resolve({ rows: [] }); // No history
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -741,9 +741,9 @@ describe('LocationHistoryAnalysisService', () => {
               longitude: -122.4194,
               last_access: new Date(),
               access_count: 10
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -786,9 +786,9 @@ describe('LocationHistoryAnalysisService', () => {
               longitude: -122.4194,
               last_access: new Date(),
               access_count: 10
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 

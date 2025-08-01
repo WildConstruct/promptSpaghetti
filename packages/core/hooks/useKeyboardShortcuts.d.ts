@@ -6,8 +6,8 @@
  */
 
 }
-export interface KeyboardShortcut {
-    key: string;
+}
+export interface KeyboardShortcut { key: string;
     ctrl?: boolean;
     cmd?: boolean;
     alt?: boolean;
@@ -16,9 +16,8 @@ export interface KeyboardShortcut {
     action: () => void;
     preventDefault?: boolean;
     enabled?: boolean;
-    global?: boolean;
-
-
+    global?: boolean }
+}
 }
 export interface UseKeyboardShortcutsOptions {
     shortcuts: KeyboardShortcut[];
@@ -30,19 +29,16 @@ export interface UseKeyboardShortcutsOptions {
  * Hook for managing keyboard shortcuts in the graph editor
  */
 }
-export declare const useKeyboardShortcuts: ({ shortcuts, enabled, preventDefault }: UseKeyboardShortcutsOptions) => {
-    shortcuts: KeyboardShortcut[];
-};
+}
+export declare const useKeyboardShortcuts: ({ shortcuts, enabled, preventDefault }: UseKeyboardShortcutsOptions) => { shortcuts: KeyboardShortcut[] };
 /**
  * Hook for command palette specific shortcuts
  */
-export declare const useCommandPaletteShortcuts: (shortcuts: KeyboardShortcut[]) => {
-    shortcuts: KeyboardShortcut[];
-};
+export declare const useCommandPaletteShortcuts: (shortcuts: KeyboardShortcut[]) => { shortcuts: KeyboardShortcut[] };
 /**
  * Default keyboard shortcuts for the graph editor
  */
-export declare const createDefaultShortcuts: (actions: {)
+export declare const createDefaultShortcuts: (actions: { )
     onUndo?: () => void;
     onRedo?: () => void;
     onSave?: () => void;
@@ -55,8 +51,7 @@ export declare const createDefaultShortcuts: (actions: {)
     onZoomIn?: () => void;
     onZoomOut?: () => void;
     onNewNode?: (type: string) => void;
-    onExport?: () => void;
-}) => KeyboardShortcut[];
+    onExport?: () => void }) => KeyboardShortcut[];
 /**
  * Format keyboard shortcut for display
  */

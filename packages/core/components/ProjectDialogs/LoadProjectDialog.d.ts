@@ -4,14 +4,13 @@
 import React from 'react';
 
 }
-interface LoadProjectDialogProps {
-    isOpen: boolean;
+}
+interface LoadProjectDialogProps { isOpen: boolean;
     onClose: () => void;
     onLoad?: (result: {)
         success: boolean;
         error?: string;
-        warnings?: string[];
-
+        warnings?: string[] }
 }
     }) => void;
 

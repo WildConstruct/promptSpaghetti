@@ -18,18 +18,17 @@
  * @version 1.0.0
  * @since 2024-01-22
  */
-import { 
-  DashboardConfig,
+import { DashboardConfig,
   DashboardType,
   SecurityRole,
   WidgetDefinition,
-  DashboardTheme,
+  DashboardTheme }
   DashboardPermissions
 } from './SecurityDashboardFramework';
 
 }
-export interface DashboardTemplate {
-    id: string;
+}
+export interface DashboardTemplate { id: string;
     type: DashboardType;
     name: string;
     description: string;
@@ -43,22 +42,20 @@ export interface DashboardTemplate {
         allowLayoutChange: boolean;
         allowWidgetAdd: boolean;
         allowWidgetRemove: boolean;
-        allowThemeChange: boolean;
+        allowThemeChange: boolean }
 }
     };
-    metadata: {
-        version: string;
+    metadata: { version: string;
         author: string;
         createdAt: Date;
         updatedAt: Date;
         tags: string[];
         industryFocus?: string[];
-        complianceFrameworks?: string[];
-    };
+        complianceFrameworks?: string[] };
 
 }
-export interface DashboardPreset {
-    id: string;
+}
+export interface DashboardPreset { id: string;
     name: string;
     description: string;
     dashboardType: DashboardType;
@@ -69,20 +66,18 @@ export interface DashboardPreset {
         type: string;
         position: {
             x: number;
-            y: number;
+            y: number }
 }
         };
-        size: {
-            width: number;
-            height: number;
-        };
+        size: { width: number;
+            height: number };
         config: Record<string, any>;
     }[];
     permissions: DashboardPermissions;
 
 }
-export interface RegistryOptions {
-    enableCache: boolean;
+}
+export interface RegistryOptions { enableCache: boolean;
     cacheTimeout: number;
     validateConfigs: boolean;
     allowCustomDashboards: boolean;
@@ -155,7 +150,7 @@ export declare class DashboardRegistry {
         dashboardCount: number;
         presetCount: number;
         widgetCount: number;
-        categoriesByType: Record<DashboardType, number>;
+        categoriesByType: Record<DashboardType, number> }
 }
     };
     /**

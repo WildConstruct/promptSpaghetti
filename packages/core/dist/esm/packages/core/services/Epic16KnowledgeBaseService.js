@@ -143,7 +143,8 @@ export var InteractiveElementType;
 {
     sectionId: string;
     order: number;
-    placement: 'before' | 'after' | 'replace' | 'inline';
+    placement: 'before' | 'after' | 'replace' | 'inline',
+    ;
 }
 export var SuggestionType;
 (function (SuggestionType) {
@@ -519,15 +520,14 @@ Promise < KnowledgeBaseArticle | null > {
                                         };
                                     },
                                     updateSearchIndex(article) {
-                                        const searchableTerms = [];
-                                        article.title,
-                                        ;
+                                        const searchableTerms = [
+                                            article.title,
+                                            ...article.tags,
+                                            ...article.keywords,
+                                            article.searchableText
+                                        ].join(' ').toLowerCase().split(/\s+/);
+                                        this.searchIndex.set(article.id, searchableTerms);
                                     },
-                                    ...article.tags,
-                                    ...article.keywords,
-                                    article, : .searchableText,
-                                    : .join(' ').toLowerCase().split(/\s+/),
-                                    this: .searchIndex.set(article.id, searchableTerms),
                                     removeFromSearchIndex(articleId) {
                                         this.searchIndex.delete(articleId);
                                     },
@@ -798,12 +798,20 @@ Promise < KnowledgeBaseArticle | null > {
                                     }
                                     // Supporting interfaces
                                 };
-                            }
+                            },
+                            interface, UserKBSession
                         };
+                        {
+                            userId: string;
+                            sessionStart: Date;
+                            viewedArticles: Set;
+                            searchHistory: SearchHistoryItem;
+                            preferences: UserKBPreferences;
+                        }
                     }
                 };
             }
-            export default Epic16KnowledgeBaseService;
         }
     }
 };
+export default Epic16KnowledgeBaseService;

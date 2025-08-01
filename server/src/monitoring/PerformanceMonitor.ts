@@ -17,8 +17,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface PerformanceMetric {
   metricId: string;
   metricType: MetricType;
@@ -41,12 +41,13 @@ export interface PerformanceMetric {
   // Tags and Metadata
   tags: Record<string, string>;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceContext {
   // System Context
   nodeVersion: string;
@@ -70,12 +71,13 @@ export interface PerformanceContext {
   totalMemory: number;
   availableMemory: number;
   loadAverage: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MetricStatistics {
   count: number;
   min: number;
@@ -88,26 +90,28 @@ export interface MetricStatistics {
     p90: number;
     p95: number;
     p99: number;
-}
-}
+
+
+
   };
   standardDeviation: number;
   variance: number;
-}
 
-}
-}
+
+
+
 export interface PerformanceThreshold {
   level: 'info' | 'warning' | 'critical' | 'emergency';
   operator: 'lt' | 'lte' | 'gt' | 'gte' | 'eq' | 'ne';
   value: number;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceBenchmark {
   benchmarkId: string;
   name: string;
@@ -120,8 +124,9 @@ export interface PerformanceBenchmark {
     timestamp: Date;
     context: PerformanceContext;
     version: string;
-}
-}
+
+
+
   };
   
   // Current Measurements
@@ -146,10 +151,10 @@ export interface PerformanceBenchmark {
     deadline: Date;
     priority: 'low' | 'medium' | 'high' | 'critical';
   };
-}
 
-}
-}
+
+
+
 export interface PerformanceAlert {
   alertId: string;
   metricId: string;
@@ -176,9 +181,10 @@ export interface PerformanceAlert {
   escalationLevel: number;
   notificationsSent: number;
   lastNotificationAt?: Date;
-}
-}
-}
+
+
+
+
 
 export type MetricType = 
   | 'counter' 
@@ -268,7 +274,7 @@ export class PerformanceMonitor extends EventEmitter {
     this.databaseService = dependencies.databaseService;
     this.redisService = dependencies.redisService;
     this.auditService = dependencies.auditService;
-  }
+
 
   /**
    * Initialize performance monitoring system
@@ -283,7 +289,7 @@ export class PerformanceMonitor extends EventEmitter {
     // Start system monitoring
     if (this.config.systemMonitoring.enabled) {
       this.startSystemMonitoring();
-    }
+
     
     // Start metrics buffer flushing
     this.startMetricsBuffering();
@@ -299,11 +305,11 @@ export class PerformanceMonitor extends EventEmitter {
       details: {
         config: this.config,
         timestamp: new Date()
-      }
+
     });
     
     console.log('✅ Performance Monitor initialized successfully');
-  }
+
 
   /**
    * Record a performance metric
@@ -334,7 +340,7 @@ export class PerformanceMonitor extends EventEmitter {
     // Store metric
     if (!this.metrics.has(name)) {
       this.metrics.set(name, []);
-    }
+
     this.metrics.get(name)!.push(metric);
 
     // Add to buffer for batch processing
@@ -352,8 +358,8 @@ export class PerformanceMonitor extends EventEmitter {
     // Log high-severity metrics immediately
     if (metric.status === 'critical' || metric.status === 'emergency') {
       console.warn(`⚠️ Performance Alert: ${name} = ${value} ${unit} (${metric.status})`);
-    }
-  }
+
+
 
   /**
    * Start timing an operation
@@ -367,10 +373,10 @@ export class PerformanceMonitor extends EventEmitter {
     // Store context for later use
     if (context) {
       this.activeTimers.set(`${timerId}_context`, context as any);
-    }
+
     
     return timerId;
-  }
+
 
   /**
    * End timing and record the metric
@@ -384,7 +390,7 @@ export class PerformanceMonitor extends EventEmitter {
     if (!startTime) {
       console.warn(`Timer not found: ${timerId}`);
       return 0;
-    }
+
     
     const endTime = performance.now();
     const duration = endTime - startTime;
@@ -407,7 +413,7 @@ export class PerformanceMonitor extends EventEmitter {
     );
     
     return duration;
-  }
+
 
   /**
    * Record a benchmark measurement
@@ -433,21 +439,21 @@ export class PerformanceMonitor extends EventEmitter {
           timestamp: new Date(),
           context: this.enrichContext(context),
           version
-  }
+
         current: {
           value,
           timestamp: new Date(),
           context: this.enrichContext(context),
           version
-  }
+
         improvement: {
           absolute: 0,
           percentage: 0,
           trend: 'stable',
           significance: 'none'
-        }
+
       };
-    } else {
+ else {
       // Update existing benchmark
       const oldValue = benchmark.current.value;
       benchmark.current = {
@@ -467,7 +473,7 @@ export class PerformanceMonitor extends EventEmitter {
         trend: this.calculateTrend(percentage),
         significance: this.calculateSignificance(Math.abs(percentage))
       };
-    }
+
     
     this.benchmarks.set(benchmarkId, benchmark);
     
@@ -478,7 +484,7 @@ export class PerformanceMonitor extends EventEmitter {
     this.emit('benchmark_recorded', benchmark);
     
     console.log(`📈 Benchmark recorded: ${benchmarkId} = ${value} (${benchmark.improvement.trend})`);
-  }
+
 
   /**
    * Get performance dashboard data
@@ -541,7 +547,7 @@ export class PerformanceMonitor extends EventEmitter {
       systemHealth,
       timestamp: now
     };
-  }
+
 
   /**
    * Get detailed performance report
@@ -562,7 +568,7 @@ export class PerformanceMonitor extends EventEmitter {
       );
       if (filtered.length > 0) {
         acc[name] = filtered;
-      }
+
       return acc;
     }, {} as Record<string, PerformanceMetric[]>);
     
@@ -593,7 +599,7 @@ export class PerformanceMonitor extends EventEmitter {
         alertsGenerated: Array.from(this.alerts.values()).filter(a => 
           a.triggeredAt >= startDate && a.triggeredAt <= endDate
         ).length
-  }
+
       aggregateStats,
       trendAnalysis,
       benchmarkAnalysis: this.analyzeBenchmarks(relevantBenchmarks),
@@ -606,7 +612,7 @@ export class PerformanceMonitor extends EventEmitter {
     
     console.log(`✅ Performance report generated: ${report.reportId}`);
     return report;
-  }
+
 
   /**
    * Initialize default performance benchmarks
@@ -619,7 +625,7 @@ export class PerformanceMonitor extends EventEmitter {
       category: BenchmarkCategory;
       description: string;
       target?: { value: number; priority: 'low' | 'medium' | 'high' | 'critical' };
-    }> = [
+> = [
       // Runtime Performance
       {
         id: 'graph_execution_time',
@@ -627,14 +633,14 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'runtime_performance',
         description: 'Time to execute a standard test graph',
         target: { value: 1000, priority: 'high' } // 1 second
-  }
+
       {
         id: 'node_processing_time',
         name: 'Node Processing Time',
         category: 'runtime_performance', 
         description: 'Average time to process a single node',
         target: { value: 50, priority: 'medium' } // 50ms
-  }
+
       // API Performance
       {
         id: 'api_response_time',
@@ -642,14 +648,14 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'api_performance',
         description: 'Average API endpoint response time',
         target: { value: 200, priority: 'high' } // 200ms
-  }
+
       {
         id: 'preview_generation_time',
         name: 'Preview Generation Time',
         category: 'api_performance',
         description: 'Time to generate graph preview',
         target: { value: 500, priority: 'medium' } // 500ms
-  }
+
       // Database Performance
       {
         id: 'database_query_time',
@@ -657,7 +663,7 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'database_performance',
         description: 'Average database query execution time',
         target: { value: 100, priority: 'high' } // 100ms
-  }
+
       // UI Performance
       {
         id: 'ui_render_time',
@@ -665,14 +671,14 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'ui_performance',
         description: 'Time to render component updates',
         target: { value: 16, priority: 'critical' } // 16ms for 60fps
-  }
+
       {
         id: 'graph_editor_load_time',
         name: 'Graph Editor Load Time',
         category: 'ui_performance',
         description: 'Time to load and render graph editor',
         target: { value: 2000, priority: 'high' } // 2 seconds
-  }
+
       // Memory Usage
       {
         id: 'memory_usage_peak',
@@ -680,7 +686,7 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'memory_usage',
         description: 'Peak memory usage during operation',
         target: { value: 512, priority: 'medium' } // 512MB
-  }
+
       // Build Performance
       {
         id: 'build_time',
@@ -688,7 +694,7 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'build_performance',
         description: 'Time to complete full build',
         target: { value: 120, priority: 'high' } // 2 minutes
-      }
+
     ];
     
     for (const benchmarkDef of defaultBenchmarks) {
@@ -703,29 +709,29 @@ export class PerformanceMonitor extends EventEmitter {
             timestamp: new Date(),
             context: this.enrichContext({}),
             version: 'baseline'
-  }
+
           current: {
             value: 0,
             timestamp: new Date(),
             context: this.enrichContext({}),
             version: 'current'
-  }
+
           improvement: {
             absolute: 0,
             percentage: 0,
             trend: 'stable',
             significance: 'none'
-  }
+
           target: benchmarkDef.target ? {
             ...benchmarkDef.target,
             deadline: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) // 90 days
-          } : undefined
+ : undefined
         };
         
         this.benchmarks.set(benchmarkDef.id, benchmark);
-      }
-    }
-  }
+
+
+
 
   /**
    * Start system resource monitoring
@@ -734,7 +740,7 @@ export class PerformanceMonitor extends EventEmitter {
     this.monitoringInterval = setInterval(() => {
       this.collectSystemMetrics();
     }, this.config.systemMonitoring.interval);
-  }
+
 
   /**
    * Collect system resource metrics
@@ -786,7 +792,7 @@ export class PerformanceMonitor extends EventEmitter {
       component: 'system',
       operation: 'load_monitoring'
     });
-  }
+
 
   /**
    * Start metrics buffering and periodic flushing
@@ -795,9 +801,9 @@ export class PerformanceMonitor extends EventEmitter {
     this.bufferFlushInterval = setInterval(async () => {
       if (this.metricsBuffer.length > 0) {
         await this.flushMetricsBuffer();
-      }
+
     }, this.config.bufferFlushInterval);
-  }
+
 
   /**
    * Flush metrics buffer to persistent storage
@@ -813,13 +819,12 @@ export class PerformanceMonitor extends EventEmitter {
       
       // Store in Redis for real-time access
       await this.cacheMetrics(metricsToFlush);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Failed to flush metrics buffer:', error);
       // Return metrics to buffer for retry
       this.metricsBuffer.unshift(...metricsToFlush);
-    }
-  }
+
+
 
   /**
    * Enrich context with system information
@@ -851,7 +856,7 @@ export class PerformanceMonitor extends EventEmitter {
       
       ...context
     };
-  }
+
 
   /**
    * Get performance thresholds for a metric
@@ -874,7 +879,7 @@ export class PerformanceMonitor extends EventEmitter {
     };
     
     return defaultThresholds[metricName] || [];
-  }
+
 
   /**
    * Evaluate thresholds for a metric value
@@ -895,12 +900,12 @@ export class PerformanceMonitor extends EventEmitter {
         case 'emergency':
           status = 'emergency';
           break;
-        }
-      }
-    }
+
+
+
     
     return status;
-  }
+
 
   /**
    * Evaluate single threshold
@@ -914,8 +919,8 @@ export class PerformanceMonitor extends EventEmitter {
     case 'eq': return value === threshold.value;
     case 'ne': return value !== threshold.value;
     default: return false;
-    }
-  }
+
+
 
   /**
    * Check thresholds and generate alerts
@@ -959,7 +964,7 @@ export class PerformanceMonitor extends EventEmitter {
     this.emit('alert_triggered', alert);
     
     console.warn(`🚨 Performance Alert: ${alert.title} - ${alert.description}`);
-  }
+
 
   /**
    * Get performance recommendation for metric
@@ -973,7 +978,7 @@ export class PerformanceMonitor extends EventEmitter {
     };
     
     return recommendations[metricName] || 'Review performance characteristics and optimize bottlenecks';
-  }
+
 
   /**
    * Calculate trend based on percentage change
@@ -982,7 +987,7 @@ export class PerformanceMonitor extends EventEmitter {
     if (percentage > 5) return 'improving';
     if (percentage < -5) return 'degrading';
     return 'stable';
-  }
+
 
   /**
    * Calculate significance of change
@@ -992,7 +997,7 @@ export class PerformanceMonitor extends EventEmitter {
     if (percentage < 10) return 'minor';
     if (percentage < 25) return 'moderate';
     return 'major';
-  }
+
 
   /**
    * Calculate metric trend from recent values
@@ -1010,7 +1015,7 @@ export class PerformanceMonitor extends EventEmitter {
     const change = ((firstAvg - secondAvg) / firstAvg) * 100; // Positive means improvement
     
     return this.calculateTrend(change);
-  }
+
 
   /**
    * Calculate system health score
@@ -1041,7 +1046,7 @@ export class PerformanceMonitor extends EventEmitter {
       activeAlerts: activeAlertsCount,
       criticalAlerts: criticalAlertsCount,
       timestamp: new Date(};
-  }
+
 
   /**
    * Persist metrics to database
@@ -1069,11 +1074,11 @@ export class PerformanceMonitor extends EventEmitter {
           JSON.stringify(metric.metadata),
           metric.status
         ]);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to persist metrics:', error);
-    }
-  }
+
+
 
   /**
    * Cache metrics in Redis
@@ -1084,11 +1089,11 @@ export class PerformanceMonitor extends EventEmitter {
       for (const metric of metrics) {
         const key = `performance:metric:${metric.name}:latest`;
         await this.redisService.setWithExpiry(key, JSON.stringify(metric), 3600); // 1 hour
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to cache metrics:', error);
-    }
-  }
+
+
 
   /**
    * Persist benchmark to storage
@@ -1119,10 +1124,10 @@ export class PerformanceMonitor extends EventEmitter {
         JSON.stringify(benchmark.improvement),
         JSON.stringify(benchmark.target)
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to persist benchmark:', error);
-    }
-  }
+
+
 
   /**
    * Load historical performance data
@@ -1147,25 +1152,25 @@ export class PerformanceMonitor extends EventEmitter {
             timestamp: new Date(row.baseline_timestamp),
             version: row.baseline_version,
             context: this.enrichContext({})
-  }
+
           current: {
             value: row.current_value,
             timestamp: new Date(row.current_timestamp),
             version: row.current_version,
             context: this.enrichContext({})
-  }
+
           improvement: JSON.parse(row.improvement_data),
           target: row.target_data ? JSON.parse(row.target_data) : undefined
         };
         
         this.benchmarks.set(benchmark.benchmarkId, benchmark);
-      }
+
       
       console.log(`📈 Loaded ${benchmarks.length} historical benchmarks`);
-    } catch (error) {
+ catch (error) {
       console.warn('Could not load historical data:', error);
-    }
-  }
+
+
 
   /**
    * Get benchmark status
@@ -1183,7 +1188,7 @@ export class PerformanceMonitor extends EventEmitter {
     if (daysUntilDeadline < 30) return 'needs_attention';
     
     return 'on_track';
-  }
+
 
   /**
    * Calculate aggregate statistics for metrics
@@ -1209,13 +1214,13 @@ export class PerformanceMonitor extends EventEmitter {
             p90: values[Math.floor(values.length * 0.9)],
             p95: values[Math.floor(values.length * 0.95)],
             p99: values[Math.floor(values.length * 0.99)]
-          }
+
         };
-      }
-    }
+
+
     
     return stats;
-  }
+
 
   /**
    * Generate trend analysis
@@ -1237,7 +1242,7 @@ export class PerformanceMonitor extends EventEmitter {
         improvement: benchmark.improvement.percentage
       }))
     };
-  }
+
 
   /**
    * Analyze benchmarks for report
@@ -1255,7 +1260,7 @@ export class PerformanceMonitor extends EventEmitter {
         b.improvement.significance === 'major' || b.improvement.significance === 'moderate'
       ).length
     };
-  }
+
 
   /**
    * Generate performance insights
@@ -1269,19 +1274,19 @@ export class PerformanceMonitor extends EventEmitter {
     
     if (improvingTrends > degradingTrends) {
       insights.push(`Performance is generally improving with ${improvingTrends} metrics showing positive trends`);
-    } else if (degradingTrends > improvingTrends) {
+ else if (degradingTrends > improvingTrends) {
       insights.push(`${degradingTrends} metrics are degrading and require attention`);
-    }
+
     
     // Add more insights based on specific metrics
     Object.entries(stats).forEach(([name, stat]: [string, any]) => {
       if (stat.percentiles.p95 > stat.mean * 2) {
         insights.push(`${name} shows high variability with P95 significantly above average`);
-      }
+
     });
     
     return insights;
-  }
+
 
   /**
    * Generate recommendations based on insights
@@ -1295,7 +1300,7 @@ export class PerformanceMonitor extends EventEmitter {
     ];
     
     return recommendations;
-  }
+
 
   /**
    * Persist performance report
@@ -1323,12 +1328,12 @@ export class PerformanceMonitor extends EventEmitter {
           benchmarkAnalysis: report.benchmarkAnalysis,
           insights: report.insights,
           recommendations: report.recommendations
-  }
+
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to persist performance report:', error);
-    }
-  }
+
+
 
   /**
    * Stop performance monitoring
@@ -1342,16 +1347,16 @@ export class PerformanceMonitor extends EventEmitter {
     // Clear intervals
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
-    }
+
     
     if (this.bufferFlushInterval) {
       clearInterval(this.bufferFlushInterval);
-    }
+
     
     // Flush remaining metrics
     if (this.metricsBuffer.length > 0) {
       await this.flushMetricsBuffer();
-    }
+
     
     await this.auditService.logEvent({
       type: 'PERFORMANCE_MONITORING_STOPPED',
@@ -1361,11 +1366,11 @@ export class PerformanceMonitor extends EventEmitter {
         totalBenchmarks: this.benchmarks.size,
         totalAlerts: this.alerts.size,
         timestamp: new Date()
-      }
+
     });
     
     console.log('✅ Performance Monitor stopped successfully');
-  }
+
 
   /**
    * Update statistics for a metric
@@ -1390,13 +1395,13 @@ export class PerformanceMonitor extends EventEmitter {
         p90: values[Math.floor(values.length * 0.9)],
         p95: values[Math.floor(values.length * 0.95)],
         p99: values[Math.floor(values.length * 0.99)]
-  }
+
       standardDeviation: this.calculateStandardDeviation(values),
       variance: this.calculateVariance(values)
     };
     
     latestMetric.statistics = statistics;
-  }
+
 
   /**
    * Calculate standard deviation
@@ -1405,7 +1410,7 @@ export class PerformanceMonitor extends EventEmitter {
     const mean = values.reduce((sum, v) => sum + v, 0) / values.length;
     const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length;
     return Math.sqrt(variance);
-  }
+
 
   /**
    * Calculate variance
@@ -1413,19 +1418,21 @@ export class PerformanceMonitor extends EventEmitter {
   private calculateVariance(values: number[]): number {
     const mean = values.reduce((sum, v) => sum + v, 0) / values.length;
     return values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length;
-  }
-}
+
+
 
 // Supporting interfaces
-}
-}
+
+
+
 export interface PerformanceMonitorConfig {
   // System Monitoring
   systemMonitoring: {
     enabled: boolean;
     interval: number; // milliseconds
-}
-}
+
+
+
   };
   
   // Buffer Configuration
@@ -1444,18 +1451,19 @@ export interface PerformanceMonitorConfig {
     webhookUrl?: string;
     emailRecipients: string[];
   };
-}
 
-}
-}
+
+
+
 export interface PerformanceDashboard {
   systemOverview: {
     totalMetrics: number;
     activeBenchmarks: number;
     activeAlerts: number;
     monitoringUptime: number;
-}
-}
+
+
+
   };
   recentMetrics: Array<{
     name: string;
@@ -1463,7 +1471,7 @@ export interface PerformanceDashboard {
     latest: number;
     average: number;
     trend: 'improving' | 'stable' | 'degrading';
-  }>;
+>;
   benchmarkSummary: Array<{
     id: string;
     name: string;
@@ -1472,34 +1480,36 @@ export interface PerformanceDashboard {
     improvement: any;
     target?: any;
     status: 'on_track' | 'needs_attention' | 'critical';
-  }>;
+>;
   activeAlerts: PerformanceAlert[];
   systemHealth: SystemHealth;
   timestamp: Date;
-}
 
-}
-}
+
+
+
 export interface SystemHealth {
   score: number; // 0-100
   status: 'healthy' | 'warning' | 'degraded' | 'critical';
   activeAlerts: number;
   criticalAlerts: number;
   timestamp: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceReport {
   reportId: string;
   generatedAt: Date;
   period: {
     startDate: Date;
     endDate: Date;
-}
-}
+
+
+
   };
   categories: BenchmarkCategory[];
   summary: {
@@ -1513,4 +1523,3 @@ export interface PerformanceReport {
   benchmarkAnalysis: any;
   insights: string[];
   recommendations: string[];
-}

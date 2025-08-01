@@ -166,7 +166,7 @@ export class UTDGManager {
         const materials = nodes
             .filter(node => node.type === 'material' || node.type === 'texture')
             .map(node => ({
-            name: node.content.split(' ')[0], // First word as material name
+            name: node.content.split(' ')[0], // First word as material name,
             properties: this.extractMaterialProperties(node),
             historical_basis: node.external_source?.url || node.metadata.source,
             authenticity_level: node.metadata.authenticity,
@@ -304,8 +304,7 @@ export class UTDGManager {
         let results = [];
         // Convert query to demo criteria
         const era = Array.isArray(query.era) ?
-            HISTORICAL_ERAS[query.era[0].toUpperCase()] || HISTORICAL_ERAS.MEDIEVAL_HIGH :
-            HISTORICAL_ERAS.MEDIEVAL_HIGH;
+            HISTORICAL_ERAS[query.era[0].toUpperCase()] || HISTORICAL_ERAS.MEDIEVAL_HIGH : , HISTORICAL_ERAS, MEDIEVAL_HIGH;
         HISTORICAL_ERAS[query.era.toUpperCase()] || HISTORICAL_ERAS.MEDIEVAL_HIGH;
         // Query clothing
         if (!query.category || query.category.includes('garment')) {

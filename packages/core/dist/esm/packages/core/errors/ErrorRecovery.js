@@ -46,7 +46,7 @@ export class ErrorRecovery {
             }
         } };
         ;
-        console.warn() `Operation '${context}' failed (attempt ${attempt}/${maxAttempts}), retrying in ${delay},}
+        console.warn() `Operation '${context}' failed (attempt ${attempt}/${maxAttempts}), retrying in ${delay},},
   ms:`;
     }
     lastError;
@@ -55,7 +55,7 @@ export class ErrorRecovery {
 }
 await this.delay(delay);
 // All attempts failed
-throw ErrorFactory.createRecoverableError() `Operation '${context}' failed after ${maxAttempts},}
+throw ErrorFactory.createRecoverableError() `Operation '${context}' failed after ${maxAttempts},},
   attempts: ${lastError.message}`;
 context,
     () => this.withRetry(operation, context, options);
@@ -160,7 +160,10 @@ circuitName;
                     throw ErrorFactory.wrapUnknownError(error, context);
                     async;
                     withGracefulDegradation();
-                    operations: (Array),
+                    operations: Array < {
+                        operation: () => Promise,
+                        name: string,
+                        priority: 'critical' | 'important' | 'optional', } > ,
                         context;
                     string;
                     Promise < {
@@ -303,46 +306,39 @@ circuitName;
                                                         breaker.firstFailureAt = 0;
                                                         breaker.lastFailureAt = 0;
                                                         breaker.openedAt = 0;
-                                                    },
-                                                    interface, CircuitBreakerState, extends: CircuitBreakerOptions
+                                                    }
                                                 };
-                                                {
-                                                    state: 'closed' | 'open' | 'half-open';
-                                                    failures: number;
-                                                    firstFailureAt: number;
-                                                    lastFailureAt: number;
-                                                    openedAt: number;
-                                                    retryOptions ?  : Partial,
-                                                        fallbackOptions ?  : FallbackOptions;
-                                                    return ;
-                                                    propertyKey: string,
-                                                        descriptor;
-                                                    PropertyDescriptor,
-                                                    ;
-                                                    const originalMethod = descriptor.value;
-                                                    descriptor.value = async function (...args) {
-                                                        const context = `${target.constructor.name}.${propertyKey}`;
-                                                    };
-                                                    const operation = () => originalMethod.apply(this, args);
-                                                    // Apply retry logic if specified
-                                                    if (retryOptions) {
-                                                        try {
-                                                            return await ErrorRecovery.withRetry(operation, context, retryOptions);
-                                                        }
-                                                        catch (error) {
+                                                retryOptions ?  : Partial,
+                                                    fallbackOptions ?  : FallbackOptions;
+                                                return ,
+                                                    propertyKey;
+                                                string,
+                                                    descriptor;
+                                                PropertyDescriptor,
+                                                ;
+                                                const originalMethod = descriptor.value;
+                                                descriptor.value = async function (...args) {
+                                                    const context = `${target.constructor.name}.${propertyKey}`;
+                                                };
+                                                const operation = () => originalMethod.apply(this, args);
+                                                // Apply retry logic if specified
+                                                if (retryOptions) {
+                                                    try {
+                                                        return await ErrorRecovery.withRetry(operation, context, retryOptions);
+                                                    }
+                                                    catch (error) {
+                                                        if (fallbackOptions) {
+                                                            return ErrorRecovery.withFallback(operation, context, fallbackOptions);
+                                                            throw error;
+                                                            // Apply fallback logic if specified
                                                             if (fallbackOptions) {
                                                                 return ErrorRecovery.withFallback(operation, context, fallbackOptions);
-                                                                throw error;
-                                                                // Apply fallback logic if specified
-                                                                if (fallbackOptions) {
-                                                                    return ErrorRecovery.withFallback(operation, context, fallbackOptions);
-                                                                    return operation();
-                                                                }
-                                                                ;
-                                                                return descriptor;
+                                                                return operation();
                                                             }
                                                             ;
+                                                            return descriptor;
                                                         }
+                                                        ;
                                                     }
                                                 }
                                             }

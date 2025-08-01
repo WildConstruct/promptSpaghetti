@@ -10,7 +10,7 @@ export const TemplateVisibility = {
   PRIVATE: 'private',
   WORKSPACE: 'workspace', 
   PUBLIC: 'public'
-} as const;
+ as const;
 
 // Template categories
 export const TemplateCategory = {
@@ -21,21 +21,21 @@ export const TemplateCategory = {
   TECHNICAL: 'technical',
   EDUCATIONAL: 'educational',
   CUSTOM: 'custom'
-} as const;
+ as const;
 
 // Template difficulty levels
 export const TemplateDifficulty = {
   BEGINNER: 'beginner',
   INTERMEDIATE: 'intermediate',
   ADVANCED: 'advanced'
-} as const;
+ as const;
 
 // Template completion status
 export const TemplateUsageStatus = {
   IN_PROGRESS: 'in_progress',
   COMPLETED: 'completed',
   ABANDONED: 'abandoned'
-} as const;
+ as const;
 
 // Template usage source
 export const TemplateUsageSource = {
@@ -44,14 +44,14 @@ export const TemplateUsageSource = {
   SEARCH: 'search',
   FEATURED: 'featured',
   SHARED: 'shared'
-} as const;
+ as const;
 
 // Template download formats
 export const TemplateDownloadFormat = {
   JSON: 'json',
   YAML: 'yaml',
   ZIP: 'zip'
-} as const;
+ as const;
 
 // Template customization field types
 export const CustomizationFieldType = {
@@ -64,7 +64,7 @@ export const CustomizationFieldType = {
   DATE: 'date',
   OBJECT: 'object',
   ARRAY: 'array'
-} as const;
+ as const;
 
 // Zod schemas for validation
 export const ProjectTemplateSchema = z.object({
@@ -242,8 +242,9 @@ export type TemplateFavorite = z.infer<typeof TemplateFavoriteSchema>;
 export type TemplateDownload = z.infer<typeof TemplateDownloadSchema>;
 
 // Extended types with additional data
-}
-}
+
+
+
 export interface ProjectTemplateWithStats extends ProjectTemplate {
   review_count?: number;
   favorite_count?: number;
@@ -252,27 +253,28 @@ export interface ProjectTemplateWithStats extends ProjectTemplate {
   user_rating?: number;
   can_edit?: boolean;
   can_delete?: boolean;
-}
 
-}
-}
+
+
+
 export interface TemplateReviewWithAuthor extends TemplateReview {
   author_name?: string;
   author_avatar?: string;
   is_author?: boolean;
-}
 
-}
-}
+
+
+
 export interface TemplateUsageWithTemplate extends TemplateUsage {
   template_name?: string;
   template_thumbnail?: string;
   template_category?: string;
-}
+
 
 // Filter and query types
-}
-}
+
+
+
 export interface TemplateFilter {
   search?: string;
   category?: string;
@@ -283,33 +285,36 @@ export interface TemplateFilter {
   is_featured?: boolean;
   created_by?: string;
   workspace_id?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateSort {
   sort_by?: 'name' | 'created_at' | 'updated_at' | 'rating_average' | 'usage_count' | 'relevance';
   sort_order?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateReviewFilter {
   template_id?: string;
   user_id?: string;
   min_rating?: number;
   max_rating?: number;
   has_text?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateUsageFilter {
   template_id?: string;
   user_id?: string;
@@ -318,13 +323,15 @@ export interface TemplateUsageFilter {
   source?: string[];
   from_date?: Date;
   to_date?: Date;
-}
-}
-}
+
+
+
+
 
 // Customization field definition
-}
-}
+
+
+
 export interface CustomizationField {
   type: keyof typeof CustomizationFieldType;
   label: string;
@@ -335,17 +342,19 @@ export interface CustomizationField {
     min?: number;
     max?: number;
     pattern?: string;
-}
-}
+
+
+
     options?: Array<{ value: Error; label: string }>;
   };
   help_text?: string;
   group?: string;
-}
+
 
 // Template customization interface
-}
-}
+
+
+
 export interface TemplateCustomization {
   fields: Record<string, CustomizationField>;
   groups?: Array<{
@@ -353,14 +362,16 @@ export interface TemplateCustomization {
     label: string;
     description?: string;
     order: number;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 // Template analytics types
-}
-}
+
+
+
 export interface TemplateAnalytics {
   usage_stats: {
     total_usages: number;
@@ -368,8 +379,9 @@ export interface TemplateAnalytics {
     completion_rate: number;
     average_completion_time: number;
     usage_by_source: Record<string, number>;
-}
-}
+
+
+
     usage_trend: Array<{ date: string; count: number }>;
   };
   rating_stats: {
@@ -383,11 +395,12 @@ export interface TemplateAnalytics {
     retention_rate: number; // Users who come back
     recommendation_score: number; // Algorithm score
   };
-}
+
 
 // Template export format
-}
-}
+
+
+
 export interface TemplateExport {
   metadata: {
     template_id: string;
@@ -396,18 +409,19 @@ export interface TemplateExport {
     exported_at: string;
     exported_by: string;
     export_format: string;
-}
-}
+
+
+
   };
   template: ProjectTemplate;
   customizations?: Record<string, any>;
   usage_analytics?: Partial<TemplateAnalytics>;
-}
+
 
 // Utility functions
 export function isTemplatePublic(template: ProjectTemplate): boolean {
   return template.visibility === TemplateVisibility.PUBLIC && !template.archived_at;
-}
+
 
 export function canUserAccessTemplate(
   template: ProjectTemplate,
@@ -428,10 +442,10 @@ export function canUserAccessTemplate(
       template.workspace_id && 
       userWorkspaceIds.includes(template.workspace_id)) {
     return true;
-  }
+
   
   return false;
-}
+
 
 export function validateCustomizations(
   customizations: Record<string, any>,
@@ -447,7 +461,7 @@ export function validateCustomizations(
     if (fieldDef.required && (value === undefined || value === null || value === '')) {
       errors.push(`Field '${fieldName}' is required`);
       continue;
-    }
+
     
     // Skip validation if field is not provided and not required
     if (value === undefined || value === null) continue;
@@ -455,21 +469,21 @@ export function validateCustomizations(
     // Type validation
     if (fieldDef.type === CustomizationFieldType.NUMBER && typeof value !== 'number') {
       errors.push(`Field '${fieldName}' must be a number`);
-    }
+
     
     if (fieldDef.type === CustomizationFieldType.BOOLEAN && typeof value !== 'boolean') {
       errors.push(`Field '${fieldName}' must be a boolean`);
-    }
+
     
     // Range validation for numbers
     if (fieldDef.type === CustomizationFieldType.NUMBER && typeof value === 'number') {
       if (fieldDef.validation?.min !== undefined && value < fieldDef.validation.min) {
         errors.push(`Field '${fieldName}' must be at least ${fieldDef.validation.min}`);
-      }
+
       if (fieldDef.validation?.max !== undefined && value > fieldDef.validation.max) {
         errors.push(`Field '${fieldName}' must be at most ${fieldDef.validation.max}`);
-      }
-    }
+
+
     
     // Pattern validation for strings
     if (fieldDef.type === CustomizationFieldType.TEXT && typeof value === 'string') {
@@ -477,9 +491,9 @@ export function validateCustomizations(
         const regex = new RegExp(fieldDef.validation.pattern);
         if (!regex.test(value)) {
           errors.push(`Field '${fieldName}' does not match required pattern`);
-        }
-      }
-    }
+
+
+
     
     // Options validation for select fields
     if ((fieldDef.type === CustomizationFieldType.SELECT || 
@@ -489,18 +503,18 @@ export function validateCustomizations(
       if (fieldDef.type === CustomizationFieldType.SELECT) {
         if (!validValues.includes(value)) {
           errors.push(`Field '${fieldName}' must be one of: ${validValues.join(', ')}`);
-        }
-      } else if (Array.isArray(value)) {
+
+ else if (Array.isArray(value)) {
         const invalidValues = value.filter(v => !validValues.includes(v));
         if (invalidValues.length > 0) {
           errors.push(`Field '${fieldName}' contains invalid values: ${invalidValues.join(', ')}`);
-        }
-      }
-    }
-  }
+
+
+
+
   
   return { valid: errors.length === 0, errors };
-}
+
 
 export function applyTemplateCustomizations(
   templateData: Record<string, any>,
@@ -515,8 +529,8 @@ export function applyTemplateCustomizations(
   for (const [key, defaultValue] of Object.entries(defaultValues)) {
     if (customizations[key] === undefined) {
       customizations[key] = defaultValue;
-    }
-  }
+
+
   
   // Apply customizations to the template data
   // This is a simplified version - in practice, you'd need more sophisticated
@@ -527,19 +541,18 @@ export function applyTemplateCustomizations(
       for (const [key, value] of Object.entries(replacements)) {
         const placeholder = `{{${key}}}`;
         result = result.replace(new RegExp(placeholder, 'g'), String(value));
-      }
+
       return result;
-    } else if (Array.isArray(obj)) {
+ else if (Array.isArray(obj)) {
       return obj.map(item => replaceInObject(item, replacements));
-    } else if (obj && typeof obj === 'object') {
+ else if (obj && typeof obj === 'object') {
       const newObj: unknown = {};
       for (const [key, value] of Object.entries(obj)) {
         newObj[key] = replaceInObject(value, replacements);
-      }
+
       return newObj;
-    }
+
     return obj;
-  }
+
   
   return replaceInObject(result, customizations);
-}

@@ -9,7 +9,8 @@ import React, { useCallback, useState } from 'react';
 import { UnifiedSearchSystem } from './UnifiedSearchSystem';
 import { SearchQuery, SearchResult } from './SearchContext';
 import { searchApiService, Template } from '../../services/searchApiService';
-}
+
+
 interface MarketplaceSearchProps {
   // UI customization
   placeholder?: string;
@@ -26,9 +27,9 @@ interface MarketplaceSearchProps {
   renderTemplate?: (template: Template, index: number) => React.ReactNode;
   renderEmptyState?: () => React.ReactNode;
   className?: string;
+  // Default template renderer
 
-// Default template renderer
-}
+
 const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   template: Template;,
   index: number;
@@ -56,17 +57,17 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   cursor: 'pointer',
   transition: 'all 0.2s ease',
   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-}}
+
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onMouseEnter={(e) => {
         e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
         e.currentTarget.style.transform = 'translateY(-1px)';
-      }}
+}
       onMouseLeave={(e) => {
         e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
         e.currentTarget.style.transform = 'translateY(0)';
-      }}
+}
     >
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
@@ -77,7 +78,7 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   fontWeight: '600',
   color: '#1a202c',
   lineHeight: '1.3',
-}}>
+}>
             {template.title}
           </h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#718096' }}>
@@ -93,7 +94,7 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   borderRadius: '4px',
   fontSize: '11px',
   fontWeight: '500',
-}}>
+}>
                 AI Generated
               </span>
             )}
@@ -118,7 +119,7 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   fontSize: '11px',
   fontWeight: '500',
   marginTop: '4px',
-}}>
+}>
               Featured
             </div>
           )}
@@ -134,7 +135,7 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   WebkitLineClamp: 2,
   WebkitBoxOrient: 'vertical',
   overflow: 'hidden',
-}}>
+}>
         {template.description}
       </p>
       {/* Tags */}
@@ -152,7 +153,7 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   fontSize: '12px',
   marginRight: '6px',
   marginBottom: '4px',
-}}
+}
             >
               {tag}
             </span>
@@ -199,7 +200,7 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   borderRadius: '4px',
   fontSize: '11px',
   fontWeight: '500',
-}}
+}
               >
                 {model}
               </span>
@@ -222,7 +223,7 @@ const DefaultEmptyStateRenderer = () => (;);
   textAlign: 'center',
   padding: '48px 24px',
   color: '#718096',
-}}>
+}>
     <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
     <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#4a5568' }}>
       No templates found
@@ -257,7 +258,7 @@ export const MarketplaceSearchIntegrated: React.FC<MarketplaceSearchProps> = ({)
 };
   }, [itemsPerPage]);
   // Available fields for filtering
-  const availableFields = [;
+  const availableFields = [
     { key: 'categories', label: 'Categories', type: 'select' as const, options: [] },
     { key: 'tags', label: 'Tags', type: 'select' as const, options: [] },
     { key: 'complexity', label: 'Complexity', type: 'select' as const, options: ['beginner', 'intermediate', 'advanced'] },

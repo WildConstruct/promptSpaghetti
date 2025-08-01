@@ -9,8 +9,8 @@
 import React from 'react';
 
 }
-export interface CommentModerationConfig {
-    enableBulkActions: boolean;
+}
+export interface CommentModerationConfig { enableBulkActions: boolean;
     enableAutoModeration: boolean;
     enableThreadModeration: boolean;
     enableSentimentFiltering: boolean;
@@ -18,20 +18,17 @@ export interface CommentModerationConfig {
     requireApprovalThreshold: number;
     enableRealtimeUpdates: boolean;
     moderatorId: string;
-    permissions: string[];
-
-
+    permissions: string[] }
 }
-export interface CommentModerationFilters {
-    status?: 'pending' | 'approved' | 'rejected' | 'flagged' | 'auto_hidden';
+}
+export interface CommentModerationFilters { status?: 'pending' | 'approved' | 'rejected' | 'flagged' | 'auto_hidden';
     sentiment?: 'positive' | 'neutral' | 'negative' | 'very_negative';
     toxicity?: 'low' | 'medium' | 'high' | 'critical';
     reports?: 'none' | 'few' | 'many' | 'critical';
     author?: 'all' | 'new' | 'verified' | 'banned';
     dateRange?: {
         start: Date;
-        end: Date;
-
+        end: Date }
 }
     };
     resourceId?: string;
@@ -40,19 +37,17 @@ export interface CommentModerationFilters {
     keywords?: string;
 
 }
-export interface CommentModerationAction {
-    type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
+}
+export interface CommentModerationAction { type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
     commentIds: string[];
     reason?: string;
     duration?: number;
     notifyAuthor?: boolean;
     escalateTo?: string;
-    metadata?: Record<string, unknown>;
-
-
+    metadata?: Record<string, unknown> }
 }
-export interface CommentModerationStats {
-    total: number;
+}
+export interface CommentModerationStats { total: number;
     pending: number;
     approved: number;
     rejected: number;
@@ -61,9 +56,8 @@ export interface CommentModerationStats {
     totalReports: number;
     avgToxicity: number;
     avgQuality: number;
-    lastProcessed?: Date;
-
-
+    lastProcessed?: Date }
+}
 }
 interface CommentModerationPanelProps {
     config: CommentModerationConfig;
@@ -75,4 +69,5 @@ interface CommentModerationPanelProps {
 export declare const CommentModerationPanel: React.FC<CommentModerationPanelProps>;
 export default CommentModerationPanel;
 //# sourceMappingURL=CommentModerationPanel.d.ts.map
+}
 }

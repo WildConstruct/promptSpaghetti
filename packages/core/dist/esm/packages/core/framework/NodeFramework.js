@@ -539,8 +539,8 @@ export class FrameworkNode extends AdvancedRuntimeNode {
                                                                                 this: .metrics.errorRate = totalExecutions > 0 ? (totalErrors / totalExecutions) * 100 : 0
                                                                             };
                                                                         }
-                                                                        export default NodeFramework;
                                                                     }
+                                                                    export default NodeFramework;
                                                                 }
                                                             }
                                                         };

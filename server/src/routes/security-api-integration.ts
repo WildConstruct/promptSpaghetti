@@ -13,11 +13,11 @@ import {
   SecurityAPIConfig,
   ExternalSecurityTool,
   SecurityEvent
-} from '../services/SecurityAPIIntegrationPlatform';
+ from '../services/SecurityAPIIntegrationPlatform';
 import { 
   SecurityAnalyticsIntegrationService,
   SecurityAnalyticsIntegrationConfig
-} from '../services/SecurityAnalyticsIntegrationService';
+ from '../services/SecurityAnalyticsIntegrationService';
 import { AdminAuthGuard } from '../admin/guards/AdminAuthGuard';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../database/analytics-dao';
@@ -27,18 +27,18 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 // Global platform instance
 let securityAPIPlatform: SecurityAPIIntegrationPlatform | null = null;
 
-}
-}
+
+
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
   message?: string;
   timestamp: number;
-}
 
-}
-}
+
+
+
 interface ExternalToolRegistrationRequest {
   name: string;
   type: 'siem' | 'vulnerability_scanner' | 'threat_intelligence' | 'endpoint_protection';
@@ -46,16 +46,17 @@ interface ExternalToolRegistrationRequest {
   authentication: {
     type: 'api_key' | 'oauth2' | 'basic_auth' | 'certificate';
     credentials: Record<string, any>;
-}
-}
+
+
+
   };
   capabilities: string[];
   data_format: 'json' | 'xml' | 'csv' | 'syslog';
   configuration?: Record<string, any>;
-}
 
-}
-}
+
+
+
 interface SecurityEventRequest {
   type: 'threat_detected' | 'vulnerability_found' | 'compliance_violation' | 'security_incident';
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -63,20 +64,22 @@ interface SecurityEventRequest {
   description: string;
   affected_resources: string[];
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface PlatformQueryParams {
   include_metrics?: boolean;
   include_tools?: boolean;
   include_events?: boolean;
   time_range?: 'last_hour' | 'last_day' | 'last_week';
-}
-}
-}
+
+
+
+
 
 /**
  * Initialize the Security API Integration Platform
@@ -85,7 +88,7 @@ async function initializeSecurityAPIPlatform(): Promise<SecurityAPIIntegrationPl
 
   if (securityAPIPlatform) {
     return securityAPIPlatform;
-  }
+
 
   // Configure the underlying analytics service
   const analyticsConfig: SecurityAnalyticsIntegrationConfig = {
@@ -99,7 +102,7 @@ async function initializeSecurityAPIPlatform(): Promise<SecurityAPIIntegrationPl
       performance_event_forwarding: true,
       batch_size: 100,
       flush_interval_ms: 5000
-  }
+
     epic17_admin_integration: {
       enabled: true,
       auth_guard: new AdminAuthGuard(),
@@ -107,7 +110,7 @@ async function initializeSecurityAPIPlatform(): Promise<SecurityAPIIntegrationPl
       diagnostic_service: new DiagnosticService(),
       admin_notification_enabled: true,
       security_alert_threshold: 5
-  }
+
     performance_monitoring: {
       real_time_monitoring_enabled: true,
       performance_threshold_ms: 500,
@@ -115,14 +118,14 @@ async function initializeSecurityAPIPlatform(): Promise<SecurityAPIIntegrationPl
       cpu_threshold_percent: 70,
       alert_on_degradation: true,
       auto_optimization_enabled: true
-  }
+
     security_features: {
       threat_detection_enabled: true,
       anomaly_detection_sensitivity: 0.85,
       correlation_analysis_enabled: true,
       predictive_analytics_enabled: true,
       automated_response_enabled: true
-    }
+
   };
 
   const analyticsService = new SecurityAnalyticsIntegrationService(analyticsConfig);
@@ -136,7 +139,7 @@ async function initializeSecurityAPIPlatform(): Promise<SecurityAPIIntegrationPl
       max_requests_per_minute: 1000,
       burst_limit: 200,
       window_size_ms: 60000
-  }
+
     external_integrations: {
       siem_tools: {
         enabled: true,
@@ -144,45 +147,45 @@ async function initializeSecurityAPIPlatform(): Promise<SecurityAPIIntegrationPl
         webhook_endpoints: [],
         api_keys: {},
         data_format: 'json'
-  }
+
       threat_intelligence: {
         enabled: true,
         providers: ['virustotal', 'threatcrowd', 'otx', 'misp'],
         update_interval_minutes: 30,
         confidence_threshold: 0.7
-  }
+
       vulnerability_scanners: {
         enabled: true,
         supported_scanners: ['nessus', 'openvas', 'qualys', 'rapid7'],
         scan_schedules: {}
-      }
-  }
+
+
     real_time_processing: {
       enabled: true,
       stream_buffer_size: 1000,
       processing_threads: 4,
       batch_processing_interval_ms: 2000,
       priority_queue_enabled: true
-  }
+
     data_streaming: {
       enabled: true,
       websocket_enabled: true,
       compression_enabled: true
-  }
+
     microservices: {
       enabled: true,
       service_discovery_enabled: true,
       load_balancing_strategy: 'least_connections',
       health_check_interval_ms: 30000,
       circuit_breaker_enabled: true
-    }
+
   };
 
   securityAPIPlatform = new SecurityAPIIntegrationPlatform(apiConfig, analyticsService);
   await securityAPIPlatform.initialize();
 
   return securityAPIPlatform;
-}
+
 
 export default async function securityAPIIntegrationRoutes(fastify: FastifyInstance) {
   // Initialize platform
@@ -206,10 +209,10 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
           time_range: { 
             type: 'string',
             enum: ['last_hour', 'last_day', 'last_week']
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (
     request: FastifyRequest<{ Querystring: PlatformQueryParams }>,
     reply: FastifyReply
@@ -224,30 +227,30 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
 
       if (include_metrics) {
         responseData.metrics = await platform.getPlatformMetrics();
-      }
+
 
       if (include_tools) {
         responseData.external_tools = platform.getExternalToolsStatus();
-      }
+
 
       if (include_events) {
         // Would include recent events data
         responseData.recent_events = [];
-      }
+
 
       return {
         success: true,
         data: responseData,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting platform status:', error);
       return {
         success: false,
         error: 'Failed to get platform status',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -267,7 +270,7 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
           type: { 
             type: 'string',
             enum: ['siem', 'vulnerability_scanner', 'threat_intelligence', 'endpoint_protection']
-  }
+
           api_endpoint: { type: 'string', format: 'uri' },
           authentication: {
             type: 'object',
@@ -276,22 +279,22 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
               type: { 
                 type: 'string',
                 enum: ['api_key', 'oauth2', 'basic_auth', 'certificate']
-  }
+
               credentials: { type: 'object' }
-            }
-  }
+
+
           capabilities: {
             type: 'array',
             items: { type: 'string' }
-  }
+
           data_format: {
             type: 'string',
             enum: ['json', 'xml', 'csv', 'syslog']
-  }
+
           configuration: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<{ Body: ExternalToolRegistrationRequest }>,
     reply: FastifyReply
@@ -321,18 +324,18 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
           status: 'registered',
           name: externalTool.name,
           type: externalTool.type
-  }
+
         message: `External tool '${externalTool.name}' registered successfully`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error registering external tool:', error);
       return {
         success: false,
         error: `Failed to register external tool: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -344,7 +347,7 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
     schema: {
       description: 'List all registered external security tools',
       tags: ['Security Integration', 'External Tools']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const toolsStatus = platform.getExternalToolsStatus();
@@ -355,17 +358,17 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
           tools: toolsStatus,
           total_count: Object.keys(toolsStatus).length,
           active_count: Object.values(toolsStatus).filter((tool: any) => tool.status === 'active').length
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error listing external tools:', error);
       return {
         success: false,
         error: 'Failed to list external tools',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -384,21 +387,21 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
           type: {
             type: 'string',
             enum: ['threat_detected', 'vulnerability_found', 'compliance_violation', 'security_incident']
-  }
+
           severity: {
             type: 'string',
             enum: ['low', 'medium', 'high', 'critical']
-  }
+
           source: { type: 'string' },
           description: { type: 'string' },
           affected_resources: {
             type: 'array',
             items: { type: 'string' }
-  }
+
           metadata: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: SecurityEventRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const eventData = request.body;
@@ -423,18 +426,18 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
           event_id: securityEvent.id,
           processing_status: 'accepted',
           timestamp: securityEvent.timestamp
-  }
+
         message: 'Security event accepted for processing',
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error processing security event:', error);
       return {
         success: false,
         error: `Failed to process security event: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -446,7 +449,7 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
     schema: {
       description: 'Get detailed security integration platform metrics',
       tags: ['Security Integration', 'Metrics']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const metrics = await platform.getPlatformMetrics();
@@ -456,17 +459,17 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
         data: {
           platform_metrics: metrics,
           collection_timestamp: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting platform metrics:', error);
       return {
         success: false,
         error: 'Failed to get platform metrics',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -478,7 +481,7 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
     schema: {
       description: 'Trigger security integration platform optimization',
       tags: ['Security Integration', 'Admin']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       await platform.optimizePlatform();
@@ -488,18 +491,18 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
         data: {
           optimization_status: 'completed',
           optimized_at: Date.now()
-  }
+
         message: 'Platform optimization completed successfully',
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error optimizing platform:', error);
       return {
         success: false,
         error: `Failed to optimize platform: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -510,7 +513,7 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
     schema: {
       description: 'Get security integration platform health status',
       tags: ['Security Integration', 'Health Check']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const metrics = await platform.getPlatformMetrics();
@@ -532,17 +535,17 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
             events_per_second: metrics.real_time_processing.events_processed_per_second,
             latency_ms: metrics.real_time_processing.processing_latency_ms,
             queue_depth: metrics.real_time_processing.queue_depth
-  }
+
           integration_health: {
             healthy_tools: healthyTools,
             total_tools: totalTools,
             health_percentage: totalTools > 0 ? (healthyTools / totalTools) * 100 : 100
-  }
+
           last_check: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting platform health:', error);
       return {
         success: false,
@@ -550,11 +553,11 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
           healthy: false,
           platform_status: 'error',
           error_message: error.message
-  }
+
         error: 'Failed to get platform health',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -634,6 +637,5 @@ export default async function securityAPIIntegrationRoutes(fastify: FastifyInsta
     if (securityAPIPlatform) {
       await securityAPIPlatform.shutdown();
       fastify.log.info('Security API Integration Platform shut down');
-    }
+
   });
-}

@@ -17,8 +17,8 @@ import { ConversionArchitectureManager, EnhancedConversionEvent, TouchPoint } fr
 import { SessionTrackingManager } from './SessionTrackingIntegration';
 
 }
-export interface ConversionTrackingConfig extends AnalyticsClientConfig {
-    enableRealTimeStreaming: boolean;
+}
+export interface ConversionTrackingConfig extends AnalyticsClientConfig { enableRealTimeStreaming: boolean;
     streamingEndpoint: string;
     batchSize: number;
     flushInterval: number;
@@ -30,37 +30,32 @@ export interface ConversionTrackingConfig extends AnalyticsClientConfig {
     eventValidationRules: EventValidationRule[];
     deduplicationWindow: number;
     enableDebugLogging: boolean;
-    errorReportingEndpoint?: string;
-
+    errorReportingEndpoint?: string }
 }
-export interface EventValidationRule {
-    field: string;
+export interface EventValidationRule { field: string;
     type: 'required' | 'pattern' | 'range' | 'custom';
     value?: unknown;
     validator?: (value: unknown) => boolean;
-    errorMessage: string;
-
+    errorMessage: string }
 }
-export interface QueuedEvent {
-    event: EnhancedConversionEvent;
+}
+export interface QueuedEvent { event: EnhancedConversionEvent;
     timestamp: number;
     retryCount: number;
-    queuedOffline: boolean;
-
+    queuedOffline: boolean }
 }
-export interface TrackingMetrics {
-    eventsTracked: number;
+}
+export interface TrackingMetrics { eventsTracked: number;
     eventsQueued: number;
     eventsDropped: number;
     streamingLatency: number;
     validationErrors: number;
     duplicatesFiltered: number;
     offlineEvents: number;
-    privacyBlockedEvents: number;
-
+    privacyBlockedEvents: number }
 }
-export interface ConversionContext {
-    sessionId: string;
+}
+export interface ConversionContext { sessionId: string;
     userId: string;
     deviceId: string;
     timestamp: number;
@@ -69,22 +64,19 @@ export interface ConversionContext {
         tracking: boolean;
         analytics: boolean;
         personalization: boolean;
-        crossDevice: boolean;
+        crossDevice: boolean }
 }
     };
-    attribution: {
-        source: string;
+    attribution: { source: string;
         medium: string;
         campaign?: string;
         content?: string;
-        term?: string;
-    };
+        term?: string };
 /**
  * Enhanced Conversion Tracking SDK
  * Extends Epic 1 AnalyticsClient with advanced conversion tracking capabilities
  */
-export declare class ConversionTrackingSDK extends AnalyticsClient {
-    private conversionConfig;
+export declare class ConversionTrackingSDK extends AnalyticsClient { private conversionConfig;
     private conversionArchitecture;
     private sessionManager;
     private eventQueue;
@@ -108,9 +100,9 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
      */
     trackConversionEvent();
       eventType: string,
-      properties?: Record<string,
-      any>,
-      value?: number,
+      properties?: Record<string
+      any>
+      value?: number
       touchpoints?: TouchPoint[]
     ): Promise<boolean>;
     /**
@@ -121,29 +113,26 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
      * Track attribution touchpoint
      */
     trackTouchpoint();
-      channel: string,
-      source: string,
-      medium: string,
-      properties?: Record<string,
+      channel: string
+      source: string
+      medium: string
+      properties?: Record<string }
       any>
     ): Promise<boolean>;
     /**
      * Update user consent preferences
      */
-    updateConsentPreferences(consent: {)
+    updateConsentPreferences(consent: { )
         tracking?: boolean;
         analytics?: boolean;
         personalization?: boolean;
-        crossDevice?: boolean;
-    }): void;
+        crossDevice?: boolean }): void;
     /**
      * Get current tracking metrics
      */
-    getTrackingMetrics(): TrackingMetrics & {
-        queueSize: number;
+    getTrackingMetrics(): TrackingMetrics & { queueSize: number;
         offlineBufferSize: number;
-        streamingConnected: boolean;
-    };
+        streamingConnected: boolean };
     /**
      * Manually flush event queue
      */

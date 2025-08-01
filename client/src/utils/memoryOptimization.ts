@@ -46,7 +46,7 @@ class ResourceManager {
     this.resources.forEach(cleanup => {)
   try {
         cleanup();
-      } catch (error) {
+ catch (error) {
   console.warn('Cleanup function failed:', error);
 });
     this.resources.clear();
@@ -60,7 +60,7 @@ class ResourceManager {
     this.observers.forEach(observer => {)
   try {
         observer.disconnect();
-      } catch (error) {
+ catch (error) {
   console.warn('Observer disconnect failed:', error);
 });
     this.observers.clear();
@@ -80,7 +80,7 @@ export function useResourceManager(): ResourceManager {
 /**
  * Enhanced useCallback with automatic dependency tracking
  */
-export function useStableCallback<T extends (...args: unknown) => unknown>(callback: T,)
+export function useStableCallback<T extends (...args: unknown) => unknown>(callback: T)
   deps?: React.DependencyList): T {
   const callbackRef = useRef(callback);
   const depsRef = useRef(deps);
@@ -171,7 +171,7 @@ export function useLazyLoading(threshold: number = 0.1) {
         if (entry.isIntersecting) {
           setIsVisible(true);
           observer.disconnect();
-  }
+
       { threshold }
     );
     observer.observe(element);
@@ -188,7 +188,7 @@ export function useMemoryMonitoring(interval: number = 10000) {
   totalJSHeapSize?: number;
   jsHeapSizeLimit?: number;
   pressure?: number;
-}>({});
+>({});
   const resourceManager = useResourceManager();
   useEffect(() => {
   const updateMemoryInfo = () => {
@@ -204,7 +204,7 @@ export function useMemoryMonitoring(interval: number = 10000) {
 });
         // Warn if memory pressure is high
         if (pressure > 0.9) {
-  console.warn('High memory pressure detected:', {,)
+  console.warn('High memory pressure detected:', {),
   used: (memory.usedJSHeapSize / 1024 / 1024).toFixed(2) + 'MB',
   limit: (memory.jsHeapSizeLimit / 1024 / 1024).toFixed(2) + 'MB',
   pressure: (pressure * 100).toFixed(1) + '%',
@@ -257,7 +257,7 @@ export if (a == null || b == null) return false;
       if (keysA.length !== keysB.length) return false;
       return keysA.every(key => this.deepEqual(a[key], b[key]));
     return false;
-  }
+
   /**
    * Shallow compare for React.memo
    */
@@ -268,7 +268,7 @@ export if (a == null || b == null) return false;
     const keysB = Object.keys(b);
     if (keysA.length !== keysB.length) return false;
     return keysA.every(key => a[key] === b[key]);
-  }
+
   /**
    * Create a stable reference for object props
    */

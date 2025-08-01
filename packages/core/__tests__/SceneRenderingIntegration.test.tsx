@@ -21,8 +21,7 @@ jest.mock('reactflow', () => {
     getNodes: () => [],
     getEdges: () => [];
   };
-  return {
-    ...jest.requireActual('reactflow'),
+  return { ...jest.requireActual('reactflow') }
     ReactFlow: ({ children, nodes, edges, onNodesChange, onEdgesChange, onConnect, viewport, onViewportChange, ...props }: any) => {
       const [currentViewport, setCurrentViewport] = React.useState(viewport || { x: 0, y: 0, zoom: 1 });
       return;
@@ -33,11 +32,11 @@ jest.mock('reactflow', () => {
           data-viewport-zoom={currentViewport.zoom}
           data-viewport-x={currentViewport.x}
           data-viewport-y={currentViewport.y}
-          style={{ 
-            width: '100%', 
-            height: '100%',
+          style={ { 
+            width: '100%'
+            height: '100%' }
             transform: `translate(${currentViewport.x}px, ${currentViewport.y}px) scale(${currentViewport.zoom})`}
-          }}
+
           {...props}
         >
           <div data-testid="scene-nodes-layer">
@@ -48,14 +47,14 @@ jest.mock('reactflow', () => {
                 data-node-type={node.type}
                 data-scene-x={node.position.x}
                 data-scene-y={node.position.y}
-                style={{
-  position: 'absolute',
-  left: node.position.x,
-  top: node.position.y,
-  transform: node.data?.transform || 'none',
-  opacity: node.data?.opacity || 1,
-  zIndex: node.data?.zIndex || 1,
-}}
+                style={ {
+  position: 'absolute'
+  left: node.position.x
+  top: node.position.y
+  transform: node.data?.transform || 'none'
+  opacity: node.data?.opacity || 1
+  zIndex: node.data?.zIndex || 1 }
+}
                 onClick={() => props.onNodeClick?.(node)}
               >
                 <NodeRenderer 
@@ -82,15 +81,15 @@ jest.mock('reactflow', () => {
                 <svg 
                   key={edge.id}
                   data-testid={`scene-edge-${edge.id}`}
-                  style={{
-  position: 'absolute',
-  left: Math.min(x1, x2),
-  top: Math.min(y1, y2),
-  width: Math.abs(x2 - x1) + 20,
-  height: Math.abs(y2 - y1) + 20,
-  pointerEvents: 'none',
-  zIndex: 0,
-}}
+                  style={ {
+  position: 'absolute'
+  left: Math.min(x1, x2)
+  top: Math.min(y1, y2)
+  width: Math.abs(x2 - x1) + 20
+  height: Math.abs(y2 - y1) + 20
+  pointerEvents: 'none'
+  zIndex: 0 }
+}
                 >
                   <line
                     x1={x1 - Math.min(x1, x2)}
@@ -109,8 +108,8 @@ jest.mock('reactflow', () => {
           </div>
           {children}
         </div>
-      );
-  },
+      )
+
   useReactFlow: () => mockUseReactFlow,
     Handle: ({ type, position, id, ...props }: any) => ()
       <div 
@@ -120,61 +119,59 @@ jest.mock('reactflow', () => {
         className={`scene-handle scene-handle-${type}`}
         {...props}
       />
-    ),
-    Position: {
-  Top: 'top',
-  Right: 'right',
-  Bottom: 'bottom',
-  Left: 'left',
+    )
+    Position: { 
+  Top: 'top'
+  Right: 'right'
+  Bottom: 'bottom'
+  Left: 'left' }
 };
 });
 describe('Scene Rendering Integration', () => {
-  const createSceneGraph = (options = {}) => {
-    const {
-      nodeCount = 5,
-      edgeCount = 4,
-      withAnimations = false,
-      withLayering = false,
+  const createSceneGraph = (options = {}) => { const {
+      nodeCount = 5
+      edgeCount = 4
+      withAnimations = false
+      withLayering = false }
       withTransforms = false
-    } = options as any;
+ = options as any;
     const nodes: Node = Array.from({ length: nodeCount }, (_, i) => {
       const baseData = {
         label: `Scene Node ${i + 1}`}
-},
-  nodeType: i % 2 === 0 ? 'WeightedChoice' : 'Output',
-        ...(i === 0 && { choices: [{ value: 'Choice A', weight: 0.7 }, { value: 'Choice B', weight: 0.3 }] }),
+
+  nodeType: i % 2 === 0 ? 'WeightedChoice' : 'Output'
+        ...(i === 0 && { choices: [{ value: 'Choice A', weight: 0.7 }, { value: 'Choice B', weight: 0.3 }] })
         ...(i === 1 && { text: 'Scene output text' })
       };
       return {
         id: `scene-${i + 1}`}
-},
-  type: baseData.nodeType,
-        position: {
-  x: (i % 3) * 200 + Math.random() * 50,
-  y: Math.floor(i / 3) * 150 + Math.random() * 30,
-},
-  data: {
-  ...baseData,
+
+  type: baseData.nodeType
+        position: { 
+  x: (i % 3) * 200 + Math.random() * 50
+  y: Math.floor(i / 3) * 150 + Math.random() * 30 }
+
+  data: { ...baseData
   ...(withTransforms && {)
-  transform: i % 2 === 0 ? 'rotate(5deg)' : 'scale(1.1)',
-  opacity: 0.8 + (i * 0.04),
-}),
-          ...(withLayering && {)
-  zIndex: i + 1,
-}
+  transform: i % 2 === 0 ? 'rotate(5deg)' : 'scale(1.1)'
+  opacity: 0.8 + (i * 0.04) }
+})
+          ...(withLayering && { )
+  zIndex: i + 1 }
+
       };
     });
     const edges: Edge = Array.from({ length: Math.min(edgeCount, nodeCount - 1) }, (_, i) => ({)
   id: `scene-edge-${i + 1}`}
-},
+
   source: `scene-${i + 1}`}
-},
+
   target: `scene-${i + 2}`}
-},
-  animated: withAnimations && i % 2 === 0,
-      data: {
-  color: withAnimations ? '#38a169' : '#cbd5e0',
-  strokeWidth: withAnimations ? 3 : 2,
+
+  animated: withAnimations && i % 2 === 0
+      data: { 
+  color: withAnimations ? '#38a169' : '#cbd5e0'
+  strokeWidth: withAnimations ? 3 : 2 }
 }));
     return { nodes, edges };
   };
@@ -200,8 +197,8 @@ describe('Scene Rendering Integration', () => {
     });
     it('maintains visual hierarchy with z-index layering', () => {
       const { nodes, edges } = createSceneGraph({ )
-        nodeCount: 3, 
-        edgeCount: 2,
+        nodeCount: 3
+        edgeCount: 2 }
         withLayering: true ;
   });
       render(<GraphEditor initialNodes={nodes} initialEdges={edges} />);
@@ -215,8 +212,8 @@ describe('Scene Rendering Integration', () => {
     });
     it('renders animated elements with proper styling', () => {
       const { nodes, edges } = createSceneGraph({ )
-        nodeCount: 4, 
-        edgeCount: 3,
+        nodeCount: 4
+        edgeCount: 3 }
         withAnimations: true ;
   });
       render(<GraphEditor initialNodes={nodes} initialEdges={edges} />);
@@ -279,16 +276,14 @@ describe('Scene Rendering Integration', () => {
       const initialNode = screen.getByTestId('scene-node-scene-1');
       const initialX = initialNode.getAttribute('data-scene-x');
       // Update node positions
-      const updatedNodes = nodes.map(node => ({)
-  ...node,
+      const updatedNodes = nodes.map(node => ({ )
+  ...node }
         position: { x: node.position.x + 100, y: node.position.y + 50 }
       }));
       rerender(<GraphEditor initialNodes={updatedNodes} initialEdges={edges} />);
-      await waitFor(() => {
-        const updatedNode = screen.getByTestId('scene-node-scene-1');
+      await waitFor(() => { const updatedNode = screen.getByTestId('scene-node-scene-1');
         const newX = updatedNode.getAttribute('data-scene-x');
-        expect(parseFloat(newX!)).toBeGreaterThan(parseFloat(initialX!));
-      });
+        expect(parseFloat(newX!)).toBeGreaterThan(parseFloat(initialX!)) });
     });
     it('updates edge rendering when nodes move', async () => {
       const { nodes, edges } = createSceneGraph({ nodeCount: 3, edgeCount: 2 });
@@ -305,13 +300,11 @@ describe('Scene Rendering Integration', () => {
           : node
       );
       rerender(<GraphEditor initialNodes={updatedNodes} initialEdges={edges} />);
-      await waitFor(() => {
-        const updatedEdge = screen.getByTestId('scene-edge-scene-edge-1');
+      await waitFor(() => { const updatedEdge = screen.getByTestId('scene-edge-scene-edge-1');
         const updatedLine = updatedEdge.querySelector('line');
         const newX2 = updatedLine?.getAttribute('x2');
         // Edge endpoint should have moved
-        expect(parseFloat(newX2!)).not.toEqual(parseFloat(initialX2!));
-      });
+        expect(parseFloat(newX2!)).not.toEqual(parseFloat(initialX2!)) });
     });
     it('handles node addition to existing scene', async () => {
       const { nodes, edges } = createSceneGraph({ nodeCount: 2, edgeCount: 1 });
@@ -320,31 +313,28 @@ describe('Scene Rendering Integration', () => {
       );
       expect(screen.getByTestId('scene-renderer')).toHaveAttribute('data-node-count', '2');
       // Add a new node
-      const newNode: Node = {,
-  id: 'scene-3',
-        type: 'Concat',
-        position: { x: 400, y: 100 },
+      const newNode: Node = { 
+  id: 'scene-3'
+        type: 'Concat' }
+        position: { x: 400, y: 100 }
         data: { label: 'New Scene Node', nodeType: 'Concat' }
       };
       const updatedNodes = [...nodes, newNode];
-      const updatedEdges = [...edges, {
-  id: 'scene-edge-3',
-  source: 'scene-2',
-  target: 'scene-3',
-}];
+      const updatedEdges = [...edges, { id: 'scene-edge-3'
+  source: 'scene-2'
+  target: 'scene-3' }
+];
       rerender(<GraphEditor initialNodes={updatedNodes} initialEdges={updatedEdges} />);
-      await waitFor(() => {
-        expect(screen.getByTestId('scene-renderer')).toHaveAttribute('data-node-count', '3');
+      await waitFor(() => { expect(screen.getByTestId('scene-renderer')).toHaveAttribute('data-node-count', '3');
         expect(screen.getByTestId('scene-node-scene-3')).toBeInTheDocument();
-        expect(screen.getByTestId('scene-edge-scene-edge-3')).toBeInTheDocument();
-      });
+        expect(screen.getByTestId('scene-edge-scene-edge-3')).toBeInTheDocument() });
     });
   });
   describe('Visual Transformations', () => {
     it('applies CSS transforms to scene elements', () => {
       const { nodes, edges } = createSceneGraph({ )
-        nodeCount: 4, 
-        edgeCount: 3,
+        nodeCount: 4
+        edgeCount: 3 }
         withTransforms: true ;
   });
       render(<GraphEditor initialNodes={nodes} initialEdges={edges} />);
@@ -355,8 +345,8 @@ describe('Scene Rendering Integration', () => {
     });
     it('handles opacity variations across scene elements', () => {
       const { nodes, edges } = createSceneGraph({ )
-        nodeCount: 4, 
-        edgeCount: 3,
+        nodeCount: 4
+        edgeCount: 3 }
         withTransforms: true ;
   });
       render(<GraphEditor initialNodes={nodes} initialEdges={edges} />);
@@ -382,8 +372,8 @@ describe('Scene Rendering Integration', () => {
     });
     it('maintains 60fps during scene animations', async () => {
       const { nodes, edges } = createSceneGraph({ )
-        nodeCount: 20, 
-        edgeCount: 19,
+        nodeCount: 20
+        edgeCount: 19 }
         withAnimations: true ;
   });
       render(<GraphEditor initialNodes={nodes} initialEdges={edges} />);
@@ -415,8 +405,8 @@ describe('Scene Rendering Integration', () => {
       const sceneNode = screen.getByTestId('scene-node-scene-1');
       await userEvent.click(sceneNode);
       // Node selection should work within scene coordinates
-      expect(onNodeSelect).toHaveBeenCalledWith(expect.objectContaining({)
-  id: 'scene-1',
+      expect(onNodeSelect).toHaveBeenCalledWith(expect.objectContaining({ )
+  id: 'scene-1' }
 }));
     });
     it('maintains interaction accuracy during zoom', async () => {

@@ -11,7 +11,7 @@ import {
   ChallengeDifficulty,
   ChallengeRequest,
   ChallengeValidation
-} from '../../types';
+ from '../../types';
 
 // Mock fetch for external API calls
 global.fetch = jest.fn();
@@ -29,19 +29,19 @@ describe('ChallengeService', () => {
           v2Enabled: true,
           v3Enabled: true,
           v3Threshold: 0.5
-  }
+
         hcaptcha: {
           siteKey: 'test-hcaptcha-site-key',
           secretKey: 'test-hcaptcha-secret',
           enabled: true
-  }
+
         custom: {
           enabled: true,
           difficulty: ChallengeDifficulty.MEDIUM,
           maxAttempts: 3,
           expiryMinutes: 10
-        }
-  }
+
+
       rules: [],
       escalation: {
         enabled: true,
@@ -49,12 +49,12 @@ describe('ChallengeService', () => {
           failedAttempts: 3,
           timeWindow: 300,
           escalateAfter: 5
-        }
-  }
+
+
       progressive: {
         enabled: true,
         stages: []
-      }
+
     };
 
     challengeService = new ChallengeService(mockConfig);
@@ -75,7 +75,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -96,7 +96,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -114,7 +114,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -132,7 +132,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -150,7 +150,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -165,7 +165,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -180,7 +180,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       await expect(challengeService.generateChallenge(request))
@@ -216,7 +216,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -237,7 +237,7 @@ describe('ChallengeService', () => {
           clientInfo: {
             userAgent: 'test-agent',
             ipAddress: '127.0.0.1'
-          }
+
         };
 
         const result = await challengeService.validateChallenge(validation);
@@ -245,7 +245,7 @@ describe('ChallengeService', () => {
         expect(result.valid).toBe(true);
         expect(result.challengeId).toBe(challenge.id);
         expect(result.error).toBeUndefined();
-      }
+
     });
 
     test('should reject incorrect solution', async () => {
@@ -255,7 +255,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -266,7 +266,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const result = await challengeService.validateChallenge(validation);
@@ -283,7 +283,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const result = await challengeService.validateChallenge(validation);
@@ -298,15 +298,15 @@ describe('ChallengeService', () => {
       (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
         json: jest.fn().mockResolvedValue({
           success: true
-  }
-      } as any);
+
+ as any);
 
       const request: ChallengeRequest = {
         type: ChallengeType.RECAPTCHA_V2,
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -317,7 +317,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const result = await challengeService.validateChallenge(validation);
@@ -329,7 +329,7 @@ describe('ChallengeService', () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
-          }
+
   }
       );
     });
@@ -340,15 +340,15 @@ describe('ChallengeService', () => {
         json: jest.fn().mockResolvedValue({
           success: true,
           score: 0.3 // Below threshold of 0.5
-  }
-      } as any);
+
+ as any);
 
       const request: ChallengeRequest = {
         type: ChallengeType.RECAPTCHA_V3,
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -359,7 +359,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const result = await challengeService.validateChallenge(validation);
@@ -372,15 +372,15 @@ describe('ChallengeService', () => {
       (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
         json: jest.fn().mockResolvedValue({
           success: true
-  }
-      } as any);
+
+ as any);
 
       const request: ChallengeRequest = {
         type: ChallengeType.HCAPTCHA,
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -391,7 +391,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const result = await challengeService.validateChallenge(validation);
@@ -412,7 +412,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -426,11 +426,11 @@ describe('ChallengeService', () => {
           clientInfo: {
             userAgent: 'test-agent',
             ipAddress: '127.0.0.1'
-          }
+
         };
 
         lastResult = await challengeService.validateChallenge(validation);
-      }
+
 
       // Last attempt should show that attempts were exhausted
       expect(lastResult!.valid).toBe(false);
@@ -449,7 +449,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const originalChallenge = await challengeService.generateChallenge(request);
@@ -471,7 +471,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const originalChallenge = await challengeService.generateChallenge(request);
@@ -491,7 +491,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -521,7 +521,7 @@ describe('ChallengeService', () => {
         providers: {
           ...mockConfig.providers,
           recaptcha: undefined
-        }
+
       };
 
       const serviceWithoutRecaptcha = new ChallengeService(configWithoutRecaptcha);
@@ -531,7 +531,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       await expect(serviceWithoutRecaptcha.generateChallenge(request))
@@ -544,7 +544,7 @@ describe('ChallengeService', () => {
         providers: {
           ...mockConfig.providers,
           hcaptcha: undefined
-        }
+
       };
 
       const serviceWithoutHCaptcha = new ChallengeService(configWithoutHCaptcha);
@@ -554,7 +554,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       await expect(serviceWithoutHCaptcha.generateChallenge(request))
@@ -570,7 +570,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -581,7 +581,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const result = await challengeService.validateChallenge(validation);
@@ -604,7 +604,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -619,7 +619,7 @@ describe('ChallengeService', () => {
         numbers.forEach(num => {
           expect(parseInt(num)).toBeLessThanOrEqual(20);
         });
-      }
+
     });
 
     test('should generate harder math puzzles for HARD difficulty', async () => {
@@ -629,7 +629,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -646,7 +646,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -663,7 +663,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);
@@ -683,7 +683,7 @@ describe('ChallengeService', () => {
         clientInfo: {
           userAgent: 'test-agent',
           ipAddress: '127.0.0.1'
-        }
+
       };
 
       const challenge = await challengeService.generateChallenge(request);

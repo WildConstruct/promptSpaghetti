@@ -19,41 +19,35 @@ const mockText = 'This contract establishes consideration for services provided.
         jurisdiction: 'US',
         source: 'Legal Dictionary'],
     confidence: 92,
-    context: 'liability'
-  }
-  {
-    term: 'force majeure',
+    context: 'liability';
+
+  { term: 'force majeure' }
     position: { start: 115, end: 128 },
     isValid: false,
-    suggestions: [,
-      {
-  term: 'force majeure',
+    suggestions: [
+      { term: 'force majeure',
   definition: 'Superior or irresistible force; unforeseeable circumstances',
   context: 'contract performance',
   jurisdiction: 'US',
   source: 'Black\'s Law Dictionary',
   alternatives: ['act of God', 'unforeseeable circumstances', 'superior force']],
   confidence: 88,
-  context: 'contract performance',
-}
-  {
-    term: 'jurisdiction',
+  context: 'contract performance' }
+
+  { term: 'jurisdiction' }
     position: { start: 200, end: 212 },
     isValid: true,
-    suggestions: [,
-      {
-  term: 'jurisdiction',
+    suggestions: [
+      { term: 'jurisdiction',
   definition: 'The power and authority of a court to hear and determine a case',
   context: 'legal authority',
   jurisdiction: 'US',
   source: 'Black\'s Law Dictionary'],
-  confidence: 97,
+  confidence: 97 }
   context: 'legal authority'];
-  describe('TerminologyValidator Component', () => {
-  const mockOnValidationResults = jest.fn<unknown, unknown>();
+  describe('TerminologyValidator Component', () => { const mockOnValidationResults = jest.fn<unknown, unknown>();
   beforeEach(() => {
-  jest.clearAllMocks();
-});
+  jest.clearAllMocks() });
   describe('Initial Rendering', () => {
     it('renders terminology validator interface', () => {
       render();
@@ -131,9 +125,7 @@ const mockText = 'This contract establishes consideration for services provided.
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
       expect(screen.getByText(/Analyzing legal terms/i)).toBeInTheDocument();
-      await waitFor(() => {
-        expect(screen.getByText(/Checking definitions/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/Checking definitions/i)).toBeInTheDocument() });
     });
     it('calls onValidationResults when validation completes', async () => {
       const user = userEvent.setup();
@@ -145,20 +137,19 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(() => {
-  expect(mockOnValidationResults).toHaveBeenCalledWith()
+      await waitFor(() => { expect(mockOnValidationResults).toHaveBeenCalledWith()
   expect.arrayContaining([)
   expect.objectContaining({)
-  term: expect.any(String),
-  position: expect.objectContaining({,)
-  start: expect.any(Number),
-  end: expect.any(Number),
-}),
-              isValid: expect.any(Boolean),
-              suggestions: expect.any(Array),
-              confidence: expect.any(Number),
+  term: expect.any(String)
+  position: expect.objectContaining({)
+  start: expect.any(Number)
+  end: expect.any(Number) }
+})
+              isValid: expect.any(Boolean)
+              suggestions: expect.any(Array)
+              confidence: expect.any(Number)
               context: expect.any(String);
-  }
+
           ])
         );
       }, { timeout: 5000 });
@@ -171,9 +162,7 @@ const mockText = 'This contract establishes consideration for services provided.
           autoValidate={true}
         />
       );
-      await waitFor(() => {
-        expect(mockOnValidationResults).toHaveBeenCalled();
-      }, { timeout: 3000 });
+      await waitFor(() => { expect(mockOnValidationResults).toHaveBeenCalled() }, { timeout: 3000 });
     });
   });
   describe('Results Display', () => {
@@ -187,13 +176,11 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(() => {
-        expect(screen.getByText(/Validation Results/i)).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText(/Validation Results/i)).toBeInTheDocument();
         expect(screen.getByText(/consideration/i)).toBeInTheDocument();
         expect(screen.getByText(/indemnify/i)).toBeInTheDocument();
         expect(screen.getByText(/force majeure/i)).toBeInTheDocument();
-        expect(screen.getByText(/jurisdiction/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.getByText(/jurisdiction/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('highlights terms in text', async () => {
       const user = userEvent.setup();
@@ -205,12 +192,10 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(() => {
-        const highlightedTerms = screen.getAllByTestId(/highlighted-term/i);
+      await waitFor(() => { const highlightedTerms = screen.getAllByTestId(/highlighted-term/i);
         expect(highlightedTerms.length).toBeGreaterThan(0);
         expect(screen.getByText('consideration')).toHaveClass('valid-term');
-        expect(screen.getByText('force majeure')).toHaveClass('invalid-term');
-      }, { timeout: 5000 });
+        expect(screen.getByText('force majeure')).toHaveClass('invalid-term') }, { timeout: 5000 });
     });
     it('shows validation status with appropriate styling', async () => {
       const user = userEvent.setup();
@@ -222,17 +207,14 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(() => {
-        const validTerms = screen.getAllByTestId(/valid-term/i);
+      await waitFor(() => { const validTerms = screen.getAllByTestId(/valid-term/i);
         const invalidTerms = screen.getAllByTestId(/invalid-term/i);
         expect(validTerms.length).toBe(3); // consideration, indemnify, jurisdiction
         expect(invalidTerms.length).toBe(1); // force majeure
         validTerms.forEach(term => {)
-  expect(term).toHaveClass('valid');
-        });
-        invalidTerms.forEach(term => {)
-  expect(term).toHaveClass('invalid');
-        });
+  expect(term).toHaveClass('valid') });
+        invalidTerms.forEach(term => { )
+  expect(term).toHaveClass('invalid') });
       }, { timeout: 5000 });
     });
     it('displays confidence scores', async () => {
@@ -264,13 +246,11 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(async () => {
-        const considerationTerm = screen.getByTestId(/term-consideration/i);
+      await waitFor(async () => { const considerationTerm = screen.getByTestId(/term-consideration/i);
         await user.click(considerationTerm);
         expect(screen.getByText(/Something of value exchanged between parties/i)).toBeInTheDocument();
         expect(screen.getByText(/Black's Law Dictionary/i)).toBeInTheDocument();
-        expect(screen.getByText(/contract formation/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.getByText(/contract formation/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('displays alternative suggestions for invalid terms', async () => {
       const user = userEvent.setup();
@@ -282,14 +262,12 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(async () => {
-  const forceMajeureTerm = screen.getByTestId(/term-force-majeure/i);
+      await waitFor(async () => { const forceMajeureTerm = screen.getByTestId(/term-force-majeure/i);
   await user.click(forceMajeureTerm);
   expect(screen.getByText(/Alternatives:/i)).toBeInTheDocument();
   expect(screen.getByText(/act of God/i)).toBeInTheDocument();
   expect(screen.getByText(/unforeseeable circumstances/i)).toBeInTheDocument();
-  expect(screen.getByText(/superior force/i)).toBeInTheDocument();
-}, { timeout: 5000 });
+  expect(screen.getByText(/superior force/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('allows copying correct term suggestions', async () => {
       const user = userEvent.setup();
@@ -301,13 +279,11 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(async () => {
-        const forceMajeureTerm = screen.getByTestId(/term-force-majeure/i);
+      await waitFor(async () => { const forceMajeureTerm = screen.getByTestId(/term-force-majeure/i);
         await user.click(forceMajeureTerm);
         const copyButton = screen.getByText(/Copy "act of God"/i);
         await user.click(copyButton);
-        expect(screen.getByText(/Copied to clipboard/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.getByText(/Copied to clipboard/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('shows contextual information', async () => {
       const user = userEvent.setup();
@@ -319,12 +295,10 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(async () => {
-  const indemnifyTerm = screen.getByTestId(/term-indemnify/i);
+      await waitFor(async () => { const indemnifyTerm = screen.getByTestId(/term-indemnify/i);
   await user.click(indemnifyTerm);
   expect(screen.getByText(/Context: liability/i)).toBeInTheDocument();
-  expect(screen.getByText(/Jurisdiction: US/i)).toBeInTheDocument();
-}, { timeout: 5000 });
+  expect(screen.getByText(/Jurisdiction: US/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
   });
   describe('Filtering and Search', () => {
@@ -338,12 +312,10 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(async () => {
-        const filterSelect = screen.getByLabelText(/Filter by status/i);
+      await waitFor(async () => { const filterSelect = screen.getByLabelText(/Filter by status/i);
         await user.selectOptions(filterSelect, 'invalid');
         expect(screen.getByText(/force majeure/i)).toBeInTheDocument();
-        expect(screen.queryByText(/consideration/i)).not.toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.queryByText(/consideration/i)).not.toBeInTheDocument() }, { timeout: 5000 });
     });
     it('filters terms by context', async () => {
       const user = userEvent.setup();
@@ -355,12 +327,10 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(async () => {
-        const filterSelect = screen.getByLabelText(/Filter by context/i);
+      await waitFor(async () => { const filterSelect = screen.getByLabelText(/Filter by context/i);
         await user.selectOptions(filterSelect, 'contract formation');
         expect(screen.getByText(/consideration/i)).toBeInTheDocument();
-        expect(screen.queryByText(/indemnify/i)).not.toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.queryByText(/indemnify/i)).not.toBeInTheDocument() }, { timeout: 5000 });
     });
     it('searches terms by name', async () => {
       const user = userEvent.setup();
@@ -372,12 +342,10 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(async () => {
-        const searchInput = screen.getByPlaceholderText(/Search terms/i);
+      await waitFor(async () => { const searchInput = screen.getByPlaceholderText(/Search terms/i);
         await user.type(searchInput, 'force');
         expect(screen.getByText(/force majeure/i)).toBeInTheDocument();
-        expect(screen.queryByText(/consideration/i)).not.toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.queryByText(/consideration/i)).not.toBeInTheDocument() }, { timeout: 5000 });
     });
     it('sorts terms by confidence', async () => {
       const user = userEvent.setup();
@@ -416,9 +384,7 @@ const mockText = 'This contract establishes consideration for services provided.
       await user.type(textArea, 'New contract with consideration and liability clauses.');
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(() => {
-        expect(mockOnValidationResults).toHaveBeenCalled();
-      }, { timeout: 3000 });
+      await waitFor(() => { expect(mockOnValidationResults).toHaveBeenCalled() }, { timeout: 3000 });
     });
     it('updates validation when text changes', async () => {
       const user = userEvent.setup();
@@ -429,9 +395,7 @@ const mockText = 'This contract establishes consideration for services provided.
           autoValidate={true}
         />
       );
-      await waitFor(() => {
-        expect(mockOnValidationResults).toHaveBeenCalled();
-      });
+      await waitFor(() => { expect(mockOnValidationResults).toHaveBeenCalled() });
       mockOnValidationResults.mockClear();
       rerender();
         <TerminologyValidator
@@ -440,9 +404,7 @@ const mockText = 'This contract establishes consideration for services provided.
           autoValidate={true}
         />
       );
-      await waitFor(() => {
-        expect(mockOnValidationResults).toHaveBeenCalled();
-      });
+      await waitFor(() => { expect(mockOnValidationResults).toHaveBeenCalled() });
     });
   });
   describe('Export and Reporting', () => {
@@ -456,13 +418,11 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(async () => {
-        const exportButton = screen.getByText(/Export Results/i);
+      await waitFor(async () => { const exportButton = screen.getByText(/Export Results/i);
         expect(exportButton).toBeInTheDocument();
         await user.click(exportButton);
         expect(screen.getByText(/Export as CSV/i)).toBeInTheDocument();
-        expect(screen.getByText(/Export as JSON/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.getByText(/Export as JSON/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('generates terminology report', async () => {
       const user = userEvent.setup();
@@ -494,10 +454,8 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(() => {
-        expect(screen.getByText(/Error validating terms/i)).toBeInTheDocument();
-        expect(screen.getByText(/Text is empty or too short/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/Error validating terms/i)).toBeInTheDocument();
+        expect(screen.getByText(/Text is empty or too short/i)).toBeInTheDocument() });
     });
     it('handles network errors during validation', async () => {
       const user = userEvent.setup();
@@ -510,10 +468,8 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(() => {
-        expect(screen.getByText(/Network error/i)).toBeInTheDocument();
-        expect(screen.getByText(/Retry Validation/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/Network error/i)).toBeInTheDocument();
+        expect(screen.getByText(/Retry Validation/i)).toBeInTheDocument() });
     });
     it('shows retry option on validation failure', async () => {
       const user = userEvent.setup();
@@ -525,12 +481,10 @@ const mockText = 'This contract establishes consideration for services provided.
       );
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
-      await waitFor(async () => {
-        const retryButton = screen.getByText(/Retry Validation/i);
+      await waitFor(async () => { const retryButton = screen.getByText(/Retry Validation/i);
         expect(retryButton).toBeInTheDocument();
         await user.click(retryButton);
-        expect(screen.getByText(/Validating terminology/i)).toBeInTheDocument();
-      });
+        expect(screen.getByText(/Validating terminology/i)).toBeInTheDocument() });
     });
   });
   describe('Accessibility', () => {

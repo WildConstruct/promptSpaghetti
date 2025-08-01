@@ -6,21 +6,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { TimeTravel, TimeTravelState, TimelineEntry, TimeBranch, TimelineMarker } from '../TimeTravel';
 
-}
-export interface TimeTravelPanelProps {
-  timeTravel: TimeTravel;
+
+export interface TimeTravelPanelProps { timeTravel: TimeTravel;
   timeTravelState: TimeTravelState | null;
   selectedDomain: string;
-  onDomainChange: (domain: string) => void;
-}
-}
-export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
-  timeTravel,
-  timeTravelState,
-  selectedDomain,
+  onDomainChange: (domain: string) => void }
+
+export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({ )
+  timeTravel
+  timeTravelState
+  selectedDomain }
   onDomainChange
-}) => {
-  const [timeline, setTimeline] = useState<TimelineEntry>([]);
+}) => { const [timeline, setTimeline] = useState<TimelineEntry>([]);
   const [branches, setBranches] = useState<TimeBranch>([]);
   const [markers, setMarkers] = useState<TimelineMarker>([]);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
@@ -30,10 +27,8 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
   const loadTimelineData = useCallback(() => {
     setTimeline(timeTravel.getTimeline());
     setBranches(timeTravel.getBranches());
-    setMarkers(timeTravel.getMarkers());
-  }, [timeTravel]);
-  useEffect(() => {
-    loadTimelineData();
+    setMarkers(timeTravel.getMarkers()) }, [timeTravel]);
+  useEffect(() => { loadTimelineData();
     const handleTimelineChange = () => loadTimelineData();
     timeTravel.on('recordingStarted', handleTimelineChange);
     timeTravel.on('positionChanged', handleTimelineChange);
@@ -41,71 +36,53 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
     return () => {
       timeTravel.off('recordingStarted', handleTimelineChange);
       timeTravel.off('positionChanged', handleTimelineChange);
-      timeTravel.off('branchCreated', handleTimelineChange);
-    };
+      timeTravel.off('branchCreated', handleTimelineChange) };
   }, [timeTravel, loadTimelineData]);
   // Navigation handlers
-  const handleGoToPosition = (position: number) => {
-    timeTravel.goToPosition(position);
-    setSelectedEntry(timeline[position]?.id || null);
-  };
-  const handleGoToEntry = (entryId: string) => {
-    timeTravel.goToEntry(entryId);
-    setSelectedEntry(entryId);
-  };
-  const handleStepBack = () => {
-    timeTravel.goBack();
-  };
-  const handleStepForward = () => {
-    timeTravel.goForward();
-  };
-  const handleGoToStart = () => {
-    timeTravel.goToStart();
-  };
-  const handleGoToEnd = () => {
-    timeTravel.goToEnd();
-  };
+  const handleGoToPosition = (position: number) => { timeTravel.goToPosition(position);
+    setSelectedEntry(timeline[position]?.id || null) };
+  const handleGoToEntry = (entryId: string) => { timeTravel.goToEntry(entryId);
+    setSelectedEntry(entryId) };
+  const handleStepBack = () => { timeTravel.goBack() };
+  const handleStepForward = () => { timeTravel.goForward() };
+  const handleGoToStart = () => { timeTravel.goToStart() };
+  const handleGoToEnd = () => { timeTravel.goToEnd() };
   // Branch management
   const handleCreateBranch = () => {
     const name = prompt('Enter branch name:');
     if (name) {
       timeTravel.createBranch(name, {)
   description: `Branch created from position ${timeTravelState?.currentPosition}`}
-},
-  author: 'developer'
+
+  author: 'developer';
   });
   };
-  const handleSwitchBranch = (branchId: string) => {
-    timeTravel.switchBranch(branchId);
-  };
+  const handleSwitchBranch = (branchId: string) => { timeTravel.switchBranch(branchId) };
   // Marker management
-  const handleAddMarker = () => {
-    const name = prompt('Enter marker name:');
+  const handleAddMarker = () => { const name = prompt('Enter marker name:');
     if (name && selectedEntry) {
       timeTravel.addMarker({)
-  entryId: selectedEntry,
-        name,
+  entryId: selectedEntry
+        name }
         description: `Marker at ${name}`}
-},
-  color: '#61dafb',
-        type: 'bookmark'
+
+  color: '#61dafb'
+        type: 'bookmark';
   });
   };
   // Replay functionality
   const handleStartReplay = () => {
     const sessionName = `Replay ${Date.now()}`;}
-    const sessionId = timeTravel.createReplaySession(sessionName, {)
-  speed: playbackSpeed,
-  domains: selectedDomain === 'all' ? undefined : [selectedDomain],
+    const sessionId = timeTravel.createReplaySession(sessionName, { )
+  speed: playbackSpeed
+  domains: selectedDomain === 'all' ? undefined : [selectedDomain] }
 });
-    timeTravel.startReplay(sessionId, {)
-  autoPlay: isAutoPlay,
-  speed: playbackSpeed,
+    timeTravel.startReplay(sessionId, { )
+  autoPlay: isAutoPlay
+  speed: playbackSpeed }
 });
   };
-  const handleStopReplay = () => {
-    timeTravel.stopReplay();
-  };
+  const handleStopReplay = () => { timeTravel.stopReplay() };
   // Filter timeline by domain
   const filteredTimeline = timeline.filter(entry => ;);
     selectedDomain === 'all' || entry.domain === selectedDomain
@@ -221,9 +198,9 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
                 className="timeline-marker"
                 style={{
                   left: `${position}%`}
-},
+
   backgroundColor: marker.color;
-  }}
+}
                 title={marker.name}
                 onClick={() => handleGoToEntry(marker.entryId)}
               />
@@ -243,9 +220,9 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
           {branches.map(branch => ()
             <div
               key={branch.id}
-              className={`branch-item ${
-  timeTravelState?.currentBranch === branch.id ? 'active' : '',
-}`}
+              className={ `branch-item ${
+  timeTravelState?.currentBranch === branch.id ? 'active' : '' }
+`}
               onClick={() => handleSwitchBranch(branch.id)}
             >
               <div className="branch-info">
@@ -278,11 +255,10 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
                 key={entry.id}
                 className={`timeline-entry ${isSelected ? 'selected' : ''} ${}
                   isCurrent ? 'current' : ''
-                }`}
-                onClick={() => {
+`}
+                onClick={ () => {
                   setSelectedEntry(entry.id);
-                  handleGoToEntry(entry.id);
-                }}
+                  handleGoToEntry(entry.id) }}
               >
                 <div className="entry-header">
                   <span className="entry-type">{entry.type}</span>
@@ -324,9 +300,9 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
           })}
         </div>
       </div>
-      <style jsx>{`
+      <style jsx>{ `
         .timetravel-panel {
-          height: 100%;
+          height: 100%
   display: flex;
           flex-direction: column;
   background: var(--devtools-bg, #1e1e1e);
@@ -349,11 +325,11 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
   cursor: pointer;
           font-size: 14px;
   transition: background 0.2s;
-        .control-btn:hover:not(:disabled) {,
+        .control-btn:hover:not(:disabled) {
   background: var(--devtools-hover, #404040);
-        .control-btn:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+        .control-btn:disabled {
+  opacity: 0.5
+  cursor: not-allowed;
         .position-info {
           font-size: 12px;
   color: var(--devtools-text-secondary, #aaa);
@@ -395,18 +371,18 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
           border-bottom: 1px solid var(--devtools-border, #333);
           position: relative;
         .slider {
-          width: 100%;
+          width: 100%
   height: 4px;
           background: var(--devtools-slider-bg, #333);
           outline: none;
           border-radius: 2px;
   appearance: none;
-        .slider::-webkit-slider-thumb {,
+        .slider::-webkit-slider-thumb {
   appearance: none;
-          width: 16px;
+  width: 16px;
   height: 16px;
-          background: var(--devtools-active, #61dafb);
-          border-radius: 50%;
+  background: var(--devtools-active, #61dafb);
+          border-radius: 50%
   cursor: pointer;
         .timeline-markers {
           position: absolute;
@@ -419,13 +395,13 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
           position: absolute;
   width: 8px;
           height: 8px;
-          border-radius: 50%;
+          border-radius: 50%
   top: -2px;
-          transform: translateX(-50%);
+          transform: translateX(-50%)
   cursor: pointer;
           pointer-events: all;
   border: 1px solid var(--devtools-bg, #1e1e1e);
-        .branch-section,
+        .branch-section
         .timeline-section {
           flex: 1;
           min-height: 0;
@@ -434,7 +410,7 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
         .section-header {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-section-bg, #252525);
@@ -452,10 +428,10 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
   cursor: pointer;
           font-size: 11px;
           font-weight: 500;
-        .add-btn:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
-        .branch-list,
+        .add-btn:disabled {
+  opacity: 0.5
+  cursor: not-allowed;
+        .branch-list
         .timeline-list {
           flex: 1;
           overflow-y: auto;
@@ -463,12 +439,12 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
         .branch-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           cursor: pointer;
   transition: background 0.2s;
-        .branch-item:hover {,
+        .branch-item:hover {
   background: var(--devtools-hover, #2a2a2a);
         .branch-item.active {
           background: var(--devtools-active-bg, #2a3a4a);
@@ -487,14 +463,14 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
         .branch-color {
           width: 12px;
   height: 12px;
-          border-radius: 50%;
+          border-radius: 50%
   border: 1px solid var(--devtools-border, #333);
         .timeline-entry {
           padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           cursor: pointer;
   transition: background 0.2s;
-        .timeline-entry:hover {,
+        .timeline-entry:hover {
   background: var(--devtools-hover, #2a2a2a);
         .timeline-entry.selected {
           background: var(--devtools-selected-bg, #2a3a4a);
@@ -530,7 +506,7 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
   gap: 4px;
           margin-bottom: 4px;
         .entry-marker {
-          display: inline-block;
+          display: inline-block }
   width: 16px;
           height: 16px;
           border-radius: 50%;

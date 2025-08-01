@@ -12,7 +12,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle
-} from '../ui/Card';
+ from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { 
@@ -26,20 +26,21 @@ import {
   TrendingDown,
   AlertTriangle,
   CheckCircle
-} from 'lucide-react';
+ from 'lucide-react';
 import { QualityMetrics } from '../../hooks/useQualityMetrics';
 
 // =============================================================================
 // Quality Metrics Overview Component
 // =============================================================================
 
-}
+
 export interface QualityMetricsOverviewProps {
   metrics: QualityMetrics;
   compact?: boolean;
   className?: string;
-}
-}
+
+
+
 export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
   metrics,
   compact = false,
@@ -79,7 +80,7 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
   );
 };
   // Quality metric card data
-  const qualityCards = [;
+  const qualityCards = [
     {
       id: 'testCoverage',
       title: 'Test Coverage',
@@ -93,7 +94,7 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
   trend: metrics.testCoverage.trends.last7Days,
       alerts: metrics.testCoverage.overall.percentage < 70 ? 1 : 0,
       color: 'blue';
-  }
+
     {
       id: 'codeQuality',
       title: 'Code Quality',
@@ -107,7 +108,7 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
   trend: metrics.codeQuality.maintainability.trends,
       alerts: metrics.codeQuality.linting.errorCount,
       color: 'purple';
-  }
+
     {
       id: 'performance',
       title: 'Performance',
@@ -121,7 +122,7 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
   trend: metrics.performance.responseTime.average ? [metrics.performance.responseTime.average] : [],
       alerts: metrics.performance.errorRates.overall > 5 ? 1 : 0,
       color: 'green';
-  }
+
     {
       id: 'security',
       title: 'Security',
@@ -135,7 +136,7 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
   trend: metrics.security.vulnerabilities.trends,
       alerts: metrics.security.vulnerabilities.critical + metrics.security.vulnerabilities.high,
       color: 'red';
-  }
+
     {
       id: 'documentation',
       title: 'Documentation',
@@ -149,7 +150,7 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({)
   trend: [],
       alerts: metrics.documentation.accuracy.brokenLinks > 5 ? 1 : 0,
       color: 'indigo';
-  }
+
     {
       id: 'buildHealth',
       title: 'Build Health',

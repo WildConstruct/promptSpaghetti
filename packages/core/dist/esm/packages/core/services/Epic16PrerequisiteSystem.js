@@ -7,7 +7,11 @@
  */
 import { EventEmitter } from 'events';
 ;
-categories: Record;
+categories: Record < string, {
+    passed: boolean,
+    checks: number,
+    failures: number
+} > ;
 results: Record;
 dependencies: PrerequisiteDependencyMap;
 recommendations: string;
@@ -601,8 +605,9 @@ else {
                                             await new Promise(resolve => setTimeout(resolve, 100));
                                             return results;
                                             async;
-                                            processCheckAsync(checkId, string);
-                                            check: PrerequisiteCheck,
+                                            processCheckAsync(checkId, string),
+                                                check;
+                                            PrerequisiteCheck,
                                                 results;
                                             (Record),
                                                 dependencyMap;
@@ -663,8 +668,9 @@ else {
                                         try { }
                                         finally {
                                             processing.delete(checkId);
-                                            checkDependenciesSatisfied(checkId, string);
-                                            dependencyMap: PrerequisiteDependencyMap,
+                                            checkDependenciesSatisfied(checkId, string),
+                                                dependencyMap;
+                                            PrerequisiteDependencyMap,
                                                 results;
                                             Record;
                                             {
@@ -874,13 +880,13 @@ else {
                                                                                         async checkClickHouse() {
                                                                                             try {
                                                                                                 // Check ClickHouse availability and required tables
-                                                                                                const requiredTables = [];
-                                                                                                'marketplace_events',
+                                                                                                const requiredTables = [
+                                                                                                    'marketplace_events',
                                                                                                     'template_views',
                                                                                                     'purchase_events',
                                                                                                     'preview_events',
-                                                                                                    'user_sessions';
-                                                                                                ;
+                                                                                                    'user_sessions'
+                                                                                                ];
                                                                                                 // Simulate ClickHouse health check
                                                                                                 const isAvailable = true; // Replace with actual ClickHouse ping;
                                                                                                 const missingTables = []; // Replace with actual table check
@@ -1069,10 +1075,10 @@ else {
                                                                                         };
                                                                                         // Check PostgreSQL connection and required schemas
                                                                                         const isConnected = true; // Replace with actual connection test;
-                                                                                        const requiredTables = [];
-                                                                                        'users', 'templates', 'template_versions', 'purchases',
-                                                                                            'rating_reviews', 'forum_posts', 'support_tickets';
-                                                                                        ;
+                                                                                        const requiredTables = [
+                                                                                            'users', 'templates', 'template_versions', 'purchases',
+                                                                                            'rating_reviews', 'forum_posts', 'support_tickets'
+                                                                                        ];
                                                                                         const missingTables = []; // Replace with actual table check
                                                                                         return {
                                                                                             passed: isConnected && missingTables.length === 0,
@@ -1350,10 +1356,10 @@ else {
                                                                 return: false,
                                                                 async checkSSLCertificates() {
                                                                     try {
-                                                                        const domains = [];
-                                                                        process.env.MARKETPLACE_DOMAIN || 'marketplace.example.com',
-                                                                            process.env.API_DOMAIN || 'api.example.com';
-                                                                        ;
+                                                                        const domains = [
+                                                                            process.env.MARKETPLACE_DOMAIN || 'marketplace.example.com',
+                                                                            process.env.API_DOMAIN || 'api.example.com'
+                                                                        ];
                                                                         const invalidCerts = [];
                                                                         const validCerts = [];
                                                                         for (const domain of domains) {
@@ -1391,13 +1397,13 @@ else {
                                                                 },
                                                                 async checkSecurityHeaders() {
                                                                     try {
-                                                                        const requiredHeaders = [];
-                                                                        'Strict-Transport-Security',
+                                                                        const requiredHeaders = [
+                                                                            'Strict-Transport-Security',
                                                                             'Content-Security-Policy',
                                                                             'X-Frame-Options',
                                                                             'X-Content-Type-Options',
-                                                                            'Referrer-Policy';
-                                                                        ;
+                                                                            'Referrer-Policy'
+                                                                        ];
                                                                         const missingHeaders = []; // Replace with actual header check
                                                                         const configuredHeaders = requiredHeaders; // Replace with actual check
                                                                         return {

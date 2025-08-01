@@ -148,26 +148,26 @@ funnelDefinition.steps[1]?.id,
         seasonality;
     'normal',
         environmentalFactors;
-    [,
+    [
         { factor: 'server_load', value: 0.85, impact: 'negative', confidence: 0.9 }
     ],
         concurrentEvents;
-    [,
+    [
         { eventType: 'deployment', eventName: 'Payment System Update', timestamp: baseTime - 30 * 60 * 1000, impact: 'negative', correlation: 0.8 }
     ],
         marketConditions;
     [],
         systemMetrics;
-    [,
+    [
         { metric: 'response_time', value: 450, threshold: 300, status: 'warning' }
     ];
 }
-rootCauses: [,
+rootCauses: [
     {
         category: 'technical',
         description: 'Payment processing latency increased after deployment',
         probability: 0.8,
-        evidence: [,
+        evidence: [
             { type: 'metric', description: 'Response time spike at deployment time', strength: 'strong', timestamp: baseTime, source: 'monitoring' }
         ],
         investigationSteps: ['Check payment service logs', 'Review deployment changes', 'Analyze error rates']
@@ -190,7 +190,7 @@ rootCauses: [,
     true,
     ;
 }
-recommendations: [,
+recommendations: [
     { action: 'Rollback payment system changes', priority: 'immediate', effort: 'low', expectedImpact: 'high', timeline: '15 minutes', owner: 'DevOps', dependencies: [] },
     { action: 'Implement payment timeout optimization', priority: 'high', effort: 'medium', expectedImpact: 'medium', timeline: '2 hours', owner: 'Backend Team', dependencies: ['Root cause confirmation'] }
 ],
@@ -230,7 +230,7 @@ timestamp: baseTime - Math.random() * 2 * 60 * 60 * 1000,
         environmentalFactors;
     [],
         concurrentEvents;
-    [,
+    [
         { eventType: 'marketing', eventName: 'Social Media Campaign Launch', timestamp: baseTime - 45 * 60 * 1000, impact: 'positive', correlation: 0.95 }
     ],
         marketConditions;
@@ -238,12 +238,12 @@ timestamp: baseTime - Math.random() * 2 * 60 * 60 * 1000,
         systemMetrics;
     [];
 }
-rootCauses: [,
+rootCauses: [
     {
         category: 'external_factors',
         description: 'Viral social media campaign driving unexpected traffic',
         probability: 0.95,
-        evidence: [,
+        evidence: [
             { type: 'correlation', description: 'Traffic spike correlates with campaign launch', strength: 'strong', timestamp: baseTime, source: 'analytics' }
         ],
         investigationSteps: ['Verify campaign metrics', 'Check social media engagement', 'Monitor system capacity']
@@ -266,7 +266,7 @@ rootCauses: [,
     false,
     ;
 }
-recommendations: [,
+recommendations: [
     { action: 'Scale infrastructure to handle increased load', priority: 'high', effort: 'medium', expectedImpact: 'high', timeline: '30 minutes', owner: 'DevOps', dependencies: [] },
     { action: 'Prepare follow-up marketing campaigns', priority: 'medium', effort: 'high', expectedImpact: 'medium', timeline: '2 days', owner: 'Marketing', dependencies: ['Traffic analysis'] }
 ],
@@ -283,15 +283,14 @@ const generateMockPredictions = () => {
             probability: 0.73,
             expectedSeverity: 'medium',
             affectedMetric: 'conversion_rate',
-            preventiveActions: [,
+            preventiveActions: [
                 { action: 'Pre-scale infrastructure', effectiveness: 0.8, cost: 200, timeline: '1 hour', dependencies: [] }
             ],
-            monitoringPlan: {
-                metrics: ['response_time', 'error_rate', 'conversion_rate'],
-                frequency: 60,
-                alertThresholds: { 'response_time': 400, 'error_rate': 0.05 },
-                escalationPlan: ['ops', 'management']
-            }
+            monitoringPlan: {},
+            metrics: ['response_time', 'error_rate', 'conversion_rate'],
+            frequency: 60,
+            alertThresholds: { 'response_time': 400, 'error_rate': 0.05 },
+            escalationPlan: ['ops', 'management']
         }
     ];
 };
@@ -302,26 +301,25 @@ const generateAnomalyTrends = () => {
             period: 'last_24h',
             anomalyCount: 12,
             severityDistribution: { critical: 1, high: 3, medium: 5, low: 3, info: 0 },
-            typeDistribution: {
-                performance_drop: 4,
-                conversion_anomaly: 3,
-                traffic_anomaly: 2,
-                revenue_anomaly: 1,
-                temporal_anomaly: 1,
-                technical_anomaly: 1,
-                performance_spike: 0,
-                segment_anomaly: 0,
-                cohort_anomaly: 0,
-            },
-            falsePositiveRate: 0.15,
-            averageDetectionTime: 120,
-            averageResolutionTime: 1800
-        }
+            typeDistribution: {},
+            performance_drop: 4,
+            conversion_anomaly: 3,
+            traffic_anomaly: 2,
+            revenue_anomaly: 1,
+            temporal_anomaly: 1,
+            technical_anomaly: 1,
+            performance_spike: 0,
+            segment_anomaly: 0,
+            cohort_anomaly: 0,
+        },
+        falsePositiveRate, 0.15,
+        averageDetectionTime, 120,
+        averageResolutionTime, 1800
     ];
 };
 // Generate root cause analyses
 const generateRootCauseAnalyses = (anomalies) => {
-    return anomalies.map(anomaly => ({}), anomalyId, anomaly.id, analysisTimestamp, Date.now(), primaryCause, anomaly.rootCauses[0], contributingFactors, anomaly.rootCauses.slice(1), correlatedAnomalies, [], timeline, [,
+    return anomalies.map(anomaly => ({}), anomalyId, anomaly.id, analysisTimestamp, Date.now(), primaryCause, anomaly.rootCauses[0], contributingFactors, anomaly.rootCauses.slice(1), correlatedAnomalies, [], timeline, [
         { timestamp: anomaly.timestamp - 30 * 60 * 1000, event: 'System deployment initiated', impact: 'neutral', correlation: 0.5 },
         { timestamp: anomaly.timestamp, event: 'Anomaly detected', impact: 'negative', correlation: 1.0 }
     ], confidence, anomaly.confidence, validationStatus, 'pending');

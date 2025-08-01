@@ -299,8 +299,9 @@ export class ExtensionManifestParser {
                     errors,
                     warnings
                 };
-                checkCompatibility(manifest, ExtensionManifest);
-                systemVersion: string,
+                checkCompatibility(manifest, ExtensionManifest),
+                    systemVersion;
+                string,
                     platform;
                 string;
                 ExtensionValidationResult;
@@ -366,8 +367,7 @@ export class ExtensionManifestParser {
                                                     enabled: true,
                                                 },
                                                 // Add type-specific configurations
-                                                switch(options) { }, : .extensionType
-                                            } }, { case: , 'node': , template, runtime = {
+                                                switch(options) { }, : .extensionType } }, { case: , 'node': , template, runtime = {
                                             node_types: options.nodeTypes || [],
                                         } };
                                         break;
@@ -590,13 +590,14 @@ export class ExtensionManifestParser {
                                                             {
                                                                 // Basic CSP validation (in a real implementation, use proper CSP parser)
                                                                 return csp.includes('default-src') || csp.includes('script-src');
-                                                                // Export singletons
-                                                                export const extensionManifestParser = ExtensionManifestParser.getInstance();
-                                                                export const extensionManifestValidator = ExtensionManifestValidator.getInstance();
+                                                                 > ;
                                                             }
                                                         }
                                                     }
                                                 }
+                                                // Export singletons
+                                                export const extensionManifestParser = ExtensionManifestParser.getInstance();
+                                                export const extensionManifestValidator = ExtensionManifestValidator.getInstance();
                                             }
                                         }
                                     }

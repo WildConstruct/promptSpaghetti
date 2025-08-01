@@ -16,8 +16,7 @@ export * from './PromotionServices';
 export * from './PromotionEvents';
 
 // Re-export commonly used types for convenience
-export type {
-  // Core promotion types
+export type { // Core promotion types
   BasePromotion,
   DiscountPromotion,
   ContentPromotion,
@@ -51,11 +50,10 @@ export type {
   PromotionServiceResponse,
   PromotionEligibilityCheck,
   PromotionApplicationResult,
-  PromotionSearchResult,
-} from './PromotionInterfaces';
+  PromotionSearchResult }
+ from './PromotionInterfaces';
 
-export type {
-  // Service request/response types
+export type { // Service request/response types
   CreatePromotionRequest,
   UpdatePromotionRequest,
   EligibilityCheckRequest,
@@ -70,11 +68,10 @@ export type {
   // Management types
   PromotionRule,
   PromotionTemplate,
-  PromotionAuditLog,
-} from './PromotionServices';
+  PromotionAuditLog }
+ from './PromotionServices';
 
-export type {
-  // Event data types
+export type { // Event data types
   PromotionEventData,
   PromotionLifecycleEventData,
   PromotionUsageEventData,
@@ -88,11 +85,10 @@ export type {
   // Notification types
   NotificationRecipient,
   NotificationTemplate,
-  NotificationContent,
-} from './PromotionEvents';
+  NotificationContent }
+ from './PromotionEvents';
 
-export {
-  // Core enums
+export { // Core enums
   PromotionType,
   PromotionStatus,
   PromotionTargetType,
@@ -108,5 +104,5 @@ export {
   CreatePromotionSchema,
   UpdatePromotionSchema,
   ApplyPromotionSchema,
-  CheckEligibilitySchema,
-} from './PromotionInterfaces';
+  CheckEligibilitySchema }
+ from './PromotionInterfaces';

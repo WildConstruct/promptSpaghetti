@@ -47,7 +47,7 @@ export const FunnelSegmentation = ({
     const [loading, setLoading] = useState(false);
     const [viewMode, setViewMode] = useState('segments');
     // Rule builder configuration
-    const ruleBuilder = useMemo(() => ({}), fieldDefinitions, [,
+    const ruleBuilder = useMemo(() => ({}), fieldDefinitions, [
         {
             path: 'userContext.lifetimeValue',
             displayName: 'Lifetime Value',
@@ -76,7 +76,8 @@ export const FunnelSegmentation = ({
             category: 'Acquisition',
             description: 'Source of traffic',
             possibleValues: ['direct', 'search', 'social', 'referral']
-        }], operators, [,
+        }
+    ], operators, [
         {
             operator: 'equals',
             displayName: 'Equals',
@@ -108,7 +109,8 @@ export const FunnelSegmentation = ({
             description: 'Contains the specified value',
             requiresValue: true,
             multiValue: false
-        }], templates, [,
+        }
+    ], templates, [
         {
             id: 'high-value-users',
             name: 'High Value Users',
@@ -121,7 +123,8 @@ export const FunnelSegmentation = ({
                 value, 1000,
                 displayName, 'Lifetime Value > $1000',
                 dataType, 'number',]
-        }], operator, 'AND', tags, ['value', 'premium']);
+        }
+    ], operator, 'AND', tags, ['value', 'premium']);
 }
 {
     id: 'mobile-users',
@@ -443,7 +446,7 @@ function mapOperatorToQuery(operator) {
                 churnRate: 12.5,
             },
             comparisons: [],
-            insights: [,
+            insights: [
                 {
                     type: 'opportunity',
                     severity: 'high',
@@ -451,7 +454,7 @@ function mapOperatorToQuery(operator) {
                     description: 'This segment shows 23% higher conversion rates than average',
                     impact: 0.23,
                     confidence: 0.89,
-                    recommendations: [,
+                    recommendations: [
                         'Increase marketing spend for this segment',
                         'Create targeted campaigns for similar users'
                     ],

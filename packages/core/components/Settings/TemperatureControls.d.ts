@@ -2,6 +2,7 @@ import React from 'react';
 import { TemperatureSettings } from '../../settings/types';
 
 }
+}
 export interface TemperatureControlsProps {
     settings: TemperatureSettings;
     onChange: (settings: TemperatureSettings) => void;
@@ -13,4 +14,5 @@ export interface TemperatureControlsProps {
  */
 export declare const TemperatureControls: React.FC<TemperatureControlsProps>;
 //# sourceMappingURL=TemperatureControls.d.ts.map
+}
 }

@@ -13,20 +13,21 @@ import { PolicyManagementService } from './PolicyManagementService';
 import { AutomatedEnforcementService } from '../services/trust/AutomatedEnforcementService';
 import { TrustScoreService } from '../services/trust/TrustScoreService';
 
-}
-}
+
+
 export interface PolicyTemplateCreateRequest {
   name: string;
   description: string;
   category: 'trust_score' | 'fraud_detection' | 'content_quality' | 'user_behavior' | 'transaction_monitoring';
   severity: 'low' | 'medium' | 'high' | 'critical';
   defaultConfig: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationReviewRequest {
   decision: 'dismiss' | 'enforce';
   notes?: string;
@@ -34,13 +35,14 @@ export interface ViolationReviewRequest {
     actionType?: 'suspend' | 'restrict' | 'flag' | 'require_verification' | 'block_transaction' | 'quarantine_template';
     severity?: 'low' | 'medium' | 'high' | 'critical';
     expiresAt?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface EnforcementRequestCreate {
   entityType: 'user' | 'template' | 'transaction';
   entityId: string;
@@ -49,18 +51,20 @@ export interface EnforcementRequestCreate {
   severity: 'low' | 'medium' | 'high' | 'critical';
   evidence?: Record<string, unknown>;
   expiresAt?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnforcementRequestProcess {
   decision: 'approve' | 'reject';
   rejectionReason?: string;
-}
-}
-}
+
+
+
+
 
 export class AdminEnforcementController {
   private policyService: PolicyManagementService;
@@ -75,7 +79,7 @@ export class AdminEnforcementController {
     this.policyService = policyService;
     this.automatedEnforcement = automatedEnforcement;
     this.trustScoreService = trustScoreService;
-  }
+
 
   // =============================================================================
   // Policy Template Endpoints
@@ -103,16 +107,16 @@ export class AdminEnforcementController {
           total: result.total,
           limit: options.limit,
           offset: options.offset
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch policy templates',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * POST /admin/enforcement/templates
@@ -127,7 +131,7 @@ export class AdminEnforcementController {
           success: false,
           error: 'Missing required fields: name, category, severity'
         });
-      }
+
 
       const template = await this.policyService.createPolicyTemplate({
         name: body.name,
@@ -142,14 +146,14 @@ export class AdminEnforcementController {
         success: true,
         data: template
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to create policy template',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * POST /admin/enforcement/templates/:templateId/policies
@@ -168,14 +172,14 @@ export class AdminEnforcementController {
         success: true,
         data: policy
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to create policy from template',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Violation Management Endpoints
@@ -204,16 +208,16 @@ export class AdminEnforcementController {
           total: result.total,
           limit: options.limit,
           offset: options.offset
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch violations',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * POST /admin/enforcement/violations/scan
@@ -234,14 +238,14 @@ export class AdminEnforcementController {
         data: violations,
         message: `Found ${violations.length} violations`
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to scan for violations',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * PUT /admin/enforcement/violations/:violationId/review
@@ -257,7 +261,7 @@ export class AdminEnforcementController {
           success: false,
           error: 'Invalid decision. Must be "dismiss" or "enforce"'
         });
-      }
+
 
       await this.policyService.reviewViolation(
         violationId,
@@ -271,14 +275,14 @@ export class AdminEnforcementController {
         success: true,
         message: `Violation ${body.decision === 'dismiss' ? 'dismissed' : 'enforced'} successfully`
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to review violation',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Manual Enforcement Endpoints
@@ -298,7 +302,7 @@ export class AdminEnforcementController {
           success: false,
           error: 'Missing required fields: entityType, entityId, actionType, reason, severity'
         });
-      }
+
 
       const enforcementRequest = await this.policyService.createEnforcementRequest({
         entityType: body.entityType,
@@ -315,14 +319,14 @@ export class AdminEnforcementController {
         success: true,
         data: enforcementRequest
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to create enforcement request',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * PUT /admin/enforcement/requests/:requestId/process
@@ -338,14 +342,14 @@ export class AdminEnforcementController {
           success: false,
           error: 'Invalid decision. Must be "approve" or "reject"'
         });
-      }
+
 
       if (body.decision === 'reject' && !body.rejectionReason) {
         return reply.code(400).send({
           success: false,
           error: 'Rejection reason is required when rejecting a request'
         });
-      }
+
 
       await this.policyService.processEnforcementRequest(
         requestId,
@@ -358,14 +362,14 @@ export class AdminEnforcementController {
         success: true,
         message: `Enforcement request ${body.decision}d successfully`
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to process enforcement request',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Trust Score Integration Endpoints
@@ -391,14 +395,14 @@ export class AdminEnforcementController {
         data: actions,
         message: `Triggered enforcement evaluation for ${entityType} ${entityId}`
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to trigger enforcement evaluation',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * GET /admin/enforcement/actions/:entityType/:entityId
@@ -424,14 +428,14 @@ export class AdminEnforcementController {
         success: true,
         data: actions
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch enforcement actions',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Analytics and Statistics Endpoints
@@ -448,14 +452,14 @@ export class AdminEnforcementController {
         success: true,
         data: stats
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch enforcement statistics',
         details: error.message
       });
-    }
-  }
+
+
 
   /**
    * GET /admin/enforcement/health
@@ -471,26 +475,26 @@ export class AdminEnforcementController {
           automatedEnforcement: 'healthy',
           trustScoring: 'healthy',
           database: 'healthy'
-  }
+
         metrics: {
           uptime: process.uptime(),
           memoryUsage: process.memoryUsage(),
           version: process.version
-        }
+
       };
 
       reply.code(200).send({
         success: true,
         data: health
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch system health',
         details: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Utility Methods
@@ -538,5 +542,4 @@ export class AdminEnforcementController {
     // Analytics and Health
     fastify.get('/admin/enforcement/stats', controller.getEnforcementStats.bind(controller));
     fastify.get('/admin/enforcement/health', controller.getSystemHealth.bind(controller));
-  }
-}
+

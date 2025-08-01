@@ -50,32 +50,32 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
       email: 'super@admin.com',
       roles: ['super_admin'],
       permissions: ['*']
-  }
+
     admin: {
       id: 2,
       email: 'admin@company.com',
       roles: ['admin'],
       permissions: ['users:read', 'users:write', 'reports:read', 'settings:read']
-  }
+
     manager: {
       id: 3,
       email: 'manager@company.com',
       roles: ['manager'],
       permissions: ['users:read', 'reports:read', 'team:manage']
-  }
+
     user: {
       id: 4,
       email: 'user@company.com',
       roles: ['user'],
       permissions: ['profile:read', 'profile:write']
-  }
+
     contractor: {
       id: 5,
       email: 'contractor@company.com',
       roles: ['contractor'],
       permissions: ['reports:read'],
       context: { department: 'engineering', clearanceLevel: 'public' }
-    }
+
   };
 
   const testRoles = {
@@ -85,28 +85,28 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
       permissions: ['*'],
       inherits: [],
       constraints: {}
-  }
+
     admin: {
       id: 'admin',
       name: 'Administrator',
       permissions: ['users:*', 'reports:*', 'settings:read'],
       inherits: ['manager'],
       constraints: {}
-  }
+
     manager: {
       id: 'manager',
       name: 'Manager',
       permissions: ['users:read', 'reports:read', 'team:manage'],
       inherits: ['user'],
       constraints: { businessHours: true }
-  }
+
     user: {
       id: 'user',
       name: 'User',
       permissions: ['profile:*'],
       inherits: [],
       constraints: {}
-  }
+
     contractor: {
       id: 'contractor',
       name: 'Contractor',
@@ -115,8 +115,8 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
       constraints: { 
         ipWhitelist: ['192.168.1.0/24'],
         timeLimit: 90 // days
-      }
-    }
+
+
   };
 
   beforeEach(async () => {
@@ -155,10 +155,10 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
         
         if (!user) {
           return reply.code(401).send({ error: 'Unauthorized' });
-        }
+
         
         request.user = user;
-      }
+
     });
   });
 
@@ -179,7 +179,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'system:admin');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Forbidden' });
-          }
+
           return { message: 'System admin access granted' };
         });
 
@@ -203,7 +203,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           return user.permissions.some(p => {
             if (p.endsWith(':*')) {
               return permission.startsWith(p.slice(0, -1));
-            }
+
             return p === permission;
           });
         });
@@ -212,7 +212,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'users:read');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Insufficient permissions' });
-          }
+
           return { users: ['user1', 'user2'] };
         });
 
@@ -220,7 +220,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'users:write');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Insufficient permissions' });
-          }
+
           return { success: true };
         });
 
@@ -267,7 +267,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             if (p.endsWith(':*')) {
               const prefix = p.slice(0, -1);
               return permission.startsWith(prefix);
-            }
+
             return p === permission;
           });
         });
@@ -276,7 +276,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'profile:settings');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Access denied' });
-          }
+
           return { settings: {} };
         });
 
@@ -284,7 +284,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'profile:update');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Access denied' });
-          }
+
           return { success: true };
         });
 
@@ -333,7 +333,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             if (p === '*') return true;
             if (p.endsWith(':*')) {
               return permission.startsWith(p.slice(0, -1));
-            }
+
             return p === permission;
           });
         });
@@ -342,7 +342,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'profile:read');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Access denied' });
-          }
+
           return { profile: 'data' };
         });
 
@@ -376,8 +376,8 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
                 if (role.inherits.length > 0) {
                   const inheritedPermissions = resolvePermissions(role.inherits, visited);
                   inheritedPermissions.forEach(p => permissions.add(p));
-                }
-              }
+
+
             });
             
             return Array.from(permissions);
@@ -389,7 +389,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             if (p === '*') return true;
             if (p.endsWith(':*')) {
               return permission.startsWith(p.slice(0, -1));
-            }
+
             return p === permission;
           });
         });
@@ -398,7 +398,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'team:manage');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Not a manager' });
-          }
+
           return { team: 'management-data' };
         });
 
@@ -406,7 +406,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'reports:read');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Cannot access reports' });
-          }
+
           return { reports: 'report-data' };
         });
 
@@ -446,7 +446,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
                 allowed: true,
                 delegation: { id: 'delegation-123', remainingUses: 4 }
               };
-            }
+
             return { allowed: false };
           }),
           revokeDelegation: jest.fn<unknown[], unknown>().mockResolvedValue({ success: true } as unknown as unknown as unknown as unknown as unknown)
@@ -460,7 +460,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const canDelegate = await rbacService.hasPermission(request.user.id, 'permissions:delegate');
           if (!canDelegate) {
             return reply.code(403).send({ error: 'Cannot delegate permissions' });
-          }
+
 
           const delegation = await mockDelegationService.createDelegation({
             fromUserId: request.user.id,
@@ -480,7 +480,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           
           if (!directPermission && !delegatedPermission.allowed) {
             return reply.code(403).send({ error: 'Access denied' });
-          }
+
 
           return { 
             reports: 'delegated-access-data',
@@ -505,7 +505,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             permissions: ['reports:read'],
             duration: 3600,
             constraints: { maxUses: 5 }
-          }
+
         });
 
         expect(delegationResponse.statusCode).toBe(200);
@@ -535,9 +535,9 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
                 expired: true,
                 delegation: { id: 'delegation-123', expiresAt: new Date(Date.now() - 1000).toISOString() }
               };
-            }
+
             return { allowed: false };
-  }
+
         };
 
         fastify.get('/api/reports/time-sensitive', async (request, reply) => {
@@ -548,11 +548,11 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               error: 'Delegated permission has expired',
               expiredAt: delegatedPermission.delegation.expiresAt
             });
-          }
+
 
           if (!delegatedPermission.allowed) {
             return reply.code(403).send({ error: 'Access denied' });
-          }
+
 
           return { reports: 'time-sensitive-data' };
         });
@@ -592,7 +592,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               'contractors': ['docs:read']
             };
             return groupPermissions[groupId as keyof typeof groupPermissions] || [];
-  }
+
         };
 
         rbacService.hasPermission.mockImplementation(async (userId, permission) => {
@@ -602,12 +602,12 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           for (const groupId of userGroups) {
             const groupPerms = await mockGroupService.getGroupPermissions(groupId);
             allGroupPermissions.push(...groupPerms);
-          }
+
 
           return allGroupPermissions.some(p => {
             if (p.endsWith(':*')) {
               return permission.startsWith(p.slice(0, -1));
-            }
+
             return p === permission;
           });
         });
@@ -616,7 +616,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'project:alpha:read');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Not member of project alpha' });
-          }
+
           return { projectData: 'alpha-data' };
         });
 
@@ -624,7 +624,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'project:alpha:write');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Cannot write to project alpha' });
-          }
+
           return { success: true };
         });
 
@@ -680,7 +680,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             // Admins have all permissions
             const user = Object.values(testUsers).find(u => u.id === userId);
             if (user?.roles.includes('admin') || user?.roles.includes('super_admin')) return true;
-          }
+
           
           return false;
         });
@@ -695,7 +695,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Cannot access this document' });
-          }
+
           
           return { document: `Document ${id} content` };
         });
@@ -710,7 +710,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Cannot modify this document' });
-          }
+
           
           return { success: true };
         });
@@ -761,17 +761,17 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           'org:acme': {
             children: ['department:engineering', 'department:sales'],
             permissions: { '1': ['admin'], '2': ['admin'] } // super_admin and admin
-  }
+
           'department:engineering': {
             parent: 'org:acme',
             children: ['team:backend', 'team:frontend'],
             permissions: { '3': ['manage'] } // manager
-  }
+
           'team:backend': {
             parent: 'department:engineering',
             children: [],
             permissions: { '4': ['member'], '5': ['contractor'] } // user and contractor
-          }
+
         };
 
         rbacService.hasResourcePermission.mockImplementation(async (userId, resource, action) => {
@@ -786,12 +786,12 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               if (userRole[0] === 'manage' && ['read', 'write'].includes(action)) return true;
               if (userRole[0] === 'member' && action === 'read') return true;
               if (userRole[0] === 'contractor' && action === 'read') return true;
-            }
+
 
             // Check parent resource permission (inheritance)
             if (res.parent) {
               return checkResourcePermission(res.parent);
-            }
+
 
             return false;
           };
@@ -809,7 +809,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Access denied to resource' });
-          }
+
           
           return { data: `${resourceId} data` };
         });
@@ -881,15 +881,15 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             
             if (!isBusinessHours) {
               return false;
-            }
-          }
+
+
 
           // Check base permission
           return user.permissions.some(p => {
             if (p === '*') return true;
             if (p.endsWith(':*')) {
               return permission.startsWith(p.slice(0, -1));
-            }
+
             return p === permission;
           });
         });
@@ -905,7 +905,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             return reply.code(403).send({ 
               error: 'Sensitive operations restricted to business hours (9 AM - 5 PM)' 
             });
-          }
+
           
           return { operation: 'completed' };
         });
@@ -922,7 +922,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
         
         if (response.statusCode === 403) {
           expect(JSON.parse(response.body).error).toContain('business hours');
-        }
+
       });
 
       it('should handle expiring permissions', async () => {
@@ -932,13 +932,13 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               granted: new Date(Date.now() - 86400000), // granted yesterday
               expires: new Date(Date.now() + 3600000), // expires in 1 hour
               permissions: ['reports:temp:read']
-  }
+
             'expired:access': {
               granted: new Date(Date.now() - 172800000), // granted 2 days ago
               expires: new Date(Date.now() - 3600000), // expired 1 hour ago
               permissions: ['admin:temp']
-            }
-          }
+
+
         };
 
         rbacService.hasPermission.mockImplementation(async (userId, permission) => {
@@ -950,7 +950,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             if (p === '*') return true;
             if (p.endsWith(':*')) {
               return permission.startsWith(p.slice(0, -1));
-            }
+
             return p === permission;
           });
 
@@ -963,10 +963,10 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               if (new Date() < new Date(access.expires)) {
                 if (access.permissions.includes(permission)) {
                   return true;
-                }
-              }
-            }
-          }
+
+
+
+
 
           return false;
         });
@@ -975,7 +975,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'reports:temp:read');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Temporary access expired or not granted' });
-          }
+
           return { reports: 'temporary-access-data' };
         });
 
@@ -983,7 +983,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           const hasPermission = await rbacService.hasPermission(request.user.id, 'admin:temp');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Admin access has expired' });
-          }
+
           return { admin: 'temporary-admin-data' };
         });
 
@@ -1024,15 +1024,15 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
                   const baseIp = allowedRange.split('/')[0].split('.').slice(0, 3).join('.');
                   const clientBaseIp = context.ipAddress.split('.').slice(0, 3).join('.');
                   return baseIp === clientBaseIp;
-                }
+
                 return allowedRange === context.ipAddress;
               });
               
               if (!isAllowedIp) {
                 return false;
-              }
-            }
-          }
+
+
+
 
           // Check regular permissions
           return user.permissions.includes(permission) || user.permissions.includes('*');
@@ -1042,7 +1042,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           if (request.url.startsWith('/api/')) {
             // Simulate getting client IP
             request.clientIp = request.headers['x-forwarded-for'] as string || '192.168.1.100';
-          }
+
         });
 
         fastify.get('/api/contractor/reports', async (request, reply) => {
@@ -1057,7 +1057,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               error: 'Access denied from this IP address',
               clientIp: (request as any).clientIp
             });
-          }
+
           
           return { reports: 'contractor-accessible-reports' };
         });
@@ -1069,7 +1069,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           headers: { 
             'x-user-id': '5', // contractor
             'x-forwarded-for': '192.168.1.50' // within allowed range
-          }
+
         });
         expect(allowedIpResponse.statusCode).toBe(200);
 
@@ -1080,7 +1080,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           headers: { 
             'x-user-id': '5', // contractor
             'x-forwarded-for': '10.0.0.50' // outside allowed range
-          }
+
         });
         expect(blockedIpResponse.statusCode).toBe(403);
         expect(JSON.parse(blockedIpResponse.body).error).toContain('IP address');
@@ -1097,20 +1097,20 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             permissions: ['users:read', 'events:read', 'reports:write'],
             clientId: 'analytics-service-client',
             scopes: ['data:read', 'reports:write']
-  }
+
           'service:notification': {
             id: 'svc-notification',
             permissions: ['users:read', 'notifications:write'],
             clientId: 'notification-service-client',
             scopes: ['users:read', 'notifications:send']
-          }
+
         };
 
         rbacService.hasPermission.mockImplementation(async (serviceId, permission) => {
           if (typeof serviceId === 'string' && serviceId.startsWith('svc-')) {
             const service = Object.values(serviceAccounts).find(s => s.id === serviceId);
             return service?.permissions.includes(permission) || false;
-          }
+
           return false;
         });
 
@@ -1122,15 +1122,15 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             if (service) {
               (request as any).serviceAccount = service;
               return;
-            }
-          }
+
+
 
           // Regular user authentication would happen here
           const userId = parseInt(request.headers['x-user-id'] as string || '0');
           const user = Object.values(testUsers).find(u => u.id === userId);
           if (user) {
             request.user = user;
-          }
+
         });
 
         fastify.get('/api/service/user-data', async (request, reply) => {
@@ -1140,28 +1140,28 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             const hasPermission = await rbacService.hasPermission(serviceAccount.id, 'users:read');
             if (!hasPermission) {
               return reply.code(403).send({ error: 'Service lacks required permissions' });
-            }
+
             
             return { 
               users: ['user1', 'user2'], 
               accessType: 'service',
               serviceId: serviceAccount.id 
             };
-          }
+
 
           // Handle regular user request
           if (request.user) {
             const userHasPermission = await rbacService.hasPermission(request.user.id, 'users:read');
             if (!userHasPermission) {
               return reply.code(403).send({ error: 'User lacks required permissions' });
-            }
+
             
             return { 
               users: ['user1', 'user2'], 
               accessType: 'user',
               userId: request.user.id 
             };
-          }
+
 
           return reply.code(401).send({ error: 'No authentication provided' });
         });
@@ -1201,14 +1201,14 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             // Users can only access their own profile
             if (action === 'read' || action === 'write') {
               return parseInt(resourceId) === userId;
-            }
-          }
+
+
           
           // Admins can access all user resources
           const user = Object.values(testUsers).find(u => u.id === userId);
           if (user?.roles.includes('admin') || user?.roles.includes('super_admin')) {
             return true;
-          }
+
           
           return false;
         });
@@ -1227,7 +1227,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               requestedUserId: userId,
               currentUserId: request.user.id
             });
-          }
+
           
           return { profile: `User ${userId} profile data` };
         });
@@ -1272,20 +1272,20 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             // Only super_admin can assign admin roles
             if (roleId === 'admin' && !assigner?.roles.includes('super_admin')) {
               throw new Error('Insufficient privileges to assign admin role');
-            }
+
             
             // Only admin and above can assign manager roles
             if (roleId === 'manager' && !assigner?.roles.some(r => ['admin', 'super_admin'].includes(r))) {
               throw new Error('Insufficient privileges to assign manager role');
-            }
+
             
             // Users cannot assign roles to themselves or others
             if (assigner?.roles.includes('user') && !assigner.roles.includes('manager')) {
               throw new Error('Users cannot assign roles');
-            }
+
             
             return { success: true, assignedRole: roleId };
-  }
+
         };
 
         fastify.post('/api/admin/users/:userId/assign-role', async (request, reply) => {
@@ -1308,11 +1308,11 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
                 targetUserId: parseInt(userId),
                 roleId,
                 success: true
-              }
+
             });
             
             return result;
-          } catch (error) {
+ catch (error) {
             await auditService.logSecurityEvent({
               type: 'ROLE_ASSIGNMENT_DENIED',
               severity: 'HIGH',
@@ -1321,13 +1321,13 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
                 targetUserId: parseInt(userId),
                 roleId,
                 error: error instanceof Error ? error.message : 'Unknown error'
-              }
+
             });
             
             return reply.code(403).send({ 
               error: error instanceof Error ? error.message : 'Role assignment failed'
             });
-          }
+
         });
 
         // Test super admin assigning admin role (should succeed)
@@ -1382,10 +1382,10 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
                   suspiciousPermissions.some(suspicious => perm.includes(suspicious))
 
               };
-            }
+
 
             return { tampered: false };
-  }
+
         };
 
         fastify.post('/api/auth/validate-permissions', async (request, reply) => {
@@ -1403,14 +1403,14 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
                 requestedPermissions: permissions,
                 suspiciousPermissions: tamperingResult.suspiciousPermissions,
                 userRoles: request.user.roles
-              }
+
             });
             
             return reply.code(403).send({ 
               error: 'Permission tampering detected',
               details: tamperingResult 
             });
-          }
+
           
           return { valid: true };
         });
@@ -1445,7 +1445,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           details: expect.objectContaining({
             reason: 'Attempted privilege escalation',
             suspiciousPermissions: expect.arrayContaining(['admin:*'])
-  }
+
         });
       });
     });

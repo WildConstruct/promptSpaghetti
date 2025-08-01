@@ -6,8 +6,8 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import crypto from 'crypto';
 
-}
-}
+
+
 export interface DeviceFingerprint {
   fingerprint: string;
   components: {
@@ -30,8 +30,9 @@ export interface DeviceFingerprint {
     webRTC?: {
       localIP?: string;
       publicIP?: string;
-}
-}
+
+
+
     };
   };
   metadata: {
@@ -41,10 +42,10 @@ export interface DeviceFingerprint {
     trustScore: number;
     riskFactors: string[];
   };
-}
 
-}
-}
+
+
+
 export interface DeviceTrustProfile {
   deviceId: string;
   fingerprint: string;
@@ -57,9 +58,10 @@ export interface DeviceTrustProfile {
     country: string;
     city: string;
     timestamp: Date;
-}
-}
-  }>;
+
+
+
+>;
   behaviorMetrics: {
     consistencyScore: number;
     anomalyCount: number;
@@ -71,11 +73,11 @@ export interface DeviceTrustProfile {
     severity: 'low' | 'medium' | 'high';
     timestamp: Date;
     resolved: boolean;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface DeviceFingerprintConfig {
   enabled: boolean;
   
@@ -88,8 +90,9 @@ export interface DeviceFingerprintConfig {
     collectPlugins: boolean;
     collectWebRTC: boolean;
     collectHardware: boolean;
-}
-}
+
+
+
   };
   
   // Trust scoring
@@ -122,7 +125,7 @@ export interface DeviceFingerprintConfig {
     excludeFields: string[];
     anonymizeIPs: boolean;
   };
-}
+
 
 export class DeviceFingerprintingService {
   private db: DatabaseService;
@@ -140,7 +143,7 @@ export class DeviceFingerprintingService {
     this.redis = redis;
     this.auditService = auditService;
     this.config = config;
-  }
+
 
   async initialize(): Promise<void> {
 
@@ -148,7 +151,7 @@ export class DeviceFingerprintingService {
     await this.initializeTables();
     
     console.log('Device Fingerprinting Service initialized');
-  }
+
 
   private async initializeTables(): Promise<void> {
 
@@ -236,14 +239,14 @@ export class DeviceFingerprintingService {
       CREATE INDEX IF NOT EXISTS idx_device_security_severity ON device_security_events(severity);
       CREATE INDEX IF NOT EXISTS idx_device_security_resolved ON device_security_events(resolved);
     `);
-  }
+
 
   async generateFingerprint(components: Partial<DeviceFingerprint['components']>): Promise<string> {
 
     // Validate required components
     if (!components.userAgent || !components.timezone || !components.language) {
       throw new Error('Missing required fingerprint components');
-    }
+
 
     // Create a deterministic fingerprint from device components
     const fingerprintData = {
@@ -287,20 +290,20 @@ export class DeviceFingerprintingService {
       // Plugin list (sorted for consistency)
       ...(this.config.components.collectPlugins && {
         plugins: components.plugins?.sort()
-  }
+
     };
 
     // Apply privacy settings
     if (this.config.privacy.anonymizeIPs && components.webRTC) {
       delete fingerprintData['webRTC'];
-    }
+
 
     // Create stable hash
     const fingerprintString = JSON.stringify(fingerprintData, Object.keys(fingerprintData).sort());
     const hash = crypto.createHash('sha256').update(fingerprintString).digest('hex');
     
     return hash;
-  }
+
 
   async recordDeviceAccess(
     fingerprint: string,
@@ -323,27 +326,27 @@ export class DeviceFingerprintingService {
         // Update user association if provided
         if (userId) {
           await this.updateUserAssociation(fingerprint, userId);
-        }
+
         
         // Update location history if provided
         if (context?.location) {
           await this.updateLocationHistory(fingerprint, context.location);
-        }
-      } else {
+
+ else {
         // Create new device record
         await this.createDeviceRecord(fingerprint, components);
         
         // Create user association if provided
         if (userId) {
           await this.createUserAssociation(fingerprint, userId);
-        }
+
         
         // Create trust profile
         await this.createTrustProfile(fingerprint);
         
         // Log new device event
         await this.logSecurityEvent(fingerprint, 'new_device', 'low', 'New device detected');
-      }
+
       
       // Calculate trust score
       const trustProfile = await this.calculateDeviceTrust(fingerprint, userId);
@@ -352,11 +355,11 @@ export class DeviceFingerprintingService {
       await this.cacheDeviceProfile(fingerprint, trustProfile);
       
       return trustProfile;
-    } catch (error) {
+ catch (error) {
       console.error('Error recording device access:', error);
       throw error;
-    }
-  }
+
+
 
   private async getDeviceByFingerprint(fingerprint: string): Promise<unknown> {
 
@@ -365,7 +368,7 @@ export class DeviceFingerprintingService {
       [fingerprint]
     );
     return result.rows[0];
-  }
+
 
   private async updateDeviceAccess(
     fingerprint: string,
@@ -381,7 +384,7 @@ export class DeviceFingerprintingService {
         updated_at = NOW()
       WHERE fingerprint = $1
     `, [fingerprint, JSON.stringify(components)]);
-  }
+
 
   private async createDeviceRecord(
     fingerprint: string,
@@ -392,7 +395,7 @@ export class DeviceFingerprintingService {
       INSERT INTO device_fingerprints (fingerprint, components)
       VALUES ($1, $2)
     `, [fingerprint, JSON.stringify(components)]);
-  }
+
 
   private async updateUserAssociation(fingerprint: string, userId: string): Promise<void> {
 
@@ -404,7 +407,7 @@ export class DeviceFingerprintingService {
         last_accessed = NOW(),
         access_count = device_user_associations.access_count + 1
     `, [fingerprint, userId]);
-  }
+
 
   private async createUserAssociation(fingerprint: string, userId: string): Promise<void> {
 
@@ -412,7 +415,7 @@ export class DeviceFingerprintingService {
       INSERT INTO device_user_associations (device_fingerprint, user_id)
       VALUES ($1, $2)
     `, [fingerprint, userId]);
-  }
+
 
   private async updateLocationHistory(
     fingerprint: string,
@@ -439,8 +442,8 @@ export class DeviceFingerprintingService {
         SET location_history = $2, updated_at = NOW()
         WHERE fingerprint = $1
       `, [fingerprint, JSON.stringify(trimmedHistory)]);
-    }
-  }
+
+
 
   private async createTrustProfile(fingerprint: string): Promise<void> {
 
@@ -448,7 +451,7 @@ export class DeviceFingerprintingService {
       INSERT INTO device_trust_profiles (fingerprint, trust_score, verification_status)
       VALUES ($1, $2, 'unverified')
     `, [fingerprint, this.config.thresholds.minimumTrustScore]);
-  }
+
 
   private async calculateDeviceTrust(
     fingerprint: string,
@@ -467,14 +470,14 @@ export class DeviceFingerprintingService {
     const ageInDays = (Date.now() - new Date(device.first_seen).getTime()) / (1000 * 60 * 60 * 24);
     if (ageInDays > 30) {
       trustScore += Math.min(this.config.trustScoring.ageBonus, ageInDays / 10);
-    } else {
+ else {
       trustScore -= this.config.trustScoring.newDevicePenalty;
-    }
+
     
     // Consistency bonus - regular access patterns
     if (device.seen_count > 10) {
       trustScore += this.config.trustScoring.consistencyBonus;
-    }
+
     
     // User association bonus - multiple verified users
     const verifiedUsers = associations.filter((a: unknown) => a.is_trusted).length;
@@ -489,7 +492,7 @@ export class DeviceFingerprintingService {
     // Verification status bonus
     if (profile?.verification_status === 'verified') {
       trustScore += this.config.trustScoring.verificationBonus;
-    }
+
     
     // Normalize score
     trustScore = Math.max(0, Math.min(100, Math.round(trustScore)));
@@ -501,9 +504,9 @@ export class DeviceFingerprintingService {
     let verificationStatus = profile?.verification_status || 'unverified';
     if (trustScore < this.config.thresholds.autoBlockThreshold) {
       verificationStatus = 'blocked';
-    } else if (trustScore < this.config.thresholds.suspiciousActivityThreshold) {
+ else if (trustScore < this.config.thresholds.suspiciousActivityThreshold) {
       verificationStatus = 'suspicious';
-    }
+
     
     const trustProfile: DeviceTrustProfile = {
       deviceId: device.id,
@@ -524,7 +527,7 @@ export class DeviceFingerprintingService {
     };
     
     return trustProfile;
-  }
+
 
   private async getTrustProfile(fingerprint: string): Promise<unknown> {
 
@@ -533,7 +536,7 @@ export class DeviceFingerprintingService {
       [fingerprint]
     );
     return result.rows[0];
-  }
+
 
   private async getUserAssociations(fingerprint: string): Promise<any[]> {
 
@@ -542,7 +545,7 @@ export class DeviceFingerprintingService {
       [fingerprint]
     );
     return result.rows;
-  }
+
 
   private async getSecurityEvents(fingerprint: string): Promise<any[]> {
 
@@ -551,7 +554,7 @@ export class DeviceFingerprintingService {
       [fingerprint]
     );
     return result.rows;
-  }
+
 
   private async updateTrustScore(fingerprint: string, trustScore: number): Promise<void> {
 
@@ -566,7 +569,7 @@ export class DeviceFingerprintingService {
       SET trust_score = $2, updated_at = NOW()
       WHERE fingerprint = $1
     `, [fingerprint, trustScore]);
-  }
+
 
   private async calculateBehaviorMetrics(fingerprint: string): Promise<DeviceTrustProfile['behaviorMetrics']> {
 
@@ -610,7 +613,7 @@ export class DeviceFingerprintingService {
       avgSessionDuration: 0, // Would calculate from session data
       accessPatterns: patterns
     };
-  }
+
 
   private async logSecurityEvent(
     fingerprint: string,
@@ -634,10 +637,10 @@ export class DeviceFingerprintingService {
         severity,
         description,
         ...contextData
-  }
+
       severity: severity === 'high' ? 'error' : severity === 'medium' ? 'warning' : 'info'
     });
-  }
+
 
   private async cacheDeviceProfile(fingerprint: string, profile: DeviceTrustProfile): Promise<void> {
 
@@ -648,11 +651,11 @@ export class DeviceFingerprintingService {
         this.config.cache.deviceProfileTtl,
         JSON.stringify(profile)
       );
-    } catch (error) {
+ catch (error) {
       // Log cache errors but don't propagate them
       console.warn('Failed to cache device profile:', error instanceof Error ? error.message : 'Unknown error');
-    }
-  }
+
+
 
   async verifyDevice(
     fingerprint: string,
@@ -663,7 +666,7 @@ export class DeviceFingerprintingService {
     trustScore: number;
     riskFactors: string[];
     requiresAdditionalVerification: boolean;
-  }> {
+> {
 
     try {
       // Check if device is blocked
@@ -675,7 +678,7 @@ export class DeviceFingerprintingService {
           riskFactors: ['unknown_device'],
           requiresAdditionalVerification: true
         };
-      }
+
       
       if (device.is_blocked) {
         return {
@@ -684,7 +687,7 @@ export class DeviceFingerprintingService {
           riskFactors: ['device_blocked'],
           requiresAdditionalVerification: true
         };
-      }
+
       
       // Check fingerprint change if expected fingerprint provided
       const riskFactors: string[] = [];
@@ -699,8 +702,8 @@ export class DeviceFingerprintingService {
             'Significant device fingerprint change detected',
             { previousFingerprint: expectedFingerprint, similarity }
           );
-        }
-      }
+
+
       
       // Get trust profile
       const trustProfile = await this.calculateDeviceTrust(fingerprint, userId);
@@ -708,11 +711,11 @@ export class DeviceFingerprintingService {
       // Check for risk factors
       if (trustProfile.trustScore < this.config.thresholds.suspiciousActivityThreshold) {
         riskFactors.push('low_trust_score');
-      }
+
       
       if (trustProfile.verificationStatus === 'suspicious') {
         riskFactors.push('suspicious_device');
-      }
+
       
       // Check recent security events
       const recentHighSeverityEvents = trustProfile.securityEvents.filter(
@@ -720,7 +723,7 @@ export class DeviceFingerprintingService {
       );
       if (recentHighSeverityEvents.length > 0) {
         riskFactors.push('recent_security_events');
-      }
+
       
       // Check user association
       if (userId && !trustProfile.associatedUsers.includes(userId)) {
@@ -732,7 +735,7 @@ export class DeviceFingerprintingService {
           'New user accessing from existing device',
           { userId }
         );
-      }
+
       
       return {
         isValid: trustProfile.verificationStatus !== 'blocked',
@@ -741,7 +744,7 @@ export class DeviceFingerprintingService {
         requiresAdditionalVerification: riskFactors.length > 0 || 
           trustProfile.trustScore < this.config.thresholds.minimumTrustScore
       };
-    } catch (error) {
+ catch (error) {
       console.error('Device verification error:', error);
       return {
         isValid: false,
@@ -749,8 +752,8 @@ export class DeviceFingerprintingService {
         riskFactors: ['verification_error'],
         requiresAdditionalVerification: true
       };
-    }
-  }
+
+
 
   private calculateFingerprintSimilarity(fp1: string, fp2: string): number {
     // Simple similarity based on character matching
@@ -760,10 +763,10 @@ export class DeviceFingerprintingService {
     
     for (let i = 0; i < Math.min(fp1.length, fp2.length); i++) {
       if (fp1[i] === fp2[i]) matches++;
-    }
+
     
     return (matches / maxLength) * 100;
-  }
+
 
   async getDeviceHistory(
     fingerprint: string,
@@ -773,12 +776,12 @@ export class DeviceFingerprintingService {
     users: unknown[];
     locations: unknown[];
     securityEvents: unknown[];
-  }> {
+> {
 
     const device = await this.getDeviceByFingerprint(fingerprint);
     if (!device) {
       throw new Error('Device not found');
-    }
+
     
     const users = await this.db.query(`
       SELECT 
@@ -808,7 +811,7 @@ export class DeviceFingerprintingService {
       locations: locations.slice(-limit),
       securityEvents: securityEvents.rows
     };
-  }
+
 
   async markDeviceAsTrusted(
     fingerprint: string,
@@ -841,7 +844,7 @@ export class DeviceFingerprintingService {
     
     // Recalculate trust score
     await this.calculateDeviceTrust(fingerprint, userId);
-  }
+
 
   async blockDevice(
     fingerprint: string,
@@ -874,7 +877,7 @@ export class DeviceFingerprintingService {
     
     // Clear cache
     await this.redis.del(`device_profile:${fingerprint}`);
-  }
+
 
   async getDeviceStatistics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<Record<string, any>> {
     const timeframes = {
@@ -920,5 +923,4 @@ export class DeviceFingerprintingService {
       userMetrics: userDeviceStats.rows[0],
       generatedAt: new Date()
     };
-  }
-}
+

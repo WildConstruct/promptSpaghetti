@@ -22,11 +22,10 @@ import {
   AlertTriangle,
   TrendingUp,
   Zap
-} from 'lucide-react';
+ from 'lucide-react';
 import { Badge } from '../common/Badge';
 import './EnhancedToggleFilters.css';
 
-}
 export interface ToggleFilters {}
 
 
@@ -42,7 +41,7 @@ export interface ToggleFilters {}
   start: string;,
   end: string,
   field: 'created' | 'updated' | 'lastEvaluated';
-}
+
 };
   // Performance filters
   evaluationCount?: {
@@ -75,23 +74,25 @@ export interface ToggleFilters {}
   // Tags and metadata
   tags?: string;
   customFields?: Record<string, unknown>;
-}
-}
+
+
+
 export interface SortConfig {
   field: SortField;,
   direction: 'asc' | 'desc';
   secondary?: {
   field: SortField;,
   direction: 'asc' | 'desc';
-}
+
+
 };
-}
+
 export type SortField = 
   | 'name' | 'key' | 'type' | 'enabled' | 'createdAt' | 'updatedAt'
   | 'claudeImpact' | 'version' | 'evaluationCount' | 'successRate' 
   | 'responseTime' | 'lastEvaluated' | 'dependencyCount' | 'organizationCount';
 
-}
+
 export interface SavedFilter {
   id: string;,
   name: string;
@@ -102,20 +103,23 @@ export interface SavedFilter {
   createdBy: string;,
   createdAt: string,
   usageCount: number;
-}
+
+
+
 interface EnhancedToggleFiltersProps {
   filters: ToggleFilters;,
   sort: SortConfig,
   onFiltersChange: (filters: ToggleFilters) => void;,
-  onSortChange: (sort: SortConfig) => void;,
+  onSortChange: (sort: SortConfig) => void;
+},
   onReset: () => void;}
 
 
   // Data for dropdowns
   availableTypes: string;
-}
-  availableOrganizations: Array<{ id: string, name: string }>;
-  availableUsers: Array<{ id: string, name: string }>;
+},
+  availableOrganizations: Array<{ id: string, name: string }>,
+  availableUsers: Array<{ id: string, name: string }>,
   availableToggles: Array<{ id: string, name: string }>;
   // Loading states
   loading?: boolean;
@@ -126,7 +130,7 @@ interface EnhancedToggleFiltersProps {
   // Advanced features
   showAdvanced?: boolean;
   allowSavedFilters?: boolean;
-}
+
 export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
   filters,
   sort,
@@ -167,7 +171,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
           createdBy: 'admin',
           createdAt: '2024-01-01T00:00:00Z',
           usageCount: 23;
-  }
+
         {
           id: '2',
           name: 'High Performance Issues',
@@ -182,7 +186,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
           createdBy: 'admin',
           createdAt: '2024-01-01T00:00:00Z',
           usageCount: 15;
-  }
+
         {
   id: '3',
   name: 'Recently Created',
@@ -199,7 +203,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
           createdAt: '2024-01-01T00:00:00Z',
           usageCount: 8];
       setSavedFilters(mockFilters);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load saved filters:', error);
 };
   // Handle filter changes with debouncing
@@ -243,7 +247,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
       setSelectedSavedFilter(newFilter.id);
       // In real implementation, save to API
       console.log('Saved filter:', newFilter);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to save filter:', error);
 };
   const getActiveFilterCount = () => {
@@ -297,7 +301,7 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
                   onChange={(e) => {
                     const savedFilter = savedFilters.find(f => f.id === e.target.value);
                     if (savedFilter) handleSavedFilterSelect(savedFilter);
-                  }}
+}
                 >
                   <option value="">Saved Filters</option>
                   {savedFilters.map(filter => (
@@ -636,11 +640,13 @@ export const EnhancedToggleFilters: React.FC<EnhancedToggleFiltersProps> = ({
 };
 
 // Save Filter Modal Component
-}
+
+
 interface SaveFilterModalProps {
   onSave: (name: string, description?: string) => void,
   onCancel: () => void;
-}
+
+
 const SaveFilterModal: React.FC<SaveFilterModalProps> = ({ onSave, onCancel }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');

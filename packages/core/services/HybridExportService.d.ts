@@ -12,49 +12,40 @@ import { VFXExportFormat, VFXPromptVariant } from '../types/VFXExport.js';
 import { Node, Edge } from 'reactflow';
 
 }
-export interface HybridExportFormat extends VFXExportFormat {
-    hybridPrompting: {
+}
+export interface HybridExportFormat extends VFXExportFormat { hybridPrompting: {
         mars: {
             framework: 'MARS-v1.0';
             tags: MARSFrameworkTags;
-            structured: MARSStructuredPrompt;
-        };
-        zada: {
-            approach: 'screenplay-style';
+            structured: MARSStructuredPrompt };
+        zada: { approach: 'screenplay-style';
             variants: ZadaNaturalLanguageVariant[];
-            director_friendly: DirectorAccessiblePrompt;
-        };
-        hollywood: {
-            protocol: 'reproducibility-v1';
+            director_friendly: DirectorAccessiblePrompt };
+        hollywood: { protocol: 'reproducibility-v1';
             seeds: HollywoodSeedProtocol;
-            iteration_tracking: IterationHistory[];
-        };
+            iteration_tracking: IterationHistory[] };
     };
 
 }
-export interface MARSFrameworkTags {
-    CAM: {
+}
+export interface MARSFrameworkTags { CAM: {
         shot_type: 'ECU' | 'CU' | 'MS' | 'WS' | 'EWS' | 'OTS' | 'POV';
         angle: 'high' | 'eye' | 'low' | 'dutch' | 'aerial';
         movement: 'static' | 'pan' | 'tilt' | 'dolly' | 'zoom' | 'handheld';
         lens: string;
-        depth_of_field: 'shallow' | 'deep' | 'rack-focus';
+        depth_of_field: 'shallow' | 'deep' | 'rack-focus' }
 }
     };
-    SUBJ: {
-        primary: string;
+    SUBJ: { primary: string;
         secondary?: string;
         interaction: string;
         emotion: string;
-        blocking: string;
-    };
-    FX: {
-        lighting: 'natural' | 'dramatic' | 'soft' | 'harsh' | 'practical' | 'motivated';
+        blocking: string };
+    FX: { lighting: 'natural' | 'dramatic' | 'soft' | 'harsh' | 'practical' | 'motivated';
         color_grade: 'neutral' | 'warm' | 'cool' | 'desaturated' | 'cinematic';
         atmosphere: 'clear' | 'hazy' | 'smoky' | 'foggy' | 'dusty';
         special_fx?: string[];
-        post_processing?: string[];
-    };
+        post_processing?: string[] };
     FOCAL: {
         primary_focus: string;
         secondary_focus?: string;
@@ -63,59 +54,56 @@ export interface MARSFrameworkTags {
   };
 
 }
-export interface MARSStructuredPrompt {
-    raw_mars: string;
+}
+export interface MARSStructuredPrompt { raw_mars: string;
     parsed_structure: {
         camera_section: string;
         subject_section: string;
         effects_section: string;
-        focal_section: string;
+        focal_section: string }
 }
     };
-    controlnet_mapping: {
-        pose_guidance: string;
+    controlnet_mapping: { pose_guidance: string;
         depth_hints: string;
         edge_conditions: string;
-        composition_rules: string;
-    };
+        composition_rules: string };
 
 }
-export interface ZadaNaturalLanguageVariant {
-    variant_id: string;
+}
+export interface ZadaNaturalLanguageVariant { variant_id: string;
     style: 'screenplay' | 'storyboard' | 'shot_list' | 'director_note';
     content: string;
     accessibility_level: 'director' | 'cinematographer' | 'general_crew';
-    human_readable_score: number;
-
+    human_readable_score: number }
 }
-export interface DirectorAccessiblePrompt {
-    screenplay_style: string;
+}
+export interface DirectorAccessiblePrompt { screenplay_style: string;
     shot_description: string;
     mood_direction: string;
     reference_notes: string;
     crew_notes: {
         cinematographer: string;
         lighting_director: string;
-        vfx_supervisor: string;
+        vfx_supervisor: string }
 }
     };
 
 }
-export interface HollywoodSeedProtocol {
-    master_seed: number;
+}
+export interface HollywoodSeedProtocol { master_seed: number;
     component_seeds: Record<string, number>;
     iteration_seeds: number[];
     reproducibility_checksum: string;
     version_compatibility: {
         generator_version: string;
         node_version_map: Record<string, string>;
-        schema_version: string;
+        schema_version: string }
 }
     };
 
 }
-export interface IterationHistory {
-    iteration_id: string;
+}
+export interface IterationHistory { iteration_id: string;
     timestamp: string;
     seed_used: number;
     changes_from_previous: string[];
@@ -133,15 +121,13 @@ export declare class HybridPromptExportService {
      */
     exportHybridPrompt(graph: {)
         nodes: Node[];
-        edges: Edge[];
+        edges: Edge[] }
 }
-    }, executionResults: {
-        finalPrompt: string;
+    }, executionResults: { finalPrompt: string;
         variables: Record<string, string>;
         executionTime: number;
         nodePerformance?: Record<string, number>;
-        variants?: VFXPromptVariant[];
-    }, options?: {
+        variants?: VFXPromptVariant[] }, options?: {
         includeMARS: boolean;
         includeZada: boolean;
         includeHollywoodProtocol: boolean;
@@ -149,8 +135,7 @@ export declare class HybridPromptExportService {
         targetAudience: 'director' | 'vfx_professional' | 'mixed_crew'
   }): Promise<HybridExportFormat>;
     private buildHybridExtensions;
-declare class MARSFrameworkExtractor {
-    extractMARSTags(prompt: string, variables: Record<string, string>): Promise<MARSFrameworkTags>;
+declare class MARSFrameworkExtractor { extractMARSTags(prompt: string, variables: Record<string, string>): Promise<MARSFrameworkTags>;
     createStructuredPrompt(prompt: string): Promise<MARSStructuredPrompt>;
     private extractCameraTags;
     private extractSubjectTags;
@@ -187,14 +172,14 @@ declare class MARSFrameworkExtractor {
     private mapToControlNetComposition;
 declare class ZadaNaturalLanguageGenerator {
     generateNaturalLanguageVariants();
-      prompt: string,
-      variables: Record<string,
-      string>,
-      targetAudience: 'director' | 'vfx_professional' | 'mixed_crew',
+      prompt: string
+      variables: Record<string
+      string>
+      targetAudience: 'director' | 'vfx_professional' | 'mixed_crew'
     ): Promise<ZadaNaturalLanguageVariant[]>;
     createDirectorAccessiblePrompt();
-      prompt: string,
-      variables: Record<string,
+      prompt: string
+      variables: Record<string }
       string>
     ): Promise<DirectorAccessiblePrompt>;
     private convertToScreenplayStyle;
@@ -239,11 +224,9 @@ declare class ZadaNaturalLanguageGenerator {
     private inferDirectorialIntent;
     private extractActionDirection;
     private extractTechnicalRequirements;
-declare class HollywoodSeedManager {
-    generateHollywoodSeeds(graph: {)
+declare class HollywoodSeedManager { generateHollywoodSeeds(graph: {)
         nodes: Node[];
-        edges: Edge[];
-    }): HollywoodSeedProtocol;
+        edges: Edge[] }): HollywoodSeedProtocol;
     createIterationHistory(executionResults: any): IterationHistory[];
     private hashSeed;
     private generateChecksum;

@@ -8,55 +8,43 @@
 import { CommentAnalytics, CommentEngagementType, CommentableResourceType } from '../types/TrendingCommentsTypes';
 
 }
-export interface CommentAnalyticsConfig {
-    databaseUrl?: string;
+}
+export interface CommentAnalyticsConfig { databaseUrl?: string;
     cacheTTLSeconds?: number;
     enableRealTimeUpdates?: boolean;
-    maxAnalyticsPeriodDays?: number;
-
-
+    maxAnalyticsPeriodDays?: number }
 }
-export interface EngagementBreakdown {
-    [key: string]: number;
-
-
 }
-export interface TimeSeriesData {
-    timestamp: string;
-    value: number;
-
-
+export interface EngagementBreakdown { [key: string]: number }
 }
-export interface CommentMetrics {
-    totalComments: number;
+}
+export interface TimeSeriesData { timestamp: string;
+    value: number }
+}
+}
+export interface CommentMetrics { totalComments: number;
     totalReplies: number;
     totalThreads: number;
     uniqueCommenters: number;
     averageRating: number;
-    engagementRate: number;
-
-
+    engagementRate: number }
 }
-export interface SentimentAnalysis {
-    positive: number;
+}
+export interface SentimentAnalysis { positive: number;
     neutral: number;
     negative: number;
     averageScore: number;
-    confidence: number;
-
-
+    confidence: number }
 }
-export interface TopicTrend {
-    topic: string;
+}
+export interface TopicTrend { topic: string;
     mentionCount: number;
     sentimentAverage: number;
     growthRate: number;
-    peakHour?: number;
-
-
+    peakHour?: number }
 }
-export interface UserEngagementData {
-    userId: string;
+}
+export interface UserEngagementData { userId: string;
     commentsPosted: number;
     likesReceived: number;
     influenceScore: number;
@@ -75,7 +63,7 @@ export declare class CommentAnalyticsService {
         endDate?: Date;
         includeRealTime?: boolean;
         includeSentiment?: boolean;
-        includeTopics?: boolean;
+        includeTopics?: boolean }
 }
     }): Promise<CommentAnalytics>;
     /**

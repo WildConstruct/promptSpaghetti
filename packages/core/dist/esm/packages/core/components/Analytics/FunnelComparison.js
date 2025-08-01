@@ -29,19 +29,22 @@ autoGenerateInsights: boolean;
 totalConversions: {
     absolute: number;
     relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
+    direction: 'improvement' | 'decline' | 'no_change',
+    ;
 }
 ;
 averageTimeToConvert: {
     absolute: number;
     relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
+    direction: 'improvement' | 'decline' | 'no_change',
+    ;
 }
 ;
 totalValue: {
     absolute: number;
     relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
+    direction: 'improvement' | 'decline' | 'no_change',
+    ;
 }
 ;
 stepDeltas: StepDelta;
@@ -49,7 +52,8 @@ stepDeltas: StepDelta;
 dropOffRate: {
     absolute: number;
     relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
+    direction: 'improvement' | 'decline' | 'no_change',
+    ;
 }
 ;
 sampleSizes: {
@@ -142,19 +146,16 @@ export const FunnelComparison = ({
          * Comparison Header Component
          */
     }
-    {
-        return;
-        _jsxs("div", { className: "comparison-header", children: [_jsxs("div", { className: "header-info", children: [_jsx("h2", { children: "Funnel Comparison" }), _jsxs("p", { className: "comparison-description", children: [configuration.baseline.name, " vs ", configuration.comparison.name] }), _jsxs("div", { className: "comparison-meta", children: [_jsx("span", { className: "mode-indicator", children: configuration.mode.replace('_', ' ') }), _jsxs("span", { className: "confidence-level", children: [((1 - configuration.significanceLevel) * 100).toFixed(0), "% confidence"] })] })] }), _jsxs("div", { className: "header-controls", children: [_jsxs("div", { className: "view-mode-selector", children: [['overview', 'detailed', 'statistical'].map(mode => ()
-                                    < button, key = { mode }, onClick = {}()), " => onViewModeChange(mode)} className=", `mode-button ${viewMode === mode ? 'active' : ''}`, ">", mode.charAt(0).toUpperCase() + mode.slice(1)] }), "))}"] }), _jsx("button", { onClick: onExport, className: "export-button", children: "Export Report" })] });
-        div >
-        ;
-        ;
-    }
-    ;
-    /**
-     * Comparison Summary Component
-     */
 }
+{
+    return;
+    _jsxs("div", { className: "comparison-header", children: [_jsxs("div", { className: "header-info", children: [_jsx("h2", { children: "Funnel Comparison" }), _jsxs("p", { className: "comparison-description", children: [configuration.baseline.name, " vs ", configuration.comparison.name] }), _jsxs("div", { className: "comparison-meta", children: [_jsx("span", { className: "mode-indicator", children: configuration.mode.replace('_', ' ') }), _jsxs("span", { className: "confidence-level", children: [((1 - configuration.significanceLevel) * 100).toFixed(0), "% confidence"] })] })] }), _jsxs("div", { className: "header-controls", children: [_jsxs("div", { className: "view-mode-selector", children: [['overview', 'detailed', 'statistical'].map(mode => ()
+                                < button, key = { mode }, onClick = {}()), " => onViewModeChange(mode)} className=", `mode-button ${viewMode === mode ? 'active' : ''}`, ">", mode.charAt(0).toUpperCase() + mode.slice(1)] }), "))}"] }), _jsx("button", { onClick: onExport, className: "export-button", children: "Export Report" })] });
+    div >
+    ;
+    ;
+}
+;
 {
     return;
     _jsx("div", { className: "comparison-summary", children: _jsxs("div", { className: "summary-grid", children: [_jsx(MetricComparisonCard, { title: "Overall Conversion Rate", baseline: baseline.overallConversionRate, comparison: comparison.overallConversionRate, delta: delta.overallConversionRate, format: "percentage" }), _jsx(MetricComparisonCard, { title: "Total Conversions", baseline: baseline.totalConversions, comparison: comparison.totalConversions, delta: delta.totalConversions, format: "number" }), _jsx(MetricComparisonCard, { title: "Average Time to Convert", baseline: baseline.averageTimeToConvert, comparison: comparison.averageTimeToConvert, delta: delta.averageTimeToConvert, format: "duration" }), _jsx(MetricComparisonCard, { title: "Total Value", baseline: baseline.totalValue, comparison: comparison.totalValue, delta: delta.totalValue, format: "currency" })] }) });
@@ -356,8 +357,7 @@ return {
     statisticalTests,
     insights,
     metadata: {
-        comparisonId: `comparison-${Date.now()}`
-    }
+        comparisonId: `comparison-${Date.now()}` }
 },
     generatedAt;
 Date.now(),
@@ -451,7 +451,7 @@ StatisticalTestResult;
             confidenceLevel;
         0.95;
     }
-    recommendations: [,
+    recommendations: [
         'Consider implementing the comparison funnel configuration as the new standard',
         'Monitor the performance over time to ensure sustained improvement'
     ],

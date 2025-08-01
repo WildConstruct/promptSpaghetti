@@ -17,6 +17,14 @@ import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 import { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay';
 import { MarketplaceContextualHelp } from './MarketplaceContextualHelp';
 ;
+cartItems ?  : number;
+purchaseStage ?  : 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
+forumContext ?  : {
+    category: string,
+    hasPosted: boolean,
+    reputation: number
+};
+;
 // User preferences
 helpEnabled ?  : boolean;
 autoContextualHelp ?  : boolean;
@@ -171,7 +179,7 @@ _jsxs("div", { className: "epic16-help-system", children: [(helpMode === 'core' 
         .epic16-help-system {
           position: relative;
         .help-system-status {
-          position: fixed;
+          position: fixed;,
   top: 10px;
           left: 10px;
           z-index: 9998;
@@ -180,12 +188,12 @@ _jsxs("div", { className: "epic16-help-system", children: [(helpMode === 'core' 
           pointer-events: auto;
         .mode-badge {
           background: rgba(0, 0, 0, 0.7);
-          color: #fff;
+          color: #fff;,
   padding: 4px 8px;
           border-radius: 12px;
           font-size: 11px;
           font-weight: 600;
-          backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);,
   border: 1px solid rgba(255, 255, 255, 0.2);
         .mode-badge.core {
           background: linear-gradient(135deg, rgba(255, 215, 0, 0.8) 0%, rgba(255, 193, 7, 0.6) 100%);
@@ -200,9 +208,9 @@ _jsxs("div", { className: "epic16-help-system", children: [(helpMode === 'core' 
           color: #fff;
           border-color: rgba(255, 255, 255, 0.4);
         .help-debug-info {
-          margin-top: 8px;
+          margin-top: 8px;,
   background: rgba(0, 0, 0, 0.8);
-          color: #fff;
+          color: #fff;,
   padding: 8px;
           border-radius: 6px;
           font-size: 10px;
@@ -214,10 +222,10 @@ _jsxs("div", { className: "epic16-help-system", children: [(helpMode === 'core' 
           margin-bottom: 0;
         @media (max-width: 768px) {
           .help-system-status {
-            top: 5px;
+            top: 5px;,
   left: 5px;
           .mode-badge {
-            font-size: 10px;
+            font-size: 10px;,
   padding: 3px 6px;
           .help-debug-info {
             display: none;

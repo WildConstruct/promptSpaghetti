@@ -4,8 +4,8 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { KeyManagementService, KeyGenerationRequest, KeyOperationContext } from '../services/KeyManagementService';
 
-}
-}
+
+
 interface GenerateKeyRequest {
   purpose: 'data_encryption' | 'key_encryption' | 'token_signing' | 'api_signing' | 'session_encryption' | 'backup_encryption' | 'audit_signing';
   algorithm?: string;
@@ -14,51 +14,56 @@ interface GenerateKeyRequest {
   expiresAt?: string; // ISO date string
   maxUsageCount?: number;
   makePrimary?: boolean;
-}
-}
-  complianceTags?: { [key: string]: any };
-}
 
-}
-}
+
+
+  complianceTags?: { [key: string]: any };
+
+
+
+
 interface RotateKeyRequest {
   keyId: string;
   reason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface DestroyKeyRequest {
   keyId: string;
   reason: string;
   confirmDestruction: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CreateBackupRequest {
   keyId: string;
   backupType: 'full' | 'metadata_only' | 'differential';
   storageLocation?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ListKeysQuery {
   purpose?: string;
   isActive?: boolean;
   securityLevel?: string;
   page?: number;
   limit?: number;
-}
-}
-}
+
+
+
+
 
 export async function keyManagementRoutes(
   fastify: FastifyInstance,
@@ -68,23 +73,23 @@ export async function keyManagementRoutes(
   // Generate new master key
   fastify.post<{
     Body: GenerateKeyRequest;
-  }>('/keys/generate', {
+>('/keys/generate', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'key_manager'].includes(role))) {
         reply.code(403).send({ error: 'Key management role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: GenerateKeyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       const { 
         purpose, algorithm, keyLength, securityLevel, 
         expiresAt, maxUsageCount, makePrimary, complianceTags 
-      } = request.body;
+ = request.body;
 
       // Validate required fields
       if (!purpose) {
@@ -96,7 +101,7 @@ export async function keyManagementRoutes(
           ]
         });
         return;
-      }
+
 
       // Validate purpose
       const validPurposes = [
@@ -109,7 +114,7 @@ export async function keyManagementRoutes(
           validPurposes
         });
         return;
-      }
+
 
       // Validate security level
       if (securityLevel && !['standard', 'high', 'maximum', 'ultra'].includes(securityLevel)) {
@@ -118,7 +123,7 @@ export async function keyManagementRoutes(
           validLevels: ['standard', 'high', 'maximum', 'ultra']
         });
         return;
-      }
+
 
       // Validate key length
       if (keyLength && ![128, 192, 256, 512].includes(keyLength)) {
@@ -127,7 +132,7 @@ export async function keyManagementRoutes(
           validLengths: [128, 192, 256, 512]
         });
         return;
-      }
+
 
       const keyRequest: KeyGenerationRequest = {
         purpose,
@@ -154,27 +159,27 @@ export async function keyManagementRoutes(
           isPrimary: masterKey.isPrimary,
           createdAt: masterKey.createdAt,
           expiresAt: masterKey.expiresAt
-  }
+
         message: 'Master key generated successfully',
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Key generation error:', error);
       reply.code(500).send({
         error: 'Failed to generate key',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get key information (without key material)
   fastify.get<{
     Params: { keyId: string };
-  }>('/keys/:keyId', {
+>('/keys/:keyId', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { keyId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       const { keyId } = request.params;
@@ -195,7 +200,7 @@ export async function keyManagementRoutes(
           keyId
         });
         return;
-      }
+
 
       return {
         key: {
@@ -215,26 +220,26 @@ export async function keyManagementRoutes(
           lastUsedAt: masterKey.lastUsedAt,
           securityLevel: masterKey.securityLevel,
           complianceTags: masterKey.complianceTags
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Key retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve key',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // List keys with filtering
   fastify.get<{
     Querystring: ListKeysQuery;
-  }>('/keys', {
+>('/keys', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Querystring: ListKeysQuery;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { purpose, isActive, securityLevel, page = 1, limit = 50 } = request.query;
 
@@ -264,33 +269,33 @@ export async function keyManagementRoutes(
           page,
           limit,
           hasMore: keys.length === limit
-  }
+
         filters: { purpose, isActive, securityLevel },
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Keys listing error:', error);
       reply.code(500).send({
         error: 'Failed to list keys',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Rotate key
   fastify.post<{
     Body: RotateKeyRequest;
-  }>('/keys/rotate', {
+>('/keys/rotate', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'key_manager'].includes(role))) {
         reply.code(403).send({ error: 'Key management role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: RotateKeyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       const { keyId, reason } = request.body;
@@ -300,7 +305,7 @@ export async function keyManagementRoutes(
           error: 'Missing required field: keyId'
         });
         return;
-      }
+
 
       const context: KeyOperationContext = {
         userId,
@@ -319,7 +324,7 @@ export async function keyManagementRoutes(
           newKeyId: newKey.keyId,
           reason: reason || 'Manual rotation',
           rotatedAt: new Date().toISOString()
-  }
+
         newKey: {
           keyId: newKey.keyId,
           purpose: newKey.purpose,
@@ -328,33 +333,33 @@ export async function keyManagementRoutes(
           securityLevel: newKey.securityLevel,
           isPrimary: newKey.isPrimary,
           createdAt: newKey.createdAt
-  }
+
         message: 'Key rotated successfully',
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Key rotation error:', error);
       reply.code(500).send({
         error: 'Failed to rotate key',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Destroy key (requires confirmation)
   fastify.post<{
     Body: DestroyKeyRequest;
-  }>('/keys/destroy', {
+>('/keys/destroy', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required for key destruction' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: DestroyKeyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       const { keyId, reason, confirmDestruction } = request.body;
@@ -365,7 +370,7 @@ export async function keyManagementRoutes(
           required: ['keyId', 'reason']
         });
         return;
-      }
+
 
       if (!confirmDestruction) {
         reply.code(400).send({
@@ -373,7 +378,7 @@ export async function keyManagementRoutes(
           message: 'Set confirmDestruction to true to proceed with key destruction'
         });
         return;
-      }
+
 
       const context: KeyOperationContext = {
         userId,
@@ -395,35 +400,35 @@ export async function keyManagementRoutes(
           message: 'Key destroyed successfully',
           warning: 'This action cannot be undone'
         };
-      } else {
+ else {
         reply.code(500).send({
           error: 'Failed to destroy key',
           keyId
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       request.log.error('Key destruction error:', error);
       reply.code(500).send({
         error: 'Failed to destroy key',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Create key backup
   fastify.post<{
     Body: CreateBackupRequest;
-  }>('/keys/backup', {
+>('/keys/backup', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'backup_operator'].includes(role))) {
         reply.code(403).send({ error: 'Backup operator role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: CreateBackupRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyId, backupType, storageLocation } = request.body;
 
@@ -433,7 +438,7 @@ export async function keyManagementRoutes(
           required: ['keyId', 'backupType']
         });
         return;
-      }
+
 
       if (!['full', 'metadata_only', 'differential'].includes(backupType)) {
         reply.code(400).send({
@@ -441,7 +446,7 @@ export async function keyManagementRoutes(
           validTypes: ['full', 'metadata_only', 'differential']
         });
         return;
-      }
+
 
       const backup = await keyManagementService.createKeyBackup(keyId, backupType);
 
@@ -454,17 +459,17 @@ export async function keyManagementRoutes(
           createdAt: backup.createdAt,
           expiresAt: backup.expiresAt,
           storageLocation: storageLocation || 'default'
-  }
+
         message: 'Key backup created successfully',
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Key backup error:', error);
       reply.code(500).send({
         error: 'Failed to create key backup',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Check rotation requirements
@@ -474,8 +479,8 @@ export async function keyManagementRoutes(
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'key_manager'].includes(role))) {
         reply.code(403).send({ error: 'Key management role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const rotationNeeded = await keyManagementService.checkRotationRequirements();
@@ -491,29 +496,29 @@ export async function keyManagementRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Rotation check error:', error);
       reply.code(500).send({
         error: 'Failed to check rotation requirements',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Key management statistics
   fastify.get<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>('/keys/admin/statistics', {
+>('/keys/admin/statistics', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { timeframe = 'week' } = request.query;
       
@@ -589,13 +594,13 @@ export async function keyManagementRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Statistics error:', error);
       reply.code(500).send({
         error: 'Failed to get statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Health check
@@ -630,7 +635,7 @@ export async function keyManagementRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
@@ -638,7 +643,7 @@ export async function keyManagementRoutes(
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -666,22 +671,22 @@ export async function keyManagementRoutes(
           phase: 'Generation',
           description: 'Create new cryptographic keys with specified properties',
           operations: ['generate', 'activate']
-  }
+
         {
           phase: 'Active Use',
           description: 'Keys are available for cryptographic operations',
           operations: ['encrypt', 'decrypt', 'sign', 'verify']
-  }
+
         {
           phase: 'Rotation',
           description: 'Replace keys based on policies or manual triggers',
           operations: ['rotate', 'overlap', 'deactivate']
-  }
+
         {
           phase: 'Archive/Destroy',
           description: 'Securely retire or destroy keys',
           operations: ['backup', 'destroy', 'audit']
-        }
+
       ],
       endpoints: [
         {
@@ -689,37 +694,37 @@ export async function keyManagementRoutes(
           method: 'POST',
           description: 'Generate new master key',
           auth: 'key_manager role required'
-  }
+
         {
           path: '/keys/:keyId',
           method: 'GET',
           description: 'Get key metadata (no key material)',
           auth: 'authenticated user'
-  }
+
         {
           path: '/keys',
           method: 'GET',
           description: 'List keys with filtering',
           auth: 'authenticated user'
-  }
+
         {
           path: '/keys/rotate',
           method: 'POST',
           description: 'Rotate existing key',
           auth: 'key_manager role required'
-  }
+
         {
           path: '/keys/destroy',
           method: 'POST',
           description: 'Permanently destroy key',
           auth: 'admin role required'
-  }
+
         {
           path: '/keys/backup',
           method: 'POST',
           description: 'Create key backup',
           auth: 'backup_operator role required'
-        }
+
       ],
       compliance: [
         'FIPS 140-2 Level 2 equivalent encryption',
@@ -730,4 +735,3 @@ export async function keyManagementRoutes(
       ]
     };
   });
-}

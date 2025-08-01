@@ -24,7 +24,7 @@ export enum ArchiveToggleMode {
   AUTOMATIC = 'automatic',         // Full automatic archiving
   COMPLIANCE_ONLY = 'compliance_only', // Only compliance-required archiving
   EMERGENCY = 'emergency'          // Emergency archiving mode
-}
+
 
 /**
  * Archive toggle scope for fine-grained control
@@ -38,13 +38,14 @@ export enum ArchiveToggleScope {
   LOG_DATA = 'log_data',                // Log and audit data
   SYSTEM_DATA = 'system_data',          // System configuration data
   BACKUP_DATA = 'backup_data'           // Backup and recovery data
-}
+
 
 /**
  * Archive toggle configuration for different data types
  */
-}
-}
+
+
+
 export interface ArchiveToggleConfig {
   id: string;
   name: string;
@@ -91,15 +92,17 @@ export interface ArchiveToggleConfig {
   
   // Custom configuration
   customSettings?: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 /**
  * Archive toggle state for runtime evaluation
  */
-}
-}
+
+
+
 export interface ArchiveToggleState {
   configId: string;
   orgId?: string;
@@ -132,9 +135,10 @@ export interface ArchiveToggleState {
   
   // Audit trail
   auditTrail: ArchiveToggleAuditEntry[];
-}
-}
-}
+
+
+
+
 
 /**
  * Compliance status for archiving operations
@@ -145,13 +149,14 @@ export enum ComplianceStatus {
   PENDING_REVIEW = 'pending_review',
   REQUIRES_CONSENT = 'requires_consent',
   UNKNOWN = 'unknown'
-}
+
 
 /**
  * Audit trail entry for archive toggle operations
  */
-}
-}
+
+
+
 export interface ArchiveToggleAuditEntry {
   id: string;
   timestamp: Date;
@@ -178,10 +183,11 @@ export interface ArchiveToggleAuditEntry {
     regulation: string;
     requirementId: string;
     justification: string;
-}
-}
+
+
+
   };
-}
+
 
 /**
  * Archive toggle actions for audit logging
@@ -199,13 +205,14 @@ export enum ArchiveToggleAction {
   CONFIG_UPDATED = 'config_updated',
   ARCHIVE_OPERATION_TRIGGERED = 'archive_operation_triggered',
   ARCHIVE_OPERATION_BLOCKED = 'archive_operation_blocked'
-}
+
 
 /**
  * Request interface for creating archive toggles
  */
-}
-}
+
+
+
 export interface CreateArchiveToggleRequest {
   name: string;
   description: string;
@@ -216,15 +223,17 @@ export interface CreateArchiveToggleRequest {
   complianceRequired?: boolean;
   customSettings?: Record<string, unknown>;
   orgId?: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Request interface for updating archive toggles
  */
-}
-}
+
+
+
 export interface UpdateArchiveToggleRequest {
   id: string;
   name?: string;
@@ -235,15 +244,17 @@ export interface UpdateArchiveToggleRequest {
   complianceRequired?: boolean;
   reason: string;
   customSettings?: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 /**
  * Archive toggle evaluation context for runtime decisions
  */
-}
-}
+
+
+
 export interface ArchiveToggleEvaluationContext {
   userId?: string;
   orgId?: string;
@@ -266,15 +277,17 @@ export interface ArchiveToggleEvaluationContext {
   ipAddress?: string;
   userAgent?: string;
   requestId?: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Archive toggle evaluation result
  */
-}
-}
+
+
+
 export interface ArchiveToggleEvaluationResult {
   configId: string;
   isArchivingAllowed: boolean;
@@ -298,9 +311,10 @@ export interface ArchiveToggleEvaluationResult {
   // Related policies and configurations
   relatedRetentionPolicies: string[];
   appliedComplianceRules: string[];
-}
-}
-}
+
+
+
+
 
 /**
  * Pre-defined archive toggle configurations for common scenarios
@@ -320,7 +334,7 @@ export const PREDEFINED_ARCHIVE_TOGGLE_CONFIGS = {
     auditArchiveOperations: true,
     allowedCategories: ['user_data', 'application_data'],
     allowedClassifications: ['internal', 'confidential']
-  }
+
   // System Logs Archiving
   SYSTEM_LOGS: {
     name: 'System Logs Archive Toggle',
@@ -335,7 +349,7 @@ export const PREDEFINED_ARCHIVE_TOGGLE_CONFIGS = {
     auditArchiveOperations: true,
     allowedCategories: ['log_data', 'system_data'],
     allowedTypes: ['log_archive', 'system_snapshot']
-  }
+
   // Emergency Backup Archiving
   EMERGENCY_BACKUP: {
     name: 'Emergency Backup Archive Toggle',
@@ -351,7 +365,7 @@ export const PREDEFINED_ARCHIVE_TOGGLE_CONFIGS = {
     auditArchiveOperations: true,
     allowedCategories: ['backup_data', 'system_data'],
     allowedTypes: ['full_backup', 'incremental_backup']
-  }
+
   // Compliance Data Archiving
   COMPLIANCE_DATA: {
     name: 'Compliance Data Archive Toggle',
@@ -369,8 +383,8 @@ export const PREDEFINED_ARCHIVE_TOGGLE_CONFIGS = {
     auditArchiveOperations: true,
     allowedCategories: ['compliance_data', 'analytics_data'],
     allowedClassifications: ['confidential', 'restricted']
-  }
-} as const;
+
+ as const;
 
 /**
  * Default toggle configuration values

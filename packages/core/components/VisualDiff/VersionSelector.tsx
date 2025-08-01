@@ -2,74 +2,61 @@
 // Story 9.3.2 - Visual Diff Tool
 import React, { useMemo } from 'react';
 
-}
-export interface Version {
-  id: string;
+
+export interface Version { id: string;
   version_number: number;
   description: string;
   created_at: Date;
   created_by?: string;
-  is_current?: boolean;
-}
-}
-}
-export interface VersionSelectorProps {
-  graphId: string;
+  is_current?: boolean }
+
+
+
+export interface VersionSelectorProps { graphId: string;
   versions: Version;
   sourceVersionId: string;
   targetVersionId: string;
   onVersionChange: (sourceId: string, targetId: string) => void;
-  className?: string;
-}
-}
-export const VersionSelector: React.FC<VersionSelectorProps> = ({)
-  graphId,
-  versions,
-  sourceVersionId,
-  targetVersionId,
-  onVersionChange,
+  className?: string }
+
+export const VersionSelector: React.FC<VersionSelectorProps> = ({ )
+  graphId
+  versions
+  sourceVersionId
+  targetVersionId
+  onVersionChange }
   className = ''
-}) => {
-  // Sort versions by version number (descending)
+}) => { // Sort versions by version number (descending)
   const sortedVersions = useMemo(() => {
-    return [...versions].sort((a, b) => b.version_number - a.version_number);
-  }, [versions]);
+    return [...versions].sort((a, b) => b.version_number - a.version_number) }, [versions]);
   // Format version display
-  const formatVersion = (version: Version) => {
-  const date = new Date(version.created_at).toLocaleDateString();
+  const formatVersion = (version: Version) => { const date = new Date(version.created_at).toLocaleDateString();
   const time = new Date(version.created_at).toLocaleTimeString([], { )
-  hour: '2-digit',
-  minute: '2-digit',
+  hour: '2-digit'
+  minute: '2-digit' }
 });
     return `v${version.version_number} - ${version.description || 'No description'} (${date} ${time})`;}
   };
   // Handle source version change
-  const handleSourceChange = (versionId: string) => {
-    if (versionId !== targetVersionId) {
-      onVersionChange(versionId, targetVersionId);
-  };
+  const handleSourceChange = (versionId: string) => { if (versionId !== targetVersionId) {
+      onVersionChange(versionId, targetVersionId) };
   // Handle target version change
-  const handleTargetChange = (versionId: string) => {
-    if (versionId !== sourceVersionId) {
-      onVersionChange(sourceVersionId, versionId);
-  };
+  const handleTargetChange = (versionId: string) => { if (versionId !== sourceVersionId) {
+      onVersionChange(sourceVersionId, versionId) };
   // Get quick compare options (recent versions)
-  const getQuickCompareOptions = () => {
-  if (sortedVersions.length < 2) return [];
+  const getQuickCompareOptions = () => { if (sortedVersions.length < 2) return [];
   return [
   {
   label: 'Current vs Previous',
   source: sortedVersions[1]?.id,
-  target: sortedVersions[0]?.id,
-}
-      {
-  label: 'Current vs 2 versions ago',
+  target: sortedVersions[0]?.id }
+
+      { label: 'Current vs 2 versions ago',
   source: sortedVersions[2]?.id,
-  target: sortedVersions[0]?.id,
-}
-      {
-  label: 'Previous vs 2 versions ago',
-  source: sortedVersions[2]?.id,
+  target: sortedVersions[0]?.id }
+
+      { label: 'Previous vs 2 versions ago',
+  source: sortedVersions[2]?.id }
   target: sortedVersions[1]?.id].filter(option => option.source && option.target);
 };
   const quickOptions = getQuickCompareOptions();

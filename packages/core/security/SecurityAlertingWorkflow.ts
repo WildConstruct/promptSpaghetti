@@ -7,23 +7,20 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import { 
-  SecurityEventAnalytics, 
+import { SecurityEventAnalytics, 
   SecurityInsight, 
   SecurityPattern, 
-  RiskLevel, 
+  RiskLevel }
   ThreatCategory 
-} from './SecurityEventAnalytics';
-import { 
-  SecurityLogger, 
+ from './SecurityEventAnalytics';
+import { SecurityLogger, 
   SecurityLogEntry, 
-  SecurityEventType, 
+  SecurityEventType }
   ComplianceFramework 
-} from './SecurityLogger';
+ from './SecurityLogger';
 
 // Alert System Types
-export enum AlertSeverity {
-  CRITICAL = 'critical',    // < 5 minutes response
+export enum AlertSeverity { CRITICAL = 'critical',    // < 5 minutes response
   HIGH = 'high',           // < 15 minutes response
   MEDIUM = 'medium',       // < 1 hour response
   LOW = 'low',            // < 4 hours response
@@ -52,18 +49,19 @@ export enum AlertSeverity {
   title: string;
   description: string;
   source: string;
-  sourceData: {
+  sourceData: { }
   eventIds?: string;
   patternIds?: string;
   insightIds?: string;
   metrics?: Record<string, number>;
-}
+
+
 };
-  context: {
+  context: { 
   affectedSystems: string;
   affectedUsers: string;
   ipAddresses: string;
-  geolocation?: {
+  geolocation?: { }
   country: string;
   region: string;
   confidence: number;
@@ -75,34 +73,28 @@ export enum AlertSeverity {
     likelihood: number; // 0-1,
   impact: number; // 0-1
   };
-  compliance: {
+  compliance: { ,
   frameworks: ComplianceFramework;
   reportingRequired: boolean;
-  deadline?: Date;
-};
-  escalation: {
+  deadline?: Date };
+  escalation: { ,
   level: number;
   maxLevel: number;
   nextEscalation?: Date;
-  assignedTo?: string;
-};
-  resolution?: {
-  resolvedBy: string;
+  assignedTo?: string };
+  resolution?: { resolvedBy: string;
   resolvedAt: Date;
   solution: string;
   preventionMeasures: string;
-  lessonsLearned: string;
-};
-  metadata: {
+  lessonsLearned: string };
+  metadata: { ,
   correlationId: string;
   workflowVersion: string;
   processingTime: number;
-  checksum: string;
-};
-}
-}
-export interface AlertRule {
-  id: string;
+  checksum: string };
+
+
+export interface AlertRule { id: string;
   name: string;
   description: string;
   enabled: boolean;
@@ -112,64 +104,63 @@ export interface AlertRule {
   suppressionRules?: SuppressionRule;
   escalationPolicy: EscalationPolicy;
   automatedActions: AutomatedAction;
-  compliance: ComplianceFramework;
-}
-}
-}
-export interface AlertCondition {
-  field: string;
+  compliance: ComplianceFramework }
+
+
+
+export interface AlertCondition { field: string;
   operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'nin' | 'contains' | 'matches';
   value: any;
-  aggregation?: {
+  aggregation?: {;
   function: 'count' | 'sum' | 'avg' | 'min' | 'max';
-  timeWindow: number; // seconds,
+  timeWindow: number; // seconds }
   groupBy?: string;
-}
+
+
 };
-}
-}
-export interface SuppressionRule {
-  id: string;
+
+
+export interface SuppressionRule { id: string;
   description: string;
   conditions: AlertCondition;
-  suppressionWindow: number; // seconds,
+  suppressionWindow: number; // seconds }
   maxSuppressions?: number;
-}
-}
-}
-export interface EscalationPolicy {
-  id: string;
+
+
+
+
+export interface EscalationPolicy { id: string;
   name: string;
   steps: EscalationStep;
   requiresAcknowledgment: boolean;
   autoResolve: boolean;
-  escalationTimeout: number; // seconds,
-}
-}
-}
-export interface EscalationStep {
-  level: number;
-  delay: number; // seconds,
+  escalationTimeout: number; // seconds }
+
+
+
+
+export interface EscalationStep { level: number;
+  delay: number; // seconds }
   recipients: NotificationRecipient;
   channels: AlertChannel;
   actions: string;
   continueOnFailure: boolean;
-}
-}
-}
-export interface NotificationRecipient {
-  type: 'user' | 'team' | 'role';
+
+
+
+
+export interface NotificationRecipient { type: 'user' | 'team' | 'role';
   identifier: string;
-  contactMethods: Array<{
+  contactMethods: Array<{ }
   channel: AlertChannel;
   address: string;
   priority: number;
-}
-}>;
-}
-}
-export interface AutomatedAction {
-  id: string;
+
+
+>;
+
+
+export interface AutomatedAction { id: string;
   name: string;
   description: string;
   type: 'system' | 'network' | 'user' | 'data' | 'notification';
@@ -177,31 +168,31 @@ export interface AutomatedAction {
   parameters: Record<string, any>;
   conditions: AlertCondition;
   maxExecutions: number;
-  cooldownPeriod: number; // seconds,
+  cooldownPeriod: number; // seconds }
   requiresApproval: boolean;
   approvers?: string;
-}
-}
-}
-export interface WorkflowExecution {
-  alertId: string;
+
+
+
+
+export interface WorkflowExecution { alertId: string;
   workflowId: string;
   status: 'running' | 'completed' | 'failed' | 'cancelled';
   startTime: Date;
   endTime?: Date;
   steps: WorkflowStep;
-  error?: {
+  error?: { }
   message: string;
   stack: string;
   step: string;
-}
+
+
 };
-}
-}
-export interface WorkflowStep {
-  id: string;
+
+
+export interface WorkflowStep { id: string;
   name: string;
-  type: 'notification' | 'action' | 'escalation' | 'approval';
+  type: 'notification' | 'action' | 'escalation' | 'approval' }
   status: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
   startTime?: Date;
   endTime?: Date;
@@ -210,10 +201,9 @@ export interface WorkflowStep {
   /**
   * Advanced security alerting workflow engine
   */
-}
-}
-export class SecurityAlertingWorkflow extends EventEmitter {
-  private analytics: SecurityEventAnalytics;
+
+
+export class SecurityAlertingWorkflow extends EventEmitter { private analytics: SecurityEventAnalytics;
   private securityLogger: SecurityLogger;
   private alerts: Map<string, SecurityAlert> = new Map();
   private alertRules: Map<string, AlertRule> = new Map();
@@ -231,43 +221,41 @@ export class SecurityAlertingWorkflow extends EventEmitter {
    * Create and process a new security alert
    */
   public async createAlert(
-    source: string,
-    severity: AlertSeverity,
-    category: ThreatCategory,
-    title: string,
-    description: string,
-    context: Partial<SecurityAlert['context']> = {},
+    source: string
+    severity: AlertSeverity
+    category: ThreatCategory
+    title: string
+    description: string }
+    context: Partial<SecurityAlert['context']> = {}
     sourceData: Partial<SecurityAlert['sourceData']> = {}
-  ): Promise<string> {
-
-  const alert: SecurityAlert = {,
-  id: crypto.randomUUID(),
-  timestamp: new Date(),
-  severity,
-  state: AlertState.TRIGGERED,
-  category,
-  title,
-  description,
-  source,
-  sourceData,
+  ): Promise<string> { const alert: SecurityAlert = {
+  id: crypto.randomUUID()
+  timestamp: new Date()
+  severity
+  state: AlertState.TRIGGERED
+  category
+  title
+  description
+  source
+  sourceData
   context: {
-  affectedSystems: context.affectedSystems || [],
-  affectedUsers: context.affectedUsers || [],
-  ipAddresses: context.ipAddresses || [],
-  geolocation: context.geolocation,
-},
-  risk: await this.calculateRiskScore(severity, category, sourceData),
-      compliance: this.determineComplianceRequirements(category, severity),
-      escalation: {
-  level: 0,
-  maxLevel: this.getMaxEscalationLevel(severity),
-  nextEscalation: this.calculateNextEscalation(severity),
-},
-  metadata: {
-  correlationId: crypto.randomBytes(16).toString('hex'),
-  workflowVersion: '1.0.0',
-  processingTime: 0,
-  checksum: '',
+  affectedSystems: context.affectedSystems || []
+  affectedUsers: context.affectedUsers || []
+  ipAddresses: context.ipAddresses || []
+  geolocation: context.geolocation }
+
+  risk: await this.calculateRiskScore(severity, category, sourceData)
+      compliance: this.determineComplianceRequirements(category, severity)
+      escalation: { 
+  level: 0
+  maxLevel: this.getMaxEscalationLevel(severity)
+  nextEscalation: this.calculateNextEscalation(severity) }
+
+  metadata: { 
+  correlationId: crypto.randomBytes(16).toString('hex')
+  workflowVersion: '1.0.0'
+  processingTime: 0
+  checksum: '' }
 };
     // Calculate checksum for integrity
     alert.metadata.checksum = this.calculateAlertChecksum(alert);
@@ -283,27 +271,24 @@ export class SecurityAlertingWorkflow extends EventEmitter {
   /**
    * Process alert from security insights
    */
-  public async processSecurityInsight(insight: SecurityInsight): Promise<string | null> {
-
-  // Check if alert should be created for this insight
+  public async processSecurityInsight(insight: SecurityInsight): Promise<string | null> { // Check if alert should be created for this insight
   if (!this.shouldCreateAlertForInsight(insight)) {
   return null;
   // Determine severity mapping
   const severity = this.mapRiskLevelToAlertSeverity(insight.severity);
   // Create alert with insight context
   return await this.createAlert()
-  'SecurityEventAnalytics',
-  severity,
-  insight.category,
-  insight.title,
-  insight.description,
+  'SecurityEventAnalytics'
+  severity
+  insight.category
+  insight.title
+  insight.description
   {
-  affectedSystems: insight.evidence.eventIds.length > 0 ? ['security-system'] : [],
-  affectedUsers: this.extractUsersFromInsight(insight),
-}
-      {
-        insightIds: [insight.id],
-        eventIds: insight.evidence.eventIds,
+  affectedSystems: insight.evidence.eventIds.length > 0 ? ['security-system'] : []
+  affectedUsers: this.extractUsersFromInsight(insight) }
+
+      { insightIds: [insight.id]
+        eventIds: insight.evidence.eventIds
         metrics: insight.evidence.metrics);
   /**
    * Process alert from threat patterns
@@ -317,23 +302,21 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     return await this.createAlert()
       'SecurityEventAnalytics',
       severity,
-      pattern.category,
+      pattern.category }
       `Threat Pattern Detected: ${pattern.name}`}
-}
+
       pattern.description,
-      {
-  affectedSystems: ['security-monitoring'],
-  ipAddresses: this.extractIPsFromPattern(pattern),
-}
-      {
-        patternIds: [pattern.id],
+      { affectedSystems: ['security-monitoring'],
+  ipAddresses: this.extractIPsFromPattern(pattern) }
+
+      { patternIds: [pattern.id],
         eventIds: pattern.relatedEvents);
   /**
    * Acknowledge an alert
    */
   public async acknowledgeAlert(
     alertId: string, 
-    acknowledgedBy: string,
+    acknowledgedBy: string }
     estimatedResolution?: Date
   ): Promise<void> {
 
@@ -344,28 +327,26 @@ export class SecurityAlertingWorkflow extends EventEmitter {
       throw new Error(`Alert cannot be acknowledged in state: ${alert.state}`);}
     alert.state = AlertState.ACKNOWLEDGED;
     alert.escalation.assignedTo = acknowledgedBy;
-    if (estimatedResolution) {
-      alert.escalation.nextEscalation = estimatedResolution;
+    if (estimatedResolution) { alert.escalation.nextEscalation = estimatedResolution;
     await this.logAlertEvent(alert, 'acknowledged', acknowledgedBy);
     this.emit('alertAcknowledged', alert);
   /**
    * Resolve an alert
    */
   public async resolveAlert(
-    alertId: string,
-    resolvedBy: string,
-    solution: string,
-    preventionMeasures: string = [],
-    lessonsLearned: string = []): Promise<void> {,
+    alertId: string
+    resolvedBy: string
+    solution: string
+    preventionMeasures: string = []
+    lessonsLearned: string = []): Promise<void> { }
     const alert = this.alerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert not found: ${alertId}`);}
     alert.state = AlertState.RESOLVED;
-    alert.resolution = {
-  resolvedBy,
-  resolvedAt: new Date(),
-  solution,
-  preventionMeasures,
+    alert.resolution = { resolvedBy
+  resolvedAt: new Date()
+  solution
+  preventionMeasures }
   lessonsLearned
 };
     await this.logAlertEvent(alert, 'resolved', resolvedBy);
@@ -382,7 +363,7 @@ export class SecurityAlertingWorkflow extends EventEmitter {
   offset?: number;
   sortBy?: 'timestamp' | 'severity' | 'risk';
   sortOrder?: 'asc' | 'desc'
-  } = {}): {
+ = {}): {
     alerts: SecurityAlert;
   total: number;
     hasMore: boolean;
@@ -423,10 +404,9 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     const offset = options.offset || 0;
     const limit = options.limit || 100;
     alerts = alerts.slice(offset, offset + limit);
-    return {
-  alerts,
-  total,
-  hasMore: (offset + limit) < total,
+    return { alerts
+  total
+  hasMore: (offset + limit) < total }
 };
   /**
    * Get alert metrics and statistics
@@ -446,19 +426,16 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     const totalAlerts = alerts.length;
     // Count by state
     const alertsByState: Record<AlertState, number> = {} as any;
-    alerts.forEach(alert => {)
-  alertsByState[alert.state] = (alertsByState[alert.state] || 0) + 1;
-    });
+    alerts.forEach(alert => { )
+  alertsByState[alert.state] = (alertsByState[alert.state] || 0) + 1 });
     // Count by severity
     const alertsBySeverity: Record<AlertSeverity, number> = {} as any;
-    alerts.forEach(alert => {)
-  alertsBySeverity[alert.severity] = (alertsBySeverity[alert.severity] || 0) + 1;
-    });
+    alerts.forEach(alert => { )
+  alertsBySeverity[alert.severity] = (alertsBySeverity[alert.severity] || 0) + 1 });
     // Count by category
     const alertsByCategory: Record<ThreatCategory, number> = {} as any;
-    alerts.forEach(alert => {)
-  alertsByCategory[alert.category] = (alertsByCategory[alert.category] || 0) + 1;
-    });
+    alerts.forEach(alert => { )
+  alertsByCategory[alert.category] = (alertsByCategory[alert.category] || 0) + 1 });
     // Calculate response times
     const acknowledgedAlerts = alerts.filter(a => a.state !== AlertState.TRIGGERED);
     const averageResponseTime = acknowledgedAlerts.length > 0 ;
@@ -474,21 +451,19 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     const escalationRate = totalAlerts > 0 ? escalatedAlerts.length / totalAlerts : 0;
     // Top alert sources
     const sourceCount: Record<string, number> = {};
-    alerts.forEach(alert => {)
-  sourceCount[alert.source] = (sourceCount[alert.source] || 0) + 1;
-    });
+    alerts.forEach(alert => { )
+  sourceCount[alert.source] = (sourceCount[alert.source] || 0) + 1 });
     const topAlertSources = Object.entries(sourceCount);
       .map(([source, count]) => ({ source, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
-    return {
-      totalAlerts,
-      alertsByState,
-      alertsBySeverity,
-      alertsByCategory,
-      averageResponseTime,
-      averageResolutionTime,
-      escalationRate,
+    return { totalAlerts
+      alertsByState
+      alertsBySeverity
+      alertsByCategory
+      averageResponseTime
+      averageResolutionTime
+      escalationRate }
       topAlertSources
     };
   // Private workflow processing methods
@@ -502,12 +477,10 @@ export class SecurityAlertingWorkflow extends EventEmitter {
         console.warn(`No rules found for alert: ${alert.id}`);}
         return;
       // Process each applicable rule
-      for (const rule of applicableRules) {
-        await this.processAlertRule(alert, rule);
-    } catch (error) {
+      for (const rule of applicableRules) { await this.processAlertRule(alert, rule) } catch (error) {
       console.error(`Workflow processing failed for alert ${alert.id}:`, error);}
       await this.logAlertEvent(alert, 'workflow_failed', 'system', String(error));
-    } finally {
+ finally {
       alert.metadata.processingTime = Date.now() - startTime;
   private async processAlertRule(alert: SecurityAlert, rule: AlertRule): Promise<void> {
 
@@ -538,38 +511,34 @@ export class SecurityAlertingWorkflow extends EventEmitter {
         await this.executeAction(alert, action);
         await this.logAlertEvent(alert, 'action_executed', 'system')
           `Executed action: ${action.name}`);}
-      } catch (error) {
+ catch (error) {
         await this.logAlertEvent(alert, 'action_failed', 'system')
           `Failed to execute action: ${action.name} - ${error}`);}
-  private async startEscalationProcess(alert: SecurityAlert, policy: EscalationPolicy): Promise<void> {
-
-  const execution: WorkflowExecution = {,
-  alertId: alert.id,
-  workflowId: policy.id,
-  status: 'running',
-  startTime: new Date(),
-  steps: [],
+  private async startEscalationProcess(alert: SecurityAlert, policy: EscalationPolicy): Promise<void> { const execution: WorkflowExecution = {
+  alertId: alert.id
+  workflowId: policy.id
+  status: 'running'
+  startTime: new Date()
+  steps: [] }
 };
     this.executions.set(`${alert.id}-${policy.id}`, execution);}
     // Schedule first escalation step
-    if (policy.steps.length > 0) {
-      const firstStep = policy.steps[0];
+    if (policy.steps.length > 0) { const firstStep = policy.steps[0];
       setTimeout(() => {
-        this.executeEscalationStep(alert, policy, firstStep, execution);
-      }, firstStep.delay * 1000);
+        this.executeEscalationStep(alert, policy, firstStep, execution) }, firstStep.delay * 1000);
   private async executeEscalationStep(alert: SecurityAlert)
-    policy: EscalationPolicy,
-    step: EscalationStep,
-    execution: WorkflowExecution): Promise<void> {,
+  policy: EscalationPolicy
+    step: EscalationStep
+    execution: WorkflowExecution): Promise<void> { 
     // Skip if alert is already acknowledged/resolved
     if (alert.state === AlertState.ACKNOWLEDGED || alert.state === AlertState.RESOLVED) {
       return;
-    const workflowStep: WorkflowStep = {,
-  id: crypto.randomUUID(),
+    const workflowStep: WorkflowStep = {
+  id: crypto.randomUUID() }
       name: `Escalation Level ${step.level}`}
-},
-  type: 'escalation',
-      status: 'running',
+
+  type: 'escalation'
+      status: 'running'
       startTime: new Date();
   };
     execution.steps.push(workflowStep);
@@ -585,41 +554,38 @@ export class SecurityAlertingWorkflow extends EventEmitter {
       await this.logAlertEvent(alert, 'escalated', 'system')
         `Escalated to level ${step.level}`);}
       // Schedule next escalation if not acknowledged
-      if (policy.requiresAcknowledgment && alert.state === AlertState.TRIGGERED) {
-        const nextStep = policy.steps.find(s => s.level === step.level + 1);
+      if (policy.requiresAcknowledgment && alert.state === AlertState.TRIGGERED) { const nextStep = policy.steps.find(s => s.level === step.level + 1);
         if (nextStep) {
           setTimeout(() => {
-            this.executeEscalationStep(alert, policy, nextStep, execution);
-          }, policy.escalationTimeout * 1000);
-    } catch (error) {
+            this.executeEscalationStep(alert, policy, nextStep, execution) }, policy.escalationTimeout * 1000);
+ catch (error) {
       workflowStep.status = 'failed';
       workflowStep.endTime = new Date();
       workflowStep.error = String(error);
       if (step.continueOnFailure) {
         console.warn(`Escalation step failed but continuing: ${error}`);}
-      } else {
-  execution.status = 'failed';
+ else { execution.status = 'failed';
   execution.error = {
-  message: String(error),
-  stack: error instanceof Error ? error.stack || '' : '',
-  step: workflowStep.id,
+  message: String(error)
+  stack: error instanceof Error ? error.stack || '' : ''
+  step: workflowStep.id }
 };
   private async sendNotifications(alert: SecurityAlert)
-    recipients: NotificationRecipient,
-    channels: AlertChannel): Promise<void> {,
+  recipients: NotificationRecipient
+    channels: AlertChannel): Promise<void> { 
   for (const recipient of recipients) {
   for (const contactMethod of recipient.contactMethods) {
   if (channels.includes(contactMethod.channel)) {
   await this.sendNotification(alert, contactMethod.channel, contactMethod.address);
   private async sendNotification(alert: SecurityAlert)
-  channel: AlertChannel,
-  address: string): Promise<void> {,
+  channel: AlertChannel
+  address: string): Promise<void> {
   const notification = {
-  alert,
-  channel,
-  address,
-  timestamp: new Date(),
-  content: this.formatNotificationContent(alert, channel),
+  alert
+  channel
+  address
+  timestamp: new Date()
+  content: this.formatNotificationContent(alert, channel) }
 };
     // In real implementation, integrate with actual notification services
     switch (channel) {
@@ -635,85 +601,80 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     default:
       console.log(`Notification sent via ${channel} to ${address}:`, notification.content);}
   // Helper methods and utilities
-  private shouldCreateAlertForInsight(insight: SecurityInsight): boolean {
-  // Only create alerts for high-impact insights
+  private shouldCreateAlertForInsight(insight: SecurityInsight): boolean { // Only create alerts for high-impact insights
   return insight.severity === RiskLevel.CRITICAL ||
   insight.severity === RiskLevel.HIGH ||
   (insight.severity === RiskLevel.MEDIUM && insight.impact === 'high');
-  private mapRiskLevelToAlertSeverity(riskLevel: RiskLevel): AlertSeverity {,
+  private mapRiskLevelToAlertSeverity(riskLevel: RiskLevel): AlertSeverity {
   switch (riskLevel) {
   case RiskLevel.CRITICAL: return AlertSeverity.CRITICAL;
   case RiskLevel.HIGH: return AlertSeverity.HIGH;
   case RiskLevel.MEDIUM: return AlertSeverity.MEDIUM;
-  case RiskLevel.LOW: return AlertSeverity.LOW;
+  case RiskLevel.LOW: return AlertSeverity.LOW
   default: return AlertSeverity.INFO;
-  private mapRiskScoreToAlertSeverity(riskScore: number): AlertSeverity {,
+  private mapRiskScoreToAlertSeverity(riskScore: number): AlertSeverity {
   if (riskScore >= 90) return AlertSeverity.CRITICAL;
   if (riskScore >= 70) return AlertSeverity.HIGH;
   if (riskScore >= 50) return AlertSeverity.MEDIUM;
   if (riskScore >= 30) return AlertSeverity.LOW;
   return AlertSeverity.INFO;
   private async calculateRiskScore(severity: AlertSeverity)
-  category: ThreatCategory,
-  sourceData: Partial<SecurityAlert['sourceData']>): Promise<SecurityAlert['risk']> {,
+  category: ThreatCategory
+  sourceData: Partial<SecurityAlert['sourceData']>): Promise<SecurityAlert['risk']> {
   let baseScore = 30;
   // Severity contribution
   const severityScores = {
-  [AlertSeverity.CRITICAL]: 40,
-  [AlertSeverity.HIGH]: 30,
-  [AlertSeverity.MEDIUM]: 20,
-  [AlertSeverity.LOW]: 10,
-  [AlertSeverity.INFO]: 5,
+  [AlertSeverity.CRITICAL]: 40
+  [AlertSeverity.HIGH]: 30
+  [AlertSeverity.MEDIUM]: 20
+  [AlertSeverity.LOW]: 10
+  [AlertSeverity.INFO]: 5 }
 };
     baseScore += severityScores[severity];
     // Category contribution
-    const categoryScores = {
-  [ThreatCategory.SYSTEM_COMPROMISE]: 25,
-  [ThreatCategory.DATA_EXFILTRATION]: 25,
-  [ThreatCategory.PRIVILEGE_ESCALATION]: 20,
-  [ThreatCategory.INSIDER_THREAT]: 20,
-  [ThreatCategory.EXTERNAL_ATTACK]: 15,
-  [ThreatCategory.AUTHENTICATION]: 10,
-  [ThreatCategory.AUTHORIZATION]: 10,
-  [ThreatCategory.DATA_ACCESS]: 10,
-  [ThreatCategory.COMPLIANCE_VIOLATION]: 5,
+    const categoryScores = { [ThreatCategory.SYSTEM_COMPROMISE]: 25
+  [ThreatCategory.DATA_EXFILTRATION]: 25
+  [ThreatCategory.PRIVILEGE_ESCALATION]: 20
+  [ThreatCategory.INSIDER_THREAT]: 20
+  [ThreatCategory.EXTERNAL_ATTACK]: 15
+  [ThreatCategory.AUTHENTICATION]: 10
+  [ThreatCategory.AUTHORIZATION]: 10
+  [ThreatCategory.DATA_ACCESS]: 10
+  [ThreatCategory.COMPLIANCE_VIOLATION]: 5 }
 };
     baseScore += categoryScores[category] || 10;
-    const factors = [;
-      { factor: 'Alert Severity', impact: severityScores[severity] },
+    const factors = [
+      { factor: 'Alert Severity', impact: severityScores[severity] }
       { factor: 'Threat Category', impact: categoryScores[category] || 10 }
     ];
-    return {
-  score: Math.min(100, baseScore),
-  factors,
-  likelihood: this.calculateLikelihood(category),
-  impact: this.calculateImpact(severity),
+    return { score: Math.min(100, baseScore)
+  factors
+  likelihood: this.calculateLikelihood(category)
+  impact: this.calculateImpact(severity) }
 };
-  private calculateLikelihood(category: ThreatCategory): number {
-  // Simplified likelihood calculation based on category
+  private calculateLikelihood(category: ThreatCategory): number { // Simplified likelihood calculation based on category
   const likelihoods = {
-  [ThreatCategory.EXTERNAL_ATTACK]: 0.7,
-  [ThreatCategory.AUTHENTICATION]: 0.6,
-  [ThreatCategory.AUTHORIZATION]: 0.5,
-  [ThreatCategory.DATA_ACCESS]: 0.4,
-  [ThreatCategory.PRIVILEGE_ESCALATION]: 0.3,
-  [ThreatCategory.DATA_EXFILTRATION]: 0.3,
-  [ThreatCategory.INSIDER_THREAT]: 0.2,
-  [ThreatCategory.SYSTEM_COMPROMISE]: 0.1,
-  [ThreatCategory.COMPLIANCE_VIOLATION]: 0.5,
+  [ThreatCategory.EXTERNAL_ATTACK]: 0.7
+  [ThreatCategory.AUTHENTICATION]: 0.6
+  [ThreatCategory.AUTHORIZATION]: 0.5
+  [ThreatCategory.DATA_ACCESS]: 0.4
+  [ThreatCategory.PRIVILEGE_ESCALATION]: 0.3
+  [ThreatCategory.DATA_EXFILTRATION]: 0.3
+  [ThreatCategory.INSIDER_THREAT]: 0.2
+  [ThreatCategory.SYSTEM_COMPROMISE]: 0.1
+  [ThreatCategory.COMPLIANCE_VIOLATION]: 0.5 }
 };
     return likelihoods[category] || 0.5;
-  private calculateImpact(severity: AlertSeverity): number {
-  const impacts = {
-  [AlertSeverity.CRITICAL]: 1.0,
-  [AlertSeverity.HIGH]: 0.8,
-  [AlertSeverity.MEDIUM]: 0.6,
-  [AlertSeverity.LOW]: 0.4,
-  [AlertSeverity.INFO]: 0.2,
+  private calculateImpact(severity: AlertSeverity): number { const impacts = {
+  [AlertSeverity.CRITICAL]: 1.0
+  [AlertSeverity.HIGH]: 0.8
+  [AlertSeverity.MEDIUM]: 0.6
+  [AlertSeverity.LOW]: 0.4
+  [AlertSeverity.INFO]: 0.2 }
 };
     return impacts[severity];
   private determineComplianceRequirements(((
-    category: ThreatCategory,
+    category: ThreatCategory
     severity: AlertSeverity
   ): SecurityAlert['compliance'] {
     const frameworks: ComplianceFramework = [ComplianceFramework.ISO_27001];
@@ -734,29 +695,27 @@ export class SecurityAlertingWorkflow extends EventEmitter {
         reportingRequired = true;
         deadline = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
     return { frameworks, reportingRequired, deadline };
-  private getMaxEscalationLevel(severity: AlertSeverity): number {
-  switch (severity) {
+  private getMaxEscalationLevel(severity: AlertSeverity): number { switch (severity) {
   case AlertSeverity.CRITICAL: return 4;
   case AlertSeverity.HIGH: return 3;
   case AlertSeverity.MEDIUM: return 2;
-  case AlertSeverity.LOW: return 1;
+  case AlertSeverity.LOW: return 1
   default: return 0;
-  private calculateNextEscalation(severity: AlertSeverity): Date {,
+  private calculateNextEscalation(severity: AlertSeverity): Date {
   const delays = {
-  [AlertSeverity.CRITICAL]: 5 * 60 * 1000,      // 5 minutes,
-  [AlertSeverity.HIGH]: 15 * 60 * 1000,         // 15 minutes,
-  [AlertSeverity.MEDIUM]: 60 * 60 * 1000,       // 1 hour,
-  [AlertSeverity.LOW]: 4 * 60 * 60 * 1000,      // 4 hours,
-  [AlertSeverity.INFO]: 0,
+  [AlertSeverity.CRITICAL]: 5 * 60 * 1000,      // 5 minutes
+  [AlertSeverity.HIGH]: 15 * 60 * 1000,         // 15 minutes
+  [AlertSeverity.MEDIUM]: 60 * 60 * 1000,       // 1 hour
+  [AlertSeverity.LOW]: 4 * 60 * 60 * 1000,      // 4 hours
+  [AlertSeverity.INFO]: 0 }
 };
     return new Date(Date.now() + delays[severity]);
-  private calculateAlertChecksum(alert: SecurityAlert): string {
-  const data = {
-  id: alert.id,
-  timestamp: alert.timestamp.toISOString(),
-  severity: alert.severity,
-  category: alert.category,
-  title: alert.title,
+  private calculateAlertChecksum(alert: SecurityAlert): string { const data = {
+  id: alert.id
+  timestamp: alert.timestamp.toISOString()
+  severity: alert.severity
+  category: alert.category
+  title: alert.title }
 };
     return crypto.createHash('sha256')
       .update(JSON.stringify(data) + (process.env.ALERT_INTEGRITY_SECRET || 'default'))
@@ -773,20 +732,17 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     const ips: string = [];
     pattern.indicators.forEach(indicator => {)
   const ipMatch = indicator.match(/\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/);
-      if (ipMatch) {
-        ips.push(ipMatch[0]);
-    });
+      if (ipMatch) { ips.push(ipMatch[0]) });
     return ips;
-  private findApplicableRules(alert: SecurityAlert): AlertRule {
-  const applicableRules: AlertRule = [];
+  private findApplicableRules(alert: SecurityAlert): AlertRule { const applicableRules: AlertRule = [];
   for (const rule of this.alertRules.values()) {
   if (!rule.enabled) continue;
   if (this.evaluateRuleConditions(alert, rule.conditions)) {
   applicableRules.push(rule);
   return applicableRules;
-  private evaluateRuleConditions(alert: SecurityAlert, conditions: AlertCondition): boolean {,
+  private evaluateRuleConditions(alert: SecurityAlert, conditions: AlertCondition): boolean {
   return conditions.every(condition => this.evaluateCondition(alert, condition));
-  private evaluateCondition(alert: SecurityAlert, condition: AlertCondition): boolean {,
+  private evaluateCondition(alert: SecurityAlert, condition: AlertCondition): boolean {
   const fieldValue = this.getFieldValue(alert, condition.field);
   switch (condition.operator) {
   case 'eq': return fieldValue === condition.value;
@@ -800,13 +756,11 @@ export class SecurityAlertingWorkflow extends EventEmitter {
   case 'contains': return String(fieldValue).includes(String(condition.value));
   case 'matches': return new RegExp(String(condition.value)).test(String(fieldValue));
   default: return false;
-  private getFieldValue(alert: SecurityAlert, field: string): any {,
+  private getFieldValue(alert: SecurityAlert, field: string): any { }
   const parts = field.split('.');
   let value: any = alert;
-  for (const part of parts) {
-  if (value && typeof value === 'object' && part in value) {
-  value = value[part];
-} else {
+  for (const part of parts) { if (value && typeof value === 'object' && part in value) {
+  value = value[part] } else {
         return undefined;
     return value;
   private async isAlertSuppressed(alert: SecurityAlert, rule: AlertRule): Promise<boolean> {
@@ -900,7 +854,7 @@ export class SecurityAlertingWorkflow extends EventEmitter {
       break;
     default:
       console.log(`Unknown step action: ${actionId}`);
-  }
+
   
   private formatNotificationContent(alert: SecurityAlert, channel: AlertChannel): string {
     const baseContent = `🚨 SECURITY ALERT [${alert.severity.toUpperCase()}]
@@ -950,8 +904,7 @@ Do not reply to this email.`;
   private async activateIncidentResponse(alert: SecurityAlert): Promise<void> {
 
     console.log(`Activating incident response for alert: ${alert.id}`);}
-  private getResponseTime(alert: SecurityAlert): number {
-    // Calculate time from triggered to acknowledged
+  private getResponseTime(alert: SecurityAlert): number { // Calculate time from triggered to acknowledged
     if (alert.state === AlertState.TRIGGERED) return 0;
     // In real implementation, would track state transitions
     return 300000; // 5 minutes default
@@ -960,308 +913,288 @@ Do not reply to this email.`;
     if (!alert.resolution) return 0;
     return alert.resolution.resolvedAt.getTime() - alert.timestamp.getTime();
   private async logAlertEvent(alert: SecurityAlert)
-    event: string,
-    actor: string = 'system',
+  event: string
+    actor: string = 'system' }
     details?: string
   ): Promise<void> {
 
     await this.securityLogger.logSecurityAlert()
       `alert_${event}`}
-}
-      'high',
-      {
-  alertId: alert.id,
-  alertSeverity: alert.severity,
-  alertCategory: alert.category,
-  event,
-  actor,
+
+      'high'
+      { alertId: alert.id
+  alertSeverity: alert.severity
+  alertCategory: alert.category
+  event
+  actor }
   details
-}
-      {
-  correlationId: alert.metadata.correlationId,
+
+      { correlationId: alert.metadata.correlationId
   ...alert.context
   );
-  private async logComplianceEvent(alert: SecurityAlert, frameworks: ComplianceFramework): Promise<void> {,
+  private async logComplianceEvent(alert: SecurityAlert, frameworks: ComplianceFramework): Promise<void> {
   await this.securityLogger.logSecurityAlert()
-  'compliance_alert',
-  'medium',
+  'compliance_alert'
+  'medium'
   {
-  alertId: alert.id,
-  frameworks: frameworks,
-  reportingRequired: alert.compliance.reportingRequired,
-  deadline: alert.compliance.deadline?.toISOString(),
-}
+  alertId: alert.id
+  frameworks: frameworks
+  reportingRequired: alert.compliance.reportingRequired
+  deadline: alert.compliance.deadline?.toISOString() }
+
       { correlationId: alert.metadata.correlationId }
     );
-  private async generateResolutionReport(alert: SecurityAlert): Promise<void> {
-
-  if (!alert.resolution) return;
+  private async generateResolutionReport(alert: SecurityAlert): Promise<void> { if (!alert.resolution) return;
   const report = {
-  alertId: alert.id,
-  title: alert.title,
-  severity: alert.severity,
-  category: alert.category,
+  alertId: alert.id
+  title: alert.title
+  severity: alert.severity
+  category: alert.category
   timeline: {
-  triggered: alert.timestamp,
-  resolved: alert.resolution.resolvedAt,
-  totalTime: this.getResolutionTime(alert),
-},
-  resolution: alert.resolution,
-      impact: alert.risk,
+  triggered: alert.timestamp
+  resolved: alert.resolution.resolvedAt
+  totalTime: this.getResolutionTime(alert) }
+
+  resolution: alert.resolution
+      impact: alert.risk
       compliance: alert.compliance;
   };
     // In real implementation, store in compliance database
     console.log('Resolution Report Generated:', JSON.stringify(report, null, 2));
-  private initializeDefaultRules(): void {
-    // Create default alerting rules
+  private initializeDefaultRules(): void { // Create default alerting rules
     this.createDefaultCriticalRules();
     this.createDefaultHighRules();
     this.createDefaultMediumRules();
   private createDefaultCriticalRules(): void {
     // Critical: System Compromise
     this.alertRules.set('critical-system-compromise', {)
-  id: 'critical-system-compromise',
-      name: 'System Compromise Detection',
-      description: 'Detect system-level security compromises',
-      enabled: true,
-      conditions: [,
-        { field: 'category', operator: 'eq', value: ThreatCategory.SYSTEM_COMPROMISE },
+  id: 'critical-system-compromise'
+      name: 'System Compromise Detection'
+      description: 'Detect system-level security compromises'
+      enabled: true }
+      conditions: [
+        { field: 'category', operator: 'eq', value: ThreatCategory.SYSTEM_COMPROMISE }
         { field: 'risk.score', operator: 'gte', value: 80 }
-      ],
-      severity: AlertSeverity.CRITICAL,
-      category: ThreatCategory.SYSTEM_COMPROMISE,
-      escalationPolicy: {
-  id: 'critical-escalation',
-        name: 'Critical Escalation Policy',
-        steps: [,
+      ]
+      severity: AlertSeverity.CRITICAL
+      category: ThreatCategory.SYSTEM_COMPROMISE
+      escalationPolicy: { 
+  id: 'critical-escalation'
+        name: 'Critical Escalation Policy'
+        steps: [
           {
-            level: 1,
-            delay: 0,
-            recipients: [,
+            level: 1
+            delay: 0
+            recipients: [
               {
-                type: 'team',
-                identifier: 'security-team',
-                contactMethods: [,
-                  { channel: AlertChannel.PAGERDUTY, address: 'security-oncall', priority: 1 },
+                type: 'team'
+                identifier: 'security-team' }
+                contactMethods: [
+                  { channel: AlertChannel.PAGERDUTY, address: 'security-oncall', priority: 1 }
                   { channel: AlertChannel.SLACK, address: '#security-alerts', priority: 2 }
                 ]
-            ],
-            channels: [AlertChannel.PAGERDUTY, AlertChannel.SLACK],
-            actions: ['create_incident_ticket'],
+            ]
+            channels: [AlertChannel.PAGERDUTY, AlertChannel.SLACK]
+            actions: ['create_incident_ticket']
             continueOnFailure: true;
-  }
-          {
-            level: 2,
+
+          { level: 2
             delay: 300, // 5 minutes
-            recipients: [,
+            recipients: [
               {
-                type: 'role',
-                identifier: 'security-manager',
-                contactMethods: [,
+                type: 'role'
+                identifier: 'security-manager' }
+                contactMethods: [
                   { channel: AlertChannel.PAGERDUTY, address: 'security-manager', priority: 1 }
                 ]
-            ],
-            channels: [AlertChannel.PAGERDUTY, AlertChannel.EMAIL],
-            actions: ['notify_management'],
-            continueOnFailure: true],
-        requiresAcknowledgment: true,
-        autoResolve: false,
-        escalationTimeout: 300;
-  },
-  automatedActions: [,
-        {
-          id: 'isolate-system',
-          name: 'Isolate Compromised System',
-          description: 'Automatically isolate systems showing compromise indicators',
-          type: 'system',
-          action: 'isolate_system',
-          parameters: { isolation_level: 'network' },
-          conditions: [,
+            ]
+            channels: [AlertChannel.PAGERDUTY, AlertChannel.EMAIL]
+            actions: ['notify_management']
+            continueOnFailure: true]
+        requiresAcknowledgment: true
+        autoResolve: false
+        escalationTimeout: 300
+
+  automatedActions: [
+        { id: 'isolate-system'
+          name: 'Isolate Compromised System'
+          description: 'Automatically isolate systems showing compromise indicators'
+          type: 'system'
+          action: 'isolate_system' }
+          parameters: { isolation_level: 'network' }
+          conditions: [
             { field: 'severity', operator: 'eq', value: AlertSeverity.CRITICAL }
-          ],
-          maxExecutions: 1,
-          cooldownPeriod: 3600,
-          requiresApproval: false],
+          ]
+          maxExecutions: 1
+          cooldownPeriod: 3600
+          requiresApproval: false]
       compliance: [ComplianceFramework.SOX, ComplianceFramework.ISO_27001]
     });
     // Critical: Data Exfiltration
-    this.alertRules.set('critical-data-exfiltration', {)
-  id: 'critical-data-exfiltration',
-      name: 'Data Exfiltration Detection',
-      description: 'Detect large-scale data exfiltration attempts',
-      enabled: true,
-      conditions: [,
-        { field: 'category', operator: 'eq', value: ThreatCategory.DATA_EXFILTRATION },
+    this.alertRules.set('critical-data-exfiltration', { )
+  id: 'critical-data-exfiltration'
+      name: 'Data Exfiltration Detection'
+      description: 'Detect large-scale data exfiltration attempts'
+      enabled: true }
+      conditions: [
+        { field: 'category', operator: 'eq', value: ThreatCategory.DATA_EXFILTRATION }
         { field: 'severity', operator: 'in', value: [AlertSeverity.CRITICAL, AlertSeverity.HIGH] }
-      ],
-      severity: AlertSeverity.CRITICAL,
-      category: ThreatCategory.DATA_EXFILTRATION,
-      escalationPolicy: {
-  id: 'data-breach-escalation',
-        name: 'Data Breach Escalation Policy',
-        steps: [,
+      ]
+      severity: AlertSeverity.CRITICAL
+      category: ThreatCategory.DATA_EXFILTRATION
+      escalationPolicy: { 
+  id: 'data-breach-escalation'
+        name: 'Data Breach Escalation Policy'
+        steps: [
           {
-            level: 1,
-            delay: 0,
-            recipients: [,
+            level: 1
+            delay: 0
+            recipients: [
               {
-                type: 'team',
-                identifier: 'security-team',
-                contactMethods: [,
+                type: 'team'
+                identifier: 'security-team' }
+                contactMethods: [
                   { channel: AlertChannel.PAGERDUTY, address: 'security-oncall', priority: 1 }
                 ]
-  }
-              {
-                type: 'role',
+
+              { type: 'role' }
                 identifier: 'dpo', // Data Protection Officer
-                contactMethods: [,
+                contactMethods: [
                   { channel: AlertChannel.EMAIL, address: 'dpo@company.com', priority: 1 }
                 ]
-            ],
-            channels: [AlertChannel.PAGERDUTY, AlertChannel.EMAIL],
-            actions: ['activate_incident_response'],
-            continueOnFailure: true],
-        requiresAcknowledgment: true,
-        autoResolve: false,
-        escalationTimeout: 300;
-  },
-  automatedActions: [,
-        {
-          id: 'block-data-export',
-          name: 'Block Data Export',
-          description: 'Prevent further data exports during investigation',
-          type: 'data',
-          action: 'block_exports',
-          parameters: { scope: 'affected_users' },
-          conditions: [],
-          maxExecutions: 1,
-          cooldownPeriod: 1800,
-          requiresApproval: false],
+            ]
+            channels: [AlertChannel.PAGERDUTY, AlertChannel.EMAIL]
+            actions: ['activate_incident_response']
+            continueOnFailure: true]
+        requiresAcknowledgment: true
+        autoResolve: false
+        escalationTimeout: 300
+
+  automatedActions: [
+        { id: 'block-data-export'
+          name: 'Block Data Export'
+          description: 'Prevent further data exports during investigation'
+          type: 'data'
+          action: 'block_exports' }
+          parameters: { scope: 'affected_users' }
+          conditions: []
+          maxExecutions: 1
+          cooldownPeriod: 1800
+          requiresApproval: false]
       compliance: [ComplianceFramework.GDPR, ComplianceFramework.ISO_27001]
     });
-  private createDefaultHighRules(): void {
-    // High: Insider Threat
+  private createDefaultHighRules(): void { // High: Insider Threat
     this.alertRules.set('high-insider-threat', {)
-  id: 'high-insider-threat',
-      name: 'Insider Threat Detection',
-      description: 'Detect potential insider threat activities',
-      enabled: true,
-      conditions: [,
-        { field: 'category', operator: 'eq', value: ThreatCategory.INSIDER_THREAT },
+  id: 'high-insider-threat'
+      name: 'Insider Threat Detection'
+      description: 'Detect potential insider threat activities'
+      enabled: true }
+      conditions: [
+        { field: 'category', operator: 'eq', value: ThreatCategory.INSIDER_THREAT }
         { field: 'risk.score', operator: 'gte', value: 60 }
-      ],
-      severity: AlertSeverity.HIGH,
-      category: ThreatCategory.INSIDER_THREAT,
-      escalationPolicy: {
-  id: 'insider-threat-escalation',
-        name: 'Insider Threat Escalation Policy',
-        steps: [,
+      ]
+      severity: AlertSeverity.HIGH
+      category: ThreatCategory.INSIDER_THREAT
+      escalationPolicy: { 
+  id: 'insider-threat-escalation'
+        name: 'Insider Threat Escalation Policy'
+        steps: [
           {
-            level: 1,
-            delay: 0,
-            recipients: [,
+            level: 1
+            delay: 0
+            recipients: [
               {
-                type: 'team',
-                identifier: 'security-analysts',
-                contactMethods: [,
+                type: 'team'
+                identifier: 'security-analysts' }
+                contactMethods: [
                   { channel: AlertChannel.SLACK, address: '#security-alerts', priority: 1 }
                 ]
-            ],
-            channels: [AlertChannel.SLACK, AlertChannel.EMAIL],
-            actions: [],
-            continueOnFailure: true],
-        requiresAcknowledgment: true,
-        autoResolve: false,
-        escalationTimeout: 900 // 15 minutes;
-  },
-  automatedActions: [,
-        {
-          id: 'enhance-monitoring',
-          name: 'Enhanced User Monitoring',
-          description: 'Enable enhanced monitoring for suspected insider threat',
-          type: 'user',
-          action: 'enhance_monitoring',
+            ]
+            channels: [AlertChannel.SLACK, AlertChannel.EMAIL]
+            actions: []
+            continueOnFailure: true]
+        requiresAcknowledgment: true
+        autoResolve: false
+        escalationTimeout: 900 // 15 minutes
+
+  automatedActions: [
+        { id: 'enhance-monitoring'
+          name: 'Enhanced User Monitoring'
+          description: 'Enable enhanced monitoring for suspected insider threat'
+          type: 'user'
+          action: 'enhance_monitoring' }
           parameters: { monitoring_level: 'detailed', duration: 7200 }, // 2 hours
-          conditions: [],
-          maxExecutions: 3,
-          cooldownPeriod: 3600,
-          requiresApproval: false],
+          conditions: []
+          maxExecutions: 3
+          cooldownPeriod: 3600
+          requiresApproval: false]
       compliance: [ComplianceFramework.ISO_27001];
   });
-  private createDefaultMediumRules(): void {
-    // Medium: Authentication Issues
+  private createDefaultMediumRules(): void { // Medium: Authentication Issues
     this.alertRules.set('medium-auth-issues', {)
-  id: 'medium-auth-issues',
-      name: 'Authentication Issues',
-      description: 'Monitor authentication-related security events',
-      enabled: true,
-      conditions: [,
-        { field: 'category', operator: 'eq', value: ThreatCategory.AUTHENTICATION },
+  id: 'medium-auth-issues'
+      name: 'Authentication Issues'
+      description: 'Monitor authentication-related security events'
+      enabled: true }
+      conditions: [
+        { field: 'category', operator: 'eq', value: ThreatCategory.AUTHENTICATION }
         { field: 'severity', operator: 'in', value: [AlertSeverity.MEDIUM, AlertSeverity.HIGH] }
-      ],
-      severity: AlertSeverity.MEDIUM,
-      category: ThreatCategory.AUTHENTICATION,
-      suppressionRules: [,
-        {
-          id: 'auth-suppression',
-          description: 'Suppress duplicate auth alerts from same IP',
-          conditions: [,
+      ]
+      severity: AlertSeverity.MEDIUM
+      category: ThreatCategory.AUTHENTICATION
+      suppressionRules: [
+        { id: 'auth-suppression'
+          description: 'Suppress duplicate auth alerts from same IP' }
+          conditions: [
             { field: 'context.ipAddresses.0', operator: 'eq', value: '{same_ip}' }
-          ],
+          ]
           suppressionWindow: 1800, // 30 minutes
-          maxSuppressions: 5],
-      escalationPolicy: {
-  id: 'auth-escalation',
-        name: 'Authentication Escalation Policy',
-        steps: [,
+          maxSuppressions: 5]
+      escalationPolicy: { 
+  id: 'auth-escalation'
+        name: 'Authentication Escalation Policy'
+        steps: [
           {
-            level: 1,
-            delay: 0,
-            recipients: [,
+            level: 1
+            delay: 0
+            recipients: [
               {
-                type: 'team',
-                identifier: 'security-analysts',
-                contactMethods: [,
+                type: 'team'
+                identifier: 'security-analysts' }
+                contactMethods: [
                   { channel: AlertChannel.EMAIL, address: 'security-analysts@company.com', priority: 1 }
                 ]
-            ],
-            channels: [AlertChannel.EMAIL],
-            actions: [],
-            continueOnFailure: true],
-        requiresAcknowledgment: false,
-        autoResolve: true,
-        escalationTimeout: 3600 // 1 hour;
-  },
-  automatedActions: [,
-        {
-          id: 'rate-limit-auth',
-          name: 'Rate Limit Authentication',
-          description: 'Apply rate limiting to authentication attempts',
-          type: 'network',
-          action: 'rate_limit',
-          parameters: { resource: 'auth', factor: 2 },
-          conditions: [,
+            ]
+            channels: [AlertChannel.EMAIL]
+            actions: []
+            continueOnFailure: true]
+        requiresAcknowledgment: false
+        autoResolve: true
+        escalationTimeout: 3600 // 1 hour
+
+  automatedActions: [
+        { id: 'rate-limit-auth'
+          name: 'Rate Limit Authentication'
+          description: 'Apply rate limiting to authentication attempts'
+          type: 'network'
+          action: 'rate_limit' }
+          parameters: { resource: 'auth', factor: 2 }
+          conditions: [
             { field: 'context.ipAddresses', operator: 'ne', value: [] }
-          ],
-          maxExecutions: 3,
-          cooldownPeriod: 1800,
-          requiresApproval: false],
+          ]
+          maxExecutions: 3
+          cooldownPeriod: 1800
+          requiresApproval: false]
       compliance: [ComplianceFramework.ISO_27001];
   });
-  private startContinuousProcessing(): void {
-    // Process alerts every 30 seconds
+  private startContinuousProcessing(): void { // Process alerts every 30 seconds
     setInterval(async () => {
       if (this.isProcessing) return;
       this.isProcessing = true;
       try {
         await this.processQueuedEvents();
         await this.processEscalationTimeouts();
-        await this.cleanupOldAlerts();
-      } catch (error) {
-  console.error('Continuous processing error:', error);
-} finally {
-        this.isProcessing = false;
-    }, 30000);
+        await this.cleanupOldAlerts() } catch (error) { console.error('Continuous processing error:', error) } finally { this.isProcessing = false }, 30000);
   private async processQueuedEvents(): Promise<void> {
 
     // Process any queued events from analytics
@@ -1298,26 +1231,21 @@ Do not reply to this email.`;
         this.alerts.delete(id);
         // Archive to long-term storage in production
         console.log(`Archived old alert: ${id}`);}
-  private setupAnalyticsIntegration(): void {
-  // Listen for insights and patterns from analytics
-  this.analytics.on('securityInsightGenerated', async (insight: SecurityInsight) => {,
+  private setupAnalyticsIntegration(): void { // Listen for insights and patterns from analytics
+  this.analytics.on('securityInsightGenerated', async (insight: SecurityInsight) => { }
   await this.processSecurityInsight(insight);
 });
-    this.analytics.on('threatPatternDetected', async (pattern: SecurityPattern) => {
-      await this.processSecurityPattern(pattern);
-    });
-    this.analytics.on('criticalSecurityEvent', async (event: any) => {
-      await this.createAlert()
+    this.analytics.on('threatPatternDetected', async (pattern: SecurityPattern) => { await this.processSecurityPattern(pattern) });
+    this.analytics.on('criticalSecurityEvent', async (event: any) => { await this.createAlert()
         'SecurityEventAnalytics',
         AlertSeverity.CRITICAL,
         ThreatCategory.SYSTEM_COMPROMISE,
-        'Critical Security Event Detected',
+        'Critical Security Event Detected' }
         `Critical security event: ${event.eventType}`}
-}
-        {
-  affectedSystems: ['security-system'],
-  ipAddresses: event.context?.ipAddress ? [event.context.ipAddress] : [],
-}
+
+        { affectedSystems: ['security-system'],
+  ipAddresses: event.context?.ipAddress ? [event.context.ipAddress] : [] }
+
         { eventIds: [event.id] }
       );
     });

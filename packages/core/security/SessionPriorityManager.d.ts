@@ -38,8 +38,8 @@ export declare enum ConflictResolution {
     MERGE_SESSIONS = "merge_sessions"
 
 }
-export interface SessionPriorityConfig {
-    maxSessionsPerUser: number;
+}
+export interface SessionPriorityConfig { maxSessionsPerUser: number;
     maxSessionsPerDevice: number;
     maxTotalSessions: number;
     evictionPolicy: EvictionPolicy;
@@ -51,26 +51,25 @@ export interface SessionPriorityConfig {
         timeOfDay: number;
         sessionAge: number;
         activityLevel: number;
-        securityLevel: number;
+        securityLevel: number }
 }
     };
     emergencyOverride: boolean;
     gracePeriodMinutes: number;
 
 }
-export interface PriorityFactors {
-    userRole: 'admin' | 'moderator' | 'user' | 'guest';
+}
+export interface PriorityFactors { userRole: 'admin' | 'moderator' | 'user' | 'guest';
     deviceTrustLevel: number;
     locationFamiliarity: number;
     timeOfDayScore: number;
     sessionDuration: number;
     activityLevel: number;
     securityRequirement: number;
-    businessCriticality: number;
-
+    businessCriticality: number }
 }
-export interface PrioritySessionData {
-    sessionId: string;
+}
+export interface PrioritySessionData { sessionId: string;
     userId: string;
     deviceId: string;
     priority: SessionPriority;
@@ -82,28 +81,26 @@ export interface PrioritySessionData {
     conflicts: string[];
     evictionProtection: boolean;
     emergencySession: boolean;
-    gracePeriodEnd?: Date;
-
+    gracePeriodEnd?: Date }
 }
-export interface EvictionDecision {
-    sessionId: string;
+}
+export interface EvictionDecision { sessionId: string;
     reason: string;
     evictionPolicy: EvictionPolicy;
     confidence: number;
     alternativeSessions: string[];
     gracePeriodOffered: boolean;
-    userNotificationRequired: boolean;
-
+    userNotificationRequired: boolean }
 }
-export interface SessionConflict {
-    id: string;
+}
+export interface SessionConflict { id: string;
     type: 'user_limit' | 'device_limit' | 'total_limit' | 'resource_contention';
     affectedSessions: string[];
     newSessionRequest: {
         userId: string;
         deviceId: string;
         priority: SessionPriority;
-        factors: PriorityFactors;
+        factors: PriorityFactors }
 }
     };
     resolutionOptions: ConflictResolution[];
@@ -113,8 +110,8 @@ export interface SessionConflict {
     timeoutMinutes: number;
 
 }
-export interface PriorityMetrics {
-    totalSessions: number;
+}
+export interface PriorityMetrics { totalSessions: number;
     sessionsByPriority: Record<SessionPriority, number>;
     evictionRate: number;
     conflictRate: number;
@@ -122,7 +119,7 @@ export interface PriorityMetrics {
     utilizationPercentage: number;
     topEvictionReasons: Array<{
         reason: string;
-        count: number;
+        count: number }
 }
     }>;
     emergencyOverrides: number;
@@ -130,8 +127,7 @@ export interface PriorityMetrics {
 /**
  * Comprehensive session priority and eviction management service
  */
-export declare class SessionPriorityManager extends EventEmitter {
-    private sessions;
+export declare class SessionPriorityManager extends EventEmitter { private sessions;
     private userSessions;
     private deviceSessions;
     private conflicts;
@@ -143,16 +139,14 @@ export declare class SessionPriorityManager extends EventEmitter {
      * Register a new session with priority management
      */
     registerSession();
-      sessionId: string,
-      userId: string,
-      deviceId: string,
-      priority: SessionPriority,
-      factors: PriorityFactors,
-    ): {
-        allowed: boolean;
+      sessionId: string
+      userId: string
+      deviceId: string
+      priority: SessionPriority
+      factors: PriorityFactors }
+    ): { allowed: boolean;
         conflicts?: SessionConflict[];
-        evicted?: string[];
-    };
+        evicted?: string[] };
     /**
      * Update session activity and recalculate priority
      */
@@ -164,11 +158,9 @@ export declare class SessionPriorityManager extends EventEmitter {
     /**
      * Resolve a session conflict
      */
-    resolveConflict(conflict: SessionConflict): {
-        resolved: boolean;
+    resolveConflict(conflict: SessionConflict): { resolved: boolean;
         evicted?: string[];
-        gracePeriod?: number;
-    };
+        gracePeriod?: number };
     /**
      * Force evict a session with specified reason
      */
@@ -176,10 +168,8 @@ export declare class SessionPriorityManager extends EventEmitter {
     /**
      * Create emergency override session
      */
-    createEmergencySession(sessionId: string, userId: string, deviceId: string, factors: PriorityFactors): {
-        created: boolean;
-        evicted?: string[];
-    };
+    createEmergencySession(sessionId: string, userId: string, deviceId: string, factors: PriorityFactors): { created: boolean;
+        evicted?: string[] };
     /**
      * Get session priority ranking
      */

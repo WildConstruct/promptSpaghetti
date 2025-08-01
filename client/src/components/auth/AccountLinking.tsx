@@ -2,7 +2,8 @@
 // Interface for linking and unlinking OAuth provider accounts
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-}
+
+
 interface LinkedAccount {
   provider: string;,
   email: string;
@@ -12,17 +13,18 @@ interface LinkedAccount {
   updatedAt: string;
   interface OAuthProvider {
   name: string;,
-  displayName: string;
+  displayName: string;,
   icon: string;,
   color: string;
   interface AccountLinkingProps {
   onAccountLinked?: (provider: string) => void;
   onAccountUnlinked?: (provider: string) => void;
-  export const AccountLinking: React.FC<AccountLinkingProps> = ({,)
+  export const AccountLinking: React.FC<AccountLinkingProps> = ({),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onAccountLinked,
   onAccountUnlinked
-}
+
+
 }) => {
   const { user } = useAuth();
   const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount>([]);
@@ -46,7 +48,7 @@ interface LinkedAccount {
         throw new Error('Failed to fetch linked accounts');
       const data = await response.json();
       setLinkedAccounts(data.accounts);
-    } catch (error) {
+ catch (error) {
   console.error('Error fetching linked accounts:', error);
   setError('Failed to load linked accounts');
 };
@@ -57,9 +59,9 @@ interface LinkedAccount {
         throw new Error('Failed to fetch available providers');
       const data = await response.json();
       setAvailableProviders(data.providers);
-    } catch (error) {
+ catch (error) {
   console.error('Error fetching available providers:', error);
-} finally {
+ finally {
       setLoading(false);
   };
   const linkAccount = async (provider: string) => {
@@ -77,7 +79,7 @@ interface LinkedAccount {
       const authData = await authResponse.json();
       // Redirect to OAuth provider
       window.location.href = authData.url;
-    } catch (error) {
+ catch (error) {
       console.error('Error linking account:', error);
       setError(`Failed to link ${provider} account`);}
       setLinking(null);
@@ -100,10 +102,10 @@ interface LinkedAccount {
       // Remove from local state
       setLinkedAccounts(prev => prev.filter(acc => acc.provider !== provider));
       onAccountUnlinked?.(provider);
-    } catch (error) {
+ catch (error) {
       console.error('Error unlinking account:', error);
       setError(error.message || `Failed to unlink ${provider} account`);}
-    } finally {
+ finally {
       setUnlinking(null);
   };
   const getProviderIcon = (provider: string) => {
@@ -166,7 +168,7 @@ interface LinkedAccount {
   linked
   ? 'border-green-200 bg-green-50'
   : 'border-gray-200 bg-white',
-}`}
+`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -211,7 +213,7 @@ interface LinkedAccount {
   unlinking === provider.name
   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
   : 'bg-red-50 text-red-700 hover:bg-red-100',
-}`}
+`}
                         >
                           {unlinking === provider.name ? 'Unlinking...' : 'Unlink'}
                         </button>
@@ -224,7 +226,7 @@ interface LinkedAccount {
   linking === provider.name
   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
   : 'bg-blue-600 text-white hover:bg-blue-700',
-}`}
+`}
                       >
                         {linking === provider.name ? 'Linking...' : 'Link Account'}
                       </button>
@@ -274,7 +276,7 @@ interface LinkedAccount {
               <div className="text-2xl font-bold text-purple-600">
                 {linkedAccounts.length > 0 ? 
                   Math.round((linkedAccounts.length / availableProviders.length) * 100) : 0
-                }%
+%
               </div>
               <div className="text-sm text-gray-600">Integration Level</div>
             </div>

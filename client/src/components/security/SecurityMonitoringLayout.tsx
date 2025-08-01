@@ -12,51 +12,53 @@ import {
   ChevronRight,
   Maximize2,
   Minimize2
-} from 'lucide-react';
+ from 'lucide-react';
 import { SecurityDashboard } from './SecurityDashboard';
 import { SecurityEventLog } from './SecurityEventLog';
 import { IncidentResponsePanel } from './IncidentResponsePanel';
 import { ThreatDetectionVisualizer } from './ThreatDetectionVisualizer';
 import { SecurityAlerts } from './SecurityAlerts';
 type SecurityView = 'dashboard' | 'events' | 'threats' | 'incidents' | 'alerts';
-}
+
+
 interface SecurityMonitoringLayoutProps {
   initialView?: SecurityView;
   compactMode?: boolean;
-  export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> = ({,)
+  export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> = ({),
   initialView = 'dashboard',
   compactMode = false
-}
+
+
 }) => {
   const [currentView, setCurrentView] = useState<SecurityView>(initialView);
   const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const navigationItems = [;
+  const navigationItems = [
   {
   id: 'dashboard' as SecurityView,
   label: 'Dashboard',
   icon: Activity,
   description: 'Security overview and metrics',
-}
+
     {
   id: 'threats' as SecurityView,
   label: 'Threat Detection',
   icon: Shield,
   description: 'Real-time threat monitoring',
-}
+
     {
   id: 'events' as SecurityView,
   label: 'Event Log',
   icon: Eye,
   description: 'Security event history',
-}
+
     {
   id: 'incidents' as SecurityView,
   label: 'Incidents',
   icon: AlertTriangle,
   description: 'Incident response management',
-}
+
     {
   id: 'alerts' as SecurityView,
   label: 'Alerts',

@@ -8,166 +8,145 @@ import React from 'react';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 }
-export interface RetentionChurnAnalysisProps {
-    analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
+export interface RetentionChurnAnalysisProps { analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     retentionConfig: RetentionAnalysisConfig;
     churnPredictionConfig: ChurnPredictionConfig;
     onChurnAlert?: (alert: ChurnAlert) => void;
     onRetentionInsight?: (insight: RetentionInsight) => void;
-    onExport?: (data: RetentionChurnExportData) => void;
-
+    onExport?: (data: RetentionChurnExportData) => void }
 }
-export interface RetentionAnalysisConfig {
-    cohortDefinition: CohortDefinition;
+}
+export interface RetentionAnalysisConfig { cohortDefinition: CohortDefinition;
     retentionPeriods: RetentionPeriod[];
     segmentation: RetentionSegmentation;
-    benchmarks: RetentionBenchmark[];
-
+    benchmarks: RetentionBenchmark[] }
 }
-export interface ChurnPredictionConfig {
-    predictionModels: ChurnPredictionModel[];
+}
+export interface ChurnPredictionConfig { predictionModels: ChurnPredictionModel[];
     riskFactors: ChurnRiskFactor[];
     interventionStrategies: ChurnInterventionStrategy[];
-    evaluationMetrics: ChurnModelMetric[];
-
+    evaluationMetrics: ChurnModelMetric[] }
 }
-export interface RetentionData {
-    cohortId: string;
+}
+export interface RetentionData { cohortId: string;
     cohortName: string;
     cohortSize: number;
     acquisitionDate: number;
     retentionRates: RetentionRateData[];
-    segments: SegmentRetentionData[];
-
+    segments: SegmentRetentionData[] }
 }
-export interface RetentionRateData {
-    period: number;
+}
+export interface RetentionRateData { period: number;
     retainedUsers: number;
     retentionRate: number;
     benchmark: number;
-    variance: number;
-
+    variance: number }
 }
-export interface ChurnPredictionData {
-    userId: string;
+}
+export interface ChurnPredictionData { userId: string;
     churnProbability: number;
     riskLevel: ChurnRiskLevel;
     riskFactors: ActiveRiskFactor[];
     predictions: ChurnPrediction[];
     recommendedActions: ChurnPreventionAction[];
 
-export type ChurnRiskLevel = 'low' | 'medium' | 'high' | 'critical';
-
+export type ChurnRiskLevel = 'low' | 'medium' | 'high' | 'critical' }
 }
-export interface ChurnPrediction {
-    timeHorizon: number;
+}
+export interface ChurnPrediction { timeHorizon: number;
     probability: number;
     confidence: number;
     model: string;
 
-export declare const RetentionChurnAnalysis: React.FC<RetentionChurnAnalysisProps>;
-
+export declare const RetentionChurnAnalysis: React.FC<RetentionChurnAnalysisProps> }
 }
-export interface CohortDefinition {
-    timeRange: 'daily' | 'weekly' | 'monthly';
-    criteria: CohortCriteria[];
-
 }
-export interface CohortCriteria {
-    field: string;
+export interface CohortDefinition { timeRange: 'daily' | 'weekly' | 'monthly';
+    criteria: CohortCriteria[] }
+}
+}
+export interface CohortCriteria { field: string;
     operator: string;
-    value: Error;
-
+    value: Error }
 }
-export interface RetentionPeriod {
-    days: number;
-    label: string;
-
 }
-export interface RetentionSegmentation {
-    enabled: boolean;
-    segments: string[];
-
+export interface RetentionPeriod { days: number;
+    label: string }
 }
-export interface RetentionBenchmark {
-    period: number;
+}
+export interface RetentionSegmentation { enabled: boolean;
+    segments: string[] }
+}
+}
+export interface RetentionBenchmark { period: number;
     value: number;
-    source: string;
-
+    source: string }
 }
-export interface ChurnPredictionModel {
-    modelId: string;
+}
+export interface ChurnPredictionModel { modelId: string;
     name: string;
     accuracy: number;
-    features: string[];
-
+    features: string[] }
 }
-export interface ChurnRiskFactor {
-    factor: string;
+}
+export interface ChurnRiskFactor { factor: string;
     weight: number;
-    category: string;
-
+    category: string }
 }
-export interface ChurnInterventionStrategy {
-    strategyId: string;
+}
+export interface ChurnInterventionStrategy { strategyId: string;
     name: string;
     effectiveness: number;
-    cost: string;
-
+    cost: string }
 }
-export interface ChurnModelMetric {
-    metric: string;
+}
+export interface ChurnModelMetric { metric: string;
     target: number;
-    current: number;
-
+    current: number }
 }
-export interface SegmentRetentionData {
-    segment: string;
-    retentionRates: RetentionRateData[];
-
 }
-export interface ActiveRiskFactor {
-    factor: string;
+export interface SegmentRetentionData { segment: string;
+    retentionRates: RetentionRateData[] }
+}
+}
+export interface ActiveRiskFactor { factor: string;
     impact: number;
     trend: string;
-    daysActive: number;
-
+    daysActive: number }
 }
-export interface ChurnPreventionAction {
-    action: string;
+}
+export interface ChurnPreventionAction { action: string;
     priority: string;
     expectedImpact: number;
     cost: string;
-    timeline: string;
-
+    timeline: string }
 }
-export interface RetentionInsight {
-    insightId: string;
+}
+export interface RetentionInsight { insightId: string;
     type: string;
     message: string;
     severity: string;
-    recommendations: string[];
-
+    recommendations: string[] }
 }
-export interface ChurnAlert {
-    alertId: string;
+}
+export interface ChurnAlert { alertId: string;
     severity: string;
     type: string;
     message: string;
     timestamp: number;
     affectedUsers: number;
-    recommendedActions: string[];
-
+    recommendedActions: string[] }
 }
-export interface RetentionChurnExportData {
-    retentionData: RetentionData[];
+}
+export interface RetentionChurnExportData { retentionData: RetentionData[];
     churnPredictions: ChurnPredictionData[];
     analysisTimestamp: number;
     metadata: {
         totalCohorts: number;
         totalUsers: number;
         highRiskUsers: number;
-        averageRetention30d: number;
+        averageRetention30d: number }
 }
     };
 

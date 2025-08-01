@@ -5,18 +5,16 @@
  * Part of Epic 17 - Backstage Admin Controls
  */
 
-}
-export interface Policy {
-  id: string;
+
+export interface Policy { id: string;
   policyKey: string;
   name: string;
   description?: string;
   category: PolicyCategory;
   createdBy: string;
   createdAt: Date;
-  updatedAt: Date;
-}
-}
+  updatedAt: Date }
+
 export type PolicyCategory = 
   | 'general'
   | 'content'
@@ -28,9 +26,8 @@ export type PolicyCategory =
   | 'user_safety'
   | 'intellectual_property';
 
-}
-export interface PolicyVersion {
-  id: string;
+
+export interface PolicyVersion { id: string;
   policyId: string;
   version: string;
   majorVersion: number;
@@ -61,9 +58,8 @@ export interface PolicyVersion {
   metadata: Record<string, any>;
   // Timestamps
   createdAt: Date;
-  updatedAt: Date;
-}
-}
+  updatedAt: Date }
+
 export type PolicyStatus = 
   | 'draft'
   | 'review'
@@ -104,28 +100,26 @@ export type ComplianceFramework =
   | 'quality_assurance'
   | 'data_protection';
 
-}
-export interface PolicyContent {
-  sections: PolicySection;
+
+export interface PolicyContent { sections: PolicySection;
   summary?: string;
   lastModified?: Date;
   wordCount?: number;
-  [key: string]: any; // Allow additional content properties,
-}
-}
-}
-export interface PolicySection {
-  id?: string;
+  [key: string]: any; // Allow additional content properties }
+
+
+
+
+export interface PolicySection { id?: string;
   title: string;
   content: string;
   order?: number;
   subsections?: PolicySection;
-  metadata?: Record<string, any>;
-}
-}
-}
-export interface PolicyVersionChange {
-  id: string;
+  metadata?: Record<string, any> }
+
+
+
+export interface PolicyVersionChange { id: string;
   versionId: string;
   changeType: string;
   fieldPath: string;
@@ -133,39 +127,35 @@ export interface PolicyVersionChange {
   newValue?: any;
   changeReason?: string;
   createdBy: string;
-  createdAt: Date;
-}
-}
-}
-export interface PolicyApproval {
-  id: string;
+  createdAt: Date }
+
+
+
+export interface PolicyApproval { id: string;
   versionId: string;
   approverId: string;
   approvalStatus: ApprovalStatus;
   approvalType: string;
   comments?: string;
   approvedAt?: Date;
-  createdAt: Date;
-}
-}
+  createdAt: Date }
+
 export type ApprovalStatus = 
   | 'pending'
   | 'approved'
   | 'rejected'
   | 'withdrawn';
 
-}
-export interface PolicyComplianceMapping {
-  id: string;
+
+export interface PolicyComplianceMapping { id: string;
   versionId: string;
   complianceFramework: ComplianceFramework;
   requirementId: string;
   requirementDescription?: string;
   complianceLevel: ComplianceLevel;
   notes?: string;
-  createdAt: Date;
-}
-}
+  createdAt: Date }
+
 export type ComplianceLevel = 
   | 'full'
   | 'partial'
@@ -173,17 +163,15 @@ export type ComplianceLevel =
 
 // Request and Response Types
 
-}
-export interface CreatePolicyRequest {
-  policyKey: string;
+
+export interface CreatePolicyRequest { policyKey: string;
   name: string;
   description?: string;
-  category: PolicyCategory;
-}
-}
-}
-export interface CreatePolicyVersionRequest {
-  title: string;
+  category: PolicyCategory }
+
+
+
+export interface CreatePolicyVersionRequest { title: string;
   content: PolicyContent;
   contentType?: ContentType;
   changeType?: ChangeType;
@@ -193,12 +181,11 @@ export interface CreatePolicyVersionRequest {
   severityLevel?: SeverityLevel;
   effectiveDate?: Date;
   expirationDate?: Date;
-  metadata?: Record<string, any>;
-}
-}
-}
-export interface UpdatePolicyVersionRequest {
-  title?: string;
+  metadata?: Record<string, any> }
+
+
+
+export interface UpdatePolicyVersionRequest { title?: string;
   content?: PolicyContent;
   contentType?: ContentType;
   changeSummary?: string;
@@ -207,38 +194,35 @@ export interface UpdatePolicyVersionRequest {
   severityLevel?: SeverityLevel;
   effectiveDate?: Date;
   expirationDate?: Date;
-  metadata?: Record<string, any>;
-}
-}
-}
-export interface PublishPolicyVersionRequest {
-  effectiveDate?: Date;
-  publishingNotes?: string;
-}
-}
-}
-export interface PolicyVersionComparison {
-  fromVersion: PolicyVersion;
+  metadata?: Record<string, any> }
+
+
+
+export interface PublishPolicyVersionRequest { effectiveDate?: Date;
+  publishingNotes?: string }
+
+
+
+export interface PolicyVersionComparison { fromVersion: PolicyVersion;
   toVersion: PolicyVersion;
   changes: PolicyVersionDiff;
-  summary: {
+  summary: { }
   addedSections: number;
   removedSections: number;
   modifiedSections: number;
   totalChanges: number;
-}
+
+
 };
-}
-}
-export interface PolicyVersionDiff {
-  type: DiffType;
+
+
+export interface PolicyVersionDiff { type: DiffType;
   path: string;
   description: string;
   oldValue?: any;
   newValue?: any;
-  impact: DiffImpact;
-}
-}
+  impact: DiffImpact }
+
 export type DiffType = 
   | 'added'
   | 'removed'
@@ -251,21 +235,20 @@ export type DiffImpact =
   | 'high'
   | 'breaking';
 
-}
-export interface PolicyVersionListResponse {
-  versions: PolicyVersion;
-  pagination: {
+
+export interface PolicyVersionListResponse { versions: PolicyVersion;
+  pagination: { }
   page: number;
   pageSize: number;
   total: number;
   totalPages: number;
-}
+
+
 };
   policy: Policy;
-}
-}
-export interface PolicyVersionSearchQuery {
-  policyId?: string;
+
+
+export interface PolicyVersionSearchQuery { policyId?: string;
   status?: PolicyStatus;
   complianceFrameworks?: ComplianceFramework;
   tags?: string;
@@ -278,9 +261,9 @@ export interface PolicyVersionSearchQuery {
   page?: number;
   pageSize?: number;
   sortBy?: PolicyVersionSortField;
-  sortOrder?: 'asc' | 'desc'
-}
-  }
+  sortOrder?: 'asc' | 'desc' }
+
+
 export type PolicyVersionSortField = 
   | 'version'
   | 'title'
@@ -292,42 +275,39 @@ export type PolicyVersionSortField =
   | 'minorVersion'
   | 'patchVersion';
 
-}
-export interface PolicyVersionAnalytics {
-  policyId: string;
+
+export interface PolicyVersionAnalytics { policyId: string;
   totalVersions: number;
   publishedVersions: number;
   draftVersions: number;
-  averageTimeToPublish: number; // in hours,
+  averageTimeToPublish: number; // in hours;
   mostActiveContributor: string;
   complianceFrameworkUsage: Record<ComplianceFramework, number>;
-  versionsByMonth: Array<{
+  versionsByMonth: Array<{ }
   month: string;
   count: number;
-}
-}>;
+
+
+>;
   changeTypeDistribution: Record<ChangeType, number>;
 
 // Workflow Types
-}
-}
-export interface PolicyWorkflowState {
-  currentStatus: PolicyStatus;
+
+
+export interface PolicyWorkflowState { currentStatus: PolicyStatus;
   allowedTransitions: PolicyStatus;
   requiredApprovals: number;
   currentApprovals: number;
   pendingReviewers: string;
-  blockers: WorkflowBlocker;
-}
-}
-}
-export interface WorkflowBlocker {
-  type: BlockerType;
+  blockers: WorkflowBlocker }
+
+
+
+export interface WorkflowBlocker { type: BlockerType;
   description: string;
   resolvable: boolean;
-  resolveAction?: string;
-}
-}
+  resolveAction?: string }
+
 export type BlockerType = 
   | 'missing_approval'
   | 'compliance_check_failed'
@@ -337,17 +317,15 @@ export type BlockerType =
 
 // Event Types
 
-}
-export interface PolicyVersionEvent {
-  id: string;
+
+export interface PolicyVersionEvent { id: string;
   type: PolicyEventType;
   versionId: string;
   policyId: string;
   userId: string;
   data: Record<string, any>;
-  timestamp: Date;
-}
-}
+  timestamp: Date }
+
 export type PolicyEventType = 
   | 'version_created'
   | 'version_updated'
@@ -362,31 +340,29 @@ export type PolicyEventType =
 
 // Validation Types
 
-}
-export interface PolicyVersionValidation {
-  isValid: boolean;
+
+export interface PolicyVersionValidation { isValid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
-  complianceStatus: ComplianceValidation;
-}
-}
-}
-export interface ValidationError {
-  field: string;
+  complianceStatus: ComplianceValidation }
+
+
+
+export interface ValidationError { field: string;
   message: string;
   code: string;
-  severity: 'error' | 'warning'
-}
-  }
-}
-export interface ValidationWarning {
-  field: string;
+  severity: 'error' | 'warning' }
+
+
+
+
+export interface ValidationWarning { field: string;
   message: string;
   code: string;
-  suggestion?: string;
-}
-}
-}
+  suggestion?: string }
+
+
+
 export interface ComplianceValidation {
   framework: ComplianceFramework;
   status: 'compliant' | 'non_compliant' | 'unknown';
@@ -394,15 +370,15 @@ export interface ComplianceValidation {
   missingRequirements: string;
   notes?: string;
   // Export Configuration
-}
-}
-}
-export interface PolicyVersionConfig {
-  maxVersionsPerPolicy: number;
+
+
+
+
+export interface PolicyVersionConfig { maxVersionsPerPolicy: number;
   defaultComplianceFrameworks: ComplianceFramework;
   requiredApprovals: Record<SeverityLevel, number>;
   autoArchiveAfterDays: number;
   enableAutomaticVersioning: boolean;
-  versionNumberingStrategy: 'semantic' | 'sequential' | 'timestamp'
-}
-  }
+  versionNumberingStrategy: 'semantic' | 'sequential' | 'timestamp' }
+
+

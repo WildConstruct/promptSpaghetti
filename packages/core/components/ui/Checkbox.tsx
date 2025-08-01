@@ -10,10 +10,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>()
         type="checkbox"
         className={`checkbox ${className || ''}`}
         ref={ref}
-        onChange={(e) => {
+        onChange={ (e) => {
           onChange?.(e);
-          onCheckedChange?.(e.target.checked);
-        }}
+          onCheckedChange?.(e.target.checked) }}
         {...props}
       />
     );

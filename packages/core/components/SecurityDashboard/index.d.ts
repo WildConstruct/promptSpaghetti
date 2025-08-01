@@ -11,37 +11,33 @@
  */
 export { default as SecurityDashboardMain } from './SecurityDashboardMain';
 export { default as SecurityDashboardDataService } from './SecurityDashboardDataService';
-export {
-  SecurityDashboardFramework,
+export { SecurityDashboardFramework,
   DashboardType,
   SecurityRole,
-  DashboardTheme,
+  DashboardTheme }
 } from '../../security/dashboard/SecurityDashboardFramework';
 export { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow';
 export { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard';
 export { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSecurityDashboard';
 export { ComplianceSecurityDashboard } from '../../security/dashboard/ComplianceSecurityDashboard';
-export type {
-  SecurityDashboardMainProps,
+export type { SecurityDashboardMainProps,
   SecurityMetrics,
   SecurityAlert,
   ResponseAction,
   ComplianceStatus,
-  ComplianceViolation,
+  ComplianceViolation }
 } from './SecurityDashboardMain';
 export type { SecurityAction, DataServiceConfig, ApiResponse } from './SecurityDashboardDataService';
-export type {
-  DashboardConfig,
+export type { DashboardConfig,
   WidgetConfiguration,
   DashboardLayout,
   DashboardPermissions,
-  SecurityDashboardFrameworkOptions,
+  SecurityDashboardFrameworkOptions }
 } from '../../security/dashboard/SecurityDashboardFramework';
-export type {
-  SecurityWorkflowEvent,
+export type { SecurityWorkflowEvent,
   SecurityEventType,
   SecuritySeverity,
   SecurityActionType,
-  SecurityWorkflowConfig,
+  SecurityWorkflowConfig }
 } from '../../security/dashboard/SecurityDashboardWorkflow';
 //# sourceMappingURL=index.d.ts.map

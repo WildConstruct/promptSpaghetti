@@ -7,22 +7,20 @@
 
 // Core security components
 export { default as CrossSystemAlertingSystem } from './AlertingSystem';
-export type {
-  SecurityEvent,
+export type { SecurityEvent,
   AlertRule,
   NotificationAction,
   EscalationAction,
   AutomationAction,
-  AlertingConfig,
+  AlertingConfig }
   AlertMetrics
-} from './AlertingSystem';
+ from './AlertingSystem';
 
 export { default as UnifiedMonitoringDashboard } from './UnifiedMonitoringDashboard';
 
 // Epic 31 Security Integration Framework - New Components
 export { default as SecurityIncidentResponseService } from './SecurityIncidentResponseService';
-export type {
-  SecurityIncident,
+export type { SecurityIncident,
   IncidentTimelineEntry,
   IncidentAction,
   Evidence,
@@ -35,24 +33,22 @@ export type {
   TroubleshootingWorkflow,
   DiagnosticStep,
   DecisionNode,
-  Solution,
+  Solution }
   IncidentResponseConfig
-} from './SecurityIncidentResponseService';
+ from './SecurityIncidentResponseService';
 
 export { default as SecurityDataIntegrityMonitor } from './SecurityDataIntegrityMonitor';
-export type {
-  DataIntegrityCheck,
+export type { DataIntegrityCheck,
   AutoRemediationAction,
   IntegrityCheckResult,
   IntegrityFinding,
   RemediationResult,
-  DataIntegrityMetrics,
+  DataIntegrityMetrics }
   DataIntegrityConfig
-} from './SecurityDataIntegrityMonitor';
+ from './SecurityDataIntegrityMonitor';
 
 export { default as SecurityReliabilityEngineer } from './SecurityReliabilityEngineer';
-export type {
-  ServiceLevelObjective,
+export type { ServiceLevelObjective,
   BurnRateAlert,
   SLOPerformanceRecord,
   ReliabilityIncident,
@@ -60,13 +56,12 @@ export type {
   ImprovementItem,
   ReliabilityMetrics,
   PostmortemTemplate,
-  ReliabilityReport,
+  ReliabilityReport }
   ReliabilityEvent
-} from './SecurityReliabilityEngineer';
+ from './SecurityReliabilityEngineer';
 
 export { default as SecurityCapacityManager } from './SecurityCapacityManager';
-export type {
-  CapacityPlan,
+export type { CapacityPlan,
   ResourceRequirements,
   GrowthProjection,
   SeasonalFactor,
@@ -82,24 +77,22 @@ export type {
   InstanceTypeConfig,
   CapacityMetrics,
   ScalingEvent,
-  CapacityForecast,
+  CapacityForecast }
   CapacityRecommendation
-} from './SecurityCapacityManager';
+ from './SecurityCapacityManager';
 
 export { default as SecurityFailoverManager } from './SecurityFailoverManager';
-export type {
-  SecuritySystemNode,
+export type { SecuritySystemNode,
   FailoverPolicy,
   FailoverEvent,
   RedundancyGroup,
   LoadBalancingStrategy,
-  HealthCheckConfig,
+  HealthCheckConfig }
   FailoverMetrics
-} from './SecurityFailoverManager';
+ from './SecurityFailoverManager';
 
 export { default as SecurityDisasterRecoveryManager } from './SecurityDisasterRecoveryManager';
-export type {
-  DisasterRecoveryPlan,
+export type { DisasterRecoveryPlan,
   RecoveryStrategy,
   BackupJob,
   BackupExecution,
@@ -107,49 +100,45 @@ export type {
   TestResult,
   NotificationTreeNode,
   EscalationProcedure,
-  StakeholderGroup,
+  StakeholderGroup }
   ExternalDependency
-} from './SecurityDisasterRecoveryManager';
+ from './SecurityDisasterRecoveryManager';
 
 export { default as SecurityCostOptimizer } from './SecurityCostOptimizer';
-export type {
-  CostCenter,
+export type { CostCenter,
   CostAlert,
   AutoCostAction,
   CostMetrics,
   CostOptimizationRecommendation,
   CostBudget,
-  CostReport,
+  CostReport }
   CostEvent
-} from './SecurityCostOptimizer';
+ from './SecurityCostOptimizer';
 
 export { default as SecurityDataArchiver } from './SecurityDataArchiver';
-export type {
-  DataPartitionConfig,
+export type { DataPartitionConfig,
   RetentionPolicy,
   StorageTier,
   ArchivalJob,
   ArchivalExecution,
   DataRetrievalRequest,
-  PartitionMetrics,
+  PartitionMetrics }
   ArchivalEvent
-} from './SecurityDataArchiver';
+ from './SecurityDataArchiver';
 
 export { default as SecuritySystemHealthTracker } from './SecuritySystemHealthTracker';
-export type {
-  SecuritySystemNode,
+export type { SecuritySystemNode,
   SuccessCriteria,
   MaintenanceWindow,
   HealthCheckResult,
   AvailabilityReport,
   SystemAlert,
-  HealthTrackerConfig,
+  HealthTrackerConfig }
   EscalationRule
-} from './SecuritySystemHealthTracker';
+ from './SecuritySystemHealthTracker';
 
 export { default as SecurityQueryOptimizer } from './SecurityQueryOptimizer';
-export type {
-  QueryProfile,
+export type { QueryProfile,
   QueryExecution,
   CachingStrategy,
   ExecutionPlan,
@@ -158,13 +147,12 @@ export type {
   SeasonalPattern,
   QueryCache,
   CacheEntry,
-  PerformanceMetrics,
+  PerformanceMetrics }
   QueryOptimizerConfig
-} from './SecurityQueryOptimizer';
+ from './SecurityQueryOptimizer';
 
 export { default as SecurityOptimizationTools } from './SecurityOptimizationTools';
-export type {
-  OptimizationProfile,
+export type { OptimizationProfile,
   OptimizationGoal,
   PerformanceTarget,
   OptimizationConstraint,
@@ -175,13 +163,12 @@ export type {
   PerformanceAnalysis,
   CostBenefitAnalysis,
   RiskAssessment,
-  OptimizationResult,
+  OptimizationResult }
   OptimizationEvent
-} from './SecurityOptimizationTools';
+ from './SecurityOptimizationTools';
 
 export { default as SecurityDataPipelineMonitor } from './SecurityDataPipelineMonitor';
-export type {
-  DataPipeline,
+export type { DataPipeline,
   DataSource,
   DataDestination,
   ProcessingStage,
@@ -195,13 +182,12 @@ export type {
   StageExecution,
   ExecutionError,
   PipelineAlert,
-  PipelineOptimizationRecommendation,
+  PipelineOptimizationRecommendation }
   DataLineageRecord
-} from './SecurityDataPipelineMonitor';
+ from './SecurityDataPipelineMonitor';
 
 export { default as SecurityQueryPerformanceOptimizer } from './SecurityQueryPerformanceOptimizer';
-export type {
-  QueryPerformanceProfile,
+export type { QueryPerformanceProfile,
   CacheStrategy,
   SeasonalUsagePattern,
   QueryOptimizationRule,
@@ -212,13 +198,12 @@ export type {
   CacheInteraction,
   PerformanceAlert,
   CacheConfiguration,
-  OptimizationReport,
+  OptimizationReport }
   PerformanceMetrics
-} from './SecurityQueryPerformanceOptimizer';
+ from './SecurityQueryPerformanceOptimizer';
 
 export { default as SecurityInfrastructureMonitor } from './SecurityInfrastructureMonitor';
-export type {
-  InfrastructureComponent,
+export type { InfrastructureComponent,
   HealthCheckConfig,
   CustomMetricConfig,
   AlertThreshold,
@@ -229,41 +214,37 @@ export type {
   MaintenanceWindow,
   InfrastructureMetrics,
   InfrastructureAlert,
-  InfrastructureEvent,
+  InfrastructureEvent }
   MonitoringReport
-} from './SecurityInfrastructureMonitor';
+ from './SecurityInfrastructureMonitor';
 
 // Epic 31 - ML Security Analytics Components (NEW)
-export { 
-  PredictiveSecurityAnalytics,
+export { PredictiveSecurityAnalytics,
   PredictiveAnalyticsFactory,
   SecurityEvent as PredictiveSecurityEvent,
   ThreatPrediction,
   SecurityEventType as PredictiveEventType,
-  ThreatType,
+  ThreatType }
   ActionType
-} from './PredictiveSecurityAnalytics';
+ from './PredictiveSecurityAnalytics';
 
-export {
-  UserBehaviorAnalytics,
+export { UserBehaviorAnalytics,
   UserBehaviorAnalyticsFactory,
   UserBehaviorEvent,
   BehaviorAnomaly,
-  UserActionType,
+  UserActionType }
   AnomalyType
-} from './UserBehaviorAnalytics';
+ from './UserBehaviorAnalytics';
 
-export {
-  MLSecurityAnalyticsFramework,
+export { MLSecurityAnalyticsFramework,
   SecurityIntelligence,
   SecurityAnalyticsConfig,
-  SecurityMetrics as MLSecurityMetrics,
+  SecurityMetrics as MLSecurityMetrics }
   Epic31SecurityAnalytics
-} from './MLSecurityAnalyticsFramework';
+ from './MLSecurityAnalyticsFramework';
 
 // Epic 31.4.1 & 31.4.2 - Advanced Security Analytics Components (NEW)
-export {
-  SecurityAnomalyDetector,
+export { SecurityAnomalyDetector,
   SecurityAnomaly,
   SecurityAlert,
   AnomalyDetectionConfig,
@@ -274,12 +255,11 @@ export {
   EscalationRule,
   MetricBaseline,
   SecurityMetric,
-  AnomalyDetectionModel,
+  AnomalyDetectionModel }
   DetectionModelType
-} from './SecurityAnomalyDetector';
+ from './SecurityAnomalyDetector';
 
-export {
-  SecurityThreatForecasting,
+export { SecurityThreatForecasting,
   ThreatForecast,
   ForecastType,
   SeasonalFactor,
@@ -291,13 +271,12 @@ export {
   ThreatScenario,
   TimeSeriesData,
   ForecastAlgorithm,
-  SeasonalPeriod,
+  SeasonalPeriod }
   TrendType
-} from './SecurityThreatForecasting';
+ from './SecurityThreatForecasting';
 
 // Epic 31.4.1 - Security Intelligence Dashboard and Data Analysis Components (NEW)
-export {
-  SecurityIntelligenceDashboard,
+export { SecurityIntelligenceDashboard,
   SecurityDashboardConfig,
   SecurityPosture,
   ThreatLevel,
@@ -311,12 +290,11 @@ export {
   ExecutiveReport,
   ReportType,
   ReportFrequency,
-  DashboardAlertThresholds,
+  DashboardAlertThresholds }
   ReportingSchedule
-} from './SecurityIntelligenceDashboard';
+ from './SecurityIntelligenceDashboard';
 
-export {
-  SecurityDataQualityMonitor,
+export { SecurityDataQualityMonitor,
   DataQualityConfig,
   QualityThresholds,
   ValidationRule,
@@ -327,13 +305,12 @@ export {
   QualityDimension,
   DataQualityViolation,
   QualityProfile,
-  QualityTrend,
+  QualityTrend }
   QualityRecommendation
-} from './SecurityDataQualityMonitor';
+ from './SecurityDataQualityMonitor';
 
 // Epic 31.4.1 - Security Event Correlation and Data Pipeline Components (NEW)
-export {
-  SecurityEventCorrelationEngine,
+export { SecurityEventCorrelationEngine,
   SecurityEventCorrelationFactory,
   CorrelatedEventGroup,
   CorrelationRule,
@@ -350,12 +327,11 @@ export {
   GroupRecommendation,
   RecommendationType,
   GroupStatus,
-  CorrelationAnalytics,
+  CorrelationAnalytics }
   CorrelationReport
-} from './SecurityEventCorrelationEngine';
+ from './SecurityEventCorrelationEngine';
 
-export {
-  SecurityIntelligenceDataPipeline,
+export { SecurityIntelligenceDataPipeline,
   SecurityIntelligenceDataPipelineFactory,
   DataPipelineConfig,
   PipelineStage,
@@ -379,9 +355,9 @@ export {
   DestinationType,
   PipelineAlert,
   PipelineAlertType,
-  PipelineMetrics,
+  PipelineMetrics }
   OutputFormat
-} from './SecurityIntelligenceDataPipeline';
+ from './SecurityIntelligenceDataPipeline';
 
 // Re-export existing security components for convenience
 export { default as RateLimiter } from './RateLimiter';
@@ -417,8 +393,7 @@ export if (threatLevel >= 3) return 'medium';
 };
 
 export timeRange: { start: number; end: number }
-): {
-  summary: {
+): { summary: { }
   total_events: number;
   critical_count: number;
   resolved_count: number;
@@ -427,7 +402,7 @@ export timeRange: { start: number; end: number }
   top_threats: Array<{ type: string; count: number }>;
   affected_systems: Array<{ system: string; incident_count: number }>;
   recommendations: string;
-} => {
+ => {
   const filteredEvents = events.filter(e => ;);
     e.timestamp >= timeRange.start && e.timestamp <= timeRange.end
   );
@@ -441,19 +416,17 @@ export timeRange: { start: number; end: number }
     : 0;
   // Count by type
   const typeCounts: Record<string, number> = {};
-  filteredEvents.forEach(e => {)
-  typeCounts[e.type] = (typeCounts[e.type] || 0) + 1;
-  });
+  filteredEvents.forEach(e => { )
+  typeCounts[e.type] = (typeCounts[e.type] || 0) + 1 });
   const topThreats = Object.entries(typeCounts);
     .map(([type, count]) => ({ type: type as SecurityEvent['type'], count }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
   // Count by affected systems
   const systemCounts: Record<string, number> = {};
-  filteredEvents.forEach(e => {)
+  filteredEvents.forEach(e => { )
   e.details.affected_systems.forEach(system => {)
-  systemCounts[system] = (systemCounts[system] || 0) + 1;
-    });
+  systemCounts[system] = (systemCounts[system] || 0) + 1 });
   });
   const affectedSystems = Object.entries(systemCounts);
     .map(([system, incident_count]) => ({ system, incident_count }))
@@ -467,17 +440,16 @@ export timeRange: { start: number; end: number }
   if (topThreats.length > 0 && topThreats[0].count > filteredEvents.length * 0.3) {
     recommendations.push(`${topThreats[0].type} events are dominant - focus prevention efforts here`);}
   const unresolvedCount = filteredEvents.filter(e => e.status !== 'resolved').length;
-  if (unresolvedCount > filteredEvents.length * 0.2) {
-  recommendations.push('High number of unresolved events - ensure adequate staffing');
+  if (unresolvedCount > filteredEvents.length * 0.2) { recommendations.push('High number of unresolved events - ensure adequate staffing');
   return {
   summary: {
-  total_events: filteredEvents.length,
-  critical_count: criticalEvents.length,
-  resolved_count: resolvedEvents.length,
-  avg_response_time: avgResponseTime,
-},
-  top_threats: topThreats,
-    affected_systems: affectedSystems,
+  total_events: filteredEvents.length
+  critical_count: criticalEvents.length
+  resolved_count: resolvedEvents.length
+  avg_response_time: avgResponseTime }
+
+  top_threats: topThreats
+    affected_systems: affectedSystems
     recommendations
   };
 };

@@ -5,13 +5,13 @@
  * methodologies, combining MARS framework, Zada patterns, and VFX integration.
  */
 import React from 'react';
-import { 
-  AdvancedPromptingCollaborationService,
+import { AdvancedPromptingCollaborationService,
   FilmIndustryUser,
-  MARSRegionTemplate,
+  MARSRegionTemplate }
   ZadaPromptPattern
 } from '../../services/AdvancedPromptingCollaborationService';
 
+}
 }
 interface AdvancedPromptingCollaborationPanelProps {
     collaborationService: AdvancedPromptingCollaborationService;
@@ -25,4 +25,5 @@ interface AdvancedPromptingCollaborationPanelProps {
 declare const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps>;
 export default AdvancedPromptingCollaborationPanel;
 //# sourceMappingURL=AdvancedPromptingCollaborationPanel.d.ts.map
+}
 }

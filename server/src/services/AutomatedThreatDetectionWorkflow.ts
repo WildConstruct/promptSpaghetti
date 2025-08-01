@@ -9,8 +9,8 @@ import { AuditService } from '../auth/services/AuditService';
 import { RiskScoringService } from './RiskScoringService';
 import { logger } from '../utils/logger';
 
-}
-}
+
+
 export interface ThreatDetectionAlert {
   id: string;
   type: 'threat_detected' | 'anomaly_detected' | 'policy_violation' | 'brute_force' | 'credential_stuffing';
@@ -25,28 +25,29 @@ export interface ThreatDetectionAlert {
     sessions: string[];
     ipAddresses: string[];
     systems: string[];
-}
-}
+
+
+
   };
   indicators: {
     type: string;
     value: string;
     confidence: number;
-  }[];
+[];
   mitigationActions: {
     action: string;
     status: 'pending' | 'in_progress' | 'completed' | 'failed';
     timestamp: Date;
     result?: string;
-  }[];
+[];
   status: 'active' | 'investigating' | 'mitigated' | 'resolved' | 'false_positive';
   assignedTo?: string;
   resolution?: string;
   escalationLevel: number; // 1-5
-}
 
-}
-}
+
+
+
 export interface AutomatedResponse {
   id: string;
   alertId: string;
@@ -58,12 +59,13 @@ export interface AutomatedResponse {
   result?: string;
   revertedAt?: Date;
   revertReason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatIntelligenceFeed {
   id: string;
   name: string;
@@ -74,12 +76,13 @@ export interface ThreatIntelligenceFeed {
   lastUpdate: Date;
   status: 'active' | 'inactive' | 'error';
   recordCount: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PlaybookDefinition {
   id: string;
   name: string;
@@ -87,8 +90,9 @@ export interface PlaybookDefinition {
   triggers: {
     eventTypes: string[];
     conditions: Record<string, any>;
-}
-}
+
+
+
   };
   steps: {
     id: string;
@@ -97,14 +101,14 @@ export interface PlaybookDefinition {
     parameters: Record<string, any>;
     timeout: number; // seconds
     onFailure: 'continue' | 'stop' | 'escalate';
-  }[];
+[];
   escalationRules: {
     condition: string;
     target: string; // user, group, external system
     method: 'email' | 'sms' | 'webhook' | 'ticket';
-  }[];
+[];
   enabled: boolean;
-}
+
 
 export class AutomatedThreatDetectionWorkflow extends EventEmitter {
   private auditService: AuditService;
@@ -129,7 +133,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
     this.initializeDefaultThreatFeeds();
     this.startProcessing();
     this.startFeedUpdates();
-  }
+
 
   /**
    * Process a threat detection event
@@ -179,7 +183,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           riskScore: alert.riskScore,
           confidence: alert.confidence,
           originalEventId: event.id
-  }
+
         {
           ipAddress: event.ipAddress,
           userId: event.userId,
@@ -199,11 +203,11 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
       logger.log(`Threat detected and processed: ${alert.id} (${alert.type})`);
       
       return alert;
-    } catch (error) {
+ catch (error) {
       logger.log(`Threat processing error: ${error}`);
       throw error;
-    }
-  }
+
+
 
   /**
    * Execute automated responses based on threat level and type
@@ -226,7 +230,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           executedAt: new Date(),
           status: 'pending'
         });
-      }
+
 
       // Suspend user account for certain threats
       if (alert.triggeringEvent.userId && this.shouldSuspendUser(alert)) {
@@ -239,7 +243,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           executedAt: new Date(),
           status: 'pending'
         });
-      }
+
 
       // Force logout all sessions for compromised accounts
       if (alert.type === 'credential_stuffing' || alert.confidence > 0.9) {
@@ -252,7 +256,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           executedAt: new Date(),
           status: 'pending'
         });
-      }
+
 
       // Require additional MFA for suspicious activity
       if (alert.type === 'anomaly_detected' && alert.triggeringEvent.userId) {
@@ -265,8 +269,8 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           executedAt: new Date(),
           status: 'pending'
         });
-      }
-    }
+
+
 
     // Apply rate limiting for brute force attempts
     if (alert.type === 'brute_force' && alert.triggeringEvent.ipAddress) {
@@ -279,7 +283,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
         executedAt: new Date(),
         status: 'pending'
       });
-    }
+
 
     // Queue responses for execution
     for (const response of responses) {
@@ -290,8 +294,8 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
         status: 'pending',
         timestamp: new Date()
       });
-    }
-  }
+
+
 
   /**
    * Execute security playbooks
@@ -304,9 +308,9 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
       // Check if playbook should be triggered
       if (this.shouldExecutePlaybook(playbook, alert)) {
         await this.runPlaybook(playbook, alert);
-      }
-    }
-  }
+
+
+
 
   /**
    * Run a specific security playbook
@@ -322,18 +326,18 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
       for (const step of playbook.steps) {
         try {
           await this.executePlaybookStep(step, alert, playbook);
-        } catch (stepError) {
+ catch (stepError) {
           logger.log(`Playbook step failed: ${step.id} - ${stepError}`);
           
           if (step.onFailure === 'stop') {
             break;
-          } else if (step.onFailure === 'escalate') {
+ else if (step.onFailure === 'escalate') {
             await this.escalateAlert(alert, `Playbook step failed: ${step.id}`);
             break;
-          }
+
           // Continue on 'continue' failure mode
-        }
-      }
+
+
 
       // Log playbook execution
       await this.auditService.logEvent(
@@ -346,10 +350,10 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           status: 'completed'
         }
       );
-    } catch (error) {
+ catch (error) {
       logger.log(`Playbook execution failed: ${playbook.name} - ${error}`);
-    }
-  }
+
+
 
   /**
    * Execute a single playbook step
@@ -380,15 +384,15 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
       break;
     default:
       throw new Error(`Unknown playbook step type: ${step.type}`);
-    }
+
 
     const executionTime = Date.now() - startTime;
     
     // Check for timeout
     if (executionTime > step.timeout * 1000) {
       throw new Error(`Step timed out: ${step.id}`);
-    }
-  }
+
+
 
   /**
    * Process automated response queue
@@ -415,18 +419,18 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           );
           if (actionIndex >= 0) {
             alert.mitigationActions[actionIndex].status = 'completed';
-          }
-        }
-      } catch (error) {
+
+
+ catch (error) {
         response.status = 'failed';
         response.result = error.toString();
         
         logger.log(`Automated response failed: ${response.id} - ${error}`);
-      }
+
       
       this.automatedResponses.set(response.id, response);
-    }
-  }
+
+
 
   /**
    * Execute a specific automated response
@@ -454,8 +458,8 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
       break;
     default:
       throw new Error(`Unknown response type: ${response.type}`);
-    }
-  }
+
+
 
   /**
    * Update threat intelligence feeds
@@ -474,13 +478,13 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           await this.updateThreatFeed(feed);
           feed.lastUpdate = now;
           feed.status = 'active';
-        } catch (error) {
+ catch (error) {
           feed.status = 'error';
           logger.log(`Threat feed update failed: ${feed.name} - ${error}`);
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Get current threat detection statistics
@@ -495,22 +499,22 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
         bySeverity: this.groupBy(activeAlerts, 'severity'),
         byType: this.groupBy(activeAlerts, 'type'),
         byStatus: this.groupBy(activeAlerts, 'status')
-  }
+
       responses: {
         total: responses.length,
         byType: this.groupBy(responses, 'type'),
         byStatus: this.groupBy(responses, 'status')
-  }
+
       playbooks: {
         total: this.playbooks.size,
         enabled: Array.from(this.playbooks.values()).filter(p => p.enabled).length
-  }
+
       threatFeeds: {
         total: this.threatFeeds.size,
         active: Array.from(this.threatFeeds.values()).filter(f => f.status === 'active').length
-      }
+
     };
-  }
+
 
   /**
    * Helper methods
@@ -521,7 +525,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
     if (event.type.includes('anomaly')) return 'anomaly_detected';
     if (event.type.includes('policy_violation')) return 'policy_violation';
     return 'threat_detected';
-  }
+
 
   private calculateAlertSeverity(riskScore: number, confidence: number): ThreatDetectionAlert['severity'] {
     const adjustedScore = riskScore * confidence;
@@ -529,7 +533,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
     if (adjustedScore >= 60) return 'high';
     if (adjustedScore >= 40) return 'medium';
     return 'low';
-  }
+
 
   private calculateEscalationLevel(riskScore: number): number {
     if (riskScore >= 90) return 5;
@@ -537,7 +541,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
     if (riskScore >= 50) return 3;
     if (riskScore >= 30) return 2;
     return 1;
-  }
+
 
   private identifyAffectedResources(event: SecurityEvent): ThreatDetectionAlert['affectedResources'] {
     return {
@@ -546,7 +550,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
       ipAddresses: event.ipAddress ? [event.ipAddress] : [],
       systems: ['authentication_system'] // would be determined based on event context
     };
-  }
+
 
   private async extractThreatIndicators(event: SecurityEvent): Promise<ThreatDetectionAlert['indicators']> {
 
@@ -558,7 +562,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
         value: event.ipAddress,
         confidence: 0.8
       });
-    }
+
     
     if (event.userAgent) {
       indicators.push({
@@ -566,31 +570,31 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
         value: event.userAgent,
         confidence: 0.6
       });
-    }
+
     
     return indicators;
-  }
+
 
   private shouldBlockIP(alert: ThreatDetectionAlert): boolean {
     return alert.severity === 'critical' || 
            alert.type === 'brute_force' || 
            alert.confidence > 0.9;
-  }
+
 
   private shouldSuspendUser(alert: ThreatDetectionAlert): boolean {
     return alert.severity === 'critical' && 
            (alert.type === 'credential_stuffing' || alert.confidence > 0.95);
-  }
+
 
   private shouldExecutePlaybook(playbook: PlaybookDefinition, alert: ThreatDetectionAlert): boolean {
     return playbook.triggers.eventTypes.includes(alert.type) &&
            this.evaluatePlaybookConditions(playbook.triggers.conditions, alert);
-  }
+
 
   private evaluatePlaybookConditions(_____conditions: Record<string, any>, _____alert: ThreatDetectionAlert): boolean {
     // Simple condition evaluation - would be more sophisticated in practice
     return true;
-  }
+
 
   /**
    * Action implementations (mock - would integrate with real systems)
@@ -599,37 +603,37 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
 
     logger.log(`Blocking IP address: ${ipAddress}`);
     // Would integrate with firewall/WAF
-  }
+
 
   private async suspendUser(userId: string): Promise<void> {
 
     logger.log(`Suspending user: ${userId}`);
     // Would integrate with user management system
-  }
+
 
   private async requireAdditionalMFA(userId: string): Promise<void> {
 
     logger.log(`Requiring additional MFA for user: ${userId}`);
     // Would integrate with MFA system
-  }
+
 
   private async forceLogoutSessions(target: string): Promise<void> {
 
     logger.log(`Force logging out sessions: ${target}`);
     // Would integrate with session management
-  }
+
 
   private async applyRateLimit(ipAddress: string): Promise<void> {
 
     logger.log(`Applying rate limit to: ${ipAddress}`);
     // Would integrate with rate limiting system
-  }
+
 
   private async quarantineResource(resource: string): Promise<void> {
 
     logger.log(`Quarantining resource: ${resource}`);
     // Would implement resource quarantine
-  }
+
 
   /**
    * Playbook step implementations
@@ -637,39 +641,39 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
   private async executeAnalysisStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
 
     // Implement analysis logic
-  }
+
 
   private async executeContainmentStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
 
     // Implement containment logic
-  }
+
 
   private async executeInvestigationStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
 
     // Implement investigation logic
-  }
+
 
   private async executeNotificationStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
 
     // Implement notification logic
-  }
+
 
   private async executeRecoveryStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
 
     // Implement recovery logic
-  }
+
 
   private async escalateAlert(alert: ThreatDetectionAlert, reason: string): Promise<void> {
 
     alert.escalationLevel = Math.min(alert.escalationLevel + 1, 5);
     logger.log(`Escalating alert ${alert.id}: ${reason}`);
-  }
+
 
   private async updateThreatFeed(feed: ThreatIntelligenceFeed): Promise<void> {
 
     // Mock implementation - would fetch from real threat intelligence feeds
     feed.recordCount = Math.floor(Math.random() * 10000);
-  }
+
 
   private groupBy(array: unknown[], key: string): Record<string, number> {
     return array.reduce((result, item) => {
@@ -677,18 +681,18 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
       result[group] = (result[group] || 0) + 1;
       return result;
     }, {});
-  }
+
 
   /**
    * Utility methods
    */
   private generateAlertId(): string {
     return `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateResponseId(): string {
     return `resp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   /**
    * Initialize default security playbooks
@@ -702,7 +706,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
       triggers: {
         eventTypes: ['brute_force'],
         conditions: { severity: ['high', 'critical'] }
-  }
+
       steps: [
         {
           id: 'analyze_source',
@@ -711,7 +715,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           parameters: {},
           timeout: 30,
           onFailure: 'continue'
-  }
+
         {
           id: 'block_source',
           type: 'containment',
@@ -719,7 +723,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           parameters: {},
           timeout: 60,
           onFailure: 'escalate'
-  }
+
         {
           id: 'notify_admin',
           type: 'notification',
@@ -727,18 +731,18 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
           parameters: { urgency: 'high' },
           timeout: 30,
           onFailure: 'continue'
-        }
+
       ],
       escalationRules: [
         {
           condition: 'step_failure',
           target: 'security_team',
           method: 'email'
-        }
+
       ],
       enabled: true
     });
-  }
+
 
   /**
    * Initialize default threat intelligence feeds
@@ -754,7 +758,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
       status: 'active',
       recordCount: 0
     });
-  }
+
 
   /**
    * Start background processing
@@ -763,7 +767,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
     this.processingInterval = setInterval(() => {
       this.processResponseQueue();
     }, 5000); // Process every 5 seconds
-  }
+
 
   /**
    * Start threat feed updates
@@ -772,7 +776,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
     this.feedUpdateInterval = setInterval(() => {
       this.updateThreatFeeds();
     }, 300000); // Check every 5 minutes
-  }
+
 
   /**
    * Cleanup and shutdown
@@ -780,14 +784,14 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
   public shutdown(): void {
     if (this.processingInterval) {
       clearInterval(this.processingInterval);
-    }
+
     if (this.feedUpdateInterval) {
       clearInterval(this.feedUpdateInterval);
-    }
+
     
     // Process remaining responses
     this.processResponseQueue();
     
     logger.log('AutomatedThreatDetectionWorkflow shutdown complete');
-  }
-}
+
+

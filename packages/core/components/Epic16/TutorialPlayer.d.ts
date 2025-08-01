@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface TutorialStep {
-    id: string;
+}
+export interface TutorialStep { id: string;
     title: string;
     description: string;
     content: string;
@@ -19,20 +19,18 @@ export interface TutorialStep {
     highlightElements?: string[];
     requirements?: string[];
     tips?: string[];
-    actions?: TutorialAction[];
-
+    actions?: TutorialAction[] }
 }
-export interface TutorialAction {
-    id: string;
+}
+export interface TutorialAction { id: string;
     type: 'click' | 'hover' | 'input' | 'scroll' | 'wait';
     selector?: string;
     value?: string;
     message?: string;
-    completed: boolean;
-
+    completed: boolean }
 }
-export interface Tutorial {
-    id: string;
+}
+export interface Tutorial { id: string;
     title: string;
     description: string;
     category: 'getting-started' | 'template-creation' | 'marketplace' | 'collaboration' | 'advanced';
@@ -43,7 +41,7 @@ export interface Tutorial {
     completionRewards: {
         xp: number;
         badge?: string;
-        certificate?: string;
+        certificate?: string }
 }
     };
     tags: string[];
@@ -53,19 +51,18 @@ export interface Tutorial {
     updatedAt: Date;
 
 }
-export interface TutorialProgress {
-    tutorialId: string;
+}
+export interface TutorialProgress { tutorialId: string;
     currentStepIndex: number;
     completed: boolean;
     startedAt: Date;
     completedAt?: Date;
     timeSpent: number;
     stepsCompleted: string[];
-    score?: number;
-
+    score?: number }
 }
-export interface TutorialPlayerProps {
-    tutorial?: Tutorial;
+}
+export interface TutorialPlayerProps { tutorial?: Tutorial;
     isOpen: boolean;
     onClose: () => void;
     onComplete?: (tutorial: Tutorial, progress: TutorialProgress) => void;
@@ -75,15 +72,14 @@ export interface TutorialPlayerProps {
     enableInteractions?: boolean;
     className?: string;
 
-export declare const TutorialPlayer: React.FC<TutorialPlayerProps>;
-
+export declare const TutorialPlayer: React.FC<TutorialPlayerProps> }
 }
-export interface TutorialBrowserProps {
-    tutorials: Tutorial[];
+}
+export interface TutorialBrowserProps { tutorials: Tutorial[];
     onSelectTutorial: (tutorial: Tutorial) => void;
     onStartTutorial?: (tutorial: Tutorial) => void;
     userProgress?: {
-        [tutorialId: string]: TutorialProgress;
+        [tutorialId: string]: TutorialProgress }
 }
     };
     className?: string;

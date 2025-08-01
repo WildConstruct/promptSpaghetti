@@ -7,7 +7,7 @@ import {
   AnalyticsInsight,
   TimeRange,
   AnalyticsService as IAnalyticsService
-} from '../types/analytics';
+ from '../types/analytics';
 class AnalyticsService implements IAnalyticsService {
   private baseUrl: string;
   constructor() {
@@ -27,7 +27,7 @@ class AnalyticsService implements IAnalyticsService {
   });
       if (!response.ok) {
         throw new Error(`Failed to track event: ${response.statusText}`);}
-    } catch (error) {
+ catch (error) {
       console.error('Error tracking analytics event:', error);
       // Don't throw error to avoid disrupting user experience
   // Batch track multiple events
@@ -45,11 +45,11 @@ class AnalyticsService implements IAnalyticsService {
       });
       if (!response.ok) {
         throw new Error(`Failed to batch track events: ${response.statusText}`);}
-    } catch (error) {
+ catch (error) {
       console.error('Error batch tracking analytics events:', error);
   // Get creator dashboard data
-  async getCreatorDashboard(creatorId: string,)
-    timeRange: TimeRange,
+  async getCreatorDashboard(creatorId: string);
+  timeRange: TimeRange,
     startDate?: Date,
     endDate?: Date
   ): Promise<CreatorDashboard> {
@@ -62,7 +62,7 @@ class AnalyticsService implements IAnalyticsService {
       });
       const response = await fetch(;);
         `${this.baseUrl}/api/analytics/creators/${creatorId}/dashboard?${params}`}
-}
+
         {
           headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
@@ -71,12 +71,12 @@ class AnalyticsService implements IAnalyticsService {
         throw new Error(`Failed to fetch dashboard: ${response.statusText}`);}
       const data = await response.json();
       return this.transformDashboardData(data);
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching creator dashboard:', error);
       throw error;
   // Get template metrics
-  async getTemplateMetrics(templateId: string,)
-    timeRange: TimeRange,
+  async getTemplateMetrics(templateId: string);
+  timeRange: TimeRange,
     startDate?: Date,
     endDate?: Date
   ): Promise<TemplateMetrics> {
@@ -89,7 +89,7 @@ class AnalyticsService implements IAnalyticsService {
       });
       const response = await fetch(;);
         `${this.baseUrl}/api/analytics/templates/${templateId}/metrics?${params}`}
-}
+
         {
           headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
@@ -98,7 +98,7 @@ class AnalyticsService implements IAnalyticsService {
         throw new Error(`Failed to fetch template metrics: ${response.statusText}`);}
       const data = await response.json();
       return this.transformTemplateMetrics(data);
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching template metrics:', error);
       throw error;
   // Query analytics data
@@ -117,7 +117,7 @@ class AnalyticsService implements IAnalyticsService {
       if (!response.ok) {
         throw new Error(`Failed to query analytics: ${response.statusText}`);}
       return await response.json();
-    } catch (error) {
+ catch (error) {
       console.error('Error querying analytics:', error);
       throw error;
   // Create custom report
@@ -137,7 +137,7 @@ class AnalyticsService implements IAnalyticsService {
         throw new Error(`Failed to create report: ${response.statusText}`);}
       const data = await response.json();
       return this.transformCustomReport(data);
-    } catch (error) {
+ catch (error) {
       console.error('Error creating custom report:', error);
       throw error;
   // Get custom reports
@@ -146,7 +146,7 @@ class AnalyticsService implements IAnalyticsService {
     try {
       const response = await fetch(;);
         `${this.baseUrl}/api/analytics/creators/${creatorId}/reports`}
-}
+
         {
           headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
@@ -155,7 +155,7 @@ class AnalyticsService implements IAnalyticsService {
         throw new Error(`Failed to fetch reports: ${response.statusText}`);}
       const data = await response.json();
       return data.map(this.transformCustomReport);
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching custom reports:', error);
       throw error;
   // Generate report
@@ -164,7 +164,7 @@ class AnalyticsService implements IAnalyticsService {
     try {
       const response = await fetch(;);
         `${this.baseUrl}/api/analytics/reports/${reportId}/generate`}
-}
+
         {
           method: 'POST',
           headers: {
@@ -173,11 +173,11 @@ class AnalyticsService implements IAnalyticsService {
       if (!response.ok) {
         throw new Error(`Failed to generate report: ${response.statusText}`);}
       return await response.json();
-    } catch (error) {
+ catch (error) {
       console.error('Error generating report:', error);
       throw error;
   // Generate insights
-  async generateInsights(creatorId: string,)
+  async generateInsights(creatorId: string)
     templateIds?: string
   ): Promise<AnalyticsInsight> {
 
@@ -187,7 +187,7 @@ class AnalyticsService implements IAnalyticsService {
         params.append('template_ids', templateIds.join(','));
       const response = await fetch(;);
         `${this.baseUrl}/api/analytics/creators/${creatorId}/insights?${params}`}
-}
+
         {
           headers: {
             'Authorization': `Bearer ${this.getAuthToken()}`}
@@ -196,7 +196,7 @@ class AnalyticsService implements IAnalyticsService {
         throw new Error(`Failed to fetch insights: ${response.statusText}`);}
       const data = await response.json();
       return data.map(this.transformInsight);
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching insights:', error);
       throw error;
   // Update custom report
@@ -219,7 +219,7 @@ class AnalyticsService implements IAnalyticsService {
         throw new Error(`Failed to update report: ${response.statusText}`);}
       const data = await response.json();
       return this.transformCustomReport(data);
-    } catch (error) {
+ catch (error) {
       console.error('Error updating custom report:', error);
       throw error;
   // Delete custom report
@@ -234,7 +234,7 @@ class AnalyticsService implements IAnalyticsService {
       });
       if (!response.ok) {
         throw new Error(`Failed to delete report: ${response.statusText}`);}
-    } catch (error) {
+ catch (error) {
       console.error('Error deleting custom report:', error);
       throw error;
   // Dismiss insight
@@ -243,7 +243,7 @@ class AnalyticsService implements IAnalyticsService {
     try {
       const response = await fetch(;);
         `${this.baseUrl}/api/analytics/insights/${insightId}/dismiss`}
-}
+
         {
           method: 'POST',
           headers: {
@@ -251,7 +251,7 @@ class AnalyticsService implements IAnalyticsService {
       );
       if (!response.ok) {
         throw new Error(`Failed to dismiss insight: ${response.statusText}`);}
-    } catch (error) {
+ catch (error) {
       console.error('Error dismissing insight:', error);
       throw error;
   // Export analytics data
@@ -273,7 +273,7 @@ class AnalyticsService implements IAnalyticsService {
       if (!response.ok) {
         throw new Error(`Failed to export data: ${response.statusText}`);}
       return await response.blob();
-    } catch (error) {
+ catch (error) {
   console.error('Error exporting analytics data:', error);
   throw error;
   // Private helper methods
@@ -291,9 +291,9 @@ class AnalyticsService implements IAnalyticsService {
   ...data,
   period_start: new Date(data.period_start),
   period_end: new Date(data.period_end),
-  trends: {
+  trends: {,
   ...data.trends,
-  daily_metrics: data.trends.daily_metrics.map((metric: any) => ({,)
+  daily_metrics: data.trends.daily_metrics.map((metric: any) => ({),
   ...metric,
   date: new Date(metric.date),
 }))

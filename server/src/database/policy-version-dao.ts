@@ -19,7 +19,7 @@ import {
   PolicyVersionListResponse,
   PolicyStatus,
   ChangeType
-} from '../../../packages/core/types/PolicyVersionTypes';
+ from '../../../packages/core/types/PolicyVersionTypes';
 
 export class PolicyVersionDAO {
   constructor(private db: Database) {}
@@ -45,7 +45,7 @@ export class PolicyVersionDAO {
     ]);
 
     return this.mapRowToPolicy(result.rows[0]);
-  }
+
 
   async getPolicyById(policyId: string): Promise<Policy | null> {
 
@@ -57,7 +57,7 @@ export class PolicyVersionDAO {
 
     const result = await this.db.query(query, [policyId]);
     return result.rows[0] ? this.mapRowToPolicy(result.rows[0]) : null;
-  }
+
 
   async getPolicyByKey(policyKey: string): Promise<Policy | null> {
 
@@ -69,7 +69,7 @@ export class PolicyVersionDAO {
 
     const result = await this.db.query(query, [policyKey]);
     return result.rows[0] ? this.mapRowToPolicy(result.rows[0]) : null;
-  }
+
 
   async listPolicies(
     offset: number = 0,
@@ -87,7 +87,7 @@ export class PolicyVersionDAO {
     if (category) {
       query += ` WHERE category = $${paramIndex++}`;
       params.push(category);
-    }
+
 
     query += ` ORDER BY created_at DESC OFFSET $${paramIndex++} LIMIT $${paramIndex++}`;
     params.push(offset, limit);
@@ -104,7 +104,7 @@ export class PolicyVersionDAO {
       policies: result.rows.map(row => this.mapRowToPolicy(row)),
       total: parseInt(countResult.rows[0].total)
     };
-  }
+
 
   // ============================================================================
   // Policy Version CRUD Operations
@@ -152,7 +152,7 @@ export class PolicyVersionDAO {
     ]);
 
     return this.mapRowToPolicyVersion(result.rows[0]);
-  }
+
 
   async getPolicyVersionById(versionId: string): Promise<PolicyVersion | null> {
 
@@ -164,7 +164,7 @@ export class PolicyVersionDAO {
 
     const result = await this.db.query(query, [versionId]);
     return result.rows[0] ? this.mapRowToPolicyVersion(result.rows[0]) : null;
-  }
+
 
   async getPolicyVersionByNumber(policyId: string, version: string): Promise<PolicyVersion | null> {
 
@@ -176,7 +176,7 @@ export class PolicyVersionDAO {
 
     const result = await this.db.query(query, [policyId, version]);
     return result.rows[0] ? this.mapRowToPolicyVersion(result.rows[0]) : null;
-  }
+
 
   async updatePolicyVersion(
     versionId: string,
@@ -192,59 +192,59 @@ export class PolicyVersionDAO {
     if (request.title !== undefined) {
       updateFields.push(`title = $${paramIndex++}`);
       params.push(request.title);
-    }
+
 
     if (request.content !== undefined) {
       updateFields.push(`content = $${paramIndex++}`);
       params.push(JSON.stringify(request.content));
-    }
+
 
     if (request.contentType !== undefined) {
       updateFields.push(`content_type = $${paramIndex++}`);
       params.push(request.contentType);
-    }
+
 
     if (request.changeSummary !== undefined) {
       updateFields.push(`change_summary = $${paramIndex++}`);
       params.push(request.changeSummary);
-    }
+
 
     if (request.complianceFrameworks !== undefined) {
       updateFields.push(`compliance_frameworks = $${paramIndex++}`);
       params.push(request.complianceFrameworks);
-    }
+
 
     if (request.tags !== undefined) {
       updateFields.push(`tags = $${paramIndex++}`);
       params.push(request.tags);
-    }
+
 
     if (request.severityLevel !== undefined) {
       updateFields.push(`severity_level = $${paramIndex++}`);
       params.push(request.severityLevel);
-    }
+
 
     if (request.effectiveDate !== undefined) {
       updateFields.push(`effective_date = $${paramIndex++}`);
       params.push(request.effectiveDate);
-    }
+
 
     if (request.expirationDate !== undefined) {
       updateFields.push(`expiration_date = $${paramIndex++}`);
       params.push(request.expirationDate);
-    }
+
 
     if (request.metadata !== undefined) {
       updateFields.push(`metadata = $${paramIndex++}`);
       params.push(JSON.stringify(request.metadata));
-    }
+
 
     // Always update the updated_at timestamp
     updateFields.push('updated_at = NOW()');
 
     if (updateFields.length === 1) { // Only timestamp update
       throw new Error('No fields to update');
-    }
+
 
     params.push(versionId);
     const query = `
@@ -257,10 +257,10 @@ export class PolicyVersionDAO {
     const result = await this.db.query(query, params);
     if (result.rows.length === 0) {
       throw new Error(`Policy version with ID ${versionId} not found`);
-    }
+
 
     return this.mapRowToPolicyVersion(result.rows[0]);
-  }
+
 
   async deletePolicyVersion(versionId: string): Promise<boolean> {
 
@@ -271,7 +271,7 @@ export class PolicyVersionDAO {
 
     const result = await this.db.query(query, [versionId]);
     return result.rowCount > 0;
-  }
+
 
   // ============================================================================
   // Policy Version Listing and Search
@@ -296,7 +296,7 @@ export class PolicyVersionDAO {
       pageSize = 20,
       sortBy = 'version',
       sortOrder = 'desc'
-    } = searchQuery;
+ = searchQuery;
 
     // Build WHERE clause
     const conditions: string[] = ['policy_id = $1'];
@@ -306,47 +306,47 @@ export class PolicyVersionDAO {
     if (status && status.length > 0) {
       conditions.push(`status = ANY($${paramIndex++})`);
       params.push(status);
-    }
+
 
     if (complianceFrameworks && complianceFrameworks.length > 0) {
       conditions.push(`compliance_frameworks && $${paramIndex++}`);
       params.push(complianceFrameworks);
-    }
+
 
     if (tags && tags.length > 0) {
       conditions.push(`tags && $${paramIndex++}`);
       params.push(tags);
-    }
+
 
     if (createdBy) {
       conditions.push(`created_by = $${paramIndex++}`);
       params.push(createdBy);
-    }
+
 
     if (createdAfter) {
       conditions.push(`created_at >= $${paramIndex++}`);
       params.push(createdAfter);
-    }
+
 
     if (createdBefore) {
       conditions.push(`created_at <= $${paramIndex++}`);
       params.push(createdBefore);
-    }
+
 
     if (effectiveAfter) {
       conditions.push(`effective_date >= $${paramIndex++}`);
       params.push(effectiveAfter);
-    }
+
 
     if (effectiveBefore) {
       conditions.push(`effective_date <= $${paramIndex++}`);
       params.push(effectiveBefore);
-    }
+
 
     if (textSearch) {
       conditions.push(`(title ILIKE $${paramIndex++} OR content::text ILIKE $${paramIndex-1})`);
       params.push(`%${textSearch}%`);
-    }
+
 
     // Build ORDER BY clause
     const sortColumn = this.getSortColumn(sortBy);
@@ -380,7 +380,7 @@ export class PolicyVersionDAO {
 
     if (!policy) {
       throw new Error(`Policy with ID ${policyId} not found`);
-    }
+
 
     const total = parseInt(countResult.rows[0].total);
     const totalPages = Math.ceil(total / pageSize);
@@ -392,10 +392,10 @@ export class PolicyVersionDAO {
         pageSize,
         total,
         totalPages
-  }
+
       policy
     };
-  }
+
 
   // ============================================================================
   // Status Management
@@ -416,7 +416,7 @@ export class PolicyVersionDAO {
     if (status === 'published') {
       updates.push('published_at = NOW()', `published_by = $${paramIndex++}`);
       params.push(updatedBy);
-    }
+
 
     const query = `
       UPDATE policy_versions
@@ -428,10 +428,10 @@ export class PolicyVersionDAO {
     const result = await this.db.query(query, params);
     if (result.rows.length === 0) {
       throw new Error(`Policy version with ID ${versionId} not found`);
-    }
+
 
     return this.mapRowToPolicyVersion(result.rows[0]);
-  }
+
 
   async getCurrentPolicyVersion(policyId: string): Promise<PolicyVersion | null> {
 
@@ -444,10 +444,10 @@ export class PolicyVersionDAO {
 
     if (!currentVersionId) {
       return null;
-    }
+
 
     return this.getPolicyVersionById(currentVersionId);
-  }
+
 
   // ============================================================================
   // Version Management
@@ -458,7 +458,7 @@ export class PolicyVersionDAO {
     const query = 'SELECT generate_next_version($1, $2) as next_version';
     const result = await this.db.query(query, [policyId, changeType]);
     return result.rows[0].next_version;
-  }
+
 
   async getVersionHistory(policyId: string): Promise<PolicyVersion[]> {
 
@@ -471,7 +471,7 @@ export class PolicyVersionDAO {
 
     const result = await this.db.query(query, [policyId]);
     return result.rows.map(row => this.mapRowToPolicyVersion(row));
-  }
+
 
   // ============================================================================
   // Change Tracking
@@ -506,7 +506,7 @@ export class PolicyVersionDAO {
     ]);
 
     return this.mapRowToPolicyVersionChange(result.rows[0]);
-  }
+
 
   async getVersionChanges(versionId: string): Promise<PolicyVersionChange[]> {
 
@@ -519,7 +519,7 @@ export class PolicyVersionDAO {
 
     const result = await this.db.query(query, [versionId]);
     return result.rows.map(row => this.mapRowToPolicyVersionChange(row));
-  }
+
 
   // ============================================================================
   // Helper Methods
@@ -539,7 +539,7 @@ export class PolicyVersionDAO {
     };
 
     return columnMap[sortBy] || 'created_at';
-  }
+
 
   private mapRowToPolicy(row: unknown): Policy {
     return {
@@ -552,7 +552,7 @@ export class PolicyVersionDAO {
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at)
     };
-  }
+
 
   private mapRowToPolicyVersion(row: unknown): PolicyVersion {
     return {
@@ -582,7 +582,7 @@ export class PolicyVersionDAO {
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at)
     };
-  }
+
 
   private mapRowToPolicyVersionChange(row: unknown): PolicyVersionChange {
     return {
@@ -596,5 +596,4 @@ export class PolicyVersionDAO {
       createdBy: row.created_by,
       createdAt: new Date(row.created_at)
     };
-  }
-}
+

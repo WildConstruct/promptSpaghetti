@@ -7,8 +7,8 @@ import { EventEmitter } from 'events';
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
-}
-}
+
+
 export interface TimeoutConfiguration {
   id: string;
   name: string;
@@ -24,8 +24,9 @@ export interface TimeoutConfiguration {
     validated: boolean;
     deployedAt?: Date;
     lastModified: Date;
-}
-}
+
+
+
   };
   
   scope: {
@@ -120,7 +121,7 @@ export interface TimeoutConfiguration {
       constraint: 'min' | 'max' | 'range' | 'regex' | 'custom';
       value: string | number | boolean;
       message: string;
-    }>;
+>;
     
     dependencies: Array<{
       field: string;
@@ -128,14 +129,14 @@ export interface TimeoutConfiguration {
       relationship: 'greater' | 'less' | 'equal' | 'ratio';
       factor?: number;
       message: string;
-    }>;
+>;
     
     businessRules: Array<{
       name: string;
       condition: string;
       action: 'warn' | 'error' | 'adjust';
       message: string;
-    }>;
+>;
   };
   
   metadata: {
@@ -146,17 +147,18 @@ export interface TimeoutConfiguration {
     riskLevel: 'low' | 'medium' | 'high';
     businessJustification?: string;
   };
-}
 
-}
-}
+
+
+
 export interface TimeoutMetrics {
   configurationId: string;
   timeRange: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   usage: {
     totalSessions: number;
@@ -182,11 +184,11 @@ export interface TimeoutMetrics {
     description: string;
     impact: string;
     priority: 'low' | 'medium' | 'high';
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface TimeoutTemplate {
   id: string;
   name: string;
@@ -205,20 +207,21 @@ export interface TimeoutTemplate {
       max?: number;
       pattern?: string;
       required?: boolean;
-}
-}
+
+
+
     };
-  }>;
+>;
   
   recommendations: Array<{
     scenario: string;
     settings: Record<string, string | number | boolean>;
     reasoning: string;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface TimeoutAdjustment {
   id: string;
   configurationId: string;
@@ -233,8 +236,9 @@ export interface TimeoutAdjustment {
       metric: string;
       threshold: number;
       actualValue: number;
-}
-}
+
+
+
     };
   };
   
@@ -243,7 +247,7 @@ export interface TimeoutAdjustment {
     oldValue: string | number | boolean | null;
     newValue: string | number | boolean | null;
     changeReason: string;
-  }>;
+>;
   
   impact: {
     affectedSessions: number;
@@ -264,14 +268,15 @@ export interface TimeoutAdjustment {
     appliedAt?: Date;
     errors?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface TimeoutMetrics {
   configurationId: string;
-}
-}
+
+
+
   timeRange: { start: Date; end: Date };
   
   usage: {
@@ -303,8 +308,8 @@ export interface TimeoutMetrics {
     recommendedValue: number;
     confidence: number;
     reasoning: string;
-  }>;
-}
+>;
+
 
 export class ConfigurableTimeoutService extends EventEmitter {
   private db: DatabaseService;
@@ -327,7 +332,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     this.metricsCollector = new TimeoutMetricsCollector();
     this.initializeDefaultTemplates();
     this.loadActiveConfiguration();
-  }
+
 
   /**
    * Create a new timeout configuration
@@ -340,7 +345,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     configuration?: TimeoutConfiguration;
     validationErrors?: string[];
     warnings?: string[];
-  }> {
+> {
 
     try {
       // Create configuration object
@@ -353,7 +358,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
           active: false,
           validated: false,
           lastModified: new Date()
-        }
+
       };
 
       // Validate configuration
@@ -364,7 +369,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
           validationErrors: validation.errors,
           warnings: validation.warnings
         };
-      }
+
 
       configuration.status.validated = true;
 
@@ -389,15 +394,14 @@ export class ConfigurableTimeoutService extends EventEmitter {
         configuration,
         warnings: validation.warnings
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating timeout configuration:', error);
       return {
         success: false,
         validationErrors: ['Failed to create configuration']
       };
-    }
-  }
+
+
 
   /**
    * Update an existing timeout configuration
@@ -410,14 +414,14 @@ export class ConfigurableTimeoutService extends EventEmitter {
       createNewVersion?: boolean;
       validateOnly?: boolean;
       forceUpdate?: boolean;
-    } = {}
+ = {}
   ): Promise<{
     success: boolean;
     configuration?: TimeoutConfiguration;
     validationErrors?: string[];
     warnings?: string[];
     requiresApproval?: boolean;
-  }> {
+> {
 
     try {
       const existingConfig = this.configurations.get(configurationId);
@@ -426,7 +430,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
           success: false,
           validationErrors: ['Configuration not found']
         };
-      }
+
 
       // Create updated configuration
       const updatedConfig: TimeoutConfiguration = {
@@ -439,7 +443,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
           ...existingConfig.status,
           validated: false,
           lastModified: new Date()
-        }
+
       };
 
       // Validate updated configuration
@@ -450,7 +454,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
           validationErrors: validation.errors,
           warnings: validation.warnings
         };
-      }
+
 
       // Check if update requires approval
       const requiresApproval = await this.requiresApproval(existingConfig, updatedConfig);
@@ -463,7 +467,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
           warnings: validation.warnings,
           requiresApproval
         };
-      }
+
 
       updatedConfig.status.validated = validation.valid;
 
@@ -482,7 +486,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
       // Apply changes if not requiring approval
       if (!requiresApproval && updatedConfig.status.active) {
         await this.applyConfiguration(configurationId);
-      }
+
 
       // Log update
       await this.logConfigurationEvent('updated', configurationId, updatedBy, {
@@ -504,15 +508,14 @@ export class ConfigurableTimeoutService extends EventEmitter {
         warnings: validation.warnings,
         requiresApproval
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error updating timeout configuration:', error);
       return {
         success: false,
         validationErrors: ['Failed to update configuration']
       };
-    }
-  }
+
+
 
   /**
    * Apply a timeout configuration (make it active)
@@ -524,7 +527,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
       force?: boolean;
       dryRun?: boolean;
       rollbackPlan?: string;
-    } = {}
+ = {}
   ): Promise<{
     success: boolean;
     impactAssessment?: {
@@ -533,7 +536,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
       estimatedDowntime: number;
     };
     errors?: string[];
-  }> {
+> {
 
     try {
       const configuration = this.configurations.get(configurationId);
@@ -542,14 +545,14 @@ export class ConfigurableTimeoutService extends EventEmitter {
           success: false,
           errors: ['Configuration not found']
         };
-      }
+
 
       if (!configuration.status.validated && !options.force) {
         return {
           success: false,
           errors: ['Configuration has not been validated']
         };
-      }
+
 
       // Assess impact
       const impactAssessment = await this.assessConfigurationImpact(configuration);
@@ -559,18 +562,18 @@ export class ConfigurableTimeoutService extends EventEmitter {
           success: true,
           impactAssessment
         };
-      }
+
 
       // Backup current configuration
       if (this.activeConfig) {
         await this.backupConfiguration(this.activeConfig);
-      }
+
 
       // Deactivate current configuration
       if (this.activeConfig) {
         this.activeConfig.status.active = false;
         await this.saveConfigurationToDatabase(this.activeConfig);
-      }
+
 
       // Activate new configuration
       configuration.status.active = true;
@@ -603,15 +606,14 @@ export class ConfigurableTimeoutService extends EventEmitter {
         success: true,
         impactAssessment
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error applying timeout configuration:', error);
       return {
         success: false,
         errors: ['Failed to apply configuration']
       };
-    }
-  }
+
+
 
   /**
    * Create configuration from template
@@ -625,7 +627,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     success: boolean;
     configuration?: TimeoutConfiguration;
     errors?: string[];
-  }> {
+> {
 
     try {
       const template = this.templates.get(templateId);
@@ -634,7 +636,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
           success: false,
           errors: ['Template not found']
         };
-      }
+
 
       // Validate variables
       const variableValidation = this.validateTemplateVariables(template, variables);
@@ -643,7 +645,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
           success: false,
           errors: variableValidation.errors
         };
-      }
+
 
       // Generate configuration from template
       const configuration = await this.generateFromTemplate(template, variables, configName, createdBy);
@@ -652,15 +654,14 @@ export class ConfigurableTimeoutService extends EventEmitter {
       const result = await this.createConfiguration(configuration, createdBy);
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating configuration from template:', error);
       return {
         success: false,
         errors: ['Failed to create configuration from template']
       };
-    }
-  }
+
+
 
   /**
    * Get timeout value for specific context
@@ -679,7 +680,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     source: string;
     expires?: Date;
     overridable: boolean;
-  }> {
+> {
 
     try {
       // Get applicable configuration
@@ -690,7 +691,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
           source: 'default',
           overridable: true
         };
-      }
+
 
       // Extract timeout value
       const value = this.extractTimeoutValue(config, timeoutType);
@@ -700,16 +701,15 @@ export class ConfigurableTimeoutService extends EventEmitter {
         source: config.name,
         overridable: config.policies.overrides.adminOverride
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting timeout value:', error);
       return {
         value: this.getDefaultTimeout(timeoutType),
         source: 'fallback',
         overridable: true
       };
-    }
-  }
+
+
 
   /**
    * Get configuration metrics and analytics
@@ -721,11 +721,11 @@ export class ConfigurableTimeoutService extends EventEmitter {
 
     try {
       return await this.metricsCollector.collectMetrics(configurationId, timeRange);
-    } catch (error) {
+ catch (error) {
       console.error('Error getting configuration metrics:', error);
       throw new Error('Failed to get configuration metrics');
-    }
-  }
+
+
 
   /**
    * Recommend timeout adjustments based on metrics
@@ -741,15 +741,15 @@ export class ConfigurableTimeoutService extends EventEmitter {
       reasoning: string;
       confidence: number;
       impact: string;
-    }>;
+>;
     riskAssessment: string;
     implementationPlan?: string;
-  }> {
+> {
     try {
       const configuration = this.configurations.get(configurationId);
       if (!configuration) {
         throw new Error('Configuration not found');
-      }
+
 
       // Get metrics for analysis
       const metrics = await this.getConfigurationMetrics(configurationId, {
@@ -761,12 +761,11 @@ export class ConfigurableTimeoutService extends EventEmitter {
       const recommendations = await this.analyzeMetricsForRecommendations(configuration, metrics, analysisDepth);
 
       return recommendations;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error generating recommendations:', error);
       throw new Error('Failed to generate recommendations');
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -784,7 +783,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     const cached = await this.redis.get(cacheKey);
     if (cached) {
       return JSON.parse(cached);
-    }
+
 
     // Find most specific configuration
     let bestMatch: TimeoutConfiguration | null = null;
@@ -797,16 +796,16 @@ export class ConfigurableTimeoutService extends EventEmitter {
       if (score > bestScore) {
         bestScore = score;
         bestMatch = config;
-      }
-    }
+
+
 
     // Cache result
     if (bestMatch) {
       await this.redis.setex(cacheKey, 300, JSON.stringify(bestMatch)); // 5 minute cache
-    }
+
 
     return bestMatch;
-  }
+
 
   /**
    * Calculate match score for configuration based on context
@@ -825,35 +824,35 @@ export class ConfigurableTimeoutService extends EventEmitter {
     // Global scope gets base score
     if (config.scope.global) {
       score += 1;
-    }
+
 
     // More specific scopes get higher scores
     if (config.scope.userRoles && context.userRole) {
       if (config.scope.userRoles.includes(context.userRole)) {
         score += 10;
-      }
-    }
+
+
 
     if (config.scope.sessionTypes && context.sessionType) {
       if (config.scope.sessionTypes.includes(context.sessionType)) {
         score += 20;
-      }
-    }
+
+
 
     if (config.scope.deviceTypes && context.deviceType) {
       if (config.scope.deviceTypes.includes(context.deviceType)) {
         score += 15;
-      }
-    }
+
+
 
     if (config.scope.organizationIds && context.organizationId) {
       if (config.scope.organizationIds.includes(context.organizationId)) {
         score += 30;
-      }
-    }
+
+
 
     return score;
-  }
+
 
   /**
    * Extract timeout value from configuration using dot notation path
@@ -868,16 +867,16 @@ export class ConfigurableTimeoutService extends EventEmitter {
     for (const part of parts) {
       if (typeof value === 'object' && value !== null && part in value) {
         value = (value as Record<string, unknown>)[part];
-      } else {
+ else {
         value = undefined;
-      }
+
       if (value === undefined) {
         break;
-      }
-    }
+
+
 
     return typeof value === 'number' ? value : this.getDefaultTimeout(timeoutType);
-  }
+
 
   /**
    * Get default timeout value for a given timeout type
@@ -896,7 +895,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     };
 
     return defaults[timeoutType] || 300; // 5 minute fallback
-  }
+
 
   /**
    * Initialize default timeout configuration templates
@@ -915,31 +914,31 @@ export class ConfigurableTimeoutService extends EventEmitter {
               absolute: { enabled: true, duration: 28800 }, // 8 hours
               idle: { enabled: true, duration: 1800, warningPeriod: 300 }, // 30 min idle, 5 min warning
               inactivity: { enabled: true, duration: 900, heartbeatRequired: true }
-            }
-          }
-  }
+
+
+
         variables: [
           {
             name: 'sessionDuration',
             type: 'number',
             description: 'Maximum session duration in seconds',
             defaultValue: 28800
-  }
+
           {
             name: 'idleDuration',
             type: 'number',
             description: 'Idle timeout in seconds',
             defaultValue: 1800
-          }
+
         ],
         recommendations: [
           {
             scenario: 'High traffic application',
             settings: { 'timeouts.session.idle.duration': 1200 },
             reasoning: 'Shorter idle timeout for better resource management'
-          }
+
         ]
-  }
+
       {
         name: 'High Security Environment',
         description: 'Strict timeouts for high-security applications',
@@ -951,40 +950,40 @@ export class ConfigurableTimeoutService extends EventEmitter {
               absolute: { enabled: true, duration: 3600 }, // 1 hour
               idle: { enabled: true, duration: 900, warningPeriod: 120 }, // 15 min idle, 2 min warning
               inactivity: { enabled: true, duration: 300, heartbeatRequired: true }
-            }
-          }
-  }
+
+
+
         variables: [
           {
             name: 'maxSessionTime',
             type: 'number',
             description: 'Maximum allowed session time',
             defaultValue: 3600
-          }
+
         ],
         recommendations: []
-      }
+
     ];
 
     templates.forEach(template => {
       const id = this.generateTemplateId();
       this.templates.set(id, { ...template, id });
     });
-  }
+
 
   /**
    * Generate unique identifier for timeout configuration
    */
   private generateConfigurationId(): string {
     return `TIMEOUT-CONFIG-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-  }
+
 
   /**
    * Generate unique identifier for timeout template
    */
   private generateTemplateId(): string {
     return `TIMEOUT-TEMPLATE-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-  }
+
 
   /**
    * Save configuration to database with validation
@@ -996,7 +995,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
       const validation = await this.validationEngine.validate(configuration);
       if (!validation.valid) {
         throw new Error(`Configuration validation failed: ${validation.errors.join(', ')}`);
-      }
+
 
       // Use proper database service instead of console.log
       if (this.db) {
@@ -1014,11 +1013,11 @@ export class ConfigurableTimeoutService extends EventEmitter {
           configuration.createdAt,
           new Date()
         ]);
-      }
-    } catch (error) {
+
+ catch (error) {
       throw new Error(`Failed to save configuration to database: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Apply configuration to Redis with security validation
@@ -1029,7 +1028,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
       // Validate configuration security before applying
       if (!this.validateSecurityConstraints(configuration)) {
         throw new Error('Configuration failed security validation');
-      }
+
 
       if (this.redis) {
         const configKey = `timeout:config:${configuration.id}`;
@@ -1042,11 +1041,11 @@ export class ConfigurableTimeoutService extends EventEmitter {
         
         await this.redis.setex(configKey, 86400, configData); // 24 hour TTL
         await this.redis.set('timeout:active_config', configuration.id);
-      }
-    } catch (error) {
+
+ catch (error) {
       throw new Error(`Failed to apply configuration to Redis: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Apply configuration to active sessions with security checks
@@ -1057,7 +1056,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
       // Security check: Validate that new timeouts don't create security vulnerabilities
       if (!this.validateSessionSecurityConstraints(configuration)) {
         throw new Error('Configuration creates session security vulnerabilities');
-      }
+
 
       if (this.redis) {
         // Get all active sessions
@@ -1077,13 +1076,13 @@ export class ConfigurableTimeoutService extends EventEmitter {
             
             // Update session with new timeout config
             await this.redis.setex(sessionKey, configuration.timeouts.session.absolute.duration, JSON.stringify(session));
-          }
-        }
-      }
-    } catch (error) {
+
+
+
+ catch (error) {
       throw new Error(`Failed to apply configuration to active sessions: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Validate security constraints for configuration
@@ -1097,20 +1096,20 @@ export class ConfigurableTimeoutService extends EventEmitter {
     if (configuration.timeouts.session.absolute.duration < minSessionTimeout ||
         configuration.timeouts.session.absolute.duration > maxSessionTimeout) {
       return false;
-    }
+
     
     if (configuration.timeouts.session.idle.duration < minIdleTimeout) {
       return false;
-    }
+
     
     // Check for dangerous authentication timeouts
     if (configuration.timeouts.authentication.loginTimeout < 30 || // Minimum 30 seconds
         configuration.timeouts.authentication.loginTimeout > 3600) { // Maximum 1 hour
       return false;
-    }
+
     
     return true;
-  }
+
 
   /**
    * Validate session security constraints
@@ -1119,15 +1118,15 @@ export class ConfigurableTimeoutService extends EventEmitter {
     // Ensure idle timeout is not longer than absolute timeout
     if (configuration.timeouts.session.idle.duration >= configuration.timeouts.session.absolute.duration) {
       return false;
-    }
+
     
     // Ensure warning period is reasonable
     if (configuration.timeouts.session.idle.warningPeriod >= configuration.timeouts.session.idle.duration) {
       return false;
-    }
+
     
     return true;
-  }
+
 
   /**
    * Log configuration events with proper typing
@@ -1146,8 +1145,8 @@ export class ConfigurableTimeoutService extends EventEmitter {
           INSERT INTO timeout_audit_log (action, configuration_id, user_id, details, timestamp)
           VALUES ($1, $2, $3, $4, $5)
         `, [action, configurationId, userId, JSON.stringify(details), new Date()]);
-      }
-    } catch (error) {
+
+ catch (error) {
       // Fallback to console.error for critical audit failures
       console.error(`Failed to log timeout configuration event: ${error.message}`, {
         action,
@@ -1155,8 +1154,8 @@ export class ConfigurableTimeoutService extends EventEmitter {
         userId,
         details
       });
-    }
-  }
+
+
 
   /**
    * Load the currently active configuration from storage
@@ -1173,13 +1172,13 @@ export class ConfigurableTimeoutService extends EventEmitter {
           );
           if (result.rows.length > 0) {
             this.activeConfig = JSON.parse(result.rows[0].config_data);
-          }
-        }
-      }
-    } catch (error) {
+
+
+
+ catch (error) {
       console.error('Failed to load active configuration:', error.message);
-    }
-  }
+
+
 
   /**
    * Check if configuration updates require approval
@@ -1202,11 +1201,11 @@ export class ConfigurableTimeoutService extends EventEmitter {
       
       if (Math.abs(oldValue - newValue) / oldValue > 0.2) { // 20% change threshold
         return true;
-      }
-    }
+
+
 
     return false;
-  }
+
 
   /**
    * Create an adjustment record for configuration changes
@@ -1229,7 +1228,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
         newValue: updatedConfig.timeouts.session.idle.duration,
         changeReason: 'Configuration update'
       });
-    }
+
 
     const adjustment: TimeoutAdjustment = {
       id: `ADJ-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
@@ -1239,19 +1238,19 @@ export class ConfigurableTimeoutService extends EventEmitter {
         reason: 'Configuration update',
         triggeredBy,
         triggeredAt: new Date()
-  }
+
       changes,
       impact: {
         affectedSessions: 0,
         estimatedUsers: 0,
         riskAssessment: 'low',
         rollbackPlan: 'Revert to previous configuration version'
-      }
+
     };
 
     this.adjustments.set(adjustment.id, adjustment);
     return adjustment;
-  }
+
 
   /**
    * Assess the impact of applying a configuration
@@ -1261,7 +1260,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     estimatedUsers: number;
     riskLevel: 'low' | 'medium' | 'high';
     recommendations: string[];
-  }> {
+> {
 
     // Mock implementation - would analyze current sessions and user activity
     return {
@@ -1273,7 +1272,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
         'Prepare rollback plan if user complaints increase'
       ]
     };
-  }
+
 
   /**
    * Backup current configuration before changes
@@ -1286,11 +1285,11 @@ export class ConfigurableTimeoutService extends EventEmitter {
           INSERT INTO timeout_configuration_backups (config_id, config_data, backed_up_at)
           VALUES ($1, $2, $3)
         `, [configuration.id, JSON.stringify(configuration), new Date()]);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to backup configuration:', error.message);
-    }
-  }
+
+
 
   /**
    * Validate template variables
@@ -1307,28 +1306,28 @@ export class ConfigurableTimeoutService extends EventEmitter {
       if (variable.validation?.required && value === undefined) {
         errors.push(`Required variable '${variable.name}' is missing`);
         continue;
-      }
+
 
       if (value !== undefined) {
         // Type validation
         if (variable.type === 'number' && typeof value !== 'number') {
           errors.push(`Variable '${variable.name}' must be a number`);
-        }
+
         
         // Range validation
         if (variable.type === 'number' && typeof value === 'number') {
           if (variable.validation?.min !== undefined && value < variable.validation.min) {
             errors.push(`Variable '${variable.name}' must be at least ${variable.validation.min}`);
-          }
+
           if (variable.validation?.max !== undefined && value > variable.validation.max) {
             errors.push(`Variable '${variable.name}' must be at most ${variable.validation.max}`);
-          }
-        }
-      }
-    }
+
+
+
+
 
     return { valid: errors.length === 0, errors };
-  }
+
 
   /**
    * Generate configuration from template
@@ -1349,11 +1348,11 @@ export class ConfigurableTimeoutService extends EventEmitter {
       // Apply variable substitution (simplified implementation)
       if (variable.name === 'sessionDuration') {
         config.timeouts.session.absolute.duration = value;
-      }
+
       if (variable.name === 'idleDuration') {
         config.timeouts.session.idle.duration = value;
-      }
-    }
+
+
 
     return {
       ...config,
@@ -1367,8 +1366,8 @@ export class ConfigurableTimeoutService extends EventEmitter {
         active: false,
         validated: false,
         lastModified: new Date(}
-    } as TimeoutConfiguration;
-  }
+ as TimeoutConfiguration;
+
 
   /**
    * Analyze metrics to generate recommendations
@@ -1385,10 +1384,10 @@ export class ConfigurableTimeoutService extends EventEmitter {
       reasoning: string;
       confidence: number;
       impact: string;
-    }>;
+>;
     riskAssessment: string;
     implementationPlan?: string;
-  }> {
+> {
     const recommendations = [];
     
     // Analyze session timeout patterns
@@ -1401,7 +1400,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
         confidence: 0.8,
         impact: 'May reduce user frustration and improve productivity'
       });
-    }
+
 
     return {
       recommendations,
@@ -1410,7 +1409,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
         ? 'Implement changes gradually over 3 phases with monitoring'
         : undefined
     };
-  }
+
 
   /**
    * Clean up resources and destroy the service instance
@@ -1420,8 +1419,8 @@ export class ConfigurableTimeoutService extends EventEmitter {
     this.configurations.clear();
     this.templates.clear();
     this.adjustments.clear();
-  }
-}
+
+
 
 // Helper classes
 
@@ -1439,7 +1438,7 @@ class TimeoutValidationEngine {
     valid: boolean;
     errors: string[];
     warnings: string[];
-  }> {
+> {
 
     const errors: string[] = [];
     const warnings: string[] = [];
@@ -1447,33 +1446,33 @@ class TimeoutValidationEngine {
     // Validate timeout values are positive
     if (config.timeouts.session.absolute.duration <= 0) {
       errors.push('Session absolute timeout must be positive');
-    }
+
 
     if (config.timeouts.session.idle.duration <= 0) {
       errors.push('Session idle timeout must be positive');
-    }
+
 
     // Validate relationships between timeouts
     if (config.timeouts.session.idle.warningPeriod >= config.timeouts.session.idle.duration) {
       errors.push('Idle warning period must be less than idle duration');
-    }
+
 
     // Check for reasonable values
     if (config.timeouts.session.absolute.duration > 86400) { // 24 hours
       warnings.push('Session duration exceeds 24 hours - consider security implications');
-    }
+
 
     if (config.timeouts.session.idle.duration < 300) { // 5 minutes
       warnings.push('Very short idle timeout may impact user experience');
-    }
+
 
     return {
       valid: errors.length === 0,
       errors,
       warnings
     };
-  }
-}
+
+
 
 /**
  * Metrics collector for timeout configurations
@@ -1497,24 +1496,23 @@ class TimeoutMetricsCollector {
         timeoutOccurrences: {
           'session.idle': 50,
           'session.absolute': 20
-  }
+
         averageSessionDuration: 1800,
         extensionsGranted: 15,
         overridesUsed: 3
-  }
+
       performance: {
         systemLoad: 0.65,
         responseTime: 120,
         errorRate: 0.02,
         availability: 99.9
-  }
+
       effectiveness: {
         securityIncidents: 2,
         userComplaints: 5,
         productivityImpact: 0.1,
         complianceScore: 95
-  }
+
       recommendations: []
     };
-  }
-}
+

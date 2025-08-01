@@ -1,7 +1,12 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 Promise;
-importRules: (content, filename, options) => Promise;
+importRules: ();
+content: string,
+    filename;
+string,
+    options ?  : ImportOptions;
+Promise;
 export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
     // Initial state
     rules: [],

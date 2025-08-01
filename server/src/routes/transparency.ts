@@ -15,7 +15,7 @@ import {
   TransparencyConfig,
   DataSubjectAccessRequest,
   TransparencySettings
-} from '../../../packages/core/security/UserAccessTransparency';
+ from '../../../packages/core/security/UserAccessTransparency';
 
 // Request schemas
 const InventoryRequestSchema = z.object({
@@ -113,36 +113,36 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 interface InventoryRequest extends AuthenticatedRequest {
   Querystring: z.infer<typeof InventoryRequestSchema>;
-}
+
 
 interface ActivityRequest extends AuthenticatedRequest {
   Querystring: z.infer<typeof ActivityRequestSchema>;
-}
+
 
 interface DSARCreateRequest extends AuthenticatedRequest {
   Body: z.infer<typeof DSARRequestSchema>;
-}
+
 
 interface SettingsRequest extends AuthenticatedRequest {
   Body: z.infer<typeof SettingsUpdateSchema>;
-}
+
 
 interface ExportRequest extends AuthenticatedRequest {
   Querystring: z.infer<typeof ExportRequestSchema>;
-}
+
 
 interface DeleteRequest extends AuthenticatedRequest {
   Body: z.infer<typeof DeleteRequestSchema>;
   Params: { categoryId: string };
-}
+
 
 interface DSARStatusRequest extends AuthenticatedRequest {
   Params: { requestId: string };
-}
+
 
 export async function transparencyRoutes(fastify: FastifyInstance) {
   // Initialize transparency service
@@ -170,7 +170,7 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Valid authentication token required'
         });
-      }
+
 
       const token = authHeader.slice(7);
       const user = await fastify.jwt.verify(token) as any;
@@ -180,15 +180,15 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Invalid authentication token'
         });
-      }
+
 
       request.user = user;
-    } catch (error) {
+ catch (error) {
       return reply.code(401).send({
         error: 'Unauthorized',
         message: 'Authentication failed'
       });
-    }
+
   };
 
   /**
@@ -205,8 +205,8 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           refresh: { type: 'boolean', default: false },
           categories: { type: 'array', items: { type: 'string' } },
           includeExpired: { type: 'boolean', default: false }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -220,10 +220,10 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
             thirdPartySharing: { type: 'array', items: { type: 'object' } },
             complianceStatus: { type: 'object' },
             privacyScore: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: InventoryRequest, reply: FastifyReply) => {
     try {
       const queryParams = InventoryRequestSchema.parse(request.query);
@@ -232,30 +232,30 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
       let inventory;
       if (queryParams.refresh) {
         inventory = await transparencyService.generateUserDataInventory(userId);
-      } else {
+ else {
         // Try to get cached inventory first, generate if not available
         try {
           inventory = await transparencyService.getUserDataInventory(userId);
-        } catch {
+ catch {
           inventory = await transparencyService.generateUserDataInventory(userId);
-        }
-      }
+
+
 
       // Filter by categories if specified
       if (queryParams.categories && queryParams.categories.length > 0) {
         inventory.dataCategories = inventory.dataCategories.filter(
           category => queryParams.categories!.includes(category.category)
         );
-      }
+
 
       reply.send(inventory);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching data inventory:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch data inventory'
       });
-    }
+
   });
 
   /**
@@ -274,8 +274,8 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           search: { type: 'string' },
           limit: { type: 'integer', minimum: 1, maximum: 1000, default: 50 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -287,12 +287,12 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
                 limit: { type: 'integer' },
                 offset: { type: 'integer' },
                 total: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: ActivityRequest, reply: FastifyReply) => {
     try {
       const queryParams = ActivityRequestSchema.parse(request.query);
@@ -324,7 +324,7 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
         filteredActivities = activities.filter(
           activity => activity.actor.type === queryParams.type
         );
-      }
+
 
       // Apply search filter if specified
       if (queryParams.search) {
@@ -336,7 +336,7 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
             data.dataType.toLowerCase().includes(searchTerm)
 
         );
-      }
+
 
       // Apply pagination
       const paginatedActivities = filteredActivities.slice(
@@ -350,15 +350,15 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           limit: queryParams.limit,
           offset: queryParams.offset,
           total: filteredActivities.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching access activities:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch access activities'
       });
-    }
+
   });
 
   /**
@@ -375,22 +375,22 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           requestType: { 
             type: 'string', 
             enum: ['ACCESS', 'RECTIFICATION', 'ERASURE', 'PORTABILITY', 'RESTRICTION', 'OBJECTION']
-  }
+
           dataCategories: { type: 'array', items: { type: 'string' } },
           timeRange: {
             type: 'object',
             properties: {
               start: { type: 'string', format: 'date-time' },
               end: { type: 'string', format: 'date-time' }
-            }
-  }
+
+
           specificData: { type: 'array', items: { type: 'string' } },
           reason: { type: 'string' },
           urgency: { type: 'string', enum: ['STANDARD', 'URGENT', 'EMERGENCY'], default: 'STANDARD' },
           preferredFormat: { type: 'string', enum: ['JSON', 'XML', 'CSV', 'PDF', 'HUMAN_READABLE'], default: 'JSON' }
-  }
+
         required: ['requestType']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -399,10 +399,10 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             completionDeadline: { type: 'string', format: 'date-time' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: DSARCreateRequest, reply: FastifyReply) => {
     try {
       const requestData = DSARRequestSchema.parse(request.body);
@@ -416,13 +416,13 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           timeRange: requestData.timeRange ? {
             start: new Date(requestData.timeRange.start),
             end: new Date(requestData.timeRange.end)
-          } : undefined,
+ : undefined,
           specificData: requestData.specificData,
           reason: requestData.reason,
           identityVerified: true, // Assume verified through authentication
           urgency: requestData.urgency,
           preferredFormat: requestData.preferredFormat
-        }
+
       );
 
       reply.send({
@@ -431,13 +431,13 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
         completionDeadline: dsarRequest.completionDeadline.toISOString(),
         message: `Your ${requestData.requestType.toLowerCase()} request has been submitted and will be processed within the required timeframe.`
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error submitting DSAR:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to submit data subject access request'
       });
-    }
+
   });
 
   /**
@@ -452,9 +452,9 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-  }
+
         required: ['requestId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -466,10 +466,10 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
             completionDeadline: { type: 'string', format: 'date-time' },
             processingHistory: { type: 'array', items: { type: 'object' } },
             response: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: DSARStatusRequest, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
@@ -482,16 +482,16 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'DSAR request not found'
         });
-      }
+
 
       reply.send(dsarRequest);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching DSAR status:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch DSAR status'
       });
-    }
+
   });
 
   /**
@@ -509,9 +509,9 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           categories: { type: 'array', items: { type: 'string' } },
           includeMetadata: { type: 'boolean', default: true },
           includeHistory: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request: ExportRequest, reply: FastifyReply) => {
     try {
       const queryParams = ExportRequestSchema.parse(request.query);
@@ -526,20 +526,20 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
       if (exportResponse.downloadUrl) {
         // Redirect to download URL
         reply.redirect(exportResponse.downloadUrl);
-      } else {
+ else {
         // Return file directly
         reply
           .header('Content-Disposition', `attachment; filename="user-data.${queryParams.format.toLowerCase()}"`)
           .header('Content-Type', this.getContentType(queryParams.format))
           .send(exportResponse);
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Error exporting user data:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to export user data'
       });
-    }
+
   });
 
   /**
@@ -558,18 +558,18 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           consentPreferences: { type: 'object' },
           dataRetentionPreferences: { type: 'object' },
           accessControlPreferences: { type: 'object' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             message: { type: 'string' },
             settings: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: SettingsRequest, reply: FastifyReply) => {
     try {
       const settingsUpdate = SettingsUpdateSchema.parse(request.body);
@@ -584,21 +584,21 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
         message: 'Transparency settings updated successfully',
         settings: updatedSettings
       });
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid settings data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error updating transparency settings:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to update transparency settings'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -613,27 +613,27 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           categoryId: { type: 'string' }
-  }
+
         required: ['categoryId']
-  }
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', minLength: 10 },
           confirmationToken: { type: 'string', minLength: 1 }
-  }
+
         required: ['reason', 'confirmationToken']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             message: { type: 'string' },
             deletionId: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: DeleteRequest, reply: FastifyReply) => {
     try {
       const { categoryId } = request.params;
@@ -646,7 +646,7 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           error: 'Invalid Confirmation',
           message: 'Invalid confirmation token for data deletion'
         });
-      }
+
 
       const deletionResult = await transparencyService.deleteDataCategory(
         userId,
@@ -658,13 +658,13 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
         message: 'Data deletion request submitted successfully',
         deletionId: deletionResult.deletionId
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error deleting data category:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to process data deletion request'
       });
-    }
+
   });
 
   /**
@@ -684,22 +684,22 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
             trends: { type: 'array', items: { type: 'object' } },
             recommendations: { type: 'array', items: { type: 'object' } },
             lastCalculated: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const userId = request.user!.id;
       const privacyScore = await transparencyService.getPrivacyScore(userId);
       reply.send(privacyScore);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching privacy score:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch privacy score'
       });
-    }
+
   });
 
   // Helper methods
@@ -710,17 +710,16 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
     case 'CSV': return 'text/csv';
     case 'PDF': return 'application/pdf';
     default: return 'application/octet-stream';
-    }
-  }
+
+
 
   function verifyDeletionToken(token: string, userId: string, categoryId: string): boolean {
     // Implement your own token verification logic
     // This could check against a database of issued tokens
     return token === `delete_${userId}_${categoryId}_${Date.now()}`;
-  }
-}
+
+
 
 // Register the plugin
 export default async function (fastify: FastifyInstance) {
   await fastify.register(transparencyRoutes, { prefix: '/api/transparency' });
-}

@@ -7,6 +7,7 @@
 import React from 'react';
 
 }
+}
 export interface PolicyManagementDashboardProps {
     userId: string;
     userRole: string;
@@ -15,4 +16,5 @@ export interface PolicyManagementDashboardProps {
 export declare const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>;
 export default PolicyManagementDashboard;
 //# sourceMappingURL=PolicyManagementDashboard.d.ts.map
+}
 }

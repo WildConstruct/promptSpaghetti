@@ -15,24 +15,22 @@ import { ErrorFactory } from '../errors/ErrorFactory';
 
 // Core condition interfaces
 
-}
-export interface ToggleCondition {
-  id: string;
+
+export interface ToggleCondition { id: string;
   toggleId: string;
   name: string;
   description: string;
   conditionType: ConditionType;
   expression: string;
   parameters: ConditionParameters;
-  priority: number; // Higher number = higher priority,
+  priority: number; // Higher number = higher priority }
   active: boolean;
   metadata: ConditionMetadata;
   created: Date;
   lastModified: Date;
-}
-}
-export enum ConditionType {
-  USER_ATTRIBUTE = 'user_attribute',       // Based on user properties (id, email, role, etc.)
+
+
+export enum ConditionType { USER_ATTRIBUTE = 'user_attribute',       // Based on user properties (id, email, role, etc.)
   USER_SEGMENT = 'user_segment',           // Based on predefined user segments
   PERCENTAGE = 'percentage',               // Percentage-based rollout
   TIME_WINDOW = 'time_window',             // Time-based activation
@@ -50,7 +48,7 @@ export enum ConditionType {
   userSegments?: string;
   // Rollout parameters
   percentage?: number;
-  salt?: string; // For consistent percentage calculation,
+  salt?: string; // For consistent percentage calculation }
   // Time-based parameters
   startTime?: Date;
   endTime?: Date;
@@ -72,20 +70,20 @@ export enum ConditionType {
   // Custom expression parameters
   customVariables?: Record<string, any>;
   functions?: Record<string, Function>;
-}
-}
-}
-export interface UserAttributeParams {
-  attributes: Array<{
+
+
+
+
+export interface UserAttributeParams { attributes: Array<{ }
   key: string;
   operator: ComparisonOperator;
   value: any;
-}
-}>;
-  logic: 'AND' | 'OR'
-  }
-export enum ComparisonOperator {
-  EQUALS = 'equals',
+
+
+>;
+  logic: 'AND' | 'OR';
+
+export enum ComparisonOperator { EQUALS = 'equals',
   NOT_EQUALS = 'not_equals',
   GREATER_THAN = 'greater_than',
   LESS_THAN = 'less_than',
@@ -99,213 +97,208 @@ export enum ComparisonOperator {
   IN_LIST = 'in_list',
   NOT_IN_LIST = 'not_in_list'
   export interface ScheduleParams {
-  daysOfWeek?: number; // 0-6, Sunday=0,
-  hoursOfDay?: number; // 0-23,
+  daysOfWeek?: number; // 0-6, Sunday=0;
+  hoursOfDay?: number; // 0-23;
   recurring?: boolean;
-  recurrencePattern?: 'daily' | 'weekly' | 'monthly'
-}
-  }
-}
-export interface ExperimentParams {
-  experimentId: string;
+  recurrencePattern?: 'daily' | 'weekly' | 'monthly' }
+
+
+
+
+export interface ExperimentParams { experimentId: string;
   variant: string;
-  trafficAllocation: number; // 0-100,
-  stickiness?: 'user' | 'session' | 'device'
-}
-  }
-}
-export interface ConditionMetadata {
-  category: string;
+  trafficAllocation: number; // 0-100;
+  stickiness?: 'user' | 'session' | 'device' }
+
+
+
+
+export interface ConditionMetadata { category: string;
   tags: string;
   epic?: string;
   story?: string;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: 'low' | 'medium' | 'high' | 'critical' }
   businessImpact: string;
   technicalNotes: string;
   author: string;
   reviewedBy?: string;
   reviewedAt?: Date;
   // Evaluation interfaces
-}
-}
-}
-export interface EvaluationContext {
-  user?: UserContext;
+
+
+
+
+export interface EvaluationContext { user?: UserContext;
   request?: RequestContext;
   environment?: EnvironmentContext;
   toggles?: Record<string, boolean>;
   experiments?: Record<string, string>;
   timestamp?: Date;
-  customData?: Record<string, any>;
-}
-}
-}
-export interface UserContext {
-  id: string;
+  customData?: Record<string, any> }
+
+
+
+export interface UserContext { id: string;
   email?: string;
   role?: string;
   segment?: string;
   attributes?: Record<string, any>;
   groups?: string;
-  permissions?: string;
-}
-}
-}
-export interface RequestContext {
-  ip?: string;
+  permissions?: string }
+
+
+
+export interface RequestContext { ip?: string;
   userAgent?: string;
   country?: string;
   region?: string;
   city?: string;
   device?: DeviceInfo;
-  session?: SessionInfo;
-}
-}
-}
-export interface DeviceInfo {
-  type: 'mobile' | 'tablet' | 'desktop' | 'unknown';
+  session?: SessionInfo }
+
+
+
+export interface DeviceInfo { type: 'mobile' | 'tablet' | 'desktop' | 'unknown' }
   platform: string;
   browser?: string;
   version?: string;
-}
-}
-}
-export interface SessionInfo {
-  id: string;
+
+
+
+
+export interface SessionInfo { id: string;
   startTime: Date;
-  duration: number; // seconds,
+  duration: number; // seconds }
   pageViews: number;
-}
-}
-}
-export interface EnvironmentContext {
-  environment: 'development' | 'staging' | 'production';
+
+
+
+
+export interface EnvironmentContext { environment: 'development' | 'staging' | 'production' }
   region: string;
   timezone: string;
   version: string;
   // Evaluation results
-}
-}
-}
-export interface ConditionEvaluationResult {
-  conditionId: string;
+
+
+
+
+export interface ConditionEvaluationResult { conditionId: string;
   result: boolean;
-  score?: number; // 0-1 for weighted conditions,
+  score?: number; // 0-1 for weighted conditions;
   reason: string;
-  executionTime: number; // milliseconds,
-  metadata: {
+  executionTime: number; // milliseconds;
+  metadata: { }
   evaluatedAt: Date;
   contextHash: string;
   intermediateValues?: Record<string, any>;
-}
+
+
 };
-}
-}
-export interface ToggleEvaluationResult {
-  toggleId: string;
+
+
+export interface ToggleEvaluationResult { toggleId: string;
   enabled: boolean;
-  variant?: string; // for multivariate toggles,
+  variant?: string; // for multivariate toggles;
   conditions: ConditionEvaluationResult;
   fallbackReason?: string;
-  confidence: number; // 0-1,
-  metadata: {
+  confidence: number; // 0-1;
+  metadata: { }
   evaluatedAt: Date;
   totalExecutionTime: number;
   cacheHit: boolean;
-}
+
+
 };
 
 // Service configuration
-}
-}
-export interface ToggleConditionsConfig {
-  evaluation: {
+
+
+export interface ToggleConditionsConfig { evaluation: {;
   enableCaching: boolean;
-  cacheTimeToLive: number; // seconds,
+  cacheTimeToLive: number; // seconds;
   maxConditionsPerToggle: number;
-  evaluationTimeout: number; // milliseconds,
+  evaluationTimeout: number; // milliseconds }
   strictMode: boolean;
-}
+
+
 };
-  security: {
+  security: { ,
   allowCustomExpressions: boolean;
   maxExpressionComplexity: number;
   enableSecurityAudit: boolean;
-  blockedPatterns: string;
-};
-  rollout: {
+  blockedPatterns: string };
+  rollout: { ,
   defaultSalt: string;
   stickinessDuration: number; // seconds,
   enableGradualRollout: boolean;
-  rolloutRateLimit: number; // percentage per hour,
+  rolloutRateLimit: number; // percentage per hour }
 };
-  experiments: {
+  experiments: { ,
   enableABTesting: boolean;
   defaultTrafficAllocation: number;
   maxVariants: number;
-  stickinessStrategy: 'user' | 'session' | 'device'
-  };
+  stickinessStrategy: 'user' | 'session' | 'device' }
+};
 /**
  * Toggle Conditions Service
  * 
  * Core service for evaluating complex conditions for feature toggles in Epic 17.
  * Provides secure, performant, and flexible condition evaluation.
  */
-}
+
 export class ToggleConditionsService {
   private conditions: Map<string, ToggleCondition> = new Map();
   private toggleConditions: Map<string, string> = new Map(); // toggleId -> conditionIds
   private evaluationCache: Map<string, ConditionEvaluationResult> = new Map();
   private config: ToggleConditionsConfig;
   private expressionEvaluator: SafeExpressionEvaluator;
-  constructor(config: Partial<ToggleConditionsConfig> = {}) {
-  this.config = {
+  constructor(config: Partial<ToggleConditionsConfig> = {}) { this.config = {
   evaluation: {
-  enableCaching: true,
-  cacheTimeToLive: 300, // 5 minutes,
-  maxConditionsPerToggle: 20,
-  evaluationTimeout: 1000, // 1 second,
-  strictMode: false,
+  enableCaching: true
+  cacheTimeToLive: 300, // 5 minutes
+  maxConditionsPerToggle: 20
+  evaluationTimeout: 1000, // 1 second
+  strictMode: false }
   ...config.evaluation
-},
-  security: {
-  allowCustomExpressions: true,
-  maxExpressionComplexity: 100,
-  enableSecurityAudit: true,
-  blockedPatterns: ['eval', 'Function', 'constructor', 'prototype', '__proto__'],
+
+  security: { 
+  allowCustomExpressions: true
+  maxExpressionComplexity: 100
+  enableSecurityAudit: true
+  blockedPatterns: ['eval', 'Function', 'constructor', 'prototype', '__proto__'] }
   ...config.security
-},
-  rollout: {
-  defaultSalt: 'toggle-conditions-v1',
-  stickinessDuration: 86400, // 24 hours,
-  enableGradualRollout: true,
-  rolloutRateLimit: 10, // 10% per hour,
+
+  rollout: { 
+  defaultSalt: 'toggle-conditions-v1'
+  stickinessDuration: 86400, // 24 hours
+  enableGradualRollout: true
+  rolloutRateLimit: 10, // 10% per hour }
   ...config.rollout
-},
-  experiments: {
-  enableABTesting: true,
-  defaultTrafficAllocation: 100,
-  maxVariants: 10,
-  stickinessStrategy: 'user',
+
+  experiments: { 
+  enableABTesting: true
+  defaultTrafficAllocation: 100
+  maxVariants: 10
+  stickinessStrategy: 'user' }
   ...config.experiments
 };
-    this.expressionEvaluator = new SafeExpressionEvaluator({)
-  timeout: this.config.evaluation.evaluationTimeout,
-  maxComplexity: this.config.security.maxExpressionComplexity,
+    this.expressionEvaluator = new SafeExpressionEvaluator({ )
+  timeout: this.config.evaluation.evaluationTimeout
+  maxComplexity: this.config.security.maxExpressionComplexity }
 });
     // Clean up expired cache entries periodically
-    if (this.config.evaluation.enableCaching) {
-  setInterval(() => this.cleanupCache(), this.config.evaluation.cacheTimeToLive * 1000);
+    if (this.config.evaluation.enableCaching) { setInterval(() => this.cleanupCache(), this.config.evaluation.cacheTimeToLive * 1000);
   /**
   * Add or update a condition for a toggle
   */
-  async addCondition(condition: Omit<ToggleCondition, 'id' | 'created' | 'lastModified'>): Promise<ToggleCondition> {,
+  async addCondition(condition: Omit<ToggleCondition, 'id' | 'created' | 'lastModified'>): Promise<ToggleCondition> {
   const id = this.generateConditionId();
-  const fullCondition: ToggleCondition = {,
-  ...condition,
-  id,
-  created: new Date(),
-  lastModified: new Date(),
+  const fullCondition: ToggleCondition = {
+  ...condition
+  id
+  created: new Date()
+  lastModified: new Date() }
 };
     // Validate condition
     const validation = await this.validateCondition(fullCondition);
@@ -322,9 +315,7 @@ export class ToggleConditionsService {
   /**
    * Remove a condition
    */
-  async removeCondition(conditionId: string): Promise<boolean> {
-
-  const condition = this.conditions.get(conditionId);
+  async removeCondition(conditionId: string): Promise<boolean> { const condition = this.conditions.get(conditionId);
   if (!condition) {
   return false;
   this.conditions.delete(conditionId);
@@ -340,27 +331,26 @@ export class ToggleConditionsService {
   /**
   * Evaluate all conditions for a toggle
   */
-  async evaluateToggle(toggleId: string, context: EvaluationContext): Promise<ToggleEvaluationResult> {,
+  async evaluateToggle(toggleId: string, context: EvaluationContext): Promise<ToggleEvaluationResult> {
   const startTime = Date.now();
   const conditionIds = this.toggleConditions.get(toggleId) || [];
   if (conditionIds.length === 0) {
   return {
-  toggleId,
-  enabled: false,
-  conditions: [],
-  fallbackReason: 'No conditions configured',
-  confidence: 0,
+  toggleId
+  enabled: false
+  conditions: []
+  fallbackReason: 'No conditions configured'
+  confidence: 0
   metadata: {
-  evaluatedAt: new Date(),
-  totalExecutionTime: Date.now() - startTime,
-  cacheHit: false,
+  evaluatedAt: new Date()
+  totalExecutionTime: Date.now() - startTime
+  cacheHit: false }
 };
     // Evaluate all conditions
     const conditionResults: ConditionEvaluationResult = [];
     let overallResult = false;
     let variant: string | undefined;
-    for (const conditionId of conditionIds) {
-      const condition = this.conditions.get(conditionId);
+    for (const conditionId of conditionIds) { const condition = this.conditions.get(conditionId);
       if (!condition || !condition.active) {
         continue;
       try {
@@ -371,31 +361,28 @@ export class ToggleConditionsService {
           overallResult = true;
           // Extract variant for multivariate toggles
           if (condition.conditionType === ConditionType.MULTIVARIATE && result.metadata.intermediateValues?.variant) {
-            variant = result.metadata.intermediateValues.variant;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
+            variant = result.metadata.intermediateValues.variant } catch (error) { const errorMessage = error instanceof Error ? error.message : String(error);
         conditionResults.push({)
-  conditionId,
-          result: false,
+  conditionId
+          result: false }
           reason: `Evaluation error: ${errorMessage}`}
-},
-  executionTime: 0,
-          metadata: {
-  evaluatedAt: new Date(),
-  contextHash: this.generateContextHash(context),
+
+  executionTime: 0
+          metadata: { 
+  evaluatedAt: new Date()
+  contextHash: this.generateContextHash(context) }
 });
     // Calculate confidence based on condition results
     const confidence = this.calculateConfidence(conditionResults);
-    return {
-  toggleId,
-  enabled: overallResult,
-  variant,
-  conditions: conditionResults,
-  confidence,
+    return { toggleId
+  enabled: overallResult
+  variant
+  conditions: conditionResults
+  confidence
   metadata: {
-  evaluatedAt: new Date(),
-  totalExecutionTime: Date.now() - startTime,
-  cacheHit: false,
+  evaluatedAt: new Date()
+  totalExecutionTime: Date.now() - startTime
+  cacheHit: false }
 };
   /**
    * Evaluate a single condition
@@ -474,64 +461,58 @@ export class ToggleConditionsService {
         break;
       default:
         throw new Error(`Unknown condition type: ${condition.conditionType}`);}
-    } catch (error) {
-  result = false;
+ catch (error) { result = false;
   reason = error instanceof Error ? error.message : String(error);
   if (this.config.security.enableSecurityAudit) {
   securityAudit.logEvent()
-  SecuritySeverity.ERROR,
-  SecurityEventCategory.EXPRESSION_VALIDATION,
-  'Condition evaluation failed',
+  SecuritySeverity.ERROR
+  SecurityEventCategory.EXPRESSION_VALIDATION
+  'Condition evaluation failed'
   {
-  conditionId: condition.id,
-  conditionType: condition.conditionType,
-  error: reason,
-}
+  conditionId: condition.id
+  conditionType: condition.conditionType
+  error: reason }
+
           false
         );
-    const evaluationResult: ConditionEvaluationResult = {,
-  conditionId: condition.id,
-  result,
-  reason,
-  executionTime: Date.now() - startTime,
+    const evaluationResult: ConditionEvaluationResult = { 
+  conditionId: condition.id
+  result
+  reason
+  executionTime: Date.now() - startTime
   metadata: {
-  evaluatedAt: new Date(),
-  contextHash,
+  evaluatedAt: new Date()
+  contextHash }
   intermediateValues
 };
     // Cache the result
-    if (this.config.evaluation.enableCaching) {
-  this.evaluationCache.set(cacheKey, evaluationResult);
+    if (this.config.evaluation.enableCaching) { this.evaluationCache.set(cacheKey, evaluationResult);
   return evaluationResult;
   /**
   * Get all conditions for a toggle
   */
-  getToggleConditions(toggleId: string): ToggleCondition {,
+  getToggleConditions(toggleId: string): ToggleCondition {
   const conditionIds = this.toggleConditions.get(toggleId) || [];
   return conditionIds
   .map(id => this.conditions.get(id))
-  .filter((condition): condition is ToggleCondition => condition !== undefined),
+  .filter((condition): condition is ToggleCondition => condition !== undefined)
   .sort((a, b) => b.priority - a.priority);
   /**
   * Bulk evaluate multiple toggles
   */
-  async evaluateToggles(toggleIds: string, context: EvaluationContext): Promise<Map<string, ToggleEvaluationResult>> {,
+  async evaluateToggles(toggleIds: string, context: EvaluationContext): Promise<Map<string, ToggleEvaluationResult>> { }
   const results = new Map<string, ToggleEvaluationResult>();
-  const evaluationPromises = toggleIds.map(async (toggleId) => {
-  const result = await this.evaluateToggle(toggleId, context);
-  results.set(toggleId, result);
-});
+  const evaluationPromises = toggleIds.map(async (toggleId) => { const result = await this.evaluateToggle(toggleId, context);
+  results.set(toggleId, result) });
     await Promise.all(evaluationPromises);
     return results;
   // Private evaluation methods
-  private evaluateUserAttribute(condition: ToggleCondition, context: EvaluationContext): boolean {
-    const params = condition.parameters.userAttributes;
+  private evaluateUserAttribute(condition: ToggleCondition, context: EvaluationContext): boolean { const params = condition.parameters.userAttributes;
     if (!params || !context.user) {
       return false;
     const results = params.attributes.map(attr => {)
   const userValue = context.user?.attributes?.[attr.key];
-      return this.compareValues(userValue, attr.operator, attr.value);
-    });
+      return this.compareValues(userValue, attr.operator, attr.value) });
     return params.logic === 'AND' ? results.every(r => r) : results.some(r => r);
   private evaluateUserSegment(condition: ToggleCondition, context: EvaluationContext): boolean {
     const segments = condition.parameters.userSegments;
@@ -545,9 +526,8 @@ export class ToggleConditionsService {
     const hash = this.generateHash(`${condition.id}_${userId}_${salt}`);}
     const hashValue = parseInt(hash.substring(0, 8), 16);
     const threshold = (hashValue / 0xFFFFFFFF) * 100;
-    return {
-  included: threshold < percentage,
-  hash,
+    return { included: threshold < percentage,
+  hash }
   threshold
 };
   private evaluateTimeWindow(condition: ToggleCondition, context: EvaluationContext): boolean {
@@ -572,15 +552,14 @@ export class ToggleConditionsService {
     if (!experiment) {
       return { included: false, variant: 'control' };
     // Check traffic allocation
-    const percentageResult = this.evaluatePercentage({)
+    const percentageResult = this.evaluatePercentage({ )
   ...condition,
-      parameters: {
-  percentage: experiment.trafficAllocation,
+      parameters: {,
+  percentage: experiment.trafficAllocation }
         salt: `ab_${experiment.experimentId}`}
     }, context);
-    return {
-  included: percentageResult.included,
-  variant: percentageResult.included ? experiment.variant : 'control',
+    return { included: percentageResult.included,
+  variant: percentageResult.included ? experiment.variant : 'control' }
 };
   private evaluateMultivariate(condition: ToggleCondition, context: EvaluationContext): { included: boolean; variant: string } {
     // Simplified multivariate logic - would be more complex in full implementation
@@ -588,26 +567,23 @@ export class ToggleConditionsService {
     if (!experiment) {
       return { included: false, variant: 'default' };
     const percentageResult = this.evaluatePercentage(condition, context);
-    return {
-  included: percentageResult.included,
-  variant: experiment.variant,
+    return { included: percentageResult.included,
+  variant: experiment.variant }
 };
-  private async evaluateCustomExpression(condition: ToggleCondition, context: EvaluationContext): Promise<boolean> {
-
-  if (!this.config.security.allowCustomExpressions) {
+  private async evaluateCustomExpression(condition: ToggleCondition, context: EvaluationContext): Promise<boolean> { if (!this.config.security.allowCustomExpressions) {
   return false;
   try {
   // Create safe evaluation context
   const evalContext = {
-  user: context.user,
-  request: context.request,
-  environment: context.environment,
-  timestamp: context.timestamp,
+  user: context.user
+  request: context.request
+  environment: context.environment
+  timestamp: context.timestamp }
   ...condition.parameters.customVariables
 };
       const result = await this.expressionEvaluator.evaluate(condition.expression, evalContext);
       return Boolean(result);
-    } catch (error) {
+ catch (error) {
       if (this.config.evaluation.strictMode) {
         throw error;
       return false;
@@ -647,12 +623,10 @@ export class ToggleConditionsService {
     const hash = this.generateHash(`traffic_${condition.id}_${userId}`);}
     const bucket = parseInt(hash.substring(0, 2), 16) % 100;
     const percentage = condition.parameters.percentage || 0;
-    return {
-  included: bucket < percentage,
+    return { included: bucket < percentage }
   bucket
 };
-  private evaluateFeatureFlag(condition: ToggleCondition, context: EvaluationContext): boolean {
-  const requiredFlags = condition.parameters.requiredToggles || [];
+  private evaluateFeatureFlag(condition: ToggleCondition, context: EvaluationContext): boolean { const requiredFlags = condition.parameters.requiredToggles || [];
   return requiredFlags.every(flagId => )
   context.toggles?.[flagId] === true
   );
@@ -679,14 +653,11 @@ export class ToggleConditionsService {
   return String(userValue).startsWith(String(targetValue));
   case ComparisonOperator.ENDS_WITH:,
   return String(userValue).endsWith(String(targetValue));
-  case ComparisonOperator.MATCHES_REGEX:,
-  try {
-  return new RegExp(String(targetValue)).test(String(userValue));
-} catch {
-        return false;
+  case ComparisonOperator.MATCHES_REGEX: }
+  try { return new RegExp(String(targetValue)).test(String(userValue)) } catch { return false;
     case ComparisonOperator.IN_LIST:
       return Array.isArray(targetValue) && targetValue.includes(userValue);
-    case ComparisonOperator.NOT_IN_LIST: return Array.isArray(targetValue) && !targetValue.includes(userValue);
+    case ComparisonOperator.NOT_IN_LIST: return Array.isArray(targetValue) && !targetValue.includes(userValue) }
   default:
       return false;
   private generateHash(input: string): string {
@@ -699,37 +670,32 @@ export class ToggleConditionsService {
     return Math.abs(hash).toString(16);
   private generateConditionId(): string {
     return `cond_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  private generateContextHash(context: EvaluationContext): string {
-  const hashInput = JSON.stringify({)
+  private generateContextHash(context: EvaluationContext): string { const hashInput = JSON.stringify({)
   userId: context.user?.id,
   segment: context.user?.segment,
   country: context.request?.country,
   device: context.request?.device?.type,
-  timestamp: Math.floor((context.timestamp?.getTime() || Date.now()) / 60000) // minute precision,
+  timestamp: Math.floor((context.timestamp?.getTime() || Date.now()) / 60000) // minute precision }
 });
     return this.generateHash(hashInput);
   private calculateConfidence(results: ConditionEvaluationResult): number {
     if (results.length === 0) return 0;
     const successfulEvaluations = results.filter(r => !r.reason.includes('error')).length;
     return successfulEvaluations / results.length;
-  private async validateCondition(condition: ToggleCondition): Promise<{ valid: boolean; errors: string; warnings: string }> {
-
-  const errors: string = [];
+  private async validateCondition(condition: ToggleCondition): Promise<{ valid: boolean; errors: string; warnings: string }> { const errors: string = [];
   const warnings: string = [];
   // Validate expression for custom expressions
   if (condition.conditionType === ConditionType.CUSTOM_EXPRESSION) {
   try {
-  this.expressionEvaluator.validate(condition.expression);
-} catch (error) {
+  this.expressionEvaluator.validate(condition.expression) } catch (error) {
         errors.push(`Invalid custom expression: ${error}`);}
     // Validate parameters based on condition type
-    if (condition.conditionType === ConditionType.PERCENTAGE) {
-  const percentage = condition.parameters.percentage;
+    if (condition.conditionType === ConditionType.PERCENTAGE) { const percentage = condition.parameters.percentage;
   if (percentage === undefined || percentage < 0 || percentage > 100) {
   errors.push('Percentage must be between 0 and 100');
   return {
   valid: errors.length === 0,
-  errors,
+  errors }
   warnings
 };
   private clearToggleCache(toggleId: string): void {

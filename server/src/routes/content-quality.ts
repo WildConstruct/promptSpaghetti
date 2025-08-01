@@ -14,95 +14,102 @@ import {
   ContentQualityMetrics,
   CreatorQualityDashboard,
   MarketplaceQualityInsights 
-} from '../marketplace/ContentQualityMetricsService';
+ from '../marketplace/ContentQualityMetricsService';
 import { AnalyticsService } from '../marketplace/analytics.service';
 import { QualityMetricsService } from '../services/QualityMetricsService';
 import { TimeRange } from '../marketplace/analytics.types';
 import { Database } from '../database';
 
 // Request type definitions
-}
-}
+
+
+
 interface AssessQualityRequest {
   Params: {
     templateId: string;
-}
-}
+
+
+
   };
   Querystring: {
     timeRange?: TimeRange;
     forceRefresh?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface CreatorDashboardRequest {
   Params: {
     creatorId: string;
-}
-}
+
+
+
   };
   Querystring: {
     timeRange?: TimeRange;
     includeRecommendations?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface QualityTrendsRequest {
   Params: {
     templateId: string;
-}
-}
+
+
+
   };
   Querystring: {
     timeRange?: TimeRange;
     granularity?: 'daily' | 'weekly' | 'monthly';
   };
-}
 
-}
-}
+
+
+
 interface MarketplaceInsightsRequest {
   Querystring: {
     timeRange?: TimeRange;
     category?: string;
     minQualityScore?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface QualityBenchmarkRequest {
   Params: {
     templateId: string;
-}
-}
+
+
+
   };
   Body: {
     compareWith?: string[]; // competitor template IDs
     benchmarkType?: 'category' | 'marketplace' | 'custom';
   };
-}
 
-}
-}
+
+
+
 interface QualityRecommendationsRequest {
   Params: {
     templateId: string;
-}
-}
+
+
+
   };
   Querystring: {
     priority?: 'critical' | 'high' | 'medium' | 'low';
     category?: string;
     implementationLevel?: 'quick' | 'moderate' | 'complex';
   };
-}
+
 
 export async function contentQualityRoutes(fastify: FastifyInstance) {
   // Initialize services (in production, these would be properly dependency-injected)
@@ -131,8 +138,8 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           required: ['templateId'],
           properties: {
             templateId: { type: 'string', description: 'Template ID to assess' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           properties: {
@@ -141,14 +148,14 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D,
               description: 'Time range for quality assessment'
-  }
+
             forceRefresh: { 
               type: 'boolean', 
               default: false,
               description: 'Force fresh assessment ignoring cache'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -157,11 +164,11 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               qualityMetrics: { type: 'object' },
               assessmentDuration: { type: 'number' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<AssessQualityRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -181,12 +188,12 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           if (isRecent) {
             qualityMetrics = existing;
             console.log(`📋 Using cached quality assessment for template: ${templateId}`);
-          } else {
+ else {
             qualityMetrics = await contentQualityService.assessContentQuality(templateId, timeRange);
-          }
-        } else {
+
+ else {
           qualityMetrics = await contentQualityService.assessContentQuality(templateId, timeRange);
-        }
+
 
         const assessmentDuration = Date.now() - startTime;
 
@@ -196,16 +203,14 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           assessmentDuration,
           message: `Quality assessment completed: ${qualityMetrics.qualityGrade} (${qualityMetrics.overallQualityScore}%)`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Quality assessment failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Quality assessment failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -222,8 +227,8 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           required: ['creatorId'],
           properties: {
             creatorId: { type: 'string', description: 'Creator ID' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           properties: {
@@ -231,14 +236,14 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-  }
+
             includeRecommendations: { 
               type: 'boolean', 
               default: true,
               description: 'Include quality improvement recommendations'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -246,11 +251,11 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               dashboard: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<CreatorDashboardRequest>, reply: FastifyReply) => {
       try {
         const { creatorId } = request.params;
@@ -268,16 +273,14 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           dashboard,
           message: 'Creator quality dashboard generated successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Creator dashboard generation failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Dashboard generation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -296,19 +299,19 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-  }
+
             category: { 
               type: 'string',
               description: 'Filter by specific category'
-  }
+
             minQualityScore: { 
               type: 'number',
               minimum: 0,
               maximum: 100,
               description: 'Minimum quality score filter'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -316,11 +319,11 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               insights: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<MarketplaceInsightsRequest>, reply: FastifyReply) => {
       try {
         const { timeRange = TimeRange.LAST_30D, category, minQualityScore } = request.query;
@@ -335,28 +338,26 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           filteredInsights.categoryBreakdown = insights.categoryBreakdown.filter(
             cb => cb.category === category
           );
-        }
+
         if (minQualityScore !== undefined) {
           filteredInsights.topPerformers = insights.topPerformers.filter(
             tp => tp.qualityScore >= minQualityScore
           );
-        }
+
 
         reply.code(200).send({
           success: true,
           insights: filteredInsights,
           message: 'Marketplace quality insights generated successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Marketplace insights generation failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Insights generation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -373,8 +374,8 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           required: ['templateId'],
           properties: {
             templateId: { type: 'string' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           properties: {
@@ -382,15 +383,15 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_90D
-  }
+
             granularity: { 
               type: 'string',
               enum: ['daily', 'weekly', 'monthly'],
               default: 'weekly',
               description: 'Data point granularity'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -398,11 +399,11 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               trends: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<QualityTrendsRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -421,16 +422,14 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           trends: currentMetrics.trends,
           message: 'Quality trends retrieved successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Quality trends retrieval failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Trends retrieval failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -447,8 +446,8 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           required: ['templateId'],
           properties: {
             templateId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           properties: {
@@ -456,15 +455,15 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'array',
               items: { type: 'string' },
               description: 'Specific template IDs to compare with'
-  }
+
             benchmarkType: { 
               type: 'string',
               enum: ['category', 'marketplace', 'custom'],
               default: 'category',
               description: 'Type of benchmark comparison'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -472,11 +471,11 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               benchmarks: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<QualityBenchmarkRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -492,23 +491,21 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
         if (compareWith && compareWith.length > 0) {
           // Would implement custom comparison logic here
           console.log(`Comparing with ${compareWith.length} specific templates`);
-        }
+
 
         reply.code(200).send({
           success: true,
           benchmarks: enhancedBenchmarks,
           message: `Quality benchmarks generated using ${benchmarkType} comparison`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Quality benchmarks generation failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Benchmarks generation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -525,8 +522,8 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           required: ['templateId'],
           properties: {
             templateId: { type: 'string' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           properties: {
@@ -534,19 +531,19 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['critical', 'high', 'medium', 'low'],
               description: 'Filter by recommendation priority'
-  }
+
             category: { 
               type: 'string',
               enum: ['effectiveness', 'usability', 'engagement', 'reliability', 'maintainability', 'marketFit'],
               description: 'Filter by quality dimension'
-  }
+
             implementationLevel: { 
               type: 'string',
               enum: ['quick', 'moderate', 'complex'],
               description: 'Filter by implementation complexity'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -556,11 +553,11 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               prioritizedActions: { type: 'array' },
               estimatedImpact: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<QualityRecommendationsRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -578,26 +575,26 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           filteredRecommendations = filteredRecommendations.filter(
             rec => rec.priority === priority
           );
-        }
+
         
         if (category) {
           filteredRecommendations = filteredRecommendations.filter(
             rec => rec.category === category
           );
-        }
+
         
         if (implementationLevel) {
           filteredRecommendations = filteredRecommendations.filter(
             rec => rec.implementation.complexity === implementationLevel
           );
-        }
+
 
         // Generate prioritized action plan
         const prioritizedActions = filteredRecommendations
           .sort((a, b) => {
             const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
             return priorityOrder[a.priority] - priorityOrder[b.priority];
-  }
+
           .slice(0, 10); // Top 10 actions
 
         // Calculate estimated cumulative impact
@@ -617,16 +614,14 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           estimatedImpact,
           message: `Generated ${filteredRecommendations.length} quality recommendations`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Quality recommendations generation failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Recommendations generation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   /**
@@ -648,19 +643,19 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               minItems: 1,
               maxItems: 50,
               description: 'Template IDs to get quality summary for'
-  }
+
             timeRange: { 
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-  }
+
             includeDetails: { 
               type: 'boolean', 
               default: false,
               description: 'Include detailed metrics for each template'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
@@ -669,11 +664,11 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               summaries: { type: 'array' },
               aggregateMetrics: { type: 'object' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { templateIds, timeRange = TimeRange.LAST_30D, includeDetails = false } = request.body as any;
@@ -691,13 +686,13 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
                 qualityStatus: metrics.qualityStatus,
                 ...(includeDetails && { fullMetrics: metrics })
               };
-            } catch (error) {
+ catch (error) {
               return {
                 templateId,
                 qualityScore: null,
                 error: error instanceof Error ? error.message : 'Assessment failed'
               };
-            }
+
   }
         );
 
@@ -720,16 +715,14 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           aggregateMetrics,
           message: `Quality summary generated for ${validSummaries.length}/${templateIds.length} templates`
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Bulk quality summary generation failed:', error);
         reply.code(500).send({
           success: false,
           error: 'Bulk summary generation failed',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
   );
 
   // Helper methods for calculations
@@ -741,23 +734,23 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
 
     if (effortCounts.high > effortCounts.medium && effortCounts.high > effortCounts.low) {
       return 'high';
-    } else if (effortCounts.medium > effortCounts.low) {
+ else if (effortCounts.medium > effortCounts.low) {
       return 'medium';
-    }
+
     return 'low';
-  }
+
 
   function calculateTimeframe(recommendations: any[]): string {
     // Would implement proper timeframe calculation logic
     return '2-6 months';
-  }
+
 
   function calculateExpectedROI(recommendations: any[]): number {
     return recommendations.reduce((sum, rec) => {
       const roi = rec.roi?.expectedReturn || 0;
       return sum + roi;
     }, 0);
-  }
+
 
   function calculateQualityDistribution(summaries: any[]): Record<string, number> {
     return summaries.reduce((dist, summary) => {
@@ -765,5 +758,4 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
       dist[status] = (dist[status] || 0) + 1;
       return dist;
     }, {} as Record<string, number>);
-  }
-}
+

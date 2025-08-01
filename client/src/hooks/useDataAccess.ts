@@ -1,72 +1,87 @@
 // useDataAccess Hook - Epic 19.4
 // Custom React hook for managing data access operations
 import { useState, useCallback } from 'react';
-}
+
+
 interface DataAccessGrant {
   id: string;,
-  resourceId: string;
+  resourceId: string;,
   resourceType: string;,
-  operations: string;
+  operations: string;,
   classification: string;,
-  grantedBy: string;
+  grantedBy: string;,
   grantedAt: Date;,
-  expiresAt: Date;
+  expiresAt: Date;,
   reason: string;,
   restrictions: AccessRestriction;
-}
+
+
+
 interface AccessRestriction {
   type: string;,
-  value: string;
+  value: string;,
   description: string;
-}
+
+
+
 interface AccessHistoryEvent {
   id: string;,
-  userId: string;
+  userId: string;,
   resourceId: string;,
-  operation: string;
+  operation: string;,
   allowed: boolean;,
-  reason: string;
+  reason: string;,
   classification: string;,
-  accessLevel: string;
+  accessLevel: string;,
   timestamp: Date;,
   riskScore: number;
-}
+
+
+
 interface AccessRequest {
   resourceId: string;,
-  resourceType: string;
+  resourceType: string;,
   operation: string;,
   reason: string;
   expiresAt?: Date;
-}
+
+
+
 interface AccessPermissions {
   allowed: boolean;,
-  reason: string;
+  reason: string;,
   classification: string;,
-  accessLevel: string;
+  accessLevel: string;,
   requiredPermissions: string;,
-  actualPermissions: string;
+  actualPermissions: string;,
   restrictions: AccessRestriction;,
   auditId: string;
-}
+
+
+
 interface UseDataAccessOptions {
   apiBaseUrl?: string;
   authToken?: string;
-}
+
+
+
 interface UseDataAccessResult {
   // State
   grants: DataAccessGrant;,
-  history: AccessHistoryEvent;
+  history: AccessHistoryEvent;,
   loading: boolean;,
   error: string | null;
   // Actions
   loadGrants: (userId: string) => Promise<void>;,
   loadHistory: (userId: string, filters?: HistoryFilters) => Promise<void>;
-}
+
+},
   requestAccess: (request: AccessRequest) => Promise<{ requestId: string; status: string; message: string }>;
   checkAccess: (resourceId: string, resourceType: string, operation: string) => Promise<AccessPermissions | null>;,
   revokeAccess: (grantId: string, reason: string) => Promise<boolean>;,
   clearError: () => void;
-}
+
+
 interface HistoryFilters {
   operation?: string;
   allowed?: boolean;
@@ -75,7 +90,7 @@ interface HistoryFilters {
   limit?: number;
   offset?: number;
 
-}
+
 export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccessResult => {
   const { apiBaseUrl = '/api', authToken } = options;
   // State
@@ -87,19 +102,19 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
   const apiRequest = useCallback(async (endpoint: string, options: RequestInit = {}) => {
     const token = authToken || localStorage.getItem('authToken');
     const response = await fetch(`${apiBaseUrl}${endpoint}`, {)}
-  }
+
       ...options,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`}
-}
+
         ...options.headers
     });
     if (!response.ok) {
       let errorData = { message: `Request failed with status ${response.status}` };}
       try {
         errorData = await response.json();
-      } catch {
+ catch {
         // Use default error data if JSON parsing fails
       throw new Error(errorData.message ?? `Request failed with status ${response.status}`);}
     return response.json();
@@ -117,11 +132,11 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
   expiresAt: new Date(grant.expiresAt),
 }));
       setGrants(grantsWithDates);
-    } catch (err) {
+ catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(`Failed to load access grants: ${errorMessage}`);}
       setGrants([]);
-    } finally {
+ finally {
       setLoading(false);
   }, [apiRequest]);
   // Load user's access history
@@ -144,11 +159,11 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
   timestamp: new Date(event.timestamp),
 }));
       setHistory(historyWithDates);
-    } catch (err) {
+ catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(`Failed to load access history: ${errorMessage}`);}
       setHistory([]);
-    } finally {
+ finally {
       setLoading(false);
   }, [apiRequest]);
   // Request new access
@@ -161,11 +176,11 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
   body: JSON.stringify(request),
 });
       return response;
-    } catch (err) {
+ catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(`Failed to submit access request: ${errorMessage}`);}
       throw err;
-    } finally {
+ finally {
       setLoading(false);
   }, [apiRequest]);
   // Check specific resource access
@@ -178,9 +193,9 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
         `/data-access/permissions/${resourceId}?resourceType=${resourceType}&operation=${operation}`}
       );
       return response;
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-  console.error('Failed to check resource access:', {,)
+  console.error('Failed to check resource access:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -196,11 +211,11 @@ export const useDataAccess = (options: UseDataAccessOptions = {}): UseDataAccess
         body: JSON.stringify({ grantId, reason })
       });
       return response.success;
-    } catch (err) {
+ catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(`Failed to revoke access: ${errorMessage}`);}
       return false;
-    } finally {
+ finally {
       setLoading(false);
   }, [apiRequest]);
   // Clear error state

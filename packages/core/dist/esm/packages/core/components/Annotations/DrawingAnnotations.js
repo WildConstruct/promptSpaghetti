@@ -64,8 +64,8 @@ eraser: {
 }
 ;
 // Predefined colors for VFX workflow
-const DRAWING_COLORS = [];
-'#ff0000', // Red - Critical/Revision
+const DRAWING_COLORS = [
+    '#ff0000', // Red - Critical/Revision
     '#ff7c00', // Orange - Cinema4D orange
     '#ffff00', // Yellow - Caution/Notes
     '#00ff00', // Green - Approved/Good
@@ -74,47 +74,17 @@ const DRAWING_COLORS = [];
     '#8000ff', // Purple - Creative
     '#ff00ff', // Magenta - Highlight
     '#ffffff', // White
-    '#000000'; // Black
-;
+    '#000000' // Black
+];
 // Layer configurations for VFX pipeline
-const DRAWING_LAYERS = [];
-{
-    id: 0, name;
-    'Background', color;
-    '#6b7280', defaultVisible;
-    true;
-}
-{
-    id: 1, name;
-    'Technical', color;
-    '#3b82f6', defaultVisible;
-    true;
-}
-{
-    id: 2, name;
-    'Creative', color;
-    '#8b5cf6', defaultVisible;
-    true;
-}
-{
-    id: 3, name;
-    'Director Notes', color;
-    '#ef4444', defaultVisible;
-    true;
-}
-{
-    id: 4, name;
-    'Review', color;
-    '#10b981', defaultVisible;
-    true;
-}
-{
-    id: 5, name;
-    'Markup', color;
-    '#f59e0b', defaultVisible;
-    true;
-}
-;
+const DRAWING_LAYERS = [
+    { id: 0, name: 'Background', color: '#6b7280', defaultVisible: true },
+    { id: 1, name: 'Technical', color: '#3b82f6', defaultVisible: true },
+    { id: 2, name: 'Creative', color: '#8b5cf6', defaultVisible: true },
+    { id: 3, name: 'Director Notes', color: '#ef4444', defaultVisible: true },
+    { id: 4, name: 'Review', color: '#10b981', defaultVisible: true },
+    { id: 5, name: 'Markup', color: '#f59e0b', defaultVisible: true }
+];
 export const DrawingAnnotationsCanvas = ({
     width,
     height,
@@ -558,7 +528,7 @@ Card >
 _jsxs("div", { className: "relative border border-gray-300 rounded-lg overflow-hidden", style: { width, height }, children: [backgroundImageUrl && ()
             < canvas, "ref=", backgroundCanvasRef, "width=", width, "height=", height, "className=\"absolute inset-0\" style=", {
             backgroundImage: `url(${backgroundImageUrl})`
-        }, ", backgroundSize: 'cover', backgroundPosition: 'center' }} /> )}", _jsx("canvas", { ref: canvasRef, width: width, height: height, className: "absolute inset-0" }), _jsx("canvas", { ref: overlayCanvasRef, width: width, height: height, className: "absolute inset-0 cursor-crosshair", onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, onMouseLeave: () => {
+        }, ", backgroundSize: 'cover', backgroundPosition: 'center'; }} /> )}", _jsx("canvas", { ref: canvasRef, width: width, height: height, className: "absolute inset-0" }), _jsx("canvas", { ref: overlayCanvasRef, width: width, height: height, className: "absolute inset-0 cursor-crosshair", onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, onMouseLeave: () => {
                 setIsDrawing(false);
                 setCurrentPoints([]);
             }, style: {

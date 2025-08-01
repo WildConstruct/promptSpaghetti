@@ -6,8 +6,8 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { RBACService } from './RBACService';
 
-}
-}
+
+
 export interface CreateOrganizationData {
   name: string;
   slug?: string;
@@ -17,12 +17,13 @@ export interface CreateOrganizationData {
   maxUsers?: number;
   settings?: Record<string, any>;
   branding?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UpdateOrganizationData {
   name?: string;
   description?: string;
@@ -31,46 +32,50 @@ export interface UpdateOrganizationData {
   maxUsers?: number;
   settings?: Record<string, any>;
   branding?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CreateTeamData {
   organizationId: string;
   parentTeamId?: string;
   name: string;
   description?: string;
   settings?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UpdateTeamData {
   name?: string;
   description?: string;
   parentTeamId?: string;
   settings?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TeamMemberData {
   teamId: string;
   userId: string;
   role: 'owner' | 'admin' | 'member' | 'viewer';
   invitedBy?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OrganizationStats {
   totalMembers: number;
   totalTeams: number;
@@ -80,15 +85,16 @@ export interface OrganizationStats {
     maxUsers: number;
     maxTeams: number;
     maxStorage: number;
-}
-}
+
+
+
   };
   usage: {
     users: number;
     teams: number;
     storage: number;
   };
-}
+
 
 export class OrganizationService {
   private config: AuthConfig;
@@ -106,7 +112,7 @@ export class OrganizationService {
     this.dbService = dbService;
     this.auditService = auditService;
     this.rbacService = rbacService;
-  }
+
 
   // Organization Management
   async createOrganization(
@@ -130,7 +136,7 @@ export class OrganizationService {
 
       if (existingOrg.rows.length > 0) {
         throw new Error('Organization slug already exists');
-      }
+
 
       // Create organization
       await transaction.query(`
@@ -211,7 +217,7 @@ export class OrganizationService {
           organizationName: data.name,
           slug,
           plan: data.plan || 'free'
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -233,11 +239,11 @@ export class OrganizationService {
       };
 
       return organization;
-    } catch (error) {
+ catch (error) {
       await transaction.rollback();
       throw error;
-    }
-  }
+
+
 
   async updateOrganization(
     organizationId: string,
@@ -252,7 +258,7 @@ export class OrganizationService {
     const existing = await this.getOrganizationById(organizationId);
     if (!existing) {
       throw new Error('Organization not found');
-    }
+
 
     await this.dbService.query(`
       UPDATE organizations 
@@ -283,8 +289,8 @@ export class OrganizationService {
           name: existing.name,
           description: existing.description,
           plan: existing.plan
-        }
-  }
+
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -303,7 +309,7 @@ export class OrganizationService {
     };
 
     return updated;
-  }
+
 
   async deleteOrganization(
     organizationId: string,
@@ -317,7 +323,7 @@ export class OrganizationService {
       const organization = await this.getOrganizationById(organizationId);
       if (!organization) {
         throw new Error('Organization not found');
-      }
+
 
       const now = new Date();
 
@@ -374,16 +380,16 @@ export class OrganizationService {
         details: {
           organizationName: organization.name,
           slug: organization.slug
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
-    } catch (error) {
+ catch (error) {
       await transaction.rollback();
       throw error;
-    }
-  }
+
+
 
   async getOrganizationById(organizationId: string): Promise<Organization | null> {
 
@@ -394,10 +400,10 @@ export class OrganizationService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapDatabaseToOrganization(result.rows[0]);
-  }
+
 
   async getOrganizationBySlug(slug: string): Promise<Organization | null> {
 
@@ -408,10 +414,10 @@ export class OrganizationService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapDatabaseToOrganization(result.rows[0]);
-  }
+
 
   async getUserOrganizations(userId: string): Promise<Organization[]> {
 
@@ -425,7 +431,7 @@ export class OrganizationService {
     `, [userId]);
 
     return result.rows.map(row => this.mapDatabaseToOrganization(row));
-  }
+
 
   // Team Management
   async createTeam(
@@ -470,7 +476,7 @@ export class OrganizationService {
         teamName: data.name,
         organizationId: data.organizationId,
         parentTeamId: data.parentTeamId
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -488,7 +494,7 @@ export class OrganizationService {
     };
 
     return team;
-  }
+
 
   async updateTeam(
     teamId: string,
@@ -502,7 +508,7 @@ export class OrganizationService {
     const existing = await this.getTeamById(teamId);
     if (!existing) {
       throw new Error('Team not found');
-    }
+
 
     await this.dbService.query(`
       UPDATE teams 
@@ -529,8 +535,8 @@ export class OrganizationService {
           name: existing.name,
           description: existing.description,
           parentTeamId: existing.parentTeamId
-        }
-  }
+
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -546,7 +552,7 @@ export class OrganizationService {
     };
 
     return updated;
-  }
+
 
   async deleteTeam(
     teamId: string,
@@ -560,7 +566,7 @@ export class OrganizationService {
       const team = await this.getTeamById(teamId);
       if (!team) {
         throw new Error('Team not found');
-      }
+
 
       // Check for child teams
       const childTeams = await transaction.query(
@@ -570,7 +576,7 @@ export class OrganizationService {
 
       if (parseInt(childTeams.rows[0].count) > 0) {
         throw new Error('Cannot delete team with child teams. Please delete or move child teams first.');
-      }
+
 
       const now = new Date();
 
@@ -597,16 +603,16 @@ export class OrganizationService {
         details: {
           teamName: team.name,
           organizationId: team.organizationId
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
-    } catch (error) {
+ catch (error) {
       await transaction.rollback();
       throw error;
-    }
-  }
+
+
 
   async getTeamById(teamId: string): Promise<Team | null> {
 
@@ -617,10 +623,10 @@ export class OrganizationService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapDatabaseToTeam(result.rows[0]);
-  }
+
 
   async getOrganizationTeams(organizationId: string): Promise<Team[]> {
 
@@ -631,7 +637,7 @@ export class OrganizationService {
     `, [organizationId]);
 
     return result.rows.map(row => this.mapDatabaseToTeam(row));
-  }
+
 
   async getTeamHierarchy(organizationId: string): Promise<Team[]> {
 
@@ -656,7 +662,7 @@ export class OrganizationService {
       level: row.level,
       path: row.path
     }));
-  }
+
 
   // Team Membership Management
   async addTeamMember(
@@ -675,7 +681,7 @@ export class OrganizationService {
 
     if (existing.rows.length > 0) {
       throw new Error('User is already a member of this team');
-    }
+
 
     await this.dbService.query(`
       INSERT INTO team_members (id, team_id, user_id, role, joined_at, invited_by)
@@ -692,7 +698,7 @@ export class OrganizationService {
         teamId: data.teamId,
         addedUserId: data.userId,
         role: data.role
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -708,7 +714,7 @@ export class OrganizationService {
     };
 
     return teamMember;
-  }
+
 
   async removeTeamMember(
     teamId: string,
@@ -725,7 +731,7 @@ export class OrganizationService {
 
     if (result.rows.length === 0) {
       throw new Error('Team member not found');
-    }
+
 
     // Log team member removal
     await this.auditService.logEvent({
@@ -737,12 +743,12 @@ export class OrganizationService {
         teamId,
         removedUserId: userId,
         previousRole: result.rows[0].role
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
     });
-  }
+
 
   async updateTeamMemberRole(
     teamId: string,
@@ -761,7 +767,7 @@ export class OrganizationService {
 
     if (result.rows.length === 0) {
       throw new Error('Team member not found');
-    }
+
 
     // Log role update
     await this.auditService.logEvent({
@@ -774,12 +780,12 @@ export class OrganizationService {
         targetUserId: userId,
         newRole,
         previousRole: result.rows[0].role
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
     });
-  }
+
 
   async getTeamMembers(teamId: string): Promise<any[]> {
 
@@ -805,9 +811,9 @@ export class OrganizationService {
         firstName: row.first_name,
         lastName: row.last_name,
         avatarUrl: row.avatar_url
-      }
+
     }));
-  }
+
 
   async getUserTeams(userId: string, organizationId?: string): Promise<Team[]> {
 
@@ -821,13 +827,13 @@ export class OrganizationService {
     if (organizationId) {
       query += ' AND t.organization_id = $2';
       params.push(organizationId);
-    }
+
 
     query += ' ORDER BY t.name';
 
     const result = await this.dbService.query(query, params);
     return result.rows.map(row => this.mapDatabaseToTeam(row));
-  }
+
 
   // Statistics and Analytics
   async getOrganizationStats(organizationId: string): Promise<OrganizationStats> {
@@ -866,9 +872,9 @@ export class OrganizationService {
         users: parseInt(membersResult.rows[0].total_members) || 0,
         teams: parseInt(teamsResult.rows[0].total_teams) || 0,
         storage: 0 // TODO: Implement storage calculation
-      }
+
     };
-  }
+
 
   // Helper Methods
   private generateSlug(name: string): string {
@@ -879,7 +885,7 @@ export class OrganizationService {
       .replace(/-+/g, '-')
       .trim()
       .substring(0, 50);
-  }
+
 
   private getDefaultMaxUsers(plan: string): number {
     switch (plan) {
@@ -887,8 +893,8 @@ export class OrganizationService {
     case 'pro': return 100;
     case 'enterprise': return 1000;
     default: return 10;
-    }
-  }
+
+
 
   private getPlanLimits(plan: string) {
     switch (plan) {
@@ -900,8 +906,8 @@ export class OrganizationService {
       return { maxUsers: 1000, maxTeams: 500, maxStorage: 102400 }; // 100GB
     default:
       return { maxUsers: 10, maxTeams: 5, maxStorage: 1024 };
-    }
-  }
+
+
 
   private mapDatabaseToOrganization(row: any): Organization {
     return {
@@ -919,7 +925,7 @@ export class OrganizationService {
       updatedAt: row.updated_at,
       deletedAt: row.deleted_at
     };
-  }
+
 
   private mapDatabaseToTeam(row: any): Team {
     return {
@@ -933,5 +939,4 @@ export class OrganizationService {
       updatedAt: row.updated_at,
       deletedAt: row.deleted_at
     };
-  }
-}
+

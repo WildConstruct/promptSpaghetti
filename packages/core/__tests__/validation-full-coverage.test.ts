@@ -25,13 +25,13 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       ];
       const errors = validateConnection(selfLoopEdges, mockNodes);
       expect(errors).toHaveLength(2);
-      expect(errors[0]).toEqual({)
+      expect(errors[0]).toEqual({ )
   edgeId: 'e1',
-  message: 'Edge is a self-loop',
+  message: 'Edge is a self-loop' }
 });
-      expect(errors[1]).toEqual({)
+      expect(errors[1]).toEqual({ )
   edgeId: 'e2',
-  message: 'Edge is a self-loop',
+  message: 'Edge is a self-loop' }
 });
     });
     it('should detect duplicate edges', () => {
@@ -42,21 +42,19 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       ];
       const errors = validateConnection(duplicateEdges, mockNodes);
       expect(errors).toHaveLength(2); // First is valid, second and third are duplicates
-      expect(errors[0]).toEqual({)
+      expect(errors[0]).toEqual({ )
   edgeId: 'e2',
-  message: 'Duplicate edge',
+  message: 'Duplicate edge' }
 });
-      expect(errors[1]).toEqual({)
+      expect(errors[1]).toEqual({ )
   edgeId: 'e3',
-  message: 'Duplicate edge',
+  message: 'Duplicate edge' }
 });
     });
   });
-  describe('validateConnection - Edge Cases', () => {
-    it('should handle empty edges array', () => {
+  describe('validateConnection - Edge Cases', () => { it('should handle empty edges array', () => {
       const errors = validateConnection([], mockNodes);
-      expect(errors).toEqual([]);
-    });
+      expect(errors).toEqual([]) });
     it('should handle empty nodes array', () => {
       const edges: Edge = [
         { id: 'e1', source: 'node1', target: 'node2', type: 'default' }
@@ -64,10 +62,8 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       const errors = validateConnection(edges, []);
       expect(errors).toEqual([]); // Validation doesn't check node existence
     });
-    it('should handle both empty arrays', () => {
-      const errors = validateConnection([], []);
-      expect(errors).toEqual([]);
-    });
+    it('should handle both empty arrays', () => { const errors = validateConnection([], []);
+      expect(errors).toEqual([]) });
     it('should handle edges with missing properties', () => {
       const malformedEdges: Edge = [
         { id: 'e1', source: '', target: 'node2', type: 'default' },
@@ -76,9 +72,9 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       ];
       const errors = validateConnection(malformedEdges, mockNodes);
       expect(errors).toHaveLength(1); // Only e3 is a self-loop ('' === '')
-      expect(errors[0]).toEqual({)
+      expect(errors[0]).toEqual({ )
   edgeId: 'e3',
-  message: 'Edge is a self-loop',
+  message: 'Edge is a self-loop' }
 });
     });
     it('should handle null/undefined edge properties gracefully', () => {
@@ -89,9 +85,9 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       ];
       const errors = validateConnection(edgesWithNull, mockNodes);
       expect(errors).toHaveLength(1); // undefined === undefined is a self-loop
-      expect(errors[0]).toEqual({)
+      expect(errors[0]).toEqual({ )
   edgeId: 'e3',
-  message: 'Edge is a self-loop',
+  message: 'Edge is a self-loop' }
 });
     });
   });
@@ -132,7 +128,7 @@ describe('Validation Module - Full Coverage (95% target)', () => {
 },
   target: `node${i + 1}`}
 },
-  type: 'default'
+  type: 'default';
   });
       const start = Date.now();
       const errors = validateConnection(largeEdges, mockNodes);
@@ -156,8 +152,7 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       expect(errors[3].edgeId).toBe('e5');
     });
   });
-  describe('validateConnection - Type Safety', () => {
-  it('should handle edges with additional properties', () => {
+  describe('validateConnection - Type Safety', () => { it('should handle edges with additional properties', () => {
   interface ExtendedEdge extends Edge {
   customProp?: string;
   weight?: number;
@@ -167,7 +162,7 @@ describe('Validation Module - Full Coverage (95% target)', () => {
   source: 'node1',
   target: 'node2',
   type: 'default',
-  customProp: 'test',
+  customProp: 'test' }
   weight: 0.5];
   const errors = validateConnection(extendedEdges, mockNodes);
   expect(errors).toEqual([]);
@@ -183,62 +178,56 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       expect(errors).toEqual([]);
     });
   });
-  describe('ValidationError Interface', () => {
-  it('should correctly type validation errors', () => {
+  describe('ValidationError Interface', () => { it('should correctly type validation errors', () => {
   const error: ValidationError = {,
   edgeId: 'test-id',
-  message: 'test message',
+  message: 'test message' }
 };
       expect(error.edgeId).toBe('test-id');
       expect(error.message).toBe('test message');
     });
-    it('should handle errors with extended properties', () => {
-  interface ExtendedValidationError extends ValidationError {
+    it('should handle errors with extended properties', () => { interface ExtendedValidationError extends ValidationError {
   severity?: 'warning' | 'error';
   timestamp?: number;
   const extendedError: ExtendedValidationError = {,
   edgeId: 'test-id',
   message: 'test message',
   severity: 'error',
-  timestamp: Date.now(),
+  timestamp: Date.now() }
 };
       expect(extendedError.severity).toBe('error');
       expect(extendedError.timestamp).toBeDefined();
     });
   });
-  describe('Integration with React Flow', () => {
-    it('should work with React Flow edge data structures', () => {
+  describe('Integration with React Flow', () => { it('should work with React Flow edge data structures', () => {
       const reactFlowEdges: Edge = [
         {
           id: 'e1-2',
           source: '1',
           target: '2',
           type: 'default',
-          animated: true,
+          animated: true }
           style: { stroke: '#fff' }
-  }
-        {
-          id: 'e2-3',
+
+        { id: 'e2-3',
           source: '2',
           target: '3',
           type: 'smoothstep',
-          label: 'Edge Label',
+          label: 'Edge Label' }
           labelStyle: { fill: '#000' }
       ];
       const errors = validateConnection(reactFlowEdges, mockNodes);
       expect(errors).toEqual([]);
     });
-    it('should work with React Flow node data structures', () => {
-      const reactFlowNodes: Node = [
+    it('should work with React Flow node data structures', () => { const reactFlowNodes: Node = [
         {
-          id: '1',
+          id: '1' }
           position: { x: 0, y: 0 },
           data: { label: 'Node 1' },
           type: 'input',
           style: { background: '#fff' }
-  }
-        {
-          id: '2',
+
+        { id: '2' }
           position: { x: 100, y: 100 },
           data: { label: 'Node 2' },
           type: 'default',

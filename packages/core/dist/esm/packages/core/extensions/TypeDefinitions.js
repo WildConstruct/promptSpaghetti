@@ -237,8 +237,9 @@ if (!extensionType) {
         type: extensionType,
         errors
     };
-    validateMethodSignature(obj, any);
-    methodName: string,
+    validateMethodSignature(obj, any),
+        methodName;
+    string,
         expectedSignature;
     {
         parameterCount ?  : number;

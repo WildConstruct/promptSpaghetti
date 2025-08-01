@@ -27,10 +27,10 @@ import {
   ReviewPriority,
   AvailabilityStatus,
   ReviewAssignment
-} from '../../../../packages/core/types/ReviewTools';
+ from '../../../../packages/core/types/ReviewTools';
 
-}
-}
+
+
 export interface AssignmentRecommendation {
   reviewerId: string;
   score: number;
@@ -39,32 +39,35 @@ export interface AssignmentRecommendation {
   expectedCompletionTime: number; // minutes
   riskFactors: string[];
   alternativeReviewers: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentReason {
   factor: WeightingFactor;
   weight: number;
   contribution: number;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentStrategy {
   name: AssignmentType;
   description: string;
   weights: Record<WeightingFactor, number>;
   fallback: FallbackStrategy;
   enabled: boolean;
-}
-}
-}
+
+
+
+
 
 export class ReviewerAssignmentService {
   private db: Database;
@@ -81,7 +84,7 @@ export class ReviewerAssignmentService {
     this.db = database;
     this.auditService = auditService;
     this.initializeStrategies();
-  }
+
 
   // =============================================================================
   // Core Assignment Methods
@@ -102,7 +105,7 @@ export class ReviewerAssignmentService {
     if (rules.length === 0) {
       console.log(`⚠️ No assignment rules configured for ${review.reviewType}`);
       return await this.fallbackAssignment(review, excludeReviewers);
-    }
+
 
     // Get available reviewers
     const availableReviewers = await this.getAvailableReviewers(
@@ -114,7 +117,7 @@ export class ReviewerAssignmentService {
     if (availableReviewers.length === 0) {
       console.log(`⚠️ No available reviewers for ${review.reviewType}`);
       return null;
-    }
+
 
     // Score reviewers using the primary assignment rule
     const primaryRule = rules[0]; // Use first rule as primary
@@ -122,13 +125,13 @@ export class ReviewerAssignmentService {
 
     if (scoredReviewers.length === 0) {
       return null;
-    }
+
 
     const bestMatch = scoredReviewers[0];
     console.log(`✅ Best reviewer found: ${bestMatch.reviewerId} (score: ${bestMatch.score.toFixed(2)})`);
 
     return bestMatch;
-  }
+
 
   /**
    * Get multiple reviewer recommendations for consensus reviews
@@ -150,18 +153,18 @@ export class ReviewerAssignmentService {
       if (!recommendation) {
         console.log(`⚠️ Could not find reviewer ${i + 1} of ${requiredReviewers}`);
         break;
-      }
+
 
       recommendations.push(recommendation);
       currentExclusions.push(recommendation.reviewerId);
-    }
+
 
     // Ensure diversity in reviewer selection
     const diverseRecommendations = this.ensureReviewerDiversity(recommendations);
 
     console.log(`✅ Found ${diverseRecommendations.length} reviewers for consensus`);
     return diverseRecommendations;
-  }
+
 
   /**
    * Recommend reviewer reassignment for stuck or problematic reviews
@@ -178,7 +181,7 @@ export class ReviewerAssignmentService {
     const currentReviewer = await this.getReviewer(currentReviewerId);
     if (!currentReviewer) {
       throw new Error(`Current reviewer not found: ${currentReviewerId}`);
-    }
+
 
     // Determine reassignment strategy based on reason
     
@@ -192,10 +195,10 @@ export class ReviewerAssignmentService {
       // Adjust confidence based on reassignment reason
       const confidenceAdjustment = this.getReassignmentConfidenceAdjustment(reason);
       recommendation.confidence = Math.max(0, recommendation.confidence + confidenceAdjustment);
-    }
+
 
     return recommendation;
-  }
+
 
   /**
    * Balance workload across reviewers
@@ -240,10 +243,10 @@ export class ReviewerAssignmentService {
           const targetReviewerProfile = underutilizedReviewers.find(r => r.reviewerId === targetReviewer);
           if (targetReviewerProfile) {
             targetReviewerProfile.workload.capacityUtilization += 10; // Approximate increase
-          }
-        }
-      }
-    }
+
+
+
+
 
     return {
       totalReviewers: reviewers.length,
@@ -252,7 +255,7 @@ export class ReviewerAssignmentService {
       recommendedActions: rebalanceActions,
       projectedImprovement: this.calculateProjectedImprovement(rebalanceActions)
     };
-  }
+
 
   // =============================================================================
   // Reviewer Scoring and Matching
@@ -274,12 +277,12 @@ export class ReviewerAssignmentService {
       
       if (score.score >= 0.3) { // Minimum threshold
         scoredReviewers.push(score);
-      }
-    }
+
+
 
     // Sort by score descending
     return scoredReviewers.sort((a, b) => b.score - a.score);
-  }
+
 
   /**
    * Calculate comprehensive score for a reviewer-review match
@@ -331,7 +334,7 @@ export class ReviewerAssignmentService {
     // Adjust confidence based on risk factors
     if (riskFactors.length > 0) {
       confidence -= riskFactors.length * 10;
-    }
+
 
     return {
       reviewerId: reviewer.reviewerId,
@@ -342,7 +345,7 @@ export class ReviewerAssignmentService {
       riskFactors,
       alternativeReviewers: [] // Would be populated with next best options
     };
-  }
+
 
   /**
    * Score reviewer availability
@@ -350,7 +353,7 @@ export class ReviewerAssignmentService {
   private scoreAvailability(reviewer: ReviewerProfile, priority: ReviewPriority): {
     score: number;
     reason: AssignmentReason;
-  } {
+ {
     let score = 0;
     let description = '';
 
@@ -370,7 +373,7 @@ export class ReviewerAssignmentService {
     default:
       score = 0;
       description = 'Not available';
-    }
+
 
     return {
       score,
@@ -379,9 +382,9 @@ export class ReviewerAssignmentService {
         weight: 0.2,
         contribution: score * 0.2,
         description
-      }
+
     };
-  }
+
 
   /**
    * Score reviewer workload
@@ -390,7 +393,7 @@ export class ReviewerAssignmentService {
     score: number;
     reason: AssignmentReason;
     risk?: string;
-  } {
+ {
     const utilization = reviewer.workload.capacityUtilization;
     let score = 0;
     let description = '';
@@ -399,18 +402,18 @@ export class ReviewerAssignmentService {
     if (utilization < 50) {
       score = 1.0;
       description = `Low utilization (${utilization}%)`;
-    } else if (utilization < 75) {
+ else if (utilization < 75) {
       score = 0.8;
       description = `Moderate utilization (${utilization}%)`;
-    } else if (utilization < 90) {
+ else if (utilization < 90) {
       score = 0.5;
       description = `High utilization (${utilization}%)`;
       risk = 'High workload may impact review quality';
-    } else {
+ else {
       score = 0.2;
       description = `Very high utilization (${utilization}%)`;
       risk = 'Reviewer at capacity, may cause delays';
-    }
+
 
     return {
       score,
@@ -419,10 +422,10 @@ export class ReviewerAssignmentService {
         weight: 0.2,
         contribution: score * 0.2,
         description
-  }
+
       risk
     };
-  }
+
 
   /**
    * Score reviewer expertise
@@ -434,7 +437,7 @@ export class ReviewerAssignmentService {
   ): {
     score: number;
     reason: AssignmentReason;
-  } {
+ {
     let score = 0;
     let description = '';
 
@@ -454,15 +457,15 @@ export class ReviewerAssignmentService {
       if (expertiseScore >= complexityRequirement) {
         score = Math.min(1, expertiseScore / complexityRequirement);
         description = `${bestSpec.level} expertise in ${bestSpec.area}`;
-      } else {
+ else {
         score = 0.3;
         description = `Limited expertise for ${complexity} complexity`;
-      }
-    } else {
+
+ else {
       // General expertise based on role
       score = this.getRoleExpertiseScore(reviewer.role, complexity);
       description = `General ${reviewer.role} capabilities`;
-    }
+
 
     return {
       score,
@@ -471,9 +474,9 @@ export class ReviewerAssignmentService {
         weight: 0.3,
         contribution: score * 0.3,
         description
-      }
+
     };
-  }
+
 
   /**
    * Score reviewer performance
@@ -481,7 +484,7 @@ export class ReviewerAssignmentService {
   private scorePerformance(reviewer: ReviewerProfile, _____reviewType: ReviewType): {
     score: number;
     reason: AssignmentReason;
-  } {
+ {
     const performance = reviewer.performance;
     
     // Composite performance score
@@ -506,9 +509,9 @@ export class ReviewerAssignmentService {
         weight: 0.2,
         contribution: score * 0.2,
         description
-      }
+
     };
-  }
+
 
   /**
    * Score historical success with review type
@@ -516,7 +519,7 @@ export class ReviewerAssignmentService {
   private async scoreHistoricalSuccess(_____reviewer: ReviewerProfile, _____reviewType: ReviewType): Promise<{
     score: number;
     reason: AssignmentReason;
-  }> {
+> {
 
     // Would query historical performance for this review type
     // For now, return a baseline score
@@ -529,9 +532,9 @@ export class ReviewerAssignmentService {
         weight: 0.1,
         contribution: score * 0.1,
         description: 'Historical performance with this review type'
-      }
+
     };
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -549,7 +552,7 @@ export class ReviewerAssignmentService {
         performance: 0.1,
         specialization: 0,
         historical_success: 0
-  }
+
       fallback: 'assign_to_manager',
       enabled: true
     });
@@ -565,7 +568,7 @@ export class ReviewerAssignmentService {
         availability: 0.1,
         workload: 0,
         historical_success: 0
-  }
+
       fallback: 'use_backup_pool',
       enabled: true
     });
@@ -581,11 +584,11 @@ export class ReviewerAssignmentService {
         expertise: 0,
         specialization: 0,
         historical_success: 0
-  }
+
       fallback: 'queue_for_manual',
       enabled: true
     });
-  }
+
 
   private isRelevantSpecialization(area: SpecializationArea, reviewType: ReviewType): boolean {
     const relevanceMap: Record<SpecializationArea, ReviewType[]> = {
@@ -600,7 +603,7 @@ export class ReviewerAssignmentService {
     };
 
     return relevanceMap[area]?.includes(reviewType) || false;
-  }
+
 
   private getExpertiseScore(level: ExpertiseLevel): number {
     const scores = {
@@ -610,7 +613,7 @@ export class ReviewerAssignmentService {
       expert: 1.0
     };
     return scores[level];
-  }
+
 
   private getComplexityRequirement(complexity: ReviewComplexity): number {
     const requirements = {
@@ -620,7 +623,7 @@ export class ReviewerAssignmentService {
       expert_required: 1.0
     };
     return requirements[complexity];
-  }
+
 
   private getRoleExpertiseScore(role: string, complexity: ReviewComplexity): number {
     const roleScores: Record<string, Record<ReviewComplexity, number>> = {
@@ -631,7 +634,7 @@ export class ReviewerAssignmentService {
     };
 
     return roleScores[role]?.[complexity] || 0.5;
-  }
+
 
   private calculateExpectedCompletionTime(
     reviewer: ReviewerProfile,
@@ -643,13 +646,13 @@ export class ReviewerAssignmentService {
     const workloadMultiplier = 1 + (reviewer.workload.capacityUtilization / 200); // Higher workload = slower
     
     return estimatedTime * performanceMultiplier * workloadMultiplier;
-  }
+
 
   private ensureReviewerDiversity(recommendations: AssignmentRecommendation[]): AssignmentRecommendation[] {
     // Ensure we don't assign similar reviewers for consensus
     // Would implement diversity logic here
     return recommendations;
-  }
+
 
   private getReassignmentStrategy(reason: ReassignmentReason, _____currentReviewer: ReviewerProfile): AssignmentType {
     switch (reason) {
@@ -661,8 +664,8 @@ export class ReviewerAssignmentService {
       return 'expertise_based';
     default:
       return 'load_balanced';
-    }
-  }
+
+
 
   private getReassignmentConfidenceAdjustment(reason: ReassignmentReason): number {
     const adjustments = {
@@ -673,14 +676,14 @@ export class ReviewerAssignmentService {
       escalated: 0
     };
     return adjustments[reason] || -10;
-  }
+
 
   // Database and cache methods
   private async getAssignmentRules(reviewType: ReviewType): Promise<AssignmentRule[]> {
 
     if (this.assignmentRulesCache.has(reviewType)) {
       return this.assignmentRulesCache.get(reviewType)!;
-    }
+
 
     const result = await this.db.query(`
       SELECT * FROM assignment_rules 
@@ -691,7 +694,7 @@ export class ReviewerAssignmentService {
     const rules = result.rows.map(row => this.mapRowToAssignmentRule(row));
     this.assignmentRulesCache.set(reviewType, rules);
     return rules;
-  }
+
 
   private async getAvailableReviewers(
     reviewType: ReviewType,
@@ -715,13 +718,13 @@ export class ReviewerAssignmentService {
     const result = await this.db.query(query, params);
 
     return result.rows.map(row => this.mapRowToReviewerProfile(row));
-  }
+
 
   private async getReviewer(reviewerId: string): Promise<ReviewerProfile | null> {
 
     if (this.reviewerCache.has(reviewerId)) {
       return this.reviewerCache.get(reviewerId)!;
-    }
+
 
     const result = await this.db.query(`
       SELECT * FROM reviewer_profiles WHERE reviewer_id = $1
@@ -732,7 +735,7 @@ export class ReviewerAssignmentService {
     const reviewer = this.mapRowToReviewerProfile(result.rows[0]);
     this.reviewerCache.set(reviewerId, reviewer);
     return reviewer;
-  }
+
 
   private async fallbackAssignment(
     review: ReviewItem,
@@ -742,7 +745,7 @@ export class ReviewerAssignmentService {
     // Implement fallback assignment logic
     console.log(`🔄 Using fallback assignment for review ${review.reviewId}`);
     return null;
-  }
+
 
   // Placeholder mapping methods
   private mapRowToAssignmentRule(row: unknown): AssignmentRule {
@@ -755,12 +758,12 @@ export class ReviewerAssignmentService {
       fallbackStrategy: row.fallback_strategy,
       enabled: row.enabled
     };
-  }
+
 
   private mapRowToReviewerProfile(_____row: unknown): ReviewerProfile {
     // Would implement full mapping from database row
     return {} as ReviewerProfile;
-  }
+
 
   // Placeholder methods for workload rebalancing
   private async getActiveReviewers(reviewType?: ReviewType): Promise<ReviewerProfile[]> { return []; }
@@ -771,31 +774,32 @@ export class ReviewerAssignmentService {
   ): Promise<string | null> { return null; }
   private calculateRebalanceBenefit(_____from: ReviewerProfile, _____to: string): number { return 0; }
   private calculateProjectedImprovement(_____actions: WorkloadRebalanceAction[]): number { return 0; }
-}
+
 
 // Supporting types
 type ReassignmentReason = 'performance_issue' | 'workload_overload' | 'expertise_mismatch' | 'unavailable' | 'escalated';
 
-}
-}
+
+
 interface WorkloadRebalanceResult {
   totalReviewers: number;
   overloadedCount: number;
   underutilizedCount: number;
   recommendedActions: WorkloadRebalanceAction[];
   projectedImprovement: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface WorkloadRebalanceAction {
   reviewId: string;
   fromReviewerId: string;
   toReviewerId: string;
   reason: string;
   expectedBenefit: number;
-}
-}
-}
+
+
+

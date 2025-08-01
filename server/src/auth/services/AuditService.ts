@@ -12,7 +12,7 @@ export class AuditService implements IAuditService {
   constructor(config: AuthConfig, db: DatabaseService) {
     this.config = config;
     this.db = db;
-  }
+
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 300 })
   async logEvent(event: Omit<AuditLog, 'id' | 'createdAt'>): Promise<void> {
@@ -43,17 +43,17 @@ export class AuditService implements IAuditService {
           resourceId: event.resourceId,
           details: event.details
         });
-      }
+
 
       // Send alerts for critical events
       if (event.severity === 'critical' || event.severity === 'error') {
         await this.sendAlert(event);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to log audit event:', error, event);
       // Don't throw - audit logging should not break the main flow
-    }
-  }
+
+
 
   // Enhanced security event logging for password reset and other security actions
   async logSecurityEvent(event: SecurityEvent): Promise<void> {
@@ -67,12 +67,12 @@ export class AuditService implements IAuditService {
         success: event.success,
         email: event.email,
         ...event.metadata
-  }
+
       ipAddress: event.ipAddress,
       userAgent: event.userAgent,
       severity: event.success ? 'info' : 'warning'
     });
-  }
+
 
   async getAuditLogs(filters: {
     userId?: string;
@@ -93,37 +93,37 @@ export class AuditService implements IAuditService {
       conditions.push(`user_id = $${paramIndex}`);
       params.push(filters.userId);
       paramIndex++;
-    }
+
 
     if (filters.action) {
       conditions.push(`action = $${paramIndex}`);
       params.push(filters.action);
       paramIndex++;
-    }
+
 
     if (filters.severity) {
       conditions.push(`severity = $${paramIndex}`);
       params.push(filters.severity);
       paramIndex++;
-    }
+
 
     if (filters.resourceType) {
       conditions.push(`resource_type = $${paramIndex}`);
       params.push(filters.resourceType);
       paramIndex++;
-    }
+
 
     if (filters.startDate) {
       conditions.push(`created_at >= $${paramIndex}`);
       params.push(filters.startDate);
       paramIndex++;
-    }
+
 
     if (filters.endDate) {
       conditions.push(`created_at <= $${paramIndex}`);
       params.push(filters.endDate);
       paramIndex++;
-    }
+
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const limit = filters.limit || 100;
@@ -141,18 +141,18 @@ export class AuditService implements IAuditService {
     try {
       const result = await this.db.query(query, params);
       return result.rows.map(this.mapDatabaseAuditLog);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get audit logs:', error);
       throw error;
-    }
-  }
+
+
 
   async getAuditStats(timeframe: 'hour' | 'day' | 'week' | 'month' = 'day'): Promise<{
     totalEvents: number;
     eventsByAction: Record<string, number>;
     eventsBySeverity: Record<string, number>;
     topUsers: Array<{ userId: string; count: number }>;
-  }> {
+> {
     const timeframes = {
       hour: '1 hour',
       day: '1 day',
@@ -212,11 +212,11 @@ export class AuditService implements IAuditService {
           count: parseInt(row.count)
         }))
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get audit stats:', error);
       throw error;
-    }
-  }
+
+
 
   async exportAuditLogs(filters: {
     startDate: Date;
@@ -232,10 +232,10 @@ export class AuditService implements IAuditService {
 
     if (filters.format === 'csv') {
       return this.exportToCSV(logs);
-    } else {
+ else {
       return JSON.stringify(logs, null, 2);
-    }
-  }
+
+
 
   async cleanupOldLogs(retentionDays: number = 365): Promise<number> {
 
@@ -254,17 +254,17 @@ export class AuditService implements IAuditService {
             deletedCount, 
             retentionDays,
             cleanupDate: new Date().toISOString()
-  }
+
           severity: 'info'
         });
-      }
+
 
       return deletedCount;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to cleanup audit logs:', error);
       throw error;
-    }
-  }
+
+
 
   private async sendAlert(event: Omit<AuditLog, 'id' | 'createdAt'>): Promise<void> {
 
@@ -286,7 +286,7 @@ export class AuditService implements IAuditService {
 
     // TODO: Implement actual alerting integrations
     // Example: Send to webhook, email, or monitoring system
-  }
+
 
   private mapDatabaseAuditLog(row: any): AuditLog {
     return {
@@ -302,7 +302,7 @@ export class AuditService implements IAuditService {
       severity: row.severity,
       createdAt: row.created_at
     };
-  }
+
 
   private exportToCSV(logs: AuditLog[]): string {
     const headers = [
@@ -329,7 +329,7 @@ export class AuditService implements IAuditService {
     ].join('\n');
 
     return csvContent;
-  }
+
 
   /**
    * Legacy compatibility method - alias for logEvent
@@ -358,5 +358,4 @@ export class AuditService implements IAuditService {
       sessionId: params.sessionId,
       severity: params.severity || 'info'
     });
-  }
-}
+

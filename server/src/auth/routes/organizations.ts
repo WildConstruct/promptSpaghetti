@@ -12,7 +12,7 @@ export interface OrganizationRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 export async function organizationRoutes(fastify: FastifyInstance) {
   const orgService = fastify.organizationService as OrganizationService;
@@ -36,9 +36,9 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           maxUsers: { type: 'number', minimum: 1 },
           settings: { type: 'object' },
           branding: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: OrganizationRequest, reply) => {
     try {
       const createData: CreateOrganizationData = request.body as CreateOrganizationData;
@@ -57,13 +57,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: organization
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Organization creation failed:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Organization creation failed'
       });
-    }
+
   });
 
   // Get user's organizations
@@ -77,13 +77,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: organizations
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to fetch user organizations:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch organizations'
       });
-    }
+
   });
 
   // Get organization by ID
@@ -105,7 +105,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to view organization'
         });
-      }
+
 
       const organization = await orgService.getOrganizationById(organizationId);
       if (!organization) {
@@ -113,19 +113,19 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Organization not found'
         });
-      }
+
 
       reply.send({
         success: true,
         data: organization
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to fetch organization:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch organization'
       });
-    }
+
   });
 
   // Update organization
@@ -142,9 +142,9 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           maxUsers: { type: 'number', minimum: 1 },
           settings: { type: 'object' },
           branding: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { organizationId } = request.params as { organizationId: string };
@@ -162,7 +162,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to update organization'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -180,13 +180,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: organization
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Organization update failed:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Organization update failed'
       });
-    }
+
   });
 
   // Delete organization
@@ -208,7 +208,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to delete organization'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -221,13 +221,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Organization deleted successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Organization deletion failed:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Organization deletion failed'
       });
-    }
+
   });
 
   // Get organization statistics
@@ -249,7 +249,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to view organization statistics'
         });
-      }
+
 
       const stats = await orgService.getOrganizationStats(organizationId);
 
@@ -257,13 +257,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: stats
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to fetch organization stats:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch organization statistics'
       });
-    }
+
   });
 
   // Team Management Routes
@@ -280,9 +280,9 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           description: { type: 'string', maxLength: 500 },
           parentTeamId: { type: 'string', format: 'uuid' },
           settings: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { organizationId } = request.params as { organizationId: string };
@@ -305,7 +305,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to create teams'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -322,13 +322,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: team
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Team creation failed:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Team creation failed'
       });
-    }
+
   });
 
   // Get organization teams
@@ -350,7 +350,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to view teams'
         });
-      }
+
 
       const teams = await orgService.getOrganizationTeams(organizationId);
 
@@ -358,13 +358,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: teams
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to fetch teams:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch teams'
       });
-    }
+
   });
 
   // Get team hierarchy
@@ -386,7 +386,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to view team hierarchy'
         });
-      }
+
 
       const hierarchy = await orgService.getTeamHierarchy(organizationId);
 
@@ -394,13 +394,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: hierarchy
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to fetch team hierarchy:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch team hierarchy'
       });
-    }
+
   });
 
   // Get team by ID
@@ -416,7 +416,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Team not found'
         });
-      }
+
 
       // Check permission to view team
       const hasPermission = await rbacService.checkPermission(
@@ -430,19 +430,19 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to view team'
         });
-      }
+
 
       reply.send({
         success: true,
         data: team
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to fetch team:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch team'
       });
-    }
+
   });
 
   // Update team
@@ -456,9 +456,9 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           description: { type: 'string', maxLength: 500 },
           parentTeamId: { type: 'string', format: 'uuid' },
           settings: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId } = request.params as { teamId: string };
@@ -475,7 +475,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Team not found'
         });
-      }
+
 
       // Check permission to update team
       const hasPermission = await rbacService.checkPermission(
@@ -489,7 +489,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to update team'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -507,13 +507,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: updatedTeam
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Team update failed:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Team update failed'
       });
-    }
+
   });
 
   // Delete team
@@ -529,7 +529,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Team not found'
         });
-      }
+
 
       // Check permission to delete team
       const hasPermission = await rbacService.checkPermission(
@@ -543,7 +543,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to delete team'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -556,13 +556,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Team deleted successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Team deletion failed:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Team deletion failed'
       });
-    }
+
   });
 
   // Team Membership Routes
@@ -577,9 +577,9 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         properties: {
           userId: { type: 'string', format: 'uuid' },
           role: { type: 'string', enum: ['owner', 'admin', 'member', 'viewer'] }
-        }
-      }
-    }
+
+
+
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId } = request.params as { teamId: string };
@@ -591,7 +591,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Team not found'
         });
-      }
+
 
       // Check permission to manage team members
       const hasPermission = await rbacService.checkPermission(
@@ -605,7 +605,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to manage team members'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -618,7 +618,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           userId,
           role: role as 'owner' | 'admin' | 'member' | 'viewer',
           invitedBy: request.user.id
-  }
+
         context
       );
 
@@ -626,13 +626,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: member
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to add team member:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to add team member'
       });
-    }
+
   });
 
   // Get team members
@@ -648,7 +648,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Team not found'
         });
-      }
+
 
       // Check permission to view team members
       const hasPermission = await rbacService.checkPermission(
@@ -662,7 +662,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to view team members'
         });
-      }
+
 
       const members = await orgService.getTeamMembers(teamId);
 
@@ -670,13 +670,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: members
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to fetch team members:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch team members'
       });
-    }
+
   });
 
   // Update team member role
@@ -688,9 +688,9 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         required: ['role'],
         properties: {
           role: { type: 'string', enum: ['owner', 'admin', 'member', 'viewer'] }
-        }
-      }
-    }
+
+
+
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId, userId } = request.params as { teamId: string; userId: string };
@@ -702,7 +702,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Team not found'
         });
-      }
+
 
       // Check permission to manage team members
       const hasPermission = await rbacService.checkPermission(
@@ -716,7 +716,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to manage team members'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -735,13 +735,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Team member role updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to update team member role:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to update team member role'
       });
-    }
+
   });
 
   // Remove team member
@@ -757,7 +757,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Team not found'
         });
-      }
+
 
       // Check permission to manage team members
       const hasPermission = await rbacService.checkPermission(
@@ -771,7 +771,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Insufficient permissions to manage team members'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -784,13 +784,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Team member removed successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to remove team member:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to remove team member'
       });
-    }
+
   });
 
   // Get user teams
@@ -814,8 +814,8 @@ export async function organizationRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions to view user teams'
           });
-        }
-      }
+
+
 
       const teams = await orgService.getUserTeams(userId, organizationId);
 
@@ -823,12 +823,11 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: teams
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to fetch user teams:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to fetch user teams'
       });
-    }
+
   });
-}

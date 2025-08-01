@@ -10,8 +10,8 @@
 import { FastifyRequest, FastifyReply, FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { PerformanceProfiler } from '../performance/PerformanceProfiler';
 
-}
-}
+
+
 interface PerformanceMiddlewareOptions {
   enabled?: boolean;
   autoStartProfiling?: boolean;
@@ -23,10 +23,11 @@ interface PerformanceMiddlewareOptions {
     memoryUsage: number;
     responseTime: number;
     errorRate: number;
-}
-}
+
+
+
   };
-}
+
 
 /**
  * Performance profiler middleware plugin
@@ -46,14 +47,14 @@ export async function performanceProfilerMiddleware(
       memoryUsage: 85,
       responseTime: 2000,
       errorRate: 5
-  }
+
     ...options
   };
 
   if (!opts.enabled) {
     fastify.log.info('Performance profiler middleware disabled');
     return;
-  }
+
 
   // Initialize performance profiler
   const profiler = new PerformanceProfiler({
@@ -74,7 +75,7 @@ export async function performanceProfilerMiddleware(
       // Skip excluded routes
       if (opts.excludeRoutes?.some(route => request.url.includes(route))) {
         return;
-      }
+
 
       // Add start time to request
       (request as any).startTime = Date.now();
@@ -84,7 +85,7 @@ export async function performanceProfilerMiddleware(
       // Skip excluded routes
       if (opts.excludeRoutes?.some(route => request.url.includes(route))) {
         return;
-      }
+
 
       const startTime = (request as any).startTime;
       if (!startTime) return;
@@ -101,7 +102,7 @@ export async function performanceProfilerMiddleware(
       profiler.addCustomMetric('lastRequestStatusCode', reply.statusCode);
       profiler.addCustomMetric('lastRequestResponseTime', responseTime);
     });
-  }
+
 
   // Performance alert handler
   profiler.on('performance_alert', (alertData) => {
@@ -110,7 +111,7 @@ export async function performanceProfilerMiddleware(
     // Could integrate with external alerting systems here
     if (process.env.NODE_ENV === 'production') {
       // Send to monitoring service, Slack, etc.
-    }
+
   });
 
   // Auto-start profiling if enabled
@@ -125,23 +126,23 @@ export async function performanceProfilerMiddleware(
         await profiler.stopProfiling();
       }, opts.profileDuration);
     });
-  }
+
 
   // Graceful shutdown
   fastify.addHook('onClose', async () => {
     try {
       await profiler.stopProfiling();
       fastify.log.info('Performance profiler stopped on server shutdown');
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error stopping performance profiler:', error);
-    }
+
   });
 
   // Register performance profiling routes
   await registerPerformanceRoutes(fastify, profiler);
 
   fastify.log.info('Performance profiler middleware initialized');
-}
+
 
 /**
  * Register performance profiling API routes
@@ -157,12 +158,12 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
         success: true,
         message: 'Performance profiling started'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Stop profiling
@@ -175,12 +176,12 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
         message: 'Performance profiling stopped',
         snapshotCount: snapshots.length
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Get current performance stats
@@ -192,18 +193,18 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
         success: true,
         data: stats
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Add custom metric
   fastify.post<{
     Body: { key: string; value: unknown }
-  }>('/api/performance/metric', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/performance/metric', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { key, value } = request.body as { key: string; value: unknown };
       
@@ -213,12 +214,12 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
         success: true,
         message: `Custom metric '${key}' added`
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Get profiling status
@@ -235,18 +236,18 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
         success: true,
         data: status
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Client report endpoint
   fastify.post<{
     Body: Record<string, unknown>
-  }>('/api/performance/client-report', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/performance/client-report', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const report = request.body;
       
@@ -264,12 +265,12 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
         message: 'Client performance report received',
         reportPath
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Health check with performance metrics
@@ -289,36 +290,36 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
             heapTotal: memoryUsage.heapTotal,
             heapUsed: memoryUsage.heapUsed,
             external: memoryUsage.external
-  }
+
           cpu: {
             user: cpuUsage.user,
             system: cpuUsage.system
-  }
+
           uptime: process.uptime(),
           platform: process.platform,
           nodeVersion: process.version
-        }
+
       };
 
       // Determine health status based on performance
       if (stats) {
         if (stats.cpu > 90 || stats.memory > 90) {
           health.status = 'degraded';
-        }
+
         if (stats.responseTime > 5000 || stats.errorRate > 10) {
           health.status = 'unhealthy';
-        }
-      }
+
+
       
       return reply.code(200).send(health);
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         status: 'error',
         error: error.message
       });
-    }
+
   });
-}
+
 
 /**
  * Helper function to create performance middleware with options
@@ -327,7 +328,7 @@ export function createPerformanceMiddleware(options: PerformanceMiddlewareOption
   return async function(fastify: FastifyInstance, opts: FastifyPluginOptions) {
     return performanceProfilerMiddleware(fastify, options);
   };
-}
+
 
 /**
  * Performance tracking decorator for route handlers
@@ -345,28 +346,28 @@ export function withPerformanceTracking(routeHandler: Function) {
       if (profiler) {
         profiler.trackRequest(responseTime, false);
         profiler.addCustomMetric('lastRouteResponseTime', responseTime);
-      }
+
       
       return result;
-    } catch (error) {
+ catch (error) {
       const responseTime = Date.now() - startTime;
       const profiler = (request.server as any).performanceProfiler;
       
       if (profiler) {
         profiler.trackRequest(responseTime, true);
         profiler.addCustomMetric('lastRouteError', error.message);
-      }
+
       
       throw error;
-    }
+
   };
-}
+
 
 // Types for Fastify augmentation
 declare module 'fastify' {
   interface FastifyInstance {
     performanceProfiler: PerformanceProfiler;
-}
-}
-  }
-}
+
+
+
+

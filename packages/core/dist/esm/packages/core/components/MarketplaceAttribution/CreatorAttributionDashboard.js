@@ -54,7 +54,21 @@ if (!response.ok) {
         setStats(calculatedStats);
         // Calculate top performers
         const performers = data.templates
-            .map((template) => ({}), templateId, template.templateId, title, template.title, views, template.performance.views, purchases, template.performance.purchases, revenue, template.revenue.total, rating, template.performance.rating, trend, template.performance.purchases > 10 ? 'up' : 'stable');
+            .map((template) => ({}));
+        templateId: template.templateId,
+            title;
+        template.title,
+            views;
+        template.performance.views,
+            purchases;
+        template.performance.purchases,
+            revenue;
+        template.revenue.total,
+            rating;
+        template.performance.rating,
+            trend;
+        template.performance.purchases > 10 ? 'up' : 'stable',
+        ;
     }
     sort((a, b) => b.revenue - a.revenue)
         .slice(0, 5);
@@ -82,32 +96,26 @@ useEffect(() => {
 const renderStatsCards = () => {
     if (!stats)
         return null;
-    const statCards = [];
-    {
-        icon: FileText,
-            label;
-        'Templates Created',
-            value;
-        stats.totalTemplates.toString(),
-            subtext;
-        'Active templates',
-            color;
-        'blue',
-        ;
-    }
-    {
-        icon: DollarSign,
-            label;
-        'Total Revenue',
-            value;
-        `$${(stats.totalRevenue / 100).toFixed(2)}`;
-    }
+    const statCards = [
+        {
+            icon: FileText,
+            label: 'Templates Created',
+            value: stats.totalTemplates.toString(),
+            subtext: 'Active templates',
+            color: 'blue',
+        },
+        {
+            icon: DollarSign,
+            label: 'Total Revenue',
+            value: `$${(stats.totalRevenue / 100).toFixed(2)}`
+        }
+    ];
 }, subtext;
 / 100;
 toFixed(2);
 pending `}
 },
-  color: 'green'
+  color: 'green';
   }
       {
   icon: Users,

@@ -14,6 +14,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { UserTrustScore, TemplateTrustScore, TransactionTrustScore } from '../../../../packages/core/types/TrustTypes';
 }
 }
+}
 export interface EnforcementAction {
     actionId: string;
     entityType: 'user' | 'template' | 'transaction';
@@ -35,7 +36,9 @@ export interface EnforcementAction {
         reason: string;
 }
 }
+}
     };
+}
 }
 }
 }
@@ -49,6 +52,7 @@ export interface EnforcementPolicy {
             suspend: number;
             restrict: number;
             flag: number;
+}
 }
 }
         };
@@ -77,6 +81,7 @@ export interface EnforcementPolicy {
 }
 }
 }
+}
 export interface EnforcementConfig {
     enabled: boolean;
     policies: EnforcementPolicy[];
@@ -84,6 +89,7 @@ export interface EnforcementConfig {
         adminAlerts: boolean;
         userNotifications: boolean;
         webhookUrl?: string;
+}
 }
 }
     };

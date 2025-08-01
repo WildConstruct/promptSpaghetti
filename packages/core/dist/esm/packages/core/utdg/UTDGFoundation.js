@@ -151,9 +151,9 @@ relationships: [];
 ;
 this.addNode(genreNode);
 // Social Classes as core entities
-const socialClasses = [];
-'peasant', 'merchant', 'craftsman', 'minor_noble', 'major_noble', 'clergy', 'royal';
-;
+const socialClasses = [
+    'peasant', 'merchant', 'craftsman', 'minor_noble', 'major_noble', 'clergy', 'royal'
+];
 for (const socialClass of socialClasses) {
     const classNode = {
         id: `social_${socialClass}` };

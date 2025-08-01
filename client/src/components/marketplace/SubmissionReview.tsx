@@ -2,21 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './SubmissionReview.css';
-}
+
+
 interface SubmissionData {
   title: string;,
-  description: string;
+  description: string;,
   tags: string;,
-  categories: string;
+  categories: string;,
   price_cents: number;,
-  is_ai_generated: boolean;
+  is_ai_generated: boolean;,
   claude_compat: string;,
-  claude_model: string;
+  claude_model: string;,
   graph_json: Record<string, unknown>;
   prompt_yaml?: string;
   changelog_md?: string;
   token_per_run_estimate: number;,
-  intended_use_cases: string;
+  intended_use_cases: string;,
   technical_requirements: string;,
   example_outputs: string;
   documentation_md?: string;
@@ -25,24 +26,26 @@ interface SubmissionData {
   previous_version_id?: string;
   interface ValidationResult {
   id: string;,
-  rule_id: string;
+  rule_id: string;,
   severity: 'error' | 'warning' | 'info';,
   message: string;
   details?: Record<string, unknown>;
   suggested_fix?: string;
   auto_fixable: boolean;
-  location?: {
+  location?: {,
   field?: string;
-}
+
+
 };
-}
+
+
 interface SubmissionDetails {
   id: string;,
-  template_id: string;
+  template_id: string;,
   submitter_id: string;,
-  version_number: number;
+  version_number: number;,
   status: 'draft' | 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';,
-  submission_data: SubmissionData;
+  submission_data: SubmissionData;,
   validation_results: ValidationResult;
   reviewer_id?: string;
   review_comments?: string;
@@ -51,14 +54,17 @@ interface SubmissionDetails {
   reviewed_at?: string;
   created_at: string;,
   updated_at: string;
-}
+
+
+
 interface ReviewFeedback {
   category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';,
-  rating: number;
+  rating: number;,
   comments: string;,
   suggestions: string;
-const FEEDBACK_CATEGORIES = [;
-}
+  const FEEDBACK_CATEGORIES = [
+
+
   { id: 'content', label: 'Content Quality', description: 'Originality, usefulness, and relevance' },
   { id: 'quality', label: 'Technical Quality', description: 'Code structure, performance, and reliability' },
   { id: 'compliance', label: 'Policy Compliance', description: 'Adherence to platform guidelines and policies' },
@@ -66,33 +72,7 @@ const FEEDBACK_CATEGORIES = [;
   { id: 'technical', label: 'Technical Implementation', description: 'Claude compatibility and technical accuracy' }
 ];
 
-export const SubmissionReview: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [submission, setSubmission] = useState<SubmissionDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [decision, setDecision] = useState<'approved' | 'rejected' | 'changes_requested' | ''>('');
-  const [overallScore, setOverallScore] = useState(75);
-  const [comments, setComments] = useState('');
-  const [detailedFeedback, setDetailedFeedback] = useState<ReviewFeedback>()
-    FEEDBACK_CATEGORIES.map(cat => ({)
-  category: cat.id as 'content' | 'quality' | 'compliance' | 'usability' | 'technical',
-  rating: 3,
-  comments: '',
-  suggestions: [],
-}))
-  );
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  useEffect(() => {
-    if (id) {
-      fetchSubmission(id);
-  }, [id]);
-  const fetchSubmission = async (submissionId: string) => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(`/api/marketplace/submissions/${submissionId}`, {)}
-  },
+export const SubmissionReview = () => { return null; },
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
@@ -100,9 +80,9 @@ export const SubmissionReview: React.FC = () => {
         throw new Error('Failed to fetch submission');
       const data = await response.json();
       setSubmission(data);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to fetch submission');
-} finally {
+ finally {
       setIsLoading(false);
   };
   const handleFeedbackChange = (index: number, field: keyof ReviewFeedback, value: Error) => {
@@ -144,15 +124,15 @@ export const SubmissionReview: React.FC = () => {
   score: overallScore,
   comments,
   detailed_feedback: detailedFeedback.filter(f => f.comments.trim()),
-}
+
       });
       if (!response.ok) {
         throw new Error('Failed to submit review');
       navigate('/marketplace/admin/review-queue');
-    } catch (err) {
+ catch (err) {
   console.error('Review submission failed:', err);
   alert('Failed to submit review. Please try again.');
-} finally {
+ finally {
       setIsSubmitting(false);
   };
   const formatDate = (dateString: string) => {

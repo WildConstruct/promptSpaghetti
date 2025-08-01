@@ -36,8 +36,7 @@
  */
 import React from 'react';
 import { DashboardTheme } from './SecurityDashboardFramework';
-export declare enum ComplianceFramework {
-    SOC2_TYPE1 = "soc2_type1",
+export declare enum ComplianceFramework { SOC2_TYPE1 = "soc2_type1",
     SOC2_TYPE2 = "soc2_type2",
     ISO27001 = "iso27001",
     NIST_CSF = "nist_csf",
@@ -51,12 +50,12 @@ export declare enum ComplianceStatus {
     COMPLIANT = "compliant",
     PARTIALLY_COMPLIANT = "partially_compliant",
     NON_COMPLIANT = "non_compliant",
-    NOT_ASSESSED = "not_assessed",
+    NOT_ASSESSED = "not_assessed" }
     IN_REMEDIATION = "in_remediation"
 
 }
-export interface ComplianceRequirement {
-    id: string;
+}
+export interface ComplianceRequirement { id: string;
     framework: ComplianceFramework;
     category: string;
     requirement: string;
@@ -68,11 +67,10 @@ export interface ComplianceRequirement {
     evidence: Evidence[];
     findings: Finding[];
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    businessImpact: string;
-
+    businessImpact: string }
 }
-export interface Evidence {
-    id: string;
+}
+export interface Evidence { id: string;
     type: 'document' | 'screenshot' | 'log' | 'certificate' | 'policy';
     title: string;
     description: string;
@@ -80,11 +78,10 @@ export interface Evidence {
     validUntil?: Date;
     location: string;
     owner: string;
-    status: 'current' | 'outdated' | 'missing';
-
+    status: 'current' | 'outdated' | 'missing' }
 }
-export interface Finding {
-    id: string;
+}
+export interface Finding { id: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     type: 'gap' | 'weakness' | 'deficiency' | 'observation';
     title: string;
@@ -94,11 +91,10 @@ export interface Finding {
     targetResolution: Date;
     status: 'open' | 'in_progress' | 'resolved' | 'accepted_risk';
     owner: string;
-    estimatedEffort: string;
-
+    estimatedEffort: string }
 }
-export interface AuditCycle {
-    id: string;
+}
+export interface AuditCycle { id: string;
     framework: ComplianceFramework;
     type: 'internal' | 'external' | 'certification';
     auditor: string;
@@ -109,38 +105,32 @@ export interface AuditCycle {
     status: 'planned' | 'in_progress' | 'completed' | 'cancelled';
     scope: string[];
     findings: Finding[];
-    reportUrl?: string;
-
+    reportUrl?: string }
 }
-export interface ComplianceMetrics {
-    overallScore: number;
+}
+export interface ComplianceMetrics { overallScore: number;
     byFramework: Record<ComplianceFramework, {
         score: number;
         compliantRequirements: number;
         totalRequirements: number;
         criticalGaps: number;
         lastAudit: Date;
-        nextAudit?: Date;
+        nextAudit?: Date }
 }
     }>;
-    riskProfile: {
-        high: number;
+    riskProfile: { high: number;
         medium: number;
         low: number;
-        accepted: number;
-    };
-    auditStatus: {
-        upcoming: AuditCycle[];
+        accepted: number };
+    auditStatus: { upcoming: AuditCycle[];
         active: AuditCycle[];
-        recentlyCompleted: AuditCycle[];
-    };
-    evidenceHealth: {
-        current: number;
+        recentlyCompleted: AuditCycle[] };
+    evidenceHealth: { current: number;
         outdated: number;
         missing: number;
-        expiringWithin30Days: number;
-    };
+        expiringWithin30Days: number };
 
+}
 }
 export interface ComplianceSecurityDashboardProps {
     metrics: ComplianceMetrics;
@@ -159,4 +149,5 @@ export interface ComplianceSecurityDashboardProps {
 export declare const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardProps>;
 export default ComplianceSecurityDashboard;
 //# sourceMappingURL=ComplianceSecurityDashboard.d.ts.map
+}
 }

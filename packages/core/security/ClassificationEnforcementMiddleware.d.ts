@@ -12,9 +12,8 @@
  */
 import { Request, Response, NextFunction } from 'express';
 import { type EnforcementResult, type AccessDecision } from './ClassificationEnforcer';
-import { 
-  DataClassificationLevel,
-  type OperationContext,
+import { DataClassificationLevel,
+  type OperationContext }
   type ClassificationAuditEvent
 } from '../types/DataClassification';
 /**
@@ -22,26 +21,23 @@ import {
  */
 
 }
-export interface ClassificationAwareRequest extends Request {
-    classification?: {
+}
+export interface ClassificationAwareRequest extends Request { classification?: {
         level: DataClassificationLevel;
         dataId?: string;
         enforcement?: EnforcementResult;
-        accessDecision?: AccessDecision;
-    };
-    user?: {
-        id: string;
+        accessDecision?: AccessDecision };
+    user?: { id: string;
         roles?: string[];
-        authLevel?: string;
-    };
+        authLevel?: string };
 
 /**
  * Middleware configuration
  */
 
 }
-export interface ClassificationEnforcementMiddlewareConfig {
-    /** Environment preset for the enforcer */
+}
+export interface ClassificationEnforcementMiddlewareConfig { /** Environment preset for the enforcer */
     environment: 'development' | 'staging' | 'production';
     /** Function to extract classification from request */
     classificationExtractor?: (req: Request) => Promise<DataClassificationLevel | null>;
@@ -75,7 +71,7 @@ export declare function createOperationValidationMiddleware(): (req: Classificat
 export declare function enforceClassification(classification: DataClassificationLevel, options?: {)
     allowedOperations?: OperationContext['operation'][];
     requiredControls?: string[];
-    customValidation?: (req: Request) => boolean;
+    customValidation?: (req: Request) => boolean }
 }
 }): (req: ClassificationAwareRequest, res: Response, next: NextFunction) => void;
 /**

@@ -2,16 +2,15 @@ import { EventEmitter } from 'events';
 import { GraphUpdatePayload, PresenceUpdatePayload } from '../../../server/src/websocket/types';
 
 }
-export interface WebSocketClientConfig {
-    url: string;
+}
+export interface WebSocketClientConfig { url: string;
     reconnectInterval: number;
     maxReconnectAttempts: number;
     heartbeatInterval: number;
     connectionTimeout: number;
     enableOfflineQueue: boolean;
-    authToken?: string;
-
-
+    authToken?: string }
+}
 }
 export interface ConnectionState {
     status: 'disconnected' | 'connecting' | 'connected' | 'authenticating' | 'authenticated' | 'error';
@@ -132,4 +131,5 @@ export declare class WebSocketClient extends EventEmitter {
     private clearTimeouts;
 
 //# sourceMappingURL=WebSocketClient.d.ts.map
+}
 }

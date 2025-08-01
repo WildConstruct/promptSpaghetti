@@ -54,12 +54,11 @@ describe('SafeExpressionEvaluator', () => {
         .toThrow('Undefined variable: undefinedVar');
     });
   });
-  describe('Function Calls', () => {
-  it('should allow safe function calls from context', () => {
+  describe('Function Calls', () => { it('should allow safe function calls from context', () => {
   const context = {
   double: (x: number) => x * 2,
   add: (a: number, b: number) => a + b,
-  len: (arr: unknown) => arr.length,
+  len: (arr: unknown) => arr.length }
 };
       expect(SafeExpressionEvaluator.evaluate('double(5)', context)).toBe(10);
       expect(SafeExpressionEvaluator.evaluate('add(3, 4)', context)).toBe(7);
@@ -96,7 +95,7 @@ describe('SafeExpressionEvaluator', () => {
   describe('Complex Expressions', () => {
     it('should handle complex nested expressions', () => {
       const context = {
-        users: [,
+        users: [
           { name: 'Alice', age: 25 },
           { name: 'Bob', age: 30 },
           { name: 'Charlie', age: 35 }

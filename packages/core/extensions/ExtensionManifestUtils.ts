@@ -6,50 +6,34 @@ import { ExtensionManifest } from './ExtensionManifest';
 import { extensionManifestManager } from './ExtensionManifestManager';
 
 // Manifest Utility Functions
-export class ExtensionManifestUtils {
-  /**
-  * Convert package.json to extension manifest
-  */
-  public static convertPackageJsonToManifest(packageJson: any): ExtensionManifest {,
-  const manifest: ExtensionManifest = {,
-  manifest_version: '1.0',
-  id: packageJson.name || 'unknown-extension',
-  name: packageJson.displayName || packageJson.name || 'Unknown Extension',
-  version: packageJson.version || '1.0.0',
-  description: packageJson.description || 'No description provided',
-  author: {
-  name: typeof packageJson.author === 'string' ? packageJson.author : packageJson.author?.name || 'Unknown',
-  email: typeof packageJson.author === 'object' ? packageJson.author.email : undefined,
-  url: typeof packageJson.author === 'object' ? packageJson.author.url : undefined,
-},
+export class ExtensionManifestUtils {},
   extension_type: packageJson.extensionType || 'node',
       main: packageJson.main || 'index.js',
-      dependencies: {
-  system: packageJson.engines?.promptSpaghetti || '1.0.0',
+      dependencies: { ,
+  system: packageJson.engines?.promptSpaghetti || '1.0.0' }
         extensions: packageJson.extensionDependencies || {},
         npm: packageJson.dependencies || {}
   },
   permissions: packageJson.permissions || [],
-      capabilities: {
+      capabilities: { ,
   provides: packageJson.capabilities?.provides || [],
   requires: packageJson.capabilities?.requires || [],
-  optional: packageJson.capabilities?.optional || [],
+  optional: packageJson.capabilities?.optional || [] }
 },
-  metadata: {
+  metadata: { ,
   license: packageJson.license || 'MIT',
   repository: packageJson.repository?.url || packageJson.repository,
   homepage: packageJson.homepage,
   bugs: packageJson.bugs?.url || packageJson.bugs,
   keywords: packageJson.keywords || [],
-  categories: packageJson.categories || [],
+  categories: packageJson.categories || [] }
 },
-  compatibility: {
+  compatibility: { ,
   min_system_version: packageJson.engines?.promptSpaghetti || '1.0.0',
-  platforms: packageJson.platforms || ['web'],
+  platforms: packageJson.platforms || ['web'] }
 };
     // Add type-specific configurations
-    if (packageJson.ui) {
-  manifest.ui = packageJson.ui;
+    if (packageJson.ui) { manifest.ui = packageJson.ui;
   if (packageJson.runtime) {
   manifest.runtime = packageJson.runtime;
   if (packageJson.security) {
@@ -65,14 +49,14 @@ export class ExtensionManifestUtils {
   version: manifest.version,
   description: manifest.description,
   main: manifest.main,
-  author: {
+  author: {,
   name: manifest.author.name,
   email: manifest.author.email,
-  url: manifest.author.url,
+  url: manifest.author.url }
 },
   extensionType: manifest.extension_type,
-      engines: {
-  promptSpaghetti: manifest.dependencies?.system || '1.0.0',
+      engines: { ,
+  promptSpaghetti: manifest.dependencies?.system || '1.0.0' }
 },
   dependencies: manifest.dependencies?.npm || {},
       extensionDependencies: manifest.dependencies?.extensions || {},
@@ -107,46 +91,38 @@ export class ExtensionManifestUtils {
     // Merge complex objects
     if (override.author) {
       merged.author = { ...merged.author, ...override.author };
-    if (override.dependencies) {
-  merged.dependencies = {
-  ...merged.dependencies,
-  ...override.dependencies,
+    if (override.dependencies) { merged.dependencies = {
+  ...merged.dependencies
+  ...override.dependencies
   extensions: {
-  ...merged.dependencies?.extensions,
+  ...merged.dependencies?.extensions }
   ...override.dependencies.extensions
-},
-  npm: {
-          ...merged.dependencies?.npm,
+
+  npm: { ...merged.dependencies?.npm }
           ...override.dependencies.npm
       };
-    if (override.capabilities) {
-      merged.capabilities = {
-        ...merged.capabilities,
+    if (override.capabilities) { merged.capabilities = {
+        ...merged.capabilities }
         ...override.capabilities
       };
-    if (override.ui) {
-      merged.ui = {
-        ...merged.ui,
+    if (override.ui) { merged.ui = {
+        ...merged.ui }
         ...override.ui
       };
-    if (override.runtime) {
-      merged.runtime = {
-        ...merged.runtime,
+    if (override.runtime) { merged.runtime = {
+        ...merged.runtime }
         ...override.runtime
       };
-    if (override.metadata) {
-      merged.metadata = {
-        ...merged.metadata,
+    if (override.metadata) { merged.metadata = {
+        ...merged.metadata }
         ...override.metadata
       };
-    if (override.compatibility) {
-      merged.compatibility = {
-        ...merged.compatibility,
+    if (override.compatibility) { merged.compatibility = {
+        ...merged.compatibility }
         ...override.compatibility
       };
-    if (override.security) {
-      merged.security = {
-        ...merged.security,
+    if (override.security) { merged.security = {
+        ...merged.security }
         ...override.security
       };
     return merged;
@@ -177,105 +153,97 @@ export class ExtensionManifestUtils {
       for (const [packageName, version] of Object.entries(manifest.dependencies.npm)) {
         if (!this.isValidPackageName(packageName)) {
           warnings.push(`Questionable npm package name: ${packageName}`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0
+  errors }
   warnings
 };
   /**
    * Get manifest size information
    */
-  public static getManifestSize(manifest: ExtensionManifest): ManifestSizeInfo {
-    const jsonString = JSON.stringify(manifest, null, 2);
+  public static getManifestSize(manifest: ExtensionManifest): ManifestSizeInfo { const jsonString = JSON.stringify(manifest, null, 2);
     const compressed = this.compress(jsonString);
     return {
-      raw: jsonString.length,
-      compressed: compressed.length,
-      compressionRatio: compressed.length / jsonString.length,
-      fieldCount: this.countFields(manifest),
-      dependencyCount: Object.keys(manifest.dependencies?.extensions || {}).length,
+      raw: jsonString.length
+      compressed: compressed.length
+      compressionRatio: compressed.length / jsonString.length
+      fieldCount: this.countFields(manifest) }
+      dependencyCount: Object.keys(manifest.dependencies?.extensions || {}).length
       permissionCount: manifest.permissions?.length || 0;
   };
   /**
    * Extract manifest metadata
    */
-  public static extractMetadata(manifest: ExtensionManifest): ManifestMetadata {
-    return {
-      id: manifest.id,
-      name: manifest.name,
-      version: manifest.version,
-      type: manifest.extension_type,
-      author: manifest.author.name,
-      description: manifest.description,
-      license: manifest.metadata?.license || 'Unknown',
-      keywords: manifest.metadata?.keywords || [],
-      categories: manifest.metadata?.categories || [],
-      hasUI: !!manifest.ui,
-      hasRuntime: !!manifest.runtime,
-      hasSecurity: !!manifest.security,
-      dependencyCount: Object.keys(manifest.dependencies?.extensions || {}).length,
-      permissionCount: manifest.permissions?.length || 0,
+  public static extractMetadata(manifest: ExtensionManifest): ManifestMetadata { return {
+      id: manifest.id
+      name: manifest.name
+      version: manifest.version
+      type: manifest.extension_type
+      author: manifest.author.name
+      description: manifest.description
+      license: manifest.metadata?.license || 'Unknown'
+      keywords: manifest.metadata?.keywords || []
+      categories: manifest.metadata?.categories || []
+      hasUI: !!manifest.ui
+      hasRuntime: !!manifest.runtime
+      hasSecurity: !!manifest.security }
+      dependencyCount: Object.keys(manifest.dependencies?.extensions || {}).length
+      permissionCount: manifest.permissions?.length || 0
       size: this.getManifestSize(manifest);
   };
   /**
    * Compare two manifests
    */
-  public static compareManifests(manifest1: ExtensionManifest, manifest2: ExtensionManifest): ManifestComparison {
-  const comparison: ManifestComparison = {,
-  identical: false,
-  versionChanged: false,
-  dependenciesChanged: false,
-  permissionsChanged: false,
-  configurationChanged: false,
-  changes: [],
+  public static compareManifests(manifest1: ExtensionManifest, manifest2: ExtensionManifest): ManifestComparison { const comparison: ManifestComparison = {
+  identical: false
+  versionChanged: false
+  dependenciesChanged: false
+  permissionsChanged: false
+  configurationChanged: false
+  changes: [] }
 };
     // Check if identical
-    if (JSON.stringify(manifest1) === JSON.stringify(manifest2)) {
-  comparison.identical = true;
+    if (JSON.stringify(manifest1) === JSON.stringify(manifest2)) { comparison.identical = true;
   return comparison;
   // Check version
   if (manifest1.version !== manifest2.version) {
   comparison.versionChanged = true;
   comparison.changes.push({)
-  field: 'version',
-  oldValue: manifest1.version,
-  newValue: manifest2.version,
-  type: 'modified',
+  field: 'version'
+  oldValue: manifest1.version
+  newValue: manifest2.version
+  type: 'modified' }
 });
     // Check dependencies
     const deps1 = JSON.stringify(manifest1.dependencies);
     const deps2 = JSON.stringify(manifest2.dependencies);
-    if (deps1 !== deps2) {
-  comparison.dependenciesChanged = true;
+    if (deps1 !== deps2) { comparison.dependenciesChanged = true;
   comparison.changes.push({)
-  field: 'dependencies',
-  oldValue: deps1,
-  newValue: deps2,
-  type: 'modified',
+  field: 'dependencies'
+  oldValue: deps1
+  newValue: deps2
+  type: 'modified' }
 });
     // Check permissions
     const perms1 = JSON.stringify(manifest1.permissions);
     const perms2 = JSON.stringify(manifest2.permissions);
-    if (perms1 !== perms2) {
-  comparison.permissionsChanged = true;
+    if (perms1 !== perms2) { comparison.permissionsChanged = true;
   comparison.changes.push({)
-  field: 'permissions',
-  oldValue: perms1,
-  newValue: perms2,
-  type: 'modified',
+  field: 'permissions'
+  oldValue: perms1
+  newValue: perms2
+  type: 'modified' }
 });
     // Check other fields
     const fields = ['name', 'description', 'main', 'ui', 'runtime', 'security'];
-    for (const field of fields) {
-  const val1 = JSON.stringify((manifest1 as Record<string, unknown>)[field]);
+    for (const field of fields) { const val1 = JSON.stringify((manifest1 as Record<string, unknown>)[field]);
   const val2 = JSON.stringify((manifest2 as Record<string, unknown>)[field]);
   if (val1 !== val2) {
   comparison.configurationChanged = true;
   comparison.changes.push({)
-  field,
-  oldValue: val1,
-  newValue: val2,
-  type: 'modified',
+  field
+  oldValue: val1
+  newValue: val2
+  type: 'modified' }
 });
     return comparison;
   /**
@@ -295,8 +263,7 @@ export class ExtensionManifestUtils {
   /**
    * Sanitize manifest for distribution
    */
-  public static sanitizeManifest(manifest: ExtensionManifest): ExtensionManifest {
-  const sanitized = JSON.parse(JSON.stringify(manifest));
+  public static sanitizeManifest(manifest: ExtensionManifest): ExtensionManifest { const sanitized = JSON.parse(JSON.stringify(manifest));
   // Remove sensitive information
   if (sanitized.author.email) {
   delete sanitized.author.email;
@@ -310,10 +277,10 @@ export class ExtensionManifestUtils {
   /**
   * Private utility methods
   */
-  private static isValidSemanticVersion(version: string): boolean {,
+  private static isValidSemanticVersion(version: string): boolean {
   const semverRegex = /^\d+\.\d+\.\d+$/;
   return semverRegex.test(version);
-  private static isValidExtensionId(id: string): boolean {,
+  private static isValidExtensionId(id: string): boolean {
   const idRegex = /^[a-z0-9-]+$/;
   return idRegex.test(id) && id.length >= 3 && id.length <= 100;
   private static isValidVersionRange(range: string): boolean {,
@@ -343,67 +310,58 @@ export class ExtensionManifestUtils {
   node: this.generateNodeTemplate(),
   ui: this.generateUITemplate(),
   transform: this.generateTransformTemplate(),
-  storage: this.generateStorageTemplate(),
+  storage: this.generateStorageTemplate() }
 };
     return templates[extensionType];
   /**
    * Generate manifest wizard questions
    */
-  public static generateWizardQuestions(): ManifestWizardQuestion {
-  return [
+  public static generateWizardQuestions(): ManifestWizardQuestion { return [
   {
   key: 'id',
   prompt: 'Extension ID (lowercase, alphanumeric, hyphens only):',
   type: 'text',
   required: true,
-  validation: (value: string) => /^[a-z0-9-]+$/.test(value),
-}
-      {
-  key: 'name',
+  validation: (value: string) => /^[a-z0-9-]+$/.test(value) }
+
+      { key: 'name',
   prompt: 'Extension name:',
   type: 'text',
-  required: true,
-}
-      {
-  key: 'version',
+  required: true }
+
+      { key: 'version',
   prompt: 'Version (semantic versioning):',
   type: 'text',
   default: '1.0.0',
-  validation: (value: string) => /^\d+\.\d+\.\d+$/.test(value),
-}
-      {
-  key: 'description',
+  validation: (value: string) => /^\d+\.\d+\.\d+$/.test(value) }
+
+      { key: 'description',
   prompt: 'Description:',
   type: 'text',
-  required: true,
-}
-      {
-  key: 'extensionType',
+  required: true }
+
+      { key: 'extensionType',
   prompt: 'Extension type:',
   type: 'select',
   options: ['node', 'ui', 'transform', 'storage'],
-  required: true,
-}
-      {
-  key: 'authorName',
+  required: true }
+
+      { key: 'authorName',
   prompt: 'Author name:',
   type: 'text',
-  required: true,
-}
-      {
-  key: 'authorEmail',
+  required: true }
+
+      { key: 'authorEmail',
   prompt: 'Author email (optional):',
-  type: 'text',
-}
-      {
-  key: 'license',
+  type: 'text' }
+
+      { key: 'license',
   prompt: 'License:',
   type: 'select',
   options: ['MIT', 'Apache-2.0', 'GPL-3.0', 'BSD-3-Clause', 'Other'],
-  default: 'MIT',
-}
-      {
-  key: 'permissions',
+  default: 'MIT' }
+
+      { key: 'permissions',
   prompt: 'Required permissions (comma-separated):',
   type: 'text',
   transform: (value: string) => value.split(',').map(p => p.trim()).filter(p => p)];
@@ -414,117 +372,114 @@ export class ExtensionManifestUtils {
   name: 'My Node Extension',
   version: '1.0.0',
   description: 'A custom node extension',
-  author: {
+  author: {,
   name: 'Your Name',
-  email: 'your.email@example.com',
+  email: 'your.email@example.com' }
 },
   extension_type: 'node',
       main: 'index.js',
-      dependencies: {
-  system: '1.0.0',
+      dependencies: { ,
+  system: '1.0.0' }
 },
-  permissions: [,
+  permissions: [
         'runtime-nodes'
       ],
-      runtime: {
-  node_types: [,
+      runtime: {,
+  node_types: [
   'custom-node'
   ]
 },
-  metadata: {
+  metadata: { ,
   license: 'MIT',
   keywords: ['node', 'custom'],
-  categories: ['workflow'],
+  categories: ['workflow'] }
 }, null, 2);
-  private static generateUITemplate(): string {
-  return JSON.stringify({)
+  private static generateUITemplate(): string { return JSON.stringify({)
   manifest_version: '1.0',
   id: 'my-ui-extension',
   name: 'My UI Extension',
   version: '1.0.0',
   description: 'A custom UI extension',
-  author: {
+  author: {,
   name: 'Your Name',
-  email: 'your.email@example.com',
+  email: 'your.email@example.com' }
 },
   extension_type: 'ui',
       main: 'index.js',
-      dependencies: {
-  system: '1.0.0',
+      dependencies: { ,
+  system: '1.0.0' }
 },
-  permissions: [,
+  permissions: [
         'ui-components'
       ],
-      ui: {
+      ui: { ,
   category: 'general',
-  components: {
-  'custom-component': './components/CustomComponent.js',
+  components: {,
+  'custom-component': './components/CustomComponent.js' }
 },
-  metadata: {
+  metadata: { ,
   license: 'MIT',
   keywords: ['ui', 'components'],
-  categories: ['interface'],
+  categories: ['interface'] }
 }, null, 2);
-  private static generateTransformTemplate(): string {
-  return JSON.stringify({)
+  private static generateTransformTemplate(): string { return JSON.stringify({)
   manifest_version: '1.0',
   id: 'my-transform-extension',
   name: 'My Transform Extension',
   version: '1.0.0',
   description: 'A custom transform extension',
-  author: {
+  author: {,
   name: 'Your Name',
-  email: 'your.email@example.com',
+  email: 'your.email@example.com' }
 },
   extension_type: 'transform',
       main: 'index.js',
-      dependencies: {
-  system: '1.0.0',
+      dependencies: { ,
+  system: '1.0.0' }
 },
-  runtime: {
-  transforms: [,
+  runtime: {,
+  transforms: [
   'custom-transform'
   ]
 },
-  metadata: {
+  metadata: { ,
   license: 'MIT',
   keywords: ['transform', 'data'],
-  categories: ['processing'],
+  categories: ['processing'] }
 }, null, 2);
-  private static generateStorageTemplate(): string {
-  return JSON.stringify({)
+  private static generateStorageTemplate(): string { return JSON.stringify({)
   manifest_version: '1.0',
   id: 'my-storage-extension',
   name: 'My Storage Extension',
   version: '1.0.0',
   description: 'A custom storage extension',
-  author: {
+  author: {,
   name: 'Your Name',
-  email: 'your.email@example.com',
+  email: 'your.email@example.com' }
 },
   extension_type: 'storage',
       main: 'index.js',
-      dependencies: {
-  system: '1.0.0',
+      dependencies: { ,
+  system: '1.0.0' }
 },
-  permissions: [,
+  permissions: [
         'storage'
       ],
-      runtime: {
-  storage_providers: [,
+      runtime: {,
+  storage_providers: [
   'custom-storage'
   ]
 },
-  metadata: {
+  metadata: { ,
   license: 'MIT',
   keywords: ['storage', 'persistence'],
-  categories: ['data'],
+  categories: ['data'] }
 }, null, 2);
 
 // Types and Interfaces
-}
-interface ManifestSizeInfo {
-  raw: number;
+
+
+interface ManifestSizeInfo { raw: number;
   compressed: number;
   compressionRatio: number;
   fieldCount: number;
@@ -552,14 +507,16 @@ interface ManifestSizeInfo {
   dependenciesChanged: boolean;
   permissionsChanged: boolean;
   configurationChanged: boolean;
-  changes: Array<{
+  changes: Array<{;
   field: string;
   oldValue: string;
   newValue: string;
-  type: 'added' | 'removed' | 'modified'
-}
-  }>;
-}
+  type: 'added' | 'removed' | 'modified' }
+
+
+>;
+
+
 interface ManifestWizardQuestion {
   key: string;
   prompt: string;
@@ -569,7 +526,7 @@ interface ManifestWizardQuestion {
   options?: string;
   validation?: (value: any) => boolean;
   transform?: (value: any) => any;
+  // Export utilities
 
-// Export utilities
-}
+
 export { ManifestTemplateGenerator };

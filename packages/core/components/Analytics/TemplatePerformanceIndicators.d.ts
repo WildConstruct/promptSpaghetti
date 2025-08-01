@@ -20,14 +20,14 @@ import { ConversionFunnelDefinition } from '../../analytics/ConversionDataModel'
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 }
-export interface TemplatePerformanceIndicatorsProps {
-    templateId: string;
+}
+export interface TemplatePerformanceIndicatorsProps { templateId: string;
     templateMetadata: TemplateMetadata;
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     timeRange?: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     displayMode?: IndicatorDisplayMode;
@@ -38,8 +38,8 @@ export interface TemplatePerformanceIndicatorsProps {
     onExport?: (data: TemplatePerformanceExportData) => void;
 
 }
-export interface TemplateMetadata {
-    templateId: string;
+}
+export interface TemplateMetadata { templateId: string;
     templateName: string;
     templateTitle: string;
     category: string;
@@ -53,11 +53,10 @@ export interface TemplateMetadata {
     description: string;
     pricing: TemplatePricing;
     status: TemplateStatus;
-    visibility: TemplateVisibility;
-
+    visibility: TemplateVisibility }
 }
-export interface TemplatePricing {
-    type: 'free' | 'premium' | 'subscription';
+}
+export interface TemplatePricing { type: 'free' | 'premium' | 'subscription';
     price?: number;
     originalPrice?: number;
     discountPercentage?: number;
@@ -66,32 +65,29 @@ export interface TemplatePricing {
 
 export type TemplateStatus = 'draft' | 'review' | 'published' | 'archived' | 'suspended';
 export type TemplateVisibility = 'public' | 'unlisted' | 'private' | 'premium_only';
-export type IndicatorDisplayMode = 'compact' | 'standard' | 'detailed' | 'dashboard' | 'overlay' | 'mobile';
-
+export type IndicatorDisplayMode = 'compact' | 'standard' | 'detailed' | 'dashboard' | 'overlay' | 'mobile' }
 }
-export interface TemplatePerformanceData {
-    templateMetrics: TemplateMetrics;
+}
+export interface TemplatePerformanceData { templateMetrics: TemplateMetrics;
     funnelPerformance: TemplateFunnelPerformance;
     performanceIndicators: PerformanceIndicator[];
     competitivePosition: TemplateCompetitivePosition;
     optimizationOpportunities: TemplateOptimizationOpportunity[];
     performanceAlerts: PerformanceAlert[];
     historicalTrends: PerformanceTrend[];
-    benchmarkComparison: BenchmarkComparison;
-
+    benchmarkComparison: BenchmarkComparison }
 }
-export interface TemplateMetrics {
-    views: TemplateViewMetrics;
+}
+export interface TemplateMetrics { views: TemplateViewMetrics;
     engagement: TemplateEngagementMetrics;
     conversion: TemplateConversionMetrics;
     revenue: TemplateRevenueMetrics;
     quality: TemplateQualityMetrics;
     performance: TemplatePerformanceMetrics;
-    lastUpdated: number;
-
+    lastUpdated: number }
 }
-export interface TemplateViewMetrics {
-    totalViews: number;
+}
+export interface TemplateViewMetrics { totalViews: number;
     uniqueViews: number;
     viewsGrowth: number;
     viewsToday: number;
@@ -99,18 +95,16 @@ export interface TemplateViewMetrics {
     viewsThisMonth: number;
     averageViewDuration: number;
     bounceRate: number;
-    viewSources: ViewSource[];
-
+    viewSources: ViewSource[] }
 }
-export interface ViewSource {
-    source: string;
+}
+export interface ViewSource { source: string;
     views: number;
     percentage: number;
-    conversionRate: number;
-
+    conversionRate: number }
 }
-export interface TemplateEngagementMetrics {
-    engagementScore: number;
+}
+export interface TemplateEngagementMetrics { engagementScore: number;
     engagementTrend: number;
     averageTimeOnPage: number;
     interactionRate: number;
@@ -118,21 +112,19 @@ export interface TemplateEngagementMetrics {
     favoriteCount: number;
     commentCount: number;
     previewRate: number;
-    downloadAttempts: number;
-
+    downloadAttempts: number }
 }
-export interface TemplateConversionMetrics {
-    overallConversionRate: number;
+}
+export interface TemplateConversionMetrics { overallConversionRate: number;
     conversionTrend: number;
     conversionsByStep: StepConversionData[];
     conversionsBySource: SourceConversionData[];
     conversionsByDevice: DeviceConversionData[];
     conversionsByTime: TimeConversionData[];
-    dropoffPoints: DropoffPoint[];
-
+    dropoffPoints: DropoffPoint[] }
 }
-export interface StepConversionData {
-    stepId: string;
+}
+export interface StepConversionData { stepId: string;
     stepName: string;
     stepOrder: number;
     entries: number;
@@ -140,50 +132,44 @@ export interface StepConversionData {
     conversionRate: number;
     dropoffRate: number;
     averageTime: number;
-    optimizationScore: number;
-
+    optimizationScore: number }
 }
-export interface SourceConversionData {
-    source: string;
+}
+export interface SourceConversionData { source: string;
     visits: number;
     conversions: number;
     conversionRate: number;
-    quality: number;
-
+    quality: number }
 }
-export interface DeviceConversionData {
-    deviceType: 'desktop' | 'mobile' | 'tablet';
+}
+export interface DeviceConversionData { deviceType: 'desktop' | 'mobile' | 'tablet';
     visits: number;
     conversions: number;
     conversionRate: number;
-    averageTime: number;
-
+    averageTime: number }
 }
-export interface TimeConversionData {
-    timeSlot: string;
+}
+export interface TimeConversionData { timeSlot: string;
     conversions: number;
     conversionRate: number;
-    volume: number;
-
+    volume: number }
 }
-export interface DropoffPoint {
-    stepId: string;
+}
+export interface DropoffPoint { stepId: string;
     stepName: string;
     dropoffRate: number;
     dropoffCount: number;
     reasons: DropoffReason[];
-    severity: 'low' | 'medium' | 'high' | 'critical';
-
+    severity: 'low' | 'medium' | 'high' | 'critical' }
 }
-export interface DropoffReason {
-    reason: string;
+}
+export interface DropoffReason { reason: string;
     frequency: number;
     impact: number;
-    actionable: boolean;
-
+    actionable: boolean }
 }
-export interface TemplateRevenueMetrics {
-    totalRevenue: number;
+}
+export interface TemplateRevenueMetrics { totalRevenue: number;
     revenueGrowth: number;
     revenuePerView: number;
     revenuePerConversion: number;
@@ -191,96 +177,85 @@ export interface TemplateRevenueMetrics {
     lifetimeValue: number;
     refundRate: number;
     revenueBySource: RevenueBySource[];
-    revenueTrend: RevenueTrendData[];
-
+    revenueTrend: RevenueTrendData[] }
 }
-export interface RevenueBySource {
-    source: string;
+}
+export interface RevenueBySource { source: string;
     revenue: number;
     percentage: number;
-    growth: number;
-
+    growth: number }
 }
-export interface RevenueTrendData {
-    date: number;
+}
+export interface RevenueTrendData { date: number;
     revenue: number;
     conversions: number;
-    averageValue: number;
-
+    averageValue: number }
 }
-export interface TemplateQualityMetrics {
-    qualityScore: number;
+}
+export interface TemplateQualityMetrics { qualityScore: number;
     qualityTrend: number;
     averageRating: number;
     ratingCount: number;
     ratingDistribution: RatingDistribution;
     reviewSentiment: ReviewSentiment;
-    qualityFactors: QualityFactor[];
-
+    qualityFactors: QualityFactor[] }
 }
-export interface RatingDistribution {
-    fiveStars: number;
+}
+export interface RatingDistribution { fiveStars: number;
     fourStars: number;
     threeStars: number;
     twoStars: number;
-    oneStar: number;
-
+    oneStar: number }
 }
-export interface ReviewSentiment {
-    positive: number;
+}
+export interface ReviewSentiment { positive: number;
     neutral: number;
     negative: number;
     sentimentScore: number;
-    keyThemes: SentimentTheme[];
-
+    keyThemes: SentimentTheme[] }
 }
-export interface SentimentTheme {
-    theme: string;
+}
+export interface SentimentTheme { theme: string;
     sentiment: 'positive' | 'negative' | 'neutral';
     frequency: number;
-    impact: number;
-
+    impact: number }
 }
-export interface QualityFactor {
-    factor: string;
+}
+export interface QualityFactor { factor: string;
     score: number;
     weight: number;
-    trend: 'improving' | 'declining' | 'stable';
-
+    trend: 'improving' | 'declining' | 'stable' }
 }
-export interface TemplatePerformanceMetrics {
-    performanceScore: number;
+}
+export interface TemplatePerformanceMetrics { performanceScore: number;
     performanceTrend: number;
     loadTime: number;
     errorRate: number;
     compatibility: number;
     accessibility: number;
     seoScore: number;
-    mobileScore: number;
-
+    mobileScore: number }
 }
-export interface TemplateFunnelPerformance {
-    funnelId: string;
+}
+export interface TemplateFunnelPerformance { funnelId: string;
     overallPerformance: FunnelOverallPerformance;
     stepPerformance: FunnelStepPerformance[];
     conversionPaths: ConversionPath[];
     optimizationInsights: FunnelOptimizationInsight[];
-    performanceComparison: FunnelPerformanceComparison;
-
+    performanceComparison: FunnelPerformanceComparison }
 }
-export interface FunnelOverallPerformance {
-    conversionRate: number;
+}
+export interface FunnelOverallPerformance { conversionRate: number;
     conversionRateTrend: number;
     totalConversions: number;
     averageTimeToConvert: number;
     conversionValue: number;
     efficiencyScore: number;
     bottleneckStep: string;
-    topPerformingStep: string;
-
+    topPerformingStep: string }
 }
-export interface FunnelStepPerformance {
-    stepId: string;
+}
+export interface FunnelStepPerformance { stepId: string;
     stepName: string;
     stepType: string;
     position: number;
@@ -293,21 +268,19 @@ export interface FunnelStepPerformance {
     errorCount: number;
     satisfactionScore: number;
     optimizationPotential: number;
-    performanceGrade: 'A' | 'B' | 'C' | 'D' | 'F';
-
+    performanceGrade: 'A' | 'B' | 'C' | 'D' | 'F' }
 }
-export interface ConversionPath {
-    pathId: string;
+}
+export interface ConversionPath { pathId: string;
     steps: string[];
     frequency: number;
     conversionRate: number;
     averageValue: number;
     averageTime: number;
-    efficiency: number;
-
+    efficiency: number }
 }
-export interface FunnelOptimizationInsight {
-    type: OptimizationInsightType;
+}
+export interface FunnelOptimizationInsight { type: OptimizationInsightType;
     title: string;
     description: string;
     impact: 'high' | 'medium' | 'low';
@@ -317,20 +290,18 @@ export interface FunnelOptimizationInsight {
     affectedSteps: string[];
     actionItems: string[];
 
-export type OptimizationInsightType = 'bottleneck_removal' | 'step_optimization' | 'path_simplification' | 'content_improvement' | 'technical_fix' | 'user_experience';
-
+export type OptimizationInsightType = 'bottleneck_removal' | 'step_optimization' | 'path_simplification' | 'content_improvement' | 'technical_fix' | 'user_experience' }
 }
-export interface FunnelPerformanceComparison {
-    categoryAverage: number;
+}
+export interface FunnelPerformanceComparison { categoryAverage: number;
     creatorAverage: number;
     topPerformer: number;
     industryBenchmark: number;
     percentileRank: number;
-    competitivePosition: 'leading' | 'above_average' | 'average' | 'below_average' | 'lagging';
-
+    competitivePosition: 'leading' | 'above_average' | 'average' | 'below_average' | 'lagging' }
 }
-export interface PerformanceIndicator {
-    indicatorId: string;
+}
+export interface PerformanceIndicator { indicatorId: string;
     type: IndicatorType;
     name: string;
     value: number | string;
@@ -346,62 +317,55 @@ export interface PerformanceIndicator {
     thresholds: IndicatorThreshold[];
     lastUpdated: number;
 
-export type IndicatorType = 'conversion_rate' | 'revenue_performance' | 'engagement_score' | 'quality_rating' | 'traffic_volume' | 'technical_performance' | 'competitive_position' | 'optimization_opportunity';
-
+export type IndicatorType = 'conversion_rate' | 'revenue_performance' | 'engagement_score' | 'quality_rating' | 'traffic_volume' | 'technical_performance' | 'competitive_position' | 'optimization_opportunity' }
 }
-export interface IndicatorTrend {
-    direction: 'up' | 'down' | 'stable' | 'volatile';
+}
+export interface IndicatorTrend { direction: 'up' | 'down' | 'stable' | 'volatile';
     percentage: number;
     timeframe: string;
     confidence: number;
 
 export type IndicatorSeverity = 'critical' | 'warning' | 'info' | 'success';
-export type IndicatorStatus = 'healthy' | 'attention_needed' | 'critical' | 'improving' | 'declining';
-
+export type IndicatorStatus = 'healthy' | 'attention_needed' | 'critical' | 'improving' | 'declining' }
 }
-export interface IndicatorAction {
-    actionId: string;
+}
+export interface IndicatorAction { actionId: string;
     title: string;
     description: string;
     priority: 'high' | 'medium' | 'low';
     effort: 'low' | 'medium' | 'high';
     expectedImpact: number;
-    actionType: 'optimization' | 'fix' | 'enhancement' | 'investigation';
-
+    actionType: 'optimization' | 'fix' | 'enhancement' | 'investigation' }
 }
-export interface IndicatorVisualization {
-    type: 'gauge' | 'progress' | 'trend' | 'comparison' | 'heatmap';
+}
+export interface IndicatorVisualization { type: 'gauge' | 'progress' | 'trend' | 'comparison' | 'heatmap';
     config: VisualizationConfig;
-    colorScheme: ColorScheme;
-
+    colorScheme: ColorScheme }
 }
-export interface VisualizationConfig {
-    showTrend: boolean;
+}
+export interface VisualizationConfig { showTrend: boolean;
     showComparison: boolean;
     timeframe: string;
     granularity: string;
-    format: 'percentage' | 'currency' | 'number' | 'time' | 'score';
-
+    format: 'percentage' | 'currency' | 'number' | 'time' | 'score' }
 }
-export interface ColorScheme {
-    primary: string;
+}
+export interface ColorScheme { primary: string;
     secondary: string;
     success: string;
     warning: string;
     error: string;
-    neutral: string;
-
+    neutral: string }
 }
-export interface IndicatorThreshold {
-    level: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
+}
+export interface IndicatorThreshold { level: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
     minValue: number;
     maxValue: number;
     color: string;
-    description: string;
-
+    description: string }
 }
-export interface TemplateCompetitivePosition {
-    categoryRank: number;
+}
+export interface TemplateCompetitivePosition { categoryRank: number;
     totalInCategory: number;
     percentile: number;
     rankChange: number;
@@ -409,42 +373,37 @@ export interface TemplateCompetitivePosition {
     strengthAreas: CompetitiveStrength[];
     weaknessAreas: CompetitiveWeakness[];
     opportunities: CompetitiveOpportunity[];
-    threats: CompetitiveThreat[];
-
+    threats: CompetitiveThreat[] }
 }
-export interface CompetitiveStrength {
-    area: string;
+}
+export interface CompetitiveStrength { area: string;
     score: number;
     description: string;
-    advantage: string;
-
+    advantage: string }
 }
-export interface CompetitiveWeakness {
-    area: string;
+}
+export interface CompetitiveWeakness { area: string;
     score: number;
     description: string;
     impact: string;
-    improvement: string;
-
+    improvement: string }
 }
-export interface CompetitiveOpportunity {
-    opportunity: string;
+}
+export interface CompetitiveOpportunity { opportunity: string;
     description: string;
     potential: number;
     effort: 'low' | 'medium' | 'high';
-    timeframe: number;
-
+    timeframe: number }
 }
-export interface CompetitiveThreat {
-    threat: string;
+}
+export interface CompetitiveThreat { threat: string;
     description: string;
     severity: 'low' | 'medium' | 'high';
     probability: number;
-    mitigation: string;
-
+    mitigation: string }
 }
-export interface TemplateOptimizationOpportunity {
-    opportunityId: string;
+}
+export interface TemplateOptimizationOpportunity { opportunityId: string;
     title: string;
     description: string;
     category: OpportunityCategory;
@@ -456,63 +415,55 @@ export interface TemplateOptimizationOpportunity {
     successMetrics: OpportunityMetric[];
     relatedIndicators: string[];
 
-export type OpportunityCategory = 'conversion_optimization' | 'content_improvement' | 'technical_enhancement' | 'marketing_boost' | 'user_experience' | 'pricing_strategy';
-
+export type OpportunityCategory = 'conversion_optimization' | 'content_improvement' | 'technical_enhancement' | 'marketing_boost' | 'user_experience' | 'pricing_strategy' }
 }
-export interface OpportunityImpact {
-    revenueIncrease: number;
+}
+export interface OpportunityImpact { revenueIncrease: number;
     conversionImprovement: number;
     trafficIncrease: number;
     ratingImprovement: number;
-    confidenceLevel: number;
-
+    confidenceLevel: number }
 }
-export interface OpportunityEffort {
-    estimatedHours: number;
+}
+export interface OpportunityEffort { estimatedHours: number;
     skillsRequired: string[];
     resourcesNeeded: string[];
     complexity: 'simple' | 'moderate' | 'complex' | 'expert';
 
-export type OpportunityPriority = 'critical' | 'high' | 'medium' | 'low';
-
+export type OpportunityPriority = 'critical' | 'high' | 'medium' | 'low' }
 }
-export interface OpportunityTimeline {
-    estimatedDuration: number;
+}
+export interface OpportunityTimeline { estimatedDuration: number;
     milestones: OpportunityMilestone[];
     dependencies: string[];
-    risks: OpportunityRisk[];
-
+    risks: OpportunityRisk[] }
 }
-export interface OpportunityMilestone {
-    name: string;
+}
+export interface OpportunityMilestone { name: string;
     description: string;
     targetDate: number;
-    deliverables: string[];
-
+    deliverables: string[] }
 }
-export interface OpportunityRisk {
-    risk: string;
+}
+export interface OpportunityRisk { risk: string;
     probability: number;
     impact: number;
-    mitigation: string;
-
+    mitigation: string }
 }
-export interface OpportunityRequirement {
-    requirement: string;
+}
+export interface OpportunityRequirement { requirement: string;
     type: 'skill' | 'tool' | 'resource' | 'approval';
     description: string;
-    critical: boolean;
-
+    critical: boolean }
 }
-export interface OpportunityMetric {
-    metric: string;
+}
+export interface OpportunityMetric { metric: string;
     currentValue: number;
     targetValue: number;
-    measurementMethod: string;
-
+    measurementMethod: string }
 }
-export interface PerformanceAlert {
-    alertId: string;
+}
+export interface PerformanceAlert { alertId: string;
     type: AlertType;
     severity: AlertSeverity;
     title: string;
@@ -526,167 +477,147 @@ export interface PerformanceAlert {
 
 export type AlertType = 'performance_drop' | 'conversion_decline' | 'revenue_loss' | 'quality_issue' | 'technical_problem' | 'competitive_threat';
 export type AlertSeverity = 'info' | 'warning' | 'critical' | 'emergency';
-export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'suppressed';
-
+export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'suppressed' }
 }
-export interface AlertThreshold {
-    metric: string;
+}
+export interface AlertThreshold { metric: string;
     condition: 'above' | 'below' | 'equals' | 'change';
     value: number;
-    timeframe: number;
-
+    timeframe: number }
 }
-export interface AlertAction {
-    actionId: string;
+}
+export interface AlertAction { actionId: string;
     title: string;
     description: string;
     actionType: 'investigate' | 'fix' | 'optimize' | 'escalate';
-    automated: boolean;
-
+    automated: boolean }
 }
-export interface AlertEscalation {
-    escalationLevel: number;
+}
+export interface AlertEscalation { escalationLevel: number;
     escalationTime: number;
     escalationTarget: string;
-    maxEscalations: number;
-
+    maxEscalations: number }
 }
-export interface PerformanceTrend {
-    metric: string;
+}
+export interface PerformanceTrend { metric: string;
     timeframe: string;
     dataPoints: TrendDataPoint[];
     trendAnalysis: TrendAnalysis;
     forecast: TrendForecast;
-    seasonality: SeasonalityData;
-
+    seasonality: SeasonalityData }
 }
-export interface TrendDataPoint {
-    timestamp: number;
+}
+export interface TrendDataPoint { timestamp: number;
     value: number;
     volume: number;
-    context: Record<string, any>;
-
+    context: Record<string, any> }
 }
-export interface TrendAnalysis {
-    direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';
+}
+export interface TrendAnalysis { direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';
     strength: number;
     significance: number;
     acceleration: number;
-    inflectionPoints: InflectionPoint[];
-
+    inflectionPoints: InflectionPoint[] }
 }
-export interface InflectionPoint {
-    timestamp: number;
+}
+export interface InflectionPoint { timestamp: number;
     type: 'peak' | 'trough' | 'change';
     significance: number;
-    context: string;
-
+    context: string }
 }
-export interface TrendForecast {
-    nextPeriod: ForecastPeriod[];
+}
+export interface TrendForecast { nextPeriod: ForecastPeriod[];
     confidence: number;
     assumptions: string[];
-    risks: string[];
-
+    risks: string[] }
 }
-export interface ForecastPeriod {
-    timestamp: number;
+}
+export interface ForecastPeriod { timestamp: number;
     predictedValue: number;
     confidenceInterval: {
         min: number;
-        max: number;
+        max: number }
 }
     };
 
 }
-export interface SeasonalityData {
-    detected: boolean;
+}
+export interface SeasonalityData { detected: boolean;
     patterns: SeasonalPattern[];
     strength: number;
-    reliability: number;
-
+    reliability: number }
 }
-export interface SeasonalPattern {
-    type: 'daily' | 'weekly' | 'monthly' | 'yearly';
+}
+export interface SeasonalPattern { type: 'daily' | 'weekly' | 'monthly' | 'yearly';
     amplitude: number;
     phase: number;
-    confidence: number;
-
+    confidence: number }
 }
-export interface BenchmarkComparison {
-    benchmarks: BenchmarkData[];
+}
+export interface BenchmarkComparison { benchmarks: BenchmarkData[];
     position: BenchmarkPosition;
     gaps: PerformanceGap[];
-    opportunities: BenchmarkOpportunity[];
-
+    opportunities: BenchmarkOpportunity[] }
 }
-export interface BenchmarkData {
-    benchmarkType: 'category' | 'creator' | 'industry' | 'top_performer';
+}
+export interface BenchmarkData { benchmarkType: 'category' | 'creator' | 'industry' | 'top_performer';
     name: string;
     metrics: BenchmarkMetric[];
-    lastUpdated: number;
-
+    lastUpdated: number }
 }
-export interface BenchmarkMetric {
-    metric: string;
+}
+export interface BenchmarkMetric { metric: string;
     value: number;
     percentile: number;
-    trend: 'improving' | 'declining' | 'stable';
-
+    trend: 'improving' | 'declining' | 'stable' }
 }
-export interface BenchmarkPosition {
-    overallRank: number;
+}
+export interface BenchmarkPosition { overallRank: number;
     categoryRank: number;
     percentile: number;
     competitiveAdvantage: string[];
-    improvementAreas: string[];
-
+    improvementAreas: string[] }
 }
-export interface PerformanceGap {
-    metric: string;
+}
+export interface PerformanceGap { metric: string;
     gap: number;
     gapPercentage: number;
     priority: 'high' | 'medium' | 'low';
-    actionItems: string[];
-
+    actionItems: string[] }
 }
-export interface BenchmarkOpportunity {
-    opportunity: string;
+}
+export interface BenchmarkOpportunity { opportunity: string;
     description: string;
     potentialGain: number;
     effort: 'low' | 'medium' | 'high';
-    examples: BenchmarkExample[];
-
+    examples: BenchmarkExample[] }
 }
-export interface BenchmarkExample {
-    templateName: string;
+}
+export interface BenchmarkExample { templateName: string;
     creatorName: string;
     achievement: string;
-    strategy: string;
-
+    strategy: string }
 }
-export interface OptimizationAction {
-    actionType: 'view_details' | 'start_optimization' | 'fix_issue' | 'ignore_alert';
+}
+export interface OptimizationAction { actionType: 'view_details' | 'start_optimization' | 'fix_issue' | 'ignore_alert';
     targetId: string;
     details: Record<string, any>;
-    timestamp: number;
-
+    timestamp: number }
 }
-export interface TemplatePerformanceExportData {
-    templateMetadata: TemplateMetadata;
+}
+export interface TemplatePerformanceExportData { templateMetadata: TemplateMetadata;
     performanceData: TemplatePerformanceData;
     indicators: PerformanceIndicator[];
     trends: PerformanceTrend[];
     exportTimestamp: number;
-    exportConfig: ExportConfig;
-
+    exportConfig: ExportConfig }
 }
-export interface ExportConfig {
-    format: 'json' | 'csv' | 'excel' | 'pdf';
+}
+export interface ExportConfig { format: 'json' | 'csv' | 'excel' | 'pdf';
     includeCharts: boolean;
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     metrics: string[];

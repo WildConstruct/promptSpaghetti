@@ -11,8 +11,7 @@ import { Button } from '../ui/Button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { useMarketplaceMetrics } from '../../hooks/useMarketplaceMetrics';
-import { 
-  TrendingUp,
+import { TrendingUp,
   TrendingDown,
   DollarSign,
   Download,
@@ -20,54 +19,48 @@ import {
   Share,
   Search,
   Users,
-  Star,
+  Star }
   Target
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
-export interface MarketplaceDashboardProps {
-  userId?: number;
+
+export interface MarketplaceDashboardProps { userId?: number;
   userRole?: 'director' | 'producer' | 'creator' | 'admin';
   timeRange?: string;
-  className?: string;
-}
-}
-export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
-  userId,
-  userRole = 'director',
-  timeRange = '30d',
+  className?: string }
+
+export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({ )
+  userId
+  userRole = 'director'
+  timeRange = '30d' }
   className = ''
-}) => {
-  const {
-    dashboardData,
-    insights,
-    isLoading,
-    getTopPerformingTemplates,
-    getSearchAnalytics,
+}) => { const {
+    dashboardData
+    insights
+    isLoading
+    getTopPerformingTemplates
+    getSearchAnalytics }
     refreshData
-  } = useMarketplaceMetrics({ userRole });
+ = useMarketplaceMetrics({ userRole });
   const [selectedMetric, setSelectedMetric] = useState<'revenue' | 'downloads' | 'rating'>('revenue');
   const [topTemplates, setTopTemplates] = useState<any>([]);
   const [searchData, setSearchData] = useState<unknown>(null);
-  useEffect(() => {
-    if (!isLoading && dashboardData) {
+  useEffect(() => { if (!isLoading && dashboardData) {
       const templates = getTopPerformingTemplates(selectedMetric, 10);
       const search = getSearchAnalytics();
       setTopTemplates(templates);
-      setSearchData(search);
-  }, [isLoading, dashboardData, selectedMetric, getTopPerformingTemplates, getSearchAnalytics]);
-  const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('en-US', {)
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
+      setSearchData(search) }, [isLoading, dashboardData, selectedMetric, getTopPerformingTemplates, getSearchAnalytics]);
+  const formatCurrency = (amount: number) => { return new Intl.NumberFormat('en-US', {)
+  style: 'currency'
+  currency: 'USD'
+  minimumFractionDigits: 0
+  maximumFractionDigits: 0 }
 }).format(amount);
   };
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return `${(num / 1000000).toFixed(1)}M`;}
-    } else if (num >= 1000) {
+ else if (num >= 1000) {
       return `${(num / 1000).toFixed(1)}K`;}
     return num.toString();
   };
@@ -373,7 +366,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
           {renderInsights()}
         </TabsContent>
       </Tabs>
-      <style>{`
+      <style>{ `
         .marketplace-dashboard {
           display: flex;
           flex-direction: column;
@@ -395,7 +388,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
           margin-bottom: 2rem;
         .metric-card {
           transition: transform 0.2s ease;
-        .metric-card:hover {,
+        .metric-card:hover {
   transform: translateY(-2px);
         .metric-title {
           display: flex;
@@ -420,7 +413,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
         .trend-period {
           color: #9ca3af;
         .metric-subtitle {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .rating-stars {
           display: flex;
@@ -433,7 +426,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
         .category-item, .template-item, .query-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 1rem;
           border: 1px solid #e5e7eb;
           border-radius: 8px;
@@ -455,10 +448,10 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
         .metric-secondary {
           display: flex;
   gap: 1rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .query-stats {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .templates-header {
           display: flex;
@@ -466,11 +459,11 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
           align-items: center;
         .search-analytics {
           display: grid;
-          grid-template-columns: 1fr 2fr;
+          grid-template-columns: 1fr 2fr
   gap: 1rem;
         .search-metrics {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1rem;
         .search-stat {
           text-align: center;
@@ -479,7 +472,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
           font-weight: 700;
   color: #1f2937;
         .stat-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .insight-item {
           display: flex;
@@ -510,7 +503,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
           font-weight: 600;
   color: #1f2937;
         .insight-description {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin-bottom: 0.75rem;
         .loading {
@@ -524,11 +517,10 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: spin 1s linear infinite;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
         @media (max-width: 768px) {
           .metrics-grid {
             grid-template-columns: 1fr;

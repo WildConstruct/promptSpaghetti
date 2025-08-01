@@ -86,7 +86,7 @@ const SECURITY_SCANNER_CONFIG = {
       high: 5,      // Max 5 high severity
       medium: 20,   // Max 20 medium severity
       low: 50       // Max 50 low severity
-    }
+
   },
 
   // Configuration security analysis
@@ -111,7 +111,7 @@ const SECURITY_SCANNER_CONFIG = {
       authentication: ['MFA', 'Strong passwords', 'Session management'],
       authorization: ['RBAC', 'Principle of least privilege'],
       logging: ['Audit trails', 'Centralized logging', 'Log integrity']
-    }
+
   },
 
   // Report configuration
@@ -125,8 +125,8 @@ const SECURITY_SCANNER_CONFIG = {
       medium: '#FFAA00',
       low: '#FFFF00',
       info: '#00AAFF'
-    }
-  }
+
+
 };
 
 // Security vulnerability database
@@ -194,8 +194,8 @@ const VULNERABILITY_DATABASE = {
       description: 'Execution of system commands with user input',
       cwe: 'CWE-78',
       owasp: 'A03:2021 - Injection'
-    }
-  }
+
+
 };
 
 // Main security scanner class
@@ -215,7 +215,7 @@ class AutomatedSecurityScanner {
       metrics: {},
       recommendations: []
     };
-  }
+
 
   /**
    * Run comprehensive security scan
@@ -248,12 +248,11 @@ class AutomatedSecurityScanner {
       
       console.log('\n✅ Automated security scan completed!');
       return this.scanResults;
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Security scan failed:', error.message);
       throw error;
-    }
-  }
+
+
 
   /**
    * Run Static Application Security Testing (SAST)
@@ -271,10 +270,10 @@ class AutomatedSecurityScanner {
         const content = await fs.readFile(filePath, 'utf8');
         const findings = await this.analyzeSASTPatterns(filePath, content);
         sastFindings.push(...findings);
-      } catch (error) {
+ catch (error) {
         console.warn(`  ⚠️ Unable to scan file: ${filePath}`);
-      }
-    }
+
+
 
     // Categorize findings by severity
     const severityCount = this.categorizeBySeverity(sastFindings);
@@ -288,7 +287,7 @@ class AutomatedSecurityScanner {
     this.scanResults.summary.totalFiles = files.length;
     this.scanResults.summary.vulnerabilities.sast = severityCount;
     this.scanResults.findings.push(...sastFindings);
-  }
+
 
   /**
    * Analyze SAST security patterns in code
@@ -313,8 +312,8 @@ class AutomatedSecurityScanner {
           owasp: VULNERABILITY_DATABASE.patterns['SQL-001'].owasp,
           recommendation: 'Use parameterized queries or prepared statements'
         });
-      }
-    }
+
+
 
     // Check XSS patterns
     for (const pattern of patterns.xss) {
@@ -332,8 +331,8 @@ class AutomatedSecurityScanner {
           owasp: VULNERABILITY_DATABASE.patterns['XSS-001'].owasp,
           recommendation: 'Use proper input validation and output encoding'
         });
-      }
-    }
+
+
 
     // Check hardcoded secrets
     for (const pattern of patterns.hardcodedSecrets) {
@@ -351,8 +350,8 @@ class AutomatedSecurityScanner {
           owasp: VULNERABILITY_DATABASE.patterns['SEC-001'].owasp,
           recommendation: 'Use environment variables or secure key management'
         });
-      }
-    }
+
+
 
     // Check unsafe patterns
     for (const pattern of patterns.unsafePatterns) {
@@ -370,8 +369,8 @@ class AutomatedSecurityScanner {
           owasp: VULNERABILITY_DATABASE.patterns['INJ-001'].owasp,
           recommendation: 'Avoid dynamic code execution, use safe alternatives'
         });
-      }
-    }
+
+
 
     // Check weak cryptography
     for (const pattern of patterns.weakCrypto) {
@@ -389,11 +388,11 @@ class AutomatedSecurityScanner {
           owasp: VULNERABILITY_DATABASE.patterns['SEC-002'].owasp,
           recommendation: 'Use strong cryptographic algorithms (AES-256, SHA-256+)'
         });
-      }
-    }
+
+
 
     return findings;
-  }
+
 
   /**
    * Run dependency vulnerability scanning
@@ -410,10 +409,10 @@ class AutomatedSecurityScanner {
         console.log('  📊 Scanning npm dependencies...');
         const npmVulns = await this.scanNpmDependencies(projectPath);
         dependencyFindings.push(...npmVulns);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.warn('  ⚠️ Unable to scan npm dependencies:', error.message);
-    }
+
 
     // Mock additional dependency scanners for demonstration
     const mockFindings = this.generateMockDependencyFindings();
@@ -429,7 +428,7 @@ class AutomatedSecurityScanner {
 
     this.scanResults.summary.vulnerabilities.dependencies = severityCount;
     this.scanResults.findings.push(...dependencyFindings);
-  }
+
 
   /**
    * Scan npm dependencies for vulnerabilities
@@ -462,24 +461,24 @@ class AutomatedSecurityScanner {
                 cwe: advisory.cwe ? `CWE-${advisory.cwe.join(', CWE-')}` : 'N/A',
                 recommendation: `Update ${packageName} to version ${vulnData.fixAvailable?.version || 'latest'}`
               });
-            }
-          }
-        }
-      }
-    } catch (error) {
+
+
+
+
+ catch (error) {
       // npm audit returns non-zero exit code when vulnerabilities are found
       if (error.stdout) {
         try {
           const auditData = JSON.parse(error.stdout);
           // Process audit data similar to above
-        } catch (parseError) {
+ catch (parseError) {
           console.warn('  ⚠️ Unable to parse npm audit results');
-        }
-      }
-    }
+
+
+
     
     return findings;
-  }
+
 
   /**
    * Run configuration security analysis
@@ -511,7 +510,7 @@ class AutomatedSecurityScanner {
 
     this.scanResults.summary.vulnerabilities.configuration = severityCount;
     this.scanResults.findings.push(...configFindings);
-  }
+
 
   /**
    * Run Dynamic Application Security Testing (DAST)
@@ -542,7 +541,7 @@ class AutomatedSecurityScanner {
         finding: 'Information disclosure',
         description: 'API returns detailed error messages that may aid attackers',
         recommendation: 'Implement generic error messages for security'
-      }
+
     ];
     
     dastFindings.push(...mockDastFindings);
@@ -557,7 +556,7 @@ class AutomatedSecurityScanner {
 
     this.scanResults.summary.vulnerabilities.dast = severityCount;
     this.scanResults.findings.push(...dastFindings);
-  }
+
 
   /**
    * Run compliance validation
@@ -586,7 +585,7 @@ class AutomatedSecurityScanner {
     console.log(`    GDPR: ${complianceResults.gdpr.score}% compliant`);
 
     this.scanResults.summary.compliance = complianceResults;
-  }
+
 
   /**
    * Generate security metrics
@@ -619,7 +618,7 @@ class AutomatedSecurityScanner {
     
     // Generate recommendations based on metrics
     this.generateSecurityRecommendations(metrics);
-  }
+
 
   /**
    * Generate comprehensive security report
@@ -655,7 +654,7 @@ class AutomatedSecurityScanner {
     console.log(`    🌐 HTML Report: docs/security/epic19-security-scan-report.html`);
     console.log(`    🔍 SARIF Report: docs/security/epic19-security-scan.sarif`);
     console.log(`    📝 Summary: docs/security/epic19-security-scan-summary.md`);
-  }
+
 
   // Helper methods
   async getSourceFiles(projectPath: string): Promise<string[]> {
@@ -673,26 +672,26 @@ class AutomatedSecurityScanner {
         // Skip excluded paths
         if (excludePaths.some(exclude => relativePath.includes(exclude))) {
           continue;
-        }
+
         
         if (entry.isDirectory()) {
           await walkDir(fullPath);
-        } else if (entry.isFile()) {
+ else if (entry.isFile()) {
           const ext = path.extname(entry.name);
           if (extensions.includes(ext)) {
             files.push(fullPath);
-          }
-        }
-      }
-    }
+
+
+
+
     
     await walkDir(projectPath);
     return files;
-  }
+
 
   getLineNumber(content: string, index: number): number {
     return content.substring(0, index).split('\n').length;
-  }
+
 
   categorizeBySeverity(findings: any[]): any {
     return findings.reduce((count, finding) => {
@@ -700,34 +699,34 @@ class AutomatedSecurityScanner {
       count[severity] = (count[severity] || 0) + 1;
       return count;
     }, { critical: 0, high: 0, medium: 0, low: 0 });
-  }
+
 
   calculateRiskScore(severityCount: any): number {
     const weights = { critical: 40, high: 20, medium: 5, low: 1 };
     const totalRisk = Object.entries(severityCount)
       .reduce((sum, [sev, count]) => sum + (weights[sev] || 0) * count, 0);
     return Math.min(100, totalRisk);
-  }
+
 
   calculateSecurityScore(severityCount: any): number {
     const riskScore = this.calculateRiskScore(severityCount);
     return Math.max(0, 100 - riskScore);
-  }
+
 
   calculateComplianceScore(): number {
     const compliance = this.scanResults.summary.compliance || {};
     const scores = Object.values(compliance).map(c => c.score || 0);
     return scores.length > 0 ? scores.reduce((sum, score) => sum + score, 0) / scores.length : 0;
-  }
+
 
   async fileExists(filePath: string): Promise<boolean> {
     try {
       await fs.access(filePath);
       return true;
-    } catch {
+ catch {
       return false;
-    }
-  }
+
+
 
   // Mock methods for demonstration
   generateMockDependencyFindings(): any[] {
@@ -741,9 +740,9 @@ class AutomatedSecurityScanner {
         title: 'Prototype Pollution',
         description: 'Vulnerable to prototype pollution attacks',
         recommendation: 'Update lodash to version 4.17.21 or later'
-      }
+
     ];
-  }
+
 
   async scanDockerConfigurations(projectPath: string): Promise<any[]> {
     const findings = [];
@@ -759,10 +758,10 @@ class AutomatedSecurityScanner {
         description: 'Container runs with root privileges',
         recommendation: 'Use non-root USER directive'
       });
-    }
+
     
     return findings;
-  }
+
 
   async scanEnvironmentConfigurations(projectPath: string): Promise<any[]> {
     const findings = [];
@@ -778,31 +777,31 @@ class AutomatedSecurityScanner {
         description: 'Environment file may contain sensitive data',
         recommendation: 'Add .env to .gitignore'
       });
-    }
+
     
     return findings;
-  }
+
 
   async scanWebServerConfigurations(projectPath: string): Promise<any[]> {
     // Mock web server configuration scan
     return [];
-  }
+
 
   async validateOWASPCompliance(): Promise<any> {
     return { score: 85, issues: ['Missing CSRF protection', 'Insufficient logging'] };
-  }
+
 
   async validateNISTCompliance(): Promise<any> {
     return { score: 78, issues: ['Access control gaps', 'Incident response procedures'] };
-  }
+
 
   async validateSOXCompliance(): Promise<any> {
     return { score: 92, issues: ['Audit trail completeness'] };
-  }
+
 
   async validateGDPRCompliance(): Promise<any> {
     return { score: 88, issues: ['Data retention policies', 'Right to deletion'] };
-  }
+
 
   generateExecutiveSummary(): any {
     const metrics = this.scanResults.metrics;
@@ -812,7 +811,7 @@ class AutomatedSecurityScanner {
       complianceStatus: metrics.complianceScore > 80 ? 'COMPLIANT' : 'NON-COMPLIANT',
       recommendedActions: this.scanResults.recommendations.length
     };
-  }
+
 
   generateVulnerabilityBreakdown(): any {
     const breakdown = {};
@@ -820,9 +819,9 @@ class AutomatedSecurityScanner {
       const type = finding.type || 'other';
       if (!breakdown[type]) breakdown[type] = { critical: 0, high: 0, medium: 0, low: 0 };
       breakdown[type][finding.severity || 'low']++;
-    }
+
     return breakdown;
-  }
+
 
   generateSecurityRecommendations(metrics: any): string[] {
     const recommendations = [];
@@ -835,7 +834,7 @@ class AutomatedSecurityScanner {
         timeframe: '24 hours',
         effort: 'High'
       });
-    }
+
     
     if (metrics.securityScore < 70) {
       recommendations.push({
@@ -845,7 +844,7 @@ class AutomatedSecurityScanner {
         timeframe: '1 week',
         effort: 'Medium'
       });
-    }
+
     
     if (metrics.complianceScore < 80) {
       recommendations.push({
@@ -855,10 +854,10 @@ class AutomatedSecurityScanner {
         timeframe: '2 weeks',
         effort: 'Medium'
       });
-    }
+
     
     this.scanResults.recommendations = recommendations;
-  }
+
 
   generateNextSteps(): string[] {
     return [
@@ -868,31 +867,31 @@ class AutomatedSecurityScanner {
       'Schedule regular security scans',
       'Train development team on secure coding practices'
     ];
-  }
+
 
   async saveJSONReport(reportData: any): Promise<void> {
     const reportPath = path.join(__dirname, '../docs/security/epic19-security-scan-report.json');
     await fs.mkdir(path.dirname(reportPath), { recursive: true });
     await fs.writeFile(reportPath, JSON.stringify(reportData, null, 2));
-  }
+
 
   async saveHTMLReport(reportData: any): Promise<void> {
     const htmlContent = this.generateHTMLReport(reportData);
     const reportPath = path.join(__dirname, '../docs/security/epic19-security-scan-report.html');
     await fs.writeFile(reportPath, htmlContent);
-  }
+
 
   async saveSARIFReport(reportData: any): Promise<void> {
     const sarifContent = this.generateSARIFReport(reportData);
     const reportPath = path.join(__dirname, '../docs/security/epic19-security-scan.sarif');
     await fs.writeFile(reportPath, JSON.stringify(sarifContent, null, 2));
-  }
+
 
   async saveMarkdownSummary(reportData: any): Promise<void> {
     const markdownContent = this.generateMarkdownSummary(reportData);
     const reportPath = path.join(__dirname, '../docs/security/epic19-security-scan-summary.md');
     await fs.writeFile(reportPath, markdownContent);
-  }
+
 
   generateHTMLReport(reportData: any): string {
     return `
@@ -952,7 +951,7 @@ class AutomatedSecurityScanner {
     </ul>
 </body>
 </html>`;
-  }
+
 
   generateSARIFReport(reportData: any): string {
     return {
@@ -964,7 +963,7 @@ class AutomatedSecurityScanner {
             name: "Epic19SecurityScanner",
             version: "1.0.0",
             informationUri: "https://github.com/your-org/epic19-security-scanner"
-          }
+
         },
         results: (reportData.detailedFindings || []).map(finding => ({
           ruleId: finding.vulnerability,
@@ -974,12 +973,12 @@ class AutomatedSecurityScanner {
             physicalLocation: {
               artifactLocation: { uri: finding.file },
               region: { startLine: finding.line || 1 }
-            }
-          }] : []
+
+] : []
         }))
-      }]
+]
     };
-  }
+
 
   generateMarkdownSummary(reportData: any): string {
     const summary = reportData.executiveSummary;
@@ -1028,8 +1027,8 @@ ${(reportData.nextSteps || []).map((step, i) => `${i + 1}. ${step}`).join('\n')}
 
 ---
 *Generated by Epic 19 Automated Security Scanner*`;
-  }
-}
+
+
 
 // CLI interface
 async function main(): Promise<void> {
@@ -1048,18 +1047,18 @@ async function main(): Promise<void> {
     if (criticalCount > 0) {
       console.error(`❌ CRITICAL: ${criticalCount} critical vulnerabilities must be fixed`);
       process.exit(1);
-    }
+
     
     process.exit(0);
-  } catch (error) {
+ catch (error) {
     console.error('❌ Security scanning failed:', error);
     process.exit(1);
-  }
-}
+
+
 
 // Run if called directly
 if (require.main === module) {
   main();
-}
+
 
 module.exports = { AutomatedSecurityScanner, SECURITY_SCANNER_CONFIG, VULNERABILITY_DATABASE };

@@ -4,69 +4,67 @@
  */
 import { Notification } from './NotificationCenter';
 
-}
-export interface NotificationPreferences {
-  in_app_enabled: boolean;
+
+export interface NotificationPreferences { in_app_enabled: boolean;
   email_enabled: boolean;
   push_enabled: boolean;
   // Event type preferences
-  comments: {
+  comments: { }
   enabled: boolean;
   channels: ('in_app' | 'email' | 'push')[];
   mentions_only: boolean;
-}
+
+
 };
-  collaboration: {
+  collaboration: { ,
   enabled: boolean;
-  channels: ('in_app' | 'email' | 'push')[];
+  channels: ('in_app' | 'email' | 'push')[] }
   presence_updates: boolean;
 };
-  workspace: {
+  workspace: { ,
   enabled: boolean;
-  channels: ('in_app' | 'email' | 'push')[];
+  channels: ('in_app' | 'email' | 'push')[] }
   member_changes: boolean;
 };
-  approvals: {
+  approvals: { ,
   enabled: boolean;
-  channels: ('in_app' | 'email' | 'push')[];
-};
-  system: {
+  channels: ('in_app' | 'email' | 'push')[] };
+  system: { ,
   enabled: boolean;
-  channels: ('in_app' | 'email' | 'push')[];
+  channels: ('in_app' | 'email' | 'push')[] }
   maintenance_only: boolean;
 };
   // Timing preferences
-  quiet_hours: {
+  quiet_hours: { ,
   enabled: boolean;
-  start_time: string; // HH:MM format,
+  start_time: string; // HH:MM format }
   end_time: string;
   timezone: string;
 };
-  digest: {
+  digest: { ,
   enabled: boolean;
-  frequency: 'hourly' | 'daily' | 'weekly';
-  time: string; // HH:MM format,
+  frequency: 'hourly' | 'daily' | 'weekly';,
+  time: string; // HH:MM format }
 };
-}
-}
-export interface NotificationFilter {
-  filter: 'all' | 'unread' | 'mentions' | 'workspace';
+
+
+export interface NotificationFilter { filter: 'all' | 'unread' | 'mentions' | 'workspace' }
   sort_by: 'newest' | 'priority' | 'type';
   limit?: number;
   offset?: number;
   start_date?: string;
   end_date?: string;
-}
-}
-}
-export interface NotificationStats {
-  total: number;
+
+
+
+
+export interface NotificationStats { total: number;
   unread: number;
   by_type: Record<string, number>;
-  by_priority: Record<string, number>;
-}
+  by_priority: Record<string, number> }
+
   by_day: { date: string; count: number }[];
-}
+
 export class NotificationManager {
   private notifications = new Map<string, Notification>();
   private preferences: NotificationPreferences | null = null;
@@ -82,25 +80,15 @@ export class NotificationManager {
     try {
       const wsUrl = `ws://localhost:8000/ws/notifications/${this.userId}`;}
       this.wsConnection = new WebSocket(wsUrl);
-      this.wsConnection.onopen = () => {
-        console.log('Notification WebSocket connected');
-        this.reconnectAttempts = 0;
-      };
-      this.wsConnection.onmessage = (event) => {
-        try {
+      this.wsConnection.onopen = () => { console.log('Notification WebSocket connected');
+        this.reconnectAttempts = 0 };
+      this.wsConnection.onmessage = (event) => { try {
           const notification = JSON.parse(event.data) as Notification;
-          this.handleIncomingNotification(notification);
-        } catch (error) {
-  console.error('Failed to parse notification:', error);
-};
-      this.wsConnection.onclose = () => {
-        console.log('Notification WebSocket disconnected');
-        this.attemptReconnect();
-      };
-      this.wsConnection.onerror = (error) => {
-  console.error('Notification WebSocket error:', error);
-};
-    } catch (error) {
+          this.handleIncomingNotification(notification) } catch (error) { console.error('Failed to parse notification:', error) };
+      this.wsConnection.onclose = () => { console.log('Notification WebSocket disconnected');
+        this.attemptReconnect() };
+      this.wsConnection.onerror = (error) => { console.error('Notification WebSocket error:', error) };
+ catch (error) {
       console.error('Failed to initialize WebSocket:', error);
   private attemptReconnect() {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
@@ -110,8 +98,7 @@ export class NotificationManager {
         console.log(`Attempting notification WebSocket reconnection (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);}
         this.initializeWebSocket();
       }, delay);
-  private handleIncomingNotification(notification: Notification) {
-  // Store notification
+  private handleIncomingNotification(notification: Notification) { // Store notification
   this.notifications.set(notification.id, notification);
   // Check if notification should be shown based on preferences
   if (this.shouldShowNotification(notification)) {
@@ -139,11 +126,8 @@ export class NotificationManager {
   const currentTime = now.toTimeString().slice(0, 5); // HH:MM format;
   const startTime = this.preferences.quiet_hours.start_time;
   const endTime = this.preferences.quiet_hours.end_time;
-  // Handle overnight quiet hours (e.g., 22:00 to 08:00),
-  if (startTime > endTime) {
-  return currentTime >= startTime || currentTime <= endTime;
-} else {
-  return currentTime >= startTime && currentTime <= endTime;
+  // Handle overnight quiet hours (e.g., 22:00 to 08:00) }
+  if (startTime > endTime) { return currentTime >= startTime || currentTime <= endTime } else { return currentTime >= startTime && currentTime <= endTime;
   private getTypePreferences(notificationType: string) {,
   if (!this.preferences) return null;
   switch (notificationType) {
@@ -168,34 +152,27 @@ export class NotificationManager {
   body: notification.message,
   icon: '/favicon.ico',
   tag: notification.id,
-  requireInteraction: notification.priority === 'urgent',
+  requireInteraction: notification.priority === 'urgent' }
 });
-    browserNotification.onclick = () => {
-      window.focus();
+    browserNotification.onclick = () => { window.focus();
       if (notification.action_url) {
         window.location.href = notification.action_url;
-      browserNotification.close();
-    };
+      browserNotification.close() };
     // Auto-close after 5 seconds for non-urgent notifications
     if (notification.priority !== 'urgent') {
       setTimeout(() => browserNotification.close(), 5000);
   // Public API methods
-  async getNotifications(filter: NotificationFilter): Promise<{ notifications: Notification; total: number; unread_count: number }> {
-
-    try {
+  async getNotifications(filter: NotificationFilter): Promise<{ notifications: Notification; total: number; unread_count: number }> { try {
       const params = new URLSearchParams();
       Object.entries(filter).forEach(([key, value]) => {
         if (value !== undefined) {
-          params.append(key, String(value));
-      });
+          params.append(key, String(value)) });
       const response = await this.apiClient.get(`/api/notifications?${params}`);}
       const result = response.data;
       // Update local cache
-      result.notifications.forEach((notification: Notification) => {
-        this.notifications.set(notification.id, notification);
-      });
+      result.notifications.forEach((notification: Notification) => { this.notifications.set(notification.id, notification) });
       return result;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get notifications:', error);
       throw error;
   async markAsRead(notificationId: string): Promise<void> {
@@ -204,26 +181,22 @@ export class NotificationManager {
       await this.apiClient.put(`/api/notifications/${notificationId}/read`);}
       // Update local cache
       const notification = this.notifications.get(notificationId);
-      if (notification) {
-        notification.read_at = new Date().toISOString();
-        this.notifications.set(notificationId, notification);
-    } catch (error) {
-  console.error('Failed to mark notification as read:', error);
+      if (notification) { notification.read_at = new Date().toISOString();
+        this.notifications.set(notificationId, notification) } catch (error) { console.error('Failed to mark notification as read:', error);
   throw error;
-  async markAllAsRead(notificationIds: string): Promise<void> {,
+  async markAllAsRead(notificationIds: string): Promise<void> {
   try {
   await this.apiClient.put('/api/notifications/read-all', {)
-  notification_ids: notificationIds,
+  notification_ids: notificationIds }
 });
       // Update local cache
       const now = new Date().toISOString();
-      notificationIds.forEach(id => {)
+      notificationIds.forEach(id => { )
   const notification = this.notifications.get(id);
         if (notification) {
           notification.read_at = now;
-          this.notifications.set(id, notification);
-      });
-    } catch (error) {
+          this.notifications.set(id, notification) });
+ catch (error) {
       console.error('Failed to mark all notifications as read:', error);
       throw error;
   async deleteNotification(notificationId: string): Promise<void> {
@@ -231,7 +204,7 @@ export class NotificationManager {
     try {
       await this.apiClient.delete(`/api/notifications/${notificationId}`);}
       this.notifications.delete(notificationId);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to delete notification:', error);
       throw error;
   async getStats(days: number = 30): Promise<NotificationStats> {
@@ -239,90 +212,78 @@ export class NotificationManager {
     try {
       const response = await this.apiClient.get(`/api/notifications/stats?days=${days}`);}
       return response.data;
-    } catch (error) {
-  console.error('Failed to get notification stats:', error);
+ catch (error) { console.error('Failed to get notification stats:', error);
   throw error;
   // Preference management
-  async getPreferences(): Promise<NotificationPreferences> {,
-  try {
-  const response = await this.apiClient.get('/api/notification-preferences');
+  async getPreferences(): Promise<NotificationPreferences> { }
+  try { const response = await this.apiClient.get('/api/notification-preferences');
   this.preferences = response.data;
-  return this.preferences;
-} catch (error) {
-  console.error('Failed to get notification preferences:', error);
+  return this.preferences } catch (error) { console.error('Failed to get notification preferences:', error);
   throw error;
-  async updatePreferences(preferences: Partial<NotificationPreferences>): Promise<NotificationPreferences> {,
-  try {
-  const response = await this.apiClient.put('/api/notification-preferences', preferences);
+  async updatePreferences(preferences: Partial<NotificationPreferences>): Promise<NotificationPreferences> { }
+  try { const response = await this.apiClient.put('/api/notification-preferences', preferences);
   this.preferences = response.data;
-  return this.preferences;
-} catch (error) {
-  console.error('Failed to update notification preferences:', error);
+  return this.preferences } catch (error) { console.error('Failed to update notification preferences:', error);
   throw error;
   private async loadPreferences() {
   try {
-  await this.getPreferences();
-} catch (error) {
-  // Use default preferences if loading fails
+  await this.getPreferences() } catch (error) { // Use default preferences if loading fails
   this.preferences = this.getDefaultPreferences();
-  private getDefaultPreferences(): NotificationPreferences {,
+  private getDefaultPreferences(): NotificationPreferences {
   return {
-  in_app_enabled: true,
-  email_enabled: true,
-  push_enabled: false,
+  in_app_enabled: true
+  email_enabled: true
+  push_enabled: false
   comments: {
-  enabled: true,
-  channels: ['in_app', 'email'],
-  mentions_only: false,
-},
-  collaboration: {
-  enabled: true,
-  channels: ['in_app'],
-  presence_updates: false,
-},
-  workspace: {
-  enabled: true,
-  channels: ['in_app', 'email'],
-  member_changes: true,
-},
-  approvals: {
-  enabled: true,
-  channels: ['in_app', 'email'],
-},
-  system: {
-  enabled: true,
-  channels: ['in_app'],
-  maintenance_only: true,
-},
-  quiet_hours: {
-  enabled: false,
-  start_time: '22:00',
-  end_time: '08:00',
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-},
-  digest: {
-  enabled: false,
-  frequency: 'daily',
-  time: '09:00',
+  enabled: true
+  channels: ['in_app', 'email']
+  mentions_only: false }
+
+  collaboration: { 
+  enabled: true
+  channels: ['in_app']
+  presence_updates: false }
+
+  workspace: { 
+  enabled: true
+  channels: ['in_app', 'email']
+  member_changes: true }
+
+  approvals: { 
+  enabled: true
+  channels: ['in_app', 'email'] }
+
+  system: { 
+  enabled: true
+  channels: ['in_app']
+  maintenance_only: true }
+
+  quiet_hours: { 
+  enabled: false
+  start_time: '22:00'
+  end_time: '08:00'
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }
+
+  digest: { 
+  enabled: false
+  frequency: 'daily'
+  time: '09:00' }
 };
   // Event listeners
-  onNotificationReceived(callback: (notification: Notification) => void): () => void {
-  this.listeners.add(callback);
+  onNotificationReceived(callback: (notification: Notification) => void): () => void { this.listeners.add(callback);
   return () => this.listeners.delete(callback);
   // Utility methods
-  async requestPermission(): Promise<NotificationPermission> {,
+  async requestPermission(): Promise<NotificationPermission> {
   if (!('Notification' in window)) {
   return 'denied';
   if (Notification.permission === 'default') {
   return await Notification.requestPermission();
   return Notification.permission;
-  getUnreadCount(): number {,
+  getUnreadCount(): number {
   return Array.from(this.notifications.values()).filter(n => !n.read_at).length;
   // Send notification (for testing/admin purposes)
-  async sendNotification(notification: Omit<Notification, 'id' | 'user_id' | 'delivered_at'>): Promise<void> {,
-  try {
-  await this.apiClient.post('/api/notifications', notification);
-} catch (error) {
+  async sendNotification(notification: Omit<Notification, 'id' | 'user_id' | 'delivered_at'>): Promise<void> { }
+  try { await this.apiClient.post('/api/notifications', notification) } catch (error) {
       console.error('Failed to send notification:', error);
       throw error;
   // Cleanup

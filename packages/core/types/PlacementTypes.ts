@@ -8,9 +8,8 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
-}
-export interface PlacementSlot {
-  slotId: string;
+
+export interface PlacementSlot { slotId: string;
   name: string;
   displayName: string;
   description: string;
@@ -36,11 +35,9 @@ export interface PlacementSlot {
   createdBy: string;
   lastModifiedBy?: string;
   // Performance Data
-  performanceMetrics?: PlacementSlotMetrics;
-}
-}
-export enum PlacementArea {
-  HOMEPAGE = 'homepage',
+  performanceMetrics?: PlacementSlotMetrics }
+
+export enum PlacementArea { HOMEPAGE = 'homepage',
   CATEGORY_PAGE = 'category_page',
   SEARCH_RESULTS = 'search_results',
   TEMPLATE_DETAIL = 'template_detail',
@@ -65,46 +62,46 @@ export enum PlacementArea {
   export interface PlacementDimensions {
   width?: number;
   height?: number;
-  aspectRatio?: string; // e.g., "16:9", "4:3", "1:1",
+  aspectRatio?: string; // e.g., "16:9", "4:3", "1:1";
   maxWidth?: number;
   maxHeight?: number;
   minWidth?: number;
   minHeight?: number;
   responsive: boolean;
-  breakpoints?: {
-  mobile: Partial<PlacementDimensions>;
+  breakpoints?: {;
+  mobile: Partial<PlacementDimensions> }
   tablet: Partial<PlacementDimensions>;
   desktop: Partial<PlacementDimensions>;
-}
+
+
 };
-}
-}
-export interface PlacementStyling {
-  backgroundColor?: string;
+
+
+export interface PlacementStyling { backgroundColor?: string;
   borderRadius?: number;
   padding?: number;
   margin?: number;
   shadow?: boolean;
-  border?: {
+  border?: {;
   width: number;
   color: string;
-  style: 'solid' | 'dashed' | 'dotted'
-}
+  style: 'solid' | 'dashed' | 'dotted' }
+
+
   };
   animation?: PlacementAnimation;
   customCss?: string;
-}
-}
-export interface PlacementAnimation {
-  type: 'fade' | 'slide' | 'zoom' | 'bounce' | 'none';
+
+
+export interface PlacementAnimation { type: 'fade' | 'slide' | 'zoom' | 'bounce' | 'none' }
   duration: number;
   delay?: number;
   easing?: string;
-}
-}
-}
-export interface PlacementLayout {
-  type: 'grid' | 'carousel' | 'stack' | 'masonry' | 'list';
+
+
+
+
+export interface PlacementLayout { type: 'grid' | 'carousel' | 'stack' | 'masonry' | 'list';
   columns?: number;
   rows?: number;
   gap?: number;
@@ -112,67 +109,60 @@ export interface PlacementLayout {
   itemsPerPage?: number;
   showNavigation?: boolean;
   showPagination?: boolean;
-  autoRotate?: {
+  autoRotate?: {;
   enabled: boolean;
-  interval: number; // seconds,
+  interval: number; // seconds }
   pauseOnHover: boolean;
-}
+
+
 };
-}
-}
-export interface PlacementTargetingRules {
-  userSegments?: string;
-  geographicTargeting?: {
+
+
+export interface PlacementTargetingRules { userSegments?: string;
+  geographicTargeting?: { }
   countries?: string;
   regions?: string;
   cities?: string;
   excludeCountries?: string;
-}
+
+
 };
-  deviceTargeting?: {
-  deviceTypes?: ('desktop' | 'mobile' | 'tablet')[];
+  deviceTargeting?: { deviceTypes?: ('desktop' | 'mobile' | 'tablet')[];
   browsers?: string;
-  operatingSystems?: string;
-};
-  behaviorTargeting?: {
-  previousPurchases?: boolean;
+  operatingSystems?: string };
+  behaviorTargeting?: { previousPurchases?: boolean;
   activityLevel?: 'low' | 'medium' | 'high';
   interests?: string;
-  searchHistory?: string;
-};
-  timeTargeting?: {
-  timeZones?: string;
+  searchHistory?: string };
+  timeTargeting?: { timeZones?: string;
   hoursOfDay?: number;
   daysOfWeek?: number;
-  dateRange?: {
+  dateRange?: { }
   start: Date;
   end: Date;
 };
   };
-}
-}
-export interface PlacementDisplayRules {
-  frequencyCapping?: {
+
+
+export interface PlacementDisplayRules { frequencyCapping?: {;
   maxImpressions: number;
-  timeWindow: number; // hours,
+  timeWindow: number; // hours }
   perUser: boolean;
-}
+
+
 };
-  exclusionRules?: {
-  excludeIfPurchased?: boolean;
+  exclusionRules?: { excludeIfPurchased?: boolean;
   excludeIfViewed?: boolean;
   excludeCompetitors?: boolean;
-  mutuallyExclusive?: string; // other placement slot IDs,
+  mutuallyExclusive?: string; // other placement slot IDs }
 };
-  loadingBehavior?: {
-  lazy: boolean;
+  loadingBehavior?: { lazy: boolean;
   priority: 'high' | 'medium' | 'low';
-  fallback?: string; // fallback content,
+  fallback?: string; // fallback content }
 };
-}
-}
-export interface ContentPlacement {
-  placementId: string;
+
+
+export interface ContentPlacement { placementId: string;
   slotId: string;
   contentId: string;
   contentType: ContentType;
@@ -202,11 +192,9 @@ export interface ContentPlacement {
   createdBy: string;
   lastModifiedBy?: string;
   notes?: string;
-  tags?: string;
-}
-}
-export enum ContentType {
-  TEMPLATE = 'template',
+  tags?: string }
+
+export enum ContentType { TEMPLATE = 'template',
   COLLECTION = 'collection',
   CATEGORY = 'category',
   PROMOTION = 'promotion',
@@ -223,10 +211,9 @@ export enum ContentType {
   export enum PlacementApprovalStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
-  REJECTED = 'rejected',
+  REJECTED = 'rejected' }
   NEEDS_REVIEW = 'needs_review'
-  export interface PlacementSchedule {
-  scheduleId: string;
+  export interface PlacementSchedule { scheduleId: string;
   placementId: string;
   // Schedule Configuration
   type: ScheduleType;
@@ -245,42 +232,40 @@ export enum ContentType {
   // Metadata
   createdAt: Date;
   updatedAt: Date;
-  createdBy: string;
-}
-}
-export enum ScheduleType {
-  ONE_TIME = 'one_time',
+  createdBy: string }
+
+export enum ScheduleType { ONE_TIME = 'one_time',
   RECURRING = 'recurring',
   CONDITIONAL = 'conditional',
   EVENT_BASED = 'event_based'
   export interface SchedulePattern {
   frequency?: 'daily' | 'weekly' | 'monthly' | 'yearly';
   interval?: number;
-  specificTimes?: string; // ["09:00", "12:00", "18:00"],
-  specificDays?: number; // [1, 3, 5] for Mon, Wed, Fri,
+  specificTimes?: string; // ["09:00", "12:00", "18:00"];
+  specificDays?: number; // [1, 3, 5] for Mon, Wed, Fri }
   specificDates?: Date;
-}
-}
-}
-export interface RecurrenceRules {
-  count?: number; // number of occurrences,
-  until?: Date; // end date,
+
+
+
+
+export interface RecurrenceRules { count?: number; // number of occurrences;
+  until?: Date; // end date;
   byWeekDay?: number;
   byMonthDay?: number;
   byMonth?: number;
-  exceptions?: Date; // exclude these dates,
-}
-}
-}
-export interface PlacementCampaign {
-  campaignId: string;
+  exceptions?: Date; // exclude these dates }
+
+
+
+
+export interface PlacementCampaign { campaignId: string;
   name: string;
   description: string;
   // Campaign Configuration
   objective: CampaignObjective;
   budget?: CampaignBudget;
   // Associated Placements
-  placements: string; // placement IDs,
+  placements: string; // placement IDs }
   // Targeting
   globalTargeting?: PlacementTargetingRules;
   // Performance Goals
@@ -296,10 +281,9 @@ export interface PlacementCampaign {
   updatedAt: Date;
   createdBy: string;
   tags?: string;
-}
-}
-export enum CampaignObjective {
-  AWARENESS = 'awareness',
+
+
+export enum CampaignObjective { AWARENESS = 'awareness',
   ENGAGEMENT = 'engagement',
   CONVERSIONS = 'conversions',
   REVENUE = 'revenue',
@@ -308,19 +292,18 @@ export enum CampaignObjective {
   totalBudget?: number;
   dailyBudget?: number;
   currency: string;
-  spendingPace: 'even' | 'accelerated'
-}
-  }
-}
-export interface CampaignKPI {
-  metric: string;
+  spendingPace: 'even' | 'accelerated' }
+
+
+
+
+export interface CampaignKPI { metric: string;
   target: number;
   unit: string;
-  priority: 'high' | 'medium' | 'low'
-}
-  }
-export enum CampaignStatus {
-  DRAFT = 'draft',
+  priority: 'high' | 'medium' | 'low' }
+
+
+export enum CampaignStatus { DRAFT = 'draft',
   SCHEDULED = 'scheduled',
   RUNNING = 'running',
   PAUSED = 'paused',
@@ -332,8 +315,8 @@ export enum CampaignStatus {
   // Visibility Metrics
   impressions: number;
   uniqueViews: number;
-  viewDuration: number; // seconds,
-  viewabilityRate: number; // percentage,
+  viewDuration: number; // seconds;
+  viewabilityRate: number; // percentage;
   // Engagement Metrics
   clicks: number;
   clickThroughRate: number;
@@ -345,16 +328,16 @@ export enum CampaignStatus {
   revenue: number;
   revenuePerView: number;
   // Quality Metrics
-  loadTime: number; // milliseconds,
+  loadTime: number; // milliseconds;
   errorRate: number;
   // Comparative Metrics
-  performanceIndex: number; // vs baseline,
-  competitiveIndex?: number; // vs other slots,
-}
-}
-}
-export interface ContentPlacementMetrics {
-  placementId: string;
+  performanceIndex: number; // vs baseline;
+  competitiveIndex?: number; // vs other slots }
+
+
+
+
+export interface ContentPlacementMetrics { placementId: string;
   period: MetricsPeriod;
   // Content Performance
   impressions: number;
@@ -373,12 +356,11 @@ export interface ContentPlacementMetrics {
   // A/B Testing Results
   liftOverControl?: number;
   confidenceLevel?: number;
-  statisticalSignificance?: boolean;
-}
-}
-}
-export interface CampaignMetrics {
-  campaignId: string;
+  statisticalSignificance?: boolean }
+
+
+
+export interface CampaignMetrics { campaignId: string;
   period: MetricsPeriod;
   // Overall Performance
   totalImpressions: number;
@@ -390,28 +372,28 @@ export interface CampaignMetrics {
   costPerConversion?: number;
   returnOnAdSpend?: number;
   // Goal Achievement
-  kpiProgress: Array<{
+  kpiProgress: Array<{;
   kpi: string;
   current: number;
   target: number;
-  progress: number; // percentage,
-}
-}>;
+  progress: number; // percentage }
+
+
+>;
   // Budget Utilization
   budgetSpent?: number;
   budgetRemaining?: number;
   paceToGoal?: number;
-}
-}
-export interface MetricsPeriod {
-  startDate: Date;
+
+
+export interface MetricsPeriod { startDate: Date;
   endDate: Date;
-  granularity: 'hour' | 'day' | 'week' | 'month'
-}
-  }
-}
-export interface PlacementAnalytics {
-  period: MetricsPeriod;
+  granularity: 'hour' | 'day' | 'week' | 'month' }
+
+
+
+
+export interface PlacementAnalytics { period: MetricsPeriod;
   generatedAt: Date;
   // Overview Metrics
   totalSlots: number;
@@ -419,13 +401,14 @@ export interface PlacementAnalytics {
   totalPlacements: number;
   activePlacements: number;
   // Performance Summary
-  overallPerformance: {
+  overallPerformance: { }
   totalImpressions: number;
   totalClicks: number;
   averageCTR: number;
   totalConversions: number;
   totalRevenue: number;
-}
+
+
 };
   // Top Performers
   topSlots: PlacementSlotMetrics;
@@ -434,64 +417,61 @@ export interface PlacementAnalytics {
   // Insights and Recommendations
   insights: PlacementInsight;
   recommendations: PlacementRecommendation;
-}
-}
-export interface PlacementInsight {
-  insightId: string;
+
+
+export interface PlacementInsight { insightId: string;
   type: 'performance' | 'optimization' | 'trend' | 'anomaly';
   title: string;
   description: string;
   impact: 'low' | 'medium' | 'high' | 'critical';
-  confidence: number; // 0-100,
+  confidence: number; // 0-100 }
   data: Record<string, any>;
   generatedAt: Date;
-}
-}
-}
-export interface PlacementRecommendation {
-  recommendationId: string;
+
+
+
+
+export interface PlacementRecommendation { recommendationId: string;
   category: 'content' | 'targeting' | 'scheduling' | 'creative' | 'budget';
   priority: 'low' | 'medium' | 'high' | 'critical';
   title: string;
   description: string;
   expectedImpact: string;
   actionItems: string;
-  estimatedLift?: number; // percentage,
-  implementationEffort: 'low' | 'medium' | 'high';
+  estimatedLift?: number; // percentage;
+  implementationEffort: 'low' | 'medium' | 'high' }
   generatedAt: Date;
-}
-}
-}
-export interface PlacementPreview {
-  previewId: string;
+
+
+
+
+export interface PlacementPreview { previewId: string;
   slotId: string;
   placements: ContentPlacement;
   // Preview Configuration
   previewMode: 'live' | 'staged' | 'test';
-  viewerContext: {
+  viewerContext: { }
   userSegment?: string;
   deviceType: 'desktop' | 'mobile' | 'tablet';
   location?: string;
   timestamp: Date;
-}
+
+
 };
   // Rendered Output
   renderedContent: RenderedPlacement;
   // Performance Simulation
-  estimatedMetrics?: {
-  expectedCTR: number;
+  estimatedMetrics?: { expectedCTR: number;
   expectedConversions: number;
   expectedRevenue: number;
-  confidence: number;
-};
+  confidence: number };
   createdAt: Date;
   expiresAt: Date;
-}
-}
-export interface RenderedPlacement {
-  placementId: string;
+
+
+export interface RenderedPlacement { placementId: string;
   slotPosition: number;
-  content: {
+  content: { }
   id: string;
   type: ContentType;
   title: string;
@@ -499,34 +479,32 @@ export interface RenderedPlacement {
   imageUrl?: string;
   ctaText?: string;
   targetUrl: string;
-}
+
+
 };
   styling: PlacementStyling;
   metadata: Record<string, any>;
-}
-}
-export interface PlacementFilter {
-  slotIds?: string;
+
+
+export interface PlacementFilter { slotIds?: string;
   contentTypes?: ContentType;
   placementAreas?: PlacementArea;
   status?: PlacementStatus;
   approvalStatus?: PlacementApprovalStatus;
   tags?: string;
-  dateRange?: {
+  dateRange?: { }
   start: Date;
   end: Date;
-}
+
+
 };
-  performanceThreshold?: {
-  metric: string;
+  performanceThreshold?: { metric: string;
   operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
-  value: number;
-};
+  value: number };
   createdBy?: string;
-}
-}
-export interface PlacementSearchCriteria extends PlacementFilter {
-  query?: string;
+
+
+export interface PlacementSearchCriteria extends PlacementFilter { query?: string;
   sortBy?: 'createdAt' | 'priority' | 'performance' | 'name';
   sortOrder?: 'asc' | 'desc';
   limit?: number;
@@ -538,27 +516,27 @@ export interface PlacementSearchCriteria extends PlacementFilter {
   operationData?: Record<string, any>;
   // Execution Status
   status: 'pending' | 'running' | 'completed' | 'failed';
-  progress: number; // 0-100,
+  progress: number; // 0-100;
   // Results
   successCount: number;
   failureCount: number;
-  errors: Array<{
+  errors: Array<{ }
   placementId: string;
   error: string;
-}
-}>;
+
+
+>;
   // Metadata
   createdAt: Date;
   completedAt?: Date;
   initiatedBy: string;
-}
-}
-export interface PlacementTemplate {
-  templateId: string;
+
+
+export interface PlacementTemplate { templateId: string;
   name: string;
   description: string;
   // Template Configuration
-  slotConfiguration: Partial<PlacementSlot>;
+  slotConfiguration: Partial<PlacementSlot> }
   defaultPlacements: Array<Partial<ContentPlacement>>;
   // Usage and Application
   category: string;
@@ -573,21 +551,22 @@ export interface PlacementTemplate {
   createdBy: string;
   version: string;
   tags: string;
-}
-}
-}
-export interface PlacementAuditLog {
-  logId: string;
+
+
+
+
+export interface PlacementAuditLog { logId: string;
   entityType: 'slot' | 'placement' | 'campaign' | 'schedule';
   entityId: string;
   action: string;
   // Change Details
-  changes?: Array<{
+  changes?: Array<{ }
   field: string;
   oldValue: any;
   newValue: any;
-}
-}>;
+
+
+>;
   // Context
   userId: string;
   userRole: string;
@@ -597,4 +576,3 @@ export interface PlacementAuditLog {
   timestamp: Date;
   reason?: string;
   additionalData?: Record<string, any>;
-}

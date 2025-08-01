@@ -181,7 +181,8 @@ const getStatusVariant = useCallback((status) => {
         case 'completed': return 'default';
         case 'paused': return 'secondary';
         case 'archived': return 'outline';
-        default: return 'secondary';
+        default: return 'secondary',
+        ;
     }
     [];
 });

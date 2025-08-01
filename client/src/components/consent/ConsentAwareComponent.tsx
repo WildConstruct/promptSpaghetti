@@ -10,17 +10,17 @@ import React, { useState, useCallback } from 'react';
 import { 
   useJustInTimeConsentContext, 
   useConsentPrompt
-} from './JustInTimeConsentProvider';
+ from './JustInTimeConsentProvider';
 import { useConsent } from '../../hooks/useConsent';
 import { ConsentType } from '../../types/consent';
 
-// Example 1: Analytics Dashboard - requires analytics consent
+// Example 1: Analytics Dashboard - requires analytics consent;
 
-}
+
 interface AnalyticsDashboardProps {
   data?: unknown;
 
-}
+
   const { promptForConsent } = useConsentPrompt();
   const [isLoading, setIsLoading] = useState(false);
   const handleViewAnalytics = async () => {
@@ -73,9 +73,9 @@ export const [email, setEmail] = useState('');
   console.log('Subscribing to newsletter:', email);
   alert('Subscribed successfully!');
   setEmail('');
-} catch (error) {
+ catch (error) {
   console.error('Newsletter signup failed:', error);
-} finally {
+ finally {
       setIsSubmitting(false);
 
   };
@@ -128,14 +128,13 @@ export const { triggerPromptForElement } = useJustInTimeConsentContext();
     try {
       if (navigator.share) {
         await navigator.share({ title, url });
-      } else {
+ else {
         // Fallback to copying URL
         await navigator.clipboard.writeText(url);
         alert('Link copied to clipboard!');
-
-    } catch (error) {
+ catch (error) {
   console.error('Share failed:', error);
-} finally {
+ finally {
       setIsSharing(false);
 
   };

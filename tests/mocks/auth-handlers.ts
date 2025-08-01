@@ -49,7 +49,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'Email and password are required'
           })
         );
-      }
+
 
       const user = mockUsers.get(email);
       
@@ -61,7 +61,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'Invalid email or password'
           })
         );
-      }
+
 
       if (!user.isActive) {
         return res(
@@ -71,7 +71,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'Account is deactivated'
           })
         );
-      }
+
 
       // In real implementation, verify password hash
       const isValidPassword = password === 'password123' || 
@@ -85,7 +85,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'Invalid email or password'
           })
         );
-      }
+
 
       // Generate mock tokens
       const accessToken = `mock_access_token_${user.id}_${Date.now()}`;
@@ -113,11 +113,10 @@ export     const { email, password } = req.body as { email: string; password: st
             accessToken,
             refreshToken,
             expiresIn: 3600
-          }
+
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -125,7 +124,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Login failed'
         })
       );
-    }
+
   }),
 
   // POST /api/auth/register - User registration
@@ -144,10 +143,10 @@ export     const { email, password } = req.body as { email: string; password: st
               email: !email ? 'Email is required' : null,
               password: !password ? 'Password is required' : null,
               username: !username ? 'Username is required' : null
-            }
+
           })
         );
-      }
+
 
       // Check if user already exists
       if (mockUsers.has(email)) {
@@ -158,7 +157,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'User with this email already exists'
           })
         );
-      }
+
 
       // Check username uniqueness
       const existingUsername = Array.from(mockUsers.values())
@@ -172,7 +171,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'Username already taken'
           })
         );
-      }
+
 
       // Create new user
       const newUser = {
@@ -204,8 +203,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'User registered successfully'
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -213,7 +211,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Registration failed'
         })
       );
-    }
+
   }),
 
   // POST /api/auth/logout - User logout
@@ -223,7 +221,7 @@ export     const { email, password } = req.body as { email: string; password: st
     if (authHeader) {
       const token = authHeader.replace('Bearer ', '');
       mockSessions.delete(token);
-    }
+
 
     return res(
       ctx.status(200),
@@ -244,7 +242,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'Refresh token is required'
           })
         );
-      }
+
 
       // In real implementation, validate refresh token
       // For testing, generate new tokens
@@ -265,11 +263,10 @@ export     const { email, password } = req.body as { email: string; password: st
             accessToken: newAccessToken,
             refreshToken: newRefreshToken,
             expiresIn: 3600
-          }
+
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(401),
         ctx.json({
@@ -277,7 +274,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Invalid refresh token'
         })
       );
-    }
+
   }),
 
   // GET /api/auth/profile - Get user profile
@@ -292,7 +289,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Authentication token required'
         })
       );
-    }
+
 
     const token = authHeader.replace('Bearer ', '');
     const session = mockSessions.get(token);
@@ -305,7 +302,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Invalid or expired token'
         })
       );
-    }
+
 
     // Find user by session
     const user = Array.from(mockUsers.values())
@@ -319,7 +316,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'User not found'
         })
       );
-    }
+
 
     return res(
       ctx.status(200),
@@ -334,7 +331,7 @@ export     const { email, password } = req.body as { email: string; password: st
           isActive: user.isActive,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt
-        }
+
       })
     );
   }),
@@ -351,7 +348,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Authentication token required'
         })
       );
-    }
+
 
     const token = authHeader.replace('Bearer ', '');
     const session = mockSessions.get(token);
@@ -364,7 +361,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Invalid or expired token'
         })
       );
-    }
+
 
     try {
       const updates = await req.json();
@@ -381,7 +378,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'User not found'
           })
         );
-      }
+
 
       const [email, user] = userEntry;
       const updatedUser = {
@@ -404,11 +401,10 @@ export     const { email, password } = req.body as { email: string; password: st
             firstName: updatedUser.firstName,
             lastName: updatedUser.lastName,
             role: updatedUser.role
-          }
+
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -416,7 +412,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Profile update failed'
         })
       );
-    }
+
   }),
 
   // POST /api/auth/change-password - Change user password
@@ -431,7 +427,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Authentication token required'
         })
       );
-    }
+
 
     const token = authHeader.replace('Bearer ', '');
     const session = mockSessions.get(token);
@@ -444,7 +440,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Invalid token'
         })
       );
-    }
+
 
     try {
       const { currentPassword, newPassword } = await req.json();
@@ -457,7 +453,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'Current password and new password are required'
           })
         );
-      }
+
 
       // Find user and update password
       const userEntry = Array.from(mockUsers.entries())
@@ -471,7 +467,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'User not found'
           })
         );
-      }
+
 
       const [email, user] = userEntry;
       
@@ -495,8 +491,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Password changed successfully. Please login again.'
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -504,7 +499,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Password change failed'
         })
       );
-    }
+
   }),
 
   // POST /api/auth/forgot-password - Request password reset
@@ -520,7 +515,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'Email is required'
           })
         );
-      }
+
 
       // Always return success for security (don't reveal if email exists)
       return res(
@@ -529,8 +524,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'If an account with that email exists, a password reset link has been sent.'
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -538,7 +532,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Password reset request failed'
         })
       );
-    }
+
   }),
 
   // POST /api/auth/reset-password - Reset password with token
@@ -554,7 +548,7 @@ export     const { email, password } = req.body as { email: string; password: st
             message: 'Reset token and new password are required'
           })
         );
-      }
+
 
       // In real implementation, validate reset token
       // For testing, always succeed
@@ -564,8 +558,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Password reset successfully. You can now login with your new password.'
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -573,7 +566,7 @@ export     const { email, password } = req.body as { email: string; password: st
           message: 'Password reset failed'
         })
       );
-    }
+
   }),
 
   // GET /api/auth/verify-email/:token - Verify email address

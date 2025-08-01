@@ -4,8 +4,7 @@
  *
  * Simplified reporting categories for deployment readiness
  */
-export declare enum Epic16ReportCategory {
-    CREATOR_PERFORMANCE = "creator_performance",
+export declare enum Epic16ReportCategory { CREATOR_PERFORMANCE = "creator_performance",
     MARKETPLACE_OVERVIEW = "marketplace_overview",
     REVENUE_ANALYTICS = "revenue_analytics",
     COMMUNITY_METRICS = "community_metrics"
@@ -17,9 +16,10 @@ export declare enum ReportAudience {
 
 export declare enum ReportFormat {
     DASHBOARD = "dashboard",
-    PDF = "pdf",
+    PDF = "pdf" }
     CSV = "csv"
 
+}
 }
 export interface ReportCategoryDefinition {
     id: Epic16ReportCategory;
@@ -35,4 +35,5 @@ export declare class Epic16ReportCategoryService {
 
 export declare const epic16ReportCategoryService: Epic16ReportCategoryService;
 //# sourceMappingURL=Epic16ReportCategories.d.ts.map
+}
 }

@@ -4,20 +4,20 @@
  * Service layer for integrating the real-time dashboard with existing
  * analytics routes and consolidating dashboard functionality.
  */
-import { 
-  UnifiedEventBus,
+import { UnifiedEventBus,
   UnifiedAnalyticsEvent,
   EventFilter,
-  AnalyticsEventType,
+  AnalyticsEventType }
   EventCategory
-} from './UnifiedEventBus';
+ from './UnifiedEventBus';
 import { EventRepository } from './EventPersistenceLayer';
 import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthorization';
 import { WebSocketStreamingServer } from './WebSocketStreaming';
 import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 
 // Dashboard Integration Configuration
-}
+
+
 interface DashboardIntegrationConfig {
   enableLegacySupport: boolean;
   migrationMode: 'gradual' | 'immediate' | 'parallel';
@@ -25,20 +25,21 @@ interface DashboardIntegrationConfig {
   cacheTTL: number;
   webhookEndpoints: string;
   alertingEnabled: boolean;
+  // Legacy Analytics System Info
 
-// Legacy Analytics System Info
-}
-interface LegacyAnalyticsSystem {
-  name: string;
+
+
+interface LegacyAnalyticsSystem { name: string;
   routePath: string;
-  dataFormat: 'dao' | 'rest' | 'event';
+  dataFormat: 'dao' | 'rest' | 'event' }
   migrationStatus: 'pending' | 'in_progress' | 'completed' | 'failed';
   lastSync: number;
   eventCount: number;
   healthStatus: 'healthy' | 'degraded' | 'failing';
+  // Dashboard Widget Performance Metrics
 
-// Dashboard Widget Performance Metrics
-}
+
+
 interface WidgetPerformanceMetrics {
   widgetId: string;
   widgetType: string;
@@ -47,9 +48,10 @@ interface WidgetPerformanceMetrics {
   cacheHitRate: number;
   queryCount: number;
   lastUpdate: number;
+  // Integration Status
 
-// Integration Status
-}
+
+
 interface IntegrationStatus {
   totalSystems: number;
   integratedSystems: number;
@@ -58,20 +60,20 @@ interface IntegrationStatus {
   eventThroughput: number;
   systemHealth: number;
   lastHealthCheck: number;
+  // Statistics Interface
 
-// Statistics Interface
-}
-interface EventStatistics {
-  totalEvents: number;
+
+
+interface EventStatistics { totalEvents: number;
   eventsBySource?: Record<string, number>;
   eventsByCategory?: Record<string, number>;
   eventsByType?: Record<string, number>;
-/**
- * Dashboard Integration Service
- * 
- * Manages the integration between the unified dashboard and existing analytics systems
- */
-export class DashboardIntegrationService {
+  /**
+  * Dashboard Integration Service
+  *
+  * Manages the integration between the unified dashboard and existing analytics systems
+  */
+  export class DashboardIntegrationService {
   private eventBus: UnifiedEventBus;
   private eventRepository: EventRepository;
   private authService: AnalyticsAuthorizationService;
@@ -79,28 +81,27 @@ export class DashboardIntegrationService {
   private adapters: AnalyticsAdapterManager;
   private config: DashboardIntegrationConfig;
   private legacySystems: Map<string, LegacyAnalyticsSystem> = new Map();
-  private performanceMetrics: Map<string, WidgetPerformanceMetrics> = new Map();
-}
+  private performanceMetrics: Map<string, WidgetPerformanceMetrics> = new Map() }
+
   private integrationCache: Map<string, { data: unknown; timestamp: number }> = new Map();
   constructor();
-    eventBus: UnifiedEventBus,
-    eventRepository: EventRepository,
-    authService: AnalyticsAuthorizationService,
-    wsServer: WebSocketStreamingServer,
-    adapters: AnalyticsAdapterManager,
+    eventBus: UnifiedEventBus
+    eventRepository: EventRepository
+    authService: AnalyticsAuthorizationService
+    wsServer: WebSocketStreamingServer
+    adapters: AnalyticsAdapterManager
     config: Partial<DashboardIntegrationConfig> = {}
     this.eventBus = eventBus;
     this.eventRepository = eventRepository;
     this.authService = authService;
     this.wsServer = wsServer;
     this.adapters = adapters;
-    this.config = {
-  enableLegacySupport: true,
-  migrationMode: 'gradual',
-  cacheEnabled: true,
-  cacheTTL: 300000, // 5 minutes,
-  webhookEndpoints: [],
-  alertingEnabled: true,
+    this.config = { enableLegacySupport: true
+  migrationMode: 'gradual'
+  cacheEnabled: true
+  cacheTTL: 300000, // 5 minutes
+  webhookEndpoints: []
+  alertingEnabled: true }
   ...config
 };
     this.initializeLegacySystems();
@@ -110,53 +111,47 @@ export class DashboardIntegrationService {
    */
   private initializeLegacySystems(): void {
     const legacySystems: Array<Omit<LegacyAnalyticsSystem, 'lastSync' | 'eventCount' | 'healthStatus'>> = [
-      { name: 'MainAnalytics', routePath: '/analytics', dataFormat: 'dao', migrationStatus: 'completed' },
-      { name: 'IntegrationAnalytics', routePath: '/integration-analytics', dataFormat: 'rest', migrationStatus: 'completed' },
-      { name: 'BehaviorAnalytics', routePath: '/behavior-analytics', dataFormat: 'dao', migrationStatus: 'completed' },
-      { name: 'PerformanceMonitoring', routePath: '/epic17-performance-monitoring', dataFormat: 'rest', migrationStatus: 'completed' },
-      { name: 'FraudMonitoring', routePath: '/fraud-monitoring', dataFormat: 'event', migrationStatus: 'completed' },
-      { name: 'TransactionMonitoring', routePath: '/transaction-monitoring', dataFormat: 'dao', migrationStatus: 'completed' },
-      { name: 'SearchAnalytics', routePath: '/search-analytics', dataFormat: 'dao', migrationStatus: 'completed' },
-      { name: 'SecurityEventMonitoring', routePath: '/security-event-monitoring', dataFormat: 'event', migrationStatus: 'completed' },
-      { name: 'SessionMonitoring', routePath: '/session-monitoring', dataFormat: 'dao', migrationStatus: 'completed' },
-      { name: 'FileBrowserAnalytics', routePath: '/file-browser-analytics', dataFormat: 'dao', migrationStatus: 'completed' },
-      { name: 'RevenueAnalytics', routePath: '/revenue-analytics', dataFormat: 'rest', migrationStatus: 'completed' },
+      { name: 'MainAnalytics', routePath: '/analytics', dataFormat: 'dao', migrationStatus: 'completed' }
+      { name: 'IntegrationAnalytics', routePath: '/integration-analytics', dataFormat: 'rest', migrationStatus: 'completed' }
+      { name: 'BehaviorAnalytics', routePath: '/behavior-analytics', dataFormat: 'dao', migrationStatus: 'completed' }
+      { name: 'PerformanceMonitoring', routePath: '/epic17-performance-monitoring', dataFormat: 'rest', migrationStatus: 'completed' }
+      { name: 'FraudMonitoring', routePath: '/fraud-monitoring', dataFormat: 'event', migrationStatus: 'completed' }
+      { name: 'TransactionMonitoring', routePath: '/transaction-monitoring', dataFormat: 'dao', migrationStatus: 'completed' }
+      { name: 'SearchAnalytics', routePath: '/search-analytics', dataFormat: 'dao', migrationStatus: 'completed' }
+      { name: 'SecurityEventMonitoring', routePath: '/security-event-monitoring', dataFormat: 'event', migrationStatus: 'completed' }
+      { name: 'SessionMonitoring', routePath: '/session-monitoring', dataFormat: 'dao', migrationStatus: 'completed' }
+      { name: 'FileBrowserAnalytics', routePath: '/file-browser-analytics', dataFormat: 'dao', migrationStatus: 'completed' }
+      { name: 'RevenueAnalytics', routePath: '/revenue-analytics', dataFormat: 'rest', migrationStatus: 'completed' }
       { name: 'SystemMonitoring', routePath: '/system-monitoring', dataFormat: 'event', migrationStatus: 'completed' }
     ];
-    legacySystems.forEach(system => {)
+    legacySystems.forEach(system => { )
   this.legacySystems.set(system.name, {)
-  ...system,
-  lastSync: Date.now(),
-  eventCount: 0,
-  healthStatus: 'healthy',
+  ...system
+  lastSync: Date.now()
+  eventCount: 0
+  healthStatus: 'healthy' }
 });
     });
     console.log(`Initialized ${this.legacySystems.size} legacy analytics systems`);}
   /**
    * Setup performance monitoring for dashboard widgets
    */
-  private setupPerformanceMonitoring(): void {
-    if (!this.config.cacheEnabled) return;
+  private setupPerformanceMonitoring(): void { if (!this.config.cacheEnabled) return;
     // Monitor widget performance every 30 seconds
     setInterval(() => {
-      this.updatePerformanceMetrics();
-    }, 30000);
+      this.updatePerformanceMetrics() }, 30000);
     // Clean up old cache entries every 5 minutes
-    setInterval(() => {
-      this.cleanupCache();
-    }, 300000);
+    setInterval(() => { this.cleanupCache() }, 300000);
   /**
    * Get consolidated dashboard data from all integrated systems
    */
   async getConsolidatedDashboardData(filter: EventFilter)
-    authContext: AuthContext,
+  authContext: AuthContext
     cacheKey?: string
-  ): Promise<{
-  metrics: unknown;
+  ): Promise<{ metrics: unknown;
   events: UnifiedAnalyticsEvent;
   timeSeriesData: unknown;
-  integrationStatus: IntegrationStatus;
-}> {
+  integrationStatus: IntegrationStatus }> {
 
     const startTime = Date.now();
     try {
@@ -165,12 +160,10 @@ export class DashboardIntegrationService {
         const cached = this.getCachedData(cacheKey);
         if (cached) {
           console.log(`Dashboard data served from cache for key: ${cacheKey}`);}
-          return cached as {
-  metrics: unknown;
+          return cached as { metrics: unknown;
   events: UnifiedAnalyticsEvent;
   timeSeriesData: unknown;
-  integrationStatus: IntegrationStatus;
-};
+  integrationStatus: IntegrationStatus };
       // Authorize query filter
       const queryAuth = await this.authService.authorizeAnalyticsQuery(filter, authContext);
       if (!queryAuth.allowed) {
@@ -178,11 +171,11 @@ export class DashboardIntegrationService {
       const authorizedFilter = queryAuth.filteredQuery!;
       // Get data from unified event repository
       const [events, statistics] = await Promise.all([)
-        this.eventRepository.findMany({)
+        this.eventRepository.findMany({ )
   filter: authorizedFilter,
   limit: 1000,
   sortBy: 'timestamp',
-  sortOrder: 'desc',
+  sortOrder: 'desc' }
 }),
         this.eventRepository.getStatistics(authorizedFilter)
       ]);
@@ -196,33 +189,29 @@ export class DashboardIntegrationService {
       );
       // Get integration status
       const integrationStatus = await this.getIntegrationStatus();
-      const result = {
-  metrics,
+      const result = { metrics,
   events,
-  timeSeriesData: timeSeriesData.map(point => ({)
+  timeSeriesData: timeSeriesData.map(point => ({),
   timestamp: point.timestamp,
   value: point.value,
-  label: 'Events',
+  label: 'Events' }
 })),
         integrationStatus
       };
       // Cache the result
-      if (this.config.cacheEnabled && cacheKey) {
-        this.setCachedData(cacheKey, result);
+      if (this.config.cacheEnabled && cacheKey) { this.setCachedData(cacheKey, result);
       // Update performance metrics
       const loadTime = Date.now() - startTime;
       this.updateWidgetPerformance('dashboard', 'consolidated', loadTime, false);
-      return result;
-    } catch (error) {
-      const loadTime = Date.now() - startTime;
+      return result } catch (error) { const loadTime = Date.now() - startTime;
       this.updateWidgetPerformance('dashboard', 'consolidated', loadTime, true);
       throw error;
   /**
    * Calculate consolidated metrics from all systems
    */
-  private async calculateConsolidatedMetrics(events: UnifiedAnalyticsEvent)
-    statistics: EventStatistics,
-    filter: EventFilter): Promise<any> {,
+  private async calculateConsolidatedMetrics(events: UnifiedAnalyticsEvent),
+  statistics: EventStatistics,
+    filter: EventFilter): Promise<any> { }
     const timeRange = (filter.endTime || Date.now()) - (filter.startTime || Date.now() - 86400000);
     // Basic metrics
     const eventsPerSecond = statistics.totalEvents / (timeRange / 1000);
@@ -234,40 +223,37 @@ export class DashboardIntegrationService {
     const sourceCounts = statistics.eventsBySource || {};
     const totalSourceEvents = Object.values(sourceCounts).reduce((sum: number, count: unknown) => sum + (typeof count === 'number' ? count : 0), 0);
     const topSources = Object.entries(sourceCounts);
-      .map(([source, count]) => ({)
-  source,
-  count: typeof count === 'number' ? count : 0,
-  percentage: totalSourceEvents > 0 ? ((typeof count === 'number' ? count : 0) / totalSourceEvents) * 100 : 0,
+      .map(([source, count]) => ({ )
+  source
+  count: typeof count === 'number' ? count : 0
+  percentage: totalSourceEvents > 0 ? ((typeof count === 'number' ? count : 0) / totalSourceEvents) * 100 : 0 }
 }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
     // Integration status from legacy systems
     const integrationStatus: { [key: string]: 'healthy' | 'degraded' | 'failing' } = {};
-    for (const [name, system] of this.legacySystems) {
-  integrationStatus[name] = system.healthStatus;
+    for (const [name, system] of this.legacySystems) { integrationStatus[name] = system.healthStatus;
   // System health calculation incorporating all systems
   const systemHealth = Math.max(0, 100 - errorRate - this.calculateSystemHealthPenalty());
   // Business metrics aggregation
   const businessMetrics = await this.calculateBusinessMetrics(events, filter);
   return {
-  totalEvents: statistics.totalEvents,
-  eventsPerSecond: Math.round(eventsPerSecond * 100) / 100,
-  activeUsers: uniqueUsers,
-  activeSessions: uniqueSessions,
-  errorRate: Math.round(errorRate * 100) / 100,
-  systemHealth: Math.round(systemHealth),
-  integrationStatus,
-  topSources,
-  businessMetrics,
-  legacySystemsStatus: this.getLegacySystemsStatus(),
-  performanceMetrics: this.getAggregatedPerformanceMetrics(),
+  totalEvents: statistics.totalEvents
+  eventsPerSecond: Math.round(eventsPerSecond * 100) / 100
+  activeUsers: uniqueUsers
+  activeSessions: uniqueSessions
+  errorRate: Math.round(errorRate * 100) / 100
+  systemHealth: Math.round(systemHealth)
+  integrationStatus
+  topSources
+  businessMetrics
+  legacySystemsStatus: this.getLegacySystemsStatus()
+  performanceMetrics: this.getAggregatedPerformanceMetrics() }
 };
   /**
    * Calculate business metrics from consolidated data
    */
-  private async calculateBusinessMetrics(events: UnifiedAnalyticsEvent, filter: EventFilter): Promise<any> {
-
-  const businessEvents = events.filter(e => e.category === EventCategory.BUSINESS || e.category === EventCategory.USER);
+  private async calculateBusinessMetrics(events: UnifiedAnalyticsEvent, filter: EventFilter): Promise<any> { const businessEvents = events.filter(e => e.category === EventCategory.BUSINESS || e.category === EventCategory.USER);
   // Graph creation metrics
   const graphEvents = events.filter(e => e.type === AnalyticsEventType.GRAPH_EXECUTION || e.type === AnalyticsEventType.GRAPH_CREATED);
   const graphsCreated = graphEvents.filter(e => e.type === AnalyticsEventType.GRAPH_CREATED).length;
@@ -276,32 +262,27 @@ export class DashboardIntegrationService {
   const revenueEvents = events.filter(e => e.source === 'RevenueAnalytics');
   const totalRevenue = revenueEvents.reduce((sum, event) => {
   const amount = typeof event.data.amount === 'number' ? event.data.amount : 0;
-  return sum + amount;
-}, 0);
+  return sum + amount }, 0);
     // Feature usage metrics
     const featureUsage: { [feature: string]: number } = {};
-    events.forEach(event => {)
+    events.forEach(event => { )
   const feature = typeof event.data.feature === 'string' ? event.data.feature : null;
   if (feature) {
-  featureUsage[feature] = (featureUsage[feature] || 0) + 1;
-});
+  featureUsage[feature] = (featureUsage[feature] || 0) + 1 });
     const topFeatures = Object.entries(featureUsage);
       .sort(([ a], [ b]) => b - a)
       .slice(0, 5)
       .map(([feature, usage]) => ({ feature, usage }));
-    return {
-  graphsCreated,
-  graphsExecuted,
-  totalRevenue: Math.round(totalRevenue * 100) / 100,
-  topFeatures,
-  conversionRate: graphsCreated > 0 ? (graphsExecuted / graphsCreated) * 100 : 0,
+    return { graphsCreated
+  graphsExecuted
+  totalRevenue: Math.round(totalRevenue * 100) / 100
+  topFeatures
+  conversionRate: graphsCreated > 0 ? (graphsExecuted / graphsCreated) * 100 : 0 }
 };
   /**
    * Get integration status for all systems
    */
-  async getIntegrationStatus(): Promise<IntegrationStatus> {
-
-  const totalSystems = this.legacySystems.size;
+  async getIntegrationStatus(): Promise<IntegrationStatus> { const totalSystems = this.legacySystems.size;
   const integratedSystems = Array.from(this.legacySystems.values());
   .filter(system => system.migrationStatus === 'completed').length;
   const migrationProgress = totalSystems > 0 ? (integratedSystems / totalSystems) * 100 : 100;
@@ -310,9 +291,9 @@ export class DashboardIntegrationService {
   // Calculate event throughput from recent events
   const recentEvents = await this.eventRepository.findMany({)
   filter: {
-  startTime: Date.now() - 300000, // Last 5 minutes,
-  endTime: Date.now(),
-},
+  startTime: Date.now() - 300000, // Last 5 minutes
+  endTime: Date.now() }
+
   limit: 10000;
   });
     const eventThroughput = recentEvents.length / 300; // Events per second over last 5 minutes;
@@ -320,22 +301,21 @@ export class DashboardIntegrationService {
     const healthySystemsCount = Array.from(this.legacySystems.values());
       .filter(system => system.healthStatus === 'healthy').length;
     const systemHealth = totalSystems > 0 ? (healthySystemsCount / totalSystems) * 100 : 100;
-    return {
-  totalSystems,
-  integratedSystems,
-  migrationProgress: Math.round(migrationProgress),
-  activeConnections,
-  eventThroughput: Math.round(eventThroughput * 100) / 100,
-  systemHealth: Math.round(systemHealth),
-  lastHealthCheck: Date.now(),
+    return { totalSystems
+  integratedSystems
+  migrationProgress: Math.round(migrationProgress)
+  activeConnections
+  eventThroughput: Math.round(eventThroughput * 100) / 100
+  systemHealth: Math.round(systemHealth)
+  lastHealthCheck: Date.now() }
 };
   /**
    * Get widget-specific performance data
    */
   async getWidgetPerformanceData(widgetId: string)
-    widgetType: string,
-    filter: EventFilter,
-    authContext: AuthContext): Promise<any> {,
+  widgetType: string
+    filter: EventFilter
+    authContext: AuthContext): Promise<any> {
     const startTime = Date.now();
     const cacheKey = `widget_${widgetId}_${JSON.stringify(filter)}`;}
     try {
@@ -347,28 +327,25 @@ export class DashboardIntegrationService {
           return cached;
       // Get widget-specific data using appropriate adapter
       let widgetData: Record<string, unknown> = {};
-      switch (widgetType) {
-  case 'performance_metrics':,
+      switch (widgetType) { case 'performance_metrics':
   widgetData = await this.getPerformanceWidgetData(filter, authContext);
   break;
-  case 'integration_status':,
+  case 'integration_status':
   widgetData = await this.getIntegrationWidgetData(filter, authContext);
   break;
-  case 'business_metrics':,
+  case 'business_metrics':
   widgetData = await this.getBusinessWidgetData(filter, authContext);
   break;
-  case 'security_events':,
+  case 'security_events':
   widgetData = await this.getSecurityWidgetData(filter, authContext);
   break;
-  default:,
+  default: }
   // Use standard event repository for other widget types
   widgetData = await this.getStandardWidgetData(widgetType, filter, authContext);
   // Cache the result
-  if (this.config.cacheEnabled) {
-  this.setCachedData(cacheKey, widgetData);
+  if (this.config.cacheEnabled) { this.setCachedData(cacheKey, widgetData);
   this.updateWidgetPerformance(widgetId, widgetType, Date.now() - startTime, false, false);
-  return widgetData;
-} catch (error) {
+  return widgetData } catch (error) {
       this.updateWidgetPerformance(widgetId, widgetType, Date.now() - startTime, true, false);
       throw error;
   /**
@@ -377,14 +354,14 @@ export class DashboardIntegrationService {
   private async getPerformanceWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
 
     const performanceEvents = await this.eventRepository.findMany({)
-  filter: { ...filter, categories: [EventCategory.PERFORMANCE] },
-      limit: 1000,
-      sortBy: 'timestamp',
-      sortOrder: 'desc'
+  filter: { ...filter, categories: [EventCategory.PERFORMANCE] }
+      limit: 1000
+      sortBy: 'timestamp'
+      sortOrder: 'desc';
   });
     const timeSeriesData = await this.eventRepository.getTimeSeriesData(;);
-      'avg',
-      'minute',
+      'avg'
+      'minute'
       { ...filter, categories: [EventCategory.PERFORMANCE] }
     );
     // Calculate performance metrics
@@ -400,14 +377,13 @@ export class DashboardIntegrationService {
     const avgMemoryUsage = memoryUsage.length > 0;
       ? memoryUsage.reduce((sum, usage) => sum + usage, 0) / memoryUsage.length
       : 0;
-    return {
-  averageExecutionTime: Math.round(avgExecutionTime * 100) / 100,
-  averageMemoryUsage: Math.round(avgMemoryUsage / 1024 / 1024 * 100) / 100, // Convert to MB,
+    return { averageExecutionTime: Math.round(avgExecutionTime * 100) / 100
+  averageMemoryUsage: Math.round(avgMemoryUsage / 1024 / 1024 * 100) / 100, // Convert to MB
   timeSeriesData: timeSeriesData.map(point => ({)
-  timestamp: point.timestamp,
-  value: point.value,
-  label: 'Performance',
-})),
+  timestamp: point.timestamp
+  value: point.value
+  label: 'Performance' }
+}))
       eventCount: performanceEvents.length;
   };
   /**
@@ -416,25 +392,23 @@ export class DashboardIntegrationService {
   private async getIntegrationWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
 
     const integrationEvents = await this.eventRepository.findMany({)
-  filter: { ...filter, categories: [EventCategory.INTEGRATION] },
+  filter: { ...filter, categories: [EventCategory.INTEGRATION] }
       limit: 1000;
   });
     const integrationStatus: Record<string, unknown> = {};
-    for (const [name, system] of this.legacySystems) {
-  const systemEvents = integrationEvents.filter(e => e.source === name);
+    for (const [name, system] of this.legacySystems) { const systemEvents = integrationEvents.filter(e => e.source === name);
   const errorEvents = systemEvents.filter(e => e.severity === 'error' || e.severity === 'critical');
   const errorRate = systemEvents.length > 0 ? (errorEvents.length / systemEvents.length) * 100 : 0;
   integrationStatus[name] = {
-  status: system.healthStatus,
-  eventCount: systemEvents.length,
-  errorRate: Math.round(errorRate * 100) / 100,
-  lastSync: system.lastSync,
-  migrationStatus: system.migrationStatus,
+  status: system.healthStatus
+  eventCount: systemEvents.length
+  errorRate: Math.round(errorRate * 100) / 100
+  lastSync: system.lastSync
+  migrationStatus: system.migrationStatus }
 };
-    return {
-  integrationStatus,
-  totalSystems: this.legacySystems.size,
-  healthySystems: Array.from(this.legacySystems.values()),
+    return { integrationStatus
+  totalSystems: this.legacySystems.size
+  healthySystems: Array.from(this.legacySystems.values()) }
   .filter(s => s.healthStatus === 'healthy').length
 };
   /**
@@ -443,68 +417,63 @@ export class DashboardIntegrationService {
   private async getBusinessWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
 
     const businessEvents = await this.eventRepository.findMany({)
-  filter: { ...filter, categories: [EventCategory.BUSINESS, EventCategory.USER] },
+  filter: { ...filter, categories: [EventCategory.BUSINESS, EventCategory.USER] }
       limit: 1000;
   });
     const metrics = await this.calculateBusinessMetrics(businessEvents, filter);
     const timeSeriesData = await this.eventRepository.getTimeSeriesData(;);
-      'count',
-      'hour',
+      'count'
+      'hour'
       { ...filter, categories: [EventCategory.BUSINESS] }
     );
-    return {
-  ...metrics,
+    return { ...metrics
   timeSeriesData: timeSeriesData.map(point => ({)
-  timestamp: point.timestamp,
-  value: point.value,
-  label: 'Business Events',
+  timestamp: point.timestamp
+  value: point.value
+  label: 'Business Events' }
 }))
     };
   /**
    * Get security widget data from security monitoring systems
    */
-  private async getSecurityWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> {
-
-  const securityEvents = await this.eventRepository.findMany({)
+  private async getSecurityWidgetData(filter: EventFilter, authContext: AuthContext): Promise<any> { const securityEvents = await this.eventRepository.findMany({)
   filter: {
-  ...filter,
-  categories: [EventCategory.SECURITY],
-  types: [AnalyticsEventType.SECURITY_EVENT, AnalyticsEventType.FRAUD_DETECTION, AnalyticsEventType.AUTH_EVENT],
-},
-  limit: 100,
-      sortBy: 'timestamp',
-      sortOrder: 'desc'
+  ...filter
+  categories: [EventCategory.SECURITY]
+  types: [AnalyticsEventType.SECURITY_EVENT, AnalyticsEventType.FRAUD_DETECTION, AnalyticsEventType.AUTH_EVENT] }
+
+  limit: 100
+      sortBy: 'timestamp'
+      sortOrder: 'desc';
   });
     const riskLevels = { high: 0, medium: 0, low: 0 };
-    securityEvents.forEach(event => {)
+    securityEvents.forEach(event => { )
   const riskLevel = typeof event.data.riskLevel === 'string' ? event.data.riskLevel : 'low';
   if (riskLevel in riskLevels) {
-  riskLevels[riskLevel as keyof typeof riskLevels]++;
-});
-    return {
-  events: securityEvents.slice(0, 20), // Show top 20 recent events,
-  riskDistribution: riskLevels,
-  totalSecurityEvents: securityEvents.length,
-  criticalAlerts: securityEvents.filter(e => e.severity === 'critical').length,
+  riskLevels[riskLevel as keyof typeof riskLevels]++ });
+    return { events: securityEvents.slice(0, 20), // Show top 20 recent events
+  riskDistribution: riskLevels
+  totalSecurityEvents: securityEvents.length
+  criticalAlerts: securityEvents.filter(e => e.severity === 'critical').length }
 };
   /**
    * Get standard widget data using event repository
    */
   private async getStandardWidgetData(widgetType: string)
-    filter: EventFilter,  
-    authContext: AuthContext): Promise<any> {,
+  filter: EventFilter
+    authContext: AuthContext): Promise<any> { 
   // Authorize query
   const queryAuth = await this.authService.authorizeAnalyticsQuery(filter, authContext);
   if (!queryAuth.allowed) {
   throw new Error('Widget data access denied');
   const authorizedFilter = queryAuth.filteredQuery!;
   switch (widgetType) {
-  case 'event_stream':,
+  case 'event_stream':
   const events = await this.eventRepository.findMany({)
-  filter: authorizedFilter,
-  limit: 50,
-  sortBy: 'timestamp',
-  sortOrder: 'desc',
+  filter: authorizedFilter
+  limit: 50
+  sortBy: 'timestamp'
+  sortOrder: 'desc' }
 });
         return { events };
       case 'metrics_summary':
@@ -512,15 +481,14 @@ export class DashboardIntegrationService {
         return { statistics };
       case 'time_series_chart':
         const timeSeriesData = await this.eventRepository.getTimeSeriesData(;);
-          'count',
-          'hour',
+          'count'
+          'hour'
           authorizedFilter
         );
-        return {
-  timeSeries: timeSeriesData.map(point => ({)
-  timestamp: point.timestamp,
-  value: point.value,
-  label: 'Events',
+        return { timeSeries: timeSeriesData.map(point => ({)
+  timestamp: point.timestamp
+  value: point.value
+  label: 'Events' }
 }))
         };
       default:
@@ -555,12 +523,12 @@ export class DashboardIntegrationService {
         this.legacySystems.set(systemName, system);
         console.log(`Successfully migrated ${systemName}`);}
         return true;
-      } else {
+ else {
         system.migrationStatus = 'failed';
         this.legacySystems.set(systemName, system);
         console.error(`No adapter found for ${systemName}`);}
         return false;
-    } catch (error) {
+ catch (error) {
       const system = this.legacySystems.get(systemName);
       if (system) {
         system.migrationStatus = 'failed';
@@ -578,17 +546,14 @@ export class DashboardIntegrationService {
   /**
    * Health check for all integrated systems
    */
-  async performHealthCheck(): Promise<void> {
-
-  console.log('Performing health check on all integrated systems...');
+  async performHealthCheck(): Promise<void> { console.log('Performing health check on all integrated systems...');
   for (const [name, system] of this.legacySystems) {
   try {
   // Simulate health check
   const isHealthy = await this.checkSystemHealth(name);
   system.healthStatus = isHealthy ? 'healthy' : 'degraded';
   system.lastSync = Date.now();
-  this.legacySystems.set(name, system);
-} catch (error) {
+  this.legacySystems.set(name, system) } catch (error) {
         console.error(`Health check failed for ${name}:`, error);}
         system.healthStatus = 'failing';
         this.legacySystems.set(name, system);
@@ -596,15 +561,13 @@ export class DashboardIntegrationService {
   /**
    * Check individual system health
    */
-  private async checkSystemHealth(systemName: string): Promise<boolean> {
-
-  // Simulate health check logic
+  private async checkSystemHealth(systemName: string): Promise<boolean> { // Simulate health check logic
   // In production, this would check actual system endpoints, data freshness, etc.
   return Math.random() > 0.1; // 90% chance of being healthy
   /**
   * Helper Methods
   */
-  private getCachedData(key: string): unknown {,
+  private getCachedData(key: string): unknown {
   const cached = this.integrationCache.get(key);
   if (cached && Date.now() - cached.timestamp < this.config.cacheTTL) {
   return cached.data;
@@ -612,14 +575,13 @@ export class DashboardIntegrationService {
   private setCachedData(key: string, data: unknown): void {,
   this.integrationCache.set(key, {)
   data,
-  timestamp: Date.now(),
+  timestamp: Date.now() }
 });
-  private cleanupCache(): void {
-  const now = Date.now();
+  private cleanupCache(): void { const now = Date.now();
   for (const [key, cached] of this.integrationCache) {
   if (now - cached.timestamp > this.config.cacheTTL) {
   this.integrationCache.delete(key);
-  private updateWidgetPerformance(widgetId: string)
+  private updateWidgetPerformance(widgetId: string),
   widgetType: string,
   loadTime: number,
   isError: boolean,
@@ -636,17 +598,16 @@ export class DashboardIntegrationService {
   errorRate: newErrorRate,
   cacheHitRate: newCacheHitRate,
   queryCount: totalQueries,
-  lastUpdate: Date.now(),
+  lastUpdate: Date.now() }
 });
-    } else {
-  this.performanceMetrics.set(widgetId, {)
+ else { this.performanceMetrics.set(widgetId, {)
   widgetId,
   widgetType,
   averageLoadTime: loadTime,
   errorRate: isError ? 100 : 0,
   cacheHitRate: cacheHit ? 100 : 0,
   queryCount: 1,
-  lastUpdate: Date.now(),
+  lastUpdate: Date.now() }
 });
   private updatePerformanceMetrics(): void {
     // Update performance metrics for dashboard monitoring
@@ -659,32 +620,29 @@ export class DashboardIntegrationService {
     return (degradedSystems * 5) + (failingSystems * 15); // Penalty points
   private getLegacySystemsStatus(): Record<string, unknown> {
     const status: Record<string, unknown> = {};
-    for (const [name, system] of this.legacySystems) {
-  status[name] = {
-  health: system.healthStatus,
-  migration: system.migrationStatus,
-  lastSync: system.lastSync,
-  eventCount: system.eventCount,
+    for (const [name, system] of this.legacySystems) { status[name] = {
+  health: system.healthStatus
+  migration: system.migrationStatus
+  lastSync: system.lastSync
+  eventCount: system.eventCount }
 };
     return status;
-  private getAggregatedPerformanceMetrics(): unknown {
-  const metrics = Array.from(this.performanceMetrics.values());
+  private getAggregatedPerformanceMetrics(): unknown { const metrics = Array.from(this.performanceMetrics.values());
   if (metrics.length === 0) {
   return {
-  totalWidgets: 0,
-  averageLoadTime: 0,
-  overallErrorRate: 0,
-  overallCacheHitRate: 0,
+  totalWidgets: 0
+  averageLoadTime: 0
+  overallErrorRate: 0
+  overallCacheHitRate: 0 }
 };
     const totalQueries = metrics.reduce((sum, m) => sum + m.queryCount, 0);
     const weightedAvgLoadTime = metrics.reduce((sum, m) => sum + (m.averageLoadTime * m.queryCount), 0) / totalQueries;
     const weightedErrorRate = metrics.reduce((sum, m) => sum + (m.errorRate * m.queryCount), 0) / totalQueries;
     const weightedCacheHitRate = metrics.reduce((sum, m) => sum + (m.cacheHitRate * m.queryCount), 0) / totalQueries;
-    return {
-  totalWidgets: metrics.length,
-  averageLoadTime: Math.round(weightedAvgLoadTime),
-  overallErrorRate: Math.round(weightedErrorRate * 100) / 100,
-  overallCacheHitRate: Math.round(weightedCacheHitRate * 100) / 100,
+    return { totalWidgets: metrics.length
+  averageLoadTime: Math.round(weightedAvgLoadTime)
+  overallErrorRate: Math.round(weightedErrorRate * 100) / 100
+  overallCacheHitRate: Math.round(weightedCacheHitRate * 100) / 100 }
 };
   /**
    * Public API Methods
@@ -692,25 +650,22 @@ export class DashboardIntegrationService {
   /**
    * Get integration status summary
    */
-  getIntegrationSummary(): {
-  legacySystems: LegacyAnalyticsSystem;
+  getIntegrationSummary(): { legacySystems: LegacyAnalyticsSystem;
   performanceMetrics: WidgetPerformanceMetrics;
   integrationStatus: unknown;
   return {
-  legacySystems: Array.from(this.legacySystems.values()),
-  performanceMetrics: Array.from(this.performanceMetrics.values()),
-  integrationStatus: this.getLegacySystemsStatus(),
+  legacySystems: Array.from(this.legacySystems.values())
+  performanceMetrics: Array.from(this.performanceMetrics.values())
+  integrationStatus: this.getLegacySystemsStatus() }
 };
   /**
    * Force refresh of system health checks
    */
-  async refreshSystemHealth(): Promise<void> {
-
-  await this.performHealthCheck();
+  async refreshSystemHealth(): Promise<void> { await this.performHealthCheck();
   /**
   * Clear integration cache
   */
-  clearCache(): void {,
+  clearCache(): void {
   this.integrationCache.clear();
   console.log('Integration cache cleared');
   /**
@@ -728,8 +683,8 @@ export class DashboardIntegrationService {
   // Estimate memory usage (rough calculation)
   const memoryUsage = totalEntries * 1024; // Assume 1KB per entry;
   return {
-  totalEntries,
-  hitRate: Math.round(hitRate * 100) / 100,
+  totalEntries
+  hitRate: Math.round(hitRate * 100) / 100 }
   memoryUsage
 };
 

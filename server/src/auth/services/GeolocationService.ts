@@ -4,8 +4,8 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
-}
-}
+
+
 export interface GeolocationData {
   country: string;
   countryCode: string;
@@ -17,8 +17,9 @@ export interface GeolocationData {
   coordinates?: {
     latitude: number;
     longitude: number;
-}
-}
+
+
+
   };
   isp?: string;
   organization?: string;
@@ -29,10 +30,10 @@ export interface GeolocationData {
   isHosting?: boolean;
   confidence: number; // 0-1 scale
   source: 'cloudflare' | 'ipapi' | 'maxmind' | 'cache' | 'fallback';
-}
 
-}
-}
+
+
+
 export interface LocationHistory {
   userId: string;
   location: GeolocationData;
@@ -40,12 +41,13 @@ export interface LocationHistory {
   lastSeen: Date;
   frequency: number;
   isTypical: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GeolocationConfig {
   // API configurations
   ipApiKey?: string;
@@ -61,9 +63,10 @@ export interface GeolocationConfig {
   newLocationThresholdKm: number;
   typicalLocationUpdateThreshold: number;
   suspiciousLocationPatterns: string[];
-}
-}
-}
+
+
+
+
 
 export class GeolocationService {
   private db: DatabaseService;
@@ -93,7 +96,7 @@ export class GeolocationService {
       ],
       ...config
     };
-  }
+
 
   /**
    * Get comprehensive geolocation data for an IP address
@@ -111,15 +114,15 @@ export class GeolocationService {
     // Validate IP address
     if (!this.isValidIP(ipAddress)) {
       return this.createFallbackGeolocation(ipAddress, fallbackHeaders);
-    }
+
 
     // Check cache first
     if (this.config.enableCache) {
       const cached = await this.getCachedGeolocation(ipAddress);
       if (cached) {
         return cached;
-      }
-    }
+
+
 
     // Try multiple geolocation sources
     let geolocationData: GeolocationData | null = null;
@@ -130,25 +133,25 @@ export class GeolocationService {
     // Fallback: MaxMind (if configured)
     if (!geolocationData && this.config.maxmindLicenseKey) {
       geolocationData = await this.getLocationFromMaxMind(ipAddress);
-    }
+
 
     // Fallback: Cloudflare headers
     if (!geolocationData && this.config.fallbackToHeaders && fallbackHeaders) {
       geolocationData = this.createLocationFromHeaders(ipAddress, fallbackHeaders);
-    }
+
 
     // Ultimate fallback
     if (!geolocationData) {
       geolocationData = this.createFallbackGeolocation(ipAddress, fallbackHeaders);
-    }
+
 
     // Cache the result
     if (this.config.enableCache && geolocationData.confidence >= this.config.requireMinimumConfidence) {
       await this.cacheGeolocation(ipAddress, geolocationData);
-    }
+
 
     return geolocationData;
-  }
+
 
   /**
    * Track location for a user's login attempt
@@ -162,7 +165,7 @@ export class GeolocationService {
     isTypicalLocation: boolean;
     distanceFromNearestKm?: number;
     suspiciousIndicators: string[];
-  }> {
+> {
 
     // Get user's location history
     const locationHistory = await this.getUserLocationHistory(userId);
@@ -182,7 +185,7 @@ export class GeolocationService {
       distanceFromNearestKm: locationAnalysis.nearestDistance,
       suspiciousIndicators
     };
-  }
+
 
   /**
    * Get user's historical locations
@@ -209,7 +212,7 @@ export class GeolocationService {
       frequency: row.frequency,
       isTypical: row.is_typical
     }));
-  }
+
 
   /**
    * Analyze if location is new or typical for user
@@ -221,10 +224,10 @@ export class GeolocationService {
     isNew: boolean;
     isTypical: boolean;
     nearestDistance?: number;
-  } {
+ {
     if (history.length === 0) {
       return { isNew: true, isTypical: false };
-    }
+
 
     let nearestDistance = Infinity;
     let isExactMatch = false;
@@ -236,7 +239,7 @@ export class GeolocationService {
         isExactMatch = true;
         nearestDistance = 0;
         break;
-      }
+
 
       // Calculate distance if coordinates available
       if (location.coordinates && historicalLocation.location.coordinates) {
@@ -251,9 +254,9 @@ export class GeolocationService {
         
         if (distance <= this.config.newLocationThresholdKm) {
           hasNearbyLocation = true;
-        }
-      }
-    }
+
+
+
 
     // Determine if this is a new location
     const isNew = !isExactMatch && !hasNearbyLocation;
@@ -269,7 +272,7 @@ export class GeolocationService {
       isTypical,
       nearestDistance: nearestDistance === Infinity ? undefined : nearestDistance
     };
-  }
+
 
   /**
    * Update user's location history
@@ -303,7 +306,7 @@ export class GeolocationService {
           location_data = $5
         WHERE user_id = $1 AND location_key = $2
       `, [userId, locationKey, newFrequency, isTypical, JSON.stringify(location)]);
-    } else {
+ else {
       // Insert new location
       await this.db.query(`
         INSERT INTO user_location_history (
@@ -311,8 +314,8 @@ export class GeolocationService {
           first_seen, last_seen, frequency, is_typical
         ) VALUES ($1, $2, $3, NOW(), NOW(), 1, false)
       `, [userId, locationKey, JSON.stringify(location)]);
-    }
-  }
+
+
 
   /**
    * Detect suspicious location indicators
@@ -331,11 +334,11 @@ export class GeolocationService {
       const org = location.organization.toLowerCase();
       if (org.includes('hosting') || org.includes('cloud') || org.includes('server')) {
         indicators.push('datacenter_ip');
-      }
-    }
+
+
     
     return indicators;
-  }
+
 
   /**
    * Get geolocation from IP-API service
@@ -353,7 +356,7 @@ export class GeolocationService {
       if (data.status === 'fail') {
         console.warn(`IP-API lookup failed for ${ipAddress}: ${data.message}`);
         return null;
-      }
+
       
       return {
         country: data.country || 'Unknown',
@@ -366,7 +369,7 @@ export class GeolocationService {
         coordinates: data.lat && data.lon ? {
           latitude: data.lat,
           longitude: data.lon
-        } : undefined,
+ : undefined,
         isp: data.isp,
         organization: data.org,
         asn: data.as,
@@ -377,11 +380,11 @@ export class GeolocationService {
         confidence: 0.8, // IP-API generally has good accuracy
         source: 'ipapi'
       };
-    } catch (error) {
+ catch (error) {
       console.error(`Error fetching geolocation from IP-API for ${ipAddress}:`, error);
       return null;
-    }
-  }
+
+
 
   /**
    * Get geolocation from MaxMind (placeholder - requires MaxMind SDK)
@@ -392,7 +395,7 @@ export class GeolocationService {
     // In production, you would use the MaxMind Node.js SDK
     console.log(`MaxMind lookup for ${ipAddress} - not implemented`);
     return null;
-  }
+
 
   /**
    * Create geolocation from HTTP headers (Cloudflare)
@@ -416,7 +419,7 @@ export class GeolocationService {
       confidence: 0.6, // Headers are less reliable
       source: 'cloudflare'
     };
-  }
+
 
   /**
    * Create fallback geolocation data
@@ -435,7 +438,7 @@ export class GeolocationService {
       confidence: 0.1,
       source: 'fallback'
     };
-  }
+
 
   /**
    * Cache geolocation data in Redis
@@ -446,7 +449,7 @@ export class GeolocationService {
     const expirySeconds = this.config.cacheExpiryHours * 3600;
     
     await this.redis.setex(cacheKey, expirySeconds, JSON.stringify(data));
-  }
+
 
   /**
    * Get cached geolocation data from Redis
@@ -461,13 +464,13 @@ export class GeolocationService {
         const data = JSON.parse(cached);
         data.source = 'cache';
         return data;
-      } catch (error) {
+ catch (error) {
         console.error('Error parsing cached geolocation data:', error);
-      }
-    }
+
+
     
     return null;
-  }
+
 
   /**
    * Validate IP address format
@@ -482,10 +485,10 @@ export class GeolocationService {
       // Validate IPv4 ranges
       const parts = ip.split('.').map(Number);
       return parts.every(part => part >= 0 && part <= 255);
-    }
+
     
     return ipv6Regex.test(ip);
-  }
+
 
   /**
    * Check if two locations are the same (city level)
@@ -494,14 +497,14 @@ export class GeolocationService {
     return loc1.country === loc2.country &&
            loc1.region === loc2.region &&
            loc1.city === loc2.city;
-  }
+
 
   /**
    * Generate a unique key for location storage
    */
   private getLocationKey(location: GeolocationData): string {
     return `${location.countryCode}:${location.regionCode}:${location.city}`.toLowerCase();
-  }
+
 
   /**
    * Calculate distance between two coordinates using Haversine formula
@@ -520,11 +523,11 @@ export class GeolocationService {
     
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-  }
+
 
   private degreesToRadians(degrees: number): number {
     return degrees * (Math.PI / 180);
-  }
+
 
   /**
    * Get country name from country code
@@ -555,7 +558,7 @@ export class GeolocationService {
     };
     
     return countryNames[countryCode] || countryCode;
-  }
+
 
   /**
    * Initialize database tables for geolocation tracking
@@ -592,5 +595,4 @@ export class GeolocationService {
       CREATE INDEX IF NOT EXISTS idx_user_location_history_typical 
       ON user_location_history(user_id, is_typical);
     `);
-  }
-}
+

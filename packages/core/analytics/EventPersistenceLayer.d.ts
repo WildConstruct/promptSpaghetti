@@ -6,8 +6,7 @@
  */
 import { z } from 'zod';
 import { UnifiedAnalyticsEvent, EventFilter } from './UnifiedEventBus';
-export declare const StoredEventSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const StoredEventSchema: z.ZodObject<{ id: z.ZodString;
     type: z.ZodString;
     category: z.ZodString;
     severity: z.ZodString;
@@ -25,9 +24,7 @@ export declare const StoredEventSchema: z.ZodObject<{
     environment: z.ZodString;
     region: z.ZodNullable<z.ZodString>;
     storedAt: z.ZodNumber;
-    retentionDate: z.ZodNullable<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    retentionDate: z.ZodNullable<z.ZodNumber> }, "strip", z.ZodTypeAny, { id: string;
     data: string;
     type: string;
     category: string;
@@ -45,9 +42,7 @@ export declare const StoredEventSchema: z.ZodObject<{
     organizationId: string | null;
     traceId: string | null;
     storedAt: number;
-    retentionDate: number | null;
-}, {
-    id: string;
+    retentionDate: number | null }, { id: string;
     data: string;
     type: string;
     category: string;
@@ -65,44 +60,34 @@ export declare const StoredEventSchema: z.ZodObject<{
     organizationId: string | null;
     traceId: string | null;
     storedAt: number;
-    retentionDate: number | null;
-}>;
+    retentionDate: number | null }>;
 export type StoredEvent = z.infer<typeof StoredEventSchema>;
 
 }
-export interface EventQueryOptions {
-    filter?: EventFilter;
+}
+export interface EventQueryOptions { filter?: EventFilter;
     sortBy?: 'timestamp' | 'type' | 'severity' | 'source';
     sortOrder?: 'asc' | 'desc';
     limit?: number;
     offset?: number;
-    includeMetadata?: boolean;
-
+    includeMetadata?: boolean }
 }
-export interface EventStatistics {
-    totalEvents: number;
+}
+export interface EventStatistics { totalEvents: number;
     eventsByType: {
-        [type: string]: number;
+        [type: string]: number }
 }
     };
-    eventsByCategory: {
-        [category: string]: number;
-    };
-    eventsBySeverity: {
-        [severity: string]: number;
-    };
-    eventsBySource: {
-        [source: string]: number;
-    };
-    timeRange: {
-        earliest: number;
-        latest: number;
-    };
+    eventsByCategory: { [category: string]: number };
+    eventsBySeverity: { [severity: string]: number };
+    eventsBySource: { [source: string]: number };
+    timeRange: { earliest: number;
+        latest: number };
     storageSize: number;
 
 }
-export interface EventAggregation {
-    groupBy: string;
+}
+export interface EventAggregation { groupBy: string;
     timeGranularity?: 'hour' | 'day' | 'week' | 'month';
     aggregates: {
         count: number;
@@ -110,7 +95,7 @@ export interface EventAggregation {
         lastSeen: number;
         uniqueSources: number;
         uniqueUsers: number;
-        uniqueSessions: number;
+        uniqueSessions: number }
 }
     };
 /**
@@ -120,8 +105,8 @@ export interface EventAggregation {
  */
 
 }
-export interface EventRepository {
-    save(event: UnifiedAnalyticsEvent): Promise<string>;
+}
+export interface EventRepository { save(event: UnifiedAnalyticsEvent): Promise<string>;
     saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]>;
     findById(id: string): Promise<UnifiedAnalyticsEvent | null>;
     findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent[]>;
@@ -132,7 +117,7 @@ export interface EventRepository {
     getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation[]>;
     getTimeSeriesData(metric: string, granularity: string, filter?: EventFilter): Promise<Array<{
         timestamp: number;
-        value: number;
+        value: number }
 }
     }>>;
     cleanup(retentionDays: number): Promise<number>;
@@ -143,8 +128,7 @@ export interface EventRepository {
  *
  * SQLite-based implementation for production use
  */
-export declare class DatabaseEventRepository implements EventRepository {
-    private db;
+export declare class DatabaseEventRepository implements EventRepository { private db;
     private tableName;
     constructor(database: any);
     /**
@@ -192,8 +176,7 @@ export declare class DatabaseEventRepository implements EventRepository {
      */
     getTimeSeriesData(metric: string, granularity: string, filter?: EventFilter): Promise<Array<{
         timestamp: number;
-        value: number;
-    }>>;
+        value: number }>>;
     /**
      * Cleanup old events
      */

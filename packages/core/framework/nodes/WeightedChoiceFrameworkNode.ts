@@ -8,7 +8,7 @@ import { FrameworkNode, NodeDefinition } from '../NodeFramework';
 import { AdvancedNodeConfig, AdvancedExecutionContext } from '../../runtime/advanced';
 import { IOPortDefinition } from '../../runtime/io-system';
 
-}
+
 export interface WeightedChoiceData {
   choices: string;
   weights: number;
@@ -17,8 +17,8 @@ export interface WeightedChoiceData {
   /**
   * Framework-integrated WeightedChoice node
   */
-}
-}
+
+
 export class WeightedChoiceFrameworkNode extends FrameworkNode {
   private data: WeightedChoiceData;
   private normalizedWeights: number = [];
@@ -26,79 +26,72 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   constructor(id: string, config: AdvancedNodeConfig, data: WeightedChoiceData) {
     super(id, config, data);
     this.data = { normalizeWeights: true, ...data };
-  getType(): string {
-  return 'WeightedChoice';
-  getDefinition(): Partial<NodeDefinition> {,
+  getType(): string { return 'WeightedChoice';
+  getDefinition(): Partial<NodeDefinition> {
   return {
-  type: 'WeightedChoice',
-  displayName: 'Weighted Choice',
-  description: 'Randomly selects from a list of choices based on assigned weights',
-  category: 'basic',
-  version: '2.0.0',
+  type: 'WeightedChoice'
+  displayName: 'Weighted Choice'
+  description: 'Randomly selects from a list of choices based on assigned weights'
+  category: 'basic'
+  version: '2.0.0'
   defaultConfig: {
-  deterministic: true,
-  cacheable: true,
-  stateful: false,
+  deterministic: true
+  cacheable: true
+  stateful: false
   performanceHints: {
-  expectedExecutionTime: 'fast',
-  memoryUsage: 'low',
-},
-  ports: {
-  inputs: [,
-  {
-  id: 'choices',
-  label: 'Choices',
-  dataType: 'stringArray',
-  required: true,
-  description: 'Array of choice options',
-}
-          {
-  id: 'weights',
-  label: 'Weights',
-  dataType: 'numberArray',
-  required: false,
-  description: 'Relative weights for each choice',
-  defaultValue: []] as IOPortDefinition,
-  outputs: [,
-  {
-  id: 'result',
-  label: 'Selected Choice',
-  dataType: 'string',
-  required: true,
-  description: 'The randomly selected choice',
-}
-          {
-  id: 'index',
-  label: 'Choice Index',
-  dataType: 'number',
-  required: false,
-  description: 'Index of the selected choice'] as IOPortDefinition;
-  },
-  metadata: {
-  author: 'Framework Team',
-  tags: ['random', 'choice', 'weighted', 'selection'],
-  deprecated: false,
-  experimental: false,
-};
-  protected async onInitialize(): Promise<void> {
+  expectedExecutionTime: 'fast'
+  memoryUsage: 'low' }
 
-  // Validate and normalize the data
+  ports: { 
+  inputs: [
+  {
+  id: 'choices'
+  label: 'Choices'
+  dataType: 'stringArray'
+  required: true
+  description: 'Array of choice options' }
+
+          { id: 'weights'
+  label: 'Weights'
+  dataType: 'numberArray'
+  required: false
+  description: 'Relative weights for each choice'
+  defaultValue: []] as IOPortDefinition
+  outputs: [
+  {
+  id: 'result'
+  label: 'Selected Choice'
+  dataType: 'string'
+  required: true
+  description: 'The randomly selected choice' }
+
+          { id: 'index'
+  label: 'Choice Index'
+  dataType: 'number'
+  required: false }
+  description: 'Index of the selected choice'] as IOPortDefinition
+
+  metadata: { 
+  author: 'Framework Team'
+  tags: ['random', 'choice', 'weighted', 'selection']
+  deprecated: false
+  experimental: false }
+};
+  protected async onInitialize(): Promise<void> { // Validate and normalize the data
   this.validateChoicesAndWeights();
   this.calculateNormalizedWeights();
   // Set up performance monitoring if enabled
   if (this.config.performanceHints?.expectedExecutionTime === 'fast') {
   // Enable lightweight monitoring
   this.framework?.emit('node_performance_hint', {)
-  nodeId: this.id,
-  hint: 'fast_execution',
+  nodeId: this.id
+  hint: 'fast_execution' }
 });
-  protected async executeNode(context: AdvancedExecutionContext): Promise<any> {
-
-  const startTime = performance.now();
+  protected async executeNode(context: AdvancedExecutionContext): Promise<any> { const startTime = performance.now();
   try {
   // Use seeded random if deterministic mode is enabled
   const random = this.config.deterministic ? ;
-  context.prng() :,
+  context.prng() :
   Math.random();
   // Perform weighted selection
   const selectedIndex = this.selectWeightedIndex(random);
@@ -106,13 +99,13 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   // Update internal metrics
   this.updatePerformanceMetrics(performance.now() - startTime);
   return {
-  result: selectedChoice,
-  index: selectedIndex,
-  weight: this.data.weights[selectedIndex] || 1,
-  normalizedWeight: this.normalizedWeights[selectedIndex],
-  totalWeight: this.totalWeight,
+  result: selectedChoice
+  index: selectedIndex
+  weight: this.data.weights[selectedIndex] || 1
+  normalizedWeight: this.normalizedWeights[selectedIndex]
+  totalWeight: this.totalWeight }
 };
-    } catch (error) {
+ catch (error) {
       throw new Error(`WeightedChoice execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   protected async onDestroy(): Promise<void> {
 
@@ -127,8 +120,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   updateData(newData: Partial<WeightedChoiceData>): void {
     this.data = { ...this.data, ...newData };
     // Recalculate normalized weights if choices or weights changed
-    if (newData.choices || newData.weights || newData.normalizeWeights !== undefined) {
-  this.validateChoicesAndWeights();
+    if (newData.choices || newData.weights || newData.normalizeWeights !== undefined) { this.validateChoicesAndWeights();
   this.calculateNormalizedWeights();
   /**
   * Get current choice statistics
@@ -137,47 +129,43 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   totalChoices: number;
   totalWeight: number;
   averageWeight: number;
-  choiceDistribution: Array<{
+  choiceDistribution: Array<{ }
   choice: string;
   weight: number;
   normalizedWeight: number;
   percentage: number;
-}>;
-    const choiceDistribution = this.data.choices.map((choice, index) => {
-      const weight = this.data.weights[index] || 1;
+>;
+    const choiceDistribution = this.data.choices.map((choice, index) => { const weight = this.data.weights[index] || 1;
       const normalizedWeight = this.normalizedWeights[index];
       const percentage = normalizedWeight * 100;
       return {
         choice,
         weight,
-        normalizedWeight,
+        normalizedWeight }
         percentage
       };
     });
-    return {
-  totalChoices: this.data.choices.length,
+    return { totalChoices: this.data.choices.length,
   totalWeight: this.totalWeight,
-  averageWeight: this.totalWeight / this.data.choices.length,
+  averageWeight: this.totalWeight / this.data.choices.length }
   choiceDistribution
 };
   /**
    * Simulate multiple selections for testing
    */
-  simulate(iterations: number, seed?: number): {
-  results: Record<string, number>;
+  simulate(iterations: number, seed?: number): { results: Record<string, number>;
   percentages: Record<string, number>;
-  expectedVsActual: Array<{
+  expectedVsActual: Array<{ }
   choice: string;
   expected: number;
   actual: number;
   deviation: number;
-}>;
+>;
     const results: Record<string, number> = {};
     const random = seed ? this.createSeededRandom(seed) : Math.random;
     // Initialize result counts
-    this.data.choices.forEach(choice => {)
-  results[choice] = 0;
-    });
+    this.data.choices.forEach(choice => { )
+  results[choice] = 0 });
     // Perform simulations
     for (let i = 0; i < iterations; i++) {
       const selectedIndex = this.selectWeightedIndex(random());
@@ -185,29 +173,24 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
       results[selectedChoice]++;
     // Calculate percentages
     const percentages: Record<string, number> = {};
-    Object.entries(results).forEach(([choice, count]) => {
-      percentages[choice] = (count / iterations) * 100;
-    });
+    Object.entries(results).forEach(([choice, count]) => { percentages[choice] = (count / iterations) * 100 });
     // Compare expected vs actual
-    const expectedVsActual = this.data.choices.map((choice, index) => {
-      const expected = this.normalizedWeights[index] * 100;
+    const expectedVsActual = this.data.choices.map((choice, index) => { const expected = this.normalizedWeights[index] * 100;
       const actual = percentages[choice] || 0;
       const deviation = Math.abs(expected - actual);
       return {
-        choice,
-        expected,
-        actual,
+        choice
+        expected
+        actual }
         deviation
       };
     });
-    return {
-      results,
-      percentages,
+    return { results
+      percentages }
       expectedVsActual
     };
   // Private helper methods
-  private validateChoicesAndWeights(): void {
-  if (!Array.isArray(this.data.choices) || this.data.choices.length === 0) {
+  private validateChoicesAndWeights(): void { if (!Array.isArray(this.data.choices) || this.data.choices.length === 0) {
   throw new Error('WeightedChoice requires a non-empty choices array');
   if (this.data.weights) {
   if (!Array.isArray(this.data.weights)) {
@@ -216,16 +199,13 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   throw new Error('Weights array must match choices array length');
   if (this.data.weights.some(w => typeof w !== 'number' || w < 0)) {
   throw new Error('All weights must be non-negative numbers');
-  private calculateNormalizedWeights(): void {,
+  private calculateNormalizedWeights(): void { }
   // Use provided weights or default to 1 for each choice
   const weights = this.data.weights || this.data.choices.map(() => 1);
   this.totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-  if (this.totalWeight === 0) {
-  throw new Error('Total weight cannot be zero');
+  if (this.totalWeight === 0) { throw new Error('Total weight cannot be zero');
   if (this.data.normalizeWeights ?? true) {
-  this.normalizedWeights = weights.map(weight => weight / this.totalWeight);
-} else {
-  this.normalizedWeights = [...weights];
+  this.normalizedWeights = weights.map(weight => weight / this.totalWeight) } else { this.normalizedWeights = [...weights];
   private selectWeightedIndex(random: number): number {,
   let cumulativeWeight = 0;
   for (let i = 0; i < this.normalizedWeights.length; i++) {
@@ -234,22 +214,19 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
   return i;
   // Fallback to last index (should not happen with proper normalization)
   return this.data.choices.length - 1;
-  private createSeededRandom(seed: number): () => number {,
+  private createSeededRandom(seed: number): () => number { }
   // Simple seeded random number generator for simulation
   let state = seed;
-  return () => {
-  state = (state * 1664525 + 1013904223) % 4294967296;
-  return state / 4294967296;
-};
-  private updatePerformanceMetrics(executionTime: number): void {
-  // Update node-specific performance metrics
+  return () => { state = (state * 1664525 + 1013904223) % 4294967296;
+  return state / 4294967296 };
+  private updatePerformanceMetrics(executionTime: number): void { // Update node-specific performance metrics
   const metrics = this.getMetrics();
   metrics.memoryUsage = this.estimateMemoryUsage();
   this.framework?.emit('node_performance_update', {)
   nodeId: this.id,
   nodeType: this.getType(),
   executionTime,
-  memoryUsage: metrics.memoryUsage,
+  memoryUsage: metrics.memoryUsage }
 });
   private estimateMemoryUsage(): number {
     // Rough estimate of memory usage in bytes

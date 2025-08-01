@@ -9,7 +9,8 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { ConsentCategory, ConsentOption, ConsentPreference } from '../../types/consent';
-}
+
+
 interface GranularConsentInterfaceProps {
   userId: string;,
   onSave: (preferences: ConsentPreference) => Promise<void>;
@@ -17,14 +18,16 @@ interface GranularConsentInterfaceProps {
   initialPreferences?: ConsentPreference;
   readOnly?: boolean;
   complianceMode?: 'GDPR' | 'CCPA' | 'LGPD' | 'PIPEDA';
-}
+
+
+
 interface CategoryState {
   expanded: boolean;,
-  allEnabled: boolean;
+  allEnabled: boolean;,
   someEnabled: boolean;
+  export const [categories, setCategories] = useState<ConsentCategory>([]);
 
-export const [categories, setCategories] = useState<ConsentCategory>([]);
-}
+
   const [categoryStates, setCategoryStates] = useState<Record<string, CategoryState>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -46,7 +49,7 @@ export const [categories, setCategories] = useState<ConsentCategory>([]);
       // Initialize preferences if empty
       if (preferences.length === 0) {
   const defaultPreferences = data.categories.flatMap((cat: ConsentCategory) =>;
-  cat.options.map((opt: ConsentOption) => ({,)
+  cat.options.map((opt: ConsentOption) => ({),
   userId,
   optionId: opt.id,
   categoryId: cat.id,
@@ -58,9 +61,9 @@ export const [categories, setCategories] = useState<ConsentCategory>([]);
 }))
         );
         setPreferences(defaultPreferences);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load categories');
-} finally {
+ finally {
       setLoading(false);
   }, [complianceMode, userId, preferences]);
   const updateCategoryStates = useCallback(() => {
@@ -87,7 +90,7 @@ export const [categories, setCategories] = useState<ConsentCategory>([]);
             ? { ...p, granted, timestamp: new Date() }
             : p
         );
-      } else {
+ else {
   return [...prev, {
   userId,
   optionId,
@@ -97,7 +100,7 @@ export const [categories, setCategories] = useState<ConsentCategory>([]);
   source: 'user_interface',
   ipAddress: '',
   userAgent: navigator.userAgent,
-}];
+];
     });
     setHasChanges(true);
   };
@@ -113,7 +116,7 @@ export const [categories, setCategories] = useState<ConsentCategory>([]);
   const toggleCategoryExpansion = (categoryId: string) => {
   setCategoryStates(prev => ({)
   ...prev,
-  [categoryId]: {
+  [categoryId]: {,
   ...prev[categoryId],
   expanded: !prev[categoryId]?.expanded,
 }));
@@ -124,9 +127,9 @@ export const [categories, setCategories] = useState<ConsentCategory>([]);
       setError(null);
       await onSave(preferences);
       setHasChanges(false);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to save preferences');
-} finally {
+ finally {
       setSaving(false);
   };
   const getPreferenceForOption = (optionId: string): boolean => {
@@ -242,7 +245,7 @@ export const [categories, setCategories] = useState<ConsentCategory>([]);
                           checked={categoryState.allEnabled}
                           ref={input => {
                             if (input) input.indeterminate = categoryState.someEnabled && !categoryState.allEnabled;
-                          }}
+}
                           onChange={(e) => handleCategoryToggle(category.id, e.target.checked)}
                           className="sr-only"
                         />

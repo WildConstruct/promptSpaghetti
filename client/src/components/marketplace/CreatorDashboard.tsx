@@ -14,45 +14,48 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer
-} from 'recharts';
+ from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/environment';
-}
+
+
 interface CreatorStats {
   total_templates: number;,
-  active_templates: number;
+  active_templates: number;,
   total_revenue_cents: number;,
-  total_purchases: number;
+  total_purchases: number;,
   avg_rating: number;,
-  total_reviews: number;
+  total_reviews: number;,
   total_views: number;,
   conversion_rate: number;
   interface Template {
   id: string;,
-  title: string;
+  title: string;,
   status: 'draft' | 'listed' | 'blocked' | 'archived';,
-  price_cents: number;
+  price_cents: number;,
   total_purchases: number;,
-  total_revenue: number;
+  total_revenue: number;,
   avg_rating: number;,
-  total_reviews: number;
+  total_reviews: number;,
   total_views: number;,
-  created_at: string;
+  created_at: string;,
   updated_at: string;
   interface MonetizationSettings {
   payout_threshold_cents: number;,
-  payout_schedule: 'weekly' | 'monthly';
+  payout_schedule: 'weekly' | 'monthly';,
   payment_method: 'stripe' | 'paypal' | 'bank_transfer';,
-  tax_settings: {
+  tax_settings: {,
   tax_id?: string;
   business_name?: string;
   address: string;,
-  city: string;
+  city: string;,
   country: string;,
   tax_exempt: boolean;
-}
+
+
 };
-}
+
+
 interface CreatorProfile {
   id: string;,
   display_name: string;
@@ -60,7 +63,7 @@ interface CreatorProfile {
   website?: string;
   social_links: Record<string, string>;
   verification_status: 'unverified' | 'pending' | 'verified' | 'rejected';,
-  creator_tier: 'bronze' | 'silver' | 'gold' | 'platinum';
+  creator_tier: 'bronze' | 'silver' | 'gold' | 'platinum';,
   badges: string;,
   public_profile: boolean;
   export const [templates, setTemplates] = useState<Template>([]);
@@ -72,7 +75,8 @@ interface CreatorProfile {
   const [dateRange, setDateRange] = useState({)
   start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   end: new Date().toISOString().split('T')[0],
-}
+
+
 });
   const navigate = useNavigate();
   const getAuthHeaders = useCallback(() => {
@@ -102,7 +106,7 @@ interface CreatorProfile {
         fetch(`${API_URL}/api/marketplace/creator/monetization`, {)}
   },
   headers: getAuthHeaders();
-  }
+
       ]);
       if (!statsRes.ok || !templatesRes.ok || !profileRes.ok || !monetizationRes.ok) {
         throw new Error('Failed to fetch creator data');
@@ -116,9 +120,9 @@ interface CreatorProfile {
       setTemplates(templatesData.templates || []);
       setProfile(profileData);
       setMonetization(monetizationData);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to fetch creator data');
-} finally {
+ finally {
       setLoading(false);
   }, [dateRange, getAuthHeaders]);
   useEffect(() => {
@@ -519,8 +523,8 @@ interface CreatorProfile {
       <style>{`
         .creator-dashboard {
           max-width: 1400px;,
-  margin: 0 auto;
-          padding: 20px;
+  margin: 0 auto;,
+  padding: 20px;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
@@ -546,8 +550,8 @@ interface CreatorProfile {
   gap: 15px;
         .create-template-btn {
           background: #3b82f6;,
-  color: white;
-          border: none;,
+  color: white;,
+  border: none;,
   padding: 10px 20px;
           border-radius: 8px;
           font-weight: 500;,
@@ -570,10 +574,10 @@ interface CreatorProfile {
           border-bottom: 2px solid #e1e5e9;
         .tab {
           background: none;,
-  border: none;
-          padding: 12px 20px;,
-  cursor: pointer;
-          color: #6b7280;
+  border: none;,
+  padding: 12px 20px;,
+  cursor: pointer;,
+  color: #6b7280;
           font-weight: 500;
           border-bottom: 2px solid transparent;
         .tab.active {
@@ -620,8 +624,8 @@ interface CreatorProfile {
         .table-header, .table-row {
           display: grid;
           grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;,
-  gap: 20px;
-          padding: 12px 0;
+  gap: 20px;,
+  padding: 12px 0;
         .table-header {
           font-weight: 600;,
   color: #6b7280;
@@ -690,8 +694,8 @@ interface CreatorProfile {
   gap: 8px;
         .card-actions button {
           flex: 1;,
-  padding: 8px 12px;
-          border: 1px solid #d1d5db;,
+  padding: 8px 12px;,
+  border: 1px solid #d1d5db;,
   background: white;
           border-radius: 6px;,
   cursor: pointer;
@@ -733,14 +737,14 @@ interface CreatorProfile {
   color: #374151;
         .setting-row input, .setting-row select, .setting-row textarea {
           flex: 1;,
-  padding: 8px 12px;
-          border: 1px solid #d1d5db;
+  padding: 8px 12px;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
         .save-settings-btn, .save-profile-btn {
           background: #3b82f6;,
-  color: white;
-          border: none;,
+  color: white;,
+  border: none;,
   padding: 12px 24px;
           border-radius: 8px;
           font-weight: 500;,
@@ -756,25 +760,25 @@ interface CreatorProfile {
           text-align: center;
         .spinner {
           width: 40px;,
-  height: 40px;
-          border: 4px solid #f3f4f6;
+  height: 40px;,
+  border: 4px solid #f3f4f6;
           border-top: 4px solid #3b82f6;
           border-radius: 50%;,
-  animation: spin 1s linear infinite;
-          margin: 0 auto 20px;
+  animation: spin 1s linear infinite;,
+  margin: 0 auto 20px;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         .error-message {
           text-align: center;,
-  padding: 40px;
-          background: white;
+  padding: 40px;,
+  background: white;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         .retry-button {
           background: #3b82f6;,
-  color: white;
-          border: none;,
+  color: white;,
+  border: none;,
   padding: 10px 20px;
           border-radius: 6px;,
   cursor: pointer;

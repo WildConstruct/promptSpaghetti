@@ -35,11 +35,11 @@ import {
   PlaybookMetadata,
   PerformanceMetadata,
   UsageMetadata
-} from '../../../../packages/core/types/Epic17IncidentPlaybooks';
+ from '../../../../packages/core/types/Epic17IncidentPlaybooks';
 import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
-}
-}
+
+
 export interface PlaybookExecutionContext {
   executionId: string;
   playbookId: string;
@@ -48,12 +48,13 @@ export interface PlaybookExecutionContext {
   severity: ActionSeverity;
   timestamp: Date;
   executionMetadata: ExecutionMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionMetadata {
   userId?: string;
   correlationId: string;
@@ -61,12 +62,13 @@ export interface ExecutionMetadata {
   estimatedDuration: number; // minutes
   approvalRequired: boolean;
   stakeholders: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PlaybookExecutionResult {
   executionId: string;
   playbookId: string;
@@ -84,12 +86,13 @@ export interface PlaybookExecutionResult {
   businessImpactResolved: boolean;
   lessons: string[];
   recommendations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Epic17PlaybookOrchestratorConfig {
   enabled: boolean;
   maxConcurrentExecutions: number;
@@ -100,9 +103,10 @@ export interface Epic17PlaybookOrchestratorConfig {
   dryRunMode: boolean;
   integrationTimeouts: Record<Epic17System, number>;
   healthCheckEnabled: boolean;
-}
-}
-}
+
+
+
+
 
 export class Epic17PlaybookOrchestrator {
   private db: Database;
@@ -158,13 +162,13 @@ export class Epic17PlaybookOrchestrator {
         review_tools: 30,
         fraud_monitoring: 45,
         enforcement_actions: 30
-  }
+
       healthCheckEnabled: true,
       ...config
     };
 
     this.initializeOrchestrator();
-  }
+
 
   // =============================================================================
   // Core Orchestration Methods
@@ -183,7 +187,7 @@ export class Epic17PlaybookOrchestrator {
       urgencyOverride?: ActionSeverity;
       skipApproval?: boolean;
       dryRun?: boolean;
-    } = {}
+ = {}
   ): Promise<PlaybookExecutionResult> {
 
     const executionId = this.generateExecutionId();
@@ -191,19 +195,19 @@ export class Epic17PlaybookOrchestrator {
 
     if (!this.config.enabled) {
       throw new Error('Epic17 Playbook Orchestrator is disabled');
-    }
+
 
     // Check concurrent execution limits
     if (this.activeExecutions.size >= this.config.maxConcurrentExecutions) {
       throw new Error('Maximum concurrent playbook executions reached');
-    }
+
 
     try {
       // Load playbook
       const playbook = await this.getPlaybook(playbookId);
       if (!playbook || !playbook.enabled) {
         throw new Error(`Playbook not found or disabled: ${playbookId}`);
-      }
+
 
       // Determine severity
       const severity = options.urgencyOverride || this.determineSeverity(triggerEvent, playbook);
@@ -211,7 +215,7 @@ export class Epic17PlaybookOrchestrator {
       // Check if approval is required
       if (this.requiresApproval(playbook, severity) && !options.skipApproval) {
         return await this.requestApprovalAndExecute(playbook, triggerSource, triggerEvent, options);
-      }
+
 
       // Create execution context
       const context: PlaybookExecutionContext = {
@@ -228,7 +232,7 @@ export class Epic17PlaybookOrchestrator {
           estimatedDuration: this.estimateExecutionDuration(playbook),
           approvalRequired: false,
           stakeholders: this.getStakeholders(playbook, severity)
-        }
+
       };
 
       // Register active execution
@@ -245,8 +249,7 @@ export class Epic17PlaybookOrchestrator {
 
       console.log(`✅ Playbook execution completed: ${executionId} (${result.status})`);
       return result;
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Playbook execution failed: ${executionId}:`, error);
       
       // Create failure result
@@ -278,16 +281,16 @@ export class Epic17PlaybookOrchestrator {
           playbookId,
           error: error.message,
           triggerSource
-  }
+
         severity: 'error'
       });
 
       return failureResult;
-    } finally {
+ finally {
       // Clean up
       this.activeExecutions.delete(executionId);
-    }
-  }
+
+
 
   /**
    * Perform the actual playbook execution
@@ -324,7 +327,7 @@ export class Epic17PlaybookOrchestrator {
           if (stepResult.success) {
             stepsSuccessful++;
             console.log(`✅ Step completed: ${step.name}`);
-          } else {
+ else {
             stepsFailed++;
             console.log(`❌ Step failed: ${step.name} - ${stepResult.error}`);
             
@@ -334,8 +337,8 @@ export class Epic17PlaybookOrchestrator {
               escalated = true;
               await this.escalatePlaybook(playbook, context, `Critical step failed: ${step.name}`);
               break;
-            }
-          }
+
+
 
           // Check timeout
           if (this.hasExecutionTimedOut(startTime, playbook.configuration.execution.defaultTimeout)) {
@@ -343,9 +346,8 @@ export class Epic17PlaybookOrchestrator {
             escalated = true;
             await this.escalatePlaybook(playbook, context, 'Execution timeout');
             break;
-          }
 
-        } catch (error) {
+ catch (error) {
           stepsFailed++;
           console.error(`💥 Step execution error: ${step.name}:`, error);
           
@@ -355,15 +357,15 @@ export class Epic17PlaybookOrchestrator {
               console.log(`🔄 Attempting rollback for step: ${step.name}`);
               await this.executeRollbackAction(step.rollbackAction, context, dryRun);
               rollbackPerformed = true;
-            }
+
 
             // Escalate critical failures
             escalated = true;
             await this.escalatePlaybook(playbook, context, `Step execution error: ${error.message}`);
             break;
-          }
-        }
-      }
+
+
+
 
       // Execute recovery procedures if needed
       if (stepsFailed > 0 && playbook.recoveryProcedures.length > 0) {
@@ -372,9 +374,9 @@ export class Epic17PlaybookOrchestrator {
           const recoveryResult = await this.executeRecoveryProcedure(procedure, context, dryRun);
           if (recoveryResult.success) {
             recoveryActions.push(procedure.name);
-          }
-        }
-      }
+
+
+
 
       const endTime = new Date();
       const duration = (endTime.getTime() - startTime.getTime()) / 1000;
@@ -383,11 +385,11 @@ export class Epic17PlaybookOrchestrator {
       let status: PlaybookExecutionResult['status'] = 'success';
       if (escalated) {
         status = 'escalated';
-      } else if (stepsFailed > 0 && stepsSuccessful === 0) {
+ else if (stepsFailed > 0 && stepsSuccessful === 0) {
         status = 'failure';
-      } else if (stepsFailed > 0) {
+ else if (stepsFailed > 0) {
         status = 'partial';
-      }
+
 
       const result: PlaybookExecutionResult = {
         executionId: context.executionId,
@@ -409,8 +411,7 @@ export class Epic17PlaybookOrchestrator {
       };
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       const endTime = new Date();
       const duration = (endTime.getTime() - startTime.getTime()) / 1000;
 
@@ -434,8 +435,8 @@ export class Epic17PlaybookOrchestrator {
         lessons: [`Execution failed: ${error.message}`],
         recommendations: ['Review playbook configuration and system health']
       };
-    }
-  }
+
+
 
   /**
    * Execute a single playbook step
@@ -461,8 +462,8 @@ export class Epic17PlaybookOrchestrator {
             severity: 'low',
             duration: Date.now() - stepStartTime
           };
-        }
-      }
+
+
 
       // Execute the step action
       const actionResult = await this.executeAction(step.action, context, dryRun);
@@ -477,16 +478,15 @@ export class Epic17PlaybookOrchestrator {
             severity: 'medium',
             duration: Date.now() - stepStartTime
           };
-        }
-      }
+
+
 
       return {
         success: true,
         result: actionResult,
         duration: Date.now() - stepStartTime
       };
-
-    } catch (error) {
+ catch (error) {
       console.error(`💥 Step execution error: ${step.name}:`, error);
       return {
         success: false,
@@ -494,8 +494,8 @@ export class Epic17PlaybookOrchestrator {
         severity: 'high',
         duration: Date.now() - stepStartTime
       };
-    }
-  }
+
+
 
   /**
    * Execute a playbook action
@@ -509,7 +509,7 @@ export class Epic17PlaybookOrchestrator {
     if (dryRun) {
       console.log(`📝 DRY RUN - Would execute ${action.actionType} on ${action.targetSystem}`);
       return { status: 'dry_run_success', action: action.actionType };
-    }
+
 
     console.log(`⚡ Executing action: ${action.actionType} on ${action.targetSystem}`);
 
@@ -580,8 +580,8 @@ export class Epic17PlaybookOrchestrator {
 
     default:
       throw new Error(`Unknown action type: ${action.actionType}`);
-    }
-  }
+
+
 
   // =============================================================================
   // Trigger Management and Health Monitoring
@@ -595,7 +595,7 @@ export class Epic17PlaybookOrchestrator {
     if (!this.config.enabled) {
       console.log('🔌 Epic17 Playbook Orchestrator disabled');
       return;
-    }
+
 
     console.log('🚀 Initializing Epic17 Playbook Orchestrator...');
 
@@ -606,7 +606,7 @@ export class Epic17PlaybookOrchestrator {
       // Set up health check monitoring
       if (this.config.healthCheckEnabled) {
         await this.initializeHealthCheckMonitoring();
-      }
+
 
       // Set up alert listeners
       await this.initializeAlertListeners();
@@ -618,12 +618,11 @@ export class Epic17PlaybookOrchestrator {
       await this.validateIntegrations();
 
       console.log('✅ Epic17 Playbook Orchestrator initialized successfully');
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize Epic17 Playbook Orchestrator:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Register a health check trigger
@@ -645,7 +644,7 @@ export class Epic17PlaybookOrchestrator {
 
     this.healthCheckListeners.set(listenerId, listener);
     console.log(`📊 Registered health check trigger: ${trigger.healthCheckName} -> ${playbookId}`);
-  }
+
 
   /**
    * Handle health check failure
@@ -682,12 +681,12 @@ export class Epic17PlaybookOrchestrator {
           );
 
           listener.lastTriggered = new Date();
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error(`Failed to trigger playbook ${listener.playbookId}:`, error);
-      }
-    }
-  }
+
+
+
 
   // =============================================================================
   // Action Execution Methods (Epic 17 Specific)
@@ -711,7 +710,7 @@ export class Epic17PlaybookOrchestrator {
       newState: enabled,
       rollbackAvailable: !!rollbackConfig
     };
-  }
+
 
   private async executeEmergencyKillSwitchAction(
     action: PlaybookAction,
@@ -730,7 +729,7 @@ export class Epic17PlaybookOrchestrator {
       timestamp: new Date(),
       recoveryEstimate: '15-30 minutes'
     };
-  }
+
 
   private async executeUserSuspensionAction(
     action: PlaybookAction,
@@ -758,8 +757,8 @@ export class Epic17PlaybookOrchestrator {
             executionId: context.executionId,
             playbookId: context.playbookId,
             triggerEvent: context.triggerEvent
-          }
-        }
+
+
       ],
       executionType: 'immediate',
       executedBy: 'epic17_orchestrator',
@@ -772,7 +771,7 @@ export class Epic17PlaybookOrchestrator {
       userId,
       suspensionDuration: duration || 24
     };
-  }
+
 
   private async executeContentQuarantineAction(
     action: PlaybookAction,
@@ -791,7 +790,7 @@ export class Epic17PlaybookOrchestrator {
       quarantineReason: reason,
       reviewRequired: true
     };
-  }
+
 
   private async executeNotificationAction(
     action: PlaybookAction,
@@ -809,7 +808,7 @@ export class Epic17PlaybookOrchestrator {
       channels: channels || ['email'],
       urgency: urgency || 'medium'
     };
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -819,7 +818,7 @@ export class Epic17PlaybookOrchestrator {
 
     if (this.playbookCache.has(playbookId)) {
       return this.playbookCache.get(playbookId)!;
-    }
+
 
     // Load from database
     const result = await this.db.query(`
@@ -831,31 +830,31 @@ export class Epic17PlaybookOrchestrator {
     const playbook = this.mapRowToPlaybook(result.rows[0]);
     this.playbookCache.set(playbookId, playbook);
     return playbook;
-  }
+
 
   private generateExecutionId(): string {
     return `EX-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   private generateCorrelationId(): string {
     return `CR-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   private determineSeverity(triggerEvent: unknown, playbook: Epic17IncidentPlaybook): ActionSeverity {
     // Logic to determine severity based on trigger event and playbook context
     return triggerEvent.severity || playbook.epic17Context.businessImpact.severity || 'medium';
-  }
+
 
   private requiresApproval(playbook: Epic17IncidentPlaybook, severity: ActionSeverity): boolean {
     return this.config.requireApprovalForCritical && 
            (severity === 'critical' || severity === 'high') &&
            playbook.category !== 'system_performance'; // Allow automatic performance responses
-  }
+
 
   private estimateExecutionDuration(playbook: Epic17IncidentPlaybook): number {
     // Estimate based on automated steps
     return playbook.automatedSteps.reduce((total, step) => total + (step.timeout / 60), 0);
-  }
+
 
   private getStakeholders(playbook: Epic17IncidentPlaybook, severity: ActionSeverity): string[] {
     // Return stakeholders based on affected systems and severity
@@ -863,14 +862,14 @@ export class Epic17PlaybookOrchestrator {
     
     if (severity === 'critical' || severity === 'high') {
       stakeholders.push('engineering_manager', 'on_call_engineer');
-    }
+
     
     if (playbook.epic17Context.affectedSystems.includes('fraud_monitoring')) {
       stakeholders.push('fraud_team');
-    }
+
     
     return stakeholders;
-  }
+
 
   // Placeholder methods for complex operations
   private async validatePrerequisites(
@@ -880,7 +879,7 @@ export class Epic17PlaybookOrchestrator {
 
     // Validate that all prerequisites are met before execution
     console.log(`✅ Prerequisites validated for playbook ${playbook.id}`);
-  }
+
 
   private async validateStepConditions(
     _____step: PlaybookStep,
@@ -889,7 +888,7 @@ export class Epic17PlaybookOrchestrator {
 
     // Validate step conditions
     return true;
-  }
+
 
   private async validateStepCompletion(
     _____step: PlaybookStep,
@@ -900,7 +899,7 @@ export class Epic17PlaybookOrchestrator {
 
     // Validate step completed successfully
     return { valid: true };
-  }
+
 
   private async executeRollbackAction(
     action: PlaybookAction,
@@ -911,7 +910,7 @@ export class Epic17PlaybookOrchestrator {
     // Execute rollback action
     console.log(`🔄 Executing rollback action: ${action.actionType}`);
     return { status: 'rollback_success' };
-  }
+
 
   private async executeRecoveryProcedure(
     procedure: RecoveryProcedure,
@@ -922,7 +921,7 @@ export class Epic17PlaybookOrchestrator {
     // Execute recovery procedure
     console.log(`🔧 Executing recovery procedure: ${procedure.name}`);
     return { success: true };
-  }
+
 
   private async escalatePlaybook(
     playbook: Epic17IncidentPlaybook,
@@ -941,15 +940,15 @@ export class Epic17PlaybookOrchestrator {
         playbookId: playbook.id,
         reason,
         severity: context.severity
-  }
+
       severity: 'warning'
     });
-  }
+
 
   private hasExecutionTimedOut(startTime: Date, timeoutMinutes: number): boolean {
     const elapsed = (Date.now() - startTime.getTime()) / 1000 / 60;
     return elapsed > timeoutMinutes;
-  }
+
 
   private extractLessons(
     playbook: Epic17IncidentPlaybook,
@@ -958,7 +957,7 @@ export class Epic17PlaybookOrchestrator {
   ): string[] {
     // Extract lessons learned from execution
     return [`Playbook ${playbook.name} completed with status: ${status}`];
-  }
+
 
   private generateRecommendations(
     playbook: Epic17IncidentPlaybook,
@@ -971,13 +970,13 @@ export class Epic17PlaybookOrchestrator {
     if (status === 'failure') {
       recommendations.push('Review playbook steps and system health');
       recommendations.push('Consider manual intervention');
-    } else if (status === 'partial') {
+ else if (status === 'partial') {
       recommendations.push('Monitor system for full recovery');
       recommendations.push('Review failed steps for improvement');
-    }
+
     
     return recommendations;
-  }
+
 
   // Placeholder implementation methods
   private async requestApprovalAndExecute(
@@ -989,13 +988,13 @@ export class Epic17PlaybookOrchestrator {
 
     // Implementation for approval workflow
     throw new Error('Approval workflow not yet implemented');
-  }
+
 
   private async updatePerformanceMetrics(playbookId: string, _____result: PlaybookExecutionResult): Promise<void> {
 
     // Update performance metrics
     console.log(`📊 Updating performance metrics for playbook ${playbookId}`);
-  }
+
 
   private async logPlaybookExecution(
     context: PlaybookExecutionContext,
@@ -1011,50 +1010,50 @@ export class Epic17PlaybookOrchestrator {
         status: result.status,
         duration: result.duration,
         stepsExecuted: result.stepsExecuted
-  }
+
       severity: result.status === 'success' ? 'info' : 'warning'
     });
-  }
+
 
   private shouldTriggerPlaybook(_____trigger: HealthCheckTrigger, _____failureData: unknown): boolean {
     // Logic to determine if playbook should be triggered
     return true;
-  }
+
 
   private async loadPlaybooks(): Promise<void> {
 
     // Load all playbooks from database
     console.log('📚 Loading Epic17 incident playbooks...');
-  }
+
 
   private async initializeHealthCheckMonitoring(): Promise<void> {
 
     // Initialize health check monitoring
     console.log('🏥 Initializing health check monitoring...');
-  }
+
 
   private async initializeAlertListeners(): Promise<void> {
 
     // Initialize alert listeners
     console.log('🚨 Initializing alert listeners...');
-  }
+
 
   private async initializeMetricWatchers(): Promise<void> {
 
     // Initialize metric watchers
     console.log('📊 Initializing metric watchers...');
-  }
+
 
   private async validateIntegrations(): Promise<void> {
 
     // Validate Epic17 system integrations
     console.log('🔌 Validating Epic17 integrations...');
-  }
+
 
   private mapRowToPlaybook(row: unknown): Epic17IncidentPlaybook {
     // Map database row to playbook object
     return JSON.parse(row.playbook_data);
-  }
+
 
   // Placeholder action execution methods
   private async executeFeatureRollbackAction(
@@ -1113,53 +1112,57 @@ export class Epic17PlaybookOrchestrator {
     _____action: PlaybookAction,
     _____context: PlaybookExecutionContext
   ): Promise<unknown> { return { status: 'success' }; }
-}
+
 
 // Supporting interfaces
-}
-}
+
+
+
 interface StepExecutionResult {
   success: boolean;
   result?: unknown;
   error?: string;
   severity?: ActionSeverity;
   duration: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface HealthCheckListener {
   id: string;
   trigger: HealthCheckTrigger;
   playbookId: string;
   active: boolean;
   lastTriggered: Date | null;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface AlertListener {
   id: string;
   trigger: AlertTrigger;
   playbookId: string;
   active: boolean;
   lastTriggered: Date | null;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface MetricWatcher {
   id: string;
   threshold: MetricThreshold;
   playbookId: string;
   active: boolean;
   lastTriggered: Date | null;
-}
-}
-}
+
+
+

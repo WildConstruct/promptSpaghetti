@@ -7,18 +7,19 @@ import {
   PolicyPublishingRequest,
   PolicyVersionRequest,
   UserRole
-} from '../services/MarketplacePolicyPublishingService';
+ from '../services/MarketplacePolicyPublishingService';
 import {
   MarketplacePolicyEnforcementService,
   ViolationType,
   ViolationSeverity,
   ViolationReport,
   EnforcementActionType
-} from '../services/MarketplacePolicyEnforcementService';
+ from '../services/MarketplacePolicyEnforcementService';
 
 // Request interfaces
-}
-}
+
+
+
 interface CreatePolicyRequest {
   policy_type: MarketplacePolicyType;
   title: string;
@@ -26,57 +27,60 @@ interface CreatePolicyRequest {
   content: Record<string, unknown>;
   metadata: Record<string, unknown>;
   enforcement: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UpdatePolicyRequest extends Partial<CreatePolicyRequest> {
   // Extends create request with optional fields
-}
 
-}
-}
+
+
+
 interface PublishPolicyRequest extends PolicyPublishingRequest {
   // Extends base publishing request
-}
 
-}
-}
+
+
+
 interface CreateVersionRequest extends PolicyVersionRequest {
   // Extends base version request
-}
 
-}
-}
+
+
+
 interface DetectViolationsRequest {
   content_id: string;
   content_type: 'template' | 'listing' | 'user_profile' | 'comment';
   content_data: Record<string, unknown>;
   owner_id: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ReportViolationRequest extends ViolationReport {
   // Extends base violation report
-}
 
-}
-}
+
+
+
 interface ExecuteActionRequest {
   action_id: string;
   confirmation: boolean;
   notes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CreateDetectionRuleRequest {
   policy_id: string;
   name: string;
@@ -85,25 +89,28 @@ interface CreateDetectionRuleRequest {
   conditions: Record<string, unknown>[];
   enforcement_config: Record<string, unknown>;
   ai_model_config?: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 // Query interfaces
-}
-}
+
+
+
 interface GetPoliciesQuery {
   policy_type?: MarketplacePolicyType;
   status?: PolicyStatus;
   user_role?: UserRole;
   limit?: number;
   offset?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface GetViolationsQuery {
   violator_id?: string;
   violation_type?: ViolationType;
@@ -113,9 +120,10 @@ interface GetViolationsQuery {
   offset?: number;
   date_from?: string;
   date_to?: string;
-}
-}
-}
+
+
+
+
 
 export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance, pool: Pool) {
   const publishingService = new MarketplacePolicyPublishingService(pool);
@@ -130,17 +138,17 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
   // Create new marketplace policy
   fastify.post<{
     Body: CreatePolicyRequest;
-  }>('/marketplace/policies', {
+>('/marketplace/policies', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('policy_manager')) {
         reply.code(403).send({ error: 'Admin or policy manager role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: CreatePolicyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as Record<string, unknown>)?.id;
       const policyData = {
@@ -154,15 +162,15 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
             type: 'immediate' as const,
             start_date: new Date(),
             rollback_triggers: []
-  }
+
           notification_settings: {
             enabled: false,
             channels: [],
             audience: [],
             template_id: '',
             send_reminders: false
-          }
-  }
+
+
         analytics: {
           views: 0,
           acknowledgments: 0,
@@ -171,7 +179,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
           user_feedback: [],
           compliance_score: 0,
           last_updated: new Date()
-        }
+
       };
 
       const policy = await publishingService.createPolicy(policyData, userId);
@@ -187,31 +195,31 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
           'Publish to marketplace'
         ]
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy creation error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to create policy',
         message: error.message
       });
-    }
+
   });
 
   // Update marketplace policy
   fastify.put<{
     Params: { policyId: string };
     Body: UpdatePolicyRequest;
-  }>('/marketplace/policies/:policyId', {
+>('/marketplace/policies/:policyId', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('policy_manager')) {
         reply.code(403).send({ error: 'Admin or policy manager role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Params: { policyId: string };
     Body: UpdatePolicyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as Record<string, unknown>)?.id;
       const { policyId } = request.params;
@@ -223,31 +231,31 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
         policy,
         message: 'Policy updated successfully'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy update error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to update policy',
         message: error.message
       });
-    }
+
   });
 
   // Publish policy to marketplace
   fastify.post<{
     Params: { policyId: string };
     Body: PublishPolicyRequest;
-  }>('/marketplace/policies/:policyId/publish', {
+>('/marketplace/policies/:policyId/publish', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Admin access required for policy publishing' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Params: { policyId: string };
     Body: PublishPolicyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as Record<string, unknown>)?.id;
       const { policyId } = request.params;
@@ -266,25 +274,25 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
         channels: publishingRequest.publication_channels,
         rollout_strategy: publishingRequest.rollout_strategy
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy publishing error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to publish policy',
         message: error.message
       });
-    }
+
   });
 
   // Create new policy version
   fastify.post<{
     Params: { policyId: string };
     Body: CreateVersionRequest;
-  }>('/marketplace/policies/:policyId/versions', {
+>('/marketplace/policies/:policyId/versions', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { policyId: string };
     Body: CreateVersionRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as Record<string, unknown>)?.id;
       const { policyId } = request.params;
@@ -294,7 +302,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
       if (!policy) {
         reply.code(404).send({ error: 'Policy not found' });
         return;
-      }
+
 
       const newVersion = this.incrementVersion(policy.version, request.body.version_increment);
       
@@ -312,32 +320,32 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
         new_version: newVersion,
         message: 'Policy version created successfully'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy version creation error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to create policy version',
         message: error.message
       });
-    }
+
   });
 
   // Get marketplace policies
   fastify.get<{
     Querystring: GetPoliciesQuery;
-  }>('/marketplace/policies', async (request: FastifyRequest<{
+>('/marketplace/policies', async (request: FastifyRequest<{
     Querystring: GetPoliciesQuery;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { policy_type, status, user_role = UserRole.ALL, limit = 20, offset = 0 } = request.query;
 
       let policies;
       if (policy_type) {
         policies = await publishingService.getPoliciesByType(policy_type, status);
-      } else {
+ else {
         // Get all active policies - would implement in service
         const userId = (request.user as Record<string, unknown>)?.id;
         policies = await publishingService.getActivePoliciesForUser(userId || 'anonymous', user_role);
-      }
+
 
       // Apply pagination
       const paginatedPolicies = policies.slice(offset, offset + limit);
@@ -349,23 +357,23 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
           limit,
           offset,
           has_more: offset + limit < policies.length
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve policies',
         message: error.message
       });
-    }
+
   });
 
   // Get specific policy
   fastify.get<{
     Params: { policyId: string };
-  }>('/marketplace/policies/:policyId', async (request: FastifyRequest<{
+>('/marketplace/policies/:policyId', async (request: FastifyRequest<{
     Params: { policyId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { policyId } = request.params;
       const policy = await publishingService.getPolicyById(policyId);
@@ -373,28 +381,28 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
       if (!policy) {
         reply.code(404).send({ error: 'Policy not found' });
         return;
-      }
+
 
       return { policy };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve policy',
         message: error.message
       });
-    }
+
   });
 
   // Record policy acknowledgment
   fastify.post<{
     Params: { policyId: string };
     Body: { metadata?: Record<string, unknown> };
-  }>('/marketplace/policies/:policyId/acknowledge', {
+>('/marketplace/policies/:policyId/acknowledge', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { policyId: string };
     Body: { metadata?: Record<string, unknown> };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as Record<string, unknown>)?.id;
       const userRole = (request.user as Record<string, unknown>)?.roles?.[0] || UserRole.BUYER;
@@ -414,41 +422,41 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
         message: 'Policy acknowledgment recorded',
         acknowledged_at: new Date()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy acknowledgment error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to record acknowledgment',
         message: error.message
       });
-    }
+
   });
 
   // Get policy analytics
   fastify.get<{
     Params: { policyId: string };
-  }>('/marketplace/policies/:policyId/analytics', {
+>('/marketplace/policies/:policyId/analytics', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('policy_manager')) {
         reply.code(403).send({ error: 'Admin or policy manager role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Params: { policyId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { policyId } = request.params;
       const analytics = await publishingService.getPolicyAnalytics(policyId);
 
       return { analytics };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy analytics error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to retrieve analytics',
         message: error.message
       });
-    }
+
   });
 
   // ============== POLICY ENFORCEMENT ENDPOINTS ==============
@@ -456,17 +464,17 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
   // Create violation detection rule
   fastify.post<{
     Body: CreateDetectionRuleRequest;
-  }>('/marketplace/enforcement/rules', {
+>('/marketplace/enforcement/rules', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Admin access required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: CreateDetectionRuleRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as Record<string, unknown>)?.id;
       
@@ -484,23 +492,23 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
         rule,
         message: 'Violation detection rule created successfully'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Detection rule creation error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to create detection rule',
         message: error.message
       });
-    }
+
   });
 
   // Detect violations in content
   fastify.post<{
     Body: DetectViolationsRequest;
-  }>('/marketplace/enforcement/detect', {
+>('/marketplace/enforcement/detect', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: DetectViolationsRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const violations = await enforcementService.detectViolations(
         request.body.content_id,
@@ -517,23 +525,23 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
           `${violations.length} violation(s) detected` : 
           'No violations detected'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Violation detection error:', error);
       reply.code(500).send({
         error: 'Failed to detect violations',
         message: error.message
       });
-    }
+
   });
 
   // Report violation manually
   fastify.post<{
     Body: ReportViolationRequest;
-  }>('/marketplace/enforcement/report', {
+>('/marketplace/enforcement/report', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: ReportViolationRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const reporterId = request.body.anonymous ? undefined : (request.user as any)?.id;
       
@@ -549,36 +557,36 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
           'Thank you for helping maintain marketplace quality'
         ]
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Violation reporting error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to report violation',
         message: error.message
       });
-    }
+
   });
 
   // Execute enforcement action
   fastify.post<{
     Body: ExecuteActionRequest;
-  }>('/marketplace/enforcement/actions/execute', {
+>('/marketplace/enforcement/actions/execute', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as Record<string, unknown>;
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('moderator')) {
         reply.code(403).send({ error: 'Admin or moderator role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: ExecuteActionRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as Record<string, unknown>)?.id;
       
       if (!request.body.confirmation) {
         reply.code(400).send({ error: 'Action confirmation required' });
         return;
-      }
+
 
       const result = await enforcementService.executeEnforcementAction(
         request.body.action_id,
@@ -591,13 +599,13 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
         executed_at: new Date(),
         executed_by: userId
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Enforcement action execution error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to execute enforcement action',
         message: error.message
       });
-    }
+
   });
 
   // Get enforcement dashboard
@@ -607,31 +615,31 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
       if (!user?.roles?.includes('admin') && !user?.roles?.includes('moderator')) {
         reply.code(403).send({ error: 'Admin or moderator role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as Record<string, unknown>)?.id;
       const dashboard = await enforcementService.getEnforcementDashboard(userId);
 
       return { dashboard };
-    } catch (error) {
+ catch (error) {
       request.log.error('Enforcement dashboard error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve enforcement dashboard',
         message: error.message
       });
-    }
+
   });
 
   // Get violations
   fastify.get<{
     Querystring: GetViolationsQuery;
-  }>('/marketplace/enforcement/violations', {
+>('/marketplace/enforcement/violations', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Querystring: GetViolationsQuery;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const user = request.user as Record<string, unknown>;
       const { 
@@ -643,7 +651,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
         offset = 0,
         date_from,
         date_to
-      } = request.query;
+ = request.query;
 
       // If not admin/moderator, only show user's own violations
       const targetViolatorId = user?.roles?.some((role: string) => ['admin', 'moderator'].includes(role)) 
@@ -659,22 +667,22 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
           limit,
           offset,
           has_more: false
-  }
+
         filters_applied: {
           violator_id: targetViolatorId,
           violation_type,
           severity,
           status,
           date_range: date_from && date_to ? { from: date_from, to: date_to } : null
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Violations retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve violations',
         message: error.message
       });
-    }
+
   });
 
   // AI-assisted content classification
@@ -684,7 +692,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
       content: string;
       content_type: string;
     };
-  }>('/marketplace/enforcement/classify', {
+>('/marketplace/enforcement/classify', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: {
@@ -692,7 +700,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
       content: string;
       content_type: string;
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const classification = await enforcementService.classifyContentViolation(
         request.body.content_id,
@@ -705,13 +713,13 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
         classification,
         processed_at: new Date()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Content classification error:', error);
       reply.code(500).send({
         error: 'Failed to classify content',
         message: error.message
       });
-    }
+
   });
 
   // Health check for policy management system
@@ -729,22 +737,22 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
           database: 'connected',
           policy_publishing_service: 'operational',
           enforcement_service: 'operational'
-  }
+
         features: {
           policy_types: Object.values(MarketplacePolicyType),
           violation_types: Object.values(ViolationType),
           enforcement_actions: Object.values(EnforcementActionType)
-  }
+
         version: '1.0.0'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy management health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
         error: error.message,
         timestamp: new Date()
       });
-    }
+
   });
 
   // Helper function to increment version numbers
@@ -759,6 +767,5 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     case 'patch':
     default:
       return `${major}.${minor}.${patch + 1}`;
-    }
-  }
-}
+
+

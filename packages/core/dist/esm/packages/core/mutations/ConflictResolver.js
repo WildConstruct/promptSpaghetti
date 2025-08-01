@@ -256,8 +256,9 @@ export class ConflictResolver extends EventEmitter {
                                                                                                     if (remoteEdgeId)
                                                                                                         elements.add(remoteEdgeId);
                                                                                                     return Array.from(elements);
-                                                                                                    getConflictSeverity(localOp, GraphOperation);
-                                                                                                    remoteOp: GraphOperation,
+                                                                                                    getConflictSeverity(localOp, GraphOperation),
+                                                                                                        remoteOp;
+                                                                                                    GraphOperation,
                                                                                                         conflictType;
                                                                                                     ConflictType;
                                                                                                     'low' | 'medium' | 'high' | 'critical';
@@ -273,8 +274,9 @@ export class ConflictResolver extends EventEmitter {
                                                                                                                 return 'low';
                                                                                                             default:
                                                                                                                 return 'medium';
-                                                                                                                getConflictResolutionOptions(localOp, GraphOperation);
-                                                                                                                remoteOp: GraphOperation,
+                                                                                                                getConflictResolutionOptions(localOp, GraphOperation),
+                                                                                                                    remoteOp;
+                                                                                                                GraphOperation,
                                                                                                                     conflictType;
                                                                                                                 ConflictType;
                                                                                                                 ConflictResolutionOption;
@@ -393,8 +395,7 @@ export class ConflictResolver extends EventEmitter {
                                                                                     },
                                                                                     return: mergedOperation,
                                                                                     conflict: OperationConflict,
-                                                                                    strategy: ConflictResolutionStrategy
-                                                                                }
+                                                                                    strategy: ConflictResolutionStrategy }
                                                                             };
                                                                         }), void {
                                                                             this: .emit('conflict_resolved', {}),

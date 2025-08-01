@@ -18,14 +18,12 @@ export { ExtensionMarketplace } from './ExtensionMarketplace';
 export type { ExtensionMarketplaceProps } from './ExtensionMarketplace';
 export { useExtensionManagerStore } from './ExtensionManagerStore';
 export type { ExtensionManagerState, ExtensionStatus, ExtensionInstallation, ExtensionManagerStore } from './ExtensionManagerStore';
-export declare const ExtensionManagerConstants: {
-    VIEW_MODES: readonly ["installed", "marketplace", "settings"];
+export declare const ExtensionManagerConstants: { VIEW_MODES: readonly ["installed", "marketplace", "settings"];
     EXTENSION_STATUSES: readonly ["enabled", "disabled", "error", "loading"];
     FILTER_TYPES: readonly ["all", "node", "ui", "transform", "storage"];
     SORT_OPTIONS: readonly ["name", "version", "lastUpdated", "size"];
     INSTALL_METHODS: readonly ["file", "url", "dev"];
-    CONFIG_TABS: readonly ["general", "advanced", "security"];
-};
+    CONFIG_TABS: readonly ["general", "advanced", "security"] };
 export type ViewMode = typeof ExtensionManagerConstants.VIEW_MODES[number];
 export type ExtensionStatusType = typeof ExtensionManagerConstants.EXTENSION_STATUSES[number];
 export type FilterType = typeof ExtensionManagerConstants.FILTER_TYPES[number];

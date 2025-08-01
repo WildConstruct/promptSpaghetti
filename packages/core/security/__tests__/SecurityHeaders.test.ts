@@ -17,8 +17,7 @@ import { createHash } from 'crypto';
 
 // Mock Express app for testing headers
 import express, { Application, Request, Response } from 'express';
-describe('Security Headers Test Suite', () => {
-  let app: Application;
+describe('Security Headers Test Suite', () => { let app: Application;
   beforeEach(() => {
   app = express();
   // Default security headers middleware
@@ -32,7 +31,7 @@ describe('Security Headers Test Suite', () => {
   'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; ' +,
   'font-src \'self\' https://fonts.gstatic.com; ' +,
   'img-src \'self\' data: https:; ' +,
-  'connect-src \'self\' https://api.example.com; ' +,
+  'connect-src \'self\' https://api.example.com; ' + }
   'frame-ancestors \'none\'; ' +
   'form-action \'self\'; ' +
   'base-uri \'self\'; ' +
@@ -58,8 +57,7 @@ describe('Security Headers Test Suite', () => {
       res.json({ success: true });
     });
   });
-  describe('HTTP Strict Transport Security (HSTS)', () => {
-    test('should include HSTS header with correct directives', async () => {
+  describe('HTTP Strict Transport Security (HSTS)', () => { test('should include HSTS header with correct directives', async () => {
       const response = await request(app).get('/test');
       const hstsHeader = response.headers['strict-transport-security'];
       expect(hstsHeader).toBeDefined();
@@ -68,8 +66,7 @@ describe('Security Headers Test Suite', () => {
       expect(hstsDirectives).toHaveProperty('max-age');
       expect(parseInt(hstsDirectives['max-age'])).toBeGreaterThanOrEqual(31536000); // 1 year minimum
       expect(hstsDirectives).toHaveProperty('includeSubDomains');
-      expect(hstsDirectives).toHaveProperty('preload');
-    });
+      expect(hstsDirectives).toHaveProperty('preload') });
     test('should have sufficient max-age value', async () => {
       const response = await request(app).get('/test');
       const hstsHeader = response.headers['strict-transport-security'];
@@ -79,15 +76,12 @@ describe('Security Headers Test Suite', () => {
       expect(maxAge).toBeGreaterThanOrEqual(31536000); // 1 year minimum
       expect(maxAge).toBeLessThanOrEqual(63072000); // 2 years maximum (recommended)
     });
-    test('should be present on all HTTPS endpoints', async () => {
-      const endpoints = ['/test', '/api/data'];
+    test('should be present on all HTTPS endpoints', async () => { const endpoints = ['/test', '/api/data'];
       for (const endpoint of endpoints) {
         const response = await request(app).get(endpoint);
-        expect(response.headers['strict-transport-security']).toBeDefined();
-    });
+        expect(response.headers['strict-transport-security']).toBeDefined() });
   });
-  describe('Content Security Policy (CSP)', () => {
-    test('should include CSP header with secure directives', async () => {
+  describe('Content Security Policy (CSP)', () => { test('should include CSP header with secure directives', async () => {
       const response = await request(app).get('/test');
       const cspHeader = response.headers['content-security-policy'];
       expect(cspHeader).toBeDefined();
@@ -99,10 +93,8 @@ describe('Security Headers Test Suite', () => {
       expect(cspDirectives).toHaveProperty('object-src');
       expect(cspDirectives).toHaveProperty('base-uri');
       expect(cspDirectives).toHaveProperty('form-action');
-      expect(cspDirectives).toHaveProperty('frame-ancestors');
-    });
-    test('should restrict dangerous directives appropriately', async () => {
-      const response = await request(app).get('/test');
+      expect(cspDirectives).toHaveProperty('frame-ancestors') });
+    test('should restrict dangerous directives appropriately', async () => { const response = await request(app).get('/test');
       const cspHeader = response.headers['content-security-policy'];
       const cspDirectives = parseCSPHeader(cspHeader);
       // object-src should be 'none' to prevent Flash/plugin content
@@ -112,18 +104,13 @@ describe('Security Headers Test Suite', () => {
       // frame-ancestors should be 'none' or restricted to prevent clickjacking
       expect(cspDirectives['frame-ancestors']).toBe('\'none\'');
       // form-action should be restricted
-      expect(cspDirectives['form-action']).toContain('\'self\'');
-    });
-    test('should include upgrade-insecure-requests directive', async () => {
-      const response = await request(app).get('/test');
+      expect(cspDirectives['form-action']).toContain('\'self\'') });
+    test('should include upgrade-insecure-requests directive', async () => { const response = await request(app).get('/test');
       const cspHeader = response.headers['content-security-policy'];
-      expect(cspHeader).toContain('upgrade-insecure-requests');
-    });
-    test('should not allow unsafe-eval in script-src', async () => {
-      const response = await request(app).get('/test');
+      expect(cspHeader).toContain('upgrade-insecure-requests') });
+    test('should not allow unsafe-eval in script-src', async () => { const response = await request(app).get('/test');
       const cspHeader = response.headers['content-security-policy'];
-      expect(cspHeader).not.toContain('\'unsafe-eval\'');
-    });
+      expect(cspHeader).not.toContain('\'unsafe-eval\'') });
     test('should validate nonce generation for inline scripts', () => {
       // Test nonce generation utility
       const nonce1 = generateCSPNonce();
@@ -134,100 +121,78 @@ describe('Security Headers Test Suite', () => {
       expect(nonce1).toMatch(/^[A-Za-z0-9+/]+=*$/); // Valid base64
     });
   });
-  describe('X-Content-Type-Options', () => {
-    test('should include nosniff directive', async () => {
+  describe('X-Content-Type-Options', () => { test('should include nosniff directive', async () => {
       const response = await request(app).get('/test');
-      expect(response.headers['x-content-type-options']).toBe('nosniff');
-    });
-    test('should be present on all content responses', async () => {
-      const endpoints = ['/test', '/api/data'];
+      expect(response.headers['x-content-type-options']).toBe('nosniff') });
+    test('should be present on all content responses', async () => { const endpoints = ['/test', '/api/data'];
       for (const endpoint of endpoints) {
         const response = await request(app).get(endpoint);
-        expect(response.headers['x-content-type-options']).toBe('nosniff');
-    });
+        expect(response.headers['x-content-type-options']).toBe('nosniff') });
   });
-  describe('X-Frame-Options', () => {
-    test('should prevent framing with DENY or SAMEORIGIN', async () => {
+  describe('X-Frame-Options', () => { test('should prevent framing with DENY or SAMEORIGIN', async () => {
       const response = await request(app).get('/test');
       const xFrameOptions = response.headers['x-frame-options'];
-      expect(xFrameOptions).toMatch(/^(DENY|SAMEORIGIN)$/);
-    });
-    test('should be consistent with CSP frame-ancestors', async () => {
-      const response = await request(app).get('/test');
+      expect(xFrameOptions).toMatch(/^(DENY|SAMEORIGIN)$/) });
+    test('should be consistent with CSP frame-ancestors', async () => { const response = await request(app).get('/test');
       const xFrameOptions = response.headers['x-frame-options'];
       const cspHeader = response.headers['content-security-policy'];
       const cspDirectives = parseCSPHeader(cspHeader);
       if (xFrameOptions === 'DENY') {
-        expect(cspDirectives['frame-ancestors']).toBe('\'none\'');
-      } else if (xFrameOptions === 'SAMEORIGIN') {
-        expect(cspDirectives['frame-ancestors']).toContain('\'self\'');
-    });
+        expect(cspDirectives['frame-ancestors']).toBe('\'none\'') } else if (xFrameOptions === 'SAMEORIGIN') { expect(cspDirectives['frame-ancestors']).toContain('\'self\'') });
   });
-  describe('X-XSS-Protection', () => {
-    test('should enable XSS filtering with block mode', async () => {
+  describe('X-XSS-Protection', () => { test('should enable XSS filtering with block mode', async () => {
       const response = await request(app).get('/test');
       const xssProtection = response.headers['x-xss-protection'];
-      expect(xssProtection).toMatch(/^1(; mode=block)?$/);
-    });
+      expect(xssProtection).toMatch(/^1(; mode=block)?$/) });
   });
-  describe('Referrer-Policy', () => {
-    test('should include appropriate referrer policy', async () => {
+  describe('Referrer-Policy', () => { test('should include appropriate referrer policy', async () => {
       const response = await request(app).get('/test');
       const referrerPolicy = response.headers['referrer-policy'];
       expect(referrerPolicy).toBeDefined();
       // Should be one of the secure options
-      const secureReferrerPolicies = [;
+      const secureReferrerPolicies = [
         'no-referrer',
         'no-referrer-when-downgrade',
         'strict-origin',
-        'strict-origin-when-cross-origin',
+        'strict-origin-when-cross-origin' }
         'same-origin'
       ];
       expect(secureReferrerPolicies).toContain(referrerPolicy);
     });
   });
-  describe('Permissions-Policy (Feature-Policy)', () => {
-    test('should restrict dangerous permissions', async () => {
+  describe('Permissions-Policy (Feature-Policy)', () => { test('should restrict dangerous permissions', async () => {
       const response = await request(app).get('/test');
       const permissionsPolicy = response.headers['permissions-policy'];
       expect(permissionsPolicy).toBeDefined();
       // Should restrict camera, microphone, and geolocation by default
       expect(permissionsPolicy).toContain('camera=()');
       expect(permissionsPolicy).toContain('microphone=()');
-      expect(permissionsPolicy).toContain('geolocation=()');
-    });
+      expect(permissionsPolicy).toContain('geolocation=()') });
   });
-  describe('Security Header Configuration Validation', () => {
-    test('should have all required security headers', async () => {
+  describe('Security Header Configuration Validation', () => { test('should have all required security headers', async () => {
       const response = await request(app).get('/test');
-      const requiredHeaders = [;
+      const requiredHeaders = [
         'strict-transport-security',
         'content-security-policy',
         'x-content-type-options',
         'x-frame-options',
-        'x-xss-protection',
+        'x-xss-protection' }
         'referrer-policy'
       ];
-      requiredHeaders.forEach(header => {)
-  expect(response.headers[header]).toBeDefined();
-      });
+      requiredHeaders.forEach(header => { )
+  expect(response.headers[header]).toBeDefined() });
     });
-    test('should not expose server information', async () => {
-      const response = await request(app).get('/test');
+    test('should not expose server information', async () => { const response = await request(app).get('/test');
       // Should not expose sensitive server information
       expect(response.headers['server']).toBeUndefined();
-      expect(response.headers['x-powered-by']).toBeUndefined();
-    });
-    test('should include security headers on error responses', async () => {
-      const response = await request(app).get('/nonexistent');
+      expect(response.headers['x-powered-by']).toBeUndefined() });
+    test('should include security headers on error responses', async () => { const response = await request(app).get('/nonexistent');
       // Even 404 responses should include security headers
       expect(response.headers['strict-transport-security']).toBeDefined();
       expect(response.headers['content-security-policy']).toBeDefined();
-      expect(response.headers['x-content-type-options']).toBeDefined();
-    });
+      expect(response.headers['x-content-type-options']).toBeDefined() });
   });
-  describe('CSP Reporting and Monitoring', () => {
-    test('should support CSP reporting endpoint', () => {
+  describe('CSP Reporting and Monitoring', () => { test('should support CSP reporting endpoint', () => {
       const cspWithReporting = ;
         'default-src \'self\'; ' +
         'script-src \'self\'; ' +
@@ -235,24 +200,21 @@ describe('Security Headers Test Suite', () => {
         'report-to csp-endpoint';
       const directives = parseCSPHeader(cspWithReporting);
       expect(directives).toHaveProperty('report-uri');
-      expect(directives['report-uri']).toBe('/csp-report');
-    });
-    test('should validate CSP report format', () => {
-  const mockCSPReport = {
-  'csp-report': {
+      expect(directives['report-uri']).toBe('/csp-report') });
+    test('should validate CSP report format', () => { const mockCSPReport = {
+  'csp-report': {,
   'document-uri': 'https://example.com/page',
   'referrer': '',
   'violated-directive': 'script-src',
   'effective-directive': 'script-src',
   'original-policy': 'default-src \'self\'; script-src \'self\'',
   'blocked-uri': 'https://evil.com/script',
-  'status-code': 200,
+  'status-code': 200 }
 };
       expect(validateCSPReport(mockCSPReport)).toBe(true);
     });
   });
-  describe('Header Security Scanning', () => {
-    test('should pass OWASP security header checklist', async () => {
+  describe('Header Security Scanning', () => { test('should pass OWASP security header checklist', async () => {
       const response = await request(app).get('/test');
       const headers = response.headers;
       const securityScore = calculateSecurityScore(headers);
@@ -261,15 +223,12 @@ describe('Security Headers Test Suite', () => {
       expect(securityScore.checks.hsts).toBe(true);
       expect(securityScore.checks.csp).toBe(true);
       expect(securityScore.checks.contentTypeOptions).toBe(true);
-      expect(securityScore.checks.frameOptions).toBe(true);
-    });
-    test('should detect and warn about insecure configurations', async () => {
-      // Test app with insecure headers
+      expect(securityScore.checks.frameOptions).toBe(true) });
+    test('should detect and warn about insecure configurations', async () => { // Test app with insecure headers
       const insecureApp = express();
       insecureApp.use((req, res, next) => {
         res.setHeader('Content-Security-Policy', 'default-src *; script-src * \'unsafe-eval\' \'unsafe-inline\'');
-        next();
-      });
+        next() });
       insecureApp.get('/test', (req, res) => res.json({ test: true }));
       const response = await request(insecureApp).get('/test');
       const warnings = analyzeSecurityHeaders(response.headers);
@@ -298,12 +257,11 @@ describe('Security Headers Test Suite', () => {
  */
 function parseHSTSHeader(header: string): Record<string, string> {
   const directives: Record<string, string> = {};
-  header.split(';').forEach(directive => {)
+  header.split(';').forEach(directive => { )
   const trimmed = directive.trim();
     if (trimmed.includes('=')) {
       const [key, value] = trimmed.split('=', 2);
-      directives[key.trim()] = value.trim();
-    } else {
+      directives[key.trim()] = value.trim() } else {
       directives[trimmed] = 'true'
   });
   return directives;
@@ -312,31 +270,29 @@ function parseHSTSHeader(header: string): Record<string, string> {
  */
 function parseCSPHeader(header: string): Record<string, string> {
   const directives: Record<string, string> = {};
-  header.split(';').forEach(directive => {)
+  header.split(';').forEach(directive => { )
   const trimmed = directive.trim();
     if (trimmed) {
       const parts = trimmed.split(/\s+/);
       const directiveName = parts[0];
       const directiveValue = parts.slice(1).join(' ');
-      directives[directiveName] = directiveValue;
-  });
+      directives[directiveName] = directiveValue });
   return directives;
 /**
  * Generate cryptographically secure CSP nonce
  */
-function generateCSPNonce(): string {
-  const crypto = require('crypto');
+function generateCSPNonce(): string { const crypto = require('crypto');
   return crypto.randomBytes(24).toString('base64');
   /**
   * Validate CSP violation report structure
   */
-  function validateCSPReport(report: any): boolean {,
+  function validateCSPReport(report: any): boolean {
   if (!report['csp-report']) return false;
   const cspReport = report['csp-report'];
-  const requiredFields = [;
-  'document-uri',
-  'violated-directive',
-  'effective-directive',
+  const requiredFields = [
+  'document-uri'
+  'violated-directive'
+  'effective-directive'
   'original-policy'
   ];
   return requiredFields.every(field => field in cspReport);
@@ -347,13 +303,13 @@ function generateCSPNonce(): string {
   total: number;
   checks: Record<string, boolean>;
   const checks = {
-  hsts: !!headers['strict-transport-security'],
-  csp: !!headers['content-security-policy'],
-  contentTypeOptions: headers['x-content-type-options'] === 'nosniff',
-  frameOptions: !!headers['x-frame-options'],
-  xssProtection: !!headers['x-xss-protection'],
-  referrerPolicy: !!headers['referrer-policy'],
-  permissionsPolicy: !!headers['permissions-policy'],
+  hsts: !!headers['strict-transport-security']
+  csp: !!headers['content-security-policy']
+  contentTypeOptions: headers['x-content-type-options'] === 'nosniff'
+  frameOptions: !!headers['x-frame-options']
+  xssProtection: !!headers['x-xss-protection']
+  referrerPolicy: !!headers['referrer-policy']
+  permissionsPolicy: !!headers['permissions-policy'] }
 };
   const totalChecks = Object.keys(checks).length;
   const passedChecks = Object.values(checks).filter(Boolean).length;
@@ -362,8 +318,7 @@ function generateCSPNonce(): string {
 /**
  * Analyze security headers for common issues
  */
-function analyzeSecurityHeaders(headers: Record<string, string>): string {
-  const warnings: string = [];
+function analyzeSecurityHeaders(headers: Record<string, string>): string { const warnings: string = [];
   // Check CSP for common issues
   const csp = headers['content-security-policy'];
   if (csp) {
@@ -378,9 +333,7 @@ function analyzeSecurityHeaders(headers: Record<string, string>): string {
   if (hsts) {
   const maxAgeMatch = hsts.match(/max-age=(\d+)/);
   if (maxAgeMatch && parseInt(maxAgeMatch[1]) < 31536000) {
-  warnings.push('HSTS_SHORT_MAX_AGE');
-} else {
-  warnings.push('MISSING_HSTS');
+  warnings.push('HSTS_SHORT_MAX_AGE') } else { warnings.push('MISSING_HSTS');
   // Check for missing headers
   if (!headers['x-content-type-options']) {
   warnings.push('MISSING_CONTENT_TYPE_OPTIONS');
@@ -391,41 +344,38 @@ function analyzeSecurityHeaders(headers: Record<string, string>): string {
   * Integration test helper for external security scanning
   */
   export class SecurityHeaderScanner {
-  static async scanEndpoint(url: string): Promise<{,
+  static async scanEndpoint(url: string): Promise<{ }
   score: number;
   headers: Record<string, string>;
   warnings: string;
   recommendations: string;
-}> {
-  // This would integrate with external security scanning services
+> { // This would integrate with external security scanning services
   // For testing purposes, we'll simulate the functionality
   const mockResponse = {
-  score: 85,
+  score: 85
   headers: {
-  'strict-transport-security': 'max-age=31536000; includeSubDomains',
-  'content-security-policy': 'default-src \'self\'',
-  'x-content-type-options': 'nosniff',
-  'x-frame-options': 'DENY',
-},
-  warnings: [],
-      recommendations: [,
-        'Add Permissions-Policy header',
-        'Include preload directive in HSTS',
+  'strict-transport-security': 'max-age=31536000; includeSubDomains'
+  'content-security-policy': 'default-src \'self\''
+  'x-content-type-options': 'nosniff'
+  'x-frame-options': 'DENY' }
+
+  warnings: []
+      recommendations: [
+        'Add Permissions-Policy header'
+        'Include preload directive in HSTS'
         'Consider implementing CSP reporting'
       ]
     };
     return mockResponse;
-  static async generateSecurityReport(scanResults: any): Promise<string> {
-
-  const report = {
-  timestamp: new Date().toISOString(),
+  static async generateSecurityReport(scanResults: any): Promise<string> { const report = {
+  timestamp: new Date().toISOString()
   summary: {
-  totalEndpoints: scanResults.length,
-  averageScore: scanResults.reduce((sum, r) => sum + r.score, 0) / scanResults.length,
-  criticalIssues: scanResults.filter(r => r.score < 60).length,
+  totalEndpoints: scanResults.length
+  averageScore: scanResults.reduce((sum, r) => sum + r.score, 0) / scanResults.length
+  criticalIssues: scanResults.filter(r => r.score < 60).length }
 },
   details: scanResults,
-      recommendations: [,
+      recommendations: [
         'Implement Content Security Policy on all endpoints',
         'Enable HSTS with preload for all domains',
         'Set up automated security header monitoring',

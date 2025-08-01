@@ -30,7 +30,7 @@ const mockWorkspaceDAO = {
   deleteOAuthState: jest.fn(),
   logSecurityEvent: jest.fn(),
   getUserWorkspaces: jest.fn()
-} as unknown as WorkspaceDAO;
+ as unknown as WorkspaceDAO;
 
 // Mock fetch for OAuth tests
 global.fetch = jest.fn();
@@ -131,7 +131,7 @@ describe('AuthService', () => {
           method: 'POST',
           headers: expect.objectContaining({
             'Content-Type': 'application/x-www-form-urlencoded'
-  }
+
   }
       );
     });
@@ -446,7 +446,7 @@ describe('AuthService', () => {
       for (let i = 0; i < 100; i++) {
         const sessionId = await authService.createSession('user-123');
         sessionIds.push(sessionId);
-      }
+
 
       // Check uniqueness
       const uniqueSessionIds = new Set(sessionIds);
@@ -463,7 +463,7 @@ describe('AuthService', () => {
       for (let i = 0; i < 10; i++) {
         const mfaSetup = await authService.enableMFA(`user-${i}`);
         secrets.push(mfaSetup.secret);
-      }
+
 
       // Check uniqueness
       const uniqueSecrets = new Set(secrets);

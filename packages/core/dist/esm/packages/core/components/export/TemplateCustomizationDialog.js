@@ -8,6 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useExport } from '../../hooks/useExport';
+options ?  : Array;
 ;
 category ?  : string;
 dependencies ?  : string;
@@ -35,14 +36,14 @@ dependencies ?  : string;
     'iso',
         validation;
     {
-        options: [,
+        options: [
             { value: 'iso', label: 'ISO 8601 (2024-01-01T00:00:00Z)' },
             { value: 'unix', label: 'Unix Timestamp (1704067200)' },
             { value: 'readable', label: 'Human Readable (Jan 1, 2024)' }
         ];
     }
     category: 'Formatting';
-    yaml: [,
+    yaml: [
         {
             key: 'flowLevel',
             label: 'Flow Level',
@@ -57,17 +58,17 @@ dependencies ?  : string;
             label: 'String Quoting',
             type: 'select',
             defaultValue: 'auto',
-            validation: {
-                options: [,
-                    { value: 'auto', label: 'Automatic' },
-                    { value: 'single', label: 'Single Quotes' },
-                    { value: 'double', label: 'Double Quotes' }
-                ]
-            },
-            category: 'Formatting'
-        }],
+            validation: {},
+            options: [
+                { value: 'auto', label: 'Automatic' },
+                { value: 'single', label: 'Single Quotes' },
+                { value: 'double', label: 'Double Quotes' }
+            ]
+        },
+        category, 'Formatting'
+    ],
         xml;
-    [,
+    [
         {
             key: 'rootElement',
             label: 'Root Element',
@@ -83,85 +84,98 @@ dependencies ?  : string;
             type: 'boolean',
             defaultValue: true,
             category: 'Structure'
-        }],
+        }
+    ],
         csv;
-    [,
+    [
         {
             key: 'delimiter',
             label: 'Delimiter',
             type: 'select',
             defaultValue: ',',
-            validation: {
-                options: [,
-                    { value: ',', label: 'Comma ()' },
-                    { value: ';', label: 'Semicolon (;)' },
-                    { value: '\t', label: 'Tab' },
-                    { value: '|', label: 'Pipe (|)' }
-                ]
-            },
-            category: 'Formatting'
+            validation: {},
+            options: [
+                { value: ',', label: 'Comma ()' },
+                { value: ';', label: 'Semicolon (;)' },
+                { value: '\t', label: 'Tab' },
+                { value: '|', label: 'Pipe (|)' }
+            ]
         },
-        {
-            key: 'includeHeaders',
-            label: 'Include Column Headers',
-            type: 'boolean',
-            defaultValue: true,
-            category: 'Content'
-        }],
-        markdown;
-    [,
+        category, 'Formatting'
+    ];
+}
+{
+    key: 'includeHeaders',
+        label;
+    'Include Column Headers',
+        type;
+    'boolean',
+        defaultValue;
+    true,
+        category;
+    'Content';
+    markdown: [
         {
             key: 'headingStyle',
             label: 'Heading Style',
             type: 'select',
             defaultValue: 'atx',
-            validation: {
-                options: [,
-                    { value: 'atx', label: 'ATX Style (# Heading)' },
-                    { value: 'setext', label: 'Setext Style (Heading\n======)' }
-                ]
-            },
-            category: 'Formatting'
+            validation: {},
+            options: [
+                { value: 'atx', label: 'ATX Style (# Heading)' },
+                { value: 'setext', label: 'Setext Style (Heading\n======)' }
+            ]
         },
-        {
-            key: 'tableStyle',
-            label: 'Table Style',
-            type: 'select',
-            defaultValue: 'github',
-            validation: {
-                options: [,
-                    { value: 'github', label: 'GitHub Flavored' },
-                    { value: 'plain', label: 'Plain Markdown' }
-                ]
-            },
-            category: 'Formatting'
-        }],
-        pdf;
-    [,
+        category, 'Formatting'
+    ];
+}
+{
+    key: 'tableStyle',
+        label;
+    'Table Style',
+        type;
+    'select',
+        defaultValue;
+    'github',
+        validation;
+    {
+        options: [
+            { value: 'github', label: 'GitHub Flavored' },
+            { value: 'plain', label: 'Plain Markdown' }
+        ];
+    }
+    category: 'Formatting';
+    pdf: [
         {
             key: 'pageSize',
             label: 'Page Size',
             type: 'select',
             defaultValue: 'A4',
-            validation: {
-                options: [,
-                    { value: 'A4', label: 'A4' },
-                    { value: 'Letter', label: 'Letter' },
-                    { value: 'Legal', label: 'Legal' }
-                ]
-            },
-            category: 'Layout'
+            validation: {},
+            options: [
+                { value: 'A4', label: 'A4' },
+                { value: 'Letter', label: 'Letter' },
+                { value: 'Legal', label: 'Legal' }
+            ]
         },
-        {
-            key: 'margins',
-            label: 'Margins (inches)',
-            type: 'number',
-            defaultValue: 1,
-            validation: { min: 0.5, max: 2 },
-            category: 'Layout'
-        }],
-        html;
-    [,
+        category, 'Layout'
+    ];
+}
+{
+    key: 'margins',
+        label;
+    'Margins (inches)',
+        type;
+    'number',
+        defaultValue;
+    1,
+        validation;
+    {
+        min: 0.5, max;
+        2;
+    }
+    category: 'Layout';
+    html: [
         {
             key: 'includeCSS',
             label: 'Include Embedded CSS',
@@ -174,17 +188,17 @@ dependencies ?  : string;
             label: 'Theme',
             type: 'select',
             defaultValue: 'default',
-            validation: {
-                options: [,
-                    { value: 'default', label: 'Default' },
-                    { value: 'dark', label: 'Dark Theme' },
-                    { value: 'minimal', label: 'Minimal' }
-                ]
-            },
-            category: 'Styling'
-        }],
+            validation: {},
+            options: [
+                { value: 'default', label: 'Default' },
+                { value: 'dark', label: 'Dark Theme' },
+                { value: 'minimal', label: 'Minimal' }
+            ]
+        },
+        category, 'Styling'
+    ],
         zip;
-    [,
+    [
         {
             key: 'compressionLevel',
             label: 'Compression Level',
@@ -193,33 +207,42 @@ dependencies ?  : string;
             validation: { min: 0, max: 9 },
             description: '0 = no compression, 9 = maximum compression',
             category: 'Archive'
-        }],
+        }
+    ],
         vfx;
-    [,
+    [
         {
             key: 'pipeline',
             label: 'VFX Pipeline',
             type: 'select',
             defaultValue: 'standard',
-            validation: {
-                options: [,
-                    { value: 'standard', label: 'Standard Pipeline' },
-                    { value: 'maya', label: 'Maya Pipeline' },
-                    { value: 'houdini', label: 'Houdini Pipeline' },
-                    { value: 'blender', label: 'Blender Pipeline' }
-                ]
-            },
-            category: 'Pipeline'
+            validation: {},
+            options: [
+                { value: 'standard', label: 'Standard Pipeline' },
+                { value: 'maya', label: 'Maya Pipeline' },
+                { value: 'houdini', label: 'Houdini Pipeline' },
+                { value: 'blender', label: 'Blender Pipeline' }
+            ]
         },
-        {
-            key: 'frameRange',
-            label: 'Frame Range',
-            type: 'string',
-            defaultValue: '1-100',
-            description: 'Frame range in format: start-end',
-            validation: { pattern: '^\\d+-\\d+$' },
-            category: 'Animation'
-        }];
+        category, 'Pipeline'
+    ];
+}
+{
+    key: 'frameRange',
+        label;
+    'Frame Range',
+        type;
+    'string',
+        defaultValue;
+    '1-100',
+        description;
+    'Frame range in format: start-end',
+        validation;
+    {
+        pattern: '^\\d+-\\d+$';
+    }
+    category: 'Animation';
+    ;
 }
 ;
 export const TemplateCustomizationDialog = ({

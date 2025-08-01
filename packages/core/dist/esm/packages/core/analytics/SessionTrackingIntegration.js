@@ -26,7 +26,11 @@ deviceType: 'desktop' | 'mobile' | 'tablet';
 browser: string;
 os: string;
  > ;
-dropoffPoints: Array;
+dropoffPoints: Array < {
+    page: string,
+    dropoffRate: number,
+    recoverableUsers: number
+} > ;
 export class SessionTrackingManager {
     analyticsClient;
     conversionArchitecture;
@@ -268,22 +272,22 @@ else if (/mobile|iphone|android/i.test(userAgent)) {
                                 string;
                                 {
                                     // Create a privacy-compliant behavioral fingerprint
-                                    const patterns = [];
-                                    this.currentSession?.viewport.width + 'x' + this.currentSession?.viewport.height,
+                                    const patterns = [
+                                        this.currentSession?.viewport.width + 'x' + this.currentSession?.viewport.height,
                                         this.currentSession?.deviceType,
                                         this.currentSession?.browser,
-                                        new Date().getTimezoneOffset().toString();
-                                    ;
+                                        new Date().getTimezoneOffset().toString()
+                                    ];
                                     return btoa(patterns.join('|')).substring(0, 16);
                                     generateBehavioralFingerprintFromSession(session, EnhancedSession);
                                     string;
                                     {
-                                        const patterns = [];
-                                        session.viewport.width + 'x' + session.viewport.height,
+                                        const patterns = [
+                                            session.viewport.width + 'x' + session.viewport.height,
                                             session.deviceType,
                                             session.browser,
-                                            new Date().getTimezoneOffset().toString();
-                                        ;
+                                            new Date().getTimezoneOffset().toString()
+                                        ];
                                         return btoa(patterns.join('|')).substring(0, 16);
                                         calculateBehavioralSimilarity(fp1, string, fp2, string);
                                         number;
@@ -505,12 +509,12 @@ else if (/mobile|iphone|android/i.test(userAgent)) {
                                                                 return 'hashed_ip_placeholder';
                                                             },
                                                             generateDeviceFingerprint() {
-                                                                const components = [];
-                                                                navigator.userAgent,
+                                                                const components = [
+                                                                    navigator.userAgent,
                                                                     navigator.language,
                                                                     screen.width + 'x' + screen.height,
-                                                                    new Date().getTimezoneOffset().toString();
-                                                                ;
+                                                                    new Date().getTimezoneOffset().toString()
+                                                                ];
                                                                 return btoa(components.join('|')).substring(0, 32);
                                                                 // Export factory function for integration with Epic 1 analytics
                                                                 export const createSessionTrackingManager = (analyticsClient, conversionArchitecture) => {

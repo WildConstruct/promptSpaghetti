@@ -66,108 +66,128 @@ export class AuditIntegration {
                 resourceId,
                 classification,
                 reason: enforcementResult?.reason,
-                missingControls: enforcementResult?.missingControls
+                missingControls: enforcementResult?.missingControls,
             });
         }
-    }
-    /**
-    * Log an administrative operation
-    */
-    async logAdminOperation(operation, context, target, metadata) {
-        await this.logger.log({
-            userId: context.userId,
-            userRole: context.userRole,
-            operation: AuditOperation[operation],
-            resourceType: target.resourceType,
-            resourceId: target.resourceId,
-            dataClassification: target.classification || DataClassificationLevel.PUBLIC,
-            ipAddress: context.ipAddress,
-            sessionId: context.sessionId,
-            authorized: true,
-            success: true,
-            sensitiveAccess: target.classification ?
-                this.isSensitiveClassification(target.classification) : false,
-            metadata: {
-                targetUserId: target.userId,
-                ...metadata
-            }
-        });
-    }
-    /**
-     * Log a security event
-     */
-    async logSecurityEvent(eventType, context, details) {
-        await this.logger.log({
-            userId: context.userId,
-            userRole: context.userRole,
-            operation: AuditOperation.AUTHORIZATION,
-            resourceType: 'security_event',
-            resourceId: eventType,
-            dataClassification: DataClassificationLevel.INTERNAL,
-            ipAddress: context.ipAddress,
-            sessionId: context.sessionId,
-            authorized: false,
-            success: false,
-            anomalyDetected: true,
-            metadata: {
-                eventType,
-                ...details
-            }
-        });
-    }
-    /**
-     * Log a batch operation
-     */
-    async logBatchOperation(context, operation, resources, success, metadata) {
-        const highestClassification = resources.reduce((highest, resource) => {
-            const level = resource.classification || DataClassificationLevel.PUBLIC;
-            return this.getClassificationPriority(level) > this.getClassificationPriority(highest)
-                ? level : highest;
-        }, DataClassificationLevel.PUBLIC);
-        await this.logger.log({
-            userId: context.userId,
-            userRole: context.userRole,
-            operation: AuditOperation.BATCH_OPERATION,
-            resourceType: 'batch',
-            resourceId: `batch_${Date.now()}`,
-            dataClassification: highestClassification,
-            ipAddress: context.ipAddress,
-            sessionId: context.sessionId,
-            authorized: true,
-            success,
-            recordCount: resources.length,
-            sensitiveAccess: this.isSensitiveClassification(highestClassification),
-            metadata: {
-                batchOperation: operation,
-                resourceTypes: [...new Set(resources.map(r => r.type))],
-                resourceCount: resources.length,
-                ...metadata
-            }
-        });
-    }
-    /**
-     * Create an audit trail for a workflow
-     */
-    async startAuditTrail(workflowId, context, metadata) {
-        const correlationId = `workflow_${workflowId}_${Date.now()}`;
-        await this.logger.log({
-            userId: context.userId,
-            userRole: context.userRole,
-            operation: AuditOperation.API_CALL,
-            resourceType: 'workflow',
-            resourceId: workflowId,
-            dataClassification: DataClassificationLevel.INTERNAL,
-            correlationId,
-            ipAddress: context.ipAddress,
-            sessionId: context.sessionId,
-            authorized: true,
-            success: true,
-            metadata: {
-                workflowStart: true,
-                ...metadata
-            }
-        });
-        return correlationId;
+        /**
+        * Log an administrative operation
+        */
+        async;
+        logAdminOperation(operation, 'GRANT_ACCESS' | 'REVOKE_ACCESS' | 'CHANGE_CLASSIFICATION', context, OperationContext, target, {
+            userId: string,
+            resourceType: string,
+            resourceId: string,
+            classification: DataClassificationLevel
+        }, metadata ?  : Record);
+        Promise < void  > {
+            await: this.logger.log({
+                userId: context.userId,
+                userRole: context.userRole,
+                operation: AuditOperation[operation],
+                resourceType: target.resourceType,
+                resourceId: target.resourceId,
+                dataClassification: target.classification || DataClassificationLevel.PUBLIC,
+                ipAddress: context.ipAddress,
+                sessionId: context.sessionId,
+                authorized: true,
+                success: true,
+                sensitiveAccess: target.classification ?  : ,
+                this: .isSensitiveClassification(target.classification), false: ,
+                metadata: {
+                    targetUserId: target.userId,
+                    ...metadata
+                }
+            })
+        };
+        /**
+         * Log a security event
+         */
+        async;
+        logSecurityEvent(eventType, string, context, OperationContext, details, (Record));
+        Promise < void  > {
+            await: this.logger.log({
+                userId: context.userId,
+                userRole: context.userRole,
+                operation: AuditOperation.AUTHORIZATION,
+                resourceType: 'security_event',
+                resourceId: eventType,
+                dataClassification: DataClassificationLevel.INTERNAL,
+                ipAddress: context.ipAddress,
+                sessionId: context.sessionId,
+                authorized: false,
+                success: false,
+                anomalyDetected: true,
+                metadata: {
+                    eventType,
+                    ...details
+                }
+            })
+        };
+        /**
+         * Log a batch operation
+         */
+        async;
+        logBatchOperation(context, OperationContext, operation, AuditOperation, resources, Array < {
+            type: string,
+            id: string,
+            classification: DataClassificationLevel
+        } > , success, boolean, metadata ?  : Record);
+        Promise < void  > {
+            const: highestClassification = resources.reduce((highest, resource) => {
+                const level = resource.classification || DataClassificationLevel.PUBLIC;
+                return this.getClassificationPriority(level) > this.getClassificationPriority(highest)
+                    ? level : highest;
+            }, DataClassificationLevel.PUBLIC),
+            await: this.logger.log({
+                userId: context.userId,
+                userRole: context.userRole,
+                operation: AuditOperation.BATCH_OPERATION,
+                resourceType: 'batch',
+                resourceId: `batch_${Date.now()}`,
+                dataClassification: highestClassification,
+                ipAddress: context.ipAddress,
+                sessionId: context.sessionId,
+                authorized: true,
+                success,
+                recordCount: resources.length,
+                sensitiveAccess: this.isSensitiveClassification(highestClassification),
+                metadata: {
+                    batchOperation: operation,
+                    resourceTypes: [...new Set(resources.map(r => r.type))],
+                    resourceCount: resources.length,
+                    ...metadata
+                }
+            })
+        };
+        /**
+         * Create an audit trail for a workflow
+         */
+        async;
+        startAuditTrail(workflowId, string, context, OperationContext, metadata ?  : Record);
+        Promise < string > {
+            const: correlationId = `workflow_${workflowId}_${Date.now()}`,
+            await: this.logger.log({
+                userId: context.userId,
+                userRole: context.userRole,
+                operation: AuditOperation.API_CALL,
+                resourceType: 'workflow',
+                resourceId: workflowId,
+                dataClassification: DataClassificationLevel.INTERNAL,
+                correlationId,
+                ipAddress: context.ipAddress,
+                sessionId: context.sessionId,
+                authorized: true,
+                success: true,
+                metadata: {
+                    workflowStart: true,
+                    ...metadata
+                }
+            }),
+            return: correlationId
+        };
+        /**
+         * Set up event listeners for automatic logging
+         */
     }
     /**
      * Set up event listeners for automatic logging
@@ -228,6 +248,9 @@ export class AuditIntegration {
                 }
             });
         }
+        /**
+         * Check if classification level is sensitive
+         */
     }
     /**
      * Check if classification level is sensitive
@@ -314,14 +337,12 @@ classificationBreakdown: Record;
 operationBreakdown: Record;
 anomalies: number;
 riskMetrics: {
+    ;
     averageRiskScore: number;
     highRiskOperations: number;
 }
 ;
-details ?  : AuditLogEntry[];
-/**
- * Factory function to create audit integration
- */
+details ?  : AuditLogEntry;
 export function createAuditIntegration(config) {
     return new AuditIntegration(config);
 }

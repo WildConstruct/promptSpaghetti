@@ -3,68 +3,54 @@
 // Core serialization logic for converting graphs to LLM-friendly format
 import { Graph, Node } from '../../graphSchema';
 // Use Node.js crypto in Node environment, or web crypto API in browser
-}
-interface HashFunction {
-  update: (data: string) => {,
+
+
+interface HashFunction { update: (data: string) => { }
   digest: (format: string) => string;
-}
+
+
 };
 let createHash: (algorithm: string) => HashFunction;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  createHash = require('crypto').createHash;
-} catch {
-  // Browser environment - use a simple hash alternative
+try { // eslint-disable-next-line @typescript-eslint/no-require-imports
+  createHash = require('crypto').createHash } catch { // Browser environment - use a simple hash alternative
   createHash = () => ({)
-  update: (data: string) => ({,)
-  digest: () => {,
+  update: (data: string) => ({),
+  digest: () => { }
   // Simple hash fallback for browser testing
   let hash = 0;
-  for (let i = 0; i < data.length; i++) {
-  const char = data.charCodeAt(i);
+  for (let i = 0; i < data.length; i++) { const char = data.charCodeAt(i);
   hash = ((hash << 5) - hash) + char;
   hash = hash & hash; // Convert to 32-bit integer
-  return Math.abs(hash).toString(16).padStart(16, '0');
-}
+  return Math.abs(hash).toString(16).padStart(16, '0') }
   });
 
-}
-export interface SerializationMetadata {
-  name?: string;
+
+export interface SerializationMetadata { name?: string;
   description?: string;
   author?: string;
   created?: string;
-  tags?: string;
-}
-}
-}
-export interface SerializationOptions {
-  includeChecksum?: boolean;
+  tags?: string }
+
+
+
+export interface SerializationOptions { includeChecksum?: boolean;
   includeMetadata?: boolean;
   compactFormat?: boolean;
-  validateOnSerialize?: boolean;
-}
-}
-export class GraphSerializer {
-  private static readonly FORMAT_VERSION = '1.0.0';
-  private static readonly SECTION_DELIMITERS = {
-  NODES: '---NODES---',
-  EDGES: '---EDGES---',
-  END: '---END---',
-};
+  validateOnSerialize?: boolean }
+
+export class GraphSerializer {};
   /**
    * Serialize a graph to LLM-friendly format
    */
-  static serialize(graph: Graph, )
+  static serialize(graph: Graph)
     metadata?: SerializationMetadata,
     options: SerializationOptions = {}
-  ): string {
-    const {
+  ): string { const {
       includeChecksum = true,
       includeMetadata = true,
-      compactFormat = false,
+      compactFormat = false }
       validateOnSerialize = true
-    } = options;
+ = options;
     if (validateOnSerialize) {
       this.validateGraph(graph);
     const lines: string = [];
@@ -73,16 +59,16 @@ export class GraphSerializer {
     lines.push(`version: ${this.FORMAT_VERSION}`);}
     if (includeMetadata && metadata) {
       lines.push('metadata:');
-      if (metadata.name) lines.push(`${indent},)}
+      if (metadata.name) lines.push(`${indent})},
   name: "${metadata.name}"`);}
-      if (metadata.description) lines.push(`${indent},)}
+      if (metadata.description) lines.push(`${indent})},
   description: "${metadata.description}"`);}
-      if (metadata.author) lines.push(`${indent},)}
+      if (metadata.author) lines.push(`${indent})},
   author: "${metadata.author}"`);}
-      if (metadata.created) lines.push(`${indent},)}
+      if (metadata.created) lines.push(`${indent})},
   created: ${metadata.created}`);}
       if (metadata.tags && metadata.tags.length > 0) {
-        lines.push(`${indent},)}
+        lines.push(`${indent})},
   tags: [${metadata.tags.map(t => `"${t}"`).join(', ')}]`);}
     lines.push(''); // Empty line before nodes section
     // Nodes section
@@ -105,7 +91,7 @@ export class GraphSerializer {
       const checksum = this.calculateChecksum(serialized);
       serialized = serialized.replace()
         `version: ${this.FORMAT_VERSION}`}
-}
+
         `version: ${this.FORMAT_VERSION}\nchecksum: ${checksum}`}
       );
     return serialized;
@@ -116,12 +102,12 @@ export class GraphSerializer {
     const lines: string = [];
     const indent = compact ? '' : '  ';
     lines.push(`${node.id}:`);}
-    lines.push(`${indent},)}
+    lines.push(`${indent})},
   type: ${node.type}`);}
     // Serialize properties based on node type
     const props = this.extractNodeProperties(node);
     if (Object.keys(props).length > 0) {
-      lines.push(`${indent},)}
+      lines.push(`${indent})},
   props:`);}
       Object.entries(props).forEach(([key, value]) => {
         lines.push(`${indent}${indent}${key}: ${this.serializeValue(value)}`);}
@@ -129,7 +115,7 @@ export class GraphSerializer {
     // Add inputs if present
     if (node.inputs && node.inputs.length > 0) {
       const inputsStr = node.inputs.map(id => `"${id}"`).join(', ');}
-      lines.push(`${indent},)}
+      lines.push(`${indent})},
   inputs: [${inputsStr}]`);}
     return lines;
   /**
@@ -206,12 +192,12 @@ export class GraphSerializer {
    */
   private static extractEdges(graph: Graph): Array<{source: string, target: string}> {
     const edges: Array<{source: string, target: string}> = [];
-    graph.nodes.forEach(node => {)
+    graph.nodes.forEach(node => { )
   if (node.inputs) {
   node.inputs.forEach(inputId => {)
   edges.push({)
   source: inputId,
-  target: node.id,
+  target: node.id }
 });
         });
     });
@@ -251,8 +237,7 @@ export class GraphSerializer {
     const dfs = (nodeId: string): boolean => {
       if (recursionStack.has(nodeId)) {
         throw new Error(`Cycle detected involving node ${nodeId}`);}
-      if (visited.has(nodeId)) {
-        return false;
+      if (visited.has(nodeId)) { return false;
       visited.add(nodeId);
       recursionStack.add(nodeId);
       const node = nodeMap.get(nodeId);
@@ -261,24 +246,22 @@ export class GraphSerializer {
           if (dfs(inputId)) {
             return true;
       recursionStack.delete(nodeId);
-      return false;
-    };
-    for (const node of graph.nodes) {
-  if (!visited.has(node.id)) {
+      return false };
+    for (const node of graph.nodes) { if (!visited.has(node.id)) {
   dfs(node.id);
   /**
   * Utility function for easy serialization
   */
   export function serializeGraph(graph: Graph)
-  metadata?: SerializationMetadata,
-  options?: SerializationOptions): string {,
+  metadata?: SerializationMetadata
+  options?: SerializationOptions): string {
   return GraphSerializer.serialize(graph, metadata, options);
   /**
   * Create default metadata for a graph
   */
-  export function createDefaultMetadata(): SerializationMetadata {,
+  export function createDefaultMetadata(): SerializationMetadata {
   return {
-  author: 'llm-agent',
-  created: new Date().toISOString(),
-  description: 'LLM-generated graph',
+  author: 'llm-agent'
+  created: new Date().toISOString()
+  description: 'LLM-generated graph' }
 };

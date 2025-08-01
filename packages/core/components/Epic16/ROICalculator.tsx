@@ -7,98 +7,95 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 import { Calculator, DollarSign, Clock, TrendingUp, Target, Zap } from 'lucide-react';
-}
-interface ROIInputs {
-  // Template costs
-  templatePrice: number; // in cents,
-  templateUsageFrequency: number; // uses per month,
-  claudeTokensPerUse: number; // estimated tokens per template use,
+
+
+interface ROIInputs { // Template costs
+  templatePrice: number; // in cents;
+  templateUsageFrequency: number; // uses per month;
+  claudeTokensPerUse: number; // estimated tokens per template use;
   // Manual alternative costs
-  manualDevelopmentHours: number; // hours to develop equivalent manually,
-  developerHourlyRate: number; // $/hour for developer time,
-  manualTokensPerUse: number; // estimated tokens for manual prompts,
+  manualDevelopmentHours: number; // hours to develop equivalent manually;
+  developerHourlyRate: number; // $/hour for developer time;
+  manualTokensPerUse: number; // estimated tokens for manual prompts;
   // Time horizon
-  analysisMonths: number; // number of months to analyze,
+  analysisMonths: number; // number of months to analyze;
   // Claude API pricing (2025 rates)
-  claudeTokenCostPer1K: number; // cost per 1K tokens,
+  claudeTokenCostPer1K: number; // cost per 1K tokens;
   interface ROIResult {
   templateTotalCost: number;
   manualTotalCost: number;
   netSavings: number;
-  roi: number; // as percentage,
+  roi: number; // as percentage;
   paybackMonths: number;
   monthlySavings: number;
   timeToValue: string;
-  efficiency: number; // efficiency factor,
+  efficiency: number; // efficiency factor;
   interface ROICalculatorProps {
   className?: string;
   onResultsChange?: (results: ROIResult) => void;
   presetScenario?: 'startup' | 'enterprise' | 'individual' | 'agency';
-  export const ROICalculator: React.FC<ROICalculatorProps> = ({,)
-  className = '',
-  onResultsChange,
+  export const ROICalculator: React.FC<ROICalculatorProps> = ({);
+  className = '';
+  onResultsChange }
   presetScenario
-}
-}) => {
-  const [inputs, setInputs] = useState<ROIInputs>({)
-  templatePrice: 999, // $9.99 in cents,
-  templateUsageFrequency: 20,
-  claudeTokensPerUse: 1500,
-  manualDevelopmentHours: 8,
-  developerHourlyRate: 85,
-  manualTokensPerUse: 2500,
-  analysisMonths: 12,
-  claudeTokenCostPer1K: 0.015 // Claude 3 Haiku pricing,
+
+
+}) => { const [inputs, setInputs] = useState<ROIInputs>({)
+  templatePrice: 999, // $9.99 in cents
+  templateUsageFrequency: 20
+  claudeTokensPerUse: 1500
+  manualDevelopmentHours: 8
+  developerHourlyRate: 85
+  manualTokensPerUse: 2500
+  analysisMonths: 12
+  claudeTokenCostPer1K: 0.015 // Claude 3 Haiku pricing }
 });
   const [activeScenario, setActiveScenario] = useState<string>(presetScenario || 'individual');
   // Preset scenarios for different user types
-  const presetScenarios = {
-  individual: {
-  templatePrice: 499, // $4.99,
-  templateUsageFrequency: 10,
-  claudeTokensPerUse: 1200,
-  manualDevelopmentHours: 4,
-  developerHourlyRate: 50,
-  manualTokensPerUse: 2000,
-  analysisMonths: 6,
-  claudeTokenCostPer1K: 0.015,
-},
-  startup: {
-  templatePrice: 999, // $9.99,
-  templateUsageFrequency: 30,
-  claudeTokensPerUse: 1500,
-  manualDevelopmentHours: 6,
-  developerHourlyRate: 75,
-  manualTokensPerUse: 2500,
-  analysisMonths: 12,
-  claudeTokenCostPer1K: 0.015,
-},
-  agency: {
-  templatePrice: 1999, // $19.99,
-  templateUsageFrequency: 100,
-  claudeTokensPerUse: 2000,
-  manualDevelopmentHours: 12,
-  developerHourlyRate: 95,
-  manualTokensPerUse: 3500,
-  analysisMonths: 12,
-  claudeTokenCostPer1K: 0.015,
-},
-  enterprise: {
-  templatePrice: 4999, // $49.99,
-  templateUsageFrequency: 250,
-  claudeTokensPerUse: 2500,
-  manualDevelopmentHours: 20,
-  developerHourlyRate: 120,
-  manualTokensPerUse: 4000,
-  analysisMonths: 24,
-  claudeTokenCostPer1K: 0.015,
+  const presetScenarios = { individual: {
+  templatePrice: 499, // $4.99
+  templateUsageFrequency: 10
+  claudeTokensPerUse: 1200
+  manualDevelopmentHours: 4
+  developerHourlyRate: 50
+  manualTokensPerUse: 2000
+  analysisMonths: 6
+  claudeTokenCostPer1K: 0.015 }
+
+  startup: { 
+  templatePrice: 999, // $9.99
+  templateUsageFrequency: 30
+  claudeTokensPerUse: 1500
+  manualDevelopmentHours: 6
+  developerHourlyRate: 75
+  manualTokensPerUse: 2500
+  analysisMonths: 12
+  claudeTokenCostPer1K: 0.015 }
+
+  agency: { 
+  templatePrice: 1999, // $19.99
+  templateUsageFrequency: 100
+  claudeTokensPerUse: 2000
+  manualDevelopmentHours: 12
+  developerHourlyRate: 95
+  manualTokensPerUse: 3500
+  analysisMonths: 12
+  claudeTokenCostPer1K: 0.015 }
+
+  enterprise: { 
+  templatePrice: 4999, // $49.99
+  templateUsageFrequency: 250
+  claudeTokensPerUse: 2500
+  manualDevelopmentHours: 20
+  developerHourlyRate: 120
+  manualTokensPerUse: 4000
+  analysisMonths: 24
+  claudeTokenCostPer1K: 0.015 }
 };
   // Load preset scenario when changed
-  useEffect(() => {
-    if (presetScenario && presetScenarios[presetScenario]) {
+  useEffect(() => { if (presetScenario && presetScenarios[presetScenario]) {
       setInputs(presetScenarios[presetScenario]);
-      setActiveScenario(presetScenario);
-  }, [presetScenario]);
+      setActiveScenario(presetScenario) }, [presetScenario]);
   // Calculate ROI metrics
   const roiResults: ROIResult = useMemo(() => {
     // Template costs
@@ -117,50 +114,41 @@ interface ROIInputs {
     // Efficiency metrics
     const tokenEfficiency = inputs.manualTokensPerUse > 0 ? ((inputs.manualTokensPerUse - inputs.claudeTokensPerUse) / inputs.manualTokensPerUse) * 100 : 0;
     const timeToValue = paybackMonths < 1 ? `${Math.ceil(paybackMonths * 30)} days` : `${Math.ceil(paybackMonths)} months`;}
-    const result: ROIResult = {
-  templateTotalCost,
+    const result: ROIResult = { templateTotalCost,
   manualTotalCost,
   netSavings,
   roi,
   paybackMonths,
   monthlySavings,
   timeToValue,
-  efficiency: tokenEfficiency,
+  efficiency: tokenEfficiency }
 };
     return result;
   }, [inputs]);
   // Notify parent of results changes
-  useEffect(() => {
-    onResultsChange?.(roiResults);
-  }, [roiResults, onResultsChange]);
-  const handleInputChange = (field: keyof ROIInputs, value: number) => {
-  setInputs(prev => ({)
+  useEffect(() => { onResultsChange?.(roiResults) }, [roiResults, onResultsChange]);
+  const handleInputChange = (field: keyof ROIInputs, value: number) => { setInputs(prev => ({)
   ...prev,
-  [field]: value,
+  [field]: value }
 }));
   };
-  const handleScenarioChange = (scenario: string) => {
-    if (presetScenarios[scenario as keyof typeof presetScenarios]) {
+  const handleScenarioChange = (scenario: string) => { if (presetScenarios[scenario as keyof typeof presetScenarios]) {
       setInputs(presetScenarios[scenario as keyof typeof presetScenarios]);
-      setActiveScenario(scenario);
-  };
-  const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('en-US', {)
+      setActiveScenario(scenario) };
+  const formatCurrency = (amount: number) => { return new Intl.NumberFormat('en-US', {)
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
+  maximumFractionDigits: 2 }
 }).format(amount);
   };
   const formatPercentage = (value: number) => {
     return `${value.toFixed(1)}%`;}
   };
-  const getROIColor = (roi: number) => {
-    if (roi >= 300) return 'text-green-600';
+  const getROIColor = (roi: number) => { if (roi >= 300) return 'text-green-600';
     if (roi >= 100) return 'text-blue-600';
     if (roi >= 0) return 'text-yellow-600';
-    return 'text-red-600';
-  };
+    return 'text-red-600' };
   return;
     <div className={`bg-white rounded-lg shadow-lg border border-gray-200 ${className}`}>}
       {/* Header */}
@@ -188,11 +176,11 @@ interface ROIInputs {
               <button
                 key={scenario}
                 onClick={() => handleScenarioChange(scenario)}
-                className={`p-3 rounded-lg border text-sm font-medium transition-colors ${
+                className={ `p-3 rounded-lg border text-sm font-medium transition-colors ${
   activeScenario === scenario
   ? 'border-blue-500 bg-blue-50 text-blue-700'
-  : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50',
-}`}
+  : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50' }
+`}
               >
                 {scenario.charAt(0).toUpperCase() + scenario.slice(1)}
               </button>

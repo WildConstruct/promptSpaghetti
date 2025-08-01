@@ -7,6 +7,21 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  */
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { useReactFlow } from 'reactflow';
+options ?  : Array;
+validation ?  : {
+    required: boolean,
+    minLength: number,
+    maxLength: number,
+    pattern: RegExp
+};
+defaultValue ?  : unknown;
+onNodeCreate: (nodeType, position, data) => void ;
+onNodeDelete: (nodeIds) => void ;
+onExport: (format) => void ;
+onTemplateApply: (templateId) => void ;
+theme ?  : 'light' | 'dark' | 'cinema';
+recentCommands ?  : string;
+customActions ?  : CommandPaletteAction;
 const GenerationWizard = ({ flow, currentStep, params, onParamsChange, onStepChange, onExecute, onCancel, theme, }) => {
     const step = flow.steps[currentStep];
     const isLastStep = currentStep === flow.steps.length - 1;
@@ -152,9 +167,6 @@ const GenerationWizard = ({ flow, currentStep, params, onParamsChange, onStepCha
                                     cursor: 'pointer',
                                 }, children: isLastStep ? '✨ Generate' : 'Next' })] })] })] }));
 };
-/**
- * Professional command palette for graph editor with generation flow integration
- */
 export const CommandPalette = ({ isOpen, onClose, nodes, edges, selectedNodes, onGenerationStart, onNodeCreate, onNodeDelete, onExport, onTemplateApply, theme = 'cinema', recentCommands = [], customActions = [], }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -200,7 +212,7 @@ export const CommandPalette = ({ isOpen, onClose, nodes, edges, selectedNodes, o
                                 { value: 'antagonist', label: 'Antagonist' },
                                 { value: 'supporting', label: 'Supporting Character' },
                                 { value: 'mentor', label: 'Mentor' },
-                                { value: 'comic-relief', label: 'Comic Relief' },
+                                { value: 'comic-relief', label: 'Comic Relief' }
                             ],
                         },
                         {
@@ -213,13 +225,13 @@ export const CommandPalette = ({ isOpen, onClose, nodes, edges, selectedNodes, o
                                 { value: 'comedy', label: 'Comedy' },
                                 { value: 'thriller', label: 'Thriller' },
                                 { value: 'sci-fi', label: 'Sci-Fi' },
-                                { value: 'fantasy', label: 'Fantasy' },
+                                { value: 'fantasy', label: 'Fantasy' }
                             ],
-                        },
+                        }
                     ],
-                },
+                }
             ],
-        },
+        }
     ];
     // Build command actions
     const commandActions = useMemo(() => {
@@ -269,7 +281,7 @@ export const CommandPalette = ({ isOpen, onClose, nodes, edges, selectedNodes, o
                 action: () => reactFlowInstance?.fitView({ padding: 0.1 }),
             },
             // Add custom actions
-            ...customActions,
+            ...customActions
         ];
         return actions;
     }, [selectedNodes, customActions, onExport, onTemplateApply, onNodeDelete, reactFlowInstance]);

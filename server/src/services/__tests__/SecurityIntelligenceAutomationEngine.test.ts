@@ -11,7 +11,7 @@ import {
   IntelligenceAnalysisResult,
   IntelligenceWorkflow,
   IntelligenceBriefing 
-} from '../SecurityIntelligenceAutomationEngine';
+ from '../SecurityIntelligenceAutomationEngine';
 import { SecurityAPIIntegrationPlatform } from '../SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../SecurityPolicyAnalysisEngine';
 import { SecurityRiskScoringEngine } from '../SecurityRiskScoringEngine';
@@ -44,48 +44,48 @@ describe('SecurityIntelligenceAutomationEngine', () => {
       getPlatformMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         api_calls: { total_requests: 50000, successful_requests: 49500 },
         security_analytics: { threats_detected: 125, detection_accuracy_percent: 98 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPolicyEngine = {
       on: jest.fn<unknown[], unknown>(),
       analyzePolicyImpact: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_analysis: { overall_risk_score: 55 },
         validation_results: { validation_passed: true }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockRiskScoringEngine = {
       on: jest.fn<unknown[], unknown>(),
       scoreSecurityRisk: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_id: 'risk_789',
         risk_scoring: { composite_score: 87 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPatternEngine = {
       on: jest.fn<unknown[], unknown>(),
       recognizePatterns: jest.fn<unknown[], unknown>().mockResolvedValue({
         patterns_discovered: { new_patterns: ['pattern_1', 'pattern_2'] },
         analysis_id: 'pattern_analysis_789'
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockTimeSeriesEngine = {
       on: jest.fn<unknown[], unknown>(),
       analyzeTimeSeries: jest.fn<unknown[], unknown>().mockResolvedValue({
         analysis_id: 'timeseries_789',
         detected_anomalies: [{ anomaly_id: 'anom_1', severity: 'high' }]
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockInsightsEngine = {
       on: jest.fn<unknown[], unknown>(),
       generateInsights: jest.fn<unknown[], unknown>().mockResolvedValue({
         generation_id: 'gen_789',
         insights_generated: []
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     // Setup configuration
     config = {
@@ -98,7 +98,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         dark_web_monitoring: true,
         social_media_intelligence: true,
         vulnerability_intelligence: true
-  }
+
       intelligence_processing: {
         natural_language_processing: true,
         machine_learning_analysis: true,
@@ -108,7 +108,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         temporal_analysis: true,
         geospatial_analysis: true,
         behavioral_analysis: true
-  }
+
       threat_intelligence: {
         indicator_extraction: true,
         ioc_management: true,
@@ -118,7 +118,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         attribution_analysis: true,
         threat_hunting_automation: true,
         predictive_threat_modeling: true
-  }
+
       intelligence_fusion: {
         multi_source_correlation: true,
         cross_intelligence_analysis: true,
@@ -127,7 +127,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         strategic_intelligence: true,
         technical_intelligence: true,
         contextual_intelligence: true
-  }
+
       automation_capabilities: {
         automated_analysis: true,
         intelligence_orchestration: true,
@@ -137,7 +137,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         decision_support: true,
         workflow_automation: true,
         integration_automation: true
-  }
+
       intelligence_distribution: {
         stakeholder_targeting: true,
         format_customization: true,
@@ -147,7 +147,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         api_distribution: true,
         alert_distribution: true,
         report_distribution: true
-      }
+
     };
 
     engine = new SecurityIntelligenceAutomationEngine(
@@ -391,7 +391,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         distribution_settings: {
           channels: ['email', 'dashboard', 'api'],
           audiences: ['security_team', 'management']
-        }
+
       };
 
       const result = await engine.automateWorkflow('distribution', workflowConfig);
@@ -655,9 +655,9 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         await engine.collectIntelligence(['invalid_source'], { 
           time_range: { start: Date.now(), end: Date.now() - 86400000 } // Invalid range
         });
-      } catch (error) {
+ catch (error) {
         // Expected to not reach here in normal operation
-      }
+
     });
   });
 
@@ -764,17 +764,17 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           workflow_name: 'Collection Workflow',
           automation_level: 'fully_automated' as const,
           trigger_conditions: ['schedule']
-  }
+
         {
           workflow_name: 'Analysis Workflow',
           automation_level: 'semi_automated' as const,
           trigger_conditions: ['data_available']
-  }
+
         {
           workflow_name: 'Distribution Workflow',
           automation_level: 'fully_automated' as const,
           trigger_conditions: ['analysis_complete']
-        }
+
       ];
 
       const workflowPromises = workflowConfigs.map((config, index) => 
@@ -825,7 +825,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           dark_web_monitoring: true,
           social_media_intelligence: false,
           vulnerability_intelligence: true
-  }
+
         intelligence_processing: {
           natural_language_processing: true,
           machine_learning_analysis: false,
@@ -835,7 +835,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           temporal_analysis: false,
           geospatial_analysis: false,
           behavioral_analysis: true
-  }
+
         threat_intelligence: {
           indicator_extraction: true,
           ioc_management: true,
@@ -845,7 +845,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           attribution_analysis: true,
           threat_hunting_automation: false,
           predictive_threat_modeling: true
-  }
+
         intelligence_fusion: {
           multi_source_correlation: true,
           cross_intelligence_analysis: false,
@@ -854,7 +854,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           strategic_intelligence: false,
           technical_intelligence: true,
           contextual_intelligence: false
-  }
+
         automation_capabilities: {
           automated_analysis: false,
           intelligence_orchestration: true,
@@ -864,7 +864,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           decision_support: false,
           workflow_automation: true,
           integration_automation: false
-  }
+
         intelligence_distribution: {
           stakeholder_targeting: true,
           format_customization: true,
@@ -874,7 +874,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           api_distribution: false,
           alert_distribution: true,
           report_distribution: false
-        }
+
       };
 
       const customEngine = new SecurityIntelligenceAutomationEngine(

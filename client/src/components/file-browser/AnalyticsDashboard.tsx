@@ -8,82 +8,88 @@
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
-}
+
+
 interface DashboardMetrics {
-  summary: {
-  today: {
+  summary: {,
+  today: {,
   operations: number;,
-  users: number;
+  users: number;,
   downloads: number;,
   errorRate: number;
-}
+
+
 };
-    thisWeek: {
+    thisWeek: {,
   operations: number;
   users: number;,
-  downloads: number;
+  downloads: number;,
   errorRate: number;
 };
-    thisMonth: {
+    thisMonth: {,
   operations: number;
   users: number;,
-  downloads: number;
+  downloads: number;,
   errorRate: number;
 };
   };
   topOperations: Record<string, number>;
   topFileTypes: Record<string, number>;
-  performanceMetrics: {
+  performanceMetrics: {,
   averageLoadTime: number;
   averageOperationTime: number;
 };
-  searchMetrics: {
+  searchMetrics: {,
   totalSearches: number;
   uniqueSearchTerms: number;,
   averageResultsClicked: number;
 };
   generatedAt: string;
-}
+
+
 interface DeveloperInsights {
-  systemHealth: {
+  systemHealth: {,
   overallScore: number;,
-  reliability: number;
+  reliability: number;,
   performance: number;,
   usability: number;
-}
+
+
 };
-  recommendations: Array<{
+  recommendations: Array<{,
   category: 'performance' | 'usability' | 'features' | 'security';
   priority: 'high' | 'medium' | 'low';,
-  title: string;
+  title: string;,
   description: string;,
-  impact: string;
+  impact: string;,
   effort: 'low' | 'medium' | 'high';,
   metrics: Record<string, number>;
-}>;
-  alerts: Array<{
+>;
+  alerts: Array<{,
   severity: 'critical' | 'warning' | 'info';
   category: string;,
-  message: string;
+  message: string;,
   timestamp: string;,
-  affectedUsers: number;
+  affectedUsers: number;,
   suggestedAction: string;
-}>;
-  trends: {
+>;
+  trends: {,
   usageGrowth: number;
   errorRateChange: number;,
-  performanceChange: number;
+  performanceChange: number;,
   userSatisfactionTrend: number;
 };
-}
+
+
 interface AnalyticsDashboardProps {
   className?: string;
   showInsights?: boolean;
   const REFRESH_INTERVAL = 300000; // 5 minutes;
-  export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({,)
+  export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({),
   className = '',
   showInsights = false
-}
+
+
 }) => {
   const { user, isAuthenticated } = useAuthStore();
   const [dashboardData, setDashboardData] = useState<DashboardMetrics | null>(null);
@@ -103,7 +109,7 @@ interface AnalyticsDashboardProps {
   method: 'GET',
         headers: {
           'Authorization': `Bearer ${user?.token}`}
-}
+
           'Content-Type': 'application/json'
       });
       if (!response.ok) {
@@ -111,7 +117,7 @@ interface AnalyticsDashboardProps {
       const result = await response.json();
       setDashboardData(result.data);
       setLastRefresh(new Date());
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
 }, [user]);
   // Fetch developer insights
@@ -122,14 +128,14 @@ interface AnalyticsDashboardProps {
   method: 'GET',
         headers: {
           'Authorization': `Bearer ${user?.token}`}
-}
+
           'Content-Type': 'application/json'
       });
       if (!response.ok) {
         throw new Error(`Failed to fetch insights: ${response.statusText}`);}
       const result = await response.json();
       setInsights(result.data);
-    } catch (err) {
+ catch (err) {
   console.warn('Failed to load developer insights:', err);
 }, [hasAdminAccess, showInsights, user]);
   // Initial data load
@@ -208,7 +214,7 @@ interface AnalyticsDashboardProps {
             setError(null);
             fetchDashboardData();
             fetchInsights();
-          }}
+
           style={{
   marginTop: '10px',
   padding: '8px 16px',
@@ -217,7 +223,7 @@ interface AnalyticsDashboardProps {
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-}}
+}
         >
           Retry
         </button>
@@ -230,12 +236,12 @@ interface AnalyticsDashboardProps {
       </div>
     );
   return;
-    <div className={`analytics-dashboard ${className}`} style={{},}
+    <div className={`analytics-dashboard ${className}`} style={{},},
   padding: '20px',
       backgroundColor: '#f8f9fa',
       borderRadius: '8px',
       fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
+}>
       {/* Header */}
       <div style={{
   display: 'flex',
@@ -244,7 +250,7 @@ interface AnalyticsDashboardProps {
   marginBottom: '20px',
   borderBottom: '1px solid #e5e7eb',
   paddingBottom: '15px',
-}}>
+}>
         <h2 style={{ margin: 0, color: '#1f2937' }}>File Browser Analytics</h2>
         <div style={{ fontSize: '12px', color: '#6b7280' }}>
           Last updated: {lastRefresh ? lastRefresh.toLocaleTimeString() : 'Never'}
@@ -255,7 +261,7 @@ interface AnalyticsDashboardProps {
   display: 'flex',
   marginBottom: '20px',
   borderBottom: '1px solid #e5e7eb',
-}}>
+}>
         {[
           { id: 'overview', label: 'Overview' },
           { id: 'operations', label: 'Operations' },
@@ -274,7 +280,7 @@ interface AnalyticsDashboardProps {
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: activeTab === tab.id ? '600' : '400',
-}}
+
           >
             {tab.label}
           </button>
@@ -289,13 +295,13 @@ interface AnalyticsDashboardProps {
   gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
   gap: '15px',
   marginBottom: '30px',
-}}>
+}>
             <div style={{
   backgroundColor: 'white',
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
               <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
                 Today&apos;s Operations
               </h3>
@@ -311,7 +317,7 @@ interface AnalyticsDashboardProps {
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
               <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
                 Downloads Today
               </h3>
@@ -324,7 +330,7 @@ interface AnalyticsDashboardProps {
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
               <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
                 Error Rate
               </h3>
@@ -333,7 +339,7 @@ interface AnalyticsDashboardProps {
   fontSize: '24px',
   fontWeight: '700',
   color: dashboardData.summary.today.errorRate > 5 ? '#ef4444' : '#22c55e',
-}}>
+}>
                 {formatPercentage(dashboardData.summary.today.errorRate)}
               </p>
             </div>
@@ -342,7 +348,7 @@ interface AnalyticsDashboardProps {
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
               <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
                 Avg Load Time
               </h3>
@@ -351,7 +357,7 @@ interface AnalyticsDashboardProps {
   fontSize: '24px',
   fontWeight: '700',
   color: dashboardData.performanceMetrics.averageLoadTime > 2000 ? '#ef4444' : '#22c55e',
-}}>
+}>
                 {formatTime(dashboardData.performanceMetrics.averageLoadTime)}
               </p>
             </div>
@@ -362,13 +368,13 @@ interface AnalyticsDashboardProps {
   gridTemplateColumns: '1fr 1fr',
   gap: '20px',
   marginBottom: '30px',
-}}>
+}>
             <div style={{
   backgroundColor: 'white',
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 This Week
               </h3>
@@ -398,7 +404,7 @@ interface AnalyticsDashboardProps {
   fontSize: '18px',
   fontWeight: '600',
   color: dashboardData.summary.thisWeek.errorRate > 5 ? '#ef4444' : '#22c55e',
-}}>
+}>
                     {formatPercentage(dashboardData.summary.thisWeek.errorRate)}
                   </p>
                 </div>
@@ -409,7 +415,7 @@ interface AnalyticsDashboardProps {
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 This Month
               </h3>
@@ -439,7 +445,7 @@ interface AnalyticsDashboardProps {
   fontSize: '18px',
   fontWeight: '600',
   color: dashboardData.summary.thisMonth.errorRate > 5 ? '#ef4444' : '#22c55e',
-}}>
+}>
                     {formatPercentage(dashboardData.summary.thisMonth.errorRate)}
                   </p>
                 </div>
@@ -456,7 +462,7 @@ interface AnalyticsDashboardProps {
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
             <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
               Most Used Operations
             </h3>
@@ -470,7 +476,7 @@ interface AnalyticsDashboardProps {
   alignItems: 'center',
   padding: '8px 0',
   borderBottom: '1px solid #f3f4f6',
-}}>
+}>
                   <span style={{ fontSize: '14px', color: '#374151', textTransform: 'capitalize' }}>
                     {operation.replace('_', ' ')}
                   </span>
@@ -485,7 +491,7 @@ interface AnalyticsDashboardProps {
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
             <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
               Popular File Types
             </h3>
@@ -499,7 +505,7 @@ interface AnalyticsDashboardProps {
   alignItems: 'center',
   padding: '8px 0',
   borderBottom: '1px solid #f3f4f6',
-}}>
+}>
                   <span style={{ fontSize: '14px', color: '#374151', textTransform: 'uppercase' }}>
                     .{fileType}
                   </span>
@@ -520,7 +526,7 @@ interface AnalyticsDashboardProps {
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 Load Time Metrics
               </h3>
@@ -531,7 +537,7 @@ interface AnalyticsDashboardProps {
   fontSize: '24px',
   fontWeight: '700',
   color: dashboardData.performanceMetrics.averageLoadTime > 2000 ? '#ef4444' : '#22c55e',
-}}>
+}>
                   {formatTime(dashboardData.performanceMetrics.averageLoadTime)}
                 </p>
               </div>
@@ -542,7 +548,7 @@ interface AnalyticsDashboardProps {
   fontSize: '24px',
   fontWeight: '700',
   color: dashboardData.performanceMetrics.averageOperationTime > 1000 ? '#ef4444' : '#22c55e',
-}}>
+}>
                   {formatTime(dashboardData.performanceMetrics.averageOperationTime)}
                 </p>
               </div>
@@ -552,7 +558,7 @@ interface AnalyticsDashboardProps {
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 Search Analytics
               </h3>
@@ -588,7 +594,7 @@ interface AnalyticsDashboardProps {
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
   marginBottom: '20px',
-}}>
+}>
             <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
               System Health Score
             </h3>
@@ -612,7 +618,7 @@ interface AnalyticsDashboardProps {
   color: 'white',
   fontSize: '18px',
   fontWeight: '700',
-}}>
+}>
                     {item.score}
                   </div>
                   <p style={{ margin: 0, fontSize: '12px', color: '#6b7280', fontWeight: '500' }}>
@@ -630,7 +636,7 @@ interface AnalyticsDashboardProps {
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
   marginBottom: '20px',
-}}>
+}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 Active Alerts
               </h3>
@@ -642,14 +648,14 @@ interface AnalyticsDashboardProps {
 },
   borderRadius: '6px',
                   backgroundColor: `${getSeverityColor(alert.severity)}10`}
-                }}>
+}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                     <span style={{
   fontSize: '12px',
   fontWeight: '600',
   color: getSeverityColor(alert.severity),
   textTransform: 'uppercase',
-}}>
+}>
                       {alert.severity} • {alert.category}
                     </span>
                     <span style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -673,7 +679,7 @@ interface AnalyticsDashboardProps {
   padding: '20px',
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-}}>
+}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
                 Recommendations
               </h3>
@@ -684,7 +690,7 @@ interface AnalyticsDashboardProps {
   border: '1px solid #e5e7eb',
   borderRadius: '6px',
   backgroundColor: '#f9fafb',
-}}>
+}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                     <h4 style={{ margin: 0, fontSize: '14px', fontWeight: '600', color: '#1f2937' }}>
                       {rec.title}
@@ -698,7 +704,7 @@ interface AnalyticsDashboardProps {
   color: 'white',
   fontWeight: '500',
   textTransform: 'uppercase',
-}}>
+}>
                         {rec.priority}
                       </span>
                       <span style={{
@@ -709,7 +715,7 @@ interface AnalyticsDashboardProps {
   color: 'white',
   fontWeight: '500',
   textTransform: 'uppercase',
-}}>
+}>
                         {rec.effort} effort
                       </span>
                     </div>

@@ -10,7 +10,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'Establishes when and where the scene takes place',
         template: 'In {era} during {time_of_day}, at {location}',
         variables: ['era', 'time_of_day', 'location'],
-        examples: [,
+        examples: [
             'In medieval times during dawn, at a castle courtyard',
             'In the far future during midnight, at a space station',
             'In Victorian era during sunset, at a fog-covered street'
@@ -23,7 +23,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'Creates mood and atmosphere for the scene',
         template: 'The {weather} creates a {mood} atmosphere, with {lighting} casting {shadow_type} shadows',
         variables: ['weather', 'mood', 'lighting', 'shadow_type'],
-        examples: [,
+        examples: [
             'The storm creates a tense atmosphere, with lightning casting dramatic shadows',
             'The gentle rain creates a melancholic atmosphere, with soft light casting long shadows'
         ],
@@ -38,7 +38,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'Primary character action driving the scene',
         template: '{character} {action_verb} {action_target} {action_manner}',
         variables: ['character', 'action_verb', 'action_target', 'action_manner'],
-        examples: [,
+        examples: [
             'The knight charges toward the dragon with unwavering determination',
             'The detective examines the evidence with careful attention'
         ],
@@ -51,7 +51,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'Conflict or tension-building action',
         template: 'As {obstacle} {obstacle_action}, {protagonist} must {response_action} or face {consequence}',
         variables: ['obstacle', 'obstacle_action', 'protagonist', 'response_action', 'consequence'],
-        examples: [,
+        examples: [
             'As the enemy advances, the hero must stand firm or face defeat',
             'As time runs out, the scientist must complete the formula or face disaster'
         ],
@@ -67,7 +67,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'Main location where action takes place',
         template: 'The scene unfolds in {location_type}, characterized by {location_features} and {location_mood}',
         variables: ['location_type', 'location_features', 'location_mood'],
-        examples: [,
+        examples: [
             'The scene unfolds in an ancient library, characterized by towering bookshelves and mystical atmosphere',
             'The scene unfolds in a cyberpunk alley, characterized by neon lights and dangerous mood'
         ],
@@ -80,7 +80,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'Specific environmental details',
         template: 'Surrounding details include {detail_1}, {detail_2}, and {detail_3} that {impact_on_scene}',
         variables: ['detail_1', 'detail_2', 'detail_3', 'impact_on_scene'],
-        examples: [,
+        examples: [
             'Surrounding details include flickering torches, stone carvings, and echoing footsteps that heighten the tension',
             'Surrounding details include floating debris, alien sounds, and distant explosions that create urgency'
         ],
@@ -95,7 +95,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'Main character focus and description',
         template: '{character_name}, a {character_type} with {character_trait_1} and {character_trait_2}',
         variables: ['character_name', 'character_type', 'character_trait_1', 'character_trait_2'],
-        examples: [,
+        examples: [
             'Aria, a skilled warrior with fierce determination and hidden vulnerability',
             'Dr. Chen, a brilliant scientist with innovative thinking and moral conviction'
         ],
@@ -108,7 +108,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'What drives the character in this scene',
         template: 'Driven by {motivation} to {goal}, despite {internal_conflict}',
         variables: ['motivation', 'goal', 'internal_conflict'],
-        examples: [,
+        examples: [
             'Driven by love to save the kingdom, despite fear of failure',
             'Driven by duty to solve the mystery, despite personal cost'
         ],
@@ -124,7 +124,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'Camera angle and movement for cinematic feel',
         template: 'Shot with {camera_angle} using {camera_movement}, emphasizing {visual_focus}',
         variables: ['camera_angle', 'camera_movement', 'visual_focus'],
-        examples: [,
+        examples: [
             'Shot with low angle using slow zoom, emphasizing the character\'s determination',
             'Shot with overhead view using smooth pan, emphasizing the vast landscape'
         ],
@@ -137,7 +137,7 @@ export const ZADA_SCREENPLAY_TEMPLATES = [
         description: 'Lighting setup for mood and visual impact',
         template: 'Lit with {lighting_style} creating {lighting_effect} that {emotional_impact}',
         variables: ['lighting_style', 'lighting_effect', 'emotional_impact'],
-        examples: [,
+        examples: [
             'Lit with dramatic chiaroscuro creating stark contrasts that heighten tension',
             'Lit with soft golden hour creating warm glow that evokes nostalgia'
         ],
@@ -470,14 +470,14 @@ export class AdvancedPromptingMethodology {
                                                         zada: ZadaTemplateComponent;
                                                         mars: MarsTag;
                                                         hybridExamples: string;
-                                                        const hybridExamples = [];
-                                                        // Zada + MARS hybrid examples
-                                                        '[CAM:WIDE] In {era} during {time_of_day}, !FOCAL:PRIMARY {character} {action_verb} {action_target} [FX:MAGIC] while [MOOD:EPIC] atmosphere fills the scene',
+                                                        const hybridExamples = [
+                                                            // Zada + MARS hybrid examples
+                                                            '[CAM:WIDE] In {era} during {time_of_day}, !FOCAL:PRIMARY {character} {action_verb} {action_target} [FX:MAGIC] while [MOOD:EPIC] atmosphere fills the scene',
                                                             '[CAM:CLOSE] [SUBJ:HERO] {character_name}, a {character_type} with {character_trait}, !FOCAL:PRIMARY faces {challenge} [FX:FIRE] in [SET:MEDIEVAL] {location}',
                                                             '[CAM:AERIAL] [SET:FANTASY] The scene unfolds in {location_type} where [SUBJ:CROWD] {group} [FX:WEATHER] encounters {obstacle} !FOCAL:SECONDARY while {background_action}',
                                                             '[MOOD:INTIMATE] [CAM:LOW] Driven by {motivation} to {goal}, [SUBJ:HERO] {character} must !FOCAL:PRIMARY {critical_action} despite [FX:PARTICLES] {environmental_challenge}',
-                                                            '[SET:SCIFI] [CAM:HIGH] In the {futuristic_setting}, [SUBJ:VILLAIN] {antagonist} !FOCAL:PRIMARY {villainous_action} while [FX:MOTION] {dynamic_element} [MOOD:DARK] threatens everything';
-                                                        ;
+                                                            '[SET:SCIFI] [CAM:HIGH] In the {futuristic_setting}, [SUBJ:VILLAIN] {antagonist} !FOCAL:PRIMARY {villainous_action} while [FX:MOTION] {dynamic_element} [MOOD:DARK] threatens everything'
+                                                        ];
                                                         return {
                                                             zada: ZADA_SCREENPLAY_TEMPLATES,
                                                             mars: MARS_FRAMEWORK_TAGS,

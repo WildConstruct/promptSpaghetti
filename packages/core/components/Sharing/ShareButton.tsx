@@ -9,9 +9,9 @@
 import React, { useState } from 'react';
 import { ShareableResourceType } from '../../types/sharingTypes';
 import { ShareModal } from './ShareModal';
-}
-interface ShareButtonProps {
-  resourceId: string;
+
+
+interface ShareButtonProps { resourceId: string;
   resourceType: ShareableResourceType;
   resourceTitle: string;
   resourceDescription?: string;
@@ -19,31 +19,27 @@ interface ShareButtonProps {
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
   onShareCreated?: (shareResponse: Error) => void;
-  export const ShareButton: React.FC<ShareButtonProps> = ({,)
-  resourceId,
-  resourceType,
-  resourceTitle,
-  resourceDescription,
-  variant = 'primary',
-  size = 'medium',
-  disabled = false,
+  export const ShareButton: React.FC<ShareButtonProps> = ({);
+  resourceId;
+  resourceType;
+  resourceTitle;
+  resourceDescription;
+  variant = 'primary';
+  size = 'medium';
+  disabled = false }
   onShareCreated
-}
-}) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+}) => { const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => {
     if (!disabled) {
-      setIsModalOpen(true);
-  };
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+      setIsModalOpen(true) };
+  const handleCloseModal = () => { setIsModalOpen(false) };
   const handleShareCreated = (shareResponse: Error) => {
     onShareCreated?.(shareResponse);
     // Keep modal open to show share results
   };
-  const getButtonStyles = () => {
-  const baseStyles = {
+  const getButtonStyles = () => { const baseStyles = {
   display: 'flex',
   alignItems: 'center',
   gap: '6px',
@@ -52,49 +48,46 @@ interface ShareButtonProps {
   cursor: disabled ? 'not-allowed' : 'pointer',
   fontWeight: '500',
   transition: 'all 0.2s ease',
-  opacity: disabled ? 0.5 : 1,
+  opacity: disabled ? 0.5 : 1 }
 };
     const sizeStyles = {
       small: { padding: '4px 8px', fontSize: '12px' },
       medium: { padding: '8px 12px', fontSize: '14px' },
       large: { padding: '12px 16px', fontSize: '16px' }
     };
-    const variantStyles = {
-      primary: {
+    const variantStyles = { primary: {,
   backgroundColor: '#3b82f6',
-        color: 'white',
+        color: 'white' }
         ...(!disabled && {)
   ':hover': { backgroundColor: '#2563eb' }
-  }
+
   },
-  secondary: {
+  secondary: { ,
   backgroundColor: 'white',
         color: '#374151',
-        border: '1px solid #d1d5db',
+        border: '1px solid #d1d5db' }
         ...(!disabled && {)
   ':hover': { backgroundColor: '#f9fafb' }
-  }
+
   },
-  icon: {
+  icon: { ,
   backgroundColor: 'transparent',
         color: '#6b7280',
-        padding: size === 'small' ? '4px' : '8px',
+        padding: size === 'small' ? '4px' : '8px' }
         ...(!disabled && {)
   ':hover': { color: '#374151', backgroundColor: '#f3f4f6' }
-  }
+
     };
-    return {
-      ...baseStyles,
-      ...sizeStyles[size],
+    return { ...baseStyles,
+      ...sizeStyles[size] }
       ...variantStyles[variant]
     };
   };
-  const getIconSize = () => {
-  switch (size) {
+  const getIconSize = () => { switch (size) {
   case 'small': return '14px';
   case 'large': return '20px';
-  default: return '16px'
-  };
+  default: return '16px' }
+};
   const ShareIcon = () => (;);
     <svg
       width={getIconSize()}

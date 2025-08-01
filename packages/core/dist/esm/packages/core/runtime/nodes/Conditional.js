@@ -319,19 +319,19 @@ ValidationResult;
                 string;
                 {
                     // Remove dangerous patterns
-                    const dangerous = [];
-                    /eval\s*\(/gi;
-                    /Function\s*\(/gi;
-                    /constructor/gi,
+                    const dangerous = [
+                        /eval\s*\(/gi,
+                        /Function\s*\(/gi,
+                        /constructor/gi,
                         /prototype/gi,
                         /__proto__/gi,
-                        /import\s*\(/gi;
-                    /require\s*\(/gi;
-                    /process\./gi,
+                        /import\s*\(/gi,
+                        /require\s*\(/gi,
+                        /process\./gi,
                         /global\./gi,
                         /window\./gi,
-                        /document\./gi;
-                    ;
+                        /document\./gi
+                    ];
                     const sanitized = expression;
                     for (const pattern of dangerous) {
                         if (pattern.test(sanitized)) {

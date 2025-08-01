@@ -12,7 +12,7 @@ import {
   parseFromCSV,
   validateImportedSet,
   detectFormat
-} from './export-formats';
+ from './export-formats';
 import { getDatabase } from './connection';
 import { createHash } from 'crypto';
 
@@ -24,7 +24,7 @@ export class ExportService {
 
   constructor() {
     this.dao = new CorrectionsDAO();
-  }
+
 
   // ========== EXPORT OPERATIONS ==========
 
@@ -40,14 +40,14 @@ export class ExportService {
       includeInactive?: boolean;
       includeStatistics?: boolean;
       ruleIds?: number[];
-    } = {}
+ = {}
   ): Promise<{
     success: boolean;
     data?: string;
     filename?: string;
     mimeType?: string;
     error?: string;
-  }> {
+> {
 
     try {
       // Get rules to export
@@ -60,7 +60,7 @@ export class ExportService {
           success: false,
           error: 'No correction rules found to export'
         };
-      }
+
 
       // Convert to export format
       const exportedRules: ExportedCorrectionRule[] = rules.map(ruleToExportFormat);
@@ -76,7 +76,7 @@ export class ExportService {
           success_rate: 100 - metrics.error_rate,
           avg_execution_time: metrics.average_execution_time
         };
-      }
+
 
       // Create export set
       const exportSet: ExportedCorrectionSet = {
@@ -87,7 +87,7 @@ export class ExportService {
           format_version: '1.0',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-  }
+
         rules: exportedRules,
         statistics
       };
@@ -118,7 +118,7 @@ export class ExportService {
           success: false,
           error: 'Unsupported export format'
         };
-      }
+
 
       return {
         success: true,
@@ -126,13 +126,13 @@ export class ExportService {
         filename,
         mimeType
       };
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         error: `Export failed: ${error instanceof Error ? error.message : String(error)}`
       };
-    }
-  }
+
+
 
   /**
    * Create a shareable correction set
@@ -150,7 +150,7 @@ export class ExportService {
     success: boolean;
     setId?: number;
     error?: string;
-  }> {
+> {
 
     try {
       // Get rules
@@ -161,7 +161,7 @@ export class ExportService {
           success: false,
           error: 'No valid rules found for the correction set'
         };
-      }
+
 
       // Create export data
       const exportSet: ExportedCorrectionSet = {
@@ -172,7 +172,7 @@ export class ExportService {
           format_version: '1.0',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-  }
+
         rules: rules.map(ruleToExportFormat)
       };
 
@@ -215,13 +215,13 @@ export class ExportService {
         success: true,
         setId
       };
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         error: `Failed to create correction set: ${error instanceof Error ? error.message : String(error)}`
       };
-    }
-  }
+
+
 
   // ========== IMPORT OPERATIONS ==========
 
@@ -236,14 +236,14 @@ export class ExportService {
       overwrite?: boolean;
       merge?: boolean;
       skipDuplicates?: boolean;
-    } = {}
+ = {}
   ): Promise<{
     success: boolean;
     importedCount?: number;
     skippedCount?: number;
     errors?: string[];
     warnings?: string[];
-  }> {
+> {
 
     try {
       // Detect format
@@ -254,7 +254,7 @@ export class ExportService {
           success: false,
           errors: ['Unable to detect file format. Supported formats: JSON, YAML, CSV']
         };
-      }
+
 
       // Parse content
       let importedSet: ExportedCorrectionSet;
@@ -272,13 +272,13 @@ export class ExportService {
           break;
         default:
           throw new Error('Unsupported format');
-        }
-      } catch (error) {
+
+ catch (error) {
         return {
           success: false,
           errors: [`Failed to parse ${format.toUpperCase()} file: ${error instanceof Error ? error.message : String(error)}`]
         };
-      }
+
 
       // Validate imported data
       const validation = validateImportedSet(importedSet);
@@ -288,7 +288,7 @@ export class ExportService {
           errors: validation.errors,
           warnings: validation.warnings
         };
-      }
+
 
       // Import rules
       const importResult = await this.importCorrectionRules(
@@ -304,13 +304,13 @@ export class ExportService {
         errors: importResult.errors,
         warnings: [...(validation.warnings || []), ...(importResult.warnings || [])]
       };
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         errors: [`Import failed: ${error instanceof Error ? error.message : String(error)}`]
       };
-    }
-  }
+
+
 
   /**
    * Import correction rules from exported format
@@ -328,7 +328,7 @@ export class ExportService {
     skippedCount: number;
     errors: string[];
     warnings: string[];
-  }> {
+> {
 
     let importedCount = 0;
     let skippedCount = 0;
@@ -362,28 +362,28 @@ export class ExportService {
             const updated = this.dao.updateRule(existingByUuidConflict.id, updateData, userId);
             if (updated) {
               importedCount++;
-            } else {
+ else {
               errors.push(`Failed to update rule: ${rule.name}`);
-            }
-          } else if (options.skipDuplicates) {
+
+ else if (options.skipDuplicates) {
             skippedCount++;
             warnings.push(`Skipped duplicate rule: ${rule.name}`);
-          } else {
+ else {
             errors.push(`Rule with UUID ${rule.id} already exists: ${rule.name}`);
-          }
+
           continue;
-        }
+
 
         if (existingByNameConflict) {
           if (options.skipDuplicates) {
             skippedCount++;
             warnings.push(`Skipped rule with duplicate name: ${rule.name}`);
             continue;
-          } else if (!options.merge) {
+ else if (!options.merge) {
             errors.push(`Rule with name "${rule.name}" already exists`);
             continue;
-          }
-        }
+
+
 
         // Create new rule
         const ruleData = {
@@ -401,13 +401,13 @@ export class ExportService {
         const created = this.dao.createRule(ruleData);
         if (created) {
           importedCount++;
-        } else {
+ else {
           errors.push(`Failed to create rule: ${rule.name}`);
-        }
-      } catch (error) {
+
+ catch (error) {
         errors.push(`Error importing rule "${rule.name}": ${error instanceof Error ? error.message : String(error)}`);
-      }
-    }
+
+
 
     return {
       importedCount,
@@ -415,7 +415,7 @@ export class ExportService {
       errors,
       warnings
     };
-  }
+
 
   // ========== CORRECTION SET OPERATIONS ==========
 
@@ -430,7 +430,7 @@ export class ExportService {
     
     if (includePublic) {
       whereClause += ' OR is_public = 1';
-    }
+
     
     const stmt = db.prepare(`
       SELECT 
@@ -444,7 +444,7 @@ export class ExportService {
     `);
     
     return stmt.all(...params);
-  }
+
 
   /**
    * Get correction set by ID
@@ -461,7 +461,7 @@ export class ExportService {
     `);
     
     return stmt.get(setId, userId);
-  }
+
 
   /**
    * Download correction set
@@ -472,7 +472,7 @@ export class ExportService {
     filename?: string;
     mimeType?: string;
     error?: string;
-  }> {
+> {
 
     try {
       const set = this.getCorrectionSetById(setId, userId);
@@ -482,7 +482,7 @@ export class ExportService {
           success: false,
           error: 'Correction set not found or access denied'
         };
-      }
+
 
       // Increment download count
       const db = getDatabase();
@@ -507,13 +507,13 @@ export class ExportService {
         filename: `${setData.name.replace(/[^a-z0-9]/gi, '_')}.${setData.export_format}`,
         mimeType
       };
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         error: `Download failed: ${error instanceof Error ? error.message : String(error)}`
       };
-    }
-  }
+
+
 
   /**
    * Delete correction set
@@ -528,16 +528,15 @@ export class ExportService {
       
       if (!set) {
         return false;
-      }
+
 
       // Delete the set (cascade will handle rules)
       const deleteStmt = db.prepare('DELETE FROM correction_sets WHERE id = ?');
       const result = deleteStmt.run(setId);
       
       return result.changes > 0;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to delete correction set:', error);
       return false;
-    }
-  }
-}
+
+

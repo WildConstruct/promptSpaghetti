@@ -11,10 +11,10 @@ import {
   ComplianceMonitoringAuditRecord,
   RiskLevel,
   DeletionMethod
-} from '../types/audit';
+ from '../types/audit';
 
-}
-}
+
+
 export interface AuditContext {
   userId?: string;
   sessionId?: string;
@@ -22,12 +22,13 @@ export interface AuditContext {
   ipAddress?: string;
   correlationId?: string;
   systemComponent?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataDeletionAuditOptions {
   affectedUserId?: string;
   targetDataType: string;
@@ -39,9 +40,10 @@ export interface DataDeletionAuditOptions {
   complianceFramework?: string;
   isSubjectRequest?: boolean;
   legalBasis?: string;
-}
-}
-}
+
+
+
+
 
 export class AuditLogger {
   constructor(private auditService: DataRetentionAuditService) {}
@@ -106,7 +108,7 @@ export class AuditLogger {
       errorDetails: executionDetails?.errorCode ? {
         code: executionDetails.errorCode,
         message: executionDetails.errorMessage
-      } : {},
+ : {},
       retryCount: 0,
       exceptionGranted: false,
       
@@ -126,17 +128,17 @@ export class AuditLogger {
         environment: process.env.NODE_ENV || 'unknown',
         version: process.env.APP_VERSION || 'unknown',
         service: 'data-retention-service'
-  }
+
       userAgent: context.userAgent,
       ipAddress: context.ipAddress,
       metadata: {
         auditVersion: '1.0',
         schemaVersion: '048'
-      }
+
     };
 
     return await this.auditService.logDataRetentionOperation(auditRecord);
-  }
+
 
   /**
    * Log a data subject rights request
@@ -188,18 +190,18 @@ export class AuditLogger {
         direction: 'INBOUND',
         summary: `${requestType} request received via API`,
         attachments: []
-      }],
+],
       
       metadata: {
         correlationId: context.correlationId,
         initiatedBy: context.userId,
         userAgent: context.userAgent,
         ipAddress: context.ipAddress
-      }
+
     };
 
     return await this.auditService.logDataSubjectRightsRequest(auditRecord);
-  }
+
 
   /**
    * Log a compliance monitoring event
@@ -217,7 +219,7 @@ export class AuditLogger {
       violationsSeverity?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
       riskScore?: number;
       remediationRequired?: boolean;
-    }
+
   ): Promise<string> {
 
     const auditRecord: Partial<ComplianceMonitoringAuditRecord> = {
@@ -269,11 +271,11 @@ export class AuditLogger {
         userAgent: context.userAgent,
         ipAddress: context.ipAddress,
         monitoringTimestamp: new Date().toISOString()
-      }
+
     };
 
     return await this.auditService.logComplianceMonitoringEvent(auditRecord);
-  }
+
 
   /**
    * Update an existing audit record with execution results
@@ -289,7 +291,7 @@ export class AuditLogger {
       errorCode?: string;
       errorMessage?: string;
       complianceVerified?: boolean;
-    }
+
   ): Promise<void> {
 
     await this.auditService.updateDataRetentionOperation(auditId, {
@@ -302,7 +304,7 @@ export class AuditLogger {
       errorMessage: results.errorMessage,
       complianceVerified: results.complianceVerified || false
     });
-  }
+
 
   // Helper Methods
 
@@ -311,24 +313,24 @@ export class AuditLogger {
     if (operationType === 'DATA_DELETION') return 'MEDIUM';
     if (operationType === 'RIGHT_TO_ERASURE') return 'HIGH';
     return 'LOW';
-  }
+
 
   private getDataProtectionMeasures(operationType: DataRetentionOperationType): string[] {
     const measures = ['encryption_at_rest', 'access_control', 'audit_logging'];
     
     if (operationType === 'DATA_DELETION' || operationType === 'RIGHT_TO_ERASURE') {
       measures.push('secure_deletion', 'backup_verification');
-    }
+
     
     return measures;
-  }
+
 
   private calculateDueDate(requestType: string): Date {
     const dueDate = new Date();
     // GDPR requires response within 30 days (1 month)
     dueDate.setMonth(dueDate.getMonth() + 1);
     return dueDate;
-  }
+
 
   private getGDPRArticle(requestType: string): string {
     const articleMap: { [key: string]: string } = {
@@ -341,24 +343,24 @@ export class AuditLogger {
       'CONSENT_WITHDRAWAL': '7'
     };
     return articleMap[requestType] || '15';
-  }
+
 
   private identifyRiskFactors(status: string, violations?: number): string[] {
     const factors = [];
     
     if (status === 'NON_COMPLIANT') {
       factors.push('compliance_violation');
-    }
+
     
     if (violations && violations > 0) {
       factors.push('policy_violations_detected');
       if (violations > 5) {
         factors.push('multiple_violations');
-      }
-    }
+
+
     
     return factors;
-  }
+
 
   private assessPotentialImpact(status: string, severity?: string): string {
     if (status === 'NON_COMPLIANT') {
@@ -367,16 +369,16 @@ export class AuditLogger {
       case 'HIGH': return 'Regulatory investigation, compliance penalties';
       case 'MEDIUM': return 'Warning notice, corrective action required';
       default: return 'Minor compliance gap, monitoring required';
-      }
-    }
+
+
     return 'No immediate impact identified';
-  }
-}
+
+
 
 // Factory function for creating audit logger instances
 export function createAuditLogger(auditService: DataRetentionAuditService): AuditLogger {
   return new AuditLogger(auditService);
-}
+
 
 // Utility function to create audit context from request
 export function createAuditContextFromRequest(req: any, correlationId?: string): AuditContext {
@@ -388,4 +390,3 @@ export function createAuditContextFromRequest(req: any, correlationId?: string):
     correlationId: correlationId || crypto.randomUUID(),
     systemComponent: req.headers['x-component'] || 'api-server'
   };
-}

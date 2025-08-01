@@ -9,8 +9,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { SessionLimitConfig } from './SessionLimitManager';
 
-}
-}
+
+
 export interface LimitCheckResult {
   allowed: boolean;
   reason?: string;
@@ -18,9 +18,10 @@ export interface LimitCheckResult {
   severity?: 'low' | 'medium' | 'high' | 'critical';
   type?: string;
   details?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export class SessionLimitChecks {
   private dbService: DatabaseService;
@@ -29,7 +30,7 @@ export class SessionLimitChecks {
   constructor(dbService: DatabaseService, redisService: RedisService) {
     this.dbService = dbService;
     this.redisService = redisService;
-  }
+
   
   /**
    * Check concurrent sessions per user limit
@@ -61,17 +62,16 @@ export class SessionLimitChecks {
             currentCount,
             limit: config.maxConcurrentSessionsPerUser,
             userId
-          }
+
         };
-      }
+
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error checking user concurrent limit:', error);
       return { allowed: true }; // Fail open
-    }
-  }
+
+
   
   /**
    * Check concurrent sessions per IP address limit
@@ -83,7 +83,7 @@ export class SessionLimitChecks {
 
     if (!ipAddress) {
       return { allowed: true };
-    }
+
     
     try {
       const result = await this.dbService.query(`
@@ -108,17 +108,16 @@ export class SessionLimitChecks {
             limit: config.maxConcurrentSessionsPerIP,
             ipAddress,
             affectedUsers: [...new Set(activeSessions.map(s => s.user_id))]
-          }
+
         };
-      }
+
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error checking IP concurrent limit:', error);
       return { allowed: true }; // Fail open
-    }
-  }
+
+
   
   /**
    * Check concurrent sessions per organization limit
@@ -130,7 +129,7 @@ export class SessionLimitChecks {
 
     if (!organizationId) {
       return { allowed: true };
-    }
+
     
     try {
       // This assumes user table has organization_id column
@@ -158,17 +157,16 @@ export class SessionLimitChecks {
             limit: config.maxConcurrentSessionsPerOrganization,
             organizationId,
             affectedUsers: [...new Set(activeSessions.map(s => s.user_id))]
-          }
+
         };
-      }
+
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error checking organization concurrent limit:', error);
       return { allowed: true }; // Fail open
-    }
-  }
+
+
   
   /**
    * Check concurrent sessions per device limit
@@ -180,7 +178,7 @@ export class SessionLimitChecks {
 
     if (!deviceFingerprint || !config.enableDeviceLimits) {
       return { allowed: true };
-    }
+
     
     try {
       const result = await this.dbService.query(`
@@ -205,17 +203,16 @@ export class SessionLimitChecks {
             limit: config.maxConcurrentSessionsPerDevice,
             deviceFingerprint,
             affectedUsers: [...new Set(activeSessions.map(s => s.user_id))]
-          }
+
         };
-      }
+
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error checking device concurrent limit:', error);
       return { allowed: true }; // Fail open
-    }
-  }
+
+
   
   /**
    * Check concurrent sessions per country limit
@@ -227,7 +224,7 @@ export class SessionLimitChecks {
 
     if (!country) {
       return { allowed: true };
-    }
+
     
     try {
       // This would require a GeoIP lookup for existing sessions
@@ -246,17 +243,16 @@ export class SessionLimitChecks {
             currentCount: count,
             limit: config.maxConcurrentSessionsPerCountry,
             country
-          }
+
         };
-      }
+
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error checking country concurrent limit:', error);
       return { allowed: true }; // Fail open
-    }
-  }
+
+
   
   /**
    * Check geographic limits (allowed/blocked countries)
@@ -268,7 +264,7 @@ export class SessionLimitChecks {
 
     if (!config.enableGeographicLimits || !country) {
       return { allowed: true };
-    }
+
     
     // Check blocked countries
     if (config.blockedCountries.length > 0 && config.blockedCountries.includes(country)) {
@@ -280,9 +276,9 @@ export class SessionLimitChecks {
         details: {
           country,
           blockedCountries: config.blockedCountries
-        }
+
       };
-    }
+
     
     // Check allowed countries (if specified)
     if (config.allowedCountries.length > 0 && !config.allowedCountries.includes(country)) {
@@ -294,12 +290,12 @@ export class SessionLimitChecks {
         details: {
           country,
           allowedCountries: config.allowedCountries
-        }
+
       };
-    }
+
     
     return { allowed: true };
-  }
+
   
   /**
    * Check business hours limits
@@ -312,12 +308,12 @@ export class SessionLimitChecks {
 
     if (!config.enableBusinessHoursLimits) {
       return { allowed: true };
-    }
+
     
     // Admins might bypass business hours limits
     if (isAdmin && config.adminSessionsHavePriority) {
       return { allowed: true };
-    }
+
     
     try {
       const now = new Date();
@@ -336,12 +332,11 @@ export class SessionLimitChecks {
       // For now, we'll assume this check is done elsewhere or combined with user limit check
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error checking business hours limits:', error);
       return { allowed: true }; // Fail open
-    }
-  }
+
+
   
   /**
    * Check device limits (trusted devices, max devices per user)
@@ -354,7 +349,7 @@ export class SessionLimitChecks {
 
     if (!config.enableDeviceLimits || !deviceFingerprint) {
       return { allowed: true };
-    }
+
     
     try {
       // Check if device is trusted
@@ -388,18 +383,17 @@ export class SessionLimitChecks {
               limit: config.maxDevicesPerUser,
               deviceFingerprint,
               isTrustedDevice
-            }
+
           };
-        }
-      }
+
+
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error checking device limits:', error);
       return { allowed: true }; // Fail open
-    }
-  }
+
+
   
   /**
    * Check for suspicious activity patterns
@@ -412,7 +406,7 @@ export class SessionLimitChecks {
 
     if (!config.enableSuspiciousActivityDetection) {
       return { allowed: true };
-    }
+
     
     try {
       const checks = await Promise.all([
@@ -440,17 +434,16 @@ export class SessionLimitChecks {
               reason: v.reason,
               details: v.details
             }))
-          }
+
         };
-      }
+
       
       return { allowed: true };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error checking suspicious activity:', error);
       return { allowed: true }; // Fail open
-    }
-  }
+
+
   
   /**
    * Check for rapid session creation
@@ -478,12 +471,12 @@ export class SessionLimitChecks {
           sessionCount: recentSessions,
           threshold: config.rapidSessionCreationThreshold,
           timeWindow: '1 minute'
-        }
+
       };
-    }
+
     
     return { allowed: true };
-  }
+
   
   /**
    * Check for suspicious location changes
@@ -496,7 +489,7 @@ export class SessionLimitChecks {
 
     if (!sessionData.country) {
       return { allowed: true };
-    }
+
     
     const result = await this.dbService.query(`
       SELECT ip_address, created_at
@@ -508,7 +501,7 @@ export class SessionLimitChecks {
     
     if (result.rows.length === 0) {
       return { allowed: true };
-    }
+
     
     const latestSession = result.rows[0];
     const timeDiff = new Date().getTime() - new Date(latestSession.created_at).getTime();
@@ -530,13 +523,13 @@ export class SessionLimitChecks {
             currentCountry: sessionData.country,
             timeDiffMinutes,
             threshold: config.suspiciousLocationChangeMinutes
-          }
+
         };
-      }
-    }
+
+
     
     return { allowed: true };
-  }
+
   
   /**
    * Check for unusual device characteristics
@@ -549,7 +542,7 @@ export class SessionLimitChecks {
 
     if (!sessionData.userAgent && !sessionData.deviceFingerprint) {
       return { allowed: true };
-    }
+
     
     // Get user's device history
     const result = await this.dbService.query(`
@@ -577,12 +570,12 @@ export class SessionLimitChecks {
           userAgent: sessionData.userAgent,
           deviceFingerprint: sessionData.deviceFingerprint,
           knownDeviceCount: knownDevices.length
-        }
+
       };
-    }
+
     
     return { allowed: true };
-  }
+
   
   /**
    * Check for time-based anomalies
@@ -602,7 +595,7 @@ export class SessionLimitChecks {
     
     if (result.rows.length === 0) {
       return { allowed: true };
-    }
+
     
     const currentHour = new Date().getHours();
     const hourlyPattern = result.rows;
@@ -618,12 +611,12 @@ export class SessionLimitChecks {
         details: {
           currentHour,
           typicalHours: hourlyPattern.map(p => parseInt(p.hour))
-        }
+
       };
-    }
+
     
     return { allowed: true };
-  }
+
   
   // Helper methods
   
@@ -631,10 +624,10 @@ export class SessionLimitChecks {
     // Simple timezone conversion - in production use a proper library like moment.js
     try {
       return new Date(date.toLocaleString('en-US', { timeZone: timezone }));
-    } catch (error) {
+ catch (error) {
       return date; // Fallback to UTC
-    }
-  }
+
+
   
   private isWithinBusinessHours(
     currentTime: Date, 
@@ -649,12 +642,11 @@ export class SessionLimitChecks {
     const endMinutes = endHour * 60 + endMinute;
     
     return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
-  }
+
   
   private async getCountryFromIP(___ipAddress: string): Promise<string> {
 
     // In production, this would use a GeoIP service
     // For now, return a placeholder
     return 'US';
-  }
-}
+

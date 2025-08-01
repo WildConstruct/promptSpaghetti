@@ -7,7 +7,7 @@ export class AuditService {
   constructor(config, db) {
     this.config = config;
     this.db = db;
-  }
+
   @retryableDatabase({ maxAttempts: 3, baseDelay: 300 })
   async logEvent(event) {
     try {
@@ -38,16 +38,16 @@ export class AuditService {
           resourceId: event.resourceId,
           details: event.details,
         });
-      }
+
       // Send alerts for critical events
       if (event.severity === 'critical' || event.severity === 'error') {
         await this.sendAlert(event);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to log audit event:', error, event);
       // Don't throw - audit logging should not break the main flow
-    }
-  }
+
+
   // Enhanced security event logging for password reset and other security actions
   async logSecurityEvent(event) {
     return this.logEvent({
@@ -64,7 +64,7 @@ export class AuditService {
       userAgent: event.userAgent,
       severity: event.success ? 'info' : 'warning',
     });
-  }
+
   async getAuditLogs(filters) {
     const conditions = [];
     const params = [];
@@ -73,32 +73,32 @@ export class AuditService {
       conditions.push(`user_id = $${paramIndex}`);
       params.push(filters.userId);
       paramIndex++;
-    }
+
     if (filters.action) {
       conditions.push(`action = $${paramIndex}`);
       params.push(filters.action);
       paramIndex++;
-    }
+
     if (filters.severity) {
       conditions.push(`severity = $${paramIndex}`);
       params.push(filters.severity);
       paramIndex++;
-    }
+
     if (filters.resourceType) {
       conditions.push(`resource_type = $${paramIndex}`);
       params.push(filters.resourceType);
       paramIndex++;
-    }
+
     if (filters.startDate) {
       conditions.push(`created_at >= $${paramIndex}`);
       params.push(filters.startDate);
       paramIndex++;
-    }
+
     if (filters.endDate) {
       conditions.push(`created_at <= $${paramIndex}`);
       params.push(filters.endDate);
       paramIndex++;
-    }
+
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const limit = filters.limit || 100;
     const offset = filters.offset || 0;
@@ -112,11 +112,11 @@ export class AuditService {
     try {
       const result = await this.db.query(query, params);
       return result.rows.map(this.mapDatabaseAuditLog);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get audit logs:', error);
       throw error;
-    }
-  }
+
+
   async getAuditStats(timeframe = 'day') {
     const timeframes = {
       hour: '1 hour',
@@ -172,11 +172,11 @@ export class AuditService {
           count: parseInt(row.count),
         })),
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get audit stats:', error);
       throw error;
-    }
-  }
+
+
   async exportAuditLogs(filters) {
     const logs = await this.getAuditLogs({
       startDate: filters.startDate,
@@ -185,10 +185,10 @@ export class AuditService {
     });
     if (filters.format === 'csv') {
       return this.exportToCSV(logs);
-    } else {
+ else {
       return JSON.stringify(logs, null, 2);
-    }
-  }
+
+
   async cleanupOldLogs(retentionDays = 365) {
     try {
       const result = await this.db.query(`
@@ -206,13 +206,13 @@ export class AuditService {
           },
           severity: 'info',
         });
-      }
+
       return deletedCount;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to cleanup audit logs:', error);
       throw error;
-    }
-  }
+
+
   async sendAlert(event) {
     // In production, this would integrate with alerting systems like:
     // - PagerDuty
@@ -230,7 +230,7 @@ export class AuditService {
     });
     // TODO: Implement actual alerting integrations
     // Example: Send to webhook, email, or monitoring system
-  }
+
   mapDatabaseAuditLog(row) {
     return {
       id: row.id,
@@ -245,7 +245,7 @@ export class AuditService {
       severity: row.severity,
       createdAt: row.created_at,
     };
-  }
+
   exportToCSV(logs) {
     const headers = [
       'ID',
@@ -276,7 +276,7 @@ export class AuditService {
       ...rows.map(row => row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')),
     ].join('\n');
     return csvContent;
-  }
+
   /**
    * Legacy compatibility method - alias for logEvent
    * DEPLOYMENT BLOCKER FIX: Provides logAction method expected by calling code
@@ -293,5 +293,5 @@ export class AuditService {
       sessionId: params.sessionId,
       severity: params.severity || 'info',
     });
-  }
-}
+
+

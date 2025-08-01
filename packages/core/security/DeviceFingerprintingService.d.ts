@@ -16,8 +16,7 @@
  * - Risk scoring based on fingerprint analysis
  */
 import { EventEmitter } from 'events';
-export declare enum FingerprintType {
-    BASIC = "basic",
+export declare enum FingerprintType { BASIC = "basic",
     ENHANCED = "enhanced",
     COMPREHENSIVE = "comprehensive"
 
@@ -31,12 +30,12 @@ export declare enum DeviceType {
     DESKTOP = "desktop",
     MOBILE = "mobile",
     TABLET = "tablet",
-    EMBEDDED = "embedded",
+    EMBEDDED = "embedded" }
     UNKNOWN = "unknown"
 
 }
-export interface DeviceFingerprint {
-    id: string;
+}
+export interface DeviceFingerprint { id: string;
     type: FingerprintType;
     confidence: number;
     createdAt: Date;
@@ -49,19 +48,16 @@ export interface DeviceFingerprint {
         cookieEnabled: boolean;
         doNotTrack: boolean;
         timezone: string;
-        timezoneOffset: number;
+        timezoneOffset: number }
 }
     };
-    enhanced: {
-        screen: {
+    enhanced: { screen: {
             width: number;
             height: number;
             colorDepth: number;
             pixelRatio: number;
-            orientation: string;
-        };
-        browser: {
-            name: string;
+            orientation: string };
+        browser: { name: string;
             version: string;
             engine: string;
             engineVersion: string;
@@ -69,37 +65,27 @@ export interface DeviceFingerprint {
             product?: string;
             productSub?: string;
             vendor?: string;
-            vendorSub?: string;
-        };
-        plugins: Array<{
-            name: string;
+            vendorSub?: string };
+        plugins: Array<{ name: string;
             filename: string;
             description: string;
-            version?: string;
-        }>;
+            version?: string }>;
         fonts: string[];
-        webgl: {
-            vendor: string;
+        webgl: { vendor: string;
             renderer: string;
             version: string;
             shadingLanguageVersion: string;
             extensions: string[];
-            parameters: Record<string, any>;
-        };
-        canvas: {
-            fingerprint: string;
+            parameters: Record<string, any> };
+        canvas: { fingerprint: string;
             geometry: string;
-            text: string;
-        };
-        audio: {
-            fingerprint: string;
+            text: string };
+        audio: { fingerprint: string;
             sampleRate: number;
             channelCount: number;
-            contextState: string;
-        };
+            contextState: string };
     };
-    comprehensive: {
-        hardware: {
+    comprehensive: { hardware: {
             cpuCores: number;
             memory: number;
             touchSupport: boolean;
@@ -109,45 +95,36 @@ export interface DeviceFingerprint {
             webrtc: {
                 supported: boolean;
                 localCandidates: string[];
-                stunServers: string[];
-            };
+                stunServers: string[] };
         };
-        network: {
-            connectionType: string;
+        network: { connectionType: string;
             downlink?: number;
             effectiveType?: string;
             rtt?: number;
-            saveData?: boolean;
-        };
-        permissions: {
-            camera: string;
+            saveData?: boolean };
+        permissions: { camera: string;
             microphone: string;
             location: string;
             notifications: string;
-            persistentStorage: string;
-        };
-        storage: {
-            localStorage: boolean;
+            persistentStorage: string };
+        storage: { localStorage: boolean;
             sessionStorage: boolean;
             indexedDB: boolean;
             webSQL: boolean;
-            quota: number;
-        };
-        features: {
-            webAssembly: boolean;
+            quota: number };
+        features: { webAssembly: boolean;
             serviceWorker: boolean;
             webWorker: boolean;
             webRTC: boolean;
             webGL: boolean;
             webGL2: boolean;
             webVR: boolean;
-            webXR: boolean;
-        };
+            webXR: boolean };
     };
 
 }
-export interface LocationData {
-    id: string;
+}
+export interface LocationData { id: string;
     timestamp: Date;
     source: 'ip' | 'gps' | 'wifi' | 'cell' | 'manual';
     accuracy: number;
@@ -159,21 +136,18 @@ export interface LocationData {
         accuracy?: number;
         altitudeAccuracy?: number;
         heading?: number;
-        speed?: number;
+        speed?: number }
 }
     };
-    address: {
-        country: string;
+    address: { country: string;
         countryCode: string;
         region: string;
         regionCode: string;
         city: string;
         postalCode?: string;
         street?: string;
-        district?: string;
-    };
-    network: {
-        ipAddress: string;
+        district?: string };
+    network: { ipAddress: string;
         isp: string;
         organization?: string;
         asn?: string;
@@ -182,20 +156,17 @@ export interface LocationData {
         proxyDetected: boolean;
         torDetected: boolean;
         hostingProvider: boolean;
-        datacenter: boolean;
-    };
-    metadata: {
-        language: string;
+        datacenter: boolean };
+    metadata: { language: string;
         currency: string;
         callingCode: string;
         flag?: string;
         population?: number;
-        area?: number;
-    };
+        area?: number };
 
 }
-export interface RiskAssessment {
-    deviceId: string;
+}
+export interface RiskAssessment { deviceId: string;
     overallRisk: RiskLevel;
     riskScore: number;
     factors: Array<{
@@ -203,15 +174,15 @@ export interface RiskAssessment {
         factor: string;
         impact: number;
         confidence: number;
-        description: string;
+        description: string }
 }
     }>;
     recommendations: string[];
     timestamp: Date;
 
 }
-export interface FingerprintContext {
-    ipAddress: string;
+}
+export interface FingerprintContext { ipAddress: string;
     userAgent: string;
     acceptLanguage?: string;
     acceptEncoding?: string;
@@ -232,14 +203,13 @@ export interface FingerprintContext {
         fonts?: string[];
         storage?: any;
         permissions?: any;
-        network?: any;
+        network?: any }
 }
     };
 /**
  * Comprehensive device fingerprinting and location service
  */
-export declare class DeviceFingerprintingService extends EventEmitter {
-    private readonly geoipApiKey?;
+export declare class DeviceFingerprintingService extends EventEmitter { private readonly geoipApiKey?;
     private readonly fraudDetectionEnabled;
     private fingerprints;
     private locations;
@@ -275,8 +245,7 @@ export declare class DeviceFingerprintingService extends EventEmitter {
         riskDistribution: Record<RiskLevel, number>;
         topCountries: Array<{
             country: string;
-            count: number;
-        }>;
+            count: number }>;
         deviceTypes: Record<DeviceType, number>;
         avgConfidence: number;
     };

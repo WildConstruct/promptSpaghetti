@@ -413,8 +413,7 @@ const ConsentPreferenceCenter = ({
                                                 ...prev.categories[category],
                                                 enabled,
                                                 lastModified: new Date(),
-                                            }
-                                        });
+                                            } });
                                         ;
                                     };
                                     const updateCommunicationPreference = ();

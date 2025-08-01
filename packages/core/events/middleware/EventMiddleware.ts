@@ -8,18 +8,16 @@ import { BaseEvent, EventMiddleware, EventPriority, EventCategory } from '../Eve
 /**
  * Enhanced logging middleware with different log levels
  */
-export const createLoggingMiddleware = (options?: {)
+export const createLoggingMiddleware = (options?: { )
   logLevel?: 'debug' | 'info' | 'warn' | 'error';
   includeMetadata?: boolean;
   filterCategories?: EventCategory;
-  filterPriorities?: EventPriority;
-}): EventMiddleware => {
-  const {
+  filterPriorities?: EventPriority }): EventMiddleware => { const {
     logLevel = 'info',
     includeMetadata = false,
-    filterCategories,
+    filterCategories }
     filterPriorities
-  } = options || {};
+ = options || {};
   return (event: BaseEvent, next: () => void) => {
     // Apply filters
     if (filterCategories && event.metadata?.category && )
@@ -39,8 +37,7 @@ export const createLoggingMiddleware = (options?: {)
     if (includeMetadata && event.metadata) {
       logMessage += `\n  Metadata: ${JSON.stringify(event.metadata, null, 2)}`;}
     // Log at appropriate level
-    switch (logLevel) {
-  case 'debug':,
+    switch (logLevel) { case 'debug':,
   console.debug(logMessage);
   break;
   case 'info':,
@@ -49,7 +46,7 @@ export const createLoggingMiddleware = (options?: {)
   case 'warn':,
   console.warn(logMessage);
   break;
-  case 'error':,
+  case 'error': }
   console.error(logMessage);
   break;
   next();
@@ -58,16 +55,14 @@ export const createLoggingMiddleware = (options?: {)
 /**
  * Advanced validation middleware
  */
-export const createValidationMiddleware = (options?: {)
+export const createValidationMiddleware = (options?: { )
   strictMode?: boolean;
   requiredFields?: string;
-  customValidators?: Array<(event: BaseEvent) => string | null>;
-}): EventMiddleware => {
-  const {
+  customValidators?: Array<(event: BaseEvent) => string | null> }): EventMiddleware => { const {
     strictMode = false,
-    requiredFields = ['type', 'timestamp', 'id', 'source'],
+    requiredFields = ['type', 'timestamp', 'id', 'source'] }
     customValidators = []
-  } = options || {};
+ = options || {};
   return (event: BaseEvent, next: () => void) => {
     const errors: string = [];
     // Check required fields
@@ -99,14 +94,11 @@ export const createValidationMiddleware = (options?: {)
         errors.push(error);
     if (errors.length > 0) {
       const errorMessage = `Event validation failed: ${errors.join(', ')}`;}
-      if (strictMode) {
-        throw new Error(errorMessage);
-      } else {
-  console.warn(errorMessage);
+      if (strictMode) { throw new Error(errorMessage) } else { console.warn(errorMessage);
   // Add validation errors to event metadata
   event.metadata = {
   ...event.metadata,
-  validationErrors: errors,
+  validationErrors: errors }
 };
     next();
   };
@@ -114,45 +106,40 @@ export const createValidationMiddleware = (options?: {)
 /**
  * Rate limiting middleware with different strategies
  */
-export const createRateLimitMiddleware = (options: {)
+export const createRateLimitMiddleware = (options: { )
   maxEventsPerSecond?: number;
   maxEventsPerMinute?: number;
   maxEventsPerHour?: number;
   strategy?: 'drop' | 'delay' | 'error';
   keyGenerator?: (event: BaseEvent) => string;
-  whitelist?: string;
-}): EventMiddleware => {
-  const {
+  whitelist?: string }): EventMiddleware => { const {
     maxEventsPerSecond = 100,
     maxEventsPerMinute = 1000,
     maxEventsPerHour = 10000,
-    strategy = 'error',
+    strategy = 'error' }
     keyGenerator = (event) => `${event.source}-${event.type}`}
-}
+
     whitelist = []
-  } = options;
-  const eventCounts = new Map<string, {
-  secondCount: number;
+ = options;
+  const eventCounts = new Map<string, { secondCount: number;
   minuteCount: number;
   hourCount: number;
   secondReset: number;
   minuteReset: number;
-  hourReset: number;
-}>();
-  return (event: BaseEvent, next: () => void) => {
-  const key = keyGenerator(event);
+  hourReset: number }>();
+  return (event: BaseEvent, next: () => void) => { const key = keyGenerator(event);
   const now = Date.now();
   // Skip rate limiting for whitelisted keys
   if (whitelist.includes(key)) {
   next();
   return;
   const counts = eventCounts.get(key) || {
-  secondCount: 0,
-  minuteCount: 0,
-  hourCount: 0,
-  secondReset: now + 1000,
-  minuteReset: now + 60000,
-  hourReset: now + 3600000,
+  secondCount: 0
+  minuteCount: 0
+  hourCount: 0
+  secondReset: now + 1000
+  minuteReset: now + 60000
+  hourReset: now + 3600000 }
 };
     // Reset counters if time windows have passed
     if (now >= counts.secondReset) {
@@ -193,37 +180,33 @@ export const createRateLimitMiddleware = (options: {)
 /**
  * Event transformation middleware
  */
-export const createTransformMiddleware = (options: {)
-  transforms: Array<{
-  condition: (event: BaseEvent) => boolean;
+export const createTransformMiddleware = (options: { )
+  transforms: Array<{;
+  condition: (event: BaseEvent) => boolean }
   transform: (event: BaseEvent) => BaseEvent;
-}>;
+>;
 }): EventMiddleware => {
   return (event: BaseEvent, next: () => void) => {
     let transformedEvent = event;
-    for (const { condition, transform } of options.transforms) {
-      if (condition(transformedEvent)) {
+    for (const { condition, transform } of options.transforms) { if (condition(transformedEvent)) {
         transformedEvent = transform(transformedEvent);
     // Update the original event object
     Object.assign(event, transformedEvent);
-    next();
-  };
+    next() };
 };
 /**
  * Security middleware for sensitive data filtering
  */
-export const createSecurityMiddleware = (options?: {)
+export const createSecurityMiddleware = (options?: { )
   sensitiveFields?: string;
   maskPattern?: string;
   logSensitiveAccess?: boolean;
-  allowedSources?: string;
-}): EventMiddleware => {
-  const {
+  allowedSources?: string }): EventMiddleware => { const {
     sensitiveFields = ['password', 'token', 'secret', 'key', 'ssn', 'creditCard'],
     maskPattern = '***',
-    logSensitiveAccess = true,
+    logSensitiveAccess = true }
     allowedSources = []
-  } = options || {};
+ = options || {};
   const maskSensitiveData = (obj: any): any => {
     if (typeof obj !== 'object' || obj === null) {
       return obj;
@@ -238,34 +221,27 @@ export const createSecurityMiddleware = (options?: {)
         masked[key] = maskPattern;
         if (logSensitiveAccess) {
           console.warn(`Sensitive field '${key}' accessed in event ${event.id}`);}
-      } else if (typeof value === 'object') {
-        masked[key] = maskSensitiveData(value);
-      } else {
-        masked[key] = value;
-    return masked;
-  };
-  return (event: BaseEvent, next: () => void) => {
-    // Check if source is allowed for sensitive data
+ else if (typeof value === 'object') { masked[key] = maskSensitiveData(value) } else { masked[key] = value;
+    return masked };
+  return (event: BaseEvent, next: () => void) => { // Check if source is allowed for sensitive data
     if (allowedSources.length > 0 && !allowedSources.includes(event.source)) {
       // Mask sensitive data in metadata
       if (event.metadata) {
         event.metadata = maskSensitiveData(event.metadata);
-    next();
-  };
+    next() };
 };
 /**
  * Performance monitoring middleware
  */
-export const createPerformanceMiddleware = (options?: {)
+export const createPerformanceMiddleware = (options?: { )
   sampleRate?: number;
   slowEventThreshold?: number;
-  trackMemoryUsage?: boolean;
-}): EventMiddleware => {
+  trackMemoryUsage?: boolean }): EventMiddleware => {
   const {
     sampleRate = 1.0, // Sample 100% of events by default
     slowEventThreshold = 100, // 100ms threshold
     trackMemoryUsage = false
-  } = options || {};
+ = options || {};
   return (event: BaseEvent, next: () => void) => {
     // Skip if not in sample
     if (Math.random() > sampleRate) {
@@ -283,36 +259,32 @@ export const createPerformanceMiddleware = (options?: {)
     if (duration > slowEventThreshold) {
       console.warn(`Slow event processing: ${event.type} took ${duration}ms`);}
     // Add performance metadata
-    event.metadata = {
-  ...event.metadata,
-  performance: {
+    event.metadata = { ...event.metadata,
+  performance: {,
   processingTime: duration,
   timestamp: endTime,
   ...(startMemory && trackMemoryUsage && {)
-  memoryUsage: {
+  memoryUsage: {,
   before: startMemory,
-  after: typeof process !== 'undefined' ? process.memoryUsage() : null,
-}
+  after: typeof process !== 'undefined' ? process.memoryUsage() : null }
+
     };
   };
 };
 /**
  * Event deduplication middleware
  */
-export const createDeduplicationMiddleware = (options: {)
-  keyGenerator: (event: BaseEvent) => string;
+export const createDeduplicationMiddleware = (options: { ),
+  keyGenerator: (event: BaseEvent) => string }
   windowMs: number;
   strategy?: 'drop' | 'merge' | 'latest'
-  }): EventMiddleware => {
-  const {
+  }): EventMiddleware => { const {
     keyGenerator,
-    windowMs,
+    windowMs }
     strategy = 'drop'
-  } = options;
-  const recentEvents = new Map<string, {
-  event: BaseEvent;
-  timestamp: number;
-}>();
+ = options;
+  const recentEvents = new Map<string, { event: BaseEvent;
+  timestamp: number }>();
   return (event: BaseEvent, next: () => void) => {
     const key = keyGenerator(event);
     const now = Date.now();
@@ -328,17 +300,16 @@ export const createDeduplicationMiddleware = (options: {)
           return; // Don't call next()
         case 'merge':
           // Merge metadata
-          current.event.metadata = {
-  ...current.event.metadata,
-  ...event.metadata,
-  duplicateCount: (current.event.metadata?.duplicateCount || 0) + 1,
+          current.event.metadata = { ...current.event.metadata
+  ...event.metadata
+  duplicateCount: (current.event.metadata?.duplicateCount || 0) + 1 }
 };
           return; // Don't call next(), use existing event
         case 'latest':
           // Replace with latest event
           recentEvents.set(key, { event, timestamp: now });
           break;
-    } else {
+ else {
       recentEvents.set(key, { event, timestamp: now });
     next();
   };
@@ -346,7 +317,7 @@ export const createDeduplicationMiddleware = (options: {)
 /**
  * Circuit breaker middleware
  */
-export const createCircuitBreakerMiddleware = (options: {)
+export const createCircuitBreakerMiddleware = (options: { ) }
   failureThreshold: number;
   resetTimeoutMs: number;
   monitorWindowMs: number;
@@ -356,8 +327,7 @@ export const createCircuitBreakerMiddleware = (options: {)
   let failureCount = 0;
   let lastFailureTime = 0;
   let windowStart = Date.now();
-  return (event: BaseEvent, next: () => void) => {
-  const now = Date.now();
+  return (event: BaseEvent, next: () => void) => { const now = Date.now();
   // Reset window if expired
   if (now - windowStart > monitorWindowMs) {
   failureCount = 0;
@@ -365,25 +335,20 @@ export const createCircuitBreakerMiddleware = (options: {)
   if (state === 'open' && now - lastFailureTime > resetTimeoutMs) {
   state = 'half-open';
   switch (state) {
-  case 'open':,
+  case 'open':
   throw new Error('Circuit breaker is OPEN - rejecting events');
-  case 'half-open':,
-  try {
-  next();
+  case 'half-open': }
+  try { next();
   // Success - reset to closed
   state = 'closed';
-  failureCount = 0;
-} catch (error) {
-  // Failure - back to open
+  failureCount = 0 } catch (error) { // Failure - back to open
   state = 'open';
   lastFailureTime = now;
   throw error;
   break;
-  case 'closed':,
-  default:,
-  try {
-  next();
-} catch (error) {
+  case 'closed':
+  default: }
+  try { next() } catch (error) {
           failureCount++;
           lastFailureTime = now;
           if (failureCount >= failureThreshold) {
@@ -397,19 +362,19 @@ export const createCircuitBreakerMiddleware = (options: {)
  * Pre-configured middleware collections
  */
 export const developmentMiddleware = [
-  createLoggingMiddleware({ level: 'info' }),
+  createLoggingMiddleware({ level: 'info' })
   createPerformanceMiddleware({ trackMemoryUsage: true })
 ];
 
 export const productionMiddleware = [
-  createRateLimitingMiddleware({ maxRequests: 1000, windowMs: 60000 }),
+  createRateLimitingMiddleware({ maxRequests: 1000, windowMs: 60000 })
   createCircuitBreakerMiddleware({ failureThreshold: 10, resetTimeoutMs: 30000, monitorWindowMs: 60000 })
 ];
 
 export const testingMiddleware = [
   createDeduplicationMiddleware({ )
     keyGenerator: (event) => `${event.type}_${event.timestamp}`}
-},
+
   windowMs: 1000 ;
-  }
+
 ];

@@ -13,7 +13,7 @@ export enum HealthStatus {
   UNHEALTHY = 'unhealthy',
   CRITICAL = 'critical',
   UNKNOWN = 'unknown'
-}
+
 
 export enum DependencyType {
   DATABASE = 'database',
@@ -23,9 +23,9 @@ export enum DependencyType {
   MESSAGE_QUEUE = 'message-queue',
   AUTHENTICATION = 'authentication',
   CUSTOM = 'custom'
-}
 
-}
+
+
 export interface HealthCheckResult {
   status: HealthStatus;
   responseTimeMs: number;
@@ -33,12 +33,13 @@ export interface HealthCheckResult {
   details?: Record<string, unknown>;
   timestamp: number;
   error?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DependencyHealthCheck {
   name: string;
   type: DependencyType;
@@ -47,18 +48,20 @@ export interface DependencyHealthCheck {
   healthCheck: () => Promise<HealthCheckResult>;
   criticalThresholdMs?: number; // Response time threshold for critical status
   degradedThresholdMs?: number; // Response time threshold for degraded status
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemHealthSummary {
   overall: HealthStatus;
   score: number; // 0-100, weighted health score
   timestamp: number;
-}
-}
+
+
+
   dependencies: Record<string, HealthCheckResult & { weight: number; type: DependencyType }>;
   issues: string[];
   recommendations: string[];
@@ -68,10 +71,10 @@ export interface SystemHealthSummary {
     to: HealthStatus;
     timestamp: number;
   };
-}
 
-}
-}
+
+
+
 export interface HealthMetrics {
   checksPerformed: number;
   averageHealthScore: number;
@@ -80,16 +83,17 @@ export interface HealthMetrics {
     name: string;
     averageResponseTime: number;
     type: DependencyType;
-}
-}
-  }>;
+
+
+
+>;
   recentDowntime: Array<{
     dependency: string;
     status: HealthStatus;
     duration: number;
     timestamp: number;
-  }>;
-}
+>;
+
 
 class HealthMonitoringService extends EventEmitter {
   private dependencies: Map<string, DependencyHealthCheck> = new Map();
@@ -119,14 +123,14 @@ class HealthMonitoringService extends EventEmitter {
       ),
       totalHealthScore: 0,
       responseTimeSums: new Map(};
-  }
+
 
   static getInstance(): HealthMonitoringService {
     if (!HealthMonitoringService.instance) {
       HealthMonitoringService.instance = new HealthMonitoringService();
-    }
+
     return HealthMonitoringService.instance;
-  }
+
 
   public registerDependency(check: DependencyHealthCheck): void {
     this.dependencies.set(check.name, check);
@@ -137,7 +141,7 @@ class HealthMonitoringService extends EventEmitter {
       weight: check.weight,
       timeoutMs: check.timeoutMs
     });
-  }
+
 
   public unregisterDependency(name: string): void {
     this.dependencies.delete(name);
@@ -146,7 +150,7 @@ class HealthMonitoringService extends EventEmitter {
     this.metrics.responseTimeSums.delete(name);
     
     logger.info(`Unregistered health check for dependency '${name}'`);
-  }
+
 
   private async performHealthCheck(dependency: DependencyHealthCheck): Promise<HealthCheckResult> {
 
@@ -168,14 +172,14 @@ class HealthMonitoringService extends EventEmitter {
         if (dependency.criticalThresholdMs && responseTime > dependency.criticalThresholdMs) {
           result.status = HealthStatus.CRITICAL;
           result.message = `Response time ${responseTime}ms exceeds critical threshold ${dependency.criticalThresholdMs}ms`;
-        } else if (dependency.degradedThresholdMs && responseTime > dependency.degradedThresholdMs) {
+ else if (dependency.degradedThresholdMs && responseTime > dependency.degradedThresholdMs) {
           result.status = HealthStatus.DEGRADED;
           result.message = `Response time ${responseTime}ms exceeds degraded threshold ${dependency.degradedThresholdMs}ms`;
-        }
-      }
+
+
 
       return result;
-    } catch (error) {
+ catch (error) {
       const responseTime = Date.now() - startTime;
       return {
         status: HealthStatus.UNHEALTHY,
@@ -184,8 +188,8 @@ class HealthMonitoringService extends EventEmitter {
         error: error instanceof Error ? error.message : String(error),
         message: `Health check failed: ${error instanceof Error ? error.message : String(error)}`
       };
-    }
-  }
+
+
 
   private createTimeoutPromise(timeoutMs: number, dependencyName: string): Promise<HealthCheckResult> {
 
@@ -194,7 +198,7 @@ class HealthMonitoringService extends EventEmitter {
         reject(new Error(`Health check for '${dependencyName}' timed out after ${timeoutMs}ms`));
       }, timeoutMs);
     });
-  }
+
 
   private updateMetrics(dependencyName: string, result: HealthCheckResult): void {
     this.metrics.checksPerformed++;
@@ -211,9 +215,9 @@ class HealthMonitoringService extends EventEmitter {
     history.push(result);
     if (history.length > 50) {
       history.shift();
-    }
+
     this.healthHistory.set(dependencyName, history);
-  }
+
 
   private calculateOverallHealthScore(): { score: number; status: HealthStatus; issues: string[]; recommendations: string[] } {
     let totalWeight = 0;
@@ -254,7 +258,7 @@ class HealthMonitoringService extends EventEmitter {
         issues.push(`${name} status is unknown`);
         recommendations.push(`Check ${name} health monitoring configuration`);
         break;
-      }
+
 
       weightedScore += statusScore * weight;
     });
@@ -269,18 +273,18 @@ class HealthMonitoringService extends EventEmitter {
 
     if (hasCriticalIssues) {
       overallStatus = HealthStatus.CRITICAL;
-    } else if (finalScore >= 90) {
+ else if (finalScore >= 90) {
       overallStatus = HealthStatus.HEALTHY;
-    } else if (finalScore >= 70) {
+ else if (finalScore >= 70) {
       overallStatus = HealthStatus.DEGRADED;
-    } else if (finalScore >= 30) {
+ else if (finalScore >= 30) {
       overallStatus = HealthStatus.UNHEALTHY;
-    } else {
+ else {
       overallStatus = HealthStatus.CRITICAL;
-    }
+
 
     return { score: finalScore, status: overallStatus, issues, recommendations };
-  }
+
 
   public async checkHealth(): Promise<SystemHealthSummary> {
 
@@ -290,7 +294,7 @@ class HealthMonitoringService extends EventEmitter {
         this.lastHealthCheck.set(name, result);
         this.updateMetrics(name, result);
         return { name, dependency, result };
-      }
+
     );
 
     await Promise.allSettled(healthChecks);
@@ -316,7 +320,7 @@ class HealthMonitoringService extends EventEmitter {
       });
 
       logger.warn('System health status changed', this.lastStatusChange);
-    }
+
 
     // Build summary
     const dependencies: Record<string, HealthCheckResult & { weight: number; type: DependencyType }> = {};
@@ -328,7 +332,7 @@ class HealthMonitoringService extends EventEmitter {
           weight: dependency.weight,
           type: dependency.type
         };
-      }
+
     });
 
     return {
@@ -341,7 +345,7 @@ class HealthMonitoringService extends EventEmitter {
       uptime: Date.now() - this.startTime,
       lastStatusChange: this.lastStatusChange
     };
-  }
+
 
   public getMetrics(): HealthMetrics {
     const averageHealthScore = this.metrics.checksPerformed > 0 
@@ -364,7 +368,7 @@ class HealthMonitoringService extends EventEmitter {
       status: HealthStatus;
       duration: number;
       timestamp: number;
-    }> = [];
+> = [];
 
     this.healthHistory.forEach((history, dependencyName) => {
       const recentHistory = history.slice(-10); // Last 10 checks
@@ -375,7 +379,7 @@ class HealthMonitoringService extends EventEmitter {
         
         if (isDown && !downtimeStart) {
           downtimeStart = check.timestamp;
-        } else if (!isDown && downtimeStart) {
+ else if (!isDown && downtimeStart) {
           recentDowntime.push({
             dependency: dependencyName,
             status: check.status,
@@ -383,7 +387,7 @@ class HealthMonitoringService extends EventEmitter {
             timestamp: downtimeStart
           });
           downtimeStart = null;
-        }
+
       });
     });
 
@@ -394,13 +398,13 @@ class HealthMonitoringService extends EventEmitter {
       slowestDependencies,
       recentDowntime: recentDowntime.sort((a, b) => b.timestamp - a.timestamp).slice(0, 10)
     };
-  }
+
 
   public startMonitoring(intervalMs: number = 30000): void {
     if (this.isRunning) {
       logger.warn('Health monitoring is already running');
       return;
-    }
+
 
     this.isRunning = true;
     
@@ -413,29 +417,29 @@ class HealthMonitoringService extends EventEmitter {
     this.checkInterval = setInterval(async () => {
       try {
         await this.checkHealth();
-      } catch (error) {
+ catch (error) {
         logger.error(
           'Error in periodic health check',
           { error: error instanceof Error ? error.message : String(error
           ) });
-      }
+
     }, intervalMs);
 
     logger.info(`Health monitoring started with ${intervalMs}ms interval`);
-  }
+
 
   public stopMonitoring(): void {
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
       this.checkInterval = undefined;
-    }
+
     this.isRunning = false;
     logger.info('Health monitoring stopped');
-  }
+
 
   public isMonitoringActive(): boolean {
     return this.isRunning;
-  }
+
 
   // Pre-configured health checks for common dependencies
   public registerDatabaseHealthCheck(connectionTest: () => Promise<boolean>): void {
@@ -454,9 +458,9 @@ class HealthMonitoringService extends EventEmitter {
           timestamp: Date.now(),
           message: isConnected ? 'Database connection is healthy' : 'Database connection failed'
         };
-      }
+
     });
-  }
+
 
   public registerRedisHealthCheck(pingTest: () => Promise<boolean>): void {
     this.registerDependency({
@@ -474,9 +478,9 @@ class HealthMonitoringService extends EventEmitter {
           timestamp: Date.now(),
           message: isConnected ? 'Redis connection is healthy' : 'Redis connection failed'
         };
-      }
+
     });
-  }
+
 
   public registerExternalAPIHealthCheck(
     serviceName: string,
@@ -498,10 +502,10 @@ class HealthMonitoringService extends EventEmitter {
           message: response.ok ? `${serviceName} API is healthy` : `${serviceName} API is not responding`,
           details: { statusCode: response.status }
         };
-      }
+
     });
-  }
-}
+
+
 
 // Export singleton instance
 export const healthMonitoringService = new HealthMonitoringService();

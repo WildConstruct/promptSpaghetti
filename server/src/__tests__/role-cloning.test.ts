@@ -52,7 +52,7 @@ describe('Role Cloning System', () => {
       scope: 'own' as const,
       description: 'View project details',
       category: 'Projects'
-  }
+
     {
       id: 'perm_edit_projects',
       name: 'Edit Projects', 
@@ -61,7 +61,7 @@ describe('Role Cloning System', () => {
       scope: 'own' as const,
       description: 'Modify projects',
       category: 'Projects'
-  }
+
     {
       id: 'perm_admin_roles',
       name: 'Manage Roles',
@@ -70,7 +70,7 @@ describe('Role Cloning System', () => {
       scope: 'organization' as const,
       description: 'Create and modify roles',
       category: 'Administration'
-    }
+
   ];
 
   beforeAll(async () => {
@@ -104,7 +104,7 @@ describe('Role Cloning System', () => {
         permission.id, permission.name, permission.resource, permission.action,
         permission.scope, permission.description, permission.category, 1
       ]);
-    }
+
 
     // Insert test user
     await db.query(`
@@ -128,8 +128,8 @@ describe('Role Cloning System', () => {
         INSERT IGNORE INTO role_permissions (role_id, permission_id)
         VALUES (?, ?)
       `, [mockSourceRole.id, permission]);
-    }
-  }
+
+
 
   async function cleanupTestData() {
     await db.query('DELETE FROM role_permissions WHERE role_id LIKE ?', ['role_%']);
@@ -137,7 +137,7 @@ describe('Role Cloning System', () => {
     await db.query('DELETE FROM roles WHERE id LIKE ?', ['role_%']);
     await db.query('DELETE FROM users WHERE id LIKE ?', ['test-%']);
     await db.query('DELETE FROM permissions WHERE id LIKE ?', ['perm_%']);
-  }
+
 
   describe('RoleCloneService', () => {
     test('should clone role successfully with all permissions', async () => {
@@ -285,7 +285,7 @@ describe('Role Cloning System', () => {
           includePermissions: mockSourceRole.permissions
         };
         await roleCloneService.cloneRole(cloneRequest, mockUser.id);
-      }
+
 
       const templates = await roleCloneService.getRoleTemplates('org_test', 5);
 
@@ -305,7 +305,7 @@ describe('Role Cloning System', () => {
         url: '/api/roles/clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-  }
+
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: 'API Test Clone',
@@ -313,7 +313,7 @@ describe('Role Cloning System', () => {
           targetScope: 'organization',
           organizationId: 'org_test',
           includePermissions: mockSourceRole.permissions
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -329,7 +329,7 @@ describe('Role Cloning System', () => {
         url: '/api/roles/clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-  }
+
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: '', // Invalid empty name
@@ -337,7 +337,7 @@ describe('Role Cloning System', () => {
           targetScope: 'organization',
           organizationId: 'org_test',
           includePermissions: []
-        }
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -354,7 +354,7 @@ describe('Role Cloning System', () => {
         url: '/api/roles/clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-  }
+
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: 'History API Test',
@@ -362,7 +362,7 @@ describe('Role Cloning System', () => {
           targetScope: 'organization',
           organizationId: 'org_test',
           includePermissions: mockSourceRole.permissions
-        }
+
       });
 
       // Then get the history
@@ -371,7 +371,7 @@ describe('Role Cloning System', () => {
         url: `/api/roles/${mockSourceRole.id}/clone-history`,
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -388,7 +388,7 @@ describe('Role Cloning System', () => {
         url: '/api/roles/templates?organizationId=org_test',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -404,14 +404,14 @@ describe('Role Cloning System', () => {
         url: '/api/roles/validate-clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-  }
+
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: 'Validation Test',
           targetScope: 'organization',
           organizationId: 'org_test',
           includePermissions: mockSourceRole.permissions
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -431,7 +431,7 @@ describe('Role Cloning System', () => {
           targetDescription: 'Should fail',
           targetScope: 'organization',
           includePermissions: []
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -450,14 +450,14 @@ describe('Role Cloning System', () => {
         url: '/api/roles/clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(unauthorizedUser)}`
-  }
+
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: 'Unauthorized Clone',
           targetDescription: 'Should fail',
           targetScope: 'organization',
           includePermissions: []
-        }
+
       });
 
       expect(response.statusCode).toBe(403);
@@ -544,7 +544,7 @@ describe('Role Cloning System', () => {
     // This would normally use the same JWT signing as the main app
     // For testing, we'll use a simple mock token
     return Buffer.from(JSON.stringify(user)).toString('base64');
-  }
+
 });
 
 describe('Role Cloning Database Schema', () => {

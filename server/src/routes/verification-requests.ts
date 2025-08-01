@@ -10,10 +10,10 @@ import {
   identityValidationService,
   IdentityValidationType,
   IdentityValidationData
-} from '../../../packages/core/auth/IdentityValidation';
+ from '../../../packages/core/auth/IdentityValidation';
 
-}
-}
+
+
 interface SubmitVerificationRequestBody {
   userId: string;
   verificationType: IdentityValidationType;
@@ -23,19 +23,21 @@ interface SubmitVerificationRequestBody {
     userAgent?: string;
     sessionId?: string;
     requestSource?: 'profile_setup' | 'manual_request' | 'system_triggered';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetVerificationStatusParams {
   userId: string;
   requestId?: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Submit a new verification request
@@ -53,7 +55,7 @@ export async function submitVerificationRequest(
         error: 'Missing required fields',
         message: 'userId, verificationType, and data are required'
       });
-    }
+
     
     // Extract metadata from request
     const requestMetadata = {
@@ -81,18 +83,17 @@ export async function submitVerificationRequest(
         status: result.status,
         verificationType,
         submittedAt: new Date().toISOString()
-  }
+
       message: 'Verification request submitted successfully'
     });
-    
-  } catch (error) {
+ catch (error) {
     console.error('Error submitting verification request:', error);
     reply.status(500).send({
       error: 'Internal server error',
       message: 'Failed to submit verification request'
     });
-  }
-}
+
+
 
 /**
  * Get verification status for a user or specific request
@@ -108,7 +109,7 @@ export async function getVerificationStatus(
       return reply.status(400).send({
         error: 'Missing userId parameter'
       });
-    }
+
     
     if (requestId) {
       // Get specific request status
@@ -119,16 +120,16 @@ export async function getVerificationStatus(
         return reply.status(404).send({
           error: 'Verification request not found'
         });
-      }
+
       
       reply.send({
         success: true,
         data: {
           request: requestStatus,
           result: requestResult
-        }
+
       });
-    } else {
+ else {
       // Get all verifications for user
       const userValidations = identityValidationService.getUserValidations(userId);
       const validationSummary = identityValidationService.getUserValidationSummary(userId);
@@ -146,18 +147,17 @@ export async function getVerificationStatus(
             timestamp: request.timestamp,
             metadata: request.metadata
           }))
-        }
+
       });
-    }
-    
-  } catch (error) {
+
+ catch (error) {
     console.error('Error getting verification status:', error);
     reply.status(500).send({
       error: 'Internal server error',
       message: 'Failed to retrieve verification status'
     });
-  }
-}
+
+
 
 /**
  * Get user's trust score
@@ -173,7 +173,7 @@ export async function getUserTrustScore(
       return reply.status(400).send({
         error: 'Missing userId parameter'
       });
-    }
+
     
     const trustScore = identityValidationService.getUserTrustScore(userId);
     
@@ -182,21 +182,20 @@ export async function getUserTrustScore(
         error: 'Trust score not found',
         message: 'User has no completed verifications'
       });
-    }
+
     
     reply.send({
       success: true,
       data: trustScore
     });
-    
-  } catch (error) {
+ catch (error) {
     console.error('Error getting trust score:', error);
     reply.status(500).send({
       error: 'Internal server error',
       message: 'Failed to retrieve trust score'
     });
-  }
-}
+
+
 
 /**
  * Get validation result details
@@ -212,7 +211,7 @@ export async function getValidationResult(
       return reply.status(400).send({
         error: 'Missing requestId parameter'
       });
-    }
+
     
     const result = identityValidationService.getValidationResult(requestId);
     
@@ -220,21 +219,20 @@ export async function getValidationResult(
       return reply.status(404).send({
         error: 'Validation result not found'
       });
-    }
+
     
     reply.send({
       success: true,
       data: result
     });
-    
-  } catch (error) {
+ catch (error) {
     console.error('Error getting validation result:', error);
     reply.status(500).send({
       error: 'Internal server error',
       message: 'Failed to retrieve validation result'
     });
-  }
-}
+
+
 
 /**
  * Get verification types and requirements
@@ -253,7 +251,7 @@ export async function getVerificationTypes(
         estimatedTime: '5 minutes',
         requirements: ['Valid email address'],
         fields: ['email']
-  }
+
       {
         type: 'phone_verification',
         title: 'Phone Verification',
@@ -262,7 +260,7 @@ export async function getVerificationTypes(
         estimatedTime: '10 minutes',
         requirements: ['Valid phone number with country code'],
         fields: ['phoneNumber']
-  }
+
       {
         type: 'government_id',
         title: 'Government ID',
@@ -276,7 +274,7 @@ export async function getVerificationTypes(
         ],
         fields: ['governmentId'],
         acceptedDocuments: ['passport', 'drivers_license', 'national_id']
-  }
+
       {
         type: 'professional_credentials',
         title: 'Professional Credentials',
@@ -290,7 +288,7 @@ export async function getVerificationTypes(
         ],
         fields: ['professionalCredentials'],
         acceptedDocuments: ['degree', 'certificate', 'award', 'credit']
-  }
+
       {
         type: 'social_media_verification',
         title: 'Social Media Verification',
@@ -304,22 +302,21 @@ export async function getVerificationTypes(
         ],
         fields: ['socialMediaProfiles'],
         supportedPlatforms: ['linkedin', 'twitter', 'instagram', 'imdb', 'website']
-      }
+
     ];
     
     reply.send({
       success: true,
       data: verificationTypes
     });
-    
-  } catch (error) {
+ catch (error) {
     console.error('Error getting verification types:', error);
     reply.status(500).send({
       error: 'Internal server error',
       message: 'Failed to retrieve verification types'
     });
-  }
-}
+
+
 
 /**
  * Upload documents for verification
@@ -328,7 +325,7 @@ export async function uploadVerificationDocuments(
   request: FastifyRequest<{ 
     Params: { requestId: string };
     Body: { files: { name: string; data: string; type: string }[] }
-  }>,
+>,
   reply: FastifyReply
 ) {
   try {
@@ -339,13 +336,13 @@ export async function uploadVerificationDocuments(
       return reply.status(400).send({
         error: 'Missing requestId parameter'
       });
-    }
+
     
     if (!files || !Array.isArray(files) || files.length === 0) {
       return reply.status(400).send({
         error: 'No files provided'
       });
-    }
+
     
     // Validate file types and sizes
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
@@ -357,7 +354,7 @@ export async function uploadVerificationDocuments(
           error: `File type ${file.type} is not allowed`,
           allowedTypes
         });
-      }
+
       
       // Check base64 file size (approximate)
       const fileSize = (file.data.length * 3) / 4;
@@ -365,8 +362,8 @@ export async function uploadVerificationDocuments(
         return reply.status(400).send({
           error: `File ${file.name} exceeds maximum size of 10MB`
         });
-      }
-    }
+
+
     
     // In a real implementation, you would:
     // 1. Store files in secure storage (S3, etc.)
@@ -392,17 +389,16 @@ export async function uploadVerificationDocuments(
         requestId,
         uploadedFiles: processedFiles,
         message: `Successfully uploaded ${processedFiles.length} document(s)`
-      }
+
     });
-    
-  } catch (error) {
+ catch (error) {
     console.error('Error uploading verification documents:', error);
     reply.status(500).send({
       error: 'Internal server error',
       message: 'Failed to upload documents'
     });
-  }
-}
+
+
 
 /**
  * Register verification request routes
@@ -419,9 +415,9 @@ export function registerVerificationRoutes(fastify: any) {
           verificationType: { type: 'string' },
           data: { type: 'object' },
           metadata: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, submitVerificationRequest);
   
   // Get verification status
@@ -439,4 +435,3 @@ export function registerVerificationRoutes(fastify: any) {
   
   // Upload documents
   fastify.post('/api/verification/upload/:requestId', uploadVerificationDocuments);
-}

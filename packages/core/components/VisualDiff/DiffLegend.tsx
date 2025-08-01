@@ -3,43 +3,37 @@
 import React from 'react';
 import { HighlightMode } from '../../types/comparison';
 
-}
-export interface DiffLegendProps {
-  highlightMode: HighlightMode;
-  className?: string;
-}
-}
-export const DiffLegend: React.FC<DiffLegendProps> = ({)
-  highlightMode,
+
+export interface DiffLegendProps { highlightMode: HighlightMode;
+  className?: string }
+
+export const DiffLegend: React.FC<DiffLegendProps> = ({ )
+  highlightMode }
   className = ''
-}) => {
-  const legendItems = [;
+}) => { const legendItems = [
   {
-  type: 'added',
-  label: 'Added',
-  color: '#10b981',
-  bgColor: '#ecfdf5',
-  visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'additions',
-}
-    {
-  type: 'removed',
-  label: 'Removed',
-  color: '#ef4444',
-  bgColor: '#fef2f2',
-  visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'deletions',
-}
-    {
-  type: 'modified',
-  label: 'Modified',
-  color: '#f59e0b',
-  bgColor: '#fffbeb',
-  visible: highlightMode === 'all' || highlightMode === 'changes',
-}
-    {
-      type: 'unchanged',
-      label: 'Unchanged',
-      color: '#6b7280',
-      bgColor: '#f9fafb',
+  type: 'added'
+  label: 'Added'
+  color: '#10b981'
+  bgColor: '#ecfdf5'
+  visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'additions' }
+
+    { type: 'removed'
+  label: 'Removed'
+  color: '#ef4444'
+  bgColor: '#fef2f2'
+  visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'deletions' }
+
+    { type: 'modified'
+  label: 'Modified'
+  color: '#f59e0b'
+  bgColor: '#fffbeb'
+  visible: highlightMode === 'all' || highlightMode === 'changes' }
+
+    { type: 'unchanged'
+      label: 'Unchanged'
+      color: '#6b7280'
+      bgColor: '#f9fafb' }
       visible: highlightMode === 'all'];
   const visibleItems = legendItems.filter(item => item.visible);
   if (visibleItems.length === 0) {
@@ -52,10 +46,10 @@ export const DiffLegend: React.FC<DiffLegendProps> = ({)
           <div key={item.type} className="flex items-center space-x-2">
             <div
               className="w-4 h-4 rounded border-2 flex-shrink-0"
-              style={{
-  borderColor: item.color,
-  backgroundColor: item.bgColor,
-}}
+              style={ {
+  borderColor: item.color
+  backgroundColor: item.bgColor }
+}
             />
             <span className="text-sm text-gray-700">{item.label}</span>
           </div>

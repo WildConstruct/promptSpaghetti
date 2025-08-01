@@ -20,8 +20,8 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
-}
-}
+
+
 export interface SearchQuery {
   query?: string;              // Text search query
   categories?: string[];       // Filter by categories
@@ -34,8 +34,9 @@ export interface SearchQuery {
   dateRange?: {              // Filter by creation date
     start?: Date;
     end?: Date;
-}
-}
+
+
+
   };
   priceRange?: {             // Filter by price (if applicable)
     min?: number;
@@ -44,10 +45,10 @@ export interface SearchQuery {
   sortBy?: 'relevance' | 'newest' | 'oldest' | 'rating' | 'popular' | 'trending';
   page?: number;
   limit?: number;
-}
 
-}
-}
+
+
+
 export interface SearchFacets {
   categories: Array<{ name: string; count: number; subcategories?: Array<{ name: string; count: number }> }>;
   tags: Array<{ name: string; count: number }>;
@@ -55,10 +56,10 @@ export interface SearchFacets {
   rating: Array<{ range: string; count: number }>;
   authors: Array<{ name: string; count: number; verified: boolean }>;
   dateRanges: Array<{ range: string; count: number }>;
-}
 
-}
-}
+
+
+
 export interface SearchResult {
   id: string;
   title: string;
@@ -72,8 +73,9 @@ export interface SearchResult {
     name: string;
     verified: boolean;
     avatar?: string;
-}
-}
+
+
+
   };
   rating: {
     average: number;
@@ -99,10 +101,10 @@ export interface SearchResult {
     description?: string;
     tags?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface SearchResponse {
   results: SearchResult[];
   total: number;
@@ -113,32 +115,35 @@ export interface SearchResponse {
   searchTime: number;
   page: number;
   limit: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SearchSuggestion {
   query: string;
   type: 'completion' | 'correction' | 'related';
   confidence: number;
   category?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrendingSearch {
   query: string;
   count: number;
   growth: number;
   category?: string;
   timeframe: '1h' | '24h' | '7d' | '30d';
-}
-}
-}
+
+
+
+
 
 @Injectable()
 export class TemplateSearchService {
@@ -153,7 +158,7 @@ export class TemplateSearchService {
       maxRetriesPerRequest: 3,
       keyPrefix: 'template_search:'
     });
-  }
+
 
   /**
    * Perform advanced template search with faceted filtering
@@ -171,7 +176,7 @@ export class TemplateSearchService {
       if (cached) {
         await this.logSearchEvent(query, userId, cached.total, Date.now() - startTime, true);
         return cached;
-      }
+
 
       // Build SQL query with filters and scoring
       const { sqlQuery, params } = await this.buildSearchSQL(query, userId);
@@ -213,11 +218,11 @@ export class TemplateSearchService {
       await this.logSearchEvent(query, userId, total, response.searchTime, false);
 
       return response;
-    } catch (error) {
+ catch (error) {
       console.error('Search failed:', error);
       throw new Error('Search service temporarily unavailable');
-    }
-  }
+
+
 
   /**
    * Get real-time search suggestions as user types
@@ -236,7 +241,7 @@ export class TemplateSearchService {
       
       if (cached) {
         return JSON.parse(cached);
-      }
+
 
       // Get suggestions from multiple sources
       const [templateSuggestions, tagSuggestions, categorySuggestions, trendingSuggestions] = await Promise.all([
@@ -264,11 +269,11 @@ export class TemplateSearchService {
       await this.redis.setex(cacheKey, 60, JSON.stringify(rankedSuggestions));
 
       return rankedSuggestions;
-    } catch (error) {
+ catch (error) {
       console.error('Autocomplete suggestions failed:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Get trending searches and popular queries
@@ -285,7 +290,7 @@ export class TemplateSearchService {
       
       if (cached) {
         return JSON.parse(cached);
-      }
+
 
       const intervalMap = {
         '1h': '1 hour',
@@ -313,7 +318,7 @@ export class TemplateSearchService {
         query += ` AND category = $${paramIndex}`;
         params.push(category);
         paramIndex++;
-      }
+
 
       query += `
         GROUP BY query, category
@@ -337,11 +342,11 @@ export class TemplateSearchService {
       await this.redis.setex(cacheKey, 900, JSON.stringify(trending));
 
       return trending;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get trending searches:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Get search analytics and insights
@@ -358,7 +363,7 @@ export class TemplateSearchService {
       cacheHitRate: number;
       errorRate: number;
     };
-  }> {
+> {
     try {
       const intervalMap = {
         '24h': '24 hours',
@@ -453,13 +458,13 @@ export class TemplateSearchService {
           averageSearchTime: parseFloat(performanceStats.rows[0]?.avg_search_time) || 0,
           cacheHitRate: parseFloat(performanceStats.rows[0]?.cache_hit_rate) || 0,
           errorRate: parseFloat(performanceStats.rows[0]?.error_rate) || 0
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get search analytics:', error);
       throw error;
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -480,26 +485,26 @@ export class TemplateSearchService {
     ];
     
     return Buffer.from(keyParts.join('|')).toString('base64');
-  }
+
 
   private async getCachedResults(searchKey: string): Promise<SearchResponse | null> {
 
     try {
       const cached = await this.redis.get(`results:${searchKey}`);
       return cached ? JSON.parse(cached) : null;
-    } catch (error) {
+ catch (error) {
       return null;
-    }
-  }
+
+
 
   private async cacheResults(searchKey: string, response: SearchResponse): Promise<void> {
 
     try {
       await this.redis.setex(`results:${searchKey}`, 300, JSON.stringify(response));
-    } catch (error) {
+ catch (error) {
       console.error('Failed to cache search results:', error);
-    }
-  }
+
+
 
   private async buildSearchSQL(query: SearchQuery, userId?: string): Promise<{ sqlQuery: string; params: any[] }> {
 
@@ -535,55 +540,55 @@ export class TemplateSearchService {
       baseQuery += ` AND t.category = ANY($${paramIndex})`;
       params.push(query.categories);
       paramIndex++;
-    }
+
 
     if (query.tags && query.tags.length > 0) {
       baseQuery += ` AND t.tags && $${paramIndex}`;
       params.push(query.tags);
       paramIndex++;
-    }
+
 
     if (query.complexity && query.complexity.length > 0) {
       baseQuery += ` AND t.complexity = ANY($${paramIndex})`;
       params.push(query.complexity);
       paramIndex++;
-    }
+
 
     if (query.minRating) {
       baseQuery += ` AND r.average_rating >= $${paramIndex}`;
       params.push(query.minRating);
       paramIndex++;
-    }
+
 
     if (query.verified !== undefined) {
       baseQuery += ` AND t.verified = $${paramIndex}`;
       params.push(query.verified);
       paramIndex++;
-    }
+
 
     if (query.featured !== undefined) {
       baseQuery += ` AND t.featured = $${paramIndex}`;
       params.push(query.featured);
       paramIndex++;
-    }
+
 
     if (query.author) {
       baseQuery += ` AND u.id = $${paramIndex}`;
       params.push(query.author);
       paramIndex++;
-    }
+
 
     if (query.dateRange?.start) {
       baseQuery += ` AND t.created_at >= $${paramIndex}`;
       params.push(query.dateRange.start);
       paramIndex++;
-    }
+
 
     if (query.dateRange?.end) {
       baseQuery += ` AND t.created_at <= $${paramIndex}`;
       params.push(query.dateRange.end);
       paramIndex++;
-    }
+
 
     // Add sorting
     const sortMap = {
@@ -605,7 +610,7 @@ export class TemplateSearchService {
     params.push(limit, offset);
 
     return { sqlQuery: baseQuery, params };
-  }
+
 
   private async buildFacets(query: SearchQuery): Promise<SearchFacets> {
 
@@ -618,7 +623,7 @@ export class TemplateSearchService {
       authors: [],
       dateRanges: []
     };
-  }
+
 
   private async processSearchResults(
     rows: any[],
@@ -639,17 +644,17 @@ export class TemplateSearchService {
         name: row.author_name,
         verified: row.author_verified,
         avatar: row.author_avatar
-  }
+
       rating: {
         average: parseFloat(row.average_rating) || 0,
         count: parseInt(row.review_count) || 0,
         distribution: row.rating_distribution || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
-  }
+
       usage: {
         downloadCount: row.download_count || 0,
         viewCount: row.view_count || 0,
         bookmarkCount: row.bookmark_count || 0
-  }
+
       metadata: {
         createdAt: row.created_at,
         updatedAt: row.updated_at,
@@ -657,11 +662,11 @@ export class TemplateSearchService {
         verified: row.verified || false,
         premium: row.premium || false,
         price: row.price
-  }
+
       relevanceScore: parseInt(row.relevance_score) || 0,
       highlightedSnippets: this.generateHighlights(row, searchQuery)
     }));
-  }
+
 
   private generateHighlights(row: any, query: string): SearchResult['highlightedSnippets'] {
     // Simplified highlighting - would implement proper text highlighting
@@ -669,26 +674,26 @@ export class TemplateSearchService {
     
     if (query && row.title?.toLowerCase().includes(query.toLowerCase())) {
       highlights.title = row.title;
-    }
+
     
     if (query && row.description?.toLowerCase().includes(query.toLowerCase())) {
       highlights.description = row.description;
-    }
+
     
     return highlights;
-  }
+
 
   private async generateSuggestions(query: string, userId?: string): Promise<string[]> {
 
     // Simplified suggestion generation
     return [];
-  }
+
 
   private async getRelatedQueries(query: string, userId?: string): Promise<string[]> {
 
     // Simplified related query generation
     return [];
-  }
+
 
   private async getTemplateTitleSuggestions(partial: string, limit: number): Promise<SearchSuggestion[]> {
 
@@ -708,25 +713,25 @@ export class TemplateSearchService {
       type: 'completion' as const,
       confidence: Math.min(row.download_count / 1000, 1)
     }));
-  }
+
 
   private async getTagSuggestions(partial: string, limit: number): Promise<SearchSuggestion[]> {
 
     // Simplified tag suggestions
     return [];
-  }
+
 
   private async getCategorySuggestions(partial: string, limit: number): Promise<SearchSuggestion[]> {
 
     // Simplified category suggestions  
     return [];
-  }
+
 
   private async getTrendingSuggestions(partial: string, userId?: string, limit: number): Promise<SearchSuggestion[]> {
 
     // Simplified trending suggestions
     return [];
-  }
+
 
   private deduplicateSuggestions(suggestions: SearchSuggestion[]): SearchSuggestion[] {
     const seen = new Set<string>();
@@ -736,7 +741,7 @@ export class TemplateSearchService {
       seen.add(key);
       return true;
     });
-  }
+
 
   private async logSearchEvent(
     query: SearchQuery,
@@ -759,10 +764,10 @@ export class TemplateSearchService {
         searchTime,
         fromCache
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to log search event:', error);
-    }
-  }
+
+
 
   /**
    * Cleanup resources
@@ -772,8 +777,7 @@ export class TemplateSearchService {
     try {
       await this.redis.quit();
       console.log('TemplateSearchService destroyed successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Error during TemplateSearchService destruction:', error);
-    }
-  }
-}
+
+

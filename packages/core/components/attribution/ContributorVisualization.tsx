@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
+import { Card, 
   Avatar, 
   Typography, 
   Timeline, 
@@ -16,62 +15,59 @@ import {
   Tabs,
   DatePicker,
   Select,
-  Button,
+  Button }
   Empty
-} from 'antd';
-import {
-  UserOutlined,
+ from 'antd';
+import { UserOutlined,
   ClockCircleOutlined,
   EditOutlined,
   TeamOutlined,
   TrophyOutlined,
   CalendarOutlined,
   BarChartOutlined,
-  EyeOutlined,
+  EyeOutlined }
   EyeInvisibleOutlined
-} from '@ant-design/icons';
-import { 
-  ContributorStatsResponse,
+ from '@ant-design/icons';
+import { ContributorStatsResponse,
   ChangeAttribution,
   ResourceType,
   ChangeType,
-  CHANGE_TYPE_DESCRIPTIONS,
+  CHANGE_TYPE_DESCRIPTIONS }
   RESOURCE_TYPE_DESCRIPTIONS
-} from '../../types/attribution';
+ from '../../types/attribution';
 import { useAttribution } from '../../hooks/useAttribution';
 const { Title, Text, _____Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 const { _____Option } = Select;
-}
-interface ContributorVisualizationProps {
-  projectId: string;
+
+
+interface ContributorVisualizationProps { projectId: string;
   visible?: boolean;
-  onClose?: () => void;
-}
-interface ContributorCardProps {
-  contributor: ContributorStatsResponse['contributors'][0];
+  onClose?: () => void }
+
+
+interface ContributorCardProps { contributor: ContributorStatsResponse['contributors'][0] }
   projectId: string;
   onViewDetails: (contributorId: string) => void;
-}
-const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, _____projectId, onViewDetails }) => {
-  const getContributorInitials = (name?: string) => {,
+
+
+const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, _____projectId, onViewDetails }) => { const getContributorInitials = (name?: string) => { }
   if (!name) return '?';
   return name.split(' ').map(n => n[0]).join('').toUpperCase();
 };
-  const getContributorColor = (authorType: string) => {
-  switch (authorType) {
-  case 'user':,
+  const getContributorColor = (authorType: string) => { switch (authorType) {
+  case 'user':
   return '#1890ff';
-  case 'anonymous':,
+  case 'anonymous':
   return '#d9d9d9';
-  case 'guest':,
+  case 'guest':
   return '#faad14';
-  case 'system':,
+  case 'system':
   return '#52c41a';
-  case 'api':,
+  case 'api':
   return '#722ed1';
-  default:,
+  default: }
   return '#8c8c8c';
 };
   const formatDuration = (start: Date, end: Date) => {
@@ -158,62 +154,50 @@ const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, _____pro
   );
 };
 
-export const ContributorVisualization: React.FC<ContributorVisualizationProps> = ({)
-  projectId,
-  visible = true,
+export const ContributorVisualization: React.FC<ContributorVisualizationProps> = ({ )
+  projectId
+  visible = true }
   onClose
-}) => {
-  const [contributors, setContributors] = useState<ContributorStatsResponse | null>(null);
+}) => { const [contributors, setContributors] = useState<ContributorStatsResponse | null>(null);
   const [recentAttributions, setRecentAttributions] = useState<ChangeAttribution>([]);
   const [activeTab, setActiveTab] = useState('overview');
   const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
   const [selectedContributor, setSelectedContributor] = useState<string | null>(null);
   const [showAnonymous, setShowAnonymous] = useState(false);
   const { 
-    getContributorStats, 
-    listAttributions, 
-    loading, 
+    getContributorStats
+    listAttributions
+    loading }
     error 
-  } = useAttribution();
-  useEffect(() => {
-    if (visible) {
+ = useAttribution();
+  useEffect(() => { if (visible) {
       loadContributors();
-      loadRecentAttributions();
-  }, [visible, projectId, dateRange]);
-  const loadContributors = async () => {
-  try {
+      loadRecentAttributions() }, [visible, projectId, dateRange]);
+  const loadContributors = async () => { try {
   const stats = await getContributorStats(projectId, dateRange ? {)
-  start: dateRange[0],
-  end: dateRange[1],
-} : undefined);
+  start: dateRange[0]
+  end: dateRange[1] }
+ : undefined);
       setContributors(stats);
-    } catch (error) {
-  console.error('Failed to load contributors:', error);
-};
-  const loadRecentAttributions = async () => {
-  try {
+ catch (error) { console.error('Failed to load contributors:', error) };
+  const loadRecentAttributions = async () => { try {
   const attributions = await listAttributions({)
-  projectId,
-  dateFrom: dateRange?.[0],
-  dateTo: dateRange?.[1],
-  limit: 50,
-  offset: 0,
-  sortBy: 'created_at',
-  sortOrder: 'desc',
+  projectId
+  dateFrom: dateRange?.[0]
+  dateTo: dateRange?.[1]
+  limit: 50
+  offset: 0
+  sortBy: 'created_at'
+  sortOrder: 'desc' }
 });
       setRecentAttributions(attributions);
-    } catch (error) {
-  console.error('Failed to load recent attributions:', error);
-};
-  const handleViewDetails = (contributorId: string) => {
-    setSelectedContributor(contributorId);
-    setActiveTab('details');
-  };
-  const filteredContributors = contributors?.contributors.filter(contributor => {)
+ catch (error) { console.error('Failed to load recent attributions:', error) };
+  const handleViewDetails = (contributorId: string) => { setSelectedContributor(contributorId);
+    setActiveTab('details') };
+  const filteredContributors = contributors?.contributors.filter(contributor => { )
   if (!showAnonymous && contributor.authorType === 'anonymous') {
       return false;
-    return true;
-  }) || [];
+    return true }) || [];
   const getChangeTypeIcon = (changeType: ChangeType) => {
     switch (changeType) {
     case 'create':
@@ -225,17 +209,16 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
     default:
       return <EditOutlined />;
   };
-  const getChangeTypeColor = (changeType: ChangeType) => {
-  switch (changeType) {
-  case 'create':,
+  const getChangeTypeColor = (changeType: ChangeType) => { switch (changeType) {
+  case 'create':
   return 'success';
-  case 'update':,
+  case 'update':
   return 'processing';
-  case 'delete':,
+  case 'delete':
   return 'error';
-  default:,
+  default: }
   return 'default'
-  };
+};
   const formatTime = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
@@ -337,9 +320,9 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
               <Card title="Recent Activity" size="small">
                 <Timeline
                   style={{ maxHeight: '400px', overflowY: 'auto' }}
-                  items={recentAttributions.slice(0, 20).map((attribution) => ({)
-  dot: getChangeTypeIcon(attribution.changeType),
-                    children: (),
+                  items={ recentAttributions.slice(0, 20).map((attribution) => ({)
+  dot: getChangeTypeIcon(attribution.changeType)
+                    children: () }
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <Space size="small">
@@ -396,11 +379,10 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
 };
 
 // Placeholder components for detailed views
-const ContributorDetails: React.FC<{,
+const ContributorDetails: React.FC<{ ,
   projectId: string;
   contributorId: string;
-  onBack: () => void;
-}> = ({ projectId, contributorId, onBack }) => {
+  onBack: () => void }> = ({ projectId, contributorId, onBack }) => {
   return;
     <div>
       <Button onClick={onBack} style={{ marginBottom: '16px' }}>
@@ -413,10 +395,10 @@ const ContributorDetails: React.FC<{,
     </div>
   );
 };
-const ContributorAnalytics: React.FC<{,
-  contributors: ContributorStatsResponse | null;
+const ContributorAnalytics: React.FC<{ ,
+  contributors: ContributorStatsResponse | null }
   projectId: string;
-}> = ({ contributors, projectId }) => {
+> = ({ contributors, projectId }) => {
   return;
     <div>
       <Row gutter={16}>

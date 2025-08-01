@@ -7,9 +7,8 @@
 
 // Audience and Segmentation types
 
-}
-export interface Audience {
-  id: string;
+
+export interface Audience { id: string;
   name: string;
   description: string;
   segments: AudienceSegment;
@@ -17,31 +16,27 @@ export interface Audience {
   size: number;
   estimatedReach: number;
   status: AudienceStatus;
-  metadata: AudienceMetadata;
-}
-}
+  metadata: AudienceMetadata }
+
 export type AudienceStatus = 'active' | 'draft' | 'archived' | 'inactive';
 
-}
-export interface AudienceSegment {
-  id: string;
+
+export interface AudienceSegment { id: string;
   name: string;
   description: string;
   criteria: SegmentCriteria;
   size: number;
   overlap: SegmentOverlap;
-  performance: SegmentPerformance;
-}
-}
-}
-export interface SegmentCriteria {
-  type: CriteriaType;
+  performance: SegmentPerformance }
+
+
+
+export interface SegmentCriteria { type: CriteriaType;
   operator: CriteriaOperator;
   value: any;
   weight: number;
-  description: string;
-}
-}
+  description: string }
+
 export type CriteriaType = 
   | 'demographic' | 'behavioral' | 'geographic' | 'psychographic' 
   | 'technographic' | 'contextual' | 'temporal' | 'custom';
@@ -50,23 +45,21 @@ export type CriteriaOperator =
   | 'equals' | 'not_equals' | 'contains' | 'not_contains'
   | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in';
 
-}
-export interface SegmentOverlap {
-  segmentId: string;
+
+export interface SegmentOverlap { segmentId: string;
   overlapSize: number;
-  overlapPercentage: number;
-}
-}
-}
-export interface SegmentPerformance {
-  conversionRate: number;
+  overlapPercentage: number }
+
+
+
+export interface SegmentPerformance { conversionRate: number;
   engagementRate: number;
   retentionRate: number;
   averageValue: number;
-  lastUpdated: Date;
-}
-}
-}
+  lastUpdated: Date }
+
+
+
 export interface AudienceMetadata {
   createdAt: Date;
   updatedAt: Date;
@@ -75,33 +68,30 @@ export interface AudienceMetadata {
   version: number;
   tags: string;
   // Targeting Conditions and Rules
-}
-}
-}
-export interface TargetingCondition {
-  id: string;
+
+
+
+
+export interface TargetingCondition { id: string;
   name: string;
   type: ConditionType;
   rules: TargetingRule;
   logic: LogicOperator;
   priority: number;
-  enabled: boolean;
-}
-}
+  enabled: boolean }
+
 export type ConditionType = 'inclusion' | 'exclusion' | 'requirement' | 'preference';
 export type LogicOperator = 'AND' | 'OR' | 'NOT' | 'XOR';
 
-}
-export interface TargetingRule {
-  id: string;
+
+export interface TargetingRule { id: string;
   attribute: string;
   operator: RuleOperator;
   value: any;
   valueType: ValueType;
   caseSensitive: boolean;
-  negated: boolean;
-}
-}
+  negated: boolean }
+
 export type RuleOperator = 
   | 'equals' | 'not_equals' | 'contains' | 'starts_with' | 'ends_with'
   | 'greater_than' | 'less_than' | 'between' | 'in_list' | 'regex'
@@ -111,27 +101,25 @@ export type ValueType = 'string' | 'number' | 'boolean' | 'date' | 'list' | 'reg
 
 // Preview and Testing
 
-}
-export interface TargetingPreview {
-  audienceId: string;
+
+export interface TargetingPreview { audienceId: string;
   previewData: PreviewResult;
   sampleSize: number;
   confidence: number;
   estimatedReach: number;
-  generatedAt: Date;
-}
-}
-}
-export interface PreviewResult {
-  userId: string;
+  generatedAt: Date }
+
+
+
+export interface PreviewResult { userId: string;
   matched: boolean;
   matchedSegments: string;
   matchedConditions: string;
   score: number;
-  reasoning: MatchReasoning;
-}
-}
-}
+  reasoning: MatchReasoning }
+
+
+
 export interface MatchReasoning {
   rule: string;
   condition: string;
@@ -139,28 +127,27 @@ export interface MatchReasoning {
   score: number;
   explanation: string;
   // Analytics and Performance
-}
-}
-}
-export interface TargetingAnalytics {
-  audienceId: string;
+
+
+
+
+export interface TargetingAnalytics { audienceId: string;
   period: AnalyticsPeriod;
   metrics: TargetingMetrics;
   performance: PerformanceData;
   trends: TrendData;
-  insights: AnalyticsInsight;
-}
-}
-}
-export interface AnalyticsPeriod {
-  start: Date;
+  insights: AnalyticsInsight }
+
+
+
+export interface AnalyticsPeriod { start: Date;
   end: Date;
-  granularity: 'hour' | 'day' | 'week' | 'month'
-}
-  }
-}
-export interface TargetingMetrics {
-  totalReach: number;
+  granularity: 'hour' | 'day' | 'week' | 'month' }
+
+
+
+
+export interface TargetingMetrics { totalReach: number;
   uniqueReach: number;
   impressions: number;
   clicks: number;
@@ -170,38 +157,34 @@ export interface TargetingMetrics {
   cost: number;
   costPerClick: number;
   costPerConversion: number;
-  returnOnAdSpend: number;
-}
-}
-}
-export interface PerformanceData {
-  bySegment: Map<string, TargetingMetrics>;
+  returnOnAdSpend: number }
+
+
+
+export interface PerformanceData { bySegment: Map<string, TargetingMetrics>;
   byCondition: Map<string, TargetingMetrics>;
   byTimeOfDay: Map<string, TargetingMetrics>;
   byDayOfWeek: Map<string, TargetingMetrics>;
   byDevice: Map<string, TargetingMetrics>;
-  byLocation: Map<string, TargetingMetrics>;
-}
-}
-}
-export interface TrendData {
-  metric: string;
-}
+  byLocation: Map<string, TargetingMetrics> }
+
+
+
+export interface TrendData { metric: string }
+
   values: { timestamp: Date; value: number }[];
-  trend: 'increasing' | 'decreasing' | 'stable' | 'volatile';
+  trend: 'increasing' | 'decreasing' | 'stable' | 'volatile'
   changeRate: number;
-}
-}
-export interface AnalyticsInsight {
-  type: InsightType;
+
+
+export interface AnalyticsInsight { type: InsightType;
   title: string;
   description: string;
   impact: InsightImpact;
   confidence: number;
   recommendation: string;
-  data: any;
-}
-}
+  data: any }
+
 export type InsightType = 
   | 'performance_anomaly' | 'segment_opportunity' | 'cost_optimization'
   | 'audience_fatigue' | 'timing_optimization' | 'demographic_shift';
@@ -210,49 +193,46 @@ export type InsightImpact = 'low' | 'medium' | 'high' | 'critical';
 
 // Domain State and Events
 
-}
-export interface TargetingDomainState {
-  audiences: Audience;
+
+export interface TargetingDomainState { audiences: Audience;
   selectedAudience: Audience | null;
-  previewResults: TargetingPreview | null;
+  previewResults: TargetingPreview | null }
   analytics: TargetingAnalytics | null;
   loading: boolean;
   error: string | null;
-}
-}
-}
-export interface TargetingDomainEvents {
-  onAudienceCreated: (audience: Audience) => void;
-  onAudienceUpdated: (audience: Audience) => void;
-  onAudienceDeleted: (audienceId: string) => void;
-  onPreviewGenerated: (preview: TargetingPreview) => void;
-  onAnalyticsUpdated: (analytics: TargetingAnalytics) => void;
+
+
+
+
+export interface TargetingDomainEvents { onAudienceCreated: (audience: Audience) => void
+  onAudienceUpdated: (audience: Audience) => void
+  onAudienceDeleted: (audienceId: string) => void
+  onPreviewGenerated: (preview: TargetingPreview) => void
+  onAnalyticsUpdated: (analytics: TargetingAnalytics) => void }
   onSegmentPerformanceChanged: (segmentId: string, performance: SegmentPerformance) => void;
   // Component Props
-}
-}
-}
-export interface AudienceBuilderProps {
-  audienceId?: string;
+
+
+
+
+export interface AudienceBuilderProps { audienceId?: string;
   onAudienceChange?: (audience: Audience) => void;
   onSave?: (audience: Audience) => void;
   readOnly?: boolean;
-  className?: string;
-}
-}
-}
-export interface ConditionEditorProps {
-  conditions: TargetingCondition;
-  onChange: (conditions: TargetingCondition) => void;
+  className?: string }
+
+
+
+export interface ConditionEditorProps { conditions: TargetingCondition;
+  onChange: (conditions: TargetingCondition) => void }
   availableAttributes: string;
   className?: string;
-}
-}
-}
-export interface TargetingPreviewProps {
-  audience: Audience;
+
+
+
+
+export interface TargetingPreviewProps { audience: Audience;
   onPreviewUpdate?: (preview: TargetingPreview) => void;
   sampleSize?: number;
-  className?: string;
-}
-}
+  className?: string }
+

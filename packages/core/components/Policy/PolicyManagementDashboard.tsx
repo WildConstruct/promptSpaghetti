@@ -14,17 +14,15 @@ import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
 import { Switch } from '../ui/Switch';
 import { usePolicyManagement } from '../../hooks/usePolicyManagement';
-import { 
-  PolicyDomain, 
+import { PolicyDomain, 
   PolicyType, 
   PolicyStatus, 
   UnifiedPolicy,
   ComplianceFramework,
-  PolicyEvaluationResult,
+  PolicyEvaluationResult }
   PolicyViolation
-} from '../../services/PolicyManagement';
-import {
-  Shield,
+ from '../../services/PolicyManagement';
+import { Shield,
   FileText,
   Settings,
   AlertTriangle,
@@ -44,44 +42,41 @@ import {
   BarChart3,
   Users,
   Globe,
-  Zap,
+  Zap }
   Lock
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
-export interface PolicyManagementDashboardProps {
-  userId: string;
+
+export interface PolicyManagementDashboardProps { userId: string;
   userRole: string;
-  className?: string;
-}
-}
-export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps> = ({)
-  userId,
-  userRole,
+  className?: string }
+
+export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps> = ({ )
+  userId
+  userRole }
   className = ''
-}) => {
-  const {
-    policies,
-    evaluationResults,
-    violations,
-    isLoading,
-    error,
-    createPolicy,
-    updatePolicy,
-    deletePolicy,
-    evaluatePolicies,
-    generateComplianceReport,
-    getPolicyStatistics,
-    getFilteredPolicies,
-    getRecentEvaluations,
-    getPolicyViolations,
-    domains,
-    types,
-    statuses,
+}) => { const {
+    policies
+    evaluationResults
+    violations
+    isLoading
+    error
+    createPolicy
+    updatePolicy
+    deletePolicy
+    evaluatePolicies
+    generateComplianceReport
+    getPolicyStatistics
+    getFilteredPolicies
+    getRecentEvaluations
+    getPolicyViolations
+    domains
+    types
+    statuses }
     frameworks
-  } = usePolicyManagement({)
-  autoEvaluate: true,
-  enableRealTimeUpdates: true,
+ = usePolicyManagement({ )
+  autoEvaluate: true
+  enableRealTimeUpdates: true }
 });
   const [activeTab, setActiveTab] = useState('overview');
   const [__selectedPolicy, setSelectedPolicy] = useState<UnifiedPolicy | null>(null);
@@ -91,62 +86,49 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
   const [domainFilter, setDomainFilter] = useState<PolicyDomain | 'ALL'>('ALL');
   const [statusFilter, setStatusFilter] = useState<PolicyStatus | 'ALL'>('ALL');
   const statistics = useMemo(() => getPolicyStatistics(), [getPolicyStatistics]);
-  const filteredPolicies = useMemo(() => {
-  return getFilteredPolicies({)
-  domain: domainFilter !== 'ALL' ? domainFilter : undefined,
-  status: statusFilter !== 'ALL' ? statusFilter : undefined,
-  search: searchTerm,
+  const filteredPolicies = useMemo(() => { return getFilteredPolicies({)
+  domain: domainFilter !== 'ALL' ? domainFilter : undefined
+  status: statusFilter !== 'ALL' ? statusFilter : undefined
+  search: searchTerm }
 });
   }, [getFilteredPolicies, domainFilter, statusFilter, searchTerm]);
   const recentEvaluations = useMemo(() => getRecentEvaluations(10), [getRecentEvaluations]);
   const recentViolations = useMemo(() => ;
-    getPolicyViolations({ resolved: false, limit: 10 }), 
+    getPolicyViolations({ resolved: false, limit: 10 })
     [getPolicyViolations]
   );
-  const getDomainIcon = (domain: PolicyDomain) => {
-  const iconMap = {
-  [PolicyDomain.SECURITY]: Shield,
-  [PolicyDomain.CONTENT]: FileText,
-  [PolicyDomain.QUALITY]: CheckCircle,
-  [PolicyDomain.COMPLIANCE]: Settings,
-  [PolicyDomain.VFX_PIPELINE]: Activity,
-  [PolicyDomain.DATA_PROTECTION]: Lock,
-  [PolicyDomain.ACCESS_CONTROL]: Users,
-  [PolicyDomain.MARKETPLACE]: Globe,
+  const getDomainIcon = (domain: PolicyDomain) => { const iconMap = {
+  [PolicyDomain.SECURITY]: Shield
+  [PolicyDomain.CONTENT]: FileText
+  [PolicyDomain.QUALITY]: CheckCircle
+  [PolicyDomain.COMPLIANCE]: Settings
+  [PolicyDomain.VFX_PIPELINE]: Activity
+  [PolicyDomain.DATA_PROTECTION]: Lock
+  [PolicyDomain.ACCESS_CONTROL]: Users
+  [PolicyDomain.MARKETPLACE]: Globe }
 };
     return iconMap[domain] || Settings;
   };
-  const getStatusColor = (status: PolicyStatus) => {
-  switch (status) {
+  const getStatusColor = (status: PolicyStatus) => { switch (status) {
   case PolicyStatus.ACTIVE: return 'bg-green-100 text-green-800';
   case PolicyStatus.INACTIVE: return 'bg-gray-100 text-gray-800';
   case PolicyStatus.PENDING: return 'bg-yellow-100 text-yellow-800';
   case PolicyStatus.DEPRECATED: return 'bg-red-100 text-red-800';
-  case PolicyStatus.EMERGENCY: return 'bg-red-100 text-red-800';
+  case PolicyStatus.EMERGENCY: return 'bg-red-100 text-red-800' }
   default: return 'bg-gray-100 text-gray-800';
 };
-  const getSeverityColor = (severity: string) => {
-  switch (severity) {
+  const getSeverityColor = (severity: string) => { switch (severity) {
   case 'CRITICAL': return 'text-red-600';
   case 'HIGH': return 'text-orange-600';
   case 'MEDIUM': return 'text-yellow-600';
   case 'LOW': return 'text-green-600';
-  default: return 'text-gray-600';
-};
-      } catch (err) {
-  console.error('Failed to create policy:', err);
-};
+  default: return 'text-gray-600' };
+ catch (err) { console.error('Failed to create policy:', err) };
         setSelectedPolicy(null);
-    } catch (err) {
-  console.error('Failed to update policy:', err);
-};
-  const handleDeletePolicy = async (policyId: string) => {
-    if (confirm('Are you sure you want to delete this policy?')) {
+ catch (err) { console.error('Failed to update policy:', err) };
+  const handleDeletePolicy = async (policyId: string) => { if (confirm('Are you sure you want to delete this policy?')) {
       try {
-        await deletePolicy(policyId, userId);
-      } catch (err) {
-  console.error('Failed to delete policy:', err);
-};
+        await deletePolicy(policyId, userId) } catch (err) { console.error('Failed to delete policy:', err) };
   const renderOverview = () => (;);
     <div className="policy-overview space-y-6">
       {/* Statistics Cards */}
@@ -365,10 +347,9 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                     <Button 
                       variant="ghost" 
                       size="sm"
-                      onClick={() => {
+                      onClick={ () => {
                         setSelectedPolicy(policy);
-                        setIsEditingPolicy(true);
-                      }}
+                        setIsEditingPolicy(true) }}
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
@@ -540,7 +521,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           </div>
         </div>
       )}
-      <style>{`
+      <style>{ `
         .policy-management-dashboard {
           max-width: 1400px;
   margin: 0 auto;
@@ -554,7 +535,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           gap: 1rem;
         .policy-list .policy-card {
           transition: all 0.2s ease;
-        .policy-list .policy-card:hover {,
+        .policy-list .policy-card:hover { }
   transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         @media (max-width: 768px) {

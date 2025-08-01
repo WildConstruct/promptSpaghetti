@@ -14,8 +14,8 @@ import { PerformanceMonitoringService } from '../analytics/PerformanceMonitoring
 import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
-}
-}
+
+
 export interface SecurityIntelligenceDataPipelineConfig {
   ingestion: {
     enabled: boolean;
@@ -26,8 +26,9 @@ export interface SecurityIntelligenceDataPipelineConfig {
     deduplication_enabled: boolean;
     rate_limit_per_second: number;
     backpressure_threshold: number;
-}
-}
+
+
+
   };
   processing: {
     enabled: boolean;
@@ -75,10 +76,10 @@ export interface SecurityIntelligenceDataPipelineConfig {
     unified_monitoring: boolean;
     performance_tracking: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface SecurityEvent {
   id: string;
   timestamp: number;
@@ -97,9 +98,10 @@ export interface SecurityEvent {
   incident_id?: string;
   response_actions: ResponseAction[];
   metadata: SecurityEventMetadata;
-}
-}
-}
+
+
+
+
 
 export enum SecurityEventType {
   NETWORK_INTRUSION = 'network_intrusion',
@@ -114,17 +116,17 @@ export enum SecurityEventType {
   PRIVILEGE_ESCALATION = 'privilege_escalation',
   SUSPICIOUS_ACTIVITY = 'suspicious_activity',
   THREAT_INTELLIGENCE_MATCH = 'threat_intelligence_match'
-}
+
 
 export enum SecurityEventSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
 
-}
-}
+
+
+
 export interface SecurityEventSource {
   system_name: string;
   ip_address: string;
@@ -134,12 +136,13 @@ export interface SecurityEventSource {
   location: string;
   owner: string;
   criticality: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityEventDestination {
   system_name: string;
   ip_address: string;
@@ -147,12 +150,13 @@ export interface SecurityEventDestination {
   port: number;
   protocol: string;
   service: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserContext {
   user_id: string;
   username: string;
@@ -163,12 +167,13 @@ export interface UserContext {
   authentication_method: string;
   last_activity: number;
   risk_score: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeviceContext {
   device_id: string;
   device_name: string;
@@ -181,12 +186,13 @@ export interface DeviceContext {
   owner: string;
   compliance_status: string;
   last_seen: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NetworkContext {
   source_ip: string;
   destination_ip: string;
@@ -199,12 +205,13 @@ export interface NetworkContext {
   packets_received: number;
   duration_ms: number;
   network_segment: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApplicationContext {
   application_name: string;
   application_version: string;
@@ -215,12 +222,13 @@ export interface ApplicationContext {
   file_path: string;
   file_hash: string;
   digital_signature: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatIndicator {
   type: IOCType;
   value: string;
@@ -231,9 +239,10 @@ export interface ThreatIndicator {
   last_seen: number;
   context: string;
   tags: string[];
-}
-}
-}
+
+
+
+
 
 export enum IOCType {
   IP_ADDRESS = 'ip_address',
@@ -246,10 +255,10 @@ export enum IOCType {
   CERTIFICATE = 'certificate',
   USER_AGENT = 'user_agent',
   PROCESS_NAME = 'process_name'
-}
 
-}
-}
+
+
+
 export interface ResponseAction {
   action_type: ResponseActionType;
   action_status: ResponseActionStatus;
@@ -258,9 +267,10 @@ export interface ResponseAction {
   description: string;
   parameters: Record<string, unknown>;
   result: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 export enum ResponseActionType {
   BLOCK_IP = 'block_ip',
@@ -271,7 +281,7 @@ export enum ResponseActionType {
   CREATE_INCIDENT = 'create_incident',
   NOTIFY_ADMIN = 'notify_admin',
   RUN_SCAN = 'run_scan'
-}
+
 
 export enum ResponseActionStatus {
   PENDING = 'pending',
@@ -279,10 +289,10 @@ export enum ResponseActionStatus {
   COMPLETED = 'completed',
   FAILED = 'failed',
   CANCELLED = 'cancelled'
-}
 
-}
-}
+
+
+
 export interface SecurityEventMetadata {
   collector_version: string;
   ingestion_timestamp: number;
@@ -296,12 +306,13 @@ export interface SecurityEventMetadata {
   processing_duration_ms: number;
   quality_score: number;
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatIntelligence {
   id: string;
   threat_type: ThreatType;
@@ -318,24 +329,26 @@ export interface ThreatIntelligence {
   mitigation_strategies: MitigationStrategy[];
   related_campaigns: string[];
   metadata: ThreatIntelligenceMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatType {
   category: string;
   subcategory: string;
   description: string;
   kill_chain_phase: string;
   mitre_attack_id: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatActor {
   name: string;
   aliases: string[];
@@ -344,12 +357,13 @@ export interface ThreatActor {
   motivations: string[];
   capabilities: string[];
   attribution_confidence: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface IOC {
   type: IOCType;
   value: string;
@@ -358,12 +372,13 @@ export interface IOC {
   last_seen: number;
   context: string;
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TTP {
   tactic: string;
   technique: string;
@@ -372,12 +387,13 @@ export interface TTP {
   description: string;
   detection_methods: string[];
   mitigation_methods: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatIntelligenceSource {
   name: string;
   type: string;
@@ -386,12 +402,13 @@ export interface ThreatIntelligenceSource {
   feed_url?: string;
   api_endpoint?: string;
   credentials?: Record<string, string>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MitigationStrategy {
   strategy_type: string;
   description: string;
@@ -399,12 +416,13 @@ export interface MitigationStrategy {
   effectiveness_score: number;
   cost_estimate: string;
   timeline_estimate: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatIntelligenceMetadata {
   source_reliability: string;
   collection_method: string;
@@ -412,12 +430,13 @@ export interface ThreatIntelligenceMetadata {
   expiration_date?: number;
   classification_level: string;
   handling_requirements: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataPipelineMetrics {
   ingestion_metrics: {
     events_ingested_per_second: number;
@@ -426,8 +445,9 @@ export interface DataPipelineMetrics {
     average_ingestion_latency_ms: number;
     queue_depth: number;
     throughput_mbps: number;
-}
-}
+
+
+
   };
   processing_metrics: {
     processing_rate_per_second: number;
@@ -460,7 +480,7 @@ export interface DataPipelineMetrics {
     storage_utilization_percent: number;
     retention_policy_violations: number;
   };
-}
+
 
 /**
  * Security Intelligence Data Pipeline Service
@@ -520,7 +540,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     this.initializeMetrics();
     this.initializeSchemas();
     this.initializeFieldMappings();
-  }
+
 
   /**
    * Initialize the security intelligence data pipeline
@@ -533,32 +553,32 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       // Initialize processing components
       if (this.config.ingestion.enabled) {
         await this.initializeIngestion();
-      }
+
       
       if (this.config.processing.enabled) {
         await this.initializeProcessing();
-      }
+
       
       if (this.config.normalization.enabled) {
         await this.initializeNormalization();
-      }
+
       
       if (this.config.enrichment.enabled) {
         await this.initializeEnrichment();
-      }
+
       
       if (this.config.storage.enabled) {
         await this.initializeStorage();
-      }
+
       
       // Initialize Epic integrations
       if (this.config.epic_integration.epic1_analytics_enabled) {
         await this.initializeEpic1Integration();
-      }
+
       
       if (this.config.epic_integration.epic17_admin_enabled) {
         await this.initializeEpic17Integration();
-      }
+
       
       // Start processing intervals
       await this.startProcessingIntervals();
@@ -570,11 +590,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       this.emit('initialized', { timestamp: Date.now() });
       
       console.log('Security Intelligence Data Pipeline initialized successfully');
-    } catch (error) {
+ catch (error) {
       this.emit('initialization_error', { error: error.message, timestamp: Date.now() });
       throw error;
-    }
-  }
+
+
 
   /**
    * Initialize metrics tracking
@@ -588,7 +608,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         average_ingestion_latency_ms: 0,
         queue_depth: 0,
         throughput_mbps: 0
-  }
+
       processing_metrics: {
         processing_rate_per_second: 0,
         processing_errors: 0,
@@ -596,14 +616,14 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         cpu_utilization_percent: 0,
         memory_utilization_percent: 0,
         worker_thread_utilization: 0
-  }
+
       normalization_metrics: {
         normalization_success_rate: 0,
         schema_validation_errors: 0,
         field_mapping_errors: 0,
         data_quality_score: 0,
         normalization_latency_ms: 0
-  }
+
       enrichment_metrics: {
         enrichment_success_rate: 0,
         threat_intel_matches: 0,
@@ -611,7 +631,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         reputation_lookups: 0,
         enrichment_latency_ms: 0,
         external_api_errors: 0
-  }
+
       storage_metrics: {
         storage_write_rate_per_second: 0,
         storage_errors: 0,
@@ -619,9 +639,9 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         index_update_time_ms: 0,
         storage_utilization_percent: 0,
         retention_policy_violations: 0
-      }
+
     };
-  }
+
 
   /**
    * Initialize event schemas for validation
@@ -634,7 +654,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       validation_rules: {
         timestamp: { type: 'number', min: 0 },
         severity: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] }
-      }
+
     });
     
     this.eventSchemas.set(SecurityEventType.MALWARE_DETECTION, {
@@ -643,11 +663,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       validation_rules: {
         file_hash: { type: 'string', pattern: /^[a-fA-F0-9]{32,64}$/ },
         malware_family: { type: 'string', min_length: 1 }
-      }
+
     });
     
     // Add more schemas for other event types...
-  }
+
 
   /**
    * Initialize field mappings for normalization
@@ -666,7 +686,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     this.fieldMappings.set('severity', 'severity');
     this.fieldMappings.set('event_time', 'timestamp');
     this.fieldMappings.set('alert_name', 'event_type');
-  }
+
 
   /**
    * Initialize ingestion components
@@ -686,11 +706,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
           threshold: this.config.ingestion.backpressure_threshold,
           timestamp: Date.now()
         });
-      }
+
     }, 5000);
     
     console.log('Data ingestion components initialized');
-  }
+
 
   /**
    * Initialize processing components
@@ -705,10 +725,10 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     // Initialize worker threads if parallel processing is enabled
     if (this.config.processing.parallel_processing) {
       await this.initializeWorkerThreads();
-    }
+
     
     console.log('Data processing components initialized');
-  }
+
 
   /**
    * Initialize worker threads for parallel processing
@@ -721,10 +741,10 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       // Worker thread implementation would go here
       // For now, we'll simulate with a placeholder
       this.workerThreads.set(i, null as any);
-    }
+
     
     console.log(`Initialized ${workerCount} worker threads`);
-  }
+
 
   /**
    * Initialize normalization components
@@ -738,7 +758,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     // Initialize data cleansing rules
     
     console.log('Data normalization components initialized');
-  }
+
 
   /**
    * Initialize enrichment components
@@ -750,20 +770,20 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     // Initialize threat intelligence feeds
     if (this.config.enrichment.threat_intelligence_enabled) {
       await this.initializeThreatIntelligenceFeeds();
-    }
+
     
     // Initialize geo-location services
     if (this.config.enrichment.geo_location_enabled) {
       await this.initializeGeoLocationServices();
-    }
+
     
     // Initialize reputation services
     if (this.config.enrichment.reputation_scoring_enabled) {
       await this.initializeReputationServices();
-    }
+
     
     console.log('Data enrichment components initialized');
-  }
+
 
   /**
    * Initialize threat intelligence feeds
@@ -777,7 +797,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     await this.loadThreatIntelligenceCache();
     
     console.log('Threat intelligence feeds initialized');
-  }
+
 
   /**
    * Load threat intelligence cache
@@ -795,7 +815,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         description: 'Banking trojan targeting financial institutions',
         kill_chain_phase: 'installation',
         mitre_attack_id: 'T1055'
-  }
+
       threat_actor: {
         name: 'APT-Banking-Group',
         aliases: ['BankingTrojan', 'FinancialThreat'],
@@ -804,7 +824,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         motivations: ['financial-gain'],
         capabilities: ['custom-malware', 'social-engineering'],
         attribution_confidence: 85
-  }
+
       indicators_of_compromise: [
         {
           type: IOCType.FILE_HASH,
@@ -814,7 +834,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
           last_seen: Date.now(),
           context: 'Malware payload hash',
           tags: ['banking', 'trojan', 'high-confidence']
-        }
+
       ],
       tactics_techniques_procedures: [],
       targeted_sectors: ['financial', 'banking'],
@@ -832,11 +852,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         sharing_permissions: 'internal',
         classification_level: 'confidential',
         handling_requirements: ['need-to-know']
-      }
+
     };
     
     this.threatIntelligenceCache.set(sampleThreatIntel.id, sampleThreatIntel);
-  }
+
 
   /**
    * Initialize geo-location services
@@ -845,7 +865,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
 
     // Initialize geo-location lookup services
     console.log('Geo-location services initialized');
-  }
+
 
   /**
    * Initialize reputation services
@@ -854,7 +874,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
 
     // Initialize IP/domain reputation services
     console.log('Reputation services initialized');
-  }
+
 
   /**
    * Initialize storage components
@@ -868,7 +888,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     // Initialize encryption for data at rest
     
     console.log('Data storage components initialized');
-  }
+
 
   /**
    * Initialize Epic 1 analytics integration
@@ -881,7 +901,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     this.on('security_event_processed', async (event) => {
       if (this.config.epic_integration.epic1_analytics_enabled) {
         await this.forwardEventToEpic1Analytics(event);
-      }
+
     });
     
     // Setup performance metrics forwarding
@@ -889,10 +909,10 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       setInterval(async () => {
         await this.forwardMetricsToEpic1();
       }, 60000); // Every minute
-    }
+
     
     console.log('Epic 1 analytics integration initialized');
-  }
+
 
   /**
    * Initialize Epic 17 admin integration
@@ -911,11 +931,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     this.on('pipeline_error', async (error) => {
       if (this.config.epic_integration.epic17_admin_enabled) {
         await this.notifyEpic17Admin(error);
-      }
+
     });
     
     console.log('Epic 17 admin integration initialized');
-  }
+
 
   /**
    * Register health checks with Epic 17
@@ -944,19 +964,19 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
               ingestion: metrics.ingestion_metrics.ingestion_errors,
               processing: metrics.processing_metrics.processing_errors,
               storage: metrics.storage_metrics.storage_errors
-  }
+
             performance_metrics: {
               ingestion_rate: metrics.ingestion_metrics.events_ingested_per_second,
               processing_rate: metrics.processing_metrics.processing_rate_per_second,
               average_latency: metrics.processing_metrics.average_processing_time_ms
-            }
-          }
+
+
         };
-  }
+
       interval_ms: 30000,
       timeout_ms: 10000
     });
-  }
+
 
   /**
    * Register diagnostics with Epic 17
@@ -976,8 +996,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
               ingestion: this.ingestionQueue.length,
               processing: this.processingQueue.length,
               enrichment: this.enrichmentQueue.length
-            }
-  }
+
+
           performance_metrics: this.metrics,
           configuration: {
             ingestion_enabled: this.config.ingestion.enabled,
@@ -985,21 +1005,21 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
             normalization_enabled: this.config.normalization.enabled,
             enrichment_enabled: this.config.enrichment.enabled,
             storage_enabled: this.config.storage.enabled
-  }
+
           threat_intelligence: {
             cache_size: this.threatIntelligenceCache.size,
             ioc_cache_size: this.iocCache.size,
             last_update: this.getLastThreatIntelUpdate()
-  }
+
           epic_integration: {
             epic1_enabled: this.config.epic_integration.epic1_analytics_enabled,
             epic17_enabled: this.config.epic_integration.epic17_admin_enabled,
             cross_epic_correlation: this.config.epic_integration.cross_epic_correlation
-          }
+
         };
-      }
+
     });
-  }
+
 
   /**
    * Start processing intervals
@@ -1011,24 +1031,24 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       this.processingIntervals.set('ingestion', setInterval(async () => {
         await this.processIngestionQueue();
       }, this.config.ingestion.flush_interval_ms));
-    }
+
     
     // Processing interval
     if (this.config.processing.enabled) {
       this.processingIntervals.set('processing', setInterval(async () => {
         await this.processEventQueue();
       }, 1000)); // Process every second
-    }
+
     
     // Enrichment interval
     if (this.config.enrichment.enabled) {
       this.processingIntervals.set('enrichment', setInterval(async () => {
         await this.processEnrichmentQueue();
       }, 2000)); // Process every 2 seconds
-    }
+
     
     console.log('Processing intervals started');
-  }
+
 
   /**
    * Start metrics collection
@@ -1041,7 +1061,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     }, 10000); // Update metrics every 10 seconds
     
     console.log('Metrics collection started');
-  }
+
 
   /**
    * Ingest security event into the pipeline
@@ -1054,7 +1074,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       // Validate event structure
       if (!this.validateEventStructure(event)) {
         throw new Error('Invalid event structure');
-      }
+
       
       // Add metadata
       event.metadata = {
@@ -1071,7 +1091,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       // Check queue capacity
       if (this.ingestionQueue.length >= this.config.ingestion.max_queue_size) {
         throw new Error('Ingestion queue at capacity');
-      }
+
       
       // Add to ingestion queue
       this.ingestionQueue.push(event);
@@ -1082,12 +1102,12 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       this.metrics.ingestion_metrics.queue_depth = this.ingestionQueue.length;
       
       this.emit('event_ingested', { event_id: event.id, timestamp: Date.now() });
-    } catch (error) {
+ catch (error) {
       this.metrics.ingestion_metrics.ingestion_errors++;
       this.emit('ingestion_error', { error: error.message, event_id: event.id, timestamp: Date.now() });
       throw error;
-    }
-  }
+
+
 
   /**
    * Validate event structure
@@ -1096,17 +1116,17 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     // Basic validation
     if (!event.id || !event.timestamp || !event.event_type || !event.severity) {
       return false;
-    }
+
     
     // Event type specific validation
     const schema = this.eventSchemas.get(event.event_type);
     if (schema && this.config.normalization.schema_validation) {
       // Perform schema validation
       return this.performSchemaValidation(event, schema);
-    }
+
     
     return true;
-  }
+
 
   /**
    * Perform schema validation
@@ -1115,7 +1135,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     // Simplified schema validation
     // In a real implementation, this would use a proper schema validation library
     return true;
-  }
+
 
   /**
    * Process ingestion queue
@@ -1124,7 +1144,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
 
     if (this.ingestionQueue.length === 0) {
       return;
-    }
+
     
     const batchSize = Math.min(this.config.ingestion.batch_size, this.ingestionQueue.length);
     const batch = this.ingestionQueue.splice(0, batchSize);
@@ -1134,12 +1154,12 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         // Move to processing queue
         this.processingQueue.push(event);
         this.emit('event_queued_for_processing', { event_id: event.id, timestamp: Date.now() });
-      } catch (error) {
+ catch (error) {
         this.metrics.ingestion_metrics.ingestion_errors++;
         this.emit('ingestion_processing_error', { error: error.message, event_id: event.id });
-      }
-    }
-  }
+
+
+
 
   /**
    * Process event queue
@@ -1148,7 +1168,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
 
     if (this.processingQueue.length === 0 || this.isProcessing) {
       return;
-    }
+
     
     this.isProcessing = true;
     
@@ -1161,12 +1181,12 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       // Normalize event
       if (this.config.normalization.enabled) {
         await this.normalizeEvent(event);
-      }
+
       
       // Enrich event
       if (this.config.enrichment.enabled) {
         this.enrichmentQueue.push(event);
-      }
+
       
       // Update processing metrics
       const processingTime = Date.now() - startTime;
@@ -1177,13 +1197,13 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         (this.metrics.processing_metrics.average_processing_time_ms + processingTime) / 2;
       
       this.emit('event_processed', { event_id: event.id, processing_time_ms: processingTime });
-    } catch (error) {
+ catch (error) {
       this.metrics.processing_metrics.processing_errors++;
       this.emit('processing_error', { error: error.message, timestamp: Date.now() });
-    } finally {
+ finally {
       this.isProcessing = false;
-    }
-  }
+
+
 
   /**
    * Normalize security event
@@ -1196,22 +1216,22 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       // Apply field mappings
       if (this.config.normalization.field_mapping_enabled) {
         event = this.applyFieldMappings(event);
-      }
+
       
       // Standardize formats
       if (this.config.normalization.format_standardization) {
         event = this.standardizeFormats(event);
-      }
+
       
       // Normalize timezone
       if (this.config.normalization.timezone_normalization) {
         event.timestamp = this.normalizeTimezone(event.timestamp);
-      }
+
       
       // Data cleansing
       if (this.config.normalization.data_cleansing_enabled) {
         event = this.cleanseData(event);
-      }
+
       
       // Update normalization metrics
       const normalizationTime = Date.now() - startTime;
@@ -1220,12 +1240,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       this.metrics.normalization_metrics.normalization_latency_ms = normalizationTime;
       this.metrics.normalization_metrics.normalization_success_rate = 
         (this.metrics.normalization_metrics.normalization_success_rate + 100) / 2;
-      
-    } catch (error) {
+ catch (error) {
       this.metrics.normalization_metrics.schema_validation_errors++;
       throw error;
-    }
-  }
+
+
 
   /**
    * Apply field mappings for normalization
@@ -1234,7 +1253,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     // Apply field mappings based on configuration
     // This is a simplified implementation
     return event;
-  }
+
 
   /**
    * Standardize data formats
@@ -1242,7 +1261,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
   private standardizeFormats(event: SecurityEvent): SecurityEvent {
     // Standardize IP addresses, timestamps, etc.
     return event;
-  }
+
 
   /**
    * Normalize timezone to UTC
@@ -1250,7 +1269,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
   private normalizeTimezone(timestamp: number): number {
     // Convert to UTC if not already
     return timestamp;
-  }
+
 
   /**
    * Cleanse data
@@ -1258,7 +1277,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
   private cleanseData(event: SecurityEvent): SecurityEvent {
     // Remove invalid characters, normalize encoding, etc.
     return event;
-  }
+
 
   /**
    * Process enrichment queue
@@ -1267,7 +1286,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
 
     if (this.enrichmentQueue.length === 0) {
       return;
-    }
+
     
     const event = this.enrichmentQueue.shift();
     if (!event) return;
@@ -1278,19 +1297,19 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       // Store enriched event
       if (this.config.storage.enabled) {
         await this.storeEvent(event);
-      }
+
       
       // Forward to Epic 1 analytics
       if (this.config.epic_integration.epic1_analytics_enabled) {
         await this.forwardEventToEpic1Analytics(event);
-      }
+
       
       this.emit('security_event_processed', event);
-    } catch (error) {
+ catch (error) {
       this.metrics.enrichment_metrics.external_api_errors++;
       this.emit('enrichment_error', { error: error.message, event_id: event.id });
-    }
-  }
+
+
 
   /**
    * Enrich security event with additional context
@@ -1303,37 +1322,37 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       // Threat intelligence enrichment
       if (this.config.enrichment.threat_intelligence_enabled) {
         await this.enrichWithThreatIntelligence(event);
-      }
+
       
       // Geo-location enrichment
       if (this.config.enrichment.geo_location_enabled) {
         await this.enrichWithGeoLocation(event);
-      }
+
       
       // Reputation scoring
       if (this.config.enrichment.reputation_scoring_enabled) {
         await this.enrichWithReputationScoring(event);
-      }
+
       
       // Asset context enrichment
       if (this.config.enrichment.asset_context_enabled) {
         await this.enrichWithAssetContext(event);
-      }
+
       
       // User context enrichment
       if (this.config.enrichment.user_context_enabled) {
         await this.enrichWithUserContext(event);
-      }
+
       
       // Network context enrichment
       if (this.config.enrichment.network_context_enabled) {
         await this.enrichWithNetworkContext(event);
-      }
+
       
       // ML scoring
       if (this.config.enrichment.ml_scoring_enabled) {
         await this.enrichWithMLScoring(event);
-      }
+
       
       // Update enrichment metrics
       const enrichmentTime = Date.now() - startTime;
@@ -1342,12 +1361,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       this.metrics.enrichment_metrics.enrichment_latency_ms = enrichmentTime;
       this.metrics.enrichment_metrics.enrichment_success_rate = 
         (this.metrics.enrichment_metrics.enrichment_success_rate + 100) / 2;
-      
-    } catch (error) {
+ catch (error) {
       this.metrics.enrichment_metrics.external_api_errors++;
       throw error;
-    }
-  }
+
+
 
   /**
    * Enrich with threat intelligence
@@ -1363,9 +1381,9 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
           [indicator.type]: threatIntel
         };
         this.metrics.enrichment_metrics.threat_intel_matches++;
-      }
-    }
-  }
+
+
+
 
   /**
    * Find threat intelligence for indicator
@@ -1376,11 +1394,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       for (const ioc of threatIntel.indicators_of_compromise) {
         if (ioc.type === indicator.type && ioc.value === indicator.value) {
           return threatIntel;
-        }
-      }
-    }
+
+
+
     return null;
-  }
+
 
   /**
    * Enrich with geo-location data
@@ -1392,14 +1410,14 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       const geoData = await this.getGeoLocationData(event.source.ip_address);
       event.enriched_data.source_geo_location = geoData;
       this.metrics.enrichment_metrics.geo_location_enrichments++;
-    }
+
     
     if (event.destination?.ip_address) {
       const geoData = await this.getGeoLocationData(event.destination.ip_address);
       event.enriched_data.destination_geo_location = geoData;
       this.metrics.enrichment_metrics.geo_location_enrichments++;
-    }
-  }
+
+
 
   /**
    * Get geo-location data for IP address
@@ -1416,7 +1434,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       isp: 'Example ISP',
       organization: 'Example Org'
     };
-  }
+
 
   /**
    * Enrich with reputation scoring
@@ -1428,8 +1446,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       const reputationScore = await this.getReputationScore(event.source.ip_address, 'ip');
       event.enriched_data.source_reputation = reputationScore;
       this.metrics.enrichment_metrics.reputation_lookups++;
-    }
-  }
+
+
 
   /**
    * Get reputation score
@@ -1442,7 +1460,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       risk_level: 'low',
       sources: ['reputation_service_1', 'reputation_service_2'],
       last_updated: Date.now(};
-  }
+
 
   /**
    * Enrich with asset context
@@ -1453,8 +1471,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     if (event.source?.asset_id) {
       const assetContext = await this.getAssetContext(event.source.asset_id);
       event.enriched_data.source_asset_context = assetContext;
-    }
-  }
+
+
 
   /**
    * Get asset context
@@ -1470,7 +1488,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       location: 'datacenter-west',
       compliance_requirements: ['PCI-DSS', 'SOX']
     };
-  }
+
 
   /**
    * Enrich with user context
@@ -1481,8 +1499,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     if (event.user_context?.user_id) {
       const userContext = await this.getUserContext(event.user_context.user_id);
       event.enriched_data.enhanced_user_context = userContext;
-    }
-  }
+
+
 
   /**
    * Get user context
@@ -1498,7 +1516,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       risk_score: 25,
       access_level: 'standard'
     };
-  }
+
 
   /**
    * Enrich with network context
@@ -1509,8 +1527,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     if (event.network_context) {
       const networkContext = await this.getNetworkContext(event.network_context);
       event.enriched_data.enhanced_network_context = networkContext;
-    }
-  }
+
+
 
   /**
    * Get network context
@@ -1525,7 +1543,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       bandwidth_utilization: 45,
       threat_landscape: 'moderate'
     };
-  }
+
 
   /**
    * Enrich with ML scoring
@@ -1535,7 +1553,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     // Add ML-based risk scoring
     const mlScore = await this.calculateMLRiskScore(event);
     event.enriched_data.ml_risk_score = mlScore;
-  }
+
 
   /**
    * Calculate ML risk score
@@ -1549,7 +1567,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       factors: ['unusual_time', 'suspicious_source', 'high_volume'],
       model_version: '1.0.0',
       model_timestamp: Date.now(};
-  }
+
 
   /**
    * Store enriched event
@@ -1570,7 +1588,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
           severity: event.severity,
           source_system: event.source.system_name,
           processing_pipeline: 'security_intelligence'
-        }
+
       });
       
       // Update storage metrics
@@ -1580,12 +1598,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       this.metrics.storage_metrics.index_update_time_ms = storageTime;
       this.metrics.storage_metrics.storage_write_rate_per_second = 
         (this.metrics.storage_metrics.storage_write_rate_per_second + 1) / 2;
-      
-    } catch (error) {
+ catch (error) {
       this.metrics.storage_metrics.storage_errors++;
       throw error;
-    }
-  }
+
+
 
   /**
    * Forward event to Epic 1 analytics
@@ -1603,10 +1620,10 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         processing_time_ms: event.metadata.processing_duration_ms,
         timestamp: event.timestamp
       });
-    } catch (error) {
+ catch (error) {
       this.emit('epic1_forwarding_error', { error: error.message, event_id: event.id });
-    }
-  }
+
+
 
   /**
    * Forward metrics to Epic 1
@@ -1624,11 +1641,10 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         this.metrics.ingestion_metrics.ingestion_errors + 
         this.metrics.processing_metrics.processing_errors + 
         this.metrics.storage_metrics.storage_errors, 'count');
-        
-    } catch (error) {
+ catch (error) {
       this.emit('metrics_forwarding_error', { error: error.message });
-    }
-  }
+
+
 
   /**
    * Notify Epic 17 admin of errors
@@ -1648,15 +1664,15 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
             ingestion_queue_size: this.ingestionQueue.length,
             processing_queue_size: this.processingQueue.length,
             enrichment_queue_size: this.enrichmentQueue.length
-  }
+
           metrics: this.metrics
-  }
+
         created_at: Date.now()
       });
-    } catch (alertError) {
+ catch (alertError) {
       this.emit('admin_notification_error', { error: alertError.message });
-    }
-  }
+
+
 
   /**
    * Update metrics
@@ -1676,7 +1692,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       
       this.metrics.storage_metrics.storage_write_rate_per_second = 
         (this.metrics.storage_metrics.storage_write_rate_per_second * 1000) / timeDelta;
-    }
+
     
     // Update system resource metrics
     const memoryUsage = process.memoryUsage();
@@ -1687,7 +1703,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     this.metrics.ingestion_metrics.queue_depth = this.ingestionQueue.length;
     
     this.lastMetricsUpdate = currentTime;
-  }
+
 
   /**
    * Emit metrics event
@@ -1698,14 +1714,14 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       metrics: this.metrics,
       timestamp: Date.now()
     });
-  }
+
 
   /**
    * Get current metrics
    */
   getMetrics(): DataPipelineMetrics {
     return { ...this.metrics };
-  }
+
 
   /**
    * Get pipeline status
@@ -1718,15 +1734,15 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         ingestion: this.ingestionQueue.length,
         processing: this.processingQueue.length,
         enrichment: this.enrichmentQueue.length
-  }
+
       threat_intelligence: {
         cache_size: this.threatIntelligenceCache.size,
         ioc_cache_size: this.iocCache.size
-  }
+
       worker_threads: this.workerThreads.size,
       processing_intervals: this.processingIntervals.size
     };
-  }
+
 
   /**
    * Get last threat intelligence update time
@@ -1736,10 +1752,10 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     for (const threatIntel of this.threatIntelligenceCache.values()) {
       if (threatIntel.last_updated > lastUpdate) {
         lastUpdate = threatIntel.last_updated;
-      }
-    }
+
+
     return lastUpdate;
-  }
+
 
   /**
    * Shutdown the data pipeline
@@ -1752,7 +1768,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       // Stop processing intervals
       for (const [name, interval] of this.processingIntervals.entries()) {
         clearInterval(interval);
-      }
+
       this.processingIntervals.clear();
       
       // Process remaining events in queues
@@ -1762,8 +1778,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       for (const [id, worker] of this.workerThreads.entries()) {
         if (worker && typeof worker.terminate === 'function') {
           await worker.terminate();
-        }
-      }
+
+
       this.workerThreads.clear();
       
       // Clear caches
@@ -1781,11 +1797,11 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       this.emit('shutdown', { timestamp: Date.now() });
       
       console.log('Security Intelligence Data Pipeline shutdown complete');
-    } catch (error) {
+ catch (error) {
       this.emit('shutdown_error', { error: error.message, timestamp: Date.now() });
       throw error;
-    }
-  }
+
+
 
   /**
    * Process remaining events in queues before shutdown
@@ -1797,18 +1813,17 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     // Process ingestion queue
     while (this.ingestionQueue.length > 0) {
       await this.processIngestionQueue();
-    }
+
     
     // Process event queue
     while (this.processingQueue.length > 0) {
       await this.processEventQueue();
-    }
+
     
     // Process enrichment queue
     while (this.enrichmentQueue.length > 0) {
       await this.processEnrichmentQueue();
-    }
+
     
     console.log('Remaining events processed');
-  }
-}
+

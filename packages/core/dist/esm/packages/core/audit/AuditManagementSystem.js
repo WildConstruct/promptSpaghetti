@@ -75,8 +75,9 @@ export var AuditEventType;
             user_agent;
         z.string().optional(),
             geo_location;
-        z.object({});
-        country: z.string(),
+        z.object({}),
+            country;
+        z.string(),
             region;
         z.string(),
             city;
@@ -335,8 +336,10 @@ export class AuditManagementSystem {
                             /**
                              * Real-time audit monitoring and alerting
                              */
-                            setupRealTimeMonitoring(config, {});
-                            alertThresholds: {
+                            setupRealTimeMonitoring(config, {}),
+                                alertThresholds;
+                            {
+                                ;
                                 criticalEventRate: number; // Events per minute,
                                 highRiskEventRate: number; // Events per hour,
                                 failedLoginRate: number; // Failed logins per minute,
@@ -422,8 +425,9 @@ return patterns;
 /**
  * Audit retention and archival management
  */
-manageAuditRetention(policies, {});
-defaultRetentionDays: number;
+manageAuditRetention(policies, {}),
+    defaultRetentionDays;
+number;
 complianceRetentionDays: {
     [framework in ComplianceFramework] ?  : number;
 }

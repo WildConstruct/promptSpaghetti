@@ -5,10 +5,10 @@
  * Supports multiple file types with preview and validation.
  */
 import React, { useState, useCallback, useRef } from 'react';
-}
-interface DocumentUploadProps {
-  acceptedTypes?: string;
-  maxFileSize?: number; // in MB,
+
+
+interface DocumentUploadProps { acceptedTypes?: string;
+  maxFileSize?: number; // in MB;
   maxFiles?: number;
   onFilesChange: (files: File) => void;
   existingFiles?: UploadedFile;
@@ -21,23 +21,24 @@ interface DocumentUploadProps {
   type: string;
   url: string;
   uploadedAt: Date;
-  const DEFAULT_ACCEPTED_TYPES = [;
-  'image/jpeg',
-  'image/png',
-  'image/webp',
+  const DEFAULT_ACCEPTED_TYPES = [
+  'image/jpeg';
+  'image/png';
+  'image/webp';
   'application/pdf'
   ];
   const DEFAULT_MAX_FILE_SIZE = 10; // 10MB;
   const DEFAULT_MAX_FILES = 5;
-  export const DocumentUpload: React.FC<DocumentUploadProps> = ({,)
-  acceptedTypes = DEFAULT_ACCEPTED_TYPES,
-  maxFileSize = DEFAULT_MAX_FILE_SIZE,
-  maxFiles = DEFAULT_MAX_FILES,
-  onFilesChange,
-  existingFiles = [],
-  disabled = false,
+  export const DocumentUpload: React.FC<DocumentUploadProps> = ({);
+  acceptedTypes = DEFAULT_ACCEPTED_TYPES;
+  maxFileSize = DEFAULT_MAX_FILE_SIZE;
+  maxFiles = DEFAULT_MAX_FILES;
+  onFilesChange;
+  existingFiles = [];
+  disabled = false }
   placeholder = 'Upload your documents here'
-}
+
+
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File>([]);
   const [dragActive, setDragActive] = useState(false);
@@ -75,56 +76,38 @@ interface DocumentUploadProps {
         errors.push(`${file.name} is already added`);}
         continue;
       newFiles.push(file);
-    if (newFiles.length > 0) {
-      const updatedFiles = [...selectedFiles, ...newFiles];
+    if (newFiles.length > 0) { const updatedFiles = [...selectedFiles, ...newFiles];
       setSelectedFiles(updatedFiles);
       onFilesChange(updatedFiles);
-    setUploadErrors(errors);
-  }, [selectedFiles, existingFiles, maxFiles, validateFile, onFilesChange]);
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    processFiles(e.target.files);
+    setUploadErrors(errors) }, [selectedFiles, existingFiles, maxFiles, validateFile, onFilesChange]);
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => { processFiles(e.target.files);
     // Reset input value to allow selecting the same file again if needed
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-  }, [processFiles]);
-  const handleDragEnter = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
+      fileInputRef.current.value = '' }, [processFiles]);
+  const handleDragEnter = useCallback((e: React.DragEvent) => { e.preventDefault();
     e.stopPropagation();
-    setDragActive(true);
-  }, []);
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
+    setDragActive(true) }, []);
+  const handleDragLeave = useCallback((e: React.DragEvent) => { e.preventDefault();
     e.stopPropagation();
-    setDragActive(false);
-  }, []);
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  }, []);
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
+    setDragActive(false) }, []);
+  const handleDragOver = useCallback((e: React.DragEvent) => { e.preventDefault();
+    e.stopPropagation() }, []);
+  const handleDrop = useCallback((e: React.DragEvent) => { e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
     if (!disabled) {
-      processFiles(e.dataTransfer.files);
-  }, [processFiles, disabled]);
-  const removeFile = useCallback((index: number) => {
-    const updatedFiles = selectedFiles.filter((_, i) => i !== index);
+      processFiles(e.dataTransfer.files) }, [processFiles, disabled]);
+  const removeFile = useCallback((index: number) => { const updatedFiles = selectedFiles.filter((_, i) => i !== index);
     setSelectedFiles(updatedFiles);
-    onFilesChange(updatedFiles);
-  }, [selectedFiles, onFilesChange]);
-  const formatFileSize = useCallback((bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
+    onFilesChange(updatedFiles) }, [selectedFiles, onFilesChange]);
+  const formatFileSize = useCallback((bytes: number): string => { if (bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }, []);
-  const getFileIcon = useCallback((type: string): string => {
-    if (type.startsWith('image/')) return '🖼️';
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i] }, []);
+  const getFileIcon = useCallback((type: string): string => { if (type.startsWith('image/')) return '🖼️';
     if (type === 'application/pdf') return '📄';
-    return '📋';
-  }, []);
+    return '📋' }, []);
   const totalFiles = selectedFiles.length + existingFiles.length;
   const canAddMore = totalFiles < maxFiles;
   return;
@@ -155,7 +138,7 @@ interface DocumentUploadProps {
               Drag and drop or click to browse files
             </div>
             <div className="upload-info">
-              Accepted: {acceptedTypes.map(type => {),
+              Accepted: { acceptedTypes.map(type => {) }
   const ext = type.split('/')[1].toUpperCase();
   return ext === 'JPEG' ? 'JPG' : ext;
 }).join(', ')} • Max {maxFileSize}MB each • {maxFiles} files max
@@ -220,7 +203,7 @@ interface DocumentUploadProps {
           ))}
         </div>
       )}
-      <style>{`
+      <style>{ `
         .document-upload {
           width: 100%;
         .upload-area {
@@ -237,10 +220,10 @@ interface DocumentUploadProps {
           background-color: #f0f9ff;
         .upload-area.drag-active {
           border-color: #3b82f6;
-          background-color: #dbeafe;
+          background-color: #dbeafe
   transform: scale(1.02);
         .upload-area.disabled {
-          opacity: 0.5;
+          opacity: 0.5
   cursor: not-allowed;
           background-color: #f5f5f5;
         .upload-icon {
@@ -264,17 +247,17 @@ interface DocumentUploadProps {
         .upload-errors {
           margin-bottom: 20px;
         .error-message {
-          background-color: #fef2f2;
+          background-color: #fef2f2
   color: #dc2626;
           padding: 8px 12px;
           border-radius: 6px;
           border-left: 4px solid #dc2626;
           margin-bottom: 8px;
           font-size: 14px;
-        .selected-files,
+        .selected-files
         .existing-files {
           margin-bottom: 20px;
-        .selected-files h4,
+        .selected-files h4
         .existing-files h4 {
           font-size: 16px;
           font-weight: 600;
@@ -283,7 +266,7 @@ interface DocumentUploadProps {
         .file-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 12px;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
@@ -322,9 +305,9 @@ interface DocumentUploadProps {
   transition: background-color 0.2s;
         .remove-file:hover:not(:disabled) {
           background-color: #fee2e2;
-        .remove-file:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+        .remove-file:disabled {
+  opacity: 0.5 }
+  cursor: not-allowed;
         .file-status {
           font-size: 16px;
           margin-left: 8px;

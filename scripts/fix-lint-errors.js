@@ -17,7 +17,7 @@ const fixes = [
     fix: (content: string) => {
       // This is a simplified version - in practice you'd want a more sophisticated approach
       return content.replace(/^import\s+{\s*}\s+from\s+.*;\s*$/gm, '');
-    }
+
   },
   {
     name: 'Fix unused variables',
@@ -32,11 +32,11 @@ const fixes = [
           if (matches.length <= 1) {
             // Variable is only declared, never used - prefix with underscore
             return `${indent}${keyword} _${varName} = ${match.split('=')[1]}`;
-          }
+
           return match;
         }
       );
-    }
+
   },
   {
     name: 'Fix console.log statements',
@@ -44,8 +44,8 @@ const fixes = [
     fix: (content: string) => {
       // Only warn about console.log, don't remove them entirely
       return content; // Keep as-is, our improved ESLint config allows console.log
-    }
-  }
+
+
 ];
 
 const commonProblematicFiles = [
@@ -58,7 +58,7 @@ const commonProblematicFiles = [
 function fixFile(filePath: string): boolean {
   if (!fs.existsSync(filePath)) {
     return false;
-  }
+
 
   console.log(`🔍 Checking ${filePath}...`);
   
@@ -73,23 +73,23 @@ function fixFile(filePath: string): boolean {
           console.log(`   ✅ Applied: ${fix.name}`);
           content = newContent;
           changed = true;
-        }
-      }
+
+
     });
 
     if (changed) {
       fs.writeFileSync(filePath, content);
       console.log(`   💾 Saved changes to ${filePath}`);
       return true;
-    } else {
+ else {
       console.log(`   ✨ No changes needed for ${filePath}`);
       return false;
-    }
-  } catch (error) {
+
+ catch (error) {
     console.log(`   ❌ Error processing ${filePath}: ${error.message}`);
     return false;
-  }
-}
+
+
 
 function runAutoFix(): void {
   console.log('🎯 Running ESLint auto-fix on staged files...\n');
@@ -103,7 +103,7 @@ function runAutoFix(): void {
     if (stagedFiles.length === 0) {
       console.log('📝 No JavaScript/TypeScript files staged for commit');
       return;
-    }
+
 
     console.log(`📝 Found ${stagedFiles.length} staged files to check:\n`);
     
@@ -114,7 +114,7 @@ function runAutoFix(): void {
       const fullPath = path.resolve(filePath);
       if (fixFile(fullPath)) {
         fixedCount++;
-      }
+
     });
 
     // Also check commonly problematic files
@@ -124,7 +124,7 @@ function runAutoFix(): void {
       const fullPath = path.resolve(filePath);
       if (fixFile(fullPath)) {
         fixedCount++;
-      }
+
     });
 
     console.log('\n📊 Summary:');
@@ -134,19 +134,18 @@ function runAutoFix(): void {
     if (fixedCount > 0) {
       console.log('\n🎉 Auto-fixes complete! Stage the changes and commit again.');
       console.log('💡 Tip: Use "git add -u" to stage the fixed files');
-    } else {
+ else {
       console.log('\n✨ All files look good!');
-    }
 
-  } catch (error) {
+ catch (error) {
     console.error('❌ Error running auto-fix:', error.message);
     process.exit(1);
-  }
-}
+
+
 
 // Check if we're running this directly
 if (require.main === module) {
   runAutoFix();
-}
+
 
 module.exports = { fixFile, runAutoFix };

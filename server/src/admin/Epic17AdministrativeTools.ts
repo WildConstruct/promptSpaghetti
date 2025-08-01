@@ -20,8 +20,8 @@ import * as path from 'path';
 // Administrative Tools Types and Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface AdminToolsConfig {
   // System monitoring
   healthCheckInterval: number; // seconds
@@ -30,8 +30,9 @@ export interface AdminToolsConfig {
     maxErrorRate: number; // percentage
     maxMemoryUsage: number; // percentage
     maxCpuUsage: number; // percentage
-}
-}
+
+
+
   };
   
   // Maintenance operations
@@ -67,10 +68,10 @@ export interface AdminToolsConfig {
   dataRetentionDays: number;
   backupEnabled: boolean;
   backupSchedule: string; // cron expression
-}
 
-}
-}
+
+
+
 export interface SystemHealthStatus {
   overall: 'healthy' | 'degraded' | 'unhealthy';
   timestamp: Date;
@@ -81,8 +82,9 @@ export interface SystemHealthStatus {
     authentication: ComponentHealth;
     monitoring: ComponentHealth;
     vault: ComponentHealth;
-}
-}
+
+
+
   };
   metrics: {
     totalApiCalls: number;
@@ -95,10 +97,10 @@ export interface SystemHealthStatus {
   };
   alerts: SystemAlert[];
   recommendations: string[];
-}
 
-}
-}
+
+
+
 export interface ComponentHealth {
   status: 'healthy' | 'degraded' | 'unhealthy';
   lastChecked: Date;
@@ -106,12 +108,13 @@ export interface ComponentHealth {
   errorCount?: number;
   details?: string;
   metrics?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemAlert {
   id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -122,12 +125,13 @@ export interface SystemAlert {
   component: string;
   resolved: boolean;
   actions?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkOperation {
   operationId: string;
   type: 'revoke_keys' | 'suspend_keys' | 'rotate_secrets' | 'update_limits' | 'bulk_export' | 'cleanup_data';
@@ -158,36 +162,39 @@ export interface BulkOperation {
   reason: string;
   approvedBy?: string;
   rollbackPossible: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkOperationResult {
   id: string;
   success: boolean;
   message: string;
   details?: Record<string, any>;
   processedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkOperationError {
   id: string;
   error: string;
   details: string;
   retryable: boolean;
   occuredAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MaintenanceWindow {
   windowId: string;
   title: string;
@@ -214,12 +221,13 @@ export interface MaintenanceWindow {
   createdBy: string;
   approvedBy?: string;
   reason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MaintenanceOperation {
   operationId: string;
   name: string;
@@ -236,12 +244,13 @@ export interface MaintenanceOperation {
   
   rollbackPossible: boolean;
   rollbackInstructions?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityScanResult {
   scanId: string;
   scanType: 'vulnerability' | 'compliance' | 'configuration' | 'permissions' | 'keys';
@@ -267,12 +276,13 @@ export interface SecurityScanResult {
   // Metadata
   initiatedBy: string;
   scanParameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityFinding {
   findingId: string;
   severity: 'critical' | 'high' | 'medium' | 'low';
@@ -283,12 +293,13 @@ export interface SecurityFinding {
   remediation: string;
   affectedResources: string[];
   riskScore: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityRecommendation {
   recommendationId: string;
   priority: 'immediate' | 'high' | 'medium' | 'low';
@@ -297,12 +308,13 @@ export interface SecurityRecommendation {
   implementation: string;
   estimatedEffort: string;
   impactAssessment: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataCleanupOperation {
   cleanupId: string;
   type: 'logs' | 'expired_keys' | 'old_sessions' | 'unused_permissions' | 'audit_trails';
@@ -329,9 +341,10 @@ export interface DataCleanupOperation {
   initiatedBy: string;
   approvedBy?: string;
   backupLocation?: string;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Epic 17 Administrative Tools Implementation
@@ -362,7 +375,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
         maxErrorRate: 5, // 5%
         maxMemoryUsage: 80, // 80%
         maxCpuUsage: 70 // 70%
-  }
+
       // Maintenance defaults
       maintenanceMode: false,
       maintenanceMessage: 'System is under maintenance. Please try again later.',
@@ -370,13 +383,13 @@ export class Epic17AdministrativeTools extends EventEmitter {
         enabled: true,
         schedule: '0 2 * * 0', // Sunday 2 AM
         operations: ['cleanup', 'rotate_secrets', 'vacuum_db']
-  }
+
       // Bulk operation defaults
       bulkOperationLimits: {
         maxKeysPerOperation: 10000,
         maxConcurrentOperations: 3,
         timeoutMinutes: 60
-  }
+
       // Security defaults
       securityScanning: true,
       complianceReporting: true,
@@ -387,7 +400,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
       notificationChannels: {
         email: ['admin@example.com'],
         webhook: []
-  }
+
       // Data management defaults
       dataRetentionDays: 365,
       backupEnabled: true,
@@ -397,7 +410,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
     };
 
     this.initializeAdminTools();
-  }
+
 
   // =============================================================================
   // System Health Monitoring
@@ -443,11 +456,11 @@ export class Epic17AdministrativeTools extends EventEmitter {
       
       if (componentStatuses.every(s => s === 'healthy')) {
         overall = 'healthy';
-      } else if (componentStatuses.some(s => s === 'unhealthy')) {
+ else if (componentStatuses.some(s => s === 'unhealthy')) {
         overall = 'unhealthy';
-      } else {
+ else {
         overall = 'degraded';
-      }
+
       
       // Get system metrics
       const metrics = await this.getSystemMetrics();
@@ -476,8 +489,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
       this.emit('health_status_updated', healthStatus);
       
       return healthStatus;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting system health:', error);
       
       // Return minimal health status on error
@@ -489,8 +501,8 @@ export class Epic17AdministrativeTools extends EventEmitter {
         alerts: [],
         recommendations: ['System health check failed - investigate immediately']
       };
-    }
-  }
+
+
 
   /**
    * Start continuous system health monitoring
@@ -498,7 +510,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
   startHealthMonitoring(): void {
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
-    }
+
     
     this.healthCheckInterval = setInterval(async () => {
       try {
@@ -507,18 +519,17 @@ export class Epic17AdministrativeTools extends EventEmitter {
         // Check for critical issues
         if (health.overall === 'unhealthy') {
           await this.handleCriticalHealthIssues(health);
-        }
+
         
         // Update alerting based on health status
         await this.updateAlertsFromHealth(health);
-        
-      } catch (error) {
+ catch (error) {
         console.error('Error in health monitoring:', error);
-      }
+
     }, this.config.healthCheckInterval * 1000);
     
     console.log(`✅ Health monitoring started (interval: ${this.config.healthCheckInterval}s)`);
-  }
+
 
   /**
    * Stop health monitoring
@@ -528,8 +539,8 @@ export class Epic17AdministrativeTools extends EventEmitter {
       clearInterval(this.healthCheckInterval);
       this.healthCheckInterval = undefined;
       console.log('🔴 Health monitoring stopped');
-    }
-  }
+
+
 
   // =============================================================================
   // Bulk Operations Management
@@ -552,11 +563,11 @@ export class Epic17AdministrativeTools extends EventEmitter {
       // Validate bulk operation limits
       if (targets.length > this.config.bulkOperationLimits.maxKeysPerOperation) {
         throw new Error(`Bulk operation exceeds maximum limit of ${this.config.bulkOperationLimits.maxKeysPerOperation} keys`);
-      }
+
       
       if (this.activeBulkOperations.size >= this.config.bulkOperationLimits.maxConcurrentOperations) {
         throw new Error(`Maximum concurrent bulk operations (${this.config.bulkOperationLimits.maxConcurrentOperations}) reached`);
-      }
+
       
       const bulkOperation: BulkOperation = {
         operationId,
@@ -600,18 +611,17 @@ export class Epic17AdministrativeTools extends EventEmitter {
           type,
           targetCount: targets.length,
           reason
-        }
+
       });
       
       this.emit('bulk_operation_started', { operationId, type, targetCount: targets.length });
       
       return operationId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error executing bulk operation:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get bulk operation status
@@ -621,7 +631,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
     const operation = this.activeBulkOperations.get(operationId);
     if (operation) {
       return { ...operation };
-    }
+
     
     // Check database for completed operations
     try {
@@ -650,13 +660,13 @@ export class Epic17AdministrativeTools extends EventEmitter {
           reason: row.reason,
           rollbackPossible: row.rollback_possible
         };
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error getting bulk operation status:', error);
-    }
+
     
     return null;
-  }
+
 
   /**
    * Cancel running bulk operation
@@ -666,7 +676,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
     const operation = this.activeBulkOperations.get(operationId);
     if (!operation || operation.status === 'completed') {
       return false;
-    }
+
     
     operation.status = 'cancelled';
     operation.completedAt = new Date();
@@ -685,13 +695,13 @@ export class Epic17AdministrativeTools extends EventEmitter {
         operationId,
         processedCount: operation.processedCount,
         remainingCount: operation.targetCount - operation.processedCount
-      }
+
     });
     
     this.emit('bulk_operation_cancelled', { operationId, cancelledBy });
     
     return true;
-  }
+
 
   // =============================================================================
   // Maintenance Management
@@ -767,18 +777,17 @@ export class Epic17AdministrativeTools extends EventEmitter {
           scheduledEnd,
           impactLevel,
           operationCount: operations.length
-        }
+
       });
       
       this.emit('maintenance_window_scheduled', maintenanceWindow);
       
       return windowId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error scheduling maintenance window:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Start maintenance window
@@ -788,7 +797,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
     const window = this.activeMaintenanceWindows.get(windowId);
     if (!window || window.status !== 'scheduled') {
       return false;
-    }
+
     
     window.status = 'active';
     window.actualStart = new Date();
@@ -817,7 +826,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
     this.emit('maintenance_window_started', window);
     
     return true;
-  }
+
 
   /**
    * Execute maintenance operations
@@ -841,8 +850,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
           operation.result = result;
           
           this.emit('maintenance_operation_completed', { windowId, operation });
-          
-        } catch (error) {
+ catch (error) {
           operation.status = 'failed';
           operation.completedAt = new Date();
           operation.error = error.message;
@@ -854,17 +862,16 @@ export class Epic17AdministrativeTools extends EventEmitter {
           if (operation.type === 'database') {
             console.error('Critical database operation failed, stopping maintenance');
             break;
-          }
-        }
-      }
+
+
+
       
       // Complete maintenance window
       await this.completeMaintenanceWindow(windowId);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error executing maintenance operations:', error);
-    }
-  }
+
+
 
   // =============================================================================
   // Security Scanning and Compliance
@@ -920,12 +927,11 @@ export class Epic17AdministrativeTools extends EventEmitter {
       this.emit('security_scan_started', { scanId, scanType });
       
       return scanId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error starting security scan:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Generate compliance report
@@ -955,7 +961,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
           passedChecks: complianceData.checks.filter(c => c.status === 'pass').length,
           failedChecks: complianceData.checks.filter(c => c.status === 'fail').length,
           warningChecks: complianceData.checks.filter(c => c.status === 'warning').length
-  }
+
         sections: this.generateComplianceSections(reportType, complianceData),
         findings: complianceData.findings,
         recommendations: includeRecommendations ? complianceData.recommendations : [],
@@ -978,18 +984,17 @@ export class Epic17AdministrativeTools extends EventEmitter {
           reportType,
           dateRange,
           checkCount: report.summary.totalChecks
-        }
+
       });
       
       this.emit('compliance_report_generated', { reportId, reportType, summary: report.summary });
       
       return report;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error generating compliance report:', error);
       throw error;
-    }
-  }
+
+
 
   // =============================================================================
   // Data Management and Cleanup
@@ -1043,12 +1048,11 @@ export class Epic17AdministrativeTools extends EventEmitter {
       this.emit('data_cleanup_started', { cleanupId, cleanupType, dryRun });
       
       return cleanupId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error executing data cleanup:', error);
       throw error;
-    }
-  }
+
+
 
   // =============================================================================
   // Emergency Operations
@@ -1109,12 +1113,11 @@ export class Epic17AdministrativeTools extends EventEmitter {
       this.emit('emergency_lockdown', { lockdownId, reason, initiatedBy });
       
       console.error(`🚨 EMERGENCY LOCKDOWN: ${reason} (initiated by: ${initiatedBy})`);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error during emergency lockdown:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Emergency system recovery
@@ -1148,7 +1151,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
         // Implement failover logic
         await this.performFailover(notes);
         break;
-      }
+
       
       // Log recovery action
       await this.database.query(`
@@ -1170,12 +1173,11 @@ export class Epic17AdministrativeTools extends EventEmitter {
       this.emit('emergency_recovery', { recoveryId, recoveryType, initiatedBy });
       
       console.log(`✅ EMERGENCY RECOVERY: ${recoveryType} completed (initiated by: ${initiatedBy})`);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error during emergency recovery:', error);
       throw error;
-    }
-  }
+
+
 
   // =============================================================================
   // Private Helper Methods
@@ -1190,26 +1192,25 @@ export class Epic17AdministrativeTools extends EventEmitter {
       // Start health monitoring if enabled
       if (this.config.healthCheckInterval > 0) {
         this.startHealthMonitoring();
-      }
+
       
       // Start auto-maintenance if enabled
       if (this.config.autoMaintenance.enabled) {
         this.scheduleAutoMaintenance();
-      }
+
       
       console.log('✅ Epic 17 Administrative Tools initialized successfully');
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error initializing administrative tools:', error);
       throw error;
-    }
-  }
+
+
 
   private async initializeAdminTables(): Promise<void> {
 
     // Implementation would include CREATE TABLE statements for admin tools
     console.log('📊 Epic 17 administrative tools database tables initialized');
-  }
+
 
   private async checkDatabaseHealth(): Promise<ComponentHealth> {
 
@@ -1224,14 +1225,14 @@ export class Epic17AdministrativeTools extends EventEmitter {
         responseTime,
         details: responseTime > 1000 ? 'Slow database response' : 'Database responsive'
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         lastChecked: new Date(),
         details: `Database connection failed: ${error.message}`
       };
-    }
-  }
+
+
 
   private async checkRedisHealth(): Promise<ComponentHealth> {
 
@@ -1246,14 +1247,14 @@ export class Epic17AdministrativeTools extends EventEmitter {
         responseTime,
         details: responseTime > 100 ? 'Slow Redis response' : 'Redis responsive'
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         lastChecked: new Date(),
         details: `Redis connection failed: ${error.message}`
       };
-    }
-  }
+
+
 
   private async checkApiKeysHealth(): Promise<ComponentHealth> {
 
@@ -1278,12 +1279,12 @@ export class Epic17AdministrativeTools extends EventEmitter {
       if (suspendedKeys > activeKeys * 0.1) { // More than 10% suspended
         status = 'degraded';
         details = 'High number of suspended keys detected';
-      }
+
       
       if (activeKeys === 0 && totalKeys > 0) {
         status = 'unhealthy';
         details = 'No active API keys found';
-      }
+
       
       return {
         status,
@@ -1291,14 +1292,14 @@ export class Epic17AdministrativeTools extends EventEmitter {
         details,
         metrics
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         lastChecked: new Date(),
         details: `API keys health check failed: ${error.message}`
       };
-    }
-  }
+
+
 
   private async checkAuthenticationHealth(): Promise<ComponentHealth> {
 
@@ -1311,7 +1312,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
       if (metrics && metrics.failed_attempts > 0) {
         status = 'degraded';
         details = 'Some authentication failures detected';
-      }
+
       
       return {
         status,
@@ -1319,14 +1320,14 @@ export class Epic17AdministrativeTools extends EventEmitter {
         details,
         metrics
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         lastChecked: new Date(),
         details: `Authentication health check failed: ${error.message}`
       };
-    }
-  }
+
+
 
   private async checkMonitoringHealth(): Promise<ComponentHealth> {
 
@@ -1336,7 +1337,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
       lastChecked: new Date(),
       details: 'Monitoring system operational'
     };
-  }
+
 
   private async checkVaultHealth(): Promise<ComponentHealth> {
 
@@ -1346,7 +1347,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
       lastChecked: new Date(),
       details: 'Vault system operational'
     };
-  }
+
 
   private async getSystemMetrics(): Promise<SystemHealthStatus['metrics']> {
 
@@ -1360,7 +1361,7 @@ export class Epic17AdministrativeTools extends EventEmitter {
       memoryUsage: process.memoryUsage().heapUsed / process.memoryUsage().heapTotal * 100,
       cpuUsage: 0
     };
-  }
+
 
   private generateHealthRecommendations(
     components: SystemHealthStatus['components'], 
@@ -1373,32 +1374,32 @@ export class Epic17AdministrativeTools extends EventEmitter {
     Object.entries(components).forEach(([name, health]) => {
       if (health.status === 'unhealthy') {
         recommendations.push(`Immediate attention required for ${name} component`);
-      } else if (health.status === 'degraded') {
+ else if (health.status === 'degraded') {
         recommendations.push(`Monitor ${name} component performance closely`);
-      }
+
     });
     
     // Check metrics
     if (metrics.errorRate > this.config.performanceThresholds.maxErrorRate) {
       recommendations.push('High error rate detected - investigate API endpoint issues');
-    }
+
     
     if (metrics.averageResponseTime > this.config.performanceThresholds.maxResponseTime) {
       recommendations.push('High response times detected - consider performance optimization');
-    }
+
     
     // Check alerts
     const criticalAlerts = alerts.filter(a => a.severity === 'critical').length;
     if (criticalAlerts > 0) {
       recommendations.push(`${criticalAlerts} critical alerts require immediate attention`);
-    }
+
     
     if (recommendations.length === 0) {
       recommendations.push('System is operating within normal parameters');
-    }
+
     
     return recommendations;
-  }
+
 
   // Additional helper methods would be implemented here...
   
@@ -1406,13 +1407,13 @@ export class Epic17AdministrativeTools extends EventEmitter {
 
     // Implementation for processing bulk operations
     console.log(`Processing bulk operation ${operationId} for ${targets.length} targets`);
-  }
+
 
   private async executeMaintenanceOperation(operation: MaintenanceOperation): Promise<string> {
 
     // Implementation for executing individual maintenance operations
     return `Operation ${operation.name} completed successfully`;
-  }
+
 
   private async completeMaintenanceWindow(windowId: string): Promise<void> {
 
@@ -1425,20 +1426,20 @@ export class Epic17AdministrativeTools extends EventEmitter {
       this.config.maintenanceMode = false;
       await this.redis.del('epic17:maintenance_mode');
       await this.redis.del('epic17:maintenance_message');
-    }
-  }
+
+
 
   private async scheduleMaintenanceNotifications(windowId: string): Promise<void> {
 
     // Implementation for scheduling maintenance notifications
     console.log(`Scheduled notifications for maintenance window ${windowId}`);
-  }
+
 
   private async executeSecurityScan(scanId: string, scanType: string, parameters: any): Promise<void> {
 
     // Implementation for executing security scans
     console.log(`Executing security scan ${scanId} of type ${scanType}`);
-  }
+
 
   private async gatherComplianceData(reportType: string, dateRange: any): Promise<any> {
 
@@ -1449,85 +1450,85 @@ export class Epic17AdministrativeTools extends EventEmitter {
       recommendations: [],
       attestations: []
     };
-  }
+
 
   private generateComplianceSections(reportType: string, data: any): any[] {
     // Implementation for generating compliance report sections
     return [];
-  }
+
 
   private async processDataCleanup(cleanupId: string): Promise<void> {
 
     // Implementation for processing data cleanup operations
     console.log(`Processing data cleanup operation ${cleanupId}`);
-  }
+
 
   private async sendEmergencyNotifications(type: string, message: string, initiatedBy: string): Promise<void> {
 
     // Implementation for sending emergency notifications
     console.log(`🚨 Emergency notification: ${type} - ${message} (by ${initiatedBy})`);
-  }
+
 
   private async restoreFromBackup(notes?: string): Promise<void> {
 
     // Implementation for backup restoration
     console.log(`Restoring from backup: ${notes || 'No notes provided'}`);
-  }
+
 
   private async performFailover(notes?: string): Promise<void> {
 
     // Implementation for system failover
     console.log(`Performing failover: ${notes || 'No notes provided'}`);
-  }
+
 
   private scheduleAutoMaintenance(): void {
     // Implementation for scheduling automatic maintenance
     console.log('🔧 Auto-maintenance scheduling enabled');
-  }
+
 
   private async handleCriticalHealthIssues(health: SystemHealthStatus): Promise<void> {
 
     // Implementation for handling critical health issues
     console.error('🚨 Critical health issues detected:', health.alerts);
-  }
+
 
   private async updateAlertsFromHealth(health: SystemHealthStatus): Promise<void> {
 
     // Implementation for updating alerts based on health status
     console.log('📊 Updating alerts from health status');
-  }
+
 
   // Public getter methods for monitoring
   getActiveBulkOperations(): BulkOperation[] {
     return Array.from(this.activeBulkOperations.values());
-  }
+
 
   getActiveMaintenanceWindows(): MaintenanceWindow[] {
     return Array.from(this.activeMaintenanceWindows.values());
-  }
+
 
   getSystemAlerts(): SystemAlert[] {
     return Array.from(this.systemAlerts.values());
-  }
+
 
   isMaintenanceMode(): boolean {
     return this.config.maintenanceMode;
-  }
+
 
   // Cleanup method
   async shutdown(): Promise<void> {
 
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
-    }
+
     
     if (this.maintenanceInterval) {
       clearInterval(this.maintenanceInterval);
-    }
+
     
     this.removeAllListeners();
     console.log('✅ Epic 17 Administrative Tools shut down');
-  }
-}
+
+
 
 export default Epic17AdministrativeTools;

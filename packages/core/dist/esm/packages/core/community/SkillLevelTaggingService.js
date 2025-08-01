@@ -49,8 +49,9 @@ export class SkillLevelTaggingService {
                 console.error('Failed to classify difficulty:', error);
                 throw error;
                 async;
-                tagContentWithSkillLevel(contentId, string);
-                skillTag: Omit;
+                tagContentWithSkillLevel(contentId, string),
+                    skillTag;
+                Omit;
                 Promise < ContentSkillTag > {
                     try: {
                         const: response = await this.apiClient.post(`/api/content/${contentId}/skill-tags`, {})
@@ -131,8 +132,9 @@ export class SkillLevelTaggingService {
                 console.error('Failed to assess user skill level:', error);
                 throw error;
                 async;
-                updateUserSkillAssessment(userId, string);
-                domain: SkillDomain,
+                updateUserSkillAssessment(userId, string),
+                    domain;
+                SkillDomain,
                     newLevel;
                 SkillLevel,
                     evidence;
@@ -265,8 +267,9 @@ export class SkillLevelTaggingService {
                         console.error('Failed to incorporate community feedback:', error);
                         throw error;
                         async;
-                        submitSkillFeedback(userId, string);
-                        contentId: string,
+                        submitSkillFeedback(userId, string),
+                            contentId;
+                        string,
                             feedback;
                         {
                             perceived_difficulty: number;
@@ -329,7 +332,12 @@ export class SkillLevelTaggingService {
                                     total_content: number,
                                     classification_accuracy: number,
                                     community_consensus: number,
-                                    issues_found: (Array)
+                                    issues_found: Array < {
+                                        content_id: string,
+                                        issue_type: string,
+                                        severity: string,
+                                        description: string
+                                    } > 
                                 } > {
                                     try: {
                                         const: response = await this.apiClient.get('/api/skill-assessment/audit', {}),

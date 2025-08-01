@@ -13,27 +13,29 @@ import {
   WebSocketSecurityConfig,
   ConnectionSecurityContext,
   SecureWebSocketMessage 
-} from '../../../../packages/core/security/WebSocketSecurityManager';
+ from '../../../../packages/core/security/WebSocketSecurityManager';
 import { 
   KeyManagementService, 
   KeyManagementConfig 
-} from '../../../../packages/core/security/KeyManagementService';
+ from '../../../../packages/core/security/KeyManagementService';
 import { DataClassifier } from '../../../../packages/core/security/DataClassifier';
 import { DeviceFingerprintingService } from '../../../../packages/core/security/DeviceFingerprintingService';
 import { TrustedDeviceManager } from '../../../../packages/core/security/TrustedDeviceManager';
 import { WSServerConfig, WSMessage } from './types';
 
 // Enhanced server configuration
-}
-}
+
+
+
 export interface SecureWSServerConfig extends WSServerConfig {
   security: WebSocketSecurityConfig;
   keyManagement: KeyManagementConfig;
-}
+
 
 // Enhanced connection info with security context
-}
-}
+
+
+
 export interface SecureConnectionInfo {
   id: string;
   userId: string;
@@ -50,9 +52,10 @@ export interface SecureConnectionInfo {
   isSecure: boolean;
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
   trustLevel: 'none' | 'basic' | 'verified' | 'full';
-}
-}
-}
+
+
+
+
 
 /**
  * Secure WebSocket Server with Enhanced Security
@@ -98,7 +101,7 @@ export class SecureWebSocketServer extends EventEmitter {
     
     this.setupSecurityIntegration();
     this.setupEventHandlers();
-  }
+
 
   /**
    * Start the secure WebSocket server
@@ -111,11 +114,11 @@ export class SecureWebSocketServer extends EventEmitter {
       
       console.log('Secure WebSocket server started with enhanced security features');
       this.emit('started');
-    } catch (error) {
+ catch (error) {
       console.error('Failed to start secure WebSocket server:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Stop the secure WebSocket server
@@ -126,7 +129,7 @@ export class SecureWebSocketServer extends EventEmitter {
       // Clean up all secure connections
       for (const connectionId of this.secureConnections.keys()) {
         await this.cleanupSecureConnection(connectionId);
-      }
+
       
       // Stop base server
       await this.baseServer.stop();
@@ -137,11 +140,11 @@ export class SecureWebSocketServer extends EventEmitter {
       
       console.log('Secure WebSocket server stopped');
       this.emit('stopped');
-    } catch (error) {
+ catch (error) {
       console.error('Error stopping secure WebSocket server:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get enhanced health metrics including security stats
@@ -156,16 +159,16 @@ export class SecureWebSocketServer extends EventEmitter {
         ...this.securityMetrics,
         ...securityStats,
         uptime: Date.now() - this.securityMetrics.lastReset
-      }
+
     };
-  }
+
 
   /**
    * Get secure connection info
    */
   getSecureConnectionInfo(connectionId: string): SecureConnectionInfo | null {
     return this.secureConnections.get(connectionId) || null;
-  }
+
 
   /**
    * Get all secure connections for a user
@@ -173,7 +176,7 @@ export class SecureWebSocketServer extends EventEmitter {
   getUserSecureConnections(userId: string): SecureConnectionInfo[] {
     return Array.from(this.secureConnections.values())
       .filter(conn => conn.userId === userId);
-  }
+
 
   /**
    * Broadcast secure message to document with encryption
@@ -203,8 +206,8 @@ export class SecureWebSocketServer extends EventEmitter {
         if (connection.ws.readyState === WebSocket.OPEN) {
           connection.ws.send(JSON.stringify(secureMessage));
           this.securityMetrics.encryptedMessages++;
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error(`Failed to send secure message to connection ${connection.id}:`, error);
         
         this.emit('secureMessageError', {
@@ -212,9 +215,9 @@ export class SecureWebSocketServer extends EventEmitter {
           userId: connection.userId,
           error: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
-  }
+
+
+
 
   /**
    * Force disconnect for security violation
@@ -232,7 +235,7 @@ export class SecureWebSocketServer extends EventEmitter {
       // Close WebSocket connection
       if (connection.ws.readyState === WebSocket.OPEN) {
         connection.ws.close(1008, `Security violation: ${reason}`);
-      }
+
       
       // Clean up
       await this.cleanupSecureConnection(connectionId);
@@ -245,8 +248,8 @@ export class SecureWebSocketServer extends EventEmitter {
         reason,
         timestamp: new Date()
       });
-    }
-  }
+
+
 
   // Private methods
 
@@ -265,7 +268,7 @@ export class SecureWebSocketServer extends EventEmitter {
     this.baseServer.on('disconnect', async (connectionId: string) => {
       await this.cleanupSecureConnection(connectionId);
     });
-  }
+
 
   private setupEventHandlers(): void {
     // Security manager events
@@ -291,7 +294,7 @@ export class SecureWebSocketServer extends EventEmitter {
     this.baseServer.on('started', () => {
       console.log('Base WebSocket server started, security layer active');
     });
-  }
+
 
   private async handleSecureConnection(
     connectionId: string,
@@ -311,7 +314,7 @@ export class SecureWebSocketServer extends EventEmitter {
       if (this.securityManager.isConnectionBlocked(connectionId, ipAddress)) {
         ws.close(1008, 'Connection blocked for security reasons');
         return;
-      }
+
       
       // Initialize security context (placeholder user ID for now)
       const userId = this.extractUserIdFromRequest(request) || 'anonymous';
@@ -348,7 +351,7 @@ export class SecureWebSocketServer extends EventEmitter {
       
       if (secureConnection.isSecure) {
         this.securityMetrics.secureConnections++;
-      }
+
       
       // Send enhanced connection confirmation with security requirements
       const connectionMessage = {
@@ -360,18 +363,17 @@ export class SecureWebSocketServer extends EventEmitter {
           encryptionEnabled: this.config.security.enableMessageEncryption,
           mfaRequired: this.config.security.enableMFAForHighRisk && 
                        (securityContext.threatLevel === 'high' || securityContext.threatLevel === 'critical')
-        }
+
       };
       
       ws.send(JSON.stringify(connectionMessage));
       
       console.log(`Secure connection established: ${connectionId} (threat level: ${securityContext.threatLevel})`);
-      
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to establish secure connection ${connectionId}:`, error);
       ws.close(1011, 'Security initialization failed');
-    }
-  }
+
+
 
   private async handleSecureMessage(
     connectionId: string,
@@ -382,14 +384,14 @@ export class SecureWebSocketServer extends EventEmitter {
     if (!connection) {
       console.warn(`Secure connection not found: ${connectionId}`);
       return;
-    }
+
 
     try {
       // Check if connection is blocked
       if (this.securityManager.isConnectionBlocked(connectionId, connection.ipAddress)) {
         await this.forceDisconnectForSecurity(connectionId, 'Connection blocked during message processing');
         return;
-      }
+
 
       // Parse and decrypt message if it's a secure message
       let message: any;
@@ -400,8 +402,8 @@ export class SecureWebSocketServer extends EventEmitter {
         
         if (message.metadata?.encrypted) {
           this.securityMetrics.encryptedMessages++;
-        }
-      } else {
+
+ else {
         // Handle legacy/unencrypted message
         message = rawMessage;
         
@@ -412,8 +414,8 @@ export class SecureWebSocketServer extends EventEmitter {
             'Unencrypted message received when encryption is required'
           );
           return;
-        }
-      }
+
+
 
       // Update connection activity
       connection.lastSeen = Date.now();
@@ -421,8 +423,7 @@ export class SecureWebSocketServer extends EventEmitter {
 
       // Forward processed message to base server for normal handling
       this.baseServer.emit('secureMessage', connectionId, message);
-      
-    } catch (error) {
+ catch (error) {
       console.error(`Error processing secure message from ${connectionId}:`, error);
       
       // Increment suspicious activity if message processing fails
@@ -433,9 +434,9 @@ export class SecureWebSocketServer extends EventEmitter {
           connectionId,
           'Multiple message processing failures'
         );
-      }
-    }
-  }
+
+
+
 
   private async cleanupSecureConnection(connectionId: string): Promise<void> {
 
@@ -450,11 +451,11 @@ export class SecureWebSocketServer extends EventEmitter {
       // Update metrics
       if (connection.isSecure) {
         this.securityMetrics.secureConnections--;
-      }
+
       
       console.log(`Secure connection cleaned up: ${connectionId}`);
-    }
-  }
+
+
 
   private extractIPAddress(request: any): string {
     return request.headers['x-forwarded-for']?.split(',')[0] ||
@@ -462,7 +463,7 @@ export class SecureWebSocketServer extends EventEmitter {
            request.connection?.remoteAddress ||
            request.socket?.remoteAddress ||
            '127.0.0.1';
-  }
+
 
   private extractUserIdFromRequest(request: any): string | null {
     // Extract user ID from query parameters, headers, or token
@@ -471,7 +472,7 @@ export class SecureWebSocketServer extends EventEmitter {
     return url.searchParams.get('userId') || 
            request.headers['x-user-id'] ||
            null;
-  }
+
 
   private isSecureMessage(message: any): boolean {
     return message && 
@@ -479,14 +480,14 @@ export class SecureWebSocketServer extends EventEmitter {
            'encrypted' in message &&
            'classification' in message &&
            'originConnectionId' in message;
-  }
+
 
   /**
    * Get security configuration
    */
   public getSecurityConfig(): WebSocketSecurityConfig {
     return { ...this.config.security };
-  }
+
 
   /**
    * Update security configuration
@@ -494,7 +495,7 @@ export class SecureWebSocketServer extends EventEmitter {
   public updateSecurityConfig(updates: Partial<WebSocketSecurityConfig>): void {
     Object.assign(this.config.security, updates);
     console.log('Security configuration updated:', updates);
-  }
+
 
   /**
    * Get real-time security metrics
@@ -505,7 +506,7 @@ export class SecureWebSocketServer extends EventEmitter {
       securityManager: this.securityManager.getSecurityStats(),
       keyManagement: this.keyManagementService.getPerformanceMetrics(),
       lastUpdated: new Date(};
-  }
+
 
   /**
    * Reset security metrics
@@ -519,7 +520,7 @@ export class SecureWebSocketServer extends EventEmitter {
       connectionsBlocked: 0,
       lastReset: Date.now()
     };
-  }
+
 
   /**
    * Export secure connection data for analysis
@@ -543,7 +544,7 @@ export class SecureWebSocketServer extends EventEmitter {
       metrics: this.getSecurityMetrics(),
       timestamp: new Date()
     };
-  }
-}
+
+
 
 export default SecureWebSocketServer;

@@ -6,8 +6,7 @@
  */
 import { EventEmitter } from 'events';
 import { SecurityAnalysisResult } from '../validation/advanced-security';
-export declare enum SecurityEventType {
-    VALIDATION_FAILURE = "validation_failure",
+export declare enum SecurityEventType { VALIDATION_FAILURE = "validation_failure",
     INJECTION_ATTEMPT = "injection_attempt",
     PATTERN_MATCH = "pattern_match",
     THRESHOLD_EXCEEDED = "threshold_exceeded",
@@ -18,12 +17,12 @@ export declare enum SecurityEventType {
 export declare enum SecurityEventSeverity {
     LOW = "low",
     MEDIUM = "medium",
-    HIGH = "high",
+    HIGH = "high" }
     CRITICAL = "critical"
 
 }
-export interface SecurityEvent {
-    id: string;
+}
+export interface SecurityEvent { id: string;
     timestamp: Date;
     type: SecurityEventType;
     severity: SecurityEventSeverity;
@@ -34,60 +33,52 @@ export interface SecurityEvent {
         raw: string;
         sanitized?: string;
         size: number;
-        type: string;
+        type: string }
 }
     };
-    analysis: {
-        riskScore: number;
+    analysis: { riskScore: number;
         threatsDetected: string[];
         confidence: number;
-        validationResult: boolean;
-    };
-    context: {
-        userAgent?: string;
+        validationResult: boolean };
+    context: { userAgent?: string;
         ipAddress?: string;
         endpoint?: string;
-        component: string;
-    };
+        component: string };
     metadata: Record<string, any>;
 
 }
-export interface AlertConfig {
-    enabled: boolean;
+}
+export interface AlertConfig { enabled: boolean;
     severityThreshold: SecurityEventSeverity;
     rateThreshold: {
         events: number;
-        timeWindowMs: number;
+        timeWindowMs: number }
 }
     };
     channels: AlertChannel[];
 
 }
-export interface AlertChannel {
-    type: 'webhook' | 'email' | 'slack' | 'console';
-    config: Record<string, any>;
-    enabled: boolean;
-
 }
-export interface SecurityMonitoringStats {
-    totalEvents: number;
+export interface AlertChannel { type: 'webhook' | 'email' | 'slack' | 'console';
+    config: Record<string, any>;
+    enabled: boolean }
+}
+}
+export interface SecurityMonitoringStats { totalEvents: number;
     eventsByType: Record<SecurityEventType, number>;
     eventsBySeverity: Record<SecurityEventSeverity, number>;
     averageRiskScore: number;
     topThreats: Array<{
         threat: string;
-        count: number;
+        count: number }
 }
     }>;
-    timeRange: {
-        start: Date;
-        end: Date;
-    };
+    timeRange: { start: Date;
+        end: Date };
 /**
  * Real-time Security Event Monitor
  */
-export declare class SecurityEventMonitor extends EventEmitter {
-    private events;
+export declare class SecurityEventMonitor extends EventEmitter { private events;
     private alertConfig;
     private rateLimitTracker;
     private readonly maxEventHistory;
@@ -98,36 +89,35 @@ export declare class SecurityEventMonitor extends EventEmitter {
      */
     recordEvent(type: SecurityEventType, severity: SecurityEventSeverity, source: string, input: {)
         raw: string;
-        type: string;
-    }, analysis: SecurityAnalysisResult, context?: Partial<SecurityEvent['context']>, metadata?: Record<string, any>): SecurityEvent;
+        type: string }, analysis: SecurityAnalysisResult, context?: Partial<SecurityEvent['context']>, metadata?: Record<string, any>): SecurityEvent;
     /**
      * Record validation failure event
      */
     recordValidationFailure();
-      input: string,
-      inputType: string,
-      source: string,
-      analysis: SecurityAnalysisResult,
+      input: string
+      inputType: string
+      source: string
+      analysis: SecurityAnalysisResult
       context?: Partial<SecurityEvent['context']>
     ): SecurityEvent;
     /**
      * Record injection attempt
      */
     recordInjectionAttempt();
-      input: string,
-      inputType: string,
-      source: string,
-      detectedPatterns: string[],
+      input: string
+      inputType: string
+      source: string
+      detectedPatterns: string[]
       context?: Partial<SecurityEvent['context']>
     ): SecurityEvent;
     /**
      * Record anomalous activity
      */
     recordAnomaly();
-      description: string,
-      source: string,
-      riskScore: number,
-      metadata?: Record<string,
+      description: string
+      source: string
+      riskScore: number
+      metadata?: Record<string
       any>
     ): SecurityEvent;
     /**

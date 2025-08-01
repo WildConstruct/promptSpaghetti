@@ -21,8 +21,7 @@ persist();
                 disclosureLevel: level,
                 useGlobalDefault: false,
                 lastModified: Date.now(),
-            }
-        });
+            } });
         ;
     },
     setNodeUseGlobalDefault: (nodeId, useGlobal) => {
@@ -33,8 +32,7 @@ persist();
                 disclosureLevel: state.nodePreferences[nodeId]?.disclosureLevel || state.globalDisclosureLevel,
                 useGlobalDefault: useGlobal,
                 lastModified: Date.now(),
-            }
-        });
+            } });
         ;
     },
     setNodeTypeDisclosureLevel: (nodeType, level) => {
@@ -44,8 +42,7 @@ persist();
                 ...state.nodeTypePreferences[nodeType],
                 disclosureLevel: level,
                 collapsedSections: state.nodeTypePreferences[nodeType]?.collapsedSections || [],
-            }
-        });
+            } });
         ;
     },
     setNodeTypeCollapsedSections: (nodeType, sections) => {
@@ -55,8 +52,7 @@ persist();
                 ...state.nodeTypePreferences[nodeType],
                 disclosureLevel: state.nodeTypePreferences[nodeType]?.disclosureLevel || state.globalDisclosureLevel,
                 collapsedSections: sections,
-            }
-        });
+            } });
         ;
     },
     setPreferenceInheritance: (inheritance) => {

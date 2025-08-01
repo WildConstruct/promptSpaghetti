@@ -29,7 +29,7 @@ export enum RotationType {
   WEBHOOK_SECRET = 'webhook_secret',
   ADMIN_PASSWORD = 'admin_password',
   SERVICE_ACCOUNT_KEY = 'service_account_key'
-}
+
 
 export enum RotationStatus {
   ACTIVE = 'active',
@@ -40,7 +40,7 @@ export enum RotationStatus {
   PAUSED = 'paused',
   CANCELLED = 'cancelled',
   EXPIRED = 'expired'
-}
+
 
 export enum RotationPriority {
   LOW = 'low',
@@ -48,10 +48,10 @@ export enum RotationPriority {
   HIGH = 'high',
   CRITICAL = 'critical',
   EMERGENCY = 'emergency'
-}
 
-}
-}
+
+
+
 export interface RotationPolicy {
   policyId: string;
   name: string;
@@ -67,12 +67,13 @@ export interface RotationPolicy {
   notifications: NotificationSettings;
   rollbackPolicy: RollbackPolicy;
   metadata: RotationPolicyMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationRequirements {
   keyLength: number;
   complexity: 'simple' | 'medium' | 'complex' | 'maximum';
@@ -82,56 +83,61 @@ export interface RotationRequirements {
   customValidation?: string; // JavaScript function
   expirationDays?: number;
   renewalThresholdDays?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationSettings {
   enabled: boolean;
   channels: NotificationChannel[];
   events: NotificationEvent[];
   escalationRules: EscalationRule[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'teams';
   target: string;
   priority: RotationPriority;
   enabled: boolean;
   template?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationEvent {
   event: 'rotation_due' | 'rotation_started' | 'rotation_completed' | 'rotation_failed' | 'credential_expired';
   advanceNotice: number; // milliseconds
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRule {
   condition: 'failed_rotation' | 'overdue_rotation' | 'expired_credential';
   delay: number; // milliseconds
   action: 'notify_admin' | 'emergency_rotation' | 'disable_service' | 'create_incident';
   parameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackPolicy {
   enabled: boolean;
   automaticRollback: boolean;
@@ -139,12 +145,13 @@ export interface RollbackPolicy {
   rollbackTimeout: number; // milliseconds
   validationChecks: string[];
   preserveHistory: number; // number of previous versions to keep
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationPolicyMetadata {
   createdBy: string;
   createdAt: Date;
@@ -153,23 +160,25 @@ export interface RotationPolicyMetadata {
   tags: string[];
   compliance: ComplianceRequirement[];
   auditTrail: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceRequirement {
   standard: string; // e.g., 'SOC2', 'PCI-DSS', 'HIPAA', 'GDPR'
   requirement: string;
   mandatoryRotationPeriod: number; // milliseconds
   auditFrequency: number; // milliseconds
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ManagedCredential {
   credentialId: string;
   name: string;
@@ -185,12 +194,13 @@ export interface ManagedCredential {
   configuration: CredentialConfiguration;
   dependencies: CredentialDependency[];
   metadata: CredentialMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CredentialVersion {
   versionId: string;
   version: number;
@@ -202,12 +212,13 @@ export interface CredentialVersion {
   rotationJobId?: string;
   validationResult?: ValidationResult;
   rollbackCapable: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CredentialConfiguration {
   scope: 'global' | 'service' | 'user' | 'environment';
   environment: string[];
@@ -215,23 +226,25 @@ export interface CredentialConfiguration {
   accessLevel: 'read' | 'write' | 'admin' | 'service';
   restrictions: AccessRestriction[];
   customSettings: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessRestriction {
   type: 'ip_range' | 'time_window' | 'usage_count' | 'geo_location' | 'custom';
   value: string;
   enabled: boolean;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CredentialDependency {
   dependencyId: string;
   type: 'service' | 'database' | 'api' | 'certificate' | 'user';
@@ -240,12 +253,13 @@ export interface CredentialDependency {
   rotationOrder: number;
   validationEndpoint?: string;
   rollbackSupport: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CredentialMetadata {
   owner: string;
   team: string;
@@ -255,12 +269,13 @@ export interface CredentialMetadata {
   dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
   tags: Record<string, string>;
   customAttributes: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationJob {
   jobId: string;
   credentialId: string;
@@ -277,12 +292,13 @@ export interface RotationJob {
   errors: RotationError[];
   rollbackJob?: RollbackJob;
   metadata: JobMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationAttempt {
   attemptId: string;
   attempt: number;
@@ -293,12 +309,13 @@ export interface RotationAttempt {
   error?: RotationError;
   rollbackRequired: boolean;
   validationResults: ValidationResult[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationStep {
   stepId: string;
   name: string;
@@ -310,12 +327,13 @@ export interface RotationStep {
   output?: any;
   error?: string;
   rollbackData?: any;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationError {
   errorId: string;
   timestamp: Date;
@@ -326,12 +344,13 @@ export interface RotationError {
   stackTrace?: string;
   recoverable: boolean;
   retryable: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackJob {
   rollbackJobId: string;
   originalJobId: string;
@@ -341,12 +360,13 @@ export interface RollbackJob {
   completedAt?: Date;
   status: 'pending' | 'in_progress' | 'completed' | 'failed';
   steps: RollbackStep[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackStep {
   stepId: string;
   name: string;
@@ -354,12 +374,13 @@ export interface RollbackStep {
   previousValue?: string;
   rollbackAction: string;
   completedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationResult {
   validationId: string;
   timestamp: Date;
@@ -368,46 +389,50 @@ export interface ValidationResult {
   score?: number;
   details: ValidationDetails;
   recommendations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationDetails {
   checks: ValidationCheck[];
   metrics: Record<string, number>;
   compliance: ComplianceCheck[];
   warnings: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationCheck {
   name: string;
   passed: boolean;
   expected: any;
   actual: any;
   severity: 'info' | 'warning' | 'error' | 'critical';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceCheck {
   standard: string;
   requirement: string;
   compliant: boolean;
   details: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface JobMetadata {
   initiatedBy: string;
   reason: string;
@@ -416,18 +441,20 @@ export interface JobMetadata {
   relatedJobs: string[];
   estimatedDuration: number;
   actualDuration?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationAnalytics {
   timeRange: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   totalRotations: number;
   successfulRotations: number;
@@ -439,22 +466,23 @@ export interface RotationAnalytics {
   trends: RotationTrends;
   topErrors: RotationErrorAnalysis[];
   recommendations: string[];
-}
 
-}
-}
+
+
+
 export interface ComplianceMetrics {
   overallCompliance: number; // percentage
   standardCompliance: Record<string, number>;
   overdueRotations: number;
   expiredCredentials: number;
   complianceViolations: ComplianceViolation[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceViolation {
   violationId: string;
   credentialId: string;
@@ -464,23 +492,25 @@ export interface ComplianceViolation {
   detectedAt: Date;
   resolved: boolean;
   resolution?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationTrends {
   rotationFrequency: TrendData;
   successRate: TrendData;
   averageDuration: TrendData;
   errorRate: TrendData;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrendData {
   current: number;
   previous: number;
@@ -488,21 +518,23 @@ export interface TrendData {
   changePercentage: number;
   trend: 'increasing' | 'decreasing' | 'stable';
   dataPoints: DataPoint[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataPoint {
   timestamp: Date;
   value: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationErrorAnalysis {
   errorType: string;
   count: number;
@@ -510,9 +542,10 @@ export interface RotationErrorAnalysis {
   averageResolutionTime: number;
   topAffectedCredentials: string[];
   recommendedActions: string[];
-}
-}
-}
+
+
+
+
 
 // ==========================================
 // ROTATION MANAGEMENT SERVICE IMPLEMENTATION
@@ -533,7 +566,7 @@ export class RotationManagementService {
     this.auditService = new AuditService(this.databaseService);
     this.initializeDefaultPolicies();
     this.startRotationScheduler();
-  }
+
 
   // ==========================================
   // ROTATION POLICY MANAGEMENT
@@ -560,10 +593,10 @@ export class RotationManagementService {
             requirement: 'Credential rotation', 
             mandatoryRotationPeriod: policy.rotationInterval,
             auditFrequency: policy.rotationInterval / 4
-          }] 
+] 
           : [],
         auditTrail: [`Created: ${new Date().toISOString()}`]
-      }
+
     };
 
     // Validate policy configuration
@@ -584,12 +617,12 @@ export class RotationManagementService {
         rotationType: policy.rotationType,
         rotationInterval: policy.rotationInterval,
         autoRotate: policy.autoRotate
-      }
+
     });
 
     console.log(`Rotation policy created: ${policyId} (${policy.name})`);
     return policyId;
-  }
+
 
   async updateRotationPolicy(
     policyId: string, 
@@ -599,7 +632,7 @@ export class RotationManagementService {
     const existingPolicy = this.rotationPolicies.get(policyId);
     if (!existingPolicy) {
       throw new Error(`Rotation policy not found: ${policyId}`);
-    }
+
 
     const updatedPolicy: RotationPolicy = {
       ...existingPolicy,
@@ -613,7 +646,7 @@ export class RotationManagementService {
           ...existingPolicy.metadata.auditTrail,
           `Updated: ${new Date().toISOString()}`
         ]
-      }
+
     };
 
     // Validate updated policy
@@ -626,7 +659,7 @@ export class RotationManagementService {
     // Update scheduled rotations if interval changed
     if (updates.rotationInterval && updates.rotationInterval !== existingPolicy.rotationInterval) {
       await this.rescheduleCredentialRotations(policyId);
-    }
+
 
     // Audit logging
     await this.auditService.logAction({
@@ -637,9 +670,9 @@ export class RotationManagementService {
         policyId,
         changes: updates,
         version: updatedPolicy.metadata.version
-      }
+
     });
-  }
+
 
   // ==========================================
   // CREDENTIAL MANAGEMENT
@@ -654,7 +687,7 @@ export class RotationManagementService {
     const policy = this.rotationPolicies.get(credential.policyId);
     if (!policy) {
       throw new Error(`Rotation policy not found: ${credential.policyId}`);
-    }
+
 
     // Generate initial credential version
     const initialValue = await this.generateCredential(policy.rotationType, policy.requirements);
@@ -692,7 +725,7 @@ export class RotationManagementService {
         dataClassification: 'restricted',
         tags: { 'auto-managed': 'true', 'epic17': 'true' },
         customAttributes: {}
-      }
+
     };
 
     // Store credential
@@ -702,7 +735,7 @@ export class RotationManagementService {
     // Schedule rotation if auto-rotation is enabled
     if (policy.autoRotate) {
       await this.scheduleRotation(credentialId);
-    }
+
 
     // Audit logging
     await this.auditService.logAction({
@@ -715,12 +748,12 @@ export class RotationManagementService {
         type: credential.type,
         policyId: credential.policyId,
         nextRotationDue: managedCredential.nextRotationDue
-      }
+
     });
 
     console.log(`Credential registered: ${credentialId} (${credential.name})`);
     return credentialId;
-  }
+
 
   async rotateCredential(
     credentialId: string, 
@@ -731,12 +764,12 @@ export class RotationManagementService {
     const credential = this.managedCredentials.get(credentialId);
     if (!credential) {
       throw new Error(`Credential not found: ${credentialId}`);
-    }
+
 
     const policy = this.rotationPolicies.get(credential.policyId);
     if (!policy) {
       throw new Error(`Rotation policy not found: ${credential.policyId}`);
-    }
+
 
     const jobId = `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
@@ -758,7 +791,7 @@ export class RotationManagementService {
         context: { priority },
         relatedJobs: [],
         estimatedDuration: this.estimateRotationDuration(credential.type)
-      }
+
     };
 
     // Add to job queue
@@ -768,7 +801,7 @@ export class RotationManagementService {
     // Process immediately if high priority
     if (priority === RotationPriority.CRITICAL || priority === RotationPriority.EMERGENCY) {
       await this.processRotationJob(rotationJob);
-    }
+
 
     // Audit logging
     await this.auditService.logAction({
@@ -781,11 +814,11 @@ export class RotationManagementService {
         reason,
         priority,
         scheduledAt: rotationJob.scheduledAt
-      }
+
     });
 
     return jobId;
-  }
+
 
   // ==========================================
   // JOB PROCESSING
@@ -832,7 +865,7 @@ export class RotationManagementService {
           step.status = 'completed';
           step.completedAt = new Date();
           step.duration = Date.now() - step.startedAt!.getTime();
-        } catch (error) {
+ catch (error) {
           step.status = 'failed';
           step.error = error.message;
           step.completedAt = new Date();
@@ -856,13 +889,13 @@ export class RotationManagementService {
 
           if (!rotationError.retryable || job.currentAttempt >= job.maxAttempts) {
             throw error;
-          }
+
 
           // Wait before retry
           await this.delay(this.calculateRetryDelay(job.currentAttempt));
           break;
-        }
-      }
+
+
 
       // Complete attempt
       attempt.completedAt = new Date();
@@ -882,11 +915,10 @@ export class RotationManagementService {
       if (policy.autoRotate) {
         credential.nextRotationDue = new Date(Date.now() + policy.rotationInterval);
         await this.scheduleRotation(job.credentialId);
-      }
+
 
       console.log(`Rotation completed: ${job.jobId} for credential ${job.credentialId}`);
-
-    } catch (error) {
+ catch (error) {
       job.status = RotationStatus.FAILED;
       job.completedAt = new Date();
       job.duration = performance.now() - startTime;
@@ -895,13 +927,13 @@ export class RotationManagementService {
       const policy = this.rotationPolicies.get(job.policyId)!;
       if (policy.rollbackPolicy.enabled && policy.rollbackPolicy.automaticRollback) {
         await this.initiateRollback(job, 'Automatic rollback due to rotation failure');
-      }
+
 
       // Send failure notifications
       await this.sendRotationNotification(job, 'rotation_failed');
 
       console.error(`Rotation failed: ${job.jobId} - ${error.message}`);
-    } finally {
+ finally {
       // Clean up active job
       this.activeJobs.delete(job.jobId);
 
@@ -925,10 +957,10 @@ export class RotationManagementService {
           duration: job.duration,
           attempts: job.currentAttempt,
           errors: job.errors.length
-        }
+
       });
-    }
-  }
+
+
 
   private async getRotationSteps(job: RotationJob): Promise<RotationStepConfig[]> {
 
@@ -940,41 +972,41 @@ export class RotationManagementService {
         name: 'validate_prerequisites',
         description: 'Validate rotation prerequisites',
         execute: async () => this.validateRotationPrerequisites(credential, policy)
-  }
+
       {
         name: 'generate_new_credential',
         description: 'Generate new credential value',
         execute: async () => this.generateCredential(credential.type, policy.requirements)
-  }
+
       {
         name: 'validate_new_credential',
         description: 'Validate new credential',
         execute: async (newValue: string) => this.validateCredential(newValue, policy.requirements)
-  }
+
       {
         name: 'update_credential_store',
         description: 'Update credential in secure store',
         execute: async (newValue: string) => this.updateCredentialStore(credential, newValue)
-  }
+
       {
         name: 'distribute_to_services',
         description: 'Distribute new credential to dependent services',
         execute: async () => this.distributeCredential(credential)
-  }
+
       {
         name: 'verify_functionality',
         description: 'Verify services are functioning with new credential',
         execute: async () => this.verifyCredentialFunctionality(credential)
-  }
+
       {
         name: 'cleanup_old_credential',
         description: 'Clean up old credential after grace period',
         execute: async () => this.scheduleCredentialCleanup(credential, policy.gracePeriod)
-      }
+
     ];
 
     return steps;
-  }
+
 
   private async executeRotationStep(
     job: RotationJob, 
@@ -990,14 +1022,14 @@ export class RotationManagementService {
       // Store rollback data if step supports it
       if (stepConfig.rollbackData) {
         step.rollbackData = await stepConfig.rollbackData();
-      }
+
 
       return result;
-    } catch (error) {
+ catch (error) {
       console.error(`Rotation step failed: ${step.name} - ${error.message}`);
       throw error;
-    }
-  }
+
+
 
   // ==========================================
   // CREDENTIAL OPERATIONS
@@ -1018,8 +1050,8 @@ export class RotationManagementService {
       return this.generateServiceToken(requirements);
     default:
       return this.generateGenericCredential(requirements);
-    }
-  }
+
+
 
   private generateApiKey(requirements: RotationRequirements): string {
     const prefix = 'epic17_';
@@ -1029,15 +1061,15 @@ export class RotationManagementService {
     let key = '';
     for (let i = 0; i < keyLength; i++) {
       key += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+
     
     return prefix + key;
-  }
+
 
   private generateJWTSecret(requirements: RotationRequirements): string {
     const keyLength = requirements.keyLength || 64;
     return crypto.randomBytes(keyLength).toString('hex');
-  }
+
 
   private generatePassword(requirements: RotationRequirements): string {
     const length = requirements.keyLength || 16;
@@ -1046,15 +1078,15 @@ export class RotationManagementService {
     let chars = 'abcdefghijklmnopqrstuvwxyz';
     if (complexity !== 'simple') {
       chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    }
+
     if (complexity === 'complex' || complexity === 'maximum') {
       chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
-    }
+
     
     let password = '';
     for (let i = 0; i < length; i++) {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+
     
     // Ensure required characters are included
     if (requirements.mustInclude) {
@@ -1062,17 +1094,17 @@ export class RotationManagementService {
         if (!password.includes(required)) {
           const pos = Math.floor(Math.random() * password.length);
           password = password.substring(0, pos) + required + password.substring(pos + 1);
-        }
-      }
-    }
+
+
+
     
     return password;
-  }
+
 
   private generateEncryptionKey(requirements: RotationRequirements): string {
     const keyLength = requirements.keyLength || 32;
     return crypto.randomBytes(keyLength).toString('base64');
-  }
+
 
   private generateServiceToken(requirements: RotationRequirements): string {
     const timestamp = Date.now();
@@ -1082,12 +1114,12 @@ export class RotationManagementService {
       .digest('hex');
     
     return `${timestamp}:${randomBytes}:${signature}`;
-  }
+
 
   private generateGenericCredential(requirements: RotationRequirements): string {
     const length = requirements.keyLength || 32;
     return crypto.randomBytes(length).toString('hex');
-  }
+
 
   private async validateCredential(
     credential: string, 
@@ -1116,7 +1148,7 @@ export class RotationManagementService {
         actual: regex.test(credential) ? 'present' : 'not present',
         severity: 'error'
       });
-    }
+
 
     // Required characters check
     for (const required of requirements.mustInclude || []) {
@@ -1127,7 +1159,7 @@ export class RotationManagementService {
         actual: credential.includes(required) ? 'present' : 'not present',
         severity: 'error'
       });
-    }
+
 
     const passedChecks = checks.filter(c => c.passed).length;
     const totalChecks = checks.length;
@@ -1147,17 +1179,17 @@ export class RotationManagementService {
           score: score,
           passedChecks,
           totalChecks
-  }
+
         compliance: [],
         warnings: checks.filter(c => !c.passed && c.severity === 'warning').map(c => c.name)
-  }
+
       recommendations: passed ? [] : [
         'Regenerate credential with stronger requirements',
         'Review credential policy configuration',
         'Ensure all validation checks pass before deployment'
       ]
     };
-  }
+
 
   private async encryptCredential(credential: string, salt: string): Promise<string> {
 
@@ -1170,7 +1202,7 @@ export class RotationManagementService {
     encrypted += cipher.final('hex');
     
     return `${iv.toString('hex')}:${encrypted}`;
-  }
+
 
   private async decryptCredential(encryptedCredential: string, salt: string): Promise<string> {
 
@@ -1185,7 +1217,7 @@ export class RotationManagementService {
     decrypted += decipher.final('utf8');
     
     return decrypted;
-  }
+
 
   // ==========================================
   // SCHEDULING & AUTOMATION
@@ -1199,7 +1231,7 @@ export class RotationManagementService {
     }, 60000);
 
     console.log('Rotation scheduler started');
-  }
+
 
   private async checkScheduledRotations(): Promise<void> {
 
@@ -1214,10 +1246,10 @@ export class RotationManagementService {
             'Scheduled automatic rotation',
             RotationPriority.MEDIUM
           );
-        }
-      }
-    }
-  }
+
+
+
+
 
   private async processJobQueue(): Promise<void> {
 
@@ -1243,7 +1275,7 @@ export class RotationManagementService {
     
     const processingPromises = jobsToProcess.map(job => this.processRotationJob(job));
     await Promise.allSettled(processingPromises);
-  }
+
 
   private async scheduleRotation(credentialId: string): Promise<void> {
 
@@ -1257,7 +1289,7 @@ export class RotationManagementService {
     const existingTimeout = this.scheduledRotations.get(credentialId);
     if (existingTimeout) {
       clearTimeout(existingTimeout);
-    }
+
 
     // Calculate next rotation time
     const nextRotationTime = credential.nextRotationDue.getTime();
@@ -1274,7 +1306,7 @@ export class RotationManagementService {
     }, delayMs);
 
     this.scheduledRotations.set(credentialId, timeout);
-  }
+
 
   // ==========================================
   // UTILITY METHODS
@@ -1284,22 +1316,22 @@ export class RotationManagementService {
 
     if (policy.rotationInterval < 60000) {
       throw new Error('Rotation interval must be at least 1 minute');
-    }
+
     
     if (policy.gracePeriod < 0) {
       throw new Error('Grace period cannot be negative');
-    }
+
     
     if (policy.maxRetries < 0 || policy.maxRetries > 10) {
       throw new Error('Max retries must be between 0 and 10');
-    }
-  }
+
+
 
   private incrementVersion(version: string): string {
     const parts = version.split('.');
     const patch = parseInt(parts[2] || '0') + 1;
     return `${parts[0]}.${parts[1]}.${patch}`;
-  }
+
 
   private estimateRotationDuration(type: RotationType): number {
     const estimates = {
@@ -1313,7 +1345,7 @@ export class RotationManagementService {
     };
     
     return estimates[type] || 60000; // Default 1 minute
-  }
+
 
   private categorizeError(error: Error): 'validation' | 'generation' | 'distribution' | 'verification' | 'rollback' | 'system' {
     const message = error.message.toLowerCase();
@@ -1325,35 +1357,35 @@ export class RotationManagementService {
     if (message.includes('rollback') || message.includes('restore')) return 'rollback';
     
     return 'system';
-  }
+
 
   private isRecoverable(error: Error): boolean {
     const unrecoverablePatterns = ['authentication', 'authorization', 'permission', 'quota'];
     return !unrecoverablePatterns.some(pattern => 
       error.message.toLowerCase().includes(pattern)
     );
-  }
+
 
   private isRetryable(error: Error): boolean {
     const nonRetryablePatterns = ['validation', 'invalid format', 'malformed'];
     return !nonRetryablePatterns.some(pattern => 
       error.message.toLowerCase().includes(pattern)
     );
-  }
+
 
   private calculateRetryDelay(attempt: number): number {
     // Exponential backoff: 1s, 2s, 4s, 8s, ...
     return Math.min(1000 * Math.pow(2, attempt - 1), 30000); // Max 30 seconds
-  }
+
 
   private async delay(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   private initializeDefaultPolicies(): void {
     console.log('Rotation Management Service initialized with default policies');
-  }
+
 
   // ==========================================
   // PLACEHOLDER METHODS
@@ -1363,31 +1395,31 @@ export class RotationManagementService {
 
     // Mock validation - would check dependencies, services health, etc.
     return true;
-  }
+
 
   private async updateCredentialStore(credential: ManagedCredential, newValue: string): Promise<void> {
 
     console.log(`Updating credential store for ${credential.credentialId}`);
     // Would update secure credential storage
-  }
+
 
   private async distributeCredential(credential: ManagedCredential): Promise<void> {
 
     console.log(`Distributing credential ${credential.credentialId} to dependencies`);
     // Would distribute to dependent services
-  }
+
 
   private async verifyCredentialFunctionality(credential: ManagedCredential): Promise<void> {
 
     console.log(`Verifying functionality for credential ${credential.credentialId}`);
     // Would verify services are working with new credential
-  }
+
 
   private async scheduleCredentialCleanup(credential: ManagedCredential, gracePeriod: number): Promise<void> {
 
     console.log(`Scheduling cleanup for credential ${credential.credentialId} in ${gracePeriod}ms`);
     // Would schedule old credential removal after grace period
-  }
+
 
   private async updateCredentialAfterRotation(job: RotationJob, attempt: RotationAttempt): Promise<void> {
 
@@ -1400,40 +1432,40 @@ export class RotationManagementService {
 
     // Store updated credential
     this.managedCredentials.set(job.credentialId, credential);
-  }
+
 
   private async initiateRollback(job: RotationJob, reason: string): Promise<void> {
 
     console.log(`Initiating rollback for job ${job.jobId}: ${reason}`);
     // Would implement rollback logic
-  }
+
 
   private async sendRotationNotification(job: RotationJob, event: string): Promise<void> {
 
     console.log(`Sending notification for job ${job.jobId}: ${event}`);
     // Would send notifications via configured channels
-  }
+
 
   private async rescheduleCredentialRotations(policyId: string): Promise<void> {
 
     console.log(`Rescheduling rotations for policy ${policyId}`);
     // Would reschedule all credentials using this policy
-  }
+
 
   private async persistRotationPolicy(policy: RotationPolicy): Promise<void> {
 
     console.log(`Persisting rotation policy: ${policy.policyId}`);
-  }
+
 
   private async persistCredential(credential: ManagedCredential): Promise<void> {
 
     console.log(`Persisting credential: ${credential.credentialId}`);
-  }
+
 
   private async persistRotationJob(job: RotationJob): Promise<void> {
 
     console.log(`Persisting rotation job: ${job.jobId}`);
-  }
+
 
   // ==========================================
   // PUBLIC API METHODS
@@ -1445,15 +1477,15 @@ export class RotationManagementService {
     
     if (filters?.type) {
       policies = policies.filter(policy => policy.rotationType === filters.type);
-    }
+
     
     return policies;
-  }
+
 
   async getRotationPolicy(policyId: string): Promise<RotationPolicy | null> {
 
     return this.rotationPolicies.get(policyId) || null;
-  }
+
 
   async getManagedCredentials(filters?: { status?: RotationStatus; type?: RotationType }): Promise<ManagedCredential[]> {
 
@@ -1461,14 +1493,14 @@ export class RotationManagementService {
     
     if (filters?.status) {
       credentials = credentials.filter(cred => cred.status === filters.status);
-    }
+
     
     if (filters?.type) {
       credentials = credentials.filter(cred => cred.type === filters.type);
-    }
+
     
     return credentials;
-  }
+
 
   async getRotationJobs(filters?: { status?: RotationStatus; credentialId?: string }): Promise<RotationJob[]> {
 
@@ -1476,14 +1508,14 @@ export class RotationManagementService {
     
     if (filters?.status) {
       jobs = jobs.filter(job => job.status === filters.status);
-    }
+
     
     if (filters?.credentialId) {
       jobs = jobs.filter(job => job.credentialId === filters.credentialId);
-    }
+
     
     return jobs;
-  }
+
 
   async getRotationAnalytics(
     timeRange: { start: Date; end: Date }
@@ -1501,18 +1533,18 @@ export class RotationManagementService {
         [RotationType.JWT_SECRET]: 10,
         [RotationType.DATABASE_PASSWORD]: 8,
         [RotationType.SERVICE_TOKEN]: 12
-      } as Record<RotationType, number>,
+ as Record<RotationType, number>,
       rotationsByStatus: {
         [RotationStatus.COMPLETED]: 42,
         [RotationStatus.FAILED]: 3
-      } as Record<RotationStatus, number>,
+ as Record<RotationStatus, number>,
       complianceMetrics: {
         overallCompliance: 95.5,
         standardCompliance: { 'Epic17': 95.5 },
         overdueRotations: 2,
         expiredCredentials: 1,
         complianceViolations: []
-  }
+
       trends: {
         rotationFrequency: {
           current: 45,
@@ -1521,7 +1553,7 @@ export class RotationManagementService {
           changePercentage: 18.4,
           trend: 'increasing',
           dataPoints: []
-  }
+
         successRate: {
           current: 93.3,
           previous: 91.2,
@@ -1529,7 +1561,7 @@ export class RotationManagementService {
           changePercentage: 2.3,
           trend: 'increasing',
           dataPoints: []
-  }
+
         averageDuration: {
           current: 45000,
           previous: 52000,
@@ -1537,7 +1569,7 @@ export class RotationManagementService {
           changePercentage: -13.5,
           trend: 'decreasing',
           dataPoints: []
-  }
+
         errorRate: {
           current: 6.7,
           previous: 8.8,
@@ -1545,8 +1577,8 @@ export class RotationManagementService {
           changePercentage: -23.9,
           trend: 'decreasing',
           dataPoints: []
-        }
-  }
+
+
       topErrors: [
         {
           errorType: 'network_timeout',
@@ -1555,7 +1587,7 @@ export class RotationManagementService {
           averageResolutionTime: 300000,
           topAffectedCredentials: ['cred_db_main', 'cred_api_service'],
           recommendedActions: ['Increase timeout values', 'Implement retry logic']
-        }
+
       ],
       recommendations: [
         'Consider increasing rotation frequency for critical credentials',
@@ -1563,20 +1595,20 @@ export class RotationManagementService {
         'Implement automated rollback for failed rotations'
       ]
     };
-  }
-}
+
+
 
 // ==========================================
 // HELPER INTERFACES
 // ==========================================
 
-}
-}
+
+
 interface RotationStepConfig {
   name: string;
   description: string;
   execute: (input?: any) => Promise<any>;
   rollbackData?: () => Promise<any>;
-}
-}
-}
+
+
+

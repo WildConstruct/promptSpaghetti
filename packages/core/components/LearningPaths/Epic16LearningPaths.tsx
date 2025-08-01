@@ -6,29 +6,28 @@
  * & Community learning system.
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  LearningPath,
-  UserEnrollment,
+import { LearningPath,
+  UserEnrollment }
   Epic16LearningPathService
-} from '../../services/Epic16LearningPathService';
+ from '../../services/Epic16LearningPathService';
 import { LearningPathDashboard } from './LearningPathDashboard';
 import { LearningPathViewer } from './LearningPathViewer';
-}
-interface Epic16LearningPathsProps {
-  userId: string;
+
+
+interface Epic16LearningPathsProps { userId: string;
   userRole: 'user' | 'creator' | 'admin';
   userTier: 'free' | 'premium' | 'enterprise';
   onAnalytics?: (analytics: unknown) => void;
   onCertification?: (certification: unknown) => void;
-  export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({,)
-  userId,
-  userRole,
-  userTier,
-  onAnalytics,
+  export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({);
+  userId;
+  userRole;
+  userTier;
+  onAnalytics }
   onCertification
-}
-}) => {
-  // Service initialization
+
+
+}) => { // Service initialization
   const learningService = useMemo(() => new Epic16LearningPathService(), []);
   // State management
   const [currentView, setCurrentView] = useState<'dashboard' | 'viewer'>('dashboard');
@@ -44,35 +43,23 @@ interface Epic16LearningPathsProps {
       try {
         // Set up service event listeners for analytics and certifications
         learningService.on('certificateEarned', (certificate) => {
-          onCertification?.(certificate);
-        });
-        learningService.on('analyticsUpdate', (analytics) => {
-          onAnalytics?.(analytics);
-        });
+          onCertification?.(certificate) });
+        learningService.on('analyticsUpdate', (analytics) => { onAnalytics?.(analytics) });
         learningService.on('pathCompleted', async (data) => {
           const { userId: completedUserId, pathId } = data;
           if (completedUserId === userId) {
             // Handle path completion
             console.log(`Path ${pathId} completed by user ${userId}`);}
         });
-        learningService.on('skillUnlocked', (skill) => {
-  // Handle skill unlock notifications
-  console.log('Skill unlocked:', skill);
-});
-      } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to initialize learning service');
-} finally {
-        setLoading(false);
-    };
+        learningService.on('skillUnlocked', (skill) => { // Handle skill unlock notifications
+  console.log('Skill unlocked:', skill) });
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to initialize learning service') } finally { setLoading(false) };
     initializeService();
     // Cleanup event listeners
-    return () => {
-      learningService.removeAllListeners();
-    };
+    return () => { learningService.removeAllListeners() };
   }, [learningService, userId, onAnalytics, onCertification]);
   // Handle path selection from dashboard
-  const handlePathSelect = useCallback(async (path: LearningPath) => {
-    setLoading(true);
+  const handlePathSelect = useCallback(async (path: LearningPath) => { setLoading(true);
     setError(null);
     try {
       setSelectedPath(path);
@@ -84,35 +71,25 @@ interface Epic16LearningPathsProps {
       if (!enrollment) {
         const newEnrollment = await learningService.enrollUser(userId, path.id);
         setUserEnrollment(newEnrollment);
-      setCurrentView('viewer');
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load learning path');
-} finally {
-      setLoading(false);
-  }, [learningService, userId]);
+      setCurrentView('viewer') } catch (err) { setError(err instanceof Error ? err.message : 'Failed to load learning path') } finally { setLoading(false) }, [learningService, userId]);
   // Handle progress updates
-  const handleProgress = useCallback((progress: number) => {
-  if (userEnrollment) {
+  const handleProgress = useCallback((progress: number) => { if (userEnrollment) {
   setUserEnrollment({)
-  ...userEnrollment,
+  ...userEnrollment
   progress: {
-  ...userEnrollment.progress,
-  overallProgress: progress,
+  ...userEnrollment.progress
+  overallProgress: progress }
 });
   }, [userEnrollment]);
   // Handle path completion
-  const handlePathComplete = useCallback(() => {
-    // Show completion celebration or navigate back to dashboard
+  const handlePathComplete = useCallback(() => { // Show completion celebration or navigate back to dashboard
     setCurrentView('dashboard');
     setSelectedPath(null);
-    setUserEnrollment(null);
-  }, []);
+    setUserEnrollment(null) }, []);
   // Handle back to dashboard
-  const handleBackToDashboard = useCallback(() => {
-    setCurrentView('dashboard');
+  const handleBackToDashboard = useCallback(() => { setCurrentView('dashboard');
     setSelectedPath(null);
-    setUserEnrollment(null);
-  }, []);
+    setUserEnrollment(null) }, []);
   // Render loading state
   if (loading && !selectedPath) {
     return;

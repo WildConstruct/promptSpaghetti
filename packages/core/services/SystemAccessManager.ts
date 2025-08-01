@@ -15,9 +15,8 @@
  * - Resource-based permissions
  */
 
-}
-export interface SystemUser {
-  id: string;
+
+export interface SystemUser { id: string;
   username: string;
   email: string;
   displayName: string;
@@ -46,12 +45,11 @@ export interface SystemUser {
   // Compliance
   termsAccepted?: Date;
   privacyPolicyAccepted?: Date;
-  dataRetentionConsent?: boolean;
-}
-}
-}
-export interface UserProfile {
-  firstName?: string;
+  dataRetentionConsent?: boolean }
+
+
+
+export interface UserProfile { firstName?: string;
   lastName?: string;
   department?: string;
   jobTitle?: string;
@@ -60,12 +58,11 @@ export interface UserProfile {
   language: string;
   phoneNumber?: string;
   organization?: string;
-  manager?: string;
-}
-}
-}
-export interface UserRole {
-  id: string;
+  manager?: string }
+
+
+
+export interface UserRole { id: string;
   roleId: string;
   roleName: string;
   roleDescription?: string;
@@ -73,12 +70,11 @@ export interface UserRole {
   assignedBy: string;
   expiresAt?: Date;
   scope: RoleScope;
-  context?: Record<string, any>;
-}
-}
-}
-export interface DirectPermission {
-  id: string;
+  context?: Record<string, any> }
+
+
+
+export interface DirectPermission { id: string;
   permission: string;
   resource?: string;
   resourceId?: string;
@@ -87,24 +83,23 @@ export interface DirectPermission {
   grantedAt: Date;
   grantedBy: string;
   expiresAt?: Date;
-  conditions?: PermissionCondition;
-}
-}
-}
-export interface PermissionCondition {
-  type: 'time' | 'location' | 'device' | 'mfa' | 'approval';
+  conditions?: PermissionCondition }
+
+
+
+export interface PermissionCondition { type: 'time' | 'location' | 'device' | 'mfa' | 'approval' }
   constraint: Record<string, any>;
   description: string;
-}
-}
-}
-export interface SystemRole {
-  id: string;
+
+
+
+
+export interface SystemRole { id: string;
   name: string;
   displayName: string;
   description: string;
   type: RoleType;
-  level: number; // Hierarchy level (1-10, 10 = highest),
+  level: number; // Hierarchy level (1-10, 10 = highest);
   // Permissions
   permissions: RolePermission;
   systemAccess: SystemAccessLevel;
@@ -114,24 +109,23 @@ export interface SystemRole {
   canDelegate: boolean;
   // Lifecycle
   isActive: boolean;
-  isSystem: boolean; // Cannot be deleted,
+  isSystem: boolean; // Cannot be deleted }
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-}
-}
-}
-export interface RolePermission {
-  permission: string;
+
+
+
+
+export interface RolePermission { permission: string;
   resource: string;
   actions: string;
   scope: PermissionScope;
-  conditions?: PermissionCondition;
-}
-}
-}
-export interface AccessRequest {
-  id: string;
+  conditions?: PermissionCondition }
+
+
+
+export interface AccessRequest { id: string;
   requesterId: string;
   requesterName: string;
   type: AccessRequestType;
@@ -140,7 +134,7 @@ export interface AccessRequest {
   roleId?: string;
   permissions?: string;
   resource?: string;
-  duration?: number; // hours,
+  duration?: number; // hours }
   // Business justification
   businessJustification: string;
   urgency: AccessUrgency;
@@ -157,60 +151,56 @@ export interface AccessRequest {
   expiresAt?: Date;
   // Audit
   auditTrail: AccessAuditEntry;
-}
-}
-}
-export interface AccessApprover {
-  userId: string;
+
+
+
+
+export interface AccessApprover { userId: string;
   displayName: string;
   order: number;
   required: boolean;
   status: ApprovalStatus;
   respondedAt?: Date;
-  comments?: string;
-}
-}
-}
-export interface AccessAuditEntry {
-  id: string;
+  comments?: string }
+
+
+
+export interface AccessAuditEntry { id: string;
   timestamp: Date;
   action: string;
   performedBy: string;
   details: Record<string, any>;
   ipAddress?: string;
-  userAgent?: string;
-}
-}
-}
-export interface AccessRestriction {
-  type: RestrictionType;
+  userAgent?: string }
+
+
+
+export interface AccessRestriction { type: RestrictionType;
   description: string;
   startDate?: Date;
   endDate?: Date;
   conditions: Record<string, any>;
   appliedBy: string;
-  appliedAt: Date;
-}
-}
-}
-export interface SystemAccess {
-  id: string;
+  appliedAt: Date }
+
+
+
+export interface SystemAccess { id: string;
   userId: string;
   level: SystemAccessLevel;
   grantedAt: Date;
   grantedBy: string;
   lastUsed?: Date;
-  restrictions: SystemRestriction;
-}
-}
-}
-export interface SystemRestriction {
-  type: 'ip_whitelist' | 'time_window' | 'mfa_required' | 'approval_required' | 'read_only';
+  restrictions: SystemRestriction }
+
+
+
+export interface SystemRestriction { type: 'ip_whitelist' | 'time_window' | 'mfa_required' | 'approval_required' | 'read_only' }
   configuration: Record<string, any>;
   description: string;
   // Enums and Types
-}
-}
+
+
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'locked' | 'pending' | 'deactivated';
 export type SystemAccessLevel = 'none' | 'basic' | 'advanced' | 'admin' | 'super_admin' | 'system';
 export type SecurityClearance = 'public' | 'internal' | 'confidential' | 'restricted' | 'top_secret';
@@ -223,9 +213,8 @@ export type AccessRequestStatus = 'pending' | 'approved' | 'rejected' | 'expired
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'delegated';
 export type RestrictionType = 'time' | 'location' | 'device' | 'resource' | 'action' | 'network';
 
-}
-export interface AccessFilter {
-  userIds?: string;
+
+export interface AccessFilter { userIds?: string;
   roles?: string;
   statuses?: UserStatus;
   accessLevels?: SystemAccessLevel;
@@ -235,38 +224,36 @@ export interface AccessFilter {
   lastActivityAfter?: Date;
   searchQuery?: string;
   includeInactive?: boolean;
-  securityClearance?: SecurityClearance;
-}
-}
-}
-export interface AccessStats {
-  totalUsers: number;
+  securityClearance?: SecurityClearance }
+
+
+
+export interface AccessStats { totalUsers: number;
   activeUsers: number;
   pendingRequests: number;
   expiredAccesses: number;
   byStatus: Record<UserStatus, number>;
   byAccessLevel: Record<SystemAccessLevel, number>;
   bySecurityClearance: Record<SecurityClearance, number>;
-  recentActivity: {
+  recentActivity: { }
   newUsers: number;
   accessGranted: number;
   accessRevoked: number;
   loginAttempts: number;
   failedLogins: number;
-}
+
+
 };
-  compliance: {
+  compliance: { 
   mfaEnabled: number;
   termsAccepted: number;
   overdueCertifications: number;
-  pendingReviews: number;
-};
+  pendingReviews: number };
 /**
  * System Access Management Service
  */
-}
-export class SystemAccessManager {
-  private static instance: SystemAccessManager;
+
+export class SystemAccessManager { private static instance: SystemAccessManager;
   private users: Map<string, SystemUser> = new Map();
   private roles: Map<string, SystemRole> = new Map();
   private accessRequests: Map<string, AccessRequest> = new Map();
@@ -274,7 +261,7 @@ export class SystemAccessManager {
   private constructor() {
   this.initializeSystemRoles();
   this.startMaintenanceTasks();
-  static getInstance(): SystemAccessManager {,
+  static getInstance(): SystemAccessManager {
   if (!SystemAccessManager.instance) {
   SystemAccessManager.instance = new SystemAccessManager();
   return SystemAccessManager.instance;
@@ -282,75 +269,70 @@ export class SystemAccessManager {
   * User Management
   */
   async createUser(userData: Omit<SystemUser, 'id' | 'createdAt' | 'updatedAt'>)
-  createdBy: string): Promise<SystemUser> {,
-  const user: SystemUser = {,
-  ...userData,
-  id: this.generateUserId(),
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdBy: string): Promise<SystemUser> {
+  const user: SystemUser = {
+  ...userData
+  id: this.generateUserId()
+  createdAt: new Date()
+  updatedAt: new Date() }
   createdBy
 };
     // Validate user data
     this.validateUserData(user);
     // Apply default settings
-    if (!user.systemAccess) {
-  user.systemAccess = 'basic';
+    if (!user.systemAccess) { user.systemAccess = 'basic';
   this.users.set(user.id, user);
   this.auditAction('user_created', createdBy, {)
-  userId: user.id,
-  username: user.username,
-  email: user.email,
+  userId: user.id
+  username: user.username
+  email: user.email }
 });
     return user;
   async updateUser(userId: string)
-    updates: Partial<SystemUser>,
-    updatedBy: string): Promise<SystemUser | null> {,
+  updates: Partial<SystemUser>
+    updatedBy: string): Promise<SystemUser | null> {
     const user = this.users.get(userId);
     if (!user) return null;
     const oldData = { ...user };
-    const updatedUser: SystemUser = {
-  ...user,
-  ...updates,
-  id: userId, // Ensure ID cannot be changed,
-  updatedAt: new Date(),
-  lastModifiedBy: updatedBy,
+    const updatedUser: SystemUser = { ...user
+  ...updates
+  id: userId, // Ensure ID cannot be changed
+  updatedAt: new Date()
+  lastModifiedBy: updatedBy }
 };
     this.validateUserData(updatedUser);
     this.users.set(userId, updatedUser);
-    this.auditAction('user_updated', updatedBy, {)
-  userId,
-  changes: this.calculateChanges(oldData, updatedUser),
+    this.auditAction('user_updated', updatedBy, { )
+  userId
+  changes: this.calculateChanges(oldData, updatedUser) }
 });
     return updatedUser;
-  async deleteUser(userId: string, deletedBy: string): Promise<boolean> {
-
-  const user = this.users.get(userId);
+  async deleteUser(userId: string, deletedBy: string): Promise<boolean> { const user = this.users.get(userId);
   if (!user) return false;
   // Deactivate instead of hard delete for audit purposes
-  const deactivatedUser: SystemUser = {,
-  ...user,
-  status: 'deactivated',
-  isActive: false,
-  updatedAt: new Date(),
-  lastModifiedBy: deletedBy,
+  const deactivatedUser: SystemUser = {
+  ...user
+  status: 'deactivated'
+  isActive: false
+  updatedAt: new Date()
+  lastModifiedBy: deletedBy }
 };
     this.users.set(userId, deactivatedUser);
-    this.auditAction('user_deactivated', deletedBy, {)
-  userId,
-  username: user.username,
+    this.auditAction('user_deactivated', deletedBy, { )
+  userId
+  username: user.username }
 });
     return true;
   /**
    * Role Management
    */
   async assignRole(userId: string)
-    roleId: string,
-    assignedBy: string,
-    options?: {
-  expiresAt?: Date;
+  roleId: string
+    assignedBy: string
+    options?: { expiresAt?: Date;
   scope?: RoleScope;
   context?: Record<string, any>;
-  ): Promise<boolean> {,
+  ): Promise<boolean> {
   const user = this.users.get(userId);
   const role = this.roles.get(roleId);
   if (!user || !role) return false;
@@ -360,40 +342,38 @@ export class SystemAccessManager {
   // Check if role requires approval
   if (role.requiresApproval && !this.hasApprovalPermission(assignedBy, role.level)) {
   await this.createAccessRequest({)
-  requesterId: assignedBy,
-  requesterName: 'System',
-  type: 'role_assignment',
-  targetUserId: userId,
-  roleId,
-  businessJustification: 'Role assignment request',
-  urgency: 'medium',
+  requesterId: assignedBy
+  requesterName: 'System'
+  type: 'role_assignment'
+  targetUserId: userId
+  roleId
+  businessJustification: 'Role assignment request'
+  urgency: 'medium' }
 });
       return true; // Request created, not immediately assigned
-    const userRole: UserRole = {,
-  id: this.generateId('role'),
-  roleId,
-  roleName: role.name,
-  roleDescription: role.description,
-  assignedAt: new Date(),
-  assignedBy,
-  expiresAt: options?.expiresAt,
-  scope: options?.scope || 'global',
-  context: options?.context,
+    const userRole: UserRole = { 
+  id: this.generateId('role')
+  roleId
+  roleName: role.name
+  roleDescription: role.description
+  assignedAt: new Date()
+  assignedBy
+  expiresAt: options?.expiresAt
+  scope: options?.scope || 'global'
+  context: options?.context }
 };
     user.roles.push(userRole);
     user.updatedAt = new Date();
     user.lastModifiedBy = assignedBy;
     this.users.set(userId, user);
-    this.auditAction('role_assigned', assignedBy, {)
-  userId,
-  roleId,
-  roleName: role.name,
-  expiresAt: options?.expiresAt,
+    this.auditAction('role_assigned', assignedBy, { )
+  userId
+  roleId
+  roleName: role.name
+  expiresAt: options?.expiresAt }
 });
     return true;
-  async revokeRole(userId: string, roleId: string, revokedBy: string): Promise<boolean> {
-
-  const user = this.users.get(userId);
+  async revokeRole(userId: string, roleId: string, revokedBy: string): Promise<boolean> { const user = this.users.get(userId);
   if (!user) return false;
   const roleIndex = user.roles.findIndex(r => r.roleId === roleId);
   if (roleIndex === -1) return false;
@@ -403,52 +383,49 @@ export class SystemAccessManager {
   user.lastModifiedBy = revokedBy;
   this.users.set(userId, user);
   this.auditAction('role_revoked', revokedBy, {)
-  userId,
-  roleId,
-  roleName: removedRole.roleName,
+  userId
+  roleId
+  roleName: removedRole.roleName }
 });
     return true;
   /**
    * Permission Management
    */
   async grantPermission(userId: string)
-    permission: string,
-    resource: string,
-    action: string,
-    grantedBy: string,
-    options?: {
-  resourceId?: string;
+  permission: string
+    resource: string
+    action: string
+    grantedBy: string
+    options?: { resourceId?: string;
   expiresAt?: Date;
   conditions?: PermissionCondition;
-  ): Promise<boolean> {,
+  ): Promise<boolean> {
   const user = this.users.get(userId);
   if (!user) return false;
-  const directPermission: DirectPermission = {,
-  id: this.generateId('permission'),
-  permission,
-  resource,
-  resourceId: options?.resourceId,
-  action,
-  granted: true,
-  grantedAt: new Date(),
-  grantedBy,
-  expiresAt: options?.expiresAt,
-  conditions: options?.conditions,
+  const directPermission: DirectPermission = {
+  id: this.generateId('permission')
+  permission
+  resource
+  resourceId: options?.resourceId
+  action
+  granted: true
+  grantedAt: new Date()
+  grantedBy
+  expiresAt: options?.expiresAt
+  conditions: options?.conditions }
 };
     user.permissions.push(directPermission);
     user.updatedAt = new Date();
     user.lastModifiedBy = grantedBy;
     this.users.set(userId, user);
-    this.auditAction('permission_granted', grantedBy, {)
-  userId,
-      permission,
-      resource,
+    this.auditAction('permission_granted', grantedBy, { )
+  userId
+      permission
+      resource }
       action
     });
     return true;
-  async revokePermission(userId: string, permissionId: string, revokedBy: string): Promise<boolean> {
-
-  const user = this.users.get(userId);
+  async revokePermission(userId: string, permissionId: string, revokedBy: string): Promise<boolean> { const user = this.users.get(userId);
   if (!user) return false;
   const permissionIndex = user.permissions.findIndex(p => p.id === permissionId);
   if (permissionIndex === -1) return false;
@@ -458,46 +435,42 @@ export class SystemAccessManager {
   user.lastModifiedBy = revokedBy;
   this.users.set(userId, user);
   this.auditAction('permission_revoked', revokedBy, {)
-  userId,
-  permission: removedPermission.permission,
-  resource: removedPermission.resource,
+  userId
+  permission: removedPermission.permission
+  resource: removedPermission.resource }
 });
     return true;
   /**
    * Access Request Management
    */
   async createAccessRequest(requestData: Omit<AccessRequest, 'id' | 'requestedAt' | 'status' | 'auditTrail'>)
-  ): Promise<AccessRequest> {
-
-    const request: AccessRequest = {
-      ...requestData,
-      id: this.generateId('request'),
-      requestedAt: new Date(),
-      status: 'pending',
-      approvers: this.determineApprovers(requestData),
-      auditTrail: [{,
-  id: this.generateId('audit'),
-        timestamp: new Date(),
-        action: 'request_created',
-        performedBy: requestData.requesterId,
+  ): Promise<AccessRequest> { const request: AccessRequest = {
+      ...requestData
+      id: this.generateId('request')
+      requestedAt: new Date()
+      status: 'pending'
+      approvers: this.determineApprovers(requestData)
+      auditTrail: [{
+  id: this.generateId('audit')
+        timestamp: new Date()
+        action: 'request_created'
+        performedBy: requestData.requesterId }
         details: { type: requestData.type }
-      }]
+]
     };
     this.accessRequests.set(request.id, request);
-    this.auditAction('access_request_created', requestData.requesterId, {)
-  requestId: request.id,
-  type: requestData.type,
-  urgency: requestData.urgency,
+    this.auditAction('access_request_created', requestData.requesterId, { )
+  requestId: request.id
+  type: requestData.type
+  urgency: requestData.urgency }
 });
     // Notify approvers
     await this.notifyApprovers(request);
     return request;
   async approveAccessRequest(requestId: string)
-    approverId: string,
+  approverId: string
     comments?: string
-  ): Promise<boolean> {
-
-    const request = this.accessRequests.get(requestId);
+  ): Promise<boolean> { const request = this.accessRequests.get(requestId);
     if (!request || request.status !== 'pending') return false;
     // Find approver
     const approver = request.approvers.find(a => a.userId === approverId);
@@ -519,23 +492,22 @@ export class SystemAccessManager {
       // Execute the access request
       await this.executeAccessRequest(request);
     request.auditTrail.push({)
-  id: this.generateId('audit'),
-      timestamp: new Date(),
-      action: 'request_approved',
-      performedBy: approverId,
+  id: this.generateId('audit')
+      timestamp: new Date()
+      action: 'request_approved'
+      performedBy: approverId }
       details: { comments }
     });
     this.accessRequests.set(requestId, request);
-    this.auditAction('access_request_approved', approverId, {)
-  requestId,
-  finalStatus: request.status,
+    this.auditAction('access_request_approved', approverId, { )
+  requestId
+  finalStatus: request.status }
 });
     return true;
   /**
    * Access Control Queries
    */
-  hasPermission(userId: string, permission: string, resource?: string, action?: string): boolean {
-    const user = this.users.get(userId);
+  hasPermission(userId: string, permission: string, resource?: string, action?: string): boolean { const user = this.users.get(userId);
     if (!user || !user.isActive) return false;
     // Check direct permissions
     const hasDirectPermission = user.permissions.some(p => {)
@@ -543,11 +515,10 @@ export class SystemAccessManager {
       if (resource && p.resource && p.resource !== resource) return false;
       if (action && p.action !== action) return false;
       if (p.expiresAt && p.expiresAt < new Date()) return false;
-      return p.granted;
-    });
+      return p.granted });
     if (hasDirectPermission) return true;
     // Check role-based permissions
-    const hasRolePermission = user.roles.some(userRole => {)
+    const hasRolePermission = user.roles.some(userRole => { )
   if (userRole.expiresAt && userRole.expiresAt < new Date()) return false;
       const role = this.roles.get(userRole.roleId);
       if (!role || !role.isActive) return false;
@@ -555,12 +526,10 @@ export class SystemAccessManager {
   if (rolePermission.permission !== permission) return false;
         if (resource && rolePermission.resource !== resource) return false;
         if (action && !rolePermission.actions.includes(action)) return false;
-        return true;
-      });
+        return true });
     });
     return hasRolePermission;
-  hasSystemAccess(userId: string, requiredLevel: SystemAccessLevel): boolean {
-  const user = this.users.get(userId);
+  hasSystemAccess(userId: string, requiredLevel: SystemAccessLevel): boolean { const user = this.users.get(userId);
   if (!user || !user.isActive) return false;
   const accessLevels: SystemAccessLevel = ['none', 'basic', 'advanced', 'admin', 'super_admin', 'system'];
   const userLevelIndex = accessLevels.indexOf(user.systemAccess);
@@ -601,7 +570,7 @@ export class SystemAccessManager {
   byStatus: this.groupBy(users, 'status'),
   byAccessLevel: this.groupBy(users, 'systemAccess'),
   bySecurityClearance: this.groupBy(users, 'securityClearance'),
-  recentActivity: {
+  recentActivity: {,
   newUsers: users.filter(u => ),
   u.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   ).length,
@@ -614,13 +583,13 @@ export class SystemAccessManager {
   entry.timestamp > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   ).length,
   loginAttempts: 0, // Would be populated from auth logs,
-  failedLogins: 0   // Would be populated from auth logs,
+  failedLogins: 0   // Would be populated from auth logs }
 },
-  compliance: {
+  compliance: { ,
   mfaEnabled: users.filter(u => u.mfaEnabled).length,
   termsAccepted: users.filter(u => u.termsAccepted).length,
   overdueCertifications: 0, // Would be calculated based on certification requirements,
-  pendingReviews: requests.filter(r => r.status === 'pending').length,
+  pendingReviews: requests.filter(r => r.status === 'pending').length }
 };
   // Private methods
   private validateUserData(user: SystemUser): void {
@@ -645,31 +614,28 @@ export class SystemAccessManager {
         changes[key] = { from: oldData[key], to: newData[key] };
     });
     return changes;
-  private hasApprovalPermission(userId: string, roleLevel: number): boolean {
-    const user = this.users.get(userId);
+  private hasApprovalPermission(userId: string, roleLevel: number): boolean { const user = this.users.get(userId);
     if (!user) return false;
     return user.roles.some(userRole => {)
   const role = this.roles.get(userRole.roleId);
-      return role && role.level >= roleLevel;
-    });
-  private determineApprovers(requestData: Partial<AccessRequest>): AccessApprover {
-  // Default approval logic - would be more sophisticated in practice
+      return role && role.level >= roleLevel });
+  private determineApprovers(requestData: Partial<AccessRequest>): AccessApprover { // Default approval logic - would be more sophisticated in practice
   return [
   {
-  userId: 'admin_001',
-  displayName: 'System Administrator',
-  order: 1,
-  required: true,
+  userId: 'admin_001'
+  displayName: 'System Administrator'
+  order: 1
+  required: true
   status: 'pending'];
-  private async notifyApprovers(request: AccessRequest): Promise<void> {,
+  private async notifyApprovers(request: AccessRequest): Promise<void> {
   // Integration point for notifications
   console.debug('Notifying approvers for request:', request.id);
-  private async executeAccessRequest(request: AccessRequest): Promise<void> {,
+  private async executeAccessRequest(request: AccessRequest): Promise<void> {
   switch (request.type) {
-  case 'role_assignment':,
+  case 'role_assignment':
   if (request.targetUserId && request.roleId) {
   await this.assignRole(request.targetUserId, request.roleId, 'system', {)
-  expiresAt: request.expiresAt,
+  expiresAt: request.expiresAt }
 });
       break;
     case 'permission_grant':
@@ -677,109 +643,97 @@ export class SystemAccessManager {
       break;
     default:
       console.warn('Unknown access request type:', request.type);
-  private auditAction(action: string, performedBy: string, details: Record<string, any>): void {
-  const entry: AccessAuditEntry = {,
-  id: this.generateId('audit'),
-  timestamp: new Date(),
-  action,
-  performedBy,
+  private auditAction(action: string, performedBy: string, details: Record<string, any>): void { const entry: AccessAuditEntry = {
+  id: this.generateId('audit')
+  timestamp: new Date()
+  action
+  performedBy }
   details
 };
     this.auditLog.push(entry);
     // Keep last 10000 entries
-    if (this.auditLog.length > 10000) {
-      this.auditLog = this.auditLog.slice(-10000);
+    if (this.auditLog.length > 10000) { this.auditLog = this.auditLog.slice(-10000);
   private groupBy<T extends Record<string, any>, K extends keyof T>(((
-    items: T,
+    items: T }
     field: K
   ): Record<string, number> {
     const grouped: Record<string, number> = {};
-    items.forEach(item => {)
+    items.forEach(item => { )
   const key = String(item[field]);
-      grouped[key] = (grouped[key] || 0) + 1;
-    });
+      grouped[key] = (grouped[key] || 0) + 1 });
     return grouped;
-  private initializeSystemRoles(): void {
-  const systemRoles: SystemRole = [
+  private initializeSystemRoles(): void { const systemRoles: SystemRole = [
   {
-  id: 'super_admin',
-  name: 'super_admin',
-  displayName: 'Super Administrator',
-  description: 'Full system access with all permissions',
-  type: 'system',
-  level: 10,
-  permissions: [{,
-  permission: '*',
-  resource: '*',
-  actions: ['*'],
-  scope: 'global',
-}],
-        systemAccess: 'super_admin',
-        requiresApproval: true,
-        canDelegate: true,
-        isActive: true,
-        isSystem: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: 'system'
-  }
-      {
-  id: 'admin',
-  name: 'admin',
-  displayName: 'Administrator',
-  description: 'Administrative access to most system functions',
-  type: 'system',
-  level: 8,
-  permissions: [{,
-  permission: 'admin',
-  resource: 'system',
-  actions: ['read', 'write', 'manage'],
-  scope: 'global',
-}],
-        systemAccess: 'admin',
-        requiresApproval: true,
-        canDelegate: false,
-        isActive: true,
-        isSystem: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: 'system'
-  }
-      {
-  id: 'user',
-  name: 'user',
-  displayName: 'Standard User',
-  description: 'Basic user access to application features',
-  type: 'system',
-  level: 1,
-  permissions: [{,
-  permission: 'user',
-  resource: 'application',
-  actions: ['read', 'write'],
-  scope: 'own',
-}],
-        systemAccess: 'basic',
-        requiresApproval: false,
-        canDelegate: false,
-        isActive: true,
-        isSystem: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+  id: 'super_admin'
+  name: 'super_admin'
+  displayName: 'Super Administrator'
+  description: 'Full system access with all permissions'
+  type: 'system'
+  level: 10
+  permissions: [{
+  permission: '*'
+  resource: '*'
+  actions: ['*']
+  scope: 'global' }
+]
+        systemAccess: 'super_admin'
+        requiresApproval: true
+        canDelegate: true
+        isActive: true
+        isSystem: true
+        createdAt: new Date()
+        updatedAt: new Date()
+        createdBy: 'system';
+
+      { id: 'admin'
+  name: 'admin'
+  displayName: 'Administrator'
+  description: 'Administrative access to most system functions'
+  type: 'system'
+  level: 8
+  permissions: [{
+  permission: 'admin'
+  resource: 'system'
+  actions: ['read', 'write', 'manage']
+  scope: 'global' }
+]
+        systemAccess: 'admin'
+        requiresApproval: true
+        canDelegate: false
+        isActive: true
+        isSystem: true
+        createdAt: new Date()
+        updatedAt: new Date()
+        createdBy: 'system';
+
+      { id: 'user'
+  name: 'user'
+  displayName: 'Standard User'
+  description: 'Basic user access to application features'
+  type: 'system'
+  level: 1
+  permissions: [{
+  permission: 'user'
+  resource: 'application'
+  actions: ['read', 'write']
+  scope: 'own' }
+]
+        systemAccess: 'basic'
+        requiresApproval: false
+        canDelegate: false
+        isActive: true
+        isSystem: true
+        createdAt: new Date()
+        updatedAt: new Date()
         createdBy: 'system'];
-    systemRoles.forEach(role => {)
-  this.roles.set(role.id, role);
-    });
-  private startMaintenanceTasks(): void {
-    // Clean up expired access every hour
+    systemRoles.forEach(role => { )
+  this.roles.set(role.id, role) });
+  private startMaintenanceTasks(): void { // Clean up expired access every hour
     setInterval(() => {
-      this.cleanupExpiredAccess();
-    }, 60 * 60 * 1000);
+      this.cleanupExpiredAccess() }, 60 * 60 * 1000);
     // Process pending requests every 10 minutes
-    setInterval(() => {
-      this.processExpiredRequests();
-    }, 10 * 60 * 1000);
-  private cleanupExpiredAccess(): void {
-  const users = Array.from(this.users.values());
+    setInterval(() => { this.processExpiredRequests() }, 10 * 60 * 1000);
+  private cleanupExpiredAccess(): void { const users = Array.from(this.users.values());
   let cleanedCount = 0;
   users.forEach(user => {)
   const expiredRoles = user.roles.filter(role => ;);
@@ -796,14 +750,13 @@ export class SystemAccessManager {
   this.auditAction('role_expired', 'system', {)
   userId: user.id,
   roleId: role.roleId,
-  roleName: role.roleName,
+  roleName: role.roleName }
 });
         });
     });
     if (cleanedCount > 0) {
       console.debug(`Cleaned up expired access for ${cleanedCount} users`);}
-  private processExpiredRequests(): void {
-    const now = new Date();
+  private processExpiredRequests(): void { const now = new Date();
     const expiredRequests = Array.from(this.accessRequests.values());
       .filter(request => )
         request.status === 'pending' && 
@@ -817,13 +770,13 @@ export class SystemAccessManager {
   id: this.generateId('audit'),
         timestamp: now,
         action: 'request_expired',
-        performedBy: 'system',
+        performedBy: 'system' }
         details: { reason: 'Request expired without approval' }
       });
       this.accessRequests.set(request.id, request);
-      this.auditAction('access_request_expired', 'system', {)
+      this.auditAction('access_request_expired', 'system', { )
   requestId: request.id,
-  type: request.type,
+  type: request.type }
 });
     });
     if (expiredRequests.length > 0) {

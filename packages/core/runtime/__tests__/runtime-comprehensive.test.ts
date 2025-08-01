@@ -1,18 +1,15 @@
-import {
-  ExecutionContext,
+import { ExecutionContext,
   RuntimeNode,
   WeightedChoiceNode,
   ConcatNode,
   OutputNode,
   IncludeNode,
-  SetVariableNode,
+  SetVariableNode }
   GetVariableNode
-} from '../index';
+ from '../index';
 
 // Mock seedrandom
-jest.mock('seedrandom', () => {
-  return jest.fn(() => jest.fn());
-});
+jest.mock('seedrandom', () => { return jest.fn(() => jest.fn()) });
 describe('Runtime Engine - Comprehensive Coverage', () => {
   let mockCtx: ExecutionContext;
   beforeEach(() => {
@@ -21,25 +18,18 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       seed: 'test-seed-123';
   };
   });
-  describe('RuntimeNode Base Class', () => {
-  // Test the base class directly
+  describe('RuntimeNode Base Class', () => { // Test the base class directly
   class TestNode extends RuntimeNode {
-  run(ctx: ExecutionContext): any {,
+  run(ctx: ExecutionContext): any { }
   return 'test-result';
-  it('should create node with ID', () => {
-  const node = new TestNode('test-id-1');
-  expect(node.id).toBe('test-id-1');
-});
-    it('should execute run method', () => {
-      const node = new TestNode('test-id-2');
-      expect(node.run(mockCtx)).toBe('test-result');
-    });
+  it('should create node with ID', () => { const node = new TestNode('test-id-1');
+  expect(node.id).toBe('test-id-1') });
+    it('should execute run method', () => { const node = new TestNode('test-id-2');
+      expect(node.run(mockCtx)).toBe('test-result') });
   });
-  describe('WeightedChoiceNode - Edge Cases', () => {
-    it('should handle empty choices array', () => {
+  describe('WeightedChoiceNode - Edge Cases', () => { it('should handle empty choices array', () => {
       const node = new WeightedChoiceNode('empty-choices', []);
-      expect(node.run(mockCtx)).toBeUndefined();
-    });
+      expect(node.run(mockCtx)).toBeUndefined() });
     it('should handle single choice', () => {
       const node = new WeightedChoiceNode('single-choice', [);
         { weight: 1, value: 'only-choice' }
@@ -82,49 +72,36 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       expect(node.run(mockCtx)).toBe(complexValue);
     });
   });
-  describe('ConcatNode - Edge Cases', () => {
-    it('should handle empty inputs', () => {
+  describe('ConcatNode - Edge Cases', () => { it('should handle empty inputs', () => {
       const node = new ConcatNode('empty-concat', []);
-      expect(node.run()).toBe('');
-    });
-    it('should handle null and undefined values', () => {
-      const node = new ConcatNode('null-concat', [null, undefined, 'text']);
-      expect(node.run()).toBe('text');
-    });
-    it('should handle non-string values', () => {
-      const node = new ConcatNode('non-string-concat', [);
+      expect(node.run()).toBe('') });
+    it('should handle null and undefined values', () => { const node = new ConcatNode('null-concat', [null, undefined, 'text']);
+      expect(node.run()).toBe('text') });
+    it('should handle non-string values', () => { const node = new ConcatNode('non-string-concat', [);
         123,
-        true,
+        true }
         { toString: () => 'object' },
         ['array']
       ]);
       expect(node.run()).toBe('123trueobjectarray');
     });
-    it('should handle very long inputs', () => {
-      const longString = 'x'.repeat(10000);
+    it('should handle very long inputs', () => { const longString = 'x'.repeat(10000);
       const node = new ConcatNode('long-concat', [longString, longString]);
-      expect(node.run()).toBe(longString + longString);
-    });
+      expect(node.run()).toBe(longString + longString) });
   });
-  describe('OutputNode - Edge Cases', () => {
-    it('should handle null value', () => {
+  describe('OutputNode - Edge Cases', () => { it('should handle null value', () => {
       const node = new OutputNode('null-output', null);
-      expect(node.run()).toBeNull();
-    });
-    it('should handle undefined value', () => {
-      const node = new OutputNode('undefined-output', undefined);
-      expect(node.run()).toBeUndefined();
-    });
+      expect(node.run()).toBeNull() });
+    it('should handle undefined value', () => { const node = new OutputNode('undefined-output', undefined);
+      expect(node.run()).toBeUndefined() });
     it('should handle complex objects', () => {
       const complexObj = { nested: { deep: { value: 42 } } };
       const node = new OutputNode('complex-output', complexObj);
       expect(node.run()).toBe(complexObj);
     });
-    it('should handle functions as values', () => {
-      const fn = () => 'function result';
+    it('should handle functions as values', () => { const fn = () => 'function result';
       const node = new OutputNode('function-output', fn);
-      expect(node.run()).toBe(fn);
-    });
+      expect(node.run()).toBe(fn) });
   });
   describe('IncludeNode - Edge Cases', () => {
     it('should handle empty templates map', () => {
@@ -135,9 +112,8 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       const node = new IncludeNode('null-template', null as any, { template: 'value' });
       expect(node.run()).toBeUndefined();
     });
-    it('should handle template with special characters', () => {
-  const templates = {
-  'special-key!@#$': 'special value',
+    it('should handle template with special characters', () => { const templates = {
+  'special-key!@#$': 'special value' }
 };
       const node = new IncludeNode('special-include', 'special-key!@#$', templates);
       expect(node.run()).toBe('special value');
@@ -149,57 +125,44 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       expect(node.run()).toBe(templates);
     });
   });
-  describe('SetVariableNode - Edge Cases', () => {
-    it('should handle setting null value', () => {
+  describe('SetVariableNode - Edge Cases', () => { it('should handle setting null value', () => {
       const node = new SetVariableNode('set-null', 'nullVar', null);
       node.run(mockCtx);
-      expect(mockCtx.variables['nullVar']).toBeNull();
-    });
-    it('should handle setting undefined value', () => {
-      const node = new SetVariableNode('set-undefined', 'undefinedVar', undefined);
+      expect(mockCtx.variables['nullVar']).toBeNull() });
+    it('should handle setting undefined value', () => { const node = new SetVariableNode('set-undefined', 'undefinedVar', undefined);
       node.run(mockCtx);
-      expect(mockCtx.variables['undefinedVar']).toBeUndefined();
-    });
-    it('should handle empty key name', () => {
-      const node = new SetVariableNode('set-empty-key', '', 'value');
+      expect(mockCtx.variables['undefinedVar']).toBeUndefined() });
+    it('should handle empty key name', () => { const node = new SetVariableNode('set-empty-key', '', 'value');
       node.run(mockCtx);
-      expect(mockCtx.variables['']).toBe('value');
-    });
+      expect(mockCtx.variables['']).toBe('value') });
     it('should handle special characters in key', () => {
       const key = 'special!@#$%^&*()_+-=[]{}|;:,.<>?';
       const node = new SetVariableNode('set-special-key', key, 'value');
       node.run(mockCtx);
       expect(mockCtx.variables[key]).toBe('value');
     });
-    it('should overwrite existing values', () => {
-      mockCtx.variables['existing'] = 'old value';
+    it('should overwrite existing values', () => { mockCtx.variables['existing'] = 'old value';
       const node = new SetVariableNode('overwrite', 'existing', 'new value');
       node.run(mockCtx);
-      expect(mockCtx.variables['existing']).toBe('new value');
-    });
-    it('should handle complex values', () => {
-      const complexValue = {
-        array: [1, 2, 3],
+      expect(mockCtx.variables['existing']).toBe('new value') });
+    it('should handle complex values', () => { const complexValue = {
+        array: [1, 2, 3] }
         nested: { deep: true },
-        fn: () => 'test'
+        fn: () => 'test';
   };
       const node = new SetVariableNode('set-complex', 'complex', complexValue);
       node.run(mockCtx);
       expect(mockCtx.variables['complex']).toBe(complexValue);
     });
   });
-  describe('GetVariableNode - Edge Cases', () => {
-    it('should handle getting empty key', () => {
+  describe('GetVariableNode - Edge Cases', () => { it('should handle getting empty key', () => {
       mockCtx.variables[''] = 'empty key value';
       const node = new GetVariableNode('get-empty-key', '');
-      expect(node.run(mockCtx)).toBe('empty key value');
-    });
-    it('should handle special characters in key', () => {
-      const key = 'special!@#$%^&*()';
+      expect(node.run(mockCtx)).toBe('empty key value') });
+    it('should handle special characters in key', () => { const key = 'special!@#$%^&*()';
       mockCtx.variables[key] = 'special value';
       const node = new GetVariableNode('get-special-key', key);
-      expect(node.run(mockCtx)).toBe('special value');
-    });
+      expect(node.run(mockCtx)).toBe('special value') });
     it('should handle nested property access attempt', () => {
       mockCtx.variables['obj'] = { nested: 'value' };
       const node = new GetVariableNode('get-nested', 'obj.nested');
@@ -229,12 +192,11 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       ]);
       expect(node.run(numCtx)).toBe('result');
     });
-    it('should handle deeply nested variables', () => {
-  const deepCtx: ExecutionContext = {,
-  variables: {
-  level1: {
-  level2: {
-  level3: 'deep value',
+    it('should handle deeply nested variables', () => { const deepCtx: ExecutionContext = {,
+  variables: {,
+  level1: {,
+  level2: {,
+  level3: 'deep value' }
 },
   seed: 'deep-seed';
   };
@@ -243,8 +205,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       expect(deepCtx.variables['newVar']).toBe(deepCtx.variables['level1']);
     });
   });
-  describe('Integration Scenarios', () => {
-    it('should handle variable flow between nodes', () => {
+  describe('Integration Scenarios', () => { it('should handle variable flow between nodes', () => {
       const set1 = new SetVariableNode('set1', 'name', 'Alice');
       const set2 = new SetVariableNode('set2', 'greeting', 'Hello');
       const get1 = new GetVariableNode('get1', 'name');
@@ -252,8 +213,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       set1.run(mockCtx);
       set2.run(mockCtx);
       expect(get1.run(mockCtx)).toBe('Alice');
-      expect(get2.run(mockCtx)).toBe('Hello');
-    });
+      expect(get2.run(mockCtx)).toBe('Hello') });
     it('should handle weighted choice with variable seeds', () => {
       const seedrandom = require('seedrandom');
       const mockRandom = jest.fn();
@@ -280,8 +240,8 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
   });
   describe('Performance Edge Cases', () => {
     it('should handle large number of weighted choices efficiently', () => {
-      const choices = Array.from({ length: 1000 }, (_, i) => ({)
-  weight: 0.001,
+      const choices = Array.from({ length: 1000 }, (_, i) => ({ )
+  weight: 0.001 }
         value: `choice-${i}`}
       }));
       const node = new WeightedChoiceNode('large-choices', choices);

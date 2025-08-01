@@ -15,21 +15,19 @@
 import { EventEmitter } from 'events';
 
 }
-export interface CodeGenerationOptions {
-    length: number;
+}
+export interface CodeGenerationOptions { length: number;
     format: 'numeric' | 'alphanumeric' | 'alphabetic';
     excludeAmbiguous: boolean;
-    customAlphabet?: string;
-
+    customAlphabet?: string }
 }
-export interface CodeValidationOptions {
-    allowedAttempts: number;
+}
+export interface CodeValidationOptions { allowedAttempts: number;
     timeWindowMinutes: number;
-    constantTimeValidation: boolean;
-
+    constantTimeValidation: boolean }
 }
-export interface VerificationCodeData {
-    id: string;
+}
+export interface VerificationCodeData { id: string;
     codeHash: string;
     algorithm: string;
     salt: string;
@@ -40,8 +38,8 @@ export interface VerificationCodeData {
     attempts: number;
     maxAttempts: number;
     used: boolean;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
+}
 }
 export interface ValidationResult {
     valid: boolean;
@@ -61,13 +59,13 @@ declare const SECURITY_CONFIG: {
         readonly alphanumeric: "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
         readonly alphabetic: "ABCDEFGHJKMNPQRSTUVWXYZ"
 }
+}
   };
 };
 /**
  * Secure verification code generator with cryptographic best practices
  */
-export declare class SecureCodeGenerator extends EventEmitter {
-    private readonly config;
+export declare class SecureCodeGenerator extends EventEmitter { private readonly config;
     constructor(config?: Partial<typeof SECURITY_CONFIG>);
     /**
      * Generate a cryptographically secure verification code
@@ -79,14 +77,13 @@ export declare class SecureCodeGenerator extends EventEmitter {
     createVerificationCode(code: string, userId: string, purpose: string, options?: {)
         expirationMinutes?: number;
         maxAttempts?: number;
-        metadata?: Record<string, any>;
-    }): Promise<VerificationCodeData>;
+        metadata?: Record<string, any> }): Promise<VerificationCodeData>;
     /**
      * Validate a verification code with timing attack protection
      */
     validateCode();
-      inputCode: string,
-      storedCode: VerificationCodeData,
+      inputCode: string
+      storedCode: VerificationCodeData
       options?: Partial<CodeValidationOptions>
     ): Promise<ValidationResult>;
     /**
@@ -96,10 +93,8 @@ export declare class SecureCodeGenerator extends EventEmitter {
     /**
      * Validate input code format before processing
      */
-    validateCodeFormat(code: string, expectedFormat?: CodeGenerationOptions['format']): {
-        valid: boolean;
-        reason?: string;
-    };
+    validateCodeFormat(code: string, expectedFormat?: CodeGenerationOptions['format']): { valid: boolean;
+        reason?: string };
     private validateGenerationOptions;
     private getAlphabet;
     private generateSecureRandomCode;
@@ -110,37 +105,29 @@ export declare class SecureCodeGenerator extends EventEmitter {
 /**
  * High-level factory for common verification code scenarios
  */
-export declare class VerificationCodeFactory {
-    private generator;
+export declare class VerificationCodeFactory { private generator;
     constructor();
     /**
      * Create an email verification code
      */
     createEmailVerificationCode(userId: string, email: string): Promise<{
         code: string;
-        data: VerificationCodeData;
-    }>;
+        data: VerificationCodeData }>;
     /**
      * Create an SMS verification code
      */
-    createSMSVerificationCode(userId: string, phoneNumber: string): Promise<{
-        code: string;
-        data: VerificationCodeData;
-    }>;
+    createSMSVerificationCode(userId: string, phoneNumber: string): Promise<{ code: string;
+        data: VerificationCodeData }>;
     /**
      * Create a password reset code
      */
-    createPasswordResetCode(userId: string, email: string): Promise<{
-        code: string;
-        data: VerificationCodeData;
-    }>;
+    createPasswordResetCode(userId: string, email: string): Promise<{ code: string;
+        data: VerificationCodeData }>;
     /**
      * Create TOTP backup codes
      */
-    createTOTPBackupCodes(userId: string): Promise<{
-        codes: string[];
-        data: VerificationCodeData[];
-    }>;
+    createTOTPBackupCodes(userId: string): Promise<{ codes: string[];
+        data: VerificationCodeData[] }>;
     /**
      * Validate any verification code
      */
@@ -148,8 +135,7 @@ export declare class VerificationCodeFactory {
 
 export declare const codeGenerator: SecureCodeGenerator;
 export declare const verificationCodeFactory: VerificationCodeFactory;
-export declare const CodeUtils: {
-    /**
+export declare const CodeUtils: { /**
      * Format a code for display (add hyphens, spaces, etc.)
      */
     formatCodeForDisplay(code: string, separator?: string, groupSize?: number): string;
@@ -164,10 +150,8 @@ export declare const CodeUtils: {
     /**
      * Calculate entropy bits for a given alphabet and length
      */
-    calculateEntropy(alphabetSize: number, length: number): number;
-};
-declare const _default: {
-    SecureCodeGenerator: typeof SecureCodeGenerator;
+    calculateEntropy(alphabetSize: number, length: number): number };
+declare const _default: { SecureCodeGenerator: typeof SecureCodeGenerator;
     VerificationCodeFactory: typeof VerificationCodeFactory;
     codeGenerator: SecureCodeGenerator;
     verificationCodeFactory: VerificationCodeFactory;
@@ -187,8 +171,7 @@ declare const _default: {
         /**
          * Calculate entropy bits for a given alphabet and length
          */
-        calculateEntropy(alphabetSize: number, length: number): number;
-    };
+        calculateEntropy(alphabetSize: number, length: number): number };
 };
 export default _default;
 //# sourceMappingURL=CodeGenerator.d.ts.map

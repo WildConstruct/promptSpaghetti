@@ -2,8 +2,8 @@ import { ConnectionState } from '../websocket/WebSocketClient';
 import { GraphUpdatePayload, PresenceUpdatePayload } from '../../../server/src/websocket/types';
 
 }
-export interface UseWebSocketOptions {
-    url?: string;
+}
+export interface UseWebSocketOptions { url?: string;
     documentId: string;
     userId?: string;
     authToken?: string;
@@ -14,11 +14,10 @@ export interface UseWebSocketOptions {
     onPresenceUpdate?: (presence: PresenceUpdatePayload) => void;
     onUserJoin?: (user: any) => void;
     onUserLeave?: (user: any) => void;
-    onError?: (error: any) => void;
-
+    onError?: (error: any) => void }
 }
-export interface UseWebSocketReturn {
-    connectionState: ConnectionState;
+}
+export interface UseWebSocketReturn { connectionState: ConnectionState;
     isConnected: boolean;
     isConnecting: boolean;
     sendGraphUpdate: (update: GraphUpdatePayload) => boolean;
@@ -33,7 +32,7 @@ export declare function usePresence(documentId: string, userId: string, userName
     cursor: {
         x: number;
         y: number;
-        nodeId?: string;
+        nodeId?: string }
 }
     } | null;
     selection: string[];

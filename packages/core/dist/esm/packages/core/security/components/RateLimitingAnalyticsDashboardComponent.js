@@ -526,11 +526,11 @@ if (error) {
 function convertToCSV(data) {
     // Simple CSV conversion - in production, this would be more sophisticated
     const headers = ['Metric', 'Value', 'Status', 'Timestamp'];
-    const rows = [];
-    ['System Health', data.securityAnalytics?.performanceAnalytics?.systemHealth?.overallScore || 0, 'Active', new Date().toISOString()],
+    const rows = [
+        ['System Health', data.securityAnalytics?.performanceAnalytics?.systemHealth?.overallScore || 0, 'Active', new Date().toISOString()],
         ['Threat Level', data.securityAnalytics?.threatAnalysis?.currentThreatLevel || 'LOW', 'Active', new Date().toISOString()],
-        ['Active Threats', data.securityAnalytics?.threatAnalysis?.attackPatterns?.length || 0, 'Active', new Date().toISOString()];
-    ;
+        ['Active Threats', data.securityAnalytics?.threatAnalysis?.attackPatterns?.length || 0, 'Active', new Date().toISOString()]
+    ];
     return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
     function generatePDFContent(data) {
         // Simple PDF content generation - in production, this would use a proper PDF library

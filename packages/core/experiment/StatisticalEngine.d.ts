@@ -5,27 +5,23 @@
 import { ExperimentResults, VariantResults, ExperimentMetric } from '../types/experiment';
 
 }
-export interface StatisticalTestResult {
-    pValue: number;
+}
+export interface StatisticalTestResult { pValue: number;
     testStatistic: number;
     effect: number;
     effectSize: number;
     confidenceInterval: [number, number];
     significant: boolean;
-    practicallySignificant: boolean;
-
-
+    practicallySignificant: boolean }
 }
-export interface BayesianResult {
-    posteriorProbability: number;
+}
+export interface BayesianResult { posteriorProbability: number;
     credibleInterval: [number, number];
     probabilityToBeatControl: number;
-    expectedLoss: number;
-
-
+    expectedLoss: number }
 }
-export interface SampleSizeCalculation {
-    requiredSampleSize: number;
+}
+export interface SampleSizeCalculation { requiredSampleSize: number;
     estimatedDuration: number;
     powerAchieved: number;
     minimumDetectableEffect: number;
@@ -38,18 +34,18 @@ export declare class StatisticalEngine {
      * Perform comprehensive statistical analysis of experiment results
      */
     analyzeExperimentResults();
-      variants: VariantResults[],
-      metrics: ExperimentMetric[],
-      controlVariantId: string,
+      variants: VariantResults[];
+      metrics: ExperimentMetric[];
+      controlVariantId: string;
     ): ExperimentResults;
     /**
      * Calculate required sample size for an experiment
      */
     calculateSampleSize();
-      baselineRate: number,
-      minimumDetectableEffect: number,
-      power?: number,
-      alpha?: number,
+      baselineRate: number;
+      minimumDetectableEffect: number;
+      power?: number;
+      alpha?: number;
       twoTailed?: boolean
     ): SampleSizeCalculation;
     /**
@@ -60,29 +56,28 @@ export declare class StatisticalEngine {
      * Perform chi-square test for proportions
      */
     chiSquareTest();
-      controlSuccesses: number,
-      controlTotal: number,
-      treatmentSuccesses: number,
-      treatmentTotal: number,
+      controlSuccesses: number;
+      controlTotal: number;
+      treatmentSuccesses: number;
+      treatmentTotal: number;
     ): StatisticalTestResult;
     /**
      * Perform Bayesian analysis for conversion rates
      */
     bayesianAnalysis();
-      controlSuccesses: number,
-      controlTotal: number,
-      treatmentSuccesses: number,
-      treatmentTotal: number,
-      priorAlpha?: number,
+      controlSuccesses: number;
+      controlTotal: number;
+      treatmentSuccesses: number;
+      treatmentTotal: number;
+      priorAlpha?: number }
       priorBeta?: number
     ): BayesianResult;
     /**
      * Detect winner based on statistical criteria
      */
-    detectWinner(variants: VariantResults[], controlVariantId: string, metric: ExperimentMetric): {
-        winner?: string;
+    detectWinner(variants: VariantResults[], controlVariantId: string, metric: ExperimentMetric): { winner?: string;
         confidence: number;
-        reason: string;
+        reason: string }
 }
     };
     private calculatePrimaryMetricResults;

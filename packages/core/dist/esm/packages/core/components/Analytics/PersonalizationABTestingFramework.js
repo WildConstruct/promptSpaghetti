@@ -63,7 +63,7 @@ description: 'Testing enhanced personalization algorithms for improved user expe
 ['draft', 'running', 'completed'][Math.floor(Math.random() * 3)],
     variants,
     metrics;
-[,
+[
     {
         metricId: 'click_through_rate',
         name: 'Click Through Rate',
@@ -77,7 +77,8 @@ description: 'Testing enhanced personalization algorithms for improved user expe
         type: 'primary',
         target: 0.05,
         minimumDetectableEffect: 0.01
-    }],
+    }
+],
     targeting;
 {
     audience: 'all_users',
@@ -94,25 +95,24 @@ results: Math.random() > 0.5 ? {
     startDate: Date.now() - Math.random() * 30 * 86400000,
     endDate: Date.now() - Math.random() * 7 * 86400000,
     participants: Math.floor(Math.random() * 8000) + 2000,
-    results: variants.map(variant => ({}), variantId, variant.variantId, participants, Math.floor(Math.random() * 2000) + 500, metrics, [,
+    results: variants.map(variant => ({}), variantId, variant.variantId, participants, Math.floor(Math.random() * 2000) + 500, metrics, [
         {
             metricId: 'click_through_rate',
             value: Math.random() * 0.15 + 0.05,
             standardError: Math.random() * 0.01 + 0.005,
-            confidenceInterval: {
-                lower: Math.random() * 0.05 + 0.05,
-                upper: Math.random() * 0.05 + 0.15,
-            }
+            confidenceInterval: {},
+            lower: Math.random() * 0.05 + 0.05,
+            upper: Math.random() * 0.05 + 0.15,
         },
         {
             metricId: 'conversion_rate',
             value: Math.random() * 0.08 + 0.02,
             standardError: Math.random() * 0.005 + 0.002,
-            confidenceInterval: {
-                lower: Math.random() * 0.02 + 0.02,
-                upper: Math.random() * 0.02 + 0.08
-            }
-        }], confidence, Math.random() * 0.3 + 0.7, statisticalPower, Math.random() * 0.2 + 0.8)
+            confidenceInterval: {},
+            lower: Math.random() * 0.02 + 0.02,
+            upper: Math.random() * 0.02 + 0.08
+        }
+    ], confidence, Math.random() * 0.3 + 0.7, statisticalPower, Math.random() * 0.2 + 0.8)
 } : ;
 statisticalSignificance: {
     pValue: Math.random() * 0.05,
@@ -214,7 +214,7 @@ export const PersonalizationABTestingFramework = ({
                         resources;
                     ['ML Engineer', 'Data Scientist'],
                         steps;
-                    [,
+                    [
                         'Implement hybrid recommendation engine',
                         'Configure content-based and collaborative filtering',
                         'Set up real-time adaptation rules',

@@ -16,56 +16,50 @@ import { EventEmitter } from 'events';
 import { EnhancedConversionEvent, FunnelStreamConfig } from './ConversionFunnelArchitecture';
 
 }
-export interface StreamEvent {
-    id: string;
+}
+export interface StreamEvent { id: string;
     type: 'conversion_event' | 'funnel_step' | 'attribution_update' | 'session_event';
     payload: EnhancedConversionEvent;
     partition: number;
     offset: number;
     timestamp: number;
     headers: Record<string, string>;
-    retryCount: number;
-
+    retryCount: number }
 }
-export interface StreamPartition {
-    id: number;
+}
+export interface StreamPartition { id: number;
     events: StreamEvent[];
     offset: number;
     lastProcessed: number;
     consumerCount: number;
-    lag: number;
-
+    lag: number }
 }
-export interface StreamConsumer {
-    id: string;
+}
+export interface StreamConsumer { id: string;
     groupId: string;
     assignedPartitions: number[];
     lastHeartbeat: number;
     processedOffset: Map<number, number>;
     isActive: boolean;
-    processingRate: number;
-
+    processingRate: number }
 }
-export interface StreamMetrics {
-    totalEvents: number;
+}
+export interface StreamMetrics { totalEvents: number;
     eventsPerSecond: number;
     averageLatency: number;
     partitionMetrics: Map<number, {
         events: number;
         lag: number;
-        throughput: number;
+        throughput: number }
 }
     }>;
-    consumerMetrics: Map<string, {
-        processedEvents: number;
+    consumerMetrics: Map<string, { processedEvents: number;
         errorCount: number;
-        avgProcessingTime: number;
-    }>;
-    deadLetterQueue: {
-        size: number;
-        oldestEvent: number;
-    };
+        avgProcessingTime: number }>;
+    deadLetterQueue: { size: number;
+        oldestEvent: number };
 
+}
 }
 export interface ProcessingResult {
     success: boolean;
@@ -179,4 +173,5 @@ export declare class ConversionStreamProcessor extends EventEmitter {
  */
 export declare export default ConversionStreamProcessor;
 //# sourceMappingURL=ConversionStreamProcessor.d.ts.map
+}
 }

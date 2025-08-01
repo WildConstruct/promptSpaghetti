@@ -9,8 +9,8 @@
 import React from 'react';
 
 }
-interface ConsentBannerProps {
-    onConsentUpdate?: (consents: ConsentPreferences) => void;
+}
+interface ConsentBannerProps { onConsentUpdate?: (consents: ConsentPreferences) => void;
     onClose?: () => void;
     country?: string;
     language?: string;
@@ -19,9 +19,8 @@ interface ConsentBannerProps {
     showRejectButton?: boolean;
     showCustomizeButton?: boolean;
     autoHide?: boolean;
-    respectDoNotTrack?: boolean;
-
-
+    respectDoNotTrack?: boolean }
+}
 }
 interface ConsentPreferences {
     essential: boolean;
@@ -36,4 +35,5 @@ interface ConsentPreferences {
 declare const ConsentBanner: React.FC<ConsentBannerProps>;
 export default ConsentBanner;
 //# sourceMappingURL=ConsentBanner.d.ts.map
+}
 }

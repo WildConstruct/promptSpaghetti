@@ -90,13 +90,13 @@ describe('Security Headers', () => {
         protocol: 'https',
         headers: {
           origin: 'http://localhost:3000'
-        }
+
       };
 
       mockReply = {
         header: jest.fn((name: string, value: string) => {
           headersSent[name.toLowerCase()] = value;
-  }
+
       };
     });
 
@@ -126,7 +126,7 @@ describe('Security Headers', () => {
           maxAge: 31536000,
           includeSubDomains: true,
           preload: true
-        }
+
       };
       const middleware = securityHeadersMiddleware(hstsConfig);
       await middleware(mockRequest, mockReply);
@@ -150,8 +150,8 @@ describe('Security Headers', () => {
             'default-src': ['\'self\''],
             'script-src': ['\'self\'', '\'unsafe-inline\''],
             'style-src': ['\'self\'', '\'unsafe-inline\'']
-          }
-        }
+
+
       };
 
       const middleware = securityHeadersMiddleware(config);
@@ -170,7 +170,7 @@ describe('Security Headers', () => {
           enabled: true,
           directives: { 'default-src': ['\'self\''] },
           reportOnly: true
-        }
+
       };
 
       const middleware = securityHeadersMiddleware(config);
@@ -204,8 +204,8 @@ describe('Security Headers', () => {
             'microphone': [],
             'autoplay': ['\'self\''],
             'fullscreen': ['\'self\'', 'https://example.com']
-          }
-        }
+
+
       };
 
       const middleware = securityHeadersMiddleware(config);

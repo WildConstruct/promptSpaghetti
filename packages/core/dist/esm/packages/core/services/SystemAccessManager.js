@@ -40,8 +40,9 @@ export class SystemAccessManager {
             * User Management
             */
             async;
-            createUser(userData, (Omit));
-            createdBy: string;
+            createUser(userData, (Omit)),
+                createdBy;
+            string;
             Promise < SystemUser > {
                 const: user, SystemUser = {
                     ...userData,
@@ -68,8 +69,9 @@ export class SystemAccessManager {
             ;
             return user;
             async;
-            updateUser(userId, string);
-            updates: (Partial),
+            updateUser(userId, string),
+                updates;
+            (Partial),
                 updatedBy;
             string;
             Promise < SystemUser | null > {
@@ -115,8 +117,9 @@ export class SystemAccessManager {
              * Role Management
              */
             async;
-            assignRole(userId, string);
-            roleId: string,
+            assignRole(userId, string),
+                roleId;
+            string,
                 assignedBy;
             string,
                 options ?  : {

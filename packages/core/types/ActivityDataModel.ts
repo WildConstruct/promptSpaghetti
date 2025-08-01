@@ -28,9 +28,8 @@ export type ActivityStatus = 'pending' | 'in_progress' | 'completed' | 'failed' 
 
 // Core Activity Interface
 
-}
-export interface BaseActivity {
-  id: string;
+
+export interface BaseActivity { id: string;
   timestamp: string;
   type: ActivityType;
   severity: ActivitySeverity;
@@ -41,7 +40,7 @@ export interface BaseActivity {
   userRole?: string;
   sessionId?: string;
   // System Context
-  source: string; // Component/service that generated the activity,
+  source: string; // Component/service that generated the activity;
   sourceVersion?: string;
   environment: 'development' | 'staging' | 'production';
   // Core Activity Data
@@ -59,12 +58,13 @@ export interface BaseActivity {
   // Network Context
   ipAddress?: string;
   userAgent?: string;
-  geolocation?: {
+  geolocation?: {;
   country?: string;
   region?: string;
   city?: string;
-  coordinates?: [number, number]; // [lat, lon],
-}
+  coordinates?: [number, number]; // [lat, lon] }
+
+
 };
   // Timing Information
   duration?: number; // milliseconds
@@ -76,31 +76,29 @@ export interface BaseActivity {
   // Change Tracking
   changes?: ActivityChange;
   // Error Information (for failed activities)
-  error?: {
-  code?: string;
+  error?: { code?: string;
   message?: string;
   stack?: string;
-  details?: Record<string, any>;
-};
+  details?: Record<string, any> };
   // Audit Trail
   createdAt: string;
   updatedAt?: string;
   version: number;
 
 // Change Tracking for Data Modifications
-}
-}
+
+
 export interface ActivityChange {
   field: string;
   oldValue: any;
   newValue: any;
   changeType: 'create' | 'update' | 'delete' | 'restore';
   // User Action Activities
-}
-}
-}
-export interface UserActivity extends BaseActivity {
-  type: 'user_action';
+
+
+
+
+export interface UserActivity extends BaseActivity { type: 'user_action';
   // UI Context
   page?: string;
   component?: string;
@@ -115,7 +113,7 @@ export interface UserActivity extends BaseActivity {
   export interface SystemActivity extends BaseActivity {
   type: 'system_event';
   // System Metrics
-  systemMetrics?: {
+  systemMetrics?: { }
   cpuUsage?: number;
   memoryUsage?: number;
   diskUsage?: number;
@@ -127,9 +125,8 @@ export interface UserActivity extends BaseActivity {
 
 // Admin Action Activities
 
-}
-export interface AdminActivity extends BaseActivity {
-  type: 'admin_action';
+
+export interface AdminActivity extends BaseActivity { type: 'admin_action';
   // Administrative Context
   adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support';
   targetUserId?: string;
@@ -152,13 +149,13 @@ export interface AdminActivity extends BaseActivity {
   // Detection Information
   detectionMethod?: string;
   detectionTime?: string;
-  detectionConfidence?: number; // 0-1,
+  detectionConfidence?: number; // 0-1
   // Response Information
   responseAction?: string;
   responseTime?: string;
   blocked?: boolean;
   // Forensic Data
-  forensicData?: {
+  forensicData?: { }
   requestHeaders?: Record<string, string>;
   requestBody?: any;
   responseStatus?: number;
@@ -167,9 +164,8 @@ export interface AdminActivity extends BaseActivity {
 
 // API Call Activities
 
-}
-export interface ApiActivity extends BaseActivity {
-  type: 'api_call';
+
+export interface ApiActivity extends BaseActivity { type: 'api_call';
   // HTTP Context
   method: string;
   endpoint: string;
@@ -201,7 +197,7 @@ export interface ApiActivity extends BaseActivity {
   export interface PerformanceActivity extends BaseActivity {
   type: 'performance_event';
   // Performance Metrics
-  metrics: {
+  metrics: { }
   responseTime?: number;
   throughput?: number;
   errorRate?: number;
@@ -219,9 +215,8 @@ export interface ApiActivity extends BaseActivity {
 
 // Authentication Activities
 
-}
-export interface AuthenticationActivity extends BaseActivity {
-  type: 'authentication';
+
+export interface AuthenticationActivity extends BaseActivity { type: 'authentication';
   // Authentication Method
   authMethod: 'password' | 'oauth' | 'saml' | 'mfa' | 'api_key' | 'jwt';
   // MFA Information
@@ -235,7 +230,7 @@ export interface AuthenticationActivity extends BaseActivity {
   loginAttempts?: number;
   lastSuccessfulLogin?: string;
   // Risk Assessment
-  riskScore?: number; // 0-100,
+  riskScore?: number; // 0-100 }
   riskFactors?: string;
   // File Operation Activities
   export interface FileActivity extends BaseActivity {
@@ -320,29 +315,27 @@ export interface AuthenticationActivity extends BaseActivity {
   // Including Relations
   include?: string;
   // Activity Aggregation Results
-}
-}
-}
-export interface ActivityAggregation {
-  field: string;
+
+
+
+
+export interface ActivityAggregation { field: string;
   value: any;
   count: number;
-  percentage: number;
-}
-}
-}
-export interface ActivityQueryResult {
-  activities: Activity;
-  totalCount: number;
-  aggregations?: Record<string, ActivityAggregation>;
+  percentage: number }
 
-}
+
+
+export interface ActivityQueryResult { activities: Activity;
+  totalCount: number;
+  aggregations?: Record<string, ActivityAggregation> }
+
   facets?: Record<string, Array<{ value: string; count: number }>>;
   executionTime: number;
 
 // Activity Storage and Indexing
-}
-}
+
+
 export interface ActivityIndex {
   id: string;
   timestamp: string;
@@ -356,70 +349,66 @@ export interface ActivityIndex {
   status: ActivityStatus;
   tags: string;
   // Activity Streaming and Real-time
-}
-}
-}
-export interface ActivityStream {
-  subscriptionId: string;
+
+
+
+
+export interface ActivityStream { subscriptionId: string;
   filters: ActivityQuery;
   isActive: boolean;
   createdAt: string;
-  lastActivity?: string;
-}
-}
-}
+  lastActivity?: string }
+
+
+
 export interface ActivityStreamEvent {
   streamId: string;
   activity: Activity;
   timestamp: string;
   // Activity Analytics
-}
-}
-}
-export interface ActivityMetrics {
-  totalActivities: number;
+
+
+
+
+export interface ActivityMetrics { totalActivities: number;
   activitiesByType: Record<ActivityType, number>;
   activitiesBySeverity: Record<ActivitySeverity, number>;
   activitiesByStatus: Record<ActivityStatus, number>;
-  activitiesOverTime: Array<{
+  activitiesOverTime: Array<{ }
   timestamp: string;
   count: number;
   types: Record<ActivityType, number>;
-}
-}>;
-  topSources: Array<{
+
+
+>;
+  topSources: Array<{ ,
   source: string;
   count: number;
-  percentage: number;
-}>;
-  topActions: Array<{
+  percentage: number }>;
+  topActions: Array<{ ,
   action: string;
   count: number;
-  percentage: number;
-}>;
-  topUsers: Array<{
+  percentage: number }>;
+  topUsers: Array<{ ,
   userId: string;
   userEmail?: string;
   count: number;
-  percentage: number;
-}>;
+  percentage: number }>;
   errorRate: number;
   averageDuration: number;
-  performanceMetrics: {
+  performanceMetrics: { ,
   p50: number;
   p95: number;
-  p99: number;
-};
+  p99: number };
 
 // Activity Retention and Archiving
-}
-}
-export interface ActivityRetentionPolicy {
-  id: string;
+
+
+export interface ActivityRetentionPolicy { id: string;
   name: string;
   description: string;
   // Retention Rules
-  retentionPeriod: number; // days,
+  retentionPeriod: number; // days;
   activityTypes: ActivityType;
   severities: ActivitySeverity;
   // Archive Configuration
@@ -428,7 +417,7 @@ export interface ActivityRetentionPolicy {
   compressionEnabled?: boolean;
   // Cleanup Configuration
   cleanupEnabled: boolean;
-  cleanupSchedule?: string; // cron expression,
+  cleanupSchedule?: string; // cron expression }
   // Compliance
   complianceRequirement?: string;
   legalHoldEnabled?: boolean;
@@ -436,12 +425,11 @@ export interface ActivityRetentionPolicy {
   updatedAt: string;
   isActive: boolean;
   // Export types for external use
-}
-}
-export type {
-  Activity as MonitoringActivity,
+
+
+export type { Activity as MonitoringActivity,
   ActivityQuery as MonitoringActivityQuery,
-  ActivityQueryResult as MonitoringActivityQueryResult,
+  ActivityQueryResult as MonitoringActivityQueryResult }
   ActivityMetrics as MonitoringActivityMetrics
 };
 
@@ -451,25 +439,23 @@ export const DEFAULT_ACTIVITY_PAGE_SIZE = 50;
 export const MAX_ACTIVITY_PAGE_SIZE = 1000;
 
 // Activity type display configurations
-export const ACTIVITY_TYPE_LABELS: Record<ActivityType, string> = {
-  user_action: 'User Action',
-  system_event: 'System Event',
-  admin_action: 'Admin Action',
-  security_event: 'Security Event',
-  api_call: 'API Call',
-  data_change: 'Data Change',
-  error_event: 'Error Event',
-  performance_event: 'Performance Event',
-  authentication: 'Authentication',
-  authorization: 'Authorization',
-  file_operation: 'File Operation',
-  workflow_event: 'Workflow Event',
+export const ACTIVITY_TYPE_LABELS: Record<ActivityType, string> = { user_action: 'User Action'
+  system_event: 'System Event'
+  admin_action: 'Admin Action'
+  security_event: 'Security Event'
+  api_call: 'API Call'
+  data_change: 'Data Change'
+  error_event: 'Error Event'
+  performance_event: 'Performance Event'
+  authentication: 'Authentication'
+  authorization: 'Authorization'
+  file_operation: 'File Operation'
+  workflow_event: 'Workflow Event' }
 };
 
-export const ACTIVITY_SEVERITY_COLORS: Record<ActivitySeverity, string> = {
-  critical: '#dc2626',
-  high: '#ea580c',
-  medium: '#d97706',
-  low: '#65a30d',
-  info: '#2563eb',
+export const ACTIVITY_SEVERITY_COLORS: Record<ActivitySeverity, string> = { critical: '#dc2626'
+  high: '#ea580c'
+  medium: '#d97706'
+  low: '#65a30d'
+  info: '#2563eb' }
 };

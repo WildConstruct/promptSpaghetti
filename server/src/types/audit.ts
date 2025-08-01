@@ -2,8 +2,8 @@
 // Task: E17-1753114396831-B13C0D - Create audit schema
 // Epic: 19 - Security & Compliance Framework
 
-}
-}
+
+
 export interface DataRetentionAuditRecord {
   id: string;
   timestamp: Date;
@@ -92,12 +92,13 @@ export interface DataRetentionAuditRecord {
   // Timestamps
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataSubjectRightsAuditRecord {
   id: string;
   timestamp: Date;
@@ -155,12 +156,13 @@ export interface DataSubjectRightsAuditRecord {
   metadata: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceMonitoringAuditRecord {
   id: string;
   timestamp: Date;
@@ -221,9 +223,10 @@ export interface ComplianceMonitoringAuditRecord {
   metadata: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
+
+
+
+
 
 // Supporting Types and Enums
 
@@ -325,8 +328,8 @@ export type RemediationStatus =
 
 // Supporting Interfaces
 
-}
-}
+
+
 export interface CommunicationLogEntry {
   timestamp: Date;
   method: string;
@@ -334,12 +337,13 @@ export interface CommunicationLogEntry {
   subject?: string;
   summary: string;
   attachments?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceViolation {
   id: string;
   violationType: string;
@@ -349,12 +353,13 @@ export interface ComplianceViolation {
   evidenceRefs: string[];
   regulatoryReference?: string;
   potentialFines?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationAction {
   id: string;
   actionType: string;
@@ -365,14 +370,15 @@ export interface RemediationAction {
   status: RemediationStatus;
   cost?: number;
   priority: number;
-}
-}
-}
+
+
+
+
 
 // Audit Summary Types
 
-}
-}
+
+
 export interface DataRetentionAuditSummary {
   auditDate: Date;
   operationType: DataRetentionOperationType;
@@ -387,12 +393,13 @@ export interface DataRetentionAuditSummary {
   subjectRequests: number;
   legalHoldOperations: number;
   uniqueAffectedUsers: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataSubjectRightsSummary {
   requestMonth: Date;
   requestType: DataSubjectRequestType;
@@ -402,12 +409,13 @@ export interface DataSubjectRightsSummary {
   missedDeadlines: number;
   avgProcessingDays?: number;
   escalatedRequests: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceViolationsSummary {
   complianceFramework: string;
   violationsSeverity: ViolationSeverity;
@@ -416,22 +424,24 @@ export interface ComplianceViolationsSummary {
   reportedCount: number;
   avgRiskScore?: number;
   latestViolation: Date;
-}
-}
-}
+
+
+
+
 
 // Audit Service Configuration
 
-}
-}
+
+
 export interface AuditConfiguration {
   enabledFrameworks: string[];
   retentionPeriods: {
     dataRetentionAudit: number;
     subjectRightsAudit: number;
     complianceMonitoringAudit: number;
-}
-}
+
+
+
   };
   integrityHashingEnabled: boolean;
   automaticArchivalEnabled: boolean;
@@ -441,12 +451,12 @@ export interface AuditConfiguration {
     missedDeadlines: number;
     failedOperations: number;
   };
-}
+
 
 // Export Functions Interface
 
-}
-}
+
+
 export interface AuditExportOptions {
   startDate?: Date;
   endDate?: Date;
@@ -454,15 +464,16 @@ export interface AuditExportOptions {
   operationType?: string;
   includeMetadata?: boolean;
   format?: 'JSON' | 'CSV' | 'XML';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AuditExportResult {
   auditType: 'data_retention' | 'subject_rights' | 'compliance_monitoring';
   auditData: Record<string, any>;
-}
-}
-}
+
+
+

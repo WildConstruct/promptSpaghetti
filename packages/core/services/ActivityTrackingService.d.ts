@@ -9,28 +9,24 @@
 import { Activity, ActivityQuery, ActivityQueryResult, ActivityMetrics, ActivityStream, ActivityStreamEvent, ActivityRetentionPolicy, ActivitySeverity, BaseActivity } from '../types/ActivityDataModel';
 
 }
-export interface ActivityStorage {
-    create(activity: Activity): Promise<Activity>;
+}
+export interface ActivityStorage { create(activity: Activity): Promise<Activity>;
     findById(id: string): Promise<Activity | null>;
     query(query: ActivityQuery): Promise<ActivityQueryResult>;
     update(id: string, updates: Partial<Activity>): Promise<Activity>;
     delete(id: string): Promise<boolean>;
     bulkCreate(activities: Activity[]): Promise<Activity[]>;
-    getMetrics(query: ActivityQuery): Promise<ActivityMetrics>;
-
-
+    getMetrics(query: ActivityQuery): Promise<ActivityMetrics> }
 }
-export interface ActivityStreaming {
-    createStream(filters: ActivityQuery): Promise<ActivityStream>;
+}
+export interface ActivityStreaming { createStream(filters: ActivityQuery): Promise<ActivityStream>;
     destroyStream(subscriptionId: string): Promise<boolean>;
     publishActivity(activity: Activity): Promise<void>;
     subscribe(subscriptionId: string, callback: (event: ActivityStreamEvent) => void): Promise<void>;
-    unsubscribe(subscriptionId: string): Promise<void>;
-
-
+    unsubscribe(subscriptionId: string): Promise<void> }
 }
-export interface ActivityServiceConfig {
-    storage: ActivityStorage;
+}
+export interface ActivityServiceConfig { storage: ActivityStorage;
     streaming?: ActivityStreaming;
     enableRealTime?: boolean;
     enableAnalytics?: boolean;
@@ -57,19 +53,18 @@ export declare class ActivityTrackingService {
         page?: string;
         component?: string;
         metadata?: Record<string, any>;
-        severity?: ActivitySeverity;
+        severity?: ActivitySeverity }
 }
     }): Promise<Activity>;
-    trackSystemEvent(params: {)
+    trackSystemEvent(params: { )
         source: string;
         action: string;
         description: string;
         category: string;
         severity?: ActivitySeverity;
         systemMetrics?: any;
-        metadata?: Record<string, any>;
-    }): Promise<Activity>;
-    trackAdminAction(params: {)
+        metadata?: Record<string, any> }): Promise<Activity>;
+    trackAdminAction(params: { )
         adminUserId: string;
         adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support';
         action: string;
@@ -78,9 +73,8 @@ export declare class ActivityTrackingService {
         resourceType?: string;
         resourceId?: string;
         metadata?: Record<string, any>;
-        severity?: ActivitySeverity;
-    }): Promise<Activity>;
-    trackSecurityEvent(params: {)
+        severity?: ActivitySeverity }): Promise<Activity>;
+    trackSecurityEvent(params: { )
         threatType: string;
         threatLevel: 'low' | 'medium' | 'high' | 'critical';
         source: string;
@@ -90,9 +84,8 @@ export declare class ActivityTrackingService {
         ipAddress?: string;
         userAgent?: string;
         forensicData?: any;
-        metadata?: Record<string, any>;
-    }): Promise<Activity>;
-    trackApiCall(params: {)
+        metadata?: Record<string, any> }): Promise<Activity>;
+    trackApiCall(params: { )
         method: string;
         endpoint: string;
         statusCode: number;
@@ -100,14 +93,12 @@ export declare class ActivityTrackingService {
         userId?: string;
         requestSize?: number;
         responseSize?: number;
-        metadata?: Record<string, any>;
-    }): Promise<Activity>;
-    trackPerformanceEvent(params: {)
+        metadata?: Record<string, any> }): Promise<Activity>;
+    trackPerformanceEvent(params: { )
         source: string;
         metrics: Record<string, number>;
         thresholdViolations?: string[];
-        metadata?: Record<string, any>;
-    }): Promise<Activity>;
+        metadata?: Record<string, any> }): Promise<Activity>;
     queryActivities(query: ActivityQuery): Promise<ActivityQueryResult>;
     getMetrics(query: ActivityQuery): Promise<ActivityMetrics>;
     createActivityStream(filters: ActivityQuery): Promise<ActivityStream>;

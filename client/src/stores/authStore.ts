@@ -7,54 +7,57 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-}
+
 export interface User {
   id: string;,
-  email: string;
+  email: string;,
   firstName: string;,
-  lastName: string;
+  lastName: string;,
   isEmailVerified: boolean;,
   roles: string;
-  preferences?: {
+  preferences?: {,
   theme?: 'light' | 'dark';
   notifications?: boolean;
-}
+
+
 };
-}
-}
+
+
+
 export interface AuthState {
   // User state
   user: User | null;,
-  isAuthenticated: boolean;
+  isAuthenticated: boolean;,
   isLoading: boolean;
   // Token management
   accessToken: string | null;,
-  refreshToken: string | null;
+  refreshToken: string | null;,
   tokenExpiration: number | null;
   // UI state
   error: string | null;,
   returnUrl: string | null;
   // Actions
   login: (email: string, password: string, rememberMe?: boolean) => Promise<boolean>;
-  register: (userData: {)
+  register: (userData: {),
   email: string;,
-  password: string;
+  password: string;,
   firstName: string;,
   lastName: string;
-}
+
+
 }) => Promise<boolean>;
   oauthLogin: (provider: string, returnUrl?: string) => Promise<{ url: string; state: string }>;
   processOAuthCallback: (provider: string, code: string, state: string) => Promise<boolean>;,
-  logout: () => void;
+  logout: () => void;,
   refreshTokens: () => Promise<boolean>;,
-  clearError: () => void;
+  clearError: () => void;,
   setReturnUrl: (url: string) => void;,
   updateUser: (userData: Partial<User>) => void;,
   checkAuthStatus: () => Promise<boolean>;
 
 // API base URL - use environment variable or default to server port
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-}
+
 export const useAuthStore = create<AuthState>()()
   persist();
     (set, get) => ({)
@@ -81,7 +84,7 @@ export const useAuthStore = create<AuthState>()()
               email, 
               password, 
               rememberMe 
-  }
+
           });
           if (!response.ok) {
   const errorData = await response.json();
@@ -99,7 +102,7 @@ export const useAuthStore = create<AuthState>()()
   error: null,
 });
           return true;
-        } catch (error) {
+ catch (error) {
   set({)
   isLoading: false,
   error: error instanceof Error ? error.message : 'Login failed',
@@ -110,7 +113,7 @@ export const useAuthStore = create<AuthState>()()
   tokenExpiration: null,
 });
           return false;
-  }
+
       // Register action
       register: async (userData) => {,
         set({ isLoading: true, error: null });
@@ -134,13 +137,13 @@ export const useAuthStore = create<AuthState>()()
           // Note: After registration, user typically needs to verify email
           // so we don't automatically log them in
           return true;
-        } catch (error) {
+ catch (error) {
   set({)
   isLoading: false,
   error: error instanceof Error ? error.message : 'Registration failed',
 });
           return false;
-  }
+
       // OAuth login initiation
       oauthLogin: async (provider: string, returnUrl?: string) => {
         set({ isLoading: true, error: null });
@@ -149,7 +152,7 @@ export const useAuthStore = create<AuthState>()()
   provider,
             ...(returnUrl && { returnUrl })
           });
-          const response = await fetch(`${API_BASE_URL}/api/auth/oauth/authorize?${queryParams.toString()}`, {},}
+          const response = await fetch(`${API_BASE_URL}/api/auth/oauth/authorize?${queryParams.toString()}`, {},},
   method: 'GET',
             headers: {
   'Content-Type': 'application/json',
@@ -160,13 +163,13 @@ export const useAuthStore = create<AuthState>()()
           const data = await response.json();
           set({ isLoading: false });
           return { url: data.url, state: data.state };
-        } catch (error) {
+ catch (error) {
   set({)
   isLoading: false,
   error: error instanceof Error ? error.message : 'OAuth authorization failed',
 });
           throw error;
-  }
+
       // Process OAuth callback
       processOAuthCallback: async (provider: string, code: string, state: string) => {
         set({ isLoading: true, error: null });
@@ -175,7 +178,7 @@ export const useAuthStore = create<AuthState>()()
   code,
             state
           });
-          const response = await fetch(`${API_BASE_URL}/api/auth/oauth/callback/${provider}?${queryParams.toString()}`, {},}
+          const response = await fetch(`${API_BASE_URL}/api/auth/oauth/callback/${provider}?${queryParams.toString()}`, {},},
   method: 'GET',
             headers: {
   'Content-Type': 'application/json',
@@ -196,7 +199,7 @@ export const useAuthStore = create<AuthState>()()
   error: null,
 });
           return true;
-        } catch (error) {
+ catch (error) {
   set({)
   isLoading: false,
   error: error instanceof Error ? error.message : 'OAuth callback failed',
@@ -207,7 +210,7 @@ export const useAuthStore = create<AuthState>()()
   tokenExpiration: null,
 });
           return false;
-  }
+
       // Logout action
       logout: () => {,
         const { refreshToken } = get();
@@ -230,7 +233,7 @@ export const useAuthStore = create<AuthState>()()
   error: null,
   returnUrl: null,
 });
-  }
+
       // Refresh tokens
       refreshTokens: async () => {,
         const { refreshToken } = get();
@@ -256,25 +259,25 @@ export const useAuthStore = create<AuthState>()()
   error: null,
 });
           return true;
-        } catch (error) {
+ catch (error) {
           // Refresh failed, clear auth state
           get().logout();
           return false;
-  }
+
       // Clear error
       clearError: () => {,
         set({ error: null });
-  }
+
       // Set return URL for post-login redirect
       setReturnUrl: (url: string) => {,
         set({ returnUrl: url });
-  }
+
       // Update user data
       updateUser: (userData: Partial<User>) => {,
         const { user } = get();
         if (user) {
           set({ user: { ...user, ...userData } });
-  }
+
       // Check authentication status (for app initialization)
       checkAuthStatus: async () => {,
         const { accessToken, refreshToken, tokenExpiration } = get();
@@ -299,14 +302,14 @@ export const useAuthStore = create<AuthState>()()
   isAuthenticated: true,
 });
           return true;
-        } catch (error) {
+ catch (error) {
           // Auth check failed, try to refresh
           return await get().refreshTokens();
     }),
     {
   name: 'auth-storage', // localStorage key,
   storage: createJSONStorage(() => localStorage),
-  partialize: (state) => ({,)
+  partialize: (state) => ({),
   // Only persist essential auth data
   user: state.user,
   isAuthenticated: state.isAuthenticated,
@@ -314,7 +317,7 @@ export const useAuthStore = create<AuthState>()()
   refreshToken: state.refreshToken,
   tokenExpiration: state.tokenExpiration,
   returnUrl: state.returnUrl,
-}
+
 );
 
 // Utility function to get auth headers for API calls
@@ -323,7 +326,7 @@ export const getAuthHeaders = (): Record<string, string> => {
   if (accessToken) {
     return {
       'Authorization': `Bearer ${accessToken}`}
-}
+
       'Content-Type': 'application/json'
     };
   return {
@@ -339,7 +342,7 @@ export const authenticatedFetch = async (((
   const authHeaders = getAuthHeaders();
   const response = await fetch(url, {)
   ...options,
-  headers: {
+  headers: {,
   ...authHeaders,
   ...options.headers
 });
@@ -352,7 +355,7 @@ export const authenticatedFetch = async (((
   const newAuthHeaders = getAuthHeaders();
   return fetch(url, {)
   ...options,
-  headers: {
+  headers: {,
   ...newAuthHeaders,
   ...options.headers
 });

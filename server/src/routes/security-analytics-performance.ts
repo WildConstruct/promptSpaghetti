@@ -10,7 +10,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { 
   SecurityAnalyticsIntegrationService,
   SecurityAnalyticsIntegrationConfig
-} from '../services/SecurityAnalyticsIntegrationService';
+ from '../services/SecurityAnalyticsIntegrationService';
 import { AdminAuthGuard } from '../admin/guards/AdminAuthGuard';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../database/analytics-dao';
@@ -20,27 +20,29 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 // Global service instance
 let securityAnalyticsService: SecurityAnalyticsIntegrationService | null = null;
 
-}
-}
+
+
 interface SecurityAnalyticsQuery {
   timeRange?: 'last_hour' | 'last_day' | 'last_week' | 'last_month';
   includeAlerts?: boolean;
   includeMetrics?: boolean;
   includeDiagnostics?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SecurityAnalyticsResponse {
   success: boolean;
   data?: any;
   error?: string;
   timestamp: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Initialize security analytics service
@@ -49,7 +51,7 @@ async function initializeSecurityAnalyticsService(): Promise<SecurityAnalyticsIn
 
   if (securityAnalyticsService) {
     return securityAnalyticsService;
-  }
+
 
   // Configure integration with Epic 1 and Epic 17 systems
   const config: SecurityAnalyticsIntegrationConfig = {
@@ -63,7 +65,7 @@ async function initializeSecurityAnalyticsService(): Promise<SecurityAnalyticsIn
       performance_event_forwarding: true,
       batch_size: 50,
       flush_interval_ms: 10000
-  }
+
     epic17_admin_integration: {
       enabled: true,
       auth_guard: new AdminAuthGuard(),
@@ -71,7 +73,7 @@ async function initializeSecurityAnalyticsService(): Promise<SecurityAnalyticsIn
       diagnostic_service: new DiagnosticService(),
       admin_notification_enabled: true,
       security_alert_threshold: 10
-  }
+
     performance_monitoring: {
       real_time_monitoring_enabled: true,
       performance_threshold_ms: 1000,
@@ -79,21 +81,21 @@ async function initializeSecurityAnalyticsService(): Promise<SecurityAnalyticsIn
       cpu_threshold_percent: 80,
       alert_on_degradation: true,
       auto_optimization_enabled: false
-  }
+
     security_features: {
       threat_detection_enabled: true,
       anomaly_detection_sensitivity: 0.8,
       correlation_analysis_enabled: true,
       predictive_analytics_enabled: false,
       automated_response_enabled: false
-    }
+
   };
 
   securityAnalyticsService = new SecurityAnalyticsIntegrationService(config);
   await securityAnalyticsService.initialize();
 
   return securityAnalyticsService;
-}
+
 
 export default async function securityAnalyticsPerformanceRoutes(fastify: FastifyInstance) {
   // Initialize service
@@ -119,13 +121,13 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
                 integration_status: { type: 'object' },
                 current_metrics: { type: 'object' },
                 monitoring_active: { type: 'boolean' }
-              }
-  }
+
+
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<SecurityAnalyticsResponse> => {
     try {
       const integrationStatus = service.getIntegrationStatus();
@@ -137,17 +139,17 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
           integration_status: integrationStatus,
           current_metrics: currentMetrics,
           monitoring_active: integrationStatus.monitoring_active
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting security analytics status:', error);
       return {
         success: false,
         error: 'Failed to get security analytics status',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -165,13 +167,13 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
           timeRange: { 
             type: 'string', 
             enum: ['last_hour', 'last_day', 'last_week', 'last_month'] 
-  }
+
           includeAlerts: { type: 'boolean' },
           includeMetrics: { type: 'boolean' },
           includeDiagnostics: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<{ Querystring: SecurityAnalyticsQuery }>,
     reply: FastifyReply
@@ -184,30 +186,30 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
       if (includeMetrics) {
         responseData.current_metrics = await service.getCurrentPerformanceMetrics();
         responseData.integration_status = service.getIntegrationStatus();
-      }
+
 
       if (includeAlerts) {
         // Get recent alerts from service
         responseData.recent_alerts = []; // Would be populated from service
-      }
+
 
       if (includeDiagnostics) {
         responseData.diagnostics = await service.performDeepDiagnostics();
-      }
+
 
       return {
         success: true,
         data: responseData,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting security analytics metrics:', error);
       return {
         success: false,
         error: 'Failed to get security analytics metrics',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -225,9 +227,9 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
         properties: {
           alertId: { type: 'string' },
           acknowledgedBy: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<{ Body: { alertId: string; acknowledgedBy: string } }>,
     reply: FastifyReply
@@ -244,17 +246,17 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
           alert_id: alertId,
           acknowledged_by: acknowledgedBy,
           acknowledged_at: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error acknowledging security analytics alert:', error);
       return {
         success: false,
         error: 'Failed to acknowledge alert',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -265,7 +267,7 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
     schema: {
       description: 'Get security analytics system health',
       tags: ['Security Analytics', 'Health Check']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<SecurityAnalyticsResponse> => {
     try {
       const metrics = await service.getCurrentPerformanceMetrics();
@@ -280,17 +282,17 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
           system_availability: metrics.system_availability_percent,
           active_threats: metrics.active_threats_detected,
           last_check: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting security analytics health:', error);
       return {
         success: false,
         error: 'Failed to get system health',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -302,7 +304,7 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
     schema: {
       description: 'Trigger security analytics performance optimization',
       tags: ['Security Analytics', 'Admin']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<SecurityAnalyticsResponse> => {
     try {
       // Implementation would trigger optimization in service
@@ -313,17 +315,17 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
         data: {
           optimization_started: true,
           started_at: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error triggering security analytics optimization:', error);
       return {
         success: false,
         error: 'Failed to trigger optimization',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -335,7 +337,7 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
     schema: {
       description: 'Get comprehensive security analytics diagnostics',
       tags: ['Security Analytics', 'Admin', 'Diagnostics']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<SecurityAnalyticsResponse> => {
     try {
       const diagnostics = await service.performDeepDiagnostics();
@@ -345,14 +347,14 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
         data: diagnostics,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting security analytics diagnostics:', error);
       return {
         success: false,
         error: 'Failed to get diagnostics',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Setup service event handlers for real-time updates
@@ -372,6 +374,5 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
   fastify.addHook('onClose', async () => {
     if (securityAnalyticsService) {
       await securityAnalyticsService.shutdown();
-    }
+
   });
-}

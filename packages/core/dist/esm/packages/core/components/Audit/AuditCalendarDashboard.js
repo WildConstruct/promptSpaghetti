@@ -356,25 +356,21 @@ onScheduleUpdate: (scheduleId, updates) => void ;
 loading: boolean;
  > ;
 ({ schedules, onScheduleClick, onScheduleUpdate, loading }) => {
-    const columns = [];
-    {
-        title: 'Title',
-            dataIndex;
-        'title',
-            key;
-        'title',
-            render;
-        (title, record) => ()
-            < Button;
-        type = "link";
-        onClick = {}();
-        onScheduleClick(record);
-    }
-     >
-        { title };
-    Button >
-    ;
+    const columns = [
+        {
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
+            render: (title, record) => ()
+                < Button, type = "link", onClick = {}()
+        }
+    ];
+    onScheduleClick(record);
 };
+ >
+    { title };
+Button >
+;
 {
     title: 'Activity Type',
         dataIndex;
@@ -615,25 +611,21 @@ onScheduleClick: (schedule) => void ;
 onScheduleUpdate: (scheduleId, updates) => void ;
  > ;
 ({ schedules, onScheduleClick, onScheduleUpdate }) => {
-    const columns = [];
-    {
-        title: 'Title',
-            dataIndex;
-        'title',
-            key;
-        'title',
-            render;
-        (title, record) => ()
-            < Button;
-        type = "link";
-        onClick = {}();
-        onScheduleClick(record);
-    }
-    style = {};
-    {
-        padding: 0;
-    }
+    const columns = [
+        {
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
+            render: (title, record) => ()
+                < Button, type = "link", onClick = {}()
+        }
+    ];
+    onScheduleClick(record);
 };
+style = {};
+{
+    padding: 0;
+}
  >
     _jsxs(Space, { children: [_jsx(WarningOutlined, { style: { color: '#f5222d' } }), title] });
 Button >

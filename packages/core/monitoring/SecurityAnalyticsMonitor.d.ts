@@ -9,48 +9,40 @@ import { PerformanceMonitor, PerformanceAlert } from './PerformanceMonitor';
 import { SecurityEvent } from '../security/AlertingSystem';
 
 }
-export interface SecurityAnalyticsMetrics {
-    threatDetectionMetrics: {
+}
+export interface SecurityAnalyticsMetrics { threatDetectionMetrics: {
         threatsDetected: number;
         falsePositives: number;
         truePositives: number;
         threatLevel: number;
         detectionAccuracy: number;
-        timeToDetection: number;
+        timeToDetection: number }
 }
     };
-    complianceMetrics: {
-        complianceViolations: number;
+    complianceMetrics: { complianceViolations: number;
         auditTrailEntries: number;
         dataAccessEvents: number;
         policyEnforcements: number;
-        complianceScore: number;
-    };
-    accessControlMetrics: {
-        authenticationAttempts: number;
+        complianceScore: number };
+    accessControlMetrics: { authenticationAttempts: number;
         failedAuthentications: number;
         privilegeEscalations: number;
         sessionAnomalies: number;
-        accessViolations: number;
-    };
-    dataProtectionMetrics: {
-        encryptionOperations: number;
+        accessViolations: number };
+    dataProtectionMetrics: { encryptionOperations: number;
         dataClassificationEvents: number;
         dataLeakageIncidents: number;
         backupIntegrityChecks: number;
-        dataRetentionActions: number;
-    };
-    incidentResponseMetrics: {
-        incidentCount: number;
+        dataRetentionActions: number };
+    incidentResponseMetrics: { incidentCount: number;
         meanTimeToDetection: number;
         meanTimeToResponse: number;
         meanTimeToResolution: number;
-        escalationRate: number;
-    };
+        escalationRate: number };
 
 }
-export interface SecuritySystemHealth {
-    systemId: string;
+}
+export interface SecuritySystemHealth { systemId: string;
     systemType: 'firewall' | 'ids' | 'siem' | 'auth' | 'compliance' | 'backup' | 'encryption';
     status: 'healthy' | 'degraded' | 'critical' | 'offline';
     lastHealthCheck: number;
@@ -68,30 +60,26 @@ export interface SecuritySystemHealth {
     networkLatency: number;
     configurationVersion: string;
     lastConfigUpdate: number;
-    pendingUpdates: number;
-
+    pendingUpdates: number }
 }
-export interface SecurityAnalyticsAlert extends PerformanceAlert {
-    securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';
+}
+export interface SecurityAnalyticsAlert extends PerformanceAlert { securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';
     affectedSystems: string[];
     threatLevel: number;
     complianceImpact: 'none' | 'low' | 'medium' | 'high' | 'critical';
     recommendedActions: string[];
-    relatedEvents: string[];
-
+    relatedEvents: string[] }
 }
-export interface SecurityAnalyticsConfig {
-    performanceConfig: {
+export interface SecurityAnalyticsConfig { performanceConfig: {
         enableMemoryTracking: boolean;
         enableContextTracking: boolean;
         enableAggregation: boolean;
         enableAlerting: boolean;
         slowExecutionThreshold: number;
-        memoryThreshold: number;
+        memoryThreshold: number }
 }
     };
-    securityConfig: {
-        enableThreatDetection: boolean;
+    securityConfig: { enableThreatDetection: boolean;
         enableComplianceMonitoring: boolean;
         enableAccessControlTracking: boolean;
         enableDataProtectionMonitoring: boolean;
@@ -103,19 +91,15 @@ export interface SecurityAnalyticsConfig {
         responseTimeThreshold: number;
         healthCheckInterval: number;
         systemHealthThreshold: number;
-        alertCorrelationWindow: number;
-    };
-    integrationConfig: {
-        siemIntegration: boolean;
+        alertCorrelationWindow: number };
+    integrationConfig: { siemIntegration: boolean;
         complianceIntegration: boolean;
         auditIntegration: boolean;
-        threatIntelIntegration: boolean;
-    };
+        threatIntelIntegration: boolean };
 /**
  * Security Analytics Monitor extending Epic 1 Performance Monitor
  */
-export declare class SecurityAnalyticsMonitor extends EventEmitter {
-    private performanceMonitor;
+export declare class SecurityAnalyticsMonitor extends EventEmitter { private performanceMonitor;
     private config;
     private securityMetrics;
     private systemHealthMap;
@@ -163,40 +147,30 @@ export declare class SecurityAnalyticsMonitor extends EventEmitter {
             healthy: number;
             degraded: number;
             critical: number;
-            offline: number;
-        };
+            offline: number };
         threatLevel: number;
         complianceScore: number;
-        incidentStats: {
-            activeIncidents: number;
+        incidentStats: { activeIncidents: number;
             meanDetectionTime: number;
-            meanResponseTime: number;
-        };
-        topThreats: Array<{
-            type: string;
-            count: number;
-        }>;
-        systemPerformance: Array<{
-            systemId: string;
+            meanResponseTime: number };
+        topThreats: Array<{ type: string;
+            count: number }>;
+        systemPerformance: Array<{ systemId: string;
             healthScore: number;
             responseTime: number;
-            threatDetectionRate: number;
-        }>;
+            threatDetectionRate: number }>;
     };
     /**
      * Generate security analytics report
      */
-    generateSecurityReport(timeRange: {)
+    generateSecurityReport(timeRange: { )
         start: number;
-        end: number;
-    }): {
-        summary: {
+        end: number }): { summary: {
             totalEvents: number;
             threatsDetected: number;
             complianceViolations: number;
             incidentsResolved: number;
-            averageResponseTime: number;
-        };
+            averageResponseTime: number };
         trends: {
             threatTrend: 'increasing' | 'stable' | 'decreasing';
             complianceTrend: 'improving' | 'stable' | 'degrading';

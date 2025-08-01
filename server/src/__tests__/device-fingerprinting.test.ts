@@ -34,19 +34,19 @@ describe('DeviceFingerprintingService', () => {
     // Mock database
     mockDb = {
       query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
-    } as any;
+ as any;
 
     // Mock Redis
     mockRedis = {
       get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
       setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
       del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
-    } as any;
+ as any;
 
     // Mock audit service
     mockAuditService = {
       logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
-    } as any;
+ as any;
 
     // Test configuration
     testConfig = {
@@ -59,30 +59,30 @@ describe('DeviceFingerprintingService', () => {
         collectPlugins: true,
         collectWebRTC: false,
         collectHardware: true
-  }
+
       trustScoring: {
         newDevicePenalty: 10,
         consistencyBonus: 5,
         anomalyPenalty: 15,
         verificationBonus: 20,
         ageBonus: 10
-  }
+
       thresholds: {
         minimumTrustScore: 40,
         suspiciousActivityThreshold: 30,
         autoBlockThreshold: 20,
         fingerprintChangeThreshold: 90
-  }
+
       cache: {
         deviceProfileTtl: 3600,
         fingerprintTtl: 7200,
         trustScoreTtl: 1800
-  }
+
       privacy: {
         hashSensitiveData: true,
         excludeFields: ['webRTC'],
         anonymizeIPs: true
-      }
+
     };
 
     deviceService = new DeviceFingerprintingService(
@@ -203,7 +203,7 @@ describe('DeviceFingerprintingService', () => {
         if (query.includes('SELECT * FROM device_fingerprints WHERE fingerprint')) {
           if (!deviceCreated) {
             return Promise.resolve({ rows: [] }); // Device not found on first call
-          } else {
+ else {
             // Return created device after INSERT
             return Promise.resolve({ 
               rows: [{
@@ -213,14 +213,14 @@ describe('DeviceFingerprintingService', () => {
                 last_seen: new Date(),
                 seen_count: 1,
                 trust_score: 50
-              }]
+]
             });
-          }
-        }
+
+
         if (query.includes('INSERT INTO device_fingerprints')) {
           deviceCreated = true;
           return Promise.resolve({ rows: [] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -269,22 +269,22 @@ describe('DeviceFingerprintingService', () => {
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('SELECT * FROM device_fingerprints')) {
           return Promise.resolve({ rows: [existingDevice] });
-        }
+
         if (query.includes('SELECT * FROM device_trust_profiles')) {
           return Promise.resolve({ 
             rows: [{
               fingerprint: testFingerprint,
               trust_score: 60,
               verification_status: 'verified'
-            }]
+]
           });
-        }
+
         if (query.includes('SELECT * FROM device_user_associations')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT * FROM device_security_events')) {
           return Promise.resolve({ rows: [] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -309,7 +309,7 @@ describe('DeviceFingerprintingService', () => {
         if (query.includes('SELECT * FROM device_fingerprints WHERE fingerprint')) {
           if (!deviceCreated) {
             return Promise.resolve({ rows: [] }); // Device not found on first call
-          } else {
+ else {
             // Return created device after INSERT
             return Promise.resolve({ 
               rows: [{
@@ -319,14 +319,14 @@ describe('DeviceFingerprintingService', () => {
                 last_seen: new Date(),
                 seen_count: 1,
                 trust_score: 50
-              }]
+]
             });
-          }
-        }
+
+
         if (query.includes('INSERT INTO device_fingerprints')) {
           deviceCreated = true;
           return Promise.resolve({ rows: [] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -356,19 +356,19 @@ describe('DeviceFingerprintingService', () => {
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('SELECT * FROM device_fingerprints')) {
           return Promise.resolve({ rows: [newDevice] });
-        }
+
         if (query.includes('SELECT * FROM device_trust_profiles')) {
           return Promise.resolve({ rows: [{ trust_score: 50 }] });
-        }
+
         if (query.includes('SELECT * FROM device_user_associations')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT * FROM device_security_events')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT EXTRACT(HOUR')) {
           return Promise.resolve({ rows: [] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -391,31 +391,31 @@ describe('DeviceFingerprintingService', () => {
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('SELECT * FROM device_fingerprints')) {
           return Promise.resolve({ rows: [oldDevice] });
-        }
+
         if (query.includes('SELECT * FROM device_trust_profiles')) {
           return Promise.resolve({ 
             rows: [{
               trust_score: 60,
               verification_status: 'verified'
-            }]
+]
           });
-        }
+
         if (query.includes('SELECT * FROM device_user_associations')) {
           return Promise.resolve({ 
             rows: [{ user_id: testUserId, is_trusted: true }]
           });
-        }
+
         if (query.includes('SELECT * FROM device_security_events')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT EXTRACT(HOUR')) {
           return Promise.resolve({ 
             rows: Array.from({ length: 24 }, (_, i) => ({ hour: i, count: 10 }))
           });
-        }
+
         if (query.includes('SELECT COUNT')) {
           return Promise.resolve({ rows: [{ count: '0' }] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -441,34 +441,34 @@ describe('DeviceFingerprintingService', () => {
           severity: 'medium',
           created_at: new Date(),
           resolved: false
-  }
+
         {
           event_type: 'suspicious_activity',
           severity: 'high',
           created_at: new Date(),
           resolved: false
-        }
+
       ];
 
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('SELECT * FROM device_fingerprints')) {
           return Promise.resolve({ rows: [device] });
-        }
+
         if (query.includes('SELECT * FROM device_trust_profiles')) {
           return Promise.resolve({ rows: [{ trust_score: 70 }] });
-        }
+
         if (query.includes('SELECT * FROM device_user_associations')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT * FROM device_security_events')) {
           return Promise.resolve({ rows: securityEvents });
-        }
+
         if (query.includes('SELECT EXTRACT(HOUR')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT COUNT')) {
           return Promise.resolve({ rows: [{ count: '2' }] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -492,29 +492,29 @@ describe('DeviceFingerprintingService', () => {
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('SELECT * FROM device_fingerprints')) {
           return Promise.resolve({ rows: [device] });
-        }
+
         if (query.includes('SELECT * FROM device_trust_profiles')) {
           return Promise.resolve({ 
             rows: [{
               trust_score: 70,
               verification_status: 'verified'
-            }]
+]
           });
-        }
+
         if (query.includes('SELECT * FROM device_user_associations')) {
           return Promise.resolve({ 
             rows: [{ user_id: testUserId, is_trusted: true }]
           });
-        }
+
         if (query.includes('SELECT * FROM device_security_events')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT EXTRACT(HOUR')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT COUNT')) {
           return Promise.resolve({ rows: [{ count: '0' }] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -535,7 +535,7 @@ describe('DeviceFingerprintingService', () => {
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('SELECT * FROM device_fingerprints')) {
           return Promise.resolve({ rows: [blockedDevice] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -556,22 +556,22 @@ describe('DeviceFingerprintingService', () => {
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('SELECT * FROM device_fingerprints')) {
           return Promise.resolve({ rows: [device] });
-        }
+
         if (query.includes('SELECT * FROM device_trust_profiles')) {
           return Promise.resolve({ rows: [{ trust_score: 60 }] });
-        }
+
         if (query.includes('SELECT * FROM device_user_associations')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT * FROM device_security_events')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT EXTRACT(HOUR')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT COUNT')) {
           return Promise.resolve({ rows: [{ count: '0' }] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -603,24 +603,24 @@ describe('DeviceFingerprintingService', () => {
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('SELECT * FROM device_fingerprints')) {
           return Promise.resolve({ rows: [device] });
-        }
+
         if (query.includes('SELECT * FROM device_trust_profiles')) {
           return Promise.resolve({ rows: [{ trust_score: 60 }] });
-        }
+
         if (query.includes('SELECT * FROM device_user_associations')) {
           return Promise.resolve({ 
             rows: [{ user_id: otherUserId, is_trusted: true }] // Different user
           });
-        }
+
         if (query.includes('SELECT * FROM device_security_events')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT EXTRACT(HOUR')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('SELECT COUNT')) {
           return Promise.resolve({ rows: [{ count: '0' }] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -656,7 +656,7 @@ describe('DeviceFingerprintingService', () => {
           last_accessed: new Date(),
           access_count: 30,
           is_trusted: true
-        }
+
       ];
 
       const securityEvents = [
@@ -665,28 +665,28 @@ describe('DeviceFingerprintingService', () => {
           severity: 'low',
           created_at: new Date('2024-01-01'),
           resolved: true
-        }
+
       ];
 
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('SELECT * FROM device_fingerprints')) {
           return Promise.resolve({ rows: [device] });
-        }
+
         if (query.includes('device_user_associations')) {
           return Promise.resolve({ rows: users });
-        }
+
         if (query.includes('SELECT * FROM device_trust_profiles')) {
           return Promise.resolve({ 
             rows: [{
               location_history: [
                 { country: 'US', city: 'San Francisco', timestamp: new Date() }
               ]
-            }]
+]
           });
-        }
+
         if (query.includes('device_security_events')) {
           return Promise.resolve({ rows: securityEvents });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -721,17 +721,17 @@ describe('DeviceFingerprintingService', () => {
               last_seen: new Date(),
               seen_count: 25,
               trust_score: 70
-            }]
+]
           });
-        }
+
         if (query.includes('SELECT * FROM device_trust_profiles')) {
           return Promise.resolve({ 
             rows: [{
               trust_score: 70,
               verification_status: 'verified'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -796,26 +796,26 @@ describe('DeviceFingerprintingService', () => {
               blocked_devices: '5',
               avg_trust_score: '65.5',
               suspicious_devices: '8'
-            }]
+]
           });
-        }
+
         if (query.includes('device_security_events')) {
           return Promise.resolve({
             rows: [{
               total_events: '50',
               high_severity_events: '5',
               unresolved_events: '12'
-            }]
+]
           });
-        }
+
         if (query.includes('device_user_associations')) {
           return Promise.resolve({
             rows: [{
               users_with_devices: '80',
               avg_devices_per_user: '1.25'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -856,10 +856,10 @@ describe('DeviceFingerprintingService', () => {
       (mockDb as any).query.mockImplementation((query) => {
         if (query.includes('EXTRACT(HOUR')) {
           return Promise.resolve({ rows: accessPatterns });
-        }
+
         if (query.includes('COUNT(*) as count')) {
           return Promise.resolve({ rows: [{ count: '2' }] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -916,7 +916,7 @@ describe('DeviceFingerprintingService', () => {
         if (query.includes('SELECT * FROM device_fingerprints WHERE fingerprint')) {
           if (!deviceCreated) {
             return Promise.resolve({ rows: [] }); // Device not found on first call
-          } else {
+ else {
             // Return created device after INSERT
             return Promise.resolve({ 
               rows: [{
@@ -926,14 +926,14 @@ describe('DeviceFingerprintingService', () => {
                 last_seen: new Date(),
                 seen_count: 1,
                 trust_score: 50
-              }]
+]
             });
-          }
-        }
+
+
         if (query.includes('INSERT INTO device_fingerprints')) {
           deviceCreated = true;
           return Promise.resolve({ rows: [] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -973,7 +973,7 @@ describe('DeviceFingerprintingService', () => {
           severity: 'medium',
           description: 'Test description',
           additional: 'data'
-  }
+
         severity: 'warning'
       });
     });

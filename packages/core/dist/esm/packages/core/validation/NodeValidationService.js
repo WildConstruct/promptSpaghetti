@@ -359,7 +359,7 @@ for (let i = 0; i < content.length; i++) {
                         // Also emit specific event type
                         this.emit(eventType, data);
                         chunkArray(array, T, chunkSize, number);
-                        T[];
+                        T;
                         {
                             const chunks = [];
                             for (let i = 0; i < array.length; i += chunkSize) {

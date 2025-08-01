@@ -30,6 +30,17 @@ metadata: {
     complianceFrameworks ?  : string;
 }
 ;
+position: {
+    x: number;
+    y: number;
+}
+;
+size: {
+    width: number;
+    height: number;
+}
+;
+config: Record;
 [];
 permissions: DashboardPermissions;
 export class DashboardRegistry {
@@ -455,7 +466,7 @@ DashboardType.OPERATIONAL,
             dashboardType: DashboardType.EXECUTIVE,
             theme: DashboardTheme.CINEMA,
             layout: 'standard',
-            widgets: [,
+            widgets: [
                 { id: 'security-score', type: 'security-gauge', position: { x: 0, y: 0 }, size: { width: 2, height: 2 }, config: {} },
                 { id: 'risk-level', type: 'risk-indicator', position: { x: 2, y: 0 }, size: { width: 1, height: 2 }, config: {} },
                 { id: 'incidents', type: 'incident-summary', position: { x: 3, y: 0 }, size: { width: 1, height: 2 }, config: {} },
@@ -477,7 +488,7 @@ DashboardType.OPERATIONAL,
             dashboardType: DashboardType.OPERATIONAL,
             theme: DashboardTheme.DARK,
             layout: 'compact',
-            widgets: [,
+            widgets: [
                 { id: 'alert-queue', type: 'alert-list', position: { x: 0, y: 0 }, size: { width: 4, height: 4 }, config: {} },
                 { id: 'metrics', type: 'metrics-summary', position: { x: 4, y: 0 }, size: { width: 2, height: 2 }, config: {} },
                 { id: 'system-status', type: 'system-health', position: { x: 4, y: 2 }, size: { width: 2, height: 2 }, config: {} }
@@ -541,7 +552,7 @@ DashboardType.OPERATIONAL,
                     50;
                 }
             }
-            dataRequirements: [,
+            dataRequirements: [
                 { field: 'score', type: 'number', required: true, description: 'Security score (0-100)' },
                 { field: 'trend', type: 'string', required: false, description: 'Score trend direction' },
                 { field: 'benchmark', type: 'number', required: false, description: 'Industry benchmark' }
@@ -617,7 +628,7 @@ DashboardType.OPERATIONAL,
                     true;
                 }
             }
-            dataRequirements: [,
+            dataRequirements: [
                 { field: 'alerts', type: 'object', required: true, description: 'Array of security alerts' },
                 { field: 'severity', type: 'string', required: true, description: 'Alert severity level' },
                 { field: 'timestamp', type: 'date', required: true, description: 'Alert timestamp' }
@@ -686,7 +697,7 @@ DashboardType.OPERATIONAL,
                     'traffic-light';
                 }
             }
-            dataRequirements: [,
+            dataRequirements: [
                 { field: 'frameworks', type: 'object', required: true, description: 'Compliance framework scores' },
                 { field: 'overallScore', type: 'number', required: true, description: 'Overall compliance percentage' }
             ],
@@ -850,8 +861,7 @@ DashboardType.OPERATIONAL,
                                             widgets;
                                         preset.widgets.map(w => ({}), id, w.id, type, w.type, category, this.widgets.get(w.type)?.category || 'METRICS', title, this.widgets.get(w.type)?.name || w.type, position, w.position, size, w.size, config, w.config, dataSource, {
                                             type: 'realtime',
-                                            source: 'default',
-                                        }, permissions, this.widgets.get(w.type)?.permissions || {
+                                            source: 'default', }, permissions, this.widgets.get(w.type)?.permissions || {
                                             view: [SecurityRole.VIEWER],
                                             configure: [SecurityRole.SECURITY_ADMIN],
                                             export: [SecurityRole.VIEWER],

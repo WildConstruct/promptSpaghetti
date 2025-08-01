@@ -26,38 +26,39 @@ import {
   Edit,
   Archive,
   Timer
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Types extending Epic 19 backup infrastructure for admin use
 
-}
+
 export interface AdminBackupConfiguration {
   config_id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  enabled: boolean;
+  enabled: boolean;,
   backup_type: 'full' | 'incremental' | 'differential';
   // Schedule configuration
-  schedule: {
+  schedule: {,
   frequency: 'hourly' | 'daily' | 'weekly' | 'monthly';,
   time_of_day: string; // HH:MM format,
   days_of_week?: number; // 0-6 for weekly,
   day_of_month?: number; // 1-31 for monthly,
   timezone: string;
-}
+
+
 };
   // Data scope
-  data_scope: {
+  data_scope: {,
   include_admin_configs: boolean;
   include_user_permissions: boolean;,
-  include_system_settings: boolean;
+  include_system_settings: boolean;,
   include_audit_logs: boolean;,
-  include_marketplace_data: boolean;
+  include_marketplace_data: boolean;,
   custom_tables: string;,
   exclude_tables: string;
 };
   // Retention policy
-  retention_policy: {
+  retention_policy: {,
   keep_hourly: number; // hours,
   keep_daily: number; // days,
   keep_weekly: number; // weeks,
@@ -66,29 +67,30 @@ export interface AdminBackupConfiguration {
   archive_after_days?: number;
 };
   // Storage configuration
-  storage: {
+  storage: {,
   provider: 'local' | 'aws_s3' | 'gcp_storage' | 'azure_blob';
   location: string;,
-  encryption_enabled: boolean;
+  encryption_enabled: boolean;,
   compression_enabled: boolean;
   storage_class?: string;
 };
   // Notification settings
-  notifications: {
+  notifications: {,
   on_success: boolean;
   on_failure: boolean;,
-  on_completion: boolean;
+  on_completion: boolean;,
   recipients: string;
   slack_webhook?: string;
   email_template?: string;
 };
   created_by: string;,
-  created_at: Date;
+  created_at: Date;,
   updated_at: Date;
   last_run_at?: Date;
   next_run_at?: Date;
-}
-}
+
+
+
 export interface BackupExecution {
   execution_id: string;,
   config_id: string;
@@ -100,13 +102,14 @@ export interface BackupExecution {
   backup_size_bytes?: number;
   compressed_size_bytes?: number;
   record_count?: number;
-  progress: {
+  progress: {,
   current_step: string;,
-  steps_completed: number;
+  steps_completed: number;,
   total_steps: number;,
   percentage: number;
   estimated_remaining_seconds?: number;
-}
+
+
 };
   error_details?: {
   error_code: string;,
@@ -116,73 +119,54 @@ export interface BackupExecution {
 };
   validation_results?: {
   checksum_valid: boolean;,
-  record_counts_match: boolean;
+  record_counts_match: boolean;,
   schema_valid: boolean;,
   integrity_score: number;
 };
-}
-}
+
+
+
 export interface BackupMetrics {
   total_configurations: number;,
-  active_configurations: number;
+  active_configurations: number;,
   total_recovery_points: number;,
-  total_storage_bytes: number;
-  recent_executions: {
+  total_storage_bytes: number;,
+  recent_executions: {,
   successful: number;,
-  failed: number;
+  failed: number;,
   average_duration_minutes: number;,
   last_24h_count: number;
-}
+
+
 };
-  storage_breakdown: {
+  storage_breakdown: {,
   provider: string;
   size_bytes: number;
   cost_estimate?: number;
   usage_percentage: number;
-}[];
-  upcoming_backups: {
+[];
+  upcoming_backups: {,
   config_name: string;
   next_run: Date;,
   estimated_duration: number;
-}[];
-  health_status: {
+[];
+  health_status: {,
   overall_status: 'healthy' | 'warning' | 'critical';
   issues: string;,
   recommendations: string;
 };
-const BackupDashboard: React.FC = () => {
-  // State management
-  const [configurations, setConfigurations] = useState<AdminBackupConfiguration>([]);
-  const [executions, setExecutions] = useState<BackupExecution>([]);
-  const [metrics, setMetrics] = useState<BackupMetrics | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_selectedConfig, _setSelectedConfig] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
-  // Load dashboard data
-  useEffect(() => {
-    loadBackupData();
-    const interval = setInterval(loadBackupData, 30000); // Refresh every 30 seconds;
-    return () => clearInterval(interval);
-  }, []);
-  const loadBackupData = async (): Promise<void> => {
-    setLoading(true);
-    try {
-      const [configsRes, executionsRes, metricsRes] = await Promise.all([)
-        fetch('/api/admin/backup/configurations', {)
-  headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
-        }),
+const BackupDashboard = () => { return null; }),
         fetch('/api/admin/backup/executions?limit=50', {)
   headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         }),
         fetch('/api/admin/backup/metrics', {)
   headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
-  }
+
       ]);
       if (configsRes.ok) setConfigurations(await configsRes.json());
       if (executionsRes.ok) setExecutions(await executionsRes.json());
       if (metricsRes.ok) setMetrics(await metricsRes.json());
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load backup data:', error);
   setLoading(false);
 };
@@ -195,7 +179,7 @@ const BackupDashboard: React.FC = () => {
       });
       if (response.ok) {
         loadBackupData(); // Refresh data
-    } catch (error) {
+ catch (error) {
   console.error('Failed to run backup:', error);
 };
   const handleToggleConfiguration = async (configId: string, enabled: boolean): Promise<void> => {
@@ -214,7 +198,7 @@ const BackupDashboard: React.FC = () => {
           prev.map(config => )
             config.config_id === configId ? { ...config, enabled } : config
         );
-    } catch (error) {
+ catch (error) {
   console.error('Failed to update configuration:', error);
 };
   const getStatusColor = (status: string): string => {
@@ -315,7 +299,7 @@ const BackupDashboard: React.FC = () => {
   metrics.health_status.overall_status === 'healthy' ? 'bg-green-100 text-green-800' :,
   metrics.health_status.overall_status === 'warning' ? 'bg-yellow-100 text-yellow-800' :,
   'bg-red-100 text-red-800'
-}`}>
+`}>
                 {metrics.health_status.overall_status}
               </Badge>
             </CardTitle>
@@ -560,14 +544,14 @@ const BackupDashboard: React.FC = () => {
   padding: '24px',
   background: '#f8fafc',
   minHeight: '100vh',
-}}>
+}>
       <div style={{
   background: 'white',
   borderRadius: '12px',
   padding: '24px',
   marginBottom: '24px',
   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-}}>
+}>
         <div className="header-content">
           <div className="title-section">
             <Database className="w-8 h-8 text-blue-600" />
@@ -597,5 +581,5 @@ const BackupDashboard: React.FC = () => {
     </div>
   );
 };
-}
+
 export default BackupDashboard;

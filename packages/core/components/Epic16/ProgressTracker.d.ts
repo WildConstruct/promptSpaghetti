@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface UserProgress {
-    userId: string;
+}
+export interface UserProgress { userId: string;
     level: number;
     totalXP: number;
     nextLevelXP: number;
@@ -16,12 +16,10 @@ export interface UserProgress {
     joinDate: Date;
     lastActivity: Date;
     streakDays: number;
-    longestStreak: number;
-
-
+    longestStreak: number }
 }
-export interface EngagementMetrics {
-    templatesViewed: number;
+}
+export interface EngagementMetrics { templatesViewed: number;
     searchesPerformed: number;
     categoriesExplored: number;
     filtersUsed: number;
@@ -40,12 +38,10 @@ export interface EngagementMetrics {
     tutorialsCompleted: number;
     skillsLearned: string[];
     certificationsEarned: number;
-    learningPathsCompleted: number;
-
-
+    learningPathsCompleted: number }
 }
-export interface Milestone {
-    id: string;
+}
+export interface Milestone { id: string;
     title: string;
     description: string;
     category: 'discovery' | 'usage' | 'creation' | 'social' | 'learning' | 'special';
@@ -57,9 +53,8 @@ export interface Milestone {
     badgeReward?: string;
     icon: string;
     tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
-    rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-
-
+    rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' }
+}
 }
 export interface ProgressTrackerProps {
     userId: string;
@@ -73,4 +68,5 @@ export interface ProgressTrackerProps {
 export declare const ProgressTracker: React.FC<ProgressTrackerProps>;
 export default ProgressTracker;
 //# sourceMappingURL=ProgressTracker.d.ts.map
+}
 }

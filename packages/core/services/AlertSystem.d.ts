@@ -14,8 +14,8 @@
  */
 
 }
-export interface AlertRule {
-    id: string;
+}
+export interface AlertRule { id: string;
     name: string;
     description: string;
     type: AlertType;
@@ -30,60 +30,49 @@ export interface AlertRule {
     tags?: string[];
     createdAt: Date;
     updatedAt: Date;
-    createdBy: string;
-
-
+    createdBy: string }
 }
-export interface AlertCondition {
-    id: string;
+}
+export interface AlertCondition { id: string;
     field: string;
     operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'regex';
     value: string | number | boolean;
     aggregation?: 'sum' | 'avg' | 'min' | 'max' | 'count';
-    timeWindow?: number;
-
-
+    timeWindow?: number }
 }
-export interface AlertAction {
-    id: string;
+}
+export interface AlertAction { id: string;
     type: 'notification' | 'email' | 'webhook' | 'script' | 'create_task';
     enabled: boolean;
     configuration: Record<string, any>;
     retryPolicy?: {
         maxRetries: number;
         retryDelay: number;
-        backoffMultiplier?: number;
-
+        backoffMultiplier?: number }
 }
     };
 
 }
-export interface AlertThreshold {
-    id: string;
+}
+export interface AlertThreshold { id: string;
     name: string;
     value: number;
     comparison: 'above' | 'below' | 'equals';
-    severity: AlertSeverity;
-
-
+    severity: AlertSeverity }
 }
-export interface AlertEscalation {
-    enabled: boolean;
-    stages: AlertEscalationStage[];
-
-
 }
-export interface AlertEscalationStage {
-    id: string;
+export interface AlertEscalation { enabled: boolean;
+    stages: AlertEscalationStage[] }
+}
+}
+export interface AlertEscalationStage { id: string;
     delayMinutes: number;
     severity: AlertSeverity;
     actions: AlertAction[];
-    condition?: 'unacknowledged' | 'unresolved' | 'recurring';
-
-
+    condition?: 'unacknowledged' | 'unresolved' | 'recurring' }
 }
-export interface Alert {
-    id: string;
+}
+export interface Alert { id: string;
     ruleId: string;
     ruleName: string;
     type: AlertType;
@@ -120,11 +109,10 @@ export type AlertType = 'performance' | 'error' | 'security' | 'system' | 'user_
 export type AlertCategory = 'execution' | 'authentication' | 'authorization' | 'data_processing' | 'ui_interaction' | 'api_request' | 'database' | 'external_service' | 'configuration' | 'maintenance';
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'suppressed' | 'expired';
-export type AlertPriority = 'urgent' | 'high' | 'normal' | 'low';
-
+export type AlertPriority = 'urgent' | 'high' | 'normal' | 'low' }
 }
-export interface AlertFilter {
-    types?: AlertType[];
+}
+export interface AlertFilter { types?: AlertType[];
     categories?: AlertCategory[];
     severities?: AlertSeverity[];
     statuses?: AlertStatus[];
@@ -132,12 +120,12 @@ export interface AlertFilter {
     tags?: string[];
     dateRange?: {
         start: Date;
-        end: Date;
-
+        end: Date }
 }
     };
     searchQuery?: string;
 
+}
 }
 export interface AlertStats {
     total: number;
@@ -245,4 +233,5 @@ export declare const getAlerts: (filter?: AlertFilter) => Alert[];
 export declare const getAlertStats: () => AlertStats;
 export declare const subscribeToAlerts: (listenerId: string, callback: (alert: Alert) => void) => void;
 //# sourceMappingURL=AlertSystem.d.ts.map
+}
 }

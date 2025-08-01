@@ -12,8 +12,8 @@ import { AuditService } from '../auth/services/AuditService';
 import { PolicyAuthoringService } from './PolicyAuthoringService';
 import { PolicyNotificationService } from './PolicyNotificationService';
 
-}
-}
+
+
 export interface ComplianceReport {
   reportId: string;
   reportType: ComplianceReportType;
@@ -31,12 +31,13 @@ export interface ComplianceReport {
   certification: ReportCertification;
   distribution: ReportDistribution;
   metadata: ReportMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportScope {
   scopeId: string;
   name: string;
@@ -48,12 +49,13 @@ export interface ReportScope {
   geographicScope: string[];
   timeScope: TimeScope;
   exclusions: ScopeExclusion[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataScope {
   dataCategory: string;
   dataTypes: string[];
@@ -61,12 +63,13 @@ export interface DataScope {
   processing: ProcessingScope[];
   retention: RetentionScope;
   transfers: TransferScope[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProcessingScope {
   purpose: string;
   legalBasis: string;
@@ -74,46 +77,50 @@ export interface ProcessingScope {
   methods: string[];
   automated: boolean;
   profiling: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetentionScope {
   retentionPeriod: number;
   retentionBasis: string;
   deletionMethods: string[];
   archivalPolicy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TransferScope {
   recipientCountry: string;
   adequacyDecision: boolean;
   safeguards: string[];
   purposes: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeScope {
   startDate: Date;
   endDate: Date;
   timezone: string;
   includePastPeriods: boolean;
   forecastPeriods: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScopeExclusion {
   exclusionType: 'SYSTEM' | 'POLICY' | 'PROCESS' | 'DATA' | 'GEOGRAPHIC';
   identifier: string;
@@ -121,12 +128,13 @@ export interface ScopeExclusion {
   approvedBy: string;
   temporary: boolean;
   expiresAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportPeriod {
   periodType: 'MONTHLY' | 'QUARTERLY' | 'ANNUAL' | 'CUSTOM';
   startDate: Date;
@@ -134,35 +142,38 @@ export interface ReportPeriod {
   comparisonPeriods: ComparisonPeriod[];
   seasonalAdjustments: boolean;
   holidayAdjustments: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComparisonPeriod {
   name: string;
   startDate: Date;
   endDate: Date;
   comparisonType: 'YEAR_OVER_YEAR' | 'QUARTER_OVER_QUARTER' | 'MONTH_OVER_MONTH' | 'BASELINE';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportContent {
   executiveSummary: ExecutiveSummary;
   sections: ReportSection[];
   appendices: ReportAppendix[];
   glossary: ReportGlossary[];
   references: ReportReference[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutiveSummary {
   overallCompliance: number;
   keyFindings: string[];
@@ -171,12 +182,13 @@ export interface ExecutiveSummary {
   complianceStatus: ComplianceStatus;
   riskLevel: RiskLevel;
   nextActions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportSection {
   sectionId: string;
   title: string;
@@ -187,12 +199,13 @@ export interface ReportSection {
   tables: TableConfiguration[];
   attachments: string[];
   pageBreak: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportSubsection {
   subsectionId: string;
   title: string;
@@ -201,12 +214,13 @@ export interface ReportSubsection {
   level: number;
   charts: ChartConfiguration[];
   tables: TableConfiguration[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChartConfiguration {
   chartId: string;
   type: ChartType;
@@ -214,66 +228,72 @@ export interface ChartConfiguration {
   data: ChartData;
   styling: ChartStyling;
   interactivity: ChartInteractivity;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChartData {
   datasets: Dataset[];
   labels: string[];
   filters: DataFilter[];
   aggregation: DataAggregation;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Dataset {
   name: string;
   data: number[];
   metadata: Record<string, any>;
   styling: DatasetStyling;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DatasetStyling {
   color: string;
   pattern: string;
   thickness: number;
   transparency: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataFilter {
   field: string;
   operator: string;
   value: Error;
   active: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataAggregation {
   method: 'SUM' | 'AVERAGE' | 'COUNT' | 'MIN' | 'MAX' | 'MEDIAN';
   groupBy: string[];
   period: 'DAY' | 'WEEK' | 'MONTH' | 'QUARTER' | 'YEAR';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChartStyling {
   theme: string;
   colors: string[];
@@ -281,34 +301,37 @@ export interface ChartStyling {
   showLegend: boolean;
   showGrid: boolean;
   showAxes: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChartInteractivity {
   drillDown: boolean;
   filtering: boolean;
   export: boolean;
   tooltip: TooltipConfiguration;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TooltipConfiguration {
   enabled: boolean;
   format: string;
   includeMetadata: boolean;
   customContent: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableConfiguration {
   tableId: string;
   title: string;
@@ -317,23 +340,25 @@ export interface TableConfiguration {
   pagination: TablePagination;
   sorting: TableSorting;
   filtering: TableFiltering;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableData {
   headers: TableHeader[];
   rows: TableRow[];
   footer: TableFooter;
   totals: TableTotals;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableHeader {
   column: string;
   title: string;
@@ -342,166 +367,181 @@ export interface TableHeader {
   alignment: 'LEFT' | 'CENTER' | 'RIGHT';
   sortable: boolean;
   filterable: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableRow {
   rowId: string;
   cells: TableCell[];
   styling: RowStyling;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableCell {
   value: Error;
   displayValue: string;
   formatting: CellFormatting;
   hyperlink: string;
   tooltip: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CellFormatting {
   color: string;
   backgroundColor: string;
   bold: boolean;
   italic: boolean;
   alignment: 'LEFT' | 'CENTER' | 'RIGHT';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RowStyling {
   backgroundColor: string;
   textColor: string;
   highlight: boolean;
   strikethrough: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableFooter {
   enabled: boolean;
   content: string;
   styling: RowStyling;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableTotals {
   enabled: boolean;
   columns: string[];
   method: 'SUM' | 'AVERAGE' | 'COUNT';
   formatting: CellFormatting;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableFormatting {
   striped: boolean;
   bordered: boolean;
   compact: boolean;
   responsive: boolean;
   theme: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TablePagination {
   enabled: boolean;
   pageSize: number;
   showPageNumbers: boolean;
   showPageInfo: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableSorting {
   enabled: boolean;
   defaultSort: TableSort[];
   multiColumn: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableSort {
   column: string;
   direction: 'ASC' | 'DESC';
   priority: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TableFiltering {
   enabled: boolean;
   globalFilter: boolean;
   columnFilters: ColumnFilter[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ColumnFilter {
   column: string;
   filterType: 'TEXT' | 'NUMBER' | 'DATE' | 'SELECT' | 'RANGE';
   options: unknown[];
   defaultValue: Error;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportAppendix {
   appendixId: string;
   title: string;
   content: string;
   attachments: string[];
   references: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportGlossary {
   term: string;
   definition: string;
   category: string;
   references: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportReference {
   referenceId: string;
   type: 'REGULATION' | 'STANDARD' | 'GUIDANCE' | 'CASE_LAW' | 'ARTICLE' | 'BOOK';
@@ -510,12 +550,13 @@ export interface ReportReference {
   url: string;
   accessedDate: Date;
   citation: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceMetrics {
   overallScore: number;
   frameworkScores: FrameworkScore[];
@@ -523,12 +564,13 @@ export interface ComplianceMetrics {
   benchmarks: MetricBenchmark[];
   kpis: KPIMetric[];
   gaps: ComplianceGap[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FrameworkScore {
   framework: string;
   score: number;
@@ -537,12 +579,13 @@ export interface FrameworkScore {
   status: ComplianceStatus;
   lastAssessed: Date;
   components: ComponentScore[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComponentScore {
   component: string;
   score: number;
@@ -550,57 +593,62 @@ export interface ComponentScore {
   weight: number;
   status: ComplianceStatus;
   issues: ComponentIssue[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComponentIssue {
   issueId: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   description: string;
   impact: number;
   remediation: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MetricTrend {
   metric: string;
   values: TrendValue[];
   direction: 'IMPROVING' | 'DECLINING' | 'STABLE';
   velocity: number;
   forecast: TrendForecast[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrendValue {
   date: Date;
   value: number;
   context: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrendForecast {
   date: Date;
   predicted: number;
   confidence: number;
   scenario: 'OPTIMISTIC' | 'REALISTIC' | 'PESSIMISTIC';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MetricBenchmark {
   metric: string;
   currentValue: number;
@@ -609,12 +657,13 @@ export interface MetricBenchmark {
   variance: number;
   percentile: number;
   industryAverage: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KPIMetric {
   kpiId: string;
   name: string;
@@ -624,12 +673,13 @@ export interface KPIMetric {
   achievement: number;
   status: 'EXCEEDS' | 'MEETS' | 'BELOW' | 'CRITICAL';
   trend: 'UP' | 'DOWN' | 'STABLE';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceGap {
   gapId: string;
   framework: string;
@@ -641,12 +691,13 @@ export interface ComplianceGap {
   timeline: number;
   cost: number;
   priority: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceFinding {
   findingId: string;
   type: FindingType;
@@ -662,12 +713,13 @@ export interface ComplianceFinding {
   assignee: string;
   dueDate: Date;
   progress: FindingProgress;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FindingEvidence {
   evidenceId: string;
   type: 'DOCUMENT' | 'LOG' | 'SCREENSHOT' | 'TESTIMONY' | 'DATA';
@@ -677,12 +729,13 @@ export interface FindingEvidence {
   verified: boolean;
   verifiedBy: string;
   verifiedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FindingImpact {
   riskLevel: RiskLevel;
   affectedSystems: string[];
@@ -690,12 +743,13 @@ export interface FindingImpact {
   affectedData: string[];
   potentialPenalties: PotentialPenalty[];
   businessImpact: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PotentialPenalty {
   framework: string;
   penaltyType: 'FINE' | 'SANCTION' | 'ENFORCEMENT_ACTION' | 'REPUTATIONAL';
@@ -703,12 +757,13 @@ export interface PotentialPenalty {
   maxAmount: number;
   probability: number;
   currency: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FindingRecommendation {
   priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   actions: RecommendedAction[];
@@ -717,12 +772,13 @@ export interface FindingRecommendation {
   cost: number;
   benefits: string[];
   risks: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RecommendedAction {
   actionId: string;
   description: string;
@@ -730,48 +786,52 @@ export interface RecommendedAction {
   owner: string;
   dependencies: string[];
   deliverables: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FindingProgress {
   status: FindingStatus;
   percentComplete: number;
   milestones: ProgressMilestone[];
   lastUpdate: Date;
   comments: ProgressComment[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProgressMilestone {
   milestoneId: string;
   name: string;
   dueDate: Date;
   completedDate: Date;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'DELAYED';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProgressComment {
   commentId: string;
   author: string;
   timestamp: Date;
   content: string;
   visibility: 'PUBLIC' | 'INTERNAL' | 'RESTRICTED';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceRecommendation {
   recommendationId: string;
   category: RecommendationCategory;
@@ -784,12 +844,13 @@ export interface ComplianceRecommendation {
   risks: RecommendationRisk[];
   alternatives: Alternative[];
   approval: RecommendationApproval;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImplementationPlan {
   phases: ImplementationPhase[];
   timeline: number;
@@ -798,12 +859,13 @@ export interface ImplementationPlan {
   resources: RequiredResource[];
   dependencies: string[];
   milestones: PlanMilestone[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImplementationPhase {
   phaseId: string;
   name: string;
@@ -812,24 +874,26 @@ export interface ImplementationPhase {
   dependencies: string[];
   deliverables: string[];
   success_criteria: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RequiredResource {
   resourceType: 'HUMAN' | 'TECHNICAL' | 'FINANCIAL' | 'EXTERNAL';
   description: string;
   quantity: number;
   cost: number;
   availability: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PlanMilestone {
   milestoneId: string;
   name: string;
@@ -837,12 +901,13 @@ export interface PlanMilestone {
   dueDate: Date;
   criteria: string[];
   dependencies: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RecommendationBenefit {
   category: 'COMPLIANCE' | 'RISK_REDUCTION' | 'EFFICIENCY' | 'COST_SAVINGS' | 'REPUTATION';
   description: string;
@@ -850,24 +915,26 @@ export interface RecommendationBenefit {
   value: number;
   unit: string;
   timeframe: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RecommendationRisk {
   category: 'IMPLEMENTATION' | 'OPERATIONAL' | 'FINANCIAL' | 'TECHNICAL' | 'REGULATORY';
   description: string;
   probability: number;
   impact: string;
   mitigation: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Alternative {
   alternativeId: string;
   name: string;
@@ -877,12 +944,13 @@ export interface Alternative {
   cost: number;
   timeline: number;
   feasibility: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RecommendationApproval {
   required: boolean;
   approvers: string[];
@@ -891,12 +959,13 @@ export interface RecommendationApproval {
   approvedAt: Date;
   conditions: string[];
   comments: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportEvidence {
   evidenceId: string;
   type: EvidenceType;
@@ -908,12 +977,13 @@ export interface ReportEvidence {
   verificationDetails: VerificationDetails;
   retention: EvidenceRetention;
   access: EvidenceAccess;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VerificationDetails {
   verifiedBy: string;
   verifiedAt: Date;
@@ -921,36 +991,39 @@ export interface VerificationDetails {
   notes: string;
   attestation: boolean;
   witnesses: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceRetention {
   retentionPeriod: number;
   retentionBasis: string;
   deleteAfter: Date;
   archiveAfter: Date;
   legalHold: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceAccess {
   classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
   accessControls: string[];
   viewPermissions: string[];
   downloadPermissions: string[];
   auditAccess: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportCertification {
   certified: boolean;
   certifiedBy: string;
@@ -959,12 +1032,13 @@ export interface ReportCertification {
   attestation: CertificationAttestation;
   approvals: CertificationApproval[];
   digitalSignature: DigitalSignature;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CertificationAttestation {
   statement: string;
   accuracy: boolean;
@@ -972,12 +1046,13 @@ export interface CertificationAttestation {
   methodology: string;
   limitations: string[];
   assumptions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CertificationApproval {
   role: string;
   approver: string;
@@ -985,12 +1060,13 @@ export interface CertificationApproval {
   scope: string[];
   conditions: string[];
   comments: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DigitalSignature {
   algorithm: string;
   signature: string;
@@ -998,24 +1074,26 @@ export interface DigitalSignature {
   timestamp: Date;
   valid: boolean;
   verificationDetails: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportDistribution {
   distributionList: ReportRecipient[];
   deliveryMethods: DeliveryMethod[];
   accessControls: ReportAccessControl[];
   notifications: DistributionNotification[];
   tracking: DistributionTracking;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportRecipient {
   recipientId: string;
   name: string;
@@ -1025,59 +1103,64 @@ export interface ReportRecipient {
   accessLevel: 'FULL' | 'SUMMARY' | 'RESTRICTED';
   deliveryPreference: 'EMAIL' | 'PORTAL' | 'API' | 'PRINT';
   notificationPreference: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeliveryMethod {
   method: 'EMAIL' | 'PORTAL' | 'API' | 'PRINT' | 'SECURE_TRANSFER';
   configuration: Record<string, any>;
   encryption: boolean;
   compression: boolean;
   format: 'PDF' | 'HTML' | 'DOCX' | 'XLSX' | 'JSON';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportAccessControl {
   controlType: 'VIEW' | 'DOWNLOAD' | 'SHARE' | 'EDIT' | 'DELETE';
   permissions: string[];
   restrictions: string[];
   auditRequired: boolean;
   timeLimit: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DistributionNotification {
   notificationType: 'GENERATION' | 'DELIVERY' | 'ACCESS' | 'EXPIRATION';
   recipients: string[];
   template: string;
   timing: 'IMMEDIATE' | 'SCHEDULED' | 'ON_DEMAND';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DistributionTracking {
   trackDelivery: boolean;
   trackAccess: boolean;
   trackDownloads: boolean;
   retentionPeriod: number;
   reportingFrequency: 'REAL_TIME' | 'DAILY' | 'WEEKLY';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportMetadata {
   version: string;
   classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
@@ -1091,9 +1174,10 @@ export interface ReportMetadata {
   relatedReports: string[];
   supersedes: string[];
   validUntil: Date;
-}
-}
-}
+
+
+
+
 
 export type ComplianceReportType = 
   | 'ANNUAL_COMPLIANCE'
@@ -1194,8 +1278,8 @@ export type EvidenceType =
   | 'COMMUNICATION_RECORD'
   | 'THIRD_PARTY_ASSESSMENT';
 
-}
-}
+
+
 export interface ComplianceReportRequest {
   reportType: ComplianceReportType;
   framework: ComplianceFramework;
@@ -1205,21 +1289,23 @@ export interface ComplianceReportRequest {
   format: 'PDF' | 'HTML' | 'DOCX' | 'XLSX' | 'JSON';
   template?: string;
   customizations?: ReportCustomization[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportCustomization {
   section: string;
   modification: 'ADD' | 'REMOVE' | 'MODIFY' | 'REORDER';
   content?: unknown;
   position?: number;
   conditions?: string[];
-}
-}
-}
+
+
+
+
 
 export class ComplianceReportingService {
   private audit: AuditService;
@@ -1234,7 +1320,7 @@ export class ComplianceReportingService {
     this.audit = audit;
     this.policyAuthoring = policyAuthoring;
     this.policyNotification = policyNotification;
-  }
+
 
   /**
    * Generate comprehensive compliance report
@@ -1312,12 +1398,11 @@ export class ComplianceReportingService {
           period: `${request.period.startDate.toISOString()} - ${request.period.endDate.toISOString()}`,
           findingsCount: findings.length,
           overallCompliance: metrics.overallScore
-        }
+
       });
 
       return { reportId };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'COMPLIANCE_REPORT_ERROR',
         userId: generatorId,
@@ -1327,12 +1412,12 @@ export class ComplianceReportingService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Get compliance dashboard data
@@ -1352,7 +1437,7 @@ export class ComplianceReportingService {
       reportingSchedule: await this.getReportingSchedule(};
 
     return dashboardData;
-  }
+
 
   /**
    * Track compliance metrics over time
@@ -1374,7 +1459,7 @@ export class ComplianceReportingService {
       benchmarks: analysis.benchmarks,
       alerts: analysis.alerts
     };
-  }
+
 
   /**
    * Generate compliance certificate
@@ -1394,7 +1479,7 @@ export class ComplianceReportingService {
       // Validate compliance status
       if (assessment.overallCompliance < 95) {
         throw new Error('Compliance threshold not met for certification');
-      }
+
 
       // Generate certificate
       const certificate = await this.createComplianceCertificate(
@@ -1420,12 +1505,11 @@ export class ComplianceReportingService {
           framework,
           complianceScore: assessment.overallCompliance,
           validUntil: certificate.validUntil
-        }
+
       });
 
       return { certificateId };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'COMPLIANCE_CERTIFICATE_ERROR',
         userId: assessorId,
@@ -1435,12 +1519,12 @@ export class ComplianceReportingService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -1448,16 +1532,16 @@ export class ComplianceReportingService {
 
     if (!request.scope.includedSystems || request.scope.includedSystems.length === 0) {
       throw new Error('At least one system must be included in report scope');
-    }
+
 
     if (request.period.startDate >= request.period.endDate) {
       throw new Error('Report period start date must be before end date');
-    }
+
 
     if (!request.recipients || request.recipients.length === 0) {
       throw new Error('At least one recipient must be specified');
-    }
-  }
+
+
 
   private async collectComplianceData(_____scope: ReportScope, _____period: ReportPeriod): Promise<ComplianceData> {
 
@@ -1470,7 +1554,7 @@ export class ComplianceReportingService {
       audits: [],
       evidence: [],
       metrics: new Map(};
-  }
+
 
   private async analyzeComplianceMetrics(
     data: ComplianceData, 
@@ -1489,14 +1573,14 @@ export class ComplianceReportingService {
           status: 'COMPLIANT',
           lastAssessed: new Date(),
           components: []
-        }
+
       ],
       trends: [],
       benchmarks: [],
       kpis: [],
       gaps: []
     };
-  }
+
 
   private async generateFindings(
     data: ComplianceData, 
@@ -1521,7 +1605,7 @@ export class ComplianceReportingService {
           affectedData: ['personal-data'],
           potentialPenalties: [],
           businessImpact: 'Potential regulatory penalties and data breach risk'
-  }
+
         recommendation: {
           priority: 'HIGH',
           actions: [],
@@ -1530,7 +1614,7 @@ export class ComplianceReportingService {
           cost: 15000,
           benefits: ['Enhanced data protection', 'Regulatory compliance'],
           risks: ['Implementation complexity']
-  }
+
         status: 'OPEN',
         assignee: 'security-team',
         dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
@@ -1540,10 +1624,10 @@ export class ComplianceReportingService {
           milestones: [],
           lastUpdate: new Date(),
           comments: []
-        }
-      }
+
+
     ];
-  }
+
 
   private async generateRecommendations(
     _____findings: ComplianceFinding[], 
@@ -1567,7 +1651,7 @@ export class ComplianceReportingService {
           resources: [],
           dependencies: [],
           milestones: []
-  }
+
         benefits: [],
         risks: [],
         alternatives: [],
@@ -1579,16 +1663,16 @@ export class ComplianceReportingService {
           approvedAt: new Date(),
           conditions: [],
           comments: ''
-        }
-      }
+
+
     ];
-  }
+
 
   private async collectEvidence(_____scope: ReportScope, _____findings: ComplianceFinding[]): Promise<ReportEvidence[]> {
 
     // Mock implementation - would collect evidence
     return [];
-  }
+
 
   private async generateReportContent(
     request: ComplianceReportRequest,
@@ -1607,13 +1691,13 @@ export class ComplianceReportingService {
         complianceStatus: metrics.overallScore >= 95 ? 'COMPLIANT' : 'PARTIAL_COMPLIANCE',
         riskLevel: this.calculateOverallRiskLevel(findings),
         nextActions: recommendations.slice(0, 3).map(r => r.title)
-  }
+
       sections: [],
       appendices: [],
       glossary: [],
       references: []
     };
-  }
+
 
   private calculateOverallRiskLevel(findings: ComplianceFinding[]): RiskLevel {
     const criticalCount = findings.filter(f => f.severity === 'CRITICAL').length;
@@ -1623,7 +1707,7 @@ export class ComplianceReportingService {
     if (highCount > 3) return 'HIGH';
     if (highCount > 0) return 'MEDIUM';
     return 'LOW';
-  }
+
 
   private async initializeCertification(): Promise<ReportCertification> {
 
@@ -1639,7 +1723,7 @@ export class ComplianceReportingService {
         methodology: '',
         limitations: [],
         assumptions: []
-  }
+
       approvals: [],
       digitalSignature: {
         algorithm: '',
@@ -1648,9 +1732,9 @@ export class ComplianceReportingService {
         timestamp: new Date(),
         valid: false,
         verificationDetails: ''
-      }
+
     };
-  }
+
 
   private async setupDistribution(recipients: string[]): Promise<ReportDistribution> {
 
@@ -1674,9 +1758,9 @@ export class ComplianceReportingService {
         trackDownloads: true,
         retentionPeriod: 365,
         reportingFrequency: 'WEEKLY'
-      }
+
     };
-  }
+
 
   private async generateReportMetadata(request: ComplianceReportRequest): Promise<ReportMetadata> {
 
@@ -1694,22 +1778,22 @@ export class ComplianceReportingService {
       supersedes: [],
       validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
     };
-  }
+
 
   private async storeReport(_____report: ComplianceReport): Promise<void> {
 
     // Implementation would store report in database
-  }
+
 
   private async generateReportArtifacts(_____report: ComplianceReport, _____format: string): Promise<void> {
 
     // Implementation would generate report in requested format
-  }
+
 
   private async sendReportNotifications(_____report: ComplianceReport): Promise<void> {
 
     // Implementation would send notifications via PolicyNotificationService
-  }
+
 
   private async getComplianceSummary(_____frameworks: string[]): Promise<ComplianceSummary> {
 
@@ -1726,7 +1810,7 @@ export class ComplianceReportingService {
       riskScore: 35.8,
       trend: 'IMPROVING'
     };
-  }
+
 
   private async getFrameworkStatus(frameworks: string[]): Promise<FrameworkStatus[]> {
 
@@ -1739,25 +1823,25 @@ export class ComplianceReportingService {
       findings: Math.floor(Math.random() * 10),
       criticalIssues: Math.floor(Math.random() * 3)
     }));
-  }
+
 
   private async getRecentFindings(_____limit: number): Promise<ComplianceFinding[]> {
 
     // Implementation would fetch recent findings
     return [];
-  }
+
 
   private async getComplianceTrends(_____frameworks: string[], _____months: number): Promise<ComplianceTrend[]> {
 
     // Implementation would generate compliance trends
     return [];
-  }
+
 
   private async getUpcomingDeadlines(_____days: number): Promise<ComplianceDeadline[]> {
 
     // Implementation would fetch upcoming deadlines
     return [];
-  }
+
 
   private async generateRiskHeatmap(_____frameworks: string[]): Promise<RiskHeatmap> {
 
@@ -1767,13 +1851,13 @@ export class ComplianceReportingService {
       risks: [],
       matrix: []
     };
-  }
+
 
   private async getActionItems(_____frameworks: string[]): Promise<ActionItem[]> {
 
     // Implementation would fetch action items
     return [];
-  }
+
 
   private async getReportingSchedule(): Promise<ReportingSchedule> {
 
@@ -1783,24 +1867,25 @@ export class ComplianceReportingService {
       overdueReports: [],
       scheduledReports: []
     };
-  }
+
 
   private async generateReportId(): Promise<string> {
 
     return `RPT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async generateCertificateId(): Promise<string> {
 
     return `CERT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   // Additional helper methods would be implemented here...
-}
+
 
 // Supporting interfaces
-}
-}
+
+
+
 export interface ComplianceData {
   policies: unknown[];
   controls: unknown[];
@@ -1809,12 +1894,13 @@ export interface ComplianceData {
   audits: unknown[];
   evidence: Error[];
   metrics: Map<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceDashboard {
   summary: ComplianceSummary;
   frameworkStatus: FrameworkStatus[];
@@ -1824,12 +1910,13 @@ export interface ComplianceDashboard {
   riskHeatmap: RiskHeatmap;
   actionItems: ActionItem[];
   reportingSchedule: ReportingSchedule;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceSummary {
   overallCompliance: number;
   totalFindings: number;
@@ -1842,12 +1929,13 @@ export interface ComplianceSummary {
   complianceScore: number;
   riskScore: number;
   trend: 'IMPROVING' | 'DECLINING' | 'STABLE';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FrameworkStatus {
   framework: string;
   status: ComplianceStatus;
@@ -1856,24 +1944,26 @@ export interface FrameworkStatus {
   nextAssessment: Date;
   findings: number;
   criticalIssues: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceTrend {
   framework: string;
   period: string;
   score: number;
   change: number;
   direction: 'UP' | 'DOWN' | 'STABLE';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceDeadline {
   deadlineId: string;
   framework: string;
@@ -1882,34 +1972,37 @@ export interface ComplianceDeadline {
   status: 'ON_TRACK' | 'AT_RISK' | 'OVERDUE';
   assignee: string;
   progress: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskHeatmap {
   categories: string[];
   risks: RiskItem[];
   matrix: number[][];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskItem {
   risk: string;
   category: string;
   probability: number;
   impact: number;
   score: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActionItem {
   itemId: string;
   title: string;
@@ -1919,22 +2012,24 @@ export interface ActionItem {
   dueDate: Date;
   status: 'OPEN' | 'IN_PROGRESS' | 'COMPLETED';
   framework: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportingSchedule {
   upcomingReports: ScheduledReport[];
   overdueReports: ScheduledReport[];
   scheduledReports: ScheduledReport[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScheduledReport {
   reportId: string;
   reportType: ComplianceReportType;
@@ -1942,12 +2037,13 @@ export interface ScheduledReport {
   dueDate: Date;
   assignee: string;
   status: 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'OVERDUE';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceMetricsHistory {
   framework: ComplianceFramework;
   period: ReportPeriod;
@@ -1956,23 +2052,25 @@ export interface ComplianceMetricsHistory {
   forecasts: TrendForecast[];
   benchmarks: MetricBenchmark[];
   alerts: MetricAlert[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HistoricalMetric {
   date: Date;
   metric: string;
   value: number;
   context: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MetricAlert {
   alertId: string;
   metric: string;
@@ -1981,6 +2079,6 @@ export interface MetricAlert {
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   triggered: Date;
   status: 'ACTIVE' | 'ACKNOWLEDGED' | 'RESOLVED';
-}
-}
-}
+
+
+

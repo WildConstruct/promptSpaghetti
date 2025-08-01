@@ -35,8 +35,9 @@ ExecutionCache;
         * Get optimized graph storage with persistent node map
         */
         async;
-        getOptimizedGraph(nodes, Node);
-        edges: Edge,
+        getOptimizedGraph(nodes, Node),
+            edges;
+        Edge,
             graphId ?  : string;
         Promise < {
             storage: OptimizedGraphStorage,
@@ -88,8 +89,9 @@ ExecutionCache;
      * Cache execution result with dependency tracking
      */
     async;
-    cacheExecutionResult(key, string);
-    result: any,
+    cacheExecutionResult(key, string),
+        result;
+    any,
         dependencies;
     string,
         executionTime;

@@ -5,169 +5,156 @@
  * Unified alerting system for security events across all analytics and monitoring systems
  */
 
-}
-export interface SecurityEvent {
-  id: string;
+
+export interface SecurityEvent { id: string;
   type: 'security_breach' | 'anomaly_detected' | 'policy_violation' | 'system_failure' | 'suspicious_activity' | 'data_leak' | 'unauthorized_access';
   severity: 'low' | 'medium' | 'high' | 'critical';
-  source: string; // System or component that generated the event
+  source: string; // System or component that generated the event;
   timestamp: number;
   title: string;
   description: string;
   details: {;
   affected_systems: string;
-    affected_users?: string;
-    ip_addresses?: string;
-    user_agents?: string;
-    request_patterns?: any;
-    data_accessed?: string;
-    geographic_location?: {
-      country: string;
+  affected_users?: string;
+  ip_addresses?: string;
+  user_agents?: string;
+  request_patterns?: any;
+  data_accessed?: string;
+  geographic_location?: { }
+  country: string;
   region: string;
-      city: string;
-}
+  city: string;
+
+
       coordinates?: { lat: number; lng: number };
     };
   };
-  metadata: {
-  correlation_id?: string;
+  metadata: { correlation_id?: string;
   threat_level: number; // 0-10 scale,
-  confidence_score: number; // 0-1 scale,
+  confidence_score: number; // 0-1 scale }
   auto_detected: boolean;
   false_positive_likelihood?: number;
   related_events?: string;
 };
   status: 'active' | 'investigating' | 'resolved' | 'dismissed' | 'escalated';
   assigned_to?: string;
-  resolution?: {
-  action_taken: string;
+  resolution?: { action_taken: string;
   resolved_by: string;
   resolved_at: number;
-  notes: string;
-};
-}
-}
-export interface AlertRule {
-  id: string;
+  notes: string };
+
+
+export interface AlertRule { id: string;
   name: string;
   description: string;
   enabled: boolean;
-  conditions: {
+  conditions: {;
   event_types: SecurityEvent['type'][];
   severity_threshold: SecurityEvent['severity'];
   source_systems: string;
-  frequency_threshold?: {
+  frequency_threshold?: {;
   count: number;
-  time_window: number; // milliseconds,
-}
+  time_window: number; // milliseconds }
+
+
 };
-    custom_conditions?: Array<{
-  field: string;
+    custom_conditions?: Array<{ field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'matches_regex';
-  value: any;
-}>;
+  value: any }>;
   };
-  actions: {
+  actions: { ,
   notifications: NotificationAction;
   escalation?: EscalationAction;
-  automation?: AutomationAction;
-};
-  suppression?: {
-  duplicate_window: number; // Don't send duplicate alerts within this window,
-  similar_event_threshold: number; // Group similar events,
+  automation?: AutomationAction };
+  suppression?: { duplicate_window: number; // Don't send duplicate alerts within this window,
+  similar_event_threshold: number; // Group similar events }
 };
   created_by: string;
   created_at: number;
   last_modified: number;
-}
-}
-export interface NotificationAction {
-  type: 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'teams' | 'discord';
-  target: string; // Email, phone number, webhook URL, etc.,
+
+
+export interface NotificationAction { type: 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'teams' | 'discord';
+  target: string; // Email, phone number, webhook URL, etc.;
   template?: string;
   priority: 'low' | 'normal' | 'high' | 'urgent';
-  rate_limit?: {
+  rate_limit?: { }
   max_per_hour: number;
   max_per_day: number;
-}
+
+
 };
-}
-}
-export interface EscalationAction {
-  trigger_after: number; // milliseconds,
+
+
+export interface EscalationAction { trigger_after: number; // milliseconds }
   escalate_to: string;
   escalation_message?: string;
   auto_assign?: boolean;
-}
-}
-}
-export interface AutomationAction {
-  type: 'block_ip' | 'disable_user' | 'quarantine_system' | 'trigger_backup' | 'rotate_keys' | 'scale_resources';
+
+
+
+
+export interface AutomationAction { type: 'block_ip' | 'disable_user' | 'quarantine_system' | 'trigger_backup' | 'rotate_keys' | 'scale_resources';
   parameters: Record<string, any>;
   confirmation_required: boolean;
-  timeout?: number; // Auto-revert after this time,
-}
-}
-}
-export interface AlertingConfig {
-  enabled: boolean;
+  timeout?: number; // Auto-revert after this time }
+
+
+
+
+export interface AlertingConfig { enabled: boolean;
   default_severity_threshold: SecurityEvent['severity'];
-  notification_settings: {
+  notification_settings: {;
   batch_notifications: boolean;
-  batch_interval: number; // milliseconds,
-  quiet_hours?: {
-  start: string; // HH:MM format,
+  batch_interval: number; // milliseconds;
+  quiet_hours?: {;
+  start: string; // HH:MM format }
   end: string;
   timezone: string;
-}
+
+
 };
   };
-  escalation_settings: {
+  escalation_settings: { ,
   auto_escalation_enabled: boolean;
-  escalation_timeout: number; // milliseconds,
+  escalation_timeout: number; // milliseconds }
   max_escalation_levels: number;
 };
-  retention: {
+  retention: { ,
   events_retention_days: number;
   resolved_events_retention_days: number;
-  archive_after_days: number;
-};
-  integrations: {
-  siem_integration?: {
+  archive_after_days: number };
+  integrations: { siem_integration?: { }
   enabled: boolean;
   endpoint: string;
   api_key: string;
 };
-    ticketing_integration?: {
-  enabled: boolean;
+    ticketing_integration?: { enabled: boolean;
   system: 'jira' | 'servicenow' | 'zendesk';
   endpoint: string;
-  credentials: Record<string, string>;
-};
+  credentials: Record<string, string> };
   };
-}
-}
-export interface AlertMetrics {
-  total_alerts: number;
+
+
+export interface AlertMetrics { total_alerts: number;
   alerts_by_severity: Record<SecurityEvent['severity'], number>;
   alerts_by_type: Record<SecurityEvent['type'], number>;
   alerts_by_source: Record<string, number>;
-  response_times: {
+  response_times: { }
   mean_acknowledgment_time: number;
   mean_resolution_time: number;
   p95_response_time: number;
-}
+
+
 };
-  escalation_stats: {
+  escalation_stats: { 
   total_escalations: number;
-  escalation_rate: number;
-};
+  escalation_rate: number };
   false_positive_rate: number;
-  time_range: {;
+  time_range: { ;
   start: number;
-  end: number;
-};
-}
+  end: number };
+
 export class CrossSystemAlertingSystem {
   private config: AlertingConfig;
   private alertRules: Map<string, AlertRule> = new Map();
@@ -177,12 +164,11 @@ export class CrossSystemAlertingSystem {
   private notificationQueue: Array<{ alert: SecurityEvent; rule: AlertRule; timestamp: number }> = [];
   private processingTimer?: NodeJS.Timeout;
   private escalationTimers: Map<string, NodeJS.Timeout> = new Map();
-  constructor(config: AlertingConfig) {
-  this.config = config;
+  constructor(config: AlertingConfig) { this.config = config;
   this.alertMetrics = this.initializeMetrics();
   this.startProcessing();
   // Event ingestion and processing
-  async ingestSecurityEvent(event: SecurityEvent): Promise<void> {,
+  async ingestSecurityEvent(event: SecurityEvent): Promise<void> {
   // Validate and enrich event
   const enrichedEvent = await this.enrichEvent(event);
   // Store event in history
@@ -193,10 +179,9 @@ export class CrossSystemAlertingSystem {
   await this.processEventAgainstRules(enrichedEvent);
   // Cleanup old events
   this.cleanupOldEvents();
-  async processEventAgainstRules(event: SecurityEvent): Promise<void> {,
+  async processEventAgainstRules(event: SecurityEvent): Promise<void> { }
   const matchingRules = this.findMatchingRules(event);
-  for (const rule of matchingRules) {
-  if (!rule.enabled) continue;
+  for (const rule of matchingRules) { if (!rule.enabled) continue;
   // Check for suppression
   if (await this.shouldSuppressAlert(event, rule)) {
   continue;
@@ -206,53 +191,48 @@ export class CrossSystemAlertingSystem {
   // Update existing alert
   const existingAlert = this.activeAlerts.get(alertId)!;
   existingAlert.metadata.related_events = existingAlert.metadata.related_events || [];
-  existingAlert.metadata.related_events.push(event.id);
-} else {
-  // Create new alert
+  existingAlert.metadata.related_events.push(event.id) } else { // Create new alert
   event.status = 'active';
   this.activeAlerts.set(alertId, event);
   // Queue for notification
   this.notificationQueue.push({)
-  alert: event,
-  rule,
-  timestamp: Date.now(),
+  alert: event
+  rule
+  timestamp: Date.now() }
 });
         // Setup escalation if configured
-        if (rule.actions.escalation) {
-  this.setupEscalation(alertId, rule.actions.escalation);
+        if (rule.actions.escalation) { this.setupEscalation(alertId, rule.actions.escalation);
   // Execute automation actions
   if (rule.actions.automation) {
   await this.executeAutomationActions(event, rule.actions.automation);
   // Alert rule management
-  createAlertRule(rule: Omit<AlertRule, 'id' | 'created_at' | 'last_modified'>): string {,
+  createAlertRule(rule: Omit<AlertRule, 'id' | 'created_at' | 'last_modified'>): string {
   const ruleId = this.generateRuleId();
-  const fullRule: AlertRule = {,
-  ...rule,
-  id: ruleId,
-  created_at: Date.now(),
-  last_modified: Date.now(),
+  const fullRule: AlertRule = {
+  ...rule
+  id: ruleId
+  created_at: Date.now()
+  last_modified: Date.now() }
 };
     this.alertRules.set(ruleId, fullRule);
     return ruleId;
-  updateAlertRule(ruleId: string, updates: Partial<AlertRule>): boolean {
-  const rule = this.alertRules.get(ruleId);
+  updateAlertRule(ruleId: string, updates: Partial<AlertRule>): boolean { const rule = this.alertRules.get(ruleId);
   if (!rule) return false;
   const updatedRule = {
-  ...rule,
-  ...updates,
-  id: ruleId, // Ensure ID doesn't change,
-  last_modified: Date.now(),
+  ...rule
+  ...updates
+  id: ruleId, // Ensure ID doesn't change
+  last_modified: Date.now() }
 };
     this.alertRules.set(ruleId, updatedRule);
     return true;
-  deleteAlertRule(ruleId: string): boolean {
-  return this.alertRules.delete(ruleId);
-  getAlertRule(ruleId: string): AlertRule | null {,
+  deleteAlertRule(ruleId: string): boolean { return this.alertRules.delete(ruleId);
+  getAlertRule(ruleId: string): AlertRule | null {
   return this.alertRules.get(ruleId) || null;
-  getAllAlertRules(): AlertRule {,
+  getAllAlertRules(): AlertRule {
   return Array.from(this.alertRules.values());
   // Alert management
-  getActiveAlerts(filters?: {)
+  getActiveAlerts(filters?: {) }
   severity?: SecurityEvent['severity'];
   type?: SecurityEvent['type'];
   source?: string;
@@ -275,9 +255,7 @@ export class CrossSystemAlertingSystem {
       if (severityDiff !== 0) return severityDiff;
       return b.timestamp - a.timestamp;
     });
-  async acknowledgeAlert(alertId: string, userId: string): Promise<boolean> {
-
-  const alert = this.activeAlerts.get(alertId);
+  async acknowledgeAlert(alertId: string, userId: string): Promise<boolean> { const alert = this.activeAlerts.get(alertId);
   if (!alert) return false;
   alert.status = 'investigating';
   alert.assigned_to = userId;
@@ -287,23 +265,19 @@ export class CrossSystemAlertingSystem {
   clearTimeout(escalationTimer);
   this.escalationTimers.delete(alertId);
   return true;
-  async resolveAlert((alertId: string,
-  resolution: SecurityEvent['resolution']): Promise<boolean> {,
+  async resolveAlert((alertId: string
+  resolution: SecurityEvent['resolution']): Promise<boolean> {
   const alert = this.activeAlerts.get(alertId);
   if (!alert) return false;
   alert.status = 'resolved';
   alert.resolution = {
-  ...resolution,
-  resolved_at: Date.now(),
+  ...resolution
+  resolved_at: Date.now() }
 };
     // Remove from active alerts after a delay (for audit purposes)
-    setTimeout(() => {
-      this.activeAlerts.delete(alertId);
-    }, 24 * 60 * 60 * 1000); // 24 hours
+    setTimeout(() => { this.activeAlerts.delete(alertId) }, 24 * 60 * 60 * 1000); // 24 hours
     return true;
-  async escalateAlert(alertId: string, escalatedBy: string): Promise<boolean> {
-
-    const alert = this.activeAlerts.get(alertId);
+  async escalateAlert(alertId: string, escalatedBy: string): Promise<boolean> { const alert = this.activeAlerts.get(alertId);
     if (!alert) return false;
     alert.status = 'escalated';
     // Send escalation notifications
@@ -311,7 +285,7 @@ export class CrossSystemAlertingSystem {
     return true;
   // Notification system
   async sendNotification(((
-    alert: SecurityEvent,
+    alert: SecurityEvent }
     action: NotificationAction
   ): Promise<boolean> {
 
@@ -341,7 +315,7 @@ export class CrossSystemAlertingSystem {
         default:
           console.error(`Unknown notification type: ${action.type}`);}
           return false;
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to send notification:`, error);
       return false;
   // Metrics and reporting
@@ -349,8 +323,7 @@ export class CrossSystemAlertingSystem {
     if (timeRange) {
       return this.calculateMetricsForTimeRange(timeRange);
     return { ...this.alertMetrics };
-  generateSecurityReport(timeRange: { start: number; end: number }): {
-  summary: {
+  generateSecurityReport(timeRange: { start: number; end: number }): { summary: { }
   total_events: number;
   critical_alerts: number;
   avg_response_time: number;
@@ -368,26 +341,23 @@ export class CrossSystemAlertingSystem {
     const criticalAlerts = events.filter(e => e.severity === 'critical');
     const resolvedAlerts = events.filter(e => e.status === 'resolved' && e.resolution);
     const avgResponseTime = resolvedAlerts.length > 0 ;
-      ? resolvedAlerts.reduce((sum, alert) => {
-          const responseTime = (alert.resolution?.resolved_at || 0) - alert.timestamp;
-          return sum + responseTime;
-        }, 0) / resolvedAlerts.length
+      ? resolvedAlerts.reduce((sum, alert) => { const responseTime = (alert.resolution?.resolved_at || 0) - alert.timestamp;
+          return sum + responseTime }, 0) / resolvedAlerts.length
       : 0;
     // Generate daily counts
     const dailyCounts = this.generateDailyAlertCounts(events, timeRange);
     const topSources = this.getTopAlertSources(events);
     const responseTimeTrend = this.generateResponseTimeTrend(resolvedAlerts, timeRange);
-    return {
-  summary: {
+    return { summary: {,
   total_events: events.length,
   critical_alerts: criticalAlerts.length,
   avg_response_time: avgResponseTime,
-  false_positive_rate: this.calculateFalsePositiveRate(events),
+  false_positive_rate: this.calculateFalsePositiveRate(events) }
 },
-  trends: {
+  trends: { ,
   daily_alert_counts: dailyCounts,
   top_alert_sources: topSources,
-  response_time_trend: responseTimeTrend,
+  response_time_trend: responseTimeTrend }
 },
   recommendations: this.generateRecommendations(events);
   };
@@ -420,8 +390,7 @@ export class CrossSystemAlertingSystem {
       return false;
     // Check severity threshold
     const severityOrder = { low: 1, medium: 2, high: 3, critical: 4 };
-    if (severityOrder[event.severity] < severityOrder[conditions.severity_threshold]) {
-  return false;
+    if (severityOrder[event.severity] < severityOrder[conditions.severity_threshold]) { return false;
   // Check source systems
   if (conditions.source_systems.length > 0 && !conditions.source_systems.includes(event.source)) {
   return false;
@@ -457,23 +426,21 @@ export class CrossSystemAlertingSystem {
   return false;
   private getNestedFieldValue(obj: any, path: string): any {,
   return path.split('.').reduce((current, key) => current?.[key], obj);
-  private async shouldSuppressAlert(event: SecurityEvent, rule: AlertRule): Promise<boolean> {,
+  private async shouldSuppressAlert(event: SecurityEvent, rule: AlertRule): Promise<boolean> { }
   if (!rule.suppression) return false;
   const now = Date.now();
   const suppressionWindow = rule.suppression.duplicate_window;
   // Check for recent similar alerts
-  const recentSimilarAlerts = Array.from(this.activeAlerts.values()).filter(alert => {)
+  const recentSimilarAlerts = Array.from(this.activeAlerts.values()).filter(alert => { )
   const timeDiff = now - alert.timestamp;
   return;
   timeDiff <= suppressionWindow &&
   alert.type === event.type &&
   alert.source === event.source &&
   this.calculateEventSimilarity(alert, event) >= rule.suppression!.similar_event_threshold
-  );
-});
+  ) });
     return recentSimilarAlerts.length > 0;
-  private calculateEventSimilarity(event1: SecurityEvent, event2: SecurityEvent): number {
-  let similarity = 0;
+  private calculateEventSimilarity(event1: SecurityEvent, event2: SecurityEvent): number { let similarity = 0;
   let factors = 0;
   // Type similarity
   if (event1.type === event2.type) similarity += 0.3;
@@ -497,20 +464,16 @@ export class CrossSystemAlertingSystem {
   if (commonUsers > 0) similarity += 0.2;
   factors += 0.2;
   return factors > 0 ? similarity / factors : 0;
-  private setupEscalation(alertId: string, escalation: EscalationAction): void {,
-  const timer = setTimeout(async () => {
-  const alert = this.activeAlerts.get(alertId);
+  private setupEscalation(alertId: string, escalation: EscalationAction): void { }
+  const timer = setTimeout(async () => { const alert = this.activeAlerts.get(alertId);
   if (alert && alert.status === 'active') {
   await this.escalateAlert(alertId, 'system');
-  this.escalationTimers.delete(alertId);
-}, escalation.trigger_after);
+  this.escalationTimers.delete(alertId) }, escalation.trigger_after);
     this.escalationTimers.set(alertId, timer);
   private async executeAutomationActions(((
     event: SecurityEvent,
     actions: AutomationAction
-  ): Promise<void> {
-
-    for (const action of actions) {
+  ): Promise<void> { for (const action of actions) {
       try {
         if (action.confirmation_required) {
           // Queue for manual confirmation
@@ -519,20 +482,18 @@ export class CrossSystemAlertingSystem {
         // Set auto-revert timer if specified
         if (action.timeout) {
           setTimeout(async () => {
-            await this.revertAutomationAction(event, action);
-          }, action.timeout);
-      } catch (error) {
+            await this.revertAutomationAction(event, action) }, action.timeout);
+ catch (error) {
         console.error(`Failed to execute automation action ${action.type}:`, error);}
   private async executeAutomationAction(((
-    event: SecurityEvent,
+    event: SecurityEvent
     action: AutomationAction
   ): Promise<void> {
 
     // This would integrate with actual security systems
     console.log(`Executing automation action: ${action.type}`, action.parameters);}
     // Implementation would depend on the specific action type
-    switch (action.type) {
-      case 'block_ip':
+    switch (action.type) { case 'block_ip':
         // Integration with firewall/WAF
         break;
       case 'disable_user':
@@ -543,17 +504,15 @@ export class CrossSystemAlertingSystem {
         break;
       // ... other action types
   private async revertAutomationAction(((
-    event: SecurityEvent,
+    event: SecurityEvent }
     action: AutomationAction
   ): Promise<void> {
 
     console.log(`Auto-reverting action: ${action.type}`, action.parameters);}
     // Implementation for reverting actions
-  private startProcessing(): void {
-    if (this.config.enabled) {
+  private startProcessing(): void { if (this.config.enabled) {
       this.processingTimer = setInterval(() => {
-        this.processNotificationQueue();
-      }, 5000); // Process every 5 seconds
+        this.processNotificationQueue() }, 5000); // Process every 5 seconds
   private async processNotificationQueue(): Promise<void> {
 
     if (this.notificationQueue.length === 0) return;
@@ -570,11 +529,10 @@ export class CrossSystemAlertingSystem {
       // Send notifications for this alert
       for (const notificationAction of item.rule.actions.notifications) {
         await this.sendNotification(item.alert, notificationAction);
-  private getBatchedNotifications(): Array<{ alert: SecurityEvent; rule: AlertRule; timestamp: number }> {
-  // Simple batching - group by severity and send together
+  private getBatchedNotifications(): Array<{ alert: SecurityEvent; rule: AlertRule; timestamp: number }> { // Simple batching - group by severity and send together
   const batch = this.notificationQueue.splice(0, 50);
   return batch;
-  private isInQuietHours(timestamp: number): boolean {,
+  private isInQuietHours(timestamp: number): boolean { }
   const quietHours = this.config.notification_settings.quiet_hours;
   if (!quietHours) return false;
   const date = new Date(timestamp);
@@ -585,13 +543,10 @@ export class CrossSystemAlertingSystem {
   const [endHour, endMinute] = quietHours.end.split(':').map(Number);
   const startTime = startHour * 60 + startMinute;
   const endTime = endHour * 60 + endMinute;
-  if (startTime <= endTime) {
-  return currentTime >= startTime && currentTime <= endTime;
-} else {
-      // Crosses midnight
+  if (startTime <= endTime) { return currentTime >= startTime && currentTime <= endTime } else { // Crosses midnight
       return currentTime >= startTime || currentTime <= endTime;
   private async formatNotificationMessage(((
-    alert: SecurityEvent,
+    alert: SecurityEvent }
     action: NotificationAction
   ): Promise<string> {
 
@@ -610,10 +565,8 @@ ${alert.details.ip_addresses ? `IP Addresses: ${alert.details.ip_addresses.join(
 Alert ID: ${alert.id}`;}
   private renderTemplate(template: string, alert: SecurityEvent): string {
     return template
-      .replace(/\{\{(\w+(?:\.\w+)*)\}\}/g, (match, path) => {
-  const value = this.getNestedFieldValue(alert, path);
-  return value !== undefined ? String(value) : match;
-});
+      .replace(/\{\{(\w+(?:\.\w+)*)\}\}/g, (match, path) => { const value = this.getNestedFieldValue(alert, path);
+  return value !== undefined ? String(value) : match });
   // Notification method implementations (simplified)
   private async sendEmailNotification(to: string, message: string, alert: SecurityEvent): Promise<boolean> {
 
@@ -647,37 +600,35 @@ Alert ID: ${alert.id}`;}
 
     // Send escalation notifications to higher-level personnel
     console.log(`Alert ${alert.id} escalated by ${escalatedBy}`);}
-  private async isRateLimited(action: NotificationAction): Promise<boolean> {
-
-    // Simple rate limiting implementation
+  private async isRateLimited(action: NotificationAction): Promise<boolean> { // Simple rate limiting implementation
     return false; // Would implement actual rate limiting
   private initializeMetrics(): AlertMetrics {
     return {
-      total_alerts: 0,
-      alerts_by_severity: { low: 0, medium: 0, high: 0, critical: 0 },
-      alerts_by_type: {
-  security_breach: 0,
-  anomaly_detected: 0,
-  policy_violation: 0,
-  system_failure: 0,
-  suspicious_activity: 0,
-  data_leak: 0,
-  unauthorized_access: 0,
-},
-  alerts_by_source: {},
-      response_times: {
-  mean_acknowledgment_time: 0,
-  mean_resolution_time: 0,
-  p95_response_time: 0,
-},
-  escalation_stats: {
-  total_escalations: 0,
-  escalation_rate: 0,
-},
-  false_positive_rate: 0,
-      time_range: {
-  start: Date.now(),
-  end: Date.now(),
+      total_alerts: 0 }
+      alerts_by_severity: { low: 0, medium: 0, high: 0, critical: 0 }
+      alerts_by_type: { 
+  security_breach: 0
+  anomaly_detected: 0
+  policy_violation: 0
+  system_failure: 0
+  suspicious_activity: 0
+  data_leak: 0
+  unauthorized_access: 0 }
+
+  alerts_by_source: {}
+      response_times: { 
+  mean_acknowledgment_time: 0
+  mean_resolution_time: 0
+  p95_response_time: 0 }
+
+  escalation_stats: { 
+  total_escalations: 0
+  escalation_rate: 0 }
+
+  false_positive_rate: 0
+      time_range: { 
+  start: Date.now()
+  end: Date.now() }
 };
   private updateMetrics(event: SecurityEvent): void {
     this.alertMetrics.total_alerts++;
@@ -721,19 +672,17 @@ Alert ID: ${alert.id}`;}
     // Simplified threat level calculation
     const severityScores = { low: 2, medium: 4, high: 7, critical: 10 };
     return severityScores[event.severity];
-  private async calculateConfidenceScore(event: SecurityEvent): Promise<number> {
-
-  // Simplified confidence calculation
+  private async calculateConfidenceScore(event: SecurityEvent): Promise<number> { // Simplified confidence calculation
   return event.metadata.auto_detected ? 0.8 : 0.95;
-  private async enrichWithGeolocation(ipAddress: string): Promise<SecurityEvent['details']['geographic_location']> {,
+  private async enrichWithGeolocation(ipAddress: string): Promise<SecurityEvent['details']['geographic_location']> {
   // Simplified geolocation enrichment
   return {
-  country: 'Unknown',
-  region: 'Unknown',
-  city: 'Unknown',
+  country: 'Unknown'
+  region: 'Unknown'
+  city: 'Unknown' }
 };
   private generateDailyAlertCounts(((
-    events: SecurityEvent,
+    events: SecurityEvent
     timeRange: { start: number; end: number }
   ): Array<{ date: string; count: number }> {
     const dailyCounts: Record<string, number> = {};
@@ -750,20 +699,19 @@ Alert ID: ${alert.id}`;}
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
   private generateResponseTimeTrend(((
-    resolvedAlerts: SecurityEvent,
+    resolvedAlerts: SecurityEvent
     timeRange: { start: number; end: number }
   ): Array<{ date: string; avg_response_time: number }> {
     const dailyResponseTimes: Record<string, number> = {};
-    for (const alert of resolvedAlerts) {
-  if (alert.resolution) {
+    for (const alert of resolvedAlerts) { if (alert.resolution) {
   const date = new Date(alert.timestamp).toISOString().split('T')[0];
   const responseTime = alert.resolution.resolved_at - alert.timestamp;
   if (!dailyResponseTimes[date]) {
   dailyResponseTimes[date] = [];
   dailyResponseTimes[date].push(responseTime);
   return Object.entries(dailyResponseTimes).map(([date, times]) => ({)
-  date,
-  avg_response_time: times.reduce((sum, time) => sum + time, 0) / times.length,
+  date
+  avg_response_time: times.reduce((sum, time) => sum + time, 0) / times.length }
 }));
   private calculateFalsePositiveRate(events: SecurityEvent): number {
     const resolvedEvents = events.filter(e => e.status === 'resolved');

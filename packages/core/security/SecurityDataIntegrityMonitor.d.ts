@@ -9,8 +9,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface DataIntegrityCheck {
-    id: string;
+}
+export interface DataIntegrityCheck { id: string;
     name: string;
     description: string;
     type: 'hash_verification' | 'schema_validation' | 'referential_integrity' | 'temporal_consistency' | 'business_rule' | 'digital_signature';
@@ -18,7 +18,7 @@ export interface DataIntegrityCheck {
         dataType: 'audit_logs' | 'security_events' | 'user_data' | 'configuration' | 'certificates' | 'keys' | 'policies' | 'alerts';
         location: string;
         scope: 'full' | 'incremental' | 'sample';
-        filters?: Record<string, any>;
+        filters?: Record<string, any> }
 }
     };
     parameters: {
@@ -32,36 +32,30 @@ export interface DataIntegrityCheck {
             algorithmSuite: 'RSA' | 'ECDSA' | 'EdDSA'
   };
     };
-    schedule: {
-        enabled: boolean;
+    schedule: { enabled: boolean;
         frequency: 'continuous' | 'hourly' | 'daily' | 'weekly' | 'on_demand';
         interval?: number;
         cronExpression?: string;
-        triggerEvents?: string[];
-    };
-    thresholds: {
-        errorThreshold: number;
+        triggerEvents?: string[] };
+    thresholds: { errorThreshold: number;
         errorRate: number;
         severityMapping: {
             minor: number;
             major: number;
-            critical: number;
-        };
+            critical: number };
     };
-    remediation: {
-        autoRemediate: boolean;
+    remediation: { autoRemediate: boolean;
         actions: AutoRemediationAction[];
         rollbackSupported: boolean;
-        requiresApproval: boolean;
-    };
+        requiresApproval: boolean };
     createdBy: string;
     createdAt: number;
     lastUpdated: number;
     enabled: boolean;
 
 }
-export interface AutoRemediationAction {
-    id: string;
+}
+export interface AutoRemediationAction { id: string;
     name: string;
     type: 'restore_backup' | 'regenerate_hash' | 'repair_reference' | 'revert_change' | 'quarantine_data' | 'notify_admin' | 'lock_account' | 'rotate_keys';
     description: string;
@@ -71,26 +65,22 @@ export interface AutoRemediationAction {
         notificationRecipients?: string[];
         quarantineLocation?: string;
         lockDuration?: number;
-        keyRotationScope?: string[];
+        keyRotationScope?: string[] }
 }
     };
-    safetyChecks: {
-        requiresConfirmation: boolean;
+    safetyChecks: { requiresConfirmation: boolean;
         testMode: boolean;
         dryRun: boolean;
         backupBeforeAction: boolean;
-        maxRetries: number;
-    };
-    constraints: {
-        businessHoursOnly: boolean;
+        maxRetries: number };
+    constraints: { businessHoursOnly: boolean;
         requiresMaintenanceWindow: boolean;
         maxConcurrentExecutions: number;
-        cooldownPeriod: number;
-    };
+        cooldownPeriod: number };
 
 }
-export interface IntegrityCheckResult {
-    checkId: string;
+}
+export interface IntegrityCheckResult { checkId: string;
     executionId: string;
     startTime: number;
     endTime: number;
@@ -101,28 +91,25 @@ export interface IntegrityCheckResult {
         recordsPassed: number;
         recordsFailed: number;
         recordsSkipped: number;
-        errorRate: number;
+        errorRate: number }
 }
     };
     findings: IntegrityFinding[];
-    performance: {
-        executionTime: number;
+    performance: { executionTime: number;
         throughput: number;
         resourceUsage: {
             cpu: number;
             memory: number;
-            io: number;
-        };
+            io: number };
     };
     remediationResults?: RemediationResult[];
-    metadata: {
-        checksum: string;
+    metadata: { checksum: string;
         version: string;
         environment: string;
         triggeredBy: 'schedule' | 'event' | 'manual';
-        correlationId?: string;
-    };
+        correlationId?: string };
 
+}
 }
 export interface IntegrityFinding {
     id: string;
@@ -136,9 +123,9 @@ export interface IntegrityFinding {
         fields: string[];
         estimatedImpact: 'low' | 'medium' | 'high' | 'critical'
 }
+}
   };
-    evidence: {
-        expectedValue?: any;
+    evidence: { expectedValue?: any;
         actualValue?: any;
         previousValue?: any;
         changeTimestamp?: number;
@@ -147,31 +134,26 @@ export interface IntegrityFinding {
         checksumMismatch?: {
             expected: string;
             actual: string;
-            algorithm: string;
-        };
+            algorithm: string };
     };
-    context: {
-        relatedFindings: string[];
+    context: { relatedFindings: string[];
         possibleCauses: string[];
         riskAssessment: string;
         businessImpact: string;
-        technicalImpact: string;
-    };
-    resolution: {
-        status: 'open' | 'investigating' | 'resolved' | 'false_positive' | 'accepted_risk';
+        technicalImpact: string };
+    resolution: { status: 'open' | 'investigating' | 'resolved' | 'false_positive' | 'accepted_risk';
         assignedTo?: string;
         resolvedBy?: string;
         resolvedAt?: number;
         resolutionNotes?: string;
-        preventiveActions?: string[];
-    };
+        preventiveActions?: string[] };
     firstDetected: number;
     lastSeen: number;
     occurrenceCount: number;
 
 }
-export interface RemediationResult {
-    actionId: string;
+}
+export interface RemediationResult { actionId: string;
     actionName: string;
     status: 'success' | 'failed' | 'partial' | 'skipped';
     startTime: number;
@@ -181,7 +163,7 @@ export interface RemediationResult {
         recordsRepaired: number;
         recordsFailed: number;
         backupCreated?: string;
-        rollbackAvailable: boolean;
+        rollbackAvailable: boolean }
 }
     };
     errors?: Array<{
@@ -189,15 +171,13 @@ export interface RemediationResult {
         error: string;
         severity: 'warning' | 'error' | 'critical'
   }>;
-    verification: {
-        verificationRun: boolean;
+    verification: { verificationRun: boolean;
         verificationPassed: boolean;
-        residualIssues: number;
-    };
+        residualIssues: number };
 
 }
-export interface DataIntegrityMetrics {
-    overallIntegrityScore: number;
+}
+export interface DataIntegrityMetrics { overallIntegrityScore: number;
     dataHealthTrend: 'improving' | 'stable' | 'degrading';
     checksRun: number;
     checksTotal: number;
@@ -209,7 +189,7 @@ export interface DataIntegrityMetrics {
     findingTrends: {
         newFindings: number;
         resolvedFindings: number;
-        recurringFindings: number;
+        recurringFindings: number }
 }
     };
     remediationSuccessRate: number;
@@ -226,14 +206,12 @@ export interface DataIntegrityMetrics {
         averageIoUsage: number;
         performanceImpact: 'minimal' | 'low' | 'medium' | 'high'
   };
-    timeRange: {
-        start: number;
-        end: number;
-    };
+    timeRange: { start: number;
+        end: number };
 
 }
-export interface DataIntegrityConfig {
-    enabled: boolean;
+}
+export interface DataIntegrityConfig { enabled: boolean;
     defaultHashAlgorithm: 'sha256' | 'sha512';
     maxConcurrentChecks: number;
     checkTimeout: number;
@@ -242,66 +220,51 @@ export interface DataIntegrityConfig {
         backupRetentionDays: number;
         logRetentionDays: number;
         compressionEnabled: boolean;
-        encryptionEnabled: boolean;
+        encryptionEnabled: boolean }
 }
     };
-    performance: {
-        maxResourceUsage: {
+    performance: { maxResourceUsage: {
             cpu: number;
             memory: number;
-            io: number;
-        };
-        throttling: {
-            enabled: boolean;
+            io: number };
+        throttling: { enabled: boolean;
             maxRecordsPerSecond: number;
-            pauseDuration: number;
-        };
+            pauseDuration: number };
         batchSize: number;
     };
-    alerting: {
-        enabled: boolean;
+    alerting: { enabled: boolean;
         immediateNotification: {
             severityThreshold: IntegrityFinding['severity'];
             recipients: string[];
-            channels: ('email' | 'sms' | 'slack' | 'webhook')[];
-        };
-        summaryReports: {
-            enabled: boolean;
+            channels: ('email' | 'sms' | 'slack' | 'webhook')[] };
+        summaryReports: { enabled: boolean;
             frequency: 'daily' | 'weekly' | 'monthly';
             recipients: string[];
-            includeMetrics: boolean;
-        };
+            includeMetrics: boolean };
     };
-    integrations: {
-        siem: {
+    integrations: { siem: {
             enabled: boolean;
             endpoint: string;
             apiKey: string;
-            eventTypes: string[];
-        };
-        backup: {
-            enabled: boolean;
+            eventTypes: string[] };
+        backup: { enabled: boolean;
             backupLocation: string;
             encryptBackups: boolean;
-            compressionLevel: number;
-        };
+            compressionLevel: number };
         audit: {
             enabled: boolean;
             auditAllChanges: boolean;
             auditLevel: 'basic' | 'detailed' | 'comprehensive'
   };
     };
-    compliance: {
-        frameworks: string[];
+    compliance: { frameworks: string[];
         requireDigitalSignatures: boolean;
         immutableLogging: boolean;
-        changeApprovalRequired: boolean;
-    };
+        changeApprovalRequired: boolean };
 /**
  * Security Data Integrity Monitor
  */
-export declare class SecurityDataIntegrityMonitor extends EventEmitter {
-    private config;
+export declare class SecurityDataIntegrityMonitor extends EventEmitter { private config;
     private integrityChecks;
     private activeExecutions;
     private checkHistory;
@@ -337,8 +300,7 @@ export declare class SecurityDataIntegrityMonitor extends EventEmitter {
         severity?: IntegrityFinding['severity'];
         category?: IntegrityFinding['category'];
         status?: IntegrityFinding['resolution']['status'];
-        dataType?: DataIntegrityCheck['target']['dataType'];
-    }): IntegrityFinding[];
+        dataType?: DataIntegrityCheck['target']['dataType'] }): IntegrityFinding[];
     /**
      * Resolve a finding
      */
@@ -350,69 +312,55 @@ export declare class SecurityDataIntegrityMonitor extends EventEmitter {
     /**
      * Get integrity metrics
      */
-    getIntegrityMetrics(timeRange?: {)
+    getIntegrityMetrics(timeRange?: { )
         start: number;
-        end: number;
-    }): DataIntegrityMetrics;
+        end: number }): DataIntegrityMetrics;
     /**
      * Generate integrity report
      */
-    generateIntegrityReport(timeRange: {)
+    generateIntegrityReport(timeRange: { )
         start: number;
-        end: number;
-    }, includeDetails?: boolean): {
-        summary: {
+        end: number }, includeDetails?: boolean): { summary: {
             reportId: string;
             generatedAt: number;
             timeRange: {
                 start: number;
-                end: number;
-            };
+                end: number };
             overallIntegrityScore: number;
             dataHealthStatus: 'healthy' | 'warning' | 'critical';
             totalChecksRun: number;
             totalFindings: number;
             criticalFindings: number;
         };
-        checksExecuted: Array<{
-            checkId: string;
+        checksExecuted: Array<{ checkId: string;
             checkName: string;
             executionCount: number;
             successRate: number;
             averageExecutionTime: number;
-            findingsGenerated: number;
-        }>;
-        findingsSummary: {
-            bySeverity: Record<IntegrityFinding['severity'], number>;
+            findingsGenerated: number }>;
+        findingsSummary: { bySeverity: Record<IntegrityFinding['severity'], number>;
             byCategory: Record<IntegrityFinding['category'], number>;
             topAffectedDataTypes: Array<{
                 dataType: string;
-                count: number;
-            }>;
-            resolutionStats: {
-                resolved: number;
+                count: number }>;
+            resolutionStats: { resolved: number;
                 open: number;
                 falsePositives: number;
-                acceptedRisks: number;
-            };
+                acceptedRisks: number };
         };
-        remediationSummary: {
-            totalRemediations: number;
+        remediationSummary: { totalRemediations: number;
             successfulRemediations: number;
             failedRemediations: number;
             averageRemediationTime: number;
             topRemediationActions: Array<{
                 action: string;
                 count: number;
-                successRate: number;
-            }>;
+                successRate: number }>;
         };
         recommendations: string[];
-        complianceStatus: {
-            framework: string;
+        complianceStatus: { framework: string;
             compliant: boolean;
-            issues: string[];
-        }[];
+            issues: string[] }[];
     };
     private executeHashVerification;
     private executeSchemaValidation;

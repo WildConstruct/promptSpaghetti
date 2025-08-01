@@ -753,6 +753,7 @@ export class ChargebackService {
   }
 
   private async mapRowToChargeback(row: any): Promise<Chargeback> {
+
     // Get evidence and communication history
     const evidence = await this.getChargebackEvidence(row.id);
     const communications = await this.getChargebackCommunications(row.id);
@@ -803,11 +804,13 @@ export class ChargebackService {
 
   // Placeholder helper methods (to be implemented)
   private async getTransactionById(transactionId: string): Promise<Transaction | null> {
+
     // Implementation would query transactions table
     return null;
   }
 
   private async getOrderByTransactionId(transactionId: string): Promise<Order | null> {
+
     // Implementation would query orders table
     return null;
   }
@@ -816,38 +819,46 @@ export class ChargebackService {
     providerChargebackId: string,
     provider: PaymentProvider
   ): Promise<Chargeback | null> {
+
     // Implementation would check for existing chargebacks
     return null;
   }
 
   private async processPreventionRules(chargeback: Chargeback): Promise<void> {
+
     // Implementation would check and apply prevention rules
   }
 
   private async generateChargebackAlert(chargeback: Chargeback): Promise<void> {
+
     // Implementation would create alerts based on risk level
   }
 
   private async emitChargebackEvent(eventType: string, chargeback: Chargeback): Promise<void> {
+
     // Implementation would emit events to event bus
     this.fastify.log.info(`Chargeback event: ${eventType} for ${chargeback.id}`);
   }
 
   private async getChargebackEvidence(chargebackId: string): Promise<ChargebackEvidence[]> {
+
     // Implementation would query evidence table
     return [];
   }
 
   private async getChargebackCommunications(chargebackId: string): Promise<any[]> {
+
     // Implementation would query communications table
     return [];
   }
 
   private async submitEvidenceToProvider(chargeback: Chargeback, evidence: ChargebackEvidence[]): Promise<void> {
+
     // Implementation would submit evidence to Stripe/other providers
   }
 
   private async generateReceiptEvidence(chargeback: Chargeback, order: Order): Promise<ChargebackEvidence | null> {
+
     // Implementation would generate receipt evidence
     return null;
   }
@@ -856,11 +867,13 @@ export class ChargebackService {
     chargeback: Chargeback,
     order: Order
   ): Promise<ChargebackEvidence | null> {
+
     // Implementation would generate communication evidence
     return null;
   }
 
   private async generateTermsEvidence(chargeback: Chargeback): Promise<ChargebackEvidence | null> {
+
     // Implementation would generate terms of service evidence
     return null;
   }
@@ -870,6 +883,7 @@ export class ChargebackService {
     periodEnd: Date,
     userId?: string
   ): Promise<ChargebackAnalytics> {
+
     // Implementation would calculate comprehensive analytics
     return {
       period_start: periodStart,
@@ -898,6 +912,7 @@ export class ChargebackService {
   }
 
   private async calculateSearchAggregates(criteria: ChargebackSearchCriteria): Promise<any> {
+
     // Implementation would calculate search aggregates
     return {
       total_count: 0,

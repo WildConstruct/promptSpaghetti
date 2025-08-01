@@ -10,8 +10,8 @@ import { EnhancedSessionService } from './EnhancedSessionService';
 import { AuditService } from './AuditService';
 import { EmailService } from './EmailService';
 
-}
-}
+
+
 export interface ForcedLogoutRequest {
   id: string;
   targetUserId: string;
@@ -25,8 +25,9 @@ export interface ForcedLogoutRequest {
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     evidence?: string[];
-}
-}
+
+
+
   };
   
   scope: {
@@ -71,10 +72,10 @@ export interface ForcedLogoutRequest {
     failedLogouts: number;
     affectedDevices: string[];
   };
-}
 
-}
-}
+
+
+
 export interface LogoutPolicy {
   id: string;
   name: string;
@@ -89,9 +90,10 @@ export interface LogoutPolicy {
       operator: 'equals' | 'contains' | 'greater' | 'less' | 'matches';
       value: any;
       weight: number;
-}
-}
-    }>;
+
+
+
+>;
     threshold: number; // Combined weight threshold for triggering
     cooldown: number; // seconds between automatic triggers
   };
@@ -125,10 +127,10 @@ export interface LogoutPolicy {
     whitelistedIPs?: string[];
     excludeServiceAccounts: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface LogoutEvent {
   id: string;
   userId: string;
@@ -140,8 +142,9 @@ export interface LogoutEvent {
     source: string;
     requestId?: string;
     policyId?: string;
-}
-}
+
+
+
   };
   
   execution: {
@@ -175,10 +178,10 @@ export interface LogoutEvent {
     tags: string[];
     auditTrail: string[];
   };
-}
 
-}
-}
+
+
+
 export interface LogoutStatistics {
   timeRange: { start: Date; end: Date };
   
@@ -210,7 +213,7 @@ export interface LogoutStatistics {
     userCompliance: number;
     securityIncidentReduction: number;
   };
-}
+
 
 export class ForcedLogoutService extends EventEmitter {
   private db: DatabaseService;
@@ -258,7 +261,7 @@ export class ForcedLogoutService extends EventEmitter {
     
     this.initializeDefaultPolicies();
     this.loadActiveBlocks();
-  }
+
 
   /**
    * Request forced logout for a user
@@ -278,7 +281,7 @@ export class ForcedLogoutService extends EventEmitter {
     requiresApproval?: boolean;
     estimatedSessions?: number;
     message: string;
-  }> {
+> {
 
     try {
       // Validate target user exists and is not requesting themselves (unless allowed)
@@ -287,7 +290,7 @@ export class ForcedLogoutService extends EventEmitter {
           success: false,
           message: 'Cannot force logout yourself unless it\'s a user request'
         };
-      }
+
 
       // Estimate affected sessions
       const sessionEstimate = await this.estimateAffectedSessions(targetUserId, logoutConfig.scope);
@@ -297,7 +300,7 @@ export class ForcedLogoutService extends EventEmitter {
           success: false,
           message: 'No active sessions found for the specified user and scope'
         };
-      }
+
 
       // Create logout request
       const request: ForcedLogoutRequest = {
@@ -310,29 +313,29 @@ export class ForcedLogoutService extends EventEmitter {
           allSessions: true,
           includeDormantSessions: false,
           ...logoutConfig.scope
-  }
+
         execution: {
           immediate: logoutConfig.emergency || logoutConfig.reason.severity === 'critical',
           gracePeriod: this.config.defaultGracePeriod,
           notifyUser: true,
           preserveData: true,
           ...logoutConfig.execution
-  }
+
         authorization: {
           approved: false,
           requiresElevation: this.requiresElevation(logoutConfig.reason),
           emergencyOverride: logoutConfig.emergency || false
-  }
+
         status: {
           state: 'pending',
           attempts: 0
-  }
+
         impact: {
           estimatedSessions: sessionEstimate,
           successfulLogouts: 0,
           failedLogouts: 0,
           affectedDevices: []
-        }
+
       };
 
       // Check if approval is required
@@ -344,7 +347,7 @@ export class ForcedLogoutService extends EventEmitter {
         request.authorization.approvedBy = requestedBy;
         request.authorization.approvedAt = new Date();
         request.status.state = 'approved';
-      }
+
 
       // Store request
       this.logoutRequests.set(request.id, request);
@@ -355,10 +358,10 @@ export class ForcedLogoutService extends EventEmitter {
       // Execute immediately if approved and immediate
       if (request.authorization.approved && request.execution.immediate) {
         setTimeout(() => this.executeForcedLogout(request.id), 0);
-      } else if (request.authorization.approved && request.execution.scheduledAt) {
+ else if (request.authorization.approved && request.execution.scheduledAt) {
         // Schedule for later execution
         this.scheduleLogout(request.id, request.execution.scheduledAt);
-      }
+
 
       return {
         success: true,
@@ -371,15 +374,14 @@ export class ForcedLogoutService extends EventEmitter {
             ? 'Forced logout initiated immediately'
             : 'Forced logout scheduled'
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error requesting forced logout:', error);
       return {
         success: false,
         message: 'Failed to create forced logout request'
       };
-    }
-  }
+
+
 
   /**
    * Approve a pending forced logout request
@@ -395,7 +397,7 @@ export class ForcedLogoutService extends EventEmitter {
     success: boolean;
     message: string;
     executed?: boolean;
-  }> {
+> {
 
     const request = this.logoutRequests.get(requestId);
     if (!request) {
@@ -403,21 +405,21 @@ export class ForcedLogoutService extends EventEmitter {
         success: false,
         message: 'Forced logout request not found'
       };
-    }
+
 
     if (request.authorization.approved) {
       return {
         success: false,
         message: 'Request already approved'
       };
-    }
+
 
     if (request.status.state !== 'pending') {
       return {
         success: false,
         message: `Request is in ${request.status.state} state`
       };
-    }
+
 
     // Verify elevated credentials if required
     if (request.authorization.requiresElevation && elevatedCredentials) {
@@ -427,8 +429,8 @@ export class ForcedLogoutService extends EventEmitter {
           success: false,
           message: 'Invalid elevated credentials'
         };
-      }
-    }
+
+
 
     // Approve the request
     request.authorization.approved = true;
@@ -445,7 +447,7 @@ export class ForcedLogoutService extends EventEmitter {
         targetUserId: request.targetUserId,
         reason: request.reason,
         scope: request.scope
-  }
+
       severity: 'warning'
     });
 
@@ -457,14 +459,14 @@ export class ForcedLogoutService extends EventEmitter {
     // Schedule if not immediate
     if (!request.execution.immediate && request.execution.scheduledAt) {
       this.scheduleLogout(requestId, request.execution.scheduledAt);
-    }
+
 
     return {
       success: true,
       message: 'Forced logout approved',
       executed
     };
-  }
+
 
   /**
    * Execute immediate forced logout for all active sessions of a user
@@ -478,13 +480,13 @@ export class ForcedLogoutService extends EventEmitter {
       notifyUser?: boolean;
       blockReauth?: boolean;
       blockDuration?: number;
-    } = {}
+ = {}
   ): Promise<{
     success: boolean;
     sessionsTerminated: number;
     errors: string[];
     logoutEvents: LogoutEvent[];
-  }> {
+> {
 
     const errors: string[] = [];
     const logoutEvents: LogoutEvent[] = [];
@@ -504,7 +506,7 @@ export class ForcedLogoutService extends EventEmitter {
           errors: ['No active sessions found'],
           logoutEvents: []
         };
-      }
+
 
       // Process each session
       for (const session of userSessions) {
@@ -514,7 +516,7 @@ export class ForcedLogoutService extends EventEmitter {
           // Preserve session data if requested
           if (options.preserveData) {
             await this.preserveSessionData(session.id, reason);
-          }
+
 
           // Revoke the session
           const result = await this.sessionService.revokeSession(
@@ -531,14 +533,14 @@ export class ForcedLogoutService extends EventEmitter {
             trigger: {
               type: 'manual',
               source: executedBy
-  }
+
             execution: {
               method: 'forced',
               success: result.success,
               duration: Date.now() - startTime,
               error: result.success ? undefined : result.message,
               retries: 0
-  }
+
             session: {
               deviceId: session.deviceId,
               deviceType: session.metadata?.deviceType || 'unknown',
@@ -547,46 +549,45 @@ export class ForcedLogoutService extends EventEmitter {
               duration: Math.floor((Date.now() - session.createdAt.getTime()) / 1000),
               lastActivity: session.lastActivity,
               dataPreserved: options.preserveData || false
-  }
+
             outcome: {
               userNotified: false,
               reauthBlocked: options.blockReauth || false,
               blockDuration: options.blockDuration,
               followUpRequired: false,
               escalated: false
-  }
+
             metadata: {
               correlationId: this.generateCorrelationId(),
               tags: ['forced', 'immediate'],
               auditTrail: [`Executed by ${executedBy}`, `Reason: ${reason}`]
-            }
+
           };
 
           if (result.success) {
             sessionsTerminated++;
             // Invalidate session in Redis
             await this.invalidateSessionCache(session.id);
-          } else {
+ else {
             errors.push(`Failed to terminate session ${session.id}: ${result.message}`);
-          }
+
 
           logoutEvents.push(logoutEvent);
           this.logoutHistory.push(logoutEvent);
-
-        } catch (error) {
+ catch (error) {
           errors.push(`Error processing session ${session.id}: ${error.message}`);
-        }
-      }
+
+
 
       // Block reauthentication if requested
       if (options.blockReauth && options.blockDuration) {
         await this.blockUserReauth(userId, options.blockDuration, reason);
-      }
+
 
       // Notify user if requested
       if (options.notifyUser && sessionsTerminated > 0) {
         await this.notifyUserOfForcedLogout(userId, reason, sessionsTerminated);
-      }
+
 
       // Log the forced logout action
       await this.auditService.logEvent({
@@ -601,7 +602,7 @@ export class ForcedLogoutService extends EventEmitter {
           preserveData: options.preserveData,
           blockReauth: options.blockReauth,
           blockDuration: options.blockDuration
-  }
+
         severity: 'warning'
       });
 
@@ -619,8 +620,7 @@ export class ForcedLogoutService extends EventEmitter {
         errors,
         logoutEvents
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error executing immediate forced logout:', error);
       return {
         success: false,
@@ -628,8 +628,8 @@ export class ForcedLogoutService extends EventEmitter {
         errors: ['Failed to execute forced logout'],
         logoutEvents: []
       };
-    }
-  }
+
+
 
   /**
    * Check if user is currently blocked from reauthentication
@@ -639,12 +639,12 @@ export class ForcedLogoutService extends EventEmitter {
     reason?: string;
     expiresAt?: Date;
     remainingTime?: number;
-  }> {
+> {
 
     const blockExpiry = this.activeBlocks.get(userId);
     if (!blockExpiry) {
       return { blocked: false };
-    }
+
 
     const now = new Date();
     if (now >= blockExpiry) {
@@ -652,7 +652,7 @@ export class ForcedLogoutService extends EventEmitter {
       this.activeBlocks.delete(userId);
       await this.redis.del(`logout_block:${userId}`);
       return { blocked: false };
-    }
+
 
     const remainingTime = Math.floor((blockExpiry.getTime() - now.getTime()) / 1000);
     
@@ -662,7 +662,7 @@ export class ForcedLogoutService extends EventEmitter {
       expiresAt: blockExpiry,
       remainingTime
     };
-  }
+
 
   /**
    * Manually unblock a user from reauthentication
@@ -674,7 +674,7 @@ export class ForcedLogoutService extends EventEmitter {
   ): Promise<{
     success: boolean;
     message: string;
-  }> {
+> {
 
     try {
       const wasBlocked = this.activeBlocks.has(userId);
@@ -684,7 +684,7 @@ export class ForcedLogoutService extends EventEmitter {
           success: false,
           message: 'User is not currently blocked'
         };
-      }
+
 
       // Remove block
       this.activeBlocks.delete(userId);
@@ -698,7 +698,7 @@ export class ForcedLogoutService extends EventEmitter {
           targetUserId: userId,
           reason,
           unblockedBy
-  }
+
         severity: 'info'
       });
 
@@ -712,15 +712,14 @@ export class ForcedLogoutService extends EventEmitter {
         success: true,
         message: 'User successfully unblocked'
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error unblocking user:', error);
       return {
         success: false,
         message: 'Failed to unblock user'
       };
-    }
-  }
+
+
 
   /**
    * Get forced logout statistics and analytics
@@ -744,17 +743,17 @@ export class ForcedLogoutService extends EventEmitter {
       if (filters) {
         if (filters.userIds) {
           filteredEvents = filteredEvents.filter(e => filters.userIds!.includes(e.userId));
-        }
+
         if (filters.executedBy) {
           filteredEvents = filteredEvents.filter(e => filters.executedBy!.includes(e.trigger.source));
-        }
+
         if (filters.reasons) {
           // Implementation would check reason patterns
-        }
+
         if (filters.successful !== undefined) {
           filteredEvents = filteredEvents.filter(e => e.execution.success === filters.successful);
-        }
-      }
+
+
 
       // Calculate statistics
       const statistics: LogoutStatistics = {
@@ -765,7 +764,7 @@ export class ForcedLogoutService extends EventEmitter {
           voluntaryLogouts: filteredEvents.filter(e => e.trigger.type === 'manual').length,
           failedLogouts: filteredEvents.filter(e => !e.execution.success).length,
           averageExecutionTime: this.calculateAverageExecutionTime(filteredEvents)
-  }
+
         triggers: {
           byType: this.groupByProperty(filteredEvents, e => e.trigger.type),
           byReason: this.groupByMetadataTags(filteredEvents),
@@ -773,14 +772,14 @@ export class ForcedLogoutService extends EventEmitter {
           automatedVsManual: {
             automated: filteredEvents.filter(e => e.trigger.type === 'automated').length,
             manual: filteredEvents.filter(e => e.trigger.type === 'manual').length
-          }
-  }
+
+
         patterns: {
           peakLogoutHours: this.calculatePeakLogoutHours(filteredEvents),
           deviceTypeBreakdown: this.groupByProperty(filteredEvents, e => e.session.deviceType),
           locationBreakdown: this.groupByLocation(filteredEvents),
           frequentUsers: this.getFrequentUsers(filteredEvents)
-  }
+
         effectiveness: {
           successRate: filteredEvents.length > 0 
             ? Math.round((filteredEvents.filter(e => e.execution.success).length / filteredEvents.length) * 100)
@@ -788,16 +787,15 @@ export class ForcedLogoutService extends EventEmitter {
           averageResponseTime: this.calculateAverageExecutionTime(filteredEvents),
           userCompliance: this.calculateUserCompliance(filteredEvents),
           securityIncidentReduction: this.calculateSecurityImpact(filteredEvents)
-        }
+
       };
 
       return statistics;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error generating logout statistics:', error);
       throw new Error('Failed to generate logout statistics');
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -806,7 +804,7 @@ export class ForcedLogoutService extends EventEmitter {
     const request = this.logoutRequests.get(requestId);
     if (!request) {
       return false;
-    }
+
 
     request.status.state = 'executing';
     request.status.attempts++;
@@ -822,7 +820,7 @@ export class ForcedLogoutService extends EventEmitter {
           notifyUser: request.execution.notifyUser,
           blockReauth: request.execution.blockReauth,
           blockDuration: request.execution.blockDuration
-        }
+
       );
 
       // Update request status
@@ -836,45 +834,44 @@ export class ForcedLogoutService extends EventEmitter {
         // Retry after delay
         setTimeout(() => this.executeForcedLogout(requestId), this.config.retryDelay);
         return false;
-      }
+
 
       return result.success;
-
-    } catch (error) {
+ catch (error) {
       request.status.state = 'failed';
       request.status.error = error.message;
       console.error('Error executing forced logout request:', error);
       return false;
-    }
-  }
+
+
 
   private requiresElevation(reason: ForcedLogoutRequest['reason']): boolean {
     return reason.severity === 'critical' || reason.type === 'security_breach';
-  }
+
 
   private requiresApproval(request: ForcedLogoutRequest): boolean {
     // Emergency override bypasses approval
     if (request.authorization.emergencyOverride) {
       return false;
-    }
+
 
     // Self-requests don't require approval
     if (request.targetUserId === request.requestedBy && request.reason.type === 'user_request') {
       return false;
-    }
+
 
     // Critical severity requires approval
     if (request.reason.severity === 'critical') {
       return true;
-    }
+
 
     // Large scope requires approval
     if (request.impact.estimatedSessions > 5) {
       return true;
-    }
+
 
     return false;
-  }
+
 
   private async estimateAffectedSessions(
     userId: string,
@@ -889,33 +886,32 @@ export class ForcedLogoutService extends EventEmitter {
 
       if (!scope || scope.allSessions) {
         return sessions.length;
-      }
+
 
       let filtered = sessions;
 
       if (scope.specificSessions) {
         filtered = filtered.filter(s => scope.specificSessions!.includes(s.id));
-      }
+
 
       if (scope.deviceTypes) {
         filtered = filtered.filter(s => 
           scope.deviceTypes!.includes(s.metadata?.deviceType || 'unknown')
         );
-      }
+
 
       if (scope.excludeDevices) {
         filtered = filtered.filter(s => 
           !scope.excludeDevices!.includes(s.deviceId)
         );
-      }
+
 
       return filtered.length;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error estimating affected sessions:', error);
       return 0;
-    }
-  }
+
+
 
   private async verifyElevatedCredentials(
     userId: string,
@@ -925,7 +921,7 @@ export class ForcedLogoutService extends EventEmitter {
     // Implementation would verify password and/or MFA
     // For now, return true if any credentials provided
     return !!(credentials.password || credentials.mfaCode);
-  }
+
 
   private async preserveSessionData(sessionId: string, reason: string): Promise<void> {
 
@@ -944,7 +940,7 @@ export class ForcedLogoutService extends EventEmitter {
             metadata: sessionData.metadata,
             lastActivity: sessionData.lastActivity,
             createdAt: sessionData.createdAt
-          }
+
         };
 
         await this.redis.setex(
@@ -952,17 +948,17 @@ export class ForcedLogoutService extends EventEmitter {
           86400, // 24 hours
           JSON.stringify(preservedData)
         );
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error preserving session data:', error);
-    }
-  }
+
+
 
   private async invalidateSessionCache(sessionId: string): Promise<void> {
 
     await this.redis.del(`session:${sessionId}`);
     await this.redis.del(`session_data:${sessionId}`);
-  }
+
 
   private async blockUserReauth(userId: string, durationSeconds: number, reason: string): Promise<void> {
 
@@ -981,7 +977,7 @@ export class ForcedLogoutService extends EventEmitter {
       duration: durationSeconds,
       expiresAt
     });
-  }
+
 
   private async notifyUserOfForcedLogout(
     userId: string,
@@ -996,10 +992,10 @@ export class ForcedLogoutService extends EventEmitter {
         timestamp: new Date(),
         supportContact: 'support@example.com'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error sending forced logout notification:', error);
-    }
-  }
+
+
 
   private scheduleLogout(requestId: string, scheduledTime: Date): void {
     const delay = scheduledTime.getTime() - Date.now();
@@ -1011,8 +1007,8 @@ export class ForcedLogoutService extends EventEmitter {
       }, delay);
       
       this.scheduledLogouts.set(requestId, timeout);
-    }
-  }
+
+
 
   private async loadActiveBlocks(): Promise<void> {
 
@@ -1026,12 +1022,12 @@ export class ForcedLogoutService extends EventEmitter {
         if (blockData) {
           const { expiresAt } = JSON.parse(blockData);
           this.activeBlocks.set(userId, new Date(expiresAt));
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       console.error('Error loading active blocks:', error);
-    }
-  }
+
+
 
   private initializeDefaultPolicies(): void {
     const defaultPolicies: Array<Omit<LogoutPolicy, 'id'>> = [
@@ -1048,7 +1044,7 @@ export class ForcedLogoutService extends EventEmitter {
           ],
           threshold: 80,
           cooldown: 300
-  }
+
         scope: {},
         actions: {
           logoutType: 'immediate',
@@ -1057,20 +1053,20 @@ export class ForcedLogoutService extends EventEmitter {
           blockDuration: 3600,
           preserveData: true,
           escalationRequired: true
-  }
+
         exceptions: {
           adminBypass: false,
           emergencyAccess: true,
           excludeServiceAccounts: false
-        }
-      }
+
+
     ];
 
     defaultPolicies.forEach(policyData => {
       const id = this.generatePolicyId();
       this.policies.set(id, { ...policyData, id });
     });
-  }
+
 
   private async logForcedLogoutRequest(request: ForcedLogoutRequest): Promise<void> {
 
@@ -1083,16 +1079,16 @@ export class ForcedLogoutService extends EventEmitter {
         reason: request.reason,
         scope: request.scope,
         execution: request.execution
-  }
+
       severity: request.reason.severity === 'critical' ? 'error' : 'warning'
     });
-  }
+
 
   private calculateAverageExecutionTime(events: LogoutEvent[]): number {
     if (events.length === 0) return 0;
     const total = events.reduce((sum, event) => sum + event.execution.duration, 0);
     return Math.round(total / events.length);
-  }
+
 
   private groupByProperty<T>(items: T[], getProperty: (item: T) => string): Record<string, number> {
     return items.reduce((acc, item) => {
@@ -1100,7 +1096,7 @@ export class ForcedLogoutService extends EventEmitter {
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-  }
+
 
   private groupByMetadataTags(events: LogoutEvent[]): Record<string, number> {
     const tagCounts: Record<string, number> = {};
@@ -1110,7 +1106,7 @@ export class ForcedLogoutService extends EventEmitter {
       });
     });
     return tagCounts;
-  }
+
 
   private groupBySeverity(events: LogoutEvent[]): Record<string, number> {
     // Would extract severity from event metadata or audit trail
@@ -1120,7 +1116,7 @@ export class ForcedLogoutService extends EventEmitter {
       'high': events.filter(e => e.metadata.tags.includes('high')).length,
       'critical': events.filter(e => e.metadata.tags.includes('critical')).length
     };
-  }
+
 
   private calculatePeakLogoutHours(events: LogoutEvent[]): Array<{ hour: number; count: number }> {
     const hourCounts: Record<number, number> = {};
@@ -1133,11 +1129,11 @@ export class ForcedLogoutService extends EventEmitter {
     return Object.entries(hourCounts)
       .map(([hour, count]) => ({ hour: parseInt(hour), count }))
       .sort((a, b) => b.count - a.count);
-  }
+
 
   private groupByLocation(events: LogoutEvent[]): Record<string, number> {
     return this.groupByProperty(events, e => e.session.location || 'unknown');
-  }
+
 
   private getFrequentUsers(events: LogoutEvent[]): Array<{ userId: string; logouts: number }> {
     const userCounts = this.groupByProperty(events, e => e.userId);
@@ -1145,13 +1141,13 @@ export class ForcedLogoutService extends EventEmitter {
       .map(([userId, logouts]) => ({ userId, logouts }))
       .sort((a, b) => b.logouts - a.logouts)
       .slice(0, 10);
-  }
+
 
   private calculateUserCompliance(events: LogoutEvent[]): number {
     // Calculate percentage of successful vs failed logouts
     const successful = events.filter(e => e.execution.success).length;
     return events.length > 0 ? Math.round((successful / events.length) * 100) : 100;
-  }
+
 
   private calculateSecurityImpact(events: LogoutEvent[]): number {
     // Mock calculation - would use real security incident data
@@ -1159,29 +1155,29 @@ export class ForcedLogoutService extends EventEmitter {
       e.metadata.tags.includes('security') || e.metadata.tags.includes('breach')
     ).length;
     return Math.round((securityLogouts / Math.max(events.length, 1)) * 100);
-  }
+
 
   private generateRequestId(): string {
     return `FLR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateEventId(): string {
     return `FLE-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generatePolicyId(): string {
     return `FLP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateCorrelationId(): string {
     return `FLC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   destroy(): void {
     // Clean up scheduled logouts
     for (const timeout of this.scheduledLogouts.values()) {
       clearTimeout(timeout);
-    }
+
     
     // Clear data structures
     this.logoutRequests.clear();
@@ -1189,5 +1185,4 @@ export class ForcedLogoutService extends EventEmitter {
     this.activeBlocks.clear();
     this.scheduledLogouts.clear();
     this.logoutHistory = [];
-  }
-}
+

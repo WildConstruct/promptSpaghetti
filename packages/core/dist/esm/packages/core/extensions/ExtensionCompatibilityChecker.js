@@ -303,8 +303,9 @@ CompatibilityCheck;
                                 issues,
                                 warnings
                             };
-                            checkTransitiveDependencies(extension, ExtensionManifest);
-                            context: CompatibilityContext,
+                            checkTransitiveDependencies(extension, ExtensionManifest),
+                                context;
+                            CompatibilityContext,
                                 visited;
                             string = [];
                             CompatibilityCheck;
@@ -394,13 +395,13 @@ CompatibilityCheck;
                                                                                                         * Check if permission is dangerous
                                                                                                         */
                                                                                                         isDangerousPermission(permission) {
-                                                                                                            const dangerousPermissions = [];
-                                                                                                            'file-system-write',
+                                                                                                            const dangerousPermissions = [
+                                                                                                                'file-system-write',
                                                                                                                 'network',
                                                                                                                 'process-spawn',
                                                                                                                 'system-info',
-                                                                                                                'extensions-api';
-                                                                                                            ;
+                                                                                                                'extensions-api'
+                                                                                                            ];
                                                                                                             return dangerousPermissions.includes(permission);
                                                                                                             /**
                                                                                                             * Validate CSP
@@ -432,12 +433,12 @@ CompatibilityCheck;
                                                                                                         * Check if domain is trusted
                                                                                                         */
                                                                                                         isTrustedDomain(domain) {
-                                                                                                            const trustedDomains = [];
-                                                                                                            'localhost',
+                                                                                                            const trustedDomains = [
+                                                                                                                'localhost',
                                                                                                                 '127.0.0.1',
                                                                                                                 'api.example.com',
-                                                                                                                'cdn.example.com';
-                                                                                                            ;
+                                                                                                                'cdn.example.com'
+                                                                                                            ];
                                                                                                             return trustedDomains.includes(domain) || domain.endsWith('.example.com');
                                                                                                             /**
                                                                                                             * Initialize system capabilities
@@ -452,7 +453,7 @@ CompatibilityCheck;
                                                                                                         */
                                                                                                         initializeSystemCapabilities() {
                                                                                                             return {
-                                                                                                                available: [,
+                                                                                                                available: [
                                                                                                                     'runtime-nodes',
                                                                                                                     'ui-components',
                                                                                                                     'data-transforms',
@@ -532,14 +533,14 @@ CompatibilityCheck;
                                                                                                     };
                                                                                                 }
                                                                                             }
-                                                                                            ;
                                                                                         }
                                                                                     }
-                                                                                    export const extensionCompatibilityChecker = ExtensionCompatibilityChecker.getInstance();
                                                                                 }
+                                                                                ;
                                                                             }
                                                                         }
                                                                     }
+                                                                    export const extensionCompatibilityChecker = ExtensionCompatibilityChecker.getInstance();
                                                                 }
                                                             }
                                                         }

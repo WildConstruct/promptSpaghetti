@@ -167,8 +167,9 @@ export const RestoreSnapshotPayloadSchema = z.object({
 export type RestoreSnapshotPayload = z.infer<typeof RestoreSnapshotPayloadSchema>;
 
 // Connection metadata
-}
-}
+
+
+
 export interface ConnectionInfo {
   id: string;
   userId: string;
@@ -183,25 +184,29 @@ export interface ConnectionInfo {
   // Enhanced collaboration fields
   collaborationSessionId?: string;
   role?: 'owner' | 'editor' | 'viewer' | 'reviewer';
-}
-}
-}
+
+
+
+
 
 // Document session info
-}
-}
+
+
+
 export interface DocumentSession {
   documentId: string;
   connections: Map<string, ConnectionInfo>;
   lastActivity: number;
   version: number;
-}
-}
-}
+
+
+
+
 
 // WebSocket server configuration
-}
-}
+
+
+
 export interface WSServerConfig {
   port: number;
   heartbeatInterval: number;
@@ -210,13 +215,15 @@ export interface WSServerConfig {
   enableAuthentication: boolean;
   jwtSecret?: string;
   corsOrigins: string[];
-}
-}
-}
+
+
+
+
 
 // Health check data
-}
-}
+
+
+
 export interface HealthMetrics {
   totalConnections: number;
   activeDocuments: number;
@@ -224,6 +231,6 @@ export interface HealthMetrics {
   uptime: number;
   memoryUsage: number;
   lastUpdated: number;
-}
-}
-}
+
+
+

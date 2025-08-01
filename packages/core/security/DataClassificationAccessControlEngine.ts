@@ -6,8 +6,7 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import {
-  AccessRequest,
+import { AccessRequest,
   AccessDecision,
   AccessDecisionEngine,
   RBACDecision,
@@ -28,16 +27,14 @@ import {
   AccessCondition,
   MonitoringRequirement,
   DataOperation,
-  STANDARD_CLASSIFICATION_ROLES,
+  STANDARD_CLASSIFICATION_ROLES }
   ACCESS_CONTROL_MATRIX
-} from './DataClassificationAccessControl';
-import { 
-  DataClassificationLevel, 
+ from './DataClassificationAccessControl';
+import { DataClassificationLevel }
   OperationContext 
-} from '../types/DataClassification';
+ from '../types/DataClassification';
 
-export class DataClassificationAccessControlEngine implements AccessDecisionEngine {
-  private rbacModel: RBACModel;
+export class DataClassificationAccessControlEngine implements AccessDecisionEngine { private rbacModel: RBACModel;
   private abacModel: ABACModel;
   private classificationPolicies: Map<DataClassificationLevel, ClassificationAccessPolicy>;
   private roleCache: Map<string, DataClassificationRole>;
@@ -45,9 +42,9 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   private policyCache: Map<string, ABACPolicy>;
   private decisionCache: Map<string, AccessDecision>;
   constructor();
-  rbacModel: RBACModel,
-  abacModel: ABACModel,
-  classificationPolicies: ClassificationAccessPolicy,
+  rbacModel: RBACModel
+  abacModel: ABACModel
+  classificationPolicies: ClassificationAccessPolicy
   this.rbacModel = rbacModel;
   this.abacModel = abacModel;
   this.classificationPolicies = new Map();
@@ -59,7 +56,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   /**
   * Main access evaluation method that combines RBAC and ABAC
   */
-  async evaluateAccess(request: AccessRequest): Promise<AccessDecision> {,
+  async evaluateAccess(request: AccessRequest): Promise<AccessDecision> {
   const startTime = Date.now();
   try {
   // Check cache first
@@ -67,11 +64,11 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   const cachedDecision = this.decisionCache.get(cacheKey);
   if (cachedDecision && this.isCacheValid(cachedDecision)) {
   return {
-  ...cachedDecision,
+  ...cachedDecision
   metadata: {
-  ...cachedDecision.metadata,
-  cacheHit: true,
-  evaluationTime: Date.now() - startTime,
+  ...cachedDecision.metadata
+  cacheHit: true
+  evaluationTime: Date.now() - startTime }
 };
       // Evaluate RBAC
       const rbacDecision = await this.evaluateRBAC(request);
@@ -80,33 +77,31 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
       // Combine decisions
       const finalDecision = await this.combinedDecision(rbacDecision, abacDecision);
       // Add evaluation metadata
-      finalDecision.metadata = {
-  evaluationTime: Date.now() - startTime,
-  policiesEvaluated: abacDecision.matchedPolicies,
-  rolesEvaluated: rbacDecision.matchedRoles,
-  cacheHit: false,
-  version: '1.0',
+      finalDecision.metadata = { evaluationTime: Date.now() - startTime
+  policiesEvaluated: abacDecision.matchedPolicies
+  rolesEvaluated: rbacDecision.matchedRoles
+  cacheHit: false
+  version: '1.0' }
 };
       // Cache the decision
       this.decisionCache.set(cacheKey, finalDecision);
       return finalDecision;
-    } catch (error) {
-  console.error('Error evaluating access:', error);
+ catch (error) { console.error('Error evaluating access:', error);
   return {
-  decision: 'DENY',
-  reason: 'Access evaluation failed due to system error',
-  confidence: 0,
-  obligations: [],
-  conditions: [],
-  monitoring: [],
-  auditRequired: true,
-  riskLevel: 'CRITICAL',
+  decision: 'DENY'
+  reason: 'Access evaluation failed due to system error'
+  confidence: 0
+  obligations: []
+  conditions: []
+  monitoring: []
+  auditRequired: true
+  riskLevel: 'CRITICAL'
   metadata: {
-  evaluationTime: Date.now() - startTime,
-  policiesEvaluated: [],
-  rolesEvaluated: [],
-  cacheHit: false,
-  version: '1.0',
+  evaluationTime: Date.now() - startTime
+  policiesEvaluated: []
+  rolesEvaluated: []
+  cacheHit: false
+  version: '1.0' }
 };
   /**
    * Evaluate Role-Based Access Control
@@ -136,43 +131,39 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
         matchedRoles.push(role.id);
         // Check permissions for this role
         const rolePermissions = await this.getRolePermissions(role);
-        for (const permission of rolePermissions) {
-          if (this.permissionMatches(permission, request)) {
+        for (const permission of rolePermissions) { if (this.permissionMatches(permission, request)) {
             matchedPermissions.push(permission.id);
             // Add any requirements from the permission
             if (permission.conditions) {
               requirements.push(...permission.conditions);
       // Check access control matrix
       const matrixAllowed = this.checkAccessControlMatrix(;);
-        request.object.classification,
-        request.action.operation,
+        request.object.classification
+        request.action.operation
         userRoles
       );
       if (!matrixAllowed) {
         denialReasons.push('Operation not permitted by access control matrix');
       const permitted = matchedPermissions.length > 0 && matrixAllowed;
       return {
-        permitted,
-        matchedRoles,
-        matchedPermissions,
-        denialReasons,
+        permitted
+        matchedRoles
+        matchedPermissions
+        denialReasons }
         requirements
       };
-    } catch (error) {
-  console.error('Error evaluating RBAC:', error);
+ catch (error) { console.error('Error evaluating RBAC:', error);
   return {
-  permitted: false,
-  matchedRoles: [],
-  matchedPermissions: [],
-  denialReasons: ['RBAC evaluation failed'],
-  requirements: [],
+  permitted: false
+  matchedRoles: []
+  matchedPermissions: []
+  denialReasons: ['RBAC evaluation failed']
+  requirements: [] }
 };
   /**
    * Evaluate Attribute-Based Access Control
    */
-  async evaluateABAC(request: AccessRequest): Promise<ABACDecision> {
-
-  const matchedPolicies: string = [];
+  async evaluateABAC(request: AccessRequest): Promise<ABACDecision> { const matchedPolicies: string = [];
   const obligations: PolicyObligation = [];
   const conditions: AccessCondition = [];
   let confidence = 0;
@@ -194,7 +185,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   const classificationPolicy = this.classificationPolicies.get(request.object.classification);
   if (classificationPolicy) {
   const classificationResult = await this.evaluateClassificationPolicy(;);
-  classificationPolicy,
+  classificationPolicy
   request
   );
   if (classificationResult.permitted) {
@@ -204,27 +195,24 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   // Default deny if no policies match
   const permitted = matchedPolicies.length > 0 && confidence > 0.5;
   return {
-  permitted,
-  matchedPolicies,
-  obligations,
-  conditions,
+  permitted
+  matchedPolicies
+  obligations
+  conditions }
   confidence
 };
-    } catch (error) {
-  console.error('Error evaluating ABAC:', error);
+ catch (error) { console.error('Error evaluating ABAC:', error);
   return {
-  permitted: false,
-  matchedPolicies: [],
-  obligations: [],
-  conditions: [],
-  confidence: 0,
+  permitted: false
+  matchedPolicies: []
+  obligations: []
+  conditions: []
+  confidence: 0 }
 };
   /**
    * Combine RBAC and ABAC decisions
    */
-  async combinedDecision(rbac: RBACDecision, abac: ABACDecision): Promise<AccessDecision> {
-
-  // Both RBAC and ABAC must permit for final approval
+  async combinedDecision(rbac: RBACDecision, abac: ABACDecision): Promise<AccessDecision> { // Both RBAC and ABAC must permit for final approval
   const permitted = rbac.permitted && abac.permitted;
   let decision: 'PERMIT' | 'DENY' | 'INDETERMINATE';
   let reason: string;
@@ -232,9 +220,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   if (permitted) {
   decision = 'PERMIT';
   reason = 'Access granted by RBAC and ABAC policies';
-  riskLevel = this.calculateRiskLevel(rbac, abac);
-} else {
-  decision = 'DENY';
+  riskLevel = this.calculateRiskLevel(rbac, abac) } else { decision = 'DENY';
   const rbacReasons = rbac.denialReasons.join('; ');
   const abacReason = abac.permitted ? '' : 'ABAC policies not satisfied';
   reason = [rbacReasons, abacReason].filter(Boolean).join('; ');
@@ -243,57 +229,49 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   const monitoring: MonitoringRequirement = [];
   if (riskLevel === 'HIGH' || riskLevel === 'CRITICAL') {
   monitoring.push({)
-  type: 'REALTIME',
+  type: 'REALTIME'
   specification: {
-  metrics: ['access_attempts', 'data_volume', 'operation_duration'],
-  frequency: 'immediate',
-  retention: 90,
-  alerting: true,
-},
-  thresholds: [{,
-  metric: 'access_frequency',
-  operator: 'greater_than',
-  value: 10,
-  action: 'ALERT',
-}]
+  metrics: ['access_attempts', 'data_volume', 'operation_duration']
+  frequency: 'immediate'
+  retention: 90
+  alerting: true }
+
+  thresholds: [{ 
+  metric: 'access_frequency'
+  operator: 'greater_than'
+  value: 10
+  action: 'ALERT' }
+]
       });
-    return {
-  decision,
-  reason,
-  confidence: abac.confidence,
-  obligations: abac.obligations,
-  conditions: abac.conditions,
-  monitoring,
-  auditRequired: riskLevel === 'HIGH' || riskLevel === 'CRITICAL',
-  riskLevel,
+    return { decision
+  reason
+  confidence: abac.confidence
+  obligations: abac.obligations
+  conditions: abac.conditions
+  monitoring
+  auditRequired: riskLevel === 'HIGH' || riskLevel === 'CRITICAL'
+  riskLevel
   metadata: {
-  evaluationTime: 0, // Will be set by caller,
-  policiesEvaluated: [],
-  rolesEvaluated: [],
-  cacheHit: false,
-  version: '1.0',
+  evaluationTime: 0, // Will be set by caller
+  policiesEvaluated: []
+  rolesEvaluated: []
+  cacheHit: false
+  version: '1.0' }
 };
   // Private helper methods
-  private initializeCaches(classificationPolicies: ClassificationAccessPolicy): void {
-    // Initialize classification policies
+  private initializeCaches(classificationPolicies: ClassificationAccessPolicy): void { // Initialize classification policies
     classificationPolicies.forEach(policy => {)
-  this.classificationPolicies.set(policy.classification, policy);
-    });
+  this.classificationPolicies.set(policy.classification, policy) });
     // Initialize role cache
-    this.rbacModel.roles.forEach(role => {)
-  this.roleCache.set(role.id, role);
-    });
+    this.rbacModel.roles.forEach(role => { )
+  this.roleCache.set(role.id, role) });
     // Initialize permission cache
-    this.rbacModel.permissions.forEach(permission => {)
-  this.permissionCache.set(permission.id, permission);
-    });
+    this.rbacModel.permissions.forEach(permission => { )
+  this.permissionCache.set(permission.id, permission) });
     // Initialize policy cache
-    this.abacModel.policies.forEach(policy => {)
-  this.policyCache.set(policy.id, policy);
-    });
-  private async getUserRoles(userId: string): Promise<DataClassificationRole> {
-
-  const userRoleAssignments = this.rbacModel.userRoleAssignments.filter(;);
+    this.abacModel.policies.forEach(policy => { )
+  this.policyCache.set(policy.id, policy) });
+  private async getUserRoles(userId: string): Promise<DataClassificationRole> { const userRoleAssignments = this.rbacModel.userRoleAssignments.filter(;);
   assignment => assignment.userId === userId &&
   assignment.status === 'ACTIVE' &&
   (!assignment.expiresAt || assignment.expiresAt > new Date())
@@ -304,30 +282,30 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   if (role && role.isActive) {
   roles.push(role);
   return roles;
-  private hasClassificationClearance((role: DataClassificationRole,
-  classification: DataClassificationLevel): boolean {,
+  private hasClassificationClearance((role: DataClassificationRole
+  classification: DataClassificationLevel): boolean {
   const levels: DataClassificationLevel = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
   const roleLevel = levels.indexOf(role.maxClassificationLevel);
   const requiredLevel = levels.indexOf(classification);
   return roleLevel >= requiredLevel;
-  private async evaluateRoleConstraints((role: DataClassificationRole,
-  request: AccessRequest): Promise<boolean> {,
+  private async evaluateRoleConstraints((role: DataClassificationRole
+  request: AccessRequest): Promise<boolean> {
   for (const constraint of role.constraints) {
   const satisfied = await this.evaluateConstraint(constraint, request);
   if (!satisfied) {
   return false;
   return true;
-  private async evaluateConstraint(constraint: any, request: AccessRequest): Promise<boolean> {,
+  private async evaluateConstraint(constraint: any, request: AccessRequest): Promise<boolean> {
   switch (constraint.type) {
-  case 'TIME':,
+  case 'TIME':
   return this.evaluateTimeConstraint(constraint, request.timestamp);
-  case 'LOCATION':,
+  case 'LOCATION':
   return this.evaluateLocationConstraint(constraint, request.environment.location);
-  case 'PURPOSE':,
+  case 'PURPOSE':
   return this.evaluatePurposeConstraint(constraint, request.action.purpose);
-  default:,
+  default:
   return true;
-  private evaluateTimeConstraint(constraint: any, timestamp: Date): boolean {,
+  private evaluateTimeConstraint(constraint: any, timestamp: Date): boolean {
   const hour = timestamp.getHours();
   if (constraint.operator === 'BETWEEN' && Array.isArray(constraint.value)) {
   const [start, end] = constraint.value;
@@ -341,15 +319,15 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   if (constraint.operator === 'EQUALS') {
   return purpose === constraint.value;
   return true;
-  private async getRolePermissions(role: DataClassificationRole): Promise<DataClassificationPermission> {,
+  private async getRolePermissions(role: DataClassificationRole): Promise<DataClassificationPermission> {
   const permissions: DataClassificationPermission = [];
   for (const permissionId of role.permissions) {
   const permission = this.permissionCache.get(permissionId);
   if (permission) {
   permissions.push(permission);
   return permissions;
-  private permissionMatches((permission: DataClassificationPermission,
-  request: AccessRequest): boolean {,
+  private permissionMatches((permission: DataClassificationPermission
+  request: AccessRequest): boolean {
   // Check operation match
   if (permission.operation !== '*' && permission.operation !== request.action.operation) {
   return false;
@@ -359,8 +337,8 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   // Check effect
   return permission.effect === 'ALLOW';
   private checkAccessControlMatrix(classification: DataClassificationLevel)
-  operation: DataOperation,
-  userRoles: DataClassificationRole): boolean {,
+  operation: DataOperation
+  userRoles: DataClassificationRole): boolean {
   const matrixEntry = ACCESS_CONTROL_MATRIX[classification]?.[operation];
   if (!matrixEntry) {
   return false;
@@ -368,39 +346,39 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   return userRoles.some(role => )
   matrixEntry.includes(role.name as any)
   );
-  private async getApplicablePolicies(request: AccessRequest): Promise<ABACPolicy> {,
+  private async getApplicablePolicies(request: AccessRequest): Promise<ABACPolicy> {
   const applicablePolicies: ABACPolicy = [];
   for (const policy of this.abacModel.policies) {
   if (policy.enabled && await this.isPolicyApplicable(policy, request)) {
   applicablePolicies.push(policy);
   // Sort by priority
   return applicablePolicies.sort((a, b) => b.priority - a.priority);
-  private async isPolicyApplicable(policy: ABACPolicy, request: AccessRequest): Promise<boolean> {,
+  private async isPolicyApplicable(policy: ABACPolicy, request: AccessRequest): Promise<boolean> {
   return;
   await this.evaluateTarget(policy.target.subjects, request.subject) &&
   await this.evaluateTarget(policy.target.objects, request.object) &&
   await this.evaluateTarget(policy.target.actions, request.action) &&
   await this.evaluateTarget(policy.target.environment, request.environment)
   );
-  private async evaluateTarget(expressions: AttributeExpression, attributes: any): Promise<boolean> {,
+  private async evaluateTarget(expressions: AttributeExpression, attributes: any): Promise<boolean> {
   for (const expression of expressions) {
   if (!await this.evaluateExpression(expression, attributes)) {
   return false;
   return true;
-  private async evaluateExpression(expression: AttributeExpression, attributes: any): Promise<boolean> {,
+  private async evaluateExpression(expression: AttributeExpression, attributes: any): Promise<boolean> {
   const attributeValue = this.getAttributeValue(expression.attribute, attributes);
   switch (expression.operator) {
-  case 'EQUALS':,
+  case 'EQUALS':
   return attributeValue === expression.value;
-  case 'NOT_EQUALS':,
+  case 'NOT_EQUALS':
   return attributeValue !== expression.value;
-  case 'IN':,
+  case 'IN':
   return Array.isArray(expression.value) && expression.value.includes(attributeValue);
-  case 'NOT_IN':,
+  case 'NOT_IN':
   return Array.isArray(expression.value) && !expression.value.includes(attributeValue);
-  case 'GREATER_THAN':,
+  case 'GREATER_THAN':
   return attributeValue > expression.value;
-  case 'LESS_THAN':,
+  case 'LESS_THAN':
   return attributeValue < expression.value;
   case 'CONTAINS':,
   return String(attributeValue).includes(String(expression.value));
@@ -419,28 +397,24 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   if (value === undefined) {
   return undefined;
   return value;
-  private async evaluatePolicy(policy: ABACPolicy, request: AccessRequest): Promise<{,
+  private async evaluatePolicy(policy: ABACPolicy, request: AccessRequest): Promise<{ }
   applicable: boolean;
   effect: 'PERMIT' | 'DENY' | 'INDETERMINATE';
   confidence: number;
   conditions?: AccessCondition;
-}> {
-
-  // Simplified policy evaluation - in real implementation would be more complex
+> { // Simplified policy evaluation - in real implementation would be more complex
   const applicable = await this.isPolicyApplicable(policy, request);
   return {
   applicable,
   effect: applicable ? policy.effect : 'INDETERMINATE',
   confidence: applicable ? 0.9 : 0,
-  conditions: [],
+  conditions: [] }
 };
   private async evaluateClassificationPolicy(((
     policy: ClassificationAccessPolicy,
     request: AccessRequest
-  ): Promise<{
-  permitted: boolean;
-  conditions: AccessCondition;
-}> {
+  ): Promise<{ permitted: boolean;
+  conditions: AccessCondition }> {
 
     // Find applicable access rule
     const applicableRule = policy.accessRules.find(rule => ;);
@@ -454,9 +428,8 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
       return { permitted: false, conditions: [] };
     // Evaluate conditions
     const conditionsMet = await this.evaluateAccessConditions(applicableRule.conditions, request);
-    return {
-  permitted: applicableRule.effect === 'ALLOW' && conditionsMet,
-  conditions: applicableRule.conditions,
+    return { permitted: applicableRule.effect === 'ALLOW' && conditionsMet,
+  conditions: applicableRule.conditions }
 };
   private checkSubjectCriteria(criteria: any, subject: SubjectAttributes): boolean {
     // Check clearance level

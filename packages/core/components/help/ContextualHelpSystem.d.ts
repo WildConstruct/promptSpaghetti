@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-export interface HelpContent {
-    id: string;
+}
+export interface HelpContent { id: string;
     title: string;
     description: string;
     category: 'basic' | 'advanced' | 'debug' | 'onboarding';
@@ -13,28 +13,24 @@ export interface HelpContent {
     examples?: string[];
     shortcut?: string;
     relatedFeatures?: string[];
-    priority?: 'high' | 'medium' | 'low';
-
-
+    priority?: 'high' | 'medium' | 'low' }
 }
-export interface ContextualTooltipProps {
-    content: HelpContent;
+}
+export interface ContextualTooltipProps { content: HelpContent;
     children: React.ReactNode;
     disabled?: boolean;
     delay?: number;
-    className?: string;
-
-
+    className?: string }
 }
-export interface HelpSystemProps {
-    helpContent: HelpContent[];
+}
+export interface HelpSystemProps { helpContent: HelpContent[];
     showOnboarding?: boolean;
     onboardingStep?: number;
     onOnboardingComplete?: () => void;
     className?: string;
 
-export declare const ContextualTooltip: React.FC<ContextualTooltipProps>;
-
+export declare const ContextualTooltip: React.FC<ContextualTooltipProps> }
+}
 }
 interface ProgressiveOnboardingProps {
     steps: any[];
@@ -47,4 +43,5 @@ interface ProgressiveOnboardingProps {
 export declare const ProgressiveOnboarding: React.FC<ProgressiveOnboardingProps>;
 export default ContextualTooltip;
 //# sourceMappingURL=ContextualHelpSystem.d.ts.map
+}
 }

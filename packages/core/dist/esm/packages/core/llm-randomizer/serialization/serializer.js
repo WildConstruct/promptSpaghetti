@@ -18,15 +18,8 @@ catch {
                     return Math.abs(hash).toString(16).padStart(16, '0');
                 }
             }
-        }),
-        interface, SerializationMetadata });
-    {
-        name ?  : string;
-        description ?  : string;
-        author ?  : string;
-        created ?  : string;
-        tags ?  : string;
-    }
+        })
+    });
 }
 export class GraphSerializer {
     static FORMAT_VERSION = '1.0.0';
@@ -51,21 +44,21 @@ string;
     if (includeMetadata && metadata) {
         lines.push('metadata:');
         if (metadata.name)
-            lines.push(`${indent},)}
+            lines.push(`${indent})},
   name: "${metadata.name}"`);
     }
     if (metadata.description)
-        lines.push(`${indent},)}
+        lines.push(`${indent})},
   description: "${metadata.description}"`);
 }
 if (metadata.author)
-    lines.push(`${indent},)}
+    lines.push(`${indent})},
   author: "${metadata.author}"`);
 if (metadata.created)
-    lines.push(`${indent},)}
+    lines.push(`${indent})},
   created: ${metadata.created}`);
 if (metadata.tags && metadata.tags.length > 0) {
-    lines.push(`${indent},)}
+    lines.push(`${indent})},
   tags: [${metadata.tags.map(t => `"${t}"`).join(', ')}]`);
 }
 lines.push(''); // Empty line before nodes section
@@ -99,12 +92,12 @@ string;
     const indent = compact ? '' : '  ';
     lines.push(`${node.id}:`);
 }
-lines.push(`${indent},)}
+lines.push(`${indent})},
   type: ${node.type}`);
 // Serialize properties based on node type
 const props = this.extractNodeProperties(node);
 if (Object.keys(props).length > 0) {
-    lines.push(`${indent},)}
+    lines.push(`${indent})},
   props:`);
 }
 Object.entries(props).forEach(([key, value]) => {
@@ -114,7 +107,7 @@ Object.entries(props).forEach(([key, value]) => {
 if (node.inputs && node.inputs.length > 0) {
     const inputsStr = node.inputs.map(id => `"${id}"`).join(', ');
 }
-lines.push(`${indent},)}
+lines.push(`${indent})},
   inputs: [${inputsStr}]`);
 return lines;
 extractNodeProperties(node, Node);

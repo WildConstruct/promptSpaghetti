@@ -7,12 +7,12 @@ import {
   LoginAttempt as RiskLoginAttempt, 
   UserProfile, 
   RiskScore 
-} from '../../services/RiskScoringService';
+ from '../../services/RiskScoringService';
 import { LoginAttempt } from './LoginService';
 import { DatabaseService } from '../database/DatabaseService';
 
-}
-}
+
+
 export interface EnhancedSecurityAnalysis {
   riskScore: RiskScore;
   geolocationData: GeolocationData;
@@ -21,13 +21,14 @@ export interface EnhancedSecurityAnalysis {
     isTypicalLocation: boolean;
     distanceFromNearestKm?: number;
     suspiciousIndicators: string[];
-}
-}
+
+
+
   };
   recommendations: string[];
   requiresAdditionalVerification: boolean;
   shouldBlockLogin: boolean;
-}
+
 
 export class LocationRiskIntegrationService {
   private geolocationService: GeolocationService;
@@ -42,7 +43,7 @@ export class LocationRiskIntegrationService {
     this.geolocationService = geolocationService;
     this.riskScoringService = riskScoringService;
     this.db = db;
-  }
+
 
   /**
    * Perform comprehensive security analysis for a login attempt
@@ -67,7 +68,7 @@ export class LocationRiskIntegrationService {
       context.geoLocation ? {
         'cf-ipcountry': context.geoLocation.country,
         'cf-timezone': context.geoLocation.timezone
-      } : undefined
+ : undefined
     );
 
     // Track location for the user
@@ -104,7 +105,7 @@ export class LocationRiskIntegrationService {
         region: geolocationData.region,
         city: geolocationData.city,
         coordinates: geolocationData.coordinates
-  }
+
       timestamp: loginAttempt.timestamp,
       success: loginAttempt.success,
       sessionId: undefined, // Not available in this context
@@ -142,7 +143,7 @@ export class LocationRiskIntegrationService {
       requiresAdditionalVerification,
       shouldBlockLogin
     };
-  }
+
 
   /**
    * Build user profile for risk scoring from database
@@ -179,7 +180,7 @@ export class LocationRiskIntegrationService {
       mfaEnabled: userInfo.mfaEnabled,
       riskLevel: userInfo.riskLevel
     };
-  }
+
 
   /**
    * Create guest user profile for users without history
@@ -194,7 +195,7 @@ export class LocationRiskIntegrationService {
       mfaEnabled: false,
       riskLevel: 'medium'
     };
-  }
+
 
   /**
    * Get recent login attempts for pattern analysis
@@ -221,12 +222,12 @@ export class LocationRiskIntegrationService {
     if (userId) {
       query += ` AND user_id = $${params.length + 1}`;
       params.push(userId);
-    }
+
 
     if (ipAddress) {
       query += ` AND ip_address = $${params.length + 1}`;
       params.push(ipAddress);
-    }
+
 
     query += ' ORDER BY created_at DESC LIMIT 100';
 
@@ -241,7 +242,7 @@ export class LocationRiskIntegrationService {
       success: row.action === 'login_success',
       deviceFingerprint: row.details?.deviceFingerprint
     }));
-  }
+
 
   /**
    * Get user's device history
@@ -250,7 +251,7 @@ export class LocationRiskIntegrationService {
     fingerprint: string;
     lastSeen: Date;
     frequency: number;
-  }>> {
+>> {
     const result = await this.db.query(`
       SELECT 
         details->>'deviceFingerprint' as fingerprint,
@@ -270,7 +271,7 @@ export class LocationRiskIntegrationService {
       lastSeen: row.last_seen,
       frequency: parseInt(row.frequency)
     }));
-  }
+
 
   /**
    * Get user's login time patterns
@@ -279,7 +280,7 @@ export class LocationRiskIntegrationService {
     hourOfDay: number;
     dayOfWeek: number;
     frequency: number;
-  }>> {
+>> {
     const result = await this.db.query(`
       SELECT 
         EXTRACT(HOUR FROM created_at) as hour_of_day,
@@ -299,7 +300,7 @@ export class LocationRiskIntegrationService {
       dayOfWeek: parseInt(row.day_of_week),
       frequency: parseInt(row.frequency)
     }));
-  }
+
 
   /**
    * Get user account information
@@ -308,7 +309,7 @@ export class LocationRiskIntegrationService {
     accountAge: number;
     mfaEnabled: boolean;
     riskLevel: 'low' | 'medium' | 'high';
-  }> {
+> {
 
     const result = await this.db.query(`
       SELECT 
@@ -325,7 +326,7 @@ export class LocationRiskIntegrationService {
         mfaEnabled: false,
         riskLevel: 'medium'
       };
-    }
+
 
     const user = result.rows[0];
     const accountAge = Math.floor(
@@ -337,7 +338,7 @@ export class LocationRiskIntegrationService {
       mfaEnabled: user.two_factor_enabled || false,
       riskLevel: user.risk_level || 'medium'
     };
-  }
+
 
   /**
    * Extract location data from audit log details
@@ -347,7 +348,7 @@ export class LocationRiskIntegrationService {
     region: string;
     city: string;
     coordinates?: { lat: number; lng: number };
-  } | undefined {
+ | undefined {
     if (!details?.geolocationData) return undefined;
 
     const geo = details.geolocationData;
@@ -357,7 +358,7 @@ export class LocationRiskIntegrationService {
       city: geo.city || 'Unknown',
       coordinates: geo.coordinates
     };
-  }
+
 
   /**
    * Generate comprehensive security recommendations
@@ -372,22 +373,22 @@ export class LocationRiskIntegrationService {
     // Add location-specific recommendations
     if (locationAnalysis.isNewLocation) {
       recommendations.push('Send location verification email to user');
-    }
+
 
     if (locationAnalysis.suspiciousIndicators.includes('vpn_detected')) {
       recommendations.push('Consider additional identity verification for VPN usage');
-    }
+
 
     if (locationAnalysis.suspiciousIndicators.includes('tor_exit_node')) {
       recommendations.push('Block or require manual review for Tor exit node usage');
-    }
+
 
     if (geolocationData.confidence < 0.5) {
       recommendations.push('Use additional verification methods due to low location confidence');
-    }
+
 
     return [...new Set(recommendations)]; // Remove duplicates
-  }
+
 
   /**
    * Determine if additional verification is required
@@ -403,7 +404,7 @@ export class LocationRiskIntegrationService {
       locationAnalysis.isNewLocation ||
       locationAnalysis.suspiciousIndicators.length > 1
     );
-  }
+
 
   /**
    * Determine if login should be blocked
@@ -418,5 +419,4 @@ export class LocationRiskIntegrationService {
       locationAnalysis.suspiciousIndicators.includes('tor_exit_node') ||
       (locationAnalysis.suspiciousIndicators.length >= 3)
     );
-  }
-}
+

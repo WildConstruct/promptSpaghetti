@@ -6,6 +6,7 @@ import React from 'react';
 import { Workspace } from '../../types/workspace';
 
 }
+}
 interface WorkspaceManagerProps {
     userId: string;
     onWorkspaceSelect?: (workspace: Workspace) => void;
@@ -13,4 +14,5 @@ interface WorkspaceManagerProps {
 export declare const WorkspaceManager: React.FC<WorkspaceManagerProps>;
 export default WorkspaceManager;
 //# sourceMappingURL=WorkspaceManager.d.ts.map
+}
 }

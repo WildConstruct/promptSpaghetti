@@ -9,250 +9,226 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useMemo } from 'react';
 import { CLASSIFICATION_LEVELS } from '../../types/DataClassification';
 ;
-{
-    id: 'financial-template',
-        name;
-    'Financial Information',
-        description;
-    'For financial and payment data',
-        classification;
-    'RESTRICTED',
-        rationale;
-    'Financial data requires highest protection level',
-        criteria;
+contentPatterns: ['\\b\\d{3}-\\d{2}-\\d{4}\\b', '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,
+    b, '],
     {
+        id: 'financial-template',
+        name: 'Financial Information',
+        description: 'For financial and payment data',
+        classification: 'RESTRICTED',
+        rationale: 'Financial data requires highest protection level',
+        criteria: {},
         dataTypes: ['financial', 'payment', 'banking'],
-            namePatterns;
-        ['*account*', '*card*', '*payment*', '*bank*', '*credit*'],
-            contentPatterns;
-        ['\\b\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b'];
-    }
+        namePatterns: ['*account*', '*card*', '*payment*', '*bank*', '*credit*'],
+        contentPatterns: ['\\b\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b']
+    },
     {
         id: 'public-template',
-            name;
-        'Public Information',
-            description;
-        'For publicly available information',
-            classification;
-        'PUBLIC',
-            rationale;
-        'Information intended for public consumption',
-            criteria;
-        {
-            dataTypes: ['public', 'marketing', 'documentation'],
-                namePatterns;
-            ['*public*', '*marketing*', '*docs*', '*help*'],
-                contentPatterns;
-            [],
-            ;
-        }
-        {
-            id: 'internal-template',
-                name;
-            'Internal Business',
-                description;
-            'For internal business information',
-                classification;
-            'INTERNAL',
-                rationale;
-            'Internal business information for employee use',
-                criteria;
-            {
-                dataTypes: ['internal', 'business', 'operational'],
-                    namePatterns;
-                ['*internal*', '*business*', '*operational*', '*metrics*'],
-                    contentPatterns;
-                [];
-                ;
-                export const BulkClassificationTools = ({
-                    dataElements,
-                    classificationRules = [],
-                    onBulkClassification,
-                    onValidationResults,
-                    context
-                });
-                {
-                    const [state, setState] = useState({});
-                    selectedElements: new Set(),
-                        operationType;
-                    'manual',
-                        rationale;
-                    '',
-                        dataOwner;
-                    context?.dataOwner || '',
-                        processing;
-                    false,
-                        results;
-                    new Map(),
-                    ;
-                }
-                ;
-                const [templates] = useState(DEFAULT_TEMPLATES);
-                const [currentUser] = useState('current-user'); // TODO: Get from auth context
-                const [showPreview, setShowPreview] = useState(false);
-                // Filter and categorize data elements
-                const categorizedElements = useMemo(() => {
-                    const unclassified = dataElements.filter(el => !el.existingClassification);
-                    const classified = dataElements.filter(el => el.existingClassification);
-                    const byType = dataElements.reduce((acc, el) => {
-                        if (!acc[el.type])
-                            acc[el.type] = [];
-                        acc[el.type].push(el);
-                        return acc;
-                    }, {});
-                    return { unclassified, classified, byType };
-                }, [dataElements]);
-                // Auto-suggest classifications based on templates and rules
-                const getSuggestedClassifications = (elements) => {
-                    const suggestions = new Map();
-                    elements.forEach(element => { });
-                    let bestMatch = null;
-                    // Check templates
-                    for (const template of templates) {
-                        let score = 0;
-                        // Check data type match
-                        if (template.criteria.dataTypes.includes(element.type.toLowerCase())) {
-                            score += 30;
-                            // Check name patterns
-                            const nameMatches = template.criteria.namePatterns.some(pattern => { });
-                            const regex = new RegExp(pattern.replace('*', '.*'), 'i');
-                            return regex.test(element.name);
-                        }
-                        ;
-                        if (nameMatches)
-                            score += 40;
-                        // Check content patterns
-                        if (element.content) {
-                            const contentMatches = template.criteria.contentPatterns.some(pattern => { });
-                            const regex = new RegExp(pattern, 'i');
-                            return regex.test(element.content);
-                        }
-                        ;
-                        if (contentMatches)
-                            score += 30;
-                        if (score > 0 && (!bestMatch || score > bestMatch.confidence)) {
-                            bestMatch = {
-                                classification: template.classification,
-                                confidence: score,
-                                reason: `Matches template: ${template.name} (${score}% confidence)`
-                            };
-                        }
-                        ;
-                        // Check classification rules
-                        for (const rule of classificationRules) {
-                            let ruleScore = 0;
-                            for (const condition of rule.conditions) {
-                                switch (condition.type) {
-                                    case 'FIELD_NAME':
-                                        if (new RegExp(condition.pattern, 'i').test(element.name)) {
-                                            ruleScore += condition.weight;
-                                            break;
-                                        }
-                                    case 'CONTENT_PATTERN':
-                                        if (element.content && new RegExp(condition.pattern, 'i').test(element.content)) {
-                                            ruleScore += condition.weight;
-                                            break;
-                                        }
-                                    default:
-                                        break;
-                                        const ruleConfidence = Math.min(100, ruleScore);
-                                        if (ruleConfidence > (bestMatch?.confidence || 0)) {
-                                            bestMatch = {
-                                                classification: rule.classification,
-                                                confidence: ruleConfidence,
-                                                reason: `Matches rule: ${rule.name} (${ruleConfidence}% confidence)`
-                                            };
-                                        }
-                                        ;
-                                        if (bestMatch) {
-                                            suggestions.set(element.id, bestMatch);
-                                        }
-                                        ;
-                                        return suggestions;
-                                }
-                                ;
-                                const handleElementSelection = (elementId, selected) => {
-                                    setState(prev => { });
-                                    const newSelected = new Set(prev.selectedElements);
-                                    if (selected) {
-                                        newSelected.add(elementId);
-                                    }
-                                    else {
-                                        newSelected.delete(elementId);
-                                        return { ...prev, selectedElements: newSelected };
-                                    }
-                                    ;
-                                };
-                                const handleSelectAll = (elementIds) => {
-                                    setState(prev => ({}), ...prev, selectedElements, new Set([...prev.selectedElements, ...elementIds]));
-                                };
-                            }
-                            ;
-                            const handleDeselectAll = () => {
-                                setState(prev => ({ ...prev, selectedElements: new Set() }));
-                            };
-                            const generatePreview = () => {
-                                const selectedElements = Array.from(state.selectedElements);
-                            };
-                        }
-                    }
-                };
-                map(id => dataElements.find(el => el.id === id))
-                    .filter(Boolean);
-                const suggestions = getSuggestedClassifications(selectedElements);
-                return selectedElements.map(element => { });
-                let classification;
-                let rationale;
-                switch (state.operationType) {
-                    case 'manual':
-                        classification = state.manualClassification || 'INTERNAL';
-                        rationale = state.rationale || `Manual classification as ${classification}`;
-                }
-                break;
-                'template';
-                classification = state.selectedTemplate?.classification || 'INTERNAL';
-                rationale = state.selectedTemplate?.rationale || 'Applied from template';
-                break;
-                'rules';
-                'ai';
-                const suggestion = suggestions.get(element.id);
-                classification = suggestion?.classification || 'INTERNAL';
-                rationale = suggestion?.reason || 'Default classification applied';
-                break;
-                classification = 'INTERNAL';
-                rationale = 'Default classification';
-                return {
-                    id: `class-${element.id}-${Date.now()}`
-                };
-            }
-            dataElement: element.id,
-                classification,
-                rationale,
-                dataOwner;
-            state.dataOwner,
-                classifiedBy;
-            currentUser,
-                classificationDate;
-            new Date(),
-                reviewDate;
-            new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-                approvals;
-            [],
-                metadata;
-            {
-                businessJustification: `Bulk classification using ${state.operationType} method`;
-            }
-        }
-        riskAssessment: 'Risk assessment pending individual review',
-            regulatoryRequirements;
-        context?.regulatoryScope || [],
-            dataLineage;
-        [element.type],
-            relatedClassifications;
-        [];
-    }
+        name: 'Public Information',
+        description: 'For publicly available information',
+        classification: 'PUBLIC',
+        rationale: 'Information intended for public consumption',
+        criteria: {},
+        dataTypes: ['public', 'marketing', 'documentation'],
+        namePatterns: ['*public*', '*marketing*', '*docs*', '*help*'],
+        contentPatterns: [],
+    },
+    {
+        id: 'internal-template',
+        name: 'Internal Business',
+        description: 'For internal business information',
+        classification: 'INTERNAL',
+        rationale: 'Internal business information for employee use',
+        criteria: {},
+        dataTypes: ['internal', 'business', 'operational'],
+        namePatterns: ['*internal*', '*business*', '*operational*', '*metrics*'],
+        contentPatterns: []
+    }];
+export const BulkClassificationTools = ({
+    dataElements,
+    classificationRules = [],
+    onBulkClassification,
+    onValidationResults,
+    context
+});
+{
+    const [state, setState] = useState({});
+    selectedElements: new Set(),
+        operationType;
+    'manual',
+        rationale;
+    '',
+        dataOwner;
+    context?.dataOwner || '',
+        processing;
+    false,
+        results;
+    new Map(),
     ;
 }
+;
+const [templates] = useState(DEFAULT_TEMPLATES);
+const [currentUser] = useState('current-user'); // TODO: Get from auth context
+const [showPreview, setShowPreview] = useState(false);
+// Filter and categorize data elements
+const categorizedElements = useMemo(() => {
+    const unclassified = dataElements.filter(el => !el.existingClassification);
+    const classified = dataElements.filter(el => el.existingClassification);
+    const byType = dataElements.reduce((acc, el) => {
+        if (!acc[el.type])
+            acc[el.type] = [];
+        acc[el.type].push(el);
+        return acc;
+    }, {});
+    return { unclassified, classified, byType };
+}, [dataElements]);
+// Auto-suggest classifications based on templates and rules
+const getSuggestedClassifications = (elements) => {
+    const suggestions = new Map();
+    elements.forEach(element => { });
+    let bestMatch = null;
+    // Check templates
+    for (const template of templates) {
+        let score = 0;
+        // Check data type match
+        if (template.criteria.dataTypes.includes(element.type.toLowerCase())) {
+            score += 30;
+            // Check name patterns
+            const nameMatches = template.criteria.namePatterns.some(pattern => { });
+            const regex = new RegExp(pattern.replace('*', '.*'), 'i');
+            return regex.test(element.name);
+        }
+        ;
+        if (nameMatches)
+            score += 40;
+        // Check content patterns
+        if (element.content) {
+            const contentMatches = template.criteria.contentPatterns.some(pattern => { });
+            const regex = new RegExp(pattern, 'i');
+            return regex.test(element.content);
+        }
+        ;
+        if (contentMatches)
+            score += 30;
+        if (score > 0 && (!bestMatch || score > bestMatch.confidence)) {
+            bestMatch = {
+                classification: template.classification,
+                confidence: score,
+                reason: `Matches template: ${template.name} (${score}% confidence)`
+            };
+        }
+        ;
+        // Check classification rules
+        for (const rule of classificationRules) {
+            let ruleScore = 0;
+            for (const condition of rule.conditions) {
+                switch (condition.type) {
+                    case 'FIELD_NAME':
+                        if (new RegExp(condition.pattern, 'i').test(element.name)) {
+                            ruleScore += condition.weight;
+                            break;
+                        }
+                    case 'CONTENT_PATTERN':
+                        if (element.content && new RegExp(condition.pattern, 'i').test(element.content)) {
+                            ruleScore += condition.weight;
+                            break;
+                        }
+                    default:
+                        break;
+                        const ruleConfidence = Math.min(100, ruleScore);
+                        if (ruleConfidence > (bestMatch?.confidence || 0)) {
+                            bestMatch = {
+                                classification: rule.classification,
+                                confidence: ruleConfidence,
+                                reason: `Matches rule: ${rule.name} (${ruleConfidence}% confidence)`
+                            };
+                        }
+                        ;
+                        if (bestMatch) {
+                            suggestions.set(element.id, bestMatch);
+                        }
+                        ;
+                        return suggestions;
+                }
+                ;
+                const handleElementSelection = (elementId, selected) => {
+                    setState(prev => { });
+                    const newSelected = new Set(prev.selectedElements);
+                    if (selected) {
+                        newSelected.add(elementId);
+                    }
+                    else {
+                        newSelected.delete(elementId);
+                        return { ...prev, selectedElements: newSelected };
+                    }
+                    ;
+                };
+                const handleSelectAll = (elementIds) => {
+                    setState(prev => ({}), ...prev, selectedElements, new Set([...prev.selectedElements, ...elementIds]));
+                };
+            }
+            ;
+            const handleDeselectAll = () => {
+                setState(prev => ({ ...prev, selectedElements: new Set() }));
+            };
+            const generatePreview = () => {
+                const selectedElements = Array.from(state.selectedElements);
+            };
+        }
+    }
+};
+map(id => dataElements.find(el => el.id === id))
+    .filter(Boolean);
+const suggestions = getSuggestedClassifications(selectedElements);
+return selectedElements.map(element => { });
+let classification;
+let rationale;
+switch (state.operationType) {
+    case 'manual':
+        classification = state.manualClassification || 'INTERNAL';
+        rationale = state.rationale || `Manual classification as ${classification}`;
+}
+break;
+'template';
+classification = state.selectedTemplate?.classification || 'INTERNAL';
+rationale = state.selectedTemplate?.rationale || 'Applied from template';
+break;
+'rules';
+'ai';
+const suggestion = suggestions.get(element.id);
+classification = suggestion?.classification || 'INTERNAL';
+rationale = suggestion?.reason || 'Default classification applied';
+break;
+classification = 'INTERNAL';
+rationale = 'Default classification';
+return {
+    id: `class-${element.id}-${Date.now()}`
+};
+dataElement: element.id,
+    classification,
+    rationale,
+    dataOwner;
+state.dataOwner,
+    classifiedBy;
+currentUser,
+    classificationDate;
+new Date(),
+    reviewDate;
+new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+    approvals;
+[],
+    metadata;
+{
+    businessJustification: `Bulk classification using ${state.operationType} method`;
+}
+riskAssessment: 'Risk assessment pending individual review',
+    regulatoryRequirements;
+context?.regulatoryScope || [],
+    dataLineage;
+[element.type],
+    relatedClassifications;
+[];
+;
 ;
 ;
 const handleApplyClassifications = async () => {

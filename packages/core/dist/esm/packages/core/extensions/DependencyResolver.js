@@ -15,7 +15,7 @@ circularDependencies: CircularDependency;
  > ;
 resolution ?  : {
     selectedVersion: string,
-    strategy: 'latest' | 'maxSatisfying' | 'manual'
+    strategy: 'latest' | 'maxSatisfying' | 'manual',
 };
 export class DependencyResolver {
     versionManager;
@@ -208,7 +208,8 @@ DependencyGraph;
                                                                                                 DependencyConflict;
                                                                                                 {
                                                                                                     const conflicts = [];
-                                                                                                    const dependencyVersions = new Map();
+                                                                                                    const dependencyVersions = new Map < string, Array;
+                                                                                                     > ();
                                                                                                     // Collect all version requirements
                                                                                                     for (const manifest of manifests) {
                                                                                                         if (manifest.dependencies) {

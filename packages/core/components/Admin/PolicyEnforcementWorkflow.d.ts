@@ -7,26 +7,25 @@
 import React from 'react';
 
 }
-export interface EnforcementAction {
-    id: string;
+}
+export interface EnforcementAction { id: string;
     type: 'suspend_user' | 'restrict_access' | 'hide_template' | 'block_transaction' | 'send_warning' | 'require_verification';
     name: string;
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     automated: boolean;
     requiresApproval: boolean;
-    reversible: boolean;
-
+    reversible: boolean }
 }
-export interface EnforcementWorkflow {
-    workflowId: string;
+}
+export interface EnforcementWorkflow { workflowId: string;
     name: string;
     description: string;
     policyId: string;
     policyName: string;
     trigger: {
         type: 'violation_detected' | 'manual_trigger' | 'scheduled_check';
-        conditions: string[];
+        conditions: string[] }
 }
     };
     steps: EnforcementStep[];
@@ -36,8 +35,8 @@ export interface EnforcementWorkflow {
     successRate: number;
 
 }
-export interface EnforcementStep {
-    stepId: string;
+}
+export interface EnforcementStep { stepId: string;
     name: string;
     type: 'condition_check' | 'enforcement_action' | 'notification' | 'human_review' | 'data_collection';
     config: {
@@ -45,15 +44,15 @@ export interface EnforcementStep {
         approvers?: string[];
         timeout?: number;
         retryPolicy?: 'none' | 'linear' | 'exponential';
-        notificationChannels?: ('email' | 'sms' | 'in_app' | 'webhook')[];
+        notificationChannels?: ('email' | 'sms' | 'in_app' | 'webhook')[] }
 }
     };
     order: number;
     enabled: boolean;
 
 }
-export interface WorkflowExecution {
-    executionId: string;
+}
+export interface WorkflowExecution { executionId: string;
     workflowId: string;
     workflowName: string;
     triggeredBy: string;
@@ -63,8 +62,8 @@ export interface WorkflowExecution {
     totalSteps: number;
     entityType: 'user' | 'template' | 'transaction';
     entityId: string;
-    context: Record<string, any>;
-
+    context: Record<string, any> }
+}
 }
 export interface PolicyEnforcementWorkflowProps {
     className?: string;
@@ -72,4 +71,5 @@ export interface PolicyEnforcementWorkflowProps {
 export declare const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>;
 export default PolicyEnforcementWorkflow;
 //# sourceMappingURL=PolicyEnforcementWorkflow.d.ts.map
+}
 }

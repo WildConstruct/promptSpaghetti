@@ -1,17 +1,16 @@
 // Epic 9.4 - Workflow State Indicator Component
 // Simple component to show current workflow state in the editor
 import React from 'react';
-import { 
-  DocumentTextIcon,
+import { DocumentTextIcon,
   EyeIcon,
   CheckCircleIcon,
   GlobeAltIcon,
-  ArchiveBoxIcon,
+  ArchiveBoxIcon }
   ChevronDownIcon
-} from '@heroicons/react/24/outline';
-}
-interface WorkflowState {
-  id: string;
+ from '@heroicons/react/24/outline';
+
+
+interface WorkflowState { id: string;
   name: string;
   color: string;
   icon?: string;
@@ -24,39 +23,37 @@ interface WorkflowState {
   canEdit?: boolean;
   onStateChange?: () => void;
   compact?: boolean;
-  export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({,)
-  state,
-  isLocked = false,
-  canEdit = false,
-  onStateChange,
+  export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({);
+  state;
+  isLocked = false;
+  canEdit = false;
+  onStateChange }
   compact = false
-}
-}) => {
-  const getStateIcon = (iconName?: string) => {,
+
+
+}) => { const getStateIcon = (iconName?: string) => {,
   switch (iconName) {
   case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
   case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
   case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
   case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
-  case 'DocumentTextIcon':,
+  case 'DocumentTextIcon': }
   default: return <DocumentTextIcon className="h-4 w-4" />;
 };
-  const getStateDescription = () => {
-    if (state.is_initial) return 'Initial state';
+  const getStateDescription = () => { if (state.is_initial) return 'Initial state';
     if (state.is_final) return 'Final state';
     if (state.is_locked) return 'Locked state';
-    return 'Active state';
-  };
+    return 'Active state' };
   if (compact) {
     return;
       <div 
         className="flex items-center space-x-2 px-2 py-1 rounded-md text-sm"
         style={{ 
           backgroundColor: `${state.color}20`}
-},
-  color: state.color,
+
+  color: state.color
           border: `1px solid ${state.color}40`}
-        }}
+
         title={`${state.name} - ${getStateDescription()}`}
       >
         {getStateIcon(state.icon)}
@@ -76,9 +73,9 @@ interface WorkflowState {
             className="flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium"
             style={{ 
               backgroundColor: `${state.color}20`}
-},
+
   color: state.color ;
-  }}
+}
           >
             {getStateIcon(state.icon)}
             <span>{state.name}</span>
@@ -130,7 +127,7 @@ interface WorkflowState {
 export const WorkflowStateBadge: React.FC<{,
   state: WorkflowState;
   size?: 'sm' | 'md' | 'lg'
-  }> = ({ state, size = 'md' }) => {
+> = ({ state, size = 'md' }) => {
   const getStateIcon = (iconName?: string) => {
     const iconSize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
     switch (iconName) {
@@ -141,19 +138,18 @@ export const WorkflowStateBadge: React.FC<{,
     case 'DocumentTextIcon': 
     default: return <DocumentTextIcon className={iconSize} />;
   };
-  const sizeClasses = {
-  sm: 'px-2 py-1 text-xs',
-  md: 'px-3 py-1 text-sm',
-  lg: 'px-4 py-2 text-base',
+  const sizeClasses = { sm: 'px-2 py-1 text-xs'
+  md: 'px-3 py-1 text-sm'
+  lg: 'px-4 py-2 text-base' }
 };
   return;
     <div 
       className={`inline-flex items-center space-x-2 rounded-full font-medium ${sizeClasses[size]}`}
       style={{ 
         backgroundColor: `${state.color}20`}
-},
+
   color: state.color ;
-  }}
+}
     >
       {getStateIcon(state.icon)}
       <span>{state.name}</span>

@@ -25,7 +25,7 @@ export class UserService implements IUserService {
     this.db = db;
     this.audit = audit;
     this.passwordBreachService = passwordBreachService;
-  }
+
 
   async createUser(data: RegisterRequest): Promise<User> {
 
@@ -36,7 +36,7 @@ export class UserService implements IUserService {
     const existingUser = await this.getUserByEmail(data.email);
     if (existingUser) {
       throw new Error('User with this email already exists');
-    }
+
 
     // Hash password using Argon2id (OWASP recommended)
     const hashedPassword = await this.hashPassword(data.password);
@@ -65,7 +65,7 @@ export class UserService implements IUserService {
             user_id, display_name, first_name, last_name
           ) VALUES ($1, $2, $3, $4)
         `, [newUser.id, data.displayName, data.firstName, data.lastName]);
-      }
+
 
       // Assign default 'user' role
       const defaultRole = await client.query(`
@@ -77,7 +77,7 @@ export class UserService implements IUserService {
           INSERT INTO user_roles (user_id, role_id)
           VALUES ($1, $2)
         `, [newUser.id, defaultRole.rows[0].id]);
-      }
+
 
       return newUser;
     });
@@ -92,7 +92,7 @@ export class UserService implements IUserService {
     });
 
     return user;
-  }
+
 
   async getUserById(id: string): Promise<User | null> {
 
@@ -102,10 +102,10 @@ export class UserService implements IUserService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapDatabaseUser(result.rows[0]);
-  }
+
 
   async getUserByEmail(email: string): Promise<User | null> {
 
@@ -115,10 +115,10 @@ export class UserService implements IUserService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapDatabaseUser(result.rows[0]);
-  }
+
 
   async updateUser(id: string, data: Partial<User>): Promise<User> {
 
@@ -139,12 +139,12 @@ export class UserService implements IUserService {
         updates.push(`${dbField} = $${paramIndex}`);
         values.push(value);
         paramIndex++;
-      }
+
     });
 
     if (updates.length === 0) {
       throw new Error('No valid fields to update');
-    }
+
 
     updates.push(`updated_at = $${paramIndex}`);
     values.push(new Date());
@@ -161,7 +161,7 @@ export class UserService implements IUserService {
     
     if (result.rows.length === 0) {
       throw new Error('User not found');
-    }
+
 
     const updatedUser = this.mapDatabaseUser(result.rows[0]);
 
@@ -176,7 +176,7 @@ export class UserService implements IUserService {
     });
 
     return updatedUser;
-  }
+
 
   async deleteUser(id: string): Promise<void> {
 
@@ -201,13 +201,13 @@ export class UserService implements IUserService {
       resourceId: id,
       severity: 'warning'
     });
-  }
+
 
   async verifyPassword(user: User, password: string): Promise<boolean> {
 
     if (!user.hashedPassword) {
       return false;
-    }
+
 
     try {
       // Use Argon2 verify with timing-safe comparison
@@ -221,18 +221,18 @@ export class UserService implements IUserService {
             accountLocked: false,
             lockedUntil: undefined
           });
-        }
-      } else {
+
+ else {
         // Increment failed login attempts
         await this.handleFailedLogin(user);
-      }
+
 
       return isValid;
-    } catch (error) {
+ catch (error) {
       console.error('Password verification error:', error);
       return false;
-    }
-  }
+
+
 
   async hashPassword(password: string): Promise<string> {
 
@@ -244,10 +244,10 @@ export class UserService implements IUserService {
         timeCost: 3,
         parallelism: 1
       });
-    } catch (error) {
+ catch (error) {
       throw new Error('Failed to hash password');
-    }
-  }
+
+
 
   async requestPasswordReset(email: string): Promise<string> {
 
@@ -255,7 +255,7 @@ export class UserService implements IUserService {
     if (!user) {
       // Don't reveal if email exists - still return token for security
       return this.generateSecureToken();
-    }
+
 
     const resetToken = this.generateSecureToken();
     const resetExpires = new Date(
@@ -277,7 +277,7 @@ export class UserService implements IUserService {
     });
 
     return resetToken;
-  }
+
 
   async resetPassword(token: string, newPassword: string): Promise<User> {
 
@@ -293,7 +293,7 @@ export class UserService implements IUserService {
 
     if (user.rows.length === 0) {
       throw new Error('Invalid or expired password reset token');
-    }
+
 
     const userData = this.mapDatabaseUser(user.rows[0]);
     const hashedPassword = await this.hashPassword(newPassword);
@@ -317,7 +317,7 @@ export class UserService implements IUserService {
     });
 
     return updatedUser;
-  }
+
 
   async verifyEmail(token: string): Promise<User> {
 
@@ -329,7 +329,7 @@ export class UserService implements IUserService {
 
     if (user.rows.length === 0) {
       throw new Error('Invalid or expired email verification token');
-    }
+
 
     const userData = this.mapDatabaseUser(user.rows[0]);
     
@@ -349,20 +349,20 @@ export class UserService implements IUserService {
     });
 
     return updatedUser;
-  }
+
 
   async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
 
     const user = await this.getUserById(userId);
     if (!user) {
       throw new Error('User not found');
-    }
+
 
     // Verify current password
     const isCurrentPasswordValid = await this.verifyPassword(user, currentPassword);
     if (!isCurrentPasswordValid) {
       throw new Error('Current password is incorrect');
-    }
+
 
     // Validate new password with breach detection
     await this.validatePassword(newPassword, userId, false);
@@ -381,7 +381,7 @@ export class UserService implements IUserService {
       resourceId: userId,
       severity: 'info'
     });
-  }
+
 
   private async handleFailedLogin(user: User): Promise<void> {
 
@@ -409,13 +409,13 @@ export class UserService implements IUserService {
         details: { reason: 'Too many failed login attempts' },
         severity: 'warning'
       });
-    } else {
+ else {
       // Just increment failed attempts
       await this.updateUser(user.id, {
         failedLoginAttempts: failedAttempts
       });
-    }
-  }
+
+
 
   private async validatePassword(password: string, userId?: string, skipBreachCheck: boolean = false): Promise<void> {
 
@@ -423,32 +423,32 @@ export class UserService implements IUserService {
 
     if (password.length < rules.minLength) {
       throw new Error(`Password must be at least ${rules.minLength} characters long`);
-    }
+
 
     if (password.length > rules.maxLength) {
       throw new Error(`Password must be no more than ${rules.maxLength} characters long`);
-    }
+
 
     if (rules.requireUppercase && !/[A-Z]/.test(password)) {
       throw new Error('Password must contain at least one uppercase letter');
-    }
+
 
     if (rules.requireLowercase && !/[a-z]/.test(password)) {
       throw new Error('Password must contain at least one lowercase letter');
-    }
+
 
     if (rules.requireNumbers && !/\d/.test(password)) {
       throw new Error('Password must contain at least one number');
-    }
+
 
     if (rules.requireSymbols && !/[^A-Za-z0-9]/.test(password)) {
       throw new Error('Password must contain at least one special character');
-    }
+
 
     // Check against common passwords
     if (rules.forbiddenPasswords.includes(password.toLowerCase())) {
       throw new Error('This password is too common and not allowed');
-    }
+
 
     // Enhanced breach detection using k-anonymity hash-prefix queries
     if (!skipBreachCheck && this.passwordBreachService) {
@@ -464,7 +464,7 @@ export class UserService implements IUserService {
               occurrences: breachResult.occurrenceCount,
               source: breachResult.source,
               responseTime: breachResult.responseTime
-  }
+
             severity: 'critical'
           });
 
@@ -474,7 +474,7 @@ export class UserService implements IUserService {
             : 'This password has been found in known data breaches. Please choose a different password for your security.';
           
           throw new Error(errorMessage);
-        }
+
 
         // Log successful breach check
         if (userId) {
@@ -485,17 +485,16 @@ export class UserService implements IUserService {
               responseTime: breachResult.responseTime,
               cacheHit: breachResult.cacheHit,
               source: breachResult.source
-  }
+
             severity: 'info'
           });
-        }
-        
-      } catch (error) {
+
+ catch (error) {
         // Handle breach detection service errors gracefully
         if (error.message.includes('data breach')) {
           // Re-throw breach detection errors
           throw error;
-        }
+
 
         // Log service errors but don't block password validation
         if (userId) {
@@ -505,20 +504,20 @@ export class UserService implements IUserService {
             details: {
               error: error.message,
               service: 'PasswordBreachService'
-  }
+
             severity: 'warning'
           });
-        }
+
         
         console.warn('Password breach check failed:', error.message);
         // Continue with password validation - don't block users due to service issues
-      }
-    }
-  }
+
+
+
 
   private generateSecureToken(): string {
     return randomBytes(32).toString('hex');
-  }
+
 
   private mapDatabaseUser(row: any): User {
     return {
@@ -539,9 +538,8 @@ export class UserService implements IUserService {
       status: row.status,
       deletedAt: row.deleted_at
     };
-  }
+
 
   private camelToSnake(camelCase: string): string {
     return camelCase.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-  }
-}
+

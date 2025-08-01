@@ -7,34 +7,29 @@
 import React from 'react';
 
 }
-export interface SearchFilters {
-    priceRange: [number, number];
+}
+export interface SearchFilters { priceRange: [number, number];
     tags: string[];
     rating: number;
     compatibility: string[];
     isAiGenerated?: boolean;
     sortBy: 'relevance' | 'price_low' | 'price_high' | 'rating' | 'downloads' | 'newest' | 'oldest';
-    creatorId?: string;
-
-
+    creatorId?: string }
 }
-interface SearchSuggestion {
-    text: string;
+}
+interface SearchSuggestion { text: string;
     type: 'query' | 'tag' | 'creator' | 'template';
     count?: number;
-    icon?: string;
-
-
+    icon?: string }
 }
-interface MarketplaceSearchProps {
-    onSearch: (query: string, filters: SearchFilters) => void;
+}
+interface MarketplaceSearchProps { onSearch: (query: string, filters: SearchFilters) => void;
     onFiltersChange?: (filters: SearchFilters) => void;
     availableTags?: string[];
     availableCreators?: Array<{
         id: string;
         name: string;
-        templateCount: number;
-
+        templateCount: number }
 }
     }>;
     availableModels?: string[];

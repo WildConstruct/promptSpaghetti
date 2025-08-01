@@ -29,8 +29,9 @@ import {
   FileText,
   Zap,
   BarChart3
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface RetentionPolicy {
   id: string;,
   name: string,
@@ -40,7 +41,8 @@ interface RetentionPolicy {
   retentionPeriod: number,
   retentionUnit: 'days' | 'months' | 'years';,
   autoDelete: boolean,
-  status: 'active' | 'inactive' | 'expired' | 'draft';,
+  status: 'active' | 'inactive' | 'expired' | 'draft';
+},
   complianceFrameworks: string;}
 
 
@@ -86,65 +88,16 @@ interface RetentionPolicy {
   executionTimeMs: number,
   errors: string;,
   warnings: string;
-  }
 
-const DataRetentionManager: React.FC = () => {
-  const [policies, setPolicies] = useState<RetentionPolicy[]>([]);
-  const [ setTemplates] = useState<PolicyTemplate[]>([]);
-  const [ setExecutionResults] = useState<PolicyExecutionResult[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  // View and filter states
-  const [view, setView] = useState<'list' | 'cards' | 'calendar'>('cards');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [frameworkFilter, setFrameworkFilter] = useState<string>('all');
-  const [sortBy] = useState<'name' | 'created' | 'execution' | 'affected'>('name');
-  const [sortOrder] = useState<'asc' | 'desc'>('asc');
-  // Modal states
-  const [ setShowCreateModal] = useState(false);
-  const [ setShowTemplateModal] = useState(false);
-  const [ setSelectedPolicy] = useState<RetentionPolicy | null>(null);
-  const [] = useState<PolicyTemplate | null>(null);
-  const [] = useState(false);
-  const [] = useState<Set<string>>(new Set());
-  // Form state for policy creation/editing
-  const [ ] = useState<Partial<RetentionPolicy>>({
-  name: '',
-  description: '',
-  dataType: '',
-  dataCategory: 'user_data',
-  retentionPeriod: 30,
-  retentionUnit: 'days',
-  autoDelete: false,
-  status: 'draft',
-  complianceFrameworks: [],
-  scheduleType: 'daily',
-  notifyBeforeExpiry: true,
-  notificationDays: 7,
-  exemptionRules: [],
-  cascadeDelete: false,
-  backupBeforeDelete: true,
-  tags: []
-}
-});
-  // Load data
-  useEffect(() => {
-    loadRetentionData();
-  }, []);
-  const loadRetentionData = async () => {
-    try {
-      setLoading(true);
-      const [policiesRes, templatesRes, executionsRes] = await Promise.all([)
-        fetch('/api/data-retention/policies', {
-  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        }),
+
+
+const DataRetentionManager = () => { return null; }),
         fetch('/api/data-retention/templates', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-retention/executions', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-  }
+
       ]);
       if (policiesRes.ok) {
         const policiesData = await policiesRes.json();
@@ -155,9 +108,9 @@ const DataRetentionManager: React.FC = () => {
       if (executionsRes.ok) {
         const executionsData = await executionsRes.json();
         setExecutionResults(executionsData.executions || []);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load retention data');
-} finally {
+ finally {
       setLoading(false);
   };
   // Helper functions
@@ -200,7 +153,7 @@ const DataRetentionManager: React.FC = () => {
       if (frameworkFilter !== 'all' && !policy.complianceFrameworks.includes(frameworkFilter)) {
         return false;
       return true;
-  }
+
     .sort((a, b) => {
   let aValue, bValue;
   switch (sortBy) {
@@ -224,7 +177,7 @@ const DataRetentionManager: React.FC = () => {
   return 0;
   if (sortOrder === 'asc') {
   return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-} else {
+ else {
   return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
 });
   // TODO: Connect this function to the create policy modal
@@ -258,7 +211,7 @@ const DataRetentionManager: React.FC = () => {
       });
       if (response.ok) {
         await loadRetentionData();
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to delete policy');
 };
   const handleTogglePolicy = async (policyId: string, currentStatus: string) => {
@@ -269,14 +222,14 @@ const DataRetentionManager: React.FC = () => {
   method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({ status: newStatus })
       });
       if (response.ok) {
         await loadRetentionData();
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to update policy status');
 };
   const handleExecutePolicy = async (policyId: string) => {
@@ -288,7 +241,7 @@ const DataRetentionManager: React.FC = () => {
       });
       if (response.ok) {
         await loadRetentionData();
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to execute policy');
 };
   if (loading) {

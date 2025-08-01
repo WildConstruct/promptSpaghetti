@@ -5,6 +5,7 @@ import React from 'react';
 import { Node, Edge } from 'reactflow';
 
 }
+}
 interface GraphAnalysisPanelProps {
     nodes: Node[];
     edges: Edge[];
@@ -14,4 +15,5 @@ interface GraphAnalysisPanelProps {
 export declare const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps>;
 export default GraphAnalysisPanel;
 //# sourceMappingURL=GraphAnalysisPanel.d.ts.map
+}
 }

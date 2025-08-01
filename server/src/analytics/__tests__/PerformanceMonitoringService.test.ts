@@ -16,7 +16,7 @@ import PerformanceMonitoringService, {
   TraceContext,
   Span,
   PerformanceReport
-} from '../PerformanceMonitoringService';
+ from '../PerformanceMonitoringService';
 import { EventRepository } from '../EventPersistenceLayer';
 import { 
   UnifiedAnalyticsEvent, 
@@ -24,7 +24,7 @@ import {
   EventCategory, 
   EventSeverity,
   EventFilter 
-} from '../UnifiedEventBus';
+ from '../UnifiedEventBus';
 
 // Mock Event Repository
 class MockEventRepository implements EventRepository {
@@ -36,21 +36,21 @@ class MockEventRepository implements EventRepository {
     const savedEvent = { ...event, id: event.id || `event-${this.nextId++}` };
     this.events.push(savedEvent);
     return savedEvent.id;
-  }
+
 
   async saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]> {
 
     const ids: string[] = [];
     for (const event of events) {
       ids.push(await this.save(event));
-    }
+
     return ids;
-  }
+
 
   async findById(id: string): Promise<UnifiedAnalyticsEvent | null> {
 
     return this.events.find(e => e.id === id) || null;
-  }
+
 
   async findMany(options: unknown): Promise<UnifiedAnalyticsEvent[]> {
 
@@ -65,19 +65,19 @@ class MockEventRepository implements EventRepository {
         if (filter.categories && !filter.categories.includes(event.category)) return false;
         return true;
       });
-    }
+
 
     if (options.sortBy === 'timestamp') {
       filtered.sort((a, b) => {
         const direction = options.sortOrder === 'desc' ? -1 : 1;
         return direction * (a.timestamp - b.timestamp);
       });
-    }
+
 
     const offset = options.offset || 0;
     const limit = options.limit || filtered.length;
     return filtered.slice(offset, offset + limit);
-  }
+
 
   async count(filter?: EventFilter): Promise<number> {
 
@@ -90,7 +90,7 @@ class MockEventRepository implements EventRepository {
       if (filter.categories && !filter.categories.includes(event.category)) return false;
       return true;
     }).length;
-  }
+
 
   async delete(id: string): Promise<boolean> {
 
@@ -98,18 +98,18 @@ class MockEventRepository implements EventRepository {
     if (index >= 0) {
       this.events.splice(index, 1);
       return true;
-    }
+
     return false;
-  }
+
 
   async deleteBatch(ids: string[]): Promise<number> {
 
     let deleted = 0;
     for (const id of ids) {
       if (await this.delete(id)) deleted++;
-    }
+
     return deleted;
-  }
+
 
   async getStatistics(filter?: EventFilter): Promise<any> {
 
@@ -123,34 +123,34 @@ class MockEventRepository implements EventRepository {
       timeRange: {
         earliest: Math.min(...events.map(e => e.timestamp)),
         latest: Math.max(...events.map(e => e.timestamp))
-  }
+
       storageSize: JSON.stringify(events).length
     };
-  }
+
 
   async getAggregations(): Promise<any[]> {
 
     return [];
-  }
+
 
   async getTimeSeriesData(): Promise<Array<{ timestamp: number; value: number }>> {
     return [];
-  }
+
 
   async cleanup(retentionDays: number): Promise<number> {
 
     return 0;
-  }
+
 
   async archive(beforeDate: number): Promise<number> {
 
     return 0;
-  }
+
 
   async optimize(): Promise<void> {
 
     // Mock optimization
-  }
+
 
   private groupBy(events: UnifiedAnalyticsEvent[], field: keyof UnifiedAnalyticsEvent): Record<string, number> {
     return events.reduce((acc, event) => {
@@ -158,18 +158,18 @@ class MockEventRepository implements EventRepository {
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-  }
+
 
   // Helper method to get events for testing
   getEvents(): UnifiedAnalyticsEvent[] {
     return [...this.events];
-  }
+
 
   // Helper method to clear events
   clearEvents(): void {
     this.events = [];
-  }
-}
+
+
 
 describe('PerformanceMonitoringService', () => {
   let service: PerformanceMonitoringService;
@@ -197,7 +197,7 @@ describe('PerformanceMonitoringService', () => {
         type: 'gauge',
         name: 'memory.usage',
         value: 75.5
-      } as GaugeMetric;
+ as GaugeMetric;
 
       await service.recordMetric(metric);
 
@@ -216,7 +216,7 @@ describe('PerformanceMonitoringService', () => {
         name: 'requests.total',
         value: 1000,
         delta: 5
-      } as CounterMetric;
+ as CounterMetric;
 
       await service.recordMetric(metric);
 
@@ -247,7 +247,7 @@ describe('PerformanceMonitoringService', () => {
         max: 900,
         mean: 275,
         stdDev: 125
-      } as HistogramMetric;
+ as HistogramMetric;
 
       await service.recordMetric(metric);
 
@@ -269,7 +269,7 @@ describe('PerformanceMonitoringService', () => {
           component: 'api-server',
           environment: 'production',
           region: 'us-east-1' 
-  }
+
         tags: ['infrastructure', 'cpu', 'monitoring']
       });
 
@@ -521,7 +521,7 @@ describe('PerformanceMonitoringService', () => {
         max: 200,
         mean: 125,
         stdDev: 25
-      } as HistogramMetric);
+ as HistogramMetric);
 
       await service.recordMetric({
         name: 'memory.usage',
@@ -530,7 +530,7 @@ describe('PerformanceMonitoringService', () => {
         timestamp: now,
         labels: { category: 'performance' },
         tags: ['performance']
-      } as GaugeMetric);
+ as GaugeMetric);
 
       await service.recordMetric({
         name: 'active.users',
@@ -539,7 +539,7 @@ describe('PerformanceMonitoringService', () => {
         timestamp: now,
         labels: { category: 'business' },
         tags: ['business']
-      } as GaugeMetric);
+ as GaugeMetric);
     });
 
     it('should get comprehensive system metrics', async () => {
@@ -591,7 +591,7 @@ describe('PerformanceMonitoringService', () => {
           labels: { category: 'performance' },
           tags: ['performance']
         }));
-      }
+
 
       // Add some error metrics
       await service.recordMetric(createTestMetric({
@@ -761,7 +761,7 @@ describe('PerformanceMonitoringService', () => {
           name: `metric.${i}`,
           value: i
         })));
-      }
+
 
       await Promise.all(promises);
       
@@ -781,7 +781,7 @@ describe('PerformanceMonitoringService', () => {
           name: 'memory.usage', // Same name to accumulate in same list
           value: i
         })));
-      }
+
 
       await Promise.all(promises);
       
@@ -797,7 +797,7 @@ describe('PerformanceMonitoringService', () => {
       // Start 50 concurrent traces
       for (let i = 0; i < 50; i++) {
         traces.push(service.startTrace(`operation.${i}`));
-      }
+
 
       // Finish all traces concurrently
       const finishPromises = traces.map(trace => 

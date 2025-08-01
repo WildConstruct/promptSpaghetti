@@ -314,10 +314,10 @@ _jsx("style", { children: `
           animation: nodeLabelFadeIn 0.2s ease-out;
         @keyframes nodeLabelFadeIn {
           from {
-            opacity: 0;
+            opacity: 0;,
   transform: translateX(-50%) scale(0.9);
           to {
-            opacity: 1;
+            opacity: 1;,
   transform: translateX(-50%) scale(1);
       ` });
 div >

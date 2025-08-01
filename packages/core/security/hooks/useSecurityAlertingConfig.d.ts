@@ -20,16 +20,15 @@
  * @version 1.0.0
  * @since 2024-01-22
  */
-import { 
-  SecurityAlertingConfig,
+import { SecurityAlertingConfig,
   EscalationThresholds,
-  CorrelationRule,
+  CorrelationRule }
   ResponseAutomation
 } from '../SecurityAlertingAnalytics';
 
 }
-export interface UseSecurityAlertingConfigOptions {
-    configId?: string;
+}
+export interface UseSecurityAlertingConfigOptions { configId?: string;
     autoSave?: boolean;
     autoSaveInterval?: number;
     validationDebounce?: number;
@@ -37,18 +36,16 @@ export interface UseSecurityAlertingConfigOptions {
     onConfigChange?: (config: SecurityAlertingConfig) => void;
     onValidationError?: (errors: ValidationError[]) => void;
     onSaveSuccess?: () => void;
-    onSaveError?: (error: Error) => void;
-
+    onSaveError?: (error: Error) => void }
 }
-export interface ValidationError {
-    field: string;
+}
+export interface ValidationError { field: string;
     message: string;
     severity: 'error' | 'warning' | 'info';
-    code: string;
-
+    code: string }
 }
-export interface ConfigurationState {
-    config: SecurityAlertingConfig;
+}
+export interface ConfigurationState { config: SecurityAlertingConfig;
     originalConfig: SecurityAlertingConfig;
     isLoading: boolean;
     isSaving: boolean;
@@ -58,11 +55,10 @@ export interface ConfigurationState {
     validationErrors: ValidationError[];
     validationWarnings: ValidationError[];
     securityScore: number;
-    configVersion: number;
-
+    configVersion: number }
 }
-export interface UseSecurityAlertingConfigReturn {
-    state: ConfigurationState;
+}
+export interface UseSecurityAlertingConfigReturn { state: ConfigurationState;
     actions: {
         updateConfig: (config: Partial<SecurityAlertingConfig>) => void;
         updateEscalationThresholds: (thresholds: Partial<EscalationThresholds>) => void;
@@ -74,12 +70,11 @@ export interface UseSecurityAlertingConfigReturn {
         resetConfig: () => void;
         revertChanges: () => void;
         exportConfig: () => string;
-        importConfig: (configJson: string) => boolean;
+        importConfig: (configJson: string) => boolean }
 }
     };
-    utils: {
-        getConfigDiff: () => Partial<SecurityAlertingConfig>;
-        getValidationSummary: () => {,
+    utils: { getConfigDiff: () => Partial<SecurityAlertingConfig>;
+        getValidationSummary: () => { }
             hasErrors: boolean;
             hasWarnings: boolean;
             errorCount: number;
@@ -90,8 +85,8 @@ export interface UseSecurityAlertingConfigReturn {
     };
 
 }
-export interface ConfigRecommendation {
-    field: string;
+}
+export interface ConfigRecommendation { field: string;
     current: any;
     recommended: any;
     reason: string;
@@ -101,9 +96,10 @@ export interface ConfigRecommendation {
  * Hook for managing security alerting configuration
  */
 export declare const useSecurityAlertingConfig: ()
-  initialConfig?: SecurityAlertingConfig,
+  initialConfig?: SecurityAlertingConfig }
   options?: UseSecurityAlertingConfigOptions
 ) => UseSecurityAlertingConfigReturn;
 export default useSecurityAlertingConfig;
 //# sourceMappingURL=useSecurityAlertingConfig.d.ts.map
+}
 }

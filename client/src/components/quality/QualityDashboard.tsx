@@ -13,7 +13,7 @@ import {
   CardContent,
   // CardHeader, // Commented out unused import
   // CardTitle // Commented out unused import
-} from '../ui/Card';
+ from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Alert } from '../ui/Alert';
@@ -35,13 +35,14 @@ import { useQualityMetrics } from '../../hooks/useQualityMetrics';
 // Quality Dashboard Component
 // =============================================================================
 
-}
+
 export interface QualityDashboardProps {
   refreshInterval?: number; // milliseconds,
   compact?: boolean;
   className?: string;
-}
-}
+
+
+
 export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
   refreshInterval = 60000, // 1 minute default
   compact = false,
@@ -60,16 +61,16 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
     isLoading,
     error,
     refreshMetrics
-  } = useQualityMetrics({ refreshInterval: autoRefresh ? refreshInterval : 0 });
+ = useQualityMetrics({ refreshInterval: autoRefresh ? refreshInterval : 0 });
   // Manual refresh handler
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
     try {
       await refreshMetrics();
       setLastRefresh(new Date());
-    } catch (error) {
+ catch (error) {
   console.error('Failed to refresh quality metrics:', error);
-} finally {
+ finally {
       setIsRefreshing(false);
   }, [refreshMetrics]);
   // Get overall status styling
@@ -229,7 +230,7 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
                       {getTrendIcon(metrics.overall.improvement > 0 ? 'improving' : 'degrading')}
                       <span className={`text-sm font-medium ${
   metrics.overall.improvement > 0 ? 'text-green-600' : 'text-red-600',
-}`}>
+`}>
                         {Math.abs(metrics.overall.improvement)}% {metrics.overall.improvement > 0 ? 'improved' : 'declined'}
                       </span>
                     </div>
@@ -303,14 +304,14 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({)
               alerts={activeAlerts} 
               onAlertAction={(alertId, action) => {
   console.log('Alert action:', alertId, action);
-}}
+}
               compact={compact}
             />
             <QualityRecommendations 
               recommendations={highPriorityRecommendations}
               onRecommendationAction={(recId, action) => {
   console.log('Recommendation action:', recId, action);
-}}
+}
               compact={compact}
             />
           </div>

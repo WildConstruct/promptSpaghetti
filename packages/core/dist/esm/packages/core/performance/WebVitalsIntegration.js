@@ -4,10 +4,60 @@
  */
 import { getCLS, getFCP, getFID, getLCP, getTTI, onCLS, onFCP, onFID, onLCP, onTTI } from 'web-vitals';
 import { EventEmitter } from 'events';
+fcp: {
+    good: number;
+    poor: number;
+}
+; // First Contentful Paint (ms)
+lcp: {
+    good: number;
+    poor: number;
+}
+; // Largest Contentful Paint (ms)
+fid: {
+    good: number;
+    poor: number;
+}
+; // First Input Delay (ms)
+cls: {
+    good: number;
+    poor: number;
+}
+; // Cumulative Layout Shift (score)
+tti: {
+    good: number;
+    poor: number;
+}
+; // Time to Interactive (ms)
 ;
 enableConsoleLogging: boolean;
 enableAnalytics: boolean;
 analyticsEndpoint ?  : string;
+fcp: {
+    value: number;
+    rating: string;
+}
+;
+lcp: {
+    value: number;
+    rating: string;
+}
+;
+fid: {
+    value: number;
+    rating: string;
+}
+;
+cls: {
+    value: number;
+    rating: string;
+}
+;
+tti: {
+    value: number;
+    rating: string;
+}
+;
 ;
 deviceInfo: {
     userAgent: string;

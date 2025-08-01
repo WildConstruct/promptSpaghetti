@@ -9,33 +9,28 @@ import React from 'react';
 import { TrustScore } from '../auth/IdentityValidation';
 
 }
-export interface TrustIndicatorProps {
-    trustScore?: TrustScore | null;
+}
+export interface TrustIndicatorProps { trustScore?: TrustScore | null;
     size?: 'small' | 'medium' | 'large';
     variant?: 'minimal' | 'detailed' | 'compact';
     showLabel?: boolean;
     showTooltip?: boolean;
-    className?: string;
-
-
+    className?: string }
 }
-export interface CreatorTrustBadgeProps {
-    creatorId: string;
+}
+export interface CreatorTrustBadgeProps { creatorId: string;
     creatorName: string;
     trustScore?: TrustScore | null;
     verifications?: string[];
     showFullDetails?: boolean;
-    className?: string;
-
-
+    className?: string }
 }
-export interface TrustScoreDisplayProps {
-    trustScore: TrustScore;
+}
+export interface TrustScoreDisplayProps { trustScore: TrustScore;
     showBreakdown?: boolean;
     orientation?: 'horizontal' | 'vertical';
-    className?: string;
-
-
+    className?: string }
+}
 }
 export interface VerificationBadgesProps {
     verifications: string[];
@@ -65,6 +60,8 @@ export declare const VerificationBadges: React.FC<VerificationBadgesProps>;
  */
 
 }
+}
+}
 export interface TemplateTrustIndicatorProps {
     creatorTrustScore?: TrustScore | null;
     templateQualityScore?: number;
@@ -79,8 +76,9 @@ export declare const TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProp
  */
 
 }
-export interface InlineTrustStatusProps {
-    trustTier?: string;
+}
+}
+export interface InlineTrustStatusProps { trustTier?: string;
     isVerified?: boolean;
     size?: 'small' | 'medium';
     className?: string;
@@ -92,7 +90,7 @@ declare const _default: {
     TrustScoreDisplay: React.FC<TrustScoreDisplayProps>;
     VerificationBadges: React.FC<VerificationBadgesProps>;
     TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps>;
-    InlineTrustStatus: React.FC<InlineTrustStatusProps>;
+    InlineTrustStatus: React.FC<InlineTrustStatusProps> }
 }
 };
 export default _default;

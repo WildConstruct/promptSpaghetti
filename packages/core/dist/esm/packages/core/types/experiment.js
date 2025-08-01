@@ -13,6 +13,11 @@ guardrailMetrics: {
     actualValue: number;
 }
 [];
+previousSalts: {
+    salt: string;
+    rotatedAt: Date;
+}
+[];
 ;
 export class ExperimentError extends Error {
     message;

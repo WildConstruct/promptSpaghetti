@@ -285,15 +285,14 @@ div >
 return null;
 ;
 const getModalTitle = () => {
-    const stepTitles = [];
-    'Configure Restoration',
+    const stepTitles = [
+        'Configure Restoration',
         'Preview Changes',
         'Confirm Restoration',
-        'Restoration in Progress';
+        'Restoration in Progress'
+    ];
+    return stepTitles[currentStep] || 'Version Restoration';
 };
-;
-return stepTitles[currentStep] || 'Version Restoration';
-;
 const getModalWidth = () => {
     switch (currentStep) {
         case 1:

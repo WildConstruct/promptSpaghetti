@@ -1,18 +1,20 @@
 // Common Loading Spinner Component
 import React from 'react';
 import './LoadingSpinner.css';
-}
+
+
 interface LoadingSpinnerProps {
   size?: 'small' | 'medium' | 'large';
   variant?: 'default' | 'dots' | 'pulse';
   message?: string;
   className?: string;
-  export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({,)
+  export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({),
   size = 'medium',
   variant = 'default',
   message,
   className = ''
-}
+
+
 }) => {
   const renderSpinner = () => {
   switch (variant) {

@@ -204,9 +204,7 @@ export const MarketplaceAttributionAnalyticsSchema = z.object({
     periodStart: z.date(),
     periodEnd: z.date(),
     // Analytics data
-    metrics: z.object({})
-    // Creator metrics
-    ,
+    metrics: z.object({}),
     // Creator metrics
     templatesCreated: z.number().int().default(0),
     collaborationsInitiated: z.number().int().default(0),

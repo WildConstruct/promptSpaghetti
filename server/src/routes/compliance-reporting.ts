@@ -17,7 +17,7 @@ import {
   ComplianceReportRequest,
   MetricsTimeRange,
   ComplianceCertificationType
-} from '../services/ComplianceReportingService';
+ from '../services/ComplianceReportingService';
 
 // Request/Response Schemas
 const GenerateReportRequestSchema = z.object({
@@ -176,7 +176,7 @@ const CreateCertificationRequestSchema = z.object({
       criteria: z.array(z.string()),
       responsible: z.string()
     }))
-  }
+
 });
 
 const UpdateCertificationStatusRequestSchema = z.object({
@@ -226,7 +226,7 @@ const ScheduleReportRequestSchema = z.object({
     scope: z.string(),
     options: z.record(z.any()).optional(),
     template: z.string().optional()
-  }
+
 });
 
 export async function complianceReportingRoutes(fastify: FastifyInstance) {
@@ -241,7 +241,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof GenerateReportRequestSchema>;
-  }>('/generate', {
+>('/generate', {
     schema: {
       description: 'Generate comprehensive compliance report',
       tags: ['Compliance Reporting'],
@@ -258,20 +258,20 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
                 reportId: { type: 'string' },
                 status: { type: 'string' },
                 estimatedCompletion: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('compliance:report:generate')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const generatorId = request.user.userId;
@@ -291,17 +291,16 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
             reportId: result.reportId,
             status: 'GENERATING',
             estimatedCompletion: new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutes
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error generating compliance report:', error);
         reply.code(500).send({
           error: 'Failed to generate compliance report',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -310,7 +309,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: z.infer<typeof GetDashboardQuerySchema>;
-  }>('/dashboard', {
+>('/dashboard', {
     schema: {
       description: 'Get compliance dashboard with metrics and trends',
       tags: ['Compliance Reporting'],
@@ -322,18 +321,18 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('compliance:dashboard:view')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const { framework } = request.query;
@@ -344,15 +343,14 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           success: true,
           data: dashboard
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error getting compliance dashboard:', error);
         reply.code(500).send({
           error: 'Failed to get compliance dashboard',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -361,7 +359,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: z.infer<typeof GetMetricsQuerySchema>;
-  }>('/metrics', {
+>('/metrics', {
     schema: {
       description: 'Get detailed compliance metrics and analytics',
       tags: ['Compliance Reporting'],
@@ -378,15 +376,15 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
                 metrics: { type: 'array' },
                 timeRange: { type: 'object' },
                 trends: { type: 'array' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { framework, timeRange, customStartDate, customEndDate, granularity, metrics } = request.query;
@@ -405,15 +403,14 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           success: true,
           data: result
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error getting compliance metrics:', error);
         reply.code(500).send({
           error: 'Failed to get compliance metrics',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -422,7 +419,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof CreateCertificationRequestSchema>;
-  }>('/certification', {
+>('/certification', {
     schema: {
       description: 'Create new certification tracking and management',
       tags: ['Compliance Reporting'],
@@ -439,20 +436,20 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
                 certificationId: { type: 'string' },
                 status: { type: 'string' },
                 timeline: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('compliance:certification:create')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const managerId = request.user.userId;
@@ -475,17 +472,16 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
             certificationId: result.certificationId,
             status: 'PLANNING',
             timeline: request.body.timeline
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error creating certification:', error);
         reply.code(500).send({
           error: 'Failed to create certification',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -494,7 +490,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
    */
   fastify.put<{
     Body: z.infer<typeof UpdateCertificationStatusRequestSchema>;
-  }>('/certification/status', {
+>('/certification/status', {
     schema: {
       description: 'Update certification progress and status',
       tags: ['Compliance Reporting'],
@@ -511,20 +507,20 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
                 updated: { type: 'boolean' },
                 currentStatus: { type: 'string' },
                 progress: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('compliance:certification:update')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const updaterId = request.user.userId;
@@ -546,17 +542,16 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
             updated: result.updated,
             currentStatus: status,
             progress
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error updating certification status:', error);
         reply.code(500).send({
           error: 'Failed to update certification status',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -565,7 +560,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof ScheduleReportRequestSchema>;
-  }>('/schedule', {
+>('/schedule', {
     schema: {
       description: 'Schedule automated compliance report generation',
       tags: ['Compliance Reporting'],
@@ -582,20 +577,20 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
                 scheduleId: { type: 'string' },
                 nextExecution: { type: 'string' },
                 status: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('compliance:schedule:create')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const schedulerId = request.user.userId;
@@ -627,7 +622,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
         case 'ANNUALLY':
           nextExecution.setFullYear(nextExecution.getFullYear() + 1);
           break;
-        }
+
 
         reply.send({
           success: true,
@@ -635,17 +630,16 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
             scheduleId: result.scheduleId,
             nextExecution: nextExecution.toISOString(),
             status: 'ACTIVE'
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error scheduling report:', error);
         reply.code(500).send({
           error: 'Failed to schedule report',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -655,7 +649,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
   fastify.get<{
     Params: { reportId: string };
     Querystring: { includeEvidence?: boolean; format?: string };
-  }>('/report/:reportId', {
+>('/report/:reportId', {
     schema: {
       description: 'Get detailed compliance report information',
       tags: ['Compliance Reporting'],
@@ -664,29 +658,29 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           reportId: { type: 'string' }
-  }
+
         required: ['reportId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           includeEvidence: { type: 'boolean', default: false },
           format: { type: 'string', enum: ['JSON', 'PDF', 'HTML'], default: 'JSON' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { reportId } = request.params;
@@ -698,15 +692,14 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           success: true,
           data: report
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error getting report details:', error);
         reply.code(500).send({
           error: 'Failed to get report details',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -723,7 +716,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
       sortBy?: string;
       sortOrder?: string;
     };
-  }>('/reports', {
+>('/reports', {
     schema: {
       description: 'List compliance reports with filtering and pagination',
       tags: ['Compliance Reporting'],
@@ -738,8 +731,8 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           limit: { type: 'number', minimum: 1, maximum: 100, default: 20 },
           sortBy: { type: 'string', enum: ['generatedAt', 'framework', 'reportType'], default: 'generatedAt' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -751,15 +744,15 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
                 reports: { type: 'array' },
                 pagination: { type: 'object' },
                 filters: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const filters = request.query;
@@ -770,15 +763,14 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           success: true,
           data: result
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error listing compliance reports:', error);
         reply.code(500).send({
           error: 'Failed to list compliance reports',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -801,15 +793,15 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
                 frameworks: { type: 'array' },
                 reportTypes: { type: 'array' },
                 capabilities: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const frameworks = await complianceReportingService.getAvailableFrameworks();
@@ -818,14 +810,12 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           success: true,
           data: frameworks
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error getting frameworks:', error);
         reply.code(500).send({
           error: 'Failed to get frameworks',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
-}

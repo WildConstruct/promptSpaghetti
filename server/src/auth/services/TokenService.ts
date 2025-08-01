@@ -21,7 +21,7 @@ export class TokenService implements ITokenService {
     this.redis = redis;
     this.db = db;
     this.loadKeys();
-  }
+
 
   async generateAccessToken(user: User, scopes?: string[]): Promise<string> {
 
@@ -39,15 +39,15 @@ export class TokenService implements ITokenService {
     // Add scopes if provided (for API tokens)
     if (scopes && scopes.length > 0) {
       (payload as any).scopes = scopes;
-    }
+
 
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
       expiresIn: JWT_CONFIG.accessTokenExpiry
-    } as jwt.SignOptions);
+ as jwt.SignOptions);
 
     return token;
-  }
+
 
   async generateApiToken(
     user: User,
@@ -72,13 +72,13 @@ export class TokenService implements ITokenService {
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
       expiresIn
-    } as jwt.SignOptions);
+ as jwt.SignOptions);
 
     // Store API token in database for tracking
     await this.storeApiToken(user.id, tokenId, token, scopes, name, expiresIn);
 
     return { token, tokenId };
-  }
+
 
   async generateRefreshToken(user: User): Promise<string> {
 
@@ -92,13 +92,13 @@ export class TokenService implements ITokenService {
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
       expiresIn: JWT_CONFIG.refreshTokenExpiry
-    } as jwt.SignOptions);
+ as jwt.SignOptions);
 
     // Store refresh token in database for tracking
     await this.storeRefreshToken(user.id, token);
 
     return token;
-  }
+
 
   async verifyAccessToken(token: string): Promise<JWTPayload> {
 
@@ -107,7 +107,7 @@ export class TokenService implements ITokenService {
       const isRevoked = await this.isTokenRevoked(token);
       if (isRevoked) {
         throw new Error('Token has been revoked');
-      }
+
 
       const payload = jwt.verify(token, this.publicKey, {
         algorithms: [JWT_CONFIG.algorithm],
@@ -116,13 +116,13 @@ export class TokenService implements ITokenService {
       }) as JWTPayload;
 
       return payload;
-    } catch (error) {
+ catch (error) {
       if (error instanceof jwt.JsonWebTokenError) {
         throw new Error(`Invalid token: ${error.message}`);
-      }
+
       throw error;
-    }
-  }
+
+
 
   async verifyRefreshToken(token: string): Promise<JWTPayload> {
 
@@ -136,22 +136,22 @@ export class TokenService implements ITokenService {
 
       if (payload.type !== 'refresh') {
         throw new Error('Invalid token type');
-      }
+
 
       // Check if refresh token exists in database
       const exists = await this.validateRefreshToken(payload.sub, token);
       if (!exists) {
         throw new Error('Refresh token not found or expired');
-      }
+
 
       return payload;
-    } catch (error) {
+ catch (error) {
       if (error instanceof jwt.JsonWebTokenError) {
         throw new Error(`Invalid refresh token: ${error.message}`);
-      }
+
       throw error;
-    }
-  }
+
+
 
   async refreshAccessToken(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
 
@@ -162,7 +162,7 @@ export class TokenService implements ITokenService {
     const user = await this.db.query('SELECT * FROM users WHERE id = $1', [payload.sub]);
     if (user.rows.length === 0) {
       throw new Error('User not found');
-    }
+
 
     const userData = user.rows[0];
     
@@ -194,7 +194,7 @@ export class TokenService implements ITokenService {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken
     };
-  }
+
 
   async revokeToken(token: string): Promise<void> {
 
@@ -203,7 +203,7 @@ export class TokenService implements ITokenService {
       const decoded = jwt.decode(token) as any;
       if (!decoded || !decoded.exp) {
         return; // Invalid token format, nothing to revoke
-      }
+
 
       // Store in Redis with TTL until token expires
       const expiryTime = decoded.exp * 1000; // Convert to milliseconds
@@ -211,12 +211,12 @@ export class TokenService implements ITokenService {
       
       if (ttl > 0) {
         await this.redis.setex(`revoked_token:${token}`, ttl, '1');
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error revoking token:', error);
       // Don't throw - best effort revocation
-    }
-  }
+
+
 
   async revokeAllUserTokens(userId: string): Promise<void> {
 
@@ -236,7 +236,7 @@ export class TokenService implements ITokenService {
 
     // Add user to blacklist in Redis (expires in 24 hours - longer than our longest token)
     await this.redis.setex(`user_tokens_revoked:${userId}`, 24 * 60 * 60, Date.now().toString());
-  }
+
 
   async revokeSessionTokens(sessionId: string): Promise<void> {
 
@@ -246,7 +246,7 @@ export class TokenService implements ITokenService {
       SET revoked = true, revoked_at = NOW() 
       WHERE id = $1
     `, [sessionId]);
-  }
+
 
   async revokeApiToken(tokenId: string): Promise<void> {
 
@@ -255,7 +255,7 @@ export class TokenService implements ITokenService {
       SET revoked = true, revoked_at = NOW() 
       WHERE id = $1
     `, [tokenId]);
-  }
+
 
   async getUserApiTokens(userId: string): Promise<any[]> {
 
@@ -275,7 +275,7 @@ export class TokenService implements ITokenService {
       lastUsedAt: row.last_used_at,
       revoked: row.revoked
     }));
-  }
+
 
   async validateApiToken(token: string): Promise<boolean> {
 
@@ -284,7 +284,7 @@ export class TokenService implements ITokenService {
       
       if ((payload as any).type !== 'api') {
         return false;
-      }
+
 
       // Check if API token exists and is not revoked
       const result = await this.db.query(`
@@ -294,7 +294,7 @@ export class TokenService implements ITokenService {
 
       if (result.rows.length === 0) {
         return false;
-      }
+
 
       // Update last used timestamp
       await this.db.query(`
@@ -304,10 +304,10 @@ export class TokenService implements ITokenService {
       `, [(payload as any).tokenId]);
 
       return true;
-    } catch (error) {
+ catch (error) {
       return false;
-    }
-  }
+
+
 
   async hasScope(token: string, requiredScope: string): Promise<boolean> {
 
@@ -317,10 +317,10 @@ export class TokenService implements ITokenService {
       
       // Check for exact scope match or wildcard
       return scopes.includes(requiredScope) || scopes.includes('*');
-    } catch (error) {
+ catch (error) {
       return false;
-    }
-  }
+
+
 
   async isTokenRevoked(token: string): Promise<boolean> {
 
@@ -329,7 +329,7 @@ export class TokenService implements ITokenService {
       const isRevoked = await this.redis.exists(`revoked_token:${token}`);
       if (isRevoked) {
         return true;
-      }
+
 
       // Check if all user tokens are revoked
       const decoded = jwt.decode(token) as any;
@@ -339,15 +339,15 @@ export class TokenService implements ITokenService {
           const revokedTimestamp = parseInt(userRevokedTime);
           const tokenIssuedTime = decoded.iat * 1000; // Convert to milliseconds
           return tokenIssuedTime < revokedTimestamp;
-        }
-      }
+
+
 
       return false;
-    } catch (error) {
+ catch (error) {
       console.error('Error checking token revocation:', error);
       return false; // Assume not revoked if we can't check
-    }
-  }
+
+
 
   private async storeRefreshToken(userId: string, token: string): Promise<void> {
 
@@ -358,7 +358,7 @@ export class TokenService implements ITokenService {
       INSERT INTO user_sessions (user_id, refresh_token, expires_at)
       VALUES ($1, $2, $3)
     `, [userId, token, expiresAt]);
-  }
+
 
   private async validateRefreshToken(userId: string, token: string): Promise<boolean> {
 
@@ -368,7 +368,7 @@ export class TokenService implements ITokenService {
     `, [userId, token]);
 
     return result.rows.length > 0;
-  }
+
 
   private async revokeRefreshToken(userId: string, token: string): Promise<void> {
 
@@ -377,7 +377,7 @@ export class TokenService implements ITokenService {
       SET revoked = true, revoked_at = NOW() 
       WHERE user_id = $1 AND refresh_token = $2
     `, [userId, token]);
-  }
+
 
   private async storeApiToken(
     userId: string,
@@ -395,7 +395,7 @@ export class TokenService implements ITokenService {
       INSERT INTO api_tokens (id, user_id, name, scopes, expires_at)
       VALUES ($1, $2, $3, $4, $5)
     `, [tokenId, userId, name, JSON.stringify(scopes), expiresAt]);
-  }
+
 
   private async getUserRoles(userId: string): Promise<string[]> {
 
@@ -407,7 +407,7 @@ export class TokenService implements ITokenService {
     `, [userId]);
 
     return result.rows.map(row => row.name);
-  }
+
 
   private async getUserPermissions(userId: string): Promise<string[]> {
 
@@ -420,7 +420,7 @@ export class TokenService implements ITokenService {
     `, [userId]);
 
     return result.rows.map(row => row.permission);
-  }
+
 
   private async getUserPrimaryOrganization(userId: string): Promise<string | undefined> {
 
@@ -434,7 +434,7 @@ export class TokenService implements ITokenService {
     `, [userId]);
 
     return result.rows.length > 0 ? result.rows[0].organization_id : undefined;
-  }
+
 
   private async getUserTeams(userId: string): Promise<string[]> {
 
@@ -443,7 +443,7 @@ export class TokenService implements ITokenService {
     `, [userId]);
 
     return result.rows.map(row => row.team_id);
-  }
+
 
   private loadKeys(): void {
     try {
@@ -454,16 +454,16 @@ export class TokenService implements ITokenService {
         // Load from environment variables (base64 encoded)
         this.privateKey = Buffer.from(process.env.JWT_PRIVATE_KEY, 'base64').toString('utf8');
         this.publicKey = Buffer.from(process.env.JWT_PUBLIC_KEY, 'base64').toString('utf8');
-      } else {
+ else {
         // Load from files (development)
         this.privateKey = readFileSync(join(keyPath, 'private.pem'), 'utf8');
         this.publicKey = readFileSync(join(keyPath, 'public.pem'), 'utf8');
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to load JWT keys:', error);
       throw new Error('JWT keys not configured properly. Please set JWT_PRIVATE_KEY and JWT_PUBLIC_KEY environment variables or place key files in the keys directory.');
-    }
-  }
+
+
 
   // Utility method to generate RS256 key pair (for development setup)
   static generateKeyPair(): { privateKey: string; publicKey: string } {
@@ -473,13 +473,12 @@ export class TokenService implements ITokenService {
       publicKeyEncoding: {
         type: 'spki',
         format: 'pem'
-  }
+
       privateKeyEncoding: {
         type: 'pkcs8',
         format: 'pem'
-      }
+
     });
 
     return { privateKey, publicKey };
-  }
-}
+

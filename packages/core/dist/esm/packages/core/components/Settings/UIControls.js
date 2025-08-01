@@ -63,56 +63,39 @@ const handleHighContrastChange = useCallback((highContrast) => {
 [settings, onChange];
 ;
 // Theme options
-const themeOptions = [];
-{
-    value: 'light',
-        label;
-    'Light Theme',
-        description;
-    'Bright interface for well-lit environments',
-        icon;
-    FiSun,
-    ;
-}
-{
-    value: 'dark',
-        label;
-    'Dark Theme',
-        description;
-    'Dark interface for low-light environments',
-        icon;
-    FiMoon,
-    ;
-}
-{
-    value: 'auto',
-        label;
-    'System Theme',
-        description;
-    'Follow your system theme preference',
-        icon;
-    FiMonitor;
-    ;
-    // UI features sections
-    const uiSections = [];
+const themeOptions = [
+    {
+        value: 'light',
+        label: 'Light Theme',
+        description: 'Bright interface for well-lit environments',
+        icon: FiSun,
+    },
+    {
+        value: 'dark',
+        label: 'Dark Theme',
+        description: 'Dark interface for low-light environments',
+        icon: FiMoon,
+    },
+    {
+        value: 'auto',
+        label: 'System Theme',
+        description: 'Follow your system theme preference',
+        icon: FiMonitor
+    }
+];
+// UI features sections
+const uiSections = [
     {
         id: 'appearance',
-            title;
-        'Theme & Appearance',
-            icon;
-        FiEye,
-            content;
-        'theme-selector',
-        ;
-    }
+        title: 'Theme & Appearance',
+        icon: FiEye,
+        content: 'theme-selector',
+    },
     {
         id: 'interaction',
-            title;
-        'User Interaction',
-            icon;
-        FiHelpCircle,
-            settings;
-        [,
+        title: 'User Interaction',
+        icon: FiHelpCircle,
+        settings: [
             {
                 key: 'showTooltips',
                 label: 'Show tooltips',
@@ -128,16 +111,14 @@ const themeOptions = [];
                 enabled: settings.enableKeyboardShortcuts,
                 handler: handleEnableKeyboardShortcutsChange,
                 icon: FiKeyboard
-            }];
-    }
+            }
+        ]
+    },
     {
         id: 'accessibility',
-            title;
-        'Accessibility',
-            icon;
-        FiContrast,
-            settings;
-        [,
+        title: 'Accessibility',
+        icon: FiContrast,
+        settings: [
             {
                 key: 'reduceAnimations',
                 label: 'Reduce animations',
@@ -153,118 +134,117 @@ const themeOptions = [];
                 enabled: settings.highContrast,
                 handler: handleHighContrastChange,
                 icon: FiContrast
-            }],
-        ;
-        ;
-        // Get theme icon and color
-        const getThemeInfo = (theme) => {
-            const option = themeOptions.find(opt => opt.value === theme);
-            return {
-                Icon: option?.icon || FiMonitor,
-                color: theme === 'light' ? '#f59e0b' : theme === 'dark' ? '#6366f1' : uiColors.accent.primary,
-            };
-        };
-        const currentThemeInfo = getThemeInfo(settings.theme);
+            }
+        ]
+    }
+];
+// Get theme icon and color
+const getThemeInfo = (theme) => {
+    const option = themeOptions.find(opt => opt.value === theme);
+    return {
+        Icon: option?.icon || FiMonitor,
+        color: theme === 'light' ? '#f59e0b' : theme === 'dark' ? '#6366f1' : uiColors.accent.primary,
+    };
+};
+const currentThemeInfo = getThemeInfo(settings.theme);
+return;
+_jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '16px',
+            }, children: [_jsx(FiEye, { size: 18, color: uiColors.accent.primary }), _jsx("h3", { style: {
+                        margin: 0,
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        color: uiColors.text.primary,
+                    }, children: "Interface & Accessibility Settings" })] }), _jsx("div", { style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                marginBottom: '20px',
+                padding: '12px',
+                backgroundColor: uiColors.ui.hover,
+                borderRadius: '8px',
+                border: `1px solid ${uiColors.ui.border}`
+            } }), "}>", _jsx(currentThemeInfo.Icon, { size: 16, color: currentThemeInfo.color }), _jsxs("div", { style: {
+                fontSize: '14px',
+                fontWeight: 500,
+                color: uiColors.text.primary,
+            }, children: ["Current Theme: ", themeOptions.find(opt => opt.value === settings.theme)?.label] }), _jsxs("div", { style: {
+                fontSize: '12px',
+                color: uiColors.text.secondary,
+                marginLeft: 'auto',
+            }, children: [settings.highContrast && ()
+                    < span, " style=", {
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '2px 6px',
+                    borderRadius: '3px',
+                    backgroundColor: '#6366f1' + '20',
+                    color: '#6366f1',
+                    fontSize: '10px',
+                    fontWeight: 500,
+                }, ">", _jsx(FiContrast, { size: 10 }), "High Contrast"] }), ")}"] });
+div >
+    { /* UI Settings Sections */};
+{
+    uiSections.map((section) => {
+        const SectionIcon = section.icon;
         return;
         _jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style: {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',
-                        marginBottom: '16px',
-                    }, children: [_jsx(FiEye, { size: 18, color: uiColors.accent.primary }), _jsx("h3", { style: {
+                        marginBottom: '12px',
+                    }, children: [_jsx(SectionIcon, { size: 16, color: uiColors.accent.primary }), _jsx("h4", { style: {
                                 margin: 0,
-                                fontSize: '16px',
+                                fontSize: '14px',
                                 fontWeight: 600,
                                 color: uiColors.text.primary,
-                            }, children: "Interface & Accessibility Settings" })] }), _jsx("div", { style: {
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        marginBottom: '20px',
-                        padding: '12px',
-                        backgroundColor: uiColors.ui.hover,
-                        borderRadius: '8px',
-                        border: `1px solid ${uiColors.ui.border}`
-                    } }), "}>", _jsx(currentThemeInfo.Icon, { size: 16, color: currentThemeInfo.color }), _jsxs("div", { style: {
-                        fontSize: '14px',
-                        fontWeight: 500,
-                        color: uiColors.text.primary,
-                    }, children: ["Current Theme: ", themeOptions.find(opt => opt.value === settings.theme)?.label] }), _jsxs("div", { style: {
-                        fontSize: '12px',
-                        color: uiColors.text.secondary,
-                        marginLeft: 'auto',
-                    }, children: [settings.highContrast && ()
-                            < span, " style=", {
-                            display: 'inline-flex',
+                            }, children: section.title })] }), section.content === 'theme-selector' && ()
+                    < div, " style=", {
+                    marginLeft: '24px',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+                    gap: '8px',
+                }, ">", themeOptions.map((option) => {
+                    const Icon = option.icon;
+                    const isSelected = settings.theme === option.value;
+                    return;
+                    _jsx("button", { onClick: () => handleThemeChange(option.value), style: ({
+                            display: 'flex',
+                            flexDirection: 'column',
                             alignItems: 'center',
-                            gap: '4px',
-                            padding: '2px 6px',
-                            borderRadius: '3px',
-                            backgroundColor: '#6366f1' + '20',
-                            color: '#6366f1',
-                            fontSize: '10px',
-                            fontWeight: 500,
-                        }, ">", _jsx(FiContrast, { size: 10 }), "High Contrast"] }), ")}"] });
-        div >
-            { /* UI Settings Sections */};
-        {
-            uiSections.map((section) => {
-                const SectionIcon = section.icon;
-                return;
-                _jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style: {
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                marginBottom: '12px',
-                            }, children: [_jsx(SectionIcon, { size: 16, color: uiColors.accent.primary }), _jsx("h4", { style: {
-                                        margin: 0,
-                                        fontSize: '14px',
-                                        fontWeight: 600,
-                                        color: uiColors.text.primary,
-                                    }, children: section.title })] }), section.content === 'theme-selector' && ()
-                            < div, " style=", {
-                            marginLeft: '24px',
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-                            gap: '8px',
-                        }, ">", themeOptions.map((option) => {
-                            const Icon = option.icon;
-                            const isSelected = settings.theme === option.value;
-                            return;
-                            _jsx("button", { onClick: () => handleThemeChange(option.value), style: ({
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    padding: '12px',
-                                    backgroundColor: isSelected,
-                                }
-                                    ? uiColors.accent.primary + '20'
-                                    : uiColors.ui.hover,
-                                    border) }, option.value);
-                        }), ": isSelected, ? `1px solid $", uiColors.accent.primary, "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', textAlign: 'center' }} onMouseEnter=", (e) => {
-                            if (!isSelected) {
-                                e.currentTarget.style.backgroundColor = uiColors.ui.selected;
-                            }
-                        }, "onMouseLeave=", (e) => {
-                            if (!isSelected) {
-                                e.currentTarget.style.backgroundColor = uiColors.ui.hover;
-                            }
-                        }, ">", _jsx(Icon, { size: 20, color: isSelected ? uiColors.accent.primary : uiColors.text.secondary, style: { marginBottom: '6px' } }), _jsx("div", { style: {
-                                fontSize: '13px',
-                                fontWeight: 500,
-                                color: isSelected ? uiColors.accent.primary : uiColors.text.primary,
-                                marginBottom: '4px',
-                            }, children: option.label }), _jsx("div", { style: {
-                                fontSize: '10px',
-                                color: isSelected ? uiColors.accent.primary : uiColors.text.secondary,
-                                lineHeight: 1.3,
-                            }, children: option.description })] }, section.id);
-            });
-        }
-    }
-    div >
-    ;
+                            padding: '12px',
+                            backgroundColor: isSelected,
+                        }
+                            ? uiColors.accent.primary + '20'
+                            : uiColors.ui.hover,
+                            border) }, option.value);
+                }), ": isSelected, ? `1px solid $", uiColors.accent.primary, "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', textAlign: 'center'; }} onMouseEnter=", (e) => {
+                    if (!isSelected) {
+                        e.currentTarget.style.backgroundColor = uiColors.ui.selected;
+                    }
+                }, "onMouseLeave=", (e) => {
+                    if (!isSelected) {
+                        e.currentTarget.style.backgroundColor = uiColors.ui.hover;
+                    }
+                }, ">", _jsx(Icon, { size: 20, color: isSelected ? uiColors.accent.primary : uiColors.text.secondary, style: { marginBottom: '6px' } }), _jsx("div", { style: {
+                        fontSize: '13px',
+                        fontWeight: 500,
+                        color: isSelected ? uiColors.accent.primary : uiColors.text.primary,
+                        marginBottom: '4px',
+                    }, children: option.label }), _jsx("div", { style: {
+                        fontSize: '10px',
+                        color: isSelected ? uiColors.accent.primary : uiColors.text.secondary,
+                        lineHeight: 1.3,
+                    }, children: option.description })] }, section.id);
+    });
 }
+div >
+;
 { /* Section Settings */ }
 {
     section.settings && ()

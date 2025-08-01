@@ -121,8 +121,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
                                                 audio_length: this._estimateAudioDuration(text, processedOptions.speed),
                                                 speed: processedOptions.speed,
                                                 response_format: processedOptions.response_format,
-                                                generation_time: generationTime,
-                                            },
+                                                generation_time: generationTime, },
                                             usage: {
                                                 characters: text.length,
                                                 cost: this._calculateCost(text.length, processedOptions.model),
@@ -156,8 +155,9 @@ export class OpenAITTSAdapter extends BaseAIModel {
                                                         async getAvailableVoices() {
                                                             return [...this.availableVoices];
                                                             async;
-                                                            generateWithCustomVoice(text, string);
-                                                            voiceId: string,
+                                                            generateWithCustomVoice(text, string),
+                                                                voiceId;
+                                                            string,
                                                                 options ?  : Partial;
                                                             Promise < TTSGenerationResult > {
                                                                 const: ttsOptions, TTSRequestOptions = {
@@ -178,8 +178,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
                     }
                     finally {
                     }
-                }
-            } };
+                } } };
         Promise < TTSGenerationResult > {
             const: ttsOptions, TTSRequestOptions = {
                 text: ssmlText,

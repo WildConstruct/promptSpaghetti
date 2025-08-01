@@ -83,7 +83,7 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     permissions: string[];
   };
-}
+
 
 /**
  * Register bulk assignment tools routes
@@ -114,7 +114,7 @@ export async function registerBulkAssignmentToolsRoutes(
           resources: requestData.resources,
           parameters: requestData.parameters,
           templateId: requestData.templateId
-  }
+
         options: {
           batchSize: requestData.parameters?.batchSize || 50,
           maxConcurrency: requestData.parameters?.maxConcurrency || 5,
@@ -123,14 +123,14 @@ export async function registerBulkAssignmentToolsRoutes(
           atomicMode: requestData.parameters?.rollbackOnFailure ?? false,
           validateBefore: true,
           notifyOnComplete: requestData.parameters?.notifyTargets ?? false
-  }
+
         metadata: {
           requestedBy: request.user!.id,
           reason: requestData.reason,
           priority: 'medium' as const,
           category: 'bulk_assignment',
           tags: [requestData.assignmentType, requestData.operationType]
-        }
+
       };
 
       const result = await bulkOperationFramework.submitOperation(
@@ -150,17 +150,16 @@ export async function registerBulkAssignmentToolsRoutes(
           totalTargets: result.progress.totalItems,
           estimatedDuration: requestData.targets.length * 100, // milliseconds per target estimate
           message: 'Bulk assignment operation submitted for processing'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid bulk assignment request data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to submit bulk assignment:', error);
       return reply.code(500).send({
@@ -168,7 +167,7 @@ export async function registerBulkAssignmentToolsRoutes(
         error: 'Failed to submit bulk assignment operation',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get bulk assignment operation status
@@ -185,20 +184,19 @@ export async function registerBulkAssignmentToolsRoutes(
           success: false,
           error: 'Bulk assignment operation not found'
         });
-      }
+
 
       return reply.code(200).send({
         success: true,
         data: operation
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to get bulk assignment status ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve bulk assignment status'
       });
-    }
+
   });
 
   // List bulk assignment operations
@@ -215,7 +213,7 @@ export async function registerBulkAssignmentToolsRoutes(
         offset,
         startDate,
         endDate 
-      } = request.query as {
+ = request.query as {
         status?: string;
         assignmentType?: string;
         operationType?: string;
@@ -242,17 +240,16 @@ export async function registerBulkAssignmentToolsRoutes(
             requestedBy,
             startDate,
             endDate
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       fastify.log.error('Failed to list bulk assignments:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve bulk assignments'
       });
-    }
+
   });
 
   // Cancel bulk assignment operation
@@ -267,14 +264,13 @@ export async function registerBulkAssignmentToolsRoutes(
         success: true,
         message: 'Bulk assignment operation cancellation requested'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to cancel bulk assignment ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to cancel bulk assignment operation'
       });
-    }
+
   });
 
   // Validate bulk assignment before execution
@@ -295,17 +291,17 @@ export async function registerBulkAssignmentToolsRoutes(
           duplicateTargets: 0,
           invalidTargets: 0,
           conflictedTargets: 0
-  }
+
         resourceAnalysis: {
           totalResources: requestData.resources.length,
           unavailableResources: 0,
           restrictedResources: 0
-  }
+
         estimatedDuration: requestData.targets.length * requestData.resources.length * 100, // milliseconds
         estimatedCost: {
           computeUnits: requestData.targets.length * requestData.resources.length * 0.1,
           storageGB: requestData.targets.length * 0.001
-  }
+
         recommendations: [
           'Consider using a template for similar operations in the future',
           'Review conflict resolution settings for optimal results',
@@ -317,22 +313,21 @@ export async function registerBulkAssignmentToolsRoutes(
         success: true,
         data: validationResults
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid validation request data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to validate bulk assignment:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to validate bulk assignment'
       });
-    }
+
   });
 
   // Resolve conflicts for bulk assignment
@@ -350,24 +345,23 @@ export async function registerBulkAssignmentToolsRoutes(
           resolvedConflicts: resolutionData.conflicts.length,
           remainingConflicts: 0,
           message: 'Conflicts resolved successfully'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid conflict resolution data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error(`Failed to resolve conflicts for ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to resolve conflicts'
       });
-    }
+
   });
 
   // Create assignment template
@@ -390,19 +384,18 @@ export async function registerBulkAssignmentToolsRoutes(
           usage: {
             timesUsed: 0,
             successRate: 0
-          }
-  }
+
+
         message: 'Assignment template created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid template data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to create assignment template:', error);
       return reply.code(500).send({
@@ -410,7 +403,7 @@ export async function registerBulkAssignmentToolsRoutes(
         error: 'Failed to create assignment template',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // List assignment templates
@@ -425,7 +418,7 @@ export async function registerBulkAssignmentToolsRoutes(
         isSystemTemplate,
         limit,
         offset
-      } = request.query as {
+ = request.query as {
         assignmentType?: string;
         operationType?: string;
         createdBy?: string;
@@ -446,13 +439,13 @@ export async function registerBulkAssignmentToolsRoutes(
             executionMode: 'immediate',
             batchSize: 10,
             notifyTargets: true
-  }
+
           defaultResources: ['basic_user_role', 'default_permissions'],
           isSystemTemplate: true,
           usage: { timesUsed: 45, lastUsed: new Date(), successRate: 95 },
           createdBy: 'system',
           createdAt: new Date('2024-01-01')
-  }
+
         {
           id: 'template_api_key_distribution',
           name: 'API Key Distribution',
@@ -463,13 +456,13 @@ export async function registerBulkAssignmentToolsRoutes(
             executionMode: 'staged',
             batchSize: 25,
             continueOnError: false
-  }
+
           defaultResources: ['dev_api_key', 'staging_api_key'],
           isSystemTemplate: false,
           usage: { timesUsed: 12, lastUsed: new Date(), successRate: 88 },
           createdBy: request.user!.id,
           createdAt: new Date('2024-02-01')
-        }
+
       ].filter(template => {
         if (assignmentType && template.assignmentType !== assignmentType) return false;
         if (operationType && template.operationType !== operationType) return false;
@@ -489,16 +482,15 @@ export async function registerBulkAssignmentToolsRoutes(
           totalCount: mockTemplates.length,
           limit: pageSize,
           offset: startIndex
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Failed to list assignment templates:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve assignment templates'
       });
-    }
+
   });
 
   // Get assignment template by ID
@@ -513,14 +505,13 @@ export async function registerBulkAssignmentToolsRoutes(
         success: false,
         error: 'Assignment template not found'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to get assignment template ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve assignment template'
       });
-    }
+
   });
 
   // Update assignment template
@@ -538,25 +529,24 @@ export async function registerBulkAssignmentToolsRoutes(
           id: templateId,
           ...updates,
           lastModified: new Date().toISOString()
-  }
+
         message: 'Assignment template updated successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid template update data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error(`Failed to update assignment template ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to update assignment template'
       });
-    }
+
   });
 
   // Delete assignment template
@@ -571,14 +561,13 @@ export async function registerBulkAssignmentToolsRoutes(
         success: true,
         message: 'Assignment template deleted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to delete assignment template ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to delete assignment template'
       });
-    }
+
   });
 
   // Get bulk assignment analytics
@@ -590,7 +579,7 @@ export async function registerBulkAssignmentToolsRoutes(
         timeframe,
         assignmentType,
         operationType
-      } = request.query as {
+ = request.query as {
         timeframe?: 'day' | 'week' | 'month';
         assignmentType?: string;
         operationType?: string;
@@ -606,7 +595,7 @@ export async function registerBulkAssignmentToolsRoutes(
           successRate: 91.0,
           averageProcessingTime: 234000, // milliseconds
           totalTargetsProcessed: 12450
-  }
+
         breakdown: {
           byAssignmentType: {
             api_key: 45,
@@ -614,14 +603,14 @@ export async function registerBulkAssignmentToolsRoutes(
             role: 28,
             team: 12,
             quota: 4
-  }
+
           byOperationType: {
             assign: 89,
             revoke: 34,
             update: 23,
             transfer: 10
-          }
-  }
+
+
         trends: [
           { date: '2024-01-01', operations: 12, successRate: 88.5 },
           { date: '2024-01-02', operations: 18, successRate: 94.2 },
@@ -636,7 +625,7 @@ export async function registerBulkAssignmentToolsRoutes(
           averageResourcesPerOperation: 2.3,
           peakConcurrency: 8,
           systemLoad: 'normal'
-        }
+
       };
 
       return reply.code(200).send({
@@ -645,16 +634,15 @@ export async function registerBulkAssignmentToolsRoutes(
         meta: {
           timeframe: timeframe || 'week',
           generatedAt: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Failed to get bulk assignment analytics:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve bulk assignment analytics'
       });
-    }
+
   });
 
   // Health check for bulk assignment system
@@ -674,15 +662,14 @@ export async function registerBulkAssignmentToolsRoutes(
           memory: 62,
           database: 38,
           network: 23
-        }
+
       };
 
       return reply.code(200).send({
         success: true,
         data: health
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Bulk assignment system health check failed:', error);
       return reply.code(500).send({
         success: false,
@@ -690,10 +677,10 @@ export async function registerBulkAssignmentToolsRoutes(
         data: {
           status: 'unhealthy',
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
-    }
+
   });
-}
+
 
 export default registerBulkAssignmentToolsRoutes;

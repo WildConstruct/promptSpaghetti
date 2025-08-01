@@ -2,8 +2,8 @@ import React from 'react';
 import { HelpContent } from './ContextualHelpSystem';
 
 }
-export interface HelpContextState {
-    helpContent: HelpContent[];
+}
+export interface HelpContextState { helpContent: HelpContent[];
     onboardingEnabled: boolean;
     onboardingStep: number;
     onboardingComplete: boolean;
@@ -37,11 +37,9 @@ export declare export declare     currentStep: number;
     skipOnboarding: any;
     completeOnboarding: any;
     startOnboarding: any;
-    isComplete: any;
+    isComplete: any }
 }
 };
-export declare const HelpSystemSettings: React.FC<{
-    className?: string;
-}>;
+export declare const HelpSystemSettings: React.FC<{ className?: string }>;
 export default HelpProvider;
 //# sourceMappingURL=HelpContentManager.d.ts.map

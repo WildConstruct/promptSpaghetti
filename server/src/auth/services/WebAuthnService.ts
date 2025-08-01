@@ -12,8 +12,8 @@ import crypto from 'crypto';
 import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from './AuditService';
 
-}
-}
+
+
 export interface WebAuthnConfig {
   rpId: string; // Relying Party ID (domain)
   rpName: string; // Relying Party Name
@@ -22,12 +22,13 @@ export interface WebAuthnConfig {
   requireResidentKey: boolean;
   userVerification: 'required' | 'preferred' | 'discouraged';
   attestation: 'none' | 'indirect' | 'direct' | 'enterprise';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WebAuthnCredential {
   credentialId: string;
   userId: string;
@@ -40,48 +41,51 @@ export interface WebAuthnCredential {
   deviceType?: string;
   backupEligible?: boolean;
   backupState?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AuthenticatorSelection {
   authenticatorAttachment?: 'platform' | 'cross-platform';
   requireResidentKey: boolean;
   residentKey: 'discouraged' | 'preferred' | 'required';
   userVerification: 'required' | 'preferred' | 'discouraged';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CredentialCreationOptions {
   challenge: string;
   user: {
     id: string;
     name: string;
     displayName: string;
-}
-}
+
+
+
   };
   pubKeyCredParams: Array<{
     alg: number;
     type: 'public-key';
-  }>;
+>;
   timeout: number;
   excludeCredentials?: Array<{
     id: string;
     type: 'public-key';
     transports?: AuthenticatorTransport[];
-  }>;
+>;
   authenticatorSelection?: AuthenticatorSelection;
   attestation: 'none' | 'indirect' | 'direct' | 'enterprise';
-}
 
-}
-}
+
+
+
 export interface CredentialRequestOptions {
   challenge: string;
   timeout: number;
@@ -90,14 +94,15 @@ export interface CredentialRequestOptions {
     id: string;
     type: 'public-key';
     transports?: AuthenticatorTransport[];
-}
-}
-  }>;
-  userVerification: 'required' | 'preferred' | 'discouraged';
-}
 
-}
-}
+
+
+>;
+  userVerification: 'required' | 'preferred' | 'discouraged';
+
+
+
+
 export interface AttestationResult {
   verified: boolean;
   credentialId: string;
@@ -106,20 +111,22 @@ export interface AttestationResult {
   aaguid?: string;
   credentialDeviceType?: string;
   credentialBackedUp?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssertionResult {
   verified: boolean;
   credentialId: string;
   counter: number;
   userHandle?: string;
-}
-}
-}
+
+
+
+
 
 export class WebAuthnService {
   private config: WebAuthnConfig;
@@ -128,7 +135,7 @@ export class WebAuthnService {
     userId: string; 
     expiresAt: Date;
     type: 'registration' | 'authentication';
-  }> = new Map();
+> = new Map();
 
   constructor(
     private databaseService: DatabaseService,
@@ -144,7 +151,7 @@ export class WebAuthnService {
       userVerification: config.userVerification || 'preferred',
       attestation: config.attestation || 'none'
     };
-  }
+
 
   /**
    * Generate registration options for WebAuthn credential creation
@@ -181,7 +188,7 @@ export class WebAuthnService {
         id: userId,
         name: userName,
         displayName: userDisplayName
-  }
+
       pubKeyCredParams: [
         { alg: -7, type: 'public-key' }, // ES256
         { alg: -257, type: 'public-key' } // RS256
@@ -193,7 +200,7 @@ export class WebAuthnService {
         requireResidentKey: this.config.requireResidentKey,
         residentKey: this.config.requireResidentKey ? 'required' : 'preferred',
         userVerification: this.config.userVerification
-  }
+
       attestation: this.config.attestation
     };
 
@@ -204,17 +211,17 @@ export class WebAuthnService {
         challengeId,
         rpId: this.config.rpId,
         excludedCredentials: excludeCredentialsList.length
-  }
+
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2', 'ISO27001'],
         requirements: ['authentication_methods'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
 
     return options;
-  }
+
 
   /**
    * Generate authentication options for WebAuthn assertion
@@ -238,7 +245,7 @@ export class WebAuthnService {
       id: string;
       type: 'public-key';
       transports?: AuthenticatorTransport[];
-    }> = [];
+> = [];
 
     // If userId is provided, get their specific credentials
     if (userId) {
@@ -248,7 +255,7 @@ export class WebAuthnService {
         type: 'public-key' as const,
         transports: cred.transports
       }));
-    }
+
 
     const options: CredentialRequestOptions = {
       challenge: challengeId, // Use challengeId as public identifier
@@ -266,17 +273,17 @@ export class WebAuthnService {
         rpId: this.config.rpId,
         allowedCredentials: allowCredentials.length,
         userless: !userId
-  }
+
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2', 'ISO27001'],
         requirements: ['authentication_methods'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
 
     return options;
-  }
+
 
   /**
    * Verify registration attestation
@@ -291,16 +298,16 @@ export class WebAuthnService {
     
     if (!challengeInfo) {
       return { success: false, error: 'Invalid or expired challenge' };
-    }
+
 
     if (challengeInfo.type !== 'registration') {
       return { success: false, error: 'Challenge type mismatch' };
-    }
+
 
     if (new Date() > challengeInfo.expiresAt) {
       this.pendingChallenges.delete(challengeId);
       return { success: false, error: 'Challenge expired' };
-    }
+
 
     try {
       // In a full implementation, this would:
@@ -339,36 +346,35 @@ export class WebAuthnService {
           credentialId,
           deviceType: credential.deviceType,
           transports: credential.transports
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
           requirements: ['authentication_methods'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return { success: true, credential };
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'WEBAUTHN_REGISTRATION_FAILED',
         userId: challengeInfo.userId,
         details: {
           challengeId,
           error: error.message
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
           requirements: ['authentication_methods'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return { success: false, error: 'Registration verification failed' };
-    }
-  }
+
+
 
   /**
    * Verify authentication assertion
@@ -383,16 +389,16 @@ export class WebAuthnService {
     
     if (!challengeInfo) {
       return { success: false, error: 'Invalid or expired challenge' };
-    }
+
 
     if (challengeInfo.type !== 'authentication') {
       return { success: false, error: 'Challenge type mismatch' };
-    }
+
 
     if (new Date() > challengeInfo.expiresAt) {
       this.pendingChallenges.delete(challengeId);
       return { success: false, error: 'Challenge expired' };
-    }
+
 
     try {
       // In a full implementation, this would:
@@ -414,36 +420,35 @@ export class WebAuthnService {
         details: {
           challengeId,
           success: true
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
           requirements: ['authentication_methods'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return { success: true, userId };
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'WEBAUTHN_AUTHENTICATION_FAILED',
         userId: challengeInfo.userId || 'unknown',
         details: {
           challengeId,
           error: error.message
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
           requirements: ['authentication_methods'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return { success: false, error: 'Authentication verification failed' };
-    }
-  }
+
+
 
   /**
    * Get user's registered credentials
@@ -454,11 +459,11 @@ export class WebAuthnService {
       // In a full implementation, this would query the database
       // For now, return empty array as foundation
       return [];
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching user credentials:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Store new credential
@@ -473,11 +478,11 @@ export class WebAuthnService {
         userId: credential.userId,
         createdAt: credential.createdAt
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error storing credential:', error);
       throw new Error('Failed to store credential');
-    }
-  }
+
+
 
   /**
    * Revoke a credential
@@ -491,21 +496,21 @@ export class WebAuthnService {
         userId,
         details: {
           credentialId
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
           requirements: ['authentication_methods'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error revoking credential:', error);
       return false;
-    }
-  }
+
+
 
   /**
    * Get WebAuthn service statistics
@@ -522,7 +527,7 @@ export class WebAuthnService {
         'roaming'   // USB security keys, NFC
       ]
     };
-  }
+
 
   /**
    * Cleanup expired challenges
@@ -532,16 +537,16 @@ export class WebAuthnService {
     for (const [challengeId, challengeInfo] of this.pendingChallenges.entries()) {
       if (now > challengeInfo.expiresAt) {
         this.pendingChallenges.delete(challengeId);
-      }
-    }
-  }
+
+
+
 
   /**
    * Generate cryptographically secure challenge
    */
   private generateChallenge(): string {
     return crypto.randomBytes(32).toString('base64url');
-  }
+
 
   /**
    * Health check for WebAuthn service
@@ -559,5 +564,4 @@ export class WebAuthnService {
       status: allHealthy ? 'healthy' : 'degraded',
       checks
     };
-  }
-}
+

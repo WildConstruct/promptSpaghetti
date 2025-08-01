@@ -49,14 +49,15 @@ const checkPermissionSchema = z.object({
   }).optional()
 });
 
-}
-}
+
+
 interface RBACRouteContext {
   authService: AuthenticationService;
   rbacService: RBACService;
-}
-}
-}
+
+
+
+
 
 export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteContext) {
   const { authService, rbacService } = context;
@@ -76,8 +77,8 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           search: { type: 'string' },
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'number', minimum: 0, default: 0 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -94,9 +95,9 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
                   organizationId: { type: 'string' },
                   createdAt: { type: 'string' },
                   updatedAt: { type: 'string' }
-                }
-              }
-  }
+
+
+
             total: { type: 'number' },
             pagination: {
               type: 'object',
@@ -104,12 +105,12 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
                 limit: { type: 'number' },
                 offset: { type: 'number' },
                 hasMore: { type: 'boolean' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { scope, organizationId, search, limit = 50, offset = 0 } = request.query as any;
@@ -126,15 +127,15 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           limit,
           offset,
           hasMore: offset + limit < result.total
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get roles error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve roles'
       });
-    }
+
   });
 
   // Get role by ID with permissions
@@ -148,9 +149,9 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         type: 'object',
         properties: {
           roleId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['roleId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -158,10 +159,10 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
             role: { type: 'object' },
             permissions: { type: 'array' },
             assignedUsers: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { roleId } = request.params as { roleId: string };
@@ -177,26 +178,26 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           error: 'Role Not Found',
           message: 'Role not found'
         });
-      }
+
 
       return reply.send({
         role,
         permissions,
         assignedUsers
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get role error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve role'
       });
-    }
+
   });
 
   // Create new role
   fastify.post<{
     Body: z.infer<typeof createRoleSchema>;
-  }>('/rbac/roles', {
+>('/rbac/roles', {
     preHandler: [
       fastify.authenticate,
       fastify.requirePermission({ resource: 'roles', action: 'write' })
@@ -209,10 +210,10 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           properties: {
             role: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const roleData = request.body as z.infer<typeof createRoleSchema>;
@@ -230,20 +231,20 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         role,
         message: 'Role created successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Create role error:', error);
       return reply.status(400).send({
         error: 'Role Creation Failed',
         message: error.message || 'Failed to create role'
       });
-    }
+
   });
 
   // Update role
   fastify.put<{
     Body: z.infer<typeof updateRoleSchema>;
     Params: { roleId: string };
-  }>('/rbac/roles/:roleId', {
+>('/rbac/roles/:roleId', {
     preHandler: [
       fastify.authenticate,
       fastify.requirePermission({ resource: 'roles', action: 'write' })
@@ -253,9 +254,9 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         type: 'object',
         properties: {
           roleId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['roleId']
-  }
+
       body: updateRoleSchema,
       response: {
         200: {
@@ -263,10 +264,10 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           properties: {
             role: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { roleId } = request.params as { roleId: string };
@@ -285,13 +286,13 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         role,
         message: 'Role updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Update role error:', error);
       return reply.status(400).send({
         error: 'Role Update Failed',
         message: error.message || 'Failed to update role'
       });
-    }
+
   });
 
   // Delete role
@@ -305,18 +306,18 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         type: 'object',
         properties: {
           roleId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['roleId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { roleId } = request.params as { roleId: string };
@@ -333,19 +334,19 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
       return reply.send({
         message: 'Role deleted successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Delete role error:', error);
       return reply.status(400).send({
         error: 'Role Deletion Failed',
         message: error.message || 'Failed to delete role'
       });
-    }
+
   });
 
   // Assign role to user
   fastify.post<{
     Body: z.infer<typeof assignRoleSchema>;
-  }>('/rbac/assign-role', {
+>('/rbac/assign-role', {
     preHandler: [
       fastify.authenticate,
       fastify.requirePermission({ resource: 'users', action: 'write' })
@@ -358,10 +359,10 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           properties: {
             assignment: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const assignmentData = request.body as z.infer<typeof assignRoleSchema>;
@@ -377,7 +378,7 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           ...assignmentData,
           grantedBy,
           expiresAt: assignmentData.expiresAt ? new Date(assignmentData.expiresAt) : undefined
-  }
+
         context
       );
 
@@ -385,19 +386,19 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         assignment,
         message: 'Role assigned successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Assign role error:', error);
       return reply.status(400).send({
         error: 'Role Assignment Failed',
         message: error.message || 'Failed to assign role'
       });
-    }
+
   });
 
   // Remove role from user
   fastify.post<{
     Body: z.infer<typeof removeRoleSchema>;
-  }>('/rbac/remove-role', {
+>('/rbac/remove-role', {
     preHandler: [
       fastify.authenticate,
       fastify.requirePermission({ resource: 'users', action: 'write' })
@@ -409,10 +410,10 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           type: 'object',
           properties: {
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { userId, roleId } = request.body as z.infer<typeof removeRoleSchema>;
@@ -429,13 +430,13 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
       return reply.send({
         message: 'Role removed successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Remove role error:', error);
       return reply.status(400).send({
         error: 'Role Removal Failed',
         message: error.message || 'Failed to remove role'
       });
-    }
+
   });
 
   // Get user roles and permissions
@@ -449,19 +450,19 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         type: 'object',
         properties: {
           userId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['userId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             roles: { type: 'array' },
             permissions: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { userId } = request.params as { userId: string };
@@ -475,19 +476,19 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         roles,
         permissions
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get user roles error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve user roles'
       });
-    }
+
   });
 
   // Check permission
   fastify.post<{
     Body: z.infer<typeof checkPermissionSchema>;
-  }>('/rbac/check-permission', {
+>('/rbac/check-permission', {
     preHandler: [
       fastify.authenticate,
       fastify.requirePermission({ resource: 'users', action: 'read' })
@@ -501,10 +502,10 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
             allowed: { type: 'boolean' },
             reason: { type: 'string' },
             matchingPermissions: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { userId, resource, action, context: permContext } = request.body as z.infer<typeof checkPermissionSchema>;
@@ -516,13 +517,13 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
       );
 
       return reply.send(result);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Check permission error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to check permission'
       });
-    }
+
   });
 
   // Get RBAC statistics
@@ -540,21 +541,21 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
             rolesByScope: { type: 'object' },
             totalAssignments: { type: 'number' },
             recentAssignments: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const stats = await rbacService.getRoleStats();
       return reply.send(stats);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get RBAC stats error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve RBAC statistics'
       });
-    }
+
   });
 
   // Get current user's permissions (for UI state management)
@@ -568,10 +569,10 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
             roles: { type: 'array' },
             permissions: { type: 'array' },
             permissionMap: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -593,12 +594,11 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         permissions,
         permissionMap
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get my permissions error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve permissions'
       });
-    }
+
   });
-}

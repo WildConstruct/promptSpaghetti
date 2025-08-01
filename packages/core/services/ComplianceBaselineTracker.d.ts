@@ -5,8 +5,8 @@
  */
 
 }
-export interface ComplianceBaseline {
-    id: string;
+}
+export interface ComplianceBaseline { id: string;
     framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL';
     category: 'security' | 'privacy' | 'regulatory' | 'operational';
     name: string;
@@ -17,11 +17,10 @@ export interface ComplianceBaseline {
     measurementFrequency: 'realtime' | 'hourly' | 'daily' | 'weekly' | 'monthly';
     baselineEstablishedAt: Date;
     lastUpdatedAt: Date;
-    isActive: boolean;
-
+    isActive: boolean }
 }
-export interface ComplianceMeasurement {
-    id: string;
+}
+export interface ComplianceMeasurement { id: string;
     baselineId: string;
     actualValue: number;
     targetValue: number;
@@ -29,11 +28,10 @@ export interface ComplianceMeasurement {
     status: 'above_baseline' | 'at_baseline' | 'below_baseline' | 'critical_deviation';
     measuredAt: Date;
     context?: Record<string, any>;
-    notes?: string;
-
+    notes?: string }
 }
-export interface BaselineTrend {
-    baselineId: string;
+}
+export interface BaselineTrend { baselineId: string;
     framework: string;
     category: string;
     name: string;
@@ -42,40 +40,34 @@ export interface BaselineTrend {
     averageDeviation: number;
     consistencyScore: number;
     lastMeasurement: ComplianceMeasurement;
-    recommendedActions: string[];
-
+    recommendedActions: string[] }
 }
-export interface BaselineDashboard {
-    overallHealthScore: number;
+}
+export interface BaselineDashboard { overallHealthScore: number;
     frameworkHealth: Record<string, {
         score: number;
         status: 'healthy' | 'warning' | 'critical';
         baselinesTracked: number;
         baselinesMet: number;
-        criticalDeviations: number;
+        criticalDeviations: number }
 }
     }>;
     recentDeviations: ComplianceMeasurement[];
     trendAnalysis: BaselineTrend[];
-    improvementOpportunities: {
-        baselineId: string;
+    improvementOpportunities: { baselineId: string;
         name: string;
         currentGap: number;
         potentialImpact: string;
         difficulty: 'low' | 'medium' | 'high';
-        estimatedTimeframe: string;
-    }[];
-    alerts: {
-        id: string;
+        estimatedTimeframe: string }[];
+    alerts: { id: string;
         severity: 'low' | 'medium' | 'high' | 'critical';
         message: string;
         baselineId: string;
         triggeredAt: Date;
-        acknowledged: boolean;
-    }[];
+        acknowledged: boolean }[];
 
-export declare class ComplianceBaselineTracker {
-    private baselines;
+export declare class ComplianceBaselineTracker { private baselines;
     private measurements;
     private alerts;
     constructor();
@@ -87,10 +79,10 @@ export declare class ComplianceBaselineTracker {
      * Record a new measurement against a baseline
      */
     recordMeasurement();
-      baselineId: string,
-      actualValue: number,
-      context?: Record<string,
-      any>,
+      baselineId: string
+      actualValue: number
+      context?: Record<string
+      any>
       notes?: string
     ): Promise<ComplianceMeasurement>;
     /**
@@ -105,15 +97,15 @@ export declare class ComplianceBaselineTracker {
      * Update baseline target or tolerance
      */
     updateBaseline();
-      baselineId: string,
-      updates: Partial<Pick<ComplianceBaseline,
+      baselineId: string
+      updates: Partial<Pick<ComplianceBaseline
       'targetValue' | 'toleranceThreshold' | 'isActive'>>
     ): Promise<void>;
     /**
      * Create custom baseline
      */
     createCustomBaseline();
-      baseline: Omit<ComplianceBaseline,
+      baseline: Omit<ComplianceBaseline }
       'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>
     ): Promise<ComplianceBaseline>;
     /**
@@ -123,11 +115,9 @@ export declare class ComplianceBaselineTracker {
     /**
      * Export baseline data for reporting
      */
-    exportBaselineData(framework?: string, daysPeriod?: number): {
-        baselines: ComplianceBaseline[];
+    exportBaselineData(framework?: string, daysPeriod?: number): { baselines: ComplianceBaseline[];
         measurements: ComplianceMeasurement[];
-        summary: Record<string, any>;
-    };
+        summary: Record<string, any> };
     private calculateDeviation;
     private determineStatus;
     private calculateConsistencyScore;

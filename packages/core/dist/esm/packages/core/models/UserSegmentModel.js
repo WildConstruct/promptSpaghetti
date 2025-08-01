@@ -34,7 +34,7 @@ abTestParticipation: string; // active A/B test IDs,
 betaFeatures: string;
 // Computed attributes (updated in real-time)
 riskOfChurn: number; // 0-1 probability,
-upsellProbability: number; // 0-1 probability
+upsellProbability: number; // 0-1 probability,
 supportTicketCount: number;
 lastSupportInteraction ?  : Date;
 npsScore ?  : number; // Net Promoter Score
@@ -51,7 +51,7 @@ isEnabled: boolean;
 // Advanced condition properties
 timeWindow ?  : {
     value: number,
-    unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months'
+    unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months',
 };
 ;
 aggregation ?  : 'sum' | 'avg' | 'count' | 'min' | 'max' | 'distinct' | 'percentile';
@@ -90,16 +90,29 @@ allowedUsers: string;
 allowedRoles: string;
 // Integration settings
 syncToExternalSystems: boolean;
-externalSystemMappings: Record;
+externalSystemMappings: Record < string, {
+    systemId: string,
+    segmentId: string,
+    lastSync: Date,
+    syncStatus: 'pending' | 'syncing' | 'synced' | 'failed',
+} > ;
 // Validation and quality
-validationRules: Array;
+validationRules: Array < {
+    rule: string,
+    description: string,
+    isRequired: boolean
+} > ;
 qualityScore: number; // 0-100 based on data completeness, accuracy, etc.
 // Advanced features
 parentSegmentId ?  : string; // for hierarchical segments
 childSegmentIds: string;
 dependencies: string; // other segments this one depends on
 // A/B testing integration
-treatmentVariants ?  : Record;
+treatmentVariants ?  : Record < string, {
+    name: string,
+    allocation: number, // percentage 0-100,
+    isControl: boolean
+} > ;
 // Scheduling and lifecycle
 schedule ?  : {
     startDate: Date,
@@ -112,7 +125,14 @@ schedule ?  : {
     }
 };
 // Analytics and insights
-insights: Array;
+insights: Array < {
+    type: 'trend' | 'anomaly' | 'opportunity' | 'risk',
+    title: string,
+    description: string,
+    severity: 'low' | 'medium' | 'high',
+    actionable: boolean,
+    generatedAt: Date
+} > ;
 ;
 // Analysis settings
 analysisMetric: 'retention' | 'revenue' | 'engagement' | 'conversion' | 'churn';
@@ -123,7 +143,15 @@ analysisWindow: {
 }
 ;
 // Cohort data
-cohortData: Array;
+cohortData: Array < {
+    cohortPeriod: string, // "2024-01", "Week 1", etc.,
+    userCount: number,
+    periodData: Array < {
+        period: number, // 0, 1, 2, ... representing time periods,
+        value: number, // metric value for this period,
+        userCount: number
+    } > 
+} > ;
 // Metadata
 createdAt: Date;
 lastCalculated: Date;
@@ -142,15 +170,25 @@ averageSessionDuration: number;
 bounceRate: number;
 pageViewsPerSession: number;
 // Conversion metrics
-conversionEvents: Record;
+conversionEvents: Record < string, {
+    eventCount: number,
+    uniqueUsers: number,
+    conversionRate: number
+} > ;
 // Revenue metrics
 totalRevenue: number;
 averageRevenuePerUser: number;
 customerLifetimeValue: number;
 // Geographic distribution
-geographicBreakdown: Record;
+geographicBreakdown: Record < string, {
+    userCount: number,
+    percentage: number
+} > ;
 // Device and platform distribution
-platformBreakdown: Record;
+platformBreakdown: Record < string, {
+    userCount: number,
+    percentage: number
+} > ;
 // Temporal patterns
 activityHeatmap: Record; // hour -> activity level
 weeklyPattern: Record; // day -> activity level
@@ -160,7 +198,8 @@ benchmarkComparison: {
     segmentValue: number;
     benchmarkValue: number;
     percentageDifference: number;
-    significance: 'higher' | 'lower' | 'similar';
+    significance: 'higher' | 'lower' | 'similar',
+    ;
 }
 [];
 ;
@@ -455,8 +494,9 @@ export class SegmentUtils {
                         matchingConditions,
                         score
                     };
-                    evaluateCondition(userAttributes, UserAttributes);
-                    condition: SegmentCondition,
+                    evaluateCondition(userAttributes, UserAttributes),
+                        condition;
+                    SegmentCondition,
                         behaviorHistory ?  : BehaviorEvent;
                     boolean;
                     {
@@ -494,8 +534,9 @@ export class SegmentUtils {
                                 return fieldValue === null || fieldValue === undefined;
                             default:
                                 return false;
-                                getFieldValue(userAttributes, UserAttributes);
-                                field: string,
+                                getFieldValue(userAttributes, UserAttributes),
+                                    field;
+                                string,
                                     behaviorHistory ?  : BehaviorEvent;
                                 any;
                                 {
@@ -509,8 +550,9 @@ export class SegmentUtils {
                                         else {
                                             return undefined;
                                             return value;
-                                            evaluateComplexLogic(expression, string);
-                                            conditions: SegmentCondition,
+                                            evaluateComplexLogic(expression, string),
+                                                conditions;
+                                            SegmentCondition,
                                                 matchingConditionIds;
                                             string;
                                             boolean;

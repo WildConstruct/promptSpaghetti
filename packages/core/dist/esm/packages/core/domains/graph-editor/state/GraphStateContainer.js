@@ -163,8 +163,7 @@ export class GraphStateContainer extends BaseStateContainer {
                     },
                     message: 'Node must have id and type',
                     value: node,
-                    code: 'INVALID_NODE'
-                },
+                    code: 'INVALID_NODE' },
                 if(, node) { }, : .position || typeof node.position.x !== 'number' || typeof node.position.y !== 'number'
             };
             {

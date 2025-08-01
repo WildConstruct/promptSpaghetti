@@ -6,17 +6,16 @@
  * Marketplace & Community features.
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  KnowledgeBaseArticle,
+import { KnowledgeBaseArticle,
   KnowledgeCategory,
-  ArticleType,
+  ArticleType }
   Epic16KnowledgeBaseService
-} from '../../services/Epic16KnowledgeBaseService';
+ from '../../services/Epic16KnowledgeBaseService';
 import { KnowledgeBaseSearch } from './KnowledgeBaseSearch';
 import { KnowledgeBaseArticleViewer } from './KnowledgeBaseArticleViewer';
-}
-interface Epic16KnowledgeBaseProps {
-  userId: string;
+
+
+interface Epic16KnowledgeBaseProps { userId: string;
   userRole: 'user' | 'creator' | 'admin';
   initialView?: 'search' | 'browse' | 'article';
   initialArticleId?: string;
@@ -30,107 +29,97 @@ interface Epic16KnowledgeBaseProps {
   error: string | null;
   searchQuery: string;
   selectedCategory: KnowledgeCategory | null;
-  export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({,)
-  userId,
-  userRole,
-  initialView = 'search',
-  initialArticleId,
+  export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({);
+  userId;
+  userRole;
+  initialView = 'search';
+  initialArticleId }
   onAnalytics
-}
-}) => {
-  // Service initialization
+
+
+}) => { // Service initialization
   const knowledgeService = useMemo(() => new Epic16KnowledgeBaseService(), []);
   // State management
   const [kbState, setKbState] = useState<KnowledgeBaseState>({)
-  currentView: initialView,
-  selectedArticle: null,
-  popularArticles: [],
-  recentArticles: [],
-  loading: true,
-  error: null,
-  searchQuery: '',
-  selectedCategory: null,
+  currentView: initialView
+  selectedArticle: null
+  popularArticles: []
+  recentArticles: []
+  loading: true
+  error: null
+  searchQuery: ''
+  selectedCategory: null }
 });
   // Initialize knowledge base data
   useEffect(() => {
     const initializeKnowledgeBase = async () => {
       setKbState(prev => ({ ...prev, loading: true, error: null }));
-      try {
-  // Create sample articles for demonstration
+      try { // Create sample articles for demonstration
   await createSampleArticles(knowledgeService);
   // Load popular and recent articles
   const [popularArticles, recentArticles] = await Promise.all([)
-  knowledgeService.getPopularArticles(undefined, 6),
+  knowledgeService.getPopularArticles(undefined, 6)
   knowledgeService.getRecentArticles(6)
   ]);
   setKbState(prev => ({)
-  ...prev,
-  popularArticles,
-  recentArticles,
-  loading: false,
+  ...prev
+  popularArticles
+  recentArticles
+  loading: false }
 }));
         // Load initial article if specified
-        if (initialArticleId) {
-  const article = await knowledgeService.getArticle(initialArticleId, userId);
+        if (initialArticleId) { const article = await knowledgeService.getArticle(initialArticleId, userId);
   if (article) {
   setKbState(prev => ({)
-  ...prev,
-  selectedArticle: article,
-  currentView: 'article',
+  ...prev
+  selectedArticle: article
+  currentView: 'article' }
 }));
         // Set up analytics tracking
-        knowledgeService.on('searchPerformed', (data) => {
-  onAnalytics?.({)
-  type: 'knowledge_base_search',
-  query: data.query,
-  results: data.results,
-  userId: data.userId,
+        knowledgeService.on('searchPerformed', (data) => { onAnalytics?.({)
+  type: 'knowledge_base_search'
+  query: data.query
+  results: data.results
+  userId: data.userId }
 });
         });
-        knowledgeService.on('articleViewed', (data) => {
-  onAnalytics?.({)
-  type: 'knowledge_base_article_view',
-  articleId: data.articleId,
-  userId: data.userId,
-  analytics: data.analytics,
+        knowledgeService.on('articleViewed', (data) => { onAnalytics?.({)
+  type: 'knowledge_base_article_view'
+  articleId: data.articleId
+  userId: data.userId
+  analytics: data.analytics }
 });
         });
-      } catch (error) {
-  setKbState(prev => ({)
-  ...prev,
-  error: error instanceof Error ? error.message : 'Failed to initialize knowledge base',
-  loading: false,
+ catch (error) { setKbState(prev => ({)
+  ...prev
+  error: error instanceof Error ? error.message : 'Failed to initialize knowledge base'
+  loading: false }
 }));
     };
     initializeKnowledgeBase();
     // Cleanup
-    return () => {
-      knowledgeService.removeAllListeners();
-    };
+    return () => { knowledgeService.removeAllListeners() };
   }, [knowledgeService, userId, initialArticleId, onAnalytics]);
   // Handle article selection
   const handleArticleSelect = useCallback(async (articleId: string) => {
     try {
       setKbState(prev => ({ ...prev, loading: true }));
       const article = await knowledgeService.getArticle(articleId, userId);
-      if (article) {
-  setKbState(prev => ({)
-  ...prev,
-  selectedArticle: article,
-  currentView: 'article',
-  loading: false,
+      if (article) { setKbState(prev => ({)
+  ...prev
+  selectedArticle: article
+  currentView: 'article'
+  loading: false }
 }));
-      } else {
-  setKbState(prev => ({)
-  ...prev,
-  error: 'Article not found',
-  loading: false,
+ else { setKbState(prev => ({)
+  ...prev
+  error: 'Article not found'
+  loading: false }
 }));
-    } catch (error) {
-  setKbState(prev => ({)
-  ...prev,
-  error: error instanceof Error ? error.message : 'Failed to load article',
-  loading: false,
+ catch (error) { setKbState(prev => ({)
+  ...prev
+  error: error instanceof Error ? error.message : 'Failed to load article'
+  loading: false }
 }));
   }, [knowledgeService, userId]);
   // Handle search performed
@@ -142,36 +131,32 @@ interface Epic16KnowledgeBaseProps {
     setKbState(prev => ({ ...prev, selectedCategory: category, currentView: 'browse' }));
   }, []);
   // Handle back to search
-  const handleBackToSearch = useCallback(() => {
-  setKbState(prev => ({)
-  ...prev,
-  currentView: 'search',
-  selectedArticle: null,
-  selectedCategory: null,
+  const handleBackToSearch = useCallback(() => { setKbState(prev => ({)
+  ...prev
+  currentView: 'search'
+  selectedArticle: null
+  selectedCategory: null }
 }));
   }, []);
   // Format category name
-  const formatCategoryName = useCallback((category: string) => {
-    return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-  }, []);
+  const formatCategoryName = useCallback((category: string) => { return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) }, []);
   // Get category icon
-  const getCategoryIcon = useCallback((category: KnowledgeCategory) => {
-  const icons: Record<KnowledgeCategory, string> = {,
-  [KnowledgeCategory.GETTING_STARTED]: '🚀',
-  [KnowledgeCategory.MARKETPLACE_GUIDE]: '🏪',
-  [KnowledgeCategory.TEMPLATE_CREATION]: '🎨',
-  [KnowledgeCategory.SELLING_BUYING]: '💰',
-  [KnowledgeCategory.COMMUNITY_HELP]: '👥',
-  [KnowledgeCategory.TECHNICAL_DOCS]: '⚙️',
-  [KnowledgeCategory.API_REFERENCE]: '📝',
-  [KnowledgeCategory.TROUBLESHOOTING]: '🔧',
-  [KnowledgeCategory.BEST_PRACTICES]: '✨',
-  [KnowledgeCategory.POLICIES_LEGAL]: '📋',
-  [KnowledgeCategory.BILLING_PAYMENTS]: '💳',
-  [KnowledgeCategory.ACCOUNT_SECURITY]: '🔒',
-  [KnowledgeCategory.INTEGRATIONS]: '🔗',
-  [KnowledgeCategory.MOBILE_APP]: '📱',
-  [KnowledgeCategory.ADVANCED_FEATURES]: '🎯',
+  const getCategoryIcon = useCallback((category: KnowledgeCategory) => { const icons: Record<KnowledgeCategory, string> = {
+  [KnowledgeCategory.GETTING_STARTED]: '🚀'
+  [KnowledgeCategory.MARKETPLACE_GUIDE]: '🏪'
+  [KnowledgeCategory.TEMPLATE_CREATION]: '🎨'
+  [KnowledgeCategory.SELLING_BUYING]: '💰'
+  [KnowledgeCategory.COMMUNITY_HELP]: '👥'
+  [KnowledgeCategory.TECHNICAL_DOCS]: '⚙️'
+  [KnowledgeCategory.API_REFERENCE]: '📝'
+  [KnowledgeCategory.TROUBLESHOOTING]: '🔧'
+  [KnowledgeCategory.BEST_PRACTICES]: '✨'
+  [KnowledgeCategory.POLICIES_LEGAL]: '📋'
+  [KnowledgeCategory.BILLING_PAYMENTS]: '💳'
+  [KnowledgeCategory.ACCOUNT_SECURITY]: '🔒'
+  [KnowledgeCategory.INTEGRATIONS]: '🔗'
+  [KnowledgeCategory.MOBILE_APP]: '📱'
+  [KnowledgeCategory.ADVANCED_FEATURES]: '🎯' }
 };
     return icons[category] || '📄';
   }, []);
@@ -278,14 +263,14 @@ interface Epic16KnowledgeBaseProps {
                         {[...Array(5)].map((_, i) => ()
                           <svg
                             key={i}
-                            className={`w-4 h-4 ${
+                            className={ `w-4 h-4 ${
   i < Math.round()
   article.ratings.reduce((sum)
   r
   ) => sum + r.rating, 0) / article.ratings.length || 0)
   ? 'text-yellow-400'
-  : 'text-gray-300',
-}`}
+  : 'text-gray-300' }
+`}
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -332,14 +317,14 @@ interface Epic16KnowledgeBaseProps {
                           {[...Array(5)].map((_, i) => ()
                             <svg
                               key={i}
-                              className={`w-4 h-4 ${
+                              className={ `w-4 h-4 ${
   i < Math.round()
   article.ratings.reduce((sum)
   r
   ) => sum + r.rating, 0) / article.ratings.length || 0)
   ? 'text-yellow-400'
-  : 'text-gray-300',
-}`}
+  : 'text-gray-300' }
+`}
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -415,14 +400,14 @@ interface Epic16KnowledgeBaseProps {
                     {[...Array(5)].map((_, i) => ()
                       <svg
                         key={i}
-                        className={`w-4 h-4 ${
+                        className={ `w-4 h-4 ${
   i < Math.round()
   article.ratings.reduce((sum)
   r
   ) => sum + r.rating, 0) / article.ratings.length || 0)
   ? 'text-yellow-400'
-  : 'text-gray-300',
-}`}
+  : 'text-gray-300' }
+`}
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -441,8 +426,7 @@ interface Epic16KnowledgeBaseProps {
 };
 
 // Helper function to create sample articles
-async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService) {
-  const sampleArticles = [;
+async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService) { const sampleArticles = [
     {
       title: 'Getting Started with the Marketplace',
       slug: 'getting-started-marketplace',
@@ -453,7 +437,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       type: ArticleType.GUIDE,
       tags: ['marketplace', 'getting-started', 'beginner'],
       keywords: ['marketplace', 'templates', 'buying', 'selling'],
-      sections: [,
+      sections: [
         {
           id: 'section-1',
           title: 'Creating Your Account',
@@ -461,17 +445,16 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
           order: 1,
           type: 'text',
           anchor: 'creating-account',
-          isCollapsible: false,
+          isCollapsible: false }
           metadata: {}
-  }
-        {
-          id: 'section-2',
+
+        { id: 'section-2',
           title: 'Browsing Templates',
           content: 'Use our advanced search and filtering tools to find the perfect templates for your needs.',
           order: 2,
           type: 'text',
           anchor: 'browsing-templates',
-          isCollapsible: false,
+          isCollapsible: false }
           metadata: {}
       ],
       attachments: [],
@@ -484,7 +467,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       lastUpdated: new Date(),
       status: 'published',
       views: 1250,
-      ratings: [,
+      ratings: [
         { userId: 'user-1', rating: 5, helpful: true, timestamp: new Date() },
         { userId: 'user-2', rating: 4, helpful: true, timestamp: new Date() }
       ],
@@ -502,9 +485,8 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       codeExamples: [],
       videos: [],
       images: [];
-  }
-    {
-      title: 'How to Create and Sell Templates',
+
+    { title: 'How to Create and Sell Templates',
       slug: 'create-sell-templates',
       content: 'This guide covers the complete process of creating high-quality templates and successfully selling them on our marketplace.',
       excerpt: 'Learn how to create professional templates and maximize your sales.',
@@ -513,7 +495,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       type: ArticleType.TUTORIAL,
       tags: ['templates', 'creation', 'selling', 'design'],
       keywords: ['template', 'design', 'creation', 'selling', 'marketplace'],
-      sections: [,
+      sections: [
         {
           id: 'section-1',
           title: 'Design Principles',
@@ -521,17 +503,16 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
           order: 1,
           type: 'text',
           anchor: 'design-principles',
-          isCollapsible: false,
+          isCollapsible: false }
           metadata: {}
-  }
-        {
-          id: 'section-2',
+
+        { id: 'section-2',
           title: 'File Requirements',
           content: 'Ensure your templates meet our technical requirements for quality and compatibility.',
           order: 2,
           type: 'text',
           anchor: 'file-requirements',
-          isCollapsible: false,
+          isCollapsible: false }
           metadata: {}
       ],
       attachments: [],
@@ -544,7 +525,7 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       lastUpdated: new Date(),
       status: 'published',
       views: 890,
-      ratings: [,
+      ratings: [
         { userId: 'user-3', rating: 5, helpful: true, timestamp: new Date() },
         { userId: 'user-4', rating: 4, helpful: true, timestamp: new Date() },
         { userId: 'user-5', rating: 5, helpful: true, timestamp: new Date() }
@@ -560,12 +541,11 @@ async function createSampleArticles(knowledgeService: Epic16KnowledgeBaseService
       language: 'en',
       translations: {},
       interactiveElements: [],
-      codeExamples: [,
-        {
-          id: 'code-1',
+      codeExamples: [
+        { id: 'code-1',
           language: 'javascript',
           title: 'Template Validation',
-          description: 'Basic validation for template files',
+          description: 'Basic validation for template files' }
           code: 'function validateTemplate(template) {\n  return template.name && template.files.length > 0;\n}',
           runnable: false],
       videos: [],

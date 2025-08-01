@@ -9,6 +9,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useRef, useCallback, useEffect } from 'react';
 ;
+;
 export const CommentSubmissionForm = ({
     resourceId,
     resourceType,
@@ -765,12 +766,12 @@ function extractMentions(content) {
         const matches = content.match(hashtagRegex);
         return matches ? matches.map(match => match.substring(1)) : [];
         function detectSuspiciousContent(content) {
-            const patterns = [];
-            /spam/i,
+            const patterns = [
+                /spam/i,
                 /buy now/i,
                 /click here/i,
-                /urgent/i;
-            ;
+                /urgent/i
+            ];
             return patterns.filter(pattern => pattern.test(content)).map(p => p.toString());
             function getAttachmentType(mimeType) {
                 if (mimeType.startsWith('image/'))

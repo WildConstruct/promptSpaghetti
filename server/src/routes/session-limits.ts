@@ -12,34 +12,37 @@ import { SessionService } from '../auth/services/SessionService';
 import { AuditService } from '../auth/services/AuditService';
 
 // Request/Response schemas
-}
-}
+
+
+
 interface GetConfigRequest {
   Params: {
     scope: 'global' | 'organization' | 'user';
     targetId?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface UpdateConfigRequest {
   Params: {
     scope: 'global' | 'organization' | 'user';
     targetId?: string;
-}
-}
+
+
+
   };
   Body: {
     config: Partial<SessionLimitConfig>;
     reason?: string;
   };
-}
 
-}
-}
+
+
+
 interface GetMetricsRequest {
   Querystring: {
     timeRange?: string;
@@ -47,13 +50,14 @@ interface GetMetricsRequest {
     endDate?: string;
     userId?: string;
     organizationId?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetViolationsRequest {
   Querystring: {
     userId?: string;
@@ -61,53 +65,57 @@ interface GetViolationsRequest {
     severity?: string;
     limit?: number;
     resolved?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ResolveViolationRequest {
   Params: {
     violationId: string;
-}
-}
+
+
+
   };
   Body: {
     resolution: string;
   };
-}
 
-}
-}
+
+
+
 interface TerminateSessionRequest {
   Params: {
     sessionId: string;
-}
-}
+
+
+
   };
   Body: {
     reason: string;
     graceful?: boolean;
     gracePeriodMinutes?: number;
   };
-}
 
-}
-}
+
+
+
 interface OverrideUserLimitsRequest {
   Params: {
     userId: string;
-}
-}
+
+
+
   };
   Body: {
     overrides: Partial<SessionLimitConfig>;
     expiresAt?: string;
     reason: string;
   };
-}
+
 
 export async function sessionLimitsRoutes(fastify: FastifyInstance) {
   // Initialize services (these would be injected from the main app)
@@ -130,7 +138,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         error: 'Insufficient permissions',
         code: 'FORBIDDEN'
       });
-    }
+
   });
   
   /**
@@ -143,9 +151,9 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
       let config;
       if (scope === 'user' && targetId) {
         config = await configManager.getEffectiveConfiguration(targetId);
-      } else {
+ else {
         config = await configManager.loadConfiguration(scope, targetId);
-      }
+
       
       // Get configuration history
       const history = await configManager.getConfigurationHistory(scope, targetId || null, 10);
@@ -156,14 +164,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         scope,
         targetId
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting session limit configuration:', error);
       reply.status(500).send({
         error: 'Failed to get configuration',
         code: 'CONFIG_ERROR'
       });
-    }
+
   });
   
   /**
@@ -191,14 +198,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         message: 'Configuration updated successfully',
         config: validatedConfig
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error updating session limit configuration:', error);
       reply.status(400).send({
         error: error instanceof Error ? error.message : 'Failed to update configuration',
         code: 'CONFIG_UPDATE_ERROR'
       });
-    }
+
   });
   
   /**
@@ -214,14 +220,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         templates,
         categories: ['security', 'performance', 'compliance', 'custom']
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting configuration templates:', error);
       reply.status(500).send({
         error: 'Failed to get templates',
         code: 'TEMPLATES_ERROR'
       });
-    }
+
   });
   
   /**
@@ -239,14 +244,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         templateId,
         message: 'Template created successfully'
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error creating configuration template:', error);
       reply.status(400).send({
         error: error instanceof Error ? error.message : 'Failed to create template',
         code: 'TEMPLATE_CREATE_ERROR'
       });
-    }
+
   });
   
   /**
@@ -264,14 +268,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Template applied successfully'
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error applying configuration template:', error);
       reply.status(400).send({
         error: error instanceof Error ? error.message : 'Failed to apply template',
         code: 'TEMPLATE_APPLY_ERROR'
       });
-    }
+
   });
   
   /**
@@ -287,13 +290,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           start: new Date(query.startDate),
           end: new Date(query.endDate)
         };
-      } else if (query.timeRange) {
+ else if (query.timeRange) {
         const hours = parseInt(query.timeRange);
         timeRange = {
           start: new Date(Date.now() - hours * 60 * 60 * 1000),
           end: new Date()
         };
-      }
+
       
       const metrics = await sessionLimitManager.getMetrics(timeRange);
       
@@ -305,7 +308,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           userActiveSessions: userSessions.length,
           userSessionDetails: userSessions
         };
-      }
+
       
       reply.send({
         metrics,
@@ -313,17 +316,16 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         filters: {
           userId: query.userId,
           organizationId: query.organizationId
-  }
+
         ...additionalMetrics
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting session limit metrics:', error);
       reply.status(500).send({
         error: 'Failed to get metrics',
         code: 'METRICS_ERROR'
       });
-    }
+
   });
   
   /**
@@ -357,14 +359,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         statistics: violationStats,
         filters
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting violations:', error);
       reply.status(500).send({
         error: 'Failed to get violations',
         code: 'VIOLATIONS_ERROR'
       });
-    }
+
   });
   
   /**
@@ -382,14 +383,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Violation resolved successfully'
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error resolving violation:', error);
       reply.status(500).send({
         error: 'Failed to resolve violation',
         code: 'VIOLATION_RESOLVE_ERROR'
       });
-    }
+
   });
   
   /**
@@ -403,11 +403,11 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
       let sessions;
       if (userId) {
         sessions = await sessionService.getUserActiveSessions(userId);
-      } else {
+ else {
         // This would need to be implemented in SessionService
         // For now, return empty array
         sessions = [];
-      }
+
       
       // Add limit compliance information to each session
       const sessionsWithLimits = await Promise.all(
@@ -424,17 +424,17 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
                 compliant: limitCheck.allowed,
                 reason: limitCheck.reason,
                 action: limitCheck.action
-              }
+
             };
-          } catch (error) {
+ catch (error) {
             return {
               ...session,
               limitCompliance: {
                 compliant: true,
                 reason: 'Unable to check limits'
-              }
+
             };
-          }
+
   }
       );
       
@@ -443,14 +443,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         filters: { userId, organizationId },
         total: sessionsWithLimits.length
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting sessions:', error);
       reply.status(500).send({
         error: 'Failed to get sessions',
         code: 'SESSIONS_ERROR'
       });
-    }
+
   });
   
   /**
@@ -470,7 +469,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           code: 'SESSION_NOT_FOUND'
         });
         return;
-      }
+
       
       if (graceful) {
         await middleware.terminateSessionGracefully(
@@ -485,7 +484,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           message: `Session will be terminated in ${gracePeriodMinutes} minutes`,
           gracePeriodMinutes
         });
-      } else {
+ else {
         await sessionService.revokeSession(sessionId, reason);
         
         // Log admin action
@@ -496,7 +495,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
             terminatedSessionId: sessionId,
             terminatedUserId: session.userId,
             reason
-  }
+
           severity: 'info'
         });
         
@@ -504,15 +503,14 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           success: true,
           message: 'Session terminated immediately'
         });
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       console.error('Error terminating session:', error);
       reply.status(500).send({
         error: 'Failed to terminate session',
         code: 'SESSION_TERMINATE_ERROR'
       });
-    }
+
   });
   
   /**
@@ -527,23 +525,23 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         reason, 
         graceful = true, 
         gracePeriodMinutes = 5 
-      } = request.body as any;
+ = request.body as any;
       const adminUserId = (request as any).auth.userId;
       
       let targetSessionIds: string[] = [];
       
       if (sessionIds) {
         targetSessionIds = sessionIds;
-      } else if (userId) {
+ else if (userId) {
         const userSessions = await sessionService.getUserActiveSessions(userId);
         targetSessionIds = userSessions.map(s => s.id);
-      } else {
+ else {
         reply.status(400).send({
           error: 'Must specify sessionIds or userId',
           code: 'INVALID_REQUEST'
         });
         return;
-      }
+
       
       const results = [];
       for (const sessionId of targetSessionIds) {
@@ -557,30 +555,30 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
                 reason,
                 gracePeriodMinutes
               );
-            } else {
+ else {
               await sessionService.revokeSession(sessionId, reason);
-            }
+
             
             results.push({
               sessionId,
               status: 'success',
               message: graceful ? 'Termination scheduled' : 'Terminated immediately'
             });
-          } else {
+ else {
             results.push({
               sessionId,
               status: 'error',
               message: 'Session not found'
             });
-          }
-        } catch (error) {
+
+ catch (error) {
           results.push({
             sessionId,
             status: 'error',
             message: error instanceof Error ? error.message : 'Unknown error'
           });
-        }
-      }
+
+
       
       // Log bulk termination
       await auditService.logEvent({
@@ -592,7 +590,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           graceful,
           gracePeriodMinutes,
           results
-  }
+
         severity: 'info'
       });
       
@@ -603,14 +601,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         successful: results.filter(r => r.status === 'success').length,
         failed: results.filter(r => r.status === 'error').length
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error in bulk session termination:', error);
       reply.status(500).send({
         error: 'Failed to terminate sessions',
         code: 'BULK_TERMINATE_ERROR'
       });
-    }
+
   });
   
   /**
@@ -644,14 +641,13 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         message: 'User limit override applied successfully',
         override
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error applying user limit override:', error);
       reply.status(500).send({
         error: 'Failed to apply limit override',
         code: 'OVERRIDE_ERROR'
       });
-    }
+
   });
   
   /**
@@ -678,7 +674,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           pendingViolations: violations.length,
           averageCheckTime: metrics.performance.averageCheckTime,
           cacheHitRate: metrics.performance.cacheHitRate
-  }
+
         sessionBreakdown: metrics.activeSessionsByType,
         recentViolations: violations.slice(0, 5),
         violationTrends: metrics.violations.byType,
@@ -686,18 +682,17 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           status: metrics.performance.errorRate < 0.01 ? 'healthy' : 'degraded',
           errorRate: metrics.performance.errorRate,
           lastUpdated: metrics.timestamp
-        }
+
       };
       
       reply.send(dashboardData);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting dashboard data:', error);
       reply.status(500).send({
         error: 'Failed to get dashboard data',
         code: 'DASHBOARD_ERROR'
       });
-    }
+
   });
   
   /**
@@ -713,16 +708,14 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           configManager: 'healthy',
           database: 'healthy',
           redis: 'healthy'
-        }
+
       };
       
       reply.send(health);
-      
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
-}

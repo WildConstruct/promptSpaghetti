@@ -8,23 +8,26 @@
  */
 import { useState, useEffect, useCallback } from 'react';
 import { useConsent } from './useConsent';
-}
+
+
 interface ToggleResult {
   enabled: boolean;,
-  value: unknown;
+  value: unknown;,
   reason: string;
   variantKey?: string;
   ruleMatched?: string;
-  metadata?: {
+  metadata?: {,
   consentChecked?: boolean;
   consentRequired?: boolean;
   consentGranted?: boolean;
   requiredConsents?: string;
   fallbackBehavior?: string;
   [key: string]: unknown;
-}
+
+
 };
-}
+
+
 interface UseConsentAwareToggleOptions {
   userId?: string;
   orgId?: string;
@@ -34,31 +37,34 @@ interface UseConsentAwareToggleOptions {
   context?: Record<string, unknown>;
   interface UseConsentAwareToggleReturn {
   result: ToggleResult | null;,
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;
-  consentInfo?: {
+  consentInfo?: {,
   isConsentRequired: boolean;,
-  requiredConsents: string;
+  requiredConsents: string;,
   consentChecked: boolean;,
   consentGranted: boolean;
-}
+
+
 };
   refresh: () => Promise<void>;,
   isFeatureAvailable: () => boolean;
-}
+
+
 interface BatchToggleResult {
   [key: string]: ToggleResult;
   interface UseBatchConsentAwareToggleReturn {
   results: BatchToggleResult;,
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;
   consentInfo?: Record<string, {,
   isConsentRequired: boolean;,
-  requiredConsents: string;
+  requiredConsents: string;,
   consentChecked: boolean;,
   consentGranted: boolean;
-}
-}>;
+
+
+>;
   refresh: () => Promise<void>;,
   getToggle: (key: string) => ToggleResult | null;
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -81,7 +87,7 @@ export function useConsentAwareToggle(((
     autoRefreshOnConsentChange = true,
     fallbackEnabled = false,
     context = {}
-  } = options;
+ = options;
   const evaluateToggle = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -107,7 +113,7 @@ export function useConsentAwareToggle(((
       setResult(data.result);
       if (data.consentInfo) {
         setConsentInfo(data.consentInfo);
-    } catch (err) {
+ catch (err) {
       console.error(`Failed to evaluate toggle ${toggleKey}:`, err);}
       setError(err instanceof Error ? err.message : 'Unknown error');
       // Fallback behavior
@@ -117,7 +123,7 @@ export function useConsentAwareToggle(((
   value: fallbackEnabled,
   reason: 'Fallback due to evaluation error',
 });
-    } finally {
+ finally {
       setIsLoading(false);
   }, [toggleKey, userId, orgId, preferences?.sessionId, includeConsentData, fallbackEnabled]);
   // Initial evaluation
@@ -160,7 +166,7 @@ export function useBatchConsentAwareToggle(((
     autoRefreshOnConsentChange = true,
     fallbackEnabled = false,
     context = {}
-  } = options;
+ = options;
   const evaluateToggles = useCallback(async () => {
   if (toggleKeys.length === 0) return;
   setIsLoading(true);
@@ -168,12 +174,12 @@ export function useBatchConsentAwareToggle(((
   try {
   const requestBody = {
   keys: toggleKeys,
-  context: {
+  context: {,
   userId,
   orgId,
   sessionId: preferences?.sessionId,
   ...context
-}
+
         includeConsentData
       };
       const response = await fetch(`${API_BASE_URL}/consent-toggles/batch`, {)}
@@ -193,7 +199,7 @@ export function useBatchConsentAwareToggle(((
       setResults(data.results);
       if (data.consentInfo) {
         setConsentInfo(data.consentInfo);
-    } catch (err) {
+ catch (err) {
       console.error('Failed to evaluate batch toggles:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
       // Fallback behavior
@@ -206,7 +212,7 @@ export function useBatchConsentAwareToggle(((
   reason: 'Fallback due to evaluation error',
 };
         setResults(fallbackResults);
-    } finally {
+ finally {
       setIsLoading(false);
   }, [toggleKeys, userId, orgId, preferences?.sessionId, includeConsentData, fallbackEnabled, context]);
   // Initial evaluation
@@ -232,22 +238,23 @@ export function useBatchConsentAwareToggle(((
 /**
  * Helper component for conditional rendering based on consent-aware toggles
  */
-}
+
+
 interface ConsentAwareFeatureProps {
   toggleKey: string;
   options?: UseConsentAwareToggleOptions;
   children: React.ReactNode;
   fallback?: React.ReactNode;
   onConsentRequired?: (requiredConsents: string) => void;
-
-export function ConsentAwareFeature({)
+  export function ConsentAwareFeature({)
   toggleKey,
-}
+
+
   options = {},
   children,
   fallback = null,
   onConsentRequired
-}: ConsentAwareFeatureProps): React.ReactElement | null {
+: ConsentAwareFeatureProps): React.ReactElement | null {
   const { result, isLoading, consentInfo } = useConsentAwareToggle(toggleKey, options);
   // Notify parent about consent requirements
   useEffect(() => {

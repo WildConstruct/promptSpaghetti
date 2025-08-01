@@ -16,9 +16,10 @@ import {
   RiskLevel,
   PolicyConflict,
   BulkAssignmentStrategy
-} from '../../types/PolicyAssignmentTypes';
+ from '../../types/PolicyAssignmentTypes';
 import './BulkAssignmentWizard.css';
-}
+
+
 interface BulkAssignmentWizardProps {
   onSubmit: (data: Partial<BulkPolicyAssignment>) => Promise<void>;,
   onCancel: () => void;
@@ -32,7 +33,8 @@ interface BulkAssignmentWizardProps {
   description: string,
   assignments: Partial<PolicyAssignment>[];,
   strategy: BulkAssignmentStrategy;
-  }
+
+
 
 const INITIAL_STRATEGY: BulkAssignmentStrategy = {,
   conflictResolution: ConflictResolutionStrategy.MOST_RESTRICTIVE,
@@ -40,15 +42,15 @@ const INITIAL_STRATEGY: BulkAssignmentStrategy = {,
   approvalRequired: false,
   dryRun: false,
   executionMode: 'IMMEDIATE',
-  rollbackOnError: true
-}
+  rollbackOnError: true;
+
 };
 const INITIAL_FORM_DATA: BulkFormData = {,
   title: '',
   description: '',
   assignments: [],
-  strategy: INITIAL_STRATEGY
-};
+  strategy: INITIAL_STRATEGY;
+  };
 
 export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
   onSubmit,
@@ -66,25 +68,25 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
   title: 'Basic Information',
   description: 'Define the bulk assignment details',
   isValid: formData.title.trim().length > 0
-}
+
     {
   id: 'assignments',
   title: 'Policy Assignments',
   description: 'Add individual policy assignments',
   isValid: formData.assignments.length > 0
-}
+
     {
   id: 'strategy',
   title: 'Execution Strategy',
   description: 'Configure how assignments are processed',
   isValid: true
-}
+
     {
   id: 'conflicts',
   title: 'Conflict Analysis',
   description: 'Review and resolve potential conflicts',
   isValid: true
-}
+
     {
   id: 'review',
   title: 'Review & Submit',
@@ -105,9 +107,9 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
       const data = await response.json();
       if (data.success) {
         setConflicts(data.data.conflicts || []);
-    } catch (error) {
+ catch (error) {
   console.error('Error analyzing conflicts:', error);
-} finally {
+ finally {
       setIsAnalyzing(false);
   }, [formData.assignments]);
   const handleNext = () => {
@@ -122,7 +124,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
     setIsSubmitting(true);
     try {
       await onSubmit(formData);
-    } finally {
+ finally {
       setIsSubmitting(false);
   };
   const addAssignment = () => {
@@ -204,7 +206,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
         assignments
       }));
       setCsvData('');
-    } catch (error) {
+ catch (error) {
   console.error('Error parsing CSV:', error);
 };
   const renderBasicStep = () => (;);

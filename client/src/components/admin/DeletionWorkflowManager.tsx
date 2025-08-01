@@ -32,13 +32,15 @@ import {
   BarChart3,
   RefreshCw,
   Plus
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface DeletionWorkflow {
   id: string;,
   name: string,
   description: string;,
-  status: 'draft' | 'scheduled' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled',
+  status: 'draft' | 'scheduled' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled'
+},
   priority: 'low' | 'normal' | 'high' | 'critical';}
 
 
@@ -84,7 +86,8 @@ interface DeletionWorkflow {
   createdBy: string;,
   lastModifiedBy: string,
   tags: string;
-}
+
+
 interface WorkflowError {
   id: string;,
   timestamp: string,
@@ -94,7 +97,9 @@ interface WorkflowError {
   stackTrace?: string;
   resolution?: string,
   resolved: boolean;
-}
+
+
+
 interface WorkflowTemplate {
   id: string;,
   name: string,
@@ -102,7 +107,9 @@ interface WorkflowTemplate {
   category: 'user_data' | 'system_cleanup' | 'log_rotation' | 'compliance' | 'backup_cleanup',
   recommended: boolean;,
   config: Partial<DeletionWorkflow>;
-}
+
+
+
 interface WorkflowMetrics {
   totalWorkflows: number;,
   activeWorkflows: number,
@@ -112,43 +119,16 @@ interface WorkflowMetrics {
   totalDataDeleted: number,
   averageExecutionTime: number;,
   successRate: number;
-}
 
-const DeletionWorkflowManager: React.FC = () => {
-  const [workflows, setWorkflows] = useState<DeletionWorkflow[]>([]);
-  const [ setTemplates] = useState<WorkflowTemplate[]>([]);
-  const [metrics, setMetrics] = useState<WorkflowMetrics | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  // View and filter states
-  const [view, setView] = useState<'active' | 'scheduled' | 'completed' | 'all'>('active');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [priorityFilter, setPriorityFilter] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'name' | 'created' | 'progress' | 'priority'>('created');
-  // Modal and selection states
-  const [ setShowCreateModal] = useState(false);
-  const [ setShowTemplateModal] = useState(false);
-  const [ setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
-  const [selectedWorkflows, setSelectedWorkflows] = useState<Set<string>>(new Set());
-  // Real-time updates
-  const [autoRefresh, setAutoRefresh] = useState(true);
-  const [refreshInterval] = useState(5000); // 5 seconds
-  // Load workflow data
-  const loadWorkflowData = useCallback(async () => {
-    try {
-      setError(null);
-      const [workflowsRes, templatesRes, metricsRes] = await Promise.all([)
-        fetch('/api/data-protection/workflows', {
-}
-  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        }),
+
+
+const DeletionWorkflowManager = () => { return null; }),
         fetch('/api/data-protection/workflow-templates', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/data-protection/workflow-metrics', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-  }
+
       ]);
       if (workflowsRes.ok) {
         const workflowsData = await workflowsRes.json();
@@ -159,9 +139,9 @@ const DeletionWorkflowManager: React.FC = () => {
       if (metricsRes.ok) {
         const metricsData = await metricsRes.json();
         setMetrics(metricsData);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load workflow data');
-} finally {
+ finally {
       setLoading(false);
   }, []);
   useEffect(() => {
@@ -232,7 +212,7 @@ const DeletionWorkflowManager: React.FC = () => {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       await loadWorkflowData();
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to start workflow');
 };
   const handlePauseWorkflow = async (workflowId: string) => {
@@ -243,7 +223,7 @@ const DeletionWorkflowManager: React.FC = () => {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       await loadWorkflowData();
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to pause workflow');
 };
   const handleStopWorkflow = async (workflowId: string) => {
@@ -256,7 +236,7 @@ const DeletionWorkflowManager: React.FC = () => {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       await loadWorkflowData();
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to stop workflow');
 };
   const handleDeleteWorkflow = async (workflowId: string) => {
@@ -269,7 +249,7 @@ const DeletionWorkflowManager: React.FC = () => {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       await loadWorkflowData();
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to delete workflow');
 };
   // Filter workflows based on current view and filters
@@ -288,7 +268,7 @@ const DeletionWorkflowManager: React.FC = () => {
       // Priority filter
       if (priorityFilter !== 'all' && workflow.priority !== priorityFilter) return false;
       return true;
-  }
+
     .sort((a, b) => {
       switch (sortBy) {
       case 'name':
@@ -333,12 +313,12 @@ const DeletionWorkflowManager: React.FC = () => {
                 onClick={() => setAutoRefresh(!autoRefresh)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
   autoRefresh ? 'bg-blue-600' : 'bg-gray-200'
-}`}
+`}
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
   autoRefresh ? 'translate-x-6' : 'translate-x-1'
-}`}
+`}
                 />
               </button>
             </div>
@@ -438,7 +418,7 @@ const DeletionWorkflowManager: React.FC = () => {
   view === key
   ? 'border-blue-500 text-blue-600 bg-blue-50'
   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-} whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
+ whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
               >
                 <span>{label}</span>
                 <span className="bg-gray-200 text-gray-700 rounded-full px-2 py-0.5 text-xs">
@@ -517,10 +497,10 @@ const DeletionWorkflowManager: React.FC = () => {
                         const newSelected = new Set(selectedWorkflows);
                         if (e.target.checked) {
                           newSelected.add(workflow.id);
-                        } else {
+ else {
                           newSelected.delete(workflow.id);
                         setSelectedWorkflows(newSelected);
-                      }}
+}
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     {getStatusIcon(workflow.status)}

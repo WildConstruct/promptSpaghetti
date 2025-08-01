@@ -53,6 +53,7 @@ export declare enum DataSensitivityLevel {
 }
 }
 }
+}
 export interface DashboardPolicy {
     id: string;
     name: string;
@@ -82,11 +83,14 @@ export interface DashboardPolicy {
 }
 }
 }
+}
+}
 export interface AccessSchedule {
     allowedDays: number[];
     allowedHours: {
         start: string;
         end: string;
+}
 }
 }
     };
@@ -95,10 +99,13 @@ export interface AccessSchedule {
 }
 }
 }
+}
 export interface ScheduleException {
     date: string;
     type: 'ALLOW' | 'DENY';
     reason: string;
+}
+}
 }
 }
 }
@@ -116,11 +123,15 @@ export interface ContentFilter {
 }
 }
 }
+}
+}
 export interface DataRetentionPolicy {
     retentionPeriod: number;
     archiveAfter: number;
     purgeAfter: number;
     complianceHolds: string[];
+}
+}
 }
 }
 }
@@ -132,6 +143,8 @@ export interface PolicyCondition {
     operator: 'EQUALS' | 'NOT_EQUALS' | 'IN' | 'NOT_IN' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN';
     value: Error;
     weight: number;
+}
+}
 }
 }
 }
@@ -150,6 +163,7 @@ export interface PolicyEvaluationContext {
         sessionId: string;
 }
 }
+}
     };
     requestedData: {
         type: string;
@@ -158,6 +172,7 @@ export interface PolicyEvaluationContext {
         operations: DataOperation[];
     };
     riskScore?: number;
+}
 }
 }
 }
@@ -175,10 +190,14 @@ export interface PolicyEvaluationResult {
 }
 }
 }
+}
+}
 export interface PolicyRestriction {
     type: 'TIME_LIMIT' | 'DATA_LIMIT' | 'OPERATION_LIMIT' | 'EXPORT_DISABLED' | 'APPROVAL_REQUIRED';
     description: string;
     parameters: Record<string, any>;
+}
+}
 }
 }
 }
@@ -198,7 +217,9 @@ export interface DashboardViewConfiguration {
         watermarkRequired: boolean;
 }
 }
+}
     };
+}
 }
 }
 }
@@ -210,6 +231,7 @@ export interface ComplianceReport {
     period: {
         start: Date;
         end: Date;
+}
 }
 }
     };
@@ -230,6 +252,7 @@ export interface ComplianceReport {
 }
 }
 }
+}
 export interface ComplianceFinding {
     id: string;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -239,6 +262,8 @@ export interface ComplianceFinding {
     evidence: ComplianceEvidence[];
     remediation: string;
     status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
+}
+}
 }
 }
 }
@@ -255,6 +280,8 @@ export interface ComplianceEvidence {
 }
 }
 }
+}
+}
 export interface ComplianceRecommendation {
     priority: 'LOW' | 'MEDIUM' | 'HIGH';
     category: 'POLICY' | 'CONFIGURATION' | 'TRAINING' | 'PROCESS';
@@ -262,6 +289,7 @@ export interface ComplianceRecommendation {
     implementation: string;
     impact: string;
     effort: 'LOW' | 'MEDIUM' | 'HIGH';
+}
 }
 }
 }

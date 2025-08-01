@@ -4,6 +4,7 @@ import { Node, Edge } from 'reactflow';
  */
 
 }
+}
 export interface Template {
     id: string;
     name: string;
@@ -20,6 +21,8 @@ export interface Template {
  */
 
 }
+}
+}
 export interface GraphData {
     nodes: Node[];
     edges: Edge[];
@@ -29,8 +32,9 @@ export interface GraphData {
  */
 
 }
-export interface GraphAnnotations {
-    stickyNotes: StickyNote[];
+}
+}
+export interface GraphAnnotations { stickyNotes: StickyNote[];
     nodeLabels: Record<string, string>;
     regionGroups: RegionGroup[];
     connectionLabels: Record<string, string>;
@@ -38,37 +42,35 @@ export interface GraphAnnotations {
         author: string;
         created: string;
         modified: string;
-        version: string;
+        version: string }
 }
     };
 
 }
-export interface StickyNote {
-    id: string;
+}
+export interface StickyNote { id: string;
     position: {
         x: number;
-        y: number;
+        y: number }
 }
     };
     content: string;
     color: string;
-    size: {
-        width: number;
-        height: number;
-    };
+    size: { width: number;
+        height: number };
     author: string;
     timestamp: string;
 
 }
-export interface RegionGroup {
-    id: string;
+}
+export interface RegionGroup { id: string;
     label: string;
     color: string;
     bounds: {
         x: number;
         y: number;
         width: number;
-        height: number;
+        height: number }
 }
     };
     nodeIds: string[];
@@ -77,6 +79,7 @@ export interface RegionGroup {
  * Review system for templates
  */
 
+}
 }
 export interface Review {
     id: string;
@@ -89,6 +92,8 @@ export interface Review {
  * Template metadata
  */
 
+}
+}
 }
 export interface TemplateMetadata {
     created: string;
@@ -110,6 +115,8 @@ export type TemplateCategory = 'character' | 'setting' | 'mood' | 'action' | 'di
  */
 
 }
+}
+}
 export interface TemplateSharing {
     isPublic: boolean;
     sharedWith: string[];
@@ -120,6 +127,8 @@ export interface TemplateSharing {
  * Template search and filtering
  */
 
+}
+}
 }
 export interface TemplateFilter {
     category?: TemplateCategory;
@@ -135,6 +144,8 @@ export interface TemplateFilter {
  */
 
 }
+}
+}
 export interface TemplateInstantiationOptions {
     preservePositions: boolean;
     mergeWithCurrent: boolean;
@@ -146,20 +157,22 @@ export interface TemplateInstantiationOptions {
  */
 
 }
-export interface TemplateValidation {
-    isValid: boolean;
+}
+}
+export interface TemplateValidation { isValid: boolean;
     errors: string[];
     warnings: string[];
     compatibility: {
         version: string;
         features: string[];
-        missingFeatures: string[];
+        missingFeatures: string[] }
 }
     };
 /**
  * Template library state
  */
 
+}
 }
 export interface TemplateLibraryState {
     templates: Template[];
@@ -172,6 +185,8 @@ export interface TemplateLibraryState {
  * Template operations
  */
 
+}
+}
 }
 export interface TemplateOperations {
     saveTemplate: (template: Omit<Template, 'id'>) => Promise<Template>;
@@ -193,6 +208,8 @@ export interface TemplateOperations {
  */
 
 }
+}
+}
 export interface TemplateSaveData {
     name: string;
     description: string;
@@ -204,6 +221,8 @@ export interface TemplateSaveData {
  * Template browser UI state
  */
 
+}
+}
 }
 export interface TemplateBrowserState {
     isOpen: boolean;
@@ -218,37 +237,31 @@ export interface TemplateBrowserState {
  */
 
 }
-export type TemplateEvent = {
-    type: 'template-saved';
-    template: Template;
 }
-} | {
-    type: 'template-applied';
+}
+export type TemplateEvent = { type: 'template-saved';
+    template: Template }
+} | { type: 'template-applied';
     templateId: string;
-    options: TemplateInstantiationOptions;
-} | {
-    type: 'template-shared';
+    options: TemplateInstantiationOptions } | { type: 'template-shared';
     templateId: string;
-    shareUrl: string;
-} | {
-    type: 'review-added';
+    shareUrl: string } | { type: 'review-added';
     templateId: string;
-    review: Review;
-};
+    review: Review };
 /**
  * Template compatibility with existing graph system
  */
 
 }
-export interface TemplateCompatibility {
-    supportsNodeTypes: string[];
+}
+export interface TemplateCompatibility { supportsNodeTypes: string[];
     requiredFeatures: string[];
     minEditorVersion: string;
     annotations: {
         stickyNotes: boolean;
         nodeLabels: boolean;
         regionGroups: boolean;
-        connectionLabels: boolean;
+        connectionLabels: boolean }
 }
     };
 

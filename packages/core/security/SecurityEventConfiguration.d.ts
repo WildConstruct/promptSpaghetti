@@ -6,16 +6,15 @@
 import { ComplianceFramework, DataSensitivityLevel } from './DataProtectionEventLogger';
 
 }
-export interface SecurityEventConfig {
-    logging: LoggingConfiguration;
+}
+export interface SecurityEventConfig { logging: LoggingConfiguration;
     alerting: AlertingConfiguration;
     retention: RetentionConfiguration;
     compliance: ComplianceConfiguration;
-    performance: PerformanceConfiguration;
-
+    performance: PerformanceConfiguration }
 }
-export interface LoggingConfiguration {
-    enabled: boolean;
+}
+export interface LoggingConfiguration { enabled: boolean;
     level: 'debug' | 'info' | 'warn' | 'error' | 'critical';
     destinations: LogDestination[];
     encryption: EncryptionConfiguration;
@@ -23,56 +22,49 @@ export interface LoggingConfiguration {
     flushInterval: number;
     bufferSize: number;
     enableCircuitBreaker: boolean;
-    circuitBreakerConfig: CircuitBreakerConfiguration;
-
+    circuitBreakerConfig: CircuitBreakerConfiguration }
 }
-export interface LogDestination {
-    type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';
+}
+export interface LogDestination { type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';
     config: Record<string, any>;
     enabled: boolean;
     filters: LogFilter[];
-    formatters: LogFormatter[];
-
+    formatters: LogFormatter[] }
 }
-export interface LogFilter {
-    field: string;
+}
+export interface LogFilter { field: string;
     operator: 'equals' | 'contains' | 'regex' | 'greater_than' | 'less_than';
     value: any;
-    invert: boolean;
-
+    invert: boolean }
 }
-export interface LogFormatter {
-    type: 'json' | 'structured' | 'syslog' | 'cef' | 'leef';
+}
+export interface LogFormatter { type: 'json' | 'structured' | 'syslog' | 'cef' | 'leef';
     template?: string;
     includeFields?: string[];
-    excludeFields?: string[];
-
+    excludeFields?: string[] }
 }
-export interface EncryptionConfiguration {
-    enabled: boolean;
+}
+export interface EncryptionConfiguration { enabled: boolean;
     algorithm: 'AES-256-GCM' | 'AES-256-CBC';
     keyRotationInterval: number;
     encryptSensitiveFields: boolean;
-    sensitiveFields: string[];
-
+    sensitiveFields: string[] }
 }
-export interface CircuitBreakerConfiguration {
-    failureThreshold: number;
+}
+export interface CircuitBreakerConfiguration { failureThreshold: number;
     resetTimeout: number;
     monitoringPeriod: number;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface AlertingConfiguration {
-    enabled: boolean;
+}
+export interface AlertingConfiguration { enabled: boolean;
     rules: SecurityAlertRule[];
     channels: AlertChannel[];
     suppressionRules: SuppressionRule[];
-    escalationPolicies: EscalationPolicy[];
-
+    escalationPolicies: EscalationPolicy[] }
 }
-export interface SecurityAlertRule {
-    id: string;
+}
+export interface SecurityAlertRule { id: string;
     name: string;
     description: string;
     enabled: boolean;
@@ -82,63 +74,55 @@ export interface SecurityAlertRule {
     channels: string[];
     suppressionRules?: string[];
     escalationPolicy?: string;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface AlertCondition {
-    type: 'threshold' | 'pattern' | 'anomaly' | 'correlation';
+}
+export interface AlertCondition { type: 'threshold' | 'pattern' | 'anomaly' | 'correlation';
     field: string;
     operator: 'greater_than' | 'less_than' | 'equals' | 'contains' | 'regex' | 'exists';
     value: any;
     timeWindow: number;
     aggregation?: 'count' | 'sum' | 'avg' | 'max' | 'min';
-    groupBy?: string[];
-
+    groupBy?: string[] }
 }
-export interface AlertChannel {
-    id: string;
+}
+export interface AlertChannel { id: string;
     type: 'email' | 'webhook' | 'slack' | 'pagerduty' | 'sms';
     config: Record<string, any>;
     enabled: boolean;
-    rateLimits: RateLimit[];
-
+    rateLimits: RateLimit[] }
 }
-export interface RateLimit {
-    maxAlerts: number;
+}
+export interface RateLimit { maxAlerts: number;
     timeWindow: number;
-    severity?: 'low' | 'medium' | 'high' | 'critical';
-
+    severity?: 'low' | 'medium' | 'high' | 'critical' }
 }
-export interface SuppressionRule {
-    id: string;
+}
+export interface SuppressionRule { id: string;
     name: string;
     enabled: boolean;
     conditions: AlertCondition[];
     duration: number;
-    reason: string;
-
+    reason: string }
 }
-export interface EscalationPolicy {
-    id: string;
+}
+export interface EscalationPolicy { id: string;
     name: string;
     enabled: boolean;
-    steps: EscalationStep[];
-
+    steps: EscalationStep[] }
 }
-export interface EscalationStep {
-    delay: number;
+}
+export interface EscalationStep { delay: number;
     channels: string[];
-    condition?: 'unacknowledged' | 'unresolved';
-
+    condition?: 'unacknowledged' | 'unresolved' }
 }
-export interface RetentionConfiguration {
-    policies: RetentionPolicy[];
+}
+export interface RetentionConfiguration { policies: RetentionPolicy[];
     archival: ArchivalConfiguration;
-    deletion: DeletionConfiguration;
-
+    deletion: DeletionConfiguration }
 }
-export interface RetentionPolicy {
-    id: string;
+}
+export interface RetentionPolicy { id: string;
     name: string;
     framework: ComplianceFramework;
     eventTypes: string[];
@@ -148,122 +132,106 @@ export interface RetentionPolicy {
     encryptionRequired: boolean;
     immutableStorage: boolean;
     purgeAfterRetention: boolean;
-    exceptions: RetentionException[];
-
+    exceptions: RetentionException[] }
 }
-export interface RetentionException {
-    reason: 'legal_hold' | 'investigation' | 'regulatory_request' | 'data_subject_request';
+}
+export interface RetentionException { reason: 'legal_hold' | 'investigation' | 'regulatory_request' | 'data_subject_request';
     extendedPeriod: number;
     approvalRequired: boolean;
-    notificationRequired: boolean;
-
+    notificationRequired: boolean }
 }
-export interface ArchivalConfiguration {
-    enabled: boolean;
+}
+export interface ArchivalConfiguration { enabled: boolean;
     storageBackend: 'file' | 's3' | 'azure_blob' | 'gcs';
     compressionEnabled: boolean;
     encryptionEnabled: boolean;
-    verificationEnabled: boolean;
-
+    verificationEnabled: boolean }
 }
-export interface DeletionConfiguration {
-    enabled: boolean;
+}
+export interface DeletionConfiguration { enabled: boolean;
     scheduledDeletion: boolean;
     batchSize: number;
     verificationRequired: boolean;
     backupBeforeDeletion: boolean;
-    auditDeletion: boolean;
-
+    auditDeletion: boolean }
 }
-export interface ComplianceConfiguration {
-    frameworks: ComplianceFrameworkConfig[];
+}
+export interface ComplianceConfiguration { frameworks: ComplianceFrameworkConfig[];
     reporting: ReportingConfiguration;
-    monitoring: ComplianceMonitoringConfiguration;
-
+    monitoring: ComplianceMonitoringConfiguration }
 }
-export interface ComplianceFrameworkConfig {
-    framework: ComplianceFramework;
+}
+export interface ComplianceFrameworkConfig { framework: ComplianceFramework;
     enabled: boolean;
     requirements: ComplianceRequirement[];
     reportingFrequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
-    alertOnViolations: boolean;
-
+    alertOnViolations: boolean }
 }
-export interface ComplianceRequirement {
-    id: string;
+}
+export interface ComplianceRequirement { id: string;
     name: string;
     description: string;
     mandatory: boolean;
     eventTypes: string[];
-    validationRules: ValidationRule[];
-
+    validationRules: ValidationRule[] }
 }
-export interface ValidationRule {
-    field: string;
+}
+export interface ValidationRule { field: string;
     required: boolean;
     validation: 'regex' | 'range' | 'enum' | 'custom';
     value: any;
-    message: string;
-
+    message: string }
 }
-export interface ReportingConfiguration {
-    enabled: boolean;
+}
+export interface ReportingConfiguration { enabled: boolean;
     autoGeneration: boolean;
     outputFormats: ('json' | 'csv' | 'pdf' | 'xlsx')[];
     recipients: ReportRecipient[];
-    schedules: ReportSchedule[];
-
+    schedules: ReportSchedule[] }
 }
-export interface ReportRecipient {
-    email: string;
+}
+export interface ReportRecipient { email: string;
     role: string;
     frameworks: ComplianceFramework[];
-    reportTypes: string[];
-
+    reportTypes: string[] }
 }
-export interface ReportSchedule {
-    id: string;
+}
+export interface ReportSchedule { id: string;
     framework: ComplianceFramework;
     frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
     time: string;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface ComplianceMonitoringConfiguration {
-    enabled: boolean;
+}
+export interface ComplianceMonitoringConfiguration { enabled: boolean;
     continuousMonitoring: boolean;
     violationAlerts: boolean;
     dashboardEnabled: boolean;
-    metricsCollection: boolean;
-
+    metricsCollection: boolean }
 }
-export interface PerformanceConfiguration {
-    monitoring: {
+}
+export interface PerformanceConfiguration { monitoring: {
         enabled: boolean;
         metricsCollectionInterval: number;
-        alertThresholds: PerformanceThreshold[];
+        alertThresholds: PerformanceThreshold[] }
 }
     };
-    optimization: {
-        asyncLogging: boolean;
+    optimization: { asyncLogging: boolean;
         batchProcessing: boolean;
         caching: CacheConfiguration;
-        compression: boolean;
-    };
-    scaling: {
-        autoScaling: boolean;
+        compression: boolean };
+    scaling: { autoScaling: boolean;
         maxConcurrentEvents: number;
         queueMaxSize: number;
-        workerPoolSize: number;
-    };
+        workerPoolSize: number };
 
 }
-export interface PerformanceThreshold {
-    metric: 'latency' | 'throughput' | 'error_rate' | 'queue_depth';
+}
+export interface PerformanceThreshold { metric: 'latency' | 'throughput' | 'error_rate' | 'queue_depth';
     threshold: number;
     severity: 'low' | 'medium' | 'high' | 'critical';
-    action: 'log' | 'alert' | 'throttle' | 'circuit_break';
-
+    action: 'log' | 'alert' | 'throttle' | 'circuit_break' }
+}
 }
 export interface CacheConfiguration {
     enabled: boolean;
@@ -282,4 +250,5 @@ export declare const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig;
  */
 export declare const DEVELOPMENT_SECURITY_EVENT_CONFIG: SecurityEventConfig;
 //# sourceMappingURL=SecurityEventConfiguration.d.ts.map
+}
 }

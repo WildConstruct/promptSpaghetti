@@ -2,89 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { ArrowLeft } from 'lucide-react';
-const SettingsPage: React.FC = () => {
-  const { user: _user } = useAuthStore(); // eslint-disable-line @typescript-eslint/no-unused-vars
-  const navigate = useNavigate();
-  const [settings, setSettings] = useState({)
-  notifications: {
-  email: true,
-  browser: true,
-  taskUpdates: true,
-  systemAlerts: false,
-},
-  preferences: {
-  theme: 'system',
-  language: 'en',
-  autoSave: true,
-  showTips: true,
-},
-  privacy: {
-  profileVisible: true,
-  activityTracking: true,
-  analyticsOptIn: false,
-});
-  const [activeSection, setActiveSection] = useState('notifications');
-  const handleSettingChange = (section: string, key: string, value: Error) => {
-  setSettings(prev => ({)
-  ...prev,
-  [section]: {
-  ...prev[section as keyof typeof prev],
-  [key]: value,
-}));
-  };
-  const handleSaveSettings = () => {
-  // In a real app, this would save to backend
-  console.log('Saving settings:', settings);
-  alert('Settings saved successfully!');
-};
-  const renderToggle = (checked: boolean, onChange: (checked: boolean) => void) => (;);
-    <button
-      onClick={() => onChange(!checked)}
-      style={{
-  width: '44px',
-  height: '24px',
-  borderRadius: '12px',
-  border: 'none',
-  cursor: 'pointer',
-  backgroundColor: checked ? '#3b82f6' : '#d1d5db',
-  position: 'relative',
-  transition: 'background-color 0.2s',
-}}
-    >
-      <div
-        style={{
-  width: '20px',
-  height: '20px',
-  borderRadius: '50%',
-  backgroundColor: '#ffffff',
-  position: 'absolute',
-  top: '2px',
-  left: checked ? '22px' : '2px',
-  transition: 'left 0.2s',
-}}
-      />
-    </button>
-  );
-  const sections = [;
-    { id: 'notifications', label: 'Notifications', icon: '🔔' },
-    { id: 'preferences', label: 'Preferences', icon: '⚙️' },
-    { id: 'privacy', label: 'Privacy', icon: '🔒' },
-    { id: 'account', label: 'Account', icon: '👤' }
-  ];
-  return;
-    <div style={{
-  padding: '40px',
-  maxWidth: '1000px',
-  margin: '0 auto',
-  backgroundColor: '#ffffff',
-  minHeight: '100vh',
-}}>
-      <div style={{
-  marginBottom: '32px',
-  borderBottom: '1px solid #e5e7eb',
-  paddingBottom: '16px',
-}}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+const SettingsPage = () => { return null; }>
           <button
             onClick={() => navigate('/')}
             style={{
@@ -99,7 +17,7 @@ const SettingsPage: React.FC = () => {
   fontSize: '14px',
   color: '#374151',
   textDecoration: 'none',
-}}
+
           >
             <ArrowLeft size={16} />
             Back to App
@@ -109,7 +27,7 @@ const SettingsPage: React.FC = () => {
   fontWeight: '700',
   color: '#111827',
   margin: 0,
-}}>
+}>
             Settings
           </h1>
         </div>
@@ -117,7 +35,7 @@ const SettingsPage: React.FC = () => {
   color: '#6b7280',
   fontSize: '14px',
   margin: 0,
-}}>
+}>
           Customize your experience and manage your account preferences
         </p>
       </div>
@@ -144,7 +62,7 @@ const SettingsPage: React.FC = () => {
   fontWeight: activeSection === section.id ? '500' : '400',
   color: activeSection === section.id ? '#111827' : '#6b7280',
   textAlign: 'left',
-}}
+
               >
                 <span>{section.icon}</span>
                 {section.label}
@@ -230,7 +148,7 @@ const SettingsPage: React.FC = () => {
   borderRadius: '6px',
   fontSize: '14px',
   backgroundColor: '#ffffff',
-}}
+}
                   >
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
@@ -250,7 +168,7 @@ const SettingsPage: React.FC = () => {
   borderRadius: '6px',
   fontSize: '14px',
   backgroundColor: '#ffffff',
-}}
+}
                   >
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
@@ -340,7 +258,7 @@ const SettingsPage: React.FC = () => {
   border: '1px solid #f59e0b',
   borderRadius: '8px',
   padding: '16px',
-}}>
+}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px', color: '#92400e' }}>
                     Change Password
                   </h3>
@@ -357,7 +275,7 @@ const SettingsPage: React.FC = () => {
   fontSize: '14px',
   cursor: 'pointer',
   fontWeight: '500',
-}}
+}
                     onClick={() => alert('Password change functionality would be implemented here')}
                   >
                     Change Password
@@ -368,7 +286,7 @@ const SettingsPage: React.FC = () => {
   border: '1px solid #ef4444',
   borderRadius: '8px',
   padding: '16px',
-}}>
+}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px', color: '#dc2626' }}>
                     Delete Account
                   </h3>
@@ -385,7 +303,7 @@ const SettingsPage: React.FC = () => {
   fontSize: '14px',
   cursor: 'pointer',
   fontWeight: '500',
-}}
+}
                     onClick={() => alert('Account deletion would require additional confirmation')}
                   >
                     Delete Account
@@ -399,7 +317,7 @@ const SettingsPage: React.FC = () => {
   marginTop: '32px',
   paddingTop: '20px',
   borderTop: '1px solid #e5e7eb',
-}}>
+}>
             <button
               onClick={handleSaveSettings}
               style={{
@@ -411,7 +329,7 @@ const SettingsPage: React.FC = () => {
   fontSize: '14px',
   cursor: 'pointer',
   fontWeight: '500',
-}}
+}
             >
               Save Settings
             </button>

@@ -64,14 +64,14 @@ z.boolean().default(true),
 z.number().min(10).max(10000).default(1000);
 ;
 /**
- * WebSocket Streaming Server
- *
- * Manages real-time WebSocket connections for analytics dashboard streaming
- */
+* WebSocket Streaming Server
+*
+* Manages real-time WebSocket connections for analytics dashboard streaming
+*/
 export class WebSocketStreamingServer extends EventEmitter {
     eventBus;
     authService;
-    server; // WebSocket server instance
+    server; // WebSocket server instance,
     clients = new Map();
     config;
     stats;
@@ -460,7 +460,7 @@ catch (error) {
                                 if (client.isAuthenticated) {
                                     this.stats.authenticatedConnections--;
                                     this.clients.delete(clientId);
-                                    console.log(`Client ${clientId},)}
+                                    console.log(`Client ${clientId})},
   disconnected: ${code} ${reason}`);
                                 }
                                 this.emit('client:disconnected', { clientId, code, reason });
@@ -480,7 +480,7 @@ catch (error) {
                          * Handle client error
                          */
                         handleError(clientId, error) {
-                            console.error(`Client ${clientId},)}
+                            console.error(`Client ${clientId})},
   error:`, error);
                         },
                         this: .emit('client:error', { clientId, error }),
@@ -567,8 +567,9 @@ catch (error) {
                                 console.error(`Error sending event to client ${client.id}:`, error);
                             }
                             async;
-                            flushClientQueue(client, ClientConnection);
-                            subscriptionId: string,
+                            flushClientQueue(client, ClientConnection),
+                                subscriptionId;
+                            string,
                                 config;
                             SubscriptionConfig;
                             Promise < void  > {

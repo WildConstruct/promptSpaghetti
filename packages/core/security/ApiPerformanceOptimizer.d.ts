@@ -10,29 +10,27 @@
 import { EventEmitter } from 'events';
 
 }
-export interface ApiPerformanceConfig {
-    enableAutomaticOptimization: boolean;
+}
+export interface ApiPerformanceConfig { enableAutomaticOptimization: boolean;
     optimizationInterval: number;
     performanceThresholds: PerformanceThresholds;
     cachingStrategy: CachingStrategy;
     rateLimitingConfig: RateLimitingConfig;
     queryOptimizationConfig: QueryOptimizationConfig;
     monitoringConfig: MonitoringConfig;
-    alertingConfig: AlertingConfig;
-
+    alertingConfig: AlertingConfig }
 }
-export interface PerformanceThresholds {
-    responseTimeMs: number;
+}
+export interface PerformanceThresholds { responseTimeMs: number;
     throughputRps: number;
     errorRatePercent: number;
     cpuUtilizationPercent: number;
     memoryUtilizationPercent: number;
     cacheHitRatePercent: number;
-    queueDepth: number;
-
+    queueDepth: number }
 }
-export interface CachingStrategy {
-    enableQueryCaching: boolean;
+}
+export interface CachingStrategy { enableQueryCaching: boolean;
     enableResultCaching: boolean;
     enableMetadataCaching: boolean;
     defaultTtlSeconds: number;
@@ -42,48 +40,48 @@ export interface CachingStrategy {
     distributedCaching: boolean;
 
 export declare enum CacheEvictionPolicy {
-    LRU = "lru",
-    LFU = "lfu",
-    FIFO = "fifo",
-    RANDOM = "random",
-    TTL_BASED = "ttl_based",
+    LRU = "lru";
+    LFU = "lfu";
+    FIFO = "fifo";
+    RANDOM = "random";
+    TTL_BASED = "ttl_based" }
     ADAPTIVE = "adaptive"
 
 }
-export interface CacheWarmupStrategy {
-    strategyType: WarmupStrategyType;
+}
+}
+export interface CacheWarmupStrategy { strategyType: WarmupStrategyType;
     schedule: WarmupSchedule;
     priority: number;
     enabled: boolean;
     parameters: Record<string, unknown>;
 
 export declare enum WarmupStrategyType {
-    POPULAR_QUERIES = "popular_queries",
-    SCHEDULED_PRELOAD = "scheduled_preload",
-    PREDICTIVE_PRELOAD = "predictive_preload",
-    USER_PATTERN_BASED = "user_pattern_based",
+    POPULAR_QUERIES = "popular_queries";
+    SCHEDULED_PRELOAD = "scheduled_preload";
+    PREDICTIVE_PRELOAD = "predictive_preload";
+    USER_PATTERN_BASED = "user_pattern_based" }
     TIME_BASED = "time_based"
 
 }
-export interface WarmupSchedule {
-    cronExpression?: string;
+}
+}
+export interface WarmupSchedule { cronExpression?: string;
     intervalMinutes?: number;
     triggerEvents?: string[];
-    conditions?: string[];
-
+    conditions?: string[] }
 }
-export interface RateLimitingConfig {
-    enableRateLimiting: boolean;
+}
+export interface RateLimitingConfig { enableRateLimiting: boolean;
     enableAdaptiveRateLimiting: boolean;
     defaultRateLimit: RateLimit;
     userTierLimits: Map<string, RateLimit>;
     endpointSpecificLimits: Map<string, RateLimit>;
     burstAllowance: number;
-    rateLimitingAlgorithm: RateLimitingAlgorithm;
-
+    rateLimitingAlgorithm: RateLimitingAlgorithm }
 }
-export interface RateLimit {
-    requestsPerSecond: number;
+}
+export interface RateLimit { requestsPerSecond: number;
     requestsPerMinute: number;
     requestsPerHour: number;
     requestsPerDay: number;
@@ -91,24 +89,24 @@ export interface RateLimit {
     bandwidthLimitMbps?: number;
 
 export declare enum RateLimitingAlgorithm {
-    TOKEN_BUCKET = "token_bucket",
-    LEAKY_BUCKET = "leaky_bucket",
-    FIXED_WINDOW = "fixed_window",
-    SLIDING_WINDOW = "sliding_window",
+    TOKEN_BUCKET = "token_bucket";
+    LEAKY_BUCKET = "leaky_bucket";
+    FIXED_WINDOW = "fixed_window";
+    SLIDING_WINDOW = "sliding_window" }
     ADAPTIVE = "adaptive"
 
 }
-export interface QueryOptimizationConfig {
-    enableQueryOptimization: boolean;
+}
+}
+export interface QueryOptimizationConfig { enableQueryOptimization: boolean;
     enableQueryRewriting: boolean;
     enableIndexOptimization: boolean;
     enableQueryPlanCaching: boolean;
     optimizationStrategies: OptimizationStrategy[];
-    queryAnalysisConfig: QueryAnalysisConfig;
-
+    queryAnalysisConfig: QueryAnalysisConfig }
 }
-export interface OptimizationStrategy {
-    strategyId: string;
+}
+export interface OptimizationStrategy { strategyId: string;
     strategyType: OptimizationStrategyType;
     enabled: boolean;
     priority: number;
@@ -116,74 +114,74 @@ export interface OptimizationStrategy {
     actions: OptimizationAction[];
 
 export declare enum OptimizationStrategyType {
-    QUERY_REWRITING = "query_rewriting",
-    INDEX_SUGGESTION = "index_suggestion",
-    RESULT_PAGINATION = "result_pagination",
-    FIELD_PROJECTION = "field_projection",
-    PREDICATE_PUSHDOWN = "predicate_pushdown",
-    JOIN_OPTIMIZATION = "join_optimization",
+    QUERY_REWRITING = "query_rewriting";
+    INDEX_SUGGESTION = "index_suggestion";
+    RESULT_PAGINATION = "result_pagination";
+    FIELD_PROJECTION = "field_projection";
+    PREDICATE_PUSHDOWN = "predicate_pushdown";
+    JOIN_OPTIMIZATION = "join_optimization" }
     AGGREGATION_OPTIMIZATION = "aggregation_optimization"
 
 }
-export interface OptimizationCondition {
-    conditionType: ConditionType;
+}
+}
+export interface OptimizationCondition { conditionType: ConditionType;
     field: string;
     operator: string;
     value: unknown;
     weight: number;
 
 export declare enum ConditionType {
-    RESPONSE_TIME = "response_time",
-    RESULT_SIZE = "result_size",
-    QUERY_COMPLEXITY = "query_complexity",
-    RESOURCE_USAGE = "resource_usage",
-    FREQUENCY = "frequency",
+    RESPONSE_TIME = "response_time";
+    RESULT_SIZE = "result_size";
+    QUERY_COMPLEXITY = "query_complexity";
+    RESOURCE_USAGE = "resource_usage";
+    FREQUENCY = "frequency" }
     USER_TIER = "user_tier"
 
 }
-export interface OptimizationAction {
-    actionType: OptimizationActionType;
+}
+}
+export interface OptimizationAction { actionType: OptimizationActionType;
     parameters: Record<string, unknown>;
     priority: number;
     enabled: boolean;
 
 export declare enum OptimizationActionType {
-    REWRITE_QUERY = "rewrite_query",
-    ADD_CACHE_HINT = "add_cache_hint",
-    LIMIT_RESULTS = "limit_results",
-    PROJECT_FIELDS = "project_fields",
-    SUGGEST_INDEX = "suggest_index",
-    PARTITION_QUERY = "partition_query",
+    REWRITE_QUERY = "rewrite_query";
+    ADD_CACHE_HINT = "add_cache_hint";
+    LIMIT_RESULTS = "limit_results";
+    PROJECT_FIELDS = "project_fields";
+    SUGGEST_INDEX = "suggest_index";
+    PARTITION_QUERY = "partition_query" }
     DEFER_EXPENSIVE_OPERATIONS = "defer_expensive_operations"
 
 }
-export interface QueryAnalysisConfig {
-    enableStaticAnalysis: boolean;
+}
+}
+export interface QueryAnalysisConfig { enableStaticAnalysis: boolean;
     enableRuntimeAnalysis: boolean;
     analyzeQueryPatterns: boolean;
     trackQueryPerformance: boolean;
     identifySlowQueries: boolean;
-    generateOptimizationSuggestions: boolean;
-
+    generateOptimizationSuggestions: boolean }
 }
-export interface MonitoringConfig {
-    enableRealTimeMonitoring: boolean;
+}
+export interface MonitoringConfig { enableRealTimeMonitoring: boolean;
     metricsCollectionInterval: number;
     performanceHistoryRetention: number;
     alertingThresholds: AlertingThresholds;
-    customMetrics: CustomMetric[];
-
+    customMetrics: CustomMetric[] }
 }
-export interface AlertingThresholds {
-    responseTimeDegradation: number;
+}
+export interface AlertingThresholds { responseTimeDegradation: number;
     errorRateIncrease: number;
     throughputDecrease: number;
     resourceUtilizationHigh: number;
-    cacheHitRateDecrease: number;
-
+    cacheHitRateDecrease: number }
 }
-export interface CustomMetric {
-    metricName: string;
+}
+export interface CustomMetric { metricName: string;
     metricType: MetricType;
     calculation: string;
     aggregation: AggregationType;
@@ -191,45 +189,46 @@ export interface CustomMetric {
     enabled: boolean;
 
 export declare enum MetricType {
-    COUNTER = "counter",
-    GAUGE = "gauge",
-    HISTOGRAM = "histogram",
-    SUMMARY = "summary",
+    COUNTER = "counter";
+    GAUGE = "gauge";
+    HISTOGRAM = "histogram";
+    SUMMARY = "summary";
     RATE = "rate"
 
 export declare enum AggregationType {
-    SUM = "sum",
-    AVERAGE = "average",
-    MIN = "min",
-    MAX = "max",
-    PERCENTILE = "percentile",
+    SUM = "sum";
+    AVERAGE = "average";
+    MIN = "min";
+    MAX = "max";
+    PERCENTILE = "percentile" }
     COUNT = "count"
 
 }
-export interface AlertingConfig {
-    enableAlerting: boolean;
+}
+}
+export interface AlertingConfig { enableAlerting: boolean;
     alertChannels: AlertChannel[];
     escalationRules: EscalationRule[];
-    suppressionRules: SuppressionRule[];
-
+    suppressionRules: SuppressionRule[] }
 }
-export interface AlertChannel {
-    channelId: string;
+}
+export interface AlertChannel { channelId: string;
     channelType: AlertChannelType;
     configuration: Record<string, unknown>;
     enabled: boolean;
 
 export declare enum AlertChannelType {
-    EMAIL = "email",
-    SLACK = "slack",
-    WEBHOOK = "webhook",
-    SMS = "sms",
-    PAGER_DUTY = "pager_duty",
+    EMAIL = "email";
+    SLACK = "slack";
+    WEBHOOK = "webhook";
+    SMS = "sms";
+    PAGER_DUTY = "pager_duty" }
     TEAMS = "teams"
 
 }
-export interface EscalationRule {
-    ruleId: string;
+}
+}
+export interface EscalationRule { ruleId: string;
     severity: AlertSeverity;
     escalationDelay: number;
     escalationTargets: string[];
@@ -237,22 +236,22 @@ export interface EscalationRule {
     enabled: boolean;
 
 export declare enum AlertSeverity {
-    INFO = "info",
-    WARNING = "warning",
-    ERROR = "error",
+    INFO = "info";
+    WARNING = "warning";
+    ERROR = "error" }
     CRITICAL = "critical"
 
 }
-export interface SuppressionRule {
-    ruleId: string;
+}
+}
+export interface SuppressionRule { ruleId: string;
     suppressionPattern: string;
     suppressionDuration: number;
     conditions: string[];
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface ApiEndpoint {
-    endpointId: string;
+}
+export interface ApiEndpoint { endpointId: string;
     path: string;
     method: string;
     description: string;
@@ -265,47 +264,48 @@ export interface ApiEndpoint {
     metrics: EndpointMetrics;
 
 export declare enum EndpointCategory {
-    AUTHENTICATION = "authentication",
-    THREAT_INTELLIGENCE = "threat_intelligence",
-    SECURITY_EVENTS = "security_events",
-    ANALYTICS = "analytics",
-    REPORTING = "reporting",
-    ADMINISTRATION = "administration",
+    AUTHENTICATION = "authentication";
+    THREAT_INTELLIGENCE = "threat_intelligence";
+    SECURITY_EVENTS = "security_events";
+    ANALYTICS = "analytics";
+    REPORTING = "reporting";
+    ADMINISTRATION = "administration";
     MONITORING = "monitoring"
 
 export declare enum SecurityLevel {
-    PUBLIC = "public",
-    AUTHENTICATED = "authenticated",
-    AUTHORIZED = "authorized",
-    PRIVILEGED = "privileged",
+    PUBLIC = "public";
+    AUTHENTICATED = "authenticated";
+    AUTHORIZED = "authorized";
+    PRIVILEGED = "privileged" }
     ADMIN_ONLY = "admin_only"
 
 }
-export interface CachingRule {
-    ruleId: string;
+}
+}
+export interface CachingRule { ruleId: string;
     cachingStrategy: CachingStrategy;
     ttl: number;
     conditions: string[];
     priority: number;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface OptimizationHint {
-    hintType: OptimizationHintType;
+}
+export interface OptimizationHint { hintType: OptimizationHintType;
     hintValue: string;
     applicability: string[];
     priority: number;
 
 export declare enum OptimizationHintType {
-    INDEX_HINT = "index_hint",
-    CACHE_HINT = "cache_hint",
-    PARTITION_HINT = "partition_hint",
-    PROJECTION_HINT = "projection_hint",
+    INDEX_HINT = "index_hint";
+    CACHE_HINT = "cache_hint";
+    PARTITION_HINT = "partition_hint";
+    PROJECTION_HINT = "projection_hint" }
     JOIN_HINT = "join_hint"
 
 }
-export interface EndpointMetrics {
-    totalRequests: number;
+}
+}
+export interface EndpointMetrics { totalRequests: number;
     successfulRequests: number;
     failedRequests: number;
     averageResponseTime: number;
@@ -315,25 +315,25 @@ export interface EndpointMetrics {
     errorRate: number;
     cacheHitRate: number;
     lastUpdated: Date;
-    trends: MetricTrend[];
-
+    trends: MetricTrend[] }
 }
-export interface MetricTrend {
-    metricName: string;
+}
+export interface MetricTrend { metricName: string;
     trend: TrendDirection;
     changePercent: number;
     confidence: number;
     timeframe: string;
 
 export declare enum TrendDirection {
-    INCREASING = "increasing",
-    DECREASING = "decreasing",
-    STABLE = "stable",
+    INCREASING = "increasing";
+    DECREASING = "decreasing";
+    STABLE = "stable" }
     VOLATILE = "volatile"
 
 }
-export interface PerformanceOptimization {
-    optimizationId: string;
+}
+}
+export interface PerformanceOptimization { optimizationId: string;
     timestamp: Date;
     endpointId: string;
     optimizationType: OptimizationType;
@@ -345,61 +345,60 @@ export interface PerformanceOptimization {
     appliedActions: OptimizationAction[];
 
 export declare enum OptimizationType {
-    CACHING_OPTIMIZATION = "caching_optimization",
-    QUERY_OPTIMIZATION = "query_optimization",
-    RATE_LIMITING_ADJUSTMENT = "rate_limiting_adjustment",
-    RESOURCE_SCALING = "resource_scaling",
-    INDEX_OPTIMIZATION = "index_optimization",
+    CACHING_OPTIMIZATION = "caching_optimization";
+    QUERY_OPTIMIZATION = "query_optimization";
+    RATE_LIMITING_ADJUSTMENT = "rate_limiting_adjustment";
+    RESOURCE_SCALING = "resource_scaling";
+    INDEX_OPTIMIZATION = "index_optimization" }
     CONNECTION_POOLING = "connection_pooling"
 
 }
-export interface PerformanceSnapshot {
-    timestamp: Date;
+}
+}
+export interface PerformanceSnapshot { timestamp: Date;
     responseTime: number;
     throughput: number;
     errorRate: number;
     resourceUtilization: ResourceUtilization;
-    cacheMetrics: CacheMetrics;
-
+    cacheMetrics: CacheMetrics }
 }
-export interface ResourceUtilization {
-    cpuPercent: number;
+}
+export interface ResourceUtilization { cpuPercent: number;
     memoryPercent: number;
     networkUtilization: number;
     diskUtilization: number;
-    connectionCount: number;
-
+    connectionCount: number }
 }
-export interface CacheMetrics {
-    hitRate: number;
+}
+export interface CacheMetrics { hitRate: number;
     missRate: number;
     evictionRate: number;
     cacheSize: number;
-    averageKeySize: number;
-
+    averageKeySize: number }
 }
-export interface OptimizationImpact {
-    expectedResponseTimeImprovement: number;
+}
+export interface OptimizationImpact { expectedResponseTimeImprovement: number;
     expectedThroughputImprovement: number;
     expectedErrorRateReduction: number;
     expectedCostReduction: number;
     confidence: number;
 
 export declare enum OptimizationStatus {
-    PROPOSED = "proposed",
-    APPROVED = "approved",
-    APPLIED = "applied",
-    VALIDATED = "validated",
-    ROLLED_BACK = "rolled_back",
+    PROPOSED = "proposed";
+    APPROVED = "approved";
+    APPLIED = "applied";
+    VALIDATED = "validated";
+    ROLLED_BACK = "rolled_back" }
     FAILED = "failed"
 
 }
-export interface PerformanceReport {
-    reportId: string;
+}
+}
+export interface PerformanceReport { reportId: string;
     generatedAt: Date;
     reportPeriod: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     summary: PerformanceSummary;
@@ -409,8 +408,8 @@ export interface PerformanceReport {
     incidents: PerformanceIncident[];
 
 }
-export interface PerformanceSummary {
-    totalRequests: number;
+}
+export interface PerformanceSummary { totalRequests: number;
     averageResponseTime: number;
     overallThroughput: number;
     errorRate: number;
@@ -418,11 +417,10 @@ export interface PerformanceSummary {
     topPerformingEndpoints: string[];
     underperformingEndpoints: string[];
     optimizationsApplied: number;
-    performanceImprovement: number;
-
+    performanceImprovement: number }
 }
-export interface EndpointAnalysis {
-    endpointId: string;
+}
+export interface EndpointAnalysis { endpointId: string;
     requestVolume: number;
     performanceGrade: PerformanceGrade;
     keyIssues: string[];
@@ -430,15 +428,16 @@ export interface EndpointAnalysis {
     optimizationPotential: number;
 
 export declare enum PerformanceGrade {
-    EXCELLENT = "excellent",
-    GOOD = "good",
-    FAIR = "fair",
-    POOR = "poor",
+    EXCELLENT = "excellent";
+    GOOD = "good";
+    FAIR = "fair";
+    POOR = "poor" }
     CRITICAL = "critical"
 
 }
-export interface OptimizationRecommendation {
-    recommendationId: string;
+}
+}
+export interface OptimizationRecommendation { recommendationId: string;
     priority: number;
     title: string;
     description: string;
@@ -448,20 +447,21 @@ export interface OptimizationRecommendation {
     actionItems: string[];
 
 export declare enum ImplementationEffort {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
+    LOW = "low";
+    MEDIUM = "medium";
+    HIGH = "high";
     VERY_HIGH = "very_high"
 
 export declare enum RiskLevel {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
+    LOW = "low";
+    MEDIUM = "medium";
+    HIGH = "high" }
     CRITICAL = "critical"
 
 }
-export interface PerformanceTrend {
-    metricName: string;
+}
+}
+export interface PerformanceTrend { metricName: string;
     trend: TrendDirection;
     changeRate: number;
     significance: TrendSignificance;
@@ -469,15 +469,16 @@ export interface PerformanceTrend {
     confidence: number;
 
 export declare enum TrendSignificance {
-    INSIGNIFICANT = "insignificant",
-    MINOR = "minor",
-    MODERATE = "moderate",
-    SIGNIFICANT = "significant",
+    INSIGNIFICANT = "insignificant";
+    MINOR = "minor";
+    MODERATE = "moderate";
+    SIGNIFICANT = "significant" }
     CRITICAL = "critical"
 
 }
-export interface PerformanceIncident {
-    incidentId: string;
+}
+}
+export interface PerformanceIncident { incidentId: string;
     timestamp: Date;
     severity: AlertSeverity;
     description: string;
@@ -485,11 +486,10 @@ export interface PerformanceIncident {
     rootCause: string;
     resolution: string;
     duration: number;
-    impact: IncidentImpact;
-
+    impact: IncidentImpact }
 }
-export interface IncidentImpact {
-    requestsAffected: number;
+}
+export interface IncidentImpact { requestsAffected: number;
     usersAffected: number;
     revenueImpact: number;
     reputationImpact: string;
@@ -557,7 +557,8 @@ export declare class ApiPerformanceOptimizer extends EventEmitter {
     private calculatePerformanceGrade;
     private generateEndpointRecommendations;
     private calculateOptimizationPotential;
-    private sleep;
+    private sleep }
+}
 }
 interface RateLimitResult {
     allowed: boolean;
@@ -573,4 +574,5 @@ export declare class ApiPerformanceOptimizerFactory {
 
 export default ApiPerformanceOptimizer;
 //# sourceMappingURL=ApiPerformanceOptimizer.d.ts.map
+}
 }

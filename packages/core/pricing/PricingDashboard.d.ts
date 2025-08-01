@@ -8,22 +8,22 @@ import { EventEmitter } from 'events';
 import { PricingOptimizer } from './PricingOptimizer';
 
 }
-export interface DashboardConfig {
-    refreshIntervalMs: number;
+}
+export interface DashboardConfig { refreshIntervalMs: number;
     showPredictiveAnalytics: boolean;
     enableRealTimeUpdates: boolean;
     maxHistoryDays: number;
     alertThresholds: {
         revenueDeclinePercent: number;
         demandDropPercent: number;
-        competitiveThreatScore: number;
+        competitiveThreatScore: number }
 }
     };
     filmIndustryFocus: boolean;
 
 }
-export interface DashboardMetrics {
-    totalRevenue: number;
+}
+export interface DashboardMetrics { totalRevenue: number;
     revenueGrowthRate: number;
     averageOrderValue: number;
     revenuePerModel: Record<string, number>;
@@ -38,7 +38,7 @@ export interface DashboardMetrics {
     seasonalTrends: Array<{
         period: string;
         revenue: number;
-        growth: number;
+        growth: number }
 }
     }>;
     marketPosition: 'leader' | 'challenger' | 'follower';
@@ -47,8 +47,8 @@ export interface DashboardMetrics {
     updatedAt: number;
 
 }
-export interface PricingAlert {
-    id: string;
+}
+export interface PricingAlert { id: string;
     type: 'revenue_decline' | 'demand_drop' | 'competitive_threat' | 'optimization_opportunity';
     severity: 'low' | 'medium' | 'high' | 'critical';
     title: string;
@@ -58,11 +58,10 @@ export interface PricingAlert {
     threshold: number;
     recommendation: string;
     createdAt: number;
-    acknowledged: boolean;
-
+    acknowledged: boolean }
 }
-export interface PricingInsight {
-    id: string;
+}
+export interface PricingInsight { id: string;
     type: 'trend' | 'opportunity' | 'risk' | 'optimization';
     category: 'revenue' | 'demand' | 'competition' | 'seasonality' | 'film_industry';
     title: string;
@@ -74,26 +73,24 @@ export interface PricingInsight {
         metric: string;
         current: number;
         previous: number;
-        change: number;
+        change: number }
 }
     }>;
     createdAt: number;
 
 }
-export interface RevenueProjection {
-    period: '1_month' | '3_months' | '6_months' | '1_year';
+}
+export interface RevenueProjection { period: '1_month' | '3_months' | '6_months' | '1_year';
     projectedRevenue: number;
     confidenceInterval: {
         lower: number;
-        upper: number;
+        upper: number }
 }
     };
     assumptions: string[];
-    keyFactors: Array<{
-        factor: string;
+    keyFactors: Array<{ factor: string;
         impact: number;
-        confidence: number;
-    }>;
+        confidence: number }>;
 /**
  * Real-time pricing dashboard for monitoring and optimization
  */
@@ -141,27 +138,19 @@ export declare class PricingDashboard extends EventEmitter {
     /**
      * Get film industry specific dashboard data
      */
-    getFilmIndustryDashboard(): {
-        studioSegments: Array<{
+    getFilmIndustryDashboard(): { studioSegments: Array<{
             segment: string;
             revenue: number;
-            growth: number;
-        }>;
-        productionTrends: Array<{
-            type: string;
+            growth: number }>;
+        productionTrends: Array<{ type: string;
             volume: number;
-            avgPrice: number;
-        }>;
-        seasonalPerformance: Array<{
-            season: string;
+            avgPrice: number }>;
+        seasonalPerformance: Array<{ season: string;
             multiplier: number;
-            revenue: number;
-        }>;
-        contentTypeAnalysis: Array<{
-            type: string;
+            revenue: number }>;
+        contentTypeAnalysis: Array<{ type: string;
             demand: number;
-            pricing: number;
-        }>;
+            pricing: number }>;
     };
     /**
      * Export dashboard data

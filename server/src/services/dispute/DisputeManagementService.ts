@@ -29,10 +29,10 @@ import {
   DisputeSearchCriteria,
   DisputeNotification,
   DisputeTrustImpact
-} from '../../../../packages/core/types/DisputeTypes';
+ from '../../../../packages/core/types/DisputeTypes';
 
-}
-}
+
+
 export interface DisputeCreationRequest {
   transactionId: string;
   type: DisputeType;
@@ -46,12 +46,13 @@ export interface DisputeCreationRequest {
   providerDisputeId?: string;
   evidence?: Partial<DisputeEvidence>[];
   dueDate?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DisputeUpdateRequest {
   status?: DisputeStatus;
   stage?: DisputeStage;
@@ -59,9 +60,10 @@ export interface DisputeUpdateRequest {
   merchantResponse?: string;
   notes?: string;
   evidence?: Partial<DisputeEvidence>[];
-}
-}
-}
+
+
+
+
 
 export class DisputeManagementService {
   private db: Database;
@@ -82,7 +84,7 @@ export class DisputeManagementService {
     this.trustScoreService = trustScoreService;
     this.auditService = auditService;
     this.enforcementActionService = enforcementActionService;
-  }
+
 
   // =============================================================================
   // Core Dispute Management
@@ -101,7 +103,7 @@ export class DisputeManagementService {
     const transaction = await this.getTransactionDetails(request.transactionId);
     if (!transaction) {
       throw new Error(`Transaction not found: ${request.transactionId}`);
-    }
+
 
     // Determine severity based on amount and type
     const severity = this.calculateDisputeSeverity(request.amount, request.type, request.category);
@@ -172,12 +174,12 @@ export class DisputeManagementService {
         transactionId: request.transactionId,
         type: request.type,
         amount: request.amount
-  }
+
       severity: 'warning'
     });
 
     return dispute;
-  }
+
 
   /**
    * Get dispute by ID with full details
@@ -192,7 +194,7 @@ export class DisputeManagementService {
 
     const row = result.rows[0];
     return this.hydrateDispute(row);
-  }
+
 
   /**
    * Search disputes with filters and pagination
@@ -216,37 +218,37 @@ export class DisputeManagementService {
       query += ` AND d.status = ANY($${paramIndex})`;
       params.push(criteria.status);
       paramIndex++;
-    }
+
 
     if (criteria.type && criteria.type.length > 0) {
       query += ` AND d.type = ANY($${paramIndex})`;
       params.push(criteria.type);
       paramIndex++;
-    }
+
 
     if (criteria.assignedTo) {
       query += ` AND d.assigned_to = $${paramIndex}`;
       params.push(criteria.assignedTo);
       paramIndex++;
-    }
+
 
     if (criteria.dateRange) {
       query += ` AND d.created_at BETWEEN $${paramIndex} AND $${paramIndex + 1}`;
       params.push(criteria.dateRange.from, criteria.dateRange.to);
       paramIndex += 2;
-    }
+
 
     if (criteria.amountRange) {
       query += ` AND d.amount BETWEEN $${paramIndex} AND $${paramIndex + 1}`;
       params.push(criteria.amountRange.min, criteria.amountRange.max);
       paramIndex += 2;
-    }
+
 
     if (criteria.query) {
       query += ` AND (d.description ILIKE $${paramIndex} OR d.customer_claim ILIKE $${paramIndex})`;
       params.push(`%${criteria.query}%`);
       paramIndex++;
-    }
+
 
     // Get total count
     const countQuery = query.replace('SELECT d.*, t.currency, t.total_amount as transaction_amount', 'SELECT COUNT(*)');
@@ -271,7 +273,7 @@ export class DisputeManagementService {
     );
 
     return { disputes, total };
-  }
+
 
   /**
    * Update dispute status and properties
@@ -283,12 +285,12 @@ export class DisputeManagementService {
     const currentDispute = await this.getDispute(disputeId);
     if (!currentDispute) {
       throw new Error(`Dispute not found: ${disputeId}`);
-    }
+
 
     // Validate status transitions
     if (updates.status && !this.isValidStatusTransition(currentDispute.status, updates.status)) {
       throw new Error(`Invalid status transition: ${currentDispute.status} -> ${updates.status}`);
-    }
+
 
     // Prepare update data
     const updateData: unknown = {
@@ -301,10 +303,10 @@ export class DisputeManagementService {
       // Auto-advance stage based on status
       if (updates.status === DisputeStatus.INVESTIGATING) {
         updateData.stage = DisputeStage.INVESTIGATION;
-      } else if (updates.status === DisputeStatus.AWAITING_RESPONSE) {
+ else if (updates.status === DisputeStatus.AWAITING_RESPONSE) {
         updateData.stage = DisputeStage.RESPONSE_PREPARATION;
-      }
-    }
+
+
 
     if (updates.stage) updateData.stage = updates.stage;
     if (updates.assignedTo) updateData.assigned_to = updates.assignedTo;
@@ -327,7 +329,7 @@ export class DisputeManagementService {
     // Handle evidence updates
     if (updates.evidence && updates.evidence.length > 0) {
       await this.addEvidence(disputeId, updates.evidence, updatedBy);
-    }
+
 
     // Trigger workflow updates
     await this.updateDisputeWorkflow(disputeId, updates);
@@ -335,15 +337,15 @@ export class DisputeManagementService {
     // Check for enforcement actions if status changed
     if (updates.status && updates.status !== currentDispute.status) {
       await this.checkEnforcementTriggers(disputeId, currentDispute, updates.status);
-    }
+
 
     // Send notifications for significant changes
     if (updates.status || updates.assignedTo) {
       const updatedDispute = await this.getDispute(disputeId);
       if (updatedDispute) {
         await this.sendDisputeNotification(updatedDispute, 'status_change');
-      }
-    }
+
+
 
     // Log update
     await this.auditService.logEvent({
@@ -354,12 +356,12 @@ export class DisputeManagementService {
         updates: Object.keys(updateData),
         previousStatus: currentDispute.status,
         newStatus: updates.status
-  }
+
       severity: 'info'
     });
 
     return await this.getDispute(disputeId) as Dispute;
-  }
+
 
   // =============================================================================
   // Evidence Management
@@ -379,7 +381,7 @@ export class DisputeManagementService {
     const dispute = await this.getDispute(disputeId);
     if (!dispute) {
       throw new Error(`Dispute not found: ${disputeId}`);
-    }
+
 
     const processedEvidence: DisputeEvidence[] = [];
 
@@ -401,13 +403,13 @@ export class DisputeManagementService {
       // Store evidence
       await this.storeEvidence(disputeId, evidence);
       processedEvidence.push(evidence);
-    }
+
 
     // Update dispute evidence count and stage if needed
     await this.updateDisputeEvidenceMetadata(disputeId);
 
     return processedEvidence;
-  }
+
 
   /**
    * Verify evidence and update relevance
@@ -426,7 +428,7 @@ export class DisputeManagementService {
       details: { disputeId, evidenceId, verified },
       severity: 'info'
     });
-  }
+
 
   // =============================================================================
   // Response Management
@@ -448,7 +450,7 @@ export class DisputeManagementService {
     const dispute = await this.getDispute(disputeId);
     if (!dispute) {
       throw new Error(`Dispute not found: ${disputeId}`);
-    }
+
 
     const response: DisputeResponse = {
       responseId: this.generateResponseId(),
@@ -470,7 +472,7 @@ export class DisputeManagementService {
     }, preparedBy);
 
     return response;
-  }
+
 
   /**
    * Submit dispute response to payment provider
@@ -480,7 +482,7 @@ export class DisputeManagementService {
     const response = await this.getDisputeResponse(responseId);
     if (!response) {
       throw new Error(`Response not found: ${responseId}`);
-    }
+
 
     // Update response status
     await this.db.query(`
@@ -502,7 +504,7 @@ export class DisputeManagementService {
       details: { responseId, disputeId: response.disputeId },
       severity: 'info'
     });
-  }
+
 
   // =============================================================================
   // Resolution Management
@@ -524,7 +526,7 @@ export class DisputeManagementService {
     const dispute = await this.getDispute(disputeId);
     if (!dispute) {
       throw new Error(`Dispute not found: ${disputeId}`);
-    }
+
 
     const resolution: DisputeResolution = {
       outcome,
@@ -568,12 +570,12 @@ export class DisputeManagementService {
         outcome,
         finalAmount,
         liabilityAmount: resolution.liabilityAmount
-  }
+
       severity: 'warning'
     });
 
     return resolution;
-  }
+
 
   // =============================================================================
   // Analytics and Reporting
@@ -618,7 +620,7 @@ export class DisputeManagementService {
       disputesByCategory: byCategory,
       disputesByStatus: byStatus,
       monthlyTrends: await this.getMonthlyTrends(};
-  }
+
 
   /**
    * Generate comprehensive dispute analytics
@@ -637,7 +639,7 @@ export class DisputeManagementService {
       insights,
       recommendations,
       generatedAt: new Date(};
-  }
+
 
   // =============================================================================
   // Integration with Trust and Enforcement Systems
@@ -655,14 +657,14 @@ export class DisputeManagementService {
     // High-value disputes or fraud-related disputes may trigger enforcement
     if (dispute.amount > 1000 || dispute.category === DisputeCategory.FRAUD) {
       await this.enforcementActionService.evaluateDisputeForEnforcement(dispute);
-    }
+
 
     // Pattern of disputes may trigger seller restrictions
     const sellerDisputeCount = await this.getSellerDisputeCount(dispute.sellerId);
     if (sellerDisputeCount > 5) {
       await this.triggerSellerReview(dispute.sellerId, sellerDisputeCount);
-    }
-  }
+
+
 
   /**
    * Apply trust score impacts based on dispute resolution
@@ -679,8 +681,8 @@ export class DisputeManagementService {
         impact: impact.buyerImpact.scoreDelta,
         description: `Dispute resolution impact: ${resolution.outcome}`,
         timestamp: new Date()
-      }]);
-    }
+]);
+
 
     if (impact.sellerImpact.scoreDelta !== 0) {
       await this.trustScoreService.updateUserTrustScore(dispute.sellerId, [{
@@ -690,9 +692,9 @@ export class DisputeManagementService {
         impact: impact.sellerImpact.scoreDelta,
         description: `Dispute resolution impact: ${resolution.outcome}`,
         timestamp: new Date()
-      }]);
-    }
-  }
+]);
+
+
 
   // =============================================================================
   // Private Helper Methods
@@ -742,19 +744,19 @@ export class DisputeManagementService {
       appealDeadline: row.appeal_deadline,
       appeal: row.appeal_data ? JSON.parse(row.appeal_data) : undefined
     };
-  }
+
 
   private generateDisputeId(): string {
     return `DSP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateEvidenceId(): string {
     return `EVD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateResponseId(): string {
     return `RSP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private calculateDisputeSeverity(
     amount: number,
@@ -765,12 +767,12 @@ export class DisputeManagementService {
     if (amount > 1000 || type === DisputeType.CHARGEBACK) return 'high';
     if (amount > 100) return 'medium';
     return 'low';
-  }
+
 
   private calculateResponseDeadline(type: DisputeType): Date {
     const days = type === DisputeType.CHARGEBACK ? 7 : 14;
     return new Date(Date.now() + days * 24 * 60 * 60 * 1000);
-  }
+
 
   private isValidStatusTransition(currentStatus: DisputeStatus, newStatus: DisputeStatus): boolean {
     const validTransitions: Record<DisputeStatus, DisputeStatus[]> = {
@@ -788,7 +790,7 @@ export class DisputeManagementService {
     };
 
     return validTransitions[currentStatus]?.includes(newStatus) || false;
-  }
+
 
   private calculateTrustImpact(dispute: Dispute, resolution: DisputeResolution): DisputeTrustImpact {
     const baseImpact = dispute.amount > 1000 ? 10 : 5;
@@ -800,23 +802,23 @@ export class DisputeManagementService {
         severity: 'moderate',
         duration: 90,
         reversible: false
-  }
+
       sellerImpact: {
         scoreDelta: resolution.outcome === DisputeOutcome.LOST ? -baseImpact : baseImpact / 2,
         factors: ['dispute_resolution'],
         severity: 'moderate', 
         duration: 90,
         reversible: false
-      }
+
     };
-  }
+
 
   // Placeholder implementation methods - would be implemented with actual database queries
   private async getTransactionDetails(transactionId: string): Promise<unknown> {
 
     const result = await this.db.query('SELECT * FROM transactions WHERE id = $1', [transactionId]);
     return result.rows[0] || null;
-  }
+
 
   private async storeDispute(dispute: Dispute): Promise<void> {
 
@@ -859,31 +861,31 @@ export class DisputeManagementService {
       dispute.createdBy, dispute.source, dispute.paymentProvider, dispute.providerDisputeId,
       dispute.appealable, dispute.appealDeadline
     ]);
-  }
+
 
   private async processInitialEvidence(_____evidence: Partial<DisputeEvidence>[]): Promise<DisputeEvidence[]> {
 
     // Process and validate initial evidence
     return [];
-  }
+
 
   private async createDisputeWorkflow(dispute: Dispute): Promise<void> {
 
     // Create workflow for dispute processing
     console.log(`📋 Creating workflow for dispute: ${dispute.disputeId}`);
-  }
+
 
   private async triggerInitialProcessing(dispute: Dispute): Promise<void> {
 
     // Trigger initial automated processing
     console.log(`🔄 Triggering initial processing for dispute: ${dispute.disputeId}`);
-  }
+
 
   private async sendDisputeNotification(dispute: Dispute, _____type: string): Promise<void> {
 
     // Send notifications to relevant parties
     console.log(`📧 Sending notification for dispute: ${dispute.disputeId}`);
-  }
+
 
   // Additional placeholder methods for completeness
   private mapSortField(field: string): string {
@@ -893,17 +895,17 @@ export class DisputeManagementService {
       dueDate: 'due_date'
     };
     return mapping[field] || 'created_at';
-  }
+
 
   private calculateRelevanceScore(_____evidence: Partial<DisputeEvidence>, _____dispute: Dispute): number {
     return 75; // Placeholder
-  }
+
 
   private async getTotalDisputesCount(dateFilter: string): Promise<number> {
 
     const result = await this.db.query(`SELECT COUNT(*) FROM disputes ${dateFilter}`);
     return parseInt(result.rows[0].count);
-  }
+
 
   private async getActiveDisputesCount(): Promise<number> {
 
@@ -912,58 +914,58 @@ export class DisputeManagementService {
       WHERE status NOT IN ('closed', 'resolved', 'withdrawn')
     `);
     return parseInt(result.rows[0].count);
-  }
+
 
   private async getWinRate(_____dateFilter: string): Promise<number> {
 
     // Calculate win rate based on resolved disputes
     return 68.5; // Placeholder
-  }
+
 
   private async getAverageResolutionTime(_____dateFilter: string): Promise<number> {
 
     // Calculate average resolution time in days
     return 12.5; // Placeholder
-  }
+
 
   private async getTotalLiability(_____dateFilter: string): Promise<number> {
 
     // Calculate total liability amount
     return 50000; // Placeholder
-  }
+
 
   private async getDisputesByType(_____dateFilter: string): Promise<Record<DisputeType, number>> {
     // Return dispute counts by type
     return {} as Record<DisputeType, number>;
-  }
+
 
   private async getDisputesByCategory(_____dateFilter: string): Promise<Record<DisputeCategory, number>> {
     // Return dispute counts by category
     return {} as Record<DisputeCategory, number>;
-  }
+
 
   private async getDisputesByStatus(_____dateFilter: string): Promise<Record<DisputeStatus, number>> {
     // Return dispute counts by status
     return {} as Record<DisputeStatus, number>;
-  }
+
 
   private async getMonthlyTrends(): Promise<any[]> {
 
     // Return monthly dispute trends
     return [];
-  }
+
 
   private async generateDisputeInsights(_____metrics: DisputeMetrics, _____period: unknown): Promise<any[]> {
 
     // Generate actionable insights
     return [];
-  }
+
 
   private async generateDisputeRecommendations(_____metrics: DisputeMetrics, _____insights: unknown[]): Promise<any[]> {
 
     // Generate improvement recommendations
     return [];
-  }
+
 
   // Additional helper methods would be implemented here
   private async getDisputeEvidence(_____disputeId: string): Promise<DisputeEvidence[]> { return []; }
@@ -986,13 +988,12 @@ export class DisputeManagementService {
   
   private calculateLiabilityAmount(dispute: Dispute, outcome: DisputeOutcome, finalAmount: number): number {
     return outcome === DisputeOutcome.LOST ? finalAmount : 0;
-  }
+
   
   private calculateFeesAwarded(dispute: Dispute, outcome: DisputeOutcome): number {
     return outcome === DisputeOutcome.WON ? 15 : 0; // Standard dispute fee
-  }
+
   
   private isAppealable(outcome: DisputeOutcome): boolean {
     return outcome === DisputeOutcome.LOST;
-  }
-}
+

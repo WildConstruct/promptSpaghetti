@@ -29,18 +29,16 @@ export class SemanticVersion {
     const match = version.match(semverRegex);
     if (!match) {
       throw new Error(`Invalid semantic version: ${version}`);}
-    return {
-  major: parseInt(match[1], 10),
+    return { major: parseInt(match[1], 10),
   minor: parseInt(match[2], 10),
   patch: parseInt(match[3], 10),
   prerelease: match[4] ? match[4].split('.') : [],
-  build: match[5] ? match[5].split('.') : [],
+  build: match[5] ? match[5].split('.') : [] }
 };
   /**
    * Compare this version with another
    */
-  public compareTo(other: SemanticVersion): number {
-    // Compare major.minor.patch
+  public compareTo(other: SemanticVersion): number { // Compare major.minor.patch
     if (this.major !== other.major) {
       return this.major - other.major;
     if (this.minor !== other.minor) {
@@ -61,8 +59,7 @@ export class SemanticVersion {
       const aNum = parseInt(a, 10);
       const bNum = parseInt(b, 10);
       if (!isNaN(aNum) && !isNaN(bNum)) {
-        if (aNum !== bNum) return aNum - bNum;
-      } else {
+        if (aNum !== bNum) return aNum - bNum } else {
         if (a !== b) return a < b ? -1 : 1;
     return 0;
   /**
@@ -89,14 +86,13 @@ export class SemanticVersion {
       if (!isNaN(preNum)) {
         const newPre = [...this.prerelease.slice(0, -1), (preNum + 1).toString()];
         return new SemanticVersion(`${this.major}.${this.minor}.${this.patch}-${newPre.join('.')}`);}
-      return new SemanticVersion(`${this.major}.${this.minor}.${this.patch}-${this.prerelease.join('.')}.1`);},}
+      return new SemanticVersion(`${this.major}.${this.minor}.${this.patch}-${this.prerelease.join('.')}.1`);},},
   default:
       throw new Error(`Unknown release type: ${releaseType}`);}
   /**
    * Check if this is a prerelease version
    */
-  public isPrerelease(): boolean {
-  return this.prerelease.length > 0;
+  public isPrerelease(): boolean { return this.prerelease.length > 0;
   /**
   * Check if this is a stable version
   */
@@ -136,7 +132,7 @@ export class SemanticVersion {
   return {
   operator: '~',
   version,
-  satisfies: (v: SemanticVersion) => {,
+  satisfies: (v: SemanticVersion) => { }
   return v.major === version.major &&
   v.minor === version.minor &&
   v.compareTo(version) >= 0 &&
@@ -144,38 +140,33 @@ export class SemanticVersion {
   v.minor === version.minor;
 };
     // Handle caret range (^1.2.3)
-    if (comp.startsWith('^')) {
-  const version = new SemanticVersion(comp.substring(1));
+    if (comp.startsWith('^')) { const version = new SemanticVersion(comp.substring(1));
   return {
   operator: '^',
   version,
-  satisfies: (v: SemanticVersion) => {,
+  satisfies: (v: SemanticVersion) => { }
   return v.major === version.major && v.compareTo(version) >= 0;
 };
     // Handle comparison operators
     const operators = ['>=', '<=', '>', '<', '='];
-    for (const op of operators) {
-  if (comp.startsWith(op)) {
+    for (const op of operators) { if (comp.startsWith(op)) {
   const version = new SemanticVersion(comp.substring(op.length));
   return {
   operator: op as ComparisonOperator,
   version,
-  satisfies: (v: SemanticVersion) => {,
+  satisfies: (v: SemanticVersion) => { }
   const cmp = v.compareTo(version);
-  switch (op) {
-  case '>=': return cmp >= 0;
+  switch (op) { case '>=': return cmp >= 0;
   case '<=': return cmp <= 0;
   case '>': return cmp > 0;
   case '<': return cmp < 0;
   case '=': return cmp === 0;
-  default: return false;
-};
+  default: return false };
     // Exact match
     const version = new SemanticVersion(comp);
-    return {
-  operator: '=',
+    return { operator: '=',
   version,
-  satisfies: (v: SemanticVersion) => v.compareTo(version) === 0,
+  satisfies: (v: SemanticVersion) => v.compareTo(version) === 0 }
 };
   /**
    * Check if version satisfies this range
@@ -198,8 +189,7 @@ export class ExtensionVersionManager {
   private versionCache: Map<string, SemanticVersion> = new Map();
   private compatibilityCache: Map<string, CompatibilityResult> = new Map();
   private constructor() {}
-  public static getInstance(): ExtensionVersionManager {
-    if (!ExtensionVersionManager.instance) {
+  public static getInstance(): ExtensionVersionManager { if (!ExtensionVersionManager.instance) {
       ExtensionVersionManager.instance = new ExtensionVersionManager();
     return ExtensionVersionManager.instance;
   /**
@@ -215,12 +205,11 @@ export class ExtensionVersionManager {
    * Check compatibility between extensions
    */
   public checkCompatibility(extension: ExtensionManifest)
-    systemVersion: string,
+  systemVersion: string }
     availableExtensions: Map<string, ExtensionManifest>
   ): CompatibilityResult {
     const cacheKey = `${extension.id}-${extension.version}-${systemVersion}`;}
-    if (this.compatibilityCache.has(cacheKey)) {
-  return this.compatibilityCache.get(cacheKey)!;
+    if (this.compatibilityCache.has(cacheKey)) { return this.compatibilityCache.get(cacheKey)!;
   const result = this.performCompatibilityCheck(extension, systemVersion, availableExtensions);
   this.compatibilityCache.set(cacheKey, result);
   return result;
@@ -228,54 +217,51 @@ export class ExtensionVersionManager {
   * Perform actual compatibility check
   */
   private performCompatibilityCheck(extension: ExtensionManifest)
-  systemVersion: string,
-  availableExtensions: Map<string, ExtensionManifest>): CompatibilityResult {,
+  systemVersion: string
+  availableExtensions: Map<string, ExtensionManifest>): CompatibilityResult {
   const issues: CompatibilityIssue = [];
   const warnings: string = [];
   // Check system version compatibility
   const systemCheck = this.checkSystemCompatibility(extension, systemVersion);
   if (!systemCheck.compatible) {
   issues.push({)
-  type: 'system-version',
-  severity: 'error',
-  message: systemCheck.message || 'System version incompatible',
-  currentVersion: systemVersion,
-  requiredVersion: extension.dependencies?.system || '1.0.0',
+  type: 'system-version'
+  severity: 'error'
+  message: systemCheck.message || 'System version incompatible'
+  currentVersion: systemVersion
+  requiredVersion: extension.dependencies?.system || '1.0.0' }
 });
     // Check extension dependencies
-    if (extension.dependencies?.extensions) {
-      for (const [depId, versionRange] of Object.entries(extension.dependencies.extensions)) {
+    if (extension.dependencies?.extensions) { for (const [depId, versionRange] of Object.entries(extension.dependencies.extensions)) {
         const depExtension = availableExtensions.get(depId);
         if (!depExtension) {
           issues.push({)
-  type: 'missing-dependency',
-            severity: 'error',
+  type: 'missing-dependency'
+            severity: 'error' }
             message: `Missing dependency: ${depId}`}
-},
-  dependencyId: depId,
+
+  dependencyId: depId
             requiredVersion: versionRange;
   });
           continue;
         const depVersion = this.parseVersion(depExtension.version);
         const range = VersionRange.parse(versionRange);
-        if (!range.satisfies(depVersion)) {
-          issues.push({)
-  type: 'version-mismatch',
-            severity: 'error',
+        if (!range.satisfies(depVersion)) { issues.push({)
+  type: 'version-mismatch'
+            severity: 'error' }
             message: `Dependency ${depId} version ${depExtension.version} doesn't satisfy ${versionRange}`}
-},
-  dependencyId: depId,
-            currentVersion: depExtension.version,
+
+  dependencyId: depId
+            currentVersion: depExtension.version
             requiredVersion: versionRange;
   });
     // Check for circular dependencies
     const circularDeps = this.findCircularDependencies(extension, availableExtensions);
-    if (circularDeps.length > 0) {
-      issues.push({)
-  type: 'circular-dependency',
-        severity: 'error',
+    if (circularDeps.length > 0) { issues.push({)
+  type: 'circular-dependency'
+        severity: 'error' }
         message: `Circular dependency detected: ${circularDeps.join(' -> ')}`}
-},
+
   circularPath: circularDeps;
   });
     // Check for deprecated dependencies
@@ -284,17 +270,16 @@ export class ExtensionVersionManager {
         const depExtension = availableExtensions.get(depId);
         if (depExtension?.compatibility?.deprecated) {
           warnings.push(`Dependency ${depId} is deprecated: ${depExtension.compatibility.deprecationMessage || 'No longer maintained'}`);}
-    return {
-  compatible: issues.filter(i => i.severity === 'error').length === 0,
-  issues,
-  warnings,
-  systemVersion,
-  extensionVersion: extension.version,
+    return { compatible: issues.filter(i => i.severity === 'error').length === 0
+  issues
+  warnings
+  systemVersion
+  extensionVersion: extension.version }
 };
   /**
    * Check system version compatibility
    */
-  private checkSystemCompatibility(extension: ExtensionManifest, systemVersion: string): {
+  private checkSystemCompatibility(extension: ExtensionManifest, systemVersion: string): { 
   compatible: boolean;
     message?: string;
     const systemVer = this.parseVersion(systemVersion);
@@ -303,15 +288,14 @@ export class ExtensionVersionManager {
       const minVer = this.parseVersion(extension.compatibility.min_system_version);
       if (systemVer.compareTo(minVer) < 0) {
         return {
-          compatible: false,
+          compatible: false }
           message: `System version ${systemVersion} is below minimum required ${extension.compatibility.min_system_version}`}
         };
     // Check maximum system version
-    if (extension.compatibility?.max_system_version) {
-      const maxVer = this.parseVersion(extension.compatibility.max_system_version);
+    if (extension.compatibility?.max_system_version) { const maxVer = this.parseVersion(extension.compatibility.max_system_version);
       if (systemVer.compareTo(maxVer) > 0) {
         return {
-          compatible: false,
+          compatible: false }
           message: `System version ${systemVersion} is above maximum supported ${extension.compatibility.max_system_version}`}
         };
     return { compatible: true };
@@ -320,9 +304,9 @@ export class ExtensionVersionManager {
    */
   private findCircularDependencies()
     extension: ExtensionManifest,
-    availableExtensions: Map<string, ExtensionManifest>,
-    visited: Set<string> = new Set(),
-    path: string = []): string {,
+    availableExtensions: Map<string, ExtensionManifest>
+    visited: Set<string> = new Set()
+    path: string = []): string { 
   if (visited.has(extension.id)) {
   const circularStart = path.indexOf(extension.id);
   return circularStart >= 0 ? path.slice(circularStart).concat(extension.id) : [];
@@ -333,9 +317,9 @@ export class ExtensionVersionManager {
   const depExtension = availableExtensions.get(depId);
   if (depExtension) {
   const circular = this.findCircularDependencies(;);
-  depExtension,
-  availableExtensions,
-  new Set(visited),
+  depExtension
+  availableExtensions
+  new Set(visited)
   [...path]
   );
   if (circular.length > 0) {
@@ -345,15 +329,15 @@ export class ExtensionVersionManager {
   * Get upgrade path for extension
   */
   public getUpgradePath(currentVersion: string)
-  targetVersion: string,
-  availableVersions: string): UpgradePath {,
+  targetVersion: string
+  availableVersions: string): UpgradePath {
   const current = this.parseVersion(currentVersion);
   const target = this.parseVersion(targetVersion);
   if (current.compareTo(target) >= 0) {
   return {
-  possible: false,
-  reason: 'Target version is not newer than current version',
-  steps: [],
+  possible: false
+  reason: 'Target version is not newer than current version'
+  steps: [] }
 };
     const sortedVersions = availableVersions;
       .map(v => this.parseVersion(v))
@@ -361,8 +345,7 @@ export class ExtensionVersionManager {
       .sort((a, b) => a.compareTo(b));
     const steps: UpgradeStep = [];
     let currentStep = current;
-    for (const version of sortedVersions) {
-  const stepType = this.getUpgradeStepType(currentStep, version);
+    for (const version of sortedVersions) { const stepType = this.getUpgradeStepType(currentStep, version);
   const risk = this.assessUpgradeRisk(currentStep, version, stepType);
   steps.push({)
   fromVersion: currentStep.toString(),
@@ -370,20 +353,18 @@ export class ExtensionVersionManager {
   type: stepType,
   risk,
   breakingChanges: stepType === 'major',
-  recommendedActions: this.getRecommendedActions(stepType, risk),
+  recommendedActions: this.getRecommendedActions(stepType, risk) }
 });
       currentStep = version;
-    return {
-  possible: true,
+    return { possible: true,
   steps,
   totalRisk: this.calculateTotalRisk(steps),
-  estimatedDuration: this.estimateDuration(steps),
+  estimatedDuration: this.estimateDuration(steps) }
 };
   /**
    * Get upgrade step type
    */
-  private getUpgradeStepType(from: SemanticVersion, to: SemanticVersion): UpgradeStepType {
-  if (from.major !== to.major) return 'major';
+  private getUpgradeStepType(from: SemanticVersion, to: SemanticVersion): UpgradeStepType { if (from.major !== to.major) return 'major';
   if (from.minor !== to.minor) return 'minor';
   if (from.patch !== to.patch) return 'patch';
   return 'prerelease';
@@ -399,18 +380,14 @@ export class ExtensionVersionManager {
   /**
   * Get recommended actions for upgrade
   */
-  private getRecommendedActions(type: UpgradeStepType, risk: RiskLevel): string {,
+  private getRecommendedActions(type: UpgradeStepType, risk: RiskLevel): string { }
   const actions: string = [];
-  if (type === 'major') {
-  actions.push('Review breaking changes documentation');
+  if (type === 'major') { actions.push('Review breaking changes documentation');
   actions.push('Update extension code for API changes');
   actions.push('Run comprehensive tests');
-  actions.push('Update dependencies');
-} else if (type === 'minor') {
-      actions.push('Review new features and deprecations');
+  actions.push('Update dependencies') } else if (type === 'minor') { actions.push('Review new features and deprecations');
       actions.push('Test extension functionality');
-      actions.push('Update documentation');
-    } else if (type === 'patch') {
+      actions.push('Update documentation') } else if (type === 'patch') {
       actions.push('Review bug fixes');
       actions.push('Run basic tests');
     if (risk === 'high') {
@@ -439,8 +416,7 @@ export class ExtensionVersionManager {
   /**
    * Clear caches
    */
-  public clearCaches(): void {
-  this.versionCache.clear();
+  public clearCaches(): void { this.versionCache.clear();
   this.compatibilityCache.clear();
   // Types and Interfaces
   interface ParsedVersion {
@@ -463,30 +439,29 @@ export class ExtensionVersionManager {
   issues: CompatibilityIssue;
   warnings: string;
   systemVersion: string;
-  extensionVersion: string;
-}
-}
-}
-export interface CompatibilityIssue {
-  type: 'system-version' | 'missing-dependency' | 'version-mismatch' | 'circular-dependency';
+  extensionVersion: string }
+
+
+
+export interface CompatibilityIssue { type: 'system-version' | 'missing-dependency' | 'version-mismatch' | 'circular-dependency' }
   severity: 'error' | 'warning';
   message: string;
   dependencyId?: string;
   currentVersion?: string;
   requiredVersion?: string;
   circularPath?: string;
-}
-}
-}
-export interface UpgradePath {
-  possible: boolean;
+
+
+
+
+export interface UpgradePath { possible: boolean;
   reason?: string;
   steps: UpgradeStep;
   totalRisk?: RiskLevel;
-  estimatedDuration?: string;
-}
-}
-}
+  estimatedDuration?: string }
+
+
+
 export interface UpgradeStep {
   fromVersion: string;
   toVersion: string;
@@ -495,6 +470,6 @@ export interface UpgradeStep {
   breakingChanges: boolean;
   recommendedActions: string;
   // Export singleton
-}
-}
+
+
 export const extensionVersionManager = ExtensionVersionManager.getInstance();

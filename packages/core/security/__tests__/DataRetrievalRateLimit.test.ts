@@ -10,185 +10,174 @@
  * - Quota enforcement
  * - Exemption handling
  */
-import {
-  DataRetrievalRateLimit,
+import { DataRetrievalRateLimit,
   DataRetrievalConfig,
-  DataRequestDetails,
+  DataRequestDetails }
   DataRetrievalDecision
-} from '../DataRetrievalRateLimit';
-import {
-  DataRetrievalConfigurationFactory,
-  STANDARD_DATA_RETRIEVAL_LIMITS,
+ from '../DataRetrievalRateLimit';
+import { DataRetrievalConfigurationFactory,
+  STANDARD_DATA_RETRIEVAL_LIMITS }
   OPERATION_MODIFIERS
-} from '../DataRetrievalConfiguration';
-import {
-  RateLimitingService,
-  RateLimitResult,
+ from '../DataRetrievalConfiguration';
+import { RateLimitingService,
+  RateLimitResult }
   ThreatLevel
-} from '../RateLimitingService';
-import {
-  SubjectAttributes,
+ from '../RateLimitingService';
+import { SubjectAttributes,
   ObjectAttributes,
-  DataClassificationLevel,
+  DataClassificationLevel }
   DataOperation
-} from '../DataClassificationAccessControl';
-describe('DataRetrievalRateLimit', () => {
-  let dataRetrievalRateLimit: DataRetrievalRateLimit;
+ from '../DataClassificationAccessControl';
+describe('DataRetrievalRateLimit', () => { let dataRetrievalRateLimit: DataRetrievalRateLimit;
   let mockRateLimitingService: jest.Mocked<RateLimitingService>;
   let testConfig: DataRetrievalConfig;
-  const createTestSubject = (overrides?: Partial<SubjectAttributes>): SubjectAttributes => ({,)
-  userId: 'user-123',
-  roles: ['USER'],
-  clearanceLevel: 'INTERNAL' as DataClassificationLevel,
-  department: 'Engineering',
-  jobTitle: 'Software Engineer',
+  const createTestSubject = (overrides?: Partial<SubjectAttributes>): SubjectAttributes => ({)
+  userId: 'user-123'
+  roles: ['USER']
+  clearanceLevel: 'INTERNAL' as DataClassificationLevel
+  department: 'Engineering'
+  jobTitle: 'Software Engineer'
   location: {
-  country: 'US',
-  region: 'California',
-  city: 'San Francisco',
-  timezone: 'PST',
-  withinApprovedRegions: true,
-},
-  device: {
-  deviceId: 'device-123',
-  deviceType: 'LAPTOP',
-  operatingSystem: 'macOS',
-  browser: 'Chrome',
-  managed: true,
-  encrypted: true,
-  patchLevel: 'current',
-  riskScore: 10,
-  registered: true,
-  lastSeen: new Date(),
-},
-  behaviorProfile: {
-  normalAccessPatterns: [],
-      anomalyScore: 5,
-      typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
-      typicalLocations: ['office'],
-      accessFrequency: 'MEDIUM',
+  country: 'US'
+  region: 'California'
+  city: 'San Francisco'
+  timezone: 'PST'
+  withinApprovedRegions: true }
+
+  device: { 
+  deviceId: 'device-123'
+  deviceType: 'LAPTOP'
+  operatingSystem: 'macOS'
+  browser: 'Chrome'
+  managed: true
+  encrypted: true
+  patchLevel: 'current'
+  riskScore: 10
+  registered: true
+  lastSeen: new Date() }
+
+  behaviorProfile: { 
+  normalAccessPatterns: []
+      anomalyScore: 5
+      typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17]
+      typicalLocations: ['office']
+      accessFrequency: 'MEDIUM' }
       dataAccessPatterns: {} as any
-  },
-  riskScore: 15,
-    certifications: [],
-    lastActivity: new Date(),
-    mfaVerified: true,
-    trustLevel: 'HIGH',
+
+  riskScore: 15
+    certifications: []
+    lastActivity: new Date()
+    mfaVerified: true
+    trustLevel: 'HIGH'
     ...overrides
   });
-  const createTestObject = (overrides?: Partial<ObjectAttributes>): ObjectAttributes => ({)
-  dataId: 'data-123',
-  classification: 'INTERNAL' as DataClassificationLevel,
-  dataOwner: 'owner-123',
-  createdAt: new Date(),
-  lastModified: new Date(),
-  retentionPeriod: 365,
-  complianceFrameworks: ['GDPR'],
-  tags: ['test'],
-  sensitivity: 'NORMAL',
-  businessValue: 'MEDIUM',
-  dataType: 'document',
-  sourceSystem: 'app',
-  encryptionStatus: 'ENCRYPTED',
+  const createTestObject = (overrides?: Partial<ObjectAttributes>): ObjectAttributes => ({ )
+  dataId: 'data-123'
+  classification: 'INTERNAL' as DataClassificationLevel
+  dataOwner: 'owner-123'
+  createdAt: new Date()
+  lastModified: new Date()
+  retentionPeriod: 365
+  complianceFrameworks: ['GDPR']
+  tags: ['test']
+  sensitivity: 'NORMAL'
+  businessValue: 'MEDIUM'
+  dataType: 'document'
+  sourceSystem: 'app'
+  encryptionStatus: 'ENCRYPTED' }
   ...overrides
 });
-  const createTestRequestDetails = (overrides?: Partial<DataRequestDetails>): DataRequestDetails => ({)
-  operation: 'read' as DataOperation,
-    estimatedBytes: 1024,
-    estimatedRecords: 10,
-    requestType: 'SINGLE',
-    context: {},
+  const createTestRequestDetails = (overrides?: Partial<DataRequestDetails>): DataRequestDetails => ({ )
+  operation: 'read' as DataOperation
+    estimatedBytes: 1024
+    estimatedRecords: 10
+    requestType: 'SINGLE' }
+    context: {}
     ...overrides
   });
-  beforeEach(() => {
-  // Create mock rate limiting service
+  beforeEach(() => { // Create mock rate limiting service
   mockRateLimitingService = {
-  checkLimit: jest.fn<unknown, unknown>().mockResolvedValue({,)
-  result: RateLimitResult.ALLOWED,
-  reason: 'Within limits',
-  retryAfter: 0,
-} as unknown as unknown as unknown),
-      recordAttempt: jest.fn<unknown, unknown>(),
-      updateConfiguration: jest.fn<unknown, unknown>(),
-      getMetrics: jest.fn<unknown, unknown>(),
-      clearCache: jest.fn<unknown, unknown>(),
-      addExemption: jest.fn<unknown, unknown>(),
-      removeExemption: jest.fn<unknown, unknown>(),
-      on: jest.fn<unknown, unknown>(),
-      emit: jest.fn<unknown, unknown>(),
+  checkLimit: jest.fn<unknown, unknown>().mockResolvedValue({)
+  result: RateLimitResult.ALLOWED
+  reason: 'Within limits'
+  retryAfter: 0 }
+ as unknown as unknown as unknown)
+      recordAttempt: jest.fn<unknown, unknown>()
+      updateConfiguration: jest.fn<unknown, unknown>()
+      getMetrics: jest.fn<unknown, unknown>()
+      clearCache: jest.fn<unknown, unknown>()
+      addExemption: jest.fn<unknown, unknown>()
+      removeExemption: jest.fn<unknown, unknown>()
+      on: jest.fn<unknown, unknown>()
+      emit: jest.fn<unknown, unknown>()
       removeAllListeners: jest.fn<unknown, unknown>()
-    } as any;
+ as any;
     // Create test configuration
-    testConfig = DataRetrievalConfigurationFactory.createConfiguration('DEVELOPMENT', {)
-  enableVolumeTracking: true,
-  enableBehaviorAnalysis: true,
-  enableAdaptiveLimits: true,
-  enableAnomalyDetection: true,
-  quotaEnforcement: true,
+    testConfig = DataRetrievalConfigurationFactory.createConfiguration('DEVELOPMENT', { )
+  enableVolumeTracking: true
+  enableBehaviorAnalysis: true
+  enableAdaptiveLimits: true
+  enableAnomalyDetection: true
+  quotaEnforcement: true }
 });
     dataRetrievalRateLimit = new DataRetrievalRateLimit()
-      mockRateLimitingService,
+      mockRateLimitingService
       testConfig
     );
   });
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-  describe('Basic Rate Limiting', () => {
-    test('should allow request within limits', async () => {
+  afterEach(() => { jest.clearAllMocks() });
+  describe('Basic Rate Limiting', () => { test('should allow request within limits', async () => {
       const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
-        subject,
-        object,
-        'read',
+        subject
+        object
+        'read' }
         requestDetails
       );
       expect(decision.decision).toBe('ALLOW');
       expect(decision.reason).toContain('Access granted');
       expect(mockRateLimitingService.checkLimit).toHaveBeenCalled();
     });
-    test('should deny request when rate limited', async () => {
-  mockRateLimitingService.checkLimit.mockResolvedValue({)
-  result: RateLimitResult.BLOCKED,
-  reason: 'Rate limit exceeded',
-  retryAfter: 60,
-} as unknown as unknown as unknown);
+    test('should deny request when rate limited', async () => { mockRateLimitingService.checkLimit.mockResolvedValue({)
+  result: RateLimitResult.BLOCKED
+  reason: 'Rate limit exceeded'
+  retryAfter: 60 }
+ as unknown as unknown as unknown);
       const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
-        subject,
-        object,
-        'read',
+        subject
+        object
+        'read'
         requestDetails
       );
       expect(decision.decision).toBe('DENY');
       expect(decision.reason).toContain('Rate limit exceeded');
       expect(decision.retryAfter).toBe(60);
     });
-    test('should check multiple rate limit scopes', async () => {
-      const subject = createTestSubject();
+    test('should check multiple rate limit scopes', async () => { const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
       await dataRetrievalRateLimit.checkDataRetrievalLimit()
-        subject,
-        object,
-        'read',
+        subject
+        object
+        'read'
         requestDetails
       );
       expect(mockRateLimitingService.checkLimit).toHaveBeenCalledTimes(3);
       expect(mockRateLimitingService.checkLimit).toHaveBeenCalledWith()
-        subject.userId,
+        subject.userId
         expect.any(String)
       );
       expect(mockRateLimitingService.checkLimit).toHaveBeenCalledWith()
-        subject.location.country,
+        subject.location.country
         expect.any(String)
       );
       expect(mockRateLimitingService.checkLimit).toHaveBeenCalledWith()
-        subject.device.deviceId,
+        subject.device.deviceId }
         expect.any(String)
       );
     });
@@ -197,13 +186,13 @@ describe('DataRetrievalRateLimit', () => {
     test('should apply stricter limits for confidential data', async () => {
       const subject = createTestSubject({ clearanceLevel: 'CONFIDENTIAL' });
       const object = createTestObject({ classification: 'CONFIDENTIAL' });
-      const requestDetails = createTestRequestDetails({)
-  estimatedBytes: 10485760 // 10MB,
+      const requestDetails = createTestRequestDetails({ )
+  estimatedBytes: 10485760 // 10MB }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
-        subject,
-        object,
-        'read',
+        subject
+        object
+        'read'
         requestDetails
       );
       expect(decision.decision).toBe('ALLOW');
@@ -211,13 +200,13 @@ describe('DataRetrievalRateLimit', () => {
     test('should apply strictest limits for restricted data', async () => {
       const subject = createTestSubject({ clearanceLevel: 'RESTRICTED' });
       const object = createTestObject({ classification: 'RESTRICTED' });
-      const requestDetails = createTestRequestDetails({)
-  estimatedBytes: 512000 // 500KB,
+      const requestDetails = createTestRequestDetails({ )
+  estimatedBytes: 512000 // 500KB }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
-        subject,
-        object,
-        'read',
+        subject
+        object
+        'read'
         requestDetails
       );
       expect(decision.decision).toBe('ALLOW');
@@ -225,27 +214,26 @@ describe('DataRetrievalRateLimit', () => {
     test('should deny large request for restricted data', async () => {
       const subject = createTestSubject({ clearanceLevel: 'RESTRICTED' });
       const object = createTestObject({ classification: 'RESTRICTED' });
-      const requestDetails = createTestRequestDetails({)
-  estimatedBytes: 5242880 // 5MB - exceeds restricted limits,
+      const requestDetails = createTestRequestDetails({ )
+  estimatedBytes: 5242880 // 5MB - exceeds restricted limits }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
-        subject,
-        object,
-        'read',
+        subject
+        object
+        'read'
         requestDetails
       );
       expect(decision.decision).toBe('DENY');
       expect(decision.reason).toContain('limit exceeded');
     });
   });
-  describe('Volume-Based Throttling', () => {
-  test('should track and enforce byte limits', async () => {
+  describe('Volume-Based Throttling', () => { test('should track and enforce byte limits', async () => {
   const subject = createTestSubject();
   const object = createTestObject();
   // Make multiple requests to accumulate bytes
   for (let i = 0; i < 5; i++) {
   const requestDetails = createTestRequestDetails({)
-  estimatedBytes: 20971520 // 20MB each,
+  estimatedBytes: 20971520 // 20MB each }
 });
         await dataRetrievalRateLimit.checkDataRetrievalLimit()
           subject,
@@ -254,8 +242,8 @@ describe('DataRetrievalRateLimit', () => {
           requestDetails
         );
       // Next request should be denied due to volume limit
-      const finalRequest = createTestRequestDetails({)
-  estimatedBytes: 20971520 // 20MB,
+      const finalRequest = createTestRequestDetails({ )
+  estimatedBytes: 20971520 // 20MB }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
@@ -266,11 +254,10 @@ describe('DataRetrievalRateLimit', () => {
       expect(decision.decision).toBe('DENY');
       expect(decision.reason).toContain('byte limit exceeded');
     });
-    test('should track and enforce record limits', async () => {
-  const subject = createTestSubject();
+    test('should track and enforce record limits', async () => { const subject = createTestSubject();
   const object = createTestObject();
   const requestDetails = createTestRequestDetails({)
-  estimatedRecords: 15000 // Exceeds hourly limit,
+  estimatedRecords: 15000 // Exceeds hourly limit }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
@@ -282,10 +269,9 @@ describe('DataRetrievalRateLimit', () => {
       expect(decision.reason).toContain('record limit exceeded');
     });
   });
-  describe('Adaptive Rate Limiting', () => {
-    test('should apply stricter limits for high-risk users', async () => {
+  describe('Adaptive Rate Limiting', () => { test('should apply stricter limits for high-risk users', async () => {
       const subject = createTestSubject({)
-  riskScore: 80,
+  riskScore: 80 }
         device: { ...createTestSubject().device, managed: false }
       });
       const object = createTestObject();
@@ -299,11 +285,10 @@ describe('DataRetrievalRateLimit', () => {
       // Should still allow but with adjusted limits
       expect(decision.decision).toBe('ALLOW');
     });
-    test('should apply location-based adjustments', async () => {
-  const subject = createTestSubject({)
-  location: {
+    test('should apply location-based adjustments', async () => { const subject = createTestSubject({)
+  location: {,
   ...createTestSubject().location,
-  withinApprovedRegions: false,
+  withinApprovedRegions: false }
 });
       const object = createTestObject({ classification: 'CONFIDENTIAL' });
       const requestDetails = createTestRequestDetails();
@@ -333,12 +318,11 @@ describe('DataRetrievalRateLimit', () => {
       jest.restoreAllMocks();
     });
   });
-  describe('Anomaly Detection', () => {
-  test('should detect unusually large requests', async () => {
+  describe('Anomaly Detection', () => { test('should detect unusually large requests', async () => {
   const subject = createTestSubject();
   const object = createTestObject();
   const requestDetails = createTestRequestDetails({)
-  estimatedBytes: 104857600 // 100MB - unusually large,
+  estimatedBytes: 104857600 // 100MB - unusually large }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
@@ -349,12 +333,11 @@ describe('DataRetrievalRateLimit', () => {
       // Should allow but trigger anomaly detection
       expect(decision.decision).toBe('ALLOW');
     });
-    test('should detect off-hours access anomaly', async () => {
-  jest.spyOn(Date.prototype, 'getHours').mockReturnValue(3 as unknown as unknown as unknown); // 3 AM
+    test('should detect off-hours access anomaly', async () => { jest.spyOn(Date.prototype, 'getHours').mockReturnValue(3 as unknown as unknown as unknown); // 3 AM
   const subject = createTestSubject({)
-  behaviorProfile: {
+  behaviorProfile: {,
   ...createTestSubject().behaviorProfile,
-  typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17] // Business hours,
+  typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17] // Business hours }
 });
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
@@ -388,8 +371,7 @@ describe('DataRetrievalRateLimit', () => {
       );
       expect(decision.decision).toBe('ALLOW');
     });
-    test('should detect rapid request patterns', async () => {
-      const subject = createTestSubject();
+    test('should detect rapid request patterns', async () => { const subject = createTestSubject();
       const object = createTestObject();
       // Make many rapid requests
       const promises = [];
@@ -398,7 +380,7 @@ describe('DataRetrievalRateLimit', () => {
           dataRetrievalRateLimit.checkDataRetrievalLimit()
             subject,
             object,
-            'read',
+            'read' }
             createTestRequestDetails();
         );
       const decisions = await Promise.all(promises);
@@ -407,13 +389,12 @@ describe('DataRetrievalRateLimit', () => {
       expect(deniedCount).toBeGreaterThan(0);
     });
   });
-  describe('Quota Enforcement', () => {
-  test('should enforce daily byte quotas', async () => {
+  describe('Quota Enforcement', () => { test('should enforce daily byte quotas', async () => {
   const subject = createTestSubject();
   const object = createTestObject();
   // Simulate quota near limit
   const largeRequest = createTestRequestDetails({)
-  estimatedBytes: 536870912000 // 500GB - exceeds daily quota,
+  estimatedBytes: 536870912000 // 500GB - exceeds daily quota }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
@@ -424,14 +405,13 @@ describe('DataRetrievalRateLimit', () => {
       expect(decision.decision).toBe('DENY');
       expect(decision.reason).toContain('quota exceeded');
     });
-    test('should provide quota remaining information', async () => {
-      const subject = createTestSubject();
+    test('should provide quota remaining information', async () => { const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
-        'read',
+        'read' }
         requestDetails
       );
       expect(decision.decision).toBe('ALLOW');
@@ -452,19 +432,18 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject();
       const object = createTestObject({ classification: 'RESTRICTED' });
       // Add exemption for user
-      const exemption = {
-  id: 'exemption-123',
+      const exemption = { id: 'exemption-123',
   userId: subject.userId,
   reason: 'Emergency access',
   exemptionType: 'RATE_LIMIT' as const,
   conditions: [],
   approvedBy: 'admin',
   approvedAt: new Date(),
-  auditRequired: true,
+  auditRequired: true }
 };
       dataRetrievalRateLimit.addExemption(exemption);
-      const requestDetails = createTestRequestDetails({)
-  estimatedBytes: 104857600 // Large request that would normally be limited,
+      const requestDetails = createTestRequestDetails({ )
+  estimatedBytes: 104857600 // Large request that would normally be limited }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
@@ -476,8 +455,7 @@ describe('DataRetrievalRateLimit', () => {
       expect(decision.reason).toContain('Exemption granted');
       expect(decision.exemptionId).toBe(exemption.id);
     });
-    test('should remove exemption when expired', async () => {
-  const exemption = {
+    test('should remove exemption when expired', async () => { const exemption = {
   id: 'exemption-123',
   userId: 'user-123',
   reason: 'Temporary access',
@@ -486,20 +464,19 @@ describe('DataRetrievalRateLimit', () => {
   conditions: [],
   approvedBy: 'admin',
   approvedAt: new Date(),
-  auditRequired: true,
+  auditRequired: true }
 };
       dataRetrievalRateLimit.addExemption(exemption);
       const removed = dataRetrievalRateLimit.removeExemption(exemption.id);
       expect(removed).toBe(true);
     });
   });
-  describe('Operation-Specific Limits', () => {
-  test('should apply stricter limits for DELETE operations', async () => {
+  describe('Operation-Specific Limits', () => { test('should apply stricter limits for DELETE operations', async () => {
   const subject = createTestSubject();
   const object = createTestObject();
   const requestDetails = createTestRequestDetails({)
   operation: 'DELETE',
-  estimatedBytes: 1024,
+  estimatedBytes: 1024 }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
@@ -510,12 +487,11 @@ describe('DataRetrievalRateLimit', () => {
       // DELETE operations should have much stricter limits
       expect(decision.decision).toBe('ALLOW');
     });
-    test('should apply appropriate limits for EXPORT operations', async () => {
-  const subject = createTestSubject();
+    test('should apply appropriate limits for EXPORT operations', async () => { const subject = createTestSubject();
   const object = createTestObject();
   const requestDetails = createTestRequestDetails({)
   operation: 'EXPORT',
-  estimatedBytes: 52428800 // 50MB,
+  estimatedBytes: 52428800 // 50MB }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
@@ -525,12 +501,11 @@ describe('DataRetrievalRateLimit', () => {
       );
       expect(decision.decision).toBe('ALLOW');
     });
-    test('should handle high-volume SEARCH operations', async () => {
-  const subject = createTestSubject();
+    test('should handle high-volume SEARCH operations', async () => { const subject = createTestSubject();
   const object = createTestObject();
   const requestDetails = createTestRequestDetails({)
   operation: 'SEARCH',
-  estimatedRecords: 100,
+  estimatedRecords: 100 }
 });
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
@@ -541,8 +516,7 @@ describe('DataRetrievalRateLimit', () => {
       expect(decision.decision).toBe('ALLOW');
     });
   });
-  describe('Metrics and Monitoring', () => {
-    test('should track retrieval metrics', async () => {
+  describe('Metrics and Monitoring', () => { test('should track retrieval metrics', async () => {
       const subject = createTestSubject();
       const object = createTestObject();
       // Make several requests
@@ -550,7 +524,7 @@ describe('DataRetrievalRateLimit', () => {
         await dataRetrievalRateLimit.checkDataRetrievalLimit()
           subject,
           object,
-          'read',
+          'read' }
           createTestRequestDetails();
         );
       const metrics = dataRetrievalRateLimit.getMetrics();
@@ -558,13 +532,12 @@ describe('DataRetrievalRateLimit', () => {
       expect(metrics.totalBytesTransferred).toBeGreaterThan(0);
       expect(metrics.classificationBreakdown.INTERNAL).toBeGreaterThan(0);
     });
-    test('should track user-specific usage', async () => {
-      const subject = createTestSubject();
+    test('should track user-specific usage', async () => { const subject = createTestSubject();
       const object = createTestObject();
       await dataRetrievalRateLimit.checkDataRetrievalLimit()
         subject,
         object,
-        'read',
+        'read' }
         createTestRequestDetails({ estimatedBytes: 2048 })
       );
       const usage = dataRetrievalRateLimit.getUserUsage(subject.userId);
@@ -573,8 +546,7 @@ describe('DataRetrievalRateLimit', () => {
       expect(usage?.bytesAccessed).toBe(2048);
       expect(usage?.classificationsAccessed).toContain('INTERNAL');
     });
-    test('should calculate anomaly scores', async () => {
-  const subject = createTestSubject();
+    test('should calculate anomaly scores', async () => { const subject = createTestSubject();
   const object = createTestObject();
   // Make requests with varying patterns
   for (let i = 0; i < 10; i++) {
@@ -583,15 +555,14 @@ describe('DataRetrievalRateLimit', () => {
   object,
   i % 2 === 0 ? 'read' : 'EXPORT',
   createTestRequestDetails({)
-  estimatedBytes: Math.random() * 10485760 // Random size up to 10MB,
-}
+  estimatedBytes: Math.random() * 10485760 // Random size up to 10MB }
+
         );
       const usage = dataRetrievalRateLimit.getUserUsage(subject.userId);
       expect(usage?.anomalyScore).toBeGreaterThanOrEqual(0);
     });
   });
-  describe('Error Handling', () => {
-    test('should handle service errors gracefully', async () => {
+  describe('Error Handling', () => { test('should handle service errors gracefully', async () => {
       mockRateLimitingService.checkLimit.mockRejectedValue()
         new Error('Service unavailable')
       );
@@ -601,21 +572,20 @@ describe('DataRetrievalRateLimit', () => {
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
-        'read',
+        'read' }
         requestDetails
       );
       expect(decision.decision).toBe('DENY');
       expect(decision.reason).toContain('Service error');
       expect(decision.retryAfter).toBe(60);
     });
-    test('should handle invalid request data', async () => {
-      const subject = createTestSubject();
+    test('should handle invalid request data', async () => { const subject = createTestSubject();
       const object = createTestObject();
       const invalidRequest = {
         operation: 'INVALID_OP' as DataOperation,
         estimatedBytes: -1,
         estimatedRecords: -1,
-        requestType: 'INVALID' as any,
+        requestType: 'INVALID' as any }
         context: {}
       };
       const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
@@ -669,50 +639,40 @@ describe('DataRetrievalRateLimit', () => {
     });
   });
 });
-describe('DataRetrievalConfigurationFactory', () => {
-  test('should create development configuration', () => {
+describe('DataRetrievalConfigurationFactory', () => { test('should create development configuration', () => {
     const config = DataRetrievalConfigurationFactory.createConfiguration('DEVELOPMENT');
     expect(config.enableBehaviorAnalysis).toBe(false);
     expect(config.enableAnomalyDetection).toBe(false);
     expect(config.quotaEnforcement).toBe(false);
-    expect(config.globalLimits.maxConcurrentUsers).toBe(100);
-  });
-  test('should create production configuration', () => {
-    const config = DataRetrievalConfigurationFactory.createConfiguration('PRODUCTION');
+    expect(config.globalLimits.maxConcurrentUsers).toBe(100) });
+  test('should create production configuration', () => { const config = DataRetrievalConfigurationFactory.createConfiguration('PRODUCTION');
     expect(config.enableBehaviorAnalysis).toBe(true);
     expect(config.enableAdaptiveLimits).toBe(true);
     expect(config.enableAnomalyDetection).toBe(true);
     expect(config.quotaEnforcement).toBe(true);
-    expect(config.globalLimits.maxConcurrentUsers).toBe(10000);
-  });
-  test('should apply operation modifiers correctly', () => {
-    const baseLimits = STANDARD_DATA_RETRIEVAL_LIMITS.INTERNAL;
+    expect(config.globalLimits.maxConcurrentUsers).toBe(10000) });
+  test('should apply operation modifiers correctly', () => { const baseLimits = STANDARD_DATA_RETRIEVAL_LIMITS.INTERNAL;
     const deleteLimits = DataRetrievalConfigurationFactory.createOperationLimits(;);
-      baseLimits,
+      baseLimits }
       'DELETE'
     );
     expect(deleteLimits.limits.requestsPerMinute).toBeLessThan(baseLimits.limits.requestsPerMinute);
     expect(deleteLimits.operation).toBe('DELETE');
   });
-  test('should validate configuration properly', () => {
-    const invalidConfig = DataRetrievalConfigurationFactory.createConfiguration('PRODUCTION');
+  test('should validate configuration properly', () => { const invalidConfig = DataRetrievalConfigurationFactory.createConfiguration('PRODUCTION');
     invalidConfig.globalLimits.maxRequestRate = -1; // Invalid
     const validation = DataRetrievalConfigurationFactory.validateConfiguration(invalidConfig);
     expect(validation.isValid).toBe(false);
-    expect(validation.errors).toContain('Global max request rate must be positive');
-  });
-  test('should optimize configuration for performance', () => {
-    const config = DataRetrievalConfigurationFactory.createConfiguration('PRODUCTION');
+    expect(validation.errors).toContain('Global max request rate must be positive') });
+  test('should optimize configuration for performance', () => { const config = DataRetrievalConfigurationFactory.createConfiguration('PRODUCTION');
     config.globalLimits.maxRequestRate = 2000; // High rate
     const optimized = DataRetrievalConfigurationFactory.optimizeForPerformance(config);
     expect(optimized.enableBehaviorAnalysis).toBe(false);
-    expect(optimized.enableAnomalyDetection).toBe(false);
-  });
-  test('should create role-based exemptions', () => {
-    const exemption = DataRetrievalConfigurationFactory.createRoleExemption(;);
+    expect(optimized.enableAnomalyDetection).toBe(false) });
+  test('should create role-based exemptions', () => { const exemption = DataRetrievalConfigurationFactory.createRoleExemption(;);
       'exemption-123',
       'SYSTEM_ADMIN',
-      'admin-user',
+      'admin-user' }
       'security-officer'
     );
     expect(exemption.id).toBe('exemption-123');
@@ -733,7 +693,7 @@ expect.extend({)
 },
   pass: true;
   };
-    } else {
+ else {
       return {
         message: () => `expected ${received} to be within range ${floor} - ${ceiling}`}
 },

@@ -14,26 +14,26 @@
  */
 import { conversionTracker } from './ConversionTracker';
 
-}
-export interface MarketplaceEvent {
-  id: string;
+
+export interface MarketplaceEvent { id: string;
   userId: string;
   sessionId: string;
   timestamp: number;
   type: MarketplaceEventType;
   category: MarketplaceCategory;
-  entityId?: string; // Template ID, Creator ID, etc.,
+  entityId?: string; // Template ID, Creator ID, etc.;
   entityType?: 'template' | 'creator' | 'category' | 'collection';
-  value?: number; // Revenue, rating, etc.,
+  value?: number; // Revenue, rating, etc.;
   properties: Record<string, any>;
-  metadata: {
+  metadata: {;
   userAgent: string;
   referrer: string;
   location?: string;
-  deviceType: 'desktop' | 'mobile' | 'tablet'
-}
+  deviceType: 'desktop' | 'mobile' | 'tablet' }
+
+
   };
-}
+
 export type MarketplaceEventType =
   // Discovery & Browse
   | 'marketplace_visited'
@@ -71,121 +71,115 @@ export type MarketplaceCategory =
   | 'creator_economy'
   | 'recommendation';
 
-}
-export interface TemplateMetrics {
-  templateId: string;
+
+export interface TemplateMetrics { templateId: string;
   name: string;
   creatorId: string;
   category: string;
-  metrics: {
+  metrics: {;
   views: number;
-    previews: number;
+  previews: number;
   downloads: number;
-    purchases: number;
+  purchases: number;
   favorites: number;
-    shares: number;
-  ratings: {;
+  shares: number;
+  ratings: { }
   average: number;
   count: number;
-}
-      distribution: { [stars: number]: number };
+
+},
+  distribution: { [stars: number]: number };
     };
-    revenue: {
+    revenue: { ,
   total: number;
   monthly: number;
-  weekly: number;
-};
-    conversionRates: {
+  weekly: number };
+    conversionRates: { ,
   viewToPreview: number;
   previewToDownload: number;
-  viewToFavorite: number;
-};
+  viewToFavorite: number };
   };
-  trends: {
+  trends: { ,
   viewsGrowth: number;
   revenueGrowth: number;
-  ratingTrend: 'improving' | 'stable' | 'declining'
-  };
-}
-}
-export interface CreatorMetrics {
-  creatorId: string;
+  ratingTrend: 'improving' | 'stable' | 'declining' }
+};
+
+
+export interface CreatorMetrics { creatorId: string;
   name: string;
-  metrics: {
+  metrics: {;
   totalTemplates: number;
   totalRevenue: number;
   totalDownloads: number;
   averageRating: number;
   followers: number;
-  topPerformingTemplate: {
+  topPerformingTemplate: { }
   id: string;
   name: string;
   revenue: number;
-}
+
+
 };
-    recentPerformance: {
+    recentPerformance: { ,
   period: string;
   revenue: number;
   downloads: number;
-  newFollowers: number;
-};
+  newFollowers: number };
   };
-  trends: {
+  trends: { ,
   revenueGrowth: number;
   followerGrowth: number;
-  templatePerformance: 'improving' | 'stable' | 'declining'
-  };
-}
-}
-export interface MarketplaceDashboardData {
-  overview: {
+  templatePerformance: 'improving' | 'stable' | 'declining' }
+};
+
+
+export interface MarketplaceDashboardData { overview: { }
   totalRevenue: number;
   totalTransactions: number;
   activeTemplates: number;
   activeCreators: number;
   averageRating: number;
   conversionRate: number;
-}
+
+
 };
-  trends: {
+  trends: { ,
   revenueGrowth: number;
   transactionGrowth: number;
   userGrowth: number;
-  topCategories: Array<{
+  topCategories: Array<{ }
   category: string;
   revenue: number;
   growth: number;
-}>;
+>;
   };
-  recommendations: {
+  recommendations: { ,
   shown: number;
   clicked: number;
   converted: number;
   ctr: number;
-  conversionRate: number;
-};
-  searchAnalytics: {
+  conversionRate: number };
+  searchAnalytics: { ,
   totalSearches: number;
-  topQueries: Array<{
+  topQueries: Array<{ }
   query: string;
   count: number;
   resultsFound: number;
   ctr: number;
-}>;
-    zeroResultQueries: Array<{
+>;
+    zeroResultQueries: Array<{ ,
   query: string;
-  count: number;
-}>;
+  count: number }>;
   };
-}
+
 export class MarketplaceMetrics {
   private events: MarketplaceEvent = [];
   private templateMetrics: Map<string, TemplateMetrics> = new Map();
   private creatorMetrics: Map<string, CreatorMetrics> = new Map();
   private searchQueries: Map<string, { count: number; results: number; clicks: number }> = new Map();
   private recommendations: Array<{ shown: number; clicked: number; converted: number }> = [];
-  constructor() {
-    this.initializeSampleData();
+  constructor() { this.initializeSampleData();
   private initializeSampleData(): void {
     // Initialize with sample marketplace data for directors
     const sampleTemplates: TemplateMetrics = [
@@ -194,165 +188,157 @@ export class MarketplaceMetrics {
         name: 'Character Development Framework',
         creatorId: 'creator-johnsmith',
         category: 'Pre-Production',
-        metrics: {
+        metrics: {,
   views: 2847,
           previews: 892,
           downloads: 267,
           purchases: 184,
           favorites: 156,
-          shares: 43,
+          shares: 43 }
           ratings: { average: 4.7, count: 89, distribution: { 5: 67, 4: 18, 3: 3, 2: 1, 1: 0 } },
           revenue: { total: 3680, monthly: 920, weekly: 230 },
-          conversionRates: {
+          conversionRates: { ,
   viewToPreview: 31.3,
   previewToDownload: 29.9,
-  viewToFavorite: 5.5,
+  viewToFavorite: 5.5 }
 },
-  trends: {
+  trends: { ,
   viewsGrowth: 23.5,
   revenueGrowth: 18.2,
-  ratingTrend: 'improving',
-}
-      {
-        templateId: 'tpl-scene-breakdown-002',
+  ratingTrend: 'improving' }
+
+      { templateId: 'tpl-scene-breakdown-002',
         name: 'Scene Breakdown Template',
         creatorId: 'creator-maryjones',
         category: 'Production',
-        metrics: {
+        metrics: {,
   views: 1934,
           previews: 578,
           downloads: 201,
           purchases: 145,
           favorites: 132,
-          shares: 28,
+          shares: 28 }
           ratings: { average: 4.5, count: 67, distribution: { 5: 45, 4: 18, 3: 3, 2: 1, 1: 0 } },
           revenue: { total: 2900, monthly: 725, weekly: 181 },
-          conversionRates: {
+          conversionRates: { ,
   viewToPreview: 29.9,
   previewToDownload: 34.8,
-  viewToFavorite: 6.8,
+  viewToFavorite: 6.8 }
 },
-  trends: {
+  trends: { ,
   viewsGrowth: 15.8,
   revenueGrowth: 22.1,
-  ratingTrend: 'stable',
-}
-      {
-        templateId: 'tpl-story-structure-003',
+  ratingTrend: 'stable' }
+
+      { templateId: 'tpl-story-structure-003',
         name: 'Three-Act Story Structure',
         creatorId: 'creator-davidbrown',
         category: 'Writing',
-        metrics: {
+        metrics: {,
   views: 3521,
           previews: 1247,
           downloads: 421,
           purchases: 298,
           favorites: 245,
-          shares: 67,
+          shares: 67 }
           ratings: { average: 4.8, count: 134, distribution: { 5: 102, 4: 28, 3: 3, 2: 1, 1: 0 } },
           revenue: { total: 5960, monthly: 1490, weekly: 373 },
-          conversionRates: {
+          conversionRates: { ,
   viewToPreview: 35.4,
   previewToDownload: 33.8,
-  viewToFavorite: 7.0,
+  viewToFavorite: 7.0 }
 },
-  trends: {
+  trends: { ,
   viewsGrowth: 31.2,
-  revenueGrowth: 28.7,
+  revenueGrowth: 28.7 }
   ratingTrend: 'improving'];
-  sampleTemplates.forEach(template => {)
-  this.templateMetrics.set(template.templateId, template);
-});
+  sampleTemplates.forEach(template => { )
+  this.templateMetrics.set(template.templateId, template) });
     // Initialize creator metrics
     const sampleCreators: CreatorMetrics = [
-      {
-  creatorId: 'creator-johnsmith',
+      { creatorId: 'creator-johnsmith',
   name: 'John Smith',
-  metrics: {
+  metrics: {,
   totalTemplates: 8,
   totalRevenue: 12450,
   totalDownloads: 1847,
   averageRating: 4.6,
   followers: 234,
-  topPerformingTemplate: {
+  topPerformingTemplate: {,
   id: 'tpl-character-dev-001',
   name: 'Character Development Framework',
-  revenue: 3680,
+  revenue: 3680 }
 },
-  recentPerformance: {
+  recentPerformance: { ,
   period: 'last 30 days',
   revenue: 920,
   downloads: 267,
-  newFollowers: 23,
+  newFollowers: 23 }
 },
-  trends: {
+  trends: { ,
   revenueGrowth: 18.2,
   followerGrowth: 15.4,
-  templatePerformance: 'improving',
-}
-      {
-  creatorId: 'creator-maryjones',
+  templatePerformance: 'improving' }
+
+      { creatorId: 'creator-maryjones',
   name: 'Mary Jones',
-  metrics: {
+  metrics: {,
   totalTemplates: 12,
   totalRevenue: 18750,
   totalDownloads: 2934,
   averageRating: 4.5,
   followers: 378,
-  topPerformingTemplate: {
+  topPerformingTemplate: {,
   id: 'tpl-production-schedule',
   name: 'Production Schedule Template',
-  revenue: 4250,
+  revenue: 4250 }
 },
-  recentPerformance: {
+  recentPerformance: { ,
   period: 'last 30 days',
   revenue: 1340,
   downloads: 421,
-  newFollowers: 31,
+  newFollowers: 31 }
 },
-  trends: {
+  trends: { ,
   revenueGrowth: 22.1,
-  followerGrowth: 12.8,
+  followerGrowth: 12.8 }
   templatePerformance: 'stable'];
-  sampleCreators.forEach(creator => {)
-  this.creatorMetrics.set(creator.creatorId, creator);
-});
+  sampleCreators.forEach(creator => { )
+  this.creatorMetrics.set(creator.creatorId, creator) });
     // Initialize search queries data
-    const sampleQueries = [;
+    const sampleQueries = [
       { query: 'character development', count: 234, results: 12, clicks: 89 },
       { query: 'story structure', count: 189, results: 8, clicks: 67 },
       { query: 'director template', count: 156, results: 15, clicks: 54 },
       { query: 'pre production', count: 134, results: 9, clicks: 45 },
       { query: 'scene breakdown', count: 98, results: 6, clicks: 32 }
     ];
-    sampleQueries.forEach(query => {)
-  this.searchQueries.set(query.query, query);
-    });
+    sampleQueries.forEach(query => { )
+  this.searchQueries.set(query.query, query) });
   /**
    * Track marketplace event
    */
-  public trackEvent(type: MarketplaceEventType)
-    properties: Record<string, any> = {},
-    entityId?: string,
-    entityType?: 'template' | 'creator' | 'category' | 'collection',
+  public trackEvent(type: MarketplaceEventType),
+  properties: Record<string, any> = {}
+    entityId?: string
+    entityType?: 'template' | 'creator' | 'category' | 'collection'
     value?: number
-  ): void {
-  const event: MarketplaceEvent = {,
-  id: this.generateEventId(),
-  userId: this.getCurrentUserId(),
-  sessionId: this.getCurrentSessionId(),
-  timestamp: Date.now(),
-  type,
-  category: this.getCategoryForEventType(type),
-  entityId,
-  entityType,
-  value,
-  properties,
+  ): void { const event: MarketplaceEvent = {
+  id: this.generateEventId()
+  userId: this.getCurrentUserId()
+  sessionId: this.getCurrentSessionId()
+  timestamp: Date.now()
+  type
+  category: this.getCategoryForEventType(type)
+  entityId
+  entityType
+  value
+  properties
   metadata: {
-  userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'server',
-  referrer: typeof document !== 'undefined' ? document.referrer : '',
-  location: properties.location,
-  deviceType: this.getDeviceType(),
+  userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'server'
+  referrer: typeof document !== 'undefined' ? document.referrer : ''
+  location: properties.location
+  deviceType: this.getDeviceType() }
 };
     this.events.push(event);
     // Update relevant metrics based on event type
@@ -388,76 +374,68 @@ export class MarketplaceMetrics {
         this.updateTemplateConversionRates(template);
   private updateTemplateConversionRates(template: TemplateMetrics): void {
     const { views, previews, downloads, favorites } = template.metrics;
-    template.metrics.conversionRates = {
-  viewToPreview: views > 0 ? (previews / views) * 100 : 0,
-  previewToDownload: previews > 0 ? (downloads / previews) * 100 : 0,
-  viewToFavorite: views > 0 ? (favorites / views) * 100 : 0,
+    template.metrics.conversionRates = { viewToPreview: views > 0 ? (previews / views) * 100 : 0
+  previewToDownload: previews > 0 ? (downloads / previews) * 100 : 0
+  viewToFavorite: views > 0 ? (favorites / views) * 100 : 0 }
 };
-  private integrateWithConversionTracking(event: MarketplaceEvent): void {
-  // Map marketplace events to conversion tracking events
-  const conversionEventMap: Record<string, any> = {,
-  'template_purchased': 'subscription_upgraded',
-  'template_downloaded': 'first_project_created',
-  'premium_accessed': 'advanced_feature_used',
-  'creator_followed': 'collaboration_invited',
+  private integrateWithConversionTracking(event: MarketplaceEvent): void { // Map marketplace events to conversion tracking events
+  const conversionEventMap: Record<string, any> = {
+  'template_purchased': 'subscription_upgraded'
+  'template_downloaded': 'first_project_created'
+  'premium_accessed': 'advanced_feature_used'
+  'creator_followed': 'collaboration_invited' }
 };
     const conversionEventType = conversionEventMap[event.type];
-    if (conversionEventType) {
-  conversionTracker.trackEvent(conversionEventType, {)
-  marketplace_event: true,
-  original_event: event.type,
-  entity_id: event.entityId,
-  entity_type: event.entityType,
+    if (conversionEventType) { conversionTracker.trackEvent(conversionEventType, {)
+  marketplace_event: true
+  original_event: event.type
+  entity_id: event.entityId
+  entity_type: event.entityType }
   ...event.properties
 }, event.value);
   /**
    * Get marketplace dashboard data
    */
-  public getDashboardData(timeRange?: { startTime: number; endTime: number }): MarketplaceDashboardData {
-  const templates = Array.from(this.templateMetrics.values());
+  public getDashboardData(timeRange?: { startTime: number; endTime: number }): MarketplaceDashboardData { const templates = Array.from(this.templateMetrics.values());
   const creators = Array.from(this.creatorMetrics.values());
   const overview = {
-  totalRevenue: templates.reduce((sum, t) => sum + t.metrics.revenue.total, 0),
-  totalTransactions: templates.reduce((sum, t) => sum + t.metrics.purchases, 0),
-  activeTemplates: templates.length,
-  activeCreators: creators.length,
-  averageRating: templates.reduce((sum, t) => sum + t.metrics.ratings.average, 0) / templates.length,
-  conversionRate: this.calculateOverallConversionRate(templates),
+  totalRevenue: templates.reduce((sum, t) => sum + t.metrics.revenue.total, 0)
+  totalTransactions: templates.reduce((sum, t) => sum + t.metrics.purchases, 0)
+  activeTemplates: templates.length
+  activeCreators: creators.length
+  averageRating: templates.reduce((sum, t) => sum + t.metrics.ratings.average, 0) / templates.length
+  conversionRate: this.calculateOverallConversionRate(templates) }
 };
-    const trends = {
-  revenueGrowth: 24.3,
-  transactionGrowth: 18.7,
-  userGrowth: 15.2,
-  topCategories: this.calculateTopCategories(templates),
+    const trends = { revenueGrowth: 24.3
+  transactionGrowth: 18.7
+  userGrowth: 15.2
+  topCategories: this.calculateTopCategories(templates) }
 };
-    const recommendations = {
-  shown: 1847,
-  clicked: 234,
-  converted: 67,
-  ctr: 12.7,
-  conversionRate: 28.6,
+    const recommendations = { shown: 1847
+  clicked: 234
+  converted: 67
+  ctr: 12.7
+  conversionRate: 28.6 }
 };
-    const searchAnalytics = {
-  totalSearches: Array.from(this.searchQueries.values()).reduce((sum, q) => sum + q.count, 0),
-  topQueries: Array.from(this.searchQueries.entries()),
+    const searchAnalytics = { totalSearches: Array.from(this.searchQueries.values()).reduce((sum, q) => sum + q.count, 0)
+  topQueries: Array.from(this.searchQueries.entries())
   .map(([query, data]) => ({)
-  query,
-  count: data.count,
-  resultsFound: data.results,
-  ctr: data.results > 0 ? (data.clicks / data.count) * 100 : 0,
+  query
+  count: data.count
+  resultsFound: data.results
+  ctr: data.results > 0 ? (data.clicks / data.count) * 100 : 0 }
 }))
         .sort((a, b) => b.count - a.count)
-        .slice(0, 10),
-      zeroResultQueries: [,
-        { query: 'director ai assistant', count: 23 },
-        { query: 'budget planning template', count: 18 },
+        .slice(0, 10)
+      zeroResultQueries: [
+        { query: 'director ai assistant', count: 23 }
+        { query: 'budget planning template', count: 18 }
         { query: 'casting workflow', count: 15 }
       ]
     };
-    return {
-      overview,
-      trends,
-      recommendations,
+    return { overview
+      trends
+      recommendations }
       searchAnalytics
     };
   private calculateOverallConversionRate(templates: TemplateMetrics): number {
@@ -468,9 +446,9 @@ export class MarketplaceMetrics {
     const categoryData = new Map<string, { revenue: number; growth: number }>();
     templates.forEach(template => {)
   const existing = categoryData.get(template.category) || { revenue: 0, growth: 0 };
-      categoryData.set(template.category, {)
-  revenue: existing.revenue + template.metrics.revenue.total,
-  growth: (existing.growth + template.trends.revenueGrowth) / 2,
+      categoryData.set(template.category, { )
+  revenue: existing.revenue + template.metrics.revenue.total
+  growth: (existing.growth + template.trends.revenueGrowth) / 2 }
 });
     });
     return Array.from(categoryData.entries())
@@ -479,31 +457,30 @@ export class MarketplaceMetrics {
   /**
    * Get template analytics
    */
-  public getTemplateAnalytics(templateId: string): TemplateMetrics | null {
-  return this.templateMetrics.get(templateId) || null;
+  public getTemplateAnalytics(templateId: string): TemplateMetrics | null { return this.templateMetrics.get(templateId) || null;
   /**
   * Get creator analytics
   */
-  public getCreatorAnalytics(creatorId: string): CreatorMetrics | null {,
+  public getCreatorAnalytics(creatorId: string): CreatorMetrics | null {
   return this.creatorMetrics.get(creatorId) || null;
   /**
   * Get top performing templates
   */
-  public getTopPerformingTemplates((metric: 'revenue' | 'downloads' | 'rating' = 'revenue',
-  limit: number = 10): TemplateMetrics {,
+  public getTopPerformingTemplates((metric: 'revenue' | 'downloads' | 'rating' = 'revenue'
+  limit: number = 10): TemplateMetrics {
   const templates = Array.from(this.templateMetrics.values());
   return templates
   .sort((a, b) => {
   switch (metric) {
-  case 'revenue':,
+  case 'revenue':
   return b.metrics.revenue.total - a.metrics.revenue.total;
-  case 'downloads':,
+  case 'downloads':
   return b.metrics.downloads - a.metrics.downloads;
-  case 'rating':,
+  case 'rating':
   return b.metrics.ratings.average - a.metrics.ratings.average;
-  default:,
+  default: }
   return 0;
-}
+
       .slice(0, limit);
   /**
    * Get search analytics
@@ -514,18 +491,17 @@ export class MarketplaceMetrics {
     averageCTR: number;
     const queries = Array.from(this.searchQueries.entries());
     const topQueries = queries;
-      .map(([query, data]) => ({)
+      .map(([query, data]) => ({ )
   query,
   count: data.count,
-  ctr: data.count > 0 ? (data.clicks / data.count) * 100 : 0,
+  ctr: data.count > 0 ? (data.clicks / data.count) * 100 : 0 }
 }))
       .sort((a, b) => b.count - a.count);
     const averageCTR = topQueries.length > 0 ;
       ? topQueries.reduce((sum, q) => sum + q.ctr, 0) / topQueries.length 
       : 0;
-    return {
-      topQueries: topQueries.slice(0, 20),
-      zeroResultQueries: [,
+    return { topQueries: topQueries.slice(0, 20) }
+      zeroResultQueries: [
         { query: 'director ai assistant', count: 23 },
         { query: 'budget planning template', count: 18 }
       ],
@@ -534,54 +510,49 @@ export class MarketplaceMetrics {
   /**
    * Generate marketplace insights
    */
-  public generateMarketplaceInsights(): Array<{
-  type: 'opportunity' | 'trend' | 'optimization';
+  public generateMarketplaceInsights(): Array<{ type: 'opportunity' | 'trend' | 'optimization' }
   title: string;
   description: string;
   impact: 'high' | 'medium' | 'low';
   action: string;
   metrics?: Record<string, number>;
-}> {
-    return [
+> { return [
       {
-        type: 'opportunity',
-        title: 'High-Demand Content Gap',
-        description: 'Director AI assistant searches have no results but high demand',
-        impact: 'high',
-        action: 'Create AI-powered director assistance templates',
+        type: 'opportunity'
+        title: 'High-Demand Content Gap'
+        description: 'Director AI assistant searches have no results but high demand'
+        impact: 'high'
+        action: 'Create AI-powered director assistance templates' }
         metrics: { searches: 23, potential_revenue: 1150 }
-  }
-      {
-        type: 'trend',
-        title: 'Story Structure Templates Trending',
-        description: 'Story structure category showing 28.7% revenue growth',
-        impact: 'medium',
-        action: 'Expand story structure template collection',
+
+      { type: 'trend'
+        title: 'Story Structure Templates Trending'
+        description: 'Story structure category showing 28.7% revenue growth'
+        impact: 'medium'
+        action: 'Expand story structure template collection' }
         metrics: { growth_rate: 28.7, current_revenue: 5960 }
-  }
-      {
-        type: 'optimization',
-        title: 'Conversion Rate Opportunity',
-        description: 'Template previews have low conversion to purchase (29.9%)',
-        impact: 'medium',
-        action: 'Improve preview experience and add purchase CTAs',
+
+      { type: 'optimization'
+        title: 'Conversion Rate Opportunity'
+        description: 'Template previews have low conversion to purchase (29.9%)'
+        impact: 'medium'
+        action: 'Improve preview experience and add purchase CTAs' }
         metrics: { current_rate: 29.9, potential_increase: 15.0 }
     ];
   // Helper methods
   private generateEventId(): string {
     return `mkt_evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  private getCurrentUserId(): string {
-  return localStorage.getItem('userId') || 'anonymous';
-  private getCurrentSessionId(): string {,
+  private getCurrentUserId(): string { return localStorage.getItem('userId') || 'anonymous';
+  private getCurrentSessionId(): string {
   return localStorage.getItem('sessionId') || 'session_' + Date.now();
-  private getCategoryForEventType(type: MarketplaceEventType): MarketplaceCategory {,
-  const categoryMap: Record<string, MarketplaceCategory> = {,
-  'marketplace_visited': 'discovery',
-  'template_viewed': 'discovery',
-  'template_favorited': 'engagement',
-  'template_purchased': 'monetization',
-  'creator_followed': 'engagement',
-  'recommendation_shown': 'recommendation',
+  private getCategoryForEventType(type: MarketplaceEventType): MarketplaceCategory {
+  const categoryMap: Record<string, MarketplaceCategory> = {
+  'marketplace_visited': 'discovery'
+  'template_viewed': 'discovery'
+  'template_favorited': 'engagement'
+  'template_purchased': 'monetization'
+  'creator_followed': 'engagement'
+  'recommendation_shown': 'recommendation' }
 };
     return categoryMap[type] || 'engagement';
   private getDeviceType(): 'desktop' | 'mobile' | 'tablet' {

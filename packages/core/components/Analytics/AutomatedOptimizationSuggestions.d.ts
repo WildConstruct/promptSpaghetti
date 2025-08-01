@@ -20,29 +20,27 @@ import { ConversionFunnelDefinition } from '../../analytics/ConversionDataModel'
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 }
-export interface AutomatedOptimizationSuggestionsProps {
-    funnelDefinition: ConversionFunnelDefinition;
+}
+export interface AutomatedOptimizationSuggestionsProps { funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     optimizationConfig?: OptimizationConfiguration;
     userContext?: UserContext;
     automationLevel?: AutomationLevel;
     onSuggestionGenerated?: (suggestion: OptimizationSuggestion) => void;
     onAutomatedAction?: (action: AutomatedAction) => void;
-    onExport?: (data: OptimizationSuggestionsExportData) => void;
-
+    onExport?: (data: OptimizationSuggestionsExportData) => void }
 }
-export interface OptimizationConfiguration {
-    enabledSuggestionTypes: SuggestionType[];
+}
+export interface OptimizationConfiguration { enabledSuggestionTypes: SuggestionType[];
     automationSettings: AutomationSettings;
     alertThresholds: AlertThreshold[];
     learningModels: LearningModel[];
     integrations: OptimizationIntegration[];
     constraints: OptimizationConstraint[];
-    performance: PerformanceSettings;
-
+    performance: PerformanceSettings }
 }
-export interface AutomationSettings {
-    enableAutomatedImplementation: boolean;
+}
+export interface AutomationSettings { enableAutomatedImplementation: boolean;
     automationLevel: AutomationLevel;
     riskTolerance: RiskTolerance;
     approvalRequired: boolean;
@@ -52,11 +50,10 @@ export interface AutomationSettings {
     maximumImpact: number;
 
 export type AutomationLevel = 'manual' | 'assisted' | 'semi_automated' | 'fully_automated';
-export type RiskTolerance = 'conservative' | 'moderate' | 'aggressive';
-
+export type RiskTolerance = 'conservative' | 'moderate' | 'aggressive' }
 }
-export interface AlertThreshold {
-    metric: string;
+}
+export interface AlertThreshold { metric: string;
     condition: ThresholdCondition;
     value: number;
     timeframe: number;
@@ -64,11 +61,10 @@ export interface AlertThreshold {
     actionRequired: boolean;
 
 export type ThresholdCondition = 'above' | 'below' | 'equals' | 'change_exceeds' | 'trend_reversal';
-export type AlertSeverity = 'info' | 'warning' | 'critical' | 'emergency';
-
+export type AlertSeverity = 'info' | 'warning' | 'critical' | 'emergency' }
 }
-export interface LearningModel {
-    modelId: string;
+}
+export interface LearningModel { modelId: string;
     modelType: ModelType;
     enabled: boolean;
     confidence: number;
@@ -76,162 +72,142 @@ export interface LearningModel {
     lastTraining: number;
     dataRequirements: ModelDataRequirement[];
 
-export type ModelType = 'conversion_prediction' | 'user_behavior_analysis' | 'pattern_recognition' | 'anomaly_detection' | 'optimization_recommendation' | 'a_b_test_analysis';
-
+export type ModelType = 'conversion_prediction' | 'user_behavior_analysis' | 'pattern_recognition' | 'anomaly_detection' | 'optimization_recommendation' | 'a_b_test_analysis' }
 }
-export interface ModelDataRequirement {
-    dataType: string;
+}
+export interface ModelDataRequirement { dataType: string;
     minimumSampleSize: number;
     freshness: number;
-    quality: number;
-
+    quality: number }
 }
-export interface OptimizationIntegration {
-    integrationId: string;
+}
+export interface OptimizationIntegration { integrationId: string;
     name: string;
     type: IntegrationType;
     enabled: boolean;
     configuration: IntegrationConfiguration;
     capabilities: IntegrationCapability[];
 
-export type IntegrationType = 'analytics_platform' | 'a_b_testing_tool' | 'personalization_engine' | 'email_marketing' | 'ad_platform' | 'cms' | 'crm';
-
+export type IntegrationType = 'analytics_platform' | 'a_b_testing_tool' | 'personalization_engine' | 'email_marketing' | 'ad_platform' | 'cms' | 'crm' }
 }
-export interface IntegrationConfiguration {
-    apiKey?: string;
+}
+export interface IntegrationConfiguration { apiKey?: string;
     endpoint?: string;
     credentials?: Record<string, string>;
-    settings: Record<string, any>;
-
+    settings: Record<string, any> }
 }
-export interface IntegrationCapability {
-    capability: string;
+}
+export interface IntegrationCapability { capability: string;
     supported: boolean;
-    configuration: Record<string, any>;
-
+    configuration: Record<string, any> }
 }
-export interface OptimizationConstraint {
-    constraintId: string;
+}
+export interface OptimizationConstraint { constraintId: string;
     type: ConstraintType;
     description: string;
     parameters: ConstraintParameter[];
     enabled: boolean;
     priority: number;
 
-export type ConstraintType = 'budget_limit' | 'time_restriction' | 'brand_guidelines' | 'technical_limitation' | 'regulatory_compliance' | 'user_impact_limit';
-
+export type ConstraintType = 'budget_limit' | 'time_restriction' | 'brand_guidelines' | 'technical_limitation' | 'regulatory_compliance' | 'user_impact_limit' }
 }
-export interface ConstraintParameter {
-    parameter: string;
+}
+export interface ConstraintParameter { parameter: string;
     value: Error;
-    required: boolean;
-
+    required: boolean }
 }
-export interface PerformanceSettings {
-    updateFrequency: number;
+}
+export interface PerformanceSettings { updateFrequency: number;
     batchSize: number;
     maxConcurrentSuggestions: number;
     suggestionLifetime: number;
-    cacheDuration: number;
-
+    cacheDuration: number }
 }
-export interface UserContext {
-    userId: string;
+}
+export interface UserContext { userId: string;
     userRole: UserRole;
     permissions: Permission[];
     preferences: UserPreferences;
     workflowState: WorkflowState;
 
-export type UserRole = 'creator' | 'marketer' | 'analyst' | 'admin' | 'viewer';
-
+export type UserRole = 'creator' | 'marketer' | 'analyst' | 'admin' | 'viewer' }
 }
-export interface Permission {
-    action: string;
+}
+export interface Permission { action: string;
     resource: string;
     allowed: boolean;
-    conditions?: Record<string, any>;
-
+    conditions?: Record<string, any> }
 }
-export interface UserPreferences {
-    notificationSettings: NotificationSettings;
+}
+export interface UserPreferences { notificationSettings: NotificationSettings;
     dashboardLayout: DashboardLayout;
     automationSettings: UserAutomationSettings;
-    displaySettings: DisplaySettings;
-
+    displaySettings: DisplaySettings }
 }
-export interface NotificationSettings {
-    enablePushNotifications: boolean;
+}
+export interface NotificationSettings { enablePushNotifications: boolean;
     enableEmailAlerts: boolean;
     frequency: NotificationFrequency;
     severityFilter: AlertSeverity[];
 
-export type NotificationFrequency = 'immediate' | 'hourly' | 'daily' | 'weekly';
-
+export type NotificationFrequency = 'immediate' | 'hourly' | 'daily' | 'weekly' }
 }
-export interface DashboardLayout {
-    layout: 'grid' | 'list' | 'cards';
+}
+export interface DashboardLayout { layout: 'grid' | 'list' | 'cards';
     density: 'compact' | 'comfortable' | 'spacious';
-    sections: DashboardSection[];
-
+    sections: DashboardSection[] }
 }
-export interface DashboardSection {
-    sectionId: string;
+}
+export interface DashboardSection { sectionId: string;
     title: string;
     visible: boolean;
     order: number;
-    size: 'small' | 'medium' | 'large';
-
+    size: 'small' | 'medium' | 'large' }
 }
-export interface UserAutomationSettings {
-    enableAutomatedSuggestions: boolean;
+}
+export interface UserAutomationSettings { enableAutomatedSuggestions: boolean;
     autoApprovalLimits: AutoApprovalLimit[];
     reviewRequired: boolean;
-    rollbackPermissions: boolean;
-
+    rollbackPermissions: boolean }
 }
-export interface AutoApprovalLimit {
-    action: string;
+}
+export interface AutoApprovalLimit { action: string;
     maxImpact: number;
     maxCost: number;
-    requiresConfirmation: boolean;
-
+    requiresConfirmation: boolean }
 }
-export interface DisplaySettings {
-    theme: 'light' | 'dark' | 'auto';
+}
+export interface DisplaySettings { theme: 'light' | 'dark' | 'auto';
     language: string;
     timezone: string;
     dateFormat: string;
-    numberFormat: string;
-
+    numberFormat: string }
 }
-export interface WorkflowState {
-    currentStep: string;
+}
+export interface WorkflowState { currentStep: string;
     completedSteps: string[];
     pendingActions: PendingAction[];
-    activeExperiments: string[];
-
+    activeExperiments: string[] }
 }
-export interface PendingAction {
-    actionId: string;
+}
+export interface PendingAction { actionId: string;
     actionType: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
     dueDate: number;
-    dependencies: string[];
-
+    dependencies: string[] }
 }
-export interface OptimizationSuggestionsData {
-    activeSuggestions: OptimizationSuggestion[];
+}
+export interface OptimizationSuggestionsData { activeSuggestions: OptimizationSuggestion[];
     automatedActions: AutomatedAction[];
     learningInsights: LearningInsight[];
     performanceMetrics: SuggestionPerformanceMetrics;
     systemHealth: AutomationSystemHealth;
     experiments: ActiveExperiment[];
     patterns: RecognizedPattern[];
-    predictions: OptimizationPrediction[];
-
+    predictions: OptimizationPrediction[] }
 }
-export interface OptimizationSuggestion {
-    suggestionId: string;
+}
+export interface OptimizationSuggestion { suggestionId: string;
     type: SuggestionType;
     title: string;
     description: string;
@@ -253,14 +229,13 @@ export interface OptimizationSuggestion {
 
 export type SuggestionType = 'conversion_optimization' | 'user_experience_improvement' | 'performance_enhancement' | 'content_optimization' | 'pricing_adjustment' | 'traffic_acquisition' | 'retention_improvement' | 'technical_fix' | 'ab_test_opportunity' | 'personalization_opportunity';
 export type SuggestionPriority = 'low' | 'medium' | 'high' | 'urgent' | 'critical';
-export type SuggestionStatus = 'generated' | 'reviewing' | 'approved' | 'implementing' | 'testing' | 'completed' | 'rejected' | 'expired';
-
+export type SuggestionStatus = 'generated' | 'reviewing' | 'approved' | 'implementing' | 'testing' | 'completed' | 'rejected' | 'expired' }
 }
-export interface SuggestionImpact {
-    expectedLift: number;
+}
+export interface SuggestionImpact { expectedLift: number;
     confidenceInterval: {
         min: number;
-        max: number;
+        max: number }
 }
     };
     affectedMetrics: AffectedMetric[];
@@ -269,169 +244,149 @@ export interface SuggestionImpact {
     riskAssessment: RiskAssessment;
 
 }
-export interface AffectedMetric {
-    metric: string;
+}
+export interface AffectedMetric { metric: string;
     currentValue: number;
     expectedValue: number;
     improvementPercentage: number;
-    confidence: number;
-
+    confidence: number }
 }
-export interface UserImpact {
-    affectedUsers: number;
+}
+export interface UserImpact { affectedUsers: number;
     userSegments: string[];
     experienceChange: 'positive' | 'negative' | 'neutral';
-    adaptationTime: number;
-
+    adaptationTime: number }
 }
-export interface BusinessImpact {
-    revenueImpact: number;
+}
+export interface BusinessImpact { revenueImpact: number;
     costImpact: number;
     resourceRequirements: ResourceRequirement[];
     timeToValue: number;
-    strategicAlignment: number;
-
+    strategicAlignment: number }
 }
-export interface ResourceRequirement {
-    resource: string;
+}
+export interface ResourceRequirement { resource: string;
     amount: number;
     duration: number;
-    criticality: 'essential' | 'important' | 'optional';
-
+    criticality: 'essential' | 'important' | 'optional' }
 }
-export interface RiskAssessment {
-    overallRisk: RiskLevel;
+}
+export interface RiskAssessment { overallRisk: RiskLevel;
     riskFactors: RiskFactor[];
     mitigationStrategies: MitigationStrategy[];
     rollbackPlan: RollbackPlan;
 
-export type RiskLevel = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
-
+export type RiskLevel = 'very_low' | 'low' | 'medium' | 'high' | 'very_high' }
 }
-export interface RiskFactor {
-    factor: string;
+}
+export interface RiskFactor { factor: string;
     probability: number;
     impact: number;
     description: string;
     category: RiskCategory;
 
-export type RiskCategory = 'technical' | 'business' | 'user_experience' | 'compliance' | 'security';
-
+export type RiskCategory = 'technical' | 'business' | 'user_experience' | 'compliance' | 'security' }
 }
-export interface MitigationStrategy {
-    strategy: string;
+}
+export interface MitigationStrategy { strategy: string;
     effectiveness: number;
     cost: number;
-    implementation: string;
-
+    implementation: string }
 }
-export interface RollbackPlan {
-    rollbackPossible: boolean;
+}
+export interface RollbackPlan { rollbackPossible: boolean;
     rollbackTime: number;
     rollbackSteps: string[];
-    dataLoss: boolean;
-
+    dataLoss: boolean }
 }
-export interface SuggestionEffort {
-    estimatedHours: number;
+}
+export interface SuggestionEffort { estimatedHours: number;
     skillsRequired: RequiredSkill[];
     toolsRequired: RequiredTool[];
     complexity: ComplexityLevel;
-    dependencies: SuggestionDependency[];
-
+    dependencies: SuggestionDependency[] }
 }
-export interface RequiredSkill {
-    skill: string;
+}
+export interface RequiredSkill { skill: string;
     level: SkillLevel;
     essential: boolean;
 
-export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert';
-
+export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert' }
 }
-export interface RequiredTool {
-    tool: string;
+}
+export interface RequiredTool { tool: string;
     version?: string;
     cost: number;
     availability: boolean;
 
-export type ComplexityLevel = 'trivial' | 'simple' | 'moderate' | 'complex' | 'expert';
-
+export type ComplexityLevel = 'trivial' | 'simple' | 'moderate' | 'complex' | 'expert' }
 }
-export interface SuggestionDependency {
-    dependencyId: string;
+}
+export interface SuggestionDependency { dependencyId: string;
     type: DependencyType;
     description: string;
     blocking: boolean;
     estimatedResolution: number;
 
-export type DependencyType = 'technical' | 'approval' | 'resource' | 'external' | 'sequential';
-
+export type DependencyType = 'technical' | 'approval' | 'resource' | 'external' | 'sequential' }
 }
-export interface SuggestionSource {
-    sourceType: SourceType;
+}
+export interface SuggestionSource { sourceType: SourceType;
     sourceName: string;
     dataQuality: number;
     reliability: number;
     freshness: number;
     methodology: string;
 
-export type SourceType = 'machine_learning' | 'statistical_analysis' | 'pattern_recognition' | 'user_feedback' | 'competitor_analysis' | 'industry_benchmark' | 'expert_knowledge' | 'historical_data';
-
+export type SourceType = 'machine_learning' | 'statistical_analysis' | 'pattern_recognition' | 'user_feedback' | 'competitor_analysis' | 'industry_benchmark' | 'expert_knowledge' | 'historical_data' }
 }
-export interface SuggestionContext {
-    triggeringEvents: TriggeringEvent[];
+}
+export interface SuggestionContext { triggeringEvents: TriggeringEvent[];
     environmentalFactors: EnvironmentalFactor[];
     marketConditions: MarketCondition[];
     seasonality: SeasonalityFactor[];
     competitiveActivity: CompetitiveActivity[];
-    userBehaviorChanges: UserBehaviorChange[];
-
+    userBehaviorChanges: UserBehaviorChange[] }
 }
-export interface TriggeringEvent {
-    eventType: string;
+}
+export interface TriggeringEvent { eventType: string;
     eventName: string;
     timestamp: number;
     severity: number;
-    correlation: number;
-
+    correlation: number }
 }
-export interface EnvironmentalFactor {
-    factor: string;
+}
+export interface EnvironmentalFactor { factor: string;
     value: Error;
     impact: 'positive' | 'negative' | 'neutral';
-    confidence: number;
-
+    confidence: number }
 }
-export interface MarketCondition {
-    condition: string;
+}
+export interface MarketCondition { condition: string;
     value: number;
     trend: 'increasing' | 'decreasing' | 'stable';
-    volatility: number;
-
+    volatility: number }
 }
-export interface SeasonalityFactor {
-    pattern: string;
+}
+export interface SeasonalityFactor { pattern: string;
     strength: number;
     phase: number;
-    reliability: number;
-
+    reliability: number }
 }
-export interface CompetitiveActivity {
-    competitor: string;
+}
+export interface CompetitiveActivity { competitor: string;
     activity: string;
     impact: number;
-    response: string;
-
+    response: string }
 }
-export interface UserBehaviorChange {
-    segment: string;
+}
+export interface UserBehaviorChange { segment: string;
     change: string;
     magnitude: number;
-    timeframe: number;
-
+    timeframe: number }
 }
-export interface ActionRecommendation {
-    actionId: string;
+}
+export interface ActionRecommendation { actionId: string;
     title: string;
     description: string;
     actionType: ActionType;
@@ -440,266 +395,230 @@ export interface ActionRecommendation {
     expectedOutcome: ActionOutcome;
     monitoring: ActionMonitoring;
 
-export type ActionType = 'content_change' | 'design_modification' | 'pricing_update' | 'targeting_adjustment' | 'feature_toggle' | 'configuration_change' | 'workflow_optimization' | 'integration_update';
-
+export type ActionType = 'content_change' | 'design_modification' | 'pricing_update' | 'targeting_adjustment' | 'feature_toggle' | 'configuration_change' | 'workflow_optimization' | 'integration_update' }
 }
-export interface ActionImplementation {
-    method: ImplementationMethod;
+}
+export interface ActionImplementation { method: ImplementationMethod;
     steps: ImplementationStep[];
     automation: AutomationCapability;
     validation: ValidationRequirement[];
 
-export type ImplementationMethod = 'manual' | 'semi_automated' | 'fully_automated' | 'api_call' | 'configuration';
-
+export type ImplementationMethod = 'manual' | 'semi_automated' | 'fully_automated' | 'api_call' | 'configuration' }
 }
-export interface ImplementationStep {
-    stepNumber: number;
+}
+export interface ImplementationStep { stepNumber: number;
     description: string;
     estimatedTime: number;
     skills: string[];
     tools: string[];
-    validation: string;
-
+    validation: string }
 }
-export interface AutomationCapability {
-    automatable: boolean;
+}
+export interface AutomationCapability { automatable: boolean;
     automationLevel: AutomationLevel;
     requirements: AutomationRequirement[];
-    limitations: string[];
-
+    limitations: string[] }
 }
-export interface AutomationRequirement {
-    requirement: string;
+}
+export interface AutomationRequirement { requirement: string;
     type: 'technical' | 'approval' | 'configuration';
-    satisfied: boolean;
-
+    satisfied: boolean }
 }
-export interface ValidationRequirement {
-    validation: string;
+}
+export interface ValidationRequirement { validation: string;
     method: ValidationMethod;
     criteria: ValidationCriteria;
     automated: boolean;
 
-export type ValidationMethod = 'testing' | 'review' | 'metrics' | 'user_feedback' | 'simulation';
-
+export type ValidationMethod = 'testing' | 'review' | 'metrics' | 'user_feedback' | 'simulation' }
 }
-export interface ValidationCriteria {
-    metric: string;
+}
+export interface ValidationCriteria { metric: string;
     threshold: number;
     direction: 'increase' | 'decrease' | 'maintain';
-    significance: number;
-
+    significance: number }
 }
-export interface ActionOutcome {
-    primaryMetric: string;
+}
+export interface ActionOutcome { primaryMetric: string;
     expectedChange: number;
     timeToEffect: number;
     duration: number;
-    sideEffects: SideEffect[];
-
+    sideEffects: SideEffect[] }
 }
-export interface SideEffect {
-    effect: string;
+}
+export interface SideEffect { effect: string;
     probability: number;
     severity: 'low' | 'medium' | 'high';
-    mitigation: string;
-
+    mitigation: string }
 }
-export interface ActionMonitoring {
-    metricsToTrack: MonitoringMetric[];
+}
+export interface ActionMonitoring { metricsToTrack: MonitoringMetric[];
     alertConditions: MonitoringAlert[];
     reportingFrequency: number;
-    dashboardUpdates: boolean;
-
+    dashboardUpdates: boolean }
 }
-export interface MonitoringMetric {
-    metric: string;
+}
+export interface MonitoringMetric { metric: string;
     baseline: number;
     targetChange: number;
-    alertThreshold: number;
-
+    alertThreshold: number }
 }
-export interface MonitoringAlert {
-    condition: string;
+}
+export interface MonitoringAlert { condition: string;
     threshold: number;
     severity: AlertSeverity;
-    action: string;
-
+    action: string }
 }
-export interface ApplicableConstraint {
-    constraintId: string;
+}
+export interface ApplicableConstraint { constraintId: string;
     constraint: string;
     impact: string;
     compliance: boolean;
-    workaround?: string;
-
+    workaround?: string }
 }
-export interface SuggestionTimeline {
-    estimatedImplementation: number;
+}
+export interface SuggestionTimeline { estimatedImplementation: number;
     phases: TimelinePhase[];
     milestones: TimelineMilestone[];
-    criticalPath: string[];
-
+    criticalPath: string[] }
 }
-export interface TimelinePhase {
-    phaseName: string;
+}
+export interface TimelinePhase { phaseName: string;
     description: string;
     duration: number;
     dependencies: string[];
-    deliverables: string[];
-
+    deliverables: string[] }
 }
-export interface TimelineMilestone {
-    milestoneName: string;
+}
+export interface TimelineMilestone { milestoneName: string;
     targetDate: number;
     criteria: string[];
-    dependencies: string[];
-
+    dependencies: string[] }
 }
-export interface AutomationOptions {
-    fullyAutomatable: boolean;
+}
+export interface AutomationOptions { fullyAutomatable: boolean;
     partialAutomation: PartialAutomation[];
     userApprovalRequired: boolean;
     rollbackCapable: boolean;
-    monitoringRequired: boolean;
-
+    monitoringRequired: boolean }
 }
-export interface PartialAutomation {
-    component: string;
+}
+export interface PartialAutomation { component: string;
     automatable: boolean;
     requirements: string[];
-    limitations: string[];
-
+    limitations: string[] }
 }
-export interface TestingRequirements {
-    testingRecommended: boolean;
+}
+export interface TestingRequirements { testingRecommended: boolean;
     testType: TestType;
     testDesign: TestDesign;
     testDuration: number;
     testCriteria: TestCriteria;
 
-export type TestType = 'a_b_test' | 'multivariate_test' | 'split_test' | 'staged_rollout' | 'canary_release';
-
+export type TestType = 'a_b_test' | 'multivariate_test' | 'split_test' | 'staged_rollout' | 'canary_release' }
 }
-export interface TestDesign {
-    variants: TestVariant[];
+}
+export interface TestDesign { variants: TestVariant[];
     trafficAllocation: TrafficAllocation;
     targetMetrics: string[];
     minimumSampleSize: number;
-    statisticalPower: number;
-
+    statisticalPower: number }
 }
-export interface TestVariant {
-    variantName: string;
+}
+export interface TestVariant { variantName: string;
     description: string;
     implementation: VariantImplementation;
-    expectedOutcome: number;
-
+    expectedOutcome: number }
 }
-export interface VariantImplementation {
-    changes: VariantChange[];
-    configuration: Record<string, any>;
-
 }
-export interface VariantChange {
-    element: string;
+export interface VariantImplementation { changes: VariantChange[];
+    configuration: Record<string, any> }
+}
+}
+export interface VariantChange { element: string;
     changeType: 'content' | 'design' | 'behavior' | 'configuration';
     before: Error;
-    after: unknown;
-
+    after: unknown }
 }
-export interface TrafficAllocation {
-    control: number;
+}
+export interface TrafficAllocation { control: number;
     variants: Record<string, number>;
-    rampUpStrategy: RampUpStrategy;
-
+    rampUpStrategy: RampUpStrategy }
 }
-export interface RampUpStrategy {
-    enabled: boolean;
+}
+export interface RampUpStrategy { enabled: boolean;
     initialPercentage: number;
     finalPercentage: number;
     incrementSize: number;
-    incrementFrequency: number;
-
+    incrementFrequency: number }
 }
-export interface TestCriteria {
-    successMetrics: SuccessMetric[];
+}
+export interface TestCriteria { successMetrics: SuccessMetric[];
     guardrailMetrics: GuardrailMetric[];
-    stopConditions: StopCondition[];
-
+    stopConditions: StopCondition[] }
 }
-export interface SuccessMetric {
-    metric: string;
+}
+export interface SuccessMetric { metric: string;
     targetImprovement: number;
     minimumDetectableEffect: number;
-    significance: number;
-
+    significance: number }
 }
-export interface GuardrailMetric {
-    metric: string;
+}
+export interface GuardrailMetric { metric: string;
     maxAllowedChange: number;
     direction: 'increase' | 'decrease';
-    severity: 'warning' | 'critical';
-
+    severity: 'warning' | 'critical' }
 }
-export interface StopCondition {
-    condition: string;
+}
+export interface StopCondition { condition: string;
     threshold: number;
-    action: 'pause' | 'stop' | 'rollback';
-
+    action: 'pause' | 'stop' | 'rollback' }
 }
-export interface SuggestionFeedback {
-    userRating: number;
+}
+export interface SuggestionFeedback { userRating: number;
     userComments: string;
     implementationFeedback: ImplementationFeedback;
     outcomeTracking: OutcomeTracking;
-    lessonsLearned: string[];
-
+    lessonsLearned: string[] }
 }
-export interface ImplementationFeedback {
-    difficultyRating: number;
+}
+export interface ImplementationFeedback { difficultyRating: number;
     timeActual: number;
     resourcesActual: ResourceActual[];
-    challenges: Challenge[];
-
+    challenges: Challenge[] }
 }
-export interface ResourceActual {
-    resource: string;
+}
+export interface ResourceActual { resource: string;
     amountUsed: number;
-    effectiveness: number;
-
+    effectiveness: number }
 }
-export interface Challenge {
-    challenge: string;
+}
+export interface Challenge { challenge: string;
     severity: 'low' | 'medium' | 'high';
     resolution: string;
-    timeToResolve: number;
-
+    timeToResolve: number }
 }
-export interface OutcomeTracking {
-    actualResults: ActualResult[];
+}
+export interface OutcomeTracking { actualResults: ActualResult[];
     timeToEffect: number;
     duration: number;
-    sideEffectsObserved: ObservedSideEffect[];
-
+    sideEffectsObserved: ObservedSideEffect[] }
 }
-export interface ActualResult {
-    metric: string;
+}
+export interface ActualResult { metric: string;
     baseline: number;
     actualValue: number;
     improvementPercentage: number;
-    statisticalSignificance: number;
-
+    statisticalSignificance: number }
 }
-export interface ObservedSideEffect {
-    effect: string;
+}
+export interface ObservedSideEffect { effect: string;
     severity: 'low' | 'medium' | 'high';
     impact: string;
-    mitigation: string;
-
+    mitigation: string }
 }
-export interface AutomatedAction {
-    actionId: string;
+}
+export interface AutomatedAction { actionId: string;
     suggestionId: string;
     actionType: AutomatedActionType;
     title: string;
@@ -714,72 +633,63 @@ export interface AutomatedAction {
     completedAt?: number;
 
 export type AutomatedActionType = 'configuration_update' | 'content_modification' | 'test_deployment' | 'alert_acknowledgment' | 'data_collection' | 'report_generation' | 'notification_dispatch' | 'integration_sync';
-export type AutomatedActionStatus = 'pending' | 'approved' | 'executing' | 'completed' | 'failed' | 'rolled_back' | 'paused';
-
+export type AutomatedActionStatus = 'pending' | 'approved' | 'executing' | 'completed' | 'failed' | 'rolled_back' | 'paused' }
 }
-export interface ActionAutomation {
-    automationLevel: AutomationLevel;
+}
+export interface ActionAutomation { automationLevel: AutomationLevel;
     approvalRequired: boolean;
     approvedBy?: string;
     approvedAt?: number;
-    constraints: AutomationConstraint[];
-
+    constraints: AutomationConstraint[] }
 }
-export interface AutomationConstraint {
-    constraint: string;
+}
+export interface AutomationConstraint { constraint: string;
     satisfied: boolean;
-    checkTime: number;
-
+    checkTime: number }
 }
-export interface ActionExecution {
-    method: string;
+}
+export interface ActionExecution { method: string;
     parameters: Record<string, any>;
     retryCount: number;
     maxRetries: number;
     timeoutDuration: number;
-    executionLog: ExecutionLogEntry[];
-
+    executionLog: ExecutionLogEntry[] }
 }
-export interface ExecutionLogEntry {
-    timestamp: number;
+}
+export interface ExecutionLogEntry { timestamp: number;
     level: 'info' | 'warning' | 'error';
     message: string;
-    details?: Record<string, any>;
-
+    details?: Record<string, any> }
 }
-export interface ActionMonitoringState {
-    isMonitoring: boolean;
+}
+export interface ActionMonitoringState { isMonitoring: boolean;
     metricsTracked: TrackedMetric[];
     alertsGenerated: GeneratedAlert[];
-    lastCheck: number;
-
+    lastCheck: number }
 }
-export interface TrackedMetric {
-    metric: string;
+}
+export interface TrackedMetric { metric: string;
     baseline: number;
     currentValue: number;
     trend: 'improving' | 'declining' | 'stable';
-    alertThreshold: number;
-
+    alertThreshold: number }
 }
-export interface GeneratedAlert {
-    alertId: string;
+}
+export interface GeneratedAlert { alertId: string;
     severity: AlertSeverity;
     message: string;
     timestamp: number;
-    resolved: boolean;
-
+    resolved: boolean }
 }
-export interface RollbackState {
-    rollbackAvailable: boolean;
+}
+export interface RollbackState { rollbackAvailable: boolean;
     rollbackPrepared: boolean;
     rollbackReason?: string;
     rollbackExecutedAt?: number;
-    rollbackSuccess?: boolean;
-
+    rollbackSuccess?: boolean }
 }
-export interface LearningInsight {
-    insightId: string;
+}
+export interface LearningInsight { insightId: string;
     type: InsightType;
     title: string;
     description: string;
@@ -790,14 +700,13 @@ export interface LearningInsight {
     applicability: InsightApplicability;
     createdAt: number;
 
-export type InsightType = 'pattern_discovery' | 'anomaly_detection' | 'trend_identification' | 'correlation_finding' | 'prediction_accuracy' | 'user_behavior_insight' | 'performance_insight';
-
+export type InsightType = 'pattern_discovery' | 'anomaly_detection' | 'trend_identification' | 'correlation_finding' | 'prediction_accuracy' | 'user_behavior_insight' | 'performance_insight' }
 }
-export interface SupportingData {
-    dataPoints: number;
+}
+export interface SupportingData { dataPoints: number;
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     dataQuality: number;
@@ -805,29 +714,26 @@ export interface SupportingData {
     methodology: string;
 
 }
-export interface InsightImplication {
-    implication: string;
+}
+export interface InsightImplication { implication: string;
     probability: number;
     impact: 'low' | 'medium' | 'high';
-    timeframe: number;
-
+    timeframe: number }
 }
-export interface InsightRecommendation {
-    recommendation: string;
+}
+export interface InsightRecommendation { recommendation: string;
     priority: 'low' | 'medium' | 'high';
     effort: 'low' | 'medium' | 'high';
-    expectedBenefit: string;
-
+    expectedBenefit: string }
 }
-export interface InsightApplicability {
-    applicableScenarios: string[];
+}
+export interface InsightApplicability { applicableScenarios: string[];
     limitations: string[];
     prerequisites: string[];
-    confidence: number;
-
+    confidence: number }
 }
-export interface SuggestionPerformanceMetrics {
-    totalSuggestions: number;
+}
+export interface SuggestionPerformanceMetrics { totalSuggestions: number;
     implementationRate: number;
     successRate: number;
     averageImpact: number;
@@ -835,78 +741,68 @@ export interface SuggestionPerformanceMetrics {
     timeToValue: number;
     costEffectiveness: number;
     accuracyMetrics: AccuracyMetrics;
-    trend: PerformanceTrend;
-
+    trend: PerformanceTrend }
 }
-export interface AccuracyMetrics {
-    predictionAccuracy: number;
+}
+export interface AccuracyMetrics { predictionAccuracy: number;
     falsePositiveRate: number;
     falseNegativeRate: number;
     precisionScore: number;
-    recallScore: number;
-
+    recallScore: number }
 }
-export interface PerformanceTrend {
-    direction: 'improving' | 'declining' | 'stable';
+}
+export interface PerformanceTrend { direction: 'improving' | 'declining' | 'stable';
     rate: number;
     confidence: number;
-    factors: TrendFactor[];
-
+    factors: TrendFactor[] }
 }
-export interface TrendFactor {
-    factor: string;
+}
+export interface TrendFactor { factor: string;
     contribution: number;
-    direction: 'positive' | 'negative';
-
+    direction: 'positive' | 'negative' }
 }
-export interface AutomationSystemHealth {
-    overallStatus: 'healthy' | 'degraded' | 'critical';
+}
+export interface AutomationSystemHealth { overallStatus: 'healthy' | 'degraded' | 'critical';
     components: SystemComponent[];
     performance: SystemPerformance;
     errors: SystemError[];
-    maintenance: MaintenanceInfo;
-
+    maintenance: MaintenanceInfo }
 }
-export interface SystemComponent {
-    componentName: string;
+}
+export interface SystemComponent { componentName: string;
     status: 'operational' | 'degraded' | 'failed';
     lastCheck: number;
     uptime: number;
-    responseTime: number;
-
+    responseTime: number }
 }
-export interface SystemPerformance {
-    throughput: number;
+}
+export interface SystemPerformance { throughput: number;
     latency: number;
     errorRate: number;
-    resourceUtilization: ResourceUtilization;
-
+    resourceUtilization: ResourceUtilization }
 }
-export interface ResourceUtilization {
-    cpu: number;
+}
+export interface ResourceUtilization { cpu: number;
     memory: number;
     storage: number;
-    network: number;
-
+    network: number }
 }
-export interface SystemError {
-    errorId: string;
+}
+export interface SystemError { errorId: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     message: string;
     timestamp: number;
     component: string;
-    resolved: boolean;
-
+    resolved: boolean }
 }
-export interface MaintenanceInfo {
-    lastMaintenance: number;
+}
+export interface MaintenanceInfo { lastMaintenance: number;
     nextMaintenance: number;
     maintenanceType: 'routine' | 'emergency' | 'upgrade';
-    estimatedDowntime: number;
-
+    estimatedDowntime: number }
 }
-export interface ActiveExperiment {
-    experimentId: string;
+}
+export interface ActiveExperiment { experimentId: string;
     name: string;
     type: TestType;
     status: ExperimentStatus;
@@ -916,28 +812,25 @@ export interface ActiveExperiment {
     metrics: ExperimentMetric[];
     results: ExperimentResult[];
 
-export type ExperimentStatus = 'planning' | 'running' | 'paused' | 'completed' | 'terminated';
-
+export type ExperimentStatus = 'planning' | 'running' | 'paused' | 'completed' | 'terminated' }
 }
-export interface ExperimentMetric {
-    metric: string;
+}
+export interface ExperimentMetric { metric: string;
     baseline: number;
     target: number;
     current: number;
-    significance: number;
-
+    significance: number }
 }
-export interface ExperimentResult {
-    variant: string;
+}
+export interface ExperimentResult { variant: string;
     users: number;
     conversions: number;
     conversionRate: number;
     improvement: number;
-    significance: number;
-
+    significance: number }
 }
-export interface RecognizedPattern {
-    patternId: string;
+}
+export interface RecognizedPattern { patternId: string;
     type: PatternType;
     description: string;
     frequency: number;
@@ -946,13 +839,12 @@ export interface RecognizedPattern {
     implications: PatternImplication[];
     actionability: PatternActionability;
 
-export type PatternType = 'user_behavior' | 'performance_cycle' | 'seasonal_trend' | 'conversion_path' | 'traffic_pattern' | 'engagement_pattern';
-
+export type PatternType = 'user_behavior' | 'performance_cycle' | 'seasonal_trend' | 'conversion_path' | 'traffic_pattern' | 'engagement_pattern' }
 }
-export interface PatternContext {
-    timeRange: {
+}
+export interface PatternContext { timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     conditions: string[];
@@ -960,27 +852,25 @@ export interface PatternContext {
     triggers: string[];
 
 }
-export interface PatternImplication {
-    implication: string;
-    confidence: number;
-    impact: 'positive' | 'negative' | 'neutral';
-
 }
-export interface PatternActionability {
-    actionable: boolean;
+export interface PatternImplication { implication: string;
+    confidence: number;
+    impact: 'positive' | 'negative' | 'neutral' }
+}
+}
+export interface PatternActionability { actionable: boolean;
     suggestedActions: string[];
     constraints: string[];
-    effort: 'low' | 'medium' | 'high';
-
+    effort: 'low' | 'medium' | 'high' }
 }
-export interface OptimizationPrediction {
-    predictionId: string;
+}
+export interface OptimizationPrediction { predictionId: string;
     type: PredictionType;
     target: string;
     predictedValue: number;
     confidenceInterval: {
         min: number;
-        max: number;
+        max: number }
 }
     };
     timeframe: number;
@@ -991,26 +881,24 @@ export interface OptimizationPrediction {
 export type PredictionType = 'conversion_rate' | 'revenue_impact' | 'user_behavior' | 'traffic_volume' | 'performance_metric' | 'experiment_outcome';
 
 }
-export interface PredictionFactor {
-    factor: string;
+}
+export interface PredictionFactor { factor: string;
     weight: number;
     direction: 'positive' | 'negative';
-    confidence: number;
-
+    confidence: number }
 }
-export interface PredictionScenario {
-    scenarioName: string;
+}
+export interface PredictionScenario { scenarioName: string;
     probability: number;
     predictedOutcome: number;
-    conditions: string[];
-
+    conditions: string[] }
 }
-export interface PredictionRecommendation {
-    recommendation: string;
+}
+export interface PredictionRecommendation { recommendation: string;
     impact: number;
     probability: number;
-    effort: 'low' | 'medium' | 'high';
-
+    effort: 'low' | 'medium' | 'high' }
+}
 }
 export interface OptimizationSuggestionsExportData {
     suggestions: OptimizationSuggestion[];
@@ -1024,4 +912,5 @@ export interface OptimizationSuggestionsExportData {
 
 export declare const AutomatedOptimizationSuggestions: React.FC<AutomatedOptimizationSuggestionsProps>;
 //# sourceMappingURL=AutomatedOptimizationSuggestions.d.ts.map
+}
 }

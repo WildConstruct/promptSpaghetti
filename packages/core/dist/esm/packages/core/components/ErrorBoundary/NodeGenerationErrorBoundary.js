@@ -48,8 +48,9 @@ export class NodeGenerationErrorBoundary extends Component {
     }
     logToMonitoringService(error, errorInfo) {
         // In a real application, this would send to a monitoring service like Sentry
-        console.warn('Production error in node generation:', {});
-        error: error.message,
+        console.warn('Production error in node generation:', {}),
+            error;
+        error.message,
             stack;
         error.stack,
             componentStack;
@@ -501,8 +502,9 @@ render();
                 console.error('Error handled programmatically:', error, errorInfo);
                 if (process.env.NODE_ENV === 'production') {
                     // Log to monitoring service
-                    console.warn('Production error reported:', {});
-                    error: error.message,
+                    console.warn('Production error reported:', {}),
+                        error;
+                    error.message,
                         stack;
                     error.stack,
                         timestamp;

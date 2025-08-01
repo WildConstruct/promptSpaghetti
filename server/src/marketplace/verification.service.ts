@@ -15,18 +15,19 @@ import {
   TrustBadge,
   VerificationMetrics,
   VerificationQueue
-} from './verification.types';
+ from './verification.types';
 
-}
-}
+
+
 export interface VerificationServiceConfig {
   s3: {
     bucket: string;
     region: string;
     accessKeyId?: string;
     secretAccessKey?: string;
-}
-}
+
+
+
   };
   documentUpload: {
     maxFileSize: number; // bytes
@@ -38,7 +39,7 @@ export interface VerificationServiceConfig {
     trustScoreThresholds: Record<VerificationLevel, number>;
     reviewSlaHours: number;
   };
-}
+
 
 export class VerificationService {
   private db: DatabaseService;
@@ -60,7 +61,7 @@ export class VerificationService {
       accessKeyId: config.s3.accessKeyId,
       secretAccessKey: config.s3.secretAccessKey
     });
-  }
+
 
   // Task E17-1753114397399-977226: Implement information collection
   async createVerificationRequest(
@@ -68,7 +69,7 @@ export class VerificationService {
     requestData: {
       requested_level: VerificationLevel;
       information: VerificationInformation;
-  }
+
     clientIp?: string,
     userAgent?: string
   ): Promise<VerificationRequest> {
@@ -105,7 +106,7 @@ export class VerificationService {
           has_personal_info: !!requestData.information.personal_info,
           has_professional_info: !!requestData.information.professional_info,
           has_business_info: !!requestData.information.business_info
-  }
+
         ipAddress: clientIp,
         userAgent,
         severity: 'info'
@@ -114,13 +115,13 @@ export class VerificationService {
       await client.query('COMMIT');
       
       return this.formatVerificationRequest(request);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async updateVerificationInformation(
     requestId: string,
@@ -143,14 +144,14 @@ export class VerificationService {
 
       if (existingResult.rows.length === 0) {
         throw new Error('Verification request not found or access denied');
-      }
+
 
       const existing = existingResult.rows[0];
       
       // Check if request can be modified
       if (!['draft', 'requires_additional_info'].includes(existing.status)) {
         throw new Error('Cannot modify request in current status');
-      }
+
 
       // Update the information
       const updateResult = await client.query(`
@@ -171,13 +172,13 @@ export class VerificationService {
       await client.query('COMMIT');
       
       return this.formatVerificationRequest(updated);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async submitVerificationRequest(
     requestId: string,
@@ -199,19 +200,19 @@ export class VerificationService {
 
       if (requestResult.rows.length === 0) {
         throw new Error('Verification request not found');
-      }
+
 
       const request = requestResult.rows[0];
       
       if (request.status !== 'draft') {
         throw new Error('Can only submit draft requests');
-      }
+
 
       // Validate that request has minimum required information
       const information = request.information;
       if (!information.personal_info?.full_name || !information.personal_info?.email) {
         throw new Error('Missing required personal information');
-      }
+
 
       // Check if any documents are required and uploaded
       const documentsResult = await client.query(
@@ -222,7 +223,7 @@ export class VerificationService {
       const uploadedDocs = parseInt(documentsResult.rows[0].count);
       if (request.requested_level !== 'basic' && uploadedDocs === 0) {
         throw new Error('Document upload required for this verification level');
-      }
+
 
       // Update status to submitted
       const updateResult = await client.query(`
@@ -252,7 +253,7 @@ export class VerificationService {
           request_id: requestId,
           requested_level: request.requested_level,
           documents_uploaded: uploadedDocs
-  }
+
         ipAddress: clientIp,
         userAgent,
         severity: 'info'
@@ -261,13 +262,13 @@ export class VerificationService {
       await client.query('COMMIT');
       
       return this.formatVerificationRequest(updateResult.rows[0]);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Task E17-1753114397398-D7FE2D: Create document upload
   async createDocumentUpload(
@@ -278,7 +279,7 @@ export class VerificationService {
       file_name: string;
       file_size: number;
       file_type: string;
-  }
+
     clientIp?: string,
     userAgent?: string
   ): Promise<{ document: VerificationDocument; upload_url: string }> {
@@ -296,21 +297,21 @@ export class VerificationService {
 
       if (requestResult.rows.length === 0) {
         throw new Error('Verification request not found or access denied');
-      }
+
 
       const request = requestResult.rows[0];
       if (!['draft', 'requires_additional_info'].includes(request.status)) {
         throw new Error('Cannot upload documents for request in current status');
-      }
+
 
       // Validate file constraints
       if (documentData.file_size > this.config.documentUpload.maxFileSize) {
         throw new Error(`File size exceeds maximum allowed size of ${this.config.documentUpload.maxFileSize} bytes`);
-      }
+
 
       if (!this.config.documentUpload.allowedMimeTypes.includes(documentData.file_type)) {
         throw new Error(`File type ${documentData.file_type} is not allowed`);
-      }
+
 
       // Generate S3 key and presigned URL
       const timestamp = Date.now();
@@ -341,7 +342,7 @@ export class VerificationService {
           'request-id': requestId,
           'document-type': documentData.document_type,
           'original-name': documentData.file_name
-        }
+
       });
 
       // Log document creation
@@ -360,13 +361,13 @@ export class VerificationService {
         document: formattedDocument,
         upload_url: uploadUrl
       };
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async confirmDocumentUpload(
     documentId: string,
@@ -390,13 +391,13 @@ export class VerificationService {
 
       if (documentResult.rows.length === 0) {
         throw new Error('Document not found or access denied');
-      }
+
 
       const document = documentResult.rows[0];
       
       if (document.status !== 'pending_upload') {
         throw new Error('Document is not in pending upload status');
-      }
+
 
       // Verify file exists in S3
       try {
@@ -404,9 +405,9 @@ export class VerificationService {
           Bucket: this.config.s3.bucket,
           Key: document.s3_key
         }).promise();
-      } catch (error) {
+ catch (error) {
         throw new Error('File not found in storage - upload may have failed');
-      }
+
 
       // Update document status
       const updateResult = await client.query(`
@@ -419,7 +420,7 @@ export class VerificationService {
       // Schedule virus scan if enabled
       if (this.config.documentUpload.virusScanEnabled) {
         await this.scheduleVirusScan(document.s3_key, documentId);
-      }
+
 
       // Log confirmation
       await this.logAuditEvent(client, document.verification_request_id, 'document_uploaded', userId, {
@@ -430,13 +431,13 @@ export class VerificationService {
       await client.query('COMMIT');
       
       return this.formatVerificationDocument(updateResult.rows[0]);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get user verification requests
   async getUserVerificationRequests(
@@ -483,7 +484,7 @@ export class VerificationService {
       requests,
       total: parseInt(countResult.rows[0].total)
     };
-  }
+
 
   // Get user verification status
   async getUserVerificationStatus(userId: string): Promise<UserVerificationStatus | null> {
@@ -508,7 +509,7 @@ export class VerificationService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     return {
@@ -521,7 +522,7 @@ export class VerificationService {
       badges: row.badges || [],
       verification_history: row.verification_history || []
     };
-  }
+
 
   // Admin/reviewer methods
 
@@ -579,7 +580,7 @@ export class VerificationService {
       sla_breaches: parseInt(stats.sla_breaches),
       reviewer_workload: [] // TODO: Implement reviewer workload calculation
     };
-  }
+
 
   // Utility methods
   private formatVerificationRequest(row: any): VerificationRequest {
@@ -599,7 +600,7 @@ export class VerificationService {
       created_at: row.created_at,
       updated_at: row.updated_at
     };
-  }
+
 
   private formatVerificationDocument(row: any): VerificationDocument {
     return {
@@ -617,7 +618,7 @@ export class VerificationService {
       created_at: row.created_at,
       updated_at: row.updated_at
     };
-  }
+
 
   private async logAuditEvent(
     client: any,
@@ -635,12 +636,11 @@ export class VerificationService {
       (verification_request_id, action, actor_id, new_values, notes, ip_address, user_agent)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
     `, [requestId, action, actorId, JSON.stringify(details), notes, ipAddress, userAgent]);
-  }
+
 
   private async scheduleVirusScan(s3Key: string, documentId: string): Promise<void> {
 
     // TODO: Implement virus scanning integration
     // This could integrate with AWS ClamAV, or other virus scanning services
     console.log(`Scheduling virus scan for document ${documentId} at ${s3Key}`);
-  }
-}
+

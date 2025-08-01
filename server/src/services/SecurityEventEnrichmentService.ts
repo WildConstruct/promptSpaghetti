@@ -9,8 +9,8 @@ import { LocationDetectionService } from './LocationDetectionService';
 import { RiskScoringService } from './RiskScoringService';
 import { logger } from '../utils/logger';
 
-}
-}
+
+
 export interface GeolocationData {
   country: string;
   countryCode: string;
@@ -26,12 +26,13 @@ export interface GeolocationData {
   isVPN?: boolean;
   isTor?: boolean;
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeviceFingerprint {
   id: string;
   browser: string;
@@ -47,12 +48,13 @@ export interface DeviceFingerprint {
   firstSeen: Date;
   lastSeen: Date;
   trustLevel: number; // 0-100
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserBehaviorContext {
   averageSessionDuration: number;
   typicalLoginTimes: number[]; // hours of day
@@ -64,20 +66,22 @@ export interface UserBehaviorContext {
   behaviorFlags: string[];
   lastLoginDate: Date;
   loginFrequency: number; // logins per day
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatIntelligence {
   ipReputation: {
     score: number; // 0-100, lower is worse
     categories: string[]; // malware, spam, phishing, etc.
     lastSeen: Date;
     sources: string[];
-}
-}
+
+
+
   };
   knownAttackPatterns: {
     matches: string[];
@@ -89,10 +93,10 @@ export interface ThreatIntelligence {
     breachSources: string[];
     lastBreachDate?: Date;
   };
-}
 
-}
-}
+
+
+
 export interface SessionAnalytics {
   sessionAge: number; // minutes
   activityCount: number;
@@ -102,9 +106,10 @@ export interface SessionAnalytics {
   deviceChanges: number;
   privilegeEscalations: number;
   suspiciousActivities: string[];
-}
-}
-}
+
+
+
+
 
 export class SecurityEventEnrichmentService {
   private deviceFingerprintingService: DeviceFingerprintingService;
@@ -125,7 +130,7 @@ export class SecurityEventEnrichmentService {
     
     // Start cache cleanup interval
     this.startCacheCleanup();
-  }
+
 
   /**
    * Enrich a security event with comprehensive context
@@ -151,7 +156,7 @@ export class SecurityEventEnrichmentService {
             .then(data => { enrichmentData.threatIntelligence = data; })
             .catch(err => logger.log(`Threat intelligence enrichment failed: ${err}`))
         );
-      }
+
 
       // Device fingerprinting
       if (event.userAgent) {
@@ -160,7 +165,7 @@ export class SecurityEventEnrichmentService {
             .then(data => { enrichmentData.deviceFingerprint = data; })
             .catch(err => logger.log(`Device fingerprint enrichment failed: ${err}`))
         );
-      }
+
 
       // User behavior analysis
       if (event.userId) {
@@ -175,7 +180,7 @@ export class SecurityEventEnrichmentService {
             .then(score => { enrichmentData.riskScore = score; })
             .catch(err => logger.log(`Risk scoring failed: ${err}`))
         );
-      }
+
 
       // Session analytics
       if (event.sessionId) {
@@ -184,7 +189,7 @@ export class SecurityEventEnrichmentService {
             .then(data => { enrichmentData.sessionAnalytics = data; })
             .catch(err => logger.log(`Session analytics enrichment failed: ${err}`))
         );
-      }
+
 
       // Time-based context
       enrichmentData.timeContext = this.enrichWithTimeContext(event.timestamp);
@@ -209,8 +214,7 @@ export class SecurityEventEnrichmentService {
         ...event,
         enrichmentData
       };
-      
-    } catch (error) {
+ catch (error) {
       logger.log(`Security event enrichment failed: ${error}`);
       // Return original event with minimal enrichment on failure
       return {
@@ -219,10 +223,10 @@ export class SecurityEventEnrichmentService {
           enrichmentError: error.toString(),
           enrichmentTimestamp: new Date(),
           timeContext: this.enrichWithTimeContext(event.timestamp)
-        }
+
       };
-    }
-  }
+
+
 
   /**
    * Enrich with geolocation data
@@ -252,7 +256,7 @@ export class SecurityEventEnrichmentService {
         isTor: location.isTor || false,
         threatLevel
       };
-    } catch (error) {
+ catch (error) {
       return {
         country: 'Unknown',
         countryCode: 'XX',
@@ -263,8 +267,8 @@ export class SecurityEventEnrichmentService {
         timezone: 'UTC',
         threatLevel: 'medium'
       };
-    }
-  }
+
+
 
   /**
    * Enrich with device fingerprinting data
@@ -283,7 +287,7 @@ export class SecurityEventEnrichmentService {
       // Check cache first
       if (this.deviceFingerprintCache.has(fingerprintId)) {
         return this.deviceFingerprintCache.get(fingerprintId)!;
-      }
+
       
       const deviceInfo = this.parseUserAgent(userAgent);
       const isKnown = userId ? await this.isKnownDevice(fingerprintId, userId) : false;
@@ -309,7 +313,7 @@ export class SecurityEventEnrichmentService {
       this.deviceFingerprintCache.set(fingerprintId, fingerprint);
       
       return fingerprint;
-    } catch (error) {
+ catch (error) {
       return {
         id: 'unknown',
         browser: 'Unknown',
@@ -325,8 +329,8 @@ export class SecurityEventEnrichmentService {
         lastSeen: new Date(),
         trustLevel: 50
       };
-    }
-  }
+
+
 
   /**
    * Enrich with user behavior context
@@ -340,7 +344,7 @@ export class SecurityEventEnrichmentService {
       // Check cache first
       if (this.userBehaviorCache.has(userId)) {
         return this.userBehaviorCache.get(userId)!;
-      }
+
       
       // Analyze user's historical behavior patterns
       const behaviorAnalysis = await this.analyzeUserBehavior(userId);
@@ -365,7 +369,7 @@ export class SecurityEventEnrichmentService {
       this.userBehaviorCache.set(userId, behaviorContext);
       
       return behaviorContext;
-    } catch (error) {
+ catch (error) {
       return {
         averageSessionDuration: 30,
         typicalLoginTimes: [],
@@ -378,8 +382,8 @@ export class SecurityEventEnrichmentService {
         lastLoginDate: new Date(),
         loginFrequency: 1
       };
-    }
-  }
+
+
 
   /**
    * Enrich with threat intelligence data
@@ -390,7 +394,7 @@ export class SecurityEventEnrichmentService {
       // Check cache first
       if (this.ipReputationCache.has(ipAddress)) {
         return this.ipReputationCache.get(ipAddress)!;
-      }
+
       
       // Query multiple threat intelligence sources
       const [reputation, knownPatterns, credentialCheck] = await Promise.all([
@@ -409,26 +413,26 @@ export class SecurityEventEnrichmentService {
       this.ipReputationCache.set(ipAddress, intelligence);
       
       return intelligence;
-    } catch (error) {
+ catch (error) {
       return {
         ipReputation: {
           score: 50,
           categories: [],
           lastSeen: new Date(),
           sources: []
-  }
+
         knownAttackPatterns: {
           matches: [],
           confidence: 0,
           severity: 'low'
-  }
+
         compromisedCredentials: {
           isCompromised: false,
           breachSources: []
-        }
+
       };
-    }
-  }
+
+
 
   /**
    * Enrich with session analytics
@@ -449,7 +453,7 @@ export class SecurityEventEnrichmentService {
         privilegeEscalations: sessionData.privilegeEscalations || 0,
         suspiciousActivities: sessionData.suspiciousActivities || []
       };
-    } catch (error) {
+ catch (error) {
       return {
         sessionAge: 0,
         activityCount: 0,
@@ -460,8 +464,8 @@ export class SecurityEventEnrichmentService {
         privilegeEscalations: 0,
         suspiciousActivities: []
       };
-    }
-  }
+
+
 
   /**
    * Enrich with time-based context
@@ -486,7 +490,7 @@ export class SecurityEventEnrichmentService {
       monthName: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][month],
       quarter: Math.floor(month / 3) + 1,
       timestamp: timestamp.toISOString(};
-  }
+
 
   /**
    * Classify the security event
@@ -497,22 +501,22 @@ export class SecurityEventEnrichmentService {
     // Authentication-related events
     if (['login_success', 'login_failed', 'logout', '2fa_attempted'].includes(event.type)) {
       classifications.push('authentication');
-    }
+
     
     // Authorization-related events
     if (['permission_granted', 'permission_revoked', 'role_assigned'].includes(event.type)) {
       classifications.push('authorization');
-    }
+
     
     // Suspicious activity
     if (['suspicious_login', 'brute_force_attempt', 'unusual_location'].includes(event.type)) {
       classifications.push('suspicious', 'potential_threat');
-    }
+
     
     // Account management
     if (['user_created', 'user_updated', 'account_locked'].includes(event.type)) {
       classifications.push('account_management');
-    }
+
     
     return {
       categories: classifications,
@@ -520,7 +524,7 @@ export class SecurityEventEnrichmentService {
       confidence: this.calculateClassificationConfidence(event),
       tags: this.generateEventTags(event)
     };
-  }
+
 
   /**
    * Analyze potential attack patterns
@@ -536,7 +540,7 @@ export class SecurityEventEnrichmentService {
         confidence: 0.7,
         indicators: ['multiple_failures', 'rapid_attempts']
       });
-    }
+
     
     if (event.ipAddress && await this.isFromSuspiciousLocation(event.ipAddress)) {
       patterns.push({
@@ -544,14 +548,14 @@ export class SecurityEventEnrichmentService {
         confidence: 0.6,
         indicators: ['unusual_location', 'geographic_distance']
       });
-    }
+
     
     return {
       detectedPatterns: patterns,
       riskScore: patterns.reduce((sum, p) => sum + p.confidence, 0) / Math.max(patterns.length, 1),
       indicators: patterns.flatMap(p => p.indicators)
     };
-  }
+
 
   /**
    * Calculate overall threat level based on all enrichment data
@@ -564,26 +568,26 @@ export class SecurityEventEnrichmentService {
     if (enrichmentData.threatIntelligence?.ipReputation) {
       score += (100 - enrichmentData.threatIntelligence.ipReputation.score);
       factors++;
-    }
+
     
     // Geolocation threat level
     if (enrichmentData.geolocation?.threatLevel) {
       const threatScores = { low: 10, medium: 30, high: 60, critical: 90 };
       score += threatScores[enrichmentData.geolocation.threatLevel];
       factors++;
-    }
+
     
     // User behavior risk
     if (enrichmentData.userBehavior?.riskScore) {
       score += enrichmentData.userBehavior.riskScore;
       factors++;
-    }
+
     
     // Device trust level
     if (enrichmentData.deviceFingerprint?.trustLevel) {
       score += (100 - enrichmentData.deviceFingerprint.trustLevel);
       factors++;
-    }
+
     
     const averageScore = factors > 0 ? score / factors : 50;
     
@@ -591,7 +595,7 @@ export class SecurityEventEnrichmentService {
     if (averageScore >= 60) return 'high';
     if (averageScore >= 40) return 'medium';
     return 'low';
-  }
+
 
   /**
    * Helper methods (would be implemented with real data sources)
@@ -600,7 +604,7 @@ export class SecurityEventEnrichmentService {
     if (location.isTor || location.isVPN) return 'high';
     if (location.isProxy) return 'medium';
     return 'low';
-  }
+
 
   private parseUserAgent(_____userAgent: string): unknown {
     // Mock implementation - would use a proper user agent parser
@@ -614,25 +618,25 @@ export class SecurityEventEnrichmentService {
       language: 'en',
       plugins: []
     };
-  }
+
 
   private async isKnownDevice(_____fingerprintId: string, userId?: string): Promise<boolean> {
 
     // Mock implementation - would check device history
     return false;
-  }
+
 
   private async calculateDeviceTrustLevel(_____fingerprintId: string, userId?: string): Promise<number> {
 
     // Mock implementation - would calculate based on device history
     return 50;
-  }
+
 
   private async getDeviceFirstSeen(_____fingerprintId: string): Promise<Date> {
 
     // Mock implementation
     return new Date();
-  }
+
 
   private async analyzeUserBehavior(_____userId: string): Promise<unknown> {
 
@@ -647,12 +651,12 @@ export class SecurityEventEnrichmentService {
       lastLogin: new Date(),
       loginFreq: 1
     };
-  }
+
 
   private calculateBehaviorAnomalyScore(_____analysis: Event, _____eventTime: Date): number {
     // Mock implementation - would calculate behavioral anomaly score
     return 50;
-  }
+
 
   private generateBehaviorFlags(analysis: Event, eventTime: Date): string[] {
     const flags = [];
@@ -661,14 +665,14 @@ export class SecurityEventEnrichmentService {
     
     if (!analysis.loginHours.includes(hour)) {
       flags.push('unusual_time');
-    }
+
     
     if (!analysis.loginDays.includes(day)) {
       flags.push('unusual_day');
-    }
+
     
     return flags;
-  }
+
 
   private async getIPReputation(_____ipAddress: string): Promise<unknown> {
 
@@ -679,7 +683,7 @@ export class SecurityEventEnrichmentService {
       lastSeen: new Date(),
       sources: ['mock_feed']
     };
-  }
+
 
   private async checkKnownAttackPatterns(_____ipAddress: string): Promise<unknown> {
 
@@ -689,7 +693,7 @@ export class SecurityEventEnrichmentService {
       confidence: 0,
       severity: 'low'
     };
-  }
+
 
   private async checkCompromisedCredentials(_____ipAddress: string): Promise<unknown> {
 
@@ -698,7 +702,7 @@ export class SecurityEventEnrichmentService {
       isCompromised: false,
       breachSources: []
     };
-  }
+
 
   private async getSessionData(_____sessionId: string): Promise<unknown> {
 
@@ -713,12 +717,12 @@ export class SecurityEventEnrichmentService {
       privilegeEscalations: 0,
       suspiciousActivities: []
     };
-  }
+
 
   private calculateClassificationConfidence(_____event: SecurityEvent): number {
     // Mock implementation - would calculate classification confidence
     return 0.8;
-  }
+
 
   private generateEventTags(event: SecurityEvent): string[] {
     const tags = [event.type, event.severity];
@@ -728,13 +732,13 @@ export class SecurityEventEnrichmentService {
     if (event.ipAddress) tags.push('network_related');
     
     return tags;
-  }
+
 
   private async isFromSuspiciousLocation(_____ipAddress: string): Promise<boolean> {
 
     // Mock implementation - would check against suspicious location database
     return false;
-  }
+
 
   /**
    * Start cache cleanup to prevent memory leaks
@@ -744,13 +748,13 @@ export class SecurityEventEnrichmentService {
       // Clean up caches periodically
       if (this.ipReputationCache.size > 10000) {
         this.ipReputationCache.clear();
-      }
+
       if (this.userBehaviorCache.size > 5000) {
         this.userBehaviorCache.clear();
-      }
+
       if (this.deviceFingerprintCache.size > 5000) {
         this.deviceFingerprintCache.clear();
-      }
+
     }, 60 * 60 * 1000); // Clean every hour
-  }
-}
+
+

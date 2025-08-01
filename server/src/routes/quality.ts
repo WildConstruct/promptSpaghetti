@@ -40,10 +40,10 @@ const QualityMetricsSchema = {
             security: { type: 'number' },
             documentation: { type: 'number' },
             buildHealth: { type: 'number' }
-          }
-        }
-      }
-  }
+
+
+
+
     testCoverage: { type: 'object' },
     codeQuality: { type: 'object' },
     performance: { type: 'object' },
@@ -54,7 +54,7 @@ const QualityMetricsSchema = {
     recommendations: { type: 'array' },
     alerts: { type: 'array' },
     metadata: { type: 'object' }
-  }
+
 };
 
 const HistoricalMetricsQuerySchema = {
@@ -63,29 +63,19 @@ const HistoricalMetricsQuerySchema = {
     start: { type: 'string', format: 'date-time' },
     end: { type: 'string', format: 'date-time' },
     granularity: { type: 'string', enum: ['hour', 'day', 'week'] }
-  }
+
   required: ['start', 'end']
 };
 
-const TrendsQuerySchema = {
-  type: 'object',
-  properties: {
-    timeframe: { type: 'string', enum: ['week', 'month', 'quarter'] }
-  }
-};
+const TrendsQuerySchema = {};
 
-const AlertAcknowledgeSchema = {
-  type: 'object',
-  properties: {
-    acknowledgedBy: { type: 'string' }
-  }
-};
+const AlertAcknowledgeSchema = {};
 
 const RecommendationUpdateSchema = {
   type: 'object',
   properties: {
     status: { type: 'string', enum: ['acknowledged', 'in_progress', 'completed', 'dismissed'] }
-  }
+
   required: ['status']
 };
 
@@ -128,11 +118,10 @@ export async function qualityRoutes(fastify: FastifyInstance) {
     
     // Start the service
     await qualityMetricsService.start();
-    
-  } catch (error) {
+ catch (error) {
     fastify.log.error('Failed to initialize Quality Metrics Service:', error);
     // Continue without the service - routes will return appropriate errors
-  }
+
   
   // =============================================================================
   // GET /api/quality/metrics - Get current quality metrics
@@ -149,10 +138,10 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           properties: {
             error: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       if (!qualityMetricsService) {
@@ -160,7 +149,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Quality Metrics Service is not available'
         });
-      }
+
       
       const metrics = await qualityMetricsService.getCurrentMetrics();
       
@@ -169,17 +158,16 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'No quality metrics available'
         });
-      }
+
       
       return reply.send(metrics);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching quality metrics:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch quality metrics'
       });
-    }
+
   });
   
   // =============================================================================
@@ -191,8 +179,8 @@ export async function qualityRoutes(fastify: FastifyInstance) {
       start: string;
       end: string;
       granularity?: 'hour' | 'day' | 'week';
-    }
-  }>('/metrics/historical', {
+
+>('/metrics/historical', {
     schema: {
       description: 'Get historical quality metrics for a date range',
       tags: ['Quality'],
@@ -201,16 +189,16 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         200: {
           type: 'array',
           items: QualityMetricsSchema
-  }
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!qualityMetricsService) {
@@ -218,7 +206,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Quality Metrics Service is not available'
         });
-      }
+
       
       const { start, end, granularity = 'day' } = request.query;
       
@@ -230,14 +218,14 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Bad Request',
           message: 'Invalid date format. Use ISO 8601 format.'
         });
-      }
+
       
       if (startDate >= endDate) {
         return reply.status(400).send({
           error: 'Bad Request',
           message: 'Start date must be before end date'
         });
-      }
+
       
       const historicalMetrics = await qualityMetricsService.getHistoricalMetrics(
         startDate,
@@ -246,14 +234,13 @@ export async function qualityRoutes(fastify: FastifyInstance) {
       );
       
       return reply.send(historicalMetrics);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching historical metrics:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch historical metrics'
       });
-    }
+
   });
   
   // =============================================================================
@@ -263,8 +250,8 @@ export async function qualityRoutes(fastify: FastifyInstance) {
   fastify.get<{
     Querystring: {
       timeframe?: 'week' | 'month' | 'quarter';
-    }
-  }>('/trends', {
+
+>('/trends', {
     schema: {
       description: 'Get quality trends for dashboard visualization',
       tags: ['Quality'],
@@ -280,10 +267,10 @@ export async function qualityRoutes(fastify: FastifyInstance) {
             security: { type: 'object' },
             documentation: { type: 'object' },
             buildHealth: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!qualityMetricsService) {
@@ -291,21 +278,20 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Quality Metrics Service is not available'
         });
-      }
+
       
       const { timeframe = 'month' } = request.query;
       
       const trends = await qualityMetricsService.getQualityTrends(timeframe);
       
       return reply.send(trends);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching quality trends:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch quality trends'
       });
-    }
+
   });
   
   // =============================================================================
@@ -317,8 +303,8 @@ export async function qualityRoutes(fastify: FastifyInstance) {
       status?: 'active' | 'acknowledged' | 'resolved';
       severity?: 'info' | 'warning' | 'error' | 'critical';
       limit?: number;
-    }
-  }>('/alerts', {
+
+>('/alerts', {
     schema: {
       description: 'Get quality alerts with optional filtering',
       tags: ['Quality'],
@@ -328,8 +314,8 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           status: { type: 'string', enum: ['active', 'acknowledged', 'resolved'] },
           severity: { type: 'string', enum: ['info', 'warning', 'error', 'critical'] },
           limit: { type: 'number', minimum: 1, maximum: 100 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'array',
@@ -345,11 +331,11 @@ export async function qualityRoutes(fastify: FastifyInstance) {
               thresholdValue: { type: 'number' },
               timestamp: { type: 'string', format: 'date-time' },
               status: { type: 'string' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!qualityMetricsService) {
@@ -357,7 +343,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Quality Metrics Service is not available'
         });
-      }
+
       
       const { status, severity, limit = 50 } = request.query;
       
@@ -366,24 +352,23 @@ export async function qualityRoutes(fastify: FastifyInstance) {
       // Apply filters
       if (status) {
         alerts = alerts.filter(alert => alert.status === status);
-      }
+
       
       if (severity) {
         alerts = alerts.filter(alert => alert.severity === severity);
-      }
+
       
       // Apply limit
       alerts = alerts.slice(0, limit);
       
       return reply.send(alerts);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching quality alerts:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch quality alerts'
       });
-    }
+
   });
   
   // =============================================================================
@@ -393,7 +378,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
   fastify.post<{
     Params: { id: string };
     Body: { acknowledgedBy?: string };
-  }>('/alerts/:id/acknowledge', {
+>('/alerts/:id/acknowledge', {
     schema: {
       description: 'Acknowledge a quality alert',
       tags: ['Quality'],
@@ -401,9 +386,9 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string' }
-  }
+
         required: ['id']
-  }
+
       body: AlertAcknowledgeSchema,
       response: {
         200: {
@@ -411,17 +396,17 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!qualityMetricsService) {
@@ -429,7 +414,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Quality Metrics Service is not available'
         });
-      }
+
       
       const { id } = request.params;
       const { acknowledgedBy = 'system' } = request.body;
@@ -440,8 +425,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Alert acknowledged successfully'
       });
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error acknowledging alert:', error);
       
       if (error instanceof Error && error.message.includes('not found')) {
@@ -449,13 +433,13 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'Alert not found'
         });
-      }
+
       
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to acknowledge alert'
       });
-    }
+
   });
   
   // =============================================================================
@@ -468,8 +452,8 @@ export async function qualityRoutes(fastify: FastifyInstance) {
       priority?: 'low' | 'medium' | 'high' | 'critical';
       status?: string;
       limit?: number;
-    }
-  }>('/recommendations', {
+
+>('/recommendations', {
     schema: {
       description: 'Get quality improvement recommendations',
       tags: ['Quality'],
@@ -480,8 +464,8 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           priority: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
           status: { type: 'string' },
           limit: { type: 'number', minimum: 1, maximum: 100 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'array',
@@ -497,11 +481,11 @@ export async function qualityRoutes(fastify: FastifyInstance) {
               effort: { type: 'string' },
               status: { type: 'string' },
               createdAt: { type: 'string', format: 'date-time' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!qualityMetricsService) {
@@ -509,7 +493,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Quality Metrics Service is not available'
         });
-      }
+
       
       const { category, priority, status, limit = 50 } = request.query;
       
@@ -518,20 +502,19 @@ export async function qualityRoutes(fastify: FastifyInstance) {
       // Apply status filter if provided
       if (status) {
         recommendations = recommendations.filter(rec => rec.status === status);
-      }
+
       
       // Apply limit
       recommendations = recommendations.slice(0, limit);
       
       return reply.send(recommendations);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching recommendations:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch recommendations'
       });
-    }
+
   });
   
   // =============================================================================
@@ -541,7 +524,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
   fastify.patch<{
     Params: { id: string };
     Body: { status: string };
-  }>('/recommendations/:id', {
+>('/recommendations/:id', {
     schema: {
       description: 'Update quality recommendation status',
       tags: ['Quality'],
@@ -549,9 +532,9 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string' }
-  }
+
         required: ['id']
-  }
+
       body: RecommendationUpdateSchema,
       response: {
         200: {
@@ -559,17 +542,17 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!qualityMetricsService) {
@@ -577,7 +560,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Quality Metrics Service is not available'
         });
-      }
+
       
       const { id } = request.params;
       const { status } = request.body;
@@ -588,8 +571,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Recommendation status updated successfully'
       });
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error updating recommendation:', error);
       
       if (error instanceof Error && error.message.includes('not found')) {
@@ -597,13 +579,13 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'Recommendation not found'
         });
-      }
+
       
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to update recommendation'
       });
-    }
+
   });
   
   // =============================================================================
@@ -621,10 +603,10 @@ export async function qualityRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       if (!qualityMetricsService) {
@@ -632,7 +614,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           error: 'Service Unavailable',
           message: 'Quality Metrics Service is not available'
         });
-      }
+
       
       const metrics = await qualityMetricsService.collectQualityMetrics();
       
@@ -641,14 +623,13 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         message: 'Quality metrics refreshed successfully',
         timestamp: metrics.timestamp
       });
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error refreshing quality metrics:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to refresh quality metrics'
       });
-    }
+
   });
   
   // =============================================================================
@@ -673,12 +654,12 @@ export async function qualityRoutes(fastify: FastifyInstance) {
                 database: { type: 'boolean' },
                 redis: { type: 'boolean' },
                 analytics: { type: 'boolean' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     const health = {
       status: qualityMetricsService ? 'healthy' : 'unavailable',
@@ -689,7 +670,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         database: true, // Would check actual connections
         redis: true,
         analytics: true
-      }
+
     };
     
     return reply.send(health);
@@ -711,7 +692,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
               type: 'metrics',
               data: metrics
             }));
-          }
+
         });
         
         // Listen for real-time updates
@@ -738,9 +719,9 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           if (qualityMetricsService) {
             qualityMetricsService.off('realTimeMetrics', handleMetricsUpdate);
             qualityMetricsService.off('alertCreated', handleAlert);
-          }
+
         });
-      }
+
     });
   });
   
@@ -748,8 +729,8 @@ export async function qualityRoutes(fastify: FastifyInstance) {
   fastify.addHook('onClose', async () => {
     if (qualityMetricsService) {
       await qualityMetricsService.stop();
-    }
+
   });
-}
+
 
 export default qualityRoutes;

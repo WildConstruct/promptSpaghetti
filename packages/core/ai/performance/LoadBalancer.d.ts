@@ -7,18 +7,17 @@
 import { BaseAIModel } from '../BaseAIModel';
 
 }
-export interface LoadBalancerConfig {
-    strategy: 'round_robin' | 'least_connections' | 'response_time' | 'cost_aware' | 'adaptive';
+}
+export interface LoadBalancerConfig { strategy: 'round_robin' | 'least_connections' | 'response_time' | 'cost_aware' | 'adaptive';
     healthCheckInterval: number;
     failoverThreshold: number;
     maxRetries: number;
     timeoutMs: number;
     circuitBreakerEnabled: boolean;
-    metricsCollection: boolean;
-
+    metricsCollection: boolean }
 }
-export interface ModelInstance {
-    id: string;
+}
+export interface ModelInstance { id: string;
     model: BaseAIModel;
     weight: number;
     healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
@@ -32,29 +31,26 @@ export interface ModelInstance {
         errorRate: number;
         costPerRequest: number;
         lastHealthCheck: number;
-        consecutiveFailures: number;
+        consecutiveFailures: number }
 }
     };
-    circuitBreaker: {
-        state: 'closed' | 'open' | 'half_open';
+    circuitBreaker: { state: 'closed' | 'open' | 'half_open';
         openedAt: number;
-        nextRetryAt: number;
-    };
+        nextRetryAt: number };
 
 }
-export interface LoadBalancingRequest {
-    id: string;
+}
+export interface LoadBalancingRequest { id: string;
     input: any;
     options?: any;
     priority: 'low' | 'normal' | 'high';
     timeout?: number;
     retryCount?: number;
     startTime: number;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface LoadBalancingResult<T = any> {
-    result: T;
+}
+export interface LoadBalancingResult<T = any> { result: T;
     modelId: string;
     responseTime: number;
     retryCount: number;
@@ -97,8 +93,7 @@ export declare class LoadBalancer {
         totalRequests: number;
         averageResponseTime: number;
         overallErrorRate: number;
-        totalCost: number;
-}
+        totalCost: number }
     };
     private generateRequestId;
     private sleep;

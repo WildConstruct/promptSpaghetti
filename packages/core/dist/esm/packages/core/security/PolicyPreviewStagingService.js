@@ -360,8 +360,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
         feedbackType: FeedbackType,
         rating: number,
         comments: string,
-        categories: FeedbackCategory
-    });
+        categories: FeedbackCategory });
     Promise < UserFeedback > {
         const: preview = this.activePreviews.get(previewId),
         if(, preview) {
@@ -561,8 +560,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
                     warnings: findings.filter(f => f.severity === 'warning').map(f => f.description),
                     validatedAt: new Date(),
                     validatorInfo: {
-                        validatorId: `validator_${validationType.toLowerCase()}`
-                    }
+                        validatorId: `validator_${validationType.toLowerCase()}` }
                 },
                     validatorType;
                 'automated',

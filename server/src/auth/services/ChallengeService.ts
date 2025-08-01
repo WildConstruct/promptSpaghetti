@@ -20,31 +20,33 @@ import {
   ChallengeStats,
   ChallengeData,
   ChallengeContext
-} from '../types';
+ from '../types';
 
 // ========================================
 // Challenge Generators
 // ========================================
 
-}
-}
+
+
 interface MathPuzzle {
   question: string;
   answer: string;
   difficulty: ChallengeDifficulty;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ImageSelectionChallenge {
   images: string[];
   correctIndices: number[];
   prompt: string;
-}
-}
-}
+
+
+
+
 
 class ChallengeGenerators {
   /**
@@ -73,16 +75,16 @@ class ChallengeGenerators {
       if (operation === '*') {
         result = x * y;
         question = `What is ${x} × ${y}?`;
-      } else if (operation === '/') {
+ else if (operation === '/') {
         result = x;
         question = `What is ${x * y} ÷ ${y}?`;
-      } else if (operation === '+') {
+ else if (operation === '+') {
         result = x + y;
         question = `What is ${x} + ${y}?`;
-      } else {
+ else {
         result = x - y;
         question = `What is ${x + y} - ${y}?`;
-      }
+
 
       return {
         question,
@@ -104,8 +106,8 @@ class ChallengeGenerators {
 
     default:
       return this.generateMathPuzzle(ChallengeDifficulty.MEDIUM);
-    }
-  }
+
+
 
   /**
    * Generate text CAPTCHA
@@ -118,7 +120,7 @@ class ChallengeGenerators {
     let text = '';
     for (let i = 0; i < length; i++) {
       text += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+
 
     // Add noise for harder difficulties
     if (difficulty === ChallengeDifficulty.HARD) {
@@ -128,11 +130,11 @@ class ChallengeGenerators {
         const pos = Math.floor(Math.random() * text.length);
         const noise = noiseChars.charAt(Math.floor(Math.random() * noiseChars.length));
         text = text.substring(0, pos) + noise + text.substring(pos);
-      }
-    }
+
+
 
     return { text, answer: text.replace(/[^A-Z0-9]/g, '') };
-  }
+
 
   /**
    * Generate pattern recognition challenge
@@ -163,8 +165,8 @@ class ChallengeGenerators {
       pattern: selected.sequence,
       answer: selected.answer
     };
-  }
-}
+
+
 
 // ========================================
 // External Provider Integrations
@@ -179,18 +181,18 @@ class ExternalChallengeProviders {
     score?: number;
     action?: string;
     errorCodes?: string[];
-  }> {
+> {
 
     try {
       const response = await globalThis.fetch('https://www.google.com/recaptcha/api/siteverify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
-  }
+
         body: new URLSearchParams({
           secret: secretKey,
           response: token
-  }
+
       });
 
       const data = await response.json() as any;
@@ -201,7 +203,7 @@ class ExternalChallengeProviders {
           success: false,
           errorCodes: ['action-mismatch']
         };
-      }
+
 
       return {
         success: data.success,
@@ -209,14 +211,14 @@ class ExternalChallengeProviders {
         action: data.action,
         errorCodes: data['error-codes']
       };
-    } catch (error) {
+ catch (error) {
       console.error('reCAPTCHA validation error:', error);
       return {
         success: false,
         errorCodes: ['network-error']
       };
-    }
-  }
+
+
 
   /**
    * Validate hCaptcha response
@@ -224,18 +226,18 @@ class ExternalChallengeProviders {
   static async validateHCaptcha(token: string, secretKey: string): Promise<{
     success: boolean;
     errorCodes?: string[];
-  }> {
+> {
 
     try {
       const response = await globalThis.fetch('https://hcaptcha.com/siteverify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
-  }
+
         body: new URLSearchParams({
           secret: secretKey,
           response: token
-  }
+
       });
 
       const data = await response.json() as any;
@@ -244,15 +246,15 @@ class ExternalChallengeProviders {
         success: data.success,
         errorCodes: data['error-codes']
       };
-    } catch (error) {
+ catch (error) {
       console.error('hCaptcha validation error:', error);
       return {
         success: false,
         errorCodes: ['network-error']
       };
-    }
-  }
-}
+
+
+
 
 // ========================================
 // Challenge Service Implementation
@@ -267,7 +269,7 @@ export class ChallengeService implements IChallengeService {
   constructor(config: ChallengeConfig) {
     this.config = config;
     this.startCleanupTimer();
-  }
+
 
   /**
    * Generate a new challenge based on request
@@ -327,7 +329,7 @@ export class ChallengeService implements IChallengeService {
 
     default:
       throw new Error(`Unsupported challenge type: ${request.type}`);
-    }
+
 
     const challengeResponse: ChallengeResponse = {
       id: challengeId,
@@ -351,7 +353,7 @@ export class ChallengeService implements IChallengeService {
     this.updateStats('generated', request.type, request.difficulty);
 
     return challengeResponse;
-  }
+
 
   /**
    * Validate challenge solution
@@ -367,7 +369,7 @@ export class ChallengeService implements IChallengeService {
         remainingAttempts: 0,
         error: 'Challenge not found or expired'
       };
-    }
+
 
     // Check if challenge is expired
     if (new Date() > storedChallenge.expiresAt) {
@@ -378,7 +380,7 @@ export class ChallengeService implements IChallengeService {
         remainingAttempts: 0,
         error: 'Challenge expired'
       };
-    }
+
 
     // Check remaining attempts
     if (storedChallenge.remainingAttempts <= 0) {
@@ -388,7 +390,7 @@ export class ChallengeService implements IChallengeService {
         remainingAttempts: 0,
         error: 'Maximum attempts exceeded'
       };
-    }
+
 
     // Decrement attempts
     storedChallenge.remainingAttempts--;
@@ -412,12 +414,12 @@ export class ChallengeService implements IChallengeService {
         // For custom challenges, compare solutions
         isValid = this.compareSolutions(validation.solution, storedChallenge.solution);
         break;
-      }
+
 
       // Check for escalation based on failed attempts
       if (!isValid && storedChallenge.remainingAttempts === 0) {
         escalationRequired = this.shouldEscalate(validation.clientInfo.ipAddress);
-      }
+
 
       // Update statistics
       this.updateStats(isValid ? 'success' : 'failure', storedChallenge.type);
@@ -425,7 +427,7 @@ export class ChallengeService implements IChallengeService {
       // Clean up if successful or no attempts left
       if (isValid || storedChallenge.remainingAttempts === 0) {
         this.challenges.delete(validation.challengeId);
-      }
+
 
       return {
         valid: isValid,
@@ -434,8 +436,7 @@ export class ChallengeService implements IChallengeService {
         error: isValid ? undefined : 'Incorrect solution',
         escalationRequired
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Challenge validation error:', error);
       return {
         valid: false,
@@ -443,8 +444,8 @@ export class ChallengeService implements IChallengeService {
         remainingAttempts: storedChallenge.remainingAttempts,
         error: 'Validation error occurred'
       };
-    }
-  }
+
+
 
   /**
    * Get challenge by ID
@@ -458,12 +459,12 @@ export class ChallengeService implements IChallengeService {
     if (new Date() > challenge.expiresAt) {
       this.challenges.delete(challengeId);
       return null;
-    }
+
 
     // Return without solution
     const { solution, ...challengeResponse } = challenge;
     return challengeResponse;
-  }
+
 
   /**
    * Refresh challenge (generate new one)
@@ -473,7 +474,7 @@ export class ChallengeService implements IChallengeService {
     const existingChallenge = this.challenges.get(challengeId);
     if (!existingChallenge) {
       throw new Error('Challenge not found');
-    }
+
 
     // Generate new challenge of same type
     const request: ChallengeRequest = {
@@ -482,14 +483,14 @@ export class ChallengeService implements IChallengeService {
       clientInfo: {
         userAgent: 'refresh',
         ipAddress: 'unknown'
-      }
+
     };
 
     // Remove old challenge
     this.challenges.delete(challengeId);
 
     return this.generateChallenge(request);
-  }
+
 
   /**
    * Invalidate challenge
@@ -497,7 +498,7 @@ export class ChallengeService implements IChallengeService {
   async invalidateChallenge(challengeId: string): Promise<void> {
 
     this.challenges.delete(challengeId);
-  }
+
 
   /**
    * Get challenge statistics
@@ -522,7 +523,7 @@ export class ChallengeService implements IChallengeService {
 
     // TODO: Implement proper aggregation based on filters
     return defaultStats;
-  }
+
 
   // ========================================
   // Private Helper Methods
@@ -530,7 +531,7 @@ export class ChallengeService implements IChallengeService {
 
   private generateChallengeId(): string {
     return 'ch_' + crypto.randomBytes(16).toString('hex');
-  }
+
 
   private getExpiryMinutes(type: ChallengeType): number {
     switch (type) {
@@ -540,13 +541,13 @@ export class ChallengeService implements IChallengeService {
       return 5; // External providers typically expire quickly
     default:
       return this.config.providers.custom?.expiryMinutes || 10;
-    }
-  }
+
+
 
   private getMaxAttempts(type: ChallengeType, difficulty?: ChallengeDifficulty): number {
     if (type === ChallengeType.RECAPTCHA_V2 || type === ChallengeType.RECAPTCHA_V3 || type === ChallengeType.HCAPTCHA) {
       return 3; // External providers
-    }
+
 
     const baseAttempts = this.config.providers.custom?.maxAttempts || 3;
     
@@ -557,37 +558,37 @@ export class ChallengeService implements IChallengeService {
       return Math.max(1, baseAttempts - 1);
     default:
       return baseAttempts;
-    }
-  }
+
+
 
   private generateRecaptchaChallenge(type: ChallengeType): ChallengeData {
     const siteKey = this.config.providers.recaptcha?.siteKey;
     if (!siteKey) {
       throw new Error('reCAPTCHA site key not configured');
-    }
+
 
     return {
       text: type === ChallengeType.RECAPTCHA_V2 ? 'Complete the reCAPTCHA' : 'Verify you are human',
       metadata: {
         siteKey,
         type: type === ChallengeType.RECAPTCHA_V3 ? 'v3' : 'v2'
-      }
+
     };
-  }
+
 
   private generateHCaptchaChallenge(): ChallengeData {
     const siteKey = this.config.providers.hcaptcha?.siteKey;
     if (!siteKey) {
       throw new Error('hCaptcha site key not configured');
-    }
+
 
     return {
       text: 'Complete the hCaptcha',
       metadata: {
         siteKey
-      }
+
     };
-  }
+
 
   private generatePatternOptions(correctAnswer: string): string[] {
     const options = [correctAnswer];
@@ -599,51 +600,51 @@ export class ChallengeService implements IChallengeService {
       for (let i = 0; i < correctAnswer.length; i++) {
         if (Math.random() > 0.7) {
           option += correctAnswer[i];
-        } else {
+ else {
           option += chars[Math.floor(Math.random() * chars.length)];
-        }
-      }
+
+
       if (!options.includes(option)) {
         options.push(option);
-      }
-    }
+
+
 
     // Shuffle options
     for (let i = options.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [options[i], options[j]] = [options[j], options[i]];
-    }
+
 
     return options;
-  }
+
 
   private async validateRecaptchaResponse(token: string, type: ChallengeType): Promise<boolean> {
 
     const secretKey = this.config.providers.recaptcha?.secretKey;
     if (!secretKey) {
       throw new Error('reCAPTCHA secret key not configured');
-    }
+
 
     const result = await ExternalChallengeProviders.validateRecaptcha(token, secretKey);
     
     if (type === ChallengeType.RECAPTCHA_V3) {
       const threshold = this.config.providers.recaptcha?.v3Threshold || 0.5;
       return result.success && (result.score || 0) >= threshold;
-    }
+
 
     return result.success;
-  }
+
 
   private async validateHCaptchaResponse(token: string): Promise<boolean> {
 
     const secretKey = this.config.providers.hcaptcha?.secretKey;
     if (!secretKey) {
       throw new Error('hCaptcha secret key not configured');
-    }
+
 
     const result = await ExternalChallengeProviders.validateHCaptcha(token, secretKey);
     return result.success;
-  }
+
 
   private compareSolutions(provided: string, expected: string): boolean {
     // Normalize both solutions (trim, lowercase)
@@ -651,7 +652,7 @@ export class ChallengeService implements IChallengeService {
     const normalizedExpected = expected.trim().toLowerCase();
     
     return normalizedProvided === normalizedExpected;
-  }
+
 
   private updateSession(request: ChallengeRequest, challengeId: string): void {
     // Simplified session tracking - in production, use proper storage
@@ -668,7 +669,7 @@ export class ChallengeService implements IChallengeService {
         correct: false,
         attempts: 0
       });
-    } else {
+ else {
       // Create new session
       this.sessions.set(sessionKey, {
         id: crypto.randomBytes(16).toString('hex'),
@@ -683,20 +684,20 @@ export class ChallengeService implements IChallengeService {
           solution: '',
           correct: false,
           attempts: 0
-        }],
+],
         currentStage: 0,
         status: 'active',
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
       });
-    }
-  }
+
+
 
   private shouldEscalate(ipAddress: string): boolean {
     // Check if escalation is enabled
     if (!this.config.escalation.enabled) {
       return false;
-    }
+
 
     // Simple escalation logic based on failed attempts
     const session = this.sessions.get(ipAddress);
@@ -704,7 +705,7 @@ export class ChallengeService implements IChallengeService {
 
     const failedChallenges = session.challenges.filter(c => !c.correct).length;
     return failedChallenges >= this.config.escalation.thresholds.escalateAfter;
-  }
+
 
   private updateStats(action: 'generated' | 'success' | 'failure', type: ChallengeType, difficulty?: ChallengeDifficulty): void {
     // Simplified stats tracking - in production, use proper analytics storage
@@ -725,7 +726,7 @@ export class ChallengeService implements IChallengeService {
       stats.typeBreakdown[type] = (stats.typeBreakdown[type] || 0) + 1;
       if (difficulty) {
         stats.difficultyBreakdown[difficulty] = (stats.difficultyBreakdown[difficulty] || 0) + 1;
-      }
+
       break;
     case 'success':
       stats.successfulChallenges++;
@@ -733,10 +734,10 @@ export class ChallengeService implements IChallengeService {
     case 'failure':
       stats.failedChallenges++;
       break;
-    }
+
 
     this.stats.set(key, stats);
-  }
+
 
   private startCleanupTimer(): void {
     // Clean up expired challenges every 5 minutes
@@ -745,17 +746,17 @@ export class ChallengeService implements IChallengeService {
       for (const [challengeId, challenge] of this.challenges.entries()) {
         if (now > challenge.expiresAt) {
           this.challenges.delete(challengeId);
-        }
-      }
+
+
 
       // Clean up expired sessions
       for (const [sessionKey, session] of this.sessions.entries()) {
         if (now > session.expiresAt) {
           this.sessions.delete(sessionKey);
-        }
-      }
+
+
     }, 5 * 60 * 1000);
-  }
-}
+
+
 
 export default ChallengeService;

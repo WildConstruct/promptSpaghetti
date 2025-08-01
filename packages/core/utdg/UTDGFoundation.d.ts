@@ -6,8 +6,8 @@
 import { HistoricalEra, Genre, Style } from '../historical/NodeMetadataManager';
 
 }
-export interface UTDGNode {
-    id: string;
+}
+export interface UTDGNode { id: string;
     type: 'concept' | 'entity' | 'relationship' | 'attribute' | 'constraint';
     label: string;
     description: string;
@@ -19,14 +19,14 @@ export interface UTDGNode {
         tags: string[];
         confidence: number;
         sources: string[];
-        lastUpdated: Date;
+        lastUpdated: Date }
 }
     };
     relationships: UTDGRelationship[];
 
 }
-export interface UTDGRelationship {
-    id: string;
+}
+export interface UTDGRelationship { id: string;
     sourceNodeId: string;
     targetNodeId: string;
     type: 'contains' | 'partOf' | 'influences' | 'requires' | 'excludes' | 'similar' | 'temporal' | 'causal';
@@ -36,13 +36,13 @@ export interface UTDGRelationship {
     temporalConstraints?: {
         before?: Date;
         after?: Date;
-        duration?: number;
+        duration?: number }
 }
     };
 
 }
-export interface UTDGQuery {
-    nodeTypes?: string[];
+}
+export interface UTDGQuery { nodeTypes?: string[];
     relationshipTypes?: string[];
     eras?: HistoricalEra[];
     genres?: Genre[];
@@ -53,44 +53,36 @@ export interface UTDGQuery {
     includeRelationships?: boolean;
     spatialConstraints?: {
         regions?: string[];
-        excludeRegions?: string[];
+        excludeRegions?: string[] }
 }
     };
-    temporalConstraints?: {
-        startYear?: number;
+    temporalConstraints?: { startYear?: number;
         endYear?: number;
-        seasons?: string[];
-    };
-    socialConstraints?: {
-        socialClasses?: string[];
+        seasons?: string[] };
+    socialConstraints?: { socialClasses?: string[];
         professions?: string[];
-        genders?: string[];
-    };
+        genders?: string[] };
 
 }
-export interface UTDGContext {
-    historical: {
+}
+export interface UTDGContext { historical: {
         era: HistoricalEra;
         year?: number;
         region?: string;
-        culturalContext?: string;
+        culturalContext?: string }
 }
     };
-    creative: {
-        genre: Genre;
+    creative: { genre: Genre;
         style: Style;
         tone?: string;
-        audience?: string;
-    };
-    technical: {
-        accuracy: 'strict' | 'moderate' | 'creative';
+        audience?: string };
+    technical: { accuracy: 'strict' | 'moderate' | 'creative';
         sources: 'academic' | 'popular' | 'mixed';
-        validation: boolean;
-    };
+        validation: boolean };
 
 }
-export interface UTDGContentSuggestion {
-    type: 'character' | 'setting' | 'object' | 'event' | 'concept';
+}
+export interface UTDGContentSuggestion { type: 'character' | 'setting' | 'object' | 'event' | 'concept';
     content: any;
     confidence: number;
     reasoning: string;
@@ -98,12 +90,11 @@ export interface UTDGContentSuggestion {
     historicalAccuracy: {
         score: number;
         violations: string[];
-        suggestions: string[];
+        suggestions: string[] }
 }
     };
 
-export declare class UTDGFoundation {
-    private nodes;
+export declare class UTDGFoundation { private nodes;
     private relationships;
     private metadataManager;
     private dataSourceManager;
@@ -176,19 +167,16 @@ export declare class UTDGFoundation {
         totalRelationships: number;
         nodesByType: Record<string, number>;
         nodesByEra: Record<string, number>;
-        averageConfidence: number;
-    };
+        averageConfidence: number };
     /**
      * Export graph data for external use
      */
-    exportGraph(): {
-        nodes: UTDGNode[];
+    exportGraph(): { nodes: UTDGNode[];
         relationships: UTDGRelationship[];
         metadata: {
             exportDate: Date;
             version: string;
-            stats: any;
-        };
+            stats: any };
     };
 
 export default UTDGFoundation;

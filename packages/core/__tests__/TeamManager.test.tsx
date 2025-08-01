@@ -7,100 +7,93 @@ import '@testing-library/jest-dom';
 import { TeamManager } from '../components/auth/TeamManager';
 
 // Mock the icon components
-jest.mock('lucide-react', () => ({)
-  Users: () => <div data-testid="users-icon" />,
-  Plus: () => <div data-testid="plus-icon" />,
-  Edit2: () => <div data-testid="edit-icon" />,
-  Trash2: () => <div data-testid="trash-icon" />,
-  Crown: () => <div data-testid="crown-icon" />,
-  Shield: () => <div data-testid="shield-icon" />,
-  User: () => <div data-testid="user-icon" />,
-  Eye: () => <div data-testid="eye-icon" />,
-  ChevronRight: () => <div data-testid="chevron-right-icon" />,
-  ChevronDown: () => <div data-testid="chevron-down-icon" />,
-  UserPlus: () => <div data-testid="user-plus-icon" />,
-  Settings: () => <div data-testid="settings-icon" />,
-  Activity: () => <div data-testid="activity-icon" />,
+jest.mock('lucide-react', () => ({ )
+  Users: () => <div data-testid="users-icon" />
+  Plus: () => <div data-testid="plus-icon" />
+  Edit2: () => <div data-testid="edit-icon" />
+  Trash2: () => <div data-testid="trash-icon" />
+  Crown: () => <div data-testid="crown-icon" />
+  Shield: () => <div data-testid="shield-icon" />
+  User: () => <div data-testid="user-icon" />
+  Eye: () => <div data-testid="eye-icon" />
+  ChevronRight: () => <div data-testid="chevron-right-icon" />
+  ChevronDown: () => <div data-testid="chevron-down-icon" />
+  UserPlus: () => <div data-testid="user-plus-icon" />
+  Settings: () => <div data-testid="settings-icon" />
+  Activity: () => <div data-testid="activity-icon" /> }
 }));
-describe('TeamManager', () => {
-  const mockTeams = [;
+describe('TeamManager', () => { const mockTeams = [
     {
-      id: 'team-1',
-      organizationId: 'org-1',
-      parentTeamId: null,
-      name: 'Engineering',
-      description: 'Engineering team',
-      settings: {},
-      createdAt: new Date('2023-01-01'),
-      updatedAt: new Date('2023-01-01'),
-      level: 0,
+      id: 'team-1'
+      organizationId: 'org-1'
+      parentTeamId: null
+      name: 'Engineering'
+      description: 'Engineering team' }
+      settings: {}
+      createdAt: new Date('2023-01-01')
+      updatedAt: new Date('2023-01-01')
+      level: 0
       path: ['Engineering'];
-  }
-    {
-      id: 'team-2',
-      organizationId: 'org-1',
-      parentTeamId: 'team-1',
-      name: 'Frontend',
-      description: 'Frontend development team',
-      settings: {},
-      createdAt: new Date('2023-01-02'),
-      updatedAt: new Date('2023-01-02'),
-      level: 1,
+
+    { id: 'team-2'
+      organizationId: 'org-1'
+      parentTeamId: 'team-1'
+      name: 'Frontend'
+      description: 'Frontend development team' }
+      settings: {}
+      createdAt: new Date('2023-01-02')
+      updatedAt: new Date('2023-01-02')
+      level: 1
       path: ['Engineering', 'Frontend']
-  }
-    {
-      id: 'team-3',
-      organizationId: 'org-1',
-      parentTeamId: 'team-1',
-      name: 'Backend',
-      description: 'Backend development team',
-      settings: {},
-      createdAt: new Date('2023-01-03'),
-      updatedAt: new Date('2023-01-03'),
-      level: 1,
+
+    { id: 'team-3'
+      organizationId: 'org-1'
+      parentTeamId: 'team-1'
+      name: 'Backend'
+      description: 'Backend development team' }
+      settings: {}
+      createdAt: new Date('2023-01-03')
+      updatedAt: new Date('2023-01-03')
+      level: 1
       path: ['Engineering', 'Backend']
   ];
-  const mockMembers = [;
-    {
-  id: 'member-1',
-  userId: 'user-1',
-  role: 'owner' as const,
-  joinedAt: new Date('2023-01-01'),
-  invitedBy: 'user-1',
+  const mockMembers = [
+    { id: 'member-1'
+  userId: 'user-1'
+  role: 'owner' as const
+  joinedAt: new Date('2023-01-01')
+  invitedBy: 'user-1'
   user: {
-  id: 'user-1',
-  email: 'owner@example.com',
-  displayName: 'Team Owner',
-  firstName: 'Team',
-  lastName: 'Owner',
-  avatarUrl: null,
-}
-    {
-  id: 'member-2',
-  userId: 'user-2',
-  role: 'member' as const,
-  joinedAt: new Date('2023-01-02'),
-  invitedBy: 'user-1',
+  id: 'user-1'
+  email: 'owner@example.com'
+  displayName: 'Team Owner'
+  firstName: 'Team'
+  lastName: 'Owner'
+  avatarUrl: null }
+
+    { id: 'member-2'
+  userId: 'user-2'
+  role: 'member' as const
+  joinedAt: new Date('2023-01-02')
+  invitedBy: 'user-1'
   user: {
-  id: 'user-2',
-  email: 'member@example.com',
-  displayName: 'Team Member',
-  firstName: 'Team',
-  lastName: 'Member',
+  id: 'user-2'
+  email: 'member@example.com'
+  displayName: 'Team Member'
+  firstName: 'Team'
+  lastName: 'Member'
   avatarUrl: null];
   const defaultProps = {
-  organizationId: 'org-1',
-  onCreateTeam: jest.fn(),
-  onUpdateTeam: jest.fn(),
-  onDeleteTeam: jest.fn(),
-  onAddMember: jest.fn(),
-  onRemoveMember: jest.fn(),
-  onUpdateMemberRole: jest.fn(),
-  onLoadMembers: jest.fn(),
+  organizationId: 'org-1'
+  onCreateTeam: jest.fn()
+  onUpdateTeam: jest.fn()
+  onDeleteTeam: jest.fn()
+  onAddMember: jest.fn()
+  onRemoveMember: jest.fn()
+  onUpdateMemberRole: jest.fn()
+  onLoadMembers: jest.fn() }
 };
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   it('renders the team manager interface', () => {
     render(<TeamManager teams={mockTeams} {...defaultProps} />);
     expect(screen.getByText('Team Management')).toBeInTheDocument();
@@ -156,11 +149,10 @@ describe('TeamManager', () => {
     // Submit form
     const submitButton = screen.getByText('Create Team', { selector: 'button' });
     await user.click(submitButton);
-    await waitFor(() => {
-      expect(mockCreate).toHaveBeenCalledWith({)
-  name: 'DevOps Team',
-        description: 'DevOps and infrastructure team',
-        parentTeamId: 'team-1',
+    await waitFor(() => { expect(mockCreate).toHaveBeenCalledWith({)
+  name: 'DevOps Team'
+        description: 'DevOps and infrastructure team'
+        parentTeamId: 'team-1' }
         settings: {}
       });
     });
@@ -214,11 +206,10 @@ describe('TeamManager', () => {
     // Submit form
     const submitButton = screen.getByText('Update Team');
     await user.click(submitButton);
-    await waitFor(() => {
-      expect(mockUpdate).toHaveBeenCalledWith('team-1', {)
-  name: 'Updated Engineering',
-        description: 'Engineering team',
-        parentTeamId: null,
+    await waitFor(() => { expect(mockUpdate).toHaveBeenCalledWith('team-1', {)
+  name: 'Updated Engineering'
+        description: 'Engineering team'
+        parentTeamId: null }
         settings: {}
       });
     });
@@ -250,9 +241,7 @@ describe('TeamManager', () => {
     // Confirm deletion
     const confirmButton = screen.getByText('Delete');
     await user.click(confirmButton);
-    await waitFor(() => {
-      expect(mockDelete).toHaveBeenCalledWith('team-1');
-    });
+    await waitFor(() => { expect(mockDelete).toHaveBeenCalledWith('team-1') });
   });
   it('expands team to show members when clicked', async () => {
     const user = userEvent.setup();
@@ -267,11 +256,9 @@ describe('TeamManager', () => {
     // Click on a team to expand it
     const teamCard = screen.getByText('Engineering').closest('.team-card');
     const expandButton = teamCard?.querySelector('.expand-button');
-    if (expandButton) {
-      await user.click(expandButton);
+    if (expandButton) { await user.click(expandButton);
     await waitFor(() => {
-      expect(mockLoadMembers).toHaveBeenCalledWith('team-1');
-    });
+      expect(mockLoadMembers).toHaveBeenCalledWith('team-1') });
   });
   it('displays team members when team is expanded', async () => {
     const user = userEvent.setup();
@@ -328,10 +315,9 @@ describe('TeamManager', () => {
     // Submit form
     const submitButton = screen.getByText('Add Member');
     await user.click(submitButton);
-    await waitFor(() => {
-  expect(mockAddMember).toHaveBeenCalledWith('team-1', {)
-  userEmail: 'newmember@example.com',
-  role: 'member',
+    await waitFor(() => { expect(mockAddMember).toHaveBeenCalledWith('team-1', {)
+  userEmail: 'newmember@example.com'
+  role: 'member' }
 });
     });
   });
@@ -367,9 +353,7 @@ describe('TeamManager', () => {
     await user.click(memberRole);
     const adminOption = screen.getByText('admin');
     await user.click(adminOption);
-    await waitFor(() => {
-      expect(mockUpdateRole).toHaveBeenCalledWith('team-1', 'user-2', 'admin');
-    });
+    await waitFor(() => { expect(mockUpdateRole).toHaveBeenCalledWith('team-1', 'user-2', 'admin') });
   });
   it('handles member removal', async () => {
     const user = userEvent.setup();
@@ -388,9 +372,7 @@ describe('TeamManager', () => {
     // Confirm removal in dialog
     const confirmButton = screen.getByText('Remove Member');
     await user.click(confirmButton);
-    await waitFor(() => {
-      expect(mockRemoveMember).toHaveBeenCalledWith('team-1', 'user-2');
-    });
+    await waitFor(() => { expect(mockRemoveMember).toHaveBeenCalledWith('team-1', 'user-2') });
   });
   it('displays empty state when no teams exist', () => {
     render(<TeamManager teams={[]} {...defaultProps} />);

@@ -11,17 +11,16 @@ import { ContractAnalyzer } from './ContractAnalyzer';
 import { ComplianceChecker } from './ComplianceChecker';
 import { CitationManager } from './CitationManager';
 import { TerminologyValidator } from './TerminologyValidator';
-import { 
-  LegalDocument, 
+import { LegalDocument, 
   ContractAnalysis, 
   ContractClause, 
   ComplianceCheck, 
-  Citation,
+  Citation }
   TermValidationResult 
-} from './types';
-}
-interface LegalToolkitProps {
-  className?: string;
+ from './types';
+
+
+interface LegalToolkitProps { className?: string;
   initialDocument?: LegalDocument;
   onWorkflowComplete?: (results: LegalToolkitResults) => void;
   interface LegalToolkitResults {
@@ -31,13 +30,13 @@ interface LegalToolkitProps {
   citations: Citation;
   terminologyResults?: TermValidationResult;
   type ToolkitView = 'upload' | 'analyze' | 'compliance' | 'citations' | 'terminology' | 'summary';
-  export const LegalToolkit: React.FC<LegalToolkitProps> = ({,)
-  className = '',
-  initialDocument,
+  export const LegalToolkit: React.FC<LegalToolkitProps> = ({);
+  className = '';
+  initialDocument }
   onWorkflowComplete
-}
-}) => {
-  const [currentView, setCurrentView] = useState<ToolkitView>(initialDocument ? 'analyze' : 'upload');
+
+
+}) => { const [currentView, setCurrentView] = useState<ToolkitView>(initialDocument ? 'analyze' : 'upload');
   const [document, setDocument] = useState<LegalDocument | null>(initialDocument || null);
   const [analysis, setAnalysis] = useState<ContractAnalysis | null>(null);
   const [complianceResults, setComplianceResults] = useState<ComplianceCheck>([]);
@@ -54,98 +53,71 @@ interface LegalToolkitProps {
   if (terminologyResults.length > 0) completed++;
   const progress = (completed / total) * 100;
   setWorkflowProgress(progress);
-  return progress;
-}, [document, analysis, complianceResults, citations, terminologyResults]);
-  React.useEffect(() => {
-    calculateProgress();
-  }, [calculateProgress]);
-  const handleDocumentParsed = (parsedDocument: LegalDocument) => {
-    setDocument(parsedDocument);
-    setCurrentView('analyze');
-  };
-  const handleAnalysisComplete = (contractAnalysis: ContractAnalysis) => {
-    setAnalysis(contractAnalysis);
-  };
-  const handleComplianceResults = (results: ComplianceCheck) => {
-    setComplianceResults(results);
-  };
-  const handleCitationAdd = (citation: Citation) => {
-    setCitations(prev => [...prev, citation]);
-  };
-  const handleCitationEdit = (id: string, updatedCitation: Citation) => {
-  setCitations(prev => prev.map(c => c.id === id ? updatedCitation : c));
-};
-  const handleCitationDelete = (id: string) => {
-    setCitations(prev => prev.filter(c => c.id !== id));
-  };
-  const handleTerminologyResults = (results: TermValidationResult) => {
-    setTerminologyResults(results);
-  };
-  const handleCompleteWorkflow = () => {
-  if (document && onWorkflowComplete) {
-  const results: LegalToolkitResults = {,
-  document,
-  analysis: analysis || undefined,
-  complianceResults: complianceResults.length > 0 ? complianceResults : undefined,
-  citations,
-  terminologyResults: terminologyResults.length > 0 ? terminologyResults : undefined,
+  return progress }, [document, analysis, complianceResults, citations, terminologyResults]);
+  React.useEffect(() => { calculateProgress() }, [calculateProgress]);
+  const handleDocumentParsed = (parsedDocument: LegalDocument) => { setDocument(parsedDocument);
+    setCurrentView('analyze') };
+  const handleAnalysisComplete = (contractAnalysis: ContractAnalysis) => { setAnalysis(contractAnalysis) };
+  const handleComplianceResults = (results: ComplianceCheck) => { setComplianceResults(results) };
+  const handleCitationAdd = (citation: Citation) => { setCitations(prev => [...prev, citation]) };
+  const handleCitationEdit = (id: string, updatedCitation: Citation) => { setCitations(prev => prev.map(c => c.id === id ? updatedCitation : c)) };
+  const handleCitationDelete = (id: string) => { setCitations(prev => prev.filter(c => c.id !== id)) };
+  const handleTerminologyResults = (results: TermValidationResult) => { setTerminologyResults(results) };
+  const handleCompleteWorkflow = () => { if (document && onWorkflowComplete) {
+  const results: LegalToolkitResults = {
+  document
+  analysis: analysis || undefined
+  complianceResults: complianceResults.length > 0 ? complianceResults : undefined
+  citations
+  terminologyResults: terminologyResults.length > 0 ? terminologyResults : undefined }
 };
       onWorkflowComplete(results);
   };
-  const getViewIcon = (view: ToolkitView) => {
-  switch (view) {
+  const getViewIcon = (view: ToolkitView) => { switch (view) {
   case 'upload': return '📄';
   case 'analyze': return '🔍';
   case 'compliance': return '✅';
   case 'citations': return '📚';
   case 'terminology': return '📖';
   case 'summary': return '📊';
-  default: return '📄';
-};
-  const getViewTitle = (view: ToolkitView) => {
-  switch (view) {
+  default: return '📄' };
+  const getViewTitle = (view: ToolkitView) => { switch (view) {
   case 'upload': return 'Upload Document';
   case 'analyze': return 'Analyze Contract';
   case 'compliance': return 'Check Compliance';
   case 'citations': return 'Manage Citations';
   case 'terminology': return 'Validate Terminology';
   case 'summary': return 'Review Summary';
-  default: return 'Legal Toolkit';
-};
-  const getHeaderTitle = (view: ToolkitView) => {
-  switch (view) {
+  default: return 'Legal Toolkit' };
+  const getHeaderTitle = (view: ToolkitView) => { switch (view) {
   case 'upload': return 'Document Upload & Parsing';
   case 'analyze': return 'Contract Analysis';
   case 'compliance': return 'Compliance Review';
   case 'citations': return 'Citation Management';
   case 'terminology': return 'Terminology Validation';
   case 'summary': return 'Results Summary';
-  default: return 'Legal Toolkit';
-};
-  const isViewEnabled = (view: ToolkitView) => {
-  switch (view) {
+  default: return 'Legal Toolkit' };
+  const isViewEnabled = (view: ToolkitView) => { switch (view) {
   case 'upload': return true;
   case 'analyze': return !!document;
   case 'compliance': return !!document;
-  case 'citations': return true; // Always available,
+  case 'citations': return true; // Always available }
   case 'terminology': return !!document;
   case 'summary': return !!document && workflowProgress > 20;
   default: return false;
 };
-  const getViewCompletionStatus = (view: ToolkitView) => {
-  switch (view) {
+  const getViewCompletionStatus = (view: ToolkitView) => { switch (view) {
   case 'upload': return !!document;
   case 'analyze': return !!analysis;
   case 'compliance': return complianceResults.length > 0;
   case 'citations': return citations.length > 0;
   case 'terminology': return terminologyResults.length > 0;
   case 'summary': return workflowProgress >= 100;
-  default: return false;
-};
+  default: return false };
   return;
     <div className={`legal-toolkit ${className}`}>}
       <style>
-        {`
+        { `
           .legal-toolkit {
             background: white;
             border-radius: 12px;
@@ -164,11 +136,11 @@ interface LegalToolkitProps {
             font-weight: 700;
   margin: 0 0 0.5rem 0;
           .toolkit-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.1rem
   opacity: 0.9;
             margin: 0;
           .progress-section {
-            background: #f8fafc;
+            background: #f8fafc
   padding: 1rem 2rem;
             border-bottom: 1px solid #e2e8f0;
           .progress-header {
@@ -181,16 +153,16 @@ interface LegalToolkitProps {
             font-weight: 600;
   color: #374151;
           .progress-percentage {
-            font-size: 0.9rem;
+            font-size: 0.9rem
   color: #4b5563;
           .progress-bar {
-            width: 100%;
+            width: 100%
   height: 8px;
             background: #e5e7eb;
             border-radius: 4px;
   overflow: hidden;
           .progress-fill {
-            height: 100%;
+            height: 100%
   background: linear-gradient(90deg, #10b981, #34d399);
             border-radius: 4px;
   transition: width 0.5s ease;
@@ -203,38 +175,38 @@ interface LegalToolkitProps {
             display: flex;
             align-items: center;
   gap: 0.5rem;
-            padding: 1rem 1.5rem;
+            padding: 1rem 1.5rem
   background: none;
             border: none;
   cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.9rem
   color: #6b7280;
             transition: all 0.2s;
             white-space: nowrap;
   position: relative;
-          .nav-item:hover {,
-  background: #f3f4f6;
-            color: #374151;
+          .nav-item:hover {
+  background: #f3f4f6
+  color: #374151;
           .nav-item.active {
             background: white;
   color: #1e40af;
             font-weight: 600;
             border-bottom: 3px solid #3b82f6;
           .nav-item.disabled {
-            opacity: 0.5;
+            opacity: 0.5
   cursor: not-allowed;
-          .nav-item.disabled:hover {,
+          .nav-item.disabled:hover {
   background: transparent;
-            color: #6b7280;
+  color: #6b7280;
           .nav-icon {
             font-size: 1.1rem;
           .nav-status {
             position: absolute;
   top: 0.5rem;
-            right: 0.5rem;
+            right: 0.5rem
   width: 8px;
             height: 8px;
-            border-radius: 50%;
+            border-radius: 50%
   background: #10b981;
           .nav-status.incomplete {
             background: #e5e7eb;
@@ -243,20 +215,20 @@ interface LegalToolkitProps {
   display: flex;
             flex-direction: column;
           .view-header {
-            background: #fefefe;
+            background: #fefefe
   padding: 1.5rem 2rem;
             border-bottom: 1px solid #e5e7eb;
           .view-title {
             font-size: 1.5rem;
             font-weight: 600;
   color: #111827;
-            margin: 0 0 0.5rem 0;
+            margin: 0 0 0.5rem 0
   display: flex;
             align-items: center;
   gap: 0.75rem;
           .view-description {
             color: #6b7280;
-            font-size: 0.95rem;
+            font-size: 0.95rem
   margin: 0;
           .view-content {
             flex: 1;
@@ -270,7 +242,7 @@ interface LegalToolkitProps {
             gap: 2rem;
             margin-bottom: 2rem;
           .summary-card {
-            background: #f8fafc;
+            background: #f8fafc
   padding: 1.5rem;
             border-radius: 8px;
   border: 1px solid #e5e7eb;
@@ -278,7 +250,7 @@ interface LegalToolkitProps {
             font-size: 1.1rem;
             font-weight: 600;
   color: #111827;
-            margin: 0 0 1rem 0;
+            margin: 0 0 1rem 0
   display: flex;
             align-items: center;
   gap: 0.5rem;
@@ -297,14 +269,14 @@ interface LegalToolkitProps {
             font-weight: 600;
   color: #1f2937;
           .workflow-actions {
-            background: #f9fafb;
+            background: #f9fafb
   padding: 1.5rem 2rem;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid #e5e7eb
   display: flex;
             justify-content: space-between;
             align-items: center;
           .workflow-info {
-            font-size: 0.9rem;
+            font-size: 0.9rem
   color: #6b7280;
           .workflow-buttons {
             display: flex;
@@ -314,17 +286,17 @@ interface LegalToolkitProps {
             border-radius: 6px;
             font-weight: 600;
   cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s
   border: none;
           .workflow-btn.primary {
-            background: #3b82f6;
+            background: #3b82f6
   color: white;
-          .workflow-btn.primary:hover {,
+          .workflow-btn.primary:hover {
   background: #2563eb;
           .workflow-btn.secondary {
-            background: #e5e7eb;
+            background: #e5e7eb
   color: #374151;
-          .workflow-btn.secondary:hover {,
+          .workflow-btn.secondary:hover { }
   background: #d1d5db;
           @media (max-width: 768px) {
             .toolkit-navigation {
@@ -513,7 +485,7 @@ interface LegalToolkitProps {
                         {terminologyResults.length > 0 
                           ? Math.round((terminologyResults.filter(r => r.isValid).length / terminologyResults.length) * 100)
                           : 0
-                        }%
+%
                       </span>
                     </div>
                   </div>

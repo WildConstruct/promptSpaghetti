@@ -124,7 +124,8 @@ export var DisputeType;
             url: string;
             uploadedBy: string;
             uploadedAt: Date;
-            category: 'evidence' | 'communication' | 'documentation' | 'screenshot';
+            category: 'evidence' | 'communication' | 'documentation' | 'screenshot',
+            ;
         }
     }
 }

@@ -585,12 +585,12 @@ ExtensionManifest;
                                                                 system: '1.0.0',
                                                                 ;
                                                             }
-                                                            permissions: [,
+                                                            permissions: [
                                                                 'runtime-nodes'
                                                             ],
                                                                 runtime;
                                                             {
-                                                                node_types: [,
+                                                                node_types: [
                                                                     'custom-node'
                                                                 ];
                                                             }
@@ -631,7 +631,7 @@ ExtensionManifest;
                                                                 system: '1.0.0',
                                                                 ;
                                                             }
-                                                            permissions: [,
+                                                            permissions: [
                                                                 'ui-components'
                                                             ],
                                                                 ui;
@@ -682,7 +682,7 @@ ExtensionManifest;
                                                                 ;
                                                             }
                                                             runtime: {
-                                                                transforms: [,
+                                                                transforms: [
                                                                     'custom-transform'
                                                                 ];
                                                             }
@@ -723,12 +723,12 @@ ExtensionManifest;
                                                                 system: '1.0.0',
                                                                 ;
                                                             }
-                                                            permissions: [,
+                                                            permissions: [
                                                                 'storage'
                                                             ],
                                                                 runtime;
                                                             {
-                                                                storage_providers: [,
+                                                                storage_providers: [
                                                                     'custom-storage'
                                                                 ];
                                                             }
@@ -745,13 +745,13 @@ ExtensionManifest;
                                                             // Types and Interfaces
                                                         }
                                                     }
-                                                     > ;
                                                 }
-                                                export { ManifestTemplateGenerator };
                                             }
+                                             > ;
                                         }
                                     }
                                 }
+                                export { ManifestTemplateGenerator };
                             }
                         }
                     }

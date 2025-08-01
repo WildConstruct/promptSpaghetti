@@ -6,8 +6,7 @@
 export declare const useNodeDisclosureControl: (
   nodeId: string,
   nodeType: string
-) => {
-  disclosureLevel: any;
+) => { disclosureLevel: any;
   nodePrefs: any;
   isBasicMode: boolean;
   isAdvancedMode: boolean;
@@ -17,15 +16,12 @@ export declare const useNodeDisclosureControl: (
   setDisclosureLevel: (level: 'basic' | 'advanced' | 'debug') => void;
   setUseGlobalDefault: (useGlobal: boolean) => void;
   shouldShowSection: (sectionLevel: 'basic' | 'advanced' | 'debug') => boolean;
-  shouldShowField: (fieldName: string, fieldLevel?: 'basic' | 'advanced' | 'debug') => boolean;
-};
+  shouldShowField: (fieldName: string, fieldLevel?: 'basic' | 'advanced' | 'debug') => boolean };
 /**
  * Hook for components that need to render progressive disclosure sections
  */
-export declare const useDisclosurePreferences: () => {
-  globalDisclosureLevel: any;
+export declare const useDisclosurePreferences: () => { globalDisclosureLevel: any;
   preferenceInheritance: 'global' | 'nodeType' | 'individual';
   setGlobalLevel: (level: 'basic' | 'advanced' | 'debug') => void;
-  setInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => void;
-};
+  setInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => void };
 //# sourceMappingURL=useNodeDisclosure.d.ts.map

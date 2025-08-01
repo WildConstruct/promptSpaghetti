@@ -15,8 +15,8 @@
 import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
-}
-}
+
+
 export interface ActivityRecord {
   id: string;
   userId: string;
@@ -32,12 +32,13 @@ export interface ActivityRecord {
   ipAddress?: string;
   userAgent?: string;
   location?: GeolocationData;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActivityDetails {
   // Core activity data
   title: string;
@@ -65,12 +66,13 @@ export interface ActivityDetails {
   // Privacy flags
   sensitive?: boolean;
   internal?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActivityMetadata {
   // System metadata
   apiVersion?: string;
@@ -95,12 +97,13 @@ export interface ActivityMetadata {
   // Privacy settings
   retentionPeriod?: number;
   anonymize?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GeolocationData {
   country?: string;
   region?: string;
@@ -108,11 +111,12 @@ export interface GeolocationData {
   coordinates?: {
     latitude: number;
     longitude: number;
-}
-}
+
+
+
   };
   timezone?: string;
-}
+
 
 export enum ActivityType {
   // Authentication activities
@@ -167,7 +171,7 @@ export enum ActivityType {
   
   // Custom activities
   CUSTOM = 'custom'
-}
+
 
 export enum ActivityCategory {
   AUTHENTICATION = 'authentication',
@@ -180,10 +184,10 @@ export enum ActivityCategory {
   SECURITY = 'security',
   ANALYTICS = 'analytics',
   CUSTOM = 'custom'
-}
 
-}
-}
+
+
+
 export interface ActivityQuery {
   userId?: string;
   sessionId?: string;
@@ -203,19 +207,21 @@ export interface ActivityQuery {
   offset?: number;
   sortBy?: 'timestamp' | 'activityType' | 'category';
   sortOrder?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActivitySummary {
   userId: string;
   dateRange: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   totalActivities: number;
   uniqueSessions: number;
@@ -228,21 +234,21 @@ export interface ActivitySummary {
       date: string;
       count: number;
       categories: Record<ActivityCategory, number>;
-    }>;
+>;
     hourlyActivity: Array<{
       hour: number;
       count: number;
-    }>;
+>;
   };
   topActivities: Array<{
     activityType: ActivityType;
     count: number;
     lastOccurrence: Date;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface ActivityExport {
   userId: string;
   exportDate: Date;
@@ -250,8 +256,9 @@ export interface ActivityExport {
   dateRange: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   format: 'json' | 'csv' | 'xml';
   activities: ActivityRecord[];
@@ -261,7 +268,7 @@ export interface ActivityExport {
     fieldsRedacted: string[];
     retentionPolicy: string;
   };
-}
+
 
 export class ActivityHistoryService {
   private db: Database;
@@ -277,7 +284,7 @@ export class ActivityHistoryService {
     
     // Setup cleanup interval
     this.setupCleanupInterval();
-  }
+
 
   /**
    * Record a single activity
@@ -292,7 +299,7 @@ export class ActivityHistoryService {
       ipAddress?: string;
       userAgent?: string;
       location?: GeolocationData;
-    } = {}
+ = {}
   ): Promise<void> {
 
     const activity: Omit<ActivityRecord, 'id'> = {
@@ -306,7 +313,7 @@ export class ActivityHistoryService {
       details: {
         title: this.generateActivityTitle(activityType, details),
         ...details
-  }
+
       metadata,
       timestamp: new Date(),
       ipAddress: context.ipAddress,
@@ -320,15 +327,15 @@ export class ActivityHistoryService {
     // Process batch if it reaches the size limit
     if (this.batchQueue.length >= this.BATCH_SIZE) {
       await this.processBatch();
-    } else {
+ else {
       // Set timeout for batch processing if not already set
       if (!this.batchTimeout) {
         this.batchTimeout = setTimeout(() => {
           this.processBatch();
         }, this.BATCH_TIMEOUT);
-      }
-    }
-  }
+
+
+
 
   /**
    * Record multiple activities in batch
@@ -344,7 +351,7 @@ export class ActivityHistoryService {
       userAgent?: string;
       location?: GeolocationData;
     };
-  }>): Promise<void> {
+>): Promise<void> {
 
     const activityRecords = activities.map(activity => ({
       id: this.generateActivityId(),
@@ -359,7 +366,7 @@ export class ActivityHistoryService {
       details: {
         title: this.generateActivityTitle(activity.activityType, activity.details),
         ...activity.details
-  }
+
       metadata: activity.metadata || {},
       timestamp: new Date(),
       ipAddress: activity.context?.ipAddress,
@@ -373,8 +380,8 @@ export class ActivityHistoryService {
     // Process immediately if batch is large enough
     if (this.batchQueue.length >= this.BATCH_SIZE) {
       await this.processBatch();
-    }
-  }
+
+
 
   /**
    * Query activities with filtering and pagination
@@ -383,7 +390,7 @@ export class ActivityHistoryService {
     activities: ActivityRecord[];
     totalCount: number;
     hasMore: boolean;
-  }> {
+> {
 
     const conditions = [];
     const values = [];
@@ -392,42 +399,42 @@ export class ActivityHistoryService {
     if (query.userId) {
       conditions.push(`user_id = $${paramIndex++}`);
       values.push(query.userId);
-    }
+
 
     if (query.sessionId) {
       conditions.push(`session_id = $${paramIndex++}`);
       values.push(query.sessionId);
-    }
+
 
     if (query.activityTypes && query.activityTypes.length > 0) {
       conditions.push(`activity_type = ANY($${paramIndex++})`);
       values.push(query.activityTypes);
-    }
+
 
     if (query.categories && query.categories.length > 0) {
       conditions.push(`category = ANY($${paramIndex++})`);
       values.push(query.categories);
-    }
+
 
     if (query.resourceType) {
       conditions.push(`resource_type = $${paramIndex++}`);
       values.push(query.resourceType);
-    }
+
 
     if (query.resourceId) {
       conditions.push(`resource_id = $${paramIndex++}`);
       values.push(query.resourceId);
-    }
+
 
     if (query.startDate) {
       conditions.push(`timestamp >= $${paramIndex++}`);
       values.push(query.startDate);
-    }
+
 
     if (query.endDate) {
       conditions.push(`timestamp <= $${paramIndex++}`);
       values.push(query.endDate);
-    }
+
 
     if (query.search) {
       conditions.push(`(
@@ -436,27 +443,27 @@ export class ActivityHistoryService {
       )`);
       values.push(`%${query.search}%`);
       paramIndex++;
-    }
+
 
     if (query.tags && query.tags.length > 0) {
       conditions.push(`metadata->'tags' ?| $${paramIndex++}`);
       values.push(query.tags);
-    }
+
 
     if (query.ipAddress) {
       conditions.push(`ip_address = $${paramIndex++}`);
       values.push(query.ipAddress);
-    }
+
 
     if (query.success !== undefined) {
       conditions.push(`(details->>'success')::boolean = $${paramIndex++}`);
       values.push(query.success);
-    }
+
 
     if (query.sensitive !== undefined) {
       conditions.push(`(details->>'sensitive')::boolean = $${paramIndex++}`);
       values.push(query.sensitive);
-    }
+
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     
@@ -488,7 +495,7 @@ export class ActivityHistoryService {
       totalCount,
       hasMore: offset + activities.length < totalCount
     };
-  }
+
 
   /**
    * Get activity summary for a user
@@ -538,7 +545,7 @@ export class ActivityHistoryService {
     activities.forEach(a => {
       if (a.resource_type) {
         resources[a.resource_type] = (resources[a.resource_type] || 0) + 1;
-      }
+
     });
 
     // Location distribution
@@ -546,7 +553,7 @@ export class ActivityHistoryService {
     activities.forEach(a => {
       if (a.country) {
         locations[a.country] = (locations[a.country] || 0) + 1;
-      }
+
     });
 
     // Daily trends
@@ -580,10 +587,10 @@ export class ActivityHistoryService {
       trends: {
         dailyActivity,
         hourlyActivity
-  }
+
       topActivities
     };
-  }
+
 
   /**
    * Export user activity data
@@ -597,7 +604,7 @@ export class ActivityHistoryService {
       includeDetails?: boolean;
       anonymize?: boolean;
       includeSummary?: boolean;
-    } = {}
+ = {}
   ): Promise<ActivityExport> {
 
     const query: ActivityQuery = {
@@ -614,13 +621,13 @@ export class ActivityHistoryService {
     // Apply anonymization if requested
     if (options.anonymize) {
       processedActivities = this.anonymizeActivities(activities);
-    }
+
 
     // Generate summary if requested
     let summary: ActivitySummary | undefined;
     if (options.includeSummary) {
       summary = await this.getActivitySummary(userId, startDate, endDate);
-    }
+
 
     const exportData: ActivityExport = {
       userId: options.anonymize ? 'anonymized' : userId,
@@ -634,7 +641,7 @@ export class ActivityHistoryService {
         anonymized: options.anonymize || false,
         fieldsRedacted: options.anonymize ? ['userId', 'ipAddress', 'location'] : [],
         retentionPolicy: 'standard_retention'
-      }
+
     };
 
     // Log the export for audit purposes
@@ -646,7 +653,7 @@ export class ActivityHistoryService {
     });
 
     return exportData;
-  }
+
 
   /**
    * Process the batch queue
@@ -661,15 +668,15 @@ export class ActivityHistoryService {
     if (this.batchTimeout) {
       clearTimeout(this.batchTimeout);
       this.batchTimeout = null;
-    }
+
 
     try {
       await this.insertActivities(batch);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to process activity batch:', error);
       // Could implement retry logic here
-    }
-  }
+
+
 
   /**
    * Insert activities into database
@@ -706,14 +713,14 @@ export class ActivityHistoryService {
     ]);
 
     await this.db.query(query, values);
-  }
+
 
   /**
    * Helper methods for activity processing
    */
   private generateActivityId(): string {
     return `activity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private getCategoryForActivityType(type: ActivityType): ActivityCategory {
     const categoryMap: Record<ActivityType, ActivityCategory> = {
@@ -755,11 +762,11 @@ export class ActivityHistoryService {
     };
 
     return categoryMap[type] || ActivityCategory.CUSTOM;
-  }
+
 
   private getActionForActivityType(type: ActivityType): string {
     return type.replace(/_/g, ' ');
-  }
+
 
   private generateActivityTitle(type: ActivityType, details: Omit<ActivityDetails, 'title'>): string {
     const resourceName = details.resourceName || 'item';
@@ -785,8 +792,8 @@ export class ActivityHistoryService {
       return 'Removed node from graph';
     default:
       return this.getActionForActivityType(type);
-    }
-  }
+
+
 
   private inferResourceType(resourceName: string): string {
     if (resourceName.toLowerCase().includes('graph')) return 'graph';
@@ -794,7 +801,7 @@ export class ActivityHistoryService {
     if (resourceName.toLowerCase().includes('user')) return 'user';
     if (resourceName.toLowerCase().includes('api')) return 'api';
     return 'unknown';
-  }
+
 
   private mapActivityRow(row: any): ActivityRecord {
     return {
@@ -813,7 +820,7 @@ export class ActivityHistoryService {
       userAgent: row.user_agent,
       location: row.location ? JSON.parse(row.location) : undefined
     };
-  }
+
 
   private calculateDailyTrends(activities: any[], startDate: Date, endDate: Date) {
     const dailyMap = new Map();
@@ -824,7 +831,7 @@ export class ActivityHistoryService {
       const date = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000);
       const dateStr = date.toISOString().split('T')[0];
       dailyMap.set(dateStr, { date: dateStr, count: 0, categories: {} });
-    }
+
 
     // Count activities per day
     activities.forEach(activity => {
@@ -833,11 +840,11 @@ export class ActivityHistoryService {
       if (dayData) {
         dayData.count++;
         dayData.categories[activity.category] = (dayData.categories[activity.category] || 0) + 1;
-      }
+
     });
 
     return Array.from(dailyMap.values());
-  }
+
 
   private calculateHourlyTrends(activities: any[]) {
     const hourlyMap = new Map();
@@ -845,7 +852,7 @@ export class ActivityHistoryService {
     // Initialize all hours
     for (let i = 0; i < 24; i++) {
       hourlyMap.set(i, { hour: i, count: 0 });
-    }
+
 
     // Count activities per hour
     activities.forEach(activity => {
@@ -853,11 +860,11 @@ export class ActivityHistoryService {
       const hourData = hourlyMap.get(hour);
       if (hourData) {
         hourData.count++;
-      }
+
     });
 
     return Array.from(hourlyMap.values());
-  }
+
 
   private anonymizeActivities(activities: ActivityRecord[]): ActivityRecord[] {
     return activities.map(activity => ({
@@ -868,32 +875,32 @@ export class ActivityHistoryService {
       details: {
         ...activity.details,
         sensitive: undefined
-  }
+
       metadata: {
         ...activity.metadata,
         organizationId: undefined,
         teamId: undefined
-      }
+
     }));
-  }
+
 
   private setupCleanupInterval(): void {
     // Run cleanup every hour
     setInterval(async () => {
       try {
         await this.cleanupOldActivities();
-      } catch (error) {
+ catch (error) {
         console.error('Activity cleanup failed:', error);
-      }
+
     }, 60 * 60 * 1000);
-  }
+
 
   private async cleanupOldActivities(): Promise<void> {
 
     // This would implement retention policy cleanup
     // For now, just log that cleanup was attempted
     console.log('Activity cleanup check completed');
-  }
-}
+
+
 
 export default ActivityHistoryService;

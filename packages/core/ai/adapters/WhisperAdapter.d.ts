@@ -7,27 +7,25 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface WhisperConfig {
-    apiKey: string;
+}
+export interface WhisperConfig { apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
-    organization?: string;
-
+    organization?: string }
 }
-export interface WhisperRequestOptions {
-    file: File | Blob | ArrayBuffer;
+}
+export interface WhisperRequestOptions { file: File | Blob | ArrayBuffer;
     model?: 'whisper-1';
     language?: string;
     prompt?: string;
     response_format?: 'json' | 'text' | 'srt' | 'verbose_json' | 'vtt';
     temperature?: number;
     timestamp_granularities?: ('word' | 'segment')[];
-    task?: 'transcribe' | 'translate';
-
+    task?: 'transcribe' | 'translate' }
 }
-export interface WhisperTranscriptionResult {
-    text: string;
+}
+export interface WhisperTranscriptionResult { text: string;
     language?: string;
     duration?: number;
     segments?: Array<{
@@ -44,31 +42,25 @@ export interface WhisperTranscriptionResult {
         words?: Array<{
             word: string;
             start: number;
-            end: number;
+            end: number }
 }
         }>;
     }>;
-    words?: Array<{
-        word: string;
+    words?: Array<{ word: string;
         start: number;
-        end: number;
-    }>;
-    metadata: {
-        model: string;
+        end: number }>;
+    metadata: { model: string;
         task: string;
         language: string;
         duration: number;
         processing_time: number;
-        confidence_score?: number;
-    };
-    usage: {
-        audio_duration: number;
-        cost: number;
-    };
+        confidence_score?: number };
+    usage: { audio_duration: number;
+        cost: number };
 
 }
-export interface AudioFileInfo {
-    name: string;
+}
+export interface AudioFileInfo { name: string;
     size: number;
     type: string;
     duration?: number;
@@ -84,24 +76,23 @@ export declare class WhisperAdapter extends BaseAIModel {
     process(input: File | Blob | ArrayBuffer | {)
         file?: File | Blob | ArrayBuffer;
         audio?: File | Blob | ArrayBuffer;
-        data?: File | Blob | ArrayBuffer;
+        data?: File | Blob | ArrayBuffer }
 }
     }, options?: WhisperRequestOptions): Promise<WhisperTranscriptionResult>;
     cleanup(): Promise<void>;
-    estimate(input: File | Blob | ArrayBuffer | {)
+    estimate(input: File | Blob | ArrayBuffer | { )
         file?: File | Blob | ArrayBuffer;
         audio?: File | Blob | ArrayBuffer;
-        data?: File | Blob | ArrayBuffer;
-    }, options?: WhisperRequestOptions): Promise<CostEstimate>;
+        data?: File | Blob | ArrayBuffer }, options?: WhisperRequestOptions): Promise<CostEstimate>;
     transcribeFile();
-      file: File,
-      language?: string,
+      file: File
+      language?: string
       options?: Partial<WhisperRequestOptions>
     ): Promise<WhisperTranscriptionResult>;
     translateToEnglish(file: File, options?: Partial<WhisperRequestOptions>): Promise<WhisperTranscriptionResult>;
     transcribeWithTimestamps();
-      file: File,
-      granularity?: 'word' | 'segment' | 'both',
+      file: File
+      granularity?: 'word' | 'segment' | 'both'
       options?: Partial<WhisperRequestOptions>
     ): Promise<WhisperTranscriptionResult>;
     batchTranscribe(files: File[], options?: WhisperRequestOptions): Promise<WhisperTranscriptionResult[]>;

@@ -1,8 +1,7 @@
 // Epic 9.4 - Workflow State Manager Component
 // Main UI component for managing workflow states and transitions
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  CheckCircleIcon, 
+import { CheckCircleIcon, 
   ClockIcon, 
   XCircleIcon, 
   DocumentTextIcon,
@@ -15,67 +14,63 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
   UserGroupIcon,
-  LockClosedIcon,
+  LockClosedIcon }
   ClipboardDocumentListIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
 import { WorkflowState, WorkflowTransition, WorkflowApproval, WorkflowLock, WorkflowStatistics } from '../types/workflow';
-}
-interface WorkflowStateManagerProps {
-  workspaceId: string;
+
+
+interface WorkflowStateManagerProps { workspaceId: string;
   resourceId?: string;
   currentUserId: string;
   onStateChange?: (newStateId: string) => void;
   onLockAcquired?: (lockId: string) => void;
-  onLockReleased?: (lockId: string) => void;
-}
-}
+  onLockReleased?: (lockId: string) => void }
 
-export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
-  workspaceId,
-  resourceId,
-  currentUserId,
-  onStateChange,
-  onLockAcquired,
+
+
+export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({ workspaceId
+  resourceId
+  currentUserId
+  onStateChange
+  onLockAcquired }
   onLockReleased
-}) => {
-  const {
-    states,
-    transitions,
-    approvals,
-    locks,
-    statistics,
-    loading,
-    error,
-    fetchStates,
-    fetchTransitions,
-    fetchApprovals,
-    fetchLocks,
-    fetchStatistics,
-    transitionResourceState,
-    approveWorkflow,
-    rejectWorkflow,
-    acquireLock,
-    releaseLock,
-    createState,
-    updateState,
-    deleteState,
-    createTransition,
+}) => { const {
+    states
+    transitions
+    approvals
+    locks
+    statistics
+    loading
+    error
+    fetchStates
+    fetchTransitions
+    fetchApprovals
+    fetchLocks
+    fetchStatistics
+    transitionResourceState
+    approveWorkflow
+    rejectWorkflow
+    acquireLock
+    releaseLock
+    createState
+    updateState
+    deleteState
+    createTransition }
     deleteTransition
-  } = useWorkflowStore();
+ = useWorkflowStore();
   const [activeTab, setActiveTab] = useState<'states' | 'approvals' | 'locks' | 'history' | 'statistics'>('states');
   const [__showCreateState, setShowCreateState] = useState(false);
   const [__showCreateTransition, __setShowCreateTransition] = useState(false);
   const [__selectedState, setSelectedState] = useState<WorkflowState | null>(null);
   const [expandedStates, setExpandedStates] = useState<Set<string>>(new Set());
   // Load initial data
-  useEffect(() => {
-    fetchStates(workspaceId);
+  useEffect(() => { fetchStates(workspaceId);
     fetchTransitions(workspaceId);
     fetchApprovals(workspaceId);
     fetchLocks(workspaceId);
-    fetchStatistics(workspaceId);
-  }, [workspaceId]);
+    fetchStatistics(workspaceId) }, [workspaceId]);
   // Get current resource state
   const currentResourceState = resourceId ;
     ? states.find(state => state.id === resourceId) // This would need to be fetched from resource data
@@ -93,80 +88,59 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
     approval.status === 'pending' && 
     (approval.requester_id === currentUserId || approval.approved_by === currentUserId)
   );
-  const handleStateTransition = useCallback(async (toStateId: string, comment?: string) => {
-  if (!resourceId) return;
+  const handleStateTransition = useCallback(async (toStateId: string, comment?: string) => { if (!resourceId) return;
   try {
   const result = await transitionResourceState(resourceId, toStateId, currentUserId, {)
-  comment,
-  force: false,
+  comment
+  force: false }
 });
-      if (result.success) {
-        if (result.approval_required) {
+      if (result.success) { if (result.approval_required) {
           // Show approval request confirmation
-          alert('Approval request submitted for state transition.');
-        } else {
-          onStateChange?.(result.new_state_id!);
-    } catch (error) {
-  console.error('Failed to transition state:', error);
-}, [resourceId, currentUserId, transitionResourceState, onStateChange]);
+          alert('Approval request submitted for state transition.') } else { onStateChange?.(result.new_state_id!) } catch (error) { console.error('Failed to transition state:', error) }, [resourceId, currentUserId, transitionResourceState, onStateChange]);
   const handleApprovalAction = useCallback(async (;);
-    approvalId: string, 
-    action: 'approve' | 'reject', 
+    approvalId: string
+    action: 'approve' | 'reject'
     comment?: string
-  ) => {
-    try {
+  ) => { try {
       if (action === 'approve') {
-        await approveWorkflow(approvalId, currentUserId, comment);
-      } else {
-        await rejectWorkflow(approvalId, currentUserId, comment || 'Rejected');
+        await approveWorkflow(approvalId, currentUserId, comment) } else { await rejectWorkflow(approvalId, currentUserId, comment || 'Rejected');
       // Refresh data
       fetchApprovals(workspaceId);
-      fetchStates(workspaceId);
-    } catch (error) {
-      console.error(`Failed to ${action},)}
+      fetchStates(workspaceId) } catch (error) {
+      console.error(`Failed to ${action})}
   workflow:`, error);}
   }, [currentUserId, approveWorkflow, rejectWorkflow, fetchApprovals, fetchStates, workspaceId]);
   const handleLockAction = useCallback(async (;);
-    action: 'acquire' | 'release',
-    lockId?: string,
+    action: 'acquire' | 'release'
+    lockId?: string
     lockType?: 'edit' | 'state_change' | 'delete' | 'custom'
-  ) => {
-  if (!resourceId) return;
+  ) => { if (!resourceId) return;
   try {
   if (action === 'acquire') {
   const lock = await acquireLock(resourceId, currentUserId, lockType || 'edit', {)
-  reason: 'Manual lock acquisition',
+  reason: 'Manual lock acquisition' }
 });
         onLockAcquired?.(lock.id);
-      } else if (lockId) {
-        await releaseLock(lockId, currentUserId);
+ else if (lockId) { await releaseLock(lockId, currentUserId);
         onLockReleased?.(lockId);
       // Refresh locks
-      fetchLocks(workspaceId);
-    } catch (error) {
-      console.error(`Failed to ${action},)}
+      fetchLocks(workspaceId) } catch (error) {
+      console.error(`Failed to ${action})}
   lock:`, error);}
   }, [resourceId, currentUserId, acquireLock, releaseLock, onLockAcquired, onLockReleased, fetchLocks, workspaceId]);
-  const toggleStateExpansion = (stateId: string) => {
-    const newExpanded = new Set(expandedStates);
+  const toggleStateExpansion = (stateId: string) => { const newExpanded = new Set(expandedStates);
     if (newExpanded.has(stateId)) {
-      newExpanded.delete(stateId);
-    } else {
-      newExpanded.add(stateId);
-    setExpandedStates(newExpanded);
-  };
-  const getStateIcon = (state: WorkflowState) => {
-  switch (state.icon) {
+      newExpanded.delete(stateId) } else { newExpanded.add(stateId);
+    setExpandedStates(newExpanded) };
+  const getStateIcon = (state: WorkflowState) => { switch (state.icon) {
   case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
   case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
   case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
   case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
-  case 'DocumentTextIcon':,
+  case 'DocumentTextIcon': }
   default: return <DocumentTextIcon className="h-4 w-4" />;
 };
-  const getStateTransitions = (stateId: string) => {
-    return transitions.filter(t => t.from_state_id === stateId);
-  };
+  const getStateTransitions = (stateId: string) => { return transitions.filter(t => t.from_state_id === stateId) };
   if (loading) {
     return;
       <div className="flex items-center justify-center p-8">
@@ -219,27 +193,27 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
         {/* Tab Navigation */}
         <div className="flex space-x-8 px-6">
           {[
-            { id: 'states', label: 'States', count: states.length },
-            { id: 'approvals', label: 'Approvals', count: pendingApprovals.length },
-            { id: 'locks', label: 'Locks', count: resourceLocks.length },
+            { id: 'states', label: 'States', count: states.length }
+            { id: 'approvals', label: 'Approvals', count: pendingApprovals.length }
+            { id: 'locks', label: 'Locks', count: resourceLocks.length }
             { id: 'statistics', label: 'Statistics', count: null }
           ].map(tab => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
             >
               {tab.label}
-              {tab.count !== null && ()
+              { tab.count !== null && ()
                 <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
   activeTab === tab.id
   ? 'bg-blue-100 text-blue-600'
-  : 'bg-gray-100 text-gray-600',
-}`}>
+  : 'bg-gray-100 text-gray-600' }
+`}>
                   {tab.count}
                 </span>
               )}
@@ -402,11 +376,11 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                             Approval Required
                           </span>
                         </div>
-                        <span className={`px-2 py-1 rounded text-xs ${
-  approval.priority === 'high' ? 'bg-red-100 text-red-800' :,
-  approval.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :,
+                        <span className={ `px-2 py-1 rounded text-xs ${
+  approval.priority === 'high' ? 'bg-red-100 text-red-800' :
+  approval.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : }
   'bg-green-100 text-green-800'
-}`}>
+`}>
                           {approval.priority}
                         </span>
                       </div>

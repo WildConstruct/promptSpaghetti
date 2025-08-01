@@ -19,8 +19,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface MediaAsset {
-    id: string;
+}
+export interface MediaAsset { id: string;
     name: string;
     type: 'image' | 'video' | 'audio' | 'document' | 'interactive';
     mimeType: string;
@@ -28,7 +28,7 @@ export interface MediaAsset {
     duration?: number;
     dimensions?: {
         width: number;
-        height: number;
+        height: number }
 }
     };
     url: string;
@@ -41,8 +41,8 @@ export interface MediaAsset {
     lastModified: Date;
 
 }
-export interface MediaMetadata {
-    title?: string;
+}
+export interface MediaMetadata { title?: string;
     description?: string;
     alt?: string;
     caption?: string;
@@ -56,107 +56,95 @@ export interface MediaMetadata {
         codec: string;
         bitrate: number;
         framerate?: number;
-        sampleRate?: number;
+        sampleRate?: number }
 }
     };
 
 }
-export interface MediaChapter {
-    id: string;
+}
+export interface MediaChapter { id: string;
     title: string;
     startTime: number;
     endTime: number;
     description?: string;
-    thumbnailUrl?: string;
-
+    thumbnailUrl?: string }
 }
-export interface AccessibilityFeatures {
-    altText: string;
+}
+export interface AccessibilityFeatures { altText: string;
     transcription?: string;
     captions?: MediaCaption[];
     audioDescription?: string;
     signLanguage?: boolean;
     highContrast?: boolean;
-    screenReaderOptimized: boolean;
-
+    screenReaderOptimized: boolean }
 }
-export interface MediaCaption {
-    id: string;
+}
+export interface MediaCaption { id: string;
     language: string;
     startTime: number;
     endTime: number;
     text: string;
     position?: {
         x: number;
-        y: number;
+        y: number }
 }
     };
-    styling?: {
-        fontSize: number;
+    styling?: { fontSize: number;
         color: string;
         backgroundColor: string;
-        fontFamily: string;
-    };
+        fontFamily: string };
 
 }
-export interface ProcessingStatus {
-    status: 'pending' | 'processing' | 'completed' | 'failed' | 'optimizing';
+}
+export interface ProcessingStatus { status: 'pending' | 'processing' | 'completed' | 'failed' | 'optimizing';
     progress: number;
     stages: ProcessingStage[];
     errors: string[];
     estimatedCompletion?: Date;
-    processingTime?: number;
-
+    processingTime?: number }
 }
-export interface ProcessingStage {
-    name: string;
+}
+export interface ProcessingStage { name: string;
     status: 'pending' | 'processing' | 'completed' | 'failed';
     progress: number;
     startTime?: Date;
     endTime?: Date;
-    details?: string;
-
+    details?: string }
 }
-export interface StorageInfo {
-    provider: 'local' | 'cloud' | 'cdn';
+}
+export interface StorageInfo { provider: 'local' | 'cloud' | 'cdn';
     bucket?: string;
     path: string;
     cdn?: {
         url: string;
         distribution: string;
-        region: string;
+        region: string }
 }
     };
-    compression: {
-        enabled: boolean;
+    compression: { enabled: boolean;
         algorithm: string;
-        ratio: number;
-    };
-    backup: {
-        enabled: boolean;
+        ratio: number };
+    backup: { enabled: boolean;
         locations: string[];
-        lastBackup?: Date;
-    };
+        lastBackup?: Date };
 
 }
-export interface MediaProcessingOptions {
-    image?: {
+}
+export interface MediaProcessingOptions { image?: {
         resize?: {
             width?: number;
             height?: number;
-            maintainAspectRatio?: boolean;
+            maintainAspectRatio?: boolean }
 }
         };
         optimize?: boolean;
         format?: 'jpeg' | 'png' | 'webp' | 'avif';
         quality?: number;
         progressive?: boolean;
-        watermark?: {
-            text?: string;
+        watermark?: { text?: string;
             image?: string;
             position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
-            opacity: number;
-        };
+            opacity: number };
     };
     video?: {
         transcode?: {
@@ -165,13 +153,11 @@ export interface MediaProcessingOptions {
             framerate?: number;
             codec?: 'h264' | 'h265' | 'vp9'
   };
-        thumbnail?: {
-            count: number;
+        thumbnail?: { count: number;
             interval?: number;
             size?: {
                 width: number;
-                height: number;
-            };
+                height: number };
         };
         chapters?: boolean;
         captions?: boolean;
@@ -187,45 +173,36 @@ export interface MediaProcessingOptions {
         noiseReduction?: boolean;
         transcription?: boolean;
     };
-    document?: {
-        convert?: 'pdf' | 'html' | 'markdown';
+    document?: { convert?: 'pdf' | 'html' | 'markdown';
         preview?: boolean;
         searchable?: boolean;
-        compress?: boolean;
-    };
+        compress?: boolean };
 
 }
-export interface MultimediaConfig {
-    storage: {
+}
+export interface MultimediaConfig { storage: {
         provider: 'local' | 'aws' | 'gcp' | 'azure';
         maxFileSize: number;
         allowedTypes: string[];
-        compressionEnabled: boolean;
+        compressionEnabled: boolean }
 }
     };
-    processing: {
-        enableTranscoding: boolean;
+    processing: { enableTranscoding: boolean;
         enableOptimization: boolean;
         enableThumbnails: boolean;
         enableAccessibility: boolean;
         maxConcurrentJobs: number;
-        timeoutMs: number;
-    };
-    delivery: {
-        cdnEnabled: boolean;
+        timeoutMs: number };
+    delivery: { cdnEnabled: boolean;
         cacheMaxAge: number;
         adaptiveStreaming: boolean;
-        lazyLoading: boolean;
-    };
-    accessibility: {
-        requireAltText: boolean;
+        lazyLoading: boolean };
+    accessibility: { requireAltText: boolean;
         autoGenerateTranscriptions: boolean;
         autoGenerateCaptions: boolean;
-        enforceStandards: boolean;
-    };
+        enforceStandards: boolean };
 
-export declare class MultimediaContentSupport extends EventEmitter {
-    private assets;
+export declare class MultimediaContentSupport extends EventEmitter { private assets;
     private processingQueue;
     private config;
     private processingWorkers;
@@ -239,45 +216,38 @@ export declare class MultimediaContentSupport extends EventEmitter {
         tags?: string[];
         dateRange?: {
             start: Date;
-            end: Date;
-        };
+            end: Date };
         status?: ProcessingStatus['status'];
     }): MediaAsset[];
     updateAsset(assetId: string, updates: Partial<MediaAsset>): Promise<void>;
     deleteAsset(assetId: string): Promise<boolean>;
-    getOptimizedUrl(assetId: string, options?: {)
+    getOptimizedUrl(assetId: string, options?: { )
         quality?: 'low' | 'medium' | 'high';
         format?: string;
         size?: {
             width?: number;
-            height?: number;
-        };
+            height?: number };
     }): string;
     getProcessingStatus(assetId: string): ProcessingStatus | null;
-    generateThumbnail(assetId: string, options?: {)
+    generateThumbnail(assetId: string, options?: { )
         size?: {
             width: number;
-            height: number;
-        };
+            height: number };
         timestamp?: number;
     }): Promise<string>;
     batchProcess(assetIds: string[], options?: MediaProcessingOptions): Promise<void>;
     batchDelete(assetIds: string[]): Promise<boolean[]>;
-    getUsageMetrics(): {
-        totalAssets: number;
+    getUsageMetrics(): { totalAssets: number;
         totalSize: number;
         assetsByType: Record<string, number>;
         processingStats: {
             pending: number;
             processing: number;
             completed: number;
-            failed: number;
-        };
-        storageUsage: {
-            used: number;
+            failed: number };
+        storageUsage: { used: number;
             available: number;
-            efficiency: number;
-        };
+            efficiency: number };
     };
     updateConfig(config: Partial<MultimediaConfig>): void;
     destroy(): void;
@@ -307,14 +277,12 @@ export declare class MultimediaContentSupport extends EventEmitter {
     private getBaseUrl;
     private delay;
 
-export declare class MultimediaComponentFactory {
-    static createImageViewer(assetId: string): React.ComponentType<any>;
+export declare class MultimediaComponentFactory { static createImageViewer(assetId: string): React.ComponentType<any>;
     static createVideoPlayer(assetId: string): React.ComponentType<any>;
     static createAudioPlayer(assetId: string): React.ComponentType<any>;
     static createDocumentViewer(assetId: string): React.ComponentType<any>;
 declare const _default: {
     MultimediaContentSupport: typeof MultimediaContentSupport;
-    MultimediaComponentFactory: typeof MultimediaComponentFactory;
-};
+    MultimediaComponentFactory: typeof MultimediaComponentFactory };
 export default _default;
 //# sourceMappingURL=MultimediaContentSupport.d.ts.map

@@ -19,13 +19,13 @@ import {
   Chip,
   Grid,
   Paper
-} from '@mui/material';
+ from '@mui/material';
 import {
   Schedule as ScheduleIcon,
   AccessTime as TimeIcon,
   Repeat as RepeatIcon,
   Warning as WarningIcon
-} from '@mui/icons-material';
+ from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -34,18 +34,18 @@ import { RecurrenceEditor } from './RecurrenceEditor';
 import { ActionConfigEditor } from './ActionConfigEditor';
 import { ConflictPreview } from './ConflictPreview';
 
-}
+
 export interface ScheduleFormData {
   id?: string;
   toggleId: string;,
   name: string;
   description?: string;
   type: 'one_time' | 'recurring' | 'conditional';,
-  action: 'enable' | 'disable' | 'update_value' | 'activate_rollout' | 'modify_percentage';
+  action: 'enable' | 'disable' | 'update_value' | 'activate_rollout' | 'modify_percentage';,
   startTime: Date;
   endTime?: Date;
   timezone: string;
-  recurrence?: {
+  recurrence?: {,
   type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';,
   interval: number;
   daysOfWeek?: number;
@@ -54,54 +54,57 @@ export interface ScheduleFormData {
   cronExpression?: string;
   maxOccurrences?: number;
   endDate?: Date;
-}
+
+
 };
   actionConfig: {
   targetValue?: unknown;
   rolloutPercentage?: number;
-  conditions?: Array<{
+  conditions?: Array<{,
   attribute: string;,
-  operator: string;
+  operator: string;,
   value: Error;
-}>;
+>;
     gradualRollout?: {
   startPercentage: number;,
-  endPercentage: number;
+  endPercentage: number;,
   incrementMinutes: number;
 };
   };
   priority: number;,
-  conflictResolution: 'skip' | 'override' | 'merge';
+  conflictResolution: 'skip' | 'override' | 'merge';,
   enabled: boolean;
-}
+
+
 interface ScheduleEditorProps {
   open: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   onSave: (schedule: ScheduleFormData) => Promise<void>;
   initialData?: Partial<ScheduleFormData>;
   toggleId: string;
   toggleName?: string;
-  existingSchedules?: Array<{
+  existingSchedules?: Array<{,
   id: string;,
-  name: string;
+  name: string;,
   startTime: Date;
   endTime?: Date;
   action: string;
-}
-}>;
-const SCHEDULE_TYPES = [;
+
+
+>;
+const SCHEDULE_TYPES = [
   { value: 'one_time', label: 'One-time', description: 'Execute once at the specified time' },
   { value: 'recurring', label: 'Recurring', description: 'Execute repeatedly on a schedule' },
   { value: 'conditional', label: 'Conditional', description: 'Execute when conditions are met' }
 ];
-const SCHEDULE_ACTIONS = [;
+const SCHEDULE_ACTIONS = [
   { value: 'enable', label: 'Enable Toggle', description: 'Turn the feature toggle on' },
   { value: 'disable', label: 'Disable Toggle', description: 'Turn the feature toggle off' },
   { value: 'update_value', label: 'Update Value', description: 'Change the toggle value' },
   { value: 'modify_percentage', label: 'Modify Percentage', description: 'Change rollout percentage' },
   { value: 'activate_rollout', label: 'Activate Rollout', description: 'Start a gradual rollout' }
 ];
-const CONFLICT_RESOLUTIONS = [;
+const CONFLICT_RESOLUTIONS = [
   { value: 'skip', label: 'Skip', description: 'Skip execution if conflict detected' },
   { value: 'override', label: 'Override', description: 'Execute anyway, overriding conflicts' },
   { value: 'merge', label: 'Merge', description: 'Try to merge with conflicting schedules' }
@@ -139,7 +142,7 @@ const CONFLICT_RESOLUTIONS = [;
 },
   severity: 'high';
   });
-        } else {
+ else {
           potentialConflicts.push({)
   description: `Time overlap with "${existing.name}" - may cause unexpected behavior`}
 },
@@ -153,7 +156,7 @@ const CONFLICT_RESOLUTIONS = [;
     return start1 < effectiveEnd2 && start2 < effectiveEnd1;
   };
   const checkActionConflict = (action1: string, action2: string): boolean => {
-    const conflictingPairs = [;
+    const conflictingPairs = [
       ['enable', 'disable'],
       ['update_value', 'update_value']
     ];
@@ -167,7 +170,7 @@ const CONFLICT_RESOLUTIONS = [;
       newErrors.name = 'Schedule name is required';
     if (!formData.startTime) {
       newErrors.startTime = 'Start time is required';
-    } else if (formData.startTime <= new Date()) {
+ else if (formData.startTime <= new Date()) {
       newErrors.startTime = 'Start time must be in the future';
     if (formData.endTime && formData.endTime <= formData.startTime) {
       newErrors.endTime = 'End time must be after start time';
@@ -189,10 +192,10 @@ const CONFLICT_RESOLUTIONS = [;
     try {
       await onSave(formData);
       onClose();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to save schedule:', error);
   // Handle error (could set an error state)
-} finally {
+ finally {
       setIsLoading(false);
   };
   const handleFieldChange = (field: keyof ScheduleFormData, value: Error) => {
@@ -216,7 +219,7 @@ const CONFLICT_RESOLUTIONS = [;
         fullWidth
         PaperProps={{
           style: { minHeight: '70vh' }
-        }}
+}
       >
         <DialogTitle>
           <Box display="flex" alignItems="center" gap={1}>
@@ -328,11 +331,11 @@ const CONFLICT_RESOLUTIONS = [;
                     value={formData.startTime}
                     onChange={(date) => handleFieldChange('startTime', date)}
                     slotProps={{
-  textField: {
+  textField: {,
   fullWidth: true,
   error: !!errors.startTime,
   helperText: errors.startTime,
-}}
+}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -341,11 +344,11 @@ const CONFLICT_RESOLUTIONS = [;
                     value={formData.endTime}
                     onChange={(date) => handleFieldChange('endTime', date)}
                     slotProps={{
-  textField: {
+  textField: {,
   fullWidth: true,
   error: !!errors.endTime,
   helperText: errors.endTime,
-}}
+}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -456,4 +459,3 @@ const CONFLICT_RESOLUTIONS = [;
     </LocalizationProvider>
   );
 };
-}

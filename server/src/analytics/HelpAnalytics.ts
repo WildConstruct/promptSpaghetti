@@ -60,20 +60,21 @@ export enum HelpEventType {
   VIDEO_TUTORIAL_COMPLETED = 'video_tutorial_completed',
   INTERACTIVE_GUIDE_STARTED = 'interactive_guide_started',
   INTERACTIVE_GUIDE_COMPLETED = 'interactive_guide_completed'
-}
+
 
 // Help analytics event interfaces
-}
-}
+
+
+
 export interface HelpEvent extends AnalyticsEvent {
   type: HelpEventType;
   helpSessionId: string;
   userTier?: 'free' | 'pro' | 'enterprise';
   userExperience?: 'beginner' | 'intermediate' | 'advanced';
-}
 
-}
-}
+
+
+
 export interface HelpSearchEvent extends HelpEvent {
   type: HelpEventType.HELP_SEARCH | HelpEventType.DOCS_SEARCH;
   metadata: {
@@ -87,10 +88,10 @@ export interface HelpSearchEvent extends HelpEvent {
     noResultsFound?: boolean;
     correctedQuery?: string;
   };
-}
 
-}
-}
+
+
+
 export interface HelpContentEvent extends HelpEvent {
   type: HelpEventType.HELP_ARTICLE_VIEW | 
         HelpEventType.DOCS_PAGE_VIEW | 
@@ -109,10 +110,10 @@ export interface HelpContentEvent extends HelpEvent {
     difficulty?: 'beginner' | 'intermediate' | 'advanced';
     tags?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface HelpFeedbackEvent extends HelpEvent {
   type: HelpEventType.HELP_ARTICLE_HELPFUL | 
         HelpEventType.HELP_ARTICLE_NOT_HELPFUL |
@@ -128,10 +129,10 @@ export interface HelpFeedbackEvent extends HelpEvent {
     recommendationLikelihood?: number;
     improvementSuggestions?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface HelpJourneyEvent extends HelpEvent {
   type: HelpEventType.HELP_FLOW_STARTED | 
         HelpEventType.HELP_FLOW_COMPLETED |
@@ -151,10 +152,10 @@ export interface HelpJourneyEvent extends HelpEvent {
     previousStep?: string;
     nextStep?: string;
   };
-}
 
-}
-}
+
+
+
 export interface SupportInteractionEvent extends HelpEvent {
   type: HelpEventType.SUPPORT_TICKET_CREATED |
         HelpEventType.SUPPORT_CHAT_STARTED |
@@ -172,17 +173,19 @@ export interface SupportInteractionEvent extends HelpEvent {
     estimatedResolutionTime?: number;
     supportAgent?: string;
   };
-}
+
 
 // Help analytics aggregation interfaces
-}
-}
+
+
+
 export interface HelpAnalyticsSummary {
   timeRange: {
     startTime: number;
     endTime: number;
-}
-}
+
+
+
   };
   overallMetrics: {
     totalHelpSessions: number;
@@ -210,10 +213,10 @@ export interface HelpAnalyticsSummary {
     escalationRate: number;
     firstContactResolution: number;
   };
-}
 
-}
-}
+
+
+
 export interface ContentMetric {
   contentId: string;
   title: string;
@@ -224,12 +227,13 @@ export interface ContentMetric {
   helpfulnessRatio: number;
   averageViewDuration: number;
   exitRate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SearchTermMetric {
   query: string;
   searchCount: number;
@@ -237,37 +241,41 @@ export interface SearchTermMetric {
   clickThroughRate: number;
   noResultsRate: number;
   refinementRate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DropoffPoint {
   stepName: string;
   flowName: string;
   dropoffRate: number;
   usersDropped: number;
   avgTimeAtStep: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserPath {
   path: string[];
   userCount: number;
   completionRate: number;
   avgDuration: number;
   conversionRate: number;
-}
-}
-}
+
+
+
+
 
 // Help analytics configuration
-}
-}
+
+
+
 export interface HelpAnalyticsConfig {
   trackDetailedInteractions: boolean;
   enablePersonalization: boolean;
@@ -277,9 +285,10 @@ export interface HelpAnalyticsConfig {
   enableRealTimeAlerts: boolean;
   contentAnalysisEnabled: boolean;
   userJourneyTrackingEnabled: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Comprehensive help analytics system
@@ -312,7 +321,7 @@ export class HelpAnalytics extends EventEmitter {
 
     // Set up periodic analysis
     this.startPeriodicAnalysis();
-  }
+
 
   /**
    * Start a help session
@@ -350,12 +359,12 @@ export class HelpAnalytics extends EventEmitter {
         flowId: 'help_session',
         flowName: 'Help Session',
         ...context
-      }
+
     };
 
     this.recordHelpEvent(event);
     return helpSessionId;
-  }
+
 
   /**
    * Track help search
@@ -370,7 +379,7 @@ export class HelpAnalytics extends EventEmitter {
       category?: string;
       suggestions?: string[];
       correctedQuery?: string;
-    } = {}
+ = {}
   ): void {
     const session = this.helpSessions.get(helpSessionId);
     if (!session) return;
@@ -393,12 +402,12 @@ export class HelpAnalytics extends EventEmitter {
         suggestionsShown: options.suggestions,
         correctedQuery: options.correctedQuery,
         noResultsFound: resultsCount === 0
-      }
+
     };
 
     this.recordHelpEvent(event);
     this.updateSearchMetrics(query, resultsCount, options.selectedResultIndex !== undefined);
-  }
+
 
   /**
    * Track content viewing
@@ -415,7 +424,7 @@ export class HelpAnalytics extends EventEmitter {
       referrer?: 'search' | 'navigation' | 'related' | 'direct' | 'external';
       difficulty?: 'beginner' | 'intermediate' | 'advanced';
       tags?: string[];
-    } = {}
+ = {}
   ): void {
     const session = this.helpSessions.get(helpSessionId);
     if (!session) return;
@@ -439,12 +448,12 @@ export class HelpAnalytics extends EventEmitter {
         referrer: options.referrer,
         difficulty: options.difficulty,
         tags: options.tags
-      }
+
     };
 
     this.recordHelpEvent(event);
     this.updateContentMetrics(contentId, 'view', options.viewDuration);
-  }
+
 
   /**
    * Track content feedback
@@ -457,7 +466,7 @@ export class HelpAnalytics extends EventEmitter {
       feedbackText?: string;
       feedbackCategory?: 'unclear' | 'outdated' | 'missing_info' | 'error' | 'suggestion';
       rating?: number;
-    } = {}
+ = {}
   ): void {
     const session = this.helpSessions.get(helpSessionId);
     if (!session) return;
@@ -476,12 +485,12 @@ export class HelpAnalytics extends EventEmitter {
         rating: options.rating,
         feedbackText: options.feedbackText,
         feedbackCategory: options.feedbackCategory
-      }
+
     };
 
     this.recordHelpEvent(event);
     this.updateContentMetrics(contentId, isHelpful ? 'helpful' : 'unhelpful');
-  }
+
 
   /**
    * Track support interaction
@@ -495,7 +504,7 @@ export class HelpAnalytics extends EventEmitter {
       priority?: 'low' | 'medium' | 'high' | 'urgent';
       issue?: string;
       previousHelpAttempts?: number;
-    } = {}
+ = {}
   ): void {
     const session = this.helpSessions.get(helpSessionId);
     if (!session) return;
@@ -516,7 +525,7 @@ export class HelpAnalytics extends EventEmitter {
       break;
     default:
       eventType = HelpEventType.SUPPORT_TICKET_CREATED;
-    }
+
 
     const event: SupportInteractionEvent = {
       id: uuidv4(),
@@ -533,7 +542,7 @@ export class HelpAnalytics extends EventEmitter {
         priority: options.priority || 'medium',
         issue: options.issue || '',
         previousHelpAttempts: options.previousHelpAttempts || 0
-      }
+
     };
 
     this.recordHelpEvent(event);
@@ -546,8 +555,8 @@ export class HelpAnalytics extends EventEmitter {
         helpSessionId,
         userId: session.userId
       });
-    }
-  }
+
+
 
   /**
    * Track user satisfaction
@@ -560,7 +569,7 @@ export class HelpAnalytics extends EventEmitter {
       feedbackText?: string;
       improvementSuggestions?: string[];
       recommendationLikelihood?: number;
-    } = {}
+ = {}
   ): void {
     const session = this.helpSessions.get(helpSessionId);
     if (!session) return;
@@ -580,11 +589,11 @@ export class HelpAnalytics extends EventEmitter {
         feedbackText: options.feedbackText,
         improvementSuggestions: options.improvementSuggestions,
         recommendationLikelihood: options.recommendationLikelihood
-      }
+
     };
 
     this.recordHelpEvent(event);
-  }
+
 
   /**
    * End help session
@@ -616,7 +625,7 @@ export class HelpAnalytics extends EventEmitter {
         timeToComplete: session.duration,
         exitReason: outcome,
         eventsInSession: session.events.length
-      }
+
     };
 
     this.recordHelpEvent(event);
@@ -625,7 +634,7 @@ export class HelpAnalytics extends EventEmitter {
     setTimeout(() => {
       this.helpSessions.delete(helpSessionId);
     }, 300000); // 5 minutes
-  }
+
 
   /**
    * Generate help analytics summary
@@ -650,7 +659,7 @@ export class HelpAnalytics extends EventEmitter {
     this.emit('analytics_summary', summary);
 
     return summary;
-  }
+
 
   /**
    * Get content performance data
@@ -659,10 +668,10 @@ export class HelpAnalytics extends EventEmitter {
     if (contentId) {
       const performance = this.contentMetrics.get(contentId);
       return performance ? [performance] : [];
-    }
+
     
     return Array.from(this.contentMetrics.values());
-  }
+
 
   /**
    * Get search analytics
@@ -670,7 +679,7 @@ export class HelpAnalytics extends EventEmitter {
   getSearchAnalytics(): SearchPerformance[] {
     return Array.from(this.searchMetrics.values())
       .sort((a, b) => b.searchCount - a.searchCount);
-  }
+
 
   /**
    * Identify content gaps
@@ -688,11 +697,11 @@ export class HelpAnalytics extends EventEmitter {
           suggestedContentType: this.suggestContentType(search.query),
           priority: this.calculateGapPriority(search)
         });
-      }
-    }
+
+
 
     return gaps.sort((a, b) => b.priority - a.priority);
-  }
+
 
   // Private methods
 
@@ -701,7 +710,7 @@ export class HelpAnalytics extends EventEmitter {
     const session = this.helpSessions.get(event.helpSessionId);
     if (session) {
       session.events.push(event);
-    }
+
 
     // Record in analytics collector
     this.analyticsCollector.recordEvent({
@@ -711,7 +720,7 @@ export class HelpAnalytics extends EventEmitter {
 
     // Emit for real-time processing
     this.emit('help_event', event);
-  }
+
 
   private updateSearchMetrics(query: string, resultsCount: number, hadClickthrough: boolean): void {
     const key = this.config.anonymizeUserData ? this.hashQuery(query) : query.toLowerCase();
@@ -724,7 +733,7 @@ export class HelpAnalytics extends EventEmitter {
         clickthroughs: 0,
         noResultsSearches: 0
       });
-    }
+
 
     const metrics = this.searchMetrics.get(key)!;
     metrics.searchCount++;
@@ -732,17 +741,17 @@ export class HelpAnalytics extends EventEmitter {
     
     if (hadClickthrough) {
       metrics.clickthroughs++;
-    }
+
     
     if (resultsCount === 0) {
       metrics.noResultsSearches++;
-    }
+
 
     // Calculate derived metrics
     metrics.avgResultsCount = metrics.totalResultsCount / metrics.searchCount;
     metrics.clickThroughRate = metrics.clickthroughs / metrics.searchCount;
     metrics.noResultsRate = metrics.noResultsSearches / metrics.searchCount;
-  }
+
 
   private updateContentMetrics(contentId: string, action: 'view' | 'helpful' | 'unhelpful', viewDuration?: number): void {
     if (!this.contentMetrics.has(contentId)) {
@@ -754,7 +763,7 @@ export class HelpAnalytics extends EventEmitter {
         totalViewDuration: 0,
         totalExitEarly: 0
       });
-    }
+
 
     const metrics = this.contentMetrics.get(contentId)!;
     
@@ -765,8 +774,8 @@ export class HelpAnalytics extends EventEmitter {
         metrics.totalViewDuration += viewDuration;
         if (viewDuration < 30000) { // Less than 30 seconds considered early exit
           metrics.totalExitEarly++;
-        }
-      }
+
+
       break;
     case 'helpful':
       metrics.helpfulVotes++;
@@ -774,13 +783,13 @@ export class HelpAnalytics extends EventEmitter {
     case 'unhelpful':
       metrics.unhelpfulVotes++;
       break;
-    }
+
 
     // Calculate derived metrics
     metrics.helpfulnessRatio = metrics.helpfulVotes / (metrics.helpfulVotes + metrics.unhelpfulVotes) || 0;
     metrics.avgViewDuration = metrics.totalViewDuration / metrics.views || 0;
     metrics.exitRate = metrics.totalExitEarly / metrics.views || 0;
-  }
+
 
   private calculateOverallMetrics(sessions: HelpSession[], events: HelpEvent[]) {
     const completedSessions = sessions.filter(s => s.outcome === 'completed');
@@ -795,7 +804,7 @@ export class HelpAnalytics extends EventEmitter {
       supportTicketRate: supportTickets.length / sessions.length || 0,
       userSatisfactionAvg: satisfactionEvents.reduce((sum, e) => sum + (e.metadata.satisfactionScore || 0), 0) / satisfactionEvents.length || 0
     };
-  }
+
 
   private calculateContentMetrics(events: HelpEvent[]) {
     const contentViews = events.filter(e => e.type === HelpEventType.HELP_ARTICLE_VIEW) as HelpContentEvent[];
@@ -819,13 +828,13 @@ export class HelpAnalytics extends EventEmitter {
           unhelpfulVotes: 0,
           totalViewDuration: 0
         });
-      }
+
       
       const stats = contentStats.get(contentId);
       stats.views++;
       if (event.metadata.viewDuration) {
         stats.totalViewDuration += event.metadata.viewDuration;
-      }
+
     });
 
     // Process feedback
@@ -835,10 +844,10 @@ export class HelpAnalytics extends EventEmitter {
         const stats = contentStats.get(contentId);
         if (event.type === HelpEventType.HELP_ARTICLE_HELPFUL) {
           stats.helpfulVotes++;
-        } else {
+ else {
           stats.unhelpfulVotes++;
-        }
-      }
+
+
     });
 
     const contentMetrics = Array.from(contentStats.values()).map(stats => ({
@@ -854,7 +863,7 @@ export class HelpAnalytics extends EventEmitter {
       mostSearchedTerms: this.getSearchAnalytics().slice(0, 10),
       contentGaps: this.identifyContentGaps().map(gap => gap.query).slice(0, 5)
     };
-  }
+
 
   private calculateUserJourneyMetrics(sessions: HelpSession[], events: HelpEvent[]) {
     const onboardingEvents = events.filter(e => 
@@ -871,7 +880,7 @@ export class HelpAnalytics extends EventEmitter {
       dropoffPoints: this.identifyDropoffPoints(sessions, events),
       commonUserPaths: this.identifyCommonPaths(sessions, events)
     };
-  }
+
 
   private calculateSupportMetrics(events: HelpEvent[]) {
     const supportTickets = events.filter(e => e.type === HelpEventType.SUPPORT_TICKET_CREATED);
@@ -883,33 +892,33 @@ export class HelpAnalytics extends EventEmitter {
       escalationRate: escalations.length / supportTickets.length || 0,
       firstContactResolution: 0 // Would need resolution tracking
     };
-  }
+
 
   private getHelpEventsInTimeRange(startTime: number, endTime: number): HelpEvent[] {
     return Array.from(this.helpSessions.values())
       .flatMap(session => session.events)
       .filter(event => event.timestamp >= startTime && event.timestamp <= endTime);
-  }
+
 
   private getHelpSessionsInTimeRange(startTime: number, endTime: number): HelpSession[] {
     return Array.from(this.helpSessions.values())
       .filter(session => session.startTime >= startTime && session.startTime <= endTime);
-  }
+
 
   private calculateAverageTimeToValue(sessions: HelpSession[]): number {
     const completedSessions = sessions.filter(s => s.outcome === 'completed' && s.duration);
     return completedSessions.reduce((sum, s) => sum + s.duration!, 0) / completedSessions.length || 0;
-  }
+
 
   private identifyDropoffPoints(sessions: HelpSession[], events: HelpEvent[]): DropoffPoint[] {
     // Simplified implementation - would need more detailed flow tracking
     return [];
-  }
+
 
   private identifyCommonPaths(sessions: HelpSession[], events: HelpEvent[]): UserPath[] {
     // Simplified implementation - would need sequence analysis
     return [];
-  }
+
 
   private hashQuery(query: string): string {
     // Simple hash for anonymization
@@ -918,33 +927,33 @@ export class HelpAnalytics extends EventEmitter {
       const char = query.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash;
-    }
+
     return Math.abs(hash).toString(16);
-  }
+
 
   private suggestContentType(query: string): string {
     if (query.includes('how to') || query.includes('tutorial')) {
       return 'tutorial';
-    }
+
     if (query.includes('what is') || query.includes('definition')) {
       return 'reference';
-    }
+
     if (query.includes('error') || query.includes('problem')) {
       return 'troubleshooting';
-    }
+
     return 'article';
-  }
+
 
   private calculateGapPriority(search: SearchPerformance): number {
     return search.searchCount * search.noResultsRate;
-  }
+
 
   private startPeriodicAnalysis(): void {
     // Run analysis every hour
     setInterval(() => {
       this.runPeriodicAnalysis();
     }, 3600000);
-  }
+
 
   private async runPeriodicAnalysis(): void {
     const oneHourAgo = Date.now() - 3600000;
@@ -960,7 +969,7 @@ export class HelpAnalytics extends EventEmitter {
           score: summary.overallMetrics.userSatisfactionAvg,
           period: 'last_hour'
         });
-      }
+
       
       if (summary.overallMetrics.supportTicketRate > 0.3) {
         this.emit('support_volume_alert', {
@@ -968,16 +977,17 @@ export class HelpAnalytics extends EventEmitter {
           rate: summary.overallMetrics.supportTicketRate,
           period: 'last_hour'
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error in periodic help analytics analysis:', error);
-    }
-  }
-}
+
+
+
 
 // Supporting interfaces
-}
-}
+
+
+
 interface HelpSession {
   id: string;
   userId?: string;
@@ -989,12 +999,13 @@ interface HelpSession {
   outcome?: 'completed' | 'abandoned' | 'escalated';
   events: HelpEvent[];
   context: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ContentPerformance {
   contentId: string;
   views: number;
@@ -1005,12 +1016,13 @@ interface ContentPerformance {
   avgViewDuration?: number;
   totalExitEarly: number;
   exitRate?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SearchPerformance {
   query: string;
   searchCount: number;
@@ -1020,20 +1032,22 @@ interface SearchPerformance {
   clickThroughRate?: number;
   noResultsSearches: number;
   noResultsRate?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ContentGap {
   query: string;
   searchVolume: number;
   noResultsRate: number;
   suggestedContentType: string;
   priority: number;
-}
-}
-}
+
+
+
+
 
 export default HelpAnalytics;

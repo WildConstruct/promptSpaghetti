@@ -4,14 +4,13 @@
  *
  * Central management system for UTDG data and historical content generation
  */
-import { 
-  UTDGNode,
+import { UTDGNode,
   Era,
   HistoricalQuery,
   HistoricalQueryResult,
   ContentGenerationConfig,
   GeneratedContent,
-  VFXExportData,
+  VFXExportData }
   ValidationReport
 } from '../types/UTDG';
 import ConstraintValidator from './ConstraintValidator';

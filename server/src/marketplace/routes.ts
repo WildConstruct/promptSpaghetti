@@ -13,7 +13,7 @@ import {
   CreateReviewSchema,
   CreatePurchaseSchema,
   PreviewRequest
-} from './types';
+ from './types';
 
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
@@ -21,7 +21,7 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) {
   const marketplaceService = new MarketplaceService(dbPool);
@@ -50,23 +50,23 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           is_ai_generated: { type: 'boolean' },
           claude_compat: { type: 'array', items: { type: 'string' } },
           categories: { type: 'array', items: { type: 'string' } }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
     
     if (!hasRole(user, ['creator', 'admin'])) {
       return reply.status(403).send({ error: 'Insufficient permissions' });
-    }
+
 
     try {
       const template = await marketplaceService.createTemplate(user.id, request.body);
       return reply.status(201).send(template);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Unknown error' });
-    }
+
   });
 
   // Search suggestions endpoint
@@ -77,20 +77,20 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         properties: {
           q: { type: 'string', minLength: 1 },
           limit: { type: 'integer', minimum: 1, maximum: 20, default: 10 }
-  }
+
         required: ['q']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { q, limit = 10 } = request.query as any;
 
     try {
       const suggestions = await marketplaceService.getSearchSuggestions(q, limit);
       return reply.send({ suggestions });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch search suggestions' });
-    }
+
   });
 
   fastify.get('/templates/search', {
@@ -109,9 +109,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           is_featured: { type: 'boolean' },
           page: { type: 'integer', minimum: 1, default: 1 },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const query = request.query as any;
     const searchStartTime = Date.now();
@@ -143,10 +143,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
       
       const results = await marketplaceService.searchTemplates(filters, userId, searchContext);
       return reply.send(results);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Search failed' });
-    }
+
   });
 
   fastify.get('/templates/:id', {
@@ -155,10 +155,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     
@@ -168,16 +168,16 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
       
       if (!template) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       
       return reply.send(template);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not accessible')) {
         return reply.status(403).send({ error: 'Template not accessible' });
-      }
+
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch template' });
-    }
+
   });
 
   fastify.put('/templates/:id', {
@@ -187,9 +187,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -201,9 +201,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           claude_compat: { type: 'array', items: { type: 'string' } },
           status: { type: 'string', enum: ['draft', 'listed', 'blocked', 'archived'] },
           categories: { type: 'array', items: { type: 'string' } }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const user = request.user;
@@ -211,16 +211,16 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       const template = await marketplaceService.updateTemplate(id, user.id, request.body);
       return reply.send(template);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       if (error instanceof Error && error.message.includes('not authorized')) {
         return reply.status(403).send({ error: 'Not authorized to update this template' });
-      }
+
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Update failed' });
-    }
+
   });
 
   fastify.delete('/templates/:id', {
@@ -230,10 +230,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const user = request.user;
@@ -241,16 +241,16 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       await marketplaceService.deleteTemplate(id, user.id);
       return reply.status(204).send();
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       if (error instanceof Error && error.message.includes('not authorized')) {
         return reply.status(403).send({ error: 'Not authorized to delete this template' });
-      }
+
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Delete failed' });
-    }
+
   });
 
   // Version endpoints
@@ -261,9 +261,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       body: {
         type: 'object',
         required: ['graph_json'],
@@ -273,9 +273,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           prompt_yaml: { type: 'string' },
           changelog_md: { type: 'string' },
           token_per_run_estimate: { type: 'integer', minimum: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const user = request.user;
@@ -283,16 +283,16 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       const version = await marketplaceService.createVersion(id, user.id, request.body);
       return reply.status(201).send(version);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       if (error instanceof Error && error.message.includes('not authorized')) {
         return reply.status(403).send({ error: 'Not authorized to create versions for this template' });
-      }
+
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Version creation failed' });
-    }
+
   });
 
   fastify.get('/templates/:id/versions', {
@@ -302,10 +302,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const user = request.user;
@@ -313,16 +313,16 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       const versions = await marketplaceService.getTemplateVersions(id, user.id);
       return reply.send(versions);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       if (error instanceof Error && error.message.includes('not authorized')) {
         return reply.status(403).send({ error: 'Not authorized to view template versions' });
-      }
+
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch versions' });
-    }
+
   });
 
   // Purchase endpoints
@@ -336,25 +336,25 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           template_id: { type: 'string', format: 'uuid' },
           version_id: { type: 'string', format: 'uuid' },
           payment_method_id: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
 
     try {
       const purchase = await marketplaceService.createPurchase(user.id, request.body);
       return reply.status(201).send(purchase);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       if (error instanceof Error && error.message.includes('already own')) {
         return reply.status(400).send({ error: 'You already own this template' });
-      }
+
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Purchase failed' });
-    }
+
   });
 
   fastify.get('/purchases/my', {
@@ -365,10 +365,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       const purchases = await marketplaceService.getUserPurchases(user.id);
       return reply.send(purchases);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch purchases' });
-    }
+
   });
 
   // Review endpoints
@@ -382,25 +382,25 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           template_id: { type: 'string', format: 'uuid' },
           stars: { type: 'integer', minimum: 1, maximum: 5 },
           comment: { type: 'string', maxLength: 2000 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
 
     try {
       const review = await marketplaceService.createReview(user.id, request.body);
       return reply.status(201).send(review);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       if (error instanceof Error && error.message.includes('must purchase')) {
         return reply.status(400).send({ error: 'You must purchase the template before reviewing' });
-      }
+
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Review creation failed' });
-    }
+
   });
 
   fastify.get('/templates/:id/reviews', {
@@ -409,20 +409,20 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
 
     try {
       const reviews = await marketplaceService.getTemplateReviews(id);
       return reply.send(reviews);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch reviews' });
-    }
+
   });
 
   // Preview metadata endpoint
@@ -432,16 +432,16 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           version_id: { type: 'string', format: 'uuid' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const { version_id } = request.query as any;
@@ -449,13 +449,13 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       const metadata = await marketplaceService.getPreviewMetadata(id, version_id);
       return reply.send(metadata);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch preview metadata' });
-    }
+
   });
 
   // Preview endpoint
@@ -466,18 +466,18 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       body: {
         type: 'object',
         properties: {
           version_id: { type: 'string', format: 'uuid' },
           user_input: { type: 'object' },
           claude_model_override: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const user = request.user;
@@ -492,16 +492,16 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       const preview = await marketplaceService.previewTemplate(user.id, previewRequest);
       return reply.send(preview);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       if (error instanceof Error && error.message.includes('not available')) {
         return reply.status(400).send({ error: 'Template preview not available' });
-      }
+
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Preview generation failed' });
-    }
+
   });
 
   // Categories
@@ -509,10 +509,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       const categories = await marketplaceService.getCategories();
       return reply.send(categories);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch categories' });
-    }
+
   });
 
   // Analytics endpoints (for creators)
@@ -523,31 +523,31 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const user = request.user;
 
     if (!hasRole(user, ['creator', 'admin'])) {
       return reply.status(403).send({ error: 'Insufficient permissions' });
-    }
+
 
     try {
       const analytics = await marketplaceService.getTemplateAnalytics(id, user.id);
       return reply.send(analytics);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.status(404).send({ error: 'Template not found' });
-      }
+
       if (error instanceof Error && error.message.includes('not authorized')) {
         return reply.status(403).send({ error: 'Not authorized to view analytics for this template' });
-      }
+
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch analytics' });
-    }
+
   });
 
   // Recommendation endpoints
@@ -559,9 +559,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 },
           exclude_owned: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
     const { limit = 10, exclude_owned = true } = request.query as any;
@@ -573,10 +573,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         exclude_owned
       );
       return reply.send({ templates: recommendations });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch personalized recommendations' });
-    }
+
   });
 
   fastify.get('/templates/:id/similar', {
@@ -585,16 +585,16 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 20, default: 5 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const { limit = 5 } = request.query as any;
@@ -602,10 +602,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       const similarTemplates = await recommendationService.getSimilarTemplates(id, limit);
       return reply.send({ templates: similarTemplates });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch similar templates' });
-    }
+
   });
 
   fastify.get('/recommendations/trending', {
@@ -615,19 +615,19 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         properties: {
           timeWindow: { type: 'integer', minimum: 1, maximum: 30, default: 7 },
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { timeWindow = 7, limit = 10 } = request.query as any;
 
     try {
       const trendingTemplates = await recommendationService.getTrendingTemplates(timeWindow, limit);
       return reply.send({ templates: trendingTemplates });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch trending templates' });
-    }
+
   });
 
   fastify.get('/recommendations/new-user', {
@@ -636,19 +636,19 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { limit = 10 } = request.query as any;
 
     try {
       const recommendations = await recommendationService.getNewUserRecommendations(limit);
       return reply.send({ templates: recommendations });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch new user recommendations' });
-    }
+
   });
 
   fastify.get('/categories/:id/recommendations', {
@@ -657,17 +657,17 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 },
           exclude: { type: 'string' } // comma-separated template IDs
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
     const { limit = 10, exclude } = request.query as any;
@@ -681,10 +681,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         excludeTemplateIds
       );
       return reply.send({ templates: recommendations });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch category recommendations' });
-    }
+
   });
 
   fastify.get('/recommendations/search-based', {
@@ -694,9 +694,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
     const { limit = 10 } = request.query as any;
@@ -704,10 +704,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     try {
       const recommendations = await recommendationService.getSearchBasedRecommendations(user.id, limit);
       return reply.send({ templates: recommendations });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch search-based recommendations' });
-    }
+
   });
 
   // Admin endpoints
@@ -718,15 +718,15 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
 
     if (!hasRole(user, ['admin'])) {
       return reply.status(403).send({ error: 'Admin access required' });
-    }
+
 
     try {
       await marketplaceService.refreshSearchIndex();
       return reply.status(204).send();
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to refresh search index' });
-    }
+
   });
 
   // Creator Management endpoints (Epic 16 Story 16.2)
@@ -738,9 +738,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         properties: {
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
     const { start_date, end_date } = request.query as any;
@@ -753,10 +753,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         end_date ? new Date(end_date) : undefined
       );
       return reply.send(stats);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch creator stats' });
-    }
+
   });
 
   fastify.get('/creator/profile', {
@@ -768,10 +768,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
       const creatorService = new CreatorManagementService(dbPool);
       const profile = await creatorService.getCreatorProfile(user.id);
       return reply.send(profile);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch creator profile' });
-    }
+
   });
 
   fastify.put('/creator/profile', {
@@ -785,9 +785,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           website: { type: 'string', format: 'uri', maxLength: 500 },
           social_links: { type: 'object' },
           public_profile: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
 
@@ -795,10 +795,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
       const creatorService = new CreatorManagementService(dbPool);
       const profile = await creatorService.updateCreatorProfile(user.id, request.body);
       return reply.send(profile);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to update creator profile' });
-    }
+
   });
 
   fastify.get('/creator/templates', {
@@ -810,10 +810,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
       const creatorService = new CreatorManagementService(dbPool);
       const templates = await creatorService.getCreatorTemplates(user.id);
       return reply.send({ templates });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch creator templates' });
-    }
+
   });
 
   fastify.get('/creator/monetization', {
@@ -831,10 +831,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         auto_payout_enabled: true,
         tax_settings: {}
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch monetization settings' });
-    }
+
   });
 
   fastify.put('/creator/monetization', {
@@ -851,9 +851,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           bank_details: { type: 'object' },
           tax_settings: { type: 'object' },
           auto_payout_enabled: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
 
@@ -861,10 +861,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
       const creatorService = new CreatorManagementService(dbPool);
       const settings = await creatorService.updateMonetizationSettings(user.id, request.body);
       return reply.send(settings);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to update monetization settings' });
-    }
+
   });
 
   fastify.get('/creator/performance', {
@@ -875,10 +875,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         properties: {
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' }
-  }
+
         required: ['start_date', 'end_date']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
     const { start_date, end_date } = request.query as any;
@@ -891,10 +891,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         new Date(end_date)
       );
       return reply.send(metrics);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch performance metrics' });
-    }
+
   });
 
   fastify.get('/creator/payouts', {
@@ -904,9 +904,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
     const { limit = 50 } = request.query as any;
@@ -915,10 +915,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
       const creatorService = new CreatorManagementService(dbPool);
       const payouts = await creatorService.getPayoutHistory(user.id, limit);
       return reply.send({ payouts });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch payout history' });
-    }
+
   });
 
   fastify.post('/creator/payout', {
@@ -930,13 +930,13 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
       const creatorService = new CreatorManagementService(dbPool);
       const payout = await creatorService.initiatePayout(user.id);
       return reply.status(201).send(payout);
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('Insufficient balance')) {
         return reply.status(400).send({ error: error.message });
-      }
+
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to initiate payout' });
-    }
+
   });
 
   // Search Analytics endpoints (Epic 16 Story 16.1)
@@ -949,17 +949,17 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' },
           user_id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['start_date', 'end_date']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
     const { start_date, end_date, user_id } = request.query as any;
 
     if (!hasRole(user, ['admin', 'analyst'])) {
       return reply.status(403).send({ error: 'Insufficient permissions' });
-    }
+
 
     try {
       const analytics = await marketplaceService.getSearchAnalytics(
@@ -968,10 +968,10 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         user_id
       );
       return reply.send(analytics);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch search analytics' });
-    }
+
   });
 
   fastify.get('/analytics/search/popular-terms', {
@@ -982,24 +982,24 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         properties: {
           timeframe: { type: 'string', enum: ['day', 'week', 'month'], default: 'week' },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
     const { timeframe = 'week', limit = 20 } = request.query as any;
 
     if (!hasRole(user, ['admin', 'analyst', 'creator'])) {
       return reply.status(403).send({ error: 'Insufficient permissions' });
-    }
+
 
     try {
       const popularTerms = await marketplaceService.getPopularSearchTerms(timeframe, limit);
       return reply.send({ popular_terms: popularTerms });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch popular search terms' });
-    }
+
   });
 
   fastify.get('/analytics/search/insights', {
@@ -1009,14 +1009,13 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
 
     if (!hasRole(user, ['admin', 'analyst'])) {
       return reply.status(403).send({ error: 'Insufficient permissions' });
-    }
+
 
     try {
       const insights = await marketplaceService.getSearchInsights();
       return reply.send(insights);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch search insights' });
-    }
+
   });
-}

@@ -6,69 +6,63 @@
  */
 import React, { useState } from 'react';
 
-}
-export interface MarketplaceTemplate {
-  id: string;
+
+export interface MarketplaceTemplate { id: string;
   title: string;
   description: string;
   thumbnailUrl?: string;
-  price: number; // in cents,
+  price: number; // in cents;
   currency: string;
   tags: string;
-  rating: number; // 0-5 scale,
+  rating: number; // 0-5 scale;
   reviewCount: number;
   creatorName: string;
   creatorAvatar?: string;
-  compatibility: string; // Claude models,
+  compatibility: string; // Claude models;
   isAiGenerated: boolean;
   status: 'draft' | 'listed' | 'blocked' | 'archived';
-  stats: {
+  stats: { }
   downloads: number;
   views: number;
   likes: number;
-}
+
+
 };
   createdAt: Date;
   updatedAt: Date;
-}
-interface MarketplaceCardProps {
-  template: MarketplaceTemplate;
+
+
+interface MarketplaceCardProps { template: MarketplaceTemplate;
   variant?: 'grid' | 'list' | 'featured';
   showActions?: boolean;
   onPreview?: (template: MarketplaceTemplate) => void;
   onPurchase?: (template: MarketplaceTemplate) => void;
   onLike?: (template: MarketplaceTemplate) => void;
   onShare?: (template: MarketplaceTemplate) => void;
-  className?: string;
-}
-}
-export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({)
-  template,
-  variant = 'grid',
-  showActions = true,
-  onPreview,
-  onPurchase,
-  onLike,
-  onShare,
+  className?: string }
+
+export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({ )
+  template
+  variant = 'grid'
+  showActions = true
+  onPreview
+  onPurchase
+  onLike
+  onShare }
   className = ''
-}) => {
-  const [imageError, setImageError] = useState(false);
+}) => { const [imageError, setImageError] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const formatPrice = (cents: number, currency: string) => {,
+  const formatPrice = (cents: number, currency: string) => {
   if (cents === 0) return 'Free';
   const amount = cents / 100;
   return new Intl.NumberFormat('en-US', {)
-  style: 'currency',
-  currency: currency.toUpperCase(),
+  style: 'currency'
+  currency: currency.toUpperCase() }
 }).format(amount);
   };
-  const formatRating = (rating: number) => {
-    return rating.toFixed(1);
-  };
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    onLike?.(template);
-  };
+  const formatRating = (rating: number) => { return rating.toFixed(1) };
+  const handleLike = () => { setIsLiked(!isLiked);
+    onLike?.(template) };
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -80,7 +74,7 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({)
             <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
           </svg>
         );
-      } else if (i === fullStars && hasHalfStar) {
+ else if (i === fullStars && hasHalfStar) {
         stars.push(
           <svg key={i} className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20">
             <defs>
@@ -92,7 +86,7 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({)
             <path fill={`url(#half-${template.id})`} d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />}
           </svg>
         );
-      } else {
+ else {
         stars.push(
           <svg key={i} className="h-4 w-4 text-gray-300" viewBox="0 0 20 20">
             <path fill="currentColor" d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
@@ -207,11 +201,11 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({)
           <div className="absolute top-2 right-2 flex space-x-1">
             <button
               onClick={handleLike}
-              className={`p-1.5 rounded-full transition-colors ${
+              className={ `p-1.5 rounded-full transition-colors ${
   isLiked
   ? 'bg-red-100 text-red-600'
-  : 'bg-white/80 text-gray-600 hover:bg-white',
-}`}
+  : 'bg-white/80 text-gray-600 hover:bg-white' }
+`}
             >
               <svg className="w-4 h-4" fill={isLiked ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />

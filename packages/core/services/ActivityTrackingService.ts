@@ -6,8 +6,7 @@
  * Service for tracking, storing, and querying activity data across the platform.
  * Provides comprehensive activity monitoring with real-time streaming and analytics.
  */
-import { 
-  Activity, 
+import { Activity, 
   ActivityQuery, 
   ActivityQueryResult, 
   ActivityMetrics,
@@ -15,13 +14,13 @@ import {
   ActivityStreamEvent,
   ActivityRetentionPolicy,
   // ActivityType, // Unused import
-  ActivitySeverity,
+  ActivitySeverity }
   BaseActivity
-} from '../types/ActivityDataModel';
+ from '../types/ActivityDataModel';
 
 // Activity Storage Interface
 
-}
+
 export interface ActivityStorage {
   create(activity: Activity): Promise<Activity>;
   findById(id: string): Promise<Activity | null>;
@@ -31,9 +30,10 @@ export interface ActivityStorage {
   bulkCreate(activities: Activity): Promise<Activity>;
   getMetrics(query: ActivityQuery): Promise<ActivityMetrics>;
   // Activity Streaming Interface
-}
-}
-}
+
+
+
+
 export interface ActivityStreaming {
   createStream(filters: ActivityQuery): Promise<ActivityStream>;
   destroyStream(subscriptionId: string): Promise<boolean>;
@@ -41,54 +41,51 @@ export interface ActivityStreaming {
   subscribe(subscriptionId: string, callback: (event: ActivityStreamEvent) => void): Promise<void>;
   unsubscribe(subscriptionId: string): Promise<void>;
   // Activity Service Configuration
-}
-}
-}
-export interface ActivityServiceConfig {
-  storage: ActivityStorage;
+
+
+
+
+export interface ActivityServiceConfig { storage: ActivityStorage;
   streaming?: ActivityStreaming;
   enableRealTime?: boolean;
   enableAnalytics?: boolean;
   enableRetention?: boolean;
   retentionPolicies?: ActivityRetentionPolicy;
   maxBatchSize?: number;
-  flushInterval?: number; // milliseconds,
+  flushInterval?: number; // milliseconds }
   enableCompression?: boolean;
   enableEncryption?: boolean;
-}
-}
-export class ActivityTrackingService {
-  private config: ActivityServiceConfig;
+
+
+export class ActivityTrackingService { private config: ActivityServiceConfig;
   private pendingActivities: Activity = [];
   private flushTimer?: NodeJS.Timeout;
   private subscribers: Map<string, (event: ActivityStreamEvent) => void> = new Map();
-  constructor(config: ActivityServiceConfig) {,
+  constructor(config: ActivityServiceConfig) {
   this.config = {
-  enableRealTime: true,
-  enableAnalytics: true,
-  enableRetention: true,
-  maxBatchSize: 100,
-  flushInterval: 5000,
-  enableCompression: false,
-  enableEncryption: false,
+  enableRealTime: true
+  enableAnalytics: true
+  enableRetention: true
+  maxBatchSize: 100
+  flushInterval: 5000
+  enableCompression: false
+  enableEncryption: false }
   ...config
 };
     this.startFlushTimer();
   // Core Activity Tracking
-  async trackActivity(activity: Partial<BaseActivity>): Promise<Activity> {
-
-    const fullActivity: Activity = {,
-  id: this.generateActivityId(),
-      timestamp: new Date().toISOString(),
-      severity: 'info',
-      status: 'completed',
-      environment: this.getEnvironment(),
-      metadata: {},
-      tags: [],
-      createdAt: new Date().toISOString(),
-      version: 1,
+  async trackActivity(activity: Partial<BaseActivity>): Promise<Activity> { const fullActivity: Activity = {
+  id: this.generateActivityId()
+      timestamp: new Date().toISOString()
+      severity: 'info'
+      status: 'completed'
+      environment: this.getEnvironment() }
+      metadata: {}
+      tags: []
+      createdAt: new Date().toISOString()
+      version: 1
       ...activity
-    } as Activity;
+ as Activity;
     // Validate activity
     this.validateActivity(fullActivity);
     // Add to pending batch
@@ -99,11 +96,10 @@ export class ActivityTrackingService {
       fullActivity.severity === 'critical'
       await this.flush();
     // Real-time streaming
-    if (this.config.enableRealTime && this.config.streaming) {
-  await this.config.streaming.publishActivity(fullActivity);
+    if (this.config.enableRealTime && this.config.streaming) { await this.config.streaming.publishActivity(fullActivity);
   return fullActivity;
   // User Activity Tracking
-  async trackUserAction(params: {)
+  async trackUserAction(params: {) }
   userId: string;
   userEmail?: string;
   action: string;
@@ -113,24 +109,22 @@ export class ActivityTrackingService {
   component?: string;
   metadata?: Record<string, unknown>;
   severity?: ActivitySeverity;
-}): Promise<Activity> {
-
-  return this.trackActivity({)
-  type: 'user_action',
-  userId: params.userId,
-  userEmail: params.userEmail,
-  action: params.action,
-  description: params.description,
-  category: params.category,
-  source: 'user-interface',
-  severity: params.severity || 'info',
+}): Promise<Activity> { return this.trackActivity({)
+  type: 'user_action'
+  userId: params.userId
+  userEmail: params.userEmail
+  action: params.action
+  description: params.description
+  category: params.category
+  source: 'user-interface'
+  severity: params.severity || 'info'
   metadata: {
-  page: params.page,
-  component: params.component,
+  page: params.page
+  component: params.component }
   ...params.metadata
 });
   // System Event Tracking
-  async trackSystemEvent(params: {)
+  async trackSystemEvent(params: { ) }
   source: string;
   action: string;
   description: string;
@@ -138,23 +132,21 @@ export class ActivityTrackingService {
   severity?: ActivitySeverity;
   systemMetrics?: unknown;
   metadata?: Record<string, unknown>;
-}): Promise<Activity> {
-
-  return this.trackActivity({)
-  type: 'system_event',
-  source: params.source,
-  action: params.action,
-  description: params.description,
-  category: params.category,
-  severity: params.severity || 'info',
+}): Promise<Activity> { return this.trackActivity({)
+  type: 'system_event'
+  source: params.source
+  action: params.action
+  description: params.description
+  category: params.category
+  severity: params.severity || 'info'
   metadata: {
-  systemMetrics: params.systemMetrics,
+  systemMetrics: params.systemMetrics }
   ...params.metadata
 });
   // Admin Action Tracking
-  async trackAdminAction(params: {)
+  async trackAdminAction(params: { )
   adminUserId: string;
-  adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support';
+  adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support' }
   action: string;
   description: string;
   targetUserId?: string;
@@ -162,27 +154,25 @@ export class ActivityTrackingService {
   resourceId?: string;
   metadata?: Record<string, unknown>;
   severity?: ActivitySeverity;
-}): Promise<Activity> {
-
-  return this.trackActivity({)
-  type: 'admin_action',
-  userId: params.adminUserId,
-  action: params.action,
-  description: params.description,
-  category: 'administration',
-  source: 'admin-panel',
-  resourceType: params.resourceType,
-  resourceId: params.resourceId,
-  severity: params.severity || 'medium',
+}): Promise<Activity> { return this.trackActivity({)
+  type: 'admin_action'
+  userId: params.adminUserId
+  action: params.action
+  description: params.description
+  category: 'administration'
+  source: 'admin-panel'
+  resourceType: params.resourceType
+  resourceId: params.resourceId
+  severity: params.severity || 'medium'
   metadata: {
-  adminLevel: params.adminLevel,
-  targetUserId: params.targetUserId,
+  adminLevel: params.adminLevel
+  targetUserId: params.targetUserId }
   ...params.metadata
 });
   // Security Event Tracking
-  async trackSecurityEvent(params: {)
+  async trackSecurityEvent(params: { )
   threatType: string;
-  threatLevel: 'low' | 'medium' | 'high' | 'critical';
+  threatLevel: 'low' | 'medium' | 'high' | 'critical' }
   source: string;
   action: string;
   description: string;
@@ -191,26 +181,24 @@ export class ActivityTrackingService {
   userAgent?: string;
   forensicData?: unknown;
   metadata?: Record<string, unknown>;
-}): Promise<Activity> {
-
-  return this.trackActivity({)
-  type: 'security_event',
-  action: params.action,
-  description: params.description,
-  category: 'security',
-  source: params.source,
-  severity: this.mapThreatLevelToSeverity(params.threatLevel),
-  ipAddress: params.ipAddress,
-  userAgent: params.userAgent,
+}): Promise<Activity> { return this.trackActivity({)
+  type: 'security_event'
+  action: params.action
+  description: params.description
+  category: 'security'
+  source: params.source
+  severity: this.mapThreatLevelToSeverity(params.threatLevel)
+  ipAddress: params.ipAddress
+  userAgent: params.userAgent
   metadata: {
-  threatType: params.threatType,
-  threatLevel: params.threatLevel,
-  blocked: params.blocked,
-  forensicData: params.forensicData,
+  threatType: params.threatType
+  threatLevel: params.threatLevel
+  blocked: params.blocked
+  forensicData: params.forensicData }
   ...params.metadata
 });
   // API Call Tracking
-  async trackApiCall(params: {)
+  async trackApiCall(params: { ) }
   method: string;
   endpoint: string;
   statusCode: number;
@@ -219,87 +207,80 @@ export class ActivityTrackingService {
   requestSize?: number;
   responseSize?: number;
   metadata?: Record<string, unknown>;
-}): Promise<Activity> {
-
-    const severity = this.getApiCallSeverity(params.statusCode, params.duration);
+}): Promise<Activity> { const severity = this.getApiCallSeverity(params.statusCode, params.duration);
     return this.trackActivity({)
-  type: 'api_call',
+  type: 'api_call' }
       action: `${params.method} ${params.endpoint}`}
-},
+
   description: `API call to ${params.endpoint} returned ${params.statusCode}`}
-},
-  category: 'api',
-      source: 'api-gateway',
-      userId: params.userId,
-      duration: params.duration,
-      severity,
+
+  category: 'api'
+      source: 'api-gateway'
+      userId: params.userId
+      duration: params.duration
+      severity
       status: params.statusCode < 400 ? 'completed' : 'failed',
-      metadata: {
+      metadata: { ,
   method: params.method,
   endpoint: params.endpoint,
   statusCode: params.statusCode,
   requestSize: params.requestSize,
-  responseSize: params.responseSize,
+  responseSize: params.responseSize }
   ...params.metadata
 });
   // Performance Event Tracking
-  async trackPerformanceEvent(params: {)
+  async trackPerformanceEvent(params: { ) }
   source: string;
   metrics: Record<string, number>;
   thresholdViolations?: string;
   metadata?: Record<string, unknown>;
-}): Promise<Activity> {
-
-    const severity = params.thresholdViolations?.length ? 'high' : 'info';
+}): Promise<Activity> { const severity = params.thresholdViolations?.length ? 'high' : 'info';
     return this.trackActivity({)
-  type: 'performance_event',
-      action: 'performance_measurement',
+  type: 'performance_event'
+      action: 'performance_measurement' }
       description: `Performance metrics collected from ${params.source}`}
-},
-  category: 'performance',
-      source: params.source,
-      severity,
-      metadata: {
-  metrics: params.metrics,
-  thresholdViolations: params.thresholdViolations,
+
+  category: 'performance'
+      source: params.source
+      severity
+      metadata: { 
+  metrics: params.metrics
+  thresholdViolations: params.thresholdViolations }
   ...params.metadata
 });
   // Activity Querying
-  async queryActivities(query: ActivityQuery): Promise<ActivityQueryResult> {
-
-  return this.config.storage.query(query);
+  async queryActivities(query: ActivityQuery): Promise<ActivityQueryResult> { return this.config.storage.query(query);
   // Get Activity Metrics
-  async getMetrics(query: ActivityQuery): Promise<ActivityMetrics> {,
+  async getMetrics(query: ActivityQuery): Promise<ActivityMetrics> {
   if (!this.config.enableAnalytics) {
   throw new Error('Analytics is disabled');
   return this.config.storage.getMetrics(query);
   // Real-time Streaming
-  async createActivityStream(filters: ActivityQuery): Promise<ActivityStream> {,
+  async createActivityStream(filters: ActivityQuery): Promise<ActivityStream> {
   if (!this.config.enableRealTime || !this.config.streaming) {
   throw new Error('Real-time streaming is disabled');
   return this.config.streaming.createStream(filters);
   async subscribeToActivityStream(()
-  subscriptionId: string,
-  callback: (event: ActivityStreamEvent) => void): Promise<void> {,
+  subscriptionId: string
+  callback: (event: ActivityStreamEvent) => void): Promise<void> {
   if (!this.config.streaming) {
   throw new Error('Streaming is not configured');
   this.subscribers.set(subscriptionId, callback);
   await this.config.streaming.subscribe(subscriptionId, callback);
-  async unsubscribeFromActivityStream(subscriptionId: string): Promise<void> {,
+  async unsubscribeFromActivityStream(subscriptionId: string): Promise<void> {
   if (!this.config.streaming) {
   throw new Error('Streaming is not configured');
   this.subscribers.delete(subscriptionId);
   await this.config.streaming.unsubscribe(subscriptionId);
   // Activity Management
-  async updateActivity(id: string, updates: Partial<Activity>): Promise<Activity> {,
+  async updateActivity(id: string, updates: Partial<Activity>): Promise<Activity> {
   const updatedActivity = await this.config.storage.update(id, {)
-  ...updates,
-  updatedAt: new Date().toISOString(),
-  version: (updates.version || 1) + 1,
+  ...updates
+  updatedAt: new Date().toISOString()
+  version: (updates.version || 1) + 1 }
 });
     // Notify subscribers of update
-    if (this.config.enableRealTime && this.config.streaming) {
-      await this.config.streaming.publishActivity(updatedActivity);
+    if (this.config.enableRealTime && this.config.streaming) { await this.config.streaming.publishActivity(updatedActivity);
     return updatedActivity;
   async getActivity(id: string): Promise<Activity | null> {
 
@@ -311,15 +292,15 @@ export class ActivityTrackingService {
   async trackActivities(activities: Partial<BaseActivity>[]): Promise<Activity> {
 
     const fullActivities = activities.map(activity => ({)
-  id: this.generateActivityId(),
-      timestamp: new Date().toISOString(),
-      severity: 'info' as ActivitySeverity,
-      status: 'completed' as const,
-      environment: this.getEnvironment(),
-      metadata: {},
-      tags: [],
-      createdAt: new Date().toISOString(),
-      version: 1,
+  id: this.generateActivityId()
+      timestamp: new Date().toISOString()
+      severity: 'info' as ActivitySeverity
+      status: 'completed' as const
+      environment: this.getEnvironment() }
+      metadata: {}
+      tags: []
+      createdAt: new Date().toISOString()
+      version: 1
       ...activity
     })) as Activity;
     // Validate all activities
@@ -327,23 +308,19 @@ export class ActivityTrackingService {
     // Store in batch
     const storedActivities = await this.config.storage.bulkCreate(fullActivities);
     // Real-time streaming for batch
-    if (this.config.enableRealTime && this.config.streaming) {
-  for (const activity of storedActivities) {
+    if (this.config.enableRealTime && this.config.streaming) { for (const activity of storedActivities) {
   await this.config.streaming.publishActivity(activity);
   return storedActivities;
   // Flush pending activities
-  async flush(): Promise<void> {,
+  async flush(): Promise<void> { }
   if (this.pendingActivities.length === 0) return;
   const activitiesToFlush = [...this.pendingActivities];
   this.pendingActivities = [];
-  try {
-  await this.config.storage.bulkCreate(activitiesToFlush);
-} catch (error) {
-  // Re-add activities back to pending if flush fails
+  try { await this.config.storage.bulkCreate(activitiesToFlush) } catch (error) { // Re-add activities back to pending if flush fails
   this.pendingActivities.unshift(...activitiesToFlush);
   throw error;
   // Cleanup and shutdown
-  async shutdown(): Promise<void> {,
+  async shutdown(): Promise<void> {
   if (this.flushTimer) {
   clearInterval(this.flushTimer);
   // Flush any remaining activities
@@ -352,12 +329,10 @@ export class ActivityTrackingService {
   for (const subscriptionId of this.subscribers.keys()) {
   await this.unsubscribeFromActivityStream(subscriptionId);
   // Private helper methods
-  private startFlushTimer(): void {,
-  if (this.config.flushInterval) {
-  this.flushTimer = setInterval(() => {
+  private startFlushTimer(): void { }
+  if (this.config.flushInterval) { this.flushTimer = setInterval(() => {
   this.flush().catch(error => {)
-  console.error('Failed to flush pending activities:', error);
-});
+  console.error('Failed to flush pending activities:', error) });
       }, this.config.flushInterval);
   private generateActivityId(): string {
     return `act_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}

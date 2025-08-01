@@ -92,7 +92,7 @@ retry ?  : {
     enabled: boolean,
     maxRetries: number,
     retryDelay: number,
-    backoffStrategy: 'fixed' | 'exponential' | 'linear'
+    backoffStrategy: 'fixed' | 'exponential' | 'linear',
 };
 // Timeout configuration
 timeout ?  : {
@@ -280,7 +280,7 @@ export var StorageExtensionHelpers;
             },
             metadata: config.metadata || {
                 author: 'Unknown',
-                license: 'MIT'
+                license: 'MIT',
             }
         };
     }

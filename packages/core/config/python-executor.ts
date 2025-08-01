@@ -3,9 +3,8 @@
  * Epic 8 Story 8.1.4: Configuration management for Python executor
  */
 
-}
-export interface PythonExecutorConfig {
-  // Service connection
+
+export interface PythonExecutorConfig { // Service connection
   serviceUrl: string;
   apiKey?: string;
   // Request settings
@@ -31,50 +30,50 @@ export interface PythonExecutorConfig {
   // Development
   enableDebugLogs: boolean;
   enableValidation: boolean;
-  const DEFAULT_CONFIG: PythonExecutorConfig = {,
+  const DEFAULT_CONFIG: PythonExecutorConfig = {;
   // Service connection
-  serviceUrl: process.env.PYTHON_EXECUTOR_URL || 'http://localhost:8001',
-  apiKey: process.env.PYTHON_EXECUTOR_API_KEY,
+  serviceUrl: process.env.PYTHON_EXECUTOR_URL || 'http://localhost:8001';
+  apiKey: process.env.PYTHON_EXECUTOR_API_KEY;
   // Request settings
-  timeout: 30000, // 30 seconds,
-  retryAttempts: 3,
-  retryDelay: 1000, // 1 second,
+  timeout: 30000, // 30 seconds;
+  retryAttempts: 3;
+  retryDelay: 1000, // 1 second;
   // Resource limits
-  defaultMemoryLimit: '128MB',
-  defaultTimeout: 30,
-  maxMemoryLimit: '1GB',
-  maxTimeout: 300,
+  defaultMemoryLimit: '128MB';
+  defaultTimeout: 30;
+  maxMemoryLimit: '1GB';
+  maxTimeout: 300;
   // Security settings
-  strictMode: true,
-  enableCaching: true,
-  allowedModules: [,
-  'json', 'math', 'datetime', 'random', 'string', 'itertools',
-  'collections', 'functools', 'operator', 'copy', 'uuid', 'hashlib',
+  strictMode: true;
+  enableCaching: true;
+  allowedModules: [
+  'json', 'math', 'datetime', 'random', 'string', 'itertools';
+  'collections', 'functools', 'operator', 'copy', 'uuid', 'hashlib';
   're', 'base64'
-  ],
+  ];
   // Fallback behavior
-  fallbackBehavior: 'error',
-  defaultOutput: '',
+  fallbackBehavior: 'error';
+  defaultOutput: '';
   // Monitoring
-  enableMetrics: process.env.NODE_ENV !== 'production',
-  enableTracing: process.env.NODE_ENV !== 'production',
-  enableAuditLogs: true,
+  enableMetrics: process.env.NODE_ENV !== 'production';
+  enableTracing: process.env.NODE_ENV !== 'production';
+  enableAuditLogs: true;
   // Development
-  enableDebugLogs: process.env.NODE_ENV === 'development',
-  enableValidation: true,
-}
+  enableDebugLogs: process.env.NODE_ENV === 'development';
+  enableValidation: true }
+
+
 };
 /**
  * Configuration manager for Python executor
  */
-}
-export class PythonExecutorConfigManager {
-  private config: PythonExecutorConfig;
+
+export class PythonExecutorConfigManager { private config: PythonExecutorConfig;
   private listeners: ((config: PythonExecutorConfig) => void)[] = [];
-  constructor(initialConfig?: Partial<PythonExecutorConfig>) {,
+  constructor(initialConfig?: Partial<PythonExecutorConfig>) {
   this.config = {
-  ...DEFAULT_CONFIG,
-  ...this.loadFromEnvironment(),
+  ...DEFAULT_CONFIG
+  ...this.loadFromEnvironment() }
   ...initialConfig
 };
   /**
@@ -92,9 +91,9 @@ export class PythonExecutorConfigManager {
     this.validateConfig();
     // Notify listeners
     this.notifyListeners();
-    console.log('Python executor configuration updated:', {)
-  changed: this.getChangedFields(oldConfig, this.config),
-  config: this.config,
+    console.log('Python executor configuration updated:', { )
+  changed: this.getChangedFields(oldConfig, this.config)
+  config: this.config }
 });
   /**
    * Reset configuration to defaults
@@ -152,12 +151,9 @@ export class PythonExecutorConfigManager {
   private validateConfig(): void {
     const { config } = this;
     // Validate service URL
-    if (!config.serviceUrl) {
-      throw new Error('Python executor service URL is required');
+    if (!config.serviceUrl) { throw new Error('Python executor service URL is required');
     try {
-      new URL(config.serviceUrl);
-    } catch {
-  throw new Error('Python executor service URL must be a valid URL');
+      new URL(config.serviceUrl) } catch { throw new Error('Python executor service URL must be a valid URL');
   // Validate timeouts
   if (config.timeout <= 0) {
   throw new Error('Timeout must be positive');
@@ -212,62 +208,54 @@ export class PythonExecutorConfigManager {
   /**
   * Notify all listeners of configuration changes
   */
-  private notifyListeners(): void {,
-  for (const listener of this.listeners) {
-  try {
-  listener(this.config);
-} catch (error) {
-  console.error('Error in Python executor config listener:', error);
+  private notifyListeners(): void { }
+  for (const listener of this.listeners) { try {
+  listener(this.config) } catch (error) { console.error('Error in Python executor config listener:', error);
   /**
   * Get configuration for a specific environment
   */
-  getEnvironmentConfig(environment: 'development' | 'staging' | 'production'): Partial<PythonExecutorConfig> {,
+  getEnvironmentConfig(environment: 'development' | 'staging' | 'production'): Partial<PythonExecutorConfig> {
   switch (environment) {
-  case 'development':,
+  case 'development':
   return {
-  enableDebugLogs: true,
-  enableMetrics: true,
-  enableTracing: true,
-  strictMode: false,
-  timeout: 60000 // Longer timeout for development,
+  enableDebugLogs: true
+  enableMetrics: true
+  enableTracing: true
+  strictMode: false
+  timeout: 60000 // Longer timeout for development }
 };
     case 'staging':
-      return {
-  enableDebugLogs: false,
-  enableMetrics: true,
-  enableTracing: true,
-  strictMode: true,
-  timeout: 45000,
+      return { enableDebugLogs: false
+  enableMetrics: true
+  enableTracing: true
+  strictMode: true
+  timeout: 45000 }
 };
     case 'production':
-      return {
-  enableDebugLogs: false,
-  enableMetrics: false,
-  enableTracing: false,
-  strictMode: true,
-  timeout: 30000,
+      return { enableDebugLogs: false
+  enableMetrics: false
+  enableTracing: false
+  strictMode: true
+  timeout: 30000 }
 };
     default:
       return {};
   /**
    * Apply environment-specific configuration
    */
-  applyEnvironmentConfig(environment: 'development' | 'staging' | 'production'): void {
-  const envConfig = this.getEnvironmentConfig(environment);
+  applyEnvironmentConfig(environment: 'development' | 'staging' | 'production'): void { const envConfig = this.getEnvironmentConfig(environment);
   this.update(envConfig);
   /**
   * Export configuration as JSON
   */
-  toJSON(): string {,
+  toJSON(): string {
   return JSON.stringify(this.config, null, 2);
   /**
   * Import configuration from JSON
   */
-  fromJSON(json: string): void {,
-  try {
-  const config = JSON.parse(json);
-  this.update(config);
-} catch (error) {
+  fromJSON(json: string): void { }
+  try { const config = JSON.parse(json);
+  this.update(config) } catch (error) {
       throw new Error(`Invalid configuration JSON: ${error.message}`);}
 /**
  * Global configuration manager instance

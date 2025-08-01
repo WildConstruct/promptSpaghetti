@@ -7,9 +7,9 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { ComplianceCheckerProps, ComplianceCheck, LegalDocument } from './types';
-}
-interface ComplianceFramework {
-  id: string;
+
+
+interface ComplianceFramework { id: string;
   name: string;
   description: string;
   jurisdiction: string;
@@ -28,82 +28,76 @@ interface ComplianceFramework {
   patterns: RegExp;
   const COMPLIANCE_FRAMEWORKS: ComplianceFramework = [
   {
-  id: 'gdpr',
-  name: 'GDPR (General Data Protection Regulation)',
-  description: 'EU data protection and privacy regulation',
-  jurisdiction: 'European Union',
-  enabled: true,
-  categories: [,
+  id: 'gdpr';
+  name: 'GDPR (General Data Protection Regulation)';
+  description: 'EU data protection and privacy regulation';
+  jurisdiction: 'European Union';
+  enabled: true;
+  categories: [
   {
-  id: 'data_processing',
-  name: 'Data Processing',
-  requirements: [,
+  id: 'data_processing';
+  name: 'Data Processing';
+  requirements: [
   {
-  id: 'lawful_basis',
-  title: 'Lawful Basis for Processing',
-  description: 'Must specify lawful basis for data processing',
-  severity: 'critical',
-  keywords: ['consent', 'contract', 'legal obligation', 'vital interests', 'public task', 'legitimate interests'],
-  patterns: [/lawful\s+basis/gi, /consent/gi, /data\s+processing/gi],
-}
-}
-          {
-  id: 'data_subject_rights',
+  id: 'lawful_basis';
+  title: 'Lawful Basis for Processing';
+  description: 'Must specify lawful basis for data processing';
+  severity: 'critical';
+  keywords: ['consent', 'contract', 'legal obligation', 'vital interests', 'public task', 'legitimate interests'];
+  patterns: [/lawful\s+basis/gi, /consent/gi, /data\s+processing/gi] }
+
+
+
+          { id: 'data_subject_rights',
   title: 'Data Subject Rights',
   description: 'Must include provisions for data subject rights',
   severity: 'high',
-  keywords: ['right to access', 'right to rectification', 'right to erasure', 'data portability'],
-  patterns: [/data\s+subject\s+rights/gi, /right\s+to\s+access/gi, /right\s+to\s+erasure/gi]]
-  ]
-}
-  {
-  id: 'ccpa',
+  keywords: ['right to access', 'right to rectification', 'right to erasure', 'data portability'] }
+  patterns: [/data\s+subject\s+rights/gi, /right\s+to\s+access/gi, /right\s+to\s+erasure/gi]]]
+
+  { id: 'ccpa',
   name: 'CCPA (California Consumer Privacy Act)',
   description: 'California state privacy law',
   jurisdiction: 'California, USA',
   enabled: true,
-  categories: [,
+  categories: [
   {
   id: 'consumer_rights',
   name: 'Consumer Rights',
-  requirements: [,
+  requirements: [
   {
   id: 'right_to_know',
   title: 'Right to Know',
   description: 'Must inform consumers about data collection',
   severity: 'high',
-  keywords: ['right to know', 'personal information', 'data collection'],
-  patterns: [/right\s+to\s+know/gi, /personal\s+information/gi]]
-  ]
-}
-  {
-  id: 'hipaa',
+  keywords: ['right to know', 'personal information', 'data collection'] }
+  patterns: [/right\s+to\s+know/gi, /personal\s+information/gi]]]
+
+  { id: 'hipaa',
   name: 'HIPAA (Health Insurance Portability and Accountability Act)',
   description: 'US healthcare privacy and security regulation',
   jurisdiction: 'United States',
   enabled: false,
-  categories: [,
+  categories: [
   {
   id: 'phi_protection',
   name: 'PHI Protection',
-  requirements: [,
+  requirements: [
   {
   id: 'phi_safeguards',
   title: 'Protected Health Information Safeguards',
   description: 'Must include safeguards for PHI',
   severity: 'critical',
   keywords: ['protected health information', 'PHI', 'healthcare', 'medical records'],
-  patterns: [/protected\s+health\s+information/gi, /\bPHI\b/gi, /medical\s+records/gi]]
-  ]
+  patterns: [/protected\s+health\s+information/gi, /\bPHI\b/gi, /medical\s+records/gi]]]
   ];
-  export const ComplianceChecker: React.FC<ComplianceCheckerProps> = ({,)
-  document,
-  regulations = ['gdpr', 'ccpa'],
-  onComplianceResults,
-  autoCheck = true,
+  export const ComplianceChecker: React.FC<ComplianceCheckerProps> = ({)
+  document
+  regulations = ['gdpr', 'ccpa']
+  onComplianceResults
+  autoCheck = true }
   className = ''
-}) => {
-  const [isChecking, setIsChecking] = useState(false);
+}) => { const [isChecking, setIsChecking] = useState(false);
   const [checkProgress, setCheckProgress] = useState(0);
   const [complianceResults, setComplianceResults] = useState<ComplianceCheck>([]);
   const [selectedFrameworks, setSelectedFrameworks] = useState<string>(regulations);
@@ -119,34 +113,30 @@ interface ComplianceFramework {
   let totalRequirements = 0;
   frameworks.forEach(framework => {)
   framework.categories.forEach(category => {)
-  totalRequirements += category.requirements.length;
-});
+  totalRequirements += category.requirements.length });
     });
     let checkedRequirements = 0;
-    for (const framework of frameworks) {
-      for (const category of framework.categories) {
+    for (const framework of frameworks) { for (const category of framework.categories) {
         for (const requirement of category.requirements) {
           const checkResult = await checkRequirement(;);
-            document, 
-            framework, 
-            category, 
+            document
+            framework
+            category }
             requirement
           );
-          if (checkResult) {
-            results.push(checkResult);
+          if (checkResult) { results.push(checkResult);
           checkedRequirements++;
           setCheckProgress((checkedRequirements / totalRequirements) * 100);
           // Small delay to show progress
           await new Promise(resolve => setTimeout(resolve, 100));
     setComplianceResults(results);
     onComplianceResults(results);
-    setIsChecking(false);
-  }, [document, selectedFrameworks, onComplianceResults]);
+    setIsChecking(false) }, [document, selectedFrameworks, onComplianceResults]);
   const checkRequirement = async (;);
-    doc: LegalDocument,
-    framework: ComplianceFramework,
-    category: ComplianceCategory,
-    requirement: ComplianceRequirement): Promise<ComplianceCheck | null> => {,
+    doc: LegalDocument
+    framework: ComplianceFramework
+    category: ComplianceCategory
+    requirement: ComplianceRequirement): Promise<ComplianceCheck | null> => {
     const content = doc.content.toLowerCase();
     // Check for keyword matches
     const keywordMatches = requirement.keywords.filter(keyword => ;);
@@ -164,102 +154,87 @@ interface ComplianceFramework {
       if (keywordMatches.length >= requirement.keywords.length * 0.7) {
         status = 'compliant';
         description = `Document appears to address ${requirement.title} requirements`;}
-      } else {
+ else {
         status = 'partial';
         description = `Document partially addresses ${requirement.title} but may be missing some requirements`;}
         remediation = [
           `Review ${requirement.title} requirements`}
-}
-          'Consider adding missing provisions',
+
+          'Consider adding missing provisions'
           'Consult with legal counsel for completeness'
         ];
-    } else {
+ else {
       status = 'non_compliant';
       description = `Document does not appear to address ${requirement.title} requirements`;}
       remediation = [
         `Add provisions for ${requirement.title}`}
-}
+
         `Include relevant ${framework.name} clauses`}
-}
+
         'Review regulatory requirements with legal team'
       ];
     return {
       id: `${framework.id}_${requirement.id}`}
-},
+
   regulation: `${framework.name} - ${requirement.title}`}
-},
-  requirement: requirement.description,
-      status,
-      severity: requirement.severity === 'critical' ? 'critical' : ,
+
+  requirement: requirement.description
+      status
+      severity: requirement.severity === 'critical' ? 'critical' : 
         requirement.severity === 'high' ? 'error' :
-          requirement.severity === 'medium' ? 'warning' : 'info',
-      description,
-      remediation: remediation.length > 0 ? remediation : undefined,
+          requirement.severity === 'medium' ? 'warning' : 'info'
+      description
+      remediation: remediation.length > 0 ? remediation : undefined
       affectedSections: [] // Would be populated with actual section analysis;
   };
   };
-  useEffect(() => {
-    if (autoCheck && document && document.content) {
-      runComplianceCheck();
-  }, [autoCheck, document, runComplianceCheck]);
-  const toggleFramework = (frameworkId: string) => {
-  setSelectedFrameworks(prev => )
+  useEffect(() => { if (autoCheck && document && document.content) {
+      runComplianceCheck() }, [autoCheck, document, runComplianceCheck]);
+  const toggleFramework = (frameworkId: string) => { setSelectedFrameworks(prev => )
   prev.includes(frameworkId)
   ? prev.filter(id => id !== frameworkId)
-  : [...prev, frameworkId]);
-};
-  const toggleExpanded = (resultId: string) => {
-    setExpandedResults(prev => {)
+  : [...prev, frameworkId]) };
+  const toggleExpanded = (resultId: string) => { setExpandedResults(prev => {)
   const newSet = new Set(prev);
       if (newSet.has(resultId)) {
-        newSet.delete(resultId);
-      } else {
-        newSet.add(resultId);
-      return newSet;
-    });
+        newSet.delete(resultId) } else { newSet.add(resultId);
+      return newSet });
   };
-  const filteredResults = complianceResults.filter(result => {)
+  const filteredResults = complianceResults.filter(result => { )
   if (filterSeverity !== 'all' && result.severity !== filterSeverity) {
       return false;
     if (filterStatus !== 'all' && result.status !== filterStatus) {
       return false;
-    return true;
-  });
-  const getSeverityColor = (severity: string) => {
-  switch (severity) {
+    return true });
+  const getSeverityColor = (severity: string) => { switch (severity) {
   case 'critical': return '#e53e3e';
   case 'error': return '#f56565';
   case 'warning': return '#ed8936';
   case 'info': return '#4299e1';
-  default: return '#718096';
-};
-  const getStatusColor = (status: string) => {
-  switch (status) {
+  default: return '#718096' };
+  const getStatusColor = (status: string) => { switch (status) {
   case 'compliant': return '#48bb78';
   case 'partial': return '#ed8936';
   case 'non_compliant': return '#f56565';
   case 'unknown': return '#718096';
-  default: return '#718096';
-};
-  const getStatusIcon = (status: string) => {
-  switch (status) {
+  default: return '#718096' };
+  const getStatusIcon = (status: string) => { switch (status) {
   case 'compliant': return '✅';
   case 'partial': return '⚠️';
   case 'non_compliant': return '❌';
   case 'unknown': return '❓';
-  default: return '❓';
-};
+  default: return '❓' };
   return;
     <div className={`compliance-checker ${className}`}>}
       <style>
-        {`
+        { `
           .compliance-checker {
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
           .checker-header {
-            background: #f7fafc;
+            background: #f7fafc
   padding: 1.5rem;
             border-bottom: 1px solid #e2e8f0;
           .checker-title {
@@ -276,19 +251,19 @@ interface ComplianceFramework {
             display: flex;
             align-items: center;
   gap: 0.5rem;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1rem
   background: white;
             border: 1px solid #cbd5e0;
             border-radius: 6px;
   cursor: pointer;
             transition: all 0.2s;
             font-size: 0.9rem;
-          .framework-toggle:hover {,
+          .framework-toggle:hover {
   background: #f7fafc;
             border-color: #a0aec0;
           .framework-toggle.selected {
             background: #ebf8ff;
-            border-color: #4299e1;
+            border-color: #4299e1
   color: #2b6cb0;
           .framework-checkbox {
             margin: 0;
@@ -297,7 +272,7 @@ interface ComplianceFramework {
   gap: 1rem;
             align-items: center;
           .check-button {
-            background: #4299e1;
+            background: #4299e1
   color: white;
             border: none;
   padding: 0.5rem 1rem;
@@ -305,22 +280,22 @@ interface ComplianceFramework {
   cursor: pointer;
             font-weight: 500;
   transition: background 0.2s;
-          .check-button:hover:not(:disabled) {,
+          .check-button:hover:not(:disabled) {
   background: #3182ce;
-          .check-button:disabled {,
-  background: #cbd5e0;
-            cursor: not-allowed;
+          .check-button:disabled {
+  background: #cbd5e0
+  cursor: not-allowed;
           .progress-container {
             flex: 1;
             margin-left: 1rem;
           .progress-bar {
-            width: 100%;
+            width: 100%
   height: 6px;
             background: #e2e8f0;
             border-radius: 3px;
   overflow: hidden;
           .progress-fill {
-            height: 100%;
+            height: 100%
   background: #4299e1;
             border-radius: 3px;
   transition: width 0.3s ease;
@@ -337,7 +312,7 @@ interface ComplianceFramework {
             align-items: center;
   gap: 0.5rem;
           .filter-select {
-            padding: 0.25rem 0.5rem;
+            padding: 0.25rem 0.5rem
   border: 1px solid #cbd5e0;
             border-radius: 4px;
             font-size: 0.9rem;
@@ -347,7 +322,7 @@ interface ComplianceFramework {
             gap: 1rem;
             margin-bottom: 1.5rem;
           .summary-card {
-            background: #f7fafc;
+            background: #f7fafc
   padding: 1rem;
             border-radius: 6px;
             text-align: center;
@@ -357,7 +332,7 @@ interface ComplianceFramework {
             font-weight: bold;
             margin-bottom: 0.25rem;
           .summary-label {
-            font-size: 0.8rem;
+            font-size: 0.8rem
   color: #718096;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -377,7 +352,7 @@ interface ComplianceFramework {
             justify-content: space-between;
             align-items: center;
   transition: background 0.2s;
-          .result-header:hover {,
+          .result-header:hover {
   background: #edf2f7;
           .result-title-section {
             display: flex;
@@ -391,7 +366,7 @@ interface ComplianceFramework {
   color: #2d3748;
             margin: 0 0 0.25rem 0;
           .result-regulation {
-            font-size: 0.9rem;
+            font-size: 0.9rem
   color: #718096;
           .result-badges {
             display: flex;
@@ -411,10 +386,10 @@ interface ComplianceFramework {
             transform: rotate(180deg);
           .result-details {
             padding: 1rem;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid #e2e8f0
   background: white;
           .result-description {
-            font-size: 0.9rem;
+            font-size: 0.9rem
   color: #4a5568;
             margin-bottom: 1rem;
             line-height: 1.5;
@@ -432,16 +407,16 @@ interface ComplianceFramework {
           .remediation-item {
             padding: 0.5rem 0;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.9rem;
+            font-size: 0.9rem
   color: #4a5568;
             display: flex;
-            align-items: flex-start;
+            align-items: flex-start
   gap: 0.5rem;
           .remediation-item:last-child {
             border-bottom: none;
-          .remediation-item:before {,
-  content: "→";
-            color: #4299e1;
+          .remediation-item:before {
+  content: "→" }
+  color: #4299e1;
             font-weight: bold;
           .no-results {
             text-align: center;

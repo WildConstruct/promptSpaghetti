@@ -14,8 +14,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { 
-  Users, 
+import { Users, 
   Shield, 
   Key, 
   Clock, 
@@ -36,11 +35,10 @@ import {
   AlertCircle,
   Lock,
   Unlock,
-  Crown,
+  Crown }
   Activity
-} from 'lucide-react';
-import {
-  systemAccessManager,
+ from 'lucide-react';
+import { systemAccessManager,
   SystemUser,
   SystemRole,
   AccessRequest,
@@ -48,16 +46,18 @@ import {
   AccessStats,
   UserStatus,
   SystemAccessLevel,
-  SecurityClearance,
+  SecurityClearance }
   AccessRequestStatus
-} from '../../services/SystemAccessManager';
-}
+ from '../../services/SystemAccessManager';
+
+
 interface SystemAccessDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-const ACCESS_LEVEL_CONFIG = {
-}
+  const ACCESS_LEVEL_CONFIG = {
+
+},
   none: { color: 'text-gray-600 bg-gray-100', icon: Lock, priority: 0 },
   basic: { color: 'text-blue-600 bg-blue-100', icon: Users, priority: 1 },
   advanced: { color: 'text-green-600 bg-green-100', icon: Key, priority: 2 },
@@ -74,9 +74,9 @@ const STATUS_CONFIG = {
   deactivated: { color: 'text-gray-600 bg-gray-100', icon: UserMinus }
 };
 
-export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
-  className = '',
-  userId,
+export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({ )
+  className = ''
+  userId }
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState('users');
@@ -91,20 +91,17 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
   const [statusFilter, setStatusFilter] = useState<UserStatus | 'all'>('all');
   const [accessLevelFilter, setAccessLevelFilter] = useState<SystemAccessLevel | 'all'>('all');
   // Load data
-  useEffect(() => {
-    loadData();
+  useEffect(() => { loadData();
     const interval = setInterval(loadData, 30000); // Refresh every 30 seconds;
-    return () => clearInterval(interval);
-  }, []);
-  const loadData = async () => {
-  try {
+    return () => clearInterval(interval) }, []);
+  const loadData = async () => { try {
   setIsLoading(true);
   // Load users
-  const filter: AccessFilter = {,
-  searchQuery: searchQuery || undefined,
-  statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
-  accessLevels: accessLevelFilter !== 'all' ? [accessLevelFilter] : undefined,
-  includeInactive: true,
+  const filter: AccessFilter = {
+  searchQuery: searchQuery || undefined
+  statuses: statusFilter !== 'all' ? [statusFilter] : undefined
+  accessLevels: accessLevelFilter !== 'all' ? [accessLevelFilter] : undefined
+  includeInactive: true }
 };
       const usersList = systemAccessManager.getUsers(filter);
       setUsers(usersList);
@@ -113,70 +110,53 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
       setStats(statsData);
       // Mock access requests - in real implementation, this would come from the service
       setAccessRequests([)
-        {
-  id: 'req_001',
-  requesterId: 'user_001',
-  requesterName: 'John Doe',
-  type: 'role_assignment',
-  targetUserId: 'user_002',
-  roleId: 'admin',
-  businessJustification: 'Need admin access for project management',
-  urgency: 'medium',
-  status: 'pending',
-  approvers: [{,
-  userId: 'admin_001',
-  displayName: 'System Admin',
-  order: 1,
-  required: true,
-  status: 'pending',
-}],
-          requestedAt: new Date(),
+        { id: 'req_001'
+  requesterId: 'user_001'
+  requesterName: 'John Doe'
+  type: 'role_assignment'
+  targetUserId: 'user_002'
+  roleId: 'admin'
+  businessJustification: 'Need admin access for project management'
+  urgency: 'medium'
+  status: 'pending'
+  approvers: [{
+  userId: 'admin_001'
+  displayName: 'System Admin'
+  order: 1
+  required: true
+  status: 'pending' }
+]
+          requestedAt: new Date()
           auditTrail: []]);
-    } catch (error) {
-  console.error('Failed to load system access data:', error);
-} finally {
-      setIsLoading(false);
-  };
-  const handleCreateUser = async () => {
-  // Mock user creation
+ catch (error) { console.error('Failed to load system access data:', error) } finally { setIsLoading(false) };
+  const handleCreateUser = async () => { // Mock user creation
   try {
   const _____newUser = await systemAccessManager.createUser({)
-  username: 'newuser',
-  email: 'new@example.com',
-  displayName: 'New User',
-  status: 'pending',
-  isActive: true,
-  isVerified: false,
+  username: 'newuser'
+  email: 'new@example.com'
+  displayName: 'New User'
+  status: 'pending'
+  isActive: true
+  isVerified: false
   profile: {
-  timezone: 'UTC',
-  language: 'en',
-},
-  roles: [],
-        permissions: [],
-        systemAccess: 'basic',
-        mfaEnabled: false,
-        securityClearance: 'public'
+  timezone: 'UTC'
+  language: 'en' }
+
+  roles: []
+        permissions: []
+        systemAccess: 'basic'
+        mfaEnabled: false
+        securityClearance: 'public';
   }, userId || 'admin');
       loadData();
-    } catch (error) {
-  console.error('Failed to create user:', error);
-};
-  const handleAssignRole = async (targetUserId: string, roleId: string) => {
-    try {
+ catch (error) { console.error('Failed to create user:', error) };
+  const handleAssignRole = async (targetUserId: string, roleId: string) => { try {
       await systemAccessManager.assignRole(targetUserId, roleId, userId || 'admin');
-      loadData();
-    } catch (error) {
-  console.error('Failed to assign role:', error);
-};
-  const handleRevokeRole = async (targetUserId: string, roleId: string) => {
-    try {
+      loadData() } catch (error) { console.error('Failed to assign role:', error) };
+  const handleRevokeRole = async (targetUserId: string, roleId: string) => { try {
       await systemAccessManager.revokeRole(targetUserId, roleId, userId || 'admin');
-      loadData();
-    } catch (error) {
-  console.error('Failed to revoke role:', error);
-};
-  const filteredUsers = useMemo(() => {
-    return users.filter(user => {)
+      loadData() } catch (error) { console.error('Failed to revoke role:', error) };
+  const filteredUsers = useMemo(() => { return users.filter(user => {)
   if (searchQuery) {
         const query = searchQuery.toLowerCase();
         if (!user.username.toLowerCase().includes(query) &&
@@ -187,8 +167,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
         return false;
       if (accessLevelFilter !== 'all' && user.systemAccess !== accessLevelFilter) {
         return false;
-      return true;
-    });
+      return true });
   }, [users, searchQuery, statusFilter, accessLevelFilter]);
   const renderUsersTab = () => (;);
     <div className="users-section">
@@ -475,18 +454,18 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
           currentUserId={userId}
         />
       )}
-      <style>{`
+      <style>{ `
         .system-access-dashboard {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
@@ -546,7 +525,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
         .stat-info {
           flex: 1;
         .stat-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin-bottom: 0.25rem;
         .stat-value {
@@ -560,13 +539,13 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
         .stat-change.positive {
           color: #059669;
         .stat-description {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .charts-section {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1rem;
-        .access-level-chart,
+        .access-level-chart
         .status-chart {
           display: flex;
           flex-direction: column;
@@ -589,7 +568,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
           border-radius: 4px;
   overflow: hidden;
         .chart-fill {
-          height: 100%;
+          height: 100% }
   transition: width 0.3s ease;
         .chart-value {
           min-width: 40px;
@@ -642,20 +621,21 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
 };
 
 // User Card Component
-}
-interface UserCardProps {
-  user: SystemUser;
-  onSelect: (user: SystemUser) => void;
-  onAssignRole: (userId: string, roleId: string) => void;
+
+
+interface UserCardProps { user: SystemUser;
+  onSelect: (user: SystemUser) => void
+  onAssignRole: (userId: string, roleId: string) => void
   onRevokeRole: (userId: string, roleId: string) => void;
   currentUserId?: string;
-  const UserCard: React.FC<UserCardProps> = ({ ),
-  user,
-  onSelect,
-  onAssignRole,
-  onRevokeRole,
+  const UserCard: React.FC<UserCardProps> = ({ );
+  user;
+  onSelect;
+  onAssignRole;
+  onRevokeRole }
   currentUserId
-}
+
+
 }) => {
   const statusConfig = STATUS_CONFIG[user.status];
   const accessConfig = ACCESS_LEVEL_CONFIG[user.systemAccess];
@@ -779,25 +759,23 @@ interface UserCardProps {
 };
 
 // Access Request Card Component
-}
-interface AccessRequestCardProps {
-  request: AccessRequest;
-  onApprove: (requestId: string) => void;
+
+
+interface AccessRequestCardProps { request: AccessRequest;
+  onApprove: (requestId: string) => void
   onReject: (requestId: string) => void;
-  const AccessRequestCard: React.FC<AccessRequestCardProps> = ({,)
-  request,
-  onApprove,
+  const AccessRequestCard: React.FC<AccessRequestCardProps> = ({);
+  request;
+  onApprove }
   onReject
-}
-}) => {
-  const getUrgencyColor = (urgency: string) => {,
-  switch (urgency) {
-  case 'critical': return 'text-red-600 bg-red-100';
+
+
+}) => { const getUrgencyColor = (urgency: string) => { }
+  switch (urgency) { case 'critical': return 'text-red-600 bg-red-100';
   case 'high': return 'text-orange-600 bg-orange-100';
   case 'medium': return 'text-yellow-600 bg-yellow-100';
   case 'low': return 'text-blue-600 bg-blue-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
+  default: return 'text-gray-600 bg-gray-100' };
   return;
     <Card className="request-card">
       <CardContent className="p-4">
@@ -857,7 +835,7 @@ interface AccessRequestCardProps {
           </Button>
         </div>
       </CardContent>
-      <style>{`
+      <style>{ `
         .request-header {
           display: flex;
           justify-content: space-between;
@@ -867,7 +845,7 @@ interface AccessRequestCardProps {
           font-weight: 600;
   color: #1f2937;
           margin-bottom: 0.25rem;
-        .request-requester,
+        .request-requester
         .request-time {
           color: #6b7280;
           font-size: 0.875rem;
@@ -892,33 +870,34 @@ interface AccessRequestCardProps {
         .approve-btn {
           background: #059669;
           border-color: #059669;
-        .approve-btn:hover {,
+        .approve-btn:hover {
   background: #047857;
           border-color: #047857;
         .reject-btn {
           color: #dc2626;
           border-color: #dc2626;
-        .reject-btn:hover {,
-  background: #dc2626;
-          color: white;
+        .reject-btn:hover {
+  background: #dc2626 }
+  color: white;
       `}</style>
     </Card>
   );
 };
 
 // User Detail Modal Component
-}
-interface UserDetailModalProps {
-  user: SystemUser;
+
+
+interface UserDetailModalProps { user: SystemUser;
   onClose: () => void;
   onUpdate: () => void;
   currentUserId?: string;
-  const UserDetailModal: React.FC<UserDetailModalProps> = ({,)
-  user,
-  onClose,
-  onUpdate,
+  const UserDetailModal: React.FC<UserDetailModalProps> = ({);
+  user;
+  onClose;
+  onUpdate }
   currentUserId
-}
+
+
 }) => {
   return;
     <div className="modal-overlay">
@@ -1013,12 +992,12 @@ interface UserDetailModalProps {
           <Button onClick={onClose} variant="outline">
             Close
           </Button>
-          <Button onClick={() => { onUpdate(); onClose(); }}>
+          <Button onClick={ () => { onUpdate(); onClose() }}>
             Edit User
           </Button>
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .modal-overlay {
           position: fixed;
   inset: 0;
@@ -1048,7 +1027,7 @@ interface UserDetailModalProps {
           padding: 1.5rem;
         .user-details-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1.5rem;
         .detail-section {
           display: flex;
@@ -1087,7 +1066,7 @@ interface UserDetailModalProps {
           font-size: 0.75rem;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
+          justify-content: flex-end }
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;

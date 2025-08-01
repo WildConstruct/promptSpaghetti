@@ -13,30 +13,25 @@
 import { ConversionEvent, ConversionFunnel } from './ConversionTracker';
 
 }
-export interface EnhancedConversionEvent extends ConversionEvent {
-    deviceFingerprint?: string;
+}
+export interface EnhancedConversionEvent extends ConversionEvent { deviceFingerprint?: string;
     crossDeviceUserId?: string;
     attributionData: {
         touchpoints: TouchPoint[];
         primaryAttribution: AttributionModel;
-        assistedAttribution: AttributionModel[];
-    };
-    privacyConsent: {
-        tracking: boolean;
+        assistedAttribution: AttributionModel[] };
+    privacyConsent: { tracking: boolean;
         analytics: boolean;
         personalization: boolean;
-        crossDevice: boolean;
-    };
-    realTimeProcessing: {
-        streamId: string;
+        crossDevice: boolean };
+    realTimeProcessing: { streamId: string;
         batchId: string;
         processed: boolean;
-        latency: number;
-    };
+        latency: number };
 
 }
-export interface TouchPoint {
-    id: string;
+}
+export interface TouchPoint { id: string;
     timestamp: number;
     channel: MarketingChannel;
     source: string;
@@ -48,45 +43,38 @@ export interface TouchPoint {
     position: number;
     influence: number;
 
-export type MarketingChannel = 'organic_search' | 'paid_search' | 'social_organic' | 'social_paid' | 'email' | 'direct' | 'referral' | 'display' | 'affiliate' | 'video' | 'content_marketing' | 'marketplace_internal';
-
+export type MarketingChannel = 'organic_search' | 'paid_search' | 'social_organic' | 'social_paid' | 'email' | 'direct' | 'referral' | 'display' | 'affiliate' | 'video' | 'content_marketing' | 'marketplace_internal' }
 }
-export interface AttributionModel {
-    name: 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based' | 'data_driven';
+}
+export interface AttributionModel { name: 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based' | 'data_driven';
     weight: number;
     touchpoint: TouchPoint;
-    attribution_value: number;
-
+    attribution_value: number }
 }
-export interface EnhancedConversionFunnel extends ConversionFunnel {
-    crossDeviceTracking: boolean;
+}
+export interface EnhancedConversionFunnel extends ConversionFunnel { crossDeviceTracking: boolean;
     attributionWindow: number;
     conversionDefinition: {
         primaryGoal: ConversionGoal;
         microConversions: ConversionGoal[];
-        macroConversions: ConversionGoal[];
-}
+        macroConversions: ConversionGoal[] }
     };
-    segmentation: {
-        userSegments: UserSegment[];
-        cohortDefinitions: CohortDefinition[];
-    };
-    anomalyDetection: {
-        enabled: boolean;
+    segmentation: { userSegments: UserSegment[];
+        cohortDefinitions: CohortDefinition[] };
+    anomalyDetection: { enabled: boolean;
         thresholds: AnomalyThreshold[];
-        alerting: AlertingConfig;
-    };
+        alerting: AlertingConfig };
 
 }
-export interface ConversionGoal {
-    id: string;
+}
+export interface ConversionGoal { id: string;
     name: string;
     type: 'micro' | 'macro';
     value: number;
     eventPattern: string;
     conditions: Record<string, any>;
-    weight: number;
-
+    weight: number }
+}
 }
 export interface UserSegment {
     id: string;
@@ -95,42 +83,39 @@ export interface UserSegment {
         rules: SegmentRule[];
         operator: 'AND' | 'OR'
 }
+}
   };
     size: number;
     conversionRate: number;
 
 }
-export interface SegmentRule {
-    field: string;
-    operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
-    value: any;
-
 }
-export interface CohortDefinition {
-    id: string;
+export interface SegmentRule { field: string;
+    operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
+    value: any }
+}
+}
+export interface CohortDefinition { id: string;
     name: string;
     criteriaEvent: string;
     criteriaWindow: number;
     analysisWindow: number;
-    retentionPeriods: number[];
-
+    retentionPeriods: number[] }
 }
-export interface AnomalyThreshold {
-    metric: 'conversion_rate' | 'drop_off_rate' | 'time_to_convert' | 'volume';
+}
+export interface AnomalyThreshold { metric: 'conversion_rate' | 'drop_off_rate' | 'time_to_convert' | 'volume';
     threshold: number;
     direction: 'above' | 'below' | 'change';
-    sensitivity: 'low' | 'medium' | 'high';
-
+    sensitivity: 'low' | 'medium' | 'high' }
 }
-export interface AlertingConfig {
-    channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];
+}
+export interface AlertingConfig { channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];
     recipients: string[];
     frequency: 'immediate' | 'hourly' | 'daily';
-    cooldown: number;
-
+    cooldown: number }
 }
-export interface CrossDeviceIdentity {
-    primaryUserId: string;
+}
+export interface CrossDeviceIdentity { primaryUserId: string;
     linkedDevices: DeviceIdentity[];
     confidence: number;
     linkingMethod: 'deterministic' | 'probabilistic' | 'hybrid';
@@ -138,13 +123,13 @@ export interface CrossDeviceIdentity {
     dataRetention: {
         createdAt: number;
         expiresAt: number;
-        purpose: string;
+        purpose: string }
 }
     };
 
 }
-export interface DeviceIdentity {
-    deviceId: string;
+}
+export interface DeviceIdentity { deviceId: string;
     deviceType: 'desktop' | 'mobile' | 'tablet';
     fingerprint: string;
     firstSeen: number;
@@ -152,56 +137,47 @@ export interface DeviceIdentity {
     userAgent: string;
     ipAddress?: string;
     linkedAt: number;
-    linkingSignals: LinkingSignal[];
-
+    linkingSignals: LinkingSignal[] }
 }
-export interface LinkingSignal {
-    type: 'login' | 'email' | 'phone' | 'behavioral' | 'temporal';
+}
+export interface LinkingSignal { type: 'login' | 'email' | 'phone' | 'behavioral' | 'temporal';
     strength: number;
     timestamp: number;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface FunnelStreamConfig {
-    streamName: string;
+}
+export interface FunnelStreamConfig { streamName: string;
     batchSize: number;
     flushInterval: number;
     retryPolicy: {
         maxRetries: number;
         backoffMultiplier: number;
-        maxBackoffTime: number;
+        maxBackoffTime: number }
 }
     };
-    deadLetterQueue: {
-        enabled: boolean;
-        maxAge: number;
-    };
-    partitioning: {
-        strategy: 'user_id' | 'session_id' | 'time_based' | 'random';
-        partitionCount: number;
-    };
+    deadLetterQueue: { enabled: boolean;
+        maxAge: number };
+    partitioning: { strategy: 'user_id' | 'session_id' | 'time_based' | 'random';
+        partitionCount: number };
 
 }
-export interface ConversionPatternInsight {
-    pattern: {
+}
+export interface ConversionPatternInsight { pattern: {
         id: string;
         name: string;
         description: string;
         frequency: number;
-        averageValue: number;
+        averageValue: number }
 }
     };
-    segments: {
-        high_value: UserJourneyPattern;
+    segments: { high_value: UserJourneyPattern;
         high_converting: UserJourneyPattern;
-        at_risk: UserJourneyPattern;
-    };
-    recommendations: {
-        optimization: string[];
+        at_risk: UserJourneyPattern };
+    recommendations: { optimization: string[];
         targeting: string[];
-        personalization: string[];
-    };
+        personalization: string[] };
 
+}
 }
 export interface UserJourneyPattern {
     pattern: string[];
@@ -263,4 +239,5 @@ export declare class ConversionArchitectureManager {
 export declare const conversionArchitecture: ConversionArchitectureManager;
 export default conversionArchitecture;
 //# sourceMappingURL=ConversionFunnelArchitecture.d.ts.map
+}
 }

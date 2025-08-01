@@ -112,7 +112,7 @@ export class NodeGenerator {
             // Validate suggestions have required fields
             for (const suggestion of request.selectedSuggestions) {
                 if (!suggestion.id || !suggestion.nodeType || !suggestion.title) {
-                    throw new Error() `Invalid suggestion: missing required fields (id: ${suggestion.id})},}
+                    throw new Error() `Invalid suggestion: missing required fields (id: ${suggestion.id})},},
   nodeType: ${suggestion.nodeType}
 },
   title: ${suggestion.title}
@@ -265,8 +265,9 @@ draggable: true,
 true;
 ;
 ;
-generateConnections(suggestions, NodeSuggestion);
-nodes: Node,
+generateConnections(suggestions, NodeSuggestion),
+    nodes;
+Node,
     pattern;
 ConnectionPattern;
 ConnectionResult;

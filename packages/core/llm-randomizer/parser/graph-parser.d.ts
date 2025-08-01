@@ -1,8 +1,8 @@
 import { Graph } from '../../graphSchema';
 
 }
-export interface ParserResult {
-    success: boolean;
+}
+export interface ParserResult { success: boolean;
     graph?: Graph;
     errors: ParserError[];
     warnings: ParserError[];
@@ -10,24 +10,23 @@ export interface ParserResult {
         parseTime: number;
         tokenCount: number;
         nodeCount: number;
-        edgeCount: number;
+        edgeCount: number }
 }
     };
 
 }
-export interface ParserError {
-    type: 'lexer' | 'parser' | 'semantic';
+}
+export interface ParserError { type: 'lexer' | 'parser' | 'semantic';
     code: string;
     message: string;
     line?: number;
     column?: number;
     nodeId?: string;
     severity: 'error' | 'warning';
-    suggestion?: string;
-
+    suggestion?: string }
 }
-export interface ParserOptions {
-    tolerateErrors?: boolean;
+}
+export interface ParserOptions { tolerateErrors?: boolean;
     maxErrors?: number;
     validateSchema?: boolean;
     includeAST?: boolean;
@@ -50,19 +49,17 @@ export declare class GraphParser {
     validate(content: string): Promise<{
         isValid: boolean;
         errors: ParserError[];
-        warnings: ParserError[];
+        warnings: ParserError[] }
 }
     }>;
     /**
      * Parse with performance profiling
      */
-    parseWithProfiling(content: string): Promise<ParserResult & {
-        profiling: {
+    parseWithProfiling(content: string): Promise<ParserResult & { profiling: {
             lexerTime: number;
             astTime: number;
             semanticTime: number;
-            totalTime: number;
-        };
+            totalTime: number };
     }>;
     /**
      * Convert lexer errors to parser errors

@@ -4,13 +4,14 @@ import React from 'react';
  */
 
 }
-export interface NodeCategory {
-    id: string;
+}
+export interface NodeCategory { id: string;
     name: string;
     description: string;
-    icon: React.ComponentType<{,
+    icon: React.ComponentType<{ }
         size?: number;
         color?: string;
+}
 }
     }>;
     color: string;
@@ -67,6 +68,7 @@ export declare function getCategoryColor(categoryId: string, opacity?: number): 
  */
 
 }
+}
 export interface CategoryFilterOptions {
     difficulty?: 'beginner' | 'intermediate' | 'advanced';
     usage?: 'common' | 'specialized' | 'experimental';
@@ -76,4 +78,5 @@ export interface CategoryFilterOptions {
  */
 export declare function filterCategories(options: CategoryFilterOptions): NodeCategory[];
 //# sourceMappingURL=NodeCategory.d.ts.map
+}
 }

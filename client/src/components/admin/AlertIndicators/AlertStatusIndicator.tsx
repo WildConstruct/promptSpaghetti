@@ -10,11 +10,12 @@
 import React, { useState } from 'react';
 import { 
   CheckCircle, AlertTriangle, AlertCircle, AlertOctagon, Settings 
-} from 'lucide-react';
+ from 'lucide-react';
 import { AlertCount } from './AlertIndicatorBadge';
 
 export type AlertSystemStatus = 'healthy' | 'warning' | 'critical' | 'maintenance' | 'unknown';
-}
+
+
 interface AlertStatusIndicatorProps {
   alertCounts: AlertCount;
   systemStatus?: AlertSystemStatus;
@@ -23,7 +24,8 @@ interface AlertStatusIndicatorProps {
   showTooltip?: boolean;
   showPulse?: boolean;
   onClick?: () => void;
-  }
+
+
 
 className?: string;
   const AlertStatusIndicator: React.FC<AlertStatusIndicatorProps> = ({
@@ -35,7 +37,7 @@ className?: string;
   showPulse = true,
   onClick,
   className = ''
-}
+
 }) => {
   const [showTooltipState, setShowTooltipState] = useState(false);
   // Calculate system status based on alert counts if not provided
@@ -93,7 +95,7 @@ className?: string;
   };
   // Get size configuration
   const getSizeConfig = (sz: string) => {
-    const configs: Record<string, { icon: string, container: string; tooltip: string }> = {
+    const configs: Record<string, { icon: string, container: string, tooltip: string }> = {
   sm: {
   icon: 'w-4 h-4',
   container: 'p-1.5',
@@ -137,7 +139,7 @@ className?: string;
   const Icon = statusConfig.icon;
   const tooltipContent = getTooltipContent();
   const shouldPulse = showPulse && (currentStatus === 'critical' || currentStatus === 'warning');
-  const indicatorClasses = [;
+  const indicatorClasses = [
     'inline-flex items-center justify-center rounded-full border-2 transition-all duration-200',
     statusConfig.bgColor,
     statusConfig.borderColor,
@@ -146,7 +148,7 @@ className?: string;
     shouldPulse ? 'animate-pulse' : '',
     className
   ].filter(Boolean).join(' ');
-  const iconClasses = [;
+  const iconClasses = [
     statusConfig.color,
     sizeConfig.icon,
     'transition-colors duration-200'
@@ -164,7 +166,7 @@ className?: string;
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onClick();
-        } : undefined}
+ : undefined}
         aria-label={`System status: ${tooltipContent.title}`}
       >
         <Icon className={iconClasses} />

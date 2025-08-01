@@ -15,15 +15,13 @@
  * - Anomaly detection for device changes
  */
 import { EventEmitter } from 'events';
-import { 
-  DeviceFingerprintingService,
+import { DeviceFingerprintingService,
   DeviceFingerprint,
   LocationData,
-  RiskLevel,
+  RiskLevel }
   FingerprintContext
 } from './DeviceFingerprintingService';
-export declare enum TrustStatus {
-    TRUSTED = "trusted",
+export declare enum TrustStatus { TRUSTED = "trusted",
     PENDING = "pending",
     EXPIRED = "expired",
     REVOKED = "revoked",
@@ -33,7 +31,7 @@ export declare enum VerificationMethod {
     EMAIL = "email",
     SMS = "sms",
     PUSH = "push",
-    MFA = "mfa",
+    MFA = "mfa" }
     ADMIN = "admin"
 
 export declare enum TrustLevel {
@@ -43,8 +41,8 @@ export declare enum TrustLevel {
     NONE = "none"
 
 }
-export interface TrustedDevice {
-    id: string;
+}
+export interface TrustedDevice { id: string;
     userId: string;
     deviceId: string;
     fingerprintId: string;
@@ -77,23 +75,22 @@ export interface TrustedDevice {
         notifyOnNewLogin: boolean;
         autoRenew: boolean;
         requirePeriodicVerification: boolean;
-        verificationIntervalDays: number;
+        verificationIntervalDays: number }
 }
     };
     metadata: Record<string, any>;
 
 }
-export interface DeviceVerificationRequest {
-    userId: string;
+}
+export interface DeviceVerificationRequest { userId: string;
     deviceFingerprint: DeviceFingerprint;
     location: LocationData;
     verificationMethod: VerificationMethod;
     challenge?: string;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface TrustDecision {
-    trusted: boolean;
+}
+export interface TrustDecision { trusted: boolean;
     device?: TrustedDevice;
     reason: string;
     riskScore: number;
@@ -105,13 +102,13 @@ export interface TrustDecision {
         riskAcceptable: boolean;
         notExpired: boolean;
         notRevoked: boolean;
-        recentlyVerified: boolean;
+        recentlyVerified: boolean }
 }
     };
 
 }
-export interface TrustedDeviceConfig {
-    maxDevicesPerUser: number;
+}
+export interface TrustedDeviceConfig { maxDevicesPerUser: number;
     defaultTrustDurationDays: number;
     defaultVerificationIntervalDays: number;
     maxLocationRadiusKm: number;
@@ -121,7 +118,7 @@ export interface TrustedDeviceConfig {
     riskThreshold: {
         full: number;
         partial: number;
-        deny: number;
+        deny: number }
 }
     };
     verificationMethods: VerificationMethod[];

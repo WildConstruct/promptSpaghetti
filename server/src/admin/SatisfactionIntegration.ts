@@ -16,8 +16,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface SatisfactionIntegrationConfig {
   enabled: boolean;
   enableSurveyCollection: boolean;
@@ -36,8 +36,9 @@ export interface SatisfactionIntegrationConfig {
     good: number;
     fair: number;
     poor: number;
-}
-}
+
+
+
   };
   
   // NPS Configuration
@@ -47,7 +48,7 @@ export interface SatisfactionIntegrationConfig {
     good: number;
     needsImprovement: number;
   };
-}
+
 
 /**
  * User Satisfaction Integration Service
@@ -82,7 +83,7 @@ export class SatisfactionIntegration {
     this.databaseService = dependencies.databaseService;
     this.redisService = dependencies.redisService;
     this.auditService = dependencies.auditService;
-  }
+
 
   /**
    * Initialize satisfaction tracking integration
@@ -92,7 +93,7 @@ export class SatisfactionIntegration {
     if (!this.config.enabled) {
       console.log('⏭️  User satisfaction tracking disabled in configuration');
       return;
-    }
+
 
     console.log('📊 Initializing User Satisfaction Tracking Integration...');
 
@@ -106,12 +107,12 @@ export class SatisfactionIntegration {
       // Setup automated survey triggers
       if (this.config.enableAutomatedSurveys) {
         await this.setupAutomatedSurveys();
-      }
+
       
       // Setup real-time tracking
       if (this.config.enableRealtimeTracking) {
         await this.setupRealtimeTracking();
-      }
+
       
       // Setup integration monitoring
       await this.setupIntegrationMonitoring();
@@ -119,12 +120,11 @@ export class SatisfactionIntegration {
       this.integrationActive = true;
       
       console.log('✅ User Satisfaction Tracking Integration initialized successfully');
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize User Satisfaction Tracking Integration:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Register satisfaction tracking routes with Fastify server
@@ -135,7 +135,7 @@ export class SatisfactionIntegration {
     // Register dashboard API routes
     if (this.dashboardAPI) {
       this.dashboardAPI.registerRoutes(server);
-    }
+
 
     // Register integration status endpoints
     server.get('/api/admin/satisfaction/integration/status', async (request, reply) => {
@@ -145,12 +145,12 @@ export class SatisfactionIntegration {
           success: true,
           data: status
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     // Register integration configuration endpoint
@@ -166,8 +166,8 @@ export class SatisfactionIntegration {
           thresholds: {
             satisfaction: this.config.satisfactionThresholds,
             nps: this.config.npsThresholds
-          }
-        }
+
+
       });
     });
 
@@ -181,12 +181,12 @@ export class SatisfactionIntegration {
           success: true,
           message: 'Webhook processed successfully'
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(400).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     // Register trigger endpoints for automatic survey invitations
@@ -195,7 +195,7 @@ export class SatisfactionIntegration {
     server.post('/api/satisfaction/triggers/support-resolution', this.handleSupportResolutionTrigger.bind(this));
 
     console.log('🔗 Satisfaction tracking integration routes registered');
-  }
+
 
   /**
    * Trigger satisfaction survey for user
@@ -209,7 +209,7 @@ export class SatisfactionIntegration {
 
     if (!this.integrationActive || !this.config.enableSurveyCollection) {
       throw new Error('Survey collection is disabled');
-    }
+
 
     try {
       // Create satisfaction survey
@@ -223,11 +223,11 @@ export class SatisfactionIntegration {
       let invitationSent = false;
       if (immediate) {
         invitationSent = await this.sendSurveyInvitation(userId, survey.surveyId, surveyType);
-      } else {
+ else {
         // Schedule survey invitation
         await this.scheduleSurveyInvitation(userId, survey.surveyId, surveyType, context);
         invitationSent = true;
-      }
+
 
       // Audit survey trigger
       await this.auditService.logActivity({
@@ -239,20 +239,19 @@ export class SatisfactionIntegration {
           surveyType,
           immediate,
           invitationSent
-  }
+
         timestamp: new Date()
-      } as any);
+ as any);
 
       return {
         surveyId: survey.surveyId,
         invitationSent
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error triggering satisfaction survey:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get satisfaction tracking integration status
@@ -270,9 +269,9 @@ export class SatisfactionIntegration {
           dashboardAPI: this.dashboardAPI ? 'active' : 'disabled',
           automatedSurveys: this.config.enableAutomatedSurveys ? 'active' : 'disabled',
           realtimeTracking: this.config.enableRealtimeTracking ? 'active' : 'disabled'
-  }
+
         lastUpdate: new Date()
-  }
+
       metrics: {
         overallSatisfaction: dashboard.summary.overallScore,
         npsScore: dashboard.summary.npsScore,
@@ -280,21 +279,21 @@ export class SatisfactionIntegration {
         totalResponses: dashboard.summary.totalResponses,
         activeAlerts: dashboard.alerts.length,
         criticalAlerts: dashboard.alerts.filter(a => a.severity === 'critical').length
-  }
+
       performance: {
         todayResponses: dashboard.realtime.todayResponses,
         averageToday: dashboard.realtime.averageToday,
         dataFreshness: dashboard.dataFreshness,
         trendDirection: dashboard.summary.trendDirection
-  }
+
       configuration: {
         surveyTimeout: this.config.surveyResponseTimeout,
         updateInterval: this.config.metricsUpdateInterval,
         alertingEnabled: this.config.alertingEnabled,
         minResponsesForMetrics: this.config.minResponsesForMetrics
-      }
+
     };
-  }
+
 
   /**
    * Shutdown satisfaction tracking integration
@@ -306,7 +305,7 @@ export class SatisfactionIntegration {
     // Stop automated survey scheduling
     if (this.automatedSurveyInterval) {
       clearInterval(this.automatedSurveyInterval);
-    }
+
     
     // Clear survey triggers
     this.surveyTriggers.clear();
@@ -314,7 +313,7 @@ export class SatisfactionIntegration {
     this.integrationActive = false;
     
     console.log('✅ User Satisfaction Tracking Integration shut down successfully');
-  }
+
 
   // Private initialization methods
 
@@ -337,7 +336,7 @@ export class SatisfactionIntegration {
     this.setupSatisfactionEventListeners();
     
     console.log('✅ Satisfaction Tracker initialized');
-  }
+
 
   /**
    * Initialize dashboard API
@@ -347,7 +346,7 @@ export class SatisfactionIntegration {
     if (!this.config.enableAdminDashboard) {
       console.log('⏭️  Admin dashboard disabled in configuration');
       return;
-    }
+
 
     console.log('📊 Initializing Dashboard API...');
     
@@ -360,7 +359,7 @@ export class SatisfactionIntegration {
     );
     
     console.log('✅ Dashboard API initialized');
-  }
+
 
   /**
    * Setup automated survey triggers
@@ -376,25 +375,25 @@ export class SatisfactionIntegration {
         condition: 'purchase_completed',
         delay: 7 * 24 * 60 * 60 * 1000, // 7 days
         surveyType: 'post_purchase'
-  }
+
       {
         name: 'feature_usage_heavy',
         condition: 'heavy_feature_usage',
         delay: 0, // immediate
         surveyType: 'feature_feedback'
-  }
+
       {
         name: 'support_resolution',
         condition: 'support_ticket_resolved',
         delay: 24 * 60 * 60 * 1000, // 1 day
         surveyType: 'support_followup'
-  }
+
       {
         name: 'periodic_checkin',
         condition: 'periodic_schedule',
         delay: 30 * 24 * 60 * 60 * 1000, // 30 days
         surveyType: 'periodic_checkin'
-      }
+
     ];
     
     triggers.forEach(trigger => {
@@ -407,7 +406,7 @@ export class SatisfactionIntegration {
     }, this.config.metricsUpdateInterval * 60 * 1000);
     
     console.log('✅ Automated survey triggers configured');
-  }
+
 
   /**
    * Setup real-time tracking
@@ -426,7 +425,7 @@ export class SatisfactionIntegration {
     });
     
     console.log('✅ Real-time tracking configured');
-  }
+
 
   /**
    * Setup integration monitoring
@@ -441,7 +440,7 @@ export class SatisfactionIntegration {
     }, 5 * 60 * 1000); // Check every 5 minutes
     
     console.log('✅ Integration monitoring configured');
-  }
+
 
   /**
    * Setup satisfaction event listeners
@@ -457,7 +456,7 @@ export class SatisfactionIntegration {
     this.satisfactionTracker.on('alert_acknowledged', (alert) => {
       console.log(`✅ Satisfaction alert acknowledged: ${alert.alertId}`);
     });
-  }
+
 
   // Event handlers
 
@@ -484,13 +483,13 @@ export class SatisfactionIntegration {
         success: true,
         data: surveyResult
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Handle feature usage survey trigger
@@ -516,19 +515,19 @@ export class SatisfactionIntegration {
           success: true,
           data: surveyResult
         });
-      } else {
+ else {
         return reply.code(200).send({
           success: true,
           message: 'Usage threshold not met for survey trigger'
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Handle support resolution survey trigger
@@ -553,13 +552,13 @@ export class SatisfactionIntegration {
         success: true,
         data: surveyResult
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Handle survey webhook from external systems
@@ -571,7 +570,7 @@ export class SatisfactionIntegration {
     
     if (!userId || !responses) {
       throw new Error('Invalid webhook data: missing userId or responses');
-    }
+
     
     // Convert external format to internal satisfaction survey format
     const satisfactionData = {
@@ -585,7 +584,7 @@ export class SatisfactionIntegration {
         negativeAspects: responses.negativeAspects || [],
         suggestions: responses.suggestions || [],
         openFeedback: responses.openFeedback
-  }
+
       source: source || 'external_webhook',
       context: {
         featureUsed: responses.feature || 'external_system',
@@ -595,11 +594,11 @@ export class SatisfactionIntegration {
         purchaseHistory: 0,
         supportHistory: 0,
         userRole: 'buyer' as any
-      }
+
     };
     
     await this.satisfactionTracker.recordSatisfactionSurvey(userId, satisfactionData);
-  }
+
 
   /**
    * Handle real-time survey response
@@ -609,8 +608,8 @@ export class SatisfactionIntegration {
     if (this.config.enableRealtimeTracking) {
       // This could integrate with WebSocket or Server-Sent Events
       console.log(`⚡ Real-time satisfaction update: ${survey.satisfactionRating}/5`);
-    }
-  }
+
+
 
   /**
    * Handle real-time satisfaction alert
@@ -624,8 +623,8 @@ export class SatisfactionIntegration {
       // - Post to Slack
       // - Trigger webhooks
       // - Update dashboard
-    }
-  }
+
+
 
   /**
    * Evaluate automated survey triggers
@@ -641,11 +640,10 @@ export class SatisfactionIntegration {
       // Example: Check for users who completed purchases 7 days ago
       // Example: Check for users with high feature usage
       // Example: Check for periodic survey scheduling
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error evaluating automated survey triggers:', error);
-    }
-  }
+
+
 
   /**
    * Check integration health
@@ -658,22 +656,21 @@ export class SatisfactionIntegration {
       // Check for critical issues
       if (status.metrics.criticalAlerts > 0) {
         console.warn(`⚠️  ${status.metrics.criticalAlerts} critical satisfaction alerts active`);
-      }
+
       
       // Check response rates
       if (status.metrics.responseRate < 10) {
         console.warn('⚠️  Low satisfaction survey response rate detected');
-      }
+
       
       // Check overall satisfaction
       if (status.metrics.overallSatisfaction < 70) {
         console.warn(`⚠️  Low overall satisfaction score: ${status.metrics.overallSatisfaction}`);
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       console.error('Error checking integration health:', error);
-    }
-  }
+
+
 
   /**
    * Send survey invitation to user
@@ -697,16 +694,16 @@ export class SatisfactionIntegration {
           surveyId,
           surveyType,
           method: 'email'
-  }
+
         timestamp: new Date()
-      } as any);
+ as any);
       
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error sending survey invitation:', error);
       return false;
-    }
-  }
+
+
 
   /**
    * Schedule survey invitation
@@ -729,11 +726,11 @@ export class SatisfactionIntegration {
         surveyId,
         surveyType,
         context
-  }
+
       timestamp: new Date()
-    } as any);
-  }
-}
+ as any);
+
+
 
 /**
  * Factory function to create and initialize satisfaction integration
@@ -750,7 +747,7 @@ export async function createSatisfactionIntegration(
   const integration = new SatisfactionIntegration(config, dependencies);
   await integration.initialize();
   return integration;
-}
+
 
 /**
  * Default configuration for satisfaction integration

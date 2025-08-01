@@ -14,8 +14,8 @@ import { BadgeSystem } from '../../../packages/core/gamification/BadgeSystem';
 // Leaderboard Types and Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface LeaderboardEntry {
   id: string;
   name: string;
@@ -24,12 +24,13 @@ export interface LeaderboardEntry {
   change: number; // Position change from previous period
   metadata: Record<string, any>;
   lastUpdated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateLeaderboardEntry extends LeaderboardEntry {
   templateId: string;
   title: string;
@@ -41,10 +42,10 @@ export interface TemplateLeaderboardEntry extends LeaderboardEntry {
   totalReviews: number;
   categoryName: string;
   createdAt: Date;
-}
 
-}
-}
+
+
+
 export interface CreatorLeaderboardEntry extends LeaderboardEntry {
   creatorId: string;
   displayName: string;
@@ -55,10 +56,10 @@ export interface CreatorLeaderboardEntry extends LeaderboardEntry {
   badgeCount: number;
   verificationBadges: string[];
   joinedAt: Date;
-}
 
-}
-}
+
+
+
 export interface CategoryLeaderboardEntry extends LeaderboardEntry {
   categoryId: string;
   categoryName: string;
@@ -72,10 +73,10 @@ export interface CategoryLeaderboardEntry extends LeaderboardEntry {
     title: string;
     revenue: number;
   };
-}
 
-}
-}
+
+
+
 export interface UserEngagementEntry extends LeaderboardEntry {
   userId: string;
   userName: string;
@@ -86,10 +87,10 @@ export interface UserEngagementEntry extends LeaderboardEntry {
   helpfulVotes: number;
   templatesCreated: number;
   achievements: string[];
-}
 
-}
-}
+
+
+
 export interface LeaderboardQuery {
   type: 'templates' | 'creators' | 'categories' | 'engagement';
   metric: string;
@@ -98,12 +99,13 @@ export interface LeaderboardQuery {
   limit: number;
   offset: number;
   includeHistory?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LeaderboardResponse {
   success: boolean;
   leaderboard: LeaderboardEntry[];
@@ -115,10 +117,11 @@ export interface LeaderboardResponse {
     topScore: number;
     totalParticipants: number;
     updateFrequency: string;
-}
-}
+
+
+
   };
-}
+
 
 // =============================================================================
 // Marketplace Leaderboard Service
@@ -138,7 +141,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
 
     // Set up periodic cache refresh
     setInterval(() => this.refreshCaches(), 10 * 60 * 1000); // Every 10 minutes
-  }
+
 
   // =============================================================================
   // Template Leaderboards
@@ -159,7 +162,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       const cached = this.getFromCache(cacheKey);
       if (cached) {
         return cached;
-      }
+
 
       let orderBy: string;
       let whereClause = 'WHERE mt.status = \'listed\'';
@@ -170,13 +173,13 @@ export class MarketplaceLeaderboardService extends EventEmitter {
         const timeFilter = this.getTimeFilter(timeframe);
         whereClause += ` AND mt.created_at >= $${queryParams.length + 1}`;
         queryParams.push(timeFilter);
-      }
+
 
       // Add category filter
       if (categoryId) {
         whereClause += ` AND tc.id = $${queryParams.length + 1}`;
         queryParams.push(categoryId);
-      }
+
 
       // Set ordering based on metric
       switch (metric) {
@@ -204,7 +207,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
         break;
       default:
         orderBy = 'total_revenue DESC';
-      }
+
 
       const query = `
         WITH ranked_templates AS (
@@ -245,7 +248,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
           metric,
           timeframe,
           category: row.category_name
-  }
+
         lastUpdated: new Date(),
         templateId: row.template_id,
         title: row.title,
@@ -263,11 +266,11 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       this.setCache(cacheKey, leaderboard);
 
       return leaderboard;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get template leaderboard:', error);
       return [];
-    }
-  }
+
+
 
   // =============================================================================
   // Creator Leaderboards
@@ -286,7 +289,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       const cached = this.getFromCache(cacheKey);
       if (cached) {
         return cached;
-      }
+
 
       let orderBy: string;
       let selectFields = '';
@@ -298,7 +301,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
         const timeFilter = this.getTimeFilter(timeframe);
         whereClause += ` AND mt.created_at >= $${queryParams.length + 1}`;
         queryParams.push(timeFilter);
-      }
+
 
       // Set fields and ordering based on metric
       switch (metric) {
@@ -348,7 +351,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
             SUM(stats.total_reviews) as total_reviews
           `;
         orderBy = 'total_revenue DESC';
-      }
+
 
       const query = `
         WITH ranked_creators AS (
@@ -386,7 +389,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
             metadata: {
               metric,
               timeframe
-  }
+
             lastUpdated: new Date(),
             creatorId: row.creator_id,
             displayName: row.display_name,
@@ -398,16 +401,16 @@ export class MarketplaceLeaderboardService extends EventEmitter {
             verificationBadges: badgeInfo.badges?.filter((b: any) => b.category === 'verification').map((b: any) => b.name) || [],
             joinedAt: new Date(row.joined_at)
           };
-  }
+
       );
 
       this.setCache(cacheKey, leaderboard);
       return leaderboard;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get creator leaderboard:', error);
       return [];
-    }
-  }
+
+
 
   // =============================================================================
   // Category Leaderboards
@@ -426,7 +429,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       const cached = this.getFromCache(cacheKey);
       if (cached) {
         return cached;
-      }
+
 
       let orderBy: string;
       let whereClause = 'WHERE mt.status = \'listed\'';
@@ -437,7 +440,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
         const timeFilter = this.getTimeFilter(timeframe);
         whereClause += ` AND mt.created_at >= $${queryParams.length + 1}`;
         queryParams.push(timeFilter);
-      }
+
 
       switch (metric) {
       case 'revenue':
@@ -451,7 +454,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
         break;
       default:
         orderBy = 'total_revenue DESC';
-      }
+
 
       const query = `
         WITH category_stats AS (
@@ -516,7 +519,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
         metadata: {
           metric,
           timeframe
-  }
+
         lastUpdated: new Date(),
         categoryId: row.category_id,
         categoryName: row.category_name,
@@ -529,16 +532,16 @@ export class MarketplaceLeaderboardService extends EventEmitter {
           id: row.top_template_id || '',
           title: row.top_template_title || '',
           revenue: parseInt(row.top_template_revenue) || 0
-        }
+
       }));
 
       this.setCache(cacheKey, leaderboard);
       return leaderboard;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get category leaderboard:', error);
       return [];
-    }
-  }
+
+
 
   // =============================================================================
   // User Engagement Leaderboards
@@ -556,7 +559,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       const cached = this.getFromCache(cacheKey);
       if (cached) {
         return cached;
-      }
+
 
       // Get badge system leaderboard as base
       const badgeLeaderboard = await this.badgeSystem.getLeaderboard();
@@ -593,7 +596,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
             change: 0,
             metadata: {
               metric
-  }
+
             lastUpdated: new Date(),
             userId: entry.userId,
             userName: entry.userName,
@@ -605,16 +608,16 @@ export class MarketplaceLeaderboardService extends EventEmitter {
             templatesCreated: parseInt(engagementData.templates_created) || 0,
             achievements: entry.recentBadges || []
           };
-  }
+
       );
 
       this.setCache(cacheKey, leaderboard);
       return leaderboard;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get user engagement leaderboard:', error);
       return [];
-    }
-  }
+
+
 
   // =============================================================================
   // General Leaderboard Query Method
@@ -660,7 +663,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
         break;
       default:
         throw new Error(`Unknown leaderboard type: ${query.type}`);
-      }
+
 
       // Calculate metadata
       const scores = leaderboard.map(entry => entry.score);
@@ -679,7 +682,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
         timeframe: query.timeframe,
         metadata
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to query leaderboard:', error);
       return {
         success: false,
@@ -692,10 +695,10 @@ export class MarketplaceLeaderboardService extends EventEmitter {
           topScore: 0,
           totalParticipants: 0,
           updateFrequency: '10 minutes'
-        }
+
       };
-    }
-  }
+
+
 
   // =============================================================================
   // Helper Methods
@@ -714,8 +717,8 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       return new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
     default:
       return new Date(0); // Beginning of time
-    }
-  }
+
+
 
   private calculateTemplateScore(row: any, metric: string): number {
     switch (metric) {
@@ -732,8 +735,8 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       return purchases * (rating / 5) * 100;
     default:
       return parseInt(row.total_revenue) || 0;
-    }
-  }
+
+
 
   private calculateCreatorScore(row: any, metric: string): number {
     switch (metric) {
@@ -747,8 +750,8 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       return parseInt(row.template_count) || 0; // Simplified
     default:
       return parseInt(row.total_revenue) || 0;
-    }
-  }
+
+
 
   private calculateCategoryScore(row: any, metric: string): number {
     switch (metric) {
@@ -760,8 +763,8 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       return parseFloat(row.growth_rate) || 0;
     default:
       return parseInt(row.total_revenue) || 0;
-    }
-  }
+
+
 
   private calculateEngagementScore(entry: any, metric: string): number {
     switch (metric) {
@@ -775,8 +778,8 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       return (entry.reviewsWritten || 0) + (entry.helpfulVotes || 0);
     default:
       return entry.totalPoints || 0;
-    }
-  }
+
+
 
   private getFromCache(key: string): any {
     const now = Date.now();
@@ -784,18 +787,18 @@ export class MarketplaceLeaderboardService extends EventEmitter {
     
     if (expiry && now < expiry) {
       return this.leaderboardCache.get(key);
-    }
+
     
     // Clean up expired cache
     this.leaderboardCache.delete(key);
     this.cacheExpiry.delete(key);
     return null;
-  }
+
 
   private setCache(key: string, data: any): void {
     this.leaderboardCache.set(key, data);
     this.cacheExpiry.set(key, Date.now() + this.CACHE_DURATION);
-  }
+
 
   private async refreshCaches(): Promise<void> {
 
@@ -805,15 +808,15 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       if (now >= expiry) {
         this.leaderboardCache.delete(key);
         this.cacheExpiry.delete(key);
-      }
-    }
+
+
 
     // Emit cache refresh event
     this.emit('cache_refreshed', {
       timestamp: new Date(),
       cacheSize: this.leaderboardCache.size
     });
-  }
+
 
   // =============================================================================
   // Public Utility Methods
@@ -823,14 +826,14 @@ export class MarketplaceLeaderboardService extends EventEmitter {
 
     this.leaderboardCache.clear();
     this.cacheExpiry.clear();
-  }
+
 
   getCacheStats(): { size: number; entries: string[] } {
     return {
       size: this.leaderboardCache.size,
       entries: Array.from(this.leaderboardCache.keys())
     };
-  }
-}
+
+
 
 export default MarketplaceLeaderboardService;

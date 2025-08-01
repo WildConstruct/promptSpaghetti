@@ -5,66 +5,64 @@
 
 // Core workspace types
 
-}
-export interface Workspace {
-  id: string;
+
+export interface Workspace { id: string;
   owner_id: string;
   name: string;
   description?: string;
   settings: Record<string, any>;
   created_at: Date;
   updated_at: Date;
-  archived_at?: Date | null;
-}
-}
-}
-export interface CreateWorkspace {
-  name: string;
+  archived_at?: Date | null }
+
+
+
+export interface CreateWorkspace { name: string;
   description?: string;
-  settings?: Record<string, any>;
-}
-}
-}
+  settings?: Record<string, any> }
+
+
+
 export interface UpdateWorkspace {
   name?: string;
   description?: string;
   settings?: Record<string, any>;
   // Project types
-}
-}
-}
-export interface Project {
-  id: string;
+
+
+
+
+export interface Project { id: string;
   workspace_id: string;
   name: string;
   description?: string;
-  status: 'draft' | 'active' | 'archived' | 'deleted';
+  status: 'draft' | 'active' | 'archived' | 'deleted' }
   metadata: Record<string, any>;
   created_by: string;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
-export interface CreateProject {
-  workspace_id: string;
+
+
+
+
+export interface CreateProject { workspace_id: string;
   name: string;
   description?: string;
-  metadata?: Record<string, any>;
-}
-}
-}
+  metadata?: Record<string, any> }
+
+
+
 export interface UpdateProject {
   name?: string;
   description?: string;
   status?: Project['status'];
   metadata?: Record<string, any>;
   // Resource types
-}
-}
-}
-export interface Resource {
-  id: string;
+
+
+
+
+export interface Resource { id: string;
   project_id: string;
   name: string;
   type: 'graph' | 'template' | 'file' | 'export';
@@ -77,10 +75,10 @@ export interface Resource {
   version: number;
   created_by: string;
   created_at: Date;
-  updated_at: Date;
-}
-}
-}
+  updated_at: Date }
+
+
+
 export interface CreateResource {
   project_id: string;
   name: string;
@@ -92,21 +90,21 @@ export interface CreateResource {
   size_bytes?: number;
   checksum?: string;
   // Permission and role types
-}
-}
-}
-export interface ACLRole {
-  id: string;
+
+
+
+
+export interface ACLRole { id: string;
   workspace_id: string;
   name: string;
   description?: string;
   permissions: number;
   is_system_role: boolean;
   created_at: Date;
-  updated_at: Date;
-}
-}
-}
+  updated_at: Date }
+
+
+
 export interface UserMembership {
   id: string;
   user_id: string;
@@ -116,11 +114,11 @@ export interface UserMembership {
   joined_at: Date;
   last_active_at: Date;
   // Activity and notifications
-}
-}
-}
-export interface ActivityEvent {
-  id: string;
+
+
+
+
+export interface ActivityEvent { id: string;
   workspace_id: string;
   project_id?: string;
   resource_id?: string;
@@ -128,12 +126,11 @@ export interface ActivityEvent {
   event_type: string;
   event_data: Record<string, any>;
   aggregation_key?: string;
-  created_at: Date;
-}
-}
-}
-export interface Comment {
-  id: string;
+  created_at: Date }
+
+
+
+export interface Comment { id: string;
   resource_id: string;
   parent_id?: string;
   author_id: string;
@@ -146,28 +143,25 @@ export interface Comment {
   resolved_by?: string;
   resolved_at?: Date;
   created_at: Date;
-  updated_at: Date;
-}
-}
-}
-export interface CreateComment {
-  resource_id: string;
+  updated_at: Date }
+
+
+
+export interface CreateComment { resource_id: string;
   parent_id?: string;
   author_id: string;
   content_markdown: string;
   target_type?: Comment['target_type'];
-  target_data?: Record<string, any>;
-}
-}
-}
-export interface UpdateComment {
-  content_markdown?: string;
-  status?: Comment['status'];
-}
-}
-}
-export interface Notification {
-  id: string;
+  target_data?: Record<string, any> }
+
+
+
+export interface UpdateComment { content_markdown?: string;
+  status?: Comment['status'] }
+
+
+
+export interface Notification { id: string;
   user_id: string;
   workspace_id: string;
   event_id?: string;
@@ -175,16 +169,16 @@ export interface Notification {
   title: string;
   message?: string;
   action_url?: string;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
+  priority: 'low' | 'normal' | 'high' | 'urgent' }
   delivery_channel: 'in_app' | 'email' | 'push';
   read_at?: Date;
   delivered_at: Date;
   // Extended types with additional data
-}
-}
-}
-export interface WorkspaceWithMembership extends Workspace {
-  membership?: UserMembership;
+
+
+
+
+export interface WorkspaceWithMembership extends Workspace { membership?: UserMembership;
   role_permissions?: number;
   export interface ProjectWithStats extends Project {
   resource_count?: number;
@@ -204,46 +198,42 @@ export interface WorkspaceWithMembership extends Workspace {
   total: number;
   total_pages: number;
   has_next: boolean;
-  has_prev: boolean;
-}
-}
-}
-export interface PaginatedResponse<T> {
-  data: T;
+  has_prev: boolean }
+
+
+
+export interface PaginatedResponse<T> { data: T;
   pagination: PaginationMeta;
   // Filter and query types
   export interface WorkspaceFilter {
   search?: string;
-  archived?: boolean;
-}
-}
-}
-export interface ProjectFilter {
-  search?: string;
+  archived?: boolean }
+
+
+
+export interface ProjectFilter { search?: string;
   status?: Project['status'][];
-  created_by?: string;
-}
-}
-}
-export interface ActivityEventFilter {
-  project_id?: string;
+  created_by?: string }
+
+
+
+export interface ActivityEventFilter { project_id?: string;
   actor_id?: string;
   event_types?: string;
   from_date?: Date;
-  to_date?: Date;
-}
-}
-}
+  to_date?: Date }
+
+
+
 export interface CommentFilter {
   resource_id?: string;
   author_id?: string;
   status?: Comment['status'][];
   target_type?: Comment['target_type'];
   // Permission constants
-}
-}
-export const PERMISSIONS = {
-  // Workspace permissions
+
+
+export const PERMISSIONS = { // Workspace permissions
   WORKSPACE_READ: 1 << 0,
   WORKSPACE_WRITE: 1 << 1,
   WORKSPACE_ADMIN: 1 << 2,
@@ -269,8 +259,8 @@ export const PERMISSIONS = {
   // Advanced permissions
   ACTIVITY_READ: 1 << 18,
   NOTIFICATION_MANAGE: 1 << 19,
-  EXPORT_DATA: 1 << 20,
-} as const;
+  EXPORT_DATA: 1 << 20 }
+ as const;
 
 // Utility functions
 export function hasPermission(userPermissions: number, requiredPermission: number): boolean {

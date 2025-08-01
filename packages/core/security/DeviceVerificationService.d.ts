@@ -15,18 +15,16 @@
  * - Verification analytics and reporting
  */
 import { EventEmitter } from 'events';
-import { 
-  DeviceFingerprintingService,
+import { DeviceFingerprintingService,
   DeviceFingerprint,
   LocationData,
-  RiskLevel,
+  RiskLevel }
   FingerprintContext
 } from './DeviceFingerprintingService';
 import { TrustedDeviceManager, TrustLevel, VerificationMethod } from './TrustedDeviceManager';
 import { VerificationCodeManager } from './VerificationCodeManager';
 import { EmailDeliveryTracker } from './services/EmailDeliveryTracker';
-export declare enum VerificationStep {
-    FINGERPRINT_COLLECTION = "fingerprint_collection",
+export declare enum VerificationStep { FINGERPRINT_COLLECTION = "fingerprint_collection",
     RISK_ASSESSMENT = "risk_assessment",
     CHALLENGE_REQUIRED = "challenge_required",
     EMAIL_VERIFICATION = "email_verification",
@@ -52,12 +50,12 @@ export declare enum VerificationOutcome {
     REJECTED = "rejected",
     PENDING = "pending",
     REQUIRES_REVIEW = "requires_review",
-    EXPIRED = "expired",
+    EXPIRED = "expired" }
     ABANDONED = "abandoned"
 
 }
-export interface VerificationSession {
-    id: string;
+}
+export interface VerificationSession { id: string;
     userId: string;
     deviceFingerprint: DeviceFingerprint;
     location: LocationData;
@@ -87,13 +85,13 @@ export interface VerificationSession {
         repeatedAttempts: boolean;
         deviceSpoofing: boolean;
         locationInconsistent: boolean;
-        timeZoneManipulation: boolean;
+        timeZoneManipulation: boolean }
 }
     };
 
 }
-export interface DeviceChallenge {
-    id: string;
+}
+export interface DeviceChallenge { id: string;
     type: ChallengeType;
     status: 'pending' | 'completed' | 'failed' | 'expired';
     createdAt: Date;
@@ -105,42 +103,37 @@ export interface DeviceChallenge {
         expectedResponse?: string;
         deliveryAddress?: string;
         attempts: number;
-        maxAttempts: number;
+        maxAttempts: number }
 }
     };
-    responseData?: {
-        userResponse: string;
+    responseData?: { userResponse: string;
         timestamp: Date;
-        metadata: Record<string, any>;
-    };
+        metadata: Record<string, any> };
     metadata: Record<string, any>;
 
 }
-export interface VerificationAttempt {
-    id: string;
+}
+export interface VerificationAttempt { id: string;
     timestamp: Date;
     step: VerificationStep;
     challengeId?: string;
     success: boolean;
     failureReason?: string;
     duration: number;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface VerificationConfig {
-    sessionTimeoutMinutes: number;
+}
+export interface VerificationConfig { sessionTimeoutMinutes: number;
     maxAttemptsPerChallenge: number;
     maxVerificationAttempts: number;
     riskThresholds: {
         lowRisk: number;
         mediumRisk: number;
         highRisk: number;
-        requireManualReview: number;
+        requireManualReview: number }
 }
     };
-    challengeRequirements: {
-        [key in RiskLevel]: ChallengeType[];
-    };
+    challengeRequirements: { [key in RiskLevel]: ChallengeType[] };
     enableBehavioralAnalysis: boolean;
     enableLocationValidation: boolean;
     enableDeviceSpoofDetection: boolean;
@@ -148,8 +141,8 @@ export interface VerificationConfig {
     requireDoubleVerification: boolean;
 
 }
-export interface DeviceVerificationRequestData {
-    userId: string;
+}
+export interface DeviceVerificationRequestData { userId: string;
     fingerprintContext: FingerprintContext;
     location?: LocationData;
     verificationMethod: VerificationMethod;
@@ -168,10 +161,10 @@ export declare class DeviceVerificationService extends EventEmitter {
     private sessions;
     private challenges;
     constructor();
-      fingerprintService: DeviceFingerprintingService,
-      trustedDeviceManager: TrustedDeviceManager,
-      verificationCodeManager: VerificationCodeManager,
-      emailTracker: EmailDeliveryTracker,
+      fingerprintService: DeviceFingerprintingService;
+      trustedDeviceManager: TrustedDeviceManager;
+      verificationCodeManager: VerificationCodeManager;
+      emailTracker: EmailDeliveryTracker;
       config?: VerificationConfig
     );
     /**
@@ -182,15 +175,14 @@ export declare class DeviceVerificationService extends EventEmitter {
      * Submit challenge response
      */
     submitChallengeResponse();
-      sessionId: string,
-      challengeId: string,
-      response: string,
-      metadata?: Record<string,
+      sessionId: string;
+      challengeId: string;
+      response: string;
+      metadata?: Record<string }
       any>
-    ): Promise<{
-        success: boolean;
+    ): Promise<{ success: boolean;
         session: VerificationSession;
-        nextStep?: VerificationStep;
+        nextStep?: VerificationStep }
 }
     }>;
     /**

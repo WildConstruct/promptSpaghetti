@@ -20,15 +20,14 @@ import { EventEmitter } from 'events';
 
 // Core step sequencing interfaces
 
-}
-export interface SequenceStep {
-  id: string;
+
+export interface SequenceStep { id: string;
   name: string;
   description?: string;
   type: 'action' | 'decision' | 'parallel' | 'loop' | 'delay' | 'validation' | 'rollback';
   category: string;
   priority: number;
-  dependencies: string; // IDs of steps that must complete before this one,
+  dependencies: string; // IDs of steps that must complete before this one }
   conditions?: StepCondition;
   action?: StepAction;
   validation?: StepValidation;
@@ -37,64 +36,61 @@ export interface SequenceStep {
   retryPolicy?: RetryPolicy;
   metadata: StepMetadata;
   performance: StepPerformance;
-}
-}
-}
-export interface StepCondition {
-  id: string;
+
+
+
+
+export interface StepCondition { id: string;
   type: 'boolean' | 'value' | 'expression' | 'function';
   field?: string;
   operator?: 'equals' | 'not_equals' | 'greater' | 'less' | 'contains' | 'exists';
   value?: unknown;
   expression?: string;
   function?: string;
-  negated?: boolean;
-}
-}
-}
-export interface StepAction {
-  type: 'function' | 'api' | 'ui' | 'data' | 'navigation' | 'notification';
+  negated?: boolean }
+
+
+
+export interface StepAction { type: 'function' | 'api' | 'ui' | 'data' | 'navigation' | 'notification';
   handler: string;
   parameters: Record<string, unknown>;
   async: boolean;
   timeout?: number;
-  onSuccess?: string; // Next step ID,
-  onFailure?: string; // Failure step ID,
-  onSkip?: string; // Skip step ID,
-}
-}
-}
-export interface StepValidation {
-  required: boolean;
-  validators: {
-  type: 'required' | 'format' | 'range' | 'custom';
+  onSuccess?: string; // Next step ID;
+  onFailure?: string; // Failure step ID;
+  onSkip?: string; // Skip step ID }
+
+
+
+
+export interface StepValidation { required: boolean;
+  validators: {;
+  type: 'required' | 'format' | 'range' | 'custom' }
   message: string;
   parameters?: Record<string, unknown>;
-}
-}[];
-  onValidationFailure: 'retry' | 'skip' | 'abort' | 'rollback'
-  }
-}
-export interface StepRollback {
-  enabled: boolean;
+
+
+[];
+  onValidationFailure: 'retry' | 'skip' | 'abort' | 'rollback';
+
+
+export interface StepRollback { enabled: boolean;
   action?: StepAction;
   autoTrigger: boolean;
   preserveState: boolean;
-  dependencies?: string;
-}
-}
-}
-export interface RetryPolicy {
-  maxAttempts: number;
+  dependencies?: string }
+
+
+
+export interface RetryPolicy { maxAttempts: number;
   backoffStrategy: 'linear' | 'exponential' | 'custom';
   baseDelay: number;
   maxDelay: number;
-  retryConditions: string;
-}
-}
-}
-export interface StepMetadata {
-  estimatedDuration: number;
+  retryConditions: string }
+
+
+
+export interface StepMetadata { estimatedDuration: number;
   category: string;
   tags: string;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
@@ -103,27 +99,24 @@ export interface StepMetadata {
   optional: boolean;
   createdAt: Date;
   lastModified: Date;
-  version: string;
-}
-}
-}
-export interface StepPerformance {
-  averageExecutionTime: number;
+  version: string }
+
+
+
+export interface StepPerformance { averageExecutionTime: number;
   successRate: number;
   failureRate: number;
   retryRate: number;
-  lastExecutions: ExecutionRecord;
-}
-}
-}
-export interface ExecutionRecord {
-  timestamp: Date;
+  lastExecutions: ExecutionRecord }
+
+
+
+export interface ExecutionRecord { timestamp: Date;
   duration: number;
   status: StepExecutionStatus;
   attempts: number;
-  errorMessage?: string;
-}
-}
+  errorMessage?: string }
+
 export type StepExecutionStatus = 
   | 'pending' 
   | 'running' 
@@ -134,30 +127,29 @@ export type StepExecutionStatus =
   | 'retrying'
   | 'rolled_back';
 
-}
-export interface SequenceDefinition {
-  id: string;
+
+export interface SequenceDefinition { id: string;
   name: string;
   description: string;
   version: string;
   steps: SequenceStep;
-  entryPoint: string; // Initial step ID,
-  exitPoints: string; // Terminal step IDs,
+  entryPoint: string; // Initial step ID;
+  exitPoints: string; // Terminal step IDs;
   globalTimeout?: number;
   concurrencyLimit?: number;
-  metadata: {
+  metadata: { }
   category: string;
   tags: string;
   estimatedTotalDuration: number;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   createdAt: Date;
   lastModified: Date;
-}
+
+
 };
-}
-}
-export interface SequenceExecution {
-  id: string;
+
+
+export interface SequenceExecution { id: string;
   sequenceId: string;
   name: string;
   status: 'initializing' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
@@ -171,115 +163,107 @@ export interface SequenceExecution {
   startTime: Date;
   endTime?: Date;
   pausedAt?: Date;
-  resumedAt?: Date;
-}
-}
-}
-export interface ExecutionContext {
-  variables: Record<string, unknown>;
+  resumedAt?: Date }
+
+
+
+export interface ExecutionContext { variables: Record<string, unknown>;
   userInput: Record<string, unknown>;
   sessionData: Record<string, unknown>;
   executionState: Record<string, unknown>;
-  rollbackStack: RollbackEntry;
-}
-}
-}
-export interface RollbackEntry {
-  stepId: string;
+  rollbackStack: RollbackEntry }
+
+
+
+export interface RollbackEntry { stepId: string;
   timestamp: Date;
   state: Record<string, unknown>;
   action: string;
-  reversible: boolean;
-}
-}
-}
-export interface SequenceProgress {
-  totalSteps: number;
+  reversible: boolean }
+
+
+
+export interface SequenceProgress { totalSteps: number;
   completedSteps: number;
   currentStep: number;
   percentage: number;
   estimatedTimeRemaining: number;
-  milestones: ProgressMilestone;
-}
-}
-}
-export interface ProgressMilestone {
-  id: string;
+  milestones: ProgressMilestone }
+
+
+
+export interface ProgressMilestone { id: string;
   name: string;
   stepId: string;
   percentage: number;
   reached: boolean;
-  timestamp?: Date;
-}
-}
-}
-export interface ExecutionPerformance {
-  totalDuration: number;
-  averageStepDuration: number;
-}
+  timestamp?: Date }
+
+
+
+export interface ExecutionPerformance { totalDuration: number;
+  averageStepDuration: number }
+
   fastestStep: { id: string; duration: number };
   slowestStep: { id: string; duration: number };
   retryCount: number;
   errorCount: number;
   effectiveSuccessRate: number;
-}
-}
-export interface SequencingConfig {
-  execution: {
+
+
+export interface SequencingConfig { execution: { }
   defaultTimeout: number;
   maxConcurrentExecutions: number;
   enableProgressPersistence: boolean;
   enablePerformanceTracking: boolean;
   enableRollback: boolean;
   autoRetryOnFailure: boolean;
-}
+
+
 };
-  validation: {
+  validation: { 
   validateDependencies: boolean;
   validateConditions: boolean;
   strictValidation: boolean;
-  allowCircularDependencies: boolean;
-};
-  performance: {
+  allowCircularDependencies: boolean };
+  performance: { 
   trackExecutionMetrics: boolean;
   optimizeExecutionOrder: boolean;
   enableCaching: boolean;
-  cacheExpiryTime: number;
-};
+  cacheExpiryTime: number };
 
 // Main Step Sequencing System
-}
-export class StepSequencingSystem extends EventEmitter {
-  private sequences: Map<string, SequenceDefinition> = new Map();
+
+export class StepSequencingSystem extends EventEmitter { private sequences: Map<string, SequenceDefinition> = new Map();
   private executions: Map<string, SequenceExecution> = new Map();
   private activeExecutions: Set<string> = new Set();
   private config: SequencingConfig;
   private actionHandlers: Map<string, (...args: unknown) => unknown> = new Map();
   private validators: Map<string, (...args: unknown) => unknown> = new Map();
   private rollbackHandlers: Map<string, (...args: unknown) => unknown> = new Map();
-  constructor(config?: Partial<SequencingConfig>) {,
+  constructor(config?: Partial<SequencingConfig>) {
   super();
   this.config = {
   execution: {
-  defaultTimeout: 30000, // 30 seconds,
-  maxConcurrentExecutions: 10,
-  enableProgressPersistence: true,
-  enablePerformanceTracking: true,
-  enableRollback: true,
-  autoRetryOnFailure: true,
-},
-  validation: {
-  validateDependencies: true,
-  validateConditions: true,
-  strictValidation: true,
-  allowCircularDependencies: false,
-},
-  performance: {
-  trackExecutionMetrics: true,
-  optimizeExecutionOrder: true,
-  enableCaching: true,
-  cacheExpiryTime: 3600000 // 1 hour,
-}
+  defaultTimeout: 30000, // 30 seconds
+  maxConcurrentExecutions: 10
+  enableProgressPersistence: true
+  enablePerformanceTracking: true
+  enableRollback: true
+  autoRetryOnFailure: true }
+
+  validation: { 
+  validateDependencies: true
+  validateConditions: true
+  strictValidation: true
+  allowCircularDependencies: false }
+
+  performance: { 
+  trackExecutionMetrics: true
+  optimizeExecutionOrder: true
+  enableCaching: true
+  cacheExpiryTime: 3600000 // 1 hour }
+
       ...config
     };
     this.registerBuiltInHandlers();
@@ -287,22 +271,21 @@ export class StepSequencingSystem extends EventEmitter {
   async createSequence(definition: Omit<SequenceDefinition, 'id'>): Promise<string> {
 
     const sequenceId = `seq_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-    const sequence: SequenceDefinition = {,
-  id: sequenceId,
-  ...definition,
+    const sequence: SequenceDefinition = { 
+  id: sequenceId
+  ...definition
   metadata: {
-  ...definition.metadata,
-  createdAt: new Date(),
-  lastModified: new Date(),
+  ...definition.metadata
+  createdAt: new Date()
+  lastModified: new Date() }
 };
     // Validate sequence
     await this.validateSequence(sequence);
     // Optimize step order if enabled
-    if (this.config.performance.optimizeExecutionOrder) {
-      sequence.steps = this.optimizeStepOrder(sequence.steps);
+    if (this.config.performance.optimizeExecutionOrder) { sequence.steps = this.optimizeStepOrder(sequence.steps);
     this.sequences.set(sequenceId, sequence);
     this.emit('sequenceCreated', {)
-  sequenceId,
+  sequenceId }
       sequence
     });
     return sequenceId;
@@ -316,19 +299,18 @@ export class StepSequencingSystem extends EventEmitter {
       .find(exec => exec.sequenceId === sequenceId && exec.status === 'running');
     if (activeExecution) {
       throw new Error(`Cannot update sequence ${sequenceId}: execution ${activeExecution.id} is currently running`);}
-    const updatedSequence = {
-  ...sequence,
-  ...updates,
+    const updatedSequence = { ...sequence
+  ...updates
   metadata: {
-  ...sequence.metadata,
-  ...updates.metadata,
-  lastModified: new Date(),
+  ...sequence.metadata
+  ...updates.metadata
+  lastModified: new Date() }
 };
     await this.validateSequence(updatedSequence);
     this.sequences.set(sequenceId, updatedSequence);
-    this.emit('sequenceUpdated', {)
-  sequenceId,
-  sequence: updatedSequence,
+    this.emit('sequenceUpdated', { )
+  sequenceId
+  sequence: updatedSequence }
   updates
 });
   async deleteSequence(sequenceId: string, force = false): Promise<void> {
@@ -344,13 +326,13 @@ export class StepSequencingSystem extends EventEmitter {
       if (activeExecutions.length > 0) {
         throw new Error(`Cannot delete sequence ${sequenceId}: ${activeExecutions.length} active executions`);}
     this.sequences.delete(sequenceId);
-    this.emit('sequenceDeleted', {)
-  sequenceId,
+    this.emit('sequenceDeleted', { )
+  sequenceId }
       sequence
     });
   // Execution management
   async startExecution(sequenceId: string, (
-    context: Partial<ExecutionContext> = {},
+    context: Partial<ExecutionContext> = {}
     options: { name?: string; timeout?: number } = {}
   ): Promise<string> {
 
@@ -361,40 +343,40 @@ export class StepSequencingSystem extends EventEmitter {
     if (this.activeExecutions.size >= this.config.execution.maxConcurrentExecutions) {
       throw new Error('Maximum concurrent executions reached');
     const executionId = `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-    const execution: SequenceExecution = {,
-  id: executionId,
-      sequenceId,
+    const execution: SequenceExecution = { 
+  id: executionId
+      sequenceId }
       name: options.name || `Execution of ${sequence.name}`}
-},
-  status: 'initializing',
-      currentStep: sequence.entryPoint,
-      completedSteps: [],
-      failedSteps: [],
-      skippedSteps: [],
+
+  status: 'initializing'
+      currentStep: sequence.entryPoint
+      completedSteps: []
+      failedSteps: []
+      skippedSteps: []
       context: {
-  variables: {},
-        userInput: {},
-        sessionData: {},
-        executionState: {},
-        rollbackStack: [],
+  variables: {}
+        userInput: {}
+        sessionData: {}
+        executionState: {}
+        rollbackStack: []
         ...context
-  },
-  progress: this.initializeProgress(sequence),
-      performance: {
-  totalDuration: 0,
-        averageStepDuration: 0,
-        fastestStep: { id: '', duration: Infinity },
-        slowestStep: { id: '', duration: 0 },
-        retryCount: 0,
-        errorCount: 0,
-        effectiveSuccessRate: 0;
-  },
+
+  progress: this.initializeProgress(sequence)
+      performance: { 
+  totalDuration: 0
+        averageStepDuration: 0 }
+        fastestStep: { id: '', duration: Infinity }
+        slowestStep: { id: '', duration: 0 }
+        retryCount: 0
+        errorCount: 0
+        effectiveSuccessRate: 0
+
   startTime: new Date();
   };
     this.executions.set(executionId, execution);
     this.activeExecutions.add(executionId);
-    this.emit('executionStarted', {)
-  executionId,
+    this.emit('executionStarted', { )
+  executionId }
       execution
     });
     // Start execution
@@ -410,8 +392,8 @@ export class StepSequencingSystem extends EventEmitter {
     execution.status = 'paused';
     execution.pausedAt = new Date();
     this.activeExecutions.delete(executionId);
-    this.emit('executionPaused', {)
-  executionId,
+    this.emit('executionPaused', { )
+  executionId }
       execution
     });
   async resumeExecution(executionId: string): Promise<void> {
@@ -424,8 +406,8 @@ export class StepSequencingSystem extends EventEmitter {
     execution.status = 'running';
     execution.resumedAt = new Date();
     this.activeExecutions.add(executionId);
-    this.emit('executionResumed', {)
-  executionId,
+    this.emit('executionResumed', { )
+  executionId }
       execution
     });
     // Resume execution
@@ -438,8 +420,8 @@ export class StepSequencingSystem extends EventEmitter {
     execution.status = 'cancelled';
     execution.endTime = new Date();
     this.activeExecutions.delete(executionId);
-    this.emit('executionCancelled', {)
-  executionId,
+    this.emit('executionCancelled', { )
+  executionId }
       execution
     });
   // Step execution and control
@@ -457,18 +439,16 @@ export class StepSequencingSystem extends EventEmitter {
     const startTime = performance.now();
     let attempts = 0;
     let lastError: Error | null = null;
-    while (attempts < (step.retryPolicy?.maxAttempts || 1)) {
-  attempts++;
+    while (attempts < (step.retryPolicy?.maxAttempts || 1)) { attempts++;
   try {
   this.emit('stepStarted', {)
   executionId,
   stepId,
   step,
-  attempt: attempts,
+  attempt: attempts }
 });
         // Check dependencies
-        if (this.config.validation.validateDependencies) {
-          await this.validateStepDependencies(execution, step);
+        if (this.config.validation.validateDependencies) { await this.validateStepDependencies(execution, step);
         // Check conditions
         if (step.conditions && this.config.validation.validateConditions) {
           const conditionsMet = await this.evaluateStepConditions(execution, step);
@@ -493,23 +473,21 @@ export class StepSequencingSystem extends EventEmitter {
   executionId,
           stepId,
           step,
-          duration,
+          duration }
           attempts
         });
         return 'completed'
-  } catch (error) {
-  lastError = error;
+ catch (error) { lastError = error;
   execution.performance.errorCount++;
   this.emit('stepError', {)
   executionId,
   stepId,
   step,
   error: error.message,
-  attempt: attempts,
+  attempt: attempts }
 });
         // Check if should retry
-        if (attempts < (step.retryPolicy?.maxAttempts || 1)) {
-  execution.performance.retryCount++;
+        if (attempts < (step.retryPolicy?.maxAttempts || 1)) { execution.performance.retryCount++;
   // Calculate retry delay
   const delay = this.calculateRetryDelay(step.retryPolicy!, attempts);
   await this.delay(delay);
@@ -517,7 +495,7 @@ export class StepSequencingSystem extends EventEmitter {
   executionId,
   stepId,
   step,
-  attempt: attempts + 1,
+  attempt: attempts + 1 }
   delay
 });
     // All retry attempts failed
@@ -525,11 +503,11 @@ export class StepSequencingSystem extends EventEmitter {
     this.updateStepPerformance(step, startTime, 'failed', attempts);
     this.updateExecutionProgress(execution, stepId, 'failed', duration);
     execution.failedSteps.push(stepId);
-    this.emit('stepFailed', {)
+    this.emit('stepFailed', { )
   executionId,
   stepId,
   step,
-  error: lastError?.message,
+  error: lastError?.message }
   attempts
 });
     return 'failed';
@@ -539,47 +517,40 @@ export class StepSequencingSystem extends EventEmitter {
     const execution = this.executions.get(executionId);
     if (!execution) {
       throw new Error(`Execution ${executionId} not found`);}
-    if (!this.config.execution.enableRollback) {
-  throw new Error('Rollback is disabled in configuration');
+    if (!this.config.execution.enableRollback) { throw new Error('Rollback is disabled in configuration');
   const rollbackEntries = toStepId ;
   ? execution.context.rollbackStack.filter(entry => entry.stepId === toStepId)
   : execution.context.rollbackStack;
   this.emit('rollbackStarted', {)
-  executionId,
-  toStepId,
-  entriesCount: rollbackEntries.length,
+  executionId
+  toStepId
+  entriesCount: rollbackEntries.length }
 });
-    for (const entry of rollbackEntries.reverse()) {
-  if (entry.reversible) {
+    for (const entry of rollbackEntries.reverse()) { if (entry.reversible) {
   try {
   await this.executeRollbackAction(execution, entry);
   this.emit('stepRolledBack', {)
-  executionId,
-  stepId: entry.stepId,
+  executionId
+  stepId: entry.stepId }
   entry
 });
-        } catch (error) {
-  this.emit('rollbackError', {)
-  executionId,
-  stepId: entry.stepId,
-  error: error.message,
+ catch (error) { this.emit('rollbackError', {)
+  executionId
+  stepId: entry.stepId
+  error: error.message }
 });
     // Update execution state
-    if (toStepId) {
-      execution.currentStep = toStepId;
+    if (toStepId) { execution.currentStep = toStepId;
       execution.completedSteps = execution.completedSteps.filter(id => )
-        !rollbackEntries.some(entry => entry.stepId === id));
-    } else {
-      execution.currentStep = undefined;
+        !rollbackEntries.some(entry => entry.stepId === id)) } else { execution.currentStep = undefined;
       execution.completedSteps = [];
     this.emit('rollbackCompleted', {)
-  executionId,
+  executionId }
       toStepId
     });
   // Query and inspection methods
-  getSequence(sequenceId: string): SequenceDefinition | null {
-  return this.sequences.get(sequenceId) || null;
-  listSequences(filters?: {)
+  getSequence(sequenceId: string): SequenceDefinition | null { return this.sequences.get(sequenceId) || null;
+  listSequences(filters?: {) }
   category?: string;
   tags?: string;
   difficulty?: string;
@@ -601,8 +572,7 @@ export class StepSequencingSystem extends EventEmitter {
   sequenceId?: string;
     status?: string;
     dateRange?: { start: Date; end: Date };
-  }): SequenceExecution {
-    let executions = Array.from(this.executions.values());
+  }): SequenceExecution { let executions = Array.from(this.executions.values());
     if (filters) {
       if (filters.sequenceId) {
         executions = executions.filter(exec => exec.sequenceId === filters.sequenceId);
@@ -622,7 +592,7 @@ export class StepSequencingSystem extends EventEmitter {
   registerRollbackHandler(stepId: string, handler: (...args: unknown) => unknown): void {
     this.rollbackHandlers.set(stepId, handler);
   // Analytics and performance
-  getSequenceAnalytics(sequenceId: string): {
+  getSequenceAnalytics(sequenceId: string): { }
   totalExecutions: number;
     successRate: number;
   averageDuration: number;
@@ -638,36 +608,32 @@ export class StepSequencingSystem extends EventEmitter {
     // Calculate failure points
     const failureCounts: Record<string, number> = {};
     const stepCounts: Record<string, number> = {};
-    executions.forEach(exec => {)
+    executions.forEach(exec => { )
   exec.failedSteps.forEach(stepId => {)
-  failureCounts[stepId] = (failureCounts[stepId] || 0) + 1;
-      });
-      [...exec.completedSteps, ...exec.failedSteps].forEach(stepId => {)
-  stepCounts[stepId] = (stepCounts[stepId] || 0) + 1;
-      });
+  failureCounts[stepId] = (failureCounts[stepId] || 0) + 1 });
+      [...exec.completedSteps, ...exec.failedSteps].forEach(stepId => { )
+  stepCounts[stepId] = (stepCounts[stepId] || 0) + 1 });
     });
     const commonFailurePoints = Object.entries(failureCounts);
-      .map(([stepId, failures]) => ({)
-  stepId,
-  failureRate: (failures / (stepCounts[stepId] || 1)) * 100,
+      .map(([stepId, failures]) => ({ )
+  stepId
+  failureRate: (failures / (stepCounts[stepId] || 1)) * 100 }
 }))
       .sort((a, b) => b.failureRate - a.failureRate);
-    return {
-  totalExecutions,
-  successRate,
-  averageDuration,
-  commonFailurePoints,
+    return { totalExecutions
+  successRate
+  averageDuration
+  commonFailurePoints
   performanceMetrics: {
-  averageRetryCount: executions.reduce((sum, exec) => sum + exec.performance.retryCount, 0) / totalExecutions,
-  averageErrorCount: executions.reduce((sum, exec) => sum + exec.performance.errorCount, 0) / totalExecutions,
+  averageRetryCount: executions.reduce((sum, exec) => sum + exec.performance.retryCount, 0) / totalExecutions
+  averageErrorCount: executions.reduce((sum, exec) => sum + exec.performance.errorCount, 0) / totalExecutions }
 };
   // Configuration management
   updateConfig(config: Partial<SequencingConfig>): void {
     this.config = { ...this.config, ...config };
     this.emit('configUpdated', { config: this.config });
   // Cleanup
-  destroy(): void {
-  // Cancel all active executions
+  destroy(): void { // Cancel all active executions
   for (const executionId of this.activeExecutions) {
   this.cancelExecution(executionId);
   this.sequences.clear();
@@ -678,7 +644,7 @@ export class StepSequencingSystem extends EventEmitter {
   this.rollbackHandlers.clear();
   this.removeAllListeners();
   // Private methods
-  private async runExecution(executionId: string): Promise<void> {,
+  private async runExecution(executionId: string): Promise<void> {
   const execution = this.executions.get(executionId);
   if (!execution) return;
   const sequence = this.sequences.get(execution.sequenceId);
@@ -701,17 +667,16 @@ export class StepSequencingSystem extends EventEmitter {
   execution.performance.totalDuration = execution.endTime.getTime() - execution.startTime.getTime();
   this.activeExecutions.delete(executionId);
   this.emit('executionCompleted', {)
-  executionId,
-  execution,
-  finalStatus: execution.status,
+  executionId
+  execution
+  finalStatus: execution.status }
 });
-    } catch (error) {
-  execution.status = 'failed';
+ catch (error) { execution.status = 'failed';
   execution.endTime = new Date();
   this.activeExecutions.delete(executionId);
   this.emit('executionError', {)
-  executionId,
-  error: error.message,
+  executionId
+  error: error.message }
 });
   private async validateSequence(sequence: SequenceDefinition): Promise<void> {
 
@@ -739,8 +704,7 @@ export class StepSequencingSystem extends EventEmitter {
     const visit = (stepId: string): boolean => {
       if (recursionStack.has(stepId)) {
         throw new Error(`Circular dependency detected involving step ${stepId}`);}
-      if (visited.has(stepId)) {
-        return false;
+      if (visited.has(stepId)) { return false;
       visited.add(stepId);
       recursionStack.add(stepId);
       const step = steps.find(s => s.id === stepId);
@@ -749,8 +713,7 @@ export class StepSequencingSystem extends EventEmitter {
           if (visit(depId)) {
             return true;
       recursionStack.delete(stepId);
-      return false;
-    };
+      return false };
     for (const step of steps) {
       if (!visited.has(step.id)) {
         visit(step.id);
@@ -762,8 +725,7 @@ export class StepSequencingSystem extends EventEmitter {
     const visit = (stepId: string) => {
       if (temp.has(stepId)) {
         throw new Error(`Circular dependency detected at step ${stepId}`);}
-      if (visited.has(stepId)) {
-        return;
+      if (visited.has(stepId)) { return;
       temp.add(stepId);
       const step = steps.find(s => s.id === stepId);
       if (step) {
@@ -771,8 +733,7 @@ export class StepSequencingSystem extends EventEmitter {
           visit(depId);
         temp.delete(stepId);
         visited.add(stepId);
-        sorted.push(step);
-    };
+        sorted.push(step) };
     for (const step of steps) {
       if (!visited.has(step.id)) {
         visit(step.id);
@@ -794,12 +755,11 @@ export class StepSequencingSystem extends EventEmitter {
           percentage: i,
           reached: false;
   });
-    return {
-  totalSteps,
+    return { totalSteps,
   completedSteps: 0,
   currentStep: 0,
   percentage: 0,
-  estimatedTimeRemaining: sequence.metadata.estimatedTotalDuration,
+  estimatedTimeRemaining: sequence.metadata.estimatedTotalDuration }
   milestones
 };
   private async validateStepDependencies(execution: SequenceExecution, step: SequenceStep): Promise<void> {
@@ -850,7 +810,7 @@ export class StepSequencingSystem extends EventEmitter {
     try {
       const func = new Function('context', `return ${expression}`);}
       return !!func(context);
-    } catch {
+ catch {
       return false;
   private async executeStepAction(execution: SequenceExecution, step: SequenceStep): Promise<void> {
 
@@ -859,12 +819,11 @@ export class StepSequencingSystem extends EventEmitter {
     if (!handler) {
       throw new Error(`No handler registered for action type ${step.action.type}`);}
     const timeout = step.action.timeout || step.timeout || this.config.execution.defaultTimeout;
-    if (step.action.async) {
-      await Promise.race([)
-        handler(step.action.parameters, execution.context),
+    if (step.action.async) { await Promise.race([)
+        handler(step.action.parameters, execution.context) }
         new Promise((_, reject) => setTimeout(() => reject(new Error('Action timeout')), timeout))
       ]);
-    } else {
+ else {
       await handler(step.action.parameters, execution.context);
   private async validateStepCompletion(execution: SequenceExecution, step: SequenceStep): Promise<void> {
 
@@ -874,49 +833,45 @@ export class StepSequencingSystem extends EventEmitter {
       if (!validatorFunc) {
         throw new Error(`No validator registered for type ${validator.type}`);}
       const isValid = await validatorFunc(execution.context, validator.parameters);
-      if (!isValid) {
-        throw new Error(validator.message);
+      if (!isValid) { throw new Error(validator.message);
   private addToRollbackStack(execution: SequenceExecution, step: SequenceStep): void {
     if (!step.rollback?.enabled) return;
-    const entry: RollbackEntry = {,
-  stepId: step.id,
-      timestamp: new Date(),
-      state: { ...execution.context.executionState },
-      action: step.action?.type || 'unknown',
+    const entry: RollbackEntry = {
+  stepId: step.id
+      timestamp: new Date() }
+      state: { ...execution.context.executionState }
+      action: step.action?.type || 'unknown'
       reversible: step.rollback.action !== undefined;
   };
     execution.context.rollbackStack.push(entry);
-  private async executeRollbackAction(execution: SequenceExecution, entry: RollbackEntry): Promise<void> {
-
-  const handler = this.rollbackHandlers.get(entry.stepId);
+  private async executeRollbackAction(execution: SequenceExecution, entry: RollbackEntry): Promise<void> { const handler = this.rollbackHandlers.get(entry.stepId);
   if (handler) {
   await handler(execution.context, entry.state);
-  private calculateRetryDelay(retryPolicy: RetryPolicy, attempt: number): number {,
+  private calculateRetryDelay(retryPolicy: RetryPolicy, attempt: number): number {
   switch (retryPolicy.backoffStrategy) {
-  case 'linear':,
+  case 'linear':
   return Math.min(retryPolicy.baseDelay * attempt, retryPolicy.maxDelay);
-  case 'exponential':,
+  case 'exponential':
   return Math.min(retryPolicy.baseDelay * Math.pow(2, attempt - 1), retryPolicy.maxDelay);
-  case 'custom':,
+  case 'custom':
   // Implement custom backoff logic
   return retryPolicy.baseDelay;
-  default:,
+  default:
   return retryPolicy.baseDelay;
   private updateStepPerformance(step: SequenceStep)
-  startTime: number,
-  status: StepExecutionStatus,
-  attempts: number): void {,
+  startTime: number
+  status: StepExecutionStatus
+  attempts: number): void {
   const duration = performance.now() - startTime;
-  const record: ExecutionRecord = {,
-  timestamp: new Date(),
-  duration,
-  status,
+  const record: ExecutionRecord = {
+  timestamp: new Date()
+  duration
+  status }
   attempts
 };
     step.performance.lastExecutions.push(record);
     // Keep only last 100 executions
-    if (step.performance.lastExecutions.length > 100) {
-      step.performance.lastExecutions.shift();
+    if (step.performance.lastExecutions.length > 100) { step.performance.lastExecutions.shift();
     // Update averages
     const executions = step.performance.lastExecutions;
     step.performance.averageExecutionTime = executions.reduce((sum, ex) => sum + ex.duration, 0) / executions.length;
@@ -924,9 +879,9 @@ export class StepSequencingSystem extends EventEmitter {
     step.performance.failureRate = (executions.filter(ex => ex.status === 'failed').length / executions.length) * 100;
     step.performance.retryRate = (executions.filter(ex => ex.attempts > 1).length / executions.length) * 100;
   private updateExecutionProgress(execution: SequenceExecution)
-    stepId: string,
-    status: StepExecutionStatus,
-    duration: number): void {,
+  stepId: string
+    status: StepExecutionStatus
+    duration: number): void { }
     if (status === 'completed') {
       execution.progress.completedSteps++;
     execution.progress.currentStep = execution.progress.completedSteps;
@@ -939,16 +894,14 @@ export class StepSequencingSystem extends EventEmitter {
     if (duration > execution.performance.slowestStep.duration) {
       execution.performance.slowestStep = { id: stepId, duration };
     // Check milestones
-    for (const milestone of execution.progress.milestones) {
-  if (!milestone.reached && execution.progress.percentage >= milestone.percentage) {
+    for (const milestone of execution.progress.milestones) { if (!milestone.reached && execution.progress.percentage >= milestone.percentage) {
   milestone.reached = true;
   milestone.timestamp = new Date();
   this.emit('milestoneReached', {)
-  executionId: execution.id,
+  executionId: execution.id }
   milestone
 });
-  private getNextStep(sequence: SequenceDefinition, currentStepId: string, status: StepExecutionStatus): string | null {
-  const currentStep = sequence.steps.find(s => s.id === currentStepId);
+  private getNextStep(sequence: SequenceDefinition, currentStepId: string, status: StepExecutionStatus): string | null { const currentStep = sequence.steps.find(s => s.id === currentStepId);
   if (!currentStep || !currentStep.action) {
   return null;
   // Check action-specific next steps
@@ -963,60 +916,49 @@ export class StepSequencingSystem extends EventEmitter {
   return null;
   private registerBuiltInHandlers(): void {,
   // Register built-in action handlers
-  this.registerActionHandler('function', async (params: Record<string, unknown>, _context: ExecutionContext) => {,
+  this.registerActionHandler('function', async (params: Record<string, unknown>, _context: ExecutionContext) => { }
   // Execute a named function
   console.log('Executing function:', params.name);
 });
-    this.registerActionHandler('data', async (params: Record<string, unknown>, context: ExecutionContext) => {
-      // Set data in context
+    this.registerActionHandler('data', async (params: Record<string, unknown>, context: ExecutionContext) => { // Set data in context
       if (params.set) {
-        Object.assign(context.variables, params.set);
-    });
-    this.registerActionHandler('delay', async (params: Record<string, unknown>, context: ExecutionContext) => {
-      // Add delay
-      await this.delay(params.duration || 1000);
-    });
+        Object.assign(context.variables, params.set) });
+    this.registerActionHandler('delay', async (params: Record<string, unknown>, context: ExecutionContext) => { // Add delay
+      await this.delay(params.duration || 1000) });
     // Register built-in validators
-    this.registerValidator('required', async (context: ExecutionContext, params: Record<string, unknown>) => {
-      return context.variables[params.field] !== undefined;
-    });
-    this.registerValidator('format', async (context: ExecutionContext, params: Record<string, unknown>) => {
-      const value = context.variables[params.field];
+    this.registerValidator('required', async (context: ExecutionContext, params: Record<string, unknown>) => { return context.variables[params.field] !== undefined });
+    this.registerValidator('format', async (context: ExecutionContext, params: Record<string, unknown>) => { const value = context.variables[params.field];
       const regex = new RegExp(params.pattern);
-      return regex.test(String(value));
-    });
-  private delay(ms: number): Promise<void> {
-
-  return new Promise(resolve => setTimeout(resolve, ms));
+      return regex.test(String(value)) });
+  private delay(ms: number): Promise<void> { return new Promise(resolve => setTimeout(resolve, ms));
   // Sequence Builder Helper
   export class SequenceBuilder {
   private definition: Partial<SequenceDefinition>;
   private steps: SequenceStep = [];
-  constructor(name: string, description = '') {,
+  constructor(name: string, description = '') {
   this.definition = {
-  name,
-  description,
-  version: '1.0.0',
-  steps: [],
-  entryPoint: '',
-  exitPoints: [],
+  name
+  description
+  version: '1.0.0'
+  steps: []
+  entryPoint: ''
+  exitPoints: []
   metadata: {
-  category: 'general',
-  tags: [],
-  estimatedTotalDuration: 0,
-  difficulty: 'medium',
-  createdAt: new Date(),
-  lastModified: new Date(),
+  category: 'general'
+  tags: []
+  estimatedTotalDuration: 0
+  difficulty: 'medium'
+  createdAt: new Date()
+  lastModified: new Date() }
 };
-  addStep(step: Omit<SequenceStep, 'performance'>): SequenceBuilder {
-  const fullStep: SequenceStep = {,
-  ...step,
+  addStep(step: Omit<SequenceStep, 'performance'>): SequenceBuilder { const fullStep: SequenceStep = {
+  ...step
   performance: {
-  averageExecutionTime: 0,
-  successRate: 100,
-  failureRate: 0,
-  retryRate: 0,
-  lastExecutions: [],
+  averageExecutionTime: 0
+  successRate: 100
+  failureRate: 0
+  retryRate: 0
+  lastExecutions: [] }
 };
     this.steps.push(fullStep);
     return this;
@@ -1031,8 +973,7 @@ export class StepSequencingSystem extends EventEmitter {
   setMetadata(metadata: Partial<SequenceDefinition['metadata']>): SequenceBuilder {
     this.definition.metadata = { ...this.definition.metadata!, ...metadata };
     return this;
-  build(): Omit<SequenceDefinition, 'id'> {
-    this.definition.steps = this.steps;
+  build(): Omit<SequenceDefinition, 'id'> { this.definition.steps = this.steps;
     if (!this.definition.entryPoint && this.steps.length > 0) {
       this.definition.entryPoint = this.steps[0].id;
     if (!this.definition.exitPoints?.length && this.steps.length > 0) {
@@ -1040,6 +981,6 @@ export class StepSequencingSystem extends EventEmitter {
     return this.definition as Omit<SequenceDefinition, 'id'>;
 
 export default {
-  StepSequencingSystem,
+  StepSequencingSystem }
   SequenceBuilder
 };

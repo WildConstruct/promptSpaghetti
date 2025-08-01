@@ -109,7 +109,7 @@ describe('RegistrationService', () => {
         createdAt: mockUser.createdAt,
         roles: ['user'],
         permissions: ['graphs:create:own']
-      } as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown);
 
       // Execute
       const result = await registrationService.registerUser(validRegistrationRequest, validContext);
@@ -123,7 +123,7 @@ describe('RegistrationService', () => {
           createdAt: mockUser.createdAt,
           roles: ['user'],
           permissions: ['graphs:create:own']
-  }
+
         emailVerificationRequired: true,
         nextSteps: expect.any(Array)
       });
@@ -241,7 +241,7 @@ describe('RegistrationService', () => {
         createdAt: mockUser.createdAt,
         roles: ['user'],
         permissions: ['graphs:create:own']
-      } as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown);
 
       // Execute
       const result = await registrationService.registerUser(requestWithInvitation, validContext);
@@ -273,10 +273,10 @@ describe('RegistrationService', () => {
           field: 'email',
           message: 'Please enter a valid email address',
           code: 'INVALID_FORMAT'
-        }],
+],
         warnings: [],
         suggestions: []
-      } as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown);
 
       await expect(
         registrationService.registerUser(invalidEmailRequest, validContext)
@@ -522,4 +522,3 @@ function createMockUser(overrides: unknown = {}) {
     deletedAt: null,
     ...overrides
   };
-}

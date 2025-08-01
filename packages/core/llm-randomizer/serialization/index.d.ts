@@ -1,12 +1,10 @@
-export {
-  GraphSerializer,
+export { GraphSerializer,
   SerializationMetadata,
   SerializationOptions,
   serializeGraph,
-  createDefaultMetadata,
+  createDefaultMetadata }
 } from './serializer';
-export {
-  FormatValidator,
+export { FormatValidator,
   ValidationResult,
   ValidationError,
   ValidationWarning,
@@ -14,6 +12,6 @@ export {
   ParsedNode,
   ParsedEdge,
   validateFormat,
-  isValidFormat,
+  isValidFormat }
 } from './validator';
 //# sourceMappingURL=index.d.ts.map

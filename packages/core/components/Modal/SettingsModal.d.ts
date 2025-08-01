@@ -2,6 +2,7 @@ import React from 'react';
 import { AdvancedSettings } from '../../settings/types';
 
 }
+}
 export interface SettingsModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -13,4 +14,5 @@ export interface SettingsModalProps {
  */
 export declare const SettingsModal: React.FC<SettingsModalProps>;
 //# sourceMappingURL=SettingsModal.d.ts.map
+}
 }

@@ -13,9 +13,8 @@ import { EventEmitter } from 'events';
 // TYPES AND INTERFACES
 // ==========================================
 
-}
-export interface UserBehaviorEvent {
-  id: string;
+
+export interface UserBehaviorEvent { id: string;
   userId: string;
   sessionId: string;
   timestamp: Date;
@@ -27,11 +26,9 @@ export interface UserBehaviorEvent {
   geolocation?: GeolocationData;
   success: boolean;
   duration?: number;
-  dataVolumeBytes?: number;
-}
-}
-export enum UserActionType {
-  LOGIN = 'login',
+  dataVolumeBytes?: number }
+
+export enum UserActionType { LOGIN = 'login',
   LOGOUT = 'logout',
   FILE_ACCESS = 'file_access',
   FILE_DOWNLOAD = 'file_download',
@@ -41,28 +38,26 @@ export enum UserActionType {
   CONFIGURATION_CHANGE = 'configuration_change',
   DATA_EXPORT = 'data_export',
   ADMIN_ACTION = 'admin_action',
-  SEARCH_QUERY = 'search_query',
+  SEARCH_QUERY = 'search_query' }
   NAVIGATION = 'navigation'
-  export interface GeolocationData {
-  country: string;
+  export interface GeolocationData { country: string;
   region: string;
   city: string;
   latitude: number;
   longitude: number;
-  timezone: string;
-}
-}
-}
-export interface UserBehaviorProfile {
-  userId: string;
+  timezone: string }
+
+
+
+export interface UserBehaviorProfile { userId: string;
   createdAt: Date;
   lastUpdated: Date;
   totalEvents: number;
   // Temporal patterns
-  typicalLoginTimes: number; // Hours of day (0-23),
-  typicalDaysOfWeek: number; // Days (0-6, Sunday=0),
+  typicalLoginTimes: number; // Hours of day (0-23);
+  typicalDaysOfWeek: number; // Days (0-6, Sunday=0);
   averageSessionDuration: number;
-  typicalLoginFrequency: number; // Logins per day,
+  typicalLoginFrequency: number; // Logins per day }
   // Geographic patterns
   commonLocations: GeolocationData;
   travelPatterns: TravelPattern;
@@ -83,30 +78,29 @@ export interface UserBehaviorProfile {
   baselineRiskScore: number;
   anomalyThreshold: number;
   adaptationRate: number;
-}
-}
-}
-export interface TravelPattern {
-  fromLocation: GeolocationData;
+
+
+
+
+export interface TravelPattern { fromLocation: GeolocationData;
   toLocation: GeolocationData;
   frequency: number;
   typicalDuration: number;
-  lastOccurrence: Date;
-}
-}
-}
-export interface ResourceAccess {
-  resource: string;
+  lastOccurrence: Date }
+
+
+
+export interface ResourceAccess { resource: string;
   accessCount: number;
   averageAccessTime: number;
-  typicalAccessPattern: number; // Hours when typically accessed,
+  typicalAccessPattern: number; // Hours when typically accessed }
   lastAccessed: Date;
   riskScore: number;
-}
-}
-}
-export interface BehaviorAnomaly {
-  id: string;
+
+
+
+
+export interface BehaviorAnomaly { id: string;
   userId: string;
   detectedAt: Date;
   anomalyType: AnomalyType;
@@ -121,11 +115,9 @@ export interface BehaviorAnomaly {
   recommendedActions: string;
   isResolved: boolean;
   resolvedAt?: Date;
-  falsePositive?: boolean;
-}
-}
-export enum AnomalyType {
-  UNUSUAL_LOGIN_TIME = 'unusual_login_time',
+  falsePositive?: boolean }
+
+export enum AnomalyType { UNUSUAL_LOGIN_TIME = 'unusual_login_time',
   UNUSUAL_LOCATION = 'unusual_location',
   EXCESSIVE_ACCESS_VOLUME = 'excessive_access_volume',
   UNUSUAL_RESOURCE_ACCESS = 'unusual_resource_access',
@@ -143,14 +135,15 @@ export enum AnomalyType {
   HIGH = 'high',
   CRITICAL = 'critical'
   export interface RiskAssessment {
-  overallRisk: number; // 0-100,
-  businessImpact: number; // 0-100,
-  probabilityOfThreat: number; // 0-100,
+  overallRisk: number; // 0-100;
+  businessImpact: number; // 0-100;
+  probabilityOfThreat: number; // 0-100;
   potentialDamage: string;
-  mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate'
-}
-  }
-}
+  mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate' }
+
+
+
+
 export interface BehaviorAnalyticsConfig {
   profileUpdateInterval: number;
   anomalyDetectionSensitivity: number;
@@ -163,8 +156,8 @@ export interface BehaviorAnalyticsConfig {
   // ==========================================
   // MAIN SERVICE CLASS
   // ==========================================
-}
-}
+
+
 export class UserBehaviorAnalytics extends EventEmitter {
   private userProfiles: Map<string, UserBehaviorProfile> = new Map();
   private recentEvents: Map<string, UserBehaviorEvent> = new Map();
@@ -172,30 +165,27 @@ export class UserBehaviorAnalytics extends EventEmitter {
   private config: BehaviorAnalyticsConfig;
   private analysisInterval?: NodeJS.Timeout;
   private isAnalyzing = false;
-  constructor(config: Partial<BehaviorAnalyticsConfig> = {}) {
-  super();
+  constructor(config: Partial<BehaviorAnalyticsConfig> = {}) { super();
   this.config = {
-  profileUpdateInterval: 3600000, // 1 hour,
-  anomalyDetectionSensitivity: 0.7,
-  baselineTrainingPeriod: 604800000, // 7 days,
-  maxProfileAge: 7776000000, // 90 days,
-  enableRealTimeDetection: true,
-  enableGeolocationTracking: true,
-  minEventsForProfile: 50,
-  adaptiveThresholding: true,
+  profileUpdateInterval: 3600000, // 1 hour
+  anomalyDetectionSensitivity: 0.7
+  baselineTrainingPeriod: 604800000, // 7 days
+  maxProfileAge: 7776000000, // 90 days
+  enableRealTimeDetection: true
+  enableGeolocationTracking: true
+  minEventsForProfile: 50
+  adaptiveThresholding: true }
   ...config
 };
-    if (this.config.enableRealTimeDetection) {
-  this.startRealTimeAnalysis();
+    if (this.config.enableRealTimeDetection) { this.startRealTimeAnalysis();
   // ==========================================
   // EVENT PROCESSING
   // ==========================================
   /**
   * Process incoming user behavior event
   */
-  public async processUserEvent(event: UserBehaviorEvent): Promise<void> {,
-  try {
-  // Store event in recent events
+  public async processUserEvent(event: UserBehaviorEvent): Promise<void> { }
+  try { // Store event in recent events
   if (!this.recentEvents.has(event.userId)) {
   this.recentEvents.set(event.userId, []);
   this.recentEvents.get(event.userId)!.push(event);
@@ -205,8 +195,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
   // Detect anomalies in real-time
   if (this.config.enableRealTimeDetection) {
   await this.detectAnomalies(event);
-  this.emit('eventProcessed', event);
-} catch (error) {
+  this.emit('eventProcessed', event) } catch (error) {
       console.error('Error processing user behavior event:', error);
       this.emit('error', { error, event });
   /**
@@ -237,34 +226,32 @@ export class UserBehaviorAnalytics extends EventEmitter {
   // ==========================================
   // PROFILE MANAGEMENT
   // ==========================================
-  private createNewProfile(userId: string): UserBehaviorProfile {
-    return {
-      userId,
-      createdAt: new Date(),
-      lastUpdated: new Date(),
-      totalEvents: 0,
-      typicalLoginTimes: [],
-      typicalDaysOfWeek: [],
-      averageSessionDuration: 0,
-      typicalLoginFrequency: 0,
-      commonLocations: [],
-      travelPatterns: [],
+  private createNewProfile(userId: string): UserBehaviorProfile { return {
+      userId
+      createdAt: new Date()
+      lastUpdated: new Date()
+      totalEvents: 0
+      typicalLoginTimes: []
+      typicalDaysOfWeek: []
+      averageSessionDuration: 0
+      typicalLoginFrequency: 0
+      commonLocations: []
+      travelPatterns: []
       suspiciousLocationThreshold: 1000, // km
-      commonResources: [],
-      typicalActionDistribution: {} as Record<UserActionType, number>,
-      peakActivityHours: [],
-      failureRate: 0,
-      riskyBehaviorScore: 0,
-      privilegedAccessFrequency: 0,
-      commonUserAgents: [],
-      typicalDeviceCount: 1,
-      ipAddressStability: 1.0,
-      baselineRiskScore: 0,
-      anomalyThreshold: 0.7,
+      commonResources: [] }
+      typicalActionDistribution: {} as Record<UserActionType, number>
+      peakActivityHours: []
+      failureRate: 0
+      riskyBehaviorScore: 0
+      privilegedAccessFrequency: 0
+      commonUserAgents: []
+      typicalDeviceCount: 1
+      ipAddressStability: 1.0
+      baselineRiskScore: 0
+      anomalyThreshold: 0.7
       adaptationRate: 0.1;
   };
-  private updateTemporalPatterns(profile: UserBehaviorProfile, event: UserBehaviorEvent): void {
-  const hour = event.timestamp.getHours();
+  private updateTemporalPatterns(profile: UserBehaviorProfile, event: UserBehaviorEvent): void { const hour = event.timestamp.getHours();
   const dayOfWeek = event.timestamp.getDay();
   // Update login times for login events
   if (event.actionType === UserActionType.LOGIN) {
@@ -272,7 +259,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
   this.updateArrayPattern(profile.typicalDaysOfWeek, dayOfWeek, 7);
   // Update peak activity hours
   this.updateArrayPattern(profile.peakActivityHours, hour, 24);
-  private updateGeographicPatterns(profile: UserBehaviorProfile, event: UserBehaviorEvent): void {,
+  private updateGeographicPatterns(profile: UserBehaviorProfile, event: UserBehaviorEvent): void {
   if (!event.geolocation) return;
   // Add to common locations if not already present
   const existingLocation = profile.commonLocations.find(loc =>;);
@@ -298,7 +285,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
   averageAccessTime: 0,
   typicalAccessPattern: new Array(24).fill(0),
   lastAccessed: event.timestamp,
-  riskScore: 0,
+  riskScore: 0 }
 };
       profile.commonResources.push(resourceAccess);
     resourceAccess.accessCount += 1;
@@ -306,8 +293,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
     resourceAccess.typicalAccessPattern[event.timestamp.getHours()] += 1;
     // Calculate risk score based on resource sensitivity
     resourceAccess.riskScore = this.calculateResourceRiskScore(event.resource, event.actionType);
-  private updateSecurityPatterns(profile: UserBehaviorProfile, event: UserBehaviorEvent): void {
-    // Update failure rate
+  private updateSecurityPatterns(profile: UserBehaviorProfile, event: UserBehaviorEvent): void { // Update failure rate
     if (event.actionType === UserActionType.LOGIN) {
       const recentLogins = this.getRecentEvents(event.userId, UserActionType.LOGIN, 24 * 60 * 60 * 1000);
       const failures = recentLogins.filter(e => !e.success).length;
@@ -366,27 +352,25 @@ export class UserBehaviorAnalytics extends EventEmitter {
         anomalies.push(this.createAnomaly()
           event,
           AnomalyType.UNUSUAL_LOGIN_TIME,
-          0.8,
+          0.8 }
           `Login at unusual time: ${hour}:00`}
-}
+
           AnomalySeverity.MEDIUM
         ));
     // Check off-hours activity
-    if (hour < 6 || hour > 22) {
-      const offHoursActivity = profile.peakActivityHours.filter(h => h < 6 || h > 22).length;
+    if (hour < 6 || hour > 22) { const offHoursActivity = profile.peakActivityHours.filter(h => h < 6 || h > 22).length;
       const totalActivity = profile.peakActivityHours.length;
       if (totalActivity > 50 && offHoursActivity / totalActivity < 0.1) {
         anomalies.push(this.createAnomaly()
           event,
           AnomalyType.OFF_HOURS_ACTIVITY,
-          0.6,
+          0.6 }
           `Activity during off hours: ${hour}:00`}
-}
+
           AnomalySeverity.LOW
         ));
     return anomalies;
-  private detectGeographicAnomalies(event: UserBehaviorEvent, profile: UserBehaviorProfile): BehaviorAnomaly {
-    const anomalies: BehaviorAnomaly = [];
+  private detectGeographicAnomalies(event: UserBehaviorEvent, profile: UserBehaviorProfile): BehaviorAnomaly { const anomalies: BehaviorAnomaly = [];
     if (!event.geolocation) return anomalies;
     // Check for unknown location
     const minDistance = Math.min(...profile.commonLocations.map(loc =>;);
@@ -395,16 +379,15 @@ export class UserBehaviorAnalytics extends EventEmitter {
     if (minDistance > profile.suspiciousLocationThreshold) {
       anomalies.push(this.createAnomaly()
         event,
-        AnomalyType.UNUSUAL_LOCATION,
+        AnomalyType.UNUSUAL_LOCATION }
         Math.min(0.9, minDistance / 5000), // Scale with distance
         `Access from unusual location: ${event.geolocation.city}, ${event.geolocation.country}`}
-}
+
         minDistance > 5000 ? AnomalySeverity.HIGH : AnomalySeverity.MEDIUM
       ));
     // Check for impossible travel
     const recentEvents = this.getRecentEvents(event.userId, undefined, 60 * 60 * 1000); // Last hour;
-    for (const recentEvent of recentEvents) {
-      if (recentEvent.geolocation && recentEvent.id !== event.id) {
+    for (const recentEvent of recentEvents) { if (recentEvent.geolocation && recentEvent.id !== event.id) {
         const distance = this.calculateDistance(recentEvent.geolocation, event.geolocation);
         const timeDiff = (event.timestamp.getTime() - recentEvent.timestamp.getTime()) / 1000 / 3600; // hours;
         const maxSpeed = distance / timeDiff; // km/h;
@@ -412,41 +395,38 @@ export class UserBehaviorAnalytics extends EventEmitter {
           anomalies.push(this.createAnomaly()
             event,
             AnomalyType.IMPOSSIBLE_TRAVEL,
-            0.95,
+            0.95 }
             `Impossible travel: ${distance.toFixed(0)}km in ${timeDiff.toFixed(1)}h`}
-}
+
             AnomalySeverity.CRITICAL
           ));
     return anomalies;
-  private detectAccessAnomalies(event: UserBehaviorEvent, profile: UserBehaviorProfile): BehaviorAnomaly {
-    const anomalies: BehaviorAnomaly = [];
+  private detectAccessAnomalies(event: UserBehaviorEvent, profile: UserBehaviorProfile): BehaviorAnomaly { const anomalies: BehaviorAnomaly = [];
     // Check unusual resource access
     const resourceAccess = profile.commonResources.find(r => r.resource === event.resource);
     if (!resourceAccess && this.isHighRiskResource(event.resource)) {
       anomalies.push(this.createAnomaly()
         event,
         AnomalyType.UNUSUAL_RESOURCE_ACCESS,
-        0.7,
+        0.7 }
         `First-time access to high-risk resource: ${event.resource}`}
-}
+
         AnomalySeverity.HIGH
       ));
     // Check rapid permission escalation
-    if (this.isPrivilegedAction(event.actionType)) {
-      const recentPrivilegedActions = this.getRecentEvents(event.userId, undefined, 60 * 60 * 1000);
+    if (this.isPrivilegedAction(event.actionType)) { const recentPrivilegedActions = this.getRecentEvents(event.userId, undefined, 60 * 60 * 1000);
         .filter(e => this.isPrivilegedAction(e.actionType));
       if (recentPrivilegedActions.length > 10) {
         anomalies.push(this.createAnomaly()
           event,
           AnomalyType.RAPID_PERMISSION_ESCALATION,
-          0.8,
+          0.8 }
           `Rapid privileged actions: ${recentPrivilegedActions.length} in last hour`}
-}
+
           AnomalySeverity.HIGH
         ));
     return anomalies;
-  private detectVolumeAnomalies(event: UserBehaviorEvent, profile: UserBehaviorProfile): BehaviorAnomaly {
-    const anomalies: BehaviorAnomaly = [];
+  private detectVolumeAnomalies(event: UserBehaviorEvent, profile: UserBehaviorProfile): BehaviorAnomaly { const anomalies: BehaviorAnomaly = [];
     // Check excessive access volume
     const recentEvents = this.getRecentEvents(event.userId, undefined, 60 * 60 * 1000); // Last hour;
     const averageHourlyActivity = profile.totalEvents / Math.max(1;);
@@ -456,14 +436,13 @@ export class UserBehaviorAnalytics extends EventEmitter {
       anomalies.push(this.createAnomaly()
         event,
         AnomalyType.EXCESSIVE_ACCESS_VOLUME,
-        0.7,
+        0.7 }
         `Excessive activity: ${recentEvents.length} events in last hour`}
-}
+
         AnomalySeverity.MEDIUM
       ));
     // Check bulk data access
-    if (event.actionType === UserActionType.DATA_EXPORT || event.actionType === UserActionType.FILE_DOWNLOAD) {
-      const dataVolume = event.dataVolumeBytes || 0;
+    if (event.actionType === UserActionType.DATA_EXPORT || event.actionType === UserActionType.FILE_DOWNLOAD) { const dataVolume = event.dataVolumeBytes || 0;
       const recentDataEvents = this.getRecentEvents(event.userId, event.actionType, 24 * 60 * 60 * 1000);
       const averageVolume = recentDataEvents.reduce((sum, e) => sum + (e.dataVolumeBytes || 0), 0) / ;
         Math.max(recentDataEvents.length, 1);
@@ -471,45 +450,41 @@ export class UserBehaviorAnalytics extends EventEmitter {
         anomalies.push(this.createAnomaly()
           event,
           AnomalyType.BULK_DATA_ACCESS,
-          0.8,
+          0.8 }
           `Large data volume: ${(dataVolume / 1024 / 1024).toFixed(1)}MB`}
-}
+
           AnomalySeverity.HIGH
         ));
     return anomalies;
-  private detectDeviceAnomalies(event: UserBehaviorEvent, profile: UserBehaviorProfile): BehaviorAnomaly {
-    const anomalies: BehaviorAnomaly = [];
+  private detectDeviceAnomalies(event: UserBehaviorEvent, profile: UserBehaviorProfile): BehaviorAnomaly { const anomalies: BehaviorAnomaly = [];
     // Check unusual device/user agent
     if (!profile.commonUserAgents.includes(event.userAgent)) {
       anomalies.push(this.createAnomaly()
         event,
         AnomalyType.UNUSUAL_DEVICE_USAGE,
-        0.6,
+        0.6 }
         `New device/browser: ${event.userAgent.substring(0, 50)}...`}
-}
+
         AnomalySeverity.LOW
       ));
     return anomalies;
   // ==========================================
   // ANOMALY HANDLING
   // ==========================================
-  private async handleAnomaly(anomaly: BehaviorAnomaly): Promise<void> {
-
-    // Store anomaly
+  private async handleAnomaly(anomaly: BehaviorAnomaly): Promise<void> { // Store anomaly
     this.detectedAnomalies.set(anomaly.id, anomaly);
     // Emit anomaly event
     this.emit('anomalyDetected', anomaly);
     // Auto-resolve low confidence anomalies after time
     if (anomaly.confidence < 0.8) {
       setTimeout(() => {
-        this.resolveAnomaly(anomaly.id, false);
-      }, 24 * 60 * 60 * 1000); // 24 hours
+        this.resolveAnomaly(anomaly.id, false) }, 24 * 60 * 60 * 1000); // 24 hours
     console.log(`🔍 BEHAVIOR ANOMALY: ${anomaly.anomalyType} (confidence: ${anomaly.confidence})`);}
-  private createAnomaly(event: UserBehaviorEvent)
-    type: AnomalyType,
+  private createAnomaly(event: UserBehaviorEvent),
+  type: AnomalyType,
     confidence: number,
     description: string,
-    severity: AnomalySeverity): BehaviorAnomaly {,
+    severity: AnomalySeverity): BehaviorAnomaly { ,
   return {
   id: this.generateAnomalyId(),
   userId: event.userId,
@@ -524,13 +499,12 @@ export class UserBehaviorAnalytics extends EventEmitter {
   observedValue: 0, // Would be calculated from event,
   riskAssessment: this.assessRisk(type, confidence, severity),
   recommendedActions: this.getRecommendedActions(type, severity),
-  isResolved: false,
+  isResolved: false }
 };
   // ==========================================
   // HELPER METHODS
   // ==========================================
-  private updateArrayPattern(array: number, value: number, maxSize: number): void {
-  array.push(value);
+  private updateArrayPattern(array: number, value: number, maxSize: number): void { array.push(value);
   if (array.length > maxSize * 10) { // Keep reasonable size
   array.splice(0, array.length - maxSize * 5);
   private updateTravelPatterns(profile: UserBehaviorProfile, event: UserBehaviorEvent): void {,
@@ -566,18 +540,16 @@ export class UserBehaviorAnalytics extends EventEmitter {
   private isHighRiskResource(resource: string): boolean {,
   const highRiskKeywords = ['admin', 'config', 'financial', 'payment', 'customer', 'sensitive'];
   return highRiskKeywords.some(keyword => resource.toLowerCase().includes(keyword));
-  private getRecentEvents(userId: string)
+  private getRecentEvents(userId: string),
   actionType?: UserActionType,
-  timeframeMs: number = 24 * 60 * 60 * 1000): UserBehaviorEvent {,
+  timeframeMs: number = 24 * 60 * 60 * 1000): UserBehaviorEvent { }
   const userEvents = this.recentEvents.get(userId) || [];
   const cutoff = Date.now() - timeframeMs;
-  return userEvents.filter(event => {)
+  return userEvents.filter(event => { )
   const isRecent = event.timestamp.getTime() > cutoff;
   const matchesType = !actionType || event.actionType === actionType;
-  return isRecent && matchesType;
-});
-  private updateRiskScores(profile: UserBehaviorProfile): void {
-  let riskScore = 0;
+  return isRecent && matchesType });
+  private updateRiskScores(profile: UserBehaviorProfile): void { let riskScore = 0;
   // Factor in failure rate
   riskScore += profile.failureRate * 20;
   // Factor in privileged access frequency
@@ -592,34 +564,32 @@ export class UserBehaviorAnalytics extends EventEmitter {
   [AnomalySeverity.LOW]: 0.25,
   [AnomalySeverity.MEDIUM]: 0.5,
   [AnomalySeverity.HIGH]: 0.8,
-  [AnomalySeverity.CRITICAL]: 1.0,
+  [AnomalySeverity.CRITICAL]: 1.0 }
 };
     const overallRisk = confidence * severityMultiplier[severity] * 100;
     const businessImpact = overallRisk * 0.8; // Slightly lower than overall risk;
     const probabilityOfThreat = confidence * 100;
-    return {
-  overallRisk,
+    return { overallRisk,
   businessImpact,
   probabilityOfThreat,
   potentialDamage: this.getPotentialDamage(type),
   mitigationUrgency: overallRisk > 80 ? 'immediate' : ,
   overallRisk > 60 ? 'high' :,
-  overallRisk > 40 ? 'medium' : 'low',
+  overallRisk > 40 ? 'medium' : 'low' }
 };
-  private getPotentialDamage(type: AnomalyType): string {
-  const damageMap: Record<AnomalyType, string> = {,
-  [AnomalyType.UNUSUAL_LOGIN_TIME]: ['Account compromise', 'Unauthorized access'],
-  [AnomalyType.UNUSUAL_LOCATION]: ['Account takeover', 'Credential theft'],
-  [AnomalyType.EXCESSIVE_ACCESS_VOLUME]: ['Data harvesting', 'System abuse'],
-  [AnomalyType.UNUSUAL_RESOURCE_ACCESS]: ['Data breach', 'Privilege escalation'],
-  [AnomalyType.RAPID_PERMISSION_ESCALATION]: ['System compromise', 'Insider threat'],
-  [AnomalyType.SUSPICIOUS_DATA_EXPORT]: ['Data exfiltration', 'IP theft'],
-  [AnomalyType.BULK_DATA_ACCESS]: ['Mass data theft', 'Compliance violation'],
-  [AnomalyType.IMPOSSIBLE_TRAVEL]: ['Credential sharing', 'Account compromise'],
-  [AnomalyType.OFF_HOURS_ACTIVITY]: ['Unauthorized access', 'Malicious activity'],
-  [AnomalyType.UNUSUAL_DEVICE_USAGE]: ['Device compromise', 'Session hijacking'],
-  [AnomalyType.ABNORMAL_SESSION_DURATION]: ['Session persistence attack', 'Automated access'],
-  [AnomalyType.ATYPICAL_NAVIGATION_PATTERN]: ['Bot activity', 'Reconnaissance'],
+  private getPotentialDamage(type: AnomalyType): string { const damageMap: Record<AnomalyType, string> = {
+  [AnomalyType.UNUSUAL_LOGIN_TIME]: ['Account compromise', 'Unauthorized access']
+  [AnomalyType.UNUSUAL_LOCATION]: ['Account takeover', 'Credential theft']
+  [AnomalyType.EXCESSIVE_ACCESS_VOLUME]: ['Data harvesting', 'System abuse']
+  [AnomalyType.UNUSUAL_RESOURCE_ACCESS]: ['Data breach', 'Privilege escalation']
+  [AnomalyType.RAPID_PERMISSION_ESCALATION]: ['System compromise', 'Insider threat']
+  [AnomalyType.SUSPICIOUS_DATA_EXPORT]: ['Data exfiltration', 'IP theft']
+  [AnomalyType.BULK_DATA_ACCESS]: ['Mass data theft', 'Compliance violation']
+  [AnomalyType.IMPOSSIBLE_TRAVEL]: ['Credential sharing', 'Account compromise']
+  [AnomalyType.OFF_HOURS_ACTIVITY]: ['Unauthorized access', 'Malicious activity']
+  [AnomalyType.UNUSUAL_DEVICE_USAGE]: ['Device compromise', 'Session hijacking']
+  [AnomalyType.ABNORMAL_SESSION_DURATION]: ['Session persistence attack', 'Automated access']
+  [AnomalyType.ATYPICAL_NAVIGATION_PATTERN]: ['Bot activity', 'Reconnaissance'] }
 };
     return damageMap[type] || ['Security incident'];
   private getRecommendedActions(type: AnomalyType, severity: AnomalySeverity): string {
@@ -631,30 +601,21 @@ export class UserBehaviorAnalytics extends EventEmitter {
     return baseActions;
   private generateAnomalyId(): string {
     return `anomaly_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  private cleanupOldEvents(userId: string): void {
-  const userEvents = this.recentEvents.get(userId);
+  private cleanupOldEvents(userId: string): void { const userEvents = this.recentEvents.get(userId);
   if (!userEvents) return;
   const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000); // 7 days;
   const filteredEvents = userEvents.filter(event => ;);
   event.timestamp.getTime() > cutoff
   );
   this.recentEvents.set(userId, filteredEvents);
-  private startRealTimeAnalysis(): void {,
-  if (this.analysisInterval) {
-  clearInterval(this.analysisInterval);
+  private startRealTimeAnalysis(): void { }
+  if (this.analysisInterval) { clearInterval(this.analysisInterval);
   this.analysisInterval = setInterval(async () => {
   if (!this.isAnalyzing) {
   this.isAnalyzing = true;
   try {
-  await this.performBatchAnalysis();
-} catch (error) {
-  console.error('Batch analysis error:', error);
-} finally {
-          this.isAnalyzing = false;
-    }, this.config.profileUpdateInterval);
-  private async performBatchAnalysis(): Promise<void> {
-
-  // Update all user profiles periodically
+  await this.performBatchAnalysis() } catch (error) { console.error('Batch analysis error:', error) } finally { this.isAnalyzing = false }, this.config.profileUpdateInterval);
+  private async performBatchAnalysis(): Promise<void> { // Update all user profiles periodically
   for (const [userId, profile] of this.userProfiles) {
   const userEvents = this.recentEvents.get(userId) || [];
   if (userEvents.length > 0) {
@@ -663,14 +624,12 @@ export class UserBehaviorAnalytics extends EventEmitter {
   // Adaptive threshold adjustment
   if (this.config.adaptiveThresholding) {
   this.adjustAnomalyThresholds(profile);
-  private adjustAnomalyThresholds(profile: UserBehaviorProfile): void {,
+  private adjustAnomalyThresholds(profile: UserBehaviorProfile): void { }
   // Adjust thresholds based on user's historical behavior
   const recentAnomalies = Array.from(this.detectedAnomalies.values());
   .filter(a => a.userId === profile.userId && !a.isResolved);
-  if (recentAnomalies.length > 10) {
-  // Too many false positives, reduce sensitivity
-  profile.anomalyThreshold = Math.min(0.9, profile.anomalyThreshold + 0.1);
-} else if (recentAnomalies.length === 0 && profile.totalEvents > 1000) {
+  if (recentAnomalies.length > 10) { // Too many false positives, reduce sensitivity
+  profile.anomalyThreshold = Math.min(0.9, profile.anomalyThreshold + 0.1) } else if (recentAnomalies.length === 0 && profile.totalEvents > 1000) {
       // No anomalies detected, increase sensitivity
       profile.anomalyThreshold = Math.max(0.5, profile.anomalyThreshold - 0.05);
   // ==========================================
@@ -696,20 +655,17 @@ export class UserBehaviorAnalytics extends EventEmitter {
     return true;
   public updateConfig(newConfig: Partial<BehaviorAnalyticsConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    if (newConfig.enableRealTimeDetection !== undefined) {
-      if (newConfig.enableRealTimeDetection) {
-        this.startRealTimeAnalysis();
-      } else if (this.analysisInterval) {
-  clearInterval(this.analysisInterval);
+    if (newConfig.enableRealTimeDetection !== undefined) { if (newConfig.enableRealTimeDetection) {
+        this.startRealTimeAnalysis() } else if (this.analysisInterval) { clearInterval(this.analysisInterval);
   this.analysisInterval = undefined;
-  public getAnalyticsStats(): Record<string, unknown> {,
+  public getAnalyticsStats(): Record<string, unknown> {
   return {
-  totalUsers: this.userProfiles.size,
-  totalAnomalies: this.detectedAnomalies.size,
-  activeAnomalies: this.getActiveAnomalies().length,
-  profilesWithBaseline: Array.from(this.userProfiles.values()),
-  .filter(p => p.totalEvents >= this.config.minEventsForProfile).length,
-  config: this.config,
+  totalUsers: this.userProfiles.size
+  totalAnomalies: this.detectedAnomalies.size
+  activeAnomalies: this.getActiveAnomalies().length
+  profilesWithBaseline: Array.from(this.userProfiles.values())
+  .filter(p => p.totalEvents >= this.config.minEventsForProfile).length
+  config: this.config }
 };
   public destroy(): void {
     if (this.analysisInterval) {

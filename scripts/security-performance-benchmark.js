@@ -31,7 +31,7 @@ const SecurityValidation = {
   validateSafePropertyKey: (key) => {
     const dangerous = ['__proto__', 'constructor', 'prototype'];
     return !dangerous.includes(key) && /^[a-zA-Z0-9_-]+$/.test(key);
-  }
+
 };
 
 // Test data generators
@@ -104,7 +104,7 @@ const TestDataGenerator = {
       data: 'prop_' + 'x'.repeat(Math.max(0, length - 5)),
       type: 'property_key'
     }));
-  }
+
 };
 
 // Performance testing framework
@@ -119,7 +119,7 @@ class SecurityPerformanceBenchmark {
       },
       tests: []
     };
-  }
+
   
   /**
    * Run a performance test
@@ -140,7 +140,7 @@ class SecurityPerformanceBenchmark {
       // Warm up
       for (let i = 0; i < 10; i++) {
         validationFunction(testItem.data);
-      }
+
       
       // Actual measurements
       for (let i = 0; i < iterations; i++) {
@@ -148,7 +148,7 @@ class SecurityPerformanceBenchmark {
         validationFunction(testItem.data);
         const end = performance.now();
         measurements.push(end - start);
-      }
+
       
       const stats = this.calculateStatistics(measurements);
       results.measurements.push({
@@ -158,11 +158,11 @@ class SecurityPerformanceBenchmark {
       });
       
       console.log(`  ✓ ${testItem.type} (size: ${testItem.data.length}): ${stats.mean.toFixed(3)}ms avg`);
-    }
+
     
     this.results.tests.push(results);
     return results;
-  }
+
   
   /**
    * Calculate statistical measures
@@ -182,7 +182,7 @@ class SecurityPerformanceBenchmark {
         measurements.reduce((sum, x) => sum + Math.pow(x - (sum / measurements.length), 2), sum) / measurements.length
       )
     };
-  }
+
   
   /**
    * Run comprehensive benchmark suite
@@ -240,7 +240,7 @@ class SecurityPerformanceBenchmark {
     
     console.log('\n✅ Benchmark suite completed!');
     return this.results;
-  }
+
   
   /**
    * Generate performance report
@@ -259,7 +259,7 @@ class SecurityPerformanceBenchmark {
     
     console.log(`\n📊 Full report saved to: ${reportPath}`);
     return report;
-  }
+
   
   /**
    * Generate performance summary
@@ -280,10 +280,10 @@ class SecurityPerformanceBenchmark {
         averageP95: avgP95,
         rating: avgMean < 1 ? 'excellent' : avgMean < 5 ? 'good' : 'needs improvement'
       };
-    }
+
     
     return summary;
-  }
+
   
   /**
    * Generate performance recommendations
@@ -301,7 +301,7 @@ class SecurityPerformanceBenchmark {
           recommendation: 'Consider caching validation results or optimizing regex patterns',
           priority: 'medium'
         });
-      }
+
       
       const highVariability = test.measurements.filter(m => m.standardDeviation > m.mean * 0.5);
       if (highVariability.length > 0) {
@@ -311,8 +311,8 @@ class SecurityPerformanceBenchmark {
           recommendation: 'Investigate garbage collection impact or optimize algorithm consistency',
           priority: 'low'
         });
-      }
-    }
+
+
     
     if (recommendations.length === 0) {
       recommendations.push({
@@ -321,10 +321,10 @@ class SecurityPerformanceBenchmark {
         recommendation: 'Current performance is excellent, monitor for regressions',
         priority: 'info'
       });
-    }
+
     
     return recommendations;
-  }
+
   
   /**
    * Print summary to console
@@ -339,15 +339,15 @@ class SecurityPerformanceBenchmark {
       for (const measurement of test.measurements) {
         const rating = measurement.mean < 1 ? '🟢' : measurement.mean < 5 ? '🟡' : '🔴';
         console.log(`  ${rating} ${measurement.testCase}: ${measurement.mean.toFixed(3)}ms (p95: ${measurement.p95.toFixed(3)}ms)`);
-      }
-    }
+
+
     
     console.log('\n🎯 Performance Targets:');
     console.log('  🟢 Excellent: < 1ms average');
     console.log('  🟡 Good: 1-5ms average');
     console.log('  🔴 Needs improvement: > 5ms average');
-  }
-}
+
+
 
 // CLI interface
 async function main(): Promise<void> {
@@ -368,19 +368,18 @@ async function main(): Promise<void> {
     if (hasSlowTests) {
       console.log('⚠️  Some tests exceeded performance targets');
       process.exit(1);
-    } else {
+ else {
       console.log('✅ All performance targets met!');
-    }
-    
-  } catch (error) {
+
+ catch (error) {
     console.error('❌ Benchmark failed:', error);
     process.exit(1);
-  }
-}
+
+
 
 // Run if called directly
 if (require.main === module) {
   main();
-}
+
 
 module.exports = { SecurityPerformanceBenchmark, TestDataGenerator };

@@ -35,7 +35,7 @@ import {
   Activity,
   Zap,
   Target
-} from 'lucide-react';
+ from 'lucide-react';
 
 // ==========================================
 // TYPE DEFINITIONS
@@ -120,7 +120,8 @@ enum VerificationStatus {
   backupType: string;,
   createdAt: Date,
   originalSize: number;,
-  compressedSize: number,
+  compressedSize: number
+},
   checksum: string;}
 
 
@@ -128,11 +129,11 @@ enum VerificationStatus {
   // MAIN COMPONENT
   // ==========================================
   export interface BackupVerificationDashboardProps {
-  }
+
 
 className?: string;
-}
-}
+
+
 export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardProps> = ({ className }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
@@ -181,10 +182,10 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   if (backupsResponse.ok) {
   const backupsResult = await backupsResponse.json();
   setBackups(backupsResult.data || []);
-} catch (err) {
+ catch (err) {
   setError('Failed to load dashboard data');
   console.error('Dashboard loading error:', err);
-} finally {
+ finally {
       setLoading(false);
   };
   // Start backup verification
@@ -196,14 +197,14 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
         body: JSON.stringify({),
           backupId,
           configuration: { ...verificationConfig, ...config }
-  }
+
       });
       if (response.ok) {
         await loadDashboardData();
-      } else {
+ else {
         const error = await response.json();
         setError(error.error || 'Failed to start verification');
-    } catch (err) {
+ catch (err) {
   setError('Error starting verification');
   console.error('Verification start error:', err);
 };
@@ -216,7 +217,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   });
       if (response.ok) {
         await loadDashboardData();
-    } catch (err) {
+ catch (err) {
   console.error('Error cancelling verification:', err);
 };
   useEffect(() => {
@@ -586,7 +587,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                   setSearchQuery('');
                   setFilterStatus('');
                   setFilterRiskLevel('');
-                }}>
+}>
                   <Filter className="w-4 h-4 mr-1" />
                   Clear
                 </Button>
@@ -700,7 +701,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   ...prev,
   stepsDisabled: newDisabled
 }));
-                            }}
+
                             disabled={step.required}
                           />
                         </div>

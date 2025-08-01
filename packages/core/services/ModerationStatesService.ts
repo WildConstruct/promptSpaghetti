@@ -8,9 +8,8 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
-}
-export interface ModerationState {
-  id: string;
+
+export interface ModerationState { id: string;
   name: string;
   type: ModerationStateType;
   category: ModerationCategory;
@@ -23,19 +22,18 @@ export interface ModerationState {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-  isActive: boolean;
-}
-}
-}
-export interface ModerationItem {
-  id: string;
+  isActive: boolean }
+
+
+
+export interface ModerationItem { id: string;
   type: ContentType;
   contentId: string;
   content: ContentSnapshot;
   author: UserInfo;
   reporter?: UserInfo;
   // Current state
-  currentState: string; // ModerationState.id,
+  currentState: string; // ModerationState.id }
   stateHistory: StateHistoryEntry;
   // Classification
   category: ModerationCategory;
@@ -60,11 +58,11 @@ export interface ModerationItem {
   dueDate?: Date;
   resolvedAt?: Date;
   archivedAt?: Date;
-}
-}
-}
-export interface StateHistoryEntry {
-  id: string;
+
+
+
+
+export interface StateHistoryEntry { id: string;
   fromState?: string;
   toState: string;
   transitionType: TransitionType;
@@ -72,12 +70,12 @@ export interface StateHistoryEntry {
   reason: string;
   metadata?: Record<string, any>;
   timestamp: Date;
-  duration?: number; // ms spent in previous state,
-}
-}
-}
-export interface StateTransition {
-  id: string;
+  duration?: number; // ms spent in previous state }
+
+
+
+
+export interface StateTransition { id: string;
   name: string;
   fromStates: string;
   toState: string;
@@ -86,86 +84,82 @@ export interface StateTransition {
   actions: TransitionAction;
   permissions: TransitionPermissions;
   validation: ValidationRules;
-  automation: AutomationRules;
-}
-}
-}
-export interface TransitionCondition {
-  type: 'user_role' | 'severity_level' | 'escalation_level' | 'time_elapsed' | 'flag_count' | 'ai_confidence' | 'custom';
+  automation: AutomationRules }
+
+
+
+export interface TransitionCondition { type: 'user_role' | 'severity_level' | 'escalation_level' | 'time_elapsed' | 'flag_count' | 'ai_confidence' | 'custom';
   field: string;
-  operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'matches_regex';
+  operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'matches_regex' }
   value: any;
   description: string;
-}
-}
-}
-export interface TransitionAction {
-  type: 'assign_reviewer' | 'send_notification' | 'escalate' | 'apply_action' | 'update_metadata' | 'trigger_automation' | 'compliance_check';
+
+
+
+
+export interface TransitionAction { type: 'assign_reviewer' | 'send_notification' | 'escalate' | 'apply_action' | 'update_metadata' | 'trigger_automation' | 'compliance_check';
   parameters: Record<string, any>;
-  condition?: string; // JavaScript expression,
-  delay?: number; // milliseconds,
-}
-}
-}
-export interface AutoModerationAction {
-  id: string;
+  condition?: string; // JavaScript expression;
+  delay?: number; // milliseconds }
+
+
+
+
+export interface AutoModerationAction { id: string;
   name: string;
   type: AutoActionType;
   triggers: AutoActionTrigger;
   conditions: AutoActionCondition;
-  actions: ModerationAction;
-}
+  actions: ModerationAction }
+},
   confidence: { min: number; max: number };
   enabled: boolean;
   cooldown?: number; // seconds between actions
   limits: ActionLimits;
-}
-}
-export interface ModerationAction {
-  type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'warn_user' | 'suspend_user' | 'ban_user' | 'escalate' | 'request_review';
+
+
+export interface ModerationAction { type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'warn_user' | 'suspend_user' | 'ban_user' | 'escalate' | 'request_review';
   severity: ActionSeverity;
-  duration?: number; // for temporary actions,
+  duration?: number; // for temporary actions }
   reason: string;
   parameters: Record<string, any>;
   reversible: boolean;
-}
-}
-}
-export interface AIAnalysisResult {
-  confidence: number;
-  categories: Array<{
+
+
+
+
+export interface AIAnalysisResult { confidence: number;
+  categories: Array<{ }
   category: string;
   confidence: number;
   evidence: string;
-}
-}>;
-  recommendations: Array<{
+
+
+>;
+  recommendations: Array<{ ,
   action: string;
   confidence: number;
-  reasoning: string;
-}>;
-  riskAssessment: {
+  reasoning: string }>;
+  riskAssessment: { ,
   level: 'low' | 'medium' | 'high' | 'critical';
   factors: string;
-  score: number;
-};
+  score: number };
   processedAt: Date;
   modelVersion: string;
-}
-}
-export interface ComplianceCheck {
-  id: string;
+
+
+export interface ComplianceCheck { id: string;
   type: ComplianceType;
-  status: 'pending' | 'passed' | 'failed' | 'requires_review';
+  status: 'pending' | 'passed' | 'failed' | 'requires_review' }
   details: ComplianceDetails;
   checkedAt?: Date;
   checkedBy?: string;
   validUntil?: Date;
-}
-}
-}
-export interface ProcessingMetrics {
-  timeToFirstReview?: number; // milliseconds,
+
+
+
+
+export interface ProcessingMetrics { timeToFirstReview?: number; // milliseconds }
   timeToResolution?: number;
   reviewerCount: number;
   escalationCount: number;
@@ -173,8 +167,8 @@ export interface ProcessingMetrics {
   automationActions: number;
   manualActions: number;
   averageConfidence?: number;
-}
-}
+
+
 export type ModerationStateType = 
   | 'initial'        // First state for new items
   | 'processing'     // Active review states
@@ -248,293 +242,278 @@ export type ComplianceType =
   | 'accessibility'  // Accessibility standards
   | 'industry_specific'; // Sector-specific rules
 
-}
-export interface UserInfo {
-  id: string;
+
+export interface UserInfo { id: string;
   username: string;
   email?: string;
   role: string;
   reputation: number;
   joinDate: Date;
-  moderationHistory: {
+  moderationHistory: { }
   totalReports: number;
   confirmedViolations: number;
   falseReports: number;
   lastViolation?: Date;
-}
+
+
 };
-}
-}
-export interface ContentSnapshot {
-  originalContent: string;
+
+
+export interface ContentSnapshot { originalContent: string;
   currentContent: string;
   metadata: Record<string, any>;
-  attachments: Array<{
+  attachments: Array<{ }
   type: string;
   url: string;
   size: number;
   checksum: string;
-}
-}>;
-  contextData: {
-  parentContent?: string;
+
+
+>;
+  contextData: { parentContent?: string;
   threadContext?: string;
-  locationData?: Record<string, any>;
-};
+  locationData?: Record<string, any> };
   capturedAt: Date;
-}
-}
-export interface ModerationFlag {
-  id: string;
+
+
+export interface ModerationFlag { id: string;
   type: string;
-  source: 'user_report' | 'auto_detection' | 'manual_review' | 'ai_analysis';
+  source: 'user_report' | 'auto_detection' | 'manual_review' | 'ai_analysis' }
   confidence: number;
   description: string;
   evidence: FlagEvidence;
   reportedBy?: string;
   reportedAt: Date;
-}
-}
-}
-export interface FlagEvidence {
-  type: 'text_match' | 'pattern_match' | 'behavior_anomaly' | 'user_report' | 'ai_classification';
+
+
+
+
+export interface FlagEvidence { type: 'text_match' | 'pattern_match' | 'behavior_anomaly' | 'user_report' | 'ai_classification' }
   details: Record<string, any>;
   confidence: number;
   source: string;
-}
-}
-}
-export interface ReviewerAssignment {
-  reviewerId: string;
+
+
+
+
+export interface ReviewerAssignment { reviewerId: string;
   assignedAt: Date;
   dueDate?: Date;
-  status: 'assigned' | 'in_progress' | 'completed' | 'skipped';
+  status: 'assigned' | 'in_progress' | 'completed' | 'skipped' }
   expertise: string;
   workload: number;
-}
-}
-}
-export interface AutoProcessingStatus {
-  enabled: boolean;
+
+
+
+
+export interface AutoProcessingStatus { enabled: boolean;
   stage: 'queued' | 'analyzing' | 'processed' | 'failed' | 'skipped';
   confidence: number;
   lastProcessed?: Date;
   nextProcessing?: Date;
   attempts: number;
-  errors: ProcessingError;
-}
-}
-}
-export interface ProcessingError {
-  timestamp: Date;
+  errors: ProcessingError }
+
+
+
+export interface ProcessingError { timestamp: Date;
   error: string;
   stage: string;
   retryable: boolean;
-  context?: Record<string, any>;
-}
-}
-}
-export interface LegalReviewStatus {
-  required: boolean;
+  context?: Record<string, any> }
+
+
+
+export interface LegalReviewStatus { required: boolean;
   status: 'pending' | 'in_progress' | 'completed' | 'expedited';
   assignedLawyer?: string;
   priority: 'routine' | 'urgent' | 'emergency';
   deadline?: Date;
   notes?: string;
-  completedAt?: Date;
-}
-}
-}
-export interface StatePermissions {
-  canView: string;        // Roles that can view items in this state,
-  canEdit: string;        // Roles that can edit items in this state,
-  canTransition: string;  // Roles that can transition from this state,
-  canAssign: string;      // Roles that can assign reviewers,
-  canEscalate: string;    // Roles that can escalate,
+  completedAt?: Date }
+
+
+
+export interface StatePermissions { canView: string;        // Roles that can view items in this state;
+  canEdit: string;        // Roles that can edit items in this state;
+  canTransition: string;  // Roles that can transition from this state;
+  canAssign: string;      // Roles that can assign reviewers;
+  canEscalate: string;    // Roles that can escalate }
   restrictions: PermissionRestriction;
-}
-}
-}
-export interface PermissionRestriction {
-  type: 'time_based' | 'condition_based' | 'approval_required';
+
+
+
+
+export interface PermissionRestriction { type: 'time_based' | 'condition_based' | 'approval_required' }
   parameters: Record<string, any>;
   description: string;
-}
-}
-}
-export interface TransitionPermissions {
-  requiredRoles: string;
+
+
+
+
+export interface TransitionPermissions { requiredRoles: string;
   requiredPermissions: string;
   approvalRequired?: boolean;
   approvers?: string;
-  conditions: PermissionCondition;
-}
-}
-}
-export interface PermissionCondition {
-  type: 'user_level' | 'content_sensitivity' | 'escalation_level' | 'time_constraint';
+  conditions: PermissionCondition }
+
+
+
+export interface PermissionCondition { type: 'user_level' | 'content_sensitivity' | 'escalation_level' | 'time_constraint' }
   parameters: Record<string, any>;
   description: string;
-}
-}
-}
-export interface ValidationRules {
-  required?: string;
+
+
+
+
+export interface ValidationRules { required?: string;
   constraints?: ValidationConstraint;
-  customValidators?: CustomValidator;
-}
-}
-}
-export interface ValidationConstraint {
-  field: string;
+  customValidators?: CustomValidator }
+
+
+
+export interface ValidationConstraint { field: string;
   type: 'presence' | 'format' | 'length' | 'value_range' | 'custom';
   parameters: Record<string, any>;
-  message: string;
-}
-}
-}
-export interface CustomValidator {
-  name: string;
+  message: string }
+
+
+
+export interface CustomValidator { name: string;
   function: string;
   parameters: Record<string, any>;
-  message: string;
-}
-}
-}
-export interface AutomationRules {
-  triggers: AutomationTrigger;
+  message: string }
+
+
+
+export interface AutomationRules { triggers: AutomationTrigger;
   conditions: AutomationCondition;
   actions: AutomationAction;
   delays?: number;
-  retries?: number;
-}
-}
-}
-export interface AutomationTrigger {
-  type: 'time_based' | 'event_based' | 'condition_met';
+  retries?: number }
+
+
+
+export interface AutomationTrigger { type: 'time_based' | 'event_based' | 'condition_met' }
   parameters: Record<string, any>;
   description: string;
-}
-}
-}
-export interface AutomationCondition {
-  type: 'field_value' | 'time_elapsed' | 'external_api' | 'user_action';
+
+
+
+
+export interface AutomationCondition { type: 'field_value' | 'time_elapsed' | 'external_api' | 'user_action' }
   parameters: Record<string, any>;
   description: string;
-}
-}
-}
-export interface AutomationAction {
-  type: 'state_transition' | 'notification' | 'assignment' | 'escalation' | 'external_api';
+
+
+
+
+export interface AutomationAction { type: 'state_transition' | 'notification' | 'assignment' | 'escalation' | 'external_api' }
   parameters: Record<string, any>;
   description: string;
-}
-}
-}
-export interface AutoActionTrigger {
-  type: 'content_created' | 'content_updated' | 'user_reported' | 'threshold_exceeded' | 'pattern_detected';
+
+
+
+
+export interface AutoActionTrigger { type: 'content_created' | 'content_updated' | 'user_reported' | 'threshold_exceeded' | 'pattern_detected' }
   parameters: Record<string, any>;
   description: string;
-}
-}
-}
-export interface AutoActionCondition {
-  type: 'content_analysis' | 'user_history' | 'volume_check' | 'reputation_score' | 'time_pattern';
+
+
+
+
+export interface AutoActionCondition { type: 'content_analysis' | 'user_history' | 'volume_check' | 'reputation_score' | 'time_pattern' }
   parameters: Record<string, any>;
   threshold: number;
   description: string;
-}
-}
-}
-export interface ActionLimits {
-  maxActionsPerHour?: number;
+
+
+
+
+export interface ActionLimits { maxActionsPerHour?: number;
   maxActionsPerDay?: number;
   maxActionsPerUser?: number;
   cooldownPeriod?: number;
-  escalationThreshold?: number;
-}
-}
-}
-export interface ModerationStateMetadata {
-  description: string;
+  escalationThreshold?: number }
+
+
+
+export interface ModerationStateMetadata { description: string;
   guidelines: string;
   examples: string;
-  slaTarget?: number; // milliseconds,
-  escalationTimeout?: number; // milliseconds,
-  autoArchiveAfter?: number; // milliseconds,
+  slaTarget?: number; // milliseconds;
+  escalationTimeout?: number; // milliseconds;
+  autoArchiveAfter?: number; // milliseconds }
   tags: string;
   version: string;
   isTemplate: boolean;
   templateParameters?: Record<string, any>;
-}
-}
-}
-export interface ComplianceDetails {
-  regulation: string;
+
+
+
+
+export interface ComplianceDetails { regulation: string;
   requirements: string;
   evidence: ComplianceEvidence;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   mitigationActions: string;
-  documentation: DocumentationReference;
-}
-}
-}
-export interface ComplianceEvidence {
-  type: 'document' | 'log_entry' | 'user_action' | 'system_record';
+  documentation: DocumentationReference }
+
+
+
+export interface ComplianceEvidence { type: 'document' | 'log_entry' | 'user_action' | 'system_record' }
   reference: string;
   description: string;
   timestamp: Date;
   verifiedBy?: string;
-}
-}
-}
-export interface DocumentationReference {
-  type: 'policy' | 'procedure' | 'legal_document' | 'audit_report';
+
+
+
+
+export interface DocumentationReference { type: 'policy' | 'procedure' | 'legal_document' | 'audit_report' }
   title: string;
   reference: string;
   version: string;
   url?: string;
-}
-}
-}
-export interface ModerationStats {
-  totalItems: number;
+
+
+
+
+export interface ModerationStats { totalItems: number;
   byState: Record<string, number>;
   byCategory: Record<ModerationCategory, number>;
   bySeverity: Record<ModerationSeverity, number>;
   byPriority: Record<ModerationPriority, number>;
-  processingMetrics: {
+  processingMetrics: { }
   averageResolutionTime: number;
   averageReviewTime: number;
   escalationRate: number;
   automationRate: number;
   accuracyRate: number;
-}
+
+
 };
-  performance: {
+  performance: { 
   itemsProcessedToday: number;
   itemsResolvedToday: number;
   backlogSize: number;
   overdueTasks: number;
-  slaCompliance: number; // percentage,
+  slaCompliance: number; // percentage }
 };
-  compliance: {
+  compliance: { 
   checksPassed: number;
   checksFailed: number;
   requiresReview: number;
-  legalReviewsPending: number;
-};
-  automation: {
+  legalReviewsPending: number };
+  automation: { 
   autoActionsTriggered: number;
   autoResolutions: number;
   falsePositives: number;
   manualOverrides: number;
-  confidenceDistribution: Record<string, number>;
-};
-}
-}
-export interface ModerationFilter {
-  states?: string;
+  confidenceDistribution: Record<string, number> };
+
+
+export interface ModerationFilter { states?: string;
   categories?: ModerationCategory;
   severities?: ModerationSeverity;
   priorities?: ModerationPriority;
@@ -542,8 +521,8 @@ export interface ModerationFilter {
   reporters?: string;
   authors?: string;
   contentTypes?: ContentType;
-  flags?: string;
-}
+  flags?: string }
+
   dateRange?: { start?: Date; end?: Date };
   searchQuery?: string;
   hasAIAnalysis?: boolean;
@@ -557,9 +536,8 @@ export interface ModerationFilter {
  * Comprehensive state management system for content moderation with
  * advanced workflows, automation, and compliance tracking.
  */
-}
-export class ModerationStatesService {
-  private static instance: ModerationStatesService;
+
+export class ModerationStatesService { private static instance: ModerationStatesService;
   private states: Map<string, ModerationState> = new Map();
   private items: Map<string, ModerationItem> = new Map();
   private transitions: Map<string, StateTransition> = new Map();
@@ -570,7 +548,7 @@ export class ModerationStatesService {
   this.initializeDefaultStates();
   this.initializeDefaultTransitions();
   this.startAutomationProcessor();
-  static getInstance(): ModerationStatesService {,
+  static getInstance(): ModerationStatesService {
   if (!ModerationStatesService.instance) {
   ModerationStatesService.instance = new ModerationStatesService();
   return ModerationStatesService.instance;
@@ -578,33 +556,32 @@ export class ModerationStatesService {
   * State Management
   */
   async createState(stateData: Omit<ModerationState, 'id' | 'createdAt' | 'updatedAt'>)
-  createdBy: string): Promise<ModerationState> {,
-  const state: ModerationState = {,
-  ...stateData,
-  id: this.generateStateId(),
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdBy: string): Promise<ModerationState> {
+  const state: ModerationState = {
+  ...stateData
+  id: this.generateStateId()
+  createdAt: new Date()
+  updatedAt: new Date() }
   createdBy
 };
     this.states.set(state.id, state);
     this.notifyListeners('state_created', state);
     return state;
   async updateState(stateId: string)
-    updates: Partial<ModerationState>,
-    updatedBy: string): Promise<ModerationState | null> {,
+  updates: Partial<ModerationState>
+    updatedBy: string): Promise<ModerationState | null> { 
   const state = this.states.get(stateId);
   if (!state) return null;
-  const updatedState: ModerationState = {,
-  ...state,
-  ...updates,
-  id: stateId,
-  updatedAt: new Date(),
+  const updatedState: ModerationState = {
+  ...state
+  ...updates
+  id: stateId
+  updatedAt: new Date() }
 };
     this.states.set(stateId, updatedState);
     this.notifyListeners('state_updated', updatedState);
     return updatedState;
-  getStates(filter?: { type?: ModerationStateType; active?: boolean }): ModerationState {
-  let states = Array.from(this.states.values());
+  getStates(filter?: { type?: ModerationStateType; active?: boolean }): ModerationState { let states = Array.from(this.states.values());
   if (filter?.type) {
   states = states.filter(s => s.type === filter.type);
   if (filter?.active !== undefined) {
@@ -614,28 +591,28 @@ export class ModerationStatesService {
   * Item Management
   */
   async createModerationItem(itemData: Omit<ModerationItem, 'id' | 'createdAt' | 'updatedAt' | 'stateHistory' | 'processingMetrics'>)
-  createdBy: string): Promise<ModerationItem> {,
+  createdBy: string): Promise<ModerationItem> {
   const initialState = this.getInitialState(itemData.category, itemData.severity);
-  const item: ModerationItem = {,
-  ...itemData,
-  id: this.generateItemId(),
-  currentState: initialState.id,
-  stateHistory: [{,
-  id: this.generateHistoryId(),
-  toState: initialState.id,
-  transitionType: 'automatic',
-  triggeredBy: 'system',
-  reason: 'Initial state assignment',
-  timestamp: new Date(),
-}],
-      processingMetrics: {
-  reviewerCount: 0,
-  escalationCount: 0,
-  stateChangeCount: 1,
-  automationActions: 0,
-  manualActions: 0,
-},
-  createdAt: new Date(),
+  const item: ModerationItem = {
+  ...itemData
+  id: this.generateItemId()
+  currentState: initialState.id
+  stateHistory: [{
+  id: this.generateHistoryId()
+  toState: initialState.id
+  transitionType: 'automatic'
+  triggeredBy: 'system'
+  reason: 'Initial state assignment'
+  timestamp: new Date() }
+]
+      processingMetrics: { 
+  reviewerCount: 0
+  escalationCount: 0
+  stateChangeCount: 1
+  automationActions: 0
+  manualActions: 0 }
+
+  createdAt: new Date()
       updatedAt: new Date();
   };
     this.items.set(item.id, item);
@@ -644,13 +621,11 @@ export class ModerationStatesService {
     await this.processAutomation(item.id);
     return item;
   async transitionItem(itemId: string)
-    toStateId: string,
-    reason: string,
-    triggeredBy: string,
+  toStateId: string
+    reason: string
+    triggeredBy: string
     metadata?: Record<string, any>
-  ): Promise<boolean> {
-
-  const item = this.items.get(itemId);
+  ): Promise<boolean> { const item = this.items.get(itemId);
   if (!item) return false;
   const fromState = this.states.get(item.currentState);
   const toState = this.states.get(toStateId);
@@ -663,67 +638,63 @@ export class ModerationStatesService {
   // Execute transition actions
   await this.executeTransitionActions(item, transition, triggeredBy);
   // Update item state
-  const historyEntry: StateHistoryEntry = {,
-  id: this.generateHistoryId(),
-  fromState: item.currentState,
-  toState: toStateId,
-  transitionType: transition.type,
-  triggeredBy,
-  reason,
-  metadata,
-  timestamp: new Date(),
-  duration: Date.now() - item.updatedAt.getTime(),
+  const historyEntry: StateHistoryEntry = {
+  id: this.generateHistoryId()
+  fromState: item.currentState
+  toState: toStateId
+  transitionType: transition.type
+  triggeredBy
+  reason
+  metadata
+  timestamp: new Date()
+  duration: Date.now() - item.updatedAt.getTime() }
 };
-    const updatedItem: ModerationItem = {
-  ...item,
-  currentState: toStateId,
-  stateHistory: [...item.stateHistory, historyEntry],
+    const updatedItem: ModerationItem = { ...item
+  currentState: toStateId
+  stateHistory: [...item.stateHistory, historyEntry]
   processingMetrics: {
-  ...item.processingMetrics,
-  stateChangeCount: item.processingMetrics.stateChangeCount + 1,
-},
+  ...item.processingMetrics
+  stateChangeCount: item.processingMetrics.stateChangeCount + 1 }
+
   updatedAt: new Date();
   };
     this.items.set(itemId, updatedItem);
     this.notifyListeners('item_transitioned', { item: updatedItem, transition });
     return true;
   async assignReviewer(itemId: string)
-    reviewerId: string,
-    assignedBy: string,
+  reviewerId: string
+    assignedBy: string
     dueDate?: Date
-  ): Promise<boolean> {
-
-  const item = this.items.get(itemId);
+  ): Promise<boolean> { const item = this.items.get(itemId);
   if (!item) return false;
-  const assignment: ReviewerAssignment = {,
-  reviewerId,
-  assignedAt: new Date(),
-  dueDate,
-  status: 'assigned',
-  expertise: [],
-  workload: 1,
+  const assignment: ReviewerAssignment = {
+  reviewerId
+  assignedAt: new Date()
+  dueDate
+  status: 'assigned'
+  expertise: []
+  workload: 1 }
 };
-    const updatedItem: ModerationItem = {
-  ...item,
-  assignedTo: reviewerId,
-  reviewers: [...item.reviewers, assignment],
-  updatedAt: new Date(),
+    const updatedItem: ModerationItem = { ...item
+  assignedTo: reviewerId
+  reviewers: [...item.reviewers, assignment]
+  updatedAt: new Date() }
 };
     this.items.set(itemId, updatedItem);
     this.notifyListeners('reviewer_assigned', { item: updatedItem, assignment });
     return true;
   async escalateItem(itemId: string)
-    reason: string,
-    escalatedBy: string): Promise<boolean> {,
+  reason: string
+    escalatedBy: string): Promise<boolean> { 
   const item = this.items.get(itemId);
   if (!item) return false;
-  const updatedItem: ModerationItem = {,
-  ...item,
-  escalationLevel: item.escalationLevel + 1,
+  const updatedItem: ModerationItem = {
+  ...item
+  escalationLevel: item.escalationLevel + 1
   processingMetrics: {
-  ...item.processingMetrics,
-  escalationCount: item.processingMetrics.escalationCount + 1,
-},
+  ...item.processingMetrics
+  escalationCount: item.processingMetrics.escalationCount + 1 }
+
   updatedAt: new Date();
   };
     this.items.set(itemId, updatedItem);
@@ -736,9 +707,7 @@ export class ModerationStatesService {
   /**
    * Automation Processing
    */
-  private async processAutomation(itemId: string): Promise<void> {
-
-    const item = this.items.get(itemId);
+  private async processAutomation(itemId: string): Promise<void> { const item = this.items.get(itemId);
     if (!item || !item.autoProcessing.enabled) return;
     try {
       // Update processing status
@@ -752,21 +721,18 @@ export class ModerationStatesService {
       // Update processing status
       item.autoProcessing.stage = 'processed';
       item.autoProcessing.lastProcessed = new Date();
-      this.items.set(itemId, item);
-    } catch (error) {
-  item.autoProcessing.stage = 'failed';
+      this.items.set(itemId, item) } catch (error) { item.autoProcessing.stage = 'failed';
   item.autoProcessing.errors.push({)
-  timestamp: new Date(),
-  error: error instanceof Error ? error.message : 'Unknown error',
-  stage: 'automation_processing',
-  retryable: true,
+  timestamp: new Date()
+  error: error instanceof Error ? error.message : 'Unknown error'
+  stage: 'automation_processing'
+  retryable: true }
 });
       this.items.set(itemId, item);
   /**
    * Data Retrieval
    */
-  getModerationItems(filter?: ModerationFilter): ModerationItem {
-    let items = Array.from(this.items.values());
+  getModerationItems(filter?: ModerationFilter): ModerationItem { let items = Array.from(this.items.values());
     if (!filter) return items;
     if (filter.states?.length) {
       items = items.filter(i => filter.states!.includes(i.currentState));
@@ -784,8 +750,7 @@ export class ModerationStatesService {
       items = items.filter(i => {)
   const date = i.createdAt;
         return (!filter.dateRange!.start || date >= filter.dateRange!.start) &&
-               (!filter.dateRange!.end || date <= filter.dateRange!.end);
-      });
+               (!filter.dateRange!.end || date <= filter.dateRange!.end) });
     if (filter.searchQuery) {
       const query = filter.searchQuery.toLowerCase();
       items = items.filter(i =>)
@@ -806,12 +771,11 @@ export class ModerationStatesService {
     const byCategory: Record<ModerationCategory, number> = {} as any;
     const bySeverity: Record<ModerationSeverity, number> = {} as any;
     const byPriority: Record<ModerationPriority, number> = {} as any;
-    items.forEach(item => {)
+    items.forEach(item => { )
   byState[item.currentState] = (byState[item.currentState] || 0) + 1;
       byCategory[item.category] = (byCategory[item.category] || 0) + 1;
       bySeverity[item.severity] = (bySeverity[item.severity] || 0) + 1;
-      byPriority[item.priority] = (byPriority[item.priority] || 0) + 1;
-    });
+      byPriority[item.priority] = (byPriority[item.priority] || 0) + 1 });
     const resolvedItems = items.filter(i => i.resolvedAt);
     const avgResolutionTime = resolvedItems.length > 0 ;
       ? resolvedItems.reduce((sum, i) => sum + (i.resolvedAt!.getTime() - i.createdAt.getTime()), 0) / resolvedItems.length
@@ -832,152 +796,141 @@ export class ModerationStatesService {
     const checksPassed = complianceChecks.filter(c => c.status === 'passed').length;
     const checksFailed = complianceChecks.filter(c => c.status === 'failed').length;
     const requiresReview = complianceChecks.filter(c => c.status === 'requires_review').length;
-    return {
-  totalItems: items.length,
+    return { totalItems: items.length,
   byState,
   byCategory,
   bySeverity,
   byPriority,
-  processingMetrics: {
+  processingMetrics: {,
   averageResolutionTime: avgResolutionTime,
   averageReviewTime: 0, // TODO: Calculate from reviewer data,
   escalationRate: items.filter(i => i.escalationLevel > 0).length / items.length,
   automationRate: items.filter(i => i.autoProcessing.stage === 'processed').length / items.length,
-  accuracyRate: 0.95 // TODO: Calculate from validation data,
+  accuracyRate: 0.95 // TODO: Calculate from validation data }
 },
-  performance: {
-  itemsProcessedToday,
+  performance: { itemsProcessedToday,
   itemsResolvedToday,
   backlogSize: items.filter(i => !i.resolvedAt).length,
   overdueTasks,
-  slaCompliance: 0.92 // TODO: Calculate from SLA data,
+  slaCompliance: 0.92 // TODO: Calculate from SLA data }
 },
-  compliance: {
-  checksPassed,
+  compliance: { checksPassed,
   checksFailed,
   requiresReview,
-  legalReviewsPending: items.filter(i => i.legalReview?.status === 'pending').length,
+  legalReviewsPending: items.filter(i => i.legalReview?.status === 'pending').length }
 },
-  automation: {
+  automation: { ,
   autoActionsTriggered: items.reduce((sum, i) => sum + i.processingMetrics.automationActions, 0),
         autoResolutions: items.filter(i => i.resolvedAt && i.processingMetrics.manualActions === 0).length,
         falsePositives: 0, // TODO: Track false positives,
-  manualOverrides: 0, // TODO: Track manual overrides,
+  manualOverrides: 0, // TODO: Track manual overrides }
   confidenceDistribution: {} // TODO: Calculate confidence distribution;
   };
   /**
    * Event Handling
    */
-  subscribe(listenerId: string, callback: (event: ModerationEvent) => void): void {
-  this.listeners.set(listenerId, callback);
+  subscribe(listenerId: string, callback: (event: ModerationEvent) => void): void { this.listeners.set(listenerId, callback);
   unsubscribe(listenerId: string): void {,
   this.listeners.delete(listenerId);
   // Private helper methods
   private initializeDefaultStates(): void {,
   const defaultStates: Array<Omit<ModerationState, 'id' | 'createdAt' | 'updatedAt'>> = [
   {
-  name: 'New',
-  type: 'initial',
-  category: 'other',
-  severity: 'medium',
-  autoActions: [],
+  name: 'New'
+  type: 'initial'
+  category: 'other'
+  severity: 'medium'
+  autoActions: []
   permissions: {
-  canView: ['moderator', 'admin', 'super_admin'],
-  canEdit: ['moderator', 'admin', 'super_admin'],
-  canTransition: ['moderator', 'admin', 'super_admin'],
-  canAssign: ['admin', 'super_admin'],
-  canEscalate: ['moderator', 'admin', 'super_admin'],
-  restrictions: [],
-},
-  transitions: [],
-        metadata: {
-  description: 'Initial state for new moderation items',
-  guidelines: ['Review content for policy violations', 'Assign appropriate reviewers'],
-  examples: [],
-  slaTarget: 1800000, // 30 minutes,
-  tags: ['initial', 'triage'],
-  version: '1.0',
-  isTemplate: false,
-},
-  createdBy: 'system',
+  canView: ['moderator', 'admin', 'super_admin']
+  canEdit: ['moderator', 'admin', 'super_admin']
+  canTransition: ['moderator', 'admin', 'super_admin']
+  canAssign: ['admin', 'super_admin']
+  canEscalate: ['moderator', 'admin', 'super_admin']
+  restrictions: [] }
+
+  transitions: []
+        metadata: { 
+  description: 'Initial state for new moderation items'
+  guidelines: ['Review content for policy violations', 'Assign appropriate reviewers']
+  examples: []
+  slaTarget: 1800000, // 30 minutes
+  tags: ['initial', 'triage']
+  version: '1.0'
+  isTemplate: false }
+
+  createdBy: 'system'
         isActive: true;
-  }
-      {
-  name: 'Under Review',
-  type: 'processing',
-  category: 'other',
-  severity: 'medium',
-  autoActions: [],
+
+      { name: 'Under Review'
+  type: 'processing'
+  category: 'other'
+  severity: 'medium'
+  autoActions: []
   permissions: {
-  canView: ['moderator', 'admin', 'super_admin'],
-  canEdit: ['moderator', 'admin', 'super_admin'],
-  canTransition: ['moderator', 'admin', 'super_admin'],
-  canAssign: ['admin', 'super_admin'],
-  canEscalate: ['moderator', 'admin', 'super_admin'],
-  restrictions: [],
-},
-  transitions: [],
-        metadata: {
-  description: 'Item is being actively reviewed',
-  guidelines: ['Conduct thorough content analysis', 'Document findings'],
-  examples: [],
-  slaTarget: 3600000, // 1 hour,
-  tags: ['review', 'processing'],
-  version: '1.0',
-  isTemplate: false,
-},
-  createdBy: 'system',
+  canView: ['moderator', 'admin', 'super_admin']
+  canEdit: ['moderator', 'admin', 'super_admin']
+  canTransition: ['moderator', 'admin', 'super_admin']
+  canAssign: ['admin', 'super_admin']
+  canEscalate: ['moderator', 'admin', 'super_admin']
+  restrictions: [] }
+
+  transitions: []
+        metadata: { 
+  description: 'Item is being actively reviewed'
+  guidelines: ['Conduct thorough content analysis', 'Document findings']
+  examples: []
+  slaTarget: 3600000, // 1 hour
+  tags: ['review', 'processing']
+  version: '1.0'
+  isTemplate: false }
+
+  createdBy: 'system'
         isActive: true;
-  }
-      {
-  name: 'Escalated',
-  type: 'escalated',
-  category: 'other',
-  severity: 'high',
-  autoActions: [],
+
+      { name: 'Escalated'
+  type: 'escalated'
+  category: 'other'
+  severity: 'high'
+  autoActions: []
   permissions: {
-  canView: ['senior_moderator', 'admin', 'super_admin'],
-  canEdit: ['senior_moderator', 'admin', 'super_admin'],
-  canTransition: ['admin', 'super_admin'],
-  canAssign: ['admin', 'super_admin'],
-  canEscalate: ['admin', 'super_admin'],
-  restrictions: [],
-},
-  transitions: [],
-        metadata: {
-  description: 'Item escalated to senior review',
-  guidelines: ['Requires senior moderator attention', 'May need legal consultation'],
-  examples: [],
-  slaTarget: 1800000, // 30 minutes,
-  escalationTimeout: 7200000, // 2 hours,
-  tags: ['escalated', 'priority'],
-  version: '1.0',
-  isTemplate: false,
-},
-  createdBy: 'system',
+  canView: ['senior_moderator', 'admin', 'super_admin']
+  canEdit: ['senior_moderator', 'admin', 'super_admin']
+  canTransition: ['admin', 'super_admin']
+  canAssign: ['admin', 'super_admin']
+  canEscalate: ['admin', 'super_admin']
+  restrictions: [] }
+
+  transitions: []
+        metadata: { 
+  description: 'Item escalated to senior review'
+  guidelines: ['Requires senior moderator attention', 'May need legal consultation']
+  examples: []
+  slaTarget: 1800000, // 30 minutes
+  escalationTimeout: 7200000, // 2 hours
+  tags: ['escalated', 'priority']
+  version: '1.0'
+  isTemplate: false }
+
+  createdBy: 'system'
         isActive: true];
-    defaultStates.forEach(stateData => {)
-  const state: ModerationState = {,
-  ...stateData,
-  id: this.generateStateId(),
-  createdAt: new Date(),
-  updatedAt: new Date(),
+    defaultStates.forEach(stateData => { )
+  const state: ModerationState = {
+  ...stateData
+  id: this.generateStateId()
+  createdAt: new Date()
+  updatedAt: new Date() }
 };
       this.states.set(state.id, state);
     });
-  private initializeDefaultTransitions(): void {
-  // TODO: Initialize default state transitions,
-  private startAutomationProcessor(): void {,
+  private initializeDefaultTransitions(): void { // TODO: Initialize default state transitions
+  private startAutomationProcessor(): void { }
   // Process automation every 30 seconds
-  this.processor = setInterval(() => {
-  this.processScheduledAutomation();
-}, 30000);
-  private processScheduledAutomation(): void {
-    const items = Array.from(this.items.values());
+  this.processor = setInterval(() => { this.processScheduledAutomation() }, 30000);
+  private processScheduledAutomation(): void { const items = Array.from(this.items.values());
     items.forEach(async (item) => {
       if (item.autoProcessing.enabled && item.autoProcessing.stage === 'queued') {
-        await this.processAutomation(item.id);
-    });
+        await this.processAutomation(item.id) });
   private getInitialState(category: ModerationCategory, severity: ModerationSeverity): ModerationState {
     const initialStates = this.getStates({ type: 'initial' });
     return initialStates.find(s => s.isActive) || initialStates[0];
@@ -1011,9 +964,7 @@ export class ModerationStatesService {
     this.listeners.forEach(callback => {)
   try {
         callback({ type: eventType, data, timestamp: new Date() });
-      } catch (error) {
-  console.error('Error in moderation listener:', error);
-});
+ catch (error) { console.error('Error in moderation listener:', error) });
   private generateStateId(): string {
     return `state_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   private generateItemId(): string {
@@ -1021,19 +972,18 @@ export class ModerationStatesService {
   private generateHistoryId(): string {
     return `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
 
-}
 export interface ModerationEvent {
   type: string;
   data: any;
   timestamp: Date;
   // Export singleton instance
-}
-}
+
+
 export const moderationStatesService = ModerationStatesService.getInstance();
 
 // Convenience functions
 export const createModerationItem = ()
-  itemData: Omit<ModerationItem, 'id' | 'createdAt' | 'updatedAt' | 'stateHistory' | 'processingMetrics'>,
+  itemData: Omit<ModerationItem, 'id' | 'createdAt' | 'updatedAt' | 'stateHistory' | 'processingMetrics'>
   createdBy: string) => moderationStatesService.createModerationItem(itemData, createdBy);
 
 export const transitionItem = (itemId: string, toStateId: string, reason: string, triggeredBy: string) =>

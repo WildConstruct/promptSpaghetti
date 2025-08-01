@@ -8,9 +8,9 @@ export type VerificationRequestStatus = 'draft' | 'submitted' | 'under_review' |
 
 export type DocumentType = 'identity' | 'business_license' | 'tax_document' | 'bank_statement' | 'portfolio' | 'credential' | 'other';
 
-}
+
 export interface VerificationInformation {
-  personal_info: {
+  personal_info: {,
   full_name: string;,
   email: string;
   phone?: string;
@@ -21,7 +21,8 @@ export interface VerificationInformation {
   postal_code?: string;
   address_line_1?: string;
   address_line_2?: string;
-}
+
+
 };
   professional_info?: {
   job_title?: string;
@@ -37,7 +38,7 @@ export interface VerificationInformation {
   business_type?: string;
   registration_number?: string;
   tax_id?: string;
-  business_address?: {
+  business_address?: {,
   country: string;
   state_province?: string;
   city?: string;
@@ -48,11 +49,12 @@ export interface VerificationInformation {
   };
   verification_purpose: string;
   additional_notes?: string;
-}
-}
+
+
+
 export interface VerificationRequest {
   id: string;,
-  user_id: string;
+  user_id: string;,
   requested_level: VerificationLevel;,
   status: VerificationRequestStatus;
   submitted_at?: string;
@@ -61,19 +63,21 @@ export interface VerificationRequest {
   review_notes?: string;
   rejection_reason?: string;
   information: VerificationInformation;,
-  documents: VerificationDocument;
+  documents: VerificationDocument;,
   created_at: string;,
   updated_at: string;
-}
-}
-}
+
+
+
+
+
 export interface VerificationDocument {
   id: string;,
-  verification_request_id: string;
+  verification_request_id: string;,
   document_type: DocumentType;,
-  file_name: string;
+  file_name: string;,
   file_size: number;,
-  file_type: string;
+  file_type: string;,
   s3_key: string;,
   status: 'pending_upload' | 'uploaded' | 'processing' | 'verified' | 'rejected';
   verification_notes?: string;
@@ -81,31 +85,35 @@ export interface VerificationDocument {
   verified_at?: string;
   created_at: string;,
   updated_at: string;
-}
-}
-}
+
+
+
+
+
 export interface UserVerificationStatus {
   user_id: string;,
-  current_level: VerificationLevel;
+  current_level: VerificationLevel;,
   status: VerificationStatus;
   verified_at?: string;
   expires_at?: string;
   trust_score: number;,
-  badges: string;
+  badges: string;,
   verification_history: VerificationRequest;
-}
-}
-}
+
+
+
+
+
 export interface TrustBadge {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  icon_url: string;
-  requirements: {
+  icon_url: string;,
+  requirements: {,
   min_verification_level: VerificationLevel;,
   additional_criteria: Record<string, unknown>;
-}
+
+
 };
   is_active: boolean;,
   created_at: string;
-}

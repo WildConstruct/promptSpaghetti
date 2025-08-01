@@ -45,8 +45,9 @@ export class ActivityTrackingService {
             return fullActivity;
             // User Activity Tracking
             async;
-            trackUserAction(params, {});
-            userId: string;
+            trackUserAction(params, {}),
+                userId;
+            string;
             userEmail ?  : string;
             action: string;
             description: string;
@@ -190,8 +191,9 @@ params.statusCode < 400 ? 'completed' : 'failed',
 ;
 // Performance Event Tracking
 async;
-trackPerformanceEvent(params, {});
-source: string;
+trackPerformanceEvent(params, {}),
+    source;
+string;
 metrics: Record;
 thresholdViolations ?  : string;
 metadata ?  : Record;

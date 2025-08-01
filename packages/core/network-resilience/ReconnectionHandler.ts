@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 
-export enum ReconnectionState {
-  IDLE = 'idle',
+export enum ReconnectionState { IDLE = 'idle',
   ATTEMPTING = 'attempting',
   BACKING_OFF = 'backing_off',
   FAILED = 'failed',
@@ -14,12 +13,12 @@ export enum ReconnectionState {
   success: boolean;
   error?: Error;
   backoffDelay: number;
-  connectionType: 'websocket' | 'http' | 'custom'
-}
-  }
-}
-export interface ReconnectionConfig {
-  maxAttempts: number;
+  connectionType: 'websocket' | 'http' | 'custom' }
+
+
+
+
+export interface ReconnectionConfig { maxAttempts: number;
   initialDelay: number;
   maxDelay: number;
   backoffFactor: number;
@@ -31,12 +30,11 @@ export interface ReconnectionConfig {
   circuitBreakerThreshold: number;
   circuitBreakerResetTime: number;
   quickReconnectWindow: number;
-  quickReconnectAttempts: number;
-}
-}
-}
-export interface ReconnectionStats {
-  totalAttempts: number;
+  quickReconnectAttempts: number }
+
+
+
+export interface ReconnectionStats { totalAttempts: number;
   successfulAttempts: number;
   failedAttempts: number;
   averageReconnectTime: number;
@@ -44,11 +42,11 @@ export interface ReconnectionStats {
   shortestReconnectTime: number;
   currentStreak: number;
   maxStreak: number;
-  lastSuccessTime: number | null;
+  lastSuccessTime: number | null }
   lastFailureTime: number | null;
   circuitBreakerTrips: number;
-}
-}
+
+
 export class ReconnectionHandler extends EventEmitter {
   private state: ReconnectionState = ReconnectionState.IDLE;
   private config: ReconnectionConfig;
@@ -62,36 +60,34 @@ export class ReconnectionHandler extends EventEmitter {
   private consecutiveFailures: number = 0;
   private lastAttemptTime: number = 0;
   private connectionFactory: (() => Promise<boolean>) | null = null;
-  constructor(config: Partial<ReconnectionConfig> = {}) {
-  super();
+  constructor(config: Partial<ReconnectionConfig> = {}) { super();
   this.config = {
-  maxAttempts: 10,
-  initialDelay: 1000,      // 1 second,
-  maxDelay: 30000,         // 30 seconds,
-  backoffFactor: 2.0,
-  jitterFactor: 0.1,
-  resetTimeoutMs: 300000,  // 5 minutes,
-  connectionTimeout: 10000, // 10 seconds,
-  enableJitter: true,
-  enableCircuitBreaker: true,
-  circuitBreakerThreshold: 5,
-  circuitBreakerResetTime: 60000, // 1 minute,
-  quickReconnectWindow: 5000,     // 5 seconds,
-  quickReconnectAttempts: 3,
+  maxAttempts: 10
+  initialDelay: 1000,      // 1 second
+  maxDelay: 30000,         // 30 seconds
+  backoffFactor: 2.0
+  jitterFactor: 0.1
+  resetTimeoutMs: 300000,  // 5 minutes
+  connectionTimeout: 10000, // 10 seconds
+  enableJitter: true
+  enableCircuitBreaker: true
+  circuitBreakerThreshold: 5
+  circuitBreakerResetTime: 60000, // 1 minute
+  quickReconnectWindow: 5000,     // 5 seconds
+  quickReconnectAttempts: 3 }
   ...config
 };
-    this.stats = {
-  totalAttempts: 0,
-  successfulAttempts: 0,
-  failedAttempts: 0,
-  averageReconnectTime: 0,
-  longestReconnectTime: 0,
-  shortestReconnectTime: Infinity,
-  currentStreak: 0,
-  maxStreak: 0,
-  lastSuccessTime: null,
-  lastFailureTime: null,
-  circuitBreakerTrips: 0,
+    this.stats = { totalAttempts: 0
+  successfulAttempts: 0
+  failedAttempts: 0
+  averageReconnectTime: 0
+  longestReconnectTime: 0
+  shortestReconnectTime: Infinity
+  currentStreak: 0
+  maxStreak: 0
+  lastSuccessTime: null
+  lastFailureTime: null
+  circuitBreakerTrips: 0 }
 };
   /**
    * Set the connection factory function
@@ -120,8 +116,7 @@ export class ReconnectionHandler extends EventEmitter {
   /**
    * Stop reconnection process
    */
-  stopReconnection(): void {
-  console.log('Stopping reconnection process');
+  stopReconnection(): void { console.log('Stopping reconnection process');
   this.clearAllTimers();
   this.setState(ReconnectionState.IDLE);
   this.currentAttempt = 0;
@@ -129,23 +124,19 @@ export class ReconnectionHandler extends EventEmitter {
   /**
   * Force immediate reconnection attempt
   */
-  async forceReconnection(): Promise<boolean> {,
+  async forceReconnection(): Promise<boolean> { }
   console.log('Forcing immediate reconnection');
   this.stopReconnection();
   this.isCircuitBreakerOpen = false; // Bypass circuit breaker
-  if (!this.connectionFactory) {
-  throw new Error('No connection factory set');
+  if (!this.connectionFactory) { throw new Error('No connection factory set');
   const startTime = Date.now();
   try {
   const success = await this.executeConnectionAttempt();
   const duration = Date.now() - startTime;
   if (success) {
   this.handleReconnectionSuccess(duration);
-  return true;
-} else {
-        this.handleReconnectionFailure(new Error('Forced reconnection failed'), duration);
-        return false;
-    } catch (error) {
+  return true } else { this.handleReconnectionFailure(new Error('Forced reconnection failed'), duration);
+        return false } catch (error) {
       const duration = Date.now() - startTime;
       this.handleReconnectionFailure(error as Error, duration);
       return false;
@@ -190,19 +181,18 @@ export class ReconnectionHandler extends EventEmitter {
   /**
    * Reset statistics
    */
-  resetStats(): void {
-  this.stats = {
-  totalAttempts: 0,
-  successfulAttempts: 0,
-  failedAttempts: 0,
-  averageReconnectTime: 0,
-  longestReconnectTime: 0,
-  shortestReconnectTime: Infinity,
-  currentStreak: 0,
-  maxStreak: 0,
-  lastSuccessTime: null,
-  lastFailureTime: null,
-  circuitBreakerTrips: 0,
+  resetStats(): void { this.stats = {
+  totalAttempts: 0
+  successfulAttempts: 0
+  failedAttempts: 0
+  averageReconnectTime: 0
+  longestReconnectTime: 0
+  shortestReconnectTime: Infinity
+  currentStreak: 0
+  maxStreak: 0
+  lastSuccessTime: null
+  lastFailureTime: null
+  circuitBreakerTrips: 0 }
 };
     this.attempts = [];
     this.emit('stats_reset');
@@ -225,15 +215,14 @@ export class ReconnectionHandler extends EventEmitter {
     this.currentAttempt++;
     this.setState(ReconnectionState.ATTEMPTING);
     console.log(`Reconnection attempt ${this.currentAttempt}/${this.config.maxAttempts}`);}
-    const attempt: ReconnectionAttempt = {,
-  attemptNumber: this.currentAttempt,
-  startTime: Date.now(),
-  success: false,
-  backoffDelay: this.calculateBackoffDelay(),
-  connectionType: 'websocket' // Default, can be customized,
+    const attempt: ReconnectionAttempt = { 
+  attemptNumber: this.currentAttempt
+  startTime: Date.now()
+  success: false
+  backoffDelay: this.calculateBackoffDelay()
+  connectionType: 'websocket' // Default, can be customized }
 };
-    try {
-      if (!this.connectionFactory) {
+    try { if (!this.connectionFactory) {
         throw new Error('No connection factory set');
       const success = await this.executeConnectionAttempt();
       const duration = Date.now() - attempt.startTime;
@@ -242,12 +231,8 @@ export class ReconnectionHandler extends EventEmitter {
       attempt.success = success;
       this.attempts.push(attempt);
       if (success) {
-        this.handleReconnectionSuccess(duration);
-      } else {
-        this.handleReconnectionFailure(new Error('Connection attempt failed'), duration);
-        await this.scheduleNextAttempt(attempt.backoffDelay);
-    } catch (error) {
-  const duration = Date.now() - attempt.startTime;
+        this.handleReconnectionSuccess(duration) } else { this.handleReconnectionFailure(new Error('Connection attempt failed'), duration);
+        await this.scheduleNextAttempt(attempt.backoffDelay) } catch (error) { const duration = Date.now() - attempt.startTime;
   attempt.endTime = Date.now();
   attempt.duration = duration;
   attempt.error = error as Error;
@@ -257,20 +242,14 @@ export class ReconnectionHandler extends EventEmitter {
   /**
   * Execute connection attempt with timeout
   */
-  private async executeConnectionAttempt(): Promise<boolean> {,
-  return new Promise((resolve, reject) => {
-  const timeout = setTimeout(() => {
-  reject(new Error('Connection attempt timed out'));
-}, this.config.connectionTimeout);
+  private async executeConnectionAttempt(): Promise<boolean> { }
+  return new Promise((resolve, reject) => { const timeout = setTimeout(() => {
+  reject(new Error('Connection attempt timed out')) }, this.config.connectionTimeout);
       this.connectionFactory!()
-        .then((success) => {
-          clearTimeout(timeout);
-          resolve(success);
-  }
-        .catch((error) => {
-          clearTimeout(timeout);
-          reject(error);
-        });
+        .then((success) => { clearTimeout(timeout);
+          resolve(success) }
+        .catch((error) => { clearTimeout(timeout);
+          reject(error) });
     });
   /**
    * Schedule next reconnection attempt
@@ -279,14 +258,12 @@ export class ReconnectionHandler extends EventEmitter {
 
     this.setState(ReconnectionState.BACKING_OFF);
     console.log(`Scheduling next attempt in ${delay}ms`);}
-    this.emit('reconnection_scheduled', {)
-  attemptNumber: this.currentAttempt + 1,
-  delay,
-  maxAttempts: this.config.maxAttempts,
+    this.emit('reconnection_scheduled', { )
+  attemptNumber: this.currentAttempt + 1
+  delay
+  maxAttempts: this.config.maxAttempts }
 });
-    this.reconnectTimer = setTimeout(() => {
-      this.attemptReconnection();
-    }, delay);
+    this.reconnectTimer = setTimeout(() => { this.attemptReconnection() }, delay);
   /**
    * Handle successful reconnection
    */
@@ -297,58 +274,54 @@ export class ReconnectionHandler extends EventEmitter {
     this.consecutiveFailures = 0;
     this.currentAttempt = 0;
     // Close circuit breaker if it was open
-    if (this.isCircuitBreakerOpen) {
-  this.isCircuitBreakerOpen = false;
+    if (this.isCircuitBreakerOpen) { this.isCircuitBreakerOpen = false;
   this.emit('circuit_breaker_closed');
   this.clearAllTimers();
   this.emit('reconnection_success', {)
-  attempts: this.currentAttempt,
-  duration,
-  stats: this.getStats(),
+  attempts: this.currentAttempt
+  duration
+  stats: this.getStats() }
 });
     this.setState(ReconnectionState.IDLE);
   /**
    * Handle failed reconnection attempt
    */
   private handleReconnectionFailure(error: Error, duration: number): void {
-    console.log(`Reconnection attempt ${this.currentAttempt},)}
+    console.log(`Reconnection attempt ${this.currentAttempt})}
   failed:`, error.message);}
     this.updateFailureStats(duration);
     this.consecutiveFailures++;
     // Check circuit breaker
     if (this.config.enableCircuitBreaker && )
         this.consecutiveFailures >= this.config.circuitBreakerThreshold &&
-        !this.isCircuitBreakerOpen) {
-  this.tripCircuitBreaker();
+        !this.isCircuitBreakerOpen) { this.tripCircuitBreaker();
   this.emit('reconnection_attempt_failed', {)
-  attemptNumber: this.currentAttempt,
-  error,
-  duration,
-  consecutiveFailures: this.consecutiveFailures,
+  attemptNumber: this.currentAttempt
+  error
+  duration
+  consecutiveFailures: this.consecutiveFailures }
 });
   /**
    * Handle max attempts reached
    */
-  private handleMaxAttemptsReached(): void {
-  this.updateFailureStats(0);
+  private handleMaxAttemptsReached(): void { this.updateFailureStats(0);
   if (this.config.enableCircuitBreaker) {
   this.tripCircuitBreaker();
   this.emit('reconnection_failed', {)
-  totalAttempts: this.currentAttempt,
-  stats: this.getStats(),
-  lastError: this.attempts[this.attempts.length - 1]?.error,
+  totalAttempts: this.currentAttempt
+  stats: this.getStats()
+  lastError: this.attempts[this.attempts.length - 1]?.error }
 });
     this.clearAllTimers();
   /**
    * Trip circuit breaker
    */
-  private tripCircuitBreaker(): void {
-  console.log('Circuit breaker tripped due to consecutive failures');
+  private tripCircuitBreaker(): void { console.log('Circuit breaker tripped due to consecutive failures');
   this.isCircuitBreakerOpen = true;
   this.stats.circuitBreakerTrips++;
   this.emit('circuit_breaker_tripped', {)
-  consecutiveFailures: this.consecutiveFailures,
-  resetTime: this.config.circuitBreakerResetTime,
+  consecutiveFailures: this.consecutiveFailures
+  resetTime: this.config.circuitBreakerResetTime }
 });
     // Schedule circuit breaker reset
     this.circuitBreakerTimer = setTimeout(() => {
@@ -360,8 +333,7 @@ export class ReconnectionHandler extends EventEmitter {
   /**
    * Calculate backoff delay with jitter
    */
-  private calculateBackoffDelay(): number {
-  const now = Date.now();
+  private calculateBackoffDelay(): number { const now = Date.now();
   // Quick reconnect for rapid failures
   if (this.currentAttempt <= this.config.quickReconnectAttempts &&)
   (now - this.lastAttemptTime) < this.config.quickReconnectWindow) {
@@ -377,23 +349,18 @@ export class ReconnectionHandler extends EventEmitter {
   /**
   * Update success statistics
   */
-  private updateSuccessStats(duration: number): void {,
+  private updateSuccessStats(duration: number): void { }
   this.stats.totalAttempts++;
   this.stats.successfulAttempts++;
   this.stats.currentStreak++;
   this.stats.maxStreak = Math.max(this.stats.maxStreak, this.stats.currentStreak);
   this.stats.lastSuccessTime = Date.now();
   // Update reconnect time stats
-  if (this.stats.shortestReconnectTime === Infinity) {
-  this.stats.shortestReconnectTime = duration;
-} else {
-      this.stats.shortestReconnectTime = Math.min(this.stats.shortestReconnectTime, duration);
+  if (this.stats.shortestReconnectTime === Infinity) { this.stats.shortestReconnectTime = duration } else { this.stats.shortestReconnectTime = Math.min(this.stats.shortestReconnectTime, duration);
     this.stats.longestReconnectTime = Math.max(this.stats.longestReconnectTime, duration);
     // Update average (exponential moving average)
     if (this.stats.averageReconnectTime === 0) {
-      this.stats.averageReconnectTime = duration;
-    } else {
-  this.stats.averageReconnectTime = (this.stats.averageReconnectTime * 0.8) + (duration * 0.2);
+      this.stats.averageReconnectTime = duration } else { this.stats.averageReconnectTime = (this.stats.averageReconnectTime * 0.8) + (duration * 0.2);
   /**
   * Update failure statistics
   */
@@ -412,19 +379,17 @@ export class ReconnectionHandler extends EventEmitter {
   this.emit('state_changed', {)
   previousState,
   newState,
-  timestamp: Date.now(),
+  timestamp: Date.now() }
 });
   /**
    * Start reset timer
    */
-  private startResetTimer(): void {
-    if (this.resetTimer) {
+  private startResetTimer(): void { if (this.resetTimer) {
       clearTimeout(this.resetTimer);
     this.resetTimer = setTimeout(() => {
       console.log('Reconnection reset timeout reached');
       this.stopReconnection();
-      this.emit('reconnection_timeout');
-    }, this.config.resetTimeoutMs);
+      this.emit('reconnection_timeout') }, this.config.resetTimeoutMs);
   /**
    * Clear all timers
    */

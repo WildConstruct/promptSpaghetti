@@ -12,10 +12,10 @@ import SMSRateLimitingService, {
   RateLimitConfig,
   RateLimitScope,
   RateLimitAlgorithm
-} from '../services/SMSRateLimitingService';
+ from '../services/SMSRateLimitingService';
 
-}
-}
+
+
 interface SendSMSBody {
   to: string;
   message: string;
@@ -26,38 +26,42 @@ interface SendSMSBody {
   priority?: number;
   scheduledAt?: string;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface BatchSendSMSBody {
   messages: SendSMSBody[];
   queueImmediate?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UpdateConfigBody {
   configs: Array<{
     configId: string;
     config: Partial<RateLimitConfig>;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 interface RateLimitCheckParams {
   scope: RateLimitScope;
   identifier: string;
-}
-}
-}
+
+
+
+
 
 // Initialize the SMS rate limiting service
 let smsService: SMSRateLimitingService;
@@ -75,7 +79,7 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: SendSMSBody;
-  }>('/sms/send', {
+>('/sms/send', {
     schema: {
       body: {
         type: 'object',
@@ -85,16 +89,16 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
           type: {
             type: 'string',
             enum: Object.values(SMSMessageType)
-  }
+
           from: { type: 'string' },
           userId: { type: 'string' },
           tenantId: { type: 'string' },
           priority: { type: 'number', minimum: 1, maximum: 10 },
           scheduledAt: { type: 'string', format: 'date-time' },
           metadata: { type: 'object' }
-  }
+
         required: ['to', 'message', 'type']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -103,9 +107,9 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
             messageId: { type: 'string' },
             queuePosition: { type: 'number' },
             estimatedDeliveryTime: { type: 'string', format: 'date-time' }
-  }
+
           required: ['success']
-  }
+
         429: {
           type: 'object',
           properties: {
@@ -118,12 +122,12 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
                 remainingRequests: { type: 'number' },
                 resetTime: { type: 'string', format: 'date-time' },
                 retryAfter: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { to, message, type, from, userId, tenantId, priority, scheduledAt, metadata } = request.body;
@@ -151,8 +155,7 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
         queuePosition: queueStatus.pending,
         estimatedDeliveryTime: new Date(Date.now() + (queueStatus.averageProcessingTime * queueStatus.pending)).toISOString()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('SMS send error:', error);
       
       if (error instanceof Error && error.message.includes('Rate limit exceeded')) {
@@ -164,15 +167,15 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
             remainingRequests: 0,
             resetTime: new Date(Date.now() + 60000).toISOString(),
             retryAfter: 60
-          }
+
         });
-      }
+
 
       return reply.status(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -181,7 +184,7 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: BatchSendSMSBody;
-  }>('/sms/send/batch', {
+>('/sms/send/batch', {
     schema: {
       body: {
         type: 'object',
@@ -200,16 +203,16 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
                 priority: { type: 'number', minimum: 1, maximum: 10 },
                 scheduledAt: { type: 'string', format: 'date-time' },
                 metadata: { type: 'object' }
-  }
+
               required: ['to', 'message', 'type']
-  }
+
             minItems: 1,
             maxItems: 100
-  }
+
           queueImmediate: { type: 'boolean' }
-  }
+
         required: ['messages']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -223,21 +226,21 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
                   messageId: { type: 'string' },
                   success: { type: 'boolean' },
                   error: { type: 'string' }
-                }
-              }
-  }
+
+
+
             summary: {
               type: 'object',
               properties: {
                 total: { type: 'number' },
                 queued: { type: 'number' },
                 failed: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { messages } = request.body;
@@ -257,15 +260,14 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
           const messageId = await smsService.queueSMS(smsMessage);
           results.push({ messageId, success: true });
           queued++;
-
-        } catch (error) {
+ catch (error) {
           results.push({
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error'
           });
           failed++;
-        }
-      }
+
+
 
       return {
         success: true,
@@ -274,16 +276,15 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
           total: messages.length,
           queued,
           failed
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       fastify.log.error('Batch SMS send error:', error);
       return reply.status(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -292,7 +293,7 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: SendSMSBody;
-  }>('/sms/send/immediate', {
+>('/sms/send/immediate', {
     schema: {
       body: {
         type: 'object',
@@ -302,15 +303,15 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
           type: {
             type: 'string',
             enum: [SMSMessageType.SECURITY_ALERT, SMSMessageType.SYSTEM_ALERT]
-  }
+
           from: { type: 'string' },
           userId: { type: 'string' },
           tenantId: { type: 'string' },
           metadata: { type: 'object' }
-  }
+
         required: ['to', 'message', 'type']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { to, message, type, from, userId, tenantId, metadata } = request.body;
@@ -333,14 +334,13 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
         success,
         message: success ? 'SMS sent immediately' : 'Failed to send SMS'
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Immediate SMS send error:', error);
       return reply.status(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -364,12 +364,12 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
                 averageProcessingTime: { type: 'number' },
                 oldestPendingAge: { type: 'number' },
                 queueHealthScore: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const status = smsService.getQueueStatus();
@@ -378,13 +378,13 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
         success: true,
         status
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Queue status error:', error);
       return reply.status(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -393,7 +393,7 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: { scope?: RateLimitScope };
-  }>('/sms/rate-limits/stats', {
+>('/sms/rate-limits/stats', {
     schema: {
       querystring: {
         type: 'object',
@@ -401,19 +401,19 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
           scope: {
             type: 'string',
             enum: Object.values(RateLimitScope)
-          }
-        }
-  }
+
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             stats: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { scope } = request.query;
@@ -423,13 +423,13 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
         success: true,
         stats
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Rate limit stats error:', error);
       return reply.status(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -438,7 +438,7 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
    */
   fastify.put<{
     Body: UpdateConfigBody;
-  }>('/sms/rate-limits/config', {
+>('/sms/rate-limits/config', {
     schema: {
       body: {
         type: 'object',
@@ -460,16 +460,16 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
                     refillRate: { type: 'number', minimum: 0.1 },
                     priority: { type: 'number', minimum: 1, maximum: 10 },
                     enabled: { type: 'boolean' }
-                  }
-                }
-  }
+
+
+
               required: ['configId', 'config']
-            }
-          }
-  }
+
+
+
         required: ['configs']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { configs } = request.body;
@@ -479,27 +479,26 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
         try {
           smsService.updateRateLimitConfig(configId, config);
           results.push({ configId, success: true });
-        } catch (error) {
+ catch (error) {
           results.push({
             configId,
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error'
           });
-        }
-      }
+
+
 
       return {
         success: true,
         results
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Config update error:', error);
       return reply.status(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -513,7 +512,7 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
       userId?: string;
       tenantId?: string;
     };
-  }>('/sms/rate-limits/check', {
+>('/sms/rate-limits/check', {
     schema: {
       body: {
         type: 'object',
@@ -522,9 +521,9 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
           type: { type: 'string', enum: Object.values(SMSMessageType) },
           userId: { type: 'string' },
           tenantId: { type: 'string' }
-  }
+
         required: ['to', 'type']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -542,12 +541,12 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
                 currentUsage: { type: 'number' },
                 limit: { type: 'number' },
                 scope: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { to, type, userId, tenantId } = request.body;
@@ -575,16 +574,15 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
         rateLimitResult: {
           ...rateLimitResult,
           resetTime: rateLimitResult.resetTime.toISOString()
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       fastify.log.error('Rate limit check error:', error);
       return reply.status(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -602,10 +600,10 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
             uptime: { type: 'number' },
             queueHealth: { type: 'number' },
             rateLimitingActive: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const queueStatus = smsService.getQueueStatus();
@@ -617,14 +615,14 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
         queueHealth: queueStatus.queueHealthScore,
         rateLimitingActive: true
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('SMS health check error:', error);
       return reply.status(503).send({
         success: false,
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Event listeners for monitoring
@@ -639,6 +637,6 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
   smsService.on('processing_error', (data) => {
     fastify.log.error('Processing error:', data);
   });
-}
+
 
 export { smsService };

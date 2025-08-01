@@ -7,25 +7,22 @@
 import React from 'react';
 import { Edge, Node, Viewport } from 'reactflow';
 
-}
-export interface PerformanceConfig {
-  maxVisibleNodes: number;
+
+export interface PerformanceConfig { maxVisibleNodes: number;
   cullingThreshold: number;
   animationFrameThrottle: number;
   renderDebounce: number;
-  memoryCleanupInterval: number;
-}
-}
-}
-export interface CanvasMetrics {
-  fps: number;
+  memoryCleanupInterval: number }
+
+
+
+export interface CanvasMetrics { fps: number;
   renderTime: number;
   nodeCount: number;
   visibleNodes: number;
   memoryUsage: number;
-  lastUpdateTime: number;
-}
-}
+  lastUpdateTime: number }
+
 export class CanvasOptimizer {
   private config: PerformanceConfig;
   private metrics: CanvasMetrics;
@@ -34,50 +31,44 @@ export class CanvasOptimizer {
   private renderTimeSum = 0;
   private memoryCleanupTimer?: NodeJS.Timeout;
   private performanceObserver?: PerformanceObserver;
-  constructor(config: Partial<PerformanceConfig> = {}) {
-  this.config = {
-  maxVisibleNodes: 150,
-  cullingThreshold: 0.1, // Viewport threshold for culling,
-  animationFrameThrottle: 16, // ~60fps,
-  renderDebounce: 100,
-  memoryCleanupInterval: 30000, // 30 seconds,
+  constructor(config: Partial<PerformanceConfig> = {}) { this.config = {
+  maxVisibleNodes: 150
+  cullingThreshold: 0.1, // Viewport threshold for culling
+  animationFrameThrottle: 16, // ~60fps
+  renderDebounce: 100
+  memoryCleanupInterval: 30000, // 30 seconds }
   ...config
 };
-    this.metrics = {
-  fps: 0,
-  renderTime: 0,
-  nodeCount: 0,
-  visibleNodes: 0,
-  memoryUsage: 0,
-  lastUpdateTime: Date.now(),
+    this.metrics = { fps: 0
+  renderTime: 0
+  nodeCount: 0
+  visibleNodes: 0
+  memoryUsage: 0
+  lastUpdateTime: Date.now() }
 };
     this.initializePerformanceMonitoring();
     this.startMemoryCleanup();
   /**
    * Initialize performance monitoring
    */
-  private initializePerformanceMonitoring(): void {
-    // Monitor React Flow performance
+  private initializePerformanceMonitoring(): void { // Monitor React Flow performance
     if ('PerformanceObserver' in window) {
       this.performanceObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         entries.forEach((entry) => {
           if (entry.name.includes('react-flow')) {
-            this.updateRenderMetrics(entry.duration);
-        });
+            this.updateRenderMetrics(entry.duration) });
       });
-      this.performanceObserver.observe({)
-  entryTypes: ['measure', 'navigation', 'resource'],
+      this.performanceObserver.observe({ )
+  entryTypes: ['measure', 'navigation', 'resource'] }
 });
     // FPS monitoring
     this.monitorFPS();
   /**
    * Monitor FPS with RAF
    */
-  private monitorFPS(): void {
-  const measureFrame = (timestamp: number) => {,
-  if (this.lastFrameTime) {
-  this.frameCount++;
+  private monitorFPS(): void { const measureFrame = (timestamp: number) => { }
+  if (this.lastFrameTime) { this.frameCount++;
   const delta = timestamp - this.lastFrameTime;
   this.renderTimeSum += delta;
   // Update FPS every second
@@ -86,28 +77,23 @@ export class CanvasOptimizer {
   this.frameCount = 0;
   this.renderTimeSum = 0;
   this.lastFrameTime = timestamp;
-  requestAnimationFrame(measureFrame);
-};
+  requestAnimationFrame(measureFrame) };
     requestAnimationFrame(measureFrame);
   /**
    * Update render metrics
    */
-  private updateRenderMetrics(renderTime: number): void {
-  this.metrics.renderTime = renderTime;
+  private updateRenderMetrics(renderTime: number): void { this.metrics.renderTime = renderTime;
   this.metrics.lastUpdateTime = Date.now();
   /**
   * Start memory cleanup interval
   */
-  private startMemoryCleanup(): void {,
-  this.memoryCleanupTimer = setInterval(() => {
-  this.cleanupMemory();
-  this.updateMemoryMetrics();
-}, this.config.memoryCleanupInterval);
+  private startMemoryCleanup(): void { }
+  this.memoryCleanupTimer = setInterval(() => { this.cleanupMemory();
+  this.updateMemoryMetrics() }, this.config.memoryCleanupInterval);
   /**
    * Cleanup memory and unused resources
    */
-  private cleanupMemory(): void {
-    // Force garbage collection if available (Chrome DevTools)
+  private cleanupMemory(): void { // Force garbage collection if available (Chrome DevTools)
     if ('gc' in window && typeof (window as any).gc === 'function') {
       (window as any).gc();
     // Clear RAF callbacks that might be queued
@@ -127,10 +113,9 @@ export class CanvasOptimizer {
    */
   optimizeNodeVisibility();
     nodes: Node, 
-    viewport: Viewport,
+    viewport: Viewport }
     canvasSize: { width: number; height: number }
-  ): Node {
-    const visibleNodes = this.cullInvisibleNodes(nodes, viewport, canvasSize);
+  ): Node { const visibleNodes = this.cullInvisibleNodes(nodes, viewport, canvasSize);
     // Limit total visible nodes for performance
     if (visibleNodes.length > this.config.maxVisibleNodes) {
       // Prioritize selected and important nodes
@@ -142,18 +127,17 @@ export class CanvasOptimizer {
    * Cull nodes outside viewport
    */
   private cullInvisibleNodes(nodes: Node, (
-    viewport: Viewport,
+    viewport: Viewport }
     canvasSize: { width: number; height: number }
   ): Node {
     const { x, y, zoom } = viewport;
     const threshold = this.config.cullingThreshold;
-    const viewportBounds = {
-  left: -x / zoom - threshold * canvasSize.width,
+    const viewportBounds = { left: -x / zoom - threshold * canvasSize.width,
   top: -y / zoom - threshold * canvasSize.height,
   right: (-x + canvasSize.width) / zoom + threshold * canvasSize.width,
-  bottom: (-y + canvasSize.height) / zoom + threshold * canvasSize.height,
+  bottom: (-y + canvasSize.height) / zoom + threshold * canvasSize.height }
 };
-    return nodes.filter(node => {)
+    return nodes.filter(node => { )
   const nodeX = node.position.x;
       const nodeY = node.position.y;
       const nodeWidth = node.width || 200;
@@ -163,26 +147,22 @@ export class CanvasOptimizer {
         nodeX <= viewportBounds.right &&
         nodeY + nodeHeight >= viewportBounds.top &&
         nodeY <= viewportBounds.bottom
-      );
-    });
+      ) });
   /**
    * Prioritize nodes for rendering
    */
-  private prioritizeNodes(nodes: Node): Node {
-    return nodes.sort((a, b) => {
+  private prioritizeNodes(nodes: Node): Node { return nodes.sort((a, b) => {
       // Selected nodes get highest priority
       if (a.selected && !b.selected) return -1;
       if (!a.selected && b.selected) return 1;
       // Then by importance (output nodes, etc.)
       const importanceA = this.getNodeImportance(a);
       const importanceB = this.getNodeImportance(b);
-      return importanceB - importanceA;
-    });
+      return importanceB - importanceA });
   /**
    * Get node importance score for prioritization
    */
-  private getNodeImportance(node: Node): number {
-  let score = 0;
+  private getNodeImportance(node: Node): number { let score = 0;
   // Output nodes are most important
   if (node.type === 'Output') score += 100;
   // Selected nodes are important
@@ -234,30 +214,26 @@ export class CanvasOptimizer {
   // Connection line settings
   connectionLineType: zoom > 0.5 ? 'smoothstep' : 'straight',
   // Quality settings
-  quality: zoom > 0.8 ? 'high' : zoom > 0.4 ? 'medium' : 'low',
+  quality: zoom > 0.8 ? 'high' : zoom > 0.4 ? 'medium' : 'low' }
 };
   /**
    * Throttled render function
    */
   createThrottledRenderer<T extends (...args: any) => void>((;(
-    fn: T,
+  fn: T
     delay: number = this.config.renderDebounce
-  ): T {
-  let timeoutId: NodeJS.Timeout;
+  ): T { let timeoutId: NodeJS.Timeout;
   let lastArgs: Parameters<T>;
-  return ((...args: Parameters<T>) => {,
+  return ((...args: Parameters<T>) => { }
   lastArgs = args;
-  if (timeoutId) {
-  clearTimeout(timeoutId);
+  if (timeoutId) { clearTimeout(timeoutId);
   timeoutId = setTimeout(() => {
-  fn(...lastArgs);
-}, delay);
+  fn(...lastArgs) }, delay);
     }) as T;
   /**
    * Performance-aware animation frame scheduler
    */
-  scheduleAnimation(callback: () => void): void {
-    // Skip frame if performance is poor
+  scheduleAnimation(callback: () => void): void { // Skip frame if performance is poor
     if (this.metrics.fps < 30) {
       setTimeout(callback, this.config.animationFrameThrottle * 2);
       return;
@@ -265,8 +241,7 @@ export class CanvasOptimizer {
       const startTime = performance.now();
       callback();
       const endTime = performance.now();
-      this.updateRenderMetrics(endTime - startTime);
-    });
+      this.updateRenderMetrics(endTime - startTime) });
   /**
    * Get current performance metrics
    */
@@ -275,8 +250,7 @@ export class CanvasOptimizer {
   /**
    * Check if performance is acceptable
    */
-  isPerformanceGood(): boolean {
-  return this.metrics.fps >= 30 && this.metrics.renderTime < 16;
+  isPerformanceGood(): boolean { return this.metrics.fps >= 30 && this.metrics.renderTime < 16;
   /**
   * Get performance recommendations
   */
@@ -307,59 +281,50 @@ export class CanvasOptimizer {
   /**
   * Hook for using canvas optimization
   */
-  export function useCanvasOptimization(config?: Partial<PerformanceConfig>) {,
+  export function useCanvasOptimization(config?: Partial<PerformanceConfig>) { }
   const [optimizer] = React.useState(() => new CanvasOptimizer(config));
   const [metrics, setMetrics] = React.useState<CanvasMetrics>(optimizer.getMetrics());
-  React.useEffect(() => {
-  const interval = setInterval(() => {
-  setMetrics(optimizer.getMetrics());
-}, 1000);
-    return () => {
-      clearInterval(interval);
-      optimizer.cleanup();
-    };
+  React.useEffect(() => { const interval = setInterval(() => {
+  setMetrics(optimizer.getMetrics()) }, 1000);
+    return () => { clearInterval(interval);
+      optimizer.cleanup() };
   }, [optimizer]);
-  return {
-  optimizer,
-  metrics,
-  isPerformanceGood: optimizer.isPerformanceGood(),
-  recommendations: optimizer.getPerformanceRecommendations(),
+  return { optimizer
+  metrics
+  isPerformanceGood: optimizer.isPerformanceGood()
+  recommendations: optimizer.getPerformanceRecommendations() }
 };
 /**
  * Performance monitoring component
  */
 
-}
-export interface PerformanceMonitorProps {
-  optimizer: CanvasOptimizer;
-  visible?: boolean;
-}
-}
-export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({ optimizer, visible = true }) => {
-  const [metrics, setMetrics] = React.useState<PerformanceMetrics>(optimizer.getMetrics());
+
+export interface PerformanceMonitorProps { optimizer: CanvasOptimizer;
+  visible?: boolean }
+
+export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({ optimizer, visible = true }) => { const [metrics, setMetrics] = React.useState<PerformanceMetrics>(optimizer.getMetrics());
   React.useEffect(() => {
     if (!visible) return;
     const interval = setInterval(() => {
-      setMetrics(optimizer.getMetrics());
-    }, 100);
+      setMetrics(optimizer.getMetrics()) }, 100);
     return () => clearInterval(interval);
   }, [optimizer, visible]);
   if (!visible) return null;
   return;
     <div
-      style={{
-  position: 'fixed',
-  top: 10,
-  left: 10,
-  background: 'rgba(0, 0, 0, 0.8)',
-  color: 'white',
-  padding: 12,
-  borderRadius: 6,
-  fontFamily: 'monospace',
-  fontSize: 12,
-  zIndex: 10000,
-  backdropFilter: 'blur(4px)',
-}}
+      style={ {
+  position: 'fixed'
+  top: 10
+  left: 10
+  background: 'rgba(0, 0, 0, 0.8)'
+  color: 'white'
+  padding: 12
+  borderRadius: 6
+  fontFamily: 'monospace'
+  fontSize: 12
+  zIndex: 10000
+  backdropFilter: 'blur(4px)' }
+
     >
       <div>FPS: {metrics.fps}</div>
       <div>Render: {metrics.renderTime.toFixed(1)}ms</div>

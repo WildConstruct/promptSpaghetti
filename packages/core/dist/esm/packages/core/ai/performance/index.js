@@ -82,92 +82,107 @@ if (averageResponseTime > 5000) {
                 return (memoryEfficiency * 0.3) + (cpuEfficiency * 0.3) + (performanceScore * 0.4);
             };
         }
-        ;
-        priorityActions: string;
     }
-    cacheMetrics: {
-        hitRate: number;
-        memoryUsage ?  : number;
+    caching: {
+        score: number;
+        recommendations: string;
     }
-    performanceMetrics: PerformanceMetrics,
-        resourceUsage;
-    ResourceUsage;
-    OptimizationCategories => {
-        // Cache analysis
-        const cacheScore = cacheMetrics.hitRate * 100;
-        const cacheRecommendations = [];
-        if (cacheMetrics.hitRate < 0.6) {
-            cacheRecommendations.push('Low cache hit rate - consider increasing cache size or TTL');
-            if ((cacheMetrics.memoryUsage || 0) / (1024 * 1024) > 400) {
-                cacheRecommendations.push('High cache memory usage - consider compression or eviction optimization');
-                // Performance analysis
-                const perfAnalysis = analyzePerformanceMetrics(performanceMetrics);
-                const performanceScore = perfAnalysis.successRateAverage * 100;
-                // Resource analysis
-                const resourceScore = calculateResourceEfficiency(resourceUsage, performanceMetrics[performanceMetrics.length - 1] || {});
-                totalRequests: 0,
-                    successfulRequests;
-                0,
-                    failedRequests;
-                0,
-                    averageResponseTime;
-                0,
-                    minResponseTime;
-                0,
-                    maxResponseTime;
-                0,
-                    memoryUsage;
-                0,
-                    cpuUsage;
-                0,
-                    networkLatency;
-                0,
-                    diskIOUsage;
-                0,
-                    tokensProcessed;
-                0,
-                    tokensPerSecond;
-                0,
-                    costPerRequest;
-                0,
-                    totalCost;
-                0,
-                    successRate;
-                0,
-                    errorRate;
-                0,
-                    timeoutRate;
-                0,
-                    retryRate;
-                0,
-                    timestamp;
-                Date.now(),
-                    windowStart;
-                Date.now(),
-                    windowEnd;
-                Date.now(),
-                ;
-            }
-             * 100;
-            const overallScore = (cacheScore + performanceScore + resourceScore) / 3;
-            // Priority actions
-            const priorityActions = [];
-            if (cacheScore < 50)
-                priorityActions.push('Optimize caching strategy');
-            if (performanceScore < 80)
-                priorityActions.push('Address performance issues');
-            if (resourceScore < 60)
-                priorityActions.push('Optimize resource usage');
-            return {
-                overallScore,
-                categories: {
-                    caching: { score: cacheScore, recommendations: cacheRecommendations },
-                    performance: { score: performanceScore, recommendations: perfAnalysis.recommendations },
-                    resources: { score: resourceScore, recommendations: ['Monitor resource utilization trends'] }
-                },
-                priorityActions
-            };
-        }
-        ;
-    };
+    ;
+    performance: {
+        score: number;
+        recommendations: string;
+    }
+    ;
+    resources: {
+        score: number;
+        recommendations: string;
+    }
+    ;
 }
+;
+priorityActions: string;
+cacheMetrics: {
+    hitRate: number;
+    memoryUsage ?  : number;
+}
+performanceMetrics: PerformanceMetrics,
+    resourceUsage;
+ResourceUsage;
+OptimizationCategories => {
+    // Cache analysis
+    const cacheScore = cacheMetrics.hitRate * 100;
+    const cacheRecommendations = [];
+    if (cacheMetrics.hitRate < 0.6) {
+        cacheRecommendations.push('Low cache hit rate - consider increasing cache size or TTL');
+        if ((cacheMetrics.memoryUsage || 0) / (1024 * 1024) > 400) {
+            cacheRecommendations.push('High cache memory usage - consider compression or eviction optimization');
+            // Performance analysis
+            const perfAnalysis = analyzePerformanceMetrics(performanceMetrics);
+            const performanceScore = perfAnalysis.successRateAverage * 100;
+            // Resource analysis
+            const resourceScore = calculateResourceEfficiency(resourceUsage, performanceMetrics[performanceMetrics.length - 1] || {});
+            totalRequests: 0,
+                successfulRequests;
+            0,
+                failedRequests;
+            0,
+                averageResponseTime;
+            0,
+                minResponseTime;
+            0,
+                maxResponseTime;
+            0,
+                memoryUsage;
+            0,
+                cpuUsage;
+            0,
+                networkLatency;
+            0,
+                diskIOUsage;
+            0,
+                tokensProcessed;
+            0,
+                tokensPerSecond;
+            0,
+                costPerRequest;
+            0,
+                totalCost;
+            0,
+                successRate;
+            0,
+                errorRate;
+            0,
+                timeoutRate;
+            0,
+                retryRate;
+            0,
+                timestamp;
+            Date.now(),
+                windowStart;
+            Date.now(),
+                windowEnd;
+            Date.now(),
+            ;
+        }
+         * 100;
+        const overallScore = (cacheScore + performanceScore + resourceScore) / 3;
+        // Priority actions
+        const priorityActions = [];
+        if (cacheScore < 50)
+            priorityActions.push('Optimize caching strategy');
+        if (performanceScore < 80)
+            priorityActions.push('Address performance issues');
+        if (resourceScore < 60)
+            priorityActions.push('Optimize resource usage');
+        return {
+            overallScore,
+            categories: {
+                caching: { score: cacheScore, recommendations: cacheRecommendations },
+                performance: { score: performanceScore, recommendations: perfAnalysis.recommendations },
+                resources: { score: resourceScore, recommendations: ['Monitor resource utilization trends'] }
+            },
+            priorityActions
+        };
+    }
+    ;
+};

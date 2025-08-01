@@ -217,13 +217,13 @@ describe('KeyExchangeService', () => {
             security_level: 'standard',
             expires_at: new Date(Date.now() + 900000),
             server_public_key: serverKeyPair.publicKey
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ // getDecryptedPrivateKey
           rows: [{
             server_private_key: 'encrypted:private:key'
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ rows: [] }); // Update session
 
       // Mock key decryption (simplified)
@@ -268,7 +268,7 @@ describe('KeyExchangeService', () => {
           session_id: testSessionId,
           state: 'initiated',
           expires_at: new Date(Date.now() - 1000) // 1 second ago
-        }]
+]
       });
 
       const result = await keyExchangeService.completeKeyExchange(
@@ -287,7 +287,7 @@ describe('KeyExchangeService', () => {
           session_id: testSessionId,
           state: 'completed',
           expires_at: new Date(Date.now() + 900000)
-        }]
+]
       });
 
       const result = await keyExchangeService.completeKeyExchange(
@@ -312,7 +312,7 @@ describe('KeyExchangeService', () => {
           state: 'initiated',
           algorithm: 'secp256r1',
           expires_at: new Date(Date.now() + 900000)
-        }]
+]
       });
 
       const result = await keyExchangeService.completeKeyExchange(
@@ -339,8 +339,8 @@ describe('KeyExchangeService', () => {
             state: 'initiated',
             algorithm: 'secp256r1',
             expires_at: new Date(Date.now() + 900000)
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ rows: [{ server_private_key: 'encrypted' }] })
         .mockResolvedValueOnce({ rows: [] }) // Update session
         .mockResolvedValueOnce({ rows: [] }) // Insert encryption key
@@ -383,8 +383,8 @@ describe('KeyExchangeService', () => {
             state: 'initiated',
             algorithm: 'secp256r1',
             expires_at: new Date(Date.now() + 900000)
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ rows: [{ server_private_key: 'encrypted' }] })
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rows: [] });
@@ -574,7 +574,7 @@ describe('KeyExchangeService', () => {
           sessionId,
           keyId,
           reason: 'Security test'
-  }
+
         severity: 'info'
       });
     });
@@ -592,7 +592,7 @@ describe('KeyExchangeService', () => {
           security_level: 'standard',
           created_at: new Date(),
           expires_at: new Date()
-  }
+
         {
           id: '2',
           session_id: 'session-2',
@@ -602,7 +602,7 @@ describe('KeyExchangeService', () => {
           security_level: 'high',
           created_at: new Date(),
           expires_at: new Date()
-        }
+
       ];
 
       mockDb.query.mockResolvedValueOnce({ rows: sessions });
@@ -657,7 +657,7 @@ describe('KeyExchangeService', () => {
           state: 'initiated',
           algorithm: 'secp256r1',
           expires_at: new Date(Date.now() + 900000)
-        }]
+]
       });
 
       const result = await keyExchangeService.completeKeyExchange(
@@ -696,8 +696,8 @@ describe('KeyExchangeService', () => {
             state: 'initiated',
             algorithm: 'secp256r1',
             expires_at: new Date(Date.now() + 900000)
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ rows: [{ server_private_key: 'encrypted' }] })
         .mockResolvedValueOnce({ rows: [] });
 

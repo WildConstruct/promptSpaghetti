@@ -13,6 +13,7 @@ import { QualityMetricsService } from '../services/QualityMetricsService';
 import { TimeRange } from './analytics.types';
 }
 }
+}
 export interface ContentQualityMetrics {
     templateId: string;
     assessmentDate: Date;
@@ -36,6 +37,8 @@ export interface ContentQualityMetrics {
 }
 }
 }
+}
+}
 export interface EffectivenessMetrics {
     score: number;
     successRate: number;
@@ -45,6 +48,7 @@ export interface EffectivenessMetrics {
         ratingDistribution: RatingDistribution;
         satisfactionScore: number;
         qualityConsistency: number;
+}
 }
 }
     };
@@ -61,6 +65,7 @@ export interface EffectivenessMetrics {
 }
 }
 }
+}
 export interface UsabilityMetrics {
     score: number;
     easeOfUse: {
@@ -68,6 +73,7 @@ export interface UsabilityMetrics {
         userFriendliness: number;
         errorRate: number;
         recoverability: number;
+}
 }
 }
     };
@@ -90,6 +96,7 @@ export interface UsabilityMetrics {
 }
 }
 }
+}
 export interface EngagementMetrics {
     score: number;
     usage: {
@@ -97,6 +104,7 @@ export interface EngagementMetrics {
         retentionRate: number;
         frequencyOfUse: number;
         sessionDuration: number;
+}
 }
 }
     };
@@ -119,6 +127,7 @@ export interface EngagementMetrics {
 }
 }
 }
+}
 export interface ReliabilityMetrics {
     score: number;
     stability: {
@@ -126,6 +135,7 @@ export interface ReliabilityMetrics {
         crashRate: number;
         uptime: number;
         consistencyScore: number;
+}
 }
 }
     };
@@ -150,6 +160,7 @@ export interface ReliabilityMetrics {
 }
 }
 }
+}
 export interface MaintainabilityMetrics {
     score: number;
     updateFrequency: {
@@ -157,6 +168,7 @@ export interface MaintainabilityMetrics {
         bugFixFrequency: number;
         featureUpdateRate: number;
         maintenanceQuality: number;
+}
 }
 }
     };
@@ -181,6 +193,7 @@ export interface MaintainabilityMetrics {
 }
 }
 }
+}
 export interface MarketFitMetrics {
     score: number;
     demand: {
@@ -188,6 +201,7 @@ export interface MarketFitMetrics {
         searchVolume: number;
         competitorComparison: number;
         marketPenetration: number;
+}
 }
 }
     };
@@ -212,6 +226,7 @@ export interface MarketFitMetrics {
 }
 }
 }
+}
 export interface QualityBenchmarks {
     industryAverage: number;
     categoryAverage: number;
@@ -219,6 +234,8 @@ export interface QualityBenchmarks {
     bottomPerformers: number;
     percentileRank: number;
     competitorComparison: CompetitorBenchmark[];
+}
+}
 }
 }
 }
@@ -236,6 +253,8 @@ export interface CompetitorBenchmark {
 }
 }
 }
+}
+}
 export interface QualityTrends {
     timeframe: string;
     overallTrend: 'improving' | 'stable' | 'declining';
@@ -243,6 +262,8 @@ export interface QualityTrends {
     historical: HistoricalQualityData[];
     projections: QualityProjection[];
     seasonality: SeasonalityPattern[];
+}
+}
 }
 }
 }
@@ -260,8 +281,10 @@ export interface HistoricalQualityData {
         marketFit: number;
 }
 }
+}
     };
     events: QualityEvent[];
+}
 }
 }
 }
@@ -270,6 +293,8 @@ export interface QualityProjection {
     projectedScore: number;
     confidence: number;
     factors: string[];
+}
+}
 }
 }
 }
@@ -284,11 +309,15 @@ export interface SeasonalityPattern {
 }
 }
 }
+}
+}
 export interface QualityEvent {
     date: Date;
     type: 'update' | 'incident' | 'milestone' | 'external';
     description: string;
     impact: number;
+}
+}
 }
 }
 }
@@ -305,6 +334,7 @@ export interface QualityRecommendation {
         projectedImprovement: number;
         confidenceLevel: number;
         timeToImpact: string;
+}
 }
 }
     };
@@ -330,12 +360,15 @@ export interface QualityRecommendation {
 }
 }
 }
+}
 export interface RatingDistribution {
     oneStar: number;
     twoStar: number;
     threeStar: number;
     fourStar: number;
     fiveStar: number;
+}
+}
 }
 }
 }
@@ -349,6 +382,7 @@ export interface ContentQualityConfig {
         reliability: number;
         maintainability: number;
         marketFit: number;
+}
 }
 }
     };
@@ -408,6 +442,7 @@ export declare class ContentQualityMetricsService {
 }
 }
 }
+}
 export interface CreatorQualityDashboard {
     creatorId: string;
     assessmentDate: Date;
@@ -425,6 +460,8 @@ export interface CreatorQualityDashboard {
 }
 }
 }
+}
+}
 export interface CreatorQualityOverview {
     averageQualityScore: number;
     qualityGrade: string;
@@ -432,6 +469,8 @@ export interface CreatorQualityOverview {
     totalQualityPoints: number;
     qualityRanking: number;
     qualityTrend: 'improving' | 'stable' | 'declining';
+}
+}
 }
 }
 }
@@ -449,10 +488,13 @@ export interface CategoryPerformance {
 }
 }
 }
+}
+}
 export interface CreatorQualityTrends {
     monthlyScores: number[];
     dimensionTrends: {
         [key: string]: number[];
+}
 }
 }
     };
@@ -461,11 +503,14 @@ export interface CreatorQualityTrends {
 }
 }
 }
+}
 export interface CreatorQualityBenchmarks {
     vsMarketplace: number;
     vsCategory: number;
     vsTopPerformers: number;
     percentileRank: number;
+}
+}
 }
 }
 }
@@ -481,12 +526,16 @@ export interface TopPerformingTemplate {
 }
 }
 }
+}
+}
 export interface ImprovementOpportunity {
     area: string;
     currentScore: number;
     potentialImprovement: number;
     effort: string;
     impactLevel: string;
+}
+}
 }
 }
 }
@@ -508,12 +557,16 @@ export interface MarketplaceQualityInsights {
 }
 }
 }
+}
+}
 export interface MarketplaceOverallMetrics {
     averageQualityScore: number;
     totalTemplatesAssessed: number;
     qualityImprovement: number;
     topCategoryScore: number;
     qualityVariance: number;
+}
+}
 }
 }
 }
@@ -530,12 +583,16 @@ export interface CategoryQualityBreakdown {
 }
 }
 }
+}
+}
 export interface QualityDistribution {
     excellent: number;
     good: number;
     fair: number;
     poor: number;
     critical: number;
+}
+}
 }
 }
 }
@@ -548,10 +605,12 @@ export interface MarketplaceQualityTrends {
         [key: string]: number[];
 }
 }
+}
     };
     qualityFactorTrends: {
         [key: string]: number[];
     };
+}
 }
 }
 }
@@ -566,12 +625,16 @@ export interface TopPerformer {
 }
 }
 }
+}
+}
 export interface QualityFactor {
     factor: string;
     importance: number;
     currentState: number;
     trend: 'improving' | 'stable' | 'declining';
     recommendations: string[];
+}
+}
 }
 }
 }
@@ -589,6 +652,8 @@ export interface MarketplaceInsight {
 }
 }
 }
+}
+}
 export interface MarketplaceRecommendation {
     category: string;
     title: string;
@@ -597,6 +662,7 @@ export interface MarketplaceRecommendation {
     effort: string;
     expectedImpact: string;
     timeframe: string;
+}
 }
 }
 }

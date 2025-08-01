@@ -13,8 +13,8 @@
 import React from 'react';
 
 }
-export interface Epic16HelpSystemProps {
-    nodes?: unknown[];
+}
+export interface Epic16HelpSystemProps { nodes?: unknown[];
     edges?: unknown[];
     selectedNodeId?: string;
     currentPage?: string;
@@ -25,17 +25,14 @@ export interface Epic16HelpSystemProps {
             id: string;
             category: string;
             type: string;
-            isPremium: boolean;
-
+            isPremium: boolean }
 }
         };
         cartItems?: number;
         purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
-        forumContext?: {
-            category: string;
+        forumContext?: { category: string;
             hasPosted: boolean;
-            reputation: number;
-        };
+            reputation: number };
     };
     helpEnabled?: boolean;
     autoContextualHelp?: boolean;

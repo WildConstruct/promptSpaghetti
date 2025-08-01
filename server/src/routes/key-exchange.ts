@@ -4,8 +4,8 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { KeyExchangeService } from '../services/KeyExchangeService';
 
-}
-}
+
+
 interface InitiateKeyExchangeRequest {
   clientId?: string;
   securityLevel?: 'standard' | 'high' | 'maximum';
@@ -14,13 +14,14 @@ interface InitiateKeyExchangeRequest {
     keyLength: number;
     expiryHours?: number;
     maxUsage?: number;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 interface CompleteKeyExchangeRequest {
   sessionId: string;
   clientPublicKey: string;
@@ -29,19 +30,21 @@ interface CompleteKeyExchangeRequest {
     keyLength: number;
     expiryHours?: number;
     maxUsage?: number;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 interface RevokeKeyRequest {
   keyId: string;
   reason: string;
-}
-}
-}
+
+
+
+
 
 export async function keyExchangeRoutes(
   fastify: FastifyInstance,
@@ -50,17 +53,17 @@ export async function keyExchangeRoutes(
   // Initiate key exchange
   fastify.post<{
     Body: InitiateKeyExchangeRequest;
-  }>('/key-exchange/initiate', {
+>('/key-exchange/initiate', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: InitiateKeyExchangeRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { clientId, securityLevel, requestedKeys } = request.body;
 
@@ -71,7 +74,7 @@ export async function keyExchangeRoutes(
           validLevels: ['standard', 'high', 'maximum']
         });
         return;
-      }
+
 
       // Validate requested keys
       if (requestedKeys) {
@@ -82,7 +85,7 @@ export async function keyExchangeRoutes(
               validPurposes: ['encryption', 'authentication', 'signing', 'session', 'api_access']
             });
             return;
-          }
+
           
           if (![16, 24, 32, 48, 64].includes(keyReq.keyLength)) {
             reply.code(400).send({
@@ -90,9 +93,9 @@ export async function keyExchangeRoutes(
               validLengths: [16, 24, 32, 48, 64]
             });
             return;
-          }
-        }
-      }
+
+
+
 
       const result = await keyExchangeService.initiateKeyExchange(
         userId,
@@ -111,32 +114,32 @@ export async function keyExchangeRoutes(
           nextStep: 'POST /key-exchange/complete with your public key',
           algorithm: result.algorithm,
           securityLevel: result.securityLevel
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Key exchange initiation error:', error);
       reply.code(500).send({
         error: 'Failed to initiate key exchange',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Complete key exchange
   fastify.post<{
     Body: CompleteKeyExchangeRequest;
-  }>('/key-exchange/complete', {
+>('/key-exchange/complete', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: CompleteKeyExchangeRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { sessionId, clientPublicKey, requestedKeys = [] } = request.body;
 
@@ -147,7 +150,7 @@ export async function keyExchangeRoutes(
           required: ['sessionId', 'clientPublicKey']
         });
         return;
-      }
+
 
       // Validate public key format (basic check)
       if (!clientPublicKey.includes('BEGIN PUBLIC KEY') || !clientPublicKey.includes('END PUBLIC KEY')) {
@@ -156,7 +159,7 @@ export async function keyExchangeRoutes(
           expected: 'PEM format with BEGIN/END PUBLIC KEY markers'
         });
         return;
-      }
+
 
       const result = await keyExchangeService.completeKeyExchange(
         sessionId,
@@ -172,7 +175,7 @@ export async function keyExchangeRoutes(
           timestamp: new Date().toISOString()
         });
         return;
-      }
+
 
       return {
         success: true,
@@ -184,32 +187,32 @@ export async function keyExchangeRoutes(
           description: 'Key exchange completed successfully',
           usage: 'Use the derived key IDs to access encrypted data or authentication tokens',
           keyManagement: 'Keys will expire according to their individual schedules'
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Key exchange completion error:', error);
       reply.code(500).send({
         error: 'Failed to complete key exchange',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get session status
   fastify.get<{
     Params: { sessionId: string };
-  }>('/key-exchange/session/:sessionId', {
+>('/key-exchange/session/:sessionId', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { sessionId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { sessionId } = request.params;
       const session = await keyExchangeService.getSessionStatus(sessionId);
@@ -220,7 +223,7 @@ export async function keyExchangeRoutes(
           sessionId
         });
         return;
-      }
+
 
       // Check if user owns this session
       if (session.userId && session.userId !== userId) {
@@ -229,7 +232,7 @@ export async function keyExchangeRoutes(
           message: 'You can only view your own sessions'
         });
         return;
-      }
+
 
       return {
         session: {
@@ -241,16 +244,16 @@ export async function keyExchangeRoutes(
           expiresAt: session.expiresAt,
           clientId: session.clientId,
           hasClientKey: !!session.clientPublicKey
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Session status error:', error);
       reply.code(500).send({
         error: 'Failed to get session status',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // List user's active sessions
@@ -262,7 +265,7 @@ export async function keyExchangeRoutes(
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const sessions = await keyExchangeService.getActiveSessions(userId);
 
@@ -280,29 +283,29 @@ export async function keyExchangeRoutes(
         count: sessions.length,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Sessions list error:', error);
       reply.code(500).send({
         error: 'Failed to list sessions',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Revoke derived key
   fastify.post<{
     Body: RevokeKeyRequest;
-  }>('/key-exchange/revoke-key', {
+>('/key-exchange/revoke-key', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: RevokeKeyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { keyId, reason } = request.body;
 
@@ -312,7 +315,7 @@ export async function keyExchangeRoutes(
           required: ['keyId', 'reason']
         });
         return;
-      }
+
 
       const success = await keyExchangeService.revokeDerivedKey(keyId, reason);
 
@@ -322,7 +325,7 @@ export async function keyExchangeRoutes(
           keyId
         });
         return;
-      }
+
 
       return {
         success: true,
@@ -331,29 +334,29 @@ export async function keyExchangeRoutes(
         revokedAt: new Date().toISOString(),
         message: 'Key revoked successfully'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Key revocation error:', error);
       reply.code(500).send({
         error: 'Failed to revoke key',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Get all sessions (with pagination)
   fastify.get<{
     Querystring: { page?: number; limit?: number; state?: string };
-  }>('/key-exchange/admin/sessions', {
+>('/key-exchange/admin/sessions', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: { page?: number; limit?: number; state?: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { page = 1, limit = 50, state } = request.query;
       const offset = (page - 1) * limit;
@@ -369,7 +372,7 @@ export async function keyExchangeRoutes(
       if (state) {
         query += ' WHERE state = $1';
         params.push(state);
-      }
+
       
       query += ` ORDER BY created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
       params.push(limit, offset);
@@ -393,33 +396,33 @@ export async function keyExchangeRoutes(
           totalPages: Math.ceil(total / limit),
           hasNext: page * limit < total,
           hasPrev: page > 1
-  }
+
         filters: { state },
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Admin sessions error:', error);
       reply.code(500).send({
         error: 'Failed to get sessions',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Key exchange statistics
   fastify.get<{
     Querystring: { timeframe?: 'hour' | 'day' | 'week' | 'month' };
-  }>('/key-exchange/admin/statistics', {
+>('/key-exchange/admin/statistics', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: { timeframe?: 'hour' | 'day' | 'week' | 'month' };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { timeframe = 'day' } = request.query;
       
@@ -497,13 +500,13 @@ export async function keyExchangeRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Statistics error:', error);
       reply.code(500).send({
         error: 'Failed to get statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Health check
@@ -537,7 +540,7 @@ export async function keyExchangeRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
@@ -545,7 +548,7 @@ export async function keyExchangeRoutes(
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -557,7 +560,7 @@ export async function keyExchangeRoutes(
         name: 'Elliptic Curve Diffie-Hellman (ECDH)',
         keyDerivation: 'HKDF (HMAC-based Key Derivation Function)',
         standards: ['RFC 5869', 'NIST SP 800-56A', 'RFC 6090']
-  }
+
       security: {
         algorithms: [
           { name: 'secp256r1', description: 'NIST P-256, 256-bit security (standard)' },
@@ -569,30 +572,30 @@ export async function keyExchangeRoutes(
           { level: 'high', iterations: 250000, algorithm: 'secp384r1' },
           { level: 'maximum', iterations: 500000, algorithm: 'secp521r1' }
         ]
-  }
+
       workflow: [
         {
           step: 1,
           endpoint: 'POST /key-exchange/initiate',
           description: 'Client initiates key exchange and receives server public key',
           required: ['authentication']
-  }
+
         {
           step: 2,
           description: 'Client generates ECDH key pair using specified algorithm',
           action: 'client-side cryptography'
-  }
+
         {
           step: 3,
           endpoint: 'POST /key-exchange/complete',
           description: 'Client sends public key and completes key exchange',
           required: ['sessionId', 'clientPublicKey']
-  }
+
         {
           step: 4,
           description: 'Both parties derive shared secret and requested keys',
           result: 'derived key IDs for secure operations'
-        }
+
       ],
       keyPurposes: [
         'encryption - For symmetric data encryption',
@@ -607,32 +610,31 @@ export async function keyExchangeRoutes(
           method: 'POST',
           description: 'Initiate ECDH key exchange',
           auth: 'required'
-  }
+
         {
           path: '/key-exchange/complete',
           method: 'POST', 
           description: 'Complete key exchange with client public key',
           auth: 'required'
-  }
+
         {
           path: '/key-exchange/session/:sessionId',
           method: 'GET',
           description: 'Get key exchange session status',
           auth: 'required'
-  }
+
         {
           path: '/key-exchange/sessions',
           method: 'GET',
           description: 'List user\'s key exchange sessions',
           auth: 'required'
-  }
+
         {
           path: '/key-exchange/revoke-key',
           method: 'POST',
           description: 'Revoke a derived key',
           auth: 'required'
-        }
+
       ]
     };
   });
-}

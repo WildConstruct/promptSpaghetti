@@ -5,125 +5,111 @@
  * management functionality including dashboard, details view, and service integration.
  */
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  MarketplaceTicket,
-  Epic16TicketIntegrationService,
+import { MarketplaceTicket,
+  Epic16TicketIntegrationService }
   TicketIntegrationConfig
-} from '../../services/Epic16TicketIntegrationService';
+ from '../../services/Epic16TicketIntegrationService';
 import TicketManagementDashboard from './TicketManagementDashboard';
 import TicketDetailsView from './TicketDetailsView';
-}
-interface Epic16TicketIntegrationProps {
-  userId: string;
+
+
+interface Epic16TicketIntegrationProps { userId: string;
   userRole: 'user' | 'agent' | 'admin';
   config?: Partial<TicketIntegrationConfig>;
   onConfigChange?: (config: TicketIntegrationConfig) => void;
-  export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = ({,)
-  userId,
-  userRole,
-  config,
+  export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = ({);
+  userId;
+  userRole;
+  config }
   onConfigChange
-}
-}) => {
-  // Service instance
+
+
+}) => { // Service instance
   const ticketService = useMemo(() => {
-    return new Epic16TicketIntegrationService(config);
-  }, [config]);
+    return new Epic16TicketIntegrationService(config) }, [config]);
   // State management
   const [selectedTicket, setSelectedTicket] = useState<MarketplaceTicket | null>(null);
   const [view, setView] = useState<'dashboard' | 'details' | 'settings'>('dashboard');
-  const [notifications, setNotifications] = useState<Array<{
-  id: string;
+  const [notifications, setNotifications] = useState<Array<{ id: string;
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;
-  timestamp: Date;
-}>>([]);
+  timestamp: Date }>>([]);
   // Set up event listeners for service events
   useEffect(() => {
     const handleTicketCreated = (data: { ticket: MarketplaceTicket }) => {
       setNotifications(prev => [...prev, {)
   id: `created-${data.ticket.id}`}
-},
-  type: 'success',
+
+  type: 'success'
         message: `Ticket ${data.ticket.id} has been created`}
-},
+
   timestamp: new Date();
-  }]);
+]);
     };
-    const handleTicketStatusChanged = (data: { ),
+    const handleTicketStatusChanged = (data: { )
   ticket: MarketplaceTicket; 
-      oldStatus: string; ,
+  oldStatus: string }
   newStatus: string; 
     }) => {
       setNotifications(prev => [...prev, {)
   id: `status-${data.ticket.id}-${Date.now()}`}
-},
-  type: 'info',
+
+  type: 'info'
         message: `Ticket ${data.ticket.id} status changed from ${data.oldStatus} to ${data.newStatus}`}
-},
+
   timestamp: new Date();
-  }]);
+]);
     };
-    const handleTicketEscalated = (data: { ),
-  ticket: MarketplaceTicket; 
-      reason: string; 
+    const handleTicketEscalated = (data: { )
+  ticket: MarketplaceTicket }
+  reason: string; 
     }) => {
       setNotifications(prev => [...prev, {)
   id: `escalated-${data.ticket.id}`}
-},
-  type: 'warning',
+
+  type: 'warning'
         message: `Ticket ${data.ticket.id} has been escalated: ${data.reason}`}
-},
+
   timestamp: new Date();
-  }]);
+]);
     };
-    const handleCommentAdded = (data: { ),
+    const handleCommentAdded = (data: { ) }
   ticket: MarketplaceTicket; 
     }) => {
       setNotifications(prev => [...prev, {)
   id: `comment-${data.ticket.id}-${Date.now()}`}
-},
-  type: 'info',
+
+  type: 'info'
         message: `New comment added to ticket ${data.ticket.id}`}
-},
+
   timestamp: new Date();
-  }]);
+]);
     };
     // Subscribe to events
     ticketService.on('ticket_created', handleTicketCreated);
     ticketService.on('ticket_status_changed', handleTicketStatusChanged);
     ticketService.on('ticket_escalated', handleTicketEscalated);
     ticketService.on('comment_added', handleCommentAdded);
-    return () => {
-      // Cleanup listeners
+    return () => { // Cleanup listeners
       ticketService.off('ticket_created', handleTicketCreated);
       ticketService.off('ticket_status_changed', handleTicketStatusChanged);
       ticketService.off('ticket_escalated', handleTicketEscalated);
-      ticketService.off('comment_added', handleCommentAdded);
-    };
+      ticketService.off('comment_added', handleCommentAdded) };
   }, [ticketService]);
   // Auto-dismiss notifications
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setNotifications(prev => prev.slice(0, -1));
-    }, 5000);
+  useEffect(() => { const timer = setTimeout(() => {
+      setNotifications(prev => prev.slice(0, -1)) }, 5000);
     return () => clearTimeout(timer);
   }, [notifications]);
   // Handle ticket selection
-  const handleTicketSelect = (ticket: MarketplaceTicket) => {
-    setSelectedTicket(ticket);
-    setView('details');
-  };
+  const handleTicketSelect = (ticket: MarketplaceTicket) => { setSelectedTicket(ticket);
+    setView('details') };
   // Handle ticket update
-  const handleTicketUpdate = (updatedTicket: MarketplaceTicket) => {
-    setSelectedTicket(updatedTicket);
-  };
+  const handleTicketUpdate = (updatedTicket: MarketplaceTicket) => { setSelectedTicket(updatedTicket) };
   // Handle view navigation
-  const handleViewChange = (newView: 'dashboard' | 'details' | 'settings') => {
-    setView(newView);
+  const handleViewChange = (newView: 'dashboard' | 'details' | 'settings') => { setView(newView);
     if (newView === 'dashboard') {
-      setSelectedTicket(null);
-  };
+      setSelectedTicket(null) };
   return;
     <div className="epic16-ticket-integration h-full flex flex-col relative">
       {/* Navigation Header */}
@@ -132,22 +118,22 @@ interface Epic16TicketIntegrationProps {
           <nav className="flex space-x-8">
             <button
               onClick={() => handleViewChange('dashboard')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   view === 'dashboard'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
             >
               Dashboard
             </button>
             {selectedTicket && ()
               <button
                 onClick={() => handleViewChange('details')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   view === 'details'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
               >
                 Ticket Details
               </button>
@@ -155,11 +141,11 @@ interface Epic16TicketIntegrationProps {
             {userRole === 'admin' && ()
               <button
                 onClick={() => handleViewChange('settings')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   view === 'settings'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
               >
                 Settings
               </button>
@@ -211,16 +197,16 @@ interface Epic16TicketIntegrationProps {
 };
 
 // Settings Component
-}
-interface IntegrationSettingsProps {
-  ticketService: Epic16TicketIntegrationService;
+
+
+interface IntegrationSettingsProps { ticketService: Epic16TicketIntegrationService;
   onConfigChange?: (config: TicketIntegrationConfig) => void;
-  const IntegrationSettings: React.FC<IntegrationSettingsProps> = ({,)
-  ticketService,
+  const IntegrationSettings: React.FC<IntegrationSettingsProps> = ({);
+  ticketService }
   onConfigChange
-}
-}) => {
-  return;
+
+
+}) => { return;
   <div className="p-6">
   <h2 className="text-2xl font-bold text-gray-900 mb-6">Integration Settings</h2>
   <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -236,7 +222,7 @@ interface IntegrationSettingsProps {
   <div className="ml-3">
   <p className="text-sm text-blue-700">
   Epic 16 ticket integration is now active. This system provides comprehensive
-  marketplace and community support ticket management with:,
+  marketplace and community support ticket management with: }
   </p>
   <ul className="mt-2 text-sm text-blue-700 list-disc list-inside space-y-1">
   <li>12 marketplace ticket types with specialized workflows</li>
@@ -299,25 +285,25 @@ interface IntegrationSettingsProps {
 };
 
 // Notification System Component
-}
-interface NotificationSystemProps {
-  notifications: Array<{
+
+
+interface NotificationSystemProps { notifications: Array<{ }
   id: string;
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;
   timestamp: Date;
-}
-}>;
-const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {
-  if (notifications.length === 0) return null;
+
+
+>;
+const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => { if (notifications.length === 0) return null;
   return;
   <div className="fixed top-4 right-4 z-50 space-y-2">
   {notifications.slice(-3).map((notification) => {
   const colors = {
-  success: 'bg-green-50 border-green-200 text-green-700',
-  error: 'bg-red-50 border-red-200 text-red-700',
-  info: 'bg-blue-50 border-blue-200 text-blue-700',
-  warning: 'bg-yellow-50 border-yellow-200 text-yellow-700',
+  success: 'bg-green-50 border-green-200 text-green-700'
+  error: 'bg-red-50 border-red-200 text-red-700'
+  info: 'bg-blue-50 border-blue-200 text-blue-700'
+  warning: 'bg-yellow-50 border-yellow-200 text-yellow-700' }
 };
         return;
           <div

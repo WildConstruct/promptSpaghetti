@@ -9,6 +9,7 @@ import React from 'react';
 import { QualityAssessmentWorkflow } from '../../community/ContentQualityAssessment';
 
 }
+}
 export interface QualityAssessmentDashboardProps {
     contentId: string;
     versionId: string;
@@ -22,4 +23,5 @@ export interface QualityAssessmentDashboardProps {
 export declare const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProps>;
 export default QualityAssessmentDashboard;
 //# sourceMappingURL=QualityAssessmentDashboard.d.ts.map
+}
 }

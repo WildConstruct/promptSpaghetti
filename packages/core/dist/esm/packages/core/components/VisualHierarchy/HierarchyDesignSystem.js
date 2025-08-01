@@ -85,12 +85,10 @@ export const TypographyScale = {
         const: ComponentSizes = {
             field: {
                 height: 36,
-                padding: `${SpacingScale.sm}px ${SpacingScale.md}px`
-            }
+                padding: `${SpacingScale.sm}px ${SpacingScale.md}px` }
         },
         section: {
-            padding: `${SpacingScale.md}px`
-        }
+            padding: `${SpacingScale.md}px` }
     },
     marginBottom: SpacingScale.md
 }, header;
@@ -102,30 +100,26 @@ export const FieldImportanceStyles = {
         borderLeftStyle: 'solid',
         borderLeftColor: HierarchyColors.basic.primary,
         backgroundColor: `${HierarchyColors.basic.primary}15`, // 15% opacity}
-        ...TypographyScale.secondary
-    },
+        ...TypographyScale.secondary },
     important: {
         borderLeftWidth: 3,
         borderLeftStyle: 'solid',
         borderLeftColor: HierarchyColors.advanced.primary,
         backgroundColor: `${HierarchyColors.advanced.primary}10`, // 10% opacity}
-        ...TypographyScale.tertiary
-    },
+        ...TypographyScale.tertiary },
     standard: {
         borderLeftWidth: 2,
         borderLeftStyle: 'solid',
         borderLeftColor: HierarchyColors.neutral.border,
         backgroundColor: 'transparent',
-        ...TypographyScale.tertiary
-    },
+        ...TypographyScale.tertiary },
     supplementary: {
         borderLeftWidth: 1,
         borderLeftStyle: 'solid',
         borderLeftColor: HierarchyColors.neutral.secondary,
         backgroundColor: 'transparent',
         ...TypographyScale.caption,
-        opacity: 0.8,
-    },
+        opacity: 0.8, },
     // Field priority classification system
     type, FieldPriority = 'critical' | 'important' | 'standard' | 'supplementary',
     const: classifyFieldPriority = (fieldName, nodeType = 'generic') => {
@@ -164,18 +158,18 @@ export const FieldImportanceStyles = {
                     // Section header component with visual hierarchy
                 }
             }
-            export const HierarchyHeader = ({
-                title,
-                level,
-                priority = 'standard',
-                description,
-                icon,
-                isCollapsible = false,
-                isExpanded = true,
-                onToggle,
-                children
-            });
         }
+        export const HierarchyHeader = ({
+            title,
+            level,
+            priority = 'standard',
+            description,
+            icon,
+            isCollapsible = false,
+            isExpanded = true,
+            onToggle,
+            children
+        });
     }
 };
 {
@@ -382,31 +376,35 @@ export const AccessibilityUtils = {
         };
         return `${levelDescriptions[level]}: ${title}`;
     }
-};
-// Generate ARIA descriptions for field priorities
-getAriaDescription: (priority) => {
-    const priorityDescriptions = {
-        critical: 'Required for basic functionality',
-        important: 'Commonly used advanced feature',
-        standard: 'Standard configuration option',
-        supplementary: 'Optional technical setting',
-    };
-    return priorityDescriptions[priority];
-};
-// Focus management utilities
-getFocusableElements: (container) => {
-    const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    return Array.from(container.querySelectorAll(focusableSelector));
-};
-export default {
-    TypographyScale,
-    HierarchyColors,
-    SpacingScale,
-    ComponentSizes,
-    FieldImportanceStyles,
-    classifyFieldPriority,
-    HierarchyHeader,
-    HierarchyField,
-    ComplexityIndicator,
-    AccessibilityUtils
+    // Generate ARIA descriptions for field priorities
+    ,
+    // Generate ARIA descriptions for field priorities
+    getAriaDescription: (priority) => {
+        const priorityDescriptions = {
+            critical: 'Required for basic functionality',
+            important: 'Commonly used advanced feature',
+            standard: 'Standard configuration option',
+            supplementary: 'Optional technical setting',
+        };
+        return priorityDescriptions[priority];
+    }
+    // Focus management utilities
+    ,
+    // Focus management utilities
+    getFocusableElements: (container) => {
+        const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+        return Array.from(container.querySelectorAll(focusableSelector));
+    },
+    export: , default: {
+        TypographyScale,
+        HierarchyColors,
+        SpacingScale,
+        ComponentSizes,
+        FieldImportanceStyles,
+        classifyFieldPriority,
+        HierarchyHeader,
+        HierarchyField,
+        ComplexityIndicator,
+        AccessibilityUtils
+    }
 };

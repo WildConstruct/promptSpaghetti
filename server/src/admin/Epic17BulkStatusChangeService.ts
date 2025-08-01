@@ -18,8 +18,8 @@ import * as crypto from 'crypto';
 // Bulk Status Change Types and Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface BulkStatusChangeConfig {
   // Operation limits
   maxItemsPerOperation: number;
@@ -31,8 +31,9 @@ export interface BulkStatusChangeConfig {
   approvalRequired: {
     itemCount: number;
     impactLevel: 'high' | 'critical';
-}
-}
+
+
+
   };
   rollbackEnabled: boolean;
   rollbackTimeoutHours: number;
@@ -51,7 +52,7 @@ export interface BulkStatusChangeConfig {
   notifyOnCompletion: boolean;
   notifyOnError: boolean;
   notificationChannels: string[];
-}
+
 
 export enum BulkChangeTarget {
   API_KEYS = 'api_keys',
@@ -60,7 +61,7 @@ export enum BulkChangeTarget {
   SERVICES = 'services',
   SESSIONS = 'sessions',
   CONFIGURATIONS = 'configurations'
-}
+
 
 export enum BulkChangeStatus {
   PENDING = 'pending',
@@ -72,10 +73,10 @@ export enum BulkChangeStatus {
   FAILED = 'failed',
   CANCELLED = 'cancelled',
   ROLLED_BACK = 'rolled_back'
-}
 
-}
-}
+
+
+
 export interface BulkStatusChangeOperation {
   operationId: string;
   operationType: 'activate' | 'suspend' | 'revoke' | 'archive' | 'restore' | 'expire' | 'reset';
@@ -138,12 +139,13 @@ export interface BulkStatusChangeOperation {
   averageProcessingTime: number;
   errorRate: number;
   throughput: number; // items per minute
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkChangeFilter {
   // Date filters
   createdAfter?: Date;
@@ -170,12 +172,13 @@ export interface BulkChangeFilter {
   // Custom filters
   customCriteria?: Record<string, any>;
   sqlWhere?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkChangeResult {
   id: string;
   targetId: string;
@@ -191,13 +194,14 @@ export interface BulkChangeResult {
     canRollback: boolean;
     rollbackData: any;
     rollbackInstructions?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface BulkChangeError {
   id: string;
   targetId: string;
@@ -209,12 +213,13 @@ export interface BulkChangeError {
   retryable: boolean;
   resolution?: string;
   escalated: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkChangeWarning {
   id: string;
   targetId?: string;
@@ -223,12 +228,13 @@ export interface BulkChangeWarning {
   details: Record<string, any>;
   severity: 'low' | 'medium' | 'high';
   recommendation?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkRollbackData {
   rollbackId: string;
   canRollback: boolean;
@@ -237,12 +243,13 @@ export interface BulkRollbackData {
   affectedSystems: string[];
   rollbackRisks: string[];
   rollbackEstimatedTime: number; // minutes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackInstruction {
   step: number;
   action: string;
@@ -250,12 +257,13 @@ export interface RollbackInstruction {
   parameters: Record<string, any>;
   rollbackData: any;
   verificationRequired: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApprovalRequest {
   requestId: string;
   requestedAt: Date;
@@ -268,24 +276,26 @@ export interface ApprovalRequest {
   status: 'pending' | 'approved' | 'rejected' | 'expired';
   justification: string;
   riskAssessment: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Approval {
   approvedBy: string;
   approvedAt: Date;
   decision: 'approve' | 'reject';
   comments?: string;
   conditions?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkChangeDryRunResult {
   dryRunId: string;
   executedAt: Date;
@@ -299,15 +309,16 @@ export interface BulkChangeDryRunResult {
     dependentServices: string[];
     businessImpact: string;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
-}
-}
+
+
+
   };
   recommendations: string[];
   warnings: BulkChangeWarning[];
-}
 
-}
-}
+
+
+
 export interface ImpactAssessment {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   businessImpact: string;
@@ -317,12 +328,13 @@ export interface ImpactAssessment {
   downstreamEffects: string[];
   mitigationStrategies: string[];
   rollbackComplexity: 'simple' | 'moderate' | 'complex' | 'high_risk';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SafetyCheckResult {
   checkName: string;
   checkType: 'dependency' | 'constraint' | 'business_rule' | 'system_health' | 'capacity';
@@ -332,12 +344,13 @@ export interface SafetyCheckResult {
   details: Record<string, any>;
   recommendation?: string;
   blockingIssue: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkStatusChangeMetrics {
   totalOperations: number;
   operationsToday: number;
@@ -357,8 +370,9 @@ export interface BulkStatusChangeMetrics {
     max: number;
     average: number;
     median: number;
-}
-}
+
+
+
   };
   
   // Error analytics
@@ -366,12 +380,12 @@ export interface BulkStatusChangeMetrics {
     errorType: string;
     count: number;
     percentage: number;
-  }>;
+>;
   
   // Recent activity
   recentOperations: BulkStatusChangeOperation[];
   activeOperations: number;
-}
+
 
 // =============================================================================
 // Bulk Status Change Service Implementation
@@ -403,7 +417,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       approvalRequired: {
         itemCount: 1000, // Require approval for operations affecting more than 1000 items
         impactLevel: 'high'
-  }
+
       rollbackEnabled: true,
       rollbackTimeoutHours: 24,
       
@@ -426,7 +440,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     };
 
     this.initializeBulkService();
-  }
+
 
   // =============================================================================
   // Main Bulk Status Change Operations
@@ -452,7 +466,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       skipDryRun?: boolean;
       skipApproval?: boolean;
       batchSize?: number;
-    } = {}
+ = {}
   ): Promise<string> {
 
     try {
@@ -462,11 +476,11 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       // Validate operation limits
       if (targetIds.length > this.config.maxItemsPerOperation) {
         throw new Error(`Operation exceeds maximum limit of ${this.config.maxItemsPerOperation} items`);
-      }
+
       
       if (this.activeOperations.size >= this.config.maxConcurrentOperations) {
         throw new Error(`Maximum concurrent operations (${this.config.maxConcurrentOperations}) reached`);
-      }
+
       
       // Create operation record
       const operation: BulkStatusChangeOperation = {
@@ -552,8 +566,8 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           
           await this.updateOperationStatus(operationId, BulkChangeStatus.FAILED);
           throw new Error(`Safety checks failed: ${blockingIssues.map(i => i.message).join(', ')}`);
-        }
-      }
+
+
       
       // Perform dry run if required
       if (this.config.dryRunRequired && !options.skipDryRun) {
@@ -567,8 +581,8 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
         // Update impact assessment based on dry run
         if (dryRunResult.impactAnalysis.riskLevel === 'critical') {
           operation.requiresApproval = true;
-        }
-      }
+
+
       
       // Handle approval workflow
       if (operation.requiresApproval && !options.skipApproval) {
@@ -585,11 +599,10 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
         await this.sendApprovalNotifications(approvalRequest, operation);
         
         this.emit('approval_required', { operationId, approvalRequest });
-        
-      } else {
+ else {
         // Start execution immediately
         await this.startExecution(operationId);
-      }
+
       
       await this.auditService.logAction({
         userId: initiatedBy,
@@ -603,18 +616,17 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           toStatus,
           reason,
           requiresApproval: operation.requiresApproval
-        }
+
       });
       
       this.emit('bulk_operation_initiated', operation);
       
       return operationId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error initiating bulk status change:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Approve pending bulk operation
@@ -631,7 +643,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       const operation = this.activeOperations.get(operationId);
       if (!operation || !operation.approvalRequest) {
         throw new Error('Operation not found or approval not required');
-      }
+
       
       const approval: Approval = {
         approvedBy,
@@ -658,12 +670,12 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
             operationId,
             comments,
             rejectedAt: new Date()
-          }
+
         });
         
         this.emit('bulk_operation_rejected', { operationId, approvedBy, comments });
         return false;
-      }
+
       
       // Check if enough approvals received
       if (operation.approvalRequest.approvalsReceived >= operation.approvalRequest.approvalRequired) {
@@ -686,19 +698,18 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
             approvedBy,
             comments,
             conditions
-          }
+
         });
         
         this.emit('bulk_operation_approved', { operationId, approvedBy });
-      }
+
       
       return true;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error approving operation:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Execute bulk status change operation
@@ -708,7 +719,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     const operation = this.activeOperations.get(operationId);
     if (!operation) {
       throw new Error('Operation not found');
-    }
+
     
     try {
       operation.status = BulkChangeStatus.RUNNING;
@@ -722,16 +733,15 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       
       // Process in batches
       await this.processBatches(operation);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error during bulk operation execution:', error);
       operation.status = BulkChangeStatus.FAILED;
       operation.completedAt = new Date();
       
       await this.updateOperationStatus(operationId, BulkChangeStatus.FAILED);
       throw error;
-    }
-  }
+
+
 
   /**
    * Process operation in batches
@@ -745,7 +755,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
         // Check if operation was cancelled
         if (operation.status === BulkChangeStatus.CANCELLED) {
           break;
-        }
+
         
         operation.currentBatch = batchIndex + 1;
         
@@ -789,17 +799,16 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
         // Delay between batches if configured
         if (this.config.batchDelayMs > 0 && batchIndex < operation.totalBatches - 1) {
           await this.delay(this.config.batchDelayMs);
-        }
-      }
+
+
       
       // Complete operation
       await this.completeOperation(operation);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error processing batches:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Process individual batch
@@ -815,7 +824,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     processedCount: number;
     successCount: number;
     failureCount: number;
-  }> {
+> {
 
     const batchResults: BulkChangeResult[] = [];
     const batchErrors: BulkChangeError[] = [];
@@ -853,7 +862,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
         
         if (result.success) {
           successCount++;
-        } else {
+ else {
           failureCount++;
           
           // Add to errors if failed
@@ -868,11 +877,10 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
             retryable: result.retryable || false,
             escalated: false
           });
-        }
+
         
         processedCount++;
-        
-      } catch (error) {
+ catch (error) {
         console.error(`Error processing item ${targetId}:`, error);
         
         failureCount++;
@@ -889,8 +897,8 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           retryable: true,
           escalated: false
         });
-      }
-    }
+
+
     
     return {
       results: batchResults,
@@ -900,7 +908,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       successCount,
       failureCount
     };
-  }
+
 
   /**
    * Execute status change for individual item
@@ -918,7 +926,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     errorType?: BulkChangeError['errorType'];
     errorCode?: string;
     retryable?: boolean;
-  }> {
+> {
     try {
       // Route to appropriate handler based on target type
       switch (operation.target) {
@@ -942,9 +950,8 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           
       default:
         throw new Error(`Unsupported target type: ${operation.target}`);
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       return {
         success: false,
         message: error.message,
@@ -953,8 +960,8 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
         errorCode: 'EXECUTION_ERROR',
         retryable: true
       };
-    }
-  }
+
+
 
   // =============================================================================
   // Target-Specific Status Change Handlers
@@ -982,7 +989,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           errorType: 'validation',
           errorCode: 'KEY_NOT_FOUND'
         };
-      }
+
       
       const currentKey = result.rows[0];
       const previousStatus = currentKey.status;
@@ -996,7 +1003,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           errorType: 'validation',
           errorCode: 'INVALID_TRANSITION'
         };
-      }
+
       
       // Execute status change based on operation type
       let updateQuery = '';
@@ -1046,7 +1053,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           errorType: 'validation',
           errorCode: 'UNSUPPORTED_OPERATION'
         };
-      }
+
       
       // Execute the update
       await this.database.query(updateQuery, updateParams);
@@ -1060,10 +1067,10 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
             previousStatus,
             previousSuspendedReason: currentKey.suspended_reason,
             keyId
-  }
+
           rollbackInstructions: `Restore API key ${keyId} to status '${previousStatus}'`
         };
-      }
+
       
       return {
         success: true,
@@ -1075,11 +1082,10 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           reason: operation.reason,
           previousStatus,
           newStatus: operation.toStatus
-  }
+
         rollbackInfo
       };
-      
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         message: `Database error: ${error.message}`,
@@ -1087,8 +1093,8 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
         errorCode: 'DATABASE_ERROR',
         retryable: true
       };
-    }
-  }
+
+
 
   /**
    * Execute user account status change
@@ -1106,7 +1112,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       message: `User account ${operation.operationType} successful`,
       details: { userId }
     };
-  }
+
 
   /**
    * Execute permission status change
@@ -1124,7 +1130,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       message: `Permission ${operation.operationType} successful`,
       details: { permissionId }
     };
-  }
+
 
   /**
    * Execute service status change
@@ -1142,7 +1148,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       message: `Service ${operation.operationType} successful`,
       details: { serviceId }
     };
-  }
+
 
   /**
    * Execute session status change
@@ -1160,7 +1166,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       message: `Session ${operation.operationType} successful`,
       details: { sessionId }
     };
-  }
+
 
   /**
    * Execute configuration status change
@@ -1178,7 +1184,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       message: `Configuration ${operation.operationType} successful`,
       details: { configId }
     };
-  }
+
 
   // =============================================================================
   // Helper Methods and Utilities
@@ -1188,11 +1194,11 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
 
     try {
       console.log('✅ Epic 17 Bulk Status Change Service initialized');
-    } catch (error) {
+ catch (error) {
       console.error('Error initializing bulk status change service:', error);
       throw error;
-    }
-  }
+
+
 
   private shouldRequireApproval(itemCount: number, operationType: string, target: BulkChangeTarget): boolean {
     if (!this.config.requireApproval) return false;
@@ -1207,7 +1213,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     if (target === BulkChangeTarget.SERVICES) return true;
     
     return false;
-  }
+
 
   private async assessImpact(
     operationType: string,
@@ -1224,7 +1230,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     
     if (['revoke', 'archive'].includes(operationType)) {
       riskLevel = riskLevel === 'low' ? 'medium' : 'high';
-    }
+
     
     return {
       riskLevel,
@@ -1236,7 +1242,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       mitigationStrategies: ['Rollback capability', 'Batch processing', 'Progress monitoring'],
       rollbackComplexity: 'simple'
     };
-  }
+
 
   private async performSafetyChecks(operation: BulkStatusChangeOperation): Promise<SafetyCheckResult[]> {
 
@@ -1256,7 +1262,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     });
     
     return checks;
-  }
+
 
   private async performDryRun(operation: BulkStatusChangeOperation): Promise<BulkChangeDryRunResult> {
 
@@ -1273,7 +1279,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       const canChange = await this.validateItemForStatusChange(operation, targetId);
       if (canChange.valid) {
         eligibleItems++;
-      } else {
+ else {
         ineligibleItems++;
         warnings.push({
           id: crypto.randomUUID(),
@@ -1283,8 +1289,8 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           details: { targetId },
           severity: 'medium'
         });
-      }
-    }
+
+
     
     // Extrapolate to full dataset
     const eligibilityRate = eligibleItems / sampleSize;
@@ -1304,7 +1310,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
         dependentServices: [],
         businessImpact: 'Status change operation',
         riskLevel: totalIneligible > totalEligible * 0.1 ? 'medium' : 'low'
-  }
+
       recommendations: [
         `${totalEligible} items eligible for status change`,
         `${totalIneligible} items require review`,
@@ -1312,7 +1318,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       ],
       warnings
     };
-  }
+
 
   private async validateItemForStatusChange(
     operation: BulkStatusChangeOperation,
@@ -1325,7 +1331,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
         const keyResult = await this.database.query('SELECT status FROM api_keys WHERE key_id = $1', [targetId]);
         if (keyResult.rows.length === 0) {
           return { valid: false, reason: 'API key not found' };
-        }
+
           
         const currentStatus = keyResult.rows[0].status;
         const transition = this.validateApiKeyStatusTransition(currentStatus, operation.toStatus);
@@ -1333,11 +1339,11 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
           
       default:
         return { valid: true };
-      }
-    } catch (error) {
+
+ catch (error) {
       return { valid: false, reason: `Validation error: ${error.message}` };
-    }
-  }
+
+
 
   private validateApiKeyStatusTransition(fromStatus: string, toStatus: string): { valid: boolean; reason?: string } {
     const validTransitions: Record<string, string[]> = {
@@ -1354,7 +1360,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       valid: isValid,
       reason: isValid ? undefined : `Cannot transition from '${fromStatus}' to '${toStatus}'`
     };
-  }
+
 
   private calculateEstimatedTimePerItem(target: BulkChangeTarget, operationType: string): number {
     // Return estimated time per item in milliseconds
@@ -1380,7 +1386,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     };
     
     return baseTime * (targetMultipliers[target] || 1) * (operationMultipliers[operationType] || 1);
-  }
+
 
   private async createApprovalRequest(operation: BulkStatusChangeOperation): Promise<ApprovalRequest> {
 
@@ -1404,14 +1410,14 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     };
     
     return approvalRequest;
-  }
+
 
   private async getApproversForOperation(operation: BulkStatusChangeOperation): Promise<string[]> {
 
     // Return list of approvers based on operation characteristics
     // In production, this would query user roles and permissions
     return ['admin@example.com', 'security@example.com'];
-  }
+
 
   private async completeOperation(operation: BulkStatusChangeOperation): Promise<void> {
 
@@ -1425,18 +1431,18 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     // Generate rollback data if needed
     if (this.config.rollbackEnabled && operation.successCount > 0) {
       operation.rollbackData = await this.generateRollbackData(operation);
-    }
+
     
     // Send completion notification
     if (this.config.notifyOnCompletion) {
       await this.sendCompletionNotification(operation);
-    }
+
     
     // Clean up from active operations
     this.activeOperations.delete(operation.operationId);
     
     this.emit('bulk_operation_completed', operation);
-  }
+
 
   // Database and utility methods
   private async storeOperation(operation: BulkStatusChangeOperation): Promise<void> {
@@ -1453,7 +1459,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       operation.requiresApproval, operation.batchSize, JSON.stringify(operation.impactAssessment),
       operation.scheduledAt
     ]);
-  }
+
 
   private async updateOperationStatus(operationId: string, status: BulkChangeStatus): Promise<void> {
 
@@ -1462,7 +1468,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       SET status = $2, updated_at = NOW() 
       WHERE operation_id = $1
     `, [operationId, status]);
-  }
+
 
   private async updateOperationProgress(operation: BulkStatusChangeOperation): Promise<void> {
 
@@ -1476,7 +1482,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       operation.operationId, operation.processedCount, operation.successCount, 
       operation.failureCount, operation.progressPercentage, operation.errorRate, operation.throughput
     ]);
-  }
+
 
   private async generateRollbackData(operation: BulkStatusChangeOperation): Promise<BulkRollbackData> {
 
@@ -1489,32 +1495,32 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       rollbackRisks: ['Data inconsistency risk'],
       rollbackEstimatedTime: Math.ceil(operation.successCount / 200) // Estimate 200 items per minute for rollback
     };
-  }
+
 
   private async sendApprovalNotifications(request: ApprovalRequest, operation: BulkStatusChangeOperation): Promise<void> {
 
     console.log(`📧 Sending approval notifications for operation ${operation.operationId}`);
-  }
+
 
   private async sendCompletionNotification(operation: BulkStatusChangeOperation): Promise<void> {
 
     console.log(`📧 Sending completion notification for operation ${operation.operationId}`);
-  }
+
 
   private delay(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   // Public API methods for monitoring and management
   getActiveOperations(): BulkStatusChangeOperation[] {
     return Array.from(this.activeOperations.values());
-  }
+
 
   async getOperationStatus(operationId: string): Promise<BulkStatusChangeOperation | null> {
 
     return this.activeOperations.get(operationId) || null;
-  }
+
 
   async cancelOperation(operationId: string, cancelledBy: string): Promise<boolean> {
 
@@ -1526,7 +1532,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     
     this.emit('bulk_operation_cancelled', { operationId, cancelledBy });
     return true;
-  }
+
 
   async getBulkChangeMetrics(): Promise<BulkStatusChangeMetrics> {
 
@@ -1544,7 +1550,7 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       recentOperations: [],
       activeOperations: this.activeOperations.size
     };
-  }
-}
+
+
 
 export default Epic17BulkStatusChangeService;

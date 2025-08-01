@@ -45,7 +45,7 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     permissions: string[];
   };
-}
+
 
 /**
  * Register data retention routes
@@ -54,6 +54,7 @@ export async function registerDataRetentionRoutes(
   fastify: FastifyInstance,
   retentionService: DataRetentionService
 ): Promise<void> {
+
   // Get all retention policies
   fastify.get(
     '/retention/policies',
@@ -75,14 +76,13 @@ export async function registerDataRetentionRoutes(
             activeOnly,
           },
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get retention policies:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve retention policies',
         });
-      }
-    }
+
   );
 
   // Create new retention policy
@@ -102,22 +102,21 @@ export async function registerDataRetentionRoutes(
           data: policy,
           message: 'Retention policy created successfully',
         });
-      } catch (error) {
+ catch (error) {
         if (error instanceof z.ZodError) {
           return reply.code(400).send({
             success: false,
             error: 'Invalid request data',
             details: error.errors,
           });
-        }
+
 
         fastify.log.error('Failed to create retention policy:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to create retention policy',
         });
-      }
-    }
+
   );
 
   // Update retention policy
@@ -138,22 +137,21 @@ export async function registerDataRetentionRoutes(
           data: policy,
           message: 'Retention policy updated successfully',
         });
-      } catch (error) {
+ catch (error) {
         if (error instanceof z.ZodError) {
           return reply.code(400).send({
             success: false,
             error: 'Invalid request data',
             details: error.errors,
           });
-        }
+
 
         fastify.log.error(`Failed to update retention policy ${request.params}:`, error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to update retention policy',
         });
-      }
-    }
+
   );
 
   // Execute retention policies manually
@@ -177,14 +175,13 @@ export async function registerDataRetentionRoutes(
             ? 'Retention execution completed with errors'
             : 'Retention execution completed successfully',
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to execute retention policies:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to execute retention policies',
         });
-      }
-    }
+
   );
 
   // Get retention execution history
@@ -203,7 +200,7 @@ export async function registerDataRetentionRoutes(
             success: false,
             error: 'Invalid limit parameter (must be between 1 and 1000)',
           });
-        }
+
 
         const history = await retentionService.getRetentionHistory(historyLimit);
 
@@ -215,14 +212,13 @@ export async function registerDataRetentionRoutes(
             limit: historyLimit,
           },
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get retention history:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve retention history',
         });
-      }
-    }
+
   );
 
   // Request user data export
@@ -242,7 +238,7 @@ export async function registerDataRetentionRoutes(
             success: false,
             error: 'Insufficient permissions to export data for other users',
           });
-        }
+
 
         const exportRequest = await retentionService.requestDataExport(
           requestData.userId,
@@ -256,22 +252,21 @@ export async function registerDataRetentionRoutes(
           data: exportRequest,
           message: 'Data export request created. You will be notified when ready.',
         });
-      } catch (error) {
+ catch (error) {
         if (error instanceof z.ZodError) {
           return reply.code(400).send({
             success: false,
             error: 'Invalid request data',
             details: error.errors,
           });
-        }
+
 
         fastify.log.error('Failed to create data export request:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to create data export request',
         });
-      }
-    }
+
   );
 
   // Get user's data export requests
@@ -291,7 +286,7 @@ export async function registerDataRetentionRoutes(
             success: false,
             error: 'Insufficient permissions to view exports for other users',
           });
-        }
+
 
         // This would need to be implemented in the service
         // For now, return placeholder
@@ -300,14 +295,13 @@ export async function registerDataRetentionRoutes(
           data: [],
           message: 'Export history retrieval not yet implemented',
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get export requests:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve export requests',
         });
-      }
-    }
+
   );
 
   // Get available data types for export
@@ -333,13 +327,13 @@ export async function registerDataRetentionRoutes(
             adminAccess: request.user?.permissions.includes('admin:data:export'),
           },
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get data types:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve data types',
         });
-      }
+
     }
   );
 
@@ -365,7 +359,7 @@ export async function registerDataRetentionRoutes(
           success: true,
           data: health,
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Retention system health check failed:', error);
         return reply.code(500).send({
           success: false,
@@ -375,8 +369,7 @@ export async function registerDataRetentionRoutes(
             error: error instanceof Error ? error.message : String(error),
           },
         });
-      }
-    }
+
   );
 
   // Initialize default retention policies (admin only)
@@ -393,14 +386,13 @@ export async function registerDataRetentionRoutes(
           success: true,
           message: 'Default retention policies initialized successfully',
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to initialize retention policies:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to initialize retention policies',
         });
-      }
-    }
+
   );
 
   // Schedule automatic retention (admin only)
@@ -417,15 +409,14 @@ export async function registerDataRetentionRoutes(
           success: true,
           message: 'Automatic retention scheduling configured',
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to schedule retention:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to configure retention scheduling',
         });
-      }
-    }
+
   );
-}
+
 
 export default registerDataRetentionRoutes;

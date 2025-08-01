@@ -33,7 +33,7 @@ export const ExecutionPathVisualization = ({ results, onNodeHighlight, config = 
             background: '#1a202c',
             borderRadius: 8,
             padding: 16,
-            fontFamily: 'system-ui, -apple-system, sans-serif'
+            fontFamily: 'system-ui, -apple-system, sans-serif',
         }, children: [_jsxs("div", { style: {
                     display: 'flex',
                     justifyContent: 'space-between',

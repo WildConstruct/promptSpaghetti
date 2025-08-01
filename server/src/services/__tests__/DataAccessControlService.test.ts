@@ -52,7 +52,7 @@ describe('DataAccessControlService', () => {
         sessionId: 'session-123',
         ipAddress: '192.168.1.1',
         userAgent: 'Mozilla/5.0'
-      }
+
     };
 
     it('should allow access for authorized user with sufficient permissions', async () => {
@@ -63,14 +63,14 @@ describe('DataAccessControlService', () => {
             classification: 'CONFIDENTIAL',
             owner_id: 'owner-789',
             metadata: '{"tags":["sensitive"]}'
-          }] 
+] 
         }) // get resource classification
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["data_viewer","employee"]',
             permissions: '["READ_CONFIDENTIAL","READ_INTERNAL"]'
-          }] 
+] 
         }) // get user roles and permissions
         .mockResolvedValueOnce({ rowCount: 1 }); // log access attempt
 
@@ -91,7 +91,7 @@ describe('DataAccessControlService', () => {
           operation: 'READ',
           classification: 'CONFIDENTIAL',
           riskScore: expect.any(Number)
-  }
+
       });
     });
 
@@ -103,15 +103,15 @@ describe('DataAccessControlService', () => {
             classification: 'CONFIDENTIAL',
             owner_id: 'owner-789',
             metadata: '{"tags":["sensitive"]}'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["basic_user"]',
             permissions: '["READ_PUBLIC","READ_INTERNAL"]'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ rowCount: 1 });
 
       const result = await dataAccessService.checkAccess(validRequest);
@@ -129,7 +129,7 @@ describe('DataAccessControlService', () => {
         metadata: expect.objectContaining({
           reason: expect.stringContaining('Insufficient permissions'),
           requiredPermission: 'READ_CONFIDENTIAL'
-  }
+
       });
     });
 
@@ -149,7 +149,7 @@ describe('DataAccessControlService', () => {
         context: {
           ...validRequest.context,
           requestTime: new Date('2023-12-25T02:00:00Z') // Outside business hours
-        }
+
       };
 
       mockDb.query
@@ -158,15 +158,15 @@ describe('DataAccessControlService', () => {
             classification: 'RESTRICTED',
             owner_id: 'owner-789',
             metadata: '{"restrictions":{"timeWindows":[{"start":"09:00","end":"17:00","days":["MON","TUE","WED","THU","FRI"]}]}}'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["data_admin"]',
             permissions: '["READ_RESTRICTED","WRITE_RESTRICTED"]'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ rowCount: 1 });
 
       const result = await dataAccessService.checkAccess(restrictedRequest);
@@ -188,7 +188,7 @@ describe('DataAccessControlService', () => {
           ipAddress: '1.2.3.4', // Different from usual
           userAgent: 'Suspicious Bot 1.0',
           purpose: 'data_export'
-        }
+
       };
 
       mockDb.query
@@ -197,15 +197,15 @@ describe('DataAccessControlService', () => {
             classification: 'CONFIDENTIAL',
             owner_id: 'owner-789',
             metadata: '{}'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["data_viewer"]',
             permissions: '["READ_CONFIDENTIAL"]'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ rowCount: 1 });
 
       const result = await dataAccessService.checkAccess(suspiciousRequest);
@@ -218,7 +218,7 @@ describe('DataAccessControlService', () => {
             riskFactors: expect.arrayContaining([
               expect.stringContaining('Suspicious user agent')
             ])
-  }
+
   }
       );
     });
@@ -254,7 +254,7 @@ describe('DataAccessControlService', () => {
         ipAddress: '192.168.1.1',
         userAgent: 'Mozilla/5.0',
         purpose: 'compliance_audit'
-      }
+
     };
 
     it('should approve automatic access request for eligible users', async () => {
@@ -264,15 +264,15 @@ describe('DataAccessControlService', () => {
             classification: 'INTERNAL',
             owner_id: mockUser.id, // User is the owner
             metadata: '{}'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["data_owner","employee"]',
             permissions: '["WRITE_INTERNAL","READ_INTERNAL"]'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ 
           rows: [{ request_id: 'req-auto-123' }] 
         }); // store request
@@ -291,7 +291,7 @@ describe('DataAccessControlService', () => {
         context: {
           ...accessRequest.context,
           ipAddress: '1.2.3.4' // Suspicious IP
-        }
+
       };
 
       mockDb.query
@@ -300,15 +300,15 @@ describe('DataAccessControlService', () => {
             classification: 'RESTRICTED',
             owner_id: 'different-owner',
             metadata: '{"sensitive": true}'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["data_viewer"]',
             permissions: '["READ_RESTRICTED"]'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ 
           rows: [{ request_id: 'req-manual-456' }] 
         });
@@ -345,7 +345,7 @@ describe('DataAccessControlService', () => {
           access_level: 'GRANTED',
           timestamp: new Date(),
           risk_score: 25
-  }
+
         {
           id: 'audit-2',
           user_id: mockUser.id,
@@ -357,7 +357,7 @@ describe('DataAccessControlService', () => {
           access_level: 'DENIED',
           timestamp: new Date(),
           risk_score: 75
-        }
+
       ];
 
       mockDb.query.mockResolvedValueOnce({ rows: mockHistory });
@@ -394,7 +394,7 @@ describe('DataAccessControlService', () => {
           expires_at: new Date(Date.now() + 86400000),
           reason: 'Temporary access for audit',
           restrictions: '[]'
-        }
+
       ];
 
       mockDb.query.mockResolvedValueOnce({ rows: mockGrants });
@@ -536,7 +536,7 @@ describe('DataAccessControlService', () => {
             classification: 'INTERNAL',
             owner_id: 'owner-123',
             metadata: 'invalid-json'
-          }] 
+] 
         });
 
       // Should not throw but handle gracefully
@@ -564,15 +564,15 @@ describe('DataAccessControlService', () => {
             classification: 'PUBLIC',
             owner_id: 'owner-123',
             metadata: '{}'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["employee"]',
             permissions: '["READ_PUBLIC"]'
-          }] 
-  }
+] 
+
         .mockResolvedValueOnce({ rowCount: 1 });
 
       const result = await dataAccessService.checkAccess(requestWithoutContext);

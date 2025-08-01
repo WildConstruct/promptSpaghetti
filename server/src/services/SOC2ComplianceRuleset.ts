@@ -21,7 +21,7 @@ import {
   ConditionType,
   ComparisonOperator,
   ActionType
-} from './ComplianceRuleEngine';
+ from './ComplianceRuleEngine';
 import { AuditService } from '../auth/services/AuditService';
 
 /**
@@ -33,7 +33,7 @@ export enum SOC2TrustServiceCategory {
   PROCESSING_INTEGRITY = 'PROCESSING_INTEGRITY',
   CONFIDENTIALITY = 'CONFIDENTIALITY',
   PRIVACY = 'PRIVACY'
-}
+
 
 /**
  * SOC2 Trust Service Criteria (TSC) Subcategories
@@ -73,7 +73,7 @@ export enum SOC2TrustServiceCriteria {
   P6_DISCLOSURE_NOTIFICATION = 'P6.0',
   P7_QUALITY = 'P7.0',
   P8_MONITORING_ENFORCEMENT = 'P8.0'
-}
+
 
 /**
  * SOC2 Control Activity Types
@@ -84,7 +84,7 @@ export enum SOC2ControlActivity {
   GENERAL_IT_CONTROLS = 'GENERAL_IT',
   BUSINESS_PROCESS_CONTROLS = 'BUSINESS_PROCESS',
   COMPLEMENTARY_USER_ENTITY_CONTROLS = 'CUEC'
-}
+
 
 /**
  * SOC2 Evidence Types
@@ -99,20 +99,22 @@ export enum SOC2EvidenceType {
   VENDOR_ASSESSMENTS = 'VENDOR_ASSESSMENTS',
   PENETRATION_TESTS = 'PENETRATION_TESTS',
   VULNERABILITY_SCANS = 'VULNERABILITY_SCANS'
-}
+
 
 /**
  * SOC2 Compliance Assessment Interface
  */
-}
-}
+
+
+
 export interface SOC2ComplianceAssessment {
   assessmentId: string;
   reportingPeriod: {
     startDate: Date;
     endDate: Date;
-}
-}
+
+
+
   };
   trustServiceCategory: SOC2TrustServiceCategory;
   criteria: SOC2TrustServiceCriteria[];
@@ -124,10 +126,10 @@ export interface SOC2ComplianceAssessment {
   assessmentStatus: 'IN_PROGRESS' | 'COMPLETED' | 'REVIEWED' | 'ACCEPTED';
   assessor: string;
   assessmentDate: Date;
-}
 
-}
-}
+
+
+
 export interface SOC2Evidence {
   evidenceId: string;
   type: SOC2EvidenceType;
@@ -141,12 +143,13 @@ export interface SOC2Evidence {
   supportingDocuments: string[];
   testingProcedures?: string[];
   testingResults?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SOC2Finding {
   findingId: string;
   severity: 'SIGNIFICANT_DEFICIENCY' | 'MATERIAL_WEAKNESS' | 'OBSERVATION';
@@ -158,12 +161,13 @@ export interface SOC2Finding {
   managementResponse: string;
   targetRemediationDate?: Date;
   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SOC2RemediationPlan {
   planId: string;
   findings: string[]; // Finding IDs
@@ -172,12 +176,13 @@ export interface SOC2RemediationPlan {
   targetCompletionDate: Date;
   responsible: string;
   approver: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SOC2RemediationAction {
   actionId: string;
   description: string;
@@ -185,9 +190,10 @@ export interface SOC2RemediationAction {
   targetDate: Date;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
   evidenceOfCompletion?: string;
-}
-}
-}
+
+
+
+
 
 /**
  * SOC2 Compliance Ruleset Service
@@ -201,7 +207,7 @@ export class SOC2ComplianceRuleset {
     this.ruleEngine = ruleEngine;
     this.auditService = auditService;
     this.initializeSOC2Rules();
-  }
+
 
   /**
    * Initialize SOC2 compliance rules
@@ -213,13 +219,13 @@ export class SOC2ComplianceRuleset {
       details: {
         framework: 'SOC2',
         trustServiceCategories: Object.values(SOC2TrustServiceCategory)
-  }
+
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['trust_service_criteria'],
         evidenceLevel: 'ENHANCED'
-      }
+
     });
 
     try {
@@ -235,32 +241,31 @@ export class SOC2ComplianceRuleset {
         details: {
           framework: 'SOC2',
           rulesCreated: 47 // Total rules across all categories
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['trust_service_criteria'],
           evidenceLevel: 'ENHANCED'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'SOC2_RULES_INITIALIZATION_FAILED',
         details: {
           framework: 'SOC2',
           error: error instanceof Error ? error.message : 'Unknown error'
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['trust_service_criteria'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Initialize Security Trust Service Category Rules (Common Criteria + Security-specific)
@@ -287,7 +292,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-  }
+
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -300,10 +305,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-  }
+
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-  }
+
       conditions: [{
         conditionId: 'CC1-GOV-001',
         type: 'DATA_FIELD' as ConditionType,
@@ -316,7 +321,7 @@ export class SOC2ComplianceRuleset {
           transformation: [],
           validation: {} as any,
           caching: {} as any
-        }],
+],
         context: {} as any,
         evaluation: {} as any,
         negated: false,
@@ -324,7 +329,7 @@ export class SOC2ComplianceRuleset {
         required: true,
         validationRules: [],
         errorHandling: {} as any
-      }],
+],
       actions: [{
         actionId: 'CC1-ACTION-001',
         type: 'AUDIT' as ActionType,
@@ -338,7 +343,7 @@ export class SOC2ComplianceRuleset {
         notification: {} as any,
         audit: {} as any,
         compliance: {} as any
-      }],
+],
       conflicts: [],
       dependencies: [],
       metadata: {
@@ -354,7 +359,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-  }
+
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -381,7 +386,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-  }
+
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -394,10 +399,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-  }
+
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-  }
+
       conditions: [{
         conditionId: 'CC6-ACCESS-001',
         type: 'CONTEXT_PROPERTY' as ConditionType,
@@ -410,7 +415,7 @@ export class SOC2ComplianceRuleset {
           transformation: [],
           validation: {} as any,
           caching: {} as any
-        }],
+],
         context: {} as any,
         evaluation: {} as any,
         negated: false,
@@ -418,7 +423,7 @@ export class SOC2ComplianceRuleset {
         required: true,
         validationRules: [],
         errorHandling: {} as any
-      }],
+],
       actions: [{
         actionId: 'CC6-ACTION-001',
         type: 'REQUIRE' as ActionType,
@@ -432,7 +437,7 @@ export class SOC2ComplianceRuleset {
         notification: {} as any,
         audit: {} as any,
         compliance: {} as any
-      }],
+],
       conflicts: [],
       dependencies: [],
       metadata: {
@@ -448,7 +453,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-  }
+
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -475,7 +480,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-  }
+
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -488,10 +493,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-  }
+
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-  }
+
       conditions: [{
         conditionId: 'CC7-OPS-001',
         type: 'THRESHOLD' as ConditionType,
@@ -504,7 +509,7 @@ export class SOC2ComplianceRuleset {
           transformation: [],
           validation: {} as any,
           caching: {} as any
-        }],
+],
         context: {} as any,
         evaluation: {} as any,
         negated: false,
@@ -512,7 +517,7 @@ export class SOC2ComplianceRuleset {
         required: true,
         validationRules: [],
         errorHandling: {} as any
-      }],
+],
       actions: [{
         actionId: 'CC7-ACTION-001',
         type: 'AUDIT' as ActionType,
@@ -526,7 +531,7 @@ export class SOC2ComplianceRuleset {
         notification: {} as any,
         audit: {} as any,
         compliance: {} as any
-      }],
+],
       conflicts: [],
       dependencies: [],
       metadata: {
@@ -542,13 +547,13 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-  }
+
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
       compliance: {} as any
     });
-  }
+
 
   /**
    * Initialize Availability Trust Service Category Rules
@@ -575,7 +580,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-  }
+
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -588,10 +593,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-  }
+
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-  }
+
       conditions: [{
         conditionId: 'A1-DESIGN-001',
         type: 'THRESHOLD' as ConditionType,
@@ -604,7 +609,7 @@ export class SOC2ComplianceRuleset {
           transformation: [],
           validation: {} as any,
           caching: {} as any
-        }],
+],
         context: {} as any,
         evaluation: {} as any,
         negated: false,
@@ -612,7 +617,7 @@ export class SOC2ComplianceRuleset {
         required: true,
         validationRules: [],
         errorHandling: {} as any
-      }],
+],
       actions: [{
         actionId: 'A1-ACTION-001',
         type: 'NOTIFY' as ActionType,
@@ -626,7 +631,7 @@ export class SOC2ComplianceRuleset {
         notification: {} as any,
         audit: {} as any,
         compliance: {} as any
-      }],
+],
       conflicts: [],
       dependencies: [],
       metadata: {
@@ -642,13 +647,13 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-  }
+
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
       compliance: {} as any
     });
-  }
+
 
   /**
    * Initialize Processing Integrity Trust Service Category Rules
@@ -675,7 +680,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-  }
+
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -688,10 +693,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-  }
+
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-  }
+
       conditions: [{
         conditionId: 'PI1-COMP-001',
         type: 'THRESHOLD' as ConditionType,
@@ -704,7 +709,7 @@ export class SOC2ComplianceRuleset {
           transformation: [],
           validation: {} as any,
           caching: {} as any
-        }],
+],
         context: {} as any,
         evaluation: {} as any,
         negated: false,
@@ -712,7 +717,7 @@ export class SOC2ComplianceRuleset {
         required: true,
         validationRules: [],
         errorHandling: {} as any
-      }],
+],
       actions: [{
         actionId: 'PI1-ACTION-001',
         type: 'LOG' as ActionType,
@@ -726,7 +731,7 @@ export class SOC2ComplianceRuleset {
         notification: {} as any,
         audit: {} as any,
         compliance: {} as any
-      }],
+],
       conflicts: [],
       dependencies: [],
       metadata: {
@@ -742,13 +747,13 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-  }
+
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
       compliance: {} as any
     });
-  }
+
 
   /**
    * Initialize Confidentiality Trust Service Category Rules
@@ -775,7 +780,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-  }
+
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -788,10 +793,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-  }
+
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-  }
+
       conditions: [{
         conditionId: 'C1-ACCESS-001',
         type: 'DATA_FIELD' as ConditionType,
@@ -804,7 +809,7 @@ export class SOC2ComplianceRuleset {
           transformation: [],
           validation: {} as any,
           caching: {} as any
-        }],
+],
         context: {} as any,
         evaluation: {} as any,
         negated: false,
@@ -812,7 +817,7 @@ export class SOC2ComplianceRuleset {
         required: true,
         validationRules: [],
         errorHandling: {} as any
-      }],
+],
       actions: [{
         actionId: 'C1-ACTION-001',
         type: 'ENCRYPT' as ActionType,
@@ -826,7 +831,7 @@ export class SOC2ComplianceRuleset {
         notification: {} as any,
         audit: {} as any,
         compliance: {} as any
-      }],
+],
       conflicts: [],
       dependencies: [],
       metadata: {
@@ -842,13 +847,13 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-  }
+
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
       compliance: {} as any
     });
-  }
+
 
   /**
    * Initialize Privacy Trust Service Category Rules
@@ -875,7 +880,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-  }
+
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -888,10 +893,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-  }
+
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-  }
+
       conditions: [{
         conditionId: 'P1-NOTICE-001',
         type: 'DATA_FIELD' as ConditionType,
@@ -904,7 +909,7 @@ export class SOC2ComplianceRuleset {
           transformation: [],
           validation: {} as any,
           caching: {} as any
-        }],
+],
         context: {} as any,
         evaluation: {} as any,
         negated: false,
@@ -912,7 +917,7 @@ export class SOC2ComplianceRuleset {
         required: true,
         validationRules: [],
         errorHandling: {} as any
-      }],
+],
       actions: [{
         actionId: 'P1-ACTION-001',
         type: 'REQUIRE' as ActionType,
@@ -926,7 +931,7 @@ export class SOC2ComplianceRuleset {
         notification: {} as any,
         audit: {} as any,
         compliance: {} as any
-      }],
+],
       conflicts: [],
       dependencies: [],
       metadata: {
@@ -942,7 +947,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-  }
+
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -969,7 +974,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-  }
+
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -982,10 +987,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-  }
+
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-  }
+
       conditions: [{
         conditionId: 'P2-CONSENT-001',
         type: 'DATA_FIELD' as ConditionType,
@@ -998,7 +1003,7 @@ export class SOC2ComplianceRuleset {
           transformation: [],
           validation: {} as any,
           caching: {} as any
-        }],
+],
         context: {} as any,
         evaluation: {} as any,
         negated: false,
@@ -1006,7 +1011,7 @@ export class SOC2ComplianceRuleset {
         required: true,
         validationRules: [],
         errorHandling: {} as any
-      }],
+],
       actions: [{
         actionId: 'P2-ACTION-001',
         type: 'LOG' as ActionType,
@@ -1020,7 +1025,7 @@ export class SOC2ComplianceRuleset {
         notification: {} as any,
         audit: {} as any,
         compliance: {} as any
-      }],
+],
       conflicts: [],
       dependencies: [],
       metadata: {
@@ -1036,13 +1041,13 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-  }
+
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
       compliance: {} as any
     });
-  }
+
 
   /**
    * Create SOC2 compliance assessment
@@ -1075,17 +1080,17 @@ export class SOC2ComplianceRuleset {
         assessmentId,
         trustServiceCategory,
         reportingPeriod
-  }
+
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['assessment_management'],
         evidenceLevel: 'ENHANCED'
-      }
+
     });
 
     return assessment;
-  }
+
 
   /**
    * Evaluate SOC2 compliance for specific trust service category
@@ -1108,17 +1113,17 @@ export class SOC2ComplianceRuleset {
         rulesEvaluated: results.length,
         compliantRules: results.filter(r => r.outcome.result === 'PASS').length,
         nonCompliantRules: results.filter(r => r.outcome.result === 'FAIL').length
-  }
+
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['compliance_evaluation'],
         evidenceLevel: 'ENHANCED'
-      }
+
     });
 
     return results;
-  }
+
 
   /**
    * Generate SOC2 compliance report
@@ -1130,11 +1135,11 @@ export class SOC2ComplianceRuleset {
     overallRating: 'EFFECTIVE' | 'INEFFECTIVE' | 'REQUIRES_IMPROVEMENT';
     trustServiceCriteriaResults: Map<SOC2TrustServiceCriteria, 'MET' | 'NOT_MET' | 'PARTIALLY_MET'>;
     recommendations: string[];
-  }> {
+> {
     const assessment = this.assessments.get(assessmentId);
     if (!assessment) {
       throw new Error(`Assessment ${assessmentId} not found`);
-    }
+
 
     // Simplified compliance assessment logic
     const trustServiceCriteriaResults = new Map<SOC2TrustServiceCriteria, 'MET' | 'NOT_MET' | 'PARTIALLY_MET'>();
@@ -1143,7 +1148,7 @@ export class SOC2ComplianceRuleset {
     for (const criteria of assessment.criteria) {
       // In a real implementation, this would evaluate actual evidence and findings
       trustServiceCriteriaResults.set(criteria, 'MET');
-    }
+
 
     const overallRating = this.determineOverallRating(trustServiceCriteriaResults);
     const recommendations = this.generateRecommendations(assessment.findings);
@@ -1154,13 +1159,13 @@ export class SOC2ComplianceRuleset {
         assessmentId,
         overallRating,
         criteriaEvaluated: trustServiceCriteriaResults.size
-  }
+
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['compliance_reporting'],
         evidenceLevel: 'ENHANCED'
-      }
+
     });
 
     return {
@@ -1169,7 +1174,7 @@ export class SOC2ComplianceRuleset {
       trustServiceCriteriaResults,
       recommendations
     };
-  }
+
 
   /**
    * Helper methods
@@ -1200,8 +1205,8 @@ export class SOC2ComplianceRuleset {
       return [...commonCriteria, SOC2TrustServiceCriteria.P1_NOTICE_COMMUNICATION, SOC2TrustServiceCriteria.P2_CHOICE_CONSENT, SOC2TrustServiceCriteria.P3_COLLECTION, SOC2TrustServiceCriteria.P4_USE_RETENTION_DISPOSAL, SOC2TrustServiceCriteria.P5_ACCESS, SOC2TrustServiceCriteria.P6_DISCLOSURE_NOTIFICATION, SOC2TrustServiceCriteria.P7_QUALITY, SOC2TrustServiceCriteria.P8_MONITORING_ENFORCEMENT];
     default:
       return commonCriteria;
-    }
-  }
+
+
 
   private getCategoriesForTrustService(trustService: SOC2TrustServiceCategory): RuleCategory[] {
     switch (trustService) {
@@ -1217,8 +1222,8 @@ export class SOC2ComplianceRuleset {
       return ['PRIVACY' as RuleCategory, 'CONSENT' as RuleCategory];
     default:
       return ['SECURITY' as RuleCategory];
-    }
-  }
+
+
 
   private determineOverallRating(
     results: Map<SOC2TrustServiceCriteria, 'MET' | 'NOT_MET' | 'PARTIALLY_MET'>
@@ -1232,7 +1237,7 @@ export class SOC2ComplianceRuleset {
     if (complianceRatio >= 0.95) return 'EFFECTIVE';
     if (complianceRatio >= 0.80) return 'REQUIRES_IMPROVEMENT';
     return 'INEFFECTIVE';
-  }
+
 
   private generateRecommendations(findings: SOC2Finding[]): string[] {
     const recommendations: string[] = [];
@@ -1240,8 +1245,8 @@ export class SOC2ComplianceRuleset {
     for (const finding of findings) {
       if (finding.status === 'OPEN' || finding.status === 'IN_PROGRESS') {
         recommendations.push(finding.recommendation);
-      }
-    }
+
+
 
     // Add generic SOC2 best practices
     recommendations.push(
@@ -1253,7 +1258,7 @@ export class SOC2ComplianceRuleset {
     );
 
     return recommendations;
-  }
+
 
   /**
    * Public API methods
@@ -1261,12 +1266,12 @@ export class SOC2ComplianceRuleset {
   async getAssessment(assessmentId: string): Promise<SOC2ComplianceAssessment | undefined> {
 
     return this.assessments.get(assessmentId);
-  }
+
 
   async listAssessments(): Promise<SOC2ComplianceAssessment[]> {
 
     return Array.from(this.assessments.values());
-  }
+
 
   async addEvidence(assessmentId: string, evidence: SOC2Evidence): Promise<void> {
 
@@ -1281,16 +1286,16 @@ export class SOC2ComplianceRuleset {
           evidenceId: evidence.evidenceId,
           evidenceType: evidence.type,
           criteria: evidence.criteria
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['evidence_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
-    }
-  }
+
+
 
   async addFinding(assessmentId: string, finding: SOC2Finding): Promise<void> {
 
@@ -1305,14 +1310,13 @@ export class SOC2ComplianceRuleset {
           findingId: finding.findingId,
           severity: finding.severity,
           criteria: finding.criteria
-  }
+
         riskLevel: finding.severity === 'MATERIAL_WEAKNESS' ? 'HIGH' : 'MEDIUM',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['finding_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
-    }
-  }
-}
+
+

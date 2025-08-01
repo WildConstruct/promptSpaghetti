@@ -19,8 +19,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface ImprovementSuggestion {
-    id: string;
+}
+export interface ImprovementSuggestion { id: string;
     type: SuggestionType;
     category: SuggestionCategory;
     priority: 'low' | 'medium' | 'high' | 'critical';
@@ -38,11 +38,10 @@ export interface ImprovementSuggestion {
 
 export type SuggestionType = 'performance' | 'usability' | 'accessibility' | 'content' | 'workflow' | 'feature' | 'design' | 'technical' | 'business' | 'security';
 export type SuggestionCategory = 'optimization' | 'enhancement' | 'fix' | 'new_feature' | 'removal' | 'modification' | 'reorganization' | 'automation';
-export type SuggestionStatus = 'generated' | 'pending_review' | 'approved' | 'rejected' | 'in_progress' | 'completed' | 'deferred' | 'cancelled';
-
+export type SuggestionStatus = 'generated' | 'pending_review' | 'approved' | 'rejected' | 'in_progress' | 'completed' | 'deferred' | 'cancelled' }
 }
-export interface ImpactAssessment {
-    scope: 'individual' | 'team' | 'organization' | 'global';
+}
+export interface ImpactAssessment { scope: 'individual' | 'team' | 'organization' | 'global';
     userExperience: number;
     performance: number;
     maintainability: number;
@@ -50,11 +49,10 @@ export interface ImpactAssessment {
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     estimatedUsers: number;
     timeToValue: number;
-    overallScore: number;
-
+    overallScore: number }
 }
-export interface ImplementationDetails {
-    complexity: 'trivial' | 'simple' | 'moderate' | 'complex' | 'very_complex';
+}
+export interface ImplementationDetails { complexity: 'trivial' | 'simple' | 'moderate' | 'complex' | 'very_complex';
     estimatedEffort: number;
     skillsRequired: string[];
     dependencies: string[];
@@ -62,22 +60,20 @@ export interface ImplementationDetails {
     risksAndChallenges: string[];
     acceptanceCriteria: string[];
     testingStrategy: string;
-    rolloutPlan: string;
-
+    rolloutPlan: string }
 }
-export interface Evidence {
-    id: string;
+}
+export interface Evidence { id: string;
     type: 'data' | 'observation' | 'feedback' | 'analytics' | 'research' | 'experiment';
     source: string;
     description: string;
     data?: any;
     confidence: number;
     timestamp: Date;
-    relevance: number;
-
+    relevance: number }
 }
-export interface SuggestionMetadata {
-    generatedBy: 'system' | 'user' | 'ai' | 'analysis';
+}
+export interface SuggestionMetadata { generatedBy: 'system' | 'user' | 'ai' | 'analysis';
     algorithm?: string;
     version: string;
     createdAt: Date;
@@ -86,15 +82,14 @@ export interface SuggestionMetadata {
     implementedBy?: string;
     relatedSuggestions: string[];
     parentSuggestion?: string;
-    childSuggestions: string[];
-
+    childSuggestions: string[] }
 }
-export interface AnalysisContext {
-    userId?: string;
+}
+export interface AnalysisContext { userId?: string;
     sessionId?: string;
     timeRange: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     scope: AnalysisScope;
@@ -104,126 +99,112 @@ export interface AnalysisContext {
     systemState: SystemStateData;
 
 }
-export interface AnalysisScope {
-    domain: 'user_experience' | 'performance' | 'content' | 'workflow' | 'system' | 'business';
+}
+export interface AnalysisScope { domain: 'user_experience' | 'performance' | 'content' | 'workflow' | 'system' | 'business';
     components: string[];
     userSegments: string[];
     features: string[];
-    workflows: string[];
-
+    workflows: string[] }
 }
-export interface AnalysisFilters {
-    includeTypes: SuggestionType[];
+}
+export interface AnalysisFilters { includeTypes: SuggestionType[];
     excludeTypes: SuggestionType[];
     minPriority: 'low' | 'medium' | 'high' | 'critical';
     maxComplexity: 'trivial' | 'simple' | 'moderate' | 'complex' | 'very_complex';
     minConfidence: number;
-    targetAudience: string[];
-
+    targetAudience: string[] }
 }
-export interface ContextMetrics {
-    performanceMetrics: {
+}
+export interface ContextMetrics { performanceMetrics: {
         responseTime: number;
         errorRate: number;
         throughput: number;
-        availability: number;
+        availability: number }
 }
     };
-    usageMetrics: {
-        activeUsers: number;
+    usageMetrics: { activeUsers: number;
         sessionDuration: number;
         bounceRate: number;
-        conversionRate: number;
-    };
-    qualityMetrics: {
-        userSatisfaction: number;
+        conversionRate: number };
+    qualityMetrics: { userSatisfaction: number;
         contentQuality: number;
         featureAdoption: number;
-        supportTickets: number;
-    };
+        supportTickets: number };
 
 }
-export interface UserBehaviorData {
-    commonPatterns: BehaviorPattern[];
+}
+export interface UserBehaviorData { commonPatterns: BehaviorPattern[];
     dropoffPoints: DropoffPoint[];
     painPoints: PainPoint[];
     successPaths: SuccessPath[];
     featureUsage: FeatureUsageData[];
-    preferences: UserPreference[];
-
+    preferences: UserPreference[] }
 }
-export interface BehaviorPattern {
-    id: string;
+}
+export interface BehaviorPattern { id: string;
     description: string;
     frequency: number;
     userSegment: string;
     actions: UserAction[];
     outcome: 'success' | 'failure' | 'abandonment' | 'completion';
-    confidence: number;
-
+    confidence: number }
 }
-export interface UserAction {
-    type: string;
+}
+export interface UserAction { type: string;
     target: string;
     timestamp: Date;
     duration: number;
     success: boolean;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface DropoffPoint {
-    location: string;
+}
+export interface DropoffPoint { location: string;
     dropoffRate: number;
     commonReasons: string[];
     userSegments: string[];
     timeSpent: number;
-    recoveryActions: string[];
-
+    recoveryActions: string[] }
 }
-export interface PainPoint {
-    id: string;
+}
+export interface PainPoint { id: string;
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     frequency: number;
     affectedUsers: number;
     userFeedback: string[];
     potentialCauses: string[];
-    suggestedSolutions: string[];
-
+    suggestedSolutions: string[] }
 }
-export interface SuccessPath {
-    id: string;
+}
+export interface SuccessPath { id: string;
     description: string;
     steps: string[];
     completionRate: number;
     averageTime: number;
     userSatisfaction: number;
-    variability: number;
-
+    variability: number }
 }
-export interface FeatureUsageData {
-    feature: string;
+}
+export interface FeatureUsageData { feature: string;
     adoptionRate: number;
     usageFrequency: number;
     userSatisfaction: number;
     commonIssues: string[];
-    improvementOpportunities: string[];
-
+    improvementOpportunities: string[] }
 }
-export interface UserPreference {
-    category: string;
+}
+export interface UserPreference { category: string;
     preference: string;
     strength: number;
     userSegment: string;
-    confidence: number;
-
+    confidence: number }
 }
-export interface SystemStateData {
-    performance: {
+}
+export interface SystemStateData { performance: {
         cpu: number;
         memory: number;
         disk: number;
-        network: number;
+        network: number }
 }
     };
     errors: ErrorPattern[];
@@ -232,72 +213,61 @@ export interface SystemStateData {
     trends: TrendData[];
 
 }
-export interface ErrorPattern {
-    type: string;
+}
+export interface ErrorPattern { type: string;
     frequency: number;
     impact: 'low' | 'medium' | 'high' | 'critical';
     commonCauses: string[];
     affectedComponents: string[];
-    trends: string;
-
+    trends: string }
 }
-export interface WarningPattern {
-    type: string;
+}
+export interface WarningPattern { type: string;
     frequency: number;
     threshold: number;
     trend: 'increasing' | 'decreasing' | 'stable';
-    predictedImpact: string;
-
+    predictedImpact: string }
 }
-export interface CapacityMetric {
-    resource: string;
+}
+export interface CapacityMetric { resource: string;
     utilization: number;
     trend: 'increasing' | 'decreasing' | 'stable';
     projectedCapacity: number;
-    timeToLimit: number;
-
+    timeToLimit: number }
 }
-export interface TrendData {
-    metric: string;
+}
+export interface TrendData { metric: string;
     direction: 'up' | 'down' | 'stable';
     rate: number;
     confidence: number;
-    significance: 'low' | 'medium' | 'high';
-
+    significance: 'low' | 'medium' | 'high' }
 }
-export interface SuggestionConfiguration {
-    generation: {
+}
+export interface SuggestionConfiguration { generation: {
         enableAutomaticGeneration: boolean;
         analysisInterval: number;
         batchSize: number;
         confidenceThreshold: number;
-        diversityFactor: number;
+        diversityFactor: number }
 }
     };
-    filtering: {
-        enableSmartFiltering: boolean;
+    filtering: { enableSmartFiltering: boolean;
         duplicateDetection: boolean;
         relevanceThreshold: number;
-        impactThreshold: number;
-    };
-    prioritization: {
-        algorithm: 'impact' | 'effort' | 'roi' | 'user_value' | 'business_value';
+        impactThreshold: number };
+    prioritization: { algorithm: 'impact' | 'effort' | 'roi' | 'user_value' | 'business_value';
         weights: {
             impact: number;
             effort: number;
             confidence: number;
-            urgency: number;
-        };
+            urgency: number };
     };
-    delivery: {
-        enableRealTimeDelivery: boolean;
+    delivery: { enableRealTimeDelivery: boolean;
         batchDelivery: boolean;
         personalization: boolean;
-        contextAware: boolean;
-    };
+        contextAware: boolean };
 
-export declare class ImprovementSuggestionsSystem extends EventEmitter {
-    private suggestions;
+export declare class ImprovementSuggestionsSystem extends EventEmitter { private suggestions;
     private analysisContexts;
     private config;
     private analyzerWorkers;
@@ -312,17 +282,15 @@ export declare class ImprovementSuggestionsSystem extends EventEmitter {
         status?: SuggestionStatus[];
         targetAudience?: string[];
         confidenceMin?: number;
-        impactMin?: number;
-    }): ImprovementSuggestion[];
+        impactMin?: number }): ImprovementSuggestion[];
     getPersonalizedSuggestions(userId: string, context?: Partial<AnalysisContext>): Promise<ImprovementSuggestion[]>;
     updateSuggestionStatus(suggestionId: string, status: SuggestionStatus, metadata?: Partial<SuggestionMetadata>): Promise<void>;
-    provideFeedback(suggestionId: string, feedback: {)
+    provideFeedback(suggestionId: string, feedback: { )
         rating: number;
         helpful: boolean;
         comment?: string;
         implemented?: boolean;
-        outcome?: string;
-    }): Promise<void>;
+        outcome?: string }): Promise<void>;
     generateTargetedSuggestions(problem: {)
         type: string;
         description: string;
@@ -331,8 +299,7 @@ export declare class ImprovementSuggestionsSystem extends EventEmitter {
   }): Promise<string[]>;
     approveSuggestions(suggestionIds: string[]): Promise<void>;
     rejectSuggestions(suggestionIds: string[], reason?: string): Promise<void>;
-    getSuggestionAnalytics(): {
-        totalSuggestions: number;
+    getSuggestionAnalytics(): { totalSuggestions: number;
         byType: Record<SuggestionType, number>;
         byPriority: Record<string, number>;
         byStatus: Record<SuggestionStatus, number>;
@@ -342,8 +309,7 @@ export declare class ImprovementSuggestionsSystem extends EventEmitter {
         approvalRate: number;
         topCategories: Array<{
             category: SuggestionCategory;
-            count: number;
-        }>;
+            count: number }>;
     };
     updateConfiguration(config: Partial<SuggestionConfiguration>): void;
     destroy(): void;
@@ -395,8 +361,6 @@ export declare class ImprovementSuggestionsSystem extends EventEmitter {
     private generateContentSuggestions;
     private generateWorkflowSuggestions;
     private generateFeatureSuggestions;
-declare const _default: {
-    ImprovementSuggestionsSystem: typeof ImprovementSuggestionsSystem;
-};
+declare const _default: { ImprovementSuggestionsSystem: typeof ImprovementSuggestionsSystem };
 export default _default;
 //# sourceMappingURL=ImprovementSuggestions.d.ts.map

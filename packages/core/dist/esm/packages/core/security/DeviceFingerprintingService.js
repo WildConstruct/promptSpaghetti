@@ -62,112 +62,116 @@ export var FingerprintType;
             timezoneOffset: number;
         }
     }
-    ;
-    // Enhanced fingerprint data
-    enhanced: {
-        screen: {
-            width: number;
-            height: number;
-            colorDepth: number;
-            pixelRatio: number;
-            orientation: string;
-        }
-        ;
-        browser: {
-            name: string;
-            version: string;
-            engine: string;
-            engineVersion: string;
-            buildId ?  : string;
-            product ?  : string;
-            productSub ?  : string;
-            vendor ?  : string;
-            vendorSub ?  : string;
-        }
-        ;
-        plugins: Array;
-        fonts: string;
-        webgl: {
-            ;
-            vendor: string;
-            renderer: string;
-            version: string;
-            shadingLanguageVersion: string;
-            extensions: string;
-            parameters: Record;
-        }
-        ;
-        canvas: {
-            fingerprint: string;
-            geometry: string;
-            text: string;
-        }
-        ;
-        audio: {
-            fingerprint: string;
-            sampleRate: number;
-            channelCount: number;
-            contextState: string;
-        }
-        ;
-    }
-    ;
-    // Comprehensive fingerprint data
-    comprehensive: {
-        hardware: {
-            cpuCores: number;
-            memory: number;
-            touchSupport: boolean;
-            sensors: string;
-            bluetooth: boolean;
-            usb: boolean;
-            webrtc: {
-                supported: boolean;
-                localCandidates: string;
-                stunServers: string;
-            }
-            ;
-        }
-        ;
-        network: {
-            connectionType: string;
-            downlink ?  : number;
-            effectiveType ?  : string;
-            rtt ?  : number;
-            saveData ?  : boolean;
-        }
-        ;
-        permissions: {
-            camera: string;
-            microphone: string;
-            location: string;
-            notifications: string;
-            persistentStorage: string;
-        }
-        ;
-        storage: {
-            localStorage: boolean;
-            sessionStorage: boolean;
-            indexedDB: boolean;
-            webSQL: boolean;
-            quota: number;
-        }
-        ;
-        features: {
-            webAssembly: boolean;
-            serviceWorker: boolean;
-            webWorker: boolean;
-            webRTC: boolean;
-            webGL: boolean;
-            webGL2: boolean;
-            webVR: boolean;
-            webXR: boolean;
-        }
-        ;
-    }
-    ;
-    // Location Data
 }
+;
+// Enhanced fingerprint data
+enhanced: {
+    screen: {
+        width: number;
+        height: number;
+        colorDepth: number;
+        pixelRatio: number;
+        orientation: string;
+    }
+    ;
+    browser: {
+        name: string;
+        version: string;
+        engine: string;
+        engineVersion: string;
+        buildId ?  : string;
+        product ?  : string;
+        productSub ?  : string;
+        vendor ?  : string;
+        vendorSub ?  : string;
+    }
+    ;
+    plugins: Array < {
+        name: string,
+        filename: string,
+        description: string,
+        version: string
+    } > ;
+    fonts: string;
+    webgl: {
+        ;
+        vendor: string;
+        renderer: string;
+        version: string;
+        shadingLanguageVersion: string;
+        extensions: string;
+        parameters: Record;
+    }
+    ;
+    canvas: {
+        fingerprint: string;
+        geometry: string;
+        text: string;
+    }
+    ;
+    audio: {
+        fingerprint: string;
+        sampleRate: number;
+        channelCount: number;
+        contextState: string;
+    }
+    ;
+}
+;
+// Comprehensive fingerprint data
+comprehensive: {
+    hardware: {
+        cpuCores: number;
+        memory: number;
+        touchSupport: boolean;
+        sensors: string;
+        bluetooth: boolean;
+        usb: boolean;
+        webrtc: {
+            supported: boolean;
+            localCandidates: string;
+            stunServers: string;
+        }
+        ;
+    }
+    ;
+    network: {
+        connectionType: string;
+        downlink ?  : number;
+        effectiveType ?  : string;
+        rtt ?  : number;
+        saveData ?  : boolean;
+    }
+    ;
+    permissions: {
+        camera: string;
+        microphone: string;
+        location: string;
+        notifications: string;
+        persistentStorage: string;
+    }
+    ;
+    storage: {
+        localStorage: boolean;
+        sessionStorage: boolean;
+        indexedDB: boolean;
+        webSQL: boolean;
+        quota: number;
+    }
+    ;
+    features: {
+        webAssembly: boolean;
+        serviceWorker: boolean;
+        webWorker: boolean;
+        webRTC: boolean;
+        webGL: boolean;
+        webGL2: boolean;
+        webVR: boolean;
+        webXR: boolean;
+    }
+    ;
+}
+;
 ;
 address: {
     country: string;
@@ -282,8 +286,9 @@ public, async, getLocationData(ipAddress, string, additionalContext ?  : any), P
         this.ipLocationCache.set(ipAddress, location);
         this.emit('locationDetected', { location, ipAddress });
         return location;
-        assessRisk(fingerprint, DeviceFingerprint);
-        location: LocationData,
+        assessRisk(fingerprint, DeviceFingerprint),
+            location;
+        LocationData,
             userId ?  : string;
         RiskAssessment;
         {
@@ -386,15 +391,15 @@ public, async, getLocationData(ipAddress, string, additionalContext ?  : any), P
                     calculateFingerprintId(context, FingerprintContext);
                     string;
                     {
-                        const components = [];
-                        context.userAgent,
+                        const components = [
+                            context.userAgent,
                             context.acceptLanguage || '',
                             context.ipAddress,
                             JSON.stringify(context.clientData?.screen || {}),
                             JSON.stringify(context.clientData?.canvas || {}),
                             JSON.stringify(context.clientData?.webgl || {}),
-                            JSON.stringify(context.clientData?.audio || {});
-                        ;
+                            JSON.stringify(context.clientData?.audio || {})
+                        ];
                         return crypto
                             .createHash('sha256')
                             .update(components.join('|'))
@@ -697,8 +702,7 @@ public, async, getLocationData(ipAddress, string, additionalContext ?  : any), P
                                                 factor: 'new_device',
                                                 impact: 10,
                                                 confidence: 90,
-                                                description: 'First time seeing this device for this user',
-                                            },
+                                                description: 'First time seeing this device for this user', },
                                             // Check for location consistency
                                             const: userLocations = Array.from(this.ipLocationCache.values()),
                                             : 

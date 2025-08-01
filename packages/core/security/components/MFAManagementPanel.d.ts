@@ -18,16 +18,15 @@
 import React from 'react';
 
 }
-interface SecurityEvent {
-    id: string;
+}
+interface SecurityEvent { id: string;
     type: 'login' | 'mfa_enabled' | 'mfa_disabled' | 'device_added' | 'device_removed' | 'backup_used';
     description: string;
     timestamp: Date;
     ipAddress: string;
     location: string;
-    riskLevel: 'low' | 'medium' | 'high';
-
-
+    riskLevel: 'low' | 'medium' | 'high' }
+}
 }
 interface MFAManagementProps {
     userId: string;
@@ -38,4 +37,5 @@ interface MFAManagementProps {
 export declare const MFAManagementPanel: React.FC<MFAManagementProps>;
 export default MFAManagementPanel;
 //# sourceMappingURL=MFAManagementPanel.d.ts.map
+}
 }

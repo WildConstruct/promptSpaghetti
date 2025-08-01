@@ -4,6 +4,7 @@
  */
 
 }
+}
 export interface PythonExecutorConfig {
     serviceUrl: string;
     apiKey?: string;
@@ -111,4 +112,5 @@ export declare function isPythonExecutorConfigured(): boolean;
  */
 export declare function getClientSafeConfig(): Omit<PythonExecutorConfig, 'apiKey'>;
 //# sourceMappingURL=python-executor.d.ts.map
+}
 }

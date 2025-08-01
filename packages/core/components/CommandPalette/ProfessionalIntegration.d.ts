@@ -8,8 +8,8 @@ import React from 'react';
 import { Node, Edge } from 'reactflow';
 
 }
-export interface ProfessionalIntegrationProps {
-    nodes: Node[];
+}
+export interface ProfessionalIntegrationProps { nodes: Node[];
     edges: Edge[];
     selectedNodes: Node[];
     selectedEdges: Edge[];
@@ -19,8 +19,7 @@ export interface ProfessionalIntegrationProps {
     onEdgesSelect: (edges: Edge[]) => void;
     onNodeCreate: (nodeType: string, position: {)
         x: number;
-        y: number;
-
+        y: number }
 }
     }, data?: Record<string, unknown>) => void;
     onNodeDelete: (nodeIds: string[]) => void;

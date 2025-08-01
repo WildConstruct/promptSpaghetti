@@ -54,8 +54,18 @@ check_date: string;
 checker_id ?  : string;
 ;
  > ;
-metadata_changes: Array;
-media_changes: Array;
+metadata_changes: Array < {
+    field: string,
+    old_value: unknown,
+    new_value: unknown,
+    change_type: 'added' | 'removed' | 'modified',
+} > ;
+media_changes: Array < {
+    media_id: string,
+    change_type: 'added' | 'removed' | 'modified',
+    old_media: ContentMediaAttachment,
+    new_media: ContentMediaAttachment
+} > ;
 structure_changes: {
     sections_added: number;
     sections_removed: number;
@@ -86,8 +96,9 @@ export class ContentVersionManager {
 this.apiClient = apiClient;
 // Core Version Management
 async;
-createVersion(content, CommunityContent);
-options: {
+createVersion(content, CommunityContent),
+    options;
+{
     version_number ?  : string;
     version_tag ?  : string;
     title ?  : string;
@@ -96,7 +107,8 @@ options: {
     branch_name ?  : string;
     revision_type ?  : 'major' | 'minor' | 'patch' | 'editorial';
     change_summary ?  : string;
-    target_status ?  : 'draft' | 'review';
+    target_status ?  : 'draft' | 'review',
+    ;
 }
 { }
 Promise < ContentVersion > {
@@ -137,10 +149,11 @@ catch (error) {
     console.error('Failed to create content version:', error);
     throw error;
     async;
-    submitForReview(versionId, string, options, {});
-    reviewer_id ?  : string;
+    submitForReview(versionId, string, options, {}),
+        reviewer_id ?  : string;
     review_notes ?  : string;
-    priority ?  : 'low' | 'normal' | 'high' | 'urgent';
+    priority ?  : 'low' | 'normal' | 'high' | 'urgent',
+    ;
 }
 { }
 Promise < ContentVersion > {
@@ -163,8 +176,8 @@ catch (error) {
     console.error('Failed to submit content for review:', error);
     throw error;
     async;
-    publishVersion(versionId, string, options, {});
-    release_notes ?  : string;
+    publishVersion(versionId, string, options, {}),
+        release_notes ?  : string;
     visibility ?  : 'private' | 'team' | 'community' | 'public';
     publish_date ?  : string;
     notify_subscribers ?  : boolean;
@@ -193,8 +206,9 @@ catch (error) {
     throw error;
     // Review and Editorial Workflow
     async;
-    addReviewFeedback(versionId, string);
-    feedback: Omit;
+    addReviewFeedback(versionId, string),
+        feedback;
+    Omit;
     Promise < ReviewFeedback > {
         try: {
             const: response = await this.apiClient.post(`/api/content-versions/${versionId}/feedback`, feedback)
@@ -385,7 +399,7 @@ catch (error) {
                     to_version: ContentVersion,
                     diff: ContentVersionDiff,
                     similarity_score: number,
-                    change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite'
+                    change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite',
                 } > {
                     try: {
                         const: response = await this.apiClient.get()
@@ -399,8 +413,8 @@ catch (error) {
                 console.error('Failed to compare content versions:', error);
                 throw error;
                 async;
-                getVersionHistory(options, {});
-                include_drafts ?  : boolean;
+                getVersionHistory(options, {}),
+                    include_drafts ?  : boolean;
                 branch_name ?  : string;
                 limit ?  : number;
                 offset ?  : number;
@@ -430,8 +444,8 @@ catch (error) {
                 throw error;
                 // Quality Assessment Integration
                 async;
-                runQualityAssessment(versionId, string, options, {});
-                include_plagiarism_check ?  : boolean;
+                runQualityAssessment(versionId, string, options, {}),
+                    include_plagiarism_check ?  : boolean;
                 include_fact_check ?  : boolean;
                 include_grammar_check ?  : boolean;
                 include_seo_analysis ?  : boolean;
@@ -496,12 +510,35 @@ catch (error) {
                             formatting_score: hasToc ? 85 : 75,
                         }
                     };
-                     > ;
                 },
-                // Verification and integrity
-                checksums: (Record),
-                signature: string
+                interface, ContentBundle
             };
+            {
+                format_version: string;
+                created_at: string;
+                created_by: string;
+                // Primary content
+                content: ContentVersion;
+                // Related content and media
+                related_content: ContentVersion;
+                media_assets: ContentMediaAttachment;
+                // Documentation and metadata
+                documentation: {
+                    readme: string;
+                    changelog: string;
+                    usage_guide ?  : string;
+                    examples ?  : Array < {
+                        name: string,
+                        description: string,
+                        preview: string
+                    };
+                }
+            }
+             > ;
         }
+        ;
+        // Verification and integrity
+        checksums: Record;
+        signature ?  : string;
     }
 }

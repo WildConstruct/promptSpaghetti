@@ -4,34 +4,36 @@
 import { AuthConfig } from '../types';
 import { EMAIL_TEMPLATES } from '../config';
 
-}
-}
+
+
 export interface EmailTemplate {
   subject: string;
   html: string;
   text?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EmailContext {
   displayName?: string;
   ipAddress?: string;
   userAgent?: string;
   deviceInfo?: string;
   timestamp?: Date;
-}
-}
-}
+
+
+
+
 
 export class EmailService {
   private config: AuthConfig;
 
   constructor(config: AuthConfig) {
     this.config = config;
-  }
+
 
   async sendEmailVerification(
     email: string,
@@ -52,7 +54,7 @@ export class EmailService {
     });
 
     await this.sendEmail(email, template);
-  }
+
 
   async sendPasswordReset(
     email: string,
@@ -73,7 +75,7 @@ export class EmailService {
     });
 
     await this.sendEmail(email, template);
-  }
+
 
   async sendPasswordChanged(
     email: string,
@@ -89,7 +91,7 @@ export class EmailService {
     });
 
     await this.sendEmail(email, template);
-  }
+
 
   async sendLoginAlert(
     email: string,
@@ -106,7 +108,7 @@ export class EmailService {
     });
 
     await this.sendEmail(email, template);
-  }
+
 
   async sendAccountLocked(
     email: string,
@@ -124,7 +126,7 @@ export class EmailService {
     });
 
     await this.sendEmail(email, template);
-  }
+
 
   async sendWelcomeEmail(
     email: string,
@@ -140,7 +142,7 @@ export class EmailService {
     });
 
     await this.sendEmail(email, template);
-  }
+
 
   async sendInvitation(
     email: string,
@@ -162,7 +164,7 @@ export class EmailService {
     });
 
     await this.sendEmail(email, template);
-  }
+
 
   // Location verification method for LocationVerificationService
   async sendLocationVerification(
@@ -178,7 +180,7 @@ export class EmailService {
       userAgent: string;
       expiryMinutes: number;
       timestamp: Date;
-    }
+
   ): Promise<void> {
 
     // In a real implementation, you'd get the user's email from the database
@@ -196,7 +198,7 @@ export class EmailService {
     });
 
     await this.sendEmail(email, template);
-  }
+
 
   // Enhanced password reset methods for PasswordResetService
   async sendPasswordResetEmail(data: {
@@ -219,7 +221,7 @@ export class EmailService {
     });
 
     await this.sendEmail(data.to, template);
-  }
+
 
   async sendPasswordResetConfirmationEmail(data: {
     to: string;
@@ -238,7 +240,7 @@ export class EmailService {
     });
 
     await this.sendEmail(data.to, template);
-  }
+
 
   private async sendEmail(email: string, template: EmailTemplate): Promise<void> {
 
@@ -248,7 +250,7 @@ export class EmailService {
       console.log(`Subject: ${template.subject}`);
       console.log(`Body: ${template.text || template.html}`);
       return;
-    }
+
 
     try {
       // In production, integrate with email service like SendGrid, AWS SES, etc.
@@ -258,7 +260,7 @@ export class EmailService {
         from: {
           email: this.config.emailService.fromEmail,
           name: this.config.emailService.fromName
-  }
+
         to: [{ email }],
         subject: template.subject,
         html: template.html,
@@ -270,11 +272,11 @@ export class EmailService {
       // await sgMail.send(emailData);
       
       console.log(`Email sent to ${email}: ${template.subject}`);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to send email:', error);
       throw new Error('Failed to send email');
-    }
-  }
+
+
 
   private renderEmailTemplate(templateName: string, data: any): EmailTemplate {
     const templates: Record<string, EmailTemplate> = {
@@ -299,7 +301,7 @@ export class EmailService {
                 text-decoration: none; 
                 border-radius: 5px; 
                 margin: 20px 0;
-              }
+
               .footer { background: #f8f9fa; padding: 20px; font-size: 12px; color: #666; }
             </style>
           </head>
@@ -348,7 +350,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-  }
+
       passwordReset: {
         subject: 'Reset your password - PromptScape',
         html: `
@@ -370,7 +372,7 @@ export class EmailService {
                 text-decoration: none; 
                 border-radius: 5px; 
                 margin: 20px 0;
-              }
+
               .footer { background: #f8f9fa; padding: 20px; font-size: 12px; color: #666; }
               .warning { background: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 5px; margin: 20px 0; }
             </style>
@@ -424,7 +426,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-  }
+
       passwordChanged: {
         subject: 'Your password has been changed - PromptScape',
         html: `
@@ -487,7 +489,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-  }
+
       welcome: {
         subject: 'Welcome to PromptScape!',
         html: `
@@ -509,7 +511,7 @@ export class EmailService {
                 text-decoration: none; 
                 border-radius: 5px; 
                 margin: 20px 0;
-              }
+
               .footer { background: #f8f9fa; padding: 20px; font-size: 12px; color: #666; }
             </style>
           </head>
@@ -525,7 +527,7 @@ export class EmailService {
                 ${data.hasInvitation ? 
     '<p>You were invited to join an organization. You\'ll find your team and projects waiting for you in your dashboard.</p>' :
     '<p>You\'re all set to start creating amazing prompt graphs and exploring our powerful features.</p>'
-}
+
                 
                 <p style="text-align: center;">
                   <a href="${data.dashboardUrl}" class="button">Go to Dashboard</a>
@@ -565,7 +567,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-  }
+
       invitation: {
         subject: `You're invited to join ${data.organizationName} on PromptScape`,
         html: `
@@ -587,7 +589,7 @@ export class EmailService {
                 text-decoration: none; 
                 border-radius: 5px; 
                 margin: 20px 0;
-              }
+
               .footer { background: #f8f9fa; padding: 20px; font-size: 12px; color: #666; }
             </style>
           </head>
@@ -628,7 +630,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-  }
+
       locationVerification: {
         subject: 'Verify your login location - PromptScape',
         html: `
@@ -653,7 +655,7 @@ export class EmailService {
                 font-weight: bold;
                 letter-spacing: 3px;
                 color: #1f2937;
-              }
+
               .footer { background: #f8f9fa; padding: 20px; font-size: 12px; color: #666; }
               .warning { background: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 5px; margin: 20px 0; }
               .location-info { background: #eff6ff; border: 1px solid #3b82f6; padding: 15px; border-radius: 5px; margin: 20px 0; }
@@ -727,7 +729,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-      }
+
     };
 
     return templates[templateName] || {
@@ -735,25 +737,24 @@ export class EmailService {
       html: '<p>This is a test email.</p>',
       text: 'This is a test email.'
     };
-  }
+
 
   private buildVerificationUrl(token: string): string {
     const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     return `${baseUrl}/verify-email?token=${token}`;
-  }
+
 
   private buildPasswordResetUrl(token: string): string {
     const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     return `${baseUrl}/reset-password?token=${token}`;
-  }
+
 
   private buildInvitationUrl(token: string): string {
     const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     return `${baseUrl}/join?token=${token}`;
-  }
+
 
   private buildDashboardUrl(): string {
     const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     return `${baseUrl}/dashboard`;
-  }
-}
+

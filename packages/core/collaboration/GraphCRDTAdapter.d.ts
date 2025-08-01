@@ -5,8 +5,8 @@
 import { Node, Edge, Graph } from '../graphSchema';
 
 }
-export interface CollaborativeGraphOptions {
-    documentId: string;
+}
+export interface CollaborativeGraphOptions { documentId: string;
     userId: string;
     onGraphChange?: (graph: Graph) => void;
     onUserPresence?: (users: Map<string, unknown>) => void;
@@ -74,7 +74,7 @@ export declare class GraphCRDTAdapter {
      */
     addNode(node: Node, position?: {)
         x: number;
-        y: number;
+        y: number }
 }
     }): void;
     /**
@@ -96,20 +96,18 @@ export declare class GraphCRDTAdapter {
     /**
      * Public API: Update node position (for React Flow integration)
      */
-    updateNodePosition(nodeId: string, position: {)
+    updateNodePosition(nodeId: string, position: { )
         x: number;
-        y: number;
-    }): void;
+        y: number }): void;
     /**
      * Public API: Set user presence
      */
-    setUserPresence(presence: {)
+    setUserPresence(presence: { )
         cursor?: {
             nodeId?: string;
             position?: {
                 x: number;
-                y: number;
-            };
+                y: number };
         };
         selection?: string[];
         name?: string;
@@ -134,12 +132,10 @@ export declare class GraphCRDTAdapter {
     /**
      * Public API: Get performance metrics
      */
-    getMetrics(): {
-        documentSize: number;
+    getMetrics(): { documentSize: number;
         nodeCount: number;
         edgeCount: number;
-        syncState: import("../../crdt-research/src/types").SyncState;
-    };
+        syncState: import("../../crdt-research/src/types").SyncState };
     /**
      * Cleanup resources
      */

@@ -1310,7 +1310,7 @@ export var ActionStatus;
                                                                                                                                                                                     riskLevel;
                                                                                                                                                                                 RiskLevel.LOW,
                                                                                                                                                                                     actionItems;
-                                                                                                                                                                                [,
+                                                                                                                                                                                [
                                                                                                                                                                                     {
                                                                                                                                                                                         itemId: 'increase_burst',
                                                                                                                                                                                         description: 'Increase burst allowance by 50%',
@@ -1318,7 +1318,8 @@ export var ActionStatus;
                                                                                                                                                                                         parameters: { burstMultiplier: 1.5 },
                                                                                                                                                                                         estimatedTime: 5,
                                                                                                                                                                                         dependencies: []
-                                                                                                                                                                                    }];
+                                                                                                                                                                                    }
+                                                                                                                                                                                ];
                                                                                                                                                                             }
                                                                                                                                                                             ;
                                                                                                                                                                             break;
@@ -1367,7 +1368,7 @@ export var ActionStatus;
                                                                     riskLevel;
                                                                 RiskLevel.LOW,
                                                                     actionItems;
-                                                                [,
+                                                                [
                                                                     {
                                                                         itemId: 'optimize_quota',
                                                                         description: 'Reduce base quota by 10% and increase burst allowance',
@@ -1375,7 +1376,8 @@ export var ActionStatus;
                                                                         parameters: { baseReduction: 0.1, burstIncrease: 0.2 },
                                                                         estimatedTime: 10,
                                                                         dependencies: []
-                                                                    }];
+                                                                    }
+                                                                ];
                                                             }
                                                             ;
                                                             break;
@@ -1399,7 +1401,7 @@ export var ActionStatus;
                                                             riskLevel;
                                                         RiskLevel.MEDIUM,
                                                             actionItems;
-                                                        [,
+                                                        [
                                                             {
                                                                 itemId: 'gradual_increase',
                                                                 description: 'Implement gradual quota increases over time',
@@ -1407,7 +1409,8 @@ export var ActionStatus;
                                                                 parameters: { growthRate: characteristics.growthRate },
                                                                 estimatedTime: 30,
                                                                 dependencies: ['monitoring_setup']
-                                                            }];
+                                                            }
+                                                        ];
                                                     }
                                                     ;
                                                     break;
@@ -1470,8 +1473,9 @@ export var ActionStatus;
                                                                                     }
                                                                                     return reasons.join('; ') || 'Pattern analysis suggests quota optimization';
                                                                                     async;
-                                                                                    analyzeQuotaImpact(pattern, UsagePattern);
-                                                                                    current: QuotaAllocation,
+                                                                                    analyzeQuotaImpact(pattern, UsagePattern),
+                                                                                        current;
+                                                                                    QuotaAllocation,
                                                                                         recommended;
                                                                                     QuotaAllocation;
                                                                                     Promise < QuotaImpactAnalysis > {
@@ -1650,7 +1654,7 @@ export var ActionStatus;
                                                                                         riskAssessment;
                                                                                     'Low risk - users selected based on utilization patterns',
                                                                                         implementationPlan;
-                                                                                    [,
+                                                                                    [
                                                                                         'Reduce quota for low-utilization users by 20%',
                                                                                         'Increase quota for high-utilization users by 30%',
                                                                                         'Monitor impact for 7 days'
@@ -1946,12 +1950,12 @@ export var ActionStatus;
                                                             enablePatternAnalysis: true,
                                                             analysisWindow: 24,
                                                             recommendationInterval: 60,
-                                                            usagePatterns: [,
+                                                            usagePatterns: [
                                                                 {
                                                                     patternId: 'burst_pattern',
                                                                     patternName: 'Burst Pattern',
                                                                     patternType: UsagePatternType.BURST_PATTERN,
-                                                                    detectionRules: [,
+                                                                    detectionRules: [
                                                                         {
                                                                             ruleId: 'burst_detection',
                                                                             condition: 'burst_detected',
@@ -1959,133 +1963,139 @@ export var ActionStatus;
                                                                             timeWindow: 15,
                                                                             weight: 1.0,
                                                                             enabled: true
-                                                                        }],
-                                                                    quotaImpact: {
-                                                                        quotaMultiplier: 1.5,
-                                                                        adjustmentType: QuotaAdjustmentType.TEMPORARY_BOOST,
-                                                                        maxAdjustment: 100,
-                                                                        minAdjustment: 10,
-                                                                        confidenceThreshold: 0.7,
-                                                                    }
-                                                                },
-                                                                priority, 1,
-                                                                enabled, true]
+                                                                        }
+                                                                    ],
+                                                                    quotaImpact: {},
+                                                                    quotaMultiplier: 1.5,
+                                                                    adjustmentType: QuotaAdjustmentType.TEMPORARY_BOOST,
+                                                                    maxAdjustment: 100,
+                                                                    minAdjustment: 10,
+                                                                    confidenceThreshold: 0.7,
+                                                                }
+                                                            ]
                                                         };
-                                                        {
-                                                            patternId: 'steady_state',
-                                                                patternName;
-                                                            'Steady State',
-                                                                patternType;
-                                                            UsagePatternType.STEADY_STATE,
-                                                                detectionRules;
-                                                            [,
-                                                                {
-                                                                    ruleId: 'steady_detection',
-                                                                    condition: 'steady_state',
-                                                                    threshold: 10,
-                                                                    timeWindow: 60,
-                                                                    weight: 1.0,
-                                                                    enabled: true
-                                                                }],
-                                                                quotaImpact;
-                                                            {
-                                                                quotaMultiplier: 0.9,
-                                                                    adjustmentType;
-                                                                QuotaAdjustmentType.DECREASE,
-                                                                    maxAdjustment;
-                                                                50,
-                                                                    minAdjustment;
-                                                                5,
-                                                                    confidenceThreshold;
-                                                                0.8,
-                                                                ;
-                                                            }
-                                                            priority: 3,
-                                                                enabled;
-                                                            true;
-                                                            quotaAdjustmentRules: [],
-                                                                fairnessConfig;
-                                                            {
-                                                                enableFairnessAnalysis: true,
-                                                                    fairnessMetrics;
-                                                                [,
-                                                                    {
-                                                                        metricId: 'gini_coefficient',
-                                                                        metricName: 'Gini Coefficient',
-                                                                        metricType: FairnessMetricType.GINI_COEFFICIENT,
-                                                                        targetValue: 0.3,
-                                                                        tolerance: 0.1,
-                                                                        weight: 1.0,
-                                                                        enabled: true
-                                                                    }],
-                                                                    redistributionRules;
-                                                                [],
-                                                                    priorityTiers;
-                                                                [],
-                                                                ;
-                                                            }
-                                                            abuseDetectionConfig: {
-                                                                enableAbuseDetection: true,
-                                                                    abusePatterns;
-                                                                [,
-                                                                    {
-                                                                        patternId: 'rate_abuse',
-                                                                        patternName: 'Rate Abuse',
-                                                                        description: 'Unusually high request rates',
-                                                                        detectionRules: [,
-                                                                            {
-                                                                                ruleId: 'rate_spike',
-                                                                                ruleType: AbuseRuleType.RATE_SPIKE,
-                                                                                threshold: 5.0,
-                                                                                timeWindow: 10,
-                                                                                condition: 'rate > threshold * average',
-                                                                                weight: 1.0
-                                                                            }],
-                                                                        severity: AbuseSeverity.HIGH,
-                                                                        confidence: 0.8,
-                                                                        enabled: true
-                                                                    }],
-                                                                    detectionSensitivity;
-                                                                0.7,
-                                                                    responseActions;
-                                                                [,
-                                                                    {
-                                                                        actionId: 'temp_limit',
-                                                                        severity: AbuseSeverity.HIGH,
-                                                                        actionType: AbuseActionType.TEMPORARY_QUOTA_REDUCTION,
-                                                                        parameters: { reduction: 0.5, duration: 60 },
-                                                                        autoExecute: true,
-                                                                        escalation: false
-                                                                    }],
-                                                                    whitelistRules;
-                                                                [];
-                                                            }
-                                                            alertingConfig: {
-                                                                enableAlerting: true,
-                                                                    alertThresholds;
-                                                                [],
-                                                                    notificationChannels;
-                                                                [],
-                                                                    escalationRules;
-                                                                [],
-                                                                ;
-                                                            }
-                                                            ;
-                                                        }
                                                     }
-                                                    static createHighSensitivityConfig() {
-                                                        const config = this.createDefaultConfig();
-                                                        config.abuseDetectionConfig.detectionSensitivity = 0.9;
-                                                        config.analysisWindow = 12; // Shorter analysis window
-                                                        config.recommendationInterval = 30; // More frequent recommendations
-                                                        return config;
-                                                    }
-                                                    static createRecommendationEngine(config) {
-                                                        const fullConfig = { ...this.createDefaultConfig(), ...config };
-                                                        return new ApiUsagePatternQuotaRecommendations(fullConfig);
-                                                        export default ApiUsagePatternQuotaRecommendations;
-                                                    }
+                                                    priority;
+                                                    enabled;
                                                 }
+                                                {
+                                                    patternId: 'steady_state',
+                                                        patternName;
+                                                    'Steady State',
+                                                        patternType;
+                                                    UsagePatternType.STEADY_STATE,
+                                                        detectionRules;
+                                                    [
+                                                        {
+                                                            ruleId: 'steady_detection',
+                                                            condition: 'steady_state',
+                                                            threshold: 10,
+                                                            timeWindow: 60,
+                                                            weight: 1.0,
+                                                            enabled: true
+                                                        }
+                                                    ],
+                                                        quotaImpact;
+                                                    {
+                                                        quotaMultiplier: 0.9,
+                                                            adjustmentType;
+                                                        QuotaAdjustmentType.DECREASE,
+                                                            maxAdjustment;
+                                                        50,
+                                                            minAdjustment;
+                                                        5,
+                                                            confidenceThreshold;
+                                                        0.8,
+                                                        ;
+                                                    }
+                                                    priority: 3,
+                                                        enabled;
+                                                    true;
+                                                    quotaAdjustmentRules: [],
+                                                        fairnessConfig;
+                                                    {
+                                                        enableFairnessAnalysis: true,
+                                                            fairnessMetrics;
+                                                        [
+                                                            {
+                                                                metricId: 'gini_coefficient',
+                                                                metricName: 'Gini Coefficient',
+                                                                metricType: FairnessMetricType.GINI_COEFFICIENT,
+                                                                targetValue: 0.3,
+                                                                tolerance: 0.1,
+                                                                weight: 1.0,
+                                                                enabled: true
+                                                            }
+                                                        ],
+                                                            redistributionRules;
+                                                        [],
+                                                            priorityTiers;
+                                                        [],
+                                                        ;
+                                                    }
+                                                    abuseDetectionConfig: {
+                                                        enableAbuseDetection: true,
+                                                            abusePatterns;
+                                                        [
+                                                            {
+                                                                patternId: 'rate_abuse',
+                                                                patternName: 'Rate Abuse',
+                                                                description: 'Unusually high request rates',
+                                                                detectionRules: [
+                                                                    {
+                                                                        ruleId: 'rate_spike',
+                                                                        ruleType: AbuseRuleType.RATE_SPIKE,
+                                                                        threshold: 5.0,
+                                                                        timeWindow: 10,
+                                                                        condition: 'rate > threshold * average',
+                                                                        weight: 1.0
+                                                                    }
+                                                                ],
+                                                                severity: AbuseSeverity.HIGH,
+                                                                confidence: 0.8,
+                                                                enabled: true
+                                                            }
+                                                        ],
+                                                            detectionSensitivity;
+                                                        0.7,
+                                                            responseActions;
+                                                        [
+                                                            {
+                                                                actionId: 'temp_limit',
+                                                                severity: AbuseSeverity.HIGH,
+                                                                actionType: AbuseActionType.TEMPORARY_QUOTA_REDUCTION,
+                                                                parameters: { reduction: 0.5, duration: 60 },
+                                                                autoExecute: true,
+                                                                escalation: false
+                                                            }
+                                                        ],
+                                                            whitelistRules;
+                                                        [];
+                                                    }
+                                                    alertingConfig: {
+                                                        enableAlerting: true,
+                                                            alertThresholds;
+                                                        [],
+                                                            notificationChannels;
+                                                        [],
+                                                            escalationRules;
+                                                        [],
+                                                        ;
+                                                    }
+                                                    ;
+                                                }
+                                            },
+                                            static createHighSensitivityConfig() {
+                                                const config = this.createDefaultConfig();
+                                                config.abuseDetectionConfig.detectionSensitivity = 0.9;
+                                                config.analysisWindow = 12; // Shorter analysis window
+                                                config.recommendationInterval = 30; // More frequent recommendations
+                                                return config;
+                                            },
+                                            static createRecommendationEngine(config) {
+                                                const fullConfig = { ...this.createDefaultConfig(), ...config };
+                                                return new ApiUsagePatternQuotaRecommendations(fullConfig);
+                                                export default ApiUsagePatternQuotaRecommendations;
                                             } });
                                     }
                                 }

@@ -12,8 +12,8 @@ import { SecurityStatisticalAnalysisEngine, SecurityStatistics } from './Securit
 import { SecurityIntelligenceIncidentResponse, SecurityIncident } from './SecurityIntelligenceIncidentResponse';
 import { SecurityAdHocAnalysisEngine, Investigation, InvestigationResult } from './SecurityAdHocAnalysisEngine';
 
-}
-}
+
+
 export interface ReportTemplate {
   template_id: string;
   name: string;
@@ -29,8 +29,9 @@ export interface ReportTemplate {
     intended_audience: ('executives' | 'security_team' | 'it_operations' | 'compliance' | 'auditors')[];
     security_clearance_required?: string;
     classification_level: 'public' | 'internal' | 'confidential' | 'restricted';
-}
-}
+
+
+
   };
   
   content_structure: {
@@ -42,7 +43,7 @@ export interface ReportTemplate {
       data_sources: string[];
       visualization_types: ('chart' | 'table' | 'graph' | 'map' | 'timeline' | 'heatmap')[];
       content_filters: Record<string, any>;
-    }>;
+>;
     
     formatting_rules: {
       max_pages: number;
@@ -59,7 +60,7 @@ export interface ReportTemplate {
         period_name: string;
         duration_hours: number;
         comparison_enabled: boolean;
-      }>;
+>;
       
       grouping_rules: Array<{
         field: string;
@@ -68,14 +69,14 @@ export interface ReportTemplate {
           warning_threshold: number;
           critical_threshold: number;
         };
-      }>;
+>;
       
       kpi_calculations: Array<{
         kpi_name: string;
         formula: string;
         target_value?: number;
         trend_analysis: boolean;
-      }>;
+>;
     };
   };
   
@@ -93,7 +94,7 @@ export interface ReportTemplate {
       trigger_type: 'schedule' | 'threshold' | 'incident' | 'data_availability';
       trigger_config: Record<string, any>;
       enabled: boolean;
-    }>;
+>;
     
     data_freshness_requirements: {
       max_data_age_hours: number;
@@ -105,7 +106,7 @@ export interface ReportTemplate {
       gate_name: string;
       validation_rule: string;
       action_on_failure: 'abort' | 'warn' | 'use_fallback';
-    }>;
+>;
   };
   
   personalization: {
@@ -115,10 +116,10 @@ export interface ReportTemplate {
     timezone_adjustment: boolean;
     custom_branding: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface ReportSchedule {
   schedule_id: string;
   template_id: string;
@@ -131,8 +132,9 @@ export interface ReportSchedule {
       hour: number;
       minute: number;
       timezone: string;
-}
-}
+
+
+
     };
     
     weekly_config?: {
@@ -149,7 +151,7 @@ export interface ReportSchedule {
       event_type: string;
       conditions: Record<string, any>;
       delay_minutes?: number;
-    }>;
+>;
   };
   
   distribution_lists: Array<{
@@ -166,17 +168,17 @@ export interface ReportSchedule {
           condition: string;
           escalation_delay_minutes: number;
           escalation_recipient: string;
-        }>;
+>;
       };
-    }>;
+>;
     
     filtering_rules: Array<{
       field: string;
       condition: string;
       value: Error;
       action: 'include' | 'exclude' | 'highlight';
-    }>;
-  }>;
+>;
+>;
   
   status: 'active' | 'paused' | 'disabled' | 'error';
   execution_history: Array<{
@@ -191,11 +193,11 @@ export interface ReportSchedule {
       recipients_reached: number;
       delivery_failures: number;
     };
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface SecurityReport {
   report_id: string;
   template_id: string;
@@ -210,8 +212,9 @@ export interface SecurityReport {
       start_time: number;
       end_time: number;
       timezone: string;
-}
-}
+
+
+
     };
     
     classification: {
@@ -230,7 +233,7 @@ export interface SecurityReport {
         changed_at: number;
         changed_by: string;
         change_summary: string;
-      }>;
+>;
     };
   };
   
@@ -242,7 +245,7 @@ export interface SecurityReport {
       direction: 'improving' | 'declining' | 'stable';
       change_percentage: number;
       significance: 'high' | 'medium' | 'low';
-    }>;
+>;
     
     critical_issues: Array<{
       issue_id: string;
@@ -251,13 +254,13 @@ export interface SecurityReport {
       impact_assessment: string;
       recommended_actions: string[];
       estimated_resolution_time: string;
-    }>;
+>;
     
     achievements: Array<{
       achievement_type: string;
       description: string;
       impact_metrics: Record<string, number>;
-    }>;
+>;
   };
   
   detailed_analysis: {
@@ -269,7 +272,7 @@ export interface SecurityReport {
         time_period: string;
         threat_volume: number;
         severity_breakdown: Record<string, number>;
-      }>;
+>;
       
       emerging_threats: Array<{
         threat_name: string;
@@ -277,7 +280,7 @@ export interface SecurityReport {
         growth_rate: number;
         potential_impact: string;
         mitigation_status: string;
-      }>;
+>;
     };
     
     incident_analysis: {
@@ -297,7 +300,7 @@ export interface SecurityReport {
         status: string;
         timeline_summary: string;
         lessons_learned: string[];
-      }>;
+>;
     };
     
     security_metrics: {
@@ -332,13 +335,13 @@ export interface SecurityReport {
           predicted_increase: number;
           confidence_level: number;
           timeframe: string;
-        }>;
+>;
         
         capacity_predictions: Array<{
           resource_type: string;
           predicted_utilization: number;
           recommended_scaling: string;
-        }>;
+>;
       };
       
       pattern_analysis: {
@@ -357,7 +360,7 @@ export interface SecurityReport {
       expected_impact: string;
       implementation_effort: string;
       success_metrics: string[];
-    }>;
+>;
     
     strategic_initiatives: Array<{
       initiative_name: string;
@@ -366,7 +369,7 @@ export interface SecurityReport {
       resource_requirements: string[];
       expected_outcomes: string[];
       risk_mitigation: string[];
-    }>;
+>;
     
     process_improvements: Array<{
       area: string;
@@ -374,7 +377,7 @@ export interface SecurityReport {
       proposed_improvement: string;
       benefits: string[];
       implementation_plan: string;
-    }>;
+>;
   };
   
   appendices: {
@@ -384,7 +387,7 @@ export interface SecurityReport {
       coverage_period: string;
       quality_score: number;
       limitations: string[];
-    }>;
+>;
     
     methodology: {
       analysis_methods: string[];
@@ -407,7 +410,7 @@ export interface SecurityReport {
       title: string;
       file_path: string;
       description: string;
-    }>;
+>;
     
     data_exports: Array<{
       export_id: string;
@@ -415,19 +418,19 @@ export interface SecurityReport {
       file_path: string;
       description: string;
       size_bytes: number;
-    }>;
+>;
     
     supporting_documents: Array<{
       document_id: string;
       document_type: string;
       file_path: string;
       description: string;
-    }>;
+>;
   };
-}
 
-}
-}
+
+
+
 export interface DeliveryReceipt {
   receipt_id: string;
   report_id: string;
@@ -440,8 +443,9 @@ export interface DeliveryReceipt {
     delivered_at?: number;
     read_at?: number;
     error_message?: string;
-}
-}
+
+
+
   };
   
   delivery_metadata: {
@@ -459,9 +463,9 @@ export interface DeliveryReceipt {
       action_type: string;
       timestamp: number;
       details: Record<string, any>;
-    }>;
+>;
   };
-}
+
 
 export class SecurityIntelligenceReportingEngine extends EventEmitter {
   private analyticsFramework: SecurityMLAnalyticsFramework;
@@ -480,7 +484,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     schedule_id?: string;
     priority: number;
     requested_at: number;
-  }> = [];
+> = [];
   
   private activeGenerations: Map<string, any> = new Map();
   private maxConcurrentGenerations: number = 3;
@@ -500,7 +504,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     
     this.setupReportingEngine();
     this.initializeDefaultTemplates();
-  }
+
   
   private setupReportingEngine(): void {
     // Setup report generation queue processing
@@ -522,7 +526,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     setInterval(() => {
       this.monitorDeliveryHealth();
     }, 300000); // Monitor every 5 minutes
-  }
+
   
   private initializeDefaultTemplates(): void {
     // Executive Security Summary Template
@@ -540,7 +544,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         tags: ['executive', 'summary', 'posture'],
         intended_audience: ['executives'],
         classification_level: 'confidential'
-  }
+
       content_structure: {
         sections: [
           {
@@ -551,7 +555,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             data_sources: ['security_dashboard', 'incident_data'],
             visualization_types: ['chart'],
             content_filters: { severity: ['high', 'critical'] }
-  }
+
           {
             section_id: 'key_metrics',
             section_name: 'Key Security Metrics',
@@ -560,7 +564,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             data_sources: ['security_statistics'],
             visualization_types: ['chart', 'table'],
             content_filters: {}
-  }
+
           {
             section_id: 'threat_trends',
             section_name: 'Threat Landscape Trends',
@@ -569,7 +573,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             data_sources: ['threat_intelligence', 'statistical_analysis'],
             visualization_types: ['chart', 'map'],
             content_filters: {}
-          }
+
         ],
         
         formatting_rules: {
@@ -580,7 +584,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           color_scheme: 'corporate',
           logo_placement: true,
           watermark_enabled: true
-  }
+
         data_aggregation: {
           time_periods: [
             { period_name: 'last_30_days', duration_hours: 720, comparison_enabled: true },
@@ -594,8 +598,8 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             { kpi_name: 'security_posture_score', formula: 'weighted_average(control_scores)', trend_analysis: true },
             { kpi_name: 'incident_reduction_rate', formula: 'percentage_change(incident_count)', trend_analysis: true }
           ]
-        }
-  }
+
+
       delivery_config: {
         supported_formats: ['pdf', 'powerpoint'],
         default_format: 'pdf',
@@ -603,35 +607,35 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         dashboard_integration: true,
         api_access_enabled: false,
         file_retention_days: 90
-  }
+
       automation_rules: {
         auto_generation_triggers: [
           {
             trigger_type: 'schedule',
             trigger_config: { frequency: 'weekly', day: 'monday', hour: 8 },
             enabled: true
-          }
+
         ],
         data_freshness_requirements: {
           max_data_age_hours: 24,
           require_real_time_data: false,
           fallback_to_cached_data: true
-  }
+
         quality_gates: [
           {
             gate_name: 'data_completeness',
             validation_rule: 'data_completeness > 0.9',
             action_on_failure: 'warn'
-          }
+
         ]
-  }
+
       personalization: {
         dynamic_content: true,
         user_role_customization: {},
         language_localization: ['en'],
         timezone_adjustment: true,
         custom_branding: true
-      }
+
     };
     
     this.reportTemplates.set('executive_security_summary', executiveSummaryTemplate);
@@ -641,7 +645,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     this.createIncidentAnalysisReportTemplate();
     this.createComplianceReportTemplate();
     this.createThreatIntelligenceReportTemplate();
-  }
+
   
   private createTechnicalSecurityReportTemplate(): void {
     const technicalTemplate: ReportTemplate = {
@@ -658,7 +662,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         tags: ['technical', 'detailed', 'operations'],
         intended_audience: ['security_team', 'it_operations'],
         classification_level: 'internal'
-  }
+
       content_structure: {
         sections: [
           {
@@ -669,7 +673,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             data_sources: ['ml_insights', 'threat_intelligence'],
             visualization_types: ['chart', 'table', 'heatmap'],
             content_filters: {}
-  }
+
           {
             section_id: 'incident_details',
             section_name: 'Incident Analysis',
@@ -678,7 +682,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             data_sources: ['incident_data'],
             visualization_types: ['timeline', 'graph'],
             content_filters: {}
-  }
+
           {
             section_id: 'ml_findings',
             section_name: 'ML Analysis Results',
@@ -687,7 +691,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             data_sources: ['ml_analytics'],
             visualization_types: ['chart', 'table'],
             content_filters: {}
-          }
+
         ],
         
         formatting_rules: {
@@ -698,7 +702,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           color_scheme: 'technical',
           logo_placement: false,
           watermark_enabled: false
-  }
+
         data_aggregation: {
           time_periods: [
             { period_name: 'last_24_hours', duration_hours: 24, comparison_enabled: true },
@@ -713,8 +717,8 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             { kpi_name: 'detection_accuracy', formula: 'true_positives / (true_positives + false_positives)', trend_analysis: true },
             { kpi_name: 'response_time_avg', formula: 'average(response_times)', trend_analysis: true }
           ]
-        }
-  }
+
+
       delivery_config: {
         supported_formats: ['pdf', 'html', 'json', 'csv'],
         default_format: 'pdf',
@@ -722,56 +726,56 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         dashboard_integration: true,
         api_access_enabled: true,
         file_retention_days: 180
-  }
+
       automation_rules: {
         auto_generation_triggers: [
           {
             trigger_type: 'schedule',
             trigger_config: { frequency: 'daily', hour: 6 },
             enabled: true
-  }
+
           {
             trigger_type: 'incident',
             trigger_config: { severity: ['high', 'critical'] },
             enabled: true
-          }
+
         ],
         data_freshness_requirements: {
           max_data_age_hours: 1,
           require_real_time_data: true,
           fallback_to_cached_data: false
-  }
+
         quality_gates: [
           {
             gate_name: 'data_accuracy',
             validation_rule: 'false_positive_rate < 0.1',
             action_on_failure: 'abort'
-          }
+
         ]
-  }
+
       personalization: {
         dynamic_content: true,
         user_role_customization: { security_analyst: ['detailed_logs'], security_manager: ['summary_only'] },
         language_localization: ['en'],
         timezone_adjustment: true,
         custom_branding: false
-      }
+
     };
     
     this.reportTemplates.set('technical_security_report', technicalTemplate);
-  }
+
   
   private createIncidentAnalysisReportTemplate(): void {
     // Implementation for incident analysis report template
-  }
+
   
   private createComplianceReportTemplate(): void {
     // Implementation for compliance report template
-  }
+
   
   private createThreatIntelligenceReportTemplate(): void {
     // Implementation for threat intelligence report template
-  }
+
   
   // Report Generation Methods
   async generateReport(template_id: string, customOptions?: Partial<SecurityReport>): Promise<string> {
@@ -779,7 +783,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     const template = this.reportTemplates.get(template_id);
     if (!template) {
       throw new Error(`Report template ${template_id} not found`);
-    }
+
     
     const request_id = `req_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     
@@ -799,15 +803,15 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     });
     
     return request_id;
-  }
+
   
   private async processGenerationQueue(): Promise<void> {
 
     while (this.generationQueue.length > 0 && this.activeGenerations.size < this.maxConcurrentGenerations) {
       const request = this.generationQueue.shift()!;
       this.generateReportAsync(request);
-    }
-  }
+
+
   
   private async generateReportAsync(request: unknown): Promise<void> {
 
@@ -830,25 +834,24 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
       // Auto-deliver if part of a schedule
       if (schedule_id) {
         await this.deliverScheduledReport(report.report_id, schedule_id);
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       this.emit('report_generation_failed', {
         request_id,
         template_id,
         error: (error as Error).message
       });
-    } finally {
+ finally {
       this.activeGenerations.delete(request_id);
-    }
-  }
+
+
   
   private async performReportGeneration(template_id: string, schedule_id?: string): Promise<SecurityReport> {
 
     const template = this.reportTemplates.get(template_id);
     if (!template) {
       throw new Error(`Template ${template_id} not found`);
-    }
+
     
     const report_id = `report_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     const currentTime = Date.now();
@@ -881,14 +884,14 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           handling_instructions: ['Internal Use Only', 'Do Not Forward Without Authorization'],
           distribution_restrictions: ['Authorized Personnel Only'],
           retention_policy: `${template.delivery_config.file_retention_days} days`
-  }
+
         version_info: {
           report_version: '1.0.0',
           template_version: template.version,
           data_version: '1.0.0',
           revision_history: []
-        }
-  }
+
+
       executive_summary: executiveSummary,
       detailed_analysis: detailedAnalysis,
       recommendations: recommendations,
@@ -897,7 +900,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     };
     
     return report;
-  }
+
   
   private calculateDataPeriod(template: ReportTemplate): { start_time: number; end_time: number; timezone: string } {
     const primaryPeriod = template.content_structure.data_aggregation.time_periods[0];
@@ -909,7 +912,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
       end_time: endTime,
       timezone: 'UTC'
     };
-  }
+
   
   private async collectReportData(template: ReportTemplate, dataPeriod: unknown): Promise<unknown> {
 
@@ -932,7 +935,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     data.investigations = await this.adHocAnalysisEngine.getSystemStatistics();
     
     return data;
-  }
+
   
   private async generateExecutiveSummary(data: Record<string, unknown>): Promise<SecurityReport['executive_summary']> {
 
@@ -952,13 +955,13 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           direction: data.incidents.length > 50 ? 'declining' : 'stable',
           change_percentage: -5.2,
           significance: 'medium'
-  }
+
         {
           metric: 'Threat Detection Accuracy',
           direction: 'improving',
           change_percentage: 12.5,
           significance: 'high'
-        }
+
       ],
       
       critical_issues: data.incidents
@@ -978,10 +981,10 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           achievement_type: 'automation_improvement',
           description: 'Increased security automation coverage by 15%',
           impact_metrics: { time_saved_hours: 120, efficiency_gain: 0.15 }
-        }
+
       ]
     };
-  }
+
   
   private async generateDetailedAnalysis(
     data: Record<string,
@@ -1000,7 +1003,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             time_period: 'last_24_hours',
             threat_volume: data.dashboard.threat_landscape_overview.total_threats_24h,
             severity_breakdown: data.dashboard.threat_landscape_overview.threat_severity_distribution
-          }
+
         ],
         
         emerging_threats: [
@@ -1010,9 +1013,9 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             growth_rate: 0.25,
             potential_impact: 'Data exfiltration and system compromise',
             mitigation_status: 'Monitoring and containment in progress'
-          }
+
         ]
-  }
+
       incident_analysis: {
         total_incidents: data.incidents.length,
         incident_categories: data.incidents.reduce((acc: unknown, incident: SecurityIncident) => {
@@ -1025,7 +1028,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           mean_time_to_response: 45, // minutes
           mean_time_to_resolution: 240, // minutes
           false_positive_rate: 0.08
-  }
+
         notable_incidents: data.incidents
           .filter((incident: SecurityIncident) => ['high', 'critical'].includes(incident.incident_metadata.severity))
           .slice(0, 5)
@@ -1037,7 +1040,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
             timeline_summary: `Created ${new Date(incident.created_at).toLocaleString()}`,
             lessons_learned: ['Improved detection rules', 'Enhanced response procedures']
           }))
-  }
+
       security_metrics: {
         control_effectiveness: data.dashboard.security_posture_metrics.control_effectiveness,
         compliance_scores: { 'SOC2': 95, 'ISO27001': 92, 'NIST': 88 },
@@ -1050,33 +1053,33 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           critical_vulnerabilities: data.dashboard.security_posture_metrics.vulnerability_exposure.critical,
           patching_rate: 0.85,
           average_remediation_time: 72 // hours
-  }
+
         operational_metrics: {
           system_uptime: data.dashboard.operational_metrics.system_uptime,
           alert_volume: data.dashboard.operational_metrics.analysis_throughput,
           automation_rate: data.dashboard.operational_metrics.analyst_productivity.automation_rate,
           analyst_productivity: 100 // baseline
-        }
-  }
+
+
       ml_insights: {
         anomaly_detection_summary: {
           anomalies_detected: 45,
           false_positive_rate: data.dashboard.operational_metrics.false_positive_rate,
           model_accuracy: data.dashboard.ml_model_performance.average_model_accuracy,
           top_anomaly_categories: { 'behavioral': 20, 'network': 15, 'access': 10 }
-  }
+
         predictive_analytics: {
           threat_forecasts: data.dashboard.predictive_insights.threat_forecasts,
           capacity_predictions: data.dashboard.predictive_insights.resource_predictions
-  }
+
         pattern_analysis: {
           attack_patterns_identified: 12,
           behavioral_patterns: 28,
           correlation_strength_avg: 0.75
-        }
-      }
+
+
     };
-  }
+
   
   private async generateRecommendations(
     data: Record<string,
@@ -1093,7 +1096,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           expected_impact: 'Reduce attack surface by 30%',
           implementation_effort: 'Medium (2-3 days)',
           success_metrics: ['Vulnerability count reduced', 'Zero critical exploits']
-  }
+
         {
           action_id: 'action_2',
           priority: 2,
@@ -1101,7 +1104,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           expected_impact: 'Improve detection accuracy by 15%',
           implementation_effort: 'Low (1 day)',
           success_metrics: ['Reduced false positives', 'Faster threat detection']
-        }
+
       ],
       
       strategic_initiatives: [
@@ -1112,7 +1115,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           resource_requirements: ['Security architects', 'Implementation team', 'Budget allocation'],
           expected_outcomes: ['Improved security posture', 'Reduced insider threat risk'],
           risk_mitigation: ['Phased rollout', 'Continuous monitoring', 'Rollback procedures']
-        }
+
       ],
       
       process_improvements: [
@@ -1122,10 +1125,10 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           proposed_improvement: 'Automated threat classification and initial response',
           benefits: ['Faster response times', 'Consistent handling', 'Resource optimization'],
           implementation_plan: 'Deploy automation rules and workflows over 2 months'
-        }
+
       ]
     };
-  }
+
   
   private async generateAppendices(
     data: Record<string,
@@ -1141,14 +1144,14 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           coverage_period: 'Last 30 days',
           quality_score: 0.95,
           limitations: ['Some legacy systems not integrated']
-  }
+
         {
           source_name: 'Threat Intelligence Feeds',
           data_type: 'IOCs and threat indicators',
           coverage_period: 'Real-time updates',
           quality_score: 0.88,
           limitations: ['Commercial feed limitations', 'Attribution accuracy varies']
-        }
+
       ],
       
       methodology: {
@@ -1156,14 +1159,14 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         tools_used: ['Custom ML models', 'Statistical engines', 'Correlation algorithms'],
         assumptions: ['Data completeness', 'Threat intelligence accuracy'],
         limitations: ['Historical data constraints', 'Model training limitations']
-  }
+
       raw_data_summary: {
         total_records_analyzed: 1250000,
         data_quality_metrics: { completeness: 0.94, accuracy: 0.91, timeliness: 0.97 },
         processing_notes: ['Normalized timestamp formats', 'Filtered noise events']
-      }
+
     };
-  }
+
   
   private async generateArtifacts(
     data: Record<string,
@@ -1179,14 +1182,14 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           title: 'Threat Volume Over Time',
           file_path: '/reports/charts/threat_timeline.png',
           description: 'Shows threat detection volume trends over the analysis period'
-  }
+
         {
           chart_id: 'incident_distribution',
           chart_type: 'pie_chart',
           title: 'Incident Category Distribution',
           file_path: '/reports/charts/incident_distribution.png',
           description: 'Breakdown of incidents by category and severity'
-        }
+
       ],
       
       data_exports: [
@@ -1196,7 +1199,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           file_path: '/reports/data/incidents.csv',
           description: 'Raw incident data for the analysis period',
           size_bytes: 245760
-        }
+
       ],
       
       supporting_documents: [
@@ -1205,10 +1208,10 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           document_type: 'technical_specification',
           file_path: '/reports/docs/methodology.pdf',
           description: 'Detailed methodology and analysis procedures'
-        }
+
       ]
     };
-  }
+
   
   // Schedule Management
   async createReportSchedule(scheduleDef: Omit<ReportSchedule, 'schedule_id' | 'execution_history'>): Promise<string> {
@@ -1230,7 +1233,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     });
     
     return schedule_id;
-  }
+
   
   private async checkScheduledReports(): Promise<void> {
 
@@ -1241,9 +1244,9 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
       
       if (this.shouldExecuteSchedule(schedule, currentTime)) {
         await this.executeScheduledReport(schedule_id);
-      }
-    }
-  }
+
+
+
   
   private shouldExecuteSchedule(schedule: ReportSchedule, currentTime: number): boolean {
     const lastExecution = schedule.execution_history.length > 0 ? 
@@ -1262,8 +1265,8 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         return timeSinceLastExecution >= 2592000000; // 30 days
       default:
         return false;
-    }
-  }
+
+
   
   private async executeScheduledReport(schedule_id: string): Promise<void> {
 
@@ -1292,7 +1295,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           delivery_time_ms: deliveryResults.total_delivery_time,
           recipients_reached: deliveryResults.successful_deliveries,
           delivery_failures: deliveryResults.failed_deliveries
-        }
+
       });
       
       this.emit('scheduled_report_completed', {
@@ -1300,8 +1303,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         execution_id,
         report_id: report.report_id
       });
-      
-    } catch (error) {
+ catch (error) {
       schedule.execution_history.push({
         execution_id,
         executed_at: startTime,
@@ -1313,7 +1315,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           delivery_time_ms: 0,
           recipients_reached: 0,
           delivery_failures: 0
-        }
+
       });
       
       this.emit('scheduled_report_failed', {
@@ -1321,8 +1323,8 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         execution_id,
         error: (error as Error).message
       });
-    }
-  }
+
+
   
   private async deliverScheduledReport(report_id: string, schedule_id: string): Promise<unknown> {
 
@@ -1331,7 +1333,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     
     if (!schedule || !report) {
       throw new Error('Schedule or report not found');
-    }
+
     
     let successful_deliveries = 0;
     let failed_deliveries = 0;
@@ -1343,19 +1345,19 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           const receipt = await this.deliverToRecipient(report, recipient);
           this.deliveryReceipts.set(receipt.receipt_id, receipt);
           successful_deliveries++;
-        } catch (error) {
+ catch (error) {
           failed_deliveries++;
           console.error(`Delivery failed for recipient ${recipient.recipient_id}:`, error);
-        }
-      }
-    }
+
+
+
     
     return {
       total_delivery_time: Date.now() - delivery_start,
       successful_deliveries,
       failed_deliveries
     };
-  }
+
   
   private async deliverToRecipient(report: SecurityReport, recipient: unknown): Promise<DeliveryReceipt> {
 
@@ -1374,21 +1376,21 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         status: 'delivered',
         attempted_at: deliveryTime,
         delivered_at: deliveryTime + 1000 // Simulate 1 second delivery
-  }
+
       delivery_metadata: {
         format_delivered: recipient.format_preference,
         file_size_bytes: 1024 * 1024, // 1MB
         delivery_channel: recipient.delivery_method
-  }
+
       engagement_metrics: {
         opened: false,
         sections_accessed: [],
         actions_taken: []
-      }
+
     };
     
     return receipt;
-  }
+
   
   // Utility Methods
   private async manageReportRetention(): Promise<void> {
@@ -1402,9 +1404,9 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
         const retentionTime = template.delivery_config.file_retention_days * 24 * 60 * 60 * 1000;
         if (now - report.report_metadata.generated_at > retentionTime) {
           expiredReports.push(report_id);
-        }
-      }
-    }
+
+
+
     
     expiredReports.forEach(report_id => {
       this.generatedReports.delete(report_id);
@@ -1412,8 +1414,8 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     
     if (expiredReports.length > 0) {
       this.emit('reports_expired', { expired_count: expiredReports.length });
-    }
-  }
+
+
   
   private async monitorDeliveryHealth(): Promise<void> {
 
@@ -1429,7 +1431,7 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     };
     
     this.emit('delivery_health_stats', stats);
-  }
+
   
   private calculateAverageDeliveryTime(receipts: DeliveryReceipt[]): number {
     const completedDeliveries = receipts.filter(r => 
@@ -1444,20 +1446,20 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
       sum + (receipt.delivery_status.delivered_at! - receipt.delivery_status.attempted_at), 0);
       
     return totalTime / completedDeliveries.length;
-  }
+
   
   // Public API Methods
   getReportTemplate(template_id: string): ReportTemplate | undefined {
     return this.reportTemplates.get(template_id);
-  }
+
   
   getReport(report_id: string): SecurityReport | undefined {
     return this.generatedReports.get(report_id);
-  }
+
   
   getReportSchedule(schedule_id: string): ReportSchedule | undefined {
     return this.reportSchedules.get(schedule_id);
-  }
+
   
   getSystemStatistics(): unknown {
     return {
@@ -1467,28 +1469,27 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
           acc[template.category] = (acc[template.category] || 0) + 1;
           return acc;
         }, {} as Record<string, number>)
-  }
+
       reports: {
         total_generated: this.generatedReports.size,
         active_generations: this.activeGenerations.size,
         generation_queue_length: this.generationQueue.length
-  }
+
       schedules: {
         total: this.reportSchedules.size,
         active: Array.from(this.reportSchedules.values()).filter(s => s.status === 'active').length,
         executions_last_24h: Array.from(this.reportSchedules.values())
           .reduce((sum, schedule) => sum + schedule.execution_history
             .filter(exec => Date.now() - exec.executed_at < 86400000).length, 0)
-  }
+
       delivery: {
         total_receipts: this.deliveryReceipts.size,
         recent_success_rate: this.calculateRecentSuccessRate(),
         average_delivery_time_ms: this.calculateAverageDeliveryTime(
           Array.from(this.deliveryReceipts.values()).slice(-100)
 
-      }
     };
-  }
+
   
   private calculateRecentSuccessRate(): number {
     const recentReceipts = Array.from(this.deliveryReceipts.values())
@@ -1498,5 +1499,4 @@ export class SecurityIntelligenceReportingEngine extends EventEmitter {
     
     const successCount = recentReceipts.filter(r => r.delivery_status.status === 'delivered').length;
     return successCount / recentReceipts.length;
-  }
-}
+

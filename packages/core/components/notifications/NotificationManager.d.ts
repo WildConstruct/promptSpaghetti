@@ -5,70 +5,56 @@
 import { Notification } from './NotificationCenter';
 
 }
-export interface NotificationPreferences {
-    in_app_enabled: boolean;
+}
+export interface NotificationPreferences { in_app_enabled: boolean;
     email_enabled: boolean;
     push_enabled: boolean;
     comments: {
         enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
-        mentions_only: boolean;
+        mentions_only: boolean }
 }
     };
-    collaboration: {
-        enabled: boolean;
+    collaboration: { enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
-        presence_updates: boolean;
-    };
-    workspace: {
-        enabled: boolean;
+        presence_updates: boolean };
+    workspace: { enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
-        member_changes: boolean;
-    };
-    approvals: {
-        enabled: boolean;
+        member_changes: boolean };
+    approvals: { enabled: boolean;
+        channels: ('in_app' | 'email' | 'push')[] };
+    system: { enabled: boolean;
         channels: ('in_app' | 'email' | 'push')[];
-    };
-    system: {
-        enabled: boolean;
-        channels: ('in_app' | 'email' | 'push')[];
-        maintenance_only: boolean;
-    };
-    quiet_hours: {
-        enabled: boolean;
+        maintenance_only: boolean };
+    quiet_hours: { enabled: boolean;
         start_time: string;
         end_time: string;
-        timezone: string;
-    };
-    digest: {
-        enabled: boolean;
+        timezone: string };
+    digest: { enabled: boolean;
         frequency: 'hourly' | 'daily' | 'weekly';
-        time: string;
-    };
+        time: string };
 
 }
-export interface NotificationFilter {
-    filter: 'all' | 'unread' | 'mentions' | 'workspace';
+}
+export interface NotificationFilter { filter: 'all' | 'unread' | 'mentions' | 'workspace';
     sort_by: 'newest' | 'priority' | 'type';
     limit?: number;
     offset?: number;
     start_date?: string;
-    end_date?: string;
-
+    end_date?: string }
 }
-export interface NotificationStats {
-    total: number;
+}
+export interface NotificationStats { total: number;
     unread: number;
     by_type: Record<string, number>;
     by_priority: Record<string, number>;
     by_day: {
         date: string;
-        count: number;
+        count: number }
 }
     }[];
 
-export declare class NotificationManager {
-    private apiClient;
+export declare class NotificationManager { private apiClient;
     private userId;
     private notifications;
     private preferences;
@@ -87,8 +73,7 @@ export declare class NotificationManager {
     getNotifications(filter: NotificationFilter): Promise<{
         notifications: Notification[];
         total: number;
-        unread_count: number;
-    }>;
+        unread_count: number }>;
     markAsRead(notificationId: string): Promise<void>;
     markAllAsRead(notificationIds: string[]): Promise<void>;
     deleteNotification(notificationId: string): Promise<void>;

@@ -12,10 +12,11 @@ import { OAuthProviderButtons } from './OAuthProviderButtons';
 
 // Registration form schema - commented out as only used for type inference
 // 
-}
+
+
 type RegistrationFormData = {
   email: string;,
-  password: string;
+  password: string;,
   confirmPassword: string;
   firstName?: string;
   lastName?: string;
@@ -23,14 +24,15 @@ type RegistrationFormData = {
   acceptTerms: boolean;
   marketingConsent?: boolean;
 };
-}
+
+
 interface RegistrationFormProps {
   invitationToken?: string;
   onSuccess?: (user: unknown) => void;
   onCancel?: () => void;
   className?: string;
 
-}
+
 export const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
@@ -40,13 +42,13 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
   error: registrationError,
   validationResult,
   validateField
-} = useRegistration();
+ = useRegistration();
   const { trackFieldEvent, trackFormStep } = useFormAnalytics();
   // Track form step changes
   useEffect(() => {
     trackFormStep(currentStep, 'registration');
   }, [currentStep, trackFormStep]);
-  const steps = [;
+  const steps = [
     { number: 1, title: 'Account Information', description: 'Create your account' },
     { number: 2, title: 'Personal Details', description: 'Tell us about yourself' },
     { number: 3, title: 'Confirmation', description: 'Review and confirm' }
@@ -75,20 +77,20 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
       // Email validation
       if (!formData.email) {
         stepErrors.email = 'Email is required';
-      } else {
+ else {
         try {
           z.string().email().parse(formData.email);
-        } catch {
+ catch {
           stepErrors.email = 'Please enter a valid email address';
       // Password validation
       if (!formData.password) {
         stepErrors.password = 'Password is required';
-      } else if (formData.password.length < 12) {
+ else if (formData.password.length < 12) {
         stepErrors.password = 'Password must be at least 12 characters';
       // Confirm password validation
       if (!formData.confirmPassword) {
         stepErrors.confirmPassword = 'Please confirm your password';
-      } else if (formData.password !== formData.confirmPassword) {
+ else if (formData.password !== formData.confirmPassword) {
         stepErrors.confirmPassword = 'Passwords don\'t match';
     if (currentStep === 2) {
       // Optional validation for personal details
@@ -123,13 +125,13 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
         firstName: formData.firstName,
         lastName: formData.lastName,
         displayName: formData.displayName ?? `${formData.firstName ?? ''} ${formData.lastName ?? ''}`.trim()}
-}
+
         invitationToken
       };
       const result = await register(registrationData);
       if (onSuccess) {
         onSuccess(result.user);
-    } catch (error) {
+ catch (error) {
   console.error('Registration failed:', error);
 };
   const renderStepIndicator = () => (;);
@@ -142,7 +144,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
   currentStep >= step.number
   ? 'bg-blue-600 text-white'
   : 'bg-gray-200 text-gray-500',
-}`}
+`}
             >
               {step.number}
             </div>
@@ -155,7 +157,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
             <div
               className={`flex-1 h-0.5 mx-4 ${
   currentStep > step.number ? 'bg-blue-600' : 'bg-gray-200',
-}`}
+`}
             />
           )}
         </React.Fragment>
@@ -179,7 +181,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
             onFocus={() => handleFieldFocus('email')}
             className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
   errors.email ? 'border-red-500' : '',
-}`}
+`}
             placeholder="you@example.com"
           />
           {errors.email && <ValidationMessage message={errors.email} type="error" />}
@@ -205,7 +207,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
             onFocus={() => handleFieldFocus('password')}
             className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 pr-10 ${
   errors.password ? 'border-red-500' : '',
-}`}
+`}
             placeholder="Choose a strong password"
           />
           <button
@@ -247,7 +249,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
             onFocus={() => handleFieldFocus('confirmPassword')}
             className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
   errors.confirmPassword ? 'border-red-500' : '',
-}`}
+`}
             placeholder="Confirm your password"
           />
           {errors.confirmPassword && <ValidationMessage message={errors.confirmPassword} type="error" />}
@@ -274,7 +276,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
               onFocus={() => handleFieldFocus('firstName')}
               className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
   errors.firstName ? 'border-red-500' : '',
-}`}
+`}
               placeholder="John"
             />
             {errors.firstName && <ValidationMessage message={errors.firstName} type="error" />}
@@ -294,7 +296,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
               onFocus={() => handleFieldFocus('lastName')}
               className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
   errors.lastName ? 'border-red-500' : '',
-}`}
+`}
               placeholder="Doe"
             />
             {errors.lastName && <ValidationMessage message={errors.lastName} type="error" />}
@@ -315,7 +317,7 @@ export const [errors, setErrors] = useState<Record<string, string>>({});
             onFocus={() => handleFieldFocus('displayName')}
             className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
   errors.displayName ? 'border-red-500' : '',
-}`}
+`}
             placeholder="This is how others will see your name"
           />
           {errors.displayName && <ValidationMessage message={errors.displayName} type="error" />}

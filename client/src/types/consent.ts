@@ -27,7 +27,7 @@ export const ConsentType = {
   SOCIAL_MEDIA: 'social_media' as const,
   FUNCTIONAL: 'functional' as const,
   PERFORMANCE: 'performance' as const,
-} as const;
+ as const;
 
 export type ConsentStatus = 
   | 'granted'
@@ -43,7 +43,7 @@ export const ConsentStatus = {
   PENDING: 'pending' as const,
   WITHDRAWN: 'withdrawn' as const,
   EXPIRED: 'expired' as const,
-} as const;
+ as const;
 
 export type LegalBasis = 
   | 'consent'
@@ -61,123 +61,143 @@ export const LegalBasis = {
   LEGAL_OBLIGATION: 'legal_obligation' as const,
   VITAL_INTERESTS: 'vital_interests' as const,
   PUBLIC_TASK: 'public_task' as const,
-} as const;
+ as const;
 
 // Consent record structure
 
-}
+
 export interface ConsentRecord {
   consentId: string;
   userId?: string;
   sessionId: string;,
-  consentType: ConsentType;
+  consentType: ConsentType;,
   status: ConsentStatus;,
-  legalBasis: LegalBasis;
+  legalBasis: LegalBasis;,
   grantedAt: Date;
   expiresAt?: Date;
   withdrawnAt?: Date;
   source: 'banner' | 'preferences' | 'just_in_time' | 'api';,
-  version: string;
+  version: string;,
   ipAddress: string;,
   userAgent: string;
   metadata?: Record<string, unknown>;
   // Configuration types
-}
-}
-}
+
+
+
+
+
 export interface ConsentConfiguration {
   version: string;,
-  lastUpdated: Date;
+  lastUpdated: Date;,
   consentTypes: ConsentTypeConfig;,
-  bannerConfig: BannerConfiguration;
+  bannerConfig: BannerConfiguration;,
   retentionPeriod: number; // days,
   autoExpiry: boolean;,
   requireExplicitConsent: boolean;
-}
-}
-}
+
+
+
+
+
 export interface ConsentTypeConfig {
   type: ConsentType;,
-  name: string;
+  name: string;,
   description: string;,
-  purpose: string;
+  purpose: string;,
   isEssential: boolean;,
-  legalBasis: LegalBasis;
+  legalBasis: LegalBasis;,
   defaultStatus: ConsentStatus;
   expiryDays?: number;
   dataCategories: DataCategoryInfo;,
-  thirdParties: ThirdPartyInfo;
+  thirdParties: ThirdPartyInfo;,
   cookies: CookieInfo;,
   justInTimePrompts: JustInTimePromptConfig;
-}
-}
-}
+
+
+
+
+
 export interface DataCategoryInfo {
   name: string;,
-  description: string;
+  description: string;,
   examples: string;,
   retention: string;
-}
-}
-}
+
+
+
+
+
 export interface ThirdPartyInfo {
   name: string;,
-  domain: string;
+  domain: string;,
   purpose: string;,
-  dataShared: string;
+  dataShared: string;,
   privacyPolicy: string;
-}
-}
-}
+
+
+
+
+
 export interface CookieInfo {
   name: string;,
-  purpose: string;
+  purpose: string;,
   type: 'session' | 'persistent' | 'secure' | 'httpOnly';
   duration?: number; // days,
   domain: string;
   path?: string;
   // Just-in-time prompt configuration
-}
-}
-}
+
+
+
+
+
 export interface JustInTimePromptConfig {
   triggerId: string;,
-  title: string;
+  title: string;,
   message: string;,
-  contexts: JustInTimeContext;
+  contexts: JustInTimeContext;,
   appearance: JustInTimeAppearance;,
   behavior: JustInTimeBehavior;
-}
-}
-}
+
+
+
+
+
 export interface JustInTimeContext {
   feature: string; // e.g., 'analytics_dashboard', 'marketing_newsletter', 'social_sharing',
   action: string; // e.g., 'view', 'click', 'submit', 'load',
   selector?: string; // CSS selector for DOM elements,
   urlPattern?: string; // URL pattern to match,
   conditions?: ContextCondition;
-}
-}
-}
+
+
+
+
+
 export interface ContextCondition {
   type: 'user_property' | 'session_property' | 'page_property' | 'time_based';,
-  property: string;
+  property: string;,
   operator: 'equals' | 'contains' | 'starts_with' | 'greater_than' | 'less_than';,
   value: unknown;
-}
-}
-}
+
+
+
+
+
 export interface JustInTimeAppearance {
   style: 'modal' | 'banner' | 'sidebar' | 'tooltip' | 'inline';
   position?: 'top' | 'bottom' | 'left' | 'right' | 'center';
   theme: 'light' | 'dark' | 'auto';,
-  size: 'small' | 'medium' | 'large';
+  size: 'small' | 'medium' | 'large';,
   showIcon: boolean;
   iconType?: 'info' | 'warning' | 'question' | 'shield';
   customStyles?: CSSStyleDeclaration;
-}
-}
-}
+
+
+
+
+
 export interface JustInTimeBehavior {
   showOnce: boolean;
   cooldownPeriod?: number; // minutes,
@@ -187,42 +207,50 @@ export interface JustInTimeBehavior {
   autoHideAfter?: number; // seconds,
   blockInteraction: boolean; // block the original action until consent is given,
   // Banner configuration
-}
-}
-}
+
+
+
+
+
 export interface BannerConfiguration {
   enabled: boolean;,
-  position: 'top' | 'bottom' | 'center';
+  position: 'top' | 'bottom' | 'center';,
   theme: 'light' | 'dark';,
-  layout: BannerLayout;
+  layout: BannerLayout;,
   content: BannerContent;,
-  styling: BannerStyling;
+  styling: BannerStyling;,
   enableAcceptAll: boolean;,
-  enableRejectAll: boolean;
+  enableRejectAll: boolean;,
   enableCustomize: boolean;
-}
-}
-}
+
+
+
+
+
 export interface BannerLayout {
   showLogo: boolean;,
-  buttonsLayout: 'horizontal' | 'vertical' | 'stacked';
+  buttonsLayout: 'horizontal' | 'vertical' | 'stacked';,
   showCloseButton: boolean;,
   showProgressBar: boolean;
-}
-}
-}
+
+
+
+
+
 export interface BannerContent {
   title: string;,
-  message: string;
+  message: string;,
   acceptAllText: string;,
-  rejectAllText: string;
+  rejectAllText: string;,
   customizeText: string;,
-  privacyPolicyUrl: string;
+  privacyPolicyUrl: string;,
   cookiePolicyUrl: string;
   learnMoreUrl?: string;
-}
-}
-}
+
+
+
+
+
 export interface BannerStyling {
   backgroundColor?: string;
   textColor?: string;
@@ -237,181 +265,218 @@ export interface BannerStyling {
   boxShadow?: string;
   zIndex?: number;
   // User preferences
-}
-}
-}
+
+
+
+
+
 export interface ConsentPreferences {
   userId?: string;
   sessionId: string;,
-  version: string;
+  version: string;,
   lastUpdated: Date;,
   consents: Record<ConsentType, ConsentStatus>;
   userPreferences: UserPreferenceSettings;,
   notifications: NotificationSettings;
-}
-}
-}
+
+
+
+
+
 export interface UserPreferenceSettings {
   language: string;,
-  timezone: string;
+  timezone: string;,
   privacySettings: PrivacySettings;,
   communicationPreferences: CommunicationPreferences;
-}
-}
-}
+
+
+
+
+
 export interface PrivacySettings {
   dataProcessingOptOut: boolean;,
-  profileVisibility: 'public' | 'limited' | 'private';
+  profileVisibility: 'public' | 'limited' | 'private';,
   trackingOptOut: boolean;,
   dataRetentionPeriod: number; // days,
-}
-}
-}
+
+
+
+
+
 export interface CommunicationPreferences {
   emailNotifications: boolean;,
-  smsNotifications: boolean;
+  smsNotifications: boolean;,
   pushNotifications: boolean;,
-  marketingEmails: boolean;
+  marketingEmails: boolean;,
   productUpdates: boolean;,
   securityAlerts: boolean;
-}
-}
-}
+
+
+
+
+
 export interface NotificationSettings {
   showBanner: boolean;,
-  showJustInTimePrompts: boolean;
+  showJustInTimePrompts: boolean;,
   reminderFrequency: number; // days,
   lastReminderShown?: Date;
   // State management
-}
-}
-}
+
+
+
+
+
 export interface ConsentBannerState {
   isVisible: boolean;,
-  mode: 'compact' | 'detailed';
+  mode: 'compact' | 'detailed';,
   hasInteracted: boolean;,
-  showPreferences: boolean;
+  showPreferences: boolean;,
   isLoading: boolean;
   error?: string;
-}
-}
-}
+
+
+
+
+
 export interface JustInTimePromptState {
   activePrompts: ActivePrompt;,
   cooldowns: Record<string, Date>;
   sessionCounts: Record<string, number>;
   dismissedPrompts: string;
-}
-}
-}
+
+
+
+
+
 export interface ActivePrompt {
   id: string;,
-  config: JustInTimePromptConfig;
+  config: JustInTimePromptConfig;,
   consentType: ConsentType;,
-  context: JustInTimeContext;
+  context: JustInTimeContext;,
   triggeredAt: Date;
 
-}
+
   position?: { x: number; y: number };
 
 // Data export (GDPR Article 20)
-}
-}
+
+
+
 export interface ConsentExport {
   exportId: string;
   userId?: string;
   sessionId: string;,
-  exportedAt: Date;
+  exportedAt: Date;,
   version: string;,
-  data: {
+  data: {,
   consents: ConsentRecord;,
-  preferences: ConsentPreferences;
+  preferences: ConsentPreferences;,
   interactions: ConsentInteraction;,
   configuration: ConsentConfiguration;
-}
+
+
 };
-}
-}
+
+
+
 export interface ConsentInteraction {
   interactionId: string;,
-  timestamp: Date;
+  timestamp: Date;,
   action: 'view_banner' | 'accept_all' | 'reject_all' | 'customize' | 'just_in_time_prompt' | 'grant_consent' | 'withdraw_consent';
   consentType?: ConsentType;
   source: string;
   metadata?: Record<string, unknown>;
   // API types
-}
-}
-}
+
+
+
+
+
 export interface ConsentConfigRequest {
   version?: string;
   types?: ConsentType;
-}
-}
-}
+
+
+
+
+
 export interface ConsentConfigResponse {
   success: boolean;,
-  data: ConsentConfiguration;
+  data: ConsentConfiguration;,
   version: string;
-}
-}
-}
+
+
+
+
+
 export interface ConsentPreferencesRequest {
   userId?: string;
   sessionId: string;,
   preferences: Partial<ConsentPreferences>;
-}
-}
-}
+
+
+
+
+
 export interface ConsentPreferencesResponse {
   success: boolean;,
   preferences: ConsentPreferences;
   message?: string;
-}
-}
-}
+
+
+
+
+
 export interface ConsentRecordRequest {
   consentType: ConsentType;,
-  status: ConsentStatus;
+  status: ConsentStatus;,
   source: string;
   metadata?: Record<string, unknown>;
-}
-}
-}
+
+
+
+
+
 export interface ConsentRecordResponse {
   success: boolean;,
   record: ConsentRecord;
   message?: string;
   // Hook return type
-}
-}
-}
+
+
+
+
+
 export interface UseConsentReturn {
   preferences: ConsentPreferences | null;,
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;,
   hasConsent: (type: ConsentType) => boolean;,
   grantConsent: (type: ConsentType, source?: string) => Promise<void>;
   withdrawConsent: (type: ConsentType, source?: string) => Promise<void>;
   updatePreferences: (updates: Partial<ConsentPreferences>) => Promise<void>;,
-  exportData: () => Promise<ConsentExport>;
+  exportData: () => Promise<ConsentExport>;,
   resetConsents: () => Promise<void>;,
   refreshConfig: () => Promise<void>;
   // Just-in-time prompt hook return type
-}
-}
-}
+
+
+
+
+
 export interface UseJustInTimeReturn {
   activePrompts: ActivePrompt;,
   showPrompt: (feature: string, action: string, element?: HTMLElement) => Promise<boolean>;
   dismissPrompt: (promptId: string) => void;,
   respondToPrompt: (promptId: string, granted: boolean) => Promise<void>;,
-  clearCooldowns: () => void;
+  clearCooldowns: () => void;,
   isPromptAllowed: (triggerId: string) => boolean;
   // Event types for consent service
-}
-}
-}
+
+
+
+
+
 export interface ConsentEvent {
   type: 'consent_given' | 'consent_withdrawn' | 'preferences_saved' | 'just_in_time_shown' | 'just_in_time_responded';
   consentType?: ConsentType;
@@ -419,20 +484,24 @@ export interface ConsentEvent {
   timestamp: Date;
   metadata?: Record<string, unknown>;
   // Validation types
-}
-}
-}
+
+
+
+
+
 export interface ConsentValidationResult {
   isValid: boolean;,
-  errors: string;
+  errors: string;,
   warnings: string;
-}
-}
-}
+
+
+
+
+
 export interface ConsentComplianceCheck {
   isCompliant: boolean;,
-  missingConsents: ConsentType;
+  missingConsents: ConsentType;,
   expiredConsents: ConsentType;,
   recommendations: string;
-}
-}
+
+

@@ -6,57 +6,54 @@ import { corePerformanceKPIs, KPIDefinition, KPISnapshot, calculateKPIStatus, ca
 import { measureExecution, ExecutionMetrics, PerformanceTracker } from '../utils/performance';
 import { EventEmitter } from 'events';
 
-}
-export interface BaselineSnapshot {
-  id: string;
+
+export interface BaselineSnapshot { id: string;
   timestamp: number;
-  environment: {
-    userAgent?: string;
-}
+  environment: { }
+  userAgent?: string;
+
+
     viewport?: { width: number; height: number };
     connection?: string;
     deviceMemory?: number;
     hardwareConcurrency?: number;
   };
   kpiSnapshots: KPISnapshot;
-  systemInfo: {
-  nodeVersion?: string;
+  systemInfo: { nodeVersion?: string;
   platform?: string;
-  memoryUsage?: NodeJS.MemoryUsage;
-};
-  testConditions: {
+  memoryUsage?: NodeJS.MemoryUsage };
+  testConditions: { ,
   graphComplexity: 'simple' | 'medium' | 'complex';
-  dataSize: 'small' | 'medium' | 'large';
+  dataSize: 'small' | 'medium' | 'large' }
   concurrentUsers: number;
 };
-}
-}
-export interface BaselineSummary {
-  capturedAt: number;
+
+
+export interface BaselineSummary { capturedAt: number;
   totalKPIs: number;
   criticalKPIs: number;
-  kpisByStatus: {
+  kpisByStatus: { }
   excellent: number;
   good: number;
   warning: number;
   critical: number;
-}
+
+
 };
-  averageScores: {
+  averageScores: { ,
   runtime: number;
   api: number;
   bundle: number;
   memory: number;
   network: number;
   build: number;
-  userExperience: number;
-};
+  userExperience: number };
   recommendations: string;
 /**
  * Performance Baseline Measurement System
  * Captures and manages performance baselines for comparison and improvement tracking
  */
-}
+
 export class PerformanceBaseline extends EventEmitter {
   private snapshots: BaselineSnapshot = [];
   private performanceTracker: PerformanceTracker;
@@ -72,26 +69,25 @@ export class PerformanceBaseline extends EventEmitter {
     const baselineId = `baseline-${Date.now()}`;}
     const timestamp = Date.now();
     console.log(`📊 Capturing performance baseline: ${baselineId}`);}
-    try {
-  // Gather environment information
+    try { // Gather environment information
   const environment = this.getEnvironmentInfo();
   // Gather system information
   const systemInfo = this.getSystemInfo();
   // Set default test conditions
-  const conditions: BaselineSnapshot['testConditions'] = {,
-  graphComplexity: 'medium',
-  dataSize: 'medium',
-  concurrentUsers: 1,
+  const conditions: BaselineSnapshot['testConditions'] = {
+  graphComplexity: 'medium'
+  dataSize: 'medium'
+  concurrentUsers: 1 }
   ...testConditions
 };
       // Capture KPI measurements
       const kpiSnapshots = await this.captureAllKPIs(conditions);
-      const baseline: BaselineSnapshot = {,
-  id: baselineId,
-  timestamp,
-  environment,
-  systemInfo,
-  testConditions: conditions,
+      const baseline: BaselineSnapshot = { 
+  id: baselineId
+  timestamp
+  environment
+  systemInfo
+  testConditions: conditions }
   kpiSnapshots
 };
       // Store baseline
@@ -101,13 +97,12 @@ export class PerformanceBaseline extends EventEmitter {
       console.log(`✅ Baseline captured with ${kpiSnapshots.length} KPI measurements`);}
       this.emit('baseline-captured', baseline);
       return baseline;
-    } catch (error) {
-  console.error('❌ Failed to capture baseline:', error);
+ catch (error) { console.error('❌ Failed to capture baseline:', error);
   throw error;
   /**
   * Capture measurements for all defined KPIs
   */
-  private async captureAllKPIs(testConditions: BaselineSnapshot['testConditions']): Promise<KPISnapshot> {,
+  private async captureAllKPIs(testConditions: BaselineSnapshot['testConditions']): Promise<KPISnapshot> {
   const kpiSnapshots: KPISnapshot = [];
   for (const kpi of corePerformanceKPIs) {
   try {
@@ -115,22 +110,22 @@ export class PerformanceBaseline extends EventEmitter {
   const status = calculateKPIStatus(kpi.id, value);
   // Get historical snapshots for trend calculation
   const historicalSnapshots = this.getHistoricalKPISnapshots(kpi.id);
-  const currentSnapshot: KPISnapshot = {,
-  kpiId: kpi.id,
-  value,
-  timestamp: Date.now(),
-  status,
-  trend: 'stable', // Will be calculated after adding to history,
+  const currentSnapshot: KPISnapshot = {
+  kpiId: kpi.id
+  value
+  timestamp: Date.now()
+  status
+  trend: 'stable', // Will be calculated after adding to history
   metadata: {
-  testConditions,
-  measurementMethod: kpi.measurement.method,
+  testConditions
+  measurementMethod: kpi.measurement.method }
 };
         // Calculate trend with updated history
         const trendSnapshots = [...historicalSnapshots, currentSnapshot];
         currentSnapshot.trend = calculateKPITrend(trendSnapshots);
         kpiSnapshots.push(currentSnapshot);
         console.log(`📈 ${kpi.name}: ${value}${kpi.unit} (${status})`);}
-      } catch (error) {
+ catch (error) {
         console.warn(`⚠️ Failed to measure KPI ${kpi.id}:`, error);}
         // Continue with other KPIs even if one fails
     return kpiSnapshots;
@@ -208,26 +203,20 @@ export class PerformanceBaseline extends EventEmitter {
   // === API Performance Measurements ===
   private async measureGraphExecution(complexity: string): Promise<number> {
 
-    const { metrics } = await measureExecution(async () => {
-  // Simulate graph execution based on complexity
+    const { metrics } = await measureExecution(async () => { // Simulate graph execution based on complexity
   const delay = complexity === 'simple' ? 300 : complexity === 'medium' ? 600 : 1200;
-  await this.simulateAsyncWork(delay);
-});
+  await this.simulateAsyncWork(delay) });
     return metrics.duration;
   private async measurePreviewGeneration(dataSize: string): Promise<number> {
 
-    const { metrics } = await measureExecution(async () => {
-  // Simulate preview generation based on data size
+    const { metrics } = await measureExecution(async () => { // Simulate preview generation based on data size
   const delay = dataSize === 'small' ? 150 : dataSize === 'medium' ? 300 : 600;
-  await this.simulateAsyncWork(delay);
-});
+  await this.simulateAsyncWork(delay) });
     return metrics.duration;
   private async measureValidation(): Promise<number> {
 
-    const { metrics } = await measureExecution(async () => {
-      // Simulate graph validation
-      await this.simulateAsyncWork(50);
-    });
+    const { metrics } = await measureExecution(async () => { // Simulate graph validation
+      await this.simulateAsyncWork(50) });
     return metrics.duration;
   private async measureThroughput(): Promise<number> {
 
@@ -306,11 +295,10 @@ export class PerformanceBaseline extends EventEmitter {
     await new Promise(resolve => setTimeout(resolve, duration * 0.9));
   private getEnvironmentInfo() {
     const env: BaselineSnapshot['environment'] = {};
-    if (typeof window !== 'undefined') {
-  env.userAgent = window.navigator.userAgent;
+    if (typeof window !== 'undefined') { env.userAgent = window.navigator.userAgent;
   env.viewport = {
   width: window.innerWidth,
-  height: window.innerHeight,
+  height: window.innerHeight }
 };
       // @ts-ignore - Web API
       if (window.navigator.connection) {
@@ -326,8 +314,7 @@ export class PerformanceBaseline extends EventEmitter {
     return env;
   private getSystemInfo(): BaselineSnapshot['systemInfo'] {
     const info: BaselineSnapshot['systemInfo'] = {};
-    if (typeof process !== 'undefined') {
-  info.nodeVersion = process.version;
+    if (typeof process !== 'undefined') { info.nodeVersion = process.version;
   info.platform = process.platform;
   info.memoryUsage = process.memoryUsage();
   return info;
@@ -358,7 +345,7 @@ export class PerformanceBaseline extends EventEmitter {
   excellent: target.kpiSnapshots.filter(k => k.status === 'excellent').length,
   good: target.kpiSnapshots.filter(k => k.status === 'good').length,
   warning: target.kpiSnapshots.filter(k => k.status === 'warning').length,
-  critical: target.kpiSnapshots.filter(k => k.status === 'critical').length,
+  critical: target.kpiSnapshots.filter(k => k.status === 'critical').length }
 };
     const criticalKPIs = target.kpiSnapshots.filter(k => {)
   const kpi = corePerformanceKPIs.find(def => def.id === k.kpiId);
@@ -368,19 +355,17 @@ export class PerformanceBaseline extends EventEmitter {
     const averageScores = this.calculateCategoryAverages(target.kpiSnapshots);
     // Generate recommendations for poor-performing KPIs
     const recommendations = this.generateBaselineRecommendations(target.kpiSnapshots);
-    return {
-  capturedAt: target.timestamp,
+    return { capturedAt: target.timestamp,
   totalKPIs: target.kpiSnapshots.length,
   criticalKPIs,
   kpisByStatus,
-  averageScores,
+  averageScores }
   recommendations
 };
   private calculateCategoryAverages(snapshots: KPISnapshot): BaselineSummary['averageScores'] {
     const categories = ['runtime', 'api', 'bundle', 'memory', 'network', 'build', 'user-experience'];
     const averages: any = {};
-    for (const category of categories) {
-  const categoryKPIs = corePerformanceKPIs.filter(kpi => kpi.category === category);
+    for (const category of categories) { const categoryKPIs = corePerformanceKPIs.filter(kpi => kpi.category === category);
   const categorySnapshots = snapshots.filter(snapshot => ;);
   categoryKPIs.some(kpi => kpi.id === snapshot.kpiId)
   );
@@ -392,11 +377,9 @@ export class PerformanceBaseline extends EventEmitter {
   case 'good': return 80;
   case 'warning': return 60;
   case 'critical': return 30;
-  default: return 70;
-});
+  default: return 70 });
         averages[category.replace('-', '')] = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
-      } else {
-  averages[category.replace('-', '')] = 0;
+ else { averages[category.replace('-', '')] = 0;
   return averages;
   private generateBaselineRecommendations(snapshots: KPISnapshot): string {,
   const recommendations = new Set<string>();
@@ -404,7 +387,7 @@ export class PerformanceBaseline extends EventEmitter {
   const warningSnapshots = snapshots.filter(s => s.status === 'warning');
   if (criticalSnapshots.length > 0) {
   recommendations.add('🚨 Critical performance issues detected - immediate attention required');
-  recommendations.add('Focus on critical KPIs first: ' + ),
+  recommendations.add('Focus on critical KPIs first: ' + )
   criticalSnapshots.map(s => corePerformanceKPIs.find(k => k.id === s.kpiId)?.name).join(', '));
   if (warningSnapshots.length > 0) {
   recommendations.add('⚠️ Performance warnings detected - plan optimization efforts');
@@ -437,14 +420,10 @@ export class PerformanceBaseline extends EventEmitter {
   kpi.category === 'memory' || kpi.category === 'network' ||
   kpi.id === 'ux_error_rate';
   const improvement = isLowerBetter ? ;
-  snapshot1.value - snapshot2.value :,
+  snapshot1.value - snapshot2.value : }
   snapshot2.value - snapshot1.value;
   const changeThreshold = kpi.target * 0.05; // 5% change threshold;
-  if (improvement > changeThreshold) {
-  improved.push(kpi.name);
-} else if (improvement < -changeThreshold) {
-          degraded.push(kpi.name);
-        } else {
+  if (improvement > changeThreshold) { improved.push(kpi.name) } else if (improvement < -changeThreshold) { degraded.push(kpi.name) } else {
           unchanged.push(kpi.name);
     return { improved, degraded, unchanged };
   /**

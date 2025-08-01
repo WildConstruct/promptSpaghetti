@@ -12,8 +12,8 @@
 import { DatabaseConnection } from '../database/connection';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface MLFlaggingConfig {
   enableContentModeration: boolean;
   enableSecurityThreatDetection: boolean;
@@ -28,14 +28,15 @@ export interface MLFlaggingConfig {
     compliance?: string;
     anomaly?: string;
     promptInjection?: string;
-}
-}
+
+
+
   };
   fallbackToRuleBased: boolean;
-}
 
-}
-}
+
+
+
 export interface FlaggingRequest {
   content: string;
   contentType: 'text' | 'json' | 'graph' | 'prompt' | 'code';
@@ -48,11 +49,12 @@ export interface FlaggingRequest {
     sessionId?: string;
     requestId?: string;
     metadata?: Record<string, unknown>;
-}
-}
+
+
+
   };
   categories: FlaggingCategory[];
-}
+
 
 export type FlaggingCategory = 
   | 'content_moderation'
@@ -64,8 +66,8 @@ export type FlaggingCategory =
   | 'malware'
   | 'phishing';
 
-}
-}
+
+
 export interface FlaggingResult {
   flagged: boolean;
   confidence: number;
@@ -76,12 +78,13 @@ export interface FlaggingResult {
   modelVersion?: string;
   processingTime: number;
   fallbackUsed: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FlaggedCategory {
   category: FlaggingCategory;
   confidence: number;
@@ -89,12 +92,13 @@ export interface FlaggedCategory {
   evidence?: string[];
   severity: 'low' | 'medium' | 'high';
   subcategories?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MLModel {
   id: string;
   name: string;
@@ -105,12 +109,13 @@ export interface MLModel {
   accuracy?: number;
   lastUpdated: Date;
   configuration?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FlaggingEvent {
   id: string;
   requestId: string;
@@ -125,12 +130,13 @@ export interface FlaggingEvent {
   reviewedBy?: string;
   reviewedAt?: Date;
   reviewNotes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FlaggingStats {
   totalRequests: number;
   flaggedRequests: number;
@@ -141,9 +147,10 @@ export interface FlaggingStats {
   averageConfidence: number;
   averageProcessingTime: number;
   modelAccuracy: Record<string, number>;
-}
-}
-}
+
+
+
+
 
 // Rule-based fallback patterns
 const SECURITY_PATTERNS = {
@@ -211,7 +218,7 @@ export class MLFlaggingService {
       fallbackToRuleBased: true,
       ...config
     };
-  }
+
 
   static getInstance(
     db: DatabaseConnection,
@@ -220,9 +227,9 @@ export class MLFlaggingService {
   ): MLFlaggingService {
     if (!MLFlaggingService.instance) {
       MLFlaggingService.instance = new MLFlaggingService(db, auditService, config);
-    }
+
     return MLFlaggingService.instance;
-  }
+
 
   /**
    * Initialize the ML flagging system
@@ -232,11 +239,11 @@ export class MLFlaggingService {
     try {
       await this.loadModels();
       console.log('MLFlaggingService initialized successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize MLFlaggingService:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Flag content using ML models and rule-based fallbacks
@@ -258,8 +265,8 @@ export class MLFlaggingService {
           if (categoryResult) {
             results.push(categoryResult);
             confidence = Math.max(confidence, categoryResult.confidence);
-          }
-        } catch (error) {
+
+ catch (error) {
           console.error(`Failed to process category ${category}:`, error);
           
           // Fallback to rule-based detection
@@ -268,10 +275,10 @@ export class MLFlaggingService {
             if (fallbackResult) {
               results.push(fallbackResult);
               fallbackUsed = true;
-            }
-          }
-        }
-      }
+
+
+
+
 
       const flagged = results.length > 0 && confidence >= this.config.confidenceThreshold;
       const riskLevel = this.calculateRiskLevel(results, confidence);
@@ -315,7 +322,7 @@ export class MLFlaggingService {
       });
 
       return result;
-    } catch (error) {
+ catch (error) {
       const errorResult: FlaggingResult = {
         flagged: false,
         confidence: 0,
@@ -329,8 +336,8 @@ export class MLFlaggingService {
 
       console.error('Error in flagContent:', error);
       return errorResult;
-    }
-  }
+
+
 
   /**
    * Flag content for a specific category
@@ -347,27 +354,27 @@ export class MLFlaggingService {
       // Fallback to rule-based if no model available
       if (this.config.fallbackToRuleBased) {
         return this.ruleBasedFlagging(content, category);
-      }
+
       return null;
-    }
+
 
     try {
       // Call ML model API (if available)
       if (model.endpoint) {
         return await this.callMLModel(model, content, context);
-      } else {
+ else {
         // Use built-in ML logic or fallback to rules
         return this.ruleBasedFlagging(content, category);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error(`Error calling ML model for ${category}:`, error);
       
       if (this.config.fallbackToRuleBased) {
         return this.ruleBasedFlagging(content, category);
-      }
+
       return null;
-    }
-  }
+
+
 
   /**
    * Call external ML model API
@@ -380,7 +387,7 @@ export class MLFlaggingService {
 
     if (!model.endpoint) {
       throw new Error('Model endpoint not configured');
-    }
+
 
     try {
       const response = await fetch(model.endpoint, {
@@ -388,17 +395,17 @@ export class MLFlaggingService {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': process.env.ML_API_KEY ? `Bearer ${process.env.ML_API_KEY}` : ''
-  }
+
         body: JSON.stringify({
           content,
           model_version: model.version,
           context: context || {}
-  }
+
       });
 
       if (!response.ok) {
         throw new Error(`ML API returned ${response.status}: ${response.statusText}`);
-      }
+
 
       const result = await response.json();
       
@@ -411,14 +418,14 @@ export class MLFlaggingService {
           severity: result.severity || 'medium',
           subcategories: result.subcategories || []
         };
-      }
+
 
       return null;
-    } catch (error) {
+ catch (error) {
       console.error(`ML model API call failed for ${model.category}:`, error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Rule-based flagging fallback
@@ -436,8 +443,8 @@ export class MLFlaggingService {
         // Simple confidence based on pattern specificity and match length
         const confidence = Math.min(0.9, 0.6 + (match[0].length / content.length) * 0.3);
         maxConfidence = Math.max(maxConfidence, confidence);
-      }
-    }
+
+
 
     if (matches.length > 0 && maxConfidence >= this.config.confidenceThreshold) {
       return {
@@ -448,10 +455,10 @@ export class MLFlaggingService {
         severity: maxConfidence > 0.8 ? 'high' : maxConfidence > 0.6 ? 'medium' : 'low',
         subcategories: []
       };
-    }
+
 
     return null;
-  }
+
 
   /**
    * Get rule patterns for a category
@@ -475,8 +482,8 @@ export class MLFlaggingService {
       ];
     default:
       return [];
-    }
-  }
+
+
 
   /**
    * Calculate overall risk level
@@ -490,16 +497,16 @@ export class MLFlaggingService {
 
     if (confidence > 0.9 && (highSeverityCount > 1 || hasCriticalCategory)) {
       return 'critical';
-    }
+
     if (confidence > 0.8 && (highSeverityCount > 0 || categories.length > 2)) {
       return 'high';
-    }
+
     if (confidence > 0.6 && categories.length > 0) {
       return 'medium';
-    }
+
     
     return 'low';
-  }
+
 
   /**
    * Determine recommended action
@@ -514,19 +521,19 @@ export class MLFlaggingService {
       case 'high': return 'block';
       case 'medium': return 'warn';
       default: return 'allow';
-      }
-    }
+
+
 
     // Below auto-action threshold, recommend review for risky content
     if (riskLevel === 'critical' || riskLevel === 'high') {
       return 'review';
-    }
+
     if (riskLevel === 'medium') {
       return 'warn';
-    }
+
     
     return 'allow';
-  }
+
 
   /**
    * Generate human-readable explanation
@@ -534,7 +541,7 @@ export class MLFlaggingService {
   private generateExplanation(categories: FlaggedCategory[], confidence: number, riskLevel: string): string {
     if (categories.length === 0) {
       return 'Content appears safe based on analysis.';
-    }
+
 
     const categoryDescriptions = categories.map(c => {
       const severityText = c.severity === 'high' ? 'potentially dangerous' : 
@@ -547,7 +554,7 @@ export class MLFlaggingService {
         confidence > 0.6 ? 'moderate' : 'low';
 
     return `Content flagged with ${confidenceText} confidence (${Math.round(confidence * 100)}%) for: ${categoryDescriptions}. Risk level: ${riskLevel}.`;
-  }
+
 
   /**
    * Store flagging event in database
@@ -579,11 +586,11 @@ export class MLFlaggingService {
         event.timestamp,
         event.processed
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to store flagging event:', error);
       // Don't throw - flagging should continue even if storage fails
-    }
-  }
+
+
 
   /**
    * Get flagging statistics
@@ -647,7 +654,7 @@ export class MLFlaggingService {
       categoryStats.forEach((stat: any) => {
         if (stat.category && categoryCounts.hasOwnProperty(stat.category)) {
           categoryCounts[stat.category as FlaggingCategory] = stat.count;
-        }
+
       });
 
       const riskLevelCounts: Record<string, number> = {};
@@ -674,11 +681,11 @@ export class MLFlaggingService {
         averageProcessingTime: stats.avg_processing_time || 0,
         modelAccuracy: {} // Would be populated from model evaluation data
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get flagging statistics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get recent flagging events
@@ -696,11 +703,11 @@ export class MLFlaggingService {
       if (organizationId) {
         whereConditions.push('organization_id = ?');
         params.push(organizationId);
-      }
+
 
       if (flaggedOnly) {
         whereConditions.push('flagged = 1');
-      }
+
 
       params.push(limit);
 
@@ -732,7 +739,7 @@ export class MLFlaggingService {
           explanation: event.explanation,
           processingTime: event.processing_time,
           fallbackUsed: Boolean(event.fallback_used)
-  }
+
         timestamp: event.timestamp,
         processed: Boolean(event.processed),
         reviewStatus: event.review_status,
@@ -740,11 +747,11 @@ export class MLFlaggingService {
         reviewedAt: event.reviewed_at,
         reviewNotes: event.review_notes
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get recent flagging events:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Update review status of flagging event
@@ -771,11 +778,11 @@ export class MLFlaggingService {
       });
 
       return result.affectedRows > 0;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to update review status:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Load ML models from database
@@ -803,11 +810,11 @@ export class MLFlaggingService {
       });
 
       console.log(`Loaded ${this.models.size} ML models`);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to load ML models:', error);
       // Continue without models - will use rule-based fallbacks
-    }
-  }
+
+
 
   /**
    * Helper methods for query building
@@ -817,16 +824,16 @@ export class MLFlaggingService {
     
     if (organizationId) {
       conditions.push('organization_id = ?');
-    }
+
     if (startDate) {
       conditions.push('timestamp >= ?');
-    }
+
     if (endDate) {
       conditions.push('timestamp <= ?');
-    }
+
 
     return conditions.length > 1 ? `WHERE ${conditions.join(' AND ')}` : '';
-  }
+
 
   private buildQueryParams(organizationId?: string, startDate?: Date, endDate?: Date): any[] {
     const params: any[] = [];
@@ -836,7 +843,7 @@ export class MLFlaggingService {
     if (endDate) params.push(endDate);
     
     return params;
-  }
-}
+
+
 
 export default MLFlaggingService;

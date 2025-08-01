@@ -40,12 +40,12 @@ describe('AnomalyDetectionService', () => {
       patterns: [],
       notification: {
         email: ['security@test.com']
-  }
+
       responseConfig: {
         autoBlock: true,
         autoDisable: false,
         requireManualReview: true
-      }
+
     };
 
     anomalyService = new AnomalyDetectionService(
@@ -125,12 +125,12 @@ describe('AnomalyDetectionService', () => {
             events: ['login_failed'],
             aggregateType: 'count',
             comparisonOperator: '>='
-  }
+
           actions: [{
             type: 'block_ip',
             config: { duration: 3600 }
-          }]
-        }]
+]
+]
       });
     });
 
@@ -149,8 +149,8 @@ describe('AnomalyDetectionService', () => {
             first_event: new Date(Date.now() - 300000), // 5 minutes ago
             last_event: new Date(),
             event_details: [{ action: 'login_failed' }]
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ rows: [] }) // check for recent similar anomaly
         .mockResolvedValueOnce({ rows: [{ id: 'anomaly-123' }] }); // create anomaly event
 
@@ -186,8 +186,8 @@ describe('AnomalyDetectionService', () => {
             first_event: new Date(Date.now() - 300000),
             last_event: new Date(),
             event_details: [{ action: 'login_failed' }]
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ rows: [{ id: 'existing-anomaly' }] }); // similar recent anomaly
 
       await (anomalyService as any).performAnomalyCheck();
@@ -216,7 +216,7 @@ describe('AnomalyDetectionService', () => {
 
         const result = (anomalyService as any).extractTriggerValue(row, testCase.aggregateType);
         expect(result).toBe(testCase.expected);
-      }
+
     });
 
     it('should evaluate thresholds correctly', async () => {
@@ -236,7 +236,7 @@ describe('AnomalyDetectionService', () => {
           testCase.operator
         );
         expect(result).toBe(testCase.expected);
-      }
+
     });
   });
 
@@ -376,7 +376,7 @@ describe('AnomalyDetectionService', () => {
           resolved_at: null,
           resolved_by: null,
           false_positive: false
-        }
+
       ];
 
       mockDb.query.mockResolvedValueOnce({ rows: mockAnomalies });
@@ -456,7 +456,7 @@ describe('AnomalyDetectionService', () => {
         affectedEntities: expect.objectContaining({
           ipAddress: '192.168.1.100',
           userId: 'user123'
-  }
+
       });
     });
 

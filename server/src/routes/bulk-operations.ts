@@ -37,7 +37,7 @@ const BulkOperationRequestSchema = z.object({
     priority: z.enum(['low', 'medium', 'high', 'critical']).default('medium'),
     category: z.string().min(1).max(100),
     tags: z.array(z.string()).optional()
-  }
+
 });
 
 const BulkOperationFilterSchema = z.object({
@@ -89,13 +89,13 @@ export async function bulkOperationsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof BulkOperationRequestSchema>
-  }>('/', {
+>('/', {
     preHandler: fastify.requirePermission([
       {
         resource: 'bulk_operations',
         action: 'create',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -105,7 +105,7 @@ export async function bulkOperationsRoutes(
       // Generate operation ID if not provided
       if (!requestData.id) {
         requestData.id = require('crypto').randomUUID();
-      }
+
 
       // Add requesting user to metadata
       requestData.metadata.requestedBy = user.id;
@@ -132,8 +132,7 @@ export async function bulkOperationsRoutes(
         data: result,
         message: 'Bulk operation submitted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error submitting bulk operation:', error);
       
       if (error instanceof z.ZodError) {
@@ -142,14 +141,14 @@ export async function bulkOperationsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to submit bulk operation',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -158,13 +157,13 @@ export async function bulkOperationsRoutes(
    */
   fastify.get<{
     Params: z.infer<typeof OperationIdSchema>
-  }>('/:operationId', {
+>('/:operationId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'bulk_operations',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -178,7 +177,7 @@ export async function bulkOperationsRoutes(
           success: false,
           error: 'Operation not found'
         });
-      }
+
 
       // Check if user can access this operation
       if (operation.metadata.requestedBy !== user.id && !user.roles?.includes('admin')) {
@@ -186,14 +185,13 @@ export async function bulkOperationsRoutes(
           success: false,
           error: 'Insufficient permissions to access this operation'
         });
-      }
+
 
       return reply.send({
         success: true,
         data: operation
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting bulk operation status:', error);
       
       if (error instanceof z.ZodError) {
@@ -202,14 +200,14 @@ export async function bulkOperationsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to get operation status',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -218,13 +216,13 @@ export async function bulkOperationsRoutes(
    */
   fastify.post<{
     Params: z.infer<typeof OperationIdSchema>
-  }>('/:operationId/cancel', {
+>('/:operationId/cancel', {
     preHandler: fastify.requirePermission([
       {
         resource: 'bulk_operations',
         action: 'cancel',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -237,8 +235,7 @@ export async function bulkOperationsRoutes(
         success: true,
         message: 'Bulk operation cancelled successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error cancelling bulk operation:', error);
       
       if (error instanceof z.ZodError) {
@@ -247,14 +244,14 @@ export async function bulkOperationsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to cancel operation',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -263,13 +260,13 @@ export async function bulkOperationsRoutes(
    */
   fastify.get<{
     Querystring: z.infer<typeof BulkOperationFilterSchema>
-  }>('/', {
+>('/', {
     preHandler: fastify.requirePermission([
       {
         resource: 'bulk_operations',
         action: 'list',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -279,7 +276,7 @@ export async function bulkOperationsRoutes(
       // Non-admin users can only see their own operations
       if (!user.roles?.includes('admin')) {
         filter.requestedBy = user.id;
-      }
+
 
       const result = await bulkOperationFramework.listOperations(filter);
 
@@ -291,10 +288,9 @@ export async function bulkOperationsRoutes(
           limit: filter.limit,
           offset: filter.offset,
           hasMore: filter.offset! + result.operations.length < result.totalCount
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error listing bulk operations:', error);
       
       if (error instanceof z.ZodError) {
@@ -303,14 +299,14 @@ export async function bulkOperationsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to list operations',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -323,7 +319,7 @@ export async function bulkOperationsRoutes(
         resource: 'bulk_operations',
         action: 'read_handlers',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -343,13 +339,13 @@ export async function bulkOperationsRoutes(
             supportsRollback: true,
             supportsBatchProcessing: true,
             supportsScheduling: true
-  }
+
           limits: {
             defaultBatchSize: 100,
             maxBatchSize: 1000,
             maxConcurrency: 10
-          }
-  }
+
+
         {
           resourceType: 'permissions',
           supportedOperations: ['grant', 'revoke', 'update', 'delete', 'export', 'import'],
@@ -358,13 +354,13 @@ export async function bulkOperationsRoutes(
             supportsRollback: true,
             supportsBatchProcessing: true,
             supportsScheduling: true
-  }
+
           limits: {
             defaultBatchSize: 200,
             maxBatchSize: 1000,
             maxConcurrency: 5
-          }
-  }
+
+
         {
           resourceType: 'roles',
           supportedOperations: [
@@ -376,13 +372,13 @@ export async function bulkOperationsRoutes(
             supportsRollback: true,
             supportsBatchProcessing: true,
             supportsScheduling: true
-  }
+
           limits: {
             defaultBatchSize: 50,
             maxBatchSize: 500,
             maxConcurrency: 3
-          }
-        }
+
+
       ];
 
       return reply.send({
@@ -391,10 +387,9 @@ export async function bulkOperationsRoutes(
         metadata: {
           totalHandlers: handlers.length,
           generatedAt: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting bulk operation handlers:', error);
       
       return reply.code(500).send({
@@ -402,7 +397,7 @@ export async function bulkOperationsRoutes(
         error: 'Failed to get handlers',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -411,13 +406,13 @@ export async function bulkOperationsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof TemplateRequestSchema>
-  }>('/templates', {
+>('/templates', {
     preHandler: fastify.requirePermission([
       {
         resource: 'bulk_operations',
         action: 'create_template',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -438,8 +433,7 @@ export async function bulkOperationsRoutes(
         data: template,
         message: 'Bulk operation template created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating bulk operation template:', error);
       
       if (error instanceof z.ZodError) {
@@ -448,14 +442,14 @@ export async function bulkOperationsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to create template',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -469,14 +463,14 @@ export async function bulkOperationsRoutes(
       visibility?: string;
       limit?: number;
       offset?: number;
-    }
-  }>('/templates', {
+
+>('/templates', {
     preHandler: fastify.requirePermission([
       {
         resource: 'bulk_operations',
         action: 'read_templates',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -501,7 +495,7 @@ export async function bulkOperationsRoutes(
           lastUsedAt: new Date(),
           defaultParameters: {},
           defaultOptions: { batchSize: 50, continueOnError: true }
-  }
+
         {
           id: 'template-2',
           name: 'Suspend Users',
@@ -513,7 +507,7 @@ export async function bulkOperationsRoutes(
           lastUsedAt: new Date(),
           defaultParameters: { lockDuration: 24, lockReason: 'Policy violation' },
           defaultOptions: { batchSize: 25, continueOnError: false, validateBefore: true }
-        }
+
       ];
 
       const limit = Math.min(query.limit || 50, 200);
@@ -527,10 +521,9 @@ export async function bulkOperationsRoutes(
           limit,
           offset,
           hasMore: offset + limit < templates.length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error listing bulk operation templates:', error);
       
       return reply.code(500).send({
@@ -538,7 +531,7 @@ export async function bulkOperationsRoutes(
         error: 'Failed to list templates',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -547,13 +540,13 @@ export async function bulkOperationsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof UseTemplateSchema>
-  }>('/templates/use', {
+>('/templates/use', {
     preHandler: fastify.requirePermission([
       {
         resource: 'bulk_operations',
         action: 'use_template',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -570,12 +563,12 @@ export async function bulkOperationsRoutes(
           // Template defaults merged with overrides
           ...{}, // template.defaultParameters
           ...useTemplateData.parameterOverrides
-  }
+
         options: {
           // Template defaults merged with overrides
           ...{ batchSize: 50, continueOnError: true }, // template.defaultOptions
           ...useTemplateData.optionOverrides
-        } as BulkOperationOptions,
+ as BulkOperationOptions,
         metadata: {
           requestedBy: user.id,
           reason: useTemplateData.reason,
@@ -583,7 +576,7 @@ export async function bulkOperationsRoutes(
           category: 'user_management', // This would come from the template
           tags: ['template_based'],
           templateId: useTemplateData.templateId
-        }
+
       };
 
       const context = {
@@ -602,8 +595,7 @@ export async function bulkOperationsRoutes(
         data: result,
         message: 'Bulk operation created from template successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error using bulk operation template:', error);
       
       if (error instanceof z.ZodError) {
@@ -612,14 +604,14 @@ export async function bulkOperationsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to use template',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -632,7 +624,7 @@ export async function bulkOperationsRoutes(
         resource: 'bulk_operations',
         action: 'read_stats',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -644,29 +636,29 @@ export async function bulkOperationsRoutes(
           completedOperations: 1195,
           failedOperations: 47,
           cancelledOperations: 3
-  }
+
         byResourceType: {
           users: 856,
           permissions: 245,
           roles: 147
-  }
+
         byStatus: {
           pending: 1,
           running: 2,
           completed: 1195,
           failed: 47,
           cancelled: 3
-  }
+
         performance: {
           averageExecutionTime: 45.2, // seconds
           averageItemsPerSecond: 12.8,
           successRate: 95.7 // percentage
-  }
+
         recent: {
           last24Hours: 23,
           lastWeek: 156,
           lastMonth: 542
-  }
+
         popularOperations: [
           { operation: 'activate', count: 324 },
           { operation: 'grant_role', count: 289 },
@@ -681,10 +673,9 @@ export async function bulkOperationsRoutes(
         metadata: {
           generatedAt: new Date().toISOString(),
           dataAccuracy: 99.2
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting bulk operation statistics:', error);
       
       return reply.code(500).send({
@@ -692,7 +683,7 @@ export async function bulkOperationsRoutes(
         error: 'Failed to get statistics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -712,18 +703,18 @@ export async function bulkOperationsRoutes(
           auditLogging: 'operational',
           rollbackSupport: 'operational',
           schedulingSupport: 'operational'
-  }
+
         handlers: {
           users: 'registered',
           permissions: 'registered',
           roles: 'registered'
-  }
+
         metrics: {
           activeOperations: 3,
           totalHandlers: 3,
           averageResponseTime: 125.5,
           uptime: process.uptime()
-  }
+
         environment: process.env.NODE_ENV || 'development'
       };
 
@@ -731,13 +722,11 @@ export async function bulkOperationsRoutes(
         success: true,
         data: healthStatus
       });
-
-    } catch (error) {
+ catch (error) {
       return reply.code(503).send({
         success: false,
         error: 'Bulk operations framework unhealthy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}

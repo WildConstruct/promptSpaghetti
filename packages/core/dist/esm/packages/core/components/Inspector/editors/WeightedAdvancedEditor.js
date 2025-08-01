@@ -48,24 +48,12 @@ const handleGaussianMeanChange = (value) => {
 const handleGaussianStdChange = (value) => {
     onChange({ gaussianStd: Math.max(0.01, Number(value) || 0.2) });
 };
-const distributionOptions = [];
-{
-    value: 'linear', label;
-    'Linear - Use original weights';
-}
-{
-    value: 'exponential', label;
-    'Exponential - Apply power transformation';
-}
-{
-    value: 'gaussian', label;
-    'Gaussian - Apply normal distribution curve';
-}
-{
-    value: 'custom', label;
-    'Custom - User-defined transformation';
-}
-;
+const distributionOptions = [
+    { value: 'linear', label: 'Linear - Use original weights' },
+    { value: 'exponential', label: 'Exponential - Apply power transformation' },
+    { value: 'gaussian', label: 'Gaussian - Apply normal distribution curve' },
+    { value: 'custom', label: 'Custom - User-defined transformation' }
+];
 const equalizeWeights = () => {
     const newChoices = choices.map(choice => ({ ...choice, weight: 1 }));
     handleChoicesChange(newChoices);

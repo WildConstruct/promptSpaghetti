@@ -1,5 +1,10 @@
 // Shared types and engine placeholder
-// Export new components and types
+position: {
+    x: number;
+    y: number;
+}
+;
+;
 export * from './components/Inspector';
 export * from './types/NodeTypes';
 export * from './utils/nodeDataUtils';

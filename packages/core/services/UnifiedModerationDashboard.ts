@@ -12,120 +12,117 @@ import { ModerationStatesService } from './ModerationStatesService';
 import { RBACService } from './RBACService';
 import { CommentAnalyticsService } from './CommentAnalyticsService';
 
-}
-export interface UnifiedDashboardConfig {
-  enableRealTimeUpdates: boolean;
-  autoRefreshInterval: number; // milliseconds,
+
+export interface UnifiedDashboardConfig { enableRealTimeUpdates: boolean;
+  autoRefreshInterval: number; // milliseconds;
   maxQueueItems: number;
   enableAdvancedFiltering: boolean;
   enablePerformanceTracking: boolean;
   enableMobileModerator: boolean;
   defaultModerationMode: 'manual' | 'assisted' | 'automated';
   escalationThreshold: number;
-  workloadDistributionMode: 'round_robin' | 'expertise_based' | 'workload_balanced'
-}
-  }
-}
-export interface DashboardOverview {
-  timestamp: Date;
-  summary: {
+  workloadDistributionMode: 'round_robin' | 'expertise_based' | 'workload_balanced' }
+
+
+
+
+export interface DashboardOverview { timestamp: Date;
+  summary: { }
   totalItems: number;
   pendingReview: number;
   autoApproved: number;
   autoRejected: number;
   escalated: number;
   appealed: number;
-}
+
+
 };
-  queues: {
+  queues: { ,
   highPriority: number;
   mediumPriority: number;
   lowPriority: number;
-  automated: number;
-};
-  performance: {
+  automated: number };
+  performance: { ,
   avgProcessingTime: number; // minutes,
   throughputLast24h: number;
   moderatorEfficiency: number; // percentage,
-  slaCompliance: number; // percentage,
+  slaCompliance: number; // percentage }
 };
   alerts: ModerationAlert;
-  trends: {;
-  volumeTrend: 'increasing' | 'decreasing' | 'stable';
+  trends: { ;
+  volumeTrend: 'increasing' | 'decreasing' | 'stable' }
   violationTrend: 'increasing' | 'decreasing' | 'stable';
-  performanceTrend: 'improving' | 'declining' | 'stable'
+  performanceTrend: 'improving' | 'declining' | 'stable';
   };
-}
-}
-export interface ModerationAlert {
-  id: string;
+
+
+export interface ModerationAlert { id: string;
   type: 'queue_backlog' | 'sla_breach' | 'policy_violation' | 'system_error' | 'performance_issue';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical' }
   message: string;
   timestamp: Date;
   data?: Record<string, unknown>;
   acknowledged: boolean;
   assignedTo?: string;
-}
-}
-}
-export interface ModerationWorkload {
-  moderatorId: string;
+
+
+
+
+export interface ModerationWorkload { moderatorId: string;
   currentLoad: number;
   capacity: number;
-  utilization: number; // percentage,
-  averageResolutionTime: number; // minutes,
-  accuracy: number; // percentage,
+  utilization: number; // percentage;
+  averageResolutionTime: number; // minutes;
+  accuracy: number; // percentage;
   specializations: string;
-  performanceRating: number; // 1-5 scale,
-  availabilityWindow: {
-  start: string; // HH:MM,
-  end: string; // HH:MM,
+  performanceRating: number; // 1-5 scale;
+  availabilityWindow: {;
+  start: string; // HH:MM;
+  end: string; // HH:MM }
   timezone: string;
-}
+
+
 };
-}
-}
-export interface AdvancedSearchQuery {
-  contentTypes?: string;
+
+
+export interface AdvancedSearchQuery { contentTypes?: string;
   statuses?: string;
   priorities?: string;
-  dateRange?: {
+  dateRange?: { }
   start: Date;
   end: Date;
-}
+
+
 };
   moderators?: string;
   policies?: string;
-  confidence?: {
-  min: number;
-  max: number;
-};
+  confidence?: { min: number;
+  max: number };
   keywords?: string;
   riskLevel?: string;
   sortBy?: 'date' | 'priority' | 'confidence' | 'risk';
   sortOrder?: 'asc' | 'desc';
   limit?: number;
   offset?: number;
-}
-}
-export interface BulkModerationAction {
-  actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize';
+
+
+export interface BulkModerationAction { actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize' }
   itemIds: string;
   reason?: string;
   assignTo?: string;
   metadata?: Record<string, unknown>;
   scheduledFor?: Date;
-}
-}
-}
-export interface DashboardMetrics {
-  realTime: {
+
+
+
+
+export interface DashboardMetrics { realTime: { }
   activeModerators: number;
   itemsBeingReviewed: number;
   averageWaitTime: number;
   systemLoad: number;
-}
+
+
 };
   historical: {
   dailyVolume: Array<{ date: string; volume: number }>;
@@ -133,10 +130,10 @@ export interface DashboardMetrics {
     accuracyTrends: Array<{ date: string; accuracy: number }>;
     violationTypes: Record<string, number>;
   };
-  predictions: {
+  predictions: { 
   expectedVolume24h: number;
   estimatedBacklog: number;
-  resourceNeeds: {
+  resourceNeeds: { }
   additionalModerators: number;
   peakHours: string;
 };
@@ -147,9 +144,8 @@ export interface DashboardMetrics {
  * Central orchestrator that brings together all moderation services
  * into a single, comprehensive management interface.
  */
-}
-export class UnifiedModerationDashboard {
-  private config: UnifiedDashboardConfig;
+
+export class UnifiedModerationDashboard { private config: UnifiedDashboardConfig;
   private workflowService: ModerationWorkflowService;
   private automatedService: AutomatedModerationService;
   private statesService: ModerationStatesService;
@@ -158,17 +154,17 @@ export class UnifiedModerationDashboard {
   private realTimeSubscriptions: Map<string, any> = new Map();
   private performanceMetrics: Map<string, any> = new Map();
   private alertQueue: ModerationAlert = [];
-  constructor(config?: Partial<UnifiedDashboardConfig>) {,
+  constructor(config?: Partial<UnifiedDashboardConfig>) {
   this.config = {
-  enableRealTimeUpdates: true,
-  autoRefreshInterval: 30000, // 30 seconds,
-  maxQueueItems: 1000,
-  enableAdvancedFiltering: true,
-  enablePerformanceTracking: true,
-  enableMobileModerator: true,
-  defaultModerationMode: 'assisted',
-  escalationThreshold: 0.7, // 70% confidence threshold,
-  workloadDistributionMode: 'workload_balanced',
+  enableRealTimeUpdates: true
+  autoRefreshInterval: 30000, // 30 seconds
+  maxQueueItems: 1000
+  enableAdvancedFiltering: true
+  enablePerformanceTracking: true
+  enableMobileModerator: true
+  defaultModerationMode: 'assisted'
+  escalationThreshold: 0.7, // 70% confidence threshold
+  workloadDistributionMode: 'workload_balanced' }
   ...config
 };
     this.initializeServices();
@@ -188,41 +184,39 @@ export class UnifiedModerationDashboard {
   /**
    * Get comprehensive dashboard overview
    */
-  async getDashboardOverview(moderatorId?: string): Promise<DashboardOverview> {
-
-  const startTime = Date.now();
+  async getDashboardOverview(moderatorId?: string): Promise<DashboardOverview> { const startTime = Date.now();
   try {
   // Fetch data from all integrated services
   const [workflowStats, automatedStats, queueStatus, performanceData] = await Promise.all([)
-  this.workflowService.getWorkflowAnalytics(),
-  this.automatedService.getModerationStatistics(),
-  this.statesService.getQueueStatus(),
+  this.workflowService.getWorkflowAnalytics()
+  this.automatedService.getModerationStatistics()
+  this.statesService.getQueueStatus()
   this.getPerformanceMetrics()
   ]);
   // Compile comprehensive overview
-  const overview: DashboardOverview = {,
-  timestamp: new Date(),
+  const overview: DashboardOverview = {
+  timestamp: new Date()
   summary: {
-  totalItems: automatedStats.totalProcessed || 0,
-  pendingReview: queueStatus.pendingCount || 0,
-  autoApproved: automatedStats.autoApproved || 0,
-  autoRejected: automatedStats.autoRejected || 0,
-  escalated: automatedStats.escalated || 0,
-  appealed: automatedStats.appealed || 0,
-},
-  queues: {
-  highPriority: queueStatus.highPriority || 0,
-  mediumPriority: queueStatus.mediumPriority || 0,
-  lowPriority: queueStatus.lowPriority || 0,
-  automated: queueStatus.automated || 0,
-},
-  performance: {
-  avgProcessingTime: performanceData.avgProcessingTime || 0,
-  throughputLast24h: performanceData.throughput24h || 0,
-  moderatorEfficiency: performanceData.efficiency || 0,
-  slaCompliance: performanceData.slaCompliance || 0,
-},
-  alerts: this.getActiveAlerts(),
+  totalItems: automatedStats.totalProcessed || 0
+  pendingReview: queueStatus.pendingCount || 0
+  autoApproved: automatedStats.autoApproved || 0
+  autoRejected: automatedStats.autoRejected || 0
+  escalated: automatedStats.escalated || 0
+  appealed: automatedStats.appealed || 0 }
+
+  queues: { 
+  highPriority: queueStatus.highPriority || 0
+  mediumPriority: queueStatus.mediumPriority || 0
+  lowPriority: queueStatus.lowPriority || 0
+  automated: queueStatus.automated || 0 }
+
+  performance: { 
+  avgProcessingTime: performanceData.avgProcessingTime || 0
+  throughputLast24h: performanceData.throughput24h || 0
+  moderatorEfficiency: performanceData.efficiency || 0
+  slaCompliance: performanceData.slaCompliance || 0 }
+
+  alerts: this.getActiveAlerts()
         trends: this.calculateTrends(automatedStats, performanceData)
       };
       // Track performance
@@ -230,27 +224,25 @@ export class UnifiedModerationDashboard {
       // Check for alerts
       await this.checkAndGenerateAlerts(overview);
       return overview;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get dashboard overview:', error);
       throw new Error(`Dashboard overview failed: ${error.message}`);}
   /**
    * Advanced search across all moderation systems
    */
-  async advancedSearch(query: AdvancedSearchQuery, moderatorId: string): Promise<{,
+  async advancedSearch(query: AdvancedSearchQuery, moderatorId: string): Promise<{ ,
   items: any;
   totalCount: number;
   aggregations: Record<string, any>;
-  suggestions: string;
-}> {
-  // Verify moderator permissions
+  suggestions: string }> { // Verify moderator permissions
   const hasPermission = await this.rbacService.hasPermission(moderatorId, 'moderation:search');
   if (!hasPermission) {
   throw new Error('Insufficient permissions for advanced search');
   try {
   // Search across multiple systems
   const [workflowResults, stateResults, analyticsResults] = await Promise.all([)
-  this.workflowService.searchWorkflowItems(query),
-  this.statesService.searchModerationItems(query),
+  this.workflowService.searchWorkflowItems(query)
+  this.statesService.searchModerationItems(query)
   this.searchAnalyticsData(query)
   ]);
   // Merge and deduplicate results
@@ -263,44 +255,41 @@ export class UnifiedModerationDashboard {
   // Generate search suggestions
   const suggestions = this.generateSearchSuggestions(query, allItems);
   return {
-  items: paginatedItems,
-  totalCount: allItems.length,
-  aggregations,
+  items: paginatedItems
+  totalCount: allItems.length
+  aggregations }
   suggestions
 };
-    } catch (error) {
+ catch (error) {
       console.error('Advanced search failed:', error);
       throw new Error(`Search failed: ${error.message}`);}
   /**
    * Execute bulk moderation actions
    */
   async executeBulkActions(((
-    actions: BulkModerationAction,
+    actions: BulkModerationAction
     moderatorId: string
   ): Promise<{
     successful: number;
   failed: number;
     errors: Array<{ itemId: string; error: string }>;
     summary: Record<string, number>;
-  }> {
-    // Verify permissions for bulk actions
+> { // Verify permissions for bulk actions
     const hasPermission = await this.rbacService.hasPermission(moderatorId, 'moderation:bulk_action');
     if (!hasPermission) {
       throw new Error('Insufficient permissions for bulk actions');
     const results = {
-      successful: 0,
-      failed: 0,
+      successful: 0
+      failed: 0 }
       errors: [] as Array<{ itemId: string; error: string }>,
       summary: {} as Record<string, number>
     };
-    for (const action of actions) {
-      try {
+    for (const action of actions) { try {
         await this.executeSingleBulkAction(action, moderatorId);
         results.successful += action.itemIds.length;
         // Update summary
         const actionKey = action.actionType;
-        results.summary[actionKey] = (results.summary[actionKey] || 0) + action.itemIds.length;
-      } catch (error) {
+        results.summary[actionKey] = (results.summary[actionKey] || 0) + action.itemIds.length } catch (error) {
         console.error(`Bulk action failed for ${action.actionType}:`, error);}
         action.itemIds.forEach(itemId => {)
   results.errors.push({ itemId, error: error.message });
@@ -312,33 +301,30 @@ export class UnifiedModerationDashboard {
   /**
    * Get moderator workload and performance analytics
    */
-  async getModeratorWorkloads(): Promise<ModerationWorkload> {
-
-    try {
+  async getModeratorWorkloads(): Promise<ModerationWorkload> { try {
       // Get active moderators from RBAC
       const moderators = await this.rbacService.getUsersByRole('moderator');
       const workloads = await Promise.all(;);
         moderators.map(async (moderator) => {
           const workload = await this.calculateModeratorWorkload(moderator.id);
-          return workload;
-  }
+          return workload }
       );
       // Sort by utilization (highest first)
       return workloads.sort((a, b) => b.utilization - a.utilization);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get moderator workloads:', error);
       throw new Error(`Workload calculation failed: ${error.message}`);}
   /**
    * Intelligent workload distribution
    */
   async distributeWorkload(((
-    items: string,
+    items: string
     distribution: 'urgent' | 'balanced' | 'expertise'
   ): Promise<{
     assignments: Array<{ moderatorId: string; itemIds: string }>;
     unassigned: string;
   reasoning: string;
-  }> {
+> {
     const workloads = await this.getModeratorWorkloads();
     const availableModerators = workloads.filter(w => w.utilization < 90); // Under 90% capacity;
     const assignments: Array<{ moderatorId: string; itemIds: string }> = [];
@@ -363,84 +349,70 @@ export class UnifiedModerationDashboard {
   /**
    * Get comprehensive dashboard metrics
    */
-  async getDashboardMetrics(timeRange?: { start: Date; end: Date }): Promise<DashboardMetrics> {
-
-  const range = timeRange || {
-  start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago,
-  end: new Date(),
+  async getDashboardMetrics(timeRange?: { start: Date; end: Date }): Promise<DashboardMetrics> { const range = timeRange || {
+  start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+  end: new Date() }
 };
-    try {
-  const [realTimeData, historicalData, predictions] = await Promise.all([)
-  this.getRealTimeMetrics(),
-  this.getHistoricalMetrics(range),
+    try { const [realTimeData, historicalData, predictions] = await Promise.all([)
+  this.getRealTimeMetrics()
+  this.getHistoricalMetrics(range)
   this.generatePredictions()
   ]);
   return {
-  realTime: realTimeData,
-  historical: historicalData,
-  predictions: predictions,
+  realTime: realTimeData
+  historical: historicalData
+  predictions: predictions }
 };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get dashboard metrics:', error);
       throw new Error(`Metrics collection failed: ${error.message}`);}
   /**
    * Setup real-time updates
    */
-  private setupRealTimeUpdates(): void {
-    if (!this.config.enableRealTimeUpdates) return;
+  private setupRealTimeUpdates(): void { if (!this.config.enableRealTimeUpdates) return;
     // Setup auto-refresh interval
     setInterval(async () => {
       try {
-        await this.refreshRealTimeData();
-      } catch (error) {
-  console.error('Real-time update failed:', error);
-}, this.config.autoRefreshInterval);
+        await this.refreshRealTimeData() } catch (error) { console.error('Real-time update failed:', error) }, this.config.autoRefreshInterval);
     console.log(`🔄 Real-time updates enabled (${this.config.autoRefreshInterval}ms interval)`);}
   // Private helper methods
-  private async getPerformanceMetrics(): Promise<any> {
-
-  // Aggregate performance data from all services
+  private async getPerformanceMetrics(): Promise<any> { // Aggregate performance data from all services
   return {
-  avgProcessingTime: 15.5, // minutes,
-  throughput24h: 1250,
-  efficiency: 94.2, // percentage,
-  slaCompliance: 98.7 // percentage,
+  avgProcessingTime: 15.5, // minutes
+  throughput24h: 1250
+  efficiency: 94.2, // percentage
+  slaCompliance: 98.7 // percentage }
 };
-  private getActiveAlerts(): ModerationAlert {
-  return this.alertQueue.filter(alert => !alert.acknowledged);
-  private calculateTrends(automatedStats: any, performanceData: any): any {,
+  private getActiveAlerts(): ModerationAlert { return this.alertQueue.filter(alert => !alert.acknowledged);
+  private calculateTrends(automatedStats: any, performanceData: any): any {
   // Calculate trends based on historical data
   return {
-  volumeTrend: 'increasing' as const,
-  violationTrend: 'stable' as const,
-  performanceTrend: 'improving' as const,
+  volumeTrend: 'increasing' as const
+  violationTrend: 'stable' as const
+  performanceTrend: 'improving' as const }
 };
-  private async checkAndGenerateAlerts(overview: DashboardOverview): Promise<void> {
-
-    // Check for queue backlog
+  private async checkAndGenerateAlerts(overview: DashboardOverview): Promise<void> { // Check for queue backlog
     if (overview.queues.highPriority > 100) {
       this.addAlert({)
-  type: 'queue_backlog',
-        severity: 'high',
+  type: 'queue_backlog'
+        severity: 'high' }
         message: `High priority queue has ${overview.queues.highPriority} items`}
-},
+
   data: { queueSize: overview.queues.highPriority }
       });
     // Check SLA compliance
-    if (overview.performance.slaCompliance < 95) {
-      this.addAlert({)
+    if (overview.performance.slaCompliance < 95) { this.addAlert({)
   type: 'sla_breach',
-        severity: 'medium',
+        severity: 'medium' }
         message: `SLA compliance at ${overview.performance.slaCompliance}%`}
 },
   data: { compliance: overview.performance.slaCompliance }
       });
-  private addAlert(alertData: Omit<ModerationAlert, 'id' | 'timestamp' | 'acknowledged'>): void {
-    const alert: ModerationAlert = {,
+  private addAlert(alertData: Omit<ModerationAlert, 'id' | 'timestamp' | 'acknowledged'>): void { const alert: ModerationAlert = { }
   id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
-},
-  timestamp: new Date(),
-      acknowledged: false,
+
+  timestamp: new Date()
+      acknowledged: false
       ...alertData
     };
     this.alertQueue.push(alert);
@@ -448,25 +420,21 @@ export class UnifiedModerationDashboard {
   private trackMetric(name: string, value: number): void {
     if (!this.config.enablePerformanceTracking) return;
     this.performanceMetrics.set(`${name}_${Date.now()}`, value);}
-  private async searchAnalyticsData(query: AdvancedSearchQuery): Promise<any> {
-
-  // Search analytics data based on query
+  private async searchAnalyticsData(query: AdvancedSearchQuery): Promise<any> { // Search analytics data based on query
   return [];
-  private mergeSearchResults(resultSets: any[]): any {,
+  private mergeSearchResults(resultSets: any): any {
   // Merge and deduplicate search results from multiple sources
   const merged = resultSets.flat();
   const unique = merged.filter((item, index, array) => ;
   array.findIndex(i => i.id === item.id) === index
   );
   return unique;
-  private applySorting(items: any, sortBy?: string, sortOrder?: string): any {,
+  private applySorting(items: any, sortBy?: string, sortOrder?: string): any { }
   if (!sortBy) return items;
-  return items.sort((a, b) => {
-  const aVal = a[sortBy];
+  return items.sort((a, b) => { const aVal = a[sortBy];
   const bVal = b[sortBy];
   const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-  return sortOrder === 'desc' ? -comparison : comparison;
-});
+  return sortOrder === 'desc' ? -comparison : comparison });
   private applyPagination(items: any, limit?: number, offset?: number): any {
     if (!limit) return items;
     const start = offset || 0;
@@ -474,8 +442,8 @@ export class UnifiedModerationDashboard {
   private generateSearchAggregations(items: any): Record<string, any> {
     // Generate search result aggregations
     return {
-      statusCounts: {},
-      typeCounts: {},
+      statusCounts: {}
+      typeCounts: {}
       priorityCounts: {}
     };
   private generateSearchSuggestions(query: AdvancedSearchQuery, items: any): string {
@@ -495,28 +463,26 @@ export class UnifiedModerationDashboard {
       break;
     default:
       throw new Error(`Unknown bulk action type: ${action.actionType}`);}
-  private async calculateModeratorWorkload(moderatorId: string): Promise<ModerationWorkload> {
-
-  // Calculate individual moderator workload metrics
+  private async calculateModeratorWorkload(moderatorId: string): Promise<ModerationWorkload> { // Calculate individual moderator workload metrics
   return {
-  moderatorId,
-  currentLoad: 45,
-  capacity: 50,
-  utilization: 90,
-  averageResolutionTime: 12.5,
-  accuracy: 96.8,
-  specializations: ['content_moderation', 'spam_detection'],
-  performanceRating: 4.2,
+  moderatorId
+  currentLoad: 45
+  capacity: 50
+  utilization: 90
+  averageResolutionTime: 12.5
+  accuracy: 96.8
+  specializations: ['content_moderation', 'spam_detection']
+  performanceRating: 4.2
   availabilityWindow: {
-  start: '09:00',
-  end: '17:00',
-  timezone: 'UTC',
+  start: '09:00'
+  end: '17:00'
+  timezone: 'UTC' }
 };
-  private distributeUrgent(items: string, )
-    moderators: ModerationWorkload, 
-    assignments: any, 
-    unassigned: string, 
-    reasoning: string): void {,
+  private distributeUrgent(items: string);
+  moderators: ModerationWorkload
+    assignments: any
+    unassigned: string
+    reasoning: string): void { 
     // Distribute items urgently to most available moderators
     const sorted = moderators.sort((a, b) => a.utilization - b.utilization);
     let modIndex = 0;
@@ -524,18 +490,17 @@ export class UnifiedModerationDashboard {
       if (modIndex < sorted.length && sorted[modIndex].utilization < 95) {
         const existing = assignments.find(a => a.moderatorId === sorted[modIndex].moderatorId);
         if (existing) {
-          existing.itemIds.push(item);
-        } else {
+          existing.itemIds.push(item) } else {
           assignments.push({ moderatorId: sorted[modIndex].moderatorId, itemIds: [item] });
         modIndex = (modIndex + 1) % sorted.length;
-      } else {
+ else {
         unassigned.push(item);
     reasoning.push(`Urgent distribution: assigned ${items.length - unassigned.length} items to ${assignments.length} moderators`);}
-  private distributeBalanced(items: string, )
-    moderators: ModerationWorkload, 
+  private distributeBalanced(items: string);
+  moderators: ModerationWorkload, 
     assignments: any, 
     unassigned: string, 
-    reasoning: string): void {,
+    reasoning: string): void { ,
     // Distribute items evenly based on workload
     const sorted = moderators.sort((a, b) => a.utilization - b.utilization);
     items.forEach((item, index) => {
@@ -543,18 +508,15 @@ export class UnifiedModerationDashboard {
       if (moderator.utilization < 90) {
         const existing = assignments.find(a => a.moderatorId === moderator.moderatorId);
         if (existing) {
-          existing.itemIds.push(item);
-        } else {
+          existing.itemIds.push(item) } else {
           assignments.push({ moderatorId: moderator.moderatorId, itemIds: [item] });
-      } else {
-        unassigned.push(item);
-    });
+ else { unassigned.push(item) });
     reasoning.push(`Balanced distribution: ${assignments.length} moderators assigned work`);}
-  private async distributeByExpertise(items: string, )
-    moderators: ModerationWorkload, 
+  private async distributeByExpertise(items: string);
+  moderators: ModerationWorkload, 
     assignments: any, 
     unassigned: string, 
-    reasoning: string): Promise<void> {,
+    reasoning: string): Promise<void> { 
     // Match items to moderators with relevant expertise
     for (const item of items) {
       const itemType = await this.getItemType(item);
@@ -565,47 +527,36 @@ export class UnifiedModerationDashboard {
         const bestMatch = expertModerators.sort((a, b) => a.utilization - b.utilization)[0];
         const existing = assignments.find(a => a.moderatorId === bestMatch.moderatorId);
         if (existing) {
-          existing.itemIds.push(item);
-        } else {
+          existing.itemIds.push(item) } else {
           assignments.push({ moderatorId: bestMatch.moderatorId, itemIds: [item] });
-      } else {
+ else {
         unassigned.push(item);
     reasoning.push(`Expertise-based distribution: matched ${items.length - unassigned.length} items to specialized moderators`);}
-  private async getItemType(itemId: string): Promise<string> {
-
-  // Determine item type for expertise matching
+  private async getItemType(itemId: string): Promise<string> { // Determine item type for expertise matching
   return 'content_moderation'; // Default type
-  private async refreshRealTimeData(): Promise<void> {,
+  private async refreshRealTimeData(): Promise<void> { }
   // Refresh real-time dashboard data
   const overview = await this.getDashboardOverview();
   // Emit to subscribed clients
-  this.realTimeSubscriptions.forEach((subscription, clientId) => {
-  subscription.emit('dashboard_update', overview);
-});
-  private async getRealTimeMetrics(): Promise<any> {
-
-  return {
-  activeModerators: 12,
-  itemsBeingReviewed: 45,
-  averageWaitTime: 8.5, // minutes,
-  systemLoad: 67 // percentage,
+  this.realTimeSubscriptions.forEach((subscription, clientId) => { subscription.emit('dashboard_update', overview) });
+  private async getRealTimeMetrics(): Promise<any> { return {
+  activeModerators: 12
+  itemsBeingReviewed: 45
+  averageWaitTime: 8.5, // minutes
+  systemLoad: 67 // percentage }
 };
-  private async getHistoricalMetrics(range: { start: Date; end: Date }): Promise<any> {
-
-    return {
-      dailyVolume: [],
-      resolutionTimes: [],
-      accuracyTrends: [],
+  private async getHistoricalMetrics(range: { start: Date; end: Date }): Promise<any> { return {
+      dailyVolume: []
+      resolutionTimes: []
+      accuracyTrends: [] }
       violationTypes: {}
     };
-  private async generatePredictions(): Promise<any> {
-
-  return {
-  expectedVolume24h: 1400,
-  estimatedBacklog: 45,
+  private async generatePredictions(): Promise<any> { return {
+  expectedVolume24h: 1400
+  estimatedBacklog: 45
   resourceNeeds: {
-  additionalModerators: 2,
-  peakHours: ['14:00', '15:00', '16:00'],
+  additionalModerators: 2
+  peakHours: ['14:00', '15:00', '16:00'] }
 };
 
 export default UnifiedModerationDashboard;

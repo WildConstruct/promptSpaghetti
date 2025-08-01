@@ -96,8 +96,8 @@ type ModelMetadata = z.infer<typeof ModelMetadataSchema>;
 type ModelVersion = z.infer<typeof ModelVersionSchema>;
 type ModelLineage = z.infer<typeof ModelLineageSchema>;
 
-}
-}
+
+
 interface ModelRegistrationRequest {
   name: string;
   description?: string;
@@ -110,12 +110,13 @@ interface ModelRegistrationRequest {
   artifactPath?: string;
   configPath?: string;
   metadata?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ModelUpdateRequest {
   name?: string;
   description?: string;
@@ -123,12 +124,13 @@ interface ModelUpdateRequest {
   tags?: string[];
   performanceMetrics?: ModelMetadata['performanceMetrics'];
   metadata?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ModelSearchOptions {
   query?: string;
   modelType?: string;
@@ -142,37 +144,40 @@ interface ModelSearchOptions {
   sortOrder?: 'asc' | 'desc';
   page: number;
   limit: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ModelComparisonRequest {
   modelIds: string[];
   metrics: string[];
   includeLineage?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ModelComparisonResult {
   models: Array<{
     id: string;
     name: string;
     version: string;
     metrics: Record<string, number | undefined>;
-}
-}
-  }>;
+
+
+
+>;
   bestPerforming: Record<string, string>; // metric -> modelId
   recommendations: string[];
-}
 
-}
-}
+
+
+
 interface ModelStatistics {
   totalModels: number;
   modelsByType: Record<string, number>;
@@ -180,74 +185,19 @@ interface ModelStatistics {
   modelsByStatus: Record<string, number>;
   averageAccuracy: number;
   averageInferenceTime: number;
-}
-}
+
+
+
   popularTags: Array<{ tag: string; count: number }>;
   recentActivity: Array<{
     type: 'registration' | 'version_update' | 'status_change';
     modelId: string;
     modelName: string;
     timestamp: string;
-  }>;
-}
+>;
 
-export class ModelRegistryService {
-  private models: Map<string, ModelMetadata>;
-  private versions: Map<string, ModelVersion[]>;
-  private lineages: Map<string, ModelLineage>;
-  private searchIndex: Map<string, Set<string>>; // term -> Set of model IDs
-  private evaluationTriggerService?: ModelEvaluationTriggerService;
 
-  constructor(
-    initializeSampleData: boolean = true,
-    evaluationTriggerService?: ModelEvaluationTriggerService
-  ) {
-    this.models = new Map();
-    this.versions = new Map();
-    this.lineages = new Map();
-    this.searchIndex = new Map();
-    this.evaluationTriggerService = evaluationTriggerService;
-    if (initializeSampleData) {
-      this.initializeSampleData();
-    }
-  }
-
-  /**
-   * Clear all data - useful for testing
-   */
-  clearAllData(): void {
-    this.models.clear();
-    this.versions.clear();
-    this.lineages.clear();
-    this.searchIndex.clear();
-  }
-
-  /**
-   * Register a new model in the registry
-   */
-  async registerModel(request: ModelRegistrationRequest): Promise<ModelMetadata> {
-
-    try {
-      const modelId = this.generateUUID();
-      const now = new Date().toISOString();
-
-      const model: ModelMetadata = {
-        id: modelId,
-        name: request.name,
-        description: request.description,
-        modelType: request.modelType,
-        framework: request.framework,
-        version: request.version,
-        status: 'training',
-        tags: request.tags || [],
-        owner: request.owner,
-        createdAt: now,
-        updatedAt: now,
-        performanceMetrics: request.performanceMetrics,
-        artifactPath: request.artifactPath,
-        configPath: request.configPath,
-        metadata: request.metadata || {}
-      };
+export class ModelRegistryService {};
 
       // Validate the model data
       const validatedModel = ModelMetadataSchema.parse(model);
@@ -261,7 +211,7 @@ export class ModelRegistryService {
         changes: [{
           type: 'architecture',
           description: 'Initial model registration'
-        }],
+],
         createdAt: now,
         isActive: true
       };
@@ -283,10 +233,10 @@ export class ModelRegistryService {
       await this.triggerEvaluationIfEnabled(validatedModel, 'model_upload');
 
       return validatedModel;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Model registration failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get model by ID
@@ -294,7 +244,7 @@ export class ModelRegistryService {
   async getModel(id: string): Promise<ModelMetadata | null> {
 
     return this.models.get(id) || null;
-  }
+
 
   /**
    * Update existing model
@@ -305,7 +255,7 @@ export class ModelRegistryService {
       const existingModel = this.models.get(id);
       if (!existingModel) {
         throw new Error('Model not found');
-      }
+
 
       const updatedModel: ModelMetadata = {
         ...existingModel,
@@ -322,13 +272,13 @@ export class ModelRegistryService {
       // Trigger evaluation if enabled and this is a significant update
       if (this.isSignificantUpdate(updates)) {
         await this.triggerEvaluationIfEnabled(validatedModel, 'model_update');
-      }
+
 
       return validatedModel;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Model update failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Create new model version
@@ -344,7 +294,7 @@ export class ModelRegistryService {
       const model = this.models.get(modelId);
       if (!model) {
         throw new Error('Model not found');
-      }
+
 
       const existingVersions = this.versions.get(modelId) || [];
       
@@ -352,7 +302,7 @@ export class ModelRegistryService {
       const versionExists = existingVersions.some(v => v.version === version);
       if (versionExists) {
         throw new Error(`Version ${version} already exists for this model`);
-      }
+
 
       // Deactivate previous versions if this is set as active
       existingVersions.forEach(v => v.isActive = false);
@@ -375,10 +325,10 @@ export class ModelRegistryService {
       await this.updateModel(modelId, { version });
 
       return validatedVersion;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Version creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get all versions for a model
@@ -388,10 +338,10 @@ export class ModelRegistryService {
     const model = this.models.get(modelId);
     if (!model) {
       throw new Error('Model not found');
-    }
+
 
     return this.versions.get(modelId) || [];
-  }
+
 
   /**
    * Get specific model version
@@ -400,7 +350,7 @@ export class ModelRegistryService {
 
     const versions = this.versions.get(modelId) || [];
     return versions.find(v => v.id === versionId) || null;
-  }
+
 
   /**
    * Search models with advanced filtering
@@ -410,7 +360,7 @@ export class ModelRegistryService {
     total: number;
     page: number;
     totalPages: number;
-  }> {
+> {
 
     let filteredModels = Array.from(this.models.values());
 
@@ -422,42 +372,42 @@ export class ModelRegistryService {
         (model.description && model.description.toLowerCase().includes(query)) ||
         model.tags.some(tag => tag.toLowerCase().includes(query))
       );
-    }
+
 
     // Apply filters
     if (options.modelType) {
       filteredModels = filteredModels.filter(model => model.modelType === options.modelType);
-    }
+
 
     if (options.framework) {
       filteredModels = filteredModels.filter(model => model.framework === options.framework);
-    }
+
 
     if (options.status) {
       filteredModels = filteredModels.filter(model => model.status === options.status);
-    }
+
 
     if (options.owner) {
       filteredModels = filteredModels.filter(model => model.owner === options.owner);
-    }
+
 
     if (options.tags && options.tags.length > 0) {
       filteredModels = filteredModels.filter(model => 
         options.tags!.some(tag => model.tags.includes(tag))
       );
-    }
+
 
     if (options.minAccuracy !== undefined) {
       filteredModels = filteredModels.filter(model => 
         model.performanceMetrics?.accuracy && model.performanceMetrics.accuracy >= options.minAccuracy!
       );
-    }
+
 
     if (options.maxInferenceTime !== undefined) {
       filteredModels = filteredModels.filter(model => 
         model.performanceMetrics?.inferenceTime && model.performanceMetrics.inferenceTime <= options.maxInferenceTime!
       );
-    }
+
 
     // Apply sorting
     if (options.sortBy) {
@@ -487,12 +437,12 @@ export class ModelRegistryService {
           break;
         default:
           return 0;
-        }
+
 
         const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
         return options.sortOrder === 'desc' ? -comparison : comparison;
       });
-    }
+
 
     // Apply pagination
     const total = filteredModels.length;
@@ -505,7 +455,7 @@ export class ModelRegistryService {
       page: options.page,
       totalPages: Math.ceil(total / options.limit)
     };
-  }
+
 
   /**
    * Compare multiple models
@@ -517,7 +467,7 @@ export class ModelRegistryService {
       
       if (models.length !== request.modelIds.length) {
         throw new Error('One or more models not found');
-      }
+
 
       const result: ModelComparisonResult = {
         models: models.map(model => ({
@@ -552,7 +502,7 @@ export class ModelRegistryService {
           if (isLowerBetter ? value < bestValue : value > bestValue) {
             bestValue = value;
             bestModel = model;
-          }
+
         });
 
         result.bestPerforming[metric] = bestModel.id;
@@ -562,10 +512,10 @@ export class ModelRegistryService {
       result.recommendations = this.generateModelRecommendations(models, request.metrics);
 
       return result;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Model comparison failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get model lineage
@@ -575,10 +525,10 @@ export class ModelRegistryService {
     const model = this.models.get(modelId);
     if (!model) {
       return null;
-    }
+
 
     return this.lineages.get(modelId) || null;
-  }
+
 
   /**
    * Update model lineage
@@ -589,7 +539,7 @@ export class ModelRegistryService {
       const model = this.models.get(modelId);
       if (!model) {
         throw new Error('Model not found');
-      }
+
 
       const existingLineage = this.lineages.get(modelId) || {
         modelId,
@@ -607,10 +557,10 @@ export class ModelRegistryService {
       this.lineages.set(modelId, validatedLineage);
 
       return validatedLineage;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Lineage update failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Delete model and all associated data
@@ -620,7 +570,7 @@ export class ModelRegistryService {
     const model = this.models.get(id);
     if (!model) {
       throw new Error('Model not found');
-    }
+
 
     // Remove from all data structures
     this.models.delete(id);
@@ -629,7 +579,7 @@ export class ModelRegistryService {
 
     // Update search index
     this.removeFromSearchIndex(model);
-  }
+
 
   /**
    * Get registry statistics
@@ -650,7 +600,7 @@ export class ModelRegistryService {
     };
 
     return statistics;
-  }
+
 
   /**
    * Get service health status
@@ -664,17 +614,17 @@ export class ModelRegistryService {
           totalVersions: Array.from(this.versions.values()).reduce((sum, versions) => sum + versions.length, 0),
           indexedTerms: this.searchIndex.size,
           lastActivity: new Date().toISOString()
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         details: {
           error: error instanceof Error ? error.message : 'Unknown error'
-        }
+
       };
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -684,7 +634,7 @@ export class ModelRegistryService {
       const v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
-  }
+
 
   private updateSearchIndex(model: ModelMetadata): void {
     // Index searchable terms
@@ -701,19 +651,19 @@ export class ModelRegistryService {
     terms.forEach(term => {
       if (!this.searchIndex.has(term)) {
         this.searchIndex.set(term, new Set());
-      }
+
       this.searchIndex.get(term)!.add(model.id);
     });
-  }
+
 
   private removeFromSearchIndex(model: ModelMetadata): void {
     this.searchIndex.forEach((modelIds, term) => {
       modelIds.delete(model.id);
       if (modelIds.size === 0) {
         this.searchIndex.delete(term);
-      }
+
     });
-  }
+
 
   private groupBy(items: ModelMetadata[], key: keyof ModelMetadata): Record<string, number> {
     const result: Record<string, number> = {};
@@ -722,7 +672,7 @@ export class ModelRegistryService {
       result[value] = (result[value] || 0) + 1;
     });
     return result;
-  }
+
 
   private calculateAverageMetric(models: ModelMetadata[], metric: string): number {
     const values = models
@@ -730,7 +680,7 @@ export class ModelRegistryService {
       .filter(value => value !== undefined && value !== null) as number[];
     
     return values.length > 0 ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
-  }
+
 
   private getPopularTags(models: ModelMetadata[]): Array<{ tag: string; count: number }> {
     const tagCounts: Record<string, number> = {};
@@ -745,7 +695,7 @@ export class ModelRegistryService {
       .map(([tag, count]) => ({ tag, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
-  }
+
 
   private getRecentActivity(models: ModelMetadata[]): ModelStatistics['recentActivity'] {
     return models
@@ -757,7 +707,7 @@ export class ModelRegistryService {
         modelName: model.name,
         timestamp: model.updatedAt
       }));
-  }
+
 
   private generateModelRecommendations(models: ModelMetadata[], metrics: string[]): string[] {
     const recommendations: string[] = [];
@@ -779,9 +729,9 @@ export class ModelRegistryService {
           
           if (delta > 0.05) {
             recommendations.push(`Consider using the model with ${(maxAccuracy * 100).toFixed(1)}% accuracy for production use`);
-          }
-        }
-      }
+
+
+
 
       if (hasInferenceTime) {
         const inferenceTimes = models
@@ -794,17 +744,17 @@ export class ModelRegistryService {
           
           if (maxTime > minTime * 2) {
             recommendations.push(`Consider the fastest model (${minTime}ms inference time) for latency-sensitive applications`);
-          }
-        }
-      }
-    }
+
+
+
+
 
     if (recommendations.length === 0) {
       recommendations.push('All models show similar performance characteristics');
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Trigger model evaluation if evaluation service is enabled
@@ -816,7 +766,7 @@ export class ModelRegistryService {
 
     if (!this.evaluationTriggerService) {
       return; // No evaluation service configured
-    }
+
 
     try {
       const evaluationRequest: ModelEvaluationTriggerRequest = {
@@ -836,11 +786,11 @@ export class ModelRegistryService {
       await this.evaluationTriggerService.triggerEvaluation(evaluationRequest);
 
       console.log(`Evaluation triggered for model ${model.name} (${model.id}) version ${model.version}`);
-    } catch (error) {
+ catch (error) {
       // Don't fail the model registration/update if evaluation fails
       console.error(`Failed to trigger evaluation for model ${model.id}:`, error);
-    }
-  }
+
+
 
   /**
    * Determine if an update is significant enough to trigger evaluation
@@ -852,7 +802,7 @@ export class ModelRegistryService {
       updates.status === 'ready' ||
       (updates.metadata && Object.keys(updates.metadata).length > 0)
     );
-  }
+
 
   /**
    * Select appropriate evaluation suite based on model characteristics
@@ -861,21 +811,21 @@ export class ModelRegistryService {
     // Production models get comprehensive evaluation
     if (model.status === 'ready' && model.tags.includes('production')) {
       return 'comprehensive';
-    }
+
 
     // Security-sensitive models get security-focused evaluation
     if (model.tags.some(tag => ['security', 'finance', 'healthcare', 'pii'].includes(tag))) {
       return 'security';
-    }
+
 
     // Performance-critical models get performance-focused evaluation
     if (model.tags.some(tag => ['realtime', 'low-latency', 'high-throughput'].includes(tag))) {
       return 'performance';
-    }
+
 
     // Default to standard evaluation
     return 'standard';
-  }
+
 
   /**
    * Determine evaluation priority based on model and trigger context
@@ -887,16 +837,16 @@ export class ModelRegistryService {
     // Production models get high priority
     if (model.status === 'ready' && model.tags.includes('production')) {
       return 'critical';
-    }
+
 
     // Security or healthcare models get high priority
     if (model.tags.some(tag => ['security', 'healthcare', 'finance'].includes(tag))) {
       return 'high';
-    }
+
 
     // New uploads get medium priority, updates get lower
     return triggeredBy === 'model_upload' ? 'medium' : 'low';
-  }
+
 
   private initializeSampleData(): void {
     // Create sample models for demonstration
@@ -922,11 +872,11 @@ export class ModelRegistryService {
           inferenceTime: 150,
           memoryUsage: 4096,
           throughput: 45
-  }
+
         artifactPath: 'https://storage.example.com/models/gpt4-support/model.bin',
         configPath: 'https://storage.example.com/models/gpt4-support/config.json',
         metadata: { domain: 'customer_service', language: 'en' }
-  }
+
       {
         id: this.generateUUID(),
         name: 'BERT Sentiment Classifier',
@@ -948,11 +898,11 @@ export class ModelRegistryService {
           inferenceTime: 45,
           memoryUsage: 512,
           throughput: 200
-  }
+
         artifactPath: 'https://storage.example.com/models/bert-sentiment/model.pth',
         configPath: 'https://storage.example.com/models/bert-sentiment/config.json',
         metadata: { domain: 'social_media', classes: ['positive', 'negative', 'neutral'] }
-      }
+
     ];
 
     sampleModels.forEach(model => {
@@ -967,7 +917,7 @@ export class ModelRegistryService {
         changes: [{
           type: 'architecture',
           description: 'Initial model version'
-        }],
+],
         createdAt: model.createdAt,
         isActive: true
       };
@@ -982,5 +932,4 @@ export class ModelRegistryService {
         trainingDatasets: []
       });
     });
-  }
-}
+

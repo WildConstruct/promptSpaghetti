@@ -83,7 +83,8 @@ quietHours: {
 frequency: {
     immediate: boolean;
     digest: boolean;
-    digestFrequency: 'daily' | 'weekly';
+    digestFrequency: 'daily' | 'weekly',
+    ;
 }
 ;
 metadata: Record;
@@ -248,8 +249,7 @@ export class LockoutNotificationService extends EventEmitter {
                                                 NotificationStatus, : .PENDING,
                                                 NotificationStatus, : .QUEUED,
                                                 NotificationStatus, : .SENDING
-                                            }
-                                        });
+                                            } });
                                     }
                                 }
                             } };
@@ -482,8 +482,9 @@ Promise < string > {
     if (html)
         html = html.replace(new RegExp(placeholder, 'g'), stringValue);
     return { subject, body, html };
-    buildTemplateVariables(lockout, AccountLockout);
-    additional: (Record) = {};
+    buildTemplateVariables(lockout, AccountLockout),
+        additional;
+    (Record) = {};
     TemplateVariables;
     {
         return {
@@ -498,7 +499,7 @@ Promise < string > {
             lockoutId: lockout.id,
             companyName: 'SecureAuth Corp',
             appName: 'SecureAuth Platform',
-            securityTips: [,
+            securityTips: [
                 'Use a strong, unique password',
                 'Enable two-factor authentication',
                 'Keep your software updated',
@@ -508,14 +509,15 @@ Promise < string > {
             estimatedResolution: this.getEstimatedResolution(lockout.reason),
             ...additional
         };
-        buildAdminTemplateVariables(lockout, AccountLockout);
-        details: Record;
+        buildAdminTemplateVariables(lockout, AccountLockout),
+            details;
+        Record;
         TemplateVariables;
         {
             const base = this.buildTemplateVariables(lockout, details);
             return {
                 ...base,
-                nextSteps: [,
+                nextSteps: [
                     'Review lockout details',
                     'Verify user identity if needed',
                     'Make unlock decision',

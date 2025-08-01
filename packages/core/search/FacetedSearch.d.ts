@@ -18,8 +18,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface SearchFacet {
-    id: string;
+}
+export interface SearchFacet { id: string;
     name: string;
     type: 'text' | 'number' | 'date' | 'boolean' | 'enum' | 'range' | 'hierarchical';
     field: string;
@@ -29,46 +29,41 @@ export interface SearchFacet {
     ranges?: FacetRange[];
     hierarchy?: FacetHierarchy;
     config: FacetConfig;
-    metadata: FacetMetadata;
-
+    metadata: FacetMetadata }
 }
-export interface FacetOption {
-    value: any;
+}
+export interface FacetOption { value: any;
     label: string;
     count: number;
     selected: boolean;
     disabled?: boolean;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface FacetRange {
-    min: number;
+}
+export interface FacetRange { min: number;
     max: number;
     step?: number;
     selectedMin?: number;
     selectedMax?: number;
-    format?: 'number' | 'currency' | 'percentage' | 'date';
-
+    format?: 'number' | 'currency' | 'percentage' | 'date' }
 }
-export interface FacetHierarchy {
-    levels: HierarchyLevel[];
+}
+export interface FacetHierarchy { levels: HierarchyLevel[];
     separator: string;
     expandedLevels: Set<string>;
-    maxDepth?: number;
-
+    maxDepth?: number }
 }
-export interface HierarchyLevel {
-    id: string;
+}
+export interface HierarchyLevel { id: string;
     name: string;
     parent?: string;
     children: string[];
     count: number;
     selected: boolean;
-    expanded: boolean;
-
+    expanded: boolean }
 }
-export interface FacetConfig {
-    multiSelect: boolean;
+}
+export interface FacetConfig { multiSelect: boolean;
     searchable: boolean;
     sortBy: 'count' | 'name' | 'custom';
     sortOrder: 'asc' | 'desc';
@@ -76,102 +71,88 @@ export interface FacetConfig {
     showCount: boolean;
     collapsible: boolean;
     defaultExpanded: boolean;
-    excludeFromQuery?: boolean;
-
+    excludeFromQuery?: boolean }
 }
-export interface FacetMetadata {
-    priority: number;
+}
+export interface FacetMetadata { priority: number;
     group?: string;
     dependencies?: string[];
     conditionalDisplay?: {
         field: string;
-        value: any;
+        value: any }
 }
     };
-    analytics: {
-        totalSelections: number;
+    analytics: { totalSelections: number;
         popularValues: string[];
-        averageSelections: number;
-    };
+        averageSelections: number };
 
 }
-export interface SearchQuery {
-    text: string;
+}
+export interface SearchQuery { text: string;
     filters: SearchFilter[];
     sort: SearchSort;
     pagination: SearchPagination;
     facets: string[];
-    options: SearchOptions;
-
+    options: SearchOptions }
 }
-export interface SearchFilter {
-    facetId: string;
+}
+export interface SearchFilter { facetId: string;
     field: string;
     operator: 'equals' | 'not_equals' | 'contains' | 'starts_with' | 'ends_with' | 'greater' | 'less' | 'between' | 'in' | 'not_in';
     value: any;
     values?: any[];
-    boost?: number;
-
+    boost?: number }
 }
-export interface SearchSort {
-    field: string;
+}
+export interface SearchSort { field: string;
     order: 'asc' | 'desc';
     mode?: 'relevance' | 'field' | 'custom';
-    customFunction?: string;
-
+    customFunction?: string }
 }
-export interface SearchPagination {
-    page: number;
+}
+export interface SearchPagination { page: number;
     size: number;
     offset: number;
-    total?: number;
-
+    total?: number }
 }
-export interface SearchOptions {
-    includeHighlights: boolean;
+}
+export interface SearchOptions { includeHighlights: boolean;
     includeAggregations: boolean;
     includeSuggestions: boolean;
     fuzzySearch: boolean;
     stemming: boolean;
     synonyms: boolean;
     boostFields: Record<string, number>;
-    minScore?: number;
-
+    minScore?: number }
 }
-export interface SearchResult<T = any> {
-    items: SearchResultItem<T>[];
+}
+export interface SearchResult<T = any> { items: SearchResultItem<T>[];
     facets: FacetResult[];
     pagination: SearchPagination;
     suggestions: SearchSuggestion[];
     aggregations: SearchAggregation[];
     metadata: SearchResultMetadata;
-    query: SearchQuery;
-
+    query: SearchQuery }
 }
-export interface SearchResultItem<T = any> {
-    id: string;
+export interface SearchResultItem<T = any> { id: string;
     data: T;
     score: number;
     highlights: Record<string, string[]>;
     explanation?: ScoreExplanation;
-    matched: string[];
-
+    matched: string[] }
 }
-export interface ScoreExplanation {
-    value: number;
+export interface ScoreExplanation { value: number;
     description: string;
-    details: ScoreDetail[];
-
+    details: ScoreDetail[] }
 }
-export interface ScoreDetail {
-    field: string;
+}
+export interface ScoreDetail { field: string;
     weight: number;
     contribution: number;
-    explanation: string;
-
+    explanation: string }
 }
-export interface FacetResult {
-    facetId: string;
+}
+export interface FacetResult { facetId: string;
     name: string;
     type: string;
     options?: FacetOption[];
@@ -179,86 +160,75 @@ export interface FacetResult {
         min: number;
         max: number;
         selectedMin?: number;
-        selectedMax?: number;
+        selectedMax?: number }
 }
     };
     hierarchy?: FacetHierarchy;
-    metadata: {
-        totalOptions: number;
+    metadata: { totalOptions: number;
         selectedOptions: number;
-        hasMore: boolean;
-    };
+        hasMore: boolean };
 
 }
-export interface SearchSuggestion {
-    type: 'query' | 'correction' | 'completion';
+}
+export interface SearchSuggestion { type: 'query' | 'correction' | 'completion';
     text: string;
     highlight: string;
     score: number;
     count?: number;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface SearchAggregation {
-    name: string;
+}
+export interface SearchAggregation { name: string;
     type: 'terms' | 'date_histogram' | 'numeric_range' | 'stats';
     field: string;
     buckets?: AggregationBucket[];
-    stats?: AggregationStats;
-
+    stats?: AggregationStats }
 }
-export interface AggregationBucket {
-    key: any;
+}
+export interface AggregationBucket { key: any;
     count: number;
-    subAggregations?: SearchAggregation[];
-
+    subAggregations?: SearchAggregation[] }
 }
-export interface AggregationStats {
-    min: number;
+}
+export interface AggregationStats { min: number;
     max: number;
     avg: number;
     sum: number;
-    count: number;
-
+    count: number }
 }
-export interface SearchResultMetadata {
-    took: number;
+}
+export interface SearchResultMetadata { took: number;
     total: number;
     maxScore: number;
     queryAnalysis: QueryAnalysis;
-    performance: PerformanceMetrics;
-
+    performance: PerformanceMetrics }
 }
-export interface QueryAnalysis {
-    processedQuery: string;
+}
+export interface QueryAnalysis { processedQuery: string;
     queryType: 'simple' | 'complex' | 'structured';
     appliedFilters: number;
     activeFacets: number;
     searchTerms: string[];
-    suggestedTerms: string[];
-
+    suggestedTerms: string[] }
 }
-export interface PerformanceMetrics {
-    parseTime: number;
+}
+export interface PerformanceMetrics { parseTime: number;
     searchTime: number;
     facetTime: number;
     totalTime: number;
     cacheHit: boolean;
     documentsScanned: number;
-    resultsFiltered: number;
-
+    resultsFiltered: number }
 }
-export interface SearchIndex<T = any> {
-    name: string;
+}
+export interface SearchIndex<T = any> { name: string;
     fields: IndexField[];
     documents: Map<string, IndexedDocument<T>>;
     facets: Map<string, SearchFacet>;
     statistics: IndexStatistics;
-    configuration: IndexConfiguration;
-
+    configuration: IndexConfiguration }
 }
-export interface IndexField {
-    name: string;
+export interface IndexField { name: string;
     type: 'text' | 'keyword' | 'number' | 'date' | 'boolean' | 'object' | 'nested';
     indexed: boolean;
     stored: boolean;
@@ -266,82 +236,68 @@ export interface IndexField {
     searchable: boolean;
     sortable: boolean;
     boost?: number;
-    analyzer?: string;
-
+    analyzer?: string }
 }
-export interface IndexedDocument<T = any> {
-    id: string;
+}
+export interface IndexedDocument<T = any> { id: string;
     data: T;
     indexed: Date;
     version: number;
     fields: Record<string, any>;
-    boost?: number;
-
+    boost?: number }
 }
-export interface IndexStatistics {
-    totalDocuments: number;
+export interface IndexStatistics { totalDocuments: number;
     totalFields: number;
     indexSize: number;
     lastUpdated: Date;
     performance: {
         averageSearchTime: number;
         averageFacetTime: number;
-        cacheHitRate: number;
+        cacheHitRate: number }
 }
     };
 
 }
-export interface IndexConfiguration {
-    analyzer: {
+}
+export interface IndexConfiguration { analyzer: {
         default: string;
         text: string;
-        keyword: string;
+        keyword: string }
 }
     };
-    faceting: {
-        defaultLimit: number;
+    faceting: { defaultLimit: number;
         maxFacets: number;
-        enableHierarchical: boolean;
-    };
-    performance: {
-        enableCaching: boolean;
+        enableHierarchical: boolean };
+    performance: { enableCaching: boolean;
         cacheSize: number;
-        cacheTtl: number;
-    };
+        cacheTtl: number };
 
 }
-export interface SearchConfiguration {
-    index: IndexConfiguration;
+}
+export interface SearchConfiguration { index: IndexConfiguration;
     query: {
         defaultOperator: 'and' | 'or';
         enableFuzzy: boolean;
         fuzzyDistance: number;
         enableSynonyms: boolean;
         enableStemming: boolean;
-        minShouldMatch?: string;
+        minShouldMatch?: string }
 }
     };
-    faceting: {
-        enableRealTime: boolean;
+    faceting: { enableRealTime: boolean;
         maxFacetOptions: number;
         enableHierarchical: boolean;
-        enableRanges: boolean;
-    };
-    suggestions: {
-        enableAutoComplete: boolean;
+        enableRanges: boolean };
+    suggestions: { enableAutoComplete: boolean;
         enableCorrections: boolean;
         maxSuggestions: number;
-        minQueryLength: number;
-    };
-    performance: {
-        enableCaching: boolean;
+        minQueryLength: number };
+    performance: { enableCaching: boolean;
         debounceDelay: number;
         maxCacheSize: number;
-        enablePrefetch: boolean;
-    };
+        enablePrefetch: boolean };
 
-export declare class FacetedSearchSystem<T = any> extends EventEmitter {
-    private indexes;
+export declare class FacetedSearchSystem<T = any> extends EventEmitter { private indexes;
     private cache;
     private config;
     private queryProcessors;
@@ -362,12 +318,9 @@ export declare class FacetedSearchSystem<T = any> extends EventEmitter {
         averageResponseTime: number;
         popularQueries: Array<{
             query: string;
-            count: number;
-        }>;
-        popularFacets: Array<{
-            facetId: string;
-            selectionCount: number;
-        }>;
+            count: number }>;
+        popularFacets: Array<{ facetId: string;
+            selectionCount: number }>;
         cacheHitRate: number;
         errorRate: number;
     };
@@ -421,8 +374,6 @@ export declare class FacetedSearchSystem<T = any> extends EventEmitter {
     private processTextQuery;
     private processFuzzyQuery;
     private processPhraseQuery;
-declare const _default: {
-    FacetedSearchSystem: typeof FacetedSearchSystem;
-};
+declare const _default: { FacetedSearchSystem: typeof FacetedSearchSystem };
 export default _default;
 //# sourceMappingURL=FacetedSearch.d.ts.map

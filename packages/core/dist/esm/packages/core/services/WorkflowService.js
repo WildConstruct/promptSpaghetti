@@ -82,8 +82,9 @@ if (!response.ok)
     throw new Error(`Failed to fetch workflow instance: ${response.statusText}`);
 return response.json();
 async;
-createWorkflowInstance(resourceId, string);
-resourceType: string,
+createWorkflowInstance(resourceId, string),
+    resourceType;
+string,
     configId;
 string,
     metadata ?  : Record;

@@ -31,7 +31,12 @@ breakingChanges: number;
 deprecations: number;
 newFeatures: number;
 ;
-timeline: Array;
+timeline: Array < {
+    timestamp: Date,
+    event: string,
+    impact: 'low' | 'medium' | 'high',
+    description: string
+} > ;
 exportFormats: ('pdf' | 'html' | 'json' | 'csv')[];
 export const ComparisonTools = ({
     sessions,

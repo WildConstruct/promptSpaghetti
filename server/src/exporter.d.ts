@@ -1645,6 +1645,7 @@ export declare function bundleToGraph(bundle: GeneratorBundle): Graph;
  */
 }
 }
+}
 export interface ExportRequest {
     format: string;
     data: Record<string, unknown>;
@@ -1655,11 +1656,14 @@ export interface ExportRequest {
 }
 }
 }
+}
+}
 export interface ExportResult {
     type: 'text' | 'binary';
     data: Record<string, unknown>;
     mimeType: string;
     shouldDownload?: boolean;
+}
 }
 }
 }

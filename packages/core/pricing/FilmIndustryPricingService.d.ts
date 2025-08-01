@@ -8,8 +8,8 @@ import { EventEmitter } from 'events';
 import { PricingOptimizer } from './PricingOptimizer';
 
 }
-export interface FilmStudioProfile {
-    studioId: string;
+}
+export interface FilmStudioProfile { studioId: string;
     name: string;
     tier: 'independent' | 'mid_tier' | 'major_studio' | 'streaming_platform';
     annualBudget: number;
@@ -19,7 +19,7 @@ export interface FilmStudioProfile {
     paymentTerms: {
         preferredBilling: 'monthly' | 'per_project' | 'annual';
         creditLimit: number;
-        paymentDays: number;
+        paymentDays: number }
 }
     };
     premiumFeatures: string[];
@@ -28,8 +28,8 @@ export interface FilmStudioProfile {
     loyaltyStatus: 'new' | 'standard' | 'preferred' | 'vip';
 
 }
-export interface ProjectPricingRequest {
-    studioId: string;
+}
+export interface ProjectPricingRequest { studioId: string;
     projectId: string;
     projectDetails: {
         title: string;
@@ -38,75 +38,67 @@ export interface ProjectPricingRequest {
         timeline: {
             startDate: number;
             endDate: number;
-            deliveryDate: number;
+            deliveryDate: number }
 }
         };
         deliverables: ProjectDeliverable[];
         priority: 'standard' | 'rush' | 'emergency';
         distributionPlan: string[];
     };
-    contentRequirements: {
-        scriptAnalysis?: ScriptAnalysisOptions;
+    contentRequirements: { scriptAnalysis?: ScriptAnalysisOptions;
         storyboardGeneration?: StoryboardOptions;
         conceptArt?: ConceptArtOptions;
         marketingContent?: MarketingContentOptions;
-        characterDevelopment?: CharacterDevelopmentOptions;
-    };
+        characterDevelopment?: CharacterDevelopmentOptions };
 
 }
-export interface ProjectDeliverable {
-    type: 'script_analysis' | 'character_profiles' | 'scene_breakdown' | 'dialogue_generation' | 'storyboard_concepts' | 'visual_references' | 'marketing_taglines' | 'synopsis_variants';
+}
+export interface ProjectDeliverable { type: 'script_analysis' | 'character_profiles' | 'scene_breakdown' | 'dialogue_generation' | 'storyboard_concepts' | 'visual_references' | 'marketing_taglines' | 'synopsis_variants';
     quantity: number;
     complexity: 'basic' | 'standard' | 'premium' | 'custom';
     deadline: number;
     revisions: number;
     format: string[];
-    specifications: Record<string, any>;
-
+    specifications: Record<string, any> }
 }
-export interface ScriptAnalysisOptions {
-    analysisDepth: 'basic' | 'comprehensive' | 'deep_dive';
+}
+export interface ScriptAnalysisOptions { analysisDepth: 'basic' | 'comprehensive' | 'deep_dive';
     includeCharacterArcs: boolean;
     includeDialogueAnalysis: boolean;
     includeStructuralNotes: boolean;
     includeGenreCompliance: boolean;
-    benchmarkScripts?: string[];
-
+    benchmarkScripts?: string[] }
 }
-export interface StoryboardOptions {
-    artStyle: 'sketch' | 'detailed' | 'cinematic' | 'animatic';
+}
+export interface StoryboardOptions { artStyle: 'sketch' | 'detailed' | 'cinematic' | 'animatic';
     frameCount: number;
     includeNotes: boolean;
     colorTreatment: 'bw' | 'color' | 'mood_palette';
-    animationPreview: boolean;
-
+    animationPreview: boolean }
 }
-export interface ConceptArtOptions {
-    artDirection: 'realistic' | 'stylized' | 'fantastical' | 'period_accurate';
+}
+export interface ConceptArtOptions { artDirection: 'realistic' | 'stylized' | 'fantastical' | 'period_accurate';
     deliverableTypes: ('character_design' | 'environment_design' | 'prop_design' | 'costume_design')[];
     iterationRounds: number;
     highResolution: boolean;
-    includeVariations: boolean;
-
+    includeVariations: boolean }
 }
-export interface MarketingContentOptions {
-    campaignScope: 'teaser' | 'full_campaign' | 'awards_season' | 'international';
+}
+export interface MarketingContentOptions { campaignScope: 'teaser' | 'full_campaign' | 'awards_season' | 'international';
     platforms: ('theatrical' | 'digital' | 'social' | 'print' | 'tv')[];
     audienceSegments: string[];
     brandGuidelines: boolean;
-    localizationNeeded: string[];
-
+    localizationNeeded: string[] }
 }
-export interface CharacterDevelopmentOptions {
-    characterCount: number;
+}
+export interface CharacterDevelopmentOptions { characterCount: number;
     developmentDepth: 'basic_profile' | 'detailed_background' | 'full_psychology';
     includeDialoguePatterns: boolean;
     includeVisualReferences: boolean;
-    includeRelationshipMaps: boolean;
-
+    includeRelationshipMaps: boolean }
 }
-export interface FilmIndustryPricingResult {
-    projectId: string;
+}
+export interface FilmIndustryPricingResult { projectId: string;
     studioId: string;
     totalPrice: number;
     currency: string;
@@ -119,7 +111,7 @@ export interface FilmIndustryPricingResult {
         quantity: number;
         unitPrice: number;
         subtotal: number;
-        complexity: string;
+        complexity: string }
 }
     }>;
     genreMultiplier: number;
@@ -141,54 +133,44 @@ export interface FilmIndustryPricingResult {
     createdAt: number;
 
 }
-export interface PaymentScheduleItem {
-    milestone: string;
+}
+export interface PaymentScheduleItem { milestone: string;
     percentage: number;
     amount: number;
     dueDate: number;
-    description: string;
-
+    description: string }
 }
-export interface StudioPricingAnalytics {
-    studioId: string;
+}
+export interface StudioPricingAnalytics { studioId: string;
     period: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     totalRevenue: number;
     averageProjectValue: number;
     profitMargin: number;
-    paymentPerformance: {
-        averagePaymentDays: number;
+    paymentPerformance: { averagePaymentDays: number;
         latePaymentRate: number;
-        creditUtilization: number;
-    };
+        creditUtilization: number };
     totalProjects: number;
     projectsByType: Record<string, number>;
     projectsByGenre: Record<string, number>;
     averageProjectTimeline: number;
-    deliveryPerformance: {
-        onTimeDeliveryRate: number;
+    deliveryPerformance: { onTimeDeliveryRate: number;
         qualityScore: number;
-        revisionRate: number;
-    };
-    seasonalPatterns: Array<{
-        period: string;
+        revisionRate: number };
+    seasonalPatterns: Array<{ period: string;
         volume: number;
         revenue: number;
-        averageValue: number;
-    }>;
-    growthMetrics: {
-        revenueGrowth: number;
+        averageValue: number }>;
+    growthMetrics: { revenueGrowth: number;
         projectVolumeGrowth: number;
-        averageValueGrowth: number;
-    };
+        averageValueGrowth: number };
 /**
  * Specialized pricing service for film industry clients
  */
-export declare class FilmIndustryPricingService extends EventEmitter {
-    private optimizer;
+export declare class FilmIndustryPricingService extends EventEmitter { private optimizer;
     private studioProfiles;
     private studioAnalytics;
     private deliverablePricing;
@@ -217,40 +199,33 @@ export declare class FilmIndustryPricingService extends EventEmitter {
         benchmarks: {
             industryAverage: number;
             tierAverage: number;
-            performanceRank: number;
-        };
+            performanceRank: number };
     }>;
     /**
      * Get industry pricing trends
      */
-    getIndustryTrends(): {
-        averagePricing: Record<string, number>;
+    getIndustryTrends(): { averagePricing: Record<string, number>;
         growthRates: Record<string, number>;
         seasonalPatterns: Array<{
             period: string;
-            multiplier: number;
-        }>;
+            multiplier: number }>;
         emergingServices: string[];
-        competitiveLandscape: Array<{
-            category: string;
+        competitiveLandscape: Array<{ category: string;
             competitorCount: number;
             priceRange: {
                 min: number;
-                max: number;
-            };
+                max: number };
         }>;
     };
     /**
      * Optimize studio relationship pricing
      */
-    optimizeStudioPricing(studioId: string): Promise<{
-        currentPricing: Record<string, number>;
+    optimizeStudioPricing(studioId: string): Promise<{ currentPricing: Record<string, number>;
         recommendedPricing: Record<string, number>;
         expectedImpact: {
             revenueChange: number;
             volumeChange: number;
-            marginChange: number;
-        };
+            marginChange: number };
         implementationPlan: Array<{
             action: string;
             timeline: string;

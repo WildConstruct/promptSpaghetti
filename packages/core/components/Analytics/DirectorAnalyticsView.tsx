@@ -9,102 +9,94 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 
-}
-export interface DirectorAnalyticsViewProps {
-  conversionData: unknown;
-  performanceData: unknown;
-}
+
+export interface DirectorAnalyticsViewProps { conversionData: unknown;
+  performanceData: unknown }
+},
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   loading: boolean;
-}
-export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
-  conversionData,
-  performanceData,
-  timeRange,
-  userId,
+
+export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({ )
+  conversionData
+  performanceData
+  timeRange
+  userId }
   loading
-}) => {
-  const [directorMetrics, setDirectorMetrics] = useState({)
-  projectsCreated: 0,
-  templatesUsed: 0,
-  advancedFeaturesAdopted: 0,
-  avgProjectComplexity: 0,
-  collaborationEvents: 0,
-  exportGenerations: 0,
-  workflowEfficiency: 0,
+}) => { const [directorMetrics, setDirectorMetrics] = useState({)
+  projectsCreated: 0
+  templatesUsed: 0
+  advancedFeaturesAdopted: 0
+  avgProjectComplexity: 0
+  collaborationEvents: 0
+  exportGenerations: 0
+  workflowEfficiency: 0
   creativeOutputMetrics: {
-  nodesPerProject: 0,
-  connectionsPerProject: 0,
-  previewGenerations: 0,
-  iterationCycles: 0,
+  nodesPerProject: 0
+  connectionsPerProject: 0
+  previewGenerations: 0
+  iterationCycles: 0 }
 });
   const [workflowInsights, setWorkflowInsights] = useState([]);
   const [recommendedTemplates, setRecommendedTemplates] = useState([]);
-  useEffect(() => {
-  if (conversionData && timeRange) {
+  useEffect(() => { if (conversionData && timeRange) {
   // Analyze director-specific conversion patterns
   // Calculate director-specific metrics
   setDirectorMetrics({)
-  projectsCreated: conversionData.realTimeMetrics?.conversionsLast24h || 0,
-  templatesUsed: Math.floor(Math.random() * 15) + 5, // Mock data,
-  advancedFeaturesAdopted: Math.floor(Math.random() * 8) + 2,
-  avgProjectComplexity: Math.random() * 50 + 25,
-  collaborationEvents: Math.floor(Math.random() * 12) + 3,
-  exportGenerations: Math.floor(Math.random() * 20) + 8,
-  workflowEfficiency: Math.random() * 30 + 70,
+  projectsCreated: conversionData.realTimeMetrics?.conversionsLast24h || 0
+  templatesUsed: Math.floor(Math.random() * 15) + 5, // Mock data
+  advancedFeaturesAdopted: Math.floor(Math.random() * 8) + 2
+  avgProjectComplexity: Math.random() * 50 + 25
+  collaborationEvents: Math.floor(Math.random() * 12) + 3
+  exportGenerations: Math.floor(Math.random() * 20) + 8
+  workflowEfficiency: Math.random() * 30 + 70
   creativeOutputMetrics: {
-  nodesPerProject: Math.random() * 20 + 15,
-  connectionsPerProject: Math.random() * 18 + 12,
-  previewGenerations: Math.random() * 25 + 20,
-  iterationCycles: Math.random() * 8 + 4,
+  nodesPerProject: Math.random() * 20 + 15
+  connectionsPerProject: Math.random() * 18 + 12
+  previewGenerations: Math.random() * 25 + 20
+  iterationCycles: Math.random() * 8 + 4 }
 });
       // Generate workflow insights
       setWorkflowInsights([)
-        {
-  type: 'efficiency',
-  title: 'Template Usage Optimization',
-  description: 'Directors using templates complete projects 40% faster',
-  action: 'Explore director-focused templates',
-  impact: 'high',
-  category: 'workflow',
-}
-        {
-  type: 'collaboration',
-  title: 'Collaboration Opportunity',
-  description: 'Your workflow could benefit from producer collaboration',
-  action: 'Invite team members to projects',
-  impact: 'medium',
-  category: 'team',
-}
-        {
-  type: 'feature',
-  title: 'Advanced Node Adoption',
-  description: 'Conditional nodes can enhance your creative logic',
-  action: 'Try Conditional and Sequential nodes',
-  impact: 'high',
+        { type: 'efficiency'
+  title: 'Template Usage Optimization'
+  description: 'Directors using templates complete projects 40% faster'
+  action: 'Explore director-focused templates'
+  impact: 'high'
+  category: 'workflow' }
+
+        { type: 'collaboration'
+  title: 'Collaboration Opportunity'
+  description: 'Your workflow could benefit from producer collaboration'
+  action: 'Invite team members to projects'
+  impact: 'medium'
+  category: 'team' }
+
+        { type: 'feature'
+  title: 'Advanced Node Adoption'
+  description: 'Conditional nodes can enhance your creative logic'
+  action: 'Try Conditional and Sequential nodes'
+  impact: 'high'
   category: 'features'] as any);
   // Generate template recommendations
   setRecommendedTemplates([)
   {
-  id: 'character-development',
-  name: 'Character Development Framework',
-  usage: 89,
-  category: 'Pre-Production',
-  description: 'Systematic approach to character arc development',
-}
-        {
-  id: 'scene-breakdown',
-  name: 'Scene Breakdown Template',
-  usage: 76,
-  category: 'Production',
-  description: 'Comprehensive scene analysis and planning',
-}
-        {
-  id: 'story-structure',
-  name: 'Three-Act Story Structure',
-  usage: 94,
-  category: 'Writing',
+  id: 'character-development'
+  name: 'Character Development Framework'
+  usage: 89
+  category: 'Pre-Production'
+  description: 'Systematic approach to character arc development' }
+
+        { id: 'scene-breakdown'
+  name: 'Scene Breakdown Template'
+  usage: 76
+  category: 'Production'
+  description: 'Comprehensive scene analysis and planning' }
+
+        { id: 'story-structure'
+  name: 'Three-Act Story Structure'
+  usage: 94
+  category: 'Writing' }
   description: 'Classical story structure with modern adaptations'] as any);
 }, [conversionData, timeRange]);
   const renderCreativeWorkflowMetrics = () => (;);
@@ -273,7 +265,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           {renderTemplateRecommendations()}
         </CardContent>
       </Card>
-      <style>{`
+      <style>{ `
         .director-analytics-view {
           display: flex;
           flex-direction: column;
@@ -289,7 +281,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           font-weight: 700;
   color: #1f2937;
         .score-label, .count-label, .complexity-label, .collab-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin-top: 0.25rem;
         .creative-workflow-section h4 {
@@ -315,7 +307,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           font-weight: 600;
   color: #1f2937;
         .metric-label {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #9ca3af;
         .workflow-insights h4, .template-recommendations h4 {
           margin: 0 0 1rem 0;
@@ -391,11 +383,10 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: spin 1s linear infinite;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
       `}</style>
     </div>
   );

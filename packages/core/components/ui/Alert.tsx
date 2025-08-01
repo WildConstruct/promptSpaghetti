@@ -1,10 +1,9 @@
 import React from 'react';
-interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'destructive';
-  export const Alert: React.FC<AlertProps> = ({ ),
-  children,
-  className,
-  variant = 'default',
+interface AlertProps extends React.HTMLAttributes<HTMLDivElement> { variant?: 'default' | 'destructive';
+  export const Alert: React.FC<AlertProps> = ({ )
+  children
+  className
+  variant = 'default' }
   ...props
 }) => ()
   <div className={`alert alert-${variant} ${className || ''}`} {...props}>}
@@ -13,8 +12,8 @@ interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
 );
 
 export const AlertTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({ )
-  children, 
-  className, 
+  children
+  className }
   ...props 
 }) => ()
   <h5 className={`alert-title ${className || ''}`} {...props}>}
@@ -23,8 +22,8 @@ export const AlertTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({
 );
 
 export const AlertDescription: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({ )
-  children, 
-  className, 
+  children
+  className }
   ...props 
 }) => ()
   <p className={`alert-description ${className || ''}`} {...props}>}

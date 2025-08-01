@@ -21,8 +21,8 @@ import { performance } from 'perf_hooks';
 // SYSTEM DIAGNOSTIC INTERFACES
 // ==========================================
 
-}
-}
+
+
 export interface SystemHealthReport {
   reportId: string;
   generatedAt: Date;
@@ -34,12 +34,13 @@ export interface SystemHealthReport {
   recommendations: SystemRecommendation[];
   trends: HealthTrends;
   metadata: ReportMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemInformation {
   hostname: string;
   platform: string;
@@ -50,82 +51,89 @@ export interface SystemInformation {
   memoryInfo: MemoryInformation;
   networkInfo: NetworkInformation;
   storageInfo: StorageInformation;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CPUInformation {
   model: string;
   cores: number;
   speed: number;
   loadAverage: number[];
   utilization: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MemoryInformation {
   total: number;
   free: number;
   used: number;
   utilization: number;
   heapUsage: NodeJS.MemoryUsage;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NetworkInformation {
   interfaces: NetworkInterface[];
   activeConnections: number;
   bandwidthUtilization: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NetworkInterface {
   name: string;
   address: string;
   family: string;
   internal: boolean;
   mac: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StorageInformation {
   disks: DiskInformation[];
   totalSpace: number;
   usedSpace: number;
   freeSpace: number;
   utilization: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DiskInformation {
   path: string;
   size: number;
   used: number;
   available: number;
   utilization: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CategoryHealthReport {
   category: DiagnosticCategory;
   status: DiagnosticStatus;
@@ -135,12 +143,13 @@ export interface CategoryHealthReport {
   lastChecked: Date;
   nextCheckDue: Date;
   trends: CategoryTrends;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CriticalIssue {
   issueId: string;
   category: DiagnosticCategory;
@@ -152,12 +161,13 @@ export interface CriticalIssue {
   recommendations: string[];
   estimatedResolutionTime: number; // minutes
   affectedSystems: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemRecommendation {
   recommendationId: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -168,91 +178,99 @@ export interface SystemRecommendation {
   estimatedEffort: number; // hours
   expectedBenefit: string;
   dependencies: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthTrends {
   timeRange: string;
   overallTrend: 'improving' | 'stable' | 'degrading';
   categoryTrends: Record<DiagnosticCategory, CategoryTrends>;
   performanceMetrics: PerformanceTrends;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CategoryTrends {
   trend: 'improving' | 'stable' | 'degrading';
   scoreChange: number;
   issueCountChange: number;
   lastWeekAverage: number;
   currentScore: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceTrends {
   responseTime: TrendData;
   throughput: TrendData;
   errorRate: TrendData;
   resourceUtilization: TrendData;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrendData {
   current: number;
   previous: number;
   change: number;
   trend: 'improving' | 'stable' | 'degrading';
   dataPoints: DataPoint[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataPoint {
   timestamp: Date;
   value: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportMetadata {
   generationDuration: number;
   diagnosticsExecuted: number;
   dataSourcesAccessed: string[];
   reportVersion: string;
   configurationSnapshot: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemDiagnosticConfiguration {
   enabledCategories: DiagnosticCategory[];
   checkIntervals: Record<DiagnosticCategory, number>; // milliseconds
   alertThresholds: AlertThresholds;
   reportingSettings: ReportingSettings;
   maintenanceWindows: MaintenanceWindow[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertThresholds {
   cpu: ThresholdConfig;
   memory: ThresholdConfig;
@@ -260,23 +278,25 @@ export interface AlertThresholds {
   network: ThresholdConfig;
   database: ThresholdConfig;
   performance: ThresholdConfig;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThresholdConfig {
   warning: number;
   critical: number;
   alertCooldown: number; // minutes
   escalationDelay: number; // minutes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportingSettings {
   generateDaily: boolean;
   generateWeekly: boolean;
@@ -284,12 +304,13 @@ export interface ReportingSettings {
   emailRecipients: string[];
   slackWebhooks: string[];
   retentionPeriod: number; // days
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MaintenanceWindow {
   id: string;
   name: string;
@@ -299,9 +320,10 @@ export interface MaintenanceWindow {
   timezone: string;
   suppressAlerts: boolean;
   skipChecks: boolean;
-}
-}
-}
+
+
+
+
 
 // ==========================================
 // SYSTEM DIAGNOSTICS IMPLEMENTATION
@@ -319,7 +341,7 @@ export class SystemDiagnostics {
     this.diagnosticService = new DiagnosticService(this.databaseService);
     this.auditService = new AuditService(this.databaseService);
     this.configuration = this.getDefaultConfiguration();
-  }
+
 
   // ==========================================
   // SYSTEM HEALTH REPORTING
@@ -365,7 +387,7 @@ export class SystemDiagnostics {
           dataSourcesAccessed: this.getDataSourcesAccessed(),
           reportVersion: '1.0.0',
           configurationSnapshot: { ...this.configuration }
-        }
+
       };
 
       // Store report
@@ -382,12 +404,11 @@ export class SystemDiagnostics {
           overallHealth,
           criticalIssueCount: criticalIssues.length,
           timestamp: new Date()
-        }
+
       });
 
       return report;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         userId: initiatedBy,
         action: 'system_health_report_failed',
@@ -396,12 +417,12 @@ export class SystemDiagnostics {
           reportId,
           error: error.message,
           timestamp: new Date()
-        }
+
       });
 
       throw new Error(`Failed to generate system health report: ${error.message}`);
-    }
-  }
+
+
 
   async gatherSystemInformation(): Promise<SystemInformation> {
 
@@ -432,7 +453,7 @@ export class SystemDiagnostics {
             mac: addr.mac
           });
         });
-      }
+
     });
 
     // Storage information (simplified - in production would use proper disk space APIs)
@@ -450,21 +471,21 @@ export class SystemDiagnostics {
         speed: cpus[0]?.speed || 0,
         loadAverage: loadAvg,
         utilization: Math.round(cpuUtilization * 100) / 100
-  }
+
       memoryInfo: {
         total: Math.round(totalMemory / 1024 / 1024), // MB
         free: Math.round(freeMemory / 1024 / 1024),
         used: Math.round(usedMemory / 1024 / 1024),
         utilization: Math.round(memoryUtilization * 100) / 100,
         heapUsage: memoryUsage
-  }
+
       networkInfo: {
         interfaces,
         activeConnections: await this.getActiveConnectionCount(),
         bandwidthUtilization: await this.getBandwidthUtilization(},
       storageInfo: mockStorageData
     };
-  }
+
 
   private async getMockStorageInformation(): Promise<StorageInformation> {
 
@@ -476,14 +497,14 @@ export class SystemDiagnostics {
         used: 60 * 1024,  // 60GB used
         available: 40 * 1024, // 40GB available
         utilization: 60
-  }
+
       {
         path: '/data',
         size: 500 * 1024, // 500GB in MB
         used: 200 * 1024, // 200GB used
         available: 300 * 1024, // 300GB available
         utilization: 40
-      }
+
     ];
 
     const totalSpace = disks.reduce((sum, disk) => sum + disk.size, 0);
@@ -497,19 +518,19 @@ export class SystemDiagnostics {
       freeSpace,
       utilization: Math.round((usedSpace / totalSpace) * 100 * 100) / 100
     };
-  }
+
 
   private async getActiveConnectionCount(): Promise<number> {
 
     // Mock data - in production would query actual network connections
     return 42;
-  }
+
 
   private async getBandwidthUtilization(): Promise<number> {
 
     // Mock data - in production would monitor actual bandwidth usage
     return 35.7;
-  }
+
 
   // ==========================================
   // HEALTH ANALYSIS METHODS
@@ -523,7 +544,7 @@ export class SystemDiagnostics {
       const category = result.category;
       if (!categoryGroups.has(category)) {
         categoryGroups.set(category, []);
-      }
+
       categoryGroups.get(category)!.push(result);
     });
 
@@ -535,7 +556,7 @@ export class SystemDiagnostics {
     });
 
     return categoryReports;
-  }
+
 
   private analyzeCategoryResults(category: DiagnosticCategory, results: DiagnosticResult[]): CategoryHealthReport {
     const issueCount = results.filter(r => 
@@ -558,7 +579,7 @@ export class SystemDiagnostics {
       nextCheckDue: new Date(Date.now() + this.configuration.checkIntervals[category] || 3600000),
       trends
     };
-  }
+
 
   private calculateDiagnosticScore(result: DiagnosticResult): number {
     switch (result.status) {
@@ -574,15 +595,15 @@ export class SystemDiagnostics {
       return 0;
     default:
       return 50;
-    }
-  }
+
+
 
   private determineCategoryStatus(score: number, issueCount: number): DiagnosticStatus {
     if (score >= 90 && issueCount === 0) return DiagnosticStatus.HEALTHY;
     if (score >= 75) return DiagnosticStatus.WARNING;
     if (score >= 50) return DiagnosticStatus.DEGRADED;
     return DiagnosticStatus.CRITICAL;
-  }
+
 
   private getCategoryTrends(category: DiagnosticCategory): CategoryTrends {
     // Mock trend data - in production would query historical data
@@ -593,7 +614,7 @@ export class SystemDiagnostics {
       lastWeekAverage: 85,
       currentScore: 87
     };
-  }
+
 
   private identifyCriticalIssues(results: DiagnosticResult[]): CriticalIssue[] {
     const criticalIssues: CriticalIssue[] = [];
@@ -613,11 +634,11 @@ export class SystemDiagnostics {
           affectedSystems: result.details.affectedComponents || ['system']
         };
         criticalIssues.push(issue);
-      }
+
     });
 
     return criticalIssues;
-  }
+
 
   private estimateResolutionTime(result: DiagnosticResult): number {
     // Estimate resolution time based on issue type and severity
@@ -644,7 +665,7 @@ export class SystemDiagnostics {
     return Math.round(
       baseTime[result.severity] * (categoryMultiplier[result.category] || 1.0)
     );
-  }
+
 
   private async generateRecommendations(results: DiagnosticResult[], systemInfo: SystemInformation): Promise<SystemRecommendation[]> {
 
@@ -656,7 +677,7 @@ export class SystemDiagnostics {
       const category = result.category;
       if (!issuesByCategory.has(category)) {
         issuesByCategory.set(category, []);
-      }
+
       issuesByCategory.get(category)!.push(result);
     });
 
@@ -675,7 +696,7 @@ export class SystemDiagnostics {
     recommendations.push(...proactiveRecommendations);
 
     return recommendations;
-  }
+
 
   private generateCategoryRecommendations(category: DiagnosticCategory, issues: DiagnosticResult[], systemInfo: SystemInformation): SystemRecommendation[] {
     const recommendations: SystemRecommendation[] = [];
@@ -699,7 +720,7 @@ export class SystemDiagnostics {
           expectedBenefit: 'Improved system responsiveness and stability',
           dependencies: []
         });
-      }
+
       if (systemInfo.memoryInfo.utilization > 85) {
         recommendations.push({
           recommendationId: `rec_memory_${Date.now()}`,
@@ -717,7 +738,7 @@ export class SystemDiagnostics {
           expectedBenefit: 'Reduced risk of out-of-memory errors and improved stability',
           dependencies: []
         });
-      }
+
       break;
 
     case DiagnosticCategory.DATABASE:
@@ -757,16 +778,16 @@ export class SystemDiagnostics {
           expectedBenefit: 'Prevented storage-related outages and improved system stability',
           dependencies: []
         });
-      }
+
       break;
 
     default:
       // Generic recommendations for other categories
       break;
-    }
+
 
     return recommendations;
-  }
+
 
   private generateProactiveRecommendations(systemInfo: SystemInformation): SystemRecommendation[] {
     const recommendations: SystemRecommendation[] = [];
@@ -807,10 +828,10 @@ export class SystemDiagnostics {
         expectedBenefit: 'Better visibility into system health and faster issue resolution',
         dependencies: ['Monitoring infrastructure setup']
       });
-    }
+
 
     return recommendations;
-  }
+
 
   private calculateOverallHealthScore(results: DiagnosticResult[]): number {
     if (results.length === 0) return 0;
@@ -826,7 +847,7 @@ export class SystemDiagnostics {
     const weightedSum = weightedScores.reduce((sum, score) => sum + score, 0);
 
     return Math.round((weightedSum / totalWeight) * 100) / 100;
-  }
+
 
   private getCategoryWeight(category: DiagnosticCategory): number {
     const weights = {
@@ -843,7 +864,7 @@ export class SystemDiagnostics {
     };
 
     return weights[category] || 1.0;
-  }
+
 
   private determineOverallHealth(healthScore: number, criticalIssues: CriticalIssue[]): DiagnosticStatus {
     if (criticalIssues.length > 0) return DiagnosticStatus.CRITICAL;
@@ -851,7 +872,7 @@ export class SystemDiagnostics {
     if (healthScore >= 75) return DiagnosticStatus.WARNING;
     if (healthScore >= 50) return DiagnosticStatus.DEGRADED;
     return DiagnosticStatus.CRITICAL;
-  }
+
 
   private async analyzeHealthTrends(): Promise<HealthTrends> {
 
@@ -870,7 +891,7 @@ export class SystemDiagnostics {
         [DiagnosticCategory.INTEGRATION]: { trend: 'stable', scoreChange: 0, issueCountChange: 0, lastWeekAverage: 92, currentScore: 92 },
         [DiagnosticCategory.BACKUP]: { trend: 'stable', scoreChange: 1, issueCountChange: 0, lastWeekAverage: 94, currentScore: 95 },
         [DiagnosticCategory.CONFIGURATION]: { trend: 'stable', scoreChange: 0, issueCountChange: 0, lastWeekAverage: 96, currentScore: 96 }
-  }
+
       performanceMetrics: {
         responseTime: {
           current: 250,
@@ -878,31 +899,31 @@ export class SystemDiagnostics {
           change: 2.04,
           trend: 'stable',
           dataPoints: []
-  }
+
         throughput: {
           current: 1250,
           previous: 1200,
           change: 4.17,
           trend: 'improving',
           dataPoints: []
-  }
+
         errorRate: {
           current: 0.12,
           previous: 0.15,
           change: -20,
           trend: 'improving',
           dataPoints: []
-  }
+
         resourceUtilization: {
           current: 68,
           previous: 72,
           change: -5.56,
           trend: 'improving',
           dataPoints: []
-        }
-      }
+
+
     };
-  }
+
 
   // ==========================================
   // UTILITY METHODS
@@ -918,7 +939,7 @@ export class SystemDiagnostics {
       'security_logs',
       'application_metrics'
     ];
-  }
+
 
   private getDefaultConfiguration(): SystemDiagnosticConfiguration {
     return {
@@ -934,7 +955,7 @@ export class SystemDiagnostics {
         [DiagnosticCategory.INTEGRATION]: 600000, // 10 minutes
         [DiagnosticCategory.BACKUP]: 3600000,     // 1 hour
         [DiagnosticCategory.CONFIGURATION]: 7200000 // 2 hours
-  }
+
       alertThresholds: {
         cpu: { warning: 70, critical: 85, alertCooldown: 15, escalationDelay: 60 },
         memory: { warning: 80, critical: 90, alertCooldown: 15, escalationDelay: 60 },
@@ -942,7 +963,7 @@ export class SystemDiagnostics {
         network: { warning: 70, critical: 85, alertCooldown: 10, escalationDelay: 30 },
         database: { warning: 500, critical: 1000, alertCooldown: 5, escalationDelay: 15 },
         performance: { warning: 1000, critical: 2000, alertCooldown: 5, escalationDelay: 15 }
-  }
+
       reportingSettings: {
         generateDaily: true,
         generateWeekly: true,
@@ -950,7 +971,7 @@ export class SystemDiagnostics {
         emailRecipients: [],
         slackWebhooks: [],
         retentionPeriod: 90
-  }
+
       maintenanceWindows: [
         {
           id: 'weekly_maintenance',
@@ -961,10 +982,10 @@ export class SystemDiagnostics {
           timezone: 'UTC',
           suppressAlerts: true,
           skipChecks: false
-        }
+
       ]
     };
-  }
+
 
   // ==========================================
   // STORAGE METHODS
@@ -979,7 +1000,7 @@ export class SystemDiagnostics {
       overallHealth: report.overallHealth,
       criticalIssueCount: report.criticalIssues.length
     });
-  }
+
 
   // ==========================================
   // PUBLIC API METHODS
@@ -989,27 +1010,26 @@ export class SystemDiagnostics {
 
     // In production, would query database for latest report
     return null;
-  }
+
 
   async getHealthReports(filters?: { startDate?: Date; endDate?: Date; limit?: number }): Promise<SystemHealthReport[]> {
 
     // In production, would query database with filters
     return [];
-  }
+
 
   async updateConfiguration(config: Partial<SystemDiagnosticConfiguration>): Promise<void> {
 
     this.configuration = { ...this.configuration, ...config };
     // In production, would persist configuration to database
-  }
+
 
   async getConfiguration(): Promise<SystemDiagnosticConfiguration> {
 
     return { ...this.configuration };
-  }
+
 
   async executeHealthCheck(initiatedBy: string): Promise<DiagnosticExecution> {
 
     return this.diagnosticService.runDiagnosticSuite('system_health_check', initiatedBy);
-  }
-}
+

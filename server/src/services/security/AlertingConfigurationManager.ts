@@ -23,20 +23,21 @@ import {
   AlertCondition,
   ChannelCondition,
   ActionCondition
-} from './UnifiedSecurityAlertingFramework';
+ from './UnifiedSecurityAlertingFramework';
 
-}
-}
+
+
 export interface ConfigurationValidationResult {
   valid: boolean;
   errors: string[];
   warnings: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConfigurationTemplate {
   id: string;
   name: string;
@@ -52,13 +53,14 @@ export interface ConfigurationTemplate {
     createdAt: Date;
     updatedAt: Date;
     tags: string[];
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ConfigurationChange {
   id: string;
   timestamp: Date;
@@ -69,12 +71,13 @@ export interface ConfigurationChange {
   previousValue?: unknown;
   newValue?: unknown;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleTestResult {
   ruleId: string;
   testCase: Error;
@@ -83,14 +86,15 @@ export interface RuleTestResult {
     condition: AlertCondition;
     matched: boolean;
     value: Error;
-}
-}
-  }[];
-  executionTime: number;
-}
 
-}
-}
+
+
+[];
+  executionTime: number;
+
+
+
+
 export interface ConfigurationAudit {
   timestamp: Date;
   userId: string;
@@ -99,9 +103,10 @@ export interface ConfigurationAudit {
   changes: string[];
   ipAddress?: string;
   userAgent?: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Configuration Manager for Security Alerting System
@@ -122,14 +127,14 @@ export class AlertingConfigurationManager extends EventEmitter {
     this.loadDefaultTemplates();
     
     logger.info('Alerting Configuration Manager initialized');
-  }
+
   
   /**
    * Get current configuration
    */
   getConfiguration(): AlertingConfiguration {
     return { ...this.configuration };
-  }
+
   
   /**
    * Update configuration
@@ -143,7 +148,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     
     if (!validation.valid) {
       return validation;
-    }
+
     
     const previousConfig = { ...this.configuration };
     this.configuration = { ...this.configuration, ...updates };
@@ -168,7 +173,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     logger.info('Configuration updated', { userId });
     
     return validation;
-  }
+
   
   /**
    * Validate configuration
@@ -180,58 +185,58 @@ export class AlertingConfigurationManager extends EventEmitter {
     // Basic validation
     if (config.alertRetentionDays < 1) {
       errors.push('Alert retention days must be at least 1');
-    }
+
     if (config.logRetentionDays < 1) {
       errors.push('Log retention days must be at least 1');
-    }
+
     if (config.maxConcurrentProcessing < 1) {
       errors.push('Max concurrent processing must be at least 1');
-    }
+
     if (config.processingTimeout < 1000) {
       errors.push('Processing timeout must be at least 1000ms');
-    }
+
     if (config.batchSize < 1) {
       errors.push('Batch size must be at least 1');
-    }
+
     
     // Threshold validation
     if (config.criticalAlertThreshold < 1) {
       errors.push('Critical alert threshold must be at least 1');
-    }
+
     if (config.highAlertThreshold < 1) {
       errors.push('High alert threshold must be at least 1');
-    }
+
     if (config.correlationTimeWindow < 1000) {
       warnings.push('Correlation time window is very short (< 1 second)');
-    }
+
     if (config.escalationTimeout < 1000) {
       warnings.push('Escalation timeout is very short (< 1 second)');
-    }
+
     
     // Notification channel validation
     config.notificationChannels.forEach((channel, index) => {
       if (!channel.name || channel.name.trim() === '') {
         errors.push(`Notification channel ${index} must have a name`);
-      }
+
       if (!channel.type) {
         errors.push(`Notification channel ${index} must have a type`);
-      }
+
       if (channel.rateLimits.maxPerMinute < 1) {
         warnings.push(`Notification channel ${channel.name} has very low rate limit`);
-      }
+
     });
     
     // Escalation chain validation
     config.escalationChain.forEach((rule, index) => {
       if (rule.level < 1) {
         errors.push(`Escalation rule ${index} level must be at least 1`);
-      }
+
       if (rule.triggerAfter < 1000) {
         warnings.push(`Escalation rule ${index} trigger time is very short`);
-      }
+
       if (rule.actions.length === 0) {
         warnings.push(`Escalation rule ${index} has no actions defined`);
-      }
+
     });
     
     return {
@@ -239,7 +244,7 @@ export class AlertingConfigurationManager extends EventEmitter {
       errors,
       warnings
     };
-  }
+
   
   /**
    * Create alert rule
@@ -257,7 +262,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const validation = this.validateAlertRule(newRule);
     if (!validation.valid) {
       throw new Error(`Rule validation failed: ${validation.errors.join(', ')}`);
-    }
+
     
     this.alertRules.set(newRule.id, newRule);
     
@@ -279,7 +284,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     });
     
     return newRule;
-  }
+
   
   /**
    * Update alert rule
@@ -293,7 +298,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const existingRule = this.alertRules.get(ruleId);
     if (!existingRule) {
       throw new Error(`Alert rule not found: ${ruleId}`);
-    }
+
     
     const updatedRule: AlertRule = {
       ...existingRule,
@@ -305,7 +310,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const validation = this.validateAlertRule(updatedRule);
     if (!validation.valid) {
       throw new Error(`Rule validation failed: ${validation.errors.join(', ')}`);
-    }
+
     
     this.alertRules.set(ruleId, updatedRule);
     
@@ -326,7 +331,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     });
     
     return updatedRule;
-  }
+
   
   /**
    * Delete alert rule
@@ -336,7 +341,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const rule = this.alertRules.get(ruleId);
     if (!rule) {
       throw new Error(`Alert rule not found: ${ruleId}`);
-    }
+
     
     this.alertRules.delete(ruleId);
     
@@ -356,7 +361,7 @@ export class AlertingConfigurationManager extends EventEmitter {
       name: rule.name,
       userId
     });
-  }
+
   
   /**
    * Enable/disable alert rule
@@ -366,7 +371,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const rule = this.alertRules.get(ruleId);
     if (!rule) {
       throw new Error(`Alert rule not found: ${ruleId}`);
-    }
+
     
     const updatedRule = { ...rule, enabled, updatedAt: new Date() };
     this.alertRules.set(ruleId, updatedRule);
@@ -384,14 +389,14 @@ export class AlertingConfigurationManager extends EventEmitter {
     this.emit('alertRuleToggled', { rule: updatedRule, enabled, userId });
     
     return updatedRule;
-  }
+
   
   /**
    * Get alert rule by ID
    */
   getAlertRule(ruleId: string): AlertRule | null {
     return this.alertRules.get(ruleId) || null;
-  }
+
   
   /**
    * Get all alert rules
@@ -401,24 +406,24 @@ export class AlertingConfigurationManager extends EventEmitter {
     category?: AlertCategory;
     source?: AlertSource;
     priority?: AlertPriority;
-  } = {}): AlertRule[] {
+ = {}): AlertRule[] {
     let rules = Array.from(this.alertRules.values());
     
     if (filters.enabled !== undefined) {
       rules = rules.filter(r => r.enabled === filters.enabled);
-    }
+
     if (filters.category) {
       rules = rules.filter(r => r.categories.includes(filters.category!));
-    }
+
     if (filters.source) {
       rules = rules.filter(r => r.sources.includes(filters.source!));
-    }
+
     if (filters.priority) {
       rules = rules.filter(r => r.minimumPriority === filters.priority);
-    }
+
     
     return rules.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
-  }
+
   
   /**
    * Test alert rule against sample data
@@ -427,7 +432,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const rule = this.alertRules.get(ruleId);
     if (!rule) {
       throw new Error(`Alert rule not found: ${ruleId}`);
-    }
+
     
     const startTime = Date.now();
     const conditionResults = rule.conditions.map(condition => ({
@@ -446,7 +451,7 @@ export class AlertingConfigurationManager extends EventEmitter {
       conditions: conditionResults,
       executionTime
     };
-  }
+
   
   /**
    * Validate alert rule
@@ -458,60 +463,60 @@ export class AlertingConfigurationManager extends EventEmitter {
     // Basic validation
     if (!rule.name || rule.name.trim() === '') {
       errors.push('Rule name is required');
-    }
+
     if (!rule.description || rule.description.trim() === '') {
       warnings.push('Rule description is recommended');
-    }
+
     if (rule.conditions.length === 0) {
       errors.push('Rule must have at least one condition');
-    }
+
     if (rule.actions.length === 0) {
       warnings.push('Rule has no actions defined');
-    }
+
     if (rule.sources.length === 0) {
       warnings.push('Rule has no sources specified');
-    }
+
     if (rule.categories.length === 0) {
       warnings.push('Rule has no categories specified');
-    }
+
     
     // Condition validation
     rule.conditions.forEach((condition, index) => {
       if (!condition.field || condition.field.trim() === '') {
         errors.push(`Condition ${index + 1} must have a field`);
-      }
+
       if (!condition.operator) {
         errors.push(`Condition ${index + 1} must have an operator`);
-      }
+
       if (condition.weight < 0 || condition.weight > 1) {
         errors.push(`Condition ${index + 1} weight must be between 0 and 1`);
-      }
+
     });
     
     // Action validation
     rule.actions.forEach((action, index) => {
       if (!action.type) {
         errors.push(`Action ${index + 1} must have a type`);
-      }
+
       if (!action.parameters) {
         warnings.push(`Action ${index + 1} has no parameters`);
-      }
+
     });
     
     // Rate limiting validation
     if (rule.maxExecutionsPerHour < 1) {
       warnings.push('Very low execution limit may prevent rule from working effectively');
-    }
+
     if (rule.cooldownPeriod < 1000) {
       warnings.push('Very short cooldown period may cause rule spam');
-    }
+
     
     return {
       valid: errors.length === 0,
       errors,
       warnings
     };
-  }
+
   
   /**
    * Create notification channel
@@ -529,7 +534,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const validation = this.validateNotificationChannel(newChannel);
     if (!validation.valid) {
       throw new Error(`Channel validation failed: ${validation.errors.join(', ')}`);
-    }
+
     
     this.notificationChannels.set(newChannel.id, newChannel);
     
@@ -545,7 +550,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     this.emit('notificationChannelCreated', { channel: newChannel, userId });
     
     return newChannel;
-  }
+
   
   /**
    * Update notification channel
@@ -559,7 +564,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const existingChannel = this.notificationChannels.get(channelId);
     if (!existingChannel) {
       throw new Error(`Notification channel not found: ${channelId}`);
-    }
+
     
     const updatedChannel: NotificationChannel = {
       ...existingChannel,
@@ -570,7 +575,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const validation = this.validateNotificationChannel(updatedChannel);
     if (!validation.valid) {
       throw new Error(`Channel validation failed: ${validation.errors.join(', ')}`);
-    }
+
     
     this.notificationChannels.set(channelId, updatedChannel);
     
@@ -591,7 +596,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     });
     
     return updatedChannel;
-  }
+
   
   /**
    * Get notification channels
@@ -601,10 +606,10 @@ export class AlertingConfigurationManager extends EventEmitter {
     
     if (enabled !== undefined) {
       channels = channels.filter(c => c.enabled === enabled);
-    }
+
     
     return channels;
-  }
+
   
   /**
    * Validate notification channel
@@ -615,50 +620,50 @@ export class AlertingConfigurationManager extends EventEmitter {
     
     if (!channel.name || channel.name.trim() === '') {
       errors.push('Channel name is required');
-    }
+
     if (!channel.type) {
       errors.push('Channel type is required');
-    }
+
     if (!channel.configuration) {
       errors.push('Channel configuration is required');
-    }
+
     
     // Rate limit validation
     if (channel.rateLimits.maxPerMinute < 1) {
       warnings.push('Very low rate limit may prevent notifications');
-    }
+
     if (channel.rateLimits.maxPerHour < channel.rateLimits.maxPerMinute) {
       errors.push('Hourly rate limit cannot be less than per-minute limit');
-    }
+
     if (channel.rateLimits.maxPerDay < channel.rateLimits.maxPerHour) {
       errors.push('Daily rate limit cannot be less than hourly limit');
-    }
+
     
     // Type-specific validation
     switch (channel.type) {
     case 'EMAIL':
       if (!channel.configuration.smtpHost && !channel.configuration.apiKey) {
         errors.push('Email channel requires SMTP configuration or API key');
-      }
+
       break;
     case 'WEBHOOK':
       if (!channel.configuration.url) {
         errors.push('Webhook channel requires URL');
-      }
+
       break;
     case 'SLACK':
       if (!channel.configuration.webhookUrl && !channel.configuration.botToken) {
         errors.push('Slack channel requires webhook URL or bot token');
-      }
+
       break;
-    }
+
     
     return {
       valid: errors.length === 0,
       errors,
       warnings
     };
-  }
+
   
   /**
    * Get configuration templates
@@ -668,10 +673,10 @@ export class AlertingConfigurationManager extends EventEmitter {
     
     if (category) {
       templates = templates.filter(t => t.category === category);
-    }
+
     
     return templates.sort((a, b) => b.metadata.updatedAt.getTime() - a.metadata.updatedAt.getTime());
-  }
+
   
   /**
    * Apply configuration template
@@ -685,7 +690,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     const template = this.configurationTemplates.get(templateId);
     if (!template) {
       throw new Error(`Template not found: ${templateId}`);
-    }
+
     
     // Apply template configuration
     const newConfig = {
@@ -700,11 +705,11 @@ export class AlertingConfigurationManager extends EventEmitter {
       // Apply template rules and channels
       for (const rule of template.rules) {
         await this.createAlertRule(rule, userId);
-      }
+
       
       for (const channel of template.channels) {
         await this.createNotificationChannel(channel, userId);
-      }
+
       
       this.escalationRules = [...template.escalationRules];
       
@@ -715,10 +720,10 @@ export class AlertingConfigurationManager extends EventEmitter {
         templateName: template.name,
         userId
       });
-    }
+
     
     return validation;
-  }
+
   
   /**
    * Get configuration change history
@@ -730,31 +735,31 @@ export class AlertingConfigurationManager extends EventEmitter {
       startDate?: Date;
       endDate?: Date;
       limit?: number;
-    } = {}
+ = {}
   ): ConfigurationChange[] {
     let changes = [...this.changeHistory];
     
     if (filters.userId) {
       changes = changes.filter(c => c.userId === filters.userId);
-    }
+
     if (filters.resourceType) {
       changes = changes.filter(c => c.resourceType === filters.resourceType);
-    }
+
     if (filters.startDate) {
       changes = changes.filter(c => c.timestamp >= filters.startDate!);
-    }
+
     if (filters.endDate) {
       changes = changes.filter(c => c.timestamp <= filters.endDate!);
-    }
+
     
     changes.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     
     if (filters.limit) {
       changes = changes.slice(0, filters.limit);
-    }
+
     
     return changes;
-  }
+
   
   /**
    * Export configuration
@@ -768,7 +773,7 @@ export class AlertingConfigurationManager extends EventEmitter {
       exportedAt: Date;
       version: string;
     };
-    } {
+ {
     return {
       configuration: this.configuration,
       rules: Array.from(this.alertRules.values()),
@@ -777,9 +782,9 @@ export class AlertingConfigurationManager extends EventEmitter {
       metadata: {
         exportedAt: new Date(),
         version: '1.0.0'
-      }
+
     };
-  }
+
   
   /**
    * Import configuration
@@ -790,7 +795,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     options: {
       overwriteExisting?: boolean;
       validateOnly?: boolean;
-    } = {}
+ = {}
   ): Promise<ConfigurationValidationResult> {
 
     const errors: string[] = [];
@@ -800,20 +805,20 @@ export class AlertingConfigurationManager extends EventEmitter {
       // Validate structure
       if (!configData.configuration) {
         errors.push('Missing configuration object');
-      }
+
       if (!Array.isArray(configData.rules)) {
         errors.push('Rules must be an array');
-      }
+
       if (!Array.isArray(configData.channels)) {
         errors.push('Channels must be an array');
-      }
+
       if (!Array.isArray(configData.escalationRules)) {
         errors.push('Escalation rules must be an array');
-      }
+
       
       if (errors.length > 0) {
         return { valid: false, errors, warnings };
-      }
+
       
       // Validate individual components
       const configValidation = this.validateConfiguration(configData.configuration);
@@ -824,41 +829,41 @@ export class AlertingConfigurationManager extends EventEmitter {
         const ruleValidation = this.validateAlertRule(rule);
         errors.push(...ruleValidation.errors.map(e => `Rule ${rule.name}: ${e}`));
         warnings.push(...ruleValidation.warnings.map(w => `Rule ${rule.name}: ${w}`));
-      }
+
       
       for (const channel of configData.channels) {
         const channelValidation = this.validateNotificationChannel(channel);
         errors.push(...channelValidation.errors.map(e => `Channel ${channel.name}: ${e}`));
         warnings.push(...channelValidation.warnings.map(w => `Channel ${channel.name}: ${w}`));
-      }
+
       
       if (options.validateOnly) {
         return { valid: errors.length === 0, errors, warnings };
-      }
+
       
       if (errors.length > 0) {
         return { valid: false, errors, warnings };
-      }
+
       
       // Apply import
       if (options.overwriteExisting) {
         this.alertRules.clear();
         this.notificationChannels.clear();
-      }
+
       
       await this.updateConfiguration(configData.configuration, userId);
       
       for (const rule of configData.rules) {
         if (options.overwriteExisting || !this.alertRules.has(rule.id)) {
           await this.createAlertRule(rule, userId);
-        }
-      }
+
+
       
       for (const channel of configData.channels) {
         if (options.overwriteExisting || !this.notificationChannels.has(channel.id)) {
           await this.createNotificationChannel(channel, userId);
-        }
-      }
+
+
       
       this.escalationRules = configData.escalationRules;
       
@@ -871,12 +876,11 @@ export class AlertingConfigurationManager extends EventEmitter {
       });
       
       return { valid: true, errors, warnings };
-      
-    } catch (error) {
+ catch (error) {
       errors.push(`Import failed: ${error instanceof Error ? error.message : String(error)}`);
       return { valid: false, errors, warnings };
-    }
-  }
+
+
   
   // PRIVATE HELPER METHODS
   
@@ -887,7 +891,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     });
     
     this.escalationRules = [...this.configuration.escalationChain];
-  }
+
   
   private loadDefaultTemplates(): void {
     // Load default configuration templates
@@ -905,7 +909,7 @@ export class AlertingConfigurationManager extends EventEmitter {
         highAlertThreshold: 10,
         correlationTimeWindow: 300000, // 5 minutes
         escalationTimeout: 3600000 // 1 hour
-  }
+
       rules: [],
       channels: [],
       escalationRules: [],
@@ -914,11 +918,11 @@ export class AlertingConfigurationManager extends EventEmitter {
         createdAt: new Date(),
         updatedAt: new Date(),
         tags: ['security', 'default']
-      }
+
     };
     
     this.configurationTemplates.set(securityTemplate.id, securityTemplate);
-  }
+
   
   private recordConfigurationChange(change: Omit<ConfigurationChange, 'id' | 'timestamp'>): void {
     const configChange: ConfigurationChange = {
@@ -932,10 +936,10 @@ export class AlertingConfigurationManager extends EventEmitter {
     // Keep only last 1000 changes
     if (this.changeHistory.length > 1000) {
       this.changeHistory.shift();
-    }
+
     
     this.emit('configurationChanged', configChange);
-  }
+
   
   private evaluateCondition(data: Record<string, unknown>, condition: AlertCondition): boolean {
     const value = this.getFieldValue(data, condition.field);
@@ -961,8 +965,8 @@ export class AlertingConfigurationManager extends EventEmitter {
       return new RegExp(String(condition.value)).test(String(value));
     default:
       return false;
-    }
-  }
+
+
   
   private getFieldValue(data: Record<string, unknown>, field: string): unknown {
     const parts = field.split('.');
@@ -971,25 +975,25 @@ export class AlertingConfigurationManager extends EventEmitter {
     for (const part of parts) {
       if (value && typeof value === 'object') {
         value = value[part];
-      } else {
+ else {
         return undefined;
-      }
-    }
+
+
     
     return value;
-  }
+
   
   private generateRuleId(): string {
     return `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateChannelId(): string {
     return `channel-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateChangeId(): string {
     return `change-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   /**
    * Cleanup resources
@@ -997,7 +1001,7 @@ export class AlertingConfigurationManager extends EventEmitter {
   destroy(): void {
     this.removeAllListeners();
     logger.info('Alerting Configuration Manager destroyed');
-  }
-}
+
+
 
 export default AlertingConfigurationManager;

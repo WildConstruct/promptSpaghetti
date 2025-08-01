@@ -404,8 +404,7 @@ ThreatIntelligence;
                                                             // Implementation would track and clear intervals
                                                             export: , default: SecurityAlertingAnalytics
                                                         }))));
-                                                    }
-                                                }
+                                                    } }
                                             };
                                         }
                                     };

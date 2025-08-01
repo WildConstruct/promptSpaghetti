@@ -8,7 +8,7 @@ import {
   SecurityRiskScoringConfig, 
   SecurityRisk,
   RiskScoringReport 
-} from '../SecurityRiskScoringEngine';
+ from '../SecurityRiskScoringEngine';
 import { SecurityAPIIntegrationPlatform } from '../SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../SecurityPolicyAnalysisEngine';
 
@@ -30,16 +30,16 @@ describe('SecurityRiskScoringEngine', () => {
       getPlatformMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         api_calls: { total_requests: 20000, successful_requests: 19500 },
         security_analytics: { threats_detected: 45, detection_accuracy_percent: 98 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPolicyEngine = {
       on: jest.fn<unknown[], unknown>(),
       analyzePolicyImpact: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_analysis: { overall_risk_score: 25 },
         validation_results: { validation_passed: true }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     // Setup configuration
     config = {
@@ -50,7 +50,7 @@ describe('SecurityRiskScoringEngine', () => {
         temporal_scoring_enabled: true,
         environmental_scoring_enabled: true,
         composite_scoring_enabled: true
-  }
+
       threat_prioritization: {
         priority_matrix_enabled: true,
         business_impact_weighting: true,
@@ -58,7 +58,7 @@ describe('SecurityRiskScoringEngine', () => {
         threat_intelligence_integration: true,
         dynamic_prioritization: true,
         contextual_prioritization: true
-  }
+
       risk_factors: {
         vulnerability_severity: true,
         asset_criticality: true,
@@ -67,7 +67,7 @@ describe('SecurityRiskScoringEngine', () => {
         business_impact: true,
         remediation_complexity: true,
         exposure_metrics: true
-  }
+
       scoring_models: {
         quantitative_models_enabled: true,
         qualitative_models_enabled: true,
@@ -75,7 +75,7 @@ describe('SecurityRiskScoringEngine', () => {
         industry_benchmarking: true,
         peer_comparison: true,
         historical_analysis: true
-  }
+
       automation_settings: {
         real_time_scoring: true,
         automated_prioritization: true,
@@ -83,7 +83,7 @@ describe('SecurityRiskScoringEngine', () => {
         escalation_automation: true,
         dashboard_integration: true,
         reporting_automation: true
-  }
+
       integration_settings: {
         threat_intelligence_feeds: true,
         vulnerability_scanners: true,
@@ -91,7 +91,7 @@ describe('SecurityRiskScoringEngine', () => {
         incident_response_platforms: true,
         compliance_frameworks: true,
         business_systems: true
-      }
+
     };
 
     // Setup sample risk data
@@ -105,7 +105,7 @@ describe('SecurityRiskScoringEngine', () => {
         identification_method: 'automated',
         source_systems: ['vulnerability_scanner', 'penetration_test'],
         confidence_level: 0.95
-  }
+
       vulnerability_details: {
         cve_id: 'CVE-2024-12345',
         cvss_base_score: 9.8,
@@ -118,14 +118,14 @@ describe('SecurityRiskScoringEngine', () => {
           exploit_maturity: 'functional',
           public_exploits_available: true,
           weaponization_level: 'high'
-  }
+
         patch_information: {
           patch_available: true,
           patch_complexity: 'medium',
           estimated_patch_time_hours: 24,
           testing_requirements: 'full_regression'
-        }
-  }
+
+
       asset_context: {
         affected_assets: [
           {
@@ -137,7 +137,7 @@ describe('SecurityRiskScoringEngine', () => {
             data_classification: 'confidential',
             network_exposure: 'internet_facing',
             compliance_requirements: ['PCI_DSS', 'SOX', 'GDPR']
-          }
+
         ],
         business_impact_potential: {
           revenue_impact_estimate: 5000000,
@@ -145,8 +145,8 @@ describe('SecurityRiskScoringEngine', () => {
           operational_disruption_level: 'severe',
           reputation_damage_level: 'high',
           regulatory_impact: 'significant'
-        }
-  }
+
+
       threat_landscape: {
         active_campaigns: [
           {
@@ -154,12 +154,12 @@ describe('SecurityRiskScoringEngine', () => {
             threat_actor: 'APT-SQL-2024',
             targeting_probability: 0.85,
             attack_sophistication: 'medium'
-          }
+
         ],
         geographic_threat_level: 'high',
         industry_targeting_level: 'elevated',
         seasonal_factors: ['tax_season', 'holiday_shopping']
-      }
+
     };
 
     engine = new SecurityRiskScoringEngine(config, mockAPIIntegration, mockPolicyEngine);
@@ -168,7 +168,7 @@ describe('SecurityRiskScoringEngine', () => {
   afterEach(async () => {
     if (engine) {
       await engine.shutdown();
-    }
+
   });
 
   describe('Initialization', () => {
@@ -248,8 +248,8 @@ describe('SecurityRiskScoringEngine', () => {
             exploit_maturity: 'proof_of_concept',
             public_exploits_available: false,
             weaponization_level: 'low'
-          }
-        }
+
+
       };
 
       const scoredRisk = await engine.scoreSecurityRisk(riskWithTemporal);
@@ -312,7 +312,7 @@ describe('SecurityRiskScoringEngine', () => {
           ...sampleRiskData.vulnerability_details!,
           cvss_base_score: 6.5,
           severity_level: 'medium'
-        }
+
       });
 
       const prioritizedRisks = await engine.prioritizeRisks([risk1.risk_id, risk2.risk_id]);
@@ -333,7 +333,7 @@ describe('SecurityRiskScoringEngine', () => {
             regulation: 'PCI_DSS',
             deadline: Date.now() + 86400000 * 30,
             penalty_risk: 'high'
-          }
+
         ]
       };
 
@@ -381,7 +381,7 @@ describe('SecurityRiskScoringEngine', () => {
         time_range: {
           start_date: Date.now() - 86400000 * 7,
           end_date: Date.now()
-  }
+
         include_trends: true,
         include_recommendations: true
       });
@@ -444,7 +444,7 @@ describe('SecurityRiskScoringEngine', () => {
             cvss_score: 8.8,
             affected_hosts: ['10.0.1.100', '10.0.1.101'],
             first_detected: Date.now() - 86400000
-          }
+
         ]
       };
 
@@ -463,7 +463,7 @@ describe('SecurityRiskScoringEngine', () => {
             criticality_change: 'elevated',
             business_impact_change: 'increased',
             compliance_requirements_added: ['SOC2']
-          }
+
         ]
       };
 
@@ -587,7 +587,7 @@ describe('SecurityRiskScoringEngine', () => {
         scoring_algorithms: {
           ...config.scoring_algorithms,
           machine_learning_scoring: false
-        }
+
       };
 
       const engineWithoutML = new SecurityRiskScoringEngine(
@@ -611,7 +611,7 @@ describe('SecurityRiskScoringEngine', () => {
           ...config.threat_prioritization,
           dynamic_prioritization: false,
           contextual_prioritization: false
-        }
+
       };
 
       const engineWithSimplePrioritization = new SecurityRiskScoringEngine(

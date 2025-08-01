@@ -15,9 +15,8 @@
  * - Export and reporting capabilities
  */
 
-}
-export interface ActivityEvent {
-  id: string;
+
+export interface ActivityEvent { id: string;
   timestamp: Date;
   userId: string;
   userDisplayName?: string;
@@ -44,7 +43,7 @@ export interface ActivityEvent {
   location?: GeolocationInfo;
   // Impact and analytics
   impact: ActivityImpact;
-  duration?: number; // milliseconds,
+  duration?: number; // milliseconds }
   success: boolean;
   errorMessage?: string;
   // Relationships
@@ -62,11 +61,11 @@ export interface ActivityEvent {
   acknowledged?: boolean;
   bookmarked?: boolean;
   archived?: boolean;
-}
-}
-}
-export interface ActivityDetails {
-  // Graph and node changes
+
+
+
+
+export interface ActivityDetails { // Graph and node changes
   nodeChanges?: NodeChange;
   connectionChanges?: ConnectionChange;
   variableChanges?: VariableChange;
@@ -91,59 +90,54 @@ export interface ActivityDetails {
   externalSource?: string;
   externalUrl?: string;
   // Custom metadata
-  customData?: Record<string, unknown>;
-}
-}
-}
-export interface NodeChange {
-  nodeId: string;
+  customData?: Record<string, unknown> }
+
+
+
+export interface NodeChange { nodeId: string;
   nodeType: string;
   changeType: 'created' | 'updated' | 'deleted' | 'moved';
   field?: string;
   oldValue?: unknown;
   newValue?: unknown;
-  position?: [number, number];
-}
-}
-}
-export interface ConnectionChange {
-  connectionId: string;
+  position?: [number, number] }
+
+
+
+export interface ConnectionChange { connectionId: string;
   changeType: 'created' | 'deleted';
   sourceNodeId: string;
   targetNodeId: string;
   sourceHandle?: string;
-  targetHandle?: string;
-}
-}
-}
-export interface VariableChange {
-  variableName: string;
+  targetHandle?: string }
+
+
+
+export interface VariableChange { variableName: string;
   oldValue?: string;
   newValue?: string;
-  scope: 'global' | 'local' | 'session'
-}
-  }
-}
-export interface ClientInfo {
-  userAgent: string;
+  scope: 'global' | 'local' | 'session' }
+
+
+
+
+export interface ClientInfo { userAgent: string;
   platform: string;
   browser: string;
   browserVersion: string;
   screenResolution: [number, number];
   viewport: [number, number];
   timezone: string;
-  language: string;
-}
-}
-}
-export interface GeolocationInfo {
-  country?: string;
+  language: string }
+
+
+
+export interface GeolocationInfo { country?: string;
   region?: string;
   city?: string;
   coordinates?: [number, number];
-  timezone: string;
-}
-}
+  timezone: string }
+
 export type ActivityType = 
   | 'user_interaction'
   | 'system_event'
@@ -181,19 +175,19 @@ export type ActivitySource =
 export type ActivityImpact = 'none' | 'low' | 'medium' | 'high' | 'critical';
 export type ActivityVisibility = 'private' | 'team' | 'workspace' | 'public';
 
-}
-export interface ActivityFilter {
-  userIds?: string;
+
+export interface ActivityFilter { userIds?: string;
   types?: ActivityType;
   categories?: ActivityCategory;
   sources?: ActivitySource;
   workspaceIds?: string;
   projectIds?: string;
   graphIds?: string;
-  dateRange?: {
+  dateRange?: { }
   start: Date;
   end: Date;
-}
+
+
 };
   impactLevels?: ActivityImpact;
   successOnly?: boolean;
@@ -208,10 +202,9 @@ export interface ActivityFilter {
   offset?: number;
   sortBy?: 'timestamp' | 'impact' | 'duration';
   sortDirection?: 'asc' | 'desc'
-  }
-}
-export interface ActivityStats {
-  totalEvents: number;
+
+
+export interface ActivityStats { totalEvents: number;
   uniqueUsers: number;
   averageSessionDuration: number;
   // Activity distribution
@@ -222,18 +215,18 @@ export interface ActivityStats {
   // Time-based stats
   eventsPerHour: Record<string, number>;
   eventsPerDay: Record<string, number>;
-  peakActivity: {
+  peakActivity: { }
   hour: number;
   count: number;
-}
+
+
 };
   // User engagement
-  mostActiveUsers: Array<{
+  mostActiveUsers: Array<{ ,
   userId: string;
   displayName: string;
   eventCount: number;
-  lastActivity: Date;
-}>;
+  lastActivity: Date }>;
   // Performance insights
   averageExecutionTime: number;
   errorRate: number;
@@ -242,16 +235,15 @@ export interface ActivityStats {
   collaborativeEvents: number;
   teamsActive: number;
   sharingEvents: number;
-}
-}
-export interface ActivitySession {
-  id: string;
+
+
+export interface ActivitySession { id: string;
   userId: string;
   workspaceId?: string;
   projectId?: string;
   startTime: Date;
   endTime?: Date;
-  duration?: number; // milliseconds,
+  duration?: number; // milliseconds;
   eventCount: number;
   uniqueResources: string;
   clientInfo: ClientInfo;
@@ -261,7 +253,7 @@ export interface ActivitySession {
   productivity: 'high' | 'medium' | 'low';
   // Key activities in session
   primaryActivities: ActivityType;
-  keyEvents: string; // event IDs,
+  keyEvents: string; // event IDs }
   // Outcomes
   goalsAchieved?: string;
   tasksCompleted?: string;
@@ -269,10 +261,9 @@ export interface ActivitySession {
   /**
   * Enhanced Activity Timeline Service
   */
-}
-}
-export class ActivityTimelineService {
-  private static instance: ActivityTimelineService;
+
+
+export class ActivityTimelineService { private static instance: ActivityTimelineService;
   private activities: Map<string, ActivityEvent> = new Map();
   private sessions: Map<string, ActivitySession> = new Map();
   private listeners: Map<string, (event: ActivityEvent) => void> = new Map();
@@ -289,20 +280,20 @@ export class ActivityTimelineService {
    */
   async trackActivity(event: Partial<ActivityEvent>): Promise<ActivityEvent> {
 
-    const fullEvent: ActivityEvent = {,
-  id: this.generateEventId(),
-      timestamp: new Date(),
-      userId: event.userId || 'anonymous',
-      type: event.type || 'user_interaction',
-      category: event.category || 'graph_editing',
-      action: event.action || 'unknown',
-      title: event.title || 'Activity',
-      details: event.details || {},
-      source: event.source || 'web_ui',
-      impact: event.impact || 'low',
-      success: event.success !== false,
-      visibility: event.visibility || 'private',
-      tags: event.tags || [],
+    const fullEvent: ActivityEvent = {
+  id: this.generateEventId()
+      timestamp: new Date()
+      userId: event.userId || 'anonymous'
+      type: event.type || 'user_interaction'
+      category: event.category || 'graph_editing'
+      action: event.action || 'unknown'
+      title: event.title || 'Activity' }
+      details: event.details || {}
+      source: event.source || 'web_ui'
+      impact: event.impact || 'low'
+      success: event.success !== false
+      visibility: event.visibility || 'private'
+      tags: event.tags || []
       ...event
     };
     // Store the event
@@ -320,111 +311,100 @@ export class ActivityTimelineService {
    * Track a graph operation
    */
   async trackGraphOperation(action: string)
-    details: Partial<ActivityDetails> & {,
+  details: Partial<ActivityDetails> & { 
   nodeChanges?: NodeChange;
   connectionChanges?: ConnectionChange;
-  variableChanges?: VariableChange;
-},
-  userId: string,
-    context?: {
-  workspaceId?: string;
+  variableChanges?: VariableChange }
+  userId: string
+    context?: { workspaceId?: string;
   projectId?: string;
   graphId?: string;
-  ): Promise<ActivityEvent> {,
+  ): Promise<ActivityEvent> {
   return this.trackActivity({)
-  type: 'graph_operation',
-  category: 'graph_editing',
-  action,
-  title: this.generateGraphOperationTitle(action, details),
-  description: this.generateGraphOperationDescription(action, details),
-  details,
-  userId,
-  impact: this.calculateGraphOperationImpact(details),
-  tags: this.generateGraphOperationTags(action, details),
+  type: 'graph_operation'
+  category: 'graph_editing'
+  action
+  title: this.generateGraphOperationTitle(action, details)
+  description: this.generateGraphOperationDescription(action, details)
+  details
+  userId
+  impact: this.calculateGraphOperationImpact(details)
+  tags: this.generateGraphOperationTags(action, details) }
   ...context
 });
   /**
    * Track user interaction
    */
   async trackUserInteraction(action: string)
-    element: string,
-    details: Partial<ActivityDetails> = {},
-    userId: string,
+  element: string
+    details: Partial<ActivityDetails> = {}
+    userId: string
     context?: Record<string, unknown>
-  ): Promise<ActivityEvent> {
-
-    return this.trackActivity({)
-  type: 'user_interaction',
-      category: this.categorizeUserInteraction(action),
-      action,
+  ): Promise<ActivityEvent> { return this.trackActivity({)
+  type: 'user_interaction'
+      category: this.categorizeUserInteraction(action)
+      action }
       title: `${action} ${element}`}
-},
-  resource: element,
-      details: {
-  ...details,
-  interactionType: action,
-  element,
+
+  resource: element
+      details: { ...details
+  interactionType: action
+  element }
   ...context
-}
-      userId,
-      impact: 'low',
+
+      userId
+      impact: 'low'
       tags: ['interaction', action, element]
     });
   /**
    * Track performance event
    */
   async trackPerformance(operation: string)
-    duration: number,
-    success: boolean,
-    details: Partial<ActivityDetails> = {},
+  duration: number
+    success: boolean
+    details: Partial<ActivityDetails> = {}
     userId?: string
-  ): Promise<ActivityEvent> {
-
-    return this.trackActivity({)
-  type: 'performance',
-      category: 'system_health',
+  ): Promise<ActivityEvent> { return this.trackActivity({)
+  type: 'performance'
+      category: 'system_health' }
       action: `performance_${operation}`}
-},
+
   title: `${operation} completed in ${duration}ms`}
-}
-      duration,
-      success,
-      details: {
-  ...details,
-  executionTime: duration,
+
+      duration
+      success
+      details: { ...details
+  executionTime: duration }
   operation
-},
-  userId: userId || 'system',
-      impact: this.calculatePerformanceImpact(duration, success),
+
+  userId: userId || 'system'
+      impact: this.calculatePerformanceImpact(duration, success)
       tags: ['performance', operation, success ? 'success' : 'error']
     });
   /**
    * Track collaboration event
    */
   async trackCollaboration(action: string)
-    collaborators: string,
-    resource: string,
-    details: Partial<ActivityDetails> = {},
-    userId: string,
+  collaborators: string
+    resource: string
+    details: Partial<ActivityDetails> = {}
+    userId: string
     context?: Record<string, unknown>
-  ): Promise<ActivityEvent> {
-
-    return this.trackActivity({)
-  type: 'collaboration',
-      category: 'collaboration',
-      action,
+  ): Promise<ActivityEvent> { return this.trackActivity({)
+  type: 'collaboration'
+      category: 'collaboration'
+      action }
       title: `${action} ${resource} with ${collaborators.length} collaborators`}
-}
-      resource,
-      details: {
-  ...details,
-  collaboratorCount: collaborators.length,
-}
-      userId,
-      collaborators,
-      impact: 'medium',
-      visibility: 'team',
-      tags: ['collaboration', action, 'team'],
+
+      resource
+      details: { ...details
+  collaboratorCount: collaborators.length }
+
+      userId
+      collaborators
+      impact: 'medium'
+      visibility: 'team'
+      tags: ['collaboration', action, 'team']
       ...context
     });
   /**
@@ -532,38 +512,35 @@ export class ActivityTimelineService {
     // Time-based analysis
     const eventsPerHour: Record<string, number> = {};
     const eventsPerDay: Record<string, number> = {};
-    activities.forEach(activity => {)
+    activities.forEach(activity => { )
   const hour = activity.timestamp.getHours().toString();
       const day = activity.timestamp.toISOString().split('T')[0];
       eventsPerHour[hour] = (eventsPerHour[hour] || 0) + 1;
-      eventsPerDay[day] = (eventsPerDay[day] || 0) + 1;
-    });
+      eventsPerDay[day] = (eventsPerDay[day] || 0) + 1 });
     // Find peak activity hour
     const peakHour = Object.entries(eventsPerHour);
       .reduce((peak, [hour, count]) => 
-        count > peak.count ? { hour: parseInt(hour), count } : peak,
+        count > peak.count ? { hour: parseInt(hour), count } : peak
       { hour: 0, count: 0 }
       );
     // Most active users
     const userActivity: Record<string, { count: number; lastActivity: Date; displayName: string }> = {};
-    activities.forEach(activity => {)
+    activities.forEach(activity => { )
   const userId = activity.userId;
   if (!userActivity[userId]) {
   userActivity[userId] = {
-  count: 0,
-  lastActivity: activity.timestamp,
-  displayName: activity.userDisplayName || userId,
+  count: 0
+  lastActivity: activity.timestamp
+  displayName: activity.userDisplayName || userId }
 };
       userActivity[userId].count++;
-      if (activity.timestamp > userActivity[userId].lastActivity) {
-        userActivity[userId].lastActivity = activity.timestamp;
-    });
+      if (activity.timestamp > userActivity[userId].lastActivity) { userActivity[userId].lastActivity = activity.timestamp });
     const mostActiveUsers = Object.entries(userActivity);
-      .map(([userId, data]) => ({)
-  userId,
-  displayName: data.displayName,
-  eventCount: data.count,
-  lastActivity: data.lastActivity,
+      .map(([userId, data]) => ({ )
+  userId
+  displayName: data.displayName
+  eventCount: data.count
+  lastActivity: data.lastActivity }
 }))
       .sort((a, b) => b.eventCount - a.eventCount)
       .slice(0, 10);
@@ -589,98 +566,92 @@ export class ActivityTimelineService {
     const sharingEvents = activities.filter(a => ;);
       a.action.includes('share') || a.visibility === 'public' || a.visibility === 'team'
     ).length;
-    return {
-  totalEvents: activities.length,
-  uniqueUsers,
-  averageSessionDuration,
-  byType: this.groupByField(activities, 'type'),
-  byCategory: this.groupByField(activities, 'category'),
-  bySource: this.groupByField(activities, 'source'),
-  byImpact: this.groupByField(activities, 'impact'),
-  eventsPerHour,
-  eventsPerDay,
-  peakActivity: peakHour,
-  mostActiveUsers,
-  averageExecutionTime,
-  errorRate,
-  cacheHitRate,
-  collaborativeEvents,
-  teamsActive,
+    return { totalEvents: activities.length
+  uniqueUsers
+  averageSessionDuration
+  byType: this.groupByField(activities, 'type')
+  byCategory: this.groupByField(activities, 'category')
+  bySource: this.groupByField(activities, 'source')
+  byImpact: this.groupByField(activities, 'impact')
+  eventsPerHour
+  eventsPerDay
+  peakActivity: peakHour
+  mostActiveUsers
+  averageExecutionTime
+  errorRate
+  cacheHitRate
+  collaborativeEvents
+  teamsActive }
   sharingEvents
 };
   /**
    * Get user activity timeline
    */
-  getUserTimeline(userId: string, filter?: Partial<ActivityFilter>): ActivityEvent {
-  return this.getActivities({)
-  ...filter,
-  userIds: [userId],
+  getUserTimeline(userId: string, filter?: Partial<ActivityFilter>): ActivityEvent { return this.getActivities({)
+  ...filter
+  userIds: [userId] }
 });
   /**
    * Get collaborative activities
    */
-  getCollaborativeActivities(workspaceId?: string, filter?: Partial<ActivityFilter>): ActivityEvent {
-  return this.getActivities({)
-  ...filter,
-  types: ['collaboration'],
-  workspaceIds: workspaceId ? [workspaceId] : filter?.workspaceIds,
+  getCollaborativeActivities(workspaceId?: string, filter?: Partial<ActivityFilter>): ActivityEvent { return this.getActivities({)
+  ...filter
+  types: ['collaboration']
+  workspaceIds: workspaceId ? [workspaceId] : filter?.workspaceIds }
 });
   /**
    * Subscribe to activity events
    */
-  subscribe(listenerId: string, callback: (event: ActivityEvent) => void): void {
-  this.listeners.set(listenerId, callback);
+  subscribe(listenerId: string, callback: (event: ActivityEvent) => void): void { this.listeners.set(listenerId, callback);
   /**
   * Unsubscribe from activity events
   */
-  unsubscribe(listenerId: string): void {,
+  unsubscribe(listenerId: string): void {
   this.listeners.delete(listenerId);
   /**
   * Start a new user session
   */
-  startSession(userId: string, clientInfo: ClientInfo, context?: {)
+  startSession(userId: string, clientInfo: ClientInfo, context?: {) }
   workspaceId?: string;
   projectId?: string;
   location?: GeolocationInfo;
-}): ActivitySession {
-  // End current session if exists
+}): ActivitySession { // End current session if exists
   if (this.currentSession && !this.currentSession.endTime) {
   this.endSession();
-  const session: ActivitySession = {,
-  id: this.generateSessionId(),
-  userId,
-  workspaceId: context?.workspaceId,
-  projectId: context?.projectId,
-  startTime: new Date(),
-  eventCount: 0,
-  uniqueResources: [],
-  clientInfo,
-  location: context?.location,
-  type: 'work',
-  productivity: 'medium',
-  primaryActivities: [],
+  const session: ActivitySession = {
+  id: this.generateSessionId()
+  userId
+  workspaceId: context?.workspaceId
+  projectId: context?.projectId
+  startTime: new Date()
+  eventCount: 0
+  uniqueResources: []
+  clientInfo
+  location: context?.location
+  type: 'work'
+  productivity: 'medium'
+  primaryActivities: [] }
 };
     this.sessions.set(session.id, session);
     this.currentSession = session;
     // Track session start
-    this.trackActivity({)
-  type: 'system_event',
-  category: 'user_management',
-  action: 'session_started',
-  title: 'User session started',
-  userId,
-  sessionId: session.id,
-  workspaceId: context?.workspaceId,
-  projectId: context?.projectId,
-  impact: 'low',
-  tags: ['session', 'start'],
+    this.trackActivity({ )
+  type: 'system_event'
+  category: 'user_management'
+  action: 'session_started'
+  title: 'User session started'
+  userId
+  sessionId: session.id
+  workspaceId: context?.workspaceId
+  projectId: context?.projectId
+  impact: 'low'
+  tags: ['session', 'start'] }
 });
     return session;
   /**
    * End current user session
    */
-  endSession(): ActivitySession | null {
-    if (!this.currentSession) return null;
+  endSession(): ActivitySession | null { if (!this.currentSession) return null;
     const session = this.currentSession;
     session.endTime = new Date();
     session.duration = session.endTime.getTime() - session.startTime.getTime();
@@ -688,15 +659,15 @@ export class ActivityTimelineService {
     this.analyzeSession(session);
     // Track session end
     this.trackActivity({)
-  type: 'system_event',
-      category: 'user_management',
-      action: 'session_ended',
+  type: 'system_event'
+      category: 'user_management'
+      action: 'session_ended' }
       title: `User session ended (${Math.round(session.duration / 1000 / 60)}m)`}
-},
-  userId: session.userId,
-      sessionId: session.id,
-      duration: session.duration,
-      impact: 'low',
+
+  userId: session.userId
+      sessionId: session.id
+      duration: session.duration
+      impact: 'low'
       tags: ['session', 'end']
     });
     this.sessions.set(session.id, session);
@@ -707,53 +678,50 @@ export class ActivityTimelineService {
     return `activity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   private generateSessionId(): string {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  private initializeSession(): void {
-  // Initialize with basic client info
-  const clientInfo: ClientInfo = {,
-  userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Node.js',
-  platform: typeof navigator !== 'undefined' ? navigator.platform : 'Server',
-  browser: 'Unknown',
-  browserVersion: '1.0',
-  screenResolution: [1920, 1080],
-  viewport: [1920, 1080],
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  language: typeof navigator !== 'undefined' ? navigator.language : 'en',
+  private initializeSession(): void { // Initialize with basic client info
+  const clientInfo: ClientInfo = {
+  userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Node.js'
+  platform: typeof navigator !== 'undefined' ? navigator.platform : 'Server'
+  browser: 'Unknown'
+  browserVersion: '1.0'
+  screenResolution: [1920, 1080]
+  viewport: [1920, 1080]
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  language: typeof navigator !== 'undefined' ? navigator.language : 'en' }
 };
     // Start anonymous session
     this.startSession('anonymous', clientInfo);
-  private updateCurrentSession(event: ActivityEvent): void {
-  if (!this.currentSession) return;
+  private updateCurrentSession(event: ActivityEvent): void { if (!this.currentSession) return;
   this.currentSession.eventCount++;
   if (event.resource && !this.currentSession.uniqueResources.includes(event.resource)) {
   this.currentSession.uniqueResources.push(event.resource);
   if (!this.currentSession.primaryActivities.includes(event.type)) {
   this.currentSession.primaryActivities.push(event.type);
   this.sessions.set(this.currentSession.id, this.currentSession);
-  private async processEventInsights(event: ActivityEvent): Promise<void> {,
+  private async processEventInsights(event: ActivityEvent): Promise<void> {
   // Process event for patterns, anomalies, and insights
   // This could include ML-based analysis in the future
   // Detect rapid error sequences
   if (!event.success) {
   const recentErrors = this.getActivities({)
   dateRange: {
-  start: new Date(Date.now() - 5 * 60 * 1000), // Last 5 minutes,
-  end: new Date(),
-},
-  errorsOnly: true,
+  start: new Date(Date.now() - 5 * 60 * 1000), // Last 5 minutes
+  end: new Date() }
+
+  errorsOnly: true
         userIds: [event.userId];
   });
       if (recentErrors.length > 5) {
         // Could trigger an alert here
         console.warn(`High error rate detected for user ${event.userId}`);}
     // Detect productivity patterns
-    if (event.type === 'graph_operation' && event.impact === 'high') {
-  // Track high-impact activities for productivity insights
-  private analyzeSession(session: ActivitySession): void {,
+    if (event.type === 'graph_operation' && event.impact === 'high') { // Track high-impact activities for productivity insights
+  private analyzeSession(session: ActivitySession): void {
   const sessionActivities = this.getActivities({)
-  userIds: [session.userId],
+  userIds: [session.userId]
   dateRange: {
-  start: session.startTime,
-  end: session.endTime || new Date(),
+  start: session.startTime
+  end: session.endTime || new Date() }
 });
     // Classify session type
     const graphOperations = sessionActivities.filter(a => a.type === 'graph_operation').length;
@@ -761,11 +729,11 @@ export class ActivityTimelineService {
     const adminActions = sessionActivities.filter(a => a.type === 'admin').length;
     if (adminActions > graphOperations) {
       session.type = 'admin'
-  } else if (collaborations > graphOperations * 0.3) {
+ else if (collaborations > graphOperations * 0.3) {
       session.type = 'collaboration'
-  } else if (graphOperations > 10) {
+ else if (graphOperations > 10) {
       session.type = 'work'
-  } else {
+ else {
       session.type = 'exploration';
     // Calculate productivity
     const highImpactActions = sessionActivities.filter(a => ;);
@@ -774,41 +742,36 @@ export class ActivityTimelineService {
     const errorRate = sessionActivities.filter(a => !a.success).length / sessionActivities.length;
     if (highImpactActions > 5 && errorRate < 0.1) {
       session.productivity = 'high'
-  } else if (highImpactActions > 2 && errorRate < 0.2) {
+ else if (highImpactActions > 2 && errorRate < 0.2) {
       session.productivity = 'medium'
-  } else {
-  session.productivity = 'low';
+ else { session.productivity = 'low';
   // Identify key events
   session.keyEvents = sessionActivities
   .filter(a => a.impact === 'high' || a.impact === 'critical')
   .slice(0, 5)
   .map(a => a.id);
-  private notifyListeners(event: ActivityEvent): void {,
-  this.listeners.forEach(callback => {)
+  private notifyListeners(event: ActivityEvent): void { }
+  this.listeners.forEach(callback => { )
   try {
-  callback(event);
-} catch (error) {
-  console.error('Error in activity listener:', error);
-});
-  private emitActivity(event: ActivityEvent): void {
-  // Integration point with external systems
-  console.debug('Activity tracked:', {,)
+  callback(event) } catch (error) { console.error('Error in activity listener:', error) });
+  private emitActivity(event: ActivityEvent): void { // Integration point with external systems
+  console.debug('Activity tracked:', {),
   id: event.id,
   type: event.type,
   action: event.action,
   userId: event.userId,
-  impact: event.impact,
+  impact: event.impact }
 });
   private generateGraphOperationTitle(action: string, details: Partial<ActivityDetails>): string {
     const nodeCount = details.nodeChanges?.length || 0;
     const connectionCount = details.connectionChanges?.length || 0;
     if (nodeCount > 0 && connectionCount > 0) {
       return `${action} (${nodeCount} nodes, ${connectionCount} connections)`;}
-    } else if (nodeCount > 0) {
+ else if (nodeCount > 0) {
       return `${action} (${nodeCount} nodes)`;}
-    } else if (connectionCount > 0) {
+ else if (connectionCount > 0) {
       return `${action} (${connectionCount} connections)`;}
-    } else {
+ else {
       return action;
   private generateGraphOperationDescription(action: string, details: Partial<ActivityDetails>): string {
     const changes = [];
@@ -819,69 +782,59 @@ export class ActivityTimelineService {
     if (details.variableChanges?.length) {
       changes.push(`${details.variableChanges.length} variable changes`);}
     return changes.length > 0 ? `Graph ${action.toLowerCase()} with ${changes.join(', ')}` : undefined;}
-  private calculateGraphOperationImpact(details: Partial<ActivityDetails>): ActivityImpact {
-  const changeCount = (details.nodeChanges?.length || 0) + ;
+  private calculateGraphOperationImpact(details: Partial<ActivityDetails>): ActivityImpact { const changeCount = (details.nodeChanges?.length || 0) + ;
   (details.connectionChanges?.length || 0) +
   (details.variableChanges?.length || 0);
   if (changeCount >= 10) return 'high';
   if (changeCount >= 5) return 'medium';
   if (changeCount >= 1) return 'low';
   return 'none';
-  private generateGraphOperationTags(action: string, details: Partial<ActivityDetails>): string {,
+  private generateGraphOperationTags(action: string, details: Partial<ActivityDetails>): string {
   const tags = ['graph', action.toLowerCase()];
   if (details.nodeChanges?.length) tags.push('nodes');
   if (details.connectionChanges?.length) tags.push('connections');
   if (details.variableChanges?.length) tags.push('variables');
   return tags;
-  private categorizeUserInteraction(action: string): ActivityCategory {,
-  const categoryMap: Record<string, ActivityCategory> = {,
-  'click': 'graph_editing',
-  'drag': 'node_manipulation',
-  'drop': 'node_manipulation',
-  'select': 'graph_editing',
-  'delete': 'node_manipulation',
-  'create': 'node_manipulation',
-  'save': 'file_management',
-  'load': 'file_management',
-  'execute': 'execution',
-  'share': 'collaboration',
+  private categorizeUserInteraction(action: string): ActivityCategory {
+  const categoryMap: Record<string, ActivityCategory> = {
+  'click': 'graph_editing'
+  'drag': 'node_manipulation'
+  'drop': 'node_manipulation'
+  'select': 'graph_editing'
+  'delete': 'node_manipulation'
+  'create': 'node_manipulation'
+  'save': 'file_management'
+  'load': 'file_management'
+  'execute': 'execution'
+  'share': 'collaboration' }
 };
     return categoryMap[action.toLowerCase()] || 'graph_editing';
-  private calculatePerformanceImpact(duration: number, success: boolean): ActivityImpact {
-    if (!success) return 'high';
+  private calculatePerformanceImpact(duration: number, success: boolean): ActivityImpact { if (!success) return 'high';
     if (duration > 10000) return 'medium'; // > 10 seconds
     if (duration > 5000) return 'low'; // > 5 seconds
     return 'none';
   private groupByField<T extends Record<string, any>, K extends keyof T>(((
-    items: T,
+    items: T }
     field: K
   ): Record<string, number> {
     const grouped: Record<string, number> = {};
-    items.forEach(item => {)
+    items.forEach(item => { )
   const key = String(item[field]);
-      grouped[key] = (grouped[key] || 0) + 1;
-    });
+      grouped[key] = (grouped[key] || 0) + 1 });
     return grouped;
-  private startBackgroundProcessing(): void {
-    // Clean up old activities every hour
+  private startBackgroundProcessing(): void { // Clean up old activities every hour
     setInterval(() => {
-      this.cleanupOldActivities();
-    }, 60 * 60 * 1000);
+      this.cleanupOldActivities() }, 60 * 60 * 1000);
     // Process session analytics every 30 minutes
-    setInterval(() => {
-      this.processSessionAnalytics();
-    }, 30 * 60 * 1000);
-  private cleanupOldActivities(): void {
-  const cutoffDate = new Date();
+    setInterval(() => { this.processSessionAnalytics() }, 30 * 60 * 1000);
+  private cleanupOldActivities(): void { const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - 30); // Keep 30 days
   const expiredIds: string = [];
   this.activities.forEach((activity, id) => {
   if (activity.timestamp < cutoffDate && !activity.bookmarked) {
-  expiredIds.push(id);
-});
-    expiredIds.forEach(id => {)
-  this.activities.delete(id);
-    });
+  expiredIds.push(id) });
+    expiredIds.forEach(id => { )
+  this.activities.delete(id) });
     console.debug(`Cleaned up ${expiredIds.length} old activities`);}
   private processSessionAnalytics(): void {
     // Analyze recent sessions for insights
@@ -897,25 +850,25 @@ export const trackActivity = (event: Partial<ActivityEvent>) =>
   activityTimeline.trackActivity(event);
 
 export const trackGraphOperation = ()
-  action: string, 
-  details: Partial<ActivityDetails>, 
-  userId: string, 
-  context?: { workspaceId?: string; projectId?: string; graphId?: string; }
+  action: string
+  details: Partial<ActivityDetails>
+  userId: string
+  context?: { workspaceId?: string; projectId?: string; graphId?: string }
 ) => activityTimeline.trackGraphOperation(action, details, userId, context);
 
 export const trackUserInteraction = ()
-  action: string, 
-  element: string, 
-  details: Partial<ActivityDetails>, 
-  userId: string, 
+  action: string
+  element: string
+  details: Partial<ActivityDetails>
+  userId: string
   context?: Record<string, unknown>
 ) => activityTimeline.trackUserInteraction(action, element, details, userId, context);
 
 export const trackPerformance = ()
-  operation: string, 
-  duration: number, 
-  success: boolean, 
-  details?: Partial<ActivityDetails>, 
+  operation: string
+  duration: number
+  success: boolean
+  details?: Partial<ActivityDetails>
   userId?: string
 ) => activityTimeline.trackPerformance(operation, duration, success, details, userId);
 

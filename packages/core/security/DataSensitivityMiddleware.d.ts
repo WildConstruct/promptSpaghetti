@@ -18,21 +18,20 @@ import { type EnhancedDataElement, type SecurityPolicyEnforcementResult } from '
  */
 
 }
-export interface SensitivityAwareRequest extends Request {
-    dataSensitivity?: {
+}
+export interface SensitivityAwareRequest extends Request { dataSensitivity?: {
         level: DataSensitivityLevel;
         detectedElements: EnhancedDataElement[];
         policyEnforcement: SecurityPolicyEnforcementResult;
-        complianceRequirements: string[];
-    };
+        complianceRequirements: string[] };
 
 /**
  * Data sensitivity middleware configuration
  */
 
 }
-export interface DataSensitivityMiddlewareConfig {
-    /** Enable automatic data sensitivity detection */
+}
+export interface DataSensitivityMiddlewareConfig { /** Enable automatic data sensitivity detection */
     autoDetection: boolean;
     /** Enforce security policies based on sensitivity level */
     enforcePolicies: boolean;
@@ -49,8 +48,7 @@ export interface DataSensitivityMiddlewareConfig {
     /** Custom validation rules */
     customValidation?: (req: SensitivityAwareRequest) => Promise<{
         allowed: boolean;
-        reasons: string[];
-
+        reasons: string[] }
 }
     }>;
     /** Compliance frameworks to validate against */
@@ -63,12 +61,11 @@ export declare function createDataSensitivityMiddleware(config?: Partial<DataSen
 /**
  * Endpoint-specific sensitivity configuration
  */
-export declare function createEndpointSensitivityMiddleware(endpointConfig: {)
+export declare function createEndpointSensitivityMiddleware(endpointConfig: { )
     path: string;
     maxSensitivityLevel: DataSensitivityLevel;
     requiredControls?: string[];
-    customValidation?: (req: SensitivityAwareRequest) => Promise<boolean>;
-}): (req: SensitivityAwareRequest, res: Response, next: NextFunction) => Promise<any>;
+    customValidation?: (req: SensitivityAwareRequest) => Promise<boolean> }): (req: SensitivityAwareRequest, res: Response, next: NextFunction) => Promise<any>;
 /**
  * Compliance reporting middleware
  */

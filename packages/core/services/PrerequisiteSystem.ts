@@ -8,7 +8,7 @@
 import { z } from 'zod';
 
 // Security: Input validation schemas
-const prerequisiteSchema = z.object({)
+const prerequisiteSchema = z.object({ )
   id: z.string().uuid(),
   name: z.string().min(1).max(100).regex(/^[a-zA-Z0-9\s\-_.,()]+$/, 'Invalid characters in name'),
   description: z.string().min(10).max(500),
@@ -17,18 +17,18 @@ const prerequisiteSchema = z.object({)
   requiredTime: z.number().min(0).optional(), // minutes,
   validityPeriod: z.number().min(0).optional(), // days,
   category: z.string().min(1).max(50),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean().default(true) }
 });
-const prerequisiteGroupSchema = z.object({)
+const prerequisiteGroupSchema = z.object({ )
   id: z.string().uuid(),
   name: z.string().min(1).max(100),
   description: z.string().min(10).max(500),
   prerequisites: z.array(z.string().uuid()).min(1).max(20),
   operator: z.enum(['AND', 'OR', 'XOR']).default('AND'),
   minimumRequired: z.number().min(1).optional(), // for OR operations,
-  weight: z.number().min(0).max(100).default(100) // importance weight,
+  weight: z.number().min(0).max(100).default(100) // importance weight }
 });
-const userProgressSchema = z.object({)
+const userProgressSchema = z.object({ )
   userId: z.string().uuid(),
   prerequisiteId: z.string().uuid(),
   status: z.enum(['not_started', 'in_progress', 'completed', 'expired', 'failed']),
@@ -36,11 +36,11 @@ const userProgressSchema = z.object({)
   completedAt: z.date().optional(),
   expiresAt: z.date().optional(),
   attempts: z.number().min(0).default(0),
-  evidence: z.array(z.object({)
+  evidence: z.array(z.object({),
   type: z.enum(['completion', 'score', 'time', 'peer_review', 'instructor_approval']),
   value: z.string().max(1000),
   timestamp: z.date(),
-  verifiedBy: z.string().uuid().optional(),
+  verifiedBy: z.string().uuid().optional() }
 })).optional()
 });
 
@@ -54,10 +54,9 @@ export class PrerequisiteSecurity {
   /**
    * Validates prerequisite input for security threats
    */
-  static validatePrerequisiteInput(input: string): { isValid: boolean; errors: string } {
-  const errors: string = [];
+  static validatePrerequisiteInput(input: string): { isValid: boolean; errors: string } { const errors: string = [];
   // Check for injection attempts
-  if (/<script|javascript:|data:|eval\(|function\(/i.test(input)) {,
+  if (/<script|javascript:|data:|eval\(|function\(/i.test(input)) {
   errors.push('Potentially dangerous script content detected');
   // Check for SQL injection patterns
   if (/union\s+select|drop\s+table|delete\s+from|insert\s+into/i.test(input)) {
@@ -66,7 +65,7 @@ export class PrerequisiteSecurity {
   if (/\.\.[\/\\]|\.\.%2f|\.\.%5c/i.test(input)) {
   errors.push('Path traversal attempt detected');
   return {
-  isValid: errors.length === 0,
+  isValid: errors.length === 0 }
   errors
 };
   /**
@@ -106,9 +105,8 @@ export class DependencyResolver {
       return { success: false, errors: securityCheck.errors };
     // Schema validation
     const validation = prerequisiteSchema.safeParse(prerequisite);
-    if (!validation.success) {
-      return {
-        success: false,
+    if (!validation.success) { return {
+        success: false }
         errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)}
       };
     this.prerequisites.set(prerequisite.id, prerequisite);
@@ -116,35 +114,32 @@ export class DependencyResolver {
   /**
    * Adds prerequisite group with dependency validation
    */
-  addPrerequisiteGroup(group: PrerequisiteGroup): { success: boolean; errors?: string } {
-    // Schema validation
+  addPrerequisiteGroup(group: PrerequisiteGroup): { success: boolean; errors?: string } { // Schema validation
     const validation = prerequisiteGroupSchema.safeParse(group);
     if (!validation.success) {
       return {
-        success: false,
+        success: false }
         errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)}
       };
     // Validate prerequisite references exist
     const missingPrerequisites = group.prerequisites.filter(;);
       prereqId => !this.prerequisites.has(prereqId)
     );
-    if (missingPrerequisites.length > 0) {
-      return {
-        success: false,
+    if (missingPrerequisites.length > 0) { return {
+        success: false }
         errors: [`Missing prerequisites: ${missingPrerequisites.join(', ')}`]}
       };
     // Check for circular dependencies
-    if (this.hasCircularDependency(group)) {
-  return {
-  success: false,
-  errors: ['Circular dependency detected'],
+    if (this.hasCircularDependency(group)) { return {
+  success: false
+  errors: ['Circular dependency detected'] }
 };
     this.groups.set(group.id, group);
     return { success: true };
   /**
    * Resolves prerequisites for a user with comprehensive checking
    */
-  resolvePrerequisitesForUser(userId: string, targetPrerequisites: string): {
+  resolvePrerequisitesForUser(userId: string, targetPrerequisites: string): { 
   canProceed: boolean;
   missingPrerequisites: string;
   satisfiedPrerequisites: string;
@@ -160,14 +155,12 @@ export class DependencyResolver {
   continue;
   const userPrereqProgress = userProgressData.find(p => p.prerequisiteId === prereqId);
   if (this.isPrerequisiteSatisfied(prerequisite, userPrereqProgress)) {
-  satisfiedPrerequisites.push(prereqId);
-} else {
-  missingPrerequisites.push(prereqId);
+  satisfiedPrerequisites.push(prereqId) } else { missingPrerequisites.push(prereqId);
   recommendations.push(this.generateRecommendation(prerequisite, userPrereqProgress));
   return {
-  canProceed: missingPrerequisites.length === 0,
-  missingPrerequisites,
-  satisfiedPrerequisites,
+  canProceed: missingPrerequisites.length === 0
+  missingPrerequisites
+  satisfiedPrerequisites }
   recommendations
 };
   /**
@@ -204,18 +197,16 @@ export class DependencyResolver {
     case 'failed':
       return `Retry prerequisite: ${prerequisite.name} (${userProgress.attempts} attempts)`;}
     case 'expired':
-      return `Renew expired prerequisite: ${prerequisite.name}`;},}
+      return `Renew expired prerequisite: ${prerequisite.name}`;},},
   default:
       return `Complete prerequisite: ${prerequisite.name}`;}
   /**
    * Detects circular dependencies in prerequisite groups
    */
-  private hasCircularDependency(newGroup: PrerequisiteGroup): boolean {
-  const visited = new Set<string>();
+  private hasCircularDependency(newGroup: PrerequisiteGroup): boolean { const visited = new Set<string>();
   const recursionStack = new Set<string>();
-  const hasCycle = (groupId: string): boolean => {,
-  if (recursionStack.has(groupId)) {
-  return true;
+  const hasCycle = (groupId: string): boolean => { }
+  if (recursionStack.has(groupId)) { return true;
   if (visited.has(groupId)) {
   return false;
   visited.add(groupId);
@@ -227,8 +218,7 @@ export class DependencyResolver {
   if (prerequisite && hasCycle(prereqId)) {
   return true;
   recursionStack.delete(groupId);
-  return false;
-};
+  return false };
     return hasCycle(newGroup.id);
   /**
    * Updates user progress with security validation
@@ -246,24 +236,20 @@ export class DependencyResolver {
     const userProgressData = this.userProgress.get(userId) || [];
     const existingProgressIndex = userProgressData.findIndex(p => p.prerequisiteId === prerequisiteId);
     // Create or update progress
-    const updatedProgress: UserProgress = {
-  userId,
-  prerequisiteId,
-  status: 'not_started',
-  attempts: 0,
+    const updatedProgress: UserProgress = { userId
+  prerequisiteId
+  status: 'not_started'
+  attempts: 0 }
   ...progress
 };
     // Validate updated progress
     const validation = userProgressSchema.safeParse(updatedProgress);
-    if (!validation.success) {
-      return {
-        success: false,
+    if (!validation.success) { return {
+        success: false }
         errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)}
       };
     // Update progress data
-    if (existingProgressIndex >= 0) {
-      userProgressData[existingProgressIndex] = updatedProgress;
-    } else {
+    if (existingProgressIndex >= 0) { userProgressData[existingProgressIndex] = updatedProgress } else {
       userProgressData.push(updatedProgress);
     this.userProgress.set(userId, userProgressData);
     return { success: true };
@@ -283,32 +269,29 @@ export class DependencyResolver {
     // For now, return basic recommendations
     const path: Array<{ prerequisiteId: string; name: string; estimatedTime: number }> = [];
     let totalTime = 0;
-    for (const [prereqId, prerequisite] of this.prerequisites) {
-  if (!completedPrerequisites.has(prereqId)) {
+    for (const [prereqId, prerequisite] of this.prerequisites) { if (!completedPrerequisites.has(prereqId)) {
   path.push({)
   prerequisiteId: prereqId,
   name: prerequisite.name,
-  estimatedTime: prerequisite.requiredTime || 60,
+  estimatedTime: prerequisite.requiredTime || 60 }
 });
         totalTime += prerequisite.requiredTime || 60;
-    return {
-  path: path.slice(0, 10), // Limit to top 10 recommendations,
-  totalEstimatedTime: totalTime,
+    return { path: path.slice(0, 10), // Limit to top 10 recommendations,
+  totalEstimatedTime: totalTime }
 };
 
 // Main service class
-export class PrerequisiteSystemService {
-  private resolver: DependencyResolver;
+export class PrerequisiteSystemService { private resolver: DependencyResolver;
   constructor() {
   this.resolver = new DependencyResolver();
   /**
   * Creates a new prerequisite with comprehensive validation
   */
-  async createPrerequisite(prerequisiteData: Prerequisite, userId: string): Promise<{,
+  async createPrerequisite(prerequisiteData: Prerequisite, userId: string): Promise<{ }
   success: boolean;
   prerequisiteId?: string;
   errors?: string;
-}> {
+> {
 
     try {
       // Security: Validate user permissions
@@ -316,87 +299,70 @@ export class PrerequisiteSystemService {
         return { success: false, errors: ['Insufficient permissions'] };
       // Add to resolver
       const result = this.resolver.addPrerequisite(prerequisiteData);
-      if (result.success) {
-  // TODO: Persist to database,
+      if (result.success) { // TODO: Persist to database,
   return {
   success: true,
-  prerequisiteId: prerequisiteData.id,
+  prerequisiteId: prerequisiteData.id }
 };
       return result;
-    } catch (error) {
-  return {
+ catch (error) { return {
   success: false,
-  errors: ['Internal server error during prerequisite creation'],
+  errors: ['Internal server error during prerequisite creation'] }
 };
   /**
    * Evaluates prerequisites for a learning objective
    */
-  async evaluatePrerequisites(userId: string, targetPrerequisites: string): Promise<{,
+  async evaluatePrerequisites(userId: string, targetPrerequisites: string): Promise<{ ,
   canProceed: boolean;
   evaluation: any;
-  recommendations: string;
-}> {
-
-  try {
+  recommendations: string }> { try {
   // Security: Validate user permissions,
   if (!PrerequisiteSecurity.validateUserPermissions(userId, 'view')) {
   return {
   canProceed: false,
   evaluation: null,
-  recommendations: ['Access denied'],
+  recommendations: ['Access denied'] }
 };
       const evaluation = this.resolver.resolvePrerequisitesForUser(userId, targetPrerequisites);
-      return {
-  canProceed: evaluation.canProceed,
+      return { canProceed: evaluation.canProceed,
   evaluation,
-  recommendations: evaluation.recommendations,
+  recommendations: evaluation.recommendations }
 };
-    } catch (error) {
-  return {
+ catch (error) { return {
   canProceed: false,
   evaluation: null,
-  recommendations: ['Error evaluating prerequisites'],
+  recommendations: ['Error evaluating prerequisites'] }
 };
   /**
    * Updates user progress with validation
    */
-  async updateProgress(userId: string, prerequisiteId: string, progressData: Partial<UserProgress>): Promise<{,
+  async updateProgress(userId: string, prerequisiteId: string, progressData: Partial<UserProgress>): Promise<{ ,
   success: boolean;
-  errors?: string;
-}> {
-
-    try {
-      return this.resolver.updateUserProgress(userId, prerequisiteId, progressData);
-    } catch (error) {
-  return {
+  errors?: string }> { try {
+      return this.resolver.updateUserProgress(userId, prerequisiteId, progressData) } catch (error) { return {
   success: false,
-  errors: ['Error updating progress'],
+  errors: ['Error updating progress'] }
 };
   /**
    * Generates personalized learning recommendations
    */
-  async generateRecommendations(userId: string, targetGoal: string): Promise<{,
+  async generateRecommendations(userId: string, targetGoal: string): Promise<{ ,
   learningPath: any;
-  estimatedTime: number;
-}> {
-
-  try {
+  estimatedTime: number }> { try {
   const pathData = this.resolver.generateLearningPath(userId, targetGoal);
   return {
   learningPath: pathData.path,
-  estimatedTime: pathData.totalEstimatedTime,
+  estimatedTime: pathData.totalEstimatedTime }
 };
-    } catch (error) {
-  return {
+ catch (error) { return {
   learningPath: [],
-  estimatedTime: 0,
+  estimatedTime: 0 }
 };
 
 // Export schemas for validation
-export const schemas = {
-  prerequisite: prerequisiteSchema,
+export const schemas = { prerequisite: prerequisiteSchema,
   prerequisiteGroup: prerequisiteGroupSchema,
-  userProgress: userProgressSchema,
+  userProgress: userProgressSchema }
 };
 
 export default PrerequisiteSystemService;

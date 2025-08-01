@@ -9,30 +9,28 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Badge } from '../ui/Badge';
 import { conversionTracker } from '../../analytics/ConversionTracker';
 
-}
-export interface ConversionFunnelDashboardProps {
-  conversionData: unknown;
-}
+
+export interface ConversionFunnelDashboardProps { conversionData: unknown }
+},
   timeRange: { startTime: number; endTime: number };
   loading: boolean;
-}
-export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps> = ({)
-  conversionData,
-  timeRange,
+
+export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps> = ({ )
+  conversionData
+  timeRange }
   loading
 }) => {
   const [selectedFunnel, setSelectedFunnel] = useState('director-onboarding');
   const [funnelMetrics, setFunnelMetrics] = useState<unknown>(null);
   const [availableFunnels] = useState([)
-    { id: 'director-onboarding', name: 'Director Onboarding', category: 'activation' },
-    { id: 'creative-workflow', name: 'Creative Workflow', category: 'activation' },
+    { id: 'director-onboarding', name: 'Director Onboarding', category: 'activation' }
+    { id: 'creative-workflow', name: 'Creative Workflow', category: 'activation' }
     { id: 'subscription-conversion', name: 'Trial to Paid', category: 'revenue' }
   ]);
-  useEffect(() => {
-    if (timeRange && selectedFunnel) {
+  useEffect(() => { if (timeRange && selectedFunnel) {
       const metrics = conversionTracker.getFunnelMetrics(;);
-        selectedFunnel,
-        timeRange.startTime,
+        selectedFunnel
+        timeRange.startTime }
         timeRange.endTime
       );
       setFunnelMetrics(metrics);
@@ -193,7 +191,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
           </Card>
         </div>
       )}
-      <style>{`
+      <style>{ `
         .conversion-funnel-dashboard {
           display: flex;
           flex-direction: column;
@@ -216,7 +214,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
           font-weight: 700;
   color: #1f2937;
         .summary-subtitle {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .funnel-visualization h4 {
           margin: 0 0 1rem 0;
@@ -241,7 +239,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
         .step-stats {
           display: flex;
   gap: 1rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .step-bar {
           height: 24px;
@@ -249,7 +247,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
           border-radius: 4px;
   overflow: hidden;
         .step-fill {
-          height: 100%;
+          height: 100%
   background: linear-gradient(90deg, #3b82f6, #1d4ed8);
           transition: width 0.3s ease;
         .dropoff-indicator {
@@ -279,7 +277,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
           font-weight: 700;
   color: #1f2937;
         .segment-details {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #9ca3af;
         .loading {
           display: flex;
@@ -292,11 +290,10 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: spin 1s linear infinite;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
       `}</style>
     </div>
   );

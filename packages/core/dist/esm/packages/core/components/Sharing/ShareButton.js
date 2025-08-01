@@ -74,7 +74,8 @@ import { ShareModal } from './ShareModal';
                 switch (size) {
                     case 'small': return '14px';
                     case 'large': return '20px';
-                    default: return '16px';
+                    default: return '16px',
+                    ;
                 }
                 ;
                 const ShareIcon = () => ();

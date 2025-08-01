@@ -7,31 +7,34 @@ import {
   DocumentType, 
   VerificationStatus, 
   VerificationDecision 
-} from '../services/VerificationProcessService';
+ from '../services/VerificationProcessService';
 import { DocumentVerificationService } from '../services/DocumentVerificationService';
 
 // Request interfaces
-}
-}
+
+
+
 interface SubmitVerificationRequest {
   verification_type: VerificationType;
   user_info?: any;
   business_info?: any;
   notes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UploadDocumentRequest {
   document_type: DocumentType;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface VerificationQueueQuery {
   status?: VerificationStatus;
   type?: VerificationType;
@@ -39,22 +42,23 @@ interface VerificationQueueQuery {
   offset?: number;
   sort_by?: 'submitted_at' | 'priority' | 'type';
   sort_order?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ProcessDecisionRequest extends VerificationDecision {
   // Extends the base decision interface
-}
+
 
 // Configure multer for file uploads
 const upload = multer({
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB
     files: 5 // Max 5 files per upload
-  }
+
   fileFilter: (req, file, cb) => {
     const allowedMimes = [
       'image/jpeg', 'image/png', 'image/gif', 'image/webp',
@@ -63,10 +67,10 @@ const upload = multer({
     
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);
-    } else {
+ else {
       cb(new Error('File type not allowed'), false);
-    }
-  }
+
+
 });
 
 export async function marketplaceVerificationRoutes(fastify: FastifyInstance, pool: Pool) {
@@ -83,24 +87,24 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
   // Submit verification request
   fastify.post<{
     Body: SubmitVerificationRequest;
-  }>('/marketplace/verification/submit', {
+>('/marketplace/verification/submit', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: SubmitVerificationRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { verification_type, user_info, business_info, notes } = request.body;
 
       if (!Object.values(VerificationType).includes(verification_type)) {
         reply.code(400).send({ error: 'Invalid verification type' });
         return;
-      }
+
 
       const metadata = {
         user_info: user_info || {},
@@ -125,32 +129,31 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
           'You will be notified of the decision via email'
         ]
       };
-
-    } catch (error) {
+ catch (error) {
       request.log.error('Verification submission error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to submit verification request',
         message: error.message
       });
-    }
+
   });
 
   // Upload document
   fastify.post<{
     Params: { requestId: string };
     Body: UploadDocumentRequest;
-  }>('/marketplace/verification/:requestId/upload', {
+>('/marketplace/verification/:requestId/upload', {
     preHandler: [fastify.jwtAuth, upload.single('document')]
   }, async (request: FastifyRequest<{
     Params: { requestId: string };
     Body: UploadDocumentRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { requestId } = request.params;
       const { document_type } = request.body;
@@ -159,12 +162,12 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
       if (!file) {
         reply.code(400).send({ error: 'No file uploaded' });
         return;
-      }
+
 
       if (!Object.values(DocumentType).includes(document_type)) {
         reply.code(400).send({ error: 'Invalid document type' });
         return;
-      }
+
 
       // Upload document
       const document = await verificationService.uploadDocument(
@@ -175,7 +178,7 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
           buffer: file.buffer,
           mimetype: file.mimetype,
           size: file.size
-  }
+
         document_type
       );
 
@@ -186,11 +189,11 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
       let analysisType: 'identity' | 'business' | 'address' | 'financial' = 'identity';
       if ([DocumentType.BUSINESS_LICENSE, DocumentType.ARTICLES_OF_INCORPORATION].includes(document_type)) {
         analysisType = 'business';
-      } else if ([DocumentType.UTILITY_BILL, DocumentType.BANK_STATEMENT].includes(document_type)) {
+ else if ([DocumentType.UTILITY_BILL, DocumentType.BANK_STATEMENT].includes(document_type)) {
         analysisType = 'address';
-      } else if ([DocumentType.TAX_DOCUMENT, DocumentType.BANK_STATEMENT].includes(document_type)) {
+ else if ([DocumentType.TAX_DOCUMENT, DocumentType.BANK_STATEMENT].includes(document_type)) {
         analysisType = 'financial';
-      }
+
 
       const analysis = await documentService.analyzeDocument(document.id, document.file_path, analysisType);
 
@@ -202,21 +205,20 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
           validation_score: validation.validation_score,
           issues: validation.issues,
           recommendations: validation.recommendations
-  }
+
         analysis: {
           confidence_score: analysis.confidence_score,
           verification_status: analysis.verification_status,
           flags: analysis.flags
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       request.log.error('Document upload error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to upload document',
         message: error.message
       });
-    }
+
   });
 
   // Get user's verification requests
@@ -228,7 +230,7 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const requests = await verificationService.getUserVerificationRequests(userId);
 
@@ -243,30 +245,29 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
           rejection_reason: req.rejection_reason
         }))
       };
-
-    } catch (error) {
+ catch (error) {
       request.log.error('User requests retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve verification requests',
         message: error.message
       });
-    }
+
   });
 
   // Admin: Get verification queue
   fastify.get<{
     Querystring: VerificationQueueQuery;
-  }>('/marketplace/verification/admin/queue', {
+>('/marketplace/verification/admin/queue', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Admin access required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: VerificationQueueQuery;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const adminUserId = (request.user as any)?.id;
       const filters = request.query;
@@ -281,32 +282,31 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
           current_page: Math.floor((filters.offset || 0) / (filters.limit || 50)) + 1,
           items_per_page: filters.limit || 50,
           total_pages: Math.ceil(queue.total / (filters.limit || 50))
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       request.log.error('Verification queue retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve verification queue',
         message: error.message
       });
-    }
+
   });
 
   // Admin: Process verification decision
   fastify.post<{
     Body: ProcessDecisionRequest;
-  }>('/marketplace/verification/admin/decision', {
+>('/marketplace/verification/admin/decision', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Admin access required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: ProcessDecisionRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const adminUserId = (request.user as any)?.id;
       const decision = request.body;
@@ -314,17 +314,17 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
       if (!decision.request_id) {
         reply.code(400).send({ error: 'Request ID is required' });
         return;
-      }
+
 
       if (!['approve', 'reject'].includes(decision.decision)) {
         reply.code(400).send({ error: 'Decision must be "approve" or "reject"' });
         return;
-      }
+
 
       if (decision.decision === 'reject' && !decision.rejection_reason) {
         reply.code(400).send({ error: 'Rejection reason is required for rejected requests' });
         return;
-      }
+
 
       const updatedRequest = await verificationService.processVerificationDecision(adminUserId, decision);
 
@@ -336,30 +336,29 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
           ? ['User verification status updated', 'Verification badges assigned']
           : ['User notified of rejection', 'Reason documented']
       };
-
-    } catch (error) {
+ catch (error) {
       request.log.error('Verification decision error:', error);
       reply.code(error.statusCode || 500).send({
         error: 'Failed to process verification decision',
         message: error.message
       });
-    }
+
   });
 
   // Admin: Get verification statistics
   fastify.get<{
     Querystring: { timeframe?: 'week' | 'month' | 'quarter' };
-  }>('/marketplace/verification/admin/statistics', {
+>('/marketplace/verification/admin/statistics', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'ops'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: { timeframe?: 'week' | 'month' | 'quarter' };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { timeframe = 'month' } = request.query;
       
@@ -374,27 +373,26 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
             statistics.avg_processing_time < 7 ? 'good' : 'needs_improvement',
           approval_trend: statistics.approval_rate > 80 ? 'high_approval' :
             statistics.approval_rate > 60 ? 'moderate_approval' : 'high_rejection'
-  }
+
         recommendations: this.generateRecommendations(statistics)
       };
-
-    } catch (error) {
+ catch (error) {
       request.log.error('Statistics retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve verification statistics',
         message: error.message
       });
-    }
+
   });
 
   // Get document validation results
   fastify.get<{
     Params: { documentId: string };
-  }>('/marketplace/verification/document/:documentId/validation', {
+>('/marketplace/verification/document/:documentId/validation', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { documentId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { documentId } = request.params;
       
@@ -402,7 +400,7 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
       if (!validation) {
         reply.code(404).send({ error: 'Document validation not found' });
         return;
-      }
+
 
       const analysis = await documentService.getDocumentAnalysis(documentId);
 
@@ -415,16 +413,15 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
             validation.validation_score > 0.6 ? 'medium' : 'low',
           issues_count: validation.issues.length,
           recommendations_count: validation.recommendations.length
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       request.log.error('Document validation retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve document validation',
         message: error.message
       });
-    }
+
   });
 
   // Health check endpoint
@@ -448,25 +445,24 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
           services: {
             verification_process: 'operational',
             document_verification: 'operational'
-          }
-  }
+
+
         configuration: {
           max_file_size: '10MB',
           supported_formats: ['PDF', 'JPEG', 'PNG', 'WebP'],
           verification_types: Object.values(VerificationType),
           document_types: Object.values(DocumentType)
-  }
+
         timestamp: new Date().toISOString()
       };
-
-    } catch (error) {
+ catch (error) {
       request.log.error('Verification system health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
         error: error.message,
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Helper function for generating recommendations
@@ -475,20 +471,19 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
 
     if (stats.total_pending > 50) {
       recommendations.push('Consider hiring additional verification staff to reduce queue backlog');
-    }
+
 
     if (stats.avg_processing_time > 7) {
       recommendations.push('Review verification processes to improve processing speed');
-    }
+
 
     if (stats.approval_rate < 60) {
       recommendations.push('Investigate high rejection rate - may indicate unclear requirements or fraudulent attempts');
-    }
+
 
     if (stats.approval_rate > 95) {
       recommendations.push('Review verification criteria - unusually high approval rate may indicate insufficient scrutiny');
-    }
+
 
     return recommendations;
-  }
-}
+

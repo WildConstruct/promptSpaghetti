@@ -14,6 +14,7 @@
 import { HelpContent } from './ContextualHelpSystem';
 
 }
+}
 export interface UserProfile {
     id: string;
     level: 'beginner' | 'intermediate' | 'advanced' | 'professional';
@@ -25,31 +26,29 @@ export interface UserProfile {
         preferredComplexity: 'simple' | 'detailed' | 'comprehensive';
         filmIndustryRole?: 'director' | 'producer' | 'writer' | 'vfx-artist' | 'editor'
 }
+}
   };
-    progress: {
-        nodesCreated: number;
+    progress: { nodesCreated: number;
         connectionsBuilt: number;
         previewsGenerated: number;
         projectsCompleted: number;
-        advancedFeaturesUsed: string[];
-    };
+        advancedFeaturesUsed: string[] };
     lastActivity: Date;
 
 }
-export interface LearningPath {
-    id: string;
+}
+export interface LearningPath { id: string;
     name: string;
     description: string;
     targetRole: string;
     steps: {
         contentId: string;
         requiredProgress?: Record<string, number>;
-        unlockConditions?: string[];
+        unlockConditions?: string[] }
 }
     }[];
 
-export declare class HelpContentManager {
-    private userProfile;
+export declare class HelpContentManager { private userProfile;
     private helpContent;
     private learningPaths;
     constructor(userId?: string);
@@ -62,8 +61,7 @@ export declare class HelpContentManager {
         edgeCount: number;
         selectedNodeType?: string;
         currentAction?: string;
-        triggerElement?: string;
-    }): HelpContent[];
+        triggerElement?: string }): HelpContent[];
     markContentViewed(contentId: string): void;
     updateProgress(progressType: keyof UserProfile['progress'], value: number | string): void;
     private checkLevelProgression;

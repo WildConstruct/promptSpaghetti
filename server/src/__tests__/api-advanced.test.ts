@@ -21,13 +21,13 @@ describe('API Advanced Node Integration', () => {
               type: 'exponential',
               parameters: { factor: 1.5 },
               normalize: true
-            }
-  }
+
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['weighted-advanced-1']
-          }
+
         ],
         seed: 1000
       };
@@ -54,8 +54,8 @@ describe('API Advanced Node Integration', () => {
             ],
             distributionConfig: {
               type: 'linear'
-            }
-  }
+
+
           {
             id: 'type',
             type: 'WeightedAdvanced',
@@ -67,18 +67,18 @@ describe('API Advanced Node Integration', () => {
             distributionConfig: {
               type: 'gaussian',
               parameters: { mean: 0.5, std: 0.3 }
-            }
-  }
+
+
           {
             id: 'loot-name',
             type: 'Concat',
             inputs: ['rarity', 'type']
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['loot-name']
-          }
+
         ],
         seed: 2000
       };
@@ -104,7 +104,7 @@ describe('API Advanced Node Integration', () => {
               { value: 'Ice', weight: 1 },
               { value: 'Lightning', weight: 1 }
             ]
-  }
+
           {
             id: 'advanced-choice',
             type: 'WeightedAdvanced',
@@ -116,18 +116,18 @@ describe('API Advanced Node Integration', () => {
             distributionConfig: {
               type: 'exponential',
               parameters: { factor: 2 }
-            }
-  }
+
+
           {
             id: 'magic-combo',
             type: 'Concat',
             inputs: ['basic-choice', 'advanced-choice']
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['magic-combo']
-          }
+
         ],
         seed: 3000
       };
@@ -155,13 +155,13 @@ describe('API Advanced Node Integration', () => {
             distributionConfig: {
               type: 'linear',
               normalize: true
-            }
-  }
+
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['test-linear']
-          }
+
         ],
         seed: 4000
       };
@@ -189,13 +189,13 @@ describe('API Advanced Node Integration', () => {
               type: 'exponential',
               parameters: { factor: 1.2 },
               normalize: true
-            }
-  }
+
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['test-exponential']
-          }
+
         ],
         seed: 4001
       };
@@ -221,13 +221,13 @@ describe('API Advanced Node Integration', () => {
             ],
             distributionConfig: {
               type: 'linear'
-            }
-  }
+
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['deterministic-test']
-          }
+
         ],
         seed: 5000
       };
@@ -246,12 +246,12 @@ describe('API Advanced Node Integration', () => {
             id: 'empty-weighted',
             type: 'WeightedAdvanced'
             // No choices or distributionConfig
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['empty-weighted']
-          }
+
         ],
         seed: 6000
       };
@@ -283,9 +283,9 @@ describe('API Advanced Node Integration', () => {
           distributionConfig: {
             type: 'exponential' as const,
             parameters: { factor: 1.1 + (i * 0.1) }
-          }
+
         });
-      }
+
 
       // Add output that uses first weighted node
       nodes.push({

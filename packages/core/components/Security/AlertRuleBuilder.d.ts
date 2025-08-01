@@ -9,8 +9,8 @@ import { SecurityEventType, SecurityEventSeverity } from '../../security/Securit
 import './AlertRuleBuilder.css';
 
 }
-interface AlertRule {
-    id: string;
+}
+interface AlertRule { id: string;
     name: string;
     description: string;
     enabled: boolean;
@@ -21,40 +21,32 @@ interface AlertRule {
     notification_channels: NotificationChannel[];
     escalation_config?: EscalationConfig;
     created_at: Date;
-    updated_at: Date;
-
-
+    updated_at: Date }
 }
-interface AlertCondition {
-    id: string;
+}
+interface AlertCondition { id: string;
     field: string;
     operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex' | 'in' | 'not_in';
     value: Error;
-    logic_operator?: 'and' | 'or';
-
-
+    logic_operator?: 'and' | 'or' }
 }
-interface AlertAction {
-    id: string;
+}
+interface AlertAction { id: string;
     type: 'notification' | 'containment' | 'escalation' | 'logging' | 'webhook';
     name: string;
     config: Record<string, any>;
     enabled: boolean;
-    delay_seconds?: number;
-
-
+    delay_seconds?: number }
 }
-interface NotificationChannel {
-    id: string;
+}
+interface NotificationChannel { id: string;
     name: string;
     type: 'email' | 'sms' | 'slack' | 'webhook' | 'dashboard';
     config: Record<string, any>;
-    enabled: boolean;
-
-
+    enabled: boolean }
 }
-interface EscalationConfig {
-    enabled: boolean;
+}
+interface EscalationConfig { enabled: boolean;
     escalation_delay_minutes: number;
     escalation_targets: string[];
     max_escalations: number;
@@ -65,7 +57,7 @@ interface EscalationConfig {
  */
 export declare const AlertRuleBuilder: React.FC<{
     alertRules: AlertRule[];
-    onRulesChange: (rules: AlertRule[]) => void;
+    onRulesChange: (rules: AlertRule[]) => void }
 }
 }>;
 export default AlertRuleBuilder;

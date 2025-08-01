@@ -124,7 +124,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
         this.config = {
             detection: {
                 autoDetectDependencies: true,
-                detectionPatterns: [,
+                detectionPatterns: [
                     'depends on', 'requires', 'needs', 'after', 'once', 'when',
                     'following', 'prerequisite', 'blocked by', 'waiting for',
                     'based on', 'building on', 'extends', 'uses', 'leverages'
@@ -371,7 +371,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
                                                             toggleId: dependency.targetToggleId,
                                                             impactType: action === 'activate' ? 'dependency_change' : 'dependency_change',
                                                             severity: this.calculateImpactSeverity(dependency),
-                                                            description: `${action === 'activate' ? 'Enables' : 'Disables'},}
+                                                            description: `${action === 'activate' ? 'Enables' : 'Disables'},},
   dependency: ${dependency.reason}` };
                                                     }
                                                     affectedFeatures: await this.getToggleFeatures(dependency.targetToggleId),

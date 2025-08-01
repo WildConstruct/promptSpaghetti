@@ -21,8 +21,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { RBACService } from '../auth/services/RBACService';
 
-}
-}
+
+
 export interface BulkOperationRequest<T = unknown> {
   id: string;
   resourceType: string;
@@ -37,10 +37,10 @@ export interface BulkOperationRequest<T = unknown> {
     category: string;
     tags?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface BulkOperationOptions {
   batchSize?: number;
   maxConcurrency?: number;
@@ -54,12 +54,13 @@ export interface BulkOperationOptions {
   expireAt?: Date;
   notifyOnComplete?: boolean;
   exportResults?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkOperationResult {
   operationId: string;
   status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled' | 'scheduled';
@@ -70,8 +71,9 @@ export interface BulkOperationResult {
     failedItems: number;
     skippedItems: number;
     percentComplete: number;
-}
-}
+
+
+
   };
   results: Array<{
     targetId: string;
@@ -79,7 +81,7 @@ export interface BulkOperationResult {
     result?: unknown;
     error?: string;
     processingTime?: number;
-  }>;
+>;
   timing: {
     startedAt?: Date;
     completedAt?: Date;
@@ -99,10 +101,10 @@ export interface BulkOperationResult {
     tags?: string[];
     auditIds: string[];
   };
-}
 
-}
-}
+
+
+
 export interface BulkOperationHandler<T = any, R = any> {
   resourceType: string;
   supportedOperations: string[];
@@ -110,10 +112,10 @@ export interface BulkOperationHandler<T = any, R = any> {
   validate(targetId: string, operation: string, parameters: T): Promise<{ valid: boolean; error?: string }>;
   execute(targetId: string, operation: string, parameters: T, context: BulkOperationContext): Promise<R>;
   rollback?(targetId: string, operation: string, parameters: T, result: R): Promise<void>;
-}
 
-}
-}
+
+
+
 export interface BulkOperationContext {
   operationId: string;
   requestedBy: string;
@@ -123,12 +125,13 @@ export interface BulkOperationContext {
   ipAddress?: string;
   userAgent?: string;
   timestamp: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkOperationConfig {
   maxConcurrentOperations: number;
   defaultBatchSize: number;
@@ -139,9 +142,10 @@ export interface BulkOperationConfig {
   retryDelayMs: number;
   cleanupIntervalMs: number;
   resultRetentionDays: number;
-}
-}
-}
+
+
+
+
 
 export class BulkOperationFramework {
   private dbService: DatabaseService;
@@ -176,14 +180,14 @@ export class BulkOperationFramework {
     };
 
     this.setupCleanupInterval();
-  }
+
 
   /**
    * Register a bulk operation handler for a specific resource type
    */
   registerHandler(handler: BulkOperationHandler): void {
     this.handlers.set(handler.resourceType, handler);
-  }
+
 
   /**
    * Submit a bulk operation request
@@ -208,15 +212,15 @@ export class BulkOperationFramework {
         failedItems: 0,
         skippedItems: 0,
         percentComplete: 0
-  }
+
       results: [],
       timing: {
         startedAt: request.options.scheduledAt || new Date()
-  }
+
       metadata: {
         ...request.metadata,
         auditIds: []
-      }
+
     };
 
     // Store operation in database
@@ -234,7 +238,7 @@ export class BulkOperationFramework {
         targetCount: request.targetIds.length,
         priority: request.metadata.priority,
         scheduled: !!request.options.scheduledAt
-  }
+
       severity: 'info'
     });
 
@@ -243,13 +247,13 @@ export class BulkOperationFramework {
     // Execute immediately or schedule for later
     if (request.options.scheduledAt && request.options.scheduledAt > new Date()) {
       this.scheduleOperation(request, adminId, context);
-    } else {
+ else {
       // Execute in background
       setImmediate(() => this.executeOperation(request, adminId, context));
-    }
+
 
     return operationResult;
-  }
+
 
   /**
    * Execute a bulk operation
@@ -263,11 +267,11 @@ export class BulkOperationFramework {
     const handler = this.handlers.get(request.resourceType);
     if (!handler) {
       throw new Error(`No handler registered for resource type: ${request.resourceType}`);
-    }
+
 
     if (!handler.supportedOperations.includes(request.operation)) {
       throw new Error(`Operation ${request.operation} not supported for ${request.resourceType}`);
-    }
+
 
     const abortController = new AbortController();
     this.activeOperations.set(request.id, abortController);
@@ -298,7 +302,7 @@ export class BulkOperationFramework {
       // Validation phase (if enabled)
       if (request.options.validateBefore) {
         await this.validateTargets(request, handler);
-      }
+
 
       // Process in batches
       const batches = this.createBatches(request.targetIds, batchSize);
@@ -309,7 +313,7 @@ export class BulkOperationFramework {
         for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
           if (abortController.signal.aborted) {
             break;
-          }
+
 
           const batch = batches[batchIndex];
           const batchResults = await this.processBatch(
@@ -329,7 +333,7 @@ export class BulkOperationFramework {
               .filter(r => r.status === 'success')
               .map(r => ({ targetId: r.targetId, result: r.result }))
             );
-          }
+
 
           // Update progress
           await this.updateProgress(request.id, batchResults);
@@ -338,24 +342,23 @@ export class BulkOperationFramework {
           if (!request.options.continueOnError && batchResults.some(r => r.status === 'failed')) {
             if (request.options.atomicMode && handler.rollback) {
               await this.performRollback(rollbackData, request, handler);
-            }
+
             throw new Error('Operation failed due to errors and continueOnError is false');
-          }
-        }
+
+
 
         // Mark as completed
         await this.updateOperationStatus(request.id, 'completed');
         await this.finalizeResults(request.id, allResults);
-
-      } catch (error) {
+ catch (error) {
         // Rollback if atomic mode and rollback is supported
         if (request.options.atomicMode && handler.rollback) {
           await this.performRollback(rollbackData, request, handler);
-        }
+
 
         await this.updateOperationStatus(request.id, 'failed');
         throw error;
-      }
+
 
       // Log completion
       await this.auditService.logAction({
@@ -367,11 +370,10 @@ export class BulkOperationFramework {
           totalItems: request.targetIds.length,
           successItems: allResults.filter(r => r.status === 'success').length,
           failedItems: allResults.filter(r => r.status === 'failed').length
-  }
+
         severity: 'info'
       });
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'bulk_operation_failed',
         userId: adminId,
@@ -379,14 +381,14 @@ export class BulkOperationFramework {
         resourceId: request.id,
         details: {
           error: error instanceof Error ? error.message : String(error)
-  }
+
         severity: 'error'
       });
       throw error;
-    } finally {
+ finally {
       this.activeOperations.delete(request.id);
-    }
-  }
+
+
 
   /**
    * Get operation status and results
@@ -400,10 +402,10 @@ export class BulkOperationFramework {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapOperationRow(result.rows[0]);
-  }
+
 
   /**
    * Cancel an active operation
@@ -413,7 +415,7 @@ export class BulkOperationFramework {
     const controller = this.activeOperations.get(operationId);
     if (controller) {
       controller.abort();
-    }
+
 
     await this.updateOperationStatus(operationId, 'cancelled');
     
@@ -424,7 +426,7 @@ export class BulkOperationFramework {
       resourceId: operationId,
       severity: 'info'
     });
-  }
+
 
   /**
    * List operations with filtering
@@ -436,7 +438,7 @@ export class BulkOperationFramework {
       requestedBy?: string;
       limit?: number;
       offset?: number;
-    } = {}
+ = {}
   ): Promise<{ operations: BulkOperationResult[]; totalCount: number }> {
 
     const conditions = [];
@@ -446,17 +448,17 @@ export class BulkOperationFramework {
     if (filter.resourceType) {
       conditions.push(`resource_type = $${paramIndex++}`);
       values.push(filter.resourceType);
-    }
+
 
     if (filter.status) {
       conditions.push(`status = $${paramIndex++}`);
       values.push(filter.status);
-    }
+
 
     if (filter.requestedBy) {
       conditions.push(`metadata->>'requestedBy' = $${paramIndex++}`);
       values.push(filter.requestedBy);
-    }
+
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     
@@ -481,7 +483,7 @@ export class BulkOperationFramework {
       operations,
       totalCount: parseInt(countResult.rows[0].count)
     };
-  }
+
 
   // Private helper methods
 
@@ -489,15 +491,15 @@ export class BulkOperationFramework {
 
     if (!this.handlers.has(request.resourceType)) {
       throw new Error(`No handler registered for resource type: ${request.resourceType}`);
-    }
+
 
     if (request.targetIds.length === 0) {
       throw new Error('Target IDs cannot be empty');
-    }
+
 
     if (request.targetIds.length > this.config.maxBatchSize) {
       throw new Error(`Too many targets: ${request.targetIds.length}, max: ${this.config.maxBatchSize}`);
-    }
+
 
     // Check permissions
     const hasPermission = await this.rbacService.checkPermission(adminId, {
@@ -508,8 +510,8 @@ export class BulkOperationFramework {
 
     if (!hasPermission) {
       throw new Error(`Insufficient permissions for ${request.operation} on ${request.resourceType}`);
-    }
-  }
+
+
 
   private async validateTargets<T>(
     request: BulkOperationRequest<T>,
@@ -522,8 +524,8 @@ export class BulkOperationFramework {
       const validation = await handler.validate(targetId, request.operation, request.parameters);
       if (!validation.valid) {
         validationErrors.push({ targetId, error: validation.error || 'Validation failed' });
-      }
-    }
+
+
 
     if (validationErrors.length > 0) {
       await this.dbService.query(
@@ -532,16 +534,16 @@ export class BulkOperationFramework {
       );
 
       throw new Error(`Validation failed for ${validationErrors.length} items`);
-    }
-  }
+
+
 
   private createBatches<T>(items: T[], batchSize: number): T[][] {
     const batches = [];
     for (let i = 0; i < items.length; i += batchSize) {
       batches.push(items.slice(i, i + batchSize));
-    }
+
     return batches;
-  }
+
 
   private async processBatch<T>(
     batch: string[],
@@ -575,7 +577,7 @@ export class BulkOperationFramework {
           result,
           processingTime
         };
-      } catch (error) {
+ catch (error) {
         const processingTime = Date.now() - startTime;
         
         return {
@@ -584,15 +586,15 @@ export class BulkOperationFramework {
           error: error instanceof Error ? error.message : String(error),
           processingTime
         };
-      } finally {
+ finally {
         // Release semaphore slot
         semaphore[semaphoreIndex % maxConcurrency] = Promise.resolve();
         semaphoreIndex++;
-      }
+
     });
 
     return Promise.all(batchPromises);
-  }
+
 
   private async performRollback<T>(
     rollbackData: Array<{ targetId: string; result: any }>,
@@ -605,11 +607,11 @@ export class BulkOperationFramework {
     for (const item of rollbackData.reverse()) {
       try {
         await handler.rollback(item.targetId, request.operation, request.parameters, item.result);
-      } catch (error) {
+ catch (error) {
         console.error(`Rollback failed for ${item.targetId}:`, error);
-      }
-    }
-  }
+
+
+
 
   private async storeOperation(operation: BulkOperationResult): Promise<void> {
 
@@ -627,7 +629,7 @@ export class BulkOperationFramework {
         JSON.stringify(operation.metadata)
       ]
     );
-  }
+
 
   private async updateOperationStatus(operationId: string, status: string): Promise<void> {
 
@@ -635,7 +637,7 @@ export class BulkOperationFramework {
       'UPDATE bulk_operations SET status = $1, updated_at = NOW() WHERE id = $2',
       [status, operationId]
     );
-  }
+
 
   private async updateProgress(operationId: string, batchResults: any[]): Promise<void> {
 
@@ -655,7 +657,7 @@ export class BulkOperationFramework {
       WHERE id = $4`,
       [batchResults.length, successCount, failedCount, operationId]
     );
-  }
+
 
   private async finalizeResults(operationId: string, allResults: any[]): Promise<void> {
 
@@ -673,7 +675,7 @@ export class BulkOperationFramework {
       WHERE id = $3`,
       [JSON.stringify(allResults), JSON.stringify(timing), operationId]
     );
-  }
+
 
   private scheduleOperation<T>(
     request: BulkOperationRequest<T>,
@@ -687,7 +689,7 @@ export class BulkOperationFramework {
         console.error(`Scheduled bulk operation ${request.id} failed:`, error);
       });
     }, delay);
-  }
+
 
   private mapOperationRow(row: any): BulkOperationResult {
     return {
@@ -699,17 +701,17 @@ export class BulkOperationFramework {
       validation: row.validation ? JSON.parse(row.validation) : undefined,
       metadata: JSON.parse(row.metadata)
     };
-  }
+
 
   private setupCleanupInterval(): void {
     this.cleanupInterval = setInterval(async () => {
       try {
         await this.cleanupOldOperations();
-      } catch (error) {
+ catch (error) {
         console.error('Bulk operation cleanup failed:', error);
-      }
+
     }, this.config.cleanupIntervalMs);
-  }
+
 
   private async cleanupOldOperations(): Promise<void> {
 
@@ -719,7 +721,7 @@ export class BulkOperationFramework {
       'DELETE FROM bulk_operations WHERE created_at < $1 AND status IN ($2, $3, $4)',
       [cutoffDate, 'completed', 'failed', 'cancelled']
     );
-  }
+
 
   /**
    * Cleanup resources when shutting down
@@ -727,13 +729,12 @@ export class BulkOperationFramework {
   destroy(): void {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
-    }
+
 
     // Cancel all active operations
     for (const [operationId, controller] of this.activeOperations) {
       controller.abort();
-    }
+
     
     this.activeOperations.clear();
-  }
-}
+

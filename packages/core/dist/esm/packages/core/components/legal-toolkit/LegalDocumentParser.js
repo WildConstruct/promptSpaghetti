@@ -209,46 +209,46 @@ const openFileDialog = () => {
 return;
 _jsxs("div", { className: `legal-document-parser ${className}`, children: ["}", _jsx("style", { children: `
           .legal-document-parser {
-            max-width: 600px;
+            max-width: 600px;,
   margin: 0 auto;
             padding: 20px;
           .upload-area {
             border: 2px dashed #cbd5e0;
-            border-radius: 8px;
+            border-radius: 8px;,
   padding: 40px 20px;
-            text-align: center;
+            text-align: center;,
   background: #f7fafc;
-            transition: all 0.2s ease;
+            transition: all 0.2s ease;,
   cursor: pointer;
             position: relative;
           .upload-area.drag-active {
-            border-color: #4299e1;
+            border-color: #4299e1;,
   background: #ebf8ff;
           .upload-area:hover {
-            border-color: #4299e1;
+            border-color: #4299e1;,
   background: #f0fff4;
           .upload-area.processing {
-            pointer-events: none;
+            pointer-events: none;,
   opacity: 0.8;
           .upload-icon {
             font-size: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1rem;,
   color: #718096;
           .upload-text {
-            font-size: 1.1rem;
+            font-size: 1.1rem;,
   color: #2d3748;
             margin-bottom: 0.5rem;
           .upload-subtext {
-            font-size: 0.9rem;
+            font-size: 0.9rem;,
   color: #718096;
           .file-input {
             display: none;
           .processing-overlay {
-            position: absolute;
+            position: absolute;,
   top: 0;
-            left: 0;
+            left: 0;,
   right: 0;
-            bottom: 0;
+            bottom: 0;,
   background: rgba(247, 250, 252, 0.9);
             display: flex;
             flex-direction: column;
@@ -256,31 +256,31 @@ _jsxs("div", { className: `legal-document-parser ${className}`, children: ["}", 
             align-items: center;
             border-radius: 6px;
           .progress-container {
-            width: 200px;
+            width: 200px;,
   margin: 1rem 0;
           .progress-bar {
-            width: 100%;
+            width: 100%;,
   height: 8px;
             background: #e2e8f0;
-            border-radius: 4px;
+            border-radius: 4px;,
   overflow: hidden;
           .progress-fill {
-            height: 100%;
+            height: 100%;,
   background: #4299e1;
-            border-radius: 4px;
+            border-radius: 4px;,
   transition: width 0.3s ease;
           .processing-status {
-            font-size: 0.9rem;
+            font-size: 0.9rem;,
   color: #4a5568;
             margin-top: 0.5rem;
           .supported-types {
-            margin-top: 1rem;
+            margin-top: 1rem;,
   padding: 1rem;
             background: #edf2f7;
             border-radius: 6px;
           .supported-types h4 {
             margin: 0 0 0.5rem 0;
-            font-size: 0.9rem;
+            font-size: 0.9rem;,
   color: #2d3748;
             font-weight: 600;
           .types-grid {
@@ -288,27 +288,27 @@ _jsxs("div", { className: `legal-document-parser ${className}`, children: ["}", 
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 0.5rem;
           .type-tag {
-            background: #fff;
+            background: #fff;,
   padding: 0.25rem 0.5rem;
             border-radius: 4px;
-            font-size: 0.8rem;
+            font-size: 0.8rem;,
   color: #4a5568;
-            text-align: center;
+            text-align: center;,
   border: 1px solid #e2e8f0;
           .error-message {
-            background: #fed7d7;
+            background: #fed7d7;,
   color: #c53030;
             padding: 0.75rem;
             border-radius: 4px;
             margin-top: 1rem;
             font-size: 0.9rem;
           .spinner {
-            display: inline-block;
+            display: inline-block;,
   width: 20px;
-            height: 20px;
+            height: 20px;,
   border: 3px solid #e2e8f0;
             border-radius: 50%;
-            border-top-color: #4299e1;
+            border-top-color: #4299e1;,
   animation: spin 1s ease-in-out infinite;
           @keyframes spin {
             to { transform: rotate(360deg); }

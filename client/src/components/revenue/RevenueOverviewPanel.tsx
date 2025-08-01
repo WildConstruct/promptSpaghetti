@@ -7,18 +7,20 @@
 import React from 'react';
 import { RevenueMetrics, RevenueDashboardData } from '../../types/revenue';
 import './RevenueOverviewPanel.css';
-}
+
+
 interface RevenueOverviewPanelProps {
   metrics: RevenueMetrics | null;,
   dashboardData: RevenueDashboardData | null;
   layout?: 'compact' | 'detailed' | 'executive';
   className?: string;
-  export const RevenueOverviewPanel: React.FC<RevenueOverviewPanelProps> = ({,)
+  export const RevenueOverviewPanel: React.FC<RevenueOverviewPanelProps> = ({),
   metrics,
   dashboardData,
   layout = 'detailed',
   className = ''
-}
+
+
 }) => {
   if (!metrics) {
     return;

@@ -8,8 +8,8 @@ import React from 'react';
 import type { TrustScore } from '../../types/TrustTypes';
 
 }
-export interface UserTrustData {
-    userId: string;
+}
+export interface UserTrustData { userId: string;
     userName: string;
     email: string;
     userType: 'creator' | 'buyer' | 'both';
@@ -18,7 +18,7 @@ export interface UserTrustData {
         email: boolean;
         phone: boolean;
         identity: boolean;
-        professional: boolean;
+        professional: boolean }
 }
     };
     accountStatus: 'active' | 'suspended' | 'under_review';
@@ -27,15 +27,15 @@ export interface UserTrustData {
     riskFlags: string[];
 
 }
-export interface TrustScoreAdjustment {
-    userId: string;
+}
+export interface TrustScoreAdjustment { userId: string;
     adjustmentType: 'manual_override' | 'penalty' | 'bonus' | 'reset';
     scoreChange: number;
     reason: string;
     adminId: string;
     timestamp: Date;
-    expiresAt?: Date;
-
+    expiresAt?: Date }
+}
 }
 export interface TrustScoreManagerProps {
     className?: string;
@@ -43,4 +43,5 @@ export interface TrustScoreManagerProps {
 export declare const TrustScoreManager: React.FC<TrustScoreManagerProps>;
 export default TrustScoreManager;
 //# sourceMappingURL=TrustScoreManager.d.ts.map
+}
 }

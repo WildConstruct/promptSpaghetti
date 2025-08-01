@@ -5,30 +5,27 @@
  */
 import crypto from 'crypto';
 import { EmailMFAProvider } from '../auth/EmailMFAProvider';
-import {
-  MFAMethodType,
+import { MFAMethodType,
   MFAMethodStatus,
   MFAVerificationResult,
   EmailConfiguration,
-  EmailVerification,
+  EmailVerification }
   MFA_CONSTANTS
-} from '../types/MFATypes';
+ from '../types/MFATypes';
 
 // ========================================
 // Mock Implementations
 // ========================================
-class MockEmailService {
-  public sentEmails: Array<{
+class MockEmailService { public sentEmails: Array<{ }
   to: string;
   template: any;
   variables: Record<string, string>;
   result: any;
-}> = [];
-  async sendEmail(to: string, template: any, variables: Record<string, string>) {
-  const result = {
-  messageId: crypto.randomUUID(),
-  status: 'sent' as const,
-  timestamp: new Date(),
+> = [];
+  async sendEmail(to: string, template: any, variables: Record<string, string>) { const result = {
+  messageId: crypto.randomUUID()
+  status: 'sent' as const
+  timestamp: new Date() }
 };
     this.sentEmails.push({ to, template, variables, result });
     return result;
@@ -106,8 +103,7 @@ class MockStorage {
 
     this.events.push({ ...event });
   // Test helpers
-  reset() {
-  this.configurations.clear();
+  reset() { this.configurations.clear();
   this.verifications.clear();
   this.rateLimits.clear();
   this.attempts = [];
@@ -126,46 +122,39 @@ class MockStorage {
   const encryptionKey = crypto.randomBytes(32).toString('hex');
   const defaultConfig = {
   encryption: {
-  algorithm: 'aes-256-gcm' as const,
-  keyDerivation: 'pbkdf2' as const,
-  iterations: 100000 as const,
-},
+  algorithm: 'aes-256-gcm' as const
+  keyDerivation: 'pbkdf2' as const
+  iterations: 100000 as const }
+
   templates: {
-  verificationCode: 'Your code is {{code}}',
+  verificationCode: 'Your code is {{code}}'
       enrollmentCode: 'Enrollment code: {{code}}'
-  },
-  rateLimit: {
-  maxDailyEmails: 5,
-  cooldownMinutes: 15,
+
+  rateLimit: { 
+  maxDailyEmails: 5
+  cooldownMinutes: 15 }
 };
   const testUserId = crypto.randomUUID();
-  const testContext = {
-  ipAddress: '192.168.1.1',
-  userAgent: 'Mozilla/5.0 Test Browser',
-  location: 'US',
-  deviceFingerprint: 'test-device-123',
-  previousAttempts: 0,
+  const testContext = { ipAddress: '192.168.1.1'
+  userAgent: 'Mozilla/5.0 Test Browser'
+  location: 'US'
+  deviceFingerprint: 'test-device-123'
+  previousAttempts: 0 }
 };
-  beforeEach(() => {
-    mockEmailService = new MockEmailService();
+  beforeEach(() => { mockEmailService = new MockEmailService();
     mockStorage = new MockStorage();
-    provider = new EmailMFAProvider(defaultConfig, mockEmailService, mockStorage, encryptionKey);
-  });
-  afterEach(() => {
-    mockEmailService.reset();
-    mockStorage.reset();
-  });
+    provider = new EmailMFAProvider(defaultConfig, mockEmailService, mockStorage, encryptionKey) });
+  afterEach(() => { mockEmailService.reset();
+    mockStorage.reset() });
   // ========================================
   // Enrollment Tests
   // ========================================
-  describe('enrollMethod', () => {
-  const validEnrollmentRequest = {
-  methodType: MFAMethodType.EMAIL,
-  displayName: 'Work Email',
-  emailAddress: 'user@example.com',
+  describe('enrollMethod', () => { const validEnrollmentRequest = {
+  methodType: MFAMethodType.EMAIL
+  displayName: 'Work Email'
+  emailAddress: 'user@example.com' }
 };
-    test('should successfully enroll a valid email address', async () => {
-      const response = await provider.enrollMethod(testUserId, validEnrollmentRequest);
+    test('should successfully enroll a valid email address', async () => { const response = await provider.enrollMethod(testUserId, validEnrollmentRequest);
       expect(response.configurationId).toBeDefined();
       expect(response.methodType).toBe(MFAMethodType.EMAIL);
       expect(response.requiresVerification).toBe(true);
@@ -178,48 +167,41 @@ class MockStorage {
       expect(config!.isVerified).toBe(false);
       // Verify verification email was sent
       expect(mockEmailService.sentEmails).toHaveLength(1);
-      expect(mockEmailService.sentEmails[0].to).toBe(validEnrollmentRequest.emailAddress);
-    });
-    test('should reject invalid email addresses', async () => {
-  const invalidRequest = {
-  ...validEnrollmentRequest,
-  emailAddress: 'invalid-email',
+      expect(mockEmailService.sentEmails[0].to).toBe(validEnrollmentRequest.emailAddress) });
+    test('should reject invalid email addresses', async () => { const invalidRequest = {
+  ...validEnrollmentRequest
+  emailAddress: 'invalid-email' }
 };
       await expect(provider.enrollMethod(testUserId, invalidRequest))
         .rejects.toThrow('Invalid email address');
     });
-    test('should reject risky email addresses', async () => {
-  const riskyRequest = {
-  ...validEnrollmentRequest,
-  emailAddress: 'user@risky-domain.com',
+    test('should reject risky email addresses', async () => { const riskyRequest = {
+  ...validEnrollmentRequest
+  emailAddress: 'user@risky-domain.com' }
 };
       await expect(provider.enrollMethod(testUserId, riskyRequest))
         .rejects.toThrow('Email address not suitable for MFA');
     });
-    test('should reject duplicate enrollment', async () => {
-      // First enrollment
+    test('should reject duplicate enrollment', async () => { // First enrollment
       await provider.enrollMethod(testUserId, validEnrollmentRequest);
       // Second enrollment should fail
       await expect(provider.enrollMethod(testUserId, validEnrollmentRequest))
-        .rejects.toThrow('Email MFA already configured for this user');
-    });
-    test('should validate input schema', async () => {
-  const invalidRequest = {
-  methodType: 'invalid-method',
-  displayName: '',
-  emailAddress: 'user@example.com',
+        .rejects.toThrow('Email MFA already configured for this user') });
+    test('should validate input schema', async () => { const invalidRequest = {
+  methodType: 'invalid-method'
+  displayName: ''
+  emailAddress: 'user@example.com' }
 };
       await expect(provider.enrollMethod(testUserId, invalidRequest as any))
         .rejects.toThrow();
     });
   });
-  describe('completeEnrollment', () => {
-  test('should complete enrollment with valid code', async () => {
+  describe('completeEnrollment', () => { test('should complete enrollment with valid code', async () => {
   // Start enrollment
   await provider.enrollMethod(testUserId, {)
-  methodType: MFAMethodType.EMAIL,
-  displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+  methodType: MFAMethodType.EMAIL
+  displayName: 'Test Email'
+  emailAddress: 'user@example.com' }
 });
       // Get verification from storage
       const verifications = await mockStorage.getActiveVerifications(testUserId);
@@ -238,11 +220,10 @@ class MockStorage {
       const remainingVerifications = await mockStorage.getActiveVerifications(testUserId);
       expect(remainingVerifications).toHaveLength(0);
     });
-    test('should reject invalid verification codes', async () => {
-  await provider.enrollMethod(testUserId, {)
-  methodType: MFAMethodType.EMAIL,
-  displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+    test('should reject invalid verification codes', async () => { await provider.enrollMethod(testUserId, {)
+  methodType: MFAMethodType.EMAIL
+  displayName: 'Test Email'
+  emailAddress: 'user@example.com' }
 });
       const verifications = await mockStorage.getActiveVerifications(testUserId);
       const verification = verifications[0];
@@ -252,11 +233,10 @@ class MockStorage {
       const updatedVerification = await mockStorage.getVerification(verification.id);
       expect(updatedVerification!.attempts).toBe(1);
     });
-    test('should reject expired verifications', async () => {
-  await provider.enrollMethod(testUserId, {)
-  methodType: MFAMethodType.EMAIL,
-  displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+    test('should reject expired verifications', async () => { await provider.enrollMethod(testUserId, {)
+  methodType: MFAMethodType.EMAIL
+  displayName: 'Test Email'
+  emailAddress: 'user@example.com' }
 });
       const verifications = await mockStorage.getActiveVerifications(testUserId);
       const verification = verifications[0];
@@ -266,39 +246,33 @@ class MockStorage {
       await expect(provider.completeEnrollment(testUserId, verification.id, '123456'))
         .rejects.toThrow('Verification expired');
     });
-    test('should lock verification after too many attempts', async () => {
-  await provider.enrollMethod(testUserId, {)
-  methodType: MFAMethodType.EMAIL,
-  displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+    test('should lock verification after too many attempts', async () => { await provider.enrollMethod(testUserId, {)
+  methodType: MFAMethodType.EMAIL
+  displayName: 'Test Email'
+  emailAddress: 'user@example.com' }
 });
       const verifications = await mockStorage.getActiveVerifications(testUserId);
       const verification = verifications[0];
       // Try wrong code 3 times
-      for (let i = 0; i < 3; i++) {
-        try {
-          await provider.completeEnrollment(testUserId, verification.id, '000000');
-        } catch (error) {
-          // Expected to fail
+      for (let i = 0; i < 3; i++) { try {
+          await provider.completeEnrollment(testUserId, verification.id, '000000') } catch (error) { // Expected to fail
       // Final attempt should completely fail
       await expect(provider.completeEnrollment(testUserId, verification.id, '000000'))
         .rejects.toThrow('Too many failed attempts');
       // Verification should be deleted
       const finalVerification = await mockStorage.getVerification(verification.id);
-      expect(finalVerification).toBeNull();
-    });
+      expect(finalVerification).toBeNull() });
   });
   // ========================================
   // Verification Tests
   // ========================================
-  describe('initiateVerification', () => {
-  let configurationId: string;
+  describe('initiateVerification', () => { let configurationId: string;
   beforeEach(async () => {
   // Set up active configuration
   const response = await provider.enrollMethod(testUserId, {)
   methodType: MFAMethodType.EMAIL,
   displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+  emailAddress: 'user@example.com' }
 });
       configurationId = response.configurationId;
       // Complete enrollment
@@ -309,8 +283,7 @@ class MockStorage {
       // Reset email tracking
       mockEmailService.reset();
     });
-    test('should initiate verification for active configuration', async () => {
-      const verificationId = await provider.initiateVerification(testUserId, configurationId, testContext);
+    test('should initiate verification for active configuration', async () => { const verificationId = await provider.initiateVerification(testUserId, configurationId, testContext);
       expect(verificationId).toBeDefined();
       // Verify email was sent
       expect(mockEmailService.sentEmails).toHaveLength(1);
@@ -318,39 +291,34 @@ class MockStorage {
       // Verify verification record was created
       const verification = await mockStorage.getVerification(verificationId);
       expect(verification).toBeTruthy();
-      expect(verification!.userId).toBe(testUserId);
-    });
-    test('should reject verification for invalid configuration', async () => {
-      const invalidConfigId = crypto.randomUUID();
+      expect(verification!.userId).toBe(testUserId) });
+    test('should reject verification for invalid configuration', async () => { const invalidConfigId = crypto.randomUUID();
       await expect(provider.initiateVerification(testUserId, invalidConfigId, testContext))
-        .rejects.toThrow('Invalid configuration');
-    });
+        .rejects.toThrow('Invalid configuration') });
     test('should reject verification for inactive configuration', async () => {
       // Disable the configuration
       await mockStorage.updateConfiguration(configurationId, { status: MFAMethodStatus.DISABLED });
       await expect(provider.initiateVerification(testUserId, configurationId, testContext))
         .rejects.toThrow('Method not active');
     });
-    test('should include security warning for high-risk context', async () => {
-  const highRiskContext = {
+    test('should include security warning for high-risk context', async () => { const highRiskContext = {
   ...testContext,
   previousAttempts: 5,
   location: undefined,
-  deviceFingerprint: undefined,
+  deviceFingerprint: undefined }
 };
       await provider.initiateVerification(testUserId, configurationId, highRiskContext);
       const sentEmail = mockEmailService.sentEmails[0];
       expect(sentEmail.variables.securityWarning).toBeTruthy();
     });
   });
-  describe('verifyCode', () => {
-  let configurationId: string;
+  describe('verifyCode', () => { let configurationId: string;
   beforeEach(async () => {
   // Set up active configuration
   const response = await provider.enrollMethod(testUserId, {)
   methodType: MFAMethodType.EMAIL,
   displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+  emailAddress: 'user@example.com' }
 });
       configurationId = response.configurationId;
       // Complete enrollment
@@ -361,8 +329,7 @@ class MockStorage {
       // Reset email tracking
       mockEmailService.reset();
     });
-    test('should verify valid code successfully', async () => {
-  // Initiate verification
+    test('should verify valid code successfully', async () => { // Initiate verification
   const verificationId = await provider.initiateVerification(testUserId, configurationId, testContext);
   // Get the code from sent email
   const sentEmail = mockEmailService.sentEmails[0];
@@ -371,7 +338,7 @@ class MockStorage {
   const result = await provider.verifyCode({)
   configurationId,
   code,
-  backupCode: false,
+  backupCode: false }
 }, testContext);
       expect(result.success).toBe(true);
       expect(result.result).toBe(MFAVerificationResult.SUCCESS);
@@ -383,12 +350,11 @@ class MockStorage {
       const verification = await mockStorage.getVerification(verificationId);
       expect(verification).toBeNull();
     });
-    test('should reject invalid codes', async () => {
-  await provider.initiateVerification(testUserId, configurationId, testContext);
+    test('should reject invalid codes', async () => { await provider.initiateVerification(testUserId, configurationId, testContext);
   const result = await provider.verifyCode({)
   configurationId,
   code: '000000',
-  backupCode: false,
+  backupCode: false }
 }, testContext);
       expect(result.success).toBe(false);
       expect(result.result).toBe(MFAVerificationResult.INVALID_CODE);
@@ -397,14 +363,13 @@ class MockStorage {
       const config = await mockStorage.getConfigurationById(configurationId);
       expect(config!.failedAttempts).toBe(1);
     });
-    test('should lock account after too many failed attempts', async () => {
-  await provider.initiateVerification(testUserId, configurationId, testContext);
+    test('should lock account after too many failed attempts', async () => { await provider.initiateVerification(testUserId, configurationId, testContext);
   // Fail multiple times
   for (let i = 0; i < MFA_CONSTANTS.SECURITY.MAX_FAILED_ATTEMPTS; i++) {
   await provider.verifyCode({)
   configurationId,
   code: '000000',
-  backupCode: false,
+  backupCode: false }
 }, testContext);
       // Verify account is locked
       const config = await mockStorage.getConfigurationById(configurationId);
@@ -420,33 +385,31 @@ class MockStorage {
       // Lock the account
       const lockTime = new Date(Date.now() + 60000); // 1 minute from now;
       await mockStorage.updateConfiguration(configurationId, { lockedUntil: lockTime });
-      const result = await provider.verifyCode({)
+      const result = await provider.verifyCode({ )
   configurationId,
   code: '123456',
-  backupCode: false,
+  backupCode: false }
 }, testContext);
       expect(result.success).toBe(false);
       expect(result.result).toBe(MFAVerificationResult.USER_LOCKED);
       expect(result.lockoutDuration).toBeGreaterThan(0);
     });
-    test('should handle expired verifications', async () => {
-  // Don't initiate verification, just try to verify
+    test('should handle expired verifications', async () => { // Don't initiate verification, just try to verify
   const result = await provider.verifyCode({)
   configurationId,
   code: '123456',
-  backupCode: false,
+  backupCode: false }
 }, testContext);
       expect(result.success).toBe(false);
       expect(result.result).toBe(MFAVerificationResult.EXPIRED);
     });
-    test('should log all verification attempts', async () => {
-  await provider.initiateVerification(testUserId, configurationId, testContext);
+    test('should log all verification attempts', async () => { await provider.initiateVerification(testUserId, configurationId, testContext);
   const sentEmail = mockEmailService.sentEmails[0];
   const code = sentEmail.variables.code;
   await provider.verifyCode({)
   configurationId,
   code,
-  backupCode: false,
+  backupCode: false }
 }, testContext);
       const attempts = mockStorage.getAttempts();
       expect(attempts).toHaveLength(1);
@@ -457,18 +420,16 @@ class MockStorage {
   // ========================================
   // Management Tests
   // ========================================
-  describe('updateEmailAddress', () => {
-  let configurationId: string;
+  describe('updateEmailAddress', () => { let configurationId: string;
   beforeEach(async () => {
   const response = await provider.enrollMethod(testUserId, {)
   methodType: MFAMethodType.EMAIL,
   displayName: 'Test Email',
-  emailAddress: 'old@example.com',
+  emailAddress: 'old@example.com' }
 });
       configurationId = response.configurationId;
     });
-    test('should update email address and require re-verification', async () => {
-      const newEmailAddress = 'new@example.com';
+    test('should update email address and require re-verification', async () => { const newEmailAddress = 'new@example.com';
       await provider.updateEmailAddress(testUserId, configurationId, newEmailAddress);
       const config = await mockStorage.getConfigurationById(configurationId);
       expect(config!.emailAddress).toBe(newEmailAddress);
@@ -477,51 +438,39 @@ class MockStorage {
       // Verify new verification email was sent
       expect(mockEmailService.sentEmails.length).toBeGreaterThan(1);
       const newVerificationEmail = mockEmailService.sentEmails[mockEmailService.sentEmails.length - 1];
-      expect(newVerificationEmail.to).toBe(newEmailAddress);
-    });
-    test('should reject invalid email addresses', async () => {
-      await expect(provider.updateEmailAddress(testUserId, configurationId, 'invalid-email'))
-        .rejects.toThrow('Invalid email address');
-    });
-    test('should reject updates for invalid configuration', async () => {
-      const invalidConfigId = crypto.randomUUID();
+      expect(newVerificationEmail.to).toBe(newEmailAddress) });
+    test('should reject invalid email addresses', async () => { await expect(provider.updateEmailAddress(testUserId, configurationId, 'invalid-email'))
+        .rejects.toThrow('Invalid email address') });
+    test('should reject updates for invalid configuration', async () => { const invalidConfigId = crypto.randomUUID();
       await expect(provider.updateEmailAddress(testUserId, invalidConfigId, 'new@example.com'))
-        .rejects.toThrow('Invalid configuration');
-    });
+        .rejects.toThrow('Invalid configuration') });
   });
-  describe('disableMethod', () => {
-  let configurationId: string;
+  describe('disableMethod', () => { let configurationId: string;
   beforeEach(async () => {
   const response = await provider.enrollMethod(testUserId, {)
   methodType: MFAMethodType.EMAIL,
   displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+  emailAddress: 'user@example.com' }
 });
       configurationId = response.configurationId;
     });
-    test('should disable method', async () => {
-      await provider.disableMethod(testUserId, configurationId);
+    test('should disable method', async () => { await provider.disableMethod(testUserId, configurationId);
       const config = await mockStorage.getConfigurationById(configurationId);
-      expect(config!.status).toBe(MFAMethodStatus.DISABLED);
-    });
-    test('should reject invalid configuration', async () => {
-      const invalidConfigId = crypto.randomUUID();
+      expect(config!.status).toBe(MFAMethodStatus.DISABLED) });
+    test('should reject invalid configuration', async () => { const invalidConfigId = crypto.randomUUID();
       await expect(provider.disableMethod(testUserId, invalidConfigId))
-        .rejects.toThrow('Invalid configuration');
-    });
+        .rejects.toThrow('Invalid configuration') });
   });
-  describe('revokeMethod', () => {
-  let configurationId: string;
+  describe('revokeMethod', () => { let configurationId: string;
   beforeEach(async () => {
   const response = await provider.enrollMethod(testUserId, {)
   methodType: MFAMethodType.EMAIL,
   displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+  emailAddress: 'user@example.com' }
 });
       configurationId = response.configurationId;
     });
-    test('should revoke method and clean up verifications', async () => {
-      // Create some verifications
+    test('should revoke method and clean up verifications', async () => { // Create some verifications
       await provider.initiateVerification(testUserId, configurationId, testContext);
       let verifications = await mockStorage.getActiveVerifications(testUserId);
       expect(verifications.length).toBeGreaterThan(0);
@@ -531,20 +480,18 @@ class MockStorage {
       expect(config!.status).toBe(MFAMethodStatus.REVOKED);
       // Verify verifications were cleaned up
       verifications = await mockStorage.getActiveVerifications(testUserId);
-      expect(verifications).toHaveLength(0);
-    });
+      expect(verifications).toHaveLength(0) });
   });
   // ========================================
   // Security Tests
   // ========================================
-  describe('Security Features', () => {
-  test('should use constant-time comparison for codes', async () => {
+  describe('Security Features', () => { test('should use constant-time comparison for codes', async () => {
   // This test verifies that timing attacks are prevented
   // by ensuring similar response times regardless of how much of the code matches
   const response = await provider.enrollMethod(testUserId, {)
   methodType: MFAMethodType.EMAIL,
   displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+  emailAddress: 'user@example.com' }
 });
       // Complete enrollment
       const verifications = await mockStorage.getActiveVerifications(testUserId);
@@ -556,19 +503,18 @@ class MockStorage {
       await provider.initiateVerification(testUserId, response.configurationId, testContext);
       const realCode = mockEmailService.sentEmails[0].variables.code;
       // Test various wrong codes
-      const wrongCodes = [;
+      const wrongCodes = [
         '000000', // All wrong
         realCode.substring(0, 3) + '000', // Half right
         realCode.substring(0, 5) + '0', // Almost right
         '999999' // All wrong but different
       ];
       const timings: number = [];
-      for (const wrongCode of wrongCodes) {
-  const start = Date.now();
+      for (const wrongCode of wrongCodes) { const start = Date.now();
   const result = await provider.verifyCode({)
   configurationId: response.configurationId,
   code: wrongCode,
-  backupCode: false,
+  backupCode: false }
 }, testContext);
         const end = Date.now();
         expect(result.success).toBe(false);
@@ -580,11 +526,10 @@ class MockStorage {
       // Allow for some variance due to system load, but shouldn't be dramatic
       expect(timingVariance).toBeLessThan(100); // 100ms variance threshold
     });
-    test('should encrypt verification tokens securely', async () => {
-  await provider.enrollMethod(testUserId, {)
+    test('should encrypt verification tokens securely', async () => { await provider.enrollMethod(testUserId, {)
   methodType: MFAMethodType.EMAIL,
   displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+  emailAddress: 'user@example.com' }
 });
       const verifications = await mockStorage.getActiveVerifications(testUserId);
       const verification = verifications[0];
@@ -595,11 +540,10 @@ class MockStorage {
       expect(verification.encryptedToken).not.toContain(plainCode);
       expect(verification.encryptedToken.length).toBeGreaterThan(50); // Should be substantial
     });
-    test('should assess risk correctly', async () => {
-  const response = await provider.enrollMethod(testUserId, {)
+    test('should assess risk correctly', async () => { const response = await provider.enrollMethod(testUserId, {)
   methodType: MFAMethodType.EMAIL,
   displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+  emailAddress: 'user@example.com' }
 });
       // Complete enrollment
       const verifications = await mockStorage.getActiveVerifications(testUserId);
@@ -607,10 +551,9 @@ class MockStorage {
       const sentEmail = mockEmailService.sentEmails[0];
       await provider.completeEnrollment(testUserId, verification.id, sentEmail.variables.code);
       // Test high-risk context
-      const highRiskContext = {
-  ipAddress: '192.168.1.1',
+      const highRiskContext = { ipAddress: '192.168.1.1',
   userAgent: 'Suspicious Browser',
-  previousAttempts: 5 // High attempt count,
+  previousAttempts: 5 // High attempt count }
   // Missing location and device fingerprint
 };
       mockEmailService.reset();
@@ -623,12 +566,11 @@ class MockStorage {
   // ========================================
   // Rate Limiting Tests
   // ========================================
-  describe('Rate Limiting', () => {
-  test('should enforce email sending rate limits', async () => {
+  describe('Rate Limiting', () => { test('should enforce email sending rate limits', async () => {
   const response = await provider.enrollMethod(testUserId, {)
   methodType: MFAMethodType.EMAIL,
   displayName: 'Test Email',
-  emailAddress: 'user@example.com',
+  emailAddress: 'user@example.com' }
 });
       // Complete enrollment
       const verifications = await mockStorage.getActiveVerifications(testUserId);
@@ -652,27 +594,23 @@ class MockStorage {
   // ========================================
   describe('Input Validation', () => {
     test('should validate enrollment requests', async () => {
-      const invalidRequests = [;
+      const invalidRequests = [
         { methodType: 'invalid', displayName: 'Test', emailAddress: 'user@example.com' },
         { methodType: MFAMethodType.EMAIL, displayName: '', emailAddress: 'user@example.com' },
         { methodType: MFAMethodType.EMAIL, displayName: 'Test', emailAddress: 'invalid-email' },
         { methodType: MFAMethodType.EMAIL, displayName: 'x'.repeat(101), emailAddress: 'user@example.com' }
       ];
-      for (const request of invalidRequests) {
-        await expect(provider.enrollMethod(testUserId, request as any))
-          .rejects.toThrow();
-    });
+      for (const request of invalidRequests) { await expect(provider.enrollMethod(testUserId, request as any))
+          .rejects.toThrow() });
     test('should validate verification requests', async () => {
-      const invalidRequests = [;
+      const invalidRequests = [
         { configurationId: 'invalid-uuid', code: '123456' },
         { configurationId: crypto.randomUUID(), code: '12345' }, // Too short
         { configurationId: crypto.randomUUID(), code: '1234567' }, // Too long
         { configurationId: crypto.randomUUID(), code: 'abcdef' } // Non-numeric
       ];
-      for (const request of invalidRequests) {
-        await expect(provider.verifyCode(request as any, testContext))
-          .rejects.toThrow();
-    });
+      for (const request of invalidRequests) { await expect(provider.verifyCode(request as any, testContext))
+          .rejects.toThrow() });
   });
 });
 

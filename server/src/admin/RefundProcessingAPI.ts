@@ -81,6 +81,7 @@ export class RefundProcessingAPI {
    * Get refunds with filtering and pagination
    */
   private async getRefunds(request: any, reply: any): Promise<any> {
+
     try {
       const { limit = 50, offset = 0, status, priority, reason, assignedTo, search, dateFrom, dateTo } = request.query;
 
@@ -167,6 +168,7 @@ export class RefundProcessingAPI {
    * Get specific refund by ID
    */
   private async getRefund(request: any, reply: any): Promise<any> {
+
     try {
       const { refundId } = request.params;
 
@@ -194,6 +196,7 @@ export class RefundProcessingAPI {
    * Create new refund request
    */
   private async createRefund(request: any, reply: any): Promise<any> {
+
     try {
       const { purchaseId, reason, amount, description, priority = 'medium' } = request.body;
       const currentUser = request.user?.id || 'admin';
@@ -232,6 +235,7 @@ export class RefundProcessingAPI {
    * Approve refund request
    */
   private async approveRefund(request: any, reply: any): Promise<any> {
+
     try {
       const { refundId } = request.params;
       const { notes } = request.body;
@@ -255,6 +259,7 @@ export class RefundProcessingAPI {
    * Reject refund request
    */
   private async rejectRefund(request: any, reply: any): Promise<any> {
+
     try {
       const { refundId } = request.params;
       const { reason } = request.body;
@@ -285,6 +290,7 @@ export class RefundProcessingAPI {
    * Process approved refund
    */
   private async processRefund(request: any, reply: any): Promise<any> {
+
     try {
       const { refundId } = request.params;
       const currentUser = request.user?.id || 'admin';
@@ -307,6 +313,7 @@ export class RefundProcessingAPI {
    * Assign refund to admin
    */
   private async assignRefund(request: any, reply: any): Promise<any> {
+
     try {
       const { refundId } = request.params;
       const { assignedTo } = request.body;
@@ -345,6 +352,7 @@ export class RefundProcessingAPI {
    * Add note to refund
    */
   private async addNote(request: any, reply: any): Promise<any> {
+
     try {
       const { refundId } = request.params;
       const { content, type = 'internal' } = request.body;
@@ -405,6 +413,7 @@ export class RefundProcessingAPI {
    * Get refund workflow history
    */
   private async getRefundHistory(request: any, reply: any): Promise<any> {
+
     try {
       const { refundId } = request.params;
 
@@ -442,6 +451,7 @@ export class RefundProcessingAPI {
    * Bulk approve refunds
    */
   private async bulkApproveRefunds(request: any, reply: any): Promise<any> {
+
     try {
       const { refundIds, notes } = request.body;
       const currentUser = request.user?.id || 'admin';
@@ -483,6 +493,7 @@ export class RefundProcessingAPI {
    * Bulk reject refunds
    */
   private async bulkRejectRefunds(request: any, reply: any): Promise<any> {
+
     try {
       const { refundIds, reason } = request.body;
       const currentUser = request.user?.id || 'admin';
@@ -531,6 +542,7 @@ export class RefundProcessingAPI {
    * Get refund statistics
    */
   private async getRefundStats(request: any, reply: any): Promise<any> {
+
     try {
       const { dateRange } = request.query;
 
@@ -560,6 +572,7 @@ export class RefundProcessingAPI {
    * Get pending refunds queue
    */
   private async getPendingRefunds(request: any, reply: any): Promise<any> {
+
     try {
       const { limit = 20 } = request.query;
 
@@ -592,6 +605,7 @@ export class RefundProcessingAPI {
    * Get overdue refunds
    */
   private async getOverdueRefunds(request: any, reply: any): Promise<any> {
+
     try {
       const { limit = 20 } = request.query;
 
@@ -625,6 +639,7 @@ export class RefundProcessingAPI {
    * Get refund dashboard data
    */
   private async getRefundDashboard(request: any, reply: any): Promise<any> {
+
     try {
       const [stats, pending, overdue] = await Promise.all([
         this.refundService.getRefundStats(),
@@ -659,6 +674,7 @@ export class RefundProcessingAPI {
    * Export refund data
    */
   private async exportRefundData(request: any, reply: any): Promise<any> {
+
     try {
       const { format = 'csv', dateFrom, dateTo } = request.query;
 
@@ -732,6 +748,7 @@ export class RefundProcessingAPI {
    * Update refund request
    */
   private async updateRefund(request: any, reply: any): Promise<any> {
+
     try {
       const { refundId } = request.params;
       const { priority, assignedTo, description } = request.body;
@@ -800,6 +817,7 @@ export class RefundProcessingAPI {
    * Cancel refund request
    */
   private async cancelRefund(request: any, reply: any): Promise<any> {
+
     try {
       const { refundId } = request.params;
       const currentUser = request.user?.id || 'admin';
@@ -852,6 +870,7 @@ export class RefundProcessingAPI {
 
   // Placeholder methods for unimplemented features
   private async getRefundAnalytics(request: any, reply: any): Promise<any> {
+
     return reply.code(200).send({
       success: true,
       data: { message: 'Analytics implementation coming soon' },
@@ -859,6 +878,7 @@ export class RefundProcessingAPI {
   }
 
   private async getRefundPolicies(request: any, reply: any): Promise<any> {
+
     return reply.code(200).send({
       success: true,
       data: [],
@@ -866,6 +886,7 @@ export class RefundProcessingAPI {
   }
 
   private async updateRefundPolicy(request: any, reply: any): Promise<any> {
+
     return reply.code(200).send({
       success: true,
       message: 'Policy updated successfully',
@@ -873,6 +894,7 @@ export class RefundProcessingAPI {
   }
 
   private async bulkAssignRefunds(request: any, reply: any): Promise<any> {
+
     return reply.code(200).send({
       success: true,
       message: 'Bulk assignment completed',
@@ -880,6 +902,7 @@ export class RefundProcessingAPI {
   }
 
   private async bulkProcessRefunds(request: any, reply: any): Promise<any> {
+
     return reply.code(200).send({
       success: true,
       message: 'Bulk processing completed',

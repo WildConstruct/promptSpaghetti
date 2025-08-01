@@ -8,8 +8,8 @@
  */
 
 }
-export interface UnifiedDashboardConfig {
-    enableRealTimeUpdates: boolean;
+}
+export interface UnifiedDashboardConfig { enableRealTimeUpdates: boolean;
     autoRefreshInterval: number;
     maxQueueItems: number;
     enableAdvancedFiltering: boolean;
@@ -17,32 +17,27 @@ export interface UnifiedDashboardConfig {
     enableMobileModerator: boolean;
     defaultModerationMode: 'manual' | 'assisted' | 'automated';
     escalationThreshold: number;
-    workloadDistributionMode: 'round_robin' | 'expertise_based' | 'workload_balanced';
-
+    workloadDistributionMode: 'round_robin' | 'expertise_based' | 'workload_balanced' }
 }
-export interface DashboardOverview {
-    timestamp: Date;
+}
+export interface DashboardOverview { timestamp: Date;
     summary: {
         totalItems: number;
         pendingReview: number;
         autoApproved: number;
         autoRejected: number;
         escalated: number;
-        appealed: number;
+        appealed: number }
 }
     };
-    queues: {
-        highPriority: number;
+    queues: { highPriority: number;
         mediumPriority: number;
         lowPriority: number;
-        automated: number;
-    };
-    performance: {
-        avgProcessingTime: number;
+        automated: number };
+    performance: { avgProcessingTime: number;
         throughputLast24h: number;
         moderatorEfficiency: number;
-        slaCompliance: number;
-    };
+        slaCompliance: number };
     alerts: ModerationAlert[];
     trends: {
         volumeTrend: 'increasing' | 'decreasing' | 'stable';
@@ -51,19 +46,18 @@ export interface DashboardOverview {
   };
 
 }
-export interface ModerationAlert {
-    id: string;
+}
+export interface ModerationAlert { id: string;
     type: 'queue_backlog' | 'sla_breach' | 'policy_violation' | 'system_error' | 'performance_issue';
     severity: 'low' | 'medium' | 'high' | 'critical';
     message: string;
     timestamp: Date;
     data?: Record<string, unknown>;
     acknowledged: boolean;
-    assignedTo?: string;
-
+    assignedTo?: string }
 }
-export interface ModerationWorkload {
-    moderatorId: string;
+}
+export interface ModerationWorkload { moderatorId: string;
     currentLoad: number;
     capacity: number;
     utilization: number;
@@ -74,26 +68,24 @@ export interface ModerationWorkload {
     availabilityWindow: {
         start: string;
         end: string;
-        timezone: string;
+        timezone: string }
 }
     };
 
 }
-export interface AdvancedSearchQuery {
-    contentTypes?: string[];
+}
+export interface AdvancedSearchQuery { contentTypes?: string[];
     statuses?: string[];
     priorities?: string[];
     dateRange?: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     moderators?: string[];
     policies?: string[];
-    confidence?: {
-        min: number;
-        max: number;
-    };
+    confidence?: { min: number;
+        max: number };
     keywords?: string[];
     riskLevel?: string[];
     sortBy?: 'date' | 'priority' | 'confidence' | 'risk';
@@ -102,45 +94,36 @@ export interface AdvancedSearchQuery {
     offset?: number;
 
 }
-export interface BulkModerationAction {
-    actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize';
+}
+export interface BulkModerationAction { actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize';
     itemIds: string[];
     reason?: string;
     assignTo?: string;
     metadata?: Record<string, unknown>;
-    scheduledFor?: Date;
-
+    scheduledFor?: Date }
 }
-export interface DashboardMetrics {
-    realTime: {
+}
+export interface DashboardMetrics { realTime: {
         activeModerators: number;
         itemsBeingReviewed: number;
         averageWaitTime: number;
-        systemLoad: number;
+        systemLoad: number }
 }
     };
-    historical: {
-        dailyVolume: Array<{
+    historical: { dailyVolume: Array<{
             date: string;
-            volume: number;
-        }>;
-        resolutionTimes: Array<{
-            date: string;
-            avgTime: number;
-        }>;
-        accuracyTrends: Array<{
-            date: string;
-            accuracy: number;
-        }>;
+            volume: number }>;
+        resolutionTimes: Array<{ date: string;
+            avgTime: number }>;
+        accuracyTrends: Array<{ date: string;
+            accuracy: number }>;
         violationTypes: Record<string, number>;
     };
-    predictions: {
-        expectedVolume24h: number;
+    predictions: { expectedVolume24h: number;
         estimatedBacklog: number;
         resourceNeeds: {
             additionalModerators: number;
-            peakHours: string[];
-        };
+            peakHours: string[] };
     };
 /**
  * Unified Moderation Dashboard Service
@@ -148,8 +131,7 @@ export interface DashboardMetrics {
  * Central orchestrator that brings together all moderation services
  * into a single, comprehensive management interface.
  */
-export declare class UnifiedModerationDashboard {
-    private config;
+export declare class UnifiedModerationDashboard { private config;
     private workflowService;
     private automatedService;
     private statesService;
@@ -174,18 +156,15 @@ export declare class UnifiedModerationDashboard {
         items: any[];
         totalCount: number;
         aggregations: Record<string, any>;
-        suggestions: string[];
-    }>;
+        suggestions: string[] }>;
     /**
      * Execute bulk moderation actions
      */
-    executeBulkActions(actions: BulkModerationAction[], moderatorId: string): Promise<{
-        successful: number;
+    executeBulkActions(actions: BulkModerationAction[], moderatorId: string): Promise<{ successful: number;
         failed: number;
         errors: Array<{
             itemId: string;
-            error: string;
-        }>;
+            error: string }>;
         summary: Record<string, number>;
     }>;
     /**
@@ -195,21 +174,18 @@ export declare class UnifiedModerationDashboard {
     /**
      * Intelligent workload distribution
      */
-    distributeWorkload(items: string[], distribution: 'urgent' | 'balanced' | 'expertise'): Promise<{
-        assignments: Array<{
+    distributeWorkload(items: string[], distribution: 'urgent' | 'balanced' | 'expertise'): Promise<{ assignments: Array<{
             moderatorId: string;
-            itemIds: string[];
-        }>;
+            itemIds: string[] }>;
         unassigned: string[];
         reasoning: string[];
     }>;
     /**
      * Get comprehensive dashboard metrics
      */
-    getDashboardMetrics(timeRange?: {)
+    getDashboardMetrics(timeRange?: { )
         start: Date;
-        end: Date;
-    }): Promise<DashboardMetrics>;
+        end: Date }): Promise<DashboardMetrics>;
     /**
      * Setup real-time updates
      */

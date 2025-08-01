@@ -1,21 +1,21 @@
 // packages/core/components/TemplateDialogs/TemplateBrowser.tsx
 // Epic 8.7 Task 6: Template Library - Template Browser Component
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
-  Template, 
+import { Template, 
   TemplateFilter, 
   TemplateCategory, 
-  TemplateInstantiationOptions,
+  TemplateInstantiationOptions }
   TemplateBrowserState
-} from '../../types/TemplateTypes';
+ from '../../types/TemplateTypes';
 import { templateService } from '../../services/TemplateService';
-}
-interface TemplateBrowserProps {
-  isOpen: boolean;
+
+
+interface TemplateBrowserProps { isOpen: boolean;
   onClose: () => void;
   onApplyTemplate: (templateId: string, options: TemplateInstantiationOptions) => Promise<void>;
-  currentAuthor?: string; // For filtering "my templates"
-}
+  currentAuthor?: string; // For filtering "my templates" }
+
+
 const TEMPLATE_CATEGORIES: Array<{ value: TemplateCategory | 'all'; label: string }> = [
   { value: 'all', label: 'All Categories' },
   { value: 'character', label: 'Character' },
@@ -30,68 +30,56 @@ const TEMPLATE_CATEGORIES: Array<{ value: TemplateCategory | 'all'; label: strin
   { value: 'general', label: 'General' }
 ];
 
-export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
-  isOpen,
-  onClose,
-  onApplyTemplate,
+export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({ )
+  isOpen
+  onClose
+  onApplyTemplate }
   currentAuthor = 'current-user'
-}) => {
-  const [browserState, setBrowserState] = useState<TemplateBrowserState>({)
-  isOpen: false,
-  viewMode: 'grid',
-  selectedCategory: 'all',
-  searchQuery: '',
-  sortBy: 'modified',
-  showOnlyMyTemplates: false,
-  previewTemplate: null,
+}) => { const [browserState, setBrowserState] = useState<TemplateBrowserState>({)
+  isOpen: false
+  viewMode: 'grid'
+  selectedCategory: 'all'
+  searchQuery: ''
+  sortBy: 'modified'
+  showOnlyMyTemplates: false
+  previewTemplate: null }
 });
   const [templates, setTemplates] = useState<Template>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Instantiation options state
-  const [instantiationOptions, setInstantiationOptions] = useState<TemplateInstantiationOptions>({)
-  preservePositions: false,
-  mergeWithCurrent: false,
-  offsetX: 100,
-  offsetY: 100,
+  const [instantiationOptions, setInstantiationOptions] = useState<TemplateInstantiationOptions>({ )
+  preservePositions: false
+  mergeWithCurrent: false
+  offsetX: 100
+  offsetY: 100 }
 });
   // Load templates
-  const loadTemplates = useCallback(async () => {
-  setIsLoading(true);
+  const loadTemplates = useCallback(async () => { setIsLoading(true);
   setError(null);
   try {
-  const filter: TemplateFilter = {,
-  category: browserState.selectedCategory === 'all' ? undefined : browserState.selectedCategory,
-  searchTerm: browserState.searchQuery || undefined,
-  sortBy: browserState.sortBy,
-  sortOrder: 'desc',
-  author: browserState.showOnlyMyTemplates ? currentAuthor : undefined,
+  const filter: TemplateFilter = {
+  category: browserState.selectedCategory === 'all' ? undefined : browserState.selectedCategory
+  searchTerm: browserState.searchQuery || undefined
+  sortBy: browserState.sortBy
+  sortOrder: 'desc'
+  author: browserState.showOnlyMyTemplates ? currentAuthor : undefined }
 };
       const loadedTemplates = await templateService.searchTemplates(filter);
       setTemplates(loadedTemplates);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load templates');
-} finally {
-      setIsLoading(false);
-  }, [browserState, currentAuthor]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load templates') } finally { setIsLoading(false) }, [browserState, currentAuthor]);
   // Load templates when browser state changes
-  useEffect(() => {
-    if (isOpen) {
-      loadTemplates();
-  }, [isOpen, loadTemplates]);
+  useEffect(() => { if (isOpen) {
+      loadTemplates() }, [isOpen, loadTemplates]);
   const handleStateChange = useCallback((updates: Partial<TemplateBrowserState>) => {
     setBrowserState(prev => ({ ...prev, ...updates }));
   }, []);
   const handlePreviewTemplate = useCallback((template: Template) => {
     setBrowserState(prev => ({ ...prev, previewTemplate: template }));
   }, []);
-  const handleApplyTemplate = useCallback(async (template: Template) => {
-    try {
+  const handleApplyTemplate = useCallback(async (template: Template) => { try {
       await onApplyTemplate(template.id, instantiationOptions);
-      onClose();
-    } catch (error) {
-  setError(error instanceof Error ? error.message : 'Failed to apply template');
-}, [instantiationOptions, onApplyTemplate, onClose]);
+      onClose() } catch (error) { setError(error instanceof Error ? error.message : 'Failed to apply template') }, [instantiationOptions, onApplyTemplate, onClose]);
   const handleDeleteTemplate = useCallback(async (templateId: string) => {
     if (!confirm('Are you sure you want to delete this template? This action cannot be undone.')) {
       return;
@@ -99,71 +87,69 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
       await templateService.deleteTemplate(templateId);
       setTemplates(prev => prev.filter(t => t.id !== templateId));
       setBrowserState(prev => ({ ...prev, previewTemplate: null }));
-    } catch (error) {
-  setError(error instanceof Error ? error.message : 'Failed to delete template');
-}, []);
+ catch (error) { setError(error instanceof Error ? error.message : 'Failed to delete template') }, []);
   // Filter templates by search query for client-side filtering
   const filteredTemplates = useMemo(() => {
     return templates; // Server-side filtering already applied
   }, [templates]);
   if (!isOpen) return null;
   return;
-    <div style={{
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 1000,
-}}>
-      <div style={{
-  backgroundColor: 'white',
-  borderRadius: '8px',
-  width: '90vw',
-  height: '90vh',
-  maxWidth: '1200px',
-  display: 'flex',
-  flexDirection: 'column',
-  overflow: 'hidden',
-  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-}}>
+    <div style={ {
+  position: 'fixed'
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  zIndex: 1000 }
+}>
+      <div style={ {
+  backgroundColor: 'white'
+  borderRadius: '8px'
+  width: '90vw'
+  height: '90vh'
+  maxWidth: '1200px'
+  display: 'flex'
+  flexDirection: 'column'
+  overflow: 'hidden'
+  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }
+}>
         {/* Header */}
-        <div style={{
-  padding: '20px 24px',
-  borderBottom: '1px solid #e5e7eb',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-}}>
+        <div style={ {
+  padding: '20px 24px'
+  borderBottom: '1px solid #e5e7eb'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'space-between' }
+}>
           <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600', color: '#1f2937' }}>
             Template Library
           </h2>
           <button
             onClick={onClose}
-            style={{
-  background: 'none',
-  border: 'none',
-  fontSize: '24px',
-  color: '#6b7280',
-  cursor: 'pointer',
-  padding: '4px',
-}}
+            style={ {
+  background: 'none'
+  border: 'none'
+  fontSize: '24px'
+  color: '#6b7280'
+  cursor: 'pointer'
+  padding: '4px' }
+}
           >
             ×
           </button>
         </div>
         <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
           {/* Sidebar - Filters */}
-          <div style={{
-  width: '250px',
-  borderRight: '1px solid #e5e7eb',
-  padding: '16px',
-  overflow: 'auto',
-}}>
+          <div style={ {
+  width: '250px'
+  borderRight: '1px solid #e5e7eb'
+  padding: '16px'
+  overflow: 'auto' }
+}>
             {/* Search */}
             <div style={{ marginBottom: '16px' }}>
               <input
@@ -171,40 +157,40 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
                 placeholder="Search templates..."
                 value={browserState.searchQuery}
                 onChange={(e) => handleStateChange({ searchQuery: e.target.value })}
-                style={{
-  width: '100%',
-  padding: '8px 12px',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '14px',
-  outline: 'none',
-  boxSizing: 'border-box',
-}}
+                style={ {
+  width: '100%'
+  padding: '8px 12px'
+  border: '1px solid #d1d5db'
+  borderRadius: '6px'
+  fontSize: '14px'
+  outline: 'none'
+  boxSizing: 'border-box' }
+
               />
             </div>
             {/* Category Filter */}
             <div style={{ marginBottom: '16px' }}>
-              <label style={{
-  display: 'block',
-  marginBottom: '8px',
-  fontSize: '14px',
-  fontWeight: '500',
-  color: '#374151',
-}}>
+              <label style={ {
+  display: 'block'
+  marginBottom: '8px'
+  fontSize: '14px'
+  fontWeight: '500'
+  color: '#374151' }
+}>
                 Category
               </label>
               <select
                 value={browserState.selectedCategory}
                 onChange={(e) => handleStateChange({ selectedCategory: e.target.value as any })}
-                style={{
-  width: '100%',
-  padding: '6px 8px',
-  border: '1px solid #d1d5db',
-  borderRadius: '4px',
-  fontSize: '13px',
-  backgroundColor: 'white',
-  boxSizing: 'border-box',
-}}
+                style={ {
+  width: '100%'
+  padding: '6px 8px'
+  border: '1px solid #d1d5db'
+  borderRadius: '4px'
+  fontSize: '13px'
+  backgroundColor: 'white'
+  boxSizing: 'border-box' }
+
               >
                 {TEMPLATE_CATEGORIES.map(cat => ()
                   <option key={cat.value} value={cat.value}>
@@ -215,27 +201,27 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
             </div>
             {/* Sort Options */}
             <div style={{ marginBottom: '16px' }}>
-              <label style={{
-  display: 'block',
-  marginBottom: '8px',
-  fontSize: '14px',
-  fontWeight: '500',
-  color: '#374151',
-}}>
+              <label style={ {
+  display: 'block'
+  marginBottom: '8px'
+  fontSize: '14px'
+  fontWeight: '500'
+  color: '#374151' }
+}>
                 Sort By
               </label>
               <select
                 value={browserState.sortBy}
                 onChange={(e) => handleStateChange({ sortBy: e.target.value as any })}
-                style={{
-  width: '100%',
-  padding: '6px 8px',
-  border: '1px solid #d1d5db',
-  borderRadius: '4px',
-  fontSize: '13px',
-  backgroundColor: 'white',
-  boxSizing: 'border-box',
-}}
+                style={ {
+  width: '100%'
+  padding: '6px 8px'
+  border: '1px solid #d1d5db'
+  borderRadius: '4px'
+  fontSize: '13px'
+  backgroundColor: 'white'
+  boxSizing: 'border-box' }
+
               >
                 <option value="modified">Recently Modified</option>
                 <option value="created">Recently Created</option>
@@ -262,41 +248,41 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
               <div style={{ display: 'flex', gap: '4px' }}>
                 <button
                   onClick={() => handleStateChange({ viewMode: 'grid' })}
-                  style={{
-  padding: '4px 8px',
-  border: '1px solid #d1d5db',
-  backgroundColor: browserState.viewMode === 'grid' ? '#3b82f6' : 'white',
-  color: browserState.viewMode === 'grid' ? 'white' : '#374151',
-  borderRadius: '4px',
-  fontSize: '12px',
-  cursor: 'pointer',
-}}
+                  style={ {
+  padding: '4px 8px'
+  border: '1px solid #d1d5db'
+  backgroundColor: browserState.viewMode === 'grid' ? '#3b82f6' : 'white'
+  color: browserState.viewMode === 'grid' ? 'white' : '#374151'
+  borderRadius: '4px'
+  fontSize: '12px'
+  cursor: 'pointer' }
+
                 >
                   Grid
                 </button>
                 <button
                   onClick={() => handleStateChange({ viewMode: 'list' })}
-                  style={{
-  padding: '4px 8px',
-  border: '1px solid #d1d5db',
-  backgroundColor: browserState.viewMode === 'list' ? '#3b82f6' : 'white',
-  color: browserState.viewMode === 'list' ? 'white' : '#374151',
-  borderRadius: '4px',
-  fontSize: '12px',
-  cursor: 'pointer',
-}}
+                  style={ {
+  padding: '4px 8px'
+  border: '1px solid #d1d5db'
+  backgroundColor: browserState.viewMode === 'list' ? '#3b82f6' : 'white'
+  color: browserState.viewMode === 'list' ? 'white' : '#374151'
+  borderRadius: '4px'
+  fontSize: '12px'
+  cursor: 'pointer' }
+
                 >
                   List
                 </button>
               </div>
             </div>
             {/* Instantiation Options */}
-            <div style={{
-  padding: '12px',
-  backgroundColor: '#f9fafb',
-  borderRadius: '6px',
-  borderTop: '1px solid #e5e7eb',
-}}>
+            <div style={ {
+  padding: '12px'
+  backgroundColor: '#f9fafb'
+  borderRadius: '6px'
+  borderTop: '1px solid #e5e7eb' }
+}>
               <h4 style={{ margin: '0 0 8px 0', fontSize: '13px', fontWeight: '500' }}>
                 Apply Options
               </h4>
@@ -305,9 +291,9 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
                   <input
                     type="checkbox"
                     checked={instantiationOptions.preservePositions}
-                    onChange={(e) => setInstantiationOptions(prev => ({)
-  ...prev,
-  preservePositions: e.target.checked,
+                    onChange={ (e) => setInstantiationOptions(prev => ({)
+  ...prev
+  preservePositions: e.target.checked }
 }))}
                     style={{ margin: 0 }}
                   />
@@ -317,9 +303,9 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
                   <input
                     type="checkbox"
                     checked={instantiationOptions.mergeWithCurrent}
-                    onChange={(e) => setInstantiationOptions(prev => ({)
-  ...prev,
-  mergeWithCurrent: e.target.checked,
+                    onChange={ (e) => setInstantiationOptions(prev => ({)
+  ...prev
+  mergeWithCurrent: e.target.checked }
 }))}
                     style={{ margin: 0 }}
                   />
@@ -332,32 +318,32 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
                       <input
                         type="number"
                         value={instantiationOptions.offsetX}
-                        onChange={(e) => setInstantiationOptions(prev => ({)
-  ...prev,
-  offsetX: Number(e.target.value),
+                        onChange={ (e) => setInstantiationOptions(prev => ({)
+  ...prev
+  offsetX: Number(e.target.value) }
 }))}
-                        style={{
-  width: '50px',
-  padding: '2px 4px',
-  border: '1px solid #d1d5db',
-  borderRadius: '2px',
-  fontSize: '11px',
-}}
+                        style={ {
+  width: '50px'
+  padding: '2px 4px'
+  border: '1px solid #d1d5db'
+  borderRadius: '2px'
+  fontSize: '11px' }
+
                       />
                       <input
                         type="number"
                         value={instantiationOptions.offsetY}
-                        onChange={(e) => setInstantiationOptions(prev => ({)
-  ...prev,
-  offsetY: Number(e.target.value),
+                        onChange={ (e) => setInstantiationOptions(prev => ({)
+  ...prev
+  offsetY: Number(e.target.value) }
 }))}
-                        style={{
-  width: '50px',
-  padding: '2px 4px',
-  border: '1px solid #d1d5db',
-  borderRadius: '2px',
-  fontSize: '11px',
-}}
+                        style={ {
+  width: '50px'
+  padding: '2px 4px'
+  border: '1px solid #d1d5db'
+  borderRadius: '2px'
+  fontSize: '11px' }
+
                       />
                     </div>
                   </div>
@@ -367,39 +353,39 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
           </div>
           {/* Main Content */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            {error && ()
+            { error && ()
               <div style={{
-  margin: '16px',
-  padding: '12px',
-  backgroundColor: '#fef2f2',
-  border: '1px solid #fecaca',
-  borderRadius: '6px',
-  color: '#dc2626',
-  fontSize: '14px',
-}}>
+  margin: '16px'
+  padding: '12px'
+  backgroundColor: '#fef2f2'
+  border: '1px solid #fecaca'
+  borderRadius: '6px'
+  color: '#dc2626'
+  fontSize: '14px' }
+}>
                 {error}
               </div>
             )}
-            {isLoading ? ()
+            { isLoading ? ()
               <div style={{
-  flex: 1,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '14px',
-  color: '#6b7280',
-}}>
+  flex: 1
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  fontSize: '14px'
+  color: '#6b7280' }
+}>
                 Loading templates...
               </div>
             ) : filteredTemplates.length === 0 ? ()
-              <div style={{
-  flex: 1,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexDirection: 'column',
-  color: '#6b7280',
-}}>
+              <div style={ {
+  flex: 1
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  flexDirection: 'column'
+  color: '#6b7280' }
+}>
                 <div style={{ fontSize: '48px', marginBottom: '16px' }}>📁</div>
                 <div style={{ fontSize: '14px', marginBottom: '8px' }}>No templates found</div>
                 <div style={{ fontSize: '12px' }}>
@@ -407,17 +393,17 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
                 </div>
               </div>
             ) : ()
-              <div style={{
-  flex: 1,
-  overflow: 'auto',
-  padding: '16px',
-}}>
-                {browserState.viewMode === 'grid' ? ()
+              <div style={ {
+  flex: 1
+  overflow: 'auto'
+  padding: '16px' }
+}>
+                { browserState.viewMode === 'grid' ? ()
                   <div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-  gap: '16px',
-}}>
+  display: 'grid'
+  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))'
+  gap: '16px' }
+}>
                     {filteredTemplates.map(template => ()
                       <TemplateCard
                         key={template.id}
@@ -461,85 +447,82 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
 };
 
 // Template Card Component for Grid View
-const TemplateCard: React.FC<{,
+const TemplateCard: React.FC<{ ,
   template: Template;
   onPreview: () => void;
-  onApply: () => void;
+  onApply: () => void }
   onDelete: () => void;
   showDelete: boolean;
-}> = ({ template, onPreview, onApply, onDelete, showDelete }) => {
-  return;
+> = ({ template, onPreview, onApply, onDelete, showDelete }) => { return;
   <div style={{
-  border: '1px solid #e5e7eb',
-  borderRadius: '8px',
-  padding: '16px',
-  backgroundColor: 'white',
-  cursor: 'pointer',
-  transition: 'box-shadow 0.2s',
-  position: 'relative',
-}}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-    }}
+  border: '1px solid #e5e7eb'
+  borderRadius: '8px'
+  padding: '16px'
+  backgroundColor: 'white'
+  cursor: 'pointer'
+  transition: 'box-shadow 0.2s'
+  position: 'relative' }
+}
+    onMouseEnter={ (e) => {
+      e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
     onMouseLeave={(e) => {
       e.currentTarget.style.boxShadow = 'none'
-  }}
+
     onClick={onPreview}
     >
-      {showDelete && ()
+      { showDelete && ()
         <button
           onClick={(e) => {
             e.stopPropagation();
-            onDelete();
-          }}
-          style={{
-  position: 'absolute',
-  top: '8px',
-  right: '8px',
-  background: 'none',
-  border: 'none',
-  color: '#dc2626',
-  cursor: 'pointer',
-  fontSize: '16px',
-  padding: '4px',
-}}
+            onDelete() }}
+          style={ {
+  position: 'absolute'
+  top: '8px'
+  right: '8px'
+  background: 'none'
+  border: 'none'
+  color: '#dc2626'
+  cursor: 'pointer'
+  fontSize: '16px'
+  padding: '4px' }
+
           title="Delete template"
         >
           🗑️
         </button>
       )}
       <div style={{ marginBottom: '12px' }}>
-        <h3 style={{
-  margin: '0 0 4px 0',
-  fontSize: '16px',
-  fontWeight: '600',
-  color: '#1f2937',
-  lineHeight: '1.2',
-}}>
+        <h3 style={ {
+  margin: '0 0 4px 0'
+  fontSize: '16px'
+  fontWeight: '600'
+  color: '#1f2937'
+  lineHeight: '1.2' }
+}>
           {template.name}
         </h3>
-        <p style={{
-  margin: 0,
-  fontSize: '13px',
-  color: '#6b7280',
-  lineHeight: '1.4',
-  display: '-webkit-box',
-  WebkitLineClamp: 2,
-  WebkitBoxOrient: 'vertical',
-  overflow: 'hidden',
-}}>
+        <p style={ {
+  margin: 0
+  fontSize: '13px'
+  color: '#6b7280'
+  lineHeight: '1.4'
+  display: '-webkit-box'
+  WebkitLineClamp: 2
+  WebkitBoxOrient: 'vertical'
+  overflow: 'hidden' }
+}>
           {template.description}
         </p>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-        <span style={{
-  padding: '2px 6px',
-  backgroundColor: '#e5e7eb',
-  borderRadius: '10px',
-  fontSize: '11px',
-  color: '#374151',
-  textTransform: 'capitalize',
-}}>
+        <span style={ {
+  padding: '2px 6px'
+  backgroundColor: '#e5e7eb'
+  borderRadius: '10px'
+  fontSize: '11px'
+  color: '#374151'
+  textTransform: 'capitalize' }
+}>
           {template.category.replace('-', ' ')}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -549,29 +532,28 @@ const TemplateCard: React.FC<{,
           </span>
         </div>
       </div>
-      <div style={{
-  fontSize: '11px',
-  color: '#9ca3af',
-  marginBottom: '12px',
-}}>
+      <div style={ {
+  fontSize: '11px'
+  color: '#9ca3af'
+  marginBottom: '12px' }
+}>
         by {template.author} • {template.metadata.nodeCount} nodes
       </div>
       <button
-        onClick={(e) => {
+        onClick={ (e) => {
           e.stopPropagation();
-          onApply();
-        }}
-        style={{
-  width: '100%',
-  padding: '6px 12px',
-  backgroundColor: '#3b82f6',
-  color: 'white',
-  border: 'none',
-  borderRadius: '4px',
-  fontSize: '13px',
-  cursor: 'pointer',
-  fontWeight: '500',
-}}
+          onApply() }}
+        style={ {
+  width: '100%'
+  padding: '6px 12px'
+  backgroundColor: '#3b82f6'
+  color: 'white'
+  border: 'none'
+  borderRadius: '4px'
+  fontSize: '13px'
+  cursor: 'pointer'
+  fontWeight: '500' }
+}
       >
         Apply Template
       </button>
@@ -580,31 +562,29 @@ const TemplateCard: React.FC<{,
 };
 
 // Template List Item Component for List View
-const TemplateListItem: React.FC<{,
+const TemplateListItem: React.FC<{ ,
   template: Template;
   onPreview: () => void;
-  onApply: () => void;
+  onApply: () => void }
   onDelete: () => void;
   showDelete: boolean;
-}> = ({ template, onPreview, onApply, onDelete, showDelete }) => {
-  return;
+> = ({ template, onPreview, onApply, onDelete, showDelete }) => { return;
   <div style={{
-  border: '1px solid #e5e7eb',
-  borderRadius: '6px',
-  padding: '12px 16px',
-  backgroundColor: 'white',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '16px',
-  cursor: 'pointer',
-  transition: 'background-color 0.2s',
-}}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.backgroundColor = '#f9fafb';
-    }}
+  border: '1px solid #e5e7eb'
+  borderRadius: '6px'
+  padding: '12px 16px'
+  backgroundColor: 'white'
+  display: 'flex'
+  alignItems: 'center'
+  gap: '16px'
+  cursor: 'pointer'
+  transition: 'background-color 0.2s' }
+
+    onMouseEnter={ (e) => {
+      e.currentTarget.style.backgroundColor = '#f9fafb' }}
     onMouseLeave={(e) => {
       e.currentTarget.style.backgroundColor = 'white'
-  }}
+
     onClick={onPreview}
     >
       <div style={{ flex: 1 }}>
@@ -612,14 +592,14 @@ const TemplateListItem: React.FC<{,
           <h4 style={{ margin: 0, fontSize: '14px', fontWeight: '600', color: '#1f2937' }}>
             {template.name}
           </h4>
-          <span style={{
-  padding: '1px 4px',
-  backgroundColor: '#e5e7eb',
-  borderRadius: '6px',
-  fontSize: '10px',
-  color: '#374151',
-  textTransform: 'capitalize',
-}}>
+          <span style={ {
+  padding: '1px 4px'
+  backgroundColor: '#e5e7eb'
+  borderRadius: '6px'
+  fontSize: '10px'
+  color: '#374151'
+  textTransform: 'capitalize' }
+}>
             {template.category.replace('-', ' ')}
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
@@ -629,55 +609,53 @@ const TemplateListItem: React.FC<{,
             </span>
           </div>
         </div>
-        <p style={{
-  margin: 0,
-  fontSize: '12px',
-  color: '#6b7280',
-  lineHeight: '1.3',
-}}>
+        <p style={ {
+  margin: 0
+  fontSize: '12px'
+  color: '#6b7280'
+  lineHeight: '1.3' }
+}>
           {template.description}
         </p>
-        <div style={{
-  fontSize: '10px',
-  color: '#9ca3af',
-  marginTop: '4px',
-}}>
+        <div style={ {
+  fontSize: '10px'
+  color: '#9ca3af'
+  marginTop: '4px' }
+}>
           by {template.author} • {template.metadata.nodeCount} nodes • {new Date(template.metadata.lastModified).toLocaleDateString()}
         </div>
       </div>
       <div style={{ display: 'flex', gap: '8px' }}>
         <button
-          onClick={(e) => {
+          onClick={ (e) => {
             e.stopPropagation();
-            onApply();
-          }}
-          style={{
-  padding: '4px 8px',
-  backgroundColor: '#3b82f6',
-  color: 'white',
-  border: 'none',
-  borderRadius: '4px',
-  fontSize: '11px',
-  cursor: 'pointer',
-}}
+            onApply() }}
+          style={ {
+  padding: '4px 8px'
+  backgroundColor: '#3b82f6'
+  color: 'white'
+  border: 'none'
+  borderRadius: '4px'
+  fontSize: '11px'
+  cursor: 'pointer' }
+
         >
           Apply
         </button>
-        {showDelete && ()
+        { showDelete && ()
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onDelete();
-            }}
-            style={{
-  padding: '4px 8px',
-  backgroundColor: '#dc2626',
-  color: 'white',
-  border: 'none',
-  borderRadius: '4px',
-  fontSize: '11px',
-  cursor: 'pointer',
-}}
+              onDelete() }}
+            style={ {
+  padding: '4px 8px'
+  backgroundColor: '#dc2626'
+  color: 'white'
+  border: 'none'
+  borderRadius: '4px'
+  fontSize: '11px'
+  cursor: 'pointer' }
+
           >
             Delete
           </button>
@@ -688,46 +666,44 @@ const TemplateListItem: React.FC<{,
 };
 
 // Template Preview Modal
-const TemplatePreview: React.FC<{,
+const TemplatePreview: React.FC<{ ,
   template: Template;
   onClose: () => void;
-  onApply: () => void;
-}> = ({ template, onClose, onApply }) => {
-  return;
+  onApply: () => void }> = ({ template, onClose, onApply }) => { return;
   <div style={{
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 1001,
-}}>
-      <div style={{
-  backgroundColor: 'white',
-  borderRadius: '8px',
-  maxWidth: '600px',
-  width: '90vw',
-  maxHeight: '80vh',
-  overflow: 'auto',
-  padding: '24px',
-}}>
+  position: 'fixed'
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  backgroundColor: 'rgba(0, 0, 0, 0.7)'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  zIndex: 1001 }
+}>
+      <div style={ {
+  backgroundColor: 'white'
+  borderRadius: '8px'
+  maxWidth: '600px'
+  width: '90vw'
+  maxHeight: '80vh'
+  overflow: 'auto'
+  padding: '24px' }
+}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '16px' }}>
           <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '600' }}>
             {template.name}
           </h3>
           <button
             onClick={onClose}
-            style={{
-  background: 'none',
-  border: 'none',
-  fontSize: '20px',
-  color: '#6b7280',
-  cursor: 'pointer',
-}}
+            style={ {
+  background: 'none'
+  border: 'none'
+  fontSize: '20px'
+  color: '#6b7280'
+  cursor: 'pointer' }
+}
           >
             ×
           </button>
@@ -769,13 +745,13 @@ const TemplatePreview: React.FC<{,
               {template.metadata.tags.map(tag => ()
                 <span
                   key={tag}
-                  style={{
-  padding: '2px 6px',
-  backgroundColor: '#e5e7eb',
-  borderRadius: '8px',
-  fontSize: '11px',
-  color: '#374151',
-}}
+                  style={ {
+  padding: '2px 6px'
+  backgroundColor: '#e5e7eb'
+  borderRadius: '8px'
+  fontSize: '11px'
+  color: '#374151' }
+}
                 >
                   {tag}
                 </span>
@@ -783,39 +759,39 @@ const TemplatePreview: React.FC<{,
             </div>
           </div>
         )}
-        <div style={{
-  display: 'flex',
-  justifyContent: 'flex-end',
-  gap: '12px',
-  paddingTop: '16px',
-  borderTop: '1px solid #e5e7eb',
-}}>
+        <div style={ {
+  display: 'flex'
+  justifyContent: 'flex-end'
+  gap: '12px'
+  paddingTop: '16px'
+  borderTop: '1px solid #e5e7eb' }
+}>
           <button
             onClick={onClose}
-            style={{
-  padding: '8px 16px',
-  backgroundColor: 'transparent',
-  color: '#6b7280',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '14px',
-  cursor: 'pointer',
-}}
+            style={ {
+  padding: '8px 16px'
+  backgroundColor: 'transparent'
+  color: '#6b7280'
+  border: '1px solid #d1d5db'
+  borderRadius: '6px'
+  fontSize: '14px'
+  cursor: 'pointer' }
+}
           >
             Cancel
           </button>
           <button
             onClick={onApply}
-            style={{
-  padding: '8px 16px',
-  backgroundColor: '#3b82f6',
-  color: 'white',
-  border: 'none',
-  borderRadius: '6px',
-  fontSize: '14px',
-  fontWeight: '500',
-  cursor: 'pointer',
-}}
+            style={ {
+  padding: '8px 16px'
+  backgroundColor: '#3b82f6'
+  color: 'white'
+  border: 'none'
+  borderRadius: '6px'
+  fontSize: '14px'
+  fontWeight: '500'
+  cursor: 'pointer' }
+}
           >
             Apply Template
           </button>

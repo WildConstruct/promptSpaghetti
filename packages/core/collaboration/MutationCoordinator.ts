@@ -4,8 +4,7 @@
  * Coordinates graph mutations with operational transform and conflict resolution
  * Handles concurrent operations and maintains data consistency
  */
-import { 
-  MutationOperation,
+import { MutationOperation,
   NodeAddOperation,
   NodeUpdateOperation,
   NodeRemoveOperation,
@@ -23,9 +22,9 @@ import {
   generateOperationId,
   compareOperations,
   operationsConflict,
-  getAffectedNodeIds,
+  getAffectedNodeIds }
   getAffectedEdgeIds
-} from './GraphMutations';
+ from './GraphMutations';
 import { GraphCRDT } from './GraphCRDT';
 
 // =============================================================================
@@ -35,18 +34,18 @@ import { GraphCRDT } from './GraphCRDT';
  * Result of operational transformation
  */
 
-}
-export interface TransformResult {
-  op1: MutationOperation | null;
+
+export interface TransformResult { op1: MutationOperation | null }
   op2: MutationOperation | null;
   conflict?: ConflictOperation;
   requiresResolution: boolean;
   /**
   * Batch operation result
   */
-}
-}
-}
+
+
+
+
 export interface BatchResult {
   success: boolean;
   appliedOperations: MutationOperation;
@@ -56,9 +55,10 @@ export interface BatchResult {
   /**
   * Operation queue item
   */
-}
-}
-}
+
+
+
+
 export interface QueuedOperation {
   operation: MutationOperation;
   priority: OperationPriority;
@@ -72,10 +72,9 @@ export interface QueuedOperation {
   /**
   * Coordinates graph mutations with conflict resolution and operational transform
   */
-}
-}
-export class MutationCoordinator {
-  private graphCRDT: GraphCRDT;
+
+
+export class MutationCoordinator { private graphCRDT: GraphCRDT;
   private documentId: string;
   private clientId: string;
   private userId: string;
@@ -86,17 +85,17 @@ export class MutationCoordinator {
   // Configuration
   private conflictResolutionStrategy: ResolutionStrategy = ResolutionStrategy.AUTO_MERGE;
   private maxOperationHistory: number = 1000;
-  private operationTimeout: number = 5000; // 5 seconds,
+  private operationTimeout: number = 5000; // 5 seconds
   // Event handlers
   private onOperationApplied?: (operation: MutationOperation) => void;
   private onConflictDetected?: (conflict: ConflictOperation) => void;
   private onConflictResolved?: (resolution: ConflictResolution) => void;
   private onBatchCompleted?: (result: BatchResult) => void;
   constructor();
-  graphCRDT: GraphCRDT,
-  documentId: string,
-  clientId: string,
-  userId: string,
+  graphCRDT: GraphCRDT
+  documentId: string
+  clientId: string
+  userId: string
   options?: {
   conflictResolutionStrategy?: ResolutionStrategy;
   maxOperationHistory?: number;
@@ -117,9 +116,8 @@ export class MutationCoordinator {
   /**
   * Apply a single mutation operation
   */
-  async applyOperation(operation: MutationOperation): Promise<boolean> {,
-  try {
-  // Add to pending operations
+  async applyOperation(operation: MutationOperation): Promise<boolean> { }
+  try { // Add to pending operations
   this.pendingOperations.set(operation.operationId, operation);
   // Check for conflicts with pending operations
   const conflicts = this.detectConflicts(operation);
@@ -130,24 +128,21 @@ export class MutationCoordinator {
   if (success) {
   this.pendingOperations.delete(operation.operationId);
   this.onOperationApplied?.(operation);
-  return success;
-} catch (error) {
-  console.error('Error applying operation:', error);
+  return success } catch (error) { console.error('Error applying operation:', error);
   this.pendingOperations.delete(operation.operationId);
   return false;
   /**
   * Apply a batch of operations atomically
   */
-  async applyBatchOperation(batchOperation: BatchMutationOperation): Promise<BatchResult> {,
-  const result: BatchResult = {,
-  success: false,
-  appliedOperations: [],
-  failedOperations: [],
-  conflicts: [],
-  rollbackRequired: false,
+  async applyBatchOperation(batchOperation: BatchMutationOperation): Promise<BatchResult> {
+  const result: BatchResult = {
+  success: false
+  appliedOperations: []
+  failedOperations: []
+  conflicts: []
+  rollbackRequired: false }
 };
-    try {
-      // Pre-validate all operations
+    try { // Pre-validate all operations
       const validationResults = await this.validateBatchOperations(batchOperation.operations);
       result.conflicts = validationResults.conflicts;
       if (validationResults.hasConflicts && batchOperation.atomic) {
@@ -157,9 +152,7 @@ export class MutationCoordinator {
       for (const operation of batchOperation.operations) {
         const success = await this.executeOperation(operation);
         if (success) {
-          result.appliedOperations.push(operation);
-        } else {
-          result.failedOperations.push(operation);
+          result.appliedOperations.push(operation) } else { result.failedOperations.push(operation);
           if (batchOperation.atomic && batchOperation.rollbackOnFailure) {
             result.rollbackRequired = true;
             break;
@@ -170,21 +163,19 @@ export class MutationCoordinator {
         result.failedOperations = batchOperation.operations;
       result.success = result.failedOperations.length === 0;
       this.onBatchCompleted?.(result);
-      return result;
-    } catch (error) {
-  console.error('Error applying batch operation:', error);
+      return result } catch (error) { console.error('Error applying batch operation:', error);
   result.failedOperations = batchOperation.operations;
   return result;
   /**
   * Transform two concurrent operations
   */
-  transformOperations(op1: MutationOperation, op2: MutationOperation): TransformResult {,
+  transformOperations(op1: MutationOperation, op2: MutationOperation): TransformResult {
   // Check if operations actually conflict
   if (!operationsConflict(op1, op2)) {
   return {
-  op1,
-  op2,
-  requiresResolution: false,
+  op1
+  op2
+  requiresResolution: false }
 };
     // Apply operation-specific transforms
     switch (`${op1.type}_${op2.type}`) {}
@@ -211,24 +202,21 @@ export class MutationCoordinator {
     if (!conflict) {
       console.warn(`Conflict ${conflictId} not found`);}
       return false;
-    try {
-  const resolution: ConflictResolution = {,
-  conflictId,
-  conflictType: conflict.type,
-  strategy,
-  affectedOperations: [conflict.id],
-  affectedElements: conflict.nodeId ? [conflict.nodeId] : conflict.edgeId ? [conflict.edgeId] : [],
-  resolutionData,
-  resolvedBy: this.userId,
-  timestamp: Date.now(),
-  automatic: false,
+    try { const resolution: ConflictResolution = {
+  conflictId
+  conflictType: conflict.type
+  strategy
+  affectedOperations: [conflict.id]
+  affectedElements: conflict.nodeId ? [conflict.nodeId] : conflict.edgeId ? [conflict.edgeId] : []
+  resolutionData
+  resolvedBy: this.userId
+  timestamp: Date.now()
+  automatic: false }
 };
       const success = await this.applyConflictResolution(conflict, resolution);
-      if (success) {
-        this.conflictOperations.delete(conflictId);
+      if (success) { this.conflictOperations.delete(conflictId);
         this.onConflictResolved?.(resolution);
-      return success;
-    } catch (error) {
+      return success } catch (error) {
       console.error('Error resolving conflict:', error);
       return false;
   // =============================================================================
@@ -243,10 +231,9 @@ export class MutationCoordinator {
       const laterOp = compareOperations(op1, op2) > 0 ? op1 : op2;
       const newNodeId = `${laterOp.nodeId}_${laterOp.userId}_${Date.now()}`;}
       const transformedOp = { ...laterOp, nodeId: newNodeId };
-      return {
-  op1: compareOperations(op1, op2) <= 0 ? op1 : transformedOp,
+      return { op1: compareOperations(op1, op2) <= 0 ? op1 : transformedOp,
   op2: compareOperations(op1, op2) <= 0 ? transformedOp : op2,
-  requiresResolution: false,
+  requiresResolution: false }
 };
     return { op1, op2, requiresResolution: false };
   /**
@@ -256,9 +243,8 @@ export class MutationCoordinator {
     if (op1.nodeId !== op2.nodeId) {
       return { op1, op2, requiresResolution: false };
     // Same node, check property paths
-    if (this.propertyPathsConflict(op1.propertyPath, op2.propertyPath)) {
-      // Property conflict - create conflict operation
-      const conflict: ConflictOperation = {,
+    if (this.propertyPathsConflict(op1.propertyPath, op2.propertyPath)) { // Property conflict - create conflict operation
+      const conflict: ConflictOperation = { }
   id: `conflict_${generateOperationId(this.userId)}`}
 },
   type: ConflictType.NODE_PROPERTIES,
@@ -274,30 +260,27 @@ export class MutationCoordinator {
         suggestedResolution: this.suggestResolution(op1, op2),
         options: this.getResolutionOptions(op1, op2)
       };
-      return {
-  op1: null,
+      return { op1: null,
   op2: null,
   conflict,
-  requiresResolution: true,
+  requiresResolution: true }
 };
     return { op1, op2, requiresResolution: false };
   /**
    * Transform update vs delete operations
    */
-  private transformUpdateDelete(updateOp: NodeUpdateOperation, deleteOp: NodeRemoveOperation): TransformResult {
-  if (updateOp.nodeId === deleteOp.nodeId) {
+  private transformUpdateDelete(updateOp: NodeUpdateOperation, deleteOp: NodeRemoveOperation): TransformResult { if (updateOp.nodeId === deleteOp.nodeId) {
   // Delete wins - nullify update
   return {
   op1: null,
   op2: deleteOp,
-  requiresResolution: false,
+  requiresResolution: false }
 };
     return { op1: updateOp, op2: deleteOp, requiresResolution: false };
   /**
    * Transform concurrent edge addition operations
    */
-  private transformEdgeAdd(op1: EdgeAddOperation, op2: EdgeAddOperation): TransformResult {
-  // Check for same connection
+  private transformEdgeAdd(op1: EdgeAddOperation, op2: EdgeAddOperation): TransformResult { // Check for same connection
   if (op1.sourceNodeId === op2.sourceNodeId && )
   op1.targetNodeId === op2.targetNodeId &&
   op1.sourcePort === op2.sourcePort &&
@@ -307,7 +290,7 @@ export class MutationCoordinator {
   return {
   op1: winner === op1 ? op1 : null,
   op2: winner === op2 ? op2 : null,
-  requiresResolution: false,
+  requiresResolution: false }
 };
     return { op1, op2, requiresResolution: false };
   /**
@@ -331,45 +314,40 @@ export class MutationCoordinator {
       documentId: this.documentId,
       requiresUserInput: true,
       suggestedResolution: ResolutionStrategy.LAST_WRITER_WINS,
-      options: [,
-        {
-  strategy: ResolutionStrategy.ACCEPT_LOCAL,
+      options: [
+        { strategy: ResolutionStrategy.ACCEPT_LOCAL,
   label: 'Keep Local Value',
   description: 'Use your local changes',
   preview: op1.newValue,
-  recommended: false,
-}
-        {
-  strategy: ResolutionStrategy.ACCEPT_REMOTE,
+  recommended: false }
+
+        { strategy: ResolutionStrategy.ACCEPT_REMOTE,
   label: 'Accept Remote Value',
   description: 'Use the remote changes',
   preview: op2.newValue,
-  recommended: false,
-}
-        {
-  strategy: ResolutionStrategy.LAST_WRITER_WINS,
+  recommended: false }
+
+        { strategy: ResolutionStrategy.LAST_WRITER_WINS,
   label: 'Last Writer Wins',
   description: 'Use the most recent change',
-  preview: compareOperations(op1, op2) > 0 ? op1.newValue : op2.newValue,
+  preview: compareOperations(op1, op2) > 0 ? op1.newValue : op2.newValue }
   recommended: true];
-  };
-    return {
-  op1: null,
+};
+    return { op1: null,
   op2: null,
   conflict,
-  requiresResolution: true,
+  requiresResolution: true }
 };
   /**
    * Handle generic conflict between operations
    */
-  private handleGenericConflict(op1: MutationOperation, op2: MutationOperation): TransformResult {
-  // Default to last-writer-wins for generic conflicts
+  private handleGenericConflict(op1: MutationOperation, op2: MutationOperation): TransformResult { // Default to last-writer-wins for generic conflicts
   const winner = compareOperations(op1, op2) > 0 ? op1 : op2;
   const loser = winner === op1 ? op2 : op1;
   return {
   op1: winner === op1 ? op1 : null,
   op2: winner === op2 ? op2 : null,
-  requiresResolution: false,
+  requiresResolution: false }
 };
   // =============================================================================
   // Operation Execution
@@ -406,12 +384,10 @@ export class MutationCoordinator {
   /**
    * Detect conflicts with pending operations
    */
-  private detectConflicts(operation: MutationOperation): MutationOperation {
-  const conflicts: MutationOperation[] = [];
+  private detectConflicts(operation: MutationOperation): MutationOperation { const conflicts: MutationOperation = [];
   this.pendingOperations.forEach((pendingOp) => {
   if (operationsConflict(operation, pendingOp)) {
-  conflicts.push(pendingOp);
-});
+  conflicts.push(pendingOp) });
     return conflicts;
   /**
    * Handle detected conflicts
@@ -428,8 +404,7 @@ export class MutationCoordinator {
         if (this.conflictResolutionStrategy !== ResolutionStrategy.MANUAL_RESOLUTION) {
           return await this.applyAutomaticResolution(transformResult);
         return false; // Requires manual resolution
-      } else {
-  // Apply transformed operations
+ else { // Apply transformed operations
   if (transformResult.op1) {
   await this.executeOperation(transformResult.op1);
   if (transformResult.op2) {
@@ -438,62 +413,59 @@ export class MutationCoordinator {
   /**
   * Apply automatic conflict resolution
   */
-  private async applyAutomaticResolution(transformResult: TransformResult): Promise<boolean> {,
+  private async applyAutomaticResolution(transformResult: TransformResult): Promise<boolean> {
   if (!transformResult.conflict) return false;
-  const resolution: ConflictResolution = {,
-  conflictId: transformResult.conflict.id,
-  conflictType: transformResult.conflict.type,
-  strategy: this.conflictResolutionStrategy,
-  affectedOperations: [transformResult.conflict.id],
-  affectedElements: transformResult.conflict.nodeId ? [transformResult.conflict.nodeId] : [],
-  resolvedBy: 'system',
-  timestamp: Date.now(),
-  automatic: true,
+  const resolution: ConflictResolution = {
+  conflictId: transformResult.conflict.id
+  conflictType: transformResult.conflict.type
+  strategy: this.conflictResolutionStrategy
+  affectedOperations: [transformResult.conflict.id]
+  affectedElements: transformResult.conflict.nodeId ? [transformResult.conflict.nodeId] : []
+  resolvedBy: 'system'
+  timestamp: Date.now()
+  automatic: true }
 };
     return await this.applyConflictResolution(transformResult.conflict, resolution);
   /**
    * Apply conflict resolution
    */
-  private async applyConflictResolution(conflict: ConflictOperation, resolution: ConflictResolution): Promise<boolean> {
-
-  try {
+  private async applyConflictResolution(conflict: ConflictOperation, resolution: ConflictResolution): Promise<boolean> { try {
   let valueToApply: any;
   switch (resolution.strategy) {
-  case ResolutionStrategy.ACCEPT_LOCAL:,
+  case ResolutionStrategy.ACCEPT_LOCAL:
   valueToApply = conflict.localValue;
   break;
-  case ResolutionStrategy.ACCEPT_REMOTE:,
+  case ResolutionStrategy.ACCEPT_REMOTE:
   valueToApply = conflict.remoteValue;
   break;
-  case ResolutionStrategy.LAST_WRITER_WINS:,
+  case ResolutionStrategy.LAST_WRITER_WINS:
   valueToApply = conflict.localValue; // Assume local is newer
   break;
-  case ResolutionStrategy.FIRST_WRITER_WINS:,
+  case ResolutionStrategy.FIRST_WRITER_WINS:
   valueToApply = conflict.remoteValue; // Assume remote was first
   break;
-  case ResolutionStrategy.AUTO_MERGE:,
+  case ResolutionStrategy.AUTO_MERGE:
   valueToApply = this.attemptAutoMerge(conflict.localValue, conflict.remoteValue);
   break;
-  default:,
+  default:
   return false;
   // Create and apply resolution operation
   if (conflict.nodeId) {
-  const resolutionOp: NodeUpdateOperation = {,
-  type: 'NODE_UPDATE',
-  operationId: generateOperationId(this.userId),
-  documentId: this.documentId,
-  nodeId: conflict.nodeId,
-  propertyPath: conflict.property ? [conflict.property] : [],
-  oldValue: conflict.baseValue,
-  newValue: valueToApply,
-  partialUpdate: true,
-  timestamp: Date.now(),
-  userId: resolution.resolvedBy,
+  const resolutionOp: NodeUpdateOperation = {
+  type: 'NODE_UPDATE'
+  operationId: generateOperationId(this.userId)
+  documentId: this.documentId
+  nodeId: conflict.nodeId
+  propertyPath: conflict.property ? [conflict.property] : []
+  oldValue: conflict.baseValue
+  newValue: valueToApply
+  partialUpdate: true
+  timestamp: Date.now()
+  userId: resolution.resolvedBy }
 };
         return await this.executeOperation(resolutionOp);
       return false;
-    } catch (error) {
-  console.error('Error applying conflict resolution:', error);
+ catch (error) { console.error('Error applying conflict resolution:', error);
   return false;
   // =============================================================================
   // Utility Functions
@@ -501,7 +473,7 @@ export class MutationCoordinator {
   /**
   * Check if property paths conflict (overlap)
   */
-  private propertyPathsConflict(path1: string, path2: string): boolean {,
+  private propertyPathsConflict(path1: string, path2: string): boolean {
   const minLength = Math.min(path1.length, path2.length);
   for (let i = 0; i < minLength; i++) {
   if (path1[i] !== path2[i]) {
@@ -534,19 +506,17 @@ export class MutationCoordinator {
   label: 'Keep Local',
   description: 'Use your local changes',
   preview: op1.newValue,
-  recommended: false,
-}
-      {
-  strategy: ResolutionStrategy.ACCEPT_REMOTE,
+  recommended: false }
+
+      { strategy: ResolutionStrategy.ACCEPT_REMOTE,
   label: 'Accept Remote',
   description: 'Use remote changes',
   preview: op2.newValue,
-  recommended: false,
-}
-      {
-        strategy: ResolutionStrategy.LAST_WRITER_WINS,
+  recommended: false }
+
+      { strategy: ResolutionStrategy.LAST_WRITER_WINS,
         label: 'Last Writer Wins',
-        description: 'Use most recent change',
+        description: 'Use most recent change' }
         recommended: true];
   /**
    * Attempt automatic merge of conflicting values
@@ -564,12 +534,9 @@ export class MutationCoordinator {
   /**
    * Validate batch operations for conflicts
    */
-  private async validateBatchOperations(operations: MutationOperation): Promise<{,
+  private async validateBatchOperations(operations: MutationOperation): Promise<{ ,
   hasConflicts: boolean;
-  conflicts: ConflictOperation;
-}> {
-
-  const conflicts: ConflictOperation[] = [];
+  conflicts: ConflictOperation }> { const conflicts: ConflictOperation = [];
   // Check for internal conflicts within the batch
   for (let i = 0; i < operations.length; i++) {
   for (let j = i + 1; j < operations.length; j++) {
@@ -578,15 +545,13 @@ export class MutationCoordinator {
   if (transformResult.conflict) {
   conflicts.push(transformResult.conflict);
   return {
-  hasConflicts: conflicts.length > 0,
+  hasConflicts: conflicts.length > 0 }
   conflicts
 };
   /**
    * Rollback applied operations
    */
-  private async rollbackOperations(operations: MutationOperation): Promise<void> {
-
-  // Rollback in reverse order
+  private async rollbackOperations(operations: MutationOperation): Promise<void> { // Rollback in reverse order
   for (let i = operations.length - 1; i >= 0; i--) {
   const operation = operations[i];
   // Create inverse operation and apply
@@ -596,35 +561,35 @@ export class MutationCoordinator {
   /**
   * Create inverse operation for rollback
   */
-  private createInverseOperation(operation: MutationOperation): MutationOperation | null {,
+  private createInverseOperation(operation: MutationOperation): MutationOperation | null {
   switch (operation.type) {
   case 'NODE_ADD':
-  const nodeRemoveOp: NodeRemoveOperation = {,
-  type: 'NODE_REMOVE',
-  operationId: generateOperationId(this.userId),
-  documentId: operation.documentId,
-  nodeId: operation.nodeId,
-  cascadeDelete: true,
-  preserveConnections: false,
-  timestamp: Date.now(),
-  userId: operation.userId,
+  const nodeRemoveOp: NodeRemoveOperation = {
+  type: 'NODE_REMOVE'
+  operationId: generateOperationId(this.userId)
+  documentId: operation.documentId
+  nodeId: operation.nodeId
+  cascadeDelete: true
+  preserveConnections: false
+  timestamp: Date.now()
+  userId: operation.userId }
 };
       return nodeRemoveOp;
     case 'NODE_REMOVE':
       // Cannot easily inverse node removal without snapshot data
       return null;
     case 'NODE_UPDATE':
-      const nodeUpdateOp: NodeUpdateOperation = {,
-  type: 'NODE_UPDATE',
-  operationId: generateOperationId(this.userId),
-  documentId: operation.documentId,
-  nodeId: operation.nodeId,
-  propertyPath: operation.propertyPath,
-  oldValue: operation.newValue,
-  newValue: operation.oldValue,
-  partialUpdate: operation.partialUpdate,
-  timestamp: Date.now(),
-  userId: operation.userId,
+      const nodeUpdateOp: NodeUpdateOperation = { 
+  type: 'NODE_UPDATE'
+  operationId: generateOperationId(this.userId)
+  documentId: operation.documentId
+  nodeId: operation.nodeId
+  propertyPath: operation.propertyPath
+  oldValue: operation.newValue
+  newValue: operation.oldValue
+  partialUpdate: operation.partialUpdate
+  timestamp: Date.now()
+  userId: operation.userId }
 };
       return nodeUpdateOp;
       // Add other operation types as needed
@@ -633,19 +598,15 @@ export class MutationCoordinator {
   /**
    * Setup periodic cleanup of old operations and conflicts
    */
-  private setupPeriodicCleanup(): void {
-    setInterval(() => {
+  private setupPeriodicCleanup(): void { setInterval(() => {
       const now = Date.now();
       // Clean up old pending operations
       this.pendingOperations.forEach((op, id) => {
         if (now - op.timestamp > this.operationTimeout) {
-          this.pendingOperations.delete(id);
-      });
+          this.pendingOperations.delete(id) });
       // Clean up resolved conflicts
-      this.conflictOperations.forEach((conflict, id) => {
-        if (now - conflict.timestamp > this.operationTimeout * 2) {
-          this.conflictOperations.delete(id);
-      });
+      this.conflictOperations.forEach((conflict, id) => { if (now - conflict.timestamp > this.operationTimeout * 2) {
+          this.conflictOperations.delete(id) });
     }, 30000); // Clean up every 30 seconds
   // =============================================================================
   // Public Getters and Setters
@@ -653,30 +614,28 @@ export class MutationCoordinator {
   /**
    * Get pending operations
    */
-  getPendingOperations(): MutationOperation {
-  return Array.from(this.pendingOperations.values());
+  getPendingOperations(): MutationOperation { return Array.from(this.pendingOperations.values());
   /**
   * Get active conflicts
   */
-  getActiveConflicts(): ConflictOperation {,
+  getActiveConflicts(): ConflictOperation {
   return Array.from(this.conflictOperations.values());
   /**
   * Set event handlers
   */
-  setEventHandlers(handlers: {)
+  setEventHandlers(handlers: {) }
   onOperationApplied?: (operation: MutationOperation) => void;
   onConflictDetected?: (conflict: ConflictOperation) => void;
   onConflictResolved?: (resolution: ConflictResolution) => void;
   onBatchCompleted?: (result: BatchResult) => void;
-}): void {
-  this.onOperationApplied = handlers.onOperationApplied;
+}): void { this.onOperationApplied = handlers.onOperationApplied;
   this.onConflictDetected = handlers.onConflictDetected;
   this.onConflictResolved = handlers.onConflictResolved;
   this.onBatchCompleted = handlers.onBatchCompleted;
   /**
   * Set conflict resolution strategy
   */
-  setConflictResolutionStrategy(strategy: ResolutionStrategy): void {,
+  setConflictResolutionStrategy(strategy: ResolutionStrategy): void {
   this.conflictResolutionStrategy = strategy;
   /**
   * Get current configuration
@@ -686,9 +645,9 @@ export class MutationCoordinator {
   maxOperationHistory: number;
   operationTimeout: number;
   return {
-  conflictResolutionStrategy: this.conflictResolutionStrategy,
-  maxOperationHistory: this.maxOperationHistory,
-  operationTimeout: this.operationTimeout,
+  conflictResolutionStrategy: this.conflictResolutionStrategy
+  maxOperationHistory: this.maxOperationHistory
+  operationTimeout: this.operationTimeout }
 };
 
 export default MutationCoordinator;

@@ -3,8 +3,9 @@ import { User, UserId, CreateUserRequest } from '../../types';
 /**
  * Repository interface for user management and authentication integration
  */
-}
-}
+
+
+
 export interface UserRepository {
   /**
    * Create a new user
@@ -55,20 +56,22 @@ export interface UserRepository {
    * Get user statistics for analytics
    */
   getUserStats(id: UserId): Promise<UserStats>;
-}
-}
-}
+
+
+
+
 
 /**
  * User statistics for analytics
  */
-}
-}
+
+
+
 export interface UserStats {
   totalGraphs: number;
   totalExecutions: number;
   lastLoginAt: Date | null;
   accountCreatedAt: Date;
-}
-}
-}
+
+
+

@@ -4,54 +4,45 @@ import { WorkspaceId, ProjectId, UserId, ResourceId } from '../types/workspace';
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
 }
+}
 export interface YGraph extends Y.Map<unknown> {
 
 }
-export interface WorkspaceSyncState {
-    workspaceId: WorkspaceId;
+}
+export interface WorkspaceSyncState { workspaceId: WorkspaceId;
     projectId?: ProjectId;
     resourceId?: ResourceId;
     participants: Set<UserId>;
     lastSyncTime: number;
     conflictCount: number;
-    isConnected: boolean;
-
-
+    isConnected: boolean }
 }
-export interface SyncEvent {
-    type: 'state_change' | 'participant_join' | 'participant_leave' | 'conflict_detected' | 'sync_complete';
+}
+export interface SyncEvent { type: 'state_change' | 'participant_join' | 'participant_leave' | 'conflict_detected' | 'sync_complete';
     workspaceId: WorkspaceId;
     userId?: UserId;
     data?: unknown;
-    timestamp: number;
-
-
+    timestamp: number }
 }
-export interface ConflictResolution {
-    strategy: 'manual' | 'automatic' | 'last_writer_wins';
-    resolver?: (conflicts: Conflict[]) => Resolution[];
-
-
 }
-export interface Conflict {
-    id: string;
+export interface ConflictResolution { strategy: 'manual' | 'automatic' | 'last_writer_wins';
+    resolver?: (conflicts: Conflict[]) => Resolution[] }
+}
+}
+export interface Conflict { id: string;
     type: 'content' | 'metadata' | 'structure';
     resourceId: ResourceId;
     conflictingChanges: Change[];
-    timestamp: number;
-
-
+    timestamp: number }
 }
-export interface Change {
-    userId: UserId;
+}
+export interface Change { userId: UserId;
     operation: Y.YEvent;
     timestamp: number;
-    clientId: number;
-
-
+    clientId: number }
 }
-export interface Resolution {
-    conflictId: string;
+}
+export interface Resolution { conflictId: string;
     selectedChange: Change;
     reason: string;
 
@@ -63,16 +54,16 @@ export declare class WorkspaceStateSync extends EventEmitter {
     constructor(dao: WorkspaceDAO);
     private setupEventHandlers;
     initializeWorkspaceSync();
-      workspaceId: WorkspaceId,
-      userId: UserId,
+      workspaceId: WorkspaceId;
+      userId: UserId;
       conflictResolution?: ConflictResolution
     ): Promise<Y.Doc>;
     initializeProjectSync(workspaceId: WorkspaceId, projectId: ProjectId, userId: UserId): Promise<Y.Doc>;
     initializeResourceSync();
-      workspaceId: WorkspaceId,
-      projectId: ProjectId,
-      resourceId: ResourceId,
-      userId: UserId,
+      workspaceId: WorkspaceId;
+      projectId: ProjectId;
+      resourceId: ResourceId;
+      userId: UserId }
     ): Promise<YGraph>;
     private setupDocumentHandlers;
     private handleDocumentUpdate;
@@ -99,4 +90,5 @@ export declare class WorkspaceStateSync extends EventEmitter {
     shutdown(): Promise<void>;
 
 //# sourceMappingURL=workspace-sync.d.ts.map
+}
 }

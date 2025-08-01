@@ -3,10 +3,11 @@
 import { useState, useCallback, useRef } from 'react';
 
 // Analytics event types
-}
+
+
 interface LoginAttemptEvent {
   email: string;,
-  success: boolean;
+  success: boolean;,
   duration: number;
   failureReason?: string;
   attemptNumber?: number;
@@ -18,65 +19,29 @@ interface LoginAttemptEvent {
   timestamp?: Date;
   interface LoginAnalytics {
   totalAttempts: number;,
-  successfulLogins: number;
+  successfulLogins: number;,
   failedAttempts: number;,
-  successRate: number;
-  topFailureReasons: Array<{
+  successRate: number;,
+  topFailureReasons: Array<{,
   reason: string;,
-  count: number;
+  count: number;,
   percentage: number;
-}
-}>;
-  suspiciousActivity: Array<{
+
+
+>;
+  suspiciousActivity: Array<{,
   type: string;
   description: string;,
-  count: number;
+  count: number;,
   severity: 'low' | 'medium' | 'high';
-}>;
-  deviceAnalysis: {
+>;
+  deviceAnalysis: {,
   newDevices: number;
   returningDevices: number;,
   suspiciousDevices: number;
 };
 
-export const useLoginAnalytics = () => {
-  const [isTracking, setIsTracking] = useState(true);
-  const [analytics, setAnalytics] = useState<LoginAnalytics | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  // Track form interactions in memory before sending
-  const formInteractions = useRef<FormInteractionEvent>([]);
-  const sessionStartTime = useRef<Date>(new Date());
-  // Enable/disable tracking
-  const setTrackingEnabled = useCallback((enabled: boolean) => {,
-  setIsTracking(enabled);
-}, []);
-  // Track form interactions (focus, blur, change events)
-  const trackFormInteraction = useCallback((action: string, field?: string, value?: any) => {
-  if (!isTracking) return;
-  const event: FormInteractionEvent = {,
-  action,
-  field,
-  value: typeof value === 'string' ? value.substring(0, 50) : value, // Limit value length,
-  timestamp: new Date(),
-};
-    formInteractions.current.push(event);
-    // Send interactions in batches to avoid overwhelming the server
-    if (formInteractions.current.length >= 10) {
-      sendFormInteractions();
-  }, [isTracking]);
-  // Track login attempts with detailed metrics
-  const trackLoginAttempt = useCallback(async (event: LoginAttemptEvent) => {
-    if (!isTracking) return;
-    try {
-      // Prepare analytics payload
-      const payload = {
-        ...event,
-        sessionDuration: new Date().getTime() - sessionStartTime.current.getTime(),
-        userAgent: navigator.userAgent,
-        language: navigator.language,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        screenResolution: `${screen.width}x${screen.height}`}
-},
+export const useLoginAnalytics = () => { return null; },
   timestamp: new Date().toISOString(),
         // Include recent form interactions
         formInteractions: formInteractions.current.slice(-20) // Last 20 interactions;
@@ -93,7 +58,7 @@ export const useLoginAnalytics = () => {
       // Clear form interactions after successful login
       if (event.success) {
         formInteractions.current = [];
-    } catch (error) {
+ catch (error) {
   console.error('Failed to track login attempt:', error);
 }, [isTracking]);
   // Send batched form interactions
@@ -115,7 +80,7 @@ export const useLoginAnalytics = () => {
   });
       // Clear sent interactions
       formInteractions.current = [];
-    } catch (error) {
+ catch (error) {
   console.error('Failed to send form interactions:', error);
 }, [isTracking]);
   // Track security events (unusual behavior, suspicious patterns)
@@ -137,7 +102,7 @@ export const useLoginAnalytics = () => {
   credentials: 'include',
         body: JSON.stringify(payload);
   });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to track security event:', error);
 }, [isTracking]);
   // Fetch login analytics data
@@ -156,10 +121,10 @@ export const useLoginAnalytics = () => {
       const data = await response.json();
       setAnalytics(data);
       return data;
-    } catch (error) {
+ catch (error) {
   console.error('Failed to fetch analytics:', error);
   throw error;
-} finally {
+ finally {
       setIsLoading(false);
   }, []);
   // Track page performance metrics
@@ -187,7 +152,7 @@ export const useLoginAnalytics = () => {
   credentials: 'include',
           body: JSON.stringify(metrics);
   });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to track page metrics:', error);
 }, [isTracking]);
   // Track user engagement metrics
@@ -209,7 +174,7 @@ export const useLoginAnalytics = () => {
   credentials: 'include',
         body: JSON.stringify(payload);
   });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to track engagement:', error);
 }, [isTracking]);
   // Generate a session ID for tracking
@@ -233,7 +198,7 @@ export const useLoginAnalytics = () => {
         .map((interaction, index, arr) => {
           if (index === 0) return null;
           return interaction.timestamp!.getTime() - arr[index - 1].timestamp!.getTime();
-  }
+
         .filter(interval => interval !== null) as number;
       if (typingIntervals.length > 5) {
   const avgInterval = typingIntervals.reduce((a, b) => a + b, 0) / typingIntervals.length;
@@ -259,7 +224,7 @@ export const useLoginAnalytics = () => {
   focusEvents: formFocusEvents.length,
   sessionDuration
 });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to detect suspicious behavior:', error);
 }, [isTracking, trackSecurityEvent]);
   // Cleanup function to send remaining data

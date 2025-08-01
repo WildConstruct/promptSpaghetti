@@ -15,10 +15,10 @@ import {
   DataClassificationLevel,
   DataOperation,
   OperationContext
-} from '../../../packages/core/types/DataClassification';
+ from '../../../packages/core/types/DataClassification';
 
-}
-}
+
+
 export interface AccessRequest {
   id: string;
   requesterId: string;
@@ -36,8 +36,9 @@ export interface AccessRequest {
     scope: AccessScope;
     timeWindow?: TimeWindow;
     conditions?: AccessCondition[];
-}
-}
+
+
+
   };
   context: OperationContext;
   attachments?: RequestAttachment[];
@@ -47,22 +48,23 @@ export interface AccessRequest {
   workflowId?: string;
   currentStep?: number;
   metadata: RequestMetadata;
-}
 
-}
-}
+
+
+
 export interface AccessScope {
   type: 'RESOURCE_SPECIFIC' | 'CLASSIFICATION_LEVEL' | 'DEPARTMENT' | 'PROJECT' | 'GLOBAL';
   targets: string[];
   exclusions?: string[];
   conditions: string[];
   inheritanceLevel?: 'NONE' | 'CHILD_RESOURCES' | 'ALL_DESCENDANTS';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeWindow {
   startTime?: Date;
   endTime?: Date;
@@ -71,12 +73,13 @@ export interface TimeWindow {
   businessHoursOnly?: boolean;
   maxConcurrentSessions?: number;
   sessionDurationLimit?: number; // minutes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RecurrencePattern {
   type: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'CUSTOM';
   frequency: number;
@@ -84,23 +87,25 @@ export interface RecurrencePattern {
   daysOfMonth?: number[];
   endDate?: Date;
   occurrences?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessCondition {
   type: 'LOCATION' | 'DEVICE' | 'NETWORK' | 'MFA_REQUIRED' | 'SUPERVISION_REQUIRED' | 'AUDIT_ENHANCED' | 'VPN_REQUIRED';
   specification: Record<string, any>;
   required: boolean;
   enforced: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RequestAttachment {
   id: string;
   filename: string;
@@ -112,9 +117,10 @@ export interface RequestAttachment {
   encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED';
   classification: DataClassificationLevel;
   purpose: 'JUSTIFICATION' | 'APPROVAL_DOCUMENTATION' | 'COMPLIANCE_EVIDENCE' | 'TECHNICAL_SPECIFICATION';
-}
-}
-}
+
+
+
+
 
 export type RequestStatus = 
   | 'DRAFT'
@@ -132,8 +138,8 @@ export type RequestStatus =
   | 'ACTIVE'
   | 'REVOKED';
 
-}
-}
+
+
 export interface RequestMetadata {
   riskScore: number;
   automaticProcessing: boolean;
@@ -148,12 +154,13 @@ export interface RequestMetadata {
   businessImpactLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   dataVolumeEstimate?: number;
   sensitivityIndicators: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewHistoryEntry {
   timestamp: Date;
   reviewerId: string;
@@ -165,12 +172,13 @@ export interface ReviewHistoryEntry {
   nextStep?: string;
   delegatedTo?: string;
   metadata: ReviewMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewMetadata {
   ipAddress?: string;
   userAgent?: string;
@@ -178,34 +186,37 @@ export interface ReviewMetadata {
   processingTime: number;
   riskAssessment?: RiskAssessmentDetails;
   complianceCheck?: ComplianceCheckResult;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskAssessmentDetails {
   overallRisk: number;
   riskFactors: string[];
   mitigatingFactors: string[];
   recommendedConditions: AccessCondition[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceCheckResult {
   compliant: boolean;
   frameworks: string[];
   violations: string[];
   requiredActions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApprovalWorkflow {
   id: string;
   name: string;
@@ -219,24 +230,26 @@ export interface ApprovalWorkflow {
   autoApprovalRules: AutoApprovalRule[];
   slaTargets: SLATarget[];
   metadata: WorkflowMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowTrigger {
   type: 'DATA_CLASSIFICATION' | 'OPERATION_TYPE' | 'RISK_SCORE' | 'URGENCY' | 'USER_ROLE' | 'RESOURCE_TYPE' | 'REQUEST_VALUE';
   operator: 'EQUALS' | 'IN' | 'GREATER_THAN' | 'LESS_THAN' | 'CONTAINS' | 'MATCHES' | 'BETWEEN';
   value: Error;
   weight: number;
   mandatory: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApprovalStep {
   id: string;
   order: number;
@@ -254,12 +267,13 @@ export interface ApprovalStep {
   skipConditions?: SkipCondition[];
   parallelExecution: boolean;
   criticalPath: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApproverConfig {
   type: 'USER' | 'ROLE' | 'GROUP' | 'DYNAMIC' | 'EXTERNAL' | 'AI_ASSISTANT';
   identifier: string;
@@ -270,67 +284,73 @@ export interface ApproverConfig {
   notificationPreferences: NotificationPreference[];
   competencyLevel: 'BASIC' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
   specializations?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationPreference {
   channel: 'EMAIL' | 'SMS' | 'SLACK' | 'TEAMS' | 'WEBHOOK' | 'IN_APP' | 'PUSH';
   address: string;
   priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
   triggerEvents: string[];
   schedule?: NotificationSchedule;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationSchedule {
   immediateDelivery: boolean;
   businessHoursOnly: boolean;
   timezone: string;
   deliveryWindows: TimeRange[];
   escalationDelay: number; // minutes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeRange {
   start: string; // HH:MM format
   end: string;
   daysOfWeek: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StepCondition {
   type: 'PREVIOUS_STEP_RESULT' | 'TIME_CONSTRAINT' | 'RESOURCE_AVAILABILITY' | 'COMPLIANCE_CHECK' | 'RISK_THRESHOLD';
   specification: Record<string, any>;
   required: boolean;
   operator: 'AND' | 'OR' | 'NOT';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SkipCondition {
   type: 'AUTO_APPROVAL_ELIGIBLE' | 'LOW_RISK' | 'EMERGENCY_OVERRIDE' | 'DELEGATION_ACTIVE';
   criteria: Record<string, any>;
   requiresJustification: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationTemplate {
   id: string;
   triggerEvent: string;
@@ -340,46 +360,50 @@ export interface NotificationTemplate {
   variables: Record<string, string>;
   priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
   deliveryOptions: DeliveryOptions;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeliveryOptions {
   immediateDelivery: boolean;
   batchDelivery: boolean;
   retryCount: number;
   retryInterval: number;
   escalateOnFailure: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowTimeout {
   stepId: string;
   timeoutHours: number;
   action: 'ESCALATE' | 'AUTO_APPROVE' | 'AUTO_REJECT' | 'NOTIFY' | 'PAUSE' | 'DELEGATE';
   notificationRecipients: string[];
   conditions?: TimeoutCondition[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeoutCondition {
   type: 'BUSINESS_HOURS' | 'HOLIDAY_EXCLUDE' | 'WEEKEND_EXCLUDE' | 'EMERGENCY_OVERRIDE';
   adjustmentHours: number;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRule {
   id: string;
   triggerConditions: EscalationTrigger[];
@@ -388,35 +412,38 @@ export interface EscalationRule {
   autoEscalate: boolean;
   maxEscalationLevel: number;
   escalationMatrix: EscalationMatrix[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationTrigger {
   type: 'TIMEOUT' | 'REJECTION' | 'HIGH_RISK' | 'COMPLIANCE_ISSUE' | 'MANUAL_REQUEST' | 'EMERGENCY' | 'BUSINESS_IMPACT';
   threshold?: number;
   conditions: Record<string, any>;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationMatrix {
   level: number;
   targetRoles: string[];
   timeoutHours: number;
   notifications: string[];
   autoActions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutoApprovalRule {
   id: string;
   name: string;
@@ -429,57 +456,62 @@ export interface AutoApprovalRule {
   validityDays: number;
   usageLimit?: number;
   cooldownPeriod?: number; // hours
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutoApprovalCriteria {
   type: 'USER_ROLE' | 'DATA_CLASSIFICATION' | 'OPERATION_TYPE' | 'REQUEST_HISTORY' | 'TIME_WINDOW' | 'RESOURCE_VALUE';
   operator: 'EQUALS' | 'IN' | 'LESS_THAN' | 'GREATER_THAN' | 'BETWEEN' | 'MATCHES';
   value: Error;
   weight: number;
   mandatory: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutoApprovalCondition {
   type: 'TIME_LIMIT' | 'USAGE_LIMIT' | 'SCOPE_RESTRICTION' | 'MONITORING_REQUIRED' | 'PERIODIC_REVIEW';
   specification: Record<string, any>;
   enforced: boolean;
   violationAction: 'REVOKE' | 'ALERT' | 'ESCALATE' | 'LOG';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SLATarget {
   metric: 'RESPONSE_TIME' | 'RESOLUTION_TIME' | 'APPROVAL_RATE' | 'ESCALATION_RATE';
   target: number;
   unit: 'HOURS' | 'DAYS' | 'PERCENTAGE';
   urgencyLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | 'EMERGENCY';
   consequences: SLAConsequence[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SLAConsequence {
   action: 'ESCALATE' | 'NOTIFY' | 'AUTO_APPROVE' | 'PRIORITY_BOOST';
   threshold: number;
   recipients: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowMetadata {
   version: string;
   createdBy: string;
@@ -491,12 +523,13 @@ export interface WorkflowMetadata {
   usageStatistics: WorkflowUsageStats;
   complianceInfo: WorkflowComplianceInfo;
   performanceMetrics: WorkflowPerformanceMetrics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowUsageStats {
   totalRequests: number;
   approvedRequests: number;
@@ -506,12 +539,13 @@ export interface WorkflowUsageStats {
   autoApprovalRate: number;
   slaViolations: number;
   userSatisfactionScore?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowComplianceInfo {
   frameworks: string[];
   requirements: string[];
@@ -519,24 +553,26 @@ export interface WorkflowComplianceInfo {
   nextReview: Date;
   auditFindings: string[];
   complianceScore: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowPerformanceMetrics {
   averageStepDuration: Record<string, number>;
   bottleneckSteps: string[];
   peakLoadTimes: string[];
   resourceUtilization: number;
   errorRate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowExecution {
   id: string;
   requestId: string;
@@ -550,12 +586,13 @@ export interface WorkflowExecution {
   decisions: WorkflowDecision[];
   metadata: ExecutionMetadata;
   slaStatus: SLAStatus;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StepExecution {
   stepId: string;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED' | 'FAILED' | 'TIMEOUT' | 'PAUSED';
@@ -567,12 +604,13 @@ export interface StepExecution {
   notifications: NotificationRecord[];
   automationResults?: AutomationResult[];
   performanceData: StepPerformanceData;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApprovalDecision {
   approverId: string;
   decision: 'APPROVE' | 'REJECT' | 'ABSTAIN' | 'DELEGATE' | 'REQUEST_INFO' | 'CONDITIONAL_APPROVE';
@@ -584,12 +622,13 @@ export interface ApprovalDecision {
   metadata: DecisionMetadata;
   riskAssessment?: RiskAssessmentDetails;
   complianceNotes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DecisionMetadata {
   ipAddress: string;
   userAgent: string;
@@ -599,12 +638,13 @@ export interface DecisionMetadata {
   automationAssisted: boolean;
   confidenceLevel: number;
   reviewDepth: 'SURFACE' | 'DETAILED' | 'COMPREHENSIVE';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRecord {
   id: string;
   triggeredBy: string;
@@ -616,12 +656,13 @@ export interface EscalationRecord {
   resolvedBy?: string;
   escalationLevel: number;
   businessImpact: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationRecord {
   id: string;
   templateId: string;
@@ -633,12 +674,13 @@ export interface NotificationRecord {
   clickedAt?: Date;
   responseReceived?: boolean;
   failureReason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutomationResult {
   scriptId: string;
   executedAt: Date;
@@ -648,12 +690,13 @@ export interface AutomationResult {
   executionTime: number;
   resourcesUsed: string[];
   sideEffects: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StepPerformanceData {
   actualDuration: number;
   expectedDuration: number;
@@ -661,12 +704,13 @@ export interface StepPerformanceData {
   notificationDeliveryTime: number;
   automationExecutionTime: number;
   waitTime: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowDecision {
   stepId: string;
   decision: 'APPROVED' | 'REJECTED' | 'ESCALATED' | 'CANCELLED' | 'CONDITIONAL_APPROVED';
@@ -677,12 +721,13 @@ export interface WorkflowDecision {
   conditions: AccessCondition[];
   nextStep?: string;
   businessJustification?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SLAStatus {
   overallSLA: 'ON_TRACK' | 'AT_RISK' | 'VIOLATED' | 'ESCALATED';
   responseTimeStatus: 'MET' | 'AT_RISK' | 'MISSED';
@@ -690,24 +735,26 @@ export interface SLAStatus {
   escalationCount: number;
   remainingTime: number; // hours
   breachNotificationsSent: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionMetadata {
   riskScore: number;
   complianceFlags: string[];
   performanceMetrics: ExecutionPerformanceMetrics;
   auditTrail: ExecutionAuditEntry[];
   businessContext: BusinessContext;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionPerformanceMetrics {
   totalProcessingTime: number;
   stepProcessingTimes: Record<string, number>;
@@ -716,12 +763,13 @@ export interface ExecutionPerformanceMetrics {
   escalationResponseTime?: number;
   waitTime: number;
   throughputRate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionAuditEntry {
   timestamp: Date;
   event: string;
@@ -730,12 +778,13 @@ export interface ExecutionAuditEntry {
   automated: boolean;
   complianceRelevant: boolean;
   riskImpact?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BusinessContext {
   department: string;
   project?: string;
@@ -744,9 +793,10 @@ export interface BusinessContext {
   stakeholders: string[];
   costCenter?: string;
   budgetImpact?: number;
-}
-}
-}
+
+
+
+
 
 export class AccessRequestWorkflowService extends EventEmitter {
   private database: Error;
@@ -776,7 +826,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
 
     this.initializeDefaultWorkflows();
     this.startBackgroundProcessing();
-  }
+
 
   /**
    * Submit a new access request
@@ -809,14 +859,14 @@ export class AccessRequestWorkflowService extends EventEmitter {
           metadata: {
             mfaVerified: false,
             processingTime: 0
-          }
-        }],
+
+],
         workflowVersion: '1.0',
         estimatedProcessingTime: await this.estimateProcessingTime(request),
         priorityScore: await this.calculatePriorityScore(request),
         businessImpactLevel: await this.assessBusinessImpact(request),
         sensitivityIndicators: await this.identifySensitivityIndicators(request)
-      }
+
     };
 
     // Store request in database
@@ -835,7 +885,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
         urgency: request.urgency,
         riskScore: fullRequest.metadata.riskScore,
         businessPurpose: request.businessPurpose
-  }
+
       timestamp: new Date(),
       ipAddress: request.context.ipAddress || 'unknown',
       userAgent: request.context.userAgent || 'unknown'
@@ -845,16 +895,16 @@ export class AccessRequestWorkflowService extends EventEmitter {
     const autoApprovalResult = await this.evaluateAutoApproval(fullRequest);
     if (autoApprovalResult.eligible) {
       return await this.processAutoApproval(fullRequest, autoApprovalResult);
-    }
+
 
     // Find and assign appropriate workflow
     const workflow = await this.findApplicableWorkflow(fullRequest);
     if (workflow) {
       await this.initiateWorkflow(fullRequest, workflow);
-    } else {
+ else {
       // Fallback to default approval process
       await this.initiateDefaultApprovalProcess(fullRequest);
-    }
+
 
     this.emit('access_request_submitted', {
       request: fullRequest,
@@ -863,7 +913,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
     });
 
     return fullRequest;
-  }
+
 
   /**
    * Process approval decision from an approver
@@ -878,17 +928,17 @@ export class AccessRequestWorkflowService extends EventEmitter {
     workflowCompleted: boolean;
     finalDecision?: 'APPROVED' | 'REJECTED' | 'CONDITIONAL_APPROVED';
     estimatedCompletion?: Date;
-  }> {
+> {
 
     const request = this.pendingRequests.get(requestId);
     if (!request) {
       throw new Error(`Access request ${requestId} not found`);
-    }
+
 
     const workflowExecution = this.activeWorkflows.get(request.workflowId!);
     if (!workflowExecution) {
       throw new Error(`Active workflow not found for request ${requestId}`);
-    }
+
 
     // Validate approver authority
     await this.validateApproverAuthority(approverId, workflowExecution, decision);
@@ -906,7 +956,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
         ...decision.metadata,
         reviewDepth: await this.assessReviewDepth(decision, request),
         confidenceLevel: await this.calculateConfidenceLevel(decision, request)
-      }
+
     };
 
     currentStep.approvals.push(enhancedDecision);
@@ -925,7 +975,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
         ...decision.metadata,
         riskAssessment,
         complianceCheck
-      }
+
     });
 
     // Update SLA status
@@ -944,7 +994,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
         processingTime: decision.metadata.processingTime,
         riskScore: riskAssessment?.overallRisk,
         complianceStatus: complianceCheck?.compliant
-  }
+
       timestamp: new Date(),
       ipAddress: decision.metadata.ipAddress,
       userAgent: decision.metadata.userAgent
@@ -956,10 +1006,10 @@ export class AccessRequestWorkflowService extends EventEmitter {
     if (stepResult.completed) {
       if (stepResult.approved) {
         return await this.advanceToNextStep(workflowExecution, request);
-      } else {
+ else {
         return await this.handleStepRejection(workflowExecution, request, stepResult);
-      }
-    }
+
+
 
     // Step still pending more approvals
     const estimatedCompletion = await this.estimateStepCompletion(workflowExecution, currentStep);
@@ -970,7 +1020,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
       nextStep: currentStep.stepId,
       estimatedCompletion
     };
-  }
+
 
   /**
    * Escalate a request manually or automatically
@@ -986,12 +1036,12 @@ export class AccessRequestWorkflowService extends EventEmitter {
     const request = this.pendingRequests.get(requestId);
     if (!request) {
       throw new Error(`Access request ${requestId} not found`);
-    }
+
 
     const workflowExecution = this.activeWorkflows.get(request.workflowId!);
     if (!workflowExecution) {
       throw new Error(`Active workflow not found for request ${requestId}`);
-    }
+
 
     const escalationId = `esc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
@@ -1003,7 +1053,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
 
     if (!escalationRule && escalationType !== 'MANUAL') {
       throw new Error(`No escalation rule found for type ${escalationType}`);
-    }
+
 
     // Determine escalation targets
     const escalationTargets = escalationRule 
@@ -1040,7 +1090,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
       metadata: {
         mfaVerified: false,
         processingTime: 0
-      }
+
     });
 
     // Update SLA status due to escalation
@@ -1063,7 +1113,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
         escalationLevel: request.metadata.escalationLevel,
         businessImpact,
         slaStatus: workflowExecution.slaStatus.overallSLA
-  }
+
       timestamp: new Date(),
       ipAddress: 'system',
       userAgent: 'workflow-service'
@@ -1077,7 +1127,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
     });
 
     return escalationRecord;
-  }
+
 
   /**
    * Cancel a pending request
@@ -1092,20 +1142,20 @@ export class AccessRequestWorkflowService extends EventEmitter {
     const request = this.pendingRequests.get(requestId);
     if (!request) {
       throw new Error(`Access request ${requestId} not found`);
-    }
+
 
     // Validate cancellation authority
     if (request.requesterId !== cancelledBy) {
       const hasAuthority = await this.validateCancellationAuthority(cancelledBy, request);
       if (!hasAuthority) {
         throw new Error('Insufficient privileges to cancel this request');
-      }
-    }
+
+
 
     // Check if request can be cancelled
     if (['PROVISIONED', 'ACTIVE'].includes(request.status)) {
       throw new Error('Cannot cancel request that has already been provisioned');
-    }
+
 
     // Update request status
     request.status = 'CANCELLED';
@@ -1118,7 +1168,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
       metadata: {
         mfaVerified: false,
         processingTime: 0
-      }
+
     });
 
     // Cancel active workflow if exists
@@ -1130,8 +1180,8 @@ export class AccessRequestWorkflowService extends EventEmitter {
         
         // Update SLA metrics
         await this.updateWorkflowMetrics(workflowExecution, 'CANCELLED');
-      }
-    }
+
+
 
     // Update database
     await this.updateAccessRequest(request);
@@ -1147,7 +1197,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
         workflowId: request.workflowId,
         statusAtCancellation: request.status,
         daysInProgress: Math.floor((Date.now() - request.createdAt.getTime()) / (24 * 60 * 60 * 1000))
-  }
+
       timestamp: new Date(),
       ipAddress: 'system',
       userAgent: 'workflow-service'
@@ -1156,7 +1206,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
     // Notify relevant parties if requested
     if (notifyStakeholders) {
       await this.notifyRequestCancellation(request, cancelledBy, reason);
-    }
+
 
     this.emit('request_cancelled', {
       request,
@@ -1166,7 +1216,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
     });
 
     return true;
-  }
+
 
   /**
    * Get comprehensive request status and workflow information
@@ -1181,12 +1231,12 @@ export class AccessRequestWorkflowService extends EventEmitter {
     riskAssessment?: RiskAssessmentDetails;
     complianceStatus?: ComplianceCheckResult;
     relatedRequests?: AccessRequest[];
-  }> {
+> {
 
     const request = this.pendingRequests.get(requestId) || await this.loadAccessRequest(requestId);
     if (!request) {
       throw new Error(`Access request ${requestId} not found`);
-    }
+
 
     const result: Record<string, unknown> = { request };
 
@@ -1207,9 +1257,9 @@ export class AccessRequestWorkflowService extends EventEmitter {
           
           // Estimate completion time
           result.estimatedCompletion = await this.estimateCompletionTime(workflowExecution, workflow);
-        }
-      }
-    }
+
+
+
 
     // Get risk assessment and compliance status
     result.riskAssessment = await this.getCurrentRiskAssessment(request);
@@ -1218,10 +1268,10 @@ export class AccessRequestWorkflowService extends EventEmitter {
     // Get related requests
     if (request.metadata.relatedRequests.length > 0) {
       result.relatedRequests = await this.loadRelatedRequests(request.metadata.relatedRequests);
-    }
+
 
     return result;
-  }
+
 
   /**
    * Get requests pending approval for a specific approver
@@ -1242,7 +1292,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
       overdueSLA: number;
       avgProcessingTime: number;
     };
-  }> {
+> {
 
     // Get pending requests for this approver
     const pendingRequests = Array.from(this.pendingRequests.values()).filter(request => 
@@ -1254,14 +1304,14 @@ export class AccessRequestWorkflowService extends EventEmitter {
     let filteredRequests = pendingRequests;
     if (filters) {
       filteredRequests = this.applyRequestFilters(pendingRequests, filters);
-    }
+
 
     // Sort by priority and urgency
     filteredRequests.sort((a, b) => {
       if (a.urgency !== b.urgency) {
         const urgencyOrder = { 'EMERGENCY': 5, 'CRITICAL': 4, 'HIGH': 3, 'MEDIUM': 2, 'LOW': 1 };
         return urgencyOrder[b.urgency] - urgencyOrder[a.urgency];
-      }
+
       return b.metadata.priorityScore - a.metadata.priorityScore;
     });
 
@@ -1277,7 +1327,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
       requests: filteredRequests,
       summary
     };
-  }
+
 
   // Private helper methods implementation continues...
   // [The rest of the implementation would include all private methods]
@@ -1293,7 +1343,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
     autoApprovalRules.forEach(rule => {
       this.autoApprovalRules.set(rule.id, rule);
     });
-  }
+
 
   private async createDefaultWorkflows(): Promise<ApprovalWorkflow[]> {
 
@@ -1310,7 +1360,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
             value: ['PUBLIC', 'INTERNAL'],
             weight: 1.0,
             mandatory: false
-          }
+
         ],
         steps: [
           {
@@ -1336,11 +1386,11 @@ export class AccessRequestWorkflowService extends EventEmitter {
                   timezone: 'UTC',
                   deliveryWindows: [],
                   escalationDelay: 60
-                }
-              }],
+
+],
               competencyLevel: 'INTERMEDIATE',
               specializations: ['data-access', 'risk-assessment']
-            }],
+],
             requiredApprovals: 1,
             allowDelegation: true,
             timeoutHours: 24,
@@ -1359,11 +1409,11 @@ export class AccessRequestWorkflowService extends EventEmitter {
                 retryCount: 3,
                 retryInterval: 30,
                 escalateOnFailure: true
-              }
-            }],
+
+],
             parallelExecution: false,
             criticalPath: true
-          }
+
         ],
         timeouts: [{
           stepId: 'initial-review',
@@ -1374,8 +1424,8 @@ export class AccessRequestWorkflowService extends EventEmitter {
             type: 'BUSINESS_HOURS',
             adjustmentHours: 8,
             description: 'Adjust timeout for business hours only'
-          }]
-        }],
+]
+],
         escalationRules: [{
           id: 'standard-escalation',
           triggerConditions: [{
@@ -1383,7 +1433,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
             threshold: 24,
             conditions: {},
             severity: 'MEDIUM'
-          }],
+],
           escalationPath: ['security-manager', 'it-director'],
           timeoutHours: 48,
           autoEscalate: true,
@@ -1394,8 +1444,8 @@ export class AccessRequestWorkflowService extends EventEmitter {
             timeoutHours: 24,
             notifications: ['EMAIL', 'SLACK'],
             autoActions: ['PRIORITY_BOOST']
-          }]
-        }],
+]
+],
         parallelProcessing: false,
         autoApprovalRules: [],
         slaTargets: [{
@@ -1407,8 +1457,8 @@ export class AccessRequestWorkflowService extends EventEmitter {
             action: 'ESCALATE',
             threshold: 6,
             recipients: ['security-manager@company.com']
-          }]
-        }],
+]
+],
         metadata: {
           version: '1.0',
           createdBy: 'system',
@@ -1423,7 +1473,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
             escalationRate: 0,
             autoApprovalRate: 0,
             slaViolations: 0
-  }
+
           complianceInfo: {
             frameworks: ['SOX', 'ISO27001', 'NIST'],
             requirements: ['Segregation of Duties', 'Approval Trail', 'Access Review'],
@@ -1431,18 +1481,18 @@ export class AccessRequestWorkflowService extends EventEmitter {
             nextReview: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
             auditFindings: [],
             complianceScore: 95
-  }
+
           performanceMetrics: {
             averageStepDuration: {},
             bottleneckSteps: [],
             peakLoadTimes: [],
             resourceUtilization: 0,
             errorRate: 0
-          }
-        }
-      }
+
+
+
     ];
-  }
+
 
   private async createDefaultAutoApprovalRules(): Promise<AutoApprovalRule[]> {
 
@@ -1458,21 +1508,21 @@ export class AccessRequestWorkflowService extends EventEmitter {
             value: 'PUBLIC',
             weight: 0.4,
             mandatory: true
-  }
+
           {
             type: 'OPERATION_TYPE',
             operator: 'IN',
             value: ['read'],
             weight: 0.3,
             mandatory: true
-  }
+
           {
             type: 'REQUEST_HISTORY',
             operator: 'GREATER_THAN',
             value: 5,
             weight: 0.3,
             mandatory: false
-          }
+
         ],
         conditions: [
           {
@@ -1480,13 +1530,13 @@ export class AccessRequestWorkflowService extends EventEmitter {
             specification: { hours: 8 },
             enforced: true,
             violationAction: 'REVOKE'
-  }
+
           {
             type: 'MONITORING_REQUIRED',
             specification: { level: 'STANDARD' },
             enforced: true,
             violationAction: 'ALERT'
-          }
+
         ],
         maxRiskScore: 25,
         auditRequired: true,
@@ -1494,9 +1544,9 @@ export class AccessRequestWorkflowService extends EventEmitter {
         validityDays: 30,
         usageLimit: 10,
         cooldownPeriod: 24
-      }
+
     ];
-  }
+
 
   private startBackgroundProcessing(): void {
     // Process timeouts every 5 minutes
@@ -1523,7 +1573,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
     setInterval(async () => {
       await this.processNotificationQueue();
     }, 60 * 1000);
-  }
+
 
   // Additional helper methods would be implemented here...
   // This is a simplified version showing the comprehensive structure
@@ -1576,7 +1626,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
     riskScore += requestTypeRisk[request.requestType] || 15;
 
     return Math.min(riskScore, 100);
-  }
+
 
   private async calculatePriorityScore(request: unknown): Promise<number> {
 
@@ -1603,25 +1653,25 @@ export class AccessRequestWorkflowService extends EventEmitter {
     score += impactScore[businessImpact] || 10;
 
     return Math.min(score, 100);
-  }
+
 
   private async assessBusinessImpact(request: unknown): Promise<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'> {
 
     // Simplified business impact assessment
     if (request.urgency === 'EMERGENCY' || request.requestType === 'EMERGENCY_ACCESS') {
       return 'CRITICAL';
-    }
+
     
     if (request.dataClassification === 'RESTRICTED' || request.requestType === 'BULK_OPERATION') {
       return 'HIGH';
-    }
+
     
     if (request.dataClassification === 'CONFIDENTIAL') {
       return 'MEDIUM';
-    }
+
     
     return 'LOW';
-  }
+
 
   private async identifySensitivityIndicators(request: unknown): Promise<string[]> {
 
@@ -1629,18 +1679,18 @@ export class AccessRequestWorkflowService extends EventEmitter {
     
     if (request.dataClassification === 'RESTRICTED') {
       indicators.push('HIGHLY_CLASSIFIED_DATA');
-    }
+
     
     if (request.requestType === 'EMERGENCY_ACCESS') {
       indicators.push('EMERGENCY_REQUEST');
-    }
+
     
     if (['DELETE', 'EXPORT', 'DECLASSIFY'].includes(request.requestedOperation)) {
       indicators.push('HIGH_RISK_OPERATION');
-    }
+
     
     return indicators;
-  }
+
 
   // Placeholder methods for comprehensive functionality
   private async findRelatedRequests(_____request: unknown): Promise<string[]> { return []; }
@@ -1668,14 +1718,14 @@ export class AccessRequestWorkflowService extends EventEmitter {
   ): Promise<RiskAssessmentDetails> {
 
     return { overallRisk: 50, riskFactors: [], mitigatingFactors: [], recommendedConditions: [] }; 
-  }
+
   private async performComplianceCheck(
     _____decision: ApprovalDecision,
     _____request: AccessRequest
   ): Promise<ComplianceCheckResult> {
 
     return { compliant: true, frameworks: [], violations: [], requiredActions: [] }; 
-  }
+
   private async assessReviewDepth(
     _____decision: ApprovalDecision,
     _____request: AccessRequest
@@ -1691,7 +1741,7 @@ export class AccessRequestWorkflowService extends EventEmitter {
   ): Promise<{ completed: boolean; approved: boolean; reason?: string }> {
 
     return { completed: false, approved: false }; 
-  }
+
   private async advanceToNextStep(
     _____execution: WorkflowExecution,
     _____request: AccessRequest
@@ -1737,11 +1787,11 @@ export class AccessRequestWorkflowService extends EventEmitter {
   private async getCurrentRiskAssessment(_____request: AccessRequest): Promise<RiskAssessmentDetails> {
 
     return { overallRisk: 50, riskFactors: [], mitigatingFactors: [], recommendedConditions: [] }; 
-  }
+
   private async getCurrentComplianceStatus(_____request: AccessRequest): Promise<ComplianceCheckResult> {
 
     return { compliant: true, frameworks: [], violations: [], requiredActions: [] }; 
-  }
+
   private async loadRelatedRequests(_____requestIds: string[]): Promise<AccessRequest[]> { return []; }
   private isApproverAssigned(_____request: AccessRequest, _____approverId: string): boolean { return false; }
   private applyRequestFilters(requests: AccessRequest[], _____filters: unknown): AccessRequest[] { return requests; }
@@ -1752,6 +1802,6 @@ export class AccessRequestWorkflowService extends EventEmitter {
   private async cleanupCompletedWorkflows(): Promise<void> { }
   private async updateWorkflowStatistics(): Promise<void> { }
   private async processNotificationQueue(): Promise<void> { }
-}
+
 
 export default AccessRequestWorkflowService;

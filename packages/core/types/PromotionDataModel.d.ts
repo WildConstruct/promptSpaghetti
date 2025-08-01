@@ -11,8 +11,8 @@
 import { PlacementTargetingRules, PlacementStyling, MetricsPeriod } from './PlacementTypes';
 
 }
-export interface PromotionCampaign {
-    campaignId: string;
+}
+export interface PromotionCampaign { campaignId: string;
     name: string;
     displayName: string;
     description: string;
@@ -44,12 +44,11 @@ export interface PromotionCampaign {
     integrationConfig?: {
         analyticsTracking: AnalyticsTrackingConfig;
         externalPlatforms?: ExternalPlatformConfig[];
-        customEventTracking?: CustomEventConfig[];
+        customEventTracking?: CustomEventConfig[] }
 }
     };
 
-export declare enum PromotionType {
-    FEATURED_TEMPLATES = "featured_templates",
+export declare enum PromotionType { FEATURED_TEMPLATES = "featured_templates",
     NEW_RELEASES = "new_releases",
     TRENDING_NOW = "trending_now",
     EDITORS_CHOICE = "editors_choice",
@@ -96,12 +95,12 @@ export declare enum ContentSelectionMethod {
     RULE_BASED = "rule_based",
     ML_RECOMMENDATIONS = "ml_recommendations",
     PERFORMANCE_RANKING = "performance_ranking",
-    HYBRID_SCORING = "hybrid_scoring",
+    HYBRID_SCORING = "hybrid_scoring" }
     REAL_TIME_OPTIMIZATION = "real_time_optimization"
 
 }
-export interface PromotionContent {
-    contentId: string;
+}
+export interface PromotionContent { contentId: string;
     templateId: string;
     contentInfo: {
         title: string;
@@ -110,17 +109,15 @@ export interface PromotionContent {
         categoryId: string;
         tags: string[];
         thumbnailUrl?: string;
-        previewUrl?: string;
+        previewUrl?: string }
 }
     };
-    promotionConfig: {
-        priority: number;
+    promotionConfig: { priority: number;
         weight?: number;
         customMessage?: string;
         callToAction?: string;
         promotionalBadges?: PromotionalBadge[];
-        customStyling?: Partial<PlacementStyling>;
-    };
+        customStyling?: Partial<PlacementStyling> };
     performanceScore: number;
     metrics: ContentPromotionMetrics;
     startTime?: Date;
@@ -135,8 +132,8 @@ export interface PromotionContent {
     controlGroup?: boolean;
 
 }
-export interface PromotionalBadge {
-    badgeId: string;
+}
+export interface PromotionalBadge { badgeId: string;
     type: BadgeType;
     text: string;
     style: BadgeStyle;
@@ -145,20 +142,21 @@ export interface PromotionalBadge {
     conditions?: BadgeConditions;
 
 export declare enum BadgeType {
-    NEW = "new",
-    FEATURED = "featured",
-    TRENDING = "trending",
-    BESTSELLER = "bestseller",
-    EDITOR_CHOICE = "editor_choice",
-    LIMITED_TIME = "limited_time",
-    EXCLUSIVE = "exclusive",
-    PREMIUM = "premium",
-    DISCOUNT = "discount",
+    NEW = "new";
+    FEATURED = "featured";
+    TRENDING = "trending";
+    BESTSELLER = "bestseller";
+    EDITOR_CHOICE = "editor_choice";
+    LIMITED_TIME = "limited_time";
+    EXCLUSIVE = "exclusive";
+    PREMIUM = "premium";
+    DISCOUNT = "discount" }
     CUSTOM = "custom"
 
 }
-export interface BadgeStyle {
-    backgroundColor: string;
+}
+}
+export interface BadgeStyle { backgroundColor: string;
     textColor: string;
     borderColor?: string;
     fontSize?: string;
@@ -167,25 +165,25 @@ export interface BadgeStyle {
     animation?: 'pulse' | 'glow' | 'bounce' | 'none';
 
 export declare enum BadgePosition {
-    TOP_LEFT = "top_left",
-    TOP_RIGHT = "top_right",
-    BOTTOM_LEFT = "bottom_left",
-    BOTTOM_RIGHT = "bottom_right",
-    CENTER = "center",
+    TOP_LEFT = "top_left";
+    TOP_RIGHT = "top_right";
+    BOTTOM_LEFT = "bottom_left";
+    BOTTOM_RIGHT = "bottom_right";
+    CENTER = "center" }
     OVERLAY = "overlay"
 
 }
-export interface BadgeVisibility {
-    showOnHover?: boolean;
+}
+}
+export interface BadgeVisibility { showOnHover?: boolean;
     showAlways?: boolean;
     showOnMobile?: boolean;
-    minScreenWidth?: number;
-
+    minScreenWidth?: number }
 }
-export interface BadgeConditions {
-    timeframe?: {
+}
+export interface BadgeConditions { timeframe?: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     performanceThreshold?: {
@@ -193,22 +191,19 @@ export interface BadgeConditions {
         value: number;
         operator: 'gt' | 'lt' | 'eq'
   };
-    userConditions?: {
-        segments: string[];
-        excludeSegments?: string[];
-    };
+    userConditions?: { segments: string[];
+        excludeSegments?: string[] };
 
-export declare enum ContentPromotionStatus {
-    ELIGIBLE = "eligible",
+export declare enum ContentPromotionStatus { ELIGIBLE = "eligible",
     ACTIVE = "active",
     PAUSED = "paused",
     EXPIRED = "expired",
-    UNDERPERFORMING = "underperforming",
+    UNDERPERFORMING = "underperforming" }
     EXCLUDED = "excluded"
 
 }
-export interface ContentSelectionCriteria {
-    templateCriteria: {
+}
+export interface ContentSelectionCriteria { templateCriteria: {
         categories?: string[];
         excludeCategories?: string[];
         tags?: string[];
@@ -219,55 +214,45 @@ export interface ContentSelectionCriteria {
         excludeCreatorIds?: string[];
         priceRange?: {
             min: number;
-            max: number;
+            max: number }
 }
         };
     };
-    performanceCriteria: {
-        minRating?: number;
+    performanceCriteria: { minRating?: number;
         minPurchases?: number;
         minRevenue?: number;
         maxAge?: number;
         performancePercentile?: number;
         engagementScore?: {
             min: number;
-            max?: number;
-        };
+            max?: number };
     };
-    qualityCriteria: {
-        hasPreview?: boolean;
+    qualityCriteria: { hasPreview?: boolean;
         hasDocumentation?: boolean;
         isVerified?: boolean;
         moderationStatus?: 'approved' | 'pending' | 'rejected';
         qualityScore?: {
             min: number;
-            max?: number;
-        };
+            max?: number };
     };
-    freshnessCriteria: {
-        preferNew?: boolean;
+    freshnessCriteria: { preferNew?: boolean;
         newThresholdDays?: number;
         updateRecency?: number;
         trendingWeight?: number;
-        seasonalRelevance?: string[];
-    };
-    diversityCriteria: {
-        maxPerCreator?: number;
+        seasonalRelevance?: string[] };
+    diversityCriteria: { maxPerCreator?: number;
         maxPerCategory?: number;
         ensureVariety?: boolean;
-        balancePopularAndNiche?: number;
-    };
-    exclusionRules: {
-        recentlyPromoted?: number;
+        balancePopularAndNiche?: number };
+    exclusionRules: { recentlyPromoted?: number;
         currentlyPromoted?: boolean;
         userPurchaseHistory?: boolean;
         competitorTemplates?: boolean;
-        lowPerformers?: boolean;
-    };
+        lowPerformers?: boolean };
 
 }
-export interface PromotionSchedule {
-    scheduleId: string;
+}
+export interface PromotionSchedule { scheduleId: string;
     startDate: Date;
     endDate?: Date;
     timezone: string;
@@ -281,22 +266,23 @@ export interface PromotionSchedule {
     executionHistory: ScheduleExecution[];
 
 export declare enum ScheduleType {
-    FIXED_DURATION = "fixed_duration",
-    PERFORMANCE_BASED = "performance_based",
-    DYNAMIC_ROTATION = "dynamic_rotation",
-    EVENT_TRIGGERED = "event_triggered",
+    FIXED_DURATION = "fixed_duration";
+    PERFORMANCE_BASED = "performance_based";
+    DYNAMIC_ROTATION = "dynamic_rotation";
+    EVENT_TRIGGERED = "event_triggered" }
     CONTINUOUS = "continuous"
 
 }
-export interface TimeBasedRules {
-    hoursOfDay?: number[];
+}
+}
+export interface TimeBasedRules { hoursOfDay?: number[];
     excludeHours?: number[];
     daysOfWeek?: number[];
     excludeDays?: number[];
     peakHours?: {
         start: string;
         end: string;
-        multiplier: number;
+        multiplier: number }
 }
     };
     primaryTimezones?: string[];
@@ -304,51 +290,46 @@ export interface TimeBasedRules {
     seasonalPatterns?: SeasonalPattern[];
 
 }
-export interface SeasonalPattern {
-    season: 'spring' | 'summer' | 'fall' | 'winter' | 'holiday' | 'back_to_school';
+}
+export interface SeasonalPattern { season: 'spring' | 'summer' | 'fall' | 'winter' | 'holiday' | 'back_to_school';
     adjustmentFactor: number;
     specificDates?: Date[];
-    geographicRegions?: string[];
-
+    geographicRegions?: string[] }
 }
-export interface RecurrenceConfig {
-    frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+}
+export interface RecurrenceConfig { frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
     interval: number;
     endCondition: 'date' | 'count' | 'performance';
     endValue: Date | number;
-    exceptions?: Date[];
-
+    exceptions?: Date[] }
 }
-export interface DynamicSchedulingRule {
-    ruleId: string;
+}
+export interface DynamicSchedulingRule { ruleId: string;
     name: string;
     condition: {
         metric: string;
         threshold: number;
         operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
-        timeWindow: number;
+        timeWindow: number }
 }
     };
-    action: {
-        type: 'extend' | 'pause' | 'rotate' | 'boost' | 'end';
-        parameters: Record<string, any>;
-    };
+    action: { type: 'extend' | 'pause' | 'rotate' | 'boost' | 'end';
+        parameters: Record<string, any> };
     priority: number;
     isActive: boolean;
 
 }
-export interface ScheduleExecution {
-    executionId: string;
+}
+export interface ScheduleExecution { executionId: string;
     executedAt: Date;
     duration: number;
     contentRotated: number;
     performanceSnapshot: Record<string, number>;
     issues?: string[];
-    success: boolean;
-
+    success: boolean }
 }
-export interface RotationConfiguration {
-    rotationId: string;
+}
+export interface RotationConfiguration { rotationId: string;
     strategy: RotationStrategy;
     rotationFrequency: RotationFrequency;
     rotationTriggers: RotationTrigger[];
@@ -363,30 +344,30 @@ export interface RotationConfiguration {
     postRotationValidation: QualityCheck[];
 
 export declare enum RotationStrategy {
-    ROUND_ROBIN = "round_robin",
-    WEIGHTED_RANDOM = "weighted_random",
-    PERFORMANCE_OPTIMIZED = "performance_optimized",
-    TIME_BASED = "time_based",
-    USER_BEHAVIOR_DRIVEN = "user_behavior_driven",
+    ROUND_ROBIN = "round_robin";
+    WEIGHTED_RANDOM = "weighted_random";
+    PERFORMANCE_OPTIMIZED = "performance_optimized";
+    TIME_BASED = "time_based";
+    USER_BEHAVIOR_DRIVEN = "user_behavior_driven" }
     MACHINE_LEARNING = "machine_learning"
 
 }
-export interface RotationFrequency {
-    type: 'fixed_interval' | 'performance_based' | 'traffic_based' | 'hybrid';
+}
+}
+export interface RotationFrequency { type: 'fixed_interval' | 'performance_based' | 'traffic_based' | 'hybrid';
     interval?: number;
     minInterval?: number;
     maxInterval?: number;
-    conditions?: RotationCondition[];
-
+    conditions?: RotationCondition[] }
 }
-export interface RotationTrigger {
-    triggerId: string;
+}
+export interface RotationTrigger { triggerId: string;
     type: 'time' | 'performance' | 'user_activity' | 'external_event' | 'manual';
     condition: {
         metric?: string;
         threshold?: number;
         operator?: 'gt' | 'lt' | 'eq';
-        timeWindow?: number;
+        timeWindow?: number }
 }
     };
     priority: number;
@@ -394,79 +375,65 @@ export interface RotationTrigger {
     lastTriggered?: Date;
 
 }
-export interface PerformanceThreshold {
-    metric: string;
+}
+export interface PerformanceThreshold { metric: string;
     threshold: number;
     action: 'promote' | 'demote' | 'pause' | 'remove' | 'boost';
     timeWindow: number;
-    sampleSize?: number;
-
+    sampleSize?: number }
 }
-export interface WeightingFactor {
-    factor: string;
+}
+export interface WeightingFactor { factor: string;
     weight: number;
     source: 'historical_performance' | 'real_time_metrics' | 'user_preference' | 'content_attributes' | 'external_signals';
-    decayRate?: number;
-
+    decayRate?: number }
 }
-export interface RotationCondition {
-    conditionId: string;
+}
+export interface RotationCondition { conditionId: string;
     metric: string;
     operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
     value: number;
-    timeWindow: number;
-
+    timeWindow: number }
 }
-export interface QualityCheck {
-    checkId: string;
+}
+export interface QualityCheck { checkId: string;
     name: string;
     type: 'content_availability' | 'performance_validation' | 'user_experience' | 'technical_health';
     isRequired: boolean;
     timeout: number;
-    retryCount: number;
-
+    retryCount: number }
 }
-export interface PromotionTargeting extends PlacementTargetingRules {
-    userTargeting: {
+}
+export interface PromotionTargeting extends PlacementTargetingRules { userTargeting: {
         segments: string[];
         excludeSegments?: string[];
         lifeCycleStage?: UserLifeCycleStage[];
         valueTiers?: UserValueTier[];
         engagementLevels?: UserEngagementLevel[];
-        purchaseHistory?: PurchaseHistoryTargeting;
-}
+        purchaseHistory?: PurchaseHistoryTargeting }
     };
-    contextualTargeting: {
-        currentPage?: string[];
+    contextualTargeting: { currentPage?: string[];
         referrerSource?: string[];
         searchQuery?: string[];
         userIntent?: UserIntent[];
         sessionStage?: SessionStage[];
-        deviceCapabilities?: DeviceCapability[];
-    };
-    behavioralTargeting: {
-        browsingPatterns: BrowsingPattern[];
+        deviceCapabilities?: DeviceCapability[] };
+    behavioralTargeting: { browsingPatterns: BrowsingPattern[];
         interactionHistory: InteractionPattern[];
         purchasePatterns: PurchasePattern[];
         contentPreferences: ContentPreference[];
-        temporalPatterns: TemporalPattern[];
-    };
-    performanceTargeting: {
-        highValueUsers?: boolean;
+        temporalPatterns: TemporalPattern[] };
+    performanceTargeting: { highValueUsers?: boolean;
         likelyConverters?: boolean;
         activeEngagers?: boolean;
         newUserFocus?: boolean;
-        retentionRisk?: boolean;
-    };
-    socialTargeting?: {
-        socialConnections?: string[];
+        retentionRisk?: boolean };
+    socialTargeting?: { socialConnections?: string[];
         communityMembership?: string[];
         influencerFollowers?: string[];
-        viralContent?: boolean;
-    };
+        viralContent?: boolean };
 
-export declare enum UserLifeCycleStage {
-    NEW_VISITOR = "new_visitor",
+export declare enum UserLifeCycleStage { NEW_VISITOR = "new_visitor",
     FIRST_PURCHASE = "first_purchase",
     REPEAT_CUSTOMER = "repeat_customer",
     VIP_CUSTOMER = "vip_customer",
@@ -483,32 +450,25 @@ export declare enum UserEngagementLevel {
     PASSIVE = "passive",
     CASUAL = "casual",
     ENGAGED = "engaged",
-    HIGHLY_ENGAGED = "highly_engaged",
+    HIGHLY_ENGAGED = "highly_engaged" }
     POWER_USER = "power_user"
 
 }
-export interface PurchaseHistoryTargeting {
-    totalPurchases?: {
+}
+export interface PurchaseHistoryTargeting { totalPurchases?: {
         min: number;
-        max?: number;
+        max?: number }
 }
     };
-    recentPurchases?: {
-        days: number;
-        count: number;
-    };
+    recentPurchases?: { days: number;
+        count: number };
     categoryPurchases?: string[];
-    avgOrderValue?: {
-        min: number;
-        max?: number;
-    };
-    purchaseFrequency?: {
-        min: number;
-        max?: number;
-    };
+    avgOrderValue?: { min: number;
+        max?: number };
+    purchaseFrequency?: { min: number;
+        max?: number };
 
-export declare enum UserIntent {
-    BROWSING = "browsing",
+export declare enum UserIntent { BROWSING = "browsing",
     RESEARCHING = "researching",
     COMPARING = "comparing",
     PURCHASING = "purchasing",
@@ -520,61 +480,56 @@ export declare enum SessionStage {
     EXPLORATION = "exploration",
     CONSIDERATION = "consideration",
     DECISION = "decision",
-    CHECKOUT = "checkout",
+    CHECKOUT = "checkout" }
     POST_PURCHASE = "post_purchase"
 
 }
-export interface DeviceCapability {
-    screenSize: 'small' | 'medium' | 'large' | 'xlarge';
+}
+export interface DeviceCapability { screenSize: 'small' | 'medium' | 'large' | 'xlarge';
     touchSupport: boolean;
     connectionSpeed: 'slow' | 'medium' | 'fast';
-    processingPower: 'low' | 'medium' | 'high';
-
+    processingPower: 'low' | 'medium' | 'high' }
 }
-export interface BrowsingPattern {
-    patternType: 'sequential' | 'comparative' | 'exploratory' | 'focused';
+}
+export interface BrowsingPattern { patternType: 'sequential' | 'comparative' | 'exploratory' | 'focused';
     categoryDepth: number;
     sessionDuration: number;
     pageViews: number;
-    bounceRate: number;
-
+    bounceRate: number }
 }
-export interface InteractionPattern {
-    interactionType: 'click' | 'scroll' | 'hover' | 'search' | 'filter' | 'share';
+}
+export interface InteractionPattern { interactionType: 'click' | 'scroll' | 'hover' | 'search' | 'filter' | 'share';
     frequency: number;
     intensity: 'low' | 'medium' | 'high';
-    recency: number;
-
+    recency: number }
 }
-export interface PurchasePattern {
-    frequency: 'impulse' | 'regular' | 'seasonal' | 'occasional';
+}
+export interface PurchasePattern { frequency: 'impulse' | 'regular' | 'seasonal' | 'occasional';
     timing: 'morning' | 'afternoon' | 'evening' | 'weekend' | 'weekday';
     categories: string[];
     priceRange: {
         min: number;
-        max: number;
+        max: number }
 }
     };
 
 }
-export interface ContentPreference {
-    categories: string[];
+}
+export interface ContentPreference { categories: string[];
     creators: string[];
     styles: string[];
     complexity: 'beginner' | 'intermediate' | 'advanced';
     topics: string[];
-    formats: string[];
-
+    formats: string[] }
 }
-export interface TemporalPattern {
-    timeOfDay: number[];
+}
+export interface TemporalPattern { timeOfDay: number[];
     dayOfWeek: number[];
     seasonality: string[];
-    eventTiming: string[];
-
+    eventTiming: string[] }
 }
-export interface PersonalizationRule {
-    ruleId: string;
+}
+export interface PersonalizationRule { ruleId: string;
     name: string;
     description: string;
     ruleType: PersonalizationRuleType;
@@ -590,32 +545,31 @@ export interface PersonalizationRule {
     version: string;
 
 export declare enum PersonalizationRuleType {
-    CONTENT_BOOST = "content_boost",
-    CONTENT_SUPPRESS = "content_suppress",
-    LAYOUT_MODIFICATION = "layout_modification",
-    TIMING_ADJUSTMENT = "timing_adjustment",
-    MESSAGING_CUSTOMIZATION = "messaging_customization",
+    CONTENT_BOOST = "content_boost";
+    CONTENT_SUPPRESS = "content_suppress";
+    LAYOUT_MODIFICATION = "layout_modification";
+    TIMING_ADJUSTMENT = "timing_adjustment";
+    MESSAGING_CUSTOMIZATION = "messaging_customization" }
     TARGETING_REFINEMENT = "targeting_refinement"
 
 }
-export interface PersonalizationCondition {
-    conditionId: string;
+}
+}
+export interface PersonalizationCondition { conditionId: string;
     type: 'user_attribute' | 'behavior' | 'context' | 'performance' | 'time';
     attribute: string;
     operator: 'eq' | 'neq' | 'gt' | 'lt' | 'in' | 'contains' | 'matches';
     value: any;
-    weight: number;
-
+    weight: number }
 }
-export interface PersonalizationAction {
-    actionId: string;
+}
+export interface PersonalizationAction { actionId: string;
     type: 'boost_content' | 'change_position' | 'modify_message' | 'adjust_timing' | 'add_badge' | 'change_style';
     parameters: Record<string, any>;
-    impact: number;
-
+    impact: number }
 }
-export interface PromotionGoal {
-    goalId: string;
+}
+export interface PromotionGoal { goalId: string;
     name: string;
     type: GoalType;
     metric: string;
@@ -632,36 +586,38 @@ export interface PromotionGoal {
     lastUpdated: Date;
 
 export declare enum GoalType {
-    VISIBILITY = "visibility",
-    ENGAGEMENT = "engagement",
-    CONVERSION = "conversion",
-    REVENUE = "revenue",
-    RETENTION = "retention",
+    VISIBILITY = "visibility";
+    ENGAGEMENT = "engagement";
+    CONVERSION = "conversion";
+    REVENUE = "revenue";
+    RETENTION = "retention" }
     BRAND_AWARENESS = "brand_awareness"
 
 }
-export interface GoalTimeframe {
-    type: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'campaign_duration';
+}
+}
+export interface GoalTimeframe { type: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'campaign_duration';
     duration?: number;
     endDate?: Date;
     milestone?: boolean;
 
 export declare enum GoalPriority {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
+    LOW = "low";
+    MEDIUM = "medium";
+    HIGH = "high";
     CRITICAL = "critical"
 
 export declare enum GoalStatus {
-    ACTIVE = "active",
-    ACHIEVED = "achieved",
-    PAUSED = "paused",
-    FAILED = "failed",
+    ACTIVE = "active";
+    ACHIEVED = "achieved";
+    PAUSED = "paused";
+    FAILED = "failed" }
     ARCHIVED = "archived"
 
 }
-export interface OptimizationSettings {
-    optimizationStrategy: OptimizationStrategy;
+}
+}
+export interface OptimizationSettings { optimizationStrategy: OptimizationStrategy;
     optimizationGoals: string[];
     mlConfig?: MachineLearningConfig;
     realTimeOptimization: boolean;
@@ -672,61 +628,56 @@ export interface OptimizationSettings {
     fallbackRules: FallbackRule[];
 
 export declare enum OptimizationStrategy {
-    MANUAL_CONTROL = "manual_control",
-    RULE_BASED = "rule_based",
-    MACHINE_LEARNING = "machine_learning",
-    HYBRID_APPROACH = "hybrid_approach",
-    MULTI_ARMED_BANDIT = "multi_armed_bandit",
+    MANUAL_CONTROL = "manual_control";
+    RULE_BASED = "rule_based";
+    MACHINE_LEARNING = "machine_learning";
+    HYBRID_APPROACH = "hybrid_approach";
+    MULTI_ARMED_BANDIT = "multi_armed_bandit" }
     BAYESIAN_OPTIMIZATION = "bayesian_optimization"
 
 }
-export interface MachineLearningConfig {
-    algorithm: 'collaborative_filtering' | 'content_based' | 'deep_learning' | 'ensemble';
+}
+}
+export interface MachineLearningConfig { algorithm: 'collaborative_filtering' | 'content_based' | 'deep_learning' | 'ensemble';
     features: MLFeature[];
     trainingData: MLTrainingConfig;
     modelUpdate: MLModelUpdateConfig;
-    explainability: boolean;
-
+    explainability: boolean }
 }
-export interface MLFeature {
-    name: string;
+}
+export interface MLFeature { name: string;
     type: 'categorical' | 'numerical' | 'text' | 'boolean';
     importance: number;
-    preprocessing: string[];
-
+    preprocessing: string[] }
 }
-export interface MLTrainingConfig {
-    dataWindow: number;
+}
+export interface MLTrainingConfig { dataWindow: number;
     minSamples: number;
     validationSplit: number;
     crossValidation: boolean;
-    hyperparameterTuning: boolean;
-
+    hyperparameterTuning: boolean }
 }
-export interface MLModelUpdateConfig {
-    updateFrequency: 'hourly' | 'daily' | 'weekly';
+}
+export interface MLModelUpdateConfig { updateFrequency: 'hourly' | 'daily' | 'weekly';
     performanceDrift: number;
     retrainingTrigger: number;
-    modelVersion: boolean;
-
+    modelVersion: boolean }
 }
-export interface OptimizationConstraint {
-    constraintId: string;
+}
+export interface OptimizationConstraint { constraintId: string;
     type: 'min_value' | 'max_value' | 'equality' | 'ratio' | 'budget';
     parameter: string;
     value: number;
-    priority: number;
-
+    priority: number }
 }
-export interface FallbackRule {
-    ruleId: string;
+}
+export interface FallbackRule { ruleId: string;
     trigger: string;
     action: string;
-    priority: number;
-
+    priority: number }
 }
-export interface ABTestConfiguration {
-    testId: string;
+}
+export interface ABTestConfiguration { testId: string;
     name: string;
     description: string;
     testType: ABTestType;
@@ -748,44 +699,45 @@ export interface ABTestConfiguration {
     multipleComparisonCorrection: boolean;
 
 export declare enum ABTestType {
-    SIMPLE_AB = "simple_ab",
-    MULTIVARIATE = "multivariate",
-    MULTI_ARMED_BANDIT = "multi_armed_bandit",
+    SIMPLE_AB = "simple_ab";
+    MULTIVARIATE = "multivariate";
+    MULTI_ARMED_BANDIT = "multi_armed_bandit" }
     SEQUENTIAL = "sequential"
 
 }
-export interface ABTestVariant {
-    variantId: string;
+}
+}
+export interface ABTestVariant { variantId: string;
     name: string;
     description: string;
     configuration: Record<string, any>;
     trafficPercentage: number;
-    isControl: boolean;
-
+    isControl: boolean }
 }
-export interface TrafficAllocation {
-    strategy: 'random' | 'deterministic' | 'weighted';
+}
+export interface TrafficAllocation { strategy: 'random' | 'deterministic' | 'weighted';
     totalTrafficPercentage: number;
     segments?: string[];
     exclusionRules?: string[];
 
 export declare enum ABTestStatus {
-    DRAFT = "draft",
-    SCHEDULED = "scheduled",
-    RUNNING = "running",
-    PAUSED = "paused",
-    COMPLETED = "completed",
+    DRAFT = "draft";
+    SCHEDULED = "scheduled";
+    RUNNING = "running";
+    PAUSED = "paused";
+    COMPLETED = "completed" }
     FAILED = "failed"
 
 }
-export interface ABTestResult {
-    variantId: string;
+}
+}
+export interface ABTestResult { variantId: string;
     metric: string;
     value: number;
     sampleSize: number;
     confidenceInterval: {
         lower: number;
-        upper: number;
+        upper: number }
 }
     };
     pValue: number;
@@ -793,14 +745,13 @@ export interface ABTestResult {
     significance: boolean;
 
 }
-export interface ABTestQualityCheck {
-    checkType: 'sample_ratio' | 'novelty_effect' | 'external_validity' | 'implementation';
-    status: 'pass' | 'fail' | 'warning';
-    details: string;
-
 }
-export interface PromotionBudget {
-    budgetId: string;
+export interface ABTestQualityCheck { checkType: 'sample_ratio' | 'novelty_effect' | 'external_validity' | 'implementation';
+    status: 'pass' | 'fail' | 'warning';
+    details: string }
+}
+}
+export interface PromotionBudget { budgetId: string;
     totalBudget: number;
     currency: string;
     budgetType: BudgetType;
@@ -821,56 +772,52 @@ export interface PromotionBudget {
     allocationByTime: Record<string, number>;
 
 export declare enum BudgetType {
-    LIFETIME = "lifetime",
-    DAILY = "daily",
-    WEEKLY = "weekly",
-    MONTHLY = "monthly",
+    LIFETIME = "lifetime";
+    DAILY = "daily";
+    WEEKLY = "weekly";
+    MONTHLY = "monthly";
     CAMPAIGN_DURATION = "campaign_duration"
 
 export declare enum SpendingPace {
-    EVEN = "even",
-    ACCELERATED = "accelerated",
-    FRONT_LOADED = "front_loaded",
+    EVEN = "even";
+    ACCELERATED = "accelerated";
+    FRONT_LOADED = "front_loaded" }
     BACK_LOADED = "back_loaded"
 
 }
-export interface CostModel {
-    model: 'cpm' | 'cpc' | 'cpa' | 'cpcv' | 'fixed';
+}
+}
+export interface CostModel { model: 'cpm' | 'cpc' | 'cpa' | 'cpcv' | 'fixed';
     baseRate: number;
-    multipliers?: CostMultiplier[];
-
+    multipliers?: CostMultiplier[] }
 }
-export interface CostMultiplier {
-    factor: string;
+}
+export interface CostMultiplier { factor: string;
     multiplier: number;
-    conditions?: Record<string, any>;
-
+    conditions?: Record<string, any> }
 }
-export interface BidStrategy {
-    strategy: 'manual' | 'target_cpa' | 'target_roas' | 'maximize_clicks' | 'maximize_conversions';
+}
+export interface BidStrategy { strategy: 'manual' | 'target_cpa' | 'target_roas' | 'maximize_clicks' | 'maximize_conversions';
     targetValue?: number;
-    constraints?: BidConstraint[];
-
+    constraints?: BidConstraint[] }
 }
-export interface BidConstraint {
-    type: 'min_bid' | 'max_bid' | 'bid_adjustment';
+}
+export interface BidConstraint { type: 'min_bid' | 'max_bid' | 'bid_adjustment';
     value: number;
-    conditions?: Record<string, any>;
-
+    conditions?: Record<string, any> }
 }
-export interface BudgetAlert {
-    alertId: string;
+}
+export interface BudgetAlert { alertId: string;
     threshold: number;
     thresholdType: 'percentage' | 'amount';
     alertType: 'email' | 'dashboard' | 'webhook';
     recipients: string[];
     isActive: boolean;
     triggered?: boolean;
-    lastTriggered?: Date;
-
+    lastTriggered?: Date }
 }
-export interface ResourceAllocation {
-    slotPriority: Record<string, number>;
+}
+export interface ResourceAllocation { slotPriority: Record<string, number>;
     slotBudgetShare: Record<string, number>;
     timeDistribution: TimeDistribution[];
     peakHourMultiplier: number;
@@ -879,17 +826,15 @@ export interface ResourceAllocation {
     contentQualityThreshold: number;
     performanceBasedReallocation: boolean;
     reallocationThreshold: number;
-    reallocationFrequency: number;
-
+    reallocationFrequency: number }
 }
-export interface TimeDistribution {
-    timeSlot: string;
+}
+export interface TimeDistribution { timeSlot: string;
     percentage: number;
-    priority: number;
-
+    priority: number }
 }
-export interface PromotionMetrics {
-    campaignId: string;
+}
+export interface PromotionMetrics { campaignId: string;
     period: MetricsPeriod;
     lastUpdated: Date;
     impressions: number;
@@ -919,11 +864,10 @@ export interface PromotionMetrics {
     competitiveBenchmarks?: CompetitiveBenchmark[];
     performanceBySegment: SegmentPerformance[];
     performanceBySlot: SlotPerformance[];
-    performanceByTime: TimePerformance[];
-
+    performanceByTime: TimePerformance[] }
 }
-export interface ContentPromotionMetrics {
-    contentId: string;
+}
+export interface ContentPromotionMetrics { contentId: string;
     period: MetricsPeriod;
     promotionImpressions: number;
     organicImpressions: number;
@@ -942,61 +886,54 @@ export interface ContentPromotionMetrics {
     promotionFrequency: number;
     totalPromotionTime: number;
     averagePromotionDuration: number;
-    lastPromotionDate: Date;
-
+    lastPromotionDate: Date }
 }
-export interface PerformanceComparison {
-    metric: string;
+}
+export interface PerformanceComparison { metric: string;
     current: number;
     baseline: number;
     change: number;
     changePercent: number;
     significance: number;
-    trend: 'improving' | 'declining' | 'stable';
-
+    trend: 'improving' | 'declining' | 'stable' }
 }
-export interface GoalComparison {
-    goalId: string;
+}
+export interface GoalComparison { goalId: string;
     goalName: string;
     target: number;
     actual: number;
     achievement: number;
-    status: 'ahead' | 'on_track' | 'behind' | 'achieved';
-
+    status: 'ahead' | 'on_track' | 'behind' | 'achieved' }
 }
-export interface CompetitiveBenchmark {
-    metric: string;
+}
+export interface CompetitiveBenchmark { metric: string;
     ourValue: number;
     industryAverage: number;
     topPerformer: number;
-    percentile: number;
-
+    percentile: number }
 }
-export interface SegmentPerformance {
-    segmentId: string;
+}
+export interface SegmentPerformance { segmentId: string;
     segmentName: string;
     metrics: Record<string, number>;
     sampleSize: number;
-    significance: boolean;
-
+    significance: boolean }
 }
-export interface SlotPerformance {
-    slotId: string;
+}
+export interface SlotPerformance { slotId: string;
     slotName: string;
     metrics: Record<string, number>;
     performance: 'high' | 'medium' | 'low';
-    ranking: number;
-
+    ranking: number }
 }
-export interface TimePerformance {
-    timeSlot: string;
+}
+export interface TimePerformance { timeSlot: string;
     metrics: Record<string, number>;
     trend: 'increasing' | 'decreasing' | 'stable';
-    seasonality: number;
-
+    seasonality: number }
 }
-export interface PromotionInsight {
-    insightId: string;
+}
+export interface PromotionInsight { insightId: string;
     campaignId: string;
     category: InsightCategory;
     type: InsightType;
@@ -1017,183 +954,176 @@ export interface PromotionInsight {
     actionResult?: ActionResult;
 
 export declare enum InsightCategory {
-    PERFORMANCE = "performance",
-    AUDIENCE = "audience",
-    CONTENT = "content",
-    TIMING = "timing",
-    BUDGET = "budget",
-    COMPETITION = "competition",
-    TECHNICAL = "technical",
+    PERFORMANCE = "performance";
+    AUDIENCE = "audience";
+    CONTENT = "content";
+    TIMING = "timing";
+    BUDGET = "budget";
+    COMPETITION = "competition";
+    TECHNICAL = "technical";
     CREATIVE = "creative"
 
 export declare enum InsightType {
-    ANOMALY = "anomaly",
-    TREND = "trend",
-    PATTERN = "pattern",
-    OPPORTUNITY = "opportunity",
-    RISK = "risk",
-    OPTIMIZATION = "optimization",
+    ANOMALY = "anomaly";
+    TREND = "trend";
+    PATTERN = "pattern";
+    OPPORTUNITY = "opportunity";
+    RISK = "risk";
+    OPTIMIZATION = "optimization";
     ALERT = "alert"
 
 export declare enum InsightPriority {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
+    LOW = "low";
+    MEDIUM = "medium";
+    HIGH = "high" }
     CRITICAL = "critical"
 
 }
-export interface InsightFinding {
-    metric: string;
+}
+}
+export interface InsightFinding { metric: string;
     observation: string;
     value: number;
     context: string;
-    timeframe: string;
-
+    timeframe: string }
 }
-export interface InsightEvidence {
-    type: 'chart' | 'table' | 'comparison' | 'statistical_test';
+}
+export interface InsightEvidence { type: 'chart' | 'table' | 'comparison' | 'statistical_test';
     data: any;
     description: string;
 
 export declare enum ImpactLevel {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
+    LOW = "low";
+    MEDIUM = "medium";
+    HIGH = "high" }
     CRITICAL = "critical"
 
 }
-export interface InsightRecommendation {
-    recommendationId: string;
+}
+}
+export interface InsightRecommendation { recommendationId: string;
     action: string;
     description: string;
     expectedImpact: string;
     effort: 'low' | 'medium' | 'high';
     timeframe: string;
-    priority: number;
-
+    priority: number }
 }
-export interface ActionResult {
-    implemented: boolean;
+}
+export interface ActionResult { implemented: boolean;
     implementationDate: Date;
     result: 'positive' | 'negative' | 'neutral' | 'inconclusive';
     impactMeasured: number;
     notes: string;
 
 export declare enum PromotionStatus {
-    DRAFT = "draft",
-    PENDING_APPROVAL = "pending_approval",
-    APPROVED = "approved",
-    SCHEDULED = "scheduled",
-    ACTIVE = "active",
-    PAUSED = "paused",
-    COMPLETED = "completed",
-    CANCELLED = "cancelled",
+    DRAFT = "draft";
+    PENDING_APPROVAL = "pending_approval";
+    APPROVED = "approved";
+    SCHEDULED = "scheduled";
+    ACTIVE = "active";
+    PAUSED = "paused";
+    COMPLETED = "completed";
+    CANCELLED = "cancelled" }
     ARCHIVED = "archived"
 
 }
-export interface PromotionLifecycle {
-    currentStage: LifecycleStage;
+}
+}
+export interface PromotionLifecycle { currentStage: LifecycleStage;
     stages: LifecycleStageHistory[];
     nextStage?: LifecycleStage;
     stageTransitionRules: StageTransitionRule[];
 
 export declare enum LifecycleStage {
-    PLANNING = "planning",
-    APPROVAL = "approval",
-    SETUP = "setup",
-    LAUNCH = "launch",
-    OPTIMIZATION = "optimization",
-    MONITORING = "monitoring",
-    COMPLETION = "completion",
-    ANALYSIS = "analysis",
+    PLANNING = "planning";
+    APPROVAL = "approval";
+    SETUP = "setup";
+    LAUNCH = "launch";
+    OPTIMIZATION = "optimization";
+    MONITORING = "monitoring";
+    COMPLETION = "completion";
+    ANALYSIS = "analysis" }
     ARCHIVAL = "archival"
 
 }
-export interface LifecycleStageHistory {
-    stage: LifecycleStage;
+}
+}
+export interface LifecycleStageHistory { stage: LifecycleStage;
     enteredAt: Date;
     exitedAt?: Date;
     duration?: number;
     status: 'completed' | 'in_progress' | 'failed' | 'skipped';
     notes?: string;
-    performedBy: string;
-
+    performedBy: string }
 }
-export interface StageTransitionRule {
-    fromStage: LifecycleStage;
+}
+export interface StageTransitionRule { fromStage: LifecycleStage;
     toStage: LifecycleStage;
     conditions: TransitionCondition[];
     isAutomatic: boolean;
-    requiredRole?: string;
-
+    requiredRole?: string }
 }
-export interface TransitionCondition {
-    type: 'approval' | 'performance' | 'time' | 'budget' | 'manual';
+}
+export interface TransitionCondition { type: 'approval' | 'performance' | 'time' | 'budget' | 'manual';
     condition: string;
     value?: any;
-    isMet: boolean;
-
+    isMet: boolean }
 }
-export interface ApprovalRecord {
-    recordId: string;
+}
+export interface ApprovalRecord { recordId: string;
     stage: LifecycleStage;
     approver: string;
     approverRole: string;
     action: 'approved' | 'rejected' | 'requested_changes';
     timestamp: Date;
     comments?: string;
-    conditions?: string[];
-
+    conditions?: string[] }
 }
-export interface AnalyticsTrackingConfig {
-    enabled: boolean;
+}
+export interface AnalyticsTrackingConfig { enabled: boolean;
     trackingId: string;
     customEvents: CustomEventDefinition[];
     conversionTracking: ConversionTrackingConfig;
     crossDomainTracking?: boolean;
-    privacyCompliant: boolean;
-
+    privacyCompliant: boolean }
 }
-export interface CustomEventDefinition {
-    eventName: string;
+}
+export interface CustomEventDefinition { eventName: string;
     eventCategory: string;
     parameters: Record<string, any>;
-    trackingCode: string;
-
+    trackingCode: string }
 }
-export interface ConversionTrackingConfig {
-    conversionEvents: string[];
+}
+export interface ConversionTrackingConfig { conversionEvents: string[];
     conversionValue: boolean;
     attributionModel: 'first_click' | 'last_click' | 'linear' | 'time_decay' | 'position_based';
-    lookbackWindow: number;
-
+    lookbackWindow: number }
 }
-export interface ExternalPlatformConfig {
-    platform: 'google_ads' | 'facebook_ads' | 'microsoft_ads' | 'twitter_ads' | 'linkedin_ads' | 'custom';
+}
+export interface ExternalPlatformConfig { platform: 'google_ads' | 'facebook_ads' | 'microsoft_ads' | 'twitter_ads' | 'linkedin_ads' | 'custom';
     accountId: string;
     campaignSync: boolean;
     bidSync: boolean;
     audienceSync: boolean;
     conversionSync: boolean;
-    apiCredentials: Record<string, string>;
-
+    apiCredentials: Record<string, string> }
 }
-export interface CustomEventConfig {
-    eventId: string;
+}
+export interface CustomEventConfig { eventId: string;
     eventName: string;
     eventType: 'impression' | 'click' | 'conversion' | 'custom';
     parameters: Record<string, any>;
     frequency: 'once' | 'session' | 'always';
-    conditions?: Record<string, any>;
-
+    conditions?: Record<string, any> }
 }
-export interface PromotionFilterCriteria {
-    campaignIds?: string[];
+}
+export interface PromotionFilterCriteria { campaignIds?: string[];
     status?: PromotionStatus[];
     types?: PromotionType[];
     dateRange?: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     performance?: {
@@ -1206,28 +1136,25 @@ export interface PromotionFilterCriteria {
     approvalStatus?: string[];
 
 }
-export interface PromotionSortOptions {
-    field: 'createdAt' | 'performance' | 'budget' | 'status' | 'name';
-    direction: 'asc' | 'desc';
-    secondarySort?: PromotionSortOptions;
-
 }
-export interface PromotionBulkOperation {
-    operationType: 'activate' | 'pause' | 'cancel' | 'duplicate' | 'update' | 'delete';
+export interface PromotionSortOptions { field: 'createdAt' | 'performance' | 'budget' | 'status' | 'name';
+    direction: 'asc' | 'desc';
+    secondarySort?: PromotionSortOptions }
+}
+}
+export interface PromotionBulkOperation { operationType: 'activate' | 'pause' | 'cancel' | 'duplicate' | 'update' | 'delete';
     campaignIds: string[];
     parameters?: Record<string, any>;
-    dryRun?: boolean;
-
+    dryRun?: boolean }
 }
-export interface PromotionValidationError {
-    errorCode: string;
+}
+export interface PromotionValidationError { errorCode: string;
     field: string;
     message: string;
-    severity: 'error' | 'warning' | 'info';
-
+    severity: 'error' | 'warning' | 'info' }
 }
-export interface PromotionTemplate {
-    templateId: string;
+}
+export interface PromotionTemplate { templateId: string;
     name: string;
     description: string;
     category: string;
@@ -1236,8 +1163,7 @@ export interface PromotionTemplate {
     averagePerformance: Record<string, number>;
     isPublic: boolean;
     createdBy: string;
-    createdAt: Date;
-
+    createdAt: Date }
 }
 export type { PromotionCampaign, PromotionContent, PromotionSchedule, RotationConfiguration, PromotionTargeting, PersonalizationRule, PromotionGoal, OptimizationSettings, ABTestConfiguration, PromotionBudget, ResourceAllocation, PromotionMetrics, ContentPromotionMetrics, PromotionInsight, PromotionLifecycle, ContentSelectionCriteria, PromotionalBadge, TimeBasedRules, RecurrenceConfig, DynamicSchedulingRule, RotationTrigger, PerformanceThreshold, WeightingFactor, MachineLearningConfig, ABTestVariant, TrafficAllocation, CostModel, BidStrategy, PerformanceComparison, GoalComparison, CompetitiveBenchmark, SegmentPerformance, SlotPerformance, TimePerformance, InsightFinding, InsightEvidence, InsightRecommendation, PromotionFilterCriteria, PromotionSortOptions, PromotionBulkOperation, PromotionValidationError, PromotionTemplate };
 //# sourceMappingURL=PromotionDataModel.d.ts.map

@@ -1,13 +1,11 @@
-import { 
-  VFXExportFormat,
+import { VFXExportFormat,
   VFXExporter,
   VFXExportOptions,
-  VFXValidationResult,
+  VFXValidationResult }
   VFXPromptVariant
 } from '../types/VFXExport';
 import { Node, Edge } from 'reactflow';
-export declare class WildConstructVFXExporter implements VFXExporter {
-    private static instance;
+export declare class WildConstructVFXExporter implements VFXExporter { private static instance;
     private exportHistory;
     static getInstance(): WildConstructVFXExporter;
     /**
@@ -15,14 +13,11 @@ export declare class WildConstructVFXExporter implements VFXExporter {
      */
     exportGraph(graph: {)
         nodes: Node[];
-        edges: Edge[];
-    }, executionResults?: {
-        finalPrompt: string;
+        edges: Edge[] }, executionResults?: { finalPrompt: string;
         variables: Record<string, string>;
         executionTime: number;
         nodePerformance?: Record<string, number>;
-        variants?: VFXPromptVariant[];
-    }, options?: VFXExportOptions): Promise<VFXExportFormat>;
+        variants?: VFXPromptVariant[] }, options?: VFXExportOptions): Promise<VFXExportFormat>;
     private buildMetadata;
     private buildPromptData;
     private analyzePromptComponents;
@@ -80,26 +75,21 @@ export declare class WildConstructVFXExporter implements VFXExporter {
     /**
      * Validate reproducibility of an export
      */
-    validateReproducibility(exportData: VFXExportFormat): {
-        canReproduce: boolean;
+    validateReproducibility(exportData: VFXExportFormat): { canReproduce: boolean;
         confidence: 'exact' | 'approximate' | 'uncertain';
         issues: string[];
-        requirements: string[];
-    };
+        requirements: string[] };
     /**
      * Reproduce execution from VFX export data
      */
-    reproduceFromExport(exportData: VFXExportFormat, graph?: {)
+    reproduceFromExport(exportData: VFXExportFormat, graph?: { )
         nodes: Node[];
-        edges: Edge[];
-    }): Promise<{
-        success: boolean;
+        edges: Edge[] }): Promise<{ success: boolean;
         reproductionResult?: {
             finalPrompt: string;
             variables: Record<string, string>;
             executionTime: number;
-            matchesOriginal: boolean;
-        };
+            matchesOriginal: boolean };
         error?: string;
     }>;
     /**

@@ -17,8 +17,8 @@ describe('WebSocketStreaming', () => {
           filter: {
             types: ['USER_INTERACTION'],
             categories: ['USER']
-          }
-        }
+
+
       });
 
       const parsed = JSON.parse(validMessage);
@@ -33,9 +33,9 @@ describe('WebSocketStreaming', () => {
       const parseMessage = (message: string) => {
         try {
           return JSON.parse(message);
-        } catch (error) {
+ catch (error) {
           return { type: 'error', payload: { message: 'Invalid message format' } };
-        }
+
       };
 
       const result = parseMessage(malformedMessage);
@@ -73,7 +73,7 @@ describe('WebSocketStreaming', () => {
           categories: ['USER', 'PERFORMANCE'],
           userId: 'user-123',
           organizationId: 'org-456'
-  }
+
         batchSize: 10,
         timeout: 5000
       };
@@ -127,7 +127,7 @@ describe('WebSocketStreaming', () => {
           types: ['USER_INTERACTION'],
           categories: ['USER'],
           userId: 'user-123'
-        }
+
       };
 
       const matchesFilter = (event: unknown, filter: unknown) => {
@@ -153,7 +153,7 @@ describe('WebSocketStreaming', () => {
         filter: {
           types: ['USER_INTERACTION'], // Different type
           categories: ['USER'] // Different category
-        }
+
       };
 
       const matchesFilter = (event: unknown, filter: unknown) => {
@@ -201,7 +201,7 @@ describe('WebSocketStreaming', () => {
 
       for (let i = 0; i < events.length; i += batchSize) {
         batches.push(events.slice(i, i + batchSize));
-      }
+
 
       expect(batches).toHaveLength(2);
       expect(batches[0]).toHaveLength(3);
@@ -271,13 +271,13 @@ describe('WebSocketStreaming', () => {
         close(code?: number, reason?: string) {
           this.readyState = 3; // CLOSED
           this.emit('close', code, reason);
-        }
+
 
         terminate() {
           this.readyState = 3;
           this.emit('close', 1006, 'Connection terminated');
-        }
-      }
+
+
 
       const ws = new MockWebSocket();
       let connectionClosed = false;
@@ -352,7 +352,7 @@ describe('WebSocketStreaming', () => {
             userId: context.userId,
             organizationId: context.organizationId
           };
-        }
+
         return filter;
       };
 
@@ -371,8 +371,8 @@ describe('WebSocketStreaming', () => {
             id: 'event-123',
             type: 'USER_INTERACTION',
             data: { large: 'data'.repeat(100) }
-  }
-        }
+
+
       };
 
       const serialized = JSON.stringify(largeMessage);
@@ -399,7 +399,7 @@ describe('WebSocketStreaming', () => {
           timestamp: startTime + i,
           data: { value: Math.random() }
         });
-      }
+
 
       expect(events).toHaveLength(maxEvents);
       expect(events[0].id).toBe('event-0');
@@ -408,7 +408,7 @@ describe('WebSocketStreaming', () => {
       // Verify chronological order
       for (let i = 1; i < events.length; i++) {
         expect(events[i].timestamp).toBeGreaterThanOrEqual(events[i-1].timestamp);
-      }
+
     });
   });
 
@@ -421,17 +421,17 @@ describe('WebSocketStreaming', () => {
         send(data: unknown) {
           if (!this.connected) {
             throw new Error('Connection lost');
-          }
+
           // Simulate successful send
           return true;
-        }
+
 
         simulateNetworkError() {
           this.connected = false;
           this.readyState = 3; // CLOSED
           this.emit('error', new Error('Network error'));
-        }
-      }
+
+
 
       const ws = new MockWebSocket();
       let errorOccurred = false;
@@ -453,18 +453,18 @@ describe('WebSocketStreaming', () => {
         ping() {
           if (this.alive) {
             this.emit('pong');
-          }
+
           // Dead connections don't respond to ping
-        }
+
 
         simulateDeadConnection() {
           this.alive = false;
-        }
+
 
         isAlive() {
           return this.alive;
-        }
-      }
+
+
 
       const ws = new MockWebSocket();
       let pongReceived = false;

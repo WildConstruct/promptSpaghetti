@@ -15,16 +15,14 @@
  */
 import { describe, it, expect, beforeEach } from '@jest/globals';
 import * as acorn from 'acorn';
-import { 
-  ASTNodeTypeRegistry,
+import { ASTNodeTypeRegistry,
   ASTNodeWhitelistFilter,
   NodeSafetyLevel,
   createConditionalNodeFilter,
-  createGeneralExpressionFilter,
+  createGeneralExpressionFilter }
   createRestrictedExpressionFilter
-} from '../runtime/ast-node-whitelist';
-describe('ASTNodeTypeRegistry', () => {
-  describe('Node Type Information', () => {
+ from '../runtime/ast-node-whitelist';
+describe('ASTNodeTypeRegistry', () => { describe('Node Type Information', () => {
     it('should provide information for safe node types', () => {
       const literalInfo = ASTNodeTypeRegistry.getNodeTypeInfo('Literal');
       expect(literalInfo.safetyLevel).toBe(NodeSafetyLevel.SAFE);
@@ -32,36 +30,28 @@ describe('ASTNodeTypeRegistry', () => {
       expect(literalInfo.allowedContexts).toContain('conditional');
       const identifierInfo = ASTNodeTypeRegistry.getNodeTypeInfo('Identifier');
       expect(identifierInfo.safetyLevel).toBe(NodeSafetyLevel.SAFE);
-      expect(identifierInfo.allowedContexts).toContain('general');
-    });
-    it('should provide information for restricted node types', () => {
-      const memberInfo = ASTNodeTypeRegistry.getNodeTypeInfo('MemberExpression');
+      expect(identifierInfo.allowedContexts).toContain('general') });
+    it('should provide information for restricted node types', () => { const memberInfo = ASTNodeTypeRegistry.getNodeTypeInfo('MemberExpression');
       expect(memberInfo.safetyLevel).toBe(NodeSafetyLevel.RESTRICTED);
       expect(memberInfo.securityConcerns).toContain('prototype pollution');
       expect(memberInfo.restrictions).toBeDefined();
       expect(memberInfo.restrictions?.length).toBeGreaterThan(0);
       const callInfo = ASTNodeTypeRegistry.getNodeTypeInfo('CallExpression');
       expect(callInfo.safetyLevel).toBe(NodeSafetyLevel.RESTRICTED);
-      expect(callInfo.securityConcerns).toContain('arbitrary code execution');
-    });
-    it('should provide information for dangerous node types', () => {
-      const functionInfo = ASTNodeTypeRegistry.getNodeTypeInfo('FunctionExpression');
+      expect(callInfo.securityConcerns).toContain('arbitrary code execution') });
+    it('should provide information for dangerous node types', () => { const functionInfo = ASTNodeTypeRegistry.getNodeTypeInfo('FunctionExpression');
       expect(functionInfo.safetyLevel).toBe(NodeSafetyLevel.DANGEROUS);
       expect(functionInfo.securityConcerns).toContain('arbitrary code execution');
       expect(functionInfo.allowedContexts).toEqual([]);
       const newInfo = ASTNodeTypeRegistry.getNodeTypeInfo('NewExpression');
       expect(newInfo.safetyLevel).toBe(NodeSafetyLevel.DANGEROUS);
-      expect(newInfo.allowedContexts).toEqual([]);
-    });
-    it('should handle unknown node types', () => {
-      const unknownInfo = ASTNodeTypeRegistry.getNodeTypeInfo('UnknownNodeType');
+      expect(newInfo.allowedContexts).toEqual([]) });
+    it('should handle unknown node types', () => { const unknownInfo = ASTNodeTypeRegistry.getNodeTypeInfo('UnknownNodeType');
       expect(unknownInfo.safetyLevel).toBe(NodeSafetyLevel.UNKNOWN);
       expect(unknownInfo.description).toContain('Unknown AST node type');
-      expect(unknownInfo.securityConcerns).toContain('unknown security implications');
-    });
+      expect(unknownInfo.securityConcerns).toContain('unknown security implications') });
   });
-  describe('Node Type Queries', () => {
-    it('should return node types by safety level', () => {
+  describe('Node Type Queries', () => { it('should return node types by safety level', () => {
       const safeTypes = ASTNodeTypeRegistry.getNodeTypesBySafetyLevel(NodeSafetyLevel.SAFE);
       expect(safeTypes).toContain('Literal');
       expect(safeTypes).toContain('Identifier');
@@ -69,49 +59,39 @@ describe('ASTNodeTypeRegistry', () => {
       const dangerousTypes = ASTNodeTypeRegistry.getNodeTypesBySafetyLevel(NodeSafetyLevel.DANGEROUS);
       expect(dangerousTypes).toContain('FunctionExpression');
       expect(dangerousTypes).toContain('NewExpression');
-      expect(dangerousTypes).toContain('ThisExpression');
-    });
-    it('should check if node types are known', () => {
-      expect(ASTNodeTypeRegistry.isKnownNodeType('Literal')).toBe(true);
+      expect(dangerousTypes).toContain('ThisExpression') });
+    it('should check if node types are known', () => { expect(ASTNodeTypeRegistry.isKnownNodeType('Literal')).toBe(true);
       expect(ASTNodeTypeRegistry.isKnownNodeType('FunctionExpression')).toBe(true);
-      expect(ASTNodeTypeRegistry.isKnownNodeType('UnknownType')).toBe(false);
-    });
-    it('should provide security summary', () => {
-      const summary = ASTNodeTypeRegistry.getSecuritySummary();
+      expect(ASTNodeTypeRegistry.isKnownNodeType('UnknownType')).toBe(false) });
+    it('should provide security summary', () => { const summary = ASTNodeTypeRegistry.getSecuritySummary();
       expect(summary[NodeSafetyLevel.SAFE]).toBeGreaterThan(0);
       expect(summary[NodeSafetyLevel.RESTRICTED]).toBeGreaterThan(0);
       expect(summary[NodeSafetyLevel.DANGEROUS]).toBeGreaterThan(0);
-      expect(summary[NodeSafetyLevel.UNKNOWN]).toBe(0);
-    });
+      expect(summary[NodeSafetyLevel.UNKNOWN]).toBe(0) });
   });
 });
-describe('ASTNodeWhitelistFilter', () => {
-  let filter: ASTNodeWhitelistFilter;
+describe('ASTNodeWhitelistFilter', () => { let filter: ASTNodeWhitelistFilter;
   beforeEach(() => {
-  filter = new ASTNodeWhitelistFilter({)
+  filter = new ASTNodeWhitelistFilter({
   strictMode: true,
   allowRestrictedNodes: true,
   logBlockedAttempts: false, // Disable logging for tests,
   context: 'test',
   maxDepth: 10,
-  maxNodes: 50,
+  maxNodes: 50 }
 });
   });
-  describe('Basic Node Filtering', () => {
-    it('should allow safe node types', () => {
+  describe('Basic Node Filtering', () => { it('should allow safe node types', () => {
       const literalNode = acorn.parseExpressionAt('42', 0);
       const result = filter.filterNode(literalNode);
       expect(result.allowed).toBe(true);
       expect(result.nodeType).toBe('Literal');
-      expect(result.safetyLevel).toBe(NodeSafetyLevel.SAFE);
-    });
-    it('should allow restricted nodes when configured', () => {
-      const memberNode = acorn.parseExpressionAt('obj.prop', 0);
+      expect(result.safetyLevel).toBe(NodeSafetyLevel.SAFE) });
+    it('should allow restricted nodes when configured', () => { const memberNode = acorn.parseExpressionAt('obj.prop', 0);
       const result = filter.filterNode(memberNode);
       expect(result.allowed).toBe(true);
       expect(result.nodeType).toBe('MemberExpression');
-      expect(result.safetyLevel).toBe(NodeSafetyLevel.RESTRICTED);
-    });
+      expect(result.safetyLevel).toBe(NodeSafetyLevel.RESTRICTED) });
     it('should block dangerous node types', () => {
       const functionNode = acorn.parseExpressionAt('function() {}', 0);
       const result = filter.filterNode(functionNode);
@@ -129,21 +109,19 @@ describe('ASTNodeWhitelistFilter', () => {
       expect(result.reason).toContain('strict mode');
     });
   });
-  describe('Context-Specific Filtering', () => {
-  it('should respect context restrictions', () => {
+  describe('Context-Specific Filtering', () => { it('should respect context restrictions', () => {
   const contextFilter = new ASTNodeWhitelistFilter({)
   context: 'restricted',
-  allowRestrictedNodes: false,
+  allowRestrictedNodes: false }
 });
       const memberNode = acorn.parseExpressionAt('obj.prop', 0);
       const result = contextFilter.filterNode(memberNode);
       expect(result.allowed).toBe(false);
       expect(result.reason).toContain('not allowed in current configuration');
     });
-    it('should apply custom overrides', () => {
-  const customFilter = new ASTNodeWhitelistFilter({)
+    it('should apply custom overrides', () => { const customFilter = new ASTNodeWhitelistFilter({)
   additionalSafeTypes: ['TestNodeType'],
-  blockedSafeTypes: ['Identifier'],
+  blockedSafeTypes: ['Identifier'] }
 });
       // Test additional safe type
       const mockSafeNode = { type: 'TestNodeType' } as acorn.Node;
@@ -156,15 +134,13 @@ describe('ASTNodeWhitelistFilter', () => {
       expect(blockedResult.reason).toContain('explicitly blocked');
     });
   });
-  describe('AST Tree Filtering', () => {
-    it('should filter entire AST trees', () => {
+  describe('AST Tree Filtering', () => { it('should filter entire AST trees', () => {
       const safeAST = acorn.parseExpressionAt('x + y > 10', 0);
       const result = filter.filterAST(safeAST);
       expect(result.allowed).toBe(true);
       expect(result.blockedNodes).toHaveLength(0);
       expect(result.stats.totalNodes).toBeGreaterThan(1);
-      expect(result.stats.safeNodes).toBeGreaterThan(0);
-    });
+      expect(result.stats.safeNodes).toBeGreaterThan(0) });
     it('should block dangerous nodes in AST trees', () => {
       const dangerousAST = acorn.parseExpressionAt('x + function() {}', 0);
       const result = filter.filterAST(dangerousAST);
@@ -189,15 +165,13 @@ describe('ASTNodeWhitelistFilter', () => {
       expect(result.blockedNodes.some(b => b.reason?.includes('node count'))).toBe(true);
     });
   });
-  describe('Statistics and Reporting', () => {
-    it('should provide comprehensive filtering statistics', () => {
+  describe('Statistics and Reporting', () => { it('should provide comprehensive filtering statistics', () => {
       const mixedAST = acorn.parseExpressionAt('x + y', 0);
       const result = filter.filterAST(mixedAST);
       expect(result.stats.totalNodes).toBeGreaterThan(0);
       expect(result.stats.maxDepth).toBeGreaterThan(0);
       expect(result.stats.nodeTypeCounts).toBeDefined();
-      expect(result.stats.safeNodes).toBeGreaterThan(0);
-    });
+      expect(result.stats.safeNodes).toBeGreaterThan(0) });
     it('should generate helpful suggestions', () => {
       const dangerousNode = acorn.parseExpressionAt('function() {}', 0);
       const result = filter.filterNode(dangerousNode);
@@ -206,10 +180,9 @@ describe('ASTNodeWhitelistFilter', () => {
       expect(result.suggestions?.some(s => s.includes('Remove'))).toBe(true);
     });
   });
-  describe('Audit Logging', () => {
-  it('should log blocked attempts when enabled', () => {
+  describe('Audit Logging', () => { it('should log blocked attempts when enabled', () => {
   const loggingFilter = new ASTNodeWhitelistFilter({)
-  logBlockedAttempts: true,
+  logBlockedAttempts: true }
 });
       const dangerousNode = acorn.parseExpressionAt('function() {}', 0);
       loggingFilter.filterNode(dangerousNode);
@@ -218,9 +191,8 @@ describe('ASTNodeWhitelistFilter', () => {
       expect(events[0].nodeType).toBe('FunctionExpression');
       expect(events[0].safetyLevel).toBe(NodeSafetyLevel.DANGEROUS);
     });
-    it('should manage audit event storage limits', () => {
-  const loggingFilter = new ASTNodeWhitelistFilter({)
-  logBlockedAttempts: true,
+    it('should manage audit event storage limits', () => { const loggingFilter = new ASTNodeWhitelistFilter({)
+  logBlockedAttempts: true }
 });
       // Generate many events
       for (let i = 0; i < 1005; i++) {
@@ -229,9 +201,8 @@ describe('ASTNodeWhitelistFilter', () => {
       const events = loggingFilter.getAuditEvents();
       expect(events.length).toBeLessThanOrEqual(1000); // Should limit storage
     });
-    it('should clear audit events', () => {
-  const loggingFilter = new ASTNodeWhitelistFilter({)
-  logBlockedAttempts: true,
+    it('should clear audit events', () => { const loggingFilter = new ASTNodeWhitelistFilter({)
+  logBlockedAttempts: true }
 });
       const dangerousNode = acorn.parseExpressionAt('function() {}', 0);
       loggingFilter.filterNode(dangerousNode);
@@ -252,8 +223,7 @@ describe('ASTNodeWhitelistFilter', () => {
     });
   });
 });
-describe('Factory Functions', () => {
-  describe('createConditionalNodeFilter', () => {
+describe('Factory Functions', () => { describe('createConditionalNodeFilter', () => {
     it('should create filter optimized for conditional expressions', () => {
       const filter = createConditionalNodeFilter();
       const config = filter.getConfig();
@@ -261,74 +231,58 @@ describe('Factory Functions', () => {
       expect(config.strictMode).toBe(true);
       expect(config.allowRestrictedNodes).toBe(true);
       expect(config.maxDepth).toBe(20);
-      expect(config.maxNodes).toBe(100);
-    });
-    it('should allow member expressions in conditional context', () => {
-      const filter = createConditionalNodeFilter();
+      expect(config.maxNodes).toBe(100) });
+    it('should allow member expressions in conditional context', () => { const filter = createConditionalNodeFilter();
       const memberNode = acorn.parseExpressionAt('obj.prop', 0);
       const result = filter.filterNode(memberNode);
-      expect(result.allowed).toBe(true);
-    });
+      expect(result.allowed).toBe(true) });
   });
-  describe('createGeneralExpressionFilter', () => {
-    it('should create filter for general expressions', () => {
+  describe('createGeneralExpressionFilter', () => { it('should create filter for general expressions', () => {
       const filter = createGeneralExpressionFilter();
       const config = filter.getConfig();
       expect(config.context).toBe('general');
       expect(config.allowRestrictedNodes).toBe(false);
       expect(config.maxDepth).toBe(15);
-      expect(config.maxNodes).toBe(50);
-    });
-    it('should block restricted nodes in general context', () => {
-      const filter = createGeneralExpressionFilter();
+      expect(config.maxNodes).toBe(50) });
+    it('should block restricted nodes in general context', () => { const filter = createGeneralExpressionFilter();
       const memberNode = acorn.parseExpressionAt('obj.prop', 0);
       const result = filter.filterNode(memberNode);
-      expect(result.allowed).toBe(false);
-    });
+      expect(result.allowed).toBe(false) });
   });
-  describe('createRestrictedExpressionFilter', () => {
-    it('should create most restrictive filter', () => {
+  describe('createRestrictedExpressionFilter', () => { it('should create most restrictive filter', () => {
       const filter = createRestrictedExpressionFilter();
       const config = filter.getConfig();
       expect(config.context).toBe('restricted');
       expect(config.allowRestrictedNodes).toBe(false);
       expect(config.maxDepth).toBe(10);
       expect(config.maxNodes).toBe(25);
-      expect(config.blockedSafeTypes).toContain('CallExpression');
-    });
-    it('should block normally safe types when configured', () => {
-      const filter = createRestrictedExpressionFilter();
+      expect(config.blockedSafeTypes).toContain('CallExpression') });
+    it('should block normally safe types when configured', () => { const filter = createRestrictedExpressionFilter();
       const callNode = acorn.parseExpressionAt('func()', 0);
       const result = filter.filterNode(callNode);
       expect(result.allowed).toBe(false);
-      expect(result.reason).toContain('explicitly blocked');
-    });
+      expect(result.reason).toContain('explicitly blocked') });
   });
 });
-describe('Real-world Expression Testing', () => {
-  let filter: ASTNodeWhitelistFilter;
+describe('Real-world Expression Testing', () => { let filter: ASTNodeWhitelistFilter;
   beforeEach(() => {
-  filter = createConditionalNodeFilter();
-});
-  it('should allow safe conditional expressions', () => {
-    const safeExpressions = [
+  filter = createConditionalNodeFilter() });
+  it('should allow safe conditional expressions', () => { const safeExpressions = [
       'x > 5',
       'name === "test"',
       'x > 0 && y < 10',
       'arr.length > 0',
       'user.active === true',
-      'value !== null',
+      'value !== null' }
       '(x + y) * 2 > threshold'
     ];
-    for (const expr of safeExpressions) {
-      const ast = acorn.parseExpressionAt(expr, 0);
+    for (const expr of safeExpressions) { const ast = acorn.parseExpressionAt(expr, 0);
       const result = filter.filterAST(ast);
-      expect(result.allowed).toBe(true);
-  });
+      expect(result.allowed).toBe(true) });
   it('should block dangerous expressions', () => {
     const dangerousExpressions = [
       'function() { return "bad"
-  }',
+',
       'new Date()',
       'x = 5',
       'x++',
@@ -336,20 +290,16 @@ describe('Real-world Expression Testing', () => {
       'eval("code")',
       '() => "arrow"'
     ];
-    for (const expr of dangerousExpressions) {
-      try {
+    for (const expr of dangerousExpressions) { try {
         const ast = acorn.parseExpressionAt(expr, 0);
         const result = filter.filterAST(ast);
-        expect(result.allowed).toBe(false);
-      } catch (error) {
+        expect(result.allowed).toBe(false) } catch (error) {
         // Some expressions may fail to parse, which is also acceptable
   });
-  it('should handle complex nested expressions', () => {
-    const complexExpr = '(user.age > 18 && user.verified === true) || (user.role === "admin" && permissions.includes("override"))';
+  it('should handle complex nested expressions', () => { const complexExpr = '(user.age > 18 && user.verified === true) || (user.role === "admin" && permissions.includes("override"))';
     const ast = acorn.parseExpressionAt(complexExpr, 0);
     const result = filter.filterAST(ast);
     expect(result.allowed).toBe(true);
     expect(result.stats.totalNodes).toBeGreaterThan(10);
-    expect(result.stats.maxDepth).toBeGreaterThan(3);
-  });
+    expect(result.stats.maxDepth).toBeGreaterThan(3) });
 });

@@ -10,8 +10,8 @@ import { AnomalyDetectionService } from './AnomalyDetectionService';
 import { SecurityAuditService } from './security-audit-service';
 import { logger } from '../utils/logger';
 
-}
-}
+
+
 export interface SecurityEvent {
   id: string;
   type: string;
@@ -25,12 +25,13 @@ export interface SecurityEvent {
   source: string;
   correlationId?: string;
   enrichmentData?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatDetectionRule {
   id: string;
   name: string;
@@ -42,8 +43,9 @@ export interface ThreatDetectionRule {
     severity: string[];
     userPattern?: string;
     ipPattern?: string;
-}
-}
+
+
+
   };
   actions: {
     alert: boolean;
@@ -53,22 +55,23 @@ export interface ThreatDetectionRule {
     escalate?: boolean;
   };
   enabled: boolean;
-}
 
-}
-}
+
+
+
 export interface SecurityEventStats {
   totalEvents: number;
   eventsByType: Record<string, number>;
   eventsBySeverity: Record<string, number>;
-}
-}
+
+
+
   topUsers: Array<{ userId: string; count: number }>;
   topIPs: Array<{ ipAddress: string; count: number }>;
   threatsDetected: number;
   activeAlerts: number;
   averageRiskScore: number;
-}
+
 
 export class SecurityEventCoordinator extends EventEmitter {
   private auditService: AuditService;
@@ -106,7 +109,7 @@ export class SecurityEventCoordinator extends EventEmitter {
 
     this.initializeDefaultRules();
     this.startProcessing();
-  }
+
 
   /**
    * Process a security event through the workflow
@@ -117,7 +120,7 @@ export class SecurityEventCoordinator extends EventEmitter {
       // Add correlation ID if not present
       if (!event.correlationId) {
         event.correlationId = this.generateCorrelationId();
-      }
+
 
       // Enrich event with additional context
       const enrichedEvent = await this.enrichEvent(event);
@@ -138,12 +141,11 @@ export class SecurityEventCoordinator extends EventEmitter {
       this.emit('securityEvent', enrichedEvent);
       
       logger.log(`Security event processed: ${event.type} for user ${event.userId}`);
-      
-    } catch (error) {
+ catch (error) {
       logger.log(`Error processing security event: ${error}`);
       throw error;
-    }
-  }
+
+
 
   /**
    * Enrich event with additional context and metadata
@@ -157,13 +159,13 @@ export class SecurityEventCoordinator extends EventEmitter {
       if (event.ipAddress) {
         enrichmentData.geolocation = await this.getGeolocation(event.ipAddress);
         enrichmentData.knownIP = await this.isKnownIP(event.ipAddress, event.userId);
-      }
+
 
       // Add device fingerprint analysis
       if (event.userAgent) {
         enrichmentData.deviceInfo = this.parseUserAgent(event.userAgent);
         enrichmentData.knownDevice = await this.isKnownDevice(event.userAgent, event.userId);
-      }
+
 
       // Add user behavior context
       if (event.userId) {
@@ -173,7 +175,7 @@ export class SecurityEventCoordinator extends EventEmitter {
           event.type,
           event.details
         );
-      }
+
 
       // Add time-based context
       enrichmentData.timeContext = this.getTimeContext(event.timestamp);
@@ -181,17 +183,17 @@ export class SecurityEventCoordinator extends EventEmitter {
       // Add session context
       if (event.sessionId) {
         enrichmentData.sessionContext = await this.getSessionContext(event.sessionId);
-      }
+
 
       return {
         ...event,
         enrichmentData
       };
-    } catch (error) {
+ catch (error) {
       logger.log(`Event enrichment failed: ${error}`);
       return event; // Return original event if enrichment fails
-    }
-  }
+
+
 
   /**
    * Check for immediate threats that require urgent action
@@ -204,8 +206,8 @@ export class SecurityEventCoordinator extends EventEmitter {
 
       if (await this.evaluateThreatRule(rule, event)) {
         await this.handleThreatDetection(rule, event);
-      }
-    }
+
+
 
     // Check for anomalies using ML-based detection
     const isAnomaly = await this.anomalyDetectionService.detectAnomaly({
@@ -218,8 +220,8 @@ export class SecurityEventCoordinator extends EventEmitter {
 
     if (isAnomaly) {
       await this.handleAnomalyDetection(event);
-    }
-  }
+
+
 
   /**
    * Evaluate a threat detection rule against an event
@@ -229,28 +231,28 @@ export class SecurityEventCoordinator extends EventEmitter {
     // Check if event type matches
     if (!rule.conditions.eventTypes.includes(event.type)) {
       return false;
-    }
+
 
     // Check severity filter
     if (!rule.conditions.severity.includes(event.severity)) {
       return false;
-    }
+
 
     // Check user pattern if specified
     if (rule.conditions.userPattern && event.userId) {
       const userPattern = new RegExp(rule.conditions.userPattern);
       if (!userPattern.test(event.userId)) {
         return false;
-      }
-    }
+
+
 
     // Check IP pattern if specified
     if (rule.conditions.ipPattern && event.ipAddress) {
       const ipPattern = new RegExp(rule.conditions.ipPattern);
       if (!ipPattern.test(event.ipAddress)) {
         return false;
-      }
-    }
+
+
 
     // Check threshold within time window
     const recentEvents = await this.getRecentEvents(
@@ -260,7 +262,7 @@ export class SecurityEventCoordinator extends EventEmitter {
     );
 
     return recentEvents.length >= rule.conditions.threshold;
-  }
+
 
   /**
    * Handle detected threats
@@ -283,7 +285,7 @@ export class SecurityEventCoordinator extends EventEmitter {
         triggeredRule: rule,
         ruleId: rule.id,
         ruleName: rule.name
-  }
+
       source: 'SecurityEventCoordinator',
       correlationId: event.correlationId
     };
@@ -297,7 +299,7 @@ export class SecurityEventCoordinator extends EventEmitter {
         ruleName: rule.name,
         originalEventType: event.type,
         severity: 'critical'
-  }
+
       {
         sessionId: event.sessionId,
         ipAddress: event.ipAddress,
@@ -308,24 +310,24 @@ export class SecurityEventCoordinator extends EventEmitter {
     // Execute rule actions
     if (rule.actions.alert) {
       this.emit('threatAlert', { rule, event, threatEvent });
-    }
+
 
     if (rule.actions.blockUser && event.userId) {
       await this.blockUser(event.userId, rule.name);
-    }
+
 
     if (rule.actions.requireReauth && event.sessionId) {
       await this.requireReauthentication(event.sessionId);
-    }
+
 
     if (rule.actions.notifyAdmin) {
       await this.notifyAdministrators(rule, event);
-    }
+
 
     if (rule.actions.escalate) {
       await this.escalateThreat(rule, event);
-    }
-  }
+
+
 
   /**
    * Handle anomaly detection
@@ -345,7 +347,7 @@ export class SecurityEventCoordinator extends EventEmitter {
         originalEvent: event,
         anomalyScore: event.enrichmentData?.riskScore || 0,
         detectionMethod: 'machine_learning'
-  }
+
       source: 'SecurityEventCoordinator',
       correlationId: event.correlationId
     };
@@ -357,7 +359,7 @@ export class SecurityEventCoordinator extends EventEmitter {
         originalEventType: event.type,
         anomalyScore: anomalyEvent.details.anomalyScore,
         severity: 'high'
-  }
+
       {
         sessionId: event.sessionId,
         ipAddress: event.ipAddress,
@@ -366,7 +368,7 @@ export class SecurityEventCoordinator extends EventEmitter {
     );
 
     this.emit('anomalyAlert', { event, anomalyEvent });
-  }
+
 
   /**
    * Add or update a threat detection rule
@@ -374,7 +376,7 @@ export class SecurityEventCoordinator extends EventEmitter {
   public addThreatRule(rule: ThreatDetectionRule): void {
     this.threatRules.set(rule.id, rule);
     logger.log(`Threat detection rule added: ${rule.name}`);
-  }
+
 
   /**
    * Remove a threat detection rule
@@ -382,14 +384,14 @@ export class SecurityEventCoordinator extends EventEmitter {
   public removeThreatRule(ruleId: string): void {
     this.threatRules.delete(ruleId);
     logger.log(`Threat detection rule removed: ${ruleId}`);
-  }
+
 
   /**
    * Get current security event statistics
    */
   public getStats(): SecurityEventStats {
     return { ...this.eventStats };
-  }
+
 
   /**
    * Get recent events for correlation analysis
@@ -407,7 +409,7 @@ export class SecurityEventCoordinator extends EventEmitter {
       event.timestamp >= cutoffTime && 
       eventTypes.includes(event.type)
     );
-  }
+
 
   /**
    * Store recent event for correlation
@@ -416,7 +418,7 @@ export class SecurityEventCoordinator extends EventEmitter {
     const key = event.userId || event.ipAddress || 'global';
     if (!this.recentEvents.has(key)) {
       this.recentEvents.set(key, []);
-    }
+
     
     const events = this.recentEvents.get(key)!;
     events.push(event);
@@ -425,7 +427,7 @@ export class SecurityEventCoordinator extends EventEmitter {
     const cutoffTime = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentEvents = events.filter(e => e.timestamp >= cutoffTime);
     this.recentEvents.set(key, recentEvents);
-  }
+
 
   /**
    * Update event statistics
@@ -446,8 +448,8 @@ export class SecurityEventCoordinator extends EventEmitter {
     if (riskScore > 0) {
       const currentTotal = this.eventStats.averageRiskScore * (this.eventStats.totalEvents - 1);
       this.eventStats.averageRiskScore = (currentTotal + riskScore) / this.eventStats.totalEvents;
-    }
-  }
+
+
 
   /**
    * Initialize default threat detection rules
@@ -463,12 +465,12 @@ export class SecurityEventCoordinator extends EventEmitter {
         timeWindow: 15,
         threshold: 5,
         severity: ['medium', 'high', 'critical']
-  }
+
       actions: {
         alert: true,
         blockUser: true,
         notifyAdmin: true
-  }
+
       enabled: true
     });
 
@@ -482,12 +484,12 @@ export class SecurityEventCoordinator extends EventEmitter {
         timeWindow: 60,
         threshold: 1,
         severity: ['high', 'critical']
-  }
+
       actions: {
         alert: true,
         requireReauth: true,
         notifyAdmin: true
-  }
+
       enabled: true
     });
 
@@ -501,15 +503,15 @@ export class SecurityEventCoordinator extends EventEmitter {
         timeWindow: 5,
         threshold: 3,
         severity: ['medium', 'high', 'critical']
-  }
+
       actions: {
         alert: true,
         notifyAdmin: true,
         escalate: true
-  }
+
       enabled: true
     });
-  }
+
 
   /**
    * Helper methods for event enrichment
@@ -518,30 +520,30 @@ export class SecurityEventCoordinator extends EventEmitter {
 
     // Mock implementation - would integrate with geolocation service
     return { country: 'US', city: 'Unknown', latitude: 0, longitude: 0 };
-  }
+
 
   private async isKnownIP(_____ipAddress: string, userId?: string): Promise<boolean> {
 
     // Mock implementation - would check against user's known IPs
     return false;
-  }
+
 
   private parseUserAgent(_____userAgent: string): unknown {
     // Mock implementation - would parse user agent string
     return { browser: 'Unknown', os: 'Unknown', device: 'Unknown' };
-  }
+
 
   private async isKnownDevice(_____userAgent: string, userId?: string): Promise<boolean> {
 
     // Mock implementation - would check against user's known devices
     return false;
-  }
+
 
   private async getUserContext(_____userId: string): Promise<unknown> {
 
     // Mock implementation - would get user context
     return { lastLogin: new Date(), loginCount: 0, riskLevel: 'low' };
-  }
+
 
   private getTimeContext(timestamp: Date): unknown {
     const hour = timestamp.getHours();
@@ -554,13 +556,13 @@ export class SecurityEventCoordinator extends EventEmitter {
       isBusinessHours: hour >= 9 && hour <= 17,
       isNightTime: hour >= 22 || hour <= 6
     };
-  }
+
 
   private async getSessionContext(_____sessionId: string): Promise<unknown> {
 
     // Mock implementation - would get session context
     return { duration: 0, activityCount: 0, lastActivity: new Date() };
-  }
+
 
   /**
    * Action handlers
@@ -569,36 +571,36 @@ export class SecurityEventCoordinator extends EventEmitter {
 
     logger.log(`Blocking user ${userId} - Reason: ${reason}`);
     // Would integrate with user management service
-  }
+
 
   private async requireReauthentication(sessionId: string): Promise<void> {
 
     logger.log(`Requiring re-authentication for session ${sessionId}`);
     // Would integrate with session management service
-  }
+
 
   private async notifyAdministrators(rule: ThreatDetectionRule, event: SecurityEvent): Promise<void> {
 
     logger.log(`Notifying administrators - Rule: ${rule.name}, Event: ${event.type}`);
     // Would integrate with notification service
-  }
+
 
   private async escalateThreat(rule: ThreatDetectionRule, event: SecurityEvent): Promise<void> {
 
     logger.log(`Escalating threat - Rule: ${rule.name}, Event: ${event.type}`);
     // Would integrate with incident management system
-  }
+
 
   /**
    * Utility methods
    */
   private generateEventId(): string {
     return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateCorrelationId(): string {
     return `corr_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   /**
    * Start background processing
@@ -607,7 +609,7 @@ export class SecurityEventCoordinator extends EventEmitter {
     this.processingInterval = setInterval(() => {
       this.processQueue();
     }, 5000); // Process queue every 5 seconds
-  }
+
 
   /**
    * Process queued events
@@ -635,12 +637,11 @@ export class SecurityEventCoordinator extends EventEmitter {
             enrichmentData: event.enrichmentData
           }
         );
-        
-      } catch (error) {
+ catch (error) {
         logger.log(`Error processing queued event: ${error}`);
-      }
-    }
-  }
+
+
+
 
   /**
    * Perform correlation analysis on events
@@ -654,9 +655,9 @@ export class SecurityEventCoordinator extends EventEmitter {
       if (relatedEvents.length > 1) {
         // Analyze patterns across related events
         await this.analyzeEventPattern(relatedEvents);
-      }
-    }
-  }
+
+
+
 
   /**
    * Find events with the same correlation ID
@@ -665,7 +666,7 @@ export class SecurityEventCoordinator extends EventEmitter {
 
     // Would query the audit log for related events
     return [];
-  }
+
 
   /**
    * Analyze patterns in related events
@@ -674,7 +675,7 @@ export class SecurityEventCoordinator extends EventEmitter {
 
     // Pattern analysis logic
     // Could detect attack chains, coordinated attacks, etc.
-  }
+
 
   /**
    * Cleanup and shutdown
@@ -683,11 +684,11 @@ export class SecurityEventCoordinator extends EventEmitter {
     if (this.processingInterval) {
       clearInterval(this.processingInterval);
       this.processingInterval = null;
-    }
+
     
     // Process remaining events
     this.processQueue();
     
     logger.log('SecurityEventCoordinator shutdown complete');
-  }
-}
+
+

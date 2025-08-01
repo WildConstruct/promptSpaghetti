@@ -12,108 +12,90 @@ import { RateLimitingService, ThreatLevel } from './RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 
 }
-export interface RateLimitingMetricsConfig {
-    enableRealTimeMetrics: boolean;
+}
+export interface RateLimitingMetricsConfig { enableRealTimeMetrics: boolean;
     metricsRetentionPeriod: number;
     performanceThresholds: {
         responseTime: number;
         throughput: number;
         errorRate: number;
-        blockRate: number;
+        blockRate: number }
 }
     };
-    visualizationOptions: {
-        enableCharts: boolean;
+    visualizationOptions: { enableCharts: boolean;
         enableHeatmaps: boolean;
         enableTimeseries: boolean;
         enableGeospatialMaps: boolean;
-        refreshInterval: number;
-    };
-    alerting: {
-        enableAlerts: boolean;
+        refreshInterval: number };
+    alerting: { enableAlerts: boolean;
         alertThresholds: {
             highResponseTime: number;
             lowThroughput: number;
             highErrorRate: number;
-            highBlockRate: number;
-        };
+            highBlockRate: number };
     };
 
 }
-export interface PerformanceMetrics {
-    timestamp: Date;
+}
+export interface PerformanceMetrics { timestamp: Date;
     responseTime: {
         average: number;
         p50: number;
         p95: number;
         p99: number;
-        max: number;
+        max: number }
 }
     };
-    throughput: {
-        requestsPerSecond: number;
+    throughput: { requestsPerSecond: number;
         allowedPerSecond: number;
         blockedPerSecond: number;
-        throttledPerSecond: number;
-    };
-    errorRates: {
-        totalRequests: number;
+        throttledPerSecond: number };
+    errorRates: { totalRequests: number;
         blockedRequests: number;
         errorRequests: number;
         blockRate: number;
-        errorRate: number;
-    };
-    resourceUtilization: {
-        memoryUsage: number;
+        errorRate: number };
+    resourceUtilization: { memoryUsage: number;
         cpuUsage: number;
         cacheHitRate: number;
-        activeConnections: number;
-    };
-    threatMetrics: {
-        threatDistribution: Record<ThreatLevel, number>;
+        activeConnections: number };
+    threatMetrics: { threatDistribution: Record<ThreatLevel, number>;
         suspiciousActivities: number;
         blockedThreats: number;
-        adaptiveAdjustments: number;
-    };
+        adaptiveAdjustments: number };
 
 }
-export interface MetricsVisualizationData {
-    timeSeriesData: {
+}
+export interface MetricsVisualizationData { timeSeriesData: {
         timestamps: Date[];
         responseTime: number[];
         throughput: number[];
         blockRate: number[];
-        errorRate: number[];
+        errorRate: number[] }
 }
     };
-    heatmapData: {
-        endpoints: string[];
+    heatmapData: { endpoints: string[];
         timeSlots: string[];
         activityMatrix: number[][];
-        blockMatrix: number[][];
-    };
-    geospatialData: {
-        locations: Array<{
+        blockMatrix: number[][] };
+    geospatialData: { locations: Array<{
             latitude: number;
             longitude: number;
             requestCount: number;
             blockCount: number;
-            threatLevel: ThreatLevel;
-        }>;
+            threatLevel: ThreatLevel }>;
     };
-    distributionData: {
-        endpointDistribution: Record<string, number>;
+    distributionData: { endpointDistribution: Record<string, number>;
         threatLevelDistribution: Record<ThreatLevel, number>;
         responseTimeDistribution: Array<{
             range: string;
-            count: number;
-        }>;
+            count: number }>;
         userAgentDistribution: Record<string, number>;
     };
 
 }
-export interface AlertCondition {
-    alertId: string;
+}
+export interface AlertCondition { alertId: string;
     timestamp: Date;
     alertType: 'performance' | 'security' | 'capacity' | 'anomaly';
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -122,11 +104,10 @@ export interface AlertCondition {
     threshold: number;
     affectedEndpoints: string[];
     recommendedActions: string[];
-    metadata: Record<string, unknown>;
-
+    metadata: Record<string, unknown> }
 }
-export interface DashboardWidget {
-    widgetId: string;
+}
+export interface DashboardWidget { widgetId: string;
     widgetType: 'chart' | 'gauge' | 'table' | 'heatmap' | 'map' | 'counter';
     title: string;
     description: string;
@@ -138,18 +119,15 @@ export interface DashboardWidget {
         aggregation?: 'sum' | 'avg' | 'max' | 'min' | 'count';
         filters?: Record<string, unknown>;
         dimensions?: string[];
-        metrics?: string[];
+        metrics?: string[] }
 }
     };
-    position: {
-        x: number;
+    position: { x: number;
         y: number;
         width: number;
-        height: number;
-    };
+        height: number };
 
-export declare class RateLimitingPerformanceMetrics extends EventEmitter {
-    private rateLimitingService;
+export declare class RateLimitingPerformanceMetrics extends EventEmitter { private rateLimitingService;
     private throttlingEngine?;
     private config;
     private metricsHistory;
@@ -159,8 +137,8 @@ export declare class RateLimitingPerformanceMetrics extends EventEmitter {
     private metricsCollectionTimer?;
     private startTime;
     constructor();
-      rateLimitingService: RateLimitingService,
-      throttlingEngine?: AdaptiveThrottlingRulesEngine,
+      rateLimitingService: RateLimitingService
+      throttlingEngine?: AdaptiveThrottlingRulesEngine }
       config?: Partial<RateLimitingMetricsConfig>
     );
     /**
@@ -266,8 +244,7 @@ export declare class RateLimitingPerformanceMetrics extends EventEmitter {
     /**
      * Get comprehensive system status
      */
-    getSystemStatus(): {
-        status: 'healthy' | 'warning' | 'critical';
+    getSystemStatus(): { status: 'healthy' | 'warning' | 'critical';
         uptime: number;
         metrics: PerformanceMetrics;
         alerts: AlertCondition[];
@@ -275,8 +252,7 @@ export declare class RateLimitingPerformanceMetrics extends EventEmitter {
             version: string;
             environment: string;
             configuredEndpoints: number;
-            metricsCollected: number;
-        };
+            metricsCollected: number };
     };
     /**
      * Export metrics data for external analysis

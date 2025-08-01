@@ -6,27 +6,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DependencyGraph } from '../StateDevTools';
 
-}
-export interface DependencyGraphPanelProps {
-  dependencyGraph: DependencyGraph | null;
+
+export interface DependencyGraphPanelProps { dependencyGraph: DependencyGraph | null }
   onGenerateGraph: () => void;
   selectedDomain: string;
   onDomainChange: (domain: string) => void;
-}
-}
-export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
-  dependencyGraph,
-  onGenerateGraph,
-  selectedDomain,
+
+
+export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({ )
+  dependencyGraph
+  onGenerateGraph
+  selectedDomain }
   onDomainChange
-}) => {
-  const [layout, setLayout] = useState<'hierarchical' | 'force' | 'circular'>('hierarchical');
+}) => { const [layout, setLayout] = useState<'hierarchical' | 'force' | 'circular'>('hierarchical');
   const [filters, setFilters] = useState({)
   includeComponents: true,
   includeSelectors: true,
   includeCrossDomainLinks: true,
   showLabels: true,
-  showMetrics: false,
+  showMetrics: false }
 });
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
@@ -34,33 +32,21 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
   const handleFilterChange = (key: keyof typeof filters, value: boolean) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
-  const handleNodeClick = (nodeId: string) => {
-  setSelectedNode(selectedNode === nodeId ? null : nodeId);
-};
-  const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev * 1.2, 5));
-  };
-  const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev / 1.2, 0.1));
-  };
-  const handleResetZoom = () => {
-    setZoom(1);
-  };
-  const getNodeColor = (type: string) => {
-  switch (type) {
+  const handleNodeClick = (nodeId: string) => { setSelectedNode(selectedNode === nodeId ? null : nodeId) };
+  const handleZoomIn = () => { setZoom(prev => Math.min(prev * 1.2, 5)) };
+  const handleZoomOut = () => { setZoom(prev => Math.max(prev / 1.2, 0.1)) };
+  const handleResetZoom = () => { setZoom(1) };
+  const getNodeColor = (type: string) => { switch (type) {
   case 'state': return '#61dafb';
   case 'component': return '#98c379';
   case 'selector': return '#d19a66';
   case 'middleware': return '#c678dd';
   case 'domain': return '#f39c12';
-  default: return '#95a5a6';
-};
-  const getNodeSize = (node: any) => {
-    if (!filters.showMetrics) return 20;
+  default: return '#95a5a6' };
+  const getNodeSize = (node: any) => { if (!filters.showMetrics) return 20;
     const baseSize = 15;
     const metricFactor = Math.log(node.metadata.accessCount + 1) * 2;
-    return Math.min(baseSize + metricFactor, 40);
-  };
+    return Math.min(baseSize + metricFactor, 40) };
   const formatPerformanceMetric = (metric: number, unit: string = 'ms') => {
     if (metric < 1) return `${(metric * 1000).toFixed(0)}μs`;}
     if (metric < 1000) return `${metric.toFixed(1)}${unit}`;}
@@ -78,18 +64,16 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
         </div>
       );
     const { nodes, edges } = dependencyGraph;
-    const filteredNodes = nodes.filter(node => {)
+    const filteredNodes = nodes.filter(node => { )
   if (!filters.includeComponents && node.type === 'component') return false;
       if (!filters.includeSelectors && node.type === 'selector') return false;
-      return true;
-    });
-    const filteredEdges = edges.filter(edge => {)
+      return true });
+    const filteredEdges = edges.filter(edge => { )
   const fromNode = filteredNodes.find(n => n.id === edge.from);
       const toNode = filteredNodes.find(n => n.id === edge.to);
       if (!fromNode || !toNode) return false;
       if (!filters.includeCrossDomainLinks && fromNode.domain !== toNode.domain) return false;
-      return true;
-    });
+      return true });
     const svgWidth = 800;
     const svgHeight = 600;
     return;
@@ -403,9 +387,9 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           </div>
         </div>
       )}
-      <style jsx>{`
+      <style jsx>{ `
         .dependency-graph-panel {
-          height: 100%;
+          height: 100%
   display: flex;
           flex-direction: column;
   background: var(--devtools-bg, #1e1e1e);
@@ -446,7 +430,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
   cursor: pointer;
           font-size: 12px;
           min-width: 30px;
-        .zoom-btn:hover {,
+        .zoom-btn:hover {
   background: var(--devtools-hover, #404040);
         .zoom-level {
           min-width: 50px;
@@ -503,8 +487,8 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
         .node-circle:hover {
           stroke-width: 2;
   filter: brightness(1.2);
-        .node-label,
-        .node-metric,
+        .node-label
+        .node-metric }
         .edge-label {
           pointer-events: none;
           user-select: none;

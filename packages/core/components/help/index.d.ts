@@ -1,23 +1,20 @@
-export {
-  ContextualTooltip,
+export { ContextualTooltip,
   ProgressiveOnboardingSystem,
   BUILT_IN_HELP_CONTENT,
   type HelpContent,
   type ContextualTooltipProps,
-  type HelpSystemProps,
+  type HelpSystemProps }
 } from './ContextualHelpSystem';
-export {
-  HelpProvider,
+export { HelpProvider,
   useHelpSystem,
   useHelpContentRegistration,
   useFieldHelp,
   useOnboardingHelp,
   HelpSystemSettings,
   type HelpContextState,
-  type HelpProviderProps,
+  type HelpProviderProps }
 } from './HelpContentManager';
-export {
-  withHelp,
+export { withHelp,
   HelpfulInput,
   HelpfulButton,
   HelpfulSection,
@@ -25,7 +22,7 @@ export {
   OnboardingOverlay,
   type HelpfulInputProps,
   type HelpfulButtonProps,
-  type HelpfulSectionProps,
+  type HelpfulSectionProps }
 } from './HelpIntegration';
 export { default } from './HelpIntegration';
 //# sourceMappingURL=index.d.ts.map

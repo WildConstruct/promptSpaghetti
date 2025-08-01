@@ -33,7 +33,7 @@ import {
   TablePagination,
   Checkbox,
   LinearProgress
-} from '@mui/material';
+ from '@mui/material';
 import {
   Add as AddIcon,
   MoreVert as MoreVertIcon,
@@ -49,7 +49,7 @@ import {
   History as HistoryIcon,
   CalendarToday as CalendarIcon,
   Timeline as TimelineIcon
-} from '@mui/icons-material';
+ from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -57,34 +57,38 @@ import { ScheduleEditor, ScheduleFormData } from './ScheduleEditor';
 import { ScheduleCalendar } from './ScheduleCalendar';
 import { ScheduleTimeline } from './ScheduleTimeline';
 import { ExecutionHistory } from './ExecutionHistory';
-}
+
+
 interface Schedule {
   id: string;,
-  toggleId: string;
+  toggleId: string;,
   toggleName: string;,
   name: string;
   description?: string;
   type: 'one_time' | 'recurring' | 'conditional';,
-  action: string;
+  action: string;,
   startTime: Date;
   endTime?: Date;
   timezone: string;,
-  status: 'pending' | 'active' | 'completed' | 'cancelled' | 'failed' | 'paused';
+  status: 'pending' | 'active' | 'completed' | 'cancelled' | 'failed' | 'paused';,
   enabled: boolean;
   nextExecution?: Date;
   lastExecution?: Date;
   executionCount: number;,
-  failureCount: number;
+  failureCount: number;,
   priority: number;,
-  createdBy: string;
+  createdBy: string;,
   createdAt: Date;,
   updatedAt: Date;
-}
+
+
+
 interface ScheduleDashboardProps {
   toggleId?: string;
   onScheduleChange?: () => void;
-const STATUS_CONFIG = {
-}
+  const STATUS_CONFIG = {
+
+},
   pending: { color: 'warning', icon: PendingIcon, label: 'Pending' },
   active: { color: 'success', icon: CheckCircleIcon, label: 'Active' },
   completed: { color: 'info', icon: CheckCircleIcon, label: 'Completed' },
@@ -92,7 +96,7 @@ const STATUS_CONFIG = {
   failed: { color: 'error', icon: ErrorIcon, label: 'Failed' },
   paused: { color: 'warning', icon: PauseIcon, label: 'Paused' }
 };
-const VIEW_MODES = [;
+const VIEW_MODES = [
   { value: 'table', label: 'Table', icon: ScheduleIcon },
   { value: 'calendar', label: 'Calendar', icon: CalendarIcon },
   { value: 'timeline', label: 'Timeline', icon: TimelineIcon }
@@ -151,7 +155,7 @@ export const [loading, setLoading] = useState(true);
   createdBy: 'admin@example.com',
   createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
   updatedAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-}
+
         {
   id: 'sched_2',
   toggleId: 'toggle_2',
@@ -173,9 +177,9 @@ export const [loading, setLoading] = useState(true);
   createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
   updatedAt: new Date(Date.now() - 60 * 60 * 1000)];
   setSchedules(mockSchedules);
-} catch (error) {
+ catch (error) {
   console.error('Failed to load schedules:', error);
-} finally {
+ finally {
       setLoading(false);
   };
   const applyFilters = useCallback(() => {
@@ -222,14 +226,14 @@ export const [loading, setLoading] = useState(true);
   // TODO: Replace with actual API call,
   // await updateSchedule(editingSchedule.id, formData);
   console.log('Updating schedule:', editingSchedule.id, formData);
-} else {
+ else {
   // Create new schedule
   // TODO: Replace with actual API call,
   // await createSchedule(formData);
   console.log('Creating schedule:', formData);
   await loadSchedules();
   onScheduleChange?.();
-} catch (error) {
+ catch (error) {
   // TODO: Add proper error notification system,
   console.error('Failed to save schedule:', error);
   throw error;
@@ -246,10 +250,10 @@ export const [loading, setLoading] = useState(true);
   // await deleteSchedule(scheduleToDelete.id);
   await loadSchedules();
   onScheduleChange?.();
-} catch (error) {
+ catch (error) {
   // TODO: Add proper error notification system,
   console.error('Failed to delete schedule:', error);
-} finally {
+ finally {
       setDeleteDialogOpen(false);
       setScheduleToDelete(null);
   };
@@ -262,7 +266,7 @@ export const [loading, setLoading] = useState(true);
   await loadSchedules();
   setSelectedSchedules([]);
   onScheduleChange?.();
-} catch (error) {
+ catch (error) {
   // TODO: Add proper error notification system,
   console.error('Failed to perform bulk action:', error);
 };
@@ -273,7 +277,7 @@ export const [loading, setLoading] = useState(true);
   console.log('Executing schedule:', schedule.id);
   await loadSchedules();
   onScheduleChange?.();
-} catch (error) {
+ catch (error) {
   // TODO: Add proper error notification system,
   console.error('Failed to execute schedule:', error);
   setAnchorEl(null);
@@ -430,7 +434,7 @@ export const [loading, setLoading] = useState(true);
               onChange={setDateRangeStart}
               slotProps={{
                 textField: { size: 'small', fullWidth: true }
-              }}
+}
             />
           </LocalizationProvider>
         </Grid>
@@ -442,7 +446,7 @@ export const [loading, setLoading] = useState(true);
               onChange={setDateRangeEnd}
               slotProps={{
                 textField: { size: 'small', fullWidth: true }
-              }}
+}
             />
           </LocalizationProvider>
         </Grid>
@@ -454,7 +458,7 @@ export const [loading, setLoading] = useState(true);
               setSearchTerm('');
               setDateRangeStart(null);
               setDateRangeEnd(null);
-            }}
+}
             size="small"
           >
             Clear
@@ -507,9 +511,9 @@ export const [loading, setLoading] = useState(true);
                   onChange={(e) => {
                     if (e.target.checked) {
                       setSelectedSchedules(filteredSchedules.map(s => s.id));
-                    } else {
+ else {
                       setSelectedSchedules([]);
-                  }}
+}
                 />
               </TableCell>
               <TableCell>Name</TableCell>
@@ -536,9 +540,9 @@ export const [loading, setLoading] = useState(true);
                         onChange={(e) => {
                           if (e.target.checked) {
                             setSelectedSchedules([...selectedSchedules, schedule.id]);
-                          } else {
+ else {
                             setSelectedSchedules(selectedSchedules.filter(id => id !== schedule.id));
-                        }}
+}
                       />
                     </TableCell>
                     <TableCell>
@@ -601,7 +605,7 @@ export const [loading, setLoading] = useState(true);
                         onClick={(e) => {
                           setAnchorEl(e.currentTarget);
                           setMenuSchedule(schedule);
-                        }}
+}
                       >
                         <MoreVertIcon />
                       </IconButton>
@@ -622,7 +626,7 @@ export const [loading, setLoading] = useState(true);
         onRowsPerPageChange={(e) => {
           setRowsPerPage(parseInt(e.target.value, 10));
           setPage(0);
-        }}
+}
       />
     </Paper>
   );
@@ -686,7 +690,7 @@ export const [loading, setLoading] = useState(true);
             priority: editingSchedule.priority,
             conflictResolution: 'skip',
             enabled: editingSchedule.enabled;
-  } : undefined}
+ : undefined}
           toggleId={toggleId || ''}
           toggleName={editingSchedule?.toggleName}
           existingSchedules={schedules.map(s => ({)

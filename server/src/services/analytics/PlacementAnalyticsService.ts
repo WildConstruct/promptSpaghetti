@@ -20,22 +20,23 @@ import {
   PlacementSlot,
   ContentPlacement,
   PlacementCampaign
-} from '../../../../packages/core/types/PlacementTypes';
+ from '../../../../packages/core/types/PlacementTypes';
 
-}
-}
+
+
 export interface AnalyticsConfig {
   metricsCalculationInterval: number; // minutes
   insightGenerationInterval: number; // hours
   anomalyDetectionThreshold: number; // percentage change
   performanceBaselineWindow: number; // days
   retentionPeriod: number; // days
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceBaselineData {
   slotId: string;
   baselineMetrics: {
@@ -43,15 +44,16 @@ export interface PerformanceBaselineData {
     averageCTR: number;
     averageConversions: number;
     averageRevenue: number;
-}
-}
+
+
+
   };
   calculatedAt: Date;
   sampleSize: number;
-}
 
-}
-}
+
+
+
 export interface AnomalyDetectionResult {
   type: 'performance_drop' | 'unusual_spike' | 'trend_change';
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -60,9 +62,10 @@ export interface AnomalyDetectionResult {
   detectedAt: Date;
   confidence: number;
   suggestions: string[];
-}
-}
-}
+
+
+
+
 
 export class PlacementAnalyticsService {
   private db: Database;
@@ -84,7 +87,7 @@ export class PlacementAnalyticsService {
     // Start background processes
     this.startMetricsCalculation();
     this.startInsightGeneration();
-  }
+
 
   // =============================================================================
   // Core Analytics Methods
@@ -105,7 +108,7 @@ export class PlacementAnalyticsService {
     // Check cache first
     if (this.metricsCache.has(cacheKey)) {
       return this.metricsCache.get(cacheKey);
-    }
+
 
     // Calculate metrics from raw data
     const metrics = await this.computeSlotMetrics(slotId, period);
@@ -117,7 +120,7 @@ export class PlacementAnalyticsService {
     this.metricsCache.set(cacheKey, metrics);
     
     return metrics;
-  }
+
 
   /**
    * Calculate placement-specific metrics
@@ -133,7 +136,7 @@ export class PlacementAnalyticsService {
     await this.storePlacementMetrics(metrics);
     
     return metrics;
-  }
+
 
   /**
    * Calculate campaign performance metrics
@@ -149,7 +152,7 @@ export class PlacementAnalyticsService {
     await this.storeCampaignMetrics(metrics);
     
     return metrics;
-  }
+
 
   /**
    * Generate comprehensive placement analytics
@@ -195,7 +198,7 @@ export class PlacementAnalyticsService {
     };
 
     return analytics;
-  }
+
 
   // =============================================================================
   // Performance Baseline Management
@@ -218,11 +221,11 @@ export class PlacementAnalyticsService {
         const baseline = await this.calculateSlotBaseline(slotId, { startDate, endDate, granularity: 'day' });
         this.baselineCache.set(slotId, baseline);
         await this.storePerformanceBaseline(baseline);
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to calculate baseline for slot ${slotId}:`, error);
-      }
-    }
-  }
+
+
+
 
   /**
    * Get performance baseline for a slot
@@ -232,7 +235,7 @@ export class PlacementAnalyticsService {
     // Check cache first
     if (this.baselineCache.has(slotId)) {
       return this.baselineCache.get(slotId);
-    }
+
 
     // Query from database
     const result = await this.db.query(`
@@ -254,7 +257,7 @@ export class PlacementAnalyticsService {
 
     this.baselineCache.set(slotId, baseline);
     return baseline;
-  }
+
 
   // =============================================================================
   // Anomaly Detection
@@ -289,7 +292,7 @@ export class PlacementAnalyticsService {
           'Consider refreshing creative assets'
         ]
       });
-    }
+
 
     // Check for unusual spikes
     if (
@@ -313,10 +316,10 @@ export class PlacementAnalyticsService {
           'Verify targeting parameters'
         ]
       });
-    }
+
 
     return anomalies;
-  }
+
 
   // =============================================================================
   // Insights Generation
@@ -342,10 +345,10 @@ export class PlacementAnalyticsService {
     // Store insights
     for (const insight of insights) {
       await this.storeInsight(insight);
-    }
+
 
     return insights;
-  }
+
 
   /**
    * Generate optimization recommendations
@@ -371,10 +374,10 @@ export class PlacementAnalyticsService {
     // Store recommendations
     for (const recommendation of recommendations) {
       await this.storeRecommendation(recommendation);
-    }
+
 
     return recommendations;
-  }
+
 
   // =============================================================================
   // Real-time Analytics
@@ -394,7 +397,7 @@ export class PlacementAnalyticsService {
     });
 
     return metrics;
-  }
+
 
   /**
    * Stream real-time updates (placeholder for WebSocket implementation)
@@ -414,7 +417,7 @@ export class PlacementAnalyticsService {
       
       callback(realtimeData);
     }, 5000); // Update every 5 seconds
-  }
+
 
   // =============================================================================
   // Background Processing
@@ -428,11 +431,11 @@ export class PlacementAnalyticsService {
       try {
         await this.calculateAllSlotMetrics();
         await this.calculatePerformanceBaselines();
-      } catch (error) {
+ catch (error) {
         console.error('Metrics calculation error:', error);
-      }
+
     }, this.config.metricsCalculationInterval * 60 * 1000);
-  }
+
 
   /**
    * Start automated insight generation
@@ -448,11 +451,11 @@ export class PlacementAnalyticsService {
         
         await this.generateInsights(period);
         await this.generateRecommendations(period);
-      } catch (error) {
+ catch (error) {
         console.error('Insight generation error:', error);
-      }
+
     }, this.config.insightGenerationInterval * 60 * 60 * 1000);
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -481,7 +484,7 @@ export class PlacementAnalyticsService {
       errorRate: Math.random() * 5,
       performanceIndex: Math.floor(Math.random() * 30) + 70
     };
-  }
+
 
   private async computePlacementMetrics(placementId: string, period: MetricsPeriod): Promise<ContentPlacementMetrics> {
 
@@ -504,7 +507,7 @@ export class PlacementAnalyticsService {
       confidenceLevel: Math.random() * 20 + 80,
       statisticalSignificance: Math.random() > 0.5
     };
-  }
+
 
   private async computeCampaignMetrics(campaignId: string, period: MetricsPeriod): Promise<CampaignMetrics> {
 
@@ -524,7 +527,7 @@ export class PlacementAnalyticsService {
       budgetRemaining: Math.random() * 3000 + 500,
       paceToGoal: Math.random() * 40 + 80
     };
-  }
+
 
   private async calculateSlotBaseline(slotId: string, _____period: MetricsPeriod): Promise<PerformanceBaselineData> {
 
@@ -536,25 +539,25 @@ export class PlacementAnalyticsService {
         averageCTR: Math.random() * 3 + 2,
         averageConversions: Math.floor(Math.random() * 40) + 10,
         averageRevenue: Math.random() * 800 + 200
-  }
+
       calculatedAt: new Date(),
       sampleSize: 30
     };
-  }
+
 
   private isSignificantDrop(current: number, baseline: number, threshold: number): boolean {
     const percentageChange = ((baseline - current) / baseline) * 100;
     return percentageChange > threshold;
-  }
+
 
   private isSignificantSpike(current: number, baseline: number, threshold: number): boolean {
     const percentageChange = ((current - baseline) / baseline) * 100;
     return percentageChange > threshold;
-  }
+
 
   private calculatePercentageChange(current: number, baseline: number): number {
     return Math.round(((current - baseline) / baseline) * 100);
-  }
+
 
   private calculateSeverity(current: number, baseline: number): 'low' | 'medium' | 'high' | 'critical' {
     const change = Math.abs(this.calculatePercentageChange(current, baseline));
@@ -562,7 +565,7 @@ export class PlacementAnalyticsService {
     if (change > 30) return 'high';
     if (change > 15) return 'medium';
     return 'low';
-  }
+
 
   private calculateConfidence(currentSample: number, baselineSample: number): number {
     // Simplified confidence calculation
@@ -571,7 +574,7 @@ export class PlacementAnalyticsService {
     if (minSample < 500) return 75;
     if (minSample < 1000) return 85;
     return 95;
-  }
+
 
   // Placeholder methods for data access
   private async getActiveSlotIds(): Promise<string[]> { return ['slot-1', 'slot-2', 'slot-3']; }
@@ -585,7 +588,7 @@ export class PlacementAnalyticsService {
   private async calculateAllSlotMetrics(): Promise<void> {
 
     console.log('🔄 Calculating metrics for all active slots');
-  }
+
 
   private async calculateOverallPerformance(_____period: MetricsPeriod): Promise<unknown> {
 
@@ -596,7 +599,7 @@ export class PlacementAnalyticsService {
       totalConversions: 250,
       totalRevenue: 25000
     };
-  }
+
 
   private async getTopPerformingSlots(
     _____period: MetricsPeriod,
@@ -642,4 +645,3 @@ export class PlacementAnalyticsService {
   private async storePerformanceBaseline(_____baseline: PerformanceBaselineData): Promise<void> {}
   private async storeInsight(_____insight: PlacementInsight): Promise<void> {}
   private async storeRecommendation(_____recommendation: PlacementRecommendation): Promise<void> {}
-}

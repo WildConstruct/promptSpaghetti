@@ -8,8 +8,8 @@ import { AuditService } from '../auth/services/AuditService';
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
-}
-}
+
+
 export interface KeyExchangeConfig {
   // Algorithm configuration
   algorithm: 'secp256r1' | 'secp384r1' | 'secp521r1';
@@ -30,12 +30,13 @@ export interface KeyExchangeConfig {
   auditAllOperations: boolean;
   enableSecurityAlerts: boolean;
   riskThreshold: number; // 0-100
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyExchangeSession {
   id: string;
   sessionId: string;
@@ -54,12 +55,13 @@ export interface KeyExchangeSession {
   expiresAt: Date;
   ipAddress?: string;
   userAgent?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DerivedKey {
   keyId: string;
   purpose: 'encryption' | 'authentication' | 'signing' | 'session' | 'api_access';
@@ -68,12 +70,13 @@ export interface DerivedKey {
   expiresAt?: Date;
   usageCount: number;
   maxUsageCount?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyExchangeResult {
   sessionId: string;
   serverPublicKey: string;
@@ -84,13 +87,14 @@ export interface KeyExchangeResult {
     kdf: string;
     iterations: number;
     saltLength: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface SharedSecretResult {
   sessionId: string;
   success: boolean;
@@ -98,12 +102,13 @@ export interface SharedSecretResult {
     [purpose: string]: {
       keyId: string;
       expiresAt?: Date;
-}
-}
+
+
+
     };
   };
   securityWarnings?: string[];
-}
+
 
 export class KeyExchangeService extends EventEmitter {
   private db: DatabaseService;
@@ -126,7 +131,7 @@ export class KeyExchangeService extends EventEmitter {
     
     // Start background cleanup
     this.startCleanupInterval();
-  }
+
 
   async initiateKeyExchange(
     userId?: string,
@@ -214,13 +219,13 @@ export class KeyExchangeService extends EventEmitter {
           kdf: this.config.keyDerivationFunction,
           iterations: this.getIterationsForSecurityLevel(effectiveSecurityLevel),
           saltLength: 32
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error initiating key exchange:', error);
       throw new Error('Failed to initiate key exchange');
-    }
-  }
+
+
 
   async completeKeyExchange(
     sessionId: string,
@@ -230,7 +235,7 @@ export class KeyExchangeService extends EventEmitter {
       keyLength: number;
       expiryHours?: number;
       maxUsage?: number;
-    }> = []
+> = []
   ): Promise<SharedSecretResult> {
 
     try {
@@ -238,16 +243,16 @@ export class KeyExchangeService extends EventEmitter {
       const session = await this.getSession(sessionId);
       if (!session) {
         throw new Error('Session not found');
-      }
+
       
       if (session.state !== 'initiated') {
         throw new Error(`Invalid session state: ${session.state}`);
-      }
+
       
       if (new Date() > session.expiresAt) {
         await this.expireSession(sessionId);
         throw new Error('Session expired');
-      }
+
       
       // Validate client public key
       this.validatePublicKey(clientPublicKey, session.algorithm);
@@ -304,13 +309,12 @@ export class KeyExchangeService extends EventEmitter {
           // Check for security concerns
           if (keyRequest.keyLength < 32 && keyRequest.purpose === 'encryption') {
             securityWarnings.push(`Encryption key length ${keyRequest.keyLength} may be insufficient`);
-          }
-          
-        } catch (error) {
+
+ catch (error) {
           console.error(`Error deriving key for purpose ${keyRequest.purpose}:`, error);
           securityWarnings.push(`Failed to derive key for ${keyRequest.purpose}`);
-        }
-      }
+
+
       
       // Clear sensitive data from memory
       this.clearSensitiveData(sessionId);
@@ -334,8 +338,7 @@ export class KeyExchangeService extends EventEmitter {
         derivedKeys,
         securityWarnings: securityWarnings.length > 0 ? securityWarnings : undefined
       };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error completing key exchange:', error);
       
       // Mark session as failed
@@ -346,8 +349,8 @@ export class KeyExchangeService extends EventEmitter {
         success: false,
         securityWarnings: [error.message]
       };
-    }
-  }
+
+
 
   async deriveKey(
     sessionId: string,
@@ -362,7 +365,7 @@ export class KeyExchangeService extends EventEmitter {
     // Validate key length
     if (![16, 24, 32, 48, 64].includes(keyLength)) {
       throw new Error(`Invalid key length: ${keyLength}`);
-    }
+
     
     // Generate unique key ID
     const keyId = this.generateKeyId(sessionId, purpose);
@@ -419,7 +422,7 @@ export class KeyExchangeService extends EventEmitter {
       usageCount: 0,
       maxUsageCount: maxUsage
     };
-  }
+
 
   async getSessionStatus(sessionId: string): Promise<KeyExchangeSession | null> {
 
@@ -435,7 +438,7 @@ export class KeyExchangeService extends EventEmitter {
       
       if (result.rows.length === 0) {
         return null;
-      }
+
       
       const row = result.rows[0];
       return {
@@ -453,11 +456,11 @@ export class KeyExchangeService extends EventEmitter {
         ipAddress: row.ip_address,
         userAgent: row.user_agent
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting session status:', error);
       return null;
-    }
-  }
+
+
 
   async revokeDerivedKey(keyId: string, reason: string): Promise<boolean> {
 
@@ -471,7 +474,7 @@ export class KeyExchangeService extends EventEmitter {
       
       if (result.rows.length === 0) {
         return false;
-      }
+
       
       const sessionId = result.rows[0].session_id;
       
@@ -485,11 +488,11 @@ export class KeyExchangeService extends EventEmitter {
       });
       
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error revoking derived key:', error);
       return false;
-    }
-  }
+
+
 
   async getActiveSessions(userId?: string): Promise<KeyExchangeSession[]> {
 
@@ -524,39 +527,39 @@ export class KeyExchangeService extends EventEmitter {
         ipAddress: row.ip_address,
         userAgent: row.user_agent
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting active sessions:', error);
       return [];
-    }
-  }
+
+
 
   // Private helper methods
 
   private generateSecureSessionId(): string {
     return crypto.randomBytes(32).toString('hex');
-  }
+
 
   private generateKeyId(sessionId: string, purpose: string): string {
     const timestamp = Date.now();
     const random = crypto.randomBytes(8).toString('hex');
     return `${purpose}_${sessionId.substring(0, 8)}_${timestamp}_${random}`;
-  }
+
 
   private getAlgorithmForSecurityLevel(level: string): 'secp256r1' | 'secp384r1' | 'secp521r1' {
     switch (level) {
     case 'maximum': return 'secp521r1';
     case 'high': return 'secp384r1';
     default: return 'secp256r1';
-    }
-  }
+
+
 
   private getIterationsForSecurityLevel(level: string): number {
     switch (level) {
     case 'maximum': return 500000;
     case 'high': return 250000;
     default: return 100000;
-    }
-  }
+
+
 
   private generateKeyPair(algorithm: string): crypto.KeyPairSyncResult<string, string> {
     return crypto.generateKeyPairSync('ec', {
@@ -564,11 +567,11 @@ export class KeyExchangeService extends EventEmitter {
       publicKeyEncoding: { type: 'spki', format: 'pem' },
       privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
     });
-  }
+
 
   private exportPublicKey(publicKey: crypto.KeyObject): string {
     return publicKey.export({ type: 'spki', format: 'pem' }) as string;
-  }
+
 
   private importPublicKey(publicKeyPem: string, _____algorithm: string): crypto.KeyObject {
     return crypto.createPublicKey({
@@ -576,7 +579,7 @@ export class KeyExchangeService extends EventEmitter {
       format: 'pem',
       type: 'spki'
     });
-  }
+
 
   private importPrivateKey(privateKeyPem: string, _____algorithm: string): crypto.KeyObject {
     return crypto.createPrivateKey({
@@ -584,7 +587,7 @@ export class KeyExchangeService extends EventEmitter {
       format: 'pem',
       type: 'pkcs8'
     });
-  }
+
 
   private validatePublicKey(publicKeyPem: string, algorithm: string): void {
     try {
@@ -593,22 +596,22 @@ export class KeyExchangeService extends EventEmitter {
       
       if (!keyDetails || keyDetails.namedCurve !== algorithm) {
         throw new Error('Invalid public key algorithm');
-      }
-    } catch (error) {
+
+ catch (error) {
       throw new Error(`Invalid public key: ${error.message}`);
-    }
-  }
+
+
 
   private deriveSharedSecret(privateKey: crypto.KeyObject, publicKey: crypto.KeyObject): Buffer {
     return crypto.diffieHellman({
       privateKey,
       publicKey
     });
-  }
+
 
   private hashSharedSecret(sharedSecret: Buffer): string {
     return crypto.createHash('sha256').update(sharedSecret).digest('hex');
-  }
+
 
   private deriveKeyHKDF(
     sharedSecret: Buffer,
@@ -617,7 +620,7 @@ export class KeyExchangeService extends EventEmitter {
     keyLength: number
   ): Buffer {
     return crypto.hkdfSync('sha256', sharedSecret, salt, info, keyLength);
-  }
+
 
   private encryptPrivateKey(privateKey: crypto.KeyObject, sessionId: string): string {
     const key = crypto.scryptSync(sessionId, 'key-exchange-salt', 32);
@@ -631,7 +634,7 @@ export class KeyExchangeService extends EventEmitter {
     const authTag = cipher.getAuthTag();
     
     return `${iv.toString('hex')}:${encrypted}:${authTag.toString('hex')}`;
-  }
+
 
   private async getDecryptedPrivateKey(sessionId: string): Promise<string> {
 
@@ -642,7 +645,7 @@ export class KeyExchangeService extends EventEmitter {
     
     if (result.rows.length === 0) {
       throw new Error('Session not found');
-    }
+
     
     const encryptedKey = result.rows[0].server_private_key;
     const [ivHex, encrypted, authTagHex] = encryptedKey.split(':');
@@ -659,7 +662,7 @@ export class KeyExchangeService extends EventEmitter {
     decrypted += decipher.final('utf8');
     
     return decrypted;
-  }
+
 
   private async getSession(sessionId: string): Promise<KeyExchangeSession | null> {
 
@@ -667,21 +670,21 @@ export class KeyExchangeService extends EventEmitter {
     const cached = await this.redis.get(`session:${sessionId}`);
     if (cached) {
       return JSON.parse(cached);
-    }
+
     
     // Fallback to database
     return this.getSessionStatus(sessionId);
-  }
+
 
   private async cacheSessionData(sessionId: string, data: Record<string, unknown>): Promise<void> {
 
     await this.redis.setex(`session:${sessionId}`, 900, JSON.stringify(data)); // 15 minutes
-  }
+
 
   private async cacheDerivedKey(keyId: string, keyBuffer: Buffer, ttl: number): Promise<void> {
 
     await this.redis.setex(`derived_key:${keyId}`, ttl, keyBuffer.toString('base64'));
-  }
+
 
   private async enforceConcurrentSessionLimits(userId?: string): Promise<void> {
 
@@ -695,8 +698,8 @@ export class KeyExchangeService extends EventEmitter {
     
     if (parseInt(activeCount.rows[0].count) >= this.config.maxConcurrentSessions) {
       throw new Error('Too many concurrent key exchange sessions');
-    }
-  }
+
+
 
   private async expireSession(sessionId: string): Promise<void> {
 
@@ -705,7 +708,7 @@ export class KeyExchangeService extends EventEmitter {
       SET state = 'expired', last_activity = NOW()
       WHERE session_id = $1
     `, [sessionId]);
-  }
+
 
   private async failSession(sessionId: string, reason: string): Promise<void> {
 
@@ -714,11 +717,11 @@ export class KeyExchangeService extends EventEmitter {
       SET state = 'failed', failure_reason = $1, last_activity = NOW()
       WHERE session_id = $2
     `, [reason, sessionId]);
-  }
+
 
   private clearSensitiveData(sessionId: string): void {
     this.activeKeys.delete(sessionId);
-  }
+
 
   private async auditKeyExchangeEvent(
     sessionId: string,
@@ -735,21 +738,20 @@ export class KeyExchangeService extends EventEmitter {
         details: {
           sessionId,
           ...eventData
-  }
+
         severity: eventType.includes('failed') || eventType.includes('security') ? 'error' : 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error logging key exchange audit event:', error);
-    }
-  }
+
+
 
   private startCleanupInterval(): void {
     setInterval(async () => {
       try {
         await this.db.query('SELECT cleanup_expired_key_exchange_sessions()');
-      } catch (error) {
+ catch (error) {
         console.error('Error in key exchange cleanup:', error);
-      }
+
     }, 60 * 1000); // Run every minute
-  }
-}
+

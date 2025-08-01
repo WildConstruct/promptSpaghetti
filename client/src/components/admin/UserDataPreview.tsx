@@ -12,49 +12,53 @@ import {
   User, Database, Shield, FileText,
   Download, Trash2, Archive, AlertTriangle, CheckCircle,
   ChevronDown, ChevronRight, Search, RefreshCw
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Types for user data preview
-}
+
+
 interface UserDataCategory {
   category: string;,
-  displayName: string;
+  displayName: string;,
   itemCount: number;,
-  dataVolume: number;
+  dataVolume: number;,
   dataSensitivity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  retentionPeriod?: number;
+  retentionPeriod?: number,
   items: UserDataItem;,
   affectedSystems: string;
   interface UserDataItem {
   id: string;,
-  type: string;
+  type: string;,
   description: string;,
-  createdAt: string;
+  createdAt: string;,
   lastModified: string;,
-  dataSize: number;
+  dataSize: number;,
   systemSource: string;,
   hasPersonalData: boolean;
   interface RetentionPolicy {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  retentionPeriodDays: number;
+  retentionPeriodDays: number;,
   applicableCategories: string;,
   complianceFramework: string;
   interface UserDataPreviewProps {
   userId: string;,
   userName: string;
-  onRetentionAction?: (action: 'delete' | 'archive' | 'export', categories: string) => void;
+  onRetentionAction?: (action: 'delete' | 'archive' | '}
+
+export', categories: string) => void;
   const UserDataPreview: React.FC<UserDataPreviewProps> = ({ ),
   userId,
   userName,
   onRetentionAction
-}
+
+
 }) => {
-  const [dataCategories, setDataCategories] = useState<UserDataCategory>([]);
+  const [dataCategories, setDataCategories] = useState<UserDataCategory[]>([]);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
-  const [retentionPolicies, setRetentionPolicies] = useState<RetentionPolicy>([]);
+  const [retentionPolicies, setRetentionPolicies] = useState<RetentionPolicy[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [sensitivityFilter, setSensitivityFilter] = useState<string>('ALL');
@@ -69,7 +73,7 @@ interface UserDataCategory {
   dataSensitivity: 'HIGH',
   retentionPeriod: 2555, // 7 years,
   affectedSystems: ['user_service', 'auth_service'],
-  items: [,
+  items: [
   {
   id: 'profile_1',
   type: 'Personal Info',
@@ -78,8 +82,8 @@ interface UserDataCategory {
   lastModified: '2024-03-15T00:00:00Z',
   dataSize: 512,
   systemSource: 'user_service',
-  hasPersonalData: true,
-}
+  hasPersonalData: true
+
         {
   id: 'profile_2',
   type: 'Employment Data',
@@ -89,7 +93,7 @@ interface UserDataCategory {
   dataSize: 256,
   systemSource: 'hr_system',
   hasPersonalData: true];
-  }
+
     {
   category: 'activity_logs',
   displayName: 'Activity & Access Logs',
@@ -98,7 +102,7 @@ interface UserDataCategory {
   dataSensitivity: 'MEDIUM',
   retentionPeriod: 365,
   affectedSystems: ['audit_service', 'analytics_service'],
-  items: [,
+  items: [
   {
   id: 'log_1',
   type: 'Login Events',
@@ -107,8 +111,8 @@ interface UserDataCategory {
   lastModified: '2024-07-22T00:00:00Z',
   dataSize: 8192,
   systemSource: 'audit_service',
-  hasPersonalData: false,
-}
+  hasPersonalData: false
+
         {
   id: 'log_2',
   type: 'System Access',
@@ -118,7 +122,7 @@ interface UserDataCategory {
   dataSize: 7168,
   systemSource: 'analytics_service',
   hasPersonalData: false];
-  }
+
     {
   category: 'content_data',
   displayName: 'Created Content',
@@ -127,7 +131,7 @@ interface UserDataCategory {
   dataSensitivity: 'MEDIUM',
   retentionPeriod: 1095, // 3 years,
   affectedSystems: ['content_service', 'graph_service'],
-  items: [,
+  items: [
   {
   id: 'content_1',
   type: 'Prompt Graphs',
@@ -136,8 +140,8 @@ interface UserDataCategory {
   lastModified: '2024-07-20T00:00:00Z',
   dataSize: 32768,
   systemSource: 'graph_service',
-  hasPersonalData: false,
-}
+  hasPersonalData: false
+
         {
   id: 'content_2',
   type: 'Generated Content',
@@ -147,7 +151,7 @@ interface UserDataCategory {
   dataSize: 12288,
   systemSource: 'content_service',
   hasPersonalData: false];
-  }
+
     {
   category: 'communication_data',
   displayName: 'Communications',
@@ -156,7 +160,7 @@ interface UserDataCategory {
   dataSensitivity: 'HIGH',
   retentionPeriod: 1825, // 5 years,
   affectedSystems: ['notification_service', 'support_service'],
-  items: [,
+  items: [
   {
   id: 'comm_1',
   type: 'Email Communications',
@@ -165,8 +169,8 @@ interface UserDataCategory {
   lastModified: '2024-07-15T00:00:00Z',
   dataSize: 2048,
   systemSource: 'notification_service',
-  hasPersonalData: true,
-}
+  hasPersonalData: true
+
         {
   id: 'comm_2',
   type: 'Support Tickets',
@@ -175,8 +179,7 @@ interface UserDataCategory {
   lastModified: '2024-06-30T00:00:00Z',
   dataSize: 1024,
   systemSource: 'support_service',
-  hasPersonalData: true],
-  ], []); // Empty dependency array since this is static mock data
+  hasPersonalData: true]], []); // Empty dependency array since this is static mock data
   const mockRetentionPolicies: RetentionPolicy = useMemo(() => [
   {
   id: 'policy_1',
@@ -184,23 +187,23 @@ interface UserDataCategory {
   description: 'Standard retention for user profile and activity data',
   retentionPeriodDays: 2555, // 7 years,
   applicableCategories: ['profile_data', 'communication_data'],
-  complianceFramework: 'GDPR',
-}
+  complianceFramework: 'GDPR'
+
     {
   id: 'policy_2',
   name: 'Activity Log Retention',
   description: 'Short-term retention for system activity logs',
   retentionPeriodDays: 365, // 1 year,
   applicableCategories: ['activity_logs'],
-  complianceFramework: 'SOX',
-}
+  complianceFramework: 'SOX'
+
     {
   id: 'policy_3',
   name: 'Content Retention Policy',
   description: 'Medium-term retention for user-generated content',
   retentionPeriodDays: 1095, // 3 years,
   applicableCategories: ['content_data'],
-  complianceFramework: 'Internal'], []); // Empty dependency array since this is static mock data
+  complianceFramework: 'Internal'], []); // Empty dependency array since this is static mock data,
   useEffect(() => {
   // Simulate loading user data
   setLoading(true);
@@ -211,21 +214,21 @@ interface UserDataCategory {
 }, 1000);
   }, [userId, mockDataCategories, mockRetentionPolicies]);
   const toggleCategoryExpansion = (category: string) => {
-    setExpandedCategories(prev => {)
+    setExpandedCategories(prev => {
   const newSet = new Set(prev);
       if (newSet.has(category)) {
         newSet.delete(category);
-      } else {
+ else {
         newSet.add(category);
       return newSet;
     });
   };
   const toggleCategorySelection = (category: string) => {
-    setSelectedCategories(prev => {)
+    setSelectedCategories(prev => {
   const newSet = new Set(prev);
       if (newSet.has(category)) {
         newSet.delete(category);
-      } else {
+ else {
         newSet.add(category);
       return newSet;
     });
@@ -250,7 +253,7 @@ interface UserDataCategory {
   case 'CRITICAL': return 'text-red-600 bg-red-50 border-red-200';
   case 'HIGH': return 'text-orange-600 bg-orange-50 border-orange-200';
   case 'MEDIUM': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-  case 'LOW': return 'text-green-600 bg-green-50 border-green-200';
+  case 'LOW': return 'text-green-600 bg-green-50 border-green-200',
   default: return 'text-gray-600 bg-gray-50 border-gray-200';
 };
   const handleRetentionAction = (action: 'delete' | 'archive' | 'export') => {
@@ -260,7 +263,7 @@ interface UserDataCategory {
     const selectedCategoryArray = Array.from(selectedCategories);
     onRetentionAction?.(action, selectedCategoryArray);
   };
-  const filteredCategories = dataCategories.filter(category => {)
+  const filteredCategories = dataCategories.filter(category => {
   const matchesSearch = category.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||;
                          category.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSensitivity = sensitivityFilter === 'ALL' || category.dataSensitivity === sensitivityFilter;
@@ -381,7 +384,7 @@ interface UserDataCategory {
       </div>
       {/* Data Categories */}
       <div className="space-y-4">
-        {filteredCategories.map((category) => ()
+        {filteredCategories.map((category) => (
           <div key={category.category} className="bg-white rounded-lg shadow-sm border">
             {/* Category Header */}
             <div className="p-4 border-b">
@@ -422,7 +425,7 @@ interface UserDataCategory {
                 <div>
                   <span className="text-gray-500">Affected Systems:</span>
                   <div className="mt-1">
-                    {category.affectedSystems.map((system) => ()
+                    {category.affectedSystems.map((system) => (
                       <span key={system} className="inline-block bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs mr-1 mb-1">
                         {system}
                       </span>
@@ -446,7 +449,7 @@ interface UserDataCategory {
               <div className="p-4">
                 <h4 className="text-sm font-medium text-gray-900 mb-3">Data Items</h4>
                 <div className="space-y-3">
-                  {category.items.map((item) => ()
+                  {category.items.map((item) => (
                     <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
@@ -534,7 +537,7 @@ interface UserDataCategory {
       <div className="bg-white rounded-lg shadow-sm border p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Applicable Retention Policies</h3>
         <div className="space-y-3">
-          {retentionPolicies.map((policy) => ()
+          {retentionPolicies.map((policy) => (
             <div key={policy.id} className="p-4 border border-gray-200 rounded-lg">
               <div className="flex items-center justify-between">
                 <div>

@@ -7,7 +7,7 @@ import {
   UpdateCorrectionRuleSchema,
   CreateCorrectionRuleInput,
   UpdateCorrectionRuleInput 
-} from '../database/models';
+ from '../database/models';
 
 // Request schemas
 const GetRulesQuerySchema = z.object({
@@ -58,50 +58,56 @@ const CreateCorrectionSetSchema = z.object({
 });
 
 // Type definitions
-}
-}
+
+
+
 interface GetRulesQuery {
   includeInactive?: boolean;
   search?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RuleIdParams {
   id: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ReorderRulesBody {
   ruleIds: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ImportRulesBody {
   rules: any[];
   userId?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface StatsQuery {
   days?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ExportQuery {
   format?: 'json' | 'yaml' | 'csv';
   name?: string;
@@ -109,33 +115,36 @@ interface ExportQuery {
   includeInactive?: boolean;
   includeStatistics?: boolean;
   ruleIds?: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ImportBody {
   filename: string;
   content: string;
   overwrite?: boolean;
   merge?: boolean;
   skipDuplicates?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CreateCorrectionSetBody {
   name: string;
   description?: string;
   version?: string;
   isPublic?: boolean;
   ruleIds: number[];
-}
-}
-}
+
+
+
+
 
 /**
  * Corrections API Routes
@@ -158,18 +167,18 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       let rules;
       if (search) {
         rules = dao.searchRules(search, userId);
-      } else {
+ else {
         rules = dao.getRulesByUser(userId, includeInactive);
-      }
+
       
       return { success: true, data: rules };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch correction rules' 
       });
-    }
+
   });
 
   /**
@@ -186,16 +195,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Correction rule not found' 
         });
-      }
+
       
       return { success: true, data: rule };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch correction rule' 
       });
-    }
+
   });
 
   /**
@@ -208,7 +217,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const rule = dao.createRule(ruleData);
       
       return reply.status(201).send({ success: true, data: rule });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       if (error instanceof z.ZodError) {
         return reply.status(400).send({ 
@@ -216,12 +225,12 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           error: 'Invalid rule data',
           details: error.errors 
         });
-      }
+
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to create correction rule' 
       });
-    }
+
   });
 
   /**
@@ -241,10 +250,10 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Correction rule not found' 
         });
-      }
+
       
       return { success: true, data: rule };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       if (error instanceof z.ZodError) {
         return reply.status(400).send({ 
@@ -252,12 +261,12 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           error: 'Invalid update data',
           details: error.errors 
         });
-      }
+
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to update correction rule' 
       });
-    }
+
   });
 
   /**
@@ -276,16 +285,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Correction rule not found' 
         });
-      }
+
       
       return { success: true, message: 'Correction rule deleted successfully' };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to delete correction rule' 
       });
-    }
+
   });
 
   /**
@@ -304,16 +313,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Correction rule not found' 
         });
-      }
+
       
       return { success: true, data: rule };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to toggle correction rule' 
       });
-    }
+
   });
 
   /**
@@ -332,16 +341,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Failed to reorder correction rules' 
         });
-      }
+
       
       return { success: true, message: 'Rules reordered successfully' };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to reorder correction rules' 
       });
-    }
+
   });
 
   // ========== RULE HISTORY ==========
@@ -356,13 +365,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const history = dao.getRuleHistory(id);
       
       return { success: true, data: history };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch rule history' 
       });
-    }
+
   });
 
   // ========== WORKFLOW MANAGEMENT ==========
@@ -379,19 +388,19 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Invalid workflow state' 
         });
-      }
+
       
       const userId = 1; // TODO: Get from authentication
       const rules = dao.getRulesByWorkflowState(userId, state);
       
       return { success: true, data: rules };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch rules by workflow state' 
       });
-    }
+
   });
 
   /**
@@ -411,16 +420,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Rule not found or not in draft state' 
         });
-      }
+
       
       return { success: true, data: result };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to approve rule' 
       });
-    }
+
   });
 
   /**
@@ -437,7 +446,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Deprecation reason is required' 
         });
-      }
+
       
       const deprecatedBy = 1; // TODO: Get from authentication
       const result = dao.deprecateRule(id, deprecatedBy, reason);
@@ -447,16 +456,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Rule not found or not in published state' 
         });
-      }
+
       
       return { success: true, data: result };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to deprecate rule' 
       });
-    }
+
   });
 
   /**
@@ -472,7 +481,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Rule IDs array is required' 
         });
-      }
+
       
       const approvedBy = 1; // TODO: Get from authentication
       const approvedCount = dao.bulkApproveRules(ruleIds, approvedBy);
@@ -482,15 +491,15 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
         data: { 
           approvedCount, 
           totalCount: ruleIds.length 
-        } 
+ 
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to bulk approve rules' 
       });
-    }
+
   });
 
   /**
@@ -506,14 +515,14 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Rule IDs array is required' 
         });
-      }
+
       
       if (!reason) {
         return reply.status(400).send({ 
           success: false, 
           error: 'Deprecation reason is required' 
         });
-      }
+
       
       const deprecatedBy = 1; // TODO: Get from authentication
       const deprecatedCount = dao.bulkDeprecateRules(ruleIds, deprecatedBy, reason);
@@ -523,15 +532,15 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
         data: { 
           deprecatedCount, 
           totalCount: ruleIds.length 
-        } 
+ 
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to bulk deprecate rules' 
       });
-    }
+
   });
 
   /**
@@ -544,13 +553,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const rules = dao.getSuggestedRules(userId);
       
       return { success: true, data: rules };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch suggested rules' 
       });
-    }
+
   });
 
   /**
@@ -563,13 +572,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       dao.recordRuleUsage(id);
       
       return { success: true };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to record rule usage' 
       });
-    }
+
   });
 
   /**
@@ -586,18 +595,18 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Score must be a number between 0 and 100' 
         });
-      }
+
       
       dao.updateRuleEffectiveness(id, score);
       
       return { success: true };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to update rule effectiveness' 
       });
-    }
+
   });
 
   /**
@@ -610,13 +619,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const history = dao.getWorkflowHistory(id);
       
       return { success: true, data: history };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch workflow history' 
       });
-    }
+
   });
 
   /**
@@ -631,13 +640,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const notifications = dao.getUnreadNotifications(userId, limit);
       
       return { success: true, data: notifications };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch notifications' 
       });
-    }
+
   });
 
   /**
@@ -656,16 +665,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Notification not found' 
         });
-      }
+
       
       return { success: true };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to mark notification as read' 
       });
-    }
+
   });
 
   // ========== STATISTICS ==========
@@ -682,13 +691,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const metrics = dao.getPerformanceMetrics(userId, days);
       
       return { success: true, data: metrics };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch performance metrics' 
       });
-    }
+
   });
 
   /**
@@ -703,13 +712,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const stats = dao.getRuleStats(id, days);
       
       return { success: true, data: stats };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch rule statistics' 
       });
-    }
+
   });
 
   // ========== IMPORT/EXPORT ==========
@@ -728,13 +737,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
         message: `Successfully imported ${importedCount} correction rules`,
         importedCount 
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to import correction rules' 
       });
-    }
+
   });
 
   /**
@@ -747,13 +756,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const rules = dao.exportToLocalStorage(userId);
       
       return { success: true, data: rules };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to export correction rules' 
       });
-    }
+
   });
 
   /**
@@ -778,20 +787,20 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: result.error 
         });
-      }
+
       
       // Set appropriate headers for download
       reply.header('Content-Type', result.mimeType);
       reply.header('Content-Disposition', `attachment; filename="${result.filename}"`);
       
       return result.data;
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to export correction rules' 
       });
-    }
+
   });
 
   /**
@@ -819,7 +828,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           errors: result.errors 
         });
-      }
+
       
       return { 
         success: true, 
@@ -828,13 +837,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
         skippedCount: result.skippedCount,
         warnings: result.warnings
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to import correction rules' 
       });
-    }
+
   });
 
   // ========== CORRECTION SETS ==========
@@ -849,13 +858,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const sets = exportService.getCorrectionSets(userId);
       
       return { success: true, data: sets };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch correction sets' 
       });
-    }
+
   });
 
   /**
@@ -883,20 +892,20 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: result.error 
         });
-      }
+
       
       return reply.status(201).send({ 
         success: true, 
         message: 'Correction set created successfully',
         setId: result.setId
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to create correction set' 
       });
-    }
+
   });
 
   /**
@@ -915,16 +924,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Correction set not found' 
         });
-      }
+
       
       return { success: true, data: set };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to fetch correction set' 
       });
-    }
+
   });
 
   /**
@@ -943,20 +952,20 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: result.error 
         });
-      }
+
       
       // Set appropriate headers for download
       reply.header('Content-Type', result.mimeType);
       reply.header('Content-Disposition', `attachment; filename="${result.filename}"`);
       
       return result.data;
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to download correction set' 
       });
-    }
+
   });
 
   /**
@@ -975,16 +984,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Correction set not found or access denied' 
         });
-      }
+
       
       return { success: true, message: 'Correction set deleted successfully' };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to delete correction set' 
       });
-    }
+
   });
 
   /**
@@ -1001,13 +1010,13 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
         message: `Successfully deleted ${deletedCount} correction rules`,
         deletedCount 
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to clear correction rules' 
       });
-    }
+
   });
 
   // ========== RULE EXECUTION ==========
@@ -1026,7 +1035,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Text is required' 
         });
-      }
+
       
       // Get rules to apply
       const rules = ruleIds 
@@ -1045,12 +1054,12 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           if (rule.is_regex) {
             const regex = new RegExp(rule.find_pattern, 'g');
             correctedText = correctedText.replace(regex, rule.replace_with);
-          } else {
+ else {
             correctedText = correctedText.replace(
               new RegExp(escapeRegExp(rule.find_pattern), 'g'),
               rule.replace_with
             );
-          }
+
           
           const executionTime = Date.now() - startTime;
           const changed = originalText !== correctedText;
@@ -1067,14 +1076,14 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
             dao.recordRuleUsage(rule.id, executionTime, originalText.length, true, {
               charactersAfter: correctedText.length
             });
-          }
-        } catch (error) {
+
+ catch (error) {
           // Record error statistics
           dao.recordRuleUsage(rule.id, Date.now() - startTime, originalText.length, false);
           
           fastify.log.warn(`Rule ${rule.name} failed to apply:`, error);
-        }
-      }
+
+
       
       return { 
         success: true, 
@@ -1084,15 +1093,15 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           appliedRules,
           changed: text !== correctedText,
           totalExecutionTime: appliedRules.reduce((sum, r) => sum + r.executionTime, 0)
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to apply corrections' 
       });
-    }
+
   });
 
   // ========== ENHANCED STATISTICS ENDPOINTS ==========
@@ -1111,7 +1120,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Rating must be a number between 1 and 5' 
         });
-      }
+
       
       const success = dao.recordUserFeedback(id, rating, comment);
       
@@ -1120,16 +1129,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Rule not found or no recent usage to rate' 
         });
-      }
+
       
       return { success: true, message: 'Feedback recorded successfully' };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to record feedback' 
       });
-    }
+
   });
 
   /**
@@ -1147,16 +1156,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           success: false, 
           error: 'Rule not found or no recent usage to mark' 
         });
-      }
+
       
       return { success: true, message: 'False positive recorded successfully' };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to record false positive' 
       });
-    }
+
   });
 
   /**
@@ -1170,17 +1179,16 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
       const recommendations = dao.getRuleRecommendations(userId);
       
       return { success: true, data: recommendations };
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ 
         success: false, 
         error: 'Failed to get recommendations' 
       });
-    }
+
   });
-}
+
 
 // Helper function to escape regex special characters
 function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}

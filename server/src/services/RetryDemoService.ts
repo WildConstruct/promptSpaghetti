@@ -17,18 +17,18 @@ export class RetryDemoService {
     baseDelay: 200,
     onAttempt: (attempt, error) => {
       console.log(`Database operation attempt ${attempt} failed: ${error.message}`);
-    }
-  }
+
+
   async performDatabaseOperation(): Promise<{ success: boolean; data: Record<string, unknown> }> {
     // Simulate a database operation that might fail
     const shouldFail = Math.random() < 0.3;
     
     if (shouldFail) {
       throw new Error('Database connection timeout');
-    }
+
     
     return { success: true, data: { id: 123, value: 'test' } };
-  }
+
 
   /**
    * Example 2: HTTP API call with retry
@@ -37,7 +37,7 @@ export class RetryDemoService {
     maxAttempts: 4,
     baseDelay: 1000,
     maxDelay: 8000
-  }
+
   async callExternalAPI(___url: string): Promise<unknown> {
 
     // Simulate HTTP call that might fail with server errors
@@ -47,10 +47,10 @@ export class RetryDemoService {
       const error = new Error('Service temporarily unavailable') as any;
       error.status = 503;
       throw error;
-    }
+
     
     return { data: 'API response data', timestamp: new Date() };
-  }
+
 
   /**
    * Example 3: Manual retry with custom logic
@@ -60,7 +60,7 @@ export class RetryDemoService {
     const result = await RetryUtils.executeWithResult(
       async () => {
         return this.performLogAnalysis(sessionId);
-  }
+
       {
         maxAttempts: 3,
         baseDelay: 2000,
@@ -71,20 +71,19 @@ export class RetryDemoService {
         ],
         onAttempt: (attempt, error) => {
           console.warn(`Log analysis attempt ${attempt} failed for session ${sessionId}: ${error.message}`);
-  }
+
         onSuccess: (attempt, result) => {
           console.log(`Log analysis succeeded on attempt ${attempt} for session ${sessionId}`);
-        }
-      }
+
     );
 
     if (!result.success) {
       console.error(`Log analysis failed after ${result.attempts} attempts:`, result.error);
       throw result.error;
-    }
+
 
     console.log(`Log analysis completed successfully in ${result.totalTime}ms after ${result.attempts} attempts`);
-  }
+
 
   /**
    * Example 4: File operation with retry
@@ -97,7 +96,7 @@ export class RetryDemoService {
       
       if (shouldFail) {
         throw new Error('EBUSY: resource busy or locked');
-      }
+
       
       // Simulate file writing
       const filepath = `/logs/${filename}`;
@@ -105,7 +104,7 @@ export class RetryDemoService {
       
       return filepath;
     });
-  }
+
 
   /**
    * Example 5: Circuit breaker pattern with retry
@@ -115,7 +114,7 @@ export class RetryDemoService {
     return RetryUtils.executeWithCircuitBreaker(
       async () => {
         return this.sendNotificationToExternalService(alertData);
-  }
+
       'critical-alert-service',
       {
         maxAttempts: 3,
@@ -123,10 +122,10 @@ export class RetryDemoService {
         retryableErrors: [500, 502, 503, 504, /timeout/i],
         onAttempt: (attempt, error) => {
           console.error(`Critical alert sending failed (attempt ${attempt}):`, error.message);
-        }
+
       }
     );
-  }
+
 
   /**
    * Example 6: Combining retry with transaction rollback
@@ -150,12 +149,11 @@ export class RetryDemoService {
       });
 
       await transaction.commit();
-      
-    } catch (error) {
+ catch (error) {
       await transaction.rollback();
       throw new Error(`Transaction failed after retries: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Example 7: Graceful degradation with retry
@@ -168,7 +166,7 @@ export class RetryDemoService {
         () => this.getPrimaryAnalytics(startDate, endDate),
         'primary-analytics'
       );
-    } catch (primaryError) {
+ catch (primaryError) {
       console.warn('Primary analytics service failed, trying fallback:', primaryError.message);
       
       try {
@@ -177,14 +175,14 @@ export class RetryDemoService {
           () => this.getSecondaryAnalytics(startDate, endDate),
           'secondary-analytics'
         );
-      } catch (secondaryError) {
+ catch (secondaryError) {
         console.warn('Secondary analytics service failed, using cached data:', secondaryError.message);
         
         // Final fallback to cached data
         return this.getCachedAnalytics(startDate, endDate);
-      }
-    }
-  }
+
+
+
 
   /**
    * Example 8: Batch processing with retry and progress tracking
@@ -200,31 +198,30 @@ export class RetryDemoService {
         await RetryUtils.execute(
           async () => {
             await this.processBatch(batch);
-  }
+
           {
             maxAttempts: 2,
             baseDelay: 1000,
             onAttempt: (attempt) => {
               console.log(`Processing batch ${index + 1}/${batches.length}, attempt ${attempt}`);
-            }
+
           }
         );
         
         processed += batch.length;
         console.log(`Progress: ${processed}/${logs.length} logs processed`);
-        
-      } catch (error) {
+ catch (error) {
         console.error(`Batch ${index + 1} failed permanently:`, error.message);
         failed.push({ batchIndex: index, error: error.message, logs: batch });
-      }
-    }
+
+
 
     if (failed.length > 0) {
       console.warn(`${failed.length} batches failed permanently. Consider manual processing.`);
-    }
+
 
     console.log(`Batch processing completed: ${processed}/${logs.length} logs processed successfully`);
-  }
+
 
   // ==========================================
   // HELPER METHODS (Simulated Operations)
@@ -235,9 +232,9 @@ export class RetryDemoService {
     const shouldFail = Math.random() < 0.3;
     if (shouldFail) {
       throw new Error('Log analysis processing error');
-    }
+
     console.log(`Log analysis completed for session: ${sessionId}`);
-  }
+
 
   private async sendNotificationToExternalService(___alertData: unknown): Promise<void> {
 
@@ -246,9 +243,9 @@ export class RetryDemoService {
       const error = new Error('External notification service unavailable') as any;
       error.status = 503;
       throw error;
-    }
+
     console.log('Critical alert sent successfully');
-  }
+
 
   private async beginTransaction(): Promise<unknown> {
 
@@ -256,71 +253,71 @@ export class RetryDemoService {
       commit: async () => console.log('Transaction committed'),
       rollback: async () => console.log('Transaction rolled back')
     };
-  }
+
 
   private async insertLogEntry(___transaction: unknown): Promise<void> {
 
     // Simulate database insert that might fail
     if (Math.random() < 0.1) {
       throw new Error('Database deadlock detected');
-    }
-  }
+
+
 
   private async updateLogMetrics(___transaction: unknown): Promise<void> {
 
     // Simulate metrics update that might fail
     if (Math.random() < 0.1) {
       throw new Error('Lock timeout exceeded');
-    }
-  }
+
+
 
   private async createLogAlert(___transaction: unknown): Promise<void> {
 
     // Simulate alert creation that might fail
     if (Math.random() < 0.1) {
       throw new Error('Connection lost during alert creation');
-    }
-  }
+
+
 
   private async getPrimaryAnalytics(___startDate: Date, ___endDate: Date): Promise<unknown> {
 
     if (Math.random() < 0.5) {
       throw new Error('Primary analytics service timeout');
-    }
+
     return { source: 'primary', data: { logs: 1000, errors: 50 } };
-  }
+
 
   private async getSecondaryAnalytics(___startDate: Date, ___endDate: Date): Promise<unknown> {
 
     if (Math.random() < 0.3) {
       throw new Error('Secondary analytics service overloaded');
-    }
+
     return { source: 'secondary', data: { logs: 950, errors: 48 } };
-  }
+
 
   private getCachedAnalytics(___startDate: Date, ___endDate: Date): unknown {
     return { source: 'cache', data: { logs: 900, errors: 45 }, cached: true };
-  }
+
 
   private async processBatch(___logs: unknown[]): Promise<void> {
 
     // Simulate batch processing that might fail
     if (Math.random() < 0.2) {
       throw new Error('Batch processing failed due to resource constraints');
-    }
+
     
     // Simulate processing time
     await new Promise(resolve => setTimeout(resolve, 100));
-  }
+
 
   private chunkArray<T>(array: T[], size: number): T[][] {
     const chunks: T[][] = [];
     for (let i = 0; i < array.length; i += size) {
       chunks.push(array.slice(i, i + size));
-    }
+
     return chunks;
-  }
-}
+
+
 
 /**
  * Example usage and testing
@@ -336,54 +333,53 @@ export async function demonstrateRetryMechanisms(): Promise<void> {
     console.log('1. Testing database operation with retry...');
     const result = await demoService.performDatabaseOperation();
     console.log('✓ Database operation succeeded:', result);
-  } catch (error) {
+ catch (error) {
     console.log('✗ Database operation failed:', error.message);
-  }
+
 
   // Example 2: HTTP API call with retry
   try {
     console.log('\n2. Testing HTTP API call with retry...');
     const apiResult = await demoService.callExternalAPI('https://api.example.com/data');
     console.log('✓ API call succeeded:', apiResult);
-  } catch (error) {
+ catch (error) {
     console.log('✗ API call failed:', error.message);
-  }
+
 
   // Example 3: Log analysis with detailed retry result
   try {
     console.log('\n3. Testing log analysis with retry...');
     await demoService.processLogAnalysisWithRetry('session-123');
     console.log('✓ Log analysis completed');
-  } catch (error) {
+ catch (error) {
     console.log('✗ Log analysis failed:', error.message);
-  }
+
 
   // Example 4: File operation with retry
   try {
     console.log('\n4. Testing file operation with retry...');
     const filepath = await demoService.exportLogsToFile([{id: 1}, {id: 2}], 'test-logs.json');
     console.log('✓ File operation succeeded:', filepath);
-  } catch (error) {
+ catch (error) {
     console.log('✗ File operation failed:', error.message);
-  }
+
 
   // Example 5: Critical alert with circuit breaker
   try {
     console.log('\n5. Testing critical alert with circuit breaker...');
     await demoService.sendCriticalAlert({ severity: 'high', message: 'System failure detected' });
     console.log('✓ Critical alert sent');
-  } catch (error) {
+ catch (error) {
     console.log('✗ Critical alert failed:', error.message);
-  }
+
 
   // Example 6: Graceful degradation
   try {
     console.log('\n6. Testing graceful degradation with retry...');
     const analytics = await demoService.getLogAnalytics(new Date('2024-01-01'), new Date());
     console.log('✓ Analytics retrieved:', analytics);
-  } catch (error) {
+ catch (error) {
     console.log('✗ Analytics failed:', error.message);
-  }
+
 
   console.log('\n=== Retry Mechanism Demonstration Complete ===\n');
-}

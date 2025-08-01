@@ -5,8 +5,8 @@ import { ConnectionState } from '../websocket/WebSocketClient';
 import { RecentProjectEntry } from '../managers/RecentProjectsManager';
 
 }
-interface StatusBarProps {
-    statusMessage: string;
+}
+interface StatusBarProps { statusMessage: string;
     errors: ValidationError[];
     onPreview: () => void;
     onSaveJson: () => void;
@@ -38,7 +38,7 @@ interface StatusBarProps {
     onSaveTemplate?: () => void;
     onBrowseTemplates?: () => void;
 
-export declare const StatusBar: React.FC<StatusBarProps>;
+export declare const StatusBar: React.FC<StatusBarProps> }
 }
 export {};
 //# sourceMappingURL=StatusBar.d.ts.map

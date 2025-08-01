@@ -5,18 +5,15 @@ import { useCallback, useRef } from 'react';
  * when weight controls change rapidly.
  */
 export function useDebounce<T extends (...args: any) => void>((;(
-    callback: T,
+  callback: T
     delay: number
-  ): T {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const debouncedCallback = useCallback((...args: Parameters<T>) => {,
+  ): T { const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const debouncedCallback = useCallback((...args: Parameters<T>) => { }
   // Clear existing timeout
-  if (timeoutRef.current) {
-  clearTimeout(timeoutRef.current);
+  if (timeoutRef.current) { clearTimeout(timeoutRef.current);
   // Set new timeout
   timeoutRef.current = setTimeout(() => {
-  callback(...args);
-}, delay);
+  callback(...args) }, delay);
   }, [callback, delay]) as T;
   return debouncedCallback;
 /**
@@ -24,12 +21,10 @@ export function useDebounce<T extends (...args: any) => void>((;(
  * Epic 8.5 Task 6: Optimized for preview system integration
  */
 export function useWeightChangeDebounce()
-  onWeightChange: (weights: any) => void,
-  delay: number = 300,
+  onWeightChange: (weights: any) => void
+  delay: number = 300
   const debouncedWeightChange = useDebounce(onWeightChange, delay);
-  const handleWeightChange = useCallback((newWeights: any) => {
-  // Log for Epic 8.5 debugging
+  const handleWeightChange = useCallback((newWeights: any) => { // Log for Epic 8.5 debugging
   console.log('[Epic 8.5 Task 6] Debounced weight change:', newWeights.length, 'options');
-  debouncedWeightChange(newWeights);
-}, [debouncedWeightChange]);
+  debouncedWeightChange(newWeights) }, [debouncedWeightChange]);
   return handleWeightChange;

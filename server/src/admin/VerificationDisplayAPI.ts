@@ -14,8 +14,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { ReputationSystem } from './ReputationSystem';
 
-}
-}
+
+
 export interface VerificationDisplayConfig {
   // Display Settings
   showTrustScores: boolean;
@@ -34,8 +34,9 @@ export interface VerificationDisplayConfig {
     unverifiedUsers: boolean;
     lowReputationUsers: boolean;
     flaggedUsers: boolean;
-}
-}
+
+
+
   };
   
   // Thresholds
@@ -49,10 +50,10 @@ export interface VerificationDisplayConfig {
   lastUpdated: Date;
   updatedBy: string;
   version: number;
-}
 
-}
-}
+
+
+
 export interface VerificationDisplayStats {
   configurationAge: number; // days since last update
   activeConfigurations: number;
@@ -60,15 +61,16 @@ export interface VerificationDisplayStats {
     usersAffected: number;
     displayRate: number;
     averageElementsShown: number;
-}
-}
+
+
+
   };
   performanceMetrics: {
     renderTime: number;
     cacheHitRate: number;
     apiResponseTime: number;
   };
-}
+
 
 /**
  * Verification Display API Service
@@ -91,7 +93,7 @@ export class VerificationDisplayAPI {
     this.databaseService = dependencies.databaseService;
     this.auditService = dependencies.auditService;
     this.reputationSystem = dependencies.reputationSystem;
-  }
+
 
   /**
    * Register verification display API routes
@@ -119,7 +121,7 @@ export class VerificationDisplayAPI {
     server.post('/api/admin/verification-display/templates', this.saveConfigurationTemplate.bind(this));
     
     console.log('🔧 Verification Display API routes registered');
-  }
+
 
   /**
    * Get current verification display configuration
@@ -133,13 +135,13 @@ export class VerificationDisplayAPI {
         success: true,
         data: config
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Update verification display configuration
@@ -158,7 +160,7 @@ export class VerificationDisplayAPI {
           error: 'Invalid configuration',
           details: validationResult.errors
         });
-      }
+
 
       // Get current configuration for versioning
       const currentConfig = await this.loadConfiguration();
@@ -186,7 +188,7 @@ export class VerificationDisplayAPI {
           previousVersion: currentConfig.version,
           newVersion: newVersion,
           changes: this.calculateConfigurationDiff(currentConfig, updatedConfig)
-        }
+
       });
 
       return reply.code(200).send({
@@ -194,13 +196,13 @@ export class VerificationDisplayAPI {
         data: updatedConfig,
         message: 'Configuration updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Reset configuration to default values
@@ -223,12 +225,12 @@ export class VerificationDisplayAPI {
           unverifiedUsers: true,
           lowReputationUsers: true,
           flaggedUsers: false
-  }
+
         displayThresholds: {
           minTrustScore: 0,
           minBadgeCount: 0,
           hideUnverified: false
-  }
+
         lastUpdated: new Date(),
         updatedBy: currentUser,
         version: 1
@@ -248,13 +250,13 @@ export class VerificationDisplayAPI {
         data: defaultConfig,
         message: 'Configuration reset to defaults'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get configuration change history
@@ -290,16 +292,16 @@ export class VerificationDisplayAPI {
             limit: parseInt(limit),
             offset: parseInt(offset),
             hasMore: (parseInt(offset) + parseInt(limit)) < totalCount.count
-          }
-        }
+
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get specific configuration version
@@ -320,7 +322,7 @@ export class VerificationDisplayAPI {
           success: false,
           error: 'Configuration version not found'
         });
-      }
+
 
       const config = JSON.parse(configRow.configuration_json);
       
@@ -328,13 +330,13 @@ export class VerificationDisplayAPI {
         success: true,
         data: config
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Preview configuration with test data
@@ -365,7 +367,7 @@ export class VerificationDisplayAPI {
             flagged: reputation.flags.length > 0,
             displayData: this.calculateDisplayData(reputation, previewConfig)
           };
-  }
+
       );
 
       return reply.code(200).send({
@@ -374,15 +376,15 @@ export class VerificationDisplayAPI {
           previews,
           configuration: previewConfig,
           generatedAt: new Date()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get test users for preview
@@ -411,19 +413,19 @@ export class VerificationDisplayAPI {
           success: true,
           data: testUsers
         });
-      }
+
 
       return testUsers;
-    } catch (error) {
+ catch (error) {
       if (reply) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
       throw error;
-    }
-  }
+
+
 
   /**
    * Get display statistics and analytics
@@ -437,13 +439,13 @@ export class VerificationDisplayAPI {
         success: true,
         data: stats
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get performance metrics
@@ -457,13 +459,13 @@ export class VerificationDisplayAPI {
         success: true,
         data: metrics
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get configuration templates
@@ -476,35 +478,35 @@ export class VerificationDisplayAPI {
           name: 'Minimal Display',
           description: 'Shows only essential trust indicators',
           config: this.getMinimalTemplate()
-  }
+
         {
           name: 'Professional Display',
           description: 'Balanced display suitable for business environments',
           config: this.getProfessionalTemplate()
-  }
+
         {
           name: 'Full Display',
           description: 'Shows all available trust and verification information',
           config: this.getFullTemplate()
-  }
+
         {
           name: 'Public Safe',
           description: 'Conservative settings that protect user privacy',
           config: this.getPublicSafeTemplate()
-        }
+
       ];
 
       return reply.code(200).send({
         success: true,
         data: templates
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Save custom configuration template
@@ -526,13 +528,13 @@ export class VerificationDisplayAPI {
         success: true,
         message: 'Configuration template saved'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -545,7 +547,7 @@ export class VerificationDisplayAPI {
     
     if (this.configCache.has(cacheKey)) {
       return this.configCache.get(cacheKey)!;
-    }
+
 
     try {
       const db = await this.databaseService.getDatabase();
@@ -558,19 +560,19 @@ export class VerificationDisplayAPI {
       
       if (row) {
         config = JSON.parse(row.configuration_json);
-      } else {
+ else {
         // Return default configuration
         config = this.getDefaultConfiguration();
         await this.saveConfiguration(config);
-      }
+
 
       this.configCache.set(cacheKey, config);
       return config;
-    } catch (error) {
+ catch (error) {
       console.error('Error loading verification display configuration:', error);
       return this.getDefaultConfiguration();
-    }
-  }
+
+
 
   /**
    * Save configuration to database
@@ -583,7 +585,7 @@ export class VerificationDisplayAPI {
       INSERT INTO verification_display_configs (version, configuration_json, updated_by, last_updated)
       VALUES (?, ?, ?, ?)
     `, [config.version, JSON.stringify(config), config.updatedBy, config.lastUpdated.toISOString()]);
-  }
+
 
   /**
    * Validate configuration object
@@ -597,21 +599,21 @@ export class VerificationDisplayAPI {
     booleanFields.forEach(field => {
       if (typeof config[field] !== 'boolean') {
         errors.push(`${field} must be a boolean`);
-      }
+
     });
 
     // Validate enum fields
     if (!['compact', 'detailed', 'minimal'].includes(config.badgeStyle)) {
       errors.push('badgeStyle must be one of: compact, detailed, minimal');
-    }
+
     
     if (!['small', 'medium', 'large'].includes(config.trustIndicatorSize)) {
       errors.push('trustIndicatorSize must be one of: small, medium, large');
-    }
+
     
     if (!['default', 'professional', 'vibrant'].includes(config.colorScheme)) {
       errors.push('colorScheme must be one of: default, professional, vibrant');
-    }
+
 
     // Validate thresholds
     if (config.displayThresholds) {
@@ -619,19 +621,19 @@ export class VerificationDisplayAPI {
           config.displayThresholds.minTrustScore < 0 || 
           config.displayThresholds.minTrustScore > 1000) {
         errors.push('minTrustScore must be a number between 0 and 1000');
-      }
+
       
       if (typeof config.displayThresholds.minBadgeCount !== 'number' || 
           config.displayThresholds.minBadgeCount < 0) {
         errors.push('minBadgeCount must be a non-negative number');
-      }
-    }
+
+
 
     return {
       valid: errors.length === 0,
       errors: errors.length > 0 ? errors : undefined
     };
-  }
+
 
   /**
    * Calculate display data for a user given configuration
@@ -653,15 +655,15 @@ export class VerificationDisplayAPI {
         badgeCount: shouldDisplay && config.showBadgeCount,
         verificationLevel: shouldDisplay && config.showVerificationLevel,
         reputation: shouldDisplay && config.showReputation
-  }
+
       styling: {
         badgeStyle: config.badgeStyle,
         size: config.trustIndicatorSize,
         colorScheme: config.colorScheme,
         animated: config.animationsEnabled
-      }
+
     };
-  }
+
 
   /**
    * Calculate configuration difference
@@ -677,11 +679,11 @@ export class VerificationDisplayAPI {
       
       if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
         changes[field] = { from: oldValue, to: newValue };
-      }
+
     });
     
     return changes;
-  }
+
 
   /**
    * Generate configuration summary
@@ -694,7 +696,7 @@ export class VerificationDisplayAPI {
     if (config.showReputation) elements.push('reputation');
     
     return `${config.badgeStyle} style, ${config.trustIndicatorSize} size, showing: ${elements.join(', ')}`;
-  }
+
 
   /**
    * Calculate display statistics
@@ -711,14 +713,14 @@ export class VerificationDisplayAPI {
         usersAffected: metrics.totalUsers,
         displayRate: 0.85, // Estimated based on thresholds
         averageElementsShown: 3.2 // Estimated
-  }
+
       performanceMetrics: {
         renderTime: 45, // ms
         cacheHitRate: 0.92,
         apiResponseTime: 120 // ms
-      }
+
     };
-  }
+
 
   /**
    * Calculate performance metrics
@@ -731,19 +733,19 @@ export class VerificationDisplayAPI {
         average: 120,
         p95: 250,
         p99: 500
-  }
+
       cachePerformance: {
         hitRate: 0.92,
         missRate: 0.08,
         evictionRate: 0.02
-  }
+
       renderMetrics: {
         averageRenderTime: 45,
         componentsRendered: 1500,
         renderErrors: 2
-      }
+
     };
-  }
+
 
   /**
    * Get users by IDs
@@ -762,11 +764,11 @@ export class VerificationDisplayAPI {
           badges: reputation.badges.filter(b => b.verified),
           flagged: reputation.flags.length > 0
         };
-  }
+
     );
     
     return users;
-  }
+
 
   // Configuration templates
 
@@ -784,17 +786,17 @@ export class VerificationDisplayAPI {
         unverifiedUsers: true,
         lowReputationUsers: true,
         flaggedUsers: false
-  }
+
       displayThresholds: {
         minTrustScore: 0,
         minBadgeCount: 0,
         hideUnverified: false
-  }
+
       lastUpdated: new Date(),
       updatedBy: 'system',
       version: 1
     };
-  }
+
 
   private getMinimalTemplate(): Partial<VerificationDisplayConfig> {
     return {
@@ -806,7 +808,7 @@ export class VerificationDisplayAPI {
       trustIndicatorSize: 'small',
       animationsEnabled: false
     };
-  }
+
 
   private getProfessionalTemplate(): Partial<VerificationDisplayConfig> {
     return {
@@ -819,7 +821,7 @@ export class VerificationDisplayAPI {
       colorScheme: 'professional',
       animationsEnabled: false
     };
-  }
+
 
   private getFullTemplate(): Partial<VerificationDisplayConfig> {
     return {
@@ -832,7 +834,7 @@ export class VerificationDisplayAPI {
       colorScheme: 'default',
       animationsEnabled: true
     };
-  }
+
 
   private getPublicSafeTemplate(): Partial<VerificationDisplayConfig> {
     return {
@@ -846,12 +848,11 @@ export class VerificationDisplayAPI {
         unverifiedUsers: false,
         lowReputationUsers: false,
         flaggedUsers: false
-  }
+
       displayThresholds: {
         minTrustScore: 500,
         minBadgeCount: 2,
         hideUnverified: true
-      }
+
     };
-  }
-}
+

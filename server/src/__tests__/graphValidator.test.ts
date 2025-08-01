@@ -10,11 +10,11 @@ describe('Graph Validator', () => {
             id: 'output1',
             type: 'Output',
             inputs: ['concat1']
-  }
+
           {
             id: 'concat1',
             type: 'Concat'
-          }
+
         ]
       };
       
@@ -38,7 +38,7 @@ describe('Graph Validator', () => {
           {
             id: '',
             type: 'Output'
-          }
+
         ]
       };
       
@@ -54,7 +54,7 @@ describe('Graph Validator', () => {
           {
             id: 'output1',
             type: ''
-          }
+
         ]
       };
       
@@ -73,7 +73,7 @@ describe('Graph Validator', () => {
             id: 'output1',
             type: 'Output',
             inputs: ['doesNotExist']
-          }
+
         ]
       };
       
@@ -93,12 +93,12 @@ describe('Graph Validator', () => {
             id: 'node1',
             type: 'Concat',
             inputs: ['node2']
-  }
+
           {
             id: 'node2',
             type: 'Concat',
             inputs: ['node1']
-          }
+
         ]
       };
       
@@ -115,17 +115,17 @@ describe('Graph Validator', () => {
             id: 'node1',
             type: 'Concat',
             inputs: ['node2']
-  }
+
           {
             id: 'node2',
             type: 'Concat',
             inputs: ['node3']
-  }
+
           {
             id: 'node3',
             type: 'Concat',
             inputs: ['node1']
-          }
+
         ]
       };
       
@@ -143,7 +143,7 @@ describe('Graph Validator', () => {
           {
             id: 'concat1',
             type: 'Concat'
-          }
+
         ]
       };
       
@@ -162,12 +162,12 @@ describe('Graph Validator', () => {
             id: 'output1',
             type: 'Output',
             inputs: ['choice1']
-  }
+
           {
             id: 'choice1',
             type: 'WeightedChoice'
             // Missing choices array
-          }
+
         ]
       };
       
@@ -184,14 +184,14 @@ describe('Graph Validator', () => {
             id: 'output1',
             type: 'Output',
             inputs: ['choice1']
-  }
+
           {
             id: 'choice1',
             type: 'WeightedChoice',
             choices: [
               { value: 'Option 1', weight: 0 } // Invalid weight (must be positive)
             ]
-          }
+
         ]
       };
       
@@ -208,12 +208,12 @@ describe('Graph Validator', () => {
             id: 'output1',
             type: 'Output',
             inputs: ['var1']
-  }
+
           {
             id: 'var1',
             type: 'GetVariable'
             // Missing key property
-          }
+
         ]
       };
       
@@ -233,7 +233,7 @@ describe('Graph Validator', () => {
             type: 'GetVariable',
             inputs: ['doesNotExist']
             // Missing key property
-          }
+
         ]
       };
       

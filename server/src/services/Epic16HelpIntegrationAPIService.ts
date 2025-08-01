@@ -16,8 +16,8 @@ import { EventEmitter } from 'events';
 // API Service Types
 // =============================================================================
 
-}
-}
+
+
 export interface HelpSessionAPIRequest {
   userId: string;
   sessionType: 'onboarding' | 'feature-discovery' | 'troubleshooting' | 'purchase-assistance' | 'template-creation' | 'marketplace-navigation';
@@ -28,13 +28,14 @@ export interface HelpSessionAPIRequest {
     userRole: 'buyer' | 'seller' | 'admin';
     graphContext?: unknown;
     marketplaceContext?: unknown;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface HelpContentAPIResponse {
   success: boolean;
   content: HelpContentItem[];
@@ -44,13 +45,14 @@ export interface HelpContentAPIResponse {
     userLevel: string;
     contextualRelevance: number;
     estimatedReadTime: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface HelpContentItem {
   id: string;
   type: string;
@@ -65,13 +67,14 @@ export interface HelpContentItem {
     viewRequired: boolean;
     completionTracking: boolean;
     feedbackEnabled: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface TransitionAPIRequest {
   userId: string;
   fromSystem: 'graph-editor' | 'marketplace';
@@ -79,12 +82,13 @@ export interface TransitionAPIRequest {
   preserveHelp: boolean;
   currentSessionId?: string;
   transitionData?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationAPIRequest {
   sessionId: string;
   userId: string;
@@ -96,10 +100,11 @@ export interface EscalationAPIRequest {
     userActions?: string[];
     systemState?: Record<string, any>;
     attachments?: string[];
-}
-}
+
+
+
   };
-}
+
 
 // =============================================================================
 // Epic 16 Help Integration API Service
@@ -124,7 +129,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     
     // Set up analytics flushing
     setInterval(() => this.flushAnalytics(), 30000); // Every 30 seconds
-  }
+
 
   // =============================================================================
   // Help Content API Methods
@@ -159,11 +164,11 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
           userLevel: userProfile.level,
           contextualRelevance: contextAnalysis.relevanceScore,
           estimatedReadTime: this.calculateReadTime(helpContent)
-        }
+
       };
 
       return response;
-    } catch (error) {
+ catch (error) {
       this.emit('error', {
         method: 'getContextualHelp',
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -178,23 +183,23 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
           userLevel: 'unknown',
           contextualRelevance: 0,
           estimatedReadTime: 0
-        }
+
       };
-    }
-  }
+
+
 
   async handleSystemTransition(request: TransitionAPIRequest): Promise<{
     success: boolean;
     transitionId: string;
     continuousHelp: boolean;
     bridgeContent?: HelpContentItem[];
-  }> {
+> {
 
     try {
       // 1. Validate transition request
       if (!this.isValidTransition(request.fromSystem, request.toSystem)) {
         throw new Error('Invalid system transition requested');
-      }
+
 
       // 2. Handle existing help session
       let continuousHelp = false;
@@ -215,8 +220,8 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
           };
           
           this.activeSessions.set(request.currentSessionId, existingSession);
-        }
-      }
+
+
 
       // 3. Create transition record
       const transitionId = await this.recordSystemTransition(request);
@@ -230,7 +235,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
         continuousHelp,
         bridgeContent: bridgeContent.length > 0 ? bridgeContent : undefined
       };
-    } catch (error) {
+ catch (error) {
       this.emit('error', {
         method: 'handleSystemTransition',
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -242,8 +247,8 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
         transitionId: '',
         continuousHelp: false
       };
-    }
-  }
+
+
 
   async escalateToSupport(request: EscalationAPIRequest): Promise<{
     success: boolean;
@@ -251,14 +256,14 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     ticketNumber: string;
     expectedResponse: string;
     supportChannels: string[];
-  }> {
+> {
 
     try {
       // 1. Validate escalation request
       const session = this.activeSessions.get(request.sessionId);
       if (!session) {
         throw new Error('Help session not found for escalation');
-      }
+
 
       // 2. Prepare escalation context
       const escalationContext = {
@@ -273,7 +278,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
           sessionDuration: Date.now() - session.startTime,
           completedActions: session.completedActions,
           currentContext: session.context
-        }
+
       };
 
       // 3. Create support ticket via Epic 16 ticket integration
@@ -288,7 +293,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
           helpSessionId: request.sessionId,
           escalationLevel: (session.escalationLevel || 0) + 1,
           originalContext: escalationContext
-        }
+
       });
 
       // 4. Update help session
@@ -324,7 +329,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
         expectedResponse: this.calculateExpectedResponse(request.priority),
         supportChannels: ['email', 'in-app', 'documentation']
       };
-    } catch (error) {
+ catch (error) {
       this.emit('error', {
         method: 'escalateToSupport',
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -338,8 +343,8 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
         expectedResponse: 'Unable to process escalation',
         supportChannels: []
       };
-    }
-  }
+
+
 
   // =============================================================================
   // Session Management API Methods
@@ -361,7 +366,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       const session = this.activeSessions.get(sessionId);
       if (!session) {
         throw new Error('Help session not found');
-      }
+
 
       // Update session data
       Object.assign(session, {
@@ -375,10 +380,10 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       this.trackSessionUpdate(sessionId, updates);
 
       return { success: true, session };
-    } catch (error) {
+ catch (error) {
       return { success: false };
-    }
-  }
+
+
 
   async getHelpSessionAnalytics(sessionId: string): Promise<{
     success: boolean;
@@ -390,12 +395,12 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       transitionPoints: unknown[];
       escalationEvents: unknown[];
     };
-  }> {
+> {
     try {
       const session = this.activeSessions.get(sessionId);
       if (!session) {
         return { success: false };
-      }
+
 
       const analytics = {
         duration: Date.now() - session.startTime,
@@ -407,10 +412,10 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       };
 
       return { success: true, analytics };
-    } catch (error) {
+ catch (error) {
       return { success: false };
-    }
-  }
+
+
 
   // =============================================================================
   // Private Helper Methods
@@ -426,15 +431,15 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
         showFilmTerminology: true,
         autoTriggerHelp: true,
         preferredComplexity: 'detailed'
-  }
+
       progress: {
         nodesCreated: 0,
         connectionsBuilt: 0,
         previewsGenerated: 0,
         projectsCompleted: 0
-      }
+
     };
-  }
+
 
   private analyzeHelpContext(
     context: unknown,
@@ -447,25 +452,25 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     if (context.currentView) {
       relevanceScore += 10;
       contextFactors.push('view-specific');
-    }
+
 
     if (context.templateId) {
       relevanceScore += 15;
       contextFactors.push('template-specific');
-    }
+
 
     if (context.searchQuery) {
       relevanceScore += 10;
       contextFactors.push('search-context');
-    }
+
 
     if (userProfile.level === 'beginner') {
       relevanceScore += 20;
       contextFactors.push('beginner-boost');
-    }
+
 
     return { relevanceScore: Math.min(relevanceScore, 100), contextFactors };
-  }
+
 
   private async fetchHelpContent(request: HelpSessionAPIRequest, _____analysis: unknown): Promise<HelpContentItem[]> {
 
@@ -483,12 +488,12 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
           viewRequired: true,
           completionTracking: true,
           feedbackEnabled: true
-        }
-      }
+
+
     ];
 
     return mockContent.filter(content => content.level === request.context.userRole || content.level === 'beginner');
-  }
+
 
   private async createHelpSession(request: HelpSessionAPIRequest, content: HelpContentItem[]): Promise<string> {
 
@@ -510,7 +515,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
 
     this.activeSessions.set(sessionId, session);
     return sessionId;
-  }
+
 
   private isValidTransition(from: string, to: string): boolean {
     const validTransitions = [
@@ -519,7 +524,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     ];
     
     return validTransitions.some(([f, t]) => f === from && t === to);
-  }
+
 
   private async generateBridgeContent(request: TransitionAPIRequest): Promise<HelpContentItem[]> {
 
@@ -536,11 +541,11 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
         viewRequired: false,
         completionTracking: false,
         feedbackEnabled: true
-      }
+
     };
 
     return [bridgeContent];
-  }
+
 
   private async recordSystemTransition(request: TransitionAPIRequest): Promise<string> {
 
@@ -561,12 +566,12 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
          VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
         [transitionId, request.userId, request.fromSystem, request.toSystem, request.preserveHelp, JSON.stringify(request.transitionData)]
       );
-    } catch (error) {
+ catch (error) {
       console.error('Failed to record system transition:', error);
-    }
+
 
     return transitionId;
-  }
+
 
   private generateSupportDescription(context: unknown): string {
     return `
@@ -589,7 +594,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     Additional Context:
     ${context.additionalContext ? JSON.stringify(context.additionalContext, null, 2) : 'None provided'}
     `;
-  }
+
 
   private mapPriorityToTicketPriority(priority: string): unknown {
     const priorityMap = {
@@ -598,7 +603,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       'high': 'high'
     };
     return priorityMap[priority] || 'medium';
-  }
+
 
   private calculateExpectedResponse(priority: string): string {
     const responseTimeMap = {
@@ -607,16 +612,16 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       'high': '2-4 hours'
     };
     return responseTimeMap[priority] || '24-48 hours';
-  }
+
 
   private calculateReadTime(content: HelpContentItem[]): number {
     return content.reduce((total, item) => total + item.estimatedTime, 0);
-  }
+
 
   private calculateHelpfulnessScore(session: unknown): number {
     // Calculate based on user feedback and completion rate
     return Math.round((session.currentStep / session.totalSteps) * 100);
-  }
+
 
   private calculateContentEngagement(session: unknown): Record<string, number> {
     // Mock implementation
@@ -625,7 +630,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       'completion_rate': session.currentStep / session.totalSteps,
       'time_per_item': (Date.now() - session.startTime) / session.currentStep
     };
-  }
+
 
   // Analytics tracking methods
   private trackHelpRequest(request: unknown, content: unknown[], duration: number): void {
@@ -637,7 +642,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       duration,
       timestamp: new Date()
     });
-  }
+
 
   private trackSystemTransition(request: unknown, continuousHelp: boolean): void {
     this.analyticsBuffer.push({
@@ -648,7 +653,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       continuousHelp,
       timestamp: new Date()
     });
-  }
+
 
   private trackSupportEscalation(request: unknown, ticketId: string): void {
     this.analyticsBuffer.push({
@@ -659,7 +664,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       priority: request.priority,
       timestamp: new Date()
     });
-  }
+
 
   private trackSessionUpdate(sessionId: string, updates: unknown): void {
     this.analyticsBuffer.push({
@@ -668,7 +673,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       updates,
       timestamp: new Date()
     });
-  }
+
 
   private async flushAnalytics(): Promise<void> {
 
@@ -686,10 +691,10 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
           events.map(e => e.timestamp)
         ]
       );
-    } catch (error) {
+ catch (error) {
       console.error('Failed to flush help analytics:', error);
-    }
-  }
-}
+
+
+
 
 export default Epic16HelpIntegrationAPIService;

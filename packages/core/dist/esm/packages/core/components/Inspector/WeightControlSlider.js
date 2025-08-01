@@ -221,13 +221,12 @@ div >
 ;
 // Helper function to get consistent colors for options
 export const getOptionColor = (index) => {
-    const colors = [];
-    '#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b',
-        '#eb4d4b', '#6c5ce7', '#a29bfe', '#fd79a8', '#fdcb6e';
+    const colors = [
+        '#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b',
+        '#eb4d4b', '#6c5ce7', '#a29bfe', '#fd79a8', '#fdcb6e'
+    ];
+    return colors[index % colors.length];
 };
-;
-return colors[index % colors.length];
-;
 // Hook for integrating weight controls with preview system
 // Epic 8.5 Task 6: Real-Time Weight Integration with debouncing
 export const useWeightControlIntegration = (onPreviewRequest) => {

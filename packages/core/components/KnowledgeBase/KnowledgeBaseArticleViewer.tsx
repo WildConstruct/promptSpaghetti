@@ -5,19 +5,18 @@
  * interactive elements, feedback system, and accessibility features.
  */
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import {
-  KnowledgeBaseArticle,
+import { KnowledgeBaseArticle,
   Epic16KnowledgeBaseService,
   ArticleRating,
   ArticleFeedback,
   FeedbackType,
   SectionType,
-  InteractiveElementType,
+  InteractiveElementType }
   AIRecommendation
-} from '../../services/Epic16KnowledgeBaseService';
-}
-interface KnowledgeBaseArticleViewerProps {
-  article: KnowledgeBaseArticle;
+ from '../../services/Epic16KnowledgeBaseService';
+
+
+interface KnowledgeBaseArticleViewerProps { article: KnowledgeBaseArticle;
   knowledgeService: Epic16KnowledgeBaseService;
   userId: string;
   onArticleSelect?: (articleId: string) => void;
@@ -33,46 +32,43 @@ interface KnowledgeBaseArticleViewerProps {
   showFeedbackForm: boolean;
   recommendations: AIRecommendation;
   readingProgress: number;
-  export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProps> = ({,)
-  article,
-  knowledgeService,
-  userId,
-  onArticleSelect,
+  export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProps> = ({);
+  article;
+  knowledgeService;
+  userId;
+  onArticleSelect }
   onClose
-}
-}) => {
-  // State management
+
+
+}) => { // State management
   const [viewerState, setViewerState] = useState<ViewerState>({)
-  loading: false,
-  error: null,
-  showTableOfContents: true,
-  activeSection: '',
-  userRating: 0,
-  userFeedback: '',
-  feedbackType: FeedbackType.IMPROVEMENT,
-  showFeedbackForm: false,
-  recommendations: [],
-  readingProgress: 0,
+  loading: false
+  error: null
+  showTableOfContents: true
+  activeSection: ''
+  userRating: 0
+  userFeedback: ''
+  feedbackType: FeedbackType.IMPROVEMENT
+  showFeedbackForm: false
+  recommendations: []
+  readingProgress: 0 }
 });
   // Refs
   const contentRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<Map<string, HTMLElement>>(new Map());
   // Load recommendations
-  useEffect(() => {
-  const loadRecommendations = async () => {
+  useEffect(() => { const loadRecommendations = async () => {
   try {
   const recommendations = await knowledgeService.getRecommendations({)
-  currentArticleId: article.id,
-  userSearchHistory: [],
-  viewedArticles: [article.id],
-  userRole: 'user',
-  userExperience: 'intermediate',
-  timestamp: new Date(),
+  currentArticleId: article.id
+  userSearchHistory: []
+  viewedArticles: [article.id]
+  userRole: 'user'
+  userExperience: 'intermediate'
+  timestamp: new Date() }
 });
         setViewerState(prev => ({ ...prev, recommendations }));
-      } catch (error) {
-  console.error('Failed to load recommendations:', error);
-};
+ catch (error) { console.error('Failed to load recommendations:', error) };
     loadRecommendations();
   }, [article.id, knowledgeService]);
   // Track reading progress
@@ -94,32 +90,24 @@ interface KnowledgeBaseArticleViewerProps {
         setViewerState(prev => ({ ...prev, activeSection }));
     };
     const contentElement = contentRef.current;
-    if (contentElement) {
-      contentElement.addEventListener('scroll', handleScroll);
-      return () => contentElement.removeEventListener('scroll', handleScroll);
-  }, [viewerState.activeSection]);
+    if (contentElement) { contentElement.addEventListener('scroll', handleScroll);
+      return () => contentElement.removeEventListener('scroll', handleScroll) }, [viewerState.activeSection]);
   // Calculate average rating
-  const averageRating = useMemo(() => {
-    if (article.ratings.length === 0) return 0;
-    return article.ratings.reduce((sum, rating) => sum + rating.rating, 0) / article.ratings.length;
-  }, [article.ratings]);
+  const averageRating = useMemo(() => { if (article.ratings.length === 0) return 0;
+    return article.ratings.reduce((sum, rating) => sum + rating.rating, 0) / article.ratings.length }, [article.ratings]);
   // Get user's existing rating
-  const existingRating = useMemo(() => {
-    return article.ratings.find(rating => rating.userId === userId);
-  }, [article.ratings, userId]);
+  const existingRating = useMemo(() => { return article.ratings.find(rating => rating.userId === userId) }, [article.ratings, userId]);
   // Handle rating submission
-  const handleRatingSubmit = useCallback(async (rating: number) => {
-  try {
+  const handleRatingSubmit = useCallback(async (rating: number) => { try {
   await knowledgeService.rateArticle(article.id, {)
   userId,
   rating,
-  helpful: rating >= 4,
+  helpful: rating >= 4 }
 });
       setViewerState(prev => ({ ...prev, userRating: rating }));
-    } catch (error) {
-  setViewerState(prev => ({)
+ catch (error) { setViewerState(prev => ({)
   ...prev,
-  error: error instanceof Error ? error.message : 'Failed to submit rating',
+  error: error instanceof Error ? error.message : 'Failed to submit rating' }
 }));
   }, [article.id, knowledgeService, userId]);
   // Handle feedback submission
@@ -127,23 +115,22 @@ interface KnowledgeBaseArticleViewerProps {
     if (!viewerState.userFeedback.trim()) return;
     try {
       setViewerState(prev => ({ ...prev, loading: true }));
-      await knowledgeService.submitFeedback(article.id, {)
+      await knowledgeService.submitFeedback(article.id, { )
   userId,
   type: viewerState.feedbackType,
   message: viewerState.userFeedback,
-  status: 'new' as any,
+  status: 'new' as any }
 });
-      setViewerState(prev => ({)
+      setViewerState(prev => ({ )
   ...prev,
   loading: false,
   userFeedback: '',
-  showFeedbackForm: false,
+  showFeedbackForm: false }
 }));
-    } catch (error) {
-  setViewerState(prev => ({)
+ catch (error) { setViewerState(prev => ({)
   ...prev,
   loading: false,
-  error: error instanceof Error ? error.message : 'Failed to submit feedback',
+  error: error instanceof Error ? error.message : 'Failed to submit feedback' }
 }));
   }, [article.id, knowledgeService, userId, viewerState.feedbackType, viewerState.userFeedback]);
   // Handle section navigation
@@ -157,27 +144,19 @@ interface KnowledgeBaseArticleViewerProps {
     try {
       // In a real implementation, this would call an API
       console.log(`Marked article as ${helpful ? 'helpful' : 'not helpful'}`);}
-    } catch (error) {
-  console.error('Failed to submit helpful vote:', error);
-}, []);
+ catch (error) { console.error('Failed to submit helpful vote:', error) }, []);
   // Format date
-  const formatDate = useCallback((date: Date) => {
-  return new Intl.DateTimeFormat('en-US', {)
+  const formatDate = useCallback((date: Date) => { return new Intl.DateTimeFormat('en-US', {)
   year: 'numeric',
   month: 'long',
-  day: 'numeric',
+  day: 'numeric' }
 }).format(date);
   }, []);
   // Format category name
-  const formatCategoryName = useCallback((category: string) => {
-    return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-  }, []);
+  const formatCategoryName = useCallback((category: string) => { return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) }, []);
   // Render section content
-  const renderSectionContent = useCallback((section: unknown) => {
-  const setSectionRef = (element: HTMLElement | null) => {,
-  if (element) {
-  sectionsRef.current.set(section.id, element);
-};
+  const renderSectionContent = useCallback((section: unknown) => { const setSectionRef = (element: HTMLElement | null) => { }
+  if (element) { sectionsRef.current.set(section.id, element) };
     switch (section.type) {
     case SectionType.CODE:
       return;
@@ -250,9 +229,9 @@ interface KnowledgeBaseArticleViewerProps {
             className={`${interactive ? 'cursor-pointer hover:scale-110' : 'cursor-default'} transition-transform`}
           >
             <svg
-              className={`w-5 h-5 ${
-  star <= rating ? 'text-yellow-400' : 'text-gray-300',
-}`}
+              className={ `w-5 h-5 ${
+  star <= rating ? 'text-yellow-400' : 'text-gray-300' }
+`}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -292,11 +271,11 @@ interface KnowledgeBaseArticleViewerProps {
                 <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
+                  className={ `w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
   viewerState.activeSection === section.id
   ? 'bg-blue-100 text-blue-700 border-l-2 border-blue-500'
-  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100',
-}`}
+  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }
+`}
                 >
                   <span className="text-xs text-gray-400 mr-2">{index + 1}.</span>
                   {section.title}

@@ -8,56 +8,52 @@ import HoverPreview from '../HoverPreview';
 import { projectManager } from '../../../projectManager';
 
 // Mock the projectManager
-jest.mock('../../../projectManager', () => ({)
-  projectManager: {
-  generateThumbnail: jest.fn<unknown, unknown>(),
+jest.mock('../../../projectManager', () => ({ )
+  projectManager: {,
+  generateThumbnail: jest.fn<unknown, unknown>() }
 }));
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
 
 // Mock getBoundingClientRect for positioning tests
 const mockGetBoundingClientRect = jest.fn<unknown, unknown>();
 Element.prototype.getBoundingClientRect = mockGetBoundingClientRect;
-describe('HoverPreview Component', () => {
-  const mockFile = {
-  id: 'test-file-1',
-  name: 'hover-test.psg',
-  path: '/projects/hover-test.psg',
-  size: 3072,
-  lastModified: new Date('2025-01-15T14:30:00Z'),
-  nodeCount: 25,
+describe('HoverPreview Component', () => { const mockFile = {
+  id: 'test-file-1'
+  name: 'hover-test.psg'
+  path: '/projects/hover-test.psg'
+  size: 3072
+  lastModified: new Date('2025-01-15T14:30:00Z')
+  nodeCount: 25
   metadata: {
-  title: 'Hover Test File',
-  description: 'A file for testing hover preview functionality',
-  tags: ['test', 'hover'],
-  author: 'Test Author',
-  version: '1.2.0',
-  created: new Date('2025-01-10T09:00:00Z'),
-},
+  title: 'Hover Test File'
+  description: 'A file for testing hover preview functionality'
+  tags: ['test', 'hover']
+  author: 'Test Author'
+  version: '1.2.0'
+  created: new Date('2025-01-10T09:00:00Z') }
+
   isFavorite: true;
   };
   const mockThumbnail = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjgwIj48L3N2Zz4=';
-  beforeEach(() => {
-  jest.clearAllMocks();
+  beforeEach(() => { jest.clearAllMocks();
   jest.useFakeTimers('legacy');
   mockProjectManager.generateThumbnail.mockResolvedValue(mockThumbnail as unknown as unknown);
   // Mock getBoundingClientRect to return predictable values
   mockGetBoundingClientRect.mockReturnValue({)
-  left: 100,
-  top: 200,
-  right: 200,
-  bottom: 250,
-  width: 100,
-  height: 50,
-  x: 100,
-  y: 200,
-} as unknown as unknown);
+  left: 100
+  top: 200
+  right: 200
+  bottom: 250
+  width: 100
+  height: 50
+  x: 100
+  y: 200 }
+ as unknown as unknown);
     // Mock window dimensions
     Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1024 });
     Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 768 });
   });
-  afterEach(() => {
-    jest.useRealTimers();
-  });
+  afterEach(() => { jest.useRealTimers() });
   describe('Basic Functionality', () => {
     it('renders trigger element', () => {
       render();
@@ -90,9 +86,7 @@ describe('HoverPreview Component', () => {
       // Advance timer by delay amount
       jest.advanceTimersByTime(500);
       // Use act to ensure React updates are flushed
-      await waitFor(() => {
-        expect(screen.getByText('Hover Test File')).toBeInTheDocument();
-      }, { timeout: 1000 });
+      await waitFor(() => { expect(screen.getByText('Hover Test File')).toBeInTheDocument() }, { timeout: 1000 });
     });
     it('cancels preview if mouse leaves before delay', async () => {
       render();
@@ -118,13 +112,9 @@ describe('HoverPreview Component', () => {
       const trigger = screen.getByText('Hover target');
       fireEvent.mouseEnter(trigger);
       jest.advanceTimersByTime(200);
-      await waitFor(() => {
-        expect(screen.getByText('Hover Test File')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Hover Test File')).toBeInTheDocument() });
       fireEvent.mouseLeave(trigger);
-      await waitFor(() => {
-        expect(screen.queryByText('Hover Test File')).not.toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.queryByText('Hover Test File')).not.toBeInTheDocument() });
     });
   });
   describe('Preview Content', () => {
@@ -137,13 +127,11 @@ describe('HoverPreview Component', () => {
       const trigger = screen.getByText('Hover target');
       fireEvent.mouseEnter(trigger);
       jest.advanceTimersByTime(100);
-      await waitFor(() => {
-        expect(screen.getByText('Hover Test File')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Hover Test File')).toBeInTheDocument();
         expect(screen.getByText('A file for testing hover preview functionality')).toBeInTheDocument();
         expect(screen.getByText('25 nodes')).toBeInTheDocument();
         expect(screen.getByText('3.00 KB')).toBeInTheDocument();
-        expect(screen.getByText('Test Author')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Test Author')).toBeInTheDocument() });
     });
     it('shows favorite status in preview', async () => {
       render();
@@ -154,9 +142,7 @@ describe('HoverPreview Component', () => {
       const trigger = screen.getByText('Hover target');
       fireEvent.mouseEnter(trigger);
       jest.advanceTimersByTime(100);
-      await waitFor(() => {
-        expect(screen.getByText('⭐')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('⭐')).toBeInTheDocument() });
     });
     it('generates and displays thumbnail', async () => {
       render();
@@ -167,13 +153,9 @@ describe('HoverPreview Component', () => {
       const trigger = screen.getByText('Hover target');
       fireEvent.mouseEnter(trigger);
       jest.advanceTimersByTime(100);
-      await waitFor(() => {
-        expect(mockProjectManager.generateThumbnail).toHaveBeenCalledWith(mockFile);
-      });
-      await waitFor(() => {
-        const thumbnail = screen.getByAltText('hover-test.psg preview');
-        expect(thumbnail).toHaveAttribute('src', mockThumbnail);
-      });
+      await waitFor(() => { expect(mockProjectManager.generateThumbnail).toHaveBeenCalledWith(mockFile) });
+      await waitFor(() => { const thumbnail = screen.getByAltText('hover-test.psg preview');
+        expect(thumbnail).toHaveAttribute('src', mockThumbnail) });
     });
   });
   describe('Positioning Logic', () => {
@@ -191,8 +173,7 @@ describe('HoverPreview Component', () => {
         expect(preview).toHaveStyle({ left: expect.stringMatching(/\d+px/) });
       });
     });
-    it('adjusts position when near right edge', async () => {
-  // Mock element being near right edge
+    it('adjusts position when near right edge', async () => { // Mock element being near right edge
   mockGetBoundingClientRect.mockReturnValue({)
   left: 900, // Near right edge,
   top: 200,
@@ -201,8 +182,8 @@ describe('HoverPreview Component', () => {
   width: 100,
   height: 50,
   x: 900,
-  y: 200,
-} as unknown as unknown);
+  y: 200 }
+ as unknown as unknown);
       render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
@@ -217,8 +198,7 @@ describe('HoverPreview Component', () => {
         expect(preview).toHaveStyle({ right: expect.stringMatching(/\d+px/) });
       });
     });
-    it('adjusts position when near bottom edge', async () => {
-  // Mock element being near bottom edge
+    it('adjusts position when near bottom edge', async () => { // Mock element being near bottom edge
   mockGetBoundingClientRect.mockReturnValue({)
   left: 100,
   top: 700, // Near bottom edge,
@@ -227,8 +207,8 @@ describe('HoverPreview Component', () => {
   width: 100,
   height: 50,
   x: 100,
-  y: 700,
-} as unknown as unknown);
+  y: 700 }
+ as unknown as unknown);
       render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
@@ -290,20 +270,17 @@ describe('HoverPreview Component', () => {
       const trigger = screen.getByText('Hover target');
       fireEvent.mouseEnter(trigger);
       jest.advanceTimersByTime(100);
-      await waitFor(() => {
-        expect(screen.getByText('Hover Test File')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Hover Test File')).toBeInTheDocument() });
       // Should still show preview without thumbnail
       expect(screen.getByText('25 nodes')).toBeInTheDocument();
     });
-    it('handles missing file metadata gracefully', async () => {
-  const fileWithoutMetadata = {
+    it('handles missing file metadata gracefully', async () => { const fileWithoutMetadata = {
   ...mockFile,
-  metadata: {
+  metadata: {,
   ...mockFile.metadata,
   title: undefined,
   description: undefined,
-  author: undefined,
+  author: undefined }
 };
       render();
         <HoverPreview file={fileWithoutMetadata} delay={100}>
@@ -313,10 +290,8 @@ describe('HoverPreview Component', () => {
       const trigger = screen.getByText('Hover target');
       fireEvent.mouseEnter(trigger);
       jest.advanceTimersByTime(100);
-      await waitFor(() => {
-        // Should use filename when title is missing
-        expect(screen.getByText('hover-test.psg')).toBeInTheDocument();
-      });
+      await waitFor(() => { // Should use filename when title is missing
+        expect(screen.getByText('hover-test.psg')).toBeInTheDocument() });
     });
   });
   describe('Accessibility', () => {
@@ -329,10 +304,8 @@ describe('HoverPreview Component', () => {
       const trigger = screen.getByText('Hover target');
       fireEvent.mouseEnter(trigger);
       jest.advanceTimersByTime(100);
-      await waitFor(() => {
-        const preview = screen.getByRole('tooltip');
-        expect(preview).toHaveAttribute('aria-label');
-      });
+      await waitFor(() => { const preview = screen.getByRole('tooltip');
+        expect(preview).toHaveAttribute('aria-label') });
     });
     it('supports focus events for keyboard users', async () => {
       render();
@@ -343,9 +316,7 @@ describe('HoverPreview Component', () => {
       const trigger = screen.getByText('Hover target');
       fireEvent.focus(trigger);
       jest.advanceTimersByTime(100);
-      await waitFor(() => {
-        expect(screen.getByText('Hover Test File')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Hover Test File')).toBeInTheDocument() });
     });
     it('hides preview on blur for keyboard users', async () => {
       render();
@@ -356,13 +327,9 @@ describe('HoverPreview Component', () => {
       const trigger = screen.getByText('Hover target');
       fireEvent.focus(trigger);
       jest.advanceTimersByTime(100);
-      await waitFor(() => {
-        expect(screen.getByText('Hover Test File')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Hover Test File')).toBeInTheDocument() });
       fireEvent.blur(trigger);
-      await waitFor(() => {
-        expect(screen.queryByText('Hover Test File')).not.toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.queryByText('Hover Test File')).not.toBeInTheDocument() });
     });
   });
   describe('Custom Delay', () => {
@@ -379,9 +346,7 @@ describe('HoverPreview Component', () => {
       expect(screen.queryByText('Hover Test File')).not.toBeInTheDocument();
       // Should show at 1000ms
       jest.advanceTimersByTime(500);
-      await waitFor(() => {
-        expect(screen.getByText('Hover Test File')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Hover Test File')).toBeInTheDocument() });
     });
     it('uses default delay when not specified', async () => {
       render();
@@ -393,9 +358,7 @@ describe('HoverPreview Component', () => {
       fireEvent.mouseEnter(trigger);
       // Default delay is 300ms
       jest.advanceTimersByTime(300);
-      await waitFor(() => {
-        expect(screen.getByText('Hover Test File')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Hover Test File')).toBeInTheDocument() });
     });
   });
 });

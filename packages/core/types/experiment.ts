@@ -3,14 +3,12 @@
  * Core experiment types and interfaces
  */
 
-}
-export interface ExperimentId {
-  value: string;
-}
-}
-}
-export interface ExperimentVariant {
-  id: string;
+
+export interface ExperimentId { value: string }
+
+
+
+export interface ExperimentVariant { id: string;
   name: string;
   description?: string;
   prompt?: string;
@@ -19,45 +17,43 @@ export interface ExperimentVariant {
   temperature?: number;
   maxTokens?: number;
   properties?: Record<string, unknown>;
-  promptHash?: string;
-}
-}
-}
-export interface TrafficAllocation {
-  [variantId: string]: number; // percentage (0-100),
-}
-}
-}
-export interface ExperimentMetric {
-  id: string;
+  promptHash?: string }
+
+
+
+export interface TrafficAllocation { [variantId: string]: number; // percentage (0-100) }
+
+
+
+
+export interface ExperimentMetric { id: string;
   name: string;
   type: 'conversion' | 'latency' | 'cost' | 'custom';
-  query?: string; // ClickHouse SQL for custom metrics,
+  query?: string; // ClickHouse SQL for custom metrics }
   isPrimary: boolean;
   isGuardrail: boolean;
   expectedDirection: 'increase' | 'decrease';
   minimumDetectableEffect?: number;
-}
-}
+
+
 export type ExperimentType = 'prompt' | 'graph' | 'feature_flag';
 
 export type ExperimentStatus = 'draft' | 'running' | 'paused' | 'completed' | 'archived';
 
-}
-export interface ExperimentSchedule {
-  startAt?: Date;
+
+export interface ExperimentSchedule { startAt?: Date;
   endAt?: Date;
-  autoStop?: {
+  autoStop?: { }
   minSampleSize?: number;
   maxPValue?: number;
   budgetCap?: number;
   confidenceThreshold?: number;
-}
+
+
 };
-}
-}
-export interface Experiment {
-  id: string;
+
+
+export interface Experiment { id: string;
   organizationId: string;
   name: string;
   type: ExperimentType;
@@ -76,162 +72,150 @@ export interface Experiment {
   targetSegments?: ExperimentSegment;
   exclusionRules?: ExperimentExclusion;
   factorialDesign?: FactorialDesign;
-  rolloutStrategy?: RolloutStrategy;
-}
-}
-}
-export interface ExperimentSegment {
-  id: string;
+  rolloutStrategy?: RolloutStrategy }
+
+
+
+export interface ExperimentSegment { id: string;
   name: string;
   filters: SegmentFilter;
-  operator: 'AND' | 'OR'
-}
-  }
-}
-export interface SegmentFilter {
-  property: string;
+  operator: 'AND' | 'OR' }
+
+
+
+
+export interface SegmentFilter { property: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
-  value: unknown;
-}
-}
-}
-export interface ExperimentExclusion {
-  type: 'user' | 'session' | 'segment';
+  value: unknown }
+
+
+
+export interface ExperimentExclusion { type: 'user' | 'session' | 'segment' }
   identifiers: string;
   reason: string;
-}
-}
-}
-export interface FactorialDesign {
-  factors: Factor;
-  designMatrix: DesignCell;
-}
-}
-}
-export interface Factor {
-  name: string;
-  levels: string;
-}
-}
-}
-export interface DesignCell {
-  id: string;
+
+
+
+
+export interface FactorialDesign { factors: Factor;
+  designMatrix: DesignCell }
+
+
+
+export interface Factor { name: string;
+  levels: string }
+
+
+
+export interface DesignCell { id: string;
   factors: Record<string, string>;
-  allocation: number;
-}
-}
-}
-export interface RolloutStrategy {
-  type: 'immediate' | 'gradual';
-  stages?: RolloutStage;
-}
-}
-}
-export interface RolloutStage {
-  percentage: number;
-  duration: number; // hours,
-  triggerConditions?: {
+  allocation: number }
+
+
+
+export interface RolloutStrategy { type: 'immediate' | 'gradual';
+  stages?: RolloutStage }
+
+
+
+export interface RolloutStage { percentage: number;
+  duration: number; // hours;
+  triggerConditions?: { }
   successRate?: number;
   errorRate?: number;
   latencyThreshold?: number;
-}
+
+
 };
 
 // Assignment and allocation types
-}
-}
-export interface UserAssignment {
-  userId: string;
+
+
+export interface UserAssignment { userId: string;
   experimentId: string;
   variantId: string;
   assignedAt: Date;
   sessionId?: string;
   sticky: boolean;
-  salt: string;
-}
-}
-}
-export interface AssignmentRequest {
-  userId: string;
+  salt: string }
+
+
+
+export interface AssignmentRequest { userId: string;
   sessionId?: string;
   experimentId: string;
   overrideVariant?: string;
-  debugMode?: boolean;
-}
-}
-}
-export interface AssignmentResponse {
-  variantId: string;
+  debugMode?: boolean }
+
+
+
+export interface AssignmentResponse { variantId: string;
   variant: ExperimentVariant;
   assigned: boolean;
   reason?: string;
-  debugInfo?: {
+  debugInfo?: { }
   hash: string;
   bucket: number;
   allocation: TrafficAllocation;
-}
+
+
 };
 
 // Results and analysis types
-}
-}
-export interface ExperimentResults {
-  experimentId: string;
+
+
+export interface ExperimentResults { experimentId: string;
   calculatedAt: Date;
   variants: VariantResults;
   statistical: StatisticalResults;
   segments: SegmentResults;
-  insights: ExperimentInsight;
-}
-}
-}
-export interface VariantResults {
-  variantId: string;
+  insights: ExperimentInsight }
+
+
+
+export interface VariantResults { variantId: string;
   metrics: MetricResult;
   sampleSize: number;
   conversionRate?: number;
   averageLatency?: number;
   totalCost?: number;
-  errorRate?: number;
-}
-}
-}
-export interface MetricResult {
-  metricId: string;
+  errorRate?: number }
+
+
+
+export interface MetricResult { metricId: string;
   value: number;
   confidenceInterval: [number, number];
   standardError: number;
-  trend: 'up' | 'down' | 'stable'
-}
-  }
-}
-export interface StatisticalResults {
-  primaryMetric: {
+  trend: 'up' | 'down' | 'stable' }
+
+
+
+
+export interface StatisticalResults { primaryMetric: { }
   winningVariant?: string;
   pValue: number;
   statisticalSignificance: boolean;
   practicalSignificance: boolean;
   confidenceLevel: number;
-}
+
+
 };
-  guardrailMetrics: {
+  guardrailMetrics: { ,
   metricId: string;
   passed: boolean;
   threshold: number;
-  actualValue: number;
-}[];
-}
-}
-export interface SegmentResults {
-  segment: ExperimentSegment;
+  actualValue: number }[];
+
+
+export interface SegmentResults { segment: ExperimentSegment;
   variants: VariantResults;
   sampleSize: number;
-  significance: boolean;
-}
-}
-}
-export interface ExperimentInsight {
-  type: 'winner_detected' | 'segment_opportunity' | 'cost_anomaly' | 'performance_degradation';
+  significance: boolean }
+
+
+
+export interface ExperimentInsight { type: 'winner_detected' | 'segment_opportunity' | 'cost_anomaly' | 'performance_degradation' }
   title: string;
   description: string;
   severity: 'low' | 'medium' | 'high';
@@ -239,11 +223,11 @@ export interface ExperimentInsight {
   recommendations?: string;
   data?: Record<string, unknown>;
   // Template and knowledge base types
-}
-}
-}
-export interface ExperimentTemplate {
-  id: string;
+
+
+
+
+export interface ExperimentTemplate { id: string;
   name: string;
   description: string;
   category: string;
@@ -256,10 +240,10 @@ export interface ExperimentTemplate {
   averageUplift: number;
   timesUsed: number;
   createdBy: string;
-  createdAt: Date;
-}
-}
-}
+  createdAt: Date }
+
+
+
 export interface KnowledgeBaseEntry {
   id: string;
   experimentId: string;
@@ -275,49 +259,48 @@ export interface KnowledgeBaseEntry {
   createdAt: Date;
   updatedAt: Date;
   // Configuration and system types
-}
-}
-}
-export interface ABTestingConfig {
-  maxVariants: number;
+
+
+
+
+export interface ABTestingConfig { maxVariants: number;
   defaultConfidenceLevel: number;
   defaultMinSampleSize: number;
-  saltRotationInterval: number; // days,
-  maxExperimentDuration: number; // days,
+  saltRotationInterval: number; // days;
+  maxExperimentDuration: number; // days }
   enableBayesian: boolean;
   enableBandits: boolean;
   enableFactorial: boolean;
-}
-}
-}
-export interface AllocationServiceConfig {
-  redisUrl: string;
-  cacheTtl: number; // seconds
-  maxAssignmentLatency: number; // ms,
+
+
+
+
+export interface AllocationServiceConfig { redisUrl: string;
+  cacheTtl: number; // seconds;
+  maxAssignmentLatency: number; // ms;
   enableDebugMode: boolean;
-  saltStorage: {
+  saltStorage: { }
   currentSalt: string;
 
-}
-    previousSalts: { salt: string; rotatedAt: Date }[];
+},
+  previousSalts: { salt: string; rotatedAt: Date }[];
   };
 
 // Error types
-}
-export class ExperimentError extends Error {
-  constructor();
+
+export class ExperimentError extends Error { constructor();
   message: string,
   public code: string,
   public experimentId?: string,
-  public details?: Record<string, unknown>,
+  public details?: Record<string, unknown>
   super(message);
   this.name = 'ExperimentError';
   export class AllocationError extends Error {
   constructor();
-  message: string,
-  public code: string,
-  public userId?: string,
-  public experimentId?: string,
+  message: string
+  public code: string
+  public userId?: string
+  public experimentId?: string }
   super(message);
   this.name = 'AllocationError';
   // Utility types
@@ -330,12 +313,10 @@ export class ExperimentError extends Error {
   | 'variant_assigned'
   | 'winner_detected'
   | 'rollout_stage_completed';
-  export interface ExperimentEvent {
-  type: ExperimentEventType;
+  export interface ExperimentEvent { type: ExperimentEventType;
   experimentId: string;
   timestamp: Date;
   data: Record<string, unknown>;
   userId?: string;
-  variantId?: string;
-}
-}
+  variantId?: string }
+

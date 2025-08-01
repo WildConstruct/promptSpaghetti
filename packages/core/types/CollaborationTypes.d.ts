@@ -7,19 +7,17 @@
  */
 
 }
-export interface StickyNote {
-    id: string;
+}
+export interface StickyNote { id: string;
     position: {
         x: number;
-        y: number;
+        y: number }
 }
     };
     content: string;
     color: StickyNoteColor;
-    size: {
-        width: number;
-        height: number;
-    };
+    size: { width: number;
+        height: number };
     author: string;
     timestamp: string;
     isEditing?: boolean;
@@ -28,8 +26,8 @@ export interface StickyNote {
 export type StickyNoteColor = 'yellow' | 'blue' | 'green' | 'red' | 'purple' | 'orange';
 
 }
-export interface StickyNoteColorInfo {
-    background: string;
+}
+export interface StickyNoteColorInfo { background: string;
     border: string;
     text: string;
     shadow: string;
@@ -37,19 +35,17 @@ export interface StickyNoteColorInfo {
     description: string;
 
 export type RegionGroupStyle = 'solid' | 'dashed' | 'dotted' | 'rounded' | 'modern';
-export type RegionGroupVisibility = 'always' | 'hover' | 'selected' | 'editing' | 'collapsed';
-
+export type RegionGroupVisibility = 'always' | 'hover' | 'selected' | 'editing' | 'collapsed' }
 }
-export interface RegionGroupBounds {
-    x: number;
+}
+export interface RegionGroupBounds { x: number;
     y: number;
     width: number;
     height: number;
-    padding?: number;
-
+    padding?: number }
 }
-export interface RegionGroup {
-    id: string;
+}
+export interface RegionGroup { id: string;
     label: string;
     description?: string;
     color: string;
@@ -68,28 +64,25 @@ export interface RegionGroup {
     zIndex?: number;
     author: string;
     timestamp: string;
-    lastModified: string;
-
+    lastModified: string }
 }
-export interface RegionGroupAction {
-    type: 'create' | 'update' | 'delete' | 'addNodes' | 'removeNodes' | 'move' | 'resize' | 'collapse' | 'expand';
+}
+export interface RegionGroupAction { type: 'create' | 'update' | 'delete' | 'addNodes' | 'removeNodes' | 'move' | 'resize' | 'collapse' | 'expand';
     groupId?: string;
     group?: Partial<RegionGroup>;
     nodeIds?: string[];
     bounds?: RegionGroupBounds;
     position?: {
         x: number;
-        y: number;
+        y: number }
 }
     };
-    size?: {
-        width: number;
-        height: number;
-    };
+    size?: { width: number;
+        height: number };
 
 }
-export interface RegionGroupPreferences {
-    defaultColor: string;
+}
+export interface RegionGroupPreferences { defaultColor: string;
     defaultBackgroundColor: string;
     defaultOpacity: number;
     defaultStyle: RegionGroupStyle;
@@ -104,17 +97,16 @@ export interface RegionGroupPreferences {
 
 export export export export type ConnectionLabelPosition = 'start' | 'middle' | 'end' | 'custom';
 export type ConnectionLabelStyle = 'default' | 'badge' | 'arrow' | 'highlight' | 'minimal';
-export type ConnectionVisualStyle = 'solid' | 'dashed' | 'dotted' | 'animated' | 'gradient';
-
+export type ConnectionVisualStyle = 'solid' | 'dashed' | 'dotted' | 'animated' | 'gradient' }
 }
-export interface ConnectionLabel {
-    id: string;
+}
+export interface ConnectionLabel { id: string;
     connectionId: string;
     content: string;
     description?: string;
     position: {
         x: number;
-        y: number;
+        y: number }
 }
     };
     positionType: ConnectionLabelPosition;
@@ -133,8 +125,8 @@ export interface ConnectionLabel {
     lastModified: string;
 
 }
-export interface ConnectionAnnotation {
-    id: string;
+}
+export interface ConnectionAnnotation { id: string;
     connectionId: string;
     labels: ConnectionLabel[];
     visualStyle: ConnectionVisualStyle;
@@ -149,32 +141,30 @@ export interface ConnectionAnnotation {
     metadata?: Record<string, any>;
     author: string;
     timestamp: string;
-    lastModified: string;
-
+    lastModified: string }
 }
-export interface ConnectionLabelAction {
-    type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit' | 'move';
+}
+export interface ConnectionLabelAction { type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit' | 'move';
     labelId?: string;
     connectionId: string;
     label?: Partial<ConnectionLabel>;
     content?: string;
     position?: {
         x: number;
-        y: number;
+        y: number }
 }
     };
     positionOffset?: number;
 
 }
-export interface ConnectionAnnotationAction {
-    type: 'create' | 'update' | 'delete' | 'highlight' | 'unhighlight';
+}
+export interface ConnectionAnnotationAction { type: 'create' | 'update' | 'delete' | 'highlight' | 'unhighlight';
     annotationId?: string;
     connectionId: string;
-    annotation?: Partial<ConnectionAnnotation>;
-
+    annotation?: Partial<ConnectionAnnotation> }
 }
-export interface ConnectionAnnotationPreferences {
-    defaultLabelStyle: ConnectionLabelStyle;
+}
+export interface ConnectionAnnotationPreferences { defaultLabelStyle: ConnectionLabelStyle;
     defaultVisualStyle: ConnectionVisualStyle;
     defaultColor: string;
     defaultPosition: ConnectionLabelPosition;
@@ -188,11 +178,10 @@ export interface ConnectionAnnotationPreferences {
 
 export export export export type NodeLabelDisplayMode = 'always' | 'hover' | 'focus' | 'selected' | 'never';
 export type NodeLabelPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
-export type NodeLabelStyle = 'default' | 'minimal' | 'professional' | 'colorful' | 'outline';
-
+export type NodeLabelStyle = 'default' | 'minimal' | 'professional' | 'colorful' | 'outline' }
 }
-export interface NodeLabelConfig {
-    id: string;
+}
+export interface NodeLabelConfig { id: string;
     nodeId: string;
     customLabel: string;
     displayMode: NodeLabelDisplayMode;
@@ -206,19 +195,17 @@ export interface NodeLabelConfig {
     showIcon?: boolean;
     truncateLength?: number;
     author: string;
-    timestamp: string;
-
+    timestamp: string }
 }
-export interface NodeLabelAction {
-    type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit';
+}
+export interface NodeLabelAction { type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit';
     nodeId: string;
     labelId?: string;
     config?: Partial<NodeLabelConfig>;
-    customLabel?: string;
-
+    customLabel?: string }
 }
-export interface NodeLabelPreferences {
-    defaultDisplayMode: NodeLabelDisplayMode;
+}
+export interface NodeLabelPreferences { defaultDisplayMode: NodeLabelDisplayMode;
     defaultPosition: NodeLabelPosition;
     defaultStyle: NodeLabelStyle;
     enableInlineEditing: boolean;
@@ -241,30 +228,28 @@ export export export interface GraphAnnotations {
         author: string;
         created: string;
         modified: string;
-        version: string;
+        version: string }
 }
     };
 
 }
-export interface StickyNoteAction {
-    type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'startEdit' | 'stopEdit';
+}
+export interface StickyNoteAction { type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'startEdit' | 'stopEdit';
     noteId?: string;
     note?: Partial<StickyNote>;
     position?: {
         x: number;
-        y: number;
+        y: number }
 }
     };
-    size?: {
-        width: number;
-        height: number;
-    };
+    size?: { width: number;
+        height: number };
     content?: string;
     color?: StickyNoteColor;
 
 }
-export interface StickyNoteContextMenuOptions {
-    x: number;
+}
+export interface StickyNoteContextMenuOptions { x: number;
     y: number;
     noteId?: string;
     canEdit: boolean;
@@ -279,13 +264,11 @@ export declare const STICKY_NOTE_COLORS: {
     blue: string;
     green: string;
     pink: string;
-    purple: string;
+    purple: string }
 }
 };
-export declare const DEFAULT_STICKY_NOTE_CONFIG: {
-    readonly color: string;
+export declare const DEFAULT_STICKY_NOTE_CONFIG: { readonly color: string;
     readonly width: 200;
     readonly height: 150;
-    readonly pinned: false;
-};
+    readonly pinned: false };
 //# sourceMappingURL=CollaborationTypes.d.ts.map

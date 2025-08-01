@@ -6,27 +6,24 @@
  * Custom React hook for managing rate limiting performance metrics,
  * providing real-time data updates and dashboard state management.
  */
-import { 
-  PerformanceMetrics,
+import { PerformanceMetrics,
   MetricsVisualizationData,
-  AlertCondition,
+  AlertCondition }
   DashboardWidget
 } from '../RateLimitingPerformanceMetrics';
 import { RateLimitingService } from '../RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from '../AdaptiveThrottlingRules';
 
 }
-export interface UseRateLimitingMetricsOptions {
-    autoRefresh?: boolean;
+}
+export interface UseRateLimitingMetricsOptions { autoRefresh?: boolean;
     refreshInterval?: number;
     timeRange?: string;
     enableAlerts?: boolean;
-    retainHistoryHours?: number;
-
-
+    retainHistoryHours?: number }
 }
-export interface MetricsHookReturn {
-    currentMetrics: PerformanceMetrics | null;
+}
+export interface MetricsHookReturn { currentMetrics: PerformanceMetrics | null;
     visualizationData: MetricsVisualizationData | null;
     activeAlerts: AlertCondition[];
     widgets: DashboardWidget[];
@@ -43,18 +40,17 @@ export interface MetricsHookReturn {
     startMonitoring: () => void;
     stopMonitoring: () => void;
     error: string | null;
-    clearError: () => void;
-
-
+    clearError: () => void }
 }
-export interface MetricsServiceConfig {
-    rateLimitingService: RateLimitingService;
+}
+export interface MetricsServiceConfig { rateLimitingService: RateLimitingService;
     throttlingEngine?: AdaptiveThrottlingRulesEngine;
     options?: UseRateLimitingMetricsOptions;
 
 export declare const useRateLimitingMetrics: ()
-  { rateLimitingService,
-  throttlingEngine,
+  { rateLimitingService;
+  throttlingEngine }
+}
 }
   options }: MetricsServiceConfig
 ) => MetricsHookReturn;

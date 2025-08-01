@@ -5,8 +5,8 @@ import { AuthConfig, UserProfile, UserPreferences } from '../types';
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
-}
-}
+
+
 export interface ProfileUpdateData {
   displayName?: string;
   firstName?: string;
@@ -14,32 +14,35 @@ export interface ProfileUpdateData {
   bio?: string;
   timezone?: string;
   locale?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProfileImageData {
   originalName: string;
   mimeType: string;
   size: number;
   buffer: Buffer;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PreferencesData {
   category: string;
   settings: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationPreferences {
   email: {
     enabled: boolean;
@@ -49,8 +52,9 @@ export interface NotificationPreferences {
       system: boolean;
       updates: boolean;
       marketing: boolean;
-}
-}
+
+
+
     };
   };
   inApp: {
@@ -77,7 +81,7 @@ export interface NotificationPreferences {
     end: string;   // HH:MM format
     timezone: string;
   };
-}
+
 
 export class ProfileService {
   private config: AuthConfig;
@@ -88,7 +92,7 @@ export class ProfileService {
     this.config = config;
     this.dbService = dbService;
     this.auditService = auditService;
-  }
+
 
   async getProfile(userId: string): Promise<UserProfile | null> {
 
@@ -98,7 +102,7 @@ export class ProfileService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     return {
@@ -114,7 +118,7 @@ export class ProfileService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
+
 
   async createProfile(userId: string, data: ProfileUpdateData): Promise<UserProfile> {
 
@@ -162,7 +166,7 @@ export class ProfileService {
       createdAt: now,
       updatedAt: now
     };
-  }
+
 
   async updateProfile(
     userId: string,
@@ -176,7 +180,7 @@ export class ProfileService {
     let profile = await this.getProfile(userId);
     if (!profile) {
       profile = await this.createProfile(userId, data);
-    } else {
+ else {
       // Update existing profile
       await this.dbService.query(`
         UPDATE user_profiles 
@@ -209,8 +213,8 @@ export class ProfileService {
             bio: profile.bio,
             timezone: profile.timezone,
             locale: profile.locale
-          }
-  }
+
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -227,10 +231,10 @@ export class ProfileService {
         locale: data.locale ?? profile.locale,
         updatedAt: now
       };
-    }
+
 
     return profile;
-  }
+
 
   async uploadProfileImage(
     userId: string,
@@ -242,12 +246,12 @@ export class ProfileService {
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (imageData.size > maxSize) {
       throw new Error('Image file too large. Maximum size is 5MB.');
-    }
+
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(imageData.mimeType)) {
       throw new Error('Invalid image type. Allowed types: JPEG, PNG, GIF, WebP.');
-    }
+
 
     try {
       // Generate unique filename
@@ -289,14 +293,14 @@ export class ProfileService {
           originalName: imageData.originalName,
           mimeType: imageData.mimeType,
           size: imageData.size
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
       });
 
       return { avatarUrl };
-    } catch (error) {
+ catch (error) {
       // Log upload failure
       await this.auditService.logEvent({
         userId,
@@ -306,15 +310,15 @@ export class ProfileService {
           originalName: imageData.originalName,
           mimeType: imageData.mimeType,
           size: imageData.size
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
       });
 
       throw error;
-    }
-  }
+
+
 
   async deleteProfileImage(
     userId: string,
@@ -324,7 +328,7 @@ export class ProfileService {
     const profile = await this.getProfile(userId);
     if (!profile || !profile.avatarUrl) {
       return;
-    }
+
 
     // Remove avatar URL from profile
     await this.dbService.query(`
@@ -347,12 +351,12 @@ export class ProfileService {
       resourceType: 'profile',
       details: {
         deletedAvatarUrl: profile.avatarUrl
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
     });
-  }
+
 
   async getPreferences(userId: string, category?: string): Promise<UserPreferences[]> {
 
@@ -371,7 +375,7 @@ export class ProfileService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     }));
-  }
+
 
   async updatePreferences(
     userId: string,
@@ -406,7 +410,7 @@ export class ProfileService {
           category,
           changes: settings,
           previousSettings
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -417,7 +421,7 @@ export class ProfileService {
         settings,
         updatedAt: now
       };
-    } else {
+ else {
       // Create new preferences
       const id = require('crypto').randomUUID();
       
@@ -435,7 +439,7 @@ export class ProfileService {
         details: {
           category,
           settings
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -449,8 +453,8 @@ export class ProfileService {
         createdAt: now,
         updatedAt: now
       };
-    }
-  }
+
+
 
   async getNotificationPreferences(userId: string): Promise<NotificationPreferences> {
 
@@ -467,8 +471,8 @@ export class ProfileService {
             system: true,
             updates: false,
             marketing: false
-          }
-  }
+
+
         inApp: {
           enabled: true,
           types: {
@@ -476,8 +480,8 @@ export class ProfileService {
             system: true,
             updates: true,
             mentions: true
-          }
-  }
+
+
         push: {
           enabled: false,
           types: {
@@ -485,19 +489,19 @@ export class ProfileService {
             system: false,
             updates: false,
             mentions: true
-          }
-  }
+
+
         quietHours: {
           enabled: false,
           start: '22:00',
           end: '08:00',
           timezone: 'UTC'
-        }
+
       };
-    }
+
 
     return preferences[0].settings as NotificationPreferences;
-  }
+
 
   async updateNotificationPreferences(
     userId: string,
@@ -507,7 +511,7 @@ export class ProfileService {
 
     await this.updatePreferences(userId, 'notifications', preferences, context);
     return preferences;
-  }
+
 
   async deleteProfile(
     userId: string,
@@ -541,18 +545,18 @@ export class ProfileService {
       resourceType: 'profile',
       details: {
         deletedAt: new Date()
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
     });
-  }
+
 
   async getProfileCompleteness(userId: string): Promise<{
     percentage: number;
     completedFields: string[];
     missingFields: string[];
-  }> {
+> {
 
     const profile = await this.getProfile(userId);
     
@@ -572,10 +576,10 @@ export class ProfileService {
     for (const field of allFields) {
       if (profile && profile[field as keyof UserProfile]) {
         completedFields.push(field);
-      } else {
+ else {
         missingFields.push(field);
-      }
-    }
+
+
 
     const percentage = Math.round((completedFields.length / allFields.length) * 100);
 
@@ -584,7 +588,7 @@ export class ProfileService {
       completedFields,
       missingFields
     };
-  }
+
 
   async searchProfiles(
     query: string,
@@ -593,7 +597,7 @@ export class ProfileService {
   ): Promise<{
     profiles: Partial<UserProfile>[];
     total: number;
-  }> {
+> {
     const searchQuery = `%${query.toLowerCase()}%`;
     
     const result = await this.dbService.query(`
@@ -628,5 +632,4 @@ export class ProfileService {
     const total = result.rows.length > 0 ? parseInt(result.rows[0].total_count) : 0;
 
     return { profiles, total };
-  }
-}
+

@@ -8,66 +8,53 @@ import { EventEmitter } from 'events';
 import { z } from 'zod';
 import { UnifiedEventBus, UnifiedAnalyticsEvent } from './UnifiedEventBus';
 import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthorization';
-export declare enum WSMessageType {
-    SUBSCRIBE = "subscribe",
+export declare enum WSMessageType { SUBSCRIBE = "subscribe",
     UNSUBSCRIBE = "unsubscribe",
     EVENT = "event",
     HEARTBEAT = "heartbeat",
     ERROR = "error",
     AUTH = "auth",
-    CONFIG = "config",
+    CONFIG = "config" }
     METRICS = "metrics"
 
-export declare const WSMessageSchema: z.ZodObject<{
-    type: z.ZodNativeEnum<typeof WSMessageType>;
+export declare const WSMessageSchema: z.ZodObject<{ type: z.ZodNativeEnum<typeof WSMessageType>;
     id: z.ZodOptional<z.ZodString>;
     payload: z.ZodOptional<z.ZodUnknown>;
     timestamp: z.ZodNumber;
-    clientId: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    type: WSMessageType;
+    clientId: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { type: WSMessageType;
     timestamp: number;
     id?: string | undefined;
     payload?: unknown;
-    clientId?: string | undefined;
-}, {
-    type: WSMessageType;
+    clientId?: string | undefined }, { type: WSMessageType;
     timestamp: number;
     id?: string | undefined;
     payload?: unknown;
-    clientId?: string | undefined;
-}>;
+    clientId?: string | undefined }>;
 export type WSMessage = z.infer<typeof WSMessageSchema>;
-export declare const SubscriptionConfigSchema: z.ZodObject<{
-    subscriptionId: z.ZodString;
-    filter: z.ZodOptional<z.ZodObject<{,
+export declare const SubscriptionConfigSchema: z.ZodObject<{ subscriptionId: z.ZodString;
+    filter: z.ZodOptional<z.ZodObject<{ }
         types: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         categories: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         sources: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         severities: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         userId: z.ZodOptional<z.ZodString>;
         organizationId: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        userId?: string | undefined;
+    }, "strip", z.ZodTypeAny, { userId?: string | undefined;
         categories?: string[] | undefined;
         organizationId?: string | undefined;
         types?: string[] | undefined;
         severities?: string[] | undefined;
-        sources?: string[] | undefined;
-    }, {
-        userId?: string | undefined;
+        sources?: string[] | undefined }, { userId?: string | undefined;
         categories?: string[] | undefined;
         organizationId?: string | undefined;
         types?: string[] | undefined;
         severities?: string[] | undefined;
-        sources?: string[] | undefined;
-    }>>;
+        sources?: string[] | undefined }>>;
     batchSize: z.ZodDefault<z.ZodNumber>;
     batchTimeoutMs: z.ZodDefault<z.ZodNumber>;
     includeMetadata: z.ZodDefault<z.ZodBoolean>;
     maxQueueSize: z.ZodDefault<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    includeMetadata: boolean;
+}, "strip", z.ZodTypeAny, { includeMetadata: boolean;
     batchSize: number;
     subscriptionId: string;
     batchTimeoutMs: number;
@@ -78,18 +65,15 @@ export declare const SubscriptionConfigSchema: z.ZodObject<{
         organizationId?: string | undefined;
         types?: string[] | undefined;
         severities?: string[] | undefined;
-        sources?: string[] | undefined;
-    } | undefined;
-}, {
-    subscriptionId: string;
+        sources?: string[] | undefined } | undefined;
+}, { subscriptionId: string;
     filter?: {
         userId?: string | undefined;
         categories?: string[] | undefined;
         organizationId?: string | undefined;
         types?: string[] | undefined;
         severities?: string[] | undefined;
-        sources?: string[] | undefined;
-    } | undefined;
+        sources?: string[] | undefined } | undefined;
     includeMetadata?: boolean | undefined;
     batchSize?: number | undefined;
     batchTimeoutMs?: number | undefined;
@@ -97,8 +81,8 @@ export declare const SubscriptionConfigSchema: z.ZodObject<{
 }>;
 export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
 }
-interface ClientConnection {
-    id: string;
+}
+interface ClientConnection { id: string;
     ws: WebSocket | any;
     authContext?: AuthContext;
     subscriptions: Map<string, SubscriptionConfig>;
@@ -107,19 +91,19 @@ interface ClientConnection {
     eventQueue: UnifiedAnalyticsEvent[];
     connected: boolean;
     ipAddress?: string;
-    userAgent?: string;
+    userAgent?: string }
 }
-interface ConnectionStats {
-    totalConnections: number;
+}
+interface ConnectionStats { totalConnections: number;
     activeConnections: number;
     authenticatedConnections: number;
     totalSubscriptions: number;
     messagesPerSecond: number;
     bytesPerSecond: number;
-    errorRate: number;
+    errorRate: number }
 }
-interface WSServerConfig {
-    port: number;
+}
+interface WSServerConfig { port: number;
     heartbeatInterval: number;
     connectionTimeout: number;
     maxConnections: number;
@@ -143,8 +127,8 @@ export declare class WebSocketStreamingServer extends EventEmitter {
     private heartbeatTimer;
     private metricsTimer;
     constructor();
-      eventBus: UnifiedEventBus,
-      authService: AnalyticsAuthorizationService,
+      eventBus: UnifiedEventBus;
+      authService: AnalyticsAuthorizationService }
       config?: Partial<WSServerConfig>
     );
     /**
@@ -245,12 +229,11 @@ export declare class WebSocketStreamingServer extends EventEmitter {
     /**
      * Get connected clients
      */
-    getClients(): Array<{
-        id: string;
+    getClients(): Array<{ id: string;
         isAuthenticated: boolean;
         subscriptions: number;
         lastHeartbeat: number;
-        ipAddress?: string;
+        ipAddress?: string }
 }
     }>;
     /**

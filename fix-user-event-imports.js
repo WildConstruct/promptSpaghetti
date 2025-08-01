@@ -29,19 +29,19 @@ filesWithUserEvent.forEach((filePath: string) => {
     if (!fs.existsSync(filePath)) {
       console.log(`⚠️  File not found: ${filePath}`);
       return;
-    }
+
 
     const content = fs.readFileSync(filePath, 'utf8');
     
     // Check if userEvent is already imported
     if (content.includes('import userEvent') || content.includes('from \'@testing-library/user-event\'')) {
       return;
-    }
+
     
     // Check if file actually uses userEvent
     if (!content.includes('userEvent.')) {
       return;
-    }
+
 
     let updatedContent = content;
     
@@ -54,7 +54,7 @@ filesWithUserEvent.forEach((filePath: string) => {
       const [fullMatch, imports] = match;
       const newImport = `${fullMatch}\nimport userEvent from '@testing-library/user-event';`;
       updatedContent = content.replace(fullMatch, newImport);
-    } else {
+ else {
       // Add userEvent import at the top after React import
       const reactImportRegex = /import React[^;]*;/;
       const reactMatch = content.match(reactImportRegex);
@@ -62,21 +62,20 @@ filesWithUserEvent.forEach((filePath: string) => {
       if (reactMatch) {
         const afterReactImport = `${reactMatch[0]}\nimport userEvent from '@testing-library/user-event';`;
         updatedContent = content.replace(reactMatch[0], afterReactImport);
-      } else {
+ else {
         // Add at the very beginning
         updatedContent = `import userEvent from '@testing-library/user-event';\n${content}`;
-      }
-    }
+
+
     
     if (updatedContent !== content) {
       fs.writeFileSync(filePath, updatedContent);
       filesProcessed++;
       console.log(`✅ ${path.relative('.', filePath)}: Added userEvent import`);
-    }
-    
-  } catch (error) {
+
+ catch (error) {
     console.error(`❌ Error processing ${filePath}:`, error.message);
-  }
+
 });
 
 console.log(`\n🎉 userEvent import fixes complete!`);
@@ -86,4 +85,3 @@ console.log(`   • Added missing userEvent imports from @testing-library/user-e
 
 if (filesProcessed > 0) {
   console.log(`\n💡 This resolves "Cannot find name 'userEvent'" TypeScript errors.`);
-}

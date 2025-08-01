@@ -18,8 +18,8 @@ import * as crypto from 'crypto';
 // Core Access Control Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface AccessControlConfig {
   enabled: boolean;
   defaultDenyAll: boolean;
@@ -55,12 +55,13 @@ export interface AccessControlConfig {
   externalPolicyProviders: string[];
   webhookNotifications: boolean;
   realTimeUpdates: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessControlContext {
   // Subject (who is requesting access)
   subject: AccessSubject;
@@ -90,12 +91,13 @@ export interface AccessControlContext {
   
   // Additional context
   customAttributes: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessSubject {
   id: string;
   type: SubjectType;
@@ -129,12 +131,13 @@ export interface AccessSubject {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessResource {
   id: string;
   type: ResourceType;
@@ -171,12 +174,13 @@ export interface AccessResource {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessAction {
   id: string;
   type: ActionType;
@@ -198,12 +202,13 @@ export interface AccessAction {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessEnvironment {
   // Time and location
   timestamp: Date;
@@ -212,8 +217,9 @@ export interface AccessEnvironment {
     country: string;
     region: string;
     city: string;
-}
-}
+
+
+
     coordinates?: { lat: number; lon: number };
   };
   
@@ -250,10 +256,10 @@ export interface AccessEnvironment {
   
   // Metadata
   metadata: Record<string, any>;
-}
 
-}
-}
+
+
+
 export interface AccessDecision {
   decision: AccessDecisionType;
   requestId: string;
@@ -282,16 +288,17 @@ export interface AccessDecision {
   
   // Additional information
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Policy System Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface AccessPolicy {
   id: string;
   name: string;
@@ -337,67 +344,73 @@ export interface AccessPolicy {
   createdAt: Date;
   updatedAt: Date;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyTarget {
   subjects?: SubjectTarget[];
   resources?: ResourceTarget[];
   actions?: ActionTarget[];
   environments?: EnvironmentTarget[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SubjectTarget {
   type: 'IDENTITY' | 'ROLE' | 'GROUP' | 'ATTRIBUTE';
   operator: ComparisonOperator;
   value: Error;
   negate: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceTarget {
   type: 'ID' | 'TYPE' | 'PATH' | 'CLASSIFICATION' | 'ATTRIBUTE';
   operator: ComparisonOperator;
   value: Error;
   negate: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActionTarget {
   type: 'ID' | 'TYPE' | 'OPERATION' | 'CATEGORY';
   operator: ComparisonOperator;
   value: Error;
   negate: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnvironmentTarget {
   type: 'TIME' | 'LOCATION' | 'DEVICE' | 'NETWORK' | 'ATTRIBUTE';
   operator: ComparisonOperator;
   value: Error;
   negate: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyRule {
   id: string;
   description: string;
@@ -416,35 +429,38 @@ export interface PolicyRule {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleCondition {
   field: string;
   operator: ComparisonOperator;
   value: Error;
   type: ConditionType;
   weight: number; // 0-1
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyCondition {
   type: 'TEMPORAL' | 'CONTEXTUAL' | 'RISK' | 'COMPLIANCE';
   operator: ComparisonOperator;
   value: Error;
   required: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyEvaluationResult {
   policyId: string;
   decision: PolicyDecision;
@@ -462,12 +478,13 @@ export interface PolicyEvaluationResult {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessCondition {
   type: ConditionType;
   description: string;
@@ -481,12 +498,13 @@ export interface AccessCondition {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessObligation {
   type: ObligationType;
   description: string;
@@ -503,16 +521,17 @@ export interface AccessObligation {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // RBAC Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface Role {
   id: string;
   name: string;
@@ -543,12 +562,13 @@ export interface Role {
   createdAt: Date;
   updatedAt: Date;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Permission {
   id: string;
   name: string;
@@ -572,12 +592,13 @@ export interface Permission {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RoleAssignment {
   id: string;
   subjectId: string;
@@ -604,48 +625,52 @@ export interface RoleAssignment {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RoleConstraint {
   type: ConstraintType;
   parameters: Record<string, any>;
   required: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PermissionConstraint {
   type: ConstraintType;
   field: string;
   operator: ComparisonOperator;
   value: Error;
   required: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PermissionCondition {
   type: ConditionType;
   expression: string;
   parameters: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // ABAC Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface SubjectAttribute {
   name: string;
   value: Error;
@@ -672,12 +697,13 @@ export interface SubjectAttribute {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceAttribute {
   name: string;
   value: Error;
@@ -698,12 +724,13 @@ export interface ResourceAttribute {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnvironmentAttribute {
   name: string;
   value: Error;
@@ -722,12 +749,13 @@ export interface EnvironmentAttribute {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Group {
   id: string;
   name: string;
@@ -756,12 +784,13 @@ export interface Group {
   createdAt: Date;
   updatedAt: Date;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GroupMember {
   subjectId: string;
   membershipType: MembershipType;
@@ -769,21 +798,23 @@ export interface GroupMember {
   expirationDate?: Date;
   addedBy: string;
   addedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GroupAttribute {
   name: string;
   value: Error;
   type: AttributeType;
   inherited: boolean;
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Enums and Types
@@ -1013,7 +1044,7 @@ export class AccessControlFramework extends EventEmitter {
     super();
     this.config = { ...this.getDefaultConfig(), ...config };
     this.initializeFramework();
-  }
+
 
   // =============================================================================
   // Core Access Control Methods
@@ -1036,8 +1067,8 @@ export class AccessControlFramework extends EventEmitter {
         if (cachedDecision && this.isCacheValid(cachedDecision)) {
           await this.auditDecision(context, cachedDecision, 'CACHED');
           return cachedDecision;
-        }
-      }
+
+
 
       // Validate context
       this.validateContext(context);
@@ -1054,7 +1085,7 @@ export class AccessControlFramework extends EventEmitter {
       // Cache decision if enabled
       if (this.config.cacheEnabled) {
         this.decisionCache.set(cacheKey, decision);
-      }
+
       
       // Audit decision
       await this.auditDecision(context, decision, 'EVALUATED');
@@ -1063,8 +1094,7 @@ export class AccessControlFramework extends EventEmitter {
       this.emit('accessDecision', { context, decision });
       
       return decision;
-
-    } catch (error) {
+ catch (error) {
       // Create deny decision for errors
       const errorDecision: AccessDecision = {
         decision: 'DENY',
@@ -1083,8 +1113,8 @@ export class AccessControlFramework extends EventEmitter {
       await this.auditDecision(context, errorDecision, 'ERROR');
       
       return errorDecision;
-    }
-  }
+
+
 
   /**
    * Bulk authorization for multiple contexts
@@ -1101,10 +1131,10 @@ export class AccessControlFramework extends EventEmitter {
         batch.map(context => this.authorize(context))
       );
       decisions.push(...batchDecisions);
-    }
+
     
     return decisions;
-  }
+
 
   /**
    * Check if subject has specific permission
@@ -1131,7 +1161,7 @@ export class AccessControlFramework extends EventEmitter {
 
     const decision = await this.authorize(authContext);
     return decision.decision === 'PERMIT';
-  }
+
 
   /**
    * Get effective permissions for a subject
@@ -1148,7 +1178,7 @@ export class AccessControlFramework extends EventEmitter {
     // Collect permissions from roles
     for (const role of subject.roles) {
       permissions.push(...role.permissions);
-    }
+
 
     // Apply filters
     let filteredPermissions = permissions;
@@ -1157,13 +1187,13 @@ export class AccessControlFramework extends EventEmitter {
       filteredPermissions = filteredPermissions.filter(p => 
         p.resource === resourceType || p.resource === '*'
       );
-    }
+
     
     if (tenantId && this.config.strictTenantIsolation) {
       filteredPermissions = filteredPermissions.filter(p => 
         p.scope === 'GLOBAL' || p.metadata?.tenantId === tenantId
       );
-    }
+
 
     // Remove duplicates
     const uniquePermissions = filteredPermissions.filter((permission, index, array) => 
@@ -1171,7 +1201,7 @@ export class AccessControlFramework extends EventEmitter {
     );
 
     return uniquePermissions;
-  }
+
 
   // =============================================================================
   // Policy Management
@@ -1209,12 +1239,12 @@ export class AccessControlFramework extends EventEmitter {
         policyName: newPolicy.name,
         policyType: newPolicy.type,
         createdBy: newPolicy.createdBy
-  }
+
       riskLevel: 'MEDIUM'
     });
 
     return newPolicy;
-  }
+
 
   /**
    * Update access policy
@@ -1224,7 +1254,7 @@ export class AccessControlFramework extends EventEmitter {
     const existingPolicy = await this.getPolicy(policyId);
     if (!existingPolicy) {
       throw new Error(`Policy not found: ${policyId}`);
-    }
+
 
     const updatedPolicy: AccessPolicy = {
       ...existingPolicy,
@@ -1254,12 +1284,12 @@ export class AccessControlFramework extends EventEmitter {
         policyId,
         changes: Object.keys(updates),
         version: updatedPolicy.version
-  }
+
       riskLevel: 'MEDIUM'
     });
 
     return updatedPolicy;
-  }
+
 
   /**
    * Delete access policy
@@ -1269,7 +1299,7 @@ export class AccessControlFramework extends EventEmitter {
     const policy = await this.getPolicy(policyId);
     if (!policy) {
       return false;
-    }
+
 
     // Remove from database
     await this.removePolicy(policyId);
@@ -1288,12 +1318,12 @@ export class AccessControlFramework extends EventEmitter {
       details: {
         policyId,
         policyName: policy.name
-  }
+
       riskLevel: 'HIGH'
     });
 
     return true;
-  }
+
 
   /**
    * Get policy by ID
@@ -1303,16 +1333,16 @@ export class AccessControlFramework extends EventEmitter {
     // Check cache first
     if (this.policyCache.has(policyId)) {
       return this.policyCache.get(policyId) || null;
-    }
+
 
     // Load from database
     const policy = await this.loadPolicy(policyId);
     if (policy) {
       this.policyCache.set(policyId, policy);
-    }
+
 
     return policy;
-  }
+
 
   /**
    * List policies with filtering
@@ -1326,7 +1356,7 @@ export class AccessControlFramework extends EventEmitter {
   }): Promise<{ policies: AccessPolicy[]; total: number }> {
 
     return await this.loadPolicies(filter);
-  }
+
 
   // =============================================================================
   // Role and Permission Management
@@ -1352,12 +1382,12 @@ export class AccessControlFramework extends EventEmitter {
         roleId: newRole.id,
         roleName: newRole.name,
         permissions: newRole.permissions.map(p => p.name)
-  }
+
       riskLevel: 'MEDIUM'
     });
 
     return newRole;
-  }
+
 
   /**
    * Assign role to subject
@@ -1370,7 +1400,7 @@ export class AccessControlFramework extends EventEmitter {
       workspaceId?: string;
       projectId?: string;
       resourceId?: string;
-  }
+
     options?: {
       effectiveDate?: Date;
       expirationDate?: Date;
@@ -1404,12 +1434,12 @@ export class AccessControlFramework extends EventEmitter {
         assignmentId: assignment.id,
         assignedBy: assignment.assignedBy,
         scope
-  }
+
       riskLevel: 'MEDIUM'
     });
 
     return assignment;
-  }
+
 
   /**
    * Revoke role from subject
@@ -1419,7 +1449,7 @@ export class AccessControlFramework extends EventEmitter {
     const assignment = await this.getRoleAssignment(assignmentId);
     if (!assignment) {
       return false;
-    }
+
 
     assignment.active = false;
     assignment.metadata.revokedBy = revokedBy || 'system';
@@ -1436,12 +1466,12 @@ export class AccessControlFramework extends EventEmitter {
         roleId: assignment.roleId,
         revokedBy,
         reason
-  }
+
       riskLevel: 'MEDIUM'
     });
 
     return true;
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -1456,7 +1486,7 @@ export class AccessControlFramework extends EventEmitter {
       try {
         const result = await this.evaluatePolicy(policy, context);
         results.push(result);
-      } catch (error) {
+ catch (error) {
         results.push({
           policyId: policy.id,
           decision: 'INDETERMINATE',
@@ -1469,11 +1499,11 @@ export class AccessControlFramework extends EventEmitter {
           warnings: [],
           metadata: {}
         });
-      }
-    }
+
+
 
     return results;
-  }
+
 
   private async evaluatePolicy(policy: AccessPolicy, context: AccessControlContext): Promise<PolicyEvaluationResult> {
 
@@ -1498,7 +1528,7 @@ export class AccessControlFramework extends EventEmitter {
         warnings,
         metadata: { reason: 'Policy target does not match context' }
       };
-    }
+
 
     // Evaluate policy conditions
     for (const condition of policy.conditions) {
@@ -1515,8 +1545,8 @@ export class AccessControlFramework extends EventEmitter {
           warnings,
           metadata: { reason: 'Policy condition not met' }
         };
-      }
-    }
+
+
 
     // Evaluate policy rules
     const ruleResults: PolicyDecision[] = [];
@@ -1529,11 +1559,11 @@ export class AccessControlFramework extends EventEmitter {
         if (ruleResult !== 'NOT_APPLICABLE') {
           ruleResults.push(ruleResult);
           appliedRules.push(rule.id);
-        }
-      } catch (error) {
+
+ catch (error) {
         errors.push(`Rule ${rule.id}: ${error instanceof Error ? error.message : String(error)}`);
-      }
-    }
+
+
 
     // Combine rule results using policy combining algorithm
     let finalDecision: PolicyDecision;
@@ -1541,10 +1571,10 @@ export class AccessControlFramework extends EventEmitter {
 
     if (ruleResults.length === 0) {
       finalDecision = policy.effect === 'PERMIT' ? 'PERMIT' : 'DENY';
-    } else {
+ else {
       finalDecision = this.combineRuleResults(ruleResults, policy.combiningAlgorithm);
       confidence = Math.min(confidence, this.calculateConfidence(ruleResults, appliedRules.length));
-    }
+
 
     return {
       policyId: policy.id,
@@ -1558,7 +1588,7 @@ export class AccessControlFramework extends EventEmitter {
       warnings,
       metadata: { policyName: policy.name, policyType: policy.type }
     };
-  }
+
 
   private combineDecisions(context: AccessControlContext, results: PolicyEvaluationResult[]): AccessDecision {
     const permits = results.filter(r => r.decision === 'PERMIT');
@@ -1574,31 +1604,31 @@ export class AccessControlFramework extends EventEmitter {
       finalDecision = this.config.defaultDenyAll ? 'DENY' : 'PERMIT';
       reason = `No applicable policies found. Default: ${finalDecision}`;
       confidence = 0.5;
-    }
+
     // Deny overrides - if any policy denies, final decision is deny
     else if (denies.length > 0) {
       finalDecision = 'DENY';
       reason = `Explicit deny from ${denies.length} policy(ies)`;
       confidence = Math.max(...denies.map(d => d.confidence));
-    }
+
     // Permit if any policy permits and no denies
     else if (permits.length > 0) {
       finalDecision = 'PERMIT';
       reason = `Permit from ${permits.length} policy(ies)`;
       confidence = Math.max(...permits.map(p => p.confidence));
-    }
+
     // Indeterminate if we have indeterminate results
     else if (indeterminates.length > 0) {
       finalDecision = 'INDETERMINATE';
       reason = `${indeterminates.length} policy(ies) returned indeterminate`;
       confidence = 0.0;
-    }
+
     // Default deny
     else {
       finalDecision = 'DENY';
       reason = 'Default deny - no permit policies matched';
       confidence = 0.8;
-    }
+
 
     // Collect all conditions and obligations
     const allConditions = results.flatMap(r => r.conditions);
@@ -1623,21 +1653,21 @@ export class AccessControlFramework extends EventEmitter {
         permitCount: permits.length,
         denyCount: denies.length,
         indeterminateCount: indeterminates.length
-      }
+
     };
-  }
+
 
   private validateContext(context: AccessControlContext): void {
     if (!context.subject?.id) {
       throw new Error('Subject ID is required');
-    }
+
     if (!context.resource?.id) {
       throw new Error('Resource ID is required');
-    }
+
     if (!context.action?.type) {
       throw new Error('Action type is required');
-    }
-  }
+
+
 
   private generateCacheKey(context: AccessControlContext): string {
     const keyData = {
@@ -1649,40 +1679,40 @@ export class AccessControlFramework extends EventEmitter {
     };
     
     return crypto.createHash('sha256').update(JSON.stringify(keyData)).digest('hex');
-  }
+
 
   private isCacheValid(decision: AccessDecision): boolean {
     const cacheAge = Date.now() - decision.timestamp.getTime();
     return cacheAge < (this.config.cacheTTL * 1000);
-  }
+
 
   private matchesPolicyTarget(target: PolicyTarget, context: AccessControlContext): boolean {
     // Check subject targets
     if (target.subjects && target.subjects.length > 0) {
       const subjectMatch = target.subjects.some(st => this.matchesSubjectTarget(st, context.subject));
       if (!subjectMatch) return false;
-    }
+
 
     // Check resource targets
     if (target.resources && target.resources.length > 0) {
       const resourceMatch = target.resources.some(rt => this.matchesResourceTarget(rt, context.resource));
       if (!resourceMatch) return false;
-    }
+
 
     // Check action targets
     if (target.actions && target.actions.length > 0) {
       const actionMatch = target.actions.some(at => this.matchesActionTarget(at, context.action));
       if (!actionMatch) return false;
-    }
+
 
     // Check environment targets
     if (target.environments && target.environments.length > 0) {
       const envMatch = target.environments.some(et => this.matchesEnvironmentTarget(et, context.environment));
       if (!envMatch) return false;
-    }
+
 
     return true;
-  }
+
 
   private matchesSubjectTarget(target: SubjectTarget, subject: AccessSubject): boolean {
     let match = false;
@@ -1702,10 +1732,10 @@ export class AccessControlFramework extends EventEmitter {
         this.compareValues(attr.value, target.operator, target.value)
       );
       break;
-    }
+
 
     return target.negate ? !match : match;
-  }
+
 
   private matchesResourceTarget(target: ResourceTarget, resource: AccessResource): boolean {
     let match = false;
@@ -1728,10 +1758,10 @@ export class AccessControlFramework extends EventEmitter {
         this.compareValues(attr.value, target.operator, target.value)
       );
       break;
-    }
+
 
     return target.negate ? !match : match;
-  }
+
 
   private matchesActionTarget(target: ActionTarget, action: AccessAction): boolean {
     let match = false;
@@ -1750,10 +1780,10 @@ export class AccessControlFramework extends EventEmitter {
       // Assuming we have action categories in metadata
       match = action.metadata.category === target.value;
       break;
-    }
+
 
     return target.negate ? !match : match;
-  }
+
 
   private matchesEnvironmentTarget(target: EnvironmentTarget, environment: AccessEnvironment): boolean {
     let match = false;
@@ -1776,10 +1806,10 @@ export class AccessControlFramework extends EventEmitter {
         this.compareValues(attr.value, target.operator, target.value)
       );
       break;
-    }
+
 
     return target.negate ? !match : match;
-  }
+
 
   private compareValues(actual: unknown, operator: ComparisonOperator, expected: unknown): boolean {
     switch (operator) {
@@ -1813,8 +1843,8 @@ export class AccessControlFramework extends EventEmitter {
       return String(actual).endsWith(String(expected));
     default:
       return false;
-    }
-  }
+
+
 
   private matchesTimeCondition(target: EnvironmentTarget, timestamp: Date): boolean {
     // Simplified time matching - would be more complex in real implementation
@@ -1822,9 +1852,9 @@ export class AccessControlFramework extends EventEmitter {
     if (typeof timeValue === 'object' && timeValue.start && timeValue.end) {
       const hour = timestamp.getHours();
       return hour >= parseInt(timeValue.start) && hour <= parseInt(timeValue.end);
-    }
+
     return true;
-  }
+
 
   private matchesLocationCondition(target: EnvironmentTarget, geolocation?: any): boolean {
     if (!geolocation) return false;
@@ -1836,8 +1866,8 @@ export class AccessControlFramework extends EventEmitter {
       return Array.isArray(target.value) && target.value.includes(geolocation.country);
     default:
       return false;
-    }
-  }
+
+
 
   private evaluateCondition(condition: PolicyCondition, context: AccessControlContext): boolean {
     // Simplified condition evaluation
@@ -1852,29 +1882,29 @@ export class AccessControlFramework extends EventEmitter {
       return this.evaluateComplianceCondition(condition, context);
     default:
       return true;
-    }
-  }
+
+
 
   private evaluateTemporalCondition(_____condition: PolicyCondition, _____context: AccessControlContext): boolean {
     // Implement time-based condition evaluation
     return true; // Simplified
-  }
+
 
   private evaluateContextualCondition(_____condition: PolicyCondition, _____context: AccessControlContext): boolean {
     // Implement context-based condition evaluation
     return true; // Simplified
-  }
+
 
   private evaluateRiskCondition(condition: PolicyCondition, context: AccessControlContext): boolean {
     // Implement risk-based condition evaluation
     const riskScore = context.riskScore || context.subject.riskScore || 0;
     return this.compareValues(riskScore, condition.operator, condition.value);
-  }
+
 
   private evaluateComplianceCondition(condition: PolicyCondition, context: AccessControlContext): boolean {
     // Implement compliance-based condition evaluation
     return context.subject.complianceStatus === 'COMPLIANT';
-  }
+
 
   private evaluateRule(rule: PolicyRule, context: AccessControlContext): PolicyDecision {
     // Simplified rule evaluation - would use a proper expression engine
@@ -1883,20 +1913,20 @@ export class AccessControlFramework extends EventEmitter {
       for (const condition of rule.conditions) {
         if (!this.evaluateRuleCondition(condition, context)) {
           return 'NOT_APPLICABLE';
-        }
-      }
+
+
       
       return rule.effect;
-    } catch (error) {
+ catch (error) {
       return 'INDETERMINATE';
-    }
-  }
+
+
 
   private evaluateRuleCondition(condition: RuleCondition, context: AccessControlContext): boolean {
     // Get the value from context based on field path
     const actualValue = this.getContextValue(condition.field, context);
     return this.compareValues(actualValue, condition.operator, condition.value);
-  }
+
 
   private getContextValue(fieldPath: string, context: AccessControlContext): unknown {
     const pathParts = fieldPath.split('.');
@@ -1905,10 +1935,10 @@ export class AccessControlFramework extends EventEmitter {
     for (const part of pathParts) {
       value = value?.[part];
       if (value === undefined) break;
-    }
+
     
     return value;
-  }
+
 
   private combineRuleResults(results: PolicyDecision[], algorithm: CombiningAlgorithm): PolicyDecision {
     switch (algorithm) {
@@ -1926,8 +1956,8 @@ export class AccessControlFramework extends EventEmitter {
       return results.includes('PERMIT') ? 'PERMIT' : 'DENY';
     default:
       return 'DENY';
-    }
-  }
+
+
 
   private calculateConfidence(results: PolicyDecision[], ruleCount: number): number {
     if (ruleCount === 0) return 0.5;
@@ -1940,7 +1970,7 @@ export class AccessControlFramework extends EventEmitter {
     
     const dominantCount = Math.max(permitCount, denyCount);
     return dominantCount / totalDecisions;
-  }
+
 
   private async auditDecision(
     context: AccessControlContext, 
@@ -1950,11 +1980,11 @@ export class AccessControlFramework extends EventEmitter {
 
     if (!this.config.auditAllDecisions && !this.config.auditFailuresOnly) {
       return;
-    }
+
 
     if (this.config.auditFailuresOnly && decision.decision === 'PERMIT') {
       return;
-    }
+
 
     await this.auditService.logEvent({
       eventType: 'ACCESS_CONTROL_DECISION',
@@ -1969,15 +1999,15 @@ export class AccessControlFramework extends EventEmitter {
         evaluationTime: decision.evaluationTime,
         source,
         appliedPolicies: decision.appliedPolicies
-  }
+
       riskLevel: decision.decision === 'DENY' ? 'MEDIUM' : 'LOW',
       compliance: {
         frameworks: context.resource.complianceFrameworks || [],
         requirements: ['access_control'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
-  }
+
 
   // =============================================================================
   // Database Operations (Simplified - would be implemented properly)
@@ -1988,71 +2018,71 @@ export class AccessControlFramework extends EventEmitter {
     // Mock implementation - would query database with complex filtering
     const allPolicies = Array.from(this.policyCache.values());
     return allPolicies.filter(policy => policy.enabled);
-  }
+
 
   private async validatePolicy(policy: AccessPolicy): Promise<void> {
 
     if (!policy.name || policy.name.trim() === '') {
       throw new Error('Policy name is required');
-    }
+
     
     if (policy.priority < 0 || policy.priority > 1000) {
       throw new Error('Policy priority must be between 0 and 1000');
-    }
+
     
     if (policy.rules.length === 0) {
       throw new Error('Policy must have at least one rule');
-    }
-  }
+
+
 
   private async storePolicy(policy: AccessPolicy): Promise<void> {
 
     // Mock implementation - would store in database
     console.log(`Storing policy: ${policy.id}`);
-  }
+
 
   private async loadPolicy(policyId: string): Promise<AccessPolicy | null> {
 
     // Mock implementation - would load from database
     return this.policyCache.get(policyId) || null;
-  }
+
 
   private async loadPolicies(filter?: any): Promise<{ policies: AccessPolicy[]; total: number }> {
 
     // Mock implementation - would load from database with filtering
     const policies = Array.from(this.policyCache.values());
     return { policies, total: policies.length };
-  }
+
 
   private async removePolicy(policyId: string): Promise<void> {
 
     // Mock implementation - would remove from database
     console.log(`Removing policy: ${policyId}`);
-  }
+
 
   private async storeRole(role: Role): Promise<void> {
 
     // Mock implementation - would store in database
     console.log(`Storing role: ${role.id}`);
-  }
+
 
   private async storeRoleAssignment(assignment: RoleAssignment): Promise<void> {
 
     // Mock implementation - would store in database
     console.log(`Storing role assignment: ${assignment.id}`);
-  }
+
 
   private async getRoleAssignment(_____assignmentId: string): Promise<RoleAssignment | null> {
 
     // Mock implementation - would load from database
     return null;
-  }
+
 
   private async updateRoleAssignment(assignment: RoleAssignment): Promise<void> {
 
     // Mock implementation - would update in database
     console.log(`Updating role assignment: ${assignment.id}`);
-  }
+
 
   private async getSubject(subjectId: string): Promise<AccessSubject> {
 
@@ -2069,7 +2099,7 @@ export class AccessControlFramework extends EventEmitter {
       complianceStatus: 'COMPLIANT',
       metadata: {}
     };
-  }
+
 
   private async getResource(resourceId: string): Promise<AccessResource> {
 
@@ -2087,7 +2117,7 @@ export class AccessControlFramework extends EventEmitter {
       legalHold: false,
       metadata: {}
     };
-  }
+
 
   private async getAction(actionType: string): Promise<AccessAction> {
 
@@ -2106,7 +2136,7 @@ export class AccessControlFramework extends EventEmitter {
       requiresJustification: false,
       metadata: {}
     };
-  }
+
 
   private async getCurrentEnvironment(): Promise<AccessEnvironment> {
 
@@ -2130,7 +2160,7 @@ export class AccessControlFramework extends EventEmitter {
       complianceMode: true,
       metadata: {}
     };
-  }
+
 
   private getDefaultConfig(): AccessControlConfig {
     return {
@@ -2157,7 +2187,7 @@ export class AccessControlFramework extends EventEmitter {
       webhookNotifications: false,
       realTimeUpdates: true
     };
-  }
+
 
   private initializeFramework(): void {
     // Initialize components
@@ -2165,7 +2195,7 @@ export class AccessControlFramework extends EventEmitter {
     this.setupEventHandlers();
     
     console.log('Access Control Framework initialized');
-  }
+
 
   private setupCacheManagement(): void {
     // Set up cache cleanup
@@ -2179,10 +2209,10 @@ export class AccessControlFramework extends EventEmitter {
         
         for (const [key] of toRemove) {
           this.decisionCache.delete(key);
-        }
-      }
+
+
     }, 60000); // Every minute
-  }
+
 
   private setupEventHandlers(): void {
     this.on('policyCreated', (policy) => {
@@ -2196,9 +2226,9 @@ export class AccessControlFramework extends EventEmitter {
     this.on('accessDecision', ({ context, decision }) => {
       if (decision.decision === 'DENY') {
         console.log(`Access denied: ${context.subject.id} -> ${context.resource.id}`);
-      }
+
     });
-  }
-}
+
+
 
 export default AccessControlFramework;

@@ -13,17 +13,18 @@ import {
   UpdateDiffSessionRequest,
   ComparisonConfig,
   GraphData
-} from '../database/comparison-models.js';
+ from '../database/comparison-models.js';
 
-}
-}
+
+
 export interface VisualDiffServiceOptions {
   comparisonConfig?: Partial<ComparisonConfig>;
   enableCaching?: boolean;
   maxCacheSize?: number;
-}
-}
-}
+
+
+
+
 
 export class VisualDiffService {
   private comparisonService: GraphComparisonService;
@@ -47,7 +48,7 @@ export class VisualDiffService {
     };
 
     this.comparisonService = new GraphComparisonService(this.config);
-  }
+
 
   /**
    * Compare two graph versions with caching support
@@ -72,9 +73,9 @@ export class VisualDiffService {
 
           if (cacheAge < maxAge) {
             return await this.enrichComparisonWithDetails(cached, include_details);
-          }
-        }
-      }
+
+
+
 
       // Fetch version data
       const [sourceVersion, targetVersion] = await Promise.all([
@@ -84,7 +85,7 @@ export class VisualDiffService {
 
       if (!sourceVersion || !targetVersion) {
         throw new Error('One or both versions not found');
-      }
+
 
       // Convert version data to GraphData format
       const sourceData = this.convertVersionToGraphData(sourceVersion);
@@ -124,17 +125,16 @@ export class VisualDiffService {
           this.comparisonDAO.createNodeMatchResults(savedComparison.id, detailedComparison.node_matches),
           this.comparisonDAO.createEdgeMatchResults(savedComparison.id, detailedComparison.edge_matches)
         ]);
-      }
+
 
       return {
         ...detailedComparison,
         id: savedComparison.id
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Comparison failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Create a new visual diff session
@@ -169,11 +169,10 @@ export class VisualDiffService {
       });
 
       return session;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to create diff session: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get diff session with comparison data
@@ -181,22 +180,22 @@ export class VisualDiffService {
   async getDiffSession(sessionId: string, userId: string): Promise<{
     session: VisualDiffSession;
     comparison: DetailedComparison;
-  } | null> {
+ | null> {
 
     try {
       const session = await this.comparisonDAO.getDiffSession(sessionId);
       if (!session || session.user_id !== userId) {
         return null;
-      }
+
 
       if (!session.comparison_id) {
         throw new Error('Session has no associated comparison');
-      }
+
 
       const comparison = await this.comparisonDAO.getComparison(session.comparison_id);
       if (!comparison) {
         throw new Error('Comparison not found');
-      }
+
 
       const detailedComparison = await this.enrichComparisonWithDetails(comparison, true);
 
@@ -207,11 +206,10 @@ export class VisualDiffService {
         session,
         comparison: detailedComparison
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get diff session: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Update diff session settings
@@ -227,19 +225,18 @@ export class VisualDiffService {
       const session = await this.comparisonDAO.getDiffSession(sessionId);
       if (!session || session.user_id !== userId) {
         return null;
-      }
+
 
       const success = await this.comparisonDAO.updateDiffSession(sessionId, updates);
       if (!success) {
         return null;
-      }
+
 
       return await this.comparisonDAO.getDiffSession(sessionId);
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to update diff session: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Delete diff session
@@ -251,14 +248,13 @@ export class VisualDiffService {
       const session = await this.comparisonDAO.getDiffSession(sessionId);
       if (!session || session.user_id !== userId) {
         return false;
-      }
+
 
       return await this.comparisonDAO.deleteDiffSession(sessionId);
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to delete diff session: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get user's active diff sessions
@@ -267,10 +263,10 @@ export class VisualDiffService {
 
     try {
       return await this.comparisonDAO.getUserDiffSessions(userId);
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get user sessions: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get comparison history for a graph
@@ -284,7 +280,7 @@ export class VisualDiffService {
     total: number;
     page: number;
     total_pages: number;
-  }> {
+> {
 
     try {
       // Get versions for this graph
@@ -293,7 +289,7 @@ export class VisualDiffService {
 
       if (versionIds.length === 0) {
         return { comparisons: [], total: 0, page, total_pages: 0 };
-      }
+
 
       // Get comparisons involving these versions
       const result = await this.comparisonDAO.getComparisons({}, { page, limit });
@@ -309,11 +305,10 @@ export class VisualDiffService {
         page,
         total_pages: Math.ceil(filteredComparisons.length / limit)
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get comparison history: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get comparison statistics
@@ -328,7 +323,7 @@ export class VisualDiffService {
       medium: number; // 0.5 - 0.8
       low: number; // < 0.5
     };
-  }> {
+> {
     try {
       const stats = await this.comparisonDAO.getComparisonStatistics(graphId);
 
@@ -342,22 +337,21 @@ export class VisualDiffService {
       comparisons.data.forEach(comp => {
         if (comp.similarity_score > 0.8) {
           distribution.high++;
-        } else if (comp.similarity_score >= 0.5) {
+ else if (comp.similarity_score >= 0.5) {
           distribution.medium++;
-        } else {
+ else {
           distribution.low++;
-        }
+
       });
 
       return {
         ...stats,
         similarity_distribution: distribution
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get statistics: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Clean up expired sessions and old comparisons
@@ -365,7 +359,7 @@ export class VisualDiffService {
   async cleanup(): Promise<{
     expired_sessions_removed: number;
     old_comparisons_removed: number;
-  }> {
+> {
 
     try {
       const expiredSessions = await this.comparisonDAO.cleanupExpiredSessions();
@@ -382,17 +376,16 @@ export class VisualDiffService {
       for (const comparison of oldComparisons.data) {
         await this.comparisonDAO.deleteComparison(comparison.id);
         removedComparisons++;
-      }
+
 
       return {
         expired_sessions_removed: expiredSessions,
         old_comparisons_removed: removedComparisons
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Cleanup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Convert version data to GraphData format for comparison
@@ -409,9 +402,9 @@ export class VisualDiffService {
         version_number: version.version_number,
         created_at: version.created_at,
         description: version.description
-      }
+
     };
-  }
+
 
   /**
    * Enrich comparison with detailed match results
@@ -432,9 +425,9 @@ export class VisualDiffService {
           steps_executed: [],
           performance_metrics: {},
           confidence_distribution: {}
-        }
+
       };
-    }
+
 
     try {
       const [nodeMatches, edgeMatches, sourceVersion, targetVersion] = await Promise.all([
@@ -453,11 +446,11 @@ export class VisualDiffService {
       allMatches.forEach(match => {
         if (match.confidence_score > 0.8) {
           confidenceDistribution.high++;
-        } else if (match.confidence_score >= 0.5) {
+ else if (match.confidence_score >= 0.5) {
           confidenceDistribution.medium++;
-        } else {
+ else {
           confidenceDistribution.low++;
-        }
+
       });
 
       return {
@@ -473,13 +466,11 @@ export class VisualDiffService {
             node_match_count: nodeMatches.length,
             edge_match_count: edgeMatches.length,
             similarity_score: comparison.similarity_score
-  }
-          confidence_distribution: confidenceDistribution
-        }
-      };
 
-    } catch (error) {
+          confidence_distribution: confidenceDistribution
+
+      };
+ catch (error) {
       throw new Error(`Failed to enrich comparison: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
-}
+
+

@@ -61,6 +61,8 @@ issues ?  : string;
 ;
 createdAt: Date;
 ;
+quality ?  : number; // 0-1 quality score
+;
 error ?  : {
     code: string,
     message: string,
@@ -309,21 +311,8 @@ export class BaseAIModel {
                                     responses.push(await this.executeRequest(request));
                                     return responses;
                                 }
-                            },
-                            interface, ModelConfiguration
+                            }
                         };
-                        {
-                            id: string;
-                            type: AIModelType;
-                            provider: AIModelProvider;
-                            endpoint ?  : string;
-                            apiKey ?  : string;
-                            modelName ?  : string;
-                            parameters ?  : Record;
-                            capabilities ?  : Partial;
-                            metadata ?  : Partial;
-                            // Error types
-                        }
                     }
                     export class ModelInitializationError extends Error {
                         constructor(modelId, cause) {

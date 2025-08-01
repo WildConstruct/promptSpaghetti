@@ -15,7 +15,7 @@ import {
   ResolutionStrategy,
   ResolutionResult,
   ConflictContext
-} from './ConflictResolutionEngine';
+ from './ConflictResolutionEngine';
 import { Epic23WorkspaceDAO } from '../database/epic23-workspace-dao';
 import {
   ConflictMarker,
@@ -23,14 +23,14 @@ import {
   CollaborativeResource,
   UserPresence,
   COLLABORATIVE_PERMISSIONS
-} from '../database/epic23-workspace-models';
+ from '../database/epic23-workspace-models';
 
 // =============================================================================
 // SERVICE INTERFACES
 // =============================================================================
 
-}
-}
+
+
 export interface ConflictResolutionConfig {
   default_strategy: ResolutionStrategy;
   auto_resolution_enabled: boolean;
@@ -39,12 +39,13 @@ export interface ConflictResolutionConfig {
   max_rollback_points: number;
   notification_enabled: boolean;
   conflict_threshold_seconds: number; // Time window for conflict detection
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConflictNotification {
   type: 'conflict_detected' | 'conflict_resolved' | 'resolution_failed' | 'rollback_performed';
   resource_id: string;
@@ -55,12 +56,13 @@ export interface ConflictNotification {
   timestamp: Date;
   severity: ConflictSeverity;
   requires_user_action: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConflictAnalysis {
   resource_id: string;
   conflict_probability: number;    // 0-1 probability of conflict
@@ -68,9 +70,10 @@ export interface ConflictAnalysis {
   recommended_strategy: ResolutionStrategy;
   prevention_suggestions: string[];
   estimated_resolution_time: number;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // CONFLICT RESOLUTION SERVICE
@@ -104,7 +107,7 @@ export class ConflictResolutionService extends EventEmitter {
     };
 
     this.setupEngineEventHandlers();
-  }
+
 
   // =============================================================================
   // CONFLICT MONITORING & DETECTION
@@ -117,14 +120,14 @@ export class ConflictResolutionService extends EventEmitter {
 
     if (this.activeMonitoring.has(resourceId)) {
       return; // Already monitoring
-    }
+
 
     const monitorInterval = setInterval(async () => {
       try {
         await this.checkResourceForConflicts(resourceId);
-      } catch (error) {
+ catch (error) {
         console.error(`Error monitoring conflicts for resource ${resourceId}:`, error);
-      }
+
     }, this.config.conflict_threshold_seconds * 1000);
 
     this.activeMonitoring.set(resourceId, monitorInterval);
@@ -132,10 +135,10 @@ export class ConflictResolutionService extends EventEmitter {
     // Create initial rollback point
     if (this.config.rollback_enabled) {
       await this.createInitialRollbackPoint(resourceId);
-    }
+
 
     this.emit('monitoring_started', { resourceId });
-  }
+
 
   /**
    * Stop monitoring a resource for conflicts
@@ -148,8 +151,8 @@ export class ConflictResolutionService extends EventEmitter {
       this.conflictAnalysisCache.delete(resourceId);
       
       this.emit('monitoring_stopped', { resourceId });
-    }
-  }
+
+
 
   /**
    * Check a resource for active conflicts
@@ -162,22 +165,21 @@ export class ConflictResolutionService extends EventEmitter {
       
       if (activeSessions.length < 2) {
         return []; // No conflicts possible with single/no editors
-      }
+
 
       // Detect conflicts using the engine
       const conflicts = await this.conflictEngine.detectConflicts(resourceId, activeSessions);
       
       if (conflicts.length > 0) {
         await this.handleDetectedConflicts(resourceId, conflicts, activeSessions);
-      }
+
 
       return conflicts;
-
-    } catch (error) {
+ catch (error) {
       console.error(`Error checking conflicts for resource ${resourceId}:`, error);
       return [];
-    }
-  }
+
+
 
   /**
    * Handle detected conflicts
@@ -206,15 +208,15 @@ export class ConflictResolutionService extends EventEmitter {
     // Notify users
     if (this.config.notification_enabled) {
       await this.sendConflictNotification(notification);
-    }
+
 
     // Attempt auto-resolution if enabled
     if (this.config.auto_resolution_enabled) {
       await this.attemptAutoResolution(resourceId, conflicts, notification);
-    }
+
 
     this.emit('conflicts_detected', notification);
-  }
+
 
   /**
    * Attempt automatic conflict resolution
@@ -234,7 +236,7 @@ export class ConflictResolutionService extends EventEmitter {
           currentContent,
           `Pre-resolution backup ${new Date().toISOString()}`
         );
-      }
+
 
       // Resolve conflicts using configured strategy
       const resolutionResult = await this.conflictEngine.resolveConflicts(
@@ -256,10 +258,10 @@ export class ConflictResolutionService extends EventEmitter {
         
         if (this.config.notification_enabled) {
           await this.sendConflictNotification(successNotification);
-        }
+
         
         this.emit('conflicts_auto_resolved', successNotification);
-      } else {
+ else {
         // Auto-resolution failed, require manual intervention
         const failureNotification: ConflictNotification = {
           ...notification,
@@ -270,12 +272,11 @@ export class ConflictResolutionService extends EventEmitter {
         
         if (this.config.notification_enabled) {
           await this.sendConflictNotification(failureNotification);
-        }
+
         
         this.emit('auto_resolution_failed', failureNotification);
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error(`Auto-resolution failed for resource ${resourceId}:`, error);
       
       // Send error notification
@@ -287,9 +288,9 @@ export class ConflictResolutionService extends EventEmitter {
       
       if (this.config.notification_enabled) {
         await this.sendConflictNotification(errorNotification);
-      }
-    }
-  }
+
+
+
 
   // =============================================================================
   // MANUAL CONFLICT RESOLUTION
@@ -320,9 +321,9 @@ export class ConflictResolutionService extends EventEmitter {
           
           if (!canResolve) {
             throw new Error('User does not have permission to resolve conflicts');
-          }
-        }
-      }
+
+
+
 
       // Create rollback point before manual resolution
       if (this.config.rollback_enabled) {
@@ -332,7 +333,7 @@ export class ConflictResolutionService extends EventEmitter {
           currentContent,
           `Pre-manual-resolution backup by ${userId || 'system'}`
         );
-      }
+
 
       // Resolve using specified strategy
       const resolutionResult = await this.conflictEngine.resolveConflicts(
@@ -363,18 +364,17 @@ export class ConflictResolutionService extends EventEmitter {
         
         if (this.config.notification_enabled) {
           await this.sendConflictNotification(notification);
-        }
+
         
         this.emit('manual_resolution_completed', { resourceId, result: resolutionResult, userId });
-      }
+
 
       return resolutionResult;
-
-    } catch (error) {
+ catch (error) {
       console.error(`Manual resolution failed for resource ${resourceId}:`, error);
       throw error;
-    }
-  }
+
+
 
   // =============================================================================
   // ROLLBACK OPERATIONS
@@ -404,16 +404,16 @@ export class ConflictResolutionService extends EventEmitter {
           
           if (!canRollback) {
             throw new Error('User does not have permission to perform rollback');
-          }
-        }
-      }
+
+
+
 
       // Perform rollback
       const rolledBackContent = this.conflictEngine.performRollback(resourceId, rollbackId);
       
       if (!rolledBackContent) {
         return false;
-      }
+
 
       // Apply rolled back content
       await this.updateResourceContent(resourceId, rolledBackContent);
@@ -435,23 +435,22 @@ export class ConflictResolutionService extends EventEmitter {
       
       if (this.config.notification_enabled) {
         await this.sendConflictNotification(notification);
-      }
+
       
       this.emit('rollback_performed', { resourceId, rollbackId, userId });
       return true;
-
-    } catch (error) {
+ catch (error) {
       console.error(`Rollback failed for resource ${resourceId}:`, error);
       return false;
-    }
-  }
+
+
 
   /**
    * Get available rollback points for a resource
    */
   getRollbackPoints(resourceId: string): unknown[] {
     return this.conflictEngine.getRollbackPoints(resourceId);
-  }
+
 
   /**
    * Create manual rollback point
@@ -471,7 +470,7 @@ export class ConflictResolutionService extends EventEmitter {
     
     this.emit('rollback_point_created', { resourceId, rollbackId, userId });
     return rollbackId;
-  }
+
 
   // =============================================================================
   // CONFLICT ANALYSIS & PREVENTION
@@ -486,7 +485,7 @@ export class ConflictResolutionService extends EventEmitter {
     const cached = this.conflictAnalysisCache.get(resourceId);
     if (cached) {
       return cached;
-    }
+
 
     try {
       const activeSessions = await this.workspaceDAO.getActiveEditSessions(resourceId);
@@ -502,7 +501,7 @@ export class ConflictResolutionService extends EventEmitter {
       if (activeSessions.length > 1) {
         conflictProbability += Math.min(0.3, activeSessions.length * 0.1);
         riskFactors.push(`${activeSessions.length} concurrent editors`);
-      }
+
 
       // Factor 2: Overlapping selections
       const overlappingSelections = this.detectOverlappingSelections(presence);
@@ -510,7 +509,7 @@ export class ConflictResolutionService extends EventEmitter {
         conflictProbability += 0.4;
         riskFactors.push(`${overlappingSelections} overlapping selections`);
         preventionSuggestions.push('Coordinate editing areas between team members');
-      }
+
 
       // Factor 3: Rapid edit frequency
       const rapidEdits = this.detectRapidEditing(activeSessions);
@@ -519,7 +518,7 @@ export class ConflictResolutionService extends EventEmitter {
         riskFactors.push('Rapid concurrent editing detected');
         preventionSuggestions.push('Slow down editing pace to reduce conflicts');
         recommendedStrategy = ResolutionStrategy.OPERATIONAL_TRANSFORM;
-      }
+
 
       // Factor 4: Resource complexity
       const resourceComplexity = await this.assessResourceComplexity(resourceId);
@@ -527,7 +526,7 @@ export class ConflictResolutionService extends EventEmitter {
         conflictProbability += 0.1;
         riskFactors.push('Complex resource structure');
         preventionSuggestions.push('Break complex resources into smaller components');
-      }
+
 
       // Estimate resolution time based on complexity and conflict probability
       const estimatedResolutionTime = Math.ceil(
@@ -539,12 +538,12 @@ export class ConflictResolutionService extends EventEmitter {
 
       if (conflictProbability < 0.3) {
         recommendedStrategy = ResolutionStrategy.LAST_WRITER_WINS;
-      } else if (conflictProbability < 0.7) {
+ else if (conflictProbability < 0.7) {
         recommendedStrategy = ResolutionStrategy.AUTO_MERGE;
-      } else {
+ else {
         recommendedStrategy = ResolutionStrategy.MANUAL_RESOLUTION;
         preventionSuggestions.push('Consider manual coordination before editing');
-      }
+
 
       const analysis: ConflictAnalysis = {
         resource_id: resourceId,
@@ -562,8 +561,7 @@ export class ConflictResolutionService extends EventEmitter {
       }, 30000);
 
       return analysis;
-
-    } catch (error) {
+ catch (error) {
       console.error(`Error analyzing conflict risk for resource ${resourceId}:`, error);
       
       // Return default analysis
@@ -575,8 +573,8 @@ export class ConflictResolutionService extends EventEmitter {
         prevention_suggestions: ['Monitor system status'],
         estimated_resolution_time: 5000
       };
-    }
-  }
+
+
 
   // =============================================================================
   // STATISTICS & MONITORING
@@ -596,7 +594,7 @@ export class ConflictResolutionService extends EventEmitter {
       monitored_resources: this.activeMonitoring.size,
       config: this.config
     };
-  }
+
 
   /**
    * Update conflict resolution configuration
@@ -604,7 +602,7 @@ export class ConflictResolutionService extends EventEmitter {
   updateConfig(newConfig: Partial<ConflictResolutionConfig>): void {
     this.config = { ...this.config, ...newConfig };
     this.emit('config_updated', this.config);
-  }
+
 
   /**
    * Clean up service resources
@@ -613,7 +611,7 @@ export class ConflictResolutionService extends EventEmitter {
     // Stop all monitoring
     for (const [resourceId] of this.activeMonitoring) {
       this.stopConflictMonitoring(resourceId);
-    }
+
     
     // Clear caches
     this.conflictAnalysisCache.clear();
@@ -622,7 +620,7 @@ export class ConflictResolutionService extends EventEmitter {
     this.conflictEngine.clearHistory();
     
     this.emit('service_cleanup_completed');
-  }
+
 
   // =============================================================================
   // PRIVATE HELPER METHODS
@@ -651,7 +649,7 @@ export class ConflictResolutionService extends EventEmitter {
     this.conflictEngine.on('rollback_performed', (data) => {
       this.emit('engine_rollback_performed', data);
     });
-  }
+
 
   /**
    * Calculate conflict severity based on conflict markers
@@ -664,12 +662,12 @@ export class ConflictResolutionService extends EventEmitter {
     
     if (hasStructuralConflicts || hasMultipleContentConflicts) {
       return ConflictSeverity.HIGH;
-    } else if (conflicts.length > 1) {
+ else if (conflicts.length > 1) {
       return ConflictSeverity.MEDIUM;
-    } else {
+ else {
       return ConflictSeverity.LOW;
-    }
-  }
+
+
 
   /**
    * Send conflict notification to affected users
@@ -679,7 +677,7 @@ export class ConflictResolutionService extends EventEmitter {
     // This would integrate with the notification system
     // For now, just emit an event
     this.emit('conflict_notification', notification);
-  }
+
 
   /**
    * Apply conflict resolution to resource
@@ -688,11 +686,11 @@ export class ConflictResolutionService extends EventEmitter {
 
     if (result.resolved_content) {
       await this.updateResourceContent(resourceId, result.resolved_content);
-    }
+
     
     // Update resource metadata to mark conflicts as resolved
     // This would integrate with the workspace DAO
-  }
+
 
   /**
    * Get current resource content
@@ -702,7 +700,7 @@ export class ConflictResolutionService extends EventEmitter {
     // This would fetch the actual resource content from the database
     // For now, return a placeholder
     return { content: 'resource_content', timestamp: new Date() };
-  }
+
 
   /**
    * Update resource content
@@ -711,7 +709,7 @@ export class ConflictResolutionService extends EventEmitter {
 
     // This would update the actual resource content in the database
     console.log(`Updating resource ${resourceId} with new content`);
-  }
+
 
   /**
    * Create initial rollback point for a resource
@@ -724,7 +722,7 @@ export class ConflictResolutionService extends EventEmitter {
       currentContent,
       'Initial monitoring checkpoint'
     );
-  }
+
 
   /**
    * End all edit sessions for a resource
@@ -735,8 +733,8 @@ export class ConflictResolutionService extends EventEmitter {
     
     for (const session of activeSessions) {
       await this.workspaceDAO.endEditSession(session.id);
-    }
-  }
+
+
 
   /**
    * Get resource presence data
@@ -746,7 +744,7 @@ export class ConflictResolutionService extends EventEmitter {
     // This would get presence data for users viewing/editing the resource
     // For now, return empty array
     return [];
-  }
+
 
   /**
    * Detect overlapping selections
@@ -755,7 +753,7 @@ export class ConflictResolutionService extends EventEmitter {
     // This would analyze user selections for overlaps
     // For now, return 0
     return 0;
-  }
+
 
   /**
    * Detect rapid editing patterns
@@ -764,7 +762,7 @@ export class ConflictResolutionService extends EventEmitter {
     // This would analyze edit timing patterns
     // For now, return false
     return false;
-  }
+
 
   /**
    * Assess resource complexity
@@ -774,5 +772,4 @@ export class ConflictResolutionService extends EventEmitter {
     // This would analyze the resource structure complexity
     // For now, return moderate complexity
     return 0.5;
-  }
-}
+

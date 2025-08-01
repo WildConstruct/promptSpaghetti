@@ -22,7 +22,7 @@ import ArchiveManagementService, {
   ArchiveCategory, 
   DataClassification,
   ArchiveRecord 
-} from './ArchiveManagementService';
+ from './ArchiveManagementService';
 import {
   ArchiveToggleConfig,
   ArchiveToggleState,
@@ -37,7 +37,7 @@ import {
   ComplianceStatus,
   DEFAULT_ARCHIVE_TOGGLE_CONFIG,
   PREDEFINED_ARCHIVE_TOGGLE_CONFIGS
-} from './ArchiveToggleTypes';
+ from './ArchiveToggleTypes';
 
 export class ArchiveToggleService extends EventEmitter {
   private dbService: DatabaseService;
@@ -59,7 +59,7 @@ export class ArchiveToggleService extends EventEmitter {
     this.setupEventHandlers();
     this.loadToggleConfigurations();
     this.initializePredefinedToggles();
-  }
+
   
   /**
    * Create a new archive toggle configuration
@@ -121,7 +121,7 @@ export class ArchiveToggleService extends EventEmitter {
           scope: config.scope,
           mode: config.mode,
           complianceRequired: config.complianceRequired
-  }
+
         severity: 'info'
       });
       
@@ -140,8 +140,7 @@ export class ArchiveToggleService extends EventEmitter {
       this.emit('toggle_created', config);
       
       return config;
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'archive_toggle_creation_failed',
         userId: createdBy,
@@ -149,12 +148,12 @@ export class ArchiveToggleService extends EventEmitter {
         details: {
           error: error instanceof Error ? error.message : String(error),
           request
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Update an existing archive toggle configuration
@@ -168,7 +167,7 @@ export class ArchiveToggleService extends EventEmitter {
       const existingConfig = this.toggleConfigs.get(request.id);
       if (!existingConfig) {
         throw new Error('Archive toggle configuration not found');
-      }
+
       
       const previousState = { ...existingConfig };
       
@@ -201,7 +200,7 @@ export class ArchiveToggleService extends EventEmitter {
         
         await this.storeToggleState(updatedState);
         this.toggleStates.set(request.id, updatedState);
-      }
+
       
       // Create audit trail entry
       await this.createAuditEntry(request.id, {
@@ -225,15 +224,14 @@ export class ArchiveToggleService extends EventEmitter {
         details: {
           changes: this.getConfigurationChanges(previousState, updatedConfig),
           reason: request.reason
-  }
+
         severity: 'info'
       });
       
       this.emit('toggle_updated', updatedConfig, previousState);
       
       return updatedConfig;
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'archive_toggle_update_failed',
         userId: updatedBy,
@@ -242,12 +240,12 @@ export class ArchiveToggleService extends EventEmitter {
         details: {
           error: error instanceof Error ? error.message : String(error),
           request
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Evaluate whether archiving is allowed for a given context
@@ -281,7 +279,7 @@ export class ArchiveToggleService extends EventEmitter {
           relatedRetentionPolicies: [],
           appliedComplianceRules: []
         };
-      }
+
       
       // Use the most specific toggle (first in priority order)
       const primaryToggle = applicableToggles[0];
@@ -290,7 +288,7 @@ export class ArchiveToggleService extends EventEmitter {
       
       if (!toggleConfig || !toggleState) {
         throw new Error('Toggle configuration or state not found');
-      }
+
       
       // Check if archiving is enabled
       if (!toggleState.isEnabled && toggleState.currentMode !== ArchiveToggleMode.EMERGENCY) {
@@ -310,7 +308,7 @@ export class ArchiveToggleService extends EventEmitter {
           relatedRetentionPolicies: [],
           appliedComplianceRules: []
         };
-      }
+
       
       // Evaluate based on current mode
       const evaluation = await this.evaluateByMode(toggleConfig, toggleState, context);
@@ -342,12 +340,12 @@ export class ArchiveToggleService extends EventEmitter {
               category: context.category,
               dataClassification: context.dataClassification,
               sourceIdentifier: context.sourceIdentifier
-  }
+
             result: evaluation
-  }
+
           severity: evaluation.isArchivingAllowed ? 'info' : 'warning'
         });
-      }
+
       
       return {
         ...evaluation,
@@ -356,8 +354,7 @@ export class ArchiveToggleService extends EventEmitter {
         evaluatedAt,
         evaluatedBy: context.triggeredBy
       };
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'archive_toggle_evaluation_failed',
         userId: context.userId || 'system',
@@ -365,12 +362,12 @@ export class ArchiveToggleService extends EventEmitter {
         details: {
           error: error instanceof Error ? error.message : String(error),
           context
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Enable or disable an archive toggle
@@ -388,11 +385,11 @@ export class ArchiveToggleService extends EventEmitter {
       
       if (!currentState || !config) {
         throw new Error('Toggle not found');
-      }
+
       
       if (currentState.isEnabled === enabled) {
         throw new Error(`Toggle is already ${enabled ? 'enabled' : 'disabled'}`);
-      }
+
       
       const previousState = { ...currentState };
       
@@ -433,15 +430,14 @@ export class ArchiveToggleService extends EventEmitter {
           reason,
           previousState: previousState.isEnabled,
           newState: enabled
-  }
+
         severity: 'info'
       });
       
       this.emit(enabled ? 'toggle_enabled' : 'toggle_disabled', updatedState, config);
       
       return updatedState;
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'archive_toggle_state_change_failed',
         userId: actorId,
@@ -451,12 +447,12 @@ export class ArchiveToggleService extends EventEmitter {
           error: error instanceof Error ? error.message : String(error),
           enabled,
           reason
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Apply emergency override to a toggle
@@ -475,11 +471,11 @@ export class ArchiveToggleService extends EventEmitter {
       
       if (!config || !currentState) {
         throw new Error('Toggle not found');
-      }
+
       
       if (!config.allowEmergencyOverride) {
         throw new Error('Emergency override not allowed for this toggle');
-      }
+
       
       const overrideExpiresAt = new Date(Date.now() + ttlMinutes * 60000);
       
@@ -513,11 +509,11 @@ export class ArchiveToggleService extends EventEmitter {
         previousState: { 
           isEnabled: currentState.isEnabled,
           isOverridden: currentState.isOverridden 
-  }
+
         newState: { 
           isEnabled: enabled,
           isOverridden: true 
-  }
+
         reason,
         isEmergency: true
       });
@@ -534,15 +530,14 @@ export class ArchiveToggleService extends EventEmitter {
           enabled,
           ttlMinutes,
           expiresAt: overrideExpiresAt.toISOString()
-  }
+
         severity: 'critical'
       });
       
       this.emit('emergency_override_applied', updatedState, config);
       
       return updatedState;
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'archive_toggle_emergency_override_failed',
         userId: actorId,
@@ -553,26 +548,26 @@ export class ArchiveToggleService extends EventEmitter {
           enabled,
           reason,
           ttlMinutes
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Get toggle configuration by ID
    */
   getToggleConfig(toggleId: string): ArchiveToggleConfig | undefined {
     return this.toggleConfigs.get(toggleId);
-  }
+
   
   /**
    * Get toggle state by ID
    */
   getToggleState(toggleId: string): ArchiveToggleState | undefined {
     return this.toggleStates.get(toggleId);
-  }
+
   
   /**
    * List all toggle configurations
@@ -588,40 +583,40 @@ export class ArchiveToggleService extends EventEmitter {
     if (filters) {
       if (filters.scope) {
         configs = configs.filter(c => c.scope === filters.scope);
-      }
+
       if (filters.mode) {
         configs = configs.filter(c => c.mode === filters.mode);
-      }
+
       if (filters.orgId) {
         const states = Array.from(this.toggleStates.values())
           .filter(s => s.orgId === filters.orgId)
           .map(s => s.configId);
         configs = configs.filter(c => states.includes(c.id));
-      }
+
       if (filters.enabled !== undefined) {
         const enabledStates = Array.from(this.toggleStates.values())
           .filter(s => s.isEnabled === filters.enabled)
           .map(s => s.configId);
         configs = configs.filter(c => enabledStates.includes(c.id));
-      }
-    }
+
+
     
     return configs.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
-  }
+
   
   // Private helper methods
   
   private generateToggleId(): string {
     return `archive_toggle_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateAuditId(): string {
     return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateEvaluationId(): string {
     return `eval_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private findApplicableToggles(context: ArchiveToggleEvaluationContext): string[] {
     const applicableToggles: Array<{ id: string; priority: number }> = [];
@@ -641,52 +636,52 @@ export class ArchiveToggleService extends EventEmitter {
               config.allowedCategories?.includes(context.category)) {
           isApplicable = true;
           priority = 5;
-        }
+
         break;
       case ArchiveToggleScope.USER_DATA:
         if (context.category === ArchiveCategory.USER_DATA ||
               context.category === ArchiveCategory.APPLICATION_DATA) {
           isApplicable = true;
           priority = 4;
-        }
+
         break;
       case ArchiveToggleScope.COMPLIANCE_DATA:
         if (context.complianceRequirements && context.complianceRequirements.length > 0) {
           isApplicable = true;
           priority = 6;
-        }
+
         break;
       case ArchiveToggleScope.LOG_DATA:
         if (context.category === ArchiveCategory.LOG_DATA) {
           isApplicable = true;
           priority = 3;
-        }
+
         break;
       case ArchiveToggleScope.SYSTEM_DATA:
         if (context.category === ArchiveCategory.SYSTEM_DATA) {
           isApplicable = true;
           priority = 3;
-        }
+
         break;
-      }
+
       
       // Additional classification-based filtering
       if (isApplicable && config.allowedClassifications) {
         if (!config.allowedClassifications.includes(context.dataClassification)) {
           isApplicable = false;
-        }
-      }
+
+
       
       if (isApplicable) {
         applicableToggles.push({ id, priority });
-      }
-    }
+
+
     
     // Sort by priority (highest first)
     return applicableToggles
       .sort((a, b) => b.priority - a.priority)
       .map(t => t.id);
-  }
+
   
   private async evaluateByMode(
     config: ArchiveToggleConfig,
@@ -713,7 +708,7 @@ export class ArchiveToggleService extends EventEmitter {
       const isManualTrigger = context.triggeredBy === 'user';
       if (!isManualTrigger) {
         warnings.push('Automatic archiving is disabled, only manual operations allowed');
-      }
+
       return {
         isArchivingAllowed: isManualTrigger,
         mode: state.currentMode,
@@ -731,7 +726,7 @@ export class ArchiveToggleService extends EventEmitter {
       const isScheduledOrManual = context.isScheduled || context.triggeredBy === 'user';
       if (!isScheduledOrManual) {
         warnings.push('Only scheduled and manual archiving operations are allowed');
-      }
+
       return {
         isArchivingAllowed: isScheduledOrManual,
         mode: state.currentMode,
@@ -762,7 +757,7 @@ export class ArchiveToggleService extends EventEmitter {
           context.complianceRequirements.length > 0;
       if (!hasComplianceRequirement) {
         warnings.push('Only compliance-required archiving is allowed');
-      }
+
       return {
         isArchivingAllowed: hasComplianceRequirement || false,
         mode: state.currentMode,
@@ -790,8 +785,8 @@ export class ArchiveToggleService extends EventEmitter {
         
     default:
       throw new Error(`Unknown archive toggle mode: ${state.currentMode}`);
-    }
-  }
+
+
   
   private getConfigurationChanges(
     previous: ArchiveToggleConfig, 
@@ -807,11 +802,11 @@ export class ArchiveToggleService extends EventEmitter {
     for (const key of keys) {
       if (previous[key] !== updated[key]) {
         changes[key] = { from: previous[key], to: updated[key] };
-      }
-    }
+
+
     
     return changes;
-  }
+
   
   private scheduleOverrideExpiration(toggleId: string, expiresAt: Date): void {
     const timeout = expiresAt.getTime() - Date.now();
@@ -820,12 +815,12 @@ export class ArchiveToggleService extends EventEmitter {
       setTimeout(async () => {
         try {
           await this.expireOverride(toggleId);
-        } catch (error) {
+ catch (error) {
           console.error('Failed to expire override:', error);
-        }
+
       }, timeout);
-    }
-  }
+
+
   
   private async expireOverride(toggleId: string): Promise<void> {
 
@@ -834,7 +829,7 @@ export class ArchiveToggleService extends EventEmitter {
     
     if (!state || !config || !state.isOverridden) {
       return;
-    }
+
     
     // Reset override
     const updatedState: ArchiveToggleState = {
@@ -866,7 +861,7 @@ export class ArchiveToggleService extends EventEmitter {
     });
     
     this.emit('override_expired', updatedState, config);
-  }
+
   
   private async initializePredefinedToggles(): Promise<void> {
 
@@ -886,12 +881,12 @@ export class ArchiveToggleService extends EventEmitter {
             requiresExplicitConsent: presetConfig.requiresExplicitConsent,
             complianceRequired: presetConfig.complianceRequired
           }, 'system');
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       console.error('Failed to initialize predefined toggles:', error);
-    }
-  }
+
+
   
   private setupEventHandlers(): void {
     // Listen to archive service events
@@ -917,28 +912,28 @@ export class ArchiveToggleService extends EventEmitter {
           };
           this.toggleStates.set(toggleId, updatedState);
           await this.storeToggleState(updatedState);
-        }
-      }
+
+
     });
-  }
+
   
   private async loadToggleConfigurations(): Promise<void> {
 
     // Implementation would load from database
     // For now, this is a placeholder
-  }
+
   
   private async storeToggleConfig(config: ArchiveToggleConfig): Promise<void> {
 
     // Implementation would store in database
     // Placeholder for database integration
-  }
+
   
   private async storeToggleState(state: ArchiveToggleState): Promise<void> {
 
     // Implementation would store in database
     // Placeholder for database integration
-  }
+
   
   private async createAuditEntry(toggleId: string, entry: ArchiveToggleAuditEntry): Promise<void> {
 
@@ -950,9 +945,9 @@ export class ArchiveToggleService extends EventEmitter {
       // Keep only last 100 entries in memory
       if (state.auditTrail.length > 100) {
         state.auditTrail = state.auditTrail.slice(-100);
-      }
-    }
-  }
-}
+
+
+
+
 
 export default ArchiveToggleService;

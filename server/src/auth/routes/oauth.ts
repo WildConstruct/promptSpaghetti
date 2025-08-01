@@ -32,14 +32,15 @@ const oauthUnlinkSchema = z.object({
   provider: z.enum(['google', 'github', 'microsoft'])
 });
 
-}
-}
+
+
 interface OAuthRouteContext {
   authService: AuthenticationService;
   oauthService: OAuthService;
-}
-}
-}
+
+
+
+
 
 export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteContext) {
   const { authService, oauthService } = context;
@@ -47,7 +48,7 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
   // OAuth authorization initiation
   fastify.get<{
     Querystring: z.infer<typeof oauthAuthSchema>;
-  }>('/oauth/authorize', {
+>('/oauth/authorize', {
     schema: {
       querystring: oauthAuthSchema,
       response: {
@@ -56,10 +57,10 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
           properties: {
             url: { type: 'string' },
             state: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { provider, returnUrl } = request.query as z.infer<typeof oauthAuthSchema>;
@@ -76,27 +77,27 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
       );
 
       return reply.send({ url, state });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('OAuth authorization error:', error);
       return reply.status(400).send({
         error: 'OAuth Authorization Failed',
         message: error.message
       });
-    }
+
   });
 
   // OAuth callback handler
   fastify.get<{
     Querystring: z.infer<typeof oauthCallbackSchema>;
     Params: { provider: string };
-  }>('/oauth/callback/:provider', {
+>('/oauth/callback/:provider', {
     schema: {
       params: {
         type: 'object',
         properties: {
           provider: { type: 'string', enum: ['google', 'github', 'microsoft'] }
-        }
-  }
+
+
       querystring: oauthCallbackSchema,
       response: {
         200: {
@@ -107,10 +108,10 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
             user: { type: 'object' },
             expiresAt: { type: 'string' },
             isNewUser: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { provider } = request.params as { provider: string };
@@ -123,14 +124,14 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
           error: 'OAuth Authorization Failed',
           message: error_description || error
         });
-      }
+
 
       if (!code || !state) {
         return reply.status(400).send({
           error: 'Invalid OAuth Callback',
           message: 'Missing authorization code or state parameter'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -169,19 +170,19 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
         expiresAt: result.tokens.expiresAt.toISOString(),
         isNewUser: result.isNewUser
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('OAuth callback error:', error);
       return reply.status(400).send({
         error: 'OAuth Callback Failed',
         message: error.message
       });
-    }
+
   });
 
   // Link OAuth account to existing user (requires authentication)
   fastify.post<{
     Body: z.infer<typeof oauthLinkSchema>;
-  }>('/oauth/link', {
+>('/oauth/link', {
     preHandler: [fastify.authenticate], // JWT authentication middleware
     schema: {
       body: oauthLinkSchema,
@@ -191,10 +192,10 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { provider, code } = request.body as z.infer<typeof oauthLinkSchema>;
@@ -205,7 +206,7 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -218,19 +219,19 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
         success: true,
         message: `Successfully linked ${provider} account`
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('OAuth link error:', error);
       return reply.status(400).send({
         error: 'OAuth Link Failed',
         message: error.message
       });
-    }
+
   });
 
   // Unlink OAuth account from user (requires authentication)
   fastify.post<{
     Body: z.infer<typeof oauthUnlinkSchema>;
-  }>('/oauth/unlink', {
+>('/oauth/unlink', {
     preHandler: [fastify.authenticate], // JWT authentication middleware
     schema: {
       body: oauthUnlinkSchema,
@@ -240,10 +241,10 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { provider } = request.body as z.infer<typeof oauthUnlinkSchema>;
@@ -254,7 +255,7 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -267,13 +268,13 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
         success: true,
         message: `Successfully unlinked ${provider} account`
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('OAuth unlink error:', error);
       return reply.status(400).send({
         error: 'OAuth Unlink Failed',
         message: error.message
       });
-    }
+
   });
 
   // Get user's linked OAuth accounts (requires authentication)
@@ -295,13 +296,13 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
                   picture: { type: 'string' },
                   createdAt: { type: 'string' },
                   updatedAt: { type: 'string' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -311,7 +312,7 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       const accounts = await oauthService.getUserOAuthAccounts(userId);
 
@@ -325,13 +326,13 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
           updatedAt: account.updated_at
         }))
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get OAuth accounts error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve OAuth accounts'
       });
-    }
+
   });
 
   // Get available OAuth providers
@@ -350,13 +351,13 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
                   displayName: { type: 'string' },
                   icon: { type: 'string' },
                   color: { type: 'string' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const providers = [
       {
@@ -364,21 +365,20 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
         displayName: 'Google',
         icon: 'google',
         color: '#4285f4'
-  }
+
       {
         name: 'github',
         displayName: 'GitHub',
         icon: 'github',
         color: '#333333'
-  }
+
       {
         name: 'microsoft',
         displayName: 'Microsoft',
         icon: 'microsoft',
         color: '#0078d4'
-      }
+
     ];
 
     return reply.send({ providers });
   });
-}

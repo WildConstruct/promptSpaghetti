@@ -17,8 +17,7 @@
  */
 import { EventEmitter } from 'events';
 import { SessionConflict, SessionPriority, ConflictResolution } from './SessionPriorityManager';
-export declare enum NotificationType {
-    SESSION_CONFLICT = "session_conflict",
+export declare enum NotificationType { SESSION_CONFLICT = "session_conflict",
     SESSION_EVICTED = "session_evicted",
     EMERGENCY_OVERRIDE = "emergency_override",
     GRACE_PERIOD_OFFERED = "grace_period_offered",
@@ -52,12 +51,12 @@ export declare enum DeliveryStatus {
     FAILED = "failed",
     BOUNCED = "bounced",
     READ = "read",
-    CLICKED = "clicked",
+    CLICKED = "clicked" }
     EXPIRED = "expired"
 
 }
-export interface NotificationConfig {
-    channels: NotificationChannel[];
+}
+export interface NotificationConfig { channels: NotificationChannel[];
     priority: NotificationPriority;
     retryAttempts: number;
     retryDelay: number;
@@ -67,11 +66,10 @@ export interface NotificationConfig {
     batchDelay: number;
     rateLimitWindow: number;
     rateLimitCount: number;
-    templateCustomization: boolean;
-
+    templateCustomization: boolean }
 }
-export interface UserNotificationPreferences {
-    userId: string;
+}
+export interface UserNotificationPreferences { userId: string;
     channels: {
         [key in NotificationChannel]: {
             enabled: boolean;
@@ -79,25 +77,21 @@ export interface UserNotificationPreferences {
             quietHours?: {
                 start: string;
                 end: string;
-                timezone: string;
+                timezone: string }
 }
             };
         };
     };
-    conflictResolution: {
-        autoResolve: boolean;
+    conflictResolution: { autoResolve: boolean;
         preferredResolution: ConflictResolution;
         requireConfirmation: boolean;
-        timeoutMinutes: number;
-    };
-    securityAlerts: {
-        enabledTypes: NotificationType[];
-        minimumPriority: NotificationPriority;
-    };
+        timeoutMinutes: number };
+    securityAlerts: { enabledTypes: NotificationType[];
+        minimumPriority: NotificationPriority };
 
 }
-export interface NotificationMessage {
-    id: string;
+}
+export interface NotificationMessage { id: string;
     type: NotificationType;
     priority: NotificationPriority;
     userId: string;
@@ -116,30 +110,27 @@ export interface NotificationMessage {
             attempts: number;
             lastAttempt?: Date;
             deliveredAt?: Date;
-            error?: string;
+            error?: string }
 }
         };
     };
-    metadata: {
-        conflictId?: string;
+    metadata: { conflictId?: string;
         sessionPriority?: SessionPriority;
         deviceInfo?: any;
-        locationInfo?: any;
-    };
+        locationInfo?: any };
 
 }
-export interface NotificationAction {
-    id: string;
+}
+export interface NotificationAction { id: string;
     label: string;
     type: 'primary' | 'secondary' | 'danger';
     action: string;
     data?: Record<string, any>;
     requiresConfirmation?: boolean;
-    timeout?: number;
-
+    timeout?: number }
 }
-export interface NotificationTemplate {
-    type: NotificationType;
+}
+export interface NotificationTemplate { type: NotificationType;
     channel: NotificationChannel;
     title: string;
     body: string;
@@ -147,23 +138,22 @@ export interface NotificationTemplate {
     actionTemplates?: {
         [actionId: string]: {
             label: string;
-            type: NotificationAction['type'];
+            type: NotificationAction['type'] }
 }
         };
     };
 
 }
-export interface ConflictResolutionResponse {
-    conflictId: string;
+}
+export interface ConflictResolutionResponse { conflictId: string;
     userId: string;
     resolution: ConflictResolution;
     selectedSessionId?: string;
     confirmed: boolean;
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface NotificationStats {
-    totalSent: number;
+}
+export interface NotificationStats { totalSent: number;
     deliveryRate: number;
     averageDeliveryTime: number;
     failureRate: number;
@@ -172,23 +162,20 @@ export interface NotificationStats {
             sent: number;
             delivered: number;
             failed: number;
-            avgDeliveryTime: number;
+            avgDeliveryTime: number }
 }
         };
     };
-    typeStats: {
-        [key in NotificationType]: {
+    typeStats: { [key in NotificationType]: {
             sent: number;
             actionTaken: number;
             ignored: number;
-            expired: number;
-        };
+            expired: number };
     };
 /**
  * Comprehensive session conflict notification service
  */
-export declare class SessionConflictNotificationService extends EventEmitter {
-    private userPreferences;
+export declare class SessionConflictNotificationService extends EventEmitter { private userPreferences;
     private notifications;
     private templates;
     private conflictResponses;
@@ -203,8 +190,7 @@ export declare class SessionConflictNotificationService extends EventEmitter {
      */
     sendConflictNotification(conflict: SessionConflict, affectedUserIds: string[]): Promise<{
         sent: string[];
-        failed: string[];
-    }>;
+        failed: string[] }>;
     /**
      * Send session eviction notification
      */
@@ -218,16 +204,16 @@ export declare class SessionConflictNotificationService extends EventEmitter {
      * Send emergency override notification
      */
     sendEmergencyOverrideNotification();
-      adminUserId: string,
-      targetUserId: string,
-      evictedSessions: string[],
+      adminUserId: string
+      targetUserId: string
+      evictedSessions: string[]
     ): Promise<boolean>;
     /**
      * Prompt user for conflict resolution choice
      */
     promptUserChoice();
-      conflict: SessionConflict,
-      userId: string,
+      conflict: SessionConflict
+      userId: string
       timeoutMinutes?: number
     ): Promise<ConflictResolutionResponse | null>;
     /**
@@ -262,10 +248,10 @@ export declare class SessionConflictNotificationService extends EventEmitter {
      * Handle notification action click
      */
     handleNotificationAction();
-      notificationId: string,
-      actionId: string,
-      userId: string,
-      data?: Record<string,
+      notificationId: string
+      actionId: string
+      userId: string
+      data?: Record<string
       any>
     ): void;
     private mergeConfig;

@@ -13,15 +13,14 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SecurityAlertingConfigurationUI } from '../components/SecurityAlertingConfigurationUI';
-import { 
-  SecurityAlertingConfig, 
-  EscalationThresholds,
+import { SecurityAlertingConfig, 
+  EscalationThresholds }
   ResponseAutomation 
-} from '../SecurityAlertingAnalytics';
+ from '../SecurityAlertingAnalytics';
 import { ComplianceFramework } from '../SecurityLogger';
 
 // Mock data
-const mockConfig: SecurityAlertingConfig = {,
+const mockConfig: SecurityAlertingConfig = { ,
   enableRealTimeAnalytics: true,
   enablePatternAnalysis: true,
   enableThreatIntelligence: true,
@@ -30,7 +29,7 @@ const mockConfig: SecurityAlertingConfig = {,
   patternAnalysisWindow: 300000,
   threatIntelligenceUpdate: 3600000,
   machinelearningEnabled: false,
-  escalationThresholds: {
+  escalationThresholds: {,
   criticalAlertCount: 5,
   highAlertCount: 20,
   correlatedAlertCount: 10,
@@ -38,22 +37,17 @@ const mockConfig: SecurityAlertingConfig = {,
   failedAccessAttempts: 5,
   dataExfiltrationThreshold: 100,
   suspiciousPatternCount: 3,
-  riskScoreThreshold: 75,
+  riskScoreThreshold: 75 }
 },
   correlationRules: [],
-  responseAutomation: {
+  responseAutomation: { ,
   enabledActions: [],
   approvalRequired: true,
   maxAutomatedActions: 5,
   cooldownPeriod: 900000,
-  emergencyOverride: false,
+  emergencyOverride: false }
 };
-const mockValidationResult = {
-  isValid: true,
-  errors: [],
-  warnings: [],
-  securityScore: 85,
-};
+const mockValidationResult = {};
 const mockComplianceFrameworks: ComplianceFramework = [
   ComplianceFramework.SOC2,
   ComplianceFramework.GDPR,
@@ -63,11 +57,9 @@ const mockComplianceFrameworks: ComplianceFramework = [
 // Mock functions
 const mockOnConfigChange = jest.fn();
 const mockOnValidateConfig = jest.fn();
-describe('SecurityAlertingConfigurationUI', () => {
-  beforeEach(() => {
+describe('SecurityAlertingConfigurationUI', () => { beforeEach(() => {
     jest.clearAllMocks();
-    mockOnValidateConfig.mockResolvedValue(mockValidationResult);
-  });
+    mockOnValidateConfig.mockResolvedValue(mockValidationResult) });
   describe('Rendering', () => {
     it('renders the main configuration interface', () => {
       render();
@@ -171,9 +163,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       const automatedResponseCheckbox = screen.getByLabelText('Enable Automated Response');
       await user.click(automatedResponseCheckbox);
       // Should show unsaved changes indicator
-      await waitFor(() => {
-        expect(screen.getByText('• Unsaved changes')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('• Unsaved changes')).toBeInTheDocument() });
       expect(automatedResponseCheckbox).toBeChecked();
     });
     it('handles retention period changes', async () => {
@@ -190,9 +180,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       const retentionInput = screen.getByDisplayValue('90');
       await user.clear(retentionInput);
       await user.type(retentionInput, '120');
-      await waitFor(() => {
-        expect(screen.getByText('• Unsaved changes')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('• Unsaved changes')).toBeInTheDocument() });
     });
   });
   describe('Alert Thresholds Tab', () => {
@@ -232,9 +220,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       const criticalAlertInput = screen.getByDisplayValue('5');
       await user.clear(criticalAlertInput);
       await user.type(criticalAlertInput, '10');
-      await waitFor(() => {
-        expect(screen.getByText('• Unsaved changes')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('• Unsaved changes')).toBeInTheDocument() });
     });
   });
   describe('Validation', () => {
@@ -253,29 +239,26 @@ describe('SecurityAlertingConfigurationUI', () => {
       await user.clear(retentionInput);
       await user.type(retentionInput, '30');
       // Wait for debounced validation
-      await waitFor(() => {
-        expect(mockOnValidateConfig).toHaveBeenCalled();
-      }, { timeout: 2000 });
+      await waitFor(() => { expect(mockOnValidateConfig).toHaveBeenCalled() }, { timeout: 2000 });
     });
-    it('displays validation results', async () => {
-  const validationWithWarnings = {
-  isValid: true,
-  errors: [],
-  warnings: [,
+    it('displays validation results', async () => { const validationWithWarnings = {
+  isValid: true
+  errors: []
+  warnings: [
   {
-  field: 'enableRealTimeAnalytics',
-  message: 'Real-time analytics disabled - may impact threat detection',
-  impact: 'high' as const,
-  code: 'REALTIME_DISABLED'],
-  securityScore: 70,
+  field: 'enableRealTimeAnalytics'
+  message: 'Real-time analytics disabled - may impact threat detection'
+  impact: 'high' as const
+  code: 'REALTIME_DISABLED']
+  securityScore: 70 }
 };
       mockOnValidateConfig.mockResolvedValue(validationWithWarnings);
       render();
         <SecurityAlertingConfigurationUI
-          currentConfig={{
-  ...mockConfig,
-  enableRealTimeAnalytics: false,
-}}
+          currentConfig={ {
+  ...mockConfig
+  enableRealTimeAnalytics: false }
+}
           onConfigChange={mockOnConfigChange}
           onValidateConfig={mockOnValidateConfig}
           userRole="admin"
@@ -285,22 +268,19 @@ describe('SecurityAlertingConfigurationUI', () => {
       // Trigger validation
       const validateButton = screen.getByText('🔍 Validate Configuration');
       fireEvent.click(validateButton);
-      await waitFor(() => {
-  expect(screen.getByText('Configuration Valid')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Configuration Valid')).toBeInTheDocument();
   expect(screen.getByText('Security Score: 70/100')).toBeInTheDocument();
-  expect(screen.getByText('Warnings:')).toBeInTheDocument();
-});
+  expect(screen.getByText('Warnings:')).toBeInTheDocument() });
     });
-    it('displays validation errors', async () => {
-  const validationWithErrors = {
-  isValid: false,
-  errors: [,
+    it('displays validation errors', async () => { const validationWithErrors = {
+  isValid: false
+  errors: [
   {
-  field: 'alertRetentionDays',
-  message: 'Alert retention period exceeds maximum allowed',
-  severity: 'error' as const],
-  warnings: [],
-  securityScore: 20,
+  field: 'alertRetentionDays'
+  message: 'Alert retention period exceeds maximum allowed'
+  severity: 'error' as const]
+  warnings: []
+  securityScore: 20 }
 };
       mockOnValidateConfig.mockResolvedValue(validationWithErrors);
       render();
@@ -315,11 +295,9 @@ describe('SecurityAlertingConfigurationUI', () => {
       // Trigger validation
       const validateButton = screen.getByText('🔍 Validate Configuration');
       fireEvent.click(validateButton);
-      await waitFor(() => {
-  expect(screen.getByText('Configuration Invalid')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Configuration Invalid')).toBeInTheDocument();
   expect(screen.getByText('Errors:')).toBeInTheDocument();
-  expect(screen.getByText(/Alert retention period exceeds maximum/)).toBeInTheDocument();
-});
+  expect(screen.getByText(/Alert retention period exceeds maximum/)).toBeInTheDocument() });
     });
   });
   describe('Save and Reset Actions', () => {
@@ -341,13 +319,9 @@ describe('SecurityAlertingConfigurationUI', () => {
       await user.clear(retentionInput);
       await user.type(retentionInput, '120');
       // Wait for validation
-      await waitFor(() => {
-        expect(mockOnValidateConfig).toHaveBeenCalled();
-      });
+      await waitFor(() => { expect(mockOnValidateConfig).toHaveBeenCalled() });
       // Save button should be enabled after validation
-      await waitFor(() => {
-        expect(saveButton).toBeEnabled();
-      });
+      await waitFor(() => { expect(saveButton).toBeEnabled() });
     });
     it('calls onConfigChange when save is clicked', async () => {
       const user = userEvent.setup();
@@ -364,9 +338,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       const checkbox = screen.getByLabelText('Enable Automated Response');
       await user.click(checkbox);
       // Wait for validation
-      await waitFor(() => {
-        expect(mockOnValidateConfig).toHaveBeenCalled();
-      });
+      await waitFor(() => { expect(mockOnValidateConfig).toHaveBeenCalled() });
       // Click save
       const saveButton = screen.getByText('💾 Save Configuration');
       await user.click(saveButton);
@@ -388,9 +360,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       await user.clear(retentionInput);
       await user.type(retentionInput, '120');
       // Verify unsaved changes indicator
-      await waitFor(() => {
-        expect(screen.getByText('• Unsaved changes')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('• Unsaved changes')).toBeInTheDocument() });
       // Click reset
       const resetButton = screen.getByText('Reset Changes');
       await user.click(resetButton);
@@ -570,9 +540,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       const checkbox = screen.getByLabelText('Enable Automated Response');
       await user.click(checkbox);
       // Wait for validation
-      await waitFor(() => {
-        expect(mockOnValidateConfig).toHaveBeenCalled();
-      });
+      await waitFor(() => { expect(mockOnValidateConfig).toHaveBeenCalled() });
       // Click save
       const saveButton = screen.getByText('💾 Save Configuration');
       await user.click(saveButton);

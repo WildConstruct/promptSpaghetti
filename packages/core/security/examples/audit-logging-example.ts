@@ -10,43 +10,39 @@
  * 
  * Epic 19 Task T-1752989143998-485: Implement audit logging for data access
  */
-import {
-  AuditLogger,
+import { AuditLogger,
   AuditOperation,
   AuditLogLevel,
   createAuditLogger,
-  type AuditStorageBackend,
+  type AuditStorageBackend }
   type AuditLogEntry
-} from '../AuditLogger';
-import {
-  AuditIntegration,
+ from '../AuditLogger';
+import { AuditIntegration }
   createAuditIntegration
-} from '../AuditIntegration';
+ from '../AuditIntegration';
 import { DataClassifier } from '../DataClassifier';
 import { ClassificationEnforcer } from '../ClassificationEnforcer';
-import {
-  DataClassificationLevel,
+import { DataClassificationLevel }
   type OperationContext
-} from '../../types/DataClassification';
+ from '../../types/DataClassification';
 /**
  * Example 1: Basic audit logging setup
  */
-async function basicAuditLogging() {
-  console.log('\n=== Basic Audit Logging ===\n');
+async function basicAuditLogging() { console.log('\n=== Basic Audit Logging ===\n');
   // Create audit logger with default in-memory storage
   const auditLogger = createAuditLogger({)
   logLevel: AuditLogLevel.DETAILED,
   bufferSize: 10,
-  flushInterval: 1000,
+  flushInterval: 1000 }
 });
   // Log a simple data access
-  const context: OperationContext = {,
+  const context: OperationContext = { ,
   userId: 'user123',
   userRole: 'analyst',
   purpose: 'quarterly report',
   ipAddress: '192.168.1.100',
   sessionId: 'session-abc-123',
-  requestedAt: new Date(),
+  requestedAt: new Date() }
 };
   await auditLogger.logDataAccess()
     context,
@@ -54,8 +50,7 @@ async function basicAuditLogging() {
     'q4_2024_revenue',
     DataClassificationLevel.CONFIDENTIAL,
     true,
-    {
-  recordCount: 1500,
+    { recordCount: 1500,
   dataSize: 2048000,
   exportFormat: 'CSV');
   console.log('✓ Logged financial data access');
@@ -67,16 +62,16 @@ async function basicAuditLogging() {
   resourceType: 'customer_database',
   resourceId: 'prod_customers',
   dataClassification: DataClassificationLevel.RESTRICTED,
-  metadata: {
+  metadata: {,
   grantedTo: 'user789',
   permissions: ['read', 'export'],
-  expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days,
+  expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days }
 });
   console.log('✓ Logged access grant operation');
   // Query audit logs
-  const logs = await auditLogger.query({)
+  const logs = await auditLogger.query({ )
   userId: 'user123',
-  dataClassification: DataClassificationLevel.CONFIDENTIAL,
+  dataClassification: DataClassificationLevel.CONFIDENTIAL }
 });
   console.log(`\nFound ${logs.length} audit entries for user123 accessing confidential data`);}
   logs.forEach(log => {)
@@ -98,20 +93,15 @@ class DatabaseStorageBackend implements AuditStorageBackend {
     // In production, this would write to a real database
     this.db.set(entry.id, entry);
     console.log(`  [DB] Written audit log ${entry.id}`);}
-  async query(criteria: any): Promise<AuditLogEntry> {
-
-    // In production, this would query a real database
+  async query(criteria: any): Promise<AuditLogEntry> { // In production, this would query a real database
     const results = Array.from(this.db.values()).filter(entry => {)
   if (criteria.userId && entry.userId !== criteria.userId) return false;
       if (criteria.startDate && entry.timestamp < criteria.startDate) return false;
       if (criteria.endDate && entry.timestamp > criteria.endDate) return false;
-      return true;
-    });
+      return true });
     return results.slice(0, criteria.limit || 100);
-  async delete(id: string): Promise<void> {
-
-  this.db.delete(id);
-  async rotate(): Promise<void> {,
+  async delete(id: string): Promise<void> { this.db.delete(id);
+  async rotate(): Promise<void> {
   // Archive old logs
   const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000); // 90 days;
   for (const [id, entry] of this.db) {
@@ -124,64 +114,61 @@ class DatabaseStorageBackend implements AuditStorageBackend {
   storageBackend: dbBackend,
   asyncLogging: false, // Synchronous for demo,
   encryptLogs: true,
-  hashSensitiveData: true,
+  hashSensitiveData: true }
 });
   // Log sensitive operations
-  const sensitiveOps = [;
+  const sensitiveOps = [
     { resource: 'patient_records', id: 'patient_12345' },
     { resource: 'credit_scores', id: 'credit_67890' },
     { resource: 'employee_salaries', id: 'salary_2024' }
   ];
-  for (const op of sensitiveOps) {
-  await auditLogger.log({)
+  for (const op of sensitiveOps) { await auditLogger.log({)
   userId: 'analyst789',
   operation: AuditOperation.READ,
   resourceType: op.resource,
   resourceId: op.id,
   dataClassification: DataClassificationLevel.RESTRICTED,
   ipAddress: '10.0.0.50',
-  sessionId: 'secure-session-xyz',
+  sessionId: 'secure-session-xyz' }
 });
   console.log('✓ Logged sensitive operations to custom database backend');
   auditLogger.destroy();
 /**
  * Example 3: Integrated audit logging with classification and enforcement
  */
-async function integratedAuditExample() {
-  console.log('\n=== Integrated Audit Logging ===\n');
+async function integratedAuditExample() { console.log('\n=== Integrated Audit Logging ===\n');
   // Set up components
   const auditLogger = createAuditLogger({)
   logLevel: AuditLogLevel.VERBOSE,
-  alertOnAnomaly: true,
+  alertOnAnomaly: true }
 });
   const classifier = new DataClassifier();
-  const enforcer = new ClassificationEnforcer({)
+  const enforcer = new ClassificationEnforcer({ )
   strictMode: true,
-  requireExplicitControls: true,
+  requireExplicitControls: true }
 });
   // Create integrated audit system
-  const auditIntegration = createAuditIntegration({)
+  const auditIntegration = createAuditIntegration({ )
   auditLogger,
   classificationEnforcer: enforcer,
   dataClassifier: classifier,
   logAllOperations: true,
-  enrichWithClassification: true,
+  enrichWithClassification: true }
 });
   // Example 1: Accessing customer data
-  const customerData = {
-  name: 'John Doe',
+  const customerData = { name: 'John Doe',
   email: 'john.doe@example.com',
   ssn: '123-45-6789',
   creditCard: '4111-1111-1111-1111',
-  address: '123 Main St',
+  address: '123 Main St' }
 };
-  const context: OperationContext = {,
+  const context: OperationContext = { ,
   userId: 'support_agent_001',
   userRole: 'support',
   purpose: 'customer verification',
   ipAddress: '192.168.10.25',
   sessionId: 'support-session-456',
-  requestedAt: new Date(),
+  requestedAt: new Date() }
 };
   // This will automatically classify the data and check enforcement
   await auditIntegration.logDataAccess()
@@ -189,14 +176,13 @@ async function integratedAuditExample() {
     'customer_profile',
     'cust_98765',
     customerData,
-    {
-      reason: 'Customer called for account verification',
+    { reason: 'Customer called for account verification',
       ticketId: 'SUPPORT-2024-1234');
   console.log('✓ Logged customer data access with automatic classification');
   // Example 2: Batch operation
   await auditIntegration.logBatchOperation()
     context,
-    AuditOperation.EXPORT,
+    AuditOperation.EXPORT }
     [
       { type: 'customer', id: 'cust_001', classification: DataClassificationLevel.CONFIDENTIAL },
       { type: 'customer', id: 'cust_002', classification: DataClassificationLevel.CONFIDENTIAL },
@@ -209,20 +195,17 @@ async function integratedAuditExample() {
   // Example 3: Administrative operation
   await auditIntegration.logAdminOperation()
     'GRANT_ACCESS',
-    {
-  userId: 'admin001',
+    { userId: 'admin001',
   userRole: 'security_admin',
   ipAddress: '10.0.0.5',
-  requestedAt: new Date(),
-}
-    {
-  userId: 'analyst002',
+  requestedAt: new Date() }
+
+    { userId: 'analyst002',
   resourceType: 'financial_reports',
   resourceId: 'annual_2024',
-  classification: DataClassificationLevel.CONFIDENTIAL,
-}
-    {
-      approvedBy: 'ciso',
+  classification: DataClassificationLevel.CONFIDENTIAL }
+
+    { approvedBy: 'ciso',
       expiresIn: '30 days',
       justification: 'Annual audit requirement');
   console.log('✓ Logged administrative access grant');
@@ -239,7 +222,7 @@ async function integratedAuditExample() {
   // Generate compliance report
   const report = await auditIntegration.generateComplianceReport(;);
     new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours
-    new Date(),
+    new Date() }
     { includeDetails: false }
   );
   console.log('\n📊 Compliance Report (Last 24 Hours):');
@@ -258,15 +241,14 @@ async function integratedAuditExample() {
 /**
  * Example 4: Handling audit events and alerts
  */
-async function auditEventsExample() {
-  console.log('\n=== Audit Events and Alerts ===\n');
+async function auditEventsExample() { console.log('\n=== Audit Events and Alerts ===\n');
   const auditLogger = createAuditLogger({)
   alertOnAnomaly: true,
-  alertThresholds: {
+  alertThresholds: {,
   failedAccessAttempts: 3,
   sensitiveDataAccess: 5,
   highRiskOperations: 2,
-  timeWindow: 5,
+  timeWindow: 5 }
 });
   // Set up event handlers
   auditLogger.on('audit', (entry) => {
@@ -278,23 +260,20 @@ async function auditEventsExample() {
     console.log(`⚠️  ANOMALY DETECTED: ${event.type}`);}
     console.log('   Details:', event.entry);
   });
-  auditLogger.on('error', (error) => {
-  console.error('❌ Audit Error:', error.message);
-});
+  auditLogger.on('error', (error) => { console.error('❌ Audit Error:', error.message) });
   // Simulate suspicious activity
-  const suspiciousContext: OperationContext = {,
+  const suspiciousContext: OperationContext = { ,
   userId: 'suspicious_user',
   userRole: 'temp_contractor',
   purpose: 'data_export',
   ipAddress: '203.0.113.0', // External IP,
-  requestedAt: new Date(),
+  requestedAt: new Date() }
 };
   // Multiple failed access attempts
-  for (let i = 0; i < 4; i++) {
-    await auditLogger.log({)
+  for (let i = 0; i < 4; i++) { await auditLogger.log({)
   userId: suspiciousContext.userId,
       operation: AuditOperation.READ,
-      resourceType: 'confidential_docs',
+      resourceType: 'confidential_docs' }
       resourceId: `doc_${i}`}
 },
   dataClassification: DataClassificationLevel.CONFIDENTIAL,
@@ -314,30 +293,28 @@ async function workflowAuditExample() {
   const auditLogger = createAuditLogger();
   const auditIntegration = createAuditIntegration({ auditLogger });
   // Start a workflow audit trail
-  const workflowContext: OperationContext = {,
+  const workflowContext: OperationContext = { ,
   userId: 'workflow_user',
   userRole: 'data_scientist',
   purpose: 'model_training',
   systemId: 'ml_pipeline',
-  requestedAt: new Date(),
+  requestedAt: new Date() }
 };
   const correlationId = await auditIntegration.startAuditTrail(;);
     'ml_training_workflow_001',
     workflowContext,
-    {
-      modelType: 'customer_churn_prediction',
+    { modelType: 'customer_churn_prediction' }
       datasetSize: 1000000);
   console.log(`✓ Started workflow audit trail: ${correlationId}`);}
   // Log workflow steps
-  const workflowSteps = [;
+  const workflowSteps = [
     { step: 'data_loading', resource: 'customer_dataset', classification: DataClassificationLevel.INTERNAL },
     { step: 'data_preprocessing', resource: 'cleaned_dataset', classification: DataClassificationLevel.INTERNAL },
     { step: 'feature_extraction', resource: 'feature_set', classification: DataClassificationLevel.CONFIDENTIAL },
     { step: 'model_training', resource: 'ml_model_v1', classification: DataClassificationLevel.CONFIDENTIAL },
     { step: 'model_evaluation', resource: 'evaluation_metrics', classification: DataClassificationLevel.INTERNAL }
   ];
-  for (const step of workflowSteps) {
-  await auditLogger.log({)
+  for (const step of workflowSteps) { await auditLogger.log({)
   correlationId,
   userId: workflowContext.userId,
   operation: AuditOperation.API_CALL,
@@ -345,10 +322,10 @@ async function workflowAuditExample() {
   resourceId: step.step,
   dataClassification: step.classification,
   success: true,
-  metadata: {
+  metadata: {,
   workflowId: 'ml_training_workflow_001',
   stepName: step.step,
-  outputResource: step.resource,
+  outputResource: step.resource }
 });
     console.log(`  ✓ Logged workflow step: ${step.step}`);}
   // Query all logs for this workflow
@@ -358,18 +335,17 @@ async function workflowAuditExample() {
   console.log(`  Correlation ID: ${correlationId}`);}
   console.log(`  Total Steps: ${correlatedLogs.length}`);}
   console.log(`  Duration: ${;)}
-  }
+
     correlatedLogs.length > 0 
       ? new Date(correlatedLogs[correlatedLogs.length - 1].timestamp).getTime() - 
         new Date(correlatedLogs[0].timestamp).getTime() 
       : 0
-  }ms`);
+ms`);
   auditLogger.destroy();
 /**
  * Run all examples
  */
-async function runExamples() {
-  console.log('🔐 Audit Logging Examples\n');
+async function runExamples() { console.log('🔐 Audit Logging Examples\n');
   console.log('This demonstrates comprehensive audit logging for data access');
   console.log('including integration with classification and enforcement.\n');
   try {
@@ -378,9 +354,7 @@ async function runExamples() {
     await integratedAuditExample();
     await auditEventsExample();
     await workflowAuditExample();
-    console.log('\n✅ All audit logging examples completed successfully!');
-  } catch (error) {
-  console.error('\n❌ Error running examples:', error);
+    console.log('\n✅ All audit logging examples completed successfully!') } catch (error) { console.error('\n❌ Error running examples:', error);
   // Run examples if this file is executed directly
   if (require.main === module) {
   runExamples();
@@ -388,6 +362,6 @@ async function runExamples() {
   basicAuditLogging,
   customStorageExample,
   integratedAuditExample,
-  auditEventsExample,
+  auditEventsExample }
   workflowAuditExample
 };

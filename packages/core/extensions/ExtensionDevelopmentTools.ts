@@ -3,13 +3,12 @@
  * Tools and utilities for extension development and testing
  */
 import { z } from 'zod';
-import { 
-  BaseExtension, 
+import { BaseExtension, 
   ExtensionContext, 
   ExtensionValidationResult,
-  ExtensionError,
+  ExtensionError }
   ExtensionErrorType
-} from './interfaces/ExtensionInterfaces';
+ from './interfaces/ExtensionInterfaces';
 import { extensionTypeChecker, extensionInterfaceValidator } from './TypeDefinitions';
 
 // Extension Development Kit
@@ -35,11 +34,10 @@ export class ExtensionDevelopmentKit {
  * @author ${author}
  * @version 1.0.0
  */
-import { 
-  BaseExtension, 
-  ExtensionContext, 
+import { BaseExtension, 
+  ExtensionContext }
   ExtensionValidationResult 
-} from '@prompt-spaghetti/core/extensions';
+ from '@prompt-spaghetti/core/extensions';
 ${baseClass}
 ${extensionClass}
 ${exports}
@@ -47,8 +45,7 @@ ${exports}
   /**
    * Validate extension implementation
    */
-  public validateExtension(extension: any): ExtensionValidationResult {
-    const errors: string = [];
+  public validateExtension(extension: any): ExtensionValidationResult { const errors: string = [];
     const warnings: string = [];
     // Type validation
     const typeValidation = extensionTypeChecker.validateExtensionType(extension);
@@ -57,7 +54,7 @@ ${exports}
     // Interface validation
     if (typeValidation.type) {
       const interfaceValidation = extensionInterfaceValidator.validateInterface(;);
-        extension,
+        extension }
         `${typeValidation.type.charAt(0).toUpperCase() + typeValidation.type.slice(1)}Extension`}
       );
       if (!interfaceValidation.valid) {
@@ -66,48 +63,37 @@ ${exports}
         if (interfaceValidation.extraMethods.length > 0) {
           warnings.push(`Extra methods detected: ${interfaceValidation.extraMethods.join(', ')}`);}
     // Configuration validation
-    try {
-      const config = extension.getConfiguration();
+    try { const config = extension.getConfiguration();
       if (typeof config !== 'object' || config === null) {
-        warnings.push('Extension configuration should be an object');
-    } catch (error) {
+        warnings.push('Extension configuration should be an object') } catch (error) {
       errors.push(`Configuration validation failed: ${error instanceof Error ? error.message : String(error)}`);}
     // Health check validation
-    try {
-      const isHealthy = extension.isHealthy();
+    try { const isHealthy = extension.isHealthy();
       if (typeof isHealthy !== 'boolean') {
         errors.push('isHealthy() must return a boolean');
       const healthStatus = extension.getHealthStatus();
       if (!healthStatus || typeof healthStatus !== 'object') {
-        errors.push('getHealthStatus() must return a health status object');
-    } catch (error) {
+        errors.push('getHealthStatus() must return a health status object') } catch (error) {
       errors.push(`Health check validation failed: ${error instanceof Error ? error.message : String(error)}`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0,
+  errors }
   warnings
 };
   /**
    * Test extension lifecycle
    */
-  public async testExtensionLifecycle(extension: BaseExtension): Promise<LifecycleTestResult> {
-
-  const result: LifecycleTestResult = {,
-  success: true,
-  phases: [],
-  errors: [],
-  duration: 0,
+  public async testExtensionLifecycle(extension: BaseExtension): Promise<LifecycleTestResult> { const result: LifecycleTestResult = {
+  success: true
+  phases: []
+  errors: []
+  duration: 0 }
 };
     const startTime = Date.now();
-    try {
-      // Test initialization
+    try { // Test initialization
       await this.testPhase(result, 'initialize', async () => {
-        await extension.initialize();
-      });
+        await extension.initialize() });
       // Test activation
-      await this.testPhase(result, 'activate', async () => {
-        await extension.activate();
-      });
+      await this.testPhase(result, 'activate', async () => { await extension.activate() });
       // Test health check
       await this.testPhase(result, 'health', async () => {
         const isHealthy = extension.isHealthy();
@@ -118,14 +104,10 @@ ${exports}
           throw new Error(`Extension health status is ${healthStatus.status}`);}
       });
       // Test deactivation
-      await this.testPhase(result, 'deactivate', async () => {
-        await extension.deactivate();
-      });
+      await this.testPhase(result, 'deactivate', async () => { await extension.deactivate() });
       // Test disposal
-      await this.testPhase(result, 'dispose', async () => {
-        await extension.dispose();
-      });
-    } catch (error) {
+      await this.testPhase(result, 'dispose', async () => { await extension.dispose() });
+ catch (error) {
       result.success = false;
       result.errors.push(error instanceof Error ? error : new Error(String(error)));
     result.duration = Date.now() - startTime;
@@ -163,63 +145,62 @@ ${this.generateExamples(extension, type)}
   /**
    * Create test extension instance
    */
-  public createTestExtension(config: Partial<TestExtensionConfig> = {}): BaseExtension {
-  return new TestExtension(config);
+  public createTestExtension(config: Partial<TestExtensionConfig> = {}): BaseExtension { return new TestExtension(config);
   /**
   * Create mock extension context
   */
-  public createMockExtensionContext(extensionId: string): ExtensionContext {,
+  public createMockExtensionContext(extensionId: string): ExtensionContext {
   return {
-  extensionId,
-  systemVersion: '1.0.0',
+  extensionId
+  systemVersion: '1.0.0'
   logger: {
-  debug: jest.fn(),
-  info: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
-  trace: jest.fn(),
-} as any,
-      storage: {
-  get: jest.fn(),
-  set: jest.fn(),
-  delete: jest.fn(),
-  clear: jest.fn(),
-  keys: jest.fn(),
-  getScoped: jest.fn(),
-} as any,
-      events: {
-  on: jest.fn(),
-  off: jest.fn(),
-  emit: jest.fn(),
-  once: jest.fn(),
-  removeAllListeners: jest.fn(),
-} as any,
-      runtime: {
-  version: '1.0.0',
-  environment: 'test',
-  getSystemInfo: jest.fn(),
-  getPerformanceMetrics: jest.fn(),
-  registerNode: jest.fn(),
-  unregisterNode: jest.fn(),
-  getRegisteredNodes: jest.fn(),
-} as any,
-      ui: {
-  registerComponent: jest.fn(),
-  unregisterComponent: jest.fn(),
-  registerInspectorEditor: jest.fn(),
-  unregisterInspectorEditor: jest.fn(),
-  registerMenuItem: jest.fn(),
-  unregisterMenuItem: jest.fn(),
-  showNotification: jest.fn(),
-  showModal: jest.fn(),
-} as any,
-      api: {
-  createHttpClient: jest.fn(),
-  registerEndpoint: jest.fn(),
-  unregisterEndpoint: jest.fn(),
-  registerMiddleware: jest.fn(),
-  unregisterMiddleware: jest.fn(),
-} as any
+  debug: jest.fn()
+  info: jest.fn()
+  warn: jest.fn()
+  error: jest.fn()
+  trace: jest.fn() }
+ as any
+      storage: { 
+  get: jest.fn()
+  set: jest.fn()
+  delete: jest.fn()
+  clear: jest.fn()
+  keys: jest.fn()
+  getScoped: jest.fn() }
+ as any
+      events: { 
+  on: jest.fn()
+  off: jest.fn()
+  emit: jest.fn()
+  once: jest.fn()
+  removeAllListeners: jest.fn() }
+ as any
+      runtime: { 
+  version: '1.0.0'
+  environment: 'test'
+  getSystemInfo: jest.fn()
+  getPerformanceMetrics: jest.fn()
+  registerNode: jest.fn()
+  unregisterNode: jest.fn()
+  getRegisteredNodes: jest.fn() }
+ as any
+      ui: { 
+  registerComponent: jest.fn()
+  unregisterComponent: jest.fn()
+  registerInspectorEditor: jest.fn()
+  unregisterInspectorEditor: jest.fn()
+  registerMenuItem: jest.fn()
+  unregisterMenuItem: jest.fn()
+  showNotification: jest.fn()
+  showModal: jest.fn() }
+ as any
+      api: { 
+  createHttpClient: jest.fn()
+  registerEndpoint: jest.fn()
+  unregisterEndpoint: jest.fn()
+  registerMiddleware: jest.fn()
+  unregisterMiddleware: jest.fn() }
+ as any
     };
   // Private helper methods
   private generateBaseClass(config: ExtensionSkeletonConfig): string {
@@ -239,13 +220,13 @@ abstract class BaseExtensionImpl implements BaseExtension {
   protected config: any = {};
   protected healthy: boolean = true;
   constructor();
-    id: string,
-    name: string,
-    version: string,
-    description: string,
-    author: string,
-    dependencies: string = [],
-    permissions: string = [],
+    id: string
+    name: string
+    version: string
+    description: string
+    author: string
+    dependencies: string = []
+    permissions: string = []
     this.id = id;
     this.name = name;
     this.version = version;
@@ -253,28 +234,26 @@ abstract class BaseExtensionImpl implements BaseExtension {
     this.author = author;
     this.dependencies = dependencies;
     this.permissions = permissions;
-  public async initialize(): Promise<void> {
-
+  public async initialize(): Promise<void> { // Override in subclass
+  public async activate(): Promise<void> {
   // Override in subclass
-  public async activate(): Promise<void> {,
+  public async deactivate(): Promise<void> {
   // Override in subclass
-  public async deactivate(): Promise<void> {,
+  public async dispose(): Promise<void> {
   // Override in subclass
-  public async dispose(): Promise<void> {,
-  // Override in subclass
-  public getConfiguration(): any {,
+  public getConfiguration(): any {
   return this.config;
-  public setConfiguration(config: any): void {,
+  public setConfiguration(config: any): void {
   this.config = config;
-  public isHealthy(): boolean {,
+  public isHealthy(): boolean {
   return this.healthy;
-  public getHealthStatus(): any {,
+  public getHealthStatus(): any {
   return {
-  status: this.healthy ? 'healthy' : 'error',
-  message: this.healthy ? 'Extension is healthy' : 'Extension has errors',
-  lastChecked: new Date(),
+  status: this.healthy ? 'healthy' : 'error'
+  message: this.healthy ? 'Extension is healthy' : 'Extension has errors'
+  lastChecked: new Date() }
 };
-}`;
+`;
   private generateExtensionClass(config: ExtensionSkeletonConfig): string {
     const { id, name, type, author, description } = config;
     const typeSpecificMethods = this.generateTypeSpecificMethods(type);
@@ -288,14 +267,14 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
   constructor() {
     super();
       '${id}'}
-}
+
       '${name}'}
-}
-      '1.0.0',
+
+      '1.0.0'
       '${description}'}
-}
+
       '${author}'}
-}
+
       [], // dependencies
       []  // permissions
     );
@@ -316,7 +295,7 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
     // Dispose of your extension here
     console.log('Disposing ${name} extension');}
   ${typeSpecificMethods}
-}`;
+`;
   private generateTypeSpecificMethods(type: string): string {
     switch (type) {
     case 'node':
@@ -333,27 +312,24 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
   public getNodeSchema(nodeType: string): any {
     // Return Zod schema for node configuration
     return z.object({});
-  public supportsAdvancedNodes(): boolean {
-    return false;
-  }`;
+  public supportsAdvancedNodes(): boolean { return false }`;
     case 'ui':
       return `
-  public getComponentDefinitions(): any {
-  return [
+  public getComponentDefinitions(): any { return [
   // Add your component definitions here
   ];
-  public createComponentInstance(componentId: string, props: any): any {,
+  public createComponentInstance(componentId: string, props: any): any {
   // Create and return component instance
   throw new Error('Not implemented');
-  public getThemeContributions(): any {,
+  public getThemeContributions(): any {
   return [];
-  public getCommandContributions(): any {,
+  public getCommandContributions(): any {
   return [];
-  public getMenuContributions(): any {,
+  public getMenuContributions(): any {
   return [];
-  public getKeybindingContributions(): any {,
+  public getKeybindingContributions(): any { }
   return [];
-}`;
+`;
     case 'transform':
       return `
   public getTransformDefinitions(): any {
@@ -368,9 +344,7 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
   public getTransformSchema(transformId: string): any {
     // Return Zod schema for transform configuration
     return z.object({});
-  public supportsPipeline(): boolean {
-    return false;
-  }`;
+  public supportsPipeline(): boolean { return false }`;
     case 'storage':
       return `
   public getStorageProviders(): any {
@@ -385,9 +359,7 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
   public getStorageSchema(providerId: string): any {
     // Return Zod schema for storage configuration
     return z.object({});
-  public supportsMigration(): boolean {
-    return false;
-  }`;
+  public supportsMigration(): boolean { return false }`;
     default:
       return '';
   private generateExports(config: ExtensionSkeletonConfig): string {
@@ -437,7 +409,7 @@ ${this.getTypeSpecificAPIDocs(type)}
     return `
 ### Basic Usage
 \`\`\`typescript
-import { extension } from './${extension.id}';}
+import { extension } from './${extension.id}';;
 
 // Initialize and activate
 await extension.initialize();
@@ -469,18 +441,14 @@ const components = extension.getComponentDefinitions();
 const Component = extension.createComponentInstance('my-component', {});`;
     default:
       return '// Use extension-specific methods here';
-  private async testPhase(result: LifecycleTestResult, phase: string, testFn: () => Promise<void>): Promise<void> {
-
-  const phaseResult: LifecyclePhaseResult = {,
-  phase,
-  success: true,
-  duration: 0,
-  error: undefined,
+  private async testPhase(result: LifecycleTestResult, phase: string, testFn: () => Promise<void>): Promise<void> { const phaseResult: LifecyclePhaseResult = {
+  phase
+  success: true
+  duration: 0
+  error: undefined }
 };
     const startTime = Date.now();
-    try {
-      await testFn();
-    } catch (error) {
+    try { await testFn() } catch (error) {
       phaseResult.success = false;
       phaseResult.error = error;
       result.success = false;
@@ -500,67 +468,65 @@ class TestExtension implements BaseExtension {
   public readonly permissions: string;
   private config: any = {};
   private healthy: boolean = true;
-  constructor(config: Partial<TestExtensionConfig> = {}) {
-  this.id = config.id || 'test-extension';
+  constructor(config: Partial<TestExtensionConfig> = {}) { this.id = config.id || 'test-extension';
   this.name = config.name || 'Test Extension';
   this.version = config.version || '1.0.0';
   this.description = config.description || 'A test extension';
   this.author = config.author || 'Test Author';
   this.dependencies = config.dependencies || [];
   this.permissions = config.permissions || [];
-  public async initialize(): Promise<void> {,
+  public async initialize(): Promise<void> {
   // Test initialization
-  public async activate(): Promise<void> {,
+  public async activate(): Promise<void> {
   // Test activation
-  public async deactivate(): Promise<void> {,
+  public async deactivate(): Promise<void> {
   // Test deactivation
-  public async dispose(): Promise<void> {,
+  public async dispose(): Promise<void> {
   // Test disposal
-  public getConfiguration(): any {,
+  public getConfiguration(): any {
   return this.config;
-  public setConfiguration(config: any): void {,
+  public setConfiguration(config: any): void {
   this.config = config;
-  public isHealthy(): boolean {,
+  public isHealthy(): boolean {
   return this.healthy;
-  public getHealthStatus(): any {,
+  public getHealthStatus(): any {
   return {
-  status: this.healthy ? 'healthy' : 'error',
-  message: this.healthy ? 'Extension is healthy' : 'Extension has errors',
-  lastChecked: new Date(),
+  status: this.healthy ? 'healthy' : 'error'
+  message: this.healthy ? 'Extension is healthy' : 'Extension has errors'
+  lastChecked: new Date() }
 };
   public setHealthy(healthy: boolean): void {
     this.healthy = healthy;
 
 // Type definitions
-}
-interface ExtensionSkeletonConfig {
-  id: string;
+
+
+interface ExtensionSkeletonConfig { id: string;
   name: string;
-  type: 'node' | 'ui' | 'transform' | 'storage';
+  type: 'node' | 'ui' | 'transform' | 'storage' }
   author: string;
   description: string;
-}
-interface TestExtensionConfig {
-  id?: string;
+
+
+
+interface TestExtensionConfig { id?: string;
   name?: string;
   version?: string;
   description?: string;
   author?: string;
   dependencies?: string;
-  permissions?: string;
-}
-interface LifecycleTestResult {
-  success: boolean;
+  permissions?: string }
+
+
+interface LifecycleTestResult { success: boolean;
   phases: LifecyclePhaseResult;
   errors: Error;
-  duration: number;
-}
-interface LifecyclePhaseResult {
-  phase: string;
+  duration: number }
+
+
+interface LifecyclePhaseResult { phase: string;
   success: boolean;
   duration: number;
   error?: Error;
-
-// Export singleton
-export const extensionDevelopmentKit = ExtensionDevelopmentKit.getInstance();
-}
+  // Export singleton
+  export const extensionDevelopmentKit = ExtensionDevelopmentKit.getInstance() }

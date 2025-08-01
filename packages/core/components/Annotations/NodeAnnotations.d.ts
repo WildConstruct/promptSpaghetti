@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface NodeAnnotation {
-    id: string;
+}
+export interface NodeAnnotation { id: string;
     nodeId: string;
     type: 'performance' | 'creative' | 'technical' | 'review' | 'approval' | 'question' | 'reference';
     content: string;
@@ -24,37 +24,35 @@ export interface NodeAnnotation {
     linkedAnnotations: string[];
     estimatedTime?: number;
     deadline?: string;
-    assignee?: VFXUser;
-
+    assignee?: VFXUser }
 }
-export interface NodeAnnotationAttachment {
-    id: string;
+}
+export interface NodeAnnotationAttachment { id: string;
     type: 'image' | 'video' | 'audio' | 'link' | 'file';
     name: string;
     url: string;
     thumbnail?: string;
     size?: number;
-    duration?: number;
-
+    duration?: number }
 }
-export interface NodeAnnotationReply {
-    id: string;
+}
+export interface NodeAnnotationReply { id: string;
     content: string;
     author: VFXUser;
     timestamp: string;
     reactions: {
-        [emoji: string]: VFXUser[];
+        [emoji: string]: VFXUser[] }
 }
     };
 
 }
-export interface VFXUser {
-    id: string;
+}
+export interface VFXUser { id: string;
     name: string;
     role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator';
     avatar?: string;
-    email: string;
-
+    email: string }
+}
 }
 export interface NodeAnnotationSystemProps {
     nodeId: string;
@@ -72,4 +70,5 @@ export interface NodeAnnotationSystemProps {
 export declare const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps>;
 export default NodeAnnotationSystem;
 //# sourceMappingURL=NodeAnnotations.d.ts.map
+}
 }

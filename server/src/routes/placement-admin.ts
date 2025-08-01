@@ -17,13 +17,14 @@ import { AuditService } from '../auth/services/AuditService';
 declare module 'fastify' {
   interface FastifyInstance {
     placementAdmin?: PlacementAdminController;
-}
-}
-  }
-}
 
-}
-}
+
+
+
+
+
+
+
 interface PlacementAdminOptions {
   prefix?: string;
   database: Database;
@@ -34,10 +35,11 @@ interface PlacementAdminOptions {
     previewCacheTTL?: number;
     bulkOperationLimit?: number;
     analyticsRetentionDays?: number;
-}
-}
+
+
+
   };
-}
+
 
 const placementAdminPlugin: FastifyPluginAsync<PlacementAdminOptions> = async (
   fastify: FastifyInstance,
@@ -64,7 +66,7 @@ const placementAdminPlugin: FastifyPluginAsync<PlacementAdminOptions> = async (
     // Skip auth for health check
     if (request.url === '/admin/placement-system-status') {
       return;
-    }
+
 
     // TODO: Implement proper authentication
     // For now, just add a placeholder user context
@@ -94,10 +96,10 @@ const placementAdminPlugin: FastifyPluginAsync<PlacementAdminOptions> = async (
           url: request.url,
           error: error.message,
           stack: error.stack
-  }
+
         severity: 'error'
       });
-    }
+
   });
 
   // Register all placement admin routes
@@ -126,39 +128,39 @@ const placementAdminPlugin: FastifyPluginAsync<PlacementAdminOptions> = async (
           'GET /admin/placement-slots/:slotId': 'Get placement slot details',
           'PUT /admin/placement-slots/:slotId': 'Update placement slot',
           'DELETE /admin/placement-slots/:slotId': 'Delete placement slot'
-  }
+
         placements: {
           'GET /admin/content-placements': 'Search content placements',
           'POST /admin/content-placements': 'Create content placement',
           'GET /admin/content-placements/:placementId': 'Get placement details',
           'PUT /admin/content-placements/:placementId': 'Update content placement',
           'DELETE /admin/content-placements/:placementId': 'Delete content placement'
-  }
+
         preview: {
           'POST /admin/placement-preview/:slotId': 'Generate placement preview',
           'GET /admin/placement-preview/:previewId': 'Get cached preview'
-  }
+
         analytics: {
           'GET /admin/placement-analytics': 'Get analytics dashboard data',
           'GET /admin/placement-metrics/:slotId': 'Get slot-specific metrics',
           'GET /admin/placement-performance': 'Get performance report'
-  }
+
         system: {
           'GET /admin/placement-system-status': 'Get system status',
           'POST /admin/placement-system-maintenance': 'Perform maintenance tasks',
           'GET /admin/placement-audit-log': 'Get audit log entries'
-  }
+
         bulk: {
           'POST /admin/placement-bulk-operations': 'Create bulk operation',
           'GET /admin/placement-bulk-operations/:operationId': 'Get operation status'
-        }
-  }
+
+
       schemas: {
         PlacementSlot: 'Defines placement slot configuration and properties',
         ContentPlacement: 'Defines content placement with scheduling and targeting',
         PlacementAnalytics: 'Analytics data structure for performance tracking',
         BulkPlacementOperation: 'Bulk operation tracking and status'
-      }
+
     };
 
     return docs;

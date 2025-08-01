@@ -11,76 +11,85 @@
 import React, { useState, useEffect, useCallback } from 'react';
 // FileItem type removed - not needed for this component
 import { useAuthStore } from '../../stores/authStore';
-}
+
+
 interface QuickNavigationProps {
   onNavigate?: (path: string, filter?: NavigationFilter) => void;
   currentPath?: string;
   className?: string;
-}
+
+
+
 interface NavigationFilter {
   type: 'all' | 'recent' | 'favorites' | 'fileType' | 'folder';
   value?: string;
-}
+
+
+
 interface NavigationSection {
   id: string;,
-  title: string;
+  title: string;,
   icon: string;,
-  isCollapsed: boolean;
+  isCollapsed: boolean;,
   items: NavigationItem;
-}
+
+
+
 interface NavigationItem {
   id: string;,
-  label: string;
+  label: string;,
   icon: string;
   path?: string;
   filter?: NavigationFilter;
   count?: number;
   isActive?: boolean;
-}
+
+
+
 interface BookmarkItem extends NavigationItem {
   createdAt: Date;,
   isCustom: boolean;
-const defaultSections: NavigationSection = [
+  const defaultSections: NavigationSection = [
   {
-    id: 'quick-access',
-    title: 'Quick Access',
-    icon: '⚡',
-    isCollapsed: false,
-    items: [,
-      {
-        id: 'recent',
-        label: 'Recent Files',
-        icon: '🕒',
-}
-        filter: { type: 'recent' }
-  }
+  id: 'quick-access',
+  title: 'Quick Access',
+  icon: '⚡',
+  isCollapsed: false,
+  items: [
+  {
+  id: 'recent',
+  label: 'Recent Files',
+  icon: '🕒',
+},
+  filter: { type: 'recent' }
+
       {
         id: 'favorites',
         label: 'Favorites',
         icon: '⭐',
         filter: { type: 'favorites' }
     ]
-  }
+
   {
     id: 'folders',
     title: 'Folders',
     icon: '📁',
     isCollapsed: false,
-    items: [,
+    items: [
       {
         id: 'projects',
         label: 'My Projects',
         icon: '📂',
         path: '/projects',
         filter: { type: 'folder', value: '/projects' }
-  }
+
       {
         id: 'templates',
         label: 'Templates',
         icon: '📋',
         path: '/templates',
         filter: { type: 'folder', value: '/templates' }
-  }
+
       {
         id: 'shared',
         label: 'Shared',
@@ -88,25 +97,25 @@ const defaultSections: NavigationSection = [
         path: '/shared',
         filter: { type: 'folder', value: '/shared' }
     ]
-  }
+
   {
     id: 'file-types',
     title: 'File Types',
     icon: '📄',
     isCollapsed: true,
-    items: [,
+    items: [
       {
         id: 'psg-files',
         label: 'Graph Files (.psg)',
         icon: '🔗',
         filter: { type: 'fileType', value: 'psg' }
-  }
+
       {
         id: 'json-files',
         label: 'JSON Files',
         icon: '📄',
         filter: { type: 'fileType', value: 'json' }
-  }
+
       {
         id: 'text-files',
         label: 'Text Files',
@@ -141,12 +150,12 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
 };
       setSections(prev => prev.map(section => ({)
   ...section,
-  items: section.items.map(item => ({,)
+  items: section.items.map(item => ({)
   ...item,
   count: mockCounts[item.id as keyof typeof mockCounts] || undefined,
 }))
       })));
-    } catch (error) {
+ catch (error) {
   console.error('Failed to update file counts:', error);
 }, []);
   // Load navigation state and bookmarks
@@ -164,14 +173,14 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
       // Load custom bookmarks
       const savedBookmarks = localStorage.getItem('quickNavigationBookmarks');
       if (savedBookmarks) {
-  const parsed = JSON.parse(savedBookmarks).map((bookmark: unknown) => ({,)
+  const parsed = JSON.parse(savedBookmarks).map((bookmark: unknown) => ({),
   ...bookmark,
   createdAt: new Date(bookmark.createdAt),
 }));
         setBookmarks(parsed);
       // Load file counts (mock data)
       updateFileCounts();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load navigation state:', error);
 }, [isAuthenticated, updateFileCounts]);
   // Toggle section collapsed state
@@ -195,14 +204,14 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   const handleItemClick = useCallback((item: NavigationItem) => {
     if (item.path) {
       onNavigate?.(item.path, item.filter);
-    } else if (item.filter) {
+ else if (item.filter) {
       onNavigate?.(currentPath, item.filter);
   }, [onNavigate, currentPath]);
   // Add custom bookmark
   const addBookmark = useCallback((path: string, label: string) => {
     const newBookmark: BookmarkItem = {,
   id: `bookmark-${Date.now()}`}
-}
+
       label,
       icon: '🔖',
       path,
@@ -237,38 +246,38 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   }, [addBookmark]);
   if (!isAuthenticated) {
     return;
-      <div className={`quick-navigation ${className}`} style={{},}
+      <div className={`quick-navigation ${className}`} style={{},},
   width: '250px',
         backgroundColor: '#f8f9fa',
         borderRight: '1px solid #dee2e6',
         padding: '20px',
         textAlign: 'center',
         color: '#6c757d';
-  }}>
+}>
         Please log in to see navigation.
       </div>
     );
   return;
-    <div className={`quick-navigation ${className}`} style={{},}
+    <div className={`quick-navigation ${className}`} style={{},},
   width: '250px',
       backgroundColor: '#f8f9fa',
       borderRight: '1px solid #dee2e6',
       display: 'flex',
       flexDirection: 'column',
       height: '100%';
-  }}>
+}>
       {/* Header */}
       <div style={{
   padding: '16px 20px',
   borderBottom: '1px solid #dee2e6',
   backgroundColor: '#fff',
-}}>
+}>
         <h3 style={{
   margin: 0,
   fontSize: '14px',
   fontWeight: 600,
   color: '#212529',
-}}>
+}>
           Navigation
         </h3>
       </div>
@@ -291,13 +300,13 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   letterSpacing: '0.5px',
   backgroundColor: 'transparent',
   transition: 'background-color 0.15s ease',
-}}
+
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#e9ecef';
-              }}
+}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
-              }}
+}
             >
               <span style={{ marginRight: '8px' }}>
                 {section.isCollapsed ? '▶' : '▼'}
@@ -325,15 +334,15 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   color: isActive ? '#007bff' : '#495057',
   backgroundColor: isActive ? '#e3f2fd' : 'transparent',
   transition: 'all 0.15s ease',
-}}
+
                       onMouseEnter={(e) => {
                         if (!isActive) {
                           e.currentTarget.style.backgroundColor = '#e9ecef';
-                      }}
+}
                       onMouseLeave={(e) => {
                         if (!isActive) {
                           e.currentTarget.style.backgroundColor = 'transparent';
-                      }}
+}
                     >
                       <span style={{ marginRight: '8px', fontSize: '14px' }}>
                         {item.icon}
@@ -348,7 +357,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   borderRadius: '8px',
   minWidth: '16px',
   textAlign: 'center',
-}}>
+}>
                           {item.count}
                         </span>
                       )}
@@ -372,7 +381,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-}}>
+}>
               <span>📚 Bookmarks</span>
             </div>
             <div style={{ paddingLeft: '8px' }}>
@@ -388,7 +397,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   fontSize: '13px',
   color: '#495057',
   group: 'bookmark',
-}}
+}
                 >
                   <div
                     onClick={() => handleItemClick(bookmark)}
@@ -397,7 +406,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   display: 'flex',
   alignItems: 'center',
   cursor: 'pointer',
-}}
+}
                   >
                     <span style={{ marginRight: '8px', fontSize: '14px' }}>
                       {bookmark.icon}
@@ -409,7 +418,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
                       onClick={(e) => {
                         e.stopPropagation();
                         removeBookmark(bookmark.id);
-                      }}
+}
                       style={{
   border: 'none',
   background: 'transparent',
@@ -417,7 +426,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   fontSize: '12px',
   color: '#6c757d',
   padding: '2px',
-}}
+}
                       title="Remove bookmark"
                     >
                       ✕
@@ -434,7 +443,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   padding: '12px 16px',
   borderTop: '1px solid #dee2e6',
   backgroundColor: '#fff',
-}}>
+}>
         {isAddingBookmark ? ()
           <form onSubmit={handleAddBookmark} style={{ marginBottom: '8px' }}>
             <input
@@ -449,7 +458,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   borderRadius: '4px',
   fontSize: '12px',
   marginBottom: '6px',
-}}
+}
             />
             <input
               name="path"
@@ -463,7 +472,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   borderRadius: '4px',
   fontSize: '12px',
   marginBottom: '8px',
-}}
+}
             />
             <div style={{ display: 'flex', gap: '6px' }}>
               <button
@@ -477,7 +486,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   borderRadius: '4px',
   fontSize: '11px',
   cursor: 'pointer',
-}}
+}
               >
                 Add
               </button>
@@ -493,7 +502,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   borderRadius: '4px',
   fontSize: '11px',
   cursor: 'pointer',
-}}
+}
               >
                 Cancel
               </button>
@@ -515,7 +524,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({)
   alignItems: 'center',
   justifyContent: 'center',
   gap: '6px',
-}}
+
           >
             <span>📌</span>
             <span>Add Bookmark</span>

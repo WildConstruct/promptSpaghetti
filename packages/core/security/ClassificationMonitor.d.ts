@@ -16,15 +16,13 @@
  * - Historical data analysis
  */
 import { EventEmitter } from 'events';
-import { 
-  ClassificationLevel,
+import { ClassificationLevel,
   DataCategory,
   ComplianceFramework,
-  ClassificationResult,
+  ClassificationResult }
   DataElement
 } from './DataClassifier';
-export declare enum MonitoringEventType {
-    CLASSIFICATION_PERFORMED = "classification_performed",
+export declare enum MonitoringEventType { CLASSIFICATION_PERFORMED = "classification_performed",
     RULE_TRIGGERED = "rule_triggered",
     COMPLIANCE_VIOLATION = "compliance_violation",
     PERFORMANCE_WARNING = "performance_warning",
@@ -35,12 +33,12 @@ export declare enum MonitoringEventType {
 export declare enum AlertSeverity {
     INFO = "info",
     WARNING = "warning",
-    ERROR = "error",
+    ERROR = "error" }
     CRITICAL = "critical"
 
 }
-export interface MonitoringEvent {
-    id: string;
+}
+export interface MonitoringEvent { id: string;
     type: MonitoringEventType;
     timestamp: Date;
     dataId: string;
@@ -48,11 +46,10 @@ export interface MonitoringEvent {
     metadata: Record<string, any>;
     severity: AlertSeverity;
     source: string;
-    userId?: string;
-
+    userId?: string }
 }
-export interface ClassificationPerformanceMetrics {
-    totalClassifications: number;
+}
+export interface ClassificationPerformanceMetrics { totalClassifications: number;
     averageResponseTime: number;
     p95ResponseTime: number;
     p99ResponseTime: number;
@@ -60,11 +57,10 @@ export interface ClassificationPerformanceMetrics {
     errorRate: number;
     cacheHitRate: number;
     queueDepth: number;
-    lastUpdated: Date;
-
+    lastUpdated: Date }
 }
-export interface ClassificationStatistics {
-    byLevel: Record<ClassificationLevel, number>;
+}
+export interface ClassificationStatistics { byLevel: Record<ClassificationLevel, number>;
     byCategory: Record<DataCategory, number>;
     byComplianceFramework: Record<ComplianceFramework, number>;
     encryptionRequired: number;
@@ -72,23 +68,22 @@ export interface ClassificationStatistics {
     uniqueDataElements: number;
     timeRange: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
 
 }
-export interface ComplianceMetrics {
-    totalViolations: number;
+}
+export interface ComplianceMetrics { totalViolations: number;
     violationsByFramework: Record<ComplianceFramework, number>;
     violationTypes: Record<string, number>;
     complianceRate: number;
     criticalViolations: number;
     resolvedViolations: number;
-    pendingRemediation: number;
-
+    pendingRemediation: number }
 }
-export interface ClassificationAnomaly {
-    id: string;
+}
+export interface ClassificationAnomaly { id: string;
     type: 'volume' | 'pattern' | 'timing' | 'classification_change';
     description: string;
     detectedAt: Date;
@@ -96,29 +91,26 @@ export interface ClassificationAnomaly {
     affectedDataIds: string[];
     expectedPattern: any;
     actualPattern: any;
-    recommendation: string;
-
+    recommendation: string }
 }
-export interface AlertConfig {
-    enabled: boolean;
+}
+export interface AlertConfig { enabled: boolean;
     thresholds: {
         errorRate: number;
         responseTime: number;
         violationCount: number;
-        anomalyConfidence: number;
+        anomalyConfidence: number }
 }
     };
-    channels: {
-        email: boolean;
+    channels: { email: boolean;
         webhook: boolean;
-        syslog: boolean;
-    };
+        syslog: boolean };
     recipients: string[];
     webhookUrl?: string;
 
 }
-export interface MonitorConfig {
-    enableRealTimeMonitoring: boolean;
+}
+export interface MonitorConfig { enableRealTimeMonitoring: boolean;
     enablePerformanceTracking: boolean;
     enableAnomalyDetection: boolean;
     enableComplianceMonitoring: boolean;
@@ -156,9 +148,9 @@ export declare class ClassificationMonitor extends EventEmitter {
      * Record a compliance violation
      */
     recordComplianceViolation();
-      dataId: string,
-      framework: ComplianceFramework,
-      violation: string,
+      dataId: string;
+      framework: ComplianceFramework;
+      violation: string }
       severity?: AlertSeverity
     ): void;
     /**
@@ -195,6 +187,7 @@ export declare class ClassificationMonitor extends EventEmitter {
         recentAnomalies: ClassificationAnomaly[];
         alerts: MonitoringEvent[];
         healthStatus: 'healthy' | 'warning' | 'critical'
+}
 }
   };
     /**

@@ -11,8 +11,8 @@ import { ApiKeyManagementService } from '../../auth/services/ApiKeyManagementSer
 import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
-}
-}
+
+
 export interface ApiKeyUsageAnalytics {
   keyId: string;
   name: string;
@@ -26,8 +26,9 @@ export interface ApiKeyUsageAnalytics {
     errorRate: number;
     averageResponseTime: number;
     rateLimitHits: number;
-}
-}
+
+
+
   };
   performance: {
     averageLatency: number;
@@ -48,16 +49,16 @@ export interface ApiKeyUsageAnalytics {
     calls: number;
     errorRate: number;
     averageLatency: number;
-  }>;
+>;
   trends: {
     dailyUsage: Array<{ date: string; calls: number; errors: number }>;
     hourlyDistribution: Array<{ hour: number; calls: number }>;
     geographicalDistribution: Array<{ country: string; calls: number }>;
   };
-}
 
-}
-}
+
+
+
 export interface SystemHealthMetrics {
   overview: {
     totalKeys: number;
@@ -69,8 +70,9 @@ export interface SystemHealthMetrics {
     callsLast24h: number;
     overallErrorRate: number;
     averageResponseTime: number;
-}
-}
+
+
+
   };
   performance: {
     currentRPS: number;
@@ -90,10 +92,10 @@ export interface SystemHealthMetrics {
     performance: Array<{ timestamp: Date; latency: number; errors: number }>;
     security: Array<{ timestamp: Date; incidents: number; blocked: number }>;
   };
-}
 
-}
-}
+
+
+
 export interface AlertConfiguration {
   id: string;
   name: string;
@@ -105,8 +107,9 @@ export interface AlertConfiguration {
     usageSpike?: number;
     rateLimitViolations?: number;
     timeWindow: number; // minutes
-}
-}
+
+
+
   };
   actions: {
     email?: string[];
@@ -117,7 +120,7 @@ export interface AlertConfiguration {
       contacts: string[];
     };
   };
-}
+
 
 export class ApiManagementService {
   constructor(
@@ -143,7 +146,7 @@ export class ApiManagementService {
       
       if (keyResult.rows.length === 0) {
         throw new Error('API key not found');
-      }
+
       
       const keyInfo = keyResult.rows[0];
 
@@ -229,19 +232,19 @@ export class ApiManagementService {
           errorRate,
           averageResponseTime: parseFloat(usage.avg_response_time) || 0,
           rateLimitHits: parseInt(usage.rate_limit_hits) || 0
-  }
+
         performance: {
           averageLatency: parseFloat(usage.avg_response_time) || 0,
           p95Latency: parseFloat(usage.p95_latency) || 0,
           p99Latency: parseFloat(usage.p99_latency) || 0,
           successRate,
           uptime: successRate * 100 // Simplified uptime calculation
-  }
+
         security: {
           uniqueIPs: parseInt(usage.unique_ips) || 0,
           suspiciousActivity: 0, // Would be calculated based on specific rules
           ipWhitelistViolations: 0 // Would track violations
-  }
+
         endpoints: endpointResult.rows.map(row => ({
           path: row.path,
           method: row.method,
@@ -260,14 +263,13 @@ export class ApiManagementService {
             calls: parseInt(row.calls)
           })),
           geographicalDistribution: [] // Would require IP geolocation
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       console.error('Failed to get API key analytics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get system-wide health and performance metrics
@@ -324,20 +326,20 @@ export class ApiManagementService {
           callsLast24h: parseInt(callStats.calls_24h) || 0,
           overallErrorRate: parseFloat(callStats.error_rate) || 0,
           averageResponseTime: parseFloat(callStats.avg_response_time) || 0
-  }
+
         performance: {
           currentRPS,
           peakRPS: currentRPS * 2, // Would track actual peak
           averageLatency: parseFloat(callStats.avg_response_time) || 0,
           errorRate: parseFloat(callStats.error_rate) || 0,
           serviceUptime: 99.9 // Would be calculated from monitoring data
-  }
+
         security: {
           activeAlerts: 0, // Would come from alerting system
           blockedRequests: 0, // Would track blocked requests
           suspiciousActivity: 0, // Would track suspicious patterns
           rateLimitViolations: parseInt(callStats.rate_limit_violations) || 0
-  }
+
         trends: {
           usage: trendsResult.rows.map(row => ({
             timestamp: new Date(row.timestamp),
@@ -354,14 +356,13 @@ export class ApiManagementService {
             incidents: parseInt(row.incidents),
             blocked: parseInt(row.blocked)
           }))
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       console.error('Failed to get system health metrics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get aggregated usage metrics for dashboard
@@ -377,20 +378,20 @@ export class ApiManagementService {
       name: string;
       requests: number;
       errorRate: number;
-    }>;
+>;
     topEndpoints: Array<{
       endpoint: string;
       requests: number;
       errorRate: number;
       averageLatency: number;
-    }>;
+>;
     hourlyBreakdown: Array<{
       hour: string;
       requests: number;
       errors: number;
       latency: number;
-    }>;
-  }> {
+>;
+> {
     const intervals = {
       '1h': 'NOW() - INTERVAL \'1 hour\'',
       '6h': 'NOW() - INTERVAL \'6 hours\'',
@@ -493,12 +494,11 @@ export class ApiManagementService {
           latency: parseFloat(row.latency) || 0
         }))
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get dashboard metrics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Generate comprehensive API key usage report
@@ -525,15 +525,15 @@ export class ApiManagementService {
       errors: number;
       dataTransferred: number;
       estimatedCost: number;
-    }>;
+>;
     insights: Array<{
       type: 'performance' | 'usage' | 'security' | 'cost';
       severity: 'info' | 'warning' | 'error';
       title: string;
       description: string;
       recommendation?: string;
-    }>;
-  }> {
+>;
+> {
     const reportId = `report_${Date.now()}`;
     const now = new Date();
     const start = startDate || new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 days ago
@@ -546,7 +546,7 @@ export class ApiManagementService {
       if (keyId) {
         whereClause += ' AND key_id = $3';
         params.push(keyId);
-      }
+
 
       // Summary statistics
       const summaryQuery = `
@@ -587,7 +587,7 @@ export class ApiManagementService {
         title: string;
         description: string;
         recommendation?: string;
-      }> = [];
+> = [];
 
       const errorRate = parseFloat(summary.error_rate) || 0;
       const avgLatency = parseFloat(summary.avg_latency) || 0;
@@ -600,7 +600,7 @@ export class ApiManagementService {
           description: `Error rate of ${(errorRate * 100).toFixed(2)}% exceeds recommended threshold of 5%`,
           recommendation: 'Review API implementation and error handling'
         });
-      }
+
 
       if (avgLatency > 1000) {
         insights.push({
@@ -610,7 +610,7 @@ export class ApiManagementService {
           description: `Average response time of ${avgLatency.toFixed(0)}ms exceeds recommended threshold of 1000ms`,
           recommendation: 'Optimize API performance and consider caching strategies'
         });
-      }
+
 
       // Calculate estimated cost (simplified)
       const totalBytes = parseInt(summary.total_bytes) || 0;
@@ -625,7 +625,7 @@ export class ApiManagementService {
           errorRate,
           averageLatency: avgLatency,
           costEstimate: estimatedCost
-  }
+
         keyBreakdown: breakdownResult.rows.map(row => ({
           keyId: row.key_id,
           keyName: row.key_name || 'Unknown',
@@ -637,12 +637,11 @@ export class ApiManagementService {
         })),
         insights
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to generate usage report:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Configure alert rules for API monitoring
@@ -678,15 +677,15 @@ export class ApiManagementService {
           alertId: config.id,
           name: config.name,
           enabled: config.enabled
-        }
+
       });
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to configure alert:', error);
       return false;
-    }
-  }
+
+
 
   /**
    * Export API usage data for external analysis
@@ -697,12 +696,12 @@ export class ApiManagementService {
     endDate?: Date;
     includeErrors?: boolean;
     includeSuccessful?: boolean;
-  } = {}): Promise<{
+ = {}): Promise<{
     downloadUrl: string;
     fileSize: number;
     recordCount: number;
     expiresAt: Date;
-  }> {
+> {
 
     try {
       // This would generate and store the export file
@@ -715,9 +714,8 @@ export class ApiManagementService {
         recordCount: 50000, // Mock record count
         expiresAt
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to export usage data:', error);
       throw error;
-    }
-  }
-}
+
+

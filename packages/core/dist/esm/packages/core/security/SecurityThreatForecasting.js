@@ -304,8 +304,9 @@ if (this.config.enableSeasonalDecomposition) {
         this.emit('forecastGenerated', forecast);
         return forecast;
         async;
-        generateEnsembleForecast(timeSeries, TimeSeriesData);
-        timeHorizon: number,
+        generateEnsembleForecast(timeSeries, TimeSeriesData),
+            timeHorizon;
+        number,
             seasonalFactors;
         SeasonalFactor,
             trendComponents;
@@ -335,8 +336,9 @@ if (this.config.enableSeasonalDecomposition) {
                 // Combine model results using weighted ensemble
                 return this.combineModelResults(modelResults);
                 async;
-                runForecastingModel(model, ForecastingModel);
-                timeSeries: TimeSeriesData,
+                runForecastingModel(model, ForecastingModel),
+                    timeSeries;
+                TimeSeriesData,
                     timeHorizon;
                 number,
                     seasonalFactors;
@@ -359,8 +361,9 @@ if (this.config.enableSeasonalDecomposition) {
                     throw new Error(`Unsupported forecasting algorithm: ${model.algorithm}`);
                 }
                 async;
-                runARIMAModel(model, ForecastingModel);
-                timeSeries: TimeSeriesData,
+                runARIMAModel(model, ForecastingModel),
+                    timeSeries;
+                TimeSeriesData,
                     timeHorizon;
                 number;
                 Promise < ModelForecastResult > {
@@ -430,8 +433,9 @@ if (this.config.enableSeasonalDecomposition) {
                         weight: model.weight,
                     };
                     async;
-                    runProphetModel(model, ForecastingModel);
-                    timeSeries: TimeSeriesData,
+                    runProphetModel(model, ForecastingModel),
+                        timeSeries;
+                    TimeSeriesData,
                         timeHorizon;
                     number,
                         seasonalFactors;
@@ -793,8 +797,9 @@ if (this.config.enableSeasonalDecomposition) {
                         uncertaintyRange: [forecast.lowerBound, forecast.upperBound],
                         scenarioRisks
                     };
-                    generateForecastRecommendations(forecast, EnsembleForecastResult);
-                    riskMetrics: ForecastRiskMetrics,
+                    generateForecastRecommendations(forecast, EnsembleForecastResult),
+                        riskMetrics;
+                    ForecastRiskMetrics,
                         threatType;
                     ThreatType;
                     ForecastRecommendation;
@@ -1088,20 +1093,19 @@ if (this.config.enableSeasonalDecomposition) {
                                                     name: 'Coordinated Multi-Vector Attack',
                                                     description: 'Simultaneous attacks across multiple threat vectors',
                                                     threatTypes: [ThreatType.BRUTE_FORCE_ATTACK, ThreatType.API_ABUSE, ThreatType.DISTRIBUTED_ATTACK],
-                                                    triggers: [,
+                                                    triggers: [
                                                         { triggerType: 'anomaly_count', condition: 'anomalies > 10', weight: 0.4 },
                                                         { triggerType: 'metric_threshold', condition: 'threat_level > 80', weight: 0.6 }
                                                     ],
                                                     expectedDuration: 180, // minutes
                                                     expectedIntensity: 85,
                                                     likelihood: 0.15,
-                                                    impactAssessment: {
-                                                        businessImpact: 90,
-                                                        technicalImpact: 85,
-                                                        reputationalImpact: 80,
-                                                        financialImpact: 85,
-                                                        complianceImpact: 70
-                                                    }
+                                                    impactAssessment: {},
+                                                    businessImpact: 90,
+                                                    technicalImpact: 85,
+                                                    reputationalImpact: 80,
+                                                    financialImpact: 85,
+                                                    complianceImpact: 70
                                                 }
                                             ];
                                             scenarios.forEach(scenario => this.threatScenarios.set(scenario.scenarioId, scenario));
@@ -1128,12 +1132,12 @@ if (this.config.enableSeasonalDecomposition) {
                                         },
                                         async performScheduledForecasting() {
                                             // Generate forecasts for all major threat types
-                                            const threatTypes = [];
-                                            ThreatType.BRUTE_FORCE_ATTACK,
+                                            const threatTypes = [
+                                                ThreatType.BRUTE_FORCE_ATTACK,
                                                 ThreatType.ACCOUNT_TAKEOVER,
                                                 ThreatType.CREDENTIAL_STUFFING,
-                                                ThreatType.API_ABUSE;
-                                            ;
+                                                ThreatType.API_ABUSE
+                                            ];
                                             for (const threatType of threatTypes) {
                                                 try {
                                                     await this.generateThreatForecast(threatType);
@@ -1195,8 +1199,18 @@ if (this.config.enableSeasonalDecomposition) {
                                                 // SUPPORTING INTERFACES
                                                 // ==========================================
                                             }
-                                        }
+                                        },
+                                        interface, ForecastingModel
                                     };
+                                    {
+                                        modelId: string;
+                                        name: string;
+                                        algorithm: ForecastAlgorithm;
+                                        weight: number;
+                                        isActive: boolean;
+                                        accuracy: number;
+                                        targetMetrics: string;
+                                    }
                                 }
                             };
                         }

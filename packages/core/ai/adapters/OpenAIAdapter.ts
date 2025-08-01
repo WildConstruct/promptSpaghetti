@@ -4,8 +4,7 @@
  * 
  * Concrete implementation of BaseAIModel for OpenAI GPT models
  */
-import { 
-  BaseAIModel,
+import { BaseAIModel,
   AIModelType,
   AIModelProvider,
   AIModelStatus,
@@ -13,22 +12,20 @@ import {
   ModelCapabilities,
   CostEstimate,
   ModelInitializationError,
-  ModelProcessingError,
+  ModelProcessingError }
   ModelUnavailableError
-} from '../BaseAIModel';
+ from '../BaseAIModel';
 
-}
-export interface OpenAIConfig {
-  apiKey: string;
+
+export interface OpenAIConfig { apiKey: string;
   baseURL?: string;
   organization?: string;
   timeout?: number;
-  maxRetries?: number;
-}
-}
-}
-export interface OpenAIRequestOptions {
-  model?: string;
+  maxRetries?: number }
+
+
+
+export interface OpenAIRequestOptions { model?: string;
   temperature?: number;
   max_tokens?: number;
   top_p?: number;
@@ -36,47 +33,45 @@ export interface OpenAIRequestOptions {
   presence_penalty?: number;
   stop?: string | string;
   stream?: boolean;
-  seed?: number;
-}
+  seed?: number }
+
   response_format?: { type: 'text' | 'json_object' };
   tools?: unknown;
   tool_choice?: string | object;
-}
-}
-export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant' | 'tool';
+
+
+export interface ChatMessage { role: 'system' | 'user' | 'assistant' | 'tool' }
   content: string;
   name?: string;
   tool_calls?: unknown;
   tool_call_id?: string;
-}
-}
-}
-export interface OpenAIResponse {
-  id: string;
+
+
+
+
+export interface OpenAIResponse { id: string;
   object: string;
   created: number;
   model: string;
-  choices: Array<{
+  choices: Array<{ }
   index: number;
   message?: ChatMessage;
   text?: string;
   finish_reason: string;
-}
-}>;
-  usage: {
+
+
+>;
+  usage: { ,
   prompt_tokens: number;
   completion_tokens: number;
-  total_tokens: number;
-};
-}
-export class OpenAIAdapter extends BaseAIModel {
-  private config: OpenAIConfig;
+  total_tokens: number };
+
+export class OpenAIAdapter extends BaseAIModel { private config: OpenAIConfig;
   private apiEndpoint: string;
   constructor(id: string, config: OpenAIConfig, modelName: string = 'gpt-3.5-turbo') {
     const metadata: ModelMetadata = {,
   name: modelName,
-      version: '1.0',
+      version: '1.0' }
       description: `OpenAI ${modelName} model adapter`}
 },
   provider: AIModelProvider.OPENAI,
@@ -84,14 +79,14 @@ export class OpenAIAdapter extends BaseAIModel {
       costPerToken: OpenAIAdapter.getModelCostPerToken(modelName),
       averageLatency: OpenAIAdapter.getModelAverageLatency(modelName),
       maxConcurrency: 50,
-      rateLimit: {
+      rateLimit: { ,
   requestsPerMinute: 3500,
-  tokensPerMinute: 90000,
+  tokensPerMinute: 90000 }
 },
   tags: ['chat', 'completion', 'text-generation'],
       lastUpdated: new Date();
   };
-    const capabilities: ModelCapabilities = {,
+    const capabilities: ModelCapabilities = { ,
   inputTypes: ['text', 'json'],
       outputTypes: ['text', 'json'],
       maxInputSize: OpenAIAdapter.getModelMaxTokens(modelName),
@@ -99,7 +94,7 @@ export class OpenAIAdapter extends BaseAIModel {
       supportsBatch: false,
       supportsStreaming: true,
       supportsAsync: true,
-      customParameters: {
+      customParameters: { }
   temperature: { type: 'number', min: 0, max: 2, default: 1 },
         max_tokens: { type: 'number', min: 1, max: 4096, default: 1000 },
         top_p: { type: 'number', min: 0, max: 1, default: 1 },
@@ -109,9 +104,7 @@ export class OpenAIAdapter extends BaseAIModel {
     super(id, metadata, capabilities);
     this.config = config;
     this.apiEndpoint = config.baseURL || 'https://api.openai.com/v1';
-  async initialize(): Promise<void> {
-
-    try {
+  async initialize(): Promise<void> { try {
       this._status = AIModelStatus.INITIALIZING;
       // Validate API key
       if (!this.config.apiKey) {
@@ -119,9 +112,7 @@ export class OpenAIAdapter extends BaseAIModel {
       // Test connectivity with a simple request
       await this._testConnection();
       this._status = AIModelStatus.READY;
-      this._lastActivity = new Date();
-    } catch (error) {
-      this._status = AIModelStatus.ERROR;
+      this._lastActivity = new Date() } catch (error) { this._status = AIModelStatus.ERROR;
       throw new ModelInitializationError(this._id, error instanceof Error ? error.message : 'Unknown error');
   async process(input: unknown, options?: OpenAIRequestOptions): Promise<unknown> {
 
@@ -132,76 +123,72 @@ export class OpenAIAdapter extends BaseAIModel {
       const messages = this._convertToMessages(input);
       // Prepare request payload
       const payload = {
-        model: options?.model || this._metadata.name,
-        messages,
-        temperature: options?.temperature ?? 1,
-        max_tokens: options?.max_tokens ?? 1000,
-        top_p: options?.top_p ?? 1,
-        frequency_penalty: options?.frequency_penalty ?? 0,
-        presence_penalty: options?.presence_penalty ?? 0,
-        ...(options?.stop && { stop: options.stop }),
-        ...(options?.stream && { stream: options.stream }),
-        ...(options?.seed && { seed: options.seed }),
-        ...(options?.response_format && { response_format: options.response_format }),
-        ...(options?.tools && { tools: options.tools }),
+        model: options?.model || this._metadata.name
+        messages
+        temperature: options?.temperature ?? 1
+        max_tokens: options?.max_tokens ?? 1000
+        top_p: options?.top_p ?? 1
+        frequency_penalty: options?.frequency_penalty ?? 0
+        presence_penalty: options?.presence_penalty ?? 0 }
+        ...(options?.stop && { stop: options.stop })
+        ...(options?.stream && { stream: options.stream })
+        ...(options?.seed && { seed: options.seed })
+        ...(options?.response_format && { response_format: options.response_format })
+        ...(options?.tools && { tools: options.tools })
         ...(options?.tool_choice && { tool_choice: options.tool_choice })
       };
       const response = await this._makeRequest('/chat/completions', payload);
       // Extract and return the generated content
       return this._extractContent(response);
-    } catch (error) {
-  throw new ModelProcessingError(this._id, error instanceof Error ? error.message : 'Unknown error');
-  async cleanup(): Promise<void> {,
+ catch (error) { throw new ModelProcessingError(this._id, error instanceof Error ? error.message : 'Unknown error');
+  async cleanup(): Promise<void> {
   this._status = AIModelStatus.OFFLINE;
   this._activeRequests.clear();
   this._requestQueue = [];
-  async estimate(input: any, options?: OpenAIRequestOptions): Promise<CostEstimate> {,
+  async estimate(input: any, options?: OpenAIRequestOptions): Promise<CostEstimate> {
   const messages = this._convertToMessages(input);
   const inputTokens = this._estimateTokenCount(messages);
   const outputTokens = options?.max_tokens || 1000;
   const inputCost = inputTokens * (this._metadata.costPerToken || 0);
   const outputCost = outputTokens * (this._metadata.costPerToken || 0) * 2; // Output tokens typically cost 2x;
   return {
-  estimatedCost: inputCost + outputCost,
-  currency: 'USD',
-  confidence: 0.9,
+  estimatedCost: inputCost + outputCost
+  currency: 'USD'
+  confidence: 0.9
   breakdown: {
-  inputCost,
-  outputCost,
-  processingCost: 0,
+  inputCost
+  outputCost
+  processingCost: 0 }
 };
   // Static helper methods for model configuration
-  static getModelCostPerToken(modelName: string): number {
-  const costs: Record<string, number> = {,
-  'gpt-3.5-turbo': 0.0000015, // $1.50 / 1M tokens,
-  'gpt-3.5-turbo-16k': 0.000003, // $3.00 / 1M tokens,
-  'gpt-4': 0.00003, // $30.00 / 1M tokens,
-  'gpt-4-32k': 0.00006, // $60.00 / 1M tokens,
-  'gpt-4-turbo': 0.00001, // $10.00 / 1M tokens,
-  'gpt-4o': 0.000005, // $5.00 / 1M tokens,
-  'gpt-4o-mini': 0.00000015 // $0.15 / 1M tokens,
+  static getModelCostPerToken(modelName: string): number { const costs: Record<string, number> = {
+  'gpt-3.5-turbo': 0.0000015, // $1.50 / 1M tokens
+  'gpt-3.5-turbo-16k': 0.000003, // $3.00 / 1M tokens
+  'gpt-4': 0.00003, // $30.00 / 1M tokens
+  'gpt-4-32k': 0.00006, // $60.00 / 1M tokens
+  'gpt-4-turbo': 0.00001, // $10.00 / 1M tokens
+  'gpt-4o': 0.000005, // $5.00 / 1M tokens
+  'gpt-4o-mini': 0.00000015 // $0.15 / 1M tokens }
 };
     return costs[modelName] || 0.000002;
-  static getModelMaxTokens(modelName: string): number {
-  const maxTokens: Record<string, number> = {,
-  'gpt-3.5-turbo': 4096,
-  'gpt-3.5-turbo-16k': 16384,
-  'gpt-4': 8192,
-  'gpt-4-32k': 32768,
-  'gpt-4-turbo': 128000,
-  'gpt-4o': 128000,
-  'gpt-4o-mini': 128000,
+  static getModelMaxTokens(modelName: string): number { const maxTokens: Record<string, number> = {
+  'gpt-3.5-turbo': 4096
+  'gpt-3.5-turbo-16k': 16384
+  'gpt-4': 8192
+  'gpt-4-32k': 32768
+  'gpt-4-turbo': 128000
+  'gpt-4o': 128000
+  'gpt-4o-mini': 128000 }
 };
     return maxTokens[modelName] || 4096;
-  static getModelAverageLatency(modelName: string): number {
-  const latencies: Record<string, number> = {,
-  'gpt-3.5-turbo': 800,
-  'gpt-3.5-turbo-16k': 1200,
-  'gpt-4': 2500,
-  'gpt-4-32k': 4000,
-  'gpt-4-turbo': 1800,
-  'gpt-4o': 1000,
-  'gpt-4o-mini': 600,
+  static getModelAverageLatency(modelName: string): number { const latencies: Record<string, number> = {
+  'gpt-3.5-turbo': 800
+  'gpt-3.5-turbo-16k': 1200
+  'gpt-4': 2500
+  'gpt-4-32k': 4000
+  'gpt-4-turbo': 1800
+  'gpt-4o': 1000
+  'gpt-4o-mini': 600 }
 };
     return latencies[modelName] || 1500;
   // Private helper methods
@@ -209,28 +196,28 @@ export class OpenAIAdapter extends BaseAIModel {
 
     try {
       const response = await fetch(`${this.apiEndpoint}/models`, {)}
-  },
+
   headers: {
           'Authorization': `Bearer ${this.config.apiKey}`}
-}
-          'Content-Type': 'application/json',
+
+          'Content-Type': 'application/json'
           ...(this.config.organization && { 'OpenAI-Organization': this.config.organization })
       });
       if (!response.ok) {
         throw new Error(`OpenAI API test failed: ${response.status} ${response.statusText}`);}
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to connect to OpenAI API: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _makeRequest(endpoint: string, payload: any): Promise<OpenAIResponse> {
 
     const url = `${this.apiEndpoint}${endpoint}`;}
-    const response = await fetch(url, {)
-  method: 'POST',
+    const response = await fetch(url, { )
+  method: 'POST' }
       headers: {
         'Authorization': `Bearer ${this.config.apiKey}`}
-}
-        'Content-Type': 'application/json',
+
+        'Content-Type': 'application/json'
         ...(this.config.organization && { 'OpenAI-Organization': this.config.organization })
-  },
+
   body: JSON.stringify(payload);
   });
     if (!response.ok) {
@@ -249,26 +236,24 @@ export class OpenAIAdapter extends BaseAIModel {
     if (input && typeof input === 'object' && input.messages) {
       return input.messages;
     return [{ role: 'user', content: JSON.stringify(input) }];
-  private _extractContent(response: OpenAIResponse): any {
-  const choice = response.choices[0];
+  private _extractContent(response: OpenAIResponse): any { const choice = response.choices[0];
   if (!choice) {
   throw new Error('No choices returned from OpenAI API');
   if (choice.message) {
   return {
-  content: choice.message.content,
-  role: choice.message.role,
-  finishReason: choice.finish_reason,
-  usage: response.usage,
-  model: response.model,
-  id: response.id,
+  content: choice.message.content
+  role: choice.message.role
+  finishReason: choice.finish_reason
+  usage: response.usage
+  model: response.model
+  id: response.id }
 };
-    if (choice.text) {
-  return {
-  content: choice.text,
-  finishReason: choice.finish_reason,
-  usage: response.usage,
-  model: response.model,
-  id: response.id,
+    if (choice.text) { return {
+  content: choice.text
+  finishReason: choice.finish_reason
+  usage: response.usage
+  model: response.model
+  id: response.id }
 };
     throw new Error('Invalid response format from OpenAI API');
   private _estimateTokenCount(messages: ChatMessage): number {

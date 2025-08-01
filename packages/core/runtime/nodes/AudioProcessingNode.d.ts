@@ -8,17 +8,15 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } fr
 import { TypedInputs } from '../io-system';
 
 }
-export interface AudioConfig {
-    provider: 'openai-tts' | 'elevenlabs' | 'whisper';
+}
+export interface AudioConfig { provider: 'openai-tts' | 'elevenlabs' | 'whisper';
     apiKey?: string;
     endpoint?: string;
     model?: string;
-    defaultParameters?: Record<string, any>;
-
-
+    defaultParameters?: Record<string, any> }
 }
-export interface AudioMetadata {
-    duration: number;
+}
+export interface AudioMetadata { duration: number;
     format: string;
     sample_rate: number;
     channels: number;
@@ -27,33 +25,26 @@ export interface AudioMetadata {
     provider: string;
     model: string;
     generation_time: number;
-    cost: number;
-
-
+    cost: number }
 }
-export interface GeneratedAudio {
-    data: ArrayBuffer | string;
+}
+export interface GeneratedAudio { data: ArrayBuffer | string;
     format: string;
-    metadata: AudioMetadata;
-
-
+    metadata: AudioMetadata }
 }
-export interface TranscriptionResult {
-    text: string;
+}
+export interface TranscriptionResult { text: string;
     language?: string;
     confidence?: number;
     segments?: Array<{
         start: number;
         end: number;
-        text: string;
-
+        text: string }
 }
     }>;
-    words?: Array<{
-        word: string;
+    words?: Array<{ word: string;
         start: number;
-        end: number;
-    }>;
+        end: number }>;
     metadata: AudioMetadata;
 
 export declare class TextToSpeechNode extends AdvancedRuntimeNode {

@@ -3,48 +3,42 @@
  * Service for managing user assignments and traffic allocation
  */
 import crypto from 'crypto';
-import {
-  AssignmentRequest,
+import { AssignmentRequest,
   AssignmentResponse,
   UserAssignment,
   Experiment,
   ExperimentVariant,
   TrafficAllocation,
-  AllocationError,
+  AllocationError }
   AllocationServiceConfig
-} from '../types/experiment';
+ from '../types/experiment';
 
-}
-export interface AllocationCache {
-  get(key: string): Promise<string | null>;
+
+export interface AllocationCache { get(key: string): Promise<string | null>;
   set(key: string, value: string, ttlSeconds: number): Promise<void>;
-  del(key: string): Promise<void>;
-}
-}
-}
-export interface AssignmentStorage {
-  getAssignment(userId: string, experimentId: string): Promise<UserAssignment | null>;
+  del(key: string): Promise<void> }
+
+
+
+export interface AssignmentStorage { getAssignment(userId: string, experimentId: string): Promise<UserAssignment | null>;
   saveAssignment(assignment: UserAssignment): Promise<void>;
-  getExperiment(experimentId: string): Promise<Experiment | null>;
-}
-}
-}
-export interface AssignmentMetrics {
-  recordAssignment(assignment: UserAssignment): Promise<void>;
+  getExperiment(experimentId: string): Promise<Experiment | null> }
+
+
+
+export interface AssignmentMetrics { recordAssignment(assignment: UserAssignment): Promise<void>;
   recordOverride(userId: string, experimentId: string, variantId: string, reason: string): Promise<void>;
-  recordExclusion(userId: string, experimentId: string, reason: string): Promise<void>;
-}
-}
-export class AllocationService {
-  private config: AllocationServiceConfig;
+  recordExclusion(userId: string, experimentId: string, reason: string): Promise<void> }
+
+export class AllocationService { private config: AllocationServiceConfig;
   private cache: AllocationCache;
   private storage: AssignmentStorage;
   private metrics: AssignmentMetrics;
   constructor();
-  config: AllocationServiceConfig,
-  cache: AllocationCache,
-  storage: AssignmentStorage,
-  metrics: AssignmentMetrics,
+  config: AllocationServiceConfig
+  cache: AllocationCache
+  storage: AssignmentStorage
+  metrics: AssignmentMetrics
   this.config = config;
   this.cache = cache;
   this.storage = storage;
@@ -52,10 +46,9 @@ export class AllocationService {
   /**
   * Assign a user to an experiment variant
   */
-  async assignUser(request: AssignmentRequest): Promise<AssignmentResponse> {,
+  async assignUser(request: AssignmentRequest): Promise<AssignmentResponse> { }
   const startTime = Date.now();
-  try {
-  // Check cache for existing assignment
+  try { // Check cache for existing assignment
   const cacheKey = this.getCacheKey(request.userId, request.experimentId);
   const cachedAssignment = await this.cache.get(cacheKey);
   if (cachedAssignment) {
@@ -99,8 +92,7 @@ export class AllocationService {
   await this.updateCache(cacheKey, assignment);
   await this.metrics.recordAssignment(assignment);
   const variant = experiment.variants.find(v => v.id === assignment.variantId)!;
-  return this.createSuccessResponse(assignment, variant, 'new_assignment', request.debugMode, experiment);
-} catch (error) {
+  return this.createSuccessResponse(assignment, variant, 'new_assignment', request.debugMode, experiment) } catch (error) {
       // Check if assignment is taking too long
       const duration = Date.now() - startTime;
       if (duration > this.config.maxAssignmentLatency) {
@@ -109,41 +101,38 @@ export class AllocationService {
         throw error;
       throw new AllocationError()
         `Assignment failed: ${error.message}`}
-}
-        'ASSIGNMENT_FAILED',
-        request.userId,
+
+        'ASSIGNMENT_FAILED'
+        request.userId
         request.experimentId
       );
   /**
    * Get assignments for multiple experiments
    */
   async bulkAssignUser(userId: string)
-    experimentIds: string,
-    sessionId?: string,
+  experimentIds: string
+    sessionId?: string
     debugMode = false
   ): Promise<Record<string, AssignmentResponse>> {
     const results: Record<string, AssignmentResponse> = {};
     // Process assignments in parallel for better performance
     const assignments = await Promise.allSettled(;);
       experimentIds.map(experimentId => )
-        this.assignUser({)
-  userId,
-          experimentId,
-          sessionId,
+        this.assignUser({ )
+  userId
+          experimentId
+          sessionId }
           debugMode
-  }
+
     );
-    experimentIds.forEach((experimentId, index) => {
-      const result = assignments[index];
+    experimentIds.forEach((experimentId, index) => { const result = assignments[index];
       if (result.status === 'fulfilled') {
-        results[experimentId] = result.value;
-      } else {
-        // Return control assignment on error
+        results[experimentId] = result.value } else { // Return control assignment on error
         results[experimentId] = {
-          variantId: 'control',
-          variant: { id: 'control', name: 'Control', description: 'Default control variant' },
-          assigned: false,
-          reason: 'assignment_error'
+          variantId: 'control' }
+          variant: { id: 'control', name: 'Control', description: 'Default control variant' }
+          assigned: false
+          reason: 'assignment_error';
   };
     });
     return results;
@@ -151,26 +140,24 @@ export class AllocationService {
    * Force assign a user to a specific variant (for debugging/testing)
    */
   async forceAssignUser(userId: string)
-    experimentId: string,
-    variantId: string,
-    reason: string,
+  experimentId: string
+    variantId: string
+    reason: string
     sessionId?: string
-  ): Promise<AssignmentResponse> {
-
-  const experiment = await this.storage.getExperiment(experimentId);
+  ): Promise<AssignmentResponse> { const experiment = await this.storage.getExperiment(experimentId);
   if (!experiment) {
   throw new AllocationError('Experiment not found', 'EXPERIMENT_NOT_FOUND', userId, experimentId);
   const variant = experiment.variants.find(v => v.id === variantId);
   if (!variant) {
   throw new AllocationError('Variant not found', 'VARIANT_NOT_FOUND', userId, experimentId);
-  const assignment: UserAssignment = {,
-  userId,
-  experimentId,
-  variantId,
-  assignedAt: new Date(),
-  sessionId,
-  sticky: false, // Force assignments are not sticky,
-  salt: 'force',
+  const assignment: UserAssignment = {
+  userId
+  experimentId
+  variantId
+  assignedAt: new Date()
+  sessionId
+  sticky: false, // Force assignments are not sticky
+  salt: 'force' }
 };
     await this.storage.saveAssignment(assignment);
     await this.metrics.recordOverride(userId, experimentId, variantId, reason);
@@ -178,27 +165,25 @@ export class AllocationService {
   /**
    * Remove user assignment (for opt-out scenarios)
    */
-  async removeUserAssignment(userId: string, experimentId: string): Promise<void> {
-
-  const cacheKey = this.getCacheKey(userId, experimentId);
+  async removeUserAssignment(userId: string, experimentId: string): Promise<void> { const cacheKey = this.getCacheKey(userId, experimentId);
   await this.cache.del(cacheKey);
-  // Note: We don't delete from persistent storage to maintain audit trail,
+  // Note: We don't delete from persistent storage to maintain audit trail
   // Instead, we would mark as opted-out in a separate field
   /**
   * Get current salt for deterministic hashing
   */
-  getCurrentSalt(): string {,
+  getCurrentSalt(): string {
   return this.config.saltStorage.currentSalt;
   /**
   * Rotate salt (typically called by scheduled job)
   */
-  async rotateSalt(): Promise<string> {,
+  async rotateSalt(): Promise<string> {
   const newSalt = crypto.randomBytes(32).toString('hex');
   const oldSalt = this.config.saltStorage.currentSalt;
   // Store previous salt for consistency window
   this.config.saltStorage.previousSalts.push({)
-  salt: oldSalt,
-  rotatedAt: new Date(),
+  salt: oldSalt
+  rotatedAt: new Date() }
 });
     // Clean up old salts (keep last 3 months)
     const threeMonthsAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
@@ -209,36 +194,33 @@ export class AllocationService {
     return newSalt;
   // Private methods
   private async performAssignment(((
-    request: AssignmentRequest,
+    request: AssignmentRequest
     experiment: Experiment
-  ): Promise<UserAssignment> {
-
-  // Handle gradual rollout
+  ): Promise<UserAssignment> { // Handle gradual rollout
   if (experiment.rolloutStrategy?.type === 'gradual') {
   const currentStage = this.getCurrentRolloutStage(experiment);
   if (!currentStage || !this.shouldIncludeInRollout(request.userId, currentStage.percentage)) {
   // User not included in current rollout stage
   const controlVariant = this.getControlVariant(experiment);
   return {
-  userId: request.userId,
-  experimentId: experiment.id,
-  variantId: controlVariant.id,
-  assignedAt: new Date(),
-  sessionId: request.sessionId,
-  sticky: true,
-  salt: this.config.saltStorage.currentSalt,
+  userId: request.userId
+  experimentId: experiment.id
+  variantId: controlVariant.id
+  assignedAt: new Date()
+  sessionId: request.sessionId
+  sticky: true
+  salt: this.config.saltStorage.currentSalt }
 };
     // Perform deterministic assignment
     const bucket = this.getBucket(request.userId, experiment.id);
     const variantId = this.getVariantFromBucket(bucket, experiment.trafficAllocation);
-    return {
-  userId: request.userId,
-  experimentId: experiment.id,
-  variantId,
-  assignedAt: new Date(),
-  sessionId: request.sessionId,
-  sticky: true,
-  salt: this.config.saltStorage.currentSalt,
+    return { userId: request.userId
+  experimentId: experiment.id
+  variantId
+  assignedAt: new Date()
+  sessionId: request.sessionId
+  sticky: true
+  salt: this.config.saltStorage.currentSalt }
 };
   private getBucket(userId: string, experimentId: string): number {
     const hash = this.generateHash(userId, experimentId);
@@ -297,99 +279,88 @@ export class AllocationService {
     const hash = crypto.createHash('sha256').update(`rollout:${userId}`).digest('hex');}
     const bucket = parseInt(hash.substring(0, 8), 16) % 10000;
     return bucket < (percentage * 100); // Convert percentage to 0-10000 scale
-  private getControlVariant(experiment: Experiment): ExperimentVariant {
-  // Return first variant as control
+  private getControlVariant(experiment: Experiment): ExperimentVariant { // Return first variant as control
   return experiment.variants[0];
   private async handleOverride((request: AssignmentRequest,
-  experiment: Experiment): Promise<AssignmentResponse> {,
+  experiment: Experiment): Promise<AssignmentResponse> {
   const variant = experiment.variants.find(v => v.id === request.overrideVariant);
   if (!variant) {
   throw new AllocationError()
-  'Override variant not found',
-  'VARIANT_NOT_FOUND',
-  request.userId,
+  'Override variant not found'
+  'VARIANT_NOT_FOUND'
+  request.userId
   request.experimentId
   );
-  const assignment: UserAssignment = {,
-  userId: request.userId,
-  experimentId: experiment.id,
-  variantId: request.overrideVariant!,
-  assignedAt: new Date(),
-  sessionId: request.sessionId,
-  sticky: false,
-  salt: 'override',
+  const assignment: UserAssignment = {
+  userId: request.userId
+  experimentId: experiment.id
+  variantId: request.overrideVariant!
+  assignedAt: new Date()
+  sessionId: request.sessionId
+  sticky: false
+  salt: 'override' }
 };
     await this.metrics.recordOverride(request.userId, experiment.id, request.overrideVariant!, 'debug_override');
     return this.createSuccessResponse(assignment, variant, 'debug_override', true, experiment);
   private createSuccessResponse(assignment: UserAssignment)
-    variant: ExperimentVariant,
-    reason: string,
-    debugMode = false,
+  variant: ExperimentVariant
+    reason: string
+    debugMode = false
     experiment?: Experiment
-  ): AssignmentResponse {
-    return {
-      variantId: assignment.variantId,
-      variant,
-      assigned: true,
-      reason,
-      debugInfo: debugMode ? {,
-  hash: this.generateHash(assignment.userId, assignment.experimentId),
-        bucket: this.getBucket(assignment.userId, assignment.experimentId),
+  ): AssignmentResponse { return {
+      variantId: assignment.variantId
+      variant
+      assigned: true
+      reason
+      debugInfo: debugMode ? {
+  hash: this.generateHash(assignment.userId, assignment.experimentId)
+        bucket: this.getBucket(assignment.userId, assignment.experimentId) }
         allocation: experiment?.trafficAllocation || {}
-      } : undefined
+ : undefined
     };
-  private createControlResponse(experiment: Experiment, reason: string): AssignmentResponse {
-  const controlVariant = this.getControlVariant(experiment);
+  private createControlResponse(experiment: Experiment, reason: string): AssignmentResponse { const controlVariant = this.getControlVariant(experiment);
   return {
-  variantId: controlVariant.id,
-  variant: controlVariant,
-  assigned: false,
+  variantId: controlVariant.id
+  variant: controlVariant
+  assigned: false }
   reason
 };
   private getCacheKey(userId: string, experimentId: string): string {
     return `ab:assignment:${userId}:${experimentId}`;}
-  private async updateCache(cacheKey: string, assignment: UserAssignment): Promise<void> {
-
-    try {
+  private async updateCache(cacheKey: string, assignment: UserAssignment): Promise<void> { try {
       await this.cache.set()
-        cacheKey,
-        JSON.stringify(assignment),
+        cacheKey
+        JSON.stringify(assignment) }
         this.config.cacheTtl
       );
-    } catch (error) {
-      // Cache errors should not fail assignment
+ catch (error) { // Cache errors should not fail assignment
       console.warn('Cache update failed:', error);
 /**
  * Factory function to create allocation service with Redis cache
  */
 export function createAllocationService(config: AllocationServiceConfig)
-  storage: AssignmentStorage,
-  metrics: AssignmentMetrics,
+  storage: AssignmentStorage
+  metrics: AssignmentMetrics }
   cache?: AllocationCache
 ): AllocationService {
   // Default in-memory cache if Redis not available
   const defaultCache: AllocationCache = {
-    private store: new Map<string, { value: string; expires: number }>(),
-    async get(key: string) {
-      const entry = this.store.get(key);
+    private store: new Map<string, { value: string; expires: number }>()
+    async get(key: string) { const entry = this.store.get(key);
       if (!entry) return null;
       if (Date.now() > entry.expires) {
         this.store.delete(key);
         return null;
-      return entry.value;
-  }
-    async set(key: string, value: string, ttlSeconds: number) {
-  this.store.set(key, {)
-  value,
-  expires: Date.now() + (ttlSeconds * 1000),
+      return entry.value }
+    async set(key: string, value: string, ttlSeconds: number) { this.store.set(key, {)
+  value
+  expires: Date.now() + (ttlSeconds * 1000) }
 });
-  }
-    async del(key: string) {
-      this.store.delete(key);
-  };
+
+    async del(key: string) { this.store.delete(key) };
   return new AllocationService()
-    config,
-    cache || defaultCache,
-    storage,
+    config
+    cache || defaultCache
+    storage
     metrics
   );

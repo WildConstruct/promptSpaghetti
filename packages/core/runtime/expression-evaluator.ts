@@ -7,8 +7,7 @@ import { securityAudit } from './security-audit-logger';
 /**
  * Token types for expression parsing
  */
-enum TokenType {
-  NUMBER = 'NUMBER',
+enum TokenType { NUMBER = 'NUMBER',
   STRING = 'STRING',
   BOOLEAN = 'BOOLEAN',
   IDENTIFIER = 'IDENTIFIER',
@@ -18,21 +17,23 @@ enum TokenType {
   LBRACKET = 'LBRACKET',
   RBRACKET = 'RBRACKET',
   DOT = 'DOT',
-  COMMA = 'COMMA',
+  COMMA = 'COMMA' }
   EOF = 'EOF'
 /**
  * Token interface
  */
-}
+
+
 interface Token {
   type: TokenType;
   value: string;
   position: number;
-/**
- * AST Node types
- */
-type ASTNode = 
-}
+  /**
+  * AST Node types
+  */
+  type ASTNode =
+
+
   | { type: 'Literal'; value: number | string | boolean | null }
   | { type: 'Identifier'; name: string }
   | { type: 'BinaryExpression'; operator: string; left: ASTNode; right: ASTNode }
@@ -73,16 +74,14 @@ class Tokenizer {
         value += this.expression[this.position++];
       return { type: TokenType.NUMBER, value, position: startPos };
     // Strings
-    if (char === '"' || char === '\'') {
-      const quote = char;
+    if (char === '"' || char === '\'') { const quote = char;
       let value = '';
       this.position++; // Skip opening quote
       while (this.position < this.expression.length && this.expression[this.position] !== quote) {
         if (this.expression[this.position] === '\\') {
           this.position++;
           if (this.position < this.expression.length) {
-            value += this.expression[this.position++];
-        } else {
+            value += this.expression[this.position++] } else {
           value += this.expression[this.position++];
       if (this.position < this.expression.length) {
         this.position++; // Skip closing quote
@@ -262,12 +261,12 @@ class Parser {
         if (property.type !== 'Identifier') {
           throw new Error('Expected identifier after dot');
         node = { type: 'MemberExpression', object: node, property, computed: false };
-      } else if (this.currentToken().type === TokenType.LBRACKET) {
+ else if (this.currentToken().type === TokenType.LBRACKET) {
         this.consumeToken();
         const property = this.parseExpression();
         this.consumeToken(TokenType.RBRACKET);
         node = { type: 'MemberExpression', object: node, property, computed: true };
-      } else if (this.currentToken().type === TokenType.LPAREN) {
+ else if (this.currentToken().type === TokenType.LPAREN) {
         this.consumeToken();
         const args: ASTNode = [];
         while (this.currentToken().type !== TokenType.RPAREN) {
@@ -276,7 +275,7 @@ class Parser {
             this.consumeToken();
         this.consumeToken(TokenType.RPAREN);
         node = { type: 'CallExpression', callee: node, arguments: args };
-      } else {
+ else {
         break;
     return node;
   private parsePrimary(): ASTNode {
@@ -304,9 +303,9 @@ class Parser {
 /**
  * Extended acorn Node type to include all necessary AST node types
  */
-}
-type ExtendedAcornNode = acorn.Node & {
-  operator?: string;
+
+
+type ExtendedAcornNode = acorn.Node & { operator?: string;
   left?: ExtendedAcornNode;
   right?: ExtendedAcornNode;
   argument?: ExtendedAcornNode;
@@ -320,12 +319,11 @@ type ExtendedAcornNode = acorn.Node & {
   computed?: boolean;
   name?: string;
   value?: unknown;
-  raw?: string;
-};
+  raw?: string };
 /**
  * Acorn parser configuration for safe expression parsing
  */
-const ACORN_OPTIONS: acorn.Options = {,
+const ACORN_OPTIONS: acorn.Options = { ,
   ecmaVersion: 2020,
   sourceType: 'script',
   allowReserved: false,
@@ -334,7 +332,7 @@ const ACORN_OPTIONS: acorn.Options = {,
   allowAwaitOutsideFunction: false,
   allowHashBang: false,
   locations: true,
-  ranges: true,
+  ranges: true }
 };
 /**
  * Enhanced safe expression evaluator with AST node filtering
@@ -363,10 +361,8 @@ export class SafeExpressionEvaluator {
       // Extract the expression from the ExpressionStatement
       if (program.type !== 'Program' || )
           program.body.length !== 1 || 
-          program.body[0].type !== 'ExpressionStatement') {
-        throw new Error('Invalid expression structure');
-      return program.body[0].expression as ExtendedAcornNode;
-    } catch (error) {
+          program.body[0].type !== 'ExpressionStatement') { throw new Error('Invalid expression structure');
+      return program.body[0].expression as ExtendedAcornNode } catch (error) {
       if (error instanceof SyntaxError) {
         throw new Error(`Expression syntax error: ${error.message}`);}
       throw error;
@@ -418,9 +414,7 @@ export class SafeExpressionEvaluator {
         throw new Error(`Unknown unary operator: ${node.operator}`);}
     case 'LogicalExpression':
       const leftLogical = this.evaluateAST(node.left!, context);
-      if (node.operator === '&&') {
-        return leftLogical && this.evaluateAST(node.right!, context);
-      } else if (node.operator === '||') {
+      if (node.operator === '&&') { return leftLogical && this.evaluateAST(node.right!, context) } else if (node.operator === '||') {
         return leftLogical || this.evaluateAST(node.right!, context);
       throw new Error(`Unknown logical operator: ${node.operator}`);}
     case 'ConditionalExpression':
@@ -430,19 +424,16 @@ export class SafeExpressionEvaluator {
         : this.evaluateAST(node.alternate!, context);
     case 'MemberExpression':
       const object = this.evaluateAST(node.object!, context);
-      if (object == null) {
-  throw new Error('Cannot access property of null or undefined');
+      if (object == null) { throw new Error('Cannot access property of null or undefined');
   let property: string;
   if (node.computed) {
-  property = String(this.evaluateAST(node.property!, context));
-} else {
-        const propNode = node.property! as any;
+  property = String(this.evaluateAST(node.property!, context)) } else { const propNode = node.property! as any;
         property = propNode.name || String(propNode.value);
       // Security check: prevent access to dangerous properties
       const dangerousProps = ['constructor', 'prototype', '__proto__', '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__'];
       if (dangerousProps.includes(property)) {
         securityAudit.logPrototypePollutionAttempt(property, {)
-  nodeType: 'MemberExpression',
+  nodeType: 'MemberExpression' }
           expression: `[object].${property}`}
         });
         throw new Error(`Access to property '${property}' is not allowed`);}
@@ -479,13 +470,9 @@ export class SafeExpressionEvaluator {
     context.getType = (value: unknown) => typeof value;
     context.length = (value: unknown) => (value as any)?.length ?? 0;
     context.isEmpty = (value: unknown) => !value || (value as any).length === 0;
-    context.includes = (value: unknown, item: unknown) => {
-      if (typeof value === 'string') {
-        return String(value).includes(String(item));
-      } else if (Array.isArray(value)) {
-        return value.includes(item);
-      return false;
-    };
+    context.includes = (value: unknown, item: unknown) => { if (typeof value === 'string') {
+        return String(value).includes(String(item)) } else if (Array.isArray(value)) { return value.includes(item);
+      return false };
     context.startsWith = (str: string, prefix: string) => String(str).startsWith(String(prefix));
     context.endsWith = (str: string, suffix: string) => String(str).endsWith(String(suffix));
     return context;

@@ -10,7 +10,7 @@ export enum ConflictType {
   EDGE_CREATION = 'edge_creation',
   EDGE_DELETION = 'edge_deletion',
   EDGE_PROPERTIES = 'edge_properties'
-}
+
 
 export enum ResolutionStrategy {
   LAST_WRITER_WINS = 'last_writer_wins',
@@ -19,10 +19,10 @@ export enum ResolutionStrategy {
   USER_RESOLUTION = 'user_resolution',
   SEMANTIC_MERGE = 'semantic_merge',
   POSITIONAL_OFFSET = 'positional_offset'
-}
 
-}
-}
+
+
+
 export interface ConflictOperation {
   id: string;
   type: ConflictType;
@@ -34,12 +34,13 @@ export interface ConflictOperation {
   userId: string;
   timestamp: number;
   documentId: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Conflict {
   id: string;
   type: ConflictType;
@@ -55,12 +56,13 @@ export interface Conflict {
   resolvedAt?: number;
   autoResolved: boolean;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResolutionResult {
   conflict: Conflict;
   resolvedValue: any;
@@ -69,14 +71,15 @@ export interface ResolutionResult {
   metadata?: {
     mergedFields?: string[];
     discardedOperations?: string[];
-}
-}
+
+
+
     offsetApplied?: { x: number; y: number };
   };
-}
 
-}
-}
+
+
+
 export interface ConflictResolverConfig {
   defaultStrategy: ResolutionStrategy;
   autoResolveThreshold: number; // ms
@@ -85,9 +88,10 @@ export interface ConflictResolverConfig {
   enableSemanticMerge: boolean;
   preserveConflictHistory: boolean;
   conflictHistoryRetention: number; // ms
-}
-}
-}
+
+
+
+
 
 export class ConflictResolver extends EventEmitter {
   private conflicts: Map<string, Conflict> = new Map();
@@ -99,7 +103,7 @@ export class ConflictResolver extends EventEmitter {
     super();
     this.config = config;
     this.startCleanup();
-  }
+
 
   /**
    * Process an incoming operation and detect conflicts
@@ -117,7 +121,7 @@ export class ConflictResolver extends EventEmitter {
       // No conflict, just store the operation
       this.storeOperation(operation);
       return null;
-    }
+
 
     // Create or update conflict
     const conflict = this.createOrUpdateConflict(operation, conflictingOps);
@@ -127,12 +131,12 @@ export class ConflictResolver extends EventEmitter {
     
     if (resolution.requiresUserInput) {
       this.emit('conflict_detected', conflict);
-    } else {
+ else {
       this.emit('conflict_auto_resolved', resolution);
-    }
+
 
     return resolution;
-  }
+
 
   /**
    * Manually resolve a conflict
@@ -146,7 +150,7 @@ export class ConflictResolver extends EventEmitter {
     const conflict = this.conflicts.get(conflictId);
     if (!conflict) {
       return null;
-    }
+
 
     const resolution = this.resolveConflictWithStrategy(conflict, strategy, userSelection);
     
@@ -162,12 +166,12 @@ export class ConflictResolver extends EventEmitter {
     // Store in history if configured
     if (this.config.preserveConflictHistory) {
       // Keep conflict in history
-    } else {
+ else {
       this.conflicts.delete(conflictId);
-    }
+
 
     return resolution;
-  }
+
 
   /**
    * Get all pending conflicts for a document
@@ -175,14 +179,14 @@ export class ConflictResolver extends EventEmitter {
   getPendingConflicts(documentId: string): Conflict[] {
     return Array.from(this.conflicts.values())
       .filter(conflict => conflict.documentId === documentId && conflict.status === 'pending');
-  }
+
 
   /**
    * Get conflict by ID
    */
   getConflict(conflictId: string): Conflict | null {
     return this.conflicts.get(conflictId) || null;
-  }
+
 
   /**
    * Clear all conflicts for a document
@@ -191,9 +195,9 @@ export class ConflictResolver extends EventEmitter {
     for (const [id, conflict] of this.conflicts) {
       if (conflict.documentId === documentId) {
         this.conflicts.delete(id);
-      }
-    }
-  }
+
+
+
 
   /**
    * Get conflict statistics
@@ -205,7 +209,7 @@ export class ConflictResolver extends EventEmitter {
     escalated: number;
     autoResolved: number;
     avgResolutionTime: number;
-  } {
+ {
     const conflicts = documentId 
       ? Array.from(this.conflicts.values()).filter(c => c.documentId === documentId)
       : Array.from(this.conflicts.values());
@@ -228,7 +232,7 @@ export class ConflictResolver extends EventEmitter {
       autoResolved,
       avgResolutionTime
     };
-  }
+
 
   /**
    * Clean up resources
@@ -236,10 +240,10 @@ export class ConflictResolver extends EventEmitter {
   cleanup(): void {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
-    }
+
     this.conflicts.clear();
     this.operationHistory.clear();
-  }
+
 
   /**
    * Find operations that conflict with the given operation
@@ -256,21 +260,21 @@ export class ConflictResolver extends EventEmitter {
       const timeDiff = Math.abs(operationTime - existingOp.timestamp);
       if (timeDiff > this.config.autoResolveThreshold) {
         continue;
-      }
+
 
       // Different users
       if (existingOp.userId === operation.userId) {
         continue;
-      }
+
 
       // Check for specific conflict types
       if (this.isConflicting(operation, existingOp)) {
         conflicts.push(existingOp);
-      }
-    }
+
+
 
     return conflicts;
-  }
+
 
   /**
    * Check if two operations conflict
@@ -278,7 +282,7 @@ export class ConflictResolver extends EventEmitter {
   private isConflicting(op1: ConflictOperation, op2: ConflictOperation): boolean {
     if (op1.type !== op2.type) {
       return false;
-    }
+
 
     switch (op1.type) {
     case ConflictType.NODE_POSITION:
@@ -298,8 +302,8 @@ export class ConflictResolver extends EventEmitter {
       
     default:
       return false;
-    }
-  }
+
+
 
   /**
    * Check if position operations conflict
@@ -307,21 +311,21 @@ export class ConflictResolver extends EventEmitter {
   private isPositionConflict(op1: ConflictOperation, op2: ConflictOperation): boolean {
     if (op1.nodeId !== op2.nodeId) {
       return false;
-    }
+
 
     const pos1 = op1.newValue;
     const pos2 = op2.newValue;
     
     if (!pos1 || !pos2 || typeof pos1.x !== 'number' || typeof pos1.y !== 'number') {
       return false;
-    }
+
 
     const distance = Math.sqrt(
       Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)
     );
 
     return distance < this.config.positionConflictThreshold;
-  }
+
 
   /**
    * Create or update a conflict
@@ -337,7 +341,7 @@ export class ConflictResolver extends EventEmitter {
       // Add operation to existing conflict
       existingConflict.operations.push(operation);
       return existingConflict;
-    }
+
 
     // Create new conflict
     const conflict: Conflict = {
@@ -356,7 +360,7 @@ export class ConflictResolver extends EventEmitter {
 
     this.conflicts.set(conflict.id, conflict);
     return conflict;
-  }
+
 
   /**
    * Find existing conflict for an operation
@@ -370,10 +374,10 @@ export class ConflictResolver extends EventEmitter {
           conflict.edgeId === operation.edgeId &&
           conflict.property === operation.property) {
         return conflict;
-      }
-    }
+
+
     return null;
-  }
+
 
   /**
    * Attempt automatic conflict resolution
@@ -381,7 +385,7 @@ export class ConflictResolver extends EventEmitter {
   private attemptAutoResolution(conflict: Conflict): ResolutionResult {
     // Use default strategy for auto-resolution
     return this.resolveConflictWithStrategy(conflict, this.config.defaultStrategy);
-  }
+
 
   /**
    * Resolve conflict using specified strategy
@@ -412,8 +416,8 @@ export class ConflictResolver extends EventEmitter {
       
     default:
       return this.resolveLastWriterWins(conflict);
-    }
-  }
+
+
 
   /**
    * Resolve using last writer wins strategy
@@ -432,9 +436,9 @@ export class ConflictResolver extends EventEmitter {
         discardedOperations: conflict.operations
           .filter(op => op.id !== latestOp.id)
           .map(op => op.id)
-      }
+
     };
-  }
+
 
   /**
    * Resolve using first writer wins strategy
@@ -453,9 +457,9 @@ export class ConflictResolver extends EventEmitter {
         discardedOperations: conflict.operations
           .filter(op => op.id !== earliestOp.id)
           .map(op => op.id)
-      }
+
     };
-  }
+
 
   /**
    * Resolve by merging properties
@@ -464,7 +468,7 @@ export class ConflictResolver extends EventEmitter {
     if (conflict.type !== ConflictType.NODE_PROPERTIES && 
         conflict.type !== ConflictType.EDGE_PROPERTIES) {
       return this.resolveLastWriterWins(conflict);
-    }
+
 
     const mergedValue = {};
     const mergedFields: string[] = [];
@@ -474,8 +478,8 @@ export class ConflictResolver extends EventEmitter {
       if (typeof op.newValue === 'object' && op.newValue !== null) {
         Object.assign(mergedValue, op.newValue);
         mergedFields.push(...Object.keys(op.newValue));
-      }
-    }
+
+
 
     return {
       conflict,
@@ -484,7 +488,7 @@ export class ConflictResolver extends EventEmitter {
       requiresUserInput: false,
       metadata: { mergedFields: [...new Set(mergedFields)] }
     };
-  }
+
 
   /**
    * Resolve position conflicts with offset
@@ -492,7 +496,7 @@ export class ConflictResolver extends EventEmitter {
   private resolvePositionalOffset(conflict: Conflict): ResolutionResult {
     if (conflict.type !== ConflictType.NODE_POSITION) {
       return this.resolveLastWriterWins(conflict);
-    }
+
 
     const operations = conflict.operations.sort((a, b) => a.timestamp - b.timestamp);
     const baseOp = operations[0];
@@ -505,7 +509,7 @@ export class ConflictResolver extends EventEmitter {
         newValue: {
           x: op.newValue.x + offset,
           y: op.newValue.y + offset
-        }
+
       };
     });
 
@@ -516,9 +520,9 @@ export class ConflictResolver extends EventEmitter {
       requiresUserInput: false,
       metadata: { 
         offsetApplied: { x: 20, y: 20 }
-      }
+
     };
-  }
+
 
   /**
    * Resolve using semantic merge (placeholder for future AI-based resolution)
@@ -530,10 +534,10 @@ export class ConflictResolver extends EventEmitter {
     if (conflict.type === ConflictType.NODE_PROPERTIES || 
         conflict.type === ConflictType.EDGE_PROPERTIES) {
       return this.resolveMergeProperties(conflict);
-    }
+
     
     return this.resolveLastWriterWins(conflict);
-  }
+
 
   /**
    * Resolve using user selection
@@ -546,12 +550,12 @@ export class ConflictResolver extends EventEmitter {
         operations: [],
         requiresUserInput: true
       };
-    }
+
 
     const selectedOp = conflict.operations.find(op => op.id === userSelection.operationId);
     if (!selectedOp) {
       return this.resolveLastWriterWins(conflict);
-    }
+
 
     return {
       conflict,
@@ -562,9 +566,9 @@ export class ConflictResolver extends EventEmitter {
         discardedOperations: conflict.operations
           .filter(op => op.id !== selectedOp.id)
           .map(op => op.id)
-      }
+
     };
-  }
+
 
   /**
    * Store operation in history
@@ -579,7 +583,7 @@ export class ConflictResolver extends EventEmitter {
     const filtered = existing.filter(op => op.timestamp > cutoff);
     
     this.operationHistory.set(key, filtered);
-  }
+
 
   /**
    * Get key for operation storage
@@ -587,12 +591,12 @@ export class ConflictResolver extends EventEmitter {
   private getOperationKey(operation: ConflictOperation): string {
     if (operation.nodeId) {
       return `node:${operation.nodeId}`;
-    }
+
     if (operation.edgeId) {
       return `edge:${operation.edgeId}`;
-    }
+
     return `doc:${operation.documentId}`;
-  }
+
 
   /**
    * Generate human-readable conflict description
@@ -627,8 +631,8 @@ export class ConflictResolver extends EventEmitter {
       
     default:
       return `${userCount} users made conflicting changes`;
-    }
-  }
+
+
 
   /**
    * Start periodic cleanup of old conflicts and operations
@@ -637,7 +641,7 @@ export class ConflictResolver extends EventEmitter {
     this.cleanupInterval = setInterval(() => {
       this.performCleanup();
     }, 60000); // Clean up every minute
-  }
+
 
   /**
    * Perform cleanup of old data
@@ -649,17 +653,16 @@ export class ConflictResolver extends EventEmitter {
     for (const [id, conflict] of this.conflicts) {
       if (conflict.status === 'resolved' && conflict.resolvedAt && conflict.resolvedAt < cutoff) {
         this.conflicts.delete(id);
-      }
-    }
+
+
 
     // Clean up old operations
     for (const [key, operations] of this.operationHistory) {
       const filtered = operations.filter(op => op.timestamp > cutoff);
       if (filtered.length === 0) {
         this.operationHistory.delete(key);
-      } else {
+ else {
         this.operationHistory.set(key, filtered);
-      }
-    }
-  }
-}
+
+
+

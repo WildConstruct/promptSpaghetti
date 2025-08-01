@@ -436,7 +436,7 @@ background: styles.secondary;
                             width: '100%',
                             padding: '6px 8px',
                             border: `1px solid ${styles.border}`
-                        }, ", borderRadius: '4px', background: styles.background, color: styles.text, fontSize: '12px' }} >", _jsx("option", { value: "linear", children: "Linear" }), _jsx("option", { value: "hierarchical", children: "Hierarchical" }), _jsx("option", { value: "radial", children: "Radial" }), _jsx("option", { value: "grid", children: "Grid" })] }) }));
+                        }, ", borderRadius: '4px', background: styles.background, color: styles.text, fontSize: '12px'; }} >", _jsx("option", { value: "linear", children: "Linear" }), _jsx("option", { value: "hierarchical", children: "Hierarchical" }), _jsx("option", { value: "radial", children: "Radial" }), _jsx("option", { value: "grid", children: "Grid" })] }) }));
 { /* Connection Pattern */ }
 _jsxs("div", { children: [_jsx("label", { style: {
                 display: 'block',
@@ -448,7 +448,7 @@ _jsxs("div", { children: [_jsx("label", { style: {
             width: '100%',
             padding: '6px 8px',
             border: `1px solid ${styles.border}`
-        }, ", borderRadius: '4px', background: styles.background, color: styles.text, fontSize: '12px' }} >", _jsx("option", { value: "sequential", children: "Sequential" }), _jsx("option", { value: "branching", children: "Branching" }), _jsx("option", { value: "hub-and-spoke", children: "Hub & Spoke" }), _jsx("option", { value: "workflow", children: "Workflow" }), _jsx("option", { value: "mesh", children: "Mesh" })] });
+        }, ", borderRadius: '4px', background: styles.background, color: styles.text, fontSize: '12px'; }} >", _jsx("option", { value: "sequential", children: "Sequential" }), _jsx("option", { value: "branching", children: "Branching" }), _jsx("option", { value: "hub-and-spoke", children: "Hub & Spoke" }), _jsx("option", { value: "workflow", children: "Workflow" }), _jsx("option", { value: "mesh", children: "Mesh" })] });
 div >
     { /* Spacing */}
     < div >

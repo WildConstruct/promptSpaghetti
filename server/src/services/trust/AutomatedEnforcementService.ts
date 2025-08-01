@@ -19,10 +19,10 @@ import {
   TrustStatus,
   RiskFactor,
   FraudIndicator
-} from '../../../../packages/core/types/TrustTypes';
+ from '../../../../packages/core/types/TrustTypes';
 
-}
-}
+
+
 export interface EnforcementAction {
   actionId: string;
   entityType: 'user' | 'template' | 'transaction';
@@ -42,13 +42,14 @@ export interface EnforcementAction {
     reversedAt: Date;
     reversedBy: string;
     reason: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface EnforcementPolicy {
   policyId: string;
   name: string;
@@ -59,8 +60,9 @@ export interface EnforcementPolicy {
       suspend: number;
       restrict: number;
       flag: number;
-}
-}
+
+
+
     };
     riskFactorRules?: {
       criticalRiskCount: number;
@@ -84,10 +86,10 @@ export interface EnforcementPolicy {
     verifiedUsers: boolean;
     whitelistedEntities: string[];
   };
-}
 
-}
-}
+
+
+
 export interface EnforcementConfig {
   enabled: boolean;
   policies: EnforcementPolicy[];
@@ -95,15 +97,16 @@ export interface EnforcementConfig {
     adminAlerts: boolean;
     userNotifications: boolean;
     webhookUrl?: string;
-}
-}
+
+
+
   };
   reviewSettings: {
     autoReviewEnabled: boolean;
     appealProcessEnabled: boolean;
     adminOverrideRequired: boolean;
   };
-}
+
 
 export class AutomatedEnforcementService {
   private db: Database;
@@ -121,7 +124,7 @@ export class AutomatedEnforcementService {
     this.trustScoreService = trustScoreService;
     this.auditService = auditService;
     this.config = config || this.getDefaultConfig();
-  }
+
 
   // =============================================================================
   // Core Enforcement Methods
@@ -137,7 +140,7 @@ export class AutomatedEnforcementService {
 
     if (!this.config.enabled) {
       return [];
-    }
+
 
     console.log(`🛡️ Evaluating enforcement policies for user: ${userTrustScore.userId}`);
     const actions: EnforcementAction[] = [];
@@ -149,7 +152,7 @@ export class AutomatedEnforcementService {
       if (await this.isUserExempt(userTrustScore.userId, policy)) {
         console.log(`⚪ User ${userTrustScore.userId} is exempt from policy: ${policy.name}`);
         continue;
-      }
+
 
       // Evaluate trust score thresholds
       const trustActions = this.evaluateTrustScoreThresholds(
@@ -170,8 +173,8 @@ export class AutomatedEnforcementService {
           triggeredBy
         );
         actions.push(...riskActions);
-      }
-    }
+
+
 
     // Apply approved actions
     const appliedActions = await this.applyEnforcementActions(actions);
@@ -180,7 +183,7 @@ export class AutomatedEnforcementService {
     await this.logEnforcementDecision('user', userTrustScore.userId, appliedActions);
 
     return appliedActions;
-  }
+
 
   /**
    * Evaluate and enforce policies for a template trust score
@@ -192,7 +195,7 @@ export class AutomatedEnforcementService {
 
     if (!this.config.enabled) {
       return [];
-    }
+
 
     console.log(`🛡️ Evaluating enforcement policies for template: ${templateTrustScore.templateId}`);
     const actions: EnforcementAction[] = [];
@@ -218,8 +221,8 @@ export class AutomatedEnforcementService {
           triggeredBy
         );
         actions.push(...warningActions);
-      }
-    }
+
+
 
     // Apply approved actions
     const appliedActions = await this.applyEnforcementActions(actions);
@@ -228,7 +231,7 @@ export class AutomatedEnforcementService {
     await this.logEnforcementDecision('template', templateTrustScore.templateId, appliedActions);
 
     return appliedActions;
-  }
+
 
   /**
    * Evaluate and enforce policies for a transaction
@@ -240,7 +243,7 @@ export class AutomatedEnforcementService {
 
     if (!this.config.enabled) {
       return [];
-    }
+
 
     console.log(`🛡️ Evaluating enforcement policies for transaction: ${transactionTrustScore.transactionId}`);
     const actions: EnforcementAction[] = [];
@@ -267,7 +270,7 @@ export class AutomatedEnforcementService {
           triggeredBy
         );
         actions.push(...fraudActions);
-      }
+
 
       // Evaluate risk assessment
       if (transactionTrustScore.riskAssessment?.riskLevel === 'critical') {
@@ -281,8 +284,8 @@ export class AutomatedEnforcementService {
           { riskLevel: transactionTrustScore.riskAssessment.riskLevel },
           policy.actions.autoSuspension
         ));
-      }
-    }
+
+
 
     // Apply approved actions
     const appliedActions = await this.applyEnforcementActions(actions);
@@ -291,7 +294,7 @@ export class AutomatedEnforcementService {
     await this.logEnforcementDecision('transaction', transactionTrustScore.transactionId, appliedActions);
 
     return appliedActions;
-  }
+
 
   /**
    * Process suspicious activity report and take automated actions
@@ -322,7 +325,7 @@ export class AutomatedEnforcementService {
         { reportType: report.type, evidence: report.evidence },
         report.severity === 'critical' || report.severity === 'high'
       ));
-    }
+
 
     if (report.templateId) {
       actions.push(this.createEnforcementAction(
@@ -335,7 +338,7 @@ export class AutomatedEnforcementService {
         { reportType: report.type, evidence: report.evidence },
         report.severity === 'critical'
       ));
-    }
+
 
     if (report.transactionId) {
       actions.push(this.createEnforcementAction(
@@ -348,7 +351,7 @@ export class AutomatedEnforcementService {
         { reportType: report.type, evidence: report.evidence },
         report.severity === 'critical' || report.severity === 'high'
       ));
-    }
+
 
     // Apply actions
     const appliedActions = await this.applyEnforcementActions(actions);
@@ -356,10 +359,10 @@ export class AutomatedEnforcementService {
     // Send alerts for high severity reports
     if (report.severity === 'high' || report.severity === 'critical') {
       await this.sendEnforcementAlert('suspicious_activity', report, appliedActions);
-    }
+
 
     return appliedActions;
-  }
+
 
   // =============================================================================
   // Evaluation Methods
@@ -375,7 +378,7 @@ export class AutomatedEnforcementService {
     
     if (!policy.triggers.trustScoreThresholds) {
       return actions;
-    }
+
 
     const thresholds = policy.triggers.trustScoreThresholds;
     const score = trustScore.score;
@@ -393,7 +396,7 @@ export class AutomatedEnforcementService {
         { score, threshold: thresholds.suspend },
         true
       ));
-    }
+
     // Restriction threshold
     else if (score <= thresholds.restrict && policy.actions.autoRestriction) {
       actions.push(this.createEnforcementAction(
@@ -406,7 +409,7 @@ export class AutomatedEnforcementService {
         { score, threshold: thresholds.restrict },
         true
       ));
-    }
+
     // Flagging threshold
     else if (score <= thresholds.flag && policy.actions.autoFlagging) {
       actions.push(this.createEnforcementAction(
@@ -419,10 +422,10 @@ export class AutomatedEnforcementService {
         { score, threshold: thresholds.flag },
         true
       ));
-    }
+
 
     return actions;
-  }
+
 
   private evaluateRiskFactors(
     entityId: string,
@@ -435,7 +438,7 @@ export class AutomatedEnforcementService {
     
     if (!policy.triggers.riskFactorRules) {
       return actions;
-    }
+
 
     const rules = policy.triggers.riskFactorRules;
     const criticalRisks = riskFactors.filter(r => r.severity === 'critical');
@@ -453,7 +456,7 @@ export class AutomatedEnforcementService {
         { criticalRisks: criticalRisks.map(r => r.factor) },
         true
       ));
-    }
+
     // High risk count threshold
     else if (highRisks.length >= rules.highRiskCount) {
       actions.push(this.createEnforcementAction(
@@ -466,10 +469,10 @@ export class AutomatedEnforcementService {
         { highRisks: highRisks.map(r => r.factor) },
         policy.actions.autoRestriction
       ));
-    }
+
 
     return actions;
-  }
+
 
   private evaluateTemplateWarnings(
     templateId: string,
@@ -494,7 +497,7 @@ export class AutomatedEnforcementService {
         { warnings: criticalWarnings },
         policy.actions.autoSuspension
       ));
-    }
+
     // Security warnings require flagging
     else if (securityWarnings.length > 0) {
       actions.push(this.createEnforcementAction(
@@ -507,10 +510,10 @@ export class AutomatedEnforcementService {
         { warnings: securityWarnings },
         policy.actions.autoFlagging
       ));
-    }
+
 
     return actions;
-  }
+
 
   private evaluateFraudIndicators(
     transactionId: string,
@@ -523,7 +526,7 @@ export class AutomatedEnforcementService {
     
     if (!policy.triggers.fraudDetectionRules) {
       return actions;
-    }
+
 
     const rules = policy.triggers.fraudDetectionRules;
 
@@ -539,7 +542,7 @@ export class AutomatedEnforcementService {
         { fraudScore, indicators: fraudIndicators },
         true
       ));
-    }
+
     // Suspicious indicator threshold
     else if (fraudIndicators.length >= rules.suspiciousIndicatorThreshold) {
       actions.push(this.createEnforcementAction(
@@ -552,10 +555,10 @@ export class AutomatedEnforcementService {
         { indicators: fraudIndicators },
         policy.actions.autoRestriction
       ));
-    }
+
 
     return actions;
-  }
+
 
   // =============================================================================
   // Action Management
@@ -585,7 +588,7 @@ export class AutomatedEnforcementService {
       reviewRequired: !autoApply || severity === 'critical',
       expiresAt: this.calculateExpirationDate(actionType, severity)
     };
-  }
+
 
   private async applyEnforcementActions(actions: EnforcementAction[]): Promise<EnforcementAction[]> {
 
@@ -598,15 +601,14 @@ export class AutomatedEnforcementService {
           action.actionTaken = true;
           action.actionTimestamp = new Date();
           console.log(`✅ Applied enforcement action: ${action.actionType} on ${action.entityType} ${action.entityId}`);
-        } else {
+ else {
           console.log(`⏳ Enforcement action queued for review: ${action.actionType} on ${action.entityType} ${action.entityId}`);
-        }
+
 
         // Store action record
         await this.storeEnforcementAction(action);
         appliedActions.push(action);
-
-      } catch (error) {
+ catch (error) {
         console.error('❌ Failed to apply enforcement action:', error);
         // Log the error but continue with other actions
         await this.auditService.logEvent({
@@ -615,14 +617,14 @@ export class AutomatedEnforcementService {
           details: {
             action: action,
             error: error.message
-  }
+
           severity: 'error'
         });
-      }
-    }
+
+
 
     return appliedActions;
-  }
+
 
   private async executeEnforcementAction(action: EnforcementAction): Promise<void> {
 
@@ -652,17 +654,16 @@ export class AutomatedEnforcementService {
         break;
       default:
         throw new Error(`Unknown action type: ${action.actionType}`);
-      }
+
 
       await client.query('COMMIT');
-      
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // =============================================================================
   // Action Implementation Methods
@@ -690,8 +691,7 @@ export class AutomatedEnforcementService {
             termination_reason = 'account_suspended'
         WHERE user_id = $1 AND is_active = true
       `, [action.entityId]);
-
-    } else if (action.entityType === 'template') {
+ else if (action.entityType === 'template') {
       // Suspend template availability
       await client.query(`
         UPDATE templates 
@@ -701,8 +701,8 @@ export class AutomatedEnforcementService {
             updated_at = NOW()
         WHERE id = $2
       `, [action.reason, action.entityId]);
-    }
-  }
+
+
 
   private async applyRestriction(client: unknown, action: EnforcementAction): Promise<void> {
 
@@ -714,8 +714,7 @@ export class AutomatedEnforcementService {
         ON CONFLICT (user_id, restriction_type) 
         DO UPDATE SET reason = $2, expires_at = $3, updated_at = NOW()
       `, [action.entityId, action.reason, action.expiresAt]);
-
-    } else if (action.entityType === 'template') {
+ else if (action.entityType === 'template') {
       // Restrict template visibility
       await client.query(`
         UPDATE templates 
@@ -724,8 +723,8 @@ export class AutomatedEnforcementService {
             updated_at = NOW()
         WHERE id = $2
       `, [action.reason, action.entityId]);
-    }
-  }
+
+
 
   private async applyFlagging(client: unknown, action: EnforcementAction): Promise<void> {
 
@@ -734,7 +733,7 @@ export class AutomatedEnforcementService {
       INSERT INTO entity_flags (entity_type, entity_id, flag_type, reason, flagged_by, expires_at)
       VALUES ($1, $2, 'automated_flag', $3, 'automated_enforcement', $4)
     `, [action.entityType, action.entityId, action.reason, action.expiresAt]);
-  }
+
 
   private async applyVerificationRequirement(client: unknown, action: EnforcementAction): Promise<void> {
 
@@ -747,8 +746,8 @@ export class AutomatedEnforcementService {
             updated_at = NOW()
         WHERE user_id = $2
       `, [action.reason, action.entityId]);
-    }
-  }
+
+
 
   private async applyTransactionBlock(client: unknown, action: EnforcementAction): Promise<void> {
 
@@ -761,7 +760,7 @@ export class AutomatedEnforcementService {
           updated_at = NOW()
       WHERE id = $2
     `, [action.reason, action.entityId]);
-  }
+
 
   private async applyTemplateQuarantine(client: unknown, action: EnforcementAction): Promise<void> {
 
@@ -774,7 +773,7 @@ export class AutomatedEnforcementService {
           updated_at = NOW()
       WHERE id = $2
     `, [action.reason, action.entityId]);
-  }
+
 
   // =============================================================================
   // Utility Methods
@@ -784,31 +783,31 @@ export class AutomatedEnforcementService {
 
     if (!policy.exemptions) {
       return false;
-    }
+
 
     // Check whitelist
     if (policy.exemptions.whitelistedEntities?.includes(userId)) {
       return true;
-    }
+
 
     // Check high trust user exemption
     if (policy.exemptions.highTrustUsers) {
       const userTrust = await this.trustScoreService.calculateUserTrustScore(userId);
       if (userTrust.score >= 90) {
         return true;
-      }
-    }
+
+
 
     // Check verified user exemption
     if (policy.exemptions.verifiedUsers) {
       const verificationStatus = await this.trustScoreService.getUserVerificationStatus(userId);
       if (verificationStatus?.isVerified) {
         return true;
-      }
-    }
+
+
 
     return false;
-  }
+
 
   private getEntityId(
     trustScore: UserTrustScore | TemplateTrustScore | TransactionTrustScore,
@@ -823,8 +822,8 @@ export class AutomatedEnforcementService {
       return (trustScore as TransactionTrustScore).transactionId;
     default:
       throw new Error(`Unknown entity type: ${entityType}`);
-    }
-  }
+
+
 
   private getSuspiciousActivityAction(
     type: 'fraud' | 'abuse' | 'violation' | 'security' | 'quality',
@@ -835,11 +834,11 @@ export class AutomatedEnforcementService {
     if (severity === 'high') return 'restrict';
     if (severity === 'medium') return 'flag';
     return 'flag';
-  }
+
 
   private generateActionId(): string {
     return `ENF-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private calculateExpirationDate(
     actionType: string,
@@ -858,8 +857,8 @@ export class AutomatedEnforcementService {
       return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);  // 7 days
     default:
       return undefined;
-    }
-  }
+
+
 
   private async storeEnforcementAction(action: EnforcementAction): Promise<void> {
 
@@ -876,7 +875,7 @@ export class AutomatedEnforcementService {
       action.actionTaken, action.actionTimestamp, action.expiresAt, 
       action.reviewRequired
     ]);
-  }
+
 
   private async logEnforcementDecision(
     entityType: string,
@@ -897,10 +896,10 @@ export class AutomatedEnforcementService {
           autoApplied: a.autoApplied,
           actionTaken: a.actionTaken
         }))
-  }
+
       severity: actions.some(a => a.severity === 'critical') ? 'error' : 'warning'
     });
-  }
+
 
   private async sendEnforcementAlert(
     alertType: string,
@@ -911,13 +910,13 @@ export class AutomatedEnforcementService {
     if (this.config.notificationSettings.adminAlerts) {
       console.log(`🚨 ADMIN ALERT: ${alertType}`, { context, actions });
       // TODO: Implement actual alert mechanism (email, Slack, etc.)
-    }
+
 
     if (this.config.notificationSettings.webhookUrl) {
       // TODO: Implement webhook notification
       console.log(`📡 Webhook notification for ${alertType}`);
-    }
-  }
+
+
 
   private getDefaultConfig(): EnforcementConfig {
     return {
@@ -933,42 +932,42 @@ export class AutomatedEnforcementService {
               suspend: 25,
               restrict: 40,
               flag: 60
-  }
+
             riskFactorRules: {
               criticalRiskCount: 1,
               highRiskCount: 3,
               automaticSuspension: true
-  }
+
             fraudDetectionRules: {
               fraudScoreThreshold: 80,
               suspiciousIndicatorThreshold: 3
-            }
-  }
+
+
           actions: {
             autoSuspension: true,
             autoRestriction: true,
             autoFlagging: true,
             requireManualReview: true,
             notifyAdmins: true
-  }
+
           exemptions: {
             highTrustUsers: true,
             verifiedUsers: false,
             whitelistedEntities: []
-          }
-        }
+
+
       ],
       notificationSettings: {
         adminAlerts: true,
         userNotifications: true
-  }
+
       reviewSettings: {
         autoReviewEnabled: false,
         appealProcessEnabled: true,
         adminOverrideRequired: true
-      }
+
     };
-  }
+
 
   // =============================================================================
   // Public API Methods
@@ -993,7 +992,7 @@ export class AutomatedEnforcementService {
 
     if (!includeExpired) {
       query += ' AND (expires_at IS NULL OR expires_at > NOW())';
-    }
+
 
     query += ` ORDER BY created_at DESC LIMIT $${params.length + 1}`;
     params.push(limit);
@@ -1016,7 +1015,7 @@ export class AutomatedEnforcementService {
       reviewRequired: row.review_required,
       adminNotes: row.admin_notes
     }));
-  }
+
 
   /**
    * Manually trigger enforcement evaluation
@@ -1039,6 +1038,5 @@ export class AutomatedEnforcementService {
         
     default:
       throw new Error(`Manual evaluation not supported for entity type: ${entityType}`);
-    }
-  }
-}
+
+

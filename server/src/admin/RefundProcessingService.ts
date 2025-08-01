@@ -13,8 +13,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { FinancialDataLifecycleService } from '../financial/FinancialDataLifecycleService';
 
-}
-}
+
+
 export interface RefundRequest {
   refundId: string;
   purchaseId: string;
@@ -41,8 +41,9 @@ export interface RefundRequest {
     originalAmount: number;
     purchaseDate: Date;
     stripePaymentIntentId?: string;
-}
-}
+
+
+
   };
   
   // Processing details
@@ -69,7 +70,7 @@ export interface RefundRequest {
   // Audit trail
   workflowHistory: RefundWorkflowStep[];
   notes: RefundNote[];
-}
+
 
 export enum RefundReason {
   NOT_AS_DESCRIBED = 'not_as_described',
@@ -81,7 +82,7 @@ export enum RefundReason {
   POLICY_VIOLATION = 'policy_violation',
   QUALITY_ISSUE = 'quality_issue',
   OTHER = 'other'
-}
+
 
 export enum RefundStatus {
   PENDING = 'pending',
@@ -92,10 +93,10 @@ export enum RefundStatus {
   COMPLETED = 'completed',
   FAILED = 'failed',
   CANCELLED = 'cancelled'
-}
 
-}
-}
+
+
+
 export interface RefundWorkflowStep {
   stepId: string;
   action: 'created' | 'assigned' | 'reviewed' | 'approved' | 'rejected' | 'processed' | 'completed';
@@ -104,24 +105,26 @@ export interface RefundWorkflowStep {
   notes?: string;
   previousStatus?: RefundStatus;
   newStatus: RefundStatus;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RefundNote {
   noteId: string;
   authorId: string;
   content: string;
   type: 'internal' | 'customer_facing' | 'creator_notification';
   createdAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RefundPolicy {
   policyId: string;
   name: string;
@@ -144,12 +147,13 @@ export interface RefundPolicy {
   // Creator impact rules
   creatorLiabilityPercent: number; // 0-100
   escrowHoldPeriod: number; // Hours
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RefundStats {
   totalRequests: number;
   pendingRequests: number;
@@ -164,8 +168,9 @@ export interface RefundStats {
     creatorsAffected: number;
     totalCreatorDeductions: number;
     avgDeductionAmount: number;
-}
-}
+
+
+
   };
   
   performance: {
@@ -174,7 +179,7 @@ export interface RefundStats {
     escalationRate: number;
     customerSatisfaction: number;
   };
-}
+
 
 /**
  * Refund Processing Service
@@ -197,7 +202,7 @@ export class RefundProcessingService {
     this.databaseService = dependencies.databaseService;
     this.auditService = dependencies.auditService;
     this.financialService = dependencies.financialService;
-  }
+
 
   /**
    * Initialize refund processing service
@@ -213,7 +218,7 @@ export class RefundProcessingService {
     this.setupPeriodicTasks();
     
     console.log('✅ Refund Processing Service initialized');
-  }
+
 
   /**
    * Create a new refund request
@@ -234,7 +239,7 @@ export class RefundProcessingService {
     const purchase = await this.getPurchaseDetails(request.purchaseId);
     if (!purchase) {
       throw new Error(`Purchase not found: ${request.purchaseId}`);
-    }
+
     
     // Validate refund eligibility
     await this.validateRefundEligibility(purchase, request);
@@ -267,7 +272,7 @@ export class RefundProcessingService {
         originalAmount: purchase.originalAmount,
         purchaseDate: purchase.purchaseDate,
         stripePaymentIntentId: purchase.stripePaymentIntentId
-  }
+
       approvalRequired,
       creatorAdjustment: this.calculateCreatorImpact(purchase, refundAmount, policy),
       createdAt: new Date(),
@@ -280,7 +285,7 @@ export class RefundProcessingService {
         performedAt: new Date(),
         newStatus: approvalRequired ? RefundStatus.PENDING : RefundStatus.APPROVED,
         notes: request.description
-      }],
+],
       notes: []
     };
     
@@ -290,7 +295,7 @@ export class RefundProcessingService {
     // If auto-approved, process immediately
     if (!approvalRequired) {
       await this.processRefund(refundRequest.refundId, 'system');
-    }
+
     
     // Log audit event
     await this.auditService.logEvent({
@@ -302,13 +307,13 @@ export class RefundProcessingService {
         amount: refundAmount,
         reason: request.reason,
         autoApproved: !approvalRequired
-      }
+
     });
     
     console.log(`✅ Refund request created: ${refundRequest.refundId} (${approvalRequired ? 'pending approval' : 'auto-approved'})`);
     
     return refundRequest;
-  }
+
 
   /**
    * Approve a refund request
@@ -320,11 +325,11 @@ export class RefundProcessingService {
     const refundRequest = await this.getRefundRequest(refundId);
     if (!refundRequest) {
       throw new Error(`Refund request not found: ${refundId}`);
-    }
+
     
     if (refundRequest.status !== RefundStatus.PENDING && refundRequest.status !== RefundStatus.REVIEWING) {
       throw new Error(`Refund cannot be approved in current status: ${refundRequest.status}`);
-    }
+
     
     // Update refund request
     refundRequest.status = RefundStatus.APPROVED;
@@ -351,7 +356,7 @@ export class RefundProcessingService {
         type: 'internal',
         createdAt: new Date()
       });
-    }
+
     
     // Update in database
     await this.updateRefundRequest(refundRequest);
@@ -365,7 +370,7 @@ export class RefundProcessingService {
       userId: approverId,
       details: { refundId, notes }
     });
-  }
+
 
   /**
    * Reject a refund request
@@ -377,11 +382,11 @@ export class RefundProcessingService {
     const refundRequest = await this.getRefundRequest(refundId);
     if (!refundRequest) {
       throw new Error(`Refund request not found: ${refundId}`);
-    }
+
     
     if (refundRequest.status !== RefundStatus.PENDING && refundRequest.status !== RefundStatus.REVIEWING) {
       throw new Error(`Refund cannot be rejected in current status: ${refundRequest.status}`);
-    }
+
     
     // Update refund request
     refundRequest.status = RefundStatus.REJECTED;
@@ -419,7 +424,7 @@ export class RefundProcessingService {
       userId: rejectedBy,
       details: { refundId, reason }
     });
-  }
+
 
   /**
    * Process approved refund (execute via Stripe)
@@ -431,11 +436,11 @@ export class RefundProcessingService {
     const refundRequest = await this.getRefundRequest(refundId);
     if (!refundRequest) {
       throw new Error(`Refund request not found: ${refundId}`);
-    }
+
     
     if (refundRequest.status !== RefundStatus.APPROVED) {
       throw new Error(`Refund must be approved before processing: ${refundRequest.status}`);
-    }
+
     
     try {
       // Update status to processing
@@ -454,14 +459,14 @@ export class RefundProcessingService {
             refund_id: refundRequest.refundId,
             purchase_id: refundRequest.purchaseId,
             processed_by: processedBy
-          }
+
         }
       );
       
       // Process creator adjustment if needed
       if (refundRequest.creatorAdjustment.required) {
         await this.processCreatorAdjustment(refundRequest);
-      }
+
       
       // Update refund request with completion
       refundRequest.status = RefundStatus.COMPLETED;
@@ -499,12 +504,11 @@ export class RefundProcessingService {
           refundId: refundRequest.refundId,
           stripeRefundId: stripeRefund.id,
           amount: refundRequest.amount
-        }
+
       });
       
       console.log(`✅ Refund processed successfully: ${refundId}`);
-      
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Failed to process refund ${refundId}:`, error);
       
       // Mark as failed
@@ -532,8 +536,8 @@ export class RefundProcessingService {
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Get refund statistics
@@ -548,7 +552,7 @@ export class RefundProcessingService {
     if (dateRange) {
       dateFilter = ' WHERE created_at >= ? AND created_at <= ?';
       params.push(dateRange.start.toISOString(), dateRange.end.toISOString());
-    }
+
     
     // Get basic counts
     const totalRequests = await db.get(`SELECT COUNT(*) as count FROM refund_requests${dateFilter}`, params);
@@ -601,7 +605,7 @@ export class RefundProcessingService {
       creatorImpact: performanceMetrics.creatorImpact,
       performance: performanceMetrics.performance
     };
-  }
+
 
   // Private helper methods
 
@@ -620,7 +624,7 @@ export class RefundProcessingService {
       FROM marketplace_purchases 
       WHERE id = ?
     `, [purchaseId]);
-  }
+
 
   private async validateRefundEligibility(purchase: any, request: any): Promise<void> {
 
@@ -630,22 +634,22 @@ export class RefundProcessingService {
     const hoursSincePurchase = (Date.now() - new Date(purchase.purchaseDate).getTime()) / (1000 * 60 * 60);
     if (hoursSincePurchase > policy.timeLimit) {
       throw new Error(`Refund request exceeds time limit of ${policy.timeLimit} hours`);
-    }
+
     
     // Check if reason is blocked
     if (policy.blockedReasons.includes(request.reason)) {
       throw new Error(`Refund reason '${request.reason}' is not eligible for refunds`);
-    }
+
     
     // Additional eligibility checks would go here
-  }
+
 
   private requiresApproval(amount: number, policy: RefundPolicy, request: any): boolean {
     if (amount > policy.autoApproveThreshold) return true;
     if (policy.requireManagerApproval) return true;
     if (request.requesterType === 'customer' && request.reason === RefundReason.FRAUDULENT) return true;
     return false;
-  }
+
 
   private calculateCreatorImpact(purchase: any, refundAmount: number, policy: RefundPolicy): any {
     const creatorLiability = (refundAmount * policy.creatorLiabilityPercent) / 100;
@@ -656,12 +660,12 @@ export class RefundProcessingService {
       escrowImpacted: true,
       creatorNotified: false
     };
-  }
+
 
   private calculateDueDate(priority: string): Date {
     const hours = priority === 'urgent' ? 4 : priority === 'high' ? 24 : priority === 'medium' ? 72 : 168;
     return new Date(Date.now() + hours * 60 * 60 * 1000);
-  }
+
 
   private async executeStripeRefund(paymentIntentId: string, amount: number, metadata: any): Promise<any> {
 
@@ -676,13 +680,13 @@ export class RefundProcessingService {
       payment_intent: paymentIntentId,
       metadata
     };
-  }
+
 
   private async processCreatorAdjustment(refundRequest: RefundRequest): Promise<void> {
 
     console.log(`⚖️ Processing creator adjustment for refund: ${refundRequest.refundId}`);
     // Implementation would adjust creator account balance
-  }
+
 
   private async updatePurchaseRefundStatus(refundRequest: RefundRequest): Promise<void> {
 
@@ -700,7 +704,7 @@ export class RefundProcessingService {
       new Date().toISOString(),
       refundRequest.purchaseId
     ]);
-  }
+
 
   private async registerRefundWithFinancialSystem(refundRequest: RefundRequest, stripeRefund: any): Promise<void> {
 
@@ -714,9 +718,9 @@ export class RefundProcessingService {
         refundId: refundRequest.refundId,
         originalPurchaseId: refundRequest.purchaseId,
         refundReason: refundRequest.reason
-      }
+
     });
-  }
+
 
   private async loadRefundPolicies(): Promise<void> {
 
@@ -741,30 +745,30 @@ export class RefundProcessingService {
     };
     
     this.policies.set(defaultPolicy.policyId, defaultPolicy);
-  }
+
 
   private async getApplicablePolicy(purchase: any, request: any): Promise<RefundPolicy> {
 
     // Return default policy - in real implementation, would choose based on purchase context
     return this.policies.get('default-refund-policy')!;
-  }
+
 
   private setupPeriodicTasks(): void {
     // Set up periodic tasks like escalation handling, metrics calculation, etc.
     console.log('⏰ Setting up periodic refund processing tasks...');
-  }
+
 
   private async notifyCustomerRefundRejected(refundRequest: RefundRequest, reason: string): Promise<void> {
 
     console.log(`📧 Notifying customer of refund rejection: ${refundRequest.refundId}`);
     // Implementation would send email/notification to customer
-  }
+
 
   private async notifyRefundCompleted(refundRequest: RefundRequest): Promise<void> {
 
     console.log(`📧 Notifying parties of refund completion: ${refundRequest.refundId}`);
     // Implementation would notify customer and creator
-  }
+
 
   private async calculatePerformanceMetrics(dateRange?: { start: Date; end: Date }): Promise<any> {
 
@@ -775,15 +779,15 @@ export class RefundProcessingService {
         creatorsAffected: 25,
         totalCreatorDeductions: 150000, // cents
         avgDeductionAmount: 6000 // cents
-  }
+
       performance: {
         approvalRate: 0.85,
         avgResolutionTime: 6.2, // hours
         escalationRate: 0.12,
         customerSatisfaction: 4.2
-      }
+
     };
-  }
+
 
   // Database operations
   private async storeRefundRequest(refund: RefundRequest): Promise<void> {
@@ -803,7 +807,7 @@ export class RefundProcessingService {
       refund.createdAt.toISOString(), refund.updatedAt.toISOString(),
       refund.dueDate?.toISOString()
     ]);
-  }
+
 
   private async getRefundRequest(refundId: string): Promise<RefundRequest | null> {
 
@@ -838,7 +842,7 @@ export class RefundProcessingService {
       workflowHistory: JSON.parse(row.workflow_history || '[]'),
       notes: JSON.parse(row.notes || '[]')
     };
-  }
+
 
   private async updateRefundRequest(refund: RefundRequest): Promise<void> {
 
@@ -855,18 +859,17 @@ export class RefundProcessingService {
       JSON.stringify(refund.notes), refund.updatedAt.toISOString(),
       refund.refundId
     ]);
-  }
+
 
   // Utility methods
   private generateRefundId(): string {
     return `RFD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateStepId(): string {
     return `STP-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-  }
+
 
   private generateNoteId(): string {
     return `NTE-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-  }
-}
+

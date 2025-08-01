@@ -19,12 +19,12 @@ import {
   Zap,
   Eye
   // Lock // Unused
-} from 'lucide-react';
+ from 'lucide-react';
 import type { 
   MFAMethodType, 
   UserMFAProfile
   // MFAVerificationResult // Unused
-} from '../../types/MFATypes';
+ from '../../types/MFATypes';
 
 export type MFASecurityLevel = 
   | 'none'
@@ -38,7 +38,8 @@ export type MFAIndicatorVariant =
   | 'detailed'
   | 'badge'
   | 'header';
-}
+
+
 interface MFAStatusIndicatorProps {
   userId: string;
   variant?: MFAIndicatorVariant;
@@ -47,19 +48,20 @@ interface MFAStatusIndicatorProps {
   className?: string;
   interface SecurityStatus {
   level: MFASecurityLevel;,
-  profile: UserMFAProfile | null;
+  profile: UserMFAProfile | null;,
   isLoading: boolean;,
-  lastCheck: Date | null;
-  recentActivity: {
+  lastCheck: Date | null;,
+  recentActivity: {,
   lastSuccess?: Date;
   lastFailure?: Date;
   suspiciousActivity: boolean;,
   breachDetected: boolean;
-}
+
+
 };
   recommendations: string;
 const SECURITY_LEVEL_CONFIG = {
-  ['none']: {
+  ['none']: {,
   icon: ShieldX,
   color: 'red',
   label: 'No Protection',
@@ -67,7 +69,7 @@ const SECURITY_LEVEL_CONFIG = {
   bgColor: 'bg-red-50',
   borderColor: 'border-red-200',
   textColor: 'text-red-700',
-}
+
   ['basic']: {
   icon: ShieldAlert,
   color: 'yellow',
@@ -76,7 +78,7 @@ const SECURITY_LEVEL_CONFIG = {
   bgColor: 'bg-yellow-50',
   borderColor: 'border-yellow-200',
   textColor: 'text-yellow-700',
-}
+
   ['standard']: {
   icon: Shield,
   color: 'blue',
@@ -85,7 +87,7 @@ const SECURITY_LEVEL_CONFIG = {
   bgColor: 'bg-blue-50',
   borderColor: 'border-blue-200',
   textColor: 'text-blue-700',
-}
+
   ['high']: {
   icon: ShieldCheck,
   color: 'green',
@@ -94,7 +96,7 @@ const SECURITY_LEVEL_CONFIG = {
   bgColor: 'bg-green-50',
   borderColor: 'border-green-200',
   textColor: 'text-green-700',
-}
+
   ['maximum']: {
   icon: ShieldCheck,
   color: 'purple',
@@ -111,13 +113,13 @@ export function MFAStatusIndicator({ )
   showActions = false,
   onSecurityAction,
   className = ''
-}: MFAStatusIndicatorProps) {
+: MFAStatusIndicatorProps) {
   const [status, setStatus] = useState<SecurityStatus>({)
   level: 'none',
   profile: null,
   isLoading: true,
   lastCheck: null,
-  recentActivity: {
+  recentActivity: {,
   suspiciousActivity: false,
   breachDetected: false,
 },
@@ -133,7 +135,7 @@ export function MFAStatusIndicator({ )
         fetch(`/api/security/activity/${userId}`, {)}
   },
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-  }
+
       ]);
       if (!profileResponse.ok) throw new Error('Failed to load profile');
       const profile: UserMFAProfile = await profileResponse.json();
@@ -145,15 +147,15 @@ export function MFAStatusIndicator({ )
   profile,
   isLoading: false,
   lastCheck: new Date(),
-  recentActivity: {
+  recentActivity: {,
   lastSuccess: activity.lastSuccess ? new Date(activity.lastSuccess) : undefined,
   lastFailure: activity.lastFailure ? new Date(activity.lastFailure) : undefined,
   suspiciousActivity: activity.suspiciousActivity || false,
   breachDetected: activity.breachDetected || false,
-}
+
         recommendations
       });
-    } catch (error) {
+ catch (error) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.error('MFA status check failed:', error);
   setStatus(prev => ({ )
@@ -174,11 +176,11 @@ export function MFAStatusIndicator({ )
     const hasBackup = profile.preferences.backupMethodEnabled;
     if (methodCount >= 3 && hasTOTP && hasBackup) {
       return 'maximum';
-    } else if (methodCount >= 2 && hasTOTP && hasBackup) {
+ else if (methodCount >= 2 && hasTOTP && hasBackup) {
       return 'high';
-    } else if (methodCount >= 2 || hasBackup) {
+ else if (methodCount >= 2 || hasBackup) {
       return 'standard';
-    } else if (methodCount >= 1) {
+ else if (methodCount >= 1) {
       return 'basic';
     return 'none';
   };
@@ -186,7 +188,7 @@ export function MFAStatusIndicator({ )
   const recommendations: string = [];
   if (!profile.isEnabled) {
   recommendations.push('Enable multi-factor authentication');
-} else {
+ else {
       if (!profile.configuredMethods.includes(MFAMethodType.TOTP)) {
         recommendations.push('Add authenticator app for better security');
       if (profile.configuredMethods.length === 1) {

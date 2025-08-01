@@ -12,7 +12,12 @@ searchQuery ?  : string;
 hasErrors ?  : boolean;
  > ;
 // Most common errors
-commonErrors: Array;
+commonErrors: Array < {
+    type: string,
+    message: string,
+    count: number,
+    affectedTargets: number
+} > ;
 // Performance metrics
 performanceMetrics: {
     averageItemsPerSecond: number;
@@ -202,8 +207,9 @@ export class BulkPropertyUpdateService {
                                                          * Template Management
                                                          */
                                                         async;
-                                                        createTemplate(name, string);
-                                                        targetType: TargetType,
+                                                        createTemplate(name, string),
+                                                            targetType;
+                                                        TargetType,
                                                             updates;
                                                         PropertyUpdate,
                                                             validation;
@@ -233,8 +239,9 @@ export class BulkPropertyUpdateService {
                                                     this.notifyListeners('template_created', template);
                                                     return template;
                                                     async;
-                                                    applyTemplate(templateId, string);
-                                                    targets: BulkUpdateTarget,
+                                                    applyTemplate(templateId, string),
+                                                        targets;
+                                                    BulkUpdateTarget,
                                                         operationName;
                                                     string,
                                                         createdBy;
@@ -740,8 +747,9 @@ return {
         default:
             return value;
             async;
-            validateTarget(target, BulkUpdateTarget);
-            updates: PropertyUpdate,
+            validateTarget(target, BulkUpdateTarget),
+                updates;
+            PropertyUpdate,
                 validation;
             ValidationRules;
             Promise < TargetValidationResult > {
@@ -917,7 +925,7 @@ return {
                     return `bulk_tpl_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 }
                 chunkArray(array, T, size, number);
-                T[];
+                T;
                 {
                     const chunks = [];
                     for (let i = 0; i < array.length; i += size) {

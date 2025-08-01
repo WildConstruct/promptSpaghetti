@@ -62,11 +62,10 @@ export var SessionPriority;
             securityLevel: number; // Weight for security requirements,
         }
     }
-    ;
-    emergencyOverride: boolean;
-    gracePeriodMinutes: number;
-    // Priority Factors
 }
+;
+emergencyOverride: boolean;
+gracePeriodMinutes: number;
 ;
 resolutionOptions: ConflictResolution;
 recommendedResolution: ConflictResolution;
@@ -151,8 +150,9 @@ export class SessionPriorityManager extends EventEmitter {
                 allowed: true,
                 evicted: evictedSessions.length > 0 ? evictedSessions : undefined,
             };
-            updateSessionActivity(sessionId, string);
-            activityLevel: number,
+            updateSessionActivity(sessionId, string),
+                activityLevel;
+            number,
                 newFactors ?  : Partial;
             void {
                 const: session = this.sessions.get(sessionId),
@@ -210,8 +210,9 @@ export class SessionPriorityManager extends EventEmitter {
                                     case ConflictResolution.PROMPT_USER: return this.offerUserChoice(conflict);
                                     default:
                                         return this.applyEvictionPolicy(conflict.affectedSessions);
-                                        evictSession(sessionId, string);
-                                        reason: string,
+                                        evictSession(sessionId, string),
+                                            reason;
+                                        string,
                                             gracePeriodMinutes ?  : number;
                                         boolean;
                                         {
@@ -241,8 +242,9 @@ export class SessionPriorityManager extends EventEmitter {
                                                     this.removeSession(sessionId);
                                                     this.emit('sessionEvicted', { sessionId, decision });
                                                     return true;
-                                                    createEmergencySession(sessionId, string);
-                                                    userId: string,
+                                                    createEmergencySession(sessionId, string),
+                                                        userId;
+                                                    string,
                                                         deviceId;
                                                     string,
                                                         factors;
@@ -401,7 +403,14 @@ export class SessionPriorityManager extends EventEmitter {
                                                                                     default: return 50;
                                                                                 }
                                                                             }
-                                                                        }(affectedSessions, string, newRequest, { userId: string, deviceId: string, priority: SessionPriority });
+                                                                        }();
+                                                                        affectedSessions: string,
+                                                                            newRequest;
+                                                                        {
+                                                                            userId: string;
+                                                                            deviceId: string;
+                                                                            priority: SessionPriority;
+                                                                        }
                                                                         SessionConflict;
                                                                         {
                                                                             const conflictId = `conflict_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;

@@ -55,7 +55,7 @@ export const ContentVersionControl = ({
                 setError(err instanceof Error ? err.message : 'Failed to compare versions');
             }
             ;
-            const handleCreateVersion = async (data) => title, string;
+            const handleCreateVersion = async (data) => , title;
             description: string;
             changelog: string;
             revision_type: 'major' | 'minor' | 'patch' | 'editorial';
@@ -406,23 +406,23 @@ div >
 />;
 _jsx("style", { children: `
         .content-version-control {
-          background: #ffffff;
+          background: #ffffff;,
   border: 1px solid #e5e7eb;
-          border-radius: 8px;
+          border-radius: 8px;,
   overflow: hidden;
         .content-version-control.loading {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
+          justify-content: center;,
   padding: 60px 20px;
           text-align: center;
         .loading-spinner {
-          width: 32px;
+          width: 32px;,
   height: 32px;
           border: 3px solid #e5e7eb;
           border-top: 3px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50%;,
   animation: spin 1s linear infinite;
           margin-bottom: 16px;
         @keyframes spin {
@@ -431,40 +431,40 @@ _jsx("style", { children: `
         .version-control-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: center;,
   padding: 20px;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid #e5e7eb;,
   background: #f9fafb;
         .version-control-header h3 {
           margin: 0;
           font-size: 18px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .create-version-btn {
-          background: #3b82f6;
+          background: #3b82f6;,
   color: #ffffff;
-          border: none;
+          border: none;,
   padding: 8px 16px;
           border-radius: 6px;
-          font-size: 14px;
+          font-size: 14px;,
   cursor: pointer;
           transition: background 0.2s ease;
         .create-version-btn:hover {,
   background: #2563eb;
         .error-message {
-          background: #fef2f2;
+          background: #fef2f2;,
   color: #dc2626;
-          padding: 12px 16px;
+          padding: 12px 16px;,
   margin: 16px 20px;
-          border-radius: 6px;
+          border-radius: 6px;,
   border: 1px solid #fecaca;
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
         .error-dismiss {
-          background: none;
+          background: none;,
   border: none;
-          color: #dc2626;
+          color: #dc2626;,
   cursor: pointer;
           margin-left: auto;
           font-size: 16px;
@@ -472,51 +472,51 @@ _jsx("style", { children: `
           display: flex;
           border-bottom: 1px solid #e5e7eb;
         .tab {
-          background: none;
+          background: none;,
   border: none;
-          padding: 12px 20px;
+          padding: 12px 20px;,
   cursor: pointer;
-          font-size: 14px;
+          font-size: 14px;,
   color: #6b7280;
-          border-bottom: 2px solid transparent;
+          border-bottom: 2px solid transparent;,
   transition: all 0.2s ease;
         .tab:hover {,
-  color: #1f2937;
-          background: #f9fafb;
+  color: #1f2937;,
+  background: #f9fafb;
         .tab.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
         .tab:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+  opacity: 0.5;,
+  cursor: not-allowed;
         .tab-content {
           padding: 20px;
         .empty-state {
-          text-align: center;
+          text-align: center;,
   padding: 40px 20px;
           color: #6b7280;
         .create-first-version {
-          background: #3b82f6;
+          background: #3b82f6;,
   color: #ffffff;
-          border: none;
+          border: none;,
   padding: 10px 20px;
-          border-radius: 6px;
+          border-radius: 6px;,
   cursor: pointer;
           margin-top: 16px;
         .versions-grid {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 16px;
         .version-card {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;
+          border-radius: 8px;,
   padding: 16px;
           transition: all 0.2s ease;
         .version-card:hover {
           border-color: #d1d5db;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         .version-card.current {
-          border-color: #3b82f6;
+          border-color: #3b82f6;,
   background: #eff6ff;
         .version-header {
           display: flex;
@@ -525,17 +525,17 @@ _jsx("style", { children: `
           margin-bottom: 12px;
         .version-info {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 4px;
         .version-number {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
           font-size: 16px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .version-tag {
-          background: #dbeafe;
+          background: #dbeafe;,
   color: #1e40af;
           padding: 2px 6px;
           border-radius: 4px;
@@ -546,19 +546,19 @@ _jsx("style", { children: `
           font-weight: 500;
           text-transform: capitalize;
         .version-actions {
-          display: flex;
+          display: flex;,
   gap: 4px;
         .action-btn {
-          background: #f3f4f6;
+          background: #f3f4f6;,
   border: 1px solid #d1d5db;
-          border-radius: 4px;
+          border-radius: 4px;,
   width: 32px;
-          height: 32px;
+          height: 32px;,
   display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: center;,
   cursor: pointer;
-          font-size: 14px;
+          font-size: 14px;,
   transition: all 0.2s ease;
         .action-btn:hover {,
   background: #e5e7eb;
@@ -572,20 +572,20 @@ _jsx("style", { children: `
         .version-details h4 {
           margin: 0 0 8px 0;
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .version-description {
           margin: 0 0 12px 0;
-          font-size: 14px;
+          font-size: 14px;,
   color: #6b7280;
           line-height: 1.5;
         .version-meta {
           display: flex;
-          flex-wrap: wrap;
+          flex-wrap: wrap;,
   gap: 16px;
           margin-bottom: 12px;
         .meta-item {
-          display: flex;
+          display: flex;,
   gap: 4px;
           font-size: 12px;
         .meta-label {
@@ -596,16 +596,16 @@ _jsx("style", { children: `
         .contributors {
           margin-bottom: 12px;
         .contributors-label {
-          font-size: 12px;
+          font-size: 12px;,
   color: #6b7280;
           font-weight: 500;
         .contributors-list {
           display: flex;
-          flex-wrap: wrap;
+          flex-wrap: wrap;,
   gap: 6px;
           margin-top: 4px;
         .contributor {
-          background: #f3f4f6;
+          background: #f3f4f6;,
   color: #4b5563;
           padding: 2px 6px;
           border-radius: 4px;
@@ -618,14 +618,14 @@ _jsx("style", { children: `
           margin-top: 8px;
         .changelog summary {
           cursor: pointer;
-          font-size: 12px;
+          font-size: 12px;,
   color: #6b7280;
         .changelog-content {
-          margin-top: 8px;
+          margin-top: 8px;,
   padding: 8px;
           background: #f9fafb;
           border-radius: 4px;
-          font-size: 12px;
+          font-size: 12px;,
   color: #4b5563;
           white-space: pre-wrap;
         .version-comparison {
@@ -641,60 +641,60 @@ _jsx("style", { children: `
         .comparison-header h4 {
           margin: 0;
           font-size: 16px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .compared-versions {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
           font-size: 14px;
         .version-label {
-          background: #f3f4f6;
+          background: #f3f4f6;,
   padding: 4px 8px;
-          border-radius: 4px;
+          border-radius: 4px;,
   color: #4b5563;
         .comparison-arrow {
           color: #9ca3af;
         .diff-sections {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 20px;
         .diff-section h5 {
           margin: 0 0 12px 0;
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .changes-list {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 12px;
         .change-item {
           border: 1px solid #e5e7eb;
-          border-radius: 6px;
+          border-radius: 6px;,
   padding: 12px;
         .change-item.added {
-          border-color: #10b981;
+          border-color: #10b981;,
   background: #ecfdf5;
         .change-item.removed {
-          border-color: #ef4444;
+          border-color: #ef4444;,
   background: #fef2f2;
         .change-item.modified {
-          border-color: #f59e0b;
+          border-color: #f59e0b;,
   background: #fffbeb;
         .change-header {
-          display: flex;
+          display: flex;,
   gap: 12px;
           margin-bottom: 8px;
           font-size: 12px;
         .change-type {
-          background: #374151;
+          background: #374151;,
   color: #ffffff;
           padding: 2px 6px;
           border-radius: 4px;
           font-weight: 500;
           text-transform: capitalize;
         .change-section {
-          background: #f3f4f6;
+          background: #f3f4f6;,
   color: #4b5563;
           padding: 2px 6px;
           border-radius: 4px;
@@ -702,7 +702,7 @@ _jsx("style", { children: `
           color: #9ca3af;
         .change-diff {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr;,
   gap: 12px;
         .old-content, .new-content {
           font-size: 12px;
@@ -713,9 +713,9 @@ _jsx("style", { children: `
           color: #10b981;
           font-weight: 500;
         .content-preview {
-          background: #f9fafb;
+          background: #f9fafb;,
   border: 1px solid #e5e7eb;
-          border-radius: 4px;
+          border-radius: 4px;,
   padding: 8px;
           margin-top: 4px;
           font-family: monospace;
@@ -724,26 +724,26 @@ _jsx("style", { children: `
           overflow-y: auto;
         .metadata-changes {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 8px;
         .metadata-change {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
-          padding: 8px;
+          padding: 8px;,
   background: #f9fafb;
           border-radius: 4px;
           font-size: 12px;
         .field-name {
-          font-weight: 500;
+          font-weight: 500;,
   color: #4b5563;
         .old-value {
-          background: #fef2f2;
+          background: #fef2f2;,
   color: #dc2626;
           padding: 2px 4px;
           border-radius: 3px;
         .new-value {
-          background: #ecfdf5;
+          background: #ecfdf5;,
   color: #059669;
           padding: 2px 4px;
           border-radius: 3px;
@@ -751,14 +751,14 @@ _jsx("style", { children: `
           color: #9ca3af;
         .media-changes {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 8px;
         .media-change {
-          padding: 8px;
+          padding: 8px;,
   background: #f9fafb;
           border-radius: 4px;
         .media-info {
-          display: flex;
+          display: flex;,
   gap: 8px;
           align-items: center;
           font-size: 12px;
@@ -768,7 +768,7 @@ _jsx("style", { children: `
           gap: 12px;
         .summary-item {
           display: flex;
-          justify-content: space-between;
+          justify-content: space-between;,
   padding: 8px;
           background: #f9fafb;
           border-radius: 4px;
@@ -780,19 +780,19 @@ _jsx("style", { children: `
           color: #1f2937;
           font-weight: 600;
         .editorial-workflow {
-          text-align: center;
+          text-align: center;,
   padding: 40px 20px;
           color: #6b7280;
         @media (max-width: 768px) {
           .version-control-header {
-            flex-direction: column;
+            flex-direction: column;,
   gap: 12px;
             align-items: flex-start;
           .tab-content {
             padding: 12px;
           .version-header {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: flex-start;,
   gap: 12px;
           .version-actions {
             align-self: flex-end;
@@ -800,7 +800,7 @@ _jsx("style", { children: `
             grid-template-columns: 1fr;
           .compared-versions {
             flex-direction: column;
-            align-items: flex-end;
+            align-items: flex-end;,
   gap: 4px;
           .structure-summary {
             grid-template-columns: 1fr;
@@ -841,39 +841,39 @@ const handleSubmit = (e) => {
         return;
         _jsxs("div", { className: "modal-overlay", onClick: handleBackdropClick, children: [_jsxs("div", { className: "modal-content", children: [_jsxs("div", { className: "modal-header", children: [_jsx("h3", { children: "Create New Version" }), _jsx("button", { onClick: onCancel, className: "close-btn", children: "\u00D7" })] }), _jsxs("form", { onSubmit: handleSubmit, className: "modal-form", children: [_jsxs("div", { className: "form-group", children: [_jsx("label", { htmlFor: "version-title", children: "Title *" }), _jsx("input", { id: "version-title", type: "text", value: formData.title, onChange: (e) => setFormData({ ...formData, title: e.target.value }), placeholder: "Brief description of changes", required: true })] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { htmlFor: "version-description", children: "Description *" }), _jsx("textarea", { id: "version-description", value: formData.description, onChange: (e) => setFormData({ ...formData, description: e.target.value }), placeholder: "Detailed description of what changed and why", rows: 3, required: true })] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { htmlFor: "revision-type", children: "Revision Type" }), _jsxs("select", { id: "revision-type", value: formData.revision_type, onChange: (e) => setFormData({ ...formData, revision_type: e.target.value }), children: [_jsx("option", { value: "editorial", children: "Editorial (typos, grammar, style)" }), _jsx("option", { value: "patch", children: "Patch (small fixes, clarifications)" }), _jsx("option", { value: "minor", children: "Minor (new content, improvements)" }), _jsx("option", { value: "major", children: "Major (significant restructure)" })] })] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { htmlFor: "changelog", children: "Changelog" }), _jsx("textarea", { id: "changelog", value: formData.changelog, onChange: (e) => setFormData({ ...formData, changelog: e.target.value }), placeholder: "Detailed list of changes (optional)", rows: 4 })] }), _jsxs("div", { className: "modal-actions", children: [_jsx("button", { type: "button", onClick: onCancel, className: "cancel-btn", children: "Cancel" }), _jsx("button", { type: "submit", className: "create-btn", children: "Create Version" })] })] })] }), _jsx("style", { children: `
         .modal-overlay {
-          position: fixed;
+          position: fixed;,
   top: 0;
-          left: 0;
+          left: 0;,
   right: 0;
-          bottom: 0;
+          bottom: 0;,
   background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 1000;
+          z-index: 1000;,
   padding: 20px;
         .modal-content {
           background: #ffffff;
           border-radius: 8px;
-          max-width: 500px;
+          max-width: 500px;,
   width: 100%;
           max-height: 90vh;
           overflow-y: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: center;,
   padding: 20px;
           border-bottom: 1px solid #e5e7eb;
         .modal-header h3 {
           margin: 0;
           font-size: 18px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .close-btn {
-          background: none;
+          background: none;,
   border: none;
-          font-size: 24px;
+          font-size: 24px;,
   color: #9ca3af;
           cursor: pointer;
         .modal-form {
@@ -884,12 +884,12 @@ const handleSubmit = (e) => {
           display: block;
           margin-bottom: 4px;
           font-size: 14px;
-          font-weight: 500;
+          font-weight: 500;,
   color: #374151;
         .form-group input,
         .form-group textarea,
         .form-group select {
-          width: 100%;
+          width: 100%;,
   padding: 8px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -898,23 +898,23 @@ const handleSubmit = (e) => {
           resize: vertical;
           min-height: 80px;
         .modal-actions {
-          display: flex;
+          display: flex;,
   gap: 12px;
           justify-content: flex-end;
           margin-top: 24px;
         .cancel-btn {
-          background: #f3f4f6;
+          background: #f3f4f6;,
   color: #374151;
-          border: 1px solid #d1d5db;
+          border: 1px solid #d1d5db;,
   padding: 8px 16px;
-          border-radius: 6px;
+          border-radius: 6px;,
   cursor: pointer;
         .create-btn {
-          background: #3b82f6;
+          background: #3b82f6;,
   color: #ffffff;
-          border: none;
+          border: none;,
   padding: 8px 16px;
-          border-radius: 6px;
+          border-radius: 6px;,
   cursor: pointer;
         .create-btn:hover {,
   background: #2563eb;

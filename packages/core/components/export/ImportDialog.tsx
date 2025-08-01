@@ -1,15 +1,14 @@
 import React, { useState, useRef } from 'react';
-import { 
-  FiUpload, 
+import { FiUpload, 
   FiX, 
   FiFile, 
   FiCheck, 
-  FiAlertCircle,
+  FiAlertCircle }
   FiInfo
-} from 'react-icons/fi';
-}
-interface ImportDialogProps {
-  onClose: () => void;
+ from 'react-icons/fi';
+
+
+interface ImportDialogProps { onClose: () => void
   onImportComplete: (result: Record<string, unknown>) => void;
   className?: string;
   interface ImportResult {
@@ -17,57 +16,48 @@ interface ImportDialogProps {
   message: string;
   data?: unknown;
   warnings?: string;
-  const SUPPORTED_FORMATS = [;
-  'application/json',
-  'text/yaml',
-  'application/x-yaml',
-  'text/yml',
-  'application/xml',
-  'text/xml',
-  'text/csv',
-  'text/markdown',
+  const SUPPORTED_FORMATS = [
+  'application/json';
+  'text/yaml';
+  'application/x-yaml';
+  'text/yml';
+  'application/xml';
+  'text/xml';
+  'text/csv';
+  'text/markdown';
   'application/zip'
   ];
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB;
-  export const ImportDialog: React.FC<ImportDialogProps> = ({,)
-  onClose,
-  onImportComplete,
+  export const ImportDialog: React.FC<ImportDialogProps> = ({);
+  onClose;
+  onImportComplete }
   className = ''
-}
-}) => {
-  const [dragOver, setDragOver] = useState(false);
+
+
+}) => { const [dragOver, setDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {,
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => { }
   const file = event.target.files?.[0];
-  if (file) {
-  validateAndSetFile(file);
-};
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
+  if (file) { validateAndSetFile(file) };
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => { event.preventDefault();
     setDragOver(false);
     const file = event.dataTransfer.files[0];
     if (file) {
-      validateAndSetFile(file);
-  };
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragOver(true);
-  };
-  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragOver(false);
-  };
-  const validateAndSetFile = (file: File) => {
-    // Reset previous states
+      validateAndSetFile(file) };
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => { event.preventDefault();
+    setDragOver(true) };
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => { event.preventDefault();
+    setDragOver(false) };
+  const validateAndSetFile = (file: File) => { // Reset previous states
     setImportResult(null);
     // Check file size
     if (file.size > MAX_FILE_SIZE) {
       setImportResult({)
-  success: false,
+  success: false }
         message: `File size ${formatFileSize(file.size)} exceeds maximum limit of ${formatFileSize(MAX_FILE_SIZE)}`}
       });
       return;
@@ -80,16 +70,14 @@ interface ImportDialogProps {
                        file.name.endsWith('.csv') ||
                        file.name.endsWith('.md') ||
                        file.name.endsWith('.zip');
-    if (!isSupported) {
-      setImportResult({)
-  success: false,
+    if (!isSupported) { setImportResult({)
+  success: false }
         message: `Unsupported file type: ${file.type || 'unknown'}. Supported formats: JSON, YAML, XML, CSV, Markdown, ZIP`}
       });
       return;
     setSelectedFile(file);
   };
-  const handleImport = async () => {
-    if (!selectedFile) return;
+  const handleImport = async () => { if (!selectedFile) return;
     setUploading(true);
     setUploadProgress(0);
     try {
@@ -101,53 +89,42 @@ interface ImportDialogProps {
   if (prev >= 90) {
             clearInterval(progressInterval);
             return 90;
-          return prev + 10;
-        });
+          return prev + 10 });
       }, 100);
-      const response = await fetch('/api/import', {)
-  method: 'POST',
-  body: formData,
+      const response = await fetch('/api/import', { )
+  method: 'POST'
+  body: formData }
 });
       clearInterval(progressInterval);
       setUploadProgress(100);
       const result = await response.json();
-      if (!response.ok) {
-  throw new Error(result.message || 'Import failed');
+      if (!response.ok) { throw new Error(result.message || 'Import failed');
   setImportResult({)
-  success: true,
-  message: result.message || 'Import completed successfully',
-  data: result.data,
-  warnings: result.warnings,
+  success: true
+  message: result.message || 'Import completed successfully'
+  data: result.data
+  warnings: result.warnings }
 });
       // Notify parent component
       onImportComplete(result);
-    } catch (error) {
-  setImportResult({)
-  success: false,
-  message: error instanceof Error ? error.message : 'Import failed with unknown error',
+ catch (error) { setImportResult({)
+  success: false
+  message: error instanceof Error ? error.message : 'Import failed with unknown error' }
 });
-    } finally {
-      setUploading(false);
-      setTimeout(() => setUploadProgress(0), 1000);
-  };
-  const formatFileSize = (bytes: number) => {
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+ finally { setUploading(false);
+      setTimeout(() => setUploadProgress(0), 1000) };
+  const formatFileSize = (bytes: number) => { const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     if (bytes === 0) return '0 Bytes';
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
-  };
-  const resetDialog = () => {
-    setSelectedFile(null);
+    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i] };
+  const resetDialog = () => { setSelectedFile(null);
     setImportResult(null);
     setUploading(false);
     setUploadProgress(0);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-  };
-  const handleClose = () => {
-    if (!uploading) {
-      onClose();
-  };
+      fileInputRef.current.value = '' };
+  const handleClose = () => { if (!uploading) {
+      onClose() };
   return;
     <div className={`import-dialog ${className}`}>}
       <div className="flex items-center justify-between mb-6">
@@ -175,12 +152,12 @@ interface ImportDialogProps {
           <p className="text-gray-600 dark:text-gray-300 mb-4">
             {importResult.message}
           </p>
-          {importResult.warnings && importResult.warnings.length > 0 && ()
+          { importResult.warnings && importResult.warnings.length > 0 && ()
             <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4 text-left">
               <div className="flex items-start space-x-2">
                 <FiAlertCircle className="w-5 h-5 text-yellow-600 mt-0.5" />
                 <div>
-                  <h5 className="text-sm font-medium text-yellow-800 dark:text-yellow-200 mb-2">,
+                  <h5 className="text-sm font-medium text-yellow-800 dark:text-yellow-200 mb-2"> }
   Warnings:
                   </h5>
                   <ul className="text-sm text-yellow-700 dark:text-yellow-300 list-disc list-inside space-y-1">
@@ -230,11 +207,11 @@ interface ImportDialogProps {
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
-              className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
+              className={ `border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
   dragOver
-  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20',
-  : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500',
-}`}
+  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+  : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500' }
+`}
               onClick={() => fileInputRef.current?.click()}
             >
               <FiUpload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -247,10 +224,9 @@ interface ImportDialogProps {
               <button
                 type="button"
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                onClick={(e) => {
+                onClick={ (e) => {
                   e.stopPropagation();
-                  fileInputRef.current?.click();
-                }}
+                  fileInputRef.current?.click() }}
               >
                 Choose File
               </button>

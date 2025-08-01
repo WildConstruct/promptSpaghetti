@@ -43,7 +43,7 @@ export enum AnalyticsEventType {
   ERROR_EVENT = 'error_event',
   WARNING_EVENT = 'warning_event',
   INFO_EVENT = 'info_event'
-}
+
 
 export enum EventSeverity {
   CRITICAL = 'critical',
@@ -51,7 +51,7 @@ export enum EventSeverity {
   WARNING = 'warning',
   INFO = 'info',
   DEBUG = 'debug'
-}
+
 
 export enum EventCategory {
   EXECUTION = 'execution',
@@ -61,7 +61,7 @@ export enum EventCategory {
   BUSINESS = 'business',
   SYSTEM = 'system',
   INTEGRATION = 'integration'
-}
+
 
 // Base Event Schema with Zod validation
 export const BaseEventSchema = z.object({
@@ -110,8 +110,9 @@ export const EventFilterSchema = z.object({
 export type EventFilter = z.infer<typeof EventFilterSchema>;
 
 // Subscriber Interface
-}
-}
+
+
+
 export interface EventSubscriber {
   id: string;
   name: string;
@@ -122,14 +123,16 @@ export interface EventSubscriber {
   retryConfig?: {
     maxRetries: number;
     backoffMs: number;
-}
-}
+
+
+
   };
-}
+
 
 // Event Bus Configuration
-}
-}
+
+
+
 export interface EventBusConfig {
   maxEventHistory: number;
   enablePersistence: boolean;
@@ -137,13 +140,15 @@ export interface EventBusConfig {
   flushIntervalMs: number;
   deadLetterQueue: boolean;
   metricsEnabled: boolean;
-}
-}
-}
+
+
+
+
 
 // Event Bus Metrics
-}
-}
+
+
+
 export interface EventBusMetrics {
   eventsPublished: number;
   eventsProcessed: number;
@@ -152,9 +157,10 @@ export interface EventBusMetrics {
   averageProcessingTime: number;
   queueDepth: number;
   lastEventTime: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Unified Event Bus Implementation
@@ -196,7 +202,7 @@ export class UnifiedEventBus extends EventEmitter {
 
     this.startFlushTimer();
     this.emit('bus:initialized', { config: this.config });
-  }
+
 
   /**
    * Publish an analytics event to the unified bus
@@ -223,17 +229,17 @@ export class UnifiedEventBus extends EventEmitter {
       // Emit event for immediate processing if queue is small
       if (this.eventQueue.length <= 10) {
         this.processEventQueue();
-      }
+
 
       this.emit('event:published', { eventId: event.id, type: event.type, category: event.category });
       
       return event.id;
-    } catch (error) {
+ catch (error) {
       this.metrics.eventsFailed++;
       this.emit('event:error', { error, eventData });
       throw new Error(`Failed to publish event: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Subscribe to analytics events with filtering
@@ -253,7 +259,7 @@ export class UnifiedEventBus extends EventEmitter {
     this.emit('subscriber:added', { subscriberId, name: subscriber.name, filter: subscriber.filter });
     
     return subscriberId;
-  }
+
 
   /**
    * Unsubscribe from analytics events
@@ -264,10 +270,10 @@ export class UnifiedEventBus extends EventEmitter {
 
     if (removed) {
       this.emit('subscriber:removed', { subscriberId });
-    }
+
 
     return removed;
-  }
+
 
   /**
    * Get filtered events from history
@@ -275,7 +281,7 @@ export class UnifiedEventBus extends EventEmitter {
   getEvents(filter: EventFilter, limit: number = 100, offset: number = 0): UnifiedAnalyticsEvent[] {
     const filteredEvents = this.eventHistory.filter(event => this.matchesFilter(event, filter));
     return filteredEvents.slice(offset, offset + limit);
-  }
+
 
   /**
    * Get real-time event stream for dashboards
@@ -288,7 +294,7 @@ export class UnifiedEventBus extends EventEmitter {
       filter,
       handler: (event) => {
         stream.emit('event', event);
-  }
+
       priority: 1000 // High priority for streams
     });
 
@@ -298,14 +304,14 @@ export class UnifiedEventBus extends EventEmitter {
     });
 
     return stream;
-  }
+
 
   /**
    * Get event bus metrics
    */
   getMetrics(): EventBusMetrics {
     return { ...this.metrics };
-  }
+
 
   /**
    * Get event bus health status
@@ -314,7 +320,7 @@ export class UnifiedEventBus extends EventEmitter {
     status: 'healthy' | 'degraded' | 'unhealthy';
     metrics: EventBusMetrics;
     issues: string[];
-  } {
+ {
     const issues: string[] = [];
     let status: 'healthy' | 'degraded' | 'unhealthy' = 'healthy';
 
@@ -322,7 +328,7 @@ export class UnifiedEventBus extends EventEmitter {
     if (this.metrics.queueDepth > 1000) {
       issues.push('High queue depth detected');
       status = 'degraded';
-    }
+
 
     // Check error rate
     const errorRate = this.metrics.eventsPublished > 0 
@@ -332,17 +338,17 @@ export class UnifiedEventBus extends EventEmitter {
     if (errorRate > 5) {
       issues.push('High error rate detected');
       status = errorRate > 20 ? 'unhealthy' : 'degraded';
-    }
+
 
     // Check processing lag
     const processingLag = Date.now() - this.metrics.lastEventTime;
     if (processingLag > 30000) { // 30 seconds
       issues.push('Processing lag detected');
       status = 'degraded';
-    }
+
 
     return { status, metrics: this.metrics, issues };
-  }
+
 
   /**
    * Migrate analytics data from existing systems
@@ -369,19 +375,19 @@ export class UnifiedEventBus extends EventEmitter {
             migrated: true,
             originalSystem: systemName,
             migrationTime: Date.now()
-  }
+
           ...transformedEvent
         });
         results.migrated++;
-      } catch (error) {
+ catch (error) {
         results.failed++;
         results.errors.push(`Failed to migrate event: ${error instanceof Error ? error.message : String(error)}`);
-      }
-    }
+
+
 
     this.emit('migration:completed', { systemName, results });
     return results;
-  }
+
 
   /**
    * Process event queue in batches
@@ -390,7 +396,7 @@ export class UnifiedEventBus extends EventEmitter {
 
     if (this.processingQueue || this.eventQueue.length === 0) {
       return;
-    }
+
 
     this.processingQueue = true;
     const startTime = Date.now();
@@ -402,20 +408,19 @@ export class UnifiedEventBus extends EventEmitter {
       // Process each event in the batch
       for (const event of batch) {
         await this.processEvent(event);
-      }
+
 
       // Update metrics
       const processingTime = Date.now() - startTime;
       this.metrics.averageProcessingTime = 
         (this.metrics.averageProcessingTime + processingTime) / 2;
       this.metrics.queueDepth = this.eventQueue.length;
-
-    } catch (error) {
+ catch (error) {
       this.emit('queue:error', { error, queueLength: this.eventQueue.length });
-    } finally {
+ finally {
       this.processingQueue = false;
-    }
-  }
+
+
 
   /**
    * Process individual event through subscribers
@@ -427,8 +432,8 @@ export class UnifiedEventBus extends EventEmitter {
       this.eventHistory.push(event);
       if (this.eventHistory.length > this.config.maxEventHistory) {
         this.eventHistory.shift();
-      }
-    }
+
+
 
     // Get matching subscribers sorted by priority
     const matchingSubscribers = Array.from(this.subscribers.values())
@@ -440,7 +445,7 @@ export class UnifiedEventBus extends EventEmitter {
       try {
         await this.processSubscriber(event, subscriber);
         this.metrics.eventsProcessed++;
-      } catch (error) {
+ catch (error) {
         this.metrics.eventsFailed++;
         this.emit('subscriber:error', { 
           subscriberId: subscriber.id, 
@@ -451,12 +456,12 @@ export class UnifiedEventBus extends EventEmitter {
         // Handle retry logic if configured
         if (subscriber.retryConfig) {
           await this.retrySubscriber(event, subscriber, error);
-        }
-      }
-    }
+
+
+
 
     this.emit('event:processed', { eventId: event.id, subscriberCount: matchingSubscribers.length });
-  }
+
 
   /**
    * Process event through individual subscriber
@@ -466,8 +471,8 @@ export class UnifiedEventBus extends EventEmitter {
     const result = subscriber.handler(event);
     if (result instanceof Promise) {
       await result;
-    }
-  }
+
+
 
   /**
    * Retry failed subscriber processing
@@ -485,7 +490,7 @@ export class UnifiedEventBus extends EventEmitter {
         await new Promise(resolve => setTimeout(resolve, subscriber.retryConfig!.backoffMs * attempt));
         await this.processSubscriber(event, subscriber);
         return; // Success
-      } catch (retryError) {
+ catch (retryError) {
         if (attempt === subscriber.retryConfig.maxRetries) {
           this.emit('subscriber:retry_exhausted', {
             subscriberId: subscriber.id,
@@ -494,10 +499,10 @@ export class UnifiedEventBus extends EventEmitter {
             originalError,
             finalError: retryError
           });
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Check if event matches filter criteria
@@ -518,10 +523,10 @@ export class UnifiedEventBus extends EventEmitter {
     if (filter.tags && filter.tags.length > 0) {
       const hasAllTags = filter.tags.every(tag => event.tags.includes(tag));
       if (!hasAllTags) return false;
-    }
+
 
     return true;
-  }
+
 
   /**
    * Start flush timer for batch processing
@@ -530,9 +535,9 @@ export class UnifiedEventBus extends EventEmitter {
     this.flushTimer = setInterval(() => {
       if (this.eventQueue.length > 0) {
         this.processEventQueue();
-      }
+
     }, this.config.flushIntervalMs);
-  }
+
 
   /**
    * Cleanup and shutdown
@@ -541,19 +546,19 @@ export class UnifiedEventBus extends EventEmitter {
 
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
-    }
+
 
     // Process remaining events
     while (this.eventQueue.length > 0) {
       await this.processEventQueue();
-    }
+
 
     this.subscribers.clear();
     this.eventHistory = [];
     
     this.emit('bus:shutdown');
-  }
-}
+
+
 
 /**
  * Event Bus Factory for dependency injection
@@ -564,21 +569,21 @@ export class EventBusFactory {
   static getInstance(config?: Partial<EventBusConfig>): UnifiedEventBus {
     if (!this.instance) {
       this.instance = new UnifiedEventBus(config);
-    }
+
     return this.instance;
-  }
+
 
   static createInstance(config?: Partial<EventBusConfig>): UnifiedEventBus {
     return new UnifiedEventBus(config);
-  }
+
 
   static async shutdown(): Promise<void> {
 
     if (this.instance) {
       await this.instance.shutdown();
       this.instance = null;
-    }
-  }
-}
+
+
+
 
 export default UnifiedEventBus;

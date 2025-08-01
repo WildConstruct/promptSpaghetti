@@ -6,6 +6,7 @@ import React from 'react';
 import { PreviewResultWithPath, ExecutionVisualizationConfig } from '../types/ExecutionPath';
 
 }
+}
 interface ExecutionPathVisualizationProps {
     results: PreviewResultWithPath[];
     onNodeHighlight?: (nodeIds: string[]) => void;
@@ -15,4 +16,5 @@ interface ExecutionPathVisualizationProps {
 export declare const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProps>;
 export default ExecutionPathVisualization;
 //# sourceMappingURL=ExecutionPathVisualization.d.ts.map
+}
 }

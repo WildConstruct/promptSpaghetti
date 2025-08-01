@@ -10,14 +10,9 @@ import { serializeProject, deserializeProject } from '../../utils/projectSeriali
 import { createDefaultMetadata, createDefaultSettings } from '../../schemas/psgSchema';
 
 // Mock localStorage for RecentProjectsManager
-const mockLocalStorage = {
-  getItem: jest.fn<unknown, unknown>(),
-  setItem: jest.fn<unknown, unknown>(),
-  removeItem: jest.fn<unknown, unknown>(),
-  hasOwnProperty: jest.fn<unknown, unknown>(),
-};
-Object.defineProperty(window, 'localStorage', {)
-  value: mockLocalStorage,
+const mockLocalStorage = {};
+Object.defineProperty(window, 'localStorage', { )
+  value: mockLocalStorage }
 });
 
 // Mock DOM for file operations
@@ -27,81 +22,71 @@ const mockRemoveChild = jest.fn<unknown, unknown>();
 const mockClick = jest.fn<unknown, unknown>();
 const mockCreateObjectURL = jest.fn(() => 'mock-url');
 const mockRevokeObjectURL = jest.fn<unknown, unknown>();
-global.document = {
-  createElement: mockCreateElement,
+global.document = { createElement: mockCreateElement
   body: {
-  appendChild: mockAppendChild,
-  removeChild: mockRemoveChild,
-} as any;
-global.URL = {
-  createObjectURL: mockCreateObjectURL,
-  revokeObjectURL: mockRevokeObjectURL,
-} as any;
+  appendChild: mockAppendChild
+  removeChild: mockRemoveChild }
+ as any;
+global.URL = { createObjectURL: mockCreateObjectURL
+  revokeObjectURL: mockRevokeObjectURL }
+ as any;
 describe('Project Workflow Integration Tests', () => {
   let sampleGraph: { nodes: Node; edges: Edge };
   let projectName: string;
   let projectAuthor: string;
-  beforeEach(() => {
-    jest.clearAllMocks();
+  beforeEach(() => { jest.clearAllMocks();
     mockLocalStorage.getItem.mockReturnValue(null as unknown);
     // Create a sample graph with multiple node types
     sampleGraph = {
-      nodes: [,
+      nodes: [
         {
-          id: 'node-1',
-          type: 'default',
-          position: { x: 100, y: 100 },
-          data: {
-  nodeType: 'weighted-choice',
-  label: 'Character Type',
-  variations: ['Warrior', 'Mage', 'Rogue'],
-}
-        {
-          id: 'node-2',
-          type: 'default',
-          position: { x: 300, y: 100 },
-          data: {
-  nodeType: 'concat',
+          id: 'node-1'
+          type: 'default' }
+          position: { x: 100, y: 100 }
+          data: { 
+  nodeType: 'weighted-choice'
+  label: 'Character Type'
+  variations: ['Warrior', 'Mage', 'Rogue'] }
+
+        { id: 'node-2'
+          type: 'default' }
+          position: { x: 300, y: 100 }
+          data: { 
+  nodeType: 'concat' }
             template: 'A {input} from the {location}'
-  }
-        {
-          id: 'node-3',
-          type: 'default',
-          position: { x: 500, y: 100 },
-          data: {
-  nodeType: 'output',
-  label: 'Final Output'],
-  edges: [,
+
+        { id: 'node-3'
+          type: 'default' }
+          position: { x: 500, y: 100 }
+          data: { 
+  nodeType: 'output'
+  label: 'Final Output']
+  edges: [
   {
-  id: 'edge-1',
-  source: 'node-1',
-  target: 'node-2',
-  sourceHandle: 'output',
-  targetHandle: 'input',
-}
-        {
-  id: 'edge-2',
-  source: 'node-2',
-  target: 'node-3',
-  sourceHandle: 'output',
+  id: 'edge-1'
+  source: 'node-1'
+  target: 'node-2'
+  sourceHandle: 'output'
+  targetHandle: 'input' }
+
+        { id: 'edge-2'
+  source: 'node-2'
+  target: 'node-3'
+  sourceHandle: 'output' }
   targetHandle: 'input'];
-  };
+};
     projectName = 'Test RPG Character Generator';
     projectAuthor = 'Integration Test User';
     // Mock DOM elements for file download
-    const mockAnchor = {
-      href: '',
-      download: '',
-      click: mockClick,
+    const mockAnchor = { href: ''
+      download: ''
+      click: mockClick }
       style: { display: '' }
     };
     mockCreateElement.mockReturnValue(mockAnchor as unknown);
   });
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-  test('complete save-load workflow maintains data integrity', async () => {
-    // 1. Create project metadata and settings
+  afterEach(() => { jest.clearAllMocks() });
+  test('complete save-load workflow maintains data integrity', async () => { // 1. Create project metadata and settings
     const metadata = createDefaultMetadata(projectName, projectAuthor);
     const settings = createDefaultSettings();
     // 2. Serialize the project
@@ -110,13 +95,13 @@ describe('Project Workflow Integration Tests', () => {
     expect(serializeResult.data).toBeDefined();
     // 3. Save project to device (simulate file download)
     const saveResult = await ProjectManager.saveProjectToDevice(;);
-      sampleGraph,
+      sampleGraph
       {
-        name: projectName,
+        name: projectName }
         fileName: `${projectName}.psg`}
-},
+
   author: projectAuthor;
-  }
+
       settings
     );
     expect(saveResult.success).toBe(true);
@@ -135,45 +120,40 @@ describe('Project Workflow Integration Tests', () => {
     expect(loadedData.metadata.name).toBe(projectName);
     expect(loadedData.metadata.author).toBe(projectAuthor);
     // 6. Verify nodes maintain their structure
-    loadedData.graph.nodes.forEach((node, index) => {
-      const originalNode = sampleGraph.nodes[index];
+    loadedData.graph.nodes.forEach((node, index) => { const originalNode = sampleGraph.nodes[index];
       expect(node.id).toBe(originalNode.id);
       expect(node.position).toEqual(originalNode.position);
-      expect(node.data.nodeType).toBe(originalNode.data.nodeType);
-    });
+      expect(node.data.nodeType).toBe(originalNode.data.nodeType) });
     // 7. Verify edges maintain their connections
-    loadedData.graph.edges.forEach((edge, index) => {
-      const originalEdge = sampleGraph.edges[index];
+    loadedData.graph.edges.forEach((edge, index) => { const originalEdge = sampleGraph.edges[index];
       expect(edge.source).toBe(originalEdge.source);
-      expect(edge.target).toBe(originalEdge.target);
-    });
+      expect(edge.target).toBe(originalEdge.target) });
   });
-  test('recent projects integration with save workflow', async () => {
-    // 1. Save a project
+  test('recent projects integration with save workflow', async () => { // 1. Save a project
     const metadata = createDefaultMetadata(projectName, projectAuthor);
     const settings = createDefaultSettings();
     const saveResult = await ProjectManager.saveProjectToDevice(;);
-      sampleGraph,
+      sampleGraph
       {
-        name: projectName,
+        name: projectName }
         fileName: `${projectName}.psg`}
-},
+
   author: projectAuthor;
-  }
+
       settings
     );
     expect(saveResult.success).toBe(true);
     // 2. Simulate adding to recent projects (as would happen in GraphEditor)
     const thumbnail = RecentProjectsManager.generateThumbnail(;);
-      sampleGraph.nodes,
+      sampleGraph.nodes
       sampleGraph.edges
     );
     const projectData = JSON.stringify({ graph: sampleGraph, metadata });
     const fileSize = new Blob([projectData]).size;
-    RecentProjectsManager.addRecentProject({)
-  name: projectName,
-  metadata,
-  thumbnail,
+    RecentProjectsManager.addRecentProject({ )
+  name: projectName
+  metadata
+  thumbnail }
   fileSize
 });
     // 3. Verify project appears in recent projects
@@ -189,24 +169,24 @@ describe('Project Workflow Integration Tests', () => {
     const largeGraph = {
       nodes: Array.from({ length: 100 }, (_, i) => ({)
   id: `node-${i}`}
-},
-  type: 'default' as const,
-        position: { x: (i % 10) * 100, y: Math.floor(i / 10) * 100 },
-        data: {
-  nodeType: 'weighted-choice',
+
+  type: 'default' as const
+        position: { x: (i % 10) * 100, y: Math.floor(i / 10) * 100 }
+        data: { 
+  nodeType: 'weighted-choice' }
           label: `Node ${i}`}
-},
+
   variations: Array.from({ length: 10 }, (_, j) => `Variation ${j}`)}
-      })),
+      }))
       edges: Array.from({ length: 99 }, (_, i) => ({)
   id: `edge-${i}`}
-},
+
   source: `node-${i}`}
-},
+
   target: `node-${i + 1}`}
-},
-  sourceHandle: 'output',
-        targetHandle: 'input'
+
+  sourceHandle: 'output'
+        targetHandle: 'input';
   }))
     };
     const metadata = createDefaultMetadata('Large Test Project', projectAuthor);
@@ -240,44 +220,40 @@ describe('Project Workflow Integration Tests', () => {
     expect(result2.success).toBe(false);
     expect(result2.error).toBeDefined();
     // Test with missing required fields
-    const missingFields = JSON.stringify({)
-  fileType: 'psg',
-  formatVersion: '1.0.0',
+    const missingFields = JSON.stringify({ )
+  fileType: 'psg'
+  formatVersion: '1.0.0' }
   // Missing graph, metadata, etc.
 });
     const result3 = deserializeProject(missingFields);
     expect(result3.success).toBe(false);
     expect(result3.error).toBeDefined();
   });
-  test('version compatibility handling', async () => {
-  const metadata = createDefaultMetadata(projectName, projectAuthor);
+  test('version compatibility handling', async () => { const metadata = createDefaultMetadata(projectName, projectAuthor);
   const settings = createDefaultSettings();
   // Create a project with future version
   const futureVersionProject = {
-  fileType: 'psg',
-  formatVersion: '2.0.0', // Future version,
-  metadata,
-  settings,
-  graph: sampleGraph,
-  exportedAt: new Date().toISOString(),
+  fileType: 'psg'
+  formatVersion: '2.0.0', // Future version
+  metadata
+  settings
+  graph: sampleGraph
+  exportedAt: new Date().toISOString() }
 };
     const serializedFuture = JSON.stringify(futureVersionProject);
     const result = deserializeProject(serializedFuture);
     // Should handle version mismatch gracefully
     expect(result.success || result.warnings?.length).toBeTruthy();
-    if (result.warnings) {
-      expect(result.warnings.some(w => w.includes('version'))).toBe(true);
-  });
-  test('file name sanitization in save process', async () => {
-  const metadata = createDefaultMetadata('Project/with\\invalid:chars*', projectAuthor);
+    if (result.warnings) { expect(result.warnings.some(w => w.includes('version'))).toBe(true) });
+  test('file name sanitization in save process', async () => { const metadata = createDefaultMetadata('Project/with\\invalid:chars*', projectAuthor);
   const settings = createDefaultSettings();
   const saveResult = await ProjectManager.saveProjectToDevice(;);
-  sampleGraph,
+  sampleGraph
   {
-  name: 'Project/with\\invalid:chars*',
-  fileName: 'Project/with\\invalid:chars*.psg',
-  author: projectAuthor,
-}
+  name: 'Project/with\\invalid:chars*'
+  fileName: 'Project/with\\invalid:chars*.psg'
+  author: projectAuthor }
+
       settings
     );
     expect(saveResult.success).toBe(true);
@@ -289,31 +265,28 @@ describe('Project Workflow Integration Tests', () => {
     expect(mockAnchor.download).not.toContain('*');
     expect(mockAnchor.download).toContain('.psg');
   });
-  test('storage quota handling for recent projects', () => {
-    // Test storage quota check
+  test('storage quota handling for recent projects', () => { // Test storage quota check
     const quotaResult = RecentProjectsManager.checkStorageQuota();
     expect(quotaResult.available).toBe(true);
     expect(typeof quotaResult.usage).toBe('number');
     // Test with storage error
     mockLocalStorage.setItem.mockImplementationOnce(() => {
-      throw new Error('Quota exceeded');
-    });
+      throw new Error('Quota exceeded') });
     const errorQuotaResult = RecentProjectsManager.checkStorageQuota();
     expect(errorQuotaResult.available).toBe(false);
   });
-  test('thumbnail generation for different graph structures', () => {
-  // Test with empty graph
+  test('thumbnail generation for different graph structures', () => { // Test with empty graph
   const emptyThumbnail = RecentProjectsManager.generateThumbnail([], []);
   expect(emptyThumbnail).toMatch(/^data:image\/svg\+xml;base64,/);
   // Test with nodes but no edges
   const nodesOnlyThumbnail = RecentProjectsManager.generateThumbnail(;);
-  sampleGraph.nodes,
+  sampleGraph.nodes
   []
   );
   expect(nodesOnlyThumbnail).toMatch(/^data:image\/svg\+xml;base64,/);
   // Test with complex graph
   const complexThumbnail = RecentProjectsManager.generateThumbnail(;);
-  sampleGraph.nodes,
+  sampleGraph.nodes }
   sampleGraph.edges
   );
   expect(complexThumbnail).toMatch(/^data:image\/svg\+xml;base64,/);
@@ -326,21 +299,20 @@ describe('Project Workflow Integration Tests', () => {
     // Simulate multiple concurrent save operations
     const savePromises = Array.from({ length: 5 }, (_, i) =>
       ProjectManager.saveProjectToDevice()
-        sampleGraph,
+        sampleGraph
         {
           name: `${projectName} ${i}`}
-},
+
   fileName: `${projectName}-${i}.psg`}
-},
+
   author: projectAuthor;
-  }
+
         settings
     );
     const results = await Promise.all(savePromises);
     // All saves should succeed
-    results.forEach(result => {)
-  expect(result.success).toBe(true);
-    });
+    results.forEach(result => { )
+  expect(result.success).toBe(true) });
     // Should create separate download operations
     expect(mockCreateElement).toHaveBeenCalledTimes(5);
     expect(mockClick).toHaveBeenCalledTimes(5);

@@ -8,6 +8,7 @@ import React from 'react';
 import { type VFXTeamMember } from './VFXChecklistSystem';
 
 }
+}
 export interface VFXChecklistDemoProps {
     title?: string;
     showTemplates?: boolean;
@@ -19,4 +20,5 @@ export interface VFXChecklistDemoProps {
 export declare const VFXChecklistDemo: React.FC<VFXChecklistDemoProps>;
 export default VFXChecklistDemo;
 //# sourceMappingURL=VFXChecklistDemo.d.ts.map
+}
 }

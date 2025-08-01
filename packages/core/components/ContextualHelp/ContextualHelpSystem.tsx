@@ -25,27 +25,26 @@ export type HelpContentType =
   | 'troubleshooting'
   | 'advanced-features';
 
-}
-export interface HelpContent {
-  id: string;
+
+export interface HelpContent { id: string;
   type: HelpContentType;
   title: string;
   content: string;
-  filmTerminology?: string; // Director-friendly explanation,
+  filmTerminology?: string; // Director-friendly explanation;
   actionItems?: string;
   relatedFeatures?: string;
   level: 'beginner' | 'intermediate' | 'advanced' | 'professional';
-  context: {
+  context: { }
   triggerElements?: string;
   nodeTypes?: string;
   actions?: string;
   conditions?: Record<string, any>;
-}
+
+
 };
-}
-}
-export interface ContextualHelpProps {
-  // Graph state for context awareness
+
+
+export interface ContextualHelpProps { // Graph state for context awareness
   nodes: Node;
   edges: Edge;
   selectedNodeId?: string;
@@ -58,19 +57,18 @@ export interface ContextualHelpProps {
   showProgressiveHints?: boolean;
   // Callbacks
   onHelpContentViewed?: (contentId: string) => void;
-  onUserLevelChange?: (level: string) => void;
-}
-}
-export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
-  nodes,
-  edges,
-  selectedNodeId,
-  selectedEdgeId,
-  userLevel = 'beginner',
-  enabled = true,
-  autoTrigger = true,
-  showProgressiveHints = true,
-  onHelpContentViewed,
+  onUserLevelChange?: (level: string) => void }
+
+export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({ )
+  nodes
+  edges
+  selectedNodeId
+  selectedEdgeId
+  userLevel = 'beginner'
+  enabled = true
+  autoTrigger = true
+  showProgressiveHints = true
+  onHelpContentViewed }
   onUserLevelChange
 }) => {
   // State management
@@ -84,112 +82,105 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
   const helpTooltipRef = useRef<HTMLDivElement>(null);
   // Comprehensive help content database
   const helpDatabase: HelpContent = useMemo(() => [
-    {
-      id: 'getting-started-canvas',
-      type: 'getting-started',
-      title: 'Welcome to the Director\'s Canvas',
-      content: 'This is your creative workspace where you\'ll build narrative flows. Think of it like a storyboard editor - each node represents a scene or creative decision in your story.',
-      filmTerminology: 'Like setting up shots in pre-production, you\'ll arrange story elements visually.',
-      actionItems: [,
-        'Drag nodes from the palette to create story elements',
-        'Connect nodes to establish narrative flow',
+    { id: 'getting-started-canvas'
+      type: 'getting-started'
+      title: 'Welcome to the Director\'s Canvas'
+      content: 'This is your creative workspace where you\'ll build narrative flows. Think of it like a storyboard editor - each node represents a scene or creative decision in your story.'
+      filmTerminology: 'Like setting up shots in pre-production, you\'ll arrange story elements visually.'
+      actionItems: [
+        'Drag nodes from the palette to create story elements'
+        'Connect nodes to establish narrative flow'
         'Use the preview system to see your story in action'
-      ],
-      level: 'beginner',
-      context: {
+      ]
+      level: 'beginner'
+      context: { }
   conditions: { nodeCount: 0, edgeCount: 0 }
-  }
-    {
-  id: 'node-creation-basics',
-  type: 'node-creation',
-  title: 'Creating Story Elements',
-  content: 'Nodes are the building blocks of your narrative. Each type serves a specific purpose in your creative workflow.',
-  filmTerminology: 'Think of nodes as different shot types - wide shots (Output), close-ups (WeightedChoice), and transitions (Concat).',
-  actionItems: [,
-  'Choose the right node type for your creative intent',
-  'Configure variations to explore creative possibilities',
+
+    { id: 'node-creation-basics'
+  type: 'node-creation'
+  title: 'Creating Story Elements'
+  content: 'Nodes are the building blocks of your narrative. Each type serves a specific purpose in your creative workflow.'
+  filmTerminology: 'Think of nodes as different shot types - wide shots (Output), close-ups (WeightedChoice), and transitions (Concat).'
+  actionItems: [
+  'Choose the right node type for your creative intent'
+  'Configure variations to explore creative possibilities'
   'Connect nodes to build narrative flow'
-  ],
-  relatedFeatures: ['Palette', 'Inspector Panel', 'Node Configuration'],
-  level: 'beginner',
+  ]
+  relatedFeatures: ['Palette', 'Inspector Panel', 'Node Configuration']
+  level: 'beginner'
   context: {
-  triggerElements: ['palette-item'],
-  actions: ['node-drag', 'node-drop'],
-}
-    {
-  id: 'weighted-choice-direction',
-  type: 'professional-workflow',
-  title: 'Directing Creative Choices',
-  content: 'WeightedChoice nodes let you control the probability of different creative options. Higher weights make options more likely to appear.',
-  filmTerminology: 'Like calling different takes during a shoot - you can favor certain performance directions while keeping alternatives available.',
-  actionItems: [,
-  'Adjust weights to favor preferred creative directions',
-  'Use multiple variations to explore alternatives',
+  triggerElements: ['palette-item']
+  actions: ['node-drag', 'node-drop'] }
+
+    { id: 'weighted-choice-direction'
+  type: 'professional-workflow'
+  title: 'Directing Creative Choices'
+  content: 'WeightedChoice nodes let you control the probability of different creative options. Higher weights make options more likely to appear.'
+  filmTerminology: 'Like calling different takes during a shoot - you can favor certain performance directions while keeping alternatives available.'
+  actionItems: [
+  'Adjust weights to favor preferred creative directions'
+  'Use multiple variations to explore alternatives'
   'Preview different weight combinations to find the right balance'
-  ],
-  level: 'intermediate',
+  ]
+  level: 'intermediate'
   context: {
-  nodeTypes: ['WeightedChoice'],
-  triggerElements: ['weight-slider', 'variation-input'],
-}
-    {
-  id: 'connection-flow-narrative',
-  type: 'connection-flow',
-  title: 'Building Narrative Connections',
-  content: 'Connections between nodes determine how your story flows. Each connection represents a creative pathway through your narrative.',
-  filmTerminology: 'Like editing decisions - each connection is a cut that moves the audience from one moment to the next.',
-  actionItems: [,
-  'Connect output ports to input ports to establish flow',
-  'Create branching paths for multiple story possibilities',
+  nodeTypes: ['WeightedChoice']
+  triggerElements: ['weight-slider', 'variation-input'] }
+
+    { id: 'connection-flow-narrative'
+  type: 'connection-flow'
+  title: 'Building Narrative Connections'
+  content: 'Connections between nodes determine how your story flows. Each connection represents a creative pathway through your narrative.'
+  filmTerminology: 'Like editing decisions - each connection is a cut that moves the audience from one moment to the next.'
+  actionItems: [
+  'Connect output ports to input ports to establish flow'
+  'Create branching paths for multiple story possibilities'
   'Use the preview to see how connections affect the final result'
-  ],
-  level: 'beginner',
+  ]
+  level: 'beginner'
   context: {
-  actions: ['connection-start', 'connection-complete'],
-}
-    {
-  id: 'preview-system-dailies',
-  type: 'preview-generation',
-  title: 'Reviewing Your Creative Work',
-  content: 'The preview system shows you how your narrative choices play out. Generate multiple versions to explore creative possibilities.',
-  filmTerminology: 'Like watching dailies - you can review different takes and see which creative choices work best.',
-  actionItems: [,
-  'Use the Director Preview Toolbar for real-time feedback',
-  'Generate multiple variants to compare options',
+  actions: ['connection-start', 'connection-complete'] }
+
+    { id: 'preview-system-dailies'
+  type: 'preview-generation'
+  title: 'Reviewing Your Creative Work'
+  content: 'The preview system shows you how your narrative choices play out. Generate multiple versions to explore creative possibilities.'
+  filmTerminology: 'Like watching dailies - you can review different takes and see which creative choices work best.'
+  actionItems: [
+  'Use the Director Preview Toolbar for real-time feedback'
+  'Generate multiple variants to compare options'
   'Rate and save the versions you like best'
-  ],
-  relatedFeatures: ['Real-time Preview', 'Enhanced Preview Modal', 'Variance Analysis'],
-  level: 'intermediate',
+  ]
+  relatedFeatures: ['Real-time Preview', 'Enhanced Preview Modal', 'Variance Analysis']
+  level: 'intermediate'
   context: {
-  triggerElements: ['preview-button', 'director-toolbar'],
-}
-    {
-  id: 'advanced-conditional-direction',
-  type: 'advanced-features',
-  title: 'Advanced Creative Direction',
-  content: 'Conditional nodes let you create smart creative decisions based on story context. Use them to build adaptive narratives.',
-  filmTerminology: 'Like having different shot plans for different scenarios - the system adapts based on creative context.',
-  actionItems: [,
-  'Define conditions that trigger different creative paths',
-  'Use variables to carry story context between scenes',
+  triggerElements: ['preview-button', 'director-toolbar'] }
+
+    { id: 'advanced-conditional-direction'
+  type: 'advanced-features'
+  title: 'Advanced Creative Direction'
+  content: 'Conditional nodes let you create smart creative decisions based on story context. Use them to build adaptive narratives.'
+  filmTerminology: 'Like having different shot plans for different scenarios - the system adapts based on creative context.'
+  actionItems: [
+  'Define conditions that trigger different creative paths'
+  'Use variables to carry story context between scenes'
   'Test different scenarios to ensure robust storytelling'
-  ],
-  level: 'advanced',
+  ]
+  level: 'advanced'
   context: {
-  nodeTypes: ['Conditional', 'GetVariable', 'SetVariable'],
-}
-    {
-  id: 'professional-export-pipeline',
-  type: 'professional-workflow',
-  title: 'Pipeline Integration',
-  content: 'Export your creative work in formats that integrate with professional VFX and post-production pipelines.',
-  filmTerminology: 'Like delivering final cuts to post - structured exports that fit your production pipeline.',
-  actionItems: [,
-  'Use structured export formats for VFX integration',
-  'Include metadata for post-production tracking',
+  nodeTypes: ['Conditional', 'GetVariable', 'SetVariable'] }
+
+    { id: 'professional-export-pipeline'
+  type: 'professional-workflow'
+  title: 'Pipeline Integration'
+  content: 'Export your creative work in formats that integrate with professional VFX and post-production pipelines.'
+  filmTerminology: 'Like delivering final cuts to post - structured exports that fit your production pipeline.'
+  actionItems: [
+  'Use structured export formats for VFX integration'
+  'Include metadata for post-production tracking'
   'Maintain version control for collaborative workflows'
-  ],
-  level: 'professional',
+  ]
+  level: 'professional'
   context: {
   triggerElements: ['export-button', 'save-project']], []);
   // Calculate current context for smart help suggestions
@@ -200,18 +191,17 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
   const hasWeightedChoices = nodes.some(n => n.type === 'WeightedChoice');
   const hasConditionals = nodes.some(n => n.type === 'Conditional');
   return {
-  nodeCount,
-  edgeCount,
-  selectedNodeType,
-  hasWeightedChoices,
-  hasConditionals,
-  isEmpty: nodeCount === 0 && edgeCount === 0,
-  isComplex: nodeCount > 5 || edgeCount > 8,
+  nodeCount
+  edgeCount
+  selectedNodeType
+  hasWeightedChoices
+  hasConditionals
+  isEmpty: nodeCount === 0 && edgeCount === 0
+  isComplex: nodeCount > 5 || edgeCount > 8 }
 };
   }, [nodes, edges, selectedNodeId]);
   // Find relevant help content based on current context
-  const getRelevantHelp = useCallback((context: unknown): HelpContent => {
-    return helpDatabase.filter(help => {)
+  const getRelevantHelp = useCallback((context: unknown): HelpContent => { return helpDatabase.filter(help => {)
   // Level filtering
       const levelOrder = ['beginner', 'intermediate', 'advanced', 'professional'];
       const userLevelIndex = levelOrder.indexOf(userLevel);
@@ -225,20 +215,17 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
       // Node type matching
       if (help.context.nodeTypes && context.selectedNodeType) {
         return help.context.nodeTypes.includes(context.selectedNodeType);
-      return true;
-    });
+      return true });
   }, [helpDatabase, userLevel]);
   // Auto-trigger contextual help
-  useEffect(() => {
-    if (!enabled || !autoTrigger) return;
+  useEffect(() => { if (!enabled || !autoTrigger) return;
     const relevantHelp = getRelevantHelp(currentContext);
     const unviewedHelp = relevantHelp.filter(help => !viewedContent.has(help.id));
     if (unviewedHelp.length > 0) {
       // Prioritize by user level and context relevance
       const prioritized = unviewedHelp.sort((a, b) => {
         const levelOrder = ['beginner', 'intermediate', 'advanced', 'professional'];
-        return levelOrder.indexOf(a.level) - levelOrder.indexOf(b.level);
-      });
+        return levelOrder.indexOf(a.level) - levelOrder.indexOf(b.level) });
       // Show the most relevant help with a slight delay
       const timer = setTimeout(() => {
         setActiveHelp(prioritized[0]);
@@ -247,44 +234,34 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
       return () => clearTimeout(timer);
   }, [enabled, autoTrigger, currentContext, getRelevantHelp, viewedContent]);
   // Handle help content viewed
-  const markAsViewed = useCallback((contentId: string) => {
-    setViewedContent(prev => new Set([...prev, contentId]));
-    onHelpContentViewed?.(contentId);
-  }, [onHelpContentViewed]);
+  const markAsViewed = useCallback((contentId: string) => { setViewedContent(prev => new Set([...prev, contentId]));
+    onHelpContentViewed?.(contentId) }, [onHelpContentViewed]);
   // Close help
-  const closeHelp = useCallback(() => {
-    if (activeHelp) {
+  const closeHelp = useCallback(() => { if (activeHelp) {
       markAsViewed(activeHelp.id);
     setActiveHelp(null);
-    setIsExpanded(false);
-  }, [activeHelp, markAsViewed]);
+    setIsExpanded(false) }, [activeHelp, markAsViewed]);
   // Start onboarding tour
-  const startTour = useCallback((tourType: string) => {
-    setCurrentTour(tourType);
+  const startTour = useCallback((tourType: string) => { setCurrentTour(tourType);
     setTourStep(0);
     // Get tour content
     const tourContent = helpDatabase.filter(help => ;);
       help.type === tourType || help.level === 'beginner'
     );
     if (tourContent.length > 0) {
-      setActiveHelp(tourContent[0]);
-  }, [helpDatabase]);
+      setActiveHelp(tourContent[0]) }, [helpDatabase]);
   // Next tour step
-  const nextTourStep = useCallback(() => {
-    if (!currentTour) return;
+  const nextTourStep = useCallback(() => { if (!currentTour) return;
     const tourContent = helpDatabase.filter(help => ;);
       help.type === currentTour || help.level === 'beginner'
     );
     const nextStep = tourStep + 1;
     if (nextStep < tourContent.length) {
       setTourStep(nextStep);
-      setActiveHelp(tourContent[nextStep]);
-    } else {
-      // Tour complete
+      setActiveHelp(tourContent[nextStep]) } else { // Tour complete
       setCurrentTour(null);
       setTourStep(0);
-      closeHelp();
-  }, [currentTour, tourStep, helpDatabase, closeHelp]);
+      closeHelp() }, [currentTour, tourStep, helpDatabase, closeHelp]);
   if (!enabled) return null;
   return;
     <div className="contextual-help-system">
@@ -309,14 +286,14 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
         <div 
           ref={helpTooltipRef}
           className={`help-tooltip ${isExpanded ? 'expanded' : 'compact'}`}
-          style={{
-            position: 'fixed',
+          style={ {
+            position: 'fixed' }
             left: `${helpPosition.x}px`}
-},
+
   top: `${helpPosition.y}px`}
-},
+
   zIndex: 10000;
-  }}
+
         >
           {/* Help Header */}
           <div className="help-header">
@@ -404,7 +381,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
           </button>
         </div>
       )}
-      <style>{`
+      <style>{ `
         .contextual-help-system {
           position: relative;
         .help-launcher {
@@ -418,20 +395,20 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
         .help-button {
           background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
           border: none;
-          border-radius: 50%;
+          border-radius: 50%
   width: 40px;
           height: 40px;
   cursor: pointer;
           transition: all 0.2s ease;
           box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
-        .help-button:hover {,
+        .help-button:hover {
   transform: scale(1.1);
           box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
         .help-icon {
           font-size: 18px;
         .progressive-hint {
           background: rgba(0, 0, 0, 0.8);
-          color: #fff;
+          color: #fff }
   padding: 8px 12px;
           border-radius: 6px;
           font-size: 12px;
@@ -439,11 +416,9 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
           align-items: center;
   gap: 6px;
           animation: fadeInPulse 2s ease-in-out;
-        @keyframes fadeInPulse {
-          0%, 100% { opacity: 0.8; }
-          50% { opacity: 1; }
-        .help-tooltip {
-          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        @keyframes fadeInPulse { 0%, 100% { opacity: 0.8 }
+          50% { opacity: 1 }
+        .help-tooltip { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
           border: 1px solid #ffd700;
           border-radius: 8px;
   color: #fff;
@@ -485,14 +460,14 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
         .expand-button, .close-button {
           background: none;
   border: none;
-          color: #aaa;
+          color: #aaa
   cursor: pointer;
           padding: 4px;
           border-radius: 3px;
   transition: color 0.2s ease;
-        .expand-button:hover, .close-button:hover {,
-  color: #fff;
-          background: rgba(255, 255, 255, 0.1);
+        .expand-button:hover, .close-button:hover {
+  color: #fff
+  background: rgba(255, 255, 255, 0.1);
         .help-content {
           padding: 16px;
         .help-description {
@@ -502,7 +477,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
   color: #ddd;
         .film-terminology {
           background: rgba(255, 215, 0, 0.1);
-          border-left: 3px solid #ffd700;
+          border-left: 3px solid #ffd700
   padding: 8px 12px;
           margin: 12px 0;
           border-radius: 0 4px 4px 0;
@@ -540,7 +515,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
           flex-wrap: wrap;
   gap: 4px;
         .feature-tag {
-          background: #444;
+          background: #444
   color: #fff;
           padding: 2px 6px;
           border-radius: 3px;
@@ -550,13 +525,13 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
           justify-content: space-between;
           align-items: center;
   padding: 12px 16px;
-          border-top: 1px solid #444;
+          border-top: 1px solid #444
   background: rgba(255, 215, 0, 0.1);
         .tour-progress {
           font-size: 11px;
   color: #ffd700;
         .tour-next {
-          background: #ffd700;
+          background: #ffd700
   color: #000;
           border: none;
   padding: 4px 12px;
@@ -571,7 +546,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
           z-index: 9999;
         .start-tour-btn {
           background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-          color: #000;
+          color: #000
   border: none;
           padding: 12px 20px;
           border-radius: 6px;
@@ -579,14 +554,13 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
           font-weight: 600;
           font-size: 13px;
           box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-          transition: all 0.2s ease;
+          transition: all 0.2s ease
   animation: tourPulse 3s ease-in-out infinite;
-        .start-tour-btn:hover {,
+        .start-tour-btn:hover { }
   transform: translateY(-2px);
           box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
-        @keyframes tourPulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05); }
+        @keyframes tourPulse { 0%, 100% { transform: scale(1) }
+          50% { transform: scale(1.05) }
       `}</style>
     </div>
   );

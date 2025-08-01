@@ -1,6 +1,7 @@
 import React from 'react';
 
 }
+}
 export interface CollapsibleSectionProps {
     title: string;
     collapsed: boolean;
@@ -9,4 +10,5 @@ export interface CollapsibleSectionProps {
 
 export declare const CollapsibleSection: React.FC<CollapsibleSectionProps>;
 //# sourceMappingURL=CollapsibleSection.d.ts.map
+}
 }

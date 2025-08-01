@@ -16,7 +16,7 @@ import {
   ComplianceReport,
   AuditContext,
   AuditConfiguration
-} from '../database/audit-models';
+ from '../database/audit-models';
 
 export class AuditService extends EventEmitter {
   private eventQueue: CreateAuditEventRequest[] = [];
@@ -27,7 +27,7 @@ export class AuditService extends EventEmitter {
   constructor(private auditDAO: AuditDAO) {
     super();
     this.initializeService();
-  }
+
 
   private async initializeService(): Promise<void> {
 
@@ -41,7 +41,7 @@ export class AuditService extends EventEmitter {
     this.on('configurationChanged', () => {
       this.loadConfiguration();
     });
-  }
+
 
   private async loadConfiguration(): Promise<void> {
 
@@ -62,7 +62,7 @@ export class AuditService extends EventEmitter {
           [AuditCategory.SYSTEM_CONFIGURATION]: 1095, // 3 years
           [AuditCategory.PERFORMANCE]: 90, // 3 months
           [AuditCategory.ERROR]: 365 // 1 year
-  }
+
         archiveAfterDays: 365,
         deleteAfterDays: 2555,
         enableIntegrityChecking: true,
@@ -79,22 +79,22 @@ export class AuditService extends EventEmitter {
         createdAt: new Date(),
         updatedAt: new Date()
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to load audit configuration:', error);
       // Use default configuration if loading fails
-    }
-  }
+
+
 
   private startFlushTimer(): void {
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
-    }
+
     
     const interval = (this.config?.flushInterval || 30) * 1000;
     this.flushTimer = setInterval(() => {
       this.flushEventQueue();
     }, interval);
-  }
+
 
   // Public API methods
 
@@ -106,12 +106,12 @@ export class AuditService extends EventEmitter {
     // Check if event type is enabled
     if (!this.isEventTypeEnabled(request.eventType)) {
       return;
-    }
+
 
     // Check minimum severity
     if (!this.meetsSeverityThreshold(request.severity)) {
       return;
-    }
+
 
     // Add to queue for batch processing
     this.eventQueue.push(request);
@@ -119,13 +119,13 @@ export class AuditService extends EventEmitter {
     // Check if we need to flush immediately
     if (this.shouldFlushImmediately(request)) {
       await this.flushEventQueue();
-    } else if (this.eventQueue.length >= (this.config?.batchSize || 100)) {
+ else if (this.eventQueue.length >= (this.config?.batchSize || 100)) {
       await this.flushEventQueue();
-    }
+
 
     // Emit real-time event for immediate processing (e.g., alerts)
     this.emit('auditEvent', { request, context });
-  }
+
 
   /**
    * Log feature toggle events
@@ -146,10 +146,10 @@ export class AuditService extends EventEmitter {
       metadata: {
         toggleType: toggleData.type,
         claudeImpact: toggleData.claudeImpact
-  }
+
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
-  }
+
 
   async logToggleUpdated(
     toggleId: string,
@@ -173,10 +173,10 @@ export class AuditService extends EventEmitter {
       metadata: {
         toggleType: afterData.type,
         claudeImpact: afterData.claudeImpact
-  }
+
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
-  }
+
 
   async logToggleEnabled(toggleId: string, toggleName: string, context: AuditContext): Promise<void> {
 
@@ -193,7 +193,7 @@ export class AuditService extends EventEmitter {
       afterValue: { enabled: true },
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
-  }
+
 
   async logToggleDisabled(toggleId: string, toggleName: string, context: AuditContext): Promise<void> {
 
@@ -210,7 +210,7 @@ export class AuditService extends EventEmitter {
       afterValue: { enabled: false },
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
-  }
+
 
   /**
    * Log schedule events
@@ -232,10 +232,10 @@ export class AuditService extends EventEmitter {
         scheduleType: scheduleData.type,
         scheduleAction: scheduleData.action,
         toggleId: scheduleData.toggleId
-  }
+
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
-  }
+
 
   async logScheduleExecuted(
     scheduleId: string,
@@ -263,11 +263,11 @@ export class AuditService extends EventEmitter {
         duration: execution.duration,
         affectedUsers: execution.affectedUsers,
         triggeredBy: execution.triggeredBy
-  }
+
       error: execution.error,
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
-  }
+
 
   /**
    * Log authentication events
@@ -299,14 +299,14 @@ export class AuditService extends EventEmitter {
       metadata: {
         loginMethod: context.metadata?.loginMethod || 'unknown',
         deviceType: context.metadata?.deviceType || 'unknown'
-  }
+
       error: error ? {
         code: error.code || 'LOGIN_FAILED',
         message: error.message || 'Login failed'
-      } : undefined,
+ : undefined,
       complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.GDPR]
     }, context);
-  }
+
 
   async logUserLogout(userId: string, userEmail: string, context: AuditContext): Promise<void> {
 
@@ -322,7 +322,7 @@ export class AuditService extends EventEmitter {
       outcome: 'success',
       complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.GDPR]
     }, context);
-  }
+
 
   /**
    * Log access control events
@@ -342,10 +342,10 @@ export class AuditService extends EventEmitter {
       metadata: {
         permission,
         resource
-  }
+
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
-  }
+
 
   async logAccessDenied(
     userId: string,
@@ -369,10 +369,10 @@ export class AuditService extends EventEmitter {
         permission,
         resource,
         reason: reason || 'insufficient_permissions'
-  }
+
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
-  }
+
 
   /**
    * Log security events
@@ -396,10 +396,10 @@ export class AuditService extends EventEmitter {
         ...metadata,
         detectionTime: new Date().toISOString(),
         riskLevel: 'high'
-  }
+
       complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.ISO27001]
     }, context);
-  }
+
 
   async logSecurityBreach(
     description: string,
@@ -421,13 +421,13 @@ export class AuditService extends EventEmitter {
         detectionTime: new Date().toISOString(),
         riskLevel: 'critical',
         requiresImmedateAction: true
-  }
+
       complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.ISO27001]
     }, context);
 
     // Emit immediate alert for critical security events
     this.emit('criticalSecurityEvent', { description, context, metadata });
-  }
+
 
   /**
    * Log API events
@@ -459,9 +459,9 @@ export class AuditService extends EventEmitter {
         statusCode,
         duration,
         responseTime: duration
-      }
+
     }, context);
-  }
+
 
   /**
    * Query audit events
@@ -469,7 +469,7 @@ export class AuditService extends EventEmitter {
   async queryEvents(query: AuditEventQuery): Promise<AuditEventResponse> {
 
     return this.auditDAO.queryAuditEvents(query);
-  }
+
 
   /**
    * Get audit statistics
@@ -477,7 +477,7 @@ export class AuditService extends EventEmitter {
   async getStatistics(startDate?: Date, endDate?: Date): Promise<AuditStatistics> {
 
     return this.auditDAO.getAuditStatistics(startDate, endDate);
-  }
+
 
   /**
    * Generate compliance report
@@ -488,7 +488,7 @@ export class AuditService extends EventEmitter {
   ): Promise<ComplianceReport> {
 
     return this.auditDAO.createComplianceReport(request, generatedBy);
-  }
+
 
   /**
    * Create audit context from request
@@ -510,7 +510,7 @@ export class AuditService extends EventEmitter {
         url: req.url,
         timestamp: new Date().toISOString(}
     };
-  }
+
 
   // Private helper methods
 
@@ -519,7 +519,7 @@ export class AuditService extends EventEmitter {
     
     return this.config.enabledEventTypes.includes(eventType) && 
            !this.config.excludedEventTypes.includes(eventType);
-  }
+
 
   private meetsSeverityThreshold(severity: AuditSeverity): boolean {
     if (!this.config) return true;
@@ -532,19 +532,19 @@ export class AuditService extends EventEmitter {
     };
     
     return severityLevels[severity] >= severityLevels[this.config.minimumSeverity];
-  }
+
 
   private shouldFlushImmediately(request: CreateAuditEventRequest): boolean {
     // Flush immediately for critical events or security events
     return request.severity === AuditSeverity.CRITICAL || 
            request.category === AuditCategory.SECURITY;
-  }
+
 
   private async flushEventQueue(): Promise<void> {
 
     if (this.isProcessing || this.eventQueue.length === 0) {
       return;
-    }
+
 
     this.isProcessing = true;
     const eventsToProcess = [...this.eventQueue];
@@ -556,15 +556,15 @@ export class AuditService extends EventEmitter {
       for (let i = 0; i < eventsToProcess.length; i += batchSize) {
         const batch = eventsToProcess.slice(i, i + batchSize);
         await this.processBatch(batch);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to process audit event batch:', error);
       // Re-queue failed events
       this.eventQueue.unshift(...eventsToProcess);
-    } finally {
+ finally {
       this.isProcessing = false;
-    }
-  }
+
+
 
   private async processBatch(events: CreateAuditEventRequest[]): Promise<void> {
 
@@ -577,12 +577,12 @@ export class AuditService extends EventEmitter {
         };
         
         await this.auditDAO.createAuditEvent(event, context);
-      } catch (error) {
+ catch (error) {
         console.error('Failed to create audit event:', error);
         // Continue processing other events
-      }
-    }
-  }
+
+
+
 
   /**
    * Middleware for automatic request logging
@@ -624,7 +624,7 @@ export class AuditService extends EventEmitter {
 
       next();
     };
-  }
+
 
   /**
    * Cleanup and shutdown
@@ -633,9 +633,8 @@ export class AuditService extends EventEmitter {
 
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
-    }
+
     
     // Flush any remaining events
     await this.flushEventQueue();
-  }
-}
+

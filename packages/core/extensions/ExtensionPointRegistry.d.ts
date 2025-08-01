@@ -3,8 +3,7 @@
  * Central registry for all extension points in the Prompt Spaghetti system
  */
 import { z } from 'zod';
-export declare enum ExtensionPointCategory {
-    RUNTIME = "runtime",
+export declare enum ExtensionPointCategory { RUNTIME = "runtime",
     UI = "ui",
     SCHEMA = "schema",
     API = "api",
@@ -33,237 +32,174 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     priority: z.ZodNativeEnum<typeof ExtensionPointPriority>;
     lifecycle: z.ZodNativeEnum<typeof ExtensionPointLifecycle>;
     version: z.ZodString;
-    location: z.ZodObject<{,
+    location: z.ZodObject<{ }
         file: z.ZodString;
         line: z.ZodOptional<z.ZodNumber>;
         function: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        file: string;
+    }, "strip", z.ZodTypeAny, { file: string;
         function?: string | undefined;
-        line?: number | undefined;
-    }, {
-        file: string;
+        line?: number | undefined }, { file: string;
         function?: string | undefined;
-        line?: number | undefined;
-    }>;
-    interfaces: z.ZodArray<z.ZodObject<{,
+        line?: number | undefined }>;
+    interfaces: z.ZodArray<z.ZodObject<{ 
         name: z.ZodString;
         description: z.ZodString;
-        parameters: z.ZodArray<z.ZodObject<{,
+        parameters: z.ZodArray<z.ZodObject<{ }
             name: z.ZodString;
             type: z.ZodString;
             required: z.ZodBoolean;
             description: z.ZodString;
             defaultValue: z.ZodOptional<z.ZodAny>;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
+        }, "strip", z.ZodTypeAny, { name: string;
             description: string;
             type: string;
             required: boolean;
-            defaultValue?: any;
-        }, {
-            name: string;
+            defaultValue?: any }, { name: string;
             description: string;
             type: string;
             required: boolean;
-            defaultValue?: any;
-        }>, "many">;
+            defaultValue?: any }>, "many">;
         returnType: z.ZodString;
         examples: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
+    }, "strip", z.ZodTypeAny, { name: string;
         description: string;
         parameters: {
             name: string;
             description: string;
             type: string;
             required: boolean;
-            defaultValue?: any;
-        }[];
+            defaultValue?: any }[];
         returnType: string;
         examples?: string[] | undefined;
-    }, {
-        name: string;
+    }, { name: string;
         description: string;
         parameters: {
             name: string;
             description: string;
             type: string;
             required: boolean;
-            defaultValue?: any;
-        }[];
+            defaultValue?: any }[];
         returnType: string;
         examples?: string[] | undefined;
     }>, "many">;
     dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    examples: z.ZodOptional<z.ZodArray<z.ZodObject<{,
+    examples: z.ZodOptional<z.ZodArray<z.ZodObject<{ 
         name: z.ZodString;
         description: z.ZodString;
         code: z.ZodString;
-        language: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
+        language: z.ZodString }, "strip", z.ZodTypeAny, { name: string;
         description: string;
         code: string;
-        language: string;
-    }, {
-        name: string;
+        language: string }, { name: string;
         description: string;
         code: string;
-        language: string;
-    }>, "many">>;
-    constraints: z.ZodOptional<z.ZodObject<{,
-        performance: z.ZodOptional<z.ZodObject<{,
+        language: string }>, "many">>;
+    constraints: z.ZodOptional<z.ZodObject<{ 
+        performance: z.ZodOptional<z.ZodObject<{ }
             maxExecutionTime: z.ZodOptional<z.ZodNumber>;
             maxMemoryUsage: z.ZodOptional<z.ZodNumber>;
-        }, "strip", z.ZodTypeAny, {
-            maxExecutionTime?: number | undefined;
-            maxMemoryUsage?: number | undefined;
-        }, {
-            maxExecutionTime?: number | undefined;
-            maxMemoryUsage?: number | undefined;
-        }>>;
-        security: z.ZodOptional<z.ZodObject<{,
+        }, "strip", z.ZodTypeAny, { maxExecutionTime?: number | undefined;
+            maxMemoryUsage?: number | undefined }, { maxExecutionTime?: number | undefined;
+            maxMemoryUsage?: number | undefined }>>;
+        security: z.ZodOptional<z.ZodObject<{ 
             permissions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            sandboxed: z.ZodOptional<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            permissions?: string[] | undefined;
-            sandboxed?: boolean | undefined;
-        }, {
-            permissions?: string[] | undefined;
-            sandboxed?: boolean | undefined;
-        }>>;
-    }, "strip", z.ZodTypeAny, {
-        performance?: {
+            sandboxed: z.ZodOptional<z.ZodBoolean> }, "strip", z.ZodTypeAny, { permissions?: string[] | undefined;
+            sandboxed?: boolean | undefined }, { permissions?: string[] | undefined;
+            sandboxed?: boolean | undefined }>>;
+    }, "strip", z.ZodTypeAny, { performance?: {
             maxExecutionTime?: number | undefined;
-            maxMemoryUsage?: number | undefined;
-        } | undefined;
-        security?: {
-            permissions?: string[] | undefined;
-            sandboxed?: boolean | undefined;
-        } | undefined;
-    }, {
-        performance?: {
+            maxMemoryUsage?: number | undefined } | undefined;
+        security?: { permissions?: string[] | undefined;
+            sandboxed?: boolean | undefined } | undefined;
+    }, { performance?: {
             maxExecutionTime?: number | undefined;
-            maxMemoryUsage?: number | undefined;
-        } | undefined;
-        security?: {
-            permissions?: string[] | undefined;
-            sandboxed?: boolean | undefined;
-        } | undefined;
+            maxMemoryUsage?: number | undefined } | undefined;
+        security?: { permissions?: string[] | undefined;
+            sandboxed?: boolean | undefined } | undefined;
     }>>;
-    metadata: z.ZodObject<{,
+    metadata: z.ZodObject<{ ,
         addedIn: z.ZodString;
         deprecatedIn: z.ZodOptional<z.ZodString>;
         removedIn: z.ZodOptional<z.ZodString>;
-        replacedBy: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        addedIn: string;
+        replacedBy: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
-        replacedBy?: string | undefined;
-    }, {
-        addedIn: string;
+        replacedBy?: string | undefined }, { addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
-        replacedBy?: string | undefined;
-    }>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+        replacedBy?: string | undefined }>;
+}, "strip", z.ZodTypeAny, { id: string;
     name: string;
     description: string;
     priority: ExtensionPointPriority;
     location: {
         file: string;
         function?: string | undefined;
-        line?: number | undefined;
-    };
+        line?: number | undefined };
     category: ExtensionPointCategory;
     version: string;
-    metadata: {
-        addedIn: string;
+    metadata: { addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
-        replacedBy?: string | undefined;
-    };
+        replacedBy?: string | undefined };
     lifecycle: ExtensionPointLifecycle;
-    interfaces: {
-        name: string;
+    interfaces: { name: string;
         description: string;
         parameters: {
             name: string;
             description: string;
             type: string;
             required: boolean;
-            defaultValue?: any;
-        }[];
+            defaultValue?: any }[];
         returnType: string;
         examples?: string[] | undefined;
     }[];
-    examples?: {
-        name: string;
+    examples?: { name: string;
         description: string;
         code: string;
-        language: string;
-    }[] | undefined;
-    constraints?: {
-        performance?: {
+        language: string }[] | undefined;
+    constraints?: { performance?: {
             maxExecutionTime?: number | undefined;
-            maxMemoryUsage?: number | undefined;
-        } | undefined;
-        security?: {
-            permissions?: string[] | undefined;
-            sandboxed?: boolean | undefined;
-        } | undefined;
+            maxMemoryUsage?: number | undefined } | undefined;
+        security?: { permissions?: string[] | undefined;
+            sandboxed?: boolean | undefined } | undefined;
     } | undefined;
     dependencies?: string[] | undefined;
-}, {
-    id: string;
+}, { id: string;
     name: string;
     description: string;
     priority: ExtensionPointPriority;
     location: {
         file: string;
         function?: string | undefined;
-        line?: number | undefined;
-    };
+        line?: number | undefined };
     category: ExtensionPointCategory;
     version: string;
-    metadata: {
-        addedIn: string;
+    metadata: { addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
-        replacedBy?: string | undefined;
-    };
+        replacedBy?: string | undefined };
     lifecycle: ExtensionPointLifecycle;
-    interfaces: {
-        name: string;
+    interfaces: { name: string;
         description: string;
         parameters: {
             name: string;
             description: string;
             type: string;
             required: boolean;
-            defaultValue?: any;
-        }[];
+            defaultValue?: any }[];
         returnType: string;
         examples?: string[] | undefined;
     }[];
-    examples?: {
-        name: string;
+    examples?: { name: string;
         description: string;
         code: string;
-        language: string;
-    }[] | undefined;
-    constraints?: {
-        performance?: {
+        language: string }[] | undefined;
+    constraints?: { performance?: {
             maxExecutionTime?: number | undefined;
-            maxMemoryUsage?: number | undefined;
-        } | undefined;
-        security?: {
-            permissions?: string[] | undefined;
-            sandboxed?: boolean | undefined;
-        } | undefined;
+            maxMemoryUsage?: number | undefined } | undefined;
+        security?: { permissions?: string[] | undefined;
+            sandboxed?: boolean | undefined } | undefined;
     } | undefined;
     dependencies?: string[] | undefined;
 }>;
@@ -271,8 +207,7 @@ export type ExtensionPoint = z.infer<typeof ExtensionPointSchema>;
 /**
  * Extension Point Registry - manages all extension points
  */
-export declare class ExtensionPointRegistry {
-    private static instance;
+export declare class ExtensionPointRegistry { private static instance;
     private extensionPoints;
     private categoryIndex;
     private locationIndex;
@@ -317,16 +252,13 @@ export declare class ExtensionPointRegistry {
         total: number;
         byCategory: Record<ExtensionPointCategory, number>;
         byPriority: Record<ExtensionPointPriority, number>;
-        byLifecycle: Record<ExtensionPointLifecycle, number>;
-    };
+        byLifecycle: Record<ExtensionPointLifecycle, number> };
     /**
      * Validate extension point compatibility
      */
-    validateCompatibility(extensionPointId: string, version: string): {
-        compatible: boolean;
+    validateCompatibility(extensionPointId: string, version: string): { compatible: boolean;
         warnings: string[];
-        errors: string[];
-    };
+        errors: string[] };
     /**
      * Initialize the registry with core extension points
      */

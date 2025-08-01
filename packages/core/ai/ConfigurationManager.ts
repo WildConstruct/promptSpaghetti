@@ -7,89 +7,70 @@
 import { ModelConfiguration, AIModelType, AIModelProvider, ModelCapabilities, ModelMetadata } from './BaseAIModel';
 import { ModelRegistration } from './AIModelFactory';
 
-}
-export interface EnvironmentConfig {
-  name: string;
+
+export interface EnvironmentConfig { name: string;
   description: string;
   models: ModelConfiguration;
-  defaults: {
+  defaults: {;
   timeout: number;
   retries: number;
-  rateLimit: {
+  rateLimit: { }
   requestsPerMinute: number;
   tokensPerMinute: number;
-}
+
+
 };
   };
-  features: {
+  features: { ,
   enableCaching: boolean;
   enableLoadBalancing: boolean;
   enableHealthChecks: boolean;
-  enableMetrics: boolean;
-};
-}
-}
-export interface ConfigurationSchema {
-  version: string;
+  enableMetrics: boolean };
+
+
+export interface ConfigurationSchema { version: string;
   environments: Record<string, EnvironmentConfig>;
   modelTemplates: Record<string, Partial<ModelConfiguration>>;
   providerDefaults: Record<AIModelProvider, Partial<ModelConfiguration>>;
-  validationRules: ValidationRule;
-}
-}
-}
-export interface ValidationRule {
-  id: string;
+  validationRules: ValidationRule }
+
+
+
+export interface ValidationRule { id: string;
   name: string;
   description: string;
-  validate: (config: ModelConfiguration) => ValidationResult;
-}
-}
-}
-export interface ValidationResult {
-  valid: boolean;
+  validate: (config: ModelConfiguration) => ValidationResult }
+
+
+
+export interface ValidationResult { valid: boolean;
   errors: string;
   warnings: string;
-  suggestions: string;
-}
-}
-}
-export interface ConfigurationUpdate {
-  path: string; // JSONPath to the configuration field,
+  suggestions: string }
+
+
+
+export interface ConfigurationUpdate { path: string; // JSONPath to the configuration field }
   value: unknown;
   environment?: string;
   modelId?: string;
   timestamp: Date;
   reason?: string;
-}
-}
-}
-export interface ConfigurationHistory {
-  updates: ConfigurationUpdate;
-  snapshots: Array<{
+
+
+
+
+export interface ConfigurationHistory { updates: ConfigurationUpdate;
+  snapshots: Array<{ }
   timestamp: Date;
   config: ConfigurationSchema;
   version: string;
-}
-}>;
-}
-export class ConfigurationValidator {
-  private rules: ValidationRule = [];
-  constructor() {
-  this._initializeDefaultRules();
-  addRule(rule: ValidationRule): void {,
-  this.rules.push(rule);
-  removeRule(ruleId: string): void {,
-  this.rules = this.rules.filter(rule => rule.id !== ruleId);
-  validate(config: ModelConfiguration): ValidationResult {,
-  const result: ValidationResult = {,
-  valid: true,
-  errors: [],
-  warnings: [],
-  suggestions: [],
-};
-    for (const rule of this.rules) {
-  const ruleResult = rule.validate(config);
+
+
+>;
+
+export class ConfigurationValidator {};
+    for (const rule of this.rules) { const ruleResult = rule.validate(config);
   result.errors.push(...ruleResult.errors);
   result.warnings.push(...ruleResult.warnings);
   result.suggestions.push(...ruleResult.suggestions);
@@ -101,7 +82,7 @@ export class ConfigurationValidator {
   valid: true,
   errors: [],
   warnings: [],
-  suggestions: [],
+  suggestions: [] }
 };
     // Validate each model in the environment
     for (const modelConfig of envConfig.models) {
@@ -112,8 +93,7 @@ export class ConfigurationValidator {
       result.warnings.push(...modelResult.warnings.map(w => `Model ${modelConfig.id}: ${w}`));}
       result.suggestions.push(...modelResult.suggestions.map(s => `Model ${modelConfig.id}: ${s}`));}
     // Validate environment-specific settings
-    if (envConfig.defaults.timeout < 1000) {
-  result.warnings.push('Timeout less than 1 second may cause failures');
+    if (envConfig.defaults.timeout < 1000) { result.warnings.push('Timeout less than 1 second may cause failures');
   if (envConfig.defaults.rateLimit.requestsPerMinute > 10000) {
   result.warnings.push('Very high rate limit may exceed provider quotas');
   return result;
@@ -132,35 +112,34 @@ export class ConfigurationValidator {
   valid: errors.length === 0,
   errors,
   warnings: [],
-  suggestions: [],
+  suggestions: [] }
 };
     });
     // API key validation
-    this.addRule({)
+    this.addRule({ )
   id: 'api-key-validation',
       name: 'API Key Validation',
       description: 'Validates API key requirements',
-      validate: (config) => {,
+      validate: (config) => { }
         const errors: string = [];
         const warnings: string = [];
         if (config.provider === AIModelProvider.OPENAI || config.provider === AIModelProvider.ANTHROPIC) {
           if (!config.apiKey) {
             errors.push(`API key is required for ${config.provider}`);}
-          } else if (config.apiKey.length < 10) {
-  warnings.push('API key seems too short');
+ else if (config.apiKey.length < 10) { warnings.push('API key seems too short');
   return {
   valid: errors.length === 0,
   errors,
   warnings,
-  suggestions: [],
+  suggestions: [] }
 };
     });
     // Model name validation
-    this.addRule({)
+    this.addRule({ )
   id: 'model-name-validation',
       name: 'Model Name Validation',
       description: 'Validates model names for specific providers',
-      validate: (config) => {,
+      validate: (config) => { }
         const warnings: string = [];
         const suggestions: string = [];
         if (config.provider === AIModelProvider.OPENAI && config.modelName) {
@@ -168,15 +147,14 @@ export class ConfigurationValidator {
           if (!validModels.some(m => config.modelName!.startsWith(m))) {
             warnings.push(`Unknown OpenAI model: ${config.modelName}`);}
             suggestions.push(`Consider using one of: ${validModels.join(', ')}`);}
-        return {
-  valid: true,
+        return { valid: true,
   errors: [],
-  warnings,
+  warnings }
   suggestions
 };
     });
     // Resource limits validation
-    this.addRule({)
+    this.addRule({ )
   id: 'resource-limits',
   name: 'Resource Limits',
   description: 'Validates resource limit settings',
@@ -191,7 +169,7 @@ export class ConfigurationValidator {
   return {
   valid: true,
   errors: [],
-  warnings,
+  warnings }
   suggestions
 };
     });
@@ -285,11 +263,11 @@ export class ConfigurationManager {
     envConfig.models[modelIndex] = updatedConfig;
     this._recordUpdate({)
   path: `environments.${env}.models[${modelIndex}]`}
-},
-  value: updates,
-      environment: env,
-      modelId,
-      timestamp: new Date(),
+
+  value: updates
+      environment: env
+      modelId
+      timestamp: new Date()
       reason: `Updated model: ${modelId}`}
     });
   removeModelConfig(modelId: string, environment?: string): void {
@@ -301,11 +279,11 @@ export class ConfigurationManager {
     envConfig.models.splice(modelIndex, 1);
     this._recordUpdate({)
   path: `environments.${env}.models[${modelIndex}]`}
-},
-  value: null,
-      environment: env,
-      modelId,
-      timestamp: new Date(),
+
+  value: null
+      environment: env
+      modelId
+      timestamp: new Date()
       reason: `Removed model: ${modelId}`}
     });
   // Template management
@@ -315,20 +293,19 @@ export class ConfigurationManager {
     this.schema.modelTemplates[templateId] = template;
     this._recordUpdate({)
   path: `modelTemplates.${templateId}`}
-},
-  value: template,
-      timestamp: new Date(),
+
+  value: template
+      timestamp: new Date()
       reason: `Created template: ${templateId}`}
     });
   applyTemplate(modelId: string, templateId: string, overrides: Partial<ModelConfiguration> = {}): ModelConfiguration {
     const template = this.getTemplate(templateId);
     if (!template) {
       throw new Error(`Template not found: ${templateId}`);}
-    return {
-  id: modelId,
-  type: AIModelType.TEXT,
-  provider: AIModelProvider.OPENAI,
-  ...template,
+    return { id: modelId
+  type: AIModelType.TEXT
+  provider: AIModelProvider.OPENAI
+  ...template }
   ...overrides
 };
   // Configuration export/import
@@ -345,18 +322,18 @@ export class ConfigurationManager {
         if (!validation.valid) {
           throw new Error(`Invalid configuration: ${validation.errors.join(', ')}`);}
         this.schema.environments[environment] = config;
-      } else {
+ else {
         // Import entire schema
         this.schema = config;
       this._recordUpdate({)
   path: environment ? `environments.${environment}` : 'root'}
-},
-  value: config,
-        environment,
-        timestamp: new Date(),
+
+  value: config
+        environment
+        timestamp: new Date()
         reason: `Imported configuration${environment ? ` for ${environment}` : ''}`}
       });
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to import configuration: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   // Validation and testing
   validateCurrentConfiguration(): ValidationResult {
@@ -370,165 +347,158 @@ export class ConfigurationManager {
   // Configuration history and versioning
   getHistory(): ConfigurationHistory {
     return { ...this.history };
-  rollback(snapshotIndex?: number): void {
-    const index = snapshotIndex ?? this.history.snapshots.length - 2; // Previous snapshot;
+  rollback(snapshotIndex?: number): void { const index = snapshotIndex ?? this.history.snapshots.length - 2; // Previous snapshot;
     const snapshot = this.history.snapshots[index];
     if (!snapshot) {
       throw new Error('No snapshot available for rollback');
     this.schema = snapshot.config;
     this._recordUpdate({)
-  path: 'root',
-      value: snapshot.config,
-      timestamp: new Date(),
+  path: 'root'
+      value: snapshot.config
+      timestamp: new Date() }
       reason: `Rolled back to snapshot from ${snapshot.timestamp.toISOString()}`}
     });
-  createSnapshot(description: string): void {
-  this._createSnapshot(description);
+  createSnapshot(description: string): void { this._createSnapshot(description);
   // Model registration helpers
-  generateRegistrations(environment?: string): ModelRegistration {,
+  generateRegistrations(environment?: string): ModelRegistration {
   const envConfig = this.getEnvironmentConfig(environment);
   return envConfig.models.map(config => ({)
-  id: config.id,
-  provider: config.provider,
-  modelName: config.modelName || 'default',
+  id: config.id
+  provider: config.provider
+  modelName: config.modelName || 'default'
   config: {
-  apiKey: config.apiKey,
-  endpoint: config.endpoint,
+  apiKey: config.apiKey
+  endpoint: config.endpoint }
   ...config.parameters
-},
-  metadata: config.metadata,
+
+  metadata: config.metadata
       capabilities: config.capabilities;
   }));
   // Private methods
-  private _createDefaultSchema(): ConfigurationSchema {
-  return {
-  version: '1.0.0',
+  private _createDefaultSchema(): ConfigurationSchema { return {
+  version: '1.0.0'
   environments: {
   development: {
-  name: 'Development',
-  description: 'Development environment configuration',
-  models: [],
+  name: 'Development'
+  description: 'Development environment configuration'
+  models: []
   defaults: {
-  timeout: 30000,
-  retries: 3,
+  timeout: 30000
+  retries: 3
   rateLimit: {
-  requestsPerMinute: 100,
-  tokensPerMinute: 10000,
-},
-  features: {
-  enableCaching: true,
-  enableLoadBalancing: false,
-  enableHealthChecks: true,
-  enableMetrics: true,
-},
-  staging: {
-  name: 'Staging',
-  description: 'Staging environment configuration',
-  models: [],
+  requestsPerMinute: 100
+  tokensPerMinute: 10000 }
+
+  features: { 
+  enableCaching: true
+  enableLoadBalancing: false
+  enableHealthChecks: true
+  enableMetrics: true }
+
+  staging: { 
+  name: 'Staging'
+  description: 'Staging environment configuration'
+  models: []
   defaults: {
-  timeout: 30000,
-  retries: 3,
+  timeout: 30000
+  retries: 3
   rateLimit: {
-  requestsPerMinute: 500,
-  tokensPerMinute: 50000,
-},
-  features: {
-  enableCaching: true,
-  enableLoadBalancing: true,
-  enableHealthChecks: true,
-  enableMetrics: true,
-},
-  production: {
-  name: 'Production',
-  description: 'Production environment configuration',
-  models: [],
+  requestsPerMinute: 500
+  tokensPerMinute: 50000 }
+
+  features: { 
+  enableCaching: true
+  enableLoadBalancing: true
+  enableHealthChecks: true
+  enableMetrics: true }
+
+  production: { 
+  name: 'Production'
+  description: 'Production environment configuration'
+  models: []
   defaults: {
-  timeout: 60000,
-  retries: 5,
+  timeout: 60000
+  retries: 5
   rateLimit: {
-  requestsPerMinute: 1000,
-  tokensPerMinute: 100000,
-},
-  features: {
-  enableCaching: true,
-  enableLoadBalancing: true,
-  enableHealthChecks: true,
-  enableMetrics: true,
-},
-  modelTemplates: {
-  'openai-text': {
-  provider: AIModelProvider.OPENAI,
-  type: AIModelType.TEXT,
+  requestsPerMinute: 1000
+  tokensPerMinute: 100000 }
+
+  features: { 
+  enableCaching: true
+  enableLoadBalancing: true
+  enableHealthChecks: true
+  enableMetrics: true }
+
+  modelTemplates: { 'openai-text': {
+  provider: AIModelProvider.OPENAI
+  type: AIModelType.TEXT
   capabilities: {
-  inputTypes: ['text', 'json'],
-  outputTypes: ['text', 'json'],
-  supportsStreaming: true,
-  supportsAsync: true,
-}
-        'anthropic-text': {
-  provider: AIModelProvider.ANTHROPIC,
-  type: AIModelType.TEXT,
+  inputTypes: ['text', 'json']
+  outputTypes: ['text', 'json']
+  supportsStreaming: true
+  supportsAsync: true }
+
+        'anthropic-text': { provider: AIModelProvider.ANTHROPIC
+  type: AIModelType.TEXT
   capabilities: {
-  inputTypes: ['text', 'json', 'image'],
-  outputTypes: ['text', 'json'],
-  supportsStreaming: true,
-  supportsAsync: true,
-}
-        'local-model': {
-  provider: AIModelProvider.LOCAL,
-  type: AIModelType.TEXT,
-  endpoint: 'http://localhost:11434',
+  inputTypes: ['text', 'json', 'image']
+  outputTypes: ['text', 'json']
+  supportsStreaming: true
+  supportsAsync: true }
+
+        'local-model': { provider: AIModelProvider.LOCAL
+  type: AIModelType.TEXT
+  endpoint: 'http://localhost:11434'
   capabilities: {
-  inputTypes: ['text', 'json'],
-  outputTypes: ['text', 'json'],
-  supportsStreaming: true,
-},
+  inputTypes: ['text', 'json']
+  outputTypes: ['text', 'json']
+  supportsStreaming: true }
+
   providerDefaults: {
         [AIModelProvider.OPENAI]: {
           parameters: { temperature: 1, max_tokens: 1000 }
-  }
+
         [AIModelProvider.ANTHROPIC]: {
           parameters: { temperature: 1, max_tokens: 1000 }
-  }
+
         [AIModelProvider.LOCAL]: {
           parameters: { temperature: 0.8, max_tokens: 1000 }
-  }
+
         [AIModelProvider.CUSTOM]: {
           parameters: {}
-  }
+
         [AIModelProvider.HUGGINGFACE]: {
           parameters: { temperature: 0.8 }
-  }
+
         [AIModelProvider.STABILITY_AI]: {
           parameters: {}
-  }
+
         [AIModelProvider.ELEVENLABS]: {
           parameters: {}
-  }
+
         [AIModelProvider.RUNWAYML]: {
           parameters: {}
-  }
+
         [AIModelProvider.MIDJOURNEY]: {
           parameters: {}
-  }
+
         [AIModelProvider.PIKA_LABS]: {
           parameters: {}
-  }
+
         [AIModelProvider.SORA]: {
           parameters: {}
-  },
+
   validationRules: [];
   };
-  private _recordUpdate(update: ConfigurationUpdate): void {
-  this.history.updates.push(update);
+  private _recordUpdate(update: ConfigurationUpdate): void { this.history.updates.push(update);
   // Keep only last 100 updates
   if (this.history.updates.length > 100) {
   this.history.updates = this.history.updates.slice(-100);
-  private _createSnapshot(description: string): void {,
+  private _createSnapshot(description: string): void {
   this.history.snapshots.push({)
-  timestamp: new Date(),
-  config: JSON.parse(JSON.stringify(this.schema)), // Deep copy,
-  version: this.schema.version,
+  timestamp: new Date()
+  config: JSON.parse(JSON.stringify(this.schema)), // Deep copy
+  version: this.schema.version }
 });
     // Keep only last 10 snapshots
     if (this.history.snapshots.length > 10) {

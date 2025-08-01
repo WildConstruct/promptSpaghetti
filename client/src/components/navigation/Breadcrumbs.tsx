@@ -12,12 +12,12 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
 import { useNavigation } from '../../hooks/useNavigation';
 
-}
+
 interface BreadcrumbsProps {
   className?: string;
   showHome?: boolean;
 
-}
+
   customBreadcrumbs?: Array<{ label: string; path?: string }>;
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ )
@@ -45,7 +45,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ )
   padding: '8px 0',
   fontSize: '14px',
   color: '#6b7280',
-}}
+}
     >
       {breadcrumbs.map((breadcrumb, index) => {
         const isLast = index === breadcrumbs.length - 1;
@@ -77,15 +77,15 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ )
   gap: '4px',
   fontSize: 'inherit',
   transition: 'all 0.2s ease',
-}}
+
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#eff6ff';
                   e.currentTarget.style.textDecoration = 'underline';
-                }}
+}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
                   e.currentTarget.style.textDecoration = 'none';
-                }}
+}
               >
                 {isHome && <Home size={14} />}
                 {breadcrumb.label}
@@ -99,7 +99,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ )
   alignItems: 'center',
   gap: '4px',
   padding: '2px 4px',
-}}
+}
               >
                 {isHome && <Home size={14} />}
                 {breadcrumb.label}

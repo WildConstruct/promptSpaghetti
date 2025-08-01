@@ -12,7 +12,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle
-} from '../ui/Card';
+ from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
@@ -30,21 +30,22 @@ import {
   ArrowUpDown,
   Target,
   Wrench
-} from 'lucide-react';
+ from 'lucide-react';
 import { QualityRecommendation } from '../../hooks/useQualityMetrics';
 
 // =============================================================================
 // Quality Recommendations Component
 // =============================================================================
 
-}
+
 export interface QualityRecommendationsProps {
   recommendations: QualityRecommendation;
   onRecommendationAction?: (recommendationId: string, action: 'acknowledge' | 'start' | 'complete' | 'dismiss') => void;
   compact?: boolean;
   className?: string;
-}
-}
+
+
+
 export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({)
   recommendations,
   onRecommendationAction,

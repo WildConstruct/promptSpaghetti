@@ -179,13 +179,15 @@ Promise < VersionSnapshot > {
         throw error;
         // Branch Management
         async;
-        createBranch(name, string);
-        options: {
+        createBranch(name, string),
+            options;
+        {
             description ?  : string;
             branch_type ?  : 'feature' | 'hotfix' | 'experiment';
             parent_branch_id ?  : string;
             base_snapshot_id ?  : string;
-            visibility ?  : 'private' | 'workspace' | 'public';
+            visibility ?  : 'private' | 'workspace' | 'public',
+            ;
         }
         { }
         Promise < Branch > {
@@ -261,8 +263,9 @@ Promise < VersionSnapshot > {
                         console.error('Failed to switch branch:', error);
                         throw error;
                         async;
-                        mergeBranch(sourceBranchId, string);
-                        targetBranchId: string,
+                        mergeBranch(sourceBranchId, string),
+                            targetBranchId;
+                        string,
                             options;
                         {
                             merge_message ?  : string;
@@ -301,8 +304,9 @@ Promise < VersionSnapshot > {
                             throw error;
                             // Change Event Tracking
                             async;
-                            recordChangeEvent(event, {});
-                            event_type: string;
+                            recordChangeEvent(event, {}),
+                                event_type;
+                            string;
                             event_data: any;
                             affected_nodes: string;
                             change_magnitude: number;
@@ -349,8 +353,8 @@ Promise < VersionSnapshot > {
                         console.error('Failed to record change event:', error);
                         throw error;
                         async;
-                        getChangeEvents(filter, {});
-                        start_date ?  : string;
+                        getChangeEvents(filter, {}),
+                            start_date ?  : string;
                         end_date ?  : string;
                         author_id ?  : string;
                         event_types ?  : string;
@@ -382,8 +386,9 @@ Promise < VersionSnapshot > {
                         throw error;
                         // Annotation Management
                         async;
-                        addAnnotation(snapshotId, string);
-                        annotation: {
+                        addAnnotation(snapshotId, string),
+                            annotation;
+                        {
                             annotation_type ?  : 'comment' | 'review' | 'approval' | 'flag';
                             title ?  : string;
                             content_markdown: string;

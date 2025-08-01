@@ -4,23 +4,25 @@
  * Defines all interfaces and types used across the file browser system
  */
 
-}
+
 export interface FileItem {
   id: string;,
-  name: string;
+  name: string;,
   type: 'file' | 'folder';,
   path: string;
   parentPath?: string;
   size?: number;
   lastModified: Date;,
-  createdAt: Date;
+  createdAt: Date;,
   tags: string;
   metadata?: FileMetadata;
   isShared?: boolean;
   permissions?: FilePermissions;
-}
-}
-}
+
+
+
+
+
 export interface FileMetadata {
   nodeCount?: number;
   edgeCount?: number;
@@ -28,17 +30,21 @@ export interface FileMetadata {
   author?: string;
   version?: string;
   thumbnail?: string; // Base64 encoded thumbnail,
-}
-}
-}
+
+
+
+
+
 export interface FilePermissions {
   read: boolean;,
-  write: boolean;
+  write: boolean;,
   delete: boolean;,
   share: boolean;
-}
-}
-}
+
+
+
+
+
 export interface FolderNode extends FileItem {
   type: 'folder';,
   children: FileItem;
@@ -47,34 +53,38 @@ export interface FolderNode extends FileItem {
   childCount: number;
   export interface FileNode extends FileItem {
   type: 'file';,
-  extension: string;
+  extension: string;,
   mimeType: string;
   isSelected?: boolean;
   isPreviewLoaded?: boolean;
   export type TreeNode = FolderNode | FileNode;
   export interface FileBrowserState {
   rootPath: string;,
-  currentPath: string;
+  currentPath: string;,
   selectedItems: string;,
-  expandedFolders: Set<string>;
+  expandedFolders: Set<string>;,
   viewMode: 'tree' | 'list' | 'grid';,
-  sortBy: 'name' | 'date' | 'size' | 'type';
+  sortBy: 'name' | 'date' | 'size' | 'type';,
   sortOrder: 'asc' | 'desc';,
-  searchTerm: string;
+  searchTerm: string;,
   filterTags: string;,
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;
-}
-}
-}
+
+
+
+
+
 export interface ContextMenuOptions {
   x: number;,
-  y: number;
+  y: number;,
   items: ContextMenuItem;
   targetItem?: FileItem;
-}
-}
-}
+
+
+
+
+
 export interface ContextMenuItem {
   id: string;,
   label: string;
@@ -83,52 +93,64 @@ export interface ContextMenuItem {
   separator?: boolean;
   onClick?: () => void;
   submenu?: ContextMenuItem;
-}
-}
-}
+
+
+
+
+
 export interface DragDropData {
   sourceItems: FileItem;,
-  targetPath: string;
+  targetPath: string;,
   operation: 'move' | 'copy';
-}
-}
-}
+
+
+
+
+
 export interface FileOperation {
   id: string;,
-  type: 'create' | 'read' | 'update' | 'delete' | 'move' | 'copy';
+  type: 'create' | 'read' | 'update' | 'delete' | 'move' | 'copy';,
   sourcePath: string;
   targetPath?: string;
   timestamp: Date;,
   status: 'pending' | 'success' | 'error';
   error?: string;
-}
-}
-}
+
+
+
+
+
 export interface FileUploadProgress {
   fileId: string;,
-  filename: string;
+  filename: string;,
   progress: number; // 0-100,
   status: 'uploading' | 'processing' | 'complete' | 'error';
   error?: string;
-}
-}
-}
+
+
+
+
+
 export interface SearchOptions {
   query: string;,
   searchIn: 'name' | 'content' | 'tags' | 'all';
   caseSensitive?: boolean;
   regex?: boolean;
   includeFolders?: boolean;
-}
-}
-}
+
+
+
+
+
 export interface SortOptions {
   field: 'name' | 'date' | 'size' | 'type';,
   order: 'asc' | 'desc';
   // Props interfaces for components
-}
-}
-}
+
+
+
+
+
 export interface FileBrowserProps {
   initialPath?: string;
   onFileSelect?: (file: FileNode) => void;
@@ -139,12 +161,14 @@ export interface FileBrowserProps {
   allowMultiSelect?: boolean;
   height?: number | string;
   className?: string;
-}
-}
-}
+
+
+
+
+
 export interface FolderTreeProps {
   nodes: TreeNode;,
-  selectedItems: string;
+  selectedItems: string;,
   expandedFolders: Set<string>;,
   onSelect: (itemId: string, multiSelect?: boolean) => void;
   onExpand: (folderId: string) => void;,
@@ -152,9 +176,11 @@ export interface FolderTreeProps {
   onContextMenu: (item: FileItem, x: number, y: number) => void;,
   onDrop: (dragData: DragDropData) => void;
   className?: string;
-}
-}
-}
+
+
+
+
+
 export interface FileItemProps {
   item: FileItem;,
   isSelected: boolean;
@@ -168,12 +194,14 @@ export interface FileItemProps {
   onDragOver?: (item: FileItem, e: React.DragEvent) => void;
   onDrop?: (targetItem: FileItem, dragData: DragDropData) => void;
   className?: string;
-}
-}
-}
+
+
+
+
+
 export interface ContextMenuProps {
   options: ContextMenuOptions | null;,
-  onClose: () => void;
+  onClose: () => void;,
   onItemClick: (item: ContextMenuItem) => void;
-}
-}
+
+

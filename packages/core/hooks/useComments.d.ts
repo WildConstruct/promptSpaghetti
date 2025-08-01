@@ -5,8 +5,8 @@
 import { Comment, CreateComment, UpdateComment } from '../types/workspace';
 
 }
-interface UseCommentsOptions {
-    workspaceId: string;
+}
+interface UseCommentsOptions { workspaceId: string;
     targetType: string;
     targetId: string;
     userId: string;
@@ -27,7 +27,7 @@ export declare function useComments(options: UseCommentsOptions): {
     deleteComment: (commentId: string) => Promise<void>;
     loadMore: () => void;
     refresh: () => void;
-    getComment: (commentId: string) => Promise<Comment | null>;
+    getComment: (commentId: string) => Promise<Comment | null> }
 }
 };
 export {};

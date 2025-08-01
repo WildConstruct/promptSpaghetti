@@ -169,8 +169,7 @@ T;
                             prng: seedrandom(String(basicCtx.seed)),
                             executionMeta: {
                                 startTime: performance.now(),
-                                executionId: `exec_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-                            }
+                                executionId: `exec_${Date.now()}_${Math.random().toString(36).substring(2, 9)}` }
                         },
                             nodeExecutionOrder;
                         [],

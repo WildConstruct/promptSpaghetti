@@ -19,8 +19,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface EmbedConfig {
-    embedId: string;
+}
+export interface EmbedConfig { embedId: string;
     trackingEnabled: boolean;
     domain: string;
     allowedDomains: string[];
@@ -31,11 +31,10 @@ export interface EmbedConfig {
     retentionDays: number;
     samplingRate: number;
     batchSize: number;
-    flushInterval: number;
-
+    flushInterval: number }
 }
-export interface AnalyticsEvent {
-    id: string;
+}
+export interface AnalyticsEvent { id: string;
     embedId: string;
     type: EventType;
     category: string;
@@ -49,92 +48,84 @@ export interface AnalyticsEvent {
     userId?: string;
     anonymousId: string;
 
-export type EventType = 'page_view' | 'interaction' | 'performance' | 'error' | 'conversion' | 'engagement' | 'experiment' | 'privacy' | 'custom';
-
+export type EventType = 'page_view' | 'interaction' | 'performance' | 'error' | 'conversion' | 'engagement' | 'experiment' | 'privacy' | 'custom' }
 }
-export interface EventData {
-    properties: Record<string, any>;
+}
+export interface EventData { properties: Record<string, any>;
     metrics: Record<string, number>;
     dimensions: Record<string, string>;
-    custom: Record<string, any>;
-
+    custom: Record<string, any> }
 }
-export interface EventContext {
-    page: PageContext;
+}
+export interface EventContext { page: PageContext;
     user: UserContext;
     device: DeviceContext;
     session: SessionContext;
     embed: EmbedContext;
     referrer: ReferrerContext;
-    experiment: ExperimentContext;
-
+    experiment: ExperimentContext }
 }
-export interface PageContext {
-    url: string;
+}
+export interface PageContext { url: string;
     title: string;
     path: string;
     domain: string;
     language: string;
     viewport: {
         width: number;
-        height: number;
+        height: number }
 }
     };
     scrollDepth: number;
     timeOnPage: number;
 
 }
-export interface UserContext {
-    id?: string;
+}
+export interface UserContext { id?: string;
     anonymousId: string;
     isReturning: boolean;
     segment?: string;
     attributes: Record<string, any>;
     preferences: UserPreferences;
-    consent: ConsentData;
-
+    consent: ConsentData }
 }
-export interface UserPreferences {
-    language: string;
+}
+export interface UserPreferences { language: string;
     timezone: string;
     theme: 'light' | 'dark' | 'auto';
     accessibility: AccessibilityPreferences;
-    notifications: NotificationPreferences;
-
+    notifications: NotificationPreferences }
 }
-export interface AccessibilityPreferences {
-    screenReader: boolean;
+}
+export interface AccessibilityPreferences { screenReader: boolean;
     highContrast: boolean;
     reducedMotion: boolean;
     largeText: boolean;
-    keyboardNavigation: boolean;
-
+    keyboardNavigation: boolean }
 }
-export interface NotificationPreferences {
-    email: boolean;
+}
+export interface NotificationPreferences { email: boolean;
     push: boolean;
     inApp: boolean;
-    sms: boolean;
-
+    sms: boolean }
 }
-export interface ConsentData {
-    analytics: boolean;
+}
+export interface ConsentData { analytics: boolean;
     marketing: boolean;
     personalization: boolean;
     functional: boolean;
     timestamp: Date;
-    version: string;
-
+    version: string }
 }
-export interface DeviceContext {
-    type: 'desktop' | 'tablet' | 'mobile' | 'tv' | 'bot';
+}
+export interface DeviceContext { type: 'desktop' | 'tablet' | 'mobile' | 'tv' | 'bot';
     os: string;
     osVersion: string;
     browser: string;
     browserVersion: string;
     resolution: {
         width: number;
-        height: number;
+        height: number }
 }
     };
     pixelDensity: number;
@@ -143,8 +134,8 @@ export interface DeviceContext {
     darkMode: boolean;
 
 }
-export interface SessionContext {
-    id: string;
+}
+export interface SessionContext { id: string;
     startTime: Date;
     duration: number;
     pageViews: number;
@@ -152,54 +143,48 @@ export interface SessionContext {
     isFirst: boolean;
     source: string;
     medium: string;
-    campaign?: string;
-
+    campaign?: string }
 }
-export interface EmbedContext {
-    id: string;
+}
+export interface EmbedContext { id: string;
     version: string;
     type: string;
     size: {
         width: number;
-        height: number;
+        height: number }
 }
     };
-    position: {
-        x: number;
-        y: number;
-    };
+    position: { x: number;
+        y: number };
     visible: boolean;
     loadTime: number;
     renderTime: number;
     interactionCount: number;
 
 }
-export interface ReferrerContext {
-    url?: string;
+}
+export interface ReferrerContext { url?: string;
     domain?: string;
     source: 'direct' | 'search' | 'social' | 'email' | 'referral' | 'paid' | 'unknown';
     medium: string;
     campaign?: string;
     term?: string;
-    content?: string;
-
+    content?: string }
 }
-export interface ExperimentContext {
-    activeExperiments: ActiveExperiment[];
+}
+export interface ExperimentContext { activeExperiments: ActiveExperiment[];
     cohort?: string;
-    segment?: string;
-
+    segment?: string }
 }
-export interface ActiveExperiment {
-    id: string;
+}
+export interface ActiveExperiment { id: string;
     name: string;
     variant: string;
     startDate: Date;
-    allocation: number;
-
+    allocation: number }
 }
-export interface PerformanceMetrics {
-    embedId: string;
+}
+export interface PerformanceMetrics { embedId: string;
     timestamp: Date;
     loadTime: number;
     renderTime: number;
@@ -210,11 +195,10 @@ export interface PerformanceMetrics {
     frameRate: number;
     bundleSize: number;
     cacheHitRate: number;
-    apiResponseTimes: Record<string, number>;
-
+    apiResponseTimes: Record<string, number> }
 }
-export interface EngagementMetrics {
-    embedId: string;
+}
+export interface EngagementMetrics { embedId: string;
     timestamp: Date;
     sessionDuration: number;
     interactionCount: number;
@@ -225,55 +209,49 @@ export interface EngagementMetrics {
     timeToInteraction: number;
     returnVisitRate: number;
     shareCount: number;
-    favoriteCount: number;
-
+    favoriteCount: number }
 }
-export interface ConversionMetrics {
-    embedId: string;
+}
+export interface ConversionMetrics { embedId: string;
     timestamp: Date;
     goalCompletions: GoalCompletion[];
     funnelSteps: FunnelStep[];
     revenueImpact: number;
     leadGeneration: number;
     signupRate: number;
-    purchaseRate: number;
-
+    purchaseRate: number }
 }
-export interface GoalCompletion {
-    goalId: string;
+}
+export interface GoalCompletion { goalId: string;
     goalName: string;
     value: number;
     completedAt: Date;
     funnelPosition: number;
-    attribution: AttributionData;
-
+    attribution: AttributionData }
 }
-export interface FunnelStep {
-    stepId: string;
+}
+export interface FunnelStep { stepId: string;
     stepName: string;
     completionRate: number;
     dropoffRate: number;
     averageTime: number;
-    userCount: number;
-
+    userCount: number }
 }
-export interface AttributionData {
-    firstTouch: TouchPoint;
+}
+export interface AttributionData { firstTouch: TouchPoint;
     lastTouch: TouchPoint;
     touchPoints: TouchPoint[];
-    modelType: 'first-touch' | 'last-touch' | 'linear' | 'time-decay' | 'position-based';
-
+    modelType: 'first-touch' | 'last-touch' | 'linear' | 'time-decay' | 'position-based' }
 }
-export interface TouchPoint {
-    source: string;
+}
+export interface TouchPoint { source: string;
     medium: string;
     campaign?: string;
     timestamp: Date;
-    value: number;
-
+    value: number }
 }
-export interface AnalyticsReport {
-    id: string;
+}
+export interface AnalyticsReport { id: string;
     name: string;
     type: ReportType;
     timeRange: TimeRange;
@@ -284,88 +262,78 @@ export interface AnalyticsReport {
     generatedAt: Date;
     generatedBy: string;
 
-export type ReportType = 'overview' | 'performance' | 'engagement' | 'conversion' | 'funnel' | 'cohort' | 'retention' | 'experiment' | 'custom';
-
+export type ReportType = 'overview' | 'performance' | 'engagement' | 'conversion' | 'funnel' | 'cohort' | 'retention' | 'experiment' | 'custom' }
 }
-export interface TimeRange {
-    start: Date;
+}
+export interface TimeRange { start: Date;
     end: Date;
-    granularity: 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';
-
+    granularity: 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year' }
 }
-export interface ReportFilter {
-    field: string;
+}
+export interface ReportFilter { field: string;
     operator: 'equals' | 'not_equals' | 'contains' | 'greater' | 'less' | 'between' | 'in';
     value: any;
-    logicalOperator?: 'AND' | 'OR';
-
+    logicalOperator?: 'AND' | 'OR' }
 }
-export interface ReportMetric {
-    name: string;
+}
+export interface ReportMetric { name: string;
     aggregation: 'sum' | 'count' | 'average' | 'median' | 'min' | 'max' | 'unique';
     format: 'number' | 'percentage' | 'currency' | 'duration' | 'bytes';
-    precision?: number;
-
+    precision?: number }
 }
-export interface ReportData {
-    summary: SummaryData;
+}
+export interface ReportData { summary: SummaryData;
     timeSeries: TimeSeriesData[];
     breakdown: BreakdownData[];
     comparisons: ComparisonData[];
-    insights: InsightData[];
-
+    insights: InsightData[] }
 }
-export interface SummaryData {
-    totalEvents: number;
+}
+export interface SummaryData { totalEvents: number;
     uniqueUsers: number;
     sessions: number;
     averageSessionDuration: number;
     bounceRate: number;
     conversionRate: number;
-    topMetrics: TopMetric[];
-
+    topMetrics: TopMetric[] }
 }
-export interface TopMetric {
-    name: string;
+}
+export interface TopMetric { name: string;
     value: number;
     change: number;
-    trend: 'up' | 'down' | 'stable';
-
+    trend: 'up' | 'down' | 'stable' }
 }
-export interface TimeSeriesData {
-    timestamp: Date;
-    values: Record<string, number>;
-
 }
-export interface BreakdownData {
-    dimension: string;
+export interface TimeSeriesData { timestamp: Date;
+    values: Record<string, number> }
+}
+}
+export interface BreakdownData { dimension: string;
     values: Array<{
         name: string;
         value: number;
-        percentage: number;
+        percentage: number }
 }
     }>;
 
 }
-export interface ComparisonData {
-    metric: string;
+}
+export interface ComparisonData { metric: string;
     current: number;
     previous: number;
     change: number;
-    significance: 'significant' | 'not_significant';
-
+    significance: 'significant' | 'not_significant' }
 }
-export interface InsightData {
-    type: 'anomaly' | 'trend' | 'opportunity' | 'warning';
+}
+export interface InsightData { type: 'anomaly' | 'trend' | 'opportunity' | 'warning';
     title: string;
     description: string;
     confidence: number;
     actionable: boolean;
-    recommendation?: string;
-
+    recommendation?: string }
 }
-export interface ExperimentConfig {
-    id: string;
+}
+export interface ExperimentConfig { id: string;
     name: string;
     description: string;
     hypothesis: string;
@@ -375,65 +343,57 @@ export interface ExperimentConfig {
     targeting: TargetingCriteria;
     goals: ExperimentGoal[];
     duration: ExperimentDuration;
-    significance: SignificanceConfig;
-
+    significance: SignificanceConfig }
 }
-export interface ExperimentVariant {
-    id: string;
+}
+export interface ExperimentVariant { id: string;
     name: string;
     description: string;
     allocation: number;
     configuration: Record<string, any>;
-    isControl: boolean;
-
+    isControl: boolean }
 }
-export interface AllocationStrategy {
-    type: 'random' | 'sticky' | 'targeted';
+}
+export interface AllocationStrategy { type: 'random' | 'sticky' | 'targeted';
     seed?: string;
-    method: 'hash' | 'random' | 'deterministic';
-
+    method: 'hash' | 'random' | 'deterministic' }
 }
-export interface TargetingCriteria {
-    includeCriteria: TargetingRule[];
+}
+export interface TargetingCriteria { includeCriteria: TargetingRule[];
     excludeCriteria: TargetingRule[];
     sampleSize?: number;
-    samplePercentage?: number;
-
+    samplePercentage?: number }
 }
-export interface TargetingRule {
-    field: string;
+}
+export interface TargetingRule { field: string;
     operator: string;
     value: any;
-    logicalOperator?: 'AND' | 'OR';
-
+    logicalOperator?: 'AND' | 'OR' }
 }
-export interface ExperimentGoal {
-    id: string;
+}
+export interface ExperimentGoal { id: string;
     name: string;
     type: 'primary' | 'secondary';
     metric: string;
     aggregation: string;
     target?: number;
-    direction: 'increase' | 'decrease';
-
+    direction: 'increase' | 'decrease' }
 }
-export interface ExperimentDuration {
-    startDate: Date;
+}
+export interface ExperimentDuration { startDate: Date;
     endDate?: Date;
     minDuration: number;
     maxDuration: number;
-    earlyStoppingEnabled: boolean;
-
+    earlyStoppingEnabled: boolean }
 }
-export interface SignificanceConfig {
-    confidenceLevel: number;
+}
+export interface SignificanceConfig { confidenceLevel: number;
     minimumSampleSize: number;
     minimumDetectableEffect: number;
-    statisticalPower: number;
-
+    statisticalPower: number }
 }
-export interface ExperimentResult {
-    experimentId: string;
+}
+export interface ExperimentResult { experimentId: string;
     variant: string;
     metrics: ExperimentMetric[];
     significance: StatisticalSignificance;
@@ -441,34 +401,30 @@ export interface ExperimentResult {
     conversionRate: number;
     confidence: ConfidenceInterval;
     pValue: number;
-    effect: EffectSize;
-
+    effect: EffectSize }
 }
-export interface ExperimentMetric {
-    goalId: string;
+}
+export interface ExperimentMetric { goalId: string;
     value: number;
     standardError: number;
     confidenceInterval: ConfidenceInterval;
     improvement: number;
-    significant: boolean;
-
+    significant: boolean }
 }
-export interface StatisticalSignificance {
-    isSignificant: boolean;
+}
+export interface StatisticalSignificance { isSignificant: boolean;
     pValue: number;
     confidenceLevel: number;
     testStatistic: number;
-    degreesOfFreedom: number;
-
+    degreesOfFreedom: number }
 }
-export interface ConfidenceInterval {
-    lower: number;
+}
+export interface ConfidenceInterval { lower: number;
     upper: number;
-    level: number;
-
+    level: number }
 }
-export interface EffectSize {
-    absolute: number;
+}
+export interface EffectSize { absolute: number;
     relative: number;
     practical: 'small' | 'medium' | 'large';
 
@@ -495,9 +451,9 @@ export declare class EmbedAnalytics extends EventEmitter {
     getExperimentVariant(experimentId: string): string | null;
     trackExperimentGoal(experimentId: string, goalId: string, value?: number): void;
     generateReport();
-      type: ReportType,
-      timeRange: TimeRange,
-      filters?: ReportFilter[],
+      type: ReportType;
+      timeRange: TimeRange;
+      filters?: ReportFilter[] }
       metrics?: ReportMetric[]
     ): Promise<AnalyticsReport>;
     getPerformanceMetrics(timeRange: TimeRange): Promise<PerformanceMetrics[]>;
@@ -510,11 +466,10 @@ export declare class EmbedAnalytics extends EventEmitter {
     getConfig(): EmbedConfig;
     flush(): Promise<void>;
     stop(): void;
-    getStatus(): {
-        tracking: boolean;
+    getStatus(): { tracking: boolean;
         queueSize: number;
         sessionCount: number;
-        errors: number;
+        errors: number }
 }
     };
     private initializeTracking;
@@ -593,8 +548,6 @@ export declare class EmbedAnalytics extends EventEmitter {
     private queryPerformanceData;
     private queryEngagementData;
     private queryConversionData;
-declare const _default: {
-    EmbedAnalytics: typeof EmbedAnalytics;
-};
+declare const _default: { EmbedAnalytics: typeof EmbedAnalytics };
 export default _default;
 //# sourceMappingURL=EmbedAnalytics.d.ts.map

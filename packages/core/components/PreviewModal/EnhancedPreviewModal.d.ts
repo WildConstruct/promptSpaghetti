@@ -14,8 +14,8 @@ import React from 'react';
 import { VarianceAnalysis } from '../../hooks/useEnhancedPreview';
 
 }
-export interface EnhancedPreviewResult {
-    seed: number;
+}
+export interface EnhancedPreviewResult { seed: number;
     output?: string;
     error?: string;
     executionTimeMs?: number;
@@ -29,8 +29,7 @@ export interface EnhancedPreviewResult {
         contentType?: 'dialogue' | 'action' | 'description' | 'mixed';
         tags?: string[];
         rating?: 1 | 2 | 3 | 4 | 5;
-        notes?: string;
-
+        notes?: string }
 }
     };
     id: string;
@@ -39,8 +38,8 @@ export interface EnhancedPreviewResult {
     exported?: boolean;
 
 }
-interface EnhancedPreviewModalProps {
-    open: boolean;
+}
+interface EnhancedPreviewModalProps { open: boolean;
     loading: boolean;
     error: string | null;
     results: EnhancedPreviewResult[];
@@ -60,7 +59,7 @@ interface EnhancedPreviewModalProps {
     enableExport?: boolean;
     maxResults?: number;
 
-export declare const EnhancedPreviewModal: React.FC<EnhancedPreviewModalProps>;
+export declare const EnhancedPreviewModal: React.FC<EnhancedPreviewModalProps> }
 }
 export {};
 //# sourceMappingURL=EnhancedPreviewModal.d.ts.map

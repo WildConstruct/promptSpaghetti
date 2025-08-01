@@ -268,7 +268,12 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
                                                         }
                                                         ;
                                                         topThreats: Array;
-                                                        systemPerformance: Array;
+                                                        systemPerformance: Array < {
+                                                            systemId: string,
+                                                            healthScore: number,
+                                                            responseTime: number,
+                                                            threatDetectionRate: number
+                                                        } > ;
                                                         const systems = Array.from(this.systemHealthMap.values());
                                                         const alerts = this.getSecurityAlerts(false);
                                                         const metrics = Array.from(this.securityMetrics.values());
@@ -354,7 +359,8 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
             trends: {
                 threatTrend: 'increasing' | 'stable' | 'decreasing';
                 complianceTrend: 'improving' | 'stable' | 'degrading';
-                performanceTrend: 'improving' | 'stable' | 'degrading';
+                performanceTrend: 'improving' | 'stable' | 'degrading',
+                ;
             }
             ;
             recommendations: string;
@@ -683,7 +689,7 @@ health.status === 'critical' ? 8 : 5,
     complianceImpact;
 health.status === 'critical' ? 'high' : 'medium',
     recommendedActions;
-[,
+[
     'Check system resources',
     'Review error logs',
     'Restart if necessary',

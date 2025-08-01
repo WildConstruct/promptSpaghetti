@@ -13,18 +13,19 @@ import { SequentialEditor } from './editors/SequentialEditor';
 import { MarkovEditor } from './editors/MarkovEditor';
 import { WeightedAdvancedEditor } from './editors/WeightedAdvancedEditor';
 import { BaseNodeEditor } from './BaseNodeEditor';
-}
-interface NodeEditorRouterProps {
-  node: Record<string, unknown>;
+
+
+interface NodeEditorRouterProps { node: Record<string, unknown>;
   schema: ZodSchema<Record<string, unknown>>;
   onChange: (partial: Record<string, unknown>) => void;
   onGlobalPreviewRequest?: () => void;
-  export const NodeEditorRouter: React.FC<NodeEditorRouterProps> = ({,)
-  node,
-  schema,
-  onChange,
+  export const NodeEditorRouter: React.FC<NodeEditorRouterProps> = ({);
+  node;
+  schema;
+  onChange }
   onGlobalPreviewRequest
-}
+
+
 }) => {
   if (!node || !schema) {
     return null;
@@ -32,10 +33,9 @@ interface NodeEditorRouterProps {
   const nodeId = node.id;
   const nodeData = node.data || {};
   // Common props for all editors
-  const editorProps = {
-    nodeId,
+  const editorProps = { nodeId,
     nodeData,
-    schema,
+    schema }
     onChange
   };
   // Route to appropriate editor based on node type

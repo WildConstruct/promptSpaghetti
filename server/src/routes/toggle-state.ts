@@ -11,13 +11,14 @@ import { ToggleStateService, ToggleStateQuery, BulkStateOperation } from '../ser
 import { FeatureToggleDAO } from '../database/feature-toggle-dao';
 import { ToggleEvaluationContext, ToggleType, ClaudeImpact } from '../database/feature-toggle-models';
 
-}
-}
+
+
 interface ToggleStateRouteOptions {
   dao: FeatureToggleDAO;
-}
-}
-}
+
+
+
+
 
 // Request schemas for validation
 const stateQuerySchema = {
@@ -27,16 +28,16 @@ const stateQuerySchema = {
       type: 'array', 
       items: { type: 'string' },
       maxItems: 100
-  }
+
     types: {
       type: 'array',
       items: { type: 'string', enum: Object.values(ToggleType) }
-  }
+
     enabled: { type: 'boolean' },
     claudeImpact: {
       type: 'array',
       items: { type: 'string', enum: Object.values(ClaudeImpact) }
-  }
+
     orgId: { type: 'string' },
     tags: { type: 'array', items: { type: 'string' } },
     lastModified: { 
@@ -44,11 +45,11 @@ const stateQuerySchema = {
       properties: {
         since: { type: 'string', format: 'date-time' },
         until: { type: 'string', format: 'date-time' }
-      }
-  }
+
+
     includeMetadata: { type: 'boolean', default: false },
     includeAudit: { type: 'boolean', default: false }
-  }
+
 };
 
 const bulkStateOperationSchema = {
@@ -58,7 +59,7 @@ const bulkStateOperationSchema = {
     operation: {
       type: 'string',
       enum: ['enable', 'disable', 'toggle', 'update_values']
-  }
+
     toggles: {
       type: 'array',
       items: {
@@ -71,17 +72,17 @@ const bulkStateOperationSchema = {
               key: { type: 'string' },
               value: {},
               reason: { type: 'string' }
-            }
-          }
+
+
         ]
-  }
+
       minItems: 1,
       maxItems: 50
-  }
+
     reason: { type: 'string', maxLength: 500 },
     dryRun: { type: 'boolean', default: false },
     rollbackOnError: { type: 'boolean', default: true }
-  }
+
 };
 
 const stateWatchSchema = {
@@ -91,17 +92,17 @@ const stateWatchSchema = {
       type: 'array',
       items: { type: 'string' },
       maxItems: 20
-  }
+
     events: {
       type: 'array',
       items: {
         type: 'string',
         enum: ['state_changed', 'value_updated', 'enabled', 'disabled', 'created', 'archived']
-  }
+
       default: ['state_changed', 'value_updated']
-  }
+
     filters: stateQuerySchema
-  }
+
 };
 
 export default async function toggleStateRoutes(
@@ -115,7 +116,7 @@ export default async function toggleStateRoutes(
     // Integration with Epic 11 auth system
     if (!request.user) {
       return reply.code(401).send({ error: 'Authentication required' });
-    }
+
   };
 
   // Middleware for admin permissions
@@ -123,7 +124,7 @@ export default async function toggleStateRoutes(
     const user = (request as any).user;
     if (!user || !user.permissions?.includes('toggle.manage')) {
       return reply.code(403).send({ error: 'Admin permissions required' });
-    }
+
   };
 
   // ==========================================
@@ -143,21 +144,21 @@ export default async function toggleStateRoutes(
             type: 'string',
             enum: ['full', 'minimal', 'keys_only', 'summary'],
             default: 'full'
-  }
+
           sort: {
             type: 'string',
             enum: ['name', 'key', 'created_at', 'updated_at', 'usage_count'],
             default: 'name'
-  }
+
           order: {
             type: 'string',
             enum: ['asc', 'desc'],
             default: 'asc'
-  }
+
           limit: { type: 'number', minimum: 1, maximum: 500, default: 100 },
           offset: { type: 'number', minimum: 0, default: 0 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -171,12 +172,12 @@ export default async function toggleStateRoutes(
                 queryTime: { type: 'number' },
                 cacheHit: { type: 'boolean' },
                 filters: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -212,16 +213,16 @@ export default async function toggleStateRoutes(
           queryTime,
           cacheHit: result.cacheHit || false,
           filters: stateQuery
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to query toggle states:', error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to query toggle states',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // GET /api/toggle-state/summary
@@ -238,16 +239,16 @@ export default async function toggleStateRoutes(
             items: {
               type: 'string',
               enum: ['type', 'enabled', 'claudeImpact', 'created_by', 'updated_by']
-  }
+
             default: ['type', 'enabled']
-  }
+
           timeRange: {
             type: 'string',
             enum: ['1h', '24h', '7d', '30d', 'all'],
             default: '24h'
-          }
-        }
-  }
+
+
+
       response: {
         200: {
           type: 'object',
@@ -263,12 +264,12 @@ export default async function toggleStateRoutes(
                 groupedCounts: { type: 'object' },
                 healthMetrics: { type: 'object' },
                 topModified: { type: 'array' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { orgId, groupBy, timeRange } = request.query as any;
@@ -284,14 +285,14 @@ export default async function toggleStateRoutes(
         success: true,
         summary
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get state summary:', error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to get state summary',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // GET /api/toggle-state/changes
@@ -311,13 +312,13 @@ export default async function toggleStateRoutes(
             items: {
               type: 'string',
               enum: ['created', 'updated', 'activated', 'deactivated', 'archived', 'override']
-            }
-  }
+
+
           limit: { type: 'number', minimum: 1, maximum: 200, default: 50 },
           includeDiff: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const query = request.query as any;
@@ -332,14 +333,14 @@ export default async function toggleStateRoutes(
         success: true,
         changes
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get state changes:', error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to get state changes',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // ==========================================
@@ -364,8 +365,8 @@ export default async function toggleStateRoutes(
                 successful: { type: 'array' },
                 failed: { type: 'array' },
                 rollbacks: { type: 'array' }
-              }
-  }
+
+
             summary: {
               type: 'object',
               properties: {
@@ -373,12 +374,12 @@ export default async function toggleStateRoutes(
                 successful: { type: 'number' },
                 failed: { type: 'number' },
                 skipped: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const bulkOperation = request.body as BulkStateOperation;
@@ -399,14 +400,14 @@ export default async function toggleStateRoutes(
         results: result.results,
         summary: result.summary
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to execute bulk operation:', error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to execute bulk operation',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // POST /api/toggle-state/clone
@@ -424,8 +425,8 @@ export default async function toggleStateRoutes(
               orgId: { type: 'string' },
               keys: { type: 'array', items: { type: 'string' } },
               filters: stateQuerySchema
-            }
-  }
+
+
           target: {
             type: 'object',
             required: ['orgId'],
@@ -434,19 +435,19 @@ export default async function toggleStateRoutes(
               keyPrefix: { type: 'string' },
               keyMapping: { type: 'object' },
               overwriteExisting: { type: 'boolean', default: false }
-            }
-  }
+
+
           options: {
             type: 'object',
             properties: {
               includeDisabled: { type: 'boolean', default: true },
               includeAuditTrail: { type: 'boolean', default: false },
               dryRun: { type: 'boolean', default: false }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { source, target, options = {} } = request.body as any;
@@ -462,14 +463,14 @@ export default async function toggleStateRoutes(
         success: true,
         cloneResult: result
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to clone toggle states:', error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to clone toggle states',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // ==========================================
@@ -486,9 +487,9 @@ export default async function toggleStateRoutes(
         properties: {
           ...stateWatchSchema.properties,
           heartbeat: { type: 'number', minimum: 5, maximum: 300, default: 30 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const query = request.query as any;
     const user = (request as any).user;
@@ -521,7 +522,7 @@ export default async function toggleStateRoutes(
       filters: { ...query.filters, orgId: query.filters?.orgId || user.orgId },
       callback: (event) => {
         sendEvent('state_change', event);
-      }
+
     });
 
     // Set up heartbeat
@@ -559,16 +560,16 @@ export default async function toggleStateRoutes(
               orgId: { type: 'string' },
               timestamp: { type: 'string', format: 'date-time' },
               filters: stateQuerySchema
-            }
-  }
+
+
           right: {
             type: 'object',
             properties: {
               orgId: { type: 'string' },
               timestamp: { type: 'string', format: 'date-time' },
               filters: stateQuerySchema
-            }
-  }
+
+
           options: {
             type: 'object',
             properties: {
@@ -578,12 +579,12 @@ export default async function toggleStateRoutes(
                 type: 'string',
                 enum: ['unified', 'split', 'json'],
                 default: 'unified'
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { left, right, options = {} } = request.body as any;
@@ -599,14 +600,14 @@ export default async function toggleStateRoutes(
         success: true,
         comparison
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to compare toggle states:', error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to compare toggle states',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // ==========================================
@@ -623,9 +624,9 @@ export default async function toggleStateRoutes(
         properties: {
           includeDetails: { type: 'boolean', default: false },
           orgId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { includeDetails, orgId } = request.query as any;
@@ -641,14 +642,14 @@ export default async function toggleStateRoutes(
         health,
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get system health:', error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to get system health',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // POST /api/toggle-state/validate
@@ -666,12 +667,12 @@ export default async function toggleStateRoutes(
             items: {
               type: 'string',
               enum: ['dependencies', 'conflicts', 'claude_impact', 'performance', 'consistency']
-  }
+
             default: ['dependencies', 'conflicts', 'claude_impact']
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { keys, orgId, checks } = request.body as any;
@@ -687,16 +688,16 @@ export default async function toggleStateRoutes(
         success: true,
         validation
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to validate toggle states:', error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to validate toggle states',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
-}
+
 
 // Export route registration function
 export { toggleStateRoutes };

@@ -15,11 +15,11 @@ import {
   Transaction, 
   PaymentIntent,
   TransactionType 
-} from '../marketplace/transaction.types';
+ from '../marketplace/transaction.types';
 import { 
   RevenueEvent, 
   RevenueEventType 
-} from '../revenue/RevenueDataModel';
+ from '../revenue/RevenueDataModel';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
 // Payment Analytics Event Types
@@ -41,11 +41,12 @@ export enum PaymentAnalyticsEventType {
   FRAUD_DETECTED = 'fraud_detected',
   FRAUD_PREVENTED = 'fraud_prevented',
   RISK_ASSESSMENT = 'risk_assessment'
-}
+
 
 // Payment Performance Metrics
-}
-}
+
+
+
 export interface PaymentProviderMetrics {
   provider: PaymentProvider;
   
@@ -74,21 +75,23 @@ export interface PaymentProviderMetrics {
     countryCode: string;
     successRate: number;
     averageProcessingTime: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Temporal Performance
   performanceByHour: Array<{
     hour: number;
     successRate: number;
     volume: number;
-  }>;
-}
+>;
+
 
 // Payment Method Performance
-}
-}
+
+
+
 export interface PaymentMethodMetrics {
   methodType: PaymentMethodType;
   provider: PaymentProvider;
@@ -104,21 +107,23 @@ export interface PaymentMethodMetrics {
     ageGroup: string;
     successRate: number;
     usage: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Device performance
   devicePerformance: Array<{
     deviceType: 'mobile' | 'desktop' | 'tablet';
     successRate: number;
     usage: number;
-  }>;
-}
+>;
+
 
 // Payment Failure Analysis
-}
-}
+
+
+
 export interface PaymentFailureAnalysis {
   failureCode: string;
   provider: PaymentProvider;
@@ -133,24 +138,26 @@ export interface PaymentFailureAnalysis {
   timePattern: Array<{
     hour: number;
     frequency: number;
-}
-}
-  }>;
+
+
+
+>;
   
   geographicPattern: Array<{
     countryCode: string;
     frequency: number;
-  }>;
+>;
   
   amountPattern: Array<{
     amountRange: string;
     frequency: number;
-  }>;
-}
+>;
+
 
 // Payment Webhook Event
-}
-}
+
+
+
 export interface PaymentWebhookEvent {
   id: string;
   provider: PaymentProvider;
@@ -160,9 +167,10 @@ export interface PaymentWebhookEvent {
   processedAt?: Date;
   processingStatus: 'pending' | 'processed' | 'failed' | 'ignored';
   errorMessage?: string;
-}
-}
-}
+
+
+
+
 
 export class PaymentAnalyticsCollector extends EventEmitter {
   private analyticsCollector: AnalyticsCollector;
@@ -196,8 +204,8 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     // Initialize PayPal (if credentials provided)
     if (paymentConfig.paypalClientId && paymentConfig.paypalClientSecret) {
       // Would initialize PayPal SDK here
-    }
-  }
+
+
 
   /**
    * Track payment attempt
@@ -231,7 +239,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
           paymentMethodId: paymentIntent.payment_method_id,
           country: userContext.country,
           userAgent: userContext.userAgent
-        }
+
       };
 
       // Track with analytics collector
@@ -245,11 +253,10 @@ export class PaymentAnalyticsCollector extends EventEmitter {
         provider: paymentIntent.provider,
         amount: paymentIntent.amount_cents
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track payment attempt:', error);
-    }
-  }
+
+
 
   /**
    * Track payment success
@@ -278,7 +285,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
           fees: transaction.fee_cents,
           netAmount: transaction.net_amount_cents,
           riskScore: transaction.risk_score
-        }
+
       };
 
       await this.analyticsCollector.track(event);
@@ -298,11 +305,10 @@ export class PaymentAnalyticsCollector extends EventEmitter {
         amount: transaction.amount_cents,
         processingTime
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track payment success:', error);
-    }
-  }
+
+
 
   /**
    * Track payment failure
@@ -331,7 +337,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
           failureReason,
           errorCode,
           isRetryable: this.isRetryableError(errorCode)
-        }
+
       };
 
       await this.analyticsCollector.track(event);
@@ -354,11 +360,10 @@ export class PaymentAnalyticsCollector extends EventEmitter {
         errorCode,
         failureReason
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track payment failure:', error);
-    }
-  }
+
+
 
   /**
    * Process payment provider webhook
@@ -387,22 +392,21 @@ export class PaymentAnalyticsCollector extends EventEmitter {
         webhookEvent.errorMessage = 'Invalid webhook signature';
         await this.storeWebhookEvent(webhookEvent);
         return;
-      }
+
 
       // Process webhook based on event type
       await this.processWebhookEvent(webhookEvent);
       
       webhookEvent.processingStatus = 'processed';
       webhookEvent.processedAt = new Date();
-
-    } catch (error) {
+ catch (error) {
       webhookEvent.processingStatus = 'failed';
       webhookEvent.errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Webhook processing failed:', error);
-    } finally {
+ finally {
       await this.storeWebhookEvent(webhookEvent);
-    }
-  }
+
+
 
   /**
    * Get payment provider metrics
@@ -420,8 +424,8 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       const expiry = this.cacheExpiry.get(cacheKey) || 0;
       if (Date.now() < expiry) {
         return this.metricsCache.get(cacheKey);
-      }
-    }
+
+
 
     // Query metrics from database
     const metrics = await this.calculateProviderMetrics(provider, startDate, endDate);
@@ -431,7 +435,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     this.cacheExpiry.set(cacheKey, Date.now() + 5 * 60 * 1000);
     
     return metrics;
-  }
+
 
   /**
    * Get payment method performance
@@ -479,7 +483,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       ageGroupPerformance: await this.getAgeGroupPerformance(methodType, provider, startDate, endDate),
       devicePerformance: await this.getDevicePerformance(methodType, provider, startDate, endDate)
     };
-  }
+
 
   /**
    * Get payment failure analysis
@@ -533,7 +537,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       geographicPattern: await this.getFailureGeographicPattern(provider, row.failure_code, startDate, endDate),
       amountPattern: await this.getFailureAmountPattern(provider, row.failure_code, startDate, endDate)
     }));
-  }
+
 
   // Private helper methods
   private async calculateProviderMetrics(
@@ -588,7 +592,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       performanceByCountry: await this.getPerformanceByCountry(provider, startDate, endDate),
       performanceByHour: await this.getPerformanceByHour(provider, startDate, endDate)
     };
-  }
+
 
   private async updateProviderMetrics(provider: PaymentProvider, update: any): Promise<void> {
 
@@ -623,7 +627,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       update.processingTime || 0,
       update.processingTime ? 1 : 0
     ]);
-  }
+
 
   private isRetryableError(errorCode: string): boolean {
     const retryableErrors = [
@@ -636,7 +640,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     ];
     
     return retryableErrors.includes(errorCode);
-  }
+
 
   private getSuggestedAction(errorCode: string): string {
     const actions: Record<string, string> = {
@@ -649,7 +653,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     };
     
     return actions[errorCode] || 'Contact technical support for assistance';
-  }
+
 
   private async verifyWebhookSignature(
     provider: PaymentProvider,
@@ -663,13 +667,13 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       try {
         // Would use Stripe's webhook signature verification
         return true; // Simplified
-      } catch (error) {
+ catch (error) {
         return false;
-      }
-    }
+
+
     
     return true; // Simplified for other providers
-  }
+
 
   private async processWebhookEvent(webhookEvent: PaymentWebhookEvent): Promise<void> {
 
@@ -687,26 +691,26 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       default:
         // Log unknown event types for monitoring
         console.log(`Unknown webhook event type: ${webhookEvent.eventType}`);
-    }
-  }
+
+
 
   private async handlePaymentSuccess(webhookEvent: PaymentWebhookEvent): Promise<void> {
 
     // Extract payment data and create analytics event
         // Implementation would process successful payment webhook
-  }
+
 
   private async handlePaymentFailure(webhookEvent: PaymentWebhookEvent): Promise<void> {
 
     // Extract failure data and create analytics event
         // Implementation would process failed payment webhook
-  }
+
 
   private async handlePaymentDispute(webhookEvent: PaymentWebhookEvent): Promise<void> {
 
     // Extract dispute data and create analytics event
         // Implementation would process payment dispute webhook
-  }
+
 
   private async storePaymentEvent(event: any): Promise<void> {
 
@@ -725,7 +729,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       JSON.stringify(event.metadata),
       new Date()
     ]);
-  }
+
 
   private async storeWebhookEvent(webhookEvent: PaymentWebhookEvent): Promise<void> {
 
@@ -747,7 +751,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       webhookEvent.errorMessage,
       new Date()
     ]);
-  }
+
 
   // Additional helper methods implementation
   private async getFailuresByReason(
@@ -777,11 +781,11 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     results.forEach((row: any) => {
       if (row.error_code) {
         failures[row.error_code] = row.count;
-      }
+
     });
 
     return failures;
-  }
+
 
   private async getRetrySuccessRate(provider: PaymentProvider, startDate: Date, endDate: Date): Promise<number> {
 
@@ -809,7 +813,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     if (row.failed_attempts === 0) return 0;
     
     return (row.successful_retries / row.failed_attempts) * 100;
-  }
+
 
   private async getPerformanceByCountry(
     provider: PaymentProvider,
@@ -843,7 +847,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       successRate: row.total_attempts > 0 ? (row.successful_payments / row.total_attempts) * 100 : 0,
       averageProcessingTime: row.avg_processing_time || 0
     }));
-  }
+
 
   private async getPerformanceByHour(
     provider: PaymentProvider,
@@ -875,7 +879,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       successRate: row.total_attempts > 0 ? (row.successful_payments / row.total_attempts) * 100 : 0,
       volume: row.volume || 0
     }));
-  }
+
 
   private async calculatePreferenceRank(methodType: PaymentMethodType, provider: PaymentProvider): Promise<number> {
 
@@ -896,7 +900,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
 
     const methodRank = results.find((row: any) => row.method_type === methodType);
     return methodRank ? methodRank.rank : results.length + 1;
-  }
+
 
   private async calculateConversionRate(
     methodType: PaymentMethodType,
@@ -924,7 +928,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
 
     const row = result[0];
     return row.attempts > 0 ? (row.successes / row.attempts) * 100 : 0;
-  }
+
 
   private async getAgeGroupPerformance(
     methodType: PaymentMethodType,
@@ -941,7 +945,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       successRate: 85 + Math.random() * 10, // Placeholder data
       usage: Math.floor(Math.random() * 1000)
     }));
-  }
+
 
   private async getDevicePerformance(
     methodType: PaymentMethodType,
@@ -978,7 +982,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       successRate: row.attempts > 0 ? (row.successes / row.attempts) * 100 : 0,
       usage: row.attempts || 0
     }));
-  }
+
 
   private async updateFailureAnalysis(
     provider: PaymentProvider,
@@ -1005,7 +1009,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       hourKey,
       timestamp
     ]);
-  }
+
 
   private async getFailureTimePattern(
     provider: PaymentProvider,
@@ -1037,7 +1041,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       hour: parseInt(row.hour),
       frequency: row.frequency
     }));
-  }
+
 
   private async getFailureGeographicPattern(
     provider: PaymentProvider,
@@ -1070,7 +1074,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       countryCode: row.country_code,
       frequency: row.frequency
     }));
-  }
+
 
   private async getFailureAmountPattern(
     provider: PaymentProvider,
@@ -1109,8 +1113,8 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       amountRange: row.amount_range,
       frequency: row.frequency
     }));
-  }
-}
+
+
 
 export {
   PaymentAnalyticsEventType,

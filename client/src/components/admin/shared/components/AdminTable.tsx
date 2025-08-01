@@ -15,11 +15,10 @@ import {
   ChevronsLeft,
   ChevronsRight,
   MoreHorizontal
-} from 'lucide-react';
+ from 'lucide-react';
 import { LoadingSpinner, EmptyState } from './LoadingStates';
 import './AdminTable.css';
 
-}
 export interface TableColumn<T = any> {
   key: string;,
   title: string;
@@ -33,7 +32,6 @@ export interface TableColumn<T = any> {
   align?: 'left' | 'center' | 'right';
   fixed?: 'left' | 'right';
 
-}
 export interface TableAction<T = any> {
   key: string;,
   label: string;
@@ -45,7 +43,7 @@ export interface TableAction<T = any> {
   title: string;,
   description: string;
 };
-}
+
 interface AdminTableProps<T = any> {
   columns: TableColumn<T>[];,
   data: T;
@@ -57,9 +55,9 @@ interface AdminTableProps<T = any> {
   selectedRows?: T;
   onSelectionChange?: (selectedRows: T) => void;
   // Pagination
-  pagination?: {
+  pagination?: {,
   current: number;,
-  pageSize: number;
+  pageSize: number;,
   total: number;,
   onChange: (page: number, pageSize: number) => void;
   showSizeChanger?: boolean;
@@ -81,7 +79,7 @@ interface AdminTableProps<T = any> {
     icon?: React.ComponentType<{ size?: number }>;
     onClick: (selectedRows: T) => void;
     danger?: boolean;
-  }>;
+>;
   // Styling
   size?: 'small' | 'medium' | 'large';
   bordered?: boolean;
@@ -120,7 +118,7 @@ export const AdminTable = <T extends Record<string, any> = any>({)
   emptyText = 'No data available',
   emptyAction,
   className = ''
-}: AdminTableProps<T>) => {
+: AdminTableProps<T>) => {
   const [localSort, setLocalSort] = useState<{ key: string; direction: 'asc' | 'desc' } | null>()
     defaultSort || null
   );
@@ -156,7 +154,7 @@ export const AdminTable = <T extends Record<string, any> = any>({)
   let newSelection: T;
   if (selected) {
   newSelection = [...selectedRows, record];
-} else {
+ else {
       newSelection = selectedRows.filter(row => getRowKey(row, 0) !== recordKey);
     onSelectionChange(newSelection);
   }, [selectedRows, onSelectionChange, getRowKey]);
@@ -165,7 +163,7 @@ export const AdminTable = <T extends Record<string, any> = any>({)
     if (!onSelectionChange) return;
     if (selected) {
       onSelectionChange(data);
-    } else {
+ else {
       onSelectionChange([]);
   }, [data, onSelectionChange]);
   // Check if row is selected
@@ -336,7 +334,7 @@ export const AdminTable = <T extends Record<string, any> = any>({)
                     checked={allSelected}
                     ref={(input) => {
                       if (input) input.indeterminate = indeterminate;
-                    }}
+}
                     onChange={(e) => handleSelectAll(e.target.checked)}
                   />
                 </th>

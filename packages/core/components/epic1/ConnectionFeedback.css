@@ -1,0 +1,149 @@
+/* Connection Feedback Styles */
+
+/* Valid drop targets - green glow */
+.epic1-valid-target {
+  position: relative;
+}
+
+.epic1-valid-target::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border: 3px solid #10b981;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+  animation: epic1-pulse-valid 1.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Invalid targets - reduced opacity */
+.epic1-invalid-target {
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+
+/* Source node being connected from */
+.epic1-connecting-source {
+  position: relative;
+}
+
+.epic1-connecting-source::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid #4a9eff;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Pulse animation for valid targets */
+@keyframes epic1-pulse-valid {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+/* Connection error message */
+.epic1-connection-error {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  animation: epic1-slide-down 0.3s ease-out;
+}
+
+.epic1-connection-error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  font-weight: 500;
+  color: #991b1b;
+}
+
+.epic1-error-icon {
+  font-size: 18px;
+}
+
+@keyframes epic1-slide-down {
+  from {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Handle highlighting during connection */
+.react-flow__handle {
+  transition: all 0.2s ease;
+}
+
+/* Valid target handles - highlight */
+.epic1-valid-target .react-flow__handle-left {
+  transform: scale(1.5);
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+}
+
+/* Source handle being dragged from */
+.epic1-connecting-source .react-flow__handle-right {
+  transform: scale(1.3);
+  background: #4a9eff;
+  box-shadow: 0 0 10px rgba(74, 158, 255, 0.6);
+}
+
+/* Connection line styling */
+.react-flow__connection {
+  stroke: #4a9eff;
+  stroke-width: 3;
+}
+
+.react-flow__connection.animated {
+  stroke-dasharray: 5;
+  animation: epic1-dash 1s linear infinite;
+}
+
+@keyframes epic1-dash {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+/* Error state for connection path */
+.react-flow__connection-path {
+  stroke: #4a9eff;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* Invalid connection attempt */
+.react-flow__connection-path.invalid {
+  stroke: #ef4444;
+  stroke-dasharray: 5;
+}

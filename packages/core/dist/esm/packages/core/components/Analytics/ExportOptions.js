@@ -208,15 +208,15 @@ div >
 const styles = `;
   .export-options {
     display: flex;
-    align-items: center;
+    align-items: center;,
   gap: 0.5rem;
   .export-options button {
     transition: all 0.2s ease-in-out;
   .export-options button:hover {,
   transform: translateY(-1px);
   .export-options button:disabled {,
-  opacity: 0.6;
-    cursor: not-allowed;
+  opacity: 0.6;,
+  cursor: not-allowed;
   transform: none;
   @media (max-width: 768px) {
     .export-options {

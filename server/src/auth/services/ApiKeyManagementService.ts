@@ -13,8 +13,8 @@ import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { RateLimitService } from './RateLimitService';
 
-}
-}
+
+
 export interface ApiKeyConfig {
   keyLength: number;
   defaultExpirationDays: number;
@@ -26,13 +26,14 @@ export interface ApiKeyConfig {
     requestsPerMinute: number;
     requestsPerHour: number;
     requestsPerDay: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ApiKey {
   keyId: string;
   userId: string;
@@ -49,8 +50,9 @@ export interface ApiKey {
     requestsPerMinute: number;
     requestsPerHour: number;
     requestsPerDay: number;
-}
-}
+
+
+
   };
   ipWhitelist?: string[];
   metadata: {
@@ -59,10 +61,10 @@ export interface ApiKey {
     purpose: string;
     rotationCount: number;
   };
-}
 
-}
-}
+
+
+
 export interface CreateApiKeyRequest {
   name: string;
   description?: string;
@@ -72,15 +74,16 @@ export interface CreateApiKeyRequest {
     requestsPerMinute?: number;
     requestsPerHour?: number;
     requestsPerDay?: number;
-}
-}
+
+
+
   };
   ipWhitelist?: string[];
   purpose: string;
-}
 
-}
-}
+
+
+
 export interface ApiKeyValidationResult {
   valid: boolean;
   keyId?: string;
@@ -92,8 +95,9 @@ export interface ApiKeyValidationResult {
       minute: number;
       hour: number;
       day: number;
-}
-}
+
+
+
     };
     resetTimes: {
       minute: Date;
@@ -102,7 +106,7 @@ export interface ApiKeyValidationResult {
     };
   };
   error?: string;
-}
+
 
 export class ApiKeyManagementService {
   private config: ApiKeyConfig;
@@ -134,9 +138,9 @@ export class ApiKeyManagementService {
         requestsPerMinute: config.rateLimitDefaults?.requestsPerMinute || 100,
         requestsPerHour: config.rateLimitDefaults?.requestsPerHour || 3000,
         requestsPerDay: config.rateLimitDefaults?.requestsPerDay || 50000
-      }
+
     };
-  }
+
 
   /**
    * Create a new API key
@@ -151,13 +155,13 @@ export class ApiKeyManagementService {
     const invalidScopes = request.scopes.filter(scope => !this.config.allowedScopes.includes(scope));
     if (invalidScopes.length > 0) {
       throw new Error(`Invalid scopes: ${invalidScopes.join(', ')}`);
-    }
+
 
     // Check key limit for user
     const existingKeys = await this.getUserApiKeys(userId, { includeInactive: false });
     if (existingKeys.length >= this.config.maxKeysPerUser) {
       throw new Error(`Maximum API keys limit reached (${this.config.maxKeysPerUser})`);
-    }
+
 
     // Generate secure API key
     const rawKey = this.generateApiKey();
@@ -183,14 +187,14 @@ export class ApiKeyManagementService {
         requestsPerMinute: request.rateLimits?.requestsPerMinute || this.config.rateLimitDefaults.requestsPerMinute,
         requestsPerHour: request.rateLimits?.requestsPerHour || this.config.rateLimitDefaults.requestsPerHour,
         requestsPerDay: request.rateLimits?.requestsPerDay || this.config.rateLimitDefaults.requestsPerDay
-  }
+
       ipWhitelist: request.ipWhitelist,
       metadata: {
         createdBy,
         environment: process.env.NODE_ENV || 'development',
         purpose: request.purpose,
         rotationCount: 0
-      }
+
     };
 
     // Store in database
@@ -210,17 +214,17 @@ export class ApiKeyManagementService {
         expiresAt: expiresAt.toISOString(),
         purpose: request.purpose,
         createdBy
-  }
+
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2', 'ISO27001'],
         requirements: ['access_control', 'key_management'],
         evidenceLevel: 'ENHANCED'
-      }
+
     });
 
     return { apiKey, rawKey };
-  }
+
 
   /**
    * Validate API key and check permissions
@@ -244,8 +248,8 @@ export class ApiKeyManagementService {
         apiKey = await this.getApiKeyByHash(keyHash);
         if (apiKey) {
           this.cacheKey(apiKey);
-        }
-      }
+
+
 
       if (!apiKey) {
         await this.auditService.logEvent({
@@ -254,16 +258,16 @@ export class ApiKeyManagementService {
             keyPrefix,
             reason: 'key_not_found',
             ipAddress
-  }
+
           riskLevel: 'HIGH',
           compliance: {
             frameworks: ['SOC2'],
             requirements: ['access_control'],
             evidenceLevel: 'STANDARD'
-          }
+
         });
         return { valid: false, error: 'Invalid API key' };
-      }
+
 
       // Check status
       if (apiKey.status !== 'active') {
@@ -276,16 +280,16 @@ export class ApiKeyManagementService {
             reason: 'key_inactive',
             status: apiKey.status,
             ipAddress
-  }
+
           riskLevel: 'MEDIUM',
           compliance: {
             frameworks: ['SOC2'],
             requirements: ['access_control'],
             evidenceLevel: 'STANDARD'
-          }
+
         });
         return { valid: false, error: `API key is ${apiKey.status}` };
-      }
+
 
       // Check expiration
       if (apiKey.expiresAt && new Date() > apiKey.expiresAt) {
@@ -298,16 +302,16 @@ export class ApiKeyManagementService {
             keyPrefix,
             expiresAt: apiKey.expiresAt.toISOString(),
             ipAddress
-  }
+
           riskLevel: 'MEDIUM',
           compliance: {
             frameworks: ['SOC2'],
             requirements: ['access_control'],
             evidenceLevel: 'STANDARD'
-          }
+
         });
         return { valid: false, error: 'API key has expired' };
-      }
+
 
       // Check IP whitelist
       if (apiKey.ipWhitelist && apiKey.ipWhitelist.length > 0 && ipAddress) {
@@ -320,17 +324,17 @@ export class ApiKeyManagementService {
               keyPrefix,
               ipAddress,
               allowedIPs: apiKey.ipWhitelist
-  }
+
             riskLevel: 'HIGH',
             compliance: {
               frameworks: ['SOC2'],
               requirements: ['access_control'],
               evidenceLevel: 'ENHANCED'
-            }
+
           });
           return { valid: false, error: 'IP address not allowed' };
-        }
-      }
+
+
 
       // Check scope if required
       if (requiredScope && !apiKey.scopes.includes(requiredScope)) {
@@ -343,16 +347,16 @@ export class ApiKeyManagementService {
             requiredScope,
             availableScopes: apiKey.scopes,
             ipAddress
-  }
+
           riskLevel: 'MEDIUM',
           compliance: {
             frameworks: ['SOC2'],
             requirements: ['access_control'],
             evidenceLevel: 'STANDARD'
-          }
+
         });
         return { valid: false, error: 'Insufficient scope permissions' };
-      }
+
 
       // Check rate limits
       const rateLimitStatus = await this.checkRateLimits(apiKey, ipAddress);
@@ -365,20 +369,20 @@ export class ApiKeyManagementService {
             keyPrefix,
             rateLimits: apiKey.rateLimits,
             ipAddress
-  }
+
           riskLevel: 'LOW',
           compliance: {
             frameworks: ['SOC2'],
             requirements: ['access_control'],
             evidenceLevel: 'STANDARD'
-          }
+
         });
         return { 
           valid: false, 
           error: 'Rate limit exceeded',
           rateLimitStatus
         };
-      }
+
 
       // Update last used timestamp
       await this.updateLastUsed(apiKey.keyId);
@@ -392,13 +396,13 @@ export class ApiKeyManagementService {
           keyPrefix,
           scope: requiredScope,
           ipAddress
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['access_control'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return {
@@ -408,24 +412,23 @@ export class ApiKeyManagementService {
         scopes: apiKey.scopes,
         rateLimitStatus
       };
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'API_KEY_VALIDATION_ERROR',
         details: {
           error: error.message,
           ipAddress
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['access_control'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
       return { valid: false, error: 'Validation error' };
-    }
-  }
+
+
 
   /**
    * Get user's API keys
@@ -446,18 +449,18 @@ export class ApiKeyManagementService {
       
       if (!options.includeInactive) {
         query += ' AND status = \'active\'';
-      }
+
       
       query += ' ORDER BY created_at DESC';
       
       const result = await this.databaseService.query(query, [userId]);
       
       return result.rows.map(row => this.mapRowToApiKey(row));
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching user API keys:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Revoke API key
@@ -472,7 +475,7 @@ export class ApiKeyManagementService {
       const apiKey = await this.getApiKeyById(keyId);
       if (!apiKey) {
         return false;
-      }
+
 
       await this.updateApiKeyStatus(keyId, 'revoked');
       this.clearKeyFromCache(apiKey.keyHash);
@@ -486,21 +489,21 @@ export class ApiKeyManagementService {
           name: apiKey.name,
           revokedBy,
           reason: reason || 'Manual revocation'
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
           requirements: ['access_control', 'key_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error revoking API key:', error);
       return false;
-    }
-  }
+
+
 
   /**
    * Rotate API key (create new, mark old as deprecated)
@@ -514,7 +517,7 @@ export class ApiKeyManagementService {
       const oldKey = await this.getApiKeyById(keyId);
       if (!oldKey || oldKey.status !== 'active') {
         return null;
-      }
+
 
       // Create new key with same properties
       const { apiKey: newApiKey, rawKey } = await this.createApiKey(
@@ -526,7 +529,7 @@ export class ApiKeyManagementService {
           rateLimits: oldKey.rateLimits,
           ipWhitelist: oldKey.ipWhitelist,
           purpose: oldKey.metadata.purpose
-  }
+
         rotatedBy
       );
 
@@ -546,21 +549,21 @@ export class ApiKeyManagementService {
           newKeyId: newApiKey.keyId,
           rotatedBy,
           rotationCount: newApiKey.metadata.rotationCount
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
           requirements: ['key_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return { newApiKey, rawKey };
-    } catch (error) {
+ catch (error) {
       console.error('Error rotating API key:', error);
       return null;
-    }
-  }
+
+
 
   /**
    * Get API key statistics
@@ -615,7 +618,7 @@ export class ApiKeyManagementService {
         topScopes,
         averageKeyAge: Math.round(parseFloat(stats.average_key_age) || 0)
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching API key statistics:', error);
       return {
         totalKeys: 0,
@@ -626,8 +629,8 @@ export class ApiKeyManagementService {
         topScopes: [],
         averageKeyAge: 0
       };
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -648,15 +651,15 @@ export class ApiKeyManagementService {
       ipWhitelist: row.ip_whitelist ? (Array.isArray(row.ip_whitelist) ? row.ip_whitelist : JSON.parse(row.ip_whitelist)) : undefined,
       metadata: typeof row.metadata === 'object' ? row.metadata : JSON.parse(row.metadata || '{}')
     };
-  }
+
 
   private generateApiKey(): string {
     return 'sk_' + crypto.randomBytes(this.config.keyLength).toString('hex');
-  }
+
 
   private hashApiKey(rawKey: string): string {
     return crypto.createHash('sha256').update(rawKey).digest('hex');
-  }
+
 
   private async storeApiKey(apiKey: ApiKey): Promise<void> {
 
@@ -685,7 +688,7 @@ export class ApiKeyManagementService {
     ];
     
     await this.databaseService.query(query, values);
-  }
+
 
   private async getApiKeyByHash(keyHash: string): Promise<ApiKey | null> {
 
@@ -701,11 +704,11 @@ export class ApiKeyManagementService {
     
     if (result.rows.length === 0) {
       return null;
-    }
+
     
     const row = result.rows[0];
     return this.mapRowToApiKey(row);
-  }
+
 
   private async getApiKeyById(keyId: string): Promise<ApiKey | null> {
 
@@ -721,11 +724,11 @@ export class ApiKeyManagementService {
     
     if (result.rows.length === 0) {
       return null;
-    }
+
     
     const row = result.rows[0];
     return this.mapRowToApiKey(row);
-  }
+
 
   private async updateApiKeyStatus(keyId: string, status: ApiKey['status']): Promise<void> {
 
@@ -736,7 +739,7 @@ export class ApiKeyManagementService {
     `;
     
     await this.databaseService.query(query, [status, keyId]);
-  }
+
 
   private async updateLastUsed(keyId: string): Promise<void> {
 
@@ -750,18 +753,18 @@ export class ApiKeyManagementService {
         `;
         
         await this.databaseService.query(query, [keyId]);
-      } catch (error) {
+ catch (error) {
         console.warn('Failed to update API key last used timestamp:', error);
-      }
+
     });
-  }
+
 
   private cacheKey(apiKey: ApiKey): void {
     this.keyCache.set(apiKey.keyHash, {
       key: apiKey,
       cachedAt: new Date()
     });
-  }
+
 
   private async getCachedKey(keyHash: string): Promise<ApiKey | null> {
 
@@ -772,23 +775,23 @@ export class ApiKeyManagementService {
     if (Date.now() - cached.cachedAt.getTime() > this.cacheTimeout) {
       this.keyCache.delete(keyHash);
       return null;
-    }
+
 
     return cached.key;
-  }
+
 
   private clearKeyFromCache(keyHash: string): void {
     this.keyCache.delete(keyHash);
-  }
+
 
   private clearUserCache(userId: string): void {
     // Clear all cached keys for user
     for (const [keyHash, cached] of this.keyCache.entries()) {
       if (cached.key.userId === userId) {
         this.keyCache.delete(keyHash);
-      }
-    }
-  }
+
+
+
 
   private async checkRateLimits(
     apiKey: ApiKey,
@@ -797,7 +800,7 @@ export class ApiKeyManagementService {
     allowed: boolean;
     remaining: { minute: number; hour: number; day: number };
     resetTimes: { minute: Date; hour: Date; day: Date };
-  }> {
+> {
 
     // Use rate limit service to check limits
     const keyIdentifier = `apikey:${apiKey.keyId}`;
@@ -831,14 +834,14 @@ export class ApiKeyManagementService {
         minute: minuteCheck.remainingRequests || 0,
         hour: hourCheck.remainingRequests || 0,
         day: dayCheck.remainingRequests || 0
-  }
+
       resetTimes: {
         minute: minuteCheck.resetTime || new Date(),
         hour: hourCheck.resetTime || new Date(),
         day: dayCheck.resetTime || new Date()
-      }
+
     };
-  }
+
 
   // Admin-specific methods for Epic 17.4.4 API Management
   
@@ -859,14 +862,14 @@ export class ApiKeyManagementService {
       offset: number;
       hasMore: boolean;
     };
-  }> {
+> {
     let whereClause = '';
     const params: any[] = [];
     
     if (options.status) {
       whereClause = 'WHERE ak.status = $1';
       params.push(options.status);
-    }
+
 
     // Count total matching records
     const countQuery = `
@@ -920,7 +923,7 @@ export class ApiKeyManagementService {
         totalCalls: parseInt(row.total_calls) || 0,
         lastMonth: parseInt(row.last_month_calls) || 0,
         errorCount: parseInt(row.error_count) || 0
-  }
+
       recentActivity: await this.getRecentActivity(row.key_id)
     }));
 
@@ -931,9 +934,9 @@ export class ApiKeyManagementService {
         limit: options.limit,
         offset: options.offset,
         hasMore: options.offset + options.limit < total
-      }
+
     };
-  }
+
 
   /**
    * Get usage metrics for all API keys
@@ -990,10 +993,10 @@ export class ApiKeyManagementService {
             errorRate: callCount > 0 ? errorCount / callCount : 0
           }))
       };
-    }
+
 
     return metrics;
-  }
+
 
   /**
    * Get real-time security alerts
@@ -1006,7 +1009,7 @@ export class ApiKeyManagementService {
     timestamp: Date;
     keyId?: string;
     resolved: boolean;
-  }>> {
+>> {
     // This would typically query an alerts table or monitoring system
     // For now, we'll generate some example alerts based on recent activity
     
@@ -1072,12 +1075,12 @@ export class ApiKeyManagementService {
         keyId: row.key_id,
         resolved: row.resolved
       }));
-    } catch (error) {
+ catch (error) {
       // If alerts table doesn't exist or query fails, return empty array
       console.warn('Failed to fetch security alerts:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Admin revoke API key with audit trail
@@ -1088,7 +1091,7 @@ export class ApiKeyManagementService {
       const key = await this.getApiKeyById(keyId);
       if (!key || key.status === 'revoked') {
         return false;
-      }
+
 
       // Update status in database
       const query = `
@@ -1131,17 +1134,17 @@ export class ApiKeyManagementService {
           revokedBy,
           reason,
           adminAction: true
-  }
+
         ipAddress: undefined,
         userAgent: undefined
       });
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to admin revoke API key:', error);
       return false;
-    }
-  }
+
+
 
   /**
    * Suspend API key
@@ -1152,7 +1155,7 @@ export class ApiKeyManagementService {
       const key = await this.getApiKeyById(keyId);
       if (!key || key.status !== 'active') {
         return false;
-      }
+
 
       // Calculate suspension end time if duration is specified
       let suspensionEnds: Date | null = null;
@@ -1161,11 +1164,11 @@ export class ApiKeyManagementService {
         if (duration.endsWith('h')) {
           const hours = parseInt(duration.slice(0, -1));
           suspensionEnds = new Date(now.getTime() + hours * 60 * 60 * 1000);
-        } else if (duration.endsWith('d')) {
+ else if (duration.endsWith('d')) {
           const days = parseInt(duration.slice(0, -1));
           suspensionEnds = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
-        }
-      }
+
+
 
       const query = `
         UPDATE api_keys 
@@ -1219,17 +1222,17 @@ export class ApiKeyManagementService {
           reason,
           duration: duration || 'permanent',
           suspensionEnds: suspensionEnds?.toISOString()
-  }
+
         ipAddress: undefined,
         userAgent: undefined
       });
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to suspend API key:', error);
       return false;
-    }
-  }
+
+
 
   /**
    * Update rate limits for API key
@@ -1240,7 +1243,7 @@ export class ApiKeyManagementService {
       requestsPerMinute: number;
       requestsPerHour: number;
       requestsPerDay: number;
-  }
+
     updatedBy: string
   ): Promise<boolean> {
 
@@ -1248,7 +1251,7 @@ export class ApiKeyManagementService {
       const key = await this.getApiKeyById(keyId);
       if (!key) {
         return false;
-      }
+
 
       const query = `
         UPDATE api_keys 
@@ -1289,17 +1292,17 @@ export class ApiKeyManagementService {
           oldRateLimits: key.rateLimits,
           newRateLimits: rateLimits,
           updatedBy
-  }
+
         ipAddress: undefined,
         userAgent: undefined
       });
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to update rate limits:', error);
       return false;
-    }
-  }
+
+
 
   /**
    * Perform bulk operations on multiple API keys
@@ -1313,7 +1316,7 @@ export class ApiKeyManagementService {
     processedCount: number;
     failedCount: number;
     results: Array<{ keyId: string; success: boolean; error?: string }>;
-  }> {
+> {
     const results: Array<{ keyId: string; success: boolean; error?: string }> = [];
     let processedCount = 0;
     let failedCount = 0;
@@ -1334,24 +1337,24 @@ export class ApiKeyManagementService {
           break;
         default:
           throw new Error(`Unsupported operation: ${operation}`);
-        }
+
 
         if (success) {
           processedCount++;
           results.push({ keyId, success: true });
-        } else {
+ else {
           failedCount++;
           results.push({ keyId, success: false, error: 'Operation failed' });
-        }
-      } catch (error) {
+
+ catch (error) {
         failedCount++;
         results.push({ 
           keyId, 
           success: false, 
           error: error instanceof Error ? error.message : 'Unknown error' 
         });
-      }
-    }
+
+
 
     // Log bulk operation audit event
     await this.auditService.logEvent({
@@ -1364,7 +1367,7 @@ export class ApiKeyManagementService {
         processedCount,
         failedCount,
         results
-  }
+
       ipAddress: undefined,
       userAgent: undefined
     });
@@ -1374,7 +1377,7 @@ export class ApiKeyManagementService {
       failedCount,
       results
     };
-  }
+
 
   /**
    * Get recent activity for an API key
@@ -1385,7 +1388,7 @@ export class ApiKeyManagementService {
     details: string;
     ipAddress?: string;
     endpoint?: string;
-  }>> {
+>> {
     try {
       const query = `
         SELECT 
@@ -1411,9 +1414,8 @@ export class ApiKeyManagementService {
         ipAddress: row.ip_address,
         endpoint: row.endpoint
       }));
-    } catch (error) {
+ catch (error) {
       // If api_call_logs table doesn't exist, return empty array
       return [];
-    }
-  }
-}
+
+

@@ -23,14 +23,14 @@ import {
   validateFeedbackFilter,
   validateModerateFeedbackRequest,
   FEEDBACK_DEFAULTS
-} from '../../../packages/core/types/feedback';
+ from '../../../packages/core/types/feedback';
 
 export class FeedbackService {
   private db: Pool;
 
   constructor(database: Pool) {
     this.db = database;
-  }
+
 
   // =============================================================================
   // Core Feedback Operations
@@ -63,12 +63,12 @@ export class FeedbackService {
       // Handle attachments if provided
       if (validatedData.attachments && validatedData.attachments.length > 0) {
         await this.attachFiles(feedbackId, validatedData.attachments, client);
-      }
+
 
       // Update target summary if this is a rating/review
       if (['rating', 'review'].includes(validatedData.type) && validatedData.rating) {
         await this.updateFeedbackSummary(validatedData.targetId, client);
-      }
+
 
       // Log feedback creation
       await this.logFeedbackActivity(feedbackId, 'created', authorId, null, client);
@@ -76,13 +76,13 @@ export class FeedbackService {
       await client.query('COMMIT');
       
       return this.getFeedbackById(feedbackId);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Get feedback by ID
@@ -113,10 +113,10 @@ export class FeedbackService {
 
     if (result.rows.length === 0) {
       throw new Error('Feedback not found');
-    }
+
 
     return this.mapFeedbackRow(result.rows[0]);
-  }
+
 
   /**
    * Get feedback list with filtering and pagination
@@ -125,7 +125,7 @@ export class FeedbackService {
     feedback: Feedback[];
     total: number;
     hasMore: boolean;
-  }> {
+> {
 
     const validatedFilter = validateFeedbackFilter(filter);
     
@@ -137,64 +137,64 @@ export class FeedbackService {
     if (validatedFilter.targetId) {
       conditions.push(`f.target_id = $${paramIndex++}`);
       params.push(validatedFilter.targetId);
-    }
+
 
     if (validatedFilter.targetType) {
       conditions.push(`f.target_type = $${paramIndex++}`);
       params.push(validatedFilter.targetType);
-    }
+
 
     if (validatedFilter.type) {
       conditions.push(`f.type = $${paramIndex++}`);
       params.push(validatedFilter.type);
-    }
+
 
     if (validatedFilter.category) {
       conditions.push(`f.category = $${paramIndex++}`);
       params.push(validatedFilter.category);
-    }
+
 
     if (validatedFilter.status) {
       conditions.push(`f.status = $${paramIndex++}`);
       params.push(validatedFilter.status);
-    }
+
 
     if (validatedFilter.authorId) {
       conditions.push(`f.author_id = $${paramIndex++}`);
       params.push(validatedFilter.authorId);
-    }
+
 
     if (validatedFilter.verifiedOnly) {
       conditions.push('u.verified = true');
-    }
+
 
     if (validatedFilter.minRating) {
       conditions.push(`f.rating >= $${paramIndex++}`);
       params.push(validatedFilter.minRating);
-    }
+
 
     if (validatedFilter.maxRating) {
       conditions.push(`f.rating <= $${paramIndex++}`);
       params.push(validatedFilter.maxRating);
-    }
+
 
     if (validatedFilter.hasAttachments !== undefined) {
       if (validatedFilter.hasAttachments) {
         conditions.push('EXISTS (SELECT 1 FROM feedback_attachments WHERE feedback_id = f.id)');
-      } else {
+ else {
         conditions.push('NOT EXISTS (SELECT 1 FROM feedback_attachments WHERE feedback_id = f.id)');
-      }
-    }
+
+
 
     if (validatedFilter.createdAfter) {
       conditions.push(`f.created_at >= $${paramIndex++}`);
       params.push(validatedFilter.createdAfter);
-    }
+
 
     if (validatedFilter.createdBefore) {
       conditions.push(`f.created_at <= $${paramIndex++}`);
       params.push(validatedFilter.createdBefore);
-    }
+
 
     if (validatedFilter.search) {
       conditions.push(`(
@@ -204,12 +204,12 @@ export class FeedbackService {
       )`);
       params.push(`%${validatedFilter.search}%`);
       paramIndex++;
-    }
+
 
     // Ensure only visible feedback is shown (unless specifically filtering by status)
     if (!validatedFilter.status) {
       conditions.push('f.status IN (\'approved\', \'pending\') AND f.visibility = \'public\'');
-    }
+
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
@@ -254,7 +254,7 @@ export class FeedbackService {
     const hasMore = validatedFilter.offset + validatedFilter.limit < total;
 
     return { feedback, total, hasMore };
-  }
+
 
   /**
    * Update feedback
@@ -279,12 +279,12 @@ export class FeedbackService {
 
       if (feedbackResult.rows.length === 0) {
         throw new Error('Feedback not found');
-      }
+
 
       const feedback = feedbackResult.rows[0];
       if (feedback.author_id !== userId) {
         throw new Error('Unauthorized to update this feedback');
-      }
+
 
       // Build update query
       const updateFields: string[] = [];
@@ -294,37 +294,37 @@ export class FeedbackService {
       if (validatedData.title !== undefined) {
         updateFields.push(`title = $${paramIndex++}`);
         params.push(validatedData.title);
-      }
+
 
       if (validatedData.content !== undefined) {
         updateFields.push(`content = $${paramIndex++}`);
         params.push(validatedData.content);
-      }
+
 
       if (validatedData.rating !== undefined) {
         updateFields.push(`rating = $${paramIndex++}`);
         params.push(validatedData.rating);
-      }
+
 
       if (validatedData.pros !== undefined) {
         updateFields.push(`pros = $${paramIndex++}`);
         params.push(JSON.stringify(validatedData.pros));
-      }
+
 
       if (validatedData.cons !== undefined) {
         updateFields.push(`cons = $${paramIndex++}`);
         params.push(JSON.stringify(validatedData.cons));
-      }
+
 
       if (validatedData.useCase !== undefined) {
         updateFields.push(`use_case = $${paramIndex++}`);
         params.push(validatedData.useCase);
-      }
+
 
       if (validatedData.wouldRecommend !== undefined) {
         updateFields.push(`would_recommend = $${paramIndex++}`);
         params.push(validatedData.wouldRecommend);
-      }
+
 
       updateFields.push(`updated_at = $${paramIndex++}`);
       params.push(new Date());
@@ -340,7 +340,7 @@ export class FeedbackService {
       // Update summary if rating changed
       if (validatedData.rating !== undefined && validatedData.rating !== feedback.rating) {
         await this.updateFeedbackSummary(feedback.target_id, client);
-      }
+
 
       // Log activity
       await this.logFeedbackActivity(feedbackId, 'updated', userId, null, client);
@@ -348,13 +348,13 @@ export class FeedbackService {
       await client.query('COMMIT');
       
       return this.getFeedbackById(feedbackId);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Delete feedback
@@ -373,12 +373,12 @@ export class FeedbackService {
 
       if (feedbackResult.rows.length === 0) {
         throw new Error('Feedback not found');
-      }
+
 
       const feedback = feedbackResult.rows[0];
       if (feedback.author_id !== userId) {
         throw new Error('Unauthorized to delete this feedback');
-      }
+
 
       // Soft delete by updating status
       await client.query(
@@ -389,19 +389,19 @@ export class FeedbackService {
       // Update summary if this was a rating
       if (feedback.rating) {
         await this.updateFeedbackSummary(feedback.target_id, client);
-      }
+
 
       // Log activity
       await this.logFeedbackActivity(feedbackId, 'deleted', userId, null, client);
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // =============================================================================
   // Voting and Interaction
@@ -433,29 +433,29 @@ export class FeedbackService {
             'DELETE FROM feedback_votes WHERE feedback_id = $1 AND user_id = $2',
             [feedbackId, userId]
           );
-        } else {
+ else {
           // Update vote type
           await client.query(
             'UPDATE feedback_votes SET vote_type = $1, created_at = $2 WHERE feedback_id = $3 AND user_id = $4',
             [voteType, new Date(), feedbackId, userId]
           );
-        }
-      } else {
+
+ else {
         // Insert new vote
         await client.query(
           'INSERT INTO feedback_votes (id, feedback_id, user_id, vote_type, created_at) VALUES ($1, $2, $3, $4, $5)',
           [crypto.randomUUID(), feedbackId, userId, voteType, new Date()]
         );
-      }
+
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Reply to feedback
@@ -485,7 +485,7 @@ export class FeedbackService {
     );
 
     return this.mapReplyRow(result.rows[0]);
-  }
+
 
   // =============================================================================
   // Moderation
@@ -522,7 +522,7 @@ export class FeedbackService {
       case 'archive':
         newStatus = 'archived';
         break;
-      }
+
 
       await client.query(`
         UPDATE feedback 
@@ -553,13 +553,13 @@ export class FeedbackService {
       await client.query('COMMIT');
       
       return this.getFeedbackById(feedbackId);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // =============================================================================
   // Aggregation and Analytics
@@ -577,10 +577,10 @@ export class FeedbackService {
     if (result.rows.length === 0) {
       // Generate summary if it doesn't exist
       return this.generateFeedbackSummary(targetId);
-    }
+
 
     return this.mapSummaryRow(result.rows[0]);
-  }
+
 
   /**
    * Generate and cache feedback summary
@@ -641,7 +641,7 @@ export class FeedbackService {
           3: parseInt(rating.rating_3) || 0,
           4: parseInt(rating.rating_4) || 0,
           5: parseInt(rating.rating_5) || 0
-  }
+
         totalReviews: 0, // Would be calculated from feedback stats
         verifiedReviews: 0,
         averageDifficulty: 0,
@@ -670,13 +670,13 @@ export class FeedbackService {
 
       await client.query('COMMIT');
       return summary;
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // =============================================================================
   // Helper Methods
@@ -698,20 +698,20 @@ export class FeedbackService {
 
       if (existingFeedback.rows.length > 0) {
         throw new Error('You have already provided a rating/review for this item');
-      }
-    }
+
+
 
     // Additional permission checks could be added here
     // e.g., checking if user has purchased a template before reviewing
-  }
+
 
   private getInitialStatus(feedbackType: FeedbackType): FeedbackStatus {
     // Auto-approve certain types of feedback, require moderation for others
     if (['rating', 'comment'].includes(feedbackType)) {
       return 'approved';
-    }
+
     return 'pending';
-  }
+
 
   private async attachFiles(
     feedbackId: string,
@@ -724,8 +724,8 @@ export class FeedbackService {
         'UPDATE feedback_attachments SET feedback_id = $1 WHERE id = $2',
         [feedbackId, attachmentId]
       );
-    }
-  }
+
+
 
   private async updateFeedbackSummary(targetId: string, client: unknown): Promise<void> {
 
@@ -734,7 +734,7 @@ export class FeedbackService {
       'DELETE FROM feedback_summaries WHERE target_id = $1',
       [targetId]
     );
-  }
+
 
   private async logFeedbackActivity(
     feedbackId: string,
@@ -757,7 +757,7 @@ export class FeedbackService {
       JSON.stringify(metadata || {}),
       new Date()
     ]);
-  }
+
 
   private calculateQualityScore(ratingStats: unknown, engagementStats: unknown): number {
     // Simple quality score calculation
@@ -772,7 +772,7 @@ export class FeedbackService {
     const engagementScore = Math.min(helpfulVotes / Math.max(totalRatings, 1) * 30, 30);
 
     return Math.round(ratingScore + engagementScore);
-  }
+
 
   private mapFeedbackRow(row: unknown): Feedback {
     return {
@@ -802,12 +802,12 @@ export class FeedbackService {
       updatedAt: row.updated_at,
       resolvedAt: row.resolved_at,
       metadata: JSON.parse(row.metadata || '{}')
-    } as Feedback;
-  }
+ as Feedback;
+
 
   private mapSummaryRow(row: unknown): FeedbackSummary {
     return JSON.parse(row.summary_data);
-  }
+
 
   private mapReplyRow(row: unknown): FeedbackReply {
     return {
@@ -825,5 +825,4 @@ export class FeedbackService {
       updatedAt: row.updated_at,
       editedAt: row.edited_at
     };
-  }
-}
+

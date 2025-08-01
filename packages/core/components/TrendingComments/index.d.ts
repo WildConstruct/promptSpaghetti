@@ -8,8 +8,7 @@
  */
 export { TrendingCommentsList } from './TrendingCommentsList';
 export { TrendingCommentCard } from './TrendingCommentCard';
-export type {
-  TrendingComment,
+export type { TrendingComment,
   CommentScore,
   CommentEngagement,
   TrendingResults,
@@ -20,7 +19,7 @@ export type {
   CommentableResourceType,
   CommentSortOrder,
   CommentEngagementType,
-  TrendingPeriod,
+  TrendingPeriod }
 } from '../../types/TrendingCommentsTypes';
 export { TrendingCommentsService } from '../../services/TrendingCommentsService';
 //# sourceMappingURL=index.d.ts.map

@@ -9,70 +9,54 @@ import { InviteUserModal } from './InviteUserModal';
 import { WorkspaceSettings } from './WorkspaceSettings';
 import { useWorkspaces } from '../../hooks/useWorkspaces';
 import { Workspace, WorkspaceWithMembership } from '../../types/workspace';
-}
-interface WorkspaceManagerProps {
-  userId: string;
+
+
+interface WorkspaceManagerProps { userId: string;
   onWorkspaceSelect?: (workspace: Workspace) => void;
-  export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({,)
-  userId,
+  export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({);
+  userId }
   onWorkspaceSelect
-}
-}) => {
-  const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceWithMembership | null>(null);
+
+
+}) => { const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceWithMembership | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const {
-    workspaces,
-    loading,
-    error,
-    createWorkspace,
-    updateWorkspace,
-    archiveWorkspace,
-    inviteUser,
+    workspaces
+    loading
+    error
+    createWorkspace
+    updateWorkspace
+    archiveWorkspace
+    inviteUser }
     refreshWorkspaces
-  } = useWorkspaces(userId);
-  const handleWorkspaceSelect = (workspace: WorkspaceWithMembership) => {
-    setSelectedWorkspace(workspace);
-    onWorkspaceSelect?.(workspace);
-  };
-  const handleCreateWorkspace = async (data: { name: string; description?: string }) => {
-    try {
+ = useWorkspaces(userId);
+  const handleWorkspaceSelect = (workspace: WorkspaceWithMembership) => { setSelectedWorkspace(workspace);
+    onWorkspaceSelect?.(workspace) };
+  const handleCreateWorkspace = async (data: { name: string; description?: string }) => { try {
       const newWorkspace = await createWorkspace(data);
       setSelectedWorkspace(newWorkspace);
       setShowCreateModal(false);
-      onWorkspaceSelect?.(newWorkspace);
-    } catch (error) {
-  console.error('Failed to create workspace:', error);
-};
+      onWorkspaceSelect?.(newWorkspace) } catch (error) { console.error('Failed to create workspace:', error) };
   const handleInviteUser = async (data: { userId: string; role: string }) => {
     if (!selectedWorkspace) return;
     try {
       await inviteUser(selectedWorkspace.id, data.userId, data.role);
       setShowInviteModal(false);
       // Optionally refresh or show success message
-    } catch (error) {
-  console.error('Failed to invite user:', error);
-};
-  const handleWorkspaceUpdate = async (updates: { name?: string; description?: string }) => {
-    if (!selectedWorkspace) return;
+ catch (error) { console.error('Failed to invite user:', error) };
+  const handleWorkspaceUpdate = async (updates: { name?: string; description?: string }) => { if (!selectedWorkspace) return;
     try {
       const updatedWorkspace = await updateWorkspace(selectedWorkspace.id, updates);
       setSelectedWorkspace(updatedWorkspace);
-      setShowSettings(false);
-    } catch (error) {
-  console.error('Failed to update workspace:', error);
-};
-  const handleWorkspaceArchive = async () => {
-    if (!selectedWorkspace) return;
+      setShowSettings(false) } catch (error) { console.error('Failed to update workspace:', error) };
+  const handleWorkspaceArchive = async () => { if (!selectedWorkspace) return;
     try {
       await archiveWorkspace(selectedWorkspace.id);
       setSelectedWorkspace(null);
       setShowSettings(false);
-      refreshWorkspaces();
-    } catch (error) {
-  console.error('Failed to archive workspace:', error);
-};
+      refreshWorkspaces() } catch (error) { console.error('Failed to archive workspace:', error) };
   const canManageWorkspace = selectedWorkspace?.role_permissions && ;
     (selectedWorkspace.role_permissions & (1 << 2)) !== 0; // WORKSPACE_ADMIN
   const canInviteUsers = selectedWorkspace?.role_permissions && ;

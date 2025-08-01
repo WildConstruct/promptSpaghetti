@@ -11,14 +11,15 @@ import { MarketplaceLeaderboardService } from '../marketplace/LeaderboardService
 import { BadgeSystem } from '../../../packages/core/gamification/BadgeSystem';
 import { Database } from '../database/connection';
 
-}
-}
+
+
 interface LeaderboardRouteOptions {
   database: Database;
   badgeSystem: BadgeSystem;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Request/Response Schemas for Validation
@@ -32,12 +33,12 @@ const leaderboardQuerySchema = {
       type: 'string',
       enum: ['24h', '7d', '30d', '90d', 'all'],
       default: 'all'
-  }
+
     category: { type: 'string', format: 'uuid' },
     limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
     offset: { type: 'number', minimum: 0, default: 0 },
     includeHistory: { type: 'boolean', default: false }
-  }
+
 };
 
 const leaderboardResponseSchema = {
@@ -56,9 +57,9 @@ const leaderboardResponseSchema = {
           change: { type: 'number' },
           metadata: { type: 'object' },
           lastUpdated: { type: 'string', format: 'date-time' }
-        }
-      }
-  }
+
+
+
     totalEntries: { type: 'number' },
     lastUpdated: { type: 'string', format: 'date-time' },
     timeframe: { type: 'string' },
@@ -69,9 +70,9 @@ const leaderboardResponseSchema = {
         topScore: { type: 'number' },
         totalParticipants: { type: 'number' },
         updateFrequency: { type: 'string' }
-      }
-    }
-  }
+
+
+
 };
 
 export default async function marketplaceLeaderboardRoutes(
@@ -101,8 +102,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { timeframe, category, limit, offset } = request.query as any;
@@ -131,13 +132,13 @@ export default async function marketplaceLeaderboardRoutes(
         timeframe,
         metadata
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get template revenue leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/leaderboards/templates/purchases
@@ -148,8 +149,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { timeframe, category, limit, offset } = request.query as any;
@@ -174,15 +175,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get template purchases leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/leaderboards/templates/rating
@@ -193,8 +194,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { timeframe, category, limit, offset } = request.query as any;
@@ -219,15 +220,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get template rating leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/leaderboards/templates/trending
@@ -238,8 +239,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { category, limit, offset } = request.query as any;
@@ -265,15 +266,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get trending templates leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -288,8 +289,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { timeframe, limit, offset } = request.query as any;
@@ -313,15 +314,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get creator revenue leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/leaderboards/creators/templates
@@ -332,8 +333,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { timeframe, limit, offset } = request.query as any;
@@ -357,15 +358,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get creator templates leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/leaderboards/creators/rating
@@ -376,8 +377,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { timeframe, limit, offset } = request.query as any;
@@ -401,15 +402,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get creator rating leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/leaderboards/creators/badges
@@ -420,8 +421,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { limit, offset } = request.query as any;
@@ -445,15 +446,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get creator badges leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -468,8 +469,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { timeframe, limit, offset } = request.query as any;
@@ -493,15 +494,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get category revenue leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/leaderboards/categories/templates
@@ -512,8 +513,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { timeframe, limit, offset } = request.query as any;
@@ -537,15 +538,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get category templates leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/leaderboards/categories/growth
@@ -556,8 +557,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { limit, offset } = request.query as any;
@@ -581,15 +582,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get category growth leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -604,8 +605,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { limit, offset } = request.query as any;
@@ -628,15 +629,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get engagement points leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/leaderboards/engagement/badges
@@ -647,8 +648,8 @@ export default async function marketplaceLeaderboardRoutes(
       querystring: leaderboardQuerySchema,
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { limit, offset } = request.query as any;
@@ -671,15 +672,15 @@ export default async function marketplaceLeaderboardRoutes(
           topScore: leaderboard.length > 0 ? leaderboard[0]?.score || 0 : 0,
           totalParticipants: leaderboard.length,
           updateFrequency: '10 minutes'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get engagement badges leaderboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -698,23 +699,23 @@ export default async function marketplaceLeaderboardRoutes(
           type: {
             type: 'string',
             enum: ['templates', 'creators', 'categories', 'engagement']
-  }
+
           metric: { type: 'string' },
           timeframe: {
             type: 'string',
             enum: ['24h', '7d', '30d', '90d', 'all'],
             default: 'all'
-  }
+
           category: { type: 'string', format: 'uuid' },
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'number', minimum: 0, default: 0 },
           includeHistory: { type: 'boolean', default: false }
-        }
-  }
+
+
       response: {
         200: leaderboardResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const query = request.body as any;
@@ -722,13 +723,13 @@ export default async function marketplaceLeaderboardRoutes(
       const response = await leaderboardService.queryLeaderboard(query);
       
       return reply.send(response);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to process leaderboard query:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -749,14 +750,14 @@ export default async function marketplaceLeaderboardRoutes(
         cache: {
           size: cacheStats.size,
           entries: cacheStats.entries.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // DELETE /api/leaderboards/cache (Admin only)
@@ -766,8 +767,8 @@ export default async function marketplaceLeaderboardRoutes(
       const user = (request as any).user;
       if (!user || !user.permissions?.includes('admin')) {
         return reply.code(403).send({ error: 'Admin access required' });
-      }
-    }]
+
+]
   }, async (request, reply) => {
     try {
       await leaderboardService.clearCache();
@@ -776,14 +777,14 @@ export default async function marketplaceLeaderboardRoutes(
         success: true,
         message: 'Leaderboard cache cleared successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to clear leaderboard cache:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to clear cache'
       });
-    }
+
   });
-}
+
 
 export { marketplaceLeaderboardRoutes };

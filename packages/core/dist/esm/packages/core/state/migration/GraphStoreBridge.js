@@ -134,12 +134,12 @@ export class GraphStoreBridge {
             {
                 // For now, keep using old state for existing components
                 // New components can opt into new state system
-                const newStateComponents = [];
-                'DevToolsPanel',
+                const newStateComponents = [
+                    'DevToolsPanel',
                     'PerformancePanel',
                     'TimeTravelPanel',
-                    'StateInspectorPanel';
-                ;
+                    'StateInspectorPanel'
+                ];
                 return componentName ? newStateComponents.includes(componentName) : false;
                 /**
                 * Cleanup method to remove listeners

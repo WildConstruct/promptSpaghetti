@@ -3,16 +3,17 @@
 import React from 'react';
 import { Lock, Clock, AlertTriangle, Users, Activity, TrendingUp } from 'lucide-react';
 import { LockingStatistics, LockConflict } from '../types/locking';
-}
-interface LockStatusOverviewProps {
-  statistics: LockingStatistics;
+
+
+interface LockStatusOverviewProps { statistics: LockingStatistics;
   conflicts: LockConflict;
   onConflictClick: (conflict: LockConflict) => void;
-  export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({,)
-  statistics,
-  conflicts,
+  export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({);
+  statistics;
+  conflicts }
   onConflictClick
-}
+
+
 }) => {
   const pendingConflicts = conflicts.filter(c => c.status === 'pending');
   const resolvedConflicts = conflicts.filter(c => c.status === 'resolved');
@@ -73,14 +74,14 @@ interface LockStatusOverviewProps {
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Lock Type Distribution</h3>
         <div className="space-y-3">
-          {Object.entries(statistics.by_type).map(([type, count]) => {
+          { Object.entries(statistics.by_type).map(([type, count]) => {
   const percentage = statistics.total_locks > 0 ? (count / statistics.total_locks) * 100 : 0;
-  const colorMap: Record<string, string> = {,
-  edit: 'bg-blue-500',
-  state_change: 'bg-orange-500',
-  delete: 'bg-red-500',
-  admin: 'bg-purple-500',
-  custom: 'bg-gray-500',
+  const colorMap: Record<string, string> = {
+  edit: 'bg-blue-500'
+  state_change: 'bg-orange-500'
+  delete: 'bg-red-500'
+  admin: 'bg-purple-500'
+  custom: 'bg-gray-500' }
 };
             return;
               <div key={type} className="flex items-center justify-between">

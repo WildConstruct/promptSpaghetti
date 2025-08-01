@@ -5,8 +5,7 @@
 import { ExtensionManifest } from './ExtensionManifest';
 import { UpgradePath } from './ExtensionVersionManager';
 import { ExtensionCompatibilityResult } from './ExtensionCompatibilityChecker';
-export declare class ExtensionUpgradeAdvisor {
-    private static instance;
+export declare class ExtensionUpgradeAdvisor { private static instance;
     private upgradeStrategies;
     private migrationRules;
     private breakingChanges;
@@ -47,7 +46,7 @@ export declare class ExtensionUpgradeAdvisor {
     validateUpgradeCompatibility();
       currentExtension: ExtensionManifest,
       targetExtension: ExtensionManifest,
-      context: UpgradeContext,
+      context: UpgradeContext }
     ): UpgradeCompatibilityResult;
     /**
      * Determine upgrade strategy based on context
@@ -101,142 +100,138 @@ export declare class ExtensionUpgradeAdvisor {
     private identifyPrerequisites;
 
 }
-export interface UpgradeContext {
-    systemVersion: string;
+}
+export interface UpgradeContext { systemVersion: string;
     platform: string;
     availableExtensions: Map<string, ExtensionManifest>;
     grantedPermissions: string[];
     browserInfo?: Record<string, string>;
     securityPriority?: boolean;
     stabilityPriority?: boolean;
-    featurePriority?: boolean;
-
+    featurePriority?: boolean }
 }
-export interface UpgradeRecommendation {
-    hasUpdates: boolean;
+}
+export interface UpgradeRecommendation { hasUpdates: boolean;
     currentVersion: string;
     recommendations: VersionRecommendation[];
-    strategy: UpgradeStrategyType;
-
+    strategy: UpgradeStrategyType }
 }
-export interface VersionRecommendation {
-    version: string;
+}
+export interface VersionRecommendation { version: string;
     priority: 'low' | 'medium' | 'high';
     reason: string;
     risk: 'low' | 'medium' | 'high';
     benefits: string[];
-    effort: 'minimal' | 'low' | 'medium' | 'high';
-
+    effort: 'minimal' | 'low' | 'medium' | 'high' }
 }
-export interface UpgradeAnalysis {
-    feasible: boolean;
+}
+export interface UpgradeAnalysis { feasible: boolean;
     reason?: string;
     path: UpgradePath;
     migrationTasks: MigrationTask[];
     risks: UpgradeRisk[];
     benefits: UpgradeBenefit[];
     estimatedEffort?: EffortEstimate;
-    timeline?: UpgradeTimeline;
-
+    timeline?: UpgradeTimeline }
 }
-export interface MigrationPlan {
-    viable: boolean;
+}
+export interface MigrationPlan { viable: boolean;
     reason?: string;
     phases: MigrationPhase[];
     rollbackPlan?: RollbackPlan;
     testingPlan?: TestingPlan;
     estimatedDuration?: string;
     riskLevel?: 'low' | 'medium' | 'high';
-    prerequisites?: string[];
+    prerequisites?: string[] }
 }
-interface BreakingChange {
-    introducedIn: string;
+}
+interface BreakingChange { introducedIn: string;
     type: 'api' | 'config' | 'behavior' | 'dependency';
     description: string;
     impact: 'low' | 'medium' | 'high';
     migrationRequired: boolean;
     automatedMigration: boolean;
-    migrationGuide?: string;
+    migrationGuide?: string }
 }
-interface BreakingChangeAnalysis {
-    hasBreakingChanges: boolean;
+}
+interface BreakingChangeAnalysis { hasBreakingChanges: boolean;
     changes: BreakingChange[];
     impactLevel: 'low' | 'medium' | 'high';
     migrationRequired: boolean;
-    automatedMigration: boolean;
+    automatedMigration: boolean }
 }
-interface UpgradeCompatibilityResult {
-    compatible: boolean;
+}
+interface UpgradeCompatibilityResult { compatible: boolean;
     compatibilityResult: ExtensionCompatibilityResult;
     dependencyConflicts: DependencyConflict[];
     permissionChanges: PermissionChange[];
     requiresRestart: boolean;
-    dataBackupRequired: boolean;
+    dataBackupRequired: boolean }
 }
-interface DependencyConflict {
-    dependencyId: string;
+}
+interface DependencyConflict { dependencyId: string;
     conflictType: 'version' | 'missing' | 'incompatible';
     description: string;
-    resolution: string;
+    resolution: string }
 }
-interface PermissionChange {
-    permission: string;
+}
+interface PermissionChange { permission: string;
     changeType: 'added' | 'removed' | 'modified';
     description: string;
-    impact: 'low' | 'medium' | 'high';
+    impact: 'low' | 'medium' | 'high' }
 }
-interface MigrationTask {
-    id: string;
+}
+interface MigrationTask { id: string;
     title: string;
     description: string;
     type: 'preparation' | 'validation' | 'migration' | 'verification';
     required: boolean;
     automated: boolean;
-    estimatedDuration: string;
+    estimatedDuration: string }
 }
-interface UpgradeRisk {
-    type: 'breaking-changes' | 'dependency-conflicts' | 'data-loss' | 'performance' | 'security';
+}
+interface UpgradeRisk { type: 'breaking-changes' | 'dependency-conflicts' | 'data-loss' | 'performance' | 'security';
     severity: 'low' | 'medium' | 'high';
     description: string;
     mitigation: string;
-    probability: 'low' | 'medium' | 'high';
+    probability: 'low' | 'medium' | 'high' }
 }
-interface UpgradeBenefit {
-    type: 'features' | 'performance' | 'security' | 'stability' | 'compatibility';
+}
+interface UpgradeBenefit { type: 'features' | 'performance' | 'security' | 'stability' | 'compatibility';
     description: string;
-    impact: 'low' | 'medium' | 'high';
+    impact: 'low' | 'medium' | 'high' }
 }
-interface EffortEstimate {
-    level: 'low' | 'medium' | 'high';
+}
+interface EffortEstimate { level: 'low' | 'medium' | 'high';
     duration: string;
-    complexity: 'simple' | 'moderate' | 'complex';
+    complexity: 'simple' | 'moderate' | 'complex' }
 }
-interface UpgradeTimeline {
-    phases: Array<{
+}
+interface UpgradeTimeline { phases: Array<{
         name: string;
         duration: string;
-        tasks: MigrationTask[];
+        tasks: MigrationTask[] }
 }
     }>;
     totalDuration: string;
 }
-interface MigrationPhase {
-    name: string;
+}
+interface MigrationPhase { name: string;
     description: string;
     tasks: MigrationTask[];
-    duration: string;
+    duration: string }
 }
-interface RollbackPlan {
-    steps: string[];
+}
+interface RollbackPlan { steps: string[];
     estimatedDuration: string;
-    dataLossRisk: 'low' | 'medium' | 'high';
+    dataLossRisk: 'low' | 'medium' | 'high' }
 }
-interface TestingPlan {
-    preUpgradeTests: string[];
+}
+interface TestingPlan { preUpgradeTests: string[];
     postUpgradeTests: string[];
     rollbackTests: string[];
 type UpgradeStrategyType = 'conservative' | 'moderate' | 'aggressive' | 'security' | 'none';
-export declare const extensionUpgradeAdvisor: ExtensionUpgradeAdvisor;
+export declare const extensionUpgradeAdvisor: ExtensionUpgradeAdvisor }
 }
 export {};
 //# sourceMappingURL=ExtensionUpgradeAdvisor.d.ts.map

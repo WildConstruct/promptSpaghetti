@@ -403,7 +403,7 @@ export class ExtensionLifecycleManager {
     createExtensionContext(extension) {
         return {
             extensionId: extension.id,
-            systemVersion: '1.0.0', // This would come from the system
+            systemVersion: '1.0.0', // This would come from the system,
             logger: this.createLogger(extension.id),
             storage: this.createStorage(extension.id),
             events: this.createEventEmitter(extension.id),

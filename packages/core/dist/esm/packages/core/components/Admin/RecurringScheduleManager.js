@@ -19,23 +19,17 @@ import { Clock, Repeat, Settings, Plus, Edit, Trash2, Copy, Play, Pause, AlertTr
 import { RecurrenceEditor } from '../../components/admin/scheduling/RecurrenceEditor';
 // Import scheduling models
 import { ScheduleType, RecurrenceType, ScheduleAction, ScheduleStatus } from '../../../server/src/database/scheduling-models';
-const RECURRENCE_PRESETS = [];
-{
-    id: 'daily-business',
-        name;
-    'Daily (Business Days)',
-        description;
-    'Monday to Friday',
-        pattern;
+const RECURRENCE_PRESETS = [
     {
+        id: 'daily-business',
+        name: 'Daily (Business Days)',
+        description: 'Monday to Friday',
+        pattern: {},
         type: 'weekly',
-            interval;
-        1,
-            daysOfWeek;
-        [1, 2, 3, 4, 5],
-        ;
+        interval: 1,
+        daysOfWeek: [1, 2, 3, 4, 5],
     }
-}
+];
 {
     id: 'weekly-maintenance',
         name;
@@ -132,233 +126,284 @@ const RECURRENCE_PRESETS = [];
                                 startTime: new Date('2024-01-07T02:00:00.000Z'),
                                 endTime: new Date('2024-01-07T06:00:00.000Z'),
                                 timezone: 'America/New_York',
-                                recurrence: {
-                                    type: RecurrenceType.WEEKLY,
-                                    interval: 1,
-                                    daysOfWeek: [0],
-                                },
-                                actionConfig: {},
-                                status: ScheduleStatus.ACTIVE,
-                                enabled: true,
-                                createdBy: 'admin',
-                                createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                                updatedAt: new Date('2024-01-01T00:00:00.000Z'),
-                                nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-                                lastExecution: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-                                executionCount: 12,
-                                failureCount: 1,
-                                priority: 1,
-                                conflictResolution: 'override',
-                                nextOccurrences: [,
-                                    new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-                                    new Date(Date.now() + 9 * 24 * 60 * 60 * 1000),
-                                    new Date(Date.now() + 16 * 24 * 60 * 60 * 1000)
-                                ],
-                                conflictCount: 0,
-                                performanceMetrics: {
-                                    successRate: 91.7,
-                                    averageExecutionTime: 1.8,
-                                    lastFailureReason: 'Network timeout',
-                                }
+                                recurrence: {},
+                                type: RecurrenceType.WEEKLY,
+                                interval: 1,
+                                daysOfWeek: [0],
                             },
-                            {
-                                id: 'schedule-2',
-                                toggleId: 'feature-rollout',
-                                name: 'Daily Feature Rollout',
-                                description: 'Gradually increase feature rollout every day at 9 AM',
-                                type: ScheduleType.RECURRING,
-                                action: ScheduleAction.MODIFY_PERCENTAGE,
-                                startTime: new Date('2024-01-15T09:00:00.000Z'),
-                                timezone: 'UTC',
-                                recurrence: {
-                                    type: RecurrenceType.DAILY,
-                                    interval: 1,
-                                    endDate: new Date('2024-02-15T00:00:00.000Z'),
-                                },
-                                actionConfig: {
-                                    rolloutPercentage: 10,
-                                },
-                                status: ScheduleStatus.ACTIVE,
-                                enabled: true,
-                                createdBy: 'devops',
-                                createdAt: new Date('2024-01-10T00:00:00.000Z'),
-                                updatedAt: new Date('2024-01-10T00:00:00.000Z'),
-                                nextExecution: new Date(Date.now() + 14 * 60 * 60 * 1000),
-                                lastExecution: new Date(Date.now() - 10 * 60 * 60 * 1000),
-                                executionCount: 25,
-                                failureCount: 2,
-                                priority: 2,
-                                conflictResolution: 'skip',
-                                nextOccurrences: [,
-                                    new Date(Date.now() + 14 * 60 * 60 * 1000),
-                                    new Date(Date.now() + 38 * 60 * 60 * 1000),
-                                    new Date(Date.now() + 62 * 60 * 60 * 1000)
-                                ],
-                                conflictCount: 1,
-                                performanceMetrics: {
-                                    successRate: 92.0,
-                                    averageExecutionTime: 0.8,
-                                }
-                            },
-                            {
-                                id: 'schedule-3',
-                                toggleId: 'database-backup',
-                                name: 'Monthly Database Backup',
-                                description: 'Enable backup mode on the first of every month',
-                                type: ScheduleType.RECURRING,
-                                action: ScheduleAction.ENABLE,
-                                startTime: new Date('2024-02-01T01:00:00.000Z'),
-                                endTime: new Date('2024-02-01T03:00:00.000Z'),
-                                timezone: 'UTC',
-                                recurrence: {
-                                    type: RecurrenceType.MONTHLY,
-                                    interval: 1,
-                                    daysOfMonth: [1],
-                                },
-                                actionConfig: {},
-                                status: ScheduleStatus.PENDING,
-                                enabled: true,
-                                createdBy: 'admin',
-                                createdAt: new Date('2024-01-20T00:00:00.000Z'),
-                                updatedAt: new Date('2024-01-20T00:00:00.000Z'),
-                                nextExecution: new Date('2024-02-01T01:00:00.000Z'),
-                                executionCount: 0,
-                                failureCount: 0,
-                                priority: 3,
-                                conflictResolution: 'skip',
-                                nextOccurrences: [,
-                                    new Date('2024-02-01T01:00:00.000Z'),
-                                    new Date('2024-03-01T01:00:00.000Z'),
-                                    new Date('2024-04-01T01:00:00.000Z')
-                                ],
-                                conflictCount: 0,
-                                performanceMetrics: {
-                                    successRate: 0,
-                                    averageExecutionTime: 0
-                                }
-                            }
+                            actionConfig, {},
+                            status, ScheduleStatus.ACTIVE,
+                            enabled, true,
+                            createdBy, 'admin',
+                            createdAt, new Date('2024-01-01T00:00:00.000Z'),
+                            updatedAt, new Date('2024-01-01T00:00:00.000Z'),
+                            nextExecution, new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+                            lastExecution, new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                            executionCount, 12,
+                            failureCount, 1,
+                            priority, 1,
+                            conflictResolution, 'override',
+                            nextOccurrences, [
+                                new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+                                new Date(Date.now() + 9 * 24 * 60 * 60 * 1000),
+                                new Date(Date.now() + 16 * 24 * 60 * 60 * 1000)
+                            ],
+                            conflictCount, 0,
+                            performanceMetrics, {},
+                            successRate, 91.7,
+                            averageExecutionTime, 1.8,
+                            lastFailureReason, 'Network timeout',
                         ];
-                        const mockConflicts = [
-                            {
-                                id: 'conflict-1',
-                                scheduleIds: ['schedule-2', 'schedule-4'],
-                                type: 'time_overlap',
-                                severity: 'medium',
-                                description: 'Feature rollout and maintenance window overlap on Sundays at 9 AM',
-                                suggestedResolution: 'Reschedule feature rollout to 10 AM on Sundays'
-                            }
-                        ];
-                        useEffect(() => {
-                            const loadData = async () => {
-                                setLoading(true);
-                                await new Promise(resolve => setTimeout(resolve, 1000));
-                                setSchedules(mockSchedules);
-                                setConflicts(mockConflicts);
-                                setLoading(false);
-                            };
-                            loadData();
-                        }, []);
-                        // Filter schedules
-                        const filteredSchedules = useMemo(() => {
-                            return schedules.filter(schedule => { });
-                            const matchesSearch = searchQuery === '' || ;
-                            schedule.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                schedule.toggleId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                schedule.createdBy.toLowerCase().includes(searchQuery.toLowerCase());
-                            const matchesStatus = statusFilter === 'all' || schedule.status === statusFilter;
-                            const matchesAction = actionFilter === 'all' || schedule.action === actionFilter;
-                            return matchesSearch && matchesStatus && matchesAction;
-                        });
                     }
-                    [schedules, searchQuery, statusFilter, actionFilter];
-                    ;
-                    const formatDate = (date) => {
-                        return new Intl.DateTimeFormat('en-US', {});
-                        month: 'short',
-                            day;
-                        'numeric',
-                            hour;
-                        '2-digit',
-                            minute;
-                        '2-digit',
+                    {
+                        id: 'schedule-2',
+                            toggleId;
+                        'feature-rollout',
+                            name;
+                        'Daily Feature Rollout',
+                            description;
+                        'Gradually increase feature rollout every day at 9 AM',
+                            type;
+                        ScheduleType.RECURRING,
+                            action;
+                        ScheduleAction.MODIFY_PERCENTAGE,
+                            startTime;
+                        new Date('2024-01-15T09:00:00.000Z'),
+                            timezone;
+                        'UTC',
+                            recurrence;
+                        {
+                            type: RecurrenceType.DAILY,
+                                interval;
+                            1,
+                                endDate;
+                            new Date('2024-02-15T00:00:00.000Z'),
+                            ;
+                        }
+                        actionConfig: {
+                            rolloutPercentage: 10,
+                            ;
+                        }
+                        status: ScheduleStatus.ACTIVE,
+                            enabled;
+                        true,
+                            createdBy;
+                        'devops',
+                            createdAt;
+                        new Date('2024-01-10T00:00:00.000Z'),
+                            updatedAt;
+                        new Date('2024-01-10T00:00:00.000Z'),
+                            nextExecution;
+                        new Date(Date.now() + 14 * 60 * 60 * 1000),
+                            lastExecution;
+                        new Date(Date.now() - 10 * 60 * 60 * 1000),
+                            executionCount;
+                        25,
+                            failureCount;
+                        2,
+                            priority;
+                        2,
+                            conflictResolution;
+                        'skip',
+                            nextOccurrences;
+                        [
+                            new Date(Date.now() + 14 * 60 * 60 * 1000),
+                            new Date(Date.now() + 38 * 60 * 60 * 1000),
+                            new Date(Date.now() + 62 * 60 * 60 * 1000)
+                        ],
+                            conflictCount;
+                        1,
+                            performanceMetrics;
+                        {
+                            successRate: 92.0,
+                                averageExecutionTime;
+                            0.8,
+                            ;
+                        }
+                        {
+                            id: 'schedule-3',
+                                toggleId;
+                            'database-backup',
+                                name;
+                            'Monthly Database Backup',
+                                description;
+                            'Enable backup mode on the first of every month',
+                                type;
+                            ScheduleType.RECURRING,
+                                action;
+                            ScheduleAction.ENABLE,
+                                startTime;
+                            new Date('2024-02-01T01:00:00.000Z'),
+                                endTime;
+                            new Date('2024-02-01T03:00:00.000Z'),
+                                timezone;
+                            'UTC',
+                                recurrence;
+                            {
+                                type: RecurrenceType.MONTHLY,
+                                    interval;
+                                1,
+                                    daysOfMonth;
+                                [1],
+                                ;
+                            }
+                            actionConfig: { }
+                            status: ScheduleStatus.PENDING,
+                                enabled;
+                            true,
+                                createdBy;
+                            'admin',
+                                createdAt;
+                            new Date('2024-01-20T00:00:00.000Z'),
+                                updatedAt;
+                            new Date('2024-01-20T00:00:00.000Z'),
+                                nextExecution;
+                            new Date('2024-02-01T01:00:00.000Z'),
+                                executionCount;
+                            0,
+                                failureCount;
+                            0,
+                                priority;
+                            3,
+                                conflictResolution;
+                            'skip',
+                                nextOccurrences;
+                            [
+                                new Date('2024-02-01T01:00:00.000Z'),
+                                new Date('2024-03-01T01:00:00.000Z'),
+                                new Date('2024-04-01T01:00:00.000Z')
+                            ],
+                                conflictCount;
+                            0,
+                                performanceMetrics;
+                            {
+                                successRate: 0,
+                                    averageExecutionTime;
+                                0;
+                                ;
+                                const mockConflicts = [
+                                    {
+                                        id: 'conflict-1',
+                                        scheduleIds: ['schedule-2', 'schedule-4'],
+                                        type: 'time_overlap',
+                                        severity: 'medium',
+                                        description: 'Feature rollout and maintenance window overlap on Sundays at 9 AM',
+                                        suggestedResolution: 'Reschedule feature rollout to 10 AM on Sundays'
+                                    }
+                                ];
+                                useEffect(() => {
+                                    const loadData = async () => {
+                                        setLoading(true);
+                                        await new Promise(resolve => setTimeout(resolve, 1000));
+                                        setSchedules(mockSchedules);
+                                        setConflicts(mockConflicts);
+                                        setLoading(false);
+                                    };
+                                    loadData();
+                                }, []);
+                                // Filter schedules
+                                const filteredSchedules = useMemo(() => {
+                                    return schedules.filter(schedule => { });
+                                    const matchesSearch = searchQuery === '' || ;
+                                    schedule.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                        schedule.toggleId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                        schedule.createdBy.toLowerCase().includes(searchQuery.toLowerCase());
+                                    const matchesStatus = statusFilter === 'all' || schedule.status === statusFilter;
+                                    const matchesAction = actionFilter === 'all' || schedule.action === actionFilter;
+                                    return matchesSearch && matchesStatus && matchesAction;
+                                });
+                            }
+                            [schedules, searchQuery, statusFilter, actionFilter];
+                            ;
+                            const formatDate = (date) => {
+                                return new Intl.DateTimeFormat('en-US', {});
+                                month: 'short',
+                                    day;
+                                'numeric',
+                                    hour;
+                                '2-digit',
+                                    minute;
+                                '2-digit',
+                                ;
+                            }, format;
+                            (date);
+                        }
                         ;
-                    }, format;
-                    (date);
-                }
-                ;
-                const getRecurrenceDescription = (recurrence) => {
-                    const { type, interval, daysOfWeek, daysOfMonth, _____monthsOfYear } = recurrence;
-                    switch (type) {
-                        case 'daily':
-                            return interval === 1 ? 'Every day' : `Every ${interval} days`;
+                        const getRecurrenceDescription = (recurrence) => {
+                            const { type, interval, daysOfWeek, daysOfMonth, _____monthsOfYear } = recurrence;
+                            switch (type) {
+                                case 'daily':
+                                    return interval === 1 ? 'Every day' : `Every ${interval} days`;
+                            }
+                        };
+                        'weekly';
+                        if (daysOfWeek && daysOfWeek.length > 0) {
+                            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                            const days = daysOfWeek.map(d => dayNames[d]).join(', ');
+                            return interval === 1 ? `Weekly on ${days}` : `Every ${interval} weeks on ${days}`;
+                        }
+                        return interval === 1 ? 'Weekly' : `Every ${interval} weeks`;
                     }
-                };
-                'weekly';
-                if (daysOfWeek && daysOfWeek.length > 0) {
-                    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                    const days = daysOfWeek.map(d => dayNames[d]).join(', ');
-                    return interval === 1 ? `Weekly on ${days}` : `Every ${interval} weeks on ${days}`;
+                    'monthly';
+                    if (daysOfMonth && daysOfMonth.length > 0) {
+                        const days = daysOfMonth.join(', ');
+                        return interval === 1 ? `Monthly on day ${days}` : `Every ${interval} months on day ${days}`;
+                    }
+                    return interval === 1 ? 'Monthly' : `Every ${interval} months`;
                 }
-                return interval === 1 ? 'Weekly' : `Every ${interval} weeks`;
+                'yearly';
+                return interval === 1 ? 'Yearly' : `Every ${interval} years`;
             }
-            'monthly';
-            if (daysOfMonth && daysOfMonth.length > 0) {
-                const days = daysOfMonth.join(', ');
-                return interval === 1 ? `Monthly on day ${days}` : `Every ${interval} months on day ${days}`;
-            }
-            return interval === 1 ? 'Monthly' : `Every ${interval} months`;
+            'custom';
+            return recurrence.cronExpression || 'Custom pattern';
+            return 'Unknown pattern';
         }
-        'yearly';
-        return interval === 1 ? 'Yearly' : `Every ${interval} years`;
-    }
-    'custom';
-    return recurrence.cronExpression || 'Custom pattern';
-    return 'Unknown pattern';
-}
-;
-const handlePauseSchedule = (scheduleId) => {
-    setSchedules(prev => prev.map(s => ), s.id === scheduleId ? { ...s, status: ScheduleStatus.PAUSED } : s);
-    ;
-};
-const handleResumeSchedule = (scheduleId) => {
-    setSchedules(prev => prev.map(s => ), s.id === scheduleId ? { ...s, status: ScheduleStatus.ACTIVE } : s);
-    ;
-};
-const handleDeleteSchedule = (scheduleId) => {
-    setSchedules(prev => prev.filter(s => s.id !== scheduleId));
-};
-const handleDuplicateSchedule = (scheduleId) => {
-    const originalSchedule = schedules.find(s => s.id === scheduleId);
-    if (originalSchedule) {
-        const duplicatedSchedule = {
-            ...originalSchedule,
-            id: `schedule-${Date.now()}`
+        ;
+        const handlePauseSchedule = (scheduleId) => {
+            setSchedules(prev => prev.map(s => ), s.id === scheduleId ? { ...s, status: ScheduleStatus.PAUSED } : s);
+            ;
+        };
+        const handleResumeSchedule = (scheduleId) => {
+            setSchedules(prev => prev.map(s => ), s.id === scheduleId ? { ...s, status: ScheduleStatus.ACTIVE } : s);
+            ;
+        };
+        const handleDeleteSchedule = (scheduleId) => {
+            setSchedules(prev => prev.filter(s => s.id !== scheduleId));
+        };
+        const handleDuplicateSchedule = (scheduleId) => {
+            const originalSchedule = schedules.find(s => s.id === scheduleId);
+            if (originalSchedule) {
+                const duplicatedSchedule = {
+                    ...originalSchedule,
+                    id: `schedule-${Date.now()}`
+                };
+            }
+            name: `${originalSchedule.name} (Copy)`;
         };
     }
-    name: `${originalSchedule.name} (Copy)`;
-};
-status: ScheduleStatus.PENDING,
-    executionCount;
-0,
-    failureCount;
-0,
-    createdAt;
-new Date(),
-    updatedAt;
-new Date(),
-    nextExecution;
-undefined,
-    lastExecution;
-undefined,
-    performanceMetrics;
-{
-    successRate: 0,
-        averageExecutionTime;
+    status: ScheduleStatus.PENDING,
+        executionCount;
     0,
+        failureCount;
+    0,
+        createdAt;
+    new Date(),
+        updatedAt;
+    new Date(),
+        nextExecution;
+    undefined,
+        lastExecution;
+    undefined,
+        performanceMetrics;
+    {
+        successRate: 0,
+            averageExecutionTime;
+        0,
+        ;
+    }
     ;
+    setSchedules(prev => [...prev, duplicatedSchedule]);
 }
-;
-setSchedules(prev => [...prev, duplicatedSchedule]);
 ;
 if (loading) {
     return;

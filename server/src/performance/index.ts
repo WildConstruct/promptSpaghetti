@@ -12,7 +12,7 @@ export type {
   OperationType, 
   DocumentComplexity, 
   NetworkConditions 
-} from './PerformanceTestSuite';
+ from './PerformanceTestSuite';
 
 export { MetricsCollector } from './MetricsCollector';
 export type { 
@@ -22,26 +22,26 @@ export type {
   PerformanceThresholds, 
   PerformanceAlert, 
   MetricsWindow 
-} from './MetricsCollector';
+ from './MetricsCollector';
 
 export { PerformanceDashboard } from './PerformanceDashboard';
 export type { 
   DashboardConfig, 
   DashboardData 
-} from './PerformanceDashboard';
+ from './PerformanceDashboard';
 
 export { LoadTestRunner } from './LoadTestRunner';
 export type { 
   LoadTestConfig, 
   LoadTestResult 
-} from './LoadTestRunner';
+ from './LoadTestRunner';
 
 export { PerformanceOptimizer } from './PerformanceOptimizer';
 export type { 
   OptimizationStrategy, 
   OptimizationAction, 
   OptimizationResult 
-} from './PerformanceOptimizer';
+ from './PerformanceOptimizer';
 
 // Internal imports for PerformanceSystem class
 import { MetricsCollector } from './MetricsCollector';
@@ -66,7 +66,7 @@ export class PerformanceSystem {
     this.optimizer = new PerformanceOptimizer(this.metricsCollector);
 
     this.setupIntegrations();
-  }
+
 
   /**
    * Start the complete performance system
@@ -74,7 +74,7 @@ export class PerformanceSystem {
   start(): void {
     if (this.isRunning) {
       return;
-    }
+
 
     console.log('Starting performance testing and optimization system');
     
@@ -84,7 +84,7 @@ export class PerformanceSystem {
     
     this.isRunning = true;
     console.log('Performance system started successfully');
-  }
+
 
   /**
    * Stop the performance system
@@ -92,7 +92,7 @@ export class PerformanceSystem {
   stop(): void {
     if (!this.isRunning) {
       return;
-    }
+
 
     console.log('Stopping performance system');
     
@@ -103,7 +103,7 @@ export class PerformanceSystem {
     
     this.isRunning = false;
     console.log('Performance system stopped');
-  }
+
 
   /**
    * Get system components
@@ -115,7 +115,7 @@ export class PerformanceSystem {
       loadTestRunner: this.loadTestRunner,
       optimizer: this.optimizer
     };
-  }
+
 
   /**
    * Run comprehensive performance assessment
@@ -136,14 +136,14 @@ export class PerformanceSystem {
         passedTests: results.filter(r => r.summary.successRate >= 95).length,
         averageLatency: results.reduce((acc, r) => acc + r.summary.averageLatency, 0) / results.length,
         overallThroughput: results.reduce((acc, r) => acc + r.summary.throughput, 0)
-  }
+
       recommendations: this.optimizer.getRecommendations(),
       results
     };
     
     console.log('Performance assessment completed');
     return report;
-  }
+
 
   /**
    * Setup integrations between components
@@ -156,5 +156,4 @@ export class PerformanceSystem {
     this.dashboard.setWebSocketServer = (wsServer) => {
       this.optimizer.setWebSocketServer(wsServer);
     };
-  }
-}
+

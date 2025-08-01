@@ -164,7 +164,7 @@ export class ExternalDataService {
         return {
             total_entries: entries.length,
             total_size: totalSize,
-            hit_rate: 0 // Would need to track hits/misses over time
+            hit_rate: 0 // Would need to track hits/misses over time,
         };
     }
     /**
@@ -195,7 +195,7 @@ export class ExternalDataService {
             const response = await fetch(url, {
                 method: 'GET',
                 headers,
-                timeout: 30000 // 30 second timeout
+                timeout: 30000 // 30 second timeout,
             });
             if (!response.ok) {
                 throw new Error(`API request failed: ${response.status} ${response.statusText}`);
@@ -572,30 +572,22 @@ export class ExternalDataService {
             transforms: [
                 {
                     type: 'map_fields',
-                    config: {
-                        field_mapping: {
-                            id: 'id',
-                            type: 'item_type',
-                            content: 'description',
-                            era: 'period',
-                            authenticity: 'accuracy',
-                            tags: 'categories',
-                        },
-                        source_name: 'Medieval Demo'
-                    },
-                    description: 'Map medieval demo fields to UTDG format'
-                }
-            ],
-            metadata: {
-                description: 'Historical medieval clothing and materials demo database',
-                coverage_eras: [require('../types/UTDG').HISTORICAL_ERAS.MEDIEVAL_HIGH],
-                data_types: ['garment', 'material', 'accessory'],
-                accuracy_level: 'high',
-                last_validated: new Date().toISOString(),
-            }
-        });
+                    config: {},
+                    field_mapping: {},
+                    id: 'id',
+                    type: 'item_type',
+                    content: 'description',
+                    era: 'period',
+                    authenticity: 'accuracy',
+                    tags: 'categories',
+                },
+                source_name, 'Medieval Demo'
+            ]
+        }, description, 'Map medieval demo fields to UTDG format');
     }
+    metadata;
 }
+;
 /**
  * Simple rate limiter implementation
  */

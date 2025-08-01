@@ -180,7 +180,7 @@ export class PerformanceMonitoringDashboard extends EventEmitter {
                                         implementation: {
                                             effort: 'medium',
                                                 steps;
-                                            [,
+                                            [
                                                 'Analyze bundle composition with webpack-bundle-analyzer',
                                                 'Implement React.lazy() for route components',
                                                 'Use dynamic imports for heavy libraries',
@@ -222,7 +222,7 @@ const Settings = React.lazy(() => import('./Settings'));
                                         implementation: {
                                             effort: 'medium',
                                                 steps;
-                                            [,
+                                            [
                                                 'Implement proper component cleanup in useEffect',
                                                 'Use useMemo and useCallback for expensive operations',
                                                 'Implement virtualization for large lists',
@@ -266,7 +266,7 @@ const expensiveValue = useMemo(() => ;
                                         implementation: {
                                             effort: 'high',
                                                 steps;
-                                            [,
+                                            [
                                                 'Implement graph result caching',
                                                 'Optimize graph traversal algorithms',
                                                 'Add execution timeouts and cancellation',
@@ -376,14 +376,15 @@ const expensiveValue = useMemo(() => ;
 }
 this.budgetManager.on('critical-violations', (violations) => {
     console.error(`🚨 ${violations.length} critical performance violations!`);
-}, violations.forEach(violation => { }), this.createAlert({}), type, 'budget-violation', severity, 'critical', title, `Critical: ${violation.metric} budget exceeded`, message, `${violation.metric} is ${violation.actual} but budget is ${violation.budget}. Impact: ${violation.impact}`, autoResolvable, false, actions, [,
+}, violations.forEach(violation => { }), this.createAlert({}), type, 'budget-violation', severity, 'critical', title, `Critical: ${violation.metric} budget exceeded`, message, `${violation.metric} is ${violation.actual} but budget is ${violation.budget}. Impact: ${violation.impact}`, autoResolvable, false, actions, [
     {
         id: 'investigate',
         label: 'Investigate Issue',
         type: 'investigate',
         description: 'Analyze the root cause of this performance issue',
         automated: false
-    }]);
+    }
+]);
 ;
 ;
 ;
@@ -419,14 +420,15 @@ if (budgetResult.violations.length >= this.config.alertThresholds.violations) {
 }
 autoResolvable: false,
     actions;
-[,
+[
     {
         id: 'review-violations',
         label: 'Review Violations',
         type: 'investigate',
         description: 'Review all budget violations and create optimization plan',
         automated: false
-    }];
+    }
+];
 ;
 createAlert(alertData, (Partial));
 void {

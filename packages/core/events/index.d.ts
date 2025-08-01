@@ -16,26 +16,22 @@ export type { EventableStore, StateChangeEvent, ZustandEventConfig } from './ada
 export declare /**
  * Event system health check utility
  */
-export declare const performEventSystemHealthCheck: () => {
-    status: "healthy" | "degraded" | "unhealthy";
+export declare const performEventSystemHealthCheck: () => { status: "healthy" | "degraded" | "unhealthy";
     stats: {
         subscriptions: number;
         middleware: number;
         historySize: number;
-        eventTypes: string[];
-    };
+        eventTypes: string[] };
     issues: string[];
 };
 /**
  * Event system metrics collection utility
  */
-export declare const collectEventSystemMetrics: () => {
-    metrics: {
+export declare const collectEventSystemMetrics: () => { metrics: {
         avgEventsPerMinute: number;
         topEventTypes: [string, number][];
         eventsByCategory: Record<string, number>;
-        eventsByPriority: Record<string, number>;
-    };
+        eventsByPriority: Record<string, number> };
     subscriptions: number;
     middleware: number;
     historySize: number;
@@ -44,8 +40,7 @@ export declare const collectEventSystemMetrics: () => {
 /**
  * Predefined event system setups for common use cases
  */
-export declare const EventSystemPresets: {
-    /**
+export declare const EventSystemPresets: { /**
      * Minimal setup for simple applications
      */
     minimal: () => void;
@@ -60,10 +55,8 @@ export declare const EventSystemPresets: {
     /**
      * High-performance setup
      */
-    performance: () => void;
-};
-declare const _default: {
-    EventBus: any;
+    performance: () => void };
+declare const _default: { EventBus: any;
     globalEventBus: import("./EventSystem").EventBus;
     EventFactory: any;
     initializeEventSystem: (environment?: "production" | "development" | "testing") => import("./EventSystem").EventBus;
@@ -83,25 +76,22 @@ declare const _default: {
         /**
          * High-performance setup
          */
-        performance: () => void;
-    };
-    performEventSystemHealthCheck: () => {,
+        performance: () => void };
+    performEventSystemHealthCheck: () => { 
         status: "healthy" | "degraded" | "unhealthy";
         stats: {
             subscriptions: number;
             middleware: number;
             historySize: number;
-            eventTypes: string[];
-        };
+            eventTypes: string[] };
         issues: string[];
     };
-    collectEventSystemMetrics: () => {,
+    collectEventSystemMetrics: () => { 
         metrics: {
             avgEventsPerMinute: number;
             topEventTypes: [string, number][];
             eventsByCategory: Record<string, number>;
-            eventsByPriority: Record<string, number>;
-        };
+            eventsByPriority: Record<string, number> };
         subscriptions: number;
         middleware: number;
         historySize: number;

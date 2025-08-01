@@ -20,7 +20,7 @@ export enum WSMessageType {
   AUTH = 'auth',
   CONFIG = 'config',
   METRICS = 'metrics'
-}
+
 
 // WebSocket Message Schema
 export const WSMessageSchema = z.object({
@@ -53,8 +53,9 @@ export const SubscriptionConfigSchema = z.object({
 export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
 
 // Client Connection
-}
-}
+
+
+
 interface ClientConnection {
   id: string;
   ws: WebSocket; // WebSocket interface
@@ -66,13 +67,15 @@ interface ClientConnection {
   connected: boolean;
   ipAddress?: string;
   userAgent?: string;
-}
-}
-}
+
+
+
+
 
 // Connection Statistics
-}
-}
+
+
+
 interface ConnectionStats {
   totalConnections: number;
   activeConnections: number;
@@ -81,13 +84,15 @@ interface ConnectionStats {
   messagesPerSecond: number;
   bytesPerSecond: number;
   errorRate: number;
-}
-}
-}
+
+
+
+
 
 // WebSocket Server Configuration
-}
-}
+
+
+
 interface WSServerConfig {
   port: number;
   heartbeatInterval: number;
@@ -98,9 +103,10 @@ interface WSServerConfig {
   enableCompression: boolean;
   enableCors: boolean;
   corsOrigins: string[];
-}
-}
-}
+
+
+
+
 
 /**
  * WebSocket Streaming Server
@@ -151,7 +157,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     };
 
     this.setupEventBusSubscription();
-  }
+
 
   /**
    * Start WebSocket server
@@ -174,12 +180,11 @@ export class WebSocketStreamingServer extends EventEmitter {
 
       this.emit('server:started', { port: this.config.port });
       console.log(`WebSocket streaming server started on port ${this.config.port}`);
-      
-    } catch (error) {
+ catch (error) {
       this.emit('server:error', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Stop WebSocket server
@@ -193,31 +198,30 @@ export class WebSocketStreamingServer extends EventEmitter {
       if (this.heartbeatTimer) {
         clearInterval(this.heartbeatTimer);
         this.heartbeatTimer = null;
-      }
+
 
       if (this.metricsTimer) {
         clearInterval(this.metricsTimer);
         this.metricsTimer = null;
-      }
+
 
       // Close all client connections
       for (const client of this.clients.values()) {
         await this.disconnectClient(client.id, 'Server shutdown');
-      }
+
 
       // Close server
       if (this.server) {
         this.server.close();
-      }
+
 
       this.emit('server:stopped');
       console.log('WebSocket server stopped');
-      
-    } catch (error) {
+ catch (error) {
       this.emit('server:error', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Handle new client connection
@@ -232,7 +236,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     if (this.clients.size >= this.config.maxConnections) {
       ws.close(1013, 'Server overloaded');
       return;
-    }
+
 
     // Create client connection
     const client: ClientConnection = {
@@ -274,12 +278,12 @@ export class WebSocketStreamingServer extends EventEmitter {
         requireAuthentication: this.config.requireAuthentication,
         maxSubscriptions: this.config.maxSubscriptionsPerClient,
         heartbeatInterval: this.config.heartbeatInterval
-  }
+
       timestamp: Date.now()
     });
 
     this.emit('client:connected', { clientId, ipAddress, userAgent });
-  }
+
 
   /**
    * Handle client message
@@ -319,13 +323,12 @@ export class WebSocketStreamingServer extends EventEmitter {
 
         default:
           await this.sendError(client, 'Unknown message type', message.type);
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error(`Error handling message from client ${clientId}:`, error);
       await this.sendError(client, 'Invalid message format', error instanceof Error ? error.message : String(error));
-    }
-  }
+
+
 
   /**
    * Handle client authentication
@@ -338,7 +341,7 @@ export class WebSocketStreamingServer extends EventEmitter {
       if (!token) {
         await this.sendError(client, 'Authentication token required');
         return;
-      }
+
 
       // Validate token using authentication service
       const authContext = await this.authService.createAuthContextFromToken(token);
@@ -346,14 +349,14 @@ export class WebSocketStreamingServer extends EventEmitter {
       if (!authContext) {
         await this.sendError(client, 'Invalid authentication token');
         return;
-      }
+
 
       // Check analytics dashboard access
       const dashboardAuth = await this.authService.authorizeDashboardAccess('user', authContext);
       if (!dashboardAuth.allowed) {
         await this.sendError(client, 'Dashboard access denied');
         return;
-      }
+
 
       client.authContext = authContext;
       client.isAuthenticated = true;
@@ -365,18 +368,17 @@ export class WebSocketStreamingServer extends EventEmitter {
           authenticated: true,
           userId: authContext.userId,
           permissions: authContext.permissions
-  }
+
         timestamp: Date.now()
       });
 
       console.log(`Client ${client.id} authenticated as user ${authContext.userId}`);
       this.emit('client:authenticated', { clientId: client.id, userId: authContext.userId });
-
-    } catch (error) {
+ catch (error) {
       console.error(`Authentication error for client ${client.id}:`, error);
       await this.sendError(client, 'Authentication failed');
-    }
-  }
+
+
 
   /**
    * Handle subscription request
@@ -388,13 +390,13 @@ export class WebSocketStreamingServer extends EventEmitter {
       if (this.config.requireAuthentication && !client.isAuthenticated) {
         await this.sendError(client, 'Authentication required for subscriptions');
         return;
-      }
+
 
       // Check subscription limits
       if (client.subscriptions.size >= this.config.maxSubscriptionsPerClient) {
         await this.sendError(client, 'Maximum subscriptions exceeded');
         return;
-      }
+
 
       // Parse subscription configuration
       const subscriptionConfig = SubscriptionConfigSchema.parse(payload);
@@ -410,10 +412,10 @@ export class WebSocketStreamingServer extends EventEmitter {
         if (!queryAuth.allowed) {
           await this.sendError(client, 'Subscription access denied');
           return;
-        }
+
 
         authorizedFilter = queryAuth.filteredQuery;
-      }
+
 
       // Create subscription with authorized filter
       const finalConfig = {
@@ -430,7 +432,7 @@ export class WebSocketStreamingServer extends EventEmitter {
           subscriptionId: subscriptionConfig.subscriptionId,
           subscribed: true,
           filter: authorizedFilter
-  }
+
         timestamp: Date.now()
       });
 
@@ -439,12 +441,11 @@ export class WebSocketStreamingServer extends EventEmitter {
         clientId: client.id, 
         subscriptionId: subscriptionConfig.subscriptionId 
       });
-
-    } catch (error) {
+ catch (error) {
       console.error(`Subscription error for client ${client.id}:`, error);
       await this.sendError(client, 'Subscription failed', error instanceof Error ? error.message : String(error));
-    }
-  }
+
+
 
   /**
    * Handle unsubscription request
@@ -463,19 +464,18 @@ export class WebSocketStreamingServer extends EventEmitter {
           payload: {
             subscriptionId,
             unsubscribed: true
-  }
+
           timestamp: Date.now()
         });
 
         console.log(`Client ${client.id} unsubscribed from ${subscriptionId}`);
         this.emit('client:unsubscribed', { clientId: client.id, subscriptionId });
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error(`Unsubscription error for client ${client.id}:`, error);
       await this.sendError(client, 'Unsubscription failed');
-    }
-  }
+
+
 
   /**
    * Handle heartbeat
@@ -489,7 +489,7 @@ export class WebSocketStreamingServer extends EventEmitter {
       payload: { timestamp: Date.now() },
       timestamp: Date.now()
     });
-  }
+
 
   /**
    * Handle configuration request
@@ -504,10 +504,10 @@ export class WebSocketStreamingServer extends EventEmitter {
         subscriptions: Array.from(client.subscriptions.keys()),
         heartbeatInterval: this.config.heartbeatInterval,
         maxSubscriptions: this.config.maxSubscriptionsPerClient
-  }
+
       timestamp: Date.now()
     });
-  }
+
 
   /**
    * Handle client disconnection
@@ -521,14 +521,14 @@ export class WebSocketStreamingServer extends EventEmitter {
       
       if (client.isAuthenticated) {
         this.stats.authenticatedConnections--;
-      }
+
 
       this.clients.delete(clientId);
       
       console.log(`Client ${clientId} disconnected: ${code} ${reason}`);
       this.emit('client:disconnected', { clientId, code, reason });
-    }
-  }
+
+
 
   /**
    * Handle client error
@@ -536,7 +536,7 @@ export class WebSocketStreamingServer extends EventEmitter {
   private handleError(clientId: string, error: Error): void {
     console.error(`Client ${clientId} error:`, error);
     this.emit('client:error', { clientId, error });
-  }
+
 
   /**
    * Setup event bus subscription for broadcasting
@@ -547,10 +547,10 @@ export class WebSocketStreamingServer extends EventEmitter {
       filter: {}, // Subscribe to all events
       handler: (event: UnifiedAnalyticsEvent) => {
         this.broadcastEvent(event);
-  }
+
       priority: 500
     });
-  }
+
 
   /**
    * Broadcast event to matching subscribers
@@ -568,12 +568,12 @@ export class WebSocketStreamingServer extends EventEmitter {
           broadcastPromises.push(
             this.sendEventToClient(client, event, subscriptionId, config)
           );
-        }
-      }
-    }
+
+
+
 
     await Promise.allSettled(broadcastPromises);
-  }
+
 
   /**
    * Send event to specific client
@@ -591,13 +591,13 @@ export class WebSocketStreamingServer extends EventEmitter {
         const eventAuth = await this.authService.authorizeEventAccess(event, client.authContext);
         if (!eventAuth.allowed) {
           return; // Skip unauthorized events
-        }
+
         
         // Use filtered event if redaction was applied
         if (eventAuth.filteredEvent) {
           event = eventAuth.filteredEvent as UnifiedAnalyticsEvent;
-        }
-      }
+
+
 
       // Add to client queue for batching
       client.eventQueue.push(event);
@@ -605,12 +605,11 @@ export class WebSocketStreamingServer extends EventEmitter {
       // Check if we should flush the queue
       if (client.eventQueue.length >= config.batchSize) {
         await this.flushClientQueue(client, subscriptionId, config);
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error(`Error sending event to client ${client.id}:`, error);
-    }
-  }
+
+
 
   /**
    * Flush client event queue
@@ -636,10 +635,10 @@ export class WebSocketStreamingServer extends EventEmitter {
           data: e.data
         })),
         batchSize: events.length
-  }
+
       timestamp: Date.now()
     });
-  }
+
 
   /**
    * Check if event matches subscription filter
@@ -655,7 +654,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     if (filter.organizationId && event.organizationId !== filter.organizationId) return false;
 
     return true;
-  }
+
 
   /**
    * Send heartbeats to all clients
@@ -671,21 +670,21 @@ export class WebSocketStreamingServer extends EventEmitter {
         // Client timed out
         clientsToRemove.push(clientId);
         continue;
-      }
+
 
       // Flush any pending events
       for (const [subscriptionId, config] of client.subscriptions) {
         if (client.eventQueue.length > 0) {
           await this.flushClientQueue(client, subscriptionId, config);
-        }
-      }
-    }
+
+
+
 
     // Remove timed out clients
     for (const clientId of clientsToRemove) {
       await this.disconnectClient(clientId, 'Connection timeout');
-    }
-  }
+
+
 
   /**
    * Update connection statistics
@@ -695,7 +694,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     // This would be implemented with actual counters in production
     
     this.emit('metrics:updated', this.stats);
-  }
+
 
   /**
    * Send message to client
@@ -707,12 +706,11 @@ export class WebSocketStreamingServer extends EventEmitter {
     try {
       const messageString = JSON.stringify(message);
       client.ws.send(messageString);
-      
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to send message to client ${client.id}:`, error);
       await this.disconnectClient(client.id, 'Send error');
-    }
-  }
+
+
 
   /**
    * Send error message to client
@@ -724,7 +722,7 @@ export class WebSocketStreamingServer extends EventEmitter {
       payload: { message, details },
       timestamp: Date.now()
     });
-  }
+
 
   /**
    * Disconnect client
@@ -736,21 +734,21 @@ export class WebSocketStreamingServer extends EventEmitter {
       try {
         if (client.ws && client.connected) {
           client.ws.close(1000, reason);
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error(`Error disconnecting client ${clientId}:`, error);
-      }
+
       
       this.handleDisconnection(clientId, 1000, reason);
-    }
-  }
+
+
 
   /**
    * Generate unique client ID
    */
   private generateClientId(): string {
     return `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   /**
    * Public API Methods
@@ -771,7 +769,7 @@ export class WebSocketStreamingServer extends EventEmitter {
       .reduce((sum, client) => sum + client.subscriptions.size, 0);
 
     return { ...this.stats };
-  }
+
 
   /**
    * Get connected clients
@@ -782,7 +780,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     subscriptions: number;
     lastHeartbeat: number;
     ipAddress?: string;
-  }> {
+> {
     return Array.from(this.clients.values()).map(client => ({
       id: client.id,
       isAuthenticated: client.isAuthenticated,
@@ -790,7 +788,7 @@ export class WebSocketStreamingServer extends EventEmitter {
       lastHeartbeat: client.lastHeartbeat,
       ipAddress: client.ipAddress
     }));
-  }
+
 
   /**
    * Broadcast custom message to all clients
@@ -803,14 +801,14 @@ export class WebSocketStreamingServer extends EventEmitter {
 
     const promises = clients.map(client => this.sendMessage(client, message));
     await Promise.allSettled(promises);
-  }
+
 
   /**
    * Get client by ID
    */
   getClient(clientId: string): ClientConnection | null {
     return this.clients.get(clientId) || null;
-  }
+
 
   /**
    * Force disconnect client
@@ -821,10 +819,10 @@ export class WebSocketStreamingServer extends EventEmitter {
     if (client) {
       await this.disconnectClient(clientId, reason);
       return true;
-    }
+
     return false;
-  }
-}
+
+
 
 /**
  * WebSocket Client for testing and integration
@@ -842,7 +840,7 @@ export class WebSocketAnalyticsClient extends EventEmitter {
     super();
     this.url = url;
     this.authToken = authToken;
-  }
+
 
   /**
    * Connect to WebSocket server
@@ -858,12 +856,11 @@ export class WebSocketAnalyticsClient extends EventEmitter {
         this.connected = true;
         this.emit('connected');
         resolve();
-
-      } catch (error) {
+ catch (error) {
         reject(error);
-      }
+
     });
-  }
+
 
   /**
    * Disconnect from server
@@ -874,8 +871,8 @@ export class WebSocketAnalyticsClient extends EventEmitter {
       this.stopHeartbeat();
       this.ws.close();
       this.ws = null;
-    }
-  }
+
+
 
   /**
    * Authenticate with server
@@ -886,7 +883,7 @@ export class WebSocketAnalyticsClient extends EventEmitter {
       payload: { token },
       timestamp: Date.now()
     });
-  }
+
 
   /**
    * Subscribe to events
@@ -899,7 +896,7 @@ export class WebSocketAnalyticsClient extends EventEmitter {
       payload: config,
       timestamp: Date.now()
     });
-  }
+
 
   /**
    * Unsubscribe from events
@@ -912,7 +909,7 @@ export class WebSocketAnalyticsClient extends EventEmitter {
       payload: { subscriptionId },
       timestamp: Date.now()
     });
-  }
+
 
   /**
    * Send message to server
@@ -920,8 +917,8 @@ export class WebSocketAnalyticsClient extends EventEmitter {
   private send(message: WSMessage): void {
     if (this.ws && this.connected) {
       this.ws.send(JSON.stringify(message));
-    }
-  }
+
+
 
   /**
    * Handle incoming message
@@ -949,13 +946,12 @@ export class WebSocketAnalyticsClient extends EventEmitter {
           
         default:
           this.emit('message', message);
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       console.error('Error parsing WebSocket message:', error);
       this.emit('error', error);
-    }
-  }
+
+
 
   /**
    * Start heartbeat
@@ -967,7 +963,7 @@ export class WebSocketAnalyticsClient extends EventEmitter {
         timestamp: Date.now()
       });
     }, 25000); // Send heartbeat every 25 seconds
-  }
+
 
   /**
    * Stop heartbeat
@@ -976,15 +972,15 @@ export class WebSocketAnalyticsClient extends EventEmitter {
     if (this.heartbeatTimer) {
       clearInterval(this.heartbeatTimer);
       this.heartbeatTimer = null;
-    }
-  }
+
+
 
   /**
    * Get connection status
    */
   isConnected(): boolean {
     return this.connected;
-  }
-}
+
+
 
 export default WebSocketStreamingServer;

@@ -18,8 +18,8 @@ import { AuditService } from '../auth/services/AuditService';
 // REQUEST/RESPONSE INTERFACES
 // ==========================================
 
-}
-}
+
+
 export interface VerifyBackupRequest {
   backupId: string;
   configuration?: {
@@ -30,13 +30,14 @@ export interface VerifyBackupRequest {
     customParameters?: Record<string, any>;
     skipOnWarnings?: boolean;
     abortOnCriticalFailure?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface BackupVerificationResponse {
   success: boolean;
   data?: any;
@@ -45,13 +46,14 @@ export interface BackupVerificationResponse {
     timestamp: Date;
     requestId: string;
     processingTime: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface SessionListQuery {
   status?: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
   backupId?: string;
@@ -59,21 +61,23 @@ export interface SessionListQuery {
   offset?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StepConfigurationRequest {
   stepId: string;
   enabled: boolean;
   timeout?: number;
   retryAttempts?: number;
   parameters?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // ==========================================
 // API PLUGIN IMPLEMENTATION
@@ -90,7 +94,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
     if (!authHeader) {
       reply.code(401).send({ error: 'Authorization header required' });
       return;
-    }
+
 
     const token = authHeader.replace('Bearer ', '');
     try {
@@ -98,12 +102,12 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
       if (!user || !user.permissions.includes('backup_admin')) {
         reply.code(403).send({ error: 'Insufficient permissions for backup verification' });
         return;
-      }
+
       request.user = user;
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ error: 'Invalid authentication token' });
       return;
-    }
+
   });
 
   // ==========================================
@@ -128,11 +132,11 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
               customParameters: { type: 'object' },
               skipOnWarnings: { type: 'boolean' },
               abortOnCriticalFailure: { type: 'boolean' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `verify_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -147,7 +151,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           requestId,
           configuration: request.body.configuration,
           timestamp: new Date()
-        }
+
       });
 
       // Start verification process
@@ -163,16 +167,16 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           sessionId,
           backupId: request.body.backupId,
           status: 'started'
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId,
           processingTime: Date.now() - startTime
-        }
+
       };
 
       reply.code(202).send(response);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Backup verification error: ${error.message}`);
 
       await auditService.logAction({
@@ -183,7 +187,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           requestId,
           error: error.message,
           timestamp: new Date()
-        }
+
       });
 
       reply.code(500).send({
@@ -193,9 +197,9 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           timestamp: new Date(),
           requestId,
           processingTime: Date.now() - startTime
-        }
+
       });
-    }
+
   });
 
   // Get verification status
@@ -211,7 +215,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           error: 'Verification session not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
@@ -220,15 +224,15 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           timestamp: new Date(),
           requestId: `status_${Date.now()}`,
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Session status error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve session status'
       });
-    }
+
   });
 
   // Cancel verification session
@@ -245,7 +249,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
         details: {
           timestamp: new Date(),
           reason: 'manual_cancellation'
-        }
+
       });
 
       reply.send({
@@ -253,20 +257,20 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
         data: {
           sessionId: request.params.sessionId,
           status: 'cancelled'
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId: `cancel_${Date.now()}`,
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Session cancellation error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to cancel verification session'
       });
-    }
+
   });
 
   // List verification sessions with filtering
@@ -281,9 +285,9 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           offset: { type: 'integer', minimum: 0, default: 0 },
           sortBy: { type: 'string', default: 'initiatedAt' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -301,15 +305,15 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           timestamp: new Date(),
           requestId: `list_${Date.now()}`,
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Session listing error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve verification sessions'
       });
-    }
+
   });
 
   // ==========================================
@@ -332,22 +336,22 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           timestamp: new Date(),
           requestId: `steps_${Date.now()}`,
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Steps retrieval error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve verification steps'
       });
-    }
+
   });
 
   // Update step configuration
   fastify.put<{ 
     Params: { stepId: string }, 
     Body: StepConfigurationRequest 
-  }>('/steps/:stepId/config', {
+>('/steps/:stepId/config', {
     schema: {
       body: {
         type: 'object',
@@ -358,9 +362,9 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           timeout: { type: 'integer', minimum: 1000 },
           retryAttempts: { type: 'integer', minimum: 0, maximum: 5 },
           parameters: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -378,7 +382,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
         details: {
           configuration: request.body,
           timestamp: new Date()
-        }
+
       });
 
       reply.send({
@@ -386,20 +390,20 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
         data: {
           stepId: request.params.stepId,
           configuration: request.body
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId: `config_${Date.now()}`,
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Step configuration error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to update step configuration'
       });
-    }
+
   });
 
   // ==========================================
@@ -420,15 +424,15 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           generatedAt: new Date(),
           requestId: `analytics_${Date.now()}`,
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Analytics error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to generate verification analytics'
       });
-    }
+
   });
 
   // Get step performance metrics
@@ -445,15 +449,15 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           generatedAt: new Date(),
           requestId: `step_metrics_${Date.now()}`,
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Step metrics error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve step performance metrics'
       });
-    }
+
   });
 
   // ==========================================
@@ -470,13 +474,13 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
         success: health.status === 'healthy',
         data: health
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Health check error: ${error.message}`);
       reply.code(503).send({
         success: false,
         error: 'Service health check failed'
       });
-    }
+
   });
 
   // Cleanup old verification sessions
@@ -493,7 +497,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
         details: {
           cleanupResult,
           timestamp: new Date()
-        }
+
       });
 
       reply.send({
@@ -503,15 +507,15 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           timestamp: new Date(),
           requestId: `cleanup_${Date.now()}`,
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Cleanup error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to cleanup old sessions'
       });
-    }
+
   });
 
   fastify.log.info('Backup Verification API routes registered successfully');

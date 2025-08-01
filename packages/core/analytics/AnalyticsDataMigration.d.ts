@@ -8,8 +8,7 @@ import { z } from 'zod';
 import { UnifiedEventBus } from './UnifiedEventBus';
 import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 import { EventRepository } from './EventPersistenceLayer';
-export declare const MigrationConfigSchema: z.ZodObject<{
-    batchSize: z.ZodDefault<z.ZodNumber>;
+export declare const MigrationConfigSchema: z.ZodObject<{ batchSize: z.ZodDefault<z.ZodNumber>;
     concurrency: z.ZodDefault<z.ZodNumber>;
     retryAttempts: z.ZodDefault<z.ZodNumber>;
     retryDelayMs: z.ZodDefault<z.ZodNumber>;
@@ -18,9 +17,7 @@ export declare const MigrationConfigSchema: z.ZodObject<{
     continueOnError: z.ZodDefault<z.ZodBoolean>;
     dryRun: z.ZodDefault<z.ZodBoolean>;
     preserveTimestamps: z.ZodDefault<z.ZodBoolean>;
-    includeMetadata: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    retryAttempts: number;
+    includeMetadata: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { retryAttempts: number;
     includeMetadata: boolean;
     batchSize: number;
     concurrency: number;
@@ -29,9 +26,7 @@ export declare const MigrationConfigSchema: z.ZodObject<{
     backupEnabled: boolean;
     continueOnError: boolean;
     dryRun: boolean;
-    preserveTimestamps: boolean;
-}, {
-    retryAttempts?: number | undefined;
+    preserveTimestamps: boolean }, { retryAttempts?: number | undefined;
     includeMetadata?: boolean | undefined;
     batchSize?: number | undefined;
     concurrency?: number | undefined;
@@ -40,20 +35,18 @@ export declare const MigrationConfigSchema: z.ZodObject<{
     backupEnabled?: boolean | undefined;
     continueOnError?: boolean | undefined;
     dryRun?: boolean | undefined;
-    preserveTimestamps?: boolean | undefined;
-}>;
+    preserveTimestamps?: boolean | undefined }>;
 export type MigrationConfig = z.infer<typeof MigrationConfigSchema>;
-export declare enum MigrationStatus {
-    PENDING = "pending",
-    RUNNING = "running",
-    PAUSED = "paused",
-    COMPLETED = "completed",
-    FAILED = "failed",
+export declare enum MigrationStatus { PENDING = "pending"
+    RUNNING = "running"
+    PAUSED = "paused"
+    COMPLETED = "completed"
+    FAILED = "failed" }
     CANCELLED = "cancelled"
 
 }
-export interface MigrationResult {
-    migrationId: string;
+}
+export interface MigrationResult { migrationId: string;
     systemName: string;
     status: MigrationStatus;
     startTime: number;
@@ -69,25 +62,24 @@ export interface MigrationResult {
         recordsPerSecond: number;
         averageBatchTime: number;
         peakMemoryUsage: number;
-        totalDataSize: number;
+        totalDataSize: number }
 }
     };
     backupLocation?: string;
     rollbackAvailable: boolean;
 
 }
-export interface ValidationError {
-    recordId?: string;
+}
+export interface ValidationError { recordId?: string;
     field: string;
     originalValue: any;
     transformedValue: any;
     errorType: 'missing_field' | 'invalid_type' | 'validation_failed' | 'transformation_error';
     message: string;
-    severity: 'warning' | 'error' | 'critical';
-
+    severity: 'warning' | 'error' | 'critical' }
 }
-export interface DataTransformationRule {
-    id: string;
+}
+export interface DataTransformationRule { id: string;
     sourceSystem: string;
     sourceField: string;
     targetField: string;
@@ -95,28 +87,24 @@ export interface DataTransformationRule {
     transformation: {
         expression?: string;
         lookupTable?: {
-            [key: string]: any;
+            [key: string]: any }
 }
         };
-        conditions?: Array<{
-            condition: string;
+        conditions?: Array<{ condition: string;
             value: any;
-            fallback?: any;
-        }>;
+            fallback?: any }>;
         defaultValue?: any;
     };
-    validation?: {
-        required?: boolean;
+    validation?: { required?: boolean;
         type?: string;
         pattern?: string;
         min?: number;
         max?: number;
-        enum?: any[];
-    };
+        enum?: any[] };
 
 }
-export interface MigrationProgress {
-    migrationId: string;
+}
+export interface MigrationProgress { migrationId: string;
     systemName: string;
     status: MigrationStatus;
     progress: {
@@ -125,22 +113,19 @@ export interface MigrationProgress {
         totalRecords: number;
         currentBatch: number;
         totalBatches: number;
-        eta: number;
+        eta: number }
 }
     };
     currentOperation: string;
     lastError?: string;
-    throughput: {
-        recordsPerSecond: number;
-        bytesPerSecond: number;
-    };
+    throughput: { recordsPerSecond: number;
+        bytesPerSecond: number };
 /**
  * Analytics Data Migration Service
  *
  * Orchestrates migration of analytics data from legacy systems to unified event bus
  */
-export declare class AnalyticsDataMigrationService {
-    private eventBus;
+export declare class AnalyticsDataMigrationService { private eventBus;
     private adapterManager;
     private eventRepository;
     private activeMigrations;
@@ -235,8 +220,7 @@ export declare class AnalyticsDataMigrationService {
      */
     listMigrations(): {
         active: MigrationProgress[];
-        completed: MigrationResult[];
-    };
+        completed: MigrationResult[] };
     /**
      * Cancel migration
      */
@@ -264,22 +248,17 @@ export declare class AnalyticsDataMigrationService {
     /**
      * Migrate all systems
      */
-    migrateAllSystems(systemsData: {)
-        [systemName: string]: any[];
-    }, config?: Partial<MigrationConfig>): Promise<{
-        [systemName: string]: string;
-    }>;
+    migrateAllSystems(systemsData: { )
+        [systemName: string]: any[] }, config?: Partial<MigrationConfig>): Promise<{ [systemName: string]: string }>;
     /**
      * Get migration summary
      */
-    getMigrationSummary(): {
-        totalMigrations: number;
+    getMigrationSummary(): { totalMigrations: number;
         activeMigrations: number;
         completedMigrations: number;
         failedMigrations: number;
         totalRecordsMigrated: number;
-        totalValidationErrors: number;
-    };
+        totalValidationErrors: number };
 
 export default AnalyticsDataMigrationService;
 //# sourceMappingURL=AnalyticsDataMigration.d.ts.map

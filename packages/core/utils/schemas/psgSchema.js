@@ -89,23 +89,23 @@ function validatePsgFile(data: unknown) {
         const result = exports.PsgFileSchema.safeParse(data);
         if (result.success) {
             return { success: true, data: result.data };
-        }
+
         else {
             return {
                 success: false,
                 error: 'Invalid .psg file format',
                 issues: result.error.issues
             };
-        }
-    }
+
+
     catch (error) {
         return {
             success: false,
             error: error instanceof Error ? error.message : 'Unknown validation error',
             issues: []
         };
-    }
-}
+
+
 // Version compatibility checking
 function isVersionCompatible(fileVersion: string) {
     const [fileMajor, fileMinor] = fileVersion.split('.').map(Number);
@@ -117,7 +117,7 @@ function isVersionCompatible(fileVersion: string) {
             requiresMigration: fileMinor < currentMinor,
             message: fileMinor < currentMinor ? 'File will be upgraded to current format version' : undefined
         };
-    }
+
     // Future major version is not compatible
     if (fileMajor > currentMajor) {
         return {
@@ -125,14 +125,14 @@ function isVersionCompatible(fileVersion: string) {
             requiresMigration: false,
             message: 'This file was created with a newer version of the application. Please update to the latest version.'
         };
-    }
+
     // Older major version requires migration
     return {
         compatible: true,
         requiresMigration: true,
         message: 'This file format is outdated and will be automatically upgraded.'
     };
-}
+
 // Helper to create default project metadata
 function createDefaultMetadata(name: string, author?: string) {
     const now = new Date().toISOString();
@@ -146,7 +146,7 @@ function createDefaultMetadata(name: string, author?: string) {
         tags: [],
         fileFormatVersion: exports.PSG_FORMAT_VERSION
     };
-}
+
 // Helper to create default project settings
 function createDefaultSettings() {
     return {
@@ -159,4 +159,4 @@ function createDefaultSettings() {
         showMinimap: true,
         autoLayout: false
     };
-}
+

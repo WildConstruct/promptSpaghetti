@@ -48,14 +48,13 @@ const updateMergeRequestSchema = z.object({
   conflictResolutions: z.array(conflictResolutionSchema).optional()
 });
 
-}
 interface AuthenticatedRequest extends FastifyRequest {
   user?: {
     id: string;
     email: string;
     permissions: string[];
   };
-}
+
 
 /**
  * Register account merging routes
@@ -82,7 +81,7 @@ export async function registerAccountMergingRoutes(
           error: 'Insufficient permissions to merge these accounts',
           details: 'You can only merge accounts that belong to you or that you have explicit permission to manage'
         });
-      }
+
 
       const preview = await mergingService.previewMerge(
         primaryAccountId,
@@ -95,15 +94,14 @@ export async function registerAccountMergingRoutes(
         data: preview,
         message: 'Account merge preview generated successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid request data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to generate merge preview:', error);
       return reply.code(500).send({
@@ -111,7 +109,7 @@ export async function registerAccountMergingRoutes(
         error: 'Failed to generate merge preview',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Create merge request
@@ -130,7 +128,7 @@ export async function registerAccountMergingRoutes(
           success: false,
           error: 'Insufficient permissions to merge these accounts'
         });
-      }
+
 
       const mergeRequest = await mergingService.createMergeRequest(
         requestData.primaryAccountId,
@@ -145,15 +143,14 @@ export async function registerAccountMergingRoutes(
         data: mergeRequest,
         message: 'Account merge request created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid request data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to create merge request:', error);
       return reply.code(500).send({
@@ -161,7 +158,7 @@ export async function registerAccountMergingRoutes(
         error: 'Failed to create merge request',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get merge request details
@@ -179,14 +176,13 @@ export async function registerAccountMergingRoutes(
         success: false,
         error: 'Merge request retrieval not yet implemented'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to get merge request ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve merge request'
       });
-    }
+
   });
 
   // Update merge request (modify strategy or conflicts before processing)
@@ -202,22 +198,21 @@ export async function registerAccountMergingRoutes(
         success: false,
         error: 'Merge request updates not yet implemented'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid request data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error(`Failed to update merge request ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to update merge request'
       });
-    }
+
   });
 
   // Process merge request (execute the merge)
@@ -243,15 +238,14 @@ export async function registerAccountMergingRoutes(
             ? 'Account merge completed with some issues'
             : 'Account merge failed'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to process merge request ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to process merge request',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Cancel merge request (only if pending)
@@ -266,14 +260,13 @@ export async function registerAccountMergingRoutes(
         success: false,
         error: 'Merge request cancellation not yet implemented'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to cancel merge request ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to cancel merge request'
       });
-    }
+
   });
 
   // Get user's merge request history
@@ -295,21 +288,20 @@ export async function registerAccountMergingRoutes(
           success: false,
           error: 'Invalid pagination parameters'
         });
-      }
+
 
       // This would need to be implemented in the service
       return reply.code(501).send({
         success: false,
         error: 'Merge request history not yet implemented'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get merge request history:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve merge request history'
       });
-    }
+
   });
 
   // Get merge templates/presets
@@ -329,8 +321,8 @@ export async function registerAccountMergingRoutes(
             oauthAccountMerge: 'merge_all',
             sessionHandling: 'transfer_all',
             preserveAuditTrail: true
-          }
-  }
+
+
         {
           id: 'minimal',
           name: 'Minimal Merge',
@@ -342,8 +334,8 @@ export async function registerAccountMergingRoutes(
             oauthAccountMerge: 'keep_primary',
             sessionHandling: 'invalidate_secondary',
             preserveAuditTrail: true
-          }
-  }
+
+
         {
           id: 'replace',
           name: 'Replace Primary',
@@ -355,8 +347,8 @@ export async function registerAccountMergingRoutes(
             oauthAccountMerge: 'merge_all',
             sessionHandling: 'transfer_all',
             preserveAuditTrail: true
-          }
-        }
+
+
       ];
 
       return reply.code(200).send({
@@ -364,16 +356,15 @@ export async function registerAccountMergingRoutes(
         data: templates,
         meta: {
           count: templates.length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Failed to get merge templates:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve merge templates'
       });
-    }
+
   });
 
   // Rollback a completed merge (if within rollback window)
@@ -389,14 +380,13 @@ export async function registerAccountMergingRoutes(
         success: false,
         error: 'Merge rollback not yet implemented'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to rollback merge request ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to rollback merge request'
       });
-    }
+
   });
 
   // Get merge statistics (admin only)
@@ -417,7 +407,7 @@ export async function registerAccountMergingRoutes(
           low: 0,
           medium: 0,
           high: 0
-        }
+
       };
 
       return reply.code(200).send({
@@ -426,16 +416,15 @@ export async function registerAccountMergingRoutes(
         meta: {
           period: period || 'last_30_days',
           generatedAt: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Failed to get merge statistics:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve merge statistics'
       });
-    }
+
   });
 
   // Health check for merge system
@@ -459,8 +448,7 @@ export async function registerAccountMergingRoutes(
         success: true,
         data: health
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Merge system health check failed:', error);
       return reply.code(500).send({
         success: false,
@@ -468,11 +456,11 @@ export async function registerAccountMergingRoutes(
         data: {
           status: 'unhealthy',
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
-    }
+
   });
-}
+
 
 /**
  * Validate that a user has permission to access/merge a specific account
@@ -482,11 +470,11 @@ async function validateAccountAccess(userId: string, accountId: string): Promise
   // Users can merge their own accounts
   if (userId === accountId) {
     return true;
-  }
+
 
   // Admin users can merge any accounts (would need to check permissions)
   // For now, only allow users to merge their own accounts
   return false;
-}
+
 
 export default registerAccountMergingRoutes;

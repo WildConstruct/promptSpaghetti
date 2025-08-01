@@ -14,13 +14,13 @@ import {
   RevenueEventType, 
   RevenueEventSchema,
   RevenueAttribution 
-} from './RevenueDataModel';
+ from './RevenueDataModel';
 import { 
   Transaction, 
   Order, 
   TransactionType,
   PaymentProvider 
-} from '../marketplace/transaction.types';
+ from '../marketplace/transaction.types';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
 // Revenue Collection Service
@@ -31,7 +31,7 @@ export class RevenueCollectionService {
   constructor(analyticsCollector: AnalyticsCollector, dbConnection: any) {
     this.analyticsCollector = analyticsCollector;
     this.dbConnection = dbConnection;
-  }
+
 
   /**
    * Record a completed transaction as a revenue event
@@ -51,7 +51,7 @@ export class RevenueCollectionService {
         medium?: string;
         campaign?: string;
       };
-    }
+
   ): Promise<RevenueEvent> {
 
     // Create revenue event
@@ -68,7 +68,7 @@ export class RevenueCollectionService {
         payment_provider: transaction.provider,
         risk_score: transaction.risk_score,
         fraud_flags: transaction.fraud_flags
-  }
+
       revenue_data: {
         amount_cents: transaction.net_amount_cents,
         currency: transaction.currency,
@@ -84,7 +84,7 @@ export class RevenueCollectionService {
         utm_source: userContext?.utmParams?.source,
         utm_medium: userContext?.utmParams?.medium,
         utm_campaign: userContext?.utmParams?.campaign
-      }
+
     };
 
     // Process order items for template attribution
@@ -100,7 +100,7 @@ export class RevenueCollectionService {
     await this.updateRealtimeAggregations(revenueEvent);
 
     return revenueEvent;
-  }
+
 
   /**
    * Process revenue attribution for order items
@@ -136,13 +136,13 @@ export class RevenueCollectionService {
           revenueEvent.revenue_data.template_id = item.template_id;
           revenueEvent.revenue_data.creator_id = templateInfo.creator_id;
           revenueEvent.revenue_data.license_type = item.license_type;
-        }
+
 
         // Create commission event for creator
         await this.createCommissionEvent(attribution, revenueEvent.sessionId);
-      }
-    }
-  }
+
+
+
 
   /**
    * Create commission earned event for creators
@@ -162,7 +162,7 @@ export class RevenueCollectionService {
         attribution_id: attribution.id,
         transaction_id: attribution.transaction_id,
         template_id: attribution.template_id
-  }
+
       revenue_data: {
         amount_cents: attribution.commission_cents,
         currency: 'USD', // Default currency
@@ -170,12 +170,12 @@ export class RevenueCollectionService {
         creator_id: attribution.creator_id,
         revenue_type: 'commission',
         payment_provider: PaymentProvider.STRIPE // Will be updated with actual provider
-      }
+
     };
 
     await this.analyticsCollector.track(commissionEvent);
     await this.storeRevenueEvent(commissionEvent);
-  }
+
 
   /**
    * Handle subscription-related revenue events
@@ -190,7 +190,7 @@ export class RevenueCollectionService {
       currency: string;
       billing_cycle: 'monthly' | 'annual';
       previous_plan_id?: string;
-  }
+
     sessionId: string
   ): Promise<RevenueEvent> {
 
@@ -207,13 +207,13 @@ export class RevenueCollectionService {
         plan_id: subscriptionEvent.plan_id,
         billing_cycle: subscriptionEvent.billing_cycle,
         previous_plan_id: subscriptionEvent.previous_plan_id
-  }
+
       revenue_data: {
         amount_cents: subscriptionEvent.amount_cents,
         currency: subscriptionEvent.currency,
         revenue_type: 'subscription',
         payment_provider: PaymentProvider.STRIPE // Will be determined dynamically
-      }
+
     };
 
     await this.analyticsCollector.track(revenueEvent);
@@ -221,7 +221,7 @@ export class RevenueCollectionService {
     await this.updateRealtimeAggregations(revenueEvent);
 
     return revenueEvent;
-  }
+
 
   /**
    * Handle refund revenue events
@@ -234,7 +234,7 @@ export class RevenueCollectionService {
       amount_cents: number;
       reason: string;
       processed_by: string;
-  }
+
     sessionId: string
   ): Promise<RevenueEvent> {
 
@@ -249,7 +249,7 @@ export class RevenueCollectionService {
         order_id: refund.order_id,
         refund_reason: refund.reason,
         processed_by: refund.processed_by
-  }
+
       revenue_data: {
         amount_cents: -refund.amount_cents, // Negative for refunds
         currency: 'USD',
@@ -257,7 +257,7 @@ export class RevenueCollectionService {
         order_id: refund.order_id,
         revenue_type: 'refund',
         payment_provider: PaymentProvider.STRIPE
-      }
+
     };
 
     await this.analyticsCollector.track(revenueEvent);
@@ -265,7 +265,7 @@ export class RevenueCollectionService {
     await this.updateRealtimeAggregations(revenueEvent);
 
     return revenueEvent;
-  }
+
 
   /**
    * Update real-time revenue aggregations
@@ -281,7 +281,7 @@ export class RevenueCollectionService {
     
     // Update daily aggregation
     await this.upsertAggregation('daily', dayStart, revenueEvent);
-  }
+
 
   /**
    * Upsert aggregation record
@@ -295,9 +295,9 @@ export class RevenueCollectionService {
     const periodEnd = new Date(periodStart);
     if (type === 'hourly') {
       periodEnd.setHours(periodEnd.getHours() + 1);
-    } else {
+ else {
       periodEnd.setDate(periodEnd.getDate() + 1);
-    }
+
 
     // Implementation would use database upsert operations
     // This is a simplified version
@@ -318,13 +318,13 @@ export class RevenueCollectionService {
       provider: revenueEvent.revenue_data.payment_provider,
       revenue_cents: revenueEvent.revenue_data.amount_cents,
       transaction_count: 1
-    }]);
+]);
 
     const geographicBreakdown = JSON.stringify([{
       country_code: revenueEvent.revenue_data.country_code,
       revenue_cents: revenueEvent.revenue_data.amount_cents,
       transaction_count: 1
-    }]);
+]);
 
     await this.dbConnection.query(query, [
       type,
@@ -334,7 +334,7 @@ export class RevenueCollectionService {
       paymentMethodBreakdown,
       geographicBreakdown
     ]);
-  }
+
 
   // Helper methods
   private mapTransactionToRevenueEventType(transactionType: TransactionType): RevenueEventType {
@@ -349,8 +349,8 @@ export class RevenueCollectionService {
         return RevenueEventType.SUBSCRIPTION_RENEWED;
       default:
         return RevenueEventType.TRANSACTION_COMPLETED;
-    }
-  }
+
+
 
   private mapTransactionType(transactionType: TransactionType): 'purchase' | 'subscription' | 'commission' | 'refund' {
     switch (transactionType) {
@@ -364,8 +364,8 @@ export class RevenueCollectionService {
         return 'refund';
       default:
         return 'purchase';
-    }
-  }
+
+
 
   private mapSubscriptionEventType(eventType: string): RevenueEventType {
     switch (eventType) {
@@ -381,13 +381,13 @@ export class RevenueCollectionService {
         return RevenueEventType.SUBSCRIPTION_DOWNGRADED;
       default:
         return RevenueEventType.SUBSCRIPTION_RENEWED;
-    }
-  }
+
+
 
   private async getTemplateInfo(templateId: string): Promise<{
     creator_id: string;
     commission_rate: number;
-  } | null> {
+ | null> {
 
     // Implementation would query template information
     // Returning mock data for now
@@ -395,11 +395,11 @@ export class RevenueCollectionService {
       creator_id: 'creator-uuid',
       commission_rate: 0.7 // 70% to creator
     };
-  }
+
 
   private calculateCommission(totalPriceCents: number, commissionRate: number): number {
     return Math.round(totalPriceCents * commissionRate);
-  }
+
 
   private async storeRevenueEvent(event: RevenueEvent): Promise<void> {
 
@@ -465,7 +465,7 @@ export class RevenueCollectionService {
       event.revenue_data.utm_campaign,
       JSON.stringify(event.metadata)
     ]);
-  }
+
 
   private async storeRevenueAttribution(attribution: RevenueAttribution): Promise<void> {
 
@@ -488,8 +488,8 @@ export class RevenueCollectionService {
       attribution.revenue_cents,
       attribution.commission_cents
     ]);
-  }
-}
+
+
 
 // Fastify API Routes
 export async function revenueCollectionRoutes(fastify: FastifyInstance) {
@@ -512,16 +512,16 @@ export async function revenueCollectionRoutes(fastify: FastifyInstance) {
             campaign: z.string().optional()
           }).optional()
         }).optional()
-  }
-    }
+
+
   }, async (request: FastifyRequest<{
     Body: {
       transaction_id: string;
       order_id: string;
       session_id: string;
       user_context?: any;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       // Get transaction and order from database
       const transaction = await getTransaction(request.body.transaction_id);
@@ -529,7 +529,7 @@ export async function revenueCollectionRoutes(fastify: FastifyInstance) {
 
       if (!transaction || !order) {
         return reply.status(404).send({ error: 'Transaction or order not found' });
-      }
+
 
       // Record revenue
       const revenueCollectionService = new RevenueCollectionService(
@@ -549,11 +549,10 @@ export async function revenueCollectionRoutes(fastify: FastifyInstance) {
         revenue_event_id: revenueEvent.id,
         amount_cents: revenueEvent.revenue_data.amount_cents
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Revenue recording failed:', error);
       reply.status(500).send({ error: 'Failed to record revenue' });
-    }
+
   });
 
   // Subscription revenue recording
@@ -569,11 +568,11 @@ export async function revenueCollectionRoutes(fastify: FastifyInstance) {
         billing_cycle: z.enum(['monthly', 'annual']),
         session_id: z.string().uuid(),
         previous_plan_id: z.string().optional()
-  }
-    }
+
+
   }, async (request: FastifyRequest<{
     Body: any
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const revenueCollectionService = new RevenueCollectionService(
         fastify.analyticsCollector,
@@ -589,25 +588,24 @@ export async function revenueCollectionRoutes(fastify: FastifyInstance) {
         success: true,
         revenue_event_id: revenueEvent.id
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Subscription revenue recording failed:', error);
       reply.status(500).send({ error: 'Failed to record subscription revenue' });
-    }
+
   });
-}
+
 
 // Helper functions (would be implemented elsewhere)
 async function getTransaction(transactionId: string): Promise<Transaction | null> {
 
   // Implementation would query transaction from database
   return null;
-}
+
 
 async function getOrder(orderId: string): Promise<Order | null> {
 
   // Implementation would query order from database
   return null;
-}
+
 
 export { RevenueCollectionService };

@@ -5,8 +5,7 @@
  */
 import crypto from 'crypto';
 import { z } from 'zod';
-import {
-  MFAMethodType,
+import { MFAMethodType,
   MFAMethodStatus,
   MFAVerificationResult,
   EmailConfiguration,
@@ -14,64 +13,65 @@ import {
   MFAVerificationRequest,
   MFAVerificationResponse,
   MFAEnrollmentRequest,
-  MFAEnrollmentResponse,
+  MFAEnrollmentResponse }
   MFA_CONSTANTS
-} from '../types/MFATypes';
+ from '../types/MFATypes';
 import { ErrorFactory } from '../errors/ErrorFactory';
 
 // ========================================
 // Configuration & Types
 // ========================================
-}
-interface EmailMFAConfig {
-  encryption: {
-  algorithm: 'aes-256-gcm';
+
+
+interface EmailMFAConfig { encryption: {;
+  algorithm: 'aes-256-gcm' }
   keyDerivation: 'pbkdf2';
   iterations: number;
-}
+
+
 };
-  templates: {
+  templates: { ,
   verificationCode: string;
-  enrollmentCode: string;
-};
-  rateLimit: {
+  enrollmentCode: string };
+  rateLimit: { ,
   maxDailyEmails: number;
-  cooldownMinutes: number;
-};
-}
-interface EmailTemplate {
-  subject: string;
+  cooldownMinutes: number };
+
+
+interface EmailTemplate { subject: string;
   htmlTemplate: string;
   textTemplate: string;
-  variables: string;
-}
-interface EmailSendResult {
-  messageId: string;
+  variables: string }
+
+
+interface EmailSendResult { messageId: string;
   status: 'sent' | 'failed';
   error?: string;
-  timestamp: Date;
-}
+  timestamp: Date }
+
+
 interface RiskAssessmentContext {
   ipAddress: string;
   userAgent: string;
   location?: string;
   deviceFingerprint?: string;
   previousAttempts: number;
+  // ========================================
+  // Email Service Interface
+  // ========================================
 
-// ========================================
-// Email Service Interface
-// ========================================
-}
-interface EmailService {
-  sendEmail(to: string, template: EmailTemplate, variables: Record<string, string>): Promise<EmailSendResult>;
-  validateEmailAddress(email: string): Promise<boolean>;
-}
+
+
+interface EmailService { sendEmail(to: string, template: EmailTemplate, variables: Record<string, string>): Promise<EmailSendResult>;
+  validateEmailAddress(email: string): Promise<boolean> }
+
   checkEmailReputation(email: string): Promise<{ valid: boolean; risk: number }>;
 
 // ========================================
 // Database Interface
 // ========================================
-}
+
+
 interface EmailMFAStorage {
   // Configuration management
   saveConfiguration(config: EmailConfiguration): Promise<void>;
@@ -85,7 +85,8 @@ interface EmailMFAStorage {
   getActiveVerifications(userId: string): Promise<EmailVerification>;
   deleteVerification(verificationId: string): Promise<void>;
   // Rate limiting
-}
+
+
   getRateLimitState(userId: string, action: string): Promise<{ count: number; windowStart: Date } | null>;
   updateRateLimitState(userId: string, action: string, count: number): Promise<void>;
   // Audit logging
@@ -95,13 +96,13 @@ interface EmailMFAStorage {
 // ========================================
 // Input Validation Schemas
 // ========================================
-const EmailEnrollmentSchema = z.object({)
-  methodType: z.literal(MFAMethodType.EMAIL),
-  displayName: z.string().min(1).max(100),
-  emailAddress: z.string().email().max(320) // RFC 5321 limit,
+const EmailEnrollmentSchema = z.object({ )
+  methodType: z.literal(MFAMethodType.EMAIL)
+  displayName: z.string().min(1).max(100)
+  emailAddress: z.string().email().max(320) // RFC 5321 limit }
 });
-const EmailVerificationSchema = z.object({)
-  configurationId: z.string().uuid(),
+const EmailVerificationSchema = z.object({ )
+  configurationId: z.string().uuid() }
   code: z.string().regex(/^\d{6}$/), // 6-digit numeric code
   backupCode: z.boolean().optional();
   });
@@ -110,16 +111,15 @@ const EmailVerificationSchema = z.object({)
 // Email MFA Provider Implementation
 // ========================================
 
-export class EmailMFAProvider {
-  private config: EmailMFAConfig;
+export class EmailMFAProvider { private config: EmailMFAConfig;
   private emailService: EmailService;
   private storage: EmailMFAStorage;
   private encryptionKey: Buffer;
   constructor();
-    config: EmailMFAConfig,
-    emailService: EmailService,
-    storage: EmailMFAStorage,
-    encryptionKey: string,
+    config: EmailMFAConfig
+    emailService: EmailService
+    storage: EmailMFAStorage
+    encryptionKey: string
     this.config = config;
     this.emailService = emailService;
     this.storage = storage;
@@ -135,53 +135,50 @@ export class EmailMFAProvider {
     const existingConfig = await this.storage.getConfiguration(userId);
     if (existingConfig && existingConfig.status !== MFAMethodStatus.REVOKED) {
       throw ErrorFactory.createMFAConfigurationError()
-        'already_configured',
-        undefined,
-        { userId,
+        'already_configured'
+        undefined
+        { userId }
           operation: 'enroll_email_mfa' }
       );
     // Validate email address
     const emailValid = await this.emailService.validateEmailAddress(validated.emailAddress);
-    if (!emailValid) {
-      throw ErrorFactory.createMFAConfigurationError()
-        'invalid_email',
-        validated.emailAddress,
-        { userId,
+    if (!emailValid) { throw ErrorFactory.createMFAConfigurationError()
+        'invalid_email'
+        validated.emailAddress
+        { userId }
           operation: 'enroll_email_mfa' }
       );
     // Check email reputation
     const reputation = await this.emailService.checkEmailReputation(validated.emailAddress);
-    if (!reputation.valid || reputation.risk > 70) {
-      throw ErrorFactory.createMFAConfigurationError()
-        'unsuitable_email',
-        validated.emailAddress,
-        { userId,
+    if (!reputation.valid || reputation.risk > 70) { throw ErrorFactory.createMFAConfigurationError()
+        'unsuitable_email'
+        validated.emailAddress
+        { userId }
           operation: 'enroll_email_mfa' }
       );
     // Create configuration
     const configurationId = crypto.randomUUID();
-    const configuration: EmailConfiguration = {,
-  id: configurationId,
-  userId,
-  methodType: MFAMethodType.EMAIL,
-  status: MFAMethodStatus.PENDING,
-  isPrimary: false,
-  displayName: validated.displayName,
-  emailAddress: validated.emailAddress,
-  isVerified: false,
-  failedAttempts: 0,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+    const configuration: EmailConfiguration = { 
+  id: configurationId
+  userId
+  methodType: MFAMethodType.EMAIL
+  status: MFAMethodStatus.PENDING
+  isPrimary: false
+  displayName: validated.displayName
+  emailAddress: validated.emailAddress
+  isVerified: false
+  failedAttempts: 0
+  createdAt: new Date()
+  updatedAt: new Date() }
 };
     // Save configuration
     await this.storage.saveConfiguration(configuration);
     // Send verification email
     await this.sendEnrollmentVerification(userId, validated.emailAddress);
-    return {
-  configurationId,
-  methodType: MFAMethodType.EMAIL,
-  requiresVerification: true,
-  expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000),
+    return { configurationId
+  methodType: MFAMethodType.EMAIL
+  requiresVerification: true
+  expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000) }
 };
   async completeEnrollment(userId: string, verificationId: string, code: string): Promise<void> {
 
@@ -202,8 +199,7 @@ export class EmailMFAProvider {
       throw ErrorFactory.createMFAVerificationError('invalid_code', { userId, operation: 'verify_mfa_code' });
     // Update configuration to active
     const configuration = await this.storage.getConfiguration(userId);
-    if (configuration) {
-      configuration.status = MFAMethodStatus.ACTIVE;
+    if (configuration) { configuration.status = MFAMethodStatus.ACTIVE;
       configuration.isVerified = true;
       configuration.updatedAt = new Date();
       await this.storage.updateConfiguration(configuration.id, configuration);
@@ -218,9 +214,9 @@ export class EmailMFAProvider {
     const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
       throw ErrorFactory.createMFAConfigurationError()
-        'invalid_config',
-        undefined,
-        { userId,
+        'invalid_config'
+        undefined
+        { userId }
           operation: 'challenge_user' }
       );
     if (configuration.status !== MFAMethodStatus.ACTIVE) {
@@ -235,34 +231,32 @@ export class EmailMFAProvider {
     // Assess risk
     const riskScore = await this.assessRisk(context);
     // Create verification record
-    const verification: EmailVerification = {,
-  id: verificationId,
-  userId,
-  emailAddress: configuration.emailAddress,
-  encryptedToken: this.encryptToken(verificationCode),
-  expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000),
-  attempts: 0,
+    const verification: EmailVerification = { 
+  id: verificationId
+  userId
+  emailAddress: configuration.emailAddress
+  encryptedToken: this.encryptToken(verificationCode)
+  expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000)
+  attempts: 0
   metadata: {
-  ipAddress: context.ipAddress,
-  userAgent: context.userAgent,
-  location: context.location,
+  ipAddress: context.ipAddress
+  userAgent: context.userAgent
+  location: context.location }
   riskScore
 };
     // Save verification
     await this.storage.saveVerification(verification);
     // Send verification email
     await this.sendVerificationEmail()
-      configuration.emailAddress,
-      verificationCode,
-      configuration.displayName,
+      configuration.emailAddress
+      verificationCode
+      configuration.displayName
       riskScore > 50 // Include security warning for high-risk attempts
     );
     // Update rate limit
     await this.updateRateLimit(userId, 'email_send');
     return verificationId;
-  async verifyCode(request: MFAVerificationRequest, context: RiskAssessmentContext): Promise<MFAVerificationResponse> {
-
-  const startTime = Date.now();
+  async verifyCode(request: MFAVerificationRequest, context: RiskAssessmentContext): Promise<MFAVerificationResponse> { const startTime = Date.now();
   try {
   // Validate input
   const validated = EmailVerificationSchema.parse(request);
@@ -270,49 +264,45 @@ export class EmailMFAProvider {
   const configuration = await this.storage.getConfigurationById(validated.configurationId);
   if (!configuration) {
   return {
-  success: false,
-  result: MFAVerificationResult.METHOD_DISABLED,
+  success: false
+  result: MFAVerificationResult.METHOD_DISABLED }
 };
       // Check if account is locked
-      if (configuration.lockedUntil && configuration.lockedUntil > new Date()) {
-  return {
-  success: false,
-  result: MFAVerificationResult.USER_LOCKED,
-  lockoutDuration: Math.ceil((configuration.lockedUntil.getTime() - Date.now()) / 1000),
+      if (configuration.lockedUntil && configuration.lockedUntil > new Date()) { return {
+  success: false
+  result: MFAVerificationResult.USER_LOCKED
+  lockoutDuration: Math.ceil((configuration.lockedUntil.getTime() - Date.now()) / 1000) }
 };
       // Check rate limiting
       const rateLimitCheck = await this.checkRateLimitForVerification(configuration.userId);
-      if (!rateLimitCheck.allowed) {
-  return {
-  success: false,
-  result: MFAVerificationResult.RATE_LIMITED,
-  remainingAttempts: rateLimitCheck.remainingAttempts,
+      if (!rateLimitCheck.allowed) { return {
+  success: false
+  result: MFAVerificationResult.RATE_LIMITED
+  remainingAttempts: rateLimitCheck.remainingAttempts }
 };
       // Find active verification
       const verifications = await this.storage.getActiveVerifications(configuration.userId);
       const activeVerification = verifications.find(v => !this.isExpired(v));
-      if (!activeVerification) {
-  return {
-  success: false,
-  result: MFAVerificationResult.EXPIRED,
+      if (!activeVerification) { return {
+  success: false
+  result: MFAVerificationResult.EXPIRED }
 };
       // Verify code
       const decryptedCode = this.decryptToken(activeVerification.encryptedToken);
       const codeMatches = this.constantTimeCompare(validated.code, decryptedCode);
       // Log attempt
-      await this.logVerificationAttempt({)
-  userId: configuration.userId,
-  configurationId: validated.configurationId,
-  success: codeMatches,
-  result: codeMatches ? MFAVerificationResult.SUCCESS : MFAVerificationResult.INVALID_CODE,
-  ipAddress: context.ipAddress,
-  userAgent: context.userAgent,
-  processingTimeMs: Date.now() - startTime,
-  codeLength: validated.code.length,
-  riskScore: activeVerification.metadata.riskScore,
+      await this.logVerificationAttempt({ )
+  userId: configuration.userId
+  configurationId: validated.configurationId
+  success: codeMatches
+  result: codeMatches ? MFAVerificationResult.SUCCESS : MFAVerificationResult.INVALID_CODE
+  ipAddress: context.ipAddress
+  userAgent: context.userAgent
+  processingTimeMs: Date.now() - startTime
+  codeLength: validated.code.length
+  riskScore: activeVerification.metadata.riskScore }
 });
-      if (!codeMatches) {
-  // Increment failed attempts
+      if (!codeMatches) { // Increment failed attempts
   activeVerification.attempts++;
   await this.storage.saveVerification(activeVerification);
   configuration.failedAttempts++;
@@ -321,24 +311,23 @@ export class EmailMFAProvider {
   configuration.lockedUntil = new Date(Date.now() + MFA_CONSTANTS.SECURITY.LOCKOUT_DURATION * 1000);
   // Log security event
   await this.storage.logSecurityEvent({)
-  userId: configuration.userId,
-  eventType: 'brute_force',
-  severity: 'high',
-  description: 'Account locked due to repeated failed MFA attempts',
+  userId: configuration.userId
+  eventType: 'brute_force'
+  severity: 'high'
+  description: 'Account locked due to repeated failed MFA attempts'
   metadata: {
-  ipAddress: context.ipAddress,
-  userAgent: context.userAgent,
-  methodType: MFAMethodType.EMAIL,
-  attemptCount: configuration.failedAttempts,
-},
-  createdAt: new Date(),
+  ipAddress: context.ipAddress
+  userAgent: context.userAgent
+  methodType: MFAMethodType.EMAIL
+  attemptCount: configuration.failedAttempts }
+
+  createdAt: new Date()
             resolved: false;
   });
         await this.storage.updateConfiguration(configuration.id, configuration);
-        return {
-  success: false,
-  result: MFAVerificationResult.INVALID_CODE,
-  remainingAttempts: Math.max(0, MFA_CONSTANTS.SECURITY.MAX_FAILED_ATTEMPTS - configuration.failedAttempts),
+        return { success: false
+  result: MFAVerificationResult.INVALID_CODE
+  remainingAttempts: Math.max(0, MFA_CONSTANTS.SECURITY.MAX_FAILED_ATTEMPTS - configuration.failedAttempts) }
 };
       // Success - clean up and reset counters
       await this.storage.deleteVerification(activeVerification.id);
@@ -347,68 +336,64 @@ export class EmailMFAProvider {
       configuration.lastUsedAt = new Date();
       configuration.updatedAt = new Date();
       await this.storage.updateConfiguration(configuration.id, configuration);
-      return {
-  success: true,
-  result: MFAVerificationResult.SUCCESS,
+      return { success: true
+  result: MFAVerificationResult.SUCCESS }
 };
-    } catch (error) {
-  // Log processing error
+ catch (error) { // Log processing error
   await this.logVerificationAttempt({)
-  userId: 'unknown',
-  configurationId: request.configurationId,
-  success: false,
-  result: MFAVerificationResult.INVALID_CODE,
-  ipAddress: context.ipAddress,
-  userAgent: context.userAgent,
-  processingTimeMs: Date.now() - startTime,
+  userId: 'unknown'
+  configurationId: request.configurationId
+  success: false
+  result: MFAVerificationResult.INVALID_CODE
+  ipAddress: context.ipAddress
+  userAgent: context.userAgent
+  processingTimeMs: Date.now() - startTime }
 });
       throw error;
   // ========================================
   // Email Sending Methods
   // ========================================
-  private async sendEnrollmentVerification(userId: string, emailAddress: string): Promise<void> {
-
-  const verificationCode = this.generateVerificationCode();
+  private async sendEnrollmentVerification(userId: string, emailAddress: string): Promise<void> { const verificationCode = this.generateVerificationCode();
   const verificationId = crypto.randomUUID();
-  const verification: EmailVerification = {,
-  id: verificationId,
-  userId,
-  emailAddress,
-  encryptedToken: this.encryptToken(verificationCode),
-  expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000),
-  attempts: 0,
+  const verification: EmailVerification = {
+  id: verificationId
+  userId
+  emailAddress
+  encryptedToken: this.encryptToken(verificationCode)
+  expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000)
+  attempts: 0
   metadata: {
-  ipAddress: '0.0.0.0', // Enrollment context,
-  userAgent: 'enrollment',
-  riskScore: 0,
+  ipAddress: '0.0.0.0', // Enrollment context
+  userAgent: 'enrollment'
+  riskScore: 0 }
 };
     await this.storage.saveVerification(verification);
-    const template: EmailTemplate = {,
-  subject: 'Complete Your Email MFA Setup',
-  htmlTemplate: this.config.templates.enrollmentCode,
-  textTemplate: this.config.templates.enrollmentCode,
-  variables: ['code', 'displayName', 'expiryMinutes'],
+    const template: EmailTemplate = { 
+  subject: 'Complete Your Email MFA Setup'
+  htmlTemplate: this.config.templates.enrollmentCode
+  textTemplate: this.config.templates.enrollmentCode
+  variables: ['code', 'displayName', 'expiryMinutes'] }
 };
-    await this.emailService.sendEmail(emailAddress, template, {)
-  code: verificationCode,
-  displayName: 'PromptScape Account',
-  expiryMinutes: '10',
+    await this.emailService.sendEmail(emailAddress, template, { )
+  code: verificationCode
+  displayName: 'PromptScape Account'
+  expiryMinutes: '10' }
 });
   private async sendVerificationEmail(emailAddress: string)
-    code: string,
-    displayName: string,
-    includeSecurityWarning: boolean = false): Promise<void> {,
-  const template: EmailTemplate = {,
-  subject: 'Your PromptScape Verification Code',
-  htmlTemplate: this.config.templates.verificationCode,
-  textTemplate: this.config.templates.verificationCode,
-  variables: ['code', 'displayName', 'expiryMinutes', 'securityWarning'],
+  code: string
+    displayName: string
+    includeSecurityWarning: boolean = false): Promise<void> { 
+  const template: EmailTemplate = {
+  subject: 'Your PromptScape Verification Code'
+  htmlTemplate: this.config.templates.verificationCode
+  textTemplate: this.config.templates.verificationCode
+  variables: ['code', 'displayName', 'expiryMinutes', 'securityWarning'] }
 };
-    await this.emailService.sendEmail(emailAddress, template, {)
-  code,
-  displayName,
-  expiryMinutes: '10',
-  securityWarning: includeSecurityWarning ? 'This login attempt appears to be from an unusual location or device.' : '',
+    await this.emailService.sendEmail(emailAddress, template, { )
+  code
+  displayName
+  expiryMinutes: '10'
+  securityWarning: includeSecurityWarning ? 'This login attempt appears to be from an unusual location or device.' : '' }
 });
   // ========================================
   // Security & Utility Methods
@@ -469,17 +454,12 @@ export class EmailMFAProvider {
       const windowDuration = MFA_CONSTANTS.EMAIL.RATE_LIMIT_WINDOW * 1000;
       if (windowAge < windowDuration && state.count >= MFA_CONSTANTS.EMAIL.MAX_DAILY_SENDS) {
         throw ErrorFactory.createMFAVerificationError('rate_limit', { userId, operation: 'send_verification_email' });
-  private async updateRateLimit(userId: string, action: string): Promise<void> {
-
-    const state = await this.storage.getRateLimitState(userId, action);
+  private async updateRateLimit(userId: string, action: string): Promise<void> { const state = await this.storage.getRateLimitState(userId, action);
     if (state) {
       const windowAge = Date.now() - state.windowStart.getTime();
       const windowDuration = MFA_CONSTANTS.EMAIL.RATE_LIMIT_WINDOW * 1000;
       if (windowAge < windowDuration) {
-        await this.storage.updateRateLimitState(userId, action, state.count + 1);
-      } else {
-        await this.storage.updateRateLimitState(userId, action, 1);
-    } else {
+        await this.storage.updateRateLimitState(userId, action, state.count + 1) } else { await this.storage.updateRateLimitState(userId, action, 1) } else {
       await this.storage.updateRateLimitState(userId, action, 1);
   private async checkRateLimitForVerification(userId: string): Promise<{ allowed: boolean; remainingAttempts: number }> {
 
@@ -491,44 +471,38 @@ export class EmailMFAProvider {
     if (windowAge > windowDuration) {
       return { allowed: true, remainingAttempts: 5 };
     const remainingAttempts = Math.max(0, 5 - state.count);
-    return {
-  allowed: remainingAttempts > 0,
+    return { allowed: remainingAttempts > 0 }
   remainingAttempts
 };
-  private async cleanupExpiredVerifications(userId: string): Promise<void> {
-
-  const verifications = await this.storage.getActiveVerifications(userId);
+  private async cleanupExpiredVerifications(userId: string): Promise<void> { const verifications = await this.storage.getActiveVerifications(userId);
   for (const verification of verifications) {
   if (this.isExpired(verification)) {
   await this.storage.deleteVerification(verification.id);
-  private isExpired(verification: EmailVerification): boolean {,
+  private isExpired(verification: EmailVerification): boolean {
   return verification.expiresAt < new Date();
-  private async logVerificationAttempt(attempt: unknown): Promise<void> {,
+  private async logVerificationAttempt(attempt: unknown): Promise<void> {
   await this.storage.logVerificationAttempt({)
-  id: crypto.randomUUID(),
-  ...attempt,
-  attemptedAt: new Date(),
+  id: crypto.randomUUID()
+  ...attempt
+  attemptedAt: new Date() }
 });
   // ========================================
   // Management Methods
   // ========================================
-  async updateEmailAddress(userId: string, configurationId: string, newEmailAddress: string): Promise<void> {
-
-    const configuration = await this.storage.getConfigurationById(configurationId);
+  async updateEmailAddress(userId: string, configurationId: string, newEmailAddress: string): Promise<void> { const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
       throw ErrorFactory.createMFAConfigurationError()
-        'invalid_config',
-        undefined,
-        { userId,
+        'invalid_config'
+        undefined
+        { userId }
           operation: 'challenge_user' }
       );
     // Validate new email
     const emailValid = await this.emailService.validateEmailAddress(newEmailAddress);
-    if (!emailValid) {
-      throw ErrorFactory.createMFAConfigurationError()
-        'invalid_email',
-        newEmailAddress,
-        { userId,
+    if (!emailValid) { throw ErrorFactory.createMFAConfigurationError()
+        'invalid_email'
+        newEmailAddress
+        { userId }
           operation: 'update_email_address' }
       );
     // Update configuration
@@ -539,27 +513,23 @@ export class EmailMFAProvider {
     await this.storage.updateConfiguration(configurationId, configuration);
     // Send verification to new email
     await this.sendEnrollmentVerification(userId, newEmailAddress);
-  async disableMethod(userId: string, configurationId: string): Promise<void> {
-
-    const configuration = await this.storage.getConfigurationById(configurationId);
+  async disableMethod(userId: string, configurationId: string): Promise<void> { const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
       throw ErrorFactory.createMFAConfigurationError()
-        'invalid_config',
-        undefined,
-        { userId,
+        'invalid_config'
+        undefined
+        { userId }
           operation: 'challenge_user' }
       );
     configuration.status = MFAMethodStatus.DISABLED;
     configuration.updatedAt = new Date();
     await this.storage.updateConfiguration(configurationId, configuration);
-  async revokeMethod(userId: string, configurationId: string): Promise<void> {
-
-    const configuration = await this.storage.getConfigurationById(configurationId);
+  async revokeMethod(userId: string, configurationId: string): Promise<void> { const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
       throw ErrorFactory.createMFAConfigurationError()
-        'invalid_config',
-        undefined,
-        { userId,
+        'invalid_config'
+        undefined
+        { userId }
           operation: 'challenge_user' }
       );
     configuration.status = MFAMethodStatus.REVOKED;

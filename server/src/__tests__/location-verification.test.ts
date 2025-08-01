@@ -5,14 +5,14 @@ import {
   LocationVerificationService,
   LocationChallengeType,
   LocationContext
-} from '../auth/services/LocationVerificationService';
+ from '../auth/services/LocationVerificationService';
 import { GeolocationService, GeolocationData } from '../auth/services/GeolocationService';
 import { VerificationThresholdService } from '../services/VerificationThresholdService';
 import { ChallengeService } from '../auth/services/ChallengeService';
 import { 
   VerificationCodeManager,
   VerificationCodeType
-} from '../../../../packages/core/security/VerificationCodeManager';
+ from '../../../../packages/core/security/VerificationCodeManager';
 import { EmailService } from '../auth/services/EmailService';
 import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../auth/database/DatabaseService';
@@ -35,7 +35,7 @@ class MockGeolocationService {
         confidence: 0.9,
         source: 'ipapi'
       };
-    } else if (ipAddress === '8.8.8.8') {
+ else if (ipAddress === '8.8.8.8') {
       return {
         country: 'United States',
         countryCode: 'US',
@@ -48,7 +48,7 @@ class MockGeolocationService {
         confidence: 0.8,
         source: 'ipapi'
       };
-    } else if (ipAddress === '1.2.3.4') {
+ else if (ipAddress === '1.2.3.4') {
       return {
         country: 'Germany',
         countryCode: 'DE',
@@ -61,7 +61,7 @@ class MockGeolocationService {
         confidence: 0.7,
         source: 'ipapi'
       };
-    }
+
     
     return {
       country: 'Unknown',
@@ -73,7 +73,7 @@ class MockGeolocationService {
       confidence: 0.1,
       source: 'fallback'
     };
-  }
+
 
   async trackLoginLocation(userId: string, ipAddress: string, geoData: GeolocationData) {
     // Mock return based on IP for testing
@@ -84,21 +84,21 @@ class MockGeolocationService {
         distanceFromNearestKm: 0,
         suspiciousIndicators: []
       };
-    } else if (ipAddress === '8.8.8.8') {
+ else if (ipAddress === '8.8.8.8') {
       return {
         isNewLocation: true,
         isTypicalLocation: false,
         distanceFromNearestKm: 3000,
         suspiciousIndicators: ['vpn_detected']
       };
-    } else if (ipAddress === '1.2.3.4') {
+ else if (ipAddress === '1.2.3.4') {
       return {
         isNewLocation: true,
         isTypicalLocation: false,
         distanceFromNearestKm: 8000,
         suspiciousIndicators: ['tor_exit_node']
       };
-    }
+
     
     return {
       isNewLocation: true,
@@ -106,8 +106,8 @@ class MockGeolocationService {
       distanceFromNearestKm: 100,
       suspiciousIndicators: []
     };
-  }
-}
+
+
 
 class MockVerificationThresholdService {
   async checkVerificationRequired(context: unknown) {
@@ -121,7 +121,7 @@ class MockVerificationThresholdService {
       factors: [],
       recommendations: this.getMockReasons(context, riskScore)
     };
-  }
+
 
   private calculateMockRiskScore(context: unknown): number {
     let score = 0;
@@ -131,7 +131,7 @@ class MockVerificationThresholdService {
     if (context.geoLocation?.isProxy) score += 15;
     
     return Math.min(100, score);
-  }
+
 
   private getMockReasons(context: unknown, riskScore: number): string[] {
     const reasons = [];
@@ -139,12 +139,12 @@ class MockVerificationThresholdService {
     if (context.geoLocation?.isTor) reasons.push('Tor detected');
     if (riskScore >= 60) reasons.push('High risk score');
     return reasons;
-  }
-}
+
+
 
 class MockChallengeService {
   // Mock implementation for challenge service
-}
+
 
 class MockVerificationCodeManager {
   private codes: Map<string, any> = new Map();
@@ -166,7 +166,7 @@ class MockVerificationCodeManager {
     
     this.codes.set(verification.id, verification);
     return { code, codeId };
-  }
+
 
   async validateCode(request: unknown) {
     const verification = Array.from(this.codes.values()).find(v => 
@@ -175,28 +175,28 @@ class MockVerificationCodeManager {
     
     if (!verification) {
       return { valid: false, reason: 'Invalid verification code' };
-    }
+
 
     if (verification.expiresAt < new Date()) {
       return { valid: false, reason: 'Verification code expired' };
-    }
+
 
     if (verification.code === request.code) {
       verification.verified = true;
       return { valid: true, codeData: verification };
-    }
+
 
     verification.attempts++;
     if (verification.attempts >= verification.maxAttempts) {
       return { valid: false, reason: 'Maximum attempts exceeded' };
-    }
+
 
     return { 
       valid: false, 
       reason: `Invalid code. ${verification.maxAttempts - verification.attempts} attempts remaining.` 
     };
-  }
-}
+
+
 
 class MockEmailService {
   public sentEmails: any[] = [];
@@ -209,8 +209,8 @@ class MockEmailService {
       data,
       timestamp: new Date()
     });
-  }
-}
+
+
 
 class MockAuditService {
   public events: any[] = [];
@@ -221,8 +221,8 @@ class MockAuditService {
       ...event,
       timestamp: new Date()
     });
-  }
-}
+
+
 
 class MockDatabaseService {
   private tables: Map<string, any[]> = new Map([
@@ -234,12 +234,12 @@ class MockDatabaseService {
     // Handle CREATE TABLE
     if (sql.includes('CREATE TABLE')) {
       return { rows: [] };
-    }
+
 
     // Handle CREATE INDEX
     if (sql.includes('CREATE INDEX')) {
       return { rows: [] };
-    }
+
 
     // Handle INSERT
     if (sql.includes('INSERT INTO location_verification_attempts')) {
@@ -263,7 +263,7 @@ class MockDatabaseService {
       
       this.tables.get('location_verification_attempts')!.push(attempt);
       return { rows: [] };
-    }
+
 
     // Handle SELECT
     if (sql.includes('SELECT') && sql.includes('location_verification_attempts')) {
@@ -271,14 +271,14 @@ class MockDatabaseService {
       
       if (sql.includes('WHERE challenge_id = $1')) {
         return { rows: attempts.filter(a => a.challenge_id === params[0]) };
-      }
+
       
       if (sql.includes('WHERE user_id = $1')) {
         return { rows: attempts.filter(a => a.user_id === params[0]).slice(0, params[1] || 50) };
-      }
+
       
       return { rows: attempts };
-    }
+
 
     // Handle UPDATE
     if (sql.includes('UPDATE location_verification_attempts')) {
@@ -290,14 +290,14 @@ class MockDatabaseService {
         if (sql.includes('status =')) attempt.status = params[0];
         if (sql.includes('attempts =')) attempt.attempts = params[sql.includes('status =') ? 1 : 0];
         if (sql.includes('completed_at =')) attempt.completed_at = params[params.length - 2];
-      }
+
       
       return { rows: [] };
-    }
+
 
     return { rows: [] };
-  }
-}
+
+
 
 class MockRedisService {
   private cache: Map<string, string> = new Map();
@@ -305,17 +305,17 @@ class MockRedisService {
   async setex(key: string, expiry: number, value: string): Promise<void> {
 
     this.cache.set(key, value);
-  }
+
 
   async get(key: string): Promise<string | null> {
 
     return this.cache.get(key) || null;
-  }
+
 
   clearCache() {
     this.cache.clear();
-  }
-}
+
+
 
 describe('LocationVerificationService', () => {
   let locationVerificationService: LocationVerificationService;
@@ -569,7 +569,7 @@ describe('LocationVerificationService', () => {
             sessionId: 'session123'
           }
         );
-      }
+
 
       const result = await locationVerificationService.verifyLocationChallenge(
         challengeId,
@@ -637,7 +637,7 @@ describe('LocationVerificationService', () => {
             sessionId: 'session123'
           }
         );
-      }
+
 
       const auditEvents = mockAuditService.events.filter(e => e.action === 'location_verification_failed');
       expect(auditEvents).toHaveLength(1);
@@ -714,7 +714,7 @@ describe('LocationVerificationService', () => {
         query: jest.fn<unknown[], unknown>().mockImplementation((sql: string) => {
           queries.push(sql);
           return Promise.resolve({ rows: [] });
-  }
+
       };
 
       const service = new LocationVerificationService(

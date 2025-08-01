@@ -12,8 +12,9 @@ import { PresenceManager } from './PresenceManager';
 import { ConnectionManager } from './ConnectionManager';
 
 // Enhanced collaboration types
-}
-}
+
+
+
 export interface CollaborationSession {
   sessionId: string;
   documentId: string;
@@ -29,12 +30,13 @@ export interface CollaborationSession {
   locks: DocumentLock[];
   snapshots: SessionSnapshot[];
   analytics: SessionAnalytics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CollaborationParticipant {
   userId: string;
   userName: string;
@@ -46,12 +48,13 @@ export interface CollaborationParticipant {
   connectionId?: string;
   isOnline: boolean;
   contribution: ContributionMetrics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionSettings {
   enableRealTimeSync: boolean;
   enableConflictResolution: boolean;
@@ -64,12 +67,13 @@ export interface SessionSettings {
   maxParticipants: number;
   allowAnonymousUsers: boolean;
   requireAuthentication: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionPermissions {
   canEdit: boolean;
   canComment: boolean;
@@ -79,21 +83,22 @@ export interface SessionPermissions {
   canDeleteSession: boolean;
   canLockElements: boolean;
   canResolveConflicts: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ParticipantPermissions extends SessionPermissions {
   canViewPresence: boolean;
   canAccessHistory: boolean;
   canCreateSnapshots: boolean;
   canRestoreSnapshots: boolean;
-}
 
-}
-}
+
+
+
 export interface DocumentLock {
   lockId: string;
   type: 'node' | 'edge' | 'document' | 'selection';
@@ -104,12 +109,13 @@ export interface DocumentLock {
   expiresAt?: number;
   reason?: string;
   isAutoLock: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionSnapshot {
   snapshotId: string;
   name: string;
@@ -120,12 +126,13 @@ export interface SessionSnapshot {
   documentState: unknown;
   participantCount: number;
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionAnalytics {
   totalEdits: number;
   totalConflicts: number;
@@ -137,14 +144,15 @@ export interface SessionAnalytics {
     nodeCount: number;
     edgeCount: number;
     complexity: number;
-}
-}
+
+
+
   };
   performanceMetrics: PerformanceMetrics;
-}
 
-}
-}
+
+
+
 export interface ContributionMetrics {
   editsCount: number;
   commentsCount: number;
@@ -154,24 +162,26 @@ export interface ContributionMetrics {
   elementsCreated: number;
   elementsModified: number;
   elementsDeleted: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceMetrics {
   averageLatency: number;
   syncThroughput: number;
   errorRate: number;
   reconnections: number;
   messagingVolume: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CollaborationEvent {
   eventId: string;
   sessionId: string;
@@ -180,9 +190,10 @@ export interface CollaborationEvent {
   timestamp: number;
   data: unknown;
   metadata?: unknown;
-}
-}
-}
+
+
+
+
 
 export enum CollaborationEventType {
   SESSION_CREATED = 'session_created',
@@ -198,10 +209,10 @@ export enum CollaborationEventType {
   COMMENT_ADDED = 'comment_added',
   PERMISSIONS_CHANGED = 'permissions_changed',
   SESSION_ENDED = 'session_ended'
-}
 
-}
-}
+
+
+
 export interface EnhancedCollaborationConfig {
   maxSessionsPerDocument: number;
   sessionTimeoutMs: number;
@@ -213,9 +224,10 @@ export interface EnhancedCollaborationConfig {
   enableAdvancedConflictResolution: boolean;
   enableSmartMerging: boolean;
   enableOperationalTransform: boolean;
-}
-}
-}
+
+
+
+
 
 export class EnhancedCollaborationService extends EventEmitter {
   private sessions: Map<string, CollaborationSession> = new Map();
@@ -249,7 +261,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     
     this.setupEventHandlers();
     this.startCleanupProcess();
-  }
+
 
   /**
    * Create a new collaboration session
@@ -304,7 +316,7 @@ export class EnhancedCollaborationService extends EventEmitter {
         permissions: { ...defaultPermissions, canDeleteSession: true, canModifyPermissions: true },
         isOnline: true,
         contribution: this.createEmptyContributionMetrics()
-      }],
+],
       createdAt: Date.now(),
       lastActivity: Date.now(),
       status: 'active',
@@ -335,7 +347,7 @@ export class EnhancedCollaborationService extends EventEmitter {
 
     this.emit('session_created', session);
     return session;
-  }
+
 
   /**
    * Join a collaboration session
@@ -350,7 +362,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     const session = this.sessions.get(sessionId);
     if (!session || session.status !== 'active') {
       return null;
-    }
+
 
     // Check if user is already in session
     let participant = session.participants.find(p => p.userId === userId);
@@ -359,11 +371,11 @@ export class EnhancedCollaborationService extends EventEmitter {
       // Update existing participant
       participant.isOnline = true;
       participant.lastSeen = Date.now();
-    } else {
+ else {
       // Add new participant
       if (session.participants.length >= session.settings.maxParticipants) {
         return null; // Session is full
-      }
+
 
       participant = {
         userId,
@@ -379,7 +391,7 @@ export class EnhancedCollaborationService extends EventEmitter {
 
       session.participants.push(participant);
       this.addUserSession(userId, sessionId);
-    }
+
 
     session.lastActivity = Date.now();
     session.analytics.peakConcurrentUsers = Math.max(
@@ -404,12 +416,12 @@ export class EnhancedCollaborationService extends EventEmitter {
         participant: participant,
         sessionId,
         documentId: session.documentId
-      }
+
     }, userId);
 
     this.emit('user_joined', sessionId, participant);
     return participant;
-  }
+
 
   /**
    * Leave a collaboration session
@@ -418,12 +430,12 @@ export class EnhancedCollaborationService extends EventEmitter {
     const session = this.sessions.get(sessionId);
     if (!session) {
       return false;
-    }
+
 
     const participant = session.participants.find(p => p.userId === userId);
     if (!participant) {
       return false;
-    }
+
 
     // Mark as offline instead of removing (keep contribution history)
     participant.isOnline = false;
@@ -456,12 +468,12 @@ export class EnhancedCollaborationService extends EventEmitter {
         userName: participant.userName,
         sessionId,
         documentId: session.documentId
-      }
+
     }, userId);
 
     this.emit('user_left', sessionId, participant);
     return true;
-  }
+
 
   /**
    * Lock a document element
@@ -480,7 +492,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     const participant = session.participants.find(p => p.userId === userId);
     if (!participant?.permissions.canLockElements) {
       return null;
-    }
+
 
     // Check if element is already locked by someone else
     const existingLock = Array.from(this.locks.values()).find(
@@ -489,7 +501,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     
     if (existingLock) {
       return null; // Already locked
-    }
+
 
     const lock: DocumentLock = {
       lockId: uuidv4(),
@@ -524,7 +536,7 @@ export class EnhancedCollaborationService extends EventEmitter {
 
     this.emit('element_locked', sessionId, lock);
     return lock;
-  }
+
 
   /**
    * Unlock a document element
@@ -536,7 +548,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     const lock = this.locks.get(lockId);
     if (!lock || (lock.userId !== userId && session.owner !== userId)) {
       return false;
-    }
+
 
     // Remove lock
     this.locks.delete(lockId);
@@ -560,7 +572,7 @@ export class EnhancedCollaborationService extends EventEmitter {
 
     this.emit('element_unlocked', sessionId, lock);
     return true;
-  }
+
 
   /**
    * Create a session snapshot
@@ -578,13 +590,13 @@ export class EnhancedCollaborationService extends EventEmitter {
     const participant = session.participants.find(p => p.userId === userId);
     if (!participant?.permissions.canEdit) {
       return null;
-    }
+
 
     // Check snapshot limit
     if (session.snapshots.length >= this.config.maxSnapshotsPerSession) {
       // Remove oldest snapshot
       session.snapshots.shift();
-    }
+
 
     // Get current document state
     const documentState = this.syncManager.getDocumentState(session.documentId);
@@ -620,12 +632,12 @@ export class EnhancedCollaborationService extends EventEmitter {
       payload: {
         snapshot: { ...snapshot, documentState: undefined },
         sessionId
-      }
+
     });
 
     this.emit('snapshot_created', sessionId, snapshot);
     return snapshot;
-  }
+
 
   /**
    * Restore from a session snapshot
@@ -641,7 +653,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     const participant = session.participants.find(p => p.userId === userId);
     if (!participant?.permissions.canEdit) {
       return false;
-    }
+
 
     const snapshot = session.snapshots.find(s => s.snapshotId === snapshotId);
     if (!snapshot) return false;
@@ -685,19 +697,18 @@ export class EnhancedCollaborationService extends EventEmitter {
 
       this.emit('snapshot_restored', sessionId, snapshot);
       return true;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Failed to restore snapshot:', error);
       return false;
-    }
-  }
+
+
 
   /**
    * Get collaboration session by ID
    */
   getSession(sessionId: string): CollaborationSession | null {
     return this.sessions.get(sessionId) || null;
-  }
+
 
   /**
    * Get all sessions for a document
@@ -707,7 +718,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     return sessionIds
       .map(id => this.sessions.get(id))
       .filter(Boolean) as CollaborationSession[];
-  }
+
 
   /**
    * Get all active sessions for a user
@@ -717,7 +728,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     return sessionIds
       .map(id => this.sessions.get(id))
       .filter(session => session?.status === 'active') as CollaborationSession[];
-  }
+
 
   /**
    * Get session analytics
@@ -725,7 +736,7 @@ export class EnhancedCollaborationService extends EventEmitter {
   getSessionAnalytics(sessionId: string): SessionAnalytics | null {
     const session = this.sessions.get(sessionId);
     return session?.analytics || null;
-  }
+
 
   /**
    * Update session settings
@@ -741,7 +752,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     const participant = session.participants.find(p => p.userId === userId);
     if (!participant?.permissions.canModifyPermissions && session.owner !== userId) {
       return false;
-    }
+
 
     Object.assign(session.settings, settings);
     session.lastActivity = Date.now();
@@ -754,7 +765,7 @@ export class EnhancedCollaborationService extends EventEmitter {
 
     this.emit('session_settings_updated', sessionId, settings);
     return true;
-  }
+
 
   /**
    * End a collaboration session
@@ -763,7 +774,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     const session = this.sessions.get(sessionId);
     if (!session || session.owner !== userId) {
       return false;
-    }
+
 
     // Mark session as ended
     session.status = 'ended';
@@ -793,7 +804,7 @@ export class EnhancedCollaborationService extends EventEmitter {
 
     this.emit('session_ended', sessionId, session);
     return true;
-  }
+
 
   /**
    * Set up event handlers for WebSocket server
@@ -812,7 +823,7 @@ export class EnhancedCollaborationService extends EventEmitter {
     this.conflictResolver.on('conflict_resolved', (resolution: unknown) => {
       this.handleConflictResolved(resolution);
     });
-  }
+
 
   /**
    * Handle graph update from WebSocket
@@ -843,8 +854,8 @@ export class EnhancedCollaborationService extends EventEmitter {
         timestamp: Date.now(),
         data: { updateType: updatePayload.type, targetId: updatePayload.nodeId || updatePayload.edgeId }
       });
-    }
-  }
+
+
 
   /**
    * Handle conflict detection
@@ -877,12 +888,12 @@ export class EnhancedCollaborationService extends EventEmitter {
             type: conflict.type,
             description: conflict.description,
             requiresResolution: true
-  }
+
           sessionId: session.sessionId
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Handle conflict resolution
@@ -896,7 +907,7 @@ export class EnhancedCollaborationService extends EventEmitter {
       const participant = session.participants.find(p => p.userId === resolution.conflict.resolvedBy);
       if (participant) {
         participant.contribution.conflictsResolved++;
-      }
+
 
       // Update analytics
       const resolutionTime = Date.now() - resolution.conflict.detectedAt;
@@ -916,7 +927,7 @@ export class EnhancedCollaborationService extends EventEmitter {
           conflictId: resolution.conflict.id, 
           strategy: resolution.conflict.resolutionStrategy,
           resolutionTime 
-        }
+
       });
 
       // Broadcast resolution to session participants
@@ -927,10 +938,10 @@ export class EnhancedCollaborationService extends EventEmitter {
           resolvedBy: resolution.conflict.resolvedBy,
           strategy: resolution.conflict.resolutionStrategy,
           sessionId: session.sessionId
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Broadcast message to all participants in a session
@@ -951,9 +962,9 @@ export class EnhancedCollaborationService extends EventEmitter {
           messageId: uuidv4(),
           documentId: session.documentId
         }, participant.connectionId);
-      }
-    }
-  }
+
+
+
 
   /**
    * Emit collaboration event
@@ -964,10 +975,10 @@ export class EnhancedCollaborationService extends EventEmitter {
     // Keep event history limited
     if (this.eventHistory.length > 10000) {
       this.eventHistory = this.eventHistory.slice(-5000);
-    }
+
     
     this.emit('collaboration_event', event);
-  }
+
 
   /**
    * Helper methods
@@ -983,7 +994,7 @@ export class EnhancedCollaborationService extends EventEmitter {
       elementsModified: 0,
       elementsDeleted: 0
     };
-  }
+
 
   private createEmptySessionAnalytics(): SessionAnalytics {
     return {
@@ -1000,9 +1011,9 @@ export class EnhancedCollaborationService extends EventEmitter {
         errorRate: 0,
         reconnections: 0,
         messagingVolume: 0
-      }
+
     };
-  }
+
 
   private getDefaultPermissionsForRole(
     role: CollaborationParticipant['role'],
@@ -1058,20 +1069,20 @@ export class EnhancedCollaborationService extends EventEmitter {
       
     default:
       return basePermissions;
-    }
-  }
+
+
 
   private addDocumentSession(documentId: string, sessionId: string): void {
     const sessions = this.documentSessions.get(documentId) || [];
     sessions.push(sessionId);
     this.documentSessions.set(documentId, sessions);
-  }
+
 
   private addUserSession(userId: string, sessionId: string): void {
     const sessions = this.userSessions.get(userId) || [];
     sessions.push(sessionId);
     this.userSessions.set(userId, sessions);
-  }
+
 
   private releaseUserLocks(sessionId: string, userId: string): void {
     const session = this.sessions.get(sessionId);
@@ -1081,8 +1092,8 @@ export class EnhancedCollaborationService extends EventEmitter {
     
     for (const lock of userLocks) {
       this.unlockElement(sessionId, userId, lock.lockId);
-    }
-  }
+
+
 
   private releaseSessionLocks(sessionId: string): void {
     const session = this.sessions.get(sessionId);
@@ -1090,10 +1101,10 @@ export class EnhancedCollaborationService extends EventEmitter {
 
     for (const lock of session.locks) {
       this.locks.delete(lock.lockId);
-    }
+
     
     session.locks = [];
-  }
+
 
   private updateFinalAnalytics(session: CollaborationSession): void {
     const now = Date.now();
@@ -1103,10 +1114,10 @@ export class EnhancedCollaborationService extends EventEmitter {
     for (const participant of session.participants) {
       if (participant.isOnline) {
         participant.contribution.timeActive += now - participant.lastSeen;
-      }
+
       session.analytics.participantActivity.set(participant.userId, participant.contribution);
-    }
-  }
+
+
 
   private serializeDocumentState(documentState: unknown): unknown {
     return {
@@ -1115,13 +1126,13 @@ export class EnhancedCollaborationService extends EventEmitter {
       edges: Object.fromEntries(documentState.edges),
       metadata: documentState.metadata
     };
-  }
+
 
   private startCleanupProcess(): void {
     this.cleanupInterval = setInterval(() => {
       this.performCleanup();
     }, 60000); // Clean up every minute
-  }
+
 
   private performCleanup(): void {
     const now = Date.now();
@@ -1130,16 +1141,16 @@ export class EnhancedCollaborationService extends EventEmitter {
     for (const [sessionId, session] of this.sessions) {
       if (session.status === 'ended' && now - session.lastActivity > this.config.sessionTimeoutMs) {
         this.sessions.delete(sessionId);
-      }
-    }
+
+
 
     // Clean up expired locks
     for (const [lockId, lock] of this.locks) {
       if (lock.expiresAt && now > lock.expiresAt) {
         this.locks.delete(lockId);
-      }
-    }
-  }
+
+
+
 
   /**
    * Clean up resources
@@ -1147,12 +1158,11 @@ export class EnhancedCollaborationService extends EventEmitter {
   cleanup(): void {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
-    }
+
     
     this.sessions.clear();
     this.documentSessions.clear();
     this.userSessions.clear();
     this.locks.clear();
     this.eventHistory = [];
-  }
-}
+

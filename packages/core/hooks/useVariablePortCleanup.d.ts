@@ -1,7 +1,7 @@
 import { Node, Edge } from 'reactflow';
 }
-interface VariablePortCleanupOptions {
-    /**
+}
+interface VariablePortCleanupOptions { /**
      * Whether to enable automatic cleanup of orphaned edges
      * @default true
      */
@@ -32,11 +32,12 @@ export declare const useVariablePortCleanup: (options?: VariablePortCleanupOptio
     performCleanup: (immediate?: boolean) => void;
     handleNodesChange: (nodes: Node[]) => void;
     forceCleanup: () => void;
-    getCleanupStats: () => {,
+    getCleanupStats: () => { }
         totalEdges: number;
         orphanedEdges: number;
         validHandles: number;
         orphanedEdgeIds: string[];
+}
 }
     };
     isEnabled: boolean;

@@ -5,8 +5,7 @@
  * conflict resolution, and history tracking capabilities.
  */
 import { EventEmitter } from 'events';
-import { 
-  GraphOperation,
+import { GraphOperation,
   OperationResult,
   BatchOperationResult,
   UndoResult,
@@ -14,7 +13,7 @@ import {
   MutationEngineConfig,
   GraphState,
   GraphSnapshot,
-  HistoryEntry,
+  HistoryEntry }
   AnyGraphOperation
 } from './types';
 /**

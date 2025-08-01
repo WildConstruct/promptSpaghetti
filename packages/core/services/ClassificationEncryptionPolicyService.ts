@@ -6,16 +6,14 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  DataClassificationLevel, 
+import { DataClassificationLevel, 
   EncryptionRequirements,
-  OperationContext,
+  OperationContext }
   ValidationResult
-} from '../types/DataClassification';
+ from '../types/DataClassification';
 
-}
-export interface EncryptionPolicy {
-  id: string;
+
+export interface EncryptionPolicy { id: string;
   name: string;
   description: string;
   classification: DataClassificationLevel;
@@ -24,12 +22,11 @@ export interface EncryptionPolicy {
   keyManagement: KeyManagementPolicy;
   complianceFrameworks: string;
   effectiveDate: Date;
-  version: string;
-}
-}
-}
-export interface EncryptionAlgorithm {
-  name: string;
+  version: string }
+
+
+
+export interface EncryptionAlgorithm { name: string;
   keyLength: number;
   mode?: string;
   approved: boolean;
@@ -37,24 +34,23 @@ export interface EncryptionAlgorithm {
   maxClassification?: DataClassificationLevel;
   fipsCompliant: boolean;
   quantumResistant: boolean;
-  deprecatedDate?: Date;
-}
-}
-}
-export interface KeyManagementPolicy {
-  keyRotationDays: number;
+  deprecatedDate?: Date }
+
+
+
+export interface KeyManagementPolicy { keyRotationDays: number;
   keyEscrowRequired: boolean;
   hsmRequired: boolean;
   keyDerivationFunction: string;
-  keyStorageLocation: 'SOFTWARE' | 'HSM' | 'CLOUD_KMS' | 'AIR_GAPPED_HSM';
+  keyStorageLocation: 'SOFTWARE' | 'HSM' | 'CLOUD_KMS' | 'AIR_GAPPED_HSM' }
   multiPartyControl: boolean;
   keyRecoveryProcedure: string;
   auditLogging: boolean;
-}
-}
-}
-export interface EncryptionCompliance {
-  dataId: string;
+
+
+
+
+export interface EncryptionCompliance { dataId: string;
   classification: DataClassificationLevel;
   encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED' | 'PARTIAL' | 'UNKNOWN';
   algorithm?: string;
@@ -64,12 +60,11 @@ export interface EncryptionCompliance {
   complianceScore: number;
   violations: string;
   recommendations: string;
-  assessmentDate: Date;
-}
-}
-}
-export interface EncryptionAuditEvent {
-  id: string;
+  assessmentDate: Date }
+
+
+
+export interface EncryptionAuditEvent { id: string;
   timestamp: Date;
   eventType: 'KEY_ROTATION' | 'ENCRYPTION_APPLIED' | 'DECRYPTION_ACCESSED' | 'POLICY_VIOLATION' | 'COMPLIANCE_CHECK';
   dataId: string;
@@ -77,12 +72,11 @@ export interface EncryptionAuditEvent {
   userId: string;
   algorithm: string;
   keyId: string;
-  result: 'SUCCESS' | 'FAILURE' | 'WARNING';
+  result: 'SUCCESS' | 'FAILURE' | 'WARNING' }
   details: Record<string, any>;
-}
-}
-export class ClassificationEncryptionPolicyService {
-  private encryptionPolicies: Map<DataClassificationLevel, EncryptionPolicy> = new Map();
+
+
+export class ClassificationEncryptionPolicyService { private encryptionPolicies: Map<DataClassificationLevel, EncryptionPolicy> = new Map();
   private approvedAlgorithms: EncryptionAlgorithm = [];
   private complianceRecords: Map<string, EncryptionCompliance> = new Map();
   private auditEvents: EncryptionAuditEvent = [];
@@ -92,199 +86,189 @@ export class ClassificationEncryptionPolicyService {
   /**
   * Initialize approved encryption algorithms
   */
-  private initializeApprovedAlgorithms(): void {,
+  private initializeApprovedAlgorithms(): void {
   this.approvedAlgorithms = [
   {
-  name: 'AES-128',
-  keyLength: 128,
-  mode: 'CBC',
-  approved: true,
-  minClassification: 'PUBLIC',
-  maxClassification: 'INTERNAL',
-  fipsCompliant: true,
-  quantumResistant: false,
-}
-      {
-  name: 'AES-256',
-  keyLength: 256,
-  mode: 'CBC',
-  approved: true,
-  minClassification: 'PUBLIC',
-  fipsCompliant: true,
-  quantumResistant: false,
-}
-      {
-  name: 'AES-256-GCM',
-  keyLength: 256,
-  mode: 'GCM',
-  approved: true,
-  minClassification: 'INTERNAL',
-  fipsCompliant: true,
-  quantumResistant: false,
-}
-      {
-  name: 'ChaCha20-Poly1305',
-  keyLength: 256,
-  approved: true,
-  minClassification: 'INTERNAL',
-  fipsCompliant: false,
-  quantumResistant: false,
-}
-      {
-  name: 'AES-256-XTS',
-  keyLength: 256,
-  mode: 'XTS',
-  approved: true,
-  minClassification: 'CONFIDENTIAL',
-  fipsCompliant: true,
-  quantumResistant: false,
-}
-      {
-  name: 'CRYSTALS-Kyber',
-  keyLength: 768,
-  approved: true,
-  minClassification: 'RESTRICTED',
-  fipsCompliant: false,
+  name: 'AES-128'
+  keyLength: 128
+  mode: 'CBC'
+  approved: true
+  minClassification: 'PUBLIC'
+  maxClassification: 'INTERNAL'
+  fipsCompliant: true
+  quantumResistant: false }
+
+      { name: 'AES-256'
+  keyLength: 256
+  mode: 'CBC'
+  approved: true
+  minClassification: 'PUBLIC'
+  fipsCompliant: true
+  quantumResistant: false }
+
+      { name: 'AES-256-GCM'
+  keyLength: 256
+  mode: 'GCM'
+  approved: true
+  minClassification: 'INTERNAL'
+  fipsCompliant: true
+  quantumResistant: false }
+
+      { name: 'ChaCha20-Poly1305'
+  keyLength: 256
+  approved: true
+  minClassification: 'INTERNAL'
+  fipsCompliant: false
+  quantumResistant: false }
+
+      { name: 'AES-256-XTS'
+  keyLength: 256
+  mode: 'XTS'
+  approved: true
+  minClassification: 'CONFIDENTIAL'
+  fipsCompliant: true
+  quantumResistant: false }
+
+      { name: 'CRYSTALS-Kyber'
+  keyLength: 768
+  approved: true
+  minClassification: 'RESTRICTED'
+  fipsCompliant: false
   quantumResistant: true];
   /**
   * Initialize default encryption policies for each classification level
   */
-  private initializeDefaultEncryptionPolicies(): void {,
-  const policies: Record<DataClassificationLevel, EncryptionPolicy> = {,
+  private initializeDefaultEncryptionPolicies(): void {
+  const policies: Record<DataClassificationLevel, EncryptionPolicy> = {
   PUBLIC: {
-  id: 'policy-encryption-public',
-  name: 'Public Data Encryption Policy',
-  description: 'Encryption policy for public data - optional encryption',
-  classification: 'PUBLIC',
+  id: 'policy-encryption-public'
+  name: 'Public Data Encryption Policy'
+  description: 'Encryption policy for public data - optional encryption'
+  classification: 'PUBLIC'
   requirements: {
-  required: false,
-  algorithm: 'AES-128',
-  keyLength: 128,
-  keyRotationDays: 365,
-  hsmRequired: false,
-  keyEscrow: false,
-},
-  algorithms: this.getAlgorithmsForClassification('PUBLIC'),
-        keyManagement: {
-  keyRotationDays: 365,
-  keyEscrowRequired: false,
-  hsmRequired: false,
-  keyDerivationFunction: 'PBKDF2',
-  keyStorageLocation: 'SOFTWARE',
-  multiPartyControl: false,
-  keyRecoveryProcedure: 'STANDARD',
-  auditLogging: false,
-},
-  complianceFrameworks: [],
-        effectiveDate: new Date('2024-01-01'),
-        version: '1.0.0';
-  },
-  INTERNAL: {
-  id: 'policy-encryption-internal',
-  name: 'Internal Data Encryption Policy',
-  description: 'Encryption policy for internal data - mandatory AES-256',
-  classification: 'INTERNAL',
+  required: false
+  algorithm: 'AES-128'
+  keyLength: 128
+  keyRotationDays: 365
+  hsmRequired: false
+  keyEscrow: false }
+
+  algorithms: this.getAlgorithmsForClassification('PUBLIC')
+        keyManagement: { 
+  keyRotationDays: 365
+  keyEscrowRequired: false
+  hsmRequired: false
+  keyDerivationFunction: 'PBKDF2'
+  keyStorageLocation: 'SOFTWARE'
+  multiPartyControl: false
+  keyRecoveryProcedure: 'STANDARD'
+  auditLogging: false }
+
+  complianceFrameworks: []
+        effectiveDate: new Date('2024-01-01')
+        version: '1.0.0'
+
+  INTERNAL: { 
+  id: 'policy-encryption-internal'
+  name: 'Internal Data Encryption Policy'
+  description: 'Encryption policy for internal data - mandatory AES-256'
+  classification: 'INTERNAL'
   requirements: {
-  required: true,
-  algorithm: 'AES-256',
-  keyLength: 256,
-  keyRotationDays: 90,
-  hsmRequired: false,
-  keyEscrow: false,
-},
-  algorithms: this.getAlgorithmsForClassification('INTERNAL'),
-        keyManagement: {
-  keyRotationDays: 90,
-  keyEscrowRequired: false,
-  hsmRequired: false,
-  keyDerivationFunction: 'PBKDF2',
-  keyStorageLocation: 'CLOUD_KMS',
-  multiPartyControl: false,
-  keyRecoveryProcedure: 'STANDARD',
-  auditLogging: true,
-},
-  complianceFrameworks: ['SOC2', 'ISO27001'],
-        effectiveDate: new Date('2024-01-01'),
-        version: '1.0.0';
-  },
-  CONFIDENTIAL: {
-  id: 'policy-encryption-confidential',
-  name: 'Confidential Data Encryption Policy',
-  description: 'Encryption policy for confidential data - mandatory AES-256-GCM with HSM',
-  classification: 'CONFIDENTIAL',
+  required: true
+  algorithm: 'AES-256'
+  keyLength: 256
+  keyRotationDays: 90
+  hsmRequired: false
+  keyEscrow: false }
+
+  algorithms: this.getAlgorithmsForClassification('INTERNAL')
+        keyManagement: { 
+  keyRotationDays: 90
+  keyEscrowRequired: false
+  hsmRequired: false
+  keyDerivationFunction: 'PBKDF2'
+  keyStorageLocation: 'CLOUD_KMS'
+  multiPartyControl: false
+  keyRecoveryProcedure: 'STANDARD'
+  auditLogging: true }
+
+  complianceFrameworks: ['SOC2', 'ISO27001']
+        effectiveDate: new Date('2024-01-01')
+        version: '1.0.0'
+
+  CONFIDENTIAL: { 
+  id: 'policy-encryption-confidential'
+  name: 'Confidential Data Encryption Policy'
+  description: 'Encryption policy for confidential data - mandatory AES-256-GCM with HSM'
+  classification: 'CONFIDENTIAL'
   requirements: {
-  required: true,
-  algorithm: 'AES-256-GCM',
-  keyLength: 256,
-  keyRotationDays: 30,
-  hsmRequired: true,
-  keyEscrow: true,
-},
-  algorithms: this.getAlgorithmsForClassification('CONFIDENTIAL'),
-        keyManagement: {
-  keyRotationDays: 30,
-  keyEscrowRequired: true,
-  hsmRequired: true,
-  keyDerivationFunction: 'HKDF',
-  keyStorageLocation: 'HSM',
-  multiPartyControl: true,
-  keyRecoveryProcedure: 'DUAL_CONTROL',
-  auditLogging: true,
-},
-  complianceFrameworks: ['SOC2', 'GDPR', 'HIPAA'],
-        effectiveDate: new Date('2024-01-01'),
-        version: '1.0.0';
-  },
-  RESTRICTED: {
-  id: 'policy-encryption-restricted',
-  name: 'Restricted Data Encryption Policy',
-  description: 'Encryption policy for restricted data - quantum-resistant algorithms with air-gapped HSM',
-  classification: 'RESTRICTED',
+  required: true
+  algorithm: 'AES-256-GCM'
+  keyLength: 256
+  keyRotationDays: 30
+  hsmRequired: true
+  keyEscrow: true }
+
+  algorithms: this.getAlgorithmsForClassification('CONFIDENTIAL')
+        keyManagement: { 
+  keyRotationDays: 30
+  keyEscrowRequired: true
+  hsmRequired: true
+  keyDerivationFunction: 'HKDF'
+  keyStorageLocation: 'HSM'
+  multiPartyControl: true
+  keyRecoveryProcedure: 'DUAL_CONTROL'
+  auditLogging: true }
+
+  complianceFrameworks: ['SOC2', 'GDPR', 'HIPAA']
+        effectiveDate: new Date('2024-01-01')
+        version: '1.0.0'
+
+  RESTRICTED: { 
+  id: 'policy-encryption-restricted'
+  name: 'Restricted Data Encryption Policy'
+  description: 'Encryption policy for restricted data - quantum-resistant algorithms with air-gapped HSM'
+  classification: 'RESTRICTED'
   requirements: {
-  required: true,
-  algorithm: 'CRYSTALS-Kyber',
-  keyLength: 768,
-  keyRotationDays: 7,
-  hsmRequired: true,
-  keyEscrow: true,
-},
-  algorithms: this.getAlgorithmsForClassification('RESTRICTED'),
-        keyManagement: {
-  keyRotationDays: 7,
-  keyEscrowRequired: true,
-  hsmRequired: true,
-  keyDerivationFunction: 'HKDF',
-  keyStorageLocation: 'AIR_GAPPED_HSM',
-  multiPartyControl: true,
-  keyRecoveryProcedure: 'TRIPLE_CONTROL',
-  auditLogging: true,
-},
-  complianceFrameworks: ['FedRAMP', 'FISMA', 'NIST'],
-        effectiveDate: new Date('2024-01-01'),
+  required: true
+  algorithm: 'CRYSTALS-Kyber'
+  keyLength: 768
+  keyRotationDays: 7
+  hsmRequired: true
+  keyEscrow: true }
+
+  algorithms: this.getAlgorithmsForClassification('RESTRICTED')
+        keyManagement: { 
+  keyRotationDays: 7
+  keyEscrowRequired: true
+  hsmRequired: true
+  keyDerivationFunction: 'HKDF'
+  keyStorageLocation: 'AIR_GAPPED_HSM'
+  multiPartyControl: true
+  keyRecoveryProcedure: 'TRIPLE_CONTROL'
+  auditLogging: true }
+
+  complianceFrameworks: ['FedRAMP', 'FISMA', 'NIST']
+        effectiveDate: new Date('2024-01-01')
         version: '1.0.0';
   };
-    Object.entries(policies).forEach(([level, policy]) => {
-      this.encryptionPolicies.set(level as DataClassificationLevel, policy);
-    });
+    Object.entries(policies).forEach(([level, policy]) => { this.encryptionPolicies.set(level as DataClassificationLevel, policy) });
   /**
    * Get approved algorithms for a classification level
    */
-  private getAlgorithmsForClassification(classification: DataClassificationLevel): EncryptionAlgorithm {
-    return this.approvedAlgorithms.filter(algorithm => {)
-  return this.isAlgorithmApprovedForClassification(algorithm, classification);
-    });
+  private getAlgorithmsForClassification(classification: DataClassificationLevel): EncryptionAlgorithm { return this.approvedAlgorithms.filter(algorithm => {)
+  return this.isAlgorithmApprovedForClassification(algorithm, classification) });
   /**
    * Check if algorithm is approved for classification level
    */
   private isAlgorithmApprovedForClassification(((
-    algorithm: EncryptionAlgorithm,
+    algorithm: EncryptionAlgorithm
     classification: DataClassificationLevel
-  ): boolean {
-  const classificationLevels: Record<DataClassificationLevel, number> = {,
-  PUBLIC: 1,
-  INTERNAL: 2,
-  CONFIDENTIAL: 3,
-  RESTRICTED: 4,
+  ): boolean { const classificationLevels: Record<DataClassificationLevel, number> = {
+  PUBLIC: 1
+  INTERNAL: 2
+  CONFIDENTIAL: 3
+  RESTRICTED: 4 }
 };
     const minLevel = classificationLevels[algorithm.minClassification];
     const currentLevel = classificationLevels[classification];
@@ -293,27 +277,26 @@ export class ClassificationEncryptionPolicyService {
   /**
    * Get encryption policy for classification level
    */
-  getEncryptionPolicy(classification: DataClassificationLevel): EncryptionPolicy | undefined {
-  return this.encryptionPolicies.get(classification);
+  getEncryptionPolicy(classification: DataClassificationLevel): EncryptionPolicy | undefined { return this.encryptionPolicies.get(classification);
   /**
   * Validate encryption compliance for data
   */
-  async validateEncryptionCompliance(dataId: string)
+  async validateEncryptionCompliance(dataId: string),
   classification: DataClassificationLevel,
-  encryptionStatus: {
+  encryptionStatus: { }
   encrypted: boolean;
   algorithm?: string;
   keyLength?: number;
-  lastRotationDate?: Date;
-},
-  context: OperationContext): Promise<ValidationResult> {,
+  lastRotationDate?: Date
+
+  context: OperationContext): Promise<ValidationResult> { 
     const policy = this.encryptionPolicies.get(classification);
     if (!policy) {
       return {
-        valid: false,
+        valid: false }
         errors: [`No encryption policy found for classification: ${classification}`]}
-},
-  warnings: [],
+
+  warnings: []
         recommendations: [];
   };
     const errors: string = [];
@@ -323,10 +306,9 @@ export class ClassificationEncryptionPolicyService {
     if (policy.requirements.required && !encryptionStatus.encrypted) {
       errors.push(`Encryption is mandatory for ${classification} data but data is not encrypted`);}
     // Check algorithm compliance
-    if (encryptionStatus.encrypted && encryptionStatus.algorithm) {
-      const algorithmValid = this.validateEncryptionAlgorithm(;);
-        encryptionStatus.algorithm,
-        classification,
+    if (encryptionStatus.encrypted && encryptionStatus.algorithm) { const algorithmValid = this.validateEncryptionAlgorithm(;);
+        encryptionStatus.algorithm
+        classification
         encryptionStatus.keyLength || 0
       );
       if (!algorithmValid.valid) {
@@ -335,51 +317,49 @@ export class ClassificationEncryptionPolicyService {
     // Check key rotation compliance
     if (encryptionStatus.encrypted && encryptionStatus.lastRotationDate) {
       const rotationValid = this.validateKeyRotation(;);
-        encryptionStatus.lastRotationDate,
+        encryptionStatus.lastRotationDate }
         policy.keyManagement.keyRotationDays
       );
       if (!rotationValid) {
         warnings.push(`Key rotation is overdue. Required frequency: ${policy.keyManagement.keyRotationDays} days`);}
         recommendations.push('Schedule immediate key rotation');
     // Record compliance assessment
-    const compliance: EncryptionCompliance = {
-  dataId,
-  classification,
-  encryptionStatus: encryptionStatus.encrypted ? 'ENCRYPTED' : 'NOT_ENCRYPTED',
-  algorithm: encryptionStatus.algorithm,
-  keyLength: encryptionStatus.keyLength,
-  keyRotationCompliant: encryptionStatus.lastRotationDate ? ,
-  this.validateKeyRotation(encryptionStatus.lastRotationDate, policy.keyManagement.keyRotationDays) : false,
-  lastRotationDate: encryptionStatus.lastRotationDate,
-  complianceScore: this.calculateComplianceScore(errors, warnings),
-  violations: errors,
-  recommendations,
-  assessmentDate: new Date(),
+    const compliance: EncryptionCompliance = { dataId
+  classification
+  encryptionStatus: encryptionStatus.encrypted ? 'ENCRYPTED' : 'NOT_ENCRYPTED'
+  algorithm: encryptionStatus.algorithm
+  keyLength: encryptionStatus.keyLength
+  keyRotationCompliant: encryptionStatus.lastRotationDate ? 
+  this.validateKeyRotation(encryptionStatus.lastRotationDate, policy.keyManagement.keyRotationDays) : false
+  lastRotationDate: encryptionStatus.lastRotationDate
+  complianceScore: this.calculateComplianceScore(errors, warnings)
+  violations: errors
+  recommendations
+  assessmentDate: new Date() }
 };
     this.complianceRecords.set(dataId, compliance);
     // Record audit event
-    await this.recordAuditEvent({)
-  eventType: 'COMPLIANCE_CHECK',
-      dataId,
-      classification,
-      userId: context.userId,
-      algorithm: encryptionStatus.algorithm || 'unknown',
-      keyId: 'unknown',
-      result: errors.length === 0 ? 'SUCCESS' : 'FAILURE',
+    await this.recordAuditEvent({ )
+  eventType: 'COMPLIANCE_CHECK'
+      dataId
+      classification
+      userId: context.userId
+      algorithm: encryptionStatus.algorithm || 'unknown'
+      keyId: 'unknown'
+      result: errors.length === 0 ? 'SUCCESS' : 'FAILURE' }
       details: { encryptionStatus, compliance }
     });
-    return {
-  valid: errors.length === 0,
-  errors,
-  warnings,
+    return { valid: errors.length === 0
+  errors
+  warnings }
   recommendations
 };
   /**
    * Validate encryption algorithm
    */
   private validateEncryptionAlgorithm(algorithm: string)
-    classification: DataClassificationLevel,
-    keyLength: number): ValidationResult {,
+  classification: DataClassificationLevel
+    keyLength: number): ValidationResult {
     const errors: string = [];
     const warnings: string = [];
     const recommendations: string = [];
@@ -398,20 +378,18 @@ export class ClassificationEncryptionPolicyService {
       errors.push(`Key length ${keyLength} is insufficient. Minimum required: ${approvedAlgorithm.keyLength}`);}
       recommendations.push(`Increase key length to at least ${approvedAlgorithm.keyLength} bits`);}
     // Check for quantum resistance requirement for restricted data
-    if (classification === 'RESTRICTED' && !approvedAlgorithm.quantumResistant) {
-  warnings.push('Consider using quantum-resistant algorithms for restricted data');
+    if (classification === 'RESTRICTED' && !approvedAlgorithm.quantumResistant) { warnings.push('Consider using quantum-resistant algorithms for restricted data');
   recommendations.push('Migrate to quantum-resistant encryption algorithms');
   return {
   valid: errors.length === 0,
   errors,
-  warnings,
+  warnings }
   recommendations
 };
   /**
    * Validate key rotation compliance
    */
-  private validateKeyRotation(lastRotationDate: Date, requiredRotationDays: number): boolean {
-    const daysSinceRotation = Math.floor((Date.now() - lastRotationDate.getTime()) / (1000 * 60 * 60 * 24));
+  private validateKeyRotation(lastRotationDate: Date, requiredRotationDays: number): boolean { const daysSinceRotation = Math.floor((Date.now() - lastRotationDate.getTime()) / (1000 * 60 * 60 * 24));
     return daysSinceRotation <= requiredRotationDays;
   /**
    * Calculate compliance score
@@ -425,18 +403,17 @@ export class ClassificationEncryptionPolicyService {
    */
   private async recordAuditEvent(event: Omit<EncryptionAuditEvent, 'id' | 'timestamp'>): Promise<void> {
 
-    const auditEvent: EncryptionAuditEvent = {,
+    const auditEvent: EncryptionAuditEvent = { }
   id: `audit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-},
-  timestamp: new Date(),
+
+  timestamp: new Date()
       ...event
     };
     this.auditEvents.push(auditEvent);
   /**
    * Get encryption requirements for classification level
    */
-  getEncryptionRequirements(classification: DataClassificationLevel): EncryptionRequirements | undefined {
-    const policy = this.encryptionPolicies.get(classification);
+  getEncryptionRequirements(classification: DataClassificationLevel): EncryptionRequirements | undefined { const policy = this.encryptionPolicies.get(classification);
     return policy?.requirements;
   /**
    * Get approved algorithms for classification level
@@ -472,27 +449,24 @@ export class ClassificationEncryptionPolicyService {
    * Update encryption policy
    */
   async updateEncryptionPolicy(((
-    classification: DataClassificationLevel,
+    classification: DataClassificationLevel }
     updates: Partial<EncryptionPolicy>
   ): Promise<void> {
 
     const existingPolicy = this.encryptionPolicies.get(classification);
     if (!existingPolicy) {
       throw new Error(`No encryption policy found for classification: ${classification}`);}
-    const updatedPolicy: EncryptionPolicy = {
-  ...existingPolicy,
-  ...updates,
-  version: this.incrementVersion(existingPolicy.version),
+    const updatedPolicy: EncryptionPolicy = { ...existingPolicy
+  ...updates
+  version: this.incrementVersion(existingPolicy.version) }
 };
     this.encryptionPolicies.set(classification, updatedPolicy);
   /**
    * Add or update approved algorithm
    */
-  addApprovedAlgorithm(algorithm: EncryptionAlgorithm): void {
-    const existingIndex = this.approvedAlgorithms.findIndex(alg => alg.name === algorithm.name);
+  addApprovedAlgorithm(algorithm: EncryptionAlgorithm): void { const existingIndex = this.approvedAlgorithms.findIndex(alg => alg.name === algorithm.name);
     if (existingIndex >= 0) {
-      this.approvedAlgorithms[existingIndex] = algorithm;
-    } else {
+      this.approvedAlgorithms[existingIndex] = algorithm } else {
       this.approvedAlgorithms.push(algorithm);
   /**
    * Deprecate algorithm

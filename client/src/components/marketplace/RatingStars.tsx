@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { StarIcon as StarOutlineIcon } from '@heroicons/react/24/outline';
 import './RatingStars.css';
-}
+
+
 interface RatingStarsProps {
   rating: number;
   maxRating?: number;
@@ -18,7 +19,7 @@ interface RatingStarsProps {
   className?: string;
   disabled?: boolean;
   showTooltip?: boolean;
-  export const RatingStars: React.FC<RatingStarsProps> = ({,)
+  export const RatingStars: React.FC<RatingStarsProps> = ({),
   rating,
   maxRating = 5,
   size = 'md',
@@ -32,7 +33,8 @@ interface RatingStarsProps {
   className = '',
   disabled = false,
   showTooltip = false
-}
+
+
 }) => {
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -46,16 +48,16 @@ interface RatingStarsProps {
   const starWidth = rect.width;
   if (clickX < starWidth / 2) {
   newRating = starIndex + 0.5;
-} else if (precision === 'quarter') {
+ else if (precision === 'quarter') {
       const rect = event.currentTarget.getBoundingClientRect();
       const clickX = event.clientX - rect.left;
       const starWidth = rect.width;
       const quarter = starWidth / 4;
       if (clickX < quarter) {
         newRating = starIndex + 0.25;
-      } else if (clickX < quarter * 2) {
+ else if (clickX < quarter * 2) {
         newRating = starIndex + 0.5;
-      } else if (clickX < quarter * 3) {
+ else if (clickX < quarter * 3) {
         newRating = starIndex + 0.75;
     onChange(newRating);
   };
@@ -148,15 +150,17 @@ interface RatingStarsProps {
 };
 
 // Rating Distribution Component
-}
+
+
 interface RatingDistributionProps {
-  distribution: {
+  distribution: {,
   five_star: number;,
-  four_star: number;
+  four_star: number;,
   three_star: number;,
-  two_star: number;
+  two_star: number;,
   one_star: number;
-}
+
+
 };
   totalReviews: number;
   onFilterByRating?: (rating: number) => void;
@@ -206,17 +210,19 @@ export const RatingDistribution: React.FC<RatingDistributionProps> = ({)
 };
 
 // Rating Summary Component
-}
+
+
 interface RatingSummaryProps {
   averageRating: number;,
-  totalReviews: number;
-  distribution: {
+  totalReviews: number;,
+  distribution: {,
   five_star: number;,
-  four_star: number;
+  four_star: number;,
   three_star: number;,
-  two_star: number;
+  two_star: number;,
   one_star: number;
-}
+
+
 };
   verifiedPercentage?: number;
   onFilterByRating?: (rating: number) => void;

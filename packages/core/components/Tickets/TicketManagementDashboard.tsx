@@ -5,114 +5,98 @@
  * Provides full CRUD operations, filtering, status management, and real-time updates.
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  MarketplaceTicket,
+import { MarketplaceTicket,
   MarketplaceTicketType,
   TicketStatus,
   TicketPriority,
-  TicketCategory,
+  TicketCategory }
   Epic16TicketIntegrationService
-} from '../../services/Epic16TicketIntegrationService';
-}
-interface TicketManagementDashboardProps {
-  ticketService: Epic16TicketIntegrationService;
+ from '../../services/Epic16TicketIntegrationService';
+
+
+interface TicketManagementDashboardProps { ticketService: Epic16TicketIntegrationService;
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
-  onTicketSelect?: (ticket: MarketplaceTicket) => void;
-}
-interface TicketFilters {
-  status: TicketStatus;
+  onTicketSelect?: (ticket: MarketplaceTicket) => void }
+
+
+interface TicketFilters { status: TicketStatus;
   type: MarketplaceTicketType;
   priority: TicketPriority;
   category: TicketCategory;
-  assignedTo?: string;
-}
+  assignedTo?: string }
+
   dateRange?: { start: Date; end: Date };
   searchQuery: string;
 
-export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps> = ({)
-  ticketService,
-  userId,
-  userRole,
+export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps> = ({ )
+  ticketService
+  userId
+  userRole }
   onTicketSelect
-}) => {
-  // State management
+}) => { // State management
   const [tickets, setTickets] = useState<MarketplaceTicket>([]);
   const [selectedTicket, setSelectedTicket] = useState<MarketplaceTicket | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<TicketFilters>({)
-  status: [],
-  type: [],
-  priority: [],
-  category: [],
-  searchQuery: '',
+  status: []
+  type: []
+  priority: []
+  category: []
+  searchQuery: '' }
 });
-  const [pagination, setPagination] = useState({)
-  page: 0,
-  limit: 25,
-  total: 0,
-  hasMore: false,
+  const [pagination, setPagination] = useState({ )
+  page: 0
+  limit: 25
+  total: 0
+  hasMore: false }
 });
   const [_____showCreateModal, setShowCreateModal] = useState(false);
   const [metrics, setMetrics] = useState<unknown>(null);
   // Load tickets
-  const loadTickets = useCallback(async () => {
-  setLoading(true);
+  const loadTickets = useCallback(async () => { setLoading(true);
   setError(null);
   try {
   const filterCriteria = {
-  status: filters.status.length > 0 ? filters.status : undefined,
-  type: filters.type.length > 0 ? filters.type : undefined,
-  priority: filters.priority.length > 0 ? filters.priority : undefined,
-  category: filters.category.length > 0 ? filters.category[0] : undefined,
-  assignedTo: filters.assignedTo,
-  dateRange: filters.dateRange,
-  limit: pagination.limit,
-  offset: pagination.page * pagination.limit,
+  status: filters.status.length > 0 ? filters.status : undefined
+  type: filters.type.length > 0 ? filters.type : undefined
+  priority: filters.priority.length > 0 ? filters.priority : undefined
+  category: filters.category.length > 0 ? filters.category[0] : undefined
+  assignedTo: filters.assignedTo
+  dateRange: filters.dateRange
+  limit: pagination.limit
+  offset: pagination.page * pagination.limit }
 };
       const result = await ticketService.getTickets(filterCriteria);
       setTickets(result.tickets);
-      setPagination(prev => ({)
-  ...prev,
-  total: result.total,
-  hasMore: result.hasMore,
+      setPagination(prev => ({ )
+  ...prev
+  total: result.total
+  hasMore: result.hasMore }
 }));
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load tickets');
-} finally {
-      setLoading(false);
-  }, [ticketService, filters, pagination.page, pagination.limit]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load tickets') } finally { setLoading(false) }, [ticketService, filters, pagination.page, pagination.limit]);
   // Load metrics
-  const loadMetrics = useCallback(async () => {
-  try {
+  const loadMetrics = useCallback(async () => { try {
   const timeRange = {
-  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days,
-  end: new Date(),
+  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
+  end: new Date() }
 };
       const metricsData = await ticketService.getTicketMetrics(timeRange);
       setMetrics(metricsData);
-    } catch (err) {
-  console.error('Failed to load metrics:', err);
-}, [ticketService]);
+ catch (err) { console.error('Failed to load metrics:', err) }, [ticketService]);
   // Effects
-  useEffect(() => {
-    loadTickets();
-  }, [loadTickets]);
-  useEffect(() => {
-    loadMetrics();
-  }, [loadMetrics]);
+  useEffect(() => { loadTickets() }, [loadTickets]);
+  useEffect(() => { loadMetrics() }, [loadMetrics]);
   // Filter tickets based on search query
-  const filteredTickets = useMemo(() => {
-    if (!filters.searchQuery) return tickets;
+  const filteredTickets = useMemo(() => { if (!filters.searchQuery) return tickets;
     const query = filters.searchQuery.toLowerCase();
     return tickets.filter(ticket =>)
       ticket.title.toLowerCase().includes(query) ||
       ticket.description.toLowerCase().includes(query) ||
       ticket.id.toLowerCase().includes(query) ||
       ticket.labels.some(label => label.toLowerCase().includes(query))
-    );
-  }, [tickets, filters.searchQuery]);
+    ) }, [tickets, filters.searchQuery]);
   // Handle ticket status update
   const handleStatusUpdate = async (ticketId: string, newStatus: TicketStatus) => {
     try {
@@ -122,50 +106,38 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
         const updatedTicket = tickets.find(t => t.id === ticketId);
         if (updatedTicket) {
           setSelectedTicket({ ...updatedTicket, status: newStatus });
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to update ticket status');
-};
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to update ticket status') };
   // Handle ticket assignment
-  const handleAssignment = async (ticketId: string, assigneeId: string) => {
-    try {
+  const handleAssignment = async (ticketId: string, assigneeId: string) => { try {
       await ticketService.assignTicket(ticketId, assigneeId, userId);
-      await loadTickets();
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to assign ticket');
-};
+      await loadTickets() } catch (err) { setError(err instanceof Error ? err.message : 'Failed to assign ticket') };
   // Handle ticket escalation
-  const handleEscalation = async (ticketId: string, reason: string) => {
-    try {
+  const handleEscalation = async (ticketId: string, reason: string) => { try {
       await ticketService.escalateTicket(ticketId, reason, userId);
-      await loadTickets();
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to escalate ticket');
-};
+      await loadTickets() } catch (err) { setError(err instanceof Error ? err.message : 'Failed to escalate ticket') };
   // Reset filters
-  const resetFilters = () => {
-  setFilters({)
-  status: [],
-  type: [],
-  priority: [],
-  category: [],
-  searchQuery: '',
+  const resetFilters = () => { setFilters({)
+  status: []
+  type: []
+  priority: []
+  category: []
+  searchQuery: '' }
 });
     setPagination(prev => ({ ...prev, page: 0 }));
   };
   // Render status badge
-  const renderStatusBadge = (status: TicketStatus) => {
-  const colors = {
-  [TicketStatus.NEW]: 'bg-blue-100 text-blue-800',
-  [TicketStatus.OPEN]: 'bg-green-100 text-green-800',
-  [TicketStatus.IN_PROGRESS]: 'bg-yellow-100 text-yellow-800',
-  [TicketStatus.PENDING_USER]: 'bg-orange-100 text-orange-800',
-  [TicketStatus.PENDING_REVIEW]: 'bg-purple-100 text-purple-800',
-  [TicketStatus.PENDING_APPROVAL]: 'bg-indigo-100 text-indigo-800',
-  [TicketStatus.RESOLVED]: 'bg-emerald-100 text-emerald-800',
-  [TicketStatus.CLOSED]: 'bg-gray-100 text-gray-800',
-  [TicketStatus.REOPENED]: 'bg-red-100 text-red-800',
-  [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
-  [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700',
+  const renderStatusBadge = (status: TicketStatus) => { const colors = {
+  [TicketStatus.NEW]: 'bg-blue-100 text-blue-800'
+  [TicketStatus.OPEN]: 'bg-green-100 text-green-800'
+  [TicketStatus.IN_PROGRESS]: 'bg-yellow-100 text-yellow-800'
+  [TicketStatus.PENDING_USER]: 'bg-orange-100 text-orange-800'
+  [TicketStatus.PENDING_REVIEW]: 'bg-purple-100 text-purple-800'
+  [TicketStatus.PENDING_APPROVAL]: 'bg-indigo-100 text-indigo-800'
+  [TicketStatus.RESOLVED]: 'bg-emerald-100 text-emerald-800'
+  [TicketStatus.CLOSED]: 'bg-gray-100 text-gray-800'
+  [TicketStatus.REOPENED]: 'bg-red-100 text-red-800'
+  [TicketStatus.ESCALATED]: 'bg-red-500 text-white'
+  [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700' }
 };
     return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
@@ -174,13 +146,12 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
     );
   };
   // Render priority badge
-  const renderPriorityBadge = (priority: TicketPriority) => {
-  const colors = {
+  const renderPriorityBadge = (priority: TicketPriority) => { const colors = {
   [TicketPriority.LOW]: 'bg-gray-100 text-gray-800',
   [TicketPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
   [TicketPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
   [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
-  [TicketPriority.CRITICAL]: 'bg-red-500 text-white',
+  [TicketPriority.CRITICAL]: 'bg-red-500 text-white' }
 };
     return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
@@ -296,7 +267,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                           ? [...filters.status, status]
                           : filters.status.filter(s => s !== status);
                         setFilters({ ...filters, status: newStatus });
-                      }}
+
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <span className="ml-2 text-sm text-gray-600">
@@ -319,7 +290,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                           ? [...filters.priority, priority]
                           : filters.priority.filter(p => p !== priority);
                         setFilters({ ...filters, priority: newPriority });
-                      }}
+
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <span className="ml-2 text-sm text-gray-600 capitalize">
@@ -342,7 +313,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                           ? [...filters.type, type]
                           : filters.type.filter(t => t !== type);
                         setFilters({ ...filters, type: newType });
-                      }}
+
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <span className="ml-2 text-sm text-gray-600">
@@ -395,10 +366,9 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
                   <TicketListItem
                     key={ticket.id}
                     ticket={ticket}
-                    onSelect={() => {
+                    onSelect={ () => {
                       setSelectedTicket(ticket);
-                      onTicketSelect?.(ticket);
-                    }}
+                      onTicketSelect?.(ticket) }}
                     onStatusUpdate={handleStatusUpdate}
                     onAssign={handleAssignment}
                     onEscalate={handleEscalation}
@@ -443,30 +413,31 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
 };
 
 // Ticket List Item Component
-}
-interface TicketListItemProps {
-  ticket: MarketplaceTicket;
+
+
+interface TicketListItemProps { ticket: MarketplaceTicket;
   onSelect: () => void;
-  onStatusUpdate: (ticketId: string, newStatus: TicketStatus) => void;
-  onAssign: (ticketId: string, assigneeId: string) => void;
-  onEscalate: (ticketId: string, reason: string) => void;
+  onStatusUpdate: (ticketId: string, newStatus: TicketStatus) => void
+  onAssign: (ticketId: string, assigneeId: string) => void
+  onEscalate: (ticketId: string, reason: string) => void
   currentUserId: string;
   userRole: 'user' | 'agent' | 'admin';
   selected: boolean;
-  renderStatusBadge: (status: TicketStatus) => React.ReactNode;
+  renderStatusBadge: (status: TicketStatus) => React.ReactNode
   renderPriorityBadge: (priority: TicketPriority) => React.ReactNode;
-  const TicketListItem: React.FC<TicketListItemProps> = ({,)
-  ticket,
-  onSelect,
-  onStatusUpdate,
-  onAssign,
-  onEscalate,
-  currentUserId,
-  userRole,
-  selected,
-  renderStatusBadge,
+  const TicketListItem: React.FC<TicketListItemProps> = ({);
+  ticket;
+  onSelect;
+  onStatusUpdate;
+  onAssign;
+  onEscalate;
+  currentUserId;
+  userRole;
+  selected;
+  renderStatusBadge }
   renderPriorityBadge
-}
+
+
 }) => {
   const [showActions, setShowActions] = useState(false);
   const canModify = userRole === 'admin' || (userRole === 'agent' && ticket.assignedTo === currentUserId);
@@ -509,47 +480,43 @@ interface TicketListItemProps {
             )}
           </div>
         </div>
-        {canModify && ()
+        { canModify && ()
           <div className="flex items-center space-x-1">
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setShowActions(!showActions);
-              }}
+                setShowActions(!showActions) }}
               className="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100"
             >
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
               </svg>
             </button>
-            {showActions && ()
+            { showActions && ()
               <div className="absolute right-4 top-12 z-10 bg-white border border-gray-200 rounded-md shadow-lg py-1 min-w-32">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     onStatusUpdate(ticket.id, TicketStatus.IN_PROGRESS);
-                    setShowActions(false);
-                  }}
+                    setShowActions(false) }}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Start Progress
                 </button>
                 <button
-                  onClick={(e) => {
+                  onClick={ (e) => {
                     e.stopPropagation();
                     onStatusUpdate(ticket.id, TicketStatus.RESOLVED);
-                    setShowActions(false);
-                  }}
+                    setShowActions(false) }}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Mark Resolved
                 </button>
                 <button
-                  onClick={(e) => {
+                  onClick={ (e) => {
                     e.stopPropagation();
                     onEscalate(ticket.id, 'Manual escalation');
-                    setShowActions(false);
-                  }}
+                    setShowActions(false) }}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Escalate

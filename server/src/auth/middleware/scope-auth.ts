@@ -4,15 +4,16 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { TokenService } from '../services/TokenService';
 
-}
-}
+
+
 export interface ScopeAuthOptions {
   requiredScopes: string[];
   requireAll?: boolean; // If true, user must have ALL scopes. If false, user must have AT LEAST ONE scope
   allowUser?: boolean; // If true, allow regular user tokens (not just API tokens)
-}
-}
-}
+
+
+
+
 
 export function createScopeAuthMiddleware(tokenService: TokenService) {
   return function scopeAuth(options: ScopeAuthOptions) {
@@ -25,7 +26,7 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
             error: 'Unauthorized',
             message: 'Bearer token required'
           });
-        }
+
 
         const token = authHeader.substring(7); // Remove 'Bearer ' prefix
         
@@ -46,8 +47,8 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
               error: 'Unauthorized',
               message: 'API token is invalid or revoked'
             });
-          }
-        }
+
+
 
         // Check if user tokens are allowed
         if (isUserToken && !options.allowUser) {
@@ -55,7 +56,7 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
             error: 'Forbidden',
             message: 'API token required for this endpoint'
           });
-        }
+
 
         // Check scopes
         const hasRequiredScopes = checkScopes(tokenScopes, options.requiredScopes, options.requireAll);
@@ -65,7 +66,7 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
             error: 'Forbidden',
             message: `Insufficient scopes. Required: ${options.requiredScopes.join(', ')}`
           });
-        }
+
 
         // Add token info to request
         (request as any).tokenInfo = {
@@ -75,82 +76,82 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
         };
 
         // Continue to next handler
-      } catch (error) {
+ catch (error) {
         return reply.status(401).send({
           error: 'Unauthorized',
           message: 'Invalid token'
         });
-      }
+
     };
   };
-}
+
 
 function checkScopes(tokenScopes: string[], requiredScopes: string[], requireAll: boolean = false): boolean {
   // If token has wildcard scope, allow everything
   if (tokenScopes.includes('*')) {
     return true;
-  }
+
 
   if (requireAll) {
     // User must have ALL required scopes
     return requiredScopes.every(scope => tokenScopes.includes(scope));
-  } else {
+ else {
     // User must have AT LEAST ONE required scope
     return requiredScopes.some(scope => tokenScopes.includes(scope));
-  }
-}
+
+
 
 // Common scope configurations
 export const ScopeConfigs = {
   GRAPHS_READ: {
     requiredScopes: ['graphs:read'],
     allowUser: true
-  }
+
   GRAPHS_WRITE: {
     requiredScopes: ['graphs:write'],
     allowUser: true
-  }
+
   GRAPHS_EXECUTE: {
     requiredScopes: ['graphs:execute'],
     allowUser: true
-  }
+
   GRAPHS_DELETE: {
     requiredScopes: ['graphs:delete'],
     allowUser: true
-  }
+
   USER_READ: {
     requiredScopes: ['user:read'],
     allowUser: true
-  }
+
   USER_WRITE: {
     requiredScopes: ['user:write'],
     allowUser: true
-  }
+
   ADMIN_USERS: {
     requiredScopes: ['admin:users'],
     allowUser: false
-  }
+
   ADMIN_SYSTEM: {
     requiredScopes: ['admin:system'],
     allowUser: false
-  }
+
   ORGANIZATIONS_READ: {
     requiredScopes: ['organizations:read'],
     allowUser: true
-  }
+
   ORGANIZATIONS_WRITE: {
     requiredScopes: ['organizations:write'],
     allowUser: true
-  }
+
   TEAMS_READ: {
     requiredScopes: ['teams:read'],
     allowUser: true
-  }
+
   TEAMS_WRITE: {
     requiredScopes: ['teams:write'],
     allowUser: true
-  }
-} as const;
+
+ as const;
 
 // Helper function to create scope auth plugin for Fastify
 export function createScopeAuthPlugin(tokenService: TokenService) {
@@ -161,13 +162,13 @@ export function createScopeAuthPlugin(tokenService: TokenService) {
     
     done();
   };
-}
+
 
 // Type augmentation for Fastify to include scopeAuth
 declare module 'fastify' {
   interface FastifyInstance {
     scopeAuth: ReturnType<typeof createScopeAuthMiddleware>;
-}
-}
-  }
-}
+
+
+
+

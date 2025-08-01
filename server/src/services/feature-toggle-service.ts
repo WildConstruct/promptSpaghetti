@@ -14,7 +14,7 @@ import {
   EmergencyOverrideRequest,
   CreateToggleRequest,
   UpdateToggleRequest
-} from '../database/feature-toggle-models';
+ from '../database/feature-toggle-models';
 import { createHash } from 'crypto';
 
 export class FeatureToggleService {
@@ -37,7 +37,7 @@ export class FeatureToggleService {
           reason: 'Toggle not found',
           metadata: { toggleKey: key }
         };
-      }
+
 
       if (!toggle.enabled || toggle.archived) {
         return {
@@ -46,7 +46,7 @@ export class FeatureToggleService {
           reason: toggle.archived ? 'Toggle archived' : 'Toggle disabled',
           metadata: { toggleId: toggle.id }
         };
-      }
+
 
       // Check cache first
       const cacheKey = this.generateCacheKey(toggle.id, context);
@@ -58,7 +58,7 @@ export class FeatureToggleService {
           reason: 'Cached result',
           metadata: { ...cachedResult.metadata, cached: true }
         };
-      }
+
 
       // Get scoping rules
       const scopes = await this.dao.getToggleScopes(toggle.id);
@@ -70,10 +70,10 @@ export class FeatureToggleService {
       const ttl = this.getCacheTTL(toggle.type);
       if (ttl > 0) {
         await this.dao.setCachedEvaluation(toggle.id, cacheKey, result, ttl);
-      }
+
 
       return result;
-    } catch (error) {
+ catch (error) {
       console.error(`Toggle evaluation error for ${key}:`, error);
       return {
         enabled: false,
@@ -81,8 +81,8 @@ export class FeatureToggleService {
         reason: 'Evaluation error',
         metadata: { error: error.message }
       };
-    }
-  }
+
+
 
   // Batch evaluation for multiple toggles
   async evaluateToggles(
@@ -101,10 +101,10 @@ export class FeatureToggleService {
     
     for (const { key, result } of resolvedEvaluations) {
       results[key] = result;
-    }
+
     
     return results;
-  }
+
 
   // Generate toggle snapshot for distribution
   async generateSnapshot(orgId?: string): Promise<unknown> {
@@ -134,13 +134,13 @@ export class FeatureToggleService {
         claudeImpact: toggle.claudeImpact,
         version: toggle.version
       };
-    }
+
 
     // Generate checksum for integrity verification
     snapshot.checksum = this.generateChecksum(snapshot);
     
     return snapshot;
-  }
+
 
   // Toggle management operations
   async createToggle(request: CreateToggleRequest, createdBy?: string): Promise<FeatureToggle> {
@@ -154,13 +154,13 @@ export class FeatureToggleService {
     await this.invalidateCaches(toggle.id);
     
     return toggle;
-  }
+
 
   async updateToggle(request: UpdateToggleRequest, updatedBy?: string): Promise<FeatureToggle> {
 
     if (request.value && request.type) {
       this.validateToggleValue(request.type, request.value);
-    }
+
     
     const toggle = await this.dao.updateToggle(request, updatedBy);
     
@@ -168,7 +168,7 @@ export class FeatureToggleService {
     await this.invalidateCaches(toggle.id);
     
     return toggle;
-  }
+
 
   async emergencyOverride(request: EmergencyOverrideRequest, actorId: string): Promise<void> {
 
@@ -176,7 +176,7 @@ export class FeatureToggleService {
     
     // Clear all caches for this toggle
     await this.invalidateCaches(request.toggleId);
-  }
+
 
   // Private evaluation methods
 
@@ -191,7 +191,7 @@ export class FeatureToggleService {
       const ruleResult = this.evaluateRule(scope.rule, context);
       if (!ruleResult.matches) {
         continue;
-      }
+
       
       // Rule matched, evaluate based on toggle type
       const result = this.evaluateByType(toggle, context);
@@ -203,13 +203,13 @@ export class FeatureToggleService {
           ...result.metadata, 
           ruleId: scope.id,
           rulePriority: scope.priority 
-        }
+
       };
-    }
+
 
     // No rules matched or no rules defined, use default evaluation
     return this.evaluateByType(toggle, context);
-  }
+
 
   private evaluateByType(
     toggle: FeatureToggle,
@@ -248,8 +248,8 @@ export class FeatureToggleService {
         value: false,
         reason: 'Unknown toggle type'
       };
-    }
-  }
+
+
 
   private evaluateBooleanToggle(value: BooleanToggleValue): ToggleEvaluationResult {
     return {
@@ -257,7 +257,7 @@ export class FeatureToggleService {
       value: value.enabled,
       reason: 'Boolean toggle evaluation'
     };
-  }
+
 
   private evaluatePercentageToggle(
     value: PercentageRolloutValue,
@@ -279,9 +279,9 @@ export class FeatureToggleService {
         userPercentage: percentage,
         threshold: value.percentage,
         hashInput: hashInput.substring(0, 20) + '...' // Truncated for privacy
-      }
+
     };
-  }
+
 
   private evaluateMultivariateToggle(
     value: MultivariateValue,
@@ -306,10 +306,10 @@ export class FeatureToggleService {
             userPercentage: percentage,
             variantPercentage: variant.percentage,
             variantKey: variant.key 
-          }
+
         };
-      }
-    }
+
+
     
     // Fallback if percentages don't add up to 100
     return {
@@ -318,7 +318,7 @@ export class FeatureToggleService {
       reason: 'No variant assigned',
       metadata: { userPercentage: percentage }
     };
-  }
+
 
   private evaluateScheduledToggle(
     value: ScheduledValue,
@@ -332,7 +332,7 @@ export class FeatureToggleService {
         value: false,
         reason: 'Scheduled toggle disabled'
       };
-    }
+
     
     if (value.startTime && now < new Date(value.startTime)) {
       return {
@@ -341,7 +341,7 @@ export class FeatureToggleService {
         reason: 'Scheduled toggle not yet active',
         metadata: { startTime: value.startTime }
       };
-    }
+
     
     if (value.endTime && now > new Date(value.endTime)) {
       return {
@@ -350,7 +350,7 @@ export class FeatureToggleService {
         reason: 'Scheduled toggle expired',
         metadata: { endTime: value.endTime }
       };
-    }
+
     
     return {
       enabled: true,
@@ -361,7 +361,7 @@ export class FeatureToggleService {
         endTime: value.endTime,
         currentTime: now.toISOString(}
     };
-  }
+
 
   private evaluateSegmentationToggle(
     value: SegmentationValue,
@@ -379,17 +379,17 @@ export class FeatureToggleService {
       
       if (i === 0) {
         finalResult = result.matches;
-      } else {
+ else {
         const operator = rule.logicalOperator || 'AND';
         if (operator === 'AND') {
           finalResult = finalResult && result.matches;
-        } else if (operator === 'OR') {
+ else if (operator === 'OR') {
           finalResult = finalResult || result.matches;
-        }
-      }
+
+
       
       reasons.push(result.reason);
-    }
+
     
     return {
       enabled: finalResult,
@@ -398,9 +398,9 @@ export class FeatureToggleService {
       metadata: { 
         ruleResults: reasons,
         rulesEvaluated: value.rules.length
-      }
+
     };
-  }
+
 
   private evaluateRule(rule: Error, context: ToggleEvaluationContext): { matches: boolean; reason: string } {
     const attributeValue = this.getAttributeValue(rule.attribute, context);
@@ -410,7 +410,7 @@ export class FeatureToggleService {
         matches: false, 
         reason: `Attribute '${rule.attribute}' not found` 
       };
-    }
+
     
     switch (rule.operator) {
     case 'equals':
@@ -462,8 +462,8 @@ export class FeatureToggleService {
         matches: false, 
         reason: `Unknown operator: ${rule.operator}` 
       };
-    }
-  }
+
+
 
   private getAttributeValue(attribute: string, context: ToggleEvaluationContext): unknown {
     switch (attribute) {
@@ -479,40 +479,40 @@ export class FeatureToggleService {
       return context.userAgent;
     default:
       return context.userAttributes?.[attribute];
-    }
-  }
+
+
 
   private validateToggleValue(type: ToggleType, value: Error): void {
     switch (type) {
     case ToggleType.BOOLEAN:
       if (typeof value.enabled !== 'boolean') {
         throw new Error('Boolean toggle must have "enabled" boolean property');
-      }
+
       break;
         
     case ToggleType.PERCENTAGE_ROLLOUT:
       if (typeof value.percentage !== 'number' || value.percentage < 0 || value.percentage > 100) {
         throw new Error('Percentage rollout must have percentage between 0 and 100');
-      }
+
       break;
         
     case ToggleType.MULTIVARIATE:
       if (!Array.isArray(value.variants)) {
         throw new Error('Multivariate toggle must have variants array');
-      }
+
       const totalPercentage = value.variants.reduce((sum: number, v: unknown) => sum + (v.percentage || 0), 0);
       if (totalPercentage > 100) {
         throw new Error('Multivariate variant percentages cannot exceed 100%');
-      }
+
       break;
         
     case ToggleType.SEGMENTATION:
       if (!Array.isArray(value.rules)) {
         throw new Error('Segmentation toggle must have rules array');
-      }
+
       break;
-    }
-  }
+
+
 
   private generateCacheKey(toggleId: string, context: ToggleEvaluationContext): string {
     const keyParts = [
@@ -527,10 +527,10 @@ export class FeatureToggleService {
         .map(key => `${key}:${context.userAttributes![key]}`)
         .join('|');
       keyParts.push(createHash('md5').update(sortedAttrs).digest('hex').substring(0, 8));
-    }
+
     
     return keyParts.join(':');
-  }
+
 
   private getCacheTTL(type: ToggleType): number {
     switch (type) {
@@ -546,20 +546,19 @@ export class FeatureToggleService {
       return 600; // 10 minutes
     default:
       return 300; // 5 minutes default
-    }
-  }
+
+
 
   private async invalidateCaches(toggleId: string): Promise<void> {
 
     await this.dao.clearCacheForToggle(toggleId);
-  }
+
 
   private generateSnapshotVersion(): string {
     return `${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
-  }
+
 
   private generateChecksum(data: Record<string, unknown>): string {
     const jsonString = JSON.stringify(data, Object.keys(data).sort());
     return createHash('sha256').update(jsonString).digest('hex').substring(0, 16);
-  }
-}
+

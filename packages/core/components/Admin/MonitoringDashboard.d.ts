@@ -10,15 +10,14 @@ import React from 'react';
 import { WidgetConfig } from './MonitoringWidgets';
 
 }
-export interface DashboardLayout {
-    id: string;
+}
+export interface DashboardLayout { id: string;
     name: string;
     description: string;
     widgets: WidgetConfig[];
     roles: string[];
-    refreshInterval: number;
-
-
+    refreshInterval: number }
+}
 }
 export interface MonitoringDashboardProps {
     userRole: string;
@@ -32,4 +31,5 @@ export interface MonitoringDashboardProps {
 export declare const MonitoringDashboard: React.FC<MonitoringDashboardProps>;
 export default MonitoringDashboard;
 //# sourceMappingURL=MonitoringDashboard.d.ts.map
+}
 }

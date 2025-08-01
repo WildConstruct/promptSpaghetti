@@ -15,7 +15,7 @@ import {
   ExecutionStatus,
   ScheduleAction,
   RecurrenceType
-} from '../database/scheduling-models';
+ from '../database/scheduling-models';
 
 export class SchedulingService {
   constructor(
@@ -30,7 +30,7 @@ export class SchedulingService {
     const toggle = await this.featureToggleDAO.getToggle(request.toggleId);
     if (!toggle) {
       throw new Error(`Feature toggle with ID ${request.toggleId} not found`);
-    }
+
 
     // Validate schedule times
     this.validateScheduleTimes(request);
@@ -39,7 +39,7 @@ export class SchedulingService {
     const conflicts = await this.detectScheduleConflicts(request);
     if (conflicts.length > 0 && request.conflictResolution === 'skip') {
       throw new Error(`Schedule conflicts detected: ${conflicts.map(c => c.description).join(', ')}`);
-    }
+
 
     // Create the schedule
     const schedule = await this.schedulingDAO.createSchedule(request, createdBy);
@@ -50,37 +50,37 @@ export class SchedulingService {
     // Handle conflicts based on resolution strategy
     if (conflicts.length > 0) {
       await this.handleScheduleConflicts(schedule, conflicts);
-    }
+
 
     return schedule;
-  }
+
 
   async getSchedule(id: string): Promise<FeatureToggleSchedule | null> {
 
     return this.schedulingDAO.getSchedule(id);
-  }
+
 
   async getSchedulesByToggle(toggleId: string): Promise<FeatureToggleSchedule[]> {
 
     return this.schedulingDAO.getSchedulesByToggle(toggleId);
-  }
+
 
   async querySchedules(query: ScheduleQuery): Promise<{ schedules: FeatureToggleSchedule[]; total: number }> {
 
     return this.schedulingDAO.querySchedules(query);
-  }
+
 
   async updateSchedule(request: UpdateScheduleRequest, updatedBy: string): Promise<FeatureToggleSchedule | null> {
 
     const existing = await this.schedulingDAO.getSchedule(request.id);
     if (!existing) {
       throw new Error(`Schedule with ID ${request.id} not found`);
-    }
+
 
     // Validate changes
     if (request.startTime || request.endTime) {
       this.validateScheduleTimes(request as CreateScheduleRequest);
-    }
+
 
     // Update the schedule
     const updated = await this.schedulingDAO.updateSchedule(request, updatedBy);
@@ -89,10 +89,10 @@ export class SchedulingService {
     // Recalculate next execution time if timing changed
     if (request.startTime || request.recurrence) {
       await this.updateNextExecutionTime(updated.id);
-    }
+
 
     return updated;
-  }
+
 
   async deleteSchedule(id: string): Promise<boolean> {
 
@@ -105,10 +105,10 @@ export class SchedulingService {
         { id, status: ScheduleStatus.CANCELLED },
         'system'
       );
-    }
+
 
     return this.schedulingDAO.deleteSchedule(id);
-  }
+
 
   // Schedule execution engine
   async executeScheduledActions(): Promise<void> {
@@ -132,12 +132,12 @@ export class SchedulingService {
     for (const schedule of readySchedules) {
       try {
         await this.executeSchedule(schedule);
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to execute schedule ${schedule.id}:`, error);
         await this.handleExecutionFailure(schedule, error as Error);
-      }
-    }
-  }
+
+
+
 
   private async executeSchedule(schedule: FeatureToggleSchedule): Promise<void> {
 
@@ -149,7 +149,7 @@ export class SchedulingService {
       const toggle = await this.featureToggleDAO.getToggle(schedule.toggleId);
       if (!toggle) {
         throw new Error(`Feature toggle ${schedule.toggleId} not found`);
-      }
+
 
       const beforeValue = toggle.value;
       let afterValue = beforeValue;
@@ -178,7 +178,7 @@ export class SchedulingService {
             value: schedule.actionConfig.targetValue
           }, 'scheduler');
           afterValue = schedule.actionConfig.targetValue;
-        }
+
         break;
 
       case ScheduleAction.MODIFY_PERCENTAGE:
@@ -186,22 +186,22 @@ export class SchedulingService {
           const newValue = { ...toggle.value };
           if (toggle.type === 'percentage_rollout') {
             newValue.percentage = schedule.actionConfig.rolloutPercentage;
-          }
+
           await this.featureToggleDAO.updateToggle({
             id: schedule.toggleId,
             value: newValue
           }, 'scheduler');
           afterValue = newValue;
-        }
+
         break;
 
       case ScheduleAction.ACTIVATE_ROLLOUT:
         if (schedule.actionConfig.gradualRollout) {
           await this.handleGradualRollout(schedule);
           return; // Gradual rollout handles its own execution logging
-        }
+
         break;
-      }
+
 
       // Log successful execution
       await this.schedulingDAO.createExecution({
@@ -215,7 +215,7 @@ export class SchedulingService {
           originalTime: schedule.nextExecution!,
           actualTime: executionTime,
           delay: executionTime.getTime() - schedule.nextExecution!.getTime()
-  }
+
         beforeValue,
         afterValue,
         affectedUsers,
@@ -223,13 +223,12 @@ export class SchedulingService {
         metadata: {
           action: schedule.action,
           actionConfig: schedule.actionConfig
-        }
+
       });
 
       // Update schedule execution count and calculate next execution
       await this.updateScheduleExecution(schedule, true);
-
-    } catch (error) {
+ catch (error) {
       // Log failed execution
       await this.schedulingDAO.createExecution({
         scheduleId: schedule.id,
@@ -241,24 +240,24 @@ export class SchedulingService {
           timezone: schedule.timezone,
           originalTime: schedule.nextExecution!,
           actualTime: executionTime
-  }
+
         error: {
           code: 'EXECUTION_ERROR',
           message: error instanceof Error ? error.message : 'Unknown error',
           stack: error instanceof Error ? error.stack : undefined,
           retryable: this.isRetryableError(error)
-  }
+
         duration: Date.now() - startTime,
         metadata: {
           action: schedule.action,
           actionConfig: schedule.actionConfig
-        }
+
       });
 
       await this.updateScheduleExecution(schedule, false);
       throw error;
-    }
-  }
+
+
 
   private async handleGradualRollout(schedule: FeatureToggleSchedule): Promise<void> {
 
@@ -285,10 +284,10 @@ export class SchedulingService {
         timezone: schedule.timezone,
         actionConfig: {
           rolloutPercentage: nextIncrement
-        }
+
       }, 'scheduler');
-    }
-  }
+
+
 
   // Conflict detection and resolution
   private async detectScheduleConflicts(request: CreateScheduleRequest): Promise<ScheduleConflict[]> {
@@ -323,12 +322,12 @@ export class SchedulingService {
           };
 
           conflicts.push(conflict);
-        }
-      }
-    }
+
+
+
 
     return conflicts;
-  }
+
 
   private checkTimeOverlap(start1: Date, end1: Date | undefined, start2: Date, end2: Date | undefined): boolean {
     // If either schedule has no end time, treat as ongoing
@@ -336,7 +335,7 @@ export class SchedulingService {
     const effectiveEnd2 = end2 || new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
 
     return start1 < effectiveEnd2 && start2 < effectiveEnd1;
-  }
+
 
   private checkActionConflict(action1: ScheduleAction, action2: ScheduleAction): boolean {
     const conflictingActions = [
@@ -347,22 +346,22 @@ export class SchedulingService {
     return conflictingActions.some(([a1, a2]) => 
       (action1 === a1 && action2 === a2) || (action1 === a2 && action2 === a1)
     );
-  }
+
 
   private calculateConflictSeverity(action1: ScheduleAction, action2: ScheduleAction): 'low' | 'medium' | 'high' | 'critical' {
     if (action1 === ScheduleAction.DISABLE || action2 === ScheduleAction.DISABLE) {
       return 'critical';
-    }
+
     if (action1 === ScheduleAction.UPDATE_VALUE && action2 === ScheduleAction.UPDATE_VALUE) {
       return 'high';
-    }
+
     return 'medium';
-  }
+
 
   private isAutoResolvableConflict(action1: ScheduleAction, action2: ScheduleAction): boolean {
     // Some conflicts can be auto-resolved based on priority
     return action1 !== ScheduleAction.DISABLE && action2 !== ScheduleAction.DISABLE;
-  }
+
 
   private generateResolutionSuggestion(_____newRequest: CreateScheduleRequest, _____existing: FeatureToggleSchedule): unknown {
     return {
@@ -374,9 +373,9 @@ export class SchedulingService {
           { action: 'decrease_existing_priority', description: 'Lower existing schedule priority' },
           { action: 'reschedule_one', description: 'Modify timing of one schedule' }
         ]
-      }
+
     };
-  }
+
 
   private async handleScheduleConflicts(schedule: FeatureToggleSchedule, conflicts: ScheduleConflict[]): Promise<void> {
 
@@ -387,12 +386,12 @@ export class SchedulingService {
       if (conflict.autoResolvable && conflict.suggestedResolution) {
         try {
           await this.autoResolveConflict(schedule, conflict);
-        } catch (error) {
+ catch (error) {
           console.warn(`Failed to auto-resolve conflict ${conflict.description}:`, error);
-        }
-      }
-    }
-  }
+
+
+
+
 
   private async autoResolveConflict(schedule: FeatureToggleSchedule, conflict: ScheduleConflict): Promise<void> {
 
@@ -407,8 +406,8 @@ export class SchedulingService {
         'auto-resolver'
       );
       break;
-    }
-  }
+
+
 
   // Utility methods
   private validateScheduleTimes(request: CreateScheduleRequest | UpdateScheduleRequest): void {
@@ -417,37 +416,37 @@ export class SchedulingService {
 
     if (startTime <= now) {
       throw new Error('Schedule start time must be in the future');
-    }
+
 
     if (request.endTime) {
       const endTime = new Date(request.endTime);
       if (endTime <= startTime) {
         throw new Error('Schedule end time must be after start time');
-      }
-    }
+
+
 
     // Validate recurrence
     if (request.recurrence) {
       const { type, interval } = request.recurrence;
       if (interval <= 0) {
         throw new Error('Recurrence interval must be positive');
-      }
+
 
       if (type === RecurrenceType.WEEKLY && request.recurrence.daysOfWeek) {
         const validDays = request.recurrence.daysOfWeek.every(day => day >= 0 && day <= 6);
         if (!validDays) {
           throw new Error('Days of week must be between 0 (Sunday) and 6 (Saturday)');
-        }
-      }
+
+
 
       if (type === RecurrenceType.MONTHLY && request.recurrence.daysOfMonth) {
         const validDays = request.recurrence.daysOfMonth.every(day => day >= 1 && day <= 31);
         if (!validDays) {
           throw new Error('Days of month must be between 1 and 31');
-        }
-      }
-    }
-  }
+
+
+
+
 
   private async updateNextExecutionTime(scheduleId: string): Promise<void> {
 
@@ -460,7 +459,7 @@ export class SchedulingService {
       { id: scheduleId, nextExecution },
       'system'
     );
-  }
+
 
   private calculateNextExecution(schedule: FeatureToggleSchedule): Date | undefined {
     const now = new Date();
@@ -468,7 +467,7 @@ export class SchedulingService {
     // One-time schedules
     if (schedule.type === ScheduleType.ONE_TIME) {
       return schedule.startTime > now ? schedule.startTime : undefined;
-    }
+
 
     // Recurring schedules
     if (schedule.type === ScheduleType.RECURRING && schedule.recurrence) {
@@ -481,45 +480,45 @@ export class SchedulingService {
         case RecurrenceType.DAILY:
           while (nextDate <= now) {
             nextDate.setDate(nextDate.getDate() + interval);
-          }
+
           break;
 
         case RecurrenceType.WEEKLY:
           while (nextDate <= now) {
             nextDate.setDate(nextDate.getDate() + (7 * interval));
-          }
+
           break;
 
         case RecurrenceType.MONTHLY:
           while (nextDate <= now) {
             nextDate.setMonth(nextDate.getMonth() + interval);
-          }
+
           break;
 
         case RecurrenceType.YEARLY:
           while (nextDate <= now) {
             nextDate.setFullYear(nextDate.getFullYear() + interval);
-          }
+
           break;
-        }
-      }
+
+
 
       // Check if within end date bounds
       if (schedule.endTime && nextDate > schedule.endTime) {
         return undefined;
-      }
+
 
       // Check max occurrences
       if (schedule.recurrence.maxOccurrences && 
           schedule.executionCount >= schedule.recurrence.maxOccurrences) {
         return undefined;
-      }
+
 
       return nextDate;
-    }
+
 
     return undefined;
-  }
+
 
   private async updateScheduleExecution(schedule: FeatureToggleSchedule, success: boolean): Promise<void> {
 
@@ -531,7 +530,7 @@ export class SchedulingService {
 
     if (!success) {
       updates.failureCount = schedule.failureCount + 1;
-    }
+
 
     // Calculate next execution
     const nextExecution = this.calculateNextExecution({
@@ -541,12 +540,12 @@ export class SchedulingService {
 
     if (!nextExecution) {
       updates.status = ScheduleStatus.COMPLETED;
-    } else {
+ else {
       updates.nextExecution = nextExecution;
-    }
+
 
     await this.schedulingDAO.updateSchedule(updates, 'system');
-  }
+
 
   private async handleExecutionFailure(schedule: FeatureToggleSchedule, error: Error): Promise<void> {
 
@@ -560,14 +559,14 @@ export class SchedulingService {
         { id: schedule.id, nextExecution: retryTime },
         'system'
       );
-    } else {
+ else {
       // Mark as failed
       await this.schedulingDAO.updateSchedule(
         { id: schedule.id, status: ScheduleStatus.FAILED },
         'system'
       );
-    }
-  }
+
+
 
   private isRetryableError(error: Error): boolean {
     // Define which errors are retryable
@@ -580,28 +579,27 @@ export class SchedulingService {
 
     if (error.code && retryableErrors.includes(error.code)) {
       return true;
-    }
+
 
     // Check error message for retryable patterns
     const message = error.message?.toLowerCase() || '';
     return message.includes('timeout') || 
            message.includes('network') || 
            message.includes('temporary');
-  }
+
 
   // Analytics
   async getScheduleAnalytics(startDate?: Date, endDate?: Date): Promise<ScheduleAnalytics> {
 
     return this.schedulingDAO.getScheduleAnalytics(startDate, endDate);
-  }
+
 
   async getExecutionsBySchedule(scheduleId: string, limit = 100): Promise<ScheduleExecution[]> {
 
     return this.schedulingDAO.getExecutionsBySchedule(scheduleId, limit);
-  }
+
 
   async getUnresolvedConflicts(): Promise<ScheduleConflict[]> {
 
     return this.schedulingDAO.getUnresolvedConflicts();
-  }
-}
+

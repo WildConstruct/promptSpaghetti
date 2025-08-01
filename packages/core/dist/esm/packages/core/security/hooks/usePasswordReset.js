@@ -30,8 +30,8 @@ export var ResetStep;
         FAIR = 'fair',
         GOOD = 'good',
         STRONG = 'strong';
-    ;
 }
+;
 export const usePasswordReset = (options = {}) => {
     const { onStepChange, onSecurityEvent, onError, customValidation, autoAdvance = true, resendCooldown = 60 } = options;
     // State

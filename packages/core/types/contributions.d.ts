@@ -10,8 +10,7 @@ export declare const ContributionTypeSchema: z.ZodEnum<["template", "knowledge_a
 export declare const ContributionStatusSchema: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
 export declare const ContributionQualityRatingSchema: z.ZodEnum<["poor", "fair", "good", "excellent", "exceptional"]>;
 export declare const ContributorLevelSchema: z.ZodEnum<["newcomer", "contributor", "regular", "trusted", "expert", "moderator"]>;
-export declare const BaseContributionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const BaseContributionSchema: z.ZodObject<{ id: z.ZodString;
     type: z.ZodEnum<["template", "knowledge_article", "tutorial", "case_study", "pattern_library", "community_post", "documentation", "review"]>;
     contributorId: z.ZodString;
     contributorName: z.ZodString;
@@ -21,28 +20,24 @@ export declare const BaseContributionSchema: z.ZodObject<{
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     category: z.ZodOptional<z.ZodString>;
     content: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         type: z.ZodEnum<["image", "video", "document", "code", "graph"]>;
         url: z.ZodString;
         filename: z.ZodString;
         size: z.ZodNumber;
         mimeType: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }, {
-        id: string;
+        mimeType: string }, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }>, "many">>;
+        mimeType: string }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
     submittedAt: z.ZodDate;
     reviewedAt: z.ZodOptional<z.ZodDate>;
@@ -50,57 +45,46 @@ export declare const BaseContributionSchema: z.ZodObject<{
     qualityScore: z.ZodDefault<z.ZodNumber>;
     qualityRating: z.ZodOptional<z.ZodEnum<["poor", "fair", "good", "excellent", "exceptional"]>>;
     moderatorNotes: z.ZodOptional<z.ZodString>;
-    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         id: z.ZodString;
         moderatorId: z.ZodString;
         moderatorName: z.ZodString;
         reason: z.ZodString;
         details: z.ZodString;
         requestedAt: z.ZodDate;
-        resolvedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        resolvedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }, {
-        id: string;
+        resolvedAt?: Date | undefined }, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }>, "many">>;
+        resolvedAt?: Date | undefined }>, "many">>;
     views: z.ZodDefault<z.ZodNumber>;
     downloads: z.ZodDefault<z.ZodNumber>;
     likes: z.ZodDefault<z.ZodNumber>;
     comments: z.ZodDefault<z.ZodNumber>;
     shares: z.ZodDefault<z.ZodNumber>;
     version: z.ZodDefault<z.ZodString>;
-    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         version: z.ZodString;
         changes: z.ZodString;
         changedAt: z.ZodDate;
-        changedBy: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        version: string;
+        changedBy: z.ZodString }, "strip", z.ZodTypeAny, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }, {
-        version: string;
+        changedBy: string }, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }>, "many">>;
+        changedBy: string }>, "many">>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -117,8 +101,7 @@ export declare const BaseContributionSchema: z.ZodObject<{
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[];
+        mimeType: string }[];
     views: number;
     downloads: number;
     likes: number;
@@ -128,28 +111,23 @@ export declare const BaseContributionSchema: z.ZodObject<{
     contributorId: string;
     contributorName: string;
     contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
-    revisionRequests: {
-        id: string;
+    revisionRequests: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[];
-    versionHistory: {
-        version: string;
+        resolvedAt?: Date | undefined }[];
+    versionHistory: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[];
+        changedBy: string }[];
     category?: string | undefined;
     publishedAt?: Date | undefined;
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -171,8 +149,7 @@ export declare const BaseContributionSchema: z.ZodObject<{
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[] | undefined;
+        mimeType: string }[] | undefined;
     views?: number | undefined;
     downloads?: number | undefined;
     likes?: number | undefined;
@@ -182,24 +159,19 @@ export declare const BaseContributionSchema: z.ZodObject<{
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-    revisionRequests?: {
-        id: string;
+    revisionRequests?: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[] | undefined;
-    versionHistory?: {
-        version: string;
+        resolvedAt?: Date | undefined }[] | undefined;
+    versionHistory?: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[] | undefined;
+        changedBy: string }[] | undefined;
 }>;
-export declare const TemplateContributionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const TemplateContributionSchema: z.ZodObject<{ id: z.ZodString;
     contributorId: z.ZodString;
     contributorName: z.ZodString;
     contributorLevel: z.ZodEnum<["newcomer", "contributor", "regular", "trusted", "expert", "moderator"]>;
@@ -207,28 +179,24 @@ export declare const TemplateContributionSchema: z.ZodObject<{
     description: z.ZodString;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     category: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         type: z.ZodEnum<["image", "video", "document", "code", "graph"]>;
         url: z.ZodString;
         filename: z.ZodString;
         size: z.ZodNumber;
         mimeType: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }, {
-        id: string;
+        mimeType: string }, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }>, "many">>;
+        mimeType: string }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
     submittedAt: z.ZodDate;
     reviewedAt: z.ZodOptional<z.ZodDate>;
@@ -236,151 +204,117 @@ export declare const TemplateContributionSchema: z.ZodObject<{
     qualityScore: z.ZodDefault<z.ZodNumber>;
     qualityRating: z.ZodOptional<z.ZodEnum<["poor", "fair", "good", "excellent", "exceptional"]>>;
     moderatorNotes: z.ZodOptional<z.ZodString>;
-    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         id: z.ZodString;
         moderatorId: z.ZodString;
         moderatorName: z.ZodString;
         reason: z.ZodString;
         details: z.ZodString;
         requestedAt: z.ZodDate;
-        resolvedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        resolvedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }, {
-        id: string;
+        resolvedAt?: Date | undefined }, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }>, "many">>;
+        resolvedAt?: Date | undefined }>, "many">>;
     views: z.ZodDefault<z.ZodNumber>;
     downloads: z.ZodDefault<z.ZodNumber>;
     likes: z.ZodDefault<z.ZodNumber>;
     comments: z.ZodDefault<z.ZodNumber>;
     shares: z.ZodDefault<z.ZodNumber>;
     version: z.ZodDefault<z.ZodString>;
-    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         version: z.ZodString;
         changes: z.ZodString;
         changedAt: z.ZodDate;
-        changedBy: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        version: string;
+        changedBy: z.ZodString }, "strip", z.ZodTypeAny, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }, {
-        version: string;
+        changedBy: string }, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }>, "many">>;
+        changedBy: string }>, "many">>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-} & {
-    type: z.ZodLiteral<"template">;
+} & { type: z.ZodLiteral<"template">;
     content: z.ZodObject<{,
         graphJson: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         promptYaml: z.ZodOptional<z.ZodString>;
         claudeModel: z.ZodDefault<z.ZodString>;
         tokenEstimate: z.ZodDefault<z.ZodNumber>;
         safetyScore: z.ZodDefault<z.ZodNumber>;
-        testCases: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        testCases: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
             input: z.ZodString;
             expectedOutput: z.ZodString;
             actualOutput: z.ZodOptional<z.ZodString>;
             passed: z.ZodOptional<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            input: string;
+        }, "strip", z.ZodTypeAny, { input: string;
             expectedOutput: string;
             passed?: boolean | undefined;
-            actualOutput?: string | undefined;
-        }, {
-            input: string;
+            actualOutput?: string | undefined }, { input: string;
             expectedOutput: string;
             passed?: boolean | undefined;
-            actualOutput?: string | undefined;
-        }>, "many">>;
-        pricing: z.ZodObject<{,
+            actualOutput?: string | undefined }>, "many">>;
+        pricing: z.ZodObject<{ ,
             type: z.ZodEnum<["free", "paid"]>;
             priceInCents: z.ZodOptional<z.ZodNumber>;
-            currency: z.ZodDefault<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            type: "free" | "paid";
+            currency: z.ZodDefault<z.ZodString> }, "strip", z.ZodTypeAny, { type: "free" | "paid";
             currency: string;
-            priceInCents?: number | undefined;
-        }, {
-            type: "free" | "paid";
+            priceInCents?: number | undefined }, { type: "free" | "paid";
             currency?: string | undefined;
-            priceInCents?: number | undefined;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        pricing: {
+            priceInCents?: number | undefined }>;
+    }, "strip", z.ZodTypeAny, { pricing: {
             type: "free" | "paid";
             currency: string;
-            priceInCents?: number | undefined;
-        };
+            priceInCents?: number | undefined };
         safetyScore: number;
         graphJson: Record<string, unknown>;
         claudeModel: string;
         tokenEstimate: number;
-        testCases: {
-            input: string;
+        testCases: { input: string;
             expectedOutput: string;
             passed?: boolean | undefined;
-            actualOutput?: string | undefined;
-        }[];
+            actualOutput?: string | undefined }[];
         promptYaml?: string | undefined;
-    }, {
-        pricing: {
+    }, { pricing: {
             type: "free" | "paid";
             currency?: string | undefined;
-            priceInCents?: number | undefined;
-        };
+            priceInCents?: number | undefined };
         graphJson: Record<string, unknown>;
         safetyScore?: number | undefined;
         promptYaml?: string | undefined;
         claudeModel?: string | undefined;
         tokenEstimate?: number | undefined;
-        testCases?: {
-            input: string;
+        testCases?: { input: string;
             expectedOutput: string;
             passed?: boolean | undefined;
-            actualOutput?: string | undefined;
-        }[] | undefined;
+            actualOutput?: string | undefined }[] | undefined;
     }>;
-    marketplace: z.ZodOptional<z.ZodObject<{,
+    marketplace: z.ZodOptional<z.ZodObject<{ 
         isListed: z.ZodDefault<z.ZodBoolean>;
         listedAt: z.ZodOptional<z.ZodDate>;
         salesCount: z.ZodDefault<z.ZodNumber>;
         revenue: z.ZodDefault<z.ZodNumber>;
         avgRating: z.ZodDefault<z.ZodNumber>;
-        reviewCount: z.ZodDefault<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        revenue: number;
+        reviewCount: z.ZodDefault<z.ZodNumber> }, "strip", z.ZodTypeAny, { revenue: number;
         isListed: boolean;
         salesCount: number;
         avgRating: number;
         reviewCount: number;
-        listedAt?: Date | undefined;
-    }, {
-        revenue?: number | undefined;
+        listedAt?: Date | undefined }, { revenue?: number | undefined;
         isListed?: boolean | undefined;
         listedAt?: Date | undefined;
         salesCount?: number | undefined;
         avgRating?: number | undefined;
-        reviewCount?: number | undefined;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+        reviewCount?: number | undefined }>>;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -392,30 +326,25 @@ export declare const TemplateContributionSchema: z.ZodObject<{
         pricing: {
             type: "free" | "paid";
             currency: string;
-            priceInCents?: number | undefined;
-        };
+            priceInCents?: number | undefined };
         safetyScore: number;
         graphJson: Record<string, unknown>;
         claudeModel: string;
         tokenEstimate: number;
-        testCases: {
-            input: string;
+        testCases: { input: string;
             expectedOutput: string;
             passed?: boolean | undefined;
-            actualOutput?: string | undefined;
-        }[];
+            actualOutput?: string | undefined }[];
         promptYaml?: string | undefined;
     };
     title: string;
     comments: number;
-    assets: {
-        id: string;
+    assets: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[];
+        mimeType: string }[];
     views: number;
     downloads: number;
     likes: number;
@@ -425,36 +354,29 @@ export declare const TemplateContributionSchema: z.ZodObject<{
     contributorId: string;
     contributorName: string;
     contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
-    revisionRequests: {
-        id: string;
+    revisionRequests: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[];
-    versionHistory: {
-        version: string;
+        resolvedAt?: Date | undefined }[];
+    versionHistory: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[];
+        changedBy: string }[];
     category?: string | undefined;
-    marketplace?: {
-        revenue: number;
+    marketplace?: { revenue: number;
         isListed: boolean;
         salesCount: number;
         avgRating: number;
         reviewCount: number;
-        listedAt?: Date | undefined;
-    } | undefined;
+        listedAt?: Date | undefined } | undefined;
     publishedAt?: Date | undefined;
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -464,19 +386,16 @@ export declare const TemplateContributionSchema: z.ZodObject<{
         pricing: {
             type: "free" | "paid";
             currency?: string | undefined;
-            priceInCents?: number | undefined;
-        };
+            priceInCents?: number | undefined };
         graphJson: Record<string, unknown>;
         safetyScore?: number | undefined;
         promptYaml?: string | undefined;
         claudeModel?: string | undefined;
         tokenEstimate?: number | undefined;
-        testCases?: {
-            input: string;
+        testCases?: { input: string;
             expectedOutput: string;
             passed?: boolean | undefined;
-            actualOutput?: string | undefined;
-        }[] | undefined;
+            actualOutput?: string | undefined }[] | undefined;
     };
     title: string;
     submittedAt: Date;
@@ -487,22 +406,18 @@ export declare const TemplateContributionSchema: z.ZodObject<{
     tags?: string[] | undefined;
     version?: string | undefined;
     comments?: number | undefined;
-    assets?: {
-        id: string;
+    assets?: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[] | undefined;
-    marketplace?: {
-        revenue?: number | undefined;
+        mimeType: string }[] | undefined;
+    marketplace?: { revenue?: number | undefined;
         isListed?: boolean | undefined;
         listedAt?: Date | undefined;
         salesCount?: number | undefined;
         avgRating?: number | undefined;
-        reviewCount?: number | undefined;
-    } | undefined;
+        reviewCount?: number | undefined } | undefined;
     views?: number | undefined;
     downloads?: number | undefined;
     likes?: number | undefined;
@@ -512,24 +427,19 @@ export declare const TemplateContributionSchema: z.ZodObject<{
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-    revisionRequests?: {
-        id: string;
+    revisionRequests?: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[] | undefined;
-    versionHistory?: {
-        version: string;
+        resolvedAt?: Date | undefined }[] | undefined;
+    versionHistory?: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[] | undefined;
+        changedBy: string }[] | undefined;
 }>;
-export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const KnowledgeArticleContributionSchema: z.ZodObject<{ id: z.ZodString;
     contributorId: z.ZodString;
     contributorName: z.ZodString;
     contributorLevel: z.ZodEnum<["newcomer", "contributor", "regular", "trusted", "expert", "moderator"]>;
@@ -537,28 +447,24 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
     description: z.ZodString;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     category: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         type: z.ZodEnum<["image", "video", "document", "code", "graph"]>;
         url: z.ZodString;
         filename: z.ZodString;
         size: z.ZodNumber;
         mimeType: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }, {
-        id: string;
+        mimeType: string }, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }>, "many">>;
+        mimeType: string }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
     submittedAt: z.ZodDate;
     reviewedAt: z.ZodOptional<z.ZodDate>;
@@ -566,118 +472,92 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
     qualityScore: z.ZodDefault<z.ZodNumber>;
     qualityRating: z.ZodOptional<z.ZodEnum<["poor", "fair", "good", "excellent", "exceptional"]>>;
     moderatorNotes: z.ZodOptional<z.ZodString>;
-    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         id: z.ZodString;
         moderatorId: z.ZodString;
         moderatorName: z.ZodString;
         reason: z.ZodString;
         details: z.ZodString;
         requestedAt: z.ZodDate;
-        resolvedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        resolvedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }, {
-        id: string;
+        resolvedAt?: Date | undefined }, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }>, "many">>;
+        resolvedAt?: Date | undefined }>, "many">>;
     views: z.ZodDefault<z.ZodNumber>;
     downloads: z.ZodDefault<z.ZodNumber>;
     likes: z.ZodDefault<z.ZodNumber>;
     comments: z.ZodDefault<z.ZodNumber>;
     shares: z.ZodDefault<z.ZodNumber>;
     version: z.ZodDefault<z.ZodString>;
-    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         version: z.ZodString;
         changes: z.ZodString;
         changedAt: z.ZodDate;
-        changedBy: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        version: string;
+        changedBy: z.ZodString }, "strip", z.ZodTypeAny, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }, {
-        version: string;
+        changedBy: string }, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }>, "many">>;
+        changedBy: string }>, "many">>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-} & {
-    type: z.ZodLiteral<"knowledge_article">;
+} & { type: z.ZodLiteral<"knowledge_article">;
     content: z.ZodObject<{,
         articleType: z.ZodEnum<["guide", "tutorial", "reference", "faq", "troubleshooting"]>;
         difficulty: z.ZodEnum<["beginner", "intermediate", "advanced", "expert"]>;
         estimatedReadTime: z.ZodNumber;
         prerequisites: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         learningObjectives: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        sections: z.ZodArray<z.ZodObject<{,
+        sections: z.ZodArray<z.ZodObject<{ }
             id: z.ZodString;
             title: z.ZodString;
             content: z.ZodString;
             order: z.ZodNumber;
             type: z.ZodEnum<["text", "code", "image", "video", "interactive"]>;
-        }, "strip", z.ZodTypeAny, {
-            id: string;
+        }, "strip", z.ZodTypeAny, { id: string;
             type: "code" | "text" | "video" | "image" | "interactive";
             content: string;
             title: string;
-            order: number;
-        }, {
-            id: string;
+            order: number }, { id: string;
             type: "code" | "text" | "video" | "image" | "interactive";
             content: string;
             title: string;
-            order: number;
-        }>, "many">;
-        codeExamples: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+            order: number }>, "many">;
+        codeExamples: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             id: z.ZodString;
             language: z.ZodString;
             code: z.ZodString;
             description: z.ZodString;
-            runnable: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            id: string;
+            runnable: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { id: string;
             description: string;
             code: string;
             language: string;
-            runnable: boolean;
-        }, {
-            id: string;
+            runnable: boolean }, { id: string;
             description: string;
             code: string;
             language: string;
-            runnable?: boolean | undefined;
-        }>, "many">>;
+            runnable?: boolean | undefined }>, "many">>;
         keywords: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         relatedArticles: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        externalLinks: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        externalLinks: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             title: z.ZodString;
             url: z.ZodString;
-            description: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            title: string;
+            description: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { title: string;
             url: string;
-            description?: string | undefined;
-        }, {
-            title: string;
+            description?: string | undefined }, { title: string;
             url: string;
-            description?: string | undefined;
-        }>, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
+            description?: string | undefined }>, "many">>;
+    }, "strip", z.ZodTypeAny, { difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         keywords: string[];
         prerequisites: string[];
         articleType: "tutorial" | "reference" | "troubleshooting" | "guide" | "faq";
@@ -688,23 +568,17 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
             type: "code" | "text" | "video" | "image" | "interactive";
             content: string;
             title: string;
-            order: number;
-        }[];
-        codeExamples: {
-            id: string;
+            order: number }[];
+        codeExamples: { id: string;
             description: string;
             code: string;
             language: string;
-            runnable: boolean;
-        }[];
+            runnable: boolean }[];
         relatedArticles: string[];
-        externalLinks: {
-            title: string;
+        externalLinks: { title: string;
             url: string;
-            description?: string | undefined;
-        }[];
-    }, {
-        difficulty: "advanced" | "expert" | "intermediate" | "beginner";
+            description?: string | undefined }[];
+    }, { difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         articleType: "tutorial" | "reference" | "troubleshooting" | "guide" | "faq";
         estimatedReadTime: number;
         sections: {
@@ -712,27 +586,21 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
             type: "code" | "text" | "video" | "image" | "interactive";
             content: string;
             title: string;
-            order: number;
-        }[];
+            order: number }[];
         keywords?: string[] | undefined;
         prerequisites?: string[] | undefined;
         learningObjectives?: string[] | undefined;
-        codeExamples?: {
-            id: string;
+        codeExamples?: { id: string;
             description: string;
             code: string;
             language: string;
-            runnable?: boolean | undefined;
-        }[] | undefined;
+            runnable?: boolean | undefined }[] | undefined;
         relatedArticles?: string[] | undefined;
-        externalLinks?: {
-            title: string;
+        externalLinks?: { title: string;
             url: string;
-            description?: string | undefined;
-        }[] | undefined;
+            description?: string | undefined }[] | undefined;
     }>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -752,32 +620,25 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
             type: "code" | "text" | "video" | "image" | "interactive";
             content: string;
             title: string;
-            order: number;
-        }[];
-        codeExamples: {
-            id: string;
+            order: number }[];
+        codeExamples: { id: string;
             description: string;
             code: string;
             language: string;
-            runnable: boolean;
-        }[];
+            runnable: boolean }[];
         relatedArticles: string[];
-        externalLinks: {
-            title: string;
+        externalLinks: { title: string;
             url: string;
-            description?: string | undefined;
-        }[];
+            description?: string | undefined }[];
     };
     title: string;
     comments: number;
-    assets: {
-        id: string;
+    assets: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[];
+        mimeType: string }[];
     views: number;
     downloads: number;
     likes: number;
@@ -787,28 +648,23 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
     contributorId: string;
     contributorName: string;
     contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
-    revisionRequests: {
-        id: string;
+    revisionRequests: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[];
-    versionHistory: {
-        version: string;
+        resolvedAt?: Date | undefined }[];
+    versionHistory: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[];
+        changedBy: string }[];
     category?: string | undefined;
     publishedAt?: Date | undefined;
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -823,24 +679,19 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
             type: "code" | "text" | "video" | "image" | "interactive";
             content: string;
             title: string;
-            order: number;
-        }[];
+            order: number }[];
         keywords?: string[] | undefined;
         prerequisites?: string[] | undefined;
         learningObjectives?: string[] | undefined;
-        codeExamples?: {
-            id: string;
+        codeExamples?: { id: string;
             description: string;
             code: string;
             language: string;
-            runnable?: boolean | undefined;
-        }[] | undefined;
+            runnable?: boolean | undefined }[] | undefined;
         relatedArticles?: string[] | undefined;
-        externalLinks?: {
-            title: string;
+        externalLinks?: { title: string;
             url: string;
-            description?: string | undefined;
-        }[] | undefined;
+            description?: string | undefined }[] | undefined;
     };
     title: string;
     submittedAt: Date;
@@ -851,14 +702,12 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
     tags?: string[] | undefined;
     version?: string | undefined;
     comments?: number | undefined;
-    assets?: {
-        id: string;
+    assets?: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[] | undefined;
+        mimeType: string }[] | undefined;
     views?: number | undefined;
     downloads?: number | undefined;
     likes?: number | undefined;
@@ -868,24 +717,19 @@ export declare const KnowledgeArticleContributionSchema: z.ZodObject<{
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-    revisionRequests?: {
-        id: string;
+    revisionRequests?: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[] | undefined;
-    versionHistory?: {
-        version: string;
+        resolvedAt?: Date | undefined }[] | undefined;
+    versionHistory?: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[] | undefined;
+        changedBy: string }[] | undefined;
 }>;
-export declare const TutorialContributionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const TutorialContributionSchema: z.ZodObject<{ id: z.ZodString;
     contributorId: z.ZodString;
     contributorName: z.ZodString;
     contributorLevel: z.ZodEnum<["newcomer", "contributor", "regular", "trusted", "expert", "moderator"]>;
@@ -893,28 +737,24 @@ export declare const TutorialContributionSchema: z.ZodObject<{
     description: z.ZodString;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     category: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         type: z.ZodEnum<["image", "video", "document", "code", "graph"]>;
         url: z.ZodString;
         filename: z.ZodString;
         size: z.ZodNumber;
         mimeType: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }, {
-        id: string;
+        mimeType: string }, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }>, "many">>;
+        mimeType: string }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
     submittedAt: z.ZodDate;
     reviewedAt: z.ZodOptional<z.ZodDate>;
@@ -922,64 +762,53 @@ export declare const TutorialContributionSchema: z.ZodObject<{
     qualityScore: z.ZodDefault<z.ZodNumber>;
     qualityRating: z.ZodOptional<z.ZodEnum<["poor", "fair", "good", "excellent", "exceptional"]>>;
     moderatorNotes: z.ZodOptional<z.ZodString>;
-    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         id: z.ZodString;
         moderatorId: z.ZodString;
         moderatorName: z.ZodString;
         reason: z.ZodString;
         details: z.ZodString;
         requestedAt: z.ZodDate;
-        resolvedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        resolvedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }, {
-        id: string;
+        resolvedAt?: Date | undefined }, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }>, "many">>;
+        resolvedAt?: Date | undefined }>, "many">>;
     views: z.ZodDefault<z.ZodNumber>;
     downloads: z.ZodDefault<z.ZodNumber>;
     likes: z.ZodDefault<z.ZodNumber>;
     comments: z.ZodDefault<z.ZodNumber>;
     shares: z.ZodDefault<z.ZodNumber>;
     version: z.ZodDefault<z.ZodString>;
-    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         version: z.ZodString;
         changes: z.ZodString;
         changedAt: z.ZodDate;
-        changedBy: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        version: string;
+        changedBy: z.ZodString }, "strip", z.ZodTypeAny, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }, {
-        version: string;
+        changedBy: string }, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }>, "many">>;
+        changedBy: string }>, "many">>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-} & {
-    type: z.ZodLiteral<"tutorial">;
+} & { type: z.ZodLiteral<"tutorial">;
     content: z.ZodObject<{,
         tutorialType: z.ZodEnum<["step_by_step", "video", "interactive", "workshop"]>;
         difficulty: z.ZodEnum<["beginner", "intermediate", "advanced", "expert"]>;
         estimatedDuration: z.ZodNumber;
         prerequisites: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         tools: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        steps: z.ZodArray<z.ZodObject<{,
+        steps: z.ZodArray<z.ZodObject<{
             id: z.ZodString;
             title: z.ZodString;
             description: z.ZodString;
@@ -987,18 +816,13 @@ export declare const TutorialContributionSchema: z.ZodObject<{
             order: z.ZodNumber;
             estimatedTime: z.ZodNumber;
             assets: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-            checkpoints: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+            checkpoints: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
                 description: z.ZodString;
                 validation: z.ZodOptional<z.ZodString>;
-            }, "strip", z.ZodTypeAny, {
-                description: string;
-                validation?: string | undefined;
-            }, {
-                description: string;
-                validation?: string | undefined;
-            }>, "many">>;
-        }, "strip", z.ZodTypeAny, {
-            id: string;
+            }, "strip", z.ZodTypeAny, { description: string;
+                validation?: string | undefined }, { description: string;
+                validation?: string | undefined }>, "many">>;
+        }, "strip", z.ZodTypeAny, { id: string;
             description: string;
             content: string;
             title: string;
@@ -1007,10 +831,8 @@ export declare const TutorialContributionSchema: z.ZodObject<{
             estimatedTime: number;
             checkpoints: {
                 description: string;
-                validation?: string | undefined;
-            }[];
-        }, {
-            id: string;
+                validation?: string | undefined }[];
+        }, { id: string;
             description: string;
             content: string;
             title: string;
@@ -1019,29 +841,22 @@ export declare const TutorialContributionSchema: z.ZodObject<{
             assets?: string[] | undefined;
             checkpoints?: {
                 description: string;
-                validation?: string | undefined;
-            }[] | undefined;
+                validation?: string | undefined }[] | undefined;
         }>, "many">;
         deliverables: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         skillsLearned: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        downloadableResources: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        downloadableResources: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             name: z.ZodString;
             type: z.ZodString;
             url: z.ZodString;
-            description: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
+            description: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { name: string;
             type: string;
             url: string;
-            description?: string | undefined;
-        }, {
-            name: string;
+            description?: string | undefined }, { name: string;
             type: string;
             url: string;
-            description?: string | undefined;
-        }>, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        steps: {
+            description?: string | undefined }>, "many">>;
+    }, "strip", z.ZodTypeAny, { steps: {
             id: string;
             description: string;
             content: string;
@@ -1051,8 +866,7 @@ export declare const TutorialContributionSchema: z.ZodObject<{
             estimatedTime: number;
             checkpoints: {
                 description: string;
-                validation?: string | undefined;
-            }[];
+                validation?: string | undefined }[];
         }[];
         difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         tools: string[];
@@ -1061,14 +875,11 @@ export declare const TutorialContributionSchema: z.ZodObject<{
         tutorialType: "video" | "interactive" | "workshop" | "step_by_step";
         estimatedDuration: number;
         skillsLearned: string[];
-        downloadableResources: {
-            name: string;
+        downloadableResources: { name: string;
             type: string;
             url: string;
-            description?: string | undefined;
-        }[];
-    }, {
-        steps: {
+            description?: string | undefined }[];
+    }, { steps: {
             id: string;
             description: string;
             content: string;
@@ -1078,8 +889,7 @@ export declare const TutorialContributionSchema: z.ZodObject<{
             assets?: string[] | undefined;
             checkpoints?: {
                 description: string;
-                validation?: string | undefined;
-            }[] | undefined;
+                validation?: string | undefined }[] | undefined;
         }[];
         difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         tutorialType: "video" | "interactive" | "workshop" | "step_by_step";
@@ -1088,15 +898,12 @@ export declare const TutorialContributionSchema: z.ZodObject<{
         prerequisites?: string[] | undefined;
         deliverables?: string[] | undefined;
         skillsLearned?: string[] | undefined;
-        downloadableResources?: {
-            name: string;
+        downloadableResources?: { name: string;
             type: string;
             url: string;
-            description?: string | undefined;
-        }[] | undefined;
+            description?: string | undefined }[] | undefined;
     }>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -1115,8 +922,7 @@ export declare const TutorialContributionSchema: z.ZodObject<{
             estimatedTime: number;
             checkpoints: {
                 description: string;
-                validation?: string | undefined;
-            }[];
+                validation?: string | undefined }[];
         }[];
         difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         tools: string[];
@@ -1125,23 +931,19 @@ export declare const TutorialContributionSchema: z.ZodObject<{
         tutorialType: "video" | "interactive" | "workshop" | "step_by_step";
         estimatedDuration: number;
         skillsLearned: string[];
-        downloadableResources: {
-            name: string;
+        downloadableResources: { name: string;
             type: string;
             url: string;
-            description?: string | undefined;
-        }[];
+            description?: string | undefined }[];
     };
     title: string;
     comments: number;
-    assets: {
-        id: string;
+    assets: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[];
+        mimeType: string }[];
     views: number;
     downloads: number;
     likes: number;
@@ -1151,28 +953,23 @@ export declare const TutorialContributionSchema: z.ZodObject<{
     contributorId: string;
     contributorName: string;
     contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
-    revisionRequests: {
-        id: string;
+    revisionRequests: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[];
-    versionHistory: {
-        version: string;
+        resolvedAt?: Date | undefined }[];
+    versionHistory: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[];
+        changedBy: string }[];
     category?: string | undefined;
     publishedAt?: Date | undefined;
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -1189,8 +986,7 @@ export declare const TutorialContributionSchema: z.ZodObject<{
             assets?: string[] | undefined;
             checkpoints?: {
                 description: string;
-                validation?: string | undefined;
-            }[] | undefined;
+                validation?: string | undefined }[] | undefined;
         }[];
         difficulty: "advanced" | "expert" | "intermediate" | "beginner";
         tutorialType: "video" | "interactive" | "workshop" | "step_by_step";
@@ -1199,12 +995,10 @@ export declare const TutorialContributionSchema: z.ZodObject<{
         prerequisites?: string[] | undefined;
         deliverables?: string[] | undefined;
         skillsLearned?: string[] | undefined;
-        downloadableResources?: {
-            name: string;
+        downloadableResources?: { name: string;
             type: string;
             url: string;
-            description?: string | undefined;
-        }[] | undefined;
+            description?: string | undefined }[] | undefined;
     };
     title: string;
     submittedAt: Date;
@@ -1215,14 +1009,12 @@ export declare const TutorialContributionSchema: z.ZodObject<{
     tags?: string[] | undefined;
     version?: string | undefined;
     comments?: number | undefined;
-    assets?: {
-        id: string;
+    assets?: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[] | undefined;
+        mimeType: string }[] | undefined;
     views?: number | undefined;
     downloads?: number | undefined;
     likes?: number | undefined;
@@ -1232,24 +1024,19 @@ export declare const TutorialContributionSchema: z.ZodObject<{
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-    revisionRequests?: {
-        id: string;
+    revisionRequests?: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[] | undefined;
-    versionHistory?: {
-        version: string;
+        resolvedAt?: Date | undefined }[] | undefined;
+    versionHistory?: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[] | undefined;
+        changedBy: string }[] | undefined;
 }>;
-export declare const CaseStudyContributionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const CaseStudyContributionSchema: z.ZodObject<{ id: z.ZodString;
     contributorId: z.ZodString;
     contributorName: z.ZodString;
     contributorLevel: z.ZodEnum<["newcomer", "contributor", "regular", "trusted", "expert", "moderator"]>;
@@ -1257,28 +1044,24 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
     description: z.ZodString;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     category: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         type: z.ZodEnum<["image", "video", "document", "code", "graph"]>;
         url: z.ZodString;
         filename: z.ZodString;
         size: z.ZodNumber;
         mimeType: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }, {
-        id: string;
+        mimeType: string }, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }>, "many">>;
+        mimeType: string }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
     submittedAt: z.ZodDate;
     reviewedAt: z.ZodOptional<z.ZodDate>;
@@ -1286,285 +1069,213 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
     qualityScore: z.ZodDefault<z.ZodNumber>;
     qualityRating: z.ZodOptional<z.ZodEnum<["poor", "fair", "good", "excellent", "exceptional"]>>;
     moderatorNotes: z.ZodOptional<z.ZodString>;
-    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         id: z.ZodString;
         moderatorId: z.ZodString;
         moderatorName: z.ZodString;
         reason: z.ZodString;
         details: z.ZodString;
         requestedAt: z.ZodDate;
-        resolvedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        resolvedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }, {
-        id: string;
+        resolvedAt?: Date | undefined }, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }>, "many">>;
+        resolvedAt?: Date | undefined }>, "many">>;
     views: z.ZodDefault<z.ZodNumber>;
     downloads: z.ZodDefault<z.ZodNumber>;
     likes: z.ZodDefault<z.ZodNumber>;
     comments: z.ZodDefault<z.ZodNumber>;
     shares: z.ZodDefault<z.ZodNumber>;
     version: z.ZodDefault<z.ZodString>;
-    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         version: z.ZodString;
         changes: z.ZodString;
         changedAt: z.ZodDate;
-        changedBy: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        version: string;
+        changedBy: z.ZodString }, "strip", z.ZodTypeAny, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }, {
-        version: string;
+        changedBy: string }, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }>, "many">>;
+        changedBy: string }>, "many">>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-} & {
-    type: z.ZodLiteral<"case_study">;
+} & { type: z.ZodLiteral<"case_study">;
     content: z.ZodObject<{,
         caseStudyType: z.ZodEnum<["success_story", "implementation", "roi_analysis", "comparison", "innovation"]>;
         industry: z.ZodString;
         useCase: z.ZodString;
         companySize: z.ZodOptional<z.ZodEnum<["startup", "small", "medium", "large", "enterprise"]>>;
-        challenge: z.ZodObject<{,
+        challenge: z.ZodObject<{ }
             description: z.ZodString;
             painPoints: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
             constraints: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        }, "strip", z.ZodTypeAny, {
-            description: string;
+        }, "strip", z.ZodTypeAny, { description: string;
             constraints: string[];
-            painPoints: string[];
-        }, {
-            description: string;
+            painPoints: string[] }, { description: string;
             constraints?: string[] | undefined;
-            painPoints?: string[] | undefined;
-        }>;
-        solution: z.ZodObject<{,
+            painPoints?: string[] | undefined }>;
+        solution: z.ZodObject<{ ,
             description: z.ZodString;
             approach: z.ZodString;
             templatesUsed: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
             implementation: z.ZodString;
-            timeline: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            description: string;
+            timeline: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { description: string;
             implementation: string;
             templatesUsed: string[];
             approach: string;
-            timeline?: string | undefined;
-        }, {
-            description: string;
+            timeline?: string | undefined }, { description: string;
             implementation: string;
             approach: string;
             timeline?: string | undefined;
-            templatesUsed?: string[] | undefined;
-        }>;
-        results: z.ZodObject<{,
+            templatesUsed?: string[] | undefined }>;
+        results: z.ZodObject<{ ,
             outcomes: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-            metrics: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+            metrics: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
                 name: z.ZodString;
                 before: z.ZodString;
                 after: z.ZodString;
                 improvement: z.ZodOptional<z.ZodString>;
-            }, "strip", z.ZodTypeAny, {
-                name: string;
+            }, "strip", z.ZodTypeAny, { name: string;
                 before: string;
                 after: string;
-                improvement?: string | undefined;
-            }, {
-                name: string;
+                improvement?: string | undefined }, { name: string;
                 before: string;
                 after: string;
-                improvement?: string | undefined;
-            }>, "many">>;
-            roi: z.ZodOptional<z.ZodObject<{,
+                improvement?: string | undefined }>, "many">>;
+            roi: z.ZodOptional<z.ZodObject<{ 
                 costSavings: z.ZodOptional<z.ZodNumber>;
                 timeReduction: z.ZodOptional<z.ZodString>;
                 qualityImprovement: z.ZodOptional<z.ZodString>;
-                description: z.ZodOptional<z.ZodString>;
-            }, "strip", z.ZodTypeAny, {
-                description?: string | undefined;
+                description: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
-                qualityImprovement?: string | undefined;
-            }, {
-                description?: string | undefined;
+                qualityImprovement?: string | undefined }, { description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
-                qualityImprovement?: string | undefined;
-            }>>;
-        }, "strip", z.ZodTypeAny, {
-            metrics: {
+                qualityImprovement?: string | undefined }>>;
+        }, "strip", z.ZodTypeAny, { metrics: {
                 name: string;
                 before: string;
                 after: string;
-                improvement?: string | undefined;
-            }[];
+                improvement?: string | undefined }[];
             outcomes: string[];
-            roi?: {
-                description?: string | undefined;
+            roi?: { description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
-                qualityImprovement?: string | undefined;
-            } | undefined;
-        }, {
-            metrics?: {
+                qualityImprovement?: string | undefined } | undefined;
+        }, { metrics?: {
                 name: string;
                 before: string;
                 after: string;
-                improvement?: string | undefined;
-            }[] | undefined;
+                improvement?: string | undefined }[] | undefined;
             outcomes?: string[] | undefined;
-            roi?: {
-                description?: string | undefined;
+            roi?: { description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
-                qualityImprovement?: string | undefined;
-            } | undefined;
+                qualityImprovement?: string | undefined } | undefined;
         }>;
-        testimonials: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        testimonials: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             author: z.ZodString;
             role: z.ZodString;
             company: z.ZodOptional<z.ZodString>;
             quote: z.ZodString;
-            avatar: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            author: string;
+            avatar: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { author: string;
             role: string;
             quote: string;
             company?: string | undefined;
-            avatar?: string | undefined;
-        }, {
-            author: string;
+            avatar?: string | undefined }, { author: string;
             role: string;
             quote: string;
             company?: string | undefined;
-            avatar?: string | undefined;
-        }>, "many">>;
-        mediaGallery: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+            avatar?: string | undefined }>, "many">>;
+        mediaGallery: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             type: z.ZodEnum<["before_after", "screenshot", "video", "diagram"]>;
             url: z.ZodString;
             caption: z.ZodString;
-            order: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            type: "video" | "screenshot" | "before_after" | "diagram";
+            order: z.ZodNumber }, "strip", z.ZodTypeAny, { type: "video" | "screenshot" | "before_after" | "diagram";
             caption: string;
             url: string;
-            order: number;
-        }, {
-            type: "video" | "screenshot" | "before_after" | "diagram";
+            order: number }, { type: "video" | "screenshot" | "before_after" | "diagram";
             caption: string;
             url: string;
-            order: number;
-        }>, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        results: {
+            order: number }>, "many">>;
+    }, "strip", z.ZodTypeAny, { results: {
             metrics: {
                 name: string;
                 before: string;
                 after: string;
-                improvement?: string | undefined;
-            }[];
+                improvement?: string | undefined }[];
             outcomes: string[];
-            roi?: {
-                description?: string | undefined;
+            roi?: { description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
-                qualityImprovement?: string | undefined;
-            } | undefined;
+                qualityImprovement?: string | undefined } | undefined;
         };
         industry: string;
-        challenge: {
-            description: string;
+        challenge: { description: string;
             constraints: string[];
-            painPoints: string[];
-        };
-        solution: {
-            description: string;
+            painPoints: string[] };
+        solution: { description: string;
             implementation: string;
             templatesUsed: string[];
             approach: string;
-            timeline?: string | undefined;
-        };
+            timeline?: string | undefined };
         caseStudyType: "comparison" | "innovation" | "implementation" | "success_story" | "roi_analysis";
         useCase: string;
-        testimonials: {
-            author: string;
+        testimonials: { author: string;
             role: string;
             quote: string;
             company?: string | undefined;
-            avatar?: string | undefined;
-        }[];
-        mediaGallery: {
-            type: "video" | "screenshot" | "before_after" | "diagram";
+            avatar?: string | undefined }[];
+        mediaGallery: { type: "video" | "screenshot" | "before_after" | "diagram";
             caption: string;
             url: string;
-            order: number;
-        }[];
+            order: number }[];
         companySize?: "small" | "medium" | "large" | "enterprise" | "startup" | undefined;
-    }, {
-        results: {
+    }, { results: {
             metrics?: {
                 name: string;
                 before: string;
                 after: string;
-                improvement?: string | undefined;
-            }[] | undefined;
+                improvement?: string | undefined }[] | undefined;
             outcomes?: string[] | undefined;
-            roi?: {
-                description?: string | undefined;
+            roi?: { description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
-                qualityImprovement?: string | undefined;
-            } | undefined;
+                qualityImprovement?: string | undefined } | undefined;
         };
         industry: string;
-        challenge: {
-            description: string;
+        challenge: { description: string;
             constraints?: string[] | undefined;
-            painPoints?: string[] | undefined;
-        };
-        solution: {
-            description: string;
+            painPoints?: string[] | undefined };
+        solution: { description: string;
             implementation: string;
             approach: string;
             timeline?: string | undefined;
-            templatesUsed?: string[] | undefined;
-        };
+            templatesUsed?: string[] | undefined };
         caseStudyType: "comparison" | "innovation" | "implementation" | "success_story" | "roi_analysis";
         useCase: string;
         companySize?: "small" | "medium" | "large" | "enterprise" | "startup" | undefined;
-        testimonials?: {
-            author: string;
+        testimonials?: { author: string;
             role: string;
             quote: string;
             company?: string | undefined;
-            avatar?: string | undefined;
-        }[] | undefined;
-        mediaGallery?: {
-            type: "video" | "screenshot" | "before_after" | "diagram";
+            avatar?: string | undefined }[] | undefined;
+        mediaGallery?: { type: "video" | "screenshot" | "before_after" | "diagram";
             caption: string;
             url: string;
-            order: number;
-        }[] | undefined;
+            order: number }[] | undefined;
     }>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -1578,56 +1289,43 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
                 name: string;
                 before: string;
                 after: string;
-                improvement?: string | undefined;
-            }[];
+                improvement?: string | undefined }[];
             outcomes: string[];
-            roi?: {
-                description?: string | undefined;
+            roi?: { description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
-                qualityImprovement?: string | undefined;
-            } | undefined;
+                qualityImprovement?: string | undefined } | undefined;
         };
         industry: string;
-        challenge: {
-            description: string;
+        challenge: { description: string;
             constraints: string[];
-            painPoints: string[];
-        };
-        solution: {
-            description: string;
+            painPoints: string[] };
+        solution: { description: string;
             implementation: string;
             templatesUsed: string[];
             approach: string;
-            timeline?: string | undefined;
-        };
+            timeline?: string | undefined };
         caseStudyType: "comparison" | "innovation" | "implementation" | "success_story" | "roi_analysis";
         useCase: string;
-        testimonials: {
-            author: string;
+        testimonials: { author: string;
             role: string;
             quote: string;
             company?: string | undefined;
-            avatar?: string | undefined;
-        }[];
-        mediaGallery: {
-            type: "video" | "screenshot" | "before_after" | "diagram";
+            avatar?: string | undefined }[];
+        mediaGallery: { type: "video" | "screenshot" | "before_after" | "diagram";
             caption: string;
             url: string;
-            order: number;
-        }[];
+            order: number }[];
         companySize?: "small" | "medium" | "large" | "enterprise" | "startup" | undefined;
     };
     title: string;
     comments: number;
-    assets: {
-        id: string;
+    assets: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[];
+        mimeType: string }[];
     views: number;
     downloads: number;
     likes: number;
@@ -1637,28 +1335,23 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
     contributorId: string;
     contributorName: string;
     contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
-    revisionRequests: {
-        id: string;
+    revisionRequests: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[];
-    versionHistory: {
-        version: string;
+        resolvedAt?: Date | undefined }[];
+    versionHistory: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[];
+        changedBy: string }[];
     category?: string | undefined;
     publishedAt?: Date | undefined;
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -1670,45 +1363,34 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
                 name: string;
                 before: string;
                 after: string;
-                improvement?: string | undefined;
-            }[] | undefined;
+                improvement?: string | undefined }[] | undefined;
             outcomes?: string[] | undefined;
-            roi?: {
-                description?: string | undefined;
+            roi?: { description?: string | undefined;
                 costSavings?: number | undefined;
                 timeReduction?: string | undefined;
-                qualityImprovement?: string | undefined;
-            } | undefined;
+                qualityImprovement?: string | undefined } | undefined;
         };
         industry: string;
-        challenge: {
-            description: string;
+        challenge: { description: string;
             constraints?: string[] | undefined;
-            painPoints?: string[] | undefined;
-        };
-        solution: {
-            description: string;
+            painPoints?: string[] | undefined };
+        solution: { description: string;
             implementation: string;
             approach: string;
             timeline?: string | undefined;
-            templatesUsed?: string[] | undefined;
-        };
+            templatesUsed?: string[] | undefined };
         caseStudyType: "comparison" | "innovation" | "implementation" | "success_story" | "roi_analysis";
         useCase: string;
         companySize?: "small" | "medium" | "large" | "enterprise" | "startup" | undefined;
-        testimonials?: {
-            author: string;
+        testimonials?: { author: string;
             role: string;
             quote: string;
             company?: string | undefined;
-            avatar?: string | undefined;
-        }[] | undefined;
-        mediaGallery?: {
-            type: "video" | "screenshot" | "before_after" | "diagram";
+            avatar?: string | undefined }[] | undefined;
+        mediaGallery?: { type: "video" | "screenshot" | "before_after" | "diagram";
             caption: string;
             url: string;
-            order: number;
-        }[] | undefined;
+            order: number }[] | undefined;
     };
     title: string;
     submittedAt: Date;
@@ -1719,14 +1401,12 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
     tags?: string[] | undefined;
     version?: string | undefined;
     comments?: number | undefined;
-    assets?: {
-        id: string;
+    assets?: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[] | undefined;
+        mimeType: string }[] | undefined;
     views?: number | undefined;
     downloads?: number | undefined;
     likes?: number | undefined;
@@ -1736,24 +1416,19 @@ export declare const CaseStudyContributionSchema: z.ZodObject<{
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-    revisionRequests?: {
-        id: string;
+    revisionRequests?: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[] | undefined;
-    versionHistory?: {
-        version: string;
+        resolvedAt?: Date | undefined }[] | undefined;
+    versionHistory?: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[] | undefined;
+        changedBy: string }[] | undefined;
 }>;
-export declare const PatternLibraryContributionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const PatternLibraryContributionSchema: z.ZodObject<{ id: z.ZodString;
     contributorId: z.ZodString;
     contributorName: z.ZodString;
     contributorLevel: z.ZodEnum<["newcomer", "contributor", "regular", "trusted", "expert", "moderator"]>;
@@ -1761,28 +1436,24 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
     description: z.ZodString;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     category: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         type: z.ZodEnum<["image", "video", "document", "code", "graph"]>;
         url: z.ZodString;
         filename: z.ZodString;
         size: z.ZodNumber;
         mimeType: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }, {
-        id: string;
+        mimeType: string }, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }>, "many">>;
+        mimeType: string }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
     submittedAt: z.ZodDate;
     reviewedAt: z.ZodOptional<z.ZodDate>;
@@ -1790,62 +1461,51 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
     qualityScore: z.ZodDefault<z.ZodNumber>;
     qualityRating: z.ZodOptional<z.ZodEnum<["poor", "fair", "good", "excellent", "exceptional"]>>;
     moderatorNotes: z.ZodOptional<z.ZodString>;
-    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         id: z.ZodString;
         moderatorId: z.ZodString;
         moderatorName: z.ZodString;
         reason: z.ZodString;
         details: z.ZodString;
         requestedAt: z.ZodDate;
-        resolvedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        resolvedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }, {
-        id: string;
+        resolvedAt?: Date | undefined }, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }>, "many">>;
+        resolvedAt?: Date | undefined }>, "many">>;
     views: z.ZodDefault<z.ZodNumber>;
     downloads: z.ZodDefault<z.ZodNumber>;
     likes: z.ZodDefault<z.ZodNumber>;
     comments: z.ZodDefault<z.ZodNumber>;
     shares: z.ZodDefault<z.ZodNumber>;
     version: z.ZodDefault<z.ZodString>;
-    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         version: z.ZodString;
         changes: z.ZodString;
         changedAt: z.ZodDate;
-        changedBy: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        version: string;
+        changedBy: z.ZodString }, "strip", z.ZodTypeAny, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }, {
-        version: string;
+        changedBy: string }, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }>, "many">>;
+        changedBy: string }>, "many">>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-} & {
-    type: z.ZodLiteral<"pattern_library">;
+} & { type: z.ZodLiteral<"pattern_library">;
     content: z.ZodObject<{,
         patternType: z.ZodEnum<["prompt_pattern", "graph_pattern", "workflow_pattern", "integration_pattern"]>;
         domain: z.ZodString;
         complexity: z.ZodEnum<["simple", "moderate", "complex", "advanced"]>;
-        pattern: z.ZodObject<{,
+        pattern: z.ZodObject<{ }
             name: z.ZodString;
             intent: z.ZodString;
             motivation: z.ZodString;
@@ -1857,8 +1517,7 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
             implementation: z.ZodString;
             sampleCode: z.ZodOptional<z.ZodString>;
             knownUses: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
+        }, "strip", z.ZodTypeAny, { name: string;
             structure: string;
             implementation: string;
             intent: string;
@@ -1868,9 +1527,7 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
             consequences: string;
             knownUses: string[];
             collaborations?: string | undefined;
-            sampleCode?: string | undefined;
-        }, {
-            name: string;
+            sampleCode?: string | undefined }, { name: string;
             structure: string;
             implementation: string;
             intent: string;
@@ -1880,55 +1537,38 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
             participants?: string[] | undefined;
             collaborations?: string | undefined;
             sampleCode?: string | undefined;
-            knownUses?: string[] | undefined;
-        }>;
-        examples: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+            knownUses?: string[] | undefined }>;
+        examples: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             title: z.ZodString;
             description: z.ZodString;
             code: z.ZodString;
-            explanation: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            description: string;
+            explanation: z.ZodString }, "strip", z.ZodTypeAny, { description: string;
             code: string;
             title: string;
-            explanation: string;
-        }, {
-            description: string;
+            explanation: string }, { description: string;
             code: string;
             title: string;
-            explanation: string;
-        }>, "many">>;
-        variations: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+            explanation: string }>, "many">>;
+        variations: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             name: z.ZodString;
             description: z.ZodString;
             whenToUse: z.ZodString;
-            tradeoffs: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
+            tradeoffs: z.ZodString }, "strip", z.ZodTypeAny, { name: string;
             description: string;
             whenToUse: string;
-            tradeoffs: string;
-        }, {
-            name: string;
+            tradeoffs: string }, { name: string;
             description: string;
             whenToUse: string;
-            tradeoffs: string;
-        }>, "many">>;
-        relatedPatterns: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+            tradeoffs: string }>, "many">>;
+        relatedPatterns: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             patternId: z.ZodString;
             relationship: z.ZodEnum<["uses", "used_by", "similar_to", "alternative_to"]>;
-            description: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            description: string;
+            description: z.ZodString }, "strip", z.ZodTypeAny, { description: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
-            patternId: string;
-        }, {
-            description: string;
+            patternId: string }, { description: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
-            patternId: string;
-        }>, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        pattern: {
+            patternId: string }>, "many">>;
+    }, "strip", z.ZodTypeAny, { pattern: {
             name: string;
             structure: string;
             implementation: string;
@@ -1939,30 +1579,22 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
             consequences: string;
             knownUses: string[];
             collaborations?: string | undefined;
-            sampleCode?: string | undefined;
-        };
-        variations: {
-            name: string;
+            sampleCode?: string | undefined };
+        variations: { name: string;
             description: string;
             whenToUse: string;
-            tradeoffs: string;
-        }[];
+            tradeoffs: string }[];
         complexity: "simple" | "complex" | "advanced" | "moderate";
-        examples: {
-            description: string;
+        examples: { description: string;
             code: string;
             title: string;
-            explanation: string;
-        }[];
+            explanation: string }[];
         patternType: "prompt_pattern" | "graph_pattern" | "workflow_pattern" | "integration_pattern";
         domain: string;
-        relatedPatterns: {
-            description: string;
+        relatedPatterns: { description: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
-            patternId: string;
-        }[];
-    }, {
-        pattern: {
+            patternId: string }[];
+    }, { pattern: {
             name: string;
             structure: string;
             implementation: string;
@@ -1973,31 +1605,23 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
             participants?: string[] | undefined;
             collaborations?: string | undefined;
             sampleCode?: string | undefined;
-            knownUses?: string[] | undefined;
-        };
+            knownUses?: string[] | undefined };
         complexity: "simple" | "complex" | "advanced" | "moderate";
         patternType: "prompt_pattern" | "graph_pattern" | "workflow_pattern" | "integration_pattern";
         domain: string;
-        variations?: {
-            name: string;
+        variations?: { name: string;
             description: string;
             whenToUse: string;
-            tradeoffs: string;
-        }[] | undefined;
-        examples?: {
-            description: string;
+            tradeoffs: string }[] | undefined;
+        examples?: { description: string;
             code: string;
             title: string;
-            explanation: string;
-        }[] | undefined;
-        relatedPatterns?: {
-            description: string;
+            explanation: string }[] | undefined;
+        relatedPatterns?: { description: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
-            patternId: string;
-        }[] | undefined;
+            patternId: string }[] | undefined;
     }>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -2017,39 +1641,30 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
             consequences: string;
             knownUses: string[];
             collaborations?: string | undefined;
-            sampleCode?: string | undefined;
-        };
-        variations: {
-            name: string;
+            sampleCode?: string | undefined };
+        variations: { name: string;
             description: string;
             whenToUse: string;
-            tradeoffs: string;
-        }[];
+            tradeoffs: string }[];
         complexity: "simple" | "complex" | "advanced" | "moderate";
-        examples: {
-            description: string;
+        examples: { description: string;
             code: string;
             title: string;
-            explanation: string;
-        }[];
+            explanation: string }[];
         patternType: "prompt_pattern" | "graph_pattern" | "workflow_pattern" | "integration_pattern";
         domain: string;
-        relatedPatterns: {
-            description: string;
+        relatedPatterns: { description: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
-            patternId: string;
-        }[];
+            patternId: string }[];
     };
     title: string;
     comments: number;
-    assets: {
-        id: string;
+    assets: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[];
+        mimeType: string }[];
     views: number;
     downloads: number;
     likes: number;
@@ -2059,28 +1674,23 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
     contributorId: string;
     contributorName: string;
     contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
-    revisionRequests: {
-        id: string;
+    revisionRequests: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[];
-    versionHistory: {
-        version: string;
+        resolvedAt?: Date | undefined }[];
+    versionHistory: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[];
+        changedBy: string }[];
     category?: string | undefined;
     publishedAt?: Date | undefined;
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -2098,28 +1708,21 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
             participants?: string[] | undefined;
             collaborations?: string | undefined;
             sampleCode?: string | undefined;
-            knownUses?: string[] | undefined;
-        };
+            knownUses?: string[] | undefined };
         complexity: "simple" | "complex" | "advanced" | "moderate";
         patternType: "prompt_pattern" | "graph_pattern" | "workflow_pattern" | "integration_pattern";
         domain: string;
-        variations?: {
-            name: string;
+        variations?: { name: string;
             description: string;
             whenToUse: string;
-            tradeoffs: string;
-        }[] | undefined;
-        examples?: {
-            description: string;
+            tradeoffs: string }[] | undefined;
+        examples?: { description: string;
             code: string;
             title: string;
-            explanation: string;
-        }[] | undefined;
-        relatedPatterns?: {
-            description: string;
+            explanation: string }[] | undefined;
+        relatedPatterns?: { description: string;
             relationship: "uses" | "used_by" | "similar_to" | "alternative_to";
-            patternId: string;
-        }[] | undefined;
+            patternId: string }[] | undefined;
     };
     title: string;
     submittedAt: Date;
@@ -2130,14 +1733,12 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
     tags?: string[] | undefined;
     version?: string | undefined;
     comments?: number | undefined;
-    assets?: {
-        id: string;
+    assets?: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[] | undefined;
+        mimeType: string }[] | undefined;
     views?: number | undefined;
     downloads?: number | undefined;
     likes?: number | undefined;
@@ -2147,24 +1748,19 @@ export declare const PatternLibraryContributionSchema: z.ZodObject<{
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-    revisionRequests?: {
-        id: string;
+    revisionRequests?: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[] | undefined;
-    versionHistory?: {
-        version: string;
+        resolvedAt?: Date | undefined }[] | undefined;
+    versionHistory?: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[] | undefined;
+        changedBy: string }[] | undefined;
 }>;
-export declare const CommunityPostContributionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const CommunityPostContributionSchema: z.ZodObject<{ id: z.ZodString;
     contributorId: z.ZodString;
     contributorName: z.ZodString;
     contributorLevel: z.ZodEnum<["newcomer", "contributor", "regular", "trusted", "expert", "moderator"]>;
@@ -2172,28 +1768,24 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
     description: z.ZodString;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     category: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         type: z.ZodEnum<["image", "video", "document", "code", "graph"]>;
         url: z.ZodString;
         filename: z.ZodString;
         size: z.ZodNumber;
         mimeType: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }, {
-        id: string;
+        mimeType: string }, { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }>, "many">>;
+        mimeType: string }>, "many">>;
     status: z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>;
     submittedAt: z.ZodDate;
     reviewedAt: z.ZodOptional<z.ZodDate>;
@@ -2201,64 +1793,53 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
     qualityScore: z.ZodDefault<z.ZodNumber>;
     qualityRating: z.ZodOptional<z.ZodEnum<["poor", "fair", "good", "excellent", "exceptional"]>>;
     moderatorNotes: z.ZodOptional<z.ZodString>;
-    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    revisionRequests: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         id: z.ZodString;
         moderatorId: z.ZodString;
         moderatorName: z.ZodString;
         reason: z.ZodString;
         details: z.ZodString;
         requestedAt: z.ZodDate;
-        resolvedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        resolvedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }, {
-        id: string;
+        resolvedAt?: Date | undefined }, { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }>, "many">>;
+        resolvedAt?: Date | undefined }>, "many">>;
     views: z.ZodDefault<z.ZodNumber>;
     downloads: z.ZodDefault<z.ZodNumber>;
     likes: z.ZodDefault<z.ZodNumber>;
     comments: z.ZodDefault<z.ZodNumber>;
     shares: z.ZodDefault<z.ZodNumber>;
     version: z.ZodDefault<z.ZodString>;
-    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    versionHistory: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         version: z.ZodString;
         changes: z.ZodString;
         changedAt: z.ZodDate;
-        changedBy: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        version: string;
+        changedBy: z.ZodString }, "strip", z.ZodTypeAny, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }, {
-        version: string;
+        changedBy: string }, { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }>, "many">>;
+        changedBy: string }>, "many">>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-} & {
-    type: z.ZodLiteral<"community_post">;
+} & { type: z.ZodLiteral<"community_post">;
     content: z.ZodObject<{,
         postType: z.ZodEnum<["discussion", "question", "announcement", "showcase", "feedback"]>;
         forum: z.ZodString;
         isSticky: z.ZodDefault<z.ZodBoolean>;
         isPinned: z.ZodDefault<z.ZodBoolean>;
         body: z.ZodString;
-        replies: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        replies: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
             id: z.ZodString;
             authorId: z.ZodString;
             authorName: z.ZodString;
@@ -2267,31 +1848,26 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
             updatedAt: z.ZodOptional<z.ZodDate>;
             votes: z.ZodDefault<z.ZodNumber>;
             isAcceptedAnswer: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            id: string;
+        }, "strip", z.ZodTypeAny, { id: string;
             createdAt: Date;
             content: string;
             authorId: string;
             authorName: string;
             votes: number;
             isAcceptedAnswer: boolean;
-            updatedAt?: Date | undefined;
-        }, {
-            id: string;
+            updatedAt?: Date | undefined }, { id: string;
             createdAt: Date;
             content: string;
             authorId: string;
             authorName: string;
             updatedAt?: Date | undefined;
             votes?: number | undefined;
-            isAcceptedAnswer?: boolean | undefined;
-        }>, "many">>;
+            isAcceptedAnswer?: boolean | undefined }>, "many">>;
         votes: z.ZodDefault<z.ZodNumber>;
         bookmarks: z.ZodDefault<z.ZodNumber>;
         isResolved: z.ZodDefault<z.ZodBoolean>;
         acceptedAnswerId: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        body: string;
+    }, "strip", z.ZodTypeAny, { body: string;
         bookmarks: number;
         postType: "feedback" | "question" | "discussion" | "announcement" | "showcase";
         forum: string;
@@ -2306,12 +1882,10 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
             authorName: string;
             votes: number;
             isAcceptedAnswer: boolean;
-            updatedAt?: Date | undefined;
-        }[];
+            updatedAt?: Date | undefined }[];
         isResolved: boolean;
         acceptedAnswerId?: string | undefined;
-    }, {
-        body: string;
+    }, { body: string;
         postType: "feedback" | "question" | "discussion" | "announcement" | "showcase";
         forum: string;
         bookmarks?: number | undefined;
@@ -2326,13 +1900,11 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
             authorName: string;
             updatedAt?: Date | undefined;
             votes?: number | undefined;
-            isAcceptedAnswer?: boolean | undefined;
-        }[] | undefined;
+            isAcceptedAnswer?: boolean | undefined }[] | undefined;
         isResolved?: boolean | undefined;
         acceptedAnswerId?: string | undefined;
     }>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -2356,21 +1928,18 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
             authorName: string;
             votes: number;
             isAcceptedAnswer: boolean;
-            updatedAt?: Date | undefined;
-        }[];
+            updatedAt?: Date | undefined }[];
         isResolved: boolean;
         acceptedAnswerId?: string | undefined;
     };
     title: string;
     comments: number;
-    assets: {
-        id: string;
+    assets: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[];
+        mimeType: string }[];
     views: number;
     downloads: number;
     likes: number;
@@ -2380,28 +1949,23 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
     contributorId: string;
     contributorName: string;
     contributorLevel: "expert" | "contributor" | "regular" | "moderator" | "trusted" | "newcomer";
-    revisionRequests: {
-        id: string;
+    revisionRequests: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[];
-    versionHistory: {
-        version: string;
+        resolvedAt?: Date | undefined }[];
+    versionHistory: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[];
+        changedBy: string }[];
     category?: string | undefined;
     publishedAt?: Date | undefined;
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -2423,8 +1987,7 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
             authorName: string;
             updatedAt?: Date | undefined;
             votes?: number | undefined;
-            isAcceptedAnswer?: boolean | undefined;
-        }[] | undefined;
+            isAcceptedAnswer?: boolean | undefined }[] | undefined;
         isResolved?: boolean | undefined;
         acceptedAnswerId?: string | undefined;
     };
@@ -2437,14 +2000,12 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
     tags?: string[] | undefined;
     version?: string | undefined;
     comments?: number | undefined;
-    assets?: {
-        id: string;
+    assets?: { id: string;
         filename: string;
         type: "document" | "code" | "graph" | "video" | "image";
         size: number;
         url: string;
-        mimeType: string;
-    }[] | undefined;
+        mimeType: string }[] | undefined;
     views?: number | undefined;
     downloads?: number | undefined;
     likes?: number | undefined;
@@ -2454,105 +2015,79 @@ export declare const CommunityPostContributionSchema: z.ZodObject<{
     reviewedAt?: Date | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
-    revisionRequests?: {
-        id: string;
+    revisionRequests?: { id: string;
         details: string;
         reason: string;
         requestedAt: Date;
         moderatorId: string;
         moderatorName: string;
-        resolvedAt?: Date | undefined;
-    }[] | undefined;
-    versionHistory?: {
-        version: string;
+        resolvedAt?: Date | undefined }[] | undefined;
+    versionHistory?: { version: string;
         changes: string;
         changedAt: Date;
-        changedBy: string;
-    }[] | undefined;
+        changedBy: string }[] | undefined;
 }>;
-export declare const CreateContributionRequestSchema: z.ZodObject<{
-    type: z.ZodEnum<["template", "knowledge_article", "tutorial", "case_study", "pattern_library", "community_post", "documentation", "review"]>;
+export declare const CreateContributionRequestSchema: z.ZodObject<{ type: z.ZodEnum<["template", "knowledge_article", "tutorial", "case_study", "pattern_library", "community_post", "documentation", "review"]>;
     title: z.ZodString;
     description: z.ZodString;
     category: z.ZodOptional<z.ZodString>;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     content: z.ZodRecord<z.ZodString, z.ZodUnknown>;
     assets: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    saveAsDraft: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    description: string;
+    saveAsDraft: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { description: string;
     type: "template" | "documentation" | "tutorial" | "review" | "knowledge_article" | "community_post" | "case_study" | "pattern_library";
     tags: string[];
     content: Record<string, unknown>;
     title: string;
     assets: string[];
     saveAsDraft: boolean;
-    category?: string | undefined;
-}, {
-    description: string;
+    category?: string | undefined }, { description: string;
     type: "template" | "documentation" | "tutorial" | "review" | "knowledge_article" | "community_post" | "case_study" | "pattern_library";
     content: Record<string, unknown>;
     title: string;
     category?: string | undefined;
     tags?: string[] | undefined;
     assets?: string[] | undefined;
-    saveAsDraft?: boolean | undefined;
-}>;
-export declare const UpdateContributionRequestSchema: z.ZodObject<{
-    title: z.ZodOptional<z.ZodString>;
+    saveAsDraft?: boolean | undefined }>;
+export declare const UpdateContributionRequestSchema: z.ZodObject<{ title: z.ZodOptional<z.ZodString>;
     description: z.ZodOptional<z.ZodString>;
     category: z.ZodOptional<z.ZodString>;
     tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     content: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-    assets: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-}, "strip", z.ZodTypeAny, {
-    description?: string | undefined;
+    assets: z.ZodOptional<z.ZodArray<z.ZodString, "many">> }, "strip", z.ZodTypeAny, { description?: string | undefined;
     category?: string | undefined;
     tags?: string[] | undefined;
     content?: Record<string, unknown> | undefined;
     title?: string | undefined;
-    assets?: string[] | undefined;
-}, {
-    description?: string | undefined;
+    assets?: string[] | undefined }, { description?: string | undefined;
     category?: string | undefined;
     tags?: string[] | undefined;
     content?: Record<string, unknown> | undefined;
     title?: string | undefined;
-    assets?: string[] | undefined;
-}>;
-export declare const ContributionReviewRequestSchema: z.ZodObject<{
-    action: z.ZodEnum<["approve", "request_revision", "reject"]>;
+    assets?: string[] | undefined }>;
+export declare const ContributionReviewRequestSchema: z.ZodObject<{ action: z.ZodEnum<["approve", "request_revision", "reject"]>;
     qualityRating: z.ZodOptional<z.ZodEnum<["poor", "fair", "good", "excellent", "exceptional"]>>;
     moderatorNotes: z.ZodOptional<z.ZodString>;
-    revisionRequests: z.ZodOptional<z.ZodArray<z.ZodObject<{,
+    revisionRequests: z.ZodOptional<z.ZodArray<z.ZodObject<{ }
         reason: z.ZodString;
         details: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        details: string;
-        reason: string;
-    }, {
-        details: string;
-        reason: string;
-    }>, "many">>;
-}, "strip", z.ZodTypeAny, {
-    action: "approve" | "reject" | "request_revision";
+    }, "strip", z.ZodTypeAny, { details: string;
+        reason: string }, { details: string;
+        reason: string }>, "many">>;
+}, "strip", z.ZodTypeAny, { action: "approve" | "reject" | "request_revision";
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
     revisionRequests?: {
         details: string;
-        reason: string;
-    }[] | undefined;
-}, {
-    action: "approve" | "reject" | "request_revision";
+        reason: string }[] | undefined;
+}, { action: "approve" | "reject" | "request_revision";
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     moderatorNotes?: string | undefined;
     revisionRequests?: {
         details: string;
-        reason: string;
-    }[] | undefined;
+        reason: string }[] | undefined;
 }>;
-export declare const ContributionFilterSchema: z.ZodObject<{
-    type: z.ZodOptional<z.ZodEnum<["template", "knowledge_article", "tutorial", "case_study", "pattern_library", "community_post", "documentation", "review"]>>;
+export declare const ContributionFilterSchema: z.ZodObject<{ type: z.ZodOptional<z.ZodEnum<["template", "knowledge_article", "tutorial", "case_study", "pattern_library", "community_post", "documentation", "review"]>>;
     status: z.ZodOptional<z.ZodEnum<["draft", "submitted", "under_review", "revision_requested", "approved", "published", "rejected", "archived"]>>;
     contributorId: z.ZodOptional<z.ZodString>;
     category: z.ZodOptional<z.ZodString>;
@@ -2564,9 +2099,7 @@ export declare const ContributionFilterSchema: z.ZodObject<{
     sortBy: z.ZodDefault<z.ZodEnum<["created_at", "updated_at", "views", "likes", "quality_score"]>>;
     sortOrder: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
     limit: z.ZodDefault<z.ZodNumber>;
-    offset: z.ZodDefault<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    limit: number;
+    offset: z.ZodDefault<z.ZodNumber> }, "strip", z.ZodTypeAny, { limit: number;
     offset: number;
     sortBy: "created_at" | "updated_at" | "views" | "likes" | "quality_score";
     sortOrder: "asc" | "desc";
@@ -2578,9 +2111,7 @@ export declare const ContributionFilterSchema: z.ZodObject<{
     contributorId?: string | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     dateFrom?: Date | undefined;
-    dateTo?: Date | undefined;
-}, {
-    search?: string | undefined;
+    dateTo?: Date | undefined }, { search?: string | undefined;
     status?: "draft" | "published" | "approved" | "rejected" | "submitted" | "archived" | "under_review" | "revision_requested" | undefined;
     type?: "template" | "documentation" | "tutorial" | "review" | "knowledge_article" | "community_post" | "case_study" | "pattern_library" | undefined;
     category?: string | undefined;
@@ -2592,10 +2123,8 @@ export declare const ContributionFilterSchema: z.ZodObject<{
     contributorId?: string | undefined;
     qualityRating?: "excellent" | "good" | "poor" | "fair" | "exceptional" | undefined;
     dateFrom?: Date | undefined;
-    dateTo?: Date | undefined;
-}>;
-export declare const ContributorProfileSchema: z.ZodObject<{
-    id: z.ZodString;
+    dateTo?: Date | undefined }>;
+export declare const ContributorProfileSchema: z.ZodObject<{ id: z.ZodString;
     userId: z.ZodString;
     displayName: z.ZodString;
     bio: z.ZodOptional<z.ZodString>;
@@ -2603,83 +2132,63 @@ export declare const ContributorProfileSchema: z.ZodObject<{
     skills: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     location: z.ZodOptional<z.ZodString>;
     website: z.ZodOptional<z.ZodString>;
-    social: z.ZodOptional<z.ZodObject<{,
+    social: z.ZodOptional<z.ZodObject<{ }
         twitter: z.ZodOptional<z.ZodString>;
         linkedin: z.ZodOptional<z.ZodString>;
         github: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        twitter?: string | undefined;
+    }, "strip", z.ZodTypeAny, { twitter?: string | undefined;
         linkedin?: string | undefined;
-        github?: string | undefined;
-    }, {
-        twitter?: string | undefined;
+        github?: string | undefined }, { twitter?: string | undefined;
         linkedin?: string | undefined;
-        github?: string | undefined;
-    }>>;
+        github?: string | undefined }>>;
     level: z.ZodEnum<["newcomer", "contributor", "regular", "trusted", "expert", "moderator"]>;
     totalContributions: z.ZodDefault<z.ZodNumber>;
     publishedContributions: z.ZodDefault<z.ZodNumber>;
     totalViews: z.ZodDefault<z.ZodNumber>;
     totalLikes: z.ZodDefault<z.ZodNumber>;
     averageQualityScore: z.ZodDefault<z.ZodNumber>;
-    badges: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    badges: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         id: z.ZodString;
         name: z.ZodString;
         description: z.ZodString;
         iconUrl: z.ZodString;
-        earnedAt: z.ZodDate;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        earnedAt: z.ZodDate }, "strip", z.ZodTypeAny, { id: string;
         name: string;
         description: string;
         iconUrl: string;
-        earnedAt: Date;
-    }, {
-        id: string;
+        earnedAt: Date }, { id: string;
         name: string;
         description: string;
         iconUrl: string;
-        earnedAt: Date;
-    }>, "many">>;
-    achievements: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        earnedAt: Date }>, "many">>;
+    achievements: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         id: z.ZodString;
         name: z.ZodString;
         description: z.ZodString;
         progress: z.ZodNumber;
-        completedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        completedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         name: string;
         description: string;
         progress: number;
-        completedAt?: Date | undefined;
-    }, {
-        id: string;
+        completedAt?: Date | undefined }, { id: string;
         name: string;
         description: string;
         progress: number;
-        completedAt?: Date | undefined;
-    }>, "many">>;
-    notificationPreferences: z.ZodDefault<z.ZodObject<{,
+        completedAt?: Date | undefined }>, "many">>;
+    notificationPreferences: z.ZodDefault<z.ZodObject<{ 
         emailOnComment: z.ZodDefault<z.ZodBoolean>;
         emailOnLike: z.ZodDefault<z.ZodBoolean>;
         emailOnFeature: z.ZodDefault<z.ZodBoolean>;
-        weeklyDigest: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        emailOnComment: boolean;
+        weeklyDigest: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { emailOnComment: boolean;
         emailOnLike: boolean;
         emailOnFeature: boolean;
-        weeklyDigest: boolean;
-    }, {
-        emailOnComment?: boolean | undefined;
+        weeklyDigest: boolean }, { emailOnComment?: boolean | undefined;
         emailOnLike?: boolean | undefined;
         emailOnFeature?: boolean | undefined;
-        weeklyDigest?: boolean | undefined;
-    }>>;
+        weeklyDigest?: boolean | undefined }>>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
@@ -2697,31 +2206,23 @@ export declare const ContributorProfileSchema: z.ZodObject<{
         name: string;
         description: string;
         iconUrl: string;
-        earnedAt: Date;
-    }[];
-    achievements: {
-        id: string;
+        earnedAt: Date }[];
+    achievements: { id: string;
         name: string;
         description: string;
         progress: number;
-        completedAt?: Date | undefined;
-    }[];
-    notificationPreferences: {
-        emailOnComment: boolean;
+        completedAt?: Date | undefined }[];
+    notificationPreferences: { emailOnComment: boolean;
         emailOnLike: boolean;
         emailOnFeature: boolean;
-        weeklyDigest: boolean;
-    };
+        weeklyDigest: boolean };
     location?: string | undefined;
-    social?: {
-        twitter?: string | undefined;
+    social?: { twitter?: string | undefined;
         linkedin?: string | undefined;
-        github?: string | undefined;
-    } | undefined;
+        github?: string | undefined } | undefined;
     website?: string | undefined;
     bio?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
@@ -2731,8 +2232,7 @@ export declare const ContributorProfileSchema: z.ZodObject<{
     social?: {
         twitter?: string | undefined;
         linkedin?: string | undefined;
-        github?: string | undefined;
-    } | undefined;
+        github?: string | undefined } | undefined;
     website?: string | undefined;
     expertise?: string[] | undefined;
     bio?: string | undefined;
@@ -2742,26 +2242,20 @@ export declare const ContributorProfileSchema: z.ZodObject<{
     totalViews?: number | undefined;
     totalLikes?: number | undefined;
     averageQualityScore?: number | undefined;
-    badges?: {
-        id: string;
+    badges?: { id: string;
         name: string;
         description: string;
         iconUrl: string;
-        earnedAt: Date;
-    }[] | undefined;
-    achievements?: {
-        id: string;
+        earnedAt: Date }[] | undefined;
+    achievements?: { id: string;
         name: string;
         description: string;
         progress: number;
-        completedAt?: Date | undefined;
-    }[] | undefined;
-    notificationPreferences?: {
-        emailOnComment?: boolean | undefined;
+        completedAt?: Date | undefined }[] | undefined;
+    notificationPreferences?: { emailOnComment?: boolean | undefined;
         emailOnLike?: boolean | undefined;
         emailOnFeature?: boolean | undefined;
-        weeklyDigest?: boolean | undefined;
-    } | undefined;
+        weeklyDigest?: boolean | undefined } | undefined;
 }>;
 export type ContributionType = z.infer<typeof ContributionTypeSchema>;
 export type ContributionStatus = z.infer<typeof ContributionStatusSchema>;
@@ -2780,36 +2274,29 @@ export type UpdateContributionRequest = z.infer<typeof UpdateContributionRequest
 export type ContributionReviewRequest = z.infer<typeof ContributionReviewRequestSchema>;
 export type ContributionFilter = z.infer<typeof ContributionFilterSchema>;
 export type ContributorProfile = z.infer<typeof ContributorProfileSchema>;
-export declare export declare export declare export declare export declare export declare export declare const CONTRIBUTION_TYPE_DESCRIPTIONS: {
-    readonly template: "Reusable prompt templates for the marketplace";
+export declare export declare export declare export declare export declare export declare export declare const CONTRIBUTION_TYPE_DESCRIPTIONS: { readonly template: "Reusable prompt templates for the marketplace";
     readonly knowledge_article: "Educational articles and guides";
     readonly tutorial: "Step-by-step learning content";
     readonly case_study: "Real-world implementation stories";
     readonly pattern_library: "Reusable design and prompt patterns";
     readonly community_post: "Community discussions and questions";
     readonly documentation: "Technical documentation";
-    readonly review: "Reviews and feedback on templates";
-};
-export declare const CONTRIBUTION_STATUS_DESCRIPTIONS: {
-    readonly draft: "Work in progress, not yet submitted";
+    readonly review: "Reviews and feedback on templates" };
+export declare const CONTRIBUTION_STATUS_DESCRIPTIONS: { readonly draft: "Work in progress, not yet submitted";
     readonly submitted: "Submitted for review";
     readonly under_review: "Currently being reviewed by moderators";
     readonly revision_requested: "Changes requested before approval";
     readonly approved: "Approved but not yet published";
     readonly published: "Live and publicly available";
     readonly rejected: "Rejected and will not be published";
-    readonly archived: "Removed from public view";
-};
-export declare const CONTRIBUTOR_LEVEL_DESCRIPTIONS: {
-    readonly newcomer: "New to the platform";
+    readonly archived: "Removed from public view" };
+export declare const CONTRIBUTOR_LEVEL_DESCRIPTIONS: { readonly newcomer: "New to the platform";
     readonly contributor: "Has made initial contributions";
     readonly regular: "Regular contributor with good quality";
     readonly trusted: "Trusted contributor with high quality work";
     readonly expert: "Expert contributor with exceptional content";
-    readonly moderator: "Community moderator and content reviewer";
-};
-export declare const CONTRIBUTION_DEFAULTS: {
-    readonly QUALITY_THRESHOLD_PUBLISH: 70;
+    readonly moderator: "Community moderator and content reviewer" };
+export declare const CONTRIBUTION_DEFAULTS: { readonly QUALITY_THRESHOLD_PUBLISH: 70;
     readonly MIN_TITLE_LENGTH: 5;
     readonly MAX_TITLE_LENGTH: 200;
     readonly MIN_DESCRIPTION_LENGTH: 20;
@@ -2818,6 +2305,5 @@ export declare const CONTRIBUTION_DEFAULTS: {
     readonly MAX_ASSETS_PER_CONTRIBUTION: 50;
     readonly MAX_ASSET_SIZE_MB: 10;
     readonly AUTO_PUBLISH_SCORE_THRESHOLD: 90;
-    readonly FEATURED_CONTRIBUTION_THRESHOLD: 95;
-};
+    readonly FEATURED_CONTRIBUTION_THRESHOLD: 95 };
 //# sourceMappingURL=contributions.d.ts.map

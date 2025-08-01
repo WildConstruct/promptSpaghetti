@@ -2,8 +2,7 @@ import { EventEmitter } from 'events';
 /**
  * WebSocket message types
  */
-export declare enum WebSocketMessageType {
-    ANALYTICS_UPDATE = "analytics_update",
+export declare enum WebSocketMessageType { ANALYTICS_UPDATE = "analytics_update",
     COST_ALERT = "cost_alert",
     BUDGET_ALERT = "budget_alert",
     PERFORMANCE_METRIC = "performance_metric",
@@ -12,13 +11,14 @@ export declare enum WebSocketMessageType {
     RECOMMENDATION = "recommendation",
     ERROR = "error",
     HEARTBEAT = "heartbeat",
-    SUBSCRIPTION = "subscription",
+    SUBSCRIPTION = "subscription" }
     UNSUBSCRIPTION = "unsubscription"
 
 /**
  * WebSocket message structure
  */
 
+}
 }
 export interface WebSocketMessage {
     type: WebSocketMessageType;
@@ -32,6 +32,8 @@ export interface WebSocketMessage {
  */
 
 }
+}
+}
 export interface SubscriptionConfig {
     topic: string;
     filters?: {
@@ -39,6 +41,7 @@ export interface SubscriptionConfig {
         organizationId?: number;
         eventTypes?: string[];
         minSeverity?: 'info' | 'warning' | 'critical'
+}
 }
   };
     throttle?: number;
@@ -48,8 +51,8 @@ export interface SubscriptionConfig {
  */
 
 }
-export interface WebSocketClientConfig {
-    url: string;
+}
+export interface WebSocketClientConfig { url: string;
     reconnectInterval: number;
     maxReconnectAttempts: number;
     heartbeatInterval: number;
@@ -64,10 +67,10 @@ export interface WebSocketClientConfig {
  * WebSocket connection state
  */
 export declare enum ConnectionState {
-    DISCONNECTED = "disconnected",
-    CONNECTING = "connecting",
-    CONNECTED = "connected",
-    RECONNECTING = "reconnecting",
+    DISCONNECTED = "disconnected";
+    CONNECTING = "connecting";
+    CONNECTED = "connected";
+    RECONNECTING = "reconnecting" }
     FAILED = "failed"
 
 /**
@@ -175,4 +178,5 @@ export declare class AnalyticsWebSocketClient extends WebSocketClient {
  * Create analytics WebSocket client instance
  */
 export declare //# sourceMappingURL=WebSocketClient.d.ts.map
+}
 }

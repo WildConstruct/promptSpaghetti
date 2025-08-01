@@ -13,7 +13,7 @@ import {
   SecurityControl, 
   SecurityControlTest,
   EffectivenessReport 
-} from '../services/SecurityControlTestingEngine';
+ from '../services/SecurityControlTestingEngine';
 import { SecurityAPIIntegrationPlatform } from '../services/SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../services/SecurityPolicyAnalysisEngine';
 import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngine';
@@ -21,48 +21,51 @@ import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngi
 // Global testing engine instance
 let controlTestingEngine: SecurityControlTestingEngine | null = null;
 
-}
-}
+
+
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
   message?: string;
   timestamp: number;
-}
 
-}
-}
+
+
+
 interface ControlRegistrationRequest {
   control: SecurityControl;
   schedule_immediate_test?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ControlTestRequest {
   control_id: string;
   test_types?: SecurityControlTest['test_type'][];
   environment?: 'production' | 'staging' | 'testing' | 'development';
   notify_on_completion?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface OptimizationRequest {
   control_id: string;
   optimization_targets?: string[];
   apply_automatically?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ReportRequest {
   report_type?: EffectivenessReport['report_type'];
   start_date?: number;
@@ -70,9 +73,10 @@ interface ReportRequest {
   control_ids?: string[];
   include_detailed_findings?: boolean;
   include_compliance_assessment?: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Initialize security control testing engine
@@ -85,7 +89,7 @@ async function initializeControlTestingEngine(
 
   if (controlTestingEngine) {
     return controlTestingEngine;
-  }
+
 
   const config: SecurityControlTestingConfig = {
     testing_framework: {
@@ -95,7 +99,7 @@ async function initializeControlTestingEngine(
       regression_testing_enabled: true,
       performance_testing_enabled: true,
       security_testing_enabled: true
-  }
+
     effectiveness_measurement: {
       enabled: true,
       real_time_monitoring: true,
@@ -103,7 +107,7 @@ async function initializeControlTestingEngine(
       comparative_analysis: true,
       trend_analysis: true,
       statistical_significance_testing: true
-  }
+
     optimization_settings: {
       enabled: true,
       automatic_optimization: false, // Require manual approval for safety
@@ -114,8 +118,8 @@ async function initializeControlTestingEngine(
         effectiveness_threshold: 80,
         performance_threshold: 500,
         reliability_threshold: 99
-      }
-  }
+
+
     test_categories: {
       authentication_controls: true,
       authorization_controls: true,
@@ -124,21 +128,21 @@ async function initializeControlTestingEngine(
       incident_response_controls: true,
       compliance_controls: true,
       monitoring_controls: true
-  }
+
     reporting_settings: {
       detailed_reports_enabled: true,
       executive_summaries_enabled: true,
       trend_reports_enabled: true,
       compliance_reports_enabled: true,
       real_time_dashboards_enabled: true
-    }
+
   };
 
   controlTestingEngine = new SecurityControlTestingEngine(config, platform, policyEngine, optimizationEngine);
   await controlTestingEngine.initialize();
 
   return controlTestingEngine;
-}
+
 
 export default async function securityControlTestingRoutes(
   fastify: FastifyInstance,
@@ -172,11 +176,11 @@ export default async function securityControlTestingRoutes(
               category: {
                 type: 'string',
                 enum: ['authentication', 'authorization', 'data_protection', 'network_security', 'incident_response', 'compliance', 'monitoring']
-  }
+
               type: {
                 type: 'string',
                 enum: ['preventive', 'detective', 'corrective', 'compensating']
-  }
+
               implementation: {
                 type: 'object',
                 properties: {
@@ -184,8 +188,8 @@ export default async function securityControlTestingRoutes(
                   configuration: { type: 'object' },
                   dependencies: { type: 'array', items: { type: 'string' } },
                   deployment_scope: { type: 'array', items: { type: 'string' } }
-                }
-  }
+
+
               testing_parameters: {
                 type: 'object',
                 properties: {
@@ -194,14 +198,14 @@ export default async function securityControlTestingRoutes(
                   success_criteria: { type: 'object' },
                   performance_thresholds: { type: 'object' },
                   failure_conditions: { type: 'array', items: { type: 'string' } }
-                }
-              }
-            }
-  }
+
+
+
+
           schedule_immediate_test: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<{ Body: ControlRegistrationRequest }>,
     reply: FastifyReply
@@ -219,10 +223,10 @@ export default async function securityControlTestingRoutes(
             test_count: testResults.length,
             overall_result: testResults.every(test => test.test_results.overall_result === 'pass') ? 'pass' : 'fail'
           };
-        } catch (error) {
+ catch (error) {
           fastify.log.warn(`Initial test failed for control ${control.id}:`, error);
-        }
-      }
+
+
 
       return {
         success: true,
@@ -233,18 +237,18 @@ export default async function securityControlTestingRoutes(
           baseline_established: true,
           initial_test_result: initialTestResult,
           next_scheduled_test: Date.now() + (control.testing_parameters.test_frequency_hours * 60 * 60 * 1000)
-  }
+
         message: `Security control '${control.name}' registered successfully`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error registering security control:', error);
       return {
         success: false,
         error: `Failed to register security control: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -266,16 +270,16 @@ export default async function securityControlTestingRoutes(
             items: {
               type: 'string',
               enum: ['functional', 'performance', 'security', 'regression', 'integration', 'load']
-            }
-  }
+
+
           environment: {
             type: 'string',
             enum: ['production', 'staging', 'testing', 'development']
-  }
+
           notify_on_completion: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: ControlTestRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { 
@@ -283,7 +287,7 @@ export default async function securityControlTestingRoutes(
         test_types = ['functional', 'performance'], 
         environment = 'testing',
         notify_on_completion = false 
-      } = request.body;
+ = request.body;
 
       const testResults = await engine.testSecurityControl(control_id, test_types, environment);
 
@@ -312,7 +316,7 @@ export default async function securityControlTestingRoutes(
             average_success_rate: Math.round(avgSuccessRate * 100) / 100,
             total_issues_found: totalIssues,
             critical_issues_found: criticalIssues
-  }
+
           detailed_results: testResults.map(test => ({
             test_id: test.test_id,
             test_type: test.test_type,
@@ -325,18 +329,18 @@ export default async function securityControlTestingRoutes(
             recommendations: test.test_results.recommendations
           })),
           next_actions: this.generateNextActions(overallResult, totalIssues, criticalIssues)
-  }
+
         message: `Security control testing completed with ${overallResult} result`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error executing security control test:', error);
       return {
         success: false,
         error: `Failed to execute security control test: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -356,18 +360,18 @@ export default async function securityControlTestingRoutes(
           optimization_targets: {
             type: 'array',
             items: { type: 'string' }
-  }
+
           apply_automatically: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: OptimizationRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { 
         control_id, 
         optimization_targets = ['effectiveness', 'performance'], 
         apply_automatically = false 
-      } = request.body;
+ = request.body;
 
       const optimizationResult = await engine.optimizeSecurityControl(control_id, optimization_targets);
 
@@ -381,29 +385,29 @@ export default async function securityControlTestingRoutes(
             applied_optimizations: optimizationResult.applied_optimizations,
             expected_improvements: optimizationResult.expected_improvements,
             monitoring_plan: optimizationResult.monitoring_plan
-  }
+
           validation: {
             validation_scheduled: true,
             validation_eta_minutes: 5,
             monitoring_duration_days: 7
-  }
+
           recommendations: [
             'Monitor control performance for next 24 hours',
             'Schedule follow-up effectiveness testing',
             'Document optimization changes for compliance'
           ]
-  }
+
         message: `Security control optimization initiated with ${optimizationResult.applied_optimizations.length} improvements`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error optimizing security control:', error);
       return {
         success: false,
         error: `Failed to optimize security control: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -415,7 +419,7 @@ export default async function securityControlTestingRoutes(
     schema: {
       description: 'Get comprehensive security control testing analytics and insights',
       tags: ['Security Controls', 'Analytics']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const analytics = engine.getTestingAnalytics();
@@ -431,17 +435,17 @@ export default async function securityControlTestingRoutes(
           recent_activities: analytics.recent_activities,
           insights: this.generateAnalyticsInsights(analytics),
           recommendations: this.generateAnalyticsRecommendations(analytics)
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting testing analytics:', error);
       return {
         success: false,
         error: `Failed to get testing analytics: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -459,15 +463,15 @@ export default async function securityControlTestingRoutes(
           report_type: {
             type: 'string',
             enum: ['individual_control', 'category_summary', 'comprehensive', 'trend_analysis']
-  }
+
           start_date: { type: 'number' },
           end_date: { type: 'number' },
           control_ids: { type: 'array', items: { type: 'string' } },
           include_detailed_findings: { type: 'boolean' },
           include_compliance_assessment: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: ReportRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { 
@@ -477,7 +481,7 @@ export default async function securityControlTestingRoutes(
         control_ids,
         include_detailed_findings = true,
         include_compliance_assessment = true
-      } = request.body;
+ = request.body;
 
       const report = await engine.generateEffectivenessReport(report_type, start_date, end_date, control_ids);
 
@@ -498,21 +502,21 @@ export default async function securityControlTestingRoutes(
             report_type: report.report_type,
             reporting_period_days: report.reporting_period.duration_days,
             controls_analyzed: report.executive_summary.total_controls_tested
-  }
+
           executive_insights: this.generateExecutiveInsights(report),
           action_items: this.generateActionItems(report)
-  }
+
         message: `${report_type} effectiveness report generated successfully`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error generating effectiveness report:', error);
       return {
         success: false,
         error: `Failed to generate effectiveness report: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -529,9 +533,9 @@ export default async function securityControlTestingRoutes(
         required: ['controlId'],
         properties: {
           controlId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { controlId: string } }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { controlId } = request.params;
@@ -550,19 +554,19 @@ export default async function securityControlTestingRoutes(
           false_positive_rate: 1.8,
           response_time_ms: 245,
           availability_percent: 99.95
-  }
+
         recent_test_results: {
           total_tests_last_24h: 12,
           passed_tests: 11,
           failed_tests: 0,
           warning_tests: 1,
           average_success_rate: 96.8
-  }
+
         optimization_potential: {
           score: 25,
           opportunities: ['Response time optimization', 'False positive reduction'],
           estimated_impact: { effectiveness_improvement: 5, performance_improvement: 15 }
-  }
+
         next_scheduled_test: Date.now() + 82800000, // 23 hours from now
         compliance_status: ['SOX: Compliant', 'PCI_DSS: Compliant', 'GDPR: Partial']
       };
@@ -572,14 +576,14 @@ export default async function securityControlTestingRoutes(
         data: controlStatus,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting control status:', error);
       return {
         success: false,
         error: `Failed to get control status: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -590,7 +594,7 @@ export default async function securityControlTestingRoutes(
     schema: {
       description: 'Get security control testing engine health status',
       tags: ['Security Controls', 'Health Check']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const analytics = engine.getTestingAnalytics();
@@ -610,23 +614,23 @@ export default async function securityControlTestingRoutes(
             test_success_rate: analytics.performance_metrics.test_success_rate_percent,
             critical_issues: analytics.performance_metrics.critical_issues_found,
             average_effectiveness: analytics.summary.average_effectiveness_score
-  }
+
           system_metrics: {
             continuous_testing_active: true,
             baseline_establishment_complete: true,
             optimization_engine_connected: true,
             reporting_system_operational: true
-  }
+
           recent_performance: {
             tests_completed_24h: analytics.summary.completed_tests_24h,
             average_test_duration: analytics.performance_metrics.average_test_duration_seconds,
             optimization_opportunities: analytics.performance_metrics.optimization_opportunities
-  }
+
           last_check: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting testing engine health:', error);
       return {
         success: false,
@@ -634,11 +638,11 @@ export default async function securityControlTestingRoutes(
           healthy: false,
           engine_status: 'error',
           error_message: error.message
-  }
+
         error: 'Failed to get engine health status',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Helper methods for generating insights and recommendations
@@ -647,19 +651,19 @@ export default async function securityControlTestingRoutes(
     
     if (overallResult === 'fail') {
       actions.push('Immediate investigation required - control failing validation criteria');
-    }
+
     
     if (criticalIssues > 0) {
       actions.push(`Address ${criticalIssues} critical security issues immediately`);
-    }
+
     
     if (totalIssues > criticalIssues) {
       actions.push(`Review and resolve ${totalIssues - criticalIssues} non-critical issues`);
-    }
+
     
     if (overallResult === 'pass' && totalIssues === 0) {
       actions.push('Control performing well - schedule regular monitoring');
-    }
+
     
     return actions.length > 0 ? actions : ['Monitor control performance and schedule next testing cycle'];
   };
@@ -669,23 +673,23 @@ export default async function securityControlTestingRoutes(
     
     if (analytics.summary.average_effectiveness_score < 85) {
       insights.push('Overall control effectiveness below recommended threshold (85%)');
-    }
+
     
     if (analytics.performance_metrics.critical_issues_found > 0) {
       insights.push(`${analytics.performance_metrics.critical_issues_found} critical issues require immediate attention`);
-    }
+
     
     if (analytics.trends.effectiveness_trend_7days === 'declining') {
       insights.push('Control effectiveness showing declining trend over past 7 days');
-    }
+
     
     if (analytics.performance_metrics.optimization_opportunities > 5) {
       insights.push(`${analytics.performance_metrics.optimization_opportunities} controls identified for optimization`);
-    }
+
     
     if (insights.length === 0) {
       insights.push('Security control portfolio appears to be performing well');
-    }
+
     
     return insights;
   };
@@ -695,15 +699,15 @@ export default async function securityControlTestingRoutes(
     
     if (analytics.performance_metrics.test_success_rate_percent < 90) {
       recommendations.push('Review and improve controls with low test success rates');
-    }
+
     
     if (analytics.summary.active_tests === 0) {
       recommendations.push('Consider increasing testing frequency for critical controls');
-    }
+
     
     if (analytics.trends.issue_detection_trend === 'increasing') {
       recommendations.push('Investigate root causes of increasing issue detection rates');
-    }
+
     
     recommendations.push('Maintain regular testing schedule and baseline reviews');
     
@@ -715,20 +719,20 @@ export default async function securityControlTestingRoutes(
     
     if (report.executive_summary.overall_effectiveness_score < 80) {
       insights.push('Overall security control effectiveness requires improvement');
-    }
+
     
     if (report.executive_summary.critical_issues > 0) {
       insights.push(`${report.executive_summary.critical_issues} critical security issues identified`);
-    }
+
     
     if (report.executive_summary.optimization_opportunities > 0) {
       insights.push(`${report.executive_summary.optimization_opportunities} optimization opportunities available`);
-    }
+
     
     const passRate = (report.executive_summary.passed_controls / report.executive_summary.total_controls_tested) * 100;
     if (passRate > 90) {
       insights.push('Strong overall security control performance');
-    }
+
     
     return insights;
   };
@@ -740,19 +744,19 @@ export default async function securityControlTestingRoutes(
     for (const rec of report.recommendations.immediate_actions) {
       if (rec.priority === 'critical' || rec.priority === 'high') {
         actions.push(`${rec.recommendation.title}: ${rec.recommendation.description}`);
-      }
-    }
+
+
     
     // Compliance actions
     for (const gap of report.compliance_status.compliance_gaps) {
       if (gap.severity === 'critical' || gap.severity === 'high') {
         actions.push(`Address ${gap.framework} compliance gap: ${gap.gap_description}`);
-      }
-    }
+
+
     
     if (actions.length === 0) {
       actions.push('Continue regular monitoring and testing schedule');
-    }
+
     
     return actions.slice(0, 10); // Limit to top 10 actions
   };
@@ -795,6 +799,5 @@ export default async function securityControlTestingRoutes(
     if (controlTestingEngine) {
       await controlTestingEngine.shutdown();
       fastify.log.info('Security Control Testing Engine shut down');
-    }
+
   });
-}

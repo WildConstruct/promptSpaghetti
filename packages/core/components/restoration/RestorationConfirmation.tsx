@@ -1,6 +1,5 @@
 import React from 'react';
-import { 
-  Card, 
+import { Card, 
   Alert, 
   Typography, 
   Space, 
@@ -10,36 +9,35 @@ import {
   Col,
   Statistic,
   Tag,
-  List,
+  List }
   Tooltip
-} from 'antd';
-import {
-  WarningOutlined,
+ from 'antd';
+import { WarningOutlined,
   InfoCircleOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
   SafetyOutlined,
-  ClockCircleOutlined,
+  ClockCircleOutlined }
   EditOutlined
-} from '@ant-design/icons';
-import { 
-  RestorationPreviewResponse, 
-  RestorationConfig,
+ from '@ant-design/icons';
+import { RestorationPreviewResponse, 
+  RestorationConfig }
   CONFLICT_DESCRIPTIONS
-} from '../../types/restoration';
+ from '../../types/restoration';
 const { Title, Text } = Typography;
-}
-interface RestorationConfirmationProps {
-  preview: RestorationPreviewResponse;
+
+
+interface RestorationConfirmationProps { preview: RestorationPreviewResponse;
   config: RestorationConfig;
-  onConfirm: () => void;
+  onConfirm: () => void
   onCancel: () => void;
-  export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = ({,)
-  preview,
-  config,
-  onConfirm,
+  export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = ({);
+  preview;
+  config;
+  onConfirm }
   onCancel
-}
+
+
 }) => {
   const hasConflicts = preview.summary.totalConflicts > 0;
   const isHighRisk = preview.summary.riskLevel === 'high';
@@ -60,15 +58,13 @@ interface RestorationConfirmationProps {
       actions.push({ type: 'delete', count: preview.preview.edgesToDelete.length, item: 'edges' });
     return actions;
   };
-  const getConflictSummary = () => {
-    const conflictTypes = preview.conflicts.reduce((acc, conflict) => {
+  const getConflictSummary = () => { const conflictTypes = preview.conflicts.reduce((acc, conflict) => {
       acc[conflict.conflictType] = (acc[conflict.conflictType] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    return Object.entries(conflictTypes).map(([type, count]) => ({)
-  type,
-  count,
-  description: CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS],
+      return acc }, {} as Record<string, number>);
+    return Object.entries(conflictTypes).map(([type, count]) => ({ )
+  type
+  count
+  description: CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS] }
 }));
   };
   const getActionIcon = (type: string) => {
@@ -82,17 +78,16 @@ interface RestorationConfirmationProps {
     default:
       return <InfoCircleOutlined />;
   };
-  const _____getActionColor = (type: string) => {
-  switch (type) {
-  case 'add':,
+  const _____getActionColor = (type: string) => { switch (type) {
+  case 'add':
   return 'success';
-  case 'update':,
+  case 'update':
   return 'processing';
-  case 'delete':,
+  case 'delete':
   return 'error';
-  default:,
+  default: }
   return 'default'
-  };
+};
   const formatDuration = (milliseconds: number) => {
     if (milliseconds < 1000) {
       return `${milliseconds}ms`;}
@@ -159,10 +154,10 @@ interface RestorationConfirmationProps {
               title="Risk Level"
               value={preview.summary.riskLevel.toUpperCase()}
               prefix={<SafetyOutlined />}
-              valueStyle={{
-  color: preview.summary.riskLevel === 'high' ? '#ff4d4f' : ,
-  preview.summary.riskLevel === 'medium' ? '#fa8c16' : '#3f8600',
-}}
+              valueStyle={ {
+  color: preview.summary.riskLevel === 'high' ? '#ff4d4f' : 
+  preview.summary.riskLevel === 'medium' ? '#fa8c16' : '#3f8600' }
+}
             />
           </Card>
         </Col>
@@ -246,25 +241,22 @@ interface RestorationConfirmationProps {
           <Card title="Safety Measures" style={{ marginBottom: '16px' }}>
             <List
               size="small"
-              dataSource={[
+              dataSource={ [
                 {
-  text: 'Backup will be created before restoration',
-  enabled: config.createBackup,
-  icon: <SafetyOutlined />,
-}
-                {
-  text: 'Current changes will be preserved where possible',
-  enabled: config.preserveCurrentChanges,
-  icon: <CheckCircleOutlined />,
-}
-                {
-  text: 'Operation can be monitored in real-time',
-  enabled: true,
-  icon: <InfoCircleOutlined />,
-}
-                { 
-                  text: 'Notification will be sent on completion', 
-                  enabled: config.notifyOnCompletion,
+  text: 'Backup will be created before restoration'
+  enabled: config.createBackup
+  icon: <SafetyOutlined /> }
+
+                { text: 'Current changes will be preserved where possible'
+  enabled: config.preserveCurrentChanges
+  icon: <CheckCircleOutlined /> }
+
+                { text: 'Operation can be monitored in real-time'
+  enabled: true
+  icon: <InfoCircleOutlined /> }
+
+                { text: 'Notification will be sent on completion'
+                  enabled: config.notifyOnCompletion }
                   icon: <InfoCircleOutlined />]}
               renderItem={(item) => ()
                 <List.Item>

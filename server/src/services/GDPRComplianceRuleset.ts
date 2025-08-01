@@ -25,10 +25,10 @@ import {
   RuleTesting,
   RuleLifecycle,
   RuleCompliance
-} from './ComplianceRuleEngine';
+ from './ComplianceRuleEngine';
 
-}
-}
+
+
 export interface GDPRRulesetConfig {
   jurisdiction: 'EU' | 'EEA' | 'UK' | 'GLOBAL';
   dataSubjectRights: boolean;
@@ -41,9 +41,10 @@ export interface GDPRRulesetConfig {
   dpoRequirements: boolean;
   recordKeeping: boolean;
   impactAssessments: boolean;
-}
-}
-}
+
+
+
+
 
 export class GDPRComplianceRuleset {
   private config: GDPRRulesetConfig;
@@ -66,7 +67,7 @@ export class GDPRComplianceRuleset {
     };
 
     this.generateGDPRRules();
-  }
+
 
   /**
    * Generate comprehensive GDPR compliance rules
@@ -110,7 +111,7 @@ export class GDPRComplianceRuleset {
 
     // Article 83 - Administrative fines
     this.addComplianceEnforcementRules();
-  }
+
 
   /**
    * Article 5 - Data Processing Principles Rules
@@ -142,7 +143,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -150,7 +151,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -163,7 +164,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -172,7 +173,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -209,7 +210,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: true,
@@ -217,7 +218,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -230,7 +231,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 2, order: 1 } as any,
           execution: {} as any,
@@ -239,7 +240,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -276,7 +277,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -284,7 +285,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -297,7 +298,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -306,7 +307,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -316,7 +317,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 5(1)(e)'])
     });
-  }
+
 
   /**
    * Article 6 - Lawful Basis Rules
@@ -347,7 +348,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: true,
@@ -355,7 +356,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -368,7 +369,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -377,7 +378,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -387,7 +388,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 6'])
     });
-  }
+
 
   /**
    * Article 7 - Consent Management Rules
@@ -419,7 +420,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -427,7 +428,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -440,7 +441,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -449,7 +450,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -486,7 +487,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: true,
@@ -494,7 +495,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -507,7 +508,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 2, order: 1 } as any,
           execution: {} as any,
@@ -516,7 +517,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -526,7 +527,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 7(3)'])
     });
-  }
+
 
   /**
    * Article 8 - Child Consent Rules
@@ -557,7 +558,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -565,7 +566,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -578,7 +579,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -587,7 +588,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -597,7 +598,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 8'])
     });
-  }
+
 
   /**
    * Article 9 - Special Category Data Rules
@@ -628,7 +629,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -636,7 +637,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-  }
+
         {
           conditionId: 'validate-special-conditions',
           type: 'CUSTOM' as ConditionType,
@@ -649,7 +650,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: true,
@@ -657,7 +658,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -670,7 +671,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -679,7 +680,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -689,7 +690,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 9'])
     });
-  }
+
 
   /**
    * Articles 12-23 - Data Subject Rights Rules
@@ -721,7 +722,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -729,7 +730,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -742,7 +743,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 2, order: 1 } as any,
           execution: {} as any,
@@ -751,7 +752,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -788,7 +789,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -796,7 +797,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -809,7 +810,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 2, order: 1 } as any,
           execution: {} as any,
@@ -818,7 +819,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -855,7 +856,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -863,7 +864,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -876,7 +877,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -885,7 +886,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -895,7 +896,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 17'])
     });
-  }
+
 
   /**
    * Article 25 - Privacy by Design Rules
@@ -926,7 +927,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: true,
@@ -934,7 +935,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -947,7 +948,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 2, order: 1 } as any,
           execution: {} as any,
@@ -956,7 +957,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -966,7 +967,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 25'])
     });
-  }
+
 
   /**
    * Article 32 - Security of Processing Rules
@@ -997,7 +998,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: true,
@@ -1005,7 +1006,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -1018,7 +1019,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -1027,7 +1028,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -1037,7 +1038,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 32'])
     });
-  }
+
 
   /**
    * Articles 33-34 - Breach Notification Rules
@@ -1069,7 +1070,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -1077,7 +1078,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -1090,7 +1091,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -1099,7 +1100,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -1136,7 +1137,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -1144,7 +1145,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -1157,7 +1158,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -1166,7 +1167,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -1176,7 +1177,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 34'])
     });
-  }
+
 
   /**
    * Article 35 - DPIA Rules
@@ -1207,7 +1208,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -1215,7 +1216,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-  }
+
         {
           conditionId: 'validate-dpia-completion',
           type: 'CUSTOM' as ConditionType,
@@ -1228,7 +1229,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: true,
@@ -1236,7 +1237,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -1249,7 +1250,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -1258,7 +1259,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -1268,7 +1269,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 35'])
     });
-  }
+
 
   /**
    * Articles 44-49 - International Transfer Rules
@@ -1299,7 +1300,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: true,
@@ -1307,7 +1308,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -1320,7 +1321,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -1329,7 +1330,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -1339,7 +1340,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 44', 'Article 45', 'Article 46'])
     });
-  }
+
 
   /**
    * Article 30 - Record Keeping Rules
@@ -1370,7 +1371,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: true,
@@ -1378,7 +1379,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -1391,7 +1392,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 3, order: 1 } as any,
           execution: {} as any,
@@ -1400,7 +1401,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -1410,7 +1411,7 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 30'])
     });
-  }
+
 
   /**
    * Article 83 - Compliance Enforcement Rules
@@ -1441,7 +1442,7 @@ export class GDPRComplianceRuleset {
             transformation: [],
             validation: {} as any,
             caching: {} as any
-          }],
+],
           context: {} as any,
           evaluation: {} as any,
           negated: false,
@@ -1449,7 +1450,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        }
+
       ],
       actions: [
         {
@@ -1462,7 +1463,7 @@ export class GDPRComplianceRuleset {
             type: 'STRING',
             required: true,
             validation: {} as any
-          }],
+],
           conditions: [],
           priority: { level: 1, order: 1 } as any,
           execution: {} as any,
@@ -1471,7 +1472,7 @@ export class GDPRComplianceRuleset {
           notification: {} as any,
           audit: {} as any,
           compliance: {} as any
-        }
+
       ],
       conflicts: [],
       dependencies: [],
@@ -1481,14 +1482,14 @@ export class GDPRComplianceRuleset {
       lifecycle: {} as any,
       compliance: this.createGDPRCompliance(['Article 83'])
     });
-  }
+
 
   /**
    * Helper methods for creating rule components
    */
   private addRule(rule: ComplianceRule): void {
     this.rules.set(rule.ruleId, rule);
-  }
+
 
   private createDataProcessingScope(): RuleScope {
     return {
@@ -1499,7 +1500,7 @@ export class GDPRComplianceRuleset {
         conditions: [],
         triggers: [],
         exemptions: []
-  }
+
       dataTypes: [],
       processingActivities: [],
       geographicScope: {
@@ -1509,7 +1510,7 @@ export class GDPRComplianceRuleset {
         adequacyDecisions: [],
         transferMechanisms: [],
         localizations: []
-  }
+
       organizationalScope: {
         departments: [],
         roles: [],
@@ -1519,7 +1520,7 @@ export class GDPRComplianceRuleset {
         processors: [],
         controllers: [],
         jointControllers: []
-  }
+
       temporalScope: {
         effectiveDate: new Date('2018-05-25'), // GDPR effective date
         activationTriggers: [],
@@ -1528,7 +1529,7 @@ export class GDPRComplianceRuleset {
         frequency: {} as any,
         businessHours: {} as any,
         holidays: []
-  }
+
       technicalScope: {
         systems: [],
         platforms: [],
@@ -1538,87 +1539,87 @@ export class GDPRComplianceRuleset {
         storageTypes: [],
         networkTypes: [],
         deploymentTypes: []
-  }
+
       exceptions: []
     };
-  }
+
 
   private createDataCollectionScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'data-collection-scope'
     };
-  }
+
 
   private createDataStorageScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'data-storage-scope'
     };
-  }
+
 
   private createConsentScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'consent-scope'
     };
-  }
+
 
   private createChildDataScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'child-data-scope'
     };
-  }
+
 
   private createSpecialCategoryDataScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'special-category-scope'
     };
-  }
+
 
   private createDataSubjectRightsScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'data-subject-rights-scope'
     };
-  }
+
 
   private createSystemDesignScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'system-design-scope'
     };
-  }
+
 
   private createBreachNotificationScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'breach-notification-scope'
     };
-  }
+
 
   private createInternationalTransferScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'international-transfer-scope'
     };
-  }
+
 
   private createRecordKeepingScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'record-keeping-scope'
     };
-  }
+
 
   private createComplianceScope(): RuleScope {
     return {
       ...this.createDataProcessingScope(),
       scopeId: 'compliance-scope'
     };
-  }
+
 
   private createRuleMetadata(name: string, article: string): RuleMetadata {
     return {
@@ -1634,22 +1635,22 @@ export class GDPRComplianceRuleset {
         title: name,
         description: `GDPR ${article} compliance rule`,
         url: `https://gdpr-info.eu/${article.toLowerCase().replace(/\s+/g, '-')}/`
-      } as any,
+ as any,
       references: [{
         type: 'LEGAL',
         title: `GDPR ${article}`,
         url: `https://gdpr-info.eu/${article.toLowerCase().replace(/\s+/g, '-')}/`,
         description: `Official GDPR text for ${article}`
-      }],
+],
       changelog: [{
         version: '1.0.0',
         date: new Date(),
         author: 'GDPR Compliance Team',
         changes: [`Initial implementation of ${name} rule`]
-      }],
+],
       annotations: []
     };
-  }
+
 
   private createGDPRCompliance(articles: string[]): RuleCompliance {
     return {
@@ -1660,7 +1661,7 @@ export class GDPRComplianceRuleset {
         articles,
         requirements: articles,
         status: 'COMPLIANT'
-      }],
+],
       certifications: [],
       audits: [],
       assessments: [],
@@ -1668,26 +1669,26 @@ export class GDPRComplianceRuleset {
       evidence: [],
       attestations: []
     };
-  }
+
 
   /**
    * Public API Methods
    */
   public getAllRules(): ComplianceRule[] {
     return Array.from(this.rules.values());
-  }
+
 
   public getRulesByCategory(category: RuleCategory): ComplianceRule[] {
     return Array.from(this.rules.values()).filter(rule => rule.category === category);
-  }
+
 
   public getRulesByPriority(priority: RulePriority): ComplianceRule[] {
     return Array.from(this.rules.values()).filter(rule => rule.priority === priority);
-  }
+
 
   public getRule(ruleId: string): ComplianceRule | undefined {
     return this.rules.get(ruleId);
-  }
+
 
   public getRulesByArticle(article: string): ComplianceRule[] {
     return Array.from(this.rules.values()).filter(rule => 
@@ -1695,25 +1696,25 @@ export class GDPRComplianceRuleset {
         framework.articles.includes(article)
 
     );
-  }
+
 
   public getConfig(): GDPRRulesetConfig {
     return { ...this.config };
-  }
+
 
   public updateConfig(updates: Partial<GDPRRulesetConfig>): void {
     this.config = { ...this.config, ...updates };
     // Regenerate rules based on new configuration
     this.rules.clear();
     this.generateGDPRRules();
-  }
+
 
   public getRuleStats(): {
     totalRules: number;
     rulesByCategory: Record<RuleCategory, number>;
     rulesByPriority: Record<RulePriority, number>;
     rulesBySeverity: Record<RuleSeverity, number>;
-    } {
+ {
     const rules = Array.from(this.rules.values());
     
     const rulesByCategory = {} as Record<RuleCategory, number>;
@@ -1724,7 +1725,7 @@ export class GDPRComplianceRuleset {
       rulesByCategory[rule.category] = (rulesByCategory[rule.category] || 0) + 1;
       rulesByPriority[rule.priority] = (rulesByPriority[rule.priority] || 0) + 1;
       rulesBySeverity[rule.severity] = (rulesBySeverity[rule.severity] || 0) + 1;
-    }
+
 
     return {
       totalRules: rules.length,
@@ -1732,7 +1733,7 @@ export class GDPRComplianceRuleset {
       rulesByPriority,
       rulesBySeverity
     };
-  }
-}
+
+
 
 export default GDPRComplianceRuleset;

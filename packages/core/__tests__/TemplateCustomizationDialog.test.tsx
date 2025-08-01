@@ -8,41 +8,30 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
 // Mock useExport hook
-const mockUseExport = {
-  updateTemplate: jest.fn<unknown, unknown>(),
-  previewTemplate: jest.fn<unknown, unknown>(),
-};
-jest.mock('../hooks/useExport', () => ({)
-  useExport: () => mockUseExport,
+const mockUseExport = {};
+jest.mock('../hooks/useExport', () => ({ )
+  useExport: () => mockUseExport }
 }));
 import { TemplateCustomizationDialog } from '../components/export/TemplateCustomizationDialog';
 
 // Mock template data
-const mockTemplate = {
-  id: 'template-1',
-  name: 'JSON Export Template',
-  description: 'Standard JSON export with customizable options',
-  export_format: 'json' as const,
-  template_type: 'full' as const,
-  is_public: false,
-  is_system_template: false,
+const mockTemplate = { id: 'template-1'
+  name: 'JSON Export Template'
+  description: 'Standard JSON export with customizable options'
+  export_format: 'json' as const
+  template_type: 'full' as const
+  is_public: false
+  is_system_template: false
   format_options: {
-  indent: 2,
-  includeMetadata: true,
-  dateFormat: 'iso',
-},
-  created_at: '2024-01-01T00:00:00Z',
-  updated_at: '2024-01-01T00:00:00Z',
+  indent: 2
+  includeMetadata: true
+  dateFormat: 'iso' }
+
+  created_at: '2024-01-01T00:00:00Z'
+  updated_at: '2024-01-01T00:00:00Z'
   created_by: 'user-1';
   };
-const defaultProps = {
-  template: mockTemplate,
-  visible: true,
-  onClose: jest.fn<unknown, unknown>(),
-  onSave: jest.fn<unknown, unknown>(),
-  onPreview: jest.fn<unknown, unknown>(),
-  projectId: 'test-project',
-};
+const defaultProps = {};
 describe('TemplateCustomizationDialog', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -142,15 +131,12 @@ describe('TemplateCustomizationDialog', () => {
       // Validation should be applied but we need to trigger save to see errors
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
-      await waitFor(() => {
-        expect(screen.getByText('Indentation must be at most 8')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Indentation must be at most 8')).toBeInTheDocument() });
     });
-    it('validates required fields', async () => {
-      // Create a template with XML format that has required fields
+    it('validates required fields', async () => { // Create a template with XML format that has required fields
       const xmlTemplate = {
-        ...mockTemplate,
-        export_format: 'xml' as const,
+        ...mockTemplate
+        export_format: 'xml' as const }
         format_options: { rootElement: 'export' }
       };
       render(<TemplateCustomizationDialog {...defaultProps} template={xmlTemplate} />);
@@ -159,9 +145,7 @@ describe('TemplateCustomizationDialog', () => {
       await userEvent.clear(rootElementInput);
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
-      await waitFor(() => {
-        expect(screen.getByText('Root Element is required')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Root Element is required')).toBeInTheDocument() });
     });
     it('shows validation errors in input styling', async () => {
       render(<TemplateCustomizationDialog {...defaultProps} />);
@@ -170,10 +154,9 @@ describe('TemplateCustomizationDialog', () => {
       await userEvent.type(indentInput, '10'); // Above max
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
-      await waitFor(() => {
-  expect(indentInput).toHaveStyle({ )
-  border: '1px solid #ef4444',
-  background: '#fef2f2',
+      await waitFor(() => { expect(indentInput).toHaveStyle({ )
+  border: '1px solid #ef4444'
+  background: '#fef2f2' }
 });
       });
     });
@@ -183,10 +166,9 @@ describe('TemplateCustomizationDialog', () => {
       render(<TemplateCustomizationDialog {...defaultProps} />);
       const previewButton = screen.getByText('👁️ Preview');
       await userEvent.click(previewButton);
-      await waitFor(() => {
-  expect(mockUseExport.previewTemplate).toHaveBeenCalledWith({)
-  ...mockTemplate,
-  format_options: expect.any(Object),
+      await waitFor(() => { expect(mockUseExport.previewTemplate).toHaveBeenCalledWith({)
+  ...mockTemplate
+  format_options: expect.any(Object) }
 });
       });
       expect(defaultProps.onPreview).toHaveBeenCalledWith({ preview: 'sample output' });
@@ -203,9 +185,7 @@ describe('TemplateCustomizationDialog', () => {
       render(<TemplateCustomizationDialog {...defaultProps} />);
       const previewButton = screen.getByText('👁️ Preview');
       await userEvent.click(previewButton);
-      await waitFor(() => {
-  expect(screen.getByText(/Error: Preview failed/)).toBeInTheDocument();
-});
+      await waitFor(() => { expect(screen.getByText(/Error: Preview failed/)).toBeInTheDocument() });
     });
   });
   describe('Save Functionality', () => {
@@ -217,12 +197,11 @@ describe('TemplateCustomizationDialog', () => {
       await userEvent.type(indentInput, '4');
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
-      await waitFor(() => {
-  expect(defaultProps.onSave).toHaveBeenCalledWith({)
-  ...mockTemplate,
-  format_options: expect.objectContaining({,)
-  indent: 4,
-}),
+      await waitFor(() => { expect(defaultProps.onSave).toHaveBeenCalledWith({)
+  ...mockTemplate
+  format_options: expect.objectContaining({)
+  indent: 4 }
+})
           custom_fields: {}
         });
       });
@@ -251,50 +230,44 @@ describe('TemplateCustomizationDialog', () => {
       render(<TemplateCustomizationDialog {...defaultProps} onSave={undefined} />);
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
-      await waitFor(() => {
-  expect(screen.getByText(/Error: Save failed/)).toBeInTheDocument();
-});
+      await waitFor(() => { expect(screen.getByText(/Error: Save failed/)).toBeInTheDocument() });
     });
     it('uses updateTemplate when onSave is not provided', async () => {
       render(<TemplateCustomizationDialog {...defaultProps} onSave={undefined} />);
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
-      await waitFor(() => {
-        expect(mockUseExport.updateTemplate).toHaveBeenCalledWith()
-          mockTemplate.id,
+      await waitFor(() => { expect(mockUseExport.updateTemplate).toHaveBeenCalledWith()
+          mockTemplate.id
           expect.objectContaining({)
-  format_options: expect.any(Object),
+  format_options: expect.any(Object) }
             custom_fields: {}
   }
         );
       });
     });
   });
-  describe('Different Export Formats', () => {
-    it('shows YAML-specific parameters for YAML templates', () => {
+  describe('Different Export Formats', () => { it('shows YAML-specific parameters for YAML templates', () => {
       const yamlTemplate = {
-        ...mockTemplate,
-        export_format: 'yaml' as const,
+        ...mockTemplate
+        export_format: 'yaml' as const }
         format_options: { flowLevel: -1, quotingType: 'auto' }
       };
       render(<TemplateCustomizationDialog {...defaultProps} template={yamlTemplate} />);
       expect(screen.getByText('Flow Level')).toBeInTheDocument();
       expect(screen.getByText('String Quoting')).toBeInTheDocument();
     });
-    it('shows CSV-specific parameters for CSV templates', () => {
-      const csvTemplate = {
-        ...mockTemplate,
-        export_format: 'csv' as const,
+    it('shows CSV-specific parameters for CSV templates', () => { const csvTemplate = {
+        ...mockTemplate
+        export_format: 'csv' as const }
         format_options: { delimiter: ',', includeHeaders: true }
       };
       render(<TemplateCustomizationDialog {...defaultProps} template={csvTemplate} />);
       expect(screen.getByText('Delimiter')).toBeInTheDocument();
       expect(screen.getByText('Include Column Headers')).toBeInTheDocument();
     });
-    it('shows VFX-specific parameters for VFX templates', () => {
-      const vfxTemplate = {
-        ...mockTemplate,
-        export_format: 'vfx' as const,
+    it('shows VFX-specific parameters for VFX templates', () => { const vfxTemplate = {
+        ...mockTemplate
+        export_format: 'vfx' as const }
         format_options: { pipeline: 'standard', frameRange: '1-100' }
       };
       render(<TemplateCustomizationDialog {...defaultProps} template={vfxTemplate} />);
@@ -324,12 +297,11 @@ describe('TemplateCustomizationDialog', () => {
       expect(screen.queryByText('Cancel')).not.toBeInTheDocument();
     });
   });
-  describe('Special Input Types', () => {
-    it('renders color inputs correctly', () => {
+  describe('Special Input Types', () => { it('renders color inputs correctly', () => {
       // Create a template with color parameter (hypothetical)
       const customTemplate = {
-        ...mockTemplate,
-        export_format: 'html' as const,
+        ...mockTemplate
+        export_format: 'html' as const }
         format_options: { backgroundColor: '#ffffff' }
       };
       render(<TemplateCustomizationDialog {...defaultProps} template={customTemplate} />);
@@ -350,10 +322,9 @@ describe('TemplateCustomizationDialog', () => {
       expect(screen.getByLabelText(/Indentation/)).toBeInTheDocument();
       expect(screen.getByLabelText(/Date Format/)).toBeInTheDocument();
     });
-    it('marks required fields appropriately', () => {
-      const xmlTemplate = {
-        ...mockTemplate,
-        export_format: 'xml' as const,
+    it('marks required fields appropriately', () => { const xmlTemplate = {
+        ...mockTemplate
+        export_format: 'xml' as const }
         format_options: { rootElement: 'export' }
       };
       render(<TemplateCustomizationDialog {...defaultProps} template={xmlTemplate} />);
@@ -366,25 +337,21 @@ describe('TemplateCustomizationDialog', () => {
       await userEvent.type(indentInput, '10');
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
-      await waitFor(() => {
-        const errorMessage = screen.getByText('Indentation must be at most 8');
-        expect(errorMessage).toBeInTheDocument();
-      });
+      await waitFor(() => { const errorMessage = screen.getByText('Indentation must be at most 8');
+        expect(errorMessage).toBeInTheDocument() });
     });
   });
-  describe('Edge Cases', () => {
-  it('handles missing format options gracefully', () => {
+  describe('Edge Cases', () => { it('handles missing format options gracefully', () => {
   const templateWithoutOptions = {
-  ...mockTemplate,
-  format_options: undefined,
+  ...mockTemplate
+  format_options: undefined }
 };
       expect(() => {
         render(<TemplateCustomizationDialog {...defaultProps} template={templateWithoutOptions} />);
       }).not.toThrow();
     });
-    it('handles empty format options', () => {
-      const templateWithEmptyOptions = {
-        ...mockTemplate,
+    it('handles empty format options', () => { const templateWithEmptyOptions = {
+        ...mockTemplate }
         format_options: {}
       };
       render(<TemplateCustomizationDialog {...defaultProps} template={templateWithEmptyOptions} />);

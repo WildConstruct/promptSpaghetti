@@ -13,19 +13,21 @@ const requestUnlockSchema = z.object({)
 });
 type UnlockAccountData = z.infer<typeof unlockAccountSchema>;
 type RequestUnlockData = z.infer<typeof requestUnlockSchema>;
-}
+
+
 interface AccountRecoveryProps {
   onSuccess?: (message: string) => void;
   onError?: (error: string) => void;
   initialEmail?: string;
   unlockToken?: string;
   type RecoveryMode = 'request' | 'unlock' | 'success';
-  export const AccountRecovery: React.FC<AccountRecoveryProps> = ({,)
+  export const AccountRecovery: React.FC<AccountRecoveryProps> = ({),
   onSuccess,
   onError,
   initialEmail = '',
   unlockToken = ''
-}
+
+
 }) => {
   const [mode, setMode] = useState<RecoveryMode>(unlockToken ? 'unlock' : 'request');
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +42,7 @@ interface AccountRecoveryProps {
   const [errors, setErrors] = useState<{
   request?: Partial<Record<keyof RequestUnlockData, string>>;
   unlock?: Partial<Record<keyof UnlockAccountData, string>>;
-}>({});
+>({});
   // Handle countdown for resend button
   useEffect(() => {
   let timer: NodeJS.Timeout;
@@ -53,7 +55,7 @@ interface AccountRecoveryProps {
       requestUnlockSchema.parse(requestData);
       setErrors(prev => ({ ...prev, request: {} }));
       return true;
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Partial<Record<keyof RequestUnlockData, string>> = {};
         error.errors.forEach(err => {)
@@ -68,7 +70,7 @@ interface AccountRecoveryProps {
       unlockAccountSchema.parse(unlockData);
       setErrors(prev => ({ ...prev, unlock: {} }));
       return true;
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Partial<Record<keyof UnlockAccountData, string>> = {};
         error.errors.forEach(err => {)
@@ -95,9 +97,9 @@ interface AccountRecoveryProps {
       setCountdown(300); // 5 minutes before allowing resend
       setMode('success');
       onSuccess?.('Account unlock instructions have been sent to your email address.');
-    } catch (error: Error) {
+ catch (error: Error) {
       onError?.(error.message || 'Failed to request account unlock');
-    } finally {
+ finally {
       setIsLoading(false);
   };
   const handleUnlockAccount = async (e: React.FormEvent) => {
@@ -116,9 +118,9 @@ interface AccountRecoveryProps {
         throw new Error(result.message || 'Failed to unlock account');
       setMode('success');
       onSuccess?.('Your account has been successfully unlocked. You can now sign in.');
-    } catch (error: Error) {
+ catch (error: Error) {
       onError?.(error.message || 'Failed to unlock account');
-    } finally {
+ finally {
       setIsLoading(false);
   };
   const formatCountdown = (seconds: number): string => {
@@ -189,7 +191,7 @@ interface AccountRecoveryProps {
               onChange={(e) => setUnlockData(prev => ({ ...prev, email: e.target.value }))}
               className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
   errors.unlock?.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300',
-}`}
+`}
               placeholder="Enter your email address"
               disabled={isLoading}
               required
@@ -210,7 +212,7 @@ interface AccountRecoveryProps {
               onChange={(e) => setUnlockData(prev => ({ ...prev, unlockToken: e.target.value }))}
               className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
   errors.unlock?.unlockToken ? 'border-red-300 focus:border-red-500' : 'border-gray-300',
-}`}
+`}
               placeholder="Enter the unlock token from your email"
               disabled={isLoading}
               required
@@ -227,7 +229,7 @@ interface AccountRecoveryProps {
   isLoading
   ? 'bg-gray-400 cursor-not-allowed'
   : 'bg-blue-600 hover:bg-blue-700',
-}`}
+`}
           >
             {isLoading ? ()
               <div className="flex items-center justify-center">
@@ -288,7 +290,7 @@ interface AccountRecoveryProps {
             onChange={(e) => setRequestData(prev => ({ ...prev, email: e.target.value }))}
             className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
   errors.request?.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300',
-}`}
+`}
             placeholder="Enter your email address"
             disabled={isLoading}
             required
@@ -305,7 +307,7 @@ interface AccountRecoveryProps {
   isLoading || countdown > 0
   ? 'bg-gray-400 cursor-not-allowed'
   : 'bg-blue-600 hover:bg-blue-700',
-}`}
+`}
         >
           {isLoading ? ()
             <div className="flex items-center justify-center">

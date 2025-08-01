@@ -222,7 +222,7 @@ export class SynchronizationRecovery extends EventEmitter {
                                     operation1: operation,
                                     description: `Failed to apply operation: ${error.message}` };
                             }
-                            resolutionOptions: [,
+                            resolutionOptions: [
                                 { strategy: 'manual', description: 'Manual resolution required', confidence: 0 }
                             ],
                                 autoResolvable;
@@ -420,7 +420,7 @@ export class SynchronizationRecovery extends EventEmitter {
                                                     operation2: ops[i + 1],
                                                     description: `Concurrent modifications to ${target}` };
                                             }
-                                            resolutionOptions: [,
+                                            resolutionOptions: [
                                                 { strategy: 'mine', description: 'Keep first operation', confidence: 0.5 },
                                                 { strategy: 'theirs', description: 'Keep second operation', confidence: 0.5 },
                                                 { strategy: 'merge', description: 'Attempt to merge operations', confidence: 0.3 }
@@ -514,7 +514,7 @@ export class SynchronizationRecovery extends EventEmitter {
                                     operation2: operation,
                                     description: `Concurrent edit detected on ${operation.target} ${operation.targetId}` };
                             }
-                            resolutionOptions: [,
+                            resolutionOptions: [
                                 { strategy: 'theirs', description: 'Use incoming operation', confidence: 0.6 }
                             ],
                                 autoResolvable;

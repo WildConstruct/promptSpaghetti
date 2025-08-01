@@ -92,8 +92,9 @@ Promise < AssignmentResponse > {
                                              * Get assignments for multiple experiments
                                              */
                                             async;
-                                            bulkAssignUser(userId, string);
-                                            experimentIds: string,
+                                            bulkAssignUser(userId, string),
+                                                experimentIds;
+                                            string,
                                                 sessionId ?  : string,
                                                 debugMode = false;
                                             Promise < Record < string, AssignmentResponse >> {
@@ -132,8 +133,9 @@ Promise < AssignmentResponse > {
                                          * Force assign a user to a specific variant (for debugging/testing)
                                          */
                                         async;
-                                        forceAssignUser(userId, string);
-                                        experimentId: string,
+                                        forceAssignUser(userId, string),
+                                            experimentId;
+                                        string,
                                             variantId;
                                         string,
                                             reason;

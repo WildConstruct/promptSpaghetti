@@ -7,15 +7,14 @@
 import React from 'react';
 
 }
-export interface VFXUser {
-    id: string;
+}
+export interface VFXUser { id: string;
     name: string;
     role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator';
     avatar?: string;
     email: string;
-    color: string;
-
-
+    color: string }
+}
 }
 export interface AnnotationToolsDemoProps {
     className?: string;
@@ -27,4 +26,5 @@ export interface AnnotationToolsDemoProps {
 export declare const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps>;
 export default AnnotationToolsDemo;
 //# sourceMappingURL=AnnotationToolsDemo.d.ts.map
+}
 }

@@ -6,39 +6,35 @@
  * displaying quality metrics, and coordinating editorial reviews.
  */
 import React, { useState, useEffect } from 'react';
-import {
-  CommunityContentQualityMetrics,
+import { CommunityContentQualityMetrics,
   QualityAssessmentWorkflow,
   EditorialReview,
   QualityRecommendation,
   QualityFlag,
-  ContentQualityAssessmentService,
+  ContentQualityAssessmentService }
   QUALITY_ASSESSMENT_CONFIG
-} from '../../community/ContentQualityAssessment';
+ from '../../community/ContentQualityAssessment';
 
-}
-export interface QualityAssessmentDashboardProps {
-  contentId: string;
+
+export interface QualityAssessmentDashboardProps { contentId: string;
   versionId: string;
   userRole?: 'author' | 'editor' | 'reviewer' | 'admin';
   onQualityImproved?: (newScore: number) => void;
   onWorkflowUpdate?: (workflow: QualityAssessmentWorkflow) => void;
   showReviewInterface?: boolean;
   readOnly?: boolean;
-  className?: string;
-}
-}
-export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProps> = ({)
-  contentId,
-  versionId,
-  userRole = 'author',
-  onQualityImproved,
-  onWorkflowUpdate,
-  showReviewInterface = false,
-  readOnly = false,
+  className?: string }
+
+export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProps> = ({ )
+  contentId
+  versionId
+  userRole = 'author'
+  onQualityImproved
+  onWorkflowUpdate
+  showReviewInterface = false
+  readOnly = false }
   className = ''
-}) => {
-  const [qualityMetrics, setQualityMetrics] = useState<CommunityContentQualityMetrics | null>(null);
+}) => { const [qualityMetrics, setQualityMetrics] = useState<CommunityContentQualityMetrics | null>(null);
   const [workflow, setWorkflow] = useState<QualityAssessmentWorkflow | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -47,8 +43,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
   const [_____showFlagModal, setShowFlagModal] = useState(false);
   const qualityService = new ContentQualityAssessmentService(null); // API client would be injected;
   useEffect(() => {
-    loadQualityData();
-  }, [contentId, versionId]);
+    loadQualityData() }, [contentId, versionId]);
   const loadQualityData = async () => {
     setLoading(true);
     setError(null);
@@ -58,64 +53,41 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
         qualityService.runComprehensiveAssessment(contentId, versionId, { include_automated: true }),
         qualityService.getReviewWorkflow(contentId, versionId)
       ]);
-      if (metricsResult.status === 'fulfilled') {
-        setQualityMetrics(metricsResult.value);
-      } else {
-  console.warn('Failed to load quality metrics:', metricsResult.reason);
+      if (metricsResult.status === 'fulfilled') { setQualityMetrics(metricsResult.value) } else { console.warn('Failed to load quality metrics:', metricsResult.reason);
   if (workflowResult.status === 'fulfilled') {
-  setWorkflow(workflowResult.value);
-} else {
-  console.warn('Failed to load workflow:', workflowResult.reason);
-} catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load quality data');
-} finally {
-      setLoading(false);
-  };
-  const handleRunAssessment = async (type: 'automated' | 'comprehensive') => {
-  setRunningAssessment(true);
+  setWorkflow(workflowResult.value) } else { console.warn('Failed to load workflow:', workflowResult.reason) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to load quality data') } finally { setLoading(false) };
+  const handleRunAssessment = async (type: 'automated' | 'comprehensive') => { setRunningAssessment(true);
   setError(null);
   try {
   const newMetrics = await qualityService.runComprehensiveAssessment(contentId, versionId, {)
   include_automated: true,
   include_editorial: type === 'comprehensive',
-  include_community: type === 'comprehensive',
+  include_community: type === 'comprehensive' }
 });
       setQualityMetrics(newMetrics);
       onQualityImproved?.(newMetrics.overallQualityScore);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to run assessment');
-} finally {
-      setRunningAssessment(false);
-  };
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to run assessment') } finally { setRunningAssessment(false) };
   const handleAssignReview = async (;);
     reviewerId: string,
-    reviewType: 'quick_review' | 'comprehensive_review' | 'specialist_review') => {,
+    reviewType: 'quick_review' | 'comprehensive_review' | 'specialist_review') => { ,
   try {
   const updatedWorkflow = await qualityService.assignEditorialReview(contentId, versionId, reviewerId, {)
-  review_type: reviewType,
+  review_type: reviewType }
 });
       setWorkflow(updatedWorkflow);
       onWorkflowUpdate?.(updatedWorkflow);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to assign review');
-};
-  const handleApplyAutomatedFixes = async () => {
-    try {
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to assign review') };
+  const handleApplyAutomatedFixes = async () => { try {
       const result = await qualityService.applyAutomatedFixes(;);
         contentId,
         versionId,
-        ['grammar', 'formatting', 'seo'],
+        ['grammar', 'formatting', 'seo'] }
         80 // confidence threshold
       );
-      if (result.fixes_applied > 0) {
-        // Reload quality data to show improvements
+      if (result.fixes_applied > 0) { // Reload quality data to show improvements
         await loadQualityData();
-        onQualityImproved?.(qualityMetrics!.overallQualityScore + result.quality_improvement);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to apply automated fixes');
-};
-  const getGradeColor = (grade: string) => {
-  const colors = {
+        onQualityImproved?.(qualityMetrics!.overallQualityScore + result.quality_improvement) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to apply automated fixes') };
+  const getGradeColor = (grade: string) => { const colors = {
   'A+': '#10b981',
   'A': '#059669',
   'B+': '#3b82f6',
@@ -123,28 +95,24 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
   'C+': '#f59e0b',
   'C': '#d97706',
   'D': '#ef4444',
-  'F': '#dc2626',
+  'F': '#dc2626' }
 };
     return colors[grade as keyof typeof colors] || '#6b7280';
   };
-  const getStatusColor = (status: string) => {
-  const colors = {
+  const getStatusColor = (status: string) => { const colors = {
   excellent: '#10b981',
   good: '#3b82f6',
   acceptable: '#f59e0b',
   needs_improvement: '#ef4444',
-  rejected: '#dc2626',
+  rejected: '#dc2626' }
 };
     return colors[status as keyof typeof colors] || '#6b7280';
   };
-  const formatScore = (score: number) => {
-    return Math.round(score);
-  };
-  const formatRecommendationPriority = (priority: string) => {
-  const priorities = {
+  const formatScore = (score: number) => { return Math.round(score) };
+  const formatRecommendationPriority = (priority: string) => { const priorities = {
   high: '🔴 High',
   medium: '🟡 Medium',
-  low: '🟢 Low',
+  low: '🟢 Low' }
 };
     return priorities[priority as keyof typeof priorities] || priority;
   };
@@ -266,7 +234,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
                   className="score-fill"
                   style={{
                     background: `conic-gradient(${getGradeColor(qualityMetrics.qualityGrade)} ${qualityMetrics.overallQualityScore * 3.6}deg, #e5e7eb 0deg)`}
-                  }}
+}
                 >
                   <div className="score-inner">
                     <div className="score-number">{formatScore(qualityMetrics.overallQualityScore)}</div>
@@ -677,9 +645,9 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           </div>
         )}
       </div>
-      <style>{`
+      <style>{ `
         .quality-assessment-dashboard {
-          background: #ffffff;
+          background: #ffffff
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   overflow: hidden;
@@ -699,17 +667,15 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
   height: 40px;
           border: 3px solid #e5e7eb;
           border-top: 3px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: spin 1s linear infinite;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        .dashboard-header {
-          display: flex;
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
+        .dashboard-header { display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   padding: 20px;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid #e5e7eb
   background: #f9fafb;
         .header-info h3 {
           margin: 0 0 8px 0;
@@ -735,7 +701,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           display: flex;
   gap: 8px;
         .assessment-btn {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
           border: none;
   padding: 8px 16px;
@@ -743,17 +709,17 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           font-size: 14px;
   cursor: pointer;
           transition: background 0.2s ease;
-        .assessment-btn:hover:not(:disabled) {,
+        .assessment-btn:hover:not(:disabled) {
   background: #2563eb;
-        .assessment-btn:disabled {,
-  opacity: 0.6;
-          cursor: not-allowed;
+        .assessment-btn:disabled {
+  opacity: 0.6
+  cursor: not-allowed;
         .assessment-btn.comprehensive {
           background: #059669;
-        .assessment-btn.comprehensive:hover:not(:disabled) {,
+        .assessment-btn.comprehensive:hover:not(:disabled) {
   background: #047857;
         .flag-issues-btn {
-          background: #ef4444;
+          background: #ef4444
   color: #ffffff;
           border: none;
   padding: 8px 16px;
@@ -761,9 +727,9 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           font-size: 14px;
   cursor: pointer;
         .error-message {
-          background: #fef2f2;
+          background: #fef2f2
   color: #dc2626;
-          padding: 12px 16px;
+          padding: 12px 16px
   margin: 0 20px 16px 20px;
           border-radius: 6px;
   border: 1px solid #fecaca;
@@ -773,25 +739,25 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
         .error-dismiss {
           background: none;
   border: none;
-          color: #dc2626;
+          color: #dc2626
   cursor: pointer;
           margin-left: auto;
         .dashboard-tabs {
           display: flex;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid #e5e7eb
   background: #ffffff;
         .tab {
           background: none;
   border: none;
-          padding: 12px 20px;
+          padding: 12px 20px
   cursor: pointer;
           font-size: 14px;
   color: #6b7280;
-          border-bottom: 2px solid transparent;
+          border-bottom: 2px solid transparent
   transition: all 0.2s ease;
-        .tab:hover {,
-  color: #1f2937;
-          background: #f9fafb;
+        .tab:hover {
+  color: #1f2937
+  background: #f9fafb;
         .tab.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
@@ -803,26 +769,26 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
   gap: 24px;
         .quality-visualization {
           display: grid;
-          grid-template-columns: 200px 1fr;
+          grid-template-columns: 200px 1fr
   gap: 24px;
           align-items: center;
         .score-circle {
           width: 160px;
   height: 160px;
-          border-radius: 50%;
+          border-radius: 50%
   position: relative;
           padding: 8px;
         .score-fill {
-          width: 100%;
+          width: 100%
   height: 100%;
-          border-radius: 50%;
+          border-radius: 50%
   display: flex;
           align-items: center;
           justify-content: center;
         .score-inner {
           width: 120px;
   height: 120px;
-          border-radius: 50%;
+          border-radius: 50%
   background: #ffffff;
           display: flex;
           flex-direction: column;
@@ -850,16 +816,16 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           margin-bottom: 8px;
   display: inline-block;
         .recommendation.publish {
-          background: #dcfce7;
+          background: #dcfce7
   color: #166534;
         .recommendation.publish-with-edits {
-          background: #dbeafe;
+          background: #dbeafe
   color: #1e40af;
         .recommendation.major-revision {
-          background: #fef3c7;
+          background: #fef3c7
   color: #92400e;
         .recommendation.reject {
-          background: #fecaca;
+          background: #fecaca
   color: #991b1b;
         .recommendation-explanation {
           margin: 0;
@@ -876,7 +842,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 16px;
         .dimension-card {
-          background: #f9fafb;
+          background: #f9fafb
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 16px;
@@ -913,7 +879,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           gap: 16px;
         .action-card {
-          background: #f9fafb;
+          background: #f9fafb
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 16px;
@@ -930,7 +896,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           font-size: 12px;
   color: #6b7280;
         .action-button {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
           border: none;
   padding: 8px 16px;
@@ -951,7 +917,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 16px;
         .analysis-card {
-          background: #f9fafb;
+          background: #f9fafb
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 16px;
@@ -967,7 +933,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           position: relative;
           margin-bottom: 8px;
         .score-bar .score-fill {
-          background: #3b82f6;
+          background: #3b82f6
   height: 100%;
           border-radius: 4px;
   transition: width 0.3s ease;
@@ -984,51 +950,51 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
   gap: 4px;
           font-size: 12px;
   color: #6b7280;
-        .issues-section h4,
+        .issues-section h4
         .flags-section h4 {
           margin: 0 0 16px 0;
           font-size: 16px;
           font-weight: 600;
   color: #1f2937;
-        .issues-list,
+        .issues-list
         .flags-list {
           display: flex;
           flex-direction: column;
   gap: 12px;
-        .issue-item,
+        .issue-item
         .flag-item {
-          background: #ffffff;
+          background: #ffffff
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 16px;
-        .issue-item.severity-critical,
+        .issue-item.severity-critical
         .flag-item.severity-critical {
-          border-color: #dc2626;
+          border-color: #dc2626
   background: #fef2f2;
-        .issue-item.severity-high,
+        .issue-item.severity-high
         .flag-item.severity-high {
-          border-color: #ef4444;
+          border-color: #ef4444
   background: #fef2f2;
-        .issue-item.severity-medium,
+        .issue-item.severity-medium
         .flag-item.severity-medium {
-          border-color: #f59e0b;
+          border-color: #f59e0b
   background: #fffbeb;
-        .issue-header,
+        .issue-header
         .flag-header {
           display: flex;
   gap: 8px;
           margin-bottom: 8px;
           align-items: center;
-        .issue-type,
+        .issue-type
         .flag-type {
-          background: #374151;
+          background: #374151
   color: #ffffff;
           padding: 2px 6px;
           border-radius: 4px;
           font-size: 11px;
           font-weight: 500;
           text-transform: capitalize;
-        .issue-severity,
+        .issue-severity
         .flag-severity {
           padding: 2px 6px;
           border-radius: 4px;
@@ -1036,32 +1002,32 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           font-weight: 500;
           text-transform: uppercase;
         .severity-critical {
-          background: #fecaca;
+          background: #fecaca
   color: #991b1b;
         .severity-high {
-          background: #fed7d7;
+          background: #fed7d7
   color: #c53030;
         .severity-medium {
-          background: #fef3c7;
+          background: #fef3c7
   color: #92400e;
         .severity-low {
-          background: #d1fae5;
+          background: #d1fae5
   color: #065f46;
-        .auto-fixable,
+        .auto-fixable
         .auto-detected {
-          background: #dbeafe;
+          background: #dbeafe
   color: #1e40af;
           padding: 2px 6px;
           border-radius: 4px;
           font-size: 11px;
           font-weight: 500;
-        .issue-description,
+        .issue-description
         .flag-description {
           margin-bottom: 8px;
           font-size: 14px;
   color: #4b5563;
-        .issue-suggestion,
-        .issue-location,
+        .issue-suggestion
+        .issue-location
         .flag-evidence {
           font-size: 12px;
   color: #6b7280;
@@ -1078,15 +1044,15 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           flex-direction: column;
   gap: 16px;
         .recommendation-card {
-          background: #ffffff;
+          background: #ffffff
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 16px;
         .recommendation-card.priority-high {
-          border-color: #ef4444;
+          border-color: #ef4444
   background: #fef2f2;
         .recommendation-card.priority-medium {
-          border-color: #f59e0b;
+          border-color: #f59e0b
   background: #fffbeb;
         .recommendation-header {
           display: flex;
@@ -1098,7 +1064,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
   gap: 8px;
           align-items: center;
         .recommendation-type {
-          background: #374151;
+          background: #374151
   color: #ffffff;
           padding: 2px 6px;
           border-radius: 4px;
@@ -1126,7 +1092,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           font-size: 12px;
   color: #6b7280;
           margin-bottom: 12px;
-        .implementation-steps h6,
+        .implementation-steps h6
         .recommendation-resources h6 {
           margin: 0 0 8px 0;
           font-size: 12px;
@@ -1148,7 +1114,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
         .resource-link:hover {
           text-decoration: underline;
         .auto-fix-section {
-          background: #f0f9ff;
+          background: #f0f9ff
   border: 1px solid #bae6fd;
           border-radius: 6px;
   padding: 12px;
@@ -1158,7 +1124,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           font-size: 12px;
   color: #0369a1;
         .auto-fix-btn {
-          background: #0ea5e9;
+          background: #0ea5e9
   color: #ffffff;
           border: none;
   padding: 6px 12px;
@@ -1197,7 +1163,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
         .timeline-marker {
           width: 12px;
   height: 12px;
-          border-radius: 50%;
+          border-radius: 50%
   background: #3b82f6;
           margin-top: 4px;
           flex-shrink: 0;
@@ -1208,8 +1174,8 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
   color: #1f2937;
           text-transform: capitalize;
           margin-bottom: 2px;
-        .step-user,
-        .step-date,
+        .step-user
+        .step-date
         .step-duration {
           font-size: 12px;
   color: #6b7280;
@@ -1235,14 +1201,14 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           border: none;
   transition: background 0.2s ease;
         .workflow-btn.assign {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
-        .workflow-btn.assign:hover {,
+        .workflow-btn.assign:hover {
   background: #2563eb;
         .workflow-btn.escalate {
-          background: #ef4444;
+          background: #ef4444
   color: #ffffff;
-        .workflow-btn.escalate:hover {,
+        .workflow-btn.escalate:hover {
   background: #dc2626;
         .review-interface {
           text-align: center;
@@ -1255,7 +1221,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
             align-items: flex-start;
           .quality-summary {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: flex-start
   gap: 8px;
           .header-actions {
             flex-direction: column;
@@ -1271,7 +1237,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
             grid-template-columns: 1fr;
           .recommendation-header {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: flex-start }
   gap: 8px;
       `}</style>
     </div>

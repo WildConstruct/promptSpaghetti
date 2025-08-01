@@ -30,7 +30,7 @@ interface AuthenticatedRequest extends Request {
     roles: string[];
     email: string;
   };
-}
+
 
 const router = Router();
 
@@ -55,12 +55,12 @@ const optionalAuth = (req: AuthenticatedRequest, res: Response, next: Function) 
 const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) => {
   if (!req.user) {
     return res.status(401).json({ error: 'Authentication required' });
-  }
+
 
   const isAdmin = req.user.roles.includes('admin');
   if (!isAdmin) {
     return res.status(403).json({ error: 'Admin access required' });
-  }
+
 
   next();
 };
@@ -85,14 +85,14 @@ router.get('/',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const {
         includeStats = true,
         depth,
         featured,
         parentId
-      } = req.query;
+ = req.query;
 
       const tree = await categorizationService.getCategoryTree(
         includeStats === 'true' || includeStats === true
@@ -103,16 +103,16 @@ router.get('/',
 
       if (featured === 'true') {
         filteredCategories = tree.categories.filter(cat => cat.config.featured);
-      }
+
 
       if (parentId) {
         filteredCategories = tree.categories.filter(cat => cat.parentId === parentId);
-      }
+
 
       if (depth !== undefined) {
         const maxDepth = parseInt(depth as string);
         filteredCategories = filteredCategories.filter(cat => cat.depth <= maxDepth);
-      }
+
 
       res.json({
         success: true,
@@ -121,17 +121,15 @@ router.get('/',
           totalCount: filteredCategories.length,
           maxDepth: tree.maxDepth,
           lastUpdated: tree.lastUpdated
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to get categories:', error);
       res.status(500).json({
         error: 'Failed to retrieve categories',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -151,7 +149,7 @@ router.get('/:categoryId',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { categoryId } = req.params;
 
@@ -179,7 +177,7 @@ router.get('/:categoryId',
         return res.status(404).json({
           error: 'Category not found'
         });
-      }
+
 
       const row = result.rows[0];
 
@@ -218,14 +216,14 @@ router.get('/:categoryId',
           searchable: row.searchable,
           autoClassification: row.auto_classification,
           requireApproval: row.require_approval
-  }
+
         stats: {
           templateCount: parseInt(row.template_count) || 0,
           activeCount: parseInt(row.active_count) || 0,
           totalDownloads: parseInt(row.total_downloads) || 0,
           averageRating: parseFloat(row.average_rating) || 0,
           trendingScore: parseFloat(row.trending_score) || 0
-  }
+
         metadata: {
           createdAt: row.created_at,
           updatedAt: row.updated_at,
@@ -234,7 +232,7 @@ router.get('/:categoryId',
           sortOrder: row.sort_order,
           keywords: row.keywords || [],
           aliases: row.aliases || []
-  }
+
         children: childrenResult.rows,
         recentTemplates: templatesResult.rows
       };
@@ -243,15 +241,13 @@ router.get('/:categoryId',
         success: true,
         data: category
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get category:', error);
       res.status(500).json({
         error: 'Failed to retrieve category',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -279,7 +275,7 @@ router.post('/',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const {
         name,
@@ -291,7 +287,7 @@ router.post('/',
         keywords = [],
         aliases = [],
         sortOrder = 0
-      } = req.body;
+ = req.body;
 
       // Check if slug already exists
       const existingQuery = `
@@ -303,7 +299,7 @@ router.post('/',
         return res.status(409).json({
           error: 'Category slug already exists'
         });
-      }
+
 
       // Determine depth based on parent
       let depth = 0;
@@ -317,7 +313,7 @@ router.post('/',
           return res.status(400).json({
             error: 'Parent category not found'
           });
-        }
+
         
         depth = parentResult.rows[0].depth + 1;
         
@@ -325,8 +321,8 @@ router.post('/',
           return res.status(400).json({
             error: 'Maximum category depth (10) exceeded'
           });
-        }
-      }
+
+
 
       // Create category
       const insertQuery = `
@@ -357,17 +353,15 @@ router.post('/',
           name: newCategory.name,
           slug: newCategory.slug,
           message: 'Category created successfully'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to create category:', error);
       res.status(500).json({
         error: 'Failed to create category',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -388,7 +382,7 @@ router.get('/:categoryId/analytics',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { categoryId } = req.params;
       const { timeframe = '30d' } = req.query;
@@ -402,15 +396,13 @@ router.get('/:categoryId/analytics',
         success: true,
         data: analytics
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get category analytics:', error);
       res.status(500).json({
         error: 'Failed to retrieve category analytics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -433,7 +425,7 @@ router.post('/classify',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { title, description, content, existingTags = [] } = req.body;
 
@@ -448,15 +440,13 @@ router.post('/classify',
         success: true,
         data: classification
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Template classification failed:', error);
       res.status(500).json({
         error: 'Classification temporarily unavailable',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -482,7 +472,7 @@ router.get('/tags',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const {
         search,
@@ -492,7 +482,7 @@ router.get('/tags',
         sortBy = 'usage',
         page = 1,
         limit = 50
-      } = req.query;
+ = req.query;
 
       let query = `
         SELECT 
@@ -510,25 +500,25 @@ router.get('/tags',
         query += ` AND (t.name ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`;
         params.push(`%${search}%`);
         paramIndex++;
-      }
+
 
       if (type) {
         query += ` AND t.type = $${paramIndex}`;
         params.push(type);
         paramIndex++;
-      }
+
 
       if (category) {
         query += ` AND t.category_id = $${paramIndex}`;
         params.push(category);
         paramIndex++;
-      }
+
 
       if (approved !== undefined) {
         query += ` AND t.approved = $${paramIndex}`;
         params.push(approved === 'true');
         paramIndex++;
-      }
+
 
       // Add sorting
       const sortMap = {
@@ -577,17 +567,15 @@ router.get('/tags',
           hasMore: offset + parseInt(limit as string) < total,
           page: parseInt(page as string),
           limit: parseInt(limit as string)
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to get tags:', error);
       res.status(500).json({
         error: 'Failed to retrieve tags',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -609,7 +597,7 @@ router.post('/tags',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { tags: tagNames, context = {} } = req.body;
 
@@ -620,17 +608,15 @@ router.post('/tags',
         data: {
           tags,
           message: `Processed ${tags.length} tag(s)`
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to process tags:', error);
       res.status(500).json({
         error: 'Failed to process tags',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -647,15 +633,13 @@ router.get('/optimization/categories',
         success: true,
         data: optimization
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get category optimization:', error);
       res.status(500).json({
         error: 'Failed to retrieve optimization suggestions',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 // Export router and initialization function

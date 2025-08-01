@@ -9,8 +9,8 @@ import { AdvancedNodeConfig } from '../runtime/advanced';
 import { NodeValidationService } from '../validation';
 
 }
-export interface NodeCreationOptions {
-    /** Validate node before creation */
+}
+export interface NodeCreationOptions { /** Validate node before creation */
     validate?: boolean;
     /** Apply performance optimizations */
     optimize?: boolean;
@@ -19,22 +19,20 @@ export interface NodeCreationOptions {
     /** Additional metadata */
     metadata?: Record<string, any>;
     /** Template to base node on */
-    template?: string;
-
+    template?: string }
 }
-export interface NodeTemplate {
-    id: string;
+}
+export interface NodeTemplate { id: string;
     name: string;
     description: string;
     nodeType: string;
     defaultConfig: AdvancedNodeConfig;
     defaultData: any;
     category: string;
-    tags: string[];
-
+    tags: string[] }
 }
-export interface NodeFactoryConfig {
-    /** Enable automatic node optimization */
+}
+export interface NodeFactoryConfig { /** Enable automatic node optimization */
     enableOptimization: boolean;
     /** Enable template system */
     enableTemplates: boolean;
@@ -55,45 +53,43 @@ export declare class NodeFactory {
     private nodeCache;
     private creationHistory;
     constructor();
-      framework: NodeFramework,
-      validationService: NodeValidationService,
+      framework: NodeFramework;
+      validationService: NodeValidationService;
       config?: Partial<NodeFactoryConfig>
     );
     /**
      * Create a new node with optional validation and optimization
      */
     createNode();
-      type: string,
-      id: string,
-      config: AdvancedNodeConfig,
-      data: any,
+      type: string;
+      id: string;
+      config: AdvancedNodeConfig;
+      data: any }
       options?: NodeCreationOptions
     ): Promise<FrameworkNode>;
     /**
      * Create node from template
      */
-    createFromTemplate(templateId: string, nodeId: string, overrides?: {)
+    createFromTemplate(templateId: string, nodeId: string, overrides?: { )
         config?: Partial<AdvancedNodeConfig>;
-        data?: any;
+        data?: any }
 }
     }): Promise<FrameworkNode>;
     /**
      * Bulk create multiple nodes
      */
-    createNodeBatch(specs: Array<{)
+    createNodeBatch(specs: Array<{ )
         type: string;
         id: string;
         config: AdvancedNodeConfig;
         data: any;
-        options?: NodeCreationOptions;
-    }>): Promise<FrameworkNode[]>;
+        options?: NodeCreationOptions }>): Promise<FrameworkNode[]>;
     /**
      * Clone an existing node with a new ID
      */
-    cloneNode(sourceId: string, newId: string, overrides?: {)
+    cloneNode(sourceId: string, newId: string, overrides?: { )
         config?: Partial<AdvancedNodeConfig>;
-        data?: any;
-    }): Promise<FrameworkNode>;
+        data?: any }): Promise<FrameworkNode>;
     /**
      * Register a node template
      */
@@ -113,8 +109,7 @@ export declare class NodeFactory {
     /**
      * Get factory statistics
      */
-    getStatistics(): {
-        totalCreated: number;
+    getStatistics(): { totalCreated: number;
         successfulCreations: number;
         failedCreations: number;
         successRate: number;
@@ -124,8 +119,7 @@ export declare class NodeFactory {
             nodeType: string;
             nodeId: string;
             error: string;
-            timestamp: number;
-        }>;
+            timestamp: number }>;
     };
     /**
      * Clear creation history

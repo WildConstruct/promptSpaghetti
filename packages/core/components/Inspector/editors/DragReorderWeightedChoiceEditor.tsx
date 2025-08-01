@@ -10,16 +10,16 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { DragReorderWeightManager, WeightedOption } from '../WeightManagement/DragReorderWeightManager';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 
-}
-export interface WeightedChoiceData {
-  choices?: Array<{
+
+export interface WeightedChoiceData { choices?: Array<{ }
   text: string;
   weight: number;
-}
-}>;
+
+
+>;
   [key: string]: unknown;
-}
-}
+
+
 export interface DragReorderWeightedChoiceEditorProps {
   data: WeightedChoiceData;
   onChange: (data: Partial<WeightedChoiceData>) => void;
@@ -31,15 +31,15 @@ export interface DragReorderWeightedChoiceEditorProps {
   /**
   * Enhanced WeightedChoice editor with professional drag-to-reorder interface
   */
-}
-}
-export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoiceEditorProps> = ({)
-  data,
-  onChange,
-  nodeId = 'drag-reorder-weighted-choice',
-  disabled = false,
-  theme = 'cinema',
-  showPreview = true,
+
+
+export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoiceEditorProps> = ({ )
+  data
+  onChange
+  nodeId = 'drag-reorder-weighted-choice'
+  disabled = false
+  theme = 'cinema'
+  showPreview = true }
   showAnalytics = true
 }) => {
   const [isAddingChoice, setIsAddingChoice] = useState(false);
@@ -52,29 +52,27 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
       return [];
     return data.choices.map((choice, index) => ({)
   id: `choice-${index}`}
-},
+
   text: choice.text || `Choice ${index + 1}`}
-},
-  weight: choice.weight || 1,
-      category: 'choice'
+
+  weight: choice.weight || 1
+      category: 'choice';
   }));
   }, [data.choices]);
   // Handle options change from drag-reorder component
-  const handleOptionsChange = useCallback((newOptions: WeightedOption) => {
-  const newChoices = newOptions.map(option => ({)
-  text: option.text,
-  weight: option.weight,
+  const handleOptionsChange = useCallback((newOptions: WeightedOption) => { const newChoices = newOptions.map(option => ({)
+  text: option.text
+  weight: option.weight }
 }));
     onChange({ choices: newChoices });
   }, [onChange]);
   // Add new choice
-  const handleAddChoice = useCallback(() => {
-    if (!newChoiceText.trim()) return;
+  const handleAddChoice = useCallback(() => { if (!newChoiceText.trim()) return;
     const currentChoices = data.choices || [];
-    const newChoices = [;
-      ...currentChoices,
+    const newChoices = [
+      ...currentChoices
       {
-        text: newChoiceText.trim(),
+        text: newChoiceText.trim() }
         weight: 1];
     onChange({ choices: newChoices });
     setNewChoiceText('');
@@ -87,8 +85,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
     onChange({ choices: newChoices });
   }, [data.choices, onChange]);
   // Generate preview
-  const generatePreview = useCallback(() => {
-  if (!data.choices || data.choices.length === 0) {
+  const generatePreview = useCallback(() => { if (!data.choices || data.choices.length === 0) {
   setPreviewResults([]);
   return;
   const totalWeight = data.choices.reduce((sum, choice) => sum + choice.weight, 0);
@@ -103,24 +100,21 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   if (random <= 0) {
   results.push(choice.text);
   break;
-  setPreviewResults(results);
-}, [data.choices, previewCount]);
+  setPreviewResults(results) }, [data.choices, previewCount]);
   // Calculate choice statistics
   const choiceStats = useMemo(() => {
     if (!data.choices || data.choices.length === 0) {
       return { totalWeight: 0, mostLikely: null, leastLikely: null };
     const totalWeight = data.choices.reduce((sum, choice) => sum + choice.weight, 0);
     const sortedChoices = [...data.choices].sort((a, b) => b.weight - a.weight);
-    return {
-  totalWeight,
+    return { totalWeight,
   mostLikely: sortedChoices[0],
-  leastLikely: sortedChoices[sortedChoices.length - 1],
+  leastLikely: sortedChoices[sortedChoices.length - 1] }
 };
   }, [data.choices]);
   // Theme styles
-  const getThemeStyles = () => {
-  const themes = {
-  light: {
+  const getThemeStyles = () => { const themes = {
+  light: {,
   background: '#ffffff',
   secondary: '#f8fafc',
   border: '#e5e7eb',
@@ -128,9 +122,9 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   accent: '#3b82f6',
   success: '#10b981',
   warning: '#f59e0b',
-  error: '#ef4444',
+  error: '#ef4444' }
 },
-  dark: {
+  dark: { ,
   background: '#1f2937',
   secondary: '#111827',
   border: '#4b5563',
@@ -138,9 +132,9 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   accent: '#60a5fa',
   success: '#34d399',
   warning: '#fbbf24',
-  error: '#f87171',
+  error: '#f87171' }
 },
-  cinema: {
+  cinema: { ,
   background: '#1a1a1a',
   secondary: '#0d1117',
   border: '#ff7c00',
@@ -148,7 +142,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   accent: '#ff7c00',
   success: '#00d084',
   warning: '#ffb700',
-  error: '#ff6b6b',
+  error: '#ff6b6b' }
 };
     return themes[theme];
   };
@@ -164,62 +158,62 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
         priority="critical"
         fieldName="choices"
       >
-        <div style={{
-  background: styles.background,
-  color: styles.text,
-  fontFamily: 'Inter, system-ui, sans-serif',
-  padding: '16px',
-  borderRadius: '8px',
-}}>
+        <div style={ {
+  background: styles.background
+  color: styles.text
+  fontFamily: 'Inter, system-ui, sans-serif'
+  padding: '16px'
+  borderRadius: '8px' }
+}>
           {/* Essential Header */}
-          <div style={{
-            marginBottom: '16px',
-            paddingBottom: '12px',
+          <div style={ {
+            marginBottom: '16px'
+            paddingBottom: '12px' }
             borderBottom: `1px solid ${styles.border}`}
-          }}>
-            <h4 style={{
-  margin: 0,
-  fontSize: '16px',
-  fontWeight: 600,
-  color: styles.text,
-}}>
+}>
+            <h4 style={ {
+  margin: 0
+  fontSize: '16px'
+  fontWeight: 600
+  color: styles.text }
+}>
               🎲 Weighted Story Choices
             </h4>
-            <p style={{
-  margin: '4px 0 0 0',
-  fontSize: '12px',
-  opacity: 0.7,
-}}>
+            <p style={ {
+  margin: '4px 0 0 0'
+  fontSize: '12px'
+  opacity: 0.7 }
+}>
               Drag to reorder by importance, adjust weights for probability control
             </p>
           </div>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <span style={{
-              fontSize: '12px',
-              padding: '4px 8px',
-              background: styles.secondary,
+            <span style={ {
+              fontSize: '12px'
+              padding: '4px 8px'
+              background: styles.secondary }
               border: `1px solid ${styles.border}`}
-},
-  borderRadius: '6px',
+
+  borderRadius: '6px'
               opacity: 0.8;
-  }}>
+}>
               {options.length} {options.length === 1 ? 'choice' : 'choices'}
             </span>
             {!disabled && ()
               <button
                 onClick={() => setIsAddingChoice(true)}
-                style={{
-                  background: styles.accent,
-                  color: styles.background,
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '6px 12px',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s ease',
+                style={ {
+                  background: styles.accent
+                  color: styles.background
+                  border: 'none'
+                  borderRadius: '6px'
+                  padding: '6px 12px'
+                  fontSize: '12px'
+                  fontWeight: 600
+                  cursor: 'pointer'
+                  transition: 'transform 0.2s ease' }
                   boxShadow: `0 2px 8px ${styles.accent}40`}
-                }}
+
                 onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
                 onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
@@ -229,40 +223,40 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
           </div>
         </div>
         {/* Quick Stats */}
-        {showAnalytics && options.length > 0 && ()
+        { showAnalytics && options.length > 0 && ()
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '16px',
-            marginBottom: '24px',
-            padding: '16px',
-            background: styles.secondary,
+            display: 'grid'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))'
+            gap: '16px'
+            marginBottom: '24px'
+            padding: '16px'
+            background: styles.secondary }
             border: `1px solid ${styles.border}`}
-},
-  borderRadius: '8px'
-  }}>
+
+  borderRadius: '8px';
+}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{
-  fontSize: '24px',
-  fontWeight: 700,
-  color: styles.accent,
-  marginBottom: '4px',
-}}>
+              <div style={ {
+  fontSize: '24px'
+  fontWeight: 700
+  color: styles.accent
+  marginBottom: '4px' }
+}>
                 {choiceStats.totalWeight.toFixed(1)}
               </div>
               <div style={{ fontSize: '12px', opacity: 0.7 }}>Total Weight</div>
             </div>
             {choiceStats.mostLikely && ()
               <div style={{ textAlign: 'center' }}>
-                <div style={{
-  fontSize: '16px',
-  fontWeight: 600,
-  color: styles.success,
-  marginBottom: '4px',
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-}}>
+                <div style={ {
+  fontSize: '16px'
+  fontWeight: 600
+  color: styles.success
+  marginBottom: '4px'
+  whiteSpace: 'nowrap'
+  overflow: 'hidden'
+  textOverflow: 'ellipsis' }
+}>
                   {choiceStats.mostLikely.text}
                 </div>
                 <div style={{ fontSize: '12px', opacity: 0.7 }}>
@@ -272,15 +266,15 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
             )}
             {choiceStats.leastLikely && choiceStats.leastLikely !== choiceStats.mostLikely && ()
               <div style={{ textAlign: 'center' }}>
-                <div style={{
-  fontSize: '16px',
-  fontWeight: 600,
-  color: styles.warning,
-  marginBottom: '4px',
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-}}>
+                <div style={ {
+  fontSize: '16px'
+  fontWeight: 600
+  color: styles.warning
+  marginBottom: '4px'
+  whiteSpace: 'nowrap'
+  overflow: 'hidden'
+  textOverflow: 'ellipsis' }
+}>
                   {choiceStats.leastLikely.text}
                 </div>
                 <div style={{ fontSize: '12px', opacity: 0.7 }}>
@@ -291,15 +285,15 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
           </div>
         )}
         {/* Add Choice Form */}
-        {isAddingChoice && ()
+        { isAddingChoice && ()
           <div style={{
-            background: styles.secondary,
+            background: styles.secondary }
             border: `1px solid ${styles.border}`}
-},
-  borderRadius: '8px',
-            padding: '16px',
-            marginBottom: '20px'
-  }}>
+
+  borderRadius: '8px'
+            padding: '16px'
+            marginBottom: '20px';
+}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
               <input
                 type="text"
@@ -307,53 +301,51 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
                 onChange={(e) => setNewChoiceText(e.target.value)}
                 placeholder="Enter choice text..."
                 autoFocus
-                style={{
-                  flex: 1,
-                  padding: '8px 12px',
+                style={ {
+                  flex: 1
+                  padding: '8px 12px' }
                   border: `1px solid ${styles.border}`}
-},
-  borderRadius: '6px',
-                  background: styles.background,
-                  color: styles.text,
-                  fontSize: '14px'
-  }}
-                onKeyPress={(e) => {
+
+  borderRadius: '6px'
+                  background: styles.background
+                  color: styles.text
+                  fontSize: '14px';
+
+                onKeyPress={ (e) => {
                   if (e.key === 'Enter') handleAddChoice();
-                  if (e.key === 'Escape') setIsAddingChoice(false);
-                }}
+                  if (e.key === 'Escape') setIsAddingChoice(false) }}
               />
               <button
                 onClick={handleAddChoice}
                 disabled={!newChoiceText.trim()}
-                style={{
-  background: styles.success,
-  color: styles.background,
-  border: 'none',
-  borderRadius: '6px',
-  padding: '8px 16px',
-  fontSize: '14px',
-  fontWeight: 600,
-  cursor: newChoiceText.trim() ? 'pointer' : 'not-allowed',
-  opacity: newChoiceText.trim() ? 1 : 0.5,
-}}
+                style={ {
+  background: styles.success
+  color: styles.background
+  border: 'none'
+  borderRadius: '6px'
+  padding: '8px 16px'
+  fontSize: '14px'
+  fontWeight: 600
+  cursor: newChoiceText.trim() ? 'pointer' : 'not-allowed'
+  opacity: newChoiceText.trim() ? 1 : 0.5 }
+
               >
               Add
               </button>
               <button
-                onClick={() => {
+                onClick={ () => {
                   setIsAddingChoice(false);
-                  setNewChoiceText('');
-                }}
-                style={{
-                  background: 'transparent',
-                  color: styles.text,
+                  setNewChoiceText('') }}
+                style={ {
+                  background: 'transparent'
+                  color: styles.text }
                   border: `1px solid ${styles.border}`}
-},
-  borderRadius: '6px',
-                  padding: '8px 16px',
-                  fontSize: '14px',
-                  cursor: 'pointer'
-  }}
+
+  borderRadius: '6px'
+                  padding: '8px 16px'
+                  fontSize: '14px'
+                  cursor: 'pointer';
+
               >
               Cancel
               </button>
@@ -373,24 +365,24 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
           enableBulkOperations={!disabled}
           showStatistics={true}
           showVisualWeights={true}
-          style={{
-  background: 'transparent',
-  border: 'none',
-  padding: 0,
-}}
+          style={ {
+  background: 'transparent'
+  border: 'none'
+  padding: 0 }
+}
         />
         {/* Empty State */}
-        {options.length === 0 && ()
+        { options.length === 0 && ()
           <div style={{
-            textAlign: 'center',
-            padding: '60px 20px',
-            background: styles.secondary,
+            textAlign: 'center'
+            padding: '60px 20px'
+            background: styles.secondary }
             border: `2px dashed ${styles.border}`}
-},
-  borderRadius: '12px',
-            color: styles.text,
+
+  borderRadius: '12px'
+            color: styles.text
             opacity: 0.7;
-  }}>
+}>
             <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎲</div>
             <h4 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: 600 }}>
             No Choices Yet
@@ -401,17 +393,17 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
             {!disabled && ()
               <button
                 onClick={() => setIsAddingChoice(true)}
-                style={{
-                  background: styles.accent,
-                  color: styles.background,
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '12px 24px',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
+                style={ {
+                  background: styles.accent
+                  color: styles.background
+                  border: 'none'
+                  borderRadius: '8px'
+                  padding: '12px 24px'
+                  fontSize: '14px'
+                  fontWeight: 600
+                  cursor: 'pointer' }
                   boxShadow: `0 4px 12px ${styles.accent}30`}
-                }}
+
               >
               ＋ Add Your First Choice
               </button>
@@ -419,27 +411,27 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
           </div>
         )}
         {/* Preview Section */}
-        {showPreview && options.length > 0 && ()
+        { showPreview && options.length > 0 && ()
           <div style={{
-            marginTop: '32px',
-            padding: '20px',
-            background: styles.secondary,
+            marginTop: '32px'
+            padding: '20px'
+            background: styles.secondary }
             border: `1px solid ${styles.border}`}
-},
-  borderRadius: '12px'
-  }}>
-            <div style={{
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: '16px',
-}}>
-              <h4 style={{
-  margin: 0,
-  fontSize: '16px',
-  fontWeight: 600,
-  color: styles.accent,
-}}>
+
+  borderRadius: '12px';
+}>
+            <div style={ {
+  display: 'flex'
+  justifyContent: 'space-between'
+  alignItems: 'center'
+  marginBottom: '16px' }
+}>
+              <h4 style={ {
+  margin: 0
+  fontSize: '16px'
+  fontWeight: 600
+  color: styles.accent }
+}>
               🎯 Preview Results
               </h4>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -452,70 +444,70 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
                   onChange={(e) => setPreviewCount(Math.max(1, Math.min(100, parseInt(e.target.value) || 10)))}
                   min={1}
                   max={100}
-                  style={{
-                    width: '60px',
-                    padding: '4px 6px',
+                  style={ {
+                    width: '60px'
+                    padding: '4px 6px' }
                     border: `1px solid ${styles.border}`}
-},
-  borderRadius: '4px',
-                    background: styles.background,
-                    color: styles.text,
-                    fontSize: '12px'
-  }}
+
+  borderRadius: '4px'
+                    background: styles.background
+                    color: styles.text
+                    fontSize: '12px';
+
                 />
                 <button
                   onClick={generatePreview}
-                  style={{
-  background: styles.accent,
-  color: styles.background,
-  border: 'none',
-  borderRadius: '6px',
-  padding: '6px 12px',
-  fontSize: '12px',
-  fontWeight: 600,
-  cursor: 'pointer',
-}}
+                  style={ {
+  background: styles.accent
+  color: styles.background
+  border: 'none'
+  borderRadius: '6px'
+  padding: '6px 12px'
+  fontSize: '12px'
+  fontWeight: 600
+  cursor: 'pointer' }
+}
                 >
                 Generate
                 </button>
               </div>
             </div>
-            {previewResults.length > 0 && ()
+            { previewResults.length > 0 && ()
               <div>
                 <div style={{
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '6px',
-  marginBottom: '12px',
-}}>
+  display: 'flex'
+  flexWrap: 'wrap'
+  gap: '6px'
+  marginBottom: '12px' }
+}>
                   {previewResults.map((result, index) => ()
                     <span
                       key={index}
-                      style={{
-                        padding: '4px 8px',
-                        background: styles.accent + '20',
+                      style={ {
+                        padding: '4px 8px'
+                        background: styles.accent + '20' }
                         border: `1px solid ${styles.accent}40`}
-},
-  borderRadius: '4px',
-                        fontSize: '12px',
-                        color: styles.accent,
+
+  borderRadius: '4px'
+                        fontSize: '12px'
+                        color: styles.accent
                         fontWeight: 500;
-  }}
+
                     >
                       {result}
                     </span>
                   ))}
                 </div>
                 {/* Preview Statistics */}
-                <div style={{
-                  padding: '12px',
-                  background: styles.background,
+                <div style={ {
+                  padding: '12px'
+                  background: styles.background }
                   border: `1px solid ${styles.border}`}
-},
-  borderRadius: '6px',
-                  fontSize: '12px',
+
+  borderRadius: '6px'
+                  fontSize: '12px'
                   opacity: 0.8;
-  }}>
+}>
                   <strong>Distribution:</strong>{' '}
                   {Array.from(new Set(previewResults)).map(unique => {)
   const count = previewResults.filter(r => r === unique).length;
@@ -529,17 +521,17 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
         )}
       </ProgressiveDisclosureSection>
       {/* Professional Footer */}
-      <div style={{
-        marginTop: '24px',
-        paddingTop: '16px',
+      <div style={ {
+        marginTop: '24px'
+        paddingTop: '16px' }
         borderTop: `1px solid ${styles.border}`}
-},
-  display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontSize: '12px',
+
+  display: 'flex'
+        justifyContent: 'space-between'
+        alignItems: 'center'
+        fontSize: '12px'
         opacity: 0.6;
-  }}>
+}>
         <div>
           Wild Construct • Weighted Choice Editor
         </div>

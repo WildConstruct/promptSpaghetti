@@ -11,11 +11,11 @@ import {
   createRateLimitPlugin, 
   RateLimitEndpoints,
   RateLimitMiddleware 
-} from './rate-limit';
+ from './rate-limit';
 import { 
   RateLimitConfigurationManager,
   RateLimitConfigurationPresets 
-} from '../../../../packages/core/security/RateLimitConfigurationManager';
+ from '../../../../packages/core/security/RateLimitConfigurationManager';
 import { RateLimitPresets } from '../../../../packages/core/security/RateLimiter';
 
 /**
@@ -37,7 +37,7 @@ export async function setupRateLimiting(
   if (process.env.NODE_ENV === 'production') {
     configManager.addProfile(RateLimitConfigurationPresets.createWebAppProfile());
     configManager.addProfile(RateLimitConfigurationPresets.createAPIProfile());
-  }
+
 
   // Register the rate limit plugin
   await fastify.register(createRateLimitPlugin({
@@ -54,7 +54,7 @@ export async function setupRateLimiting(
       legacyHeaders: false,
       message: 'Too many requests, please try again later.',
       statusCode: 429
-  }
+
     // Custom key extractor to include more context
     keyExtractor: (request) => ({
       ip: request.ip,
@@ -81,7 +81,7 @@ export async function setupRateLimiting(
       // Fail open - allow the request if rate limiting fails
       // In production, you might want to fail closed instead
       return;
-  }
+
     // Custom handler when limit is reached
     onLimitReached: (request, reply, result) => {
       // Log rate limit violations
@@ -109,7 +109,7 @@ export async function setupRateLimiting(
         resetTime: result.info.resetTime,
         documentation: 'https://docs.example.com/rate-limiting'
       });
-    }
+
   }));
 
   // Get the middleware instance
@@ -130,48 +130,48 @@ export async function setupRateLimiting(
             userId: context.userId,
             attempts: info.totalHitsInWindow
           });
-        }
-      }
-  }
+
+
+
     {
       path: '/auth/register',
       method: 'POST',
       config: RateLimitPresets.authentication()
-  }
+
     {
       path: '/auth/password-reset/request',
       method: 'POST',
       config: RateLimitPresets.passwordReset()
-  }
+
     {
       path: '/auth/password-reset/confirm',
       method: 'POST',
       config: RateLimitPresets.passwordReset()
-  }
+
     {
       path: '/auth/refresh',
       method: 'POST',
       config: {
         windowMs: 5 * 60 * 1000, // 5 minutes
         maxRequests: 10
-      }
-  }
+
+
     {
       path: '/auth/change-password',
       method: 'POST',
       config: {
         windowMs: 5 * 60 * 1000, // 5 minutes
         maxRequests: 3 // Very restrictive for password changes
-      }
-  }
+
+
     // OAuth endpoints
     {
       path: '/auth/oauth',
       config: {
         windowMs: 15 * 60 * 1000,
         maxRequests: 20
-      }
-  }
+
+
     // API endpoints - moderate limits
     {
       path: '/preview',
@@ -180,50 +180,50 @@ export async function setupRateLimiting(
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 30,
         message: 'Preview generation rate limit exceeded. Please wait before generating more previews.'
-      }
-  }
+
+
     {
       path: '/api/corrections',
       config: RateLimitPresets.api()
-  }
+
     {
       path: '/api/workspace',
       config: RateLimitPresets.api()
-  }
+
     {
       path: '/api/workflow',
       config: RateLimitPresets.api()
-  }
+
     {
       path: '/api/approval',
       config: RateLimitPresets.api()
-  }
+
     {
       path: '/api/locking',
       config: RateLimitPresets.api()
-  }
+
     {
       path: '/api/randomizer',
       config: RateLimitPresets.api()
-  }
+
     {
       path: '/api/analytics',
       config: {
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 300,
         skipSuccessfulRequests: true // Only count errors
-      }
-  }
+
+
     {
       path: '/api/marketplace',
       config: RateLimitPresets.api()
-  }
+
     // File upload endpoints - strict limits
     {
       path: '/api/marketplace/submissions/*/files',
       method: 'POST',
       config: RateLimitPresets.fileUpload()
-  }
+
     {
       path: '/auth/profile/avatar',
       method: 'POST',
@@ -231,8 +231,8 @@ export async function setupRateLimiting(
         windowMs: 60 * 60 * 1000, // 1 hour
         maxRequests: 5, // Very restrictive for avatar uploads
         message: 'Avatar upload rate limit exceeded. Please try again later.'
-      }
-  }
+
+
     // WebSocket connection attempts
     {
       path: '/ws',
@@ -240,45 +240,45 @@ export async function setupRateLimiting(
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 10,
         message: 'Too many WebSocket connection attempts'
-      }
-  }
+
+
     {
       path: '/ws/status',
       config: {
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 100
-      }
-  }
+
+
     {
       path: '/ws/documents',
       config: {
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 50
-      }
-  }
+
+
     // Health check endpoints - no limits
     {
       path: '/health',
       config: {
         windowMs: 1000,
         maxRequests: Number.MAX_SAFE_INTEGER
-      }
-  }
+
+
     {
       path: '/',
       config: {
         windowMs: 1000,
         maxRequests: Number.MAX_SAFE_INTEGER
-      }
-  }
+
+
     // Admin endpoints - restricted but higher limits for monitoring
     {
       path: '/admin/rate-limits',
       config: {
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 50
-      }
-    }
+
+
   ]);
 
   // Add dynamic rules for special cases
@@ -297,7 +297,7 @@ export async function setupRateLimiting(
           operator: 'regex',
           value: '(bot|crawler|spider|scraper)',
           caseSensitive: false
-        }
+
       ],
       windowMs: 60 * 1000, // 1 minute
       maxRequests: 10,
@@ -320,7 +320,7 @@ export async function setupRateLimiting(
             type: 'geo',
             operator: 'in',
             values: ['XX', 'YY'] // Replace with actual country codes
-          }
+
         ],
         windowMs: 60 * 60 * 1000, // 1 hour
         maxRequests: 50,
@@ -329,7 +329,7 @@ export async function setupRateLimiting(
         alertThreshold: 70,
         logViolations: true
       });
-    }
+
 
     // Time-based rules (e.g., stricter limits during off-hours)
     configManager.addRule({
@@ -343,7 +343,7 @@ export async function setupRateLimiting(
           type: 'time',
           operator: 'range',
           value: { start: '22:00', end: '06:00' }
-        }
+
       ],
       windowMs: 60 * 60 * 1000, // 1 hour
       maxRequests: 500, // Half the normal limit
@@ -357,9 +357,9 @@ export async function setupRateLimiting(
             startTime: '22:00',
             endTime: '06:00',
             maxRequests: 500
-          }
+
         ]
-      }
+
     });
 
     // Suspicious pattern detection
@@ -375,13 +375,13 @@ export async function setupRateLimiting(
           field: 'user-agent',
           operator: 'equals',
           value: ''
-  }
+
         {
           type: 'header',
           field: 'accept',
           operator: 'exists',
           negate: true
-        }
+
       ],
       windowMs: 60 * 60 * 1000, // 1 hour
       maxRequests: 20,
@@ -391,7 +391,7 @@ export async function setupRateLimiting(
       alertThreshold: 50,
       logViolations: true
     });
-  }
+
 
   // Setup monitoring endpoint for rate limit stats
   fastify.get('/admin/rate-limits/stats', {
@@ -427,7 +427,7 @@ export async function setupRateLimiting(
   });
 
   console.log('Rate limiting middleware configured successfully');
-}
+
 
 /**
  * Example of how to use in your main server file:

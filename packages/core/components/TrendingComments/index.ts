@@ -11,8 +11,7 @@ export { TrendingCommentsList } from './TrendingCommentsList';
 export { TrendingCommentCard } from './TrendingCommentCard';
 
 // Re-export types for convenience
-export type {
-  TrendingComment,
+export type { TrendingComment,
   CommentScore,
   CommentEngagement,
   TrendingResults,
@@ -23,8 +22,8 @@ export type {
   CommentableResourceType,
   CommentSortOrder,
   CommentEngagementType,
-  TrendingPeriod,
-} from '../../types/TrendingCommentsTypes';
+  TrendingPeriod }
+ from '../../types/TrendingCommentsTypes';
 
 // Re-export service for convenience
 export { TrendingCommentsService } from '../../services/TrendingCommentsService';

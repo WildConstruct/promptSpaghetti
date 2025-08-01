@@ -12,17 +12,18 @@ import { ApiOptimizationService, OptimizationAnalysisConfig } from '../services/
 import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
-}
-}
+
+
 interface OptimizationQueryParams {
   timeWindow?: number;
   keyId?: string;
   focusAreas?: string;
   severity?: string;
   includeBenchmarks?: boolean;
-}
-}
-}
+
+
+
+
 
 export async function apiOptimizationRoutes(fastify: FastifyInstance) {
   const databaseService = new DatabaseService();
@@ -35,15 +36,15 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: OptimizationQueryParams;
-  }>('/admin/api-optimization/insights', async (request: FastifyRequest<{
+>('/admin/api-optimization/insights', async (request: FastifyRequest<{
     Querystring: OptimizationQueryParams;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const {
         timeWindow = 30,
         focusAreas = 'performance,security,cost,reliability',
         includeBenchmarks = true
-      } = request.query;
+ = request.query;
 
       const config: OptimizationAnalysisConfig = {
         timeWindow,
@@ -60,16 +61,16 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
         meta: {
           generatedAt: new Date().toISOString(),
           config
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error generating optimization insights:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to generate optimization insights',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -78,15 +79,15 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: OptimizationQueryParams;
-  }>('/admin/api-optimization/recommendations', async (request: FastifyRequest<{
+>('/admin/api-optimization/recommendations', async (request: FastifyRequest<{
     Querystring: OptimizationQueryParams;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const {
         timeWindow = 7,
         severity,
         focusAreas = 'performance,security,reliability'
-      } = request.query;
+ = request.query;
 
       const config: OptimizationAnalysisConfig = {
         timeWindow,
@@ -102,7 +103,7 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
       // Filter by severity if specified
       if (severity) {
         recommendations = recommendations.filter(rec => rec.severity === severity);
-      }
+
 
       return reply.code(200).send({
         success: true,
@@ -115,28 +116,28 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
               high: recommendations.filter(r => r.severity === 'high').length,
               medium: recommendations.filter(r => r.severity === 'medium').length,
               low: recommendations.filter(r => r.severity === 'low').length
-  }
+
             byType: {
               performance: recommendations.filter(r => r.type === 'performance').length,
               security: recommendations.filter(r => r.type === 'security').length,
               cost: recommendations.filter(r => r.type === 'cost').length,
               reliability: recommendations.filter(r => r.type === 'reliability').length
-            }
-          }
-  }
+
+
+
         meta: {
           generatedAt: new Date().toISOString(),
           filters: { severity, focusAreas }
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching recommendations:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to fetch recommendations',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -145,9 +146,9 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Params: { keyId: string };
-  }>('/admin/api-optimization/key/:keyId', async (request: FastifyRequest<{
+>('/admin/api-optimization/key/:keyId', async (request: FastifyRequest<{
     Params: { keyId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyId } = request.params;
 
@@ -164,21 +165,21 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
             estimatedImpact: {
               costSavings: recommendations.reduce((acc, r) => acc + (r.impact.estimatedSavings || 0), 0),
               performanceGains: recommendations.reduce((acc, r) => acc + (r.impact.performanceImprovement || 0), 0)
-            }
-          }
-  }
+
+
+
         meta: {
           generatedAt: new Date().toISOString()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Error fetching key-specific recommendations for ${request.params.keyId}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to fetch key-specific recommendations',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -194,16 +195,16 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
         data: summary,
         meta: {
           generatedAt: new Date().toISOString()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error generating executive summary:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to generate executive summary',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -220,7 +221,7 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
           database: 'connected',
           auditService: 'operational',
           optimizationEngine: 'ready'
-  }
+
         version: '1.0.0'
       };
 
@@ -228,14 +229,14 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
         success: true,
         data: healthCheck
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Health check failed:', error);
       return reply.code(503).send({
         success: false,
         error: 'Service unhealthy',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -247,12 +248,12 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
       keyIds?: string[];
       config?: Partial<OptimizationAnalysisConfig>;
     };
-  }>('/admin/api-optimization/analyze', async (request: FastifyRequest<{
+>('/admin/api-optimization/analyze', async (request: FastifyRequest<{
     Body: {
       keyIds?: string[];
       config?: Partial<OptimizationAnalysisConfig>;
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyIds, config: customConfig } = request.body;
 
@@ -277,29 +278,29 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
             criticalIssues: recommendations.flat().filter(r => r.severity === 'critical').length,
             estimatedSavings: recommendations.flat().reduce((acc, r) => acc + (r.impact.estimatedSavings || 0), 0),
             performanceGains: 0
-  }
+
           recommendations: recommendations.flat(),
           trends: {
             performanceTrend: 'stable' as const,
             usageTrend: 'stable' as const,
             errorTrend: 'stable' as const
-  }
+
           benchmarks: {
             industryAverages: {
               responseTime: 300,
               errorRate: 2.5,
               uptime: 99.5
-  }
+
             yourPerformance: {
               responseTime: 0,
               errorRate: 0,
               uptime: 0
-            }
-          }
+
+
         };
-      } else {
+ else {
         insights = await optimizationService.generateOptimizationInsights(config);
-      }
+
 
       return reply.code(200).send({
         success: true,
@@ -309,17 +310,17 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
           analyzedKeys: keyIds || [],
           config,
           generatedAt: new Date().toISOString()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error running optimization analysis:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to run optimization analysis',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
-}
+
 
 export default apiOptimizationRoutes;

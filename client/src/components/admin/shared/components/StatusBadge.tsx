@@ -13,14 +13,16 @@ export type StatusType =
   | 'high' | 'medium' | 'low' | 'critical';
 
 export type StatusSize = 'small' | 'medium' | 'large';
-}
+
+
 interface StatusBadgeProps {
   status: StatusType | string;
   size?: StatusSize;
   variant?: 'solid' | 'outline' | 'soft';
   children?: React.ReactNode;
   className?: string;
-}
+
+
 const statusConfigs: Record<string, { color: string; icon?: string; label?: string }> = {
   // Boolean states
   active: { color: '#10b981', icon: '●', label: 'Active' },
@@ -46,17 +48,17 @@ const statusConfigs: Record<string, { color: string; icon?: string; label?: stri
   low: { color: '#6b7280', icon: '⚪', label: 'Low' }
 };
 const sizeConfigs = {
-  small: {
+  small: {,
   padding: '2px 6px',
   fontSize: '11px',
   gap: '4px',
 },
-  medium: {
+  medium: {,
   padding: '4px 8px',
   fontSize: '12px',
   gap: '6px',
 },
-  large: {
+  large: {,
   padding: '6px 12px',
   fontSize: '14px',
   gap: '8px',
@@ -109,7 +111,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({)
   borderRadius: '12px',
   whiteSpace: 'nowrap',
   ...variantStyles
-}}
+
     >
       {config.icon && <span className="status-icon">{config.icon}</span>}
       <span className="status-text">

@@ -19,8 +19,8 @@ import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 import { MarketplaceDAO } from './dao';
 
-}
-}
+
+
 interface IndexOperation {
   id: string;
   operation: 'rebuild' | 'optimize' | 'update' | 'delete' | 'warm';
@@ -31,12 +31,13 @@ interface IndexOperation {
   totalDocuments: number;
   errorMessage?: string;
   metadata: any;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface IndexHealth {
   indexName: string;
   status: 'green' | 'yellow' | 'red';
@@ -48,8 +49,9 @@ interface IndexHealth {
     relocatingShards: number;
     initializingShards: number;
     unassignedShards: number;
-}
-}
+
+
+
   };
   settings: any;
   mappings: any;
@@ -65,10 +67,10 @@ interface IndexHealth {
     avgIndexTime: number;
     cacheHitRate: number;
   };
-}
 
-}
-}
+
+
+
 interface IndexOptimizationRecommendation {
   category: 'mappings' | 'settings' | 'queries' | 'shards' | 'replicas';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -79,12 +81,13 @@ interface IndexOptimizationRecommendation {
   impact: string;
   implementation: string;
   estimatedImprovement: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface BulkIndexResult {
   operationId: string;
   total: number;
@@ -94,10 +97,11 @@ interface BulkIndexResult {
   errors: Array<{
     documentId: string;
     error: string;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 @Injectable()
 export class SearchIndexManager {
@@ -115,7 +119,7 @@ export class SearchIndexManager {
       auth: process.env.ELASTICSEARCH_AUTH ? {
         username: process.env.ELASTICSEARCH_USERNAME || 'elastic',
         password: process.env.ELASTICSEARCH_PASSWORD || 'changeme'
-      } : undefined,
+ : undefined,
       requestTimeout: 60000,
       maxRetries: 3
     });
@@ -127,7 +131,7 @@ export class SearchIndexManager {
       retryDelayOnFailover: 100,
       maxRetriesPerRequest: 3
     });
-  }
+
 
   /**
    * Get comprehensive index health information
@@ -166,7 +170,7 @@ export class SearchIndexManager {
           relocatingShards: health.relocating_shards,
           initializingShards: health.initializing_shards,
           unassignedShards: health.unassigned_shards
-  }
+
         settings,
         mappings,
         stats: {
@@ -175,14 +179,14 @@ export class SearchIndexManager {
           indexingRate: stats.total.indexing.index_total || 0,
           searchRate: stats.total.search.query_total || 0,
           mergeRate: stats.total.merges.total || 0
-  }
+
         performance
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get index health:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Start index rebuild operation
@@ -206,7 +210,7 @@ export class SearchIndexManager {
           batchSize,
           enableOptimization,
           startedAt: new Date()
-        }
+
       };
 
       this.activeOperations.set(operationId, operation);
@@ -220,11 +224,11 @@ export class SearchIndexManager {
         });
 
       return operationId;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to start index rebuild:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Optimize index performance
@@ -243,7 +247,7 @@ export class SearchIndexManager {
         startedAt: new Date(),
         metadata: {
           optimizations: []
-        }
+
       };
 
       this.activeOperations.set(operationId, operation);
@@ -259,11 +263,11 @@ export class SearchIndexManager {
 
       this.updateOperationStatus(operationId, 'completed');
       return operationId;
-    } catch (error) {
+ catch (error) {
       console.error('Index optimization failed:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Bulk index documents
@@ -315,16 +319,15 @@ export class SearchIndexManager {
                 documentId: item.index._id,
                 error: item.index.error.reason
               });
-            } else {
+ else {
               successful++;
-            }
-          }
+
+
 
           // Update operation progress
           operation.documentsProcessed = i + batch.length;
           await this.saveOperationStatus(operation);
-
-        } catch (batchError) {
+ catch (batchError) {
           console.error('Batch indexing error:', batchError);
           failed += batch.length;
           batch.forEach(doc => {
@@ -333,8 +336,8 @@ export class SearchIndexManager {
               error: batchError instanceof Error ? batchError.message : 'Unknown error'
             });
           });
-        }
-      }
+
+
 
       // Refresh index after bulk operation
       await this.client.indices.refresh({ index: this.INDEX_NAME });
@@ -350,11 +353,11 @@ export class SearchIndexManager {
         duration,
         errors
       };
-    } catch (error) {
+ catch (error) {
       console.error('Bulk indexing failed:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get optimization recommendations
@@ -378,7 +381,7 @@ export class SearchIndexManager {
           implementation: 'Reindex with fewer shards',
           estimatedImprovement: '15-25% query performance improvement'
         });
-      }
+
 
       // Analyze replica configuration
       if (health.health.numberOfReplicas === 0) {
@@ -393,7 +396,7 @@ export class SearchIndexManager {
           implementation: 'Add replica shards',
           estimatedImprovement: 'Better fault tolerance and distributed search'
         });
-      }
+
 
       // Analyze mapping efficiency
       const mappingRecommendations = await this.analyzeMappings(health.mappings);
@@ -412,7 +415,7 @@ export class SearchIndexManager {
           implementation: 'Optimize queries and add caching',
           estimatedImprovement: '50-70% query time reduction'
         });
-      }
+
 
       // Analyze cache performance
       if (health.performance.cacheHitRate < 0.8) {
@@ -427,17 +430,17 @@ export class SearchIndexManager {
           implementation: 'Adjust cache settings and query patterns',
           estimatedImprovement: '30-40% improvement for repeated queries'
         });
-      }
+
 
       return recommendations.sort((a, b) => {
         const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
         return priorityOrder[b.priority] - priorityOrder[a.priority];
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to generate recommendations:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Get operation status
@@ -447,7 +450,7 @@ export class SearchIndexManager {
     const operation = this.activeOperations.get(operationId);
     if (operation) {
       return operation;
-    }
+
 
     // Check database for historical operations
     try {
@@ -470,13 +473,13 @@ export class SearchIndexManager {
           errorMessage: row.error_message,
           metadata: row.metadata || {}
         };
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to get operation status from database:', error);
-    }
+
 
     return null;
-  }
+
 
   /**
    * Cancel running operation
@@ -486,17 +489,17 @@ export class SearchIndexManager {
     const operation = this.activeOperations.get(operationId);
     if (!operation) {
       return false;
-    }
+
 
     if (operation.status === 'running') {
       operation.status = 'cancelled';
       await this.saveOperationStatus(operation);
       this.activeOperations.delete(operationId);
       return true;
-    }
+
 
     return false;
-  }
+
 
   /**
    * Warm up index for better performance
@@ -511,16 +514,16 @@ export class SearchIndexManager {
           multi_match: {
             query: 'ai prompt template',
             fields: ['title^3', 'description^2', 'tags']
-          }
-  }
+
+
         {
           bool: {
             filter: [
               { range: { price_cents: { gte: 0, lte: 1000 } } },
               { term: { status: 'published' } }
             ]
-          }
-        }
+
+
       ];
 
       for (const query of warmupQueries) {
@@ -529,13 +532,13 @@ export class SearchIndexManager {
           body: { query },
           size: 20
         });
-      }
+
 
       console.log('Index warmup completed');
-    } catch (error) {
+ catch (error) {
       console.error('Index warmup failed:', error);
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -570,7 +573,7 @@ export class SearchIndexManager {
         body: {
           settings,
           mappings
-        }
+
       });
 
       // Get all documents from database
@@ -592,24 +595,23 @@ export class SearchIndexManager {
 
         if (enableOptimization) {
           await this.optimizeIndex();
-        }
+
 
         operation.status = 'completed';
         operation.completedAt = new Date();
-      } else {
+ else {
         operation.status = 'failed';
         operation.errorMessage = `${bulkResult.failed} documents failed to index`;
-      }
 
-    } catch (error) {
+ catch (error) {
       operation.status = 'failed';
       operation.errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Index rebuild failed:', error);
-    } finally {
+ finally {
       await this.saveOperationStatus(operation);
       this.activeOperations.delete(operationId);
-    }
-  }
+
+
 
   private async optimizeIndexSettings(): Promise<void> {
 
@@ -623,20 +625,20 @@ export class SearchIndexManager {
             'index.query.default_field': ['title', 'description', 'tags'],
             'index.requests.cache.enable': true,
             'index.queries.cache.enabled': true
-          }
-        }
+
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to optimize index settings:', error);
-    }
-  }
+
+
 
   private async optimizeMappings(): Promise<void> {
 
     // Mapping optimization would require reindexing
     // This is a placeholder for mapping analysis and recommendations
     console.log('Mapping optimization analysis completed');
-  }
+
 
   private async performForcemerge(): Promise<void> {
 
@@ -646,10 +648,10 @@ export class SearchIndexManager {
         max_num_segments: 1,
         wait_for_completion: false
       });
-    } catch (error) {
+ catch (error) {
       console.error('Force merge failed:', error);
-    }
-  }
+
+
 
   private async switchIndexAlias(newIndexName: string): Promise<void> {
 
@@ -661,12 +663,12 @@ export class SearchIndexManager {
             { add: { index: newIndexName, alias: 'marketplace_search' } },
             { add: { index: newIndexName, alias: this.INDEX_NAME } }
           ]
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to switch index alias:', error);
-    }
-  }
+
+
 
   private async calculatePerformanceMetrics(): Promise<any> {
 
@@ -685,15 +687,15 @@ export class SearchIndexManager {
         avgIndexTime: 50, // Would be calculated from indexing metrics
         cacheHitRate: 0.75 // Would be calculated from cache statistics
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to calculate performance metrics:', error);
       return {
         avgQueryTime: 0,
         avgIndexTime: 0,
         cacheHitRate: 0
       };
-    }
-  }
+
+
 
   private async analyzeMappings(mappings: any): Promise<IndexOptimizationRecommendation[]> {
 
@@ -718,7 +720,7 @@ export class SearchIndexManager {
               implementation: 'Update mapping with custom analyzer configuration',
               estimatedImprovement: '10-15% search relevance improvement'
             });
-          }
+
           
           // Check for missing keyword sub-fields
           if (!fieldConfig.fields?.keyword && fieldName !== 'content') {
@@ -733,8 +735,8 @@ export class SearchIndexManager {
               implementation: 'Add keyword subfield to mapping',
               estimatedImprovement: 'Enable new search capabilities'
             });
-          }
-        }
+
+
         
         // Check for unnecessarily complex nested mappings
         if (fieldConfig.type === 'nested' && fieldConfig.properties) {
@@ -751,8 +753,8 @@ export class SearchIndexManager {
               implementation: 'Restructure nested mapping or use flattened type',
               estimatedImprovement: '20-30% indexing performance improvement'
             });
-          }
-        }
+
+
       });
       
       // Check for missing dynamic templates
@@ -768,14 +770,13 @@ export class SearchIndexManager {
           implementation: 'Add dynamic templates for common field patterns',
           estimatedImprovement: 'Prevent mapping explosion and improve flexibility'
         });
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to analyze mappings:', error);
-    }
+
     
     return recommendations;
-  }
+
 
   private async saveOperationStatus(operation: IndexOperation): Promise<void> {
 
@@ -805,10 +806,10 @@ export class SearchIndexManager {
         operation.errorMessage,
         JSON.stringify(operation.metadata)
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to save operation status:', error);
-    }
-  }
+
+
 
   private updateOperationStatus(
     operationId: string, 
@@ -820,17 +821,17 @@ export class SearchIndexManager {
       operation.status = status;
       if (status === 'completed' || status === 'failed') {
         operation.completedAt = new Date();
-      }
+
       if (errorMessage) {
         operation.errorMessage = errorMessage;
-      }
+
       this.saveOperationStatus(operation);
-    }
-  }
+
+
 
   private generateOperationId(): string {
     return `idx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private formatBytes(bytes: number): string {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -840,10 +841,10 @@ export class SearchIndexManager {
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
-    }
+
     
     return `${size.toFixed(2)} ${units[unitIndex]}`;
-  }
+
 
   /**
    * Get index diagnostic information
@@ -863,23 +864,23 @@ export class SearchIndexManager {
           count: segments.body.indices[this.INDEX_NAME]?.total?.segments?.count || 0,
           memory: segments.body.indices[this.INDEX_NAME]?.total?.segments?.memory_in_bytes || 0,
           version_map_memory: segments.body.indices[this.INDEX_NAME]?.total?.segments?.version_map_memory_in_bytes || 0
-  }
+
         refresh_stats: {
           total: stats.body.indices[this.INDEX_NAME]?.total?.refresh?.total || 0,
           time_in_millis: stats.body.indices[this.INDEX_NAME]?.total?.refresh?.total_time_in_millis || 0,
           external_total: stats.body.indices[this.INDEX_NAME]?.total?.refresh?.external_total || 0
-  }
+
         indexing_stats: {
           total: stats.body.indices[this.INDEX_NAME]?.total?.indexing?.index_total || 0,
           time_in_millis: stats.body.indices[this.INDEX_NAME]?.total?.indexing?.index_time_in_millis || 0,
           throttle_time_in_millis: stats.body.indices[this.INDEX_NAME]?.total?.indexing?.throttle_time_in_millis || 0
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get index diagnostics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Clear index cache
@@ -895,11 +896,11 @@ export class SearchIndexManager {
       });
       
       console.log(`Cleared cache types: ${cacheTypes.join(', ')}`);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to clear cache:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Create index backup
@@ -914,11 +915,11 @@ export class SearchIndexManager {
       console.log(`Creating backup: ${backupName}`);
       
       return backupName;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to create backup:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Validate index mapping against new schema
@@ -941,13 +942,13 @@ export class SearchIndexManager {
           if (currentField && typeof newField === 'object' && (newField as any).type) {
             if (currentField.type !== (newField as any).type) {
               conflicts.push(`Field type conflict at ${fullPath}: current=${currentField.type}, new=${(newField as any).type}`);
-            }
-          }
+
+
           
           if (typeof newField === 'object' && (newField as any).properties) {
             checkFieldCompatibility(currentField?.properties, (newField as any).properties, fullPath);
-          }
-        }
+
+
       };
       
       checkFieldCompatibility(current.properties, newMapping.properties);
@@ -957,24 +958,24 @@ export class SearchIndexManager {
         Object.entries(newMapping.properties).forEach(([fieldName, fieldConfig]: [string, any]) => {
           if (fieldConfig.type === 'text' && !fieldConfig.index) {
             warnings.push(`Field ${fieldName} is text type but not indexed - consider keyword type`);
-          }
+
         });
-      }
+
       
       return {
         isValid: conflicts.length === 0,
         conflicts,
         warnings
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to validate mapping:', error);
       return {
         isValid: false,
         conflicts: [`Validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`],
         warnings: []
       };
-    }
-  }
+
+
 
   /**
    * Get index lifecycle policy status
@@ -991,11 +992,11 @@ export class SearchIndexManager {
         is_auto_retryable_error: false,
         failed_step_retry_count: 0
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get lifecycle status:', error);
       return null;
-    }
-  }
+
+
 
   /**
    * Destroy service and clean up resources
@@ -1006,14 +1007,13 @@ export class SearchIndexManager {
       // Cancel any running operations
       for (const [operationId] of this.activeOperations) {
         await this.cancelOperation(operationId);
-      }
+
       
       // Close Redis connection
       await this.redis.quit();
       
       console.log('SearchIndexManager destroyed successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Error during SearchIndexManager destruction:', error);
-    }
-  }
-}
+
+

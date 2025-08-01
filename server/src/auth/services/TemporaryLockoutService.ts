@@ -6,8 +6,8 @@
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
-}
-}
+
+
 export interface TemporaryLockoutConfig {
   enabled: boolean;
   baseDuration: number; // seconds
@@ -20,12 +20,13 @@ export interface TemporaryLockoutConfig {
   bypassRoles: string[];
   exemptIPs: string[];
   exemptUserAgents: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LockoutTrigger {
   id: string;
   name: string;
@@ -37,12 +38,13 @@ export interface LockoutTrigger {
   resetOnSuccess: boolean;
   customDuration?: number; // override default duration
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemporaryLockout {
   id: string;
   userId: string;
@@ -57,8 +59,9 @@ export interface TemporaryLockout {
     duration: number; // seconds
     gracePeriod: number; // seconds
     remainingTime: number; // seconds (calculated dynamically)
-}
-}
+
+
+
   };
   
   status: 'pending' | 'active' | 'expired' | 'released' | 'overridden';
@@ -93,12 +96,12 @@ export interface TemporaryLockout {
       performedBy: string;
       timestamp: Date;
       details: Record<string, any>;
-    }>;
+>;
   };
-}
 
-}
-}
+
+
+
 export interface LockoutAttempt {
   id: string;
   userId: string;
@@ -116,8 +119,9 @@ export interface LockoutAttempt {
     responseTime?: number;
     errorType?: string;
     blocked: boolean;
-}
-}
+
+
+
   };
   
   triggers: {
@@ -131,10 +135,10 @@ export interface LockoutAttempt {
     warningIssued?: boolean;
     additionalRestrictions?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface LockoutWarning {
   id: string;
   userId: string;
@@ -147,8 +151,9 @@ export interface LockoutWarning {
     issuedAt: Date;
     expiresAt: Date;
     acknowledgedAt?: Date;
-}
-}
+
+
+
   };
   
   thresholds: {
@@ -162,7 +167,7 @@ export interface LockoutWarning {
     recommended: string[];
     preventive: string[];
   };
-}
+
 
 export class TemporaryLockoutService extends EventEmitter {
   private config: TemporaryLockoutConfig;
@@ -178,7 +183,7 @@ export class TemporaryLockoutService extends EventEmitter {
     this.config = config;
     this.initializeDefaultTriggers();
     this.startMaintenanceTasks();
-  }
+
 
   /**
    * Register a lockout trigger
@@ -201,7 +206,7 @@ export class TemporaryLockoutService extends EventEmitter {
 
     this.emit('triggerRegistered', newTrigger);
     return newTrigger;
-  }
+
 
   /**
    * Evaluate lockout conditions for a user attempt
@@ -219,14 +224,14 @@ export class TemporaryLockoutService extends EventEmitter {
       responseCode?: number;
       responseTime?: number;
       errorType?: string;
-    }
+
   ): Promise<{
     lockoutRequired: boolean;
     lockout?: TemporaryLockout;
     warnings: LockoutWarning[];
     restrictions: string[];
     message?: string;
-  }> {
+> {
 
     // Check if user is exempt
     if (await this.isUserExempt(userId, context.ipAddress, context.userAgent)) {
@@ -235,7 +240,7 @@ export class TemporaryLockoutService extends EventEmitter {
         warnings: [],
         restrictions: []
       };
-    }
+
 
     // Check if user already has an active lockout
     const existingLockout = this.activeLockouts.get(userId);
@@ -247,7 +252,7 @@ export class TemporaryLockoutService extends EventEmitter {
         restrictions: this.getLockoutRestrictions(existingLockout),
         message: this.generateLockoutMessage(existingLockout)
       };
-    }
+
 
     // Record the attempt
     const attempt = await this.recordAttempt(userId, attemptType, context);
@@ -270,7 +275,7 @@ export class TemporaryLockoutService extends EventEmitter {
           context
         );
         break; // Only create one lockout per evaluation
-      } else if (result.shouldWarn) {
+ else if (result.shouldWarn) {
         const warning = await this.createWarning(
           userId,
           result.trigger,
@@ -278,8 +283,8 @@ export class TemporaryLockoutService extends EventEmitter {
           context
         );
         warnings.push(warning);
-      }
-    }
+
+
 
     // Update attempt with results
     attempt.triggers.triggered = evaluationResults
@@ -290,7 +295,7 @@ export class TemporaryLockoutService extends EventEmitter {
     
     if (newLockout) {
       attempt.consequences.lockoutCreated = newLockout.id;
-    }
+
 
     return {
       lockoutRequired,
@@ -299,7 +304,7 @@ export class TemporaryLockoutService extends EventEmitter {
       restrictions: newLockout ? this.getLockoutRestrictions(newLockout) : [],
       message: newLockout ? this.generateLockoutMessage(newLockout) : undefined
     };
-  }
+
 
   /**
    * Request early release from temporary lockout
@@ -318,7 +323,7 @@ export class TemporaryLockoutService extends EventEmitter {
     requiresApproval: boolean;
     approvalRequestId?: string;
     message: string;
-  }> {
+> {
 
     const lockout = this.activeLockouts.get(userId);
     if (!lockout) {
@@ -327,7 +332,7 @@ export class TemporaryLockoutService extends EventEmitter {
         requiresApproval: false,
         message: 'No active lockout found'
       };
-    }
+
 
     if (!lockout.recovery.allowEarlyRelease) {
       return {
@@ -335,7 +340,7 @@ export class TemporaryLockoutService extends EventEmitter {
         requiresApproval: false,
         message: 'Early release not allowed for this lockout type'
       };
-    }
+
 
     // Add to audit trail
     lockout.metadata.auditTrail.push({
@@ -347,7 +352,7 @@ export class TemporaryLockoutService extends EventEmitter {
         justification: context.justification,
         ipAddress: context.ipAddress,
         userAgent: context.userAgent
-      }
+
     });
 
     if (lockout.recovery.requiresApproval) {
@@ -368,7 +373,7 @@ export class TemporaryLockoutService extends EventEmitter {
         approvalRequestId,
         message: 'Early release request submitted for approval'
       };
-    } else {
+ else {
       // Auto-approve based on criteria
       const canAutoApprove = await this.canAutoApproveRelease(lockout, reason);
       
@@ -380,15 +385,15 @@ export class TemporaryLockoutService extends EventEmitter {
           requiresApproval: false,
           message: 'Lockout released successfully'
         };
-      } else {
+ else {
         return {
           success: false,
           requiresApproval: false,
           message: 'Early release criteria not met'
         };
-      }
-    }
-  }
+
+
+
 
   /**
    * Manually release a lockout (admin action)
@@ -402,7 +407,7 @@ export class TemporaryLockoutService extends EventEmitter {
     success: boolean;
     message: string;
     lockout?: TemporaryLockout;
-  }> {
+> {
 
     const lockout = this.activeLockouts.get(userId);
     if (!lockout) {
@@ -410,7 +415,7 @@ export class TemporaryLockoutService extends EventEmitter {
         success: false,
         message: 'No active lockout found'
       };
-    }
+
 
     // Update lockout status
     lockout.status = 'released';
@@ -426,7 +431,7 @@ export class TemporaryLockoutService extends EventEmitter {
       details: {
         releaseType,
         reason: reason || 'No reason provided'
-      }
+
     });
 
     // Move to history
@@ -464,7 +469,7 @@ export class TemporaryLockoutService extends EventEmitter {
       message: 'Lockout released successfully',
       lockout
     };
-  }
+
 
   /**
    * Get current lockout status for a user
@@ -476,7 +481,7 @@ export class TemporaryLockoutService extends EventEmitter {
     restrictions: string[];
     nextLockoutLevel: number;
     timeSinceLastLockout?: number;
-  }> {
+> {
 
     const lockout = this.activeLockouts.get(userId);
     const warnings = this.activeWarnings.get(userId) || [];
@@ -487,7 +492,7 @@ export class TemporaryLockoutService extends EventEmitter {
       lockout.timing.remainingTime = Math.max(0, 
         Math.ceil((lockout.timing.expiresAt.getTime() - Date.now()) / 1000)
       );
-    }
+
 
     const lastLockout = history[history.length - 1];
     const timeSinceLastLockout = lastLockout 
@@ -502,7 +507,7 @@ export class TemporaryLockoutService extends EventEmitter {
       nextLockoutLevel: this.calculateNextLockoutLevel(userId),
       timeSinceLastLockout
     };
-  }
+
 
   /**
    * Get lockout statistics and analytics
@@ -520,8 +525,8 @@ export class TemporaryLockoutService extends EventEmitter {
       lockoutCount: number;
       averageDuration: number;
       mostCommonTrigger: string;
-    }>;
-  }> {
+>;
+> {
     const allLockouts = this.getAllLockoutsInRange(timeRange);
     
     const analytics = {
@@ -536,7 +541,7 @@ export class TemporaryLockoutService extends EventEmitter {
     };
 
     return analytics;
-  }
+
 
   // Private helper methods
 
@@ -551,7 +556,7 @@ export class TemporaryLockoutService extends EventEmitter {
         severity: 'medium',
         resetOnSuccess: true,
         description: 'Lock account after multiple failed login attempts'
-  }
+
       {
         name: 'API Rate Limit Violation',
         type: 'rate_limit',
@@ -562,7 +567,7 @@ export class TemporaryLockoutService extends EventEmitter {
         resetOnSuccess: false,
         customDuration: 300, // 5 minutes
         description: 'Temporary lockout for API rate limit violations'
-  }
+
       {
         name: 'Suspicious Activity Detection',
         type: 'suspicious_activity',
@@ -572,7 +577,7 @@ export class TemporaryLockoutService extends EventEmitter {
         severity: 'high',
         resetOnSuccess: false,
         description: 'Lock account for suspicious activity patterns'
-  }
+
       {
         name: 'Security Violation',
         type: 'security_violation',
@@ -583,13 +588,13 @@ export class TemporaryLockoutService extends EventEmitter {
         resetOnSuccess: false,
         customDuration: 3600, // 1 hour
         description: 'Immediate lockout for security violations'
-      }
+
     ];
 
     for (const trigger of defaultTriggers) {
       this.registerTrigger(trigger);
-    }
-  }
+
+
 
   private async evaluateAllTriggers(
     userId: string,
@@ -600,7 +605,7 @@ export class TemporaryLockoutService extends EventEmitter {
     shouldWarn: boolean;
     violationData?: Record<string, any>;
     warningData?: Record<string, any>;
-  }>> {
+>> {
     const results = [];
     const userAttempts = this.userAttempts.get(userId) || [];
 
@@ -609,10 +614,10 @@ export class TemporaryLockoutService extends EventEmitter {
 
       const result = await this.evaluateTrigger(trigger, userAttempts, attempt);
       results.push({ trigger, ...result });
-    }
+
 
     return results;
-  }
+
 
   private async evaluateTrigger(
     trigger: LockoutTrigger,
@@ -623,7 +628,7 @@ export class TemporaryLockoutService extends EventEmitter {
     shouldWarn: boolean;
     violationData?: Record<string, any>;
     warningData?: Record<string, any>;
-  }> {
+> {
     const windowStart = new Date(Date.now() - trigger.timeWindow * 1000);
     const relevantAttempts = userAttempts.filter(attempt => 
       attempt.timestamp >= windowStart &&
@@ -642,14 +647,14 @@ export class TemporaryLockoutService extends EventEmitter {
         threshold: trigger.threshold,
         timeWindow: trigger.timeWindow,
         recentAttempts: relevantAttempts.slice(-5) // Last 5 attempts
-      } : undefined,
+ : undefined,
       warningData: shouldWarn ? {
         currentCount: violationCount,
         threshold: trigger.threshold,
         remaining: trigger.threshold - violationCount
-      } : undefined
+ : undefined
     };
-  }
+
 
   private isAttemptRelevantToTrigger(attempt: LockoutAttempt, trigger: LockoutTrigger): boolean {
     switch (trigger.type) {
@@ -663,8 +668,8 @@ export class TemporaryLockoutService extends EventEmitter {
       return this.isSecurityViolation(attempt);
     default:
       return false;
-    }
-  }
+
+
 
   private isSuspiciousAttempt(attempt: LockoutAttempt): boolean {
     // Implement suspicious activity detection logic
@@ -673,7 +678,7 @@ export class TemporaryLockoutService extends EventEmitter {
       attempt.details.errorType === 'bot_detected' ||
       attempt.details.userAgent.includes('bot')
     );
-  }
+
 
   private isSecurityViolation(attempt: LockoutAttempt): boolean {
     // Implement security violation detection logic
@@ -682,7 +687,7 @@ export class TemporaryLockoutService extends EventEmitter {
       attempt.details.errorType === 'xss_attempt' ||
       attempt.details.errorType === 'unauthorized_access'
     );
-  }
+
 
   private async createTemporaryLockout(
     userId: string,
@@ -709,7 +714,7 @@ export class TemporaryLockoutService extends EventEmitter {
         duration,
         gracePeriod,
         remainingTime: duration
-  }
+
       status: gracePeriod > 0 ? 'pending' : 'active',
       level,
       context: {
@@ -719,12 +724,12 @@ export class TemporaryLockoutService extends EventEmitter {
         sessionId: context.sessionId,
         triggerData: violationData,
         violationCount: violationData.violationCount
-  }
+
       recovery: {
         allowEarlyRelease: trigger.severity !== 'critical',
         allowGraceExtension: level === 1,
         requiresApproval: trigger.severity === 'critical' || level > 3
-  }
+
       metadata: {
         deviceFingerprint: await this.generateDeviceFingerprint(context.userAgent, context.ipAddress),
         geolocation: await this.getGeolocation(context.ipAddress),
@@ -740,9 +745,9 @@ export class TemporaryLockoutService extends EventEmitter {
             level,
             duration,
             violationData
-          }
-        }]
-      }
+
+]
+
     };
 
     // Store lockout
@@ -764,7 +769,7 @@ export class TemporaryLockoutService extends EventEmitter {
 
     this.emit('lockoutCreated', lockout);
     return lockout;
-  }
+
 
   private async createWarning(
     userId: string,
@@ -783,17 +788,17 @@ export class TemporaryLockoutService extends EventEmitter {
       timing: {
         issuedAt: new Date(),
         expiresAt: new Date(Date.now() + trigger.timeWindow * 1000)
-  }
+
       thresholds: {
         current: warningData.currentCount,
         maximum: warningData.threshold,
         remaining: warningData.remaining
-  }
+
       actions: {
         required: [],
         recommended: ['Review account activity', 'Change password if compromised'],
         preventive: ['Enable MFA', 'Use trusted devices only']
-      }
+
     };
 
     // Store warning
@@ -806,7 +811,7 @@ export class TemporaryLockoutService extends EventEmitter {
 
     this.emit('warningIssued', warning);
     return warning;
-  }
+
 
   private calculateLockoutLevel(userId: string): number {
     const history = this.lockoutHistory.get(userId) || [];
@@ -815,26 +820,26 @@ export class TemporaryLockoutService extends EventEmitter {
     );
     
     return Math.min(recentLockouts.length + 1, this.config.maxProgressiveLevel);
-  }
+
 
   private calculateLockoutDuration(trigger: LockoutTrigger, level: number): number {
     const baseDuration = trigger.customDuration || this.config.baseDuration;
     
     if (level === 1) {
       return baseDuration;
-    }
+
     
     const progressiveDuration = baseDuration * Math.pow(this.config.progressiveMultiplier, level - 1);
     return Math.min(progressiveDuration, this.config.maxDuration);
-  }
+
 
   private calculateGracePeriod(trigger: LockoutTrigger, level: number): number {
     if (trigger.severity === 'critical') {
       return 0; // No grace period for critical violations
-    }
+
     
     return level === 1 ? this.config.gracePeriod : Math.max(30, this.config.gracePeriod / level);
-  }
+
 
   private calculateRiskScore(userId: string, trigger: LockoutTrigger, violationData: Record<string, any>): number {
     let score = 0;
@@ -851,7 +856,7 @@ export class TemporaryLockoutService extends EventEmitter {
     score += Math.min(history.length * 10, 40);
     
     return Math.min(score, 100);
-  }
+
 
   private isLockoutActive(lockout: TemporaryLockout): boolean {
     const now = new Date();
@@ -859,7 +864,7 @@ export class TemporaryLockoutService extends EventEmitter {
       lockout.status === 'active' ||
       (lockout.status === 'pending' && lockout.timing.activatesAt <= now)
     ) && lockout.timing.expiresAt > now;
-  }
+
 
   private getLockoutRestrictions(lockout: TemporaryLockout): string[] {
     const restrictions = [];
@@ -877,14 +882,14 @@ export class TemporaryLockoutService extends EventEmitter {
     case 'security_violation':
       restrictions.push('Complete account lockdown');
       break;
-    }
+
     
     if (lockout.severity === 'critical') {
       restrictions.push('Requires manual review');
-    }
+
     
     return restrictions;
-  }
+
 
   private generateLockoutMessage(lockout: TemporaryLockout): string {
     const remainingMinutes = Math.ceil(lockout.timing.remainingTime / 60);
@@ -892,29 +897,29 @@ export class TemporaryLockoutService extends EventEmitter {
     if (lockout.status === 'pending') {
       const graceMinutes = Math.ceil((lockout.timing.activatesAt.getTime() - Date.now()) / (60 * 1000));
       return `Account will be locked in ${graceMinutes} minutes due to ${lockout.triggerType}. Duration: ${remainingMinutes} minutes.`;
-    }
+
     
     return `Account temporarily locked due to ${lockout.triggerType}. Remaining time: ${remainingMinutes} minutes.`;
-  }
+
 
   private async isUserExempt(userId: string, ipAddress: string, userAgent: string): Promise<boolean> {
 
     // Check IP exemptions
     if (this.config.exemptIPs.includes(ipAddress)) {
       return true;
-    }
+
     
     // Check user agent exemptions
     if (this.config.exemptUserAgents.some(ua => userAgent.includes(ua))) {
       return true;
-    }
+
     
     // Check role exemptions (would require user service integration)
     // const userRoles = await this.getUserRoles(userId);
     // return this.config.bypassRoles.some(role => userRoles.includes(role));
     
     return false;
-  }
+
 
   private async recordAttempt(
     userId: string,
@@ -938,12 +943,12 @@ export class TemporaryLockoutService extends EventEmitter {
         responseTime: context.responseTime,
         errorType: context.errorType,
         blocked: false
-  }
+
       triggers: {
         evaluated: [],
         triggered: [],
         warnings: []
-  }
+
       consequences: {}
     };
 
@@ -954,20 +959,20 @@ export class TemporaryLockoutService extends EventEmitter {
     // Keep only recent attempts (last 1000)
     if (userAttempts.length > 1000) {
       userAttempts.splice(0, userAttempts.length - 1000);
-    }
+
     
     this.userAttempts.set(userId, userAttempts);
 
     return attempt;
-  }
+
 
   private clearUserWarnings(userId: string): void {
     this.activeWarnings.delete(userId);
-  }
+
 
   private calculateNextLockoutLevel(userId: string): number {
     return this.calculateLockoutLevel(userId) + 1;
-  }
+
 
   private getAllLockoutsInRange(timeRange: { start: Date; end: Date }): TemporaryLockout[] {
     const allLockouts = [];
@@ -978,18 +983,18 @@ export class TemporaryLockoutService extends EventEmitter {
         lockout.timing.createdAt <= timeRange.end
       );
       allLockouts.push(...filteredLockouts);
-    }
+
     
     // Add active lockouts in range
     for (const lockout of this.activeLockouts.values()) {
       if (lockout.timing.createdAt >= timeRange.start &&
           lockout.timing.createdAt <= timeRange.end) {
         allLockouts.push(lockout);
-      }
-    }
+
+
     
     return allLockouts;
-  }
+
 
   private groupBy<T>(array: T[], property: keyof T): Array<{ type: string; count: number }> {
     const groups = array.reduce((acc, item) => {
@@ -999,21 +1004,21 @@ export class TemporaryLockoutService extends EventEmitter {
     }, {} as Record<string, number>);
 
     return Object.entries(groups).map(([type, count]) => ({ type, count }));
-  }
+
 
   private calculateAverageDuration(lockouts: TemporaryLockout[]): number {
     if (lockouts.length === 0) return 0;
     
     const totalDuration = lockouts.reduce((sum, lockout) => sum + lockout.timing.duration, 0);
     return Math.round(totalDuration / lockouts.length);
-  }
+
 
   private calculateEarlyReleaseRate(lockouts: TemporaryLockout[]): number {
     if (lockouts.length === 0) return 0;
     
     const earlyReleases = lockouts.filter(lockout => lockout.status === 'released').length;
     return Math.round((earlyReleases / lockouts.length) * 100);
-  }
+
 
   private getTopTriggers(lockouts: TemporaryLockout[]): Array<{ triggerId: string; name: string; count: number }> {
     const triggerCounts = this.groupBy(lockouts, 'triggerId');
@@ -1026,18 +1031,18 @@ export class TemporaryLockoutService extends EventEmitter {
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
-  }
+
 
   private getUserPatterns(lockouts: TemporaryLockout[]): Array<{
     userId: string;
     lockoutCount: number;
     averageDuration: number;
     mostCommonTrigger: string;
-  }> {
+> {
     const userGroups = lockouts.reduce((acc, lockout) => {
       if (!acc[lockout.userId]) {
         acc[lockout.userId] = [];
-      }
+
       acc[lockout.userId].push(lockout);
       return acc;
     }, {} as Record<string, TemporaryLockout[]>);
@@ -1053,13 +1058,13 @@ export class TemporaryLockoutService extends EventEmitter {
         mostCommonTrigger: this.triggers.get(mostCommonTrigger.type)?.name || 'Unknown'
       };
     });
-  }
+
 
   private startMaintenanceTasks(): void {
     this.maintenanceInterval = setInterval(() => {
       this.performMaintenance();
     }, 60 * 1000); // Every minute
-  }
+
 
   private performMaintenance(): void {
     const now = new Date();
@@ -1068,24 +1073,24 @@ export class TemporaryLockoutService extends EventEmitter {
     for (const [userId, lockout] of this.activeLockouts.entries()) {
       if (lockout.timing.expiresAt <= now) {
         this.expireLockout(userId, lockout);
-      } else if (lockout.status === 'pending' && lockout.timing.activatesAt <= now) {
+ else if (lockout.status === 'pending' && lockout.timing.activatesAt <= now) {
         this.activateLockout(lockout);
-      }
-    }
+
+
 
     // Clean up expired warnings
     for (const [userId, warnings] of this.activeWarnings.entries()) {
       const activeWarnings = warnings.filter(warning => warning.timing.expiresAt > now);
       if (activeWarnings.length === 0) {
         this.activeWarnings.delete(userId);
-      } else {
+ else {
         this.activeWarnings.set(userId, activeWarnings);
-      }
-    }
+
+
 
     // Clean up old attempt records
     this.cleanupOldAttempts();
-  }
+
 
   private expireLockout(userId: string, lockout: TemporaryLockout): void {
     lockout.status = 'expired';
@@ -1099,12 +1104,12 @@ export class TemporaryLockoutService extends EventEmitter {
     this.activeLockouts.delete(userId);
 
     this.emit('lockoutExpired', { userId, lockout });
-  }
+
 
   private activateLockout(lockout: TemporaryLockout): void {
     lockout.status = 'active';
     this.emit('lockoutActivated', lockout);
-  }
+
 
   private cleanupOldAttempts(): void {
     const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24 hours ago
@@ -1113,28 +1118,28 @@ export class TemporaryLockoutService extends EventEmitter {
       const recentAttempts = attempts.filter(attempt => attempt.timestamp >= cutoff);
       if (recentAttempts.length === 0) {
         this.userAttempts.delete(userId);
-      } else {
+ else {
         this.userAttempts.set(userId, recentAttempts);
-      }
-    }
-  }
+
+
+
 
   // Additional helper methods for notifications, approvals, etc.
   private async sendLockoutNotification(userId: string, lockout: TemporaryLockout): Promise<void> {
 
     console.log(`Sending lockout notification to user ${userId} for ${lockout.triggerType}`);
     lockout.metadata.notificationsSent.push('lockout_created');
-  }
+
 
   private async sendWarningNotification(userId: string, warning: LockoutWarning): Promise<void> {
 
     console.log(`Sending warning notification to user ${userId}: ${warning.message}`);
-  }
+
 
   private async sendReleaseNotification(userId: string, lockout: TemporaryLockout, releaseType: string, releasedBy: string): Promise<void> {
 
     console.log(`Sending release notification to user ${userId}, released by ${releasedBy}`);
-  }
+
 
   private async createApprovalRequest(lockout: TemporaryLockout, reason: string, requestedBy: string, context: any): Promise<string> {
 
@@ -1142,64 +1147,63 @@ export class TemporaryLockoutService extends EventEmitter {
     // Implementation would create approval request in database/queue
     console.log(`Created approval request ${approvalId} for lockout ${lockout.id}`);
     return approvalId;
-  }
+
 
   private async canAutoApproveRelease(lockout: TemporaryLockout, reason: string): Promise<boolean> {
 
     // Implementation would check auto-approval criteria
     return lockout.severity === 'low' && lockout.level === 1;
-  }
+
 
   private async generateDeviceFingerprint(userAgent: string, ipAddress: string): Promise<string> {
 
     return crypto.createHash('sha256').update(`${userAgent}-${ipAddress}`).digest('hex');
-  }
+
 
   private async getGeolocation(ipAddress: string): Promise<string> {
 
     // Mock implementation - would integrate with geolocation service
     return 'Unknown Location';
-  }
+
 
   private async validateTrigger(trigger: LockoutTrigger): Promise<void> {
 
     if (trigger.threshold <= 0) {
       throw new Error('Trigger threshold must be positive');
-    }
+
     
     if (trigger.timeWindow <= 0) {
       throw new Error('Trigger time window must be positive');
-    }
-  }
+
+
 
   private generateTriggerId(): string {
     return `TRG-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  }
+
 
   private generateLockoutId(): string {
     return `TLO-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private generateWarningId(): string {
     return `TWN-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  }
+
 
   private generateAttemptId(): string {
     return `TAT-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private generateApprovalId(): string {
     return `TAP-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private async logEvent(action: string, performedBy: string, metadata: any): Promise<void> {
 
     console.log(`Temporary Lockout Event: ${action} by ${performedBy}`, metadata);
-  }
+
 
   destroy(): void {
     if (this.maintenanceInterval) {
       clearInterval(this.maintenanceInterval);
-    }
-  }
-}
+
+

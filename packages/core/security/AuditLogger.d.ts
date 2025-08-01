@@ -22,8 +22,8 @@ import { DataClassificationLevel, type OperationContext } from '../types/DataCla
  */
 
 }
-export interface AuditLogEntry {
-    id: string;
+}
+export interface AuditLogEntry { id: string;
     timestamp: Date;
     correlationId: string;
     userId: string;
@@ -62,28 +62,30 @@ export interface AuditLogEntry {
  * Types of operations that can be audited
  */
 export declare enum AuditOperation {
-    READ = "READ",
-    WRITE = "WRITE",
-    UPDATE = "UPDATE",
-    DELETE = "DELETE",
-    EXPORT = "EXPORT",
-    DOWNLOAD = "DOWNLOAD",
-    GRANT_ACCESS = "GRANT_ACCESS",
-    REVOKE_ACCESS = "REVOKE_ACCESS",
-    CHANGE_CLASSIFICATION = "CHANGE_CLASSIFICATION",
-    LOGIN = "LOGIN",
-    LOGOUT = "LOGOUT",
-    API_CALL = "API_CALL",
-    BATCH_OPERATION = "BATCH_OPERATION",
-    AUTHENTICATION = "AUTHENTICATION",
-    AUTHORIZATION = "AUTHORIZATION",
-    ENCRYPTION = "ENCRYPTION",
+    READ = "READ";
+    WRITE = "WRITE";
+    UPDATE = "UPDATE";
+    DELETE = "DELETE";
+    EXPORT = "EXPORT";
+    DOWNLOAD = "DOWNLOAD";
+    GRANT_ACCESS = "GRANT_ACCESS";
+    REVOKE_ACCESS = "REVOKE_ACCESS";
+    CHANGE_CLASSIFICATION = "CHANGE_CLASSIFICATION";
+    LOGIN = "LOGIN";
+    LOGOUT = "LOGOUT";
+    API_CALL = "API_CALL";
+    BATCH_OPERATION = "BATCH_OPERATION";
+    AUTHENTICATION = "AUTHENTICATION";
+    AUTHORIZATION = "AUTHORIZATION";
+    ENCRYPTION = "ENCRYPTION" }
     DECRYPTION = "DECRYPTION"
 
 /**
  * Audit logger configuration
  */
 
+}
+}
 }
 export interface AuditLoggerConfig {
     storageBackend?: AuditStorageBackend;
@@ -108,6 +110,8 @@ export interface AuditLoggerConfig {
  */
 
 }
+}
+}
 export interface AuditStorageBackend {
     write(entry: AuditLogEntry): Promise<void>;
     query(criteria: AuditQueryCriteria): Promise<AuditLogEntry[]>;
@@ -119,6 +123,8 @@ export interface AuditStorageBackend {
  * Query criteria for retrieving audit logs
  */
 
+}
+}
 }
 export interface AuditQueryCriteria {
     startDate?: Date;
@@ -138,8 +144,9 @@ export interface AuditQueryCriteria {
  */
 
 }
-export interface AlertThresholds {
-    failedAccessAttempts?: number;
+}
+}
+export interface AlertThresholds { failedAccessAttempts?: number;
     sensitiveDataAccess?: number;
     highRiskOperations?: number;
     timeWindow?: number;
@@ -168,12 +175,12 @@ export declare class AuditLogger extends BrowserEventEmitter {
      * Log a data access operation
      */
     logDataAccess();
-      context: OperationContext,
-      resourceType: string,
-      resourceId: string,
-      classification: DataClassificationLevel,
-      success: boolean,
-      metadata?: Record<string,
+      context: OperationContext;
+      resourceType: string;
+      resourceId: string;
+      classification: DataClassificationLevel;
+      success: boolean;
+      metadata?: Record<string }
       any>
     ): Promise<void>;
     /**
@@ -242,8 +249,9 @@ export declare class AuditLogger extends BrowserEventEmitter {
  */
 
 }
-export interface AuditStatistics {
-    totalOperations: number;
+}
+}
+export interface AuditStatistics { totalOperations: number;
     operationCounts: Record<string, number>;
     failureRate: number;
     sensitiveAccessCount: number;
@@ -263,7 +271,7 @@ export declare class InMemoryStorageBackend implements AuditStorageBackend {
 /**
  * Factory function to create audit logger
  */
-export declare function createAuditLogger(config?: AuditLoggerConfig): AuditLogger;
+export declare function createAuditLogger(config?: AuditLoggerConfig): AuditLogger }
 }
 export type { AuditLogEntry, AuditLoggerConfig, AuditStorageBackend, AuditQueryCriteria, AlertThresholds, AuditStatistics };
 //# sourceMappingURL=AuditLogger.d.ts.map

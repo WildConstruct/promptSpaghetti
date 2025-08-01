@@ -30,6 +30,7 @@ export declare enum AnalyticsEventType {
  */
 }
 }
+}
 export interface AnalyticsEvent {
     id: string;
     type: AnalyticsEventType;
@@ -41,9 +42,11 @@ export interface AnalyticsEvent {
 }
 }
 }
+}
 /**
  * Graph execution analytics event
  */
+}
 }
 }
 export interface GraphExecutionEvent extends AnalyticsEvent {
@@ -64,6 +67,7 @@ export interface GraphExecutionEvent extends AnalyticsEvent {
  */
 }
 }
+}
 export interface NodeExecutionEvent extends AnalyticsEvent {
     type: AnalyticsEventType.NODE_EXECUTION_START | AnalyticsEventType.NODE_EXECUTION_COMPLETE | AnalyticsEventType.NODE_EXECUTION_ERROR;
     metadata: {
@@ -80,6 +84,7 @@ export interface NodeExecutionEvent extends AnalyticsEvent {
 /**
  * User interaction analytics event
  */
+}
 }
 }
 export interface UserInteractionEvent extends AnalyticsEvent {
@@ -101,6 +106,7 @@ export interface UserInteractionEvent extends AnalyticsEvent {
  */
 }
 }
+}
 export interface TokenUsageEvent extends AnalyticsEvent {
     type: AnalyticsEventType.TOKEN_USAGE;
     metadata: {
@@ -119,6 +125,7 @@ export interface TokenUsageEvent extends AnalyticsEvent {
  */
 }
 }
+}
 export interface PerformanceMetricEvent extends AnalyticsEvent {
     type: AnalyticsEventType.PERFORMANCE_METRIC;
     metadata: {
@@ -133,6 +140,7 @@ export interface PerformanceMetricEvent extends AnalyticsEvent {
 /**
  * Analytics configuration
  */
+}
 }
 }
 export interface AnalyticsConfig {
@@ -153,9 +161,11 @@ export interface AnalyticsConfig {
 }
 }
 }
+}
 /**
  * Analytics data aggregation window
  */
+}
 }
 }
 export interface AnalyticsWindow {
@@ -171,6 +181,7 @@ export interface AnalyticsWindow {
         totalTokenUsage: number;
         totalCost: number;
         errorRate: number;
+}
 }
 }
     };

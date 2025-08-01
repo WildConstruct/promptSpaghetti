@@ -8,8 +8,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { 
-  BarChart3,
+import { BarChart3,
   TrendingUp,
   TrendingDown,
   Activity,
@@ -28,103 +27,92 @@ import {
   PieChart,
   LineChart,
   Target,
-  Zap,
+  Zap }
   Eye
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
-export interface PolicyAnalyticsMetrics {
-  totalPolicies: number;
+
+export interface PolicyAnalyticsMetrics { totalPolicies: number;
   activePolicies: number;
   totalViolations: number;
   violationTrend: 'up' | 'down' | 'stable';
   violationTrendPercentage: number;
   enforcementActions: number;
   actionSuccessRate: number;
-  avgResponseTime: number; // hours,
-  topViolatedCategories: Array<{
+  avgResponseTime: number; // hours;
+  topViolatedCategories: Array<{ }
   category: string;
   count: number;
   percentage: number;
-}
-}>;
-  enforcementEffectiveness: Array<{
+
+
+>;
+  enforcementEffectiveness: Array<{ ,
   actionType: string;
   successRate: number;
-  count: number;
-}>;
-  timeSeriesData: Array<{
+  count: number }>;
+  timeSeriesData: Array<{ ,
   date: string;
   violations: number;
   enforcements: number;
-  preventions: number;
-}>;
-}
-}
-export interface PolicyAnalyticsDashboardProps {
-  className?: string;
-}
-}
+  preventions: number }>;
+
+
+export interface PolicyAnalyticsDashboardProps { className?: string }
+
 export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> = ({)
   className = ''
-}) => {
-  const [timeRange, setTimeRange] = useState<string>('7d');
+}) => { const [timeRange, setTimeRange] = useState<string>('7d');
   const [_____selectedCategory, _____setSelectedCategory] = useState<string>('all');
   const [_____isLoading, _____setIsLoading] = useState(false);
   // Mock analytics data - in real implementation, this would come from PolicyManagementService
   const [analyticsData] = useState<PolicyAnalyticsMetrics>({)
-  totalPolicies: 12,
-    activePolicies: 9,
-    totalViolations: 147,
-    violationTrend: 'down',
-    violationTrendPercentage: 12.5,
-    enforcementActions: 89,
-    actionSuccessRate: 92.3,
-    avgResponseTime: 2.4,
-    topViolatedCategories: [,
-      { category: 'Trust Score', count: 45, percentage: 30.6 },
-      { category: 'Content Quality', count: 38, percentage: 25.9 },
-      { category: 'Transaction', count: 32, percentage: 21.8 },
-      { category: 'User Behavior', count: 24, percentage: 16.3 },
+  totalPolicies: 12
+    activePolicies: 9
+    totalViolations: 147
+    violationTrend: 'down'
+    violationTrendPercentage: 12.5
+    enforcementActions: 89
+    actionSuccessRate: 92.3
+    avgResponseTime: 2.4 }
+    topViolatedCategories: [
+      { category: 'Trust Score', count: 45, percentage: 30.6 }
+      { category: 'Content Quality', count: 38, percentage: 25.9 }
+      { category: 'Transaction', count: 32, percentage: 21.8 }
+      { category: 'User Behavior', count: 24, percentage: 16.3 }
       { category: 'Fraud Detection', count: 8, percentage: 5.4 }
-    ],
-    enforcementEffectiveness: [,
-      { actionType: 'Warning Notification', successRate: 95.2, count: 34 },
-      { actionType: 'Access Restriction', successRate: 88.7, count: 23 },
-      { actionType: 'Account Suspension', successRate: 100, count: 15 },
+    ]
+    enforcementEffectiveness: [
+      { actionType: 'Warning Notification', successRate: 95.2, count: 34 }
+      { actionType: 'Access Restriction', successRate: 88.7, count: 23 }
+      { actionType: 'Account Suspension', successRate: 100, count: 15 }
       { actionType: 'Transaction Block', successRate: 96.4, count: 17 }
-    ],
-    timeSeriesData: [,
-      { date: '2024-01-15', violations: 18, enforcements: 12, preventions: 4 },
-      { date: '2024-01-16', violations: 22, enforcements: 15, preventions: 6 },
-      { date: '2024-01-17', violations: 15, enforcements: 11, preventions: 8 },
-      { date: '2024-01-18', violations: 28, enforcements: 19, preventions: 5 },
-      { date: '2024-01-19', violations: 31, enforcements: 24, preventions: 7 },
-      { date: '2024-01-20', violations: 19, enforcements: 14, preventions: 9 },
+    ]
+    timeSeriesData: [
+      { date: '2024-01-15', violations: 18, enforcements: 12, preventions: 4 }
+      { date: '2024-01-16', violations: 22, enforcements: 15, preventions: 6 }
+      { date: '2024-01-17', violations: 15, enforcements: 11, preventions: 8 }
+      { date: '2024-01-18', violations: 28, enforcements: 19, preventions: 5 }
+      { date: '2024-01-19', violations: 31, enforcements: 24, preventions: 7 }
+      { date: '2024-01-20', violations: 19, enforcements: 14, preventions: 9 }
       { date: '2024-01-21', violations: 14, enforcements: 10, preventions: 12 }
     ]
   });
-  const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
-  switch (trend) {
+  const getTrendIcon = (trend: 'up' | 'down' | 'stable') => { switch (trend) {
   case 'up': return TrendingUp;
   case 'down': return TrendingDown;
-  default: return Activity;
-};
-  const getTrendColor = (trend: 'up' | 'down' | 'stable') => {
-  switch (trend) {
+  default: return Activity };
+  const getTrendColor = (trend: 'up' | 'down' | 'stable') => { switch (trend) {
   case 'up': return 'text-red-500';
   case 'down': return 'text-green-500';
-  default: return 'text-gray-500';
-};
-  const getCategoryColor = (category: string) => {
-  switch (category.toLowerCase()) {
+  default: return 'text-gray-500' };
+  const getCategoryColor = (category: string) => { switch (category.toLowerCase()) {
   case 'trust score': return 'bg-blue-500';
   case 'content quality': return 'bg-purple-500';
   case 'transaction': return 'bg-orange-500';
   case 'user behavior': return 'bg-green-500';
   case 'fraud detection': return 'bg-red-500';
-  default: return 'bg-gray-500';
-};
+  default: return 'bg-gray-500' };
   const renderKPIMetrics = () => (;);
     <div className="kpi-metrics">
       <div className="metrics-grid">
@@ -253,10 +241,10 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
                       className="rate-fill"
                       style={{ 
                         width: `${action.successRate}%`}
-},
-  backgroundColor: action.successRate >= 90 ? '#10b981' : ,
+
+  backgroundColor: action.successRate >= 90 ? '#10b981' : 
                           action.successRate >= 75 ? '#f59e0b' : '#ef4444'
-                      }}
+}
                     ></div>
                   </div>
                 </div>
@@ -334,8 +322,8 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
                     ></div>
                   </div>
                   <div className="date-label">
-                    {new Date(dataPoint.date).toLocaleDateString('en-US', { )
-                      month: 'short', 
+                    { new Date(dataPoint.date).toLocaleDateString('en-US', { )
+                      month: 'short' }
                       day: 'numeric' ;
   })}
                   </div>
@@ -421,11 +409,11 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
           </div>
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .policy-analytics-dashboard {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
@@ -464,7 +452,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
         .policy-coverage {
           font-weight: 600;
   color: #3b82f6;
-          background: #eff6ff;
+          background: #eff6ff
   padding: 0.25rem 0.5rem;
           border-radius: 4px;
           font-size: 0.875rem;
@@ -482,17 +470,17 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
   color: #1f2937;
           line-height: 1;
         .metric-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin-top: 0.5rem;
           font-weight: 500;
         .metric-sublabel {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #9ca3af;
           margin-top: 0.25rem;
         .analytics-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1.5rem;
         .left-column, .right-column {
           display: flex;
@@ -529,16 +517,16 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
           font-weight: 600;
   color: #1f2937;
         .category-percentage {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .progress-bar {
-          width: 100%;
+          width: 100%
   height: 8px;
           background: #f3f4f6;
           border-radius: 4px;
   overflow: hidden;
         .progress-fill {
-          height: 100%;
+          height: 100%
   transition: width 0.3s ease;
         .effectiveness-list {
           display: flex;
@@ -548,7 +536,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
           display: flex;
           align-items: center;
   gap: 1rem;
-          padding: 0.75rem;
+          padding: 0.75rem
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .action-info {
@@ -562,7 +550,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
           font-weight: 500;
   color: #1f2937;
         .action-stats {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .success-indicator {
           display: flex;
@@ -584,17 +572,17 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
           border-radius: 2px;
   overflow: hidden;
         .rate-fill {
-          height: 100%;
+          height: 100%
   transition: width 0.3s ease;
         .chart-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         .time-range-select {
-          padding: 0.375rem 0.5rem;
+          padding: 0.375rem 0.5rem
   border: 1px solid #d1d5db;
           border-radius: 4px;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   background: white;
         .chart-legend {
           display: flex;
@@ -605,7 +593,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
           display: flex;
           align-items: center;
   gap: 0.5rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .legend-indicator {
           width: 12px;
@@ -623,9 +611,9 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
         .chart-grid {
           display: flex;
           align-items: end;
-          justify-content: space-between;
+          justify-content: space-between
   height: 180px;
-          gap: 0.5rem;
+          gap: 0.5rem
   padding: 1rem 0;
         .chart-column {
           flex: 1;
@@ -650,7 +638,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
         .data-bar.preventions {
           background: #10b981;
         .date-label {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
           text-align: center;
         .insights-list {
@@ -659,7 +647,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
   gap: 1rem;
         .insight-item {
           display: flex;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 0.75rem;
           padding: 1rem;
           border-radius: 8px;
@@ -681,7 +669,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
   color: #1f2937;
           margin: 0 0 0.5rem 0;
         .insight-content p {
-          font-size: 0.875rem;
+          font-size: 0.875rem }
   color: #6b7280;
           margin: 0;
           line-height: 1.5;

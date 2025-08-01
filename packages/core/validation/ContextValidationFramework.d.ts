@@ -8,8 +8,8 @@ import { AdvancedExecutionContext, AdvancedNodeConfig } from '../runtime/advance
 import { EventEmitter } from 'events';
 
 }
-export interface ContextValidationResult {
-    valid: boolean;
+}
+export interface ContextValidationResult { valid: boolean;
     errors: string[];
     warnings: string[];
     score: number;
@@ -18,28 +18,26 @@ export interface ContextValidationResult {
         variableIntegrity: number;
         stateConsistency: number;
         cacheEfficiency: number;
-        memoryUsage: number;
+        memoryUsage: number }
 }
     };
 
 }
-export interface ContextValidationRule {
-    name: string;
+}
+export interface ContextValidationRule { name: string;
     description: string;
     category: 'critical' | 'warning' | 'info';
     weight: number;
-    validate: (context: AdvancedExecutionContext, config?: AdvancedNodeConfig) => ContextValidationRuleResult;
-
+    validate: (context: AdvancedExecutionContext, config?: AdvancedNodeConfig) => ContextValidationRuleResult }
 }
-export interface ContextValidationRuleResult {
-    passed: boolean;
+}
+export interface ContextValidationRuleResult { passed: boolean;
     score: number;
     message?: string;
-    details?: Record<string, any>;
-
+    details?: Record<string, any> }
 }
-export interface ContextValidationConfig {
-    enableVariableValidation: boolean;
+}
+export interface ContextValidationConfig { enableVariableValidation: boolean;
     enableStateValidation: boolean;
     enableCacheValidation: boolean;
     enablePerformanceValidation: boolean;
@@ -81,7 +79,7 @@ export declare class ContextValidationFramework extends EventEmitter {
             contextId: string;
             score: number;
             timestamp: number;
-            valid: boolean;
+            valid: boolean }
 }
         }>;
     };
@@ -104,8 +102,7 @@ export declare class ContextValidationFramework extends EventEmitter {
 /**
  * Context validation utilities
  */
-export declare class ContextValidationUtils {
-    /**
+export declare class ContextValidationUtils { /**
      * Create a minimal valid context for testing
      */
     static createTestContext(overrides?: Partial<AdvancedExecutionContext>): AdvancedExecutionContext;
@@ -122,8 +119,7 @@ export declare class ContextValidationUtils {
             variables: number;
             nodeStates: number;
             cache: number;
-            metadata: number;
-        };
+            metadata: number };
     };
     private static estimateObjectMemory;
     private static estimateMapMemory;

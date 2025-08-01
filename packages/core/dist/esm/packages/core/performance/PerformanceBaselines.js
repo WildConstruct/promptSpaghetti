@@ -152,8 +152,9 @@ export class PerformanceBaselineManager {
         /**
         * Create a new performance baseline
         */
-        createBaseline(config, {});
-        id: string;
+        createBaseline(config, {}),
+            id;
+        string;
         name: string;
         description: string;
         category: BaselineCategory;
@@ -285,16 +286,16 @@ isLowerBetter(category, BaselineCategory, type, MeasurementType);
 boolean;
 {
     // For most performance metrics, lower values are better
-    const lowerIsBetter = [];
-    MeasurementType.DURATION,
+    const lowerIsBetter = [
+        MeasurementType.DURATION,
         MeasurementType.MEMORY,
-        MeasurementType.BYTES;
-    ;
+        MeasurementType.BYTES
+    ];
     // For some metrics, higher values are better
-    const higherIsBetter = [];
-    MeasurementType.THROUGHPUT,
-        MeasurementType.PERCENTAGE; // usually for success rates, etc.
-    ;
+    const higherIsBetter = [
+        MeasurementType.THROUGHPUT,
+        MeasurementType.PERCENTAGE // usually for success rates, etc.
+    ];
     if (lowerIsBetter.includes(type))
         return true;
     if (higherIsBetter.includes(type))
@@ -347,7 +348,8 @@ boolean;
                         trend = 'stable';
                     }
                     else if (isLowerBetter) {
-                        trend = percentage < 0 ? 'improving' : 'degrading';
+                        trend = percentage < 0 ? 'improving' : 'degrading',
+                        ;
                     }
                     else {
                         trend = percentage > 0 ? 'improving' : 'degrading';
@@ -364,7 +366,12 @@ boolean;
                                 alerts: number;
                             }
                             ;
-                            baselines: Array;
+                            baselines: Array < {
+                                baseline: PerformanceBaseline,
+                                status: 'ok' | 'warning' | 'critical',
+                                trend: 'improving' | 'stable' | 'degrading',
+                                lastMeasurement: PerformanceMeasurement
+                            } > ;
                             const baselines = Array.from(this.baselines.values());
                             const categories = {};
                             let alerts = 0;
@@ -523,8 +530,7 @@ boolean;
                                 target: 50,
                                 warning: 80,
                                 critical: 150,
-                                tags: ['api', 'validation'],
-                            },
+                                tags: ['api', 'validation'], },
                             // UI Rendering Baselines
                             manager, : .createBaseline({}),
                             id: 'ui-first-contentful-paint',

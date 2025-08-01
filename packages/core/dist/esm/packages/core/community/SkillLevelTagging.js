@@ -27,7 +27,12 @@ success_factors: {
 ;
 ;
 // Secondary skills (often multiple skills are covered)
-secondary_skills: Array;
+secondary_skills: Array < {
+    domain: SkillDomain,
+    subcategory: string,
+    level: SkillLevel,
+    weight: number
+} > ;
 // Learning path integration
 learning_path_info: {
     suitable_for_paths: string;
@@ -65,7 +70,11 @@ learning_effectiveness: {
 }
 ;
 // Improvement suggestions
-improvement_areas: Array;
+improvement_areas: Array < {
+    area: string,
+    suggestion_count: number,
+    examples: string
+} > ;
 // Alternative level suggestions
 level_suggestions: Record; // Community votes for different levels
 ;
@@ -81,7 +90,13 @@ adaptive_features: PathAdaptiveFeatures;
 success_metrics: PathSuccessMetrics;
  > ;
 // Content organization
-content_items: Array;
+content_items: Array < {
+    content_id: string,
+    content_type: string,
+    required: boolean,
+    estimated_time: number,
+    skill_contribution: number
+} > ;
 // Assessment
 assessments: ModuleAssessment;
 completion_criteria: CompletionCriteria;
@@ -101,7 +116,8 @@ learning_preferences: {
     preferred_difficulty_progression: 'gradual' | 'moderate' | 'steep';
     content_format_preferences: string;
     interaction_style: 'guided' | 'exploratory' | 'structured';
-    pace_preference: 'self_paced' | 'structured' | 'intensive';
+    pace_preference: 'self_paced' | 'structured' | 'intensive',
+    ;
 }
 ;
 // Performance history
@@ -130,7 +146,7 @@ community_consensus: number; // percentage agreement
 export const SKILL_LEVEL_DEFINITIONS = {
     beginner: {
         description: 'Little to no prior experience with the topic',
-        characteristics: [,
+        characteristics: [
             'New to the domain or skill area',
             'Needs step-by-step guidance',
             'Benefits from lots of examples and explanations',
@@ -138,7 +154,7 @@ export const SKILL_LEVEL_DEFINITIONS = {
             'Prefers structured, linear learning paths'
         ],
         typical_time_investment: '1-10 hours per topic',
-        success_indicators: [,
+        success_indicators: [
             'Can follow guided instructions',
             'Understands basic concepts',
             'Can replicate examples with minor modifications'
@@ -146,7 +162,7 @@ export const SKILL_LEVEL_DEFINITIONS = {
     },
     intermediate: {
         description: 'Has some experience and understands basic concepts',
-        characteristics: [,
+        characteristics: [
             'Understands fundamental concepts',
             'Can work with moderate independence',
             'Ready for more complex scenarios',
@@ -154,7 +170,7 @@ export const SKILL_LEVEL_DEFINITIONS = {
             'Benefits from practical applications'
         ],
         typical_time_investment: '5-20 hours per topic',
-        success_indicators: [,
+        success_indicators: [
             'Can adapt examples to new situations',
             'Understands underlying principles',
             'Can troubleshoot common problems'
@@ -162,7 +178,7 @@ export const SKILL_LEVEL_DEFINITIONS = {
     },
     advanced: {
         description: 'Experienced with the fundamentals, ready for complex applications',
-        characteristics: [,
+        characteristics: [
             'Strong foundation in the domain',
             'Can work independently on complex problems',
             'Ready for specialized techniques',
@@ -170,7 +186,7 @@ export const SKILL_LEVEL_DEFINITIONS = {
             'Benefits from case studies and real-world scenarios'
         ],
         typical_time_investment: '10-40 hours per topic',
-        success_indicators: [,
+        success_indicators: [
             'Can design solutions from scratch',
             'Understands advanced concepts and patterns',
             'Can mentor others in the domain'
@@ -178,7 +194,7 @@ export const SKILL_LEVEL_DEFINITIONS = {
     },
     expert: {
         description: 'Deep expertise, ready for cutting-edge topics and research',
-        characteristics: [,
+        characteristics: [
             'Deep, comprehensive knowledge',
             'Can handle ambiguous or novel problems',
             'Ready for research-level content',
@@ -186,7 +202,7 @@ export const SKILL_LEVEL_DEFINITIONS = {
             'Benefits from peer collaboration and discussion'
         ],
         typical_time_investment: '20+ hours per topic',
-        success_indicators: [,
+        success_indicators: [
             'Can contribute original insights',
             'Can handle undefined problems',
             'Can teach and lead others effectively'

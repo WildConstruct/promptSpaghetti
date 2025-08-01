@@ -437,8 +437,7 @@ export class Epic16LearningPathService extends EventEmitter {
                     audienceBreakdown: {
                         byRole: {},
                         byExperience: {},
-                        byGoal: {}
-                    },
+                        byGoal: {} },
                     deviceUsage: {
                         desktop: 0,
                         mobile: 0,
@@ -454,8 +453,7 @@ export class Epic16LearningPathService extends EventEmitter {
                     helpRequestRate: 0,
                     retakeRate: 0,
                     improvementSuggestions: [],
-                    contentGaps: []
-                },
+                    contentGaps: [] },
                 this: .learningPaths.set(pathId, learningPath),
                 this: .emit('learning_path_created', { path: learningPath }),
                 return: learningPath,
@@ -533,8 +531,7 @@ export class Epic16LearningPathService extends EventEmitter {
                             averageScore: 0,
                             improvementRate: 0,
                             strengthAreas: [],
-                            improvementAreas: []
-                        },
+                            improvementAreas: [] },
                         // Add to user enrollments
                         const: userEnrollments = this.userEnrollments.get(userId) || [],
                         userEnrollments, : .push(enrollment),
@@ -876,25 +873,24 @@ export class Epic16LearningPathService extends EventEmitter {
                             version: '2.1.0',
                             status: ContentStatus.PUBLISHED,
                             lastUpdated: new Date(),
-                            certification: {
-                                id: 'cert_template_creator',
-                                name: 'Certified Template Creator',
-                                description: 'Professional certification for template creation mastery',
-                                issuer: 'Platform Education',
-                                validityPeriod: 24,
-                                renewalRequired: true,
-                                renewalProcess: [],
-                                prerequisites: [],
-                                assessmentRequirements: [],
-                                verifiable: true,
-                                blockchainBacked: true,
-                                digitalBadge: { id: 'badge_001', imageUrl: '', metadataUrl: '', openBadgeCompliant: true, shareableUrl: '', verificationUrl: '' },
-                                industryRecognition: [],
-                                accreditation: []
-                            },
-                            marketplaceIntegration: { enabled: true, linkedTemplates: [], sellingOpportunities: [], buyingRecommendations: [], earningPotential: { skillLevel: SkillLevel.ADVANCED, averageHourlyRate: 75, marketDemand: 9, competitionLevel: 7, growthProjection: 'high' }, marketplaceTools: [] },
-                            communityIntegration: { enabled: true, forumLinks: [], discussionTopics: [], mentorshipProgram: { enabled: true, availableMentors: [], matchingCriteria: [], sessionFormats: [] }, peerLearning: { enabled: true, studyGroups: [], peerReview: { enabled: true, reviewCriteria: [], reviewersPerSubmission: 3, anonymousReview: false, qualityControl: true }, collaborativeProjects: [] }, communityEvents: [] }
-                        }
+                            certification: {},
+                            id: 'cert_template_creator',
+                            name: 'Certified Template Creator',
+                            description: 'Professional certification for template creation mastery',
+                            issuer: 'Platform Education',
+                            validityPeriod: 24,
+                            renewalRequired: true,
+                            renewalProcess: [],
+                            prerequisites: [],
+                            assessmentRequirements: [],
+                            verifiable: true,
+                            blockchainBacked: true,
+                            digitalBadge: { id: 'badge_001', imageUrl: '', metadataUrl: '', openBadgeCompliant: true, shareableUrl: '', verificationUrl: '' },
+                            industryRecognition: [],
+                            accreditation: []
+                        },
+                        marketplaceIntegration, { enabled: true, linkedTemplates: [], sellingOpportunities: [], buyingRecommendations: [], earningPotential: { skillLevel: SkillLevel.ADVANCED, averageHourlyRate: 75, marketDemand: 9, competitionLevel: 7, growthProjection: 'high' }, marketplaceTools: [] },
+                        communityIntegration, { enabled: true, forumLinks: [], discussionTopics: [], mentorshipProgram: { enabled: true, availableMentors: [], matchingCriteria: [], sessionFormats: [] }, peerLearning: { enabled: true, studyGroups: [], peerReview: { enabled: true, reviewCriteria: [], reviewersPerSubmission: 3, anonymousReview: false, qualityControl: true }, collaborativeProjects: [] }, communityEvents: [] }
                     ];
                     samplePaths.forEach((pathData, index) => {
                         const pathId = `sample_path_${index + 1}`;
@@ -914,8 +910,7 @@ export class Epic16LearningPathService extends EventEmitter {
                             audienceBreakdown: {
                                 byRole: {},
                                 byExperience: {},
-                                byGoal: {}
-                            },
+                                byGoal: {} },
                             deviceUsage: {
                                 desktop: 65,
                                 mobile: 25,
@@ -931,8 +926,7 @@ export class Epic16LearningPathService extends EventEmitter {
                             helpRequestRate: Math.random() * 5 + 2,
                             retakeRate: Math.random() * 15 + 5,
                             improvementSuggestions: [],
-                            contentGaps: []
-                        },
+                            contentGaps: [] },
                         ...pathData };
                     learningPath.analytics.completionRate = learningPath.analytics.enrollments > 0
                         ? (learningPath.analytics.completions / learningPath.analytics.enrollments) * 100

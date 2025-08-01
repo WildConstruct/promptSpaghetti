@@ -9,10 +9,10 @@ import {
   ComplianceMonitoringAuditRecord,
   DataRetentionOperationType,
   OperationStatus
-} from '../types/audit';
+ from '../types/audit';
 
-}
-}
+
+
 export interface AuditQueryFilters {
   operationType?: DataRetentionOperationType;
   operationStatus?: OperationStatus;
@@ -23,9 +23,10 @@ export interface AuditQueryFilters {
   riskLevel?: string;
   limit?: number;
   offset?: number;
-}
-}
-}
+
+
+
+
 
 export class DataRetentionAuditDAO {
   constructor(private db: Pool) {}
@@ -68,10 +69,10 @@ export class DataRetentionAuditDAO {
     try {
       const result = await dbClient.query(query, values);
       return result.rows[0].id;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to create data retention audit: ${error}`);
-    }
-  }
+
+
 
   async updateDataRetentionAudit(
     id: string,
@@ -93,19 +94,19 @@ export class DataRetentionAuditDAO {
         if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
           updateFields.push(`${dbColumnName} = $${paramIndex++}::jsonb`);
           values.push(JSON.stringify(value));
-        } else if (Array.isArray(value)) {
+ else if (Array.isArray(value)) {
           updateFields.push(`${dbColumnName} = $${paramIndex++}::jsonb`);
           values.push(JSON.stringify(value));
-        } else {
+ else {
           updateFields.push(`${dbColumnName} = $${paramIndex++}`);
           values.push(value);
-        }
-      }
+
+
     });
 
     if (updateFields.length === 0) {
       return; // Nothing to update
-    }
+
 
     updateFields.push('updated_at = NOW()');
     values.push(id);
@@ -118,10 +119,10 @@ export class DataRetentionAuditDAO {
 
     try {
       await dbClient.query(query, values);
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to update data retention audit: ${error}`);
-    }
-  }
+
+
 
   async getDataRetentionAuditById(id: string): Promise<DataRetentionAuditRecord | null> {
 
@@ -132,15 +133,15 @@ export class DataRetentionAuditDAO {
     try {
       const result = await this.db.query(query, [id]);
       return result.rows.length > 0 ? this.mapRowToDataRetentionAudit(result.rows[0]) : null;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get data retention audit: ${error}`);
-    }
-  }
+
+
 
   async findDataRetentionAudits(filters: AuditQueryFilters): Promise<{
     audits: DataRetentionAuditRecord[];
     totalCount: number;
-  }> {
+> {
 
     const whereConditions = [];
     const values = [];
@@ -150,31 +151,31 @@ export class DataRetentionAuditDAO {
     if (filters.operationType) {
       whereConditions.push(`operation_type = $${paramIndex++}`);
       values.push(filters.operationType);
-    }
+
     if (filters.operationStatus) {
       whereConditions.push(`operation_status = $${paramIndex++}`);
       values.push(filters.operationStatus);
-    }
+
     if (filters.affectedUserId) {
       whereConditions.push(`affected_user_id = $${paramIndex++}`);
       values.push(filters.affectedUserId);
-    }
+
     if (filters.complianceFramework) {
       whereConditions.push(`compliance_framework = $${paramIndex++}`);
       values.push(filters.complianceFramework);
-    }
+
     if (filters.startDate) {
       whereConditions.push(`timestamp >= $${paramIndex++}`);
       values.push(filters.startDate);
-    }
+
     if (filters.endDate) {
       whereConditions.push(`timestamp <= $${paramIndex++}`);
       values.push(filters.endDate);
-    }
+
     if (filters.riskLevel) {
       whereConditions.push(`risk_assessment = $${paramIndex++}`);
       values.push(filters.riskLevel);
-    }
+
 
     const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
     const limitClause = filters.limit ? `LIMIT $${paramIndex++}` : '';
@@ -209,17 +210,17 @@ export class DataRetentionAuditDAO {
         audits: dataResult.rows.map(row => this.mapRowToDataRetentionAudit(row)),
         totalCount: parseInt(countResult.rows[0].total)
       };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to find data retention audits: ${error}`);
-    }
-  }
+
+
 
   async getAuditStatistics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<{
     totalAudits: number;
     completedOperations: number;
     failedOperations: number;
     avgExecutionTime: number;
-  }> {
+> {
 
     const intervalMap = {
       day: '1 day',
@@ -246,10 +247,10 @@ export class DataRetentionAuditDAO {
         failedOperations: parseInt(row.failed_operations) || 0,
         avgExecutionTime: parseFloat(row.avg_execution_time) || 0
       };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get audit statistics: ${error}`);
-    }
-  }
+
+
 
   // Data Subject Rights Audit Operations
 
@@ -281,10 +282,10 @@ export class DataRetentionAuditDAO {
     try {
       const result = await dbClient.query(query, values);
       return result.rows[0].id;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to create data subject rights audit: ${error}`);
-    }
-  }
+
+
 
   // Compliance Monitoring Audit Operations
 
@@ -318,10 +319,10 @@ export class DataRetentionAuditDAO {
     try {
       const result = await dbClient.query(query, values);
       return result.rows[0].id;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to create compliance monitoring audit: ${error}`);
-    }
-  }
+
+
 
   // Private Helper Methods
 
@@ -380,7 +381,7 @@ export class DataRetentionAuditDAO {
       audit.geographicLocation,
       JSON.stringify(audit.metadata || {})
     ];
-  }
+
 
   private mapDataSubjectRightsAuditToParams(audit: Omit<DataSubjectRightsAuditRecord, 'id' | 'createdAt' | 'updatedAt'>): unknown[] {
     return [
@@ -418,7 +419,7 @@ export class DataRetentionAuditDAO {
       audit.auditNotes,
       JSON.stringify(audit.metadata || {})
     ];
-  }
+
 
   private mapComplianceMonitoringAuditToParams(audit: Omit<ComplianceMonitoringAuditRecord, 'id' | 'createdAt' | 'updatedAt'>): unknown[] {
     return [
@@ -458,7 +459,7 @@ export class DataRetentionAuditDAO {
       audit.followUpCompleted,
       JSON.stringify(audit.metadata || {})
     ];
-  }
+
 
   private mapRowToDataRetentionAudit(row: unknown): DataRetentionAuditRecord {
     return {
@@ -524,9 +525,8 @@ export class DataRetentionAuditDAO {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
+
 
   private camelToSnakeCase(str: string): string {
     return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-  }
-}
+

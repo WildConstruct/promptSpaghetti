@@ -48,9 +48,6 @@ export var ComplianceFramework;
     ComplianceFramework["HIPAA"] = "hipaa";
     ComplianceFramework["PCI_DSS"] = "pci_dss";
 })(ComplianceFramework || (ComplianceFramework = {}));
-/**
- * Comprehensive data classification engine
- */
 export class DataClassifier extends BrowserEventEmitter {
     rules = new Map();
     classifications = new Map();
@@ -81,8 +78,8 @@ export class DataClassifier extends BrowserEventEmitter {
             classifiedAt: new Date(),
             classifiedBy: 'automated',
             version: '1.0',
-            reviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days
-            lastModified: new Date()
+            reviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days,
+            lastModified: new Date(),
         };
         this.classifications.set(data.id, { ...result, ...metadata });
         // Emit classification event
@@ -111,7 +108,7 @@ export class DataClassifier extends BrowserEventEmitter {
         this.emit('batchClassificationComplete', {
             total: dataElements.length,
             successful: results.size,
-            timestamp: new Date()
+            timestamp: new Date(),
         });
         return results;
     }
@@ -143,7 +140,7 @@ export class DataClassifier extends BrowserEventEmitter {
             newLevel,
             reason,
             approvedBy,
-            timestamp: new Date()
+            timestamp: new Date(),
         });
     }
     /**
@@ -155,7 +152,7 @@ export class DataClassifier extends BrowserEventEmitter {
             ruleId: rule.id,
             name: rule.name,
             level: rule.level,
-            timestamp: new Date()
+            timestamp: new Date(),
         });
     }
     /**
@@ -166,7 +163,7 @@ export class DataClassifier extends BrowserEventEmitter {
         if (removed) {
             this.emit('ruleRemoved', {
                 ruleId,
-                timestamp: new Date()
+                timestamp: new Date(),
             });
         }
     }
@@ -181,7 +178,7 @@ export class DataClassifier extends BrowserEventEmitter {
                     inTransit: true,
                     algorithm: 'AES-256-GCM',
                     keyRotation: '90 days',
-                    keyStorage: 'HSM'
+                    keyStorage: 'HSM',
                 };
             case ClassificationLevel.CONFIDENTIAL:
                 return {
@@ -189,7 +186,7 @@ export class DataClassifier extends BrowserEventEmitter {
                     inTransit: true,
                     algorithm: 'AES-256-CBC',
                     keyRotation: '1 year',
-                    keyStorage: 'Cloud KMS'
+                    keyStorage: 'Cloud KMS',
                 };
             case ClassificationLevel.INTERNAL:
                 return {
@@ -197,7 +194,7 @@ export class DataClassifier extends BrowserEventEmitter {
                     inTransit: true,
                     algorithm: 'TLS 1.3',
                     keyRotation: 'N/A',
-                    keyStorage: 'Certificate store'
+                    keyStorage: 'Certificate store',
                 };
             default:
                 return {
@@ -205,7 +202,7 @@ export class DataClassifier extends BrowserEventEmitter {
                     inTransit: false,
                     algorithm: 'None',
                     keyRotation: 'N/A',
-                    keyStorage: 'N/A'
+                    keyStorage: 'N/A',
                 };
         }
     }
@@ -217,7 +214,7 @@ export class DataClassifier extends BrowserEventEmitter {
             return {
                 period: 'As required by GDPR (minimal necessary)',
                 disposal: 'Secure deletion with verification',
-                archival: false
+                archival: false,
             };
         }
         switch (level) {
@@ -225,25 +222,25 @@ export class DataClassifier extends BrowserEventEmitter {
                 return {
                     period: '7 years',
                     disposal: 'Cryptographic erasure',
-                    archival: true
+                    archival: true,
                 };
             case ClassificationLevel.CONFIDENTIAL:
                 return {
                     period: '3 years',
                     disposal: 'Secure deletion',
-                    archival: true
+                    archival: true,
                 };
             case ClassificationLevel.INTERNAL:
                 return {
                     period: '1 year',
                     disposal: 'Standard deletion',
-                    archival: false
+                    archival: false,
                 };
             default:
                 return {
                     period: 'As needed',
                     disposal: 'Standard deletion',
-                    archival: false
+                    archival: false,
                 };
         }
     }
@@ -351,7 +348,7 @@ export class DataClassifier extends BrowserEventEmitter {
                 keywords: ['database', 'connection', 'db_password'],
                 complianceRequirements: [ComplianceFramework.NIST],
                 priority: 9,
-                enabled: true
+                enabled: true,
             },
             // Business Data - Financial information
             {
@@ -461,7 +458,7 @@ export class DataClassifier extends BrowserEventEmitter {
             encryptionRequired: false,
             retentionPeriod: '1 year',
             accessControls: ['authenticated-users'],
-            reasoning: ['Default classification applied - no specific rules matched']
+            reasoning: ['Default classification applied - no specific rules matched'],
         };
     }
     getAccessControls(level) {
@@ -527,15 +524,14 @@ export class ClassificationPolicyManager {
             compliant: violations.length === 0,
             violations,
             policy: policy.id,
-            timestamp: new Date()
+            timestamp: new Date(),
         };
     }
 }
 ;
 auditRequirements: {
     frequency: string;
-    scope: string[];
+    scope: string;
 }
 ;
-// Export default instance
 export default DataClassifier;

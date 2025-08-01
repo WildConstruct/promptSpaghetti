@@ -9,20 +9,18 @@ import React from 'react';
 import { Template } from './TemplatePreviewModal';
 
 }
-export interface SocialPlatformIntegrationProps {
-    template: Template;
+}
+export interface SocialPlatformIntegrationProps { template: Template;
     platforms?: SocialPlatform[];
     trackingEnabled?: boolean;
     onShareComplete?: (share: ShareRecord) => void;
     onAnalyticsUpdate?: (analytics: ShareAnalytics) => void;
     className?: string;
     showAnalytics?: boolean;
-    customizations?: SocialCustomizations;
-
-
+    customizations?: SocialCustomizations }
 }
-export interface SocialPlatform {
-    id: string;
+}
+export interface SocialPlatform { id: string;
     name: string;
     displayName: string;
     icon: React.ComponentType<unknown>;
@@ -33,31 +31,25 @@ export interface SocialPlatform {
     config: PlatformConfig;
     features: PlatformFeatures;
     limits: PlatformLimits;
-    analytics: PlatformAnalytics;
-
-
+    analytics: PlatformAnalytics }
 }
-export interface PlatformConfig {
-    apiEndpoint?: string;
+}
+export interface PlatformConfig { apiEndpoint?: string;
     clientId?: string;
     redirectUri?: string;
     scopes: string[];
     customFields: Record<string, any>;
     webhookUrl?: string;
-    rateLimit: RateLimitConfig;
-
-
+    rateLimit: RateLimitConfig }
 }
-export interface RateLimitConfig {
-    requestsPerMinute: number;
+}
+export interface RateLimitConfig { requestsPerMinute: number;
     requestsPerHour: number;
     burstLimit: number;
-    retryAfter: number;
-
-
+    retryAfter: number }
 }
-export interface PlatformFeatures {
-    directPosting: boolean;
+}
+export interface PlatformFeatures { directPosting: boolean;
     scheduledPosting: boolean;
     mediaUpload: boolean;
     hashtags: boolean;
@@ -65,33 +57,27 @@ export interface PlatformFeatures {
     geotagging: boolean;
     crossPosting: boolean;
     analytics: boolean;
-    engagement: boolean;
-
-
+    engagement: boolean }
 }
-export interface PlatformLimits {
-    maxTextLength: number;
+}
+export interface PlatformLimits { maxTextLength: number;
     maxImages: number;
     maxVideos: number;
     maxHashtags: number;
     maxMentions: number;
     fileSize: number;
-    videoLength: number;
-
-
+    videoLength: number }
 }
-export interface PlatformAnalytics {
-    impressions: number;
+}
+export interface PlatformAnalytics { impressions: number;
     engagements: number;
     clicks: number;
     shares: number;
     reach: number;
-    lastUpdated: Date;
-
-
+    lastUpdated: Date }
 }
-export interface ShareRecord {
-    id: string;
+}
+export interface ShareRecord { id: string;
     templateId: string;
     platform: string;
     shareType: ShareType;
@@ -102,62 +88,51 @@ export interface ShareRecord {
     analytics: ShareAnalytics;
     metadata: ShareMetadata;
 
-export type ShareType = 'direct' | 'link' | 'embed' | 'download' | 'preview';
-
+export type ShareType = 'direct' | 'link' | 'embed' | 'download' | 'preview' }
 }
-export interface ShareContent {
-    title: string;
+}
+export interface ShareContent { title: string;
     description: string;
     url: string;
     imageUrl?: string;
     videoUrl?: string;
     hashtags: string[];
     mentions: string[];
-    customText?: string;
-
-
+    customText?: string }
 }
-export interface ShareAnalytics {
-    views: number;
+}
+export interface ShareAnalytics { views: number;
     clicks: number;
     engagements: number;
     conversions: number;
     revenue: number;
     demographics: DemographicData;
-    performance: PerformanceMetrics;
-
-
+    performance: PerformanceMetrics }
 }
-export interface DemographicData {
-    ageGroups: Record<string, number>;
+}
+export interface DemographicData { ageGroups: Record<string, number>;
     geoLocations: Record<string, number>;
     interests: Record<string, number>;
-    devices: Record<string, number>;
-
-
+    devices: Record<string, number> }
 }
-export interface PerformanceMetrics {
-    clickThroughRate: number;
+}
+export interface PerformanceMetrics { clickThroughRate: number;
     conversionRate: number;
     engagementRate: number;
     viralCoefficient: number;
-    timeToConversion: number;
-
-
+    timeToConversion: number }
 }
-export interface ShareMetadata {
-    userAgent?: string;
+}
+export interface ShareMetadata { userAgent?: string;
     referrer?: string;
     location?: string;
     deviceType?: string;
     campaignId?: string;
     source?: string;
-    medium?: string;
-
-
+    medium?: string }
 }
-export interface SocialCustomizations {
-    autoHashtags: boolean;
+}
+export interface SocialCustomizations { autoHashtags: boolean;
     customBranding: boolean;
     trackingParameters: boolean;
     crossPlatformSync: boolean;
@@ -167,7 +142,7 @@ export interface SocialCustomizations {
 export declare const ShareContentGenerator: {
     generateTitle: (template: Template, platform: string) => string;
     generateDescription: (template: Template, platform: string) => string;
-    generateHashtags: (template: Template, platform: string) => string[];
+    generateHashtags: (template: Template, platform: string) => string[] }
 }
 };
 export declare const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>;

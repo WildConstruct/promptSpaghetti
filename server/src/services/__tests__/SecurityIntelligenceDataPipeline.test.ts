@@ -9,7 +9,7 @@ import {
   SecurityEvent,
   SecurityEventType,
   SecurityEventSeverity
-} from '../SecurityIntelligenceDataPipeline';
+ from '../SecurityIntelligenceDataPipeline';
 import { AnalyticsCollector } from '../../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../../database/analytics-dao';
 import { PerformanceMonitoringService } from '../../analytics/PerformanceMonitoringService';
@@ -71,7 +71,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
         deduplication_enabled: true,
         rate_limit_per_second: 1000,
         backpressure_threshold: 8000
-  }
+
       processing: {
         enabled: true,
         worker_threads: 4,
@@ -81,7 +81,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
         parallel_processing: true,
         memory_limit_mb: 1024,
         cpu_limit_percent: 80
-  }
+
       normalization: {
         enabled: true,
         schema_validation: true,
@@ -90,7 +90,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
         format_standardization: true,
         timezone_normalization: true,
         encoding_normalization: true
-  }
+
       enrichment: {
         enabled: true,
         geo_location_enabled: true,
@@ -100,7 +100,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
         user_context_enabled: true,
         network_context_enabled: true,
         ml_scoring_enabled: true
-  }
+
       storage: {
         enabled: true,
         hot_storage_days: 30,
@@ -110,14 +110,14 @@ describe('SecurityIntelligenceDataPipeline', () => {
         compression_level: 6,
         encryption_enabled: true,
         index_optimization: true
-  }
+
       epic_integration: {
         epic1_analytics_enabled: true,
         epic17_admin_enabled: true,
         cross_epic_correlation: true,
         unified_monitoring: true,
         performance_tracking: true
-      }
+
     };
 
     pipeline = new SecurityIntelligenceDataPipeline(
@@ -133,7 +133,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
   afterEach(async () => {
     if (pipeline && typeof pipeline.shutdown === 'function') {
       await pipeline.shutdown();
-    }
+
     jest.clearAllMocks();
   });
 
@@ -206,7 +206,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'datacenter-east',
           owner: 'security-team',
           criticality: 'high'
-  }
+
         destination: {
           system_name: 'web-server-01',
           ip_address: '10.0.1.50',
@@ -214,7 +214,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           port: 80,
           protocol: 'HTTP',
           service: 'web'
-  }
+
         threat_indicators: [
           {
             type: 'ip_address',
@@ -226,7 +226,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
             last_seen: Date.now(),
             context: 'Known malicious IP',
             tags: ['botnet', 'c2']
-          }
+
         ],
         raw_data: { original_event: 'firewall log entry' },
         enriched_data: {},
@@ -244,7 +244,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['network', 'intrusion']
-        }
+
       };
     });
 
@@ -279,7 +279,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
       // Mock queue at capacity
       for (let i = 0; i < testConfig.ingestion.max_queue_size; i++) {
         await pipeline.ingestSecurityEvent({ ...testEvent, id: `event_${i}` });
-      }
+
       
       await expect(pipeline.ingestSecurityEvent({ ...testEvent, id: 'overflow_event' }))
         .rejects.toThrow('Ingestion queue at capacity');
@@ -326,7 +326,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'office-hq',
           owner: 'user-001',
           criticality: 'medium'
-  }
+
         threat_indicators: [
           {
             type: 'file_hash',
@@ -338,7 +338,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
             last_seen: Date.now(),
             context: 'Malware file hash',
             tags: ['malware', 'trojan']
-          }
+
         ],
         raw_data: { file_path: 'C:\\temp\\malware.exe', scan_result: 'infected' },
         enriched_data: {},
@@ -356,7 +356,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['malware', 'endpoint']
-        }
+
       };
     });
 
@@ -432,7 +432,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'datacenter-west',
           owner: 'auth-team',
           criticality: 'high'
-  }
+
         user_context: {
           user_id: 'user123',
           username: 'jdoe',
@@ -443,7 +443,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           authentication_method: 'password',
           last_activity: Date.now() - 300000,
           risk_score: 30
-  }
+
         threat_indicators: [],
         raw_data: { login_attempt: 'failed', reason: 'invalid_password' },
         enriched_data: {},
@@ -461,7 +461,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['authentication', 'failure']
-        }
+
       };
       
       await pipeline.ingestSecurityEvent(testEvent);
@@ -508,7 +508,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'datacenter-east',
           owner: 'security-team',
           criticality: 'high'
-  }
+
         threat_indicators: [],
         raw_data: { suspicious_pattern: 'port_scan' },
         enriched_data: {},
@@ -526,7 +526,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 95,
           tags: ['suspicious', 'activity']
-        }
+
       };
       
       await pipeline.ingestSecurityEvent(testEvent);
@@ -559,7 +559,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'cloud',
           owner: 'threat-intel-team',
           criticality: 'critical'
-  }
+
         threat_indicators: [
           {
             type: 'ip_address',
@@ -571,7 +571,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
             last_seen: Date.now(),
             context: 'C2 server IP',
             tags: ['c2', 'botnet']
-          }
+
         ],
         raw_data: { threat_type: 'c2_communication' },
         enriched_data: {},
@@ -589,7 +589,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['threat', 'intelligence']
-        }
+
       };
       
       await pipeline.ingestSecurityEvent(testEvent);
@@ -630,7 +630,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'network-edge',
           owner: 'network-team',
           criticality: 'high'
-  }
+
         threat_indicators: [],
         raw_data: { intrusion_type: 'port_scan' },
         enriched_data: {},
@@ -648,7 +648,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['network', 'intrusion']
-        }
+
       };
       
       await geoEnrichmentPipeline.ingestSecurityEvent(testEvent);
@@ -676,7 +676,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'datacenter-central',
           owner: 'data-team',
           criticality: 'critical'
-  }
+
         user_context: {
           user_id: 'user456',
           username: 'suspicious_user',
@@ -687,7 +687,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           authentication_method: 'token',
           last_activity: Date.now(),
           risk_score: 85
-  }
+
         threat_indicators: [],
         raw_data: { files_accessed: 1000, data_volume_mb: 500 },
         enriched_data: {},
@@ -705,7 +705,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['data', 'exfiltration']
-        }
+
       };
       
       await pipeline.ingestSecurityEvent(testEvent);
@@ -738,7 +738,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'cloud',
           owner: 'compliance-team',
           criticality: 'medium'
-  }
+
         threat_indicators: [],
         raw_data: { violation_type: 'data_retention', policy: 'GDPR' },
         enriched_data: {},
@@ -756,7 +756,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['compliance', 'violation']
-        }
+
       };
       
       await pipeline.ingestSecurityEvent(testEvent);
@@ -790,7 +790,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'datacenter-south',
           owner: 'policy-team',
           criticality: 'medium'
-  }
+
         threat_indicators: [],
         raw_data: { policy_violated: 'password_policy' },
         enriched_data: {},
@@ -808,7 +808,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['policy', 'violation']
-        }
+
       };
       
       await pipeline.ingestSecurityEvent(testEvent);
@@ -841,7 +841,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'datacenter-core',
           owner: 'ad-team',
           criticality: 'critical'
-  }
+
         user_context: {
           user_id: 'admin001',
           username: 'admin',
@@ -852,7 +852,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           authentication_method: 'certificate',
           last_activity: Date.now(),
           risk_score: 95
-  }
+
         threat_indicators: [],
         raw_data: { escalation_type: 'token_manipulation' },
         enriched_data: {},
@@ -870,7 +870,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['privilege', 'escalation']
-        }
+
       };
       
       await pipeline.ingestSecurityEvent(testEvent);
@@ -992,7 +992,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
               location: 'test',
               owner: 'test',
               criticality: 'low'
-  }
+
             threat_indicators: [],
             raw_data: {},
             enriched_data: {},
@@ -1010,13 +1010,13 @@ describe('SecurityIntelligenceDataPipeline', () => {
               processing_duration_ms: 0,
               quality_score: 100,
               tags: ['test']
-            }
+
           });
-        } catch (error) {
+ catch (error) {
           // Queue capacity reached
           break;
-        }
-      }
+
+
       
       // Wait for backpressure detection interval
       await new Promise(resolve => setTimeout(resolve, 50));
@@ -1033,11 +1033,11 @@ describe('SecurityIntelligenceDataPipeline', () => {
         ingestion: {
           ...testConfig.ingestion,
           enabled: false
-  }
+
         processing: {
           ...testConfig.processing,
           enabled: false
-        }
+
       };
       
       const customPipeline = new SecurityIntelligenceDataPipeline(
@@ -1066,7 +1066,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'test',
           owner: 'test',
           criticality: 'low'
-  }
+
         threat_indicators: [],
         raw_data: {},
         enriched_data: {},
@@ -1084,7 +1084,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['test']
-        }
+
       };
       
       // Since ingestion is disabled, this should still work as we test structure validation first
@@ -1102,7 +1102,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           cross_epic_correlation: false,
           unified_monitoring: false,
           performance_tracking: false
-        }
+
       };
       
       const noEpicPipeline = new SecurityIntelligenceDataPipeline(
@@ -1151,7 +1151,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'test',
           owner: 'test',
           criticality: 'low'
-  }
+
         threat_indicators: [],
         raw_data: {},
         enriched_data: {},
@@ -1169,7 +1169,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['test']
-        }
+
       };
       
       await pipeline.ingestSecurityEvent(testEvent);
@@ -1245,7 +1245,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           location: 'test',
           owner: 'test',
           criticality: 'low'
-  }
+
         threat_indicators: [],
         raw_data: {},
         enriched_data: {},
@@ -1263,7 +1263,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
           processing_duration_ms: 0,
           quality_score: 100,
           tags: ['test']
-        }
+
       };
       
       await pipeline.ingestSecurityEvent(testEvent);
@@ -1330,7 +1330,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
             location: 'test',
             owner: 'test',
             criticality: 'low'
-  }
+
           threat_indicators: [],
           raw_data: { test_id: i },
           enriched_data: {},
@@ -1348,14 +1348,14 @@ describe('SecurityIntelligenceDataPipeline', () => {
             processing_duration_ms: 0,
             quality_score: 100,
             tags: ['load', 'test']
-          }
+
         };
         
         // Don't wait for individual events to complete
         events.push(pipeline.ingestSecurityEvent(event).catch(() => {
           // Ignore individual failures (queue capacity, etc.)
         }));
-      }
+
       
       // Wait for all ingestion attempts
       await Promise.allSettled(events);
@@ -1387,7 +1387,7 @@ describe('SecurityIntelligenceDataPipeline', () => {
               location: 'test',
               owner: 'test',
               criticality: 'medium'
-  }
+
             threat_indicators: [],
             raw_data: { performance_test: true },
             enriched_data: {},
@@ -1405,13 +1405,13 @@ describe('SecurityIntelligenceDataPipeline', () => {
               processing_duration_ms: 0,
               quality_score: 100,
               tags: ['perf', 'test']
-            }
+
           });
-        } catch (error) {
+ catch (error) {
           // Queue capacity reached - this is expected under load
           break;
-        }
-      }
+
+
       
       const endTime = Date.now();
       const totalTime = endTime - startTime;

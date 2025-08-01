@@ -1,6 +1,7 @@
 import React from 'react';
 
 }
+}
 interface VisualHierarchyDemoEditorProps {
     nodeId: string;
     nodeType: string;
@@ -21,4 +22,5 @@ interface VisualHierarchyDemoEditorProps {
 export declare const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>;
 export default VisualHierarchyDemoEditor;
 //# sourceMappingURL=VisualHierarchyDemoEditor.d.ts.map
+}
 }

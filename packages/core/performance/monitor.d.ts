@@ -4,8 +4,8 @@
  */
 
 }
-export interface PerformanceMetric {
-    name: string;
+}
+export interface PerformanceMetric { name: string;
     values: number[];
     average: number;
     min: number;
@@ -13,21 +13,17 @@ export interface PerformanceMetric {
     p95: number;
     p99: number;
     count: number;
-    lastUpdated: number;
-
-
+    lastUpdated: number }
 }
-export interface PerformanceAlert {
-    metric: string;
+}
+export interface PerformanceAlert { metric: string;
     threshold: number;
     currentValue: number;
     severity: 'low' | 'medium' | 'high' | 'critical';
-    timestamp: number;
-
-
+    timestamp: number }
 }
-export interface PerformanceConfig {
-    maxSamples: number;
+}
+export interface PerformanceConfig { maxSamples: number;
     alertThresholds: Record<string, number>;
     enableLogging: boolean;
     enableAlerts: boolean;
@@ -105,7 +101,7 @@ export declare function usePerformanceMonitor(): {
     recordMetric: (name: string, value: number) => void;
     getMetrics: () => PerformanceMetric[];
     getSummary: () => Record<string, any>;
-    measureMemory: (name: string) => void;
+    measureMemory: (name: string) => void }
 }
 };
 //# sourceMappingURL=monitor.d.ts.map

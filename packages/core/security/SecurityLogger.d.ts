@@ -15,8 +15,7 @@
  */
 import { EventEmitter } from 'events';
 import { LockoutReason, AdminRole, AccountLockout, UnlockMethod } from './AccountLockoutService';
-export declare enum LogLevel {
-    DEBUG = "debug",
+export declare enum LogLevel { DEBUG = "debug",
     INFO = "info",
     WARN = "warn",
     ERROR = "error",
@@ -45,12 +44,12 @@ export declare enum ComplianceFramework {
     HIPAA = "hipaa",
     PCI_DSS = "pci_dss",
     ISO_27001 = "iso_27001",
-    NIST = "nist",
+    NIST = "nist" }
     CCPA = "ccpa"
 
 }
-export interface LogContext {
-    userId?: string;
+}
+export interface LogContext { userId?: string;
     userEmail?: string;
     adminId?: string;
     adminRole?: AdminRole;
@@ -64,25 +63,21 @@ export interface LogContext {
         region?: string;
         city?: string;
         latitude?: number;
-        longitude?: number;
+        longitude?: number }
 }
     };
-    deviceInfo?: {
-        deviceId?: string;
+    deviceInfo?: { deviceId?: string;
         deviceType?: string;
         platform?: string;
-        browser?: string;
-    };
-    threatContext?: {
-        riskScore?: number;
+        browser?: string };
+    threatContext?: { riskScore?: number;
         threatLevel?: string;
         attackVector?: string;
-        indicators?: string[];
-    };
+        indicators?: string[] };
 
 }
-export interface SecurityLogEntry {
-    id: string;
+}
+export interface SecurityLogEntry { id: string;
     timestamp: Date;
     level: LogLevel;
     eventType: SecurityEventType;
@@ -91,36 +86,30 @@ export interface SecurityLogEntry {
         type: 'user' | 'admin' | 'system';
         id: string;
         email?: string;
-        role?: AdminRole;
+        role?: AdminRole }
 }
     };
-    target?: {
-        type: 'user' | 'account' | 'lockout' | 'system';
+    target?: { type: 'user' | 'account' | 'lockout' | 'system';
         id: string;
-        email?: string;
-    };
+        email?: string };
     context: LogContext;
     details: Record<string, any>;
     outcome: 'success' | 'failure' | 'pending' | 'unknown';
     severity: 'low' | 'medium' | 'high' | 'critical';
-    compliance: {
-        frameworks: ComplianceFramework[];
+    compliance: { frameworks: ComplianceFramework[];
         retention: number;
         encrypted: boolean;
-        immutable: boolean;
-    };
-    metadata: {
-        source: string;
+        immutable: boolean };
+    metadata: { source: string;
         environment: string;
         version: string;
         correlationId?: string;
         traceId?: string;
-        checksum: string;
-    };
+        checksum: string };
 
 }
-export interface AuditTrailEntry {
-    id: string;
+}
+export interface AuditTrailEntry { id: string;
     timestamp: Date;
     operation: string;
     resource: string;
@@ -128,70 +117,54 @@ export interface AuditTrailEntry {
     actor: {
         type: 'user' | 'admin' | 'system';
         id: string;
-        email?: string;
+        email?: string }
 }
     };
-    changes: {
-        before?: any;
+    changes: { before?: any;
         after?: any;
-        fields: string[];
-    };
+        fields: string[] };
     reason?: string;
     context: LogContext;
     compliance: ComplianceFramework[];
     signature: string;
 
 }
-export interface SecurityMetrics {
-    period: {
+}
+export interface SecurityMetrics { period: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
-    lockoutEvents: {
-        total: number;
+    lockoutEvents: { total: number;
         byReason: Record<LockoutReason, number>;
         byHour: number[];
-        averagePerDay: number;
-    };
-    unlockEvents: {
-        total: number;
+        averagePerDay: number };
+    unlockEvents: { total: number;
         byMethod: Record<UnlockMethod, number>;
         adminUnlocks: number;
         emergencyUnlocks: number;
-        averageResolutionTime: number;
-    };
-    securityAlerts: {
-        total: number;
+        averageResolutionTime: number };
+    securityAlerts: { total: number;
         bySeverity: Record<string, number>;
         falsePositives: number;
-        responseTime: number;
-    };
-    compliance: {
-        violations: number;
+        responseTime: number };
+    compliance: { violations: number;
         reportingRequirements: number;
         dataRetention: number;
-        auditAccess: number;
-    };
-    threatLandscape: {
-        topAttackVectors: Array<{
+        auditAccess: number };
+    threatLandscape: { topAttackVectors: Array<{
             vector: string;
-            count: number;
-        }>;
-        topTargetedUsers: Array<{
-            userId: string;
-            count: number;
-        }>;
+            count: number }>;
+        topTargetedUsers: Array<{ userId: string;
+            count: number }>;
         geographicDistribution: Record<string, number>;
-        timePatterns: {
-            peakHours: number[];
-            peakDays: string[];
-        };
+        timePatterns: { peakHours: number[];
+            peakDays: string[] };
     };
 
 }
-export interface LogQuery {
-    startTime?: Date;
+}
+export interface LogQuery { startTime?: Date;
     endTime?: Date;
     eventTypes?: SecurityEventType[];
     levels?: LogLevel[];
@@ -203,11 +176,10 @@ export interface LogQuery {
     offset?: number;
     sortBy?: 'timestamp' | 'severity' | 'eventType';
     sortOrder?: 'asc' | 'desc';
-    search?: string;
-
+    search?: string }
 }
-export interface LogRetentionPolicy {
-    framework: ComplianceFramework;
+}
+export interface LogRetentionPolicy { framework: ComplianceFramework;
     retentionDays: number;
     archiveAfterDays: number;
     encrypted: boolean;
@@ -235,49 +207,47 @@ export declare class SecurityLogger extends EventEmitter {
      * Log unlock attempt
      */
     logUnlockAttempt();
-      lockoutId: string,
-      adminId: string,
-      reason: string,
-      outcome: 'success' | 'failure',
+      lockoutId: string;
+      adminId: string;
+      reason: string;
+      outcome: 'success' | 'failure';
       context?: LogContext
     ): string;
     /**
      * Log emergency unlock event
      */
     logEmergencyUnlock();
-      lockoutId: string,
-      adminId: string,
-      emergencyCode: string,
-      justification: string,
+      lockoutId: string;
+      adminId: string;
+      emergencyCode: string;
+      justification: string;
       context?: LogContext
     ): string;
     /**
      * Log security alert
      */
     logSecurityAlert();
-      alertType: string,
-      severity: 'low' | 'medium' | 'high' | 'critical',
-      details: Record<string,
-      any>,
+      alertType: string;
+      severity: 'low' | 'medium' | 'high' | 'critical';
+      details: Record<string;
+      any> }
       context?: LogContext
     ): string;
     /**
      * Create audit trail entry
      */
-    createAuditTrail(operation: string, resource: string, resourceId: string, actorType: 'user' | 'admin' | 'system', actorId: string, changes: {)
+    createAuditTrail(operation: string, resource: string, resourceId: string, actorType: 'user' | 'admin' | 'system', actorId: string, changes: { )
         before?: any;
         after?: any;
-        fields: string[];
+        fields: string[] }
 }
     }, reason?: string, context?: LogContext): string;
     /**
      * Query security logs
      */
-    queryLogs(query: LogQuery): {
-        logs: SecurityLogEntry[];
+    queryLogs(query: LogQuery): { logs: SecurityLogEntry[];
         total: number;
-        hasMore: boolean;
-    };
+        hasMore: boolean };
     /**
      * Get security metrics
      */
@@ -290,14 +260,12 @@ export declare class SecurityLogger extends EventEmitter {
       startTime: Date,
       endTime: Date,
       format?: 'json' | 'csv' | 'xml'
-    ): {
-        data: string;
+    ): { data: string;
         metadata: {
             framework: ComplianceFramework;
             period: {
                 start: Date;
-                end: Date;
-            };
+                end: Date };
             recordCount: number;
             exportTime: Date;
             signature: string;

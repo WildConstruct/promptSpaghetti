@@ -14,15 +14,15 @@ import {
   ComplianceResult,
   ComplianceDashboard,
   ComplianceContext
-} from '../../../../packages/core/services/ComplianceMonitor';
+ from '../../../../packages/core/services/ComplianceMonitor';
 import { ComplianceReportingService, ComplianceReportRequest } from './ComplianceReportingService';
 import { ComplianceRuleEngine } from './ComplianceRuleEngine';
 import { AuditService } from '../auth/services/AuditService';
 import { PolicyNotificationService } from './PolicyNotificationService';
 import cron from 'node-cron';
 
-}
-}
+
+
 export interface ScheduleConfig {
   id: string;
   name: string;
@@ -36,12 +36,13 @@ export interface ScheduleConfig {
   reporting: ReportingConfig;
   retention: RetentionConfig;
   metadata: ScheduleMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanType {
   type: 'full_compliance' | 'framework_specific' | 'security_focused' | 'privacy_focused' | 'operational' | 'audit_preparation';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -49,12 +50,13 @@ export interface ScanType {
   retries: number;
   parallelExecution: boolean;
   customChecks?: string[]; // Specific check IDs to run
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanScope {
   systems: string[];
   environments: ('development' | 'staging' | 'production')[];
@@ -62,36 +64,39 @@ export interface ScanScope {
   departments: string[];
   geographicScope: string[];
   exclusions: ScopeExclusion[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScopeExclusion {
   type: 'system' | 'environment' | 'check' | 'timeframe';
   identifier: string;
   reason: string;
   approvedBy: string;
   validUntil?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationConfig {
   event: 'scan_started' | 'scan_completed' | 'scan_failed' | 'violations_detected' | 'critical_issues';
   recipients: NotificationRecipient[];
   channels: NotificationChannel[];
   thresholds: NotificationThreshold[];
   template: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationRecipient {
   id: string;
   name: string;
@@ -99,56 +104,61 @@ export interface NotificationRecipient {
   role: string;
   escalationLevel: number;
   preferences: NotificationPreferences;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'dashboard';
   configuration: Record<string, any>;
   enabled: boolean;
   priority: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationThreshold {
   metric: 'compliance_score' | 'critical_violations' | 'high_violations' | 'scan_duration' | 'failure_rate';
   operator: 'lt' | 'lte' | 'gt' | 'gte' | 'eq' | 'ne';
   value: number;
   timeframe?: number; // minutes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationPreferences {
   immediateAlerts: boolean;
   dailyDigest: boolean;
   weeklyReport: boolean;
   quietHours: TimeRange[];
   skipWeekends: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeRange {
   start: string; // HH:MM format
   end: string;   // HH:MM format
   timezone: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportingConfig {
   generateReport: boolean;
   reportFormat: 'PDF' | 'HTML' | 'JSON' | 'XLSX';
@@ -157,23 +167,25 @@ export interface ReportingConfig {
   includeRecommendations: boolean;
   distributionList: string[];
   retention: number; // days
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetentionConfig {
   scanResults: number; // days
   reports: number; // days
   evidence: number; // days
   notifications: number; // days
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScheduleMetadata {
   createdBy: string;
   createdAt: Date;
@@ -181,12 +193,13 @@ export interface ScheduleMetadata {
   lastModifiedAt: Date;
   version: number;
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanExecution {
   id: string;
   scheduleId: string;
@@ -197,12 +210,13 @@ export interface ScanExecution {
   results: ScanResults;
   performance: ScanPerformance;
   errors: ScanError[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanProgress {
   totalChecks: number;
   completedChecks: number;
@@ -210,12 +224,13 @@ export interface ScanProgress {
   currentCheck?: string;
   estimatedCompletion: Date;
   percentComplete: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanResults {
   overallScore: number;
   frameworkScores: Record<string, number>;
@@ -223,12 +238,13 @@ export interface ScanResults {
   violations: ScanViolation[];
   recommendations: ScanRecommendation[];
   trends: ScanTrend[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanViolation {
   id: string;
   checkId: string;
@@ -240,24 +256,26 @@ export interface ScanViolation {
   impact: ViolationImpact;
   remediation: RemediationPlan;
   timeline: ViolationTimeline;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationImpact {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   affectedSystems: string[];
   potentialPenalties: string[];
   businessImpact: string;
   complianceImpact: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationPlan {
   actions: RemediationAction[];
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -265,12 +283,13 @@ export interface RemediationPlan {
   estimatedCost: number;
   timeline: number; // days
   dependencies: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationAction {
   id: string;
   description: string;
@@ -279,24 +298,26 @@ export interface RemediationAction {
   owner: string;
   dueDate: Date;
   status: 'planned' | 'in_progress' | 'completed' | 'blocked';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationTimeline {
   detected: Date;
   acknowledged?: Date;
   investigated?: Date;
   resolved?: Date;
   verified?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanRecommendation {
   id: string;
   category: 'process_improvement' | 'technical_enhancement' | 'policy_update' | 'training' | 'monitoring';
@@ -305,12 +326,13 @@ export interface ScanRecommendation {
   benefits: string[];
   implementation: ImplementationGuidance;
   priority: 'low' | 'medium' | 'high' | 'critical';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImplementationGuidance {
   steps: string[];
   resources: string[];
@@ -318,12 +340,13 @@ export interface ImplementationGuidance {
   effort: 'low' | 'medium' | 'high';
   cost: number;
   risks: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanTrend {
   metric: string;
   currentValue: number;
@@ -331,46 +354,50 @@ export interface ScanTrend {
   change: number;
   trend: 'improving' | 'stable' | 'declining';
   timeframe: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanPerformance {
   duration: number; // milliseconds
   checksPerSecond: number;
   resourceUtilization: ResourceUtilization;
   bottlenecks: string[];
   optimization: OptimizationSuggestions;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceUtilization {
   cpu: number; // percentage
   memory: number; // percentage
   network: number; // percentage
   database: number; // percentage
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OptimizationSuggestions {
   parallelization: string[];
   caching: string[];
   indexing: string[];
   scheduling: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScanError {
   id: string;
   checkId?: string;
@@ -379,9 +406,10 @@ export interface ScanError {
   message: string;
   timestamp: Date;
   context?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export type ComplianceFramework = 'GDPR' | 'CCPA' | 'SOX' | 'HIPAA' | 'PCI_DSS' | 'ISO27001' | 'NIST' | 'MPA' | 'COBIT' | 'ITIL';
 
@@ -407,7 +435,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     this.notificationService = notificationService;
 
     this.initializeDefaultSchedules();
-  }
+
 
   /**
    * Initialize default compliance scanning schedules
@@ -429,7 +457,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             retries: 2,
             parallelExecution: true,
             customChecks: ['gdpr_data_encryption', 'gdpr_consent_management', 'gdpr_data_retention']
-          }
+
         ],
         frameworks: ['GDPR'],
         scope: {
@@ -439,7 +467,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           departments: ['engineering', 'marketing', 'support'],
           geographicScope: ['EU', 'UK'],
           exclusions: []
-  }
+
         notifications: [
           {
             event: 'violations_detected',
@@ -456,8 +484,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
                   weeklyReport: true,
                   quietHours: [{ start: '22:00', end: '06:00', timezone: 'UTC' }],
                   skipWeekends: false
-                }
-              }
+
+
             ],
             channels: [
               { type: 'email', configuration: {}, enabled: true, priority: 1 },
@@ -468,7 +496,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
               { metric: 'compliance_score', operator: 'lt', value: 90 }
             ],
             template: 'gdpr_violation_alert'
-          }
+
         ],
         reporting: {
           generateReport: true,
@@ -478,13 +506,13 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           includeRecommendations: true,
           distributionList: ['dpo@wildConstruct.com', 'legal@wildConstruct.com'],
           retention: 365
-  }
+
         retention: {
           scanResults: 90,
           reports: 365,
           evidence: 365,
           notifications: 30
-  }
+
         metadata: {
           createdBy: 'system',
           createdAt: new Date(),
@@ -492,8 +520,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           lastModifiedAt: new Date(),
           version: 1,
           tags: ['gdpr', 'privacy', 'daily', 'automated']
-        }
-  }
+
+
       // Weekly Security Scan
       {
         id: 'weekly_security_comprehensive',
@@ -516,7 +544,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
               'internal_security_headers',
               'internal_rate_limiting'
             ]
-          }
+
         ],
         frameworks: ['SOC2', 'ISO27001'],
         scope: {
@@ -526,7 +554,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           departments: ['engineering', 'devops', 'security'],
           geographicScope: ['global'],
           exclusions: []
-  }
+
         notifications: [
           {
             event: 'scan_completed',
@@ -543,8 +571,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
                   weeklyReport: true,
                   quietHours: [{ start: '18:00', end: '08:00', timezone: 'UTC' }],
                   skipWeekends: true
-                }
-              }
+
+
             ],
             channels: [
               { type: 'email', configuration: {}, enabled: true, priority: 1 },
@@ -554,7 +582,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
               { metric: 'compliance_score', operator: 'lt', value: 85 }
             ],
             template: 'weekly_security_summary'
-          }
+
         ],
         reporting: {
           generateReport: true,
@@ -564,13 +592,13 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           includeRecommendations: true,
           distributionList: ['ciso@wildConstruct.com', 'security-team@wildConstruct.com'],
           retention: 730
-  }
+
         retention: {
           scanResults: 365,
           reports: 730,
           evidence: 365,
           notifications: 90
-  }
+
         metadata: {
           createdBy: 'system',
           createdAt: new Date(),
@@ -578,8 +606,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           lastModifiedAt: new Date(),
           version: 1,
           tags: ['security', 'soc2', 'iso27001', 'weekly', 'comprehensive']
-        }
-  }
+
+
       // Monthly Full Compliance Audit
       {
         id: 'monthly_full_compliance',
@@ -594,7 +622,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             timeout: 4 * 60 * 60 * 1000, // 4 hours
             retries: 3,
             parallelExecution: true
-          }
+
         ],
         frameworks: ['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI_DSS', 'ISO27001', 'MPA'],
         scope: {
@@ -604,7 +632,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           departments: ['all_departments'],
           geographicScope: ['global'],
           exclusions: []
-  }
+
         notifications: [
           {
             event: 'scan_completed',
@@ -621,8 +649,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
                   weeklyReport: false,
                   quietHours: [],
                   skipWeekends: false
-                }
-              }
+
+
             ],
             channels: [
               { type: 'email', configuration: {}, enabled: true, priority: 1 },
@@ -632,7 +660,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
               { metric: 'compliance_score', operator: 'lt', value: 95 }
             ],
             template: 'monthly_compliance_executive'
-          }
+
         ],
         reporting: {
           generateReport: true,
@@ -647,13 +675,13 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             'board@wildConstruct.com'
           ],
           retention: 2555 // 7 years
-  }
+
         retention: {
           scanResults: 2555, // 7 years
           reports: 2555, // 7 years
           evidence: 2555, // 7 years
           notifications: 365
-  }
+
         metadata: {
           createdBy: 'system',
           createdAt: new Date(),
@@ -661,8 +689,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           lastModifiedAt: new Date(),
           version: 1,
           tags: ['comprehensive', 'monthly', 'executive', 'audit', 'all_frameworks']
-        }
-  }
+
+
       // Quarterly Audit Preparation
       {
         id: 'quarterly_audit_prep',
@@ -677,7 +705,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             timeout: 6 * 60 * 60 * 1000, // 6 hours
             retries: 5,
             parallelExecution: false // Sequential for thoroughness
-          }
+
         ],
         frameworks: ['GDPR', 'SOX', 'ISO27001', 'SOC2'],
         scope: {
@@ -687,7 +715,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           departments: ['all_departments'],
           geographicScope: ['global'],
           exclusions: []
-  }
+
         notifications: [
           {
             event: 'scan_completed',
@@ -704,8 +732,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
                   weeklyReport: false,
                   quietHours: [],
                   skipWeekends: false
-                }
-              }
+
+
             ],
             channels: [
               { type: 'email', configuration: {}, enabled: true, priority: 1 }
@@ -715,7 +743,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
               { metric: 'compliance_score', operator: 'lt', value: 98 }
             ],
             template: 'quarterly_audit_preparation'
-          }
+
         ],
         reporting: {
           generateReport: true,
@@ -729,13 +757,13 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             'legal@wildConstruct.com'
           ],
           retention: 2555 // 7 years
-  }
+
         retention: {
           scanResults: 2555, // 7 years
           reports: 2555, // 7 years
           evidence: 2555, // 7 years
           notifications: 365
-  }
+
         metadata: {
           createdBy: 'system',
           createdAt: new Date(),
@@ -743,14 +771,14 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           lastModifiedAt: new Date(),
           version: 1,
           tags: ['quarterly', 'audit', 'preparation', 'evidence', 'comprehensive']
-        }
-      }
+
+
     ];
 
     defaultSchedules.forEach(schedule => {
       this.schedules.set(schedule.id, schedule);
     });
-  }
+
 
   /**
    * Start scheduled compliance scanning system
@@ -765,11 +793,11 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     this.schedules.forEach((schedule, scheduleId) => {
       if (schedule.enabled) {
         this.scheduleComplianceScan(scheduleId);
-      }
+
     });
 
     console.log(`✅ Scheduled compliance scanning started with ${this.scheduledTasks.size} active schedules`);
-  }
+
 
   /**
    * Stop scheduled compliance scanning system
@@ -788,7 +816,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     this.scheduledTasks.clear();
 
     console.log('✅ Scheduled compliance scanning stopped');
-  }
+
 
   /**
    * Schedule a specific compliance scan
@@ -797,18 +825,18 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     const schedule = this.schedules.get(scheduleId);
     if (!schedule) {
       throw new Error(`Schedule not found: ${scheduleId}`);
-    }
+
 
     if (!schedule.enabled) {
       console.log(`⏭️ Skipping disabled schedule: ${schedule.name}`);
       return;
-    }
+
 
     // Stop existing task if running
     const existingTask = this.scheduledTasks.get(scheduleId);
     if (existingTask) {
       existingTask.stop();
-    }
+
 
     console.log(`📅 Scheduling compliance scan: ${schedule.name} (${schedule.schedule})`);
 
@@ -823,7 +851,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     task.start();
 
     console.log(`✅ Successfully scheduled: ${schedule.name}`);
-  }
+
 
   /**
    * Execute a scheduled compliance scan
@@ -833,7 +861,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     const schedule = this.schedules.get(scheduleId);
     if (!schedule) {
       throw new Error(`Schedule not found: ${scheduleId}`);
-    }
+
 
     const execution: ScanExecution = {
       id: `scan_${scheduleId}_${Date.now()}`,
@@ -846,7 +874,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         failedChecks: 0,
         estimatedCompletion: new Date(),
         percentComplete: 0
-  }
+
       results: {
         overallScore: 0,
         frameworkScores: {},
@@ -854,7 +882,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         violations: [],
         recommendations: [],
         trends: []
-  }
+
       performance: {
         duration: 0,
         checksPerSecond: 0,
@@ -863,15 +891,15 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           memory: 0,
           network: 0,
           database: 0
-  }
+
         bottlenecks: [],
         optimization: {
           parallelization: [],
           caching: [],
           indexing: [],
           scheduling: []
-        }
-  }
+
+
       errors: []
     };
 
@@ -895,7 +923,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
       // Generate and distribute reports
       if (schedule.reporting.generateReport) {
         await this.generateScanReport(execution, schedule);
-      }
+
 
       // Send completion notifications
       await this.sendNotification(schedule, 'scan_completed', execution);
@@ -904,7 +932,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
       const criticalViolations = execution.results.violations.filter(v => v.severity === 'critical');
       if (criticalViolations.length > 0) {
         await this.sendNotification(schedule, 'critical_issues', execution);
-      }
+
 
       // Log audit trail
       await this.auditService.logSecurityEvent({
@@ -921,10 +949,9 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           violationsCount: execution.results.violations.length,
           criticalViolations: criticalViolations.length,
           duration: execution.performance.duration
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       execution.status = 'failed';
       execution.completedAt = new Date();
       
@@ -956,14 +983,14 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           scheduleId,
           scheduleName: schedule.name,
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
+
 
     return execution;
-  }
+
 
   /**
    * Run the actual scheduled scan logic
@@ -997,7 +1024,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             execution.progress.completedChecks++;
             execution.progress.percentComplete = (execution.progress.completedChecks / execution.progress.totalChecks) * 100;
             return result;
-          } catch (error) {
+ catch (error) {
             execution.progress.failedChecks++;
             const scanError: ScanError = {
               id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -1009,12 +1036,12 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             };
             execution.errors.push(scanError);
             return null;
-          }
+
         });
 
         const results = await Promise.all(promises);
         checkResults.push(...results.filter(r => r !== null) as ComplianceResult[]);
-      } else {
+ else {
         // Run checks sequentially
         for (const checkId of relevantChecks) {
           try {
@@ -1023,7 +1050,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             checkResults.push(result);
             execution.progress.completedChecks++;
             execution.progress.percentComplete = (execution.progress.completedChecks / execution.progress.totalChecks) * 100;
-          } catch (error) {
+ catch (error) {
             execution.progress.failedChecks++;
             const scanError: ScanError = {
               id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -1034,10 +1061,10 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
               timestamp: new Date()
             };
             execution.errors.push(scanError);
-          }
-        }
-      }
-    }
+
+
+
+
 
     // Process results
     execution.results.checkResults = checkResults;
@@ -1052,9 +1079,9 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
       if (check) {
         if (!frameworkGroups[check.framework]) {
           frameworkGroups[check.framework] = [];
-        }
+
         frameworkGroups[check.framework].push(result);
-      }
+
     });
 
     Object.entries(frameworkGroups).forEach(([framework, results]) => {
@@ -1079,7 +1106,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
       network: Math.random() * 100,
       database: Math.random() * 100
     };
-  }
+
 
   /**
    * Determine which checks to run based on schedule configuration
@@ -1098,10 +1125,10 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
 
     if (customChecks.length > 0) {
       return [...new Set([...frameworkChecks.filter(c => customChecks.includes(c)), ...customChecks])];
-    }
+
 
     return frameworkChecks;
-  }
+
 
   /**
    * Run compliance check with timeout
@@ -1117,12 +1144,12 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         const result = await this.runComplianceCheck(checkId);
         clearTimeout(timeoutId);
         resolve(result);
-      } catch (error) {
+ catch (error) {
         clearTimeout(timeoutId);
         reject(error);
-      }
+
     });
-  }
+
 
   /**
    * Generate violations from check results
@@ -1149,7 +1176,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
               potentialPenalties: this.getPotentialPenalties(check.framework),
               businessImpact: this.getBusinessImpact(check.severity),
               complianceImpact: `${check.framework} compliance requirement not met`
-  }
+
             remediation: {
               actions: result.remediation?.map(r => ({
                 id: r.id,
@@ -1165,19 +1192,19 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
               estimatedCost: 0,
               timeline: 7, // days
               dependencies: []
-  }
+
             timeline: {
               detected: new Date()
-            }
+
           };
 
           violations.push(violation);
-        }
-      }
-    }
+
+
+
 
     return violations;
-  }
+
 
   /**
    * Generate recommendations from check results and violations
@@ -1208,7 +1235,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           effort: this.mapSeverityToEffort(violation.severity),
           cost: violation.remediation.estimatedCost,
           risks: ['Temporary disruption during implementation']
-  }
+
         priority: violation.severity
       };
 
@@ -1241,13 +1268,13 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           effort: 'high',
           cost: 50000,
           risks: ['Resource allocation challenges']
-  }
+
         priority: 'medium'
       });
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Calculate compliance trends
@@ -1264,9 +1291,9 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         change: 2.1,
         trend: 'improving',
         timeframe: '30d'
-      }
+
     ];
-  }
+
 
   /**
    * Generate and distribute scan report
@@ -1300,7 +1327,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             timezone: 'UTC',
             includePastPeriods: false,
             forecastPeriods: 0
-  }
+
           exclusions: schedule.scope.exclusions.map(e => ({
             exclusionType: e.type.toUpperCase() as any,
             identifier: e.identifier,
@@ -1308,7 +1335,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
             approvedBy: e.approvedBy,
             temporary: false
           }))
-  }
+
         period: {
           periodType: 'CUSTOM',
           startDate: execution.startedAt,
@@ -1316,7 +1343,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           comparisonPeriods: [],
           seasonalAdjustments: false,
           holidayAdjustments: false
-  }
+
         recipients: schedule.reporting.distributionList,
         format: schedule.reporting.reportFormat as any,
         template: schedule.reporting.reportTemplate
@@ -1324,8 +1351,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
 
       const reportResult = await this.reportingService.generateReport(reportRequest, 'scheduled_scanner');
       console.log(`✅ Generated scan report: ${reportResult.reportId}`);
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Failed to generate scan report for: ${schedule.name}`, error);
       
       const scanError: ScanError = {
@@ -1337,8 +1363,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
       };
       
       execution.errors.push(scanError);
-    }
-  }
+
+
 
   /**
    * Send notifications based on scan events
@@ -1360,20 +1386,20 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
 
       if (!thresholdsMet) {
         continue; // Skip notification if thresholds not met
-      }
+
 
       // Send to each recipient through their preferred channels
       for (const recipient of config.recipients) {
         for (const channel of config.channels.filter(c => c.enabled)) {
           try {
             await this.sendChannelNotification(channel, recipient, config, execution, schedule);
-          } catch (error) {
+ catch (error) {
             console.error(`Failed to send notification via ${channel.type} to ${recipient.email}:`, error);
-          }
-        }
-      }
-    }
-  }
+
+
+
+
+
 
   /**
    * Send notification through specific channel
@@ -1411,8 +1437,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         
     default:
       console.log(`📱 ${channel.type} notification: ${message.summary}`);
-    }
-  }
+
+
 
   /**
    * Format notification message
@@ -1440,7 +1466,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         Completed: ${execution.completedAt?.toISOString()}
       `
     };
-  }
+
 
   /**
    * Get metric value from scan execution
@@ -1460,8 +1486,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         (execution.progress.failedChecks / execution.progress.totalChecks) * 100 : 0;
     default:
       return 0;
-    }
-  }
+
+
 
   /**
    * Evaluate threshold condition
@@ -1475,8 +1501,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     case 'eq': return value === threshold;
     case 'ne': return value !== threshold;
     default: return false;
-    }
-  }
+
+
 
   /**
    * Get potential penalties for framework
@@ -1493,7 +1519,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     };
 
     return penalties[framework] || ['Regulatory penalties', 'Compliance violations', 'Business impact'];
-  }
+
 
   /**
    * Get business impact description
@@ -1507,7 +1533,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     };
 
     return impacts[severity] || 'Business impact assessment required';
-  }
+
 
   /**
    * Map severity to effort level
@@ -1521,42 +1547,42 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     };
 
     return effortMap[severity] || 'medium';
-  }
+
 
   /**
    * Get check by ID (protected method access)
    */
   private getCheckById(checkId: string): ComplianceCheck | undefined {
     return this.getChecks().get(checkId);
-  }
+
 
   /**
    * Get all checks (protected method access)
    */
   private getChecks(): Map<string, ComplianceCheck> {
     return (this as any).checks;
-  }
+
 
   /**
    * Get current scan executions
    */
   public getScanExecutions(): Map<string, ScanExecution> {
     return this.executions;
-  }
+
 
   /**
    * Get scan execution by ID
    */
   public getScanExecution(executionId: string): ScanExecution | undefined {
     return this.executions.get(executionId);
-  }
+
 
   /**
    * Get active schedules
    */
   public getSchedules(): Map<string, ScheduleConfig> {
     return this.schedules;
-  }
+
 
   /**
    * Add or update a schedule
@@ -1567,8 +1593,8 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     // Restart scheduling if enabled
     if (schedule.enabled) {
       this.scheduleComplianceScan(scheduleId);
-    }
-  }
+
+
 
   /**
    * Remove a schedule
@@ -1578,10 +1604,10 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     if (task) {
       task.stop();
       this.scheduledTasks.delete(scheduleId);
-    }
+
     
     return this.schedules.delete(scheduleId);
-  }
+
 
   /**
    * Enable or disable a schedule
@@ -1595,15 +1621,15 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
       
       if (enabled) {
         this.scheduleComplianceScan(scheduleId);
-      } else {
+ else {
         const task = this.scheduledTasks.get(scheduleId);
         if (task) {
           task.stop();
           this.scheduledTasks.delete(scheduleId);
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Get compliance scanning dashboard with scheduled scan metrics
@@ -1625,13 +1651,13 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         completedScansToday: completedExecutions.filter(e => 
           Date.now() - e.startedAt.getTime() < 24 * 60 * 60 * 1000
         ).length
-  }
+
       recentExecutions: recentExecutions.slice(0, 10),
       averageScores: {
         overall: completedExecutions.length > 0 ? 
           completedExecutions.reduce((sum, e) => sum + e.results.overallScore, 0) / completedExecutions.length : 0,
         byFramework: this.calculateAverageFrameworkScores(completedExecutions)
-  }
+
       schedulePerformance: {
         averageDuration: completedExecutions.length > 0 ?
           completedExecutions.reduce((sum, e) => sum + e.performance.duration, 0) / completedExecutions.length : 0,
@@ -1639,10 +1665,10 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           (completedExecutions.length / recentExecutions.length) * 100 : 0,
         failureRate: recentExecutions.length > 0 ?
           (failedExecutions.length / recentExecutions.length) * 100 : 0
-  }
+
       upcomingScans: this.getUpcomingScans(),
       alerts: this.getSchedulingAlerts(};
-  }
+
 
   /**
    * Calculate average framework scores from executions
@@ -1654,7 +1680,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
       Object.entries(execution.results.frameworkScores).forEach(([framework, score]) => {
         if (!frameworkScores[framework]) {
           frameworkScores[framework] = [];
-        }
+
         frameworkScores[framework].push(score);
       });
     });
@@ -1665,7 +1691,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     });
 
     return averages;
-  }
+
 
   /**
    * Get upcoming scheduled scans
@@ -1687,11 +1713,11 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
           frameworks: schedule.frameworks,
           priority: schedule.scanTypes[0]?.priority || 'medium'
         });
-      }
+
     });
 
     return upcoming.sort((a, b) => a.nextExecution.getTime() - b.nextExecution.getTime());
-  }
+
 
   /**
    * Get scheduling alerts
@@ -1709,7 +1735,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         count: failedExecutions.length,
         timestamp: new Date()
       });
-    }
+
 
     // Check for disabled schedules
     const disabledSchedules = Array.from(this.schedules.values()).filter(s => !s.enabled);
@@ -1721,23 +1747,25 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
         count: disabledSchedules.length,
         timestamp: new Date()
       });
-    }
+
 
     return alerts;
-  }
-}
+
+
 
 // Supporting interfaces for dashboard
-}
-}
+
+
+
 export interface ScheduledComplianceDashboard {
   overview: {
     totalSchedules: number;
     activeSchedules: number;
     runningScans: number;
     completedScansToday: number;
-}
-}
+
+
+
   };
   recentExecutions: ScanExecution[];
   averageScores: {
@@ -1751,10 +1779,10 @@ export interface ScheduledComplianceDashboard {
   };
   upcomingScans: UpcomingScan[];
   alerts: SchedulingAlert[];
-}
 
-}
-}
+
+
+
 export interface UpcomingScan {
   scheduleId: string;
   scheduleName: string;
@@ -1762,21 +1790,23 @@ export interface UpcomingScan {
   estimatedDuration: number;
   frameworks: ComplianceFramework[];
   priority: 'low' | 'medium' | 'high' | 'critical';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SchedulingAlert {
   type: 'scan_failures' | 'disabled_schedules' | 'performance_issues' | 'configuration_errors';
   severity: 'low' | 'medium' | 'high' | 'critical';
   message: string;
   count: number;
   timestamp: Date;
-}
-}
-}
+
+
+
+
 
 // Export singleton instance (would be properly instantiated with dependencies)
 export const complianceScanner = new ScheduledComplianceScanner();

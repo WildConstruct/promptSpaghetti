@@ -9,6 +9,7 @@ import React from 'react';
 import { RegionGroup as RegionGroupType, RegionGroupAction } from '../../types/CollaborationTypes';
 
 }
+}
 interface RegionGroupProps {
     group: RegionGroupType;
     onAction: (action: RegionGroupAction) => void;
@@ -24,4 +25,5 @@ interface RegionGroupProps {
 export declare const RegionGroup: React.FC<RegionGroupProps>;
 export default RegionGroup;
 //# sourceMappingURL=RegionGroup.d.ts.map
+}
 }

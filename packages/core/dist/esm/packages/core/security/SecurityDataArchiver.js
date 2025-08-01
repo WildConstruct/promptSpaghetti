@@ -8,6 +8,22 @@
  */
 import { EventEmitter } from 'events';
 ;
+size_based ?  : {
+    max_partition_size_gb: number,
+    target_partition_size_gb: number,
+    auto_split_threshold: number
+};
+content_based ?  : {
+    partition_field: string,
+    partition_values: string,
+    dynamic_partitioning: boolean
+};
+hybrid ?  : {
+    primary_strategy: 'time_based' | 'size_based',
+    secondary_strategy: 'content_based',
+    partition_thresholds: (Record)
+};
+;
 // Storage configuration
 storage: {
     hot_storage: StorageTier;
@@ -54,9 +70,19 @@ last_updated: number;
 enabled: boolean;
  > ;
 // Compliance overrides
-compliance_overrides: Array;
+compliance_overrides: Array < {
+    regulation: string,
+    min_retention_days: number,
+    max_retention_days: number,
+    special_handling: string
+} > ;
 // Exception handling
-exceptions: Array;
+exceptions: Array < {
+    condition: string,
+    retention_extension_days: number,
+    reason: string,
+    approval_required: boolean
+} > ;
 created_at: number;
 enabled: boolean;
 ;
@@ -114,9 +140,22 @@ performance: {
 }
 ;
 // Error handling
-errors: Array;
+errors: Array < {
+    timestamp: number,
+    error_type: string,
+    error_message: string,
+    record_id: string,
+    retry_count: number,
+    resolution: string
+} > ;
 // Quality assurance
-quality_checks: Array;
+quality_checks: Array < {
+    check_name: string,
+    check_type: 'integrity' | 'completeness' | 'format' | 'compliance',
+    result: 'passed' | 'failed' | 'warning',
+    details: string,
+    timestamp: number
+} > ;
 // Results and outputs
 results: {
     output_locations: string;
@@ -128,6 +167,10 @@ results: {
 ;
 triggered_by: string;
 created_at: number;
+;
+filters: Record;
+search_query ?  : string;
+partition_ids ?  : string;
 ;
 // Retrieval options
 options: {
@@ -557,8 +600,9 @@ finally {
     }
     throw error;
     async;
-    discoverAndValidateData(execution, ArchivalExecution);
-    job: ArchivalJob,
+    discoverAndValidateData(execution, ArchivalExecution),
+        job;
+    ArchivalJob,
         config;
     DataPartitionConfig;
     Promise < void  > {
@@ -598,8 +642,9 @@ const activeExecution = this.activeExecutions.get(execution.job_id);
 if (activeExecution) {
     activeExecution.progress = 20;
     async;
-    processAndTransformData(execution, ArchivalExecution);
-    job: ArchivalJob,
+    processAndTransformData(execution, ArchivalExecution),
+        job;
+    ArchivalJob,
         config;
     DataPartitionConfig;
     Promise < void  > {
@@ -623,8 +668,9 @@ if (activeExecution) {
             if (activeExecution) {
                 activeExecution.progress = 50;
                 async;
-                archiveAndStoreData(execution, ArchivalExecution);
-                job: ArchivalJob,
+                archiveAndStoreData(execution, ArchivalExecution),
+                    job;
+                ArchivalJob,
                     config;
                 DataPartitionConfig;
                 Promise < void  > {
@@ -667,8 +713,9 @@ if (activeExecution) {
     if (activeExecution) {
         activeExecution.progress = 80;
         async;
-        verifyDataIntegrity(execution, ArchivalExecution);
-        job: ArchivalJob,
+        verifyDataIntegrity(execution, ArchivalExecution),
+            job;
+        ArchivalJob,
             config;
         DataPartitionConfig;
         Promise < void  > {
@@ -711,8 +758,9 @@ if (activeExecution) {
         if (activeExecution) {
             activeExecution.progress = 95;
             async;
-            cleanupAndFinalize(execution, ArchivalExecution);
-            job: ArchivalJob,
+            cleanupAndFinalize(execution, ArchivalExecution),
+                job;
+            ArchivalJob,
                 config;
             DataPartitionConfig;
             Promise < void  > {
@@ -838,14 +886,16 @@ if (activeExecution) {
             request.results = {
                 records_retrieved: recordsRetrieved,
                 data_volume_gb: dataVolumeGb,
-                output_files: [,
-                    `retrieval_${requestId}_data.${request.options.output_format}`]
+                output_files: [
+                    `retrieval_${requestId}_data.${request.options.output_format}`
+                ]
             };
         }
         `retrieval_${requestId}_metadata.json`;
     }
-    download_urls: [,
-        `https://secure-downloads.company.com/retrievals/${requestId}/data`];
+    download_urls: [
+        `https://secure-downloads.company.com/retrievals/${requestId}/data`
+    ];
 }
 `https://secure-downloads.company.com/retrievals/${requestId}/metadata`;
 expiry_date: Date.now() + (7 * 24 * 60 * 60 * 1000); // 7 days;
@@ -988,8 +1038,9 @@ if (!this.metrics.has(configId)) {
     ;
 }
 ;
-createExecutionNotificationMessage(execution, ArchivalExecution);
-job: ArchivalJob,
+createExecutionNotificationMessage(execution, ArchivalExecution),
+    job;
+ArchivalJob,
     status;
 'completed' | 'failed';
 string;
@@ -997,7 +1048,7 @@ string;
     return `
 📦 ARCHIVAL JOB ${status.toUpperCase()}: ${job.name}
 Execution ID: ${execution.id}
-Job ID: ${job.id},}
+Job ID: ${job.id},},
   Duration: ${execution.duration_minutes?.toFixed(1) || 'N/A'} minutes}
 ${status === 'completed' ? `}
 ✅ Success Statistics:
@@ -1005,7 +1056,7 @@ ${status === 'completed' ? `}
 - Records Archived: ${execution.statistics.records_archived.toLocaleString()}
 - Data Volume: ${execution.statistics.data_volume_gb.toFixed(2)} GB}
 - Compression Ratio: ${(execution.statistics.compression_ratio * 100).toFixed(1)}%}
-- Deduplication Savings: ${execution.statistics.dedupe_savings_percentage.toFixed(1)}%},}
+- Deduplication Savings: ${execution.statistics.dedupe_savings_percentage.toFixed(1)}%},},
   Performance:
 - Throughput: ${execution.performance.throughput_records_per_second.toFixed(0)} records/sec}
 - Data Rate: ${execution.performance.throughput_gb_per_hour.toFixed(2)} GB/hour}
@@ -1045,9 +1096,9 @@ string;
 {
     return `
 🔐 DATA RETRIEVAL APPROVAL REQUEST
-Request ID: ${request.id},}
+Request ID: ${request.id},},
   Requester: ${request.requester}
-Request Type: ${request.request_type.toUpperCase()},}
+Request Type: ${request.request_type.toUpperCase()},},
   Urgency: ${request.justification.urgency.toUpperCase()}
 Business Justification:
 ${request.justification.business_purpose}
@@ -1066,7 +1117,7 @@ To approve or deny this request, visit: /data-archiver/approvals/${request.id}
         const: message = `;
 📦 DATA RETRIEVAL COMPLETED
 Request ID: ${request.id}
-Completion Time: ${new Date().toLocaleString()},}
+Completion Time: ${new Date().toLocaleString()},},
   Results:
 - Records Retrieved: ${request.results?.records_retrieved.toLocaleString() || 'N/A'}
 - Data Volume: ${request.results?.data_volume_gb.toFixed(2) || 'N/A'} GB}
@@ -1239,169 +1290,122 @@ if (timeUntilNext > 0) {
             }
         },
         initializeDefaultConfigurations() {
-            const defaultConfigs = [];
-            {
-                name: 'Security Events Archival',
-                    description;
-                'Automated archival for security event data',
-                    data_type;
-                'security_events',
-                    partitioning;
+            const defaultConfigs = [
                 {
+                    name: 'Security Events Archival',
+                    description: 'Automated archival for security event data',
+                    data_type: 'security_events',
+                    partitioning: {},
                     strategy: 'time_based',
-                        time_based;
-                    {
-                        interval: 'daily',
-                            retention_policy;
-                        { }
-                        as;
-                        RetentionPolicy,
-                            timezone;
-                        'UTC';
-                    }
-                    storage: {
-                        hot_storage: {
-                            tier_name: 'hot',
-                                storage_class;
-                            'standard',
-                                availability;
-                            'immediate',
-                                cost_per_gb_month;
-                            0.023,
-                                retrieval_cost_per_gb;
-                            0,
-                                minimum_storage_duration_days;
-                            0,
-                                durability;
-                            99.999999999,
-                                geographic_regions;
-                            ['us-east-1', 'us-west-2'],
-                            ;
-                        }
-                        warm_storage: {
-                            tier_name: 'warm',
-                                storage_class;
-                            'standard-ia',
-                                availability;
-                            'minutes',
-                                cost_per_gb_month;
-                            0.0125,
-                                retrieval_cost_per_gb;
-                            0.01,
-                                minimum_storage_duration_days;
-                            30,
-                                durability;
-                            99.999999999,
-                                geographic_regions;
-                            ['us-east-1', 'us-west-2'],
-                            ;
-                        }
-                        cold_storage: {
-                            tier_name: 'cold',
-                                storage_class;
-                            'glacier',
-                                availability;
-                            'hours',
-                                cost_per_gb_month;
-                            0.004,
-                                retrieval_cost_per_gb;
-                            0.03,
-                                minimum_storage_duration_days;
-                            90,
-                                durability;
-                            99.999999999,
-                                geographic_regions;
-                            ['us-east-1', 'us-west-2'],
-                            ;
-                        }
-                        archive_storage: {
-                            tier_name: 'archive',
-                                storage_class;
-                            'deep-archive',
-                                availability;
-                            'days',
-                                cost_per_gb_month;
-                            0.001,
-                                retrieval_cost_per_gb;
-                            0.05,
-                                minimum_storage_duration_days;
-                            180,
-                                durability;
-                            99.999999999,
-                                geographic_regions;
-                            ['us-east-1', 'us-west-2'],
-                            ;
-                        }
-                        compression_enabled: true,
-                            encryption_enabled;
-                        true,
-                            replication_factor;
-                        2;
-                    }
-                    indexing: {
-                        primary_indices: ['timestamp', 'event_type', 'source_ip'],
-                            secondary_indices;
-                        ['user_id', 'severity'],
-                            bloom_filters;
-                        true,
-                            index_compression;
-                        true,
-                            query_optimization;
-                        true,
-                        ;
-                    }
-                    lifecycle: {
-                        hot_duration_days: 30,
-                            warm_duration_days;
-                        90,
-                            cold_duration_days;
-                        365,
-                            archive_duration_years;
-                        7,
-                            deletion_after_years;
-                        10,
-                            auto_transition;
-                        true,
-                        ;
-                    }
-                    compliance: {
-                        data_classification: 'confidential',
-                            regulatory_requirements;
-                        ['SOX', 'GDPR', 'HIPAA'],
-                            retention_legal_hold;
-                        false,
-                            audit_trail_required;
-                        true,
-                            immutable_storage;
-                        true,
-                            geographic_restrictions;
-                        ['us', 'eu'],
-                        ;
-                    }
-                    created_by: 'system',
-                        enabled;
-                    true;
-                    ;
-                    defaultConfigs.forEach(async (config) => {
-                        await this.createPartitionConfig(config);
-                    });
+                    time_based: {},
+                    interval: 'daily',
+                    retention_policy: {},
+                    timezone: 'UTC'
+                },
+                storage, {},
+                hot_storage, {},
+                tier_name, 'hot',
+                storage_class, 'standard',
+                availability, 'immediate',
+                cost_per_gb_month, 0.023,
+                retrieval_cost_per_gb, 0,
+                minimum_storage_duration_days, 0,
+                durability, 99.999999999,
+                geographic_regions, ['us-east-1', 'us-west-2'],
+            ];
+        },
+        warm_storage: {
+            tier_name: 'warm',
+            storage_class: 'standard-ia',
+            availability: 'minutes',
+            cost_per_gb_month: 0.0125,
+            retrieval_cost_per_gb: 0.01,
+            minimum_storage_duration_days: 30,
+            durability: 99.999999999,
+            geographic_regions: ['us-east-1', 'us-west-2'], },
+        cold_storage: {
+            tier_name: 'cold',
+            storage_class: 'glacier',
+            availability: 'hours',
+            cost_per_gb_month: 0.004,
+            retrieval_cost_per_gb: 0.03,
+            minimum_storage_duration_days: 90,
+            durability: 99.999999999,
+            geographic_regions: ['us-east-1', 'us-west-2'], },
+        archive_storage: {
+            tier_name: 'archive',
+            storage_class: 'deep-archive',
+            availability: 'days',
+            cost_per_gb_month: 0.001,
+            retrieval_cost_per_gb: 0.05,
+            minimum_storage_duration_days: 180,
+            durability: 99.999999999,
+            geographic_regions: ['us-east-1', 'us-west-2'], },
+        compression_enabled: true,
+        encryption_enabled: true,
+        replication_factor: 2
+    },
+        indexing;
+    {
+        primary_indices: ['timestamp', 'event_type', 'source_ip'],
+            secondary_indices;
+        ['user_id', 'severity'],
+            bloom_filters;
+        true,
+            index_compression;
+        true,
+            query_optimization;
+        true,
+        ;
+    }
+    lifecycle: {
+        hot_duration_days: 30,
+            warm_duration_days;
+        90,
+            cold_duration_days;
+        365,
+            archive_duration_years;
+        7,
+            deletion_after_years;
+        10,
+            auto_transition;
+        true,
+        ;
+    }
+    compliance: {
+        data_classification: 'confidential',
+            regulatory_requirements;
+        ['SOX', 'GDPR', 'HIPAA'],
+            retention_legal_hold;
+        false,
+            audit_trail_required;
+        true,
+            immutable_storage;
+        true,
+            geographic_restrictions;
+        ['us', 'eu'],
+        ;
+    }
+    created_by: 'system',
+        enabled;
+    true;
+    ;
+    defaultConfigs.forEach(async (config) => {
+        await this.createPartitionConfig(config);
+    });
+    startMetricsCollection();
+    void {
+        this: .metricsCollectionInterval = setInterval(async () => {
+            for (const [configId] of this.partitionConfigs) {
+                try {
+                    await this.collectPartitionMetrics(configId);
+                }
+                catch (error) {
+                    console.error(`Failed to collect metrics for ${configId}:`, error);
                 }
             }
-        },
-        startMetricsCollection() {
-            this.metricsCollectionInterval = setInterval(async () => {
-                for (const [configId] of this.partitionConfigs) {
-                    try {
-                        await this.collectPartitionMetrics(configId);
-                    }
-                    catch (error) {
-                        console.error(`Failed to collect metrics for ${configId}:`, error);
-                    }
-                }
-                300000;
-            });
-        } // Every 5 minutes
-        , // Every 5 minutes
+            300000;
+        }), // Every 5 minutes
         startMaintenanceScheduler() {
             this.maintenanceInterval = setInterval(() => {
                 this.performSystemMaintenance();

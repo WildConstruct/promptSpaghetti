@@ -9,8 +9,8 @@
 import { FlagSubmission, FlaggingStatus } from '../components/Flagging/FlaggingButton';
 
 }
-export interface UserFlagReport {
-    id: string;
+}
+export interface UserFlagReport { id: string;
     contentId: string;
     contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
     reporterId: string;
@@ -25,20 +25,18 @@ export interface UserFlagReport {
     reviewedAt?: Date;
     moderatorNote?: string;
     resolution?: FlagResolution;
-    metadata: Record<string, unknown>;
-
+    metadata: Record<string, unknown> }
 }
-export interface FlagResolution {
-    action: 'approved' | 'removed' | 'edited' | 'warning_issued' | 'user_suspended' | 'no_action';
+}
+export interface FlagResolution { action: 'approved' | 'removed' | 'edited' | 'warning_issued' | 'user_suspended' | 'no_action';
     reason: string;
     appealable: boolean;
     appealDeadline?: Date;
     notificationSent: boolean;
-    precedentCase?: string;
-
+    precedentCase?: string }
 }
-export interface ContentFlagSummary {
-    contentId: string;
+}
+export interface ContentFlagSummary { contentId: string;
     contentType: string;
     totalFlags: number;
     uniqueReporters: number;
@@ -49,13 +47,12 @@ export interface ContentFlagSummary {
     status: 'clean' | 'under_review' | 'violations_found' | 'content_removed';
     autoFlagged: boolean;
     mlConfidence?: number;
-    moderationPriority: 'low' | 'medium' | 'high' | 'urgent';
-
+    moderationPriority: 'low' | 'medium' | 'high' | 'urgent' }
 }
-export interface FlaggingAnalytics {
-    timeRange: {
+}
+export interface FlaggingAnalytics { timeRange: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     totalReports: number;
@@ -63,31 +60,23 @@ export interface FlaggingAnalytics {
     uniqueContent: number;
     reportsByReason: Record<string, number>;
     reportsBySeverity: Record<string, number>;
-    resolutionStats: {
-        resolved: number;
+    resolutionStats: { resolved: number;
         dismissed: number;
         pending: number;
-        avgResolutionTimeHours: number;
-    };
-    topReporters: Array<{
-        userId: string;
+        avgResolutionTimeHours: number };
+    topReporters: Array<{ userId: string;
         reportCount: number;
-        accuracy: number;
-    }>;
-    contentTrends: {
-        mostFlaggedContentTypes: Record<string, number>;
+        accuracy: number }>;
+    contentTrends: { mostFlaggedContentTypes: Record<string, number>;
         flagVolumeByHour: number[];
-        flagVolumeByDay: number[];
-    };
-    moderationEfficiency: {
-        avgResponseTimeHours: number;
+        flagVolumeByDay: number[] };
+    moderationEfficiency: { avgResponseTimeHours: number;
         accuracyRate: number;
-        escalationRate: number;
-    };
+        escalationRate: number };
 
 }
-export interface FlaggingConfig {
-    enableUserFlagging: boolean;
+}
+export interface FlaggingConfig { enableUserFlagging: boolean;
     maxFlagsPerUser24h: number;
     maxFlagsPerContent: number;
     autoEscalationThreshold: number;
@@ -99,7 +88,7 @@ export interface FlaggingConfig {
         mlFlaggingWeight: number;
         userFlaggingWeight: number;
         combineScores: boolean;
-        autoModerationThreshold: number;
+        autoModerationThreshold: number }
 }
     };
 /**
@@ -108,8 +97,7 @@ export interface FlaggingConfig {
  * Handles user-initiated content flagging and integrates with the existing
  * ML flagging infrastructure for comprehensive content moderation.
  */
-export declare class UserFlaggingService {
-    private baseUrl;
+export declare class UserFlaggingService { private baseUrl;
     private config;
     private flagReports;
     private contentSummaries;
@@ -121,8 +109,7 @@ export declare class UserFlaggingService {
         reportId: string;
         status: 'accepted' | 'rejected' | 'duplicate';
         message: string;
-        estimatedResolutionHours?: number;
-    }>;
+        estimatedResolutionHours?: number }>;
     /**
      * Get flagging status for content
      */
@@ -130,40 +117,35 @@ export declare class UserFlaggingService {
     /**
      * Get user's flag reports
      */
-    getUserFlagReports(userId: string, options?: {)
+    getUserFlagReports(userId: string, options?: { )
         status?: 'pending' | 'investigating' | 'resolved' | 'dismissed';
         timeRange?: {
             start: Date;
-            end: Date;
-        };
+            end: Date };
         limit?: number;
         offset?: number;
-    }): Promise<{
-        reports: UserFlagReport[];
+    }): Promise<{ reports: UserFlagReport[];
         totalCount: number;
         stats: {
             totalReports: number;
             pendingReports: number;
             resolvedReports: number;
-            accuracyRate: number;
-        };
+            accuracyRate: number };
     }>;
     /**
      * Get flagging analytics
      */
-    getFlaggingAnalytics(timeRange?: {)
+    getFlaggingAnalytics(timeRange?: { )
         start: Date;
-        end: Date;
-    }): Promise<FlaggingAnalytics>;
+        end: Date }): Promise<FlaggingAnalytics>;
     /**
      * Update flag report status (for moderators)
      */
-    updateFlagStatus(reportId: string, update: {)
+    updateFlagStatus(reportId: string, update: { )
         status: 'investigating' | 'resolved' | 'dismissed';
         moderatorId: string;
         moderatorNote?: string;
-        resolution?: FlagResolution;
-    }): Promise<void>;
+        resolution?: FlagResolution }): Promise<void>;
     private validateFlagSubmission;
     private checkRateLimits;
     private checkForDuplicates;

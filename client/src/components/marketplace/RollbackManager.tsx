@@ -2,56 +2,58 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './RollbackManager.css';
-}
+
+
 interface TemplateVersion {
   id: string;,
-  version_number: string;
+  version_number: string;,
   status: 'draft' | 'published' | 'deprecated' | 'archived';,
-  visibility: 'public' | 'private' | 'beta';
+  visibility: 'public' | 'private' | 'beta';,
   compatibility_level: 'breaking' | 'major' | 'minor' | 'patch';,
-  release_notes: string;
+  release_notes: string;,
   created_at: string;
   published_at?: string;
   download_count: number;,
-  new_features: string;
+  new_features: string;,
   bug_fixes: string;,
-  breaking_changes: string;
+  breaking_changes: string;,
   known_issues: string;
   interface RollbackData {
   to_version_id: string;,
-  rollback_reason: string;
+  rollback_reason: string;,
   rollback_type: 'emergency' | 'planned' | 'issue_resolution';,
-  impact_assessment: string;
+  impact_assessment: string;,
   rollback_plan: string;,
   verification_steps: string;
   interface RollbackResult {
   id: string;,
-  template_id: string;
+  template_id: string;,
   from_version_id: string;,
-  to_version_id: string;
+  to_version_id: string;,
   rollback_type: string;,
-  rollback_reason: string;
+  rollback_reason: string;,
   initiated_by: string;,
-  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
+  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';,
   created_at: string;
   completed_at?: string;
   error_message?: string;
-  const ROLLBACK_TYPES = [;
+  const ROLLBACK_TYPES = [
   {
   value: 'emergency',
   label: 'Emergency Rollback',
   description: 'Critical issues requiring immediate rollback',
   icon: '🚨',
   color: '#ef4444',
-}
-}
+
+
+
   {
   value: 'planned',
   label: 'Planned Rollback',
   description: 'Scheduled rollback for testing or maintenance',
   icon: '📅',
   color: '#3b82f6',
-}
+
   {
   value: 'issue_resolution',
   label: 'Issue Resolution',
@@ -67,24 +69,7 @@ interface TemplateVersion {
   verification_steps: [''],
 };
 
-export const RollbackManager: React.FC = () => {
-  const { templateId } = useParams<{ templateId: string }>();
-  const navigate = useNavigate();
-  const [versions, setVersions] = useState<TemplateVersion>([]);
-  const [currentVersion, setCurrentVersion] = useState<TemplateVersion | null>(null);
-  const [rollbackData, setRollbackData] = useState<RollbackData>(DEFAULT_ROLLBACK_DATA);
-  const [selectedVersion, setSelectedVersion] = useState<TemplateVersion | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [rollbackResult, setRollbackResult] = useState<RollbackResult | null>(null);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const totalSteps = 4;
-  const fetchVersions = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(`/api/marketplace/templates/${templateId}/versions?include_private=true`, {)}
-  },
+export const RollbackManager = () => { return null; },
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
@@ -96,9 +81,9 @@ export const RollbackManager: React.FC = () => {
   // Find current version (most recent published)
   if (publishedVersions.length > 0) {
   setCurrentVersion(publishedVersions[0]);
-} catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to fetch versions');
-} finally {
+ finally {
       setIsLoading(false);
   }, [templateId]);
   useEffect(() => {
@@ -186,9 +171,9 @@ export const RollbackManager: React.FC = () => {
       setShowConfirmation(false);
       // Refresh versions to show updated state
       await fetchVersions();
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to execute rollback');
-} finally {
+ finally {
       setIsLoading(false);
   };
   const formatDate = (dateString: string) => {
@@ -251,7 +236,7 @@ export const RollbackManager: React.FC = () => {
   backgroundColor: version.compatibility_level === 'breaking' ? '#ef4444' : ,
   version.compatibility_level === 'major' ? '#f59e0b' :,
   version.compatibility_level === 'minor' ? '#10b981' : '#3b82f6',
-}}>
+}>
                   {version.compatibility_level}
                 </span>
               </div>
@@ -516,7 +501,7 @@ export const RollbackManager: React.FC = () => {
                   setRollbackData(DEFAULT_ROLLBACK_DATA);
                   setSelectedVersion(null);
                   setCurrentStep(1);
-                }}
+}
               >
                 Start New Rollback
               </button>

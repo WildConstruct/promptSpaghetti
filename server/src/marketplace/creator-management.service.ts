@@ -1,8 +1,8 @@
 // Epic 16 Story 16.2 - Creator Management Service
 import { Pool, PoolClient } from 'pg';
 
-}
-}
+
+
 interface CreatorStats {
   total_templates: number;
   active_templates: number;
@@ -12,12 +12,13 @@ interface CreatorStats {
   total_reviews: number;
   total_views: number;
   conversion_rate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CreatorProfile {
   id: string;
   user_id: string;
@@ -31,12 +32,13 @@ interface CreatorProfile {
   public_profile: boolean;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface MonetizationSettings {
   creator_id: string;
   payout_threshold_cents: number;
@@ -54,16 +56,17 @@ interface MonetizationSettings {
     country: string;
     postal_code?: string;
     tax_exempt: boolean;
-}
-}
+
+
+
   };
   auto_payout_enabled: boolean;
   created_at: Date;
   updated_at: Date;
-}
 
-}
-}
+
+
+
 interface CreatorPayoutHistory {
   id: string;
   creator_id: string;
@@ -75,12 +78,13 @@ interface CreatorPayoutHistory {
   failure_reason?: string;
   processed_at?: Date;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CreatorTemplate {
   id: string;
   title: string;
@@ -94,31 +98,33 @@ interface CreatorTemplate {
   conversion_rate: number;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface PerformanceMetrics {
   period_start: Date;
   period_end: Date;
-}
-}
+
+
+
   revenue_trend: Array<{ date: string; revenue_cents: number; purchases: number }>;
   top_templates: CreatorTemplate[];
   category_performance: Array<{ category: string; revenue_cents: number; templates: number }>;
   geographic_sales: Array<{ country: string; revenue_cents: number; purchases: number }>;  
-}
 
-}
-}
+
+
+
 interface CreatorTierRequirements {
   bronze: { min_revenue: 0; min_rating: 0; min_templates: 0; min_reviews: 0 };
   silver: { min_revenue: 50000; min_rating: 4.0; min_templates: 5; min_reviews: 25 };
   gold: { min_revenue: 200000; min_rating: 4.3; min_templates: 15; min_reviews: 100 };
   platinum: { min_revenue: 500000; min_rating: 4.5; min_templates: 25; min_reviews: 250 };
-}
+
 
 export class CreatorManagementService {
   private tierRequirements: CreatorTierRequirements = {
@@ -178,10 +184,10 @@ export class CreatorManagementService {
         total_views: parseInt(stats.total_views) || 0,
         conversion_rate: parseFloat(stats.conversion_rate) || 0
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getCreatorProfile(userId: string): Promise<CreatorProfile | null> {
 
@@ -201,7 +207,7 @@ export class CreatorManagementService {
           social_links: {},
           public_profile: false
         });
-      }
+
 
       const profile = result.rows[0];
       return {
@@ -209,10 +215,10 @@ export class CreatorManagementService {
         social_links: profile.social_links || {},
         badges: profile.badges || []
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async createCreatorProfile(userId: string, profileData: Partial<CreatorProfile>): Promise<CreatorProfile> {
 
@@ -242,10 +248,10 @@ export class CreatorManagementService {
         social_links: profile.social_links || {},
         badges: profile.badges || []
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async updateCreatorProfile(userId: string, updates: Partial<CreatorProfile>): Promise<CreatorProfile | null> {
 
@@ -258,27 +264,27 @@ export class CreatorManagementService {
       if (updates.display_name !== undefined) {
         setClauses.push(`display_name = $${++paramCount}`);
         values.push(updates.display_name);
-      }
+
       if (updates.bio !== undefined) {
         setClauses.push(`bio = $${++paramCount}`);
         values.push(updates.bio);
-      }
+
       if (updates.website !== undefined) {
         setClauses.push(`website = $${++paramCount}`);
         values.push(updates.website);
-      }
+
       if (updates.social_links !== undefined) {
         setClauses.push(`social_links = $${++paramCount}`);
         values.push(JSON.stringify(updates.social_links));
-      }
+
       if (updates.public_profile !== undefined) {
         setClauses.push(`public_profile = $${++paramCount}`);
         values.push(updates.public_profile);
-      }
+
 
       if (setClauses.length === 0) {
         return this.getCreatorProfile(userId);
-      }
+
 
       setClauses.push(`updated_at = CURRENT_TIMESTAMP`);
 
@@ -291,7 +297,7 @@ export class CreatorManagementService {
 
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       const profile = result.rows[0];
       return {
@@ -299,10 +305,10 @@ export class CreatorManagementService {
         social_links: profile.social_links || {},
         badges: profile.badges || []
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getCreatorTemplates(userId: string): Promise<CreatorTemplate[]> {
 
@@ -341,10 +347,10 @@ export class CreatorManagementService {
         created_at: row.created_at,
         updated_at: row.updated_at
       }));
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getMonetizationSettings(userId: string): Promise<MonetizationSettings | null> {
 
@@ -357,7 +363,7 @@ export class CreatorManagementService {
 
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       const settings = result.rows[0];
       return {
@@ -365,10 +371,10 @@ export class CreatorManagementService {
         tax_settings: settings.tax_settings || {},
         bank_details: settings.bank_details || {}
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async updateMonetizationSettings(
     userId: string,
@@ -384,7 +390,7 @@ export class CreatorManagementService {
 
       if (profileResult.rows.length === 0) {
         throw new Error('Creator profile not found');
-      }
+
 
       const creatorId = profileResult.rows[0].id;
 
@@ -423,10 +429,10 @@ export class CreatorManagementService {
         tax_settings: updatedSettings.tax_settings || {},
         bank_details: updatedSettings.bank_details || {}
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getPerformanceMetrics(userId: string, startDate: Date, endDate: Date): Promise<PerformanceMetrics> {
 
@@ -515,10 +521,10 @@ export class CreatorManagementService {
         })),
         geographic_sales: [] // Would need additional geo data tracking
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async calculateCreatorTier(userId: string): Promise<keyof CreatorTierRequirements> {
 
@@ -535,11 +541,11 @@ export class CreatorManagementService {
         stats.total_reviews >= requirements.min_reviews
       ) {
         return tier;
-      }
-    }
+
+
 
     return 'bronze';
-  }
+
 
   async updateCreatorTier(userId: string): Promise<void> {
 
@@ -552,10 +558,10 @@ export class CreatorManagementService {
         SET creator_tier = $1, updated_at = CURRENT_TIMESTAMP
         WHERE user_id = $2
       `, [newTier, userId]);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getPayoutHistory(userId: string, limit: number = 50): Promise<CreatorPayoutHistory[]> {
 
@@ -570,10 +576,10 @@ export class CreatorManagementService {
       `, [userId, limit]);
 
       return result.rows;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async initiatePayout(userId: string): Promise<CreatorPayoutHistory> {
 
@@ -602,7 +608,7 @@ export class CreatorManagementService {
 
       if (balanceResult.rows.length === 0) {
         throw new Error('Creator profile or monetization settings not found');
-      }
+
 
       const balance = balanceResult.rows[0];
       const availableBalance = balance.total_earned - balance.total_paid;
@@ -612,7 +618,7 @@ export class CreatorManagementService {
           `Insufficient balance for payout. Available: $${availableBalance/100},
           Threshold: $${balance.payout_threshold_cents/100}`
         );
-      }
+
 
       // Create payout record
       const payoutResult = await client.query(`
@@ -624,11 +630,10 @@ export class CreatorManagementService {
 
       await client.query('COMMIT');
       return payoutResult.rows[0];
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
-}
+
+

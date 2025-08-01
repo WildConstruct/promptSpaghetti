@@ -9,7 +9,7 @@ import {
   TimeRange, 
   UsageStats, 
   SystemStats 
-} from '../interfaces/AnalyticsRepository';
+ from '../interfaces/AnalyticsRepository';
 import { UserId, GraphId } from '../../types';
 
 /**
@@ -37,7 +37,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
     );
     
     return eventId;
-  }
+
 
   async getEventsByUser(userId: UserId, options?: QueryOptions): Promise<AnalyticsEvent[]> {
 
@@ -46,7 +46,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
     const rows = stmt.all(...params) as any[];
     
     return rows.map(this.mapRowToEvent);
-  }
+
 
   async getEventsByGraph(graphId: GraphId, options?: QueryOptions): Promise<AnalyticsEvent[]> {
 
@@ -55,7 +55,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
     const rows = stmt.all(...params) as any[];
     
     return rows.map(this.mapRowToEvent);
-  }
+
 
   async getEventsByType(eventType: AnalyticsEventType, options?: QueryOptions): Promise<AnalyticsEvent[]> {
 
@@ -64,7 +64,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
     const rows = stmt.all(...params) as any[];
     
     return rows.map(this.mapRowToEvent);
-  }
+
 
   async getPerformanceMetrics(options?: PerformanceQueryOptions): Promise<PerformanceMetric[]> {
 
@@ -74,17 +74,17 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
     if (options?.nodeType) {
       whereClause += ' AND JSON_EXTRACT(data, "$.nodeType") = ?';
       params.push(options.nodeType);
-    }
+
     
     if (options?.minExecutionTime) {
       whereClause += ' AND JSON_EXTRACT(data, "$.executionTime") >= ?';
       params.push(options.minExecutionTime);
-    }
+
     
     if (options?.maxExecutionTime) {
       whereClause += ' AND JSON_EXTRACT(data, "$.executionTime") <= ?';
       params.push(options.maxExecutionTime);
-    }
+
     
     const { query } = this.buildQuery(whereClause, params, options);
     const stmt = this.db.prepare(query);
@@ -102,7 +102,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
         userId: row.user_id
       };
     });
-  }
+
 
   async getUserUsageStats(userId: UserId, timeRange?: TimeRange): Promise<UsageStats> {
 
@@ -158,7 +158,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
         startDate: new Date(0),
         endDate: new Date(}
     };
-  }
+
 
   async getSystemStats(timeRange?: TimeRange): Promise<SystemStats> {
 
@@ -226,7 +226,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
         startDate: new Date(0),
         endDate: new Date(}
     };
-  }
+
 
   async deleteOldEvents(olderThanDays: number): Promise<number> {
 
@@ -234,7 +234,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
     const stmt = this.db.prepare('DELETE FROM analytics_events WHERE timestamp < ?');
     const result = stmt.run(cutoffTime);
     return result.changes;
-  }
+
 
   private buildQuery(
     whereClause: string,
@@ -252,12 +252,12 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
     if (options?.startDate) {
       query += ' AND timestamp >= ?';
       params.push(options.startDate.getTime());
-    }
+
     
     if (options?.endDate) {
       query += ' AND timestamp <= ?';
       params.push(options.endDate.getTime());
-    }
+
     
     const orderBy = options?.orderBy || 'timestamp';
     const orderDirection = options?.orderDirection || 'desc';
@@ -266,15 +266,15 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
     if (options?.limit) {
       query += ' LIMIT ?';
       params.push(options.limit);
-    }
+
     
     if (options?.offset) {
       query += ' OFFSET ?';
       params.push(options.offset);
-    }
+
     
     return { query, params };
-  }
+
 
   private mapRowToEvent(row: any): AnalyticsEvent {
     return {
@@ -286,9 +286,8 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
       data: JSON.parse(row.data),
       metadata: JSON.parse(row.metadata)
     };
-  }
+
 
   private generateEventId(): string {
     return 'event_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
-  }
-}
+

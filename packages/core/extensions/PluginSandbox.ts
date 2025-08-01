@@ -12,9 +12,8 @@ import { resolve, dirname, join } from 'path';
 import { ExtensionManifest } from './ExtensionLifecycleManager';
 import * as crypto from 'crypto';
 
-}
-export interface SandboxOptions {
-  timeout: number;
+
+export interface SandboxOptions { timeout: number;
   memoryLimit: number;
   allowedModules: string;
   blockedModules: string;
@@ -22,35 +21,33 @@ export interface SandboxOptions {
   enableNetwork: boolean;
   enableChildProcess: boolean;
   maxCallStack: number;
-  contextName: string;
-}
-}
-}
-export interface ResourceUsage {
-  memoryUsed: number;
+  contextName: string }
+
+
+
+export interface ResourceUsage { memoryUsed: number;
   executionTime: number;
   apiCalls: number;
   fileOperations: number;
-  networkRequests: number;
-}
-}
-}
-export interface SandboxContext {
-  require: (id: string) => any;
-}
+  networkRequests: number }
+
+
+
+export interface SandboxContext { require: (id: string) => any }
+},
   module: { exports: any };
   exports: any;
   __filename: string;
   __dirname: string;
   console: Console;
-  process: Partial<NodeJS.Process>;
+  process: Partial<NodeJS.Process>
   global: any;
-  Buffer: typeof Buffer;
+  Buffer: typeof Buffer
   setTimeout: typeof setTimeout;
-  setInterval: typeof setInterval;
+  setInterval: typeof setInterval
   clearTimeout: typeof clearTimeout;
   clearInterval: typeof clearInterval;
-}
+
 export class PluginSandbox {
   private manifest: ExtensionManifest;
   private pluginPath: string;
@@ -60,39 +57,35 @@ export class PluginSandbox {
   private disposed: boolean;
   private allowedAPIs: Set<string>;
   private startTime: number;
-  constructor(manifest: ExtensionManifest, pluginPath: string, options: Partial<SandboxOptions> = {}) {
-    this.manifest = manifest;
+  constructor(manifest: ExtensionManifest, pluginPath: string, options: Partial<SandboxOptions> = {}) { this.manifest = manifest;
     this.pluginPath = resolve(pluginPath);
     this.disposed = false;
     this.startTime = Date.now();
     this.options = {
       timeout: 30000, // 30 seconds
       memoryLimit: 128 * 1024 * 1024, // 128MB
-      allowedModules: ['fs', 'path', 'crypto', 'util'],
-      blockedModules: ['child_process', 'cluster', 'worker_threads'],
-      enableFileSystem: false,
-      enableNetwork: false,
-      enableChildProcess: false,
-      maxCallStack: 100,
+      allowedModules: ['fs', 'path', 'crypto', 'util']
+      blockedModules: ['child_process', 'cluster', 'worker_threads']
+      enableFileSystem: false
+      enableNetwork: false
+      enableChildProcess: false
+      maxCallStack: 100 }
       contextName: `plugin-${manifest.id}`}
-}
+
       ...options
     };
-    this.resourceUsage = {
-  memoryUsed: 0,
-  executionTime: 0,
-  apiCalls: 0,
-  fileOperations: 0,
-  networkRequests: 0,
+    this.resourceUsage = { memoryUsed: 0
+  executionTime: 0
+  apiCalls: 0
+  fileOperations: 0
+  networkRequests: 0 }
 };
     this.allowedAPIs = new Set(this.manifest.permissions || []);
     this.context = this.createSandboxContext();
   /**
    * Load and execute a module in the sandbox
    */
-  async loadModule(modulePath: string): Promise<any> {
-
-  if (this.disposed) {
+  async loadModule(modulePath: string): Promise<any> { if (this.disposed) {
   throw new Error('Sandbox has been disposed');
   const absolutePath = resolve(this.pluginPath, modulePath);
   const code = readFileSync(absolutePath, 'utf-8');
@@ -100,9 +93,8 @@ export class PluginSandbox {
   /**
   * Execute code in the sandbox
   */
-  async executeCode(code: string, filename: string = 'plugin.js'): Promise<any> {,
-  if (this.disposed) {
-  throw new Error('Sandbox has been disposed');
+  async executeCode(code: string, filename: string = 'plugin.js'): Promise<any> { }
+  if (this.disposed) { throw new Error('Sandbox has been disposed');
   const startTime = Date.now();
   let result: any;
   try {
@@ -113,8 +105,7 @@ export class PluginSandbox {
   // Update resource usage
   this.resourceUsage.executionTime += Date.now() - startTime;
   this.updateMemoryUsage();
-  return result;
-} catch (error) {
+  return result } catch (error) {
       if (error.message?.includes('Script execution timed out')) {
         throw new Error(`Plugin execution timed out after ${this.options.timeout}ms`);}
       throw new Error(`Plugin execution failed: ${error.message}`);}
@@ -127,8 +118,7 @@ export class PluginSandbox {
   /**
    * Check if plugin has permission for an operation
    */
-  hasPermission(permission: string): boolean {
-    return this.allowedAPIs.has(permission) || this.allowedAPIs.has('*');
+  hasPermission(permission: string): boolean { return this.allowedAPIs.has(permission) || this.allowedAPIs.has('*');
   /**
    * Dispose sandbox and clean up resources
    */
@@ -148,76 +138,68 @@ export class PluginSandbox {
   // Private methods
   private createSandboxContext(): Context {
     const sandboxGlobal = {
-      console: this.createConsoleProxy(),
-      Buffer: this.createBufferProxy(),
-      setTimeout: this.createTimerProxy('setTimeout'),
-      setInterval: this.createTimerProxy('setInterval'),
-      clearTimeout: this.createTimerProxy('clearTimeout'),
-      clearInterval: this.createTimerProxy('clearInterval'),
-      process: this.createProcessProxy(),
-      require: this.createRequireProxy(),
-      module: { exports: {} },
-      exports: {},
-      __filename: '',
-      __dirname: '',
+      console: this.createConsoleProxy()
+      Buffer: this.createBufferProxy()
+      setTimeout: this.createTimerProxy('setTimeout')
+      setInterval: this.createTimerProxy('setInterval')
+      clearTimeout: this.createTimerProxy('clearTimeout')
+      clearInterval: this.createTimerProxy('clearInterval')
+      process: this.createProcessProxy()
+      require: this.createRequireProxy() }
+      module: { exports: {} }
+      exports: {}
+      __filename: ''
+      __dirname: ''
       global: {} as any
     };
     // Self-reference for global
     sandboxGlobal.global = sandboxGlobal;
-    return createContext(sandboxGlobal, {)
-  name: this.options.contextName,
+    return createContext(sandboxGlobal, { )
+  name: this.options.contextName
   codeGeneration: {
-  strings: false,  // Disable eval(),
-  wasm: false     // Disable WebAssembly,
+  strings: false,  // Disable eval()
+  wasm: false     // Disable WebAssembly }
 });
-  private createConsoleProxy(): Console {
-    const originalConsole = console;
+  private createConsoleProxy(): Console { const originalConsole = console;
     return {
-      ...originalConsole,
-      log: (...args: any) => {,
+      ...originalConsole
+      log: (...args: any) => { }
         this.trackAPICall('console.log');
         originalConsole.log(`[${this.manifest.id}]`, ...args);}
-  },
-  error: (...args: any) => {,
+
+  error: (...args: any) => {
         this.trackAPICall('console.error');
         originalConsole.error(`[${this.manifest.id}]`, ...args);}
-  },
-  warn: (...args: any) => {,
+
+  warn: (...args: any) => {
         this.trackAPICall('console.warn');
         originalConsole.warn(`[${this.manifest.id}]`, ...args);}
-  },
-  info: (...args: any) => {,
+
+  info: (...args: any) => {
         this.trackAPICall('console.info');
         originalConsole.info(`[${this.manifest.id}]`, ...args);}
-    } as Console;
-  private createBufferProxy(): typeof Buffer {
-  return new Proxy(Buffer, {)
-  construct: (target, args) => {,
+ as Console;
+  private createBufferProxy(): typeof Buffer { return new Proxy(Buffer, {)
+  construct: (target, args) => { }
   this.trackAPICall('Buffer');
-  return new target(...args);
-},
-  apply: (target, thisArg, args) => {
-        this.trackAPICall('Buffer');
-        return target.apply(thisArg, args);
-    });
-  private createTimerProxy(timerType: string) {
-  const originalTimer = global[timerType as keyof typeof global] as Function;
-  return (...args: any) => {,
+  return new target(...args)
+
+  apply: (target, thisArg, args) => { this.trackAPICall('Buffer');
+        return target.apply(thisArg, args) });
+  private createTimerProxy(timerType: string) { const originalTimer = global[timerType as keyof typeof global] as Function;
+  return (...args: any) => { }
   this.trackAPICall(timerType);
-  if (timerType === 'setTimeout' || timerType === 'setInterval') {
-  // Limit maximum timeout/interval to prevent runaway timers
+  if (timerType === 'setTimeout' || timerType === 'setInterval') { // Limit maximum timeout/interval to prevent runaway timers
   const maxTimeout = 60000; // 1 minute;
   if (args[1] > maxTimeout) {
   args[1] = maxTimeout;
-  return originalTimer.apply(global, args);
-};
-  private createProcessProxy(): Partial<NodeJS.Process> {
-  return {
-  env: process.env, // Read-only access to environment variables,
-  version: process.version,
-  platform: process.platform,
-  arch: process.arch,
-  pid: process.pid,
+  return originalTimer.apply(global, args) };
+  private createProcessProxy(): Partial<NodeJS.Process> { return {
+  env: process.env, // Read-only access to environment variables
+  version: process.version
+  platform: process.platform
+  arch: process.arch
+  pid: process.pid }
   // Exclude dangerous methods like exit, kill, etc.
 };
   private createRequireProxy() {
@@ -252,31 +234,24 @@ export class PluginSandbox {
     const fs = require('fs');
     const proxy: any = {};
     // Only expose read operations if write is not permitted
-    if (this.hasPermission('fs:read')) {
-  proxy.readFileSync = (...args: any) => {,
+    if (this.hasPermission('fs:read')) { proxy.readFileSync = (...args: any) => { }
   this.trackFileOperation('read');
   return fs.readFileSync(...args);
 };
-      proxy.readFile = (...args: any) => {
-        this.trackFileOperation('read');
-        return fs.readFile(...args);
-      };
-    if (this.hasPermission('fs:write')) {
-  proxy.writeFileSync = (...args: any) => {,
+      proxy.readFile = (...args: any) => { this.trackFileOperation('read');
+        return fs.readFile(...args) };
+    if (this.hasPermission('fs:write')) { proxy.writeFileSync = (...args: any) => { }
   this.trackFileOperation('write');
   return fs.writeFileSync(...args);
 };
-      proxy.writeFile = (...args: any) => {
-        this.trackFileOperation('write');
-        return fs.writeFile(...args);
-      };
+      proxy.writeFile = (...args: any) => { this.trackFileOperation('write');
+        return fs.writeFile(...args) };
     return proxy;
-  private createCryptoProxy() {
-  const cryptoModule = require('crypto');
+  private createCryptoProxy() { const cryptoModule = require('crypto');
   return {
-  randomBytes: cryptoModule.randomBytes,
-  createHash: cryptoModule.createHash,
-  createHmac: cryptoModule.createHmac,
+  randomBytes: cryptoModule.randomBytes
+  createHash: cryptoModule.createHash
+  createHmac: cryptoModule.createHmac }
   // Exclude potentially dangerous functions like createCipher
 };
   private wrapCode(code: string, filename: string): string {
@@ -286,24 +261,18 @@ export class PluginSandbox {
         return module.exports;
       })(require, module, exports, "${filename}", "${dirname(filename)}");}
     `;
-  private async executeWithTimeout(code: string, filename: string): Promise<any> {
-
-    return new Promise((resolve, reject) => {
+  private async executeWithTimeout(code: string, filename: string): Promise<any> { return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        reject(new Error('Script execution timed out'));
-      }, this.options.timeout);
-      try {
-  const result = runInContext(code, this.context, {)
-  filename,
-  timeout: this.options.timeout,
-  displayErrors: true,
+        reject(new Error('Script execution timed out')) }, this.options.timeout);
+      try { const result = runInContext(code, this.context, {)
+  filename
+  timeout: this.options.timeout
+  displayErrors: true }
 });
         clearTimeout(timeout);
         resolve(result);
-      } catch (error) {
-        clearTimeout(timeout);
-        reject(error);
-    });
+ catch (error) { clearTimeout(timeout);
+        reject(error) });
   private trackAPICall(api: string): void {
     this.resourceUsage.apiCalls++;
     // Check rate limiting

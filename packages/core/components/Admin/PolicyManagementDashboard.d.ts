@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface PolicyData {
-    id: string;
+}
+export interface PolicyData { id: string;
     name: string;
     type: 'trust_score' | 'fraud_detection' | 'content_quality' | 'user_behavior' | 'transaction_monitoring';
     status: 'active' | 'inactive' | 'draft' | 'suspended';
@@ -21,12 +21,10 @@ export interface PolicyData {
     description: string;
     version: string;
     createdBy: string;
-    updatedAt: Date;
-
-
+    updatedAt: Date }
 }
-export interface PolicyViolationData {
-    violationId: string;
+}
+export interface PolicyViolationData { violationId: string;
     policyId: string;
     policyName: string;
     entityType: 'user' | 'template' | 'transaction';
@@ -36,9 +34,8 @@ export interface PolicyViolationData {
     detectedAt: Date;
     status: 'pending' | 'reviewed' | 'dismissed' | 'enforced';
     reviewedBy?: string;
-    description: string;
-
-
+    description: string }
+}
 }
 export interface PolicyManagementDashboardProps {
     className?: string;
@@ -46,4 +43,5 @@ export interface PolicyManagementDashboardProps {
 export declare const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>;
 export default PolicyManagementDashboard;
 //# sourceMappingURL=PolicyManagementDashboard.d.ts.map
+}
 }

@@ -28,7 +28,11 @@ export class VersionRestoreManager {
 { }
 // Create restore preview
 async;
-createRestorePreview(snapshotId, string(currentGraphData, any, options, RestoreOptions = {}), Promise < RestorePreview > {
+createRestorePreview(snapshotId, string());
+currentGraphData: any,
+    options;
+RestoreOptions = {};
+Promise < RestorePreview > {
     try: {
         const: response = await this.apiClient.post('/api/version-restore/preview', {}),
         project_id: this.projectId,
@@ -36,17 +40,18 @@ createRestorePreview(snapshotId, string(currentGraphData, any, options, RestoreO
         current_graph_data: currentGraphData,
         options,
         user_id: this.userId,
-    }
-});
-return response.data;
+    },
+    return: response.data
+};
 try { }
 catch (error) {
     console.error('Failed to create restore preview:', error);
     throw error;
     // Execute version restore
     async;
-    executeRestore(snapshotId, string);
-    options: RestoreOptions = {},
+    executeRestore(snapshotId, string),
+        options;
+    RestoreOptions = {},
         conflictResolutions;
     (Record) = {};
     Promise < { restoreId: string, result: (Promise) } > {
@@ -71,8 +76,9 @@ catch (error) {
         console.error('Failed to execute restore:', error);
         throw error;
         async;
-        performRestore(restoreId, string);
-        snapshotId: string,
+        performRestore(restoreId, string),
+            snapshotId;
+        string,
             options;
         RestoreOptions,
             conflictResolutions;
@@ -266,7 +272,7 @@ catch (error) {
         async;
         detectConflicts(snapshotData, any, currentData, any);
         Promise < RestoreConflict > {
-            const: conflicts, RestoreConflict, []:  = [],
+            const: conflicts, RestoreConflict = [],
             // Detect data conflicts
             conflicts, : .push(...this.detectDataConflicts(snapshotData, currentData)),
             // Detect workflow conflicts
@@ -396,12 +402,13 @@ catch (error) {
                 ;
                 return conflicts;
                 async;
-                resolveConflicts(conflicts, RestoreConflict);
-                conflictResolutions: Record;
+                resolveConflicts(conflicts, RestoreConflict),
+                    conflictResolutions;
+                Record;
                 Promise < { resolved: RestoreConflict, unresolved: RestoreConflict, warnings: string } > {
-                    const: resolved, RestoreConflict, []:  = [],
-                    const: unresolved, RestoreConflict, []:  = [],
-                    const: warnings, string, []:  = [],
+                    const: resolved, RestoreConflict = [],
+                    const: unresolved, RestoreConflict = [],
+                    const: warnings, string = [],
                     for(, conflict, of, conflicts) {
                         const resolution = conflictResolutions[conflict.id] || conflict.suggested_resolution;
                         if (resolution === 'manual' || (!conflict.auto_resolvable && resolution !== 'keep_current' && resolution !== 'use_restore')) {

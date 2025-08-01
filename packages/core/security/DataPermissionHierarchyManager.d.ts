@@ -7,17 +7,16 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 import { EventEmitter } from 'events';
-import { 
-  PermissionHierarchy,
+import { PermissionHierarchy,
   OperationPermission,
-  PermissionCondition,
+  PermissionCondition }
   DelegationCondition
 } from './DataPermissionHierarchy';
 import { DataClassificationLevel, OperationContext, DataOperation } from '../types/DataClassification';
 
 }
-export interface PermissionRequest {
-    id: string;
+}
+export interface PermissionRequest { id: string;
     requesterId: string;
     operation: DataOperation;
     dataClassification: DataClassificationLevel;
@@ -26,12 +25,10 @@ export interface PermissionRequest {
     urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     context: OperationContext;
     requestedAt: Date;
-    expiresAt?: Date;
-
-
+    expiresAt?: Date }
 }
-export interface PermissionGrant {
-    id: string;
+}
+export interface PermissionGrant { id: string;
     requestId: string;
     grantedBy: string;
     grantedAt: Date;
@@ -43,21 +40,17 @@ export interface PermissionGrant {
     revoked: boolean;
     revokedAt?: Date;
     revokedBy?: string;
-    auditTrail: PermissionAuditEntry[];
-
-
+    auditTrail: PermissionAuditEntry[] }
 }
-export interface PermissionAuditEntry {
-    timestamp: Date;
+}
+export interface PermissionAuditEntry { timestamp: Date;
     userId: string;
     action: 'GRANTED' | 'USED' | 'DENIED' | 'REVOKED' | 'DELEGATED' | 'ESCALATED' | 'EXPIRED';
     details: Record<string, any>;
-    riskScore: number;
-
-
+    riskScore: number }
 }
-export interface EscalationRequest {
-    id: string;
+}
+export interface EscalationRequest { id: string;
     originalRequestId: string;
     escalationPath: string;
     currentStep: number;
@@ -69,34 +62,29 @@ export interface EscalationRequest {
         decision: 'APPROVED' | 'DENIED';
         decisionBy: string;
         decisionAt: Date;
-        reason: string;
-
+        reason: string }
 }
     };
 
 }
-export interface EscalationStepStatus {
-    stepId: string;
+}
+export interface EscalationStepStatus { stepId: string;
     status: 'PENDING' | 'APPROVED' | 'DENIED' | 'TIMEOUT' | 'SKIPPED';
     assignedTo: string[];
     approvals: StepApproval[];
     startedAt: Date;
     completedAt?: Date;
-    timeoutAt: Date;
-
-
+    timeoutAt: Date }
 }
-export interface StepApproval {
-    approver: string;
+}
+export interface StepApproval { approver: string;
     decision: 'APPROVED' | 'DENIED';
     timestamp: Date;
     comments?: string;
-    conditions?: PermissionCondition[];
-
-
+    conditions?: PermissionCondition[] }
 }
-export interface DelegationRequest {
-    id: string;
+}
+export interface DelegationRequest { id: string;
     delegatorId: string;
     delegateeId: string;
     permissions: string[];
@@ -107,43 +95,35 @@ export interface DelegationRequest {
     status: 'PENDING' | 'APPROVED' | 'DENIED' | 'ACTIVE' | 'EXPIRED' | 'REVOKED';
     createdAt: Date;
     approvedAt?: Date;
-    approvedBy?: string;
-
-
+    approvedBy?: string }
 }
-export interface HierarchyAnalysis {
-    userLevel: number;
+}
+export interface HierarchyAnalysis { userLevel: number;
     effectivePermissions: OperationPermission[];
     inheritedFrom: string[];
     delegatedPermissions: DelegationGrant[];
     restrictions: PermissionRestriction[];
     escalationPaths: string[];
-    riskProfile: HierarchyRiskProfile;
-
-
+    riskProfile: HierarchyRiskProfile }
 }
-export interface DelegationGrant {
-    id: string;
+}
+export interface DelegationGrant { id: string;
     delegatorId: string;
     permissions: string[];
     conditions: DelegationCondition[];
     expiresAt: Date;
     usageRemaining?: number;
-    source: 'DIRECT' | 'INHERITED' | 'EMERGENCY';
-
-
+    source: 'DIRECT' | 'INHERITED' | 'EMERGENCY' }
 }
-export interface PermissionRestriction {
-    type: 'TIME' | 'CONTEXT' | 'VOLUME' | 'FREQUENCY' | 'APPROVAL';
+}
+export interface PermissionRestriction { type: 'TIME' | 'CONTEXT' | 'VOLUME' | 'FREQUENCY' | 'APPROVAL';
     description: string;
     configuration: Record<string, any>;
     active: boolean;
-    bypassable: boolean;
-
-
+    bypassable: boolean }
 }
-export interface HierarchyRiskProfile {
-    overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+}
+export interface HierarchyRiskProfile { overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     riskFactors: string[];
     mitigationStatus: 'COMPLETE' | 'PARTIAL' | 'NONE';
     lastAssessment: Date;
@@ -168,7 +148,7 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
         escalationRequired?: boolean;
         escalationPath?: string;
         timeLimit?: Date;
-        usageLimit?: number;
+        usageLimit?: number }
 }
     }>;
     /**
@@ -189,12 +169,12 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
      * Delegate permissions to another user
      */
     delegatePermissions();
-      delegatorId: string,
-      delegateeId: string,
-      permissions: string[],
-      timeLimit: Date,
-      conditions: DelegationCondition[],
-      justification: string,
+      delegatorId: string
+      delegateeId: string
+      permissions: string[]
+      timeLimit: Date
+      conditions: DelegationCondition[]
+      justification: string
     ): Promise<DelegationRequest>;
     /**
      * Analyze user's effective permissions

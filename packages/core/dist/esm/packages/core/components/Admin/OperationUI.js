@@ -121,7 +121,8 @@ _jsxs("div", { className: "operation-ui", children: [_jsx(OperationHeader, { ope
             case RiskLevel.MEDIUM: return 'yellow';
             case RiskLevel.HIGH: return 'orange';
             case RiskLevel.CRITICAL: return 'red';
-            default: return 'gray';
+            default: return 'gray',
+            ;
         }
         ;
         return;
@@ -310,7 +311,8 @@ const getStatusColor = (status) => {
         case ExecutionStatus.COMPLETED: return 'green';
         case ExecutionStatus.FAILED: return 'red';
         case ExecutionStatus.CANCELLED: return 'gray';
-        default: return 'gray';
+        default: return 'gray',
+        ;
     }
     ;
     return;

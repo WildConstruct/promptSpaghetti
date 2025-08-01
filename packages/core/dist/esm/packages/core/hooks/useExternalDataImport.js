@@ -248,17 +248,18 @@ const exportResults = useCallback((format) => {
             if (allData.length === 0)
                 return '';
             const headers = Object.keys(allData[0]);
-            const csvRows = [];
-            headers.join(','),
-            ;
+            const csvRows = [
+                headers.join(','),
+                ...allData.map(row => ),
+                headers.map(header => { })
+            ];
+            const value = row[header];
+            // Escape quotes and wrap in quotes if contains comma
+            const escaped = String(value).replace(/"/g, '""');
+            return escaped.includes(',') ? `"${escaped}"` : escaped;
         }
     }
-}, ...allData.map(row => ), headers.map(header => { }));
-const value = row[header];
-// Escape quotes and wrap in quotes if contains comma
-const escaped = String(value).replace(/"/g, '""');
-return escaped.includes(',') ? `"${escaped}"` : escaped;
-join(',');
+}).join(',');
 ;
 return csvRows.join('\n');
 return '';

@@ -16,28 +16,33 @@ import {
   // PieChart, // Commented out unused import
   Settings,
   RefreshCw
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface ThreatData {
   id: string;,
-  type: 'malware' | 'phishing' | 'brute_force' | 'ddos' | 'injection' | 'data_breach';
+  type: 'malware' | 'phishing' | 'brute_force' | 'ddos' | 'injection' | 'data_breach';,
   severity: 'critical' | 'high' | 'medium' | 'low';,
-  confidence: number;
+  confidence: number;,
   source_ip: string;,
-  target: string;
+  target: string;,
   detected_at: Date;,
-  status: 'active' | 'blocked' | 'investigating';
+  status: 'active' | 'blocked' | 'investigating';,
   description: string;
-}
+
+
+
 interface ThreatStats {
   total_threats: number;,
-  active_threats: number;
+  active_threats: number;,
   blocked_threats: number;,
   threat_types: Record<string, number>;
   severity_distribution: Record<string, number>;
-}
+
+},
   hourly_detection_rate: Array<{ hour: number; count: number }>;
-}
+
+
 interface ThreatDetectionVisualizerProps {
   onThreatClick?: (threat: ThreatData) => void;
   refreshInterval?: number;
@@ -50,7 +55,8 @@ interface ThreatDetectionVisualizerProps {
   if (autoRefresh) {
   const interval = setInterval(loadThreatData, refreshInterval);
   return () => clearInterval(interval);
-}
+
+
 }, [autoRefresh, refreshInterval]);
   const loadThreatData = async () => {
   setIsLoading(true);
@@ -67,7 +73,7 @@ interface ThreatDetectionVisualizerProps {
   detected_at: new Date(Date.now() - 2 * 60 * 1000),
   status: 'active',
   description: 'Coordinated brute force attack against authentication service',
-}
+
         {
   id: 'threat-2',
   type: 'injection',
@@ -78,7 +84,7 @@ interface ThreatDetectionVisualizerProps {
   detected_at: new Date(Date.now() - 5 * 60 * 1000),
   status: 'blocked',
   description: 'SQL injection attempt detected in API parameters',
-}
+
         {
   id: 'threat-3',
   type: 'phishing',
@@ -89,7 +95,7 @@ interface ThreatDetectionVisualizerProps {
   detected_at: new Date(Date.now() - 8 * 60 * 1000),
   status: 'investigating',
   description: 'Suspicious email campaign targeting user credentials',
-}
+
         {
   id: 'threat-4',
   type: 'ddos',
@@ -104,7 +110,7 @@ interface ThreatDetectionVisualizerProps {
   total_threats: 47,
   active_threats: 3,
   blocked_threats: 41,
-  threat_types: {
+  threat_types: {,
   brute_force: 15,
   injection: 12,
   phishing: 8,
@@ -112,7 +118,7 @@ interface ThreatDetectionVisualizerProps {
   malware: 3,
   data_breach: 2,
 },
-  severity_distribution: {
+  severity_distribution: {,
   critical: 5,
   high: 18,
   medium: 19,
@@ -354,7 +360,7 @@ interface ThreatDetectionVisualizerProps {
                         className="chart-fill"
                         style={{ 
                           width: `${(count / Math.max(...Object.values(stats.threat_types))) * 100}%` }
-                        }}
+}
                       ></div>
                     </div>
                     <div className="chart-label">
@@ -381,7 +387,7 @@ interface ThreatDetectionVisualizerProps {
                         className={`severity-fill ${severity}`}
                         style={{ 
                           width: `${(count / Math.max(...Object.values(stats.severity_distribution))) * 100}%` }
-                        }}
+}
                       ></div>
                     </div>
                   </div>
@@ -398,7 +404,7 @@ interface ThreatDetectionVisualizerProps {
                       className="bar-fill"
                       style={{ 
                         height: `${(count / getMaxHourlyCount()) * 100}%` }
-                      }}
+}
                       title={`${hour}:00 - ${count} threats`}
                     ></div>
                     <div className="hour-label">{hour}</div>

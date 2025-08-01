@@ -24,7 +24,7 @@ export enum ChargebackStatus {
   LOST = 'lost',
   CLOSED = 'closed',
   EXPIRED = 'expired'
-}
+
 
 export enum ChargebackReason {
   // Fraud reasons
@@ -54,7 +54,7 @@ export enum ChargebackReason {
   GENERAL = 'general',
   UNRECOGNIZED = 'unrecognized',
   OTHER = 'other'
-}
+
 
 export enum ChargebackType {
   CHARGEBACK = 'chargeback',
@@ -62,7 +62,7 @@ export enum ChargebackType {
   ARBITRATION = 'arbitration',
   RETRIEVAL_REQUEST = 'retrieval_request',
   INQUIRY = 'inquiry'
-}
+
 
 export enum EvidenceType {
   RECEIPT = 'receipt',
@@ -78,20 +78,20 @@ export enum EvidenceType {
   CUSTOMER_SIGNATURE = 'customer_signature',
   UNCATEGORIZED_FILE = 'uncategorized_file',
   UNCATEGORIZED_TEXT = 'uncategorized_text'
-}
+
 
 export enum ChargebackOutcome {
   WON = 'won',
   LOST = 'lost',
   ACCEPTED = 'accepted',
   WARNING_CLOSED = 'warning_closed'
-}
+
 
 export enum DisputePhase {
   CHARGEBACK = 'chargeback',
   PRE_ARBITRATION = 'pre_arbitration',
   ARBITRATION = 'arbitration'
-}
+
 
 // =============================================================================
 // Core Chargeback Interfaces
@@ -100,8 +100,9 @@ export enum DisputePhase {
 /**
  * Main chargeback tracking interface
  */
-}
-}
+
+
+
 export interface Chargeback {
   readonly id: string;
   
@@ -167,15 +168,17 @@ export interface Chargeback {
   updated_at: Date;
   created_by: string;
   last_updated_by: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Evidence submitted for chargeback disputes
  */
-}
-}
+
+
+
 export interface ChargebackEvidence {
   readonly id: string;
   chargeback_id: string;
@@ -206,15 +209,17 @@ export interface ChargebackEvidence {
   updated_at: Date;
   submitted_at?: Date;
   created_by: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Communication history for chargebacks
  */
-}
-}
+
+
+
 export interface ChargebackCommunication {
   readonly id: string;
   chargeback_id: string;
@@ -243,27 +248,30 @@ export interface ChargebackCommunication {
   created_at: Date;
   read_at?: Date;
   created_by: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CommunicationAttachment {
   id: string;
   file_name: string;
   file_url: string;
   file_size: number;
   content_type: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Chargeback analytics and metrics
  */
-}
-}
+
+
+
 export interface ChargebackAnalytics {
   period_start: Date;
   period_end: Date;
@@ -291,9 +299,10 @@ export interface ChargebackAnalytics {
     count: number;
     amount_cents: number;
     win_rate: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Provider breakdown
   provider_breakdown: Array<{
@@ -301,14 +310,14 @@ export interface ChargebackAnalytics {
     count: number;
     amount_cents: number;
     win_rate: number;
-  }>;
+>;
   
   // Risk analysis
   risk_distribution: Array<{
     risk_level: 'low' | 'medium' | 'high' | 'critical';
     count: number;
     amount_cents: number;
-  }>;
+>;
   
   // Trends
   monthly_trends: Array<{
@@ -316,14 +325,15 @@ export interface ChargebackAnalytics {
     chargeback_count: number;
     chargeback_rate: number;
     win_rate: number;
-  }>;
-}
+>;
+
 
 /**
  * Chargeback prevention and alerts
  */
-}
-}
+
+
+
 export interface ChargebackAlert {
   readonly id: string;
   
@@ -357,15 +367,17 @@ export interface ChargebackAlert {
   // Metadata
   created_at: Date;
   expires_at?: Date;
-}
-}
-}
+
+
+
+
 
 /**
  * Chargeback prevention rules
  */
-}
-}
+
+
+
 export interface ChargebackPreventionRule {
   readonly id: string;
   
@@ -391,30 +403,33 @@ export interface ChargebackPreventionRule {
   updated_at: Date;
   created_by: string;
   last_triggered_at?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PreventionRuleCondition {
   field: string; // e.g., 'risk_score', 'transaction_amount', 'user_chargeback_history'
   operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'between';
   value: any;
   weight: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PreventionRuleAction {
   type: 'block_transaction' | 'require_verification' | 'manual_review' | 'send_alert' | 'delay_fulfillment';
   parameters: Record<string, any>;
   auto_execute: boolean;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Chargeback Templates and Automation
@@ -423,8 +438,9 @@ export interface PreventionRuleAction {
 /**
  * Pre-built response templates for different chargeback reasons
  */
-}
-}
+
+
+
 export interface ChargebackResponseTemplate {
   readonly id: string;
   
@@ -452,15 +468,17 @@ export interface ChargebackResponseTemplate {
   created_at: Date;
   created_by: string;
   tags: string[];
-}
-}
-}
+
+
+
+
 
 /**
  * Automated evidence collection
  */
-}
-}
+
+
+
 export interface EvidenceCollector {
   readonly id: string;
   
@@ -488,9 +506,10 @@ export interface EvidenceCollector {
   created_at: Date;
   updated_at: Date;
   last_run_at?: Date;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Validation Schemas
@@ -563,8 +582,8 @@ export const CreateResponseTemplateSchema = z.object({
 // Service Response Types
 // =============================================================================
 
-}
-}
+
+
 export interface ChargebackServiceResponse<T> {
   success: boolean;
   data?: T;
@@ -578,10 +597,10 @@ export interface ChargebackServiceResponse<T> {
     timestamp: Date;
     execution_time_ms: number;
   };
-}
 
-}
-}
+
+
+
 export interface ChargebackSearchCriteria {
   user_id?: string;
   transaction_id?: string;
@@ -604,12 +623,13 @@ export interface ChargebackSearchCriteria {
   offset?: number;
   sort_by?: 'initiated_at' | 'due_date' | 'amount_cents' | 'updated_at';
   sort_order?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChargebackSearchResult {
   chargebacks: Chargeback[];
   total_count: number;
@@ -619,23 +639,25 @@ export interface ChargebackSearchResult {
     total_fees_cents: number;
     status_distribution: Record<ChargebackStatus, number>;
     reason_distribution: Record<ChargebackReason, number>;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ChargebackBulkAction {
   action: 'update_status' | 'submit_evidence' | 'add_notes' | 'add_tags' | 'assign_reviewer';
   chargeback_ids: string[];
   parameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChargebackBulkResult {
   total_processed: number;
   successful: number;
@@ -644,17 +666,18 @@ export interface ChargebackBulkResult {
     chargeback_id: string;
     success: boolean;
     error?: string;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 // =============================================================================
 // Webhook and Integration Types
 // =============================================================================
 
-}
-}
+
+
 export interface ChargebackWebhookPayload {
   event_type: 'chargeback.created' | 'chargeback.updated' | 'chargeback.evidence_required' | 'chargeback.closed';
   chargeback: Chargeback;
@@ -664,22 +687,24 @@ export interface ChargebackWebhookPayload {
     timestamp: Date;
     provider: PaymentProvider;
     retry_count: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ProviderChargebackData {
   provider: PaymentProvider;
   provider_id: string;
   raw_data: Record<string, any>;
   mapped_data: Partial<Chargeback>;
   mapping_version: string;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Export all types

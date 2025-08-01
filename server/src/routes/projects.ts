@@ -60,8 +60,8 @@ const ProjectQuerySchema = z.object({
   sortOrder: z.enum(['asc', 'desc']).default('desc')
 });
 
-}
-}
+
+
 interface DatabaseProject {
   id: string;
   user_id?: number;
@@ -75,9 +75,10 @@ interface DatabaseProject {
   file_format_version: string;
   graph_data: any;
   settings: any;
-}
-}
-}
+
+
+
+
 
 /**
  * Initialize projects table if it doesn't exist
@@ -116,11 +117,11 @@ function initializeProjectsTable() {
     db.exec(createProjectsTable);
     createIndexes.forEach(indexSQL => db.exec(indexSQL));
     console.log('Projects table and indexes initialized successfully');
-  } catch (error) {
+ catch (error) {
     console.error('Failed to initialize projects table:', error);
     throw error;
-  }
-}
+
+
 
 /**
  * Convert database row to API format
@@ -138,11 +139,11 @@ function dbProjectToAPI(dbProject: DatabaseProject): any {
       author: dbProject.author,
       tags: typeof dbProject.tags === 'string' ? JSON.parse(dbProject.tags || '[]') : (dbProject.tags || []),
       fileFormatVersion: dbProject.file_format_version
-  }
+
     graph: JSON.parse(dbProject.graph_data),
     settings: JSON.parse(dbProject.settings || '{}')
   };
-}
+
 
 export async function projectRoutes(fastify: FastifyInstance) {
   // Initialize the projects table on startup
@@ -151,16 +152,16 @@ export async function projectRoutes(fastify: FastifyInstance) {
   // Save new project
   fastify.post<{
     Body: z.infer<typeof SaveProjectRequestSchema>;
-  }>('/projects', {
+>('/projects', {
     schema: {
       body: {
         type: 'object',
         properties: {
           project: { type: 'object' },
           userId: { type: 'number' }
-  }
+
         required: ['project']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -168,10 +169,10 @@ export async function projectRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             projectId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request, reply) => {
       try {
         const { project, userId } = SaveProjectRequestSchema.parse(request.body);
@@ -207,20 +208,20 @@ export async function projectRoutes(fastify: FastifyInstance) {
           projectId,
           message: 'Project saved successfully'
         };
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.status(500).send({
           success: false,
           error: `Failed to save project: ${error instanceof Error ? error.message : String(error)}`
         });
-      }
-    }
+
+
   });
 
   // Get user's projects with pagination and filtering
   fastify.get<{
     Querystring: z.infer<typeof ProjectQuerySchema>;
-  }>('/projects', {
+>('/projects', {
     schema: {
       querystring: {
         type: 'object',
@@ -232,8 +233,8 @@ export async function projectRoutes(fastify: FastifyInstance) {
           tags: { type: 'array', items: { type: 'string' } },
           sortBy: { type: 'string', enum: ['createdAt', 'lastModified', 'name'], default: 'lastModified' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -242,10 +243,10 @@ export async function projectRoutes(fastify: FastifyInstance) {
             total: { type: 'number' },
             limit: { type: 'number' },
             offset: { type: 'number' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request, reply) => {
       try {
         const query = ProjectQuerySchema.parse(request.query);
@@ -258,24 +259,24 @@ export async function projectRoutes(fastify: FastifyInstance) {
         if (query.userId) {
           whereClause += ' AND user_id = ?';
           params.push(query.userId);
-        } else {
+ else {
           // For anonymous users, only show projects without user_id
           whereClause += ' AND user_id IS NULL';
-        }
+
         
         // Search functionality
         if (query.search) {
           whereClause += ' AND (name LIKE ? OR description LIKE ? OR author LIKE ?)';
           const searchTerm = `%${query.search}%`;
           params.push(searchTerm, searchTerm, searchTerm);
-        }
+
         
         // Tag filtering
         if (query.tags && query.tags.length > 0) {
           const tagConditions = query.tags.map(() => 'tags LIKE ?').join(' OR ');
           whereClause += ` AND (${tagConditions})`;
           query.tags.forEach(tag => params.push(`%"${tag}"%`));
-        }
+
         
         // Map sort fields to database columns
         const sortFieldMap = {
@@ -306,38 +307,38 @@ export async function projectRoutes(fastify: FastifyInstance) {
           limit: query.limit,
           offset: query.offset
         };
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.status(500).send({
           error: `Failed to fetch projects: ${error instanceof Error ? error.message : String(error)}`
         });
-      }
-    }
+
+
   });
 
   // Get specific project by ID
   fastify.get<{
     Params: { projectId: string };
     Querystring: { userId?: number };
-  }>('/projects/:projectId', {
+>('/projects/:projectId', {
     schema: {
       params: {
         type: 'object',
         properties: {
           projectId: { type: 'string' }
-  }
+
         required: ['projectId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           userId: { type: 'number' }
-        }
-  }
+
+
       response: {
         200: { type: 'object' }
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const { projectId } = request.params;
@@ -351,9 +352,9 @@ export async function projectRoutes(fastify: FastifyInstance) {
         if (userId) {
           whereClause += ' AND user_id = ?';
           params.push(userId);
-        } else {
+ else {
           whereClause += ' AND user_id IS NULL';
-        }
+
         
         const project = db.prepare(`SELECT * FROM projects WHERE ${whereClause}`)
           .get(...params) as DatabaseProject | undefined;
@@ -363,49 +364,49 @@ export async function projectRoutes(fastify: FastifyInstance) {
             error: 'Project not found or access denied'
           });
           return;
-        }
+
         
         return dbProjectToAPI(project);
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.status(500).send({
           error: `Failed to fetch project: ${error instanceof Error ? error.message : String(error)}`
         });
-      }
-    }
+
+
   });
 
   // Update existing project
   fastify.put<{
     Params: { projectId: string };
     Body: z.infer<typeof UpdateProjectRequestSchema>;
-  }>('/projects/:projectId', {
+>('/projects/:projectId', {
     schema: {
       params: {
         type: 'object',
         properties: {
           projectId: { type: 'string' }
-  }
+
         required: ['projectId']
-  }
+
       body: {
         type: 'object',
         properties: {
           project: { type: 'object' },
           userId: { type: 'number' }
-  }
+
         required: ['project']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request, reply) => {
       try {
         const { projectId } = request.params;
@@ -421,7 +422,7 @@ export async function projectRoutes(fastify: FastifyInstance) {
           metadata: {
             ...project.metadata,
             lastModified: new Date().toISOString()
-          }
+
         };
         
         let whereClause = 'id = ?';
@@ -430,9 +431,9 @@ export async function projectRoutes(fastify: FastifyInstance) {
         if (userId) {
           whereClause += ' AND user_id = ?';
           params.push(userId);
-        } else {
+ else {
           whereClause += ' AND user_id IS NULL';
-        }
+
         
         const updateProject = db.prepare(`
           UPDATE projects SET
@@ -459,51 +460,51 @@ export async function projectRoutes(fastify: FastifyInstance) {
             error: 'Project not found or access denied'
           });
           return;
-        }
+
         
         return {
           success: true,
           message: 'Project updated successfully'
         };
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.status(500).send({
           success: false,
           error: `Failed to update project: ${error instanceof Error ? error.message : String(error)}`
         });
-      }
-    }
+
+
   });
 
   // Delete project
   fastify.delete<{
     Params: { projectId: string };
     Querystring: { userId?: number };
-  }>('/projects/:projectId', {
+>('/projects/:projectId', {
     schema: {
       params: {
         type: 'object',
         properties: {
           projectId: { type: 'string' }
-  }
+
         required: ['projectId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           userId: { type: 'number' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request, reply) => {
       try {
         const { projectId } = request.params;
@@ -516,9 +517,9 @@ export async function projectRoutes(fastify: FastifyInstance) {
         if (userId) {
           whereClause += ' AND user_id = ?';
           params.push(userId);
-        } else {
+ else {
           whereClause += ' AND user_id IS NULL';
-        }
+
         
         const deleteProject = db.prepare(`DELETE FROM projects WHERE ${whereClause}`);
         const result = deleteProject.run(...params);
@@ -529,43 +530,43 @@ export async function projectRoutes(fastify: FastifyInstance) {
             error: 'Project not found or access denied'
           });
           return;
-        }
+
         
         return {
           success: true,
           message: 'Project deleted successfully'
         };
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.status(500).send({
           success: false,
           error: `Failed to delete project: ${error instanceof Error ? error.message : String(error)}`
         });
-      }
-    }
+
+
   });
 
   // Get recent projects for user
   fastify.get<{
     Querystring: { userId?: number; limit?: number };
-  }>('/projects/recent', {
+>('/projects/recent', {
     schema: {
       querystring: {
         type: 'object',
         properties: {
           userId: { type: 'number' },
           limit: { type: 'number', minimum: 1, maximum: 50, default: 10 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             projects: { type: 'array' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request, reply) => {
       try {
         const { userId, limit = 10 } = request.query;
@@ -577,9 +578,9 @@ export async function projectRoutes(fastify: FastifyInstance) {
         if (userId) {
           whereClause += ' AND user_id = ?';
           params.push(userId);
-        } else {
+ else {
           whereClause += ' AND user_id IS NULL';
-        }
+
         
         const recentProjects = db.prepare(`
           SELECT * FROM projects 
@@ -591,14 +592,14 @@ export async function projectRoutes(fastify: FastifyInstance) {
         return {
           projects: recentProjects.map(dbProjectToAPI)
         };
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.status(500).send({
           error: `Failed to fetch recent projects: ${error instanceof Error ? error.message : String(error)}`
         });
-      }
-    }
+
+
   });
-}
+
 
 export default projectRoutes;

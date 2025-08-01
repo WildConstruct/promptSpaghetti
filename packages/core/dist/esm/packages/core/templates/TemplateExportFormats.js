@@ -98,8 +98,8 @@ Promise < string > {
                 };
                 {
                     async;
-                    (template, version, options) => include_version_info;
-                    boolean;
+                    (template, version, options) => ,
+                        include_version_info ?  : boolean;
                     include_metadata ?  : boolean;
                 }
                 { }
@@ -189,8 +189,8 @@ Promise < string > {
                                 };
                                 {
                                     async;
-                                    (template, version, options) => include_dependencies;
-                                    boolean;
+                                    (template, version, options) => ,
+                                        include_dependencies ?  : boolean;
                                     include_assets ?  : boolean;
                                     include_documentation ?  : boolean;
                                     compress ?  : boolean;
@@ -310,176 +310,181 @@ ${template.prerequisites.map(p => `- ${p}`).join('\n')}
 ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
 `;
                                                         },
-                                                        generateExamples(template) {
-                                                            // Generate example configurations
-                                                            return [
-                                                                {
-                                                                    name: 'Basic Configuration',
-                                                                    description: 'A simple setup with default values',
-                                                                    graph_data: template.graph_data // Simplified example];
-                                                                    , // Simplified example];
-                                                                    async verifyBundle(bundle) { },
-                                                                    // Verify checksums
-                                                                    const: templateJson = JSON.stringify(bundle.template),
-                                                                    const: expectedChecksum = await this.calculateChecksum(templateJson),
-                                                                    if(bundle) { }, : .checksums['template.json'] !== expectedChecksum
-                                                                }, {
-                                                                    throw: new Error('Template checksum verification failed'),
-                                                                    async calculateChecksum(data) { },
-                                                                    const: encoder = new TextEncoder(),
-                                                                    const: hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(data)),
-                                                                    const: hashArray = Array.from(new Uint8Array(hashBuffer)),
-                                                                    return: hashArray.map(b => b.toString(16).padStart(2, '0')).join(''),
-                                                                    // ZIP Archive Processor
-                                                                    class: ZipFormatProcessor, implements, FormatProcessor
-                                                                }, {
-                                                                    include_version_history: boolean,
-                                                                    include_dependencies: boolean,
-                                                                    separate_files: boolean
-                                                                } = {}, Promise < ArrayBuffer > {
-                                                                    // Create file structure
-                                                                    const: files
-                                                                }, {},
-                                                                // Main template file
-                                                                files['template.json'] = JSON.stringify(template, null, 2)
-                                                            ];
-                                                            // Version information
-                                                            if (version) {
-                                                                files['version.json'] = JSON.stringify({});
-                                                                id: version.id,
-                                                                    version_number;
-                                                                version.version_number,
-                                                                    changelog;
-                                                                version.changelog,
-                                                                    created_at;
-                                                                version.created_at,
-                                                                    api_version;
-                                                                version.api_version,
-                                                                ;
-                                                            }
-                                                            null, 2;
+                                                        string,
+                                                        description: string,
+                                                        graph_data: any
+                                                    } > {
+                                                        // Generate example configurations
+                                                        return: [
+                                                            {
+                                                                name: 'Basic Configuration',
+                                                                description: 'A simple setup with default values',
+                                                                graph_data: template.graph_data // Simplified example];
+                                                                , // Simplified example];
+                                                                async verifyBundle(bundle) { },
+                                                                // Verify checksums
+                                                                const: templateJson = JSON.stringify(bundle.template),
+                                                                const: expectedChecksum = await this.calculateChecksum(templateJson),
+                                                                if(bundle) { }, : .checksums['template.json'] !== expectedChecksum
+                                                            }, {
+                                                                throw: new Error('Template checksum verification failed'),
+                                                                async calculateChecksum(data) { },
+                                                                const: encoder = new TextEncoder(),
+                                                                const: hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(data)),
+                                                                const: hashArray = Array.from(new Uint8Array(hashBuffer)),
+                                                                return: hashArray.map(b => b.toString(16).padStart(2, '0')).join(''),
+                                                                // ZIP Archive Processor
+                                                                class: ZipFormatProcessor, implements, FormatProcessor
+                                                            }, {
+                                                                include_version_history: boolean,
+                                                                include_dependencies: boolean,
+                                                                separate_files: boolean
+                                                            } = {}, Promise < ArrayBuffer > {
+                                                                // Create file structure
+                                                                const: files
+                                                            }, {},
+                                                            // Main template file
+                                                            files['template.json'] = JSON.stringify(template, null, 2)
+                                                        ]
+                                                        // Version information
+                                                        ,
+                                                        // Version information
+                                                        if(version) {
+                                                            files['version.json'] = JSON.stringify({});
+                                                            id: version.id,
+                                                                version_number;
+                                                            version.version_number,
+                                                                changelog;
+                                                            version.changelog,
+                                                                created_at;
+                                                            version.created_at,
+                                                                api_version;
+                                                            version.api_version,
                                                             ;
-                                                            // Variables as separate file
-                                                            if (options.separate_files && template.variables.length > 0) {
-                                                                files['variables.json'] = JSON.stringify(template.variables, null, 2);
-                                                                // Customization points
-                                                                if (options.separate_files && template.customization_points.length > 0) {
-                                                                    files['customization-points.json'] = JSON.stringify(template.customization_points, null, 2);
-                                                                    // README
-                                                                    files['README.md'] = this.generateReadme(template);
-                                                                    // Manifest
-                                                                    files['manifest.json'] = JSON.stringify({});
-                                                                    name: template.name,
-                                                                        version;
-                                                                    template.version,
-                                                                        files;
-                                                                    Object.keys(files),
-                                                                        created_at;
-                                                                    new Date().toISOString(),
-                                                                        format_version;
-                                                                    '1.0',
-                                                                    ;
-                                                                }
-                                                                null, 2;
-                                                                ;
-                                                                // Create ZIP (simplified - would use actual ZIP library)
-                                                                const archive = {
-                                                                    files,
-                                                                    metadata: {
-                                                                        file_count: Object.keys(files).length,
-                                                                        total_size: Object.values(files).reduce((sum, content) => sum + content.length, 0),
-                                                                    },
-                                                                    return: new TextEncoder().encode(JSON.stringify(archive, null, 2)).buffer,
-                                                                    async import(data) {
-                                                                        try {
-                                                                            // Simplified - would extract from actual ZIP
-                                                                            const archiveJson = new TextDecoder().decode(data);
-                                                                            const archive = JSON.parse(archiveJson);
-                                                                            if (archive.files['template.json']) {
-                                                                                return JSON.parse(archive.files['template.json']);
-                                                                            }
-                                                                            else {
-                                                                                throw new Error('ZIP archive missing template.json');
-                                                                            }
-                                                                            try { }
-                                                                            catch (error) {
-                                                                                throw new Error(`ZIP import failed: ${error.message}`);
-                                                                            }
-                                                                            async;
-                                                                            validate(data, ArrayBuffer);
-                                                                            Promise < { valid: boolean, errors: string } > {
-                                                                                const: errors, string = [],
-                                                                                try: {
-                                                                                    const: archiveJson = new TextDecoder().decode(data),
-                                                                                    const: archive = JSON.parse(archiveJson),
-                                                                                    if(, archive) { }, : .files
-                                                                                }
-                                                                            };
-                                                                            {
-                                                                                errors.push('ZIP archive missing files');
-                                                                                if (!archive.files['template.json']) {
-                                                                                    errors.push('ZIP archive missing template.json');
-                                                                                    if (!archive.files['manifest.json']) {
-                                                                                        errors.push('ZIP archive missing manifest.json');
-                                                                                        // Validate template content
-                                                                                        if (archive.files['template.json']) {
-                                                                                            try {
-                                                                                                const template = JSON.parse(archive.files['template.json']);
-                                                                                                if (!template.id || !template.name) {
-                                                                                                    errors.push('Template in ZIP archive is invalid');
-                                                                                                }
-                                                                                                try { }
-                                                                                                catch (error) {
-                                                                                                    errors.push('Template.json in ZIP is not valid JSON');
-                                                                                                }
-                                                                                                try { }
-                                                                                                catch (error) {
-                                                                                                    errors.push(`ZIP validation failed: ${error.message}`);
-                                                                                                }
-                                                                                                return { valid: errors.length === 0, errors };
-                                                                                                async;
-                                                                                                getMetadata(data, ArrayBuffer);
-                                                                                                Promise < any > {
-                                                                                                    try: {
-                                                                                                        const: archiveJson = new TextDecoder().decode(data),
-                                                                                                        const: archive = JSON.parse(archiveJson),
-                                                                                                        let, manifest = {},
-                                                                                                        if(archive) { }, : .files['manifest.json']
-                                                                                                    }
-                                                                                                };
-                                                                                                {
-                                                                                                    manifest = JSON.parse(archive.files['manifest.json']);
-                                                                                                    let template = {};
-                                                                                                    if (archive.files['template.json']) {
-                                                                                                        template = JSON.parse(archive.files['template.json']);
-                                                                                                        return {
-                                                                                                            format: 'zip',
-                                                                                                            ...manifest,
-                                                                                                            template_name: template.name,
-                                                                                                            file_count: Object.keys(archive.files).length,
-                                                                                                            has_version_info: !!archive.files['version.json'],
-                                                                                                            has_variables: !!archive.files['variables.json'],
-                                                                                                            has_customization_points: !!archive.files['customization-points.json'],
-                                                                                                        };
-                                                                                                    }
-                                                                                                    try { }
-                                                                                                    catch (error) {
-                                                                                                        throw new Error(`Failed to extract ZIP metadata: ${error.message}`);
-                                                                                                    }
-                                                                                                }
+                                                        }, null: , 2: ,
+                                                        // Variables as separate file
+                                                        if(options) { }, : .separate_files && template.variables.length > 0
+                                                    };
+                                                    {
+                                                        files['variables.json'] = JSON.stringify(template.variables, null, 2);
+                                                        // Customization points
+                                                        if (options.separate_files && template.customization_points.length > 0) {
+                                                            files['customization-points.json'] = JSON.stringify(template.customization_points, null, 2);
+                                                            // README
+                                                            files['README.md'] = this.generateReadme(template);
+                                                            // Manifest
+                                                            files['manifest.json'] = JSON.stringify({});
+                                                            name: template.name,
+                                                                version;
+                                                            template.version,
+                                                                files;
+                                                            Object.keys(files),
+                                                                created_at;
+                                                            new Date().toISOString(),
+                                                                format_version;
+                                                            '1.0',
+                                                            ;
+                                                        }
+                                                        null, 2;
+                                                        ;
+                                                        // Create ZIP (simplified - would use actual ZIP library)
+                                                        const archive = {
+                                                            files,
+                                                            metadata: {
+                                                                file_count: Object.keys(files).length,
+                                                                total_size: Object.values(files).reduce((sum, content) => sum + content.length, 0),
+                                                            },
+                                                            return: new TextEncoder().encode(JSON.stringify(archive, null, 2)).buffer,
+                                                            async import(data) {
+                                                                try {
+                                                                    // Simplified - would extract from actual ZIP
+                                                                    const archiveJson = new TextDecoder().decode(data);
+                                                                    const archive = JSON.parse(archiveJson);
+                                                                    if (archive.files['template.json']) {
+                                                                        return JSON.parse(archive.files['template.json']);
+                                                                    }
+                                                                    else {
+                                                                        throw new Error('ZIP archive missing template.json');
+                                                                    }
+                                                                    try { }
+                                                                    catch (error) {
+                                                                        throw new Error(`ZIP import failed: ${error.message}`);
+                                                                    }
+                                                                    async;
+                                                                    validate(data, ArrayBuffer);
+                                                                    Promise < { valid: boolean, errors: string } > {
+                                                                        const: errors, string = [],
+                                                                        try: {
+                                                                            const: archiveJson = new TextDecoder().decode(data),
+                                                                            const: archive = JSON.parse(archiveJson),
+                                                                            if(, archive) { }, : .files
+                                                                        }
+                                                                    };
+                                                                    {
+                                                                        errors.push('ZIP archive missing files');
+                                                                        if (!archive.files['template.json']) {
+                                                                            errors.push('ZIP archive missing template.json');
+                                                                            if (!archive.files['manifest.json']) {
+                                                                                errors.push('ZIP archive missing manifest.json');
+                                                                                // Validate template content
+                                                                                if (archive.files['template.json']) {
+                                                                                    try {
+                                                                                        const template = JSON.parse(archive.files['template.json']);
+                                                                                        if (!template.id || !template.name) {
+                                                                                            errors.push('Template in ZIP archive is invalid');
+                                                                                        }
+                                                                                        try { }
+                                                                                        catch (error) {
+                                                                                            errors.push('Template.json in ZIP is not valid JSON');
+                                                                                        }
+                                                                                        try { }
+                                                                                        catch (error) {
+                                                                                            errors.push(`ZIP validation failed: ${error.message}`);
+                                                                                        }
+                                                                                        return { valid: errors.length === 0, errors };
+                                                                                        async;
+                                                                                        getMetadata(data, ArrayBuffer);
+                                                                                        Promise < any > {
+                                                                                            try: {
+                                                                                                const: archiveJson = new TextDecoder().decode(data),
+                                                                                                const: archive = JSON.parse(archiveJson),
+                                                                                                let, manifest = {},
+                                                                                                if(archive) { }, : .files['manifest.json']
                                                                                             }
-                                                                                            finally {
+                                                                                        };
+                                                                                        {
+                                                                                            manifest = JSON.parse(archive.files['manifest.json']);
+                                                                                            let template = {};
+                                                                                            if (archive.files['template.json']) {
+                                                                                                template = JSON.parse(archive.files['template.json']);
+                                                                                                return {
+                                                                                                    format: 'zip',
+                                                                                                    ...manifest,
+                                                                                                    template_name: template.name,
+                                                                                                    file_count: Object.keys(archive.files).length,
+                                                                                                    has_version_info: !!archive.files['version.json'],
+                                                                                                    has_variables: !!archive.files['variables.json'],
+                                                                                                    has_customization_points: !!archive.files['customization-points.json'],
+                                                                                                };
+                                                                                            }
+                                                                                            try { }
+                                                                                            catch (error) {
+                                                                                                throw new Error(`Failed to extract ZIP metadata: ${error.message}`);
                                                                                             }
                                                                                         }
+                                                                                    }
+                                                                                    finally {
                                                                                     }
                                                                                 }
                                                                             }
                                                                         }
-                                                                        finally {
-                                                                        }
-                                                                    },
-                                                                    generateReadme(template) {
-                                                                        return `# ${template.name}
+                                                                    }
+                                                                }
+                                                                finally {
+                                                                }
+                                                            },
+                                                            generateReadme(template) {
+                                                                return `# ${template.name}
 ${template.description}
 ## Installation
 1. Extract this ZIP archive
@@ -498,75 +503,73 @@ ${template.tags.join(', ')}
 ## Version
 ${template.version}
 `;
-                                                                        // Format Registry
-                                                                        export class TemplateFormatRegistry {
-                                                                            processors = new Map();
-                                                                            constructor() {
-                                                                                // Register default processors
-                                                                                this.processors.set('json', new JSONFormatProcessor());
-                                                                                this.processors.set('yaml', new YAMLFormatProcessor());
-                                                                                this.processors.set('zip', new ZipFormatProcessor());
-                                                                                this.processors.set('template_bundle', new BundleFormatProcessor());
-                                                                                registerProcessor(format, string, processor, FormatProcessor);
-                                                                                void {
-                                                                                    this: .processors.set(format, processor),
-                                                                                    getProcessor(format) {
-                                                                                        const processor = this.processors.get(format);
-                                                                                        if (!processor) {
-                                                                                            throw new Error(`Unsupported format: ${format}`);
+                                                                // Format Registry
+                                                                export class TemplateFormatRegistry {
+                                                                    processors = new Map();
+                                                                    constructor() {
+                                                                        // Register default processors
+                                                                        this.processors.set('json', new JSONFormatProcessor());
+                                                                        this.processors.set('yaml', new YAMLFormatProcessor());
+                                                                        this.processors.set('zip', new ZipFormatProcessor());
+                                                                        this.processors.set('template_bundle', new BundleFormatProcessor());
+                                                                        registerProcessor(format, string, processor, FormatProcessor);
+                                                                        void {
+                                                                            this: .processors.set(format, processor),
+                                                                            getProcessor(format) {
+                                                                                const processor = this.processors.get(format);
+                                                                                if (!processor) {
+                                                                                    throw new Error(`Unsupported format: ${format}`);
+                                                                                }
+                                                                                return processor;
+                                                                                getSupportedFormats();
+                                                                                string;
+                                                                                {
+                                                                                    return Array.from(this.processors.keys());
+                                                                                    async;
+                                                                                    detectFormat(data, string | ArrayBuffer);
+                                                                                    Promise < string | null > {
+                                                                                        // Try to detect format from data
+                                                                                        if(, data) { }
+                                                                                    } === 'string';
+                                                                                    {
+                                                                                        const trimmed = data.trim();
+                                                                                        if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+                                                                                            return 'json';
                                                                                         }
-                                                                                        return processor;
-                                                                                        getSupportedFormats();
-                                                                                        string;
-                                                                                        {
-                                                                                            return Array.from(this.processors.keys());
-                                                                                            async;
-                                                                                            detectFormat(data, string | ArrayBuffer);
-                                                                                            Promise < string | null > {
-                                                                                                // Try to detect format from data
-                                                                                                if(, data) { }
-                                                                                            } === 'string';
-                                                                                            {
-                                                                                                const trimmed = data.trim();
-                                                                                                if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
-                                                                                                    return 'json';
-                                                                                                }
-                                                                                                else if (trimmed.includes('---') || trimmed.match(/^\w+:/)) {
-                                                                                                    return 'yaml';
-                                                                                                }
-                                                                                                else {
-                                                                                                    // Binary data - check for ZIP or bundle signatures
-                                                                                                    const view = new DataView(data);
-                                                                                                    // ZIP file signature
-                                                                                                    if (view.getUint32(0) === 0x504b0304) {
-                                                                                                        return 'zip';
-                                                                                                        // Try to parse as bundle
-                                                                                                        try {
-                                                                                                            const text = new TextDecoder().decode(data);
-                                                                                                            const parsed = JSON.parse(text);
-                                                                                                            if (parsed.format_version && parsed.template) {
-                                                                                                                return 'template_bundle';
-                                                                                                            }
-                                                                                                            try { }
-                                                                                                            catch (error) {
-                                                                                                                // Not a bundle
-                                                                                                                return null;
-                                                                                                            }
-                                                                                                        }
-                                                                                                        finally { }
+                                                                                        else if (trimmed.includes('---') || trimmed.match(/^\w+:/)) {
+                                                                                            return 'yaml';
+                                                                                        }
+                                                                                        else {
+                                                                                            // Binary data - check for ZIP or bundle signatures
+                                                                                            const view = new DataView(data);
+                                                                                            // ZIP file signature
+                                                                                            if (view.getUint32(0) === 0x504b0304) {
+                                                                                                return 'zip';
+                                                                                                // Try to parse as bundle
+                                                                                                try {
+                                                                                                    const text = new TextDecoder().decode(data);
+                                                                                                    const parsed = JSON.parse(text);
+                                                                                                    if (parsed.format_version && parsed.template) {
+                                                                                                        return 'template_bundle';
+                                                                                                    }
+                                                                                                    try { }
+                                                                                                    catch (error) {
+                                                                                                        // Not a bundle
+                                                                                                        return null;
                                                                                                     }
                                                                                                 }
+                                                                                                finally { }
                                                                                             }
                                                                                         }
                                                                                     }
-                                                                                };
+                                                                                }
                                                                             }
-                                                                        }
+                                                                        };
                                                                     }
-                                                                };
+                                                                }
                                                             }
-                                                        }
-                                                    };
+                                                        };
+                                                    }
                                                 }
                                             }
                                         }

@@ -10,10 +10,9 @@
  * - Epic 17.5.4: Policy Enforcement (Marketplace policy management)
  */
 export { default as VerificationDashboard } from './VerificationDashboard';
-export type {
-  VerificationDashboardProps,
+export type { VerificationDashboardProps,
   AdminVerificationMetrics,
-  VerificationQueueItem,
+  VerificationQueueItem }
 } from './VerificationDashboard';
 export { default as VerificationQueue } from './VerificationQueue';
 export type { VerificationQueueProps, ReviewDecision } from './VerificationQueue';
@@ -28,11 +27,10 @@ export type { PolicyManagementDashboardProps, PolicyData, PolicyViolationData } 
 export { default as MarketplacePolicyConfig } from './MarketplacePolicyConfig';
 export type { MarketplacePolicyConfigProps, MarketplacePolicyTemplate, PolicyRule } from './MarketplacePolicyConfig';
 export { default as PolicyEnforcementWorkflow } from './PolicyEnforcementWorkflow';
-export type {
-  PolicyEnforcementWorkflowProps,
+export type { PolicyEnforcementWorkflowProps,
   EnforcementWorkflow,
   EnforcementAction,
-  WorkflowExecution,
+  WorkflowExecution }
 } from './PolicyEnforcementWorkflow';
 export { default as PolicyAnalyticsDashboard } from './PolicyAnalyticsDashboard';
 export type { PolicyAnalyticsDashboardProps, PolicyAnalyticsMetrics } from './PolicyAnalyticsDashboard';

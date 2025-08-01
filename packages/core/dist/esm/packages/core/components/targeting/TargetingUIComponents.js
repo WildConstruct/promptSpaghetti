@@ -107,21 +107,20 @@ const [draggedCondition, setDraggedCondition] = useState(null);
 const addCondition = (type = 'attribute') => {
     const newCondition = {
         id: `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` };
+    type,
+        field;
+    availableFields[0]?.key || '',
+        operator;
+    'equals',
+        value;
+    '',
+        logicalOperator;
+    conditions.length > 0 ? 'AND' : undefined,
+        weight;
+    1,
+        isEnabled;
+    true;
 };
-type,
-    field;
-availableFields[0]?.key || '',
-    operator;
-'equals',
-    value;
-'',
-    logicalOperator;
-conditions.length > 0 ? 'AND' : undefined,
-    weight;
-1,
-    isEnabled;
-true;
-;
 onChange([...conditions, newCondition]);
 ;
 const updateCondition = (id, updates) => {
@@ -423,7 +422,11 @@ div >
 ;
  > ;
 geographicBreakdown: Record;
-timeSeriesData: Array;
+timeSeriesData: Array < {
+    date: string,
+    impressions: number,
+    conversions: number
+} > ;
 ;
 timeRange: '24h' | '7d' | '30d' | '90d';
 onTimeRangeChange: (range) => void ;

@@ -17,8 +17,9 @@ import { PerformanceDashboard } from './PerformanceDashboard';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // k6 test result interfaces
-}
-}
+
+
+
 interface K6Metric {
   name: string;
   type: string;
@@ -33,23 +34,25 @@ interface K6Metric {
     p99?: number;
     count?: number;
     rate?: number;
-}
-}
+
+
+
   };
   thresholds?: {
     [key: string]: {
       ok: boolean;
     };
   };
-}
 
-}
-}
+
+
+
 interface K6TestResult {
   metrics: {
     [key: string]: K6Metric;
-}
-}
+
+
+
   };
   root_group: {
     name: string;
@@ -67,11 +70,12 @@ interface K6TestResult {
     isStdErrTTY: boolean;
     testRunDurationMs: number;
   };
-}
+
 
 // k6 test suite configuration
-}
-}
+
+
+
 interface K6TestSuite {
   name: string;
   scenario: 'light' | 'moderate' | 'heavy' | 'stress';
@@ -79,13 +83,15 @@ interface K6TestSuite {
   tests: string[];
   thresholds: 'standard' | 'enterprise';
   maxDuration: string;
-}
-}
-}
+
+
+
+
 
 // Performance regression detection
-}
-}
+
+
+
 interface RegressionAnalysis {
   detected: boolean;
   regressions: Array<{
@@ -94,16 +100,17 @@ interface RegressionAnalysis {
     current: number;
     change: number;
     severity: 'minor' | 'major' | 'critical';
-}
-}
-  }>;
+
+
+
+>;
   improvements: Array<{
     metric: string;
     baseline: number;
     current: number;
     improvement: number;
-  }>;
-}
+>;
+
 
 export class K6PerformanceIntegration {
   private metricsCollector: MetricsCollector;
@@ -116,7 +123,7 @@ export class K6PerformanceIntegration {
     this.performanceSuite = new PerformanceTestSuite();
     this.dashboard = new PerformanceDashboard();
     this.k6TestsDir = join(__dirname, 'k6-tests');
-  }
+
 
   /**
    * Execute k6 test suite with comprehensive monitoring
@@ -128,7 +135,7 @@ export class K6PerformanceIntegration {
       environment?: string;
       outputDir?: string;
       enableDashboard?: boolean;
-    } = {}
+ = {}
   ): Promise<LoadTestResult[]> {
 
     const {
@@ -136,7 +143,7 @@ export class K6PerformanceIntegration {
       environment = 'local',
       outputDir = './performance-results',
       enableDashboard = true
-    } = options;
+ = options;
 
     console.log(`🚀 Executing k6 test suite: ${suiteName}`);
     console.log(`📊 Configuration: ${scenario} scenario on ${environment}`);
@@ -154,7 +161,7 @@ export class K6PerformanceIntegration {
         duration: this.parseDuration(suite.maxDuration),
         interval: 5000 // 5 second intervals
       });
-    }
+
 
     const results: LoadTestResult[] = [];
     
@@ -168,7 +175,7 @@ export class K6PerformanceIntegration {
         
         // Brief pause between tests
         await this.sleep(2000);
-      }
+
 
       // Generate comprehensive analysis
       await this.generateComprehensiveReport(results, outputDir, suite);
@@ -178,14 +185,13 @@ export class K6PerformanceIntegration {
       console.log(`\n📈 Regression Analysis: ${regressionAnalysis.detected ? 'Issues detected' : 'No regressions'}`);
 
       return results;
-      
-    } finally {
+ finally {
       // Stop dashboard monitoring
       if (dashboardPromise) {
         await dashboardPromise;
-      }
-    }
-  }
+
+
+
 
   /**
    * Execute individual k6 test
@@ -203,9 +209,9 @@ export class K6PerformanceIntegration {
     // Verify test file exists
     try {
       await fs.access(testFile);
-    } catch (error) {
+ catch (error) {
       throw new Error(`k6 test file not found: ${testFile}`);
-    }
+
 
     const startTime = Date.now();
     
@@ -264,9 +270,9 @@ export class K6PerformanceIntegration {
       const lines = resultData.trim().split('\n');
       const summaryLine = lines[lines.length - 1];
       k6Results = JSON.parse(summaryLine);
-    } catch (error) {
+ catch (error) {
       console.warn(`⚠️ Could not parse k6 results for ${testName}:`, error);
-    }
+
 
     // Convert to PromptScape LoadTestResult format
     const loadTestResult: LoadTestResult = {
@@ -279,7 +285,7 @@ export class K6PerformanceIntegration {
         scenario: suite.scenario,
         environment: suite.environment,
         thresholds: suite.thresholds
-  }
+
       rawResults: k6Results
     };
 
@@ -287,7 +293,7 @@ export class K6PerformanceIntegration {
     await this.metricsCollector.collectTestMetrics(loadTestResult);
 
     return loadTestResult;
-  }
+
 
   /**
    * Convert k6 metrics to PromptScape format
@@ -311,14 +317,14 @@ export class K6PerformanceIntegration {
           count: metric.values.count,
           rate: metric.values.rate
         };
-      } else if (name.startsWith('ws_')) {
+ else if (name.startsWith('ws_')) {
         metrics.websocket[name] = {
           avg: metric.values.avg,
           p95: metric.values.p95,
           count: metric.values.count,
           rate: metric.values.rate
         };
-      } else if (name.includes('_')) {
+ else if (name.includes('_')) {
         // Custom metrics (graph_execution_duration, auth_latency, etc.)
         metrics.custom[name] = {
           avg: metric.values.avg,
@@ -327,11 +333,11 @@ export class K6PerformanceIntegration {
           max: metric.values.max,
           count: metric.values.count
         };
-      }
-    }
+
+
 
     return metrics;
-  }
+
 
   /**
    * Generate comprehensive performance report
@@ -357,7 +363,7 @@ export class K6PerformanceIntegration {
     await fs.writeFile(join(outputDir, 'performance-data.csv'), csvReport);
 
     console.log(`✅ Reports generated in ${outputDir}`);
-  }
+
 
   /**
    * Analyze performance regression compared to baselines
@@ -380,7 +386,7 @@ export class K6PerformanceIntegration {
       console.log('📊 No performance baselines found, establishing new baseline');
       await this.savePerformanceBaselines(results, suite);
       return analysis;
-    }
+
 
     // Compare current results to baselines
     for (const result of results) {
@@ -415,7 +421,7 @@ export class K6PerformanceIntegration {
                   Math.abs(change) > 0.3 ? 'major' : 'minor'
               });
               analysis.detected = true;
-            } else {
+ else {
               // Improvement detected
               analysis.improvements.push({
                 metric: `${result.testName}.${metric.key}`,
@@ -423,14 +429,14 @@ export class K6PerformanceIntegration {
                 current: currentValue,
                 improvement: Math.abs(change) * 100
               });
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
 
     return analysis;
-  }
+
 
   /**
    * Generate HTML report with charts and analysis
@@ -524,7 +530,7 @@ export class K6PerformanceIntegration {
     </div>
 </body>
 </html>`;
-  }
+
 
   /**
    * Generate JSON summary for API consumption
@@ -551,18 +557,18 @@ export class K6PerformanceIntegration {
           target_p95: 1000,
           current_p95: this.extractMetricValue(results.find(r => r.testName === 'graph-execution-load'), 'response_time_p95'),
           status: this.extractMetricValue(results.find(r => r.testName === 'graph-execution-load'), 'response_time_p95') < 1000 ? 'passed' : 'failed'
-  }
+
         websocket: {
           target_connections: 1000,
           status: 'passed' // Would be calculated based on actual metrics
-  }
+
         auth: {
           target_login_time: 800,
           status: 'passed' // Would be calculated based on actual metrics
-        }
-      }
+
+
     };
-  }
+
 
   /**
    * Generate CSV report for data analysis
@@ -580,7 +586,7 @@ export class K6PerformanceIntegration {
     ]);
 
     return [headers, ...rows].map(row => row.join(',')).join('\n');
-  }
+
 
   // Utility methods
   private getTestSuiteConfig(name: string, scenario: string, environment: string): K6TestSuite {
@@ -592,7 +598,7 @@ export class K6PerformanceIntegration {
         tests: ['graph-execution-load', 'auth-load'],
         thresholds: 'standard' as const,
         maxDuration: '10m'
-  }
+
       smoke: {
         name: 'smoke',
         scenario: scenario as any,
@@ -600,7 +606,7 @@ export class K6PerformanceIntegration {
         tests: ['graph-execution-load'],
         thresholds: 'standard' as const,
         maxDuration: '5m'
-  }
+
       staging: {
         name: 'staging',
         scenario: scenario as any,
@@ -608,11 +614,11 @@ export class K6PerformanceIntegration {
         tests: ['graph-execution-load', 'websocket-collaboration', 'auth-load'],
         thresholds: 'enterprise' as const,
         maxDuration: '30m'
-      }
+
     };
 
     return suites[name as keyof typeof suites] || suites.ci;
-  }
+
 
   private parseDuration(duration: string): number {
     const match = duration.match(/(\d+)([ms])/);
@@ -622,12 +628,12 @@ export class K6PerformanceIntegration {
     const unit = match[2];
 
     return unit === 'm' ? value * 60 * 1000 : value * 1000;
-  }
+
 
   private sleep(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   private extractMetricValue(result: LoadTestResult, key: string): number | undefined {
     // Extract specific metrics from the result structure
@@ -644,27 +650,27 @@ export class K6PerformanceIntegration {
       return metrics?.websocket?.ws_connection_errors?.count;
     default:
       return undefined;
-    }
-  }
+
+
 
   private formatMetric(value: number | undefined): string {
     if (value === undefined) return 'N/A';
     return Math.round(value * 100) / 100;
-  }
+
 
   private async loadPerformanceBaselines(suite: K6TestSuite): Promise<any> {
 
     // In real implementation, load from database or file system
     // For now, return null to indicate no baselines
     return null;
-  }
+
 
   private async savePerformanceBaselines(results: LoadTestResult[], suite: K6TestSuite): Promise<void> {
 
     // In real implementation, save to database or file system
     console.log(`💾 Saving performance baselines for suite: ${suite.name}`);
-  }
-}
+
+
 
 // Export for use in CLI and tests
 export { K6PerformanceIntegration };

@@ -138,7 +138,7 @@ database: {
     };
     try { }
     catch (err) {
-        console.error(`Failed to ${action},)}
+        console.error(`Failed to ${action})},
   alert:`, err);
     }
 }

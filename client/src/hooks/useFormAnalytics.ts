@@ -1,18 +1,20 @@
 // Epic 11 Form Analytics Hook
 // Track user interactions with forms for UX optimization
 import { useCallback, useRef } from 'react';
-}
+
+
 interface FormAnalyticsData {
   sessionId: string;,
-  formType: string;
+  formType: string;,
   fieldInteractions: Map<string, {,
   focusTime?: number;
   focusCount: number;,
-  changeCount: number;
+  changeCount: number;,
   errorCount: number;
   lastValue?: string;
-}
-}>;
+
+
+>;
   stepTimes: Map<number, number>;
   startTime: number;
 
@@ -108,7 +110,7 @@ function generateSessionId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;}
 
 // Analytics sending functions
-async function sendFieldAnalytics(fieldName: string,)
+async function sendFieldAnalytics(fieldName: string);
   eventType: string,
   data: any): Promise<void> {,
   try {
@@ -126,9 +128,9 @@ async function sendFieldAnalytics(fieldName: string,)
   eventType,
   ...data,
   timestamp: new Date().toISOString(),
-}
+
     });
-  } catch (error) {
+ catch (error) {
   console.error('Failed to send field analytics:', error);
   async function sendStepAnalytics((stepNumber: number,
   formType: string): Promise<void> {,
@@ -152,11 +154,11 @@ async function sendFieldAnalytics(fieldName: string,)
   stepNumber,
   formType,
   timestamp: new Date().toISOString(),
-}
+
     });
-  } catch (error) {
+ catch (error) {
   console.error('Failed to send step analytics:', error);
-  async function sendCompletionAnalytics(success: boolean,)
+  async function sendCompletionAnalytics(success: boolean),
   formType: string,
   data: any): Promise<void> {,
   try {
@@ -181,11 +183,11 @@ async function sendFieldAnalytics(fieldName: string,)
   formType,
   ...data,
   timestamp: new Date().toISOString(),
-}
+
     });
-  } catch (error) {
+ catch (error) {
   console.error('Failed to send completion analytics:', error);
-  async function sendAbandonmentAnalytics(currentStep: number,)
+  async function sendAbandonmentAnalytics(currentStep: number),
   formType: string,
   data: any): Promise<void> {,
   try {
@@ -210,9 +212,9 @@ async function sendFieldAnalytics(fieldName: string,)
   formType,
   ...data,
   timestamp: new Date().toISOString(),
-}
+
     });
-  } catch (error) {
+ catch (error) {
   console.error('Failed to send abandonment analytics:', error);
   // Advanced form analytics helper
   export const useAdvancedFormAnalytics = () => {
@@ -220,11 +222,11 @@ async function sendFieldAnalytics(fieldName: string,)
   fieldName: string,
   isValid: boolean,
   validationTime: number,
-  errorMessage?: string) => {
+  errorMessage?: string) => {,
   try {
   await fetch('/analytics/field-validation', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -233,9 +235,9 @@ async function sendFieldAnalytics(fieldName: string,)
   validationTime,
   errorMessage,
   timestamp: new Date().toISOString(),
-}
+
       });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to send validation analytics:', error);
 }, []);
   const trackUserHesitation = useCallback(async (;);
@@ -244,16 +246,16 @@ async function sendFieldAnalytics(fieldName: string,)
   try {
   await fetch('/analytics/user-hesitation', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
   fieldName,
   hesitationTime,
   timestamp: new Date().toISOString(),
-}
+
       });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to send hesitation analytics:', error);
 }, []);
   const trackFormErrors = useCallback(async (;);
@@ -262,7 +264,7 @@ async function sendFieldAnalytics(fieldName: string,)
   try {
   await fetch('/analytics/form-errors', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
@@ -272,9 +274,9 @@ async function sendFieldAnalytics(fieldName: string,)
   return acc;
 }, {} as Record<string, boolean>),
           timestamp: new Date().toISOString();
-  }
+
       });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to send error analytics:', error);
 }, []);
   return {
@@ -287,9 +289,8 @@ async function sendFieldAnalytics(fieldName: string,)
 // Type definitions for window.gtag
 declare global {
   interface Window {
-    gtag: (),
-      command: string,
-      action: string,
-      parameters?: Record<string, any>
-    ) => void;
-}
+  gtag: (),
+  command: string,
+  action: string,
+  parameters?: Record<string, any>) => void;
+

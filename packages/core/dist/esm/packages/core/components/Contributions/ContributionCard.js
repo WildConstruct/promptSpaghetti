@@ -231,28 +231,28 @@ div >
 div >
     _jsx("style", { children: `
         .contribution-card {
-          background: #ffffff;
+          background: #ffffff;,
   border: 1px solid #e5e7eb;
-          border-radius: 12px;
+          border-radius: 12px;,
   padding: 20px;
-          transition: all 0.2s ease;
+          transition: all 0.2s ease;,
   display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 16px;
         .contribution-card:hover {
           border-color: #d1d5db;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         .contribution-card.compact {
-          padding: 16px;
+          padding: 16px;,
   gap: 12px;
         .card-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: center;,
   gap: 12px;
         .type-badge {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 6px;
           padding: 6px 10px;
           border-radius: 6px;
@@ -274,7 +274,7 @@ div >
         .contribution-title {
           margin: 0 0 8px 0;
           font-size: 18px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           line-height: 1.4;
         .compact .contribution-title {
@@ -282,15 +282,15 @@ div >
           margin-bottom: 4px;
         .contribution-description {
           margin: 0 0 12px 0;
-          font-size: 14px;
+          font-size: 14px;,
   color: #6b7280;
           line-height: 1.5;
         .tags-container {
           display: flex;
-          flex-wrap: wrap;
+          flex-wrap: wrap;,
   gap: 6px;
         .tag {
-          background: #f3f4f6;
+          background: #f3f4f6;,
   color: #4b5563;
           padding: 4px 8px;
           border-radius: 4px;
@@ -299,78 +299,78 @@ div >
           text-transform: uppercase;
           letter-spacing: 0.3px;
         .more-tags {
-          background: #e5e7eb;
+          background: #e5e7eb;,
   color: #6b7280;
         .card-metrics {
-          display: flex;
+          display: flex;,
   gap: 16px;
           padding-top: 12px;
           border-top: 1px solid #f3f4f6;
         .metric {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 4px;
-          font-size: 13px;
+          font-size: 13px;,
   color: #6b7280;
         .card-footer {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: center;,
   gap: 12px;
           padding-top: 12px;
           border-top: 1px solid #f3f4f6;
         .footer-info {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 2px;
           flex: 1;
           min-width: 0;
         .contributor-name {
           font-size: 13px;
-          font-weight: 500;
+          font-weight: 500;,
   color: #374151;
           truncate;
         .date {
-          font-size: 12px;
+          font-size: 12px;,
   color: #9ca3af;
         .card-actions {
-          display: flex;
+          display: flex;,
   gap: 6px;
           flex-shrink: 0;
         .action-btn {
-          background: #f9fafb;
+          background: #f9fafb;,
   border: 1px solid #e5e7eb;
-          border-radius: 6px;
+          border-radius: 6px;,
   padding: 6px;
-          cursor: pointer;
+          cursor: pointer;,
   color: #6b7280;
-          transition: all 0.2s ease;
+          transition: all 0.2s ease;,
   display: flex;
           align-items: center;
           justify-content: center;
         .action-btn:hover {,
   background: #f3f4f6;
-          border-color: #d1d5db;
+          border-color: #d1d5db;,
   color: #374151;
         .edit-btn:hover {,
   background: #eff6ff;
-          border-color: #3b82f6;
+          border-color: #3b82f6;,
   color: #3b82f6;
         .delete-btn:hover {,
   background: #fef2f2;
-          border-color: #ef4444;
+          border-color: #ef4444;,
   color: #ef4444;
         .view-btn:hover {,
   background: #ecfdf5;
-          border-color: #10b981;
+          border-color: #10b981;,
   color: #10b981;
         @media (max-width: 640px) {
           .contribution-card {
-            padding: 16px;
+            padding: 16px;,
   gap: 12px;
           .card-header {
             flex-direction: column;
-            align-items: stretch;
+            align-items: stretch;,
   gap: 8px;
           .type-badge {
             align-self: flex-start;
@@ -378,7 +378,7 @@ div >
             gap: 12px;
           .card-footer {
             flex-direction: column;
-            align-items: stretch;
+            align-items: stretch;,
   gap: 8px;
           .card-actions {
             align-self: flex-end;

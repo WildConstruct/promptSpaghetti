@@ -17,66 +17,55 @@ import React from 'react';
 import { ConversionFunnelDefinition, ConversionStep, FunnelCategory } from '../../analytics/ConversionDataModel';
 
 }
-export interface FunnelConfigurationProps {
-    initialFunnel?: Partial<ConversionFunnelDefinition>;
+}
+export interface FunnelConfigurationProps { initialFunnel?: Partial<ConversionFunnelDefinition>;
     templates?: FunnelTemplate[];
     availableEvents?: EventDefinition[];
     availableProperties?: PropertyDefinition[];
     onSave?: (funnel: ConversionFunnelDefinition) => void;
     onCancel?: () => void;
-    onValidation?: (isValid: boolean, errors: ValidationError[]) => void;
-
-
+    onValidation?: (isValid: boolean, errors: ValidationError[]) => void }
 }
-export interface FunnelTemplate {
-    id: string;
+}
+export interface FunnelTemplate { id: string;
     name: string;
     description: string;
     category: FunnelCategory;
     steps: Partial<ConversionStep>[];
     defaultConfiguration: Partial<ConversionFunnelDefinition>;
-    tags: string[];
-
-
+    tags: string[] }
 }
-export interface EventDefinition {
-    type: string;
+}
+export interface EventDefinition { type: string;
     name: string;
     description: string;
     category: string;
     properties: PropertyDefinition[];
-    examples: unknown[];
-
-
+    examples: unknown[] }
 }
-export interface PropertyDefinition {
-    path: string;
+}
+export interface PropertyDefinition { path: string;
     name: string;
     type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
     description: string;
     possibleValues?: unknown[];
-    validation?: PropertyValidation;
-
-
+    validation?: PropertyValidation }
 }
-export interface PropertyValidation {
-    required?: boolean;
+}
+export interface PropertyValidation { required?: boolean;
     minLength?: number;
     maxLength?: number;
     min?: number;
     max?: number;
     pattern?: string;
-    customValidator?: string;
-
-
+    customValidator?: string }
 }
-export interface ValidationError {
-    field: string;
+}
+export interface ValidationError { field: string;
     message: string;
     severity: 'error' | 'warning' | 'info';
-    suggestion?: string;
-
-
+    suggestion?: string }
+}
 }
 export interface DragItem {
     type: 'step' | 'condition' | 'path';
@@ -90,4 +79,5 @@ export interface DragItem {
 export declare const FunnelConfiguration: React.FC<FunnelConfigurationProps>;
 export default FunnelConfiguration;
 //# sourceMappingURL=FunnelConfiguration.d.ts.map
+}
 }

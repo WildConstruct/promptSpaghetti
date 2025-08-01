@@ -6,7 +6,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
-}
+
+
 interface AuthLayoutProps {
   children: React.ReactNode;,
   title: string;
@@ -15,7 +16,7 @@ interface AuthLayoutProps {
   showBranding?: boolean;
   maxWidth?: string;
   backgroundPattern?: boolean;
-  export const AuthLayout: React.FC<AuthLayoutProps> = ({,)
+  export const AuthLayout: React.FC<AuthLayoutProps> = ({),
   children,
   title,
   subtitle,
@@ -23,7 +24,8 @@ interface AuthLayoutProps {
   showBranding = true,
   maxWidth = '450px',
   backgroundPattern = true
-}
+
+
 }) => {
   const location = useLocation();
   const { error, clearError, isLoading } = useAuthStore();
@@ -34,17 +36,17 @@ interface AuthLayoutProps {
   }, [location.pathname, error, clearError]);
   const getNavigationLinks = () => {
   const currentPath = location.pathname;
-  const links = [;
+  const links = [
   {
   path: '/login',
   label: 'Sign In',
   description: 'Access your account',
-}
+
       {
   path: '/register',
   label: 'Create Account',
   description: 'Join Prompt Spaghetti',
-}
+
       {
   path: '/reset-password',
   label: 'Reset Password',
@@ -56,7 +58,7 @@ interface AuthLayoutProps {
   radial-gradient(circle at 1px 1px, rgba(0,123,255,0.15) 1px, transparent 0)
   `,
   backgroundSize: '20px 20px',
-} : {};
+ : {};
   return;
     <div style={{
   minHeight: '100vh',
@@ -66,7 +68,7 @@ interface AuthLayoutProps {
   backgroundColor: '#f8f9fa',
   padding: '20px',
   ...backgroundStyle
-}}>
+}>
       {/* Background decoration */}
       <div style={{
   position: 'fixed',
@@ -77,7 +79,7 @@ interface AuthLayoutProps {
   opacity: 0.05,
   backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23000000" fill-opacity="1"%3E%3Ccircle cx="7" cy="7" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
   pointerEvents: 'none',
-}} />
+} />
       <div style={{
   maxWidth,
   width: '100%',
@@ -87,20 +89,20 @@ interface AuthLayoutProps {
   padding: '48px',
   position: 'relative',
   zIndex: 1,
-}}>
+}>
         {/* Branding Header */}
         {showBranding && ()
           <div style={{
   textAlign: 'center',
   marginBottom: '40px',
-}}>
+}>
             <Link 
               to="/" 
               style={{
   textDecoration: 'none',
   color: 'inherit',
   display: 'inline-block',
-}}
+}
             >
               <div style={{
   width: '60px',
@@ -114,7 +116,7 @@ interface AuthLayoutProps {
   fontSize: '24px',
   color: 'white',
   fontWeight: 'bold',
-}}>
+}>
                 🧠
               </div>
               <h1 style={{
@@ -122,14 +124,14 @@ interface AuthLayoutProps {
   fontWeight: 'bold',
   color: '#333',
   margin: '0 0 4px 0',
-}}>
+}>
                 Prompt Spaghetti
               </h1>
               <p style={{
   fontSize: '14px',
   color: '#666',
   margin: 0,
-}}>
+}>
                 Visual Prompt Engineering
               </p>
             </Link>
@@ -139,13 +141,13 @@ interface AuthLayoutProps {
         <div style={{
   textAlign: 'center',
   marginBottom: '32px',
-}}>
+}>
           <h2 style={{
   fontSize: '28px',
   fontWeight: 'bold',
   color: '#333',
   marginBottom: '8px',
-}}>
+}>
             {title}
           </h2>
           {subtitle && ()
@@ -154,7 +156,7 @@ interface AuthLayoutProps {
   fontSize: '16px',
   lineHeight: '1.5',
   margin: 0,
-}}>
+}>
               {subtitle}
             </p>
           )}
@@ -172,7 +174,7 @@ interface AuthLayoutProps {
   display: 'flex',
   alignItems: 'flex-start',
   gap: '12px',
-}}>
+}>
             <span style={{ fontSize: '16px', flexShrink: 0 }}>⚠️</span>
             <div style={{ flex: 1 }}>
               <strong>Error:</strong> {error}
@@ -188,7 +190,7 @@ interface AuthLayoutProps {
   padding: '0',
   lineHeight: '1',
   flexShrink: 0,
-}}
+}
               title="Dismiss"
             >
               ×
@@ -210,7 +212,7 @@ interface AuthLayoutProps {
   alignItems: 'center',
   justifyContent: 'center',
   gap: '12px',
-}}>
+}>
             <div style={{
   width: '16px',
   height: '16px',
@@ -218,7 +220,7 @@ interface AuthLayoutProps {
   borderTop: '2px solid transparent',
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
-}} />
+} />
             Processing...
           </div>
         )}
@@ -231,12 +233,12 @@ interface AuthLayoutProps {
           <div style={{
   textAlign: 'center',
   fontSize: '14px',
-}}>
+}>
             <div style={{
   display: 'flex',
   flexDirection: 'column',
   gap: '12px',
-}}>
+}>
               {getNavigationLinks().map(link => ()
                 <Link
                   key={link.path}
@@ -248,13 +250,13 @@ interface AuthLayoutProps {
   borderRadius: '6px',
   transition: 'background-color 0.2s',
   display: 'block',
-}}
+}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = '#f8f9fa';
-                  }}
+}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
-                  }}
+}
                 >
                   <div style={{ fontWeight: '500' }}>{link.label}</div>
                   <div style={{ fontSize: '12px', color: '#666' }}>
@@ -271,7 +273,7 @@ interface AuthLayoutProps {
   paddingTop: '24px',
   borderTop: '1px solid #eee',
   textAlign: 'center',
-}}>
+}>
           <div style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
             By continuing, you agree to our{' '}
             <Link to="/terms" style={{ color: '#007bff', textDecoration: 'none' }}>
@@ -291,7 +293,7 @@ interface AuthLayoutProps {
   display: 'inline-flex',
   alignItems: 'center',
   gap: '4px',
-}}
+}
           >
             ← Back to Editor
           </Link>

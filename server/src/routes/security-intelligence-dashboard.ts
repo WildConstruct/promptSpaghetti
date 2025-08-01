@@ -12,7 +12,7 @@ import {
   SecurityIntelligenceDashboardConfig,
   DashboardWidget,
   DashboardFilter
-} from '../services/SecurityIntelligenceDashboard';
+ from '../services/SecurityIntelligenceDashboard';
 import { SecurityIntelligenceDataPipeline } from '../services/SecurityIntelligenceDataPipeline';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../database/analytics-dao';
@@ -21,90 +21,98 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
 // Request/Response Type Definitions
-}
-}
+
+
+
 interface CreateDashboardRequest {
   Body: {
     name: string;
     widgets: DashboardWidget[];
     user_id?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface UpdateDashboardRequest {
   Params: {
     dashboardId: string;
-}
-}
+
+
+
   };
   Body: {
     widgets: DashboardWidget[];
   };
-}
 
-}
-}
+
+
+
 interface GetDashboardRequest {
   Params: {
     dashboardId: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface DeleteDashboardRequest {
   Params: {
     dashboardId: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetWidgetDataRequest {
   Params: {
     dashboardId: string;
     widgetId: string;
-}
-}
+
+
+
   };
   Querystring: {
     refresh?: boolean;
     filters?: string; // JSON string of DashboardFilter[]
   };
-}
 
-}
-}
+
+
+
 interface GetSecurityAnalyticsRequest {
   Querystring: {
     start_time?: string;
     end_time?: string;
     include_predictions?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ExportDashboardRequest {
   Params: {
     dashboardId: string;
-}
-}
+
+
+
   };
   Querystring: {
     format?: 'json' | 'csv' | 'pdf';
   };
-}
+
 
 // Global dashboard instance
 let dashboardInstance: SecurityIntelligenceDashboard | null = null;
@@ -122,7 +130,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         historical_data_retention_days: 365,
         cache_ttl_seconds: 300,
         max_concurrent_dashboards: 1000
-  }
+
       analytics: {
         enabled: true,
         aggregation_intervals: [300, 3600, 86400, 604800],
@@ -131,7 +139,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         predictive_analytics_enabled: true,
         correlation_analysis_enabled: true,
         risk_scoring_enabled: true
-  }
+
       visualization: {
         enabled: true,
         chart_types: ['line', 'bar', 'pie', 'scatter', 'heatmap', 'geo', 'network', 'sankey', 'treemap', 'radar'],
@@ -140,7 +148,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         export_formats: ['png', 'pdf', 'svg', 'csv', 'json', 'excel'],
         real_time_charts: true,
         geo_mapping_enabled: true
-  }
+
       alerts: {
         enabled: true,
         threshold_based_alerts: true,
@@ -149,7 +157,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         alert_channels: ['email', 'slack', 'webhook', 'sms'],
         escalation_rules: true,
         auto_acknowledgment: false
-  }
+
       performance: {
         query_timeout_ms: 30000,
         max_data_points: 50000,
@@ -157,14 +165,14 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         cache_optimization: true,
         lazy_loading: true,
         compression_enabled: true
-  }
+
       epic_integration: {
         epic1_analytics_enabled: true,
         epic17_admin_enabled: true,
         cross_epic_dashboards: true,
         unified_navigation: true,
         shared_authentication: true
-      }
+
     };
 
     // Mock dependencies for demonstration - in production, these would be injected
@@ -189,25 +197,25 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
     try {
       await dashboardInstance.initialize();
       fastify.log.info('Security Intelligence Dashboard initialized successfully');
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to initialize Security Intelligence Dashboard:', error);
       throw error;
-    }
-  }
+
+
 
   // Authentication and authorization middleware
   fastify.addHook('preHandler', async (request: FastifyRequest, reply: FastifyReply) => {
     // Skip authentication for health check endpoints
     if (request.url.includes('/health') || request.url.includes('/status')) {
       return;
-    }
+
 
     // In production, implement proper authentication/authorization
     const authHeader = request.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       reply.code(401).send({ error: 'Authentication required' });
       return;
-    }
+
 
     // Mock user context - in production, decode JWT token
     (request as any).user = {
@@ -252,37 +260,37 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
                     x: { type: 'number' },
                     y: { type: 'number' },
                     z_index: { type: 'number' }
-                  }
-  }
+
+
                 size: {
                   type: 'object',
                   properties: {
                     width: { type: 'number' },
                     height: { type: 'number' }
-                  }
-                }
-              }
-            }
-  }
+
+
+
+
+
           user_id: { type: 'string' }
-        }
-  }
+
+
       response: {
         201: {
           type: 'object',
           properties: {
             dashboard_id: { type: 'string' },
             message: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { name, widgets, user_id } = request.body;
@@ -294,10 +302,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         dashboard_id: dashboardId,
         message: 'Dashboard created successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error creating dashboard:', error);
       reply.code(400).send({ error: (error as Error).message });
-    }
+
   });
 
   /**
@@ -312,24 +320,24 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         type: 'object',
         properties: {
           dashboardId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             dashboard_id: { type: 'string' },
             widgets: { type: 'array' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { dashboardId } = request.params;
@@ -339,10 +347,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         dashboard_id: dashboardId,
         widgets
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving dashboard:', error);
       reply.code(404).send({ error: (error as Error).message });
-    }
+
   });
 
   /**
@@ -357,30 +365,30 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         type: 'object',
         properties: {
           dashboardId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['widgets'],
         properties: {
           widgets: { type: 'array' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             message: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { dashboardId } = request.params;
@@ -389,10 +397,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
       await dashboardInstance!.updateDashboard(dashboardId, widgets);
 
       reply.send({ message: 'Dashboard updated successfully' });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error updating dashboard:', error);
       reply.code(400).send({ error: (error as Error).message });
-    }
+
   });
 
   /**
@@ -407,33 +415,33 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         type: 'object',
         properties: {
           dashboardId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             message: { type: 'string' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { dashboardId } = request.params;
       await dashboardInstance!.deleteDashboard(dashboardId);
 
       reply.send({ message: 'Dashboard deleted successfully' });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error deleting dashboard:', error);
       reply.code(404).send({ error: (error as Error).message });
-    }
+
   });
 
   /**
@@ -449,15 +457,15 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         properties: {
           dashboardId: { type: 'string' },
           widgetId: { type: 'string' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           refresh: { type: 'boolean' },
           filters: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -466,16 +474,16 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
             data: {},
             timestamp: { type: 'number' },
             cached: { type: 'boolean' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { dashboardId, widgetId } = request.params;
@@ -488,18 +496,18 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
       if (!widget) {
         reply.code(404).send({ error: 'Widget not found' });
         return;
-      }
+
 
       // Parse filters if provided
       let filters: DashboardFilter[] = [];
       if (filtersStr) {
         try {
           filters = JSON.parse(filtersStr);
-        } catch (error) {
+ catch (error) {
           reply.code(400).send({ error: 'Invalid filters format' });
           return;
-        }
-      }
+
+
 
       // Get widget data
       const data = await dashboardInstance!.getWidgetData(widgetId, widget, filters);
@@ -510,10 +518,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         timestamp: Date.now(),
         cached: !refresh
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving widget data:', error);
       reply.code(500).send({ error: (error as Error).message });
-    }
+
   });
 
   /**
@@ -530,8 +538,8 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
           start_time: { type: 'string', format: 'date-time' },
           end_time: { type: 'string', format: 'date-time' },
           include_predictions: { type: 'boolean' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -543,10 +551,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
             risk_metrics: { type: 'object' },
             operational_metrics: { type: 'object' },
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { start_time, end_time, include_predictions } = request.query;
@@ -563,10 +571,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         ...analytics,
         timestamp: Date.now()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving security analytics:', error);
       reply.code(500).send({ error: (error as Error).message });
-    }
+
   });
 
   /**
@@ -587,10 +595,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
             user_engagement: { type: 'object' },
             system_resource_usage: { type: 'object' },
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const metrics = await dashboardInstance!.getDashboardMetrics();
@@ -599,10 +607,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         ...metrics,
         timestamp: Date.now()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving dashboard metrics:', error);
       reply.code(500).send({ error: (error as Error).message });
-    }
+
   });
 
   /**
@@ -617,15 +625,15 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         type: 'object',
         properties: {
           dashboardId: { type: 'string' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           format: { type: 'string', enum: ['json', 'csv', 'pdf'] }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { dashboardId } = request.params;
@@ -646,10 +654,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         .header('Content-Type', contentTypes[format])
         .header('Content-Disposition', `attachment; filename="${filename}"`)
         .send(exportData);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error exporting dashboard:', error);
       reply.code(500).send({ error: (error as Error).message });
-    }
+
   });
 
   /**
@@ -667,10 +675,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
             status: { type: 'string' },
             health: { type: 'object' },
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const health = await dashboardInstance!.getHealthStatus();
@@ -680,14 +688,14 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         health,
         timestamp: Date.now()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving health status:', error);
       reply.code(500).send({
         status: 'unhealthy',
         error: (error as Error).message,
         timestamp: Date.now()
       });
-    }
+
   });
 
   /**
@@ -707,10 +715,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
             cache_size: { type: 'number' },
             configuration: { type: 'object' },
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const status = dashboardInstance!.getStatus();
@@ -719,10 +727,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         ...status,
         timestamp: Date.now()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving status:', error);
       reply.code(500).send({ error: (error as Error).message });
-    }
+
   });
 
   /**
@@ -783,10 +791,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
               break;
             default:
               fastify.log.warn(`Unknown WebSocket message type: ${data.type}`);
-          }
-        } catch (error) {
+
+ catch (error) {
           fastify.log.error('Error processing WebSocket message:', error);
-        }
+
       });
 
       // Handle connection close
@@ -818,7 +826,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         details: error.validation
       });
       return;
-    }
+
 
     reply.code(500).send({
       error: 'Internal server error',

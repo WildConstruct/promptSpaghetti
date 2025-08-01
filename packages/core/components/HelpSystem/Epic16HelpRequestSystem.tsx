@@ -5,103 +5,99 @@
  * functionality including dashboard, form, and intelligent routing.
  */
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  HelpRequest,
-  Epic16HelpRequestService,
+import { HelpRequest,
+  Epic16HelpRequestService }
   HelpRequestConfig
-} from '../../services/Epic16HelpRequestService';
+ from '../../services/Epic16HelpRequestService';
 import HelpRequestDashboard from './HelpRequestDashboard';
 import HelpRequestForm from './HelpRequestForm';
-}
-interface Epic16HelpRequestSystemProps {
-  userId: string;
+
+
+interface Epic16HelpRequestSystemProps { userId: string;
   userRole: 'user' | 'agent' | 'admin';
   userType: 'guest' | 'user' | 'seller' | 'buyer' | 'admin';
   userTier: 'free' | 'premium' | 'enterprise';
   config?: Partial<HelpRequestConfig>;
   onConfigChange?: (config: HelpRequestConfig) => void;
-  export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = ({,)
-  userId,
-  userRole,
-  userType,
-  userTier,
-  config,
+  export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = ({);
+  userId;
+  userRole;
+  userType;
+  userTier;
+  config }
   onConfigChange
-}
-}) => {
-  // Service instance
+
+
+}) => { // Service instance
   const helpService = useMemo(() => {
-    return new Epic16HelpRequestService(config);
-  }, [config]);
+    return new Epic16HelpRequestService(config) }, [config]);
   // State management
   const [_____selectedRequest, setSelectedRequest] = useState<HelpRequest | null>(null);
   const [view, setView] = useState<'dashboard' | 'form' | 'settings'>('dashboard');
-  const [notifications, setNotifications] = useState<Array<{
-  id: string;
+  const [notifications, setNotifications] = useState<Array<{ id: string;
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;
-  timestamp: Date;
-}>>([]);
+  timestamp: Date }>>([]);
   // Set up event listeners for service events
   useEffect(() => {
     const handleRequestSubmitted = (data: { request: HelpRequest }) => {
       setNotifications(prev => [...prev, {)
   id: `submitted-${data.request.id}`}
-},
-  type: 'success',
+
+  type: 'success'
         message: `Help request ${data.request.id} has been submitted`}
-},
+
   timestamp: new Date();
-  }]);
+]);
     };
     const handleRequestAutoResolved = (data: { request: HelpRequest }) => {
       setNotifications(prev => [...prev, {)
   id: `auto-resolved-${data.request.id}`}
-},
-  type: 'info',
+
+  type: 'info'
         message: `Help request ${data.request.id} was automatically resolved`}
-},
+
   timestamp: new Date();
-  }]);
+]);
     };
-    const handleRequestStatusChanged = (data: { ),
+    const handleRequestStatusChanged = (data: { )
   request: HelpRequest; 
-      oldStatus: string; ,
+  oldStatus: string }
   newStatus: string; 
     }) => {
       setNotifications(prev => [...prev, {)
   id: `status-${data.request.id}-${Date.now()}`}
-},
-  type: 'info',
+
+  type: 'info'
         message: `Help request ${data.request.id} status changed to ${data.newStatus}`}
-},
+
   timestamp: new Date();
-  }]);
+]);
     };
-    const handleRequestEscalated = (data: { ),
-  request: HelpRequest; 
-      reason: string; 
+    const handleRequestEscalated = (data: { )
+  request: HelpRequest }
+  reason: string; 
     }) => {
       setNotifications(prev => [...prev, {)
   id: `escalated-${data.request.id}`}
-},
-  type: 'warning',
+
+  type: 'warning'
         message: `Help request ${data.request.id} has been escalated`}
-},
+
   timestamp: new Date();
-  }]);
+]);
     };
-    const handleResponseAdded = (data: { ),
+    const handleResponseAdded = (data: { ) }
   request: HelpRequest; 
     }) => {
       setNotifications(prev => [...prev, {)
   id: `response-${data.request.id}-${Date.now()}`}
-},
-  type: 'info',
+
+  type: 'info'
         message: `New response added to help request ${data.request.id}`}
-},
+
   timestamp: new Date();
-  }]);
+]);
     };
     // Subscribe to events
     helpService.on('help_request_submitted', handleRequestSubmitted);
@@ -109,36 +105,26 @@ interface Epic16HelpRequestSystemProps {
     helpService.on('help_request_status_changed', handleRequestStatusChanged);
     helpService.on('help_request_escalated', handleRequestEscalated);
     helpService.on('help_response_added', handleResponseAdded);
-    return () => {
-      // Cleanup listeners
+    return () => { // Cleanup listeners
       helpService.off('help_request_submitted', handleRequestSubmitted);
       helpService.off('help_request_auto_resolved', handleRequestAutoResolved);
       helpService.off('help_request_status_changed', handleRequestStatusChanged);
       helpService.off('help_request_escalated', handleRequestEscalated);
-      helpService.off('help_response_added', handleResponseAdded);
-    };
+      helpService.off('help_response_added', handleResponseAdded) };
   }, [helpService]);
   // Auto-dismiss notifications
-  useEffect(() => {
-    if (notifications.length > 0) {
+  useEffect(() => { if (notifications.length > 0) {
       const timer = setTimeout(() => {
-        setNotifications(prev => prev.slice(1));
-      }, 5000);
+        setNotifications(prev => prev.slice(1)) }, 5000);
       return () => clearTimeout(timer);
   }, [notifications]);
   // Handle request selection
-  const handleRequestSelect = (request: HelpRequest) => {
-    setSelectedRequest(request);
-  };
+  const handleRequestSelect = (request: HelpRequest) => { setSelectedRequest(request) };
   // Handle form submission
-  const handleFormSubmitted = (request: HelpRequest) => {
-    setSelectedRequest(request);
-    setView('dashboard');
-  };
+  const handleFormSubmitted = (request: HelpRequest) => { setSelectedRequest(request);
+    setView('dashboard') };
   // Handle view navigation
-  const handleViewChange = (newView: 'dashboard' | 'form' | 'settings') => {
-    setView(newView);
-  };
+  const handleViewChange = (newView: 'dashboard' | 'form' | 'settings') => { setView(newView) };
   return;
     <div className="epic16-help-request-system h-full flex flex-col relative">
       {/* Navigation Header */}
@@ -147,32 +133,32 @@ interface Epic16HelpRequestSystemProps {
           <nav className="flex space-x-8">
             <button
               onClick={() => handleViewChange('dashboard')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   view === 'dashboard'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
             >
               Help Dashboard
             </button>
             <button
               onClick={() => handleViewChange('form')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   view === 'form'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
             >
               Submit Request
             </button>
             {userRole === 'admin' && ()
               <button
                 onClick={() => handleViewChange('settings')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   view === 'settings'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
               >
                 Settings
               </button>
@@ -229,14 +215,15 @@ interface Epic16HelpRequestSystemProps {
 };
 
 // Settings Component
-}
-interface HelpSystemSettingsProps {
-  helpService: Epic16HelpRequestService;
+
+
+interface HelpSystemSettingsProps { helpService: Epic16HelpRequestService;
   onConfigChange?: (config: HelpRequestConfig) => void;
-  const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({,)
-  helpService,
+  const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({);
+  helpService }
   onConfigChange
-}
+
+
 }) => {
   return;
     <div className="p-6">
@@ -383,25 +370,25 @@ interface HelpSystemSettingsProps {
 };
 
 // Notification System Component
-}
-interface NotificationSystemProps {
-  notifications: Array<{
+
+
+interface NotificationSystemProps { notifications: Array<{ }
   id: string;
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;
   timestamp: Date;
-}
-}>;
-const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {
-  if (notifications.length === 0) return null;
+
+
+>;
+const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => { if (notifications.length === 0) return null;
   return;
   <div className="fixed top-4 right-4 z-50 space-y-2">
   {notifications.slice(-3).map((notification) => {
   const colors = {
-  success: 'bg-green-50 border-green-200 text-green-700',
-  error: 'bg-red-50 border-red-200 text-red-700',
-  info: 'bg-blue-50 border-blue-200 text-blue-700',
-  warning: 'bg-yellow-50 border-yellow-200 text-yellow-700',
+  success: 'bg-green-50 border-green-200 text-green-700'
+  error: 'bg-red-50 border-red-200 text-red-700'
+  info: 'bg-blue-50 border-blue-200 text-blue-700'
+  warning: 'bg-yellow-50 border-yellow-200 text-yellow-700' }
 };
         return;
           <div

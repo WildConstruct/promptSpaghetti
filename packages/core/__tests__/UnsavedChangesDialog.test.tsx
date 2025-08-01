@@ -5,16 +5,13 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, jest } from '@jest/globals';
 import { UnsavedChangesDialog } from '../components/Dialogs/UnsavedChangesDialog';
-describe('UnsavedChangesDialog', () => {
-  const defaultProps = {
+describe('UnsavedChangesDialog', () => { const defaultProps = {
   isOpen: true,
-  onSave: jest.fn<unknown, unknown>(),
-  onDontSave: jest.fn<unknown, unknown>(),
-  onCancel: jest.fn<unknown, unknown>(),
+  onSave: jest.fn<unknown, unknown>()
+  onDontSave: jest.fn<unknown, unknown>()
+  onCancel: jest.fn<unknown, unknown>() }
 };
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   test('does not render when isOpen is false', () => {
     render();
       <UnsavedChangesDialog
@@ -113,10 +110,8 @@ describe('UnsavedChangesDialog', () => {
     // Click on the dialog content
     const dialogContent = screen.getByText('Unsaved Changes').closest('div');
     expect(dialogContent).toBeInTheDocument();
-    if (dialogContent) {
-      fireEvent.click(dialogContent);
-      expect(onCancel).not.toHaveBeenCalled();
-  });
+    if (dialogContent) { fireEvent.click(dialogContent);
+      expect(onCancel).not.toHaveBeenCalled() });
   test('has correct ARIA attributes and accessibility', () => {
     render(<UnsavedChangesDialog {...defaultProps} />);
     // Check that buttons are properly labeled
@@ -152,19 +147,19 @@ describe('UnsavedChangesDialog', () => {
     const { container } = render(<UnsavedChangesDialog {...defaultProps} />);
     // Check that the overlay covers the full screen
     const overlay = container.firstChild as HTMLElement;
-    expect(overlay).toHaveStyle({)
-  position: 'fixed',
-  top: '0px',
-  left: '0px',
-  right: '0px',
-  bottom: '0px',
-  zIndex: '10000',
+    expect(overlay).toHaveStyle({ )
+  position: 'fixed'
+  top: '0px'
+  left: '0px'
+  right: '0px'
+  bottom: '0px'
+  zIndex: '10000' }
 });
     // Check that the dialog is centered
-    expect(overlay).toHaveStyle({)
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+    expect(overlay).toHaveStyle({ )
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center' }
 });
   });
   test('handles multiple project names correctly', () => {

@@ -7,8 +7,8 @@
  */
 
 }
-export interface Badge {
-    id: string;
+}
+export interface Badge { id: string;
     name: string;
     description: string;
     category: BadgeCategory;
@@ -25,7 +25,7 @@ export interface Badge {
     metadata: {
         createdAt: number;
         updatedAt: number;
-        version: string;
+        version: string }
 }
     };
 
@@ -34,28 +34,26 @@ export type BadgeTier = 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
 export type BadgeRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 
 }
-export interface BadgeCriteria {
-    type: 'count' | 'threshold' | 'completion' | 'verification' | 'composite';
+}
+export interface BadgeCriteria { type: 'count' | 'threshold' | 'completion' | 'verification' | 'composite';
     metric?: string;
     target?: number;
     timeframe?: number;
     conditions?: Record<string, any>;
-    customLogic?: (user: UserBadgeProgress) => boolean;
-
+    customLogic?: (user: UserBadgeProgress) => boolean }
 }
-export interface UserBadge {
-    badgeId: string;
+}
+export interface UserBadge { badgeId: string;
     userId: string;
     unlockedAt: number;
     tier: BadgeTier;
     progress?: number;
     metadata?: Record<string, any>;
     isDisplayed: boolean;
-    isNotificationSent: boolean;
-
+    isNotificationSent: boolean }
 }
-export interface UserBadgeProgress {
-    userId: string;
+}
+export interface UserBadgeProgress { userId: string;
     badges: Map<string, UserBadge>;
     totalPoints: number;
     level: number;
@@ -72,20 +70,18 @@ export interface UserBadgeProgress {
         forumPosts: number;
         helpfulVotes: number;
         mentoringSessions: number;
-        workshopsAttended: number;
+        workshopsAttended: number }
 }
     };
-    achievements: {
-        firstTemplate: boolean;
+    achievements: { firstTemplate: boolean;
         firstCollaboration: boolean;
         firstSale: boolean;
         expertRating: boolean;
-        communityLeader: boolean;
-    };
+        communityLeader: boolean };
 
 }
-export interface BadgeUnlockEvent {
-    userId: string;
+}
+export interface BadgeUnlockEvent { userId: string;
     badgeId: string;
     unlockedAt: number;
     progress: number;
@@ -143,7 +139,7 @@ export declare class BadgeSystem {
         totalPoints: number;
         level: number;
         badgeCount: number;
-        rank: number;
+        rank: number }
 }
     }>;
     /**
@@ -161,13 +157,11 @@ export declare class BadgeSystem {
     /**
      * Get badge statistics
      */
-    getBadgeStatistics(): {
-        totalBadges: number;
+    getBadgeStatistics(): { totalBadges: number;
         totalUsers: number;
         mostPopularBadge: string;
         rarest: string;
-        averageBadgesPerUser: number;
-    };
+        averageBadgesPerUser: number };
 
 export declare const badgeSystem: BadgeSystem;
 export default badgeSystem;

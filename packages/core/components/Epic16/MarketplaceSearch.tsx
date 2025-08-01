@@ -6,53 +6,52 @@
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
-}
-export interface SearchFilters {
-  priceRange: [number, number]; // in cents
+
+export interface SearchFilters { priceRange: [number, number]; // in cents;
   tags: string;
-  rating: number; // minimum rating
-  compatibility: string; // Claude models
+  rating: number; // minimum rating;
+  compatibility: string; // Claude models }
   isAiGenerated?: boolean;
   sortBy: 'relevance' | 'price_low' | 'price_high' | 'rating' | 'downloads' | 'newest' | 'oldest';
   creatorId?: string;
-}
-interface SearchSuggestion {
-  text: string;
+
+
+
+interface SearchSuggestion { text: string;
   type: 'query' | 'tag' | 'creator' | 'template';
   count?: number;
-  icon?: string;
-}
-interface MarketplaceSearchProps {
-  onSearch: (query: string, filters: SearchFilters) => void;
+  icon?: string }
+
+
+interface MarketplaceSearchProps { onSearch: (query: string, filters: SearchFilters) => void;
   onFiltersChange?: (filters: SearchFilters) => void;
-  availableTags?: string;
-}
+  availableTags?: string }
+
   availableCreators?: Array<{ id: string; name: string; templateCount: number }>;
   availableModels?: string;
   searchSuggestions?: SearchSuggestion;
   isLoading?: boolean;
   resultCount?: number;
   className?: string;
-const defaultFilters: SearchFilters = {,
+const defaultFilters: SearchFilters = { ,
   priceRange: [0, 10000], // $0 to $100,
   tags: [],
   rating: 0,
   compatibility: [],
-  sortBy: 'relevance',
+  sortBy: 'relevance' }
 };
-}
-export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
-  onSearch,
-  onFiltersChange,
-  availableTags = [],
-  availableCreators = [],
-  availableModels = ['claude-3-haiku', 'claude-3-sonnet', 'claude-3-opus'],
-  searchSuggestions = [],
-  isLoading = false,
-  resultCount,
+
+export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({ )
+  onSearch
+  onFiltersChange
+  availableTags = []
+  availableCreators = []
+  availableModels = ['claude-3-haiku', 'claude-3-sonnet', 'claude-3-opus']
+  searchSuggestions = []
+  isLoading = false
+  resultCount }
   className = ''
-}) => {
-  const [query, setQuery] = useState('');
+}) => { const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<SearchFilters>(defaultFilters);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -66,61 +65,46 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
         suggestion.text.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredSuggestions(filtered.slice(0, 8));
-      setShowSuggestions(true);
-    } else {
-      setFilteredSuggestions([]);
-      setShowSuggestions(false);
-  }, [query, searchSuggestions]);
+      setShowSuggestions(true) } else { setFilteredSuggestions([]);
+      setShowSuggestions(false) }, [query, searchSuggestions]);
   // Handle clicks outside to close suggestions
-  useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => {,
-  if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-  setShowSuggestions(false);
-};
+  useEffect(() => { const handleClickOutside = (event: MouseEvent) => { }
+  if (searchRef.current && !searchRef.current.contains(event.target as Node)) { setShowSuggestions(false) };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-  const handleSearch = () => {
-    onSearch(query, filters);
-    setShowSuggestions(false);
-  };
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-  };
+  const handleSearch = () => { onSearch(query, filters);
+    setShowSuggestions(false) };
+  const handleKeyPress = (e: React.KeyboardEvent) => { if (e.key === 'Enter') {
+      handleSearch() };
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
     if (suggestion.type === 'tag') {
       updateFilters({ tags: [...filters.tags, suggestion.text] });
       setQuery('');
-    } else if (suggestion.type === 'creator') {
+ else if (suggestion.type === 'creator') {
       const creator = availableCreators.find(c => c.name === suggestion.text);
       if (creator) {
         updateFilters({ creatorId: creator.id });
         setQuery('');
-    } else {
-      setQuery(suggestion.text);
+ else { setQuery(suggestion.text);
       handleSearch();
-    setShowSuggestions(false);
-  };
+    setShowSuggestions(false) };
   const updateFilters = (newFilters: Partial<SearchFilters>) => {
     const updatedFilters = { ...filters, ...newFilters };
     setFilters(updatedFilters);
     onFiltersChange?.(updatedFilters);
     onSearch(query, updatedFilters);
   };
-  const clearFilters = () => {
-    setFilters(defaultFilters);
+  const clearFilters = () => { setFilters(defaultFilters);
     onFiltersChange?.(defaultFilters);
-    onSearch(query, defaultFilters);
-  };
+    onSearch(query, defaultFilters) };
   const removeTag = (tagToRemove: string) => {
     updateFilters({ tags: filters.tags.filter(tag => tag !== tagToRemove) });
   };
   const _____formatPrice = (cents: number) => {
-    return `$${(cents / 100).toFixed(0)}`;}
+    return `${(cents / 100).toFixed(0)}`;}
   };
-  const activeFilterCount = useMemo(() => {
-    let count = 0;
+  const activeFilterCount = useMemo(() => { let count = 0;
     if (filters.priceRange[0] > 0 || filters.priceRange[1] < 10000) count++;
     if (filters.tags.length > 0) count++;
     if (filters.rating > 0) count++;
@@ -128,8 +112,7 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
     if (filters.isAiGenerated !== undefined) count++;
     if (filters.creatorId) count++;
     if (filters.sortBy !== 'relevance') count++;
-    return count;
-  }, [filters]);
+    return count }, [filters]);
   return;
     <div className={`bg-white border-b border-gray-200 ${className}`}>}
       <div className="max-w-7xl mx-auto px-4 py-4">
@@ -217,11 +200,11 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center space-x-2 px-3 py-2 border rounded-md text-sm font-medium ${
+              className={ `flex items-center space-x-2 px-3 py-2 border rounded-md text-sm font-medium ${
   showFilters || activeFilterCount > 0
   ? 'border-blue-300 text-blue-700 bg-blue-50'
-  : 'border-gray-300 text-gray-700 hover:bg-gray-50',
-}`}
+  : 'border-gray-300 text-gray-700 hover:bg-gray-50' }
+`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v6.586a1 1 0 01-1.414.914l-4-2A1 1 0 018 18.586v-4.586a1 1 0 00-.293-.707L1.293 7.293A1 1 0 011 6.586V4z" />
@@ -347,11 +330,10 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
                         onChange={(e) => {
                           if (e.target.checked) {
                             updateFilters({ compatibility: [...filters.compatibility, model] });
-                          } else {
-  updateFilters({ )
-  compatibility: filters.compatibility.filter(m => m !== model),
+ else { updateFilters({ )
+  compatibility: filters.compatibility.filter(m => m !== model) }
 });
-                        }}
+}
                         className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="text-sm text-gray-700">{model}</span>

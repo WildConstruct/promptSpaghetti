@@ -19,6 +19,7 @@ const getNotificationIcon = (type) => {
             return AlertCircle;
     }
 };
+;
 const getNotificationColor = (type) => {
     switch (type) {
         case 'comment':

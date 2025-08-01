@@ -7,19 +7,17 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface LocalModelConfig {
-    endpoint: string;
+}
+export interface LocalModelConfig { endpoint: string;
     modelName: string;
     timeout?: number;
     maxRetries?: number;
     warmupOnInit?: boolean;
     modelType?: 'ollama' | 'huggingface' | 'custom';
-    authToken?: string;
-
-
+    authToken?: string }
 }
-export interface LocalRequestOptions {
-    temperature?: number;
+}
+export interface LocalRequestOptions { temperature?: number;
     max_tokens?: number;
     top_p?: number;
     top_k?: number;
@@ -28,23 +26,18 @@ export interface LocalRequestOptions {
     seed?: number;
     repeat_penalty?: number;
     context_length?: number;
-    system_prompt?: string;
-
-
+    system_prompt?: string }
 }
-export interface OllamaMessage {
-    role: 'system' | 'user' | 'assistant';
-    content: string;
-
-
 }
-export interface LocalModelResponse {
-    model: string;
+export interface OllamaMessage { role: 'system' | 'user' | 'assistant';
+    content: string }
+}
+}
+export interface LocalModelResponse { model: string;
     created_at: string;
     message?: {
         role: string;
-        content: string;
-
+        content: string }
 }
     };
     response?: string;

@@ -18,53 +18,36 @@ export type QualityAssessmentType = 'automated' | 'editorial' | 'community' | 'c
 export type WorkflowStage = 'automated_analysis' | 'editorial_review' | 'specialist_review' | 'final_approval' | 'published';
 
 }
-export interface CommunityComponentEvents {
-    'version:created': {
+}
+export interface CommunityComponentEvents { 'version:created': {
         version: ContentVersion;
-        contentId: string;
-
+        contentId: string }
 }
     };
-    'version:published': {
-        version: ContentVersion;
-        contentId: string;
-    };
-    'version:reviewed': {
-        version: ContentVersion;
-        feedback: ReviewFeedback;
-    };
-    'quality:assessed': {
-        metrics: CommunityContentQualityMetrics;
-        contentId: string;
-    };
-    'quality:improved': {
-        oldScore: number;
+    'version:published': { version: ContentVersion;
+        contentId: string };
+    'version:reviewed': { version: ContentVersion;
+        feedback: ReviewFeedback };
+    'quality:assessed': { metrics: CommunityContentQualityMetrics;
+        contentId: string };
+    'quality:improved': { oldScore: number;
         newScore: number;
-        contentId: string;
-    };
-    'quality:flagged': {
-        flag: QualityFlag;
-        contentId: string;
-    };
-    'workflow:updated': {
-        workflow: QualityAssessmentWorkflow;
-        contentId: string;
-    };
-    'workflow:escalated': {
-        workflow: QualityAssessmentWorkflow;
-        reason: string;
-    };
-    'workflow:completed': {
-        workflow: QualityAssessmentWorkflow;
-        outcome: string;
-    };
+        contentId: string };
+    'quality:flagged': { flag: QualityFlag;
+        contentId: string };
+    'workflow:updated': { workflow: QualityAssessmentWorkflow;
+        contentId: string };
+    'workflow:escalated': { workflow: QualityAssessmentWorkflow;
+        reason: string };
+    'workflow:completed': { workflow: QualityAssessmentWorkflow;
+        outcome: string };
 
 export declare     calculateOverallScore: (dimensions: Record<string, number>) => number;
     calculateGrade: (score: number) => "A+" | "A" | "B+" | "B" | "C+" | "C" | "D" | "F";
-    validateWorkflowTransition: (),
-      currentStage: WorkflowStage,
-      targetStage: WorkflowStage,
-      userRole: ContentVersionControlMode,
+    validateWorkflowTransition: ()
+      currentStage: WorkflowStage
+      targetStage: WorkflowStage
+      userRole: ContentVersionControlMode
     ) => boolean;
 };
 //# sourceMappingURL=index.d.ts.map

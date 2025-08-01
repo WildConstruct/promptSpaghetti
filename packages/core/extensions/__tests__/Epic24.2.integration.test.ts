@@ -14,7 +14,8 @@ import path from 'path';
 import os from 'os';
 
 // Mock comprehensive extension system
-}
+
+
 interface ExtensionSystem {
   loader: unknown;
   lifecycle: unknown;
@@ -32,7 +33,8 @@ interface ExtensionSystem {
   restart(): Promise<void>;
   getSystemHealth(): unknown;
   // Bulk operations
-}
+
+
   installMultiple(sources: string): Promise<Array<{source: string, success: boolean, error?: string}>>;
   updateAll(): Promise<void>;
 describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
@@ -40,56 +42,55 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
   let testDirectory: string;
   let mockExtensions: Map<string, any>;
   let systemEvents: Array<{type: string, data: unknown, timestamp: number}>;
-  beforeEach(async () => {
-  jest.clearAllMocks();
+  beforeEach(async () => { jest.clearAllMocks();
   // Create test directory
   testDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'extension-integration-'));
   mockExtensions = new Map();
   systemEvents = [];
   // Mock comprehensive extension system
   extensionSystem = {
-  loader: {
-  loadPlugin: jest.fn<unknown, unknown>(),
-  unloadPlugin: jest.fn<unknown, unknown>(),
-  validatePlugin: jest.fn<unknown, unknown>(),
-  getCachedPlugin: jest.fn<unknown, unknown>(),
-},
-  lifecycle: {
-  registerExtension: jest.fn<unknown, unknown>(),
-  activateExtension: jest.fn<unknown, unknown>(),
-  deactivateExtension: jest.fn<unknown, unknown>(),
-  unregisterExtension: jest.fn<unknown, unknown>(),
-  getExtensionState: jest.fn<unknown, unknown>(),
-  addEventListener: jest.fn<unknown, unknown>(),
-},
-  resolver: {
-  resolveDependencies: jest.fn<unknown, unknown>(),
-  detectCircularDependencies: jest.fn<unknown, unknown>(),
-  resolveConflicts: jest.fn<unknown, unknown>(),
-},
-  registry: {
-  register: jest.fn<unknown, unknown>(),
-  unregister: jest.fn<unknown, unknown>(),
-  findByName: jest.fn<unknown, unknown>(),
-  getAllRegistered: jest.fn<unknown, unknown>(),
-},
-  eventSystem: {
-  emit: jest.fn<unknown, unknown>(),
-  on: jest.fn<unknown, unknown>(),
-  off: jest.fn<unknown, unknown>(),
-}
+  loader: {,
+  loadPlugin: jest.fn<unknown, unknown>()
+  unloadPlugin: jest.fn<unknown, unknown>()
+  validatePlugin: jest.fn<unknown, unknown>()
+  getCachedPlugin: jest.fn<unknown, unknown>() }
+
+  lifecycle: { 
+  registerExtension: jest.fn<unknown, unknown>()
+  activateExtension: jest.fn<unknown, unknown>()
+  deactivateExtension: jest.fn<unknown, unknown>()
+  unregisterExtension: jest.fn<unknown, unknown>()
+  getExtensionState: jest.fn<unknown, unknown>()
+  addEventListener: jest.fn<unknown, unknown>() }
+
+  resolver: { 
+  resolveDependencies: jest.fn<unknown, unknown>()
+  detectCircularDependencies: jest.fn<unknown, unknown>()
+  resolveConflicts: jest.fn<unknown, unknown>() }
+
+  registry: { 
+  register: jest.fn<unknown, unknown>()
+  unregister: jest.fn<unknown, unknown>()
+  findByName: jest.fn<unknown, unknown>()
+  getAllRegistered: jest.fn<unknown, unknown>() }
+
+  eventSystem: { 
+  emit: jest.fn<unknown, unknown>()
+  on: jest.fn<unknown, unknown>()
+  off: jest.fn<unknown, unknown>() }
+
       // High-level operations
-      installExtension: jest.fn<unknown, unknown>(),
-      uninstallExtension: jest.fn<unknown, unknown>(),
-      enableExtension: jest.fn<unknown, unknown>(),
-      disableExtension: jest.fn<unknown, unknown>(),
+      installExtension: jest.fn<unknown, unknown>()
+      uninstallExtension: jest.fn<unknown, unknown>()
+      enableExtension: jest.fn<unknown, unknown>()
+      disableExtension: jest.fn<unknown, unknown>()
       // System operations
-      initialize: jest.fn<unknown, unknown>(),
-      shutdown: jest.fn<unknown, unknown>(),
-      restart: jest.fn<unknown, unknown>(),
-      getSystemHealth: jest.fn<unknown, unknown>(),
+      initialize: jest.fn<unknown, unknown>()
+      shutdown: jest.fn<unknown, unknown>()
+      restart: jest.fn<unknown, unknown>()
+      getSystemHealth: jest.fn<unknown, unknown>()
       // Bulk operations
-      installMultiple: jest.fn<unknown, unknown>(),
+      installMultiple: jest.fn<unknown, unknown>()
       updateAll: jest.fn<unknown, unknown>()
     };
     // Setup default behaviors
@@ -102,43 +103,36 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
     // Cleanup test directory
     try {
       await fs.rm(testDirectory, { recursive: true, force: true });
-    } catch (error) {
-      // Ignore cleanup errors
-    jest.restoreAllMocks();
-  });
+ catch (error) { // Ignore cleanup errors
+    jest.restoreAllMocks() });
   describe('1. Complete Extension Installation Workflow', () => {
     it('should handle complete extension installation from source to activation', async () => {
       const extensionSource = path.join(testDirectory, 'sample-extension');
       // Create realistic extension structure
       await fs.mkdir(extensionSource, { recursive: true });
-      const manifest = {
-  id: 'sample-extension',
-  name: 'Sample Extension',
-  version: '1.0.0',
-  description: 'Sample extension for integration testing',
-  main: 'index',
+      const manifest = { id: 'sample-extension'
+  name: 'Sample Extension'
+  version: '1.0.0'
+  description: 'Sample extension for integration testing'
+  main: 'index'
   dependencies: {
-  'base-utils': '^1.0.0',
-},
-  permissions: ['read', 'write'],
-        category: 'productivity'
+  'base-utils': '^1.0.0' }
+
+  permissions: ['read', 'write']
+        category: 'productivity';
   };
       await fs.writeFile()
-        path.join(extensionSource, 'package.json'),
+        path.join(extensionSource, 'package.json')
         JSON.stringify(manifest, null, 2)
       );
       await fs.writeFile()
-        path.join(extensionSource, 'index'),
+        path.join(extensionSource, 'index')
         `
-        module.exports = {
-  activate(context) {
+        module.exports = { activate(context) {
   console.log('Extension activated with context:', context);
-  return Promise.resolve();
-}
-          deactivate() {
-            console.log('Extension deactivated');
-            return Promise.resolve();
-        };
+  return Promise.resolve() }
+          deactivate() { console.log('Extension deactivated');
+            return Promise.resolve() };
         `
       );
       // Mock complete installation workflow
@@ -191,12 +185,11 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
           );
           await extensionSystem.resolver.resolveDependencies([plugin]);
           return true;
-        } catch (error) {
-  // Rollback operations
+ catch (error) { // Rollback operations
   await extensionSystem.loader.unloadPlugin('failing-extension');
   extensionSystem.eventSystem.emit('extensionInstallFailed', {)
-  extensionId: 'failing-extension',
-  error: (error as Error).message,
+  extensionId: 'failing-extension'
+  error: (error as Error).message }
 });
           throw error;
       });
@@ -211,33 +204,30 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       expect(failEvent).toBeDefined();
     });
   });
-  describe('2. Multi-Extension Dependency Management', () => {
-    it('should install multiple interdependent extensions in correct order', async () => {
-      const extensionSources = [;
-        '/plugins/base-extension',
-        '/plugins/ui-extension',
+  describe('2. Multi-Extension Dependency Management', () => { it('should install multiple interdependent extensions in correct order', async () => {
+      const extensionSources = [
+        '/plugins/base-extension'
+        '/plugins/ui-extension'
         '/plugins/advanced-extension'
       ];
-      const mockExtensions = [;
+      const mockExtensions = [
         {
-          id: 'base-extension',
-          name: 'Base Extension',
-          version: '1.0.0',
+          id: 'base-extension'
+          name: 'Base Extension'
+          version: '1.0.0' }
           dependencies: {}
-  }
-        {
-  id: 'ui-extension',
-  name: 'UI Extension',
-  version: '1.0.0',
+
+        { id: 'ui-extension'
+  name: 'UI Extension'
+  version: '1.0.0'
   dependencies: {
-  'base-extension': '^1.0.0',
-}
-        {
-          id: 'advanced-extension',
-          name: 'Advanced Extension',
-          version: '1.0.0',
+  'base-extension': '^1.0.0' }
+
+        { id: 'advanced-extension'
+          name: 'Advanced Extension'
+          version: '1.0.0'
           dependencies: {
-            'base-extension': '^1.0.0',
+            'base-extension': '^1.0.0' }
             'ui-extension': '^1.0.0'
       ];
       const installationOrder: string = [];
@@ -245,11 +235,9 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
         const results: Array<{source: string, success: boolean, error?: string}> = [];
         // Load all extensions first
         const plugins = await Promise.all(;);
-          sources.map(async (source, index) => {
-            const plugin = mockExtensions[index];
+          sources.map(async (source, index) => { const plugin = mockExtensions[index];
             await extensionSystem.loader.loadPlugin(source);
-            return plugin;
-  }
+            return plugin }
         );
         // Resolve installation order based on dependencies
         const resolved = await extensionSystem.resolver.resolveDependencies(plugins);
@@ -261,7 +249,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
             installationOrder.push(plugin.id);
             results.push({ source: `/plugins/${plugin.id}`, success: true });}
             extensionSystem.eventSystem.emit('extensionInstalled', { extensionId: plugin.id });
-          } catch (error) {
+ catch (error) {
             results.push({)
   source: `/plugins/${plugin.id}`}
 },
@@ -291,46 +279,42 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       expect(installEvents[1].data.extensionId).toBe('ui-extension');
       expect(installEvents[2].data.extensionId).toBe('advanced-extension');
     });
-    it('should handle complex dependency conflicts across multiple extensions', async () => {
-  const conflictingSources = [;
+    it('should handle complex dependency conflicts across multiple extensions', async () => { const conflictingSources = [
   '/plugins/old-extension',
   '/plugins/new-extension'
   ];
-  const conflictingExtensions = [;
+  const conflictingExtensions = [
   {
   id: 'old-extension',
   name: 'Old Extension',
   version: '1.0.0',
-  dependencies: {
-  'shared-lib': '1.0.0'  // Requires old version,
-}
-        {
-  id: 'new-extension',
+  dependencies: {,
+  'shared-lib': '1.0.0'  // Requires old version }
+
+        { id: 'new-extension',
   name: 'New Extension',
   version: '1.0.0',
-  dependencies: {
+  dependencies: {,
   'shared-lib': '^2.0.0'  // Requires new version];
   extensionSystem.installMultiple.mockImplementationOnce(async (sources: string) => {,
   const plugins = conflictingExtensions;
   // Detect conflicts during resolution
-  const conflicts = [;
+  const conflicts = [
   {
   plugin: 'old-extension',
   dependency: 'shared-lib',
-  versions: ['1.0.0'],
-}
-          {
-            plugin: 'new-extension',
-            dependency: 'shared-lib',
+  versions: ['1.0.0'] }
+
+          { plugin: 'new-extension',
+            dependency: 'shared-lib' }
             versions: ['^2.0.0']];
         try {
           await extensionSystem.resolver.resolveConflicts(conflicts);
           return plugins.map(p => ({ source: `/plugins/${p.id}`, success: true }));}
-        } catch (error) {
-  extensionSystem.eventSystem.emit('dependencyConflict', {)
+ catch (error) { extensionSystem.eventSystem.emit('dependencyConflict', {)
   conflict: 'shared-lib',
   extensions: ['old-extension', 'new-extension'],
-  error: (error as Error).message,
+  error: (error as Error).message }
 });
           return plugins.map(p => ({)
   source: `/plugins/${p.id}`}
@@ -352,17 +336,14 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       expect(conflictEvent?.data.extensions).toContain('new-extension');
     });
   });
-  describe('3. System-Wide Extension Management', () => {
-    it('should enable/disable extensions with proper state management', async () => {
+  describe('3. System-Wide Extension Management', () => { it('should enable/disable extensions with proper state management', async () => {
       const extensionId = 'toggle-test-extension';
       // Mock extension states
       const states = ['inactive', 'activating', 'active', 'deactivating', 'inactive'];
       let stateIndex = 0;
       extensionSystem.lifecycle.getExtensionState.mockImplementation(() => {
-        return states[stateIndex];
-      });
-      extensionSystem.enableExtension.mockImplementationOnce(async (id: string) => {
-  expect(id).toBe(extensionId);
+        return states[stateIndex] });
+      extensionSystem.enableExtension.mockImplementationOnce(async (id: string) => { expect(id).toBe(extensionId);
   // Check current state
   const currentState = extensionSystem.lifecycle.getExtensionState(id);
   if (currentState === 'active') {
@@ -370,27 +351,26 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
   stateIndex = 1; // activating
   extensionSystem.eventSystem.emit('extensionStateChanged', { )
   extensionId: id,
-  state: 'activating',
+  state: 'activating' }
 });
         // Simulate activation process
         await new Promise(resolve => setTimeout(resolve, 10));
         stateIndex = 2; // active
         extensionSystem.eventSystem.emit('extensionStateChanged', { )
-          extensionId: id, 
+          extensionId: id }
           state: 'active' ;
   });
         return true;
       });
-      extensionSystem.disableExtension.mockImplementationOnce(async (id: string) => {
-  stateIndex = 3; // deactivating
+      extensionSystem.disableExtension.mockImplementationOnce(async (id: string) => { stateIndex = 3; // deactivating
   extensionSystem.eventSystem.emit('extensionStateChanged', { )
   extensionId: id,
-  state: 'deactivating',
+  state: 'deactivating' }
 });
         await new Promise(resolve => setTimeout(resolve, 10));
         stateIndex = 4; // inactive
         extensionSystem.eventSystem.emit('extensionStateChanged', { )
-          extensionId: id, 
+          extensionId: id }
           state: 'inactive' ;
   });
         return true;
@@ -430,11 +410,9 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
           extensionSystem.eventSystem.emit('extensionActivated', { extensionId: extId });
         extensionSystem.eventSystem.emit('systemReady', {});
       });
-      extensionSystem.restart.mockImplementationOnce(async () => {
-        await extensionSystem.shutdown();
+      extensionSystem.restart.mockImplementationOnce(async () => { await extensionSystem.shutdown();
         await new Promise(resolve => setTimeout(resolve, 50)); // Simulate restart delay
-        await extensionSystem.initialize();
-      });
+        await extensionSystem.initialize() });
       await extensionSystem.restart();
       // Verify shutdown events
       const shutdownEvent = systemEvents.find(e => e.type === 'systemShuttingDown');
@@ -478,27 +456,22 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
           operationTimes.push(Date.now() - opStart);
           results.push({ source: sources[i], success: true });
           // Emit progress events for large operations
-          if (i % 5 === 0) {
-  extensionSystem.eventSystem.emit('installProgress', {)
+          if (i % 5 === 0) { extensionSystem.eventSystem.emit('installProgress', {)
   completed: i + 1,
   total: extensions.length,
-  percentage: Math.round(((i + 1) / extensions.length) * 100),
+  percentage: Math.round(((i + 1) / extensions.length) * 100) }
 });
         return results;
       });
       // Mock fast operations
-      extensionSystem.resolver.resolveDependencies.mockImplementation(async () => {
-        await new Promise(resolve => setTimeout(resolve, 50)); // 50ms for 20 extensions
-        return extensions;
-      });
+      extensionSystem.resolver.resolveDependencies.mockImplementation(async () => { await new Promise(resolve => setTimeout(resolve, 50)); // 50ms for 20 extensions
+        return extensions });
       extensionSystem.loader.loadPlugin.mockImplementation(async () => {
         await new Promise(resolve => setTimeout(resolve, 10)); // 10ms per extension
         return {};
       });
-      extensionSystem.lifecycle.registerExtension.mockImplementation(async () => {
-        await new Promise(resolve => setTimeout(resolve, 5)); // 5ms per extension
-        return true;
-      });
+      extensionSystem.lifecycle.registerExtension.mockImplementation(async () => { await new Promise(resolve => setTimeout(resolve, 5)); // 5ms per extension
+        return true });
       const sources = extensions.map(ext => `/plugins/${ext.id}`);}
       const results = await extensionSystem.installMultiple(sources);
       const totalTime = Date.now() - startTime;
@@ -516,12 +489,11 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       const faultyExtensions = ['faulty-1', 'faulty-2'];
       const systemHealth = { status: 'healthy', activeExtensions: 0, errors: 0 };
       extensionSystem.getSystemHealth.mockReturnValue(systemHealth as unknown as unknown as unknown);
-      extensionSystem.enableExtension.mockImplementation(async (id: string) => {
-  if (faultyExtensions.includes(id)) {
+      extensionSystem.enableExtension.mockImplementation(async (id: string) => { if (faultyExtensions.includes(id)) {
   systemHealth.errors++;
   extensionSystem.eventSystem.emit('extensionError', {)
   extensionId: id,
-  error: 'Extension crashed during activation',
+  error: 'Extension crashed during activation' }
 });
           throw new Error('Extension crashed during activation');
         systemHealth.activeExtensions++;
@@ -549,8 +521,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       expect(errorEvents).toHaveLength(2);
     });
   });
-  describe('5. Real-World Usage Scenarios', () => {
-  it('should handle extension update workflow with backward compatibility', async () => {
+  describe('5. Real-World Usage Scenarios', () => { it('should handle extension update workflow with backward compatibility', async () => {
   const extensionId = 'updateable-extension';
   const oldVersion = '1.0.0';
   const newVersion = '1.1.0';
@@ -558,17 +529,16 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
   mockExtensions.set(extensionId, {)
   id: extensionId,
   version: oldVersion,
-  state: 'active',
+  state: 'active' }
 });
       extensionSystem.updateAll.mockImplementationOnce(async () => {
         extensionSystem.eventSystem.emit('updateStarted', {});
         // Find extensions that need updates
         const currentExt = mockExtensions.get(extensionId);
-        if (currentExt && currentExt.version !== newVersion) {
-  // Backup current state
+        if (currentExt && currentExt.version !== newVersion) { // Backup current state
   extensionSystem.eventSystem.emit('extensionBackup', {)
   extensionId,
-  version: currentExt.version,
+  version: currentExt.version }
 });
           // Deactivate for update
           await extensionSystem.lifecycle.deactivateExtension(extensionId);
@@ -577,25 +547,24 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
           mockExtensions.set(extensionId, currentExt);
           // Reactivate with new version
           await extensionSystem.lifecycle.activateExtension(extensionId);
-          extensionSystem.eventSystem.emit('extensionUpdated', {)
+          extensionSystem.eventSystem.emit('extensionUpdated', { )
   extensionId,
-            oldVersion,
+            oldVersion }
             newVersion
           });
         extensionSystem.eventSystem.emit('updateCompleted', {});
       });
       await extensionSystem.updateAll();
       // Verify update workflow events
-      const updateEvents = [;
+      const updateEvents = [
         'updateStarted',
         'extensionBackup', 
         'extensionUpdated',
         'updateCompleted'
       ];
-      updateEvents.forEach(eventType => {)
+      updateEvents.forEach(eventType => { )
   const event = systemEvents.find(e => e.type === eventType);
-        expect(event).toBeDefined();
-      });
+        expect(event).toBeDefined() });
       // Verify version was updated
       const updatedExt = mockExtensions.get(extensionId);
       expect(updatedExt?.version).toBe(newVersion);
@@ -603,49 +572,45 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       expect(updateEvent?.data.oldVersion).toBe(oldVersion);
       expect(updateEvent?.data.newVersion).toBe(newVersion);
     });
-    it('should handle extension marketplace integration scenario', async () => {
-  const marketplaceExtensions = [;
+    it('should handle extension marketplace integration scenario', async () => { const marketplaceExtensions = [
   {
   id: 'marketplace-ext-1',
   name: 'Productivity Suite',
   version: '2.0.0',
   rating: 4.5,
   downloads: 10000,
-  source: 'https://marketplace.example.com/productivity-suite',
-}
-        {
-          id: 'marketplace-ext-2', 
+  source: 'https://marketplace.example.com/productivity-suite' }
+
+        { id: 'marketplace-ext-2', 
           name: 'Theme Pack',
           version: '1.3.0',
           rating: 4.8,
-          downloads: 25000,
+          downloads: 25000 }
           source: 'https://marketplace.example.com/theme-pack'];
       extensionSystem.installMultiple.mockImplementationOnce(async (sources: string) => {
         const results: Array<{source: string, success: boolean}> = [];
-        for (const [index, source] of sources.entries()) {
-  const extension = marketplaceExtensions[index];
+        for (const [index, source] of sources.entries()) { const extension = marketplaceExtensions[index];
   // Simulate marketplace download
   extensionSystem.eventSystem.emit('downloadStarted', {)
-  extensionId: extension.id,
+  extensionId: extension.id }
   source
 });
           // Simulate download progress
-          for (let progress = 25; progress <= 100; progress += 25) {
-  extensionSystem.eventSystem.emit('downloadProgress', {)
-  extensionId: extension.id,
+          for (let progress = 25; progress <= 100; progress += 25) { extensionSystem.eventSystem.emit('downloadProgress', {)
+  extensionId: extension.id }
   progress
 });
           // Verify authenticity (mock)
-          extensionSystem.eventSystem.emit('verifyingSignature', {)
-  extensionId: extension.id,
+          extensionSystem.eventSystem.emit('verifyingSignature', { )
+  extensionId: extension.id }
 });
           // Install
           await extensionSystem.loader.loadPlugin(source);
           await extensionSystem.lifecycle.registerExtension(extension);
           extensionSystem.registry.register(extension);
-          extensionSystem.eventSystem.emit('extensionInstalled', {)
+          extensionSystem.eventSystem.emit('extensionInstalled', { )
   extensionId: extension.id,
-  source: 'marketplace',
+  source: 'marketplace' }
 });
           results.push({ source, success: true });
         return results;

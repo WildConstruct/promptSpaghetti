@@ -13,128 +13,122 @@
  */
 import { EnhancedConversionEvent, TouchPoint, AttributionModel } from './ConversionFunnelArchitecture';
 
-}
-export interface ValidationRule {
-  id: string;
+
+export interface ValidationRule { id: string;
   name: string;
   description: string;
   severity: 'error' | 'warning' | 'info';
   category: 'schema' | 'business' | 'privacy' | 'security' | 'quality';
   validator: (event: EnhancedConversionEvent, context?: ValidationContext) => ValidationResult;
   enabled: boolean;
-  weight: number; // For scoring,
-}
-}
-}
-export interface ValidationResult {
-  isValid: boolean;
-  score: number; // 0-100,
+  weight: number; // For scoring }
+
+
+
+
+export interface ValidationResult { isValid: boolean;
+  score: number; // 0-100 }
   errors: ValidationError;
   warnings: ValidationWarning;
   metadata: Record<string, any>;
-}
-}
-}
-export interface ValidationError {
-  rule: string;
+
+
+
+
+export interface ValidationError { rule: string;
   field?: string;
   message: string;
   severity: 'critical' | 'major' | 'minor';
   code: string;
-  suggestion?: string;
-}
-}
-}
-export interface ValidationWarning {
-  rule: string;
+  suggestion?: string }
+
+
+
+export interface ValidationWarning { rule: string;
   field?: string;
   message: string;
   code: string;
-  impact: string;
-}
-}
-}
-export interface ValidationContext {
-  userId: string;
+  impact: string }
+
+
+
+export interface ValidationContext { userId: string;
   sessionId: string;
   recentEvents: EnhancedConversionEvent;
   userProfile?: UserProfile;
   deviceProfile?: DeviceProfile;
-  behaviorProfile?: BehaviorProfile;
-}
-}
-}
-export interface UserProfile {
-  id: string;
+  behaviorProfile?: BehaviorProfile }
+
+
+
+export interface UserProfile { id: string;
   registrationDate: number;
   totalEvents: number;
   averageValue: number;
   riskScore: number;
   verificationStatus: 'verified' | 'pending' | 'suspicious';
   locationHistory: string;
-  deviceHistory: string;
-}
-}
-}
-export interface DeviceProfile {
-  fingerprint: string;
+  deviceHistory: string }
+
+
+
+export interface DeviceProfile { fingerprint: string;
   firstSeen: number;
   lastSeen: number;
   eventCount: number;
   userCount: number;
   riskIndicators: string;
-  characteristics: Record<string, any>;
-}
-}
-}
-export interface BehaviorProfile {
-  sessionCount: number;
+  characteristics: Record<string, any> }
+
+
+
+export interface BehaviorProfile { sessionCount: number;
   averageSessionDuration: number;
   typicalEventSequence: string;
   anomalyScore: number;
-  patterns: BehaviorPattern;
-}
-}
-}
-export interface BehaviorPattern {
-  type: 'temporal' | 'sequential' | 'volumetric' | 'value-based';
+  patterns: BehaviorPattern }
+
+
+
+export interface BehaviorPattern { type: 'temporal' | 'sequential' | 'volumetric' | 'value-based' }
   description: string;
   confidence: number;
   baseline: number;
   current: number;
   deviation: number;
-}
-}
-}
-export interface DeduplicationConfig {
-  enabled: boolean;
-  timeWindow: number; // milliseconds,
+
+
+
+
+export interface DeduplicationConfig { enabled: boolean;
+  timeWindow: number; // milliseconds;
   fuzzyMatching: boolean;
-  similarityThreshold: number; // 0-1,
+  similarityThreshold: number; // 0-1 }
   fields: DeduplicationField;
   exactMatchFields: string;
   fuzzyMatchFields: string;
-}
-}
-}
-export interface DeduplicationField {
-  name: string;
+
+
+
+
+export interface DeduplicationField { name: string;
   weight: number;
   transform?: (value: unknown) => string;
-  matcher?: (val1: unknown, val2: unknown) => number; // Returns similarity 0-1,
-}
-}
-}
-export interface DeduplicationResult {
-  isDuplicate: boolean;
+  matcher?: (val1: unknown, val2: unknown) => number; // Returns similarity 0-1 }
+
+
+
+
+export interface DeduplicationResult { isDuplicate: boolean;
   confidence: number;
   matchedEvent?: EnhancedConversionEvent;
-  matchType: 'exact' | 'fuzzy' | 'none';
+  matchType: 'exact' | 'fuzzy' | 'none' }
   matchScore: number;
   matchedFields: string;
-}
-}
-}
+
+
+
+
 export interface ValidationMetrics {
   totalValidated: number;
   passRate: number;
@@ -149,36 +143,34 @@ export interface ValidationMetrics {
   * Comprehensive Conversion Event Validator
   * Handles all aspects of event validation and deduplication
   */
-}
-}
-export class ConversionEventValidator {
-  private static readonly MAX_EVENT_AGE = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+
+export class ConversionEventValidator { private static readonly MAX_EVENT_AGE = 30 * 24 * 60 * 60 * 1000; // 30 days
   private rules: Map<string, ValidationRule> = new Map();
   private recentEvents: Map<string, EnhancedConversionEvent> = new Map();
   private userProfiles: Map<string, UserProfile> = new Map();
   private deviceProfiles: Map<string, DeviceProfile> = new Map();
   private behaviorProfiles: Map<string, BehaviorProfile> = new Map();
   private deduplicationConfig: DeduplicationConfig;
-  private metrics: ValidationMetrics = {,
-  totalValidated: 0,
-    passRate: 0,
-    averageScore: 0,
-    errorsByCategory: {},
-    errorsByRule: {},
-    duplicatesFound: 0,
-    anomaliesDetected: 0,
-    processingTime: 0,
+  private metrics: ValidationMetrics = {
+  totalValidated: 0
+    passRate: 0
+    averageScore: 0 }
+    errorsByCategory: {}
+    errorsByRule: {}
+    duplicatesFound: 0
+    anomaliesDetected: 0
+    processingTime: 0
     privacyViolations: 0;
   };
-  constructor(deduplicationConfig?: Partial<DeduplicationConfig>) {
-  this.deduplicationConfig = {
-  enabled: true,
-  timeWindow: 60000, // 1 minute,
-  fuzzyMatching: true,
-  similarityThreshold: 0.85,
-  fields: [],
-  exactMatchFields: ['userId', 'type', 'sessionId'],
-  fuzzyMatchFields: ['properties', 'value'],
+  constructor(deduplicationConfig?: Partial<DeduplicationConfig>) { this.deduplicationConfig = {
+  enabled: true
+  timeWindow: 60000, // 1 minute
+  fuzzyMatching: true
+  similarityThreshold: 0.85
+  fields: []
+  exactMatchFields: ['userId', 'type', 'sessionId']
+  fuzzyMatchFields: ['properties', 'value'] }
   ...deduplicationConfig
 };
     this.initializeDefaultRules();
@@ -187,11 +179,9 @@ export class ConversionEventValidator {
    * Validate conversion event
    */
   public async validateEvent(
-    event: EnhancedConversionEvent,
+    event: EnhancedConversionEvent
     context?: Partial<ValidationContext>
-  ): Promise<ValidationResult> {
-
-    const startTime = Date.now();
+  ): Promise<ValidationResult> { const startTime = Date.now();
     try {
       // Build full context
       const validationContext = await this.buildValidationContext(event, context);
@@ -199,119 +189,106 @@ export class ConversionEventValidator {
       const results = await this.runValidationRules(event, validationContext);
       // Update metrics
       this.updateMetrics(results, Date.now() - startTime);
-      return results;
-    } catch (error) {
-      return {
-        isValid: false,
-        score: 0,
-        errors: [{,
-  rule: 'validator_error',
+      return results } catch (error) { return {
+        isValid: false
+        score: 0
+        errors: [{
+  rule: 'validator_error' }
           message: `Validation failed: ${error}`}
-},
-  severity: 'critical',
-          code: 'VALIDATION_ERROR'
-  }],
-        warnings: [],
+
+  severity: 'critical'
+          code: 'VALIDATION_ERROR';
+]
+        warnings: []
         metadata: { error: String(error) }
       };
   /**
    * Check for duplicate events
    */
-  public async checkDuplication(event: EnhancedConversionEvent): Promise<DeduplicationResult> {
-
-  if (!this.deduplicationConfig.enabled) {
+  public async checkDuplication(event: EnhancedConversionEvent): Promise<DeduplicationResult> { if (!this.deduplicationConfig.enabled) {
   return {
-  isDuplicate: false,
-  confidence: 0,
-  matchType: 'none',
-  matchScore: 0,
-  matchedFields: [],
+  isDuplicate: false
+  confidence: 0
+  matchType: 'none'
+  matchScore: 0
+  matchedFields: [] }
 };
     const recentUserEvents = this.getRecentEvents(event.userId, this.deduplicationConfig.timeWindow);
-    for (const recentEvent of recentUserEvents) {
-  const matchResult = await this.compareEvents(event, recentEvent);
+    for (const recentEvent of recentUserEvents) { const matchResult = await this.compareEvents(event, recentEvent);
   if (matchResult.matchScore >= this.deduplicationConfig.similarityThreshold) {
   this.metrics.duplicatesFound++;
   return {
-  isDuplicate: true,
-  confidence: matchResult.matchScore,
-  matchedEvent: recentEvent,
-  matchType: matchResult.matchType,
-  matchScore: matchResult.matchScore,
-  matchedFields: matchResult.matchedFields,
+  isDuplicate: true
+  confidence: matchResult.matchScore
+  matchedEvent: recentEvent
+  matchType: matchResult.matchType
+  matchScore: matchResult.matchScore
+  matchedFields: matchResult.matchedFields }
 };
-    return {
-  isDuplicate: false,
-  confidence: 0,
-  matchType: 'none',
-  matchScore: 0,
-  matchedFields: [],
+    return { isDuplicate: false
+  confidence: 0
+  matchType: 'none'
+  matchScore: 0
+  matchedFields: [] }
 };
   /**
    * Register validation rule
    */
-  public registerRule(rule: ValidationRule): void {
-  this.rules.set(rule.id, rule);
+  public registerRule(rule: ValidationRule): void { this.rules.set(rule.id, rule);
   /**
   * Remove validation rule
   */
-  public removeRule(ruleId: string): boolean {,
+  public removeRule(ruleId: string): boolean {
   return this.rules.delete(ruleId);
   /**
   * Update user profile
   */
-  public updateUserProfile(userId: string, profile: Partial<UserProfile>): void {,
+  public updateUserProfile(userId: string, profile: Partial<UserProfile>): void {
   const existing = this.userProfiles.get(userId) || {
-  id: userId,
-  registrationDate: Date.now(),
-  totalEvents: 0,
-  averageValue: 0,
-  riskScore: 0,
-  verificationStatus: 'pending',
-  locationHistory: [],
-  deviceHistory: [],
+  id: userId
+  registrationDate: Date.now()
+  totalEvents: 0
+  averageValue: 0
+  riskScore: 0
+  verificationStatus: 'pending'
+  locationHistory: []
+  deviceHistory: [] }
 };
     this.userProfiles.set(userId, { ...existing, ...profile });
   private async buildValidationContext(event: EnhancedConversionEvent)
     context?: Partial<ValidationContext>
-  ): Promise<ValidationContext> {
-
-  const recentEvents = this.getRecentEvents(event.userId, 3600000); // Last hour;
+  ): Promise<ValidationContext> { const recentEvents = this.getRecentEvents(event.userId, 3600000); // Last hour;
   const userProfile = this.userProfiles.get(event.userId);
   const deviceProfile = this.deviceProfiles.get(event.deviceFingerprint || '');
   const behaviorProfile = this.behaviorProfiles.get(event.userId);
   return {
-  userId: event.userId,
-  sessionId: event.sessionId,
-  recentEvents,
-  userProfile,
-  deviceProfile,
-  behaviorProfile,
+  userId: event.userId
+  sessionId: event.sessionId
+  recentEvents
+  userProfile
+  deviceProfile
+  behaviorProfile }
   ...context
 };
   private async runValidationRules(((
-    event: EnhancedConversionEvent,
+    event: EnhancedConversionEvent
     context: ValidationContext
-  ): Promise<ValidationResult> {
-
-  const results: ValidationResult = [];
+  ): Promise<ValidationResult> { const results: ValidationResult = [];
   for (const rule of this.rules.values()) {
   if (!rule.enabled) continue;
   try {
   const result = rule.validator(event, context);
-  results.push(result);
-} catch (error) {
-        results.push({)
-  isValid: false,
-          score: 0,
-          errors: [{,
-  rule: rule.id,
+  results.push(result) } catch (error) { results.push({)
+  isValid: false
+          score: 0
+          errors: [{
+  rule: rule.id }
             message: `Rule execution failed: ${error}`}
-},
-  severity: 'major',
-            code: 'RULE_EXECUTION_ERROR'
-  }],
-          warnings: [],
+
+  severity: 'major'
+            code: 'RULE_EXECUTION_ERROR';
+]
+          warnings: []
           metadata: { error: String(error) }
         });
     // Aggregate results
@@ -321,8 +298,7 @@ export class ConversionEventValidator {
     const allWarnings: ValidationWarning = [];
     const scores: number = [];
     const metadata: Record<string, any> = {};
-    for (const result of results) {
-  allErrors.push(...result.errors);
+    for (const result of results) { allErrors.push(...result.errors);
   allWarnings.push(...result.warnings);
   scores.push(result.score);
   Object.assign(metadata, result.metadata);
@@ -331,25 +307,21 @@ export class ConversionEventValidator {
   : 0;
   const isValid = allErrors.filter(e => e.severity === 'critical').length === 0;
   return {
-  isValid,
-  score: averageScore,
-  errors: allErrors,
-  warnings: allWarnings,
+  isValid
+  score: averageScore
+  errors: allErrors
+  warnings: allWarnings
   metadata: {
-  ...metadata,
-  ruleCount: results.length,
-  scoreDistribution: scores,
+  ...metadata
+  ruleCount: results.length
+  scoreDistribution: scores }
 };
   private async compareEvents(((
-    event1: EnhancedConversionEvent,
+    event1: EnhancedConversionEvent
     event2: EnhancedConversionEvent
-  ): Promise<{
-  matchScore: number;
+  ): Promise<{ matchScore: number;
   matchType: 'exact' | 'fuzzy';
-  matchedFields: string;
-}> {
-
-    const matchedFields: string = [];
+  matchedFields: string }> { const matchedFields: string = [];
     let totalScore = 0;
     let totalWeight = 0;
     // Check exact match fields
@@ -366,7 +338,7 @@ export class ConversionEventValidator {
         totalWeight += weight;
         const similarity = this.calculateFieldSimilarity(;);
           this.getFieldValue(event1, field),
-          this.getFieldValue(event2, field),
+          this.getFieldValue(event2, field) }
           field
         );
         if (similarity > 0.7) {
@@ -377,24 +349,22 @@ export class ConversionEventValidator {
         const fuzzyMatches = matchedFields.filter(f => this.deduplicationConfig.fuzzyMatchFields.includes(f));
     const matchType = fuzzyMatches.length > 0 ? 'fuzzy' as const : 'exact' as const;
     return { matchScore, matchType, matchedFields };
-  private getFieldWeight(field: string): number {
-  const weights: Record<string, number> = {,
-  'userId': 1.0,
-  'type': 0.8,
-  'sessionId': 0.6,
-  'value': 0.4,
-  'properties': 0.3,
-  'timestamp': 0.2,
+  private getFieldWeight(field: string): number { const weights: Record<string, number> = {
+  'userId': 1.0
+  'type': 0.8
+  'sessionId': 0.6
+  'value': 0.4
+  'properties': 0.3
+  'timestamp': 0.2 }
 };
     return weights[field] || 0.1;
-  private getFieldValue(event: EnhancedConversionEvent, field: string): unknown {
-  const fieldMap: Record<string, unknown> = {,
-  'userId': event.userId,
-  'type': event.type,
-  'sessionId': event.sessionId,
-  'value': event.value,
-  'properties': event.properties,
-  'timestamp': Math.floor(event.timestamp / 1000) // Round to second,
+  private getFieldValue(event: EnhancedConversionEvent, field: string): unknown { const fieldMap: Record<string, unknown> = {
+  'userId': event.userId
+  'type': event.type
+  'sessionId': event.sessionId
+  'value': event.value
+  'properties': event.properties
+  'timestamp': Math.floor(event.timestamp / 1000) // Round to second }
 };
     return fieldMap[field];
   private calculateFieldSimilarity(val1: unknown, val2: unknown, field: string): number {
@@ -423,8 +393,7 @@ export class ConversionEventValidator {
     const keys2 = Object.keys(obj2 || {});
     const allKeys = new Set([...keys1, ...keys2]);
     let matches = 0;
-    for (const key of allKeys) {
-      if (obj1[key] === obj2[key]) {
+    for (const key of allKeys) { if (obj1[key] === obj2[key]) {
         matches++;
     return allKeys.size > 0 ? matches / allKeys.size : 1.0;
   private calculateStringSimilarity(str1: string, str2: string): number {
@@ -465,23 +434,22 @@ export class ConversionEventValidator {
           if (!event[field as keyof EnhancedConversionEvent]) {
             errors.push({)
   rule: 'required_fields',
-              field,
+              field }
               message: `Required field '${field}' is missing`}
 },
   severity: 'critical',
               code: 'MISSING_REQUIRED_FIELD',
               suggestion: `Ensure '${field}' is provided in the event data`}
             });
-        return {
-          isValid: errors.length === 0,
+        return { isValid: errors.length === 0,
           score: errors.length === 0 ? 100 : Math.max(0, 100 - errors.length * 25),
           errors,
-          warnings: [],
+          warnings: [] }
           metadata: { checkedFields: requiredFields }
         };
     });
     // Timestamp validation rule
-    this.registerRule({)
+    this.registerRule({ )
   id: 'timestamp_validation',
   name: 'Timestamp Validation',
   description: 'Validates event timestamp is within acceptable range',
@@ -500,34 +468,31 @@ export class ConversionEventValidator {
   field: 'timestamp',
   message: 'Event timestamp cannot be in the future',
   severity: 'critical',
-  code: 'FUTURE_TIMESTAMP',
+  code: 'FUTURE_TIMESTAMP' }
 });
-        } else if (eventAge > ConversionEventValidator.MAX_EVENT_AGE) {
-  errors.push({)
+ else if (eventAge > ConversionEventValidator.MAX_EVENT_AGE) { errors.push({)
   rule: 'timestamp_validation',
   field: 'timestamp',
   message: 'Event is too old to process',
   severity: 'major',
-  code: 'STALE_TIMESTAMP',
+  code: 'STALE_TIMESTAMP' }
 });
-        } else if (eventAge > 24 * 60 * 60 * 1000) {
-  warnings.push({)
+ else if (eventAge > 24 * 60 * 60 * 1000) { warnings.push({)
   rule: 'timestamp_validation',
   field: 'timestamp',
   message: 'Event is more than 24 hours old',
   code: 'OLD_TIMESTAMP',
-  impact: 'May affect attribution accuracy',
+  impact: 'May affect attribution accuracy' }
 });
-        return {
-          isValid: errors.length === 0,
+        return { isValid: errors.length === 0,
           score: errors.length === 0 ? 100 : Math.max(0, 100 - errors.length * 50),
           errors,
-          warnings,
+          warnings }
           metadata: { eventAge, maxAge: ConversionEventValidator.MAX_EVENT_AGE }
         };
     });
     // Value validation rule
-    this.registerRule({)
+    this.registerRule({ )
   id: 'value_validation',
   name: 'Value Validation',
   description: 'Validates event value is non-negative',
@@ -543,18 +508,17 @@ export class ConversionEventValidator {
   field: 'value',
   message: 'Event value cannot be negative',
   severity: 'major',
-  code: 'NEGATIVE_VALUE',
+  code: 'NEGATIVE_VALUE' }
 });
-        return {
-          isValid: errors.length === 0,
+        return { isValid: errors.length === 0,
           score: errors.length === 0 ? 100 : 0,
           errors,
-          warnings: [],
+          warnings: [] }
           metadata: { value: event.value }
         };
     });
     // Privacy compliance rule
-    this.registerRule({)
+    this.registerRule({ )
   id: 'privacy_compliance',
   name: 'Privacy Compliance Check',
   description: 'Validates privacy consent and compliance',
@@ -571,35 +535,32 @@ export class ConversionEventValidator {
   field: 'privacyConsent',
   message: 'Privacy consent information is required',
   severity: 'critical',
-  code: 'MISSING_PRIVACY_CONSENT',
+  code: 'MISSING_PRIVACY_CONSENT' }
 });
-        } else {
-  if (!event.privacyConsent.analytics) {
+ else { if (!event.privacyConsent.analytics) {
   errors.push({)
   rule: 'privacy_compliance',
   field: 'privacyConsent.analytics',
   message: 'Analytics consent is required for event processing',
   severity: 'major',
-  code: 'ANALYTICS_CONSENT_REQUIRED',
+  code: 'ANALYTICS_CONSENT_REQUIRED' }
 });
-          if (event.crossDeviceUserId && !event.privacyConsent.crossDevice) {
-  warnings.push({)
+          if (event.crossDeviceUserId && !event.privacyConsent.crossDevice) { warnings.push({)
   rule: 'privacy_compliance',
   field: 'crossDeviceUserId',
   message: 'Cross-device tracking without explicit consent',
   code: 'CROSS_DEVICE_CONSENT_WARNING',
-  impact: 'May violate privacy regulations',
+  impact: 'May violate privacy regulations' }
 });
-        return {
-          isValid: errors.length === 0,
+        return { isValid: errors.length === 0,
           score: errors.length === 0 ? 100 : 0,
           errors,
-          warnings,
+          warnings }
           metadata: { privacyChecked: true }
         };
     });
     // Anomaly detection rule
-    this.registerRule({)
+    this.registerRule({ )
   id: 'anomaly_detection',
   name: 'Anomaly Detection',
   description: 'Detects unusual patterns and potential fraud',
@@ -618,11 +579,10 @@ export class ConversionEventValidator {
   field: 'value',
   message: 'Unusually high event value detected',
   code: 'HIGH_VALUE_ANOMALY',
-  impact: 'May indicate fraudulent activity',
+  impact: 'May indicate fraudulent activity' }
 });
         // Check for rapid event succession
-        if (context?.recentEvents) {
-  const recentCount = context.recentEvents.filter(;);
+        if (context?.recentEvents) { const recentCount = context.recentEvents.filter(;);
   e => (event.timestamp - e.timestamp) < 1000 // Last second
   ).length;
   if (recentCount > 5) {
@@ -631,55 +591,48 @@ export class ConversionEventValidator {
   rule: 'anomaly_detection',
   message: 'Rapid event succession detected',
   code: 'RAPID_EVENTS_ANOMALY',
-  impact: 'May indicate automated/bot activity',
+  impact: 'May indicate automated/bot activity' }
 });
         // Check device fingerprint patterns
-        if (event.deviceFingerprint && context?.deviceProfile) {
-  if (context.deviceProfile.userCount > 10) {
+        if (event.deviceFingerprint && context?.deviceProfile) { if (context.deviceProfile.userCount > 10) {
   anomalyScore += 25;
   warnings.push({)
   rule: 'anomaly_detection',
   field: 'deviceFingerprint',
   message: 'Device associated with multiple users',
   code: 'SHARED_DEVICE_ANOMALY',
-  impact: 'May indicate shared or compromised device',
+  impact: 'May indicate shared or compromised device' }
 });
-        if (anomalyScore > 0) {
-          this.metrics.anomaliesDetected++;
+        if (anomalyScore > 0) { this.metrics.anomaliesDetected++;
         return {
           isValid: true,
           score: Math.max(0, 100 - anomalyScore),
           errors: [],
-          warnings,
+          warnings }
           metadata: { anomalyScore, factors: warnings.length }
         };
     });
-  private initializeDeduplicationFields(): void {
-  this.deduplicationConfig.fields = [
+  private initializeDeduplicationFields(): void { this.deduplicationConfig.fields = [
   {
   name: 'userId',
-  weight: 1.0,
-}
-      {
-  name: 'type',
-  weight: 0.8,
-}
-      {
-  name: 'sessionId',
-  weight: 0.6,
-}
-      {
-  name: 'value',
+  weight: 1.0 }
+
+      { name: 'type',
+  weight: 0.8 }
+
+      { name: 'sessionId',
+  weight: 0.6 }
+
+      { name: 'value',
   weight: 0.4,
-  matcher: (val1: number, val2: number) => {,
+  matcher: (val1: number, val2: number) => { }
   if (typeof val1 !== 'number' || typeof val2 !== 'number') return 0;
   const diff = Math.abs(val1 - val2);
   const avg = (val1 + val2) / 2;
   return avg > 0 ? Math.max(0, 1 - diff / avg) : 1.0;
-}
-      {
-        name: 'timestamp',
-        weight: 0.2,
+
+      { name: 'timestamp',
+        weight: 0.2 }
         transform: (timestamp: number) => Math.floor(timestamp / 1000).toString()];
   private updateMetrics(result: ValidationResult, processingTime: number): void {
     this.metrics.totalValidated++;
@@ -721,11 +674,10 @@ export class ConversionEventValidator {
   /**
    * Reset metrics
    */
-  public resetMetrics(): void {
-    this.metrics = {
+  public resetMetrics(): void { this.metrics = {
       totalValidated: 0,
       passRate: 0,
-      averageScore: 0,
+      averageScore: 0 }
       errorsByCategory: {},
       errorsByRule: {},
       duplicatesFound: 0,

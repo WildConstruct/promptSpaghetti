@@ -3,9 +3,8 @@
  * Epic 8.5: Real-Time Multi-Seed Preview - Task 2: Execution Path Visualization
  */
 
-}
-export interface NodeExecutionStep {
-  nodeId: string;
+
+export interface NodeExecutionStep { nodeId: string;
   nodeType: string;
   stepIndex: number;
   timestamp: number;
@@ -13,30 +12,28 @@ export interface NodeExecutionStep {
   inputs: ExecutionInput;
   output: unknown;
   randomChoice?: RandomChoiceInfo;
-  error?: string;
-}
-}
-}
-export interface ExecutionInput {
-  sourceNodeId?: string;
+  error?: string }
+
+
+
+export interface ExecutionInput { sourceNodeId?: string;
   value: unknown;
-  inputIndex: number;
-}
-}
-}
-export interface RandomChoiceInfo {
-  choiceType: 'weighted' | 'uniform' | 'conditional' | 'sequential' | 'markov';
+  inputIndex: number }
+
+
+
+export interface RandomChoiceInfo { choiceType: 'weighted' | 'uniform' | 'conditional' | 'sequential' | 'markov' }
   availableOptions: string;
   selectedOption: string;
   selectionReason: string;
   probability?: number;
   weight?: number;
   conditionMet?: boolean;
-}
-}
-}
-export interface ExecutionPath {
-  id: string;
+
+
+
+
+export interface ExecutionPath { id: string;
   seed: number;
   startTime: number;
   endTime: number;
@@ -45,32 +42,29 @@ export interface ExecutionPath {
   finalOutput: string;
   nodeExecutionOrder: string;
   randomizationPoints: RandomChoiceInfo;
-  error?: string;
-}
-}
-}
-export interface PathVisualizationData {
-  executionPath: ExecutionPath;
+  error?: string }
+
+
+
+export interface PathVisualizationData { executionPath: ExecutionPath;
   pathColor: string;
   highlightedNodes: string;
   executionFlow: ExecutionFlowEdge;
   variance: number;
-  creativityScore: number;
-}
-}
-}
-export interface ExecutionFlowEdge {
-  from: string;
+  creativityScore: number }
+
+
+
+export interface ExecutionFlowEdge { from: string;
   to: string;
   stepIndex: number;
   dataFlow: unknown;
   executionTimeMs: number;
-  isRandomChoice: boolean;
-}
-}
-}
-export interface PreviewResultWithPath {
-  seed: number;
+  isRandomChoice: boolean }
+
+
+
+export interface PreviewResultWithPath { seed: number;
   output: string;
   error?: string;
   usedNodeIds?: string;
@@ -80,54 +74,53 @@ export interface PreviewResultWithPath {
   executionPath?: ExecutionPath;
   pathVisualization?: PathVisualizationData;
   // Enhanced debugging information
-  debugInfo?: {
+  debugInfo?: { }
   nodeExecutionOrder: string;
   randomChoices: RandomChoiceInfo;
   performanceBreakdown: Record<string, number>;
   memoryUsage?: number;
-}
+
+
 };
-}
-}
-export interface MultiSeedPreviewResult {
-  results: PreviewResultWithPath;
-  aggregateStats: {
+
+
+export interface MultiSeedPreviewResult { results: PreviewResultWithPath;
+  aggregateStats: { }
   totalTime: number;
   averageTime: number;
   variance: number;
   uniquePaths: number;
   commonNodes: string;
   divergencePoints: string;
-}
+
+
 };
   pathComparison: PathComparisonData;
-}
-}
-export interface PathComparisonData {
-  sharedSteps: NodeExecutionStep;
-  divergentPaths: {
+
+
+export interface PathComparisonData { sharedSteps: NodeExecutionStep;
+  divergentPaths: { }
   resultId: string;
   divergencePoint: string;
   uniqueSteps: NodeExecutionStep;
-}
-}[];
-  varianceAnalysis: {
+
+
+[];
+  varianceAnalysis: { 
   highVarianceNodes: string;
   consistentNodes: string;
-  randomizationImpact: number;
-};
-}
-}
-export interface ExecutionTracker {
-  startTracking(seed: number): string; // Returns execution ID,
+  randomizationImpact: number };
+
+
+export interface ExecutionTracker { startTracking(seed: number): string; // Returns execution ID }
   recordNodeExecution(executionId: string, step: NodeExecutionStep): void;
   recordRandomChoice(executionId: string, choice: RandomChoiceInfo): void;
   finishTracking(executionId: string, output: string): ExecutionPath;
   getExecutionPath(executionId: string): ExecutionPath | null;
   clearTracker(executionId: string): void;
   // Color scheme for path visualization
-}
-}
+
+
 export const EXECUTION_PATH_COLORS = [
   '#3B82F6', // Blue
   '#EF4444', // Red  
@@ -145,7 +138,7 @@ export type ExecutionPathColor = typeof EXECUTION_PATH_COLORS[number];
 
 // Node highlighting styles
 
-}
+
 export interface NodeHighlightStyle {
   color: ExecutionPathColor;
   opacity: number;
@@ -153,9 +146,10 @@ export interface NodeHighlightStyle {
   animation?: 'pulse' | 'glow' | 'none';
   order: number;
   // Execution visualization configuration
-}
-}
-}
+
+
+
+
 export interface ExecutionVisualizationConfig {
   showExecutionOrder: boolean;
   showRandomChoices: boolean;
@@ -165,6 +159,6 @@ export interface ExecutionVisualizationConfig {
   colorByVariance: boolean;
   showDebugInfo: boolean;
   // Default visualization configuration
-}
-}
+
+
 export };

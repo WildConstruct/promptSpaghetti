@@ -21,25 +21,27 @@ import {
   Eye,
   EyeOff,
   Palette
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
+
 export interface QRCodeData {
   uri: string;,
-  secret: string;
+  secret: string;,
   issuer: string;,
-  accountName: string;
+  accountName: string;,
   algorithm: string;,
-  digits: number;
+  digits: number;,
   period: number;
-}
-}
-}
+
+
+
+
+
 export interface QRCodeStyle {
   size: number;,
-  margin: number;
+  margin: number;,
   errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H';,
-  includeMargin: boolean;
+  includeMargin: boolean;,
   backgroundColor: string;,
   foregroundColor: string;
   logoImage?: string;
@@ -53,11 +55,11 @@ export interface QRCodeStyle {
   className?: string;
   interface GeneratorState {
   style: QRCodeStyle;,
-  showAdvanced: boolean;
+  showAdvanced: boolean;,
   showSecret: boolean;,
-  copying: boolean;
+  copying: boolean;,
   downloading: boolean;,
-  regenerating: boolean;
+  regenerating: boolean;,
   error: string | null;,
   validationPassed: boolean;
   const DEFAULT_STYLE: QRCodeStyle = {,
@@ -67,7 +69,8 @@ export interface QRCodeStyle {
   includeMargin: true,
   backgroundColor: '#FFFFFF',
   foregroundColor: '#000000',
-}
+
+
 };
 const ERROR_CORRECTION_LEVELS = {
   L: { label: 'Low (~7%)', description: 'Basic error recovery' },
@@ -75,35 +78,31 @@ const ERROR_CORRECTION_LEVELS = {
   Q: { label: 'Quartile (~25%)', description: 'Good error recovery' },
   H: { label: 'High (~30%)', description: 'Best error recovery (recommended)' }
 };
-const PRESET_STYLES = {
-  standard: {
-  name: 'Standard',
-    style: { ...DEFAULT_STYLE }
-  },
-  large: {
+const PRESET_STYLES = {},
+  large: {,
   name: 'Large',
     style: { ...DEFAULT_STYLE, size: 384, margin: 6 }
   },
-  minimal: {
+  minimal: {,
   name: 'Minimal',
     style: { ...DEFAULT_STYLE, size: 200, margin: 2 }
   },
-  highContrast: {
+  highContrast: {,
   name: 'High Contrast',
     style: { ...DEFAULT_STYLE, foregroundColor: '#000000', backgroundColor: '#FFFFFF' }
   },
-  darkMode: {
+  darkMode: {,
   name: 'Dark Mode',
     style: { ...DEFAULT_STYLE, foregroundColor: '#FFFFFF', backgroundColor: '#1a1a1a' }
 };
-}
+
 export function QRCodeGenerator({ )
   qrData, 
   onRegenerateSecret,
   showCustomization = true,
   showSecretDetails = true,
   className = ''
-}: QRCodeGeneratorProps) {
+: QRCodeGeneratorProps) {
   const [state, setState] = useState<GeneratorState>({)
   style: DEFAULT_STYLE,
   showAdvanced: false,
@@ -152,7 +151,7 @@ export function QRCodeGenerator({ )
       setTimeout(() => {
         setState(prev => ({ ...prev, copying: false }));
       }, 2000);
-    } catch (error) {
+ catch (error) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.error('Copy failed:', error);
   setState(prev => ({ )
@@ -185,7 +184,7 @@ export function QRCodeGenerator({ )
             a.click();
             URL.revokeObjectURL(url);
         });
-      } else {
+ else {
         // SVG download
         const svgElement = document.querySelector('.qr-code-svg');
         if (svgElement) {
@@ -197,12 +196,12 @@ export function QRCodeGenerator({ )
           a.download = `promptscape-qr-${qrData.accountName}-${Date.now()}.svg`;}
           a.click();
           URL.revokeObjectURL(url);
-    } catch (error) {
+ catch (error) {
       setState(prev => ({ )
         ...prev, 
         error: `Failed to download QR code: ${error.message}`}
       }));
-    } finally {
+ finally {
       setState(prev => ({ ...prev, downloading: false }));
   };
   const regenerateSecret = async () => {
@@ -210,12 +209,12 @@ export function QRCodeGenerator({ )
     setState(prev => ({ ...prev, regenerating: true, error: null }));
     try {
       await onRegenerateSecret();
-    } catch (error) {
+ catch (error) {
       setState(prev => ({ )
         ...prev, 
         error: `Failed to regenerate secret: ${error.message}`}
       }));
-    } finally {
+ finally {
       setState(prev => ({ ...prev, regenerating: false }));
   };
   const formatSecret = (secret: string): string => {
@@ -224,9 +223,9 @@ export function QRCodeGenerator({ )
   const getSecurityLevel = (): { level: string; color: string; description: string } => {
     if (qrData.secret.length >= 32 && qrData.algorithm === 'SHA256') {
       return { level: 'High', color: 'green', description: 'Excellent security' };
-    } else if (qrData.secret.length >= 24) {
+ else if (qrData.secret.length >= 24) {
       return { level: 'Good', color: 'blue', description: 'Good security' };
-    } else {
+ else {
       return { level: 'Basic', color: 'yellow', description: 'Meets minimum requirements' };
   };
   const security = getSecurityLevel();

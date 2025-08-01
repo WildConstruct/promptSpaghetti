@@ -146,16 +146,16 @@ const handleSelectAll = (checked) => {
     ;
     // Export data
     const handleExport = () => {
-        const csvContent = [];
-        columns.map(col => col.title).join(','),
-        ;
+        const csvContent = [
+            columns.map(col => col.title).join(','),
+            ...sortedData.map(record => ),
+            columns.map(col => { })
+        ];
+        const value = col.dataIndex ? record[col.dataIndex] : record[col.key];
+        return `"${String(value).replace(/"/g, '""')}"`;
     };
-};
-sortedData.map(record => );
-columns.map(col => { });
-const value = col.dataIndex ? record[col.dataIndex] : record[col.key];
-return `"${String(value).replace(/"/g, '""')}"`;
-join(',');
+}, join;
+(',');
 join('\n');
 const blob = new Blob([csvContent], { type: 'text/csv' });
 const url = URL.createObjectURL(blob);

@@ -13,7 +13,7 @@ import {
   SecurityABTest,
   ABTestResults,
   ABTestReport 
-} from '../services/SecurityABTestingFramework';
+ from '../services/SecurityABTestingFramework';
 import { SecurityAPIIntegrationPlatform } from '../services/SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../services/SecurityPolicyAnalysisEngine';
 import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngine';
@@ -21,18 +21,18 @@ import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngi
 // Global testing framework instance
 let abTestingFramework: SecurityABTestingFramework | null = null;
 
-}
-}
+
+
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
   message?: string;
   timestamp: number;
-}
 
-}
-}
+
+
+
 interface CreateTestRequest {
   test_name: string;
   description: string;
@@ -46,8 +46,9 @@ interface CreateTestRequest {
       statistical_significance_level: number;
       statistical_power: number;
       business_significance_threshold: number;
-}
-}
+
+
+
     };
   };
   test_variants: {
@@ -59,7 +60,7 @@ interface CreateTestRequest {
       traffic_percentage: number;
       user_segments?: string[];
     };
-  }[];
+[];
   target_population?: {
     population_criteria: any;
     estimated_population_size?: number;
@@ -70,36 +71,39 @@ interface CreateTestRequest {
     allocation_strategy?: 'random' | 'hash_based' | 'geographic' | 'time_based' | 'user_attribute';
     sticky_session_enabled?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface StartTestRequest {
   pre_flight_checks_override?: boolean;
   notification_recipients?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface StopTestRequest {
   reason: string;
   generate_final_report?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface GenerateReportRequest {
   report_type: 'interim' | 'final' | 'post_implementation';
   include_statistical_appendix?: boolean;
   include_stakeholder_sections?: boolean;
   stakeholder_groups?: string[];
-}
-}
-}
+
+
+
+
 
 /**
  * Initialize security A/B testing framework
@@ -112,7 +116,7 @@ async function initializeABTestingFramework(
 
   if (abTestingFramework) {
     return abTestingFramework;
-  }
+
 
   const config: SecurityABTestingConfig = {
     testing_framework: {
@@ -122,21 +126,21 @@ async function initializeABTestingFramework(
       statistical_significance_threshold: 0.05,
       minimum_sample_size: 1000,
       maximum_test_duration_days: 30
-  }
+
     traffic_management: {
       traffic_splitting_enabled: true,
       canary_deployment_enabled: true,
       gradual_rollout_enabled: true,
       rollback_automation_enabled: true,
       traffic_allocation_strategies: ['random', 'hash_based', 'geographic']
-  }
+
     experiment_design: {
       randomization_enabled: true,
       stratified_sampling_enabled: true,
       control_group_required: true,
       minimum_control_group_size_percent: 20,
       bias_detection_enabled: true
-  }
+
     metrics_collection: {
       real_time_metrics_enabled: true,
       security_effectiveness_tracking: true,
@@ -144,14 +148,14 @@ async function initializeABTestingFramework(
       user_experience_tracking: true,
       compliance_impact_tracking: true,
       cost_impact_tracking: true
-  }
+
     statistical_analysis: {
       bayesian_analysis_enabled: true,
       confidence_interval_calculation: true,
       power_analysis_enabled: true,
       effect_size_calculation: true,
       significance_testing_methods: ['t_test', 'chi_square', 'mann_whitney', 'bayesian']
-  }
+
     safety_controls: {
       automatic_rollback_enabled: true,
       safety_thresholds: {
@@ -159,18 +163,18 @@ async function initializeABTestingFramework(
         performance_degradation_percent: 20,
         error_rate_increase_percent: 100,
         user_satisfaction_decrease_percent: 30
-  }
+
       circuit_breaker_enabled: true,
       early_termination_enabled: true,
       risk_monitoring_enabled: true
-    }
+
   };
 
   abTestingFramework = new SecurityABTestingFramework(config, platform, policyEngine, optimizationEngine);
   await abTestingFramework.initialize();
 
   return abTestingFramework;
-}
+
 
 export default async function securityABTestingRoutes(
   fastify: FastifyInstance,
@@ -199,7 +203,7 @@ export default async function securityABTestingRoutes(
           test_type: {
             type: 'string',
             enum: ['policy_comparison', 'configuration_optimization', 'feature_flag', 'traffic_routing']
-  }
+
           experiment_design: {
             type: 'object',
             required: ['hypothesis', 'primary_metrics', 'success_criteria'],
@@ -210,12 +214,12 @@ export default async function securityABTestingRoutes(
                 minItems: 1,
                 maxItems: 5,
                 items: { type: 'string' }
-  }
+
               secondary_metrics: {
                 type: 'array',
                 maxItems: 10,
                 items: { type: 'string' }
-  }
+
               success_criteria: {
                 type: 'object',
                 required: ['minimum_detectable_effect', 'statistical_significance_level', 'statistical_power'],
@@ -224,10 +228,10 @@ export default async function securityABTestingRoutes(
                   statistical_significance_level: { type: 'number', minimum: 0.80, maximum: 0.99 },
                   statistical_power: { type: 'number', minimum: 0.70, maximum: 0.99 },
                   business_significance_threshold: { type: 'number', minimum: 0 }
-                }
-              }
-            }
-  }
+
+
+
+
           test_variants: {
             type: 'array',
             minItems: 2,
@@ -246,11 +250,11 @@ export default async function securityABTestingRoutes(
                   properties: {
                     traffic_percentage: { type: 'number', minimum: 1, maximum: 100 },
                     user_segments: { type: 'array', items: { type: 'string' } }
-                  }
-                }
-              }
-            }
-  }
+
+
+
+
+
           target_population: {
             type: 'object',
             properties: {
@@ -258,21 +262,21 @@ export default async function securityABTestingRoutes(
               estimated_population_size: { type: 'number', minimum: 100 },
               inclusion_rules: { type: 'array' },
               exclusion_rules: { type: 'array' }
-            }
-  }
+
+
           traffic_allocation: {
             type: 'object',
             properties: {
               allocation_strategy: {
                 type: 'string',
                 enum: ['random', 'hash_based', 'geographic', 'time_based', 'user_attribute']
-  }
+
               sticky_session_enabled: { type: 'boolean' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request: FastifyRequest<{ Body: CreateTestRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const {
@@ -283,7 +287,7 @@ export default async function securityABTestingRoutes(
         test_variants,
         target_population,
         traffic_allocation
-      } = request.body;
+ = request.body;
 
       // Transform request to framework format
       const testConfig: Partial<SecurityABTest> = {
@@ -299,8 +303,8 @@ export default async function securityABTestingRoutes(
             confidence_level: experiment_design.success_criteria.statistical_significance_level,
             expected_effect_size: experiment_design.success_criteria.minimum_detectable_effect,
             variance_estimate: 0.25 // Default assumption
-          }
-  }
+
+
         test_variants: test_variants.map((variant, index) => ({
           variant_id: `variant_${index + 1}`,
           variant_name: variant.variant_name,
@@ -310,11 +314,11 @@ export default async function securityABTestingRoutes(
             policy: variant.policy_configuration,
             feature_flags: {},
             configuration_overrides: {}
-  }
+
           allocation: {
             traffic_percentage: variant.allocation.traffic_percentage,
             user_segments: variant.allocation.user_segments || []
-          }
+
         })),
         target_population,
         traffic_allocation
@@ -346,18 +350,18 @@ export default async function securityABTestingRoutes(
             'Set up monitoring and alerting',
             'Start the test when ready'
           ]
-  }
+
         message: `A/B test '${test_name}' created successfully`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error creating A/B test:', error);
       return {
         success: false,
         error: `Failed to create A/B test: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -374,8 +378,8 @@ export default async function securityABTestingRoutes(
         required: ['testId'],
         properties: {
           testId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
@@ -383,10 +387,10 @@ export default async function securityABTestingRoutes(
           notification_recipients: {
             type: 'array',
             items: { type: 'string', format: 'email' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (
     request: FastifyRequest<{ Params: { testId: string }; Body: StartTestRequest }>,
     reply: FastifyReply
@@ -408,24 +412,24 @@ export default async function securityABTestingRoutes(
             real_time_dashboard_available: true,
             automated_safety_monitoring: true,
             notification_recipients: notification_recipients
-  }
+
           safety_features: {
             automatic_rollback_enabled: true,
             early_termination_enabled: true,
             circuit_breaker_active: true
-          }
-  }
+
+
         message: `A/B test ${testId} started successfully`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error starting A/B test:', error);
       return {
         success: false,
         error: `Failed to start A/B test: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -442,17 +446,17 @@ export default async function securityABTestingRoutes(
         required: ['testId'],
         properties: {
           testId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['reason'],
         properties: {
           reason: { type: 'string', minLength: 5, maxLength: 500 },
           generate_final_report: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<{ Params: { testId: string }; Body: StopTestRequest }>,
     reply: FastifyReply
@@ -467,10 +471,10 @@ export default async function securityABTestingRoutes(
       if (generate_final_report) {
         try {
           finalReport = await framework.generateABTestReport(testId, 'final');
-        } catch (reportError) {
+ catch (reportError) {
           fastify.log.warn(`Failed to generate final report for test ${testId}:`, reportError);
-        }
-      }
+
+
 
       return {
         success: true,
@@ -485,24 +489,24 @@ export default async function securityABTestingRoutes(
             executive_summary: finalReport.executive_summary,
             key_findings: finalReport.executive_summary.key_findings,
             recommendations: finalReport.recommendations_summary.primary_recommendation
-          } : null,
+ : null,
           data_preservation: {
             test_data_archived: true,
             results_available_for_analysis: true,
             retention_period_days: 90
-          }
-  }
+
+
         message: `A/B test ${testId} stopped successfully`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error stopping A/B test:', error);
       return {
         success: false,
         error: `Failed to stop A/B test: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -519,15 +523,15 @@ export default async function securityABTestingRoutes(
         required: ['testId'],
         properties: {
           testId: { type: 'string' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           include_interim: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<{ Params: { testId: string }; Querystring: { include_interim?: boolean } }>,
     reply: FastifyReply
@@ -551,25 +555,25 @@ export default async function securityABTestingRoutes(
             effect_size: results.statistical_analysis.effect_size,
             winner_determined: results.statistical_analysis.winner_determination.decision_criteria_met,
             winning_variant: results.statistical_analysis.winner_determination.winning_variant_name
-  }
+
           business_impact_summary: {
             estimated_roi: results.business_impact.roi_analysis.estimated_roi_percent,
             payback_period_days: results.business_impact.roi_analysis.payback_period_days,
             implementation_feasibility_score: results.business_impact.implementation_feasibility.overall_feasibility_score,
             overall_risk_score: results.business_impact.risk_assessment.overall_risk_score
-  }
+
           security_impact_summary: {
             threat_detection_improvement: results.security_impact.threat_detection_improvement,
             security_posture_improvement: results.security_impact.security_posture_improvement.overall_improvement_score,
             compliance_score_change: results.security_impact.compliance_score_change,
             new_vulnerabilities: results.security_impact.security_posture_improvement.new_vulnerabilities_introduced
-  }
+
           performance_impact_summary: {
             response_time_change_ms: results.performance_impact.response_time_change_ms,
             throughput_change_percent: results.performance_impact.throughput_change_percent,
             availability_change: results.performance_impact.availability_impact.uptime_change_percent,
             resource_utilization_impact: results.performance_impact.resource_utilization_change
-  }
+
           variant_performance: results.statistical_analysis.variant_performance.map(variant => ({
             variant_name: variant.variant_name,
             is_control: variant.is_control,
@@ -588,17 +592,17 @@ export default async function securityABTestingRoutes(
             description: rec.recommendation.description,
             expected_impact: rec.recommendation.expected_impact
           }))
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting A/B test results:', error);
       return {
         success: false,
         error: `Failed to get A/B test results: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -615,24 +619,24 @@ export default async function securityABTestingRoutes(
         required: ['testId'],
         properties: {
           testId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
           report_type: {
             type: 'string',
             enum: ['interim', 'final', 'post_implementation']
-  }
+
           include_statistical_appendix: { type: 'boolean' },
           include_stakeholder_sections: { type: 'boolean' },
           stakeholder_groups: {
             type: 'array',
             items: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (
     request: FastifyRequest<{ Params: { testId: string }; Body: GenerateReportRequest }>,
     reply: FastifyReply
@@ -644,7 +648,7 @@ export default async function securityABTestingRoutes(
         include_statistical_appendix = true,
         include_stakeholder_sections = true,
         stakeholder_groups = ['Security Team', 'Engineering', 'Product Management', 'Executive']
-      } = request.body;
+ = request.body;
 
       const report = await framework.generateABTestReport(testId, report_type);
 
@@ -673,31 +677,31 @@ export default async function securityABTestingRoutes(
             business_impact: filteredReport.executive_summary.business_impact_summary,
             security_impact: 'Security metrics analysis included in detailed section',
             data_quality: filteredReport.detailed_analysis.data_quality_assessment.data_quality_score
-  }
+
           recommendations_summary: {
             primary_recommendation: filteredReport.recommendations_summary.primary_recommendation,
             implementation_timeline: filteredReport.recommendations_summary.implementation_roadmap.timeline_weeks,
             success_metrics: filteredReport.recommendations_summary.success_metrics
-  }
+
           report_sections: {
             executive_summary_included: true,
             detailed_analysis_included: true,
             statistical_appendix_included: include_statistical_appendix,
             stakeholder_sections_included: include_stakeholder_sections,
             stakeholder_groups_covered: stakeholder_groups
-          }
-  }
+
+
         message: `${report_type} report generated successfully for test ${testId}`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error generating A/B test report:', error);
       return {
         success: false,
         error: `Failed to generate A/B test report: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -715,16 +719,16 @@ export default async function securityABTestingRoutes(
           status: {
             type: 'string',
             enum: ['draft', 'ready', 'running', 'paused', 'completed', 'failed']
-  }
+
           test_type: {
             type: 'string',
             enum: ['policy_comparison', 'configuration_optimization', 'feature_flag', 'traffic_routing']
-  }
+
           limit: { type: 'number', minimum: 1, maximum: 100 },
           offset: { type: 'number', minimum: 0 }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<{ Querystring: { status?: string; test_type?: string; limit?: number; offset?: number } }>,
     reply: FastifyReply
@@ -743,7 +747,7 @@ export default async function securityABTestingRoutes(
           duration_days: 14,
           statistical_significance: true,
           winner_variant: 'Enhanced MFA'
-  }
+
         {
           test_id: 'test_002',
           test_name: 'Rate Limiting Configuration',
@@ -752,7 +756,7 @@ export default async function securityABTestingRoutes(
           created_at: Date.now() - 86400000 * 3,
           estimated_completion: Date.now() + 86400000 * 11,
           completion_percentage: 25
-        }
+
       ];
 
       return {
@@ -764,22 +768,22 @@ export default async function securityABTestingRoutes(
             limit,
             offset,
             has_more: false
-  }
+
           filters_applied: {
             status,
             test_type
-          }
-  }
+
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error listing A/B tests:', error);
       return {
         success: false,
         error: `Failed to list A/B tests: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -791,7 +795,7 @@ export default async function securityABTestingRoutes(
     schema: {
       description: 'Get comprehensive security A/B testing analytics and insights',
       tags: ['Security A/B Testing', 'Analytics']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const analytics = framework.getTestingAnalytics();
@@ -808,14 +812,14 @@ export default async function securityABTestingRoutes(
               running: analytics.summary.active_tests,
               completed: analytics.summary.completed_tests,
               total: analytics.summary.total_tests
-            }
-  }
+
+
           success_metrics: {
             test_success_rate: analytics.performance_metrics.test_success_rate_percent,
             statistical_power: analytics.performance_metrics.average_statistical_power,
             significant_results: analytics.performance_metrics.significant_results_percent,
             early_termination_rate: analytics.performance_metrics.early_termination_rate
-  }
+
           variant_insights: analytics.variant_performance,
           recent_activity: analytics.recent_activities.slice(0, 10),
           insights: [
@@ -827,17 +831,17 @@ export default async function securityABTestingRoutes(
               'May need to increase sample sizes or effect sizes',
             'Continuous improvement in experimental rigor recommended'
           ]
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting A/B testing analytics:', error);
       return {
         success: false,
         error: `Failed to get A/B testing analytics: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -848,7 +852,7 @@ export default async function securityABTestingRoutes(
     schema: {
       description: 'Get security A/B testing framework health status',
       tags: ['Security A/B Testing', 'Health Check']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const analytics = framework.getTestingAnalytics();
@@ -866,25 +870,25 @@ export default async function securityABTestingRoutes(
             active_tests: analytics.summary.active_tests,
             success_rate: analytics.performance_metrics.test_success_rate_percent,
             statistical_power: analytics.performance_metrics.average_statistical_power
-  }
+
           system_components: {
             traffic_router_operational: true,
             metrics_collector_operational: true,
             statistical_analyzer_operational: true,
             safety_monitor_operational: true
-  }
+
           capabilities: {
             multivariate_testing: true,
             sequential_testing: true,
             bayesian_analysis: true,
             automatic_rollback: true,
             real_time_monitoring: true
-  }
+
           last_check: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting A/B testing framework health:', error);
       return {
         success: false,
@@ -892,11 +896,11 @@ export default async function securityABTestingRoutes(
           healthy: false,
           framework_status: 'error',
           error_message: error.message
-  }
+
         error: 'Failed to get framework health status',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Setup framework event handlers for logging
@@ -949,6 +953,5 @@ export default async function securityABTestingRoutes(
     if (abTestingFramework) {
       await abTestingFramework.shutdown();
       fastify.log.info('Security A/B Testing Framework shut down');
-    }
+
   });
-}

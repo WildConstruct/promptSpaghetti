@@ -29,36 +29,15 @@ export class ExtensionInterfaceTestSuite {
             tests: [],
         };
         // Run all test categories
-        const testCategories = [];
-        {
-            name: 'Base Interface Tests', tests;
-            this.runBaseInterfaceTests(extension);
-        }
-        {
-            name: 'Lifecycle Tests', tests;
-            this.runLifecycleTests(extension);
-        }
-        {
-            name: 'Configuration Tests', tests;
-            this.runConfigurationTests(extension);
-        }
-        {
-            name: 'Health Check Tests', tests;
-            this.runHealthCheckTests(extension);
-        }
-        {
-            name: 'Type-Specific Tests', tests;
-            this.runTypeSpecificTests(extension);
-        }
-        {
-            name: 'Performance Tests', tests;
-            this.runPerformanceTests(extension);
-        }
-        {
-            name: 'Security Tests', tests;
-            this.runSecurityTests(extension);
-        }
-        ;
+        const testCategories = [
+            { name: 'Base Interface Tests', tests: this.runBaseInterfaceTests(extension) },
+            { name: 'Lifecycle Tests', tests: this.runLifecycleTests(extension) },
+            { name: 'Configuration Tests', tests: this.runConfigurationTests(extension) },
+            { name: 'Health Check Tests', tests: this.runHealthCheckTests(extension) },
+            { name: 'Type-Specific Tests', tests: this.runTypeSpecificTests(extension) },
+            { name: 'Performance Tests', tests: this.runPerformanceTests(extension) },
+            { name: 'Security Tests', tests: this.runSecurityTests(extension) }
+        ];
         for (const category of testCategories) {
             const categoryResults = await category.tests;
             testSuite.tests.push({});
@@ -636,13 +615,13 @@ boolean;
 // Extension Interface Mock Factory
 export class ExtensionInterfaceMockFactory {
     /**
-     * Create mock extension for testing
-     */
+    * Create mock extension for testing
+    */
     static createMockExtension(type = 'node') {
         const baseExtension = extensionDevelopmentKit.createTestExtension({});
     }
-    id;
 }
+id: `mock-${type}-extension`;
 name: `Mock ${type.charAt(0).toUpperCase() + type.slice(1)} Extension`;
 version: '1.0.0',
     description;

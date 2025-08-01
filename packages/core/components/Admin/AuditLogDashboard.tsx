@@ -14,8 +14,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { 
-  Search,
+import { Search,
   Filter,
   Download,
   RefreshCw,
@@ -50,31 +49,31 @@ import {
   Unlock,
   AlertCircle,
   TrendingUp,
-  TrendingDown,
+  TrendingDown }
   Minus
-} from 'lucide-react';
-import {
-  AuditEvent,
+ from 'lucide-react';
+import { AuditEvent,
   AuditEventType,
   AuditCategory,
-  AuditSeverity,
+  AuditSeverity }
   ComplianceStandard
-} from '../../services/audit-service';
-import {
-  AdvancedSearchFilter,
+ from '../../services/audit-service';
+import { AdvancedSearchFilter,
   FilteredSearchResponse,
   SavedFilter,
   FilterPreset,
-  TimePreset,
+  TimePreset }
   SearchAnalytics
-} from '../../services/audit-filtering-service';
-}
+ from '../../services/audit-filtering-service';
+
+
 interface AuditLogDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-const SEVERITY_CONFIG = {
-}
+  const SEVERITY_CONFIG = {
+
+},
   low: { color: 'text-blue-600 bg-blue-100', icon: Minus, label: 'Low' },
   medium: { color: 'text-yellow-600 bg-yellow-100', icon: AlertCircle, label: 'Medium' },
   high: { color: 'text-orange-600 bg-orange-100', icon: AlertTriangle, label: 'High' },
@@ -108,9 +107,9 @@ const TIME_PRESETS: Array<{ value: TimePreset; label: string }> = [
   { value: 'last_year', label: 'Last Year' }
 ];
 
-export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
-  className = '',
-  userId,
+export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({ )
+  className = ''
+  userId }
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState('logs');
@@ -134,102 +133,87 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   // Analytics state
   const [_analytics, _setAnalytics] = useState<SearchAnalytics | null>(null);
   // Load initial data
-  useEffect(() => {
-    loadInitialData();
-  }, [loadInitialData]);
+  useEffect(() => { loadInitialData() }, [loadInitialData]);
   // Auto-search when filter changes
-  useEffect(() => {
-    if (Object.keys(currentFilter).length > 0 || searchQuery) {
+  useEffect(() => { if (Object.keys(currentFilter).length > 0 || searchQuery) {
       const timeoutId = setTimeout(() => {
-        performSearch();
-      }, 500); // Debounce search
+        performSearch() }, 500); // Debounce search
       return () => clearTimeout(timeoutId);
   }, [currentFilter, searchQuery]);
-  const loadInitialData = useCallback(async () => {
-    try {
+  const loadInitialData = useCallback(async () => { try {
       setLoading(true);
       // Load filter presets, saved filters, and perform initial search
       // This would integrate with the AuditFilteringService
       // Perform initial search with default filter
-      await performSearch();
-    } catch (err) {
-  setError('Failed to load audit data');
-  console.error('Load error:', err);
-} finally {
-      setLoading(false);
-  }, []);
-  const performSearch = async () => {
-  try {
+      await performSearch() } catch (err) { setError('Failed to load audit data');
+  console.error('Load error:', err) } finally { setLoading(false) }, []);
+  const performSearch = async () => { try {
   setLoading(true);
   setError(null);
-  const filter: AdvancedSearchFilter = {,
-  ...currentFilter,
-  search: searchQuery ? {,
-  query: searchQuery,
-  fields: ['description', 'action', 'actor_email', 'resource_name'],
-  operator: 'OR',
-  highlight: true,
-} : undefined,
-        output: {
-  page: 1,
-  limit: 50,
-  sortBy: 'timestamp',
-  sortOrder: 'desc',
-  includeMetadata: true,
-  includeContext: true,
+  const filter: AdvancedSearchFilter = {
+  ...currentFilter
+  search: searchQuery ? {
+  query: searchQuery
+  fields: ['description', 'action', 'actor_email', 'resource_name']
+  operator: 'OR'
+  highlight: true }
+ : undefined
+        output: { 
+  page: 1
+  limit: 50
+  sortBy: 'timestamp'
+  sortOrder: 'desc'
+  includeMetadata: true
+  includeContext: true }
 };
       // This would call the AuditFilteringService
-      const mockResults: FilteredSearchResponse = {,
-  events: generateMockEvents(20),
+      const mockResults: FilteredSearchResponse = { 
+  events: generateMockEvents(20)
   pagination: {
-  page: 1,
-  limit: 50,
-  total: 150,
-  totalPages: 3,
-},
-  summary: {
-  totalEvents: 150,
+  page: 1
+  limit: 50
+  total: 150
+  totalPages: 3 }
+
+  summary: { 
+  totalEvents: 150
   eventsByCategory: {
-  authentication: 45,
-  authorization: 32,
-  data_modification: 28,
-  security: 15,
-  system_configuration: 20,
-  compliance: 6,
-  performance: 3,
-  error: 1,
-},
-  eventsBySeverity: {
-  low: 85,
-  medium: 45,
-  high: 15,
-  critical: 5,
-},
-  uniqueActors: 12,
-          timeRange: {
-  start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-  end: new Date(),
-},
-  performance: {
-  queryTime: 234,
-  totalRecords: 1250,
-  filteredRecords: 150,
-  cacheHit: false,
-},
-  filterSummary: {
-  appliedFilters: Object.keys(filter).filter(key => ),
+  authentication: 45
+  authorization: 32
+  data_modification: 28
+  security: 15
+  system_configuration: 20
+  compliance: 6
+  performance: 3
+  error: 1 }
+
+  eventsBySeverity: { 
+  low: 85
+  medium: 45
+  high: 15
+  critical: 5 }
+
+  uniqueActors: 12
+          timeRange: { 
+  start: new Date(Date.now() - 24 * 60 * 60 * 1000)
+  end: new Date() }
+
+  performance: { 
+  queryTime: 234
+  totalRecords: 1250
+  filteredRecords: 150
+  cacheHit: false }
+
+  filterSummary: { 
+  appliedFilters: Object.keys(filter).filter(key => )
   filter[key as keyof AdvancedSearchFilter] !== undefined
-  ),
-  filterCount: Object.keys(filter).length,
-  resultReduction: 88,
+  )
+  filterCount: Object.keys(filter).length
+  resultReduction: 88 }
 };
       setSearchResults(mockResults);
-    } catch (err) {
-  setError('Search failed');
-  console.error('Search error:', err);
-} finally {
-      setLoading(false);
-  };
+ catch (err) { setError('Search failed');
+  console.error('Search error:', err) } finally { setLoading(false) };
   const generateMockEvents = (count: number): AuditEvent => {
     const events: AuditEvent = [];
     const eventTypes = Object.values(AuditEventType);
@@ -266,9 +250,9 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   ipAddress: `192.168.1.${Math.floor(Math.random() * 254)}`}
 },
   userAgent: 'Mozilla/5.0 (compatible)',
-        metadata: {
+        metadata: { ,
   source: 'admin_panel',
-  version: '1.0.0',
+  version: '1.0.0' }
 },
   tags: [],
         complianceStandards: [ComplianceStandard.SOC2],
@@ -277,22 +261,19 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   });
     return events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   };
-  const applyTimeFilter = (preset: TimePreset) => {
-    setCurrentFilter(prev => ({)
-  ...prev,
+  const applyTimeFilter = (preset: TimePreset) => { setCurrentFilter(prev => ({)
+  ...prev }
       timeRange: { preset }
     }));
   };
-  const applySeverityFilter = (severities: AuditSeverity) => {
-  setCurrentFilter(prev => ({)
+  const applySeverityFilter = (severities: AuditSeverity) => { setCurrentFilter(prev => ({)
   ...prev,
-  severities: severities.length > 0 ? severities : undefined,
+  severities: severities.length > 0 ? severities : undefined }
 }));
   };
-  const applyCategoryFilter = (categories: AuditCategory) => {
-  setCurrentFilter(prev => ({)
+  const applyCategoryFilter = (categories: AuditCategory) => { setCurrentFilter(prev => ({)
   ...prev,
-  categories: categories.length > 0 ? categories : undefined,
+  categories: categories.length > 0 ? categories : undefined }
 }));
   };
   const clearFilters = () => {
@@ -303,14 +284,11 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
     try {
       // This would call the AuditFilteringService export functionality
       console.log(`Exporting ${searchResults?.events.length} events as ${format}`);}
-    } catch (err) {
-      setError('Export failed');
-  };
-  const saveCurrentFilter = async () => {
-    if (!filterName.trim()) return;
+ catch (err) { setError('Export failed') };
+  const saveCurrentFilter = async () => { if (!filterName.trim()) return;
     try {
       // This would call the AuditFilteringService saveFilter method
-      const savedFilter: SavedFilter = {,
+      const savedFilter: SavedFilter = { }
   id: `filter_${Date.now()}`}
 },
   name: filterName,
@@ -325,30 +303,23 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
       setSavedFilters(prev => [savedFilter, ...prev]);
       setShowSaveFilterDialog(false);
       setFilterName('');
-    } catch (err) {
-      setError('Failed to save filter');
-  };
-  const toggleEventExpansion = (eventId: string) => {
-  setExpandedEvents(prev => )
+ catch (err) { setError('Failed to save filter') };
+  const toggleEventExpansion = (eventId: string) => { setExpandedEvents(prev => )
   prev.includes(eventId)
   ? prev.filter(id => id !== eventId)
-  : [...prev, eventId]);
-};
-  const toggleEventSelection = (eventId: string) => {
-  setSelectedEvents(prev => )
+  : [...prev, eventId]) };
+  const toggleEventSelection = (eventId: string) => { setSelectedEvents(prev => )
   prev.includes(eventId)
   ? prev.filter(id => id !== eventId)
-  : [...prev, eventId]);
-};
-  const formatTimestamp = (timestamp: Date) => {
-  return new Intl.DateTimeFormat('en-US', {)
+  : [...prev, eventId]) };
+  const formatTimestamp = (timestamp: Date) => { return new Intl.DateTimeFormat('en-US', {)
   year: 'numeric',
   month: 'short',
   day: 'numeric',
   hour: '2-digit',
   minute: '2-digit',
   second: '2-digit',
-  timeZoneName: 'short',
+  timeZoneName: 'short' }
 }).format(timestamp);
   };
   const renderEventCard = (event: AuditEvent) => {
@@ -506,10 +477,9 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
                 {searchSuggestions.map((suggestion, index) => ()
                   <button
                     key={index}
-                    onClick={() => {
+                    onClick={ () => {
                       setSearchQuery(suggestion);
-                      setShowSuggestions(false);
-                    }}
+                      setShowSuggestions(false) }}
                     className="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm"
                   >
                     {suggestion}
@@ -573,13 +543,10 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
                       <input
                         type="checkbox"
                         checked={currentFilter.severities?.includes(severity as AuditSeverity) || false}
-                        onChange={(e) => {
+                        onChange={ (e) => {
                           const severities = currentFilter.severities || [];
                           if (e.target.checked) {
-                            applySeverityFilter([...severities, severity as AuditSeverity]);
-                          } else {
-                            applySeverityFilter(severities.filter(s => s !== severity));
-                        }}
+                            applySeverityFilter([...severities, severity as AuditSeverity]) } else { applySeverityFilter(severities.filter(s => s !== severity)) }}
                         className="rounded border-gray-300 mr-2"
                       />
                       <span className="text-sm">{config.label}</span>
@@ -598,13 +565,10 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
                       <input
                         type="checkbox"
                         checked={currentFilter.categories?.includes(category as AuditCategory) || false}
-                        onChange={(e) => {
+                        onChange={ (e) => {
                           const categories = currentFilter.categories || [];
                           if (e.target.checked) {
-                            applyCategoryFilter([...categories, category as AuditCategory]);
-                          } else {
-                            applyCategoryFilter(categories.filter(c => c !== category));
-                        }}
+                            applyCategoryFilter([...categories, category as AuditCategory]) } else { applyCategoryFilter(categories.filter(c => c !== category)) }}
                         className="rounded border-gray-300 mr-2"
                       />
                       <span className="text-sm">{category.replace('_', ' ')}</span>
@@ -623,19 +587,18 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
                       <input
                         type="checkbox"
                         checked={currentFilter.outcomes?.includes(outcome as any) || false}
-                        onChange={(e) => {
+                        onChange={ (e) => {
   const outcomes = currentFilter.outcomes || [];
   if (e.target.checked) {
   setCurrentFilter(prev => ({)
-  ...prev,
-  outcomes: [...outcomes, outcome as any],
+  ...prev
+  outcomes: [...outcomes, outcome as any] }
 }));
-                          } else {
-  setCurrentFilter(prev => ({)
-  ...prev,
-  outcomes: outcomes.filter(o => o !== outcome),
+ else { setCurrentFilter(prev => ({)
+  ...prev
+  outcomes: outcomes.filter(o => o !== outcome) }
 }));
-                        }}
+
                         className="rounded border-gray-300 mr-2"
                       />
                       <span className="text-sm">{outcome}</span>

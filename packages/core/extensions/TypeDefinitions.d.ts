@@ -16,8 +16,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         setConfiguration: (...args: unknown[]) => unknown;
         isHealthy: (...args: unknown[]) => unknown;
         getHealthStatus: (...args: unknown[]) => unknown;
-    }, {
-        id: string;
+    }, { id: string;
         name: string;
         description: string;
         version: string;
@@ -31,9 +30,8 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         isHealthy: (...args: unknown[]) => unknown;
         getHealthStatus: (...args: unknown[]) => unknown;
         permissions?: string[] | undefined;
-        dependencies?: string[] | undefined;
-    }>;
-    NodeExtension: z.ZodObject<{,
+        dependencies?: string[] | undefined }>;
+    NodeExtension: z.ZodObject<{ ,
         extensionType: z.ZodLiteral<"node">;
         getNodeDefinitions: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
         createNodeInstance: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
@@ -43,9 +41,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onNodeCreated: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         onNodeExecuted: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         onNodeDestroyed: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
-        createAdvancedNodeInstance: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
-    }, "strip", z.ZodTypeAny, {
-        extensionType: "node";
+        createAdvancedNodeInstance: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>> }, "strip", z.ZodTypeAny, { extensionType: "node";
         getNodeDefinitions: (...args: unknown[]) => unknown;
         createNodeInstance: (...args: unknown[]) => unknown;
         validateNodeConfig: (...args: unknown[]) => unknown;
@@ -54,9 +50,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onNodeCreated?: ((...args: unknown[]) => unknown) | undefined;
         onNodeExecuted?: ((...args: unknown[]) => unknown) | undefined;
         onNodeDestroyed?: ((...args: unknown[]) => unknown) | undefined;
-        createAdvancedNodeInstance?: ((...args: unknown[]) => unknown) | undefined;
-    }, {
-        extensionType: "node";
+        createAdvancedNodeInstance?: ((...args: unknown[]) => unknown) | undefined }, { extensionType: "node";
         getNodeDefinitions: (...args: unknown[]) => unknown;
         createNodeInstance: (...args: unknown[]) => unknown;
         validateNodeConfig: (...args: unknown[]) => unknown;
@@ -65,9 +59,8 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onNodeCreated?: ((...args: unknown[]) => unknown) | undefined;
         onNodeExecuted?: ((...args: unknown[]) => unknown) | undefined;
         onNodeDestroyed?: ((...args: unknown[]) => unknown) | undefined;
-        createAdvancedNodeInstance?: ((...args: unknown[]) => unknown) | undefined;
-    }>;
-    UIExtension: z.ZodObject<{,
+        createAdvancedNodeInstance?: ((...args: unknown[]) => unknown) | undefined }>;
+    UIExtension: z.ZodObject<{ ,
         extensionType: z.ZodLiteral<"ui">;
         getComponentDefinitions: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
         createComponentInstance: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
@@ -77,9 +70,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         getKeybindingContributions: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
         onUIInitialized: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         onUIDestroyed: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
-        onThemeChanged: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
-    }, "strip", z.ZodTypeAny, {
-        extensionType: "ui";
+        onThemeChanged: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>> }, "strip", z.ZodTypeAny, { extensionType: "ui";
         getComponentDefinitions: (...args: unknown[]) => unknown;
         createComponentInstance: (...args: unknown[]) => unknown;
         getThemeContributions: (...args: unknown[]) => unknown;
@@ -88,9 +79,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         getKeybindingContributions: (...args: unknown[]) => unknown;
         onUIInitialized?: ((...args: unknown[]) => unknown) | undefined;
         onUIDestroyed?: ((...args: unknown[]) => unknown) | undefined;
-        onThemeChanged?: ((...args: unknown[]) => unknown) | undefined;
-    }, {
-        extensionType: "ui";
+        onThemeChanged?: ((...args: unknown[]) => unknown) | undefined }, { extensionType: "ui";
         getComponentDefinitions: (...args: unknown[]) => unknown;
         createComponentInstance: (...args: unknown[]) => unknown;
         getThemeContributions: (...args: unknown[]) => unknown;
@@ -99,9 +88,8 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         getKeybindingContributions: (...args: unknown[]) => unknown;
         onUIInitialized?: ((...args: unknown[]) => unknown) | undefined;
         onUIDestroyed?: ((...args: unknown[]) => unknown) | undefined;
-        onThemeChanged?: ((...args: unknown[]) => unknown) | undefined;
-    }>;
-    TransformExtension: z.ZodObject<{,
+        onThemeChanged?: ((...args: unknown[]) => unknown) | undefined }>;
+    TransformExtension: z.ZodObject<{ ,
         extensionType: z.ZodLiteral<"transform">;
         getTransformDefinitions: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
         createTransformInstance: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
@@ -111,9 +99,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onTransformCreated: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         onTransformExecuted: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         onTransformError: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
-        createPipeline: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
-    }, "strip", z.ZodTypeAny, {
-        extensionType: "transform";
+        createPipeline: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>> }, "strip", z.ZodTypeAny, { extensionType: "transform";
         getTransformDefinitions: (...args: unknown[]) => unknown;
         createTransformInstance: (...args: unknown[]) => unknown;
         validateTransformConfig: (...args: unknown[]) => unknown;
@@ -122,9 +108,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onTransformCreated?: ((...args: unknown[]) => unknown) | undefined;
         onTransformExecuted?: ((...args: unknown[]) => unknown) | undefined;
         onTransformError?: ((...args: unknown[]) => unknown) | undefined;
-        createPipeline?: ((...args: unknown[]) => unknown) | undefined;
-    }, {
-        extensionType: "transform";
+        createPipeline?: ((...args: unknown[]) => unknown) | undefined }, { extensionType: "transform";
         getTransformDefinitions: (...args: unknown[]) => unknown;
         createTransformInstance: (...args: unknown[]) => unknown;
         validateTransformConfig: (...args: unknown[]) => unknown;
@@ -133,9 +117,8 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onTransformCreated?: ((...args: unknown[]) => unknown) | undefined;
         onTransformExecuted?: ((...args: unknown[]) => unknown) | undefined;
         onTransformError?: ((...args: unknown[]) => unknown) | undefined;
-        createPipeline?: ((...args: unknown[]) => unknown) | undefined;
-    }>;
-    StorageExtension: z.ZodObject<{,
+        createPipeline?: ((...args: unknown[]) => unknown) | undefined }>;
+    StorageExtension: z.ZodObject<{ ,
         extensionType: z.ZodLiteral<"storage">;
         getStorageProviders: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
         createStorageProvider: z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>;
@@ -146,9 +129,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onStorageConnected: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         onStorageDisconnected: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
         onStorageError: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
-        createMigration: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>>;
-    }, "strip", z.ZodTypeAny, {
-        extensionType: "storage";
+        createMigration: z.ZodOptional<z.ZodFunction<z.ZodTuple<[], z.ZodUnknown>, z.ZodUnknown>> }, "strip", z.ZodTypeAny, { extensionType: "storage";
         getStorageProviders: (...args: unknown[]) => unknown;
         createStorageProvider: (...args: unknown[]) => unknown;
         validateStorageConfig: (...args: unknown[]) => unknown;
@@ -158,9 +139,7 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onStorageConnected?: ((...args: unknown[]) => unknown) | undefined;
         onStorageDisconnected?: ((...args: unknown[]) => unknown) | undefined;
         onStorageError?: ((...args: unknown[]) => unknown) | undefined;
-        createMigration?: ((...args: unknown[]) => unknown) | undefined;
-    }, {
-        extensionType: "storage";
+        createMigration?: ((...args: unknown[]) => unknown) | undefined }, { extensionType: "storage";
         getStorageProviders: (...args: unknown[]) => unknown;
         createStorageProvider: (...args: unknown[]) => unknown;
         validateStorageConfig: (...args: unknown[]) => unknown;
@@ -170,38 +149,29 @@ export declare         deactivate: (...args: unknown[]) => unknown;
         onStorageConnected?: ((...args: unknown[]) => unknown) | undefined;
         onStorageDisconnected?: ((...args: unknown[]) => unknown) | undefined;
         onStorageError?: ((...args: unknown[]) => unknown) | undefined;
-        createMigration?: ((...args: unknown[]) => unknown) | undefined;
-    }>;
+        createMigration?: ((...args: unknown[]) => unknown) | undefined }>;
 };
 export declare export type AnyExtension = import('./interfaces/NodeExtension').NodeExtension | import('./interfaces/UIExtension').UIExtension | import('./interfaces/TransformExtension').TransformExtension | import('./interfaces/StorageExtension').StorageExtension;
 export declare function isNodeExtension(extension: any): extension is import('./interfaces/NodeExtension').NodeExtension;
 export declare function isUIExtension(extension: any): extension is import('./interfaces/UIExtension').UIExtension;
 export declare function isTransformExtension(extension: any): extension is import('./interfaces/TransformExtension').TransformExtension;
 export declare function isStorageExtension(extension: any): extension is import('./interfaces/StorageExtension').StorageExtension;
-export declare const ExtensionTypeInfo: {
-    readonly node: {
+export declare const ExtensionTypeInfo: { readonly node: {
         readonly name: "Node Extension";
         readonly description: "Extends the runtime node system";
         readonly interfaces: readonly ["BaseExtension", "NodeExtension"];
-        readonly capabilities: readonly ["node-creation", "node-validation", "advanced-nodes"];
-    };
-    readonly ui: {
-        readonly name: "UI Extension";
+        readonly capabilities: readonly ["node-creation", "node-validation", "advanced-nodes"] };
+    readonly ui: { readonly name: "UI Extension";
         readonly description: "Extends the user interface system";
         readonly interfaces: readonly ["BaseExtension", "UIExtension"];
-        readonly capabilities: readonly ["components", "themes", "commands", "menus", "keybindings"];
-    };
-    readonly transform: {
-        readonly name: "Transform Extension";
+        readonly capabilities: readonly ["components", "themes", "commands", "menus", "keybindings"] };
+    readonly transform: { readonly name: "Transform Extension";
         readonly description: "Extends the data transformation system";
         readonly interfaces: readonly ["BaseExtension", "TransformExtension"];
-        readonly capabilities: readonly ["data-transformation", "pipeline-support", "validation"];
-    };
-    readonly storage: {
-        readonly name: "Storage Extension";
+        readonly capabilities: readonly ["data-transformation", "pipeline-support", "validation"] };
+    readonly storage: { readonly name: "Storage Extension";
         readonly description: "Extends the storage and persistence system";
         readonly interfaces: readonly ["BaseExtension", "StorageExtension"];
-        readonly capabilities: readonly ["data-storage", "migration", "backup", "queries"];
-    };
+        readonly capabilities: readonly ["data-storage", "migration", "backup", "queries"] };
 };
 //# sourceMappingURL=TypeDefinitions.d.ts.map

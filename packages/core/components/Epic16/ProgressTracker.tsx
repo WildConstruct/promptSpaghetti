@@ -10,8 +10,7 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { 
-  Trophy, 
+import { Trophy, 
   Star, 
   Award, 
   Target, 
@@ -30,14 +29,13 @@ import {
   ArrowUp,
   Zap,
   Crown,
-  Gift,
+  Gift }
   Flame
-} from 'lucide-react';
+ from 'lucide-react';
 // Epic 16 theme imports removed
 
-}
-export interface UserProgress {
-  userId: string;
+
+export interface UserProgress { userId: string;
   level: number;
   totalXP: number;
   nextLevelXP: number;
@@ -45,12 +43,11 @@ export interface UserProgress {
   joinDate: Date;
   lastActivity: Date;
   streakDays: number;
-  longestStreak: number;
-}
-}
-}
-export interface EngagementMetrics {
-  // Discovery metrics
+  longestStreak: number }
+
+
+
+export interface EngagementMetrics { // Discovery metrics
   templatesViewed: number;
   searchesPerformed: number;
   categoriesExplored: number;
@@ -74,12 +71,11 @@ export interface EngagementMetrics {
   tutorialsCompleted: number;
   skillsLearned: string;
   certificationsEarned: number;
-  learningPathsCompleted: number;
-}
-}
-}
-export interface Milestone {
-  id: string;
+  learningPathsCompleted: number }
+
+
+
+export interface Milestone { id: string;
   title: string;
   description: string;
   category: 'discovery' | 'usage' | 'creation' | 'social' | 'learning' | 'special';
@@ -91,30 +87,28 @@ export interface Milestone {
   badgeReward?: string;
   icon: string;
   tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
-  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'
-}
-  }
-}
-export interface ProgressTrackerProps {
-  userId: string;
+  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' }
+
+
+
+
+export interface ProgressTrackerProps { userId: string;
   variant?: 'full' | 'compact' | 'dashboard';
   showDetailedMetrics?: boolean;
   enableAnimations?: boolean;
   onMilestoneComplete?: (milestone: Milestone) => void;
   onLevelUp?: (newLevel: number, oldLevel: number) => void;
-  className?: string;
-}
-}
-export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
-  userId,
-  variant = 'full',
-  showDetailedMetrics = true,
-  enableAnimations = true,
-  onMilestoneComplete,
-  onLevelUp,
+  className?: string }
+
+export const ProgressTracker: React.FC<ProgressTrackerProps> = ({ )
+  userId
+  variant = 'full'
+  showDetailedMetrics = true
+  enableAnimations = true
+  onMilestoneComplete
+  onLevelUp }
   className = ''
-}) => {
-  const [userProgress, setUserProgress] = useState<UserProgress | null>(null);
+}) => { const [userProgress, setUserProgress] = useState<UserProgress | null>(null);
   const [metrics, setMetrics] = useState<EngagementMetrics | null>(null);
   const [milestones, setMilestones] = useState<Milestone>([]);
   const [recentAchievements, setRecentAchievements] = useState<Milestone>([]);
@@ -122,123 +116,117 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   // Mock data initialization
   useEffect(() => {
-  const mockUserProgress: UserProgress = {,
-  userId,
-  level: 12,
-  totalXP: 3420,
-  nextLevelXP: 4000,
-  currentLevelXP: 3000,
-  joinDate: new Date('2024-01-15'),
-  lastActivity: new Date(),
-  streakDays: 7,
-  longestStreak: 21,
+  const mockUserProgress: UserProgress = {
+  userId
+  level: 12
+  totalXP: 3420
+  nextLevelXP: 4000
+  currentLevelXP: 3000
+  joinDate: new Date('2024-01-15')
+  lastActivity: new Date()
+  streakDays: 7
+  longestStreak: 21 }
 };
-    const mockMetrics: EngagementMetrics = {,
-  templatesViewed: 156,
-  searchesPerformed: 89,
-  categoriesExplored: 12,
-  filtersUsed: 34,
-  templatesDownloaded: 45,
-  templatesPurchased: 12,
-  templatesImplemented: 38,
-  projectsCompleted: 23,
-  templatesCreated: 8,
-  templatesPublished: 6,
-  templatesShared: 15,
-  reviewsWritten: 12,
-  likesReceived: 234,
-  sharesReceived: 67,
-  followersGained: 89,
-  collaborationsJoined: 5,
-  tutorialsCompleted: 14,
-  skillsLearned: ['Advanced Prompting', 'Template Design', 'API Integration', 'Data Analysis'],
-  certificationsEarned: 3,
-  learningPathsCompleted: 2,
+    const mockMetrics: EngagementMetrics = { 
+  templatesViewed: 156
+  searchesPerformed: 89
+  categoriesExplored: 12
+  filtersUsed: 34
+  templatesDownloaded: 45
+  templatesPurchased: 12
+  templatesImplemented: 38
+  projectsCompleted: 23
+  templatesCreated: 8
+  templatesPublished: 6
+  templatesShared: 15
+  reviewsWritten: 12
+  likesReceived: 234
+  sharesReceived: 67
+  followersGained: 89
+  collaborationsJoined: 5
+  tutorialsCompleted: 14
+  skillsLearned: ['Advanced Prompting', 'Template Design', 'API Integration', 'Data Analysis']
+  certificationsEarned: 3
+  learningPathsCompleted: 2 }
 };
     const mockMilestones: Milestone = [
-      {
-  id: 'first-download',
-  title: 'First Download',
-  description: 'Download your first template',
-  category: 'usage',
-  target: 1,
-  current: 1,
-  completed: true,
-  completedAt: new Date('2024-01-20'),
-  xpReward: 100,
-  badgeReward: 'first-download-badge',
-  icon: '📥',
-  tier: 'bronze',
-  rarity: 'common',
-}
-      {
-  id: 'template-creator',
-  title: 'Template Creator',
-  description: 'Create and publish 5 templates',
-  category: 'creation',
-  target: 5,
-  current: 6,
-  completed: true,
-  completedAt: new Date('2024-03-15'),
-  xpReward: 500,
-  badgeReward: 'creator-badge',
-  icon: '🎨',
-  tier: 'gold',
-  rarity: 'rare',
-}
-      {
-  id: 'community-contributor',
-  title: 'Community Contributor',
-  description: 'Receive 100 likes on your templates',
-  category: 'social',
-  target: 100,
-  current: 234,
-  completed: true,
-  completedAt: new Date('2024-05-22'),
-  xpReward: 750,
-  badgeReward: 'contributor-badge',
-  icon: '❤️',
-  tier: 'platinum',
-  rarity: 'epic',
-}
-      {
-  id: 'learning-enthusiast',
-  title: 'Learning Enthusiast',
-  description: 'Complete 20 tutorials',
-  category: 'learning',
-  target: 20,
-  current: 14,
-  completed: false,
-  xpReward: 300,
-  icon: '📚',
-  tier: 'silver',
-  rarity: 'uncommon',
-}
-      {
-  id: 'marketplace-explorer',
-  title: 'Marketplace Explorer',
-  description: 'View templates from all 15 categories',
-  category: 'discovery',
-  target: 15,
-  current: 12,
-  completed: false,
-  xpReward: 200,
-  icon: '🗺️',
-  tier: 'silver',
-  rarity: 'uncommon',
-}
-      {
-  id: 'streak-master',
-  title: 'Streak Master',
-  description: 'Maintain a 30-day activity streak',
-  category: 'special',
-  target: 30,
-  current: 7,
-  completed: false,
-  xpReward: 1000,
-  badgeReward: 'streak-master-badge',
-  icon: '🔥',
-  tier: 'diamond',
+      { id: 'first-download'
+  title: 'First Download'
+  description: 'Download your first template'
+  category: 'usage'
+  target: 1
+  current: 1
+  completed: true
+  completedAt: new Date('2024-01-20')
+  xpReward: 100
+  badgeReward: 'first-download-badge'
+  icon: '📥'
+  tier: 'bronze'
+  rarity: 'common' }
+
+      { id: 'template-creator'
+  title: 'Template Creator'
+  description: 'Create and publish 5 templates'
+  category: 'creation'
+  target: 5
+  current: 6
+  completed: true
+  completedAt: new Date('2024-03-15')
+  xpReward: 500
+  badgeReward: 'creator-badge'
+  icon: '🎨'
+  tier: 'gold'
+  rarity: 'rare' }
+
+      { id: 'community-contributor'
+  title: 'Community Contributor'
+  description: 'Receive 100 likes on your templates'
+  category: 'social'
+  target: 100
+  current: 234
+  completed: true
+  completedAt: new Date('2024-05-22')
+  xpReward: 750
+  badgeReward: 'contributor-badge'
+  icon: '❤️'
+  tier: 'platinum'
+  rarity: 'epic' }
+
+      { id: 'learning-enthusiast'
+  title: 'Learning Enthusiast'
+  description: 'Complete 20 tutorials'
+  category: 'learning'
+  target: 20
+  current: 14
+  completed: false
+  xpReward: 300
+  icon: '📚'
+  tier: 'silver'
+  rarity: 'uncommon' }
+
+      { id: 'marketplace-explorer'
+  title: 'Marketplace Explorer'
+  description: 'View templates from all 15 categories'
+  category: 'discovery'
+  target: 15
+  current: 12
+  completed: false
+  xpReward: 200
+  icon: '🗺️'
+  tier: 'silver'
+  rarity: 'uncommon' }
+
+      { id: 'streak-master'
+  title: 'Streak Master'
+  description: 'Maintain a 30-day activity streak'
+  category: 'special'
+  target: 30
+  current: 7
+  completed: false
+  xpReward: 1000
+  badgeReward: 'streak-master-badge'
+  icon: '🔥'
+  tier: 'diamond' }
   rarity: 'legendary'];
   setUserProgress(mockUserProgress);
   setMetrics(mockMetrics);
@@ -246,50 +234,41 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
   setRecentAchievements(mockMilestones.filter(m => m.completed).slice(-3));
   setIsLoading(false);
 }, [userId]);
-  const getMilestoneIcon = (iconString: string) => {
-  const iconMap: Record<string, React.ReactNode> = {,
-  '📥': <Download className="w-5 h-5" />,
-  '🎨': <PlusCircle className="w-5 h-5" />,
-  '❤️': <Heart className="w-5 h-5" />,
-  '📚': <BookOpen className="w-5 h-5" />,
-  '🗺️': <Eye className="w-5 h-5" />,
-  '🔥': <Flame className="w-5 h-5" />,
-  '🏆': <Trophy className="w-5 h-5" />,
-  '⭐': <Star className="w-5 h-5" />,
-  '🎯': <Target className="w-5 h-5" />,
-  '👥': <Users className="w-5 h-5" />,
+  const getMilestoneIcon = (iconString: string) => { const iconMap: Record<string, React.ReactNode> = {
+  '📥': <Download className="w-5 h-5" />
+  '🎨': <PlusCircle className="w-5 h-5" />
+  '❤️': <Heart className="w-5 h-5" />
+  '📚': <BookOpen className="w-5 h-5" />
+  '🗺️': <Eye className="w-5 h-5" />
+  '🔥': <Flame className="w-5 h-5" />
+  '🏆': <Trophy className="w-5 h-5" />
+  '⭐': <Star className="w-5 h-5" />
+  '🎯': <Target className="w-5 h-5" />
+  '👥': <Users className="w-5 h-5" /> }
 };
     return iconMap[iconString] || <Award className="w-5 h-5" />;
   };
-  const getTierColor = (tier: string) => {
-  switch (tier) {
+  const getTierColor = (tier: string) => { switch (tier) {
   case 'diamond': return 'text-purple-600 bg-purple-100';
   case 'platinum': return 'text-cyan-600 bg-cyan-100';
   case 'gold': return 'text-yellow-600 bg-yellow-100';
   case 'silver': return 'text-gray-600 bg-gray-100';
   case 'bronze': return 'text-orange-600 bg-orange-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
-  const getCategoryIcon = (category: string) => {
-  switch (category) {
+  default: return 'text-gray-600 bg-gray-100' };
+  const getCategoryIcon = (category: string) => { switch (category) {
   case 'discovery': return <Eye className="w-4 h-4" />;
   case 'usage': return <Download className="w-4 h-4" />;
   case 'creation': return <PlusCircle className="w-4 h-4" />;
   case 'social': return <Users className="w-4 h-4" />;
   case 'learning': return <BookOpen className="w-4 h-4" />;
   case 'special': return <Crown className="w-4 h-4" />;
-  default: return <Target className="w-4 h-4" />;
-};
-  const getProgressPercentage = () => {
-    if (!userProgress) return 0;
+  default: return <Target className="w-4 h-4" /> };
+  const getProgressPercentage = () => { if (!userProgress) return 0;
     const currentProgress = userProgress.totalXP - userProgress.currentLevelXP;
     const levelRange = userProgress.nextLevelXP - userProgress.currentLevelXP;
-    return (currentProgress / levelRange) * 100;
-  };
-  const getFilteredMilestones = () => {
-    if (selectedCategory === 'all') return milestones;
-    return milestones.filter(milestone => milestone.category === selectedCategory);
-  };
+    return (currentProgress / levelRange) * 100 };
+  const getFilteredMilestones = () => { if (selectedCategory === 'all') return milestones;
+    return milestones.filter(milestone => milestone.category === selectedCategory) };
   const renderOverview = () => (;);
     <div className="space-y-6">
       {/* Level Progress */}

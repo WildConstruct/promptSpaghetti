@@ -17,12 +17,12 @@ options ?  : Array;
 component ?  : React.ComponentType;
 ;
 // Tags
-tags ?  : string[];
-keywords ?  : string[];
+tags ?  : string;
+keywords ?  : string;
 ;
 // Security context
 securityContext: {
-    permissions: string[];
+    permissions: string;
     sandboxed: boolean;
     resourceLimits: {
         memory ?  : number;

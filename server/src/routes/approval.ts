@@ -16,20 +16,20 @@ export async function approvalRoutes(fastify: FastifyInstance) {
   // GET /api/approval/criteria/:workspaceId - Get approval criteria
   fastify.get<{
     Params: { workspaceId: string };
-  }>('/criteria/:workspaceId', {
+>('/criteria/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
       const criteria = await approvalService.getApprovalCriteria(workspaceId);
       reply.send(criteria);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch approval criteria' });
-    }
+
   });
 
   // POST /api/approval/criteria - Create approval criteria
@@ -42,7 +42,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       weight: number;
       is_required: boolean;
     };
-  }>('/criteria', {
+>('/criteria', {
     schema: {
       body: z.object({
         workspace_id: z.string().uuid(),
@@ -51,15 +51,15 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         conditions: z.record(z.any()).default({}),
         weight: z.number().int().min(1).default(1),
         is_required: z.boolean().default(false)
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const criteria = await approvalService.createApprovalCriteria(request.body);
       reply.status(201).send(criteria);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to create approval criteria' });
-    }
+
   });
 
   // PUT /api/approval/criteria/:id - Update approval criteria
@@ -72,7 +72,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       weight?: number;
       is_required?: boolean;
     };
-  }>('/criteria/:id', {
+>('/criteria/:id', {
     schema: {
       params: z.object({
         id: z.string().uuid()
@@ -83,8 +83,8 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         conditions: z.record(z.any()).optional(),
         weight: z.number().int().min(1).optional(),
         is_required: z.boolean().optional()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -92,23 +92,23 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       
       if (!criteria) {
         return reply.status(404).send({ error: 'Approval criteria not found' });
-      }
+
       
       reply.send(criteria);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to update approval criteria' });
-    }
+
   });
 
   // DELETE /api/approval/criteria/:id - Delete approval criteria
   fastify.delete<{
     Params: { id: string };
-  }>('/criteria/:id', {
+>('/criteria/:id', {
     schema: {
       params: z.object({
         id: z.string().uuid()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -116,12 +116,12 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       
       if (!deleted) {
         return reply.status(404).send({ error: 'Approval criteria not found' });
-      }
+
       
       reply.status(204).send();
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to delete approval criteria' });
-    }
+
   });
 
   // =============================================================================
@@ -132,7 +132,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
   fastify.get<{
     Params: { workspaceId: string };
     Querystring: { transition_id?: string };
-  }>('/rules/:workspaceId', {
+>('/rules/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
@@ -140,7 +140,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       querystring: z.object({
         transition_id: z.string().uuid().optional()
       }).optional()
-    }
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -148,9 +148,9 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       
       const rules = await approvalService.getApprovalRules(workspaceId, transition_id);
       reply.send(rules);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch approval rules' });
-    }
+
   });
 
   // POST /api/approval/rules - Create approval rule
@@ -173,7 +173,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       auto_approval_enabled: boolean;
       auto_approval_conditions: Record<string, any>;
     };
-  }>('/rules', {
+>('/rules', {
     schema: {
       body: z.object({
         workspace_id: z.string().uuid(),
@@ -192,15 +192,15 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         escalation_reviewers: z.array(z.string()).default([]),
         auto_approval_enabled: z.boolean().default(false),
         auto_approval_conditions: z.record(z.any()).default({})
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const rule = await approvalService.createApprovalRule(request.body);
       reply.status(201).send(rule);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to create approval rule' });
-    }
+
   });
 
   // =============================================================================
@@ -220,7 +220,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       limit?: number;
       offset?: number;
     };
-  }>('/requests/:workspaceId', {
+>('/requests/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
@@ -235,7 +235,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         limit: z.number().int().min(1).max(100).default(20),
         offset: z.number().int().min(0).default(0)
       }).optional()
-    }
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -243,9 +243,9 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       
       const requests = await approvalService.getApprovalRequests(workspaceId, filters);
       reply.send(requests);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch approval requests' });
-    }
+
   });
 
   // POST /api/approval/requests - Create approval request
@@ -261,7 +261,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       due_date?: string;
     };
     Headers: { 'x-user-id': string };
-  }>('/requests', {
+>('/requests', {
     schema: {
       body: z.object({
         workspace_id: z.string().uuid(),
@@ -275,8 +275,8 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { workspace_id, resource_id, transition_id, title, description, urgency, business_justification, due_date } = request.body;
@@ -297,28 +297,28 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       );
       
       reply.status(201).send(approvalRequest);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to create approval request' });
-    }
+
   });
 
   // GET /api/approval/requests/:id/reviewers - Get reviewers for approval request
   fastify.get<{
     Params: { id: string };
-  }>('/requests/:id/reviewers', {
+>('/requests/:id/reviewers', {
     schema: {
       params: z.object({
         id: z.string().uuid()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
       const reviewers = await approvalService.getReviewerAssignments(id);
       reply.send(reviewers);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch reviewer assignments' });
-    }
+
   });
 
   // =============================================================================
@@ -334,7 +334,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       criteria_evaluations?: Record<string, any>;
     };
     Headers: { 'x-user-id': string };
-  }>('/requests/:id/review', {
+>('/requests/:id/review', {
     schema: {
       params: z.object({
         id: z.string().uuid()
@@ -346,8 +346,8 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -361,9 +361,9 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       });
       
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to submit review' });
-    }
+
   });
 
   // POST /api/approval/requests/:id/reviewers - Manually assign reviewers
@@ -374,7 +374,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       assignment_reason?: string;
     };
     Headers: { 'x-user-id': string };
-  }>('/requests/:id/reviewers', {
+>('/requests/:id/reviewers', {
     schema: {
       params: z.object({
         id: z.string().uuid()
@@ -385,8 +385,8 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -396,12 +396,12 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       const assignments = [];
       for (const reviewerId of reviewer_ids) {
         // Implementation would go here
-      }
+
       
       reply.send(assignments);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to assign reviewers' });
-    }
+
   });
 
   // =============================================================================
@@ -412,7 +412,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
   fastify.get<{
     Params: { workspaceId: string };
     Querystring: { category?: string; active?: boolean };
-  }>('/templates/:workspaceId', {
+>('/templates/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
@@ -421,7 +421,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         category: z.string().optional(),
         active: z.boolean().optional()
       }).optional()
-    }
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -437,12 +437,12 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       if (category) {
         query += ` AND category = $${paramIndex++}`;
         params.push(category);
-      }
+
 
       if (active !== undefined) {
         query += ` AND is_active = $${paramIndex++}`;
         params.push(active ? 1 : 0);
-      }
+
 
       query += ' ORDER BY usage_count DESC, name';
 
@@ -450,9 +450,9 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       const stmt = db.prepare(query);
       const result = stmt.all(...params);
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch approval templates' });
-    }
+
   });
 
   // POST /api/approval/templates - Create approval template
@@ -465,7 +465,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       template_config: Record<string, any>;
     };
     Headers: { 'x-user-id': string };
-  }>('/templates', {
+>('/templates', {
     schema: {
       body: z.object({
         workspace_id: z.string().uuid(),
@@ -476,8 +476,8 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { workspace_id, name, description, category, template_config } = request.body;
@@ -491,9 +491,9 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       `, [workspace_id, name, description, category, JSON.stringify(template_config), createdBy]);
       
       reply.status(201).send(result.rows[0]);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to create approval template' });
-    }
+
   });
 
   // =============================================================================
@@ -503,20 +503,20 @@ export async function approvalRoutes(fastify: FastifyInstance) {
   // GET /api/approval/statistics/:workspaceId - Get approval statistics
   fastify.get<{
     Params: { workspaceId: string };
-  }>('/statistics/:workspaceId', {
+>('/statistics/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
       const statistics = await approvalService.getApprovalStatistics(workspaceId);
       reply.send(statistics);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch approval statistics' });
-    }
+
   });
 
   // GET /api/approval/statistics/:workspaceId/performance - Get performance metrics
@@ -526,7 +526,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       period?: '7d' | '30d' | '90d' | '1y';
       reviewer_id?: string;
     };
-  }>('/statistics/:workspaceId/performance', {
+>('/statistics/:workspaceId/performance', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
@@ -535,7 +535,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         period: z.enum(['7d', '30d', '90d', '1y']).default('30d'),
         reviewer_id: z.string().optional()
       }).optional()
-    }
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -575,13 +575,13 @@ export async function approvalRoutes(fastify: FastifyInstance) {
           AND ra.reviewer_id = $2
         )`;
         params.push(reviewer_id);
-      }
+
       
       const result = await database.query(query, params);
       reply.send(result.rows[0]);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch performance metrics' });
-    }
+
   });
 
   // =============================================================================
@@ -593,9 +593,9 @@ export async function approvalRoutes(fastify: FastifyInstance) {
     try {
       await approvalService.processEscalations();
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to process escalations' });
-    }
+
   });
 
   // POST /api/approval/maintenance/expire-overdue - Expire overdue approvals
@@ -603,9 +603,9 @@ export async function approvalRoutes(fastify: FastifyInstance) {
     try {
       const result = await database.query('SELECT expire_overdue_approvals() as expired_count');
       reply.send({ expired_count: result.rows[0].expired_count });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to expire overdue approvals' });
-    }
+
   });
 
   // GET /api/approval/health - Health check for approval system
@@ -624,8 +624,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         active_rules: parseInt(healthChecks[2].rows[0].active_rules),
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Health check failed' });
-    }
+
   });
-}

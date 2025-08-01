@@ -15,21 +15,20 @@
  * - Accessibility compliance
  */
 import React from 'react';
-import { 
-  ConversionFunnelDefinition,
+import { ConversionFunnelDefinition,
   ConversionStep,
-  UserSegment,
+  UserSegment }
   ConversionCohort
 } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 }
-export interface FunnelChartProps {
-    funnelDefinition: ConversionFunnelDefinition;
+}
+export interface FunnelChartProps { funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     segments?: UserSegment[];
@@ -43,8 +42,8 @@ export interface FunnelChartProps {
 export type FunnelChartMode = 'standard' | 'horizontal' | 'sankey' | 'waterfall' | 'heatmap';
 
 }
-export interface StepMetrics {
-    stepId: string;
+}
+export interface StepMetrics { stepId: string;
     stepName: string;
     order: number;
     totalEntries: number;
@@ -56,8 +55,8 @@ export interface StepMetrics {
     revenue: number;
     revenuePerConversion: number;
     previousStepConversionRate?: number;
-    comparisonData?: StepComparisonMetrics;
-
+    comparisonData?: StepComparisonMetrics }
+}
 }
 export interface StepComparisonMetrics {
     previousPeriod: {
@@ -65,12 +64,11 @@ export interface StepComparisonMetrics {
         change: number;
         direction: 'improvement' | 'decline' | 'no_change'
 }
+}
   };
-    benchmark: {
-        conversionRate: number;
+    benchmark: { conversionRate: number;
         percentile: number;
-        industry: string;
-    };
+        industry: string };
     segments: Array<{
         segmentId: string;
         segmentName: string;
@@ -79,16 +77,15 @@ export interface StepComparisonMetrics {
   }>;
 
 }
-export interface FunnelChartData {
-    steps: StepMetrics[];
+}
+export interface FunnelChartData { steps: StepMetrics[];
     overallMetrics: OverallFunnelMetrics;
     dropoffAnalysis: DropoffAnalysis[];
     trends: FunnelTrend[];
-    segmentComparisons: SegmentFunnelComparison[];
-
+    segmentComparisons: SegmentFunnelComparison[] }
 }
-export interface OverallFunnelMetrics {
-    totalEntries: number;
+}
+export interface OverallFunnelMetrics { totalEntries: number;
     totalConversions: number;
     overallConversionRate: number;
     averageTimeToConvert: number;
@@ -97,78 +94,73 @@ export interface OverallFunnelMetrics {
     revenuePerConversion: number;
     totalDropoffs: number;
     biggestDropoffStep: string;
-    mostEfficientStep: string;
-
+    mostEfficientStep: string }
 }
-export interface DropoffAnalysis {
-    stepId: string;
+}
+export interface DropoffAnalysis { stepId: string;
     stepName: string;
     dropOffCount: number;
     dropOffRate: number;
     dropOffReasons: DropoffReason[];
     recoveryOpportunity: number;
     recommendedActions: string[];
-    severity: 'critical' | 'high' | 'medium' | 'low';
-
+    severity: 'critical' | 'high' | 'medium' | 'low' }
 }
-export interface DropoffReason {
-    reason: string;
+}
+export interface DropoffReason { reason: string;
     category: 'technical' | 'user_experience' | 'content' | 'external';
     percentage: number;
     count: number;
-    confidence: number;
-
+    confidence: number }
 }
-export interface FunnelTrend {
-    period: string;
+}
+export interface FunnelTrend { period: string;
     conversionRate: number;
     entries: number;
     conversions: number;
-    revenue: number;
-
+    revenue: number }
 }
-export interface SegmentFunnelComparison {
-    segmentId: string;
+}
+export interface SegmentFunnelComparison { segmentId: string;
     segmentName: string;
     overallConversionRate: number;
     stepPerformance: Array<{
         stepId: string;
         conversionRate: number;
-        relativePerformance: number;
+        relativePerformance: number }
 }
     }>;
     insights: string[];
 
 }
-export interface ChartExportData {
-    chartMode: FunnelChartMode;
+}
+export interface ChartExportData { chartMode: FunnelChartMode;
     data: FunnelChartData;
     visualization: {
         svg: string;
         png?: string;
-        pdf?: string;
+        pdf?: string }
 }
     };
-    metadata: {
-        exportedAt: number;
+    metadata: { exportedAt: number;
         timeRange: {
             start: number;
-            end: number;
-        };
+            end: number };
         filters: unknown[];
     };
 
 }
-export interface InteractionState {
-    hoveredStep: string | null;
+}
+export interface InteractionState { hoveredStep: string | null;
     selectedStep: string | null;
     tooltipPosition: {
         x: number;
-        y: number;
+        y: number }
 }
     } | null;
     tooltipContent: StepTooltipContent | null;
 
+}
 }
 export interface StepTooltipContent {
     stepName: string;
@@ -181,4 +173,5 @@ export interface StepTooltipContent {
 export declare const FunnelChart: React.FC<FunnelChartProps>;
 export default FunnelChart;
 //# sourceMappingURL=FunnelChart.d.ts.map
+}
 }

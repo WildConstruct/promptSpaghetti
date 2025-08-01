@@ -12,7 +12,7 @@ import {
   ClassificationDriftEvent,
   DriftAnalysisResult,
   DriftAlert
-} from '../services/DataClassificationService';
+ from '../services/DataClassificationService';
 
 describe('DataClassificationService', () => {
   let dataClassificationService: DataClassificationService;
@@ -27,19 +27,19 @@ describe('DataClassificationService', () => {
     // Mock database
     mockDb = {
       query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
-    } as any;
+ as any;
 
     // Mock Redis
     mockRedis = {
       get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
       setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
       del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
-    } as any;
+ as any;
 
     // Mock audit service
     mockAuditService = {
       logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
-    } as any;
+ as any;
 
     // Test configuration
     testConfig = {
@@ -55,28 +55,28 @@ describe('DataClassificationService', () => {
         restricted: true,
         internal: false,
         public: false
-  }
+
       approvalRequired: {
         confidential: true,
         restricted: true,
         internal: false,
         public: false
-  }
+
       driftDetection: {
         enabled: true,
         thresholds: {
           significantChange: 10.0,
           rapidChange: 5.0,
           timeWindow: 24
-  }
+
         alerting: {
           enabled: true,
           notifyOnSignificant: true,
           notifyOnRapid: true,
           notifyOnDowngrade: true,
           notifyOnUpgrade: false
-        }
-      }
+
+
     };
 
     dataClassificationService = new DataClassificationService(
@@ -131,7 +131,7 @@ describe('DataClassificationService', () => {
             operator: 'contains',
             value: 'confidential',
             caseSensitive: false
-          }
+
         ],
         classification: 'confidential',
         enabled: true,
@@ -171,12 +171,12 @@ describe('DataClassificationService', () => {
             field: 'filename',
             operator: 'pattern',
             value: '.*\\.secret\\.'
-  }
+
           {
             field: 'size',
             operator: 'gt',
             value: 1000
-          }
+
         ],
         classification: 'restricted',
         enabled: true,
@@ -239,7 +239,7 @@ describe('DataClassificationService', () => {
             field: 'category',
             operator: 'equals',
             value: 'personal'
-          }
+
         ],
         classification: 'confidential',
         enabled: true,
@@ -382,7 +382,7 @@ describe('DataClassificationService', () => {
             type: 'user_role',
             operator: 'in',
             value: ['admin', 'security_admin']
-          }
+
         ],
         approvalRequired: false,
         encryptionRequired: true,
@@ -447,7 +447,7 @@ describe('DataClassificationService', () => {
             type: 'time_window',
             operator: 'between',
             value: { start: '9', end: '17' }
-          }
+
         ],
         approvalRequired: false,
         encryptionRequired: false,
@@ -505,7 +505,7 @@ describe('DataClassificationService', () => {
             field: 'content',
             operator: 'contains' as const,
             value: 'test'
-          }
+
         ],
         classification: 'internal' as DataClassification,
         enabled: true
@@ -538,7 +538,7 @@ describe('DataClassificationService', () => {
           ruleId: rule.id,
           ruleName: 'Test Rule',
           classification: 'internal'
-  }
+
         severity: 'info'
       });
     });
@@ -631,7 +631,7 @@ describe('DataClassificationService', () => {
           policyName: 'Test Policy',
           action: 'deny',
           sourceClassification: 'confidential'
-  }
+
         severity: 'info'
       });
     });
@@ -649,7 +649,7 @@ describe('DataClassificationService', () => {
           reasoning: JSON.stringify(['Test reasoning']),
           metadata: JSON.stringify({}),
           classified_at: new Date('2024-01-01')
-  }
+
         {
           data_id: 'data-123',
           classification: 'confidential',
@@ -659,7 +659,7 @@ describe('DataClassificationService', () => {
           reasoning: JSON.stringify(['Updated reasoning']),
           metadata: JSON.stringify({}),
           classified_at: new Date('2024-01-02')
-        }
+
       ];
 
       (mockDb as any).query.mockResolvedValueOnce({ rows: mockHistory });
@@ -704,7 +704,7 @@ describe('DataClassificationService', () => {
           audit_level: 'full',
           metadata: JSON.stringify({}),
           timestamp: new Date()
-        }
+
       ];
 
       (mockDb as any).query.mockResolvedValueOnce({ rows: mockAuditLog });
@@ -796,7 +796,7 @@ describe('DataClassificationService', () => {
 
         const result = await dataClassificationService.createClassificationRule(rule);
         expect(result.classification).toBe(classification);
-      }
+
     });
 
     it('should audit all classification and transfer operations', async () => {
@@ -907,9 +907,9 @@ describe('DataClassificationService', () => {
                 reasoning: ['Previous classification'],
                 metadata: {},
                 classifiedAt: new Date(Date.now() - 60000) // 1 minute ago
-              }
+
             ];
-          }
+
           return [];
         });
     });
@@ -926,7 +926,7 @@ describe('DataClassificationService', () => {
             operator: 'contains',
             value: 'confidential',
             caseSensitive: false
-          }
+
         ],
         classification: 'confidential',
         enabled: true,
@@ -954,7 +954,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Previous classification'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 60000)
-          }
+
         ]);
 
       await dataClassificationService.classifyData(
@@ -990,7 +990,7 @@ describe('DataClassificationService', () => {
             driftType: 'upgrade',
             previousClassification: 'internal',
             newClassification: 'confidential'
-  }
+
   }
       );
     });
@@ -1007,7 +1007,7 @@ describe('DataClassificationService', () => {
             operator: 'contains',
             value: 'internal',
             caseSensitive: false
-          }
+
         ],
         classification: 'internal',
         enabled: true,
@@ -1048,7 +1048,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Latest classification'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 60000)
-  }
+
           {
             dataId: 'oscillating-data',
             classification: 'confidential',
@@ -1058,7 +1058,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Previous classification'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 120000)
-  }
+
           {
             dataId: 'oscillating-data',
             classification: 'internal',
@@ -1068,7 +1068,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Earlier classification'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 180000)
-  }
+
           {
             dataId: 'oscillating-data',
             classification: 'confidential',
@@ -1078,7 +1078,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Earliest classification'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 240000)
-          }
+
         ]);
 
       const confidentialRule: ClassificationRule = {
@@ -1092,7 +1092,7 @@ describe('DataClassificationService', () => {
             operator: 'contains',
             value: 'confidential',
             caseSensitive: false
-          }
+
         ],
         classification: 'confidential',
         enabled: true,
@@ -1171,7 +1171,7 @@ describe('DataClassificationService', () => {
               reasoning: ['Previous'],
               metadata: {},
               classifiedAt: new Date(Date.now() - 60000)
-            }
+
           ]);
 
         const rule: ClassificationRule = {
@@ -1185,7 +1185,7 @@ describe('DataClassificationService', () => {
               operator: 'contains',
               value: 'test',
               caseSensitive: false
-            }
+
           ],
           classification: testCase.to as DataClassification,
           enabled: true,
@@ -1221,10 +1221,10 @@ describe('DataClassificationService', () => {
               expect.any(Date)
             ])
           );
-        }
+
 
         jest.clearAllMocks();
-      }
+
     });
 
     it('should create appropriate alerts for downgrades', async () => {
@@ -1241,7 +1241,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Was restricted'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 60000)
-          }
+
         ]);
 
       // Rule that classifies as internal (downgrade from restricted)
@@ -1256,7 +1256,7 @@ describe('DataClassificationService', () => {
             operator: 'contains',
             value: 'internal',
             caseSensitive: false
-          }
+
         ],
         classification: 'internal',
         enabled: true,
@@ -1305,7 +1305,7 @@ describe('DataClassificationService', () => {
           driftType: 'upgrade',
           severity: 'medium',
           detectedAt: new Date()
-  }
+
         {
           id: 'drift-2',
           dataId: 'data-2',
@@ -1314,7 +1314,7 @@ describe('DataClassificationService', () => {
           driftType: 'downgrade',
           severity: 'high',
           detectedAt: new Date()
-  }
+
         {
           id: 'drift-3',
           dataId: 'data-3',
@@ -1323,7 +1323,7 @@ describe('DataClassificationService', () => {
           driftType: 'oscillation',
           severity: 'critical',
           detectedAt: new Date()
-        }
+
       ];
 
       // Mock getDriftEvents
@@ -1409,7 +1409,7 @@ describe('DataClassificationService', () => {
           reasoning: JSON.stringify(['Test reasoning']),
           metadata: JSON.stringify({}),
           detected_at: new Date()
-        }
+
       ];
 
       (mockDb as any).query.mockResolvedValueOnce({ rows: mockRows });
@@ -1444,7 +1444,7 @@ describe('DataClassificationService', () => {
           affected_percentage: 15.5,
           time_window: '24 hours',
           created_at: new Date()
-        }
+
       ];
 
       (mockDb as any).query.mockResolvedValueOnce({ rows: mockRows });
@@ -1489,7 +1489,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Previous'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 60000)
-          }
+
         ]);
 
       const confidentialRule: ClassificationRule = {
@@ -1503,7 +1503,7 @@ describe('DataClassificationService', () => {
             operator: 'contains',
             value: 'confidential',
             caseSensitive: false
-          }
+
         ],
         classification: 'confidential',
         enabled: true,

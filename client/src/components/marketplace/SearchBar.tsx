@@ -1,7 +1,8 @@
 // Epic 16 Marketplace - Search Bar Component
 import React, { useState, useRef, useEffect } from 'react';
 import './SearchBar.css';
-}
+
+
 interface SearchBarProps {
   value: string;,
   onChange: (value: string) => void;
@@ -10,7 +11,7 @@ interface SearchBarProps {
   suggestions?: string;
   loading?: boolean;
   className?: string;
-  export const SearchBar: React.FC<SearchBarProps> = ({,)
+  export const SearchBar: React.FC<SearchBarProps> = ({),
   value,
   onChange,
   onSubmit,
@@ -18,7 +19,8 @@ interface SearchBarProps {
   suggestions = [],
   loading = false,
   className = ''
-}
+
+
 }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
@@ -66,7 +68,7 @@ interface SearchBarProps {
   e.preventDefault();
   if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
   handleSuggestionSelect(suggestions[selectedSuggestion]);
-} else {
+ else {
   handleSubmit();
   break;
   case 'Escape':,
@@ -159,7 +161,7 @@ interface SearchBarProps {
               onClick={() => handleSuggestionSelect(suggestion)}
               className={`suggestion-item ${
   index === selectedSuggestion ? 'selected' : '',
-}`}
+`}
               type="button"
             >
               <div className="suggestion-icon">

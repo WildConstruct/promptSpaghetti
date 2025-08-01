@@ -10,8 +10,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface SecurityEvent {
-    id: string;
+}
+export interface SecurityEvent { id: string;
     timestamp: Date;
     userId?: string;
     sessionId?: string;
@@ -24,38 +24,37 @@ export interface SecurityEvent {
     geolocation?: GeolocationData;
 
 export declare enum SecurityEventType {
-    LOGIN_ATTEMPT = "login_attempt",
-    LOGIN_SUCCESS = "login_success",
-    LOGIN_FAILURE = "login_failure",
-    PASSWORD_RESET = "password_reset",
-    PERMISSION_CHANGE = "permission_change",
-    API_ACCESS = "api_access",
-    DATA_ACCESS = "data_access",
-    SUSPICIOUS_ACTIVITY = "suspicious_activity",
-    RATE_LIMIT_EXCEEDED = "rate_limit_exceeded",
-    BRUTE_FORCE_ATTEMPT = "brute_force_attempt",
-    ACCOUNT_LOCKOUT = "account_lockout",
+    LOGIN_ATTEMPT = "login_attempt";
+    LOGIN_SUCCESS = "login_success";
+    LOGIN_FAILURE = "login_failure";
+    PASSWORD_RESET = "password_reset";
+    PERMISSION_CHANGE = "permission_change";
+    API_ACCESS = "api_access";
+    DATA_ACCESS = "data_access";
+    SUSPICIOUS_ACTIVITY = "suspicious_activity";
+    RATE_LIMIT_EXCEEDED = "rate_limit_exceeded";
+    BRUTE_FORCE_ATTEMPT = "brute_force_attempt";
+    ACCOUNT_LOCKOUT = "account_lockout";
     PRIVILEGE_ESCALATION = "privilege_escalation"
 
 export declare enum SecuritySeverity {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
+    LOW = "low";
+    MEDIUM = "medium";
+    HIGH = "high" }
     CRITICAL = "critical"
 
 }
-export interface GeolocationData {
-    country: string;
+}
+}
+export interface GeolocationData { country: string;
     region: string;
     city: string;
     latitude: number;
     longitude: number;
-    isKnownLocation: boolean;
-
-
+    isKnownLocation: boolean }
 }
-export interface ThreatPrediction {
-    predictionId: string;
+}
+export interface ThreatPrediction { predictionId: string;
     timestamp: Date;
     threatType: ThreatType;
     confidence: number;
@@ -67,18 +66,19 @@ export interface ThreatPrediction {
     features: Record<string, number>;
 
 export declare enum ThreatType {
-    BRUTE_FORCE_ATTACK = "brute_force_attack",
-    ACCOUNT_TAKEOVER = "account_takeover",
-    CREDENTIAL_STUFFING = "credential_stuffing",
-    DISTRIBUTED_ATTACK = "distributed_attack",
-    INSIDER_THREAT = "insider_threat",
-    API_ABUSE = "api_abuse",
-    DATA_EXFILTRATION = "data_exfiltration",
+    BRUTE_FORCE_ATTACK = "brute_force_attack";
+    ACCOUNT_TAKEOVER = "account_takeover";
+    CREDENTIAL_STUFFING = "credential_stuffing";
+    DISTRIBUTED_ATTACK = "distributed_attack";
+    INSIDER_THREAT = "insider_threat";
+    API_ABUSE = "api_abuse";
+    DATA_EXFILTRATION = "data_exfiltration" }
     PRIVILEGE_ESCALATION_ATTEMPT = "privilege_escalation_attempt"
 
 }
-export interface PreventiveAction {
-    actionType: ActionType;
+}
+}
+export interface PreventiveAction { actionType: ActionType;
     target: string;
     parameters: Record<string, unknown>;
     urgency: 'low' | 'medium' | 'high' | 'immediate';
@@ -86,18 +86,19 @@ export interface PreventiveAction {
     estimatedEffectiveness: number;
 
 export declare enum ActionType {
-    INCREASE_MONITORING = "increase_monitoring",
-    RATE_LIMIT_ADJUSTMENT = "rate_limit_adjustment",
-    TEMPORARY_BLOCK = "temporary_block",
-    REQUIRE_MFA = "require_mfa",
-    ALERT_ADMIN = "alert_admin",
-    QUARANTINE_SESSION = "quarantine_session",
-    REVOKE_PERMISSIONS = "revoke_permissions",
+    INCREASE_MONITORING = "increase_monitoring";
+    RATE_LIMIT_ADJUSTMENT = "rate_limit_adjustment";
+    TEMPORARY_BLOCK = "temporary_block";
+    REQUIRE_MFA = "require_mfa";
+    ALERT_ADMIN = "alert_admin";
+    QUARANTINE_SESSION = "quarantine_session";
+    REVOKE_PERMISSIONS = "revoke_permissions" }
     FORCE_PASSWORD_RESET = "force_password_reset"
 
 }
-export interface PredictionModel {
-    modelId: string;
+}
+}
+export interface PredictionModel { modelId: string;
     name: string;
     version: string;
     accuracy: number;
@@ -107,9 +108,8 @@ export interface PredictionModel {
     lastUpdated: Date;
     isActive: boolean;
     threatTypes: ThreatType[];
-    featureImportance: Record<string, number>;
-
-
+    featureImportance: Record<string, number> }
+}
 }
 export interface AnalyticsConfiguration {
     predictionThreshold: number;
@@ -202,4 +202,5 @@ export declare class PredictiveAnalyticsFactory {
 
 export default PredictiveSecurityAnalytics;
 //# sourceMappingURL=PredictiveSecurityAnalytics.d.ts.map
+}
 }

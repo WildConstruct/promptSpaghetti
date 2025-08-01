@@ -3,19 +3,19 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './SearchBar.css';
 
-}
+
 interface EnhancedSearchBarProps {
   value: string;,
   onChange: (value: string) => void;
   onSubmit?: () => void;
   placeholder?: string;
   className?: string;
-
-export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
+  export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
-}
+
+
   const { getSearchSuggestions } = useMarketplace();
   // Suggestion fetching function
   const getSuggestions = useCallback(async (query: string) => {
@@ -29,11 +29,11 @@ export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
       const newSuggestions = await getSearchSuggestions(query);
       setSuggestions(newSuggestions);
       setShowSuggestions(newSuggestions.length > 0);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to fetch suggestions:', error);
   setSuggestions([]);
   setShowSuggestions(false);
-} finally {
+ finally {
       setLoading(false);
 
   }, [getSearchSuggestions]);
@@ -86,7 +86,7 @@ export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   e.preventDefault();
   if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
   handleSuggestionSelect(suggestions[selectedSuggestion]);
-} else {
+ else {
   handleSubmit();
   break;
   case 'Escape':,
@@ -187,7 +187,7 @@ export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
               onClick={() => handleSuggestionSelect(suggestion)}
               className={`suggestion-item ${
   index === selectedSuggestion ? 'selected' : '',
-}`}
+`}
               type="button"
               role="option"
               aria-selected={index === selectedSuggestion}

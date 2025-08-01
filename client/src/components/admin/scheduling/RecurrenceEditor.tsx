@@ -13,38 +13,41 @@ import {
   ToggleButton,
   Divider,
   Alert
-} from '@mui/material';
+ from '@mui/material';
 import {
   DatePicker
-} from '@mui/x-date-pickers/DatePicker';
+ from '@mui/x-date-pickers/DatePicker';
 import {
   Repeat as RepeatIcon
-} from '@mui/icons-material';
+ from '@mui/icons-material';
 
-}
+
 export interface RecurrenceData {
   type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';,
   interval: number;
-  daysOfWeek?: number; // 0-6 (Sunday-Saturday)
-  daysOfMonth?: number; // 1-31
-  monthsOfYear?: number; // 1-12
+  daysOfWeek?: number; // 0-6 (Sunday-Saturday),
+  daysOfMonth?: number; // 1-31,
+  monthsOfYear?: number; // 1-12,
   cronExpression?: string;
   maxOccurrences?: number;
   endDate?: Date;
-}
+
+
+
 interface RecurrenceEditorProps {
   value?: RecurrenceData;
   onChange: (recurrence: RecurrenceData | undefined) => void;
   error?: string;
-const RECURRENCE_TYPES = [;
-}
+  const RECURRENCE_TYPES = [
+
+
   { value: 'daily', label: 'Daily', description: 'Repeat every day(s)' },
   { value: 'weekly', label: 'Weekly', description: 'Repeat every week(s)' },
   { value: 'monthly', label: 'Monthly', description: 'Repeat every month(s)' },
   { value: 'yearly', label: 'Yearly', description: 'Repeat every year(s)' },
   { value: 'custom', label: 'Custom', description: 'Use cron expression' }
 ];
-const DAYS_OF_WEEK = [;
+const DAYS_OF_WEEK = [
   { value: 0, label: 'Sun', fullLabel: 'Sunday' },
   { value: 1, label: 'Mon', fullLabel: 'Monday' },
   { value: 2, label: 'Tue', fullLabel: 'Tuesday' },
@@ -53,7 +56,7 @@ const DAYS_OF_WEEK = [;
   { value: 5, label: 'Fri', fullLabel: 'Friday' },
   { value: 6, label: 'Sat', fullLabel: 'Saturday' }
 ];
-const MONTHS_OF_YEAR = [;
+const MONTHS_OF_YEAR = [
   { value: 1, label: 'Jan', fullLabel: 'January' },
   { value: 2, label: 'Feb', fullLabel: 'February' },
   { value: 3, label: 'Mar', fullLabel: 'March' },
@@ -87,11 +90,11 @@ const MONTHS_OF_YEAR = [;
     if (type === 'never') {
       updates.maxOccurrences = undefined;
       updates.endDate = undefined;
-    } else if (type === 'after') {
+ else if (type === 'after') {
       updates.endDate = undefined;
       if (!recurrenceData.maxOccurrences) {
         updates.maxOccurrences = 10;
-    } else if (type === 'on') {
+ else if (type === 'on') {
       updates.maxOccurrences = undefined;
       if (!recurrenceData.endDate) {
         updates.endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
@@ -132,7 +135,7 @@ const MONTHS_OF_YEAR = [;
         description = interval === 1 
           ? `Every week on ${dayNames}` }
           : `Every ${interval} weeks on ${dayNames}`;}
-      } else {
+ else {
         description = interval === 1 ? 'Every week' : `Every ${interval} weeks`;}
       break;
     case 'monthly':
@@ -141,7 +144,7 @@ const MONTHS_OF_YEAR = [;
         description = interval === 1 
           ? `Every month on day ${dayList}` }
           : `Every ${interval} months on day ${dayList}`;}
-      } else {
+ else {
         description = interval === 1 ? 'Every month' : `Every ${interval} months`;}
       break;
     case 'yearly':
@@ -150,7 +153,7 @@ const MONTHS_OF_YEAR = [;
         description = interval === 1 
           ? `Every year in ${monthNames}` }
           : `Every ${interval} years in ${monthNames}`;}
-      } else {
+ else {
         description = interval === 1 ? 'Every year' : `Every ${interval} years`;}
       break;
     case 'custom':
@@ -159,7 +162,7 @@ const MONTHS_OF_YEAR = [;
     // Add end condition
     if (endType === 'after' && recurrenceData.maxOccurrences) {
       description += `, ${recurrenceData.maxOccurrences} times total`;}
-    } else if (endType === 'on' && recurrenceData.endDate) {
+ else if (endType === 'on' && recurrenceData.endDate) {
       description += `, until ${recurrenceData.endDate.toLocaleDateString()}`;}
     return description;
   };
@@ -340,7 +343,7 @@ const MONTHS_OF_YEAR = [;
               onChange={(date) => handleChange({ endDate: date || undefined })}
               slotProps={{
                 textField: { fullWidth: true }
-              }}
+}
             />
           </Grid>
         )}
@@ -369,4 +372,3 @@ const MONTHS_OF_YEAR = [;
     </Box>
   );
 };
-}

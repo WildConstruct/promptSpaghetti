@@ -3,8 +3,7 @@
  * Tools and utilities for extension development and testing
  */
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './interfaces/ExtensionInterfaces';
-export declare class ExtensionDevelopmentKit {
-    private static instance;
+export declare class ExtensionDevelopmentKit { private static instance;
     private constructor();
     static getInstance(): ExtensionDevelopmentKit;
     /**
@@ -40,44 +39,36 @@ export declare class ExtensionDevelopmentKit {
     private generateExamples;
     private getTypeSpecificExample;
     private testPhase;
-    private toPascalCase;
-
+    private toPascalCase }
 }
-interface ExtensionSkeletonConfig {
-    id: string;
+interface ExtensionSkeletonConfig { id: string;
     name: string;
     type: 'node' | 'ui' | 'transform' | 'storage';
     author: string;
-    description: string;
-
-
+    description: string }
 }
-interface TestExtensionConfig {
-    id?: string;
+}
+interface TestExtensionConfig { id?: string;
     name?: string;
     version?: string;
     description?: string;
     author?: string;
     dependencies?: string[];
-    permissions?: string[];
-
-
+    permissions?: string[] }
 }
-interface LifecycleTestResult {
-    success: boolean;
+}
+interface LifecycleTestResult { success: boolean;
     phases: LifecyclePhaseResult[];
     errors: Error[];
-    duration: number;
-
-
+    duration: number }
 }
-interface LifecyclePhaseResult {
-    phase: string;
+}
+interface LifecyclePhaseResult { phase: string;
     success: boolean;
     duration: number;
     error?: Error;
 
-export declare const extensionDevelopmentKit: ExtensionDevelopmentKit;
+export declare const extensionDevelopmentKit: ExtensionDevelopmentKit }
 }
 export {};
 //# sourceMappingURL=ExtensionDevelopmentTools.d.ts.map

@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-interface ApprovalRequest {
-    id: string;
+}
+interface ApprovalRequest { id: string;
     workspace_id: string;
     resource_id: string;
     transition_id: string;
@@ -16,24 +16,23 @@ interface ApprovalRequest {
     due_date?: Date;
     current_approvals: number;
     required_approvals: number;
-    approval_percentage: number;
-
-
+    approval_percentage: number }
 }
-interface ApprovalReviewInterfaceProps {
-    request: ApprovalRequest;
+}
+interface ApprovalReviewInterfaceProps { request: ApprovalRequest;
     workspaceId: string;
     currentUserId: string;
-    onReviewSubmit: (),
-      decision: 'approve' | 'reject' | 'abstain',
-      comment?: string,
-      criteriaEvaluations?: Record<string,
+    onReviewSubmit: ();
+      decision: 'approve' | 'reject' | 'abstain';
+      comment?: string;
+      criteriaEvaluations?: Record<string }
       any>
     ) => void;
     onClose: () => void;
     readOnly?: boolean;
 
 export declare const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps>;
+}
 }
 export {};
 //# sourceMappingURL=ApprovalReviewInterface.d.ts.map

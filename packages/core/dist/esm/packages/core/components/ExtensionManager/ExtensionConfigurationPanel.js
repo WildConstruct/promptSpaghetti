@@ -51,7 +51,7 @@ export const ExtensionConfigurationPanel = ({
         defaultValue;
     'info',
         options;
-    [,
+    [
         { label: 'Debug', value: 'debug' },
         { label: 'Info', value: 'info' },
         { label: 'Warning', value: 'warning' },

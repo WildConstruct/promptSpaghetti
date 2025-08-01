@@ -4,13 +4,12 @@
 import React from 'react';
 
 }
-interface SaveProjectDialogProps {
-    isOpen: boolean;
+}
+interface SaveProjectDialogProps { isOpen: boolean;
     onClose: () => void;
     onSave?: (result: {)
         success: boolean;
-        error?: string;
-
+        error?: string }
 }
     }) => void;
 

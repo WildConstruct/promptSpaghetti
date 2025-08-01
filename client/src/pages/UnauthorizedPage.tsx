@@ -7,74 +7,7 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 
-export const UnauthorizedPage: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { user, logout } = useAuthStore();
-  const from = location.state?.from?.pathname || '/';
-  const reason = location.state?.reason;
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-  const handleGoHome = () => {
-    navigate('/');
-  };
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-  return;
-    <div style={{
-  minHeight: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: '#f8f9fa',
-  padding: '20px',
-}}>
-      <div style={{
-  maxWidth: '500px',
-  width: '100%',
-  backgroundColor: 'white',
-  borderRadius: '8px',
-  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-  padding: '40px',
-  textAlign: 'center',
-}}>
-        {/* Error Icon */}
-        <div style={{
-  width: '80px',
-  height: '80px',
-  backgroundColor: '#fee',
-  borderRadius: '50%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  margin: '0 auto 30px',
-  fontSize: '40px',
-  color: '#dc3545',
-}}>
-          🚫
-        </div>
-        <h1 style={{
-  fontSize: '28px',
-  fontWeight: 'bold',
-  color: '#333',
-  marginBottom: '16px',
-}}>
-          Access Denied
-        </h1>
-        <div style={{
-  color: '#666',
-  fontSize: '16px',
-  lineHeight: '1.5',
-  marginBottom: '30px',
-}}>
-          {reason === 'insufficient_permissions' ? ()
-            <>
-              <p>You don't have the required permissions to access this page.</p>
-              {user && ()
-                <p style={{ marginTop: '10px', fontSize: '14px' }}>
+export const UnauthorizedPage = () => { return null; }>
                   Logged in as: <strong>{user.email}</strong>
                 </p>
               )}
@@ -102,7 +35,7 @@ export const UnauthorizedPage: React.FC = () => {
   fontWeight: '500',
   cursor: 'pointer',
   minWidth: '100px',
-}}
+}
           >
             Go Back
           </button>
@@ -118,7 +51,7 @@ export const UnauthorizedPage: React.FC = () => {
   fontWeight: '500',
   cursor: 'pointer',
   minWidth: '100px',
-}}
+}
           >
             Go Home
           </button>
@@ -129,14 +62,14 @@ export const UnauthorizedPage: React.FC = () => {
   paddingTop: '30px',
   borderTop: '1px solid #eee',
   fontSize: '14px',
-}}>
+}>
           <div style={{ marginBottom: '15px' }}>
             <Link
               to="/support"
               style={{
   color: '#007bff',
   textDecoration: 'none',
-}}
+}
             >
               Contact support if you believe this is an error
             </Link>
@@ -152,7 +85,7 @@ export const UnauthorizedPage: React.FC = () => {
   textDecoration: 'underline',
   cursor: 'pointer',
   fontSize: '14px',
-}}
+}
               >
                 Sign out and use a different account
               </button>

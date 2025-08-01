@@ -8,8 +8,8 @@ import { FrameworkNode, NodeDefinition } from '../NodeFramework';
 import { AdvancedNodeConfig, AdvancedExecutionContext } from '../../runtime/advanced';
 
 }
-export interface WeightedChoiceData {
-    choices: string[];
+}
+export interface WeightedChoiceData { choices: string[];
     weights: number[];
     normalizeWeights?: boolean;
     seedOverride?: string;
@@ -42,22 +42,20 @@ export declare class WeightedChoiceFrameworkNode extends FrameworkNode {
             choice: string;
             weight: number;
             normalizedWeight: number;
-            percentage: number;
+            percentage: number }
 }
         }>;
     };
     /**
      * Simulate multiple selections for testing
      */
-    simulate(iterations: number, seed?: number): {
-        results: Record<string, number>;
+    simulate(iterations: number, seed?: number): { results: Record<string, number>;
         percentages: Record<string, number>;
         expectedVsActual: Array<{
             choice: string;
             expected: number;
             actual: number;
-            deviation: number;
-        }>;
+            deviation: number }>;
     };
     private validateChoicesAndWeights;
     private calculateNormalizedWeights;

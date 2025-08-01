@@ -15,12 +15,11 @@ export { useNodeSelection } from './hooks/useNodeSelection';
 export { useGraphOperations } from './hooks/useGraphOperations';
 
 // Store
-export {
-  useGraphEditorStore,
+export { useGraphEditorStore,
   useGraphEditorState,
   useGraphEditorConfig,
-  useGraphEditorHistory,
-} from './stores/graphEditorStore';
+  useGraphEditorHistory }
+ from './stores/graphEditorStore';
 
 // Re-export existing components (to be migrated)
 export { default as GraphEditor } from '../../GraphEditor';

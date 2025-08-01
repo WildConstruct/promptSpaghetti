@@ -6,19 +6,17 @@
  */
 
 }
-export interface RetryOptions {
-    maxAttempts: number;
+}
+export interface RetryOptions { maxAttempts: number;
     baseDelay: number;
     maxDelay: number;
     backoffMultiplier: number;
-    retryCondition?: (error: Error) => boolean;
-
+    retryCondition?: (error: Error) => boolean }
 }
-export interface FallbackOptions<T> {
-    fallbackValue?: T;
+}
+export interface FallbackOptions<T> { fallbackValue?: T;
     fallbackFunction?: () => T | Promise<T>;
-    logError?: boolean;
-
+    logError?: boolean }
 }
 export interface CircuitBreakerOptions {
     threshold: number;
@@ -49,13 +47,12 @@ export declare class ErrorRecovery {
         name: string;
         priority: 'critical' | 'important' | 'optional'
 }
-  }>, context: string): Promise<{
-        results: Array<{
+}
+  }>, context: string): Promise<{ results: Array<{
             name: string;
             result?: T;
             error?: Error;
-            skipped?: boolean;
-        }>;
+            skipped?: boolean }>;
         success: boolean;
     }>;
     /**
@@ -80,6 +77,7 @@ export declare class ErrorRecovery {
      * Reset circuit breaker manually
      */
     static resetCircuitBreaker(name: string): void;
+}
 }
 interface CircuitBreakerState extends CircuitBreakerOptions {
     state: 'closed' | 'open' | 'half-open';

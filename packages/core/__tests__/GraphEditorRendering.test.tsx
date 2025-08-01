@@ -10,8 +10,8 @@ import { GraphEditor } from '../GraphEditor';
 import { Node, Edge } from 'reactflow';
 
 // Mock ReactFlow to control rendering behavior
-jest.mock('reactflow', () => ({)
-  ...jest.requireActual('reactflow'),
+jest.mock('reactflow', () => ({ )
+  ...jest.requireActual('reactflow') }
   ReactFlow: ({ children, nodes, edges, onNodesChange, onEdgesChange, onConnect, ...props }: any) => ()
     <div data-testid="reactflow-wrapper" {...props}>
       <div data-testid="reactflow-nodes">
@@ -46,35 +46,35 @@ jest.mock('reactflow', () => ({)
       data-handle-position={position}
       {...props}
     />
-  ),
-  Position: {
-  Top: 'top',
-  Right: 'right',
-  Bottom: 'bottom',
-  Left: 'left',
+  )
+  Position: { 
+  Top: 'top'
+  Right: 'right'
+  Bottom: 'bottom'
+  Left: 'left' }
 }));
 describe('GraphEditor Scene Rendering Integration', () => {
   const createMockGraph = (nodeCount: number = 3, edgeCount: number = 2) => {
     const nodes: Node = Array.from({ length: nodeCount }, (_, i) => ({)
   id: `node-${i + 1}`}
-},
-  type: i % 2 === 0 ? 'WeightedChoice' : 'Output',
-      position: { x: i * 200, y: i * 100 },
+
+  type: i % 2 === 0 ? 'WeightedChoice' : 'Output'
+      position: { x: i * 200, y: i * 100 }
       data: {
   label: `Node ${i + 1}`}
-},
-  nodeType: i % 2 === 0 ? 'WeightedChoice' : 'Output',
-        ...(i === 0 && { choices: [{ value: 'Option 1', weight: 1 }] }),
-        ...(i === 1 && { text: 'Output text' }),
+
+  nodeType: i % 2 === 0 ? 'WeightedChoice' : 'Output'
+        ...(i === 0 && { choices: [{ value: 'Option 1', weight: 1 }] })
+        ...(i === 1 && { text: 'Output text' })
         ...(i === 2 && { property: 'value' })
     }));
     const edges: Edge = Array.from({ length: Math.min(edgeCount, nodeCount - 1) }, (_, i) => ({)
   id: `edge-${i + 1}`}
-},
+
   source: `node-${i + 1}`}
-},
+
   target: `node-${i + 2}`}
-},
+
   animated: i % 2 === 0;
   }));
     return { nodes, edges };
@@ -118,21 +118,18 @@ describe('GraphEditor Scene Rendering Integration', () => {
         initialEdges={edges}
       />
     );
-    await waitFor(() => {
-      // Verify rendering doesn't crash with large datasets
+    await waitFor(() => { // Verify rendering doesn't crash with large datasets
       expect(screen.getByTestId('reactflow-wrapper')).toBeInTheDocument();
       expect(screen.getAllByTestId(/flow-node-/).length).toBe(50);
-      expect(screen.getAllByTestId(/flow-edge-/).length).toBe(49);
-    });
+      expect(screen.getAllByTestId(/flow-edge-/).length).toBe(49) });
     // Performance check - should render without hanging
     expect(container).toBeInTheDocument();
   });
-  it('renders nodes at correct positions', () => {
-    const nodes: Node = [
+  it('renders nodes at correct positions', () => { const nodes: Node = [
       {
-        id: 'positioned-node',
-        type: 'WeightedChoice',
-        position: { x: 150, y: 250 },
+        id: 'positioned-node'
+        type: 'WeightedChoice' }
+        position: { x: 150, y: 250 }
         data: { label: 'Positioned Node' }
     ];
     render();
@@ -142,24 +139,22 @@ describe('GraphEditor Scene Rendering Integration', () => {
       />
     );
     const nodeElement = screen.getByTestId('flow-node-positioned-node');
-    expect(nodeElement).toHaveStyle({)
-  position: 'absolute',
-  left: '150px',
-  top: '250px',
+    expect(nodeElement).toHaveStyle({ )
+  position: 'absolute'
+  left: '150px'
+  top: '250px' }
 });
   });
-  it('renders different node types with appropriate styling', () => {
-    const nodes: Node = [
+  it('renders different node types with appropriate styling', () => { const nodes: Node = [
       {
-        id: 'weighted-node',
-        type: 'WeightedChoice',
-        position: { x: 0, y: 0 },
+        id: 'weighted-node'
+        type: 'WeightedChoice' }
+        position: { x: 0, y: 0 }
         data: { label: 'Weighted Choice', nodeType: 'WeightedChoice' }
-  }
-      {
-        id: 'output-node',
-        type: 'Output',
-        position: { x: 200, y: 0 },
+
+      { id: 'output-node'
+        type: 'Output' }
+        position: { x: 200, y: 0 }
         data: { label: 'Output Node', nodeType: 'Output' }
     ];
     render();
@@ -189,7 +184,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
   });
   it('renders validation errors visually', () => {
     const { nodes, edges } = createMockGraph(2, 1);
-    const validateConnection = jest.fn(() => [;
+    const validateConnection = jest.fn(() => [
       { edgeId: 'edge-1', message: 'Invalid connection type' }
     ]);
     render();
@@ -237,18 +232,16 @@ describe('GraphEditor Scene Rendering Integration', () => {
     expect(zoomOutButton).toBeInTheDocument();
     expect(fitViewButton).toBeInTheDocument();
   });
-  it('renders animated edges correctly', () => {
-  const edges: Edge = [
+  it('renders animated edges correctly', () => { const edges: Edge = [
   {
-  id: 'animated-edge',
-  source: 'node-1',
-  target: 'node-2',
-  animated: true,
-}
-      {
-        id: 'static-edge',
-        source: 'node-2',
-        target: 'node-3',
+  id: 'animated-edge'
+  source: 'node-1'
+  target: 'node-2'
+  animated: true }
+
+      { id: 'static-edge'
+        source: 'node-2'
+        target: 'node-3' }
         animated: false];
     const { nodes } = createMockGraph(3, 0);
     render();
@@ -271,8 +264,8 @@ describe('GraphEditor Scene Rendering Integration', () => {
     const reactFlowWrapper = screen.getByTestId('reactflow-wrapper');
     // Simulate drop event on canvas
     fireEvent.dragOver(reactFlowWrapper);
-    fireEvent.drop(reactFlowWrapper, {)
-  dataTransfer: {
+    fireEvent.drop(reactFlowWrapper, { )
+  dataTransfer: { }
   getData: jest.fn(() => JSON.stringify({ nodeType: 'WeightedChoice' }))
     });
     // Canvas should handle the drop event
@@ -299,9 +292,8 @@ describe('GraphEditor Scene Rendering Integration', () => {
       />
     );
     // Simulate multiple rapid updates
-    for (let i = 0; i < 5; i++) {
-      const updatedNodes = nodes.map(node => ({)
-  ...node,
+    for (let i = 0; i < 5; i++) { const updatedNodes = nodes.map(node => ({)
+  ...node }
         position: { x: node.position.x + i * 10, y: node.position.y + i * 10 }
       }));
       rerender();
@@ -311,9 +303,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
         />
       );
     // Should still render correctly after multiple updates
-    await waitFor(() => {
-      expect(screen.getAllByTestId(/flow-node-/).length).toBe(10);
-    });
+    await waitFor(() => { expect(screen.getAllByTestId(/flow-node-/).length).toBe(10) });
   });
   it('handles edge creation and deletion rendering', () => {
     const { nodes } = createMockGraph(3, 0);
@@ -334,15 +324,15 @@ describe('GraphEditor Scene Rendering Integration', () => {
   it('renders responsive layout on different viewport sizes', () => {
     const { nodes, edges } = createMockGraph(4, 3);
     // Mock different viewport sizes
-    Object.defineProperty(window, 'innerWidth', {)
-  writable: true,
-  configurable: true,
-  value: 1200,
+    Object.defineProperty(window, 'innerWidth', { )
+  writable: true
+  configurable: true
+  value: 1200 }
 });
-    Object.defineProperty(window, 'innerHeight', {)
-  writable: true,
-  configurable: true,
-  value: 800,
+    Object.defineProperty(window, 'innerHeight', { )
+  writable: true
+  configurable: true
+  value: 800 }
 });
     render();
       <GraphEditor 

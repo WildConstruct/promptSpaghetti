@@ -414,13 +414,15 @@ onClose: () => void ;
     ;
     ;
 };
-const AssignmentModal = ({ currentAssignee, onAssign, onClose }) => {
+const AssignmentModal;
+() => void ;
+ > ;
+({ currentAssignee, onAssign, onClose }) => {
     const [selectedAssignee, setSelectedAssignee] = useState(currentAssignee || '');
     return;
     _jsx("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", children: _jsxs("div", { className: "bg-white rounded-lg shadow-xl w-full max-w-md", children: [_jsx("div", { className: "px-6 py-4 border-b border-gray-200", children: _jsx("h3", { className: "text-lg font-medium text-gray-900", children: "Assign Ticket" }) }), _jsx("div", { className: "p-6", children: _jsxs("select", { value: selectedAssignee, onChange: (e) => setSelectedAssignee(e.target.value), className: "w-full px-3 py-2 border border-gray-300 rounded-md", children: [_jsx("option", { value: "", children: "Unassigned" }), _jsx("option", { value: "agent-1", children: "Agent 1" }), _jsx("option", { value: "agent-2", children: "Agent 2" }), _jsx("option", { value: "agent-3", children: "Agent 3" }), _jsx("option", { value: "agent-4", children: "Agent 4" })] }) }), _jsxs("div", { className: "px-6 py-4 border-t border-gray-200 flex justify-end space-x-3", children: [_jsx("button", { onClick: onClose, className: "px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200", children: "Cancel" }), _jsx("button", { onClick: () => onAssign(selectedAssignee), className: "px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700", children: "Assign" })] })] }) });
+    ;
 };
-;
-;
 const EscalationModal;
 (reason) => void ;
 onClose: () => void ;

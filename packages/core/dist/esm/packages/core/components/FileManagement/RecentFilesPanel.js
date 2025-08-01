@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useCallback, useEffect } from 'react';
 import { ProjectManager } from '../../projectManager';
-export const RecentFilesPanel = ({ onFileSelected, onFileLoad, onClearRecents, theme = 'cinema', maxRecentFiles = 10, showFavorites = true, showClearButton = true }) => {
+export const RecentFilesPanel = ({ onFileSelected, onFileLoad, onClearRecents, theme = 'cinema', maxRecentFiles = 10, showFavorites = true, showClearButton = true, }) => {
     const [recentFiles, setRecentFiles] = useState([]);
     const [favoriteFiles, setFavoriteFiles] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -48,7 +48,7 @@ export const RecentFilesPanel = ({ onFileSelected, onFileLoad, onClearRecents, t
                 accent: 'var(--color-accent-orange, #ff7c00)',
                 hover: 'var(--color-ui-hover, #2d2d2d)',
                 selection: 'var(--color-ui-selection, #ff7c0040)',
-            }
+            },
         };
         return themes[theme];
     };
@@ -126,12 +126,12 @@ export const RecentFilesPanel = ({ onFileSelected, onFileLoad, onClearRecents, t
             border: `1px solid ${selectedFile?.id === file.id ? styles.accent : 'transparent'}`,
             borderRadius: '6px',
             cursor: 'pointer',
-            transition: 'all 0.15s ease'
-        }, onMouseOver: (e) => {
+            transition: 'all 0.15s ease',
+        }, onMouseOver: e => {
             if (selectedFile?.id !== file.id) {
                 e.currentTarget.style.backgroundColor = styles.hover;
             }
-        }, onMouseOut: (e) => {
+        }, onMouseOut: e => {
             if (selectedFile?.id !== file.id) {
                 e.currentTarget.style.backgroundColor = 'transparent';
             }
@@ -161,7 +161,7 @@ export const RecentFilesPanel = ({ onFileSelected, onFileLoad, onClearRecents, t
                             display: 'flex',
                             alignItems: 'center',
                             gap: '8px',
-                        }, children: [_jsxs("span", { children: [file.nodeCount, " nodes"] }), _jsx("span", { children: "\u2022" }), _jsx("span", { children: formatFileSize(file.size) }), _jsx("span", { children: "\u2022" }), _jsx("span", { children: formatDate(file.lastModified) })] }))] }), _jsx("div", { style: { display: 'flex', alignItems: 'center', gap: '4px' }, children: _jsx("button", { onClick: (e) => {
+                        }, children: [_jsxs("span", { children: [file.nodeCount, " nodes"] }), _jsx("span", { children: "\u2022" }), _jsx("span", { children: formatFileSize(file.size) }), _jsx("span", { children: "\u2022" }), _jsx("span", { children: formatDate(file.lastModified) })] }))] }), _jsx("div", { style: { display: 'flex', alignItems: 'center', gap: '4px' }, children: _jsx("button", { onClick: e => {
                         e.stopPropagation();
                         handleToggleFavorite(file);
                     }, style: {
@@ -186,7 +186,7 @@ export const RecentFilesPanel = ({ onFileSelected, onFileLoad, onClearRecents, t
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '16px',
-                    borderBottom: `1px solid ${styles.border}`
+                    borderBottom: `1px solid ${styles.border}`,
                 }, children: [_jsx("h2", { style: {
                             margin: 0,
                             fontSize: '18px',
@@ -207,7 +207,7 @@ export const RecentFilesPanel = ({ onFileSelected, onFileLoad, onClearRecents, t
                                     borderRadius: '4px',
                                     color: styles.textSecondary,
                                     fontSize: '12px',
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
                                 }, children: "Clear All" }))] })] }), _jsxs("div", { style: { flex: 1, overflow: 'auto', padding: '16px' }, children: [showFavorites && favoriteFiles.length > 0 && (_jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("h3", { style: {
                                     margin: '0 0 12px 0',
                                     fontSize: '14px',

@@ -15,8 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { Switch } from '../ui/Switch';
-import { 
-  Settings,
+import { Settings,
   Play,
   Pause,
   RotateCcw,
@@ -45,11 +44,10 @@ import {
   Activity,
   BarChart3,
   Zap,
-  History,
+  History }
   AlertCircle
-} from 'lucide-react';
-import {
-  bulkPropertyUpdateService,
+ from 'lucide-react';
+import { bulkPropertyUpdateService,
   BulkUpdateOperation,
   BulkUpdateTarget,
   PropertyUpdate,
@@ -57,16 +55,18 @@ import {
   TargetType,
   OperationStatus,
   BulkUpdateTemplate,
-  BulkUpdateFilter,
+  BulkUpdateFilter }
   BulkUpdateStats
-} from '../../services/BulkPropertyUpdateService';
-}
+ from '../../services/BulkPropertyUpdateService';
+
+
 interface BulkPropertyUpdateDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-const TARGET_TYPE_CONFIG = {
-}
+  const TARGET_TYPE_CONFIG = {
+
+},
   user: { color: 'text-blue-600 bg-blue-100', icon: Users },
   content: { color: 'text-green-600 bg-green-100', icon: FileText },
   product: { color: 'text-orange-600 bg-orange-100', icon: Package },
@@ -105,9 +105,9 @@ const OPERATION_TYPE_CONFIG = {
   toggle: { label: 'Toggle Boolean', description: 'Toggle boolean property' }
 };
 
-export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardProps> = ({)
-  className = '',
-  userId,
+export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardProps> = ({ )
+  className = ''
+  userId }
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState('operations');
@@ -123,28 +123,25 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
   const [targetTypeFilter, setTargetTypeFilter] = useState<TargetType | 'all'>('all');
   // Create Operation Form
   const [isCreating, setIsCreating] = useState(false);
-  const [newOperation, setNewOperation] = useState({)
-  name: '',
-  targetType: 'user' as TargetType,
-  targets: [] as BulkUpdateTarget,
-  updates: [] as PropertyUpdate,
-  dryRun: true,
-  backupBeforeUpdate: true,
+  const [newOperation, setNewOperation] = useState({ )
+  name: ''
+  targetType: 'user' as TargetType
+  targets: [] as BulkUpdateTarget
+  updates: [] as PropertyUpdate
+  dryRun: true
+  backupBeforeUpdate: true }
 });
   // Load data
-  useEffect(() => {
-    loadData();
+  useEffect(() => { loadData();
     const interval = setInterval(loadData, 10000); // Refresh every 10 seconds;
-    return () => clearInterval(interval);
-  }, []);
-  const loadData = async () => {
-  try {
+    return () => clearInterval(interval) }, []);
+  const loadData = async () => { try {
   setIsLoading(true);
   // Build filter
-  const operationFilter: BulkUpdateFilter = {,
-  searchQuery: searchQuery || undefined,
-  statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
-  targetTypes: targetTypeFilter !== 'all' ? [targetTypeFilter] : undefined,
+  const operationFilter: BulkUpdateFilter = {
+  searchQuery: searchQuery || undefined
+  statuses: statusFilter !== 'all' ? [statusFilter] : undefined
+  targetTypes: targetTypeFilter !== 'all' ? [targetTypeFilter] : undefined }
 };
       // Load operations
       const operationsList = bulkPropertyUpdateService.getOperations(operationFilter);
@@ -155,53 +152,37 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       // Load stats
       const statsData = bulkPropertyUpdateService.getBulkUpdateStats();
       setStats(statsData);
-    } catch (error) {
-  console.error('Failed to load bulk update data:', error);
-} finally {
-      setIsLoading(false);
-  };
-  const handleExecuteOperation = async (operationId: string) => {
-    try {
+ catch (error) { console.error('Failed to load bulk update data:', error) } finally { setIsLoading(false) };
+  const handleExecuteOperation = async (operationId: string) => { try {
       await bulkPropertyUpdateService.executeOperation(operationId);
-      loadData();
-    } catch (error) {
-  console.error('Failed to execute operation:', error);
-};
-  const handleRollbackOperation = async (operationId: string) => {
-    try {
+      loadData() } catch (error) { console.error('Failed to execute operation:', error) };
+  const handleRollbackOperation = async (operationId: string) => { try {
       await bulkPropertyUpdateService.rollbackOperation(operationId);
-      loadData();
-    } catch (error) {
-  console.error('Failed to rollback operation:', error);
-};
-  const handleCreateOperation = async () => {
-  try {
+      loadData() } catch (error) { console.error('Failed to rollback operation:', error) };
+  const handleCreateOperation = async () => { try {
   const _____operation = await bulkPropertyUpdateService.createOperation(;);
-  newOperation.name,
-  newOperation.targets,
-  newOperation.updates,
+  newOperation.name
+  newOperation.targets
+  newOperation.updates
   {
   execution: {
-  dryRun: newOperation.dryRun,
-  backupBeforeUpdate: newOperation.backupBeforeUpdate,
-}
+  dryRun: newOperation.dryRun
+  backupBeforeUpdate: newOperation.backupBeforeUpdate }
+
         userId || 'admin'
       );
       setIsCreating(false);
-      setNewOperation({)
-  name: '',
-  targetType: 'user',
-  targets: [],
-  updates: [],
-  dryRun: true,
-  backupBeforeUpdate: true,
+      setNewOperation({ )
+  name: ''
+  targetType: 'user'
+  targets: []
+  updates: []
+  dryRun: true
+  backupBeforeUpdate: true }
 });
       loadData();
-    } catch (error) {
-  console.error('Failed to create operation:', error);
-};
-  const filteredOperations = useMemo(() => {
-    return operations.filter(op => {)
+ catch (error) { console.error('Failed to create operation:', error) };
+  const filteredOperations = useMemo(() => { return operations.filter(op => {)
   if (searchQuery) {
         const query = searchQuery.toLowerCase();
         if (!op.name.toLowerCase().includes(query) &&
@@ -212,8 +193,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       if (targetTypeFilter !== 'all' && )
           !op.targets.some(target => target.type === targetTypeFilter)) {
         return false;
-      return true;
-    });
+      return true });
   }, [operations, searchQuery, statusFilter, targetTypeFilter]);
   const renderOperations = () => (;);
     <div className="operations-section">
@@ -513,7 +493,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
                         const updates = [...newOperation.updates];
                         updates[index] = { ...updates[index], property: e.target.value };
                         setNewOperation(prev => ({ ...prev, updates }));
-                      }}
+
                     />
                     <Select
                       value={update.operation}
@@ -521,7 +501,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
                         const updates = [...newOperation.updates];
                         updates[index] = { ...updates[index], operation: value as UpdateOperationType };
                         setNewOperation(prev => ({ ...prev, updates }));
-                      }}
+
                     >
                       {Object.entries(OPERATION_TYPE_CONFIG).map(([op, config]) => ()
                         <option key={op} value={op}>
@@ -536,7 +516,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
                         const updates = [...newOperation.updates];
                         updates[index] = { ...updates[index], value: e.target.value };
                         setNewOperation(prev => ({ ...prev, updates }));
-                      }}
+
                     />
                     <Button
                       size="sm"
@@ -544,7 +524,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
                       onClick={() => {
                         const updates = newOperation.updates.filter((_, i) => i !== index);
                         setNewOperation(prev => ({ ...prev, updates }));
-                      }}
+}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -552,14 +532,14 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
                 </div>
               ))}
               <Button
-                onClick={() => {
+                onClick={ () => {
   const updates = [...newOperation.updates, {
-  property: '',
-  operation: 'set' as UpdateOperationType,
-  value: '',
-}];
+  property: ''
+  operation: 'set' as UpdateOperationType
+  value: '' }
+];
                   setNewOperation(prev => ({ ...prev, updates }));
-                }}
+}
                 variant="outline"
                 size="sm"
               >
@@ -629,18 +609,18 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       )}
       {/* Create Operation Modal */}
       {isCreating && renderCreateOperation()}
-      <style>{`
+      <style>{ `
         .bulk-update-dashboard {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
@@ -707,12 +687,12 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
           gap: 1rem;
         .metric-item {
           display: flex;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 0.75rem;
         .metric-info {
           flex: 1;
         .metric-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin-bottom: 0.25rem;
         .metric-value {
@@ -721,13 +701,13 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
   color: #1f2937;
           margin-bottom: 0.25rem;
         .metric-change {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .metric-change.positive {
           color: #059669;
         .charts-section {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1rem;
         .success-rate-chart {
           display: flex;
@@ -752,7 +732,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
           border-radius: 4px;
   overflow: hidden;
         .chart-fill {
-          height: 100%;
+          height: 100%
   transition: width 0.3s ease;
         .chart-value {
           min-width: 80px;
@@ -760,7 +740,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
           font-weight: 600;
           font-size: 0.875rem;
         .chart-details {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
           margin-left: 0.25rem;
         .errors-list {
@@ -770,7 +750,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
         .error-item {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
@@ -779,11 +759,11 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
   color: #dc2626;
           margin-bottom: 0.25rem;
         .error-message {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #374151;
         .error-stats {
           text-align: right;
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .error-count {
           font-weight: 500;
@@ -799,7 +779,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
         .modal-content {
           position: absolute;
   top: 50%;
-          left: 50%;
+          left: 50%
   transform: translate(-50%, -50%);
           background: white;
           border-radius: 8px;
@@ -848,17 +828,17 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
           flex-direction: column;
   gap: 0.75rem;
         .update-item {
-          padding: 0.75rem;
+          padding: 0.75rem
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .update-fields {
           display: grid;
-          grid-template-columns: 1fr 1fr 1fr auto;
+          grid-template-columns: 1fr 1fr 1fr auto
   gap: 0.5rem;
           align-items: center;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
+          justify-content: flex-end }
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;
@@ -908,20 +888,21 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
 };
 
 // Operation Card Component (simplified for space)
-}
-interface OperationCardProps {
-  operation: BulkUpdateOperation;
-  onSelect: (operation: BulkUpdateOperation) => void;
-  onExecute: (operationId: string) => void;
+
+
+interface OperationCardProps { operation: BulkUpdateOperation;
+  onSelect: (operation: BulkUpdateOperation) => void
+  onExecute: (operationId: string) => void
   onRollback: (operationId: string) => void;
   userRole?: string;
-  const OperationCard: React.FC<OperationCardProps> = ({ ),
-  operation,
-  onSelect,
-  onExecute,
-  onRollback,
+  const OperationCard: React.FC<OperationCardProps> = ({ );
+  operation;
+  onSelect;
+  onExecute;
+  onRollback }
   userRole
-}
+
+
 }) => {
   const statusConfig = STATUS_CONFIG[operation.status];
   const StatusIcon = statusConfig.icon;
@@ -977,7 +958,7 @@ interface OperationCardProps {
           )}
         </div>
       </CardContent>
-      <style>{`
+      <style>{ `
         .operation-card {
           transition: box-shadow 0.2s ease;
         .operation-header {
@@ -990,7 +971,7 @@ interface OperationCardProps {
   color: #1f2937;
           margin-bottom: 0.25rem;
         .operation-description {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .operation-progress {
           margin-bottom: 1rem;
@@ -1001,11 +982,11 @@ interface OperationCardProps {
   overflow: hidden;
           margin-bottom: 0.5rem;
         .progress-fill {
-          height: 100%;
+          height: 100%
   background: #3b82f6;
           transition: width 0.3s ease;
         .progress-text {
-          font-size: 0.875rem;
+          font-size: 0.875rem }
   color: #6b7280;
         .operation-actions {
           display: flex;
@@ -1016,13 +997,14 @@ interface OperationCardProps {
 };
 
 // Template Card Component (simplified)
-}
-interface TemplateCardProps {
-  template: BulkUpdateTemplate;
-  onUse: (templateId: string) => void;
-  onEdit: (templateId: string) => void;
+
+
+interface TemplateCardProps { template: BulkUpdateTemplate;
+  onUse: (templateId: string) => void
+  onEdit: (templateId: string) => void }
   onDelete: (templateId: string) => void;
-}
+
+
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, onDelete }) => {
   const typeConfig = TARGET_TYPE_CONFIG[template.targetType];
   const TypeIcon = typeConfig.icon;
@@ -1062,7 +1044,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, on
           </Button>
         </div>
       </CardContent>
-      <style>{`
+      <style>{ `
         .template-header {
           display: flex;
           justify-content: space-between;
@@ -1073,7 +1055,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, on
   color: #1f2937;
           margin-bottom: 0.25rem;
         .template-description {
-          font-size: 0.875rem;
+          font-size: 0.875rem }
   color: #6b7280;
         .template-stats {
           display: flex;
@@ -1099,20 +1081,21 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, on
 };
 
 // Operation Detail Modal (simplified)
-}
-interface OperationDetailModalProps {
-  operation: BulkUpdateOperation;
+
+
+interface OperationDetailModalProps { operation: BulkUpdateOperation;
   onClose: () => void;
-  onExecute: (operationId: string) => void;
+  onExecute: (operationId: string) => void
   onRollback: (operationId: string) => void;
   userRole?: string;
-  const OperationDetailModal: React.FC<OperationDetailModalProps> = ({,)
-  operation,
-  onClose,
-  onExecute,
-  onRollback,
+  const OperationDetailModal: React.FC<OperationDetailModalProps> = ({);
+  operation;
+  onClose;
+  onExecute;
+  onRollback }
   userRole
-}
+
+
 }) => {
   const statusConfig = STATUS_CONFIG[operation.status];
   const StatusIcon = statusConfig.icon;
@@ -1189,19 +1172,19 @@ interface OperationDetailModalProps {
           <Button onClick={onClose} variant="outline">
             Close
           </Button>
-          {userRole === 'admin' && operation.status === 'validated' && ()
-            <Button onClick={() => { onExecute(operation.id); onClose(); }}>
+          { userRole === 'admin' && operation.status === 'validated' && ()
+            <Button onClick={() => { onExecute(operation.id); onClose() }}>
               Execute Operation
             </Button>
           )}
-          {userRole === 'admin' && operation.status === 'completed' && operation.rollback.enabled && ()
-            <Button onClick={() => { onRollback(operation.id); onClose(); }} variant="outline">
+          { userRole === 'admin' && operation.status === 'completed' && operation.rollback.enabled && ()
+            <Button onClick={() => { onRollback(operation.id); onClose() }} variant="outline">
               Rollback Operation
             </Button>
           )}
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .modal-overlay {
           position: fixed;
   inset: 0;
@@ -1220,7 +1203,7 @@ interface OperationDetailModalProps {
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
         .modal-title {
@@ -1246,7 +1229,7 @@ interface OperationDetailModalProps {
           padding-bottom: 0.5rem;
         .detail-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1rem;
         .detail-item {
           display: flex;
@@ -1277,7 +1260,7 @@ interface OperationDetailModalProps {
           color: #dc2626;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
+          justify-content: flex-end }
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;

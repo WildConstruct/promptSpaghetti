@@ -7,7 +7,7 @@ import {
   RotationPolicy,
   RotationSchedule,
   PolicyEvaluation
-} from '../services/KeyRotationPolicyService';
+ from '../services/KeyRotationPolicyService';
 import { KeyManagementService } from '../services/KeyManagementService';
 
 describe('KeyRotationPolicyService', () => {
@@ -375,7 +375,7 @@ describe('KeyRotationPolicyService', () => {
           rotationIntervalDays: 30,
           overlapPeriodHours: 2,
           priority: 100
-  }
+
         {
           id: 'policy-usage',
           policyName: 'usage_policy',
@@ -383,7 +383,7 @@ describe('KeyRotationPolicyService', () => {
           maxUsageCount: 10000,
           overlapPeriodHours: 1,
           priority: 200
-        }
+
       ];
 
       mockKeyManagementService.getMasterKey.mockResolvedValue(multiTriggerKey as unknown as unknown);
@@ -571,7 +571,7 @@ describe('KeyRotationPolicyService', () => {
       rotationWindow: {
         startTime: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago
         endTime: new Date(Date.now() + 60 * 60 * 1000) // 1 hour from now
-  }
+
       approvalRequired: false
     };
 
@@ -604,7 +604,7 @@ describe('KeyRotationPolicyService', () => {
             scheduled: true,
             policyId: 'policy-1',
             scheduleId: 'schedule-123'
-          }
+
   }
       );
 
@@ -638,7 +638,7 @@ describe('KeyRotationPolicyService', () => {
         rotationWindow: {
           startTime: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
           endTime: new Date(Date.now() - 60 * 60 * 1000) // 1 hour ago
-        }
+
       };
 
       jest.spyOn(rotationPolicyService as any, 'getRotationSchedule')
@@ -751,7 +751,7 @@ describe('KeyRotationPolicyService', () => {
           approval_required: false,
           created_at: new Date(),
           updated_at: new Date()
-  }
+
         {
           id: 'schedule-2',
           policy_id: 'policy-2',
@@ -764,7 +764,7 @@ describe('KeyRotationPolicyService', () => {
           approval_required: true,
           created_at: new Date(),
           updated_at: new Date()
-        }
+
       ];
 
       mockDb.query.mockResolvedValue({ rows: mockRotations } as unknown as unknown);
@@ -856,7 +856,7 @@ describe('KeyRotationPolicyService', () => {
           createdBy: testUserId,
           isActive: true,
           priority: 100
-  }
+
       ).rejects.toThrow('Failed to create rotation policy');
     });
 
@@ -934,7 +934,7 @@ describe('KeyRotationPolicyService', () => {
         expect.objectContaining({
           action: 'key_rotation_policy_created',
           severity: 'info'
-  }
+
       );
     });
 
@@ -946,7 +946,7 @@ describe('KeyRotationPolicyService', () => {
           id: 'policy-1',
           requiresApproval: false,
           overlapPeriodHours: 2
-        } as unknown as unknown);
+ as unknown as unknown);
 
       // Mock too many concurrent rotations
       mockDb.query.mockResolvedValueOnce({

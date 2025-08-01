@@ -317,44 +317,43 @@ export class HealthCheckDefinitionBuilder {
                                                                         }
                                                                     }
                                                                 }
-                                                                export let ComparisonOperator;
-                                                                (function (ComparisonOperator) {
-                                                                    ComparisonOperator["EQUALS"] = "equals";
-                                                                    ComparisonOperator["NOT_EQUALS"] = "not_equals";
-                                                                    ComparisonOperator["GREATER_THAN"] = "greater_than";
-                                                                    ComparisonOperator["GREATER_THAN_OR_EQUAL"] = "greater_than_or_equal";
-                                                                    ComparisonOperator["LESS_THAN"] = "less_than";
-                                                                    ComparisonOperator["LESS_THAN_OR_EQUAL"] = "less_than_or_equal";
-                                                                    ComparisonOperator["CONTAINS"] = "contains";
-                                                                    ComparisonOperator["NOT_CONTAINS"] = "not_contains";
-                                                                    ComparisonOperator["MATCHES"] = "matches";
-                                                                    ComparisonOperator["NOT_MATCHES"] = "not_matches";
-                                                                    ComparisonOperator["IN"] = "in";
-                                                                    ComparisonOperator["NOT_IN"] = "not_in";
-                                                                    ComparisonOperator[ComparisonOperator["export"] = void 0] = "export";
-                                                                    ComparisonOperator[ComparisonOperator["interface"] = void 0] = "interface";
-                                                                    ComparisonOperator[ComparisonOperator["ResponseValidation"] = void 0] = "ResponseValidation";
-                                                                })(ComparisonOperator || (ComparisonOperator = {}));
-                                                                {
-                                                                    contentType ?  : string;
-                                                                    bodyContains ?  : string;
-                                                                    bodyNotContains ?  : string;
-                                                                    headers ?  : Record;
-                                                                    jsonPath ?  : JsonPathValidation;
-                                                                }
                                                             }
                                                         }
+                                                        export let ComparisonOperator;
+                                                        (function (ComparisonOperator) {
+                                                            ComparisonOperator["EQUALS"] = "equals";
+                                                            ComparisonOperator["NOT_EQUALS"] = "not_equals";
+                                                            ComparisonOperator["GREATER_THAN"] = "greater_than";
+                                                            ComparisonOperator["GREATER_THAN_OR_EQUAL"] = "greater_than_or_equal";
+                                                            ComparisonOperator["LESS_THAN"] = "less_than";
+                                                            ComparisonOperator["LESS_THAN_OR_EQUAL"] = "less_than_or_equal";
+                                                            ComparisonOperator["CONTAINS"] = "contains";
+                                                            ComparisonOperator["NOT_CONTAINS"] = "not_contains";
+                                                            ComparisonOperator["MATCHES"] = "matches";
+                                                            ComparisonOperator["NOT_MATCHES"] = "not_matches";
+                                                            ComparisonOperator["IN"] = "in";
+                                                            ComparisonOperator["NOT_IN"] = "not_in";
+                                                            ComparisonOperator[ComparisonOperator["export"] = void 0] = "export";
+                                                            ComparisonOperator[ComparisonOperator["interface"] = void 0] = "interface";
+                                                            ComparisonOperator[ComparisonOperator["ResponseValidation"] = void 0] = "ResponseValidation";
+                                                        })(ComparisonOperator || (ComparisonOperator = {}));
+                                                        {
+                                                            contentType ?  : string;
+                                                            bodyContains ?  : string;
+                                                            bodyNotContains ?  : string;
+                                                            headers ?  : Record;
+                                                            jsonPath ?  : JsonPathValidation;
+                                                        }
                                                     }
-                                                },
-                                                interface, QueryExpectation
-                                            }
+                                                }
+                                            },
+                                            interface, JsonPathValidation
                                         };
                                         {
-                                            minRows ?  : number;
-                                            maxRows ?  : number;
-                                            exactRows ?  : number;
-                                            columns ?  : string;
-                                            constraints ?  : QueryConstraint;
+                                            path: string;
+                                            expectedValue ?  : unknown;
+                                            expectedType ?  : string;
+                                            required: boolean;
                                         }
                                     }
                                 }
@@ -441,7 +440,7 @@ url: '/api/health',
 {
     contentType: ['application/json'],
         jsonPath;
-    [,];
+    [];
 }
 {
     path: '$.status', expectedValue;
@@ -458,7 +457,7 @@ schedule('*/2 * * * *') // Every 2 minutes
 output: {
     expectedFormat: 'json',
         successConditions;
-    [,
+    [
         { field: 'status', operator: ComparisonOperator.EQUALS, value: 'healthy', description: 'API reports healthy status' }
     ],
         warningConditions;

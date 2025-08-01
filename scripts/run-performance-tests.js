@@ -22,7 +22,7 @@ class PerformanceTestRunner {
     this.baseUrl = process.env.API_BASE_URL || 'http://localhost:8000';
     this.outputDir = './performance-test-results';
     this.verbose = false;
-  }
+
 
   /**
    * Parse command line arguments
@@ -91,12 +91,12 @@ class PerformanceTestRunner {
       default:
         if (arg.startsWith('--')) {
           console.warn(`Unknown option: ${arg}`);
-        }
-      }
-    }
+
+
+
 
     return options;
-  }
+
 
   /**
    * Display help information
@@ -146,7 +146,7 @@ Environment Variables:
   PERF_DURATION            Sets default duration (seconds)
   PERF_OUTPUT_DIR          Sets default output directory
 `);
-  }
+
 
   /**
    * Run integrated performance test suite
@@ -165,7 +165,7 @@ Environment Variables:
         PERF_OUTPUT_DIR: options.output
       }
     );
-  }
+
 
   /**
    * Run load testing scenarios
@@ -191,14 +191,14 @@ Environment Variables:
         );
         
         results.push({ scenario, success: result.success, result });
-      } catch (error) {
+ catch (error) {
         console.error(`❌ Load test scenario ${scenario} failed:`, error.message);
         results.push({ scenario, success: false, error: error.message });
-      }
-    }
+
+
     
     return results;
-  }
+
 
   /**
    * Run main performance test runner
@@ -216,7 +216,7 @@ Environment Variables:
         '--format', 'json'
       ]
     );
-  }
+
 
   /**
    * Run TypeScript script using ts-node
@@ -241,7 +241,7 @@ Environment Variables:
         child.stderr?.on('data', (data) => {
           stderr += data.toString();
         });
-      }
+
 
       child.on('close', (code) => {
         if (code === 0) {
@@ -251,16 +251,16 @@ Environment Variables:
             stdout: stdout.trim(),
             stderr: stderr.trim()
           });
-        } else {
+ else {
           reject(new Error(`Script failed with exit code ${code}\nStderr: ${stderr}`));
-        }
+
       });
 
       child.on('error', (error) => {
         reject(error);
       });
     });
-  }
+
 
   /**
    * Run Node.js script
@@ -282,7 +282,7 @@ Environment Variables:
         child.stderr?.on('data', (data) => {
           stderr += data.toString();
         });
-      }
+
 
       child.on('close', (code) => {
         resolve({
@@ -297,7 +297,7 @@ Environment Variables:
         reject(error);
       });
     });
-  }
+
 
   /**
    * Setup output directory
@@ -308,10 +308,10 @@ Environment Variables:
       await fs.mkdir(path.join(outputDir, 'load-tests'), { recursive: true });
       await fs.mkdir(path.join(outputDir, 'scenarios'), { recursive: true });
       await fs.mkdir(path.join(outputDir, 'reports'), { recursive: true });
-    } catch (error) {
+ catch (error) {
       console.warn('Warning: Failed to create output directories:', error.message);
-    }
-  }
+
+
 
   /**
    * Generate summary report
@@ -335,16 +335,16 @@ Environment Variables:
         totalTests: Object.keys(results).length,
         successful: Object.values(results).filter(r => r && r.success !== false).length,
         failed: Object.values(results).filter(r => r && r.success === false).length
-      }
+
     };
     
     try {
       await fs.writeFile(reportPath, JSON.stringify(summary, null, 2));
       console.log(`📄 Summary report generated: ${reportPath}`);
-    } catch (error) {
+ catch (error) {
       console.warn('Warning: Failed to generate summary report:', error.message);
-    }
-  }
+
+
 
   /**
    * Main execution method
@@ -355,7 +355,7 @@ Environment Variables:
     if (options.help) {
       this.displayHelp();
       return process.exit(0);
-    }
+
     
     this.verbose = options.verbose;
     
@@ -410,7 +410,7 @@ Environment Variables:
           
       default:
         throw new Error(`Unknown test suite: ${options.suite}`);
-      }
+
       
       await this.generateSummaryReport(results, options);
       
@@ -422,40 +422,39 @@ Environment Variables:
       
       if (results.integrated) {
         console.log(`Integrated Suite: ${results.integrated.success ? '✅' : '❌'}`);
-      }
+
       
       if (results.loadTests) {
         const passedLoad = results.loadTests.filter(r => r.success).length;
         const totalLoad = results.loadTests.length;
         console.log(`Load Tests: ${passedLoad}/${totalLoad} passed`);
-      }
+
       
       if (results.mainRunner) {
         console.log(`Main Runner: ${results.mainRunner.success ? '✅' : '❌'}`);
-      }
+
       
       console.log(`\n📊 Results saved to: ${options.output}`);
       console.log('=' .repeat(50));
       
       process.exit(overallSuccess ? 0 : 1);
-      
-    } catch (error) {
+ catch (error) {
       console.error('\n❌ Performance tests failed:', error.message);
       
       if (options.verbose) {
         console.error('\nFull error details:');
         console.error(error.stack);
-      }
+
       
       process.exit(1);
-    }
-  }
-}
+
+
+
 
 // Run if called directly
 if (require.main === module) {
   const runner = new PerformanceTestRunner();
   runner.run().catch(console.error);
-}
+
 
 module.exports = { PerformanceTestRunner };

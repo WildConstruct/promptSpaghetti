@@ -7,7 +7,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NodeLabel } from '../NodeLabel';
 import { NodeLabelConfig, NODE_LABEL_STYLES } from '../../../types/CollaborationTypes';
-const mockConfig: NodeLabelConfig = {,
+const mockConfig: NodeLabelConfig = { ,
   id: 'test-label-1',
   nodeId: 'node-1',
   customLabel: 'Test Label',
@@ -17,13 +17,11 @@ const mockConfig: NodeLabelConfig = {,
   showIcon: false,
   truncateLength: 50,
   author: 'Test Author',
-  timestamp: '2024-01-01T12:00:00Z',
+  timestamp: '2024-01-01T12:00:00Z' }
 };
 const mockOnAction = jest.fn<unknown, unknown>();
-describe('NodeLabel Component', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+describe('NodeLabel Component', () => { beforeEach(() => {
+    jest.clearAllMocks() });
   describe('Rendering', () => {
     test('renders label with custom text', () => {
       render();
@@ -67,10 +65,10 @@ describe('NodeLabel Component', () => {
         />
       );
       let labelElement = screen.getByTestId('node-label-node-1');
-      expect(labelElement).toHaveStyle({)
-  bottom: '100%',
-  left: '50%',
-  transform: 'translateX(-50%)',
+      expect(labelElement).toHaveStyle({ )
+  bottom: '100%'
+  left: '50%'
+  transform: 'translateX(-50%)' }
 });
       rerender();
         <NodeLabel
@@ -80,10 +78,10 @@ describe('NodeLabel Component', () => {
         />
       );
       labelElement = screen.getByTestId('node-label-node-1');
-      expect(labelElement).toHaveStyle({)
-  left: '100%',
-  top: '50%',
-  transform: 'translateY(-50%)',
+      expect(labelElement).toHaveStyle({ )
+  left: '100%'
+  top: '50%'
+  transform: 'translateY(-50%)' }
 });
     });
     test('applies correct label styles', () => {
@@ -96,11 +94,11 @@ describe('NodeLabel Component', () => {
       );
       const labelText = screen.getByText('Test Label');
       const professionalStyle = NODE_LABEL_STYLES.professional;
-      expect(labelText).toHaveStyle({)
-  background: professionalStyle.background,
-  border: professionalStyle.border,
-  color: professionalStyle.color,
-  fontWeight: professionalStyle.fontWeight,
+      expect(labelText).toHaveStyle({ )
+  background: professionalStyle.background
+  border: professionalStyle.border
+  color: professionalStyle.color
+  fontWeight: professionalStyle.fontWeight }
 });
     });
     test('shows icon when configured', () => {
@@ -211,10 +209,10 @@ describe('NodeLabel Component', () => {
       );
       const labelElement = screen.getByText('Test Label');
       await user.dblClick(labelElement);
-      expect(mockOnAction).toHaveBeenCalledWith({)
-  type: 'startEdit',
-  nodeId: 'node-1',
-  labelId: mockConfig.id,
+      expect(mockOnAction).toHaveBeenCalledWith({ )
+  type: 'startEdit'
+  nodeId: 'node-1'
+  labelId: mockConfig.id }
 });
     });
     test('prevents editing when canEdit is false', async () => {
@@ -257,14 +255,14 @@ describe('NodeLabel Component', () => {
       const input = screen.getByDisplayValue('Test Label');
       await user.clear(input);
       await user.type(input, 'Updated Label{enter}');
-      expect(mockOnAction).toHaveBeenCalledWith({)
-  type: 'update',
-  nodeId: 'node-1',
-  labelId: mockConfig.id,
-  customLabel: 'Updated Label',
+      expect(mockOnAction).toHaveBeenCalledWith({ )
+  type: 'update'
+  nodeId: 'node-1'
+  labelId: mockConfig.id
+  customLabel: 'Updated Label'
   config: {
-  customLabel: 'Updated Label',
-  isEditing: false,
+  customLabel: 'Updated Label'
+  isEditing: false }
 });
     });
     test('cancels on Escape key', async () => {
@@ -279,10 +277,10 @@ describe('NodeLabel Component', () => {
       const input = screen.getByDisplayValue('Test Label');
       await user.clear(input);
       await user.type(input, 'Changed Text{escape}');
-      expect(mockOnAction).toHaveBeenCalledWith({)
-  type: 'stopEdit',
-  nodeId: 'node-1',
-  labelId: mockConfig.id,
+      expect(mockOnAction).toHaveBeenCalledWith({ )
+  type: 'stopEdit'
+  nodeId: 'node-1'
+  labelId: mockConfig.id }
 });
     });
     test('saves on blur', async () => {
@@ -298,14 +296,14 @@ describe('NodeLabel Component', () => {
       await user.clear(input);
       await user.type(input, 'Blur Save');
       await user.tab(); // Trigger blur
-      expect(mockOnAction).toHaveBeenCalledWith({)
-  type: 'update',
-  nodeId: 'node-1',
-  labelId: mockConfig.id,
-  customLabel: 'Blur Save',
+      expect(mockOnAction).toHaveBeenCalledWith({ )
+  type: 'update'
+  nodeId: 'node-1'
+  labelId: mockConfig.id
+  customLabel: 'Blur Save'
   config: {
-  customLabel: 'Blur Save',
-  isEditing: false,
+  customLabel: 'Blur Save'
+  isEditing: false }
 });
     });
     test('respects character limit', async () => {
@@ -337,10 +335,10 @@ describe('NodeLabel Component', () => {
       );
       const deleteButton = screen.getByTitle('Remove custom label');
       await user.click(deleteButton);
-      expect(mockOnAction).toHaveBeenCalledWith({)
-  type: 'delete',
-  nodeId: 'node-1',
-  labelId: mockConfig.id,
+      expect(mockOnAction).toHaveBeenCalledWith({ )
+  type: 'delete'
+  nodeId: 'node-1'
+  labelId: mockConfig.id }
 });
     });
     test('delete button prevents event propagation', async () => {
@@ -356,10 +354,8 @@ describe('NodeLabel Component', () => {
       );
       const deleteButton = screen.getByTitle('Remove custom label');
       // Mock stopPropagation
-      deleteButton.onclick = (e) => {
-        mockStopPropagation();
-        e.stopPropagation();
-      };
+      deleteButton.onclick = (e) => { mockStopPropagation();
+        e.stopPropagation() };
       await user.click(deleteButton);
       expect(mockStopPropagation).toHaveBeenCalled();
     });
@@ -481,17 +477,16 @@ describe('NodeLabel Component', () => {
       expect(renderSpy).toHaveBeenCalledTimes(3);
     });
   });
-  describe('Error Handling', () => {
-  test('handles missing config properties gracefully', () => {
+  describe('Error Handling', () => { test('handles missing config properties gracefully', () => {
   const incompleteConfig = {
-  id: 'test',
-  nodeId: 'node-1',
-  customLabel: 'Test',
-  displayMode: 'always' as const,
-  position: 'bottom' as const,
-  style: 'default' as const,
-  author: 'Test',
-  timestamp: '2024-01-01T12:00:00Z',
+  id: 'test'
+  nodeId: 'node-1'
+  customLabel: 'Test'
+  displayMode: 'always' as const
+  position: 'bottom' as const
+  style: 'default' as const
+  author: 'Test'
+  timestamp: '2024-01-01T12:00:00Z' }
 };
       expect(() => {
         render();

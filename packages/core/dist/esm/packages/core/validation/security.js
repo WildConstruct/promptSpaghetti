@@ -9,11 +9,11 @@ import { z } from 'zod';
 export const VARIABLE_NAME_PATTERN = /^[a-zA-Z0-9_-]+$/;
 export const VARIABLE_NAME_MAX_LENGTH = 64;
 // Dangerous patterns that should be blocked
-const DANGEROUS_PATTERNS = [];
-// JavaScript injection patterns
-/eval\s*\(/gi;
-/Function\s*\(/gi;
-/constructor/gi,
+const DANGEROUS_PATTERNS = [
+    // JavaScript injection patterns
+    /eval\s*\(/gi,
+    /Function\s*\(/gi,
+    /constructor/gi,
     /prototype/gi,
     /__proto__/gi,
     /\.__defineGetter__/gi,
@@ -21,9 +21,9 @@ const DANGEROUS_PATTERNS = [];
     /\.__lookupGetter__/gi,
     /\.__lookupSetter__/gi,
     // Node.js specific patterns
-    /require\s*\(/gi;
-/import\s*\(/gi;
-/process\./gi,
+    /require\s*\(/gi,
+    /import\s*\(/gi,
+    /process\./gi,
     /global\./gi,
     /Buffer\./gi,
     // ES6 and template literals
@@ -32,8 +32,8 @@ const DANGEROUS_PATTERNS = [];
     /`/gi,
     /new\s+Function/gi,
     /=>.*\{/gi,
-    /\bwith\s*\(/gi;
-/\bBuffer\b/gi,
+    /\bwith\s*\(/gi,
+    /\bBuffer\b/gi,
     // DOM manipulation (for browser safety)
     /document\./gi,
     /window\./gi,
@@ -53,34 +53,34 @@ const DANGEROUS_PATTERNS = [];
     /url/gi,
     /util/gi,
     /vm/gi,
-    /worker_threads/gi;
-;
+    /worker_threads/gi
+];
 // Safe expression patterns for conditionals
-const SAFE_EXPRESSION_PATTERNS = [];
-// Basic operators
-/^[a-zA-Z_$][a-zA-Z0-9_$]*$/, // Simple variable names
+const SAFE_EXPRESSION_PATTERNS = [
+    // Basic operators
+    /^[a-zA-Z_$][a-zA-Z0-9_$]*$/, // Simple variable names
     /^[a-zA-Z0-9_$\s\.\[\]]+$/, // Property access
-    /^[a-zA-Z0-9_$\s\.\[\]===!==<>=+\-*\/&&\|\|!()]+$/; // Basic expressions
-;
+    /^[a-zA-Z0-9_$\s\.\[\]===!==<>=+\-*\/&&\|\|!()]+$/ // Basic expressions
+];
 // Allowed operators and keywords in expressions
-const ALLOWED_OPERATORS = [];
-'===', '!==', '==', '!=', '<', '>', '<=', '>=',
+const ALLOWED_OPERATORS = [
+    '===', '!==', '==', '!=', '<', '>', '<=', '>=',
     '+', '-', '*', '/', '%',
     '&&', '||', '!',
     '(', ')', '[', ']', '.',
-    'true', 'false', 'null', 'undefined';
-;
+    'true', 'false', 'null', 'undefined'
+];
 // Allowed functions in expressions
-const ALLOWED_FUNCTIONS = [];
-'startsWith', 'endsWith', 'includes', 'indexOf', 'lastIndexOf',
+const ALLOWED_FUNCTIONS = [
+    'startsWith', 'endsWith', 'includes', 'indexOf', 'lastIndexOf',
     'toLowerCase', 'toUpperCase', 'trim', 'replace',
     'substring', 'substr', 'slice', 'split', 'join',
     'length', 'toString', 'valueOf',
     'Math.abs', 'Math.max', 'Math.min', 'Math.floor', 'Math.ceil', 'Math.round',
     'parseFloat', 'parseInt', 'isNaN', 'isFinite',
     'Array.isArray', 'Object.keys', 'Object.values', 'Object.entries',
-    'JSON.stringify', 'JSON.parse';
-;
+    'JSON.stringify', 'JSON.parse'
+];
 /**
  * Security validation utilities
  */
@@ -122,9 +122,9 @@ export class SecurityValidation {
         if (!SecurityValidation.validateSafeString(expression)) {
             return false;
             // Additional expression-specific validation
-            const dangerousExpressionPatterns = [];
-            /function\s*\(/gi;
-            /=\s*>/gi,
+            const dangerousExpressionPatterns = [
+                /function\s*\(/gi,
+                /=\s*>/gi,
                 /\bthis\b/gi,
                 /\bself\b/gi,
                 /\btop\b/gi,
@@ -140,8 +140,8 @@ export class SecurityValidation {
                 /\bwebkitRequestAnimationFrame\b/gi,
                 /\bmozRequestAnimationFrame\b/gi,
                 /\bmsRequestAnimationFrame\b/gi,
-                /\boRequestAnimationFrame\b/gi;
-            ;
+                /\boRequestAnimationFrame\b/gi
+            ];
             for (const pattern of dangerousExpressionPatterns) {
                 if (pattern.test(expression)) {
                     return false;
@@ -222,8 +222,8 @@ export class SecurityValidation {
         if (key.length > VARIABLE_NAME_MAX_LENGTH)
             return false; // Limit to 64 chars as per security requirements
         // Dangerous property names
-        const dangerousProperties = [];
-        '__proto__',
+        const dangerousProperties = [
+            '__proto__',
             'constructor',
             'prototype',
             '__defineGetter__',
@@ -237,8 +237,8 @@ export class SecurityValidation {
             'toString',
             'valueOf',
             'eval',
-            'Function';
-        ;
+            'Function'
+        ];
         if (dangerousProperties.includes(key)) {
             return false;
             // Check for prototype pollution attempts
@@ -443,13 +443,13 @@ export class SecurityValidation {
         safeArray: (itemSchema, maxLength = 1000) => z.array(itemSchema)
             .max(maxLength, `Array must contain no more than ${maxLength} items`);
     }
+    /**
+     * Safe object validation
+     */
+    safeObject;
+    valueSchema;
 }
-/**
- * Safe object validation
- */
-safeObject: (valueSchema, maxKeys = 100) => z.record(valueSchema)
-    .refine()(val);
-Object.keys(val).length <= maxKeys,
+(val) => Object.keys(val).length <= maxKeys,
     { message: `Object must contain no more than ${maxKeys} properties` }
         .refine()(val);
 Object.keys(val).every(key => SecurityValidation.validateSafePropertyKey(key)),

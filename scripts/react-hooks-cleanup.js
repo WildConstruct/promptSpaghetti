@@ -17,16 +17,16 @@ function getHookViolations(): string[] {
   try {
     const output = execSync('pnpm lint 2>&1 | grep "react-hooks"', { encoding: 'utf8' });
     return output.split('\n').filter(line => line.trim());
-  } catch (error) {
+ catch (error) {
     return [];
-  }
-}
+
+
 
 // Extract file path from lint output
 function extractFilePath(lintLine: string): string | null {
   const match = lintLine.match(/^(.+?):\d+:\d+/);
   return match ? match[1].trim() : null;
-}
+
 
 // Common hook fixes
 function fixHookViolations(content: string, filePath: string): { content: string; changes: number } {
@@ -53,7 +53,7 @@ function fixHookViolations(content: string, filePath: string): { content: string
     if (content.match(regex)) {
       changes++;
       return `const ${funcName} = useCallback((${params}) => {`;
-    }
+
     return match;
   });
 
@@ -63,12 +63,12 @@ function fixHookViolations(content: string, filePath: string): { content: string
     if (body.includes('fetch') || body.includes('load') || body.includes('set')) {
       changes++;
       return match.replace(', [])', ', []) // TODO: Add missing dependencies');
-    }
+
     return match;
   });
 
   return { content: fixed, changes };
-}
+
 
 // Process a single file
 async function processFile(filePath: string): Promise<number> {
@@ -87,26 +87,26 @@ async function processFile(filePath: string): Promise<number> {
           (match, imports) => {
             if (imports && !imports.includes('useCallback')) {
               return match.replace(imports, `${imports}, useCallback`);
-            } else if (!imports) {
+ else if (!imports) {
               return 'import React, { useCallback }';
-            }
+
             return match;
           }
         );
-      }
+
       
       fs.writeFileSync(filePath, finalContent);
       console.log(`   ✅ Fixed ${changes} hook issues in: ${path.basename(filePath)}`);
       return changes;
-    } else {
+ else {
       console.log(`   ℹ️  No fixable hook issues found in: ${path.basename(filePath)}`);
       return 0;
-    }
-  } catch (error) {
+
+ catch (error) {
     console.log(`   ❌ Error processing ${filePath}: ${error.message}`);
     return 0;
-  }
-}
+
+
 
 // Main execution
 async function main(): Promise<void> {
@@ -117,7 +117,7 @@ async function main(): Promise<void> {
   if (initialViolations.length === 0) {
     console.log('✅ No hook violations found!');
     return;
-  }
+
 
   // Extract unique file paths
   const filePaths = [...new Set(initialViolations.map(extractFilePath).filter(Boolean))];
@@ -129,7 +129,7 @@ async function main(): Promise<void> {
     console.log(`🔧 Processing: ${path.basename(filePath)}`);
     const fixed = await processFile(filePath);
     totalFixed += fixed;
-  }
+
 
   console.log(`\n📊 HOOK CLEANUP SUMMARY:`);
   console.log(`🎉 Total hook issues addressed: ${totalFixed}`);
@@ -143,9 +143,9 @@ async function main(): Promise<void> {
   const improvement = initialViolations.length - finalViolations.length;
   if (improvement > 0) {
     console.log(`✅ Reduced hook violations by ${improvement} (${Math.round(improvement/initialViolations.length*100)}%)`);
-  } else {
+ else {
     console.log(`ℹ️  Note: Many hook violations require manual review for proper dependency analysis`);
-  }
-}
+
+
 
 main().catch(console.error);

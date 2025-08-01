@@ -106,40 +106,46 @@ export var LearningMetricType;
         }
         ;
     }
-    ;
-    learning_outcomes: {
-        skill_acquisition_rate: number;
-        knowledge_retention_score: number;
-        real_world_application_success: number;
-        user_confidence_improvement: number;
-        competency_demonstration_rate: number;
-    }
-    ;
-    content_quality: {
-        helpfulness_rating: number;
-        accuracy_rating: number;
-        clarity_rating: number;
-        engagement_score: number;
-        community_endorsement_rate: number;
-    }
-    ;
-    user_progression: {
-        skill_level_advancement_rate: number;
-        learning_path_continuation_rate: number;
-        follow_up_learning_engagement: number;
-        marketplace_activity_correlation: number;
-    }
-    ;
-    segmented_performance: {
-        performance_by_skill_level: Record;
-        performance_by_role: Record;
-        performance_by_learning_style: Record;
-    }
-    ;
 }
 ;
+learning_outcomes: {
+    skill_acquisition_rate: number;
+    knowledge_retention_score: number;
+    real_world_application_success: number;
+    user_confidence_improvement: number;
+    competency_demonstration_rate: number;
+}
+;
+content_quality: {
+    helpfulness_rating: number;
+    accuracy_rating: number;
+    clarity_rating: number;
+    engagement_score: number;
+    community_endorsement_rate: number;
+}
+;
+user_progression: {
+    skill_level_advancement_rate: number;
+    learning_path_continuation_rate: number;
+    follow_up_learning_engagement: number;
+    marketplace_activity_correlation: number;
+}
+;
+segmented_performance: {
+    performance_by_skill_level: Record;
+    performance_by_role: Record;
+    performance_by_learning_style: Record;
+}
+;
+;
 skill_development: {
-    skills_acquired: Array;
+    skills_acquired: Array < {
+        skill_domain: SkillDomain,
+        previous_level: SkillLevel,
+        current_level: SkillLevel,
+        progression_date: string,
+        confidence_improvement: number
+    } > ;
     competencies_gained: string;
     learning_velocity: number; // skills acquired per month
     retention_score: number;
@@ -227,6 +233,7 @@ user_journey_analytics: {
 time_series_data: Array;
 contributing_factors: string;
 projected_continuation: boolean;
+drop_off_points: Array;
 ;
 effectiveness_metrics: {
     skill_acquisition_success: number;
@@ -279,14 +286,37 @@ network_analysis: {
 }
 ;
  > ;
-causal_relationships: Array;
-actionable_insights: Array;
+causal_relationships: Array < {
+    cause_metric: string,
+    effect_metric: string,
+    causal_strength: number,
+    time_lag_hours: number,
+    confidence_interval: [number, number]
+} > ;
+actionable_insights: Array < {
+    insight: string,
+    impact_potential: 'high' | 'medium' | 'low',
+    implementation_effort: 'low' | 'medium' | 'high',
+    roi_estimate: string
+} > ;
+time_range: {
+    start: Date;
+    end: Date;
+}
+;
+metrics_included: string;
+privacy_level: 'aggregated' | 'anonymized' | 'pseudonymized';
 ;
 download_url: string;
 expiration_date: Date;
 ;
 ;
-detailed_sections: Array;
+detailed_sections: Array < {
+    section_title: string,
+    metrics: (Record),
+    analysis: string,
+    visualizations: (Array)
+} > ;
 appendices: {
     methodology: string;
     data_sources: string;

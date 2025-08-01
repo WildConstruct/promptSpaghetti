@@ -5,8 +5,7 @@
  * Service contracts and API interfaces for promotion management operations
  * including CRUD, eligibility checking, application, and analytics.
  */
-import {
-  BasePromotion,
+import { BasePromotion,
   DiscountPromotion,
   ContentPromotion,
   BundlePromotion,
@@ -20,25 +19,23 @@ import {
   PromotionSearchResult,
   PromotionPerformanceMetrics,
   PromotionRule,
-  PromotionTemplate,
+  PromotionTemplate }
   PromotionAuditLog
-} from './PromotionInterfaces';
+ from './PromotionInterfaces';
 
 // =============================================================================
 // Core Promotion Management Service
 // =============================================================================
 
-}
-export interface IPromotionService {
-  // CRUD Operations
+
+export interface IPromotionService { // CRUD Operations
   createPromotion(promotionData: CreatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>>;
   getPromotion(promotionId: string): Promise<PromotionServiceResponse<BasePromotion>>;
   updatePromotion(promotionId: string, updates: UpdatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>>;
   deletePromotion(promotionId: string, deletedBy: string): Promise<PromotionServiceResponse<void>>;
   // Bulk Operations
-  createPromotions(promotions: CreatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>>;
+  createPromotions(promotions: CreatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>> }
 
-}
   updatePromotions(updates: Array<{ id: string; data: UpdatePromotionRequest }>): Promise<PromotionServiceResponse<BasePromotion>>;
   deletePromotions(promotionIds: string, deletedBy: string): Promise<PromotionServiceResponse<BulkOperationResult>>;
   // Search and Discovery
@@ -56,8 +53,8 @@ export interface IPromotionService {
 // =============================================================================
 // Promotion Application and Eligibility Service
 // =============================================================================
-}
-}
+
+
 export interface IPromotionEligibilityService {
   // Eligibility Checking
   checkEligibility(request: EligibilityCheckRequest): Promise<PromotionServiceResponse<PromotionEligibilityCheck>>;
@@ -78,9 +75,10 @@ export interface IPromotionEligibilityService {
   // =============================================================================
   // Content Promotion Service
   // =============================================================================
-}
-}
-}
+
+
+
+
 export interface IContentPromotionService {
   // Content Selection and Management
   createContentPromotion(promotionData: CreateContentPromotionRequest): Promise<PromotionServiceResponse<ContentPromotion>>;
@@ -102,9 +100,10 @@ export interface IContentPromotionService {
   // =============================================================================
   // Campaign Management Service
   // =============================================================================
-}
-}
-}
+
+
+
+
 export interface ICampaignService {
   // Campaign CRUD
   createCampaign(campaignData: CreateCampaignRequest): Promise<PromotionServiceResponse<CampaignPromotion>>;
@@ -127,9 +126,10 @@ export interface ICampaignService {
   // =============================================================================
   // Promotion Analytics Service
   // =============================================================================
-}
-}
-}
+
+
+
+
 export interface IPromotionAnalyticsService {
   // Performance Analytics
   getPromotionPerformance(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionPerformanceReport>>;
@@ -156,9 +156,10 @@ export interface IPromotionAnalyticsService {
   // =============================================================================
   // Promotion Rules Engine Service
   // =============================================================================
-}
-}
-}
+
+
+
+
 export interface IPromotionRulesService {
   // Rule Management
   createRule(ruleData: CreateRuleRequest): Promise<PromotionServiceResponse<PromotionRule>>;
@@ -177,9 +178,10 @@ export interface IPromotionRulesService {
   // =============================================================================
   // Promotion Template Service
   // =============================================================================
-}
-}
-}
+
+
+
+
 export interface IPromotionTemplateService {
   // Template Management
   createTemplate(templateData: CreateTemplateRequest): Promise<PromotionServiceResponse<PromotionTemplate>>;
@@ -199,18 +201,18 @@ export interface IPromotionTemplateService {
   // =============================================================================
   // Request/Response Type Definitions
   // =============================================================================
-}
-}
-}
-export interface CreatePromotionRequest {
-  type: PromotionType;
+
+
+
+
+export interface CreatePromotionRequest { type: PromotionType;
   name: string;
   description: string;
   start_date: Date;
   end_date: Date;
   timezone: string;
   // Type-specific configuration
-  discount_config?: any; // Will be typed based on promotion type,
+  discount_config?: any; // Will be typed based on promotion type }
   content_config?: any;
   bundle_config?: any;
   campaign_config?: any;
@@ -223,11 +225,11 @@ export interface CreatePromotionRequest {
   metadata?: Record<string, any>;
   tags?: string;
   created_by: string;
-}
-}
-}
-export interface UpdatePromotionRequest {
-  name?: string;
+
+
+
+
+export interface UpdatePromotionRequest { name?: string;
   description?: string;
   status?: PromotionStatus;
   enabled?: boolean;
@@ -237,173 +239,165 @@ export interface UpdatePromotionRequest {
   targeting_rules?: any;
   metadata?: Record<string, any>;
   tags?: string;
-  updated_by: string;
-}
-}
-}
-export interface EligibilityCheckRequest {
-  promotion_id: string;
+  updated_by: string }
+
+
+
+export interface EligibilityCheckRequest { promotion_id: string;
   user_id: string;
   cart_id?: string;
   item_ids?: string;
   promo_code?: string;
-  context?: PromotionContext;
-}
-}
-}
-export interface MultipleEligibilityCheckRequest {
-  promotion_ids: string;
+  context?: PromotionContext }
+
+
+
+export interface MultipleEligibilityCheckRequest { promotion_ids: string;
   user_id: string;
   cart_id?: string;
   item_ids?: string;
-  context?: PromotionContext;
-}
-}
-}
-export interface ApplyPromotionRequest {
-  promotion_id: string;
+  context?: PromotionContext }
+
+
+
+export interface ApplyPromotionRequest { promotion_id: string;
   user_id: string;
   cart_id: string;
   promo_code?: string;
   force_apply?: boolean;
-  context?: PromotionContext;
-}
-}
-}
-export interface RemovePromotionRequest {
-  promotion_id: string;
+  context?: PromotionContext }
+
+
+
+export interface RemovePromotionRequest { promotion_id: string;
   user_id: string;
   cart_id: string;
-  reason?: string;
-}
-}
-}
-export interface PromotionContext {
-  user_agent?: string;
+  reason?: string }
+
+
+
+export interface PromotionContext { user_agent?: string;
   ip_address?: string;
   referrer?: string;
   campaign_source?: string;
   device_type?: 'desktop' | 'mobile' | 'tablet';
-  location?: {
+  location?: { }
   country: string;
   region?: string;
   city?: string;
-}
+
+
 };
   session_data?: Record<string, any>;
   custom_attributes?: Record<string, any>;
-}
-}
-export interface ActivePromotionFilters {
-  type?: PromotionType;
+
+
+export interface ActivePromotionFilters { type?: PromotionType;
   applicable_to_user?: string;
   location?: string;
-  limit?: number;
-}
-}
-}
-export interface PromotionValidationResult {
-  valid: boolean;
+  limit?: number }
+
+
+
+export interface PromotionValidationResult { valid: boolean;
   errors: ValidationError;
   warnings: ValidationWarning;
-  suggestions: string;
-}
-}
-}
-export interface ValidationError {
-  field: string;
+  suggestions: string }
+
+
+
+export interface ValidationError { field: string;
   code: string;
   message: string;
-  severity: 'error' | 'warning'
-}
-  }
-}
-export interface ValidationWarning {
-  field: string;
+  severity: 'error' | 'warning' }
+
+
+
+
+export interface ValidationWarning { field: string;
   message: string;
-  impact: 'low' | 'medium' | 'high'
-}
-  }
-}
-export interface PromotionConflictCheck {
-  has_conflicts: boolean;
-  conflicts: Array<{
+  impact: 'low' | 'medium' | 'high' }
+
+
+
+
+export interface PromotionConflictCheck { has_conflicts: boolean;
+  conflicts: Array<{;
   conflicting_promotion_id: string;
   conflict_type: 'time_overlap' | 'mutual_exclusion' | 'resource_conflict';
   description: string;
-  severity: 'blocking' | 'warning'
-}
-  }>;
+  severity: 'blocking' | 'warning' }
+
+
+>;
   recommendations: string;
-}
-}
-export interface BulkOperationResult {
-  total_processed: number;
+
+
+export interface BulkOperationResult { total_processed: number;
   successful: number;
   failed: number;
-  results: Array<{
+  results: Array<{ }
   id: string;
   success: boolean;
   error?: string;
-}
-}>;
-}
-}
-export interface ApplicablePromotionsResult {
-  applicable_promotions: PromotionEligibilityCheck;
-  auto_applied: string; // Promotion IDs that were automatically applied,
+
+
+>;
+
+
+export interface ApplicablePromotionsResult { applicable_promotions: PromotionEligibilityCheck;
+  auto_applied: string; // Promotion IDs that were automatically applied }
   suggested: PromotionRecommendation;
   total_potential_savings_cents: number;
-}
-}
-}
-export interface PromotionRecommendation {
-  promotion_id: string;
+
+
+
+
+export interface PromotionRecommendation { promotion_id: string;
   promotion_name: string;
   promotion_type: PromotionType;
   potential_savings_cents: number;
-  confidence_score: number; // 0-1,
+  confidence_score: number; // 0-1 }
   recommendation_reason: string;
   call_to_action: string;
   expires_at?: Date;
-}
-}
-}
-export interface CartPromotionEvaluation {
-  cart_id: string;
+
+
+
+
+export interface CartPromotionEvaluation { cart_id: string;
   current_promotions: string;
   applicable_promotions: PromotionEligibilityCheck;
   potential_savings_cents: number;
-  optimization_suggestions: PromotionOptimizationSuggestion;
-}
-}
-}
-export interface PromotionOptimizationSuggestion {
-  type: 'add_item' | 'increase_quantity' | 'apply_code' | 'stack_promotion';
+  optimization_suggestions: PromotionOptimizationSuggestion }
+
+
+
+export interface PromotionOptimizationSuggestion { type: 'add_item' | 'increase_quantity' | 'apply_code' | 'stack_promotion' }
   description: string;
   additional_savings_cents: number;
   required_actions: string;
-}
-}
-}
-export interface CartPromotionApplication {
-  cart_id: string;
+
+
+
+
+export interface CartPromotionApplication { cart_id: string;
   applied_promotions: PromotionApplicationResult;
   total_savings_cents: number;
   final_cart_total_cents: number;
-  optimization_performed: boolean;
-}
-}
-}
-export interface PromoCodeValidation {
-  valid: boolean;
+  optimization_performed: boolean }
+
+
+
+export interface PromoCodeValidation { valid: boolean;
   promotion_id?: string;
   promotion_name?: string;
-  discount_preview?: {
+  discount_preview?: { }
   type: string;
   amount_cents?: number;
   percentage?: number;
-}
+
+
 };
   error_code?: string;
   error_message?: string;
@@ -412,97 +406,93 @@ export interface PromoCodeValidation {
 // =============================================================================
 // Analytics Response Types
 // =============================================================================
-}
-}
-export interface PromotionPerformanceReport {
-  promotion_id: string;
+
+
+export interface PromotionPerformanceReport { promotion_id: string;
   promotion_name: string;
   date_range: DateRange;
   // Core metrics
   metrics: PromotionPerformanceMetrics;
   // Time series data
-  time_series: Array<{
+  time_series: Array<{ }
   date: string;
   usage_count: number;
   revenue_cents: number;
   conversion_rate: number;
-}
-}>;
+
+
+>;
   // Segmentation analysis
-  user_segments: Array<{
+  user_segments: Array<{ ,
   segment_name: string;
   usage_count: number;
   conversion_rate: number;
-  average_order_value_cents: number;
-}>;
+  average_order_value_cents: number }>;
   // Performance insights
   insights: PerformanceInsight;
   recommendations: OptimizationRecommendation;
-}
-}
-export interface PerformanceInsight {
-  type: 'positive' | 'negative' | 'neutral';
+
+
+export interface PerformanceInsight { type: 'positive' | 'negative' | 'neutral';
   title: string;
   description: string;
-  impact_score: number; // 0-100,
-  confidence: number; // 0-1,
+  impact_score: number; // 0-100;
+  confidence: number; // 0-1 }
   supporting_data: Record<string, any>;
-}
-}
-}
-export interface OptimizationRecommendation {
-  type: 'increase_budget' | 'adjust_targeting' | 'modify_timing' | 'change_discount' | 'extend_duration';
+
+
+
+
+export interface OptimizationRecommendation { type: 'increase_budget' | 'adjust_targeting' | 'modify_timing' | 'change_discount' | 'extend_duration';
   title: string;
   description: string;
   expected_impact: string;
   effort_level: 'low' | 'medium' | 'high';
-  priority_score: number; // 0-100,
+  priority_score: number; // 0-100 }
   implementation_steps: string;
-}
-}
-}
-export interface DateRange {
-  start_date: Date;
-  end_date: Date;
-}
-}
-}
-export interface BenchmarkType {
-  type: 'industry' | 'category' | 'historical' | 'similar_promotions';
-  parameters?: Record<string, any>;
-}
-}
-}
-export interface RevenueAnalyticsReport {
-  promotion_id: string;
+
+
+
+
+export interface DateRange { start_date: Date;
+  end_date: Date }
+
+
+
+export interface BenchmarkType { type: 'industry' | 'category' | 'historical' | 'similar_promotions';
+  parameters?: Record<string, any> }
+
+
+
+export interface RevenueAnalyticsReport { promotion_id: string;
   date_range: DateRange;
   // Revenue metrics
   total_revenue_cents: number;
-  incremental_revenue_cents: number; // Revenue attributed to promotion,
+  incremental_revenue_cents: number; // Revenue attributed to promotion;
   revenue_per_use_cents: number;
   // Cost analysis
   total_discount_given_cents: number;
-  cost_of_promotion_cents: number; // Including operational costs,
+  cost_of_promotion_cents: number; // Including operational costs;
   net_revenue_impact_cents: number;
   // ROI calculations
   roi_percentage: number;
   payback_period_days?: number;
   break_even_usage_count: number;
   // Revenue distribution
-  revenue_by_segment: Array<{
+  revenue_by_segment: Array<{ }
   segment: string;
   revenue_cents: number;
   percentage: number;
-}
-}>;
+
+
+>;
   // Trends
-  daily_revenue: Array<{
+  daily_revenue: Array<{ ,
   date: string;
   revenue_cents: number;
-  usage_count: number;
-}>;
-}
-}
+  usage_count: number }>;
+
+
 export interface UserPromotionHistory {
   promotion_id: string;
   promotion_name: string;
@@ -514,35 +504,33 @@ export interface UserPromotionHistory {
   // =============================================================================
   // Event and Callback Types
   // =============================================================================
-}
-}
-}
-export interface PromotionUpdateCallback {
-  (update: PromotionUpdate): void;
-}
-}
-}
-export interface PromotionUpdate {
-  promotion_id: string;
+
+
+
+
+export interface PromotionUpdateCallback { (update: PromotionUpdate): void }
+
+
+
+export interface PromotionUpdate { promotion_id: string;
   update_type: 'usage' | 'performance' | 'status_change';
   data: any;
-  timestamp: Date;
-}
-}
-}
+  timestamp: Date }
+
+
+
 export interface SubscriptionHandle {
   unsubscribe(): void;
   // =============================================================================
   // Export all service interfaces
   // =============================================================================
-}
-}
-export type {
-  IPromotionService,
+
+
+export type { IPromotionService,
   IPromotionEligibilityService,
   IContentPromotionService,
   ICampaignService,
   IPromotionAnalyticsService,
-  IPromotionRulesService,
+  IPromotionRulesService }
   IPromotionTemplateService
 };

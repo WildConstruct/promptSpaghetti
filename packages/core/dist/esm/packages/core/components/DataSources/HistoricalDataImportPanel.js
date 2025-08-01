@@ -37,90 +37,30 @@ const ERA_OPTIONS = [];
     'Contemporary (1950+)';
 }
 ;
-const CATEGORY_OPTIONS = [];
-{
-    value: 'clothing', label;
-    'Clothing & Fashion';
-}
-{
-    value: 'architecture', label;
-    'Architecture';
-}
-{
-    value: 'art', label;
-    'Art & Sculpture';
-}
-{
-    value: 'literature', label;
-    'Literature & Texts';
-}
-{
-    value: 'warfare', label;
-    'Warfare & Military';
-}
-{
-    value: 'trade', label;
-    'Trade & Commerce';
-}
-{
-    value: 'religion', label;
-    'Religion & Spirituality';
-}
-{
-    value: 'daily-life', label;
-    'Daily Life & Culture';
-}
-{
-    value: 'technology', label;
-    'Technology & Tools';
-}
-{
-    value: 'materials', label;
-    'Materials & Crafts';
-}
-;
-const REGION_OPTIONS = [];
-{
-    value: 'europe', label;
-    'Europe';
-}
-{
-    value: 'england', label;
-    'England';
-}
-{
-    value: 'france', label;
-    'France';
-}
-{
-    value: 'germany', label;
-    'Germany';
-}
-{
-    value: 'italy', label;
-    'Italy';
-}
-{
-    value: 'spain', label;
-    'Spain';
-}
-{
-    value: 'asia', label;
-    'Asia';
-}
-{
-    value: 'middle-east', label;
-    'Middle East';
-}
-{
-    value: 'africa', label;
-    'Africa';
-}
-{
-    value: 'americas', label;
-    'Americas';
-}
-;
+const CATEGORY_OPTIONS = [
+    { value: 'clothing', label: 'Clothing & Fashion' },
+    { value: 'architecture', label: 'Architecture' },
+    { value: 'art', label: 'Art & Sculpture' },
+    { value: 'literature', label: 'Literature & Texts' },
+    { value: 'warfare', label: 'Warfare & Military' },
+    { value: 'trade', label: 'Trade & Commerce' },
+    { value: 'religion', label: 'Religion & Spirituality' },
+    { value: 'daily-life', label: 'Daily Life & Culture' },
+    { value: 'technology', label: 'Technology & Tools' },
+    { value: 'materials', label: 'Materials & Crafts' }
+];
+const REGION_OPTIONS = [
+    { value: 'europe', label: 'Europe' },
+    { value: 'england', label: 'England' },
+    { value: 'france', label: 'France' },
+    { value: 'germany', label: 'Germany' },
+    { value: 'italy', label: 'Italy' },
+    { value: 'spain', label: 'Spain' },
+    { value: 'asia', label: 'Asia' },
+    { value: 'middle-east', label: 'Middle East' },
+    { value: 'africa', label: 'Africa' },
+    { value: 'americas', label: 'Americas' }
+];
 export const HistoricalDataImportPanel = ({
     visible,
     onClose,

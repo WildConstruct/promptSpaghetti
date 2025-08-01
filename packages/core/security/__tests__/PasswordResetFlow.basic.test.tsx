@@ -6,17 +6,14 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { PasswordResetFlow, ResetStep } from '../components/PasswordResetFlow';
-describe('PasswordResetFlow - Basic Tests', () => {
-  const defaultProps = {
-    onResetComplete: jest.fn<unknown, unknown>(),
-    onStepChange: jest.fn<unknown, unknown>(),
-    onSecurityEvent: jest.fn<unknown, unknown>(),
-    brandName: 'Test App',
-    supportEmail: 'support@test.com',
-  };
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+describe('PasswordResetFlow - Basic Tests', () => { const defaultProps = {
+  onResetComplete: jest.fn<unknown, unknown>()
+  onStepChange: jest.fn<unknown, unknown>()
+  onSecurityEvent: jest.fn<unknown, unknown>()
+  brandName: 'Test App'
+  supportEmail: 'support@test.com' }
+};
+  beforeEach(() => { jest.clearAllMocks() });
   describe('Initial Render', () => {
     test('should render the password reset form', () => {
       render(<PasswordResetFlow {...defaultProps} />);
@@ -63,9 +60,7 @@ describe('PasswordResetFlow - Basic Tests', () => {
       const submitButton = screen.getByRole('button', { name: /send reset code/i });
       fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
       fireEvent.click(submitButton);
-      await waitFor(() => {
-        expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument() });
     });
   });
   describe('Custom Props', () => {
@@ -104,9 +99,7 @@ describe('PasswordResetFlow - Basic Tests', () => {
       fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
       fireEvent.click(submitButton);
       // Should show loading state briefly
-      await waitFor(() => {
-        expect(screen.getByText(/sending code/i) || submitButton).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/sending code/i) || submitButton).toBeInTheDocument() });
     });
   });
 });

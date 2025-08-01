@@ -22,7 +22,7 @@ const THRESHOLDS = {
   security: {
     maxHigh: 0,
     maxModerate: 5
-  }
+
 };
 
 class QualityGate {
@@ -33,7 +33,7 @@ class QualityGate {
       security: null
     };
     this.passed = true;
-  }
+
 
   async run(): Promise<void> {
     console.log(chalk.blue('🔍 Running Quality Gate Analysis...\n'));
@@ -47,15 +47,15 @@ class QualityGate {
       
       if (!this.passed) {
         process.exit(1);
-      }
+
       
       console.log(chalk.green('✅ Quality Gate: PASSED\n'));
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Quality Gate: FAILED'));
       console.error(error.message);
       process.exit(1);
-    }
-  }
+
+
 
   async checkESLintResults(): Promise<void> {
     const reportPath = path.join('reports', 'eslint-report.json');
@@ -63,7 +63,7 @@ class QualityGate {
     if (!fs.existsSync(reportPath)) {
       console.log(chalk.yellow('⚠️  ESLint report not found, skipping...'));
       return;
-    }
+
 
     const eslintData = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
     
@@ -79,18 +79,18 @@ class QualityGate {
     if (totalErrors > THRESHOLDS.eslint.maxErrors) {
       console.log(chalk.red('   ❌ Too many ESLint errors'));
       this.passed = false;
-    }
+
 
     if (totalWarnings > THRESHOLDS.eslint.maxWarnings) {
       console.log(chalk.red('   ❌ Too many ESLint warnings'));
       this.passed = false;
-    }
+
 
     if (totalErrors <= THRESHOLDS.eslint.maxErrors && totalWarnings <= THRESHOLDS.eslint.maxWarnings) {
       console.log(chalk.green('   ✅ ESLint check passed'));
-    }
+
     console.log();
-  }
+
 
   async checkComplexityResults(): Promise<void> {
     const reportPath = path.join('reports', 'complexity-report.json');
@@ -98,7 +98,7 @@ class QualityGate {
     if (!fs.existsSync(reportPath)) {
       console.log(chalk.yellow('⚠️  Complexity report not found, skipping...'));
       return;
-    }
+
 
     const complexityData = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
     
@@ -115,9 +115,9 @@ class QualityGate {
             functionCount++;
             maxComplexity = Math.max(maxComplexity, func.complexity || 0);
           });
-        }
+
       });
-    }
+
 
     const averageComplexity = functionCount > 0 ? totalComplexity / functionCount : 0;
     
@@ -135,18 +135,18 @@ class QualityGate {
     if (averageComplexity > THRESHOLDS.complexity.maxAverage) {
       console.log(chalk.red('   ❌ Average complexity too high'));
       this.passed = false;
-    }
+
 
     if (maxComplexity > THRESHOLDS.complexity.maxFunction) {
       console.log(chalk.red('   ❌ Function complexity too high'));
       this.passed = false;
-    }
+
 
     if (averageComplexity <= THRESHOLDS.complexity.maxAverage && maxComplexity <= THRESHOLDS.complexity.maxFunction) {
       console.log(chalk.green('   ✅ Complexity check passed'));
-    }
+
     console.log();
-  }
+
 
   async checkSecurityResults(): Promise<void> {
     // For now, we'll rely on npm audit output
@@ -154,7 +154,7 @@ class QualityGate {
     console.log(chalk.blue('🔒 Security Check:'));
     console.log(chalk.green('   ✅ Security scan completed (npm audit)'));
     console.log();
-  }
+
 
   printSummary(): void {
     console.log(chalk.blue('📊 Quality Gate Summary:'));
@@ -162,20 +162,20 @@ class QualityGate {
     
     if (this.results.eslint) {
       console.log(`ESLint: ${this.results.eslint.errors} errors, ${this.results.eslint.warnings} warnings`);
-    }
+
     
     if (this.results.complexity) {
       console.log(`Complexity: avg ${this.results.complexity.average.toFixed(2)}, max ${this.results.complexity.max}`);
-    }
+
     
     console.log('=' .repeat(50));
-  }
-}
+
+
 
 // Run the quality gate
 if (require.main === module) {
   const gate = new QualityGate();
   gate.run().catch(console.error);
-}
+
 
 module.exports = QualityGate;

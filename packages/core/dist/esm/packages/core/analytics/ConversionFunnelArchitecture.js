@@ -45,7 +45,7 @@ export class ConversionArchitectureManager {
             category: 'acquisition',
             crossDeviceTracking: true,
             attributionWindow: 30,
-            steps: [,
+            steps: [
                 {
                     id: 'marketplace-entry',
                     name: 'Marketplace Entry',
@@ -76,7 +76,8 @@ export class ConversionArchitectureManager {
                     name: 'Template Purchased',
                     eventType: 'template_purchased',
                     required: true
-                }],
+                }
+            ],
             conversionDefinition: {
                 primaryGoal: {},
                 id: 'template-purchase',
@@ -87,7 +88,7 @@ export class ConversionArchitectureManager {
                 conditions: {},
                 weight: 1.0
             },
-            microConversions: [,
+            microConversions: [
                 {
                     id: 'template-preview',
                     name: 'Template Preview',
@@ -105,8 +106,9 @@ export class ConversionArchitectureManager {
                     eventPattern: 'template_favorited',
                     conditions: {},
                     weight: 0.3
-                }],
-            macroConversions: [,
+                }
+            ],
+            macroConversions: [
                 {
                     id: 'template-purchase',
                     name: 'Template Purchase',
@@ -115,52 +117,114 @@ export class ConversionArchitectureManager {
                     eventPattern: 'template_purchased',
                     conditions: {},
                     weight: 1.0
-                }]
-        }, segmentation, anomalyDetection;
-        this.funnels.set(marketplaceDiscoveryFunnel.id, marketplaceDiscoveryFunnel);
-        // Define stream configurations
-        const defaultStreamConfig = {
-            streamName: 'conversion-events-stream',
-            batchSize: 100,
-            flushInterval: 5000,
-            retryPolicy: {
-                maxRetries: 3,
-                backoffMultiplier: 2,
-                maxBackoffTime: 30000,
-            },
-            deadLetterQueue: {
-                enabled: true,
-                maxAge: 24,
-            },
-            partitioning: {
-                strategy: 'user_id',
-                partitionCount: 10,
-            },
-            this: .streamConfigs.set('default', defaultStreamConfig),
-            setupPrivacyCompliance() {
-                // GDPR and privacy-compliant settings
-                this.privacySettings.set('gdpr_compliance', {});
-                consentRequired: true,
-                    dataRetentionDays;
-                730,
-                    anonymizationDelay;
-                30,
-                    rightToErasure;
-                true,
-                    dataPortability;
-                true,
+                }
+            ]
+        }, segmentation;
+        {
+            id: 'indie-filmmakers',
+                name;
+            'Independent Filmmakers',
+                definition;
+            {
+                rules: [
+                    { field: 'user.budget_range', operator: 'less_than', value: 50000 },
+                    { field: 'user.project_type', operator: 'contains', value: 'independent' }
+                ],
+                    operator;
+                'AND';
+            }
+            size: 892,
+                conversionRate;
+            18.7;
+            cohortDefinitions: [
+                {
+                    id: 'weekly-signups',
+                    name: 'Weekly Signup Cohorts',
+                    criteriaEvent: 'user_signup',
+                    criteriaWindow: 7,
+                    analysisWindow: 90,
+                    retentionPeriods: [1, 7, 30, 60, 90]
+                }
+            ],
+            ;
+        }
+        anomalyDetection: {
+            enabled: true,
+                thresholds;
+            [
+                {
+                    metric: 'conversion_rate',
+                    threshold: 15.0,
+                    direction: 'below',
+                    sensitivity: 'medium',
+                },
+                {
+                    metric: 'drop_off_rate',
+                    threshold: 40.0,
+                    direction: 'above',
+                    sensitivity: 'high'
+                }
+            ],
+                alerting;
+            {
+                channels: ['email', 'slack', 'dashboard'],
+                    recipients;
+                ['analytics@company.com'],
+                    frequency;
+                'immediate',
+                    cooldown;
+                60,
                 ;
-            } };
-        this.privacySettings.set('cross_device_tracking', {});
-        requiresExplicitConsent: true,
-            deterministicOnly;
-        false,
-            probabilisticThreshold;
-        0.8,
-            linkingCooldown;
-        24 * 60 * 60 * 1000; // 24 hours,
+            }
+            ;
+            this.funnels.set(marketplaceDiscoveryFunnel.id, marketplaceDiscoveryFunnel);
+            // Define stream configurations
+            const defaultStreamConfig = {
+                streamName: 'conversion-events-stream',
+                batchSize: 100,
+                flushInterval: 5000,
+                retryPolicy: {
+                    maxRetries: 3,
+                    backoffMultiplier: 2,
+                    maxBackoffTime: 30000,
+                },
+                deadLetterQueue: {
+                    enabled: true,
+                    maxAge: 24,
+                },
+                partitioning: {
+                    strategy: 'user_id',
+                    partitionCount: 10,
+                },
+                this: .streamConfigs.set('default', defaultStreamConfig),
+                setupPrivacyCompliance() {
+                    // GDPR and privacy-compliant settings
+                    this.privacySettings.set('gdpr_compliance', {});
+                    consentRequired: true,
+                        dataRetentionDays;
+                    730,
+                        anonymizationDelay;
+                    30,
+                        rightToErasure;
+                    true,
+                        dataPortability;
+                    true,
+                    ;
+                } };
+            this.privacySettings.set('cross_device_tracking', {});
+            requiresExplicitConsent: true,
+                deterministicOnly;
+            false,
+                probabilisticThreshold;
+            0.8,
+                linkingCooldown;
+            24 * 60 * 60 * 1000; // 24 hours,
+        }
+        ;
+        /**
+         * Create enhanced conversion event with attribution and privacy compliance
+         */
     }
-    ;
     touchpoints;
     privacyConsent;
     EnhancedConversionEvent;
@@ -307,33 +371,33 @@ export class ConversionArchitectureManager {
                                     // Privacy-compliant device fingerprinting
                                     // Detect test environment
                                     if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
-                                        const fallbackFingerprint = [];
-                                        'test-user-agent',
+                                        const fallbackFingerprint = [
+                                            'test-user-agent',
                                             'en-US',
                                             '1920x1080',
                                             '0',
-                                            'test-canvas-data';
-                                        join('|');
+                                            'test-canvas-data'
+                                        ].join('|');
                                         return btoa(fallbackFingerprint).substring(0, 32);
                                         try {
-                                            const fingerprint = [];
-                                            navigator.userAgent || 'unknown',
+                                            const fingerprint = [
+                                                navigator.userAgent || 'unknown',
                                                 navigator.language || 'unknown',
                                                 (typeof screen !== 'undefined' ? screen.width + 'x' + screen.height : '1920x1080'),
                                                 new Date().getTimezoneOffset(),
-                                                'canvas_fingerprint';
-                                            join('|');
+                                                'canvas_fingerprint'
+                                            ].join('|');
                                             return btoa(fingerprint).substring(0, 32);
                                         }
                                         catch (error) {
                                             // Fallback for any other environments
-                                            const fallbackFingerprint = [];
-                                            'fallback-user-agent',
+                                            const fallbackFingerprint = [
+                                                'fallback-user-agent',
                                                 'en-US',
                                                 '1920x1080',
                                                 '0',
-                                                'fallback-canvas-data';
-                                            join('|');
+                                                'fallback-canvas-data'
+                                            ].join('|');
                                             return btoa(fallbackFingerprint).substring(0, 32);
                                             getCrossDeviceUserId(userId, string);
                                             string | undefined;
@@ -358,8 +422,9 @@ export class ConversionArchitectureManager {
                                                     CrossDeviceIdentity | null;
                                                     {
                                                         return this.crossDeviceIdentities.get(userId) || null;
-                                                        linkDeviceIdentity(userId, string);
-                                                        deviceIdentity: DeviceIdentity,
+                                                        linkDeviceIdentity(userId, string),
+                                                            deviceIdentity;
+                                                        DeviceIdentity,
                                                             linkingSignals;
                                                         LinkingSignal;
                                                         boolean;
@@ -469,17 +534,17 @@ export class ConversionArchitectureManager {
                                                                                                         bounce_rate: 'high',
                                                                                                     },
                                                                                                     recommendations: {
-                                                                                                        optimization: [,
+                                                                                                        optimization: [
                                                                                                             'Add preview CTA on template view pages',
                                                                                                             'Implement exit-intent popups for at-risk users',
                                                                                                             'Optimize mobile checkout flow for indie filmmakers'
                                                                                                         ],
-                                                                                                        targeting: [,
+                                                                                                        targeting: [
                                                                                                             'Create lookalike audiences based on high-value segment',
                                                                                                             'Retarget users who viewed but didn\'t preview templates',
                                                                                                             'Focus acquisition on professional directors using desktop'
                                                                                                         ],
-                                                                                                        personalization: [,
+                                                                                                        personalization: [
                                                                                                             'Show template previews automatically for high-intent users',
                                                                                                             'Customize pricing displays based on user segment',
                                                                                                             'Implement role-based template recommendations'
@@ -487,11 +552,7 @@ export class ConversionArchitectureManager {
                                                                                                     },
                                                                                                     // Global instance
                                                                                                     const: conversionArchitecture = new ConversionArchitectureManager(),
-                                                                                                    export: , default: conversionArchitecture
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
+                                                                                                    export: , default: conversionArchitecture } } } }
                                                                                 };
                                                                             }
                                                                         };

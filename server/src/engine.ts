@@ -6,15 +6,17 @@
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 
 // Interface for Conditional node branches
-}
-}
+
+
+
 interface ConditionalBranch {
   condition: string;
   output: string;
   label?: string;
-}
-}
-}
+
+
+
+
 
 // Minimal engine for server startup - bypassing problematic imports
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
@@ -34,14 +36,14 @@ let analyticsDAO: any = null;
 function processTemplateVariables(template: string, executionContext: any): string {
   // Simple stub implementation
   return template || '';
-}
+
 
 /**
  * Simplified stub for server startup
  */
 export function initializeAnalytics(): void {
   console.log('Analytics initialization skipped (stub mode)');
-}
+
 
 /**
  * Simplified stub for server startup  
@@ -49,7 +51,7 @@ export function initializeAnalytics(): void {
 export async function executeGraph(graph: Graph, sessionId?: string, userId?: number): Promise<{
   outputs: string[];
   executionPath?: any;
-}> {
+> {
 
   const graphId = graph.id || uuidv4();
   const executionId = uuidv4();
@@ -71,12 +73,12 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
             event.success,
             event.error
           );
-        } else if (event.type === 'event') {
+ else if (event.type === 'event') {
           analyticsCollector.recordEvent(event.data);
-        }
+
       });
       analyticsBuffer.length = 0; // Clear buffer
-    }
+
   };
   
   // Epic 8.5: Initialize execution tracking
@@ -91,7 +93,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       graph.edges?.length || 0,
       graph.seed
     );
-  }
+
 
   try {
     // Check if graph contains advanced nodes
@@ -102,7 +104,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       ? AdvancedExecutionUtils.enhanceContext({ 
         variables: {}, 
         seed: graph.seed ?? Date.now() 
-  }
+
       : { variables: {}, seed: graph.seed ?? Date.now() } as ExecutionContext;
 
     const nodeMap = new Map<string, Node>();
@@ -115,7 +117,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       // SECURITY FIX: Prevent stack overflow with depth protection
       if (depth > 1000) {
         throw new Error(`Maximum execution depth exceeded (${depth}). Possible infinite recursion in graph at node ${nodeId}`);
-      }
+
       
       if (memo.has(nodeId)) return memo.get(nodeId);
       const node = nodeMap.get(nodeId);
@@ -135,9 +137,9 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
             nodeType: node.type,
             graphId,
             executionId
-          }
+
         });
-      }
+
 
       try {
         // Resolve inputs first (depth-first)
@@ -155,8 +157,8 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
               value: inputValue,
               inputIndex: i
             });
-          }
-        }
+
+
 
         // Instantiate runtime node per type
         const runtimeNode = createRuntimeNode(node, resolvedInputs, executionContext);
@@ -184,8 +186,8 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
           if (randomChoice) {
             executionStep.randomChoice = randomChoice;
             tracker.recordRandomChoice(trackingId, randomChoice);
-          }
-        }
+
+
         
         tracker.recordNodeExecution(trackingId, executionStep);
         
@@ -201,7 +203,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         });
 
         return result;
-      } catch (error) {
+ catch (error) {
         // Record failed node execution
         const nodeEndTime = Date.now();
         const executionTimeMs = nodeEndTime - nodeStartTime;
@@ -217,11 +219,11 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
             undefined,
             error instanceof Error ? error.message : String(error)
           );
-        }
+
         
         throw error;
-      }
-    }
+
+
 
     // Evaluate all output nodes in insertion order
     const outputs: string[] = [];
@@ -229,8 +231,8 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       if (n.type === 'Output') {
         const value = await dfs(n.id, 0); // Start depth at 0 for output nodes
         outputs.push(value);
-      }
-    }
+
+
 
     // Record successful graph execution
     const endTime = Date.now();
@@ -245,7 +247,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         graph.nodes.length,
         countGraphConnections(graph)
       );
-    }
+
 
     // Store graph execution record in database
     if (analyticsDAO) {
@@ -263,7 +265,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         outputLength: totalOutputLength,
         seedValue: typeof graph.seed === 'number' ? graph.seed : undefined
       });
-    }
+
 
     // Epic 8.5: Finish execution tracking and get execution path
     const executionPath = tracker.finishTracking(trackingId, outputs.join('\n'));
@@ -275,8 +277,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       outputs,
       executionPath
     };
-
-  } catch (error) {
+ catch (error) {
     // Record failed graph execution
     const endTime = Date.now();
     const executionTimeMs = endTime - startTime;
@@ -289,7 +290,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         countGraphConnections(graph),
         executionTimeMs
       );
-    }
+
 
     // Store failed graph execution record in database
     if (analyticsDAO) {
@@ -307,11 +308,11 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         errorMessage: error instanceof Error ? error.message : String(error),
         seedValue: typeof graph.seed === 'number' ? graph.seed : undefined
       });
-    }
+
 
     throw error;
-  }
-}
+
+
 
 /**
  * Legacy wrapper for backward compatibility - returns just the output strings
@@ -320,7 +321,7 @@ export async function executeGraphLegacy(graph: Graph, sessionId?: string, userI
 
   const result = await executeGraph(graph, sessionId, userId);
   return result.outputs;
-}
+
 
 /**
  * Count the number of connections (edges) in a graph
@@ -330,10 +331,10 @@ function countGraphConnections(graph: Graph): number {
   for (const node of graph.nodes) {
     if (node.inputs && node.inputs.length > 0) {
       connectionCount += node.inputs.length;
-    }
-  }
+
+
   return connectionCount;
-}
+
 
 /**
  * Check if a node type is an advanced node that requires AdvancedExecutionContext
@@ -344,7 +345,7 @@ function isAdvancedNodeType(nodeType: string): boolean {
   // Check built-in advanced nodes
   if (advancedNodeTypes.includes(nodeType)) {
     return true;
-  }
+
   
   // Check extension nodes - assume extensions might use advanced features
   try {
@@ -355,15 +356,15 @@ function isAdvancedNodeType(nodeType: string): boolean {
         const nodeTypes = nodeExtension.getNodeTypes();
         if (nodeTypes.some(type => type.id === nodeType)) {
           return true; // Assume extension nodes use advanced context for safety
-        }
-      }
-    }
-  } catch (error) {
+
+
+
+ catch (error) {
     // Ignore errors in extension checking
-  }
+
   
   return false;
-}
+
 
 function createRuntimeNode(
   node: Node,
@@ -383,9 +384,9 @@ function createRuntimeNode(
       const processedTemplate = processTemplateVariables(node.template, executionContext);
       // Only use processed template if it's different and valid
       output = processedTemplate || output;
-    }
+
     return new OutputNode(node.id, output);
-  }
+
   case 'Include':
     return new IncludeNode(node.id, node.name, {});
   case 'SetVariable': {
@@ -395,9 +396,9 @@ function createRuntimeNode(
       const processedTemplate = processTemplateVariables(node.template, executionContext);
       // Only use processed template if it's different and valid
       value = processedTemplate || value;
-    }
+
     return new SetVariableNode(node.id, node.key, value);
-  }
+
   case 'GetVariable':
     return new GetVariableNode(node.id, node.key);
     
@@ -418,20 +419,20 @@ function createRuntimeNode(
       for (const [key, value] of Object.entries(config.customFunctions)) {
         if (typeof value === 'function') {
           funcs[key] = value;
-        } else {
+ else {
           // Convert constants to functions that return the constant
           funcs[key] = () => value;
-        }
-      }
+
+
       config.customFunctions = funcs;
-    }
+
     return new ConditionalNode(
       node.id,
       node.branches || [],
       node.defaultOutput || '',
       config
     );
-  }
+
     
   case 'Sequential':
     const patternConfig = node.pattern?.config || {};
@@ -472,11 +473,11 @@ function createRuntimeNode(
     const extensionNode = tryCreateExtensionNode(node, resolvedInputs, executionContext);
     if (extensionNode) {
       return extensionNode;
-    }
+
     // Exhaustive check
     throw new Error(`Unsupported node type ${(node as any).type}`);
-  }
-}
+
+
 
 /**
  * Check if a node type involves randomization for execution path tracking
@@ -490,7 +491,7 @@ function isRandomizationNode(nodeType: string): boolean {
     'Markov'
   ];
   return randomizationTypes.includes(nodeType);
-}
+
 
 /**
  * Extract random choice information for execution path tracking
@@ -516,9 +517,9 @@ function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: un
           probability,
           weight
         };
-      }
+
       break;
-    }
+
       
     case 'WeightedAdvanced': {
       const choices = node.choices as string[] || [];
@@ -529,9 +530,9 @@ function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: un
           selectedOption: result,
           selectionReason: `Advanced weighted selection of "${result}"`
         };
-      }
+
       break;
-    }
+
       
     case 'Conditional': {
       const branches = (node.branches as ConditionalBranch[]) || [];
@@ -541,7 +542,7 @@ function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: un
         selectedOption: result,
         selectionReason: `Conditional evaluation resulted in "${result}"`
       };
-    }
+
       
     case 'Sequential': {
       const sequence = node.sequence as string[] || [];
@@ -551,7 +552,7 @@ function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: un
         selectedOption: result,
         selectionReason: `Sequential selection of "${result}"`
       };
-    }
+
       
     case 'Markov': {
       const states = node.states as string[] || [];
@@ -561,14 +562,14 @@ function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: un
         selectedOption: result,
         selectionReason: `Markov state transition to "${result}"`
       };
-    }
-    }
-  } catch (error) {
+
+
+ catch (error) {
     console.warn(`Failed to extract random choice info for ${node.type}:`, error);
-  }
+
   
   return null;
-}
+
 
 /**
  * Try to create a runtime node from an extension
@@ -598,14 +599,14 @@ function tryCreateExtensionNode(
           // Wrap in a RuntimeNode adapter if needed
           if (extensionNode && typeof extensionNode.run === 'function') {
             return extensionNode as RuntimeNode<any>;
-          }
-        }
-      }
-    }
+
+
+
+
     
     return null;
-  } catch (error) {
+ catch (error) {
     console.warn(`Failed to create extension node for type ${node.type}:`, error);
     return null;
-  }
-}
+
+

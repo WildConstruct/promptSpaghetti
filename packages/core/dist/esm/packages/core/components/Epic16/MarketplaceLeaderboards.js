@@ -165,36 +165,20 @@ const handleEntryClick = (entry) => {
     // UI Rendering Methods
     // =============================================================================
     const renderTabNavigation = () => {
-        const tabs = [];
-        {
-            id: 'templates', label;
-            'Templates', icon;
-            FileText;
-        }
-        {
-            id: 'creators', label;
-            'Creators', icon;
-            Users;
-        }
-        {
-            id: 'categories', label;
-            'Categories', icon;
-            Award;
-        }
-        {
-            id: 'engagement', label;
-            'Community', icon;
-            Trophy;
-        }
+        const tabs = [
+            { id: 'templates', label: 'Templates', icon: FileText },
+            { id: 'creators', label: 'Creators', icon: Users },
+            { id: 'categories', label: 'Categories', icon: Award },
+            { id: 'engagement', label: 'Community', icon: Trophy }
+        ];
+        return;
+        _jsxs("div", { className: "border-b border-gray-200 mb-6", children: [_jsxs("nav", { className: "-mb-px flex space-x-8", children: [tabs.map((tab) => ()
+                            < button, key = { tab, : .id }, onClick = {}()), " => handleTabChange(tab.id)} className=", `flex items-center py-4 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
+                            ? 'border-blue-500 text-blue-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                        }`, ">", _jsx(tab.icon, { className: "w-4 h-4 mr-2" }), tab.label] }), "))}"] });
     };
 };
-;
-return;
-_jsxs("div", { className: "border-b border-gray-200 mb-6", children: [_jsxs("nav", { className: "-mb-px flex space-x-8", children: [tabs.map((tab) => ()
-                    < button, key = { tab, : .id }, onClick = {}()), " => handleTabChange(tab.id)} className=", `flex items-center py-4 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                }`, ">", _jsx(tab.icon, { className: "w-4 h-4 mr-2" }), tab.label] }), "))}"] });
 div >
 ;
 ;
@@ -213,44 +197,29 @@ div >
 ;
 ;
 const renderFilters = () => {
-    const timeframes = [];
+    const timeframes = [
+        { id: '24h', label: '24 Hours' },
+        { id: '7d', label: '7 Days' },
+        { id: '30d', label: '30 Days' },
+        { id: '90d', label: '90 Days' },
+        { id: 'all', label: 'All Time' }
+    ];
+    return;
+    _jsx("div", { className: "flex flex-wrap items-center gap-4", children: _jsxs("div", { className: "flex items-center space-x-2", children: [_jsx(Calendar, { className: "w-4 h-4 text-gray-500" }), _jsx("select", { value: filter.timeframe, onChange: (e) => handleFilterChange({ timeframe: e.target.value }), className: "text-sm border border-gray-300 rounded-md px-2 py-1 bg-white", children: timeframes.map((timeframe) => ()
+                        < option, key = { timeframe, : .id }, value = { timeframe, : .id } >
+                        { timeframe, : .label }) }), "))}"] }) });
+    { /* Category Filter (for templates) */ }
     {
-        id: '24h', label;
-        '24 Hours';
-    }
-    {
-        id: '7d', label;
-        '7 Days';
-    }
-    {
-        id: '30d', label;
-        '30 Days';
-    }
-    {
-        id: '90d', label;
-        '90 Days';
-    }
-    {
-        id: 'all', label;
-        'All Time';
+        activeTab === 'templates' && ()
+            < div;
+        className = "flex items-center space-x-2" >
+            (_jsx(Filter, { className: "w-4 h-4 text-gray-500" })
+                ,
+                    _jsxs("select", { value: filter.category || '', onChange: (e) => handleFilterChange({ category: e.target.value || undefined }), className: "text-sm border border-gray-300 rounded-md px-2 py-1 bg-white", children: [_jsx("option", { value: "", children: "All Categories" }), categories.map((category) => ()
+                                < option, key = { category, : .id }, value = { category, : .id } >
+                                { category, : .name })] }));
     }
 };
-;
-return;
-_jsx("div", { className: "flex flex-wrap items-center gap-4", children: _jsxs("div", { className: "flex items-center space-x-2", children: [_jsx(Calendar, { className: "w-4 h-4 text-gray-500" }), _jsx("select", { value: filter.timeframe, onChange: (e) => handleFilterChange({ timeframe: e.target.value }), className: "text-sm border border-gray-300 rounded-md px-2 py-1 bg-white", children: timeframes.map((timeframe) => ()
-                    < option, key = { timeframe, : .id }, value = { timeframe, : .id } >
-                    { timeframe, : .label }) }), "))}"] }) });
-{ /* Category Filter (for templates) */ }
-{
-    activeTab === 'templates' && ()
-        < div;
-    className = "flex items-center space-x-2" >
-        (_jsx(Filter, { className: "w-4 h-4 text-gray-500" })
-            ,
-                _jsxs("select", { value: filter.category || '', onChange: (e) => handleFilterChange({ category: e.target.value || undefined }), className: "text-sm border border-gray-300 rounded-md px-2 py-1 bg-white", children: [_jsx("option", { value: "", children: "All Categories" }), categories.map((category) => ()
-                            < option, key = { category, : .id }, value = { category, : .id } >
-                            { category, : .name })] }));
-}
 select >
 ;
 div >
@@ -499,7 +468,7 @@ $;
 {
     metric;
 }
-`;},}
+`;},},
   default:
     return `;
 $;
@@ -601,7 +570,7 @@ $;
 {
     score.toFixed(1);
 }
- % `;},}
+ % `;},},
   default:
     return score.toLocaleString();
 function getRankIcon(rank: number): React.ReactNode | null {

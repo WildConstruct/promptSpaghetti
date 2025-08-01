@@ -172,22 +172,25 @@ export class ConstraintValidator {
                 }
                 eraGroups.get(eraKey).push(node);
             }
-        }
-        // Check for era conflicts
-        if (eraGroups.size > 1) {
-            const eraNames = Array.from(eraGroups.keys());
-            // Check if any eras are incompatible
-            for (let i = 0; i < eraNames.length; i++) {
-                for (let j = i + 1; j < eraNames.length; j++) {
-                    const era1Nodes = eraGroups.get(eraNames[i]);
-                    const era2Nodes = eraGroups.get(eraNames[j]);
-                    if (this.areErasIncompatible(era1Nodes[0].metadata.era[0], era2Nodes[0].metadata.era[0])) {
-                        violatingNodes.push(...era1Nodes.map(n => n.id), ...era2Nodes.map(n => n.id));
+            // Check for era conflicts
+            if (eraGroups.size > 1) {
+                const eraNames = Array.from(eraGroups.keys());
+                // Check if any eras are incompatible
+                for (let i = 0; i < eraNames.length; i++) {
+                    for (let j = i + 1; j < eraNames.length; j++) {
+                        const era1Nodes = eraGroups.get(eraNames[i]);
+                        const era2Nodes = eraGroups.get(eraNames[j]);
+                        if (this.areErasIncompatible(era1Nodes[0].metadata.era[0], era2Nodes[0].metadata.era[0])) {
+                            violatingNodes.push(...era1Nodes.map(n => n.id), ...era2Nodes.map(n => n.id));
+                        }
                     }
                 }
             }
+            return violatingNodes;
         }
-        return violatingNodes;
+        /**
+         * Check if items are appropriate for the specified social classes
+         */
     }
     /**
      * Check if items are appropriate for the specified social classes
@@ -366,7 +369,8 @@ export class ConstraintValidator {
                 regions: ['Northern Europe'],
                 enforcement: 'warning',
                 message: 'Silk was extremely rare and expensive in early medieval Northern Europe',
-                historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy',
+                historical_basis: ,
+                'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy': ,
             },
             {
                 id: 'social-class-clothing',
@@ -384,7 +388,7 @@ export class ConstraintValidator {
                 enforcement: 'suggestion',
                 message: 'Religious items should be used with cultural sensitivity and historical context',
                 historical_basis: 'Religious artifacts had sacred significance and specific usage contexts',
-            },
+            }
         ];
     }
 }

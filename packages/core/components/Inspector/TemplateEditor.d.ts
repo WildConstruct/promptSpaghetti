@@ -2,6 +2,7 @@ import React from 'react';
 import { ExtractedVariable } from '../../utils/templateParser';
 
 }
+}
 export interface TemplateEditorProps {
     value: string;
     onChange: (value: string) => void;
@@ -20,4 +21,5 @@ export interface TemplateEditorProps {
 
 export declare const TemplateEditor: React.FC<TemplateEditorProps>;
 //# sourceMappingURL=TemplateEditor.d.ts.map
+}
 }

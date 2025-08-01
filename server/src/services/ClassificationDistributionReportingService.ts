@@ -20,8 +20,8 @@ import * as crypto from 'crypto';
 // Reporting Configuration and Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface ClassificationReportingConfig {
   enabled: boolean;
   autoGenerateReports: boolean;
@@ -52,12 +52,13 @@ export interface ClassificationReportingConfig {
   cacheTTL: number; // seconds
   maxConcurrentReports: number;
   reportTimeout: number; // milliseconds
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationDistributionReport {
   reportId: string;
   reportType: ReportType;
@@ -91,12 +92,13 @@ export interface ClassificationDistributionReport {
   
   // Metadata
   metadata: ReportMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportParameters {
   // Scope filters
   tenantIds?: string[];
@@ -123,12 +125,13 @@ export interface ReportParameters {
   
   // Additional filters
   customFilters?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationSummary {
   // Overall statistics
   totalItems: number;
@@ -159,12 +162,13 @@ export interface ClassificationSummary {
   compliantItems: number;
   nonCompliantItems: number;
   complianceScore: number; // 0-1
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationDistribution {
   // Distribution category
   category: string;
@@ -187,8 +191,9 @@ export interface ClassificationDistribution {
     itemChange: number;
     sizeChange: number;
     percentageChange: number;
-}
-}
+
+
+
   };
   
   // Risk analysis
@@ -196,10 +201,10 @@ export interface ClassificationDistribution {
   
   // Metadata
   metadata: Record<string, any>;
-}
 
-}
-}
+
+
+
 export interface ClassificationDistributionItem {
   classification: DataClassification;
   count: number;
@@ -225,12 +230,13 @@ export interface ClassificationDistributionItem {
   createdCount: number;
   modifiedCount: number;
   deletedCount: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationTrends {
   // Trend period
   periodStart: Date;
@@ -248,12 +254,13 @@ export interface ClassificationTrends {
   
   // Forecasting
   forecasts?: ClassificationForecast[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrendDataPoint {
   timestamp: Date;
   classifications: ClassificationCount[];
@@ -275,12 +282,13 @@ export interface TrendDataPoint {
   newItems: number;
   reclassifiedItems: number;
   deletedItems: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceAnalysis {
   // Overall compliance status
   overallStatus: ComplianceStatus;
@@ -300,12 +308,13 @@ export interface ComplianceAnalysis {
   
   // Trend analysis
   complianceTrends?: ComplianceTrend[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationAnomaly {
   anomalyId: string;
   detectedAt: Date;
@@ -326,8 +335,9 @@ export interface ClassificationAnomaly {
   timeWindow: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   scope: AnomalyScope;
   
@@ -342,10 +352,10 @@ export interface ClassificationAnomaly {
   
   // Metadata
   metadata: Record<string, any>;
-}
 
-}
-}
+
+
+
 export interface ClassificationRecommendation {
   recommendationId: string;
   category: RecommendationCategory;
@@ -383,12 +393,13 @@ export interface ClassificationRecommendation {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VisualizationData {
   // Chart configurations
   charts: ChartConfiguration[];
@@ -401,12 +412,13 @@ export interface VisualizationData {
   
   // Export options
   exportOptions: ExportConfiguration[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChartConfiguration {
   chartId: string;
   chartType: ChartType;
@@ -432,58 +444,63 @@ export interface ChartConfiguration {
   
   // Metadata
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Supporting Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface ClassificationCount {
   classification: DataClassification;
   count: number;
   size?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationPercentage {
   classification: DataClassification;
   percentage: number;
   sizePercentage?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationSource {
   source: 'AUTOMATIC' | 'MANUAL' | 'INHERITED' | 'POLICY' | 'MIGRATION';
   count: number;
   percentage: number;
   accuracy?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskDistribution {
   lowRisk: number;
   mediumRisk: number;
   highRisk: number;
   criticalRisk: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrendAnalysis {
   // Overall trend direction
   trendDirection: 'INCREASING' | 'DECREASING' | 'STABLE' | 'VOLATILE';
@@ -503,39 +520,42 @@ export interface TrendAnalysis {
   
   // Significant changes
   significantEvents: SignificantEvent[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SeasonalPattern {
   patternType: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
   confidence: number; // 0-1
   amplitude: number;
   phase: number;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationForecast {
   forecastDate: Date;
   predictedDistribution: ClassificationCount[];
   confidenceInterval: {
     lower: ClassificationCount[];
     upper: ClassificationCount[];
-}
-}
+
+
+
   };
   confidence: number; // 0-1
   model: string;
-}
 
-}
-}
+
+
+
 export interface FrameworkComplianceAnalysis {
   frameworkId: string;
   frameworkName: string;
@@ -550,12 +570,13 @@ export interface FrameworkComplianceAnalysis {
   
   // Recommendations
   recommendations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyComplianceAnalysis {
   policyId: string;
   policyName: string;
@@ -566,12 +587,13 @@ export interface PolicyComplianceAnalysis {
   
   // Compliance by classification
   classificationCompliance: ClassificationCompliance[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceGap {
   gapId: string;
   requirement: string;
@@ -580,12 +602,13 @@ export interface ComplianceGap {
   gapSeverity: GapSeverity;
   remediationSteps: string[];
   estimatedEffort: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImpactAssessment {
   // Scope of impact
   affectedSystems: string[];
@@ -605,12 +628,13 @@ export interface ImpactAssessment {
   estimatedCost?: number;
   estimatedSavings?: number;
   roi?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImplementationStep {
   stepNumber: number;
   description: string;
@@ -618,12 +642,13 @@ export interface ImplementationStep {
   dependencies: string[];
   risks: string[];
   successCriteria: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QuantifiedBenefit {
   benefitType: string;
   metric: string;
@@ -631,24 +656,26 @@ export interface QuantifiedBenefit {
   projectedValue: number;
   improvement: number;
   confidence: number; // 0-1
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SignificantEvent {
   timestamp: Date;
   eventType: string;
   description: string;
   impact: 'HIGH' | 'MEDIUM' | 'LOW';
   affectedClassifications: DataClassification[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RequirementCompliance {
   requirementId: string;
   requirementName: string;
@@ -656,12 +683,13 @@ export interface RequirementCompliance {
   complianceScore: number; // 0-1
   evidence: string[];
   gaps: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyViolation {
   violationId: string;
   violationType: string;
@@ -669,23 +697,25 @@ export interface PolicyViolation {
   severity: ViolationSeverity;
   affectedItems: number;
   detectedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationCompliance {
   classification: DataClassification;
   complianceScore: number; // 0-1
   violationCount: number;
   recommendations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportMetadata {
   version: string;
   generationTime: number; // milliseconds
@@ -710,9 +740,10 @@ export interface ReportMetadata {
   
   // Custom fields
   customMetadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Enums and Types
@@ -869,48 +900,52 @@ export type ViolationSeverity =
   | 'HIGH'
   | 'CRITICAL';
 
-}
-}
+
+
 export type DataClassificationAccessMap = {
   [key in DataClassification]: string[]; // List of roles that can access this classification level
 };
 
 // Configuration interfaces
-}
-}
+
+
+
 export interface AxisConfiguration {
   title: string;
   dataKey: string;
   type: 'number' | 'category' | 'time';
   domain?: [number, number];
   tickFormat?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SeriesConfiguration {
   name: string;
   dataKey: string;
   color?: string;
   type?: 'line' | 'bar' | 'area';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DrilldownConfiguration {
   enabled: boolean;
   levels: string[];
   dataSource: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DashboardConfiguration {
   dashboardId: string;
   title: string;
@@ -918,201 +953,89 @@ export interface DashboardConfiguration {
   layout: LayoutConfiguration;
   charts: string[]; // Chart IDs
   filters: string[]; // Filter IDs
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LayoutConfiguration {
   columns: number;
   rows: number;
   chartPositions: ChartPosition[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChartPosition {
   chartId: string;
   x: number;
   y: number;
   width: number;
   height: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FilterConfiguration {
   filterId: string;
   title: string;
   type: 'dropdown' | 'multiselect' | 'date' | 'range';
   options?: FilterOption[];
   defaultValue?: unknown;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FilterOption {
   label: string;
   value: Error;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExportConfiguration {
   format: ReportFormat;
   enabled: boolean;
   requiresAuth: boolean;
   maxRecords?: number;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Main Service Class
 // =============================================================================
 
-export class ClassificationDistributionReportingService {
-  private config: ClassificationReportingConfig;
-  private evidenceClassificationService: EvidenceClassificationService;
-  private dataClassificationService: DataClassificationService;
-  private accessControlFramework: AccessControlFramework;
-  private reportCache: Map<string, ClassificationDistributionReport> = new Map();
-  
-  constructor(
-    private databaseService: DatabaseService,
-    private redisService: RedisService,
-    private auditService: AuditService
-  ) {
-    this.config = this.getDefaultConfig();
-    this.evidenceClassificationService = new EvidenceClassificationService(
-      databaseService, redisService, auditService
-    );
-    this.dataClassificationService = new DataClassificationService(
-      databaseService, redisService, auditService
-    );
-    this.accessControlFramework = new AccessControlFramework(
-      databaseService, redisService, auditService
-    );
-    
-    this.initializeService();
-  }
-
-  // =============================================================================
-  // Core Reporting Methods
-  // =============================================================================
-
-  /**
-   * Generate comprehensive classification distribution report
-   */
-  async generateDistributionReport(
-    parameters: ReportParameters,
-    requestedBy: string
-  ): Promise<ClassificationDistributionReport> {
-
-    const reportId = this.generateReportId();
-    const startTime = Date.now();
-    
-    try {
-      // Validate authorization
-      await this.validateReportAccess(parameters, requestedBy);
-      
-      // Generate cache key
-      const cacheKey = this.generateCacheKey(parameters);
-      
-      // Check cache
-      if (this.config.cacheEnabled && this.reportCache.has(cacheKey)) {
-        const cachedReport = this.reportCache.get(cacheKey)!;
-        if (this.isCacheValid(cachedReport)) {
-          await this.auditReportGeneration(cachedReport, requestedBy, 'CACHE_HIT');
-          return cachedReport;
-        }
-      }
-
-      // Collect raw data
-      const rawData = await this.collectClassificationData(parameters);
-      
-      // Generate summary
-      const summary = this.generateSummary(rawData);
-      
-      // Generate distributions
-      const distributions = this.generateDistributions(rawData, parameters);
-      
-      // Generate trends if requested
-      const trends = parameters.includeTrends 
-        ? await this.generateTrends(rawData, parameters)
-        : undefined;
-      
-      // Analyze compliance if requested
-      const compliance = parameters.includeCompliance
-        ? await this.analyzeCompliance(rawData, parameters)
-        : undefined;
-      
-      // Detect anomalies if requested
-      const anomalies = parameters.includeAnomalies
-        ? await this.detectAnomalies(rawData, parameters)
-        : undefined;
-      
-      // Generate recommendations if requested
-      const recommendations = parameters.includeRecommendations
-        ? await this.generateRecommendations(rawData, summary, compliance, anomalies)
-        : undefined;
-
-      // Create report
-      const report: ClassificationDistributionReport = {
-        reportId,
-        reportType: 'DISTRIBUTION_SUMMARY',
-        generatedAt: new Date(),
-        generatedBy: requestedBy,
-        parameters,
-        periodStart: parameters.timeGranularity === 'DAY' 
-          ? new Date(Date.now() - 24 * 60 * 60 * 1000)
-          : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        periodEnd: new Date(),
-        summary,
-        distributions,
-        trends,
-        compliance,
-        anomalies,
-        recommendations,
-        metadata: {
-          version: '1.0',
-          generationTime: Date.now() - startTime,
-          dataFreshness: new Date(),
-          recordsAnalyzed: rawData.length,
-          dataQuality: this.calculateDataQuality(rawData),
-          completeness: this.calculateCompleteness(rawData),
-          processingNodes: [process.env.NODE_ID || 'unknown'],
-          exportable: true,
-          supportedFormats: this.config.supportedFormats,
-          accessLevel: 'INTERNAL',
-          viewerPermissions: await this.getViewerPermissions(requestedBy),
-          customMetadata: {}
-        }
-      };
+export class ClassificationDistributionReportingService {};
 
       // Cache report
       if (this.config.cacheEnabled) {
         this.reportCache.set(cacheKey, report);
-      }
+
 
       // Audit report generation
       await this.auditReportGeneration(report, requestedBy, 'GENERATED');
 
       return report;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to generate distribution report: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Generate trend analysis report
@@ -1133,7 +1056,7 @@ export class ClassificationDistributionReportingService {
     report.reportType = 'TREND_ANALYSIS';
     
     return report;
-  }
+
 
   /**
    * Generate compliance report
@@ -1151,14 +1074,14 @@ export class ClassificationDistributionReportingService {
       customFilters: {
         ...parameters.customFilters,
         complianceFrameworks: frameworks
-      }
+
     };
 
     const report = await this.generateDistributionReport(enhancedParameters, requestedBy);
     report.reportType = 'COMPLIANCE_REPORT';
     
     return report;
-  }
+
 
   /**
    * Export report in specified format
@@ -1176,7 +1099,7 @@ export class ClassificationDistributionReportingService {
       const report = await this.getReport(reportId);
       if (!report) {
         throw new Error(`Report not found: ${reportId}`);
-      }
+
 
       // Validate export authorization
       await this.validateExportAccess(report, requestedBy, format);
@@ -1219,7 +1142,7 @@ export class ClassificationDistributionReportingService {
           
       default:
         throw new Error(`Unsupported export format: ${format}`);
-      }
+
 
       // Store export data
       const downloadUrl = await this.storeExportData(exportId, exportData, mimeType);
@@ -1234,16 +1157,15 @@ export class ClassificationDistributionReportingService {
           format,
           requestedBy,
           recordCount: report.summary.totalItems
-  }
+
         riskLevel: 'MEDIUM'
       });
 
       return { exportId, downloadUrl, expiresAt };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to export report: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Get available visualization data for reports
@@ -1256,7 +1178,7 @@ export class ClassificationDistributionReportingService {
     const report = await this.getReport(reportId);
     if (!report) {
       throw new Error(`Report not found: ${reportId}`);
-    }
+
 
     // Validate access
     await this.validateReportAccess(report.parameters, requestedBy);
@@ -1274,7 +1196,7 @@ export class ClassificationDistributionReportingService {
         interactive: true,
         exportable: true,
         metadata: {}
-  }
+
       {
         chartId: 'size-distribution-bar',
         chartType: 'BAR',
@@ -1287,7 +1209,7 @@ export class ClassificationDistributionReportingService {
         interactive: true,
         exportable: true,
         metadata: {}
-      }
+
     ];
 
     // Add trend charts if available
@@ -1308,7 +1230,7 @@ export class ClassificationDistributionReportingService {
         exportable: true,
         metadata: {}
       });
-    }
+
 
     const dashboards: DashboardConfiguration[] = [
       {
@@ -1322,10 +1244,10 @@ export class ClassificationDistributionReportingService {
             { chartId: 'classification-distribution-pie', x: 0, y: 0, width: 1, height: 1 },
             { chartId: 'size-distribution-bar', x: 1, y: 0, width: 1, height: 1 }
           ]
-  }
+
         charts: ['classification-distribution-pie', 'size-distribution-bar'],
         filters: ['classification-filter', 'time-filter']
-      }
+
     ];
 
     const filters: FilterConfiguration[] = [
@@ -1339,13 +1261,13 @@ export class ClassificationDistributionReportingService {
           { label: 'Confidential', value: 'CONFIDENTIAL' },
           { label: 'Restricted', value: 'RESTRICTED' }
         ]
-  }
+
       {
         filterId: 'time-filter',
         title: 'Time Period',
         type: 'date',
         defaultValue: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-      }
+
     ];
 
     const exportOptions: ExportConfiguration[] = [
@@ -1361,7 +1283,7 @@ export class ClassificationDistributionReportingService {
       filters,
       exportOptions
     };
-  }
+
 
   // =============================================================================
   // Private Implementation Methods
@@ -1387,10 +1309,10 @@ export class ClassificationDistributionReportingService {
         workspaceId: `workspace-${Math.floor(Math.random() * 20)}`,
         complianceStatus: Math.random() > 0.9 ? 'NON_COMPLIANT' : 'COMPLIANT'
       });
-    }
+
     
     return mockData;
-  }
+
 
   private generateSummary(rawData: unknown[]): ClassificationSummary {
     const classificationCounts: ClassificationCount[] = [];
@@ -1450,7 +1372,7 @@ export class ClassificationDistributionReportingService {
       nonCompliantItems: totalItems - compliantItems,
       complianceScore: compliantItems / totalItems
     };
-  }
+
 
   private generateDistributions(rawData: unknown[], parameters: ReportParameters): ClassificationDistribution[] {
     const distributions: ClassificationDistribution[] = [];
@@ -1459,22 +1381,22 @@ export class ClassificationDistributionReportingService {
     if (parameters.groupBy.includes('CLASSIFICATION')) {
       const byClassification = this.groupByClassification(rawData);
       distributions.push(...byClassification);
-    }
+
     
     // Group by tenant
     if (parameters.groupBy.includes('TENANT')) {
       const byTenant = this.groupByTenant(rawData);
       distributions.push(...byTenant);
-    }
+
     
     // Group by risk level
     if (parameters.groupBy.includes('RISK_LEVEL')) {
       const byRisk = this.groupByRisk(rawData);
       distributions.push(...byRisk);
-    }
+
     
     return distributions;
-  }
+
 
   private groupByClassification(rawData: unknown[]): ClassificationDistribution[] {
     const groups = rawData.reduce((acc, item) => {
@@ -1503,7 +1425,7 @@ export class ClassificationDistributionReportingService {
         createdCount: items.filter(item => this.isRecent(item.createdAt)).length,
         modifiedCount: 0,
         deletedCount: 0
-      }];
+];
 
       return {
         category: classification,
@@ -1518,17 +1440,17 @@ export class ClassificationDistributionReportingService {
         metadata: {}
       };
     });
-  }
+
 
   private groupByTenant(_____rawData: unknown[]): ClassificationDistribution[] {
     // Similar implementation for tenant grouping
     return []; // Simplified for brevity
-  }
+
 
   private groupByRisk(_____rawData: unknown[]): ClassificationDistribution[] {
     // Similar implementation for risk grouping
     return []; // Simplified for brevity
-  }
+
 
   private async generateTrends(rawData: unknown[], _____parameters: ReportParameters): Promise<ClassificationTrends | undefined> {
 
@@ -1556,7 +1478,7 @@ export class ClassificationDistributionReportingService {
         reclassifiedItems: 0,
         deletedItems: 0
       });
-    }
+
 
     return {
       periodStart: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
@@ -1572,9 +1494,9 @@ export class ClassificationDistributionReportingService {
         accelerationRate: 0.001,
         volatilityScore: 0.2,
         significantEvents: []
-      }
+
     };
-  }
+
 
   private async analyzeCompliance(rawData: unknown[], _____parameters: ReportParameters): Promise<ComplianceAnalysis | undefined> {
 
@@ -1593,13 +1515,13 @@ export class ClassificationDistributionReportingService {
           requirementCompliance: [],
           gaps: [],
           recommendations: []
-        }
+
       ],
       policyCompliance: [],
       complianceGaps: [],
       complianceRecommendations: []
     };
-  }
+
 
   private async detectAnomalies(_____rawData: unknown[], _____parameters: ReportParameters): Promise<ClassificationAnomaly[]> {
 
@@ -1624,9 +1546,9 @@ export class ClassificationDistributionReportingService {
         recommendedActions: ['Review classification policies', 'Investigate data sources'],
         status: 'DETECTED',
         metadata: {}
-      }
+
     ];
-  }
+
 
   private async generateRecommendations(
     rawData: unknown[],
@@ -1655,7 +1577,7 @@ export class ClassificationDistributionReportingService {
           complianceImprovement: 0.15,
           performanceImpact: 'NEUTRAL',
           operationalComplexity: 'MEDIUM'
-  }
+
         implementationSteps: [
           {
             stepNumber: 1,
@@ -1664,7 +1586,7 @@ export class ClassificationDistributionReportingService {
             dependencies: ['Rule review team'],
             risks: ['Temporary classification inconsistency'],
             successCriteria: ['Rules updated', 'Testing completed']
-          }
+
         ],
         estimatedEffort: '2-3 weeks',
         estimatedTimeframe: '1 month',
@@ -1676,10 +1598,10 @@ export class ClassificationDistributionReportingService {
         status: 'OPEN',
         metadata: {}
       });
-    }
+
 
     return recommendations;
-  }
+
 
   // Helper methods
   private analyzeSources(items: unknown[]): ClassificationSource[] {
@@ -1694,7 +1616,7 @@ export class ClassificationDistributionReportingService {
       percentage: ((count as number) / items.length) * 100,
       accuracy: 0.92
     }));
-  }
+
 
   private calculateRiskLevel(items: unknown[]): RiskLevel {
     const highRisk = items.filter(item => item.riskLevel === 'HIGH').length;
@@ -1703,13 +1625,13 @@ export class ClassificationDistributionReportingService {
     if (critical > 0 || highRisk / items.length > 0.5) return 'HIGH';
     if (highRisk / items.length > 0.2) return 'MEDIUM';
     return 'LOW';
-  }
+
 
   private calculateRiskScore(items: unknown[]): number {
     const riskScores = { LOW: 1, MEDIUM: 2, HIGH: 3, CRITICAL: 4 };
     const totalScore = items.reduce((sum, item) => sum + (riskScores[item.riskLevel] || 1), 0);
     return totalScore / (items.length * 4); // Normalize to 0-1
-  }
+
 
   private calculateComplianceStatus(items: unknown[]): ComplianceStatus {
     const compliant = items.filter(item => item.complianceStatus === 'COMPLIANT').length;
@@ -1718,7 +1640,7 @@ export class ClassificationDistributionReportingService {
     if (ratio === 1) return 'COMPLIANT';
     if (ratio >= 0.8) return 'PARTIALLY_COMPLIANT';
     return 'NON_COMPLIANT';
-  }
+
 
   private calculateRiskDistribution(items: unknown[]): RiskDistribution {
     const low = items.filter(item => item.riskLevel === 'LOW').length;
@@ -1727,12 +1649,12 @@ export class ClassificationDistributionReportingService {
     const critical = items.filter(item => item.riskLevel === 'CRITICAL').length;
     
     return { lowRisk: low, mediumRisk: medium, highRisk: high, criticalRisk: critical };
-  }
+
 
   private isRecent(date: Date): boolean {
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     return new Date(date) > oneDayAgo;
-  }
+
 
   private getClassificationCounts(items: unknown[]): ClassificationCount[] {
     const counts = items.reduce((acc, item) => {
@@ -1744,7 +1666,7 @@ export class ClassificationDistributionReportingService {
       classification: classification as DataClassification,
       count: count as number
     }));
-  }
+
 
   private calculateDataQuality(rawData: unknown[]): number {
     const qualityFactors = [
@@ -1755,7 +1677,7 @@ export class ClassificationDistributionReportingService {
     ];
     
     return qualityFactors.reduce((sum, factor) => sum + factor, 0) / qualityFactors.length;
-  }
+
 
   private calculateCompleteness(rawData: unknown[]): number {
     const requiredFields = ['id', 'classification', 'size', 'source', 'createdAt'];
@@ -1764,28 +1686,28 @@ export class ClassificationDistributionReportingService {
     ).length;
     
     return completeItems / rawData.length;
-  }
+
 
   private generateReportId(): string {
     return `RPT-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-  }
+
 
   private generateCacheKey(parameters: ReportParameters): string {
     return crypto.createHash('sha256').update(JSON.stringify(parameters)).digest('hex');
-  }
+
 
   private isCacheValid(report: ClassificationDistributionReport): boolean {
     const cacheAge = Date.now() - report.generatedAt.getTime();
     return cacheAge < (this.config.cacheTTL * 1000);
-  }
+
 
   private async validateReportAccess(parameters: ReportParameters, requestedBy: string): Promise<void> {
 
     // Mock validation - would integrate with AccessControlFramework
     if (!requestedBy) {
       throw new Error('Authentication required');
-    }
-  }
+
+
 
   private async validateExportAccess(
     report: ClassificationDistributionReport,
@@ -1795,19 +1717,19 @@ export class ClassificationDistributionReportingService {
 
     // Mock validation - would check permissions based on classification levels in report
     console.log(`Validating export access for ${requestedBy} to format ${format}`);
-  }
+
 
   private async getViewerPermissions(_____requestedBy: string): Promise<string[]> {
 
     // Mock implementation - would fetch actual permissions
     return ['READ_REPORTS', 'EXPORT_BASIC'];
-  }
+
 
   private async getReport(reportId: string): Promise<ClassificationDistributionReport | null> {
 
     // Mock implementation - would load from cache or database
     return Array.from(this.reportCache.values()).find(r => r.reportId === reportId) || null;
-  }
+
 
   private async auditReportGeneration(
     report: ClassificationDistributionReport,
@@ -1824,10 +1746,10 @@ export class ClassificationDistributionReportingService {
         source,
         recordsAnalyzed: report.metadata.recordsAnalyzed,
         generationTime: report.metadata.generationTime
-  }
+
       riskLevel: 'LOW'
     });
-  }
+
 
   // Export format converters
   private convertToCSV(report: ClassificationDistributionReport): string {
@@ -1841,19 +1763,19 @@ export class ClassificationDistributionReportingService {
     ]);
     
     return [headers, ...rows].map(row => row.join(',')).join('\n');
-  }
+
 
   private async convertToExcel(report: ClassificationDistributionReport): Promise<Buffer> {
 
     // Mock Excel generation - would use proper Excel library
     return Buffer.from(`Excel data for report ${report.reportId}`, 'utf-8');
-  }
+
 
   private async convertToPDF(report: ClassificationDistributionReport): Promise<Buffer> {
 
     // Mock PDF generation - would use proper PDF library
     return Buffer.from(`PDF data for report ${report.reportId}`, 'utf-8');
-  }
+
 
   private convertToHTML(report: ClassificationDistributionReport): string {
     return `
@@ -1899,7 +1821,7 @@ export class ClassificationDistributionReportingService {
         </body>
       </html>
     `;
-  }
+
 
   private async storeExportData(exportId: string, data: string | Buffer, mimeType: string): Promise<string> {
 
@@ -1911,7 +1833,7 @@ export class ClassificationDistributionReportingService {
     await this.redisService.set(`export:${exportId}:mime`, mimeType, 24 * 60 * 60);
     
     return downloadUrl;
-  }
+
 
   private getDefaultConfig(): ClassificationReportingConfig {
     return {
@@ -1934,13 +1856,13 @@ export class ClassificationDistributionReportingService {
         'INTERNAL': ['analyst', 'admin'],
         'CONFIDENTIAL': ['admin'],
         'RESTRICTED': ['admin']
-  }
+
       cacheEnabled: true,
       cacheTTL: 300,
       maxConcurrentReports: 5,
       reportTimeout: 60000
     };
-  }
+
 
   private initializeService(): void {
     console.log('Classification Distribution Reporting Service initialized');
@@ -1949,16 +1871,16 @@ export class ClassificationDistributionReportingService {
     setInterval(() => {
       this.cleanupCache();
     }, 5 * 60 * 1000); // Every 5 minutes
-  }
+
 
   private cleanupCache(): void {
     const _____now = Date._____now();
     for (const [key, report] of this.reportCache.entries()) {
       if (!this.isCacheValid(report)) {
         this.reportCache.delete(key);
-      }
-    }
-  }
-}
+
+
+
+
 
 export default ClassificationDistributionReportingService;

@@ -3,16 +3,14 @@
  * Advanced UI for importing and exporting templates with versioning support
  */
 import React, { useState, useCallback, useRef } from 'react';
-import { 
-  TemplateImportOptions, 
+import { TemplateImportOptions, 
   TemplateExportOptions, 
   TemplateImportResult,
-  TemplateVersion,
+  TemplateVersion }
   TemplateBundle
-} from '../../templates/TemplateVersionManager';
+ from '../../templates/TemplateVersionManager';
 import { ProjectTemplate } from '../../templates/ProjectTemplateManager';
-import {
-  FiUpload,
+import { FiUpload,
   FiDownload,
   FiGitBranch,
   FiPackage,
@@ -25,12 +23,12 @@ import {
   FiShield,
   FiClock,
   FiTag,
-  FiArrowRight,
+  FiArrowRight }
   FiRefreshCw
-} from 'react-icons/fi';
-}
-interface TemplateImportExportDialogProps {
-  isOpen: boolean;
+ from 'react-icons/fi';
+
+
+interface TemplateImportExportDialogProps { isOpen: boolean;
   onClose: () => void;
   mode: 'import' | 'export';
   template?: ProjectTemplate;
@@ -44,33 +42,33 @@ interface TemplateImportExportDialogProps {
   valid: boolean;
   warnings: string;
   errors: string;
-  templateInfo?: {
+  templateInfo?: { }
   name: string;
   version: string;
   author: string;
   dependencies: number;
-}
+
+
 };
 
-export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProps> = ({)
-  isOpen,
-  onClose,
-  mode,
-  template,
-  onImportComplete,
-  onExportComplete,
+export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProps> = ({ )
+  isOpen
+  onClose
+  mode
+  template
+  onImportComplete
+  onExportComplete }
   className = ''
-}) => {
-  // Import state
+}) => { // Import state
   const [importSource, setImportSource] = useState<ImportSource>('file');
   const [importStep, setImportStep] = useState<ImportStep>('source');
   const [importFile, setImportFile] = useState<File | null>(null);
   const [importUrl, setImportUrl] = useState('');
   const [gitConfig, setGitConfig] = useState({)
-  url: '',
-  branch: 'main',
-  username: '',
-  token: '',
+  url: ''
+  branch: 'main'
+  username: ''
+  token: '' }
 });
   // Export state
   const [_____exportStep, setExportStep] = useState<ExportStep>('format');
@@ -81,41 +79,39 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
   const [validation, setValidation] = useState<ValidationResult | null>(null);
   const [errors, setErrors] = useState<string>([]);
   const [warnings, setWarnings] = useState<string>([]);
-  const [importOptions, setImportOptions] = useState<TemplateImportOptions>({)
-  format: 'json',
-  source: '',
-  merge_strategy: 'replace',
-  resolve_conflicts: 'auto',
-  update_dependencies: true,
-  create_backup: true,
-  validate_schema: true,
-  validate_dependencies: true,
-  validate_compatibility: true,
+  const [importOptions, setImportOptions] = useState<TemplateImportOptions>({ )
+  format: 'json'
+  source: ''
+  merge_strategy: 'replace'
+  resolve_conflicts: 'auto'
+  update_dependencies: true
+  create_backup: true
+  validate_schema: true
+  validate_dependencies: true
+  validate_compatibility: true }
 });
-  const [exportOptions, setExportOptions] = useState<TemplateExportOptions>({)
-  format: 'json',
-  include_version_history: false,
-  include_dependencies: true,
-  include_analytics: false,
-  bundle_dependencies: true,
-  compress: true,
+  const [exportOptions, setExportOptions] = useState<TemplateExportOptions>({ )
+  format: 'json'
+  include_version_history: false
+  include_dependencies: true
+  include_analytics: false
+  bundle_dependencies: true
+  compress: true }
 });
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Import handlers
-  const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-  const file = event.target.files?.[0];
+  const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => { const file = event.target.files?.[0];
   if (file) {
   setImportFile(file);
   setImportOptions(prev => ({)
-  ...prev,
-  source: file,
-  format: file.name.endsWith('.yaml') || file.name.endsWith('.yml') ? 'yaml' :,
-  file.name.endsWith('.zip') ? 'zip' :,
-  file.name.endsWith('.bundle') ? 'template_bundle' : 'json',
+  ...prev
+  source: file
+  format: file.name.endsWith('.yaml') || file.name.endsWith('.yml') ? 'yaml' :
+  file.name.endsWith('.zip') ? 'zip' :
+  file.name.endsWith('.bundle') ? 'template_bundle' : 'json' }
 }));
   }, []);
-  const handleValidateTemplate = async (): Promise<void> => {
-  setLoading(true);
+  const handleValidateTemplate = async (): Promise<void> => { setLoading(true);
   setErrors([]);
   setWarnings([]);
   try {
@@ -142,38 +138,30 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
   // Validate URL format
   if (importSource === 'url' && importUrl) {
   try {
-  new URL(importUrl);
-} catch {
-  throw new Error('Invalid URL format');
+  new URL(importUrl) } catch { throw new Error('Invalid URL format');
   // Mock validation - in real implementation, would validate the template
-  const mockValidation: ValidationResult = {,
-  valid: true,
-  warnings: ['Template uses deprecated node type "LegacyTransform"'],
-  errors: [],
+  const mockValidation: ValidationResult = {
+  valid: true
+  warnings: ['Template uses deprecated node type "LegacyTransform"']
+  errors: []
   templateInfo: {
-  name: 'Sample Workflow Template',
-  version: '2.1.0',
-  author: 'Template Creator',
-  dependencies: 2,
+  name: 'Sample Workflow Template'
+  version: '2.1.0'
+  author: 'Template Creator'
+  dependencies: 2 }
 };
       setValidation(mockValidation);
       setWarnings(mockValidation.warnings);
-      if (mockValidation.valid) {
-        setImportStep('preview');
-    } catch (error) {
-  const errorMessage = error instanceof Error ? error.message : 'Validation failed';
+      if (mockValidation.valid) { setImportStep('preview') } catch (error) { const errorMessage = error instanceof Error ? error.message : 'Validation failed';
   console.error('Validation failed:', error);
   setErrors([errorMessage]);
   setValidation({)
-  valid: false,
-  warnings: [],
-  errors: [errorMessage],
+  valid: false
+  warnings: []
+  errors: [errorMessage] }
 });
-    } finally {
-      setLoading(false);
-  };
-  const handleImportTemplate = async (): Promise<void> => {
-  setLoading(true);
+ finally { setLoading(false) };
+  const handleImportTemplate = async (): Promise<void> => { setLoading(true);
   setImportStep('import');
   setErrors([]);
   setWarnings([]);
@@ -185,22 +173,22 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
   if (importOptions.merge_strategy === 'manual' && importOptions.resolve_conflicts === 'auto') {
   setWarnings(prev => [...prev, 'Manual merge strategy with auto conflict resolution may cause issues']);
   // Mock import result - in real implementation, would call TemplateVersionManager
-  const mockResult: TemplateImportResult = {,
-  success: true,
+  const mockResult: TemplateImportResult = {
+  success: true
   imported_version: {
-  id: 'version-123',
-  version_number: '2.1.0',
-  template_id: 'template-456',
-} as TemplateVersion,
-        warnings: ['Some customization points were updated'],
-        errors: [],
-        original_version: '2.0.0',
-        new_version: '2.1.0',
-        changes_detected: 5,
-        conflicts_resolved: 1,
-        dependencies_updated: 2,
-        migration_applied: false,
-        backup_version_id: 'backup-789',
+  id: 'version-123'
+  version_number: '2.1.0'
+  template_id: 'template-456' }
+ as TemplateVersion
+        warnings: ['Some customization points were updated']
+        errors: []
+        original_version: '2.0.0'
+        new_version: '2.1.0'
+        changes_detected: 5
+        conflicts_resolved: 1
+        dependencies_updated: 2
+        migration_applied: false
+        backup_version_id: 'backup-789'
         can_rollback: true;
   };
       // Simulate network delay
@@ -208,18 +196,13 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
       setImportStep('complete');
       setWarnings(prev => [...prev, ...mockResult.warnings]);
       onImportComplete?.(mockResult);
-    } catch (error) {
-  const errorMessage = error instanceof Error ? error.message : 'Import failed';
+ catch (error) { const errorMessage = error instanceof Error ? error.message : 'Import failed';
   console.error('Import failed:', error);
   setErrors([errorMessage]);
   // Reset to previous step on error
-  setImportStep('preview');
-} finally {
-      setLoading(false);
-  };
+  setImportStep('preview') } finally { setLoading(false) };
   // Export handlers
-  const handleExportTemplate = async (): Promise<void> => {
-  setLoading(true);
+  const handleExportTemplate = async (): Promise<void> => { setLoading(true);
   setExportStep('export');
   setErrors([]);
   setWarnings([]);
@@ -232,34 +215,30 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
   setWarnings(prev => [...prev, 'Exporting version history without dependencies may cause import issues']);
   // Mock export - in real implementation, would call TemplateVersionManager
   const mockResult = {
-  download_url: 'https://example.com/download/template-export.json',
-  filename: 'workflow-template-v1.0.0.json',
-  size: 245760,
-  checksum: 'abc123def456',
+  download_url: 'https://example.com/download/template-export.json'
+  filename: 'workflow-template-v1.0.0.json'
+  size: 245760
+  checksum: 'abc123def456' }
 };
       // Simulate processing time
       await new Promise(resolve => setTimeout(resolve, 1500));
       setExportStep('complete');
       onExportComplete?.(mockResult);
-    } catch (error) {
-  const errorMessage = error instanceof Error ? error.message : 'Export failed';
+ catch (error) { const errorMessage = error instanceof Error ? error.message : 'Export failed';
   console.error('Export failed:', error);
   setErrors([errorMessage]);
   // Reset to format selection on error
-  setExportStep('format');
-} finally {
-      setLoading(false);
-  };
+  setExportStep('format') } finally { setLoading(false) };
   // Render helpers
   const renderImportStepIndicator = (): JSX.Element => (;);
     <div className="flex items-center justify-center mb-6 space-x-2">
       {['source', 'options', 'validation', 'preview', 'import', 'complete'].map((step, index) => ()
         <div key={step} className="flex items-center">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-  importStep === step ? 'bg-blue-600 text-white' :,
-  ['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? 'bg-green-600 text-white' :,
+          <div className={ `w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+  importStep === step ? 'bg-blue-600 text-white' :
+  ['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? 'bg-green-600 text-white' : }
   'bg-gray-300 text-gray-600'
-}`}>
+`}>
             {['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? <FiCheck /> : index + 1}
           </div>
           {index < 5 && <FiArrowRight className="mx-2 text-gray-400" />}
@@ -273,9 +252,9 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
       <div className="grid grid-cols-2 gap-4">
         <button
           onClick={() => setImportSource('file')}
-          className={`p-4 border-2 rounded-lg text-left transition-colors ${
-  importSource === 'file' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400',
-}`}
+          className={ `p-4 border-2 rounded-lg text-left transition-colors ${
+  importSource === 'file' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400' }
+`}
         >
           <FiFile className="text-2xl mb-2 text-blue-600" />
           <div className="font-semibold">Local File</div>
@@ -283,9 +262,9 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
         </button>
         <button
           onClick={() => setImportSource('git')}
-          className={`p-4 border-2 rounded-lg text-left transition-colors ${
-  importSource === 'git' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400',
-}`}
+          className={ `p-4 border-2 rounded-lg text-left transition-colors ${
+  importSource === 'git' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400' }
+`}
         >
           <FiGitBranch className="text-2xl mb-2 text-green-600" />
           <div className="font-semibold">Git Repository</div>
@@ -293,9 +272,9 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
         </button>
         <button
           onClick={() => setImportSource('url')}
-          className={`p-4 border-2 rounded-lg text-left transition-colors ${
-  importSource === 'url' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400',
-}`}
+          className={ `p-4 border-2 rounded-lg text-left transition-colors ${
+  importSource === 'url' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400' }
+`}
         >
           <FiGlobe className="text-2xl mb-2 text-purple-600" />
           <div className="font-semibold">URL</div>
@@ -303,9 +282,9 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
         </button>
         <button
           onClick={() => setImportSource('marketplace')}
-          className={`p-4 border-2 rounded-lg text-left transition-colors ${
-  importSource === 'marketplace' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400',
-}`}
+          className={ `p-4 border-2 rounded-lg text-left transition-colors ${
+  importSource === 'marketplace' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400' }
+`}
         >
           <FiPackage className="text-2xl mb-2 text-orange-600" />
           <div className="font-semibold">Marketplace</div>
@@ -391,9 +370,9 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
             </label>
             <select
               value={importOptions.merge_strategy}
-              onChange={(e) => setImportOptions(prev => ({ )
-                ...prev, 
-                merge_strategy: e.target.value as 'replace' | 'merge' | 'keep_both'
+              onChange={ (e) => setImportOptions(prev => ({ )
+                ...prev }
+                merge_strategy: e.target.value as 'replace' | 'merge' | 'keep_both';
   }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -408,9 +387,9 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
             </label>
             <select
               value={importOptions.resolve_conflicts}
-              onChange={(e) => setImportOptions(prev => ({ )
-                ...prev, 
-                resolve_conflicts: e.target.value as 'auto' | 'manual' | 'skip'
+              onChange={ (e) => setImportOptions(prev => ({ )
+                ...prev }
+                resolve_conflicts: e.target.value as 'auto' | 'manual' | 'skip';
   }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -425,9 +404,9 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
             </label>
             <select
               value={importOptions.version_bump || 'patch'}
-              onChange={(e) => setImportOptions(prev => ({ )
-                ...prev, 
-                version_bump: e.target.value as 'patch' | 'minor' | 'major' | 'custom'
+              onChange={ (e) => setImportOptions(prev => ({ )
+                ...prev }
+                version_bump: e.target.value as 'patch' | 'minor' | 'major' | 'custom';
   }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -445,8 +424,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={importOptions.validate_schema}
-                onChange={(e) => setImportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setImportOptions(prev => ({ )
+                  ...prev }
                   validate_schema: e.target.checked ;
   }))}
                 className="mr-2"
@@ -457,8 +436,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={importOptions.validate_dependencies}
-                onChange={(e) => setImportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setImportOptions(prev => ({ )
+                  ...prev }
                   validate_dependencies: e.target.checked ;
   }))}
                 className="mr-2"
@@ -469,8 +448,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={importOptions.validate_compatibility}
-                onChange={(e) => setImportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setImportOptions(prev => ({ )
+                  ...prev }
                   validate_compatibility: e.target.checked ;
   }))}
                 className="mr-2"
@@ -484,8 +463,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={importOptions.create_backup}
-                onChange={(e) => setImportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setImportOptions(prev => ({ )
+                  ...prev }
                   create_backup: e.target.checked ;
   }))}
                 className="mr-2"
@@ -496,8 +475,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={importOptions.update_dependencies}
-                onChange={(e) => setImportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setImportOptions(prev => ({ )
+                  ...prev }
                   update_dependencies: e.target.checked ;
   }))}
                 className="mr-2"
@@ -512,19 +491,19 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
   const renderValidationResults = (): JSX.Element => (;);
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Validation Results</h3>
-      {validation && ()
+      { validation && ()
         <div className={`p-4 rounded-lg border-2 ${
-  validation.valid ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50',
-}`}>
+  validation.valid ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50' }
+`}>
           <div className="flex items-center mb-3">
             {validation.valid ? ()
               <FiCheck className="text-green-600 text-xl mr-2" />
             ) : ()
               <FiX className="text-red-600 text-xl mr-2" />
             )}
-            <span className={`font-semibold ${
-  validation.valid ? 'text-green-800' : 'text-red-800',
-}`}>
+            <span className={ `font-semibold ${
+  validation.valid ? 'text-green-800' : 'text-red-800' }
+`}>
               {validation.valid ? 'Template is valid' : 'Template has issues'}
             </span>
           </div>
@@ -584,9 +563,9 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
             </label>
             <select
               value={exportOptions.format}
-              onChange={(e) => setExportOptions(prev => ({ )
-                ...prev, 
-                format: e.target.value as 'json' | 'yaml' | 'zip' | 'template_bundle'
+              onChange={ (e) => setExportOptions(prev => ({ )
+                ...prev }
+                format: e.target.value as 'json' | 'yaml' | 'zip' | 'template_bundle';
   }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -619,8 +598,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={exportOptions.include_version_history}
-                onChange={(e) => setExportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setExportOptions(prev => ({ )
+                  ...prev }
                   include_version_history: e.target.checked ;
   }))}
                 className="mr-2"
@@ -631,8 +610,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={exportOptions.include_dependencies}
-                onChange={(e) => setExportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setExportOptions(prev => ({ )
+                  ...prev }
                   include_dependencies: e.target.checked ;
   }))}
                 className="mr-2"
@@ -643,8 +622,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={exportOptions.include_analytics}
-                onChange={(e) => setExportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setExportOptions(prev => ({ )
+                  ...prev }
                   include_analytics: e.target.checked ;
   }))}
                 className="mr-2"
@@ -658,8 +637,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={exportOptions.bundle_dependencies}
-                onChange={(e) => setExportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setExportOptions(prev => ({ )
+                  ...prev }
                   bundle_dependencies: e.target.checked ;
   }))}
                 className="mr-2"
@@ -670,8 +649,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               <input
                 type="checkbox"
                 checked={exportOptions.compress}
-                onChange={(e) => setExportOptions(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setExportOptions(prev => ({ )
+                  ...prev }
                   compress: e.target.checked ;
   }))}
                 className="mr-2"
@@ -788,14 +767,13 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
                   {importStep === 'complete' ? 'Close' : 'Cancel'}
                 </button>
                 <div className="space-x-3">
-                  {importStep !== 'source' && importStep !== 'complete' && ()
+                  { importStep !== 'source' && importStep !== 'complete' && ()
                     <button
                       onClick={() => {
   const steps: ImportStep = ['source', 'options', 'validation', 'preview', 'import', 'complete'];
   const currentIndex = steps.indexOf(importStep);
   if (currentIndex > 0) {
-  setImportStep(steps[currentIndex - 1]);
-}}
+  setImportStep(steps[currentIndex - 1]) }}
                       className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                       disabled={loading}
                     >

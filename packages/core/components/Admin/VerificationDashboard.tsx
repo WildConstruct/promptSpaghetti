@@ -9,8 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { 
-  CheckCircle, 
+import { CheckCircle, 
   XCircle, 
   Clock, 
   AlertCircle, 
@@ -21,96 +20,88 @@ import {
   Filter,
   Search,
   Download,
-  Eye,
+  Eye }
   RefreshCw
-} from 'lucide-react';
+ from 'lucide-react';
 import { identityValidationService } from '../../auth/IdentityValidation';
-import type { 
-  IdentityValidationRequest, 
+import type { IdentityValidationRequest, 
   ValidationResult, 
   TrustScore,
-  ValidationStatus,
+  ValidationStatus }
   IdentityValidationType 
-} from '../../auth/IdentityValidation';
+ from '../../auth/IdentityValidation';
 
-}
-export interface VerificationDashboardProps {
-  className?: string;
-  onRequestSelect?: (request: IdentityValidationRequest) => void;
-}
-}
-}
-export interface AdminVerificationMetrics {
-  totalRequests: number;
+
+export interface VerificationDashboardProps { className?: string;
+  onRequestSelect?: (request: IdentityValidationRequest) => void }
+
+
+
+export interface AdminVerificationMetrics { totalRequests: number;
   pendingRequests: number;
   approvedToday: number;
   rejectedToday: number;
-  averageProcessingTime: number; // hours,
+  averageProcessingTime: number; // hours }
   queueBacklog: number;
   priorityRequests: number;
-}
-}
-}
-export interface VerificationQueueItem extends IdentityValidationRequest {
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+
+
+
+
+export interface VerificationQueueItem extends IdentityValidationRequest { priority: 'low' | 'medium' | 'high' | 'urgent';,
   timeInQueue: number; // hours,
   assignedReviewer?: string;
-  complexity: 'simple' | 'moderate' | 'complex';
+  complexity: 'simple' | 'moderate' | 'complex';,
   flagged: boolean;
-  const VerificationDashboard: React.FC<VerificationDashboardProps> = ({,)
-  className = '',
+  const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
+  className = '' }
   onRequestSelect
-}) => {
-  const [activeTab, setActiveTab] = useState('overview');
+}) => { const [activeTab, setActiveTab] = useState('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<ValidationStatus | 'all'>('all');
   const [typeFilter, setTypeFilter] = useState<IdentityValidationType | 'all'>('all');
   const [isLoading, setIsLoading] = useState(false);
   // Mock admin metrics - in real implementation, this would come from an admin service
   const [metrics, setMetrics] = useState<AdminVerificationMetrics>({)
-  totalRequests: 1247,
-  pendingRequests: 23,
-  approvedToday: 18,
-  rejectedToday: 3,
-  averageProcessingTime: 4.2,
-  queueBacklog: 23,
-  priorityRequests: 8,
+  totalRequests: 1247
+  pendingRequests: 23
+  approvedToday: 18
+  rejectedToday: 3
+  averageProcessingTime: 4.2
+  queueBacklog: 23
+  priorityRequests: 8 }
 });
   // Mock queue data - in real implementation, this would come from admin service
   const [verificationQueue, setVerificationQueue] = useState<VerificationQueueItem>([)
-    {
-      userId: 'user-1',
-      requestId: 'val_1738457234_abc123',
+    { userId: 'user-1'
+      requestId: 'val_1738457234_abc123'
       timestamp: Date.now() - (2 * 60 * 60 * 1000), // 2 hours ago
-      type: 'government_id',
-      data: { fullName: 'John Director', governmentId: { type: 'passport', number: 'P1234567', expirationDate: '2026-12-31', issuingAuthority: 'US State Dept', documentImages: [] }},
-      status: 'pending',
-      metadata: { ipAddress: '192.168.1.1', userAgent: 'Chrome', sessionId: 'sess123', requestSource: 'profile_setup' },
-      priority: 'high',
-      timeInQueue: 2.5,
-      complexity: 'moderate',
+      type: 'government_id' }
+      data: { fullName: 'John Director', governmentId: { type: 'passport', number: 'P1234567', expirationDate: '2026-12-31', issuingAuthority: 'US State Dept', documentImages: [] }}
+      status: 'pending'
+      metadata: { ipAddress: '192.168.1.1', userAgent: 'Chrome', sessionId: 'sess123', requestSource: 'profile_setup' }
+      priority: 'high'
+      timeInQueue: 2.5
+      complexity: 'moderate'
       flagged: false;
-  }
-    {
-      userId: 'user-2',
-      requestId: 'val_1738457235_def456',
+
+    { userId: 'user-2'
+      requestId: 'val_1738457235_def456'
       timestamp: Date.now() - (6 * 60 * 60 * 1000), // 6 hours ago
-      type: 'professional_credentials',
-      data: { fullName: 'Sarah Producer', professionalCredentials: { role: 'producer', experience: 'professional', credentials: [], portfolio: [] }},
-      status: 'in_review',
-      metadata: { ipAddress: '192.168.1.2', userAgent: 'Safari', sessionId: 'sess456', requestSource: 'manual_request' },
-      priority: 'medium',
-      timeInQueue: 6.2,
-      assignedReviewer: 'admin-jane',
-      complexity: 'complex',
+      type: 'professional_credentials' }
+      data: { fullName: 'Sarah Producer', professionalCredentials: { role: 'producer', experience: 'professional', credentials: [], portfolio: [] }}
+      status: 'in_review'
+      metadata: { ipAddress: '192.168.1.2', userAgent: 'Safari', sessionId: 'sess456', requestSource: 'manual_request' }
+      priority: 'medium'
+      timeInQueue: 6.2
+      assignedReviewer: 'admin-jane'
+      complexity: 'complex'
       flagged: true]);
-  const handleRefresh = async () => {
-    setIsLoading(true);
+  const handleRefresh = async () => { setIsLoading(true);
     // Simulate API call delay
     setTimeout(() => {
       // In real implementation, refresh data from API
-      setIsLoading(false);
-    }, 1000);
+      setIsLoading(false) }, 1000);
   };
   const handleStatusUpdate = (requestId: string, newStatus: ValidationStatus) => {
     setVerificationQueue(prev => )
@@ -120,31 +111,26 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           : item
     );
   };
-  const getStatusColor = (status: ValidationStatus) => {
-  switch (status) {
+  const getStatusColor = (status: ValidationStatus) => { switch (status) {
   case 'approved': return 'text-green-600 bg-green-100';
   case 'rejected': return 'text-red-600 bg-red-100';
   case 'pending': return 'text-yellow-600 bg-yellow-100';
   case 'in_review': return 'text-blue-600 bg-blue-100';
   case 'requires_update': return 'text-orange-600 bg-orange-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
-  const getPriorityColor = (priority: string) => {
-  switch (priority) {
+  default: return 'text-gray-600 bg-gray-100' };
+  const getPriorityColor = (priority: string) => { switch (priority) {
   case 'urgent': return 'text-red-600 bg-red-100';
   case 'high': return 'text-orange-600 bg-orange-100';
   case 'medium': return 'text-yellow-600 bg-yellow-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
-  const filteredQueue = verificationQueue.filter(item => {)
+  default: return 'text-gray-600 bg-gray-100' };
+  const filteredQueue = verificationQueue.filter(item => { )
   const matchesSearch = searchTerm === '' || ;
       item.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.requestId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.data.fullName?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
     const matchesType = typeFilter === 'all' || item.type === typeFilter;
-    return matchesSearch && matchesStatus && matchesType;
-  });
+    return matchesSearch && matchesStatus && matchesType });
   const renderOverview = () => (;);
     <div className="overview-section">
       <div className="metrics-grid">
@@ -427,18 +413,18 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           </Card>
         </TabsContent>
       </Tabs>
-      <style>{`
+      <style>{ `
         .verification-dashboard {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
@@ -467,7 +453,7 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
   gap: 0.5rem;
           margin-bottom: 0.75rem;
         .metric-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           font-weight: 500;
         .metric-value {
@@ -489,7 +475,7 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           color: #6b7280;
         .performance-cards {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1rem;
         .performance-metrics {
           display: flex;
@@ -520,13 +506,13 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           border-radius: 6px;
           font-size: 0.875rem;
         .alert-item.warning {
-          background: #fef3c7;
+          background: #fef3c7
   color: #92400e;
         .alert-item.info {
-          background: #dbeafe;
+          background: #dbeafe
   color: #1e40af;
         .alert-item.success {
-          background: #d1fae5;
+          background: #d1fae5
   color: #065f46;
         .queue-section {
           display: flex;
@@ -557,7 +543,7 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        .search-input:focus {,
+        .search-input:focus {
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
@@ -566,10 +552,10 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
           align-items: center;
   gap: 0.5rem;
         .filter-select {
-          padding: 0.5rem;
+          padding: 0.5rem
   border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   background: white;
         .queue-list {
           display: flex;
@@ -580,7 +566,7 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
         .queue-item-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .item-info {
           flex: 1;
@@ -595,7 +581,7 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
         .item-details {
           display: flex;
   gap: 1rem;
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .item-actions {
           display: flex;
@@ -607,20 +593,20 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
         .approve-btn {
           background: #059669;
           border-color: #059669;
-        .approve-btn:hover {,
+        .approve-btn:hover {
   background: #047857;
           border-color: #047857;
         .reject-btn {
           color: #dc2626;
           border-color: #dc2626;
-        .reject-btn:hover {,
-  background: #dc2626;
-          color: white;
+        .reject-btn:hover {
+  background: #dc2626
+  color: white;
         .assigned-reviewer {
           margin-top: 0.75rem;
           padding-top: 0.75rem;
           border-top: 1px solid #e5e7eb;
-          font-size: 0.875rem;
+          font-size: 0.875rem }
   color: #6b7280;
         .empty-state {
           text-align: center;

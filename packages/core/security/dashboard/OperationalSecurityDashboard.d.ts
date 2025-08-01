@@ -28,8 +28,8 @@ import React from 'react';
 import { DashboardTheme } from './SecurityDashboardFramework';
 
 }
-export interface SecurityAlert {
-    id: string;
+}
+export interface SecurityAlert { id: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
     category: 'malware' | 'intrusion' | 'data_exfiltration' | 'policy_violation' | 'anomaly';
     title: string;
@@ -40,66 +40,57 @@ export interface SecurityAlert {
     assignee?: string;
     affectedAssets: string[];
     indicators: string[];
-    responseActions: ResponseAction[];
-
+    responseActions: ResponseAction[] }
 }
-export interface ResponseAction {
-    id: string;
+}
+export interface ResponseAction { id: string;
     type: 'isolate' | 'block' | 'quarantine' | 'investigate' | 'escalate';
     description: string;
     automated: boolean;
     status: 'pending' | 'in_progress' | 'completed' | 'failed';
     performer?: string;
-    timestamp?: Date;
-
+    timestamp?: Date }
 }
-export interface SystemStatus {
-    component: string;
+}
+export interface SystemStatus { component: string;
     status: 'operational' | 'degraded' | 'outage' | 'maintenance';
     lastCheck: Date;
     responseTime?: number;
     uptime: number;
-    criticalIssues: number;
-
+    criticalIssues: number }
 }
-export interface ThreatIntelligence {
-    feed: string;
+}
+export interface ThreatIntelligence { feed: string;
     lastUpdate: Date;
     newIndicators: number;
     activeThreats: number;
     confidence: 'high' | 'medium' | 'low';
-    categories: string[];
-
+    categories: string[] }
 }
-export interface OperationalMetrics {
-    alerts: {
+}
+export interface OperationalMetrics { alerts: {
         total: number;
         newLast24h: number;
         byCategory: Record<string, number>;
         bySeverity: Record<string, number>;
         avgResponseTime: number;
-        slaCompliance: number;
+        slaCompliance: number }
 }
     };
-    incidents: {
-        active: number;
+    incidents: { active: number;
         resolved24h: number;
         avgResolutionTime: number;
-        escalated: number;
-    };
-    system: {
-        overallHealth: number;
+        escalated: number };
+    system: { overallHealth: number;
         componentsOperational: number;
         totalComponents: number;
-        criticalIssues: number;
-    };
-    team: {
-        onlineAnalysts: number;
+        criticalIssues: number };
+    team: { onlineAnalysts: number;
         totalAnalysts: number;
         workload: 'low' | 'normal' | 'high' | 'critical';
-        avgCaseload: number;
-    };
+        avgCaseload: number };
 
+}
 }
 export interface OperationalSecurityDashboardProps {
     alerts: SecurityAlert[];
@@ -118,4 +109,5 @@ export interface OperationalSecurityDashboardProps {
 export declare const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboardProps>;
 export default OperationalSecurityDashboard;
 //# sourceMappingURL=OperationalSecurityDashboard.d.ts.map
+}
 }

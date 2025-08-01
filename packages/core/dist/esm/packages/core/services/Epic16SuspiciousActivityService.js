@@ -447,13 +447,14 @@ Promise < DetectionRule | null > {
             confidence;
         0.9,
             conditions;
-        [,
+        [
             {
                 field: 'eventType',
                 operator: ConditionOperator.EQUALS,
                 value: 'login_failed',
                 weight: 1.0
-            }],
+            }
+        ],
             aggregation;
         {
             type: AggregationType.COUNT,
@@ -477,7 +478,7 @@ Promise < DetectionRule | null > {
             false,
             ;
         }
-        actions: [,
+        actions: [
             {
                 type: ResponseType.IP_BLOCK,
                 parameters: { duration: 3600000 } // 1 hour
@@ -505,13 +506,14 @@ Promise < DetectionRule | null > {
     enabled: true,
     severity: SeverityLevel.MEDIUM,
     confidence: 0.7,
-    conditions: [,
+    conditions: [
         {
             field: 'eventType',
             operator: ConditionOperator.EQUALS,
             value: 'login_success',
             weight: 1.0
-        }],
+        }
+    ],
     aggregation: {
         type: AggregationType.COUNT,
         groupBy: ['userId'],
@@ -526,7 +528,7 @@ Promise < DetectionRule | null > {
         operator: ConditionOperator.GREATER_THAN,
         dynamic: true,
     },
-    actions: [,
+    actions: [
         {
             type: ResponseType.REQUIRE_VERIFICATION,
             parameters: { method: 'email' }
@@ -722,30 +724,18 @@ void {
                                 // Implementation for calculating trends over time
                                 return {};
                                 // Supporting interfaces
-                            },
-                            interface, SuspiciousActivityEvent
+                            }
                         };
-                        {
-                            eventType: string;
-                            userId ?  : string;
-                            sessionId: string;
-                            ipAddress: string;
-                            userAgent: string;
-                            timestamp: Date;
-                            geolocation ?  : GeoLocation;
-                            deviceFingerprint ?  : DeviceFingerprint;
-                            metadata: Record;
-                        }
                     }
                 }
-                topAttackers: Array;
-                topTargets: Array;
-                detectionEffectiveness: number;
-                responseTime: number;
-                falsePositiveRate: number;
-                trendsOverTime: any;
             }
-            export default Epic16SuspiciousActivityService;
         }
+        topAttackers: Array;
+        topTargets: Array;
+        detectionEffectiveness: number;
+        responseTime: number;
+        falsePositiveRate: number;
+        trendsOverTime: any;
     }
+    export default Epic16SuspiciousActivityService;
 }

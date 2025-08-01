@@ -8,6 +8,7 @@
  */
 import { EventEmitter } from 'events';
 ;
+;
 // Tracking configuration
 tracking: {
     track_by_service: boolean;
@@ -48,6 +49,21 @@ created_by: string;
 created_at: number;
 last_updated: number;
 active: boolean;
+;
+anomaly ?  : {
+    sensitivity: 'low' | 'medium' | 'high',
+    historical_period_days: number,
+    deviation_threshold: number
+};
+trend ?  : {
+    period_days: number,
+    trend_direction: 'increasing' | 'decreasing',
+    trend_threshold_percentage: number
+};
+budget ?  : {
+    variance_threshold_percentage: number,
+    forecast_period_days: number
+};
 ;
 // Notification settings
 notifications: {
@@ -134,10 +150,27 @@ trends: {
 }
 ;
 // Service-level breakdown
-services: Array;
+services: Array < {
+    service_name: string,
+    cost: number,
+    percentage: number,
+    utilization: number,
+    instances: number,
+    cost_per_instance: number
+} > ;
 // User/project breakdown (if enabled)
-user_costs ?  : Array;
-project_costs ?  : Array;
+user_costs ?  : Array < {
+    user_id: string,
+    cost: number,
+    requests: number,
+    cost_per_request: number
+} > ;
+project_costs ?  : Array < {
+    project_id: string,
+    cost: number,
+    resources: number,
+    cost_per_resource: number
+} > ;
 collected_at: number;
 collection_method: 'automated' | 'manual';
 ;
@@ -180,8 +213,17 @@ last_updated: number;
 ;
 // Budget allocation
 allocation: {
-    services: Array;
-    categories: Array;
+    services: Array < {
+        service_name: string,
+        allocated_amount: number,
+        allocated_percentage: number,
+        flexible: boolean
+    } > ;
+    categories: Array < {
+        category: 'compute' | 'storage' | 'network' | 'licensing' | 'personnel',
+        allocated_amount: number,
+        allocated_percentage: number
+    } > ;
     contingency_percentage: number;
 }
 ;
@@ -231,9 +273,27 @@ summary: {
 ;
 // Detailed analysis
 analysis: {
-    cost_breakdown: Array;
-    utilization_analysis: Array;
-    trending_data: Array;
+    cost_breakdown: Array < {
+        category: string,
+        current_cost: number,
+        previous_cost: number,
+        change_amount: number,
+        change_percentage: number
+    } > ;
+    utilization_analysis: Array < {
+        service: string,
+        utilization: number,
+        cost: number,
+        efficiency_rating: 'excellent' | 'good' | 'fair' | 'poor',
+        optimization_potential: number
+    } > ;
+    trending_data: Array < {
+        metric: string,
+        current_value: number,
+        trend_direction: 'up' | 'down' | 'stable',
+        trend_percentage: number,
+        forecasted_value: number
+    } > ;
 }
 ;
 // Recommendations
@@ -250,7 +310,7 @@ budget_analysis ?  : {
     variance_amount: number,
     variance_percentage: number,
     projected_year_end: number,
-    budget_health: 'on_track' | 'at_risk' | 'over_budget'
+    budget_health: 'on_track' | 'at_risk' | 'over_budget',
 };
 generated_by: string;
 generated_at: number;
@@ -294,48 +354,54 @@ export class SecurityCostOptimizer extends EventEmitter {
     events = [];
     // Optimization tracking
     optimizationActions = new Map();
-    optimizationHistory = [];
-    // Monitoring intervals
-    metricsCollectionInterval;
-    costMonitoringInterval;
-    optimizationInterval;
-    reportGenerationInterval;
-    constructor() {
-        super();
-        this.initializeDefaultCostCenters();
-        this.startCostMonitoring();
-        this.startMetricsCollection();
-        this.startOptimizationEngine();
-        this.startReportGeneration();
-        // Cost Center Management
-        async;
-        createCostCenter(costCenter, (Omit));
-        Promise < string > {
-            const: id = `cc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-        };
-        const newCostCenter = {
-            ...costCenter,
-            id,
-            created_at: Date.now(),
-            last_updated: Date.now(),
-        };
-        this.costCenters.set(id, newCostCenter);
-        // Initialize metrics collection for this cost center
-        this.metrics.set(id, []);
-        // Create default cost alerts
-        await this.createDefaultCostAlertsForCenter(id);
-        this.emit('cost_center_created', {});
-        cost_center_id: id,
-            name;
-        costCenter.name,
-            department;
-        costCenter.department,
-            monthly_budget;
-        costCenter.allocation.budget_monthly,
-        ;
-    }
+    optimizationHistory;
+    string;
+    executed_at;
+    savings_achieved;
+    success;
+}
+ > ;
+[];
+metricsCollectionInterval ?  : NodeJS.Timeout;
+costMonitoringInterval ?  : NodeJS.Timeout;
+optimizationInterval ?  : NodeJS.Timeout;
+reportGenerationInterval ?  : NodeJS.Timeout;
+constructor();
+{
+    super();
+    this.initializeDefaultCostCenters();
+    this.startCostMonitoring();
+    this.startMetricsCollection();
+    this.startOptimizationEngine();
+    this.startReportGeneration();
+    // Cost Center Management
+    async;
+    createCostCenter(costCenter, (Omit));
+    Promise < string > {
+        const: id = `cc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    };
+    const newCostCenter = {
+        ...costCenter,
+        id,
+        created_at: Date.now(),
+        last_updated: Date.now(),
+    };
+    this.costCenters.set(id, newCostCenter);
+    // Initialize metrics collection for this cost center
+    this.metrics.set(id, []);
+    // Create default cost alerts
+    await this.createDefaultCostAlertsForCenter(id);
+    this.emit('cost_center_created', {});
+    cost_center_id: id,
+        name;
+    costCenter.name,
+        department;
+    costCenter.department,
+        monthly_budget;
+    costCenter.allocation.budget_monthly,
     ;
 }
+;
 return id;
 async;
 createCostAlert(alert, (Omit));
@@ -971,7 +1037,7 @@ if (costCenter.tracking.track_by_user) {
                                                     prerequisites;
                                                 ['Performance baseline established', 'Change approval obtained'],
                                                     implementation_steps;
-                                                [,
+                                                [
                                                     'Analyze current resource usage patterns',
                                                     'Identify optimal instance sizes',
                                                     'Plan migration schedule',
@@ -1054,7 +1120,7 @@ if (costCenter.tracking.track_by_user) {
                                                 prerequisites;
                                             ['Data access patterns analyzed', 'Compliance requirements reviewed'],
                                                 implementation_steps;
-                                            [,
+                                            [
                                                 'Analyze data access patterns',
                                                 'Define lifecycle policies',
                                                 'Implement automated tiering',
@@ -1135,7 +1201,7 @@ if (costCenter.tracking.track_by_user) {
                                             prerequisites;
                                         ['Usage patterns analyzed', 'Budget approval obtained'],
                                             implementation_steps;
-                                        [,
+                                        [
                                             'Analyze instance usage patterns',
                                             'Calculate optimal reservation coverage',
                                             'Purchase reserved instances',
@@ -1217,7 +1283,7 @@ if (costCenter.tracking.track_by_user) {
                                         prerequisites;
                                     ['License usage audit completed', 'Vendor contracts reviewed'],
                                         implementation_steps;
-                                    [,
+                                    [
                                         'Audit current license usage',
                                         'Identify unused or underutilized licenses',
                                         'Negotiate with vendors for better rates',
@@ -1547,13 +1613,13 @@ if (costCenter.tracking.track_by_user) {
                                             {
                                                 return `
 🚨 COST ALERT: ${alert.name}
-Event ID: ${event.id},}
+Event ID: ${event.id},},
   Severity: ${event.severity.toUpperCase()}
 Cost Center: ${event.cost_center_id}
 Cost Impact:
 - Amount: ${event.cost_impact.currency} ${event.cost_impact.amount.toFixed(2)}
-- Trend: ${event.cost_impact.percentage > 0 ? '+' : ''}${event.cost_impact.percentage.toFixed(1)}%},}
-  Description: ${event.description},}
+- Trend: ${event.cost_impact.percentage > 0 ? '+' : ''}${event.cost_impact.percentage.toFixed(1)}%},},
+  Description: ${event.description},},
   Recommendations:
 ${event.data.recommendations?.map(r => `• ${r}`).join('\n') || 'No recommendations available'}
 Actions Taken:
@@ -1577,8 +1643,8 @@ View Details: /cost-optimizer/events/${event.id}
                                                 string;
                                                 {
                                                     return `
-📊 COST REPORT: ${report.title},}
-  Period: ${new Date(report.period.start).toLocaleDateString()} - ${new Date(report.period.end).toLocaleDateString()},}
+📊 COST REPORT: ${report.title},},
+  Period: ${new Date(report.period.start).toLocaleDateString()} - ${new Date(report.period.end).toLocaleDateString()},},
   Summary:
 - Total Cost: ${report.summary.total_cost.toFixed(2)}
 - Cost Change: ${report.summary.cost_change_percentage > 0 ? '+' : ''}${report.summary.cost_change_percentage.toFixed(1)}%}
@@ -1787,67 +1853,81 @@ View Full Report: /cost-optimizer/reports/${report.id}
                                         name: 'Security Operations',
                                         description: 'Cost center for security monitoring and operations',
                                         department: 'Security',
-                                        allocation: {
-                                            budget_monthly: 10000,
-                                            budget_yearly: 120000,
-                                            currency: 'USD',
-                                            cost_allocation_method: 'usage_based',
-                                            allocation_weights: {
-                                                compute: 0.4,
-                                                storage: 0.2,
-                                                network: 0.1,
-                                                licensing: 0.2,
-                                                personnel: 0.1,
-                                            },
-                                            tracking: {
-                                                track_by_service: true,
-                                                track_by_user: true,
-                                                track_by_project: true,
-                                                granularity: 'hourly',
-                                                retention_days: 90,
-                                            },
-                                            controls: {
-                                                spending_limits: {
-                                                    daily_limit: 400,
-                                                    weekly_limit: 2500,
-                                                    monthly_limit: 11000,
-                                                    auto_shutdown_on_limit: false,
-                                                },
-                                                approval_thresholds: {
-                                                    minor_threshold: 100,
-                                                    major_threshold: 500,
-                                                    critical_threshold: 1000,
-                                                },
-                                                cost_alerts: []
-                                            },
-                                            reporting: {
-                                                automated_reports: true,
-                                                report_frequency: 'weekly',
-                                                report_recipients: ['security-ops@company.com', 'finance@company.com'],
-                                                include_recommendations: true,
-                                                include_trending: true,
-                                            },
-                                            created_by: 'system',
-                                            active: true
+                                        allocation: {},
+                                        budget_monthly: 10000,
+                                        budget_yearly: 120000,
+                                        currency: 'USD',
+                                        cost_allocation_method: 'usage_based',
+                                        allocation_weights: {},
+                                        compute: 0.4,
+                                        storage: 0.2,
+                                        network: 0.1,
+                                        licensing: 0.2,
+                                        personnel: 0.1,
+                                    },
+                                    tracking, {},
+                                    track_by_service, true,
+                                    track_by_user, true,
+                                    track_by_project, true,
+                                    granularity, 'hourly',
+                                    retention_days, 90,
+                                ]
+                            },
+                                controls;
+                            {
+                                spending_limits: {
+                                    daily_limit: 400,
+                                        weekly_limit;
+                                    2500,
+                                        monthly_limit;
+                                    11000,
+                                        auto_shutdown_on_limit;
+                                    false,
+                                    ;
+                                }
+                                approval_thresholds: {
+                                    minor_threshold: 100,
+                                        major_threshold;
+                                    500,
+                                        critical_threshold;
+                                    1000,
+                                    ;
+                                }
+                                cost_alerts: [];
+                            }
+                            reporting: {
+                                automated_reports: true,
+                                    report_frequency;
+                                'weekly',
+                                    report_recipients;
+                                ['security-ops@company.com', 'finance@company.com'],
+                                    include_recommendations;
+                                true,
+                                    include_trending;
+                                true,
+                                ;
+                            }
+                            created_by: 'system',
+                                active;
+                            true;
+                            ;
+                            defaultCostCenters.forEach(async (costCenter) => {
+                                await this.createCostCenter(costCenter);
+                            });
+                            startCostMonitoring();
+                            void {
+                                // Monitor costs every 5 minutes
+                                this: .costMonitoringInterval = setInterval(async () => {
+                                    for (const [costCenterId] of this.costCenters) {
+                                        try {
+                                            await this.collectCostMetrics(costCenterId);
                                         }
-                                    }],
-                                defaultCostCenters, : .forEach(async (costCenter) => {
-                                    await this.createCostCenter(costCenter);
+                                        catch (error) {
+                                            console.error(`Failed to collect cost metrics for ${costCenterId}:`, error);
+                                        }
+                                    }
+                                    300000;
                                 }),
-                                startCostMonitoring() {
-                                    // Monitor costs every 5 minutes
-                                    this.costMonitoringInterval = setInterval(async () => {
-                                        for (const [costCenterId] of this.costCenters) {
-                                            try {
-                                                await this.collectCostMetrics(costCenterId);
-                                            }
-                                            catch (error) {
-                                                console.error(`Failed to collect cost metrics for ${costCenterId}:`, error);
-                                            }
-                                        }
-                                        300000;
-                                    });
-                                },
                                 startMetricsCollection() {
                                     // Collect detailed metrics every hour
                                     this.metricsCollectionInterval = setInterval(() => {

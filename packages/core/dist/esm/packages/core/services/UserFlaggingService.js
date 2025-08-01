@@ -1,3 +1,16 @@
+ > ;
+contentTrends: {
+    mostFlaggedContentTypes: Record;
+    flagVolumeByHour: number;
+    flagVolumeByDay: number;
+}
+;
+moderationEfficiency: {
+    avgResponseTimeHours: number;
+    accuracyRate: number;
+    escalationRate: number;
+}
+;
 ;
 export class UserFlaggingService {
     baseUrl;
@@ -206,8 +219,10 @@ export class UserFlaggingService {
                      * Update flag report status (for moderators)
                      */
                     async;
-                    updateFlagStatus(reportId, string);
-                    update: {
+                    updateFlagStatus(reportId, string),
+                        update;
+                    {
+                        ;
                         status: 'investigating' | 'resolved' | 'dismissed';
                         moderatorId: string;
                         moderatorNote ?  : string;

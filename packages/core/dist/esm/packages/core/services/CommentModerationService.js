@@ -168,8 +168,8 @@ try {
         * Get moderation queue with filtering
         */
         async;
-        getModerationQueue(queueId, string);
-        filters ?  : CommentModerationFilters;
+        getModerationQueue(queueId, string),
+            filters ?  : CommentModerationFilters;
         Promise < {
             items: any,
             totalCount: number,
@@ -279,8 +279,9 @@ try {
                  * Auto-moderate comments based on ML analysis
                  */
                 async;
-                autoModerateComments(resourceId, string);
-                resourceType: CommentableResourceType,
+                autoModerateComments(resourceId, string),
+                    resourceType;
+                CommentableResourceType,
                     options;
                 {
                     toxicityThreshold ?  : number;
@@ -388,61 +389,84 @@ try {
                                 queueId: 'high_priority',
                                 name: 'High Priority',
                                 description: 'Comments flagged as high priority or toxic',
-                                filters: {
-                                    toxicityRange: { min: 0.7, max: 1.0 },
-                                    reportCount: { min: 3 },
-                                    status: 'pending'
-                                },
-                                priority: 1,
-                                autoAssign: true,
-                                assignedModerators: [],
-                                slaMinutes: 15,
-                                enableAutoModeration: false,
-                                escalationRules: [,
-                                    {
-                                        condition: 'timeout',
-                                        threshold: 15,
-                                        action: 'escalate',
-                                        escalateTo: 'supervisor',
-                                        notifyStakeholders: ['admin@example.com']
-                                    }]
+                                filters: {},
+                                toxicityRange: { min: 0.7, max: 1.0 },
+                                reportCount: { min: 3 },
+                                status: 'pending'
                             },
-                            {
-                                queueId: 'standard',
-                                name: 'Standard Review',
-                                description: 'Regular comments pending moderation',
-                                filters: {
-                                    status: 'pending',
-                                    toxicityRange: { min: 0, max: 0.7 }
-                                },
-                                priority: 2,
-                                autoAssign: true,
-                                assignedModerators: [],
-                                slaMinutes: 120,
-                                enableAutoModeration: true,
-                                escalationRules: []
-                            },
-                            {
-                                queueId: 'appeals',
-                                name: 'Appeals Review',
-                                description: 'Comments under appeal review',
-                                filters: {
-                                    status: 'rejected',
-                                    // Additional appeal-specific filters would go here
-                                },
-                                priority: 1,
-                                autoAssign: false,
-                                assignedModerators: [],
-                                slaMinutes: 480, // 8 hours
-                                enableAutoModeration: false,
-                                escalationRules: []
-                            }
+                            priority, 1,
+                            autoAssign, true,
+                            assignedModerators, [],
+                            slaMinutes, 15,
+                            enableAutoModeration, false,
+                            escalationRules, [
+                                {
+                                    condition: 'timeout',
+                                    threshold: 15,
+                                    action: 'escalate',
+                                    escalateTo: 'supervisor',
+                                    notifyStakeholders: ['admin@example.com']
+                                }
+                            ]
                         ];
-                        defaultQueues.forEach(queue => { });
-                        this.moderationQueues.set(queue.queueId, queue);
-                    },
-                    console, : .log(`✅ Initialized ${defaultQueues.length} default moderation queues`)
+                    }
                 };
+                {
+                    queueId: 'standard',
+                        name;
+                    'Standard Review',
+                        description;
+                    'Regular comments pending moderation',
+                        filters;
+                    {
+                        status: 'pending',
+                            toxicityRange;
+                        {
+                            min: 0, max;
+                            0.7;
+                        }
+                    }
+                    priority: 2,
+                        autoAssign;
+                    true,
+                        assignedModerators;
+                    [],
+                        slaMinutes;
+                    120,
+                        enableAutoModeration;
+                    true,
+                        escalationRules;
+                    [];
+                }
+                {
+                    queueId: 'appeals',
+                        name;
+                    'Appeals Review',
+                        description;
+                    'Comments under appeal review',
+                        filters;
+                    {
+                        status: 'rejected',
+                        ;
+                        // Additional appeal-specific filters would go here
+                    }
+                    priority: 1,
+                        autoAssign;
+                    false,
+                        assignedModerators;
+                    [],
+                        slaMinutes;
+                    480, // 8 hours
+                        enableAutoModeration;
+                    false,
+                        escalationRules;
+                    [];
+                    ;
+                    defaultQueues.forEach(queue => { });
+                    this.moderationQueues.set(queue.queueId, queue);
+                }
+                ;
+                console.log(`✅ Initialized ${defaultQueues.length} default moderation queues`);
             },
             validateModerationRequest(request) {
                 if (!request.commentId) {
@@ -557,7 +581,7 @@ try {
         private, async, sendModerationNotification(((request, result) => {
             // Send notification to comment author about moderation action
             console.log(`📧 Moderation notification sent for comment ${request.commentId}`);
-        }), private, chunkArray(array, T, size, number), T[], {
+        }), private, chunkArray(array, T, size, number), T, {
             const: chunks, T = [],
             : .length, i, size
         }), {
@@ -606,8 +630,9 @@ try {
 finally { }
 ;
 async;
-processBatchSequential(batch, string);
-request: BulkModerationRequest,
+processBatchSequential(batch, string),
+    request;
+BulkModerationRequest,
     result;
 BulkModerationResult;
 Promise < void  > {

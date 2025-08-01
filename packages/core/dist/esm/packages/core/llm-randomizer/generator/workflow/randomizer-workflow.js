@@ -218,8 +218,9 @@ UniversalAgentRequest;
         examples: [] // Could be populated from history,
     };
     async;
-    callLLM(request, UniversalAgentRequest);
-    parameters: RandomizerParameters,
+    callLLM(request, UniversalAgentRequest),
+        parameters;
+    RandomizerParameters,
         timeoutMs;
     number;
     Promise < {
@@ -263,7 +264,7 @@ UniversalAgentRequest;
                         attempts
                     };
                     // Otherwise, continue to next attempt
-                    console.warn(`LLM attempt ${attempts},)}
+                    console.warn(`LLM attempt ${attempts})},
   failed:`, result.errors);
                 }
             }
@@ -277,7 +278,7 @@ UniversalAgentRequest;
                         attempts
                     };
                     // Otherwise, continue to next attempt
-                    console.warn(`LLM attempt ${attempts},)}
+                    console.warn(`LLM attempt ${attempts})},
   error:`, error);
                 }
                 return {
@@ -352,69 +353,73 @@ WorkflowResult;
      * Generate multiple variations with different parameters
      */
     async;
-    generateVariations(baseParameters, RandomizerParameters(variationCount, number = 3, options, WorkflowOptions = {}), Promise < WorkflowResult > {
+    generateVariations(baseParameters, RandomizerParameters());
+    variationCount: number = 3,
+        options;
+    WorkflowOptions = {};
+    Promise < WorkflowResult > {
         const: variations = this.createParameterVariations(baseParameters, variationCount),
-        const: results = await Promise.all()
-    });
-    variations.map((params, index) => this.generateGraph(params, {}), ...options, onProgress, (message, progress) => {
-        options.onProgress?.(`Variation ${index + 1}: ${message}`, progress);
-    });
-}
-;
-return results;
-createParameterVariations(((base, count) => {
-    const variations = [];
-    for (let i = 0; i < count; i++) {
-        const variation = { ...base };
-        // Vary temperature
-        variation.temperature = Math.max(0.1, Math.min(1.5, base.temperature + (Math.random() - 0.5) * 0.4));
-        // Vary node count slightly
-        const nodeVariation = Math.floor((Math.random() - 0.5) * 4);
-        variation.nodeCount = Math.max(3, Math.min(100, base.nodeCount + nodeVariation));
-        // Vary diversity score
-        variation.diversityScore = Math.max(0, Math.min(1, base.diversityScore + (Math.random() - 0.5) * 0.3));
-        // Optionally vary provider for different approaches
-        if (Math.random() < 0.3) {
-            const providers = ['openai', 'claude', 'gemini'];
-            variation.provider = providers[Math.floor(Math.random() * providers.length)];
-            variations.push(variation);
-            return variations;
-            /**
-             * Validate workflow parameters before generation
-             */
-            validateWorkflowParameters(parameters, RandomizerParameters);
-            {
-                isValid: boolean;
-                errors: string;
-                warnings: string;
-                const errors = [];
-                const warnings = [];
-                // Basic validation
-                if (!parameters.purpose || parameters.purpose.length < 10) {
-                    errors.push('Purpose must be at least 10 characters long');
-                    if (parameters.nodeCount < 3 || parameters.nodeCount > 100) {
-                        errors.push('Node count must be between 3 and 100');
-                        if (parameters.temperature < 0 || parameters.temperature > 2) {
-                            errors.push('Temperature must be between 0 and 2');
-                            // Complexity vs node count validation
-                            const complexityRanges = {
-                                simple: { min: 3, max: 8 },
-                                moderate: { min: 8, max: 20 },
-                                complex: { min: 20, max: 100 }
-                            };
-                            const range = complexityRanges[parameters.complexity];
-                            if (parameters.nodeCount < range.min || parameters.nodeCount > range.max) {
-                                warnings.push(`Node count ${parameters.nodeCount} may not match ${parameters.complexity} complexity (recommended: ${range.min}-${range.max})`);
+        const: results = await Promise.all(),
+        variations, : .map((params, index) => this.generateGraph(params, {}), ...options, onProgress, (message, progress) => {
+            options.onProgress?.(`Variation ${index + 1}: ${message}`, progress);
+        })
+    };
+    ;
+    return results;
+    createParameterVariations(((base, count) => {
+        const variations = [];
+        for (let i = 0; i < count; i++) {
+            const variation = { ...base };
+            // Vary temperature
+            variation.temperature = Math.max(0.1, Math.min(1.5, base.temperature + (Math.random() - 0.5) * 0.4));
+            // Vary node count slightly
+            const nodeVariation = Math.floor((Math.random() - 0.5) * 4);
+            variation.nodeCount = Math.max(3, Math.min(100, base.nodeCount + nodeVariation));
+            // Vary diversity score
+            variation.diversityScore = Math.max(0, Math.min(1, base.diversityScore + (Math.random() - 0.5) * 0.3));
+            // Optionally vary provider for different approaches
+            if (Math.random() < 0.3) {
+                const providers = ['openai', 'claude', 'gemini'];
+                variation.provider = providers[Math.floor(Math.random() * providers.length)];
+                variations.push(variation);
+                return variations;
+                /**
+                 * Validate workflow parameters before generation
+                 */
+                validateWorkflowParameters(parameters, RandomizerParameters);
+                {
+                    isValid: boolean;
+                    errors: string;
+                    warnings: string;
+                    const errors = [];
+                    const warnings = [];
+                    // Basic validation
+                    if (!parameters.purpose || parameters.purpose.length < 10) {
+                        errors.push('Purpose must be at least 10 characters long');
+                        if (parameters.nodeCount < 3 || parameters.nodeCount > 100) {
+                            errors.push('Node count must be between 3 and 100');
+                            if (parameters.temperature < 0 || parameters.temperature > 2) {
+                                errors.push('Temperature must be between 0 and 2');
+                                // Complexity vs node count validation
+                                const complexityRanges = {
+                                    simple: { min: 3, max: 8 },
+                                    moderate: { min: 8, max: 20 },
+                                    complex: { min: 20, max: 100 }
+                                };
+                                const range = complexityRanges[parameters.complexity];
+                                if (parameters.nodeCount < range.min || parameters.nodeCount > range.max) {
+                                    warnings.push(`Node count ${parameters.nodeCount} may not match ${parameters.complexity} complexity (recommended: ${range.min}-${range.max})`);
+                                }
+                                return {
+                                    isValid: errors.length === 0,
+                                    errors,
+                                    warnings
+                                };
                             }
-                            return {
-                                isValid: errors.length === 0,
-                                errors,
-                                warnings
-                            };
                         }
                     }
                 }
             }
         }
-    }
-}));
+    }));
+}

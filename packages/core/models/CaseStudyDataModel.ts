@@ -62,9 +62,8 @@ export type MediaType =
 // Media and Rich Content
 // ====================================
 
-}
-export interface CaseStudyMedia {
-  id: string;
+
+export interface CaseStudyMedia { id: string;
   type: MediaType;
   url: string;
   thumbnailUrl?: string;
@@ -73,16 +72,17 @@ export interface CaseStudyMedia {
   altText?: string;
   fileSize?: number;
   mimeType?: string;
-  dimensions?: {
+  dimensions?: { }
   width: number;
   height: number;
-}
+
+
 };
   duration?: number; // For video/audio in seconds
   uploadedAt: string;
   uploadedBy: string;
-}
-}
+
+
 export interface MediaGallery {
   featured: CaseStudyMedia;
   screenshots: CaseStudyMedia;
@@ -92,76 +92,72 @@ export interface MediaGallery {
   // ====================================
   // Metrics and ROI Data
   // ====================================
-}
-}
-}
-export interface ROIMetrics {
-  // Time savings
-  timeSaved: {
+
+
+
+
+export interface ROIMetrics { // Time savings
+  timeSaved: { }
   hours: number;
   period: 'day' | 'week' | 'month' | 'project';
   description: string;
-}
+
+
 };
   // Cost savings
-  costSavings: {
+  costSavings: { ,
   amount: number;
   currency: string;
   period: 'day' | 'week' | 'month' | 'project';
-  calculation: string;
-};
+  calculation: string };
   // Quality improvements
-  qualityMetrics: {
+  qualityMetrics: { ,
   metric: string;
-  before: number | string;
+  before: number | string;,
   after: number | string;
-  improvement: number; // Percentage,
+  improvement: number; // Percentage }
   unit?: string;
-}[];
+[];
   // Productivity metrics
-  productivityGains: {
+  productivityGains: { ,
   metric: string;
   value: number;
   unit: string;
-  description: string;
-}[];
+  description: string }[];
   // Claude-specific metrics
-  claudeMetrics?: {
-  tokensSaved: number;
+  claudeMetrics?: { tokensSaved: number;
   costPerToken: number;
   totalCostSavings: number;
   responseQualityImprovement: number;
-  consistencyImprovement: number;
-};
-}
-}
-export interface PerformanceMetrics {
-  // Usage statistics
+  consistencyImprovement: number };
+
+
+export interface PerformanceMetrics { // Usage statistics
   templatesUsed: number;
-  implementationTime: number; // Hours,
-  projectDuration: number; // Days,
+  implementationTime: number; // Hours;
+  projectDuration: number; // Days;
   teamSize: number;
   // Results achieved
-  outputQuality: number; // 1-10 scale,
-  efficiency: number; // Percentage improvement,
-  errorReduction: number; // Percentage,
-  stakeholderSatisfaction: number; // 1-10 scale,
+  outputQuality: number; // 1-10 scale;
+  efficiency: number; // Percentage improvement;
+  errorReduction: number; // Percentage;
+  stakeholderSatisfaction: number; // 1-10 scale;
   // Comparison metrics
-  beforeAfter: {
+  beforeAfter: { }
   metric: string;
   before: number | string;
   after: number | string;
   unit?: string;
-}
-}[];
+
+
+[];
 
 // ====================================
 // Template Integration
 // ====================================
-}
-}
-export interface TemplateReference {
-  templateId: string;
+
+
+export interface TemplateReference { templateId: string;
   templateName: string;
   templateVersion: string;
   templateCategory: string;
@@ -170,38 +166,36 @@ export interface TemplateReference {
   resultsWithTemplate: string;
   licenseType: string;
   purchaseDate?: string;
-  cost?: number;
-}
-}
-}
-export interface TemplateImplementation {
-  originalTemplate: TemplateReference;
-  customizations: {
+  cost?: number }
+
+
+
+export interface TemplateImplementation { originalTemplate: TemplateReference;
+  customizations: { }
   description: string;
   reasonForChange: string;
   impact: string;
-}
-}[];
-  results: {
+
+
+[];
+  results: { ,
   outputExamples: string;
   performanceMetrics: Record<string, number>;
-  userFeedback: string;
-};
+  userFeedback: string };
   lessonsLearned: string;
   recommendations: string;
 
 // ====================================
 // Core Case Study Model
 // ====================================
-}
-}
-export interface CaseStudy {
-  // Basic information
+
+
+export interface CaseStudy { // Basic information
   id: string;
   title: string;
   subtitle?: string;
   description: string;
-  summary: string; // Short summary for cards/listings,
+  summary: string; // Short summary for cards/listings;
   // Classification
   type: CaseStudyType;
   status: CaseStudyStatus;
@@ -209,14 +203,15 @@ export interface CaseStudy {
   tags: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   // Content structure
-  content: {
-  challenge: string;         // Problem being solved,
-  solution: string;          // How templates helped,
-  implementation: string;    // How it was implemented,
-  results: string;          // Outcomes achieved,
-  learnings: string;        // Key takeaways,
-  nextSteps?: string;       // Future plans,
-}
+  content: {;
+  challenge: string;         // Problem being solved;
+  solution: string;          // How templates helped;
+  implementation: string;    // How it was implemented;
+  results: string;          // Outcomes achieved;
+  learnings: string;        // Key takeaways;
+  nextSteps?: string;       // Future plans }
+
+
 };
   // Rich media
   media: MediaGallery;
@@ -228,33 +223,31 @@ export interface CaseStudy {
   roiMetrics: ROIMetrics;
   performanceMetrics: PerformanceMetrics;
   // Attribution and metadata
-  author: {
+  author: { ,
   userId: string;
   name: string;
   title?: string;
   company?: string;
   profileUrl?: string;
   avatar?: string;
-  verified: boolean;
-};
-  collaborators: {
+  verified: boolean };
+  collaborators: { ,
   userId: string;
   name: string;
   role: string;
-  contribution: string;
-}[];
+  contribution: string }[];
   // Engagement metrics
-  engagement: {
+  engagement: { ,
   views: number;
   likes: number;
   shares: number;
   bookmarks: number;
   comments: number;
   helpfulVotes: number;
-  followUps: number; // People who implemented similar solutions,
+  followUps: number; // People who implemented similar solutions }
 };
   // Review and moderation
-  moderation: {
+  moderation: { ,
   submittedAt: string;
   submittedBy: string;
   reviewedAt?: string;
@@ -262,16 +255,14 @@ export interface CaseStudy {
   approvalNotes?: string;
   rejectionReason?: string;
   featuredAt?: string;
-  featuredBy?: string;
-};
+  featuredBy?: string };
   // SEO and discovery
-  seo: {
+  seo: { ,
   slug: string;
   metaTitle: string;
   metaDescription: string;
   keywords: string;
-  canonicalUrl?: string;
-};
+  canonicalUrl?: string };
   // Timestamps
   createdAt: string;
   updatedAt: string;
@@ -281,29 +272,28 @@ export interface CaseStudy {
   version: string;
   previousVersions: string;
   // Configuration
-  config: {
+  config: { ,
   allowComments: boolean;
   allowSharing: boolean;
   showAuthor: boolean;
   showMetrics: boolean;
   requireEmailToView: boolean;
   featured: boolean;
-  priority: number; // For ordering,
+  priority: number; // For ordering }
 };
 
 // ====================================
 // Case Study Creation and Updates
 // ====================================
-}
-}
-export interface CreateCaseStudyRequest {
-  title: string;
+
+
+export interface CreateCaseStudyRequest { title: string;
   subtitle?: string;
   description: string;
   type: CaseStudyType;
   industry: IndustryCategory;
   tags: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert' }
   content: CaseStudy['content'];
   templatesUsed: Omit<TemplateReference, 'templateName' | 'templateCategory'>[];
   // Optional fields
@@ -311,9 +301,10 @@ export interface CreateCaseStudyRequest {
   performanceMetrics?: Partial<PerformanceMetrics>;
   collaborators?: CaseStudy['collaborators'];
   config?: Partial<CaseStudy['config']>;
-}
-}
-}
+
+
+
+
 export interface UpdateCaseStudyRequest {
   id: string;
   title?: string;
@@ -331,11 +322,11 @@ export interface UpdateCaseStudyRequest {
   // ====================================
   // Case Study Queries and Filters
   // ====================================
-}
-}
-}
-export interface CaseStudyFilter {
-  type?: CaseStudyType | CaseStudyType;
+
+
+
+
+export interface CaseStudyFilter { type?: CaseStudyType | CaseStudyType;
   industry?: IndustryCategory | IndustryCategory;
   tags?: string;
   difficulty?: ('beginner' | 'intermediate' | 'advanced' | 'expert')[];
@@ -362,38 +353,38 @@ export interface CaseStudyFilter {
   // Text search
   search?: string;
   // Featured content
-  featuredOnly?: boolean;
-}
-}
-}
-export interface CaseStudySort {
-  field: 'createdAt' | 'publishedAt' | 'updatedAt' | 'views' | 'likes' | ,
+  featuredOnly?: boolean }
+
+
+
+export interface CaseStudySort { field: 'createdAt' | 'publishedAt' | 'updatedAt' | 'views' | 'likes' | ;
   'helpfulVotes' | 'roiValue' | 'timeSaved' | 'title' | 'priority';
-  direction: 'asc' | 'desc'
-}
-  }
-}
-export interface CaseStudyQuery {
-  filters?: CaseStudyFilter;
+  direction: 'asc' | 'desc' }
+
+
+
+
+export interface CaseStudyQuery { filters?: CaseStudyFilter;
   sort?: CaseStudySort;
-  pagination: {
+  pagination: { }
   offset: number;
   limit: number;
-}
+
+
 };
   include?: ('media' | 'templates' | 'metrics' | 'author' | 'engagement')[];
-}
-}
-export interface CaseStudyQueryResponse {
-  caseStudies: CaseStudy;
-  pagination: {
+
+
+export interface CaseStudyQueryResponse { caseStudies: CaseStudy;
+  pagination: { }
   total: number;
   offset: number;
   limit: number;
   hasMore: boolean;
-}
+
+
 };
-  aggregations: {
+  aggregations: {,
   totalCaseStudies: number;
     byType: Array<{ type: CaseStudyType; count: number }>;
     byIndustry: Array<{ industry: IndustryCategory; count: number }>;
@@ -404,8 +395,8 @@ export interface CaseStudyQueryResponse {
 // ====================================
 // Case Study Analytics
 // ====================================
-}
-}
+
+
 export interface CaseStudyAnalytics {
   caseStudyId: string;
   // View analytics
@@ -424,7 +415,8 @@ export interface CaseStudyAnalytics {
   templatePurchases: number;
   implementationAttempts: number;
   // Geographic data
-}
+
+},
   topCountries: Array<{ country: string; views: number }>;
   topCities: Array<{ city: string; views: number }>;
   // Referral data
@@ -442,8 +434,8 @@ export interface CaseStudyAnalytics {
 // ====================================
 
 // Media schema
-}
-export const CaseStudyMediaSchema = z.object({)
+
+export const CaseStudyMediaSchema = z.object({ )
   id: z.string().uuid(),
   type: z.enum(['image', 'video', 'document', 'screenshot', 'chart', 'infographic', 'audio']),
   url: z.string().url(),
@@ -453,9 +445,9 @@ export const CaseStudyMediaSchema = z.object({)
   altText: z.string().max(500).optional(),
   fileSize: z.number().int().min(0).optional(),
   mimeType: z.string().optional(),
-  dimensions: z.object({,)
+  dimensions: z.object({);
   width: z.number().int().min(1),
-  height: z.number().int().min(1),
+  height: z.number().int().min(1) }
 }).optional(),
   duration: z.number().min(0).optional(),
   uploadedAt: z.string().datetime(),
@@ -463,42 +455,42 @@ export const CaseStudyMediaSchema = z.object({)
   });
 
 // ROI metrics schema
-export const ROIMetricsSchema = z.object({)
-  timeSaved: z.object({,)
+export const ROIMetricsSchema = z.object({ )
+  timeSaved: z.object({);
   hours: z.number().min(0),
   period: z.enum(['day', 'week', 'month', 'project']),
-  description: z.string().min(1).max(500),
+  description: z.string().min(1).max(500) }
 }),
-  costSavings: z.object({,)
+  costSavings: z.object({ );
   amount: z.number().min(0),
   currency: z.string().length(3),
   period: z.enum(['day', 'week', 'month', 'project']),
-  calculation: z.string().min(1).max(1000),
+  calculation: z.string().min(1).max(1000) }
 }),
-  qualityMetrics: z.array(z.object({)
+  qualityMetrics: z.array(z.object({ ),
   metric: z.string().min(1).max(100),
   before: z.union([z.number(), z.string()]),
   after: z.union([z.number(), z.string()]),
   improvement: z.number().min(-100).max(1000),
-  unit: z.string().max(50).optional(),
+  unit: z.string().max(50).optional() }
 })),
-  productivityGains: z.array(z.object({)
+  productivityGains: z.array(z.object({ ),
   metric: z.string().min(1).max(100),
   value: z.number(),
   unit: z.string().max(50),
-  description: z.string().min(1).max(500),
+  description: z.string().min(1).max(500) }
 })),
-  claudeMetrics: z.object({,)
+  claudeMetrics: z.object({ );
   tokensSaved: z.number().int().min(0),
   costPerToken: z.number().min(0),
   totalCostSavings: z.number().min(0),
   responseQualityImprovement: z.number().min(0).max(100),
-  consistencyImprovement: z.number().min(0).max(100),
+  consistencyImprovement: z.number().min(0).max(100) }
 }).optional()
 });
 
 // Template reference schema
-export const TemplateReferenceSchema = z.object({)
+export const TemplateReferenceSchema = z.object({ )
   templateId: z.string().uuid(),
   templateName: z.string().min(1).max(200),
   templateVersion: z.string().min(1).max(50),
@@ -508,11 +500,11 @@ export const TemplateReferenceSchema = z.object({)
   resultsWithTemplate: z.string().min(1).max(2000),
   licenseType: z.string().min(1).max(100),
   purchaseDate: z.string().datetime().optional(),
-  cost: z.number().min(0).optional(),
+  cost: z.number().min(0).optional() }
 });
 
 // Main case study schema
-export const CaseStudySchema = z.object({)
+export const CaseStudySchema = z.object({ )
   id: z.string().uuid(),
   title: z.string().min(1).max(200),
   subtitle: z.string().max(300).optional(),
@@ -523,40 +515,40 @@ export const CaseStudySchema = z.object({)
   industry: z.enum(['film-production', 'advertising', 'gaming', 'publishing', 'education', 'healthcare', 'finance', 'technology', 'legal', 'consulting', 'e-commerce', 'non-profit', 'other']),
   tags: z.array(z.string().min(1).max(50)).max(20),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
-  content: z.object({,)
+  content: z.object({);
   challenge: z.string().min(1).max(5000),
   solution: z.string().min(1).max(5000),
   implementation: z.string().min(1).max(5000),
   results: z.string().min(1).max(5000),
   learnings: z.string().min(1).max(5000),
-  nextSteps: z.string().max(2000).optional(),
+  nextSteps: z.string().max(2000).optional() }
 }),
-  media: z.object({,)
+  media: z.object({ );
   featured: z.array(CaseStudyMediaSchema),
   screenshots: z.array(CaseStudyMediaSchema),
   videos: z.array(CaseStudyMediaSchema),
   documents: z.array(CaseStudyMediaSchema),
-  charts: z.array(CaseStudyMediaSchema),
+  charts: z.array(CaseStudyMediaSchema) }
 }),
   featuredImage: CaseStudyMediaSchema.optional(),
   templatesUsed: z.array(TemplateReferenceSchema),
-  templateImplementations: z.array(z.object({)
+  templateImplementations: z.array(z.object({ ),
   originalTemplate: TemplateReferenceSchema,
-  customizations: z.array(z.object({)
+  customizations: z.array(z.object({),
   description: z.string().min(1).max(1000),
   reasonForChange: z.string().min(1).max(1000),
-  impact: z.string().min(1).max(1000),
+  impact: z.string().min(1).max(1000) }
 })),
-    results: z.object({,)
+    results: z.object({ );
   outputExamples: z.array(z.string().max(2000)),
   performanceMetrics: z.record(z.number()),
-  userFeedback: z.array(z.string().max(1000)),
+  userFeedback: z.array(z.string().max(1000)) }
 }),
     lessonsLearned: z.array(z.string().max(1000)),
     recommendations: z.array(z.string().max(1000));
   })),
   roiMetrics: ROIMetricsSchema,
-  performanceMetrics: z.object({,)
+  performanceMetrics: z.object({ );
   templatesUsed: z.number().int().min(0),
   implementationTime: z.number().min(0),
   projectDuration: z.number().min(0),
@@ -565,38 +557,38 @@ export const CaseStudySchema = z.object({)
   efficiency: z.number().min(0),
   errorReduction: z.number().min(0).max(100),
   stakeholderSatisfaction: z.number().min(1).max(10),
-  beforeAfter: z.array(z.object({)
+  beforeAfter: z.array(z.object({),
   metric: z.string().min(1).max(100),
   before: z.union([z.number(), z.string()]),
   after: z.union([z.number(), z.string()]),
-  unit: z.string().max(50).optional(),
+  unit: z.string().max(50).optional() }
 }))
   }),
-  author: z.object({,)
+  author: z.object({ );
   userId: z.string().uuid(),
   name: z.string().min(1).max(100),
   title: z.string().max(100).optional(),
   company: z.string().max(100).optional(),
   profileUrl: z.string().url().optional(),
   avatar: z.string().url().optional(),
-  verified: z.boolean(),
+  verified: z.boolean() }
 }),
-  collaborators: z.array(z.object({)
+  collaborators: z.array(z.object({ ),
   userId: z.string().uuid(),
   name: z.string().min(1).max(100),
   role: z.string().min(1).max(100),
-  contribution: z.string().min(1).max(500),
+  contribution: z.string().min(1).max(500) }
 })),
-  engagement: z.object({,)
+  engagement: z.object({ );
   views: z.number().int().min(0),
   likes: z.number().int().min(0),
   shares: z.number().int().min(0),
   bookmarks: z.number().int().min(0),
   comments: z.number().int().min(0),
   helpfulVotes: z.number().int().min(0),
-  followUps: z.number().int().min(0),
+  followUps: z.number().int().min(0) }
 }),
-  moderation: z.object({,)
+  moderation: z.object({ );
   submittedAt: z.string().datetime(),
   submittedBy: z.string().uuid(),
   reviewedAt: z.string().datetime().optional(),
@@ -604,14 +596,14 @@ export const CaseStudySchema = z.object({)
   approvalNotes: z.string().max(1000).optional(),
   rejectionReason: z.string().max(1000).optional(),
   featuredAt: z.string().datetime().optional(),
-  featuredBy: z.string().uuid().optional(),
+  featuredBy: z.string().uuid().optional() }
 }),
-  seo: z.object({,)
+  seo: z.object({ );
   slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/),
   metaTitle: z.string().min(1).max(60),
   metaDescription: z.string().min(1).max(160),
   keywords: z.array(z.string().min(1).max(50)).max(20),
-  canonicalUrl: z.string().url().optional(),
+  canonicalUrl: z.string().url().optional() }
 }),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -619,19 +611,19 @@ export const CaseStudySchema = z.object({)
   archivedAt: z.string().datetime().optional(),
   version: z.string().min(1).max(20),
   previousVersions: z.array(z.string()),
-  config: z.object({,)
+  config: z.object({ );
   allowComments: z.boolean(),
   allowSharing: z.boolean(),
   showAuthor: z.boolean(),
   showMetrics: z.boolean(),
   requireEmailToView: z.boolean(),
   featured: z.boolean(),
-  priority: z.number().int().min(0).max(100),
-}
+  priority: z.number().int().min(0).max(100) }
+
 });
 
 // Create case study request schema
-export const CreateCaseStudyRequestSchema = z.object({)
+export const CreateCaseStudyRequestSchema = z.object({ )
   title: z.string().min(1).max(200),
   subtitle: z.string().max(300).optional(),
   description: z.string().min(1).max(2000),
@@ -639,7 +631,7 @@ export const CreateCaseStudyRequestSchema = z.object({)
   industry: z.enum(['film-production', 'advertising', 'gaming', 'publishing', 'education', 'healthcare', 'finance', 'technology', 'legal', 'consulting', 'e-commerce', 'non-profit', 'other']),
   tags: z.array(z.string().min(1).max(50)).max(20),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
-  content: CaseStudySchema.shape.content,
+  content: CaseStudySchema.shape.content }
   templatesUsed: z.array(TemplateReferenceSchema.omit({ templateName: true, templateCategory: true })),
   roiMetrics: ROIMetricsSchema.partial().optional(),
   performanceMetrics: CaseStudySchema.shape.performanceMetrics.partial().optional(),
@@ -648,7 +640,7 @@ export const CreateCaseStudyRequestSchema = z.object({)
   });
 
 // Case study filter schema
-export const CaseStudyFilterSchema = z.object({)
+export const CaseStudyFilterSchema = z.object({ )
   type: z.union([),
   z.enum(['template-success', 'user-story', 'roi-analysis', 'before-after', 'industry-showcase', 'community-highlight', 'innovation-case']),
   z.array(z.enum(['template-success', 'user-story', 'roi-analysis', 'before-after', 'industry-showcase', 'community-highlight', 'innovation-case']))
@@ -678,7 +670,7 @@ export const CaseStudyFilterSchema = z.object({)
   authorId: z.string().uuid().optional(),
   verifiedAuthorsOnly: z.boolean().optional(),
   search: z.string().max(200).optional(),
-  featuredOnly: z.boolean().optional(),
+  featuredOnly: z.boolean().optional() }
 }).strict();
 
 // Export types for external use
@@ -687,11 +679,10 @@ export type CaseStudyOutput = z.output<typeof CaseStudySchema>;
 export type CreateCaseStudyInput = z.input<typeof CreateCaseStudyRequestSchema>;
 export type CaseStudyFilterInput = z.input<typeof CaseStudyFilterSchema>;
 
-export default {
-  CaseStudySchema,
-  CreateCaseStudyRequestSchema,
-  CaseStudyFilterSchema,
-  CaseStudyMediaSchema,
-  ROIMetricsSchema,
+export default { CaseStudySchema
+  CreateCaseStudyRequestSchema
+  CaseStudyFilterSchema
+  CaseStudyMediaSchema
+  ROIMetricsSchema }
   TemplateReferenceSchema
 };

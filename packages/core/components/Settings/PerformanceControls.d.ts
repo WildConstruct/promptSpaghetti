@@ -2,6 +2,7 @@ import React from 'react';
 import { PerformanceSettings } from '../../settings/types';
 
 }
+}
 export interface PerformanceControlsProps {
     settings: PerformanceSettings;
     onChange: (settings: PerformanceSettings) => void;
@@ -13,4 +14,5 @@ export interface PerformanceControlsProps {
  */
 export declare const PerformanceControls: React.FC<PerformanceControlsProps>;
 //# sourceMappingURL=PerformanceControls.d.ts.map
+}
 }

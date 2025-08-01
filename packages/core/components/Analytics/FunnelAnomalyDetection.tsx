@@ -15,25 +15,22 @@
  * - Integration with external monitoring systems
  */
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { 
-  ConversionFunnelDefinition,
+import { ConversionFunnelDefinition,
   ConversionStep,
-  UserSegment,
+  UserSegment }
   ConversionCohort
-} from '../../analytics/ConversionDataModel';
-import { 
-  ConversionAnalyticsInfrastructure,
-  ConversionMetricQuery,
+ from '../../analytics/ConversionDataModel';
+import { ConversionAnalyticsInfrastructure,
+  ConversionMetricQuery }
   ConversionMetricResult
-} from '../../analytics/ConversionAnalyticsInfrastructure';
+ from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Anomaly detection interfaces
 
-}
-export interface FunnelAnomalyDetectionProps {
-  funnelDefinition: ConversionFunnelDefinition;
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-}
+
+export interface FunnelAnomalyDetectionProps { funnelDefinition: ConversionFunnelDefinition;
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure }
+},
   timeRange: { start: number; end: number };
   detectionConfig?: AnomalyDetectionConfig;
   alertConfig?: AlertConfiguration;
@@ -43,10 +40,9 @@ export interface FunnelAnomalyDetectionProps {
   onAnomalyDetected?: (anomaly: DetectedAnomaly) => void;
   onAlertTriggered?: (alert: AnomalyAlert) => void;
   onExport?: (data: AnomalyDetectionExportData) => void;
-}
-}
-export interface AnomalyDetectionConfig {
-  algorithms: AnomalyAlgorithm;
+
+
+export interface AnomalyDetectionConfig { algorithms: AnomalyAlgorithm;
   sensitivityLevel: 'low' | 'medium' | 'high' | 'adaptive';
   minimumConfidence: number;
   lookbackPeriods: number;
@@ -54,19 +50,17 @@ export interface AnomalyDetectionConfig {
   trendAnalysis: boolean;
   segmentAnalysis: boolean;
   cohortAnalysis: boolean;
-  customRules: CustomAnomalyRule;
-}
-}
-}
-export interface AlertConfiguration {
-  channels: AlertChannel;
+  customRules: CustomAnomalyRule }
+
+
+
+export interface AlertConfiguration { channels: AlertChannel;
   escalationRules: EscalationRule;
   suppressionRules: SuppressionRule;
   throttling: AlertThrottling;
   severity: AlertSeverityConfig;
-  recipients: AlertRecipient;
-}
-}
+  recipients: AlertRecipient }
+
 export type AnomalyAlgorithm = 
   | 'statistical_zscore'
   | 'statistical_iqr'
@@ -77,9 +71,8 @@ export type AnomalyAlgorithm =
   | 'seasonal_hybrid_esd'
   | 'changepoint_detection';
 
-}
-export interface AnomalyDetectionData {
-  currentAnomalies: DetectedAnomaly;
+
+export interface AnomalyDetectionData { currentAnomalies: DetectedAnomaly;
   historicalAnomalies: DetectedAnomaly;
   anomalyTrends: AnomalyTrend;
   predictedAnomalies: PredictedAnomaly;
@@ -87,12 +80,11 @@ export interface AnomalyDetectionData {
   impactAssessment: AnomalyImpactAssessment;
   alertHistory: AnomalyAlert;
   systemHealth: SystemHealthMetrics;
-  detectionPerformance: DetectionPerformanceMetrics;
-}
-}
-}
-export interface DetectedAnomaly {
-  id: string;
+  detectionPerformance: DetectionPerformanceMetrics }
+
+
+
+export interface DetectedAnomaly { id: string;
   timestamp: number;
   type: AnomalyType;
   severity: AnomalySeverity;
@@ -115,9 +107,8 @@ export interface DetectedAnomaly {
   acknowledgedBy?: string;
   acknowledgedAt?: number;
   resolvedAt?: number;
-  falsePositive?: boolean;
-}
-}
+  falsePositive?: boolean }
+
 export type AnomalyType = 
   | 'performance_drop'
   | 'performance_spike'
@@ -132,59 +123,55 @@ export type AnomalyType =
 export type AnomalySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type AnomalyStatus = 'new' | 'acknowledged' | 'investigating' | 'resolved' | 'false_positive';
 
-}
-export interface AnomalyContext {
-  timeOfDay: number;
+
+export interface AnomalyContext { timeOfDay: number;
   dayOfWeek: number;
   seasonality: string;
   environmentalFactors: EnvironmentalFactor;
   concurrentEvents: ConcurrentEvent;
   marketConditions: MarketCondition;
-  systemMetrics: SystemMetric;
-}
-}
-}
-export interface EnvironmentalFactor {
-  factor: string;
+  systemMetrics: SystemMetric }
+
+
+
+export interface EnvironmentalFactor { factor: string;
   value: string | number;
-  impact: 'positive' | 'negative' | 'neutral';
+  impact: 'positive' | 'negative' | 'neutral' }
   confidence: number;
-}
-}
-}
-export interface ConcurrentEvent {
-  eventType: string;
+
+
+
+
+export interface ConcurrentEvent { eventType: string;
   eventName: string;
   timestamp: number;
   impact: string;
-  correlation: number;
-}
-}
-}
-export interface MarketCondition {
-  indicator: string;
+  correlation: number }
+
+
+
+export interface MarketCondition { indicator: string;
   value: number;
-  trend: 'increasing' | 'decreasing' | 'stable';
+  trend: 'increasing' | 'decreasing' | 'stable' }
   volatility: number;
-}
-}
-}
-export interface SystemMetric {
-  metric: string;
+
+
+
+
+export interface SystemMetric { metric: string;
   value: number;
   threshold: number;
-  status: 'normal' | 'warning' | 'critical'
-}
-  }
-}
-export interface PotentialRootCause {
-  category: RootCauseCategory;
+  status: 'normal' | 'warning' | 'critical' }
+
+
+
+
+export interface PotentialRootCause { category: RootCauseCategory;
   description: string;
   probability: number;
   evidence: Evidence;
-  investigationSteps: string;
-}
-}
+  investigationSteps: string }
+
 export type RootCauseCategory = 
   | 'technical'
   | 'user_behavior'
@@ -194,175 +181,161 @@ export type RootCauseCategory =
   | 'competitive'
   | 'system_performance';
 
-}
-export interface Evidence {
-  type: string;
+
+export interface Evidence { type: string;
   description: string;
-  strength: 'weak' | 'moderate' | 'strong';
+  strength: 'weak' | 'moderate' | 'strong' }
   timestamp: number;
   source: string;
-}
-}
-}
-export interface AnomalyImpact {
-  revenueImpact: number;
+
+
+
+
+export interface AnomalyImpact { revenueImpact: number;
   userImpact: number;
   conversionImpact: number;
   scopeOfImpact: 'localized' | 'widespread' | 'system_wide';
   durationEstimate: number;
   recoveryEstimate: number;
-  businessCritical: boolean;
-}
-}
-}
-export interface AnomalyRecommendation {
-  action: string;
+  businessCritical: boolean }
+
+
+
+export interface AnomalyRecommendation { action: string;
   priority: 'immediate' | 'high' | 'medium' | 'low';
-  effort: 'low' | 'medium' | 'high';
+  effort: 'low' | 'medium' | 'high' }
   expectedImpact: 'low' | 'medium' | 'high';
   timeline: string;
   owner: string;
   dependencies: string;
-}
-}
-}
-export interface AnomalyTrend {
-  period: string;
+
+
+
+
+export interface AnomalyTrend { period: string;
   anomalyCount: number;
   severityDistribution: Record<AnomalySeverity, number>;
   typeDistribution: Record<AnomalyType, number>;
   falsePositiveRate: number;
   averageDetectionTime: number;
-  averageResolutionTime: number;
-}
-}
-}
-export interface PredictedAnomaly {
-  predictedTimestamp: number;
+  averageResolutionTime: number }
+
+
+
+export interface PredictedAnomaly { predictedTimestamp: number;
   type: AnomalyType;
   probability: number;
   expectedSeverity: AnomalySeverity;
   affectedMetric: string;
   preventiveActions: PreventiveAction;
-  monitoringPlan: MonitoringPlan;
-}
-}
-}
-export interface PreventiveAction {
-  action: string;
+  monitoringPlan: MonitoringPlan }
+
+
+
+export interface PreventiveAction { action: string;
   effectiveness: number;
   cost: number;
   timeline: string;
-  dependencies: string;
-}
-}
-}
-export interface MonitoringPlan {
-  metrics: string;
+  dependencies: string }
+
+
+
+export interface MonitoringPlan { metrics: string;
   frequency: number;
   alertThresholds: Record<string, number>;
-  escalationPlan: string;
-}
-}
-}
-export interface RootCauseAnalysis {
-  anomalyId: string;
+  escalationPlan: string }
+
+
+
+export interface RootCauseAnalysis { anomalyId: string;
   analysisTimestamp: number;
   primaryCause: PotentialRootCause;
   contributingFactors: PotentialRootCause;
   correlatedAnomalies: string;
   timeline: CausalTimeline;
   confidence: number;
-  validationStatus: 'pending' | 'confirmed' | 'rejected'
-}
-  }
-}
-export interface CausalTimeline {
-  timestamp: number;
+  validationStatus: 'pending' | 'confirmed' | 'rejected' }
+
+
+
+
+export interface CausalTimeline { timestamp: number;
   event: string;
   impact: string;
-  correlation: number;
-}
-}
-}
-export interface AnomalyImpactAssessment {
-  anomalyId: string;
+  correlation: number }
+
+
+
+export interface AnomalyImpactAssessment { anomalyId: string;
   assessmentTimestamp: number;
   directImpact: DirectImpact;
   indirectImpact: IndirectImpact;
   totalImpact: TotalImpact;
   affectedUserSegments: AffectedSegment;
   businessImplications: BusinessImplication;
-  recoveryProjection: RecoveryProjection;
-}
-}
-}
-export interface DirectImpact {
-  revenueloss: number;
+  recoveryProjection: RecoveryProjection }
+
+
+
+export interface DirectImpact { revenueloss: number;
   userLoss: number;
   conversionLoss: number;
-  engagementLoss: number;
-}
-}
-}
-export interface IndirectImpact {
-  brandReputation: number;
+  engagementLoss: number }
+
+
+
+export interface IndirectImpact { brandReputation: number;
   customerSatisfaction: number;
   futureImpact: number;
-  competitiveDisadvantage: number;
-}
-}
-}
-export interface TotalImpact {
-  monetaryValue: number;
+  competitiveDisadvantage: number }
+
+
+
+export interface TotalImpact { monetaryValue: number;
   userValue: number;
   strategicValue: number;
-  severity: AnomalySeverity;
-}
-}
-}
-export interface AffectedSegment {
-  segmentId: string;
+  severity: AnomalySeverity }
+
+
+
+export interface AffectedSegment { segmentId: string;
   segmentName: string;
   impactPercentage: number;
-  recoveryTime: number;
-}
-}
-}
-export interface BusinessImplication {
-  area: string;
+  recoveryTime: number }
+
+
+
+export interface BusinessImplication { area: string;
   impact: string;
-  severity: 'low' | 'medium' | 'high';
+  severity: 'low' | 'medium' | 'high' }
   mitigation: string;
-}
-}
-}
-export interface RecoveryProjection {
-  estimatedRecoveryTime: number;
+
+
+
+
+export interface RecoveryProjection { estimatedRecoveryTime: number;
   recoveryStages: RecoveryStage;
   successProbability: number;
-  resourceRequirements: ResourceRequirement;
-}
-}
-}
-export interface RecoveryStage {
-  stage: string;
+  resourceRequirements: ResourceRequirement }
+
+
+
+export interface RecoveryStage { stage: string;
   duration: number;
   expectedImprovement: number;
-  dependencies: string;
-}
-}
-}
-export interface ResourceRequirement {
-  resource: string;
+  dependencies: string }
+
+
+
+export interface ResourceRequirement { resource: string;
   amount: number;
   duration: number;
-  criticality: 'essential' | 'important' | 'nice_to_have'
-}
-  }
-}
-export interface AnomalyAlert {
-  id: string;
+  criticality: 'essential' | 'important' | 'nice_to_have' }
+
+
+
+
+export interface AnomalyAlert { id: string;
   anomalyId: string;
   timestamp: number;
   severity: AnomalySeverity;
@@ -373,123 +346,112 @@ export interface AnomalyAlert {
   escalationLevel: number;
   acknowledgedBy?: string;
   acknowledgedAt?: number;
-  resolvedAt?: number;
-}
-}
+  resolvedAt?: number }
+
 export type AlertChannel = 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'dashboard';
 export type AlertStatus = 'sent' | 'delivered' | 'acknowledged' | 'escalated' | 'resolved';
 
-}
-export interface EscalationRule {
-  severity: AnomalySeverity;
+
+export interface EscalationRule { severity: AnomalySeverity;
   escalationDelay: number;
   escalationChain: string;
-  maxEscalations: number;
-}
-}
-}
-export interface SuppressionRule {
-  anomalyType: AnomalyType;
+  maxEscalations: number }
+
+
+
+export interface SuppressionRule { anomalyType: AnomalyType;
   suppressionDuration: number;
-  conditions: SuppressionCondition;
-}
-}
-}
-export interface SuppressionCondition {
-  metric: string;
+  conditions: SuppressionCondition }
+
+
+
+export interface SuppressionCondition { metric: string;
   operator: 'gt' | 'lt' | 'eq' | 'between';
-  value: number | [number, number];
-}
-}
-}
-export interface AlertThrottling {
-  enabled: boolean;
+  value: number | [number, number] }
+
+
+
+export interface AlertThrottling { enabled: boolean;
   maxAlertsPerHour: number;
   maxAlertsPerDay: number;
-  cooldownPeriod: number;
-}
-}
-}
-export interface AlertSeverityConfig {
-  critical: AlertSeveritySettings;
+  cooldownPeriod: number }
+
+
+
+export interface AlertSeverityConfig { critical: AlertSeveritySettings;
   high: AlertSeveritySettings;
   medium: AlertSeveritySettings;
   low: AlertSeveritySettings;
-  info: AlertSeveritySettings;
-}
-}
-}
-export interface AlertSeveritySettings {
-  enabled: boolean;
+  info: AlertSeveritySettings }
+
+
+
+export interface AlertSeveritySettings { enabled: boolean;
   channels: AlertChannel;
   immediateAlert: boolean;
-  escalationEnabled: boolean;
-}
-}
-}
-export interface AlertRecipient {
-  id: string;
+  escalationEnabled: boolean }
+
+
+
+export interface AlertRecipient { id: string;
   name: string;
   email?: string;
   phone?: string;
   slackId?: string;
   roles: string;
   severity: AnomalySeverity;
-  availability: AvailabilitySchedule;
-}
-}
-}
-export interface AvailabilitySchedule {
-  timezone: string;
+  availability: AvailabilitySchedule }
+
+
+
+export interface AvailabilitySchedule { timezone: string;
   schedule: DaySchedule;
   holidays: string;
-  onCall: boolean;
-}
-}
-}
-export interface DaySchedule {
-  day: number; // 0-6, Sunday-Saturday,
-  startTime: string; // HH:MM,
-  endTime: string; // HH:MM,
+  onCall: boolean }
+
+
+
+export interface DaySchedule { day: number; // 0-6, Sunday-Saturday;
+  startTime: string; // HH:MM;
+  endTime: string; // HH:MM }
   available: boolean;
-}
-}
-}
-export interface CustomAnomalyRule {
-  id: string;
+
+
+
+
+export interface CustomAnomalyRule { id: string;
   name: string;
   description: string;
-  condition: string; // JavaScript expression,
+  condition: string; // JavaScript expression }
   severity: AnomalySeverity;
   enabled: boolean;
   metrics: string;
   thresholds: Record<string, number>;
-}
-}
-}
-export interface SystemHealthMetrics {
-  detectionLatency: number;
+
+
+
+
+export interface SystemHealthMetrics { detectionLatency: number;
   alertLatency: number;
   processingThroughput: number;
   falsePositiveRate: number;
   falseNegativeRate: number;
   systemAvailability: number;
-  dataQuality: number;
-}
-}
-}
-export interface DetectionPerformanceMetrics {
-  algorithm: AnomalyAlgorithm;
+  dataQuality: number }
+
+
+
+export interface DetectionPerformanceMetrics { algorithm: AnomalyAlgorithm;
   accuracy: number;
   precision: number;
   recall: number;
   f1Score: number;
   avgDetectionTime: number;
   resourceUsage: number;
-  confidence: number;
-}
-}
-}
+  confidence: number }
+
+
+
 export interface AnomalyDetectionExportData {
   anomalies: DetectedAnomaly;
   alerts: AnomalyAlert;
@@ -499,8 +461,8 @@ export interface AnomalyDetectionExportData {
   exportTimestamp: number;
   configuration: AnomalyDetectionConfig;
   // Default configuration
-}
-}
+
+
 export const [error, setError] = useState<string | null>(null);
   const [selectedAnomaly, setSelectedAnomaly] = useState<DetectedAnomaly | null>(null);
   const [activeTab, setActiveTab] = useState<'current' | 'historical' | 'predicted' | 'alerts'>('current');
@@ -510,58 +472,49 @@ export const [error, setError] = useState<string | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   // Load anomaly detection data
-  const loadAnomalyData = useCallback(async () => {
-  try {
+  const loadAnomalyData = useCallback(async () => { try {
   setLoading(true);
   setError(null);
-  const query: ConversionMetricQuery = {,
-  funnelId: funnelDefinition.id,
-  timeRange,
-  segments: segments.map(s => s.id),
-  cohorts: cohorts.map(c => c.id),
-  metrics: ['anomaly_detection', 'alert_history', 'impact_assessment'],
-  aggregation: 'raw',
-  filters: [],
+  const query: ConversionMetricQuery = {
+  funnelId: funnelDefinition.id
+  timeRange
+  segments: segments.map(s => s.id)
+  cohorts: cohorts.map(c => c.id)
+  metrics: ['anomaly_detection', 'alert_history', 'impact_assessment']
+  aggregation: 'raw'
+  filters: [] }
 };
       const result = await analyticsInfrastructure.executeQuery(query);
-      if (result.success && result.data) {
-        const anomalyData = await processAnomalyDetectionData(;);
-          result.data,
-          detectionConfig,
+      if (result.success && result.data) { const anomalyData = await processAnomalyDetectionData(;);
+          result.data
+          detectionConfig }
           alertConfig
         );
         setDetectionData(anomalyData);
         // Trigger callbacks for new anomalies
-        anomalyData.currentAnomalies.forEach(anomaly => {)
+        anomalyData.currentAnomalies.forEach(anomaly => { )
   if (anomaly.status === 'new' && onAnomalyDetected) {
-            onAnomalyDetected(anomaly);
-        });
-      } else {
-        setError(result.error || 'Failed to load anomaly detection data');
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Unknown error occurred');
-} finally {
-      setLoading(false);
-  }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts, detectionConfig, alertConfig, onAnomalyDetected]);
+            onAnomalyDetected(anomaly) });
+ else { setError(result.error || 'Failed to load anomaly detection data') } catch (err) { setError(err instanceof Error ? err.message : 'Unknown error occurred') } finally { setLoading(false) }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts, detectionConfig, alertConfig, onAnomalyDetected]);
   // Process anomaly detection data
   const processAnomalyDetectionData = async (;);
-    rawData: unknown,
-    config: AnomalyDetectionConfig,
-    alertCfg: AlertConfiguration): Promise<AnomalyDetectionData> => {,
+    rawData: unknown
+    config: AnomalyDetectionConfig
+    alertCfg: AlertConfiguration): Promise<AnomalyDetectionData> => { 
   // Simulate comprehensive anomaly detection processing
   const currentAnomalies: DetectedAnomaly = generateMockAnomalies('current');
   const historicalAnomalies: DetectedAnomaly = generateMockAnomalies('historical');
   const predictedAnomalies: PredictedAnomaly = generateMockPredictions();
   return {
-  currentAnomalies,
-  historicalAnomalies,
-  anomalyTrends: generateAnomalyTrends(),
-  predictedAnomalies,
-  rootCauseAnalysis: generateRootCauseAnalyses(currentAnomalies),
-  impactAssessment: generateImpactAssessments(currentAnomalies),
-  alertHistory: generateAlertHistory(),
-  systemHealth: generateSystemHealth(),
-  detectionPerformance: generateDetectionPerformance(config.algorithms),
+  currentAnomalies
+  historicalAnomalies
+  anomalyTrends: generateAnomalyTrends()
+  predictedAnomalies
+  rootCauseAnalysis: generateRootCauseAnalyses(currentAnomalies)
+  impactAssessment: generateImpactAssessments(currentAnomalies)
+  alertHistory: generateAlertHistory()
+  systemHealth: generateSystemHealth()
+  detectionPerformance: generateDetectionPerformance(config.algorithms) }
 };
   };
   // Generate mock anomalies for demo
@@ -570,213 +523,206 @@ export const [error, setError] = useState<string | null>(null);
     return [
       {
         id: `anom-${type}-001`}
-},
-  timestamp: baseTime - Math.random() * 60 * 60 * 1000,
-        type: 'conversion_anomaly',
-        severity: 'high',
-        confidence: 0.85,
-        affectedStep: funnelDefinition.steps[1]?.id,
-        metric: 'conversion_rate',
-        expectedValue: 0.15,
-        actualValue: 0.08,
-        deviation: -0.07,
-        deviationPercentage: -46.7,
-        algorithm: 'statistical_zscore',
-        description: 'Significant drop in conversion rate detected at checkout step',
-        context: {
-  timeOfDay: 14,
-          dayOfWeek: 2,
-          seasonality: 'normal',
-          environmentalFactors: [,
+
+  timestamp: baseTime - Math.random() * 60 * 60 * 1000
+        type: 'conversion_anomaly'
+        severity: 'high'
+        confidence: 0.85
+        affectedStep: funnelDefinition.steps[1]?.id
+        metric: 'conversion_rate'
+        expectedValue: 0.15
+        actualValue: 0.08
+        deviation: -0.07
+        deviationPercentage: -46.7
+        algorithm: 'statistical_zscore'
+        description: 'Significant drop in conversion rate detected at checkout step'
+        context: { 
+  timeOfDay: 14
+          dayOfWeek: 2
+          seasonality: 'normal' }
+          environmentalFactors: [
             { factor: 'server_load', value: 0.85, impact: 'negative', confidence: 0.9 }
-          ],
-          concurrentEvents: [,
+          ]
+          concurrentEvents: [
             { eventType: 'deployment', eventName: 'Payment System Update', timestamp: baseTime - 30 * 60 * 1000, impact: 'negative', correlation: 0.8 }
-          ],
-          marketConditions: [],
-          systemMetrics: [,
+          ]
+          marketConditions: []
+          systemMetrics: [
             { metric: 'response_time', value: 450, threshold: 300, status: 'warning' }
           ]
-  },
-  rootCauses: [,
-          {
-            category: 'technical',
-            description: 'Payment processing latency increased after deployment',
-            probability: 0.8,
-            evidence: [,
+
+  rootCauses: [
+          { category: 'technical'
+            description: 'Payment processing latency increased after deployment'
+            probability: 0.8 }
+            evidence: [
               { type: 'metric', description: 'Response time spike at deployment time', strength: 'strong', timestamp: baseTime, source: 'monitoring' }
-            ],
+            ]
             investigationSteps: ['Check payment service logs', 'Review deployment changes', 'Analyze error rates']
-        ],
-        impact: {
-  revenueImpact: -2400,
-  userImpact: 150,
-  conversionImpact: -0.07,
-  scopeOfImpact: 'localized',
-  durationEstimate: 120,
-  recoveryEstimate: 30,
-  businessCritical: true,
-},
-  recommendations: [,
-          { action: 'Rollback payment system changes', priority: 'immediate', effort: 'low', expectedImpact: 'high', timeline: '15 minutes', owner: 'DevOps', dependencies: [] },
+        ]
+        impact: { 
+  revenueImpact: -2400
+  userImpact: 150
+  conversionImpact: -0.07
+  scopeOfImpact: 'localized'
+  durationEstimate: 120
+  recoveryEstimate: 30
+  businessCritical: true }
+
+  recommendations: [
+          { action: 'Rollback payment system changes', priority: 'immediate', effort: 'low', expectedImpact: 'high', timeline: '15 minutes', owner: 'DevOps', dependencies: [] }
           { action: 'Implement payment timeout optimization', priority: 'high', effort: 'medium', expectedImpact: 'medium', timeline: '2 hours', owner: 'Backend Team', dependencies: ['Root cause confirmation'] }
-        ],
-        status: type === 'current' ? 'new' : 'resolved'
-  }
+        ]
+        status: type === 'current' ? 'new' : 'resolved';
+
       {
         id: `anom-${type}-002`}
-},
-  timestamp: baseTime - Math.random() * 2 * 60 * 60 * 1000,
-        type: 'traffic_anomaly',
-        severity: 'medium',
-        confidence: 0.92,
-        metric: 'user_entries',
-        expectedValue: 1200,
-        actualValue: 1850,
-        deviation: 650,
-        deviationPercentage: 54.2,
-        algorithm: 'isolation_forest',
-        description: 'Unexpected traffic spike detected - 54% above normal levels',
-        context: {
-  timeOfDay: 10,
-          dayOfWeek: 3,
-          seasonality: 'normal',
-          environmentalFactors: [],
-          concurrentEvents: [,
+
+  timestamp: baseTime - Math.random() * 2 * 60 * 60 * 1000
+        type: 'traffic_anomaly'
+        severity: 'medium'
+        confidence: 0.92
+        metric: 'user_entries'
+        expectedValue: 1200
+        actualValue: 1850
+        deviation: 650
+        deviationPercentage: 54.2
+        algorithm: 'isolation_forest'
+        description: 'Unexpected traffic spike detected - 54% above normal levels'
+        context: { 
+  timeOfDay: 10
+          dayOfWeek: 3
+          seasonality: 'normal'
+          environmentalFactors: [] }
+          concurrentEvents: [
             { eventType: 'marketing', eventName: 'Social Media Campaign Launch', timestamp: baseTime - 45 * 60 * 1000, impact: 'positive', correlation: 0.95 }
-          ],
-          marketConditions: [],
-          systemMetrics: [];
-  },
-  rootCauses: [,
-          {
-            category: 'external_factors',
-            description: 'Viral social media campaign driving unexpected traffic',
-            probability: 0.95,
-            evidence: [,
+          ]
+          marketConditions: []
+          systemMetrics: []
+
+  rootCauses: [
+          { category: 'external_factors'
+            description: 'Viral social media campaign driving unexpected traffic'
+            probability: 0.95 }
+            evidence: [
               { type: 'correlation', description: 'Traffic spike correlates with campaign launch', strength: 'strong', timestamp: baseTime, source: 'analytics' }
-            ],
+            ]
             investigationSteps: ['Verify campaign metrics', 'Check social media engagement', 'Monitor system capacity']
-        ],
-        impact: {
-  revenueImpact: 3200,
-  userImpact: 650,
-  conversionImpact: 0.02,
-  scopeOfImpact: 'system_wide',
-  durationEstimate: 240,
-  recoveryEstimate: 0,
-  businessCritical: false,
-},
-  recommendations: [,
-          { action: 'Scale infrastructure to handle increased load', priority: 'high', effort: 'medium', expectedImpact: 'high', timeline: '30 minutes', owner: 'DevOps', dependencies: [] },
+        ]
+        impact: { 
+  revenueImpact: 3200
+  userImpact: 650
+  conversionImpact: 0.02
+  scopeOfImpact: 'system_wide'
+  durationEstimate: 240
+  recoveryEstimate: 0
+  businessCritical: false }
+
+  recommendations: [
+          { action: 'Scale infrastructure to handle increased load', priority: 'high', effort: 'medium', expectedImpact: 'high', timeline: '30 minutes', owner: 'DevOps', dependencies: [] }
           { action: 'Prepare follow-up marketing campaigns', priority: 'medium', effort: 'high', expectedImpact: 'medium', timeline: '2 days', owner: 'Marketing', dependencies: ['Traffic analysis'] }
-        ],
+        ]
         status: type === 'current' ? 'acknowledged' : 'resolved'];
   };
   // Generate mock predictions
-  const generateMockPredictions = (): PredictedAnomaly => {
-    return [
+  const generateMockPredictions = (): PredictedAnomaly => { return [
       {
-        predictedTimestamp: Date.now() + 2 * 60 * 60 * 1000,
-        type: 'performance_drop',
-        probability: 0.73,
-        expectedSeverity: 'medium',
-        affectedMetric: 'conversion_rate',
-        preventiveActions: [,
+        predictedTimestamp: Date.now() + 2 * 60 * 60 * 1000
+        type: 'performance_drop'
+        probability: 0.73
+        expectedSeverity: 'medium'
+        affectedMetric: 'conversion_rate' }
+        preventiveActions: [
           { action: 'Pre-scale infrastructure', effectiveness: 0.8, cost: 200, timeline: '1 hour', dependencies: [] }
-        ],
-        monitoringPlan: {
-  metrics: ['response_time', 'error_rate', 'conversion_rate'],
-          frequency: 60,
-          alertThresholds: { 'response_time': 400, 'error_rate': 0.05 },
+        ]
+        monitoringPlan: { 
+  metrics: ['response_time', 'error_rate', 'conversion_rate']
+          frequency: 60 }
+          alertThresholds: { 'response_time': 400, 'error_rate': 0.05 }
           escalationPlan: ['ops', 'management']
     ];
   };
   // Generate anomaly trends
-  const generateAnomalyTrends = (): AnomalyTrend => {
-    return [
+  const generateAnomalyTrends = (): AnomalyTrend => { return [
       {
-        period: 'last_24h',
-        anomalyCount: 12,
-        severityDistribution: { critical: 1, high: 3, medium: 5, low: 3, info: 0 },
-        typeDistribution: {
-  performance_drop: 4,
-  conversion_anomaly: 3,
-  traffic_anomaly: 2,
-  revenue_anomaly: 1,
-  temporal_anomaly: 1,
-  technical_anomaly: 1,
-  performance_spike: 0,
-  segment_anomaly: 0,
-  cohort_anomaly: 0,
-},
-  falsePositiveRate: 0.15,
-        averageDetectionTime: 120,
+        period: 'last_24h'
+        anomalyCount: 12 }
+        severityDistribution: { critical: 1, high: 3, medium: 5, low: 3, info: 0 }
+        typeDistribution: { 
+  performance_drop: 4
+  conversion_anomaly: 3
+  traffic_anomaly: 2
+  revenue_anomaly: 1
+  temporal_anomaly: 1
+  technical_anomaly: 1
+  performance_spike: 0
+  segment_anomaly: 0
+  cohort_anomaly: 0 }
+
+  falsePositiveRate: 0.15
+        averageDetectionTime: 120
         averageResolutionTime: 1800];
   };
   // Generate root cause analyses
-  const generateRootCauseAnalyses = (anomalies: DetectedAnomaly): RootCauseAnalysis => {
-    return anomalies.map(anomaly => ({)
-  anomalyId: anomaly.id,
-      analysisTimestamp: Date.now(),
-      primaryCause: anomaly.rootCauses[0],
-      contributingFactors: anomaly.rootCauses.slice(1),
-      correlatedAnomalies: [],
-      timeline: [,
-        { timestamp: anomaly.timestamp - 30 * 60 * 1000, event: 'System deployment initiated', impact: 'neutral', correlation: 0.5 },
+  const generateRootCauseAnalyses = (anomalies: DetectedAnomaly): RootCauseAnalysis => { return anomalies.map(anomaly => ({)
+  anomalyId: anomaly.id
+      analysisTimestamp: Date.now()
+      primaryCause: anomaly.rootCauses[0]
+      contributingFactors: anomaly.rootCauses.slice(1)
+      correlatedAnomalies: [] }
+      timeline: [
+        { timestamp: anomaly.timestamp - 30 * 60 * 1000, event: 'System deployment initiated', impact: 'neutral', correlation: 0.5 }
         { timestamp: anomaly.timestamp, event: 'Anomaly detected', impact: 'negative', correlation: 1.0 }
-      ],
-      confidence: anomaly.confidence,
-      validationStatus: 'pending'
+      ]
+      confidence: anomaly.confidence
+      validationStatus: 'pending';
   }));
   };
   // Generate impact assessments
-  const generateImpactAssessments = (anomalies: DetectedAnomaly): AnomalyImpactAssessment => {
-  return anomalies.map(anomaly => ({)
-  anomalyId: anomaly.id,
-  assessmentTimestamp: Date.now(),
+  const generateImpactAssessments = (anomalies: DetectedAnomaly): AnomalyImpactAssessment => { return anomalies.map(anomaly => ({)
+  anomalyId: anomaly.id
+  assessmentTimestamp: Date.now()
   directImpact: {
   revenueloss: anomaly.impact.revenueImpact < 0 ? Math.abs(anomaly.impact.revenueImpact) : 0,
   userLoss: anomaly.impact.userImpact,
   conversionLoss: anomaly.impact.conversionImpact < 0 ? Math.abs(anomaly.impact.conversionImpact) : 0,
-  engagementLoss: 0.05,
+  engagementLoss: 0.05 }
 },
-  indirectImpact: {
+  indirectImpact: { ,
   brandReputation: anomaly.severity === 'critical' ? 0.3 : 0.1,
   customerSatisfaction: 0.2,
   futureImpact: 0.15,
-  competitiveDisadvantage: 0.1,
+  competitiveDisadvantage: 0.1 }
 },
-  totalImpact: {
+  totalImpact: { ,
   monetaryValue: Math.abs(anomaly.impact.revenueImpact),
   userValue: anomaly.impact.userImpact,
   strategicValue: 0.25,
-  severity: anomaly.severity,
+  severity: anomaly.severity }
 },
-  affectedUserSegments: segments.map(segment => ({)
+  affectedUserSegments: segments.map(segment => ({ ),
   segmentId: segment.id,
   segmentName: segment.name,
   impactPercentage: Math.random() * 30,
-  recoveryTime: anomaly.impact.recoveryEstimate,
+  recoveryTime: anomaly.impact.recoveryEstimate }
 })),
-      businessImplications: [,
+      businessImplications: [
         { area: 'Revenue', impact: 'Short-term revenue loss', severity: 'high', mitigation: 'Implement quick fixes' }
       ],
-      recoveryProjection: {
-  estimatedRecoveryTime: anomaly.impact.recoveryEstimate,
-        recoveryStages: [,
+      recoveryProjection: { ,
+  estimatedRecoveryTime: anomaly.impact.recoveryEstimate }
+        recoveryStages: [
           { stage: 'Immediate mitigation', duration: 15, expectedImprovement: 0.6, dependencies: [] },
           { stage: 'Full resolution', duration: anomaly.impact.recoveryEstimate, expectedImprovement: 1.0, dependencies: ['Root cause fix'] }
         ],
         successProbability: 0.85,
-        resourceRequirements: [,
+        resourceRequirements: [
           { resource: 'Engineering time', amount: 4, duration: 2, criticality: 'essential' }
         ]
     }));
   };
   // Generate alert history
-  const generateAlertHistory = (): AnomalyAlert => {
-  return [
+  const generateAlertHistory = (): AnomalyAlert => { return [
   {
   id: 'alert-001',
   anomalyId: 'anom-current-001',
@@ -787,24 +733,22 @@ export const [error, setError] = useState<string | null>(null);
   status: 'acknowledged',
   message: 'High severity conversion anomaly detected',
   escalationLevel: 0,
-  acknowledgedBy: 'ops-engineer',
+  acknowledgedBy: 'ops-engineer' }
   acknowledgedAt: Date.now() - 5 * 60 * 1000];
 };
   // Generate system health metrics
-  const generateSystemHealth = (): SystemHealthMetrics => {
-  return {
+  const generateSystemHealth = (): SystemHealthMetrics => { return {
   detectionLatency: 45,
   alertLatency: 15,
   processingThroughput: 1200,
   falsePositiveRate: 0.12,
   falseNegativeRate: 0.08,
   systemAvailability: 0.999,
-  dataQuality: 0.95,
+  dataQuality: 0.95 }
 };
   };
   // Generate detection performance metrics
-  const generateDetectionPerformance = (algorithms: AnomalyAlgorithm): DetectionPerformanceMetrics => {
-  return algorithms.map(algorithm => ({)
+  const generateDetectionPerformance = (algorithms: AnomalyAlgorithm): DetectionPerformanceMetrics => { return algorithms.map(algorithm => ({)
   algorithm,
   accuracy: 0.85 + Math.random() * 0.1,
   precision: 0.80 + Math.random() * 0.15,
@@ -812,7 +756,7 @@ export const [error, setError] = useState<string | null>(null);
   f1Score: 0.78 + Math.random() * 0.12,
   avgDetectionTime: 30 + Math.random() * 60,
   resourceUsage: 0.3 + Math.random() * 0.4,
-  confidence: 0.7 + Math.random() * 0.25,
+  confidence: 0.7 + Math.random() * 0.25 }
 }));
   };
   // Setup real-time monitoring
@@ -821,44 +765,34 @@ export const [error, setError] = useState<string | null>(null);
       // WebSocket connection for real-time updates
       const wsUrl = `ws://localhost:8000/api/anomaly-detection/stream/${funnelDefinition.id}`;}
       wsRef.current = new WebSocket(wsUrl);
-      wsRef.current.onmessage = (event) => {
-  const anomaly = JSON.parse(event.data) as DetectedAnomaly;
+      wsRef.current.onmessage = (event) => { const anomaly = JSON.parse(event.data) as DetectedAnomaly;
   setDetectionData(prev => {)
   if (!prev) return prev;
   return {
   ...prev,
-  currentAnomalies: [anomaly, ...prev.currentAnomalies],
+  currentAnomalies: [anomaly, ...prev.currentAnomalies] }
 };
         });
-        if (onAnomalyDetected) {
-          onAnomalyDetected(anomaly);
-      };
+        if (onAnomalyDetected) { onAnomalyDetected(anomaly) };
       // Polling fallback
       intervalRef.current = setInterval(loadAnomalyData, 30000);
-    return () => {
-      if (wsRef.current) {
+    return () => { if (wsRef.current) {
         wsRef.current.close();
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-    };
+        clearInterval(intervalRef.current) };
   }, [realTimeEnabled, detectionData, loadAnomalyData, onAnomalyDetected, funnelDefinition.id]);
   // Initial data load
-  useEffect(() => {
-    loadAnomalyData();
-  }, [loadAnomalyData]);
+  useEffect(() => { loadAnomalyData() }, [loadAnomalyData]);
   // Filter anomalies based on current filters
-  const filteredAnomalies = useMemo(() => {
-  if (!detectionData) return [];
+  const filteredAnomalies = useMemo(() => { if (!detectionData) return [];
   const anomalies = activeTab === 'current' ? detectionData.currentAnomalies : detectionData.historicalAnomalies;
   return anomalies.filter(anomaly => {)
   if (filterSeverity !== 'all' && anomaly.severity !== filterSeverity) return false;
   if (filterType !== 'all' && anomaly.type !== filterType) return false;
-  return true;
-});
+  return true });
   }, [detectionData, activeTab, filterSeverity, filterType]);
   // Handle export
-  const handleExport = useCallback(() => {
-  if (!detectionData || !onExport) return;
+  const handleExport = useCallback(() => { if (!detectionData || !onExport) return;
   const exportData: AnomalyDetectionExportData = {,
   anomalies: [...detectionData.currentAnomalies, ...detectionData.historicalAnomalies],
   alerts: detectionData.alertHistory,
@@ -866,17 +800,16 @@ export const [error, setError] = useState<string | null>(null);
   rootCauseAnalyses: detectionData.rootCauseAnalysis,
   performanceMetrics: detectionData.detectionPerformance,
   exportTimestamp: Date.now(),
-  configuration: detectionConfig,
+  configuration: detectionConfig }
 };
     onExport(exportData);
   }, [detectionData, detectionConfig, onExport]);
   // Handle anomaly acknowledgment
-  const handleAcknowledgeAnomaly = useCallback((anomalyId: string) => {
-    setDetectionData(prev => {)
+  const handleAcknowledgeAnomaly = useCallback((anomalyId: string) => { setDetectionData(prev => {)
   if (!prev) return prev;
       return {
         ...prev,
-        currentAnomalies: prev.currentAnomalies.map(anomaly =>),
+        currentAnomalies: prev.currentAnomalies.map(anomaly =>) }
           anomaly.id === anomalyId
             ? { ...anomaly, status: 'acknowledged', acknowledgedBy: 'current-user', acknowledgedAt: Date.now() }
             : anomaly

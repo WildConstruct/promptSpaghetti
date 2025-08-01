@@ -8,13 +8,13 @@ import { OptimizedGraphStorage } from './OptimizedGraphStorage';
 /**
  * Cached execution result with metadata
  */
-}
-interface CachedExecutionResult {
-  result: any;
+
+
+interface CachedExecutionResult { result: any;
   timestamp: number;
   executionTime: number;
-  dependencies: Set<string>; // Node IDs this result depends on,
-  inputs: any; // Input values used for this execution,
+  dependencies: Set<string>; // Node IDs this result depends on;
+  inputs: any; // Input values used for this execution;
   seed?: string | number;
   hitCount: number;
   /**
@@ -25,7 +25,7 @@ interface CachedExecutionResult {
   runtimeNodes: Map<string, RuntimeNode>;
   lastGraphHash: string;
   lastUpdate: number;
-  executionOrder?: string; // Cached topological order,
+  executionOrder?: string; // Cached topological order;
   /**
   * Cache performance metrics
   */
@@ -45,37 +45,36 @@ interface CachedExecutionResult {
   private graphStateCache = new Map<string, ExecutionState>();
   // Result cache with LRU eviction
   private resultCache = new Map<string, CachedExecutionResult>();
-  private resultCacheOrder: string = []; // LRU order,
+  private resultCacheOrder: string = []; // LRU order;
   // Performance tracking
-  private metrics: CacheMetrics = {,
-  totalExecutions: 0,
-  cacheHits: 0,
-  cacheMisses: 0,
-  averageExecutionTime: 0,
-  cacheSize: 0,
-  memoryUsage: 0,
-}
+  private metrics: CacheMetrics = {;
+  totalExecutions: 0;
+  cacheHits: 0;
+  cacheMisses: 0;
+  averageExecutionTime: 0;
+  cacheSize: 0;
+  memoryUsage: 0 }
+
+
 };
   // Configuration
   private readonly MAX_RESULT_CACHE_SIZE = 1000;
   private readonly MAX_CACHE_AGE = 30 * 60 * 1000; // 30 minutes
   private readonly MEMORY_THRESHOLD = 100 * 1024 * 1024; // 100MB
   private constructor() {}
-  static getInstance(): ExecutionCache {
-  if (!ExecutionCache.instance) {
+  static getInstance(): ExecutionCache { if (!ExecutionCache.instance) {
   ExecutionCache.instance = new ExecutionCache();
   return ExecutionCache.instance;
   /**
   * Get optimized graph storage with persistent node map
   */
-  async getOptimizedGraph(nodes: Node)
+  async getOptimizedGraph(nodes: Node),
   edges: Edge,
-  graphId?: string): Promise<{,
+  graphId?: string): Promise<{ }
   storage: OptimizedGraphStorage;
   isFromCache: boolean;
   nodeMap: Map<string, Node>;
-}> {
-  const startTime = performance.now();
+> { const startTime = performance.now();
   const currentHash = this.calculateGraphHash(nodes, edges);
   const cacheKey = graphId || currentHash;
   // Check if we have a cached state
@@ -85,48 +84,45 @@ interface CachedExecutionResult {
   const storage = new OptimizedGraphStorage(nodes, edges);
   this.metrics.cacheHits++;
   return {
-  storage,
-  isFromCache: true,
-  nodeMap: cachedState.nodeMap,
+  storage
+  isFromCache: true
+  nodeMap: cachedState.nodeMap }
 };
     // Cache miss - create new optimized storage
     const storage = new OptimizedGraphStorage(nodes, edges);
     const nodeMap = new Map<string, Node>();
     nodes.forEach(node => nodeMap.set(node.id, node));
     // Update cache
-    this.graphStateCache.set(cacheKey, {)
-  nodeMap,
-  runtimeNodes: new Map(),
-  lastGraphHash: currentHash,
-  lastUpdate: Date.now(),
+    this.graphStateCache.set(cacheKey, { )
+  nodeMap
+  runtimeNodes: new Map()
+  lastGraphHash: currentHash
+  lastUpdate: Date.now() }
 });
     this.metrics.cacheMisses++;
     this.metrics.totalExecutions++;
     console.log(`Graph cache ${cachedState ? 'miss (updated)' : 'miss (new)'} - ${performance.now() - startTime}ms`);}
-    return {
-  storage,
-  isFromCache: false,
+    return { storage
+  isFromCache: false }
   nodeMap
 };
   /**
    * Cache execution result with dependency tracking
    */
   async cacheExecutionResult(key: string)
-    result: any,
-    dependencies: string,
-    executionTime: number,
-    inputs?: any,
+  result: any
+    dependencies: string
+    executionTime: number
+    inputs?: any
     seed?: string | number
-  ): Promise<void> {
-
-  const cacheEntry: CachedExecutionResult = {,
-  result,
-  timestamp: Date.now(),
-  executionTime,
-  dependencies: new Set(dependencies),
-  inputs,
-  seed,
-  hitCount: 0,
+  ): Promise<void> { const cacheEntry: CachedExecutionResult = {
+  result
+  timestamp: Date.now()
+  executionTime
+  dependencies: new Set(dependencies)
+  inputs
+  seed
+  hitCount: 0 }
 };
     // Add to cache with LRU management
     this.addToResultCache(key, cacheEntry);
@@ -135,15 +131,11 @@ interface CachedExecutionResult {
    * Get cached execution result if valid
    */
   async getCachedResult(key: string)
-    currentInputs?: any,
+    currentInputs?: any
     currentSeed?: string | number
-  ): Promise<{
-  result: any;
+  ): Promise<{ result: any;
   fromCache: boolean;
-  executionTime: number;
-} | null> {
-
-  const cached = this.resultCache.get(key);
+  executionTime: number } | null> { const cached = this.resultCache.get(key);
   if (!cached) {
   return null;
   // Check if cache is too old
@@ -167,9 +159,9 @@ interface CachedExecutionResult {
   return {
   result: cached.result,
   fromCache: true,
-  executionTime: cached.executionTime,
+  executionTime: cached.executionTime }
 };
-    } else {
+ else {
       // Dependencies changed - invalidate
       this.invalidateResult(key);
       return null;
@@ -195,8 +187,7 @@ interface CachedExecutionResult {
   /**
    * Clear all caches
    */
-  clearAll(): void {
-  this.graphStateCache.clear();
+  clearAll(): void { this.graphStateCache.clear();
   this.resultCache.clear();
   this.resultCacheOrder = [];
   this.metrics = {
@@ -205,19 +196,18 @@ interface CachedExecutionResult {
   cacheMisses: 0,
   averageExecutionTime: 0,
   cacheSize: 0,
-  memoryUsage: 0,
+  memoryUsage: 0 }
 };
   /**
    * Memory-aware cache cleanup
    */
-  cleanupIfNeeded(): void {
-  const currentMemory = this.estimateMemoryUsage();
+  cleanupIfNeeded(): void { const currentMemory = this.estimateMemoryUsage();
   if (currentMemory > this.MEMORY_THRESHOLD) {
   this.performCleanup();
   /**
   * Get cache size statistics
   */
-  getSizeStats(): {
+  getSizeStats(): {,
   graphCacheEntries: number;
   resultCacheEntries: number;
   estimatedMemoryMB: number;
@@ -230,7 +220,7 @@ interface CachedExecutionResult {
   graphCacheEntries: this.graphStateCache.size,
   resultCacheEntries: this.resultCache.size,
   estimatedMemoryMB: Math.round(this.estimateMemoryUsage() / 1024 / 1024),
-  oldestEntry: oldestTimestamp < Date.now() ? oldestTimestamp : undefined,
+  oldestEntry: oldestTimestamp < Date.now() ? oldestTimestamp : undefined }
 };
   // Private methods
   private calculateGraphHash(nodes: Node, edges: Edge): string {

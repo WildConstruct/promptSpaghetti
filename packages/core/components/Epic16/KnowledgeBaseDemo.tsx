@@ -5,40 +5,36 @@
  * work together in the Epic 16 template marketplace ecosystem.
  */
 import React, { useState, useMemo } from 'react';
-import {
-  ArticleManagement,
+import { ArticleManagement,
   KnowledgeBaseLayout,
   type Article,
   type ArticleCategory,
   type ArticleAuthor,
   type ArticleAttachment,
-  type LearningPath,
+  type LearningPath }
   type KnowledgeBaseStats
-} from './index';
+ from './index';
 
 // Demo data
 const demoAuthors: ArticleAuthor = [
-  {
-  id: 'author-1',
+  { id: 'author-1',
   name: 'Dr. Sarah Chen',
   email: 'sarah.chen@example.com',
   role: 'admin',
   bio: 'AI researcher and prompt engineering expert with 10+ years of experience.',
-  socialLinks: {
+  socialLinks: {,
   twitter: 'https://twitter.com/sarahchen',
-  linkedin: 'https://linkedin.com/in/sarahchen',
-}
-  {
-  id: 'author-2',
+  linkedin: 'https://linkedin.com/in/sarahchen' }
+
+  { id: 'author-2',
   name: 'Marcus Rodriguez',
   email: 'marcus.r@example.com',
   role: 'editor',
   bio: 'Technical writer specializing in AI and machine learning documentation.',
-  socialLinks: {
-  github: 'https://github.com/marcusr',
-}
-  {
-  id: 'author-3',
+  socialLinks: {,
+  github: 'https://github.com/marcusr' }
+
+  { id: 'author-3',
   name: 'Elena Kowalski',
   email: 'elena.k@example.com',
   role: 'contributor',
@@ -50,42 +46,37 @@ const demoAuthors: ArticleAuthor = [
   slug: 'getting-started',
   description: 'Essential guides for new users to get up and running quickly',
   color: '#3b82f6',
-  articleCount: 12,
-}
-  {
-  id: 'template-creation',
+  articleCount: 12 }
+
+  { id: 'template-creation',
   name: 'Template Creation',
   slug: 'template-creation',
   description: 'Learn how to create effective and reusable prompt templates',
   color: '#10b981',
-  articleCount: 24,
-}
-  {
-  id: 'best-practices',
+  articleCount: 24 }
+
+  { id: 'best-practices',
   name: 'Best Practices',
   slug: 'best-practices',
   description: 'Proven strategies and techniques for optimal results',
   color: '#8b5cf6',
-  articleCount: 18,
-}
-  {
-  id: 'advanced-techniques',
+  articleCount: 18 }
+
+  { id: 'advanced-techniques',
   name: 'Advanced Techniques',
   slug: 'advanced-techniques',
   description: 'Deep dives into complex prompt engineering concepts',
   color: '#f59e0b',
-  articleCount: 15,
-}
-  {
-  id: 'marketplace',
+  articleCount: 15 }
+
+  { id: 'marketplace',
   name: 'Marketplace',
   slug: 'marketplace',
   description: 'Tips for selling and buying templates on the marketplace',
   color: '#ef4444',
-  articleCount: 8,
-}
-  {
-  id: 'troubleshooting',
+  articleCount: 8 }
+
+  { id: 'troubleshooting',
   name: 'Troubleshooting',
   slug: 'troubleshooting',
   description: 'Common issues and their solutions',
@@ -148,19 +139,18 @@ const demoAuthors: ArticleAuthor = [
   difficulty: 'beginner',
   featured: true,
   relatedArticles: ['article-2', 'article-3'],
-  seo: {
+  seo: {,
   metaTitle: 'Getting Started with Prompt Engineering - Complete Beginner Guide',
   metaDescription: 'Learn prompt engineering fundamentals with this comprehensive guide. Perfect for beginners looking to master AI prompts.',
-  keywords: ['prompt engineering', 'AI prompts', 'beginner guide', 'getting started'],
+  keywords: ['prompt engineering', 'AI prompts', 'beginner guide', 'getting started'] }
 },
-  analytics: {
+  analytics: { ,
   averageRating: 4.7,
   ratingCount: 124,
   completionRate: 78,
-  bounceRate: 22,
-}
-  {
-  id: 'article-2',
+  bounceRate: 22 }
+
+  { id: 'article-2',
   title: 'Advanced Template Optimization Techniques',
   content: `# Advanced Template Optimization Techniques,
   Take your template creation to the next level with these advanced optimization strategies...`,
@@ -180,19 +170,18 @@ const demoAuthors: ArticleAuthor = [
   readTime: 12,
   difficulty: 'advanced',
   featured: true,
-  seo: {
+  seo: {,
   metaTitle: 'Advanced Template Optimization Techniques',
   metaDescription: 'Master advanced prompt template optimization with proven techniques for better performance.',
-  keywords: ['template optimization', 'advanced prompts', 'performance tuning'],
+  keywords: ['template optimization', 'advanced prompts', 'performance tuning'] }
 },
-  analytics: {
+  analytics: { ,
   averageRating: 4.5,
   ratingCount: 76,
   completionRate: 65,
-  bounceRate: 28,
-}
-  {
-  id: 'article-3',
+  bounceRate: 28 }
+
+  { id: 'article-3',
   title: 'Marketplace Success Strategies',
   content: `# Marketplace Success Strategies,
   Learn how to maximize your success selling templates on the marketplace...`,
@@ -212,19 +201,18 @@ const demoAuthors: ArticleAuthor = [
   readTime: 10,
   difficulty: 'intermediate',
   featured: false,
-  seo: {
+  seo: {,
   metaTitle: 'Marketplace Success Strategies for Template Creators',
   metaDescription: 'Learn proven strategies for selling templates and building a successful marketplace presence.',
-  keywords: ['marketplace success', 'template selling', 'creator strategies'],
+  keywords: ['marketplace success', 'template selling', 'creator strategies'] }
 },
-  analytics: {
+  analytics: { ,
   averageRating: 4.3,
   ratingCount: 52,
   completionRate: 72,
-  bounceRate: 25,
-}
-  {
-  id: 'article-4',
+  bounceRate: 25 }
+
+  { id: 'article-4',
   title: 'Building Your First Template',
   content: `# Building Your First Template,
   A step-by-step guide to creating your first reusable prompt template...`,
@@ -244,19 +232,18 @@ const demoAuthors: ArticleAuthor = [
   readTime: 15,
   difficulty: 'beginner',
   featured: false,
-  seo: {
+  seo: {,
   metaTitle: 'Building Your First Template - Step by Step Guide',
   metaDescription: 'Create your first prompt template with this comprehensive step-by-step tutorial.',
-  keywords: ['template creation', 'first template', 'beginner tutorial'],
+  keywords: ['template creation', 'first template', 'beginner tutorial'] }
 },
-  analytics: {
+  analytics: { ,
   averageRating: 4.6,
   ratingCount: 98,
   completionRate: 81,
-  bounceRate: 19,
-}
-  {
-  id: 'article-5',
+  bounceRate: 19 }
+
+  { id: 'article-5',
   title: 'Common Prompt Engineering Mistakes',
   content: `# Common Prompt Engineering Mistakes,
   Avoid these common pitfalls when creating prompts...`,
@@ -276,12 +263,12 @@ const demoAuthors: ArticleAuthor = [
   readTime: 7,
   difficulty: 'intermediate',
   featured: false,
-  seo: {
+  seo: {,
   metaTitle: 'Common Prompt Engineering Mistakes to Avoid',
   metaDescription: 'Avoid these common prompt engineering mistakes and improve your results.',
-  keywords: ['prompt mistakes', 'common errors', 'troubleshooting prompts'],
+  keywords: ['prompt mistakes', 'common errors', 'troubleshooting prompts'] }
 },
-  analytics: {
+  analytics: { ,
   averageRating: 4.2,
   ratingCount: 67,
   completionRate: 69,
@@ -293,7 +280,7 @@ const demoAuthors: ArticleAuthor = [
   description: 'Master prompt engineering from basics to advanced techniques with this comprehensive learning path.',
   difficulty: 'beginner',
   estimatedTime: 180,
-  steps: [,
+  steps: [
   {
   id: 'step-1',
   title: 'Getting Started with Prompt Engineering',
@@ -302,30 +289,27 @@ const demoAuthors: ArticleAuthor = [
   estimatedTime: 8,
   required: true,
   completed: true,
-  order: 1,
-}
-      {
-  id: 'step-2',
+  order: 1 }
+
+      { id: 'step-2',
   title: 'Building Your First Template',
   type: 'article',
   resourceId: 'article-4',
   estimatedTime: 15,
   required: true,
   completed: false,
-  order: 2,
-}
-      {
-  id: 'step-3',
+  order: 2 }
+
+      { id: 'step-3',
   title: 'Template Creation Workshop',
   type: 'exercise',
   resourceId: 'workshop-1',
   estimatedTime: 45,
   required: true,
   completed: false,
-  order: 3,
-}
-      {
-  id: 'step-4',
+  order: 3 }
+
+      { id: 'step-4',
   title: 'Advanced Optimization Techniques',
   type: 'article',
   resourceId: 'article-2',
@@ -340,15 +324,14 @@ const demoAuthors: ArticleAuthor = [
   tags: ['prompt-engineering', 'complete-course', 'beginner-friendly'],
   author: demoAuthors[0],
   createdAt: new Date('2024-01-01'),
-  updatedAt: new Date('2024-01-20'),
-}
-  {
-  id: 'path-2',
+  updatedAt: new Date('2024-01-20') }
+
+  { id: 'path-2',
   title: 'Marketplace Creator Bootcamp',
   description: 'Learn everything you need to become a successful template creator and seller.',
   difficulty: 'intermediate',
   estimatedTime: 120,
-  steps: [,
+  steps: [
   {
   id: 'step-5',
   title: 'Understanding the Marketplace',
@@ -357,10 +340,9 @@ const demoAuthors: ArticleAuthor = [
   estimatedTime: 10,
   required: true,
   completed: false,
-  order: 1,
-}
-      {
-  id: 'step-6',
+  order: 1 }
+
+      { id: 'step-6',
   title: 'Creating Marketable Templates',
   type: 'template',
   resourceId: 'template-1',
@@ -383,84 +365,76 @@ const demoAuthors: ArticleAuthor = [
   totalAuthors: demoAuthors.length,
   recentlyUpdated: demoArticles.slice(0, 3),
   popularArticles: [...demoArticles].sort((a, b) => b.viewCount - a.viewCount).slice(0, 3),
-  featuredContent: demoArticles.filter(a => a.featured),
+  featuredContent: demoArticles.filter(a => a.featured) }
 };
 
-}
-export interface KnowledgeBaseDemoProps {
-  initialMode?: 'browse' | 'manage';
+
+export interface KnowledgeBaseDemoProps { initialMode?: 'browse' | 'manage';
   currentUser?: ArticleAuthor;
-  className?: string;
-}
-}
-export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({)
-  initialMode = 'browse',
-  currentUser = demoAuthors[0],
+  className?: string }
+
+export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({ )
+  initialMode = 'browse'
+  currentUser = demoAuthors[0] }
   className = ''
-}) => {
-  const [mode, setMode] = useState<'browse' | 'manage'>(initialMode);
+}) => { const [mode, setMode] = useState<'browse' | 'manage'>(initialMode);
   const [articles, setArticles] = useState<Article>(demoArticles);
   const [categories, setCategories] = useState<ArticleCategory>(demoCategories);
   // Mock API functions for demonstration
   const handleCreateArticle = async (articleData: Partial<Article>): Promise<Article> => {
-    const newArticle: Article = {,
+    const newArticle: Article = { }
   id: `article-${Date.now()}`}
-},
-  title: articleData.title || 'New Article',
-      content: articleData.content || '',
-      excerpt: articleData.excerpt || '',
-      slug: articleData.title?.toLowerCase().replace(/\s+/g, '-') || 'new-article',
-      status: articleData.status || 'draft',
-      category: articleData.category || categories[0],
-      tags: articleData.tags || [],
-      author: currentUser,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      viewCount: 0,
-      likeCount: 0,
-      shareCount: 0,
-      bookmarkCount: 0,
-      readTime: Math.ceil((articleData.content?.length || 0) / 200),
-      difficulty: articleData.difficulty || 'beginner',
-      featured: articleData.featured || false,
-      seo: articleData.seo || {},
-      analytics: {
-  averageRating: 0,
-  ratingCount: 0,
-  completionRate: 0,
-  bounceRate: 0,
+
+  title: articleData.title || 'New Article'
+      content: articleData.content || ''
+      excerpt: articleData.excerpt || ''
+      slug: articleData.title?.toLowerCase().replace(/\s+/g, '-') || 'new-article'
+      status: articleData.status || 'draft'
+      category: articleData.category || categories[0]
+      tags: articleData.tags || []
+      author: currentUser
+      createdAt: new Date()
+      updatedAt: new Date()
+      viewCount: 0
+      likeCount: 0
+      shareCount: 0
+      bookmarkCount: 0
+      readTime: Math.ceil((articleData.content?.length || 0) / 200)
+      difficulty: articleData.difficulty || 'beginner'
+      featured: articleData.featured || false
+      seo: articleData.seo || {}
+      analytics: { 
+  averageRating: 0
+  ratingCount: 0
+  completionRate: 0
+  bounceRate: 0 }
 };
     setArticles(prev => [newArticle, ...prev]);
     return newArticle;
   };
-  const handleUpdateArticle = async (id: string, articleData: Partial<Article>): Promise<Article> => {
-  const updatedArticle = {
-  ...articles.find(a => a.id === id)!,
-  ...articleData,
-  updatedAt: new Date(),
+  const handleUpdateArticle = async (id: string, articleData: Partial<Article>): Promise<Article> => { const updatedArticle = {
+  ...articles.find(a => a.id === id)!
+  ...articleData
+  updatedAt: new Date() }
 };
     setArticles(prev => prev.map(a => a.id === id ? updatedArticle : a));
     return updatedArticle;
   };
-  const handleDeleteArticle = async (id: string): Promise<void> => {
-    setArticles(prev => prev.filter(a => a.id !== id));
-  };
-  const handlePublishArticle = async (id: string): Promise<void> => {
-  await handleUpdateArticle(id, { )
-  status: 'published',
-  publishedAt: new Date(),
+  const handleDeleteArticle = async (id: string): Promise<void> => { setArticles(prev => prev.filter(a => a.id !== id)) };
+  const handlePublishArticle = async (id: string): Promise<void> => { await handleUpdateArticle(id, { )
+  status: 'published'
+  publishedAt: new Date() }
 });
   };
   const handleArchiveArticle = async (id: string): Promise<void> => {
     await handleUpdateArticle(id, { status: 'archived' });
   };
-  const handleDuplicateArticle = async (id: string): Promise<Article> => {
-    const original = articles.find(a => a.id === id)!;
+  const handleDuplicateArticle = async (id: string): Promise<Article> => { const original = articles.find(a => a.id === id)!;
     return await handleCreateArticle({)
-  ...original,
+  ...original }
       title: `${original.title} (Copy)`}
-},
-  status: 'draft',
+
+  status: 'draft'
       publishedAt: undefined;
   });
   };
@@ -468,30 +442,28 @@ export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({)
     // Mock file upload
     return {
       id: `attachment-${Date.now()}`}
-},
-  name: file.name,
-      url: URL.createObjectURL(file),
-      type: file.type.startsWith('image/') ? 'image' : 'document',
-      size: file.size,
+
+  name: file.name
+      url: URL.createObjectURL(file)
+      type: file.type.startsWith('image/') ? 'image' : 'document'
+      size: file.size
       mimeType: file.type;
   };
   };
-  const handleCreateCategory = async (categoryData: Partial<ArticleCategory>): Promise<ArticleCategory> => {
-    const newCategory: ArticleCategory = {,
+  const handleCreateCategory = async (categoryData: Partial<ArticleCategory>): Promise<ArticleCategory> => { const newCategory: ArticleCategory = { }
   id: `category-${Date.now()}`}
-},
-  name: categoryData.name || 'New Category',
-      slug: categoryData.name?.toLowerCase().replace(/\s+/g, '-') || 'new-category',
-      description: categoryData.description || '',
-      color: categoryData.color || '#6b7280',
+
+  name: categoryData.name || 'New Category'
+      slug: categoryData.name?.toLowerCase().replace(/\s+/g, '-') || 'new-category'
+      description: categoryData.description || ''
+      color: categoryData.color || '#6b7280'
       articleCount: 0;
   };
     setCategories(prev => [...prev, newCategory]);
     return newCategory;
   };
-  const handleUpdateCategory = async (id: string, categoryData: Partial<ArticleCategory>): Promise<ArticleCategory> => {
-    const updatedCategory = {
-      ...categories.find(c => c.id === id)!,
+  const handleUpdateCategory = async (id: string, categoryData: Partial<ArticleCategory>): Promise<ArticleCategory> => { const updatedCategory = {
+      ...categories.find(c => c.id === id)! }
       ...categoryData
     };
     setCategories(prev => prev.map(c => c.id === id ? updatedCategory : c));
@@ -513,15 +485,15 @@ export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({)
   console.log('Selected learning path:', path);
   // In a real app, this would navigate to the learning path
 };
-  const updatedStats = useMemo(() => ({)
-  ...demoStats,
-  totalArticles: articles.length,
-  totalViews: articles.reduce((sum, article) => sum + article.viewCount, 0),
-  recentlyUpdated: [...articles].sort((a, b) =>,
+  const updatedStats = useMemo(() => ({ )
+  ...demoStats
+  totalArticles: articles.length
+  totalViews: articles.reduce((sum, article) => sum + article.viewCount, 0)
+  recentlyUpdated: [...articles].sort((a, b) =>
   new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-  ).slice(0, 3),
-  popularArticles: [...articles].sort((a, b) => b.viewCount - a.viewCount).slice(0, 3),
-  featuredContent: articles.filter(a => a.featured),
+  ).slice(0, 3)
+  popularArticles: [...articles].sort((a, b) => b.viewCount - a.viewCount).slice(0, 3)
+  featuredContent: articles.filter(a => a.featured) }
 }), [articles]);
   return;
     <div className={`min-h-screen bg-gray-50 ${className}`}>}
@@ -534,21 +506,21 @@ export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({)
           <div className="flex items-center gap-2">
             <button
               onClick={() => setMode('browse')}
-              className={`px-4 py-2 rounded-md text-sm font-medium ${
+              className={ `px-4 py-2 rounded-md text-sm font-medium ${
   mode === 'browse'
   ? 'bg-blue-600 text-white'
-  : 'text-gray-700 bg-gray-100 hover:bg-gray-200',
-}`}
+  : 'text-gray-700 bg-gray-100 hover:bg-gray-200' }
+`}
             >
               Browse Mode
             </button>
             <button
               onClick={() => setMode('manage')}
-              className={`px-4 py-2 rounded-md text-sm font-medium ${
+              className={ `px-4 py-2 rounded-md text-sm font-medium ${
   mode === 'manage'
   ? 'bg-blue-600 text-white'
-  : 'text-gray-700 bg-gray-100 hover:bg-gray-200',
-}`}
+  : 'text-gray-700 bg-gray-100 hover:bg-gray-200' }
+`}
             >
               Manage Mode
             </button>

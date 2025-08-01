@@ -14,8 +14,7 @@
  * - Recovery mechanisms for transient failures
  */
 import { EventEmitter } from 'events';
-export declare enum RetryStrategy {
-    EXPONENTIAL = "exponential",
+export declare enum RetryStrategy { EXPONENTIAL = "exponential",
     LINEAR = "linear",
     FIXED = "fixed",
     CUSTOM = "custom"
@@ -44,12 +43,12 @@ export declare enum FailureType {
 
 export declare enum CircuitBreakerStateEnum {
     CLOSED = "closed",
-    OPEN = "open",
+    OPEN = "open" }
     HALF_OPEN = "half_open"
 
 }
-export interface RetryConfig {
-    maxAttempts: number;
+}
+export interface RetryConfig { maxAttempts: number;
     strategy: RetryStrategy;
     baseDelayMs: number;
     maxDelayMs: number;
@@ -57,19 +56,17 @@ export interface RetryConfig {
     jitterMs: number;
     timeoutMs: number;
     retryableErrors: FailureType[];
-    customDelayFunction?: (attempt: number, baseDelay: number) => number;
-
+    customDelayFunction?: (attempt: number, baseDelay: number) => number }
 }
-export interface CircuitBreakerConfig {
-    failureThreshold: number;
+}
+export interface CircuitBreakerConfig { failureThreshold: number;
     resetTimeoutMs: number;
     monitoringWindowMs: number;
-    halfOpenMaxAttempts: number;
-
+    halfOpenMaxAttempts: number }
 }
-export interface MFARetryConfig {
-    operationConfigs: {
-        [key in MFAOperation]: RetryConfig;
+}
+export interface MFARetryConfig { operationConfigs: {
+        [key in MFAOperation]: RetryConfig }
 }
     };
     circuitBreaker: CircuitBreakerConfig;
@@ -78,38 +75,34 @@ export interface MFARetryConfig {
     enableLogging: boolean;
 
 }
-export interface OperationContext {
-    operationId: string;
+}
+export interface OperationContext { operationId: string;
     operation: MFAOperation;
     userId: string;
     sessionId?: string;
     startTime: Date;
     attempt: number;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface RetryAttempt {
-    attempt: number;
+}
+export interface RetryAttempt { attempt: number;
     startTime: Date;
     endTime?: Date;
     delayMs: number;
     error?: Error;
     success: boolean;
-    timeoutReached: boolean;
-
+    timeoutReached: boolean }
 }
-export interface OperationResult<T = any> {
-    success: boolean;
+}
+export interface OperationResult<T = any> { success: boolean;
     data?: T;
     error?: Error;
     attempts: RetryAttempt[];
     totalDurationMs: number;
     circuitBreakerTriggered: boolean;
-    rateLimited: boolean;
-
+    rateLimited: boolean }
 }
-export interface RetryMetrics {
-    totalOperations: number;
+export interface RetryMetrics { totalOperations: number;
     successfulOperations: number;
     failedOperations: number;
     totalRetries: number;
@@ -121,18 +114,15 @@ export interface RetryMetrics {
             count: number;
             successRate: number;
             averageAttempts: number;
-            averageDuration: number;
+            averageDuration: number }
 }
         };
     };
-    errorMetrics: {
-        [key in FailureType]: number;
-    };
+    errorMetrics: { [key in FailureType]: number };
 /**
  * MFA Retry Handler Service
  */
-export declare class MFARetryHandler extends EventEmitter {
-    private config;
+export declare class MFARetryHandler extends EventEmitter { private config;
     private circuitBreakers;
     private metrics;
     private activeOperations;
@@ -141,8 +131,8 @@ export declare class MFARetryHandler extends EventEmitter {
      * Execute an MFA operation with retry and timeout handling
      */
     executeWithRetry<T>()
-      operation: MFAOperation,
-      operationFn: (),
+      operation: MFAOperation
+      operationFn: () }
     ) => Promise<T>, context?: Partial<OperationContext>): Promise<OperationResult<T>>;
     /**
      * Check if an operation should be attempted based on circuit breaker state

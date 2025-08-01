@@ -15,13 +15,12 @@ useEffect(() => {
                 setShowEncryptionDetails(false);
             }
         }
-        ;
-        if (showWebSocketDetails || showEncryptionDetails) {
-            document.addEventListener('mousedown', handleClickOutside);
-            return () => document.removeEventListener('mousedown', handleClickOutside);
-        }
-        [showWebSocketDetails, showEncryptionDetails];
     };
+    if (showWebSocketDetails || showEncryptionDetails) {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+    [showWebSocketDetails, showEncryptionDetails];
 });
 return;
 _jsxs("div", { style: {

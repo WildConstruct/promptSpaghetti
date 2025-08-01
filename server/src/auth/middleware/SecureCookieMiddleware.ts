@@ -6,8 +6,8 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 
-}
-}
+
+
 export interface SecureCookieConfig {
   // Basic security attributes
   httpOnly: boolean;
@@ -51,13 +51,14 @@ export interface SecureCookieConfig {
     requireHttps: boolean;
     sameSiteBypass?: string[]; // User agents to bypass SameSite
     legacySupport: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface CookieSecurityContext {
   trustLevel: 'low' | 'medium' | 'high' | 'critical';
   environment: 'development' | 'staging' | 'production';
@@ -66,12 +67,13 @@ export interface CookieSecurityContext {
   isSecureConnection: boolean;
   supportsSameSite: boolean;
   supportsPartitioned: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecureCookie {
   name: string;
   value: string;
@@ -83,13 +85,14 @@ export interface SecureCookie {
     boundTo?: {
       ip?: string;
       userAgent?: string;
-}
-}
+
+
+
     };
     encrypted: boolean;
     signed: boolean;
   };
-}
+
 
 export class SecureCookieMiddleware {
   private config: SecureCookieConfig;
@@ -99,7 +102,7 @@ export class SecureCookieMiddleware {
   constructor(config: Partial<SecureCookieConfig> = {}) {
     this.config = this.mergeWithDefaults(config);
     this.validateConfig();
-  }
+
 
   /**
    * Express middleware for secure cookie handling
@@ -133,12 +136,12 @@ export class SecureCookieMiddleware {
         const csrfValid = await this.validateCSRFToken(req);
         if (!csrfValid && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)) {
           return res.status(403).json({ error: 'Invalid CSRF token' });
-        }
-      }
+
+
 
       next();
     };
-  }
+
 
   /**
    * Set a secure cookie with all protections
@@ -159,12 +162,12 @@ export class SecureCookieMiddleware {
     // Apply encryption if configured
     if (this.config.encrypted) {
       cookieValue = await this.encryptValue(cookieValue, securityContext);
-    }
+
     
     // Apply signing if configured
     if (this.config.signed) {
       cookieValue = this.signValue(cookieValue);
-    }
+
     
     // Generate secure cookie name with prefix
     const secureName = this.generateSecureName(name, securityContext);
@@ -193,10 +196,10 @@ export class SecureCookieMiddleware {
         boundTo: {
           ip: this.config.ipBinding ? securityContext.ipAddress : undefined,
           userAgent: this.config.userAgentBinding ? securityContext.userAgent : undefined
-  }
+
         encrypted: this.config.encrypted,
         signed: this.config.signed
-      }
+
     };
     
     // Register cookie
@@ -213,10 +216,10 @@ export class SecureCookieMiddleware {
         ...secureOptions,
         httpOnly: false // CSRF token needs to be readable by JavaScript
       });
-    }
+
     
     return res;
-  }
+
 
   /**
    * Clear a secure cookie properly
@@ -248,10 +251,10 @@ export class SecureCookieMiddleware {
         ...clearOptions,
         httpOnly: false
       });
-    }
+
     
     return res;
-  }
+
 
   /**
    * Parse and validate secure cookies from request
@@ -272,8 +275,8 @@ export class SecureCookieMiddleware {
           if (!this.validateBindings(metadata, context)) {
             console.warn(`Cookie ${name} failed binding validation`);
             continue;
-          }
-        }
+
+
         
         let parsedValue = value;
         
@@ -283,38 +286,37 @@ export class SecureCookieMiddleware {
           if (!verified) {
             console.warn(`Cookie ${name} has invalid signature`);
             continue;
-          }
+
           parsedValue = verified;
-        }
+
         
         // Decrypt if encrypted
         if (this.config.encrypted) {
           try {
             parsedValue = await this.decryptValue(parsedValue, context);
-          } catch (error) {
+ catch (error) {
             console.warn(`Cookie ${name} decryption failed`);
             continue;
-          }
-        }
+
+
         
         // Parse JSON if applicable
         try {
           parsedValue = JSON.parse(parsedValue);
-        } catch {
+ catch {
           // Not JSON, use as string
-        }
+
         
         // Remove secure prefix for application use
         const cleanName = this.removeSecurePrefix(name);
         cookies[cleanName] = parsedValue;
-        
-      } catch (error) {
+ catch (error) {
         console.error(`Error parsing cookie ${name}:`, error);
-      }
-    }
+
+
     
     return cookies;
-  }
+
 
   /**
    * Generate secure cookie options based on context
@@ -336,12 +338,12 @@ export class SecureCookieMiddleware {
     // Enforce HTTPS in production
     if (context.environment === 'production' || this.config.policies.requireHttps) {
       options.secure = true;
-    }
+
 
     // Adjust SameSite based on context
     if (context.trustLevel === 'low' && options.sameSite !== 'strict') {
       options.sameSite = 'strict';
-    }
+
 
     // Handle legacy browsers
     if (!context.supportsSameSite && this.config.policies.legacySupport) {
@@ -352,34 +354,34 @@ export class SecureCookieMiddleware {
         sameSite: 'none',
         secure: true
       };
-    }
+
 
     // Add partitioned attribute for CHIPS
     if (this.config.partitioned && context.supportsPartitioned && options.secure) {
       (options as any).partitioned = true;
-    }
+
 
     // Add priority if specified
     if (this.config.priority) {
       (options as any).priority = this.config.priority;
-    }
+
 
     // Handle domain settings
     if (this.config.domain && this.config.policies.allowSubdomains) {
       options.domain = this.config.domain;
-    } else if (this.config.useHostPrefix) {
+ else if (this.config.useHostPrefix) {
       // __Host- prefix requires no domain attribute
       delete options.domain;
-    }
+
 
     // Rolling expiry
     if (this.config.rollingExpiry && this.config.maxAge) {
       options.maxAge = this.config.maxAge;
       delete options.expires;
-    }
+
 
     return options;
-  }
+
 
   /**
    * Analyze request security context
@@ -397,7 +399,7 @@ export class SecureCookieMiddleware {
       supportsSameSite: this.checkSameSiteSupport(userAgent),
       supportsPartitioned: this.checkPartitionedSupport(userAgent)
     };
-  }
+
 
   /**
    * Generate secure cookie name with prefix
@@ -405,11 +407,11 @@ export class SecureCookieMiddleware {
   private generateSecureName(name: string, context: CookieSecurityContext): string {
     if (this.config.useHostPrefix && context.isSecureConnection) {
       return `__Host-${name}`;
-    } else if (this.config.useSecurePrefix && context.isSecureConnection) {
+ else if (this.config.useSecurePrefix && context.isSecureConnection) {
       return `__Secure-${name}`;
-    }
+
     return name;
-  }
+
 
   /**
    * Remove secure prefix from cookie name
@@ -417,11 +419,11 @@ export class SecureCookieMiddleware {
   private removeSecurePrefix(name: string): string {
     if (name.startsWith('__Host-')) {
       return name.substring(7);
-    } else if (name.startsWith('__Secure-')) {
+ else if (name.startsWith('__Secure-')) {
       return name.substring(9);
-    }
+
     return name;
-  }
+
 
   /**
    * Encrypt cookie value
@@ -430,7 +432,7 @@ export class SecureCookieMiddleware {
 
     if (!this.config.encryptionKey) {
       throw new Error('Encryption key not configured');
-    }
+
 
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(
@@ -446,10 +448,10 @@ export class SecureCookieMiddleware {
     if (this.config.fingerprinting) {
       const fingerprint = this.generateFingerprint(context);
       return `${iv.toString('hex')}.${encrypted}.${fingerprint}`;
-    }
+
 
     return `${iv.toString('hex')}.${encrypted}`;
-  }
+
 
   /**
    * Decrypt cookie value
@@ -458,12 +460,12 @@ export class SecureCookieMiddleware {
 
     if (!this.config.encryptionKey) {
       throw new Error('Encryption key not configured');
-    }
+
 
     const parts = encryptedValue.split('.');
     if (parts.length < 2) {
       throw new Error('Invalid encrypted value format');
-    }
+
 
     const [ivHex, encrypted, fingerprint] = parts;
 
@@ -472,8 +474,8 @@ export class SecureCookieMiddleware {
       const expectedFingerprint = this.generateFingerprint(context);
       if (fingerprint !== expectedFingerprint) {
         throw new Error('Fingerprint mismatch');
-      }
-    }
+
+
 
     const decipher = crypto.createDecipheriv(
       this.config.encryptionAlgorithm,
@@ -485,7 +487,7 @@ export class SecureCookieMiddleware {
     decrypted += decipher.final('utf8');
 
     return decrypted;
-  }
+
 
   /**
    * Sign cookie value
@@ -493,7 +495,7 @@ export class SecureCookieMiddleware {
   private signValue(value: string): string {
     if (!this.config.signatureKey) {
       throw new Error('Signature key not configured');
-    }
+
 
     const signature = crypto
       .createHmac(this.config.signatureAlgorithm, this.config.signatureKey)
@@ -501,7 +503,7 @@ export class SecureCookieMiddleware {
       .digest('base64');
 
     return `${value}.${signature}`;
-  }
+
 
   /**
    * Verify cookie signature
@@ -509,12 +511,12 @@ export class SecureCookieMiddleware {
   private verifySignature(signedValue: string): string | null {
     if (!this.config.signatureKey) {
       throw new Error('Signature key not configured');
-    }
+
 
     const lastDotIndex = signedValue.lastIndexOf('.');
     if (lastDotIndex === -1) {
       return null;
-    }
+
 
     const value = signedValue.substring(0, lastDotIndex);
     const signature = signedValue.substring(lastDotIndex + 1);
@@ -526,10 +528,10 @@ export class SecureCookieMiddleware {
 
     if (signature !== expectedSignature) {
       return null;
-    }
+
 
     return value;
-  }
+
 
   /**
    * Generate fingerprint for cookie binding
@@ -546,7 +548,7 @@ export class SecureCookieMiddleware {
       .update(data)
       .digest('hex')
       .substring(0, 16);
-  }
+
 
   /**
    * Validate cookie bindings
@@ -554,28 +556,28 @@ export class SecureCookieMiddleware {
   private validateBindings(cookie: SecureCookie, context: CookieSecurityContext): boolean {
     if (cookie.metadata.boundTo?.ip && cookie.metadata.boundTo.ip !== context.ipAddress) {
       return false;
-    }
+
 
     if (cookie.metadata.boundTo?.userAgent && cookie.metadata.boundTo.userAgent !== context.userAgent) {
       return false;
-    }
+
 
     if (cookie.metadata.fingerprint) {
       const currentFingerprint = this.generateFingerprint(context);
       if (cookie.metadata.fingerprint !== currentFingerprint) {
         return false;
-      }
-    }
+
+
 
     return true;
-  }
+
 
   /**
    * CSRF token generation
    */
   private generateCSRFToken(): string {
     return crypto.randomBytes(32).toString('hex');
-  }
+
 
   /**
    * CSRF token validation
@@ -588,15 +590,15 @@ export class SecureCookieMiddleware {
 
     if (!sessionCookie || !csrfCookie || !csrfHeader) {
       return false;
-    }
+
 
     const expectedToken = this.csrfTokens.get(sessionCookie);
     if (!expectedToken) {
       return false;
-    }
+
 
     return csrfCookie === expectedToken && csrfHeader === expectedToken;
-  }
+
 
   /**
    * Parse raw cookie header
@@ -608,11 +610,11 @@ export class SecureCookieMiddleware {
       const [name, ...valueParts] = cookie.trim().split('=');
       if (name && valueParts.length > 0) {
         cookies[name] = decodeURIComponent(valueParts.join('='));
-      }
+
     });
 
     return cookies;
-  }
+
 
   /**
    * Check SameSite support
@@ -622,9 +624,9 @@ export class SecureCookieMiddleware {
     if (userAgent.includes('Chrome/51') || userAgent.includes('Chrome/5[2-9]') || 
         userAgent.includes('Chrome/[6-9]') || userAgent.includes('Chrome/[1-9][0-9]')) {
       return true;
-    }
+
     return false;
-  }
+
 
   /**
    * Check Partitioned attribute support
@@ -634,9 +636,9 @@ export class SecureCookieMiddleware {
     const chromeMatch = userAgent.match(/Chrome\/(\d+)/);
     if (chromeMatch && parseInt(chromeMatch[1]) >= 118) {
       return true;
-    }
+
     return false;
-  }
+
 
   /**
    * Determine trust level from request
@@ -645,9 +647,9 @@ export class SecureCookieMiddleware {
     // Implementation would analyze various factors
     if (req.headers['x-forwarded-for']) {
       return 'medium';
-    }
+
     return 'high';
-  }
+
 
   /**
    * Get client IP address
@@ -656,7 +658,7 @@ export class SecureCookieMiddleware {
     return (req.headers['x-forwarded-for'] as string)?.split(',')[0] || 
            req.socket.remoteAddress || 
            'unknown';
-  }
+
 
   /**
    * Merge configuration with secure defaults
@@ -684,10 +686,10 @@ export class SecureCookieMiddleware {
         allowSubdomains: false,
         requireHttps: true,
         legacySupport: false
-  }
+
       ...config
     };
-  }
+
 
   /**
    * Validate configuration
@@ -695,21 +697,21 @@ export class SecureCookieMiddleware {
   private validateConfig(): void {
     if (this.config.encrypted && !this.config.encryptionKey) {
       throw new Error('Encryption key required when encryption is enabled');
-    }
+
 
     if (this.config.signed && !this.config.signatureKey) {
       throw new Error('Signature key required when signing is enabled');
-    }
+
 
     if (this.config.useHostPrefix && this.config.domain) {
       throw new Error('__Host- prefix cannot be used with domain attribute');
-    }
+
 
     if (this.config.sameSite === 'none' && !this.config.secure) {
       throw new Error('SameSite=None requires Secure attribute');
-    }
-  }
-}
+
+
+
 
 /**
  * Factory function to create secure cookie middleware
@@ -717,4 +719,3 @@ export class SecureCookieMiddleware {
 export function createSecureCookieMiddleware(config?: Partial<SecureCookieConfig>) {
   const middleware = new SecureCookieMiddleware(config);
   return middleware.middleware();
-}

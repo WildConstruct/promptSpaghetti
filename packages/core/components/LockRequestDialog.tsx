@@ -2,22 +2,22 @@
 // Dialog for requesting locks on resources
 import React, { useState, useEffect } from 'react';
 import { X, Lock, Clock, AlertTriangle, Info } from 'lucide-react';
-}
-interface LockRequestDialogProps {
-  isOpen: boolean;
+
+
+interface LockRequestDialogProps { isOpen: boolean;
   onClose: () => void;
   onRequest: (resourceId: string, lockType: string, reason?: string) => void;
   resourceId?: string | null;
   userId: string;
-  export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({,)
-  isOpen,
-  onClose,
-  onRequest,
-  resourceId,
+  export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({);
+  isOpen;
+  onClose;
+  onRequest;
+  resourceId }
   userId
-}
-}) => {
-  const [selectedResource, setSelectedResource] = useState(resourceId || '');
+
+
+}) => { const [selectedResource, setSelectedResource] = useState(resourceId || '');
   const [lockType, setLockType] = useState<string>('edit');
   const [reason, setReason] = useState('');
   const [duration, setDuration] = useState<number>(60);
@@ -25,47 +25,41 @@ interface LockRequestDialogProps {
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     if (resourceId) {
-      setSelectedResource(resourceId);
-  }, [resourceId]);
-  const lockTypes = [;
-    {
-  value: 'edit',
-  label: 'Edit Lock',
-  description: 'Prevents others from editing this resource',
-  icon: Lock,
-  color: 'text-blue-500',
-}
-    {
-  value: 'state_change',
-  label: 'State Change Lock',
-  description: 'Prevents workflow state changes',
-  icon: Clock,
-  color: 'text-orange-500',
-}
-    {
-  value: 'delete',
-  label: 'Delete Lock',
-  description: 'Prevents resource deletion',
-  icon: AlertTriangle,
-  color: 'text-red-500',
-}
-    {
-      value: 'admin',
-      label: 'Admin Lock',
-      description: 'Administrative lock with full restrictions',
-      icon: AlertTriangle,
+      setSelectedResource(resourceId) }, [resourceId]);
+  const lockTypes = [
+    { value: 'edit'
+  label: 'Edit Lock'
+  description: 'Prevents others from editing this resource'
+  icon: Lock
+  color: 'text-blue-500' }
+
+    { value: 'state_change'
+  label: 'State Change Lock'
+  description: 'Prevents workflow state changes'
+  icon: Clock
+  color: 'text-orange-500' }
+
+    { value: 'delete'
+  label: 'Delete Lock'
+  description: 'Prevents resource deletion'
+  icon: AlertTriangle
+  color: 'text-red-500' }
+
+    { value: 'admin'
+      label: 'Admin Lock'
+      description: 'Administrative lock with full restrictions'
+      icon: AlertTriangle }
       color: 'text-purple-500'];
-  const durationOptions = [;
-    { value: 15, label: '15 minutes' },
-    { value: 30, label: '30 minutes' },
-    { value: 60, label: '1 hour' },
-    { value: 120, label: '2 hours' },
-    { value: 240, label: '4 hours' },
-    { value: 480, label: '8 hours' },
+  const durationOptions = [
+    { value: 15, label: '15 minutes' }
+    { value: 30, label: '30 minutes' }
+    { value: 60, label: '1 hour' }
+    { value: 120, label: '2 hours' }
+    { value: 240, label: '4 hours' }
+    { value: 480, label: '8 hours' }
     { value: 1440, label: '24 hours' }
   ];
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => { e.preventDefault();
     setError(null);
     setIsSubmitting(true);
     try {
@@ -74,20 +68,13 @@ interface LockRequestDialogProps {
       if (!reason.trim()) {
         throw new Error('Please provide a reason for the lock');
       await onRequest(selectedResource, lockType, reason);
-      onClose();
-    } catch (error) {
-  setError(error instanceof Error ? error.message : 'Failed to request lock');
-} finally {
-      setIsSubmitting(false);
-  };
-  const handleCancel = () => {
-    setSelectedResource('');
+      onClose() } catch (error) { setError(error instanceof Error ? error.message : 'Failed to request lock') } finally { setIsSubmitting(false) };
+  const handleCancel = () => { setSelectedResource('');
     setLockType('edit');
     setReason('');
     setDuration(60);
     setError(null);
-    onClose();
-  };
+    onClose() };
   if (!isOpen) return null;
   return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Steps, Button, Form, Select, Checkbox, Alert, Typography } from 'antd';
-import { 
-  RestoreOutlined, 
+import { RestoreOutlined, 
   ExclamationCircleOutlined, 
   CheckCircleOutlined, 
-  CloseCircleOutlined,
+  CloseCircleOutlined }
   LoadingOutlined 
-} from '@ant-design/icons';
+ from '@ant-design/icons';
 import { RestorationPreview } from './RestorationPreview';
 import { RestorationConfirmation } from './RestorationConfirmation';
 import { RestoreProgressPanel } from './RestoreProgressPanel';
-import { 
-  RestorationConfig, 
+import { RestorationConfig, 
   RestorationPreviewResponse, 
   RestorationAttempt,
   RestorationType,
-  RestorationStrategy,
+  RestorationStrategy }
   RestorationProgressResponse
-} from '../../types/restoration';
+ from '../../types/restoration';
 import { useRestoration } from '../../hooks/useRestoration';
 const { Step } = Steps;
 const { Title, Text } = Typography;
 const { Option } = Select;
-}
-interface RestorationWizardProps {
-  visible: boolean;
+
+
+interface RestorationWizardProps { visible: boolean;
   onClose: () => void;
   projectId: string;
   sourceSnapshotId: string;
@@ -37,64 +35,59 @@ interface RestorationWizardProps {
   icon: React.ReactNode;
   const wizardSteps: WizardStep = [
   {
-  title: 'Configure',
-  description: 'Set restoration options',
-  icon: <RestoreOutlined />,
-}
-}
-  {
-  title: 'Preview',
-  description: 'Review changes',
-  icon: <ExclamationCircleOutlined />,
-}
-  {
-  title: 'Confirm',
-  description: 'Confirm restoration',
-  icon: <CheckCircleOutlined />,
-}
-  {
-  title: 'Progress',
-  description: 'Monitor progress',
+  title: 'Configure';
+  description: 'Set restoration options';
+  icon: <RestoreOutlined /> }
+
+
+
+  { title: 'Preview'
+  description: 'Review changes'
+  icon: <ExclamationCircleOutlined /> }
+
+  { title: 'Confirm'
+  description: 'Confirm restoration'
+  icon: <CheckCircleOutlined /> }
+
+  { title: 'Progress'
+  description: 'Monitor progress'
   icon: <LoadingOutlined />];
-  export const RestorationWizard: React.FC<RestorationWizardProps> = ({,)
-  visible,
-  onClose,
-  projectId,
-  sourceSnapshotId,
-  targetSnapshotId,
-  onSuccess,
+  export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
+  visible
+  onClose
+  projectId
+  sourceSnapshotId
+  targetSnapshotId
+  onSuccess }
   onError
-}) => {
-  const [currentStep, setCurrentStep] = useState(0);
+}) => { const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [config, setConfig] = useState<RestorationConfig>({)
-  restorationType: 'full',
-  restorationStrategy: 'replace',
-  preserveCurrentChanges: false,
-  createBackup: true,
-  notifyOnCompletion: true,
+  restorationType: 'full'
+  restorationStrategy: 'replace'
+  preserveCurrentChanges: false
+  createBackup: true
+  notifyOnCompletion: true }
 });
   const [preview, setPreview] = useState<RestorationPreviewResponse | null>(null);
   const [restorationAttempt, setRestorationAttempt] = useState<RestorationAttempt | null>(null);
   const [progress, setProgress] = useState<RestorationProgressResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { 
-    generatePreview, 
-    createRestoration, 
-    getProgress, 
+  const { generatePreview
+    createRestoration
+    getProgress }
     cancelRestoration 
-  } = useRestoration();
+ = useRestoration();
   // Reset state when modal opens/closes
-  useEffect(() => {
-  if (visible) {
+  useEffect(() => { if (visible) {
   setCurrentStep(0);
   setConfig({)
-  restorationType: 'full',
-  restorationStrategy: 'replace',
-  preserveCurrentChanges: false,
-  createBackup: true,
-  notifyOnCompletion: true,
+  restorationType: 'full'
+  restorationStrategy: 'replace'
+  preserveCurrentChanges: false
+  createBackup: true
+  notifyOnCompletion: true }
 });
       setPreview(null);
       setRestorationAttempt(null);
@@ -103,8 +96,7 @@ interface RestorationWizardProps {
       form.resetFields();
   }, [visible, form]);
   // Poll for progress updates
-  useEffect(() => {
-  let interval: NodeJS.Timeout;
+  useEffect(() => { let interval: NodeJS.Timeout;
   if (restorationAttempt && currentStep === 3) {
   interval = setInterval(async () => {
   try {
@@ -112,17 +104,10 @@ interface RestorationWizardProps {
   setProgress(progressData);
   if (progressData.status === 'completed') {
   clearInterval(interval);
-  onSuccess?.(restorationAttempt);
-} else if (progressData.status === 'failed') {
-            clearInterval(interval);
+  onSuccess?.(restorationAttempt) } else if (progressData.status === 'failed') { clearInterval(interval);
             setError(progressData.errorMessage || 'Restoration failed');
-            onError?.(progressData.errorMessage || 'Restoration failed');
-        } catch (error) {
-  console.error('Failed to get progress:', error);
-}, 1000);
-    return () => {
-      if (interval) clearInterval(interval);
-    };
+            onError?.(progressData.errorMessage || 'Restoration failed') } catch (error) { console.error('Failed to get progress:', error) }, 1000);
+    return () => { if (interval) clearInterval(interval) };
   }, [restorationAttempt, currentStep, getProgress, onSuccess, onError]);
   const handleNext = async () => {
     if (currentStep === 0) {
@@ -132,61 +117,40 @@ interface RestorationWizardProps {
         const updatedConfig = { ...config, ...values };
         setConfig(updatedConfig);
         setLoading(true);
-        const previewData = await generatePreview({)
-  projectId,
-  sourceSnapshotId,
-  targetSnapshotId,
-  config: updatedConfig,
+        const previewData = await generatePreview({ )
+  projectId
+  sourceSnapshotId
+  targetSnapshotId
+  config: updatedConfig }
 });
         setPreview(previewData);
         setCurrentStep(1);
-      } catch (error) {
-  console.error('Failed to generate preview:', error);
-  setError('Failed to generate preview. Please try again.');
-} finally {
-        setLoading(false);
-    } else if (currentStep === 1) {
-      // Preview step - move to confirmation
-      setCurrentStep(2);
-    } else if (currentStep === 2) {
-      // Confirmation step - start restoration
+ catch (error) { console.error('Failed to generate preview:', error);
+  setError('Failed to generate preview. Please try again.') } finally { setLoading(false) } else if (currentStep === 1) { // Preview step - move to confirmation
+      setCurrentStep(2) } else if (currentStep === 2) { // Confirmation step - start restoration
       try {
         setLoading(true);
         const attempt = await createRestoration({)
-  projectId,
-          sourceSnapshotId,
-          targetSnapshotId,
+  projectId
+          sourceSnapshotId
+          targetSnapshotId }
           config
         });
         setRestorationAttempt(attempt);
         setCurrentStep(3);
-      } catch (error) {
-  console.error('Failed to start restoration:', error);
-  setError('Failed to start restoration. Please try again.');
-} finally {
-        setLoading(false);
-  };
-  const handlePrevious = () => {
-    setCurrentStep(Math.max(0, currentStep - 1));
-    setError(null);
-  };
-  const handleCancel = async () => {
-    if (restorationAttempt && currentStep === 3) {
+ catch (error) { console.error('Failed to start restoration:', error);
+  setError('Failed to start restoration. Please try again.') } finally { setLoading(false) };
+  const handlePrevious = () => { setCurrentStep(Math.max(0, currentStep - 1));
+    setError(null) };
+  const handleCancel = async () => { if (restorationAttempt && currentStep === 3) {
       try {
-        await cancelRestoration(restorationAttempt.id);
-      } catch (error) {
-  console.error('Failed to cancel restoration:', error);
-  onClose();
-};
-  const canGoNext = () => {
-    if (currentStep === 0) return true;
+        await cancelRestoration(restorationAttempt.id) } catch (error) { console.error('Failed to cancel restoration:', error);
+  onClose() };
+  const canGoNext = () => { if (currentStep === 0) return true;
     if (currentStep === 1) return preview !== null;
     if (currentStep === 2) return true;
-    return false;
-  };
-  const canGoPrevious = () => {
-    return currentStep > 0 && currentStep < 3;
-  };
+    return false };
+  const canGoPrevious = () => { return currentStep > 0 && currentStep < 3 };
   const renderStepContent = () => {
     switch (currentStep) {
     case 0:
@@ -197,7 +161,7 @@ interface RestorationWizardProps {
           initialValues={config}
           onValuesChange={(changedValues) => {
             setConfig(prev => ({ ...prev, ...changedValues }));
-          }}
+}
         >
           <Form.Item
             name="restorationType"
@@ -243,10 +207,9 @@ interface RestorationWizardProps {
         <RestorationPreview
           preview={preview}
           config={config}
-          onConflictResolve={(conflictId, strategy) => {
+          onConflictResolve={ (conflictId, strategy) => {
   // Handle conflict resolution
-  console.log('Resolving conflict:', conflictId, strategy);
-}}
+  console.log('Resolving conflict:', conflictId, strategy) }}
         />
       ) : ()
         <div style={{ textAlign: 'center', padding: '40px' }}>
@@ -285,23 +248,21 @@ interface RestorationWizardProps {
     default:
       return null;
   };
-  const getModalTitle = () => {
-    const stepTitles = [;
+  const getModalTitle = () => { const stepTitles = [
       'Configure Restoration',
       'Preview Changes',
-      'Confirm Restoration',
+      'Confirm Restoration' }
       'Restoration in Progress'
     ];
     return stepTitles[currentStep] || 'Version Restoration';
   };
-  const getModalWidth = () => {
-  switch (currentStep) {
+  const getModalWidth = () => { switch (currentStep) {
   case 1:,
   case 2:,
   return 900;
   case 3:,
   return 700;
-  default:,
+  default: }
   return 600;
 };
   return;

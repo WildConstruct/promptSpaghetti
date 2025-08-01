@@ -1,35 +1,35 @@
 import React from 'react';
-import { 
-  FileText, 
+import { FileText, 
   Eye, 
   CheckCircle, 
   Globe, 
   Archive, 
   XCircle,
-  Clock,
+  Clock }
   AlertCircle
-} from 'lucide-react';
+ from 'lucide-react';
 import { WorkflowState, WorkflowStateConfig } from '../../types/WorkflowTypes';
-}
-interface WorkflowStateIndicatorProps {
-  state: WorkflowState;
+
+
+interface WorkflowStateIndicatorProps { state: WorkflowState;
   stateConfig?: WorkflowStateConfig;
   showLabel?: boolean;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-  const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {,
-  draft: {
-  id: 'draft',
-  name: 'Draft',
-  description: 'Work in progress',
-  color: 'gray',
-  icon: 'FileText',
-  is_initial: true,
-  is_final: false,
-  required_permissions: [],
-}
+  const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {;
+  draft: {;
+  id: 'draft';
+  name: 'Draft';
+  description: 'Work in progress';
+  color: 'gray';
+  icon: 'FileText';
+  is_initial: true;
+  is_final: false;
+  required_permissions: [] }
+
+
 },
-  review: {
+  review: { ,
   id: 'review',
   name: 'In Review',
   description: 'Under review',
@@ -37,9 +37,9 @@ interface WorkflowStateIndicatorProps {
   icon: 'Eye',
   is_initial: false,
   is_final: false,
-  required_permissions: [],
+  required_permissions: [] }
 },
-  approved: {
+  approved: { ,
   id: 'approved',
   name: 'Approved',
   description: 'Approved for publication',
@@ -47,9 +47,9 @@ interface WorkflowStateIndicatorProps {
   icon: 'CheckCircle',
   is_initial: false,
   is_final: false,
-  required_permissions: [],
+  required_permissions: [] }
 },
-  published: {
+  published: { ,
   id: 'published',
   name: 'Published',
   description: 'Live and public',
@@ -57,9 +57,9 @@ interface WorkflowStateIndicatorProps {
   icon: 'Globe',
   is_initial: false,
   is_final: true,
-  required_permissions: [],
+  required_permissions: [] }
 },
-  archived: {
+  archived: { ,
   id: 'archived',
   name: 'Archived',
   description: 'No longer active',
@@ -67,9 +67,9 @@ interface WorkflowStateIndicatorProps {
   icon: 'Archive',
   is_initial: false,
   is_final: true,
-  required_permissions: [],
+  required_permissions: [] }
 },
-  rejected: {
+  rejected: { ,
   id: 'rejected',
   name: 'Rejected',
   description: 'Rejected during review',
@@ -77,104 +77,93 @@ interface WorkflowStateIndicatorProps {
   icon: 'XCircle',
   is_initial: false,
   is_final: false,
-  required_permissions: [],
+  required_permissions: [] }
 };
-const STATE_ICONS = {
-  FileText,
+const STATE_ICONS = { FileText,
   Eye,
   CheckCircle,
   Globe,
   Archive,
   XCircle,
-  Clock,
+  Clock }
   AlertCircle
 };
-const getStateColors = (color: string) => {
-  switch (color) {
+const getStateColors = (color: string) => { switch (color) {
   case 'gray':,
   return {
   bg: 'bg-gray-100',
   text: 'text-gray-800',
   border: 'border-gray-300',
-  icon: 'text-gray-600',
+  icon: 'text-gray-600' }
 };
     case 'yellow':
-      return {
-  bg: 'bg-yellow-100',
+      return { bg: 'bg-yellow-100',
   text: 'text-yellow-800',
   border: 'border-yellow-300',
-  icon: 'text-yellow-600',
+  icon: 'text-yellow-600' }
 };
     case 'green':
-      return {
-  bg: 'bg-green-100',
+      return { bg: 'bg-green-100',
   text: 'text-green-800',
   border: 'border-green-300',
-  icon: 'text-green-600',
+  icon: 'text-green-600' }
 };
     case 'blue':
-      return {
-  bg: 'bg-blue-100',
+      return { bg: 'bg-blue-100',
   text: 'text-blue-800',
   border: 'border-blue-300',
-  icon: 'text-blue-600',
+  icon: 'text-blue-600' }
 };
     case 'red':
-      return {
-  bg: 'bg-red-100',
+      return { bg: 'bg-red-100',
   text: 'text-red-800',
   border: 'border-red-300',
-  icon: 'text-red-600',
+  icon: 'text-red-600' }
 };
     case 'purple':
-      return {
-  bg: 'bg-purple-100',
+      return { bg: 'bg-purple-100',
   text: 'text-purple-800',
   border: 'border-purple-300',
-  icon: 'text-purple-600',
+  icon: 'text-purple-600' }
 };
     case 'indigo':
-      return {
-  bg: 'bg-indigo-100',
+      return { bg: 'bg-indigo-100',
   text: 'text-indigo-800',
   border: 'border-indigo-300',
-  icon: 'text-indigo-600',
+  icon: 'text-indigo-600' }
 };
     default:
-      return {,
+      return { ,
   bg: 'bg-gray-100',
   text: 'text-gray-800',
   border: 'border-gray-300',
-  icon: 'text-gray-600',
+  icon: 'text-gray-600' }
 };
 };
-const getSizeClasses = (size: 'sm' | 'md' | 'lg') => {
-  switch (size) {
+const getSizeClasses = (size: 'sm' | 'md' | 'lg') => { switch (size) {
   case 'sm':,
   return {
   container: 'px-2 py-1 text-xs',
   icon: 'w-3 h-3',
-  gap: 'space-x-1',
+  gap: 'space-x-1' }
 };
     case 'lg':
-      return {
-  container: 'px-4 py-2 text-base',
+      return { container: 'px-4 py-2 text-base',
   icon: 'w-5 h-5',
-  gap: 'space-x-3',
+  gap: 'space-x-3' }
 };
     default: // md,
-      return {
-  container: 'px-3 py-1 text-sm',
+      return { container: 'px-3 py-1 text-sm',
   icon: 'w-4 h-4',
-  gap: 'space-x-2',
+  gap: 'space-x-2' }
 };
 };
 
-export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
-  state,
-  stateConfig,
-  showLabel = true,
-  size = 'md',
+export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({ )
+  state
+  stateConfig
+  showLabel = true
+  size = 'md' }
   className = ''
 }) => {
   const config = stateConfig || DEFAULT_STATE_CONFIGS[state];
@@ -203,16 +192,15 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
 };
 
 // Workflow State Timeline Component
-}
-interface WorkflowStateTimelineProps {
-  states: WorkflowStateConfig;
+
+
+interface WorkflowStateTimelineProps { states: WorkflowStateConfig;
   currentState: WorkflowState;
   completedStates?: WorkflowState;
   className?: string;
+  export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
+  return }
 
-export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
-  return;
-}
     <div className={`flex items-center space-x-2 ${className}`}>}
       {states.map((state, index) => {
         const isLast = index === states.length - 1;
@@ -232,12 +220,12 @@ export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
                 {state.name}
               </span>
             </div>
-            {!isLast && ()
+            { !isLast && ()
               <div className="flex-1 mx-2">
                 <div 
                   className={`h-0.5 ${
-  completed ? 'bg-green-400' : 'bg-gray-200',
-}`} 
+  completed ? 'bg-green-400' : 'bg-gray-200' }
+`} 
                 />
               </div>
             )}
@@ -249,16 +237,17 @@ export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
 };
 
 // Workflow State History Component
-}
-interface WorkflowStateHistoryProps {
-  history: Array<{
+
+
+interface WorkflowStateHistoryProps { history: Array<{ }
   state: WorkflowState;
   stateConfig?: WorkflowStateConfig;
   timestamp: string;
   actor?: string;
   comment?: string;
-}
-}>;
+
+
+>;
   className?: string;
 
 export };

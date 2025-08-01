@@ -7,16 +7,15 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface OpenAITTSConfig {
-    apiKey: string;
+}
+export interface OpenAITTSConfig { apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
-    organization?: string;
-
+    organization?: string }
 }
-export interface TTSRequestOptions {
-    text: string;
+}
+export interface TTSRequestOptions { text: string;
     voice?: 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer';
     model?: 'tts-1' | 'tts-1-hd';
     response_format?: 'mp3' | 'opus' | 'aac' | 'flac' | 'wav' | 'pcm';
@@ -25,7 +24,7 @@ export interface TTSRequestOptions {
         stability?: number;
         similarity_boost?: number;
         style?: number;
-        use_speaker_boost?: boolean;
+        use_speaker_boost?: boolean }
 }
     };
     use_ssml?: boolean;
@@ -34,30 +33,27 @@ export interface TTSRequestOptions {
     normalize_audio?: boolean;
 
 }
-export interface TTSGenerationResult {
-    audio: {
+}
+export interface TTSGenerationResult { audio: {
         data: ArrayBuffer | string;
         format: string;
         duration: number;
         sample_rate: number;
         channels: number;
-        bitrate?: number;
+        bitrate?: number }
 }
     };
-    metadata: {
-        voice: string;
+    metadata: { voice: string;
         model: string;
         text_length: number;
         audio_length: number;
         speed: number;
         response_format: string;
-        generation_time: number;
-    };
-    usage: {
-        characters: number;
-        cost: number;
-    };
+        generation_time: number };
+    usage: { characters: number;
+        cost: number };
 
+}
 }
 export interface VoiceInfo {
     id: string;
@@ -97,4 +93,5 @@ export declare class OpenAITTSAdapter extends BaseAIModel {
 
 export default OpenAITTSAdapter;
 //# sourceMappingURL=OpenAITTSAdapter.d.ts.map
+}
 }

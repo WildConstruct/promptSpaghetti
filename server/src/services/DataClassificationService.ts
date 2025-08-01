@@ -7,8 +7,8 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import * as crypto from 'crypto';
 
-}
-}
+
+
 export interface DataClassificationConfig {
   enabled: boolean;
   defaultClassification: DataClassification;
@@ -22,8 +22,9 @@ export interface DataClassificationConfig {
     restricted: boolean;
     internal: boolean;
     public: boolean;
-}
-}
+
+
+
   };
   approvalRequired: {
     confidential: boolean;
@@ -46,13 +47,13 @@ export interface DataClassificationConfig {
       notifyOnUpgrade: boolean; // Alert when classification level increases
     };
   };
-}
+
 
 export type DataClassification = 'public' | 'internal' | 'confidential' | 'restricted';
 export type TransferDestination = DataClassification | 'external';
 
-}
-}
+
+
 export interface ClassificationRule {
   id: string;
   name: string;
@@ -63,23 +64,25 @@ export interface ClassificationRule {
   enabled: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationCondition {
   field: string; // 'content', 'metadata', 'filename', 'size', 'source'
   operator: 'contains' | 'matches' | 'equals' | 'gt' | 'lt' | 'in' | 'pattern';
   value: string | number | string[];
   caseSensitive?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TransferPolicy {
   id: string;
   name: string;
@@ -95,26 +98,28 @@ export interface TransferPolicy {
   enabled: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
+
+
+
+
 
 export type TransferType = 'api_export' | 'file_download' | 'data_sync' | 'backup' | 'migration' | 'sharing';
 export type PolicyAction = 'allow' | 'deny' | 'require_approval' | 'encrypt_only';
 export type AuditLevel = 'none' | 'basic' | 'detailed' | 'full';
 
-}
-}
+
+
 export interface TransferCondition {
   type: 'user_role' | 'time_window' | 'location' | 'approval_status' | 'encryption_status';
   operator: 'equals' | 'in' | 'between' | 'not_in';
-}
-}
-  value: string | string[] | { start: string; end: string };
-}
 
-}
-}
+
+
+  value: string | string[] | { start: string; end: string };
+
+
+
+
 export interface DataTransferRequest {
   id: string;
   dataId: string;
@@ -131,12 +136,13 @@ export interface DataTransferRequest {
   approvedAt?: Date;
   encryptionRequired: boolean;
   auditRequired: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TransferDecision {
   requestId: string;
   action: PolicyAction;
@@ -148,12 +154,13 @@ export interface TransferDecision {
   auditLevel: AuditLevel;
   conditions: string[];
   decidedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationResult {
   dataId: string;
   classification: DataClassification;
@@ -163,12 +170,13 @@ export interface ClassificationResult {
   reasoning: string[];
   metadata: Record<string, any>;
   classifiedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TransferAuditEvent {
   id: string;
   requestId: string;
@@ -183,12 +191,13 @@ export interface TransferAuditEvent {
   auditLevel: AuditLevel;
   metadata: Record<string, any>;
   timestamp: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationDriftEvent {
   id: string;
   dataId: string;
@@ -202,22 +211,24 @@ export interface ClassificationDriftEvent {
   reasoning: string[];
   metadata: Record<string, any>;
   detectedAt: Date;
-}
-}
-}
+
+
+
+
 
 export type DriftType = 'upgrade' | 'downgrade' | 'lateral' | 'oscillation';
 export type DriftSeverity = 'low' | 'medium' | 'high' | 'critical';
 
-}
-}
+
+
 export interface DriftAnalysisResult {
   analysisId: string;
   timeRange: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   totalDataItems: number;
   driftEvents: number;
@@ -234,13 +245,13 @@ export interface DriftAnalysisResult {
     ruleName: string;
     affectedItems: number;
     percentage: number;
-  }>;
+>;
   alerts: DriftAlert[];
   recommendations: string[];
-}
 
-}
-}
+
+
+
 export interface DriftAlert {
   id: string;
   type: 'significant_change' | 'rapid_change' | 'classification_downgrade' | 'classification_upgrade' | 'rule_instability';
@@ -250,9 +261,10 @@ export interface DriftAlert {
   affectedPercentage: number;
   timeWindow: string;
   createdAt: Date;
-}
-}
-}
+
+
+
+
 
 export const defaultDataClassificationConfig: DataClassificationConfig = {
   enabled: true,
@@ -267,28 +279,28 @@ export const defaultDataClassificationConfig: DataClassificationConfig = {
     restricted: true,
     internal: false,
     public: false
-  }
+
   approvalRequired: {
     confidential: true,
     restricted: true,
     internal: false,
     public: false
-  }
+
   driftDetection: {
     enabled: true,
     thresholds: {
       significantChange: 10.0, // 10% of data items changed classification
       rapidChange: 5.0, // 5% change within time window
       timeWindow: 24 // 24 hours for rapid change detection
-  }
+
     alerting: {
       enabled: true,
       notifyOnSignificant: true,
       notifyOnRapid: true,
       notifyOnDowngrade: true,
       notifyOnUpgrade: false // Usually upgrades are less concerning
-    }
-  }
+
+
 };
 
 export class DataClassificationService {
@@ -307,7 +319,7 @@ export class DataClassificationService {
     this.redis = redis;
     this.auditService = auditService;
     this.config = config;
-  }
+
 
   async initialize(): Promise<void> {
 
@@ -322,11 +334,11 @@ export class DataClassificationService {
       await this.loadTransferPolicies();
       
       console.log('Data classification service initialized successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize data classification service:', error);
       throw error;
-    }
-  }
+
+
 
   async classifyData(
     dataId: string,
@@ -344,7 +356,7 @@ export class DataClassificationService {
         // Convert date strings back to Date objects
         parsed.classifiedAt = new Date(parsed.classifiedAt);
         return parsed;
-      }
+
 
       // Get previous classification for drift detection
       const previousClassifications = await this.getClassificationHistory(dataId);
@@ -374,12 +386,12 @@ export class DataClassificationService {
           appliedRule = rule;
           reasoning.push(...ruleResult.reasoning);
           break; // Use first matching rule (highest priority)
-        }
-      }
+
+
 
       if (!appliedRule) {
         reasoning.push(`No matching rules found, using default classification: ${classification}`);
-      }
+
 
       const result: ClassificationResult = {
         dataId,
@@ -398,7 +410,7 @@ export class DataClassificationService {
       // Detect and handle classification drift
       if (this.config.driftDetection.enabled && previousClassification) {
         await this.detectAndRecordDrift(previousClassification, result);
-      }
+
 
       // Cache for 1 hour
       await this.redis.setex(cacheKey, 3600, JSON.stringify(result));
@@ -407,11 +419,11 @@ export class DataClassificationService {
       await this.auditClassification(result);
 
       return result;
-    } catch (error) {
+ catch (error) {
       console.error('Error classifying data:', error);
       throw new Error('Failed to classify data');
-    }
-  }
+
+
 
   async evaluateTransferRequest(request: DataTransferRequest): Promise<TransferDecision> {
 
@@ -444,8 +456,8 @@ export class DataClassificationService {
             decidedAt: new Date()
           };
           break; // Use first applicable policy
-        }
-      }
+
+
 
       if (!decision) {
         // Default policy: require approval for confidential/restricted
@@ -464,7 +476,7 @@ export class DataClassificationService {
           conditions: [],
           decidedAt: new Date()
         };
-      }
+
 
       // Store decision
       await this.storeTransferDecision(decision);
@@ -473,11 +485,11 @@ export class DataClassificationService {
       await this.auditTransferDecision(request, decision);
 
       return decision;
-    } catch (error) {
+ catch (error) {
       console.error('Error evaluating transfer request:', error);
       throw new Error('Failed to evaluate transfer request');
-    }
-  }
+
+
 
   async createClassificationRule(
     rule: Omit<ClassificationRule,
@@ -524,16 +536,16 @@ export class DataClassificationService {
           ruleId,
           ruleName: rule.name,
           classification: rule.classification
-  }
+
         severity: 'info'
       });
 
       return newRule;
-    } catch (error) {
+ catch (error) {
       console.error('Error creating classification rule:', error);
       throw new Error('Failed to create classification rule');
-    }
-  }
+
+
 
   async createTransferPolicy(policy: Omit<TransferPolicy, 'id' | 'createdAt' | 'updatedAt'>): Promise<TransferPolicy> {
 
@@ -582,16 +594,16 @@ export class DataClassificationService {
           policyName: policy.name,
           action: policy.action,
           sourceClassification: policy.sourceClassification
-  }
+
         severity: 'info'
       });
 
       return newPolicy;
-    } catch (error) {
+ catch (error) {
       console.error('Error creating transfer policy:', error);
       throw new Error('Failed to create transfer policy');
-    }
-  }
+
+
 
   async getClassificationHistory(dataId: string): Promise<ClassificationResult[]> {
 
@@ -612,11 +624,11 @@ export class DataClassificationService {
         metadata: JSON.parse(row.metadata || '{}'),
         classifiedAt: row.classified_at
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting classification history:', error);
       return [];
-    }
-  }
+
+
 
   async getTransferAuditLog(filters: {
     dataId?: string;
@@ -625,7 +637,7 @@ export class DataClassificationService {
     startDate?: Date;
     endDate?: Date;
     limit?: number;
-  } = {}): Promise<TransferAuditEvent[]> {
+ = {}): Promise<TransferAuditEvent[]> {
 
     try {
       let query = 'SELECT * FROM transfer_audit_log WHERE 1=1';
@@ -635,34 +647,34 @@ export class DataClassificationService {
       if (filters.dataId) {
         query += ` AND data_id = $${paramIndex++}`;
         params.push(filters.dataId);
-      }
+
 
       if (filters.userId) {
         query += ` AND user_id = $${paramIndex++}`;
         params.push(filters.userId);
-      }
+
 
       if (filters.classification) {
         query += ` AND data_classification = $${paramIndex++}`;
         params.push(filters.classification);
-      }
+
 
       if (filters.startDate) {
         query += ` AND timestamp >= $${paramIndex++}`;
         params.push(filters.startDate);
-      }
+
 
       if (filters.endDate) {
         query += ` AND timestamp <= $${paramIndex++}`;
         params.push(filters.endDate);
-      }
+
 
       query += ' ORDER BY timestamp DESC';
 
       if (filters.limit) {
         query += ` LIMIT $${paramIndex++}`;
         params.push(filters.limit);
-      }
+
 
       const result = await this.db.query(query, params);
 
@@ -681,11 +693,11 @@ export class DataClassificationService {
         metadata: JSON.parse(row.metadata || '{}'),
         timestamp: row.timestamp
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting transfer audit log:', error);
       return [];
-    }
-  }
+
+
 
   async analyzeDrift(timeRange: { start: Date; end: Date }): Promise<DriftAnalysisResult> {
 
@@ -728,7 +740,7 @@ export class DataClassificationService {
         if (!current.ruleName) {
           const rule = this.config.classificationRules.find(r => r.id === event.newRuleId);
           current.ruleName = rule?.name || 'Unknown Rule';
-        }
+
         ruleStats.set(event.newRuleId, current);
       });
 
@@ -760,11 +772,11 @@ export class DataClassificationService {
         alerts,
         recommendations
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error analyzing drift:', error);
       throw new Error('Failed to analyze classification drift');
-    }
-  }
+
+
 
   async getDriftEvents(filters: {
     dataId?: string;
@@ -773,7 +785,7 @@ export class DataClassificationService {
     driftType?: DriftType;
     severity?: DriftSeverity;
     limit?: number;
-  } = {}): Promise<ClassificationDriftEvent[]> {
+ = {}): Promise<ClassificationDriftEvent[]> {
 
     try {
       let query = 'SELECT * FROM classification_drift_events WHERE 1=1';
@@ -783,34 +795,34 @@ export class DataClassificationService {
       if (filters.dataId) {
         query += ` AND data_id = $${paramIndex++}`;
         params.push(filters.dataId);
-      }
+
 
       if (filters.startDate) {
         query += ` AND detected_at >= $${paramIndex++}`;
         params.push(filters.startDate);
-      }
+
 
       if (filters.endDate) {
         query += ` AND detected_at <= $${paramIndex++}`;
         params.push(filters.endDate);
-      }
+
 
       if (filters.driftType) {
         query += ` AND drift_type = $${paramIndex++}`;
         params.push(filters.driftType);
-      }
+
 
       if (filters.severity) {
         query += ` AND severity = $${paramIndex++}`;
         params.push(filters.severity);
-      }
+
 
       query += ' ORDER BY detected_at DESC';
 
       if (filters.limit) {
         query += ` LIMIT $${paramIndex++}`;
         params.push(filters.limit);
-      }
+
 
       const result = await this.db.query(query, params);
 
@@ -828,11 +840,11 @@ export class DataClassificationService {
         metadata: JSON.parse(row.metadata || '{}'),
         detectedAt: row.detected_at
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting drift events:', error);
       return [];
-    }
-  }
+
+
 
   async getDriftAlerts(filters: {
     severity?: DriftSeverity;
@@ -840,7 +852,7 @@ export class DataClassificationService {
     startDate?: Date;
     endDate?: Date;
     limit?: number;
-  } = {}): Promise<DriftAlert[]> {
+ = {}): Promise<DriftAlert[]> {
 
     try {
       let query = 'SELECT * FROM classification_drift_alerts WHERE 1=1';
@@ -850,29 +862,29 @@ export class DataClassificationService {
       if (filters.severity) {
         query += ` AND severity = $${paramIndex++}`;
         params.push(filters.severity);
-      }
+
 
       if (filters.type) {
         query += ` AND type = $${paramIndex++}`;
         params.push(filters.type);
-      }
+
 
       if (filters.startDate) {
         query += ` AND created_at >= $${paramIndex++}`;
         params.push(filters.startDate);
-      }
+
 
       if (filters.endDate) {
         query += ` AND created_at <= $${paramIndex++}`;
         params.push(filters.endDate);
-      }
+
 
       query += ' ORDER BY created_at DESC';
 
       if (filters.limit) {
         query += ` LIMIT $${paramIndex++}`;
         params.push(filters.limit);
-      }
+
 
       const result = await this.db.query(query, params);
 
@@ -886,11 +898,11 @@ export class DataClassificationService {
         timeWindow: row.time_window,
         createdAt: row.created_at
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting drift alerts:', error);
       return [];
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -1004,7 +1016,7 @@ export class DataClassificationService {
 
     for (const table of tables) {
       await this.db.query(table);
-    }
+
 
     // Create indexes
     const indexes = [
@@ -1025,8 +1037,8 @@ export class DataClassificationService {
 
     for (const index of indexes) {
       await this.db.query(index);
-    }
-  }
+
+
 
   private async loadClassificationRules(): Promise<void> {
 
@@ -1048,11 +1060,11 @@ export class DataClassificationService {
         createdAt: row.created_at,
         updatedAt: row.updated_at
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error loading classification rules:', error);
       this.config.classificationRules = [];
-    }
-  }
+
+
 
   private async loadTransferPolicies(): Promise<void> {
 
@@ -1079,11 +1091,11 @@ export class DataClassificationService {
         createdAt: row.created_at,
         updatedAt: row.updated_at
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error loading transfer policies:', error);
       this.config.transferPolicies = [];
-    }
-  }
+
+
 
   private async evaluateClassificationRule(
     rule: ClassificationRule,
@@ -1098,18 +1110,18 @@ export class DataClassificationService {
       if (conditionResult.matches) {
         matchCount++;
         reasoning.push(conditionResult.reason);
-      }
-    }
+
+
 
     const matches = matchCount === rule.conditions.length; // All conditions must match
     const confidence = matches ? Math.min(0.9, 0.6 + (matchCount * 0.1)) : 0;
 
     if (matches) {
       reasoning.unshift(`Rule "${rule.name}" matched all ${rule.conditions.length} conditions`);
-    }
+
 
     return { matches, confidence, reasoning };
-  }
+
 
   private evaluateCondition(
     condition: ClassificationCondition,
@@ -1132,7 +1144,7 @@ export class DataClassificationService {
       break;
     default:
       fieldValue = data.metadata[condition.field] || '';
-    }
+
 
     const normalizedValue = condition.caseSensitive !== false ? 
       fieldValue : 
@@ -1164,10 +1176,10 @@ export class DataClassificationService {
         const regex = new RegExp(condition.value as string, condition.caseSensitive !== false ? '' : 'i');
         matches = typeof normalizedValue === 'string' && regex.test(normalizedValue);
         reason = `Field "${condition.field}" ${matches ? 'matches' : 'does not match'} pattern "${condition.value}"`;
-      } catch (error) {
+ catch (error) {
         matches = false;
         reason = `Invalid regex pattern "${condition.value}"`;
-      }
+
       break;
         
     case 'gt':
@@ -1188,10 +1200,10 @@ export class DataClassificationService {
     default:
       matches = false;
       reason = `Unknown operator "${condition.operator}"`;
-    }
+
 
     return { matches, reason };
-  }
+
 
   private async evaluateTransferPolicy(
     policy: TransferPolicy,
@@ -1209,16 +1221,16 @@ export class DataClassificationService {
         `Source classification mismatch: expected ${policy.sourceClassification},
         got ${request.sourceClassification}`
       );
-    }
+
 
     if (policy.transferType !== request.transferType) {
       applicable = false;
       reasoning.push(`Transfer type mismatch: expected ${policy.transferType}, got ${request.transferType}`);
-    }
+
 
     if (!applicable) {
       return { applicable, reasoning, conditions };
-    }
+
 
     // Evaluate policy conditions
     for (const condition of policy.conditions) {
@@ -1226,17 +1238,17 @@ export class DataClassificationService {
       if (!conditionResult.matches) {
         applicable = false;
         reasoning.push(conditionResult.reason);
-      } else {
+ else {
         conditions.push(conditionResult.reason);
-      }
-    }
+
+
 
     if (applicable) {
       reasoning.push(`Policy "${policy.name}" is applicable`);
-    }
+
 
     return { applicable, reasoning, conditions };
-  }
+
 
   private evaluateTransferCondition(
     condition: TransferCondition,
@@ -1250,10 +1262,10 @@ export class DataClassificationService {
       if (condition.operator === 'in' && Array.isArray(condition.value)) {
         matches = request.userRoles.some(role => (condition.value as string[]).includes(role));
         reason = `User roles ${matches ? 'include' : 'do not include'} required roles`;
-      } else if (condition.operator === 'equals') {
+ else if (condition.operator === 'equals') {
         matches = request.userRoles.includes(condition.value as string);
         reason = `User ${matches ? 'has' : 'does not have'} required role "${condition.value}"`;
-      }
+
       break;
         
     case 'time_window':
@@ -1264,7 +1276,7 @@ export class DataClassificationService {
         const end = parseInt(condition.value.end);
         matches = currentHour >= start && currentHour <= end;
         reason = `Current time ${matches ? 'is within' : 'is outside'} allowed window (${start}-${end})`;
-      }
+
       break;
         
     case 'approval_status':
@@ -1284,10 +1296,10 @@ export class DataClassificationService {
     default:
       matches = false;
       reason = `Unknown condition type "${condition.type}"`;
-    }
+
 
     return { matches, reason };
-  }
+
 
   private async storeClassification(result: ClassificationResult): Promise<void> {
 
@@ -1308,7 +1320,7 @@ export class DataClassificationService {
       JSON.stringify(result.metadata),
       result.classifiedAt
     ]);
-  }
+
 
   private async storeTransferDecision(decision: TransferDecision): Promise<void> {
 
@@ -1332,7 +1344,7 @@ export class DataClassificationService {
       JSON.stringify(decision.conditions),
       decision.decidedAt
     ]);
-  }
+
 
   private async auditClassification(result: ClassificationResult): Promise<void> {
 
@@ -1346,13 +1358,13 @@ export class DataClassificationService {
           confidence: result.confidence,
           ruleId: result.ruleId,
           ruleName: result.ruleName
-  }
+
         severity: 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error auditing classification:', error);
-    }
-  }
+
+
 
   private async auditTransferDecision(request: DataTransferRequest, decision: TransferDecision): Promise<void> {
 
@@ -1394,17 +1406,17 @@ export class DataClassificationService {
           policyId: decision.policyId,
           requiresApproval: decision.requiresApproval,
           requiresEncryption: decision.requiresEncryption
-  }
+
         severity: decision.action === 'deny' ? 'warning' : 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error auditing transfer decision:', error);
-    }
-  }
+
+
 
   private generateId(prefix: string): string {
     return `${prefix}_${Date.now()}_${crypto.randomBytes(8).toString('hex')}`;
-  }
+
 
   private async detectAndRecordDrift(
     previousClassification: ClassificationResult,
@@ -1415,7 +1427,7 @@ export class DataClassificationService {
       // Only detect drift if classification actually changed
       if (previousClassification.classification === newClassification.classification) {
         return;
-      }
+
 
       // Determine drift type and severity
       const driftType = this.determineDriftType(
@@ -1459,7 +1471,7 @@ export class DataClassificationService {
           newConfidence: newClassification.confidence,
           timeSinceLastClassification: new Date().getTime() - previousClassification.classifiedAt.getTime(),
           isOscillation
-  }
+
         detectedAt: new Date()
       };
 
@@ -1471,12 +1483,11 @@ export class DataClassificationService {
 
       // Audit drift detection
       await this.auditDriftDetection(driftEvent);
-
-    } catch (error) {
+ catch (error) {
       console.error('Error detecting drift:', error);
       // Don't throw - drift detection failure shouldn't block classification
-    }
-  }
+
+
 
   private determineDriftType(
     previousClassification: DataClassification,
@@ -1495,12 +1506,12 @@ export class DataClassificationService {
 
     if (newLevel > previousLevel) {
       return 'upgrade';
-    } else if (newLevel < previousLevel) {
+ else if (newLevel < previousLevel) {
       return 'downgrade';
-    } else {
+ else {
       return 'lateral';
-    }
-  }
+
+
 
   private determineDriftSeverity(
     previousClassification: DataClassification,
@@ -1523,7 +1534,7 @@ export class DataClassificationService {
       if (levelDifference >= 2) return 'critical';
       if (levelDifference === 1) return 'high';
       return 'medium';
-    }
+
 
     // High confidence changes
     if (levelDifference >= 3) return 'high';
@@ -1531,7 +1542,7 @@ export class DataClassificationService {
     if (levelDifference === 1) return 'low';
     
     return 'low';
-  }
+
 
   private detectOscillationPattern(history: ClassificationResult[]): boolean {
     if (history.length < 4) return false;
@@ -1546,7 +1557,7 @@ export class DataClassificationService {
       classifications[1] === classifications[3] &&
       classifications[0] !== classifications[1]
     );
-  }
+
 
   private escalateSeverity(severity: DriftSeverity): DriftSeverity {
     const escalation = {
@@ -1556,7 +1567,7 @@ export class DataClassificationService {
       'critical': 'critical'
     };
     return escalation[severity] as DriftSeverity;
-  }
+
 
   private async storeDriftEvent(event: ClassificationDriftEvent): Promise<void> {
 
@@ -1580,7 +1591,7 @@ export class DataClassificationService {
       JSON.stringify(event.metadata),
       event.detectedAt
     ]);
-  }
+
 
   private async checkAndCreateDriftAlerts(driftEvent: ClassificationDriftEvent): Promise<void> {
 
@@ -1598,7 +1609,7 @@ export class DataClassificationService {
         timeWindow: 'immediate',
         createdAt: new Date()
       });
-    }
+
 
     // Check for upgrade alerts
     if (this.config.driftDetection.alerting.notifyOnUpgrade && driftEvent.driftType === 'upgrade') {
@@ -1612,7 +1623,7 @@ export class DataClassificationService {
         timeWindow: 'immediate',
         createdAt: new Date()
       });
-    }
+
 
     // Check for oscillation alerts
     if (driftEvent.driftType === 'oscillation') {
@@ -1626,13 +1637,13 @@ export class DataClassificationService {
         timeWindow: 'recent_history',
         createdAt: new Date()
       });
-    }
+
 
     // Store alerts
     for (const alert of alerts) {
       await this.storeDriftAlert(alert);
-    }
-  }
+
+
 
   private async storeDriftAlert(alert: DriftAlert): Promise<void> {
 
@@ -1651,7 +1662,7 @@ export class DataClassificationService {
       alert.timeWindow,
       alert.createdAt
     ]);
-  }
+
 
   private async auditDriftDetection(driftEvent: ClassificationDriftEvent): Promise<void> {
 
@@ -1666,13 +1677,13 @@ export class DataClassificationService {
           previousClassification: driftEvent.previousClassification,
           newClassification: driftEvent.newClassification,
           confidence: driftEvent.confidence
-  }
+
         severity: driftEvent.severity === 'critical' ? 'warning' : 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error auditing drift detection:', error);
-    }
-  }
+
+
 
   private async getTotalClassificationsInRange(start: Date, end: Date): Promise<number> {
 
@@ -1684,11 +1695,11 @@ export class DataClassificationService {
       `, [start, end]);
       
       return parseInt(result.rows[0]?.count || '0');
-    } catch (error) {
+ catch (error) {
       console.error('Error getting total classifications:', error);
       return 0;
-    }
-  }
+
+
 
   private async generateDriftAlerts(
     driftEvents: ClassificationDriftEvent[],
@@ -1711,7 +1722,7 @@ export class DataClassificationService {
         timeWindow: `${timeRange.start.toISOString()} to ${timeRange.end.toISOString()}`,
         createdAt: new Date()
       });
-    }
+
 
     // Check for rapid change threshold (within configured time window)
     const rapidTimeWindow = new Date(timeRange.end.getTime() - (this.config.driftDetection.thresholds.timeWindow * 60 * 60 * 1000));
@@ -1730,10 +1741,10 @@ export class DataClassificationService {
         timeWindow: `Last ${this.config.driftDetection.thresholds.timeWindow} hours`,
         createdAt: new Date()
       });
-    }
+
 
     return alerts;
-  }
+
 
   private generateDriftRecommendations(
     driftEvents: ClassificationDriftEvent[],
@@ -1750,7 +1761,7 @@ export class DataClassificationService {
       recommendations.push(
         'Consider consolidating overlapping rules or adjusting rule priorities'
       );
-    }
+
 
     // High downgrade rate recommendations
     if (driftPatterns.downgrades > driftEvents.length * 0.6) {
@@ -1760,7 +1771,7 @@ export class DataClassificationService {
       recommendations.push(
         'Consider implementing approval workflow for classification downgrades'
       );
-    }
+
 
     // High severity events recommendations
     if (severityBreakdown.critical > 0 || severityBreakdown.high > driftEvents.length * 0.3) {
@@ -1770,7 +1781,7 @@ export class DataClassificationService {
       recommendations.push(
         'Consider implementing manual review for high-impact classification changes'
       );
-    }
+
 
     // Low confidence recommendations
     const lowConfidenceEvents = driftEvents.filter(e => e.confidence < 0.7);
@@ -1781,7 +1792,7 @@ export class DataClassificationService {
       recommendations.push(
         'Consider implementing human-in-the-loop validation for low-confidence classifications'
       );
-    }
+
 
     // General recommendations
     if (driftEvents.length > 0) {
@@ -1791,8 +1802,7 @@ export class DataClassificationService {
       recommendations.push(
         'Establish baseline metrics and set up automated alerting for unusual drift patterns'
       );
-    }
+
 
     return recommendations;
-  }
-}
+

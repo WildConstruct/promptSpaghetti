@@ -1,44 +1,34 @@
-export interface ValidationResult {
-    isValid: boolean;
+export interface ValidationResult { isValid: boolean;
     errors: ValidationError[];
-    warnings: ValidationWarning[];
-
-
+    warnings: ValidationWarning[] }
 }
-export interface ValidationError {
-    type: 'syntax' | 'semantic' | 'schema';
+}
+export interface ValidationError { type: 'syntax' | 'semantic' | 'schema';
     message: string;
     line?: number;
     column?: number;
     nodeId?: string;
-    severity: 'error' | 'warning';
-
-
+    severity: 'error' | 'warning' }
 }
-export interface ValidationWarning {
-    type: 'optimization' | 'compatibility' | 'best-practice';
+}
+export interface ValidationWarning { type: 'optimization' | 'compatibility' | 'best-practice';
     message: string;
     suggestion?: string;
-    nodeId?: string;
-
-
+    nodeId?: string }
 }
-export interface ParsedGraph {
-    version: string;
+}
+export interface ParsedGraph { version: string;
     checksum?: string;
     metadata?: Record<string, any>;
     nodes: ParsedNode[];
-    edges: ParsedEdge[];
-
-
+    edges: ParsedEdge[] }
 }
-export interface ParsedNode {
-    id: string;
+}
+export interface ParsedNode { id: string;
     type: string;
     props?: Record<string, any>;
-    inputs?: string[];
-
-
+    inputs?: string[] }
+}
 }
 export interface ParsedEdge {
     source: string;
@@ -98,4 +88,5 @@ export declare function validateFormat(content: string): ValidationResult;
  */
 export declare function isValidFormat(content: string): boolean;
 //# sourceMappingURL=validator.d.ts.map
+}
 }

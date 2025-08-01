@@ -6,8 +6,8 @@
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
-}
-}
+
+
 export interface SecurityHeader {
   name: string;
   value: string;
@@ -16,12 +16,13 @@ export interface SecurityHeader {
   complianceStandards: string[];
   description: string;
   recommendation: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HeaderAuditRule {
   id: string;
   name: string;
@@ -35,8 +36,9 @@ export interface HeaderAuditRule {
     time?: string; // HH:MM for daily/weekly
     dayOfWeek?: number; // 0-6 for weekly
     dayOfMonth?: number; // 1-31 for monthly
-}
-}
+
+
+
   };
   notifications: {
     onViolation: boolean;
@@ -47,10 +49,10 @@ export interface HeaderAuditRule {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-}
 
-}
-}
+
+
+
 export interface HeaderAuditResult {
   id: string;
   ruleId: string;
@@ -62,20 +64,21 @@ export interface HeaderAuditResult {
       value: string;
       compliant: boolean;
       issues: string[];
-}
-}
-    }>;
+
+
+
+>;
     missing: Array<{
       name: string;
       severity: 'low' | 'medium' | 'high' | 'critical';
       reason: string;
-    }>;
+>;
     malformed: Array<{
       name: string;
       value: string;
       expectedFormat: string;
       issues: string[];
-    }>;
+>;
   };
   score: number; // 0-100 compliance score
   securityLevel: 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
@@ -86,19 +89,20 @@ export interface HeaderAuditResult {
     description: string;
     recommendation: string;
     complianceImpact: string[];
-  }>;
+>;
   recommendations: string[];
   responseTime: number;
   responseStatus: number;
-}
 
-}
-}
+
+
+
 export interface AuditReport {
   id: string;
   generatedAt: Date;
-}
-}
+
+
+
   timeRange: { start: Date; end: Date };
   summary: {
     totalEndpoints: number;
@@ -122,15 +126,15 @@ export interface AuditReport {
     lastAudit: Date;
     violations: number;
     status: 'compliant' | 'warning' | 'violation' | 'critical';
-  }>;
+>;
   recommendations: Array<{
     priority: 'high' | 'medium' | 'low';
     category: string;
     description: string;
     impact: string;
     effort: 'low' | 'medium' | 'high';
-  }>;
-}
+>;
+
 
 export class SecurityHeaderAuditService extends EventEmitter {
   private rules: Map<string, HeaderAuditRule> = new Map();
@@ -141,7 +145,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
     super();
     this.initializeDefaultRules();
     this.startScheduledAudits();
-  }
+
 
   /**
    * Create a new audit rule
@@ -164,7 +168,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
     
     if (rule.enabled) {
       this.scheduleAuditRule(rule);
-    }
+
 
     await this.logAuditEvent('rule_created', rule.id, createdBy, {
       ruleName: rule.name,
@@ -174,7 +178,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
 
     this.emit('ruleCreated', rule);
     return rule;
-  }
+
 
   /**
    * Perform security header audit for endpoints
@@ -187,11 +191,11 @@ export class SecurityHeaderAuditService extends EventEmitter {
     const rule = this.rules.get(ruleId);
     if (!rule) {
       throw new Error('Audit rule not found');
-    }
+
 
     if (!rule.enabled) {
       throw new Error('Audit rule is disabled');
-    }
+
 
     const targetEndpoints = endpoints || rule.endpoints;
     const results: HeaderAuditResult[] = [];
@@ -208,19 +212,18 @@ export class SecurityHeaderAuditService extends EventEmitter {
         // Keep only last 100 results per endpoint
         if (endpointResults.length > 100) {
           endpointResults.splice(0, endpointResults.length - 100);
-        }
+
         
         this.auditResults.set(endpoint, endpointResults);
 
         // Check for violations and send notifications
         if (result.violations.length > 0) {
           await this.handleViolations(result, rule);
-        }
 
-      } catch (error) {
+ catch (error) {
         console.error(`Audit failed for endpoint ${endpoint}:`, error.message);
-      }
-    }
+
+
 
     await this.logAuditEvent('audit_completed', ruleId, 'system', {
       endpointsAudited: results.length,
@@ -230,7 +233,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
 
     this.emit('auditCompleted', { ruleId, results });
     return results;
-  }
+
 
   /**
    * Generate comprehensive audit report
@@ -274,7 +277,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
 
     this.emit('reportGenerated', report);
     return report;
-  }
+
 
   /**
    * Get security header recommendations for an endpoint
@@ -288,9 +291,9 @@ export class SecurityHeaderAuditService extends EventEmitter {
       recommendedValue: string;
       reason: string;
       priority: 'high' | 'medium' | 'low';
-    }>;
+>;
     score: number;
-  }> {
+> {
     // Mock endpoint analysis - would make actual HTTP request
     const currentHeaders = await this.analyzeEndpointHeaders(endpoint);
     const recommendations = [];
@@ -311,7 +314,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
           priority: header.severity === 'critical' ? 'high' as const : 
             header.severity === 'high' ? 'medium' as const : 'low' as const
         });
-      } else {
+ else {
         const analysis = this.analyzeHeaderValue(header.name, current.value);
         if (!analysis.compliant) {
           recommendations.push({
@@ -322,11 +325,11 @@ export class SecurityHeaderAuditService extends EventEmitter {
             reason: analysis.issues.join('; '),
             priority: header.severity === 'critical' ? 'high' as const : 'medium' as const
           });
-        } else {
+ else {
           score += this.getHeaderScore(header);
-        }
-      }
-    }
+
+
+
 
     // Check for deprecated headers
     const deprecatedHeaders = ['X-XSS-Protection', 'X-Content-Type-Options'];
@@ -340,13 +343,13 @@ export class SecurityHeaderAuditService extends EventEmitter {
           reason: 'Header value is deprecated or weak',
           priority: 'medium' as const
         });
-      }
-    }
+
+
 
     score = Math.round((score / essentialHeaders.length) * 100);
 
     return { currentHeaders, recommendations, score };
-  }
+
 
   // Private helper methods
 
@@ -367,20 +370,20 @@ export class SecurityHeaderAuditService extends EventEmitter {
       schedule: {
         frequency: 'daily',
         time: '06:00'
-  }
+
       notifications: {
         onViolation: true,
         onImprovement: false,
         recipients: ['security-team@company.com', 'devops@company.com'],
         severity: ['high', 'critical']
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
     };
 
     this.rules.set(productionRule.id, productionRule);
-  }
+
 
   private getEssentialSecurityHeaders(): SecurityHeader[] {
     return [
@@ -392,7 +395,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         complianceStandards: ['OWASP', 'PCI-DSS', 'ISO27001'],
         description: 'Enforces HTTPS and prevents protocol downgrade attacks',
         recommendation: 'Set max-age to at least 1 year with includeSubDomains'
-  }
+
       {
         name: 'Content-Security-Policy',
         value: 'default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' data: https:; font-src \'self\' https:; connect-src \'self\'; frame-ancestors \'none\'; object-src \'none\'; base-uri \'self\'',
@@ -401,7 +404,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         complianceStandards: ['OWASP', 'ISO27001'],
         description: 'Prevents XSS attacks by controlling resource loading',
         recommendation: 'Use restrictive CSP with specific source allowlists'
-  }
+
       {
         name: 'X-Frame-Options',
         value: 'DENY',
@@ -410,7 +413,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         complianceStandards: ['OWASP'],
         description: 'Prevents clickjacking attacks',
         recommendation: 'Use DENY or SAMEORIGIN based on application needs'
-  }
+
       {
         name: 'X-Content-Type-Options',
         value: 'nosniff',
@@ -419,7 +422,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         complianceStandards: ['OWASP'],
         description: 'Prevents MIME type sniffing attacks',
         recommendation: 'Always set to nosniff'
-  }
+
       {
         name: 'Referrer-Policy',
         value: 'strict-origin-when-cross-origin',
@@ -428,7 +431,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         complianceStandards: ['OWASP'],
         description: 'Controls referrer information sent with requests',
         recommendation: 'Use strict-origin-when-cross-origin for balance of security and functionality'
-  }
+
       {
         name: 'Permissions-Policy',
         value: 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=()',
@@ -437,7 +440,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         complianceStandards: ['OWASP'],
         description: 'Controls browser feature access',
         recommendation: 'Disable unnecessary browser features'
-  }
+
       {
         name: 'X-XSS-Protection',
         value: '1; mode=block',
@@ -446,9 +449,9 @@ export class SecurityHeaderAuditService extends EventEmitter {
         complianceStandards: ['OWASP'],
         description: 'Legacy XSS protection (superseded by CSP)',
         recommendation: 'Include for legacy browser support but rely on CSP'
-      }
+
     ];
-  }
+
 
   private async auditEndpoint(endpoint: string, rule: HeaderAuditRule): Promise<HeaderAuditResult> {
 
@@ -463,7 +466,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         'x-frame-options': 'DENY',
         'x-content-type-options': 'nosniff'
         // Some headers intentionally missing for demonstration
-      }
+
     };
 
     const responseTime = Date.now() - startTime;
@@ -495,8 +498,8 @@ export class SecurityHeaderAuditService extends EventEmitter {
             recommendation: requiredHeader.recommendation,
             complianceImpact: requiredHeader.complianceStandards
           });
-        }
-      } else {
+
+ else {
         const analysis = this.analyzeHeaderValue(requiredHeader.name, responseHeader);
         
         presentHeaders.push({
@@ -508,7 +511,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
 
         if (analysis.compliant) {
           score += this.getHeaderScore(requiredHeader);
-        } else {
+ else {
           violations.push({
             headerName: requiredHeader.name,
             violationType: 'malformed' as const,
@@ -524,9 +527,9 @@ export class SecurityHeaderAuditService extends EventEmitter {
             expectedFormat: requiredHeader.value,
             issues: analysis.issues
           });
-        }
-      }
-    }
+
+
+
 
     // Calculate final score
     const finalScore = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
@@ -550,7 +553,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         present: presentHeaders,
         missing: missingHeaders,
         malformed: malformedHeaders
-  }
+
       score: finalScore,
       securityLevel,
       violations,
@@ -558,7 +561,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
       responseTime,
       responseStatus: mockResponse.status
     };
-  }
+
 
   private analyzeHeaderValue(headerName: string, value: string): { compliant: boolean; issues: string[] } {
     const issues = [];
@@ -567,44 +570,44 @@ export class SecurityHeaderAuditService extends EventEmitter {
     case 'strict-transport-security':
       if (!value.includes('max-age=')) {
         issues.push('Missing max-age directive');
-      } else {
+ else {
         const maxAge = parseInt(value.match(/max-age=(\d+)/)?.[1] || '0');
         if (maxAge < 31536000) { // 1 year
           issues.push('max-age should be at least 1 year (31536000 seconds)');
-        }
-      }
+
+
       if (!value.includes('includeSubDomains')) {
         issues.push('Consider adding includeSubDomains directive');
-      }
+
       break;
         
     case 'content-security-policy':
       if (value.includes('\'unsafe-eval\'')) {
         issues.push('Avoid \'unsafe-eval\' directive');
-      }
+
       if (value.includes('*') && !value.includes('\'self\'')) {
         issues.push('Wildcard sources should be used carefully');
-      }
+
       break;
         
     case 'x-frame-options':
       if (!['DENY', 'SAMEORIGIN'].includes(value.toUpperCase())) {
         issues.push('Value should be DENY or SAMEORIGIN');
-      }
+
       break;
         
     case 'x-content-type-options':
       if (value.toLowerCase() !== 'nosniff') {
         issues.push('Value should be nosniff');
-      }
+
       break;
-    }
+
     
     return {
       compliant: issues.length === 0,
       issues
     };
-  }
+
 
   private getHeaderScore(header: SecurityHeader): number {
     const severityScores = {
@@ -615,7 +618,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
     };
     
     return severityScores[header.severity] || 0;
-  }
+
 
   private async analyzeEndpointHeaders(endpoint: string): Promise<Array<{ name: string; value: string; status: 'good' | 'warning' | 'missing' | 'deprecated' }>> {
     // Mock implementation - would make actual HTTP request
@@ -624,35 +627,35 @@ export class SecurityHeaderAuditService extends EventEmitter {
       { name: 'X-Frame-Options', value: 'DENY', status: 'good' },
       { name: 'X-Content-Type-Options', value: 'nosniff', status: 'good' }
     ];
-  }
+
 
   private generateHeaderRecommendations(violations: any[], missingHeaders: any[]): string[] {
     const recommendations = [];
     
     if (violations.length > 0) {
       recommendations.push('Fix malformed security headers to improve compliance');
-    }
+
     
     if (missingHeaders.some(h => h.severity === 'critical')) {
       recommendations.push('Add critical security headers immediately');
-    }
+
     
     if (missingHeaders.some(h => h.name.toLowerCase() === 'content-security-policy')) {
       recommendations.push('Implement Content Security Policy to prevent XSS attacks');
-    }
+
     
     if (missingHeaders.some(h => h.name.toLowerCase() === 'strict-transport-security')) {
       recommendations.push('Add HSTS header to enforce HTTPS');
-    }
+
     
     return recommendations;
-  }
+
 
   private scheduleAuditRule(rule: HeaderAuditRule): void {
     const existingTask = this.scheduledTasks.get(rule.id);
     if (existingTask) {
       clearInterval(existingTask);
-    }
+
 
     let intervalMs: number;
     switch (rule.schedule.frequency) {
@@ -670,26 +673,26 @@ export class SecurityHeaderAuditService extends EventEmitter {
       break;
     default:
       intervalMs = 24 * 60 * 60 * 1000; // Default to daily
-    }
+
 
     const task = setInterval(async () => {
       try {
         await this.performAudit(rule.id);
-      } catch (error) {
+ catch (error) {
         console.error(`Scheduled audit failed for rule ${rule.id}:`, error.message);
-      }
+
     }, intervalMs);
 
     this.scheduledTasks.set(rule.id, task);
-  }
+
 
   private startScheduledAudits(): void {
     for (const rule of this.rules.values()) {
       if (rule.enabled) {
         this.scheduleAuditRule(rule);
-      }
-    }
-  }
+
+
+
 
   private async handleViolations(result: HeaderAuditResult, rule: HeaderAuditRule): Promise<void> {
 
@@ -700,15 +703,15 @@ export class SecurityHeaderAuditService extends EventEmitter {
       // Send notifications based on rule configuration
       if (rule.notifications.onViolation) {
         await this.sendViolationNotification(result, rule);
-      }
-    }
-  }
+
+
+
 
   private async sendViolationNotification(result: HeaderAuditResult, rule: HeaderAuditRule): Promise<void> {
 
     console.log(`Sending violation notification for endpoint ${result.endpoint}`);
     console.log(`Violations: ${result.violations.length}, Score: ${result.score}`);
-  }
+
 
   private getResultsInTimeRange(timeRange: { start: Date; end: Date }, endpoints?: string[]): HeaderAuditResult[] {
     const results = [];
@@ -721,10 +724,10 @@ export class SecurityHeaderAuditService extends EventEmitter {
       );
       
       results.push(...filteredResults);
-    }
+
     
     return results;
-  }
+
 
   private calculateSummaryStats(results: HeaderAuditResult[]): AuditReport['summary'] {
     const endpointsSet = new Set(results.map(r => r.endpoint));
@@ -741,7 +744,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
       lowViolations: violations.filter(v => v.severity === 'low').length,
       complianceRate: results.length > 0 ? Math.round((results.filter(r => r.violations.length === 0).length / results.length) * 100) : 100
     };
-  }
+
 
   private calculateTrends(results: HeaderAuditResult[], timeRange: { start: Date; end: Date }): AuditReport['trends'] {
     // Group results by day
@@ -753,7 +756,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
       dayData.scores.push(result.score);
       dayData.violations.push(...result.violations);
       dailyData.set(day, dayData);
-    }
+
     
     const scoreHistory = Array.from(dailyData.entries()).map(([day, data]) => ({
       date: new Date(day),
@@ -773,7 +776,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
       violationTrends,
       improvementAreas: this.identifyImprovementAreas(results)
     };
-  }
+
 
   private getEndpointDetails(results: HeaderAuditResult[]): AuditReport['endpointDetails'] {
     const endpointMap = new Map<string, HeaderAuditResult[]>();
@@ -782,7 +785,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
       const endpointResults = endpointMap.get(result.endpoint) || [];
       endpointResults.push(result);
       endpointMap.set(result.endpoint, endpointResults);
-    }
+
     
     return Array.from(endpointMap.entries()).map(([endpoint, endpointResults]) => {
       const latestResult = endpointResults[endpointResults.length - 1];
@@ -803,7 +806,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         status
       };
     });
-  }
+
 
   private generateRecommendations(results: HeaderAuditResult[]): AuditReport['recommendations'] {
     const recommendations = [];
@@ -822,7 +825,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         impact: 'High security risk exposure',
         effort: 'low' as const
       });
-    }
+
     
     if (missingCSP > results.length * 0.5) {
       recommendations.push({
@@ -832,7 +835,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
         impact: 'Prevents XSS attacks and improves security posture',
         effort: 'medium' as const
       });
-    }
+
     
     if (missingHSTS > results.length * 0.3) {
       recommendations.push({
@@ -842,10 +845,10 @@ export class SecurityHeaderAuditService extends EventEmitter {
         impact: 'Prevents protocol downgrade attacks',
         effort: 'low' as const
       });
-    }
+
     
     return recommendations;
-  }
+
 
   private identifyImprovementAreas(results: HeaderAuditResult[]): string[] {
     const areas = [];
@@ -853,48 +856,47 @@ export class SecurityHeaderAuditService extends EventEmitter {
     
     if (allViolations.some(v => v.headerName === 'Content-Security-Policy')) {
       areas.push('Content Security Policy implementation');
-    }
+
     
     if (allViolations.some(v => v.headerName === 'Strict-Transport-Security')) {
       areas.push('HTTPS enforcement and HSTS configuration');
-    }
+
     
     if (allViolations.some(v => v.severity === 'critical')) {
       areas.push('Critical security vulnerabilities');
-    }
+
     
     return areas;
-  }
+
 
   private async validateRule(rule: HeaderAuditRule): Promise<void> {
 
     if (!rule.name || rule.name.trim().length === 0) {
       throw new Error('Rule name is required');
-    }
+
     
     if (!rule.endpoints || rule.endpoints.length === 0) {
       throw new Error('At least one endpoint must be specified');
-    }
+
     
     if (!rule.headers || rule.headers.length === 0) {
       throw new Error('At least one header must be specified');
-    }
-  }
+
+
 
   private generateRuleId(): string {
     return `SAR-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  }
+
 
   private generateResultId(): string {
     return `SAU-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private generateReportId(): string {
     return `SRE-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private async logAuditEvent(action: string, target: string, performedBy: string, metadata: any): Promise<void> {
 
     console.log(`Security Audit Event: ${action} for ${target} by ${performedBy}`, metadata);
-  }
-}
+

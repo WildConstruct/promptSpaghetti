@@ -5,9 +5,21 @@
  * Unified adapter for multimodal AI models that can process and understand multiple content types
  */
 import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
+resolution ?  : { width: number, height: number };
+description ?  : string;
 ;
+'text' | 'object' | 'person' | 'scene' | 'emotion' | 'concept';
+value: string;
+confidence: number;
+bounding_box ?  : { x: number, y: number, width: number, height: number };
+timestamp ?  : { start: number, end: number };
  > ;
-relationships: Array;
+relationships: Array < {
+    source: string,
+    target: string,
+    relationship: string,
+    confidence: number
+} > ;
 metadata: Record;
  > ;
 ;
@@ -179,8 +191,9 @@ export class MultimodalAdapter extends BaseAIModel {
                 };
                 return this.process(inputs, multimodalOptions);
                 async;
-                describeMultimodal(inputs, MultimodalInput);
-                detailLevel: 'brief' | 'detailed' | 'comprehensive';
+                describeMultimodal(inputs, MultimodalInput),
+                    detailLevel;
+                'brief' | 'detailed' | 'comprehensive';
                 'detailed',
                     options ?  : Partial;
                 Promise < MultimodalUnderstandingResult > {
@@ -210,8 +223,9 @@ export class MultimodalAdapter extends BaseAIModel {
                         };
                         return this.process(inputs, multimodalOptions);
                         async;
-                        summarizeMultimodal(inputs, MultimodalInput);
-                        summaryLength: 'short' | 'medium' | 'long';
+                        summarizeMultimodal(inputs, MultimodalInput),
+                            summaryLength;
+                        'short' | 'medium' | 'long';
                         'medium',
                             options ?  : Partial;
                         Promise < MultimodalUnderstandingResult > {
@@ -258,8 +272,7 @@ export class MultimodalAdapter extends BaseAIModel {
                                     content: imageData,
                                     metadata: {
                                         mime_type: typeof imageData === 'string' ? 'image/base64' : imageData.type,
-                                        description
-                                    },
+                                        description },
                                     static createAudioInput(audioData, description) {
                                         return {
                                             type: 'audio',
@@ -478,11 +491,12 @@ export class MultimodalAdapter extends BaseAIModel {
                                 else if (input.type === 'image') {
                                     return {
                                         role,
-                                        content: [,
+                                        content: [
                                             {
                                                 type: 'text',
                                                 text: `Analyze this ${input.type}` + (input.metadata?.description ? `: ${input.metadata.description}` : '')
-                                            }]
+                                            }
+                                        ]
                                     };
                                     {
                                         type: 'image_url',
@@ -526,8 +540,7 @@ export class MultimodalAdapter extends BaseAIModel {
                                         source: {
                                             type: 'base64',
                                             media_type: 'image/jpeg',
-                                            data: typeof input.content === 'string' ? input.content.replace() : ,
-                                        }
+                                            data: typeof input.content === 'string' ? input.content.replace() : , }
                                             /  ^ data, image
                                     } / [ ^ ] + ;
                                     base64, /,;
@@ -564,8 +577,7 @@ export class MultimodalAdapter extends BaseAIModel {
                             return {
                                 inline_data: {
                                     mime_type: 'image/jpeg',
-                                    data: typeof input.content === 'string' ? input.content.replace() : ,
-                                }
+                                    data: typeof input.content === 'string' ? input.content.replace() : , }
                                     /  ^ data, image
                             } / [ ^ ] + ;
                             base64, /,;
@@ -736,14 +748,14 @@ export class MultimodalAdapter extends BaseAIModel {
                 const insights = [];
                 const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 20);
                 // Look for insight indicators
-                const insightPatterns = [];
-                /key insight/i,
+                const insightPatterns = [
+                    /key insight/i,
                     /important/i,
                     /notably/i,
                     /significantly/i,
                     /reveals/i,
-                    /suggests/i;
-                ;
+                    /suggests/i
+                ];
                 sentences.forEach(sentence => { });
                 if (insightPatterns.some(pattern => pattern.test(sentence))) {
                     insights.push(sentence.trim());
@@ -785,11 +797,11 @@ export class MultimodalAdapter extends BaseAIModel {
                     if (inputs.length > 1) {
                         const modalities = [...new Set(inputs.map(i => i.type))];
                         // Look for connection indicators in the content
-                        const connectionPatterns = [];
-                        /connects?\s+to|relates?\s+to|corresponds?\s+to/i,
+                        const connectionPatterns = [
+                            /connects?\s+to|relates?\s+to|corresponds?\s+to/i,
                             /similar|different|contrasts?/i,
-                            /reinforces?|supports?|contradicts?/i;
-                        ;
+                            /reinforces?|supports?|contradicts?/i
+                        ];
                         if (connectionPatterns.some(pattern => pattern.test(content))) {
                             connections.push({});
                             modalities,

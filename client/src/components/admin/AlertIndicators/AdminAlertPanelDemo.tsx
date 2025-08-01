@@ -25,15 +25,15 @@ const AdminAlertPanelDemo: React.FC = () => {
   high: 1,
   medium: 2,
   low: 0,
-  info: 1
-};
+  info: 1;
+  };
   const systemAlerts: AlertCount = {,
   critical: 2,
   high: 3,
   medium: 1,
   low: 0,
-  info: 0
-};
+  info: 0;
+  };
   const mockRecentAlerts: AlertItem = [
     {
   id: 'alert-1',
@@ -45,7 +45,7 @@ const AdminAlertPanelDemo: React.FC = () => {
   source: 'system-monitor',
   status: 'active',
   affectedComponent: 'API Gateway'
-}
+
     {
   id: 'alert-2',
   type: 'security',
@@ -57,7 +57,7 @@ const AdminAlertPanelDemo: React.FC = () => {
   status: 'active',
   userId: 'user-123',
   userName: 'john.doe@example.com'
-}
+
     {
   id: 'alert-3',
   type: 'feature-toggle',
@@ -68,7 +68,7 @@ const AdminAlertPanelDemo: React.FC = () => {
   source: 'feature-toggle-service',
   status: 'acknowledged',
   affectedComponent: 'Search Service'
-}
+
     {
   id: 'alert-4',
   type: 'user-action',
@@ -81,7 +81,7 @@ const AdminAlertPanelDemo: React.FC = () => {
   userId: 'admin-456',
   userName: 'admin@example.com',
   affectedComponent: 'User Database'
-}
+
     {
   id: 'alert-5',
   type: 'system',

@@ -21,11 +21,11 @@ import {
   CollaborationEventType, 
   CollaborationContext,
   EPIC_23_SUCCESS_CRITERIA
-} from './CollaborationTelemetry';
+ from './CollaborationTelemetry';
 import { v4 as uuidv4 } from 'uuid';
 
-}
-}
+
+
 export interface CollaborationTelemetryServiceConfig {
   enabled: boolean;
   enableLatencyMeasurement: boolean;
@@ -33,9 +33,10 @@ export interface CollaborationTelemetryServiceConfig {
   sessionHeartbeatInterval: number; // ms
   enablePerformanceTracking: boolean;
   enableConflictTracking: boolean;
-}
-}
-}
+
+
+
+
 
 export class CollaborationTelemetryService {
   private wsServer: WebSocketServer;
@@ -69,8 +70,8 @@ export class CollaborationTelemetryService {
 
     if (this.config.enabled) {
       this.initializeTelemetryHooks();
-    }
-  }
+
+
 
   /**
    * Initialize event hooks into the WebSocket server
@@ -86,14 +87,14 @@ export class CollaborationTelemetryService {
     
     if (this.config.enableLatencyMeasurement) {
       this.startLatencyMeasurement();
-    }
+
     
     if (this.config.sessionHeartbeatInterval > 0) {
       this.startSessionHeartbeat();
-    }
+
     
     console.log('✅ Collaboration telemetry service initialized');
-  }
+
 
   /**
    * Set up hooks for connection and session events
@@ -118,7 +119,7 @@ export class CollaborationTelemetryService {
     this.wsServer.on('user_joined', (documentId: string, presence: any) => {
       this.recordCollaborativeSessionJoin(documentId, presence);
     });
-  }
+
 
   /**
    * Set up hooks for collaboration-specific events
@@ -138,7 +139,7 @@ export class CollaborationTelemetryService {
     this.wsServer.on('state_updated', (event: any) => {
       this.handleStateUpdate(event);
     });
-  }
+
 
   /**
    * Set up hooks for conflict resolution events
@@ -160,8 +161,8 @@ export class CollaborationTelemetryService {
       conflictResolver.on('conflict_resolved', (resolution: any) => {
         this.handleConflictManuallyResolved(resolution);
       });
-    }
-  }
+
+
 
   /**
    * Set up hooks for performance tracking
@@ -175,8 +176,8 @@ export class CollaborationTelemetryService {
       setInterval(() => {
         this.measureWebSocketPerformance();
       }, this.config.latencyMeasurementInterval);
-    }
-  }
+
+
 
   /**
    * Handle session start events
@@ -199,7 +200,7 @@ export class CollaborationTelemetryService {
     };
 
     await this.collaborationAnalytics.startCollaborativeSession(context);
-  }
+
 
   /**
    * Handle session end events
@@ -210,8 +211,8 @@ export class CollaborationTelemetryService {
     if (sessionId) {
       await this.collaborationAnalytics.endCollaborativeSession(sessionId);
       this.sessionMap.delete(connectionInfo.id);
-    }
-  }
+
+
 
   /**
    * Handle presence updates
@@ -240,14 +241,14 @@ export class CollaborationTelemetryService {
           x: presence.cursor.x,
           y: presence.cursor.y,
           viewportId: presence.cursor.nodeId
-        } : undefined,
+ : undefined,
         selectedElements: presence.selection?.nodeIds || [],
         lastActivity: new Date(),
         presenceDuration: Date.now() - presence.lastSeen,
         activityType: this.determineActivityType(presence)
-      }
+
     });
-  }
+
 
   /**
    * Handle graph update events for real-time editing
@@ -281,10 +282,10 @@ export class CollaborationTelemetryService {
           automatedResolution: true,
           userInterventionRequired: false,
           dataIntegrityMaintained: true
-        } as any
+ as any
       });
-    }
-  }
+
+
 
   /**
    * Handle conflict detection
@@ -311,7 +312,7 @@ export class CollaborationTelemetryService {
       resolutionStrategy: conflict.resolutionStrategy,
       success: false // Just detected, not resolved yet
     });
-  }
+
 
   /**
    * Handle automatic conflict resolution
@@ -339,7 +340,7 @@ export class CollaborationTelemetryService {
       resolutionTimeMs: resolution.resolutionTime,
       success: resolution.success !== false
     });
-  }
+
 
   /**
    * Handle manual conflict resolution
@@ -367,7 +368,7 @@ export class CollaborationTelemetryService {
       resolutionTimeMs: resolution.resolutionTime,
       success: true
     });
-  }
+
 
   /**
    * Handle synchronization batch processing
@@ -398,11 +399,11 @@ export class CollaborationTelemetryService {
             threshold: { warning: 50, critical: 100 },
             performanceTier: 'good',
             networkConditions: { connectionType: 'unknown' }
-          }
+
         });
-      }
-    }
-  }
+
+
+
 
   /**
    * Handle state update events
@@ -434,11 +435,11 @@ export class CollaborationTelemetryService {
             automatedResolution: true,
             userInterventionRequired: false,
             dataIntegrityMaintained: !event.hasConflicts
-          } as any
+ as any
         });
-      }
-    }
-  }
+
+
+
 
   /**
    * Record collaborative session join event
@@ -472,10 +473,10 @@ export class CollaborationTelemetryService {
           deviceType: 'desktop',
           connectionQuality: 'good',
           previousSessionExists: false
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Start periodic latency measurement
@@ -484,7 +485,7 @@ export class CollaborationTelemetryService {
     this.latencyMeasurementInterval = setInterval(() => {
       this.measureCollaborationLatency();
     }, this.config.latencyMeasurementInterval);
-  }
+
 
   /**
    * Start session heartbeat
@@ -493,7 +494,7 @@ export class CollaborationTelemetryService {
     this.heartbeatInterval = setInterval(() => {
       this.sendSessionHeartbeats();
     }, this.config.sessionHeartbeatInterval);
-  }
+
 
   /**
    * Measure collaboration latency for active sessions
@@ -523,9 +524,9 @@ export class CollaborationTelemetryService {
           latencyMs,
           'websocket_roundtrip'
         );
-      }
-    }
-  }
+
+
+
 
   /**
    * Send heartbeat events for active sessions
@@ -556,11 +557,11 @@ export class CollaborationTelemetryService {
             deviceType: 'desktop',
             connectionQuality: 'good',
             previousSessionExists: false
-          }
+
         });
-      }
-    }
-  }
+
+
+
 
   /**
    * Measure WebSocket performance metrics
@@ -590,22 +591,22 @@ export class CollaborationTelemetryService {
         performanceTier: 'good',
         networkConditions: {
           connectionType: 'unknown'
-        }
-      }
+
+
     });
-  }
+
 
   // Utility methods
 
   private extractWorkspaceId(documentId: string): string {
     // Extract workspace ID from document ID (assumes format: workspace_id.project_id.resource_id)
     return documentId.split('.')[0] || documentId;
-  }
+
 
   private extractProjectId(documentId: string): string | undefined {
     const parts = documentId.split('.');
     return parts.length > 1 ? parts[1] : undefined;
-  }
+
 
   private mapPresenceStatus(status: string): 'active' | 'idle' | 'away' | 'offline' {
     switch (status) {
@@ -621,31 +622,31 @@ export class CollaborationTelemetryService {
       return 'offline';
     default:
       return 'active';
-    }
-  }
+
+
 
   private determineActivityType(presence: any): 'editing' | 'viewing' | 'commenting' | 'navigating' {
     if (presence.isTyping) return 'editing';
     if (presence.selection && presence.selection.nodeIds.length > 0) return 'editing';
     if (presence.currentTool && presence.currentTool !== 'select') return 'editing';
     return 'viewing';
-  }
+
 
   private determineEditConflictType(updatePayload: any): 'node_edit' | 'edge_edit' | 'property_change' | 'deletion' | 'creation' {
     if (updatePayload.type.includes('delete') || updatePayload.type.includes('remove')) {
       return 'deletion';
-    }
+
     if (updatePayload.type.includes('add') || updatePayload.type.includes('create')) {
       return 'creation';
-    }
+
     if (updatePayload.type.includes('edge')) {
       return 'edge_edit';
-    }
+
     if (updatePayload.type.includes('node')) {
       return 'node_edit';
-    }
+
     return 'property_change';
-  }
+
 
   private getSessionForDocument(documentId: string): string | null {
     // Find any active session for this document
@@ -653,10 +654,10 @@ export class CollaborationTelemetryService {
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
       if (connectionInfo && connectionInfo.documentId === documentId) {
         return sessionId;
-      }
-    }
+
+
     return null;
-  }
+
 
   /**
    * Get collaboration dashboard data
@@ -664,7 +665,7 @@ export class CollaborationTelemetryService {
   public async getCollaborationDashboard(): Promise<any> {
 
     return this.collaborationAnalytics.getCollaborationDashboardData();
-  }
+
 
   /**
    * Get Epic 23 success criteria status
@@ -675,7 +676,7 @@ export class CollaborationTelemetryService {
       activeSessions: this.sessionMap.size,
       enabled: this.config.enabled
     };
-  }
+
 
   /**
    * Cleanup resources
@@ -683,16 +684,16 @@ export class CollaborationTelemetryService {
   public destroy(): void {
     if (this.latencyMeasurementInterval) {
       clearInterval(this.latencyMeasurementInterval);
-    }
+
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
-    }
+
     
     this.collaborationAnalytics.destroy();
     this.sessionMap.clear();
     
     console.log('🧹 Collaboration telemetry service cleaned up');
-  }
-}
+
+
 
 export default CollaborationTelemetryService;

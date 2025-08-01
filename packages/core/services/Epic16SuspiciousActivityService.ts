@@ -9,12 +9,11 @@ import { EventEmitter } from 'events';
 
 // Core suspicious activity interfaces
 
-}
-export interface SuspiciousActivity {
-  id: string;
+
+export interface SuspiciousActivity { id: string;
   type: ActivityType;
   severity: SeverityLevel;
-  confidence: number; // 0-1,
+  confidence: number; // 0-1;
   // Context information
   userId?: string;
   sessionId: string;
@@ -28,8 +27,8 @@ export interface SuspiciousActivity {
   metadata: Record<string, any>;
   // Detection information
   detectionMethod: DetectionMethod;
-  detectedBy: string; // detector ID or rule name,
-  riskScore: number; // 0-100,
+  detectedBy: string; // detector ID or rule name;
+  riskScore: number; // 0-100;
   // Status and handling
   status: ActivityStatus;
   investigated: boolean;
@@ -38,17 +37,16 @@ export interface SuspiciousActivity {
   resolution?: ActivityResolution;
   // Related activities
   relatedActivities: string;
-  clusterId?: string; // For grouped activities,
+  clusterId?: string; // For grouped activities }
   // Response actions
   actionsTriggered: ResponseAction;
   // Geolocation
   geolocation?: GeoLocation;
   // Device fingerprint
   deviceFingerprint?: DeviceFingerprint;
-}
-}
-export enum ActivityType {
-  // Authentication anomalies
+
+
+export enum ActivityType { // Authentication anomalies
   BRUTE_FORCE_LOGIN = 'brute_force_login',
   CREDENTIAL_STUFFING = 'credential_stuffing',
   UNUSUAL_LOGIN_LOCATION = 'unusual_login_location',
@@ -98,22 +96,20 @@ export enum ActivityType {
 export enum SeverityLevel {
   MILD = 'mild',
   MODERATE = 'moderate',
-  SEVERE = 'severe',
+  SEVERE = 'severe' }
   COMPLETE = 'complete'
-  }
+
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   // Investigation and resolution
-  async investigateActivity(activityId: string, investigatorId: string): Promise<void> {
-
-  const activity = this.activities.get(activityId);
+  async investigateActivity(activityId: string, investigatorId: string): Promise<void> { const activity = this.activities.get(activityId);
   if (!activity) throw new Error('Activity not found');
   activity.investigated = true;
   activity.investigatedBy = investigatorId;
   activity.investigatedAt = new Date();
   activity.status = ActivityStatus.INVESTIGATING;
   this.emit('activityInvestigated', activity);
-  async resolveActivity((activityId: string,
-  resolution: ActivityResolution): Promise<void> {,
+  async resolveActivity((activityId: string
+  resolution: ActivityResolution): Promise<void> {
   const activity = this.activities.get(activityId);
   if (!activity) throw new Error('Activity not found');
   activity.resolution = resolution;
@@ -121,37 +117,36 @@ export enum SeverityLevel {
   // Execute resolution actions
   await this.executeResolutionActions(activity, resolution);
   this.emit('activityResolved', activity);
-  async markFalsePositive(activityId: string, reason: string): Promise<void> {,
+  async markFalsePositive(activityId: string, reason: string): Promise<void> {
   const activity = this.activities.get(activityId);
   if (!activity) throw new Error('Activity not found');
   activity.status = ActivityStatus.FALSE_POSITIVE;
   activity.resolution = {
-  action: ResolutionAction.NO_ACTION,
-  reason,
-  timestamp: new Date(),
-  resolvedBy: 'system',
+  action: ResolutionAction.NO_ACTION
+  reason
+  timestamp: new Date()
+  resolvedBy: 'system' }
 };
     // Update rule analytics
     const rule = this.rules.get(activity.detectedBy);
-    if (rule) {
-      rule.analytics.falsePositives++;
+    if (rule) { rule.analytics.falsePositives++;
       this.updateRuleMetrics(rule);
     this.emit('falsePositiveMarked', activity);
   // Rule management
   async createRule(ruleData: Omit<DetectionRule, 'id' | 'analytics'>): Promise<DetectionRule> {
 
-    const rule: DetectionRule = {,
+    const rule: DetectionRule = { }
   id: `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-},
-  analytics: {
-  totalTriggers: 0,
-  truePositives: 0,
-  falsePositives: 0,
-  precision: 0,
-  recall: 0,
-  f1Score: 0,
-  averageProcessingTime: 0,
-}
+
+  analytics: { 
+  totalTriggers: 0
+  truePositives: 0
+  falsePositives: 0
+  precision: 0
+  recall: 0
+  f1Score: 0
+  averageProcessingTime: 0 }
+
       ...ruleData
     };
     this.rules.set(rule.id, rule);
@@ -172,9 +167,7 @@ export enum SeverityLevel {
       this.emit('ruleDeleted', { ruleId });
     return deleted;
   // Behavioral analysis
-  async getUserProfile(userId: string): Promise<UserBehaviorProfile | null> {
-
-    return this.userProfiles.get(userId) || null;
+  async getUserProfile(userId: string): Promise<UserBehaviorProfile | null> { return this.userProfiles.get(userId) || null;
   async detectBehavioralAnomalies(userId: string, event: SuspiciousActivityEvent): Promise<SuspiciousActivity> {
 
     const profile = this.userProfiles.get(userId);
@@ -198,9 +191,9 @@ export enum SeverityLevel {
   // Threat intelligence
   async addThreatIntelligence(threat: Omit<ThreatIntelligence, 'id'>): Promise<ThreatIntelligence> {
 
-    const threatData: ThreatIntelligence = {,
+    const threatData: ThreatIntelligence = { }
   id: `threat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-}
+
       ...threat
     };
     this.threatIntelligence.set(threatData.id, threatData);
@@ -214,9 +207,7 @@ export enum SeverityLevel {
         matches.push(threat);
     return matches;
   // Analytics and reporting
-  async getSecurityMetrics(timeRange: { start: Date; end: Date }): Promise<SecurityMetrics> {
-
-  const activities = Array.from(this.activities.values());
+  async getSecurityMetrics(timeRange: { start: Date; end: Date }): Promise<SecurityMetrics> { const activities = Array.from(this.activities.values());
   .filter(activity => )
   activity.timestamp >= timeRange.start && activity.timestamp <= timeRange.end
   );
@@ -230,13 +221,11 @@ export enum SeverityLevel {
   detectionEffectiveness: this.calculateDetectionEffectiveness(),
   responseTime: this.calculateAverageResponseTime(activities),
   falsePositiveRate: this.calculateFalsePositiveRate(),
-  trendsOverTime: this.calculateTrends(activities, timeRange),
+  trendsOverTime: this.calculateTrends(activities, timeRange) }
 };
     return metrics;
   // Private helper methods
-  private async evaluateRule(rule: DetectionRule, event: SuspiciousActivityEvent): Promise<SuspiciousActivity | null> {
-
-    const startTime = Date.now();
+  private async evaluateRule(rule: DetectionRule, event: SuspiciousActivityEvent): Promise<SuspiciousActivity | null> { const startTime = Date.now();
     try {
       // Check if event matches rule conditions
       const conditionResults = rule.conditions.map(condition => ;);
@@ -256,34 +245,34 @@ export enum SeverityLevel {
       if (!this.evaluateAggregation(rule.aggregation, relatedEvents)) {
         return null;
       // Create suspicious activity
-      const activity: SuspiciousActivity = {,
+      const activity: SuspiciousActivity = { }
   id: `activity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-},
-  type: rule.activityType,
-        severity: rule.severity,
-        confidence,
-        userId: event.userId,
-        sessionId: event.sessionId,
-        ipAddress: event.ipAddress,
-        userAgent: event.userAgent,
-        timestamp: new Date(),
-        description: this.generateActivityDescription(rule, event),
-        evidence: this.collectEvidence(rule, event, relatedEvents),
-        patterns: this.identifyPatterns(rule, event, relatedEvents),
-        metadata: {
-  ruleId: rule.id,
-  ruleName: rule.name,
-  eventType: event.type,
+
+  type: rule.activityType
+        severity: rule.severity
+        confidence
+        userId: event.userId
+        sessionId: event.sessionId
+        ipAddress: event.ipAddress
+        userAgent: event.userAgent
+        timestamp: new Date()
+        description: this.generateActivityDescription(rule, event)
+        evidence: this.collectEvidence(rule, event, relatedEvents)
+        patterns: this.identifyPatterns(rule, event, relatedEvents)
+        metadata: { 
+  ruleId: rule.id
+  ruleName: rule.name
+  eventType: event.type }
   ...event.metadata
-},
-  detectionMethod: DetectionMethod.RULE_BASED,
-        detectedBy: rule.id,
-        riskScore: this.calculateRiskScore(rule, confidence, event),
-        status: ActivityStatus.DETECTED,
-        investigated: false,
-        relatedActivities: [],
-        actionsTriggered: [],
-        geolocation: event.geolocation,
+
+  detectionMethod: DetectionMethod.RULE_BASED
+        detectedBy: rule.id
+        riskScore: this.calculateRiskScore(rule, confidence, event)
+        status: ActivityStatus.DETECTED
+        investigated: false
+        relatedActivities: []
+        actionsTriggered: []
+        geolocation: event.geolocation
         deviceFingerprint: event.deviceFingerprint;
   };
       // Update rule analytics
@@ -292,19 +281,18 @@ export enum SeverityLevel {
       rule.analytics.averageProcessingTime = 
         (rule.analytics.averageProcessingTime + (Date.now() - startTime)) / 2;
       return activity;
-    } catch (error) {
+ catch (error) {
       console.error(`Error evaluating rule ${rule.id}:`, error);}
       return null;
-  private evaluateCondition(condition: RuleCondition, event: SuspiciousActivityEvent): boolean {
-  const fieldValue = this.getFieldValue(condition.field, event);
+  private evaluateCondition(condition: RuleCondition, event: SuspiciousActivityEvent): boolean { const fieldValue = this.getFieldValue(condition.field, event);
   switch (condition.operator) {
-  case ConditionOperator.EQUALS:,
+  case ConditionOperator.EQUALS:
   return fieldValue === condition.value;
-  case ConditionOperator.NOT_EQUALS:,
+  case ConditionOperator.NOT_EQUALS:
   return fieldValue !== condition.value;
-  case ConditionOperator.GREATER_THAN:,
+  case ConditionOperator.GREATER_THAN:
   return Number(fieldValue) > Number(condition.value);
-  case ConditionOperator.LESS_THAN:,
+  case ConditionOperator.LESS_THAN:
   return Number(fieldValue) < Number(condition.value);
   case ConditionOperator.CONTAINS:,
   return String(fieldValue).includes(String(condition.value));
@@ -343,32 +331,30 @@ export enum SeverityLevel {
   return value === thresholdValue;
   default:,
   return value >= thresholdValue;
-  private async executeResponseActions(activity: SuspiciousActivity): Promise<void> {,
+  private async executeResponseActions(activity: SuspiciousActivity): Promise<void> {
   const rule = this.rules.get(activity.detectedBy);
   if (!rule) return;
   for (const action of rule.actions) {
   try {
-  const responseAction: ResponseAction = {,
-  type: action.type,
-  status: ActionStatus.PENDING,
-  triggeredAt: new Date(),
-  parameters: action.parameters,
+  const responseAction: ResponseAction = {
+  type: action.type
+  status: ActionStatus.PENDING
+  triggeredAt: new Date()
+  parameters: action.parameters }
 };
         // Apply delay if specified
-        if (action.delay) {
-          await new Promise(resolve => setTimeout(resolve, action.delay));
+        if (action.delay) { await new Promise(resolve => setTimeout(resolve, action.delay));
         // Execute action
         await this.executeAction(action, activity);
         responseAction.status = ActionStatus.EXECUTED;
-        activity.actionsTriggered.push(responseAction);
-      } catch (error) {
+        activity.actionsTriggered.push(responseAction) } catch (error) {
         console.error(`Failed to execute action ${action.type}:`, error);}
-        activity.actionsTriggered.push({)
-  type: action.type,
-  status: ActionStatus.FAILED,
-  triggeredAt: new Date(),
-  parameters: action.parameters,
-  error: error instanceof Error ? error.message : 'Unknown error',
+        activity.actionsTriggered.push({ )
+  type: action.type
+  status: ActionStatus.FAILED
+  triggeredAt: new Date()
+  parameters: action.parameters
+  error: error instanceof Error ? error.message : 'Unknown error' }
 });
   private async executeAction(action: RuleAction, activity: SuspiciousActivity): Promise<void> {
 
@@ -396,105 +382,94 @@ export enum SeverityLevel {
       break;
     default:
       console.warn(`Unknown action type: ${action.type}`);}
-  private initializeDefaultRules(): void {
-  // Brute force login rule
+  private initializeDefaultRules(): void { // Brute force login rule
   this.createRule({)
-  name: 'Brute Force Login Detection',
-  description: 'Detects rapid failed login attempts from the same IP',
-  category: RuleCategory.AUTHENTICATION,
-  activityType: ActivityType.BRUTE_FORCE_LOGIN,
-  enabled: true,
-  severity: SeverityLevel.HIGH,
-  confidence: 0.9,
-  conditions: [,
+  name: 'Brute Force Login Detection'
+  description: 'Detects rapid failed login attempts from the same IP'
+  category: RuleCategory.AUTHENTICATION
+  activityType: ActivityType.BRUTE_FORCE_LOGIN
+  enabled: true
+  severity: SeverityLevel.HIGH
+  confidence: 0.9
+  conditions: [
   {
-  field: 'eventType',
-  operator: ConditionOperator.EQUALS,
-  value: 'login_failed',
-  weight: 1.0],
+  field: 'eventType'
+  operator: ConditionOperator.EQUALS
+  value: 'login_failed'
+  weight: 1.0]
   aggregation: {
-  type: AggregationType.COUNT,
-  groupBy: ['ipAddress'],
-  minimumEvents: 5,
-},
-  timeWindow: {
-  duration: 300000, // 5 minutes,
-  sliding: true,
-},
-  threshold: {
-  value: 5,
-  operator: ConditionOperator.GREATER_THAN,
-  dynamic: false,
-},
-  actions: [,
-        {
-          type: ResponseType.IP_BLOCK,
+  type: AggregationType.COUNT
+  groupBy: ['ipAddress']
+  minimumEvents: 5 }
+
+  timeWindow: { 
+  duration: 300000, // 5 minutes
+  sliding: true }
+
+  threshold: { 
+  value: 5
+  operator: ConditionOperator.GREATER_THAN
+  dynamic: false }
+
+  actions: [
+        { type: ResponseType.IP_BLOCK }
           parameters: { duration: 3600000 } // 1 hour
-  }
-        {
-          type: ResponseType.ADMIN_ALERT,
+
+        { type: ResponseType.ADMIN_ALERT }
           parameters: { priority: 'high' }
-      ],
-      author: 'system',
-      version: '1.0.0',
-      lastUpdated: new Date(),
+      ]
+      author: 'system'
+      version: '1.0.0'
+      lastUpdated: new Date()
       tags: ['authentication', 'brute-force', 'security']
     });
     // Add more default rules...
-    this.createRule({)
-  name: 'Suspicious Login Location',
-  description: 'Detects logins from unusual geographic locations',
-  category: RuleCategory.AUTHENTICATION,
-  activityType: ActivityType.UNUSUAL_LOGIN_LOCATION,
-  enabled: true,
-  severity: SeverityLevel.MEDIUM,
-  confidence: 0.7,
-  conditions: [,
+    this.createRule({ )
+  name: 'Suspicious Login Location'
+  description: 'Detects logins from unusual geographic locations'
+  category: RuleCategory.AUTHENTICATION
+  activityType: ActivityType.UNUSUAL_LOGIN_LOCATION
+  enabled: true
+  severity: SeverityLevel.MEDIUM
+  confidence: 0.7
+  conditions: [
   {
-  field: 'eventType',
-  operator: ConditionOperator.EQUALS,
-  value: 'login_success',
-  weight: 1.0],
+  field: 'eventType'
+  operator: ConditionOperator.EQUALS
+  value: 'login_success'
+  weight: 1.0]
   aggregation: {
-  type: AggregationType.COUNT,
-  groupBy: ['userId'],
-  minimumEvents: 1,
-},
-  timeWindow: {
-  duration: 86400000, // 24 hours,
-  sliding: false,
-},
-  threshold: {
-  value: 1,
-  operator: ConditionOperator.GREATER_THAN,
-  dynamic: true,
-},
-  actions: [,
-        {
-          type: ResponseType.REQUIRE_VERIFICATION,
+  type: AggregationType.COUNT
+  groupBy: ['userId']
+  minimumEvents: 1 }
+
+  timeWindow: { 
+  duration: 86400000, // 24 hours
+  sliding: false }
+
+  threshold: { 
+  value: 1
+  operator: ConditionOperator.GREATER_THAN
+  dynamic: true }
+
+  actions: [
+        { type: ResponseType.REQUIRE_VERIFICATION }
           parameters: { method: 'email' }
-      ],
-      author: 'system',
-      version: '1.0.0',
-      lastUpdated: new Date(),
+      ]
+      author: 'system'
+      version: '1.0.0'
+      lastUpdated: new Date()
       tags: ['authentication', 'geolocation', 'anomaly']
     });
-  private startEventProcessor(): void {
-    setInterval(() => {
+  private startEventProcessor(): void { setInterval(() => {
       if (!this.processingQueue && this.eventQueue.length > 0) {
-        this.processEventQueue();
-    }, 1000);
-  private async processEventQueue(): Promise<void> {
-
-    this.processingQueue = true;
+        this.processEventQueue() }, 1000);
+  private async processEventQueue(): Promise<void> { this.processingQueue = true;
     try {
       while (this.eventQueue.length > 0) {
         const event = this.eventQueue.shift();
         if (event) {
-          await this.detectActivity(event);
-    } catch (error) {
-  console.error('Error processing event queue:', error);
-} finally {
+          await this.detectActivity(event) } catch (error) { console.error('Error processing event queue:', error) } finally {
       this.processingQueue = false;
   private getFieldValue(field: string, event: SuspiciousActivityEvent): any {
     const parts = field.split('.');
@@ -515,84 +490,78 @@ export enum SeverityLevel {
     return events.length >= aggregation.minimumEvents;
   private generateActivityDescription(rule: DetectionRule, event: SuspiciousActivityEvent): string {
     return `${rule.name} detected for ${event.eventType} from ${event.ipAddress}`;}
-  private collectEvidence(rule: DetectionRule, event: SuspiciousActivityEvent, relatedEvents: SuspiciousActivityEvent): ActivityEvidence {
-  return [
+  private collectEvidence(rule: DetectionRule, event: SuspiciousActivityEvent, relatedEvents: SuspiciousActivityEvent): ActivityEvidence { return [
   {
-  type: EvidenceType.LOG_ENTRY,
-  description: 'Event that triggered the rule',
-  data: event,
-  timestamp: new Date(),
-  source: 'detection_engine',
+  type: EvidenceType.LOG_ENTRY
+  description: 'Event that triggered the rule'
+  data: event
+  timestamp: new Date()
+  source: 'detection_engine'
   confidence: 1.0];
-  private identifyPatterns(rule: DetectionRule, event: SuspiciousActivityEvent, relatedEvents: SuspiciousActivityEvent): DetectionPattern {,
+  private identifyPatterns(rule: DetectionRule, event: SuspiciousActivityEvent, relatedEvents: SuspiciousActivityEvent): DetectionPattern {
   return [];
-  private calculateRiskScore(rule: DetectionRule, confidence: number, event: SuspiciousActivityEvent): number {,
+  private calculateRiskScore(rule: DetectionRule, confidence: number, event: SuspiciousActivityEvent): number {
   const severityWeight = this.compareSeverity(rule.severity, SeverityLevel.LOW) * 25;
   return Math.min(100, severityWeight + (confidence * 50));
-  private calculateDynamicThreshold(threshold: RuleThreshold): number {,
+  private calculateDynamicThreshold(threshold: RuleThreshold): number {
   // Implementation for dynamic threshold calculation
   return threshold.value;
-  private async updateUserProfile(userId: string, event: SuspiciousActivityEvent): Promise<void> {,
+  private async updateUserProfile(userId: string, event: SuspiciousActivityEvent): Promise<void> {
   // Implementation for updating user behavior profile
-  private checkLocationAnomaly(profile: UserBehaviorProfile, event: SuspiciousActivityEvent): SuspiciousActivity | null {,
+  private checkLocationAnomaly(profile: UserBehaviorProfile, event: SuspiciousActivityEvent): SuspiciousActivity | null {
   // Implementation for location anomaly detection
   return null;
-  private checkTimingAnomaly(profile: UserBehaviorProfile, event: SuspiciousActivityEvent): SuspiciousActivity | null {,
+  private checkTimingAnomaly(profile: UserBehaviorProfile, event: SuspiciousActivityEvent): SuspiciousActivity | null {
   // Implementation for timing anomaly detection
   return null;
-  private checkDeviceAnomaly(profile: UserBehaviorProfile, event: SuspiciousActivityEvent): SuspiciousActivity | null {,
+  private checkDeviceAnomaly(profile: UserBehaviorProfile, event: SuspiciousActivityEvent): SuspiciousActivity | null {
   // Implementation for device anomaly detection
   return null;
-  private async checkVolumeAnomaly(profile: UserBehaviorProfile, event: SuspiciousActivityEvent): Promise<SuspiciousActivity | null> {,
+  private async checkVolumeAnomaly(profile: UserBehaviorProfile, event: SuspiciousActivityEvent): Promise<SuspiciousActivity | null> {
   // Implementation for volume anomaly detection
   return null;
-  private matchesThreatIndicators(threat: ThreatIntelligence, event: SuspiciousActivityEvent): boolean {,
+  private matchesThreatIndicators(threat: ThreatIntelligence, event: SuspiciousActivityEvent): boolean {
   // Implementation for threat intelligence matching
   return false;
-  private updateRuleMetrics(rule: DetectionRule): void {,
+  private updateRuleMetrics(rule: DetectionRule): void {
   const total = rule.analytics.truePositives + rule.analytics.falsePositives;
   if (total > 0) {
   rule.analytics.precision = rule.analytics.truePositives / total;
-  private async executeResolutionActions(activity: SuspiciousActivity, resolution: ActivityResolution): Promise<void> {,
+  private async executeResolutionActions(activity: SuspiciousActivity, resolution: ActivityResolution): Promise<void> {
   // Implementation for executing resolution actions
-  private calculateSeverityDistribution(activities: SuspiciousActivity): Record<SeverityLevel, number> {,
-  const distribution: Record<SeverityLevel, number> = {,
-  low: 0,
-  medium: 0,
-  high: 0,
-  critical: 0,
+  private calculateSeverityDistribution(activities: SuspiciousActivity): Record<SeverityLevel, number> {
+  const distribution: Record<SeverityLevel, number> = {
+  low: 0
+  medium: 0
+  high: 0
+  critical: 0 }
 };
-    activities.forEach(activity => {)
-  distribution[activity.severity]++;
-    });
+    activities.forEach(activity => { )
+  distribution[activity.severity]++ });
     return distribution;
   private calculateTypeDistribution(activities: SuspiciousActivity): Record<ActivityType, number> {
     const distribution: Record<ActivityType, number> = {} as any;
-    activities.forEach(activity => {)
-  distribution[activity.type] = (distribution[activity.type] || 0) + 1;
-    });
+    activities.forEach(activity => { )
+  distribution[activity.type] = (distribution[activity.type] || 0) + 1 });
     return distribution;
   private calculateStatusDistribution(activities: SuspiciousActivity): Record<ActivityStatus, number> {
     const distribution: Record<ActivityStatus, number> = {} as any;
-    activities.forEach(activity => {)
-  distribution[activity.status] = (distribution[activity.status] || 0) + 1;
-    });
+    activities.forEach(activity => { )
+  distribution[activity.status] = (distribution[activity.status] || 0) + 1 });
     return distribution;
   private getTopAttackers(activities: SuspiciousActivity): Array<{ ip: string; count: number }> {
     const attackers: Record<string, number> = {};
-    activities.forEach(activity => {)
-  attackers[activity.ipAddress] = (attackers[activity.ipAddress] || 0) + 1;
-    });
+    activities.forEach(activity => { )
+  attackers[activity.ipAddress] = (attackers[activity.ipAddress] || 0) + 1 });
     return Object.entries(attackers)
       .map(([ip, count]) => ({ ip, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
   private getTopTargets(activities: SuspiciousActivity): Array<{ userId: string; count: number }> {
     const targets: Record<string, number> = {};
-    activities.forEach(activity => {)
+    activities.forEach(activity => { )
   if (activity.userId) {
-        targets[activity.userId] = (targets[activity.userId] || 0) + 1;
-    });
+        targets[activity.userId] = (targets[activity.userId] || 0) + 1 });
     return Object.entries(targets)
       .map(([userId, count]) => ({ userId, count }))
       .sort((a, b) => b.count - a.count)
@@ -621,9 +590,8 @@ export enum SeverityLevel {
 
 // Supporting interfaces
 
-}
-export interface SuspiciousActivityEvent {
-  eventType: string;
+
+export interface SuspiciousActivityEvent { eventType: string;
   userId?: string;
   sessionId: string;
   ipAddress: string;
@@ -631,21 +599,20 @@ export interface SuspiciousActivityEvent {
   timestamp: Date;
   geolocation?: GeoLocation;
   deviceFingerprint?: DeviceFingerprint;
-  metadata: Record<string, any>;
-}
-}
-}
-export interface SecurityMetrics {
-  totalActivities: number;
+  metadata: Record<string, any> }
+
+
+
+export interface SecurityMetrics { totalActivities: number;
   severityDistribution: Record<SeverityLevel, number>;
   typeDistribution: Record<ActivityType, number>;
-  statusDistribution: Record<ActivityStatus, number>;
-}
+  statusDistribution: Record<ActivityStatus, number> }
+
   topAttackers: Array<{ ip: string; count: number }>;
   topTargets: Array<{ userId: string; count: number }>;
   detectionEffectiveness: number;
   responseTime: number;
   falsePositiveRate: number;
   trendsOverTime: any;
-}
+
 export default Epic16SuspiciousActivityService;

@@ -14,8 +14,8 @@ import { AnalyticsClient } from './AnalyticsClient';
 import { ConversionArchitectureManager } from './ConversionFunnelArchitecture';
 
 }
-export interface EnhancedSession {
-    sessionId: string;
+}
+export interface EnhancedSession { sessionId: string;
     userId: string;
     deviceId: string;
     startTime: number;
@@ -31,7 +31,7 @@ export interface EnhancedSession {
     location?: {
         country?: string;
         region?: string;
-        city?: string;
+        city?: string }
 }
     };
     utmSource?: string;
@@ -48,27 +48,24 @@ export interface EnhancedSession {
     analyticsConsent: boolean;
     personalizationConsent: boolean;
     crossDeviceConsent: boolean;
-    viewport: {
-        width: number;
-        height: number;
-    };
+    viewport: { width: number;
+        height: number };
     deviceType: 'desktop' | 'mobile' | 'tablet';
     browser: string;
     os: string;
 
 }
-export interface SessionEvent {
-    sessionId: string;
+}
+export interface SessionEvent { sessionId: string;
     timestamp: number;
     type: SessionEventType;
     page?: string;
     properties: Record<string, any>;
 
-export type SessionEventType = 'session_start' | 'session_end' | 'page_view' | 'engagement' | 'conversion' | 'cross_device_link' | 'consent_update';
-
+export type SessionEventType = 'session_start' | 'session_end' | 'page_view' | 'engagement' | 'conversion' | 'cross_device_link' | 'consent_update' }
 }
-export interface SessionAnalytics {
-    totalSessions: number;
+}
+export interface SessionAnalytics { totalSessions: number;
     uniqueUsers: number;
     averageSessionDuration: number;
     averagePagesPerSession: number;
@@ -84,20 +81,17 @@ export interface SessionAnalytics {
     commonPaths: Array<{
         path: string[];
         frequency: number;
-        conversionRate: number;
+        conversionRate: number }
 }
     }>;
-    dropoffPoints: Array<{
-        page: string;
+    dropoffPoints: Array<{ page: string;
         dropoffRate: number;
-        recoverableUsers: number;
-    }>;
+        recoverableUsers: number }>;
 /**
  * Enhanced Session Tracking Manager
  * Integrates with Epic 1 AnalyticsClient for comprehensive session management
  */
-export declare class SessionTrackingManager {
-    private analyticsClient;
+export declare class SessionTrackingManager { private analyticsClient;
     private conversionArchitecture;
     private currentSession;
     private sessionStorage;
@@ -135,8 +129,7 @@ export declare class SessionTrackingManager {
         trackingConsent?: boolean;
         analyticsConsent?: boolean;
         personalizationConsent?: boolean;
-        crossDeviceConsent?: boolean;
-    }): void;
+        crossDeviceConsent?: boolean }): void;
     /**
      * End current session
      */

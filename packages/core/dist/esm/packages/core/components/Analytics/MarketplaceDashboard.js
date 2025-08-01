@@ -135,7 +135,7 @@ if (isLoading) {
     _jsxs("div", { className: `marketplace-dashboard ${className}`, children: ["}", _jsxs("div", { className: "dashboard-header", children: [_jsx("h2", { children: "Marketplace Analytics" }), _jsx(Button, { onClick: refreshData, variant: "outline", children: "Refresh Data" })] }), _jsxs(Tabs, { defaultValue: "overview", className: "dashboard-tabs", children: [_jsxs(TabsList, { className: "grid grid-cols-4 w-full", children: [_jsx(TabsTrigger, { value: "overview", children: "Overview" }), _jsx(TabsTrigger, { value: "templates", children: "Templates" }), _jsx(TabsTrigger, { value: "search", children: "Search" }), _jsx(TabsTrigger, { value: "insights", children: "Insights" })] }), _jsx(TabsContent, { value: "overview", className: "tab-content", children: _jsxs("div", { className: "overview-content", children: [renderOverviewMetrics(), renderTopCategories()] }) }), _jsx(TabsContent, { value: "templates", className: "tab-content", children: renderTopTemplates() }), _jsx(TabsContent, { value: "search", className: "tab-content", children: renderSearchAnalytics() }), _jsx(TabsContent, { value: "insights", className: "tab-content", children: renderInsights() })] }), _jsx("style", { children: `
         .marketplace-dashboard {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1.5rem;
           padding: 1rem;
         .dashboard-header {
@@ -145,7 +145,7 @@ if (isLoading) {
         .dashboard-header h2 {
           margin: 0;
           font-size: 1.5rem;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .metrics-grid {
           display: grid;
@@ -158,66 +158,66 @@ if (isLoading) {
   transform: translateY(-2px);
         .metric-title {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.5rem;
           font-size: 0.875rem;
-          font-weight: 500;
+          font-weight: 500;,
   color: #6b7280;
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;
+          font-weight: 700;,
   color: #1f2937;
           margin: 0.5rem 0;
         .metric-trend {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.25rem;
           font-size: 0.875rem;
         .trend-value {
-          font-weight: 600;
+          font-weight: 600;,
   color: #059669;
         .trend-period {
           color: #9ca3af;
         .metric-subtitle {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
         .rating-stars {
-          display: flex;
+          display: flex;,
   gap: 0.125rem;
           margin-top: 0.25rem;
         .categories-list, .templates-list, .queries-list, .insights-list {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .category-item, .template-item, .query-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between;,
   padding: 1rem;
           border: 1px solid #e5e7eb;
           border-radius: 8px;
         .category-info, .template-info, .query-info {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 1rem;
         .category-rank, .template-rank, .query-rank {
-          font-weight: 600;
+          font-weight: 600;,
   color: #6b7280;
           min-width: 2rem;
         .category-name, .template-name, .query-text {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .category-revenue, .metric-primary {
           font-size: 1.1rem;
-          font-weight: 600;
+          font-weight: 600;,
   color: #059669;
         .metric-secondary {
-          display: flex;
+          display: flex;,
   gap: 1rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
         .query-stats {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
         .templates-header {
           display: flex;
@@ -225,25 +225,25 @@ if (isLoading) {
           align-items: center;
         .search-analytics {
           display: grid;
-          grid-template-columns: 1fr 2fr;
+          grid-template-columns: 1fr 2fr;,
   gap: 1rem;
         .search-metrics {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr;,
   gap: 1rem;
         .search-stat {
           text-align: center;
         .stat-value {
           font-size: 1.5rem;
-          font-weight: 700;
+          font-weight: 700;,
   color: #1f2937;
         .stat-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
         .insight-item {
-          display: flex;
+          display: flex;,
   gap: 1rem;
-          padding: 1rem;
+          padding: 1rem;,
   border: 1px solid #e5e7eb;
           border-radius: 8px;
           border-left: 4px solid;
@@ -254,7 +254,7 @@ if (isLoading) {
         .insight-item.low {
           border-left-color: #10b981;
         .insight-icon {
-          flex-shrink: 0;
+          flex-shrink: 0;,
   padding: 0.5rem;
           background: #f3f4f6;
           border-radius: 8px;
@@ -266,24 +266,24 @@ if (isLoading) {
           align-items: center;
           margin-bottom: 0.5rem;
         .insight-title {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .insight-description {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
           margin-bottom: 0.75rem;
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;
+          align-items: center;,
   padding: 4rem;
           gap: 1rem;
         .loading-spinner {
-          width: 2rem;
+          width: 2rem;,
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50%;,
   animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
@@ -294,7 +294,7 @@ if (isLoading) {
           .search-analytics {
             grid-template-columns: 1fr;
           .templates-header {
-            flex-direction: column;
+            flex-direction: column;,
   gap: 1rem;
             align-items: stretch;
       ` })] });

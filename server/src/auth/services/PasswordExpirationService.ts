@@ -6,8 +6,8 @@
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
-}
-}
+
+
 export interface ExpirationRule {
   id: string;
   name: string;
@@ -21,8 +21,9 @@ export interface ExpirationRule {
     excludeUsers?: string[];
     departments?: string[];
     accessLevels?: string[];
-}
-}
+
+
+
   };
   expirationPolicy: {
     maxAge: number; // Days
@@ -52,7 +53,7 @@ export interface ExpirationRule {
       recipients: ('user' | 'manager' | 'admin' | 'security')[];
       notificationMethod: ('email' | 'sms' | 'push' | 'dashboard')[];
       template: string;
-    }>;
+>;
   };
   compliance: {
     auditRequired: boolean;
@@ -72,17 +73,17 @@ export interface ExpirationRule {
       dayOfWeek: number; // 0-6
       startTime: string; // HH:MM
       endTime: string; // HH:MM
-    }>;
+>;
   };
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
   approvedBy?: string;
   approvedAt?: Date;
-}
 
-}
-}
+
+
+
 export interface UserExpirationStatus {
   userId: string;
   currentPasswordSetAt: Date;
@@ -107,14 +108,15 @@ export interface UserExpirationStatus {
       ip: string;
       location: string;
       timestamp: Date;
-}
-}
-    }>;
-  };
-}
 
-}
-}
+
+
+>;
+  };
+
+
+
+
 export interface ExpirationEvent {
   id: string;
   userId: string;
@@ -128,24 +130,25 @@ export interface ExpirationEvent {
     approvedBy?: string;
     reason?: string;
     automaticAction?: boolean;
-}
-}
+
+
+
   };
   notificationsSent: Array<{
     recipient: string;
     method: string;
     status: 'sent' | 'failed' | 'pending';
     timestamp: Date;
-  }>;
+>;
   compliance: {
     auditTrail: boolean;
     reportGenerated: boolean;
     standardsApplied: string[];
   };
-}
 
-}
-}
+
+
+
 export interface ExtensionRequest {
   id: string;
   userId: string;
@@ -165,10 +168,11 @@ export interface ExtensionRequest {
     businessJustification: string;
     alternativesConsidered: string[];
     riskAssessment: string;
-}
-}
+
+
+
   };
-}
+
 
 export class PasswordExpirationService extends EventEmitter {
   private rules: Map<string, ExpirationRule> = new Map();
@@ -180,7 +184,7 @@ export class PasswordExpirationService extends EventEmitter {
     super();
     this.initializeDefaultRules();
     this.startExpirationTasks();
-  }
+
 
   /**
    * Create a new expiration rule
@@ -203,7 +207,7 @@ export class PasswordExpirationService extends EventEmitter {
     // If compliance requires approval, mark as pending
     if (rule.compliance.approvalWorkflow && !rule.approvedBy) {
       await this.requestRuleApproval(rule, createdBy);
-    }
+
 
     this.rules.set(rule.id, rule);
     await this.recalculateAffectedUsers(rule);
@@ -216,7 +220,7 @@ export class PasswordExpirationService extends EventEmitter {
 
     this.emit('ruleCreated', rule);
     return rule;
-  }
+
 
   /**
    * Get expiration status for a user
@@ -228,17 +232,17 @@ export class PasswordExpirationService extends EventEmitter {
     if (!status) {
       status = await this.calculateUserStatus(userId);
       this.userStatuses.set(userId, status);
-    }
+
 
     // Refresh if status is stale (older than 1 hour)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
     if (status.currentPasswordSetAt < oneHourAgo) {
       status = await this.calculateUserStatus(userId);
       this.userStatuses.set(userId, status);
-    }
+
 
     return status;
-  }
+
 
   /**
    * Check if password change is required for user
@@ -258,7 +262,7 @@ export class PasswordExpirationService extends EventEmitter {
       type: 'warning' | 'lock' | 'force_change';
       date: Date;
     };
-  }> {
+> {
 
     const status = await this.getUserExpirationStatus(userId);
     const applicableRules = await this.getApplicableRules(userId, userRoles);
@@ -272,7 +276,7 @@ export class PasswordExpirationService extends EventEmitter {
         allowedActions: ['login', 'api_access', 'password_change'],
         blockedActions: []
       };
-    }
+
 
     const mostRestrictiveRule = this.getMostRestrictiveRule(applicableRules);
     
@@ -301,7 +305,7 @@ export class PasswordExpirationService extends EventEmitter {
         blockedActions.push('login', 'api_access');
         required = true;
         message = `Password expired ${Math.abs(status.daysUntilExpiry)} days ago. Change required.`;
-      }
+
       break;
 
     case 'grace':
@@ -325,16 +329,16 @@ export class PasswordExpirationService extends EventEmitter {
       allowedActions.push('login', 'api_access', 'password_change');
       message = `Password extended (expires in ${status.daysUntilExpiry} days)`;
       break;
-    }
+
 
     // Determine next action
     let nextAction: { type: 'warning' | 'lock' | 'force_change'; date: Date } | undefined;
     
     if (status.nextWarningDue) {
       nextAction = { type: 'warning', date: status.nextWarningDue };
-    } else if (status.lockDate) {
+ else if (status.lockDate) {
       nextAction = { type: 'lock', date: status.lockDate };
-    }
+
 
     return {
       required,
@@ -345,7 +349,7 @@ export class PasswordExpirationService extends EventEmitter {
       blockedActions,
       nextAction
     };
-  }
+
 
   /**
    * Request password extension
@@ -363,21 +367,21 @@ export class PasswordExpirationService extends EventEmitter {
     
     if (applicableRules.length === 0) {
       throw new Error('No expiration rules apply to this user');
-    }
+
 
     const rule = this.getMostRestrictiveRule(applicableRules);
     
     if (!rule.expirationPolicy.allowSelfExtension) {
       throw new Error('Self-extension not allowed by current policy');
-    }
+
 
     if (status.extensionsUsed >= rule.expirationPolicy.maxExtensions) {
       throw new Error(`Maximum extensions (${rule.expirationPolicy.maxExtensions}) already used`);
-    }
+
 
     if (requestedDays > rule.expirationPolicy.extensionDuration) {
       throw new Error(`Requested extension exceeds maximum allowed (${rule.expirationPolicy.extensionDuration} days)`);
-    }
+
 
     const request: ExtensionRequest = {
       id: this.generateRequestId(),
@@ -395,7 +399,7 @@ export class PasswordExpirationService extends EventEmitter {
         businessJustification,
         alternativesConsidered: [],
         riskAssessment: this.assessExtensionRisk(status, requestedDays)
-      }
+
     };
 
     if (!rule.expirationPolicy.requireApprovalForExtension) {
@@ -403,10 +407,10 @@ export class PasswordExpirationService extends EventEmitter {
       request.approvedBy = 'system';
       request.approvedAt = new Date();
       await this.applyExtension(request);
-    } else {
+ else {
       // Send for approval
       await this.sendApprovalRequest(request);
-    }
+
 
     this.extensionRequests.set(request.id, request);
 
@@ -419,7 +423,7 @@ export class PasswordExpirationService extends EventEmitter {
 
     this.emit('extensionRequested', request);
     return request;
-  }
+
 
   /**
    * Approve or deny extension request
@@ -434,11 +438,11 @@ export class PasswordExpirationService extends EventEmitter {
     const request = this.extensionRequests.get(requestId);
     if (!request) {
       throw new Error('Extension request not found');
-    }
+
 
     if (request.status !== 'pending') {
       throw new Error(`Request already ${request.status}`);
-    }
+
 
     request.status = decision;
     request.approvedBy = approvedBy;
@@ -446,9 +450,9 @@ export class PasswordExpirationService extends EventEmitter {
 
     if (decision === 'denied') {
       request.denyReason = comments || 'No reason provided';
-    } else {
+ else {
       await this.applyExtension(request);
-    }
+
 
     await this.logExpirationEvent(request.userId, approvedBy, `extension_${decision}`, {
       requestId,
@@ -459,7 +463,7 @@ export class PasswordExpirationService extends EventEmitter {
 
     this.emit('extensionProcessed', request);
     return request;
-  }
+
 
   /**
    * Generate expiration compliance report
@@ -482,7 +486,7 @@ export class PasswordExpirationService extends EventEmitter {
       details: string;
       severity: 'low' | 'medium' | 'high' | 'critical';
       detectedAt: Date;
-    }>;
+>;
     trends: {
       expirationRate: number[];
       extensionRate: number[];
@@ -490,7 +494,7 @@ export class PasswordExpirationService extends EventEmitter {
       dates: Date[];
     };
     recommendations: string[];
-  }> {
+> {
     const events = this.expirationEvents.filter(event => 
       event.timestamp >= dateRange.start && 
       event.timestamp <= dateRange.end &&
@@ -514,7 +518,7 @@ export class PasswordExpirationService extends EventEmitter {
     const recommendations = this.generateRecommendations(summary, violations);
 
     return { summary, violations, trends, recommendations };
-  }
+
 
   // Private helper methods
 
@@ -528,7 +532,7 @@ export class PasswordExpirationService extends EventEmitter {
       applicability: {
         userRoles: ['user', 'editor'],
         excludeUsers: []
-  }
+
       expirationPolicy: {
         maxAge: 90,
         warningThresholds: [30, 14, 7, 3, 1],
@@ -538,7 +542,7 @@ export class PasswordExpirationService extends EventEmitter {
         extensionDuration: 30,
         requireApprovalForExtension: false,
         emergencyOverride: true
-  }
+
       strengthRequirements: {
         minStrength: 60,
         enforceComplexity: true,
@@ -546,7 +550,7 @@ export class PasswordExpirationService extends EventEmitter {
         minUniqueChars: 8,
         requireSpecialChars: true,
         preventCommonPatterns: true
-  }
+
       notifications: {
         warningNotifications: true,
         expiryNotifications: true,
@@ -558,21 +562,21 @@ export class PasswordExpirationService extends EventEmitter {
             recipients: ['user'],
             notificationMethod: ['email', 'dashboard'],
             template: 'password_warning_30days'
-  }
+
           {
             daysBeforeExpiry: 7,
             recipients: ['user', 'manager'],
             notificationMethod: ['email', 'sms', 'dashboard'],
             template: 'password_warning_7days'
-  }
+
           {
             daysBeforeExpiry: 1,
             recipients: ['user', 'manager', 'admin'],
             notificationMethod: ['email', 'sms', 'push', 'dashboard'],
             template: 'password_warning_1day'
-          }
+
         ]
-  }
+
       compliance: {
         auditRequired: true,
         documentationRequired: false,
@@ -580,21 +584,21 @@ export class PasswordExpirationService extends EventEmitter {
         retentionPeriod: 365,
         reportingFrequency: 'monthly',
         complianceStandards: ['ISO27001']
-  }
+
       schedule: {
         effectiveDate: new Date(),
         timeZone: 'UTC',
         businessHoursOnly: false,
         excludedDates: [],
         maintenanceWindows: []
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
     };
 
     this.rules.set(standardRule.id, standardRule);
-  }
+
 
   private async calculateUserStatus(userId: string): Promise<UserExpirationStatus> {
 
@@ -604,7 +608,7 @@ export class PasswordExpirationService extends EventEmitter {
     
     if (applicableRules.length === 0) {
       return this.createDefaultStatus(userId, passwordSetAt);
-    }
+
 
     const rule = this.getMostRestrictiveRule(applicableRules);
     const expiresAt = new Date(passwordSetAt.getTime() + rule.expirationPolicy.maxAge * 24 * 60 * 60 * 1000);
@@ -615,14 +619,14 @@ export class PasswordExpirationService extends EventEmitter {
       const gracePeriodEnd = new Date(expiresAt.getTime() + rule.expirationPolicy.gracePeriod * 24 * 60 * 60 * 1000);
       if (Date.now() > gracePeriodEnd.getTime()) {
         status = 'locked';
-      } else if (daysUntilExpiry <= -rule.expirationPolicy.gracePeriod) {
+ else if (daysUntilExpiry <= -rule.expirationPolicy.gracePeriod) {
         status = 'grace';
-      } else {
+ else {
         status = 'expired';
-      }
-    } else if (daysUntilExpiry <= Math.max(...rule.expirationPolicy.warningThresholds)) {
+
+ else if (daysUntilExpiry <= Math.max(...rule.expirationPolicy.warningThresholds)) {
       status = 'warning';
-    }
+
 
     return {
       userId,
@@ -640,9 +644,9 @@ export class PasswordExpirationService extends EventEmitter {
         riskLevel: 'low',
         deviceFingerprints: [],
         locationHistory: []
-      }
+
     };
-  }
+
 
   private createDefaultStatus(userId: string, passwordSetAt: Date): UserExpirationStatus {
     return {
@@ -661,9 +665,9 @@ export class PasswordExpirationService extends EventEmitter {
         riskLevel: 'medium',
         deviceFingerprints: [],
         locationHistory: []
-      }
+
     };
-  }
+
 
   private async getApplicableRules(userId: string, userRoles: string[]): Promise<ExpirationRule[]> {
 
@@ -677,17 +681,17 @@ export class PasswordExpirationService extends EventEmitter {
       if (rule.applicability.userIds?.includes(userId) ||
           rule.applicability.userRoles.some(role => userRoles.includes(role))) {
         rules.push(rule);
-      }
-    }
+
+
 
     return rules.sort((a, b) => b.priority - a.priority);
-  }
+
 
   private getMostRestrictiveRule(rules: ExpirationRule[]): ExpirationRule {
     return rules.reduce((most, current) => 
       current.expirationPolicy.maxAge < most.expirationPolicy.maxAge ? current : most
     );
-  }
+
 
   private startExpirationTasks(): void {
     // Check expiration status daily
@@ -699,49 +703,49 @@ export class PasswordExpirationService extends EventEmitter {
     setInterval(() => {
       this.sendScheduledNotifications();
     }, 60 * 60 * 1000);
-  }
+
 
   private async checkExpirations(): Promise<void> {
 
     for (const userId of this.userStatuses.keys()) {
       await this.calculateUserStatus(userId);
-    }
-  }
+
+
 
   private async sendScheduledNotifications(): Promise<void> {
 
     // Implementation would send scheduled expiration notifications
     console.log('Checking for scheduled expiration notifications');
-  }
+
 
   // Additional helper methods would continue here...
   // Due to length constraints, showing core implementation structure
 
   private generateRuleId(): string {
     return `ER-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  }
+
 
   private generateRequestId(): string {
     return `EXT-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private async validateRule(rule: ExpirationRule): Promise<void> {
 
     if (rule.expirationPolicy.maxAge < 1 || rule.expirationPolicy.maxAge > 365) {
       throw new Error('Password max age must be between 1 and 365 days');
-    }
-  }
+
+
 
   private async recalculateAffectedUsers(rule: ExpirationRule): Promise<void> {
 
     // Implementation would recalculate status for users affected by the new rule
     console.log(`Recalculating status for users affected by rule ${rule.name}`);
-  }
+
 
   private async requestRuleApproval(rule: ExpirationRule, requestedBy: string): Promise<void> {
 
     console.log(`Requesting approval for rule ${rule.name} by ${requestedBy}`);
-  }
+
 
   private assessExtensionRisk(status: UserExpirationStatus, requestedDays: number): string {
     const riskFactors = [];
@@ -751,12 +755,12 @@ export class PasswordExpirationService extends EventEmitter {
     if (requestedDays > 30) riskFactors.push('Long extension period');
     
     return riskFactors.length > 0 ? riskFactors.join('; ') : 'Low risk';
-  }
+
 
   private async sendApprovalRequest(request: ExtensionRequest): Promise<void> {
 
     console.log(`Sending approval request for extension ${request.id}`);
-  }
+
 
   private async applyExtension(request: ExtensionRequest): Promise<void> {
 
@@ -766,8 +770,8 @@ export class PasswordExpirationService extends EventEmitter {
       status.extensionsUsed++;
       status.status = 'extended';
       status.daysUntilExpiry = Math.ceil((status.expiresAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000));
-    }
-  }
+
+
 
   private calculateComplianceRate(userStatuses: UserExpirationStatus[]): number {
     const compliantUsers = userStatuses.filter(s => 
@@ -775,7 +779,7 @@ export class PasswordExpirationService extends EventEmitter {
     ).length;
     
     return userStatuses.length > 0 ? (compliantUsers / userStatuses.length) * 100 : 100;
-  }
+
 
   private identifyViolations(userStatuses: UserExpirationStatus[], standards: string[]): Array<{
     userId: string;
@@ -783,7 +787,7 @@ export class PasswordExpirationService extends EventEmitter {
     details: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     detectedAt: Date;
-  }> {
+> {
     const violations = [];
     
     for (const status of userStatuses) {
@@ -795,7 +799,7 @@ export class PasswordExpirationService extends EventEmitter {
           severity: 'high' as const,
           detectedAt: new Date()
         });
-      }
+
       
       if (status.complianceFlags.length > 0) {
         violations.push({
@@ -805,18 +809,18 @@ export class PasswordExpirationService extends EventEmitter {
           severity: 'medium' as const,
           detectedAt: new Date()
         });
-      }
-    }
+
+
     
     return violations;
-  }
+
 
   private calculateTrends(events: ExpirationEvent[], dateRange: { start: Date; end: Date }): {
     expirationRate: number[];
     extensionRate: number[];
     complianceScore: number[];
     dates: Date[];
-  } {
+ {
     // Mock implementation - would calculate actual trends
     return {
       expirationRate: [5, 7, 6, 8, 4],
@@ -830,28 +834,27 @@ export class PasswordExpirationService extends EventEmitter {
         new Date(dateRange.end.getTime())
       ]
     };
-  }
+
 
   private generateRecommendations(summary: any, violations: any[]): string[] {
     const recommendations = [];
     
     if (summary.complianceRate < 90) {
       recommendations.push('Improve compliance rate by addressing password policy violations');
-    }
+
     
     if (summary.lockedAccounts > summary.totalUsers * 0.05) {
       recommendations.push('High number of locked accounts - consider adjusting grace periods');
-    }
+
     
     if (violations.length > 0) {
       recommendations.push('Address compliance violations to improve security posture');
-    }
+
     
     return recommendations;
-  }
+
 
   private async logExpirationEvent(target: string, performedBy: string, eventType: string, metadata: any): Promise<void> {
 
     console.log(`Expiration Event: ${eventType} for ${target} by ${performedBy}`, metadata);
-  }
-}
+

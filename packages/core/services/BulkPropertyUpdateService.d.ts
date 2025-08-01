@@ -9,15 +9,14 @@
  */
 
 }
-export interface BulkUpdateTarget {
-    type: TargetType;
+}
+export interface BulkUpdateTarget { type: TargetType;
     id: string;
     displayName?: string;
-    currentValues?: Record<string, any>;
-
+    currentValues?: Record<string, any> }
 }
-export interface BulkUpdateOperation {
-    id: string;
+}
+export interface BulkUpdateOperation { id: string;
     name: string;
     description?: string;
     targets: BulkUpdateTarget[];
@@ -32,111 +31,98 @@ export interface BulkUpdateOperation {
     createdBy: string;
     executedAt?: Date;
     completedAt?: Date;
-    rolledBackAt?: Date;
-
+    rolledBackAt?: Date }
 }
-export interface PropertyUpdate {
-    property: string;
+}
+export interface PropertyUpdate { property: string;
     operation: UpdateOperationType;
     value?: any;
     conditions?: UpdateCondition[];
-    transformation?: PropertyTransformation;
-
+    transformation?: PropertyTransformation }
 }
-export interface UpdateCondition {
-    type: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'exists' | 'not_exists' | 'matches_regex';
+}
+export interface UpdateCondition { type: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'exists' | 'not_exists' | 'matches_regex';
     field: string;
     value: any;
-    description: string;
-
+    description: string }
 }
-export interface PropertyTransformation {
-    type: 'case_convert' | 'trim' | 'replace' | 'append' | 'prepend' | 'calculate' | 'format' | 'extract' | 'custom';
+}
+export interface PropertyTransformation { type: 'case_convert' | 'trim' | 'replace' | 'append' | 'prepend' | 'calculate' | 'format' | 'extract' | 'custom';
     parameters: Record<string, any>;
-    description: string;
-
+    description: string }
 }
-export interface ValidationRules {
-    required?: string[];
+}
+export interface ValidationRules { required?: string[];
     constraints?: PropertyConstraint[];
     customValidators?: CustomValidator[];
-    skipInvalid?: boolean;
-
+    skipInvalid?: boolean }
 }
-export interface PropertyConstraint {
-    property: string;
+}
+export interface PropertyConstraint { property: string;
     type: 'type' | 'length' | 'range' | 'pattern' | 'enum' | 'unique' | 'custom';
     parameters: Record<string, any>;
-    message: string;
-
+    message: string }
 }
-export interface CustomValidator {
-    name: string;
+}
+export interface CustomValidator { name: string;
     function: string;
     parameters: Record<string, any>;
-    message: string;
-
+    message: string }
 }
-export interface ExecutionSettings {
-    mode: 'sequential' | 'parallel' | 'batched';
+}
+export interface ExecutionSettings { mode: 'sequential' | 'parallel' | 'batched';
     batchSize?: number;
     delayBetweenItems?: number;
     maxRetries?: number;
     retryDelay?: number;
     timeout?: number;
     dryRun?: boolean;
-    backupBeforeUpdate?: boolean;
-
+    backupBeforeUpdate?: boolean }
 }
-export interface RollbackSettings {
-    enabled: boolean;
+}
+export interface RollbackSettings { enabled: boolean;
     autoRollbackOnFailure?: boolean;
     retainBackups?: boolean;
-    backupExpiration?: Date;
-
+    backupExpiration?: Date }
 }
-export interface OperationProgress {
-    total: number;
+}
+export interface OperationProgress { total: number;
     completed: number;
     failed: number;
     skipped: number;
     currentItem?: string;
     startTime?: Date;
-    estimatedCompletion?: Date;
-
+    estimatedCompletion?: Date }
 }
-export interface OperationResult {
-    targetId: string;
+}
+export interface OperationResult { targetId: string;
     targetType: TargetType;
     status: 'success' | 'failed' | 'skipped' | 'validation_error';
     changes: PropertyChange[];
     errors: OperationError[];
     executedAt: Date;
     duration: number;
-    backup?: Record<string, any>;
-
+    backup?: Record<string, any> }
 }
-export interface PropertyChange {
-    property: string;
+}
+export interface PropertyChange { property: string;
     oldValue: any;
     newValue: any;
     operation: UpdateOperationType;
-    applied: boolean;
-
+    applied: boolean }
 }
-export interface OperationError {
-    type: 'validation' | 'execution' | 'timeout' | 'permission' | 'not_found' | 'conflict';
+}
+export interface OperationError { type: 'validation' | 'execution' | 'timeout' | 'permission' | 'not_found' | 'conflict';
     message: string;
     property?: string;
     details?: Record<string, any>;
 
 export type TargetType = 'user' | 'content' | 'product' | 'category' | 'tag' | 'collection' | 'campaign' | 'workflow' | 'system_setting' | 'custom_entity';
 export type UpdateOperationType = 'set' | 'unset' | 'append' | 'prepend' | 'increment' | 'decrement' | 'multiply' | 'divide' | 'replace' | 'merge' | 'push' | 'pull' | 'toggle';
-export type OperationStatus = 'draft' | 'validating' | 'validated' | 'executing' | 'completed' | 'failed' | 'cancelled' | 'rolling_back' | 'rolled_back';
-
+export type OperationStatus = 'draft' | 'validating' | 'validated' | 'executing' | 'completed' | 'failed' | 'cancelled' | 'rolling_back' | 'rolled_back' }
 }
-export interface BulkUpdateTemplate {
-    id: string;
+}
+export interface BulkUpdateTemplate { id: string;
     name: string;
     description: string;
     targetType: TargetType;
@@ -146,24 +132,23 @@ export interface BulkUpdateTemplate {
     usageCount: number;
     lastUsed?: Date;
     createdBy: string;
-    createdAt: Date;
-
+    createdAt: Date }
 }
-export interface BulkUpdateFilter {
-    statuses?: OperationStatus[];
+}
+export interface BulkUpdateFilter { statuses?: OperationStatus[];
     targetTypes?: TargetType[];
     createdBy?: string[];
     dateRange?: {
         start?: Date;
-        end?: Date;
+        end?: Date }
 }
     };
     searchQuery?: string;
     hasErrors?: boolean;
 
 }
-export interface BulkUpdateStats {
-    totalOperations: number;
+}
+export interface BulkUpdateStats { totalOperations: number;
     completedOperations: number;
     failedOperations: number;
     totalTargetsProcessed: number;
@@ -171,26 +156,21 @@ export interface BulkUpdateStats {
     successRateByType: Record<TargetType, {
         total: number;
         successful: number;
-        rate: number;
+        rate: number }
 }
     }>;
-    commonErrors: Array<{
-        type: string;
+    commonErrors: Array<{ type: string;
         message: string;
         count: number;
-        affectedTargets: number;
-    }>;
-    performanceMetrics: {
-        averageItemsPerSecond: number;
+        affectedTargets: number }>;
+    performanceMetrics: { averageItemsPerSecond: number;
         largestBatchSize: number;
         longestOperation: number;
-        totalProcessingTime: number;
-    };
+        totalProcessingTime: number };
 /**
  * Bulk Property Update Service
  */
-export declare class BulkPropertyUpdateService {
-    private static instance;
+export declare class BulkPropertyUpdateService { private static instance;
     private operations;
     private templates;
     private listeners;
@@ -207,8 +187,7 @@ export declare class BulkPropertyUpdateService {
     createOperation(name: string, targets: BulkUpdateTarget[], updates: PropertyUpdate[], options: {)
         validation?: Partial<ValidationRules>;
         execution?: Partial<ExecutionSettings>;
-        rollback?: Partial<RollbackSettings>;
-    } | undefined, createdBy: string): Promise<BulkUpdateOperation>;
+        rollback?: Partial<RollbackSettings> } | undefined, createdBy: string): Promise<BulkUpdateOperation>;
     validateOperation(operationId: string): Promise<ValidationResult>;
     executeOperation(operationId: string): Promise<boolean>;
     rollbackOperation(operationId: string): Promise<boolean>;
@@ -244,25 +223,24 @@ export declare class BulkPropertyUpdateService {
     private chunkArray;
     private sleep;
 }
-interface ValidationResult {
-    valid: boolean;
+}
+interface ValidationResult { valid: boolean;
     errors: OperationError[];
     warnings: OperationError[];
-    targetResults: TargetValidationResult[];
+    targetResults: TargetValidationResult[] }
 }
-interface TargetValidationResult {
-    targetId: string;
+}
+interface TargetValidationResult { targetId: string;
     valid: boolean;
     errors: OperationError[];
-    warnings: OperationError[];
+    warnings: OperationError[] }
 }
-interface EntityProvider {
-    getEntity: (id: string) => Promise<Record<string, any> | null>;
-    updateEntity: (id: string, data: Record<string, any>) => Promise<Record<string, any>>;
-
 }
-export interface BulkUpdateEvent {
-    type: string;
+interface EntityProvider { getEntity: (id: string) => Promise<Record<string, any> | null>;
+    updateEntity: (id: string, data: Record<string, any>) => Promise<Record<string, any>> }
+}
+}
+export interface BulkUpdateEvent { type: string;
     data: any;
     timestamp: Date;
 
@@ -270,7 +248,7 @@ export declare const bulkPropertyUpdateService: BulkPropertyUpdateService;
 export declare const createBulkOperation: (name: string, targets: BulkUpdateTarget[], updates: PropertyUpdate[], options: any, createdBy: string) => Promise<BulkUpdateOperation>;
 export declare const executeBulkOperation: (operationId: string) => Promise<boolean>;
 export declare const getBulkOperations: (filter?: BulkUpdateFilter) => BulkUpdateOperation[];
-export declare const getBulkUpdateStats: () => BulkUpdateStats;
+export declare const getBulkUpdateStats: () => BulkUpdateStats }
 }
 export {};
 //# sourceMappingURL=BulkPropertyUpdateService.d.ts.map

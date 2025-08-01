@@ -43,7 +43,7 @@ async function main(): Promise<void> {
         maxMemoryUsage: 512, // 512MB
         minThroughput: isQuick ? 50 : 100, // Lower threshold for quick tests
         maxErrorRate: 0.05 // 5%
-      }
+
     };
 
     const integration = new PerformanceTestIntegration(config);
@@ -64,11 +64,11 @@ async function main(): Promise<void> {
         console.log('Issues Found:');
         for (const issue of healthCheck.issues) {
           console.log(`  ⚠️  ${issue}`);
-        }
-      }
+
+
       
       return;
-    }
+
 
     console.log(`Mode: ${isQuick ? 'Quick Test' : 'Comprehensive Test'}`);
     console.log('Configuration:');
@@ -78,7 +78,7 @@ async function main(): Promise<void> {
     console.log(`  Data Lifecycle Testing: ${config.enableDataLifecycleTesting ? '✅' : '❌'}`);
     if (reportPath) {
       console.log(`  Report Output: ${reportPath}`);
-    }
+
     console.log('');
 
     console.log('⏳ Running comprehensive performance test suite...');
@@ -109,9 +109,9 @@ async function main(): Promise<void> {
       for (const result of report.executionBenchmarks.results) {
         const passed = result.summary.passed ? '✅' : '❌';
         console.log(`    ${passed} ${result.config.name}: ${result.summary.averageExecutionTime.toFixed(2)}ms avg, ${result.summary.throughput.toFixed(1)} ops/sec`);
-      }
+
       console.log('');
-    }
+
 
     // Load testing
     if (config.enableLoadTesting) {
@@ -121,7 +121,7 @@ async function main(): Promise<void> {
       console.log(`  Average Response Time: ${report.loadTestResults.averageResponseTime}ms`);
       console.log(`  Error Rate: ${(report.loadTestResults.errorRate * 100).toFixed(2)}%`);
       console.log('');
-    }
+
 
     // System performance
     if (config.enableSystemMonitoring) {
@@ -131,7 +131,7 @@ async function main(): Promise<void> {
       console.log(`  Disk I/O: ${report.systemPerformance.diskIO.toFixed(2)} ops`);
       console.log(`  Network I/O: ${report.systemPerformance.networkIO.toFixed(2)} ops`);
       console.log('');
-    }
+
 
     // Data lifecycle performance
     if (config.enableDataLifecycleTesting) {
@@ -141,39 +141,38 @@ async function main(): Promise<void> {
       console.log(`  Throughput: ${report.dataLifecyclePerformance.throughput.toFixed(2)} ops/sec`);
       console.log(`  Error Rate: ${(report.dataLifecyclePerformance.errorRate * 100).toFixed(2)}%`);
       console.log('');
-    }
+
 
     // Recommendations
     console.log('💡 Recommendations:');
     if (report.recommendations.length === 0) {
       console.log('  ✅ No specific recommendations - performance is within acceptable thresholds');
-    } else {
+ else {
       for (const recommendation of report.recommendations) {
         console.log(`  📝 ${recommendation}`);
-      }
-    }
+
+
     console.log('');
 
     // Success/failure summary
     if (report.overallScore >= 80) {
       console.log('🎉 Performance test completed successfully!');
       console.log('   All critical performance metrics are within acceptable thresholds.');
-    } else if (report.overallScore >= 60) {
+ else if (report.overallScore >= 60) {
       console.log('⚠️  Performance test completed with warnings.');
       console.log('   Some performance metrics need attention.');
-    } else {
+ else {
       console.log('❌ Performance test failed.');
       console.log('   Critical performance issues detected that require immediate attention.');
       process.exit(1);
-    }
+
 
     if (reportPath) {
       console.log('');
       console.log(`📄 Detailed report saved to: ${reportPath}`);
       console.log(`📄 Summary report saved to: ${reportPath.replace('.json', '-summary.txt')}`);
-    }
 
-  } catch (error) {
+ catch (error) {
     console.error('');
     console.error('❌ Performance test failed with error:');
     console.error(error.message);
@@ -185,8 +184,8 @@ async function main(): Promise<void> {
     console.error('  - Run with --quick flag for faster execution');
     console.error('');
     process.exit(1);
-  }
-}
+
+
 
 function getStatusIcon(status: string): string {
   switch (status) {
@@ -194,15 +193,15 @@ function getStatusIcon(status: string): string {
   case 'WARNING': return '⚠️';
   case 'CRITICAL': return '❌';
   default: return '❓';
-  }
-}
+
+
 
 function getScoreIcon(score: number): string {
   if (score >= 90) return '🟢';
   if (score >= 70) return '🟡';
   if (score >= 50) return '🟠';
   return '🔴';
-}
+
 
 // Handle CLI usage
 if (require.main === module) {
@@ -210,6 +209,6 @@ if (require.main === module) {
     console.error('Unhandled error:', error);
     process.exit(1);
   });
-}
+
 
 module.exports = { main };

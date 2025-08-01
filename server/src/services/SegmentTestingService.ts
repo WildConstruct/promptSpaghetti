@@ -26,8 +26,8 @@ export type TestStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cance
 
 export type TestSeverity = 'low' | 'medium' | 'high' | 'critical';
 
-}
-}
+
+
 export interface SegmentTest {
   id: string;
   name: string;
@@ -54,12 +54,13 @@ export interface SegmentTest {
   createdBy: string;
   createdAt: string;
   version: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestConfiguration {
   // Sample Configuration
   sampleSize?: number;
@@ -86,12 +87,13 @@ export interface TestConfiguration {
   includeDebugInfo?: boolean;
   failOnWarnings?: boolean;
   timeoutMs?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestExpectation {
   id: string;
   description: string;
@@ -100,12 +102,13 @@ export interface TestExpectation {
   expectedValue: number | [number, number];
   severity: TestSeverity;
   failureMessage?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestResult {
   testId: string;
   status: 'passed' | 'failed' | 'warning';
@@ -149,23 +152,25 @@ export interface TestResult {
   // Raw Data
   rawMetrics?: Record<string, any>;
   testLogs?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GoldStandardEntry {
   userId: string;
   expectedMatch: boolean;
   reason?: string;
   confidence?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OverlapAnalysis {
   totalUsers: number;
   overlappingSegments: Array<{
@@ -174,26 +179,28 @@ export interface OverlapAnalysis {
     overlapCount: number;
     overlapPercentage: number;
     jaccard: number; // Jaccard similarity coefficient
-}
-}
-  }>;
+
+
+
+>;
   uniqueUsers: number;
   exclusiveUsers: number;
-}
 
-}
-}
+
+
+
 export interface IntegrationTestResult {
   testName: string;
   passed: boolean;
   details: string;
   executionTime: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestError {
   id: string;
   code: string;
@@ -202,39 +209,42 @@ export interface TestError {
   timestamp: string;
   context?: Record<string, any>;
   stackTrace?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestWarning {
   id: string;
   message: string;
   severity: TestSeverity;
   suggestion?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BatchTestRequest {
   testConfigs: Array<{
     segmentId: string;
     testTypes: TestType[];
     config?: Partial<TestConfiguration>;
-}
-}
-  }>;
+
+
+
+>;
   runInParallel?: boolean;
   maxConcurrency?: number;
   stopOnFailure?: boolean;
   createdBy: string;
-}
 
-}
-}
+
+
+
 export interface BatchTestResult {
   batchId: string;
   tests: SegmentTest[];
@@ -245,14 +255,15 @@ export interface BatchTestResult {
     warnings: number;
     avgExecutionTime: number;
     totalDuration: number;
-}
-}
+
+
+
   };
   timestamp: string;
-}
 
-}
-}
+
+
+
 export interface TestReport {
   segmentId: string;
   segmentName: string;
@@ -268,16 +279,17 @@ export interface TestReport {
     testsRun: number;
     passRate: number;
     avgScore: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Test Breakdown
   testsByType: Record<TestType, {
     count: number;
     passRate: number;
     avgScore: number;
-  }>;
+>;
   
   // Performance Insights
   performanceInsights: {
@@ -293,7 +305,7 @@ export interface TestReport {
   
   // Historical Data
   tests: SegmentTest[];
-}
+
 
 export class SegmentTestingService {
   private segmentationService: UserSegmentationService;
@@ -310,7 +322,7 @@ export class SegmentTestingService {
     this.segmentationService = segmentationService;
     this.cohortAnalyzer = cohortAnalyzer;
     this.analyticsDAO = analyticsDAO;
-  }
+
 
   // Test Creation and Management
   async createTest(request: {
@@ -326,7 +338,7 @@ export class SegmentTestingService {
     const segment = await this.segmentationService.getSegment(request.segmentId);
     if (!segment) {
       throw new Error(`Segment ${request.segmentId} not found`);
-    }
+
 
     const testId = `test_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -355,18 +367,18 @@ export class SegmentTestingService {
     await this.logTestAction('create', test);
 
     return test;
-  }
+
 
   async runTest(testId: string): Promise<SegmentTest> {
 
     const test = this.activeTests.get(testId);
     if (!test) {
       throw new Error(`Test ${testId} not found`);
-    }
+
 
     if (test.status === 'running') {
       throw new Error(`Test ${testId} is already running`);
-    }
+
 
     // Update status
     test.status = 'running';
@@ -400,8 +412,7 @@ export class SegmentTestingService {
       await this.logTestAction('complete', test);
 
       return test;
-
-    } catch (error) {
+ catch (error) {
       test.status = 'failed';
       test.completedAt = new Date().toISOString();
       test.duration = test.startedAt ? Date.now() - new Date(test.startedAt).getTime() : 0;
@@ -412,14 +423,14 @@ export class SegmentTestingService {
         severity: 'critical',
         timestamp: new Date().toISOString(),
         stackTrace: error instanceof Error ? error.stack : undefined
-      }];
+];
 
       this.activeTests.set(testId, test);
       await this.logTestAction('fail', test);
 
       throw error;
-    }
-  }
+
+
 
   async cancelTest(testId: string): Promise<boolean> {
 
@@ -428,7 +439,7 @@ export class SegmentTestingService {
 
     if (test.status !== 'running') {
       throw new Error(`Cannot cancel test ${testId} - current status: ${test.status}`);
-    }
+
 
     test.status = 'cancelled';
     test.completedAt = new Date().toISOString();
@@ -438,7 +449,7 @@ export class SegmentTestingService {
     await this.logTestAction('cancel', test);
 
     return true;
-  }
+
 
   // Batch Testing
   async runBatchTests(request: BatchTestRequest): Promise<BatchTestResult> {
@@ -459,8 +470,8 @@ export class SegmentTestingService {
           createdBy: request.createdBy
         });
         tests.push(test);
-      }
-    }
+
+
 
     // Run tests
     const results: SegmentTest[] = [];
@@ -477,9 +488,9 @@ export class SegmentTestingService {
         // Stop on failure if requested
         if (request.stopOnFailure && batchResults.some(t => t.status === 'failed')) {
           break;
-        }
-      }
-    } else {
+
+
+ else {
       // Run sequentially
       for (const test of tests) {
         const result = await this.runTest(test.id);
@@ -487,9 +498,9 @@ export class SegmentTestingService {
 
         if (request.stopOnFailure && result.status === 'failed') {
           break;
-        }
-      }
-    }
+
+
+
 
     // Calculate summary
     const passed = results.filter(t => t.results?.status === 'passed').length;
@@ -507,9 +518,9 @@ export class SegmentTestingService {
         warnings,
         avgExecutionTime,
         totalDuration: Date.now() - startTime
-  }
+
       timestamp: new Date().toISOString(};
-  }
+
 
   // Test Execution by Type
   private async executeTest(test: SegmentTest): Promise<TestResult> {
@@ -533,8 +544,8 @@ export class SegmentTestingService {
       return await this.runRegressionTest(test);
     default:
       throw new Error(`Unknown test type: ${test.testType}`);
-    }
-  }
+
+
 
   private async runValidationTest(test: SegmentTest): Promise<TestResult> {
 
@@ -551,7 +562,7 @@ export class SegmentTestingService {
       if (rule.operator === 'matches' && typeof rule.value === 'string') {
         try {
           new RegExp(rule.value);
-        } catch {
+ catch {
           score -= 20;
           warnings.push({
             id: `warning_${Date.now()}`,
@@ -559,8 +570,8 @@ export class SegmentTestingService {
             severity: 'high',
             suggestion: 'Fix the regular expression syntax'
           });
-        }
-      }
+
+
 
       // Check for logical issues
       if (rule.operator === 'exists' && rule.value !== undefined) {
@@ -571,8 +582,8 @@ export class SegmentTestingService {
           severity: 'medium',
           suggestion: 'Exists operator should not have a value'
         });
-      }
-    }
+
+
 
     // Check for rule conflicts
     const conflictingRules = this.findConflictingRules(segment.rules);
@@ -584,16 +595,16 @@ export class SegmentTestingService {
         severity: 'high',
         suggestion: 'Review and resolve rule conflicts'
       });
-    }
+
 
     // Performance recommendations
     if (segment.rules.length > 10) {
       recommendations.push('Consider breaking down complex segments into smaller, more focused segments');
-    }
+
 
     if (segment.rules.some(r => r.operator === 'matches')) {
       recommendations.push('Regular expression rules may impact performance - consider using simpler operators when possible');
-    }
+
 
     return {
       testId: test.id,
@@ -606,7 +617,7 @@ export class SegmentTestingService {
       warnings,
       recommendations
     };
-  }
+
 
   private async runPerformanceTest(test: SegmentTest): Promise<TestResult> {
 
@@ -632,11 +643,11 @@ export class SegmentTestingService {
         
         if (result.matches) {
           matchingUsers++;
-        }
-      } catch (error) {
+
+ catch (error) {
         errors.push(Date.now() - queryStart);
-      }
-    }
+
+
 
     const avgQueryTime = queryTimes.reduce((sum, time) => sum + time, 0) / queryTimes.length;
     const peakQueryTime = Math.max(...queryTimes);
@@ -656,7 +667,7 @@ export class SegmentTestingService {
         severity: 'high',
         suggestion: 'Optimize segment rules for better performance'
       });
-    }
+
 
     if (errorRate > 0.01) {
       score -= 40;
@@ -666,12 +677,12 @@ export class SegmentTestingService {
         severity: 'high',
         suggestion: 'Fix segment rule errors'
       });
-    }
+
 
     if (throughput < 100) {
       score -= 20;
       recommendations.push('Consider caching or optimizing queries for better throughput');
-    }
+
 
     return {
       testId: test.id,
@@ -689,7 +700,7 @@ export class SegmentTestingService {
       warnings,
       recommendations
     };
-  }
+
 
   private async runAccuracyTest(test: SegmentTest): Promise<TestResult> {
 
@@ -698,7 +709,7 @@ export class SegmentTestingService {
     
     if (goldStandard.length === 0) {
       throw new Error('Accuracy test requires gold standard data');
-    }
+
 
     let truePositives = 0;
     let falsePositives = 0;
@@ -710,14 +721,14 @@ export class SegmentTestingService {
       
       if (entry.expectedMatch && result.matches) {
         truePositives++;
-      } else if (!entry.expectedMatch && !result.matches) {
+ else if (!entry.expectedMatch && !result.matches) {
         trueNegatives++;
-      } else if (!entry.expectedMatch && result.matches) {
+ else if (!entry.expectedMatch && result.matches) {
         falsePositives++;
-      } else {
+ else {
         falseNegatives++;
-      }
-    }
+
+
 
     const accuracy = (truePositives + trueNegatives) / goldStandard.length;
     const precision = truePositives / (truePositives + falsePositives) || 0;
@@ -742,7 +753,7 @@ export class SegmentTestingService {
       warnings: [],
       recommendations: score < tolerance ? ['Review segment rules for better accuracy'] : []
     };
-  }
+
 
   private async runOverlapTest(test: SegmentTest): Promise<TestResult> {
 
@@ -751,7 +762,7 @@ export class SegmentTestingService {
     
     if (compareWith.length === 0) {
       throw new Error('Overlap test requires segments to compare with');
-    }
+
 
     // Get sample users
     const sampleSize = test.config.sampleSize || 1000;
@@ -763,7 +774,7 @@ export class SegmentTestingService {
     
     for (const segmentId of compareWith) {
       segmentMatches[segmentId] = new Set();
-    }
+
 
     for (const userId of testUserIds) {
       for (const segmentId of [test.segmentId, ...compareWith]) {
@@ -771,12 +782,12 @@ export class SegmentTestingService {
           const result = await this.segmentationService.evaluateUserForSegment(userId, segmentId);
           if (result.matches) {
             segmentMatches[segmentId].add(userId);
-          }
-        } catch (error) {
+
+ catch (error) {
           // Skip on error
-        }
-      }
-    }
+
+
+
 
     // Calculate overlaps
     const overlappingSegments: OverlapAnalysis['overlappingSegments'] = [];
@@ -800,7 +811,7 @@ export class SegmentTestingService {
         overlapPercentage,
         jaccard
       });
-    }
+
 
     const allUsers = new Set<string>();
     Object.values(segmentMatches).forEach(users => {
@@ -827,7 +838,7 @@ export class SegmentTestingService {
         severity: 'medium',
         suggestion: 'Consider consolidating overlapping segments'
       });
-    }
+
 
     return {
       testId: test.id,
@@ -841,7 +852,7 @@ export class SegmentTestingService {
       warnings,
       recommendations: []
     };
-  }
+
 
   private async runStabilityTest(test: SegmentTest): Promise<TestResult> {
 
@@ -859,12 +870,12 @@ export class SegmentTestingService {
         try {
           const result = await this.segmentationService.evaluateUserForSegment(userId, test.segmentId);
           if (result.matches) matches++;
-        } catch (error) {
+ catch (error) {
           // Skip on error
-        }
-      }
+
+
       matchCounts.push(matches);
-    }
+
 
     // Calculate stability metrics
     const mean = matchCounts.reduce((sum, count) => sum + count, 0) / matchCounts.length;
@@ -884,7 +895,7 @@ export class SegmentTestingService {
         severity: 'medium',
         suggestion: 'Review segment rules for consistency'
       });
-    }
+
 
     return {
       testId: test.id,
@@ -899,7 +910,7 @@ export class SegmentTestingService {
       warnings,
       recommendations: score < 70 ? ['Improve segment rule consistency for better stability'] : []
     };
-  }
+
 
   private async runIntegrationTest(test: SegmentTest): Promise<TestResult> {
 
@@ -916,14 +927,14 @@ export class SegmentTestingService {
         details: `Successfully evaluated user (matches: ${result.matches})`,
         executionTime: Date.now() - evalStart
       });
-    } catch (error) {
+ catch (error) {
       integrationResults.push({
         testName: 'Segment Evaluation',
         passed: false,
         details: error instanceof Error ? error.message : 'Unknown error',
         executionTime: Date.now() - evalStart
       });
-    }
+
 
     // Test 2: Batch evaluation integration
     const batchStart = Date.now();
@@ -938,14 +949,14 @@ export class SegmentTestingService {
         details: `Processed ${batchResult.totalUsers} users`,
         executionTime: Date.now() - batchStart
       });
-    } catch (error) {
+ catch (error) {
       integrationResults.push({
         testName: 'Batch Evaluation',
         passed: false,
         details: error instanceof Error ? error.message : 'Unknown error',
         executionTime: Date.now() - batchStart
       });
-    }
+
 
     // Test 3: Metrics integration
     const metricsStart = Date.now();
@@ -957,14 +968,14 @@ export class SegmentTestingService {
         details: `Retrieved metrics for ${metrics.totalUsers} users`,
         executionTime: Date.now() - metricsStart
       });
-    } catch (error) {
+ catch (error) {
       integrationResults.push({
         testName: 'Metrics Integration',
         passed: false,
         details: error instanceof Error ? error.message : 'Unknown error',
         executionTime: Date.now() - metricsStart
       });
-    }
+
 
     const passed = integrationResults.filter(r => r.passed).length;
     const total = integrationResults.length;
@@ -982,7 +993,7 @@ export class SegmentTestingService {
       warnings: [],
       recommendations: score < 80 ? ['Fix integration issues before deployment'] : []
     };
-  }
+
 
   private async runLoadTest(test: SegmentTest): Promise<TestResult> {
 
@@ -1011,16 +1022,16 @@ export class SegmentTestingService {
               await this.segmentationService.evaluateUserForSegment(`load_user_${i}`, test.segmentId);
               successfulQueries++;
               queryTimes.push(Date.now() - queryStart);
-            } catch (error) {
+ catch (error) {
               // Count as failed query
-            }
+
             
             // Brief pause between queries
             await new Promise(resolve => setTimeout(resolve, 10));
-          }
+
         })()
       );
-    }
+
 
     await Promise.all(promises);
 
@@ -1040,7 +1051,7 @@ export class SegmentTestingService {
         severity: 'high',
         suggestion: 'Investigate query failures under load'
       });
-    }
+
 
     if (avgQueryTime > 200) {
       score -= 30;
@@ -1050,7 +1061,7 @@ export class SegmentTestingService {
         severity: 'medium',
         suggestion: 'Optimize for better performance under load'
       });
-    }
+
 
     return {
       testId: test.id,
@@ -1067,7 +1078,7 @@ export class SegmentTestingService {
       warnings,
       recommendations: []
     };
-  }
+
 
   private async runRegressionTest(test: SegmentTest): Promise<TestResult> {
 
@@ -1101,9 +1112,9 @@ export class SegmentTestingService {
             severity: Math.abs(change) > 50 ? 'high' : 'medium',
             suggestion: `Investigate ${check.metric} changes`
           });
-        }
-      }
-    }
+
+
+
 
     return {
       testId: test.id,
@@ -1116,7 +1127,7 @@ export class SegmentTestingService {
       warnings,
       recommendations: regressions.length > 0 ? ['Review recent changes that may have caused regressions'] : []
     };
-  }
+
 
   // Helper Methods
   private getDefaultConfigForTestType(testType: TestType, customConfig?: TestConfiguration): TestConfiguration {
@@ -1141,7 +1152,7 @@ export class SegmentTestingService {
     };
 
     return { ...baseConfig, ...typeDefaults[testType], ...customConfig };
-  }
+
 
   private findConflictingRules(rules: TargetingRule[]): Array<{ rule1: string; rule2: string; conflict: string }> {
     const conflicts: Array<{ rule1: string; rule2: string; conflict: string }> = [];
@@ -1162,13 +1173,13 @@ export class SegmentTestingService {
               rule2: rule2.id,
               conflict: `Conflicting conditions on ${rule1.attribute}`
             });
-          }
-        }
-      }
-    }
+
+
+
+
     
     return conflicts;
-  }
+
 
   private async evaluateExpectations(test: SegmentTest, results: TestResult): Promise<Array<{ expectation: TestExpectation; passed: boolean; actualValue: number }>> {
     if (!test.expectations) return [];
@@ -1195,15 +1206,15 @@ export class SegmentTestingService {
       case 'between':
         if (Array.isArray(expectation.expectedValue) && expectation.expectedValue.length === 2) {
           passed = actualValue >= expectation.expectedValue[0] && actualValue <= expectation.expectedValue[1];
-        }
+
         break;
-      }
+
       
       evaluationResults.push({ expectation, passed, actualValue });
-    }
+
     
     return evaluationResults;
-  }
+
 
   private async archiveTest(test: SegmentTest): Promise<void> {
 
@@ -1213,7 +1224,7 @@ export class SegmentTestingService {
     
     // Remove from active tests
     this.activeTests.delete(test.id);
-  }
+
 
   private async logTestAction(action: string, test: SegmentTest): Promise<void> {
 
@@ -1225,18 +1236,18 @@ export class SegmentTestingService {
       status: test.status,
       timestamp: new Date().toISOString()
     });
-  }
+
 
   // Public API Methods
   async getTest(testId: string): Promise<SegmentTest | null> {
 
     return this.activeTests.get(testId) || null;
-  }
+
 
   async getTestHistory(segmentId: string): Promise<SegmentTest[]> {
 
     return this.testHistory.get(segmentId) || [];
-  }
+
 
   async generateTestReport(segmentId: string, reportType: 'summary' | 'detailed' | 'comparison' = 'summary'): Promise<TestReport> {
 
@@ -1245,7 +1256,7 @@ export class SegmentTestingService {
     
     if (!segment) {
       throw new Error(`Segment ${segmentId} not found`);
-    }
+
 
     const passedTests = tests.filter(t => t.results?.status === 'passed').length;
     const passRate = tests.length > 0 ? (passedTests / tests.length) * 100 : 0;
@@ -1267,13 +1278,13 @@ export class SegmentTestingService {
         avgExecutionTime: tests.reduce((sum, t) => sum + (t.duration || 0), 0) / tests.length || 0,
         performanceTrend: 'stable',
         bottlenecks: []
-  }
+
       qualityScore: avgScore,
       recommendations: [],
       criticalIssues: [],
       tests: reportType === 'detailed' ? tests : tests.slice(-10) // Last 10 tests for summary
     };
-  }
+
 
   private calculateTestsByType(tests: SegmentTest[]): Record<TestType, { count: number; passRate: number; avgScore: number }> {
     const result = {} as Record<TestType, { count: number; passRate: number; avgScore: number }>;
@@ -1292,10 +1303,10 @@ export class SegmentTestingService {
         passRate: typeTests.length > 0 ? (passed / typeTests.length) * 100 : 0,
         avgScore
       };
-    }
+
     
     return result;
-  }
-}
+
+
 
 export default SegmentTestingService;

@@ -19,14 +19,16 @@ const loginSchema = z.object({)
   rememberMe: z.boolean(),
 });
 type LoginFormData = z.infer<typeof loginSchema>;
-}
+
+
 interface LoginFormProps {
   onSuccess?: () => void;
   onError?: (error: string) => void;
-  export const LoginForm: React.FC<LoginFormProps> = ({,)
+  export const LoginForm: React.FC<LoginFormProps> = ({),
   onSuccess,
   onError
-}
+
+
 }) => {
   const navigate = useNavigate();
   const { login, isLoading, error: authError, returnUrl } = useAuthStore();
@@ -42,7 +44,7 @@ interface LoginFormProps {
       const fieldSchema = loginSchema.shape[field];
       fieldSchema.parse(value);
       return undefined;
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return error.errors[0]?.message;
       return 'Invalid value';
@@ -78,9 +80,9 @@ interface LoginFormProps {
         const redirectTo = returnUrl || '/';
         navigate(redirectTo);
         onSuccess?.();
-      } else {
+ else {
         onError?.(authError || 'Login failed');
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Login failed';
   onError?.(errorMessage);
 };
@@ -111,7 +113,7 @@ interface LoginFormProps {
   fontSize: '14px',
   fontWeight: '500',
   color: '#333',
-}}
+
           >
             Email Address *
           </label>
@@ -130,7 +132,7 @@ interface LoginFormProps {
   borderRadius: '6px',
               fontSize: '16px',
               boxSizing: 'border-box';
-  }}
+
             placeholder="Enter your email"
             disabled={isLoading}
             required
@@ -147,7 +149,7 @@ interface LoginFormProps {
   color: '#dc3545',
   fontSize: '14px',
   marginTop: '4px',
-}}
+}
             >
               {errors.email}
             </div>
@@ -163,7 +165,7 @@ interface LoginFormProps {
   fontSize: '14px',
   fontWeight: '500',
   color: '#333',
-}}
+
           >
             Password *
           </label>
@@ -184,7 +186,7 @@ interface LoginFormProps {
   borderRadius: '6px',
                 fontSize: '16px',
                 boxSizing: 'border-box';
-  }}
+
               placeholder="Enter your password"
               disabled={isLoading}
               required
@@ -207,7 +209,7 @@ interface LoginFormProps {
   color: '#666',
   cursor: 'pointer',
   fontSize: '14px',
-}}
+}
               disabled={isLoading}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
               aria-controls="login-password"
@@ -224,7 +226,7 @@ interface LoginFormProps {
   color: '#dc3545',
   fontSize: '14px',
   marginTop: '4px',
-}}
+}
             >
               {errors.password}
             </div>
@@ -239,7 +241,7 @@ interface LoginFormProps {
   alignItems: 'center',
   fontSize: '14px',
   cursor: 'pointer',
-}}>
+}>
             <input
               id="remember-me"
               type="checkbox"
@@ -274,7 +276,7 @@ interface LoginFormProps {
   fontWeight: '500',
   cursor: isLoading ? 'not-allowed' : 'pointer',
   transition: 'background-color 0.2s',
-}}
+
           aria-describedby={authError ? 'form-error' : undefined}
         >
           {isLoading ? 'Signing in...' : 'Sign In'}
@@ -299,7 +301,7 @@ interface LoginFormProps {
   fontSize: '14px',
   marginTop: '12px',
   textAlign: 'center',
-}}
+}
           >
             {authError}
           </div>
@@ -310,12 +312,12 @@ interface LoginFormProps {
       <style>{`
         .sr-only {
           position: absolute;,
-  width: 1px;
-          height: 1px;,
-  padding: 0;
-          margin: -1px;,
-  overflow: hidden;
-          clip: rect(0, 0, 0, 0);
+  width: 1px;,
+  height: 1px;,
+  padding: 0;,
+  margin: -1px;,
+  overflow: hidden;,
+  clip: rect(0, 0, 0, 0);
           white-space: nowrap;,
   border: 0;
       `}</style>

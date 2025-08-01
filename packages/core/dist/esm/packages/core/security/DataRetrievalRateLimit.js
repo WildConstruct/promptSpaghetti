@@ -318,8 +318,9 @@ Promise < DataRetrievalDecision > {
             };
             return { allowed: true };
             async;
-            checkQuotaLimits(subject, SubjectAttributes);
-            object: ObjectAttributes,
+            checkQuotaLimits(subject, SubjectAttributes),
+                object;
+            ObjectAttributes,
                 requestDetails;
             DataRequestDetails;
             Promise < { allowed: boolean, reason: string, retryAfter: number } > {
@@ -483,8 +484,9 @@ Promise < DataRetrievalDecision > {
                                         {
                                             return {};
                                         }
-                                        checkExemptions(subject, unknown);
-                                        object: unknown,
+                                        checkExemptions(subject, unknown),
+                                            object;
+                                        unknown,
                                             operation;
                                         unknown;
                                         Promise < DataAccessExemption | null > { return: Promise.resolve(null) };
@@ -505,18 +507,18 @@ Promise < DataRetrievalDecision > {
                                     }
                                 }
                             }
-                            ;
-                            metadata: {
-                                timestamp: Date;
-                                evaluationTime: number;
-                                appliedLimits: string;
-                            }
-                            ;
                         }
                     }
                 }
+                ;
+                metadata: {
+                    timestamp: Date;
+                    evaluationTime: number;
+                    appliedLimits: string;
+                }
+                ;
             }
         }
-        export default DataRetrievalRateLimit;
     }
 }
+export default DataRetrievalRateLimit;

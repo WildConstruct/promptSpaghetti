@@ -36,10 +36,10 @@ import {
   Evidence,
   EvidenceType,
   EvidenceSource
-} from '../../../../packages/core/types/EnforcementTypes';
+ from '../../../../packages/core/types/EnforcementTypes';
 
-}
-}
+
+
 export interface EnforcementServiceConfig {
   enabled: boolean;
   autoExecutionEnabled: boolean;
@@ -51,8 +51,9 @@ export interface EnforcementServiceConfig {
     userNotifications: boolean;
     webhookUrl?: string;
     emailEnabled: boolean;
-}
-}
+
+
+
   };
   thresholds: {
     autoSuspensionScore: number;
@@ -65,7 +66,7 @@ export interface EnforcementServiceConfig {
     appeals: number;
     audit: number;
   };
-}
+
 
 export class EnforcementActionService {
   private db: Database;
@@ -95,21 +96,21 @@ export class EnforcementActionService {
         adminAlerts: true,
         userNotifications: true,
         emailEnabled: false
-  }
+
       thresholds: {
         autoSuspensionScore: 25,
         escalationThreshold: 80,
         appealWindowHours: 72
-  }
+
       retentionDays: {
         actions: 365,
         reports: 180,
         appeals: 730,
         audit: 2555 // 7 years
-  }
+
       ...config
     };
-  }
+
 
   // =============================================================================
   // Core Enforcement Action Management
@@ -128,7 +129,7 @@ export class EnforcementActionService {
     // Validate required fields
     if (!actionData.targetType || !actionData.targetId || !actionData.actionType) {
       throw new Error('Target type, target ID, and action type are required');
-    }
+
 
     // Generate action ID and set defaults
     const actionId = this.generateActionId();
@@ -173,7 +174,7 @@ export class EnforcementActionService {
     // Execute if auto-execution is enabled and appropriate
     if (this.config.autoExecutionEnabled && this.shouldAutoExecute(action)) {
       await this.executeEnforcementAction(action.actionId);
-    }
+
 
     // Log the creation
     await this.auditService.logEvent({
@@ -185,12 +186,12 @@ export class EnforcementActionService {
         targetType: action.targetType,
         targetId: action.targetId,
         severity: action.severity
-  }
+
       severity: action.severity === 'critical' ? 'error' : 'warning'
     });
 
     return action;
-  }
+
 
   /**
    * Execute an enforcement action
@@ -202,11 +203,11 @@ export class EnforcementActionService {
     const action = await this.getEnforcementAction(actionId);
     if (!action) {
       throw new Error(`Enforcement action not found: ${actionId}`);
-    }
+
 
     if (action.status !== 'pending' && action.status !== 'scheduled') {
       throw new Error(`Cannot execute action in status: ${action.status}`);
-    }
+
 
     const client = await this.db.getClient();
     
@@ -226,30 +227,28 @@ export class EnforcementActionService {
         // Send notifications
         if (this.config.notificationConfig.userNotifications) {
           await this.sendActionNotification(action);
-        }
+
 
         await client.query('COMMIT');
         console.log(`✅ Successfully executed enforcement action: ${actionId}`);
         return true;
-
-      } else {
+ else {
         await this.updateActionStatus(actionId, 'failed', client);
         await client.query('COMMIT');
         console.error(`❌ Failed to execute enforcement action: ${actionId}`, executionResult.error);
         return false;
-      }
 
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       console.error(`❌ Error executing enforcement action: ${actionId}`, error);
       
       // Update status to failed
       await this.updateActionStatus(actionId, 'failed');
       return false;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Get enforcement action by ID
@@ -263,10 +262,10 @@ export class EnforcementActionService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapRowToEnforcementAction(result.rows[0]);
-  }
+
 
   /**
    * List enforcement actions with filters
@@ -282,7 +281,7 @@ export class EnforcementActionService {
     toDate?: Date;
     limit?: number;
     offset?: number;
-  } = {}): Promise<{ actions: EnforcementAction[]; total: number }> {
+ = {}): Promise<{ actions: EnforcementAction[]; total: number }> {
 
     const { limit = 50, offset = 0 } = filters;
     
@@ -294,42 +293,42 @@ export class EnforcementActionService {
     if (filters.targetType) {
       conditions.push(`target_type = $${paramIndex++}`);
       params.push(filters.targetType);
-    }
+
 
     if (filters.targetId) {
       conditions.push(`target_id = $${paramIndex++}`);
       params.push(filters.targetId);
-    }
+
 
     if (filters.actionType) {
       conditions.push(`action_type = $${paramIndex++}`);
       params.push(filters.actionType);
-    }
+
 
     if (filters.severity) {
       conditions.push(`severity = $${paramIndex++}`);
       params.push(filters.severity);
-    }
+
 
     if (filters.status) {
       conditions.push(`status = $${paramIndex++}`);
       params.push(filters.status);
-    }
+
 
     if (filters.executedBy) {
       conditions.push(`executed_by = $${paramIndex++}`);
       params.push(filters.executedBy);
-    }
+
 
     if (filters.fromDate) {
       conditions.push(`created_at >= $${paramIndex++}`);
       params.push(filters.fromDate);
-    }
+
 
     if (filters.toDate) {
       conditions.push(`created_at <= $${paramIndex++}`);
       params.push(filters.toDate);
-    }
+
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
@@ -351,7 +350,7 @@ export class EnforcementActionService {
     const actions = actionsResult.rows.map(row => this.mapRowToEnforcementAction(row));
 
     return { actions, total };
-  }
+
 
   /**
    * Update enforcement action status
@@ -377,7 +376,7 @@ export class EnforcementActionService {
       details: { actionId, newStatus: status },
       severity: 'info'
     });
-  }
+
 
   // =============================================================================
   // Violation Report Management
@@ -422,17 +421,17 @@ export class EnforcementActionService {
         previousReports: 0,
         reportAccuracyRate: 85,
         isVerified: true
-  }
+
       reportedAt: now,
       detectionMethod: reportData.detectionMethod ? {
         method: reportData.detectionMethod.method,
         confidence: reportData.detectionMethod.confidence,
         algorithm: 'trust-score-based',
         modelVersion: '1.0.0'
-      } : {
+ : {
         method: 'manual_report',
         confidence: 70
-  }
+
       evidence: reportData.evidence || [],
       relatedReports: [],
       status: 'submitted',
@@ -448,10 +447,10 @@ export class EnforcementActionService {
     // Auto-process if appropriate
     if (this.shouldAutoProcessReport(report)) {
       await this.processViolationReport(report.reportId);
-    }
+
 
     return report;
-  }
+
 
   /**
    * Process a violation report
@@ -463,7 +462,7 @@ export class EnforcementActionService {
     const report = await this.getViolationReport(reportId);
     if (!report) {
       throw new Error(`Violation report not found: ${reportId}`);
-    }
+
 
     // Update report status
     await this.updateReportStatus(reportId, 'under_review');
@@ -485,13 +484,13 @@ export class EnforcementActionService {
             description: `Violation report: ${report.reportId}`,
             data: { reportId: report.reportId, violationType: report.violationType },
             confidence: report.confidence
-  }
+
           ...report.evidence
         ]
       }, 'violation_processor');
 
       createdActions.push(action);
-    }
+
 
     // Update report with resolution
     await this.resolveViolationReport(reportId, {
@@ -506,7 +505,7 @@ export class EnforcementActionService {
     });
 
     return createdActions;
-  }
+
 
   /**
    * Get violation report by ID
@@ -520,10 +519,10 @@ export class EnforcementActionService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapRowToViolationReport(result.rows[0]);
-  }
+
 
   // =============================================================================
   // Appeal Management
@@ -556,16 +555,16 @@ export class EnforcementActionService {
     const action = await this.getEnforcementAction(appealData.enforcementActionId);
     if (!action) {
       throw new Error(`Enforcement action not found: ${appealData.enforcementActionId}`);
-    }
+
 
     if (!action.appealable) {
       throw new Error('This enforcement action is not appealable');
-    }
+
 
     // Check if still within appeal window
     if (action.appealDeadline && new Date() > action.appealDeadline) {
       throw new Error('Appeal deadline has passed');
-    }
+
 
     const appealId = this.generateAppealId();
     const now = new Date();
@@ -603,12 +602,12 @@ export class EnforcementActionService {
         appealId: appeal.appealId,
         actionId: appealData.enforcementActionId,
         reason: appealData.appealReason.category
-  }
+
       severity: 'info'
     });
 
     return appeal;
-  }
+
 
   /**
    * Process an appeal decision
@@ -628,7 +627,7 @@ export class EnforcementActionService {
     const appeal = await this.getAppeal(appealId);
     if (!appeal) {
       throw new Error(`Appeal not found: ${appealId}`);
-    }
+
 
     const now = new Date();
 
@@ -656,13 +655,13 @@ export class EnforcementActionService {
     if (decision.outcome === 'approved') {
       // Reverse the enforcement action
       await this.reverseEnforcementAction(appeal.enforcementActionId, decision.decidedBy, decision.reasoning);
-    } else if (decision.outcome === 'partially_approved' && decision.modifiedActions) {
+ else if (decision.outcome === 'partially_approved' && decision.modifiedActions) {
       // Modify the enforcement action
       await this.modifyEnforcementAction(appeal.enforcementActionId, decision.modifiedActions[0]);
-    }
+
 
     return await this.getAppeal(appealId) as EnforcementAppeal;
-  }
+
 
   /**
    * Get appeal by ID
@@ -676,10 +675,10 @@ export class EnforcementActionService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapRowToAppeal(result.rows[0]);
-  }
+
 
   // =============================================================================
   // Analytics and Reporting
@@ -718,7 +717,7 @@ export class EnforcementActionService {
         startDate: timeRange.startDate,
         endDate: timeRange.endDate,
         timeRange: 'custom'
-  }
+
       generatedAt: new Date(),
       overallMetrics,
       actionBreakdown,
@@ -732,7 +731,7 @@ export class EnforcementActionService {
     };
 
     return analytics;
-  }
+
 
   // =============================================================================
   // Private Implementation Methods
@@ -761,11 +760,11 @@ export class EnforcementActionService {
         return await this.executeTransactionBlock(action, client);
       default:
         return { success: false, error: `Unknown action type: ${action.actionType}` };
-      }
-    } catch (error) {
+
+ catch (error) {
       return { success: false, error: error.message };
-    }
-  }
+
+
 
   private async executeWarning(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
 
@@ -783,7 +782,7 @@ export class EnforcementActionService {
     ]);
 
     return { success: true };
-  }
+
 
   private async executeContentFlag(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
 
@@ -801,7 +800,7 @@ export class EnforcementActionService {
     ]);
 
     return { success: true };
-  }
+
 
   private async executeContentRemoval(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
 
@@ -815,10 +814,10 @@ export class EnforcementActionService {
             removed_by = $3
         WHERE id = $4
       `, [action.reason, action.executedAt, action.executedBy, action.targetId]);
-    }
+
 
     return { success: true };
-  }
+
 
   private async executeAccountWarning(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
 
@@ -835,7 +834,7 @@ export class EnforcementActionService {
     ]);
 
     return { success: true };
-  }
+
 
   private async executeAccountRestriction(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
 
@@ -848,7 +847,7 @@ export class EnforcementActionService {
     `, [action.targetId, action.reason, action.effectiveUntil, action.executedBy]);
 
     return { success: true };
-  }
+
 
   private async executeAccountSuspension(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
 
@@ -880,7 +879,7 @@ export class EnforcementActionService {
     `, [action.targetId]);
 
     return { success: true };
-  }
+
 
   private async executeTransactionBlock(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
 
@@ -895,14 +894,14 @@ export class EnforcementActionService {
     `, [action.reason, action.executedAt, action.executedBy, action.targetId]);
 
     return { success: true };
-  }
+
 
   private shouldAutoExecute(action: EnforcementAction): boolean {
     // Auto-execute low severity actions and system-triggered actions
     return action.severity === 'low' || 
            action.executionType === 'automatic' ||
            action.executedBy.startsWith('system');
-  }
+
 
   private calculateActionExpiration(actionType: EnforcementActionType, severity: ActionSeverity): Date {
     const now = new Date();
@@ -929,17 +928,17 @@ export class EnforcementActionService {
     if (days === -1) return null; // Permanent action
 
     return new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
-  }
+
 
   private calculateAppealDeadline(fromDate: Date): Date {
     return new Date(fromDate.getTime() + this.config.thresholds.appealWindowHours * 60 * 60 * 1000);
-  }
+
 
   private shouldAutoProcessReport(report: ViolationReport): boolean {
     return report.confidence > 80 && 
            report.detectionMethod.method !== 'manual_report' &&
            report.severity !== 'critical';
-  }
+
 
   private determineEnforcementActions(report: ViolationReport): Partial<EnforcementAction>[] {
     const actions: Partial<EnforcementAction>[] = [];
@@ -973,7 +972,7 @@ export class EnforcementActionService {
     });
 
     return actions;
-  }
+
 
   private async captureTargetSnapshot(targetType: TargetType, targetId: string): Promise<unknown> {
 
@@ -988,12 +987,12 @@ export class EnforcementActionService {
         return user.rows[0] || null;
       default:
         return null;
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to capture target snapshot:', error);
       return null;
-    }
-  }
+
+
 
   private calculateReportPriority(
     severity: ActionSeverity,
@@ -1007,16 +1006,16 @@ export class EnforcementActionService {
     
     if (highPriorityViolations.includes(violationType)) {
       return severity === 'high' ? 'critical' : 'high';
-    }
+
     
     return severity as any;
-  }
+
 
   private calculateAppealPriority(actionSeverity: ActionSeverity): 'normal' | 'expedited' | 'urgent' {
     if (actionSeverity === 'critical') return 'urgent';
     if (actionSeverity === 'high') return 'expedited';
     return 'normal';
-  }
+
 
   // Database storage methods
   private async storeEnforcementAction(action: EnforcementAction): Promise<void> {
@@ -1041,7 +1040,7 @@ export class EnforcementActionService {
       action.escalationLevel, JSON.stringify(action.relatedActions), JSON.stringify(action.tags),
       action.createdAt, action.updatedAt, action.createdBy, action.lastModifiedBy
     ]);
-  }
+
 
   private async storeViolationReport(report: ViolationReport): Promise<void> {
 
@@ -1061,7 +1060,7 @@ export class EnforcementActionService {
       JSON.stringify(report.relatedReports), report.status, report.priority,
       JSON.stringify(report.tags)
     ]);
-  }
+
 
   private async storeAppeal(appeal: EnforcementAppeal): Promise<void> {
 
@@ -1079,7 +1078,7 @@ export class EnforcementActionService {
       JSON.stringify(appeal.requestedOutcome), appeal.status, appeal.submittedAt,
       appeal.reviewDeadline, appeal.priority, appeal.publicVisibility, appeal.legalImplications
     ]);
-  }
+
 
   // Mapping methods
   private mapRowToEnforcementAction(row: unknown): EnforcementAction {
@@ -1112,7 +1111,7 @@ export class EnforcementActionService {
       createdBy: row.created_by,
       lastModifiedBy: row.last_modified_by
     };
-  }
+
 
   private mapRowToViolationReport(row: unknown): ViolationReport {
     return {
@@ -1136,7 +1135,7 @@ export class EnforcementActionService {
       tags: row.tags ? JSON.parse(row.tags) : [],
       externalReferences: []
     };
-  }
+
 
   private mapRowToAppeal(row: unknown): EnforcementAppeal {
     return {
@@ -1160,24 +1159,24 @@ export class EnforcementActionService {
       publicVisibility: row.public_visibility,
       legalImplications: row.legal_implications
     };
-  }
+
 
   // Utility methods
   private generateActionId(): string {
     return `EA-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   private generateReportId(): string {
     return `VR-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   private generateAppealId(): string {
     return `AP-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   private generateEvidenceId(): string {
     return `EV-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   // Analytics calculation methods (simplified implementations)
   private async calculateOverallMetrics(_____timeRange: Error): Promise<unknown> {
@@ -1195,17 +1194,17 @@ export class EnforcementActionService {
       affectedTemplates: 0,
       communityTrustImpact: 0
     };
-  }
+
 
   private async calculateActionBreakdown(_____timeRange: Error): Promise<unknown> {
 
     return { byType: [], bySeverity: [], byStatus: [], byExecutionType: [] };
-  }
+
 
   private async calculateViolationBreakdown(_____timeRange: Error): Promise<unknown> {
 
     return { byCategory: [], bySource: [], byConfidence: [] };
-  }
+
 
   private async calculateEffectivenessMetrics(_____timeRange: Error): Promise<unknown> {
 
@@ -1219,7 +1218,7 @@ export class EnforcementActionService {
       averageActionTime: 0,
       averageResolutionTime: 0
     };
-  }
+
 
   private async calculateEnforcementTrends(_____timeRange: Error): Promise<unknown> {
 
@@ -1234,7 +1233,7 @@ export class EnforcementActionService {
       predictedViolations: 0,
       predictionConfidence: 0
     };
-  }
+
 
   private async calculateAppealMetrics(_____timeRange: Error): Promise<unknown> {
 
@@ -1249,12 +1248,12 @@ export class EnforcementActionService {
       appealAccuracy: 0,
       overturnRate: 0
     };
-  }
+
 
   private async generateInsights(_____overallMetrics: unknown, _____trends: unknown): Promise<any[]> {
 
     return [];
-  }
+
 
   private async generateRecommendations(
     _____effectivenessMetrics: unknown,
@@ -1262,7 +1261,7 @@ export class EnforcementActionService {
   ): Promise<any[]> {
 
     return [];
-  }
+
 
   // Additional helper methods
   private async recordActionExecution(
@@ -1276,13 +1275,13 @@ export class EnforcementActionService {
       INSERT INTO enforcement_action_executions (action_id, executed_at, result, details)
       VALUES ($1, NOW(), $2, $3)
     `, [actionId, result.success, JSON.stringify(result)]);
-  }
+
 
   private async sendActionNotification(action: EnforcementAction): Promise<void> {
 
     // Implementation would send notification to affected user
     console.log(`📬 Sending notification for action: ${action.actionId} to ${action.targetId}`);
-  }
+
 
   private async updateReportStatus(reportId: string, status: ReportStatus): Promise<void> {
 
@@ -1291,7 +1290,7 @@ export class EnforcementActionService {
       SET status = $1, updated_at = NOW()
       WHERE report_id = $2
     `, [status, reportId]);
-  }
+
 
   private async resolveViolationReport(reportId: string, resolution: unknown): Promise<void> {
 
@@ -1300,7 +1299,7 @@ export class EnforcementActionService {
       SET status = 'resolved', resolution = $1, updated_at = NOW()
       WHERE report_id = $2
     `, [JSON.stringify(resolution), reportId]);
-  }
+
 
   private async updateAppeal(appealId: string, updates: unknown): Promise<void> {
 
@@ -1312,7 +1311,7 @@ export class EnforcementActionService {
       SET ${setClause}, updated_at = NOW()
       WHERE appeal_id = $1
     `, values);
-  }
+
 
   private async reverseEnforcementAction(actionId: string, reversedBy: string, reason: string): Promise<void> {
 
@@ -1323,11 +1322,10 @@ export class EnforcementActionService {
           updated_at = NOW()
       WHERE action_id = $2
     `, [JSON.stringify({ reversedAt: new Date(), reversedBy, reason }), actionId]);
-  }
+
 
   private async modifyEnforcementAction(actionId: string, modifications: Partial<EnforcementAction>): Promise<void> {
 
     // Implementation would apply modifications to the action
     console.log(`🔧 Modifying enforcement action: ${actionId}`, modifications);
-  }
-}
+

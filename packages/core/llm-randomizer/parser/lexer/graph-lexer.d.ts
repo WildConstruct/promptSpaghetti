@@ -1,41 +1,39 @@
-export interface LexerPosition {
-    line: number;
+export interface LexerPosition { line: number;
     column: number;
     offset: number;
 
 export declare enum TokenType {
-    VERSION = "VERSION",
-    CHECKSUM = "CHECKSUM",
-    METADATA = "METADATA",
-    SECTION_DELIMITER = "SECTION_DELIMITER",
-    KEY = "KEY",
-    VALUE = "VALUE",
-    COLON = "COLON",
-    DASH = "DASH",
-    ARRAY_START = "ARRAY_START",
-    ARRAY_END = "ARRAY_END",
-    STRING = "STRING",
-    NUMBER = "NUMBER",
-    BOOLEAN = "BOOLEAN",
-    NULL = "NULL",
-    NEWLINE = "NEWLINE",
-    INDENT = "INDENT",
-    DEDENT = "DEDENT",
-    EDGE_ARROW = "EDGE_ARROW",
-    EOF = "EOF",
+    VERSION = "VERSION";
+    CHECKSUM = "CHECKSUM";
+    METADATA = "METADATA";
+    SECTION_DELIMITER = "SECTION_DELIMITER";
+    KEY = "KEY";
+    VALUE = "VALUE";
+    COLON = "COLON";
+    DASH = "DASH";
+    ARRAY_START = "ARRAY_START";
+    ARRAY_END = "ARRAY_END";
+    STRING = "STRING";
+    NUMBER = "NUMBER";
+    BOOLEAN = "BOOLEAN";
+    NULL = "NULL";
+    NEWLINE = "NEWLINE";
+    INDENT = "INDENT";
+    DEDENT = "DEDENT";
+    EDGE_ARROW = "EDGE_ARROW";
+    EOF = "EOF" }
     ERROR = "ERROR"
 
 }
-export interface Token {
-    type: TokenType;
+}
+}
+export interface Token { type: TokenType;
     value: string;
     position: LexerPosition;
-    raw?: string;
-
-
+    raw?: string }
 }
-export interface LexerError {
-    message: string;
+}
+export interface LexerError { message: string;
     position: LexerPosition;
     suggestion?: string;
 
@@ -54,7 +52,7 @@ export declare class GraphLexer {
      */
     tokenize(): {
         tokens: Token[];
-        errors: LexerError[];
+        errors: LexerError[] }
 }
     };
     /**

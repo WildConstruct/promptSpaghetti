@@ -1,57 +1,53 @@
 import React, { useState } from 'react';
 
-}
-export interface ConflictData {
-  id: string;
+
+export interface ConflictData { id: string;
   type: string;
   description: string;
-  operations: Array<{
+  operations: Array<{ }
   id: string;
   userId: string;
   userName?: string;
   timestamp: number;
   oldValue: Error;
   newValue: Error;
-}
-}>;
+
+
+>;
   nodeId?: string;
   edgeId?: string;
   property?: string;
   detectedAt: number;
   autoResolved: boolean;
-}
-}
-export interface ConflictPanelProps {
-  conflicts: ConflictData;
+
+
+export interface ConflictPanelProps { conflicts: ConflictData;
   onResolveConflict: (conflictId: string, strategy: string, userSelection?: Record<string, unknown>) => void;
-  onViewConflict: (conflictId: string) => void;
+  onViewConflict: (conflictId: string) => void }
   currentUserId: string;
   className?: string;
-}
-}
+
+
 export const ConflictPanel: React.FC<ConflictPanelProps> = ()
-  { conflicts,
-  onResolveConflict,
-  onViewConflict,
-  currentUserId,
+  { conflicts
+  onResolveConflict
+  onViewConflict
+  currentUserId }
   className }
-) => {
-  const [selectedStrategy, setSelectedStrategy] = useState<string>('last_writer_wins');
-  const formatTimestamp = (timestamp: number): string => {,
+) => { const [selectedStrategy, setSelectedStrategy] = useState<string>('last_writer_wins');
+  const formatTimestamp = (timestamp: number): string => { }
   const date = new Date(timestamp);
   const now = new Date();
   const diff = now.getTime() - date.getTime();
   if (diff < 60000) { // Less than 1 minute
-  return 'Just now';
-} else if (diff < 3600000) { // Less than 1 hour
+  return 'Just now' } else if (diff < 3600000) { // Less than 1 hour
       const minutes = Math.floor(diff / 60000);
       return `${minutes}m ago`;}
-    } else {
+ else {
       const hours = Math.floor(diff / 3600000);
       return `${hours}h ago`;}
   };
-  const getConflictIcon = (type: string): string => {
-  switch (type) {
+  const getConflictIcon = (type: string): string => { switch (type) {
   case 'node_position':,
   return '📍';
   case 'node_properties':,
@@ -66,11 +62,10 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ()
   return '🔓';
   case 'edge_properties':,
   return '🔧';
-  default:,
+  default: }
   return '⚠️';
 };
-  const getConflictColor = (type: string): string => {
-  switch (type) {
+  const getConflictColor = (type: string): string => { switch (type) {
   case 'node_position':,
   return 'border-blue-200 bg-blue-50';
   case 'node_properties':,
@@ -85,10 +80,10 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ()
   return 'border-orange-200 bg-orange-50';
   case 'edge_properties':,
   return 'border-teal-200 bg-teal-50';
-  default:,
+  default: }
   return 'border-gray-200 bg-gray-50';
 };
-  const resolutionStrategies = [;
+  const resolutionStrategies = [
     { value: 'last_writer_wins', label: 'Last Writer Wins', description: 'Use the most recent change' },
     { value: 'first_writer_wins', label: 'First Writer Wins', description: 'Use the earliest change' },
     { value: 'merge_properties', label: 'Merge Properties', description: 'Combine all changes' },
@@ -289,11 +284,11 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ()
 export default ConflictPanel;
 
 // Notification component for conflict alerts
-}
-interface ConflictNotificationProps {
-  conflict: ConflictData;
-  onResolve: (conflict: ConflictData) => void;
+
+
+interface ConflictNotificationProps { conflict: ConflictData;
+  onResolve: (conflict: ConflictData) => void }
   onDismiss: () => void;
 
-}
+
 export };

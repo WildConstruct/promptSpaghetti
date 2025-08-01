@@ -18,7 +18,7 @@ import {
   InputType,
   TargetType,
   ExecutionStatus
-} from '../services/OperationTypesService';
+ from '../services/OperationTypesService';
 import { requirePermission } from '../../auth/middleware/permission-auth';
 
 // Request validation schemas
@@ -119,7 +119,7 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     permissions: string[];
   };
-}
+
 
 /**
  * Register operation types routes
@@ -151,16 +151,15 @@ export async function registerOperationTypesRoutes(
           totalCount: operationTypes.length,
           categories: [...new Set(operationTypes.map(ot => ot.category))],
           enabledCount: operationTypes.filter(ot => ot.isEnabled).length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Failed to get operation types:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve operation types'
       });
-    }
+
   });
 
   // Get operation type by ID
@@ -177,20 +176,19 @@ export async function registerOperationTypesRoutes(
           success: false,
           error: 'Operation type not found'
         });
-      }
+
 
       return reply.code(200).send({
         success: true,
         data: operationType
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to get operation type ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve operation type'
       });
-    }
+
   });
 
   // Create new operation type
@@ -210,15 +208,14 @@ export async function registerOperationTypesRoutes(
         data: operationType,
         message: 'Operation type created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid operation type data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to create operation type:', error);
       return reply.code(500).send({
@@ -226,7 +223,7 @@ export async function registerOperationTypesRoutes(
         error: 'Failed to create operation type',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Update operation type
@@ -248,15 +245,14 @@ export async function registerOperationTypesRoutes(
         data: operationType,
         message: 'Operation type updated successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid update data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error(`Failed to update operation type ${request.params}:`, error);
       return reply.code(500).send({
@@ -264,7 +260,7 @@ export async function registerOperationTypesRoutes(
         error: 'Failed to update operation type',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Delete operation type
@@ -280,15 +276,14 @@ export async function registerOperationTypesRoutes(
         success: true,
         message: 'Operation type deleted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to delete operation type ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to delete operation type',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Validate operation parameters
@@ -308,15 +303,14 @@ export async function registerOperationTypesRoutes(
         success: true,
         data: validation
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid validation request',
           details: error.errors
         });
-      }
+
 
       fastify.log.error(`Failed to validate parameters for ${request.params}:`, error);
       return reply.code(500).send({
@@ -324,7 +318,7 @@ export async function registerOperationTypesRoutes(
         error: 'Failed to validate parameters',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Execute operation
@@ -342,7 +336,7 @@ export async function registerOperationTypesRoutes(
           success: false,
           error: 'Operation type not found'
         });
-      }
+
 
       // Check if user has required permissions
       const userPermissions = request.user?.permissions || [];
@@ -356,7 +350,7 @@ export async function registerOperationTypesRoutes(
           error: 'Insufficient permissions to execute this operation',
           requiredPermissions: operationType.requiredPermissions
         });
-      }
+
 
       // Validate parameters
       const validation = await operationTypesService.validateOperationParameters(
@@ -371,7 +365,7 @@ export async function registerOperationTypesRoutes(
           validationErrors: validation.errors,
           validationWarnings: validation.warnings
         });
-      }
+
 
       // For now, return a mock execution response
       // In a real implementation, this would create an execution record and start the operation
@@ -387,7 +381,7 @@ export async function registerOperationTypesRoutes(
           totalSteps: 3,
           completedSteps: 0,
           lastUpdateTime: new Date()
-  }
+
         executedBy: request.user!.id,
         startTime: new Date(),
         totalTargets: 0,
@@ -410,15 +404,14 @@ export async function registerOperationTypesRoutes(
           ? 'Dry run validation successful'
           : 'Operation execution started'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid execution request',
           details: error.errors
         });
-      }
+
 
       fastify.log.error(`Failed to execute operation ${request.params}:`, error);
       return reply.code(500).send({
@@ -426,7 +419,7 @@ export async function registerOperationTypesRoutes(
         error: 'Failed to execute operation',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get operation categories
@@ -440,14 +433,13 @@ export async function registerOperationTypesRoutes(
         success: true,
         data: categories
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get operation categories:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve operation categories'
       });
-    }
+
   });
 
   // Get operation metadata (for UI forms)
@@ -471,14 +463,13 @@ export async function registerOperationTypesRoutes(
         success: true,
         data: metadata
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get operation metadata:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve operation metadata'
       });
-    }
+
   });
 
   // Get operation execution history (placeholder)
@@ -492,7 +483,7 @@ export async function registerOperationTypesRoutes(
         executedBy, 
         limit, 
         offset 
-      } = request.query as {
+ = request.query as {
         operationTypeId?: string;
         status?: ExecutionStatus;
         executedBy?: string;
@@ -509,16 +500,15 @@ export async function registerOperationTypesRoutes(
           totalCount: 0,
           limit: parseInt(limit || '20', 10),
           offset: parseInt(offset || '0', 10)
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Failed to get operation executions:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve operation executions'
       });
-    }
+
   });
 
   // Get operation execution details
@@ -534,14 +524,13 @@ export async function registerOperationTypesRoutes(
         success: false,
         error: 'Operation execution not found'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to get operation execution ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve operation execution'
       });
-    }
+
   });
 
   // Cancel operation execution
@@ -557,14 +546,13 @@ export async function registerOperationTypesRoutes(
         success: true,
         message: 'Operation cancellation requested'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to cancel operation execution ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to cancel operation execution'
       });
-    }
+
   });
 
   // Health check for operations system
@@ -585,8 +573,7 @@ export async function registerOperationTypesRoutes(
         success: true,
         data: health
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Operations system health check failed:', error);
       return reply.code(500).send({
         success: false,
@@ -594,10 +581,10 @@ export async function registerOperationTypesRoutes(
         data: {
           status: 'unhealthy',
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
-    }
+
   });
-}
+
 
 export default registerOperationTypesRoutes;

@@ -39,24 +39,24 @@ class SmartTestSelector {
       fallbackToAllTests: true,
       enableMLPrediction: false // Future: ML-based test selection
     };
-  }
+
 
   log(message: string, color: string = 'reset'): void {
     console.log(`${colors[color]}${message}${colors.reset}`);
-  }
+
 
   logHeader(title: string): void {
     const border = '='.repeat(60);
     this.log(`\n${border}`, 'cyan');
     this.log(`🧠 ${title}`, 'bold');
     this.log(border, 'cyan');
-  }
+
 
   logStep(step: string, status: string = 'info'): void {
     const icons = { info: '📋', success: '✅', warning: '⚠️', error: '❌' };
     const colorMap = { info: 'blue', success: 'green', warning: 'yellow', error: 'red' };
     this.log(`${icons[status]} ${step}`, colorMap[status]);
-  }
+
 
   async runSmartTestSelection(): Promise<any> {
     this.logHeader('Smart Test Selection');
@@ -71,7 +71,7 @@ class SmartTestSelector {
     await this.updateTestCache();
     
     return this.generateReport();
-  }
+
 
   async loadTestCache(): Promise<void> {
     if (fs.existsSync(this.cacheFile)) {
@@ -82,13 +82,13 @@ class SmartTestSelector {
         this.testHistory = cacheData.testHistory || [];
         
         this.logStep('Loaded test selection cache', 'success');
-      } catch (error) {
+ catch (error) {
         this.logStep('Failed to load test cache, starting fresh', 'warning');
-      }
-    } else {
+
+ else {
       this.logStep('No test cache found, building from scratch', 'info');
-    }
-  }
+
+
 
   async detectChangedFiles(): Promise<void> {
     this.logStep('Detecting changed files...', 'info');
@@ -115,13 +115,12 @@ class SmartTestSelector {
       if (this.changedFiles.length > 0) {
         this.log('Changed files:', 'blue');
         this.changedFiles.forEach(file => this.log(`  - ${file}`, 'blue'));
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       this.logStep('Git diff failed, falling back to all tests', 'warning');
       this.changedFiles = [];
-    }
-  }
+
+
 
   async buildDependencyGraph(): Promise<void> {
     this.logStep('Building dependency graph...', 'info');
@@ -131,7 +130,7 @@ class SmartTestSelector {
     for (const file of sourceFiles) {
       if (!this.dependencyGraph.has(file)) {
         this.dependencyGraph.set(file, new Set());
-      }
+
       
       try {
         const content = fs.readFileSync(file, 'utf8');
@@ -140,13 +139,13 @@ class SmartTestSelector {
         dependencies.forEach(dep => {
           this.dependencyGraph.get(file).add(dep);
         });
-      } catch (error) {
+ catch (error) {
         // Skip files that can't be read
-      }
-    }
+
+
     
     this.logStep(`Built dependency graph with ${this.dependencyGraph.size} files`, 'success');
-  }
+
 
   getAllSourceFiles(): string[] {
     const sourceFiles = [];
@@ -161,16 +160,16 @@ class SmartTestSelector {
         
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
-        } else if (file.match(/\.(ts|tsx|js|jsx)$/) && !file.includes('.test.') && !file.includes('.spec.')) {
+ else if (file.match(/\.(ts|tsx|js|jsx)$/) && !file.includes('.test.') && !file.includes('.spec.')) {
           sourceFiles.push(filePath);
-        }
-      }
+
+
     };
     
     ['client/src', 'server/src', 'packages'].forEach(dir => scanDirectory(dir));
     
     return sourceFiles;
-  }
+
 
   extractDependencies(content: string, currentFile: string): string[] {
     const dependencies = new Set();
@@ -186,17 +185,17 @@ class SmartTestSelector {
       // Skip node_modules dependencies
       if (!importPath.startsWith('.') && !importPath.startsWith('/')) {
         continue;
-      }
+
       
       // Resolve relative paths
       const resolvedPath = this.resolveImportPath(importPath, currentDir);
       if (resolvedPath) {
         dependencies.add(resolvedPath);
-      }
-    }
+
+
     
     return Array.from(dependencies);
-  }
+
 
   resolveImportPath(importPath: string, currentDir: string): string | null {
     // Handle relative imports
@@ -210,12 +209,12 @@ class SmartTestSelector {
         const fullPath = resolved + ext;
         if (fs.existsSync(fullPath)) {
           return fullPath;
-        }
-      }
-    }
+
+
+
     
     return null;
-  }
+
 
   async mapTestsToSources(): Promise<void> {
     this.logStep('Mapping tests to source files...', 'info');
@@ -225,7 +224,7 @@ class SmartTestSelector {
     for (const testFile of testFiles) {
       if (!this.testMappings.has(testFile)) {
         this.testMappings.set(testFile, new Set());
-      }
+
       
       try {
         const content = fs.readFileSync(testFile, 'utf8');
@@ -241,14 +240,13 @@ class SmartTestSelector {
         inferredSources.forEach(source => {
           this.testMappings.get(testFile).add(source);
         });
-        
-      } catch (error) {
+ catch (error) {
         // Skip files that can't be read
-      }
-    }
+
+
     
     this.logStep(`Mapped ${testFiles.length} test files to source dependencies`, 'success');
-  }
+
 
   getAllTestFiles(): string[] {
     const testFiles = [];
@@ -263,16 +261,16 @@ class SmartTestSelector {
         
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
-        } else if (file.match(/\.(test|spec)\.(ts|tsx|js|jsx)$/)) {
+ else if (file.match(/\.(test|spec)\.(ts|tsx|js|jsx)$/)) {
           testFiles.push(filePath);
-        }
-      }
+
+
     };
     
     ['client/src', 'server/src', 'packages', 'tests'].forEach(dir => scanDirectory(dir));
     
     return testFiles;
-  }
+
 
   inferSourceMappings(testFile: string): string[] {
     const sources = new Set();
@@ -284,7 +282,7 @@ class SmartTestSelector {
     
     if (fs.existsSync(potentialSource)) {
       sources.add(potentialSource);
-    }
+
     
     // Pattern 2: __tests__/ComponentName.test.tsx -> ../ComponentName.tsx
     if (testFile.includes('__tests__')) {
@@ -293,8 +291,8 @@ class SmartTestSelector {
       
       if (fs.existsSync(potentialSource2)) {
         sources.add(potentialSource2);
-      }
-    }
+
+
     
     // Pattern 3: Search for files with similar names in the same directory tree
     const baseName = testFileName.replace(/\.(test|spec)\.(ts|tsx|js|jsx)$/, '');
@@ -305,11 +303,11 @@ class SmartTestSelector {
       const potentialSource3 = path.join(searchDir, baseName + ext);
       if (fs.existsSync(potentialSource3)) {
         sources.add(potentialSource3);
-      }
+
     });
     
     return Array.from(sources);
-  }
+
 
   async selectRelevantTests(): Promise<void> {
     this.logStep('Selecting relevant tests...', 'info');
@@ -318,7 +316,7 @@ class SmartTestSelector {
       this.logStep('No changed files detected, running critical tests only', 'warning');
       this.selectedTests = this.selectCriticalTests();
       return;
-    }
+
     
     const relevantTests = new Set();
     
@@ -328,9 +326,9 @@ class SmartTestSelector {
         if (sources.has(changedFile)) {
           relevantTests.add(testFile);
           break;
-        }
-      }
-    }
+
+
+
     
     // Transitive dependencies: tests that import files that depend on changed files
     const transitivelyAffected = this.findTransitivelyAffectedFiles(this.changedFiles);
@@ -340,9 +338,9 @@ class SmartTestSelector {
         if (sources.has(affectedFile)) {
           relevantTests.add(testFile);
           break;
-        }
-      }
-    }
+
+
+
     
     // Add critical tests that should always run
     const criticalTests = this.selectCriticalTests();
@@ -355,8 +353,8 @@ class SmartTestSelector {
     if (this.selectedTests.length > 0) {
       this.log('Selected tests:', 'blue');
       this.selectedTests.forEach(test => this.log(`  - ${test}`, 'blue'));
-    }
-  }
+
+
 
   findTransitivelyAffectedFiles(changedFiles: string[]): string[] {
     const affected = new Set(changedFiles);
@@ -373,17 +371,17 @@ class SmartTestSelector {
               affected.add(file);
               hasChanges = true;
               break;
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
     
     // Remove the original changed files to get only transitively affected
     changedFiles.forEach(file => affected.delete(file));
     
     return Array.from(affected);
-  }
+
 
   selectCriticalTests(): string[] {
     // Select tests that should always run (e.g., security, core functionality)
@@ -400,7 +398,7 @@ class SmartTestSelector {
     return allTests.filter(testFile => 
       criticalPatterns.some(pattern => pattern.test(testFile))
     );
-  }
+
 
   async optimizeTestOrder(): Promise<void> {
     this.logStep('Optimizing test execution order...', 'info');
@@ -416,7 +414,7 @@ class SmartTestSelector {
             failureRate: 0,
             runCount: 0
           });
-        }
+
         
         const perf = testPerformance.get(test.file);
         perf.avgDuration = ((perf.avgDuration * perf.runCount) + test.duration) / (perf.runCount + 1);
@@ -434,14 +432,14 @@ class SmartTestSelector {
       const failureDiff = perfB.failureRate - perfA.failureRate;
       if (Math.abs(failureDiff) > 0.1) {
         return failureDiff > 0 ? -1 : 1;
-      }
+
       
       // Then prioritize faster tests
       return perfA.avgDuration - perfB.avgDuration;
     });
     
     this.logStep('Optimized test execution order for fast feedback', 'success');
-  }
+
 
   async executeSelectedTests(): Promise<void> {
     this.logStep('Executing selected tests...', 'info');
@@ -449,7 +447,7 @@ class SmartTestSelector {
     if (this.selectedTests.length === 0) {
       this.logStep('No tests selected for execution', 'warning');
       return;
-    }
+
     
     const testStartTime = Date.now();
     const testResults = [];
@@ -502,9 +500,8 @@ class SmartTestSelector {
       // Keep only last 50 test runs
       if (this.testHistory.length > 50) {
         this.testHistory = this.testHistory.slice(-50);
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       this.logStep(`Test execution failed: ${error.message}`, 'error');
       
       // Record failed run
@@ -517,8 +514,8 @@ class SmartTestSelector {
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   async updateTestCache(): Promise<void> {
     const cacheData = {
@@ -530,7 +527,7 @@ class SmartTestSelector {
     
     fs.writeFileSync(this.cacheFile, JSON.stringify(cacheData, null, 2));
     this.logStep('Updated test selection cache', 'success');
-  }
+
 
   generateReport(): any {
     this.logHeader('Smart Test Selection Report');
@@ -558,7 +555,7 @@ class SmartTestSelector {
     this.log(`   Strategy: ${report.strategy}`, 'blue');
     
     return report;
-  }
+
 
   estimateTimeSaved(totalTests: number, selectedTests: number): string {
     const avgTestTime = 2000; // 2 seconds per test (rough estimate)
@@ -567,20 +564,20 @@ class SmartTestSelector {
     
     if (savedTime < 60000) {
       return `${Math.round(savedTime / 1000)}s`;
-    } else {
+ else {
       return `${Math.round(savedTime / 60000)}m`;
-    }
-  }
+
+
 
   getSelectionStrategy(): string {
     if (this.changedFiles.length === 0) {
       return 'Critical tests only (no changes detected)';
-    } else if (this.selectedTests.length === this.getAllTestFiles().length) {
+ else if (this.selectedTests.length === this.getAllTestFiles().length) {
       return 'All tests (high impact changes)';
-    } else {
+ else {
       return 'Smart selection (dependency-based)';
-    }
-  }
+
+
 
   // Analysis methods for continuous improvement
   async analyzeTestSelection(): Promise<void> {
@@ -589,7 +586,7 @@ class SmartTestSelector {
     if (this.testHistory.length < 5) {
       this.logStep('Insufficient history for analysis', 'warning');
       return;
-    }
+
     
     const recentRuns = this.testHistory.slice(-10);
     
@@ -608,8 +605,8 @@ class SmartTestSelector {
       frequentlyFailingTests.forEach(test => {
         this.log(`  - ${test.file} (${Math.round(test.failureRate * 100)}% failure rate)`, 'yellow');
       });
-    }
-  }
+
+
 
   calculateSelectionAccuracy(runs: any[]): number {
     // Measure how often selected tests actually fail when changes are made
@@ -621,11 +618,11 @@ class SmartTestSelector {
       if (run.tests && run.tests.length > 0) {
         totalSelections += run.tests.length;
         accurateSelections += run.tests.filter(test => test.failed || test.passed > 0).length;
-      }
+
     });
     
     return totalSelections > 0 ? accurateSelections / totalSelections : 0;
-  }
+
 
   calculateAverageTimeSavings(runs: any[]): string {
     const avgFullSuite = 300000; // 5 minutes for full suite
@@ -637,7 +634,7 @@ class SmartTestSelector {
     
     const avgSaved = totalTimeSaved / runs.length;
     return avgSaved < 60000 ? `${Math.round(avgSaved / 1000)}s` : `${Math.round(avgSaved / 60000)}m`;
-  }
+
 
   identifyFrequentlyFailingTests(runs: any[]): any[] {
     const testFailures = new Map();
@@ -647,13 +644,13 @@ class SmartTestSelector {
         run.tests.forEach(test => {
           if (!testFailures.has(test.file)) {
             testFailures.set(test.file, { runs: 0, failures: 0 });
-          }
+
           
           const stats = testFailures.get(test.file);
           stats.runs++;
           if (test.failed) stats.failures++;
         });
-      }
+
     });
     
     const frequentlyFailing = [];
@@ -661,12 +658,12 @@ class SmartTestSelector {
       const failureRate = stats.failures / stats.runs;
       if (failureRate > 0.3 && stats.runs >= 3) { // >30% failure rate with at least 3 runs
         frequentlyFailing.push({ file, failureRate, runs: stats.runs });
-      }
-    }
+
+
     
     return frequentlyFailing.sort((a, b) => b.failureRate - a.failureRate);
-  }
-}
+
+
 
 // CLI execution
 if (require.main === module) {
@@ -698,7 +695,7 @@ The system reduces test execution time while maintaining quality
 by running only tests relevant to code changes.
 `);
     process.exit(0);
-  }
+
   
   if (args.includes('--analyze')) {
     selector.loadTestCache()
@@ -710,7 +707,7 @@ by running only tests relevant to code changes.
         console.error('❌ Analysis failed:', error);
         process.exit(1);
       });
-  } else if (args.includes('--build-cache')) {
+ else if (args.includes('--build-cache')) {
     selector.loadTestCache()
       .then(() => selector.buildDependencyGraph())
       .then(() => selector.mapTestsToSources())
@@ -722,19 +719,19 @@ by running only tests relevant to code changes.
         console.error('❌ Cache building failed:', error);
         process.exit(1);
       });
-  } else {
+ else {
     selector.runSmartTestSelection()
       .then(report => {
         console.log('✅ Smart test selection completed');
         if (report.selectedTests === 0) {
           process.exit(1);
-        }
+
       })
       .catch(error => {
         console.error('❌ Smart test selection failed:', error);
         process.exit(1);
       });
-  }
-}
+
+
 
 module.exports = { SmartTestSelector };

@@ -22,28 +22,13 @@ import { FiShare2, FiX, FiCopy, FiEye, FiLock, FiCheck, FiAlertCircle, FiGlobe }
         icon: FiEye
     }
 ];
-const EXPIRATION_OPTIONS = [];
-{
-    value: null, label;
-    'Never expires';
-}
-{
-    value: 1, label;
-    '1 day';
-}
-{
-    value: 7, label;
-    '1 week';
-}
-{
-    value: 30, label;
-    '1 month';
-}
-{
-    value: 90, label;
-    '3 months';
-}
-;
+const EXPIRATION_OPTIONS = [
+    { value: null, label: 'Never expires' },
+    { value: 1, label: '1 day' },
+    { value: 7, label: '1 week' },
+    { value: 30, label: '1 month' },
+    { value: 90, label: '3 months' }
+];
 export const ShareDialog = ({
     exportJob,
     onClose,

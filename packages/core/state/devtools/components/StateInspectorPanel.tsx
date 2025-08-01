@@ -6,19 +6,16 @@
 import React, { useState, useEffect } from 'react';
 import { StateDevTools, StateValidationResult } from '../StateDevTools';
 
-}
-export interface StateInspectorPanelProps {
-  devTools: StateDevTools;
+
+export interface StateInspectorPanelProps { devTools: StateDevTools;
   selectedDomain: string;
-  onDomainChange: (domain: string) => void;
-}
-}
-export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
-  devTools,
-  selectedDomain,
+  onDomainChange: (domain: string) => void }
+
+export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({ )
+  devTools
+  selectedDomain }
   onDomainChange
-}) => {
-  const [stateHistory, setStateHistory] = useState<any>([]);
+}) => { const [stateHistory, setStateHistory] = useState<any>([]);
   const [selectedSnapshot, setSelectedSnapshot] = useState<any>(null);
   const [validationResult, setValidationResult] = useState<StateValidationResult | null>(null);
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set());
@@ -30,30 +27,24 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
   : history.filter(snapshot => snapshot.metadata?.domain === selectedDomain);
   setStateHistory(filteredHistory);
   if (filteredHistory.length > 0 && !selectedSnapshot) {
-  setSelectedSnapshot(filteredHistory[filteredHistory.length - 1]);
-}, [devTools, selectedDomain, selectedSnapshot]);
-  const handleSnapshotSelect = (snapshot: any) => {
-  setSelectedSnapshot(snapshot);
+  setSelectedSnapshot(filteredHistory[filteredHistory.length - 1]) }, [devTools, selectedDomain, selectedSnapshot]);
+  const handleSnapshotSelect = (snapshot: any) => { setSelectedSnapshot(snapshot);
   // Validate the selected state
   if (snapshot.metadata?.domain) {
   const validation = devTools.validateStateIntegrity(;);
-  snapshot.state,
-  snapshot.metadata.domain,
+  snapshot.state
+  snapshot.metadata.domain
   {
-  deep: true,
-  checkReferences: true,
-  validateSchema: true,
+  deep: true
+  checkReferences: true
+  validateSchema: true }
   checkMemoryLeaks: true);
   setValidationResult(validation);
 };
-  const togglePath = (path: string) => {
-    const newExpanded = new Set(expandedPaths);
+  const togglePath = (path: string) => { const newExpanded = new Set(expandedPaths);
     if (newExpanded.has(path)) {
-      newExpanded.delete(path);
-    } else {
-      newExpanded.add(path);
-    setExpandedPaths(newExpanded);
-  };
+      newExpanded.delete(path) } else { newExpanded.add(path);
+    setExpandedPaths(newExpanded) };
   const renderValue = (value: any, path: string = '', depth: number = 0): React.ReactNode => {
     if (depth > 10) return <span className="max-depth">...</span>;
     if (value === null) return <span className="null">null</span>;
@@ -122,17 +113,13 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
       );
     return <span className="unknown">{String(value)}</span>;
   };
-  const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp).toLocaleString();
-  };
-  const getChangeTypeColor = (type: string) => {
-  switch (type?.toLowerCase()) {
+  const formatTimestamp = (timestamp: number) => { return new Date(timestamp).toLocaleString() };
+  const getChangeTypeColor = (type: string) => { switch (type?.toLowerCase()) {
   case 'create': return '#27ae60';
   case 'update': return '#3498db';
   case 'delete': return '#e74c3c';
   case 'restore': return '#f39c12';
-  default: return '#95a5a6';
-};
+  default: return '#95a5a6' };
   return;
     <div className="inspector-panel">
       {/* Header */}
@@ -264,16 +251,16 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
           )}
         </div>
       </div>
-      <style jsx>{`
+      <style jsx>{ `
         .inspector-panel {
-          height: 100%;
+          height: 100%
   display: flex;
           flex-direction: column;
   background: var(--devtools-bg, #1e1e1e);
         .inspector-header {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-section-bg, #252525);
@@ -298,7 +285,7 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
           border-radius: 4px;
           font-size: 12px;
   width: 200px;
-        .search-input::placeholder {,
+        .search-input::placeholder {
   color: var(--devtools-text-secondary, #aaa);
         .inspector-content {
           flex: 1;
@@ -324,7 +311,7 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
           border-bottom: 1px solid var(--devtools-border, #333);
           cursor: pointer;
   transition: background 0.2s;
-        .history-item:hover {,
+        .history-item:hover {
   background: var(--devtools-hover, #2a2a2a);
         .history-item.selected {
           background: var(--devtools-selected-bg, #2a3a4a);
@@ -396,35 +383,34 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
         .clickable {
           cursor: pointer;
           user-select: none;
-        .clickable:hover {,
+        .clickable:hover { }
   background: var(--devtools-hover, #2a2a2a);
-        .string { color: #98c379; }
-        .number { color: #d19a66; }
-        .boolean { color: #c678dd; }
-        .null, .undefined { color: #5c6370; font-style: italic; }
-        .function { color: #61dafb; }
-        .array-container,
-        .object-container {
-          margin-left: 0;
-        .array-header,
+        .string { color: #98c379 }
+        .number { color: #d19a66 }
+        .boolean { color: #c678dd }
+        .null, .undefined { color: #5c6370; font-style: italic }
+        .function { color: #61dafb }
+        .array-container
+        .object-container { margin-left: 0;
+        .array-header
         .object-header {
           color: var(--devtools-text, #fff);
           font-weight: 500;
   padding: 2px 4px;
           border-radius: 2px;
-        .array-items,
+        .array-items
         .object-properties {
           margin-left: 16px;
           margin-top: 4px;
           border-left: 1px solid var(--devtools-border, #333);
           padding-left: 12px;
-        .array-item,
+        .array-item
         .object-property {
-          margin: 4px 0;
+          margin: 4px 0
   display: flex;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 8px;
-        .index,
+        .index
         .property-key {
           color: var(--devtools-text, #fff);
           font-weight: 500;
@@ -448,15 +434,15 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
           color: #27ae60;
         .validation-status.invalid {
           color: #e74c3c;
-        .validation-errors,
+        .validation-errors
         .validation-warnings {
           margin-bottom: 12px;
-        .validation-errors h6,
+        .validation-errors h6
         .validation-warnings h6 {
           margin: 0 0 8px 0;
           font-size: 12px;
   color: var(--devtools-text, #fff);
-        .validation-error,
+        .validation-error
         .validation-warning {
           padding: 8px;
           margin-bottom: 4px;
@@ -464,13 +450,13 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
           font-size: 11px;
         .validation-error {
           background: rgba(231, 76, 60, 0.1);
-          border-left: 3px solid #e74c3c;
+          border-left: 3px solid #e74c3c
   color: #e74c3c;
         .validation-warning {
           background: rgba(243, 156, 18, 0.1);
-          border-left: 3px solid #f39c12;
+          border-left: 3px solid #f39c12
   color: #f39c12;
-        .error-value,
+        .error-value }
         .warning-suggestion {
           margin-top: 4px;
           font-size: 10px;

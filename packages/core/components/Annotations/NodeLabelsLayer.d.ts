@@ -11,8 +11,8 @@ import { Node } from 'reactflow';
 import { NodeLabelConfig, NodeLabelPreferences } from '../../types/CollaborationTypes';
 
 }
-interface NodeLabelsLayerProps {
-    nodes: Node[];
+}
+interface NodeLabelsLayerProps { nodes: Node[];
     labelConfigs: Record<string, NodeLabelConfig>;
     onLabelConfigsChange: (configs: Record<string, NodeLabelConfig>) => void;
     labelPreferences?: NodeLabelPreferences;
@@ -23,8 +23,7 @@ interface NodeLabelsLayerProps {
     readOnly?: boolean;
     canvasOffset?: {
         x: number;
-        y: number;
-
+        y: number }
 }
     };
     zoom?: number;

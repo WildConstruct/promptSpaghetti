@@ -23,8 +23,8 @@ jest.mock('../config', () => ({
       maxLoginAttempts: 5, 
       rateLimitWindow: 60 * 1000,
       maxRequestsPerWindow: 100
-    }
-  }
+
+
 }));
 
 describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
@@ -40,7 +40,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         success: boolean, 
         error?: string, 
         lockoutRemaining?: number 
-      } => {
+ => {
         const now = Date.now();
 
         // Check if account is locked
@@ -51,13 +51,13 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
             error: 'Account locked',
             lockoutRemaining: remaining
           };
-        }
+
 
         // Reset lockout if expired
         if (lockoutTime && now >= lockoutTime) {
           lockoutTime = null;
           attemptCount = 0;
-        }
+
 
         // Simulate authentication check
         if (password !== 'correct-password') {
@@ -70,13 +70,13 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
               error: 'Account locked due to too many failed attempts',
               lockoutRemaining: Math.ceil(lockoutDuration / 1000)
             };
-          }
+
 
           return { 
             success: false, 
             error: `Invalid credentials (${attemptCount}/${maxAttempts})` 
           };
-        }
+
 
         // Successful login resets attempt count
         attemptCount = 0;
@@ -89,7 +89,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         const result = attemptLogin('user@test.com', 'wrong-password');
         expect(result.success).toBe(false);
         expect(result.error).toContain(`(${i}/5)`);
-      }
+
 
       // Fifth attempt should trigger lockout
       const lockoutResult = attemptLogin('user@test.com', 'wrong-password');
@@ -116,7 +116,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         if (now - ipData.lastAttempt > windowMs) {
           ipData.count = 0;
           ipData.lastAttempt = now;
-        }
+
 
         ipData.count++;
         ipAttempts.set(ip, ipData);
@@ -131,11 +131,11 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
       for (const ip of attackerIPs) {
         for (let i = 0; i < maxAttemptsPerIP; i++) {
           expect(checkIPRateLimit(ip)).toBe(true);
-        }
+
         
         // Additional attempts should be blocked
         expect(checkIPRateLimit(ip)).toBe(false);
-      }
+
 
       // Verify each IP is tracked separately
       expect(ipAttempts.size).toBe(3);
@@ -161,7 +161,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         success: boolean,
         warning?: string,
         error?: string
-      } => {
+ => {
         // Check for known compromised credentials
         if (detectCredentialStuffing(email, password)) {
           return {
@@ -169,12 +169,12 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
             error: 'These credentials appear in known data breaches. Please choose a different password.',
             warning: 'Credential stuffing attack detected'
           };
-        }
+
 
         // Normal authentication logic would go here
         if (password === 'secure-password-2024!') {
           return { success: true };
-        }
+
 
         return { success: false, error: 'Invalid credentials' };
       };
@@ -202,7 +202,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         success: boolean,
         error: string,
         processingTime: number
-      }> => {
+> => {
         const startTime = Date.now();
         
         // Simulate constant-time user lookup
@@ -222,7 +222,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
             error: 'Invalid email or password', // Generic error message
             processingTime
           };
-        }
+
 
         return {
           success: true,
@@ -250,22 +250,22 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
       const attemptRegistration = (email: string, password: string): {
         success: boolean,
         error?: string
-      } => {
+ => {
         // Basic email validation
         if (!email.includes('@') || email.length < 5) {
           return { success: false, error: 'Please provide a valid email address' };
-        }
+
 
         // Password validation
         if (password.length < 8) {
           return { success: false, error: 'Password must be at least 8 characters long' };
-        }
+
 
         // Check if user exists (but don't reveal this information)
         if (existingUsers.has(email)) {
           // Generic response to prevent enumeration
           return { success: true }; // Pretend success, but actually don't create account
-        }
+
 
         // Would create new user here
         existingUsers.add(email);
@@ -309,7 +309,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
 
         if (hasInjection) {
           throw new Error('Invalid input detected');
-        }
+
 
         // Simulate parameterized query (safe from injection)
         return sanitizedEmail === 'admin@test.com' && sanitizedPassword === 'password';
@@ -335,7 +335,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         // Ensure inputs are strings (prevent object injection)
         if (typeof email !== 'string' || typeof password !== 'string') {
           throw new Error('Invalid input type');
-        }
+
 
         // Check for NoSQL injection patterns
         const nosqlPatterns = [
@@ -353,7 +353,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
 
         if (hasNoSQLInjection) {
           throw new Error('Invalid query pattern detected');
-        }
+
 
         return email === 'admin@test.com' && password === 'password';
       };
@@ -402,22 +402,22 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
           const expectedSignature = 'valid-signature-hash';
           if (signature !== expectedSignature) {
             return { valid: false };
-          }
+
 
           // Check for token tampering by validating known payload structure
           if (!decodedPayload.userId || !decodedPayload.role || !decodedPayload.exp) {
             return { valid: false };
-          }
+
 
           // Check expiry
           if (Date.now() / 1000 > decodedPayload.exp) {
             return { valid: false };
-          }
+
 
           return { valid: true, user: decodedPayload };
-        } catch {
+ catch {
           return { valid: false };
-        }
+
       };
 
       // Create valid user token
@@ -441,7 +441,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         success: boolean,
         error?: string,
         userRole?: string
-      } => {
+ => {
         // Simulate user lookup from secure storage
         const users = new Map([
           [1, { id: 1, role: 'admin' }],
@@ -452,7 +452,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         const user = users.get(userId);
         if (!user) {
           return { success: false, error: 'User not found' };
-        }
+
 
         // SECURITY: Role comes from secure storage, not from request data
         const actualRole = user.role;
@@ -464,7 +464,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
             error: 'Role manipulation attempt detected',
             userRole: actualRole
           };
-        }
+
 
         return { success: true, userRole: actualRole };
       };
@@ -488,7 +488,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         userMessage: string,
         logMessage: string,
         statusCode: number
-      } => {
+ => {
         // Log detailed error for developers
         const logMessage = `[${context}] ${error.name}: ${error.message}\nStack: ${error.stack}`;
         
@@ -500,13 +500,13 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         if (error.message.includes('not found')) {
           userMessage = 'Resource not found.';
           statusCode = 404;
-        } else if (error.message.includes('unauthorized')) {
+ else if (error.message.includes('unauthorized')) {
           userMessage = 'Access denied.';
           statusCode = 401;
-        } else if (error.message.includes('validation')) {
+ else if (error.message.includes('validation')) {
           userMessage = 'Invalid input provided.';
           statusCode = 400;
-        }
+
 
         return { userMessage, logMessage, statusCode };
       };
@@ -588,7 +588,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         success: boolean,
         processingTime: number,
         error?: string
-      } => {
+ => {
         const maxComplexity = 1000;
         const startTime = Date.now();
 
@@ -599,7 +599,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
             processingTime: Date.now() - startTime,
             error: 'Request complexity exceeds maximum allowed'
           };
-        }
+
 
         // Simulate processing with timeout
         const timeout = 5000; // 5 seconds max
@@ -613,8 +613,8 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
               processingTime: Date.now() - startTime,
               error: 'Request timeout'
             };
-          }
-        }
+
+
 
         return {
           success: true,
@@ -640,22 +640,22 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
       const validateInputSize = (input: string | any[]): {
         valid: boolean,
         error?: string
-      } => {
+ => {
         if (typeof input === 'string') {
           if (input.length > maxInputSize) {
             return { valid: false, error: 'Input size exceeds maximum allowed' };
-          }
-        } else if (Array.isArray(input)) {
+
+ else if (Array.isArray(input)) {
           if (input.length > maxArrayLength) {
             return { valid: false, error: 'Array length exceeds maximum allowed' };
-          }
+
           
           // Check total memory usage
           const totalSize = JSON.stringify(input).length;
           if (totalSize > maxInputSize) {
             return { valid: false, error: 'Total input size exceeds maximum allowed' };
-          }
-        }
+
+
 
         return { valid: true };
       };
@@ -684,7 +684,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         requests: number[],
         blocked: boolean,
         blockUntil?: number
-      }>();
+>();
 
       const maxRequests = 10;
       const windowMs = 60 * 1000; // 1 minute
@@ -695,7 +695,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         remaining: number,
         resetTime?: number,
         blockedUntil?: number
-      } => {
+ => {
         const now = Date.now();
         const client = rateLimiter.get(clientId) || { requests: [], blocked: false };
 
@@ -706,14 +706,14 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
             remaining: 0,
             blockedUntil: client.blockUntil
           };
-        }
+
 
         // Reset if block period expired
         if (client.blocked && client.blockUntil && now >= client.blockUntil) {
           client.blocked = false;
           client.requests = [];
           delete client.blockUntil;
-        }
+
 
         // Remove old requests outside the window
         client.requests = client.requests.filter(time => now - time < windowMs);
@@ -729,7 +729,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
             remaining: 0,
             blockedUntil: client.blockUntil
           };
-        }
+
 
         // Add current request
         client.requests.push(now);
@@ -749,7 +749,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
         const result = checkRateLimit(clientId);
         expect(result.allowed).toBe(true);
         expect(result.remaining).toBe(maxRequests - (i + 1));
-      }
+
 
       // Additional request should trigger block
       const blockedResult = checkRateLimit(clientId);

@@ -1,20 +1,20 @@
 import { Edge, Node } from 'reactflow';
 }
-interface UseAutosaveProps {
-    nodes: Node[];
+}
+interface UseAutosaveProps { nodes: Node[];
     edges: Edge[];
     intervalMs?: number;
-    storageKey?: string;
+    storageKey?: string }
 }
-interface UseAutosaveReturn {
-    showRestorePrompt: boolean;
+}
+interface UseAutosaveReturn { showRestorePrompt: boolean;
     restoreDraft: {
         nodes: Node[];
-        edges: Edge[];
+        edges: Edge[] }
 }
     } | null;
     setShowRestorePrompt: (show: boolean) => void;
-    setRestoreDraft: (draft: {),
+    setRestoreDraft: (draft: { ) }
         nodes: Node[];
         edges: Edge[];
     } | null) => void;

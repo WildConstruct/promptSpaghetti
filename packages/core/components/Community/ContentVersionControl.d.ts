@@ -9,6 +9,7 @@ import React from 'react';
 import { ContentVersion } from '../../community/ContentVersionManager';
 
 }
+}
 export interface ContentVersionControlProps {
     contentId: string;
     currentVersionId: string;
@@ -22,4 +23,5 @@ export interface ContentVersionControlProps {
 export declare const ContentVersionControl: React.FC<ContentVersionControlProps>;
 export default ContentVersionControl;
 //# sourceMappingURL=ContentVersionControl.d.ts.map
+}
 }

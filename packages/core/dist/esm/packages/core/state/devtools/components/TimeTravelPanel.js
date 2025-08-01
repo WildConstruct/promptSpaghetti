@@ -178,46 +178,46 @@ div >
 div >
     _jsx("style", { jsx: true, children: `
         .timetravel-panel {
-          height: 100%;
+          height: 100%;,
   display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   background: var(--devtools-bg, #1e1e1e);
         .timetravel-controls {
           padding: 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 16px;
           flex-wrap: wrap;
         .playback-controls {
-          display: flex;
+          display: flex;,
   gap: 4px;
         .control-btn {
           background: var(--devtools-btn-bg, #2a2a2a);
           border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
           padding: 6px 10px;
-          border-radius: 4px;
+          border-radius: 4px;,
   cursor: pointer;
-          font-size: 14px;
+          font-size: 14px;,
   transition: background 0.2s;
         .control-btn:hover:not(:disabled) {,
   background: var(--devtools-hover, #404040);
         .control-btn:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+  opacity: 0.5;,
+  cursor: not-allowed;
         .position-info {
-          font-size: 12px;
+          font-size: 12px;,
   color: var(--devtools-text-secondary, #aaa);
         .replay-controls {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
         .replay-controls label {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 4px;
-          font-size: 12px;
+          font-size: 12px;,
   color: var(--devtools-text, #fff);
         .replay-controls select {
           background: var(--devtools-input-bg, #2a2a2a);
@@ -231,9 +231,9 @@ div >
           border-bottom: 1px solid var(--devtools-border, #333);
         .domain-filter label {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
-          font-size: 12px;
+          font-size: 12px;,
   color: var(--devtools-text, #fff);
         .domain-filter select {
           background: var(--devtools-input-bg, #2a2a2a);
@@ -247,78 +247,78 @@ div >
           border-bottom: 1px solid var(--devtools-border, #333);
           position: relative;
         .slider {
-          width: 100%;
+          width: 100%;,
   height: 4px;
           background: var(--devtools-slider-bg, #333);
           outline: none;
-          border-radius: 2px;
+          border-radius: 2px;,
   appearance: none;
         .slider::-webkit-slider-thumb {,
-  appearance: none;
-          width: 16px;
-  height: 16px;
-          background: var(--devtools-active, #61dafb);
-          border-radius: 50%;
+  appearance: none;,
+  width: 16px;
+  height: 16px;,
+  background: var(--devtools-active, #61dafb);
+          border-radius: 50%;,
   cursor: pointer;
         .timeline-markers {
-          position: absolute;
+          position: absolute;,
   top: 18px;
-          left: 12px;
+          left: 12px;,
   right: 12px;
           height: 4px;
           pointer-events: none;
         .timeline-marker {
-          position: absolute;
+          position: absolute;,
   width: 8px;
           height: 8px;
-          border-radius: 50%;
+          border-radius: 50%;,
   top: -2px;
-          transform: translateX(-50%);
+          transform: translateX(-50%);,
   cursor: pointer;
-          pointer-events: all;
+          pointer-events: all;,
   border: 1px solid var(--devtools-bg, #1e1e1e);
         .branch-section,
         .timeline-section {
           flex: 1;
-          min-height: 0;
+          min-height: 0;,
   display: flex;
           flex-direction: column;
         .section-header {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between;,
   padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-section-bg, #252525);
         .section-header h4 {
           margin: 0;
           font-size: 12px;
-          font-weight: 500;
+          font-weight: 500;,
   color: var(--devtools-text, #fff);
         .add-btn {
           background: var(--devtools-active, #61dafb);
-          border: none;
+          border: none;,
   color: #000;
           padding: 4px 8px;
-          border-radius: 4px;
+          border-radius: 4px;,
   cursor: pointer;
           font-size: 11px;
           font-weight: 500;
         .add-btn:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+  opacity: 0.5;,
+  cursor: not-allowed;
         .branch-list,
         .timeline-list {
           flex: 1;
-          overflow-y: auto;
+          overflow-y: auto;,
   padding: 0;
         .branch-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between;,
   padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
-          cursor: pointer;
+          cursor: pointer;,
   transition: background 0.2s;
         .branch-item:hover {,
   background: var(--devtools-hover, #2a2a2a);
@@ -330,21 +330,21 @@ div >
         .branch-name {
           display: block;
           font-size: 12px;
-          font-weight: 500;
+          font-weight: 500;,
   color: var(--devtools-text, #fff);
         .branch-entries {
           display: block;
-          font-size: 11px;
+          font-size: 11px;,
   color: var(--devtools-text-secondary, #aaa);
         .branch-color {
-          width: 12px;
+          width: 12px;,
   height: 12px;
-          border-radius: 50%;
+          border-radius: 50%;,
   border: 1px solid var(--devtools-border, #333);
         .timeline-entry {
           padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
-          cursor: pointer;
+          cursor: pointer;,
   transition: background 0.2s;
         .timeline-entry:hover {,
   background: var(--devtools-hover, #2a2a2a);
@@ -360,38 +360,38 @@ div >
           margin-bottom: 4px;
         .entry-type {
           font-size: 11px;
-          font-weight: 500;
+          font-weight: 500;,
   color: var(--devtools-active, #61dafb);
           text-transform: uppercase;
         .entry-time {
-          font-size: 11px;
+          font-size: 11px;,
   color: var(--devtools-text-secondary, #aaa);
         .entry-info {
           margin-bottom: 4px;
         .entry-domain {
-          font-size: 11px;
+          font-size: 11px;,
   color: var(--devtools-domain, #f39c12);
           font-weight: 500;
         .entry-description {
           display: block;
-          font-size: 12px;
+          font-size: 12px;,
   color: var(--devtools-text, #fff);
           margin-top: 2px;
         .entry-markers {
-          display: flex;
+          display: flex;,
   gap: 4px;
           margin-bottom: 4px;
         .entry-marker {
-          display: inline-block;
+          display: inline-block;,
   width: 16px;
           height: 16px;
           border-radius: 50%;
-          font-size: 10px;
+          font-size: 10px;,
   display: flex;
           align-items: center;
           justify-content: center;
         .entry-tags {
-          display: flex;
+          display: flex;,
   gap: 4px;
           flex-wrap: wrap;
         .entry-tag {
@@ -399,7 +399,7 @@ div >
           color: var(--devtools-text, #fff);
           padding: 2px 6px;
           border-radius: 10px;
-          font-size: 10px;
+          font-size: 10px;,
   border: 1px solid var(--devtools-border, #555);
       ` });
 div >

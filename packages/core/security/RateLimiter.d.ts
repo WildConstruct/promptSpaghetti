@@ -5,8 +5,8 @@
  */
 
 }
-export interface RateLimitConfig {
-    windowMs: number;
+}
+export interface RateLimitConfig { windowMs: number;
     maxRequests: number;
     keyGenerator?: (context: RateLimitContext) => string;
     skipSuccessfulRequests?: boolean;
@@ -17,12 +17,10 @@ export interface RateLimitConfig {
     store?: RateLimitStore;
     onLimitReached?: (context: RateLimitContext, info: RateLimitInfo) => void;
     message?: string | ((info: RateLimitInfo) => string);
-    statusCode?: number;
-
-
+    statusCode?: number }
 }
-export interface RateLimitContext {
-    ip?: string;
+}
+export interface RateLimitContext { ip?: string;
     userId?: string;
     endpoint?: string;
     userAgent?: string;
@@ -32,79 +30,69 @@ export interface RateLimitContext {
     body?: unknown;
     timestamp?: number;
     sessionId?: string;
-    organizationId?: string;
-
-
+    organizationId?: string }
 }
-export interface RateLimitInfo {
-    totalHits: number;
+}
+export interface RateLimitInfo { totalHits: number;
     totalHitsInWindow: number;
     remainingRequests: number;
     resetTime: Date;
     windowStart: Date;
     windowEnd: Date;
     exceeded: boolean;
-    retryAfter?: number;
-
-
+    retryAfter?: number }
 }
-export interface RateLimitResult {
-    allowed: boolean;
+}
+export interface RateLimitResult { allowed: boolean;
     info: RateLimitInfo;
     headers: Record<string, string>;
-    error?: string;
-
-
+    error?: string }
 }
-export interface RateLimitStore {
-    get(key: string): Promise<RateLimitData | null>;
+}
+export interface RateLimitStore { get(key: string): Promise<RateLimitData | null>;
     set(key: string, data: RateLimitData, ttlMs: number): Promise<void>;
     increment(key: string, windowMs: number): Promise<{
         hits: number;
-        resetTime: Date;
-
+        resetTime: Date }
 }
     }>;
     reset(key: string): Promise<void>;
     cleanup(): Promise<void>;
 
 }
-export interface RateLimitData {
-    hits: number;
+}
+export interface RateLimitData { hits: number;
     resetTime: number;
     windowStart: number;
 
 export declare enum RateLimitStrategyType {
-    FIXED_WINDOW = "fixed_window",
-    SLIDING_WINDOW = "sliding_window",
-    TOKEN_BUCKET = "token_bucket",
+    FIXED_WINDOW = "fixed_window";
+    SLIDING_WINDOW = "sliding_window";
+    TOKEN_BUCKET = "token_bucket";
     LEAKY_BUCKET = "leaky_bucket"
 
 export declare enum RateLimitScope {
-    GLOBAL = "global",
-    IP = "ip",
-    USER = "user",
-    ENDPOINT = "endpoint",
+    GLOBAL = "global";
+    IP = "ip";
+    USER = "user";
+    ENDPOINT = "endpoint" }
     CUSTOM = "custom"
 
-export declare class MemoryRateLimitStore implements RateLimitStore {
-    private store;
+export declare class MemoryRateLimitStore implements RateLimitStore { private store;
     private cleanupInterval;
     constructor(cleanupIntervalMs?: number);
     get(key: string): Promise<RateLimitData | null>;
     set(key: string, data: RateLimitData, ttlMs: number): Promise<void>;
     increment(key: string, windowMs: number): Promise<{
         hits: number;
-        resetTime: Date;
+        resetTime: Date }
 }
     }>;
     reset(key: string): Promise<void>;
     cleanup(): Promise<void>;
     destroy(): void;
-    getStats(): {
-        totalKeys: number;
-        totalHits: number;
-    };
+    getStats(): { totalKeys: number;
+        totalHits: number };
 
 export declare class RateLimitKeyGenerator {
     /**

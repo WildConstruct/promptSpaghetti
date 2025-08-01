@@ -23,21 +23,15 @@ describe('usePreviewSeeds', () => {
     expect(result.current.loading).toBe(true);
 
     // Fast-forward all timers (max delay 600ms) and flush promises
-    act(() => {
-      jest.advanceTimersByTime(700);
-    });
+    act(() => { jest.advanceTimersByTime(700) });
 
     // wait for state update microtasks
-    await act(async () => {
-      await Promise.resolve();
-    });
+    await act(async () => { await Promise.resolve() });
 
     expect(result.current.loading).toBe(false);
     expect(result.current.results.length).toBe(5);
     // Each result should have seed defined
-    result.current.results.forEach(r => {
-      expect(r.seed).toBeDefined();
-    });
+    result.current.results.forEach(r => { expect(r.seed).toBeDefined() });
   });
 
   it('cancelPreview aborts in-flight fetch', async () => {
@@ -48,18 +42,12 @@ describe('usePreviewSeeds', () => {
     });
 
     // Immediately cancel
-    act(() => {
-      result.current.cancelPreview();
-    });
+    act(() => { result.current.cancelPreview() });
 
     // Advance timers – underlying promises will reject with AbortError
-    act(() => {
-      jest.advanceTimersByTime(700);
-    });
+    act(() => { jest.advanceTimersByTime(700) });
 
-    await act(async () => {
-      await Promise.resolve();
-    });
+    await act(async () => { await Promise.resolve() });
 
     // loading should be false and we expect 0 results because all were aborted
     expect(result.current.loading).toBe(false);

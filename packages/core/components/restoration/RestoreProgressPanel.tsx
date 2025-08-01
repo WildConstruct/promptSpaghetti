@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  Card, 
+import { Card, 
   Progress, 
   Typography, 
   Space, 
@@ -12,36 +11,35 @@ import {
   Tag,
   List,
   Collapse,
-  Tooltip,
+  Tooltip }
   Modal
-} from 'antd';
-import {
-  LoadingOutlined,
+ from 'antd';
+import { LoadingOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
   WarningOutlined,
   StopOutlined,
   InfoCircleOutlined,
   ClockCircleOutlined,
-  EditOutlined,
+  EditOutlined }
   ExclamationCircleOutlined
-} from '@ant-design/icons';
-import { 
-  RestorationProgressResponse,
+ from '@ant-design/icons';
+import { RestorationProgressResponse }
   RestorationStatus
-} from '../../types/restoration';
+ from '../../types/restoration';
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
-}
-interface RestoreProgressPanelProps {
-  progress: RestorationProgressResponse;
+
+
+interface RestoreProgressPanelProps { progress: RestorationProgressResponse;
   onCancel: () => void;
   showDetails?: boolean;
-  export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({,)
-  progress,
-  onCancel,
+  export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({);
+  progress;
+  onCancel }
   showDetails = false
-}
+
+
 }) => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(showDetails);
@@ -60,32 +58,30 @@ interface RestoreProgressPanelProps {
     default:
       return <InfoCircleOutlined />;
   };
-  const getStatusColor = (status: RestorationStatus) => {
-  switch (status) {
-  case 'pending':,
+  const getStatusColor = (status: RestorationStatus) => { switch (status) {
+  case 'pending':
   return 'warning';
-  case 'in_progress':,
+  case 'in_progress':
   return 'processing';
-  case 'completed':,
+  case 'completed':
   return 'success';
-  case 'failed':,
+  case 'failed':
   return 'error';
-  case 'cancelled':,
+  case 'cancelled':
   return 'default';
-  default:,
+  default: }
   return 'default'
-  };
-  const getProgressStatus = () => {
-  switch (progress.status) {
-  case 'completed':,
+};
+  const getProgressStatus = () => { switch (progress.status) {
+  case 'completed':
   return 'success';
-  case 'failed':,
+  case 'failed':
   return 'exception';
-  case 'cancelled':,
+  case 'cancelled':
   return 'exception';
-  default:,
+  default: }
   return 'active'
-  };
+};
   const formatTime = (milliseconds: number) => {
     if (milliseconds < 1000) {
       return `${milliseconds}ms`;}
@@ -95,10 +91,8 @@ interface RestoreProgressPanelProps {
     const minutes = Math.floor(seconds / 60);
     return `${minutes}m ${seconds % 60}s`;}
   };
-  const handleCancelConfirm = () => {
-    setShowCancelModal(false);
-    onCancel();
-  };
+  const handleCancelConfirm = () => { setShowCancelModal(false);
+    onCancel() };
   const isInProgress = progress.status === 'in_progress' || progress.status === 'pending';
   const isCompleted = progress.status === 'completed';
   const isFailed = progress.status === 'failed';
@@ -175,9 +169,9 @@ interface RestoreProgressPanelProps {
               value={progress.conflictsResolved}
               suffix={`/ ${progress.totalConflicts}`}
               prefix={<WarningOutlined />}
-              valueStyle={{
-  color: progress.totalConflicts > 0 ? '#fa8c16' : '#3f8600',
-}}
+              valueStyle={ {
+  color: progress.totalConflicts > 0 ? '#fa8c16' : '#3f8600' }
+
             />
           </Card>
         </Col>
@@ -248,9 +242,9 @@ interface RestoreProgressPanelProps {
               <List
                 size="small"
                 dataSource={[
-                  { label: 'Total Operations', value: progress.totalOperations },
-                  { label: 'Completed Operations', value: progress.operationsCompleted },
-                  { label: 'Remaining Operations', value: progress.totalOperations - progress.operationsCompleted },
+                  { label: 'Total Operations', value: progress.totalOperations }
+                  { label: 'Completed Operations', value: progress.operationsCompleted }
+                  { label: 'Remaining Operations', value: progress.totalOperations - progress.operationsCompleted }
                   { label: 'Success Rate', value: `${Math.round((progress.operationsCompleted / progress.totalOperations) * 100)}%` }
                 ]}
                 renderItem={(item) => ()
@@ -267,9 +261,9 @@ interface RestoreProgressPanelProps {
               <List
                 size="small"
                 dataSource={[
-                  { label: 'Total Conflicts', value: progress.totalConflicts },
-                  { label: 'Resolved Conflicts', value: progress.conflictsResolved },
-                  { label: 'Remaining Conflicts', value: progress.totalConflicts - progress.conflictsResolved },
+                  { label: 'Total Conflicts', value: progress.totalConflicts }
+                  { label: 'Resolved Conflicts', value: progress.conflictsResolved }
+                  { label: 'Remaining Conflicts', value: progress.totalConflicts - progress.conflictsResolved }
                   { label: 'Resolution Rate', value: progress.totalConflicts > 0 ? `${Math.round((progress.conflictsResolved / progress.totalConflicts) * 100)}%` : 'N/A' }
                 ]}
                 renderItem={(item) => ()
@@ -286,9 +280,9 @@ interface RestoreProgressPanelProps {
               <List
                 size="small"
                 dataSource={[
-                  { label: 'Restoration ID', value: progress.restorationAttemptId },
-                  { label: 'Status', value: progress.status },
-                  { label: 'Current Operation', value: progress.currentOperation || 'N/A' },
+                  { label: 'Restoration ID', value: progress.restorationAttemptId }
+                  { label: 'Status', value: progress.status }
+                  { label: 'Current Operation', value: progress.currentOperation || 'N/A' }
                   { label: 'Estimated Time Remaining', value: progress.estimatedTimeRemaining ? formatTime(progress.estimatedTimeRemaining) : 'N/A' }
                 ]}
                 renderItem={(item) => ()

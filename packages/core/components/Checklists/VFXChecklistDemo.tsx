@@ -11,8 +11,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Switch } from '../ui/Switch';
-import { 
-  CheckSquare,
+import { CheckSquare,
   FileText,
   Users,
   BarChart3,
@@ -29,20 +28,18 @@ import {
   Eye,
   AlertTriangle,
   CheckCircle,
-  TrendingUp,
+  TrendingUp }
   Activity
-} from 'lucide-react';
-import VFXChecklistSystem, { 
-  type VFXChecklist, 
+ from 'lucide-react';
+import VFXChecklistSystem, { type VFXChecklist, 
   type VFXChecklistItem, 
-  type VFXTeamMember, 
+  type VFXTeamMember }
   type VFXChecklistComment 
-} from './VFXChecklistSystem';
+ from './VFXChecklistSystem';
 import VFXChecklistTemplates, { type VFXChecklistTemplate } from './VFXChecklistTemplates';
 
-}
-export interface VFXChecklistDemoProps {
-  title?: string;
+
+export interface VFXChecklistDemoProps { title?: string;
   showTemplates?: boolean;
   showAnalytics?: boolean;
   showTeamPanel?: boolean;
@@ -51,95 +48,91 @@ export interface VFXChecklistDemoProps {
   // Sample team members for demo
   const DEMO_TEAM: VFXTeamMember = [
   {
-  id: 'user-director',
-  name: 'Sarah Director',
-  role: 'director',
-  email: 'sarah.director@wildconstruct.com',
-  color: '#ff7c00',
-  avatar: '/avatars/director.jpg',
-  isOnline: true,
-  permissions: {
-  canCreate: true,
-  canEdit: true,
-  canDelete: true,
-  canApprove: true,
-  canAssign: true,
-  canViewReports: true,
-}
-}
-  {
-  id: 'user-vfx-sup',
+  id: 'user-director';
+  name: 'Sarah Director';
+  role: 'director';
+  email: 'sarah.director@wildconstruct.com';
+  color: '#ff7c00';
+  avatar: '/avatars/director.jpg';
+  isOnline: true;
+  permissions: {;
+  canCreate: true;
+  canEdit: true;
+  canDelete: true;
+  canApprove: true;
+  canAssign: true;
+  canViewReports: true }
+
+
+
+  { id: 'user-vfx-sup',
   name: 'Mike VFX Supervisor',
   role: 'vfx_supervisor',
   email: 'mike.vfx@wildconstruct.com',
   color: '#3b82f6',
   avatar: '/avatars/vfx-supervisor.jpg',
   isOnline: true,
-  permissions: {
+  permissions: {,
   canCreate: true,
   canEdit: true,
   canDelete: false,
   canApprove: true,
   canAssign: true,
-  canViewReports: true,
-}
-  {
-  id: 'user-lead-artist',
+  canViewReports: true }
+
+  { id: 'user-lead-artist',
   name: 'Alex Lead Artist',
   role: 'artist',
   email: 'alex.lead@wildconstruct.com',
   color: '#10b981',
   avatar: '/avatars/lead-artist.jpg',
   isOnline: false,
-  permissions: {
+  permissions: {,
   canCreate: true,
   canEdit: true,
   canDelete: false,
   canApprove: false,
   canAssign: false,
-  canViewReports: true,
-}
-  {
-  id: 'user-pipeline-td',
+  canViewReports: true }
+
+  { id: 'user-pipeline-td',
   name: 'Jordan Pipeline TD',
   role: 'pipeline_td',
   email: 'jordan.pipeline@wildconstruct.com',
   color: '#8b5cf6',
   avatar: '/avatars/pipeline-td.jpg',
   isOnline: true,
-  permissions: {
+  permissions: {,
   canCreate: true,
   canEdit: true,
   canDelete: false,
   canApprove: false,
   canAssign: false,
-  canViewReports: true,
-}
-  {
-  id: 'user-producer',
+  canViewReports: true }
+
+  { id: 'user-producer',
   name: 'Emma Producer',
   role: 'producer',
   email: 'emma.producer@wildconstruct.com',
   color: '#f59e0b',
   avatar: '/avatars/producer.jpg',
   isOnline: true,
-  permissions: {
+  permissions: {,
   canCreate: true,
   canEdit: false,
   canDelete: false,
   canApprove: true,
   canAssign: true,
-  canViewReports: true,
-}
-  {
-  id: 'user-qa-lead',
+  canViewReports: true }
+
+  { id: 'user-qa-lead',
   name: 'Chris QA Lead',
   role: 'qa_lead',
   email: 'chris.qa@wildconstruct.com',
   color: '#ef4444',
   avatar: '/avatars/qa-lead.jpg',
   isOnline: false,
-  permissions: {
+  permissions: {,
   canCreate: true,
   canEdit: true,
   canDelete: false,
@@ -147,7 +140,7 @@ export interface VFXChecklistDemoProps {
   canAssign: false,
   canViewReports: true];
   // Sample checklist data
-  const createSampleChecklist = (): VFXChecklist => ({,)
+  const createSampleChecklist = (): VFXChecklist => ({),
   id: 'checklist-medieval-scene',
   name: 'Medieval Courtyard - Hero Shot 042',
   description: 'Complete VFX checklist for the hero establishing shot of the medieval courtyard marketplace',
@@ -162,7 +155,7 @@ export interface VFXChecklistDemoProps {
   updatedAt: '2025-07-22T14:30:00Z',
   dueDate: '2025-07-30T17:00:00Z',
   tags: ['hero-shot', 'medieval', 'courtyard', 'crowd', 'establishing'],
-  metadata: {
+  metadata: {,
   totalItems: 12,
   completedItems: 8,
   overallProgress: 67,
@@ -172,11 +165,10 @@ export interface VFXChecklistDemoProps {
   blockedItems: 0,
   averageAccuracy: 91,
   lastActivity: '2025-07-22T14:30:00Z',
-  collaborators: 6,
+  collaborators: 6 }
 },
-  items: [,
-    {
-      id: 'item-001',
+  items: [
+    { id: 'item-001',
       title: 'Camera Tracking & Matchmove',
       description: 'Track camera movement and solve 3D scene geometry for composite integration',
       status: 'approved',
@@ -190,17 +182,16 @@ export interface VFXChecklistDemoProps {
       dueDate: '2025-07-18T17:00:00Z',
       estimatedHours: 8,
       actualHours: 9,
-      dependencies: [],
-      subtasks: [,
+      dependencies: [] }
+      subtasks: [
         { id: 'sub-001', title: 'Feature tracking setup', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-002', title: '3D solve validation', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-003', title: 'Ground plane creation', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-004', title: 'Reference objects placement', completed: true, assignee: DEMO_TEAM[3] }
       ],
       attachments: [],
-      assets: [,
-        {
-          id: 'asset-track-001',
+      assets: [
+        { id: 'asset-track-001',
           name: 'Camera_Track_v03.ma',
           type: 'animation',
           status: 'final',
@@ -211,7 +202,7 @@ export interface VFXChecklistDemoProps {
       tags: ['tracking', 'camera', 'matchmove', '3d-solve'],
       category: 'pre_production',
       vfxPhase: 'previs',
-      qualityGates: [,
+      qualityGates: [
         {
           id: 'qg-001',
           name: 'Tracking Stability',
@@ -222,20 +213,19 @@ export interface VFXChecklistDemoProps {
           checkedBy: DEMO_TEAM[1],
           checkedAt: '2025-07-20T16:30:00Z',
           required: true],
-      comments: [,
+      comments: [
         {
           id: 'comment-001',
           content: 'Excellent tracking quality. The solve is very stable throughout the shot.',
           author: DEMO_TEAM[1],
           timestamp: '2025-07-20T16:45:00Z',
           type: 'approval',
-          mentions: [],
+          mentions: [] }
           reactions: { '👍': [DEMO_TEAM[0], DEMO_TEAM[2]] }
       ],
       history: [];
-  }
-    {
-      id: 'item-002',
+
+    { id: 'item-002',
       title: 'Digital Matte Painting - Background Castle',
       description: 'Create photorealistic medieval castle background extending the practical set',
       status: 'review',
@@ -249,24 +239,23 @@ export interface VFXChecklistDemoProps {
       dueDate: '2025-07-23T17:00:00Z',
       estimatedHours: 16,
       actualHours: 18,
-      dependencies: ['Camera Tracking & Matchmove'],
-      subtasks: [,
+      dependencies: ['Camera Tracking & Matchmove'] }
+      subtasks: [
         { id: 'sub-005', title: 'Reference gathering & mood board', completed: true, assignee: DEMO_TEAM[2] },
         { id: 'sub-006', title: 'Perspective layout & composition', completed: true, assignee: DEMO_TEAM[2] },
         { id: 'sub-007', title: 'Detailed painting - architecture', completed: true, assignee: DEMO_TEAM[2] },
         { id: 'sub-008', title: 'Atmospheric effects & depth', completed: false, assignee: DEMO_TEAM[2] },
         { id: 'sub-009', title: 'Final color grading integration', completed: false, assignee: DEMO_TEAM[2] }
       ],
-      attachments: [,
-        {
-  id: 'att-001',
+      attachments: [
+        { id: 'att-001',
   name: 'Castle_MattePaint_v04.exr',
   type: 'image',
   url: '/assets/matte_paint_v04.exr',
   size: 52428800,
   uploadedBy: DEMO_TEAM[2],
   uploadedAt: '2025-07-22T11:15:00Z'],
-  assets: [,
+  assets: [
   {
   id: 'asset-mp-001',
   name: 'Castle_Background_MP_v04',
@@ -279,45 +268,42 @@ export interface VFXChecklistDemoProps {
   tags: ['matte-painting', 'castle', 'background', 'architecture'],
   category: 'asset_creation',
   vfxPhase: 'asset_build',
-  qualityGates: [,
+  qualityGates: [
   {
   id: 'qg-002',
   name: 'Historical Accuracy',
   type: 'accuracy',
   status: 'pending',
   criteria: 'UTDG validation score >90%',
-  required: true,
-}
-        {
-          id: 'qg-003',
+  required: true }
+
+        { id: 'qg-003',
           name: 'Artistic Approval',
           type: 'creative',
           status: 'pending',
           criteria: 'Director final approval',
           required: true],
-      comments: [,
+      comments: [
         {
           id: 'comment-002',
           content: 'The architecture looks fantastic! The stonework detail is excellent. Just need to adjust the atmospheric haze in the distance to match the foreground lighting.',
           author: DEMO_TEAM[0],
           timestamp: '2025-07-22T11:25:00Z',
           type: 'review',
-          mentions: [DEMO_TEAM[2].id],
+          mentions: [DEMO_TEAM[2].id] }
           reactions: {}
-  }
-        {
-          id: 'comment-003',
+
+        { id: 'comment-003',
           content: 'Thanks for the feedback! I\'ll adjust the atmospheric layers to better integrate with the scene lighting. Should have the update ready by tomorrow.',
           author: DEMO_TEAM[2],
           timestamp: '2025-07-22T14:10:00Z',
           type: 'comment',
-          mentions: [],
+          mentions: [] }
           reactions: {}
       ],
       history: [];
-  }
-    {
-      id: 'item-003',
+
+    { id: 'item-003',
       title: 'Crowd Simulation - Medieval Citizens',
       description: 'Generate believable crowd of medieval citizens using CrowdControl system',
       status: 'in_progress',
@@ -330,8 +316,8 @@ export interface VFXChecklistDemoProps {
       dueDate: '2025-07-25T17:00:00Z',
       estimatedHours: 20,
       actualHours: 15,
-      dependencies: ['Camera Tracking & Matchmove'],
-      subtasks: [,
+      dependencies: ['Camera Tracking & Matchmove'] }
+      subtasks: [
         { id: 'sub-010', title: 'Character asset preparation', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-011', title: 'Animation cycle setup', completed: true, assignee: DEMO_TEAM[3] },
         { id: 'sub-012', title: 'Path planning & navigation', completed: true, assignee: DEMO_TEAM[3] },
@@ -340,9 +326,8 @@ export interface VFXChecklistDemoProps {
         { id: 'sub-015', title: 'Final render preparation', completed: false, assignee: DEMO_TEAM[3] }
       ],
       attachments: [],
-      assets: [,
-        {
-          id: 'asset-crowd-001',
+      assets: [
+        { id: 'asset-crowd-001',
           name: 'Medieval_Crowd_Setup_v02',
           type: 'animation',
           status: 'draft',
@@ -352,111 +337,107 @@ export interface VFXChecklistDemoProps {
       tags: ['crowd', 'simulation', 'medieval', 'characters', 'animation'],
       category: 'fx',
       vfxPhase: 'fx',
-      qualityGates: [,
+      qualityGates: [
         {
           id: 'qg-004',
           name: 'Performance Check',
           type: 'performance',
           status: 'pending',
-          criteria: 'Render time <2min/frame',
-          required: true],
-      comments: [,
+          criteria: 'Render time <2min/frame'
+          required: true]
+      comments: [
         {
-          id: 'comment-004',
-          content: 'The character variety looks good, but we need to ensure the clothing is historically accurate for the period. Can we get UTDG validation on the costumes?',
-          author: DEMO_TEAM[0],
-          timestamp: '2025-07-21T16:30:00Z',
-          type: 'comment',
-          mentions: [DEMO_TEAM[5].id],
+          id: 'comment-004'
+          content: 'The character variety looks good, but we need to ensure the clothing is historically accurate for the period. Can we get UTDG validation on the costumes?'
+          author: DEMO_TEAM[0]
+          timestamp: '2025-07-21T16:30:00Z'
+          type: 'comment'
+          mentions: [DEMO_TEAM[5].id] }
           reactions: {}
-      ],
+      ]
       history: [];
-  }
-    {
-      id: 'item-004',
-      title: 'Atmospheric Effects - Market Smoke & Dust',
-      description: 'Add realistic atmospheric effects including cooking fires, dust, and ambient haze',
-      status: 'pending',
-      priority: 'medium',
-      completion: 25,
+
+    { id: 'item-004'
+      title: 'Atmospheric Effects - Market Smoke & Dust'
+      description: 'Add realistic atmospheric effects including cooking fires, dust, and ambient haze'
+      status: 'pending'
+      priority: 'medium'
+      completion: 25
       assignee: DEMO_TEAM[2], // Lead Artist
       author: DEMO_TEAM[0], // Director
-      createdAt: '2025-07-18T11:00:00Z',
-      updatedAt: '2025-07-21T13:15:00Z',
-      dueDate: '2025-07-26T17:00:00Z',
-      estimatedHours: 12,
-      dependencies: ['Digital Matte Painting - Background Castle', 'Crowd Simulation - Medieval Citizens'],
-      subtasks: [,
-        { id: 'sub-016', title: 'Smoke source identification', completed: true, assignee: DEMO_TEAM[2] },
-        { id: 'sub-017', title: 'Particle system setup', completed: false, assignee: DEMO_TEAM[2] },
-        { id: 'sub-018', title: 'Dust mote simulation', completed: false, assignee: DEMO_TEAM[2] },
+      createdAt: '2025-07-18T11:00:00Z'
+      updatedAt: '2025-07-21T13:15:00Z'
+      dueDate: '2025-07-26T17:00:00Z'
+      estimatedHours: 12
+      dependencies: ['Digital Matte Painting - Background Castle', 'Crowd Simulation - Medieval Citizens'] }
+      subtasks: [
+        { id: 'sub-016', title: 'Smoke source identification', completed: true, assignee: DEMO_TEAM[2] }
+        { id: 'sub-017', title: 'Particle system setup', completed: false, assignee: DEMO_TEAM[2] }
+        { id: 'sub-018', title: 'Dust mote simulation', completed: false, assignee: DEMO_TEAM[2] }
         { id: 'sub-019', title: 'Volumetric lighting integration', completed: false, assignee: DEMO_TEAM[2] }
-      ],
-      attachments: [],
-      assets: [],
-      tags: ['atmosphere', 'smoke', 'dust', 'particles', 'volumetrics'],
-      category: 'fx',
-      vfxPhase: 'fx',
-      qualityGates: [],
-      comments: [],
+      ]
+      attachments: []
+      assets: []
+      tags: ['atmosphere', 'smoke', 'dust', 'particles', 'volumetrics']
+      category: 'fx'
+      vfxPhase: 'fx'
+      qualityGates: []
+      comments: []
       history: [];
-  }
-    {
-      id: 'item-005',
-      title: 'Historical Accuracy Review - Architecture',
-      description: 'Complete UTDG historical accuracy validation for all architectural elements',
-      status: 'blocked',
-      priority: 'critical',
-      completion: 40,
+
+    { id: 'item-005'
+      title: 'Historical Accuracy Review - Architecture'
+      description: 'Complete UTDG historical accuracy validation for all architectural elements'
+      status: 'blocked'
+      priority: 'critical'
+      completion: 40
       assignee: DEMO_TEAM[5], // QA Lead
       author: DEMO_TEAM[1], // VFX Supervisor
-      createdAt: '2025-07-19T09:30:00Z',
-      updatedAt: '2025-07-22T14:30:00Z',
-      dueDate: '2025-07-24T17:00:00Z',
-      estimatedHours: 6,
-      actualHours: 3,
-      dependencies: ['Digital Matte Painting - Background Castle'],
-      subtasks: [,
-        { id: 'sub-020', title: 'Medieval architecture research', completed: true, assignee: DEMO_TEAM[5] },
-        { id: 'sub-021', title: 'Period-specific detail validation', completed: false, assignee: DEMO_TEAM[5] },
-        { id: 'sub-022', title: 'Expert historian consultation', completed: false, assignee: DEMO_TEAM[5] },
+      createdAt: '2025-07-19T09:30:00Z'
+      updatedAt: '2025-07-22T14:30:00Z'
+      dueDate: '2025-07-24T17:00:00Z'
+      estimatedHours: 6
+      actualHours: 3
+      dependencies: ['Digital Matte Painting - Background Castle'] }
+      subtasks: [
+        { id: 'sub-020', title: 'Medieval architecture research', completed: true, assignee: DEMO_TEAM[5] }
+        { id: 'sub-021', title: 'Period-specific detail validation', completed: false, assignee: DEMO_TEAM[5] }
+        { id: 'sub-022', title: 'Expert historian consultation', completed: false, assignee: DEMO_TEAM[5] }
         { id: 'sub-023', title: 'Accuracy report generation', completed: false, assignee: DEMO_TEAM[5] }
-      ],
-      attachments: [],
-      assets: [],
-      tags: ['accuracy', 'historical', 'architecture', 'utdg', 'validation'],
-      category: 'review',
-      vfxPhase: 'review',
-      qualityGates: [,
+      ]
+      attachments: []
+      assets: []
+      tags: ['accuracy', 'historical', 'architecture', 'utdg', 'validation']
+      category: 'review'
+      vfxPhase: 'review'
+      qualityGates: [
+        { id: 'qg-005'
+          name: 'UTDG Validation'
+          type: 'accuracy'
+          status: 'pending'
+          criteria: '>90% historical accuracy score'
+          required: true]
+      comments: [
         {
-          id: 'qg-005',
-          name: 'UTDG Validation',
-          type: 'accuracy',
-          status: 'pending',
-          criteria: '>90% historical accuracy score',
-          required: true],
-      comments: [,
-        {
-          id: 'comment-005',
-          content: 'Blocked pending external historian consultation. Dr. Williams is unavailable until Thursday. This may impact our timeline.',
-          author: DEMO_TEAM[5],
-          timestamp: '2025-07-22T14:30:00Z',
-          type: 'comment',
-          mentions: [DEMO_TEAM[4].id],
+          id: 'comment-005'
+          content: 'Blocked pending external historian consultation. Dr. Williams is unavailable until Thursday. This may impact our timeline.'
+          author: DEMO_TEAM[5]
+          timestamp: '2025-07-22T14:30:00Z'
+          type: 'comment'
+          mentions: [DEMO_TEAM[4].id] }
           reactions: {}
-      ],
+      ]
       history: []];
   });
-}
-export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
-  title = 'Wild Construct VFX Checklist System',
-  showTemplates = true,
-  showAnalytics = true,
-  showTeamPanel = true,
-  initialUser = DEMO_TEAM[0],
+
+export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({ )
+  title = 'Wild Construct VFX Checklist System'
+  showTemplates = true
+  showAnalytics = true
+  showTeamPanel = true
+  initialUser = DEMO_TEAM[0] }
   className = ''
-}) => {
-  // State management
+}) => { // State management
   const [currentUser, setCurrentUser] = useState<VFXTeamMember>(initialUser);
   const [activeTab, setActiveTab] = useState('checklist');
   const [checklist, setChecklist] = useState<VFXChecklist>(createSampleChecklist());
@@ -486,16 +467,14 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
   review: reviewItems,
   approved: completedItems,
   rejected: items.filter(item => item.status === 'rejected').length,
-  blocked: blockedItems,
+  blocked: blockedItems }
 };
-    const priorityDistribution = {
-  low: items.filter(item => item.priority === 'low').length,
+    const priorityDistribution = { low: items.filter(item => item.priority === 'low').length,
   medium: items.filter(item => item.priority === 'medium').length,
   high: items.filter(item => item.priority === 'high').length,
-  critical: criticalItems,
+  critical: criticalItems }
 };
-    return {
-  totalItems,
+    return { totalItems,
   completedItems,
   inProgressItems,
   reviewItems,
@@ -506,112 +485,104 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
   totalActual,
   efficiency,
   completionRate: totalItems > 0 ? (completedItems / totalItems) * 100 : 0,
-  statusDistribution,
+  statusDistribution }
   priorityDistribution
 };
   }, [checklist.items]);
   // Event handlers
-  const handleChecklistUpdate = useCallback((updatedChecklist: VFXChecklist) => {
-    setChecklist(updatedChecklist);
-  }, []);
-  const handleItemCreate = useCallback((item: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>) => {
-    const newItem: VFXChecklistItem = {
-      ...item,
+  const handleChecklistUpdate = useCallback((updatedChecklist: VFXChecklist) => { setChecklist(updatedChecklist) }, []);
+  const handleItemCreate = useCallback((item: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>) => { const newItem: VFXChecklistItem = {
+      ...item }
       id: `item-${Date.now()}`}
-},
-  createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+
+  createdAt: new Date().toISOString()
+      updatedAt: new Date().toISOString()
       history: [];
   };
-    setChecklist(prev => ({)
-  ...prev,
-  items: [...prev.items, newItem],
-  updatedAt: new Date().toISOString(),
+    setChecklist(prev => ({ )
+  ...prev
+  items: [...prev.items, newItem]
+  updatedAt: new Date().toISOString()
   metadata: {
-  ...prev.metadata,
-  totalItems: prev.items.length + 1,
-  lastActivity: new Date().toISOString(),
+  ...prev.metadata
+  totalItems: prev.items.length + 1
+  lastActivity: new Date().toISOString() }
 }));
   }, []);
-  const handleItemUpdate = useCallback((itemId: string, updates: Partial<VFXChecklistItem>) => {
-    setChecklist(prev => ({)
-  ...prev,
-      items: prev.items.map(item => ),
+  const handleItemUpdate = useCallback((itemId: string, updates: Partial<VFXChecklistItem>) => { setChecklist(prev => ({)
+  ...prev
+      items: prev.items.map(item => ) }
         item.id === itemId 
           ? { ...item, ...updates, updatedAt: new Date().toISOString() }
           : item
-      ),
-      updatedAt: new Date().toISOString(),
-      metadata: {
-  ...prev.metadata,
-  completedItems: prev.items.filter(item => ),
-  item.id === itemId ? updates.status === 'approved' : item.status === 'approved').length,
-  lastActivity: new Date().toISOString(),
+      )
+      updatedAt: new Date().toISOString()
+      metadata: { ...prev.metadata
+  completedItems: prev.items.filter(item => )
+  item.id === itemId ? updates.status === 'approved' : item.status === 'approved').length
+  lastActivity: new Date().toISOString() }
 }));
   }, []);
-  const handleItemDelete = useCallback((itemId: string) => {
-  setChecklist(prev => ({)
-  ...prev,
-  items: prev.items.filter(item => item.id !== itemId),
-  updatedAt: new Date().toISOString(),
+  const handleItemDelete = useCallback((itemId: string) => { setChecklist(prev => ({)
+  ...prev
+  items: prev.items.filter(item => item.id !== itemId)
+  updatedAt: new Date().toISOString()
   metadata: {
-  ...prev.metadata,
-  totalItems: prev.items.length - 1,
-  lastActivity: new Date().toISOString(),
+  ...prev.metadata
+  totalItems: prev.items.length - 1
+  lastActivity: new Date().toISOString() }
 }));
   }, []);
-  const handleCommentCreate = useCallback((itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => {
-    const newComment: VFXChecklistComment = {
-      ...comment,
+  const handleCommentCreate = useCallback((itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => { const newComment: VFXChecklistComment = {
+      ...comment }
       id: `comment-${Date.now()}`}
-},
+
   timestamp: new Date().toISOString();
   };
-    setChecklist(prev => ({)
-  ...prev,
-      items: prev.items.map(item =>),
+    setChecklist(prev => ({ )
+  ...prev
+      items: prev.items.map(item =>) }
         item.id === itemId
           ? { ...item, comments: [...item.comments, newComment] }
           : item
-      ),
+      )
       updatedAt: new Date().toISOString();
   }));
   }, []);
-  const handleTemplateSelect = useCallback((template: VFXChecklistTemplate) => {
-    // Create new checklist from template
-    const newChecklist: VFXChecklist = {,
+  const handleTemplateSelect = useCallback((template: VFXChecklistTemplate) => { // Create new checklist from template
+    const newChecklist: VFXChecklist = { }
   id: `checklist-${Date.now()}`}
-},
+
   name: `${template.name} - New Project`}
-},
+
   description: `Checklist created from template: ${template.name}`}
-},
-  project: 'New Project',
-      owner: currentUser,
-      team: DEMO_TEAM,
-      status: 'draft',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      tags: [],
-      metadata: {
-  totalItems: template.items.length,
-  completedItems: 0,
-  overallProgress: 0,
-  estimatedTotalHours: template.items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0),
-  actualTotalHours: 0,
-  criticalIssues: 0,
-  blockedItems: 0,
-  averageAccuracy: 0,
-  lastActivity: new Date().toISOString(),
-  collaborators: DEMO_TEAM.length,
-},
-  items: template.items.map((templateItem, index) => ({)
-  ...templateItem,
+
+  project: 'New Project'
+      owner: currentUser
+      team: DEMO_TEAM
+      status: 'draft'
+      createdAt: new Date().toISOString()
+      updatedAt: new Date().toISOString()
+      tags: []
+      metadata: { 
+  totalItems: template.items.length
+  completedItems: 0
+  overallProgress: 0
+  estimatedTotalHours: template.items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0)
+  actualTotalHours: 0
+  criticalIssues: 0
+  blockedItems: 0
+  averageAccuracy: 0
+  lastActivity: new Date().toISOString()
+  collaborators: DEMO_TEAM.length }
+
+  items: template.items.map((templateItem, index) => ({ )
+  ...templateItem }
         id: `item-${Date.now()}-${index}`}
-},
-  author: currentUser,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+
+  author: currentUser
+        createdAt: new Date().toISOString()
+        updatedAt: new Date().toISOString()
         history: [];
   }))
     };
@@ -639,10 +610,9 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
               {/* User Switcher */}
               <Select 
                 value={currentUser.id} 
-                onValueChange={(userId) => {
+                onValueChange={ (userId) => {
                   const user = DEMO_TEAM.find(u => u.id === userId);
-                  if (user) setCurrentUser(user);
-                }}
+                  if (user) setCurrentUser(user) }}
               >
                 <SelectTrigger className="w-48">
                   <SelectValue />

@@ -5,6 +5,10 @@
 import { corePerformanceKPIs, calculateKPIStatus, calculateKPITrend } from './PerformanceKPIs';
 import { measureExecution, PerformanceTracker } from '../utils/performance';
 import { EventEmitter } from 'events';
+viewport ?  : { width: number, height: number };
+connection ?  : string;
+deviceMemory ?  : number;
+hardwareConcurrency ?  : number;
 ;
 kpiSnapshots: KPISnapshot;
 systemInfo: {

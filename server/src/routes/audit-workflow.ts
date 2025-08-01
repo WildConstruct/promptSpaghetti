@@ -11,7 +11,7 @@ import {
   StepType,
   EvidenceType,
   TriggerType
-} from '../services/AuditWorkflowService';
+ from '../services/AuditWorkflowService';
 import { z } from 'zod';
 
 // Request schemas
@@ -96,38 +96,38 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 interface CreateWorkflowRequest extends AuthenticatedRequest {
   Body: z.infer<typeof CreateWorkflowSchema>;
-}
+
 
 interface StartExecutionRequest extends AuthenticatedRequest {
   Body: z.infer<typeof StartExecutionSchema>;
-}
+
 
 interface SubmitEvidenceRequest extends AuthenticatedRequest {
   Params: { executionId: string };
   Body: z.infer<typeof SubmitEvidenceSchema>;
-}
+
 
 interface CompleteStepRequest extends AuthenticatedRequest {
   Params: { executionId: string };
   Body: z.infer<typeof CompleteStepSchema>;
-}
+
 
 interface GenerateReportRequest extends AuthenticatedRequest {
   Params: { executionId: string };
   Body: z.infer<typeof GenerateReportSchema>;
-}
+
 
 interface WorkflowListRequest extends AuthenticatedRequest {
   Querystring: z.infer<typeof WorkflowFiltersSchema>;
-}
+
 
 interface ExecutionDetailRequest extends AuthenticatedRequest {
   Params: { executionId: string };
-}
+
 
 export async function auditWorkflowRoutes(fastify: FastifyInstance) {
   // Get the audit workflow service from the DI container
@@ -142,7 +142,7 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Valid authentication token required'
         });
-      }
+
 
       const token = authHeader.slice(7);
       const user = await fastify.jwt.verify(token) as any;
@@ -152,15 +152,15 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Invalid authentication token'
         });
-      }
+
 
       request.user = user;
-    } catch (error) {
+ catch (error) {
       return reply.code(401).send({
         error: 'Unauthorized',
         message: 'Authentication failed'
       });
-    }
+
   };
 
   // Rate limiting configuration
@@ -185,7 +185,7 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           workflowType: { 
             type: 'string',
             enum: ['COMPLIANCE_AUDIT', 'SECURITY_ASSESSMENT', 'DATA_PRIVACY_REVIEW', 'ACCESS_REVIEW', 'INCIDENT_INVESTIGATION', 'PENETRATION_TEST', 'RISK_ASSESSMENT', 'VENDOR_AUDIT']
-  }
+
           triggerConditions: {
             type: 'array',
             items: {
@@ -196,10 +196,10 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
                 frequency: { type: 'string' },
                 threshold: { type: 'number' },
                 enabled: { type: 'boolean', default: true }
-  }
+
               required: ['conditionType', 'parameters']
-            }
-  }
+
+
           steps: {
             type: 'array',
             minItems: 1,
@@ -214,28 +214,28 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
                 estimatedDuration: { type: 'number', minimum: 1 },
                 dependencies: { type: 'array', items: { type: 'string' }, default: [] },
                 approvalRequired: { type: 'boolean', default: false }
-  }
+
               required: ['stepId', 'name', 'description', 'stepType', 'assigneeRole', 'estimatedDuration']
-            }
-  }
+
+
           assignees: { type: 'array', items: { type: 'string' }, minItems: 1 },
           priority: { type: 'string', enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'], default: 'MEDIUM' },
           scheduledDate: { type: 'string', format: 'date-time' },
           dueDate: { type: 'string', format: 'date-time' },
           metadata: { type: 'object', default: {} }
-  }
+
         required: ['name', 'description', 'workflowType', 'triggerConditions', 'steps', 'assignees']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             workflowId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: CreateWorkflowRequest, reply: FastifyReply) => {
     try {
       const validatedBody = CreateWorkflowSchema.parse(request.body);
@@ -252,22 +252,21 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         workflowId: result.workflowId,
         message: 'Audit workflow created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error creating audit workflow:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to create audit workflow'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -282,19 +281,19 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           workflowId: { type: 'string' }
-  }
+
         required: ['workflowId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             executionId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: StartExecutionRequest, reply: FastifyReply) => {
     try {
       const validatedBody = StartExecutionSchema.parse(request.body);
@@ -308,22 +307,21 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         executionId: result.executionId,
         message: 'Workflow execution started successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error starting workflow execution:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to start workflow execution'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -338,9 +336,9 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-  }
+
         required: ['executionId']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -349,19 +347,19 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           description: { type: 'string', minLength: 10 },
           filePath: { type: 'string' },
           dataPoints: { type: 'object', default: {} }
-  }
+
         required: ['stepId', 'type', 'description']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             evidenceId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: SubmitEvidenceRequest, reply: FastifyReply) => {
     try {
       const { executionId } = request.params;
@@ -382,22 +380,21 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         evidenceId: result.evidenceId,
         message: 'Evidence submitted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error submitting evidence:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to submit evidence'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -412,28 +409,28 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-  }
+
         required: ['executionId']
-  }
+
       body: {
         type: 'object',
         properties: {
           stepId: { type: 'string' },
           findings: { type: 'array', items: { type: 'string' }, default: [] },
           nextSteps: { type: 'array', items: { type: 'string' }, default: [] }
-  }
+
         required: ['stepId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             nextStepId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: CompleteStepRequest, reply: FastifyReply) => {
     try {
       const { executionId } = request.params;
@@ -453,22 +450,21 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           'Step completed, next step started' : 
           'Step completed, workflow finished'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error completing workflow step:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to complete workflow step'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -483,16 +479,16 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-  }
+
         required: ['executionId']
-  }
+
       body: {
         type: 'object',
         properties: {
           reportType: { type: 'string', enum: ['EXECUTIVE_SUMMARY', 'DETAILED_FINDINGS', 'COMPLIANCE_REPORT', 'REMEDIATION_PLAN'] }
-  }
+
         required: ['reportType']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -500,10 +496,10 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
             reportId: { type: 'string' },
             reportContent: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: GenerateReportRequest, reply: FastifyReply) => {
     try {
       const { executionId } = request.params;
@@ -520,22 +516,21 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         reportContent: result.reportContent,
         message: 'Audit report generated successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error generating audit report:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to generate audit report'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -553,8 +548,8 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           assignee: { type: 'string' },
           priority: { type: 'string', enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'] },
           status: { type: 'string', enum: ['DRAFT', 'ACTIVE', 'SCHEDULED', 'SUSPENDED', 'COMPLETED', 'ARCHIVED'] }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -574,13 +569,13 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
                   scheduledDate: { type: 'string', format: 'date-time' },
                   dueDate: { type: 'string', format: 'date-time' },
                   createdAt: { type: 'string', format: 'date-time' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: WorkflowListRequest, reply: FastifyReply) => {
     try {
       const filters = WorkflowFiltersSchema.parse(request.query);
@@ -601,22 +596,21 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           createdAt: workflow.createdAt.toISOString()
         }))
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid query parameters',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error getting workflows:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to get workflows'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -631,9 +625,9 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-  }
+
         required: ['executionId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -651,12 +645,12 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
                 findings: { type: 'array' },
                 evidence: { type: 'array' },
                 reports: { type: 'array' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: ExecutionDetailRequest, reply: FastifyReply) => {
     try {
       const { executionId } = request.params;
@@ -668,7 +662,7 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'Workflow execution not found'
         });
-      }
+
 
       reply.send({
         execution: {
@@ -682,16 +676,15 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           findings: execution.findings,
           evidence: execution.evidence,
           reports: execution.reports
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Error getting workflow execution:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get workflow execution'
       });
-    }
+
   });
 
   /**
@@ -708,10 +701,10 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' },
             version: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     reply.send({
       status: 'healthy',
@@ -719,9 +712,8 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
       version: '1.0.0'
     });
   });
-}
+
 
 // Register the plugin
 export default async function (fastify: FastifyInstance) {
   await fastify.register(auditWorkflowRoutes, { prefix: '/api/audit-workflow' });
-}

@@ -6,9 +6,9 @@
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { MarketplaceTemplate } from './MarketplaceCard';
-}
-interface PreviewResult {
-  output: string;
+
+
+interface PreviewResult { output: string;
   cost: number;
   qualityScore: number;
   tokens: number;
@@ -17,27 +17,27 @@ interface PreviewResult {
   interface TemplatePreviewModalProps {
   template: MarketplaceTemplate;
   isOpen: boolean;
-  onClose: () => void;
+  onClose: () => void
   onPurchase: (template: MarketplaceTemplate) => void;
   onPreviewGenerate?: (template: MarketplaceTemplate, input: string, model?: string) => Promise<PreviewResult>;
   isPurchased?: boolean;
-  currentUser?: {
+  currentUser?: {;
   id: string;
   name: string;
-  tier: 'free' | 'pro' | 'enterprise'
-}
+  tier: 'free' | 'pro' | 'enterprise' }
+
+
   };
 
-export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({)
-  template,
-  isOpen,
-  onClose,
-  onPurchase,
-  onPreviewGenerate,
-  isPurchased = false,
+export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({ )
+  template
+  isOpen
+  onClose
+  onPurchase
+  onPreviewGenerate
+  isPurchased = false }
   currentUser
-}) => {
-  const [activeTab, setActiveTab] = useState<'preview' | 'details' | 'reviews'>('preview');
+}) => { const [activeTab, setActiveTab] = useState<'preview' | 'details' | 'reviews'>('preview');
   const [previewInput, setPreviewInput] = useState('');
   const [selectedModel, setSelectedModel] = useState('claude-3-haiku');
   const [previewResult, setPreviewResult] = useState<PreviewResult | null>(null);
@@ -51,44 +51,33 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({)
   switch (currentUser.tier) {
   case 'enterprise': return 50;
   case 'pro': return 25;
-  case 'free': default: return 3;
-};
+  case 'free': default: return 3 };
   const canGenerate = usageCount < getRateLimit();
-  useEffect(() => {
-    if (isOpen) {
+  useEffect(() => { if (isOpen) {
       setActiveTab('preview');
       setPreviewInput('');
       setPreviewResult(null);
       setPreviewError(null);
-      setUsageCount(0);
-  }, [isOpen]);
-  const handlePreviewGenerate = async () => {
-    if (!onPreviewGenerate || !canGenerate || !previewInput.trim()) return;
+      setUsageCount(0) }, [isOpen]);
+  const handlePreviewGenerate = async () => { if (!onPreviewGenerate || !canGenerate || !previewInput.trim()) return;
     setIsGenerating(true);
     setPreviewError(null);
     setPreviewResult(null);
     try {
       const result = await onPreviewGenerate(template, previewInput, selectedModel);
       setPreviewResult(result);
-      setUsageCount(prev => prev + 1);
-    } catch (error) {
-  setPreviewError(error instanceof Error ? error.message : 'Preview generation failed');
-} finally {
-      setIsGenerating(false);
-  };
-  const formatCost = (cost: number) => {
-  return new Intl.NumberFormat('en-US', {)
+      setUsageCount(prev => prev + 1) } catch (error) { setPreviewError(error instanceof Error ? error.message : 'Preview generation failed') } finally { setIsGenerating(false) };
+  const formatCost = (cost: number) => { return new Intl.NumberFormat('en-US', {)
   style: 'currency',
   currency: 'USD',
-  minimumFractionDigits: 4,
+  minimumFractionDigits: 4 }
 }).format(cost);
   };
-  const formatPrice = (cents: number, currency: string) => {
-  if (cents === 0) return 'Free';
+  const formatPrice = (cents: number, currency: string) => { if (cents === 0) return 'Free';
   const amount = cents / 100;
   return new Intl.NumberFormat('en-US', {)
   style: 'currency',
-  currency: currency.toUpperCase(),
+  currency: currency.toUpperCase() }
 }).format(amount);
   };
   if (!isOpen) return null;
@@ -133,31 +122,31 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({)
           <nav className="flex space-x-8 mt-4">
             <button
               onClick={() => setActiveTab('preview')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === 'preview'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
             >
               Live Preview
             </button>
             <button
               onClick={() => setActiveTab('details')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === 'details'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
             >
               Template Details
             </button>
             <button
               onClick={() => setActiveTab('reviews')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === 'reviews'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
             >
               Reviews ({template.reviewCount})
             </button>
@@ -204,11 +193,11 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({)
                       <button
                         onClick={handlePreviewGenerate}
                         disabled={!canGenerate || !previewInput.trim() || isGenerating}
-                        className={`px-4 py-2 rounded-md font-medium ${
+                        className={ `px-4 py-2 rounded-md font-medium ${
   canGenerate && previewInput.trim() && !isGenerating
-  ? 'bg-blue-600 text-white hover:bg-blue-700',
-  : 'bg-gray-300 text-gray-500 cursor-not-allowed',
-}`}
+  ? 'bg-blue-600 text-white hover:bg-blue-700'
+  : 'bg-gray-300 text-gray-500 cursor-not-allowed' }
+`}
                       >
                         {isGenerating ? 'Generating...' : 'Generate Preview'}
                       </button>

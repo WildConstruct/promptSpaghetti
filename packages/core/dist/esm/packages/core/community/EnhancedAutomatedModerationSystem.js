@@ -36,12 +36,22 @@ risk_assessment: {
     intellectual_property_risk: 'low' | 'medium' | 'high';
     brand_safety_risk: 'low' | 'medium' | 'high';
     customer_satisfaction_risk: 'low' | 'medium' | 'high';
-    regulatory_compliance_risk: 'low' | 'medium' | 'high';
+    regulatory_compliance_risk: 'low' | 'medium' | 'high',
+    ;
 }
 ;
  > ;
-quality_gate_results: Array;
-reviewer_assignment_changes: Array;
+quality_gate_results: Array < {
+    gate_name: string,
+    passed: boolean,
+    score: number,
+    recommendations: string
+} > ;
+reviewer_assignment_changes: Array < {
+    reviewer_type: string,
+    assignment_reason: string,
+    expected_completion: string
+} > ;
 export class EnhancedModerationServiceImpl {
     baseModerationService;
     contentFilteringService;

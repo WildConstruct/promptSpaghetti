@@ -21,7 +21,7 @@ import {
   VersionDeploymentSchema,
   VersionRollbackSchema,
   VersionComparisonSchema
-} from './version.types';
+ from './version.types';
 import { MarketplaceDAO } from './dao';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class VersionService {
 
   constructor(private pool: Pool) {
     this.dao = new MarketplaceDAO(pool);
-  }
+
 
   // Create new version with enhanced metadata
   async createVersion(templateId: string, userId: string, versionData: any): Promise<EnhancedTemplateVersion> {
@@ -41,11 +41,11 @@ export class VersionService {
     const template = await this.dao.getTemplate(templateId);
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
     
     if (template.owner_id !== userId) {
       throw new ForbiddenException('Not authorized to create versions for this template');
-    }
+
 
     // Parse semantic version
     const versionParts = validated.version_number.split('.');
@@ -57,7 +57,7 @@ export class VersionService {
     const existingVersion = await this.getVersionByNumber(templateId, validated.version_number);
     if (existingVersion) {
       throw new BadRequestException(`Version ${validated.version_number} already exists`);
-    }
+
 
     // Generate hash for content integrity
     const hashContent = JSON.stringify(validated.graph_json) + (validated.prompt_yaml || '') + validated.release_notes;
@@ -94,10 +94,10 @@ export class VersionService {
       await this.dao.updateTemplate(templateId, {
         current_version_id: versionId
       });
-    }
+
 
     return this.mapVersionResult(version.rows[0]);
-  }
+
 
   // Get version by ID
   async getVersion(id: string, userId?: string): Promise<EnhancedTemplateVersion | null> {
@@ -112,7 +112,7 @@ export class VersionService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const version = result.rows[0];
     
@@ -121,10 +121,10 @@ export class VersionService {
         userId && version.owner_id !== userId && 
         !(await this.isUserAdmin(userId))) {
       throw new ForbiddenException('Version not accessible');
-    }
+
 
     return this.mapVersionResult(version);
-  }
+
 
   // Get version by semantic version number
   async getVersionByNumber(templateId: string, versionNumber: string): Promise<EnhancedTemplateVersion | null> {
@@ -138,7 +138,7 @@ export class VersionService {
     `, [templateId, versionNumber]);
 
     return result.rows.length > 0 ? this.mapVersionResult(result.rows[0]) : null;
-  }
+
 
   // Get all versions for a template
   async getTemplateVersions(templateId: string, userId?: string, includePrivate: boolean = false): Promise<EnhancedTemplateVersion[]> {
@@ -146,7 +146,7 @@ export class VersionService {
     const template = await this.dao.getTemplate(templateId);
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     const conditions = ['v.template_id = $1'];
     const params = [templateId];
@@ -156,7 +156,7 @@ export class VersionService {
     if (!includePrivate || (userId && template.owner_id !== userId && !(await this.isUserAdmin(userId)))) {
       conditions.push(`v.visibility != $${paramIndex++}`);
       params.push(VersionVisibility.PRIVATE);
-    }
+
 
     const result = await this.pool.query(`
       SELECT v.*, t.owner_id, u.name as creator_name
@@ -168,7 +168,7 @@ export class VersionService {
     `, params);
 
     return result.rows.map(this.mapVersionResult);
-  }
+
 
   // Update version
   async updateVersion(id: string, userId: string, updates: any): Promise<EnhancedTemplateVersion> {
@@ -178,12 +178,12 @@ export class VersionService {
     const version = await this.getVersion(id, userId);
     if (!version) {
       throw new NotFoundException('Version not found');
-    }
+
 
     const template = await this.dao.getTemplate(version.template_id);
     if (!template || template.owner_id !== userId) {
       throw new ForbiddenException('Not authorized to update this version');
-    }
+
 
     const updateFields = [];
     const updateValues = [];
@@ -194,11 +194,11 @@ export class VersionService {
         if (Array.isArray(value)) {
           updateFields.push(`${key} = $${paramIndex++}`);
           updateValues.push(JSON.stringify(value));
-        } else {
+ else {
           updateFields.push(`${key} = $${paramIndex++}`);
           updateValues.push(value);
-        }
-      }
+
+
     });
 
     updateFields.push('updated_at = NOW()');
@@ -212,7 +212,7 @@ export class VersionService {
     `, updateValues);
 
     return this.mapVersionResult(result.rows[0]);
-  }
+
 
   // Compare versions
   async compareVersions(fromVersionId: string, toVersionId: string, options: any = {}): Promise<VersionComparison> {
@@ -228,11 +228,11 @@ export class VersionService {
 
     if (!fromVersion || !toVersion) {
       throw new NotFoundException('One or both versions not found');
-    }
+
 
     if (fromVersion.template_id !== toVersion.template_id) {
       throw new BadRequestException('Versions must belong to the same template');
-    }
+
 
     // Generate differences
     const differences = this.generateVersionDifferences(fromVersion, toVersion, validated);
@@ -252,7 +252,7 @@ export class VersionService {
       migration_complexity,
       estimated_migration_time: estimatedMigrationTime
     };
-  }
+
 
   // Deploy version
   async deployVersion(versionId: string, userId: string, deploymentData: any): Promise<VersionDeployment> {
@@ -262,16 +262,16 @@ export class VersionService {
     const version = await this.getVersion(versionId, userId);
     if (!version) {
       throw new NotFoundException('Version not found');
-    }
+
 
     const template = await this.dao.getTemplate(version.template_id);
     if (!template || template.owner_id !== userId) {
       throw new ForbiddenException('Not authorized to deploy this version');
-    }
+
 
     if (version.status !== VersionStatus.PUBLISHED) {
       throw new BadRequestException('Only published versions can be deployed');
-    }
+
 
     const deploymentId = uuidv4();
     
@@ -292,7 +292,7 @@ export class VersionService {
     this.processDeployment(deploymentId);
 
     return this.mapDeploymentResult(deployment.rows[0]);
-  }
+
 
   // Rollback version
   async rollbackVersion(templateId: string, userId: string, rollbackData: any): Promise<VersionRollback> {
@@ -302,22 +302,22 @@ export class VersionService {
     const template = await this.dao.getTemplate(templateId);
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     if (template.owner_id !== userId && !(await this.isUserAdmin(userId))) {
       throw new ForbiddenException('Not authorized to rollback this template');
-    }
+
 
     const currentVersion = await this.getVersion(template.current_version_id || '');
     const targetVersion = await this.getVersion(validated.to_version_id);
     
     if (!currentVersion || !targetVersion) {
       throw new NotFoundException('Current or target version not found');
-    }
+
 
     if (targetVersion.status !== VersionStatus.PUBLISHED) {
       throw new BadRequestException('Can only rollback to published versions');
-    }
+
 
     const rollbackId = uuidv4();
     
@@ -348,7 +348,7 @@ export class VersionService {
     await this.executeRollback(rollbackId);
 
     return this.mapRollbackResult(rollback.rows[0]);
-  }
+
 
   // Get version analytics
   async getVersionAnalytics(versionId: string, userId: string, periodDays: number = 30): Promise<VersionAnalytics> {
@@ -356,12 +356,12 @@ export class VersionService {
     const version = await this.getVersion(versionId, userId);
     if (!version) {
       throw new NotFoundException('Version not found');
-    }
+
 
     const template = await this.dao.getTemplate(version.template_id);
     if (!template || template.owner_id !== userId) {
       throw new ForbiddenException('Not authorized to view analytics for this version');
-    }
+
 
     const periodStart = new Date(Date.now() - periodDays * 24 * 60 * 60 * 1000);
     const periodEnd = new Date();
@@ -431,7 +431,7 @@ export class VersionService {
         average_execution_time: parseFloat(metrics.average_execution_time) || 0,
         satisfaction_score: parseFloat(metrics.satisfaction_score) || 0,
         adoption_rate: adoptionRate
-  }
+
       performance_trends: trendsResult.rows.map(row => ({
         date: row.date,
         downloads: parseInt(row.downloads),
@@ -446,7 +446,7 @@ export class VersionService {
         created_at: row.created_at
       }))
     };
-  }
+
 
   // Private helper methods
   private generateVersionDifferences(
@@ -471,7 +471,7 @@ export class VersionService {
           category: 'structure'
         });
       });
-    }
+
 
     // Compare metadata
     if (options.include_metadata_diff) {
@@ -492,12 +492,12 @@ export class VersionService {
             impact: field === 'claude_model' ? 'breaking' : 'non-breaking',
             category: 'metadata'
           });
-        }
+
       });
-    }
+
 
     return differences;
-  }
+
 
   private assessCompatibilityImpact(
     differences: VersionDifference[],
@@ -515,7 +515,7 @@ export class VersionService {
       deprecation_warnings: toVersion.deprecated_features,
       risk_level: this.calculateRiskLevel(differences, fromVersion, toVersion)
     };
-  }
+
 
   private estimateMigrationComplexity(differences: VersionDifference[]): 'simple' | 'moderate' | 'complex' {
     const breakingChanges = differences.filter(d => d.impact === 'breaking').length;
@@ -524,7 +524,7 @@ export class VersionService {
     if (breakingChanges === 0 && totalChanges <= 5) return 'simple';
     if (breakingChanges <= 2 && totalChanges <= 15) return 'moderate';
     return 'complex';
-  }
+
 
   private estimateMigrationTime(differences: VersionDifference[]): number {
     const breakingChanges = differences.filter(d => d.impact === 'breaking').length;
@@ -532,7 +532,7 @@ export class VersionService {
     
     // Estimate: 30 minutes per breaking change, 5 minutes per non-breaking change
     return breakingChanges * 30 + nonBreakingChanges * 5;
-  }
+
 
   private describeDifference(diff: any): string {
     switch (diff.kind) {
@@ -540,15 +540,15 @@ export class VersionService {
     case 'D': return `Removed ${diff.path?.join('.') || 'property'}`;
     case 'E': return `Modified ${diff.path?.join('.') || 'property'}`;
     default: return 'Unknown change';
-    }
-  }
+
+
 
   private assessDifferenceImpact(diff: any): 'breaking' | 'non-breaking' | 'improvement' {
     // Simple heuristic - in production, this would be more sophisticated
     if (diff.kind === 'D') return 'breaking'; // Removal is typically breaking
     if (diff.kind === 'N') return 'improvement'; // Addition is typically improvement
     return 'non-breaking'; // Modification is typically non-breaking
-  }
+
 
   private calculateRiskLevel(
     differences: VersionDifference[],
@@ -561,7 +561,7 @@ export class VersionService {
     if (breakingChanges > 5 || modelChange) return 'high';
     if (breakingChanges > 0) return 'medium';
     return 'low';
-  }
+
 
   private async processDeployment(deploymentId: string): Promise<void> {
 
@@ -582,7 +582,7 @@ export class VersionService {
         `, [deploymentId]);
       }, 5000);
     }, 1000);
-  }
+
 
   private async executeRollback(rollbackId: string): Promise<void> {
 
@@ -606,15 +606,15 @@ export class VersionService {
         SET success = true, completed_at = NOW()
         WHERE id = $1
       `, [rollbackId]);
-    } catch (error) {
+ catch (error) {
       // Mark rollback as failed
       await this.pool.query(`
         UPDATE version_rollbacks 
         SET success = false, completed_at = NOW(), issues_encountered = $2
         WHERE id = $1
       `, [rollbackId, JSON.stringify([error instanceof Error ? error.message : 'Unknown error'])]);
-    }
-  }
+
+
 
   private async isUserAdmin(userId: string): Promise<boolean> {
 
@@ -623,7 +623,7 @@ export class VersionService {
     `, [userId]);
     
     return result.rows.length > 0 && result.rows[0].role === 'admin';
-  }
+
 
   private mapVersionResult(row: any): EnhancedTemplateVersion {
     return {
@@ -663,7 +663,7 @@ export class VersionService {
       created_at: row.created_at,
       updated_at: row.updated_at
     };
-  }
+
 
   private mapDeploymentResult(row: any): VersionDeployment {
     return {
@@ -682,7 +682,7 @@ export class VersionService {
       completed_at: row.completed_at,
       rollback_at: row.rollback_at
     };
-  }
+
 
   private mapRollbackResult(row: any): VersionRollback {
     return {
@@ -702,5 +702,4 @@ export class VersionService {
       success: row.success,
       issues_encountered: JSON.parse(row.issues_encountered || '[]')
     };
-  }
-}
+

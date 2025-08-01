@@ -13,7 +13,7 @@ import {
   ConsentPreferences,
   ConsentExport,
   UseConsentReturn
-} from '../types/consent';
+ from '../types/consent';
 
 export const useConsent = (): UseConsentReturn => {
   const [preferences, setPreferences] = useState<ConsentPreferences | null>(null);
@@ -35,11 +35,10 @@ export const useConsent = (): UseConsentReturn => {
         await consentService.initialize(userId);
         const currentPreferences = consentService.getPreferences();
         setPreferences(currentPreferences);
-        
-      } catch (err) {
+ catch (err) {
   console.error('Failed to initialize consent service:', err);
   setError(err instanceof Error ? err.message : 'Failed to initialize consent');
-} finally {
+ finally {
         setIsLoading(false);
 
     };
@@ -79,8 +78,7 @@ export const useConsent = (): UseConsentReturn => {
       // Update local state
       const updatedPreferences = consentService.getPreferences();
       setPreferences(updatedPreferences);
-      
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to grant consent';
   setError(errorMessage);
   throw err;
@@ -95,8 +93,7 @@ export const useConsent = (): UseConsentReturn => {
       // Update local state
       const updatedPreferences = consentService.getPreferences();
       setPreferences(updatedPreferences);
-      
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to withdraw consent';
   setError(errorMessage);
   throw err;
@@ -111,8 +108,7 @@ export const useConsent = (): UseConsentReturn => {
       // Update local state
       const updatedPreferences = consentService.getPreferences();
       setPreferences(updatedPreferences);
-      
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to update preferences';
   setError(errorMessage);
   throw err;
@@ -123,7 +119,7 @@ export const useConsent = (): UseConsentReturn => {
     
     try {
       return await consentService.exportData();
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to export data';
   setError(errorMessage);
   throw err;
@@ -138,8 +134,7 @@ export const useConsent = (): UseConsentReturn => {
       // Update local state
       const updatedPreferences = consentService.getPreferences();
       setPreferences(updatedPreferences);
-      
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to reset consents';
   setError(errorMessage);
   throw err;
@@ -155,8 +150,7 @@ export const useConsent = (): UseConsentReturn => {
       
       const updatedPreferences = consentService.getPreferences();
       setPreferences(updatedPreferences);
-      
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to refresh configuration';
   setError(errorMessage);
   throw err;
@@ -185,8 +179,7 @@ function getCurrentUserId(): string | undefined {
     if (userData) {
       const user = JSON.parse(userData);
       return user.id || user.userId;
-
-  } catch (error) {
+ catch (error) {
     console.warn('Failed to get user ID from localStorage:', error);
 
   // Try to get from auth context if available

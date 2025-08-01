@@ -51,7 +51,8 @@ cost_optimization: {
     spot_instances: {
         enabled: boolean;
         max_percentage: number; // % of capacity that can be spot,
-        fallback_strategy: 'on_demand' | 'reserved' | 'scale_down';
+        fallback_strategy: 'on_demand' | 'reserved' | 'scale_down',
+        ;
     }
     ;
 }
@@ -190,7 +191,15 @@ validation: {
 ;
 ;
 // Forecast data
-forecasts: Array;
+forecasts: Array < {
+    date: number,
+    predicted_load: number,
+    confidence_upper: number,
+    confidence_lower: number,
+    required_capacity: ResourceRequirements,
+    estimated_cost: number,
+    risk_factors: string
+} > ;
 // Capacity recommendations
 recommendations: {
     immediate_actions: CapacityRecommendation;
@@ -459,8 +468,7 @@ const metrics = {
             scaling_recommendations: this.generateScalingRecommendations(service, cpuUtilization, memoryUtilization),
             cost_optimization_opportunities: this.identifyCostOptimizations(currentInstances, cpuUtilization),
         },
-        : .metrics.has(service)
-    }
+        : .metrics.has(service) }
 }, { this: , metrics, set };
 (service, []);
 const serviceMetrics = this.metrics.get(service);
@@ -1024,7 +1032,14 @@ number;
                                                                                 // System Status and Health
                                                                                 getCapacityStatus();
                                                                                 {
-                                                                                    services: Array;
+                                                                                    services: Array < {
+                                                                                        service: string,
+                                                                                        current_capacity: number,
+                                                                                        utilization: { cpu: number, memory: number },
+                                                                                        health_score: number,
+                                                                                        scaling_status: 'stable' | 'scaling_up' | 'scaling_down' | 'at_limits',
+                                                                                        cost_efficiency: number
+                                                                                    } > ;
                                                                                     overall_health: number;
                                                                                     total_monthly_cost: number;
                                                                                     scaling_events_last_24h: number;
@@ -1036,7 +1051,8 @@ number;
                                                                                     const isScaling = this.activeScaling.get(plan.service) || false;
                                                                                     let scalingStatus = 'stable';
                                                                                     if (isScaling) {
-                                                                                        scalingStatus = currentCapacity < plan.scaling.max_instances ? 'scaling_up' : 'scaling_down';
+                                                                                        scalingStatus = currentCapacity < plan.scaling.max_instances ? 'scaling_up' : 'scaling_down',
+                                                                                        ;
                                                                                     }
                                                                                     else if (currentCapacity >= plan.scaling.max_instances || currentCapacity <= plan.scaling.min_instances) {
                                                                                         scalingStatus = 'at_limits';
@@ -1088,171 +1104,223 @@ number;
                                                                                                     name: 'Security Alert Processing',
                                                                                                     description: 'Capacity plan for security alert processing service',
                                                                                                     service: 'security-alerts',
-                                                                                                    planning_horizon: {
-                                                                                                        short_term_days: 30,
-                                                                                                        medium_term_days: 90,
-                                                                                                        long_term_days: 365,
-                                                                                                    },
-                                                                                                    requirements: {
-                                                                                                        baseline_capacity: {
-                                                                                                            cpu_cores: 8,
-                                                                                                            memory_gb: 32,
-                                                                                                            storage_gb: 500,
-                                                                                                            network_bandwidth_mbps: 1000,
-                                                                                                            iops_required: 2000,
-                                                                                                        },
-                                                                                                        peak_capacity: {
-                                                                                                            cpu_cores: 32,
-                                                                                                            memory_gb: 128,
-                                                                                                            storage_gb: 2000,
-                                                                                                            network_bandwidth_mbps: 4000,
-                                                                                                            iops_required: 8000,
-                                                                                                        },
-                                                                                                        growth_projections: [{},
-                                                                                                            period, 'monthly',
-                                                                                                            metric, 'events',
-                                                                                                            current_value, 100000,
-                                                                                                            projected_growth_rate, 15,
-                                                                                                            confidence_level, 0.85,
-                                                                                                            assumptions, ['Business growth continues', 'No major architectural changes'],]
+                                                                                                    planning_horizon: {},
+                                                                                                    short_term_days: 30,
+                                                                                                    medium_term_days: 90,
+                                                                                                    long_term_days: 365,
+                                                                                                },
+                                                                                                requirements, {},
+                                                                                                baseline_capacity, {},
+                                                                                                cpu_cores, 8,
+                                                                                                memory_gb, 32,
+                                                                                                storage_gb, 500,
+                                                                                                network_bandwidth_mbps, 1000,
+                                                                                                iops_required, 2000,
+                                                                                            ]
+                                                                                        },
+                                                                                            peak_capacity;
+                                                                                        {
+                                                                                            cpu_cores: 32,
+                                                                                                memory_gb;
+                                                                                            128,
+                                                                                                storage_gb;
+                                                                                            2000,
+                                                                                                network_bandwidth_mbps;
+                                                                                            4000,
+                                                                                                iops_required;
+                                                                                            8000,
+                                                                                            ;
+                                                                                        }
+                                                                                        growth_projections: [{},
+                                                                                            period, 'monthly',
+                                                                                            metric, 'events',
+                                                                                            current_value, 100000,
+                                                                                            projected_growth_rate, 15,
+                                                                                            confidence_level, 0.85,
+                                                                                            assumptions, ['Business growth continues', 'No major architectural changes'],];
+                                                                                    }
+                                                                                    performance_targets: {
+                                                                                        response_time_p95_ms: 200,
+                                                                                            response_time_p99_ms;
+                                                                                        500,
+                                                                                            throughput_rps;
+                                                                                        1000,
+                                                                                            error_rate_percentage;
+                                                                                        0.1,
+                                                                                            availability_percentage;
+                                                                                        99.9,
+                                                                                            data_processing_latency_ms;
+                                                                                        100,
+                                                                                        ;
+                                                                                    }
+                                                                                    availability_requirements: {
+                                                                                        target_availability: 99.9,
+                                                                                            downtime_budget_minutes_monthly;
+                                                                                        43.2,
+                                                                                            maintenance_window;
+                                                                                        {
+                                                                                            day_of_week: 'Sunday',
+                                                                                                start_time;
+                                                                                            '02:00',
+                                                                                                duration_hours;
+                                                                                            4,
+                                                                                                timezone;
+                                                                                            'UTC',
+                                                                                            ;
+                                                                                        }
+                                                                                        disaster_recovery: {
+                                                                                            rto_minutes: 30,
+                                                                                                rpo_minutes;
+                                                                                            5,
+                                                                                                geographic_redundancy;
+                                                                                            true,
+                                                                                            ;
+                                                                                        }
+                                                                                        scaling: {
+                                                                                            auto_scaling_enabled: true,
+                                                                                                scaling_policies;
+                                                                                            [],
+                                                                                                scaling_cooldown;
+                                                                                            300000,
+                                                                                                min_instances;
+                                                                                            2,
+                                                                                                max_instances;
+                                                                                            20,
+                                                                                                target_utilization;
+                                                                                            {
+                                                                                                cpu_percentage: 75,
+                                                                                                    memory_percentage;
+                                                                                                80,
+                                                                                                    network_percentage;
+                                                                                                70,
+                                                                                                    custom_metrics;
+                                                                                                [{},
+                                                                                                    metric_name, 'alert_processing_rate',
+                                                                                                    target_value, 90,
+                                                                                                    comparison, 'greater_than',
+                                                                                                    weight, 0.8,];
+                                                                                            }
+                                                                                        }
+                                                                                        cost_optimization: {
+                                                                                            budget_constraints: {
+                                                                                                monthly_budget: 5000,
+                                                                                                    cost_per_hour_limit;
+                                                                                                10,
+                                                                                                    currency;
+                                                                                                'USD',
+                                                                                                ;
+                                                                                            }
+                                                                                            instance_types: [{},
+                                                                                                instance_type, 'c5.2xlarge',
+                                                                                                cpu_cores, 8,
+                                                                                                memory_gb, 16,
+                                                                                                network_performance, 'high',
+                                                                                                storage_type, 'ebs',
+                                                                                                cost_per_hour, 0.34,
+                                                                                                spot_availability, true,
+                                                                                                use_cases, ['CPU intensive', 'Security processing'],
+                                                                                                priority, 1,];
+                                                                                        }
+                                                                                        reserved_capacity: {
+                                                                                            percentage: 60,
+                                                                                                commitment_period;
+                                                                                            'yearly',
+                                                                                            ;
+                                                                                        }
+                                                                                        spot_instances: {
+                                                                                            enabled: true,
+                                                                                                max_percentage;
+                                                                                            30,
+                                                                                                fallback_strategy;
+                                                                                            'on_demand',
+                                                                                            ;
+                                                                                        }
+                                                                                        monitoring: {
+                                                                                            capacity_thresholds: {
+                                                                                                warning_percentage: 75,
+                                                                                                    critical_percentage;
+                                                                                                90,
+                                                                                                    forecast_breach_days;
+                                                                                                7,
+                                                                                                ;
+                                                                                            }
+                                                                                            metrics_collection: {
+                                                                                                interval_seconds: 60,
+                                                                                                    retention_days;
+                                                                                                90,
+                                                                                                    custom_metrics;
+                                                                                                ['alert_processing_rate', 'threat_detection_accuracy'],
+                                                                                                ;
+                                                                                            }
+                                                                                            alerting: {
+                                                                                                notification_channels: ['#capacity-alerts', 'capacity-team@company.com'],
+                                                                                                    escalation_policy;
+                                                                                                ['devops-lead@company.com', 'cto@company.com'],
+                                                                                                    alert_suppression_minutes;
+                                                                                                15,
+                                                                                                ;
+                                                                                            }
+                                                                                            created_by: 'system',
+                                                                                                enabled;
+                                                                                            true;
+                                                                                            ;
+                                                                                            defaultPlans.forEach(async (plan) => {
+                                                                                                await this.createCapacityPlan(plan);
+                                                                                            });
+                                                                                            startMetricsCollection();
+                                                                                            void {
+                                                                                                // Collect metrics every 5 minutes
+                                                                                                setInterval(async) { }
+                                                                                            }();
+                                                                                            {
+                                                                                                const services = Array.from(this.capacityPlans.values()).map(plan => plan.service);
+                                                                                                for (const service of services) {
+                                                                                                    try {
+                                                                                                        await this.collectCapacityMetrics(service);
                                                                                                     }
-                                                                                                }],
-                                                                                            performance_targets: {
-                                                                                                response_time_p95_ms: 200,
-                                                                                                response_time_p99_ms: 500,
-                                                                                                throughput_rps: 1000,
-                                                                                                error_rate_percentage: 0.1,
-                                                                                                availability_percentage: 99.9,
-                                                                                                data_processing_latency_ms: 100,
-                                                                                            },
-                                                                                            availability_requirements: {
-                                                                                                target_availability: 99.9,
-                                                                                                downtime_budget_minutes_monthly: 43.2,
-                                                                                                maintenance_window: {
-                                                                                                    day_of_week: 'Sunday',
-                                                                                                    start_time: '02:00',
-                                                                                                    duration_hours: 4,
-                                                                                                    timezone: 'UTC',
-                                                                                                },
-                                                                                                disaster_recovery: {
-                                                                                                    rto_minutes: 30,
-                                                                                                    rpo_minutes: 5,
-                                                                                                    geographic_redundancy: true,
-                                                                                                },
-                                                                                                scaling: {
-                                                                                                    auto_scaling_enabled: true,
-                                                                                                    scaling_policies: [],
-                                                                                                    scaling_cooldown: 300000,
-                                                                                                    min_instances: 2,
-                                                                                                    max_instances: 20,
-                                                                                                    target_utilization: {
-                                                                                                        cpu_percentage: 75,
-                                                                                                        memory_percentage: 80,
-                                                                                                        network_percentage: 70,
-                                                                                                        custom_metrics: [{},
-                                                                                                            metric_name, 'alert_processing_rate',
-                                                                                                            target_value, 90,
-                                                                                                            comparison, 'greater_than',
-                                                                                                            weight, 0.8,]
+                                                                                                    catch (error) {
+                                                                                                        console.error(`Failed to collect capacity metrics for ${service}:`, error);
                                                                                                     }
-                                                                                                },
-                                                                                                cost_optimization: {
-                                                                                                    budget_constraints: {
-                                                                                                        monthly_budget: 5000,
-                                                                                                        cost_per_hour_limit: 10,
-                                                                                                        currency: 'USD',
-                                                                                                    },
-                                                                                                    instance_types: [{},
-                                                                                                        instance_type, 'c5.2xlarge',
-                                                                                                        cpu_cores, 8,
-                                                                                                        memory_gb, 16,
-                                                                                                        network_performance, 'high',
-                                                                                                        storage_type, 'ebs',
-                                                                                                        cost_per_hour, 0.34,
-                                                                                                        spot_availability, true,
-                                                                                                        use_cases, ['CPU intensive', 'Security processing'],
-                                                                                                        priority, 1,]
-                                                                                                },
-                                                                                                reserved_capacity: {
-                                                                                                    percentage: 60,
-                                                                                                    commitment_period: 'yearly',
-                                                                                                },
-                                                                                                spot_instances: {
-                                                                                                    enabled: true,
-                                                                                                    max_percentage: 30,
-                                                                                                    fallback_strategy: 'on_demand',
-                                                                                                },
-                                                                                                monitoring: {
-                                                                                                    capacity_thresholds: {
-                                                                                                        warning_percentage: 75,
-                                                                                                        critical_percentage: 90,
-                                                                                                        forecast_breach_days: 7,
-                                                                                                    },
-                                                                                                    metrics_collection: {
-                                                                                                        interval_seconds: 60,
-                                                                                                        retention_days: 90,
-                                                                                                        custom_metrics: ['alert_processing_rate', 'threat_detection_accuracy'],
-                                                                                                    },
-                                                                                                    alerting: {
-                                                                                                        notification_channels: ['#capacity-alerts', 'capacity-team@company.com'],
-                                                                                                        escalation_policy: ['devops-lead@company.com', 'cto@company.com'],
-                                                                                                        alert_suppression_minutes: 15,
-                                                                                                    },
-                                                                                                    created_by: 'system',
-                                                                                                    enabled: true,
-                                                                                                    defaultPlans, : .forEach(async (plan) => {
-                                                                                                        await this.createCapacityPlan(plan);
-                                                                                                    }),
-                                                                                                    startMetricsCollection() {
-                                                                                                        // Collect metrics every 5 minutes
-                                                                                                        setInterval(async () => {
-                                                                                                            const services = Array.from(this.capacityPlans.values()).map(plan => plan.service);
-                                                                                                            for (const service of services) {
-                                                                                                                try {
-                                                                                                                    await this.collectCapacityMetrics(service);
-                                                                                                                }
-                                                                                                                catch (error) {
-                                                                                                                    console.error(`Failed to collect capacity metrics for ${service}:`, error);
-                                                                                                                }
-                                                                                                            }
-                                                                                                            300000;
-                                                                                                        });
-                                                                                                    },
-                                                                                                    startCapacityMonitoring() {
-                                                                                                        // Monitor capacity thresholds every minute
-                                                                                                        setInterval(() => {
-                                                                                                            for (const [service] of this.currentCapacity) {
-                                                                                                                this.checkCapacityThresholds(service);
-                                                                                                            }
-                                                                                                            60000;
-                                                                                                        });
-                                                                                                    },
-                                                                                                    startForecastGeneration() {
+                                                                                                }
+                                                                                                300000;
+                                                                                                ;
+                                                                                                startCapacityMonitoring();
+                                                                                                void {
+                                                                                                    // Monitor capacity thresholds every minute
+                                                                                                    setInterval() { }
+                                                                                                }();
+                                                                                                {
+                                                                                                    for (const [service] of this.currentCapacity) {
+                                                                                                        this.checkCapacityThresholds(service);
+                                                                                                    }
+                                                                                                    60000;
+                                                                                                    ;
+                                                                                                    startForecastGeneration();
+                                                                                                    void {
                                                                                                         // Generate forecasts daily
-                                                                                                        setInterval(async () => {
-                                                                                                            const services = Array.from(this.capacityPlans.values()).map(plan => plan.service);
-                                                                                                            for (const service of services) {
-                                                                                                                try {
-                                                                                                                    await this.generateCapacityForecast(service, 30);
-                                                                                                                }
-                                                                                                                catch (error) {
-                                                                                                                    console.error(`Failed to generate forecast for ${service}:`, error);
-                                                                                                                }
+                                                                                                        setInterval(async) { }
+                                                                                                    }();
+                                                                                                    {
+                                                                                                        const services = Array.from(this.capacityPlans.values()).map(plan => plan.service);
+                                                                                                        for (const service of services) {
+                                                                                                            try {
+                                                                                                                await this.generateCapacityForecast(service, 30);
                                                                                                             }
-                                                                                                            24 * 60 * 60 * 1000;
-                                                                                                        });
-                                                                                                    },
-                                                                                                    checkCapacityThresholds(service) {
-                                                                                                        const recentMetrics = this.metrics.get(service)?.slice(-1)[0];
-                                                                                                        if (!recentMetrics)
-                                                                                                            return;
-                                                                                                        const plan = Array.from(this.capacityPlans.values()).find(p => p.service === service);
-                                                                                                        if (!plan)
-                                                                                                            return;
-                                                                                                        const avgUtilization = (recentMetrics.current_utilization.cpu_percentage + );
+                                                                                                            catch (error) {
+                                                                                                                console.error(`Failed to generate forecast for ${service}:`, error);
+                                                                                                            }
+                                                                                                        }
+                                                                                                        24 * 60 * 60 * 1000;
                                                                                                         ;
-                                                                                                        recentMetrics.current_utilization.memory_percentage;
-                                                                                                        / 2;
+                                                                                                        checkCapacityThresholds(service, string);
+                                                                                                        void {
+                                                                                                            const: recentMetrics = this.metrics.get(service)?.slice(-1)[0],
+                                                                                                            if(, recentMetrics) { }, return: ,
+                                                                                                            const: plan = Array.from(this.capacityPlans.values()).find(p => p.service === service),
+                                                                                                            if(, plan) { }, return: ,
+                                                                                                            const: avgUtilization = (recentMetrics.current_utilization.cpu_percentage + ),
+                                                                                                            recentMetrics, : .current_utilization.memory_percentage
+                                                                                                        } / 2;
                                                                                                         if (avgUtilization > plan.monitoring.capacity_thresholds.critical_percentage) {
                                                                                                             this.emit('capacity_threshold_critical', {});
                                                                                                             service,
@@ -1263,82 +1331,83 @@ number;
                                                                                                             ;
                                                                                                         }
                                                                                                         ;
-                                                                                                    }, else: , if(avgUtilization) { }
-                                                                                                } > plan.monitoring.capacity_thresholds.warning_percentage
-                                                                                            } };
-                                                                                        {
-                                                                                            this.emit('capacity_threshold_warning', {});
-                                                                                            service,
-                                                                                                utilization;
-                                                                                            avgUtilization,
-                                                                                                threshold;
-                                                                                            plan.monitoring.capacity_thresholds.warning_percentage,
-                                                                                            ;
-                                                                                        }
-                                                                                        ;
-                                                                                        // Public API methods
-                                                                                        getCapacityPlans();
-                                                                                        CapacityPlan;
-                                                                                        {
-                                                                                            return Array.from(this.capacityPlans.values());
-                                                                                            getScalingPolicies();
-                                                                                            ScalingPolicy;
-                                                                                            {
-                                                                                                return Array.from(this.scalingPolicies.values());
-                                                                                                getScalingEvents();
-                                                                                                ScalingEvent;
-                                                                                                {
-                                                                                                    return this.scalingEvents.slice(-1000); // Return last 1000 events
-                                                                                                    getForecasts();
-                                                                                                    CapacityForecast;
+                                                                                                    }
+                                                                                                    if (avgUtilization > plan.monitoring.capacity_thresholds.warning_percentage) {
+                                                                                                        this.emit('capacity_threshold_warning', {});
+                                                                                                        service,
+                                                                                                            utilization;
+                                                                                                        avgUtilization,
+                                                                                                            threshold;
+                                                                                                        plan.monitoring.capacity_thresholds.warning_percentage,
+                                                                                                        ;
+                                                                                                    }
+                                                                                                    ;
+                                                                                                    // Public API methods
+                                                                                                    getCapacityPlans();
+                                                                                                    CapacityPlan;
                                                                                                     {
-                                                                                                        return Array.from(this.forecasts.values());
-                                                                                                        getRecommendations();
-                                                                                                        CapacityRecommendation;
+                                                                                                        return Array.from(this.capacityPlans.values());
+                                                                                                        getScalingPolicies();
+                                                                                                        ScalingPolicy;
                                                                                                         {
-                                                                                                            return Array.from(this.recommendations.values());
-                                                                                                            async;
-                                                                                                            exportConfiguration();
-                                                                                                            Promise < string > {
-                                                                                                                const: config = {
-                                                                                                                    capacity_plans: Array.from(this.capacityPlans.values()),
-                                                                                                                    scaling_policies: Array.from(this.scalingPolicies.values()),
-                                                                                                                    metadata: {
-                                                                                                                        exported_at: Date.now(),
-                                                                                                                        version: '1.0.0',
-                                                                                                                    },
-                                                                                                                    return: JSON.stringify(config, null, 2),
-                                                                                                                    async importConfiguration(configJson) {
-                                                                                                                        try {
-                                                                                                                            const config = JSON.parse(configJson);
-                                                                                                                            // Import capacity plans
-                                                                                                                            if (config.capacity_plans) {
-                                                                                                                                for (const plan of config.capacity_plans) {
-                                                                                                                                    this.capacityPlans.set(plan.id, plan);
-                                                                                                                                    this.currentCapacity.set(plan.service, plan.scaling.min_instances);
-                                                                                                                                    // Import scaling policies
-                                                                                                                                    if (config.scaling_policies) {
-                                                                                                                                        for (const policy of config.scaling_policies) {
-                                                                                                                                            this.scalingPolicies.set(policy.id, policy);
-                                                                                                                                            this.emit('configuration_imported', {});
-                                                                                                                                            plans_imported: config.capacity_plans?.length || 0,
-                                                                                                                                                policies_imported;
-                                                                                                                                            config.scaling_policies?.length || 0,
-                                                                                                                                            ;
+                                                                                                            return Array.from(this.scalingPolicies.values());
+                                                                                                            getScalingEvents();
+                                                                                                            ScalingEvent;
+                                                                                                            {
+                                                                                                                return this.scalingEvents.slice(-1000); // Return last 1000 events
+                                                                                                                getForecasts();
+                                                                                                                CapacityForecast;
+                                                                                                                {
+                                                                                                                    return Array.from(this.forecasts.values());
+                                                                                                                    getRecommendations();
+                                                                                                                    CapacityRecommendation;
+                                                                                                                    {
+                                                                                                                        return Array.from(this.recommendations.values());
+                                                                                                                        async;
+                                                                                                                        exportConfiguration();
+                                                                                                                        Promise < string > {
+                                                                                                                            const: config = {
+                                                                                                                                capacity_plans: Array.from(this.capacityPlans.values()),
+                                                                                                                                scaling_policies: Array.from(this.scalingPolicies.values()),
+                                                                                                                                metadata: {
+                                                                                                                                    exported_at: Date.now(),
+                                                                                                                                    version: '1.0.0',
+                                                                                                                                },
+                                                                                                                                return: JSON.stringify(config, null, 2),
+                                                                                                                                async importConfiguration(configJson) {
+                                                                                                                                    try {
+                                                                                                                                        const config = JSON.parse(configJson);
+                                                                                                                                        // Import capacity plans
+                                                                                                                                        if (config.capacity_plans) {
+                                                                                                                                            for (const plan of config.capacity_plans) {
+                                                                                                                                                this.capacityPlans.set(plan.id, plan);
+                                                                                                                                                this.currentCapacity.set(plan.service, plan.scaling.min_instances);
+                                                                                                                                                // Import scaling policies
+                                                                                                                                                if (config.scaling_policies) {
+                                                                                                                                                    for (const policy of config.scaling_policies) {
+                                                                                                                                                        this.scalingPolicies.set(policy.id, policy);
+                                                                                                                                                        this.emit('configuration_imported', {});
+                                                                                                                                                        plans_imported: config.capacity_plans?.length || 0,
+                                                                                                                                                            policies_imported;
+                                                                                                                                                        config.scaling_policies?.length || 0,
+                                                                                                                                                        ;
+                                                                                                                                                    }
+                                                                                                                                                    ;
+                                                                                                                                                }
+                                                                                                                                                try { }
+                                                                                                                                                catch (error) {
+                                                                                                                                                    throw new Error(`Failed to import configuration: ${error}`);
+                                                                                                                                                }
+                                                                                                                                                export default SecurityCapacityManager;
+                                                                                                                                            }
                                                                                                                                         }
-                                                                                                                                        ;
                                                                                                                                     }
-                                                                                                                                    try { }
-                                                                                                                                    catch (error) {
-                                                                                                                                        throw new Error(`Failed to import configuration: ${error}`);
-                                                                                                                                    }
-                                                                                                                                    export default SecurityCapacityManager;
+                                                                                                                                    finally { }
                                                                                                                                 }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                        finally { }
+                                                                                                                            } };
                                                                                                                     }
-                                                                                                                } };
+                                                                                                                }
+                                                                                                            }
                                                                                                         }
                                                                                                     }
                                                                                                 }

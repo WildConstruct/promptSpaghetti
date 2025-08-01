@@ -14,8 +14,8 @@ import { UserSatisfactionTracker, SatisfactionSurvey, SatisfactionSurveyType } f
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface SatisfactionDashboardAPI {
   // Dashboard Data
   getDashboard(): Promise<any>;
@@ -37,12 +37,13 @@ export interface SatisfactionDashboardAPI {
   acknowledgeAlert(alertId: string, userId: string): Promise<any>;
   exportSatisfactionData(filters?: any): Promise<any>;
   generateReport(reportType: string, params?: any): Promise<any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SatisfactionAPIRequest {
   // Survey Creation
   surveyType: SatisfactionSurveyType;
@@ -53,18 +54,19 @@ export interface SatisfactionAPIRequest {
   timeframe?: {
     start: string;
     end: string;
-}
-}
+
+
+
   };
   segments?: string[];
   
   // Data Export
   format?: 'json' | 'csv' | 'excel';
   includePersonalData?: boolean;
-}
 
-}
-}
+
+
+
 export interface SatisfactionAPIResponse {
   success: boolean;
   data?: any;
@@ -74,10 +76,11 @@ export interface SatisfactionAPIResponse {
     filteredCount?: number;
     lastUpdated?: Date;
     processingTime?: number;
-}
-}
+
+
+
   };
-}
+
 
 /**
  * User Satisfaction Dashboard API
@@ -99,7 +102,7 @@ export class SatisfactionDashboardAPI {
     this.satisfactionTracker = satisfactionTracker;
     this.databaseService = dependencies.databaseService;
     this.auditService = dependencies.auditService;
-  }
+
 
   /**
    * Register satisfaction dashboard routes with Fastify
@@ -137,7 +140,7 @@ export class SatisfactionDashboardAPI {
     // Real-time endpoints
     server.get('/api/admin/satisfaction/realtime', this.handleRealtimeData.bind(this));
     server.get('/api/admin/satisfaction/status', this.handleSystemStatus.bind(this));
-  }
+
 
   /**
    * Get satisfaction dashboard data
@@ -159,18 +162,18 @@ export class SatisfactionDashboardAPI {
           lastUpdated: dashboard.timestamp,
           processingTime: Date.now() - startTime,
           dataFreshness: dashboard.dataFreshness
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message,
         metadata: {
           processingTime: Date.now() - startTime
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Get satisfaction metrics with filtering
@@ -188,7 +191,7 @@ export class SatisfactionDashboardAPI {
           start: new Date(query.startDate),
           end: new Date(query.endDate)
         };
-      }
+
       
       const segments = query.segments ? 
         Array.isArray(query.segments) ? query.segments : [query.segments] : 
@@ -203,18 +206,18 @@ export class SatisfactionDashboardAPI {
           timeframe,
           segments,
           processingTime: Date.now() - startTime
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message,
         metadata: {
           processingTime: Date.now() - startTime
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Create new satisfaction survey
@@ -246,22 +249,22 @@ export class SatisfactionDashboardAPI {
           surveyId: survey.surveyId,
           surveyType,
           targetUserId
-  }
+
         timestamp: new Date()
-      } as any);
+ as any);
       
       return reply.code(201).send({
         success: true,
         data: survey,
         message: 'Satisfaction survey created successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Submit survey response
@@ -283,13 +286,13 @@ export class SatisfactionDashboardAPI {
         success: true,
         message: 'Survey submitted successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get user-facing survey (public endpoint)
@@ -307,7 +310,7 @@ export class SatisfactionDashboardAPI {
           success: false,
           error: 'Survey not found or expired'
         });
-      }
+
       
       return reply.code(200).send({
         success: true,
@@ -316,15 +319,15 @@ export class SatisfactionDashboardAPI {
           questions: survey.questions,
           surveyType: survey.surveyType,
           expiresAt: survey.expiresAt
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Handle user survey response (public endpoint)
@@ -354,15 +357,15 @@ export class SatisfactionDashboardAPI {
         data: {
           surveyId: survey.surveyId,
           submittedAt: survey.createdAt
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get satisfaction trends
@@ -375,7 +378,7 @@ export class SatisfactionDashboardAPI {
       const timeframe = query.startDate && query.endDate ? {
         start: new Date(query.startDate),
         end: new Date(query.endDate)
-      } : undefined;
+ : undefined;
       
       const metrics = await this.satisfactionTracker.getSatisfactionMetrics(timeframe);
       
@@ -385,15 +388,15 @@ export class SatisfactionDashboardAPI {
           trends: metrics.trends,
           overallTrend: metrics.overallSatisfaction.trend,
           npsProgress: metrics.nps.trend
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Acknowledge satisfaction alert
@@ -413,13 +416,13 @@ export class SatisfactionDashboardAPI {
         success: true,
         message: 'Alert acknowledged successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Export satisfaction data
@@ -456,7 +459,7 @@ export class SatisfactionDashboardAPI {
       default:
         responseData = exportData;
         contentType = 'application/json';
-      }
+
       
       // Audit export
       await this.auditService.logActivity({
@@ -466,23 +469,22 @@ export class SatisfactionDashboardAPI {
           format,
           recordCount: Array.isArray(exportData) ? exportData.length : 0,
           includePersonalData
-  }
+
         timestamp: new Date()
-      } as any);
+ as any);
       
       return reply
         .code(200)
         .header('Content-Type', contentType)
         .header('Content-Disposition', `attachment; filename="satisfaction-data-${Date.now()}.${format}"`)
         .send(responseData);
-        
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Generate satisfaction report
@@ -506,13 +508,13 @@ export class SatisfactionDashboardAPI {
         data: report,
         message: 'Report generated successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get realtime satisfaction data
@@ -527,13 +529,13 @@ export class SatisfactionDashboardAPI {
         data: dashboard.realtime,
         timestamp: new Date()
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get system status
@@ -557,13 +559,13 @@ export class SatisfactionDashboardAPI {
         success: true,
         data: status
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -575,10 +577,10 @@ export class SatisfactionDashboardAPI {
     
     if (required && !userId) {
       throw new Error('User authentication required');
-    }
+
     
     return userId || 'anonymous';
-  }
+
 
   /**
    * Validate admin permissions
@@ -589,8 +591,8 @@ export class SatisfactionDashboardAPI {
     // For now, just check if user exists
     if (!userId || userId === 'anonymous') {
       throw new Error('Administrative permissions required');
-    }
-  }
+
+
 
   /**
    * Get survey template from database
@@ -604,7 +606,7 @@ export class SatisfactionDashboardAPI {
     
     if (rows.length === 0) {
       return null;
-    }
+
     
     const row = rows[0];
     return {
@@ -615,7 +617,7 @@ export class SatisfactionDashboardAPI {
       questions: JSON.parse(row.questions),
       expiresAt: new Date(row.expires_at)
     };
-  }
+
 
   /**
    * Process survey response from user
@@ -632,7 +634,7 @@ export class SatisfactionDashboardAPI {
     
     if (!surveyTemplate) {
       throw new Error('Survey not found or expired');
-    }
+
     
     // Process responses based on survey type and questions
     const satisfactionData = this.mapResponsesToSatisfactionSurvey(
@@ -643,7 +645,7 @@ export class SatisfactionDashboardAPI {
     
     // Record the satisfaction survey
     return await this.satisfactionTracker.recordSatisfactionSurvey(userId, satisfactionData);
-  }
+
 
   /**
    * Generate export data
@@ -657,24 +659,24 @@ export class SatisfactionDashboardAPI {
     if (filters.startDate) {
       query += ' AND created_at >= ?';
       params.push(filters.startDate);
-    }
+
     
     if (filters.endDate) {
       query += ' AND created_at <= ?';
       params.push(filters.endDate);
-    }
+
     
     if (filters.surveyType) {
       query += ' AND survey_type = ?';
       params.push(filters.surveyType);
-    }
+
     
     query += ' ORDER BY created_at DESC';
     
     if (filters.limit) {
       query += ' LIMIT ?';
       params.push(filters.limit);
-    }
+
     
     const rows = await this.databaseService.query(query, params);
     
@@ -698,11 +700,11 @@ export class SatisfactionDashboardAPI {
         data.ipAddress = row.ip_address;
         data.userAgent = row.user_agent;
         data.feedback = JSON.parse(row.feedback || '{}');
-      }
+
       
       return data;
     });
-  }
+
 
   /**
    * Format data as CSV
@@ -721,10 +723,10 @@ export class SatisfactionDashboardAPI {
         return String(value);
       });
       csvRows.push(values.join(','));
-    }
+
     
     return csvRows.join('\n');
-  }
+
 
   /**
    * Format data as Excel (placeholder - would use a library like exceljs)
@@ -735,7 +737,7 @@ export class SatisfactionDashboardAPI {
     // For now, return CSV as buffer
     const csv = this.formatAsCSV(data);
     return Buffer.from(csv, 'utf-8');
-  }
+
 
   /**
    * Generate satisfaction report
@@ -758,7 +760,7 @@ export class SatisfactionDashboardAPI {
             `NPS score is ${metrics.nps.score}`,
             `Satisfaction trend is ${metrics.overallSatisfaction.trend}`
           ]
-  }
+
         categories: metrics.categoryScores,
         segments: metrics.segmentSatisfaction
       };
@@ -773,8 +775,8 @@ export class SatisfactionDashboardAPI {
         
     default:
       throw new Error(`Unknown report type: ${reportType}`);
-    }
-  }
+
+
 
   /**
    * Map survey responses to satisfaction survey format
@@ -793,7 +795,7 @@ export class SatisfactionDashboardAPI {
         negativeAspects: responses.negativeAspects || [],
         suggestions: responses.suggestions || [],
         openFeedback: responses.openFeedback
-  }
+
       featureRatings: responses.featureRatings || {},
       completionTime: responses.completionTime || 0,
       responseQuality: responses.responseQuality || 'medium',
@@ -801,7 +803,7 @@ export class SatisfactionDashboardAPI {
       userAgent: metadata.userAgent,
       source: 'api_integration'
     };
-  }
+
 
   /**
    * Generate recommendations based on metrics
@@ -812,52 +814,51 @@ export class SatisfactionDashboardAPI {
     
     if (metrics.overallSatisfaction.score < 70) {
       recommendations.push('Overall satisfaction is below target. Consider investigating top pain points.');
-    }
+
     
     if (metrics.nps.score < 0) {
       recommendations.push('NPS is negative. Focus on addressing detractor feedback immediately.');
-    }
+
     
     if (metrics.overallSatisfaction.trend === 'declining') {
       recommendations.push('Satisfaction is declining. Review recent changes and user feedback.');
-    }
+
     
     return recommendations;
-  }
+
 
   // Additional placeholder methods for unimplemented functionality
   private async handleGetSurvey(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
   
   private async handleGetSegmentAnalysis(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
   
   private async handleGetFeatureAnalysis(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
   
   private async handleGetUserInsights(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
   
   private async handleCreateSurveyInvitation(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
   
   private async handleGetSurveyInvitations(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
+
   
   private async handleGetAlerts(request: FastifyRequest, reply: FastifyReply): Promise<any> {
 
     return reply.code(501).send({ success: false, error: 'Not implemented' });
-  }
-}
+

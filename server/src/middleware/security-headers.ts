@@ -3,16 +3,17 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify';
 
-}
-}
+
+
 export interface SecurityHeadersConfig {
   contentSecurityPolicy?: {
     enabled: boolean;
     directives: Record<string, string[]>;
     reportOnly?: boolean;
     reportUri?: string;
-}
-}
+
+
+
   };
   frameOptions?: {
     enabled: boolean;
@@ -48,7 +49,7 @@ export interface SecurityHeadersConfig {
     enabled: boolean;
     directive: 'same-site' | 'same-origin' | 'cross-origin';
   };
-}
+
 
 // Default security configuration
 export const defaultSecurityConfig: SecurityHeadersConfig = {
@@ -69,26 +70,26 @@ export const defaultSecurityConfig: SecurityHeadersConfig = {
       'form-action': ['\'self\''],
       'base-uri': ['\'self\''],
       'manifest-src': ['\'self\'']
-  }
+
     reportOnly: false
-  }
+
   frameOptions: {
     enabled: true,
     directive: 'DENY'
-  }
+
   contentTypeOptions: {
     enabled: true
-  }
+
   referrerPolicy: {
     enabled: true,
     directive: 'strict-origin-when-cross-origin'
-  }
+
   strictTransportSecurity: {
     enabled: true, // Will be conditionally applied based on environment and HTTPS
     maxAge: 31536000, // 1 year
     includeSubDomains: true,
     preload: true
-  }
+
   permissionsPolicy: {
     enabled: true,
     directives: {
@@ -99,20 +100,20 @@ export const defaultSecurityConfig: SecurityHeadersConfig = {
       'autoplay': ['\'self\''],
       'fullscreen': ['\'self\''],
       'picture-in-picture': ['\'self\'']
-    }
-  }
+
+
   crossOriginEmbedderPolicy: {
     enabled: false, // Can cause issues with third-party resources
     directive: 'unsafe-none'
-  }
+
   crossOriginOpenerPolicy: {
     enabled: true,
     directive: 'same-origin-allow-popups'
-  }
+
   crossOriginResourcePolicy: {
     enabled: true,
     directive: 'same-origin'
-  }
+
 };
 
 // Build CSP header value from directives
@@ -120,7 +121,7 @@ function buildCSPHeader(directives: Record<string, string[]>): string {
   return Object.entries(directives)
     .map(([directive, sources]) => `${directive} ${sources.join(' ')}`)
     .join('; ');
-}
+
 
 // Build Permissions Policy header value from directives
 function buildPermissionsPolicyHeader(directives: Record<string, string[]>): string {
@@ -128,11 +129,11 @@ function buildPermissionsPolicyHeader(directives: Record<string, string[]>): str
     .map(([feature, allowlist]) => {
       if (allowlist.length === 0) {
         return `${feature}=()`;
-      }
+
       return `${feature}=(${allowlist.join(' ')})`;
-  }
+
     .join(', ');
-}
+
 
 // Deep merge configuration with defaults
 function mergeWithDefaults(config: SecurityHeadersConfig): SecurityHeadersConfig {
@@ -140,41 +141,41 @@ function mergeWithDefaults(config: SecurityHeadersConfig): SecurityHeadersConfig
     contentSecurityPolicy: {
       ...defaultSecurityConfig.contentSecurityPolicy,
       ...config.contentSecurityPolicy
-  }
+
     frameOptions: {
       ...defaultSecurityConfig.frameOptions,
       ...config.frameOptions
-  }
+
     contentTypeOptions: {
       ...defaultSecurityConfig.contentTypeOptions,
       ...config.contentTypeOptions
-  }
+
     referrerPolicy: {
       ...defaultSecurityConfig.referrerPolicy,
       ...config.referrerPolicy
-  }
+
     strictTransportSecurity: {
       ...defaultSecurityConfig.strictTransportSecurity,
       ...config.strictTransportSecurity
-  }
+
     permissionsPolicy: {
       ...defaultSecurityConfig.permissionsPolicy,
       ...config.permissionsPolicy
-  }
+
     crossOriginEmbedderPolicy: {
       ...defaultSecurityConfig.crossOriginEmbedderPolicy,
       ...config.crossOriginEmbedderPolicy
-  }
+
     crossOriginOpenerPolicy: {
       ...defaultSecurityConfig.crossOriginOpenerPolicy,
       ...config.crossOriginOpenerPolicy
-  }
+
     crossOriginResourcePolicy: {
       ...defaultSecurityConfig.crossOriginResourcePolicy,
       ...config.crossOriginResourcePolicy
-    }
+
   };
-}
+
 
 // Security headers middleware
 export function securityHeadersMiddleware(config?: SecurityHeadersConfig) {
@@ -195,70 +196,71 @@ export function securityHeadersMiddleware(config?: SecurityHeadersConfig) {
       if (mergedConfig.contentSecurityPolicy.reportUri) {
         const cspWithReport = `${cspValue}; report-uri ${mergedConfig.contentSecurityPolicy.reportUri}`;
         reply.header(headerName, cspWithReport);
-      }
-    }
+
+
 
     // X-Frame-Options
     if (mergedConfig.frameOptions?.enabled) {
       let frameOptionsValue = mergedConfig.frameOptions.directive;
       if (mergedConfig.frameOptions.directive === 'ALLOW-FROM' && mergedConfig.frameOptions.allowFromUri) {
         frameOptionsValue += ` ${mergedConfig.frameOptions.allowFromUri}`;
-      }
+
       reply.header('X-Frame-Options', frameOptionsValue);
-    }
+
 
     // X-Content-Type-Options
     if (mergedConfig.contentTypeOptions?.enabled) {
       reply.header('X-Content-Type-Options', 'nosniff');
-    }
+
 
     // Referrer-Policy
     if (mergedConfig.referrerPolicy?.enabled) {
       reply.header('Referrer-Policy', mergedConfig.referrerPolicy.directive);
-    }
+
 
     // Strict-Transport-Security (only in production with HTTPS)
     if (mergedConfig.strictTransportSecurity?.enabled && request.protocol === 'https' && process.env.NODE_ENV === 'production') {
       let hstsValue = `max-age=${mergedConfig.strictTransportSecurity.maxAge}`;
       if (mergedConfig.strictTransportSecurity.includeSubDomains) {
         hstsValue += '; includeSubDomains';
-      }
+
       if (mergedConfig.strictTransportSecurity.preload) {
         hstsValue += '; preload';
-      }
+
       reply.header('Strict-Transport-Security', hstsValue);
-    }
+
 
     // Permissions-Policy
     if (mergedConfig.permissionsPolicy?.enabled) {
       const permissionsPolicyValue = buildPermissionsPolicyHeader(mergedConfig.permissionsPolicy.directives);
       reply.header('Permissions-Policy', permissionsPolicyValue);
-    }
+
 
     // Cross-Origin-Embedder-Policy
     if (mergedConfig.crossOriginEmbedderPolicy?.enabled) {
       reply.header('Cross-Origin-Embedder-Policy', mergedConfig.crossOriginEmbedderPolicy.directive);
-    }
+
 
     // Cross-Origin-Opener-Policy
     if (mergedConfig.crossOriginOpenerPolicy?.enabled) {
       reply.header('Cross-Origin-Opener-Policy', mergedConfig.crossOriginOpenerPolicy.directive);
-    }
+
 
     // Cross-Origin-Resource-Policy
     if (mergedConfig.crossOriginResourcePolicy?.enabled) {
       reply.header('Cross-Origin-Resource-Policy', mergedConfig.crossOriginResourcePolicy.directive);
-    }
+
 
     // Additional security headers
     reply.header('X-Powered-By', ''); // Remove server fingerprinting
     reply.header('Server', ''); // Remove server fingerprinting
   };
-}
+
 
 // Security headers audit function
-}
-}
+
+
+
 export interface SecurityAuditResult {
   passed: boolean;
   score: number;
@@ -269,16 +271,17 @@ export interface SecurityAuditResult {
     value?: string;
     recommendation?: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
-}
-}
-  }[];
+
+
+
+[];
   summary: {
     critical: number;
     high: number;
     medium: number;
     low: number;
   };
-}
+
 
 export function auditSecurityHeaders(responseHeaders: Record<string, string>): SecurityAuditResult {
   const expectedHeaders = [
@@ -288,43 +291,43 @@ export function auditSecurityHeaders(responseHeaders: Record<string, string>): S
       severity: 'high' as const,
       score: 15,
       recommendation: 'Implement CSP to prevent XSS attacks'
-  }
+
     {
       name: 'X-Frame-Options',
       severity: 'medium' as const,
       score: 10,
       recommendation: 'Prevent clickjacking attacks'
-  }
+
     {
       name: 'X-Content-Type-Options',
       severity: 'medium' as const,
       score: 8,
       recommendation: 'Prevent MIME type sniffing'
-  }
+
     {
       name: 'Referrer-Policy',
       severity: 'low' as const,
       score: 5,
       recommendation: 'Control referrer information disclosure'
-  }
+
     {
       name: 'Strict-Transport-Security',
       severity: 'high' as const,
       score: 12,
       recommendation: 'Enforce HTTPS connections (production only)'
-  }
+
     {
       name: 'Permissions-Policy',
       severity: 'medium' as const,
       score: 8,
       recommendation: 'Control browser feature access'
-  }
+
     {
       name: 'Cross-Origin-Opener-Policy',
       severity: 'low' as const,
       score: 5,
       recommendation: 'Isolate browsing context'
-    }
+
   ];
 
   const results = expectedHeaders.map(expected => {
@@ -354,7 +357,7 @@ export function auditSecurityHeaders(responseHeaders: Record<string, string>): S
   const summary = results.reduce((acc, result) => {
     if (!result.present) {
       acc[result.severity]++;
-    }
+
     return acc;
   }, { critical: 0, high: 0, medium: 0, low: 0 });
 
@@ -365,7 +368,7 @@ export function auditSecurityHeaders(responseHeaders: Record<string, string>): S
     headers: results,
     summary
   };
-}
+
 
 // CSP violation reporting endpoint handler
 export async function handleCSPViolation(request: FastifyRequest, reply: FastifyReply) {
@@ -399,8 +402,7 @@ export async function handleCSPViolation(request: FastifyRequest, reply: Fastify
     // TODO: Generate CSP violation reports
 
     reply.code(204).send();
-  } catch (error) {
+ catch (error) {
     console.error('Error handling CSP violation:', error);
     reply.code(400).send({ error: 'Invalid CSP report' });
-  }
-}
+

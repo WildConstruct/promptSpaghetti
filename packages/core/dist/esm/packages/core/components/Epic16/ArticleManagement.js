@@ -143,9 +143,15 @@ div >
 ;
 ;
 // Article Editor Component
-export const ArticleEditor = ({ article, categories, onSave, onCancel, onUploadAttachment }) => {
+export const ArticleEditor;
+(article) => Promise;
+onCancel: () => void ;
+onUploadAttachment: (file) => Promise;
+ > ;
+({ article, categories, onSave, onCancel, onUploadAttachment }) => {
     const [formData, setFormData] = useState(() => ({}), title, article?.title || '', content, article?.content || '', excerpt, article?.excerpt || '', status, article?.status || 'draft', category, article?.category || categories[0], tags, article?.tags || [], difficulty, article?.difficulty || 'beginner', featured, article?.featured || false, seo, article?.seo || {}, ...article);
 };
+;
 const [newTag, setNewTag] = useState('');
 const [isSaving, setIsSaving] = useState(false);
 const handleInputChange = useCallback((field, value) => {

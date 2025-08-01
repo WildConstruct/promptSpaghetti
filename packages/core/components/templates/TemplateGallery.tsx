@@ -4,20 +4,20 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 import { ProjectTemplate, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
-}
-interface TemplateGalleryProps {
-  templateManager: ProjectTemplateManager;
+
+
+interface TemplateGalleryProps { templateManager: ProjectTemplateManager;
   onTemplateSelect: (template: ProjectTemplate, customizations: Record<string, any>) => void;
   onTemplatePreview: (template: ProjectTemplate) => void;
   className?: string;
-  export const TemplateGallery: React.FC<TemplateGalleryProps> = ({,)
-  templateManager,
-  onTemplateSelect,
-  onTemplatePreview,
+  export const TemplateGallery: React.FC<TemplateGalleryProps> = ({);
+  templateManager;
+  onTemplateSelect;
+  onTemplatePreview }
   className = ''
-}
-}) => {
-  const [templates, setTemplates] = useState<ProjectTemplate>([]);
+
+
+}) => { const [templates, setTemplates] = useState<ProjectTemplate>([]);
   const [categories, setCategories] = useState<TemplateCategory>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -28,54 +28,35 @@ interface TemplateGalleryProps {
   useEffect(() => {
     loadTemplates();
     loadCategories();
-    loadFeaturedTemplates();
-  }, []);
-  useEffect(() => {
-    loadTemplates();
-  }, [searchQuery, selectedCategory, complexityFilter, sortBy]);
-  const loadTemplates = async () => {
-  try {
+    loadFeaturedTemplates() }, []);
+  useEffect(() => { loadTemplates() }, [searchQuery, selectedCategory, complexityFilter, sortBy]);
+  const loadTemplates = async () => { try {
   setLoading(true);
   const result = await templateManager.searchTemplates({)
-  query: searchQuery || undefined,
-  category: selectedCategory || undefined,
-  complexity: complexityFilter || undefined,
-  sort_by: sortBy,
-  limit: 50,
+  query: searchQuery || undefined
+  category: selectedCategory || undefined
+  complexity: complexityFilter || undefined
+  sort_by: sortBy
+  limit: 50 }
 });
       setTemplates(result.templates);
-    } catch (error) {
-  console.error('Failed to load templates:', error);
-} finally {
-      setLoading(false);
-  };
-  const loadCategories = async () => {
-    try {
+ catch (error) { console.error('Failed to load templates:', error) } finally { setLoading(false) };
+  const loadCategories = async () => { try {
       const cats = templateManager.getCategories();
-      setCategories(cats);
-    } catch (error) {
-  console.error('Failed to load categories:', error);
-};
-  const loadFeaturedTemplates = async () => {
-    try {
+      setCategories(cats) } catch (error) { console.error('Failed to load categories:', error) };
+  const loadFeaturedTemplates = async () => { try {
       const featured = await templateManager.getFeaturedTemplates();
-      setFeaturedTemplates(featured);
-    } catch (error) {
-  console.error('Failed to load featured templates:', error);
-};
+      setFeaturedTemplates(featured) } catch (error) { console.error('Failed to load featured templates:', error) };
   const handleTemplateUse = (template: ProjectTemplate) => {
     // For now, pass empty customizations - this could open a customization dialog
     onTemplateSelect(template, {});
   };
-  const filteredTemplates = useMemo(() => {
-    if (!searchQuery && !selectedCategory && !complexityFilter) {
+  const filteredTemplates = useMemo(() => { if (!searchQuery && !selectedCategory && !complexityFilter) {
       return templates;
-    return templates;
-  }, [templates, searchQuery, selectedCategory, complexityFilter]);
-  const _____complexityColors = {
-  beginner: 'bg-green-100 text-green-800',
-  intermediate: 'bg-yellow-100 text-yellow-800',
-  advanced: 'bg-red-100 text-red-800',
+    return templates }, [templates, searchQuery, selectedCategory, complexityFilter]);
+  const _____complexityColors = { beginner: 'bg-green-100 text-green-800'
+  intermediate: 'bg-yellow-100 text-yellow-800'
+  advanced: 'bg-red-100 text-red-800' }
 };
   return;
     <div className={`template-gallery ${className}`}>}
@@ -183,18 +164,17 @@ interface TemplateGalleryProps {
     </div>
   );
 };
-}
-interface TemplateCardProps {
-  template: ProjectTemplate;
+
+
+interface TemplateCardProps { template: ProjectTemplate;
   onUse: () => void;
   onPreview: () => void;
-  featured?: boolean;
-}
-const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onPreview, featured = false }) => {
-  const complexityColors = {
-  beginner: 'bg-green-100 text-green-800',
-  intermediate: 'bg-yellow-100 text-yellow-800',
-  advanced: 'bg-red-100 text-red-800',
+  featured?: boolean }
+
+const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onPreview, featured = false }) => { const complexityColors = {
+  beginner: 'bg-green-100 text-green-800'
+  intermediate: 'bg-yellow-100 text-yellow-800'
+  advanced: 'bg-red-100 text-red-800' }
 };
   return;
     <div className={`bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border ${featured ? 'border-blue-200 bg-blue-50' : 'border-gray-200'}`}>}

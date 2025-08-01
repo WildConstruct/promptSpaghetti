@@ -15,10 +15,10 @@ import {
   DataClassificationLevel, 
   DataOperation, 
   OperationContext 
-} from '../../../packages/core/types/DataClassification';
+ from '../../../packages/core/types/DataClassification';
 
-}
-}
+
+
 export interface TemporaryAccessGrant {
   id: string;
   requestId?: string;
@@ -42,12 +42,13 @@ export interface TemporaryAccessGrant {
   expiresAt: Date;
   revokedAt?: Date;
   lastUsedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantedPermission {
   operation: DataOperation;
   dataClassification: DataClassificationLevel;
@@ -59,24 +60,26 @@ export interface GrantedPermission {
   usageLimit?: number;
   rateLimits: RateLimit[];
   auditLevel: 'STANDARD' | 'ENHANCED' | 'COMPREHENSIVE' | 'REALTIME';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RateLimit {
   type: 'REQUESTS_PER_MINUTE' | 'REQUESTS_PER_HOUR' | 'DATA_VOLUME_PER_DAY' | 'CONCURRENT_SESSIONS';
   limit: number;
   window: number; // in seconds
   burstAllowed: boolean;
   burstLimit?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessScope {
   type: 'RESOURCE_SPECIFIC' | 'CLASSIFICATION_LEVEL' | 'DEPARTMENT' | 'PROJECT' | 'GLOBAL';
   targets: ScopeTarget[];
@@ -84,45 +87,49 @@ export interface AccessScope {
   inheritanceLevel: 'NONE' | 'CHILD_RESOURCES' | 'ALL_DESCENDANTS';
   cascadingPermissions: boolean;
   contextualRestrictions: ContextualRestriction[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScopeTarget {
   type: 'RESOURCE_ID' | 'RESOURCE_PATTERN' | 'CLASSIFICATION' | 'DEPARTMENT' | 'PROJECT';
   value: string;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ContextualRestriction {
   type: 'LOCATION' | 'DEVICE' | 'NETWORK' | 'TIME_OF_DAY' | 'USER_ATTRIBUTE';
   specification: RestrictionSpecification;
   enforcement: 'STRICT' | 'FLEXIBLE' | 'ADVISORY';
   fallbackBehavior: 'DENY' | 'DEGRADE' | 'WARN' | 'AUDIT';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RestrictionSpecification {
   attribute: string;
   operator: 'EQUALS' | 'IN' | 'NOT_IN' | 'CONTAINS' | 'MATCHES' | 'RANGE';
   value: Error;
   tolerance?: number;
   customValidation?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantTimeWindow {
   startTime?: Date;
   endTime: Date;
@@ -135,34 +142,37 @@ export interface GrantTimeWindow {
   extendable: boolean;
   maxExtensions: number;
   extensionDuration: number; // hours
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeRange {
   startHour: number; // 0-23
   endHour: number;
   daysOfWeek: number[]; // 0-6, Sunday = 0
   exceptions: TimeException[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeException {
   date: Date;
   allowed: boolean;
   reason: string;
   approvedBy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BlackoutPeriod {
   start: Date;
   end: Date;
@@ -170,12 +180,13 @@ export interface BlackoutPeriod {
   severity: 'INFO' | 'WARNING' | 'CRITICAL';
   overridable: boolean;
   overrideRequiresApproval: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessCondition {
   id: string;
   type: 'MFA_REQUIRED' | 'APPROVAL_REQUIRED' | 'SUPERVISION_REQUIRED' | 'AUDIT_ENHANCED' | 'VPN_REQUIRED' | 'DEVICE_TRUSTED';
@@ -185,31 +196,34 @@ export interface AccessCondition {
   fallbackBehavior: 'DENY' | 'PROMPT' | 'DEGRADE' | 'WARN';
   verificationRequired: boolean;
   reVerificationInterval?: number; // minutes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConditionSpecification {
   parameters: Record<string, any>;
   validation: ValidationRule[];
   dependencies: string[]; // IDs of other conditions
   conflictsWith: string[]; // IDs of conflicting conditions
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationRule {
   type: 'PRESENCE' | 'FORMAT' | 'RANGE' | 'CUSTOM';
   specification: Record<string, any>;
   errorMessage: string;
   severity: 'ERROR' | 'WARNING' | 'INFO';
-}
-}
-}
+
+
+
+
 
 export type GrantStatus = 
   | 'PENDING_ACTIVATION'
@@ -220,8 +234,8 @@ export type GrantStatus =
   | 'USED_UP'
   | 'FAILED_CONDITIONS';
 
-}
-}
+
+
 export interface GrantUsage {
   totalRequests: number;
   successfulRequests: number;
@@ -234,12 +248,13 @@ export interface GrantUsage {
   resourcesAccessed: string[];
   violationCount: number;
   lastViolation?: GrantViolation;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantViolation {
   id: string;
   type: 'SCOPE_VIOLATION' | 'TIME_VIOLATION' | 'CONDITION_VIOLATION' | 'RATE_LIMIT_VIOLATION' | 'SECURITY_VIOLATION';
@@ -249,23 +264,25 @@ export interface GrantViolation {
   resolvedAt?: Date;
   resolution?: string;
   impact: ViolationImpact;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationImpact {
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   affectedResources: string[];
   mitigationActions: string[];
   escalationRequired: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantMonitoring {
   enabled: boolean;
   realTimeTracking: boolean;
@@ -274,12 +291,13 @@ export interface GrantMonitoring {
   complianceChecks: ComplianceCheck[];
   reportingFrequency: 'REALTIME' | 'HOURLY' | 'DAILY' | 'WEEKLY';
   retentionPeriod: number; // days
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertThreshold {
   metric: string;
   operator: 'GREATER_THAN' | 'LESS_THAN' | 'EQUALS' | 'PERCENTAGE_INCREASE';
@@ -288,45 +306,49 @@ export interface AlertThreshold {
   severity: 'INFO' | 'WARNING' | 'CRITICAL';
   action: 'LOG' | 'ALERT' | 'SUSPEND' | 'REVOKE';
   recipients: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AnomalyDetectionConfig {
   enabled: boolean;
   sensitivity: 'LOW' | 'MEDIUM' | 'HIGH';
   baselineWindow: number; // hours
   detectionMethods: AnomalyDetectionMethod[];
   responseActions: AnomalyResponseAction[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AnomalyDetectionMethod {
   type: 'STATISTICAL' | 'MACHINE_LEARNING' | 'RULE_BASED' | 'BEHAVIORAL';
   configuration: Record<string, any>;
   weight: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AnomalyResponseAction {
   trigger: 'ANOMALY_DETECTED' | 'ANOMALY_CONFIRMED' | 'ANOMALY_SEVERE';
   action: 'LOG' | 'ALERT' | 'SUSPEND' | 'REQUIRE_REAUTH' | 'ESCALATE';
   parameters: Record<string, any>;
   automatic: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceCheck {
   framework: 'GDPR' | 'HIPAA' | 'SOC2' | 'FedRAMP' | 'FISMA' | 'ISO27001' | 'NIST';
   requirement: string;
@@ -334,12 +356,13 @@ export interface ComplianceCheck {
   automatedCheck: boolean;
   checkFunction: string;
   remediationActions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantSecurity {
   encryptionRequired: boolean;
   keyRotationInterval: number; // hours
@@ -349,12 +372,13 @@ export interface GrantSecurity {
   tamperDetection: boolean;
   secureChannelRequired: boolean;
   certificateBasedAuth: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessToken {
   id: string;
   type: 'BEARER' | 'OAUTH2' | 'JWT' | 'CUSTOM';
@@ -367,46 +391,50 @@ export interface AccessToken {
   revokedAt?: Date;
   lastUsed?: Date;
   usage: TokenUsage;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TokenUsage {
   requestCount: number;
   lastRequest?: Date;
   sourceIPs: string[];
   userAgents: string[];
   errors: TokenError[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TokenError {
   timestamp: Date;
   error: string;
   context: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantCompliance {
   frameworks: ComplianceFramework[];
   auditTrail: ComplianceAuditEntry[];
   certifications: ComplianceCertification[];
   violations: ComplianceViolation[];
   attestations: ComplianceAttestation[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceFramework {
   name: string;
   version: string;
@@ -415,12 +443,13 @@ export interface ComplianceFramework {
   assessorId: string;
   status: 'COMPLIANT' | 'NON_COMPLIANT' | 'PARTIALLY_COMPLIANT' | 'PENDING_REVIEW';
   nextReview: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceRequirement {
   id: string;
   description: string;
@@ -428,12 +457,13 @@ export interface ComplianceRequirement {
   status: 'MET' | 'NOT_MET' | 'PARTIALLY_MET' | 'NOT_APPLICABLE';
   evidence: string[];
   lastVerified: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceAuditEntry {
   id: string;
   timestamp: Date;
@@ -444,12 +474,13 @@ export interface ComplianceAuditEntry {
   result: 'PASS' | 'FAIL' | 'WARNING' | 'INFO';
   details: Record<string, any>;
   evidence: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceCertification {
   id: string;
   framework: string;
@@ -459,12 +490,13 @@ export interface ComplianceCertification {
   scope: string[];
   certificateNumber: string;
   status: 'VALID' | 'EXPIRED' | 'REVOKED' | 'SUSPENDED';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceViolation {
   id: string;
   framework: string;
@@ -475,24 +507,26 @@ export interface ComplianceViolation {
   resolvedAt?: Date;
   resolution?: string;
   impact: ComplianceImpact;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceImpact {
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   affectedSystems: string[];
   potentialFines: number;
   businessImpact: string;
   mitigationPlan: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceAttestation {
   id: string;
   attesterId: string;
@@ -505,12 +539,13 @@ export interface ComplianceAttestation {
   evidence: string[];
   witnessed: boolean;
   witnessId?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantMetadata {
   createdBy: string;
   approvedBy: string[];
@@ -526,12 +561,13 @@ export interface GrantMetadata {
   version: string;
   lastModified: Date;
   lastModifiedBy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantRiskAssessment {
   overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   riskFactors: RiskFactor[];
@@ -541,12 +577,13 @@ export interface GrantRiskAssessment {
   assessorId: string;
   reviewRequired: boolean;
   nextReview: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskFactor {
   category: 'DATA_SENSITIVITY' | 'USER_PRIVILEGE' | 'ACCESS_SCOPE' | 'TIME_DURATION' | 'CONTEXT' | 'COMPLIANCE';
   description: string;
@@ -554,12 +591,13 @@ export interface RiskFactor {
   likelihood: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   score: number; // 1-100
   mitigated: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskMitigation {
   riskFactorId: string;
   strategy: 'AVOID' | 'MITIGATE' | 'TRANSFER' | 'ACCEPT';
@@ -571,12 +609,13 @@ export interface RiskMitigation {
   responsible: string;
   verified: boolean;
   verificationDate?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantCreationRequest {
   requestId?: string;
   granteeId: string;
@@ -590,12 +629,13 @@ export interface GrantCreationRequest {
   monitoring?: Partial<GrantMonitoring>;
   security?: Partial<GrantSecurity>;
   customAttributes?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantRevocationRequest {
   grantId: string;
   reason: string;
@@ -603,12 +643,13 @@ export interface GrantRevocationRequest {
   revokedBy: string;
   notifyGrantee: boolean;
   auditRequired: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantExtensionRequest {
   grantId: string;
   requestedBy: string;
@@ -616,47 +657,51 @@ export interface GrantExtensionRequest {
   justification: string;
   urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   approverRequired: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantValidationResult {
   valid: boolean;
   violations: GrantValidationViolation[];
   warnings: GrantValidationWarning[];
   riskScore: number;
   recommendations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantValidationViolation {
   type: 'SCOPE_VIOLATION' | 'TIME_VIOLATION' | 'CONDITION_VIOLATION' | 'SECURITY_VIOLATION' | 'COMPLIANCE_VIOLATION';
   description: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   blockingViolation: boolean;
   remediation: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantValidationWarning {
   type: 'RISK_WARNING' | 'COMPLIANCE_WARNING' | 'SECURITY_WARNING' | 'PERFORMANCE_WARNING';
   description: string;
   impact: string;
   recommendation: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantSearchFilters {
   granteeId?: string;
   granterId?: string;
@@ -671,12 +716,13 @@ export interface GrantSearchFilters {
   tags?: string[];
   emergencyGrants?: boolean;
   activeOnly?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantAnalytics {
   totalGrants: number;
   activeGrants: number;
@@ -691,12 +737,13 @@ export interface GrantAnalytics {
   topGrantees: GranteeStatistics[];
   topGranters: GranterStatistics[];
   recentActivity: GrantActivity[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GranteeStatistics {
   granteeId: string;
   granteeName: string;
@@ -705,12 +752,13 @@ export interface GranteeStatistics {
   violationCount: number;
   riskScore: number;
   lastActivity: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GranterStatistics {
   granterId: string;
   granterName: string;
@@ -718,21 +766,23 @@ export interface GranterStatistics {
   grantsRevoked: number;
   averageGrantDuration: number;
   riskAssessmentAccuracy: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GrantActivity {
   timestamp: Date;
   grantId: string;
   activity: 'CREATED' | 'ACTIVATED' | 'USED' | 'EXTENDED' | 'SUSPENDED' | 'REVOKED' | 'EXPIRED';
   userId: string;
   details: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Temporary Access Grant Service
@@ -767,7 +817,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     // Start cleanup and monitoring processes
     this.startCleanupProcess();
     this.startMonitoringProcess();
-  }
+
 
   /**
    * Create a new temporary access grant
@@ -785,8 +835,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
         const blockingViolations = validation.violations.filter(v => v.blockingViolation);
         if (blockingViolations.length > 0) {
           throw new Error(`Grant validation failed: ${blockingViolations.map(v => v.description).join(', ')}`);
-        }
-      }
+
+
 
       // Generate grant ID
       const grantId = `grant_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -811,7 +861,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         accessScope: {
           ...request.accessScope,
           contextualRestrictions: await this.buildContextualRestrictions(request, riskAssessment)
-  }
+
         timeWindow: {
           ...request.timeWindow,
           allowedHours: await this.getDefaultAllowedHours(riskAssessment.overallRisk),
@@ -819,7 +869,6 @@ export class TemporaryAccessGrantService extends EventEmitter {
             request.timeWindow.startTime,
             request.timeWindow.endTime
 
-  }
         conditions: request.conditions?.map((c, index) => ({
           ...c,
           id: `condition_${index}`,
@@ -836,7 +885,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           operationCounts: {} as Record<DataOperation, number>,
           resourcesAccessed: [],
           violationCount: 0
-  }
+
         monitoring: {
           enabled: true,
           realTimeTracking: riskAssessment.overallRisk === 'HIGH' || riskAssessment.overallRisk === 'CRITICAL',
@@ -846,7 +895,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           reportingFrequency: this.determineReportingFrequency(riskAssessment.overallRisk),
           retentionPeriod: await this.getRetentionPeriod(request.permissions),
           ...request.monitoring
-  }
+
         security: {
           encryptionRequired: true,
           keyRotationInterval: riskAssessment.overallRisk === 'CRITICAL' ? 1 : 24,
@@ -857,14 +906,14 @@ export class TemporaryAccessGrantService extends EventEmitter {
           secureChannelRequired: true,
           certificateBasedAuth: riskAssessment.overallRisk === 'CRITICAL',
           ...request.security
-  }
+
         compliance: {
           frameworks: await this.getApplicableFrameworks(request.permissions),
           auditTrail: [],
           certifications: [],
           violations: [],
           attestations: []
-  }
+
         metadata: {
           createdBy: granterId,
           approvedBy: [],
@@ -880,7 +929,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           version: '1.0',
           lastModified: new Date(),
           lastModifiedBy: granterId
-  }
+
         createdAt: new Date(),
         expiresAt: request.timeWindow.endTime
       };
@@ -902,12 +951,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
           permissions: request.permissions.map(p => p.operation),
           duration: Math.round((request.timeWindow.endTime.getTime() - Date.now()) / (1000 * 60 * 60)),
           riskLevel: riskAssessment.overallRisk
-  }
+
         context: granterContext,
         outcome: {
           success: true,
           statusCode: 201
-        }
+
       });
 
       // Emit grant created event
@@ -920,11 +969,10 @@ export class TemporaryAccessGrantService extends EventEmitter {
       // Auto-activate if appropriate
       if (this.shouldAutoActivate(grant)) {
         await this.activateGrant(grantId, granterId, granterContext);
-      }
+
 
       return grant;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         action: 'TEMPORARY_GRANT_CREATION_FAILED',
         userId: granterId,
@@ -934,18 +982,18 @@ export class TemporaryAccessGrantService extends EventEmitter {
           error: error.message,
           granteeId: request.granteeId,
           permissions: request.permissions.map(p => p.operation)
-  }
+
         context: granterContext,
         outcome: {
           success: false,
           statusCode: 500,
           error: error.message
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Activate a pending grant
@@ -959,17 +1007,17 @@ export class TemporaryAccessGrantService extends EventEmitter {
     const grant = this.grants.get(grantId);
     if (!grant) {
       throw new Error('Grant not found');
-    }
+
 
     if (grant.status !== 'PENDING_ACTIVATION') {
       throw new Error(`Cannot activate grant in status: ${grant.status}`);
-    }
+
 
     // Check if grant is still valid for activation
     if (grant.expiresAt <= new Date()) {
       grant.status = 'EXPIRED';
       throw new Error('Grant has expired');
-    }
+
 
     // Validate activation conditions
     const validationResult = await this.validateGrantActivation(grant, context);
@@ -977,8 +1025,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
       const blockingViolations = validationResult.violations.filter(v => v.blockingViolation);
       if (blockingViolations.length > 0) {
         throw new Error(`Grant activation failed: ${blockingViolations.map(v => v.description).join(', ')}`);
-      }
-    }
+
+
 
     // Activate the grant
     grant.status = 'ACTIVE';
@@ -1009,12 +1057,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
         granteeId: grant.granteeId,
         permissions: grant.permissions.map(p => p.operation),
         duration: Math.round((grant.expiresAt.getTime() - Date.now()) / (1000 * 60 * 60))
-  }
+
       context,
       outcome: {
         success: true,
         statusCode: 200
-      }
+
     });
 
     // Emit activation event
@@ -1023,7 +1071,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
       activatorId,
       context
     });
-  }
+
 
   /**
    * Validate access using a temporary grant
@@ -1045,12 +1093,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
           severity: 'CRITICAL',
           blockingViolation: true,
           remediation: ['Verify grant ID', 'Check grant status']
-        }],
+],
         warnings: [],
         riskScore: 100,
         recommendations: ['Contact administrator']
       };
-    }
+
 
     // Check grant status
     if (grant.status !== 'ACTIVE') {
@@ -1062,12 +1110,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
           severity: 'HIGH',
           blockingViolation: true,
           remediation: ['Activate grant if pending', 'Request new grant if expired/revoked']
-        }],
+],
         warnings: [],
         riskScore: 90,
         recommendations: ['Request grant activation or new grant']
       };
-    }
+
 
     // Check expiration
     if (grant.expiresAt <= new Date()) {
@@ -1080,12 +1128,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
           severity: 'HIGH',
           blockingViolation: true,
           remediation: ['Request grant extension', 'Create new grant']
-        }],
+],
         warnings: [],
         riskScore: 85,
         recommendations: ['Request new access grant']
       };
-    }
+
 
     const violations: GrantValidationViolation[] = [];
     const warnings: GrantValidationWarning[] = [];
@@ -1106,7 +1154,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         remediation: ['Request additional permissions', 'Use different operation']
       });
       riskScore += 30;
-    }
+
 
     // Validate time window
     const timeValidation = await this.validateTimeWindow(grant.timeWindow, context);
@@ -1119,7 +1167,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         remediation: ['Wait for allowed time window', 'Request time exception']
       });
       riskScore += 20;
-    }
+
 
     // Validate conditions
     for (const condition of grant.conditions) {
@@ -1133,8 +1181,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
           remediation: conditionValidation.remediation
         });
         riskScore += condition.required ? 25 : 10;
-      }
-    }
+
+
 
     // Validate rate limits
     const rateLimitValidation = await this.validateRateLimits(grant, operation, context);
@@ -1147,7 +1195,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         remediation: ['Wait for rate limit reset', 'Optimize access patterns']
       });
       riskScore += 15;
-    }
+
 
     // Check for anomalies
     const anomalyDetection = await this.detectAnomalies(grant, operation, resourceId, context);
@@ -1159,12 +1207,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
         recommendation: 'Review access pattern and verify legitimate use'
       });
       riskScore += 10;
-    }
+
 
     // Update usage statistics if access is valid
     if (violations.filter(v => v.blockingViolation).length === 0) {
       await this.updateUsageStatistics(grant, operation, resourceId, context);
-    }
+
 
     return {
       valid: violations.filter(v => v.blockingViolation).length === 0,
@@ -1173,7 +1221,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
       riskScore,
       recommendations: this.generateRecommendations(violations, warnings, grant)
     };
-  }
+
 
   /**
    * Revoke a temporary grant
@@ -1186,20 +1234,20 @@ export class TemporaryAccessGrantService extends EventEmitter {
     const grant = this.grants.get(request.grantId);
     if (!grant) {
       throw new Error('Grant not found');
-    }
+
 
     if (grant.status === 'REVOKED') {
       throw new Error('Grant is already revoked');
-    }
+
 
     // Immediate revocation or scheduled?
     if (request.immediate) {
       grant.status = 'REVOKED';
       grant.revokedAt = new Date();
-    } else {
+ else {
       // Schedule revocation
       grant.status = 'SUSPENDED';
-    }
+
 
     grant.metadata.lastModified = new Date();
     grant.metadata.lastModifiedBy = request.revokedBy;
@@ -1209,8 +1257,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
       if (!token.revoked) {
         token.revoked = true;
         token.revokedAt = new Date();
-      }
-    }
+
+
 
     // Add compliance audit entry
     grant.compliance.auditTrail.push({
@@ -1225,7 +1273,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         reason: request.reason,
         immediate: request.immediate,
         revokedBy: request.revokedBy
-  }
+
       evidence: []
     });
 
@@ -1239,12 +1287,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
         reason: request.reason,
         immediate: request.immediate,
         granteeId: grant.granteeId
-  }
+
       context,
       outcome: {
         success: true,
         statusCode: 200
-      }
+
     });
 
     // Emit revocation event
@@ -1264,8 +1312,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
         reason: request.reason,
         revokedBy: request.revokedBy
       });
-    }
-  }
+
+
 
   /**
    * Extend a temporary grant
@@ -1278,15 +1326,15 @@ export class TemporaryAccessGrantService extends EventEmitter {
     const grant = this.grants.get(request.grantId);
     if (!grant) {
       throw new Error('Grant not found');
-    }
+
 
     if (grant.status !== 'ACTIVE') {
       throw new Error(`Cannot extend grant in status: ${grant.status}`);
-    }
+
 
     if (!grant.timeWindow.extendable) {
       throw new Error('Grant is not extendable');
-    }
+
 
     // Check extension limits
     const currentExtensions = grant.compliance.auditTrail.filter(
@@ -1295,13 +1343,13 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
     if (currentExtensions >= grant.timeWindow.maxExtensions) {
       throw new Error('Maximum extensions reached');
-    }
+
 
     // Require approval for high-risk extensions
     if (request.approverRequired && request.urgency !== 'CRITICAL') {
       // Integration with workflow service would go here
       throw new Error('Extension requires approval - not implemented in this example');
-    }
+
 
     // Calculate new expiration time
     const extensionMs = request.extensionDuration * 60 * 60 * 1000;
@@ -1325,7 +1373,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         extensionDuration: request.extensionDuration,
         justification: request.justification,
         newExpirationTime: newExpirationTime.toISOString()
-  }
+
       evidence: []
     });
 
@@ -1339,12 +1387,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
         extensionHours: request.extensionDuration,
         justification: request.justification,
         newExpiration: newExpirationTime
-  }
+
       context,
       outcome: {
         success: true,
         statusCode: 200
-      }
+
     });
 
     // Emit extension event
@@ -1356,7 +1404,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     });
 
     return grant;
-  }
+
 
   /**
    * Get grant by ID
@@ -1364,7 +1412,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   async getGrant(grantId: string): Promise<TemporaryAccessGrant | null> {
 
     return this.grants.get(grantId) || null;
-  }
+
 
   /**
    * Search grants with filters
@@ -1376,59 +1424,59 @@ export class TemporaryAccessGrantService extends EventEmitter {
     return grants.filter(grant => {
       if (filters.granteeId && grant.granteeId !== filters.granteeId) {
         return false;
-      }
+
       
       if (filters.granterId && grant.granterId !== filters.granterId) {
         return false;
-      }
+
       
       if (filters.status && !filters.status.includes(grant.status)) {
         return false;
-      }
+
       
       if (filters.permissions && !filters.permissions.some(p => 
         grant.permissions.some(gp => gp.operation === p)
       )) {
         return false;
-      }
+
       
       if (filters.classifications && !filters.classifications.some(c => 
         grant.permissions.some(gp => gp.dataClassification === c)
       )) {
         return false;
-      }
+
       
       if (filters.createdAfter && grant.createdAt < filters.createdAfter) {
         return false;
-      }
+
       
       if (filters.createdBefore && grant.createdAt > filters.createdBefore) {
         return false;
-      }
+
       
       if (filters.expiresAfter && grant.expiresAt < filters.expiresAfter) {
         return false;
-      }
+
       
       if (filters.expiresBefore && grant.expiresAt > filters.expiresBefore) {
         return false;
-      }
+
       
       if (filters.riskLevel && !filters.riskLevel.includes(grant.metadata.riskAssessment.overallRisk)) {
         return false;
-      }
+
       
       if (filters.emergencyGrants !== undefined && grant.metadata.emergencyGrant !== filters.emergencyGrants) {
         return false;
-      }
+
       
       if (filters.activeOnly && grant.status !== 'ACTIVE') {
         return false;
-      }
+
       
       return true;
     });
-  }
+
 
   /**
    * Get analytics for grants
@@ -1469,19 +1517,19 @@ export class TemporaryAccessGrantService extends EventEmitter {
       'FAILED_CONDITIONS'] as GrantStatus[]
     ) {
       analytics.grantsByStatus[status] = filteredGrants.filter(g => g.status === status).length;
-    }
+
 
     // Calculate risk distribution
     for (const risk of ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']) {
       analytics.grantsByRisk[risk] = filteredGrants.filter(g => g.metadata.riskAssessment.overallRisk === risk).length;
-    }
+
 
     // Calculate classification distribution
     for (const classification of ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'] as DataClassificationLevel[]) {
       analytics.grantsByClassification[classification] = filteredGrants.filter(g => 
         g.permissions.some(p => p.dataClassification === classification)
       ).length;
-    }
+
 
     // Calculate average grant duration
     const durations = filteredGrants.map(g => 
@@ -1503,7 +1551,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
       : 100;
 
     return analytics;
-  }
+
 
   // Helper methods
 
@@ -1524,7 +1572,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         remediation: ['Verify user ID', 'Check user status']
       });
       riskScore += 30;
-    }
+
 
     // Validate time window
     if (request.timeWindow.endTime <= new Date()) {
@@ -1536,7 +1584,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         remediation: ['Set future expiration time']
       });
       riskScore += 25;
-    }
+
 
     // Validate permissions
     for (const permission of request.permissions) {
@@ -1549,7 +1597,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           remediation: ['Use valid operation type']
         });
         riskScore += 20;
-      }
+
 
       if (permission.dataClassification === 'RESTRICTED') {
         warnings.push({
@@ -1559,8 +1607,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
           recommendation: 'Add additional monitoring and conditions'
         });
         riskScore += 15;
-      }
-    }
+
+
 
     return {
       valid: violations.filter(v => v.blockingViolation).length === 0,
@@ -1569,7 +1617,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
       riskScore,
       recommendations: this.generateRecommendations(violations, warnings)
     };
-  }
+
 
   private async assessGrantRisk(
     request: GrantCreationRequest,
@@ -1589,7 +1637,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         score: 85,
         mitigated: false
       });
-    }
+
 
     // Assess permission scope
     const highRiskOperations = request.permissions.filter(p => 
@@ -1604,7 +1652,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         score: 70,
         mitigated: false
       });
-    }
+
 
     // Assess time duration
     const durationHours = (request.timeWindow.endTime.getTime() - Date.now()) / (1000 * 60 * 60);
@@ -1617,7 +1665,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         score: 60,
         mitigated: false
       });
-    }
+
 
     // Calculate overall risk
     const totalScore = riskFactors.reduce((sum, factor) => sum + factor.score, 0);
@@ -1639,7 +1687,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
       reviewRequired: overallRisk === 'HIGH' || overallRisk === 'CRITICAL',
       nextReview: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
     };
-  }
+
 
   private calculatePermissionRisk(
     permission: Omit<GrantedPermission, 'riskLevel' | 'auditLevel'>,
@@ -1653,7 +1701,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     case 'CONFIDENTIAL': riskScore += 25; break;
     case 'INTERNAL': riskScore += 10; break;
     case 'PUBLIC': riskScore += 0; break;
-    }
+
 
     // Operation risk
     switch (permission.operation) {
@@ -1665,7 +1713,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     case 'UPDATE': riskScore += 15; break;
     case 'read': riskScore += 5; break;
     default: riskScore += 10; break;
-    }
+
 
     // Scope risk
     if (scope.type === 'GLOBAL') riskScore += 20;
@@ -1675,7 +1723,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     if (riskScore >= 50) return 'HIGH';
     if (riskScore >= 30) return 'MEDIUM';
     return 'LOW';
-  }
+
 
   private determineAuditLevel(
     permission: Omit<GrantedPermission, 'riskLevel' | 'auditLevel'>,
@@ -1683,15 +1731,15 @@ export class TemporaryAccessGrantService extends EventEmitter {
   ): 'STANDARD' | 'ENHANCED' | 'COMPREHENSIVE' | 'REALTIME' {
     if (overallRisk === 'CRITICAL' || permission.dataClassification === 'RESTRICTED') {
       return 'REALTIME';
-    }
+
     if (overallRisk === 'HIGH' || permission.dataClassification === 'CONFIDENTIAL') {
       return 'COMPREHENSIVE';
-    }
+
     if (overallRisk === 'MEDIUM') {
       return 'ENHANCED';
-    }
+
     return 'STANDARD';
-  }
+
 
   private async buildContextualRestrictions(
     request: GrantCreationRequest,
@@ -1709,11 +1757,11 @@ export class TemporaryAccessGrantService extends EventEmitter {
           operator: 'IN',
           value: ['US', 'CA', 'GB'],
           tolerance: 0
-  }
+
         enforcement: 'STRICT',
         fallbackBehavior: 'DENY'
       });
-    }
+
 
     // Add network restrictions
     restrictions.push({
@@ -1723,13 +1771,13 @@ export class TemporaryAccessGrantService extends EventEmitter {
         operator: 'EQUALS',
         value: true,
         tolerance: 0
-  }
+
       enforcement: riskAssessment.overallRisk === 'CRITICAL' ? 'STRICT' : 'FLEXIBLE',
       fallbackBehavior: 'WARN'
     });
 
     return restrictions;
-  }
+
 
   private async getDefaultAllowedHours(riskLevel: string): Promise<TimeRange[]> {
 
@@ -1740,8 +1788,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
         endHour: 17,
         daysOfWeek: [1, 2, 3, 4, 5], // Monday to Friday
         exceptions: []
-      }];
-    }
+];
+
     
     // 24/7 for lower risk levels
     return [{
@@ -1749,8 +1797,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
       endHour: 23,
       daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
       exceptions: []
-    }];
-  }
+];
+
 
   private async getApplicableBlackoutPeriods(
     startTime?: Date,
@@ -1759,7 +1807,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
     // In a real implementation, this would fetch from a blackout period service
     return [];
-  }
+
 
   private async buildAlertThresholds(
     riskAssessment: GrantRiskAssessment
@@ -1790,7 +1838,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     });
 
     return thresholds;
-  }
+
 
   private async buildAnomalyDetectionConfig(
     riskAssessment: GrantRiskAssessment
@@ -1805,12 +1853,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
           type: 'STATISTICAL',
           configuration: { threshold: 2.5 },
           weight: 0.4
-  }
+
         {
           type: 'BEHAVIORAL',
           configuration: { pattern_analysis: true },
           weight: 0.6
-        }
+
       ],
       responseActions: [
         {
@@ -1818,16 +1866,16 @@ export class TemporaryAccessGrantService extends EventEmitter {
           action: 'LOG',
           parameters: {},
           automatic: true
-  }
+
         {
           trigger: 'ANOMALY_SEVERE',
           action: 'SUSPEND',
           parameters: {},
           automatic: riskAssessment.overallRisk === 'CRITICAL'
-        }
+
       ]
     };
-  }
+
 
   private async buildComplianceChecks(
     permissions: Omit<GrantedPermission, 'riskLevel' | 'auditLevel'>[]
@@ -1845,10 +1893,10 @@ export class TemporaryAccessGrantService extends EventEmitter {
         checkFunction: 'validateGDPRCompliance',
         remediationActions: ['Enable encryption', 'Add audit logging', 'Implement access controls']
       });
-    }
+
 
     return checks;
-  }
+
 
   private determineReportingFrequency(riskLevel: string): 'REALTIME' | 'HOURLY' | 'DAILY' | 'WEEKLY' {
     switch (riskLevel) {
@@ -1856,8 +1904,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
     case 'HIGH': return 'HOURLY';
     case 'MEDIUM': return 'DAILY';
     default: return 'WEEKLY';
-    }
-  }
+
+
 
   private async getRetentionPeriod(
     permissions: Omit<GrantedPermission, 'riskLevel' | 'auditLevel'>[]
@@ -1865,7 +1913,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
     const hasRestrictedData = permissions.some(p => p.dataClassification === 'RESTRICTED');
     return hasRestrictedData ? 2555 : 365; // 7 years for restricted, 1 year for others
-  }
+
 
   private async getApplicableFrameworks(
     permissions: Omit<GrantedPermission, 'riskLevel' | 'auditLevel'>[]
@@ -1886,17 +1934,17 @@ export class TemporaryAccessGrantService extends EventEmitter {
             status: 'MET',
             evidence: ['encryption_enabled', 'access_controls'],
             lastVerified: new Date()
-          }
+
         ],
         assessmentDate: new Date(),
         assessorId: 'system',
         status: 'COMPLIANT',
         nextReview: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
       });
-    }
+
 
     return frameworks;
-  }
+
 
   private async generateAccessTokens(grant: TemporaryAccessGrant): Promise<AccessToken[]> {
 
@@ -1922,18 +1970,18 @@ export class TemporaryAccessGrantService extends EventEmitter {
         sourceIPs: [],
         userAgents: [],
         errors: []
-      }
+
     };
 
     tokens.push(jwtToken);
     return tokens;
-  }
+
 
   private shouldAutoActivate(grant: TemporaryAccessGrant): boolean {
     // Auto-activate low-risk grants
     return grant.metadata.riskAssessment.overallRisk === 'LOW' || 
            grant.metadata.riskAssessment.overallRisk === 'MEDIUM';
-  }
+
 
   private async validateGrantActivation(
     grant: TemporaryAccessGrant,
@@ -1952,7 +2000,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         blockingViolation: true,
         remediation: ['Request new grant']
       });
-    }
+
 
     // Check conditions
     for (const condition of grant.conditions) {
@@ -1965,8 +2013,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
           blockingViolation: true,
           remediation: ['Satisfy activation conditions']
         });
-      }
-    }
+
+
 
     return {
       valid: violations.filter(v => v.blockingViolation).length === 0,
@@ -1975,7 +2023,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
       riskScore: violations.length * 25,
       recommendations: []
     };
-  }
+
 
   private resourceMatchesScope(
     resourceId: string,
@@ -1991,7 +2039,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         return new RegExp(target.value).test(resourceId);
       default:
         return false;
-      }
+
     });
 
     // Check if resource is excluded
@@ -2003,11 +2051,11 @@ export class TemporaryAccessGrantService extends EventEmitter {
         return new RegExp(exclusion.value).test(resourceId);
       default:
         return false;
-      }
+
     });
 
     return matchesTarget && !isExcluded;
-  }
+
 
   private async validateTimeWindow(
     timeWindow: GrantTimeWindow,
@@ -2019,12 +2067,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
     // Check if grant has expired
     if (now > timeWindow.endTime) {
       return { valid: false, reason: 'Grant has expired' };
-    }
+
 
     // Check if grant has started
     if (timeWindow.startTime && now < timeWindow.startTime) {
       return { valid: false, reason: 'Grant has not yet started' };
-    }
+
 
     // Check allowed hours
     const currentHour = now.getHours();
@@ -2038,7 +2086,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
     if (!isAllowedTime) {
       return { valid: false, reason: 'Current time is outside allowed hours' };
-    }
+
 
     // Check blackout periods
     const isBlackedOut = timeWindow.blackoutPeriods.some(period =>
@@ -2047,10 +2095,10 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
     if (isBlackedOut) {
       return { valid: false, reason: 'Current time is within a blackout period' };
-    }
+
 
     return { valid: true };
-  }
+
 
   private async validateCondition(
     condition: AccessCondition,
@@ -2087,8 +2135,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
     default:
       return { valid: true };
-    }
-  }
+
+
 
   private async validateRateLimits(
     grant: TemporaryAccessGrant,
@@ -2099,7 +2147,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     const permission = grant.permissions.find(p => p.operation === operation);
     if (!permission) {
       return { valid: false, reason: 'Operation not permitted' };
-    }
+
 
     // Check rate limits (simplified implementation)
     for (const rateLimit of permission.rateLimits) {
@@ -2107,12 +2155,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
         const recentRequests = grant.usage.totalRequests; // Simplified
         if (recentRequests >= rateLimit.limit) {
           return { valid: false, reason: `Rate limit exceeded: ${rateLimit.limit} requests per minute` };
-        }
-      }
-    }
+
+
+
 
     return { valid: true };
-  }
+
 
   private async detectAnomalies(
     grant: TemporaryAccessGrant,
@@ -2123,7 +2171,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
     if (!grant.monitoring.anomalyDetection.enabled) {
       return { anomalyDetected: false };
-    }
+
 
     // Simple anomaly detection rules
     const now = new Date();
@@ -2135,7 +2183,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         anomalyDetected: true,
         description: 'Unusually high request rate detected'
       };
-    }
+
 
     // Detect unusual time access
     const currentHour = now.getHours();
@@ -2144,10 +2192,10 @@ export class TemporaryAccessGrantService extends EventEmitter {
         anomalyDetected: true,
         description: 'Access during unusual hours detected'
       };
-    }
+
 
     return { anomalyDetected: false };
-  }
+
 
   private async updateUsageStatistics(
     grant: TemporaryAccessGrant,
@@ -2164,13 +2212,13 @@ export class TemporaryAccessGrantService extends EventEmitter {
     // Update operation counts
     if (!grant.usage.operationCounts[operation]) {
       grant.usage.operationCounts[operation] = 0;
-    }
+
     grant.usage.operationCounts[operation]++;
 
     // Track accessed resources
     if (!grant.usage.resourcesAccessed.includes(resourceId)) {
       grant.usage.resourcesAccessed.push(resourceId);
-    }
+
 
     // Update token usage if applicable
     for (const token of grant.security.accessTokens) {
@@ -2180,14 +2228,14 @@ export class TemporaryAccessGrantService extends EventEmitter {
         
         if (context.ipAddress && !token.usage.sourceIPs.includes(context.ipAddress)) {
           token.usage.sourceIPs.push(context.ipAddress);
-        }
+
         
         if (context.userAgent && !token.usage.userAgents.includes(context.userAgent)) {
           token.usage.userAgents.push(context.userAgent);
-        }
-      }
-    }
-  }
+
+
+
+
 
   private generateRecommendations(
     violations: GrantValidationViolation[],
@@ -2198,40 +2246,40 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
     if (violations.some(v => v.type === 'TIME_VIOLATION')) {
       recommendations.push('Request grant extension or create new grant');
-    }
+
 
     if (violations.some(v => v.type === 'CONDITION_VIOLATION')) {
       recommendations.push('Ensure all access conditions are met before attempting access');
-    }
+
 
     if (warnings.some(w => w.type === 'SECURITY_WARNING')) {
       recommendations.push('Review access patterns for potential security issues');
-    }
+
 
     if (grant && grant.metadata.riskAssessment.overallRisk === 'CRITICAL') {
       recommendations.push('Consider reducing scope or duration for critical risk grants');
-    }
+
 
     return recommendations;
-  }
+
 
   private async getUserName(userId: string): Promise<string> {
 
     // In a real implementation, this would fetch from user service
     return `User ${userId}`;
-  }
+
 
   private async getUserEmail(userId: string): Promise<string> {
 
     // In a real implementation, this would fetch from user service
     return `${userId}@company.com`;
-  }
+
 
   private async userExists(userId: string): Promise<boolean> {
 
     // In a real implementation, this would check user service
     return userId !== '';
-  }
+
 
   private isValidOperation(operation: string): boolean {
     const validOperations = [
@@ -2240,27 +2288,27 @@ export class TemporaryAccessGrantService extends EventEmitter {
       'RESTORE', 'ARCHIVE', 'PURGE', 'AUDIT', 'APPROVE'
     ];
     return validOperations.includes(operation);
-  }
+
 
   private startCleanupProcess(): void {
     this.cleanupInterval = setInterval(async () => {
       try {
         await this.performCleanup();
-      } catch (error) {
+ catch (error) {
         this.emit('cleanup_error', { error: error.message });
-      }
+
     }, 5 * 60 * 1000); // Every 5 minutes
-  }
+
 
   private startMonitoringProcess(): void {
     this.monitoringInterval = setInterval(async () => {
       try {
         await this.performMonitoring();
-      } catch (error) {
+ catch (error) {
         this.emit('monitoring_error', { error: error.message });
-      }
+
     }, 60 * 1000); // Every minute
-  }
+
 
   private async performCleanup(): Promise<void> {
 
@@ -2285,31 +2333,31 @@ export class TemporaryAccessGrantService extends EventEmitter {
         });
 
         this.emit('grant_expired', { grant });
-      }
+
 
       // Revoke expired tokens
       for (const token of grant.security.accessTokens) {
         if (!token.revoked && token.expiresAt <= now) {
           token.revoked = true;
           token.revokedAt = now;
-        }
-      }
+
+
 
       // Clean up old grants (keep for retention period only)
       const retentionPeriod = grant.monitoring.retentionPeriod * 24 * 60 * 60 * 1000;
       if (grant.status === 'EXPIRED' && now.getTime() - grant.expiresAt.getTime() > retentionPeriod) {
         this.grants.delete(grantId);
         this.emit('grant_purged', { grantId });
-      }
-    }
-  }
+
+
+
 
   private async performMonitoring(): Promise<void> {
 
     for (const grant of this.grants.values()) {
       if (grant.status !== 'ACTIVE' || !grant.monitoring.enabled) {
         continue;
-      }
+
 
       // Check alert thresholds
       for (const threshold of grant.monitoring.alertThresholds) {
@@ -2318,8 +2366,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
         
         if (thresholdMet) {
           await this.handleThresholdAlert(grant, threshold, metricValue);
-        }
-      }
+
+
 
       // Check for anomalies
       if (grant.monitoring.anomalyDetection.enabled) {
@@ -2337,10 +2385,10 @@ export class TemporaryAccessGrantService extends EventEmitter {
             grant,
             description: anomalyResult.description
           });
-        }
-      }
-    }
-  }
+
+
+
+
 
   private async getMetricValue(grant: TemporaryAccessGrant, metric: string): Promise<number> {
 
@@ -2353,8 +2401,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
       return grant.usage.activeSessions;
     default:
       return 0;
-    }
-  }
+
+
 
   private evaluateThreshold(value: number, threshold: AlertThreshold): boolean {
     switch (threshold.operator) {
@@ -2366,8 +2414,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
       return value === threshold.value;
     default:
       return false;
-    }
-  }
+
+
 
   private async handleThresholdAlert(
     grant: TemporaryAccessGrant,
@@ -2400,8 +2448,8 @@ export class TemporaryAccessGrantService extends EventEmitter {
       grant.revokedAt = new Date();
       this.emit('grant_revoked', { grant, reason: 'Threshold exceeded', revokedBy: 'system' });
       break;
-    }
-  }
+
+
 
   /**
    * Clean up resources
@@ -2409,12 +2457,12 @@ export class TemporaryAccessGrantService extends EventEmitter {
   destroy(): void {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
-    }
+
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
-    }
+
     this.removeAllListeners();
-  }
-}
+
+
 
 export default TemporaryAccessGrantService;

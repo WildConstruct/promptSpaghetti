@@ -1,17 +1,16 @@
 import { RandomizerParameters, ParameterPreset, ValidationResult } from './parameter-schema';
 
 }
-export interface ParameterHistory {
-    id: string;
+}
+export interface ParameterHistory { id: string;
     parameters: RandomizerParameters;
     timestamp: string;
     success: boolean;
     generationTime?: number;
-    errorCount?: number;
-
+    errorCount?: number }
 }
-export interface ParameterManagerOptions {
-    enableHistory: boolean;
+}
+export interface ParameterManagerOptions { enableHistory: boolean;
     maxHistorySize: number;
     autoSave: boolean;
     storageKey: string;
@@ -46,7 +45,7 @@ export declare class ParameterManager {
         nodeCount?: number;
         nodeTypes?: string[];
         temperature?: number;
-        focusAreas?: string[];
+        focusAreas?: string[] }
 }
     };
     /**
@@ -69,10 +68,10 @@ export declare class ParameterManager {
      * Create new preset from parameters
      */
     createPreset();
-      name: string,
-      description: string,
-      category: string,
-      parameters: RandomizerParameters,
+      name: string
+      description: string
+      category: string
+      parameters: RandomizerParameters
       tags?: string[]
     ): ParameterPreset;
     /**
@@ -91,9 +90,9 @@ export declare class ParameterManager {
      * Add to history
      */
     addToHistory();
-      parameters: RandomizerParameters,
-      success: boolean,
-      generationTime?: number,
+      parameters: RandomizerParameters
+      success: boolean
+      generationTime?: number
       errorCount?: number
     ): void;
     /**
@@ -103,16 +102,14 @@ export declare class ParameterManager {
     /**
      * Get history statistics
      */
-    getHistoryStats(): {
-        totalGenerations: number;
+    getHistoryStats(): { totalGenerations: number;
         successRate: number;
         averageGenerationTime: number;
         mostUsedComplexity: string;
         mostUsedProvider: string;
         popularNodeTypes: Array<{
             nodeType: string;
-            count: number;
-        }>;
+            count: number }>;
     };
     /**
      * Find similar parameters in history
@@ -121,22 +118,17 @@ export declare class ParameterManager {
     /**
      * Export parameters and presets
      */
-    exportData(): {
-        presets: ParameterPreset[];
+    exportData(): { presets: ParameterPreset[];
         history: ParameterHistory[];
-        exported: string;
-    };
+        exported: string };
     /**
      * Import parameters and presets
      */
-    importData(data: {)
+    importData(data: { )
         presets?: ParameterPreset[];
-        history?: ParameterHistory[];
-    }): {
-        presetsImported: number;
+        history?: ParameterHistory[] }): { presetsImported: number;
         historyImported: number;
-        errors: string[];
-    };
+        errors: string[] };
     /**
      * Generate unique ID
      */

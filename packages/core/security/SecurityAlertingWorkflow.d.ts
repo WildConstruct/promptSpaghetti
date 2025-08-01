@@ -8,8 +8,7 @@
 import { EventEmitter } from 'events';
 import { SecurityEventAnalytics, SecurityInsight, SecurityPattern, ThreatCategory } from './SecurityEventAnalytics';
 import { SecurityLogger, ComplianceFramework } from './SecurityLogger';
-export declare enum AlertSeverity {
-    CRITICAL = "critical",// < 5 minutes response
+export declare enum AlertSeverity { CRITICAL = "critical",// < 5 minutes response
     HIGH = "high",// < 15 minutes response
     MEDIUM = "medium",// < 1 hour response
     LOW = "low",// < 4 hours response
@@ -28,12 +27,12 @@ export declare enum AlertChannel {
     SMS = "sms",
     SLACK = "slack",
     WEBHOOK = "webhook",
-    PAGERDUTY = "pagerduty",
+    PAGERDUTY = "pagerduty" }
     TEAMS = "teams"
 
 }
-export interface SecurityAlert {
-    id: string;
+}
+export interface SecurityAlert { id: string;
     timestamp: Date;
     severity: AlertSeverity;
     state: AlertState;
@@ -45,56 +44,44 @@ export interface SecurityAlert {
         eventIds?: string[];
         patternIds?: string[];
         insightIds?: string[];
-        metrics?: Record<string, number>;
+        metrics?: Record<string, number> }
 }
     };
-    context: {
-        affectedSystems: string[];
+    context: { affectedSystems: string[];
         affectedUsers: string[];
         ipAddresses: string[];
         geolocation?: {
             country: string;
             region: string;
-            confidence: number;
-        };
+            confidence: number };
     };
-    risk: {
-        score: number;
+    risk: { score: number;
         factors: Array<{
             factor: string;
-            impact: number;
-        }>;
+            impact: number }>;
         likelihood: number;
         impact: number;
     };
-    compliance: {
-        frameworks: ComplianceFramework[];
+    compliance: { frameworks: ComplianceFramework[];
         reportingRequired: boolean;
-        deadline?: Date;
-    };
-    escalation: {
-        level: number;
+        deadline?: Date };
+    escalation: { level: number;
         maxLevel: number;
         nextEscalation?: Date;
-        assignedTo?: string;
-    };
-    resolution?: {
-        resolvedBy: string;
+        assignedTo?: string };
+    resolution?: { resolvedBy: string;
         resolvedAt: Date;
         solution: string;
         preventionMeasures: string[];
-        lessonsLearned: string[];
-    };
-    metadata: {
-        correlationId: string;
+        lessonsLearned: string[] };
+    metadata: { correlationId: string;
         workflowVersion: string;
         processingTime: number;
-        checksum: string;
-    };
+        checksum: string };
 
 }
-export interface AlertRule {
-    id: string;
+}
+export interface AlertRule { id: string;
     name: string;
     description: string;
     enabled: boolean;
@@ -104,60 +91,56 @@ export interface AlertRule {
     suppressionRules?: SuppressionRule[];
     escalationPolicy: EscalationPolicy;
     automatedActions: AutomatedAction[];
-    compliance: ComplianceFramework[];
-
+    compliance: ComplianceFramework[] }
 }
-export interface AlertCondition {
-    field: string;
+}
+export interface AlertCondition { field: string;
     operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'nin' | 'contains' | 'matches';
     value: any;
     aggregation?: {
         function: 'count' | 'sum' | 'avg' | 'min' | 'max';
         timeWindow: number;
-        groupBy?: string;
+        groupBy?: string }
 }
     };
 
 }
-export interface SuppressionRule {
-    id: string;
+}
+export interface SuppressionRule { id: string;
     description: string;
     conditions: AlertCondition[];
     suppressionWindow: number;
-    maxSuppressions?: number;
-
+    maxSuppressions?: number }
 }
-export interface EscalationPolicy {
-    id: string;
+}
+export interface EscalationPolicy { id: string;
     name: string;
     steps: EscalationStep[];
     requiresAcknowledgment: boolean;
     autoResolve: boolean;
-    escalationTimeout: number;
-
+    escalationTimeout: number }
 }
-export interface EscalationStep {
-    level: number;
+}
+export interface EscalationStep { level: number;
     delay: number;
     recipients: NotificationRecipient[];
     channels: AlertChannel[];
     actions: string[];
-    continueOnFailure: boolean;
-
+    continueOnFailure: boolean }
 }
-export interface NotificationRecipient {
-    type: 'user' | 'team' | 'role';
+}
+export interface NotificationRecipient { type: 'user' | 'team' | 'role';
     identifier: string;
     contactMethods: Array<{
         channel: AlertChannel;
         address: string;
-        priority: number;
+        priority: number }
 }
     }>;
 
 }
-export interface AutomatedAction {
-    id: string;
+}
+export interface AutomatedAction { id: string;
     name: string;
     description: string;
     type: 'system' | 'network' | 'user' | 'data' | 'notification';
@@ -167,11 +150,10 @@ export interface AutomatedAction {
     maxExecutions: number;
     cooldownPeriod: number;
     requiresApproval: boolean;
-    approvers?: string[];
-
+    approvers?: string[] }
 }
-export interface WorkflowExecution {
-    alertId: string;
+}
+export interface WorkflowExecution { alertId: string;
     workflowId: string;
     status: 'running' | 'completed' | 'failed' | 'cancelled';
     startTime: Date;
@@ -180,13 +162,13 @@ export interface WorkflowExecution {
     error?: {
         message: string;
         stack: string;
-        step: string;
+        step: string }
 }
     };
 
 }
-export interface WorkflowStep {
-    id: string;
+}
+export interface WorkflowStep { id: string;
     name: string;
     type: 'notification' | 'action' | 'escalation' | 'approval';
     status: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
@@ -210,12 +192,12 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
      * Create and process a new security alert
      */
     createAlert();
-      source: string,
-      severity: AlertSeverity,
-      category: ThreatCategory,
-      title: string,
-      description: string,
-      context?: Partial<SecurityAlert['context']>,
+      source: string;
+      severity: AlertSeverity;
+      category: ThreatCategory;
+      title: string;
+      description: string;
+      context?: Partial<SecurityAlert['context']>;
       sourceData?: Partial<SecurityAlert['sourceData']>
     ): Promise<string>;
     /**
@@ -234,10 +216,10 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
      * Resolve an alert
      */
     resolveAlert();
-      alertId: string,
-      resolvedBy: string,
-      solution: string,
-      preventionMeasures?: string[],
+      alertId: string;
+      resolvedBy: string;
+      solution: string;
+      preventionMeasures?: string[] }
       lessonsLearned?: string[]
     ): Promise<void>;
     /**
@@ -252,19 +234,16 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
         sortBy?: 'timestamp' | 'severity' | 'risk';
         sortOrder?: 'asc' | 'desc'
 }
-  }): {
-        alerts: SecurityAlert[];
+}
+  }): { alerts: SecurityAlert[];
         total: number;
-        hasMore: boolean;
-    };
+        hasMore: boolean };
     /**
      * Get alert metrics and statistics
      */
-    getAlertMetrics(timeframe: {)
+    getAlertMetrics(timeframe: { )
         start: Date;
-        end: Date;
-    }): {
-        totalAlerts: number;
+        end: Date }): { totalAlerts: number;
         alertsByState: Record<AlertState, number>;
         alertsBySeverity: Record<AlertSeverity, number>;
         alertsByCategory: Record<ThreatCategory, number>;
@@ -273,8 +252,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
         escalationRate: number;
         topAlertSources: Array<{
             source: string;
-            count: number;
-        }>;
+            count: number }>;
     };
     private processAlertWorkflow;
     private processAlertRule;

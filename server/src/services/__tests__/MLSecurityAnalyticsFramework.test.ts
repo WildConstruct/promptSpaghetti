@@ -18,13 +18,13 @@ import {
   InferenceRequest,
   InferenceResult,
   MLSecurityAnalyticsMetrics
-} from '../MLSecurityAnalyticsFramework';
+ from '../MLSecurityAnalyticsFramework';
 import { 
   SecurityIntelligenceDataPipeline,
   SecurityEvent,
   SecurityEventType,
   SecurityEventSeverity
-} from '../SecurityIntelligenceDataPipeline';
+ from '../SecurityIntelligenceDataPipeline';
 import { AnalyticsCollector } from '../../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../../database/analytics-dao';
 import { PerformanceMonitoringService } from '../../analytics/PerformanceMonitoringService';
@@ -100,7 +100,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         feature_store_enabled: true,
         model_versioning: true,
         a_b_testing: true
-  }
+
       threat_detection: {
         enabled: true,
         anomaly_detection: true,
@@ -110,7 +110,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         malware_classification: true,
         network_intrusion_detection: true,
         user_risk_scoring: true
-  }
+
       model_management: {
         max_models: 100,
         model_retention_days: 90,
@@ -120,7 +120,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         cross_validation_folds: 5,
         early_stopping: true,
         hyperparameter_tuning: true
-  }
+
       feature_engineering: {
         enabled: true,
         auto_feature_generation: true,
@@ -130,7 +130,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         graph_features: true,
         nlp_features: true,
         statistical_features: true
-  }
+
       performance_monitoring: {
         enabled: true,
         model_drift_detection: true,
@@ -139,14 +139,14 @@ describe('MLSecurityAnalyticsFramework', () => {
         resource_monitoring: true,
         fairness_monitoring: true,
         explainability_tracking: true
-  }
+
       epic_integration: {
         epic1_analytics_enabled: true,
         epic17_admin_enabled: true,
         model_deployment_pipeline: true,
         performance_tracking: true,
         unified_monitoring: true
-      }
+
     };
 
     mlFramework = new MLSecurityAnalyticsFramework(
@@ -218,19 +218,19 @@ describe('MLSecurityAnalyticsFramework', () => {
             type: 'numeric',
             importance: 0.8,
             description: 'API request frequency'
-          }
+
         ],
         hyperparameters: {
           n_estimators: 100,
           max_depth: 10
-  }
+
         deployment_config: {
           environment: 'production',
           replicas: 3,
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: true
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -238,7 +238,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       const modelId = await mlFramework.createModel(modelData);
@@ -272,7 +272,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -280,7 +280,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.80,
           recall: 0.82,
           f1_score: 0.81
-        }
+
       };
 
       const modelId = await mlFramework.createModel(modelData);
@@ -308,7 +308,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -316,7 +316,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.80,
           recall: 0.82,
           f1_score: 0.81
-        }
+
       };
 
       const modelData2 = {
@@ -334,7 +334,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -342,7 +342,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.80,
           recall: 0.82,
           f1_score: 0.81
-        }
+
       };
 
       await mlFramework.createModel(modelData1);
@@ -368,7 +368,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -376,7 +376,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.80,
           recall: 0.82,
           f1_score: 0.81
-        }
+
       };
 
       const modelId = await mlFramework.createModel(modelData);
@@ -402,7 +402,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -410,7 +410,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.80,
           recall: 0.82,
           f1_score: 0.81
-        }
+
       };
 
       const modelId = await mlFramework.createModel(modelData);
@@ -439,19 +439,19 @@ describe('MLSecurityAnalyticsFramework', () => {
             type: 'numeric',
             importance: 0.9,
             description: 'Threat severity score'
-          }
+
         ],
         hyperparameters: {
           n_estimators: 100,
           max_depth: 10
-  }
+
         deployment_config: {
           environment: 'test',
           replicas: 1,
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -459,7 +459,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.80,
           recall: 0.82,
           f1_score: 0.81
-        }
+
       };
 
       modelId = await mlFramework.createModel(modelData);
@@ -540,18 +540,18 @@ describe('MLSecurityAnalyticsFramework', () => {
             type: 'numeric',
             importance: 0.8,
             description: 'Number of requests'
-          }
+
         ],
         hyperparameters: {
           n_estimators: 100
-  }
+
         deployment_config: {
           environment: 'test',
           replicas: 1,
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -559,7 +559,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       modelId = await mlFramework.createModel(modelData);
@@ -573,7 +573,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           request_count: 150,
           source_ip: '192.168.1.100',
           event_type: 'api_access'
-  }
+
         request_id: 'test_request_1',
         timestamp: Date.now()
       };
@@ -595,13 +595,13 @@ describe('MLSecurityAnalyticsFramework', () => {
           input_data: { request_count: 100 },
           request_id: 'batch_1',
           timestamp: Date.now()
-  }
+
         {
           model_id: modelId,
           input_data: { request_count: 200 },
           request_id: 'batch_2',
           timestamp: Date.now()
-        }
+
       ];
 
       const results = await mlFramework.performBatchInference(requests);
@@ -642,7 +642,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         metadata: {
           user_agent: 'Mozilla/5.0',
           country: 'US'
-        }
+
       };
 
       const features = await mlFramework.extractFeatures(securityEvent);
@@ -663,7 +663,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           timestamp: Date.now() - 60000,
           user_id: 'user123',
           metadata: {}
-  }
+
         {
           id: 'event_2',
           event_type: SecurityEventType.LOGIN_FAILURE,
@@ -672,7 +672,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           timestamp: Date.now() - 30000,
           user_id: 'user123',
           metadata: {}
-  }
+
         {
           id: 'event_3',
           event_type: SecurityEventType.LOGIN_SUCCESS,
@@ -681,7 +681,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           timestamp: Date.now(),
           user_id: 'user123',
           metadata: {}
-        }
+
       ];
 
       const timeSeriesFeatures = await mlFramework.generateTimeSeriesFeatures(events, '1h');
@@ -730,7 +730,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -738,7 +738,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       modelId = await mlFramework.createModel(modelData);
@@ -807,7 +807,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: true
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -815,7 +815,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       modelId = await mlFramework.createModel(modelData);
@@ -887,7 +887,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -895,7 +895,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       const modelId = await mlFramework.createModel(modelData);
@@ -929,7 +929,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -937,7 +937,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       const modelId = await mlFramework.createModel(modelData);
@@ -955,7 +955,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         expect.objectContaining({
           event_type: 'ml_model_lifecycle',
           action: 'model_created'
-  }
+
       );
     });
 
@@ -997,7 +997,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -1005,7 +1005,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       const modelId = await mlFramework.createModel(modelData);
@@ -1046,7 +1046,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -1054,7 +1054,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       await expect(mlFramework.createModel(invalidModelData)).rejects.toThrow();
@@ -1076,7 +1076,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -1084,7 +1084,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       const modelId = await mlFramework.createModel(modelData);
@@ -1125,7 +1125,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         ml_framework: {
           ...testConfig.ml_framework,
           enabled: false
-        }
+
       };
 
       const disabledFramework = new MLSecurityAnalyticsFramework(
@@ -1155,7 +1155,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-  }
+
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -1163,7 +1163,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           precision: 0.92,
           recall: 0.88,
           f1_score: 0.90
-        }
+
       };
 
       await expect(disabledFramework.createModel(modelData)).rejects.toThrow('ML framework is disabled');

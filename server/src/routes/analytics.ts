@@ -56,7 +56,7 @@ export async function analyticsRoutes(
   // Get analytics summary
   fastify.get<{
     Querystring: z.infer<typeof AnalyticsQuerySchema>;
-  }>('/analytics/summary', {
+>('/analytics/summary', {
     schema: {
       querystring: {
         type: 'object',
@@ -67,9 +67,9 @@ export async function analyticsRoutes(
           organizationId: { type: 'number' },
           limit: { type: 'number', minimum: 1, maximum: 1000, default: 100 },
           offset: { type: 'number', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = AnalyticsQuerySchema.parse(request.query);
@@ -92,42 +92,42 @@ export async function analyticsRoutes(
           period: {
             startTime: filters.startTime,
             endTime: filters.endTime
-  }
+
           generatedAt: Date.now()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve analytics summary',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get time series data
   fastify.get<{
     Querystring: z.infer<typeof TimeRangeSchema> & { metric: string };
-  }>('/analytics/timeseries/:metric', {
+>('/analytics/timeseries/:metric', {
     schema: {
       params: {
         type: 'object',
         properties: {
           metric: { type: 'string', enum: ['executions', 'tokens', 'cost', 'errors'] }
-  }
+
         required: ['metric']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           startTime: { type: 'number' },
           endTime: { type: 'number' },
           granularity: { type: 'string', enum: ['hour', 'day'], default: 'hour' }
-  }
+
         required: ['startTime', 'endTime']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { metric } = request.params as { metric: string };
@@ -146,39 +146,39 @@ export async function analyticsRoutes(
           metric,
           granularity: query.granularity,
           dataPoints: timeSeriesData
-  }
+
         meta: {
           period: {
             startTime: query.startTime,
             endTime: query.endTime
-  }
+
           totalDataPoints: timeSeriesData.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve time series data',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get heat map data
   fastify.get<{
     Querystring: z.infer<typeof TimeRangeSchema>;
-  }>('/analytics/heatmap', {
+>('/analytics/heatmap', {
     schema: {
       querystring: {
         type: 'object',
         properties: {
           startTime: { type: 'number' },
           endTime: { type: 'number' }
-  }
+
         required: ['startTime', 'endTime']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = TimeRangeSchema.parse(request.query);
@@ -192,33 +192,33 @@ export async function analyticsRoutes(
           period: {
             startTime: query.startTime,
             endTime: query.endTime
-  }
+
           totalPoints: heatMapData.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve heat map data',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get usage patterns
   fastify.get<{
     Params: { type: 'hourly' | 'daily' | 'weekly' };
-  }>('/analytics/patterns/:type', {
+>('/analytics/patterns/:type', {
     schema: {
       params: {
         type: 'object',
         properties: {
           type: { type: 'string', enum: ['hourly', 'daily', 'weekly'] }
-  }
+
         required: ['type']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { type } = request.params as { type: 'hourly' | 'daily' | 'weekly' };
@@ -229,14 +229,14 @@ export async function analyticsRoutes(
         success: true,
         data: patterns
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve usage patterns',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get dashboard data
@@ -248,14 +248,14 @@ export async function analyticsRoutes(
         success: true,
         data: dashboardData
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve dashboard data',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get dashboard HTML
@@ -264,14 +264,14 @@ export async function analyticsRoutes(
       const dashboardHTML = analyticsDashboard.generateHTMLDashboard();
       
       reply.type('text/html').send(dashboardHTML);
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to generate dashboard HTML',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Cost tracking routes
@@ -279,7 +279,7 @@ export async function analyticsRoutes(
   // Get cost summary
   fastify.get<{
     Querystring: z.infer<typeof TimeRangeSchema> & { userId?: number; organizationId?: number };
-  }>('/analytics/costs/summary', {
+>('/analytics/costs/summary', {
     schema: {
       querystring: {
         type: 'object',
@@ -288,10 +288,10 @@ export async function analyticsRoutes(
           endTime: { type: 'number' },
           userId: { type: 'number' },
           organizationId: { type: 'number' }
-  }
+
         required: ['startTime', 'endTime']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = request.query as any;
@@ -307,20 +307,20 @@ export async function analyticsRoutes(
         success: true,
         data: costSummary
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve cost summary',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get cost forecast
   fastify.get<{
     Querystring: { days: number; userId?: number; organizationId?: number };
-  }>('/analytics/costs/forecast', {
+>('/analytics/costs/forecast', {
     schema: {
       querystring: {
         type: 'object',
@@ -328,10 +328,10 @@ export async function analyticsRoutes(
           days: { type: 'number', minimum: 1, maximum: 365 },
           userId: { type: 'number' },
           organizationId: { type: 'number' }
-  }
+
         required: ['days']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = request.query as any;
@@ -346,14 +346,14 @@ export async function analyticsRoutes(
         success: true,
         data: forecast
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to generate cost forecast',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Budget management routes
@@ -361,7 +361,7 @@ export async function analyticsRoutes(
   // Create budget
   fastify.post<{
     Body: z.infer<typeof BudgetCreateSchema>;
-  }>('/analytics/budgets', {
+>('/analytics/budgets', {
     schema: {
       body: {
         type: 'object',
@@ -375,9 +375,9 @@ export async function analyticsRoutes(
           alertThresholds: { type: 'array', items: { type: 'number', minimum: 0, maximum: 100 } },
           userId: { type: 'number' },
           organizationId: { type: 'number' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const budgetConfig = BudgetCreateSchema.parse(request.body);
@@ -392,29 +392,29 @@ export async function analyticsRoutes(
         success: true,
         data: budget
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to create budget',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get budgets
   fastify.get<{
     Querystring: { userId?: number; organizationId?: number };
-  }>('/analytics/budgets', {
+>('/analytics/budgets', {
     schema: {
       querystring: {
         type: 'object',
         properties: {
           userId: { type: 'number' },
           organizationId: { type: 'number' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = request.query as any;
@@ -425,29 +425,29 @@ export async function analyticsRoutes(
         success: true,
         data: budgets
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve budgets',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Update budget
   fastify.put<{
     Params: { budgetId: string };
     Body: z.infer<typeof BudgetUpdateSchema>;
-  }>('/analytics/budgets/:budgetId', {
+>('/analytics/budgets/:budgetId', {
     schema: {
       params: {
         type: 'object',
         properties: {
           budgetId: { type: 'string' }
-  }
+
         required: ['budgetId']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -457,9 +457,9 @@ export async function analyticsRoutes(
           currency: { type: 'string', minLength: 3, maxLength: 3 },
           period: { type: 'string', enum: ['daily', 'weekly', 'monthly', 'yearly'] },
           alertThresholds: { type: 'array', items: { type: 'number', minimum: 0, maximum: 100 } }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { budgetId } = request.params as { budgetId: string };
@@ -473,35 +473,35 @@ export async function analyticsRoutes(
           error: 'Budget not found'
         });
         return;
-      }
+
       
       reply.send({
         success: true,
         data: updatedBudget
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to update budget',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get budget usage
   fastify.get<{
     Params: { budgetId: string };
-  }>('/analytics/budgets/:budgetId/usage', {
+>('/analytics/budgets/:budgetId/usage', {
     schema: {
       params: {
         type: 'object',
         properties: {
           budgetId: { type: 'string' }
-  }
+
         required: ['budgetId']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { budgetId } = request.params as { budgetId: string };
@@ -514,20 +514,20 @@ export async function analyticsRoutes(
           error: 'Budget usage not found'
         });
         return;
-      }
+
       
       reply.send({
         success: true,
         data: usage
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve budget usage',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get active alerts
@@ -539,29 +539,29 @@ export async function analyticsRoutes(
         success: true,
         data: alerts
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve alerts',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Acknowledge alert
   fastify.post<{
     Params: { alertId: string };
-  }>('/analytics/alerts/:alertId/acknowledge', {
+>('/analytics/alerts/:alertId/acknowledge', {
     schema: {
       params: {
         type: 'object',
         properties: {
           alertId: { type: 'string' }
-  }
+
         required: ['alertId']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { alertId } = request.params as { alertId: string };
@@ -574,35 +574,35 @@ export async function analyticsRoutes(
           error: 'Alert not found'
         });
         return;
-      }
+
       
       reply.send({
         success: true,
         message: 'Alert acknowledged'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to acknowledge alert',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get efficiency recommendations
   fastify.get<{
     Querystring: { userId?: number; organizationId?: number };
-  }>('/analytics/recommendations', {
+>('/analytics/recommendations', {
     schema: {
       querystring: {
         type: 'object',
         properties: {
           userId: { type: 'number' },
           organizationId: { type: 'number' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = request.query as any;
@@ -616,20 +616,20 @@ export async function analyticsRoutes(
         success: true,
         data: recommendations
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve recommendations',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Generate analytics report
   fastify.post<{
     Body: z.infer<typeof ReportConfigSchema>;
-  }>('/analytics/reports', {
+>('/analytics/reports', {
     schema: {
       body: {
         type: 'object',
@@ -641,9 +641,9 @@ export async function analyticsRoutes(
           includeHeatMap: { type: 'boolean', default: false },
           includeCostAnalysis: { type: 'boolean', default: true },
           includePatterns: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const config = ReportConfigSchema.parse(request.body);
@@ -660,20 +660,20 @@ export async function analyticsRoutes(
             'application/json';
       
       reply.type(contentType).send(report);
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to generate report',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Export analytics data
   fastify.get<{
     Querystring: z.infer<typeof TimeRangeSchema> & { format?: 'json' | 'csv' };
-  }>('/analytics/export', {
+>('/analytics/export', {
     schema: {
       querystring: {
         type: 'object',
@@ -681,10 +681,10 @@ export async function analyticsRoutes(
           startTime: { type: 'number' },
           endTime: { type: 'number' },
           format: { type: 'string', enum: ['json', 'csv'], default: 'json' }
-  }
+
         required: ['startTime', 'endTime']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = request.query as any;
@@ -702,13 +702,12 @@ export async function analyticsRoutes(
         .type(contentType)
         .header('Content-Disposition', `attachment; filename="${filename}"`)
         .send(exportData);
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to export analytics data',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}

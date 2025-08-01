@@ -33,263 +33,206 @@ export const OptimizationControls = ({
     };
     if (!isOpen)
         return null;
-    const optimizationFeatures = [];
-    {
-        key: 'deadCodeElimination',
-            title;
-        'Dead Code Elimination',
-            description;
-        'Remove nodes that have no output or are unreachable',
-            icon;
-        '🗑️',
-            impact;
-        'High',
-            impactColor;
-        '#28a745',
-            recommended;
-        true,
-        ;
-    }
-    {
-        key: 'constantPropagation',
-            title;
-        'Constant Propagation',
-            description;
-        'Pre-compute nodes that always produce the same output',
-            icon;
-        '⚡',
-            impact;
-        'Medium',
-            impactColor;
-        '#ffc107',
-            recommended;
-        true,
-        ;
-    }
-    {
-        key: 'resultCaching',
-            title;
-        'Result Caching',
-            description;
-        'Cache results to avoid recomputing identical operations',
-            icon;
-        '💾',
-            impact;
-        'High',
-            impactColor;
-        '#28a745',
-            recommended;
-        true,
-        ;
-    }
-    {
-        key: 'parallelExecution',
-            title;
-        'Parallel Execution',
-            description;
-        'Run independent nodes concurrently (experimental)',
-            icon;
-        '🔄',
-            impact;
-        'High',
-            impactColor;
-        '#28a745',
-            recommended;
-        false,
-            experimental;
-        true,
-        ;
-    }
-    {
-        key: 'memoryOptimization',
-            title;
-        'Memory Optimization',
-            description;
-        'Reduce memory usage through object pooling and cleanup',
-            icon;
-        '🧹',
-            impact;
-        'Medium',
-            impactColor;
-        '#ffc107',
-            recommended;
-        true,
-        ;
-    }
-    {
-        key: 'precompilation',
-            title;
-        'Graph Precompilation',
-            description;
-        'Compile graphs to optimized execution plans (experimental)',
-            icon;
-        '⚙️',
-            impact;
-        'High',
-            impactColor;
-        '#28a745',
-            recommended;
-        false,
-            experimental;
-        true,
-        ;
-    }
-    {
-        key: 'performanceMonitoring',
-            title;
-        'Performance Monitoring',
-            description;
-        'Collect detailed performance metrics and analytics',
-            icon;
-        '📊',
-            impact;
-        'Low',
-            impactColor;
-        '#17a2b8',
-            recommended;
-        true,
-        ;
-    }
-    {
-        key: 'debugMode',
-            title;
-        'Debug Mode',
-            description;
-        'Enable detailed logging and debugging information',
-            icon;
-        '🐛',
-            impact;
-        'None',
-            impactColor;
-        '#6c757d',
-            recommended;
-        false;
-        ;
-        return;
-        _jsx("div", { style: {
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 1000,
-            }, children: _jsxs("div", { style: {
-                    backgroundColor: 'white',
-                    borderRadius: '8px',
-                    padding: '24px',
-                    width: '90%',
-                    maxWidth: '700px',
-                    maxHeight: '90vh',
-                    overflowY: 'auto',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                }, children: [_jsxs("div", { style: {
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginBottom: '24px',
-                        }, children: [_jsx("h2", { style: {
-                                    margin: 0,
-                                    fontSize: '20px',
-                                    fontWeight: '600',
-                                    color: '#333',
-                                }, children: "\u2699\uFE0F Optimization Settings" }), _jsx("button", { onClick: onClose, style: {
-                                    background: 'none',
-                                    border: 'none',
-                                    fontSize: '24px',
-                                    cursor: 'pointer',
-                                    color: '#666',
-                                    padding: '0',
-                                    width: '32px',
-                                    height: '32px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }, children: "\u00D7" })] }), _jsxs("div", { style: {
-                            padding: '12px 16px',
-                            backgroundColor: '#fff3cd',
-                            border: '1px solid #ffeaa7',
-                            borderRadius: '4px',
-                            marginBottom: '24px',
-                            fontSize: '14px',
-                            color: '#856404',
-                        }, children: ["\u26A0\uFE0F ", _jsx("strong", { children: "Note:" }), " Experimental features may affect graph execution behavior. Enable them only if you understand the implications."] }), _jsxs("div", { style: {
-                            display: 'grid',
-                            gap: '16px',
-                            marginBottom: '24px',
-                        }, children: [optimizationFeatures.map((feature) => ()
-                                < div, key = { feature, : .key }, style = {}, {
-                                padding: '16px',
-                                border: '1px solid #e9ecef',
-                                borderRadius: '8px',
-                                backgroundColor: localSettings[feature.key] ? '#f8f9fa' : 'white',
-                            }), ">", _jsxs("div", { style: {
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'flex-start',
-                                    marginBottom: '8px',
-                                }, children: [_jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }, children: [_jsx("span", { style: { fontSize: '20px' }, children: feature.icon }), _jsx("h3", { style: {
-                                                            margin: 0,
-                                                            fontSize: '16px',
-                                                            fontWeight: '600',
-                                                            color: '#333',
-                                                        }, children: feature.title }), feature.experimental && ()
-                                                        < span, " style=", {
-                                                        padding: '2px 6px',
-                                                        backgroundColor: '#ffc107',
-                                                        color: 'white',
-                                                        borderRadius: '8px',
-                                                        fontSize: '10px',
-                                                        fontWeight: '500',
-                                                        textTransform: 'uppercase',
-                                                    }, "> Experimental"] }), ")}", feature.recommended && ()
-                                                < span, " style=", {
-                                                padding: '2px 6px',
-                                                backgroundColor: '#28a745',
-                                                color: 'white',
-                                                borderRadius: '8px',
-                                                fontSize: '10px',
-                                                fontWeight: '500',
-                                                textTransform: 'uppercase',
-                                            }, "> Recommended"] }), ")}"] }), _jsx("p", { style: {
-                                    margin: '0 0 8px 0',
-                                    fontSize: '14px',
-                                    color: '#6c757d',
-                                    lineHeight: 1.4,
-                                }, children: feature.description }), _jsxs("div", { style: {
-                                    fontSize: '12px',
-                                    color: feature.impactColor,
-                                    fontWeight: '500',
-                                }, children: ["Impact: ", feature.impact] })] }), _jsx("label", { style: {
-                            display: 'flex',
-                            alignItems: 'center',
-                            cursor: 'pointer',
-                            marginLeft: '16px',
-                        }, children: _jsx("input", { type: "checkbox", checked: localSettings[feature.key], onChange: (e) => handleSettingChange(feature.key, e.target.checked), style: {
-                                width: '18px',
-                                height: '18px',
+    const optimizationFeatures = [
+        {
+            key: 'deadCodeElimination',
+            title: 'Dead Code Elimination',
+            description: 'Remove nodes that have no output or are unreachable',
+            icon: '🗑️',
+            impact: 'High',
+            impactColor: '#28a745',
+            recommended: true,
+        },
+        {
+            key: 'constantPropagation',
+            title: 'Constant Propagation',
+            description: 'Pre-compute nodes that always produce the same output',
+            icon: '⚡',
+            impact: 'Medium',
+            impactColor: '#ffc107',
+            recommended: true,
+        },
+        {
+            key: 'resultCaching',
+            title: 'Result Caching',
+            description: 'Cache results to avoid recomputing identical operations',
+            icon: '💾',
+            impact: 'High',
+            impactColor: '#28a745',
+            recommended: true,
+        },
+        {
+            key: 'parallelExecution',
+            title: 'Parallel Execution',
+            description: 'Run independent nodes concurrently (experimental)',
+            icon: '🔄',
+            impact: 'High',
+            impactColor: '#28a745',
+            recommended: false,
+            experimental: true,
+        },
+        {
+            key: 'memoryOptimization',
+            title: 'Memory Optimization',
+            description: 'Reduce memory usage through object pooling and cleanup',
+            icon: '🧹',
+            impact: 'Medium',
+            impactColor: '#ffc107',
+            recommended: true,
+        },
+        {
+            key: 'precompilation',
+            title: 'Graph Precompilation',
+            description: 'Compile graphs to optimized execution plans (experimental)',
+            icon: '⚙️',
+            impact: 'High',
+            impactColor: '#28a745',
+            recommended: false,
+            experimental: true,
+        },
+        {
+            key: 'performanceMonitoring',
+            title: 'Performance Monitoring',
+            description: 'Collect detailed performance metrics and analytics',
+            icon: '📊',
+            impact: 'Low',
+            impactColor: '#17a2b8',
+            recommended: true,
+        },
+        {
+            key: 'debugMode',
+            title: 'Debug Mode',
+            description: 'Enable detailed logging and debugging information',
+            icon: '🐛',
+            impact: 'None',
+            impactColor: '#6c757d',
+            recommended: false
+        }
+    ];
+    return;
+    _jsx("div", { style: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+        }, children: _jsxs("div", { style: {
+                backgroundColor: 'white',
+                borderRadius: '8px',
+                padding: '24px',
+                width: '90%',
+                maxWidth: '700px',
+                maxHeight: '90vh',
+                overflowY: 'auto',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            }, children: [_jsxs("div", { style: {
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '24px',
+                    }, children: [_jsx("h2", { style: {
                                 margin: 0,
-                            } }) })] }) });
-    }
-    div >
-        { /* Performance Impact Summary */}
-        < div;
-    style = {};
-    {
-        padding: '16px',
-            backgroundColor;
-        '#e7f3ff',
-            border;
-        '1px solid #b3d9ff',
-            borderRadius;
-        '8px',
-            marginBottom;
-        '24px',
-        ;
-    }
+                                fontSize: '20px',
+                                fontWeight: '600',
+                                color: '#333',
+                            }, children: "\u2699\uFE0F Optimization Settings" }), _jsx("button", { onClick: onClose, style: {
+                                background: 'none',
+                                border: 'none',
+                                fontSize: '24px',
+                                cursor: 'pointer',
+                                color: '#666',
+                                padding: '0',
+                                width: '32px',
+                                height: '32px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }, children: "\u00D7" })] }), _jsxs("div", { style: {
+                        padding: '12px 16px',
+                        backgroundColor: '#fff3cd',
+                        border: '1px solid #ffeaa7',
+                        borderRadius: '4px',
+                        marginBottom: '24px',
+                        fontSize: '14px',
+                        color: '#856404',
+                    }, children: ["\u26A0\uFE0F ", _jsx("strong", { children: "Note:" }), " Experimental features may affect graph execution behavior. Enable them only if you understand the implications."] }), _jsxs("div", { style: {
+                        display: 'grid',
+                        gap: '16px',
+                        marginBottom: '24px',
+                    }, children: [optimizationFeatures.map((feature) => ()
+                            < div, key = { feature, : .key }, style = {}, {
+                            padding: '16px',
+                            border: '1px solid #e9ecef',
+                            borderRadius: '8px',
+                            backgroundColor: localSettings[feature.key] ? '#f8f9fa' : 'white',
+                        }), ">", _jsxs("div", { style: {
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'flex-start',
+                                marginBottom: '8px',
+                            }, children: [_jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }, children: [_jsx("span", { style: { fontSize: '20px' }, children: feature.icon }), _jsx("h3", { style: {
+                                                        margin: 0,
+                                                        fontSize: '16px',
+                                                        fontWeight: '600',
+                                                        color: '#333',
+                                                    }, children: feature.title }), feature.experimental && ()
+                                                    < span, " style=", {
+                                                    padding: '2px 6px',
+                                                    backgroundColor: '#ffc107',
+                                                    color: 'white',
+                                                    borderRadius: '8px',
+                                                    fontSize: '10px',
+                                                    fontWeight: '500',
+                                                    textTransform: 'uppercase',
+                                                }, "> Experimental"] }), ")}", feature.recommended && ()
+                                            < span, " style=", {
+                                            padding: '2px 6px',
+                                            backgroundColor: '#28a745',
+                                            color: 'white',
+                                            borderRadius: '8px',
+                                            fontSize: '10px',
+                                            fontWeight: '500',
+                                            textTransform: 'uppercase',
+                                        }, "> Recommended"] }), ")}"] }), _jsx("p", { style: {
+                                margin: '0 0 8px 0',
+                                fontSize: '14px',
+                                color: '#6c757d',
+                                lineHeight: 1.4,
+                            }, children: feature.description }), _jsxs("div", { style: {
+                                fontSize: '12px',
+                                color: feature.impactColor,
+                                fontWeight: '500',
+                            }, children: ["Impact: ", feature.impact] })] }), _jsx("label", { style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        marginLeft: '16px',
+                    }, children: _jsx("input", { type: "checkbox", checked: localSettings[feature.key], onChange: (e) => handleSettingChange(feature.key, e.target.checked), style: {
+                            width: '18px',
+                            height: '18px',
+                            margin: 0,
+                        } }) })] }) });
+}
+div >
+    { /* Performance Impact Summary */}
+    < div;
+style = {};
+{
+    padding: '16px',
+        backgroundColor;
+    '#e7f3ff',
+        border;
+    '1px solid #b3d9ff',
+        borderRadius;
+    '8px',
+        marginBottom;
+    '24px',
+    ;
 }
  >
     (_jsx("h4", { style: {

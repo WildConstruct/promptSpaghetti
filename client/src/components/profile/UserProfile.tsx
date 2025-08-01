@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { User } from '../../types/auth';
-}
+
+
 interface UserProfileProps {
   user: User;
   onUpdateProfile?: (updates: Partial<User>) => void;
   onDeleteAccount?: () => void;
   readOnly?: boolean;
-  export const UserProfile: React.FC<UserProfileProps> = ({,)
+  export const UserProfile: React.FC<UserProfileProps> = ({),
   user,
   onUpdateProfile,
   onDeleteAccount,
   readOnly = false
-}
+
+
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({)

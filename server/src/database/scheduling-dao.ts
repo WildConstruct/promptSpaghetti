@@ -17,7 +17,7 @@ import {
   ScheduleStatus,
   ExecutionStatus,
   ScheduleAction
-} from './scheduling-models';
+ from './scheduling-models';
 
 export class SchedulingDAO {
   constructor(private db: Database) {}
@@ -172,7 +172,7 @@ export class SchedulingDAO {
           else resolve();
         });
       });
-    }
+
 
     // Create indexes
     for (const index of indexes) {
@@ -182,8 +182,8 @@ export class SchedulingDAO {
           else resolve();
         });
       });
-    }
-  }
+
+
 
   // Schedule CRUD operations
   async createSchedule(request: CreateScheduleRequest, createdBy: string): Promise<FeatureToggleSchedule> {
@@ -252,7 +252,7 @@ export class SchedulingDAO {
     });
 
     return schedule;
-  }
+
 
   async getSchedule(id: string): Promise<FeatureToggleSchedule | null> {
 
@@ -263,15 +263,15 @@ export class SchedulingDAO {
         (err, row: unknown) => {
           if (err) {
             reject(err);
-          } else if (!row) {
+ else if (!row) {
             resolve(null);
-          } else {
+ else {
             resolve(this.mapRowToSchedule(row));
-          }
+
         }
       );
     });
-  }
+
 
   async getSchedulesByToggle(toggleId: string): Promise<FeatureToggleSchedule[]> {
 
@@ -282,13 +282,13 @@ export class SchedulingDAO {
         (err, rows: unknown[]) => {
           if (err) {
             reject(err);
-          } else {
+ else {
             resolve(rows.map(row => this.mapRowToSchedule(row)));
-          }
+
         }
       );
     });
-  }
+
 
   async querySchedules(query: ScheduleQuery): Promise<{ schedules: FeatureToggleSchedule[]; total: number }> {
 
@@ -301,37 +301,37 @@ export class SchedulingDAO {
       sql += ' AND toggle_id = ?';
       countSql += ' AND toggle_id = ?';
       params.push(query.toggleId);
-    }
+
 
     if (query.status) {
       sql += ' AND status = ?';
       countSql += ' AND status = ?';
       params.push(query.status);
-    }
+
 
     if (query.type) {
       sql += ' AND type = ?';
       countSql += ' AND type = ?';
       params.push(query.type);
-    }
+
 
     if (query.startDate) {
       sql += ' AND start_time >= ?';
       countSql += ' AND start_time >= ?';
       params.push(query.startDate);
-    }
+
 
     if (query.endDate) {
       sql += ' AND start_time <= ?';
       countSql += ' AND start_time <= ?';
       params.push(query.endDate);
-    }
+
 
     if (query.createdBy) {
       sql += ' AND created_by = ?';
       countSql += ' AND created_by = ?';
       params.push(query.createdBy);
-    }
+
 
     // Add ORDER BY
     const sortBy = query.sortBy || 'start_time';
@@ -356,11 +356,11 @@ export class SchedulingDAO {
           if (err) reject(err);
           else resolve(row.total);
         });
-  }
+
     ]);
 
     return { schedules, total };
-  }
+
 
   async updateSchedule(request: UpdateScheduleRequest, updatedBy: string): Promise<FeatureToggleSchedule | null> {
 
@@ -390,7 +390,7 @@ export class SchedulingDAO {
       default:
         updates.push(`${key.replace(/([A-Z])/g, '_$1').toLowerCase()} = ?`);
         params.push(value);
-      }
+
     });
 
     if (updates.length === 0) return existing;
@@ -411,7 +411,7 @@ export class SchedulingDAO {
     });
 
     return this.getSchedule(request.id);
-  }
+
 
   async deleteSchedule(id: string): Promise<boolean> {
 
@@ -421,7 +421,7 @@ export class SchedulingDAO {
         else resolve(this.changes > 0);
       });
     });
-  }
+
 
   // Schedule execution operations
   async createExecution(execution: Omit<ScheduleExecution, 'id' | 'createdAt'>): Promise<ScheduleExecution> {
@@ -466,7 +466,7 @@ export class SchedulingDAO {
     });
 
     return fullExecution;
-  }
+
 
   async getExecutionsBySchedule(scheduleId: string, limit = 100): Promise<ScheduleExecution[]> {
 
@@ -480,7 +480,7 @@ export class SchedulingDAO {
         }
       );
     });
-  }
+
 
   // Schedule conflict operations
   async createConflict(conflict: Omit<ScheduleConflict, 'id' | 'detectedAt'>): Promise<ScheduleConflict> {
@@ -519,7 +519,7 @@ export class SchedulingDAO {
     });
 
     return fullConflict;
-  }
+
 
   async getUnresolvedConflicts(): Promise<ScheduleConflict[]> {
 
@@ -532,7 +532,7 @@ export class SchedulingDAO {
         }
       );
     });
-  }
+
 
   // Analytics
   async getScheduleAnalytics(startDate?: Date, endDate?: Date): Promise<ScheduleAnalytics> {
@@ -543,11 +543,11 @@ export class SchedulingDAO {
     if (startDate) {
       timeFilter += ' AND created_at >= ?';
       params.push(startDate.toISOString());
-    }
+
     if (endDate) {
       timeFilter += ' AND created_at <= ?';
       params.push(endDate.toISOString());
-    }
+
 
     const queries = [
       `SELECT 
@@ -580,13 +580,11 @@ export class SchedulingDAO {
               if (err) reject(err);
               else resolve(rows);
             });
-          } else {
+ else {
             this.db.get(query, params, (err, row) => {
               if (err) reject(err);
               else resolve(row);
             });
-          }
-  }
 
     );
 
@@ -612,7 +610,7 @@ export class SchedulingDAO {
       timeDistribution: [], // TODO: Calculate time distribution
       timezoneDistribution: [] // TODO: Calculate timezone distribution
     };
-  }
+
 
   // Helper methods
   private mapRowToSchedule(row: unknown): FeatureToggleSchedule {
@@ -641,7 +639,7 @@ export class SchedulingDAO {
       priority: row.priority,
       conflictResolution: row.conflict_resolution
     };
-  }
+
 
   private mapRowToExecution(row: unknown): ScheduleExecution {
     return {
@@ -660,7 +658,7 @@ export class SchedulingDAO {
       metadata: JSON.parse(row.metadata || '{}'),
       createdAt: new Date(row.created_at)
     };
-  }
+
 
   private mapRowToConflict(row: unknown): ScheduleConflict {
     return {
@@ -676,5 +674,4 @@ export class SchedulingDAO {
       autoResolvable: Boolean(row.auto_resolvable),
       suggestedResolution: row.suggested_resolution ? JSON.parse(row.suggested_resolution) : undefined
     };
-  }
-}
+

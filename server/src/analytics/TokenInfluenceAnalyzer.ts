@@ -9,8 +9,8 @@
 import { logger } from '../utils/logger';
 import { AnalyticsCollector } from './AnalyticsCollector';
 
-}
-}
+
+
 export interface TokenInfluenceResult {
   originalPrompt: string;
   tokens: TokenInfluence[];
@@ -24,13 +24,14 @@ export interface TokenInfluenceResult {
     analysisTime: number;
     tokenCount: number;
     perturbationCount?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface TokenInfluence {
   token: string;
   position: number;
@@ -42,13 +43,14 @@ export interface TokenInfluence {
   contextWindow?: {
     before: string[];
     after: string[];
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface LimeAnalysisOptions {
   numSamples: number;           // Number of perturbations for LIME
   perturbationStrategy: 'mask' | 'replace' | 'reorder';
@@ -56,32 +58,35 @@ export interface LimeAnalysisOptions {
   kernelWidth: number;          // Exponential kernel width
   maxFeatures: number;          // Max features in explanation
   regularization: number;       // Ridge regression alpha
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SaliencyAnalysisOptions {
   gradientMethod: 'vanilla' | 'integrated' | 'smoothgrad';
   baselineStrategy: 'zero' | 'random' | 'mask';
   numSteps: number;             // Steps for integrated gradients
   noiseLevel: number;           // Noise for SmoothGrad
   aggregationMethod: 'mean' | 'max' | 'l2_norm';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PromptPerturbation {
   perturbedPrompt: string;
   changedPositions: number[];
   similarity: number;
   prediction?: any;
-}
-}
-}
+
+
+
+
 
 class TokenInfluenceAnalyzer {
   private analyticsCollector: AnalyticsCollector;
@@ -89,14 +94,14 @@ class TokenInfluenceAnalyzer {
 
   constructor(analyticsCollector: AnalyticsCollector) {
     this.analyticsCollector = analyticsCollector;
-  }
+
 
   static getInstance(analyticsCollector: AnalyticsCollector): TokenInfluenceAnalyzer {
     if (!TokenInfluenceAnalyzer.instance) {
       TokenInfluenceAnalyzer.instance = new TokenInfluenceAnalyzer(analyticsCollector);
-    }
+
     return TokenInfluenceAnalyzer.instance;
-  }
+
 
   /**
    * Analyze token influence using LIME methodology
@@ -140,14 +145,13 @@ class TokenInfluenceAnalyzer {
           try {
             const prediction = await predictionFunction(p.perturbedPrompt);
             return { ...p, prediction, index };
-          } catch (error) {
+ catch (error) {
             logger.warn(
               `Perturbation ${index} failed`,
               { error: error instanceof Error ? error.message : String(error
               ) });
             return { ...p, prediction: null, index };
-          }
-  }
+
       );
 
       // Filter successful predictions
@@ -176,7 +180,7 @@ class TokenInfluenceAnalyzer {
           analysisTime: Date.now() - startTime,
           tokenCount: tokens.length,
           perturbationCount: validPerturbations.length
-        }
+
       };
 
       // Track analytics
@@ -190,14 +194,14 @@ class TokenInfluenceAnalyzer {
       });
 
       return result;
-    } catch (error) {
+ catch (error) {
       logger.error('LIME analysis failed', {
         error: error instanceof Error ? error.message : String(error),
         analysisTime: Date.now() - startTime
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Analyze token influence using Saliency mapping
@@ -246,7 +250,7 @@ class TokenInfluenceAnalyzer {
       default:
         saliencyScores = await gradientFunction(prompt);
         break;
-      }
+
 
       // Convert saliency scores to token influences
       const influences = tokens.map((token, index) => {
@@ -267,7 +271,7 @@ class TokenInfluenceAnalyzer {
         metadata: {
           analysisTime: Date.now() - startTime,
           tokenCount: tokens.length
-        }
+
       };
 
       // Track analytics
@@ -281,14 +285,14 @@ class TokenInfluenceAnalyzer {
       });
 
       return result;
-    } catch (error) {
+ catch (error) {
       logger.error('Saliency analysis failed', {
         error: error instanceof Error ? error.message : String(error),
         analysisTime: Date.now() - startTime
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Compare multiple analysis methods
@@ -305,7 +309,7 @@ class TokenInfluenceAnalyzer {
       agreement: number;
       divergentTokens: TokenInfluence[];
     };
-  }> {
+> {
 
     logger.info('Starting comparative token influence analysis');
 
@@ -324,7 +328,7 @@ class TokenInfluenceAnalyzer {
         correlation: comparison.correlation,
         agreement: comparison.agreement,
         divergentCount: comparison.divergentTokens.length
-      }
+
     });
 
     return {
@@ -332,12 +336,12 @@ class TokenInfluenceAnalyzer {
       saliency: saliencyResult,
       comparison
     };
-  }
+
 
   private tokenizePrompt(prompt: string): string[] {
     // Simple tokenization - in production this would use a proper tokenizer
     return prompt.split(/\s+/).filter(token => token.length > 0);
-  }
+
 
   private generatePerturbations(
     prompt: string,
@@ -374,10 +378,10 @@ class TokenInfluenceAnalyzer {
             [perturbedTokens[pos], perturbedTokens[swapPos]] = 
                 [perturbedTokens[swapPos], perturbedTokens[pos]];
             changedPositions.push(swapPos);
-          }
+
           break;
-        }
-      }
+
+
 
       const perturbedPrompt = perturbedTokens.join(' ');
       const similarity = this.calculateSimilarity(prompt, perturbedPrompt);
@@ -387,10 +391,10 @@ class TokenInfluenceAnalyzer {
         changedPositions,
         similarity
       });
-    }
+
 
     return perturbations;
-  }
+
 
   private calculateLimeInfluences(
     tokens: string[],
@@ -415,7 +419,7 @@ class TokenInfluenceAnalyzer {
       if (relevantPerturbations.length === 0) {
         influences.push(this.createTokenInfluence(token, tokenIndex, 0, 'lime'));
         continue;
-      }
+
 
       // Calculate average impact when this token is changed
       const impactScores = relevantPerturbations.map(p => {
@@ -427,10 +431,10 @@ class TokenInfluenceAnalyzer {
       const confidence = this.calculateConfidence(impactScores);
 
       influences.push(this.createTokenInfluence(token, tokenIndex, averageImpact, 'lime', confidence));
-    }
+
 
     return influences;
-  }
+
 
   private async calculateIntegratedGradients(
     prompt: string,
@@ -451,13 +455,13 @@ class TokenInfluenceAnalyzer {
       
       for (let i = 0; i < tokens.length; i++) {
         integratedGrads[i] += gradients[i] / steps;
-      }
-    }
+
+
 
     // Scale by input difference
     const inputDiff = this.calculateInputDifference(baseline, prompt, tokens);
     return integratedGrads.map((grad, i) => grad * inputDiff[i]);
-  }
+
 
   private async calculateSmoothGrad(
     prompt: string,
@@ -475,11 +479,11 @@ class TokenInfluenceAnalyzer {
       
       for (let i = 0; i < tokens.length; i++) {
         smoothedGrads[i] += gradients[i] / numSamples;
-      }
-    }
+
+
 
     return smoothedGrads;
-  }
+
 
   private createTokenInfluence(
     token: string,
@@ -503,7 +507,7 @@ class TokenInfluenceAnalyzer {
       isPositive: score > 0,
       alternatives: this.generateAlternatives(token)
     };
-  }
+
 
   private generateAlternatives(token: string): string[] {
     // Simple alternatives generation - in production use word embeddings
@@ -515,29 +519,29 @@ class TokenInfluenceAnalyzer {
     ].filter(alt => alt !== token && alt.length > 0);
 
     return alternatives.slice(0, 3);
-  }
+
 
   private calculateOverallScore(influences: TokenInfluence[]): number {
     if (influences.length === 0) return 0;
     
     const totalInfluence = influences.reduce((sum, inf) => sum + Math.abs(inf.influenceScore), 0);
     return totalInfluence / influences.length;
-  }
+
 
   private calculateModelConfidence(prediction: any): number {
     // Extract confidence from prediction - implementation depends on model format
     if (typeof prediction === 'object' && prediction.confidence) {
       return prediction.confidence;
-    }
+
     return 0.5; // Default confidence
-  }
+
 
   private extractPredictionScore(prediction: any): number {
     // Extract numerical score from prediction - implementation depends on model format
     if (typeof prediction === 'number') return prediction;
     if (typeof prediction === 'object' && prediction.score) return prediction.score;
     return 0;
-  }
+
 
   private calculateSimilarity(prompt1: string, prompt2: string): number {
     // Simple Jaccard similarity
@@ -548,7 +552,7 @@ class TokenInfluenceAnalyzer {
     const union = new Set([...tokens1, ...tokens2]);
     
     return intersection.size / union.size;
-  }
+
 
   private calculateConfidence(scores: number[]): number {
     if (scores.length <= 1) return 0.5;
@@ -559,7 +563,7 @@ class TokenInfluenceAnalyzer {
     
     // Lower standard deviation = higher confidence
     return Math.max(0.1, Math.min(1.0, 1 - (stdDev / Math.max(Math.abs(mean), 1))));
-  }
+
 
   private compareResults(result1: TokenInfluenceResult, result2: TokenInfluenceResult) {
     const scores1 = result1.tokens.map(t => t.influenceScore);
@@ -579,11 +583,11 @@ class TokenInfluenceAnalyzer {
       const scoreDiff = Math.abs(token.influenceScore - scores2[index]);
       if (scoreDiff > 0.5) {
         divergentTokens.push(token);
-      }
+
     });
 
     return { correlation, agreement, divergentTokens };
-  }
+
 
   private calculateCorrelation(x: number[], y: number[]): number {
     if (x.length !== y.length) return 0;
@@ -599,7 +603,7 @@ class TokenInfluenceAnalyzer {
     const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
     
     return denominator === 0 ? 0 : numerator / denominator;
-  }
+
 
   private sampleWithoutReplacement<T>(array: T[], count: number): T[] {
     const result: T[] = [];
@@ -608,16 +612,16 @@ class TokenInfluenceAnalyzer {
     for (let i = 0; i < count && remaining.length > 0; i++) {
       const index = Math.floor(Math.random() * remaining.length);
       result.push(remaining.splice(index, 1)[0]);
-    }
+
     
     return result;
-  }
+
 
   private getRandomReplacement(token: string): string {
     // Simple random replacement - in production use semantic replacements
     const replacements = ['the', 'and', 'or', 'but', 'with', 'from', 'to', 'of', 'in', 'on'];
     return replacements[Math.floor(Math.random() * replacements.length)];
-  }
+
 
   private createBaseline(prompt: string, tokens: string[], strategy: string): string {
     switch (strategy) {
@@ -629,8 +633,8 @@ class TokenInfluenceAnalyzer {
       return tokens.map(() => this.getRandomReplacement('')).join(' ');
     default:
       return '';
-    }
-  }
+
+
 
   private interpolatePrompts(baseline: string, prompt: string, alpha: number): string {
     // Simple linear interpolation - in production use embedding interpolation
@@ -649,10 +653,10 @@ class TokenInfluenceAnalyzer {
       
       // Simple interpolation: use prompt token if alpha > threshold
       interpolated.push(Math.random() < alpha ? promptToken : baseToken);
-    }
+
     
     return interpolated.filter(t => t.length > 0).join(' ');
-  }
+
 
   private calculateInputDifference(baseline: string, prompt: string, tokens: string[]): number[] {
     // Calculate difference between baseline and prompt for each token
@@ -665,7 +669,7 @@ class TokenInfluenceAnalyzer {
       
       return baseToken === promptToken ? 0 : 1;
     });
-  }
+
 
   private addNoise(prompt: string, tokens: string[], noiseLevel: number): string {
     // Add noise to tokens for SmoothGrad
@@ -678,10 +682,10 @@ class TokenInfluenceAnalyzer {
           chars[noiseIndex].charCodeAt(0) + Math.floor(Math.random() * 3) - 1
         );
         return chars.join('');
-      }
+
       return token;
     }).join(' ');
-  }
+
 
   private trackAnalysisEvent(eventType: string, result: TokenInfluenceResult): void {
     this.analyticsCollector.trackEvent({
@@ -693,9 +697,9 @@ class TokenInfluenceAnalyzer {
         analysisTime: result.metadata.analysisTime,
         overallScore: result.overallScore,
         highInfluenceTokens: result.tokens.filter(t => t.importance === 'high').length
-      }
+
     });
-  }
-}
+
+
 
 export default TokenInfluenceAnalyzer;

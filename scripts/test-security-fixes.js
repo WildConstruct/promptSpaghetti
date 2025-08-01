@@ -20,7 +20,7 @@ const z = {
           if (val.length > n) throw new Error(`Max length ${n}`);
           if (!validator(val)) throw new Error(opts.message);
           return val;
-        }
+
       }) 
     })
   }),
@@ -34,7 +34,7 @@ const z = {
           if (!isFinite(val)) throw new Error('Must be finite');
           if (!validator(val)) throw new Error(opts.message);
           return val;
-        }
+
       }) 
     })
   }),
@@ -47,7 +47,7 @@ const z = {
           if (val.length > n) throw new Error(`Max length ${n}`);
           if (!validator(val)) throw new Error(opts.message);
           return val;
-        }
+
       }) 
     })
   }),
@@ -57,7 +57,7 @@ const z = {
         if (typeof val !== 'object') throw new Error('Must be object');
         if (!validator(val)) throw new Error(opts.message);
         return val;
-      }
+
     })
   }),
   union: (schemas: any[]) => ({ 
@@ -65,12 +65,12 @@ const z = {
       for (const schema of (schemas as any[])) {
         try {
           return schema.parse(val);
-        } catch (e) {
+ catch (e) {
           continue;
-        }
-      }
+
+
       throw new Error('No valid schema match');
-    }
+
   }),
   null: () => ({ parse: (val: any) => val }),
   undefined: () => ({ parse: (val: any) => val })
@@ -101,11 +101,11 @@ class SecurityValidation {
     for (const pattern of (DANGEROUS_PATTERNS as RegExp[])) {
       if (pattern.test(value)) {
         return false;
-      }
-    }
+
+
     
     return true;
-  }
+
 
   static validateSafeExpression(expression: any): boolean {
     if (typeof expression !== 'string') return false;
@@ -114,7 +114,7 @@ class SecurityValidation {
     
     if (!SecurityValidation.validateSafeString(expression)) {
       return false;
-    }
+
     
     const dangerousExpressionPatterns = [
       /function\s*\(/gi,
@@ -134,16 +134,16 @@ class SecurityValidation {
     for (const pattern of (dangerousExpressionPatterns as RegExp[])) {
       if (pattern.test(expression)) {
         return false;
-      }
-    }
+
+
     
     const basicSafePattern = /^[a-zA-Z0-9_$\s\.\[\]()===!==<>=+\-*\/&&\|\|!'"]+$/;
     if (!basicSafePattern.test(expression)) {
       return false;
-    }
+
     
     return true;
-  }
+
 
   static validateSafePropertyKey(key: any): boolean {
     if (typeof key !== 'string') return false;
@@ -168,39 +168,39 @@ class SecurityValidation {
     
     if (dangerousProperties.includes(key)) {
       return false;
-    }
+
     
     if (key.includes('__proto__') || key.includes('constructor') || key.includes('prototype')) {
       return false;
-    }
+
     
     const safeKeyPattern = /^[a-zA-Z0-9_-]+$/;
     if (!safeKeyPattern.test(key)) {
       return false;
-    }
+
     
     return true;
-  }
+
 
   static validateSafeValue(value: any): boolean {
     if (value === null || value === undefined) return true;
     
     if (typeof value === 'string') {
       return SecurityValidation.validateSafeString(value) && value.length <= 10000;
-    }
+
     
     if (typeof value === 'number') {
       return isFinite(value) && !isNaN(value);
-    }
+
     
     if (typeof value === 'boolean') {
       return true;
-    }
+
     
     if (Array.isArray(value)) {
       if (value.length > 1000) return false;
       return value.every((item: any) => SecurityValidation.validateSafeValue(item));
-    }
+
     
     if (typeof value === 'object') {
       const keys = Object.keys(value);
@@ -209,14 +209,14 @@ class SecurityValidation {
       for (const key of (keys as string[])) {
         if (!SecurityValidation.validateSafePropertyKey(key)) return false;
         if (!SecurityValidation.validateSafeValue(value[key])) return false;
-      }
+
       
       return true;
-    }
+
     
     return false;
-  }
-}
+
+
 
 const SecureValidation = {
   safeString: (maxLength: number = 10000) => 
@@ -347,11 +347,11 @@ function runSecurityTests(): boolean {
   if (failedTests === 0) {
     console.log('🎉 All security tests passed! Fixes are working correctly.');
     return true;
-  } else {
+ else {
     console.log('⚠️  Some security tests failed. Please review the issues above.');
     return false;
-  }
-}
+
+
 
 function testValidation(validator: any, testPatterns: any[], testName: string): any {
   let passed = 0;
@@ -365,15 +365,15 @@ function testValidation(validator: any, testPatterns: any[], testName: string): 
     if (shouldBlock) {
       passed++;
       console.log(`   ✅ Blocked: ${pattern.toString().substring(0, 50)}...`);
-    } else {
+ else {
       failed++;
       console.log(`   ❌ Allowed: ${pattern.toString().substring(0, 50)}...`);
-    }
-  }
+
+
   
   console.log(`   ${testName} Results: ${passed} passed, ${failed} failed`);
   return { total, passed, failed };
-}
+
 
 function testSchemaValidation(): void {
   console.log('   Testing schema validation against dangerous inputs...');
@@ -389,21 +389,20 @@ function testSchemaValidation(): void {
     try {
       setVarSchema.key.parse('__proto__');
       console.log('   ❌ SetVariable schema allowed dangerous key');
-    } catch (e) {
+ catch (e) {
       console.log('   ✅ SetVariable schema blocked dangerous key');
-    }
+
     
     // Test dangerous value
     try {
       setVarSchema.value.parse(function() { return 'evil'; });
       console.log('   ❌ SetVariable schema allowed dangerous value');
-    } catch (e) {
+ catch (e) {
       console.log('   ✅ SetVariable schema blocked dangerous value');
-    }
-    
-  } catch (e) {
+
+ catch (e) {
     console.log('   ⚠️  SetVariable schema test error:', e.message);
-  }
+
   
   // Test Conditional schema
   try {
@@ -415,13 +414,12 @@ function testSchemaValidation(): void {
     try {
       conditionalSchema.condition.parse('eval("alert(1)")');
       console.log('   ❌ Conditional schema allowed dangerous expression');
-    } catch (e) {
+ catch (e) {
       console.log('   ✅ Conditional schema blocked dangerous expression');
-    }
-    
-  } catch (e) {
+
+ catch (e) {
     console.log('   ⚠️  Conditional schema test error:', e.message);
-  }
+
   
   // Test Include schema
   try {
@@ -433,14 +431,13 @@ function testSchemaValidation(): void {
     try {
       includeSchema.name.parse('constructor');
       console.log('   ❌ Include schema allowed dangerous property name');
-    } catch (e) {
+ catch (e) {
       console.log('   ✅ Include schema blocked dangerous property name');
-    }
-    
-  } catch (e) {
+
+ catch (e) {
     console.log('   ⚠️  Include schema test error:', e.message);
-  }
-}
+
+
 
 function testRuntimeSecurity(): void {
   console.log('   Testing runtime security implementations...');
@@ -451,7 +448,7 @@ function testRuntimeSecurity(): void {
       this.id = id;
       this.key = key;
       this.value = value;
-    }
+
     
     run(ctx: any): void {
       // Security: Validate key for dangerous patterns
@@ -461,40 +458,40 @@ function testRuntimeSecurity(): void {
           typeof this.key !== 'string' ||
           this.key.length === 0) {
         return; // Silently ignore dangerous keys
-      }
+
       
       // Security: Validate value is safe
       if (this.value === null || this.value === undefined) {
         ctx.variables[this.key] = this.value;
         return;
-      }
+
       
       // Only allow safe primitive types and simple objects/arrays
       const valueType = typeof this.value;
       if (valueType === 'string' || valueType === 'number' || valueType === 'boolean') {
         ctx.variables[this.key] = this.value;
-      } else if (Array.isArray(this.value)) {
+ else if (Array.isArray(this.value)) {
         ctx.variables[this.key] = JSON.parse(JSON.stringify(this.value));
-      } else if (valueType === 'object') {
+ else if (valueType === 'object') {
         ctx.variables[this.key] = JSON.parse(JSON.stringify(this.value));
-      } else {
+ else {
         return; // Reject functions and other dangerous types
-      }
-    }
-  }
+
+
+
   
   class MockIncludeNode {
     constructor(id: string, name: string, lookup: any) {
       this.id = id;
       this.name = name;
       this.lookup = lookup;
-    }
+
     
     run(ctx: any): string {
       // Security: Validate lookup object and key
       if (!this.lookup || typeof this.lookup !== 'object') {
         return ctx.variables['defaultText'] || '';
-      }
+
       
       // Security: Prevent prototype pollution and dangerous property access
       if (this.name.includes('__proto__') || 
@@ -502,18 +499,18 @@ function testRuntimeSecurity(): void {
           this.name.includes('prototype') ||
           !Object.prototype.hasOwnProperty.call(this.lookup, this.name)) {
         return ctx.variables['defaultText'] || '';
-      }
+
       
       const result = this.lookup[this.name];
       
       // Security: Ensure result is a safe string
       if (typeof result !== 'string') {
         return ctx.variables['defaultText'] || '';
-      }
+
       
       return result;
-    }
-  }
+
+
   
   // Test SetVariable runtime security
   const ctx = { variables: {} };
@@ -524,9 +521,9 @@ function testRuntimeSecurity(): void {
   
   if (ctx.variables['__proto__'] === undefined) {
     console.log('   ✅ SetVariable runtime blocked dangerous key');
-  } else {
+ else {
     console.log('   ❌ SetVariable runtime allowed dangerous key');
-  }
+
   
   // Test dangerous value
   const dangerousValueSetVar = new MockSetVariableNode('test', 'testKey', function() { return 'evil'; } as any);
@@ -534,9 +531,9 @@ function testRuntimeSecurity(): void {
   
   if (ctx.variables['testKey'] === undefined) {
     console.log('   ✅ SetVariable runtime blocked dangerous value');
-  } else {
+ else {
     console.log('   ❌ SetVariable runtime allowed dangerous value');
-  }
+
   
   // Test Include runtime security
   const lookup = { template: 'safe content' };
@@ -545,15 +542,15 @@ function testRuntimeSecurity(): void {
   
   if (result === '') {
     console.log('   ✅ Include runtime blocked dangerous property access');
-  } else {
+ else {
     console.log('   ❌ Include runtime allowed dangerous property access');
-  }
-}
+
+
 
 // Run the tests
 if (require.main === module) {
   const success = runSecurityTests();
   process.exit(success ? 0 : 1);
-}
+
 
 module.exports = { runSecurityTests, SecurityValidation, SecureValidation };

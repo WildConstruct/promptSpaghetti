@@ -25,7 +25,7 @@ interface AuthenticatedRequest extends Request {
     roles: string[];
     email: string;
   };
-}
+
 
 const router = Router();
 
@@ -43,7 +43,7 @@ const initializeServices = (pool: Pool) => {
 const requireAuth = (req: AuthenticatedRequest, res: Response, next: Function) => {
   if (!req.user) {
     return res.status(401).json({ error: 'Authentication required' });
-  }
+
   next();
 };
 
@@ -53,7 +53,7 @@ const requireAuth = (req: AuthenticatedRequest, res: Response, next: Function) =
 const requireModerator = (req: AuthenticatedRequest, res: Response, next: Function) => {
   if (!req.user) {
     return res.status(401).json({ error: 'Authentication required' });
-  }
+
 
   const hasModerationRole = req.user.roles.some(role => 
     ['admin', 'moderator', 'curator'].includes(role)
@@ -61,7 +61,7 @@ const requireModerator = (req: AuthenticatedRequest, res: Response, next: Functi
 
   if (!hasModerationRole) {
     return res.status(403).json({ error: 'Moderator access required' });
-  }
+
 
   next();
 };
@@ -91,7 +91,7 @@ router.post('/',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { templateId, title, content, criteria, metadata = {} } = req.body;
 
@@ -106,7 +106,7 @@ router.post('/',
         return res.status(409).json({
           error: 'You have already reviewed this template'
         });
-      }
+
 
       const reviewId = await reviewService.submitReview({
         templateId,
@@ -118,7 +118,7 @@ router.post('/',
           ...metadata,
           userAgent: req.get('User-Agent'),
           ipAddress: req.ip
-        }
+
       });
 
       res.status(201).json({
@@ -127,17 +127,15 @@ router.post('/',
           reviewId,
           status: 'submitted',
           message: 'Review submitted successfully and is pending moderation'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to submit review:', error);
       res.status(500).json({
         error: 'Failed to submit review',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -161,7 +159,7 @@ router.get('/template/:templateId',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { templateId } = req.params;
       const {
@@ -170,7 +168,7 @@ router.get('/template/:templateId',
         sortBy = 'newest',
         minRating,
         verified
-      } = req.query;
+ = req.query;
 
       const result = await reviewService.getTemplateReviews(templateId, {
         page: parseInt(page as string),
@@ -184,15 +182,13 @@ router.get('/template/:templateId',
         success: true,
         data: result
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get template reviews:', error);
       res.status(500).json({
         error: 'Failed to retrieve template reviews',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -211,7 +207,7 @@ router.get('/:reviewId',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { reviewId } = req.params;
 
@@ -229,7 +225,7 @@ router.get('/:reviewId',
         return res.status(404).json({
           error: 'Review not found'
         });
-      }
+
 
       const review = result.rows[0];
       
@@ -247,7 +243,7 @@ router.get('/:reviewId',
             usability: review.usability_rating,
             documentation: review.documentation_rating,
             support: review.support_rating
-  }
+
           overallRating: review.overall_rating,
           timestamp: review.timestamp,
           verified: review.verified,
@@ -255,18 +251,16 @@ router.get('/:reviewId',
           sentiment: {
             score: review.sentiment_score,
             confidence: review.sentiment_confidence
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       console.error('Failed to get review:', error);
       res.status(500).json({
         error: 'Failed to retrieve review',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -286,7 +280,7 @@ router.put('/:reviewId/helpful',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { reviewId } = req.params;
 
@@ -296,15 +290,13 @@ router.put('/:reviewId/helpful',
         success: true,
         message: 'Review marked as helpful'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to mark review as helpful:', error);
       res.status(500).json({
         error: 'Failed to mark review as helpful',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -325,7 +317,7 @@ router.put('/:reviewId/report',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { reviewId } = req.params;
       const { reason } = req.body;
@@ -351,16 +343,14 @@ router.put('/:reviewId/report',
         success: true,
         message: 'Review reported successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       await reviewService['pool'].query('ROLLBACK');
       console.error('Failed to report review:', error);
       res.status(500).json({
         error: 'Failed to report review',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -377,15 +367,13 @@ router.get('/moderation/queue',
         success: true,
         data: queue
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get moderation queue:', error);
       res.status(500).json({
         error: 'Failed to retrieve moderation queue',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -407,30 +395,28 @@ router.put('/:reviewId/moderate',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { reviewId } = req.params;
       const { action, reason = '' } = req.body;
 
       if (action === 'approve') {
         await reviewService.approveReview(reviewId, req.user!.id);
-      } else {
+ else {
         await reviewService.rejectReview(reviewId, req.user!.id, reason);
-      }
+
 
       res.json({
         success: true,
         message: `Review ${action}d successfully`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to moderate review:', error);
       res.status(500).json({
         error: 'Failed to moderate review',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -449,7 +435,7 @@ router.get('/analytics/template/:templateId',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { templateId } = req.params;
 
@@ -481,17 +467,15 @@ router.get('/analytics/template/:templateId',
             averageRating: parseFloat(row.avg_rating),
             averageSentiment: parseFloat(row.avg_sentiment) || 0
           }))
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to get review analytics:', error);
       res.status(500).json({
         error: 'Failed to retrieve review analytics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 // Export router and initialization function

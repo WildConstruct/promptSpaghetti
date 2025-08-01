@@ -71,8 +71,7 @@ import { useWorkflowStore } from '../stores/workflowStore';
                         comment: transitionComment,
                         metadata: {
                             transition_id: transition.id,
-                            transition_name: transition.name
-                        },
+                            transition_name: transition.name },
                         if(result) { }, : .success
                     };
                 {

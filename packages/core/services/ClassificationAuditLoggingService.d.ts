@@ -9,8 +9,8 @@
 import { DataClassificationLevel, OperationContext } from '../types/DataClassification';
 
 }
-export interface AuditLogEntry {
-    id: string;
+}
+export interface AuditLogEntry { id: string;
     timestamp: Date;
     userId: string;
     sessionId: string;
@@ -27,11 +27,10 @@ export interface AuditLogEntry {
     riskScore: number;
     correlationId?: string;
 
-export type AuditAction = 'CLASSIFY_DATA' | 'DECLASSIFY_DATA' | 'RECLASSIFY_DATA' | 'ACCESS_DATA' | 'EXPORT_DATA' | 'SHARE_DATA' | 'DELETE_DATA' | 'BACKUP_DATA' | 'RESTORE_DATA' | 'POLICY_CHANGE' | 'PERMISSION_GRANT' | 'PERMISSION_REVOKE' | 'ENCRYPTION_APPLIED' | 'ENCRYPTION_REMOVED' | 'COMPLIANCE_CHECK' | 'VIOLATION_DETECTED' | 'REMEDIATION_APPLIED' | 'ALERT_TRIGGERED' | 'ALERT_RESOLVED';
-
+export type AuditAction = 'CLASSIFY_DATA' | 'DECLASSIFY_DATA' | 'RECLASSIFY_DATA' | 'ACCESS_DATA' | 'EXPORT_DATA' | 'SHARE_DATA' | 'DELETE_DATA' | 'BACKUP_DATA' | 'RESTORE_DATA' | 'POLICY_CHANGE' | 'PERMISSION_GRANT' | 'PERMISSION_REVOKE' | 'ENCRYPTION_APPLIED' | 'ENCRYPTION_REMOVED' | 'COMPLIANCE_CHECK' | 'VIOLATION_DETECTED' | 'REMEDIATION_APPLIED' | 'ALERT_TRIGGERED' | 'ALERT_RESOLVED' }
 }
-export interface AuditDetails {
-    previousClassification?: DataClassificationLevel;
+}
+export interface AuditDetails { previousClassification?: DataClassificationLevel;
     newClassification?: DataClassificationLevel;
     accessMethod: string;
     toolUsed: string;
@@ -43,11 +42,10 @@ export interface AuditDetails {
     fieldCount?: number;
     piiDetected: boolean;
     encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED' | 'PARTIALLY_ENCRYPTED';
-    customProperties?: Record<string, any>;
-
+    customProperties?: Record<string, any> }
 }
-export interface AuditOutcome {
-    success: boolean;
+}
+export interface AuditOutcome { success: boolean;
     errorCode?: string;
     errorMessage?: string;
     warningMessages: string[];
@@ -55,49 +53,43 @@ export interface AuditOutcome {
     resourcesAffected: number;
     complianceScore: number;
     violationsDetected: string[];
-    remediationRequired: boolean;
-
+    remediationRequired: boolean }
 }
-export interface AuditMetadata {
-    sourceIP: string;
+}
+export interface AuditMetadata { sourceIP: string;
     userAgent: string;
     geolocation?: {
         country: string;
         region: string;
         city: string;
-        coordinates: [number, number];
+        coordinates: [number, number] }
 }
     };
-    deviceInfo?: {
-        deviceId: string;
+    deviceInfo?: { deviceId: string;
         deviceType: string;
         operatingSystem: string;
-        browser: string;
-    };
+        browser: string };
     networkInfo?: {
         vpnDetected: boolean;
         proxyDetected: boolean;
         networkQuality: 'HIGH' | 'MEDIUM' | 'LOW'
   };
-    organizationInfo?: {
-        organizationId: string;
+    organizationInfo?: { organizationId: string;
         department: string;
         role: string;
-        accessLevel: string;
-    };
+        accessLevel: string };
 
 }
-export interface ComplianceFlag {
-    framework: string;
+}
+export interface ComplianceFlag { framework: string;
     requirement: string;
     status: 'COMPLIANT' | 'NON_COMPLIANT' | 'NEEDS_REVIEW' | 'EXEMPTED';
     evidence?: string;
     assessmentDate: Date;
-    nextReviewDate?: Date;
-
+    nextReviewDate?: Date }
 }
-export interface AuditQuery {
-    startDate?: Date;
+}
+export interface AuditQuery { startDate?: Date;
     endDate?: Date;
     userId?: string;
     classification?: DataClassificationLevel;
@@ -111,11 +103,10 @@ export interface AuditQuery {
     limit?: number;
     offset?: number;
     sortBy?: 'timestamp' | 'riskScore' | 'classification' | 'userId';
-    sortOrder?: 'asc' | 'desc';
-
+    sortOrder?: 'asc' | 'desc' }
 }
-export interface AuditReport {
-    id: string;
+}
+export interface AuditReport { id: string;
     name: string;
     description: string;
     generatedAt: Date;
@@ -125,29 +116,24 @@ export interface AuditReport {
     entries: AuditLogEntry[];
     format: 'JSON' | 'CSV' | 'PDF' | 'XML';
     retentionPeriod: number;
-    expiresAt: Date;
-
+    expiresAt: Date }
 }
-export interface AuditSummary {
-    totalEntries: number;
+}
+export interface AuditSummary { totalEntries: number;
     uniqueUsers: number;
     timeRange: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     actionBreakdown: Record<AuditAction, number>;
     classificationBreakdown: Record<DataClassificationLevel, number>;
-    complianceBreakdown: Record<string, {
-        compliant: number;
+    complianceBreakdown: Record<string, { compliant: number;
         nonCompliant: number;
-        needsReview: number;
-    }>;
-    riskAnalysis: {
-        averageRiskScore: number;
+        needsReview: number }>;
+    riskAnalysis: { averageRiskScore: number;
         highRiskEntries: number;
-        criticalViolations: number;
-    };
+        criticalViolations: number };
     trendsAnalysis: {
         activityTrend: 'INCREASING' | 'DECREASING' | 'STABLE';
         riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
@@ -155,8 +141,8 @@ export interface AuditSummary {
   };
 
 }
-export interface AuditRetentionPolicy {
-    classification: DataClassificationLevel;
+}
+export interface AuditRetentionPolicy { classification: DataClassificationLevel;
     retentionDays: number;
     archiveAfterDays: number;
     permanentDeletionAfterDays: number;
@@ -179,12 +165,12 @@ export declare class ClassificationAuditLoggingService {
      * Log an audit entry
      */
     logAuditEvent();
-      action: AuditAction,
-      classification: DataClassificationLevel,
-      dataId: string,
-      details: Partial<AuditDetails>,
-      context: OperationContext,
-      outcome: Partial<AuditOutcome>,
+      action: AuditAction;
+      classification: DataClassificationLevel;
+      dataId: string;
+      details: Partial<AuditDetails>;
+      context: OperationContext;
+      outcome: Partial<AuditOutcome>;
       metadata?: Partial<AuditMetadata>
     ): Promise<string>;
     /**
@@ -219,11 +205,11 @@ export declare class ClassificationAuditLoggingService {
      * Generate audit report
      */
     generateAuditReport();
-      name: string,
-      description: string,
-      query: AuditQuery,
-      format: AuditReport["format"] | undefined,
-      requestedBy: string,
+      name: string;
+      description: string;
+      query: AuditQuery;
+      format: AuditReport["format"] | undefined;
+      requestedBy: string }
     ): Promise<string>;
     /**
      * Generate audit summary
@@ -272,12 +258,11 @@ export declare class ClassificationAuditLoggingService {
     /**
      * Get audit statistics
      */
-    getAuditStatistics(): {
-        totalEntries: number;
+    getAuditStatistics(): { totalEntries: number;
         entriesByClassification: Record<DataClassificationLevel, number>;
         entriesByAction: Record<string, number>;
         averageRiskScore: number;
-        recentViolations: number;
+        recentViolations: number }
 }
     };
     /**

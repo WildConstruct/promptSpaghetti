@@ -8,7 +8,7 @@ import {
   SecurityPolicyConfig, 
   SecurityPolicy, 
   PolicyImpactAnalysis 
-} from '../SecurityPolicyAnalysisEngine';
+ from '../SecurityPolicyAnalysisEngine';
 import { SecurityAPIIntegrationPlatform } from '../SecurityAPIIntegrationPlatform';
 import { SecurityOptimizationEngine } from '../SecurityOptimizationEngine';
 
@@ -30,12 +30,12 @@ describe('SecurityPolicyAnalysisEngine', () => {
       getPlatformMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         api_calls: { total_requests: 1000, successful_requests: 950 },
         security_analytics: { threats_detected: 10, detection_accuracy_percent: 95 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockOptimizationEngine = {
       on: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     // Setup configuration
     config = {
@@ -45,14 +45,14 @@ describe('SecurityPolicyAnalysisEngine', () => {
         impact_simulation_enabled: true,
         compliance_checking_enabled: true,
         historical_analysis_enabled: true
-  }
+
       validation_framework: {
         enabled: true,
         automated_validation: true,
         validation_rules: ['no_wildcard_permissions', 'require_mfa_for_admin'],
         compliance_standards: ['SOX', 'PCI_DSS'],
         risk_assessment_enabled: true
-  }
+
       policy_categories: {
         access_control: true,
         authentication: true,
@@ -61,7 +61,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
         network_security: true,
         compliance: true,
         incident_response: true
-  }
+
       impact_assessment: {
         user_impact_analysis: true,
         system_impact_analysis: true,
@@ -69,14 +69,14 @@ describe('SecurityPolicyAnalysisEngine', () => {
         security_impact_analysis: true,
         compliance_impact_analysis: true,
         cost_impact_analysis: true
-  }
+
       approval_workflow: {
         enabled: true,
         require_approval_for: ['high', 'critical'],
         approval_levels: 2,
         auto_approve_low_risk: true,
         notification_enabled: true
-      }
+
     };
 
     // Setup sample policy
@@ -98,7 +98,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
             { action_type: 'deny', parameters: {}, notification_enabled: true }
           ],
           exceptions: []
-        }
+
       ],
       metadata: {
         created_by: 'test_user',
@@ -107,13 +107,13 @@ describe('SecurityPolicyAnalysisEngine', () => {
         status: 'draft',
         compliance_mappings: ['SOX', 'PCI_DSS'],
         risk_level: 'medium'
-  }
+
       enforcement: {
         enforcement_mode: 'enforcing',
         enforcement_scope: ['admin_panel', 'api_access'],
         rollback_enabled: true,
         monitoring_enabled: true
-      }
+
     };
 
     engine = new SecurityPolicyAnalysisEngine(config, mockPlatform, mockOptimizationEngine);
@@ -122,7 +122,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
   afterEach(async () => {
     if (engine) {
       await engine.shutdown();
-    }
+
   });
 
   describe('Initialization', () => {
@@ -273,7 +273,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
             conditions: [],
             actions: [],
             exceptions: []
-          }
+
         ]
       };
 
@@ -300,7 +300,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
               { action_type: 'allow', parameters: {}, notification_enabled: false }
             ],
             exceptions: []
-          }
+
         ]
       };
 
@@ -318,7 +318,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
         metadata: {
           ...samplePolicy.metadata,
           compliance_mappings: ['PCI_DSS']
-        }
+
       };
 
       const validationResult = await engine.validatePolicy(policyWithCompliance);
@@ -364,7 +364,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
             conditions: [{ field: 'activity', operator: 'equals', value: 'login' }],
             actions: [{ action_type: 'log', parameters: {}, notification_enabled: true }],
             exceptions: []
-          }
+
         ]
       };
 
@@ -392,7 +392,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
         enforcement: {
           ...samplePolicy.enforcement,
           enforcement_mode: 'permissive' // Changed from enforcing
-        }
+
       };
 
       const comparison = await engine.comparePolicyVersions(samplePolicy, newPolicy);
@@ -467,7 +467,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
         expect(analysis.policy_id).toBeDefined();
         expect(analysis.analysis_id).toBeDefined();
         expect(analysis.timestamp).toBeGreaterThan(0);
-      }
+
     });
   });
 
@@ -494,7 +494,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
       // Perform more than 10 analyses
       for (let i = 0; i < 15; i++) {
         await engine.analyzePolicyImpact(samplePolicy);
-      }
+
 
       const history = engine.getPolicyAnalysisHistory(samplePolicy.id);
 
@@ -521,7 +521,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
       if (alertHandler) {
         await alertHandler({ severity: 'high', type: 'threat_detected' });
         // Should not throw
-      }
+
     });
 
     it('should handle optimization engine events', async () => {
@@ -532,7 +532,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
       if (optimizationHandler) {
         await optimizationHandler({ recommendationId: 'test', result: { success: true } });
         // Should not throw
-      }
+
     });
   });
 
@@ -583,7 +583,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
         analysis_settings: {
           ...config.analysis_settings,
           impact_simulation_enabled: false
-        }
+
       };
 
       const engineWithoutSim = new SecurityPolicyAnalysisEngine(
@@ -605,7 +605,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
         validation_framework: {
           ...config.validation_framework,
           compliance_standards: ['HIPAA', 'GDPR']
-        }
+
       };
 
       const engineWithCompliance = new SecurityPolicyAnalysisEngine(

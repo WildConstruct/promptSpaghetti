@@ -6,8 +6,7 @@
  * application security, network security, incident response, and compliance.
  */
 import { z } from 'zod';
-export declare enum SecurityEventType {
-    AUTHENTICATION_FAILURE = "authentication_failure",
+export declare enum SecurityEventType { AUTHENTICATION_FAILURE = "authentication_failure",
     AUTHORIZATION_VIOLATION = "authorization_violation",
     SESSION_ANOMALY = "session_anomaly",
     INPUT_VALIDATION_FAILURE = "input_validation_failure",
@@ -109,22 +108,18 @@ export declare const SecurityEventSchema: z.ZodObject<{
     assigned_to: z.ZodOptional<z.ZodString>;
     evidence_preserved: z.ZodDefault<z.ZodBoolean>;
     forensic_artifacts: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    chain_of_custody: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    chain_of_custody: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         timestamp: z.ZodDate;
         action: z.ZodString;
         performed_by: z.ZodString;
         signature: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        timestamp: Date;
+    }, "strip", z.ZodTypeAny, { timestamp: Date;
         action: string;
         performed_by: string;
-        signature?: string | undefined;
-    }, {
-        timestamp: Date;
+        signature?: string | undefined }, { timestamp: Date;
         action: string;
         performed_by: string;
-        signature?: string | undefined;
-    }>, "many">>;
+        signature?: string | undefined }>, "many">>;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     custom_fields: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
     related_events: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -132,8 +127,7 @@ export declare const SecurityEventSchema: z.ZodObject<{
     updated_by: z.ZodOptional<z.ZodString>;
     created_at: z.ZodDate;
     updated_at: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    description: string;
+}, "strip", z.ZodTypeAny, { description: string;
     status: SecurityEventStatus;
     category: string;
     tags: string[];
@@ -160,8 +154,7 @@ export declare const SecurityEventSchema: z.ZodObject<{
         timestamp: Date;
         action: string;
         performed_by: string;
-        signature?: string | undefined;
-    }[];
+        signature?: string | undefined }[];
     related_events: string[];
     method?: string | undefined;
     endpoint?: string | undefined;
@@ -179,8 +172,7 @@ export declare const SecurityEventSchema: z.ZodObject<{
     attack_vector?: string | undefined;
     notification_timeline?: string | undefined;
     custom_fields?: Record<string, unknown> | undefined;
-}, {
-    description: string;
+}, { description: string;
     status: SecurityEventStatus;
     category: string;
     timestamp: Date;
@@ -222,13 +214,13 @@ export declare const SecurityEventSchema: z.ZodObject<{
         timestamp: Date;
         action: string;
         performed_by: string;
-        signature?: string | undefined;
-    }[] | undefined;
+        signature?: string | undefined }[] | undefined;
     custom_fields?: Record<string, unknown> | undefined;
     related_events?: string[] | undefined;
 }>;
 export type SecurityEvent = z.infer<typeof SecurityEventSchema>;
 
+}
 }
 export interface SecurityEventPolicy {
     policy_id: string;
@@ -243,35 +235,29 @@ export interface SecurityEventPolicy {
             value: any;
             logic?: 'and' | 'or'
 }
+}
   }>;
         time_window?: number;
         frequency_threshold?: number;
     };
-    response_actions: {
-        immediate_actions: string[];
+    response_actions: { immediate_actions: string[];
         escalation_actions: string[];
         notification_channels: string[];
-        automated_containment: boolean;
-    };
-    compliance_mapping: {
-        frameworks: ComplianceFramework[];
+        automated_containment: boolean };
+    compliance_mapping: { frameworks: ComplianceFramework[];
         requirements: string[];
         retention_period: number;
-        requires_encryption: boolean;
-    };
-    reporting: {
-        real_time_alerts: boolean;
+        requires_encryption: boolean };
+    reporting: { real_time_alerts: boolean;
         periodic_reports: string[];
         stakeholders: string[];
-        external_reporting: boolean;
-    };
+        external_reporting: boolean };
 /**
  * Comprehensive Security Event Logging Policy Engine
  *
  * Manages security event policies, detection rules, and automated responses
  */
-export declare class SecurityEventLoggingPolicyEngine {
-    private policies;
+export declare class SecurityEventLoggingPolicyEngine { private policies;
     private eventHistory;
     private complianceRequirements;
     constructor();
@@ -295,8 +281,7 @@ export declare class SecurityEventLoggingPolicyEngine {
         actions_triggered: string[];
         notifications_sent: string[];
         compliance_requirements: ComplianceFramework[];
-        escalation_required: boolean;
-    };
+        escalation_required: boolean };
     /**
      * Check if security event matches policy conditions
      */
@@ -328,12 +313,10 @@ export declare class SecurityEventLoggingPolicyEngine {
     /**
      * Generate compliance report for framework
      */
-    generateComplianceReport(framework: ComplianceFramework, startDate: Date, endDate: Date): {
-        framework: ComplianceFramework;
+    generateComplianceReport(framework: ComplianceFramework, startDate: Date, endDate: Date): { framework: ComplianceFramework;
         period: {
             start: Date;
-            end: Date;
-        };
+            end: Date };
         events_count: number;
         policy_violations: number;
         compliance_score: number;

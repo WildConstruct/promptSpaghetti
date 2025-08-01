@@ -38,7 +38,7 @@ describe('ConsentEnforcementMiddleware', () => {
       headers: {
         'user-agent': 'Test Browser',
         'x-forwarded-for': '192.168.1.1'
-  }
+
       ip: '192.168.1.1'
     };
 
@@ -130,8 +130,8 @@ describe('ConsentEnforcementMiddleware', () => {
             granted: true,
             grantedAt: new Date(),
             expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year
-          }
-        }
+
+
       });
 
       const middlewareFunc = middleware.createMiddleware();
@@ -147,8 +147,8 @@ describe('ConsentEnforcementMiddleware', () => {
           ANALYTICS: {
             granted: false,
             grantedAt: new Date()
-          }
-        }
+
+
       });
 
       const middlewareFunc = middleware.createMiddleware();
@@ -168,8 +168,8 @@ describe('ConsentEnforcementMiddleware', () => {
             granted: true,
             grantedAt: new Date(),
             expiresAt: new Date(Date.now() - 24 * 60 * 60 * 1000) // Expired yesterday
-          }
-        }
+
+
       });
 
       const middlewareFunc = middleware.createMiddleware();
@@ -382,7 +382,7 @@ describe('ConsentEnforcementMiddleware', () => {
       mockConsentCollectionService.getUserConsent.mockResolvedValue({
         consents: {
           ANALYTICS: { granted: false }
-        }
+
       });
 
       const middlewareFunc = middleware.createMiddleware();

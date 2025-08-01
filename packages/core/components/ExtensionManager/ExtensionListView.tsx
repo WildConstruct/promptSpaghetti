@@ -6,58 +6,50 @@ import React from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 
-}
-export interface ExtensionListViewProps {
-  extensions: ExtensionManifest;
-  selectedExtension: ExtensionManifest | null;
-  getExtensionStatus: (extensionId: string) => ExtensionStatus;
-  onExtensionSelect: (extension: ExtensionManifest) => void;
-  onToggleExtension: (extensionId: string) => void;
-  onUninstallExtension: (extensionId: string) => void;
-  onUpdateExtension: (extensionId: string) => void;
-  onConfigureExtension: (extension: ExtensionManifest) => void;
-}
-}
 
-export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
-  extensions,
-  selectedExtension,
-  getExtensionStatus,
-  onExtensionSelect,
-  onToggleExtension,
-  onUninstallExtension,
-  onUpdateExtension,
+export interface ExtensionListViewProps { extensions: ExtensionManifest;
+  selectedExtension: ExtensionManifest | null;
+  getExtensionStatus: (extensionId: string) => ExtensionStatus
+  onExtensionSelect: (extension: ExtensionManifest) => void
+  onToggleExtension: (extensionId: string) => void
+  onUninstallExtension: (extensionId: string) => void
+  onUpdateExtension: (extensionId: string) => void }
+  onConfigureExtension: (extension: ExtensionManifest) => void;
+
+
+
+
+export const ExtensionListView: React.FC<ExtensionListViewProps> = ({ extensions
+  selectedExtension
+  getExtensionStatus
+  onExtensionSelect
+  onToggleExtension
+  onUninstallExtension
+  onUpdateExtension }
   onConfigureExtension
-}) => {
-  const getExtensionIcon = (type: string): string => {
-  switch (type) {
-  case 'node': return '🔧';
+}) => { const getExtensionIcon = (type: string): string => { }
+  switch (type) { case 'node': return '🔧';
   case 'ui': return '🎨';
   case 'transform': return '⚡';
   case 'storage': return '💾';
-  default: return '📦';
-};
-  const getStatusIcon = (status: ExtensionStatus): string => {
-    if (status.hasErrors) return '❌';
+  default: return '📦' };
+  const getStatusIcon = (status: ExtensionStatus): string => { if (status.hasErrors) return '❌';
     if (!status.loaded) return '⏸️';
     if (status.enabled) return '✅';
-    return '⭕';
-  };
+    return '⭕' };
   const getStatusText = (status: ExtensionStatus): string => {
     if (status.hasErrors) return 'Error';
     if (!status.loaded) return 'Not Loaded';
     if (status.enabled) return 'Enabled';
     return 'Disabled'
   };
-  if (extensions.length === 0) {
-    return;
+  if (extensions.length === 0) { return;
       <div className="extension-list-empty">
         <div className="empty-icon">📦</div>
         <h3>No Extensions Found</h3>
         <p>No extensions match your current search and filter criteria.</p>
       </div>
-    );
-  }
+    ) }
   return (
     <div className="extension-list-view">
       <div className="extension-list-header">
@@ -126,22 +118,20 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                 {/* Toggle Enable/Disable */}
                 <button
                   className={`action-btn toggle-btn ${status.enabled ? 'disable' : 'enable'}`}
-                  onClick={(e) => {
+                  onClick={ (e) => {
                     e.stopPropagation();
-                    onToggleExtension(extension.id);
-                  }}
+                    onToggleExtension(extension.id) }}
                   title={status.enabled ? 'Disable Extension' : 'Enable Extension'}
                 >
                   {status.enabled ? '⏸️' : '▶️'}
                 </button>
                 {/* Update */}
-                {status.updateAvailable && ()
+                { status.updateAvailable && ()
                   <button
                     className="action-btn update-btn"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onUpdateExtension(extension.id);
-                    }}
+                      onUpdateExtension(extension.id) }}
                     title="Update Extension"
                   >
                     ⬆️
@@ -150,10 +140,9 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                 {/* Configure */}
                 <button
                   className="action-btn configure-btn"
-                  onClick={(e) => {
+                  onClick={ (e) => {
                     e.stopPropagation();
-                    onConfigureExtension(extension);
-                  }}
+                    onConfigureExtension(extension) }}
                   title="Configure Extension"
                 >
                   ⚙️
@@ -165,10 +154,9 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                   </button>
                   <div className="action-menu-dropdown">
                     <button
-                      onClick={(e) => {
+                      onClick={ (e) => {
                         e.stopPropagation();
-                        onUninstallExtension(extension.id);
-                      }}
+                        onUninstallExtension(extension.id) }}
                       className="menu-item danger"
                     >
                       🗑️ Uninstall
@@ -177,7 +165,7 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                       onClick={(e) => {
                         e.stopPropagation();
                         // Open extension folder (if applicable)
-                      }}
+}
                       className="menu-item"
                     >
                       📁 Show in Folder
@@ -186,7 +174,7 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({
                       onClick={(e) => {
                         e.stopPropagation();
                         // View extension logs
-                      }}
+}
                       className="menu-item"
                     >
                       📋 View Logs

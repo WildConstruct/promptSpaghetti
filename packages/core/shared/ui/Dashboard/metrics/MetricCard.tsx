@@ -9,33 +9,32 @@ import { TrendingUp, TrendingDown, Minus, Target, Info } from 'lucide-react';
 import { TrendIndicator } from './TrendIndicator';
 import './MetricCard.css';
 
-}
-export interface MetricValue {
-  current: number | string;
+
+export interface MetricValue { current: number | string;
   previous?: number;
   target?: number;
   format?: 'number' | 'currency' | 'percentage' | 'bytes' | 'duration' | 'custom';
   precision?: number;
   suffix?: string;
-  prefix?: string;
-}
-}
-}
-export interface MetricTrend {
-  value: number;
+  prefix?: string }
+
+
+
+export interface MetricTrend { value: number;
   direction: 'up' | 'down' | 'neutral';
   period?: string;
-  isGoodTrend?: boolean;
-}
-}
-}
+  isGoodTrend?: boolean }
+
+
+
 export interface MetricCardProps {
   // Core content
   title: string;
   value: MetricValue;
   description?: string;
   // Visual elements
-}
+
+
   icon?: React.ComponentType<{ size?: number; className?: string }>;
   trend?: MetricTrend;
   // Styling and behavior
@@ -45,10 +44,9 @@ export interface MetricCardProps {
   onClick?: () => void;
   // Additional content
   helpText?: string;
-  badge?: {
-  text: string;
-  variant?: 'default' | 'success' | 'warning' | 'error'
-  };
+  badge?: { text: string;
+  variant?: 'default' | 'success' | 'warning' | 'error' }
+};
   className?: string;
 const formatValue = (;);
   value: number | string, 
@@ -59,13 +57,12 @@ const formatValue = (;);
 ): string => {
   if (typeof value === 'string') return `${prefix}${value}${suffix}`;}
   let formattedValue: string;
-  switch (format) {
-  case 'currency':,
+  switch (format) { case 'currency':,
   formattedValue = new Intl.NumberFormat('en-US', {)
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: precision,
-  maximumFractionDigits: precision,
+  maximumFractionDigits: precision }
 }).format(value);
       break;
     case 'percentage':
@@ -83,40 +80,39 @@ const formatValue = (;);
     case 'duration':
       if (value < 60) {
         formattedValue = `${value.toFixed(precision)}s`;}
-      } else if (value < 3600) {
+ else if (value < 3600) {
         formattedValue = `${(value / 60).toFixed(precision)}m`;}
-      } else {
+ else {
         formattedValue = `${(value / 3600).toFixed(precision)}h`;}
       break;
     case 'number':
     default:
-      formattedValue = new Intl.NumberFormat('en-US', {)
+      formattedValue = new Intl.NumberFormat('en-US', { )
   minimumFractionDigits: precision,
-  maximumFractionDigits: precision,
+  maximumFractionDigits: precision }
 }).format(value);
       break;
   return `${prefix}${formattedValue}${suffix}`;}
 };
-}
-export const MetricCard: React.FC<MetricCardProps> = ({)
-  title,
-  value,
-  description,
-  icon: Icon,
-  trend,
-  variant = 'default',
-  size = 'medium',
-  loading = false,
-  onClick,
-  helpText,
-  badge,
+
+export const MetricCard: React.FC<MetricCardProps> = ({ )
+  title
+  value
+  description
+  icon: Icon
+  trend
+  variant = 'default'
+  size = 'medium'
+  loading = false
+  onClick
+  helpText
+  badge }
   className = ''
-}) => {
-  const formattedValue = formatValue(;);
-  value.current,
-  value.format,
-  value.precision,
-  value.prefix,
+}) => { const formattedValue = formatValue(;);
+  value.current
+  value.format
+  value.precision
+  value.prefix
   value.suffix
   );
   const hasTarget = value.target !== undefined;
@@ -124,16 +120,15 @@ export const MetricCard: React.FC<MetricCardProps> = ({)
   ? Math.min((value.current / value.target!) * 100, 100)
   : 0;
   const sizeClasses = {
-  small: 'metric-card-small',
-  medium: 'metric-card-medium',
-  large: 'metric-card-large',
+  small: 'metric-card-small'
+  medium: 'metric-card-medium'
+  large: 'metric-card-large' }
 };
-  const variantClasses = {
-  default: 'metric-card-default',
-  success: 'metric-card-success',
-  warning: 'metric-card-warning',
-  error: 'metric-card-error',
-  info: 'metric-card-info',
+  const variantClasses = { default: 'metric-card-default'
+  success: 'metric-card-success'
+  warning: 'metric-card-warning'
+  error: 'metric-card-error'
+  info: 'metric-card-info' }
 };
   return;
     <div 

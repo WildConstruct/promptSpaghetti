@@ -7,19 +7,18 @@
 
 // Pagination types
 
-}
-export interface PaginationOptions {
-  page?: number;
+
+export interface PaginationOptions { page?: number;
   limit?: number;
   offset?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc'
-}
-  }
-}
-export interface PaginatedResult<T> {
-  data: T;
-  pagination: {
+  sortOrder?: 'asc' | 'desc' }
+
+
+
+
+export interface PaginatedResult<T> { data: T;
+  pagination: { }
   page: number;
   limit: number;
   totalCount: number;
@@ -29,39 +28,35 @@ export interface PaginatedResult<T> {
   nextPage?: number;
   previousPage?: number;
 };
-  metadata?: {
-  executionTime?: number;
+  metadata?: { executionTime?: number;
   cacheHit?: boolean;
   query?: string;
-  [key: string]: any;
-};
+  [key: string]: any };
 
 // Role-Based Access Control (RBAC) Types
 // Re-exported from auth types for consistency
 
-}
-export interface Role {
-  id: string;
+
+export interface Role { id: string;
   name: string;
   description?: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
   createdAt: Date;
-  updatedAt: Date;
-}
-}
-}
-export interface Permission {
-  id: string;
+  updatedAt: Date }
+
+
+
+export interface Permission { id: string;
   roleId: string;
   resource: string;
   action: string;
   scope: 'global' | 'organization' | 'team' | 'own';
   conditions?: Record<string, unknown>;
-  createdAt: Date;
-}
-}
-}
+  createdAt: Date }
+
+
+
 export interface UserRole {
   id: string;
   userId: string;
@@ -71,20 +66,19 @@ export interface UserRole {
   expiresAt?: Date;
   scopeContext?: Record<string, unknown>;
   // Database query result types
-}
-}
-}
-export interface QueryOptions {
-  select?: string;
+
+
+
+
+export interface QueryOptions { select?: string;
   where?: Record<string, unknown>;
   orderBy?: Record<string, 'asc' | 'desc'>;
   include?: string;
-  distinct?: boolean;
-}
-}
-}
-export interface QueryResult<T> {
-  rows: T;
+  distinct?: boolean }
+
+
+
+export interface QueryResult<T> { rows: T;
   count: number;
   affectedRows?: number;
   insertId?: number;
@@ -98,35 +92,36 @@ export interface QueryResult<T> {
   ssl?: boolean;
   poolSize?: number;
   connectionTimeout?: number;
-  commandTimeout?: number;
-}
-}
-}
+  commandTimeout?: number }
+
+
+
 export interface TransactionContext {
   id: string;
   startedAt: Date;
   isolationLevel?: 'READ_UNCOMMITTED' | 'READ_COMMITTED' | 'REPEATABLE_READ' | 'SERIALIZABLE';
   // Audit and tracking types
-}
-}
-}
-export interface AuditableEntity {
-  createdAt: Date;
+
+
+
+
+export interface AuditableEntity { createdAt: Date;
   updatedAt: Date;
   createdBy?: string;
   updatedBy?: string;
-  version?: number;
-}
-}
-}
+  version?: number }
+
+
+
 export interface SoftDeletableEntity {
   deletedAt?: Date;
   deletedBy?: string;
   isDeleted: boolean;
   // Generic database entity base
-}
-}
-}
+
+
+
+
 export interface BaseEntity extends AuditableEntity {
   id: string;
 
@@ -134,27 +129,26 @@ export interface FullEntity extends BaseEntity, SoftDeletableEntity {}
 
 // Search and filtering types
 
-}
-export interface SearchOptions {
-  query?: string;
+
+export interface SearchOptions { query?: string;
   fields?: string;
   filters?: Record<string, unknown>;
   fuzzy?: boolean;
-  caseSensitive?: boolean;
-}
-}
-}
+  caseSensitive?: boolean }
+
+
+
 export interface FilterOptions {
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'like' | 'ilike' | 'between';
   value: any;
   values?: any;
   // Database operation result types
-}
-}
-}
-export interface OperationResult<T = unknown> {
-  success: boolean;
+
+
+
+
+export interface OperationResult<T = unknown> { success: boolean;
   data?: T;
   error?: string;
   errorCode?: string;
@@ -165,24 +159,24 @@ export interface OperationResult<T = unknown> {
   successCount: number;
   errorCount: number;
   data?: T;
-  errors?: Array<{
+  errors?: Array<{ }
   index: number;
   error: string;
   item?: any;
-}>;
+>;
   timestamp: Date;
   executionTime?: number;
 
 // Cache-related types
 
-}
-export interface CacheOptions {
-  ttl?: number; // time to live in seconds,
+
+export interface CacheOptions { ttl?: number; // time to live in seconds }
   tags?: string;
   version?: string;
-}
-}
-}
+
+
+
+
 export interface CachedResult<T> {
   data: T;
   cached: boolean;
@@ -198,8 +192,8 @@ export interface CachedResult<T> {
   timestamp: Date;
   metadata?: Record<string, unknown>;
   // Helper types for type-safe database queries
-}
-}
+
+
 export type Primitive = string | number | boolean | Date | null | undefined;
 export type DatabaseValue = Primitive | Record<string, unknown> | Array<unknown>;
 export type WhereCondition = Record<string, DatabaseValue>;
@@ -208,36 +202,35 @@ export type CreateData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
 
 // Export utility functions for creating pagination results
 export function createPaginatedResult<T>(data: T)
-  totalCount: number,
-  options: PaginationOptions): PaginatedResult<T> {,
+  totalCount: number
+  options: PaginationOptions): PaginatedResult<T> { 
   const page = options.page || 1;
   const limit = options.limit || 10;
   const totalPages = Math.ceil(totalCount / limit);
   return {
-  data,
+  data
   pagination: {
-  page,
-  limit,
-  totalCount,
-  totalPages,
+  page
+  limit
+  totalCount
+  totalPages
   hasNextPage: page < totalPages,
   hasPreviousPage: page > 1,
   nextPage: page < totalPages ? page + 1 : undefined,
-  previousPage: page > 1 ? page - 1 : undefined,
+  previousPage: page > 1 ? page - 1 : undefined }
 };
 
 // Export utility function for creating operation results
 export function createOperationResult<T>(success: boolean)
-  data?: T,
-  error?: string,
-  errorCode?: string,
+  data?: T
+  error?: string
+  errorCode?: string
   executionTime?: number
-): OperationResult<T> {
-  return {
-  success,
-  data,
-  error,
-  errorCode,
-  timestamp: new Date(),
+): OperationResult<T> { return {
+  success
+  data
+  error
+  errorCode
+  timestamp: new Date() }
   executionTime
 };

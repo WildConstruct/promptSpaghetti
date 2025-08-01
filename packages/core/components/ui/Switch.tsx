@@ -1,21 +1,19 @@
 import React from 'react';
 
-}
-export interface SwitchProps {
-  checked?: boolean;
+
+export interface SwitchProps { checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   id?: string;
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
-  className?: string;
-}
-}
-export const Switch: React.FC<SwitchProps> = ({)
-  checked = false,
-  onCheckedChange,
-  id,
-  size = 'md',
-  disabled = false,
+  className?: string }
+
+export const Switch: React.FC<SwitchProps> = ({ )
+  checked = false
+  onCheckedChange
+  id
+  size = 'md'
+  disabled = false }
   className = ''
 }) => {
   return;

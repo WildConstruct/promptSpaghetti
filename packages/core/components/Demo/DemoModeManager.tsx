@@ -7,65 +7,56 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 
-}
-export interface DemoModeConfig {
-  screenshotMode: boolean;
+
+export interface DemoModeConfig { screenshotMode: boolean;
   presentationFocus: boolean;
   performanceMode: boolean;
   accessibilityMode: boolean;
   brandingVisible: boolean;
-  debugElementsHidden: boolean;
-}
-}
-}
-export interface DemoModeManagerProps {
-  children: React.ReactNode;
+  debugElementsHidden: boolean }
+
+
+
+export interface DemoModeManagerProps { children: React.ReactNode;
   onModeChange?: (config: DemoModeConfig) => void;
   initialConfig?: Partial<DemoModeConfig>;
-  const DEFAULT_CONFIG: DemoModeConfig = {,
-  screenshotMode: false,
-  presentationFocus: false,
-  performanceMode: false,
-  accessibilityMode: false,
-  brandingVisible: true,
-  debugElementsHidden: false,
-}
+  const DEFAULT_CONFIG: DemoModeConfig = {;
+  screenshotMode: false;
+  presentationFocus: false;
+  performanceMode: false;
+  accessibilityMode: false;
+  brandingVisible: true;
+  debugElementsHidden: false }
+
+
 };
-}
-export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
-  children,
-  onModeChange,
+
+export const DemoModeManager: React.FC<DemoModeManagerProps> = ({ )
+  children
+  onModeChange }
   initialConfig = {}
-}) => {
-  const [config, setConfig] = useState<DemoModeConfig>({)
-  ...DEFAULT_CONFIG,
+}) => { const [config, setConfig] = useState<DemoModeConfig>({)
+  ...DEFAULT_CONFIG }
     ...initialConfig
   });
   const [isTransitioning, setIsTransitioning] = useState(false);
   // Auto-detect screen resolution and apply appropriate scaling
-  useEffect(() => {
-    const detectScreenMode = () => {
+  useEffect(() => { const detectScreenMode = () => {
       const width = window.screen.width;
       const height = window.screen.height;
       const pixelRatio = window.devicePixelRatio || 1;
       // Apply demo scaling for presentation screens
       if (width === 1920 && height === 1080) {
-        document.documentElement.className += ' presentation-1080p';
-      } else if (width >= 3840 && height >= 2160) {
-        document.documentElement.className += ' presentation-4k';
-      } else if (width >= 2560) {
-        document.documentElement.className += ' presentation-ultrawide';
+        document.documentElement.className += ' presentation-1080p' } else if (width >= 3840 && height >= 2160) { document.documentElement.className += ' presentation-4k' } else if (width >= 2560) { document.documentElement.className += ' presentation-ultrawide';
       // Apply high-DPI optimizations
       if (pixelRatio >= 2) {
-        document.documentElement.className += ' presentation-hidpi';
-    };
+        document.documentElement.className += ' presentation-hidpi' };
     detectScreenMode();
     window.addEventListener('resize', detectScreenMode);
     return () => window.removeEventListener('resize', detectScreenMode);
   }, []);
   // Apply CSS classes based on config - memoized for performance
-  useEffect(() => {
-    const classes = [];
+  useEffect(() => { const classes = [];
     if (config.screenshotMode) classes.push('demo-screenshot-mode');
     if (config.presentationFocus) classes.push('presentation-focus');
     if (config.performanceMode) classes.push('demo-performance-mode');
@@ -79,8 +70,7 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
       !cls.startsWith('demo-') && !cls.startsWith('presentation-')
     );
     document.body.className = [...filteredClasses, ...classes].join(' ');
-    onModeChange?.(config);
-  }, [config, onModeChange]);
+    onModeChange?.(config) }, [config, onModeChange]);
   const updateConfig = useCallback((updates: Partial<DemoModeConfig>) => {
     setIsTransitioning(true);
     setTimeout(() => {
@@ -138,22 +128,22 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
         </div>
       )}
       {/* Demo mode transition overlay */}
-      {isTransitioning && ()
+      { isTransitioning && ()
         <div
           style={{
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  background: 'rgba(0, 0, 0, 0.3)',
-  backdropFilter: 'blur(4px)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 9999,
-  pointerEvents: 'none',
-}}
+  position: 'fixed'
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background: 'rgba(0, 0, 0, 0.3)'
+  backdropFilter: 'blur(4px)'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  zIndex: 9999
+  pointerEvents: 'none' }
+
         >
           <ProfessionalSpinner
             size="medium"
@@ -172,11 +162,11 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
 };
 
 // Demo control panel for development/presentation setup
-}
-interface DemoControlPanelProps {
-  config: DemoModeConfig;
-  onConfigChange: (updates: Partial<DemoModeConfig>) => void;
-}
+
+
+interface DemoControlPanelProps { config: DemoModeConfig;
+  onConfigChange: (updates: Partial<DemoModeConfig>) => void }
+
 const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigChange }) => {
   const [panelVisible, setPanelVisible] = useState(false);
   return;
@@ -184,44 +174,44 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
       {/* Toggle button */}
       <button
         onClick={() => setPanelVisible(!panelVisible)}
-        style={{
-  position: 'fixed',
-  top: 10,
-  right: 10,
-  background: 'rgba(31, 41, 55, 0.95)',
-  border: '1px solid rgba(55, 65, 81, 0.6)',
-  borderRadius: '6px',
-  color: '#e5e7eb',
-  padding: '8px',
-  cursor: 'pointer',
-  fontSize: '12px',
-  zIndex: 10001,
-  backdropFilter: 'blur(8px)',
-  transition: 'all 0.2s ease',
-}}
+        style={ {
+  position: 'fixed'
+  top: 10
+  right: 10
+  background: 'rgba(31, 41, 55, 0.95)'
+  border: '1px solid rgba(55, 65, 81, 0.6)'
+  borderRadius: '6px'
+  color: '#e5e7eb'
+  padding: '8px'
+  cursor: 'pointer'
+  fontSize: '12px'
+  zIndex: 10001
+  backdropFilter: 'blur(8px)'
+  transition: 'all 0.2s ease' }
+
         className="development-only"
         title="Demo Controls (Alt+Shift+[key])"
       >
         🎭 Demo
       </button>
       {/* Control panel */}
-      {panelVisible && ()
+      { panelVisible && ()
         <div
           style={{
-  position: 'fixed',
-  top: 50,
-  right: 10,
-  background: 'rgba(31, 41, 55, 0.98)',
-  border: '1px solid rgba(55, 65, 81, 0.6)',
-  borderRadius: '8px',
-  padding: '16px',
-  fontSize: '12px',
-  color: '#e5e7eb',
-  zIndex: 10000,
-  backdropFilter: 'blur(16px)',
-  minWidth: '220px',
-  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)',
-}}
+  position: 'fixed'
+  top: 50
+  right: 10
+  background: 'rgba(31, 41, 55, 0.98)'
+  border: '1px solid rgba(55, 65, 81, 0.6)'
+  borderRadius: '8px'
+  padding: '16px'
+  fontSize: '12px'
+  color: '#e5e7eb'
+  zIndex: 10000
+  backdropFilter: 'blur(16px)'
+  minWidth: '220px'
+  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)' }
+
           className="development-only"
         >
           <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 14 }}>

@@ -7,20 +7,22 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 interface RouteContext {
   db: DatabaseService;
   redis: RedisService;
   auditService: AuditService;
   accessControlManager: AccessControlManager;
-}
-}
-}
+
+
+
+
 
 // Request type definitions
-}
-}
+
+
+
 interface CreateRoleRequest {
   Body: {
     name: string;
@@ -30,31 +32,33 @@ interface CreateRoleRequest {
       resource: string;
       scope: string;
       constraints?: any[];
-}
-}
-    }>;
+
+
+
+>;
     parentRoles?: string[];
   };
-}
 
-}
-}
+
+
+
 interface AssignRoleRequest {
   Body: {
     userId: string;
     roleId: string;
     expiresAt?: string;
     conditions?: any[];
-}
-}
+
+
+
   };
   Params: {
     userId: string;
   };
-}
 
-}
-}
+
+
+
 interface CreatePolicyRequest {
   Body: {
     name: string;
@@ -62,15 +66,16 @@ interface CreatePolicyRequest {
     rules: Array<{
       condition: any;
       action: string;
-}
-}
-    }>;
+
+
+
+>;
     priority: number;
   };
-}
 
-}
-}
+
+
+
 interface AccessRequestSubmission {
   Body: {
     keyId: string;
@@ -78,25 +83,27 @@ interface AccessRequestSubmission {
     justification: string;
     requestedDuration?: number;
     urgency: 'low' | 'medium' | 'high' | 'critical';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ApproveAccessRequest {
   Body: {
     approved: boolean;
     comments?: string;
     conditions?: any[];
-}
-}
+
+
+
   };
   Params: {
     requestId: string;
   };
-}
+
 
 export async function accessControlRoutes(
   fastify: FastifyInstance,
@@ -112,7 +119,7 @@ export async function accessControlRoutes(
     if (!userId) {
       reply.code(401).send({ error: 'Authentication required' });
       return;
-    }
+
     
     // Add user to request context
     (request as any).userId = userId;
@@ -133,9 +140,9 @@ export async function accessControlRoutes(
           systemRole: { type: 'boolean' },
           limit: { type: 'integer', minimum: 1, maximum: 100 },
           offset: { type: 'integer', minimum: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = request.query as any;
@@ -150,7 +157,7 @@ export async function accessControlRoutes(
       
       if (!userCanViewRoles) {
         return reply.code(403).send({ error: 'Insufficient permissions' });
-      }
+
       
       const roles = await getRoles(query, context.db);
       
@@ -159,11 +166,10 @@ export async function accessControlRoutes(
         total: roles.length,
         filters: query
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching roles:', error);
       reply.code(500).send({ error: 'Internal server error' });
-    }
+
   });
 
   // POST /api/access-control/roles
@@ -186,16 +192,16 @@ export async function accessControlRoutes(
                 resource: { type: 'string' },
                 scope: { type: 'string', enum: ['global', 'organizational', 'project', 'personal'] },
                 constraints: { type: 'array' }
-              }
-            }
-  }
+
+
+
           parentRoles: {
             type: 'array',
             items: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<CreateRoleRequest>, reply: FastifyReply) => {
     try {
       const userId = (request as any).userId;
@@ -204,7 +210,7 @@ export async function accessControlRoutes(
       const canCreateRoles = await checkPermission(userId, 'create', 'role', accessControlManager);
       if (!canCreateRoles) {
         return reply.code(403).send({ error: 'Insufficient permissions to create roles' });
-      }
+
       
       const { name, description, permissions, parentRoles } = request.body;
       
@@ -234,11 +240,10 @@ export async function accessControlRoutes(
       });
       
       reply.code(201).send(role);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error creating role:', error);
       reply.code(500).send({ error: 'Failed to create role' });
-    }
+
   });
 
   // PUT /api/access-control/users/:userId/roles
@@ -250,8 +255,8 @@ export async function accessControlRoutes(
         required: ['userId'],
         properties: {
           userId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['roleId'],
@@ -259,9 +264,9 @@ export async function accessControlRoutes(
           roleId: { type: 'string' },
           expiresAt: { type: 'string', format: 'date-time' },
           conditions: { type: 'array' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<AssignRoleRequest>, reply: FastifyReply) => {
     try {
       const assignerId = (request as any).userId;
@@ -272,7 +277,7 @@ export async function accessControlRoutes(
       const canAssignRoles = await checkPermission(assignerId, 'assign', 'role', accessControlManager);
       if (!canAssignRoles) {
         return reply.code(403).send({ error: 'Insufficient permissions to assign roles' });
-      }
+
       
       const userRole = await accessControlManager.assignRoleToUser(
         userId,
@@ -283,11 +288,10 @@ export async function accessControlRoutes(
       );
       
       reply.send(userRole);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error assigning role:', error);
       reply.code(500).send({ error: 'Failed to assign role' });
-    }
+
   });
 
   /**
@@ -303,15 +307,14 @@ export async function accessControlRoutes(
       const canViewPolicies = await checkPermission(userId, 'read', 'policy', accessControlManager);
       if (!canViewPolicies) {
         return reply.code(403).send({ error: 'Insufficient permissions' });
-      }
+
       
       const policies = await getPolicies(context.db);
       reply.send({ policies });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching policies:', error);
       reply.code(500).send({ error: 'Internal server error' });
-    }
+
   });
 
   // POST /api/access-control/policies
@@ -333,12 +336,12 @@ export async function accessControlRoutes(
               properties: {
                 condition: { type: 'object' },
                 action: { type: 'string', enum: ['allow', 'deny', 'require_approval', 'require_mfa', 'log_warning'] }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest<CreatePolicyRequest>, reply: FastifyReply) => {
     try {
       const userId = (request as any).userId;
@@ -346,7 +349,7 @@ export async function accessControlRoutes(
       const canCreatePolicies = await checkPermission(userId, 'create', 'policy', accessControlManager);
       if (!canCreatePolicies) {
         return reply.code(403).send({ error: 'Insufficient permissions to create policies' });
-      }
+
       
       const { name, description, rules, priority } = request.body;
       
@@ -364,11 +367,10 @@ export async function accessControlRoutes(
       });
       
       reply.code(201).send(policy);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error creating policy:', error);
       reply.code(500).send({ error: 'Failed to create policy' });
-    }
+
   });
 
   /**
@@ -388,9 +390,9 @@ export async function accessControlRoutes(
           justification: { type: 'string', minLength: 10 },
           requestedDuration: { type: 'integer', minimum: 1, maximum: 168 }, // Max 1 week
           urgency: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<AccessRequestSubmission>, reply: FastifyReply) => {
     try {
       const userId = (request as any).userId;
@@ -406,11 +408,10 @@ export async function accessControlRoutes(
       });
       
       reply.code(201).send(accessRequest);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error submitting access request:', error);
       reply.code(500).send({ error: 'Failed to submit access request' });
-    }
+
   });
 
   // GET /api/access-control/access-requests
@@ -431,11 +432,10 @@ export async function accessControlRoutes(
       );
       
       reply.send({ accessRequests });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching access requests:', error);
       reply.code(500).send({ error: 'Internal server error' });
-    }
+
   });
 
   // POST /api/access-control/access-requests/:requestId/approve
@@ -447,8 +447,8 @@ export async function accessControlRoutes(
         required: ['requestId'],
         properties: {
           requestId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['approved'],
@@ -456,9 +456,9 @@ export async function accessControlRoutes(
           approved: { type: 'boolean' },
           comments: { type: 'string' },
           conditions: { type: 'array' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<ApproveAccessRequest>, reply: FastifyReply) => {
     try {
       const reviewerId = (request as any).userId;
@@ -469,7 +469,7 @@ export async function accessControlRoutes(
       const canApprove = await checkPermission(reviewerId, 'approve', 'access_request', accessControlManager);
       if (!canApprove) {
         return reply.code(403).send({ error: 'Insufficient permissions to approve requests' });
-      }
+
       
       const result = await processAccessRequestApproval(
         requestId,
@@ -481,11 +481,10 @@ export async function accessControlRoutes(
       );
       
       reply.send(result);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error processing approval:', error);
       reply.code(500).send({ error: 'Failed to process approval' });
-    }
+
   });
 
   /**
@@ -501,17 +500,16 @@ export async function accessControlRoutes(
       const canViewAnalytics = await checkPermission(userId, 'read', 'audit_log', accessControlManager);
       if (!canViewAnalytics) {
         return reply.code(403).send({ error: 'Insufficient permissions' });
-      }
+
       
       const analytics = await getAccessPatternAnalytics(request.query as any, context.db);
       reply.send(analytics);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching analytics:', error);
       reply.code(500).send({ error: 'Internal server error' });
-    }
+
   });
-}
+
 
 // Helper functions
 
@@ -526,11 +524,11 @@ async function checkPermission(
     // This would integrate with the access control manager
     // For now, simplified check
     return true; // Would implement proper permission checking
-  } catch (error) {
+ catch (error) {
     console.error('Error checking permission:', error);
     return false;
-  }
-}
+
+
 
 async function getRoles(query: any, db: DatabaseService): Promise<Role[]> {
 
@@ -542,13 +540,13 @@ async function getRoles(query: any, db: DatabaseService): Promise<Role[]> {
     whereClause += ` AND is_active = $${paramIndex}`;
     params.push(query.active);
     paramIndex++;
-  }
+
   
   if (query.systemRole !== undefined) {
     whereClause += ` AND is_system_role = $${paramIndex}`;
     params.push(query.systemRole);
     paramIndex++;
-  }
+
   
   const sql = `
     SELECT * FROM access_control_roles 
@@ -561,11 +559,11 @@ async function getRoles(query: any, db: DatabaseService): Promise<Role[]> {
   if (query.limit) {
     params.push(query.limit);
     paramIndex++;
-  }
+
   
   if (query.offset) {
     params.push(query.offset);
-  }
+
   
   const result = await db.query(sql, params);
   
@@ -580,7 +578,7 @@ async function getRoles(query: any, db: DatabaseService): Promise<Role[]> {
     updatedAt: row.updated_at,
     isActive: row.is_active
   }));
-}
+
 
 async function getPolicies(db: DatabaseService): Promise<AccessPolicy[]> {
 
@@ -600,7 +598,7 @@ async function getPolicies(db: DatabaseService): Promise<AccessPolicy[]> {
     updatedAt: row.updated_at,
     createdBy: row.created_by
   }));
-}
+
 
 async function getAccessRequests(
   userId: string,
@@ -617,13 +615,13 @@ async function getAccessRequests(
     whereClause += ` AND user_id = $${paramIndex}`;
     params.push(userId);
     paramIndex++;
-  }
+
   
   if (query.status) {
     whereClause += ` AND status = $${paramIndex}`;
     params.push(query.status);
     paramIndex++;
-  }
+
   
   const result = await db.query(`
     SELECT * FROM access_requests 
@@ -647,7 +645,7 @@ async function getAccessRequests(
     reviewComments: row.review_comments,
     expiresAt: row.expires_at
   }));
-}
+
 
 async function processAccessRequestApproval(
   requestId: string,
@@ -693,8 +691,8 @@ async function processAccessRequestApproval(
         reviewerId,
         JSON.stringify(conditions || [])
       ]);
-    }
-  }
+
+
   
   // Log the approval decision
   await auditService.logEvent({
@@ -705,7 +703,7 @@ async function processAccessRequestApproval(
   });
   
   return { success: true, approved, requestId };
-}
+
 
 async function getAccessPatternAnalytics(query: any, db: DatabaseService): Promise<any> {
 
@@ -726,8 +724,8 @@ async function getAccessPatternAnalytics(query: any, db: DatabaseService): Promi
     summary: {
       totalEvents: result.rows.reduce((sum, row) => sum + parseInt(row.count), 0),
       timeRange: '30 days'
-    }
+
   };
-}
+
 
 export default accessControlRoutes;

@@ -47,38 +47,38 @@ describe('LocationDetectionService', () => {
         apiKeys: {
           ipgeolocation: 'test-api-key',
           ipstack: 'test-api-key'
-        }
-  }
+
+
       riskThresholds: {
         newCountry: 50,
         newCity: 25,
         impossibleTravel: 80,
         proxyDetection: 60,
         maliciousIP: 90
-  }
+
       impossibleTravel: {
         enabled: true,
         maxSpeedKmh: 1000, // Commercial aircraft speed
         minimumTimeMinutes: 10,
         alertThresholdKm: 100
-  }
+
       cache: {
         ipLocationTtl: 3600,
         userLocationTtl: 1800,
         riskScoreTtl: 900
-  }
+
       regionalRisk: {
         enabled: true,
         highRiskCountries: ['XX', 'YY'], // Fictional country codes
         highRiskRegions: ['high-risk-region'],
         riskWeights: { 'XX': 70, 'YY': 60 }
-  }
+
       notifications: {
         enabled: true,
         alertOnNewCountry: true,
         alertOnImpossibleTravel: true,
         alertOnProxyDetection: true
-      }
+
     };
 
     locationService = new LocationDetectionService(
@@ -169,7 +169,7 @@ describe('LocationDetectionService', () => {
       (fetch as jest.Mock)
         .mockResolvedValueOnce({
           json: () => Promise.resolve({ status: 'fail', message: 'API error' })
-  }
+
         // Mock IPGeolocation success
         .mockResolvedValueOnce({
           json: () => Promise.resolve({
@@ -178,7 +178,7 @@ describe('LocationDetectionService', () => {
             city: 'Mountain View',
             latitude: '37.4419',
             longitude: '-122.1430'
-  }
+
         });
 
       const location = await locationService.detectLocation(testUserId, testIP);
@@ -243,7 +243,7 @@ describe('LocationDetectionService', () => {
           country: 'Germany',
           countryCode: 'DE',
           city: 'Berlin'
-  }
+
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -286,7 +286,7 @@ describe('LocationDetectionService', () => {
             last_access: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
             country: 'United States',
             city: 'San Francisco'
-          }]
+]
         });
 
       // Mock current location (London - about 8600km from SF)
@@ -298,7 +298,7 @@ describe('LocationDetectionService', () => {
           city: 'London',
           lat: 51.5074,
           lon: -0.1278
-  }
+
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -342,7 +342,7 @@ describe('LocationDetectionService', () => {
           countryCode: 'US',
           city: 'New York',
           proxy: true // Proxy detected
-  }
+
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -386,7 +386,7 @@ describe('LocationDetectionService', () => {
           city: 'Unknown',
           proxy: true,
           hosting: false
-  }
+
       });
 
       // Mock Tor detection (would be enhanced with threat intel)
@@ -428,8 +428,8 @@ describe('LocationDetectionService', () => {
             confidence: 95,
             source: 'threat_feed',
             description: 'Known malware C&C server'
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ rows: [{ count: '0' }] }) // New country
         .mockResolvedValueOnce({ rows: [{ count: '0' }] }) // New city
         .mockResolvedValueOnce({ rows: [] }); // No recent location
@@ -439,7 +439,7 @@ describe('LocationDetectionService', () => {
           status: 'success',
           country: 'Unknown',
           countryCode: 'XX'
-  }
+
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -482,7 +482,7 @@ describe('LocationDetectionService', () => {
           country: 'High Risk Country',
           countryCode: 'XX', // Matches config high-risk country
           city: 'High Risk City'
-  }
+
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -568,7 +568,7 @@ describe('LocationDetectionService', () => {
         rows: [{
           location_data: dbCachedLocation,
           last_updated: new Date()
-        }]
+]
       });
 
       const result = await (locationService as any).getCachedLocation(testIP);
@@ -640,7 +640,7 @@ describe('LocationDetectionService', () => {
           id: 'history-123',
           access_count: 5,
           first_access: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 7 days ago
-        }]
+]
       });
 
       const location = {
@@ -689,7 +689,7 @@ describe('LocationDetectionService', () => {
           description: 'First access from Germany',
           acknowledged: false,
           created_at: new Date()
-        }
+
       ];
 
       mockDb.query.mockResolvedValueOnce({ rows: mockAlerts });
@@ -794,7 +794,7 @@ describe('LocationDetectionService', () => {
           is_known_attacker: false,
           is_tor: false,
           is_threat: false
-        }
+
       };
 
       (fetch as jest.Mock).mockResolvedValueOnce({
@@ -830,13 +830,13 @@ describe('LocationDetectionService', () => {
         connection: {
           isp: 'Telstra Corporation',
           asn: 1221
-  }
+
         security: {
           is_proxy: false,
           is_vpn: false,
           is_tor: false,
           is_threat: false
-        }
+
       };
 
       (fetch as jest.Mock).mockResolvedValueOnce({

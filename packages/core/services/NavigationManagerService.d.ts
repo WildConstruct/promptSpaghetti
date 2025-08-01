@@ -7,8 +7,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface NavigationPreferences {
-    userId: string;
+}
+export interface NavigationPreferences { userId: string;
     expandedSections: string[];
     pinnedItems: string[];
     favoriteItems: string[];
@@ -20,22 +20,20 @@ export interface NavigationPreferences {
     enableAnimations: boolean;
     searchHistory: string[];
     lastSection: string;
-    customSections: CustomNavigationSection[];
-
+    customSections: CustomNavigationSection[] }
 }
-export interface NavigationHistoryItem {
-    id: string;
+}
+export interface NavigationHistoryItem { id: string;
     label: string;
     path: string;
     icon: string;
     timestamp: Date;
     category: string;
     accessCount: number;
-    lastAccessed: Date;
-
+    lastAccessed: Date }
 }
-export interface CustomNavigationSection {
-    id: string;
+}
+export interface CustomNavigationSection { id: string;
     label: string;
     description: string;
     path: string;
@@ -45,69 +43,62 @@ export interface CustomNavigationSection {
     order: number;
     category: string;
     createdBy: string;
-    created: Date;
-
+    created: Date }
 }
-export interface NavigationAnalytics {
-    userId: string;
+}
+export interface NavigationAnalytics { userId: string;
     sessionId: string;
     pathHistory: NavigationPathEvent[];
     timeSpent: Map<string, number>;
     clickCounts: Map<string, number>;
     searchQueries: SearchQueryEvent[];
     errorEvents: NavigationErrorEvent[];
-    performanceMetrics: NavigationPerformanceMetric[];
-
+    performanceMetrics: NavigationPerformanceMetric[] }
 }
-export interface NavigationPathEvent {
-    path: string;
+}
+export interface NavigationPathEvent { path: string;
     section: string;
     timestamp: Date;
     duration: number;
-    source: 'click' | 'keyboard' | 'bookmark' | 'direct' | 'search';
-
+    source: 'click' | 'keyboard' | 'bookmark' | 'direct' | 'search' }
 }
-export interface SearchQueryEvent {
-    query: string;
+}
+export interface SearchQueryEvent { query: string;
     timestamp: Date;
     resultsCount: number;
     selectedResult?: string;
-    source: 'header' | 'sidebar' | 'modal';
-
+    source: 'header' | 'sidebar' | 'modal' }
 }
-export interface NavigationErrorEvent {
-    path: string;
+}
+export interface NavigationErrorEvent { path: string;
     error: string;
     timestamp: Date;
     userAgent: string;
-    resolved: boolean;
-
+    resolved: boolean }
 }
-export interface NavigationPerformanceMetric {
-    action: string;
+}
+export interface NavigationPerformanceMetric { action: string;
     duration: number;
     timestamp: Date;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface NavigationSearchOptions {
-    query: string;
+}
+export interface NavigationSearchOptions { query: string;
     categories?: string[];
     permissions?: string[];
     limit?: number;
     fuzzyMatch?: boolean;
     includeDescriptions?: boolean;
-    userId?: string;
-
+    userId?: string }
 }
-export interface NavigationSearchResult {
-    item: {
+}
+export interface NavigationSearchResult { item: {
         id: string;
         label: string;
         description: string;
         path: string;
         icon: string;
-        category: string;
+        category: string }
 }
     };
     score: number;
@@ -119,8 +110,7 @@ export interface NavigationSearchResult {
  * Manages navigation state, preferences, analytics, and provides
  * intelligent navigation features for Epic 17.
  */
-export declare class NavigationManagerService extends EventEmitter {
-    private preferences;
+export declare class NavigationManagerService extends EventEmitter { private preferences;
     private analytics;
     private navigationCache;
     private searchIndex;
@@ -173,16 +163,13 @@ export declare class NavigationManagerService extends EventEmitter {
         averageSessionTime: number;
         mostVisitedSections: string[];
         searchQueriesCount: number;
-        lastActivity: Date | null;
-    }>;
+        lastActivity: Date | null }>;
     /**
      * Export user navigation data
      */
-    exportUserData(userId: string): Promise<{
-        preferences: NavigationPreferences;
+    exportUserData(userId: string): Promise<{ preferences: NavigationPreferences;
         analytics: NavigationAnalytics;
-        summary: any;
-    }>;
+        summary: any }>;
     private createDefaultPreferences;
     private createEmptyAnalytics;
     private persistPreferences;

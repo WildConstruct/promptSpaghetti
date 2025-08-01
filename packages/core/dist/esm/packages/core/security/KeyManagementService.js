@@ -920,8 +920,9 @@ CryptographicKey | null;
                                                     default:
                                                         return 256;
                                                         async;
-                                                        logKeyEvent(key, CryptographicKey);
-                                                        event: KeyAuditEvent['event'],
+                                                        logKeyEvent(key, CryptographicKey),
+                                                            event;
+                                                        KeyAuditEvent['event'],
                                                             details;
                                                         Record;
                                                         Promise < void  > {

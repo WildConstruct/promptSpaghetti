@@ -234,8 +234,9 @@ if (!baseline) {
         ;
         anomalies.push(anomaly);
         return anomalies;
-        detectStatisticalThresholdAnomaly(metric, SecurityMetric);
-        baseline: MetricBaseline,
+        detectStatisticalThresholdAnomaly(metric, SecurityMetric),
+            baseline;
+        MetricBaseline,
             model;
         AnomalyDetectionModel;
         {
@@ -251,8 +252,9 @@ if (!baseline) {
             const deviationMagnitude = Math.abs(metric.value - baseline.mean) / baseline.standardDeviation;
             const confidence = Math.min(0.99, deviationMagnitude / 3); // Cap at 99%;
             return { isAnomalous, deviationMagnitude, confidence };
-            detectZScoreAnomaly(metric, SecurityMetric);
-            baseline: MetricBaseline,
+            detectZScoreAnomaly(metric, SecurityMetric),
+                baseline;
+            MetricBaseline,
                 model;
             AnomalyDetectionModel;
             {
@@ -268,8 +270,9 @@ if (!baseline) {
                 const confidence = Math.min(0.99, zScore / 4); // Normalize to 0-1 range;
                 return { isAnomalous, deviationMagnitude, confidence };
                 async;
-                detectChangepointAnomaly(metric, SecurityMetric);
-                baseline: MetricBaseline,
+                detectChangepointAnomaly(metric, SecurityMetric),
+                    baseline;
+                MetricBaseline,
                     model;
                 AnomalyDetectionModel;
                 Promise < { isAnomalous: boolean, deviationMagnitude: number, confidence: number } > {
@@ -575,8 +578,9 @@ if (!baseline) {
                                                                                 const mean = this.calculateMean(pattern);
                                                                                 const variance = this.calculateStandardDeviation(pattern, mean);
                                                                                 return variance / Math.max(mean, 1); // Coefficient of variation
-                                                                                createAnomaly(metric, SecurityMetric);
-                                                                                baseline: MetricBaseline,
+                                                                                createAnomaly(metric, SecurityMetric),
+                                                                                    baseline;
+                                                                                MetricBaseline,
                                                                                     model;
                                                                                 AnomalyDetectionModel,
                                                                                     deviationMagnitude;
@@ -628,8 +632,9 @@ if (!baseline) {
                                                                                 if (score >= 1)
                                                                                     return AnomalySeverity.LOW;
                                                                                 return AnomalySeverity.INFO;
-                                                                                assessAnomalyRisk(metric, SecurityMetric);
-                                                                                severity: AnomalySeverity,
+                                                                                assessAnomalyRisk(metric, SecurityMetric),
+                                                                                    severity;
+                                                                                AnomalySeverity,
                                                                                     deviationMagnitude;
                                                                                 number;
                                                                                 AnomalyRiskAssessment;
@@ -731,12 +736,11 @@ if (!baseline) {
                                                                                                 target: 'security-alerts@company.com',
                                                                                                 enabled: true,
                                                                                                 severity: [AnomalySeverity.MEDIUM, AnomalySeverity.HIGH, AnomalySeverity.CRITICAL],
-                                                                                                rateLimiting: {
-                                                                                                    maxAlertsPerHour: 10,
-                                                                                                    maxAlertsPerDay: 50,
-                                                                                                    burstLimit: 3,
-                                                                                                    cooldownPeriod: 5
-                                                                                                }
+                                                                                                rateLimiting: {},
+                                                                                                maxAlertsPerHour: 10,
+                                                                                                maxAlertsPerDay: 50,
+                                                                                                burstLimit: 3,
+                                                                                                cooldownPeriod: 5
                                                                                             }
                                                                                         ];
                                                                                         return channels.filter(channel => channel.severity.includes(severity));

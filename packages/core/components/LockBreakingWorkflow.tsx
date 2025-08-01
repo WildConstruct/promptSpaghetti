@@ -3,22 +3,22 @@
 import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle, Shield, Clock, User, FileText } from 'lucide-react';
 import { WorkflowLock } from '../types/locking';
-}
-interface LockBreakingWorkflowProps {
-  isOpen: boolean;
+
+
+interface LockBreakingWorkflowProps { isOpen: boolean;
   onClose: () => void;
   resourceId: string;
-  onBreakLock: (lockId: string, resourceId: string, justification: string) => void;
+  onBreakLock: (lockId: string, resourceId: string, justification: string) => void
   userId: string;
-  export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({,)
-  isOpen,
-  onClose,
-  resourceId,
-  onBreakLock,
+  export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({);
+  isOpen;
+  onClose;
+  resourceId;
+  onBreakLock }
   userId
-}
-}) => {
-  const [currentStep, setCurrentStep] = useState<'select' | 'confirm' | 'justification'>('select');
+
+
+}) => { const [currentStep, setCurrentStep] = useState<'select' | 'confirm' | 'justification'>('select');
   const [selectedLock, setSelectedLock] = useState<WorkflowLock | null>(null);
   const [justification, setJustification] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,15 +27,13 @@ interface LockBreakingWorkflowProps {
   const [userPermissions, setUserPermissions] = useState<{
   canBreakLocks: boolean;
   requiresJustification: boolean;
-  roles: string;
-}>({)
+  roles: string }>({ )
   canBreakLocks: false,
   requiresJustification: true,
-  roles: [],
+  roles: [] }
 });
   // Mock data - in real implementation, this would come from API
-  useEffect(() => {
-  if (isOpen && resourceId) {
+  useEffect(() => { if (isOpen && resourceId) {
   // Mock locks data
   setLocks([)
   {
@@ -52,40 +50,26 @@ interface LockBreakingWorkflowProps {
   setUserPermissions({)
   canBreakLocks: true,
   requiresJustification: true,
-  roles: ['admin', 'editor'],
+  roles: ['admin', 'editor'] }
 });
   }, [isOpen, resourceId]);
-  const handleLockSelect = (lock: WorkflowLock) => {
-    setSelectedLock(lock);
-    setCurrentStep('confirm');
-  };
-  const handleConfirmBreak = () => {
-    if (userPermissions.requiresJustification) {
-      setCurrentStep('justification');
-    } else {
-      handleBreakLock();
-  };
-  const handleBreakLock = async () => {
-    if (!selectedLock) return;
+  const handleLockSelect = (lock: WorkflowLock) => { setSelectedLock(lock);
+    setCurrentStep('confirm') };
+  const handleConfirmBreak = () => { if (userPermissions.requiresJustification) {
+      setCurrentStep('justification') } else { handleBreakLock() };
+  const handleBreakLock = async () => { if (!selectedLock) return;
     setIsSubmitting(true);
     setError(null);
     try {
       if (userPermissions.requiresJustification && !justification.trim()) {
         throw new Error('Justification is required');
       await onBreakLock(selectedLock.id, resourceId, justification);
-      onClose();
-    } catch (error) {
-  setError(error instanceof Error ? error.message : 'Failed to break lock');
-} finally {
-      setIsSubmitting(false);
-  };
-  const handleCancel = () => {
-    setCurrentStep('select');
+      onClose() } catch (error) { setError(error instanceof Error ? error.message : 'Failed to break lock') } finally { setIsSubmitting(false) };
+  const handleCancel = () => { setCurrentStep('select');
     setSelectedLock(null);
     setJustification('');
     setError(null);
-    onClose();
-  };
+    onClose() };
   const formatTimeRemaining = (expiresAt: string) => {
     const now = new Date();
     const expires = new Date(expiresAt);

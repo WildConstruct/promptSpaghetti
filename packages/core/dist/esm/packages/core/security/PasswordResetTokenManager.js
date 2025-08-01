@@ -665,8 +665,9 @@ Promise < number > {
                                         return: new Promise(resolve => { }),
                                         : .config.antiEnumerationDelay };
                                     ;
-                                    logSecurityEvent(event, SecurityEvent);
-                                    details: (Record),
+                                    logSecurityEvent(event, SecurityEvent),
+                                        details;
+                                    (Record),
                                         ipAddress;
                                     string = 'system',
                                         userAgent;

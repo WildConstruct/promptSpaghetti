@@ -22,28 +22,24 @@ import React from 'react';
 import { DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework';
 
 }
-export interface SecurityDashboardMainProps {
-    workspaceId: string;
+}
+export interface SecurityDashboardMainProps { workspaceId: string;
     userId: string;
     userRole: SecurityRole;
     initialDashboardType?: DashboardType;
     theme?: DashboardTheme;
     enableRealTimeUpdates?: boolean;
-    refreshInterval?: number;
-
-
+    refreshInterval?: number }
 }
-export interface SecurityMetrics {
-    securityScore: number;
+}
+export interface SecurityMetrics { securityScore: number;
     activeThreats: number;
     blockedThreats: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    lastScanTime: Date;
-
-
+    lastScanTime: Date }
 }
-export interface SecurityAlert {
-    id: string;
+}
+export interface SecurityAlert { id: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
     category: 'malware' | 'intrusion' | 'data_exfiltration' | 'policy_violation' | 'anomaly';
     title: string;
@@ -54,29 +50,24 @@ export interface SecurityAlert {
     assignee?: string;
     affectedAssets: string[];
     indicators: string[];
-    responseActions: ResponseAction[];
-
-
+    responseActions: ResponseAction[] }
 }
-export interface ResponseAction {
-    id: string;
+}
+export interface ResponseAction { id: string;
     type: 'isolate' | 'block' | 'quarantine' | 'investigate' | 'escalate';
     description: string;
     automated: boolean;
     status: 'pending' | 'in_progress' | 'completed' | 'failed';
     performer?: string;
-    timestamp?: Date;
-
-
+    timestamp?: Date }
 }
-export interface ComplianceStatus {
-    framework: string;
+}
+export interface ComplianceStatus { framework: string;
     status: 'compliant' | 'non_compliant' | 'partial';
     score: number;
     violations: ComplianceViolation[];
-    lastAssessment: Date;
-
-
+    lastAssessment: Date }
+}
 }
 export interface ComplianceViolation {
     id: string;
@@ -93,4 +84,5 @@ export interface ComplianceViolation {
 export declare const SecurityDashboardMain: React.FC<SecurityDashboardMainProps>;
 export default SecurityDashboardMain;
 //# sourceMappingURL=SecurityDashboardMain.d.ts.map
+}
 }

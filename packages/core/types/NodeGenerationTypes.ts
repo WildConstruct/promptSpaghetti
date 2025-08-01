@@ -9,7 +9,7 @@ import { Node, Edge, Position } from 'reactflow';
  * Request parameters for node generation
  */
 
-}
+
 export interface NodeGenerationRequest {
   analysisResult: PromptAnalysisResult;
   selectedSuggestions: NodeSuggestion;
@@ -18,87 +18,85 @@ export interface NodeGenerationRequest {
   /**
   * Result of prompt analysis that drives node generation
   */
-}
-}
-}
-export interface PromptAnalysisResult {
-  prompt: string;
+
+
+
+
+export interface PromptAnalysisResult { prompt: string;
   suggestions: NodeSuggestion;
   confidence: number;
-  analysisMetadata: {
+  analysisMetadata: { }
   processingTimeMs: number;
   complexity: 'simple' | 'moderate' | 'complex';
   suggestedLayout: LayoutType;
   estimatedNodes: number;
-}
+
+
 };
 
 /**
  * Individual node suggestion from analysis
  */
-}
-}
-export interface NodeSuggestion {
-  id: string;
+
+
+export interface NodeSuggestion { id: string;
   nodeType: string;
   title: string;
   description: string;
-  confidence: number; // 0-100,
+  confidence: number; // 0-100;
   suggestedPosition: Position;
   nodeData: Record<string, unknown>;
   connections: SuggestedConnection;
-  metadata: {
+  metadata: {;
   category: 'content' | 'logic' | 'output' | 'variable';
   priority: 'high' | 'medium' | 'low';
-  estimatedComplexity: number; // 1-10,
-}
+  estimatedComplexity: number; // 1-10 }
+
+
 };
 
 /**
  * Suggested connection between nodes
  */
-}
-}
-export interface SuggestedConnection {
-  fromNodeId: string;
+
+
+export interface SuggestedConnection { fromNodeId: string;
   toNodeId: string;
-  connectionType: 'direct' | 'conditional' | 'weighted';
+  connectionType: 'direct' | 'conditional' | 'weighted' }
   confidence: number;
   label?: string;
   /**
   * User customization options for generation
   */
-}
-}
-}
-export interface GenerationOptions {
-  layout: LayoutType;
-  spacing: {
+
+
+
+
+export interface GenerationOptions { layout: LayoutType;
+  spacing: { }
   horizontal: number;
   vertical: number;
-}
+
+
 };
   connectionPattern: ConnectionPattern;
-  nodeConfiguration: {;
+  nodeConfiguration: { ;
   autoConnect: boolean;
   useSmartPositioning: boolean;
-  preserveUserNodes: boolean;
-};
-  validation: {
+  preserveUserNodes: boolean };
+  validation: { ,
   enableStrictValidation: boolean;
   allowDuplicateConnections: boolean;
-  maxNodesPerGeneration: number;
-};
-  performance: {
+  maxNodesPerGeneration: number };
+  performance: { ,
   batchSize: number;
   useProgressiveGeneration: boolean;
-  enablePerformanceTracking: boolean;
-};
+  enablePerformanceTracking: boolean };
 
 /**
  * Layout algorithms for node positioning
  */
-}
+
 export type LayoutType = 'linear' | 'hierarchical' | 'radial' | 'force-directed' | 'grid';
 /**
  * Connection patterns for linking generated nodes
@@ -114,7 +112,7 @@ export type ConnectionPattern =
  * Complete generated graph result
  */
 
-}
+
 export interface GeneratedGraph {
   nodes: Node;
   edges: Edge;
@@ -122,72 +120,71 @@ export interface GeneratedGraph {
   /**
   * Metadata about the generation process
   */
-}
-}
-}
-export interface GenerationMetadata {
-  generationId: string;
+
+
+
+
+export interface GenerationMetadata { generationId: string;
   timestamp: Date;
-  performance: {
+  performance: { }
   totalTimeMs: number;
   nodesGenerated: number;
   edgesGenerated: number;
   layoutTimeMs: number;
   validationTimeMs: number;
-}
+
+
 };
   options: GenerationOptions;
-  validation: {;
+  validation: { ;
   isValid: boolean;
   errors: ValidationError;
-  warnings: ValidationWarning;
-};
-  statistics: {
+  warnings: ValidationWarning };
+  statistics: { ,
   averageNodeConfidence: number;
   layoutEfficiency: number;
   connectionDensity: number;
-  complexityScore: number;
-};
+  complexityScore: number };
 
 /**
  * Validation error during generation
  */
-}
-}
-export interface ValidationError {
-  code: string;
+
+
+export interface ValidationError { code: string;
   message: string;
   nodeId?: string;
   edgeId?: string;
-  severity: 'error' | 'warning';
+  severity: 'error' | 'warning' }
   suggestions: string;
   /**
   * Validation warning during generation
   */
-}
-}
-}
-export interface ValidationWarning {
-  code: string;
+
+
+
+
+export interface ValidationWarning { code: string;
   message: string;
   nodeId?: string;
   edgeId?: string;
-  impact: 'low' | 'medium' | 'high';
+  impact: 'low' | 'medium' | 'high' }
   recommendation: string;
   /**
   * Layout calculation result
   */
-}
-}
-}
-export interface LayoutResult {
-  positions: Map<string, Position>;
-  bounds: {
+
+
+
+
+export interface LayoutResult { positions: Map<string, Position>;
+  bounds: { }
   minX: number;
   maxX: number;
   minY: number;
   maxY: number;
-}
+
+
 };
   efficiency: number; // 0-100, higher is better
   overlaps: number;
@@ -195,37 +192,36 @@ export interface LayoutResult {
 /**
  * Connection calculation result
  */
-}
-}
-export interface ConnectionResult {
-  edges: Edge;
-  patterns: {
+
+
+export interface ConnectionResult { edges: Edge;
+  patterns: { }
   sequential: number;
   branching: number;
   cyclical: number;
-}
+
+
 };
-  validation: {
+  validation: { 
   validConnections: number;
   invalidConnections: number;
-  duplicateConnections: number;
-};
+  duplicateConnections: number };
 
 /**
  * Node factory configuration
  */
-}
-}
-export interface NodeFactoryConfig {
-  nodeType: string;
+
+
+export interface NodeFactoryConfig { nodeType: string;
   defaultData: Record<string, unknown>;
-  validation: {
+  validation: { }
   requiredFields: string;
   optionalFields: string;
   constraints: Record<string, unknown>;
-}
+
+
 };
-  rendering: {
+  rendering: {,
   defaultSize: { width: number; height: number };
     iconClass: string;
   colorScheme: string;
@@ -234,11 +230,10 @@ export interface NodeFactoryConfig {
 /**
  * Generation progress tracking
  */
-}
-}
-export interface GenerationProgress {
-  stage: 'analyzing' | 'layouting' | 'connecting' | 'validating' | 'finalizing';
-  progress: number; // 0-100,
+
+
+export interface GenerationProgress { stage: 'analyzing' | 'layouting' | 'connecting' | 'validating' | 'finalizing';
+  progress: number; // 0-100 }
   currentStep: string;
   estimatedTimeRemainingMs: number;
   nodesProcessed: number;
@@ -246,115 +241,110 @@ export interface GenerationProgress {
   /**
   * Generation context for maintaining state
   */
-}
-}
-}
-export interface GenerationContext {
-  requestId: string;
+
+
+
+
+export interface GenerationContext { requestId: string;
   startTime: Date;
-  canvas: {
+  canvas: {;
   existingNodes: Node;
   existingEdges: Edge;
-  viewport: {
+  viewport: { }
   x: number;
   y: number;
   zoom: number;
-}
+
+
 };
   };
-  userPreferences: {
+  userPreferences: { ,
   defaultLayout: LayoutType;
   preferredSpacing: number;
-  autoSaveEnabled: boolean;
-};
-  performance: {
+  autoSaveEnabled: boolean };
+  performance: { ,
   memoryUsageMB: number;
   renderTimeMs: number;
-  validationTimeMs: number;
-};
+  validationTimeMs: number };
 
 /**
  * Undo/Redo operation for generated content
  */
-}
-}
-export interface GenerationOperation {
-  type: 'generate' | 'delete' | 'modify';
+
+
+export interface GenerationOperation { type: 'generate' | 'delete' | 'modify';
   operationId: string;
   timestamp: Date;
-  data: {
+  data: { }
   nodesAffected: string;
   edgesAffected: string;
   beforeState: Record<string, unknown>;
   afterState: Record<string, unknown>;
-}
+
+
 };
-  metadata: {
+  metadata: { ,
   description: string;
   canUndo: boolean;
-  canRedo: boolean;
-};
+  canRedo: boolean };
 
 /**
  * Export configuration for generated graphs
  */
-}
-}
-export interface ExportConfiguration {
-  format: 'json' | 'yaml' | 'graphml' | 'dot' | 'svg';
-  options: {
+
+
+export interface ExportConfiguration { format: 'json' | 'yaml' | 'graphml' | 'dot' | 'svg';
+  options: { }
   includeMetadata: boolean;
   includePerformanceData: boolean;
   compressOutput: boolean;
   validateBeforeExport: boolean;
-}
+
+
 };
-  filters: {
+  filters: { ,
   nodeTypes: string;
   excludeSystemNodes: boolean;
-  includeHiddenEdges: boolean;
-};
+  includeHiddenEdges: boolean };
 
 /**
  * Performance metrics for monitoring
  */
-}
-}
-export interface PerformanceMetrics {
-  generationStats: {
+
+
+export interface PerformanceMetrics { generationStats: { }
   totalGenerations: number;
   averageGenerationTimeMs: number;
   peakMemoryUsageMB: number;
   errorRate: number;
-}
+
+
 };
-  layoutStats: {
+  layoutStats: { ,
   preferredLayouts: Record<LayoutType, number>;
   averageLayoutTimeMs: Record<LayoutType, number>;
-  layoutEfficiencyScores: Record<LayoutType, number>;
-};
-  userStats: {
+  layoutEfficiencyScores: Record<LayoutType, number> };
+  userStats: { 
   averageNodesPerGeneration: number;
   mostUsedNodeTypes: Record<string, number>;
-  commonValidationErrors: Record<string, number>;
-};
+  commonValidationErrors: Record<string, number> };
 
 /**
  * Security constraints for node generation
  */
-}
-}
-export interface SecurityConstraints {
-  maxNodesPerRequest: number;
+
+
+export interface SecurityConstraints { maxNodesPerRequest: number;
   maxPromptLength: number;
   maxGenerationTimeMs: number;
   allowedNodeTypes: string;
   restrictedOperations: string;
-  validationRules: {
+  validationRules: { }
   requireInputValidation: boolean;
   sanitizeUserContent: boolean;
   enforceRateLimiting: boolean;
-}
+
+
 };
 
 /**
@@ -364,16 +354,15 @@ export interface SecurityConstraints {
 /**
  * Error codes for validation and generation
  */
-}
-export const ERROR_CODES = {
-  INVALID_INPUT: 'INVALID_INPUT',
-  GENERATION_FAILED: 'GENERATION_FAILED',
-  LAYOUT_ERROR: 'LAYOUT_ERROR',
-  CONNECTION_ERROR: 'CONNECTION_ERROR',
-  VALIDATION_FAILED: 'VALIDATION_FAILED',
-  PERFORMANCE_LIMIT: 'PERFORMANCE_LIMIT',
-  SECURITY_VIOLATION: 'SECURITY_VIOLATION',
-  TIMEOUT: 'TIMEOUT',
-} as const;
+
+export const ERROR_CODES = { INVALID_INPUT: 'INVALID_INPUT'
+  GENERATION_FAILED: 'GENERATION_FAILED'
+  LAYOUT_ERROR: 'LAYOUT_ERROR'
+  CONNECTION_ERROR: 'CONNECTION_ERROR'
+  VALIDATION_FAILED: 'VALIDATION_FAILED'
+  PERFORMANCE_LIMIT: 'PERFORMANCE_LIMIT'
+  SECURITY_VIOLATION: 'SECURITY_VIOLATION'
+  TIMEOUT: 'TIMEOUT' }
+ as const;
 
 export type ErrorCode = typeof ERROR_CODES[keyof typeof ERROR_CODES];

@@ -8,7 +8,7 @@ import {
   DataRefreshConfig, 
   RefreshJob,
   RefreshAnalytics 
-} from '../SecurityIntelligenceDataRefreshEngine';
+ from '../SecurityIntelligenceDataRefreshEngine';
 import { SecurityIntelligenceAutomationEngine } from '../SecurityIntelligenceAutomationEngine';
 import { SecurityAPIIntegrationPlatform } from '../SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../SecurityPolicyAnalysisEngine';
@@ -44,60 +44,60 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
       collectIntelligence: jest.fn<unknown[], unknown>().mockResolvedValue({
         collection_id: 'collection_123',
         intelligence_collected: 150
-      } as unknown),
+ as unknown),
       analyzeIntelligence: jest.fn<unknown[], unknown>().mockResolvedValue({
         analysis_id: 'analysis_123',
         analysis_type: 'tactical'
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockAPIIntegration = {
       on: jest.fn<unknown[], unknown>(),
       getPlatformMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         api_calls: { total_requests: 10000, successful_requests: 9850 },
         security_analytics: { threats_detected: 45, detection_accuracy_percent: 96 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPolicyEngine = {
       on: jest.fn<unknown[], unknown>(),
       analyzePolicyImpact: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_analysis: { overall_risk_score: 42 },
         validation_results: { validation_passed: true }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockRiskScoringEngine = {
       on: jest.fn<unknown[], unknown>(),
       scoreSecurityRisk: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_id: 'risk_123',
         risk_scoring: { composite_score: 78 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPatternEngine = {
       on: jest.fn<unknown[], unknown>(),
       recognizePatterns: jest.fn<unknown[], unknown>().mockResolvedValue({
         patterns_discovered: { new_patterns: ['malware_pattern_1'] },
         analysis_id: 'pattern_123'
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockTimeSeriesEngine = {
       on: jest.fn<unknown[], unknown>(),
       analyzeTimeSeries: jest.fn<unknown[], unknown>().mockResolvedValue({
         analysis_id: 'timeseries_123',
         detected_anomalies: [{ anomaly_id: 'anom_1', severity: 'medium' }]
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockInsightsEngine = {
       on: jest.fn<unknown[], unknown>(),
       generateInsights: jest.fn<unknown[], unknown>().mockResolvedValue({
         generation_id: 'gen_123',
         insights_generated: []
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     // Setup configuration
     config = {
@@ -110,7 +110,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
         quality_gated_refresh: true,
         error_recovery: true,
         performance_optimization: true
-  }
+
       refresh_scheduling: {
         global_interval: 300000, // 5 minutes
         source_specific_intervals: new Map([
@@ -123,9 +123,9 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           start_hour: 2,
           end_hour: 6,
           timezone: 'UTC'
-  }
+
         emergency_refresh_triggers: ['critical_threat_detected', 'system_compromise']
-  }
+
       data_collection: {
         concurrent_sources: 5,
         timeout_per_source: 30000,
@@ -135,9 +135,9 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           minimum_confidence: 0.75,
           freshness_requirement: 3600000, // 1 hour
           completeness_threshold: 0.8
-  }
+
         deduplication_enabled: true
-  }
+
       analysis_automation: {
         trigger_on_refresh: true,
         analysis_types: ['threat_detection', 'pattern_analysis', 'risk_assessment'],
@@ -145,7 +145,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
         real_time_analysis_criteria: ['critical_severity', 'high_confidence'],
         quality_impact_analysis: true,
         trend_change_detection: true
-  }
+
       performance_monitoring: {
         track_refresh_performance: true,
         source_health_monitoring: true,
@@ -153,7 +153,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
         alert_on_degradation: true,
         performance_history_retention: 30,
         optimization_recommendations: true
-  }
+
       integration_settings: {
         workflow_orchestrator_integration: true,
         siem_refresh_synchronization: true,
@@ -161,7 +161,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
         dashboard_real_time_updates: true,
         api_change_notifications: true,
         external_system_webhooks: ['https://webhook.example.com/security']
-      }
+
     };
 
     refreshEngine = new SecurityIntelligenceDataRefreshEngine(
@@ -284,7 +284,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
 
         expect(result).toHaveProperty('job_id');
         expect(result.job_status).toBe('pending');
-      }
+
     });
 
     it('should execute refresh jobs successfully', async () => {
@@ -297,7 +297,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           processing_options: {
             analysis_trigger: true,
             notification_on_completion: true
-          }
+
         }
       );
 
@@ -537,7 +537,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
         expect(sourceMetrics).toHaveProperty('data_quality_score');
         expect(sourceMetrics).toHaveProperty('last_successful_refresh');
         expect(sourceMetrics).toHaveProperty('reliability_rating');
-      }
+
     });
 
     it('should provide temporal analysis insights', () => {
@@ -635,7 +635,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
       const patternAnalysis = {
         patterns_discovered: { 
           new_patterns: ['malware_family_x', 'attack_vector_y'] 
-  }
+
         confidence: 0.95
       };
 
@@ -704,7 +704,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           processing_options: {
             parallel_processing: true,
             batch_size: 50
-          }
+
         }
       );
 
@@ -776,12 +776,12 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
       for (let i = 0; i < 5; i++) {
         const job = await refreshEngine.createRefreshJob(`High Load Job ${i}`, 'manual');
         jobs.push(job);
-      }
+
 
       // Execute all jobs
       for (const job of jobs) {
         await refreshEngine.executeRefreshJob(job.job_id);
-      }
+
 
       // Verify analytics are still generated correctly
       const analytics = refreshEngine.getRefreshAnalytics();
@@ -826,9 +826,9 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
       // Create a scenario that might cause errors (implementation dependent)
       try {
         await refreshEngine.createRefreshJob('', 'manual'); // Empty name might cause error
-      } catch (error) {
+ catch (error) {
         // Expected in some implementations
-      }
+
     });
 
     it('should handle network timeout scenarios gracefully', async () => {
@@ -840,7 +840,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           processing_options: {
             parallel_processing: false,
             batch_size: 1
-          }
+
         }
       );
 
@@ -857,7 +857,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           target_sources: ['unreliable_source_1', 'unreliable_source_2'],
           processing_options: {
             parallel_processing: true
-          }
+
         }
       );
 
@@ -882,9 +882,9 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
             minimum_confidence: 0.9,
             freshness_requirement: 1800000, // 30 minutes
             completeness_threshold: 0.95
-  }
+
           deduplication_enabled: false
-        }
+
       };
 
       const customEngine = new SecurityIntelligenceDataRefreshEngine(

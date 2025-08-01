@@ -7,8 +7,8 @@ import { EventEmitter } from 'events';
 import { RedisService } from '../database/RedisService';
 import { IdleTimeoutDetectionService } from './IdleTimeoutDetectionService';
 
-}
-}
+
+
 export interface ActivityDefinition {
   id: string;
   name: string;
@@ -24,9 +24,10 @@ export interface ActivityDefinition {
       payloadPattern?: string;
       minDuration?: number; // milliseconds
       userInitiated: boolean;
-}
-}
-    }>;
+
+
+
+>;
     
     filters: {
       excludePaths?: string[];
@@ -52,13 +53,13 @@ export interface ActivityDefinition {
       condition: string;
       scoreMultiplier: number;
       reason: string;
-    }>;
+>;
     
     antiPatterns: Array<{
       pattern: string;
       penaltyScore: number;
       description: string;
-    }>;
+>;
   };
   
   timeoutReset: {
@@ -68,10 +69,10 @@ export interface ActivityDefinition {
     minimumGapBetweenResets: number; // seconds
     resetScope: 'session' | 'user' | 'device';
   };
-}
 
-}
-}
+
+
+
 export interface DetectedActivity {
   id: string;
   sessionId: string;
@@ -85,8 +86,9 @@ export interface DetectedActivity {
     userAgent?: string;
     ipAddress: string;
     referrer?: string;
-}
-}
+
+
+
   };
   
   analysis: {
@@ -134,10 +136,10 @@ export interface DetectedActivity {
     reasons: string[];
     flags: string[];
   };
-}
 
-}
-}
+
+
+
 export interface ActivityPattern {
   id: string;
   name: string;
@@ -153,16 +155,17 @@ export interface ActivityPattern {
       operator: 'equals' | 'contains' | 'matches' | 'between' | 'greater' | 'less';
       value: any;
       weight: number;
-}
-}
-    }>;
+
+
+
+>;
     
     relationships: Array<{
       activity1: string;
       activity2: string;
       relationship: 'follows' | 'concurrent' | 'excludes' | 'implies';
       maxTimeDiff?: number; // milliseconds
-    }>;
+>;
   };
   
   scoring: {
@@ -178,10 +181,10 @@ export interface ActivityPattern {
     notifySecurityTeam: boolean;
     logLevel: 'info' | 'warn' | 'error' | 'critical';
   };
-}
 
-}
-}
+
+
+
 export interface ActivitySession {
   sessionId: string;
   userId: string;
@@ -196,8 +199,9 @@ export interface ActivitySession {
     automatedActivities: number;
     averageGenuineness: number;
     timeoutResets: number;
-}
-}
+
+
+
   };
   
   patterns: {
@@ -214,7 +218,7 @@ export interface ActivitySession {
     preferredEndpoints: string[];
     usualTimeOfDay: number[]; // hours when user is typically active
   };
-}
+
 
 export class ActivityDetectionService extends EventEmitter {
   private redis: RedisService;
@@ -255,7 +259,7 @@ export class ActivityDetectionService extends EventEmitter {
     this.initializeDefaultDefinitions();
     this.initializeDefaultPatterns();
     this.startBackgroundProcessing();
-  }
+
 
   /**
    * Detect and process activity
@@ -273,7 +277,7 @@ export class ActivityDetectionService extends EventEmitter {
       ipAddress: string;
       userAgent: string;
       referrer?: string;
-    }
+
   ): Promise<{
     detected: boolean;
     activity?: DetectedActivity;
@@ -281,7 +285,7 @@ export class ActivityDetectionService extends EventEmitter {
     confidence: number;
     warnings: string[];
     blocked: boolean;
-  }> {
+> {
 
     try {
       const timestamp = activityData.timestamp || new Date();
@@ -296,7 +300,7 @@ export class ActivityDetectionService extends EventEmitter {
           warnings: ['No matching activity definitions'],
           blocked: false
         };
-      }
+
 
       // Use the highest-scoring definition
       const bestDefinition = this.selectBestDefinition(matchingDefinitions, activityData);
@@ -314,38 +318,38 @@ export class ActivityDetectionService extends EventEmitter {
           userAgent: activityData.userAgent,
           ipAddress: activityData.ipAddress,
           referrer: activityData.referrer
-  }
+
         analysis: {
           definitionId: bestDefinition.id,
           genuineScore: 0,
           automatedProbability: 0,
           fraudRisk: 0,
           validationResults: {}
-  }
+
         patterns: {
           sequencePosition: 0,
           timingPattern: 'regular',
           frequencyScore: 50,
           velocityIndicator: 'normal'
-  }
+
         context: {
           sessionContext: {
             totalActivities: 0,
             recentActivities: 0,
             averageGap: 0,
             sessionDuration: 0
-  }
+
           userContext: {
             deviationScore: 0,
             riskProfile: 'low'
-          }
-  }
+
+
         outcome: {
           shouldResetTimeout: false,
           confidence: 0,
           reasons: [],
           flags: []
-        }
+
       };
 
       // Perform validation
@@ -362,7 +366,7 @@ export class ActivityDetectionService extends EventEmitter {
           warnings: validation.warnings,
           blocked: validation.blocked
         };
-      }
+
 
       // Analyze activity genuineness
       const analysis = await this.analyzeActivityGenuineness(activity, bestDefinition);
@@ -387,17 +391,17 @@ export class ActivityDetectionService extends EventEmitter {
       let timeoutReset = false;
       if (outcome.shouldResetTimeout && outcome.confidence >= 70) {
         timeoutReset = await this.performTimeoutReset(activity, bestDefinition);
-      }
+
 
       // Check for suspicious patterns
       const warnings: string[] = [];
       if (activity.analysis.fraudRisk > this.config.suspicoiusThreshold) {
         warnings.push('High fraud risk detected');
-      }
+
       
       if (activity.analysis.automatedProbability > this.config.automationThreshold) {
         warnings.push('Possible automated activity');
-      }
+
 
       // Emit activity detected event
       this.emit('activityDetected', {
@@ -414,8 +418,7 @@ export class ActivityDetectionService extends EventEmitter {
         warnings,
         blocked: false
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error detecting activity:', error);
       return {
         detected: false,
@@ -424,8 +427,8 @@ export class ActivityDetectionService extends EventEmitter {
         warnings: ['Activity detection failed'],
         blocked: false
       };
-    }
-  }
+
+
 
   /**
    * Establish baseline behavior for a user
@@ -438,7 +441,7 @@ export class ActivityDetectionService extends EventEmitter {
     confidenceLevel: number;
     profile: any;
     recommendations: string[];
-  }> {
+> {
 
     try {
       // Get user's recent activities
@@ -451,7 +454,7 @@ export class ActivityDetectionService extends EventEmitter {
           profile: {},
           recommendations: ['Insufficient activity data for baseline establishment']
         };
-      }
+
 
       // Analyze activity patterns
       const baseline = await this.analyzeUserBehaviorPatterns(userActivities, analysisDepth);
@@ -472,8 +475,7 @@ export class ActivityDetectionService extends EventEmitter {
         profile: baseline.profile,
         recommendations: baseline.recommendations
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error establishing user baseline:', error);
       return {
         baselineEstablished: false,
@@ -481,8 +483,8 @@ export class ActivityDetectionService extends EventEmitter {
         profile: {},
         recommendations: ['Failed to establish baseline']
       };
-    }
-  }
+
+
 
   /**
    * Register custom activity definition
@@ -494,7 +496,7 @@ export class ActivityDetectionService extends EventEmitter {
     success: boolean;
     definitionId?: string;
     errors?: string[];
-  }> {
+> {
 
     try {
       // Validate definition
@@ -504,7 +506,7 @@ export class ActivityDetectionService extends EventEmitter {
           success: false,
           errors: validation.errors
         };
-      }
+
 
       // Create definition
       const activityDefinition: ActivityDefinition = {
@@ -526,15 +528,14 @@ export class ActivityDetectionService extends EventEmitter {
         success: true,
         definitionId: activityDefinition.id
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error registering activity definition:', error);
       return {
         success: false,
         errors: ['Failed to register activity definition']
       };
-    }
-  }
+
+
 
   /**
    * Get activity analytics
@@ -545,7 +546,7 @@ export class ActivityDetectionService extends EventEmitter {
       userId?: string;
       timeRange?: { start: Date; end: Date };
       activityTypes?: string[];
-    } = {}
+ = {}
   ): Promise<{
     summary: {
       totalActivities: number;
@@ -564,7 +565,7 @@ export class ActivityDetectionService extends EventEmitter {
       genuinenessTrend: Array<{ date: Date; score: number }>;
       riskTrend: Array<{ date: Date; risk: number }>;
     };
-  }> {
+> {
     try {
       // Get filtered activities
       const activities = await this.getFilteredActivities(filters);
@@ -583,12 +584,11 @@ export class ActivityDetectionService extends EventEmitter {
         patterns,
         trends
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting activity analytics:', error);
       throw new Error('Failed to get activity analytics');
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -607,39 +607,39 @@ export class ActivityDetectionService extends EventEmitter {
         if (this.matchesPattern(activityData, pattern)) {
           matching.push(definition);
           break;
-        }
-      }
-    }
+
+
+
     
     return matching;
-  }
+
 
   private matchesPattern(activityData: any, pattern: any): boolean {
     // Check path pattern
     if (pattern.path && activityData.endpoint) {
       const pathRegex = new RegExp(pattern.path);
       if (!pathRegex.test(activityData.endpoint)) return false;
-    }
+
     
     // Check method
     if (pattern.method && activityData.method !== pattern.method) {
       return false;
-    }
+
     
     // Check headers
     if (pattern.headers) {
       for (const [key, value] of Object.entries(pattern.headers)) {
         if (activityData.headers?.[key] !== value) return false;
-      }
-    }
+
+
     
     return true;
-  }
+
 
   private selectBestDefinition(definitions: ActivityDefinition[], activityData: any): ActivityDefinition {
     // For now, return the first one. Could implement more sophisticated scoring
     return definitions[0];
-  }
+
 
   private async validateActivity(
     activity: DetectedActivity,
@@ -649,7 +649,7 @@ export class ActivityDetectionService extends EventEmitter {
     results: Record<string, boolean>;
     warnings: string[];
     blocked: boolean;
-  }> {
+> {
     const results: Record<string, boolean> = {};
     const warnings: string[] = [];
     let blocked = false;
@@ -661,14 +661,14 @@ export class ActivityDetectionService extends EventEmitter {
       if (!sessionValid) {
         warnings.push('Invalid session');
         blocked = true;
-      }
-    }
+
+
 
     // Check CSRF token
     if (definition.validation.requiresCSRFToken) {
       // Implementation would check CSRF token
       results.validCSRF = true; // Placeholder
-    }
+
 
     // Check timestamp validity
     if (definition.validation.validateTimestamp) {
@@ -679,8 +679,8 @@ export class ActivityDetectionService extends EventEmitter {
       results.validTimestamp = timestampValid;
       if (!timestampValid) {
         warnings.push('Invalid timestamp');
-      }
-    }
+
+
 
     return {
       passed: !blocked && Object.values(results).every(r => r !== false),
@@ -688,7 +688,7 @@ export class ActivityDetectionService extends EventEmitter {
       warnings,
       blocked
     };
-  }
+
 
   private async analyzeActivityGenuineness(
     activity: DetectedActivity,
@@ -697,7 +697,7 @@ export class ActivityDetectionService extends EventEmitter {
     genuineScore: number;
     automatedProbability: number;
     fraudRisk: number;
-  }> {
+> {
 
     let genuineScore = definition.scoring.baseScore;
     let automatedProbability = 0;
@@ -707,8 +707,8 @@ export class ActivityDetectionService extends EventEmitter {
     for (const modifier of definition.scoring.modifiers) {
       if (this.evaluateCondition(activity, modifier.condition)) {
         genuineScore *= modifier.scoreMultiplier;
-      }
-    }
+
+
 
     // Check anti-patterns
     for (const antiPattern of definition.scoring.antiPatterns) {
@@ -716,15 +716,15 @@ export class ActivityDetectionService extends EventEmitter {
         genuineScore -= antiPattern.penaltyScore;
         automatedProbability += 20;
         fraudRisk += 15;
-      }
-    }
+
+
 
     // Analyze timing patterns
     const timingAnalysis = await this.analyzeActivityTiming(activity);
     if (timingAnalysis.suspicious) {
       automatedProbability += 30;
       fraudRisk += 20;
-    }
+
 
     // Clamp values
     genuineScore = Math.max(0, Math.min(100, genuineScore));
@@ -736,7 +736,7 @@ export class ActivityDetectionService extends EventEmitter {
       automatedProbability,
       fraudRisk
     };
-  }
+
 
   private async performTimeoutReset(
     activity: DetectedActivity,
@@ -750,8 +750,8 @@ export class ActivityDetectionService extends EventEmitter {
         const timeSinceReset = activity.timestamp.getTime() - lastReset.getTime();
         if (timeSinceReset < definition.timeoutReset.minimumGapBetweenResets * 1000) {
           return false;
-        }
-      }
+
+
 
       // Perform the timeout reset
       const resetResult = await this.timeoutService.recordActivity(
@@ -761,7 +761,7 @@ export class ActivityDetectionService extends EventEmitter {
           timestamp: activity.timestamp,
           resetIdle: definition.timeoutReset.shouldResetIdle,
           userInitiated: true
-        }
+
       );
 
       if (resetResult.idleReset) {
@@ -774,15 +774,14 @@ export class ActivityDetectionService extends EventEmitter {
           activityType: activity.source.type,
           confidence: activity.outcome.confidence
         });
-      }
+
 
       return resetResult.idleReset;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error performing timeout reset:', error);
       return false;
-    }
-  }
+
+
 
   private initializeDefaultDefinitions(): void {
     const definitions: Array<Omit<ActivityDefinition, 'id'>> = [
@@ -798,13 +797,13 @@ export class ActivityDetectionService extends EventEmitter {
           }, {
             method: 'PUT',
             userInitiated: true
-          }],
+],
           filters: {
             excludePaths: ['/health', '/metrics', '/ping'],
             requireAuthentication: true,
             minTimeBetweenActivities: 1000 // 1 second
-          }
-  }
+
+
         validation: {
           requiresValidSession: true,
           requiresCSRFToken: true,
@@ -812,28 +811,28 @@ export class ActivityDetectionService extends EventEmitter {
           checkIPConsistency: true,
           validateTimestamp: true,
           timestampTolerance: 30000 // 30 seconds
-  }
+
         scoring: {
           baseScore: 80,
           modifiers: [{
             condition: 'method === "POST"',
             scoreMultiplier: 1.2,
             reason: 'POST requests typically indicate user action'
-          }],
+],
           antiPatterns: [{
             pattern: 'rapid_successive_calls',
             penaltyScore: 30,
             description: 'Too many calls in short succession'
-          }]
-  }
+]
+
         timeoutReset: {
           shouldResetIdle: true,
           shouldResetInactivity: true,
           resetGracePeriod: 5,
           minimumGapBetweenResets: 10,
           resetScope: 'session'
-        }
-  }
+
+
       {
         name: 'Page Navigation',
         description: 'User navigating between pages',
@@ -843,13 +842,13 @@ export class ActivityDetectionService extends EventEmitter {
           patterns: [{
             method: 'GET',
             userInitiated: true
-          }],
+],
           filters: {
             excludePaths: ['/assets/', '/static/', '/api/'],
             requireAuthentication: true,
             minTimeBetweenActivities: 2000 // 2 seconds
-          }
-  }
+
+
         validation: {
           requiresValidSession: true,
           requiresCSRFToken: false,
@@ -857,28 +856,28 @@ export class ActivityDetectionService extends EventEmitter {
           checkIPConsistency: true,
           validateTimestamp: true,
           timestampTolerance: 10000 // 10 seconds
-  }
+
         scoring: {
           baseScore: 90,
           modifiers: [{
             condition: 'referrer !== null',
             scoreMultiplier: 1.1,
             reason: 'Referrer indicates natural navigation'
-          }],
+],
           antiPatterns: [{
             pattern: 'no_referrer_rapid_navigation',
             penaltyScore: 40,
             description: 'Rapid navigation without referrer'
-          }]
-  }
+]
+
         timeoutReset: {
           shouldResetIdle: true,
           shouldResetInactivity: true,
           resetGracePeriod: 3,
           minimumGapBetweenResets: 5,
           resetScope: 'session'
-        }
-  }
+
+
       {
         name: 'User Interaction',
         description: 'Direct user interface interactions',
@@ -887,12 +886,12 @@ export class ActivityDetectionService extends EventEmitter {
           type: 'user_interaction',
           patterns: [{
             userInitiated: true
-          }],
+],
           filters: {
             requireAuthentication: true,
             minTimeBetweenActivities: 500 // 0.5 seconds
-          }
-  }
+
+
         validation: {
           requiresValidSession: true,
           requiresCSRFToken: false,
@@ -900,7 +899,7 @@ export class ActivityDetectionService extends EventEmitter {
           checkIPConsistency: false,
           validateTimestamp: true,
           timestampTolerance: 5000 // 5 seconds
-  }
+
         scoring: {
           baseScore: 95,
           modifiers: [],
@@ -908,23 +907,23 @@ export class ActivityDetectionService extends EventEmitter {
             pattern: 'impossible_speed',
             penaltyScore: 80,
             description: 'Interactions happening faster than humanly possible'
-          }]
-  }
+]
+
         timeoutReset: {
           shouldResetIdle: true,
           shouldResetInactivity: true,
           resetGracePeriod: 1,
           minimumGapBetweenResets: 2,
           resetScope: 'session'
-        }
-      }
+
+
     ];
 
     definitions.forEach(def => {
       const id = this.generateDefinitionId();
       this.activityDefinitions.set(id, { ...def, id });
     });
-  }
+
 
   private initializeDefaultPatterns(): void {
     // Initialize default suspicious activity patterns
@@ -941,36 +940,36 @@ export class ActivityDetectionService extends EventEmitter {
             operator: 'equals',
             value: 'api_call',
             weight: 1
-          }],
+],
           relationships: []
-  }
+
         scoring: {
           genuinessIndicator: -50,
           automationIndicator: 80,
           suspiciousIndicator: 70
-  }
+
         response: {
           blockActivity: false,
           requireAdditionalValidation: true,
           adjustTimeoutBehavior: true,
           notifySecurityTeam: true,
           logLevel: 'warn'
-        }
-      }
+
+
     ];
 
     patterns.forEach(pattern => {
       const id = this.generatePatternId();
       this.activityPatterns.set(id, { ...pattern, id });
     });
-  }
+
 
   private startBackgroundProcessing(): void {
     // Start periodic cleanup and analysis
     setInterval(() => {
       this.performMaintenance();
     }, 60000); // Every minute
-  }
+
 
   private async performMaintenance(): Promise<void> {
 
@@ -981,32 +980,32 @@ export class ActivityDetectionService extends EventEmitter {
       const filtered = activities.filter(a => a.timestamp > cutoff);
       if (filtered.length === 0) {
         this.recentActivities.delete(sessionId);
-      } else {
+ else {
         this.recentActivities.set(sessionId, filtered);
-      }
-    }
-  }
+
+
+
 
   private validateSession(sessionId: string): Promise<boolean> {
 
     // Implementation would validate session with session service
     return Promise.resolve(true);
-  }
+
 
   private validateTimestamp(timestamp: Date, tolerance: number): boolean {
     const now = Date.now();
     const diff = Math.abs(now - timestamp.getTime());
     return diff <= tolerance;
-  }
+
 
   private evaluateCondition(activity: DetectedActivity, condition: string): boolean {
     // Simple condition evaluation - would use a proper expression evaluator
     try {
       return eval(condition);
-    } catch {
+ catch {
       return false;
-    }
-  }
+
+
 
   private matchesAntiPattern(activity: DetectedActivity, pattern: string): boolean {
     // Check for common anti-patterns
@@ -1019,8 +1018,8 @@ export class ActivityDetectionService extends EventEmitter {
       return this.checkImpossibleSpeed(activity);
     default:
       return false;
-    }
-  }
+
+
 
   private checkRapidSuccessiveCalls(activity: DetectedActivity): boolean {
     const recent = this.recentActivities.get(activity.sessionId) || [];
@@ -1029,7 +1028,7 @@ export class ActivityDetectionService extends EventEmitter {
       a.timestamp.getTime() > activity.timestamp.getTime() - 5000 // 5 seconds
     );
     return recentApiCalls.length > 10;
-  }
+
 
   private checkRapidNavigation(activity: DetectedActivity): boolean {
     const recent = this.recentActivities.get(activity.sessionId) || [];
@@ -1038,7 +1037,7 @@ export class ActivityDetectionService extends EventEmitter {
       a.timestamp.getTime() > activity.timestamp.getTime() - 10000 // 10 seconds
     );
     return recentNavigation.length > 5;
-  }
+
 
   private checkImpossibleSpeed(activity: DetectedActivity): boolean {
     const recent = this.recentActivities.get(activity.sessionId) || [];
@@ -1047,7 +1046,7 @@ export class ActivityDetectionService extends EventEmitter {
     const lastActivity = recent[recent.length - 1];
     const timeDiff = activity.timestamp.getTime() - lastActivity.timestamp.getTime();
     return timeDiff < 100; // Less than 100ms between activities
-  }
+
 
   private async analyzeActivityTiming(activity: DetectedActivity): Promise<{ suspicious: boolean }> {
 
@@ -1056,13 +1055,13 @@ export class ActivityDetectionService extends EventEmitter {
     
     if (recent.length < 3) {
       return { suspicious: false };
-    }
+
 
     // Check for perfectly regular intervals (bot-like behavior)
     const intervals = [];
     for (let i = 1; i < recent.length; i++) {
       intervals.push(recent[i].timestamp.getTime() - recent[i-1].timestamp.getTime());
-    }
+
 
     const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
     const variance = intervals.reduce((acc, interval) => acc + Math.pow(interval - avgInterval, 2), 0) / intervals.length;
@@ -1072,7 +1071,7 @@ export class ActivityDetectionService extends EventEmitter {
     const suspicious = standardDeviation < avgInterval * 0.1 && avgInterval < 2000; // Less than 2 seconds
 
     return { suspicious };
-  }
+
 
   private async storeActivity(activity: DetectedActivity): Promise<void> {
 
@@ -1083,7 +1082,7 @@ export class ActivityDetectionService extends EventEmitter {
     // Keep only recent activities
     if (sessionActivities.length > 100) {
       sessionActivities.shift();
-    }
+
     
     this.recentActivities.set(activity.sessionId, sessionActivities);
 
@@ -1091,19 +1090,19 @@ export class ActivityDetectionService extends EventEmitter {
     await this.redis.lpush(`activities:${activity.sessionId}`, JSON.stringify(activity));
     await this.redis.ltrim(`activities:${activity.sessionId}`, 0, 99); // Keep last 100
     await this.redis.expire(`activities:${activity.sessionId}`, 86400); // 24 hour TTL
-  }
+
 
   private generateActivityId(): string {
     return `ACT-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-  }
+
 
   private generateDefinitionId(): string {
     return `DEF-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-  }
+
 
   private generatePatternId(): string {
     return `PAT-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-  }
+
 
   destroy(): void {
     this.activityDefinitions.clear();
@@ -1111,5 +1110,4 @@ export class ActivityDetectionService extends EventEmitter {
     this.activeSessions.clear();
     this.userBaselines.clear();
     this.recentActivities.clear();
-  }
-}
+

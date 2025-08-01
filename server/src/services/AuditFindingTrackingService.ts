@@ -10,7 +10,7 @@ import { AuditTeamCollaborationService } from './AuditTeamCollaborationService';
 import { 
   DataProtectionEventLogger,
   DataProtectionEventType
-} from '../../../packages/core/security/DataProtectionEventLogger';
+ from '../../../packages/core/security/DataProtectionEventLogger';
 
 export enum FindingTrackingStatus {
   NEW = 'new',
@@ -22,7 +22,7 @@ export enum FindingTrackingStatus {
   CLOSED = 'closed',
   ESCALATED = 'escalated',
   OVERDUE = 'overdue'
-}
+
 
 export enum SLAStatus {
   ON_TIME = 'on_time',
@@ -30,10 +30,10 @@ export enum SLAStatus {
   OVERDUE = 'overdue',
   ESCALATED = 'escalated',
   EXTENDED = 'extended'
-}
 
-}
-}
+
+
+
 export interface AuditFindingTracker extends WorkflowFinding {
   // Enhanced tracking fields
   findingId: string;
@@ -52,10 +52,10 @@ export interface AuditFindingTracker extends WorkflowFinding {
   nextReviewDate: Date;
   autoEscalationEnabled: boolean;
   customMetrics: Record<string, any>;
-}
 
-}
-}
+
+
+
 export interface BusinessImpactAssessment {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   businessUnit: string;
@@ -67,12 +67,13 @@ export interface BusinessImpactAssessment {
   operationalImpact: OperationalImpactMetrics;
   lastAssessment: Date;
   assessor: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataExposureAssessment {
   hasPersonalData: boolean;
   dataTypes: string[];
@@ -80,12 +81,13 @@ export interface DataExposureAssessment {
   dataClassification: string;
   exposureLevel: 'none' | 'limited' | 'moderate' | 'extensive';
   affectedPersons: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RegulatoryImplication {
   framework: string;
   requirement: string;
@@ -93,12 +95,13 @@ export interface RegulatoryImplication {
   reportingRequired: boolean;
   reportingDeadline?: Date;
   potentialFines: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FinancialImpactEstimate {
   directCosts: number;
   indirectCosts: number;
@@ -107,12 +110,13 @@ export interface FinancialImpactEstimate {
   remediationCosts: number;
   totalEstimate: number;
   confidence: 'low' | 'medium' | 'high';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OperationalImpactMetrics {
   systemsAffected: number;
   usersImpacted: number;
@@ -120,12 +124,13 @@ export interface OperationalImpactMetrics {
   performanceDegradation: number;
   dataIntegrityRisk: boolean;
   backupRequired: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SLATracking {
   acknowledgmentSLA: number; // hours
   resolutionSLA: number; // hours  
@@ -137,12 +142,13 @@ export interface SLATracking {
   timeExtensions: TimeExtension[];
   acknowledgedAt?: Date;
   resolvedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationTrigger {
   type: 'sla_breach' | 'severity_increase' | 'manual' | 'risk_threshold' | 'regulatory_deadline';
   threshold?: number;
@@ -150,12 +156,13 @@ export interface EscalationTrigger {
   autoEscalate: boolean;
   escalationDelay: number; // minutes
   recipients: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeExtension {
   extensionId: string;
   requestedBy: string;
@@ -165,12 +172,13 @@ export interface TimeExtension {
   approvedBy?: string;
   approvalDate?: Date;
   status: 'pending' | 'approved' | 'denied';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRecord {
   escalationId: string;
   timestamp: Date;
@@ -180,24 +188,26 @@ export interface EscalationRecord {
   reason: string;
   resolution: EscalationResolution;
   completedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationResolution {
   status: 'pending' | 'acknowledged' | 'action_taken' | 'resolved';
   actions: string[];
   responseTime: number; // minutes
   resolution: string;
   resolvedBy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StakeholderCommunication {
   communicationId: string;
   timestamp: Date;
@@ -207,36 +217,39 @@ export interface StakeholderCommunication {
   message: CommunicationMessage;
   deliveryStatus: DeliveryStatus;
   responseTracking: ResponseTracking;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StakeholderGroup {
   groupId: string;
   name: string;
   members: string[];
   role: 'owner' | 'assignee' | 'reviewer' | 'observer' | 'approver';
   notificationPreferences: NotificationPreferences;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CommunicationMessage {
   subject: string;
   body: string;
   template: string;
   variables: Record<string, any>;
   priority: 'low' | 'normal' | 'high' | 'urgent';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeliveryStatus {
   sent: boolean;
   delivered: boolean;
@@ -246,35 +259,38 @@ export interface DeliveryStatus {
   failureReason?: string;
   sentAt?: Date;
   deliveredAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResponseTracking {
   responseRequired: boolean;
   responseDeadline?: Date;
   responses: StakeholderResponse[];
   acknowledgments: string[];
   escalationOnNoResponse: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StakeholderResponse {
   userId: string;
   timestamp: Date;
   response: string;
   type: 'acknowledgment' | 'question' | 'objection' | 'approval';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationPreferences {
   email: boolean;
   slack: boolean;
@@ -282,12 +298,13 @@ export interface NotificationPreferences {
   webhook: boolean;
   frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
   severityFilter: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationProgress {
   remediationId: string;
   plan: RemediationPlan;
@@ -299,12 +316,13 @@ export interface RemediationProgress {
   validationResults: ValidationResult[];
   lastUpdate: Date;
   updatedBy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationPlan {
   planId: string;
   description: string;
@@ -318,12 +336,13 @@ export interface RemediationPlan {
   createdAt: Date;
   approvedBy?: string;
   approvedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationMilestone {
   milestoneId: string;
   name: string;
@@ -334,12 +353,13 @@ export interface RemediationMilestone {
   dependencies: string[];
   deliverables: string[];
   progress: number; // 0-100
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationBlocker {
   blockerId: string;
   description: string;
@@ -351,12 +371,13 @@ export interface RemediationBlocker {
   resolvedBy?: string;
   resolvedAt?: Date;
   status: 'open' | 'in_progress' | 'resolved';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationResource {
   resourceId: string;
   type: 'personnel' | 'equipment' | 'budget' | 'external_service';
@@ -366,12 +387,13 @@ export interface RemediationResource {
   availableUntil: Date;
   cost: number;
   approved: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationResult {
   validationId: string;
   timestamp: Date;
@@ -382,12 +404,13 @@ export interface ValidationResult {
   findings: string[];
   recommendations: string[];
   nextValidation?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationCriteria {
   criteriaId: string;
   description: string;
@@ -396,12 +419,13 @@ export interface ValidationCriteria {
   actualResult: string;
   passed: boolean;
   weight: number; // 0-1 for weighted scoring
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskProfileUpdate {
   updateId: string;
   timestamp: Date;
@@ -414,12 +438,13 @@ export interface RiskProfileUpdate {
   nextAssessmentDate: Date;
   changeFromPrevious?: number;
   changeReason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskFactor {
   factorId: string;
   name: string;
@@ -429,12 +454,13 @@ export interface RiskFactor {
   impact: number; // 0-100
   score: number; // likelihood * impact
   weight: number; // 0-1
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MitigatingControl {
   controlId: string;
   name: string;
@@ -443,24 +469,26 @@ export interface MitigatingControl {
   implemented: boolean;
   implementationDate?: Date;
   testResults: ControlTestResult[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ControlTestResult {
   testDate: Date;
   testType: 'design' | 'operational';
   result: 'effective' | 'deficient' | 'not_tested';
   findings: string[];
   tester: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceImpact {
   framework: string;
   controlsAffected: string[];
@@ -469,12 +497,13 @@ export interface ComplianceImpact {
   deadline?: Date;
   regulatoryNotificationRequired: boolean;
   potentialConsequences: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportingRequirement {
   requirementId: string;
   description: string;
@@ -484,12 +513,13 @@ export interface ReportingRequirement {
   completed: boolean;
   completedAt?: Date;
   completedBy?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FindingTrackingReport {
   reportId: string;
   findingId: string;
@@ -501,12 +531,13 @@ export interface FindingTrackingReport {
   metrics: FindingMetrics;
   recommendations: string[];
   attachments: ReportAttachment[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FindingSummary {
   finding: AuditFindingTracker;
   currentStatus: string;
@@ -515,24 +546,26 @@ export interface FindingSummary {
   riskTrend: 'increasing' | 'stable' | 'decreasing';
   remediationProgress: number;
   stakeholderEngagement: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FindingTimelineEntry {
   timestamp: Date;
   event: string;
   actor: string;
   details: Record<string, any>;
   category: 'status_change' | 'escalation' | 'communication' | 'remediation' | 'validation';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FindingMetrics {
   timeToAcknowledgment: number; // hours
   timeToResolution?: number; // hours
@@ -541,12 +574,13 @@ export interface FindingMetrics {
   stakeholderResponseRate: number; // 0-100
   slaPerformance: number; // 0-100
   costToResolve: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportAttachment {
   attachmentId: string;
   name: string;
@@ -555,9 +589,10 @@ export interface ReportAttachment {
   url: string;
   uploadedBy: string;
   uploadedAt: Date;
-}
-}
-}
+
+
+
+
 
 /**
  * Audit Finding Tracking Service
@@ -618,7 +653,7 @@ export class AuditFindingTrackingService {
     await this.notifyStakeholders(findingId, 'initial_notification');
 
     return trackedFinding;
-  }
+
 
   /**
    * Update finding status with comprehensive tracking
@@ -628,7 +663,7 @@ export class AuditFindingTrackingService {
     const finding = this.findings.get(findingId);
     if (!finding) {
       throw new Error(`Finding ${findingId} not found`);
-    }
+
 
     const oldStatus = finding.trackingStatus;
     finding.trackingStatus = newStatus;
@@ -638,12 +673,12 @@ export class AuditFindingTrackingService {
     if (newStatus === FindingTrackingStatus.ASSIGNED && !finding.slaDetails.acknowledgedAt) {
       finding.slaDetails.acknowledgedAt = new Date();
       finding.slaDetails.acknowledgmentStatus = SLAStatus.ON_TIME;
-    }
+
 
     if (newStatus === FindingTrackingStatus.RESOLVED && !finding.slaDetails.resolvedAt) {
       finding.slaDetails.resolvedAt = new Date();
       finding.slaDetails.resolutionStatus = SLAStatus.ON_TIME;
-    }
+
 
     // Log status change
     await this.dataProtectionEventLogger.logDataProtectionEvent({
@@ -661,7 +696,7 @@ export class AuditFindingTrackingService {
         oldStatus,
         newStatus,
         reason
-      }
+
     });
 
     // Send status update notifications
@@ -670,8 +705,8 @@ export class AuditFindingTrackingService {
     // Check for auto-escalation conditions
     if (finding.autoEscalationEnabled) {
       await this.checkEscalationTriggers(findingId);
-    }
-  }
+
+
 
   /**
    * Escalate finding based on trigger conditions
@@ -685,7 +720,7 @@ export class AuditFindingTrackingService {
     const finding = this.findings.get(findingId);
     if (!finding) {
       throw new Error(`Finding ${findingId} not found`);
-    }
+
 
     const escalationId = this.generateEscalationId();
     const escalationRecord: EscalationRecord = {
@@ -701,7 +736,7 @@ export class AuditFindingTrackingService {
         responseTime: 0,
         resolution: '',
         resolvedBy: ''
-      }
+
     };
 
     finding.escalationHistory.push(escalationRecord);
@@ -724,12 +759,12 @@ export class AuditFindingTrackingService {
         escalationType: escalationType.type,
         escalationLevel,
         recipients: escalationType.recipients
-      }
+
     });
 
     // Send escalation notifications
     await this.notifyStakeholders(findingId, 'escalation');
-  }
+
 
   /**
    * Assess business impact of finding
@@ -751,7 +786,7 @@ export class AuditFindingTrackingService {
         dataClassification: 'unknown',
         exposureLevel: 'none',
         affectedPersons: 0
-  }
+
       regulatoryImplications: [],
       financialImpact: {
         directCosts: 0,
@@ -761,7 +796,7 @@ export class AuditFindingTrackingService {
         remediationCosts: 0,
         totalEstimate: 0,
         confidence: 'low'
-  }
+
       reputationalRisk: 'minimal',
       operationalImpact: {
         systemsAffected: 0,
@@ -770,11 +805,11 @@ export class AuditFindingTrackingService {
         performanceDegradation: 0,
         dataIntegrityRisk: false,
         backupRequired: false
-  }
+
       lastAssessment: new Date(),
       assessor: 'system'
     };
-  }
+
 
   /**
    * Update remediation progress
@@ -787,7 +822,7 @@ export class AuditFindingTrackingService {
     const finding = this.findings.get(findingId);
     if (!finding) {
       throw new Error(`Finding ${findingId} not found`);
-    }
+
 
     finding.remediationTracking = {
       ...finding.remediationTracking,
@@ -800,7 +835,7 @@ export class AuditFindingTrackingService {
       const completedMilestones = progress.milestones.filter(m => m.status === 'completed');
       finding.remediationTracking.overallProgress = 
         (completedMilestones.length / progress.milestones.length) * 100;
-    }
+
 
     // Log progress update
     await this.dataProtectionEventLogger.logDataProtectionEvent({
@@ -817,9 +852,9 @@ export class AuditFindingTrackingService {
       metadata: {
         overallProgress: finding.remediationTracking.overallProgress,
         currentPhase: finding.remediationTracking.currentPhase
-      }
+
     });
-  }
+
 
   /**
    * Generate comprehensive finding report
@@ -829,7 +864,7 @@ export class AuditFindingTrackingService {
     const finding = this.findings.get(findingId);
     if (!finding) {
       throw new Error(`Finding ${findingId} not found`);
-    }
+
 
     const reportId = this.generateReportId();
     const timeline = await this.buildFindingTimeline(findingId);
@@ -849,13 +884,13 @@ export class AuditFindingTrackingService {
         riskTrend: 'stable', // Would be calculated from risk assessment history
         remediationProgress: finding.remediationTracking.overallProgress,
         stakeholderEngagement: this.calculateStakeholderEngagement(finding)
-  }
+
       timeline,
       metrics,
       recommendations: await this.generateRecommendations(finding),
       attachments: []
     };
-  }
+
 
   /**
    * Get findings by status
@@ -865,7 +900,7 @@ export class AuditFindingTrackingService {
     return Array.from(this.findings.values()).filter(finding => 
       statuses.includes(finding.trackingStatus)
     );
-  }
+
 
   /**
    * Get overdue findings
@@ -877,7 +912,7 @@ export class AuditFindingTrackingService {
       return (finding.slaDetails.acknowledgmentDeadline < now && !finding.slaDetails.acknowledgedAt) ||
              (finding.slaDetails.resolutionDeadline < now && !finding.slaDetails.resolvedAt);
     });
-  }
+
 
   /**
    * Get escalated findings
@@ -887,21 +922,21 @@ export class AuditFindingTrackingService {
     return Array.from(this.findings.values()).filter(finding => 
       finding.trackingStatus === FindingTrackingStatus.ESCALATED
     );
-  }
+
 
   // Private helper methods
 
   private generateFindingId(): string {
     return `AFT_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateEscalationId(): string {
     return `ESC_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateReportId(): string {
     return `RPT_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private calculateSLADeadlines(finding: WorkflowFinding): SLATracking {
     const now = new Date();
@@ -918,7 +953,7 @@ export class AuditFindingTrackingService {
       escalationTriggers: this.getDefaultEscalationTriggers(),
       timeExtensions: []
     };
-  }
+
 
   private getSLAHours(severity: string, type: 'acknowledgment' | 'resolution'): number {
     const slaMatrix = {
@@ -929,7 +964,7 @@ export class AuditFindingTrackingService {
     };
 
     return slaMatrix[severity as keyof typeof slaMatrix]?.[type] || slaMatrix['medium'][type];
-  }
+
 
   private getDefaultEscalationTriggers(): EscalationTrigger[] {
     return [
@@ -939,9 +974,9 @@ export class AuditFindingTrackingService {
         escalationDelay: 0,
         condition: 'SLA deadline exceeded',
         recipients: ['security-manager@company.com']
-      }
+
     ];
-  }
+
 
   private initializeRemediationTracking(): RemediationProgress {
     return {
@@ -957,7 +992,7 @@ export class AuditFindingTrackingService {
         rollbackPlan: '',
         createdBy: 'system',
         createdAt: new Date()
-  }
+
       milestones: [],
       currentPhase: 'planning',
       overallProgress: 0,
@@ -967,15 +1002,15 @@ export class AuditFindingTrackingService {
       lastUpdate: new Date(),
       updatedBy: 'system'
     };
-  }
+
 
   private generateRemediationId(): string {
     return `REM_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generatePlanId(): string {
     return `PLN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private assessComplianceImpact(finding: WorkflowFinding): ComplianceImpact[] {
     // Basic implementation - would be enhanced with real compliance framework mapping
@@ -987,15 +1022,15 @@ export class AuditFindingTrackingService {
         reportingRequirements: [],
         regulatoryNotificationRequired: false,
         potentialConsequences: []
-      }
+
     ];
-  }
+
 
   private calculateNextReviewDate(finding: WorkflowFinding): Date {
     const now = new Date();
     const daysToAdd = finding.severity === 'critical' ? 1 : finding.severity === 'high' ? 3 : 7;
     return new Date(now.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
-  }
+
 
   private getDataClassification(severity: string): unknown {
     // Map severity to data sensitivity level
@@ -1006,11 +1041,11 @@ export class AuditFindingTrackingService {
       'low': 'internal'
     };
     return mapping[severity as keyof typeof mapping] || 'internal';
-  }
+
 
   private extractComplianceFrameworks(implications: ComplianceImpact[]): unknown[] {
     return implications.map(imp => imp.framework as any);
-  }
+
 
   private mapSeverityToRiskLevel(severity: string): 'low' | 'medium' | 'high' | 'critical' {
     const mapping = {
@@ -1020,17 +1055,17 @@ export class AuditFindingTrackingService {
       'low': 'low' as const
     };
     return mapping[severity as keyof typeof mapping] || 'medium';
-  }
+
 
   private mapSeverityToComplianceRisk(severity: string): 'low' | 'medium' | 'high' | 'critical' {
     return this.mapSeverityToRiskLevel(severity);
-  }
+
 
   private async notifyStakeholders(findingId: string, communicationType: string): Promise<void> {
 
     // Implementation would integrate with actual notification service
     console.log(`Sending ${communicationType} notification for finding ${findingId}`);
-  }
+
 
   private async checkEscalationTriggers(findingId: string): Promise<void> {
 
@@ -1044,15 +1079,15 @@ export class AuditFindingTrackingService {
       const trigger = finding.slaDetails.escalationTriggers.find(t => t.type === 'sla_breach');
       if (trigger && trigger.autoEscalate) {
         await this.escalateFinding(findingId, trigger);
-      }
-    }
-  }
+
+
+
 
   private async buildFindingTimeline(__findingId: string): Promise<FindingTimelineEntry[]> {
 
     // Would build from audit logs and tracking history
     return [];
-  }
+
 
   private calculateFindingMetrics(finding: AuditFindingTracker): FindingMetrics {
         const acknowledgedTime = finding.slaDetails.acknowledgedAt;
@@ -1069,22 +1104,22 @@ export class AuditFindingTrackingService {
       slaPerformance: this.calculateSLAPerformance(finding),
       costToResolve: 0 // Would be calculated from resource tracking
     };
-  }
+
 
   private calculateDaysOpen(finding: AuditFindingTracker): number {
     const now = new Date();
     return Math.floor((now.getTime() - finding.createdAt.getTime()) / (1000 * 60 * 60 * 24));
-  }
+
 
   private checkSLACompliance(finding: AuditFindingTracker): boolean {
     return finding.slaDetails.acknowledgmentStatus !== SLAStatus.OVERDUE &&
            finding.slaDetails.resolutionStatus !== SLAStatus.OVERDUE;
-  }
+
 
   private calculateStakeholderEngagement(__finding: AuditFindingTracker): number {
     // Calculate engagement score based on responses and acknowledgments
     return 0; // Placeholder implementation
-  }
+
 
   private calculateSLAPerformance(finding: AuditFindingTracker): number {
     let score = 100;
@@ -1093,7 +1128,7 @@ export class AuditFindingTrackingService {
     if (finding.slaDetails.resolutionStatus === SLAStatus.OVERDUE) score -= 50;
     
     return Math.max(0, score);
-  }
+
 
   private async generateRecommendations(finding: AuditFindingTracker): Promise<string[]> {
 
@@ -1101,12 +1136,11 @@ export class AuditFindingTrackingService {
     
     if (finding.trackingStatus === FindingTrackingStatus.OVERDUE) {
       recommendations.push('Consider escalating this overdue finding');
-    }
+
     
     if (finding.remediationTracking.overallProgress < 50) {
       recommendations.push('Review remediation plan and resource allocation');
-    }
+
     
     return recommendations;
-  }
-}
+

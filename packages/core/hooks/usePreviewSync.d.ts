@@ -6,22 +6,22 @@
  * intelligent caching, and performance optimization.
  */
 }
-interface GraphChangeAnalysis {
-    changeType: 'structural' | 'content' | 'cosmetic';
+}
+interface GraphChangeAnalysis { changeType: 'structural' | 'content' | 'cosmetic';
     affectedNodes: string[];
     affectedEdges: string[];
     significance: number;
-    shouldTriggerPreview: boolean;
+    shouldTriggerPreview: boolean }
 }
-interface PreviewSyncOptions {
-    enabled?: boolean;
+}
+interface PreviewSyncOptions { enabled?: boolean;
     debounceMs?: number;
     significanceThreshold?: number;
     maxAutoRefreshRate?: number;
-    enablePerformanceTracking?: boolean;
+    enablePerformanceTracking?: boolean }
 }
-interface PreviewSyncReturn {
-    isEnabled: boolean;
+}
+interface PreviewSyncReturn { isEnabled: boolean;
     isSyncing: boolean;
     lastSyncTime: number | null;
     syncCount: number;
@@ -31,7 +31,7 @@ interface PreviewSyncReturn {
     performanceMetrics: {
         avgSyncTime: number;
         successRate: number;
-        cacheHitRate: number;
+        cacheHitRate: number }
 }
     };
 

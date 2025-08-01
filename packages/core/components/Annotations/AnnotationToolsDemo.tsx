@@ -18,8 +18,7 @@ import DrawingAnnotationsCanvas from './DrawingAnnotations';
 import RegionAnnotationSystem from './RegionAnnotations';
 
 // Import existing components for integration
-import { 
-  MessageCircle,
+import { MessageCircle,
   Pen,
   Square,
   Link as LinkIcon,
@@ -37,9 +36,9 @@ import {
   Camera,
   Film,
   Palette,
-  Target,
+  Target }
   Zap
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Import types
 import type { NodeAnnotation } from './NodeAnnotations';
@@ -48,9 +47,8 @@ import type { RegionAnnotation } from './RegionAnnotations';
 
 // Unified VFX User type
 
-}
-export interface VFXUser {
-  id: string;
+
+export interface VFXUser { id: string;
   name: string;
   role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator';
   avatar?: string;
@@ -68,20 +66,18 @@ export interface VFXUser {
   interface MockConnection {
   id: string;
   source: string;
-  target: string;
-}
-}
-}
-export interface AnnotationToolsDemoProps {
-  className?: string;
+  target: string }
+
+
+
+export interface AnnotationToolsDemoProps { className?: string;
   title?: string;
   showAllTools?: boolean;
   readonly?: boolean;
   initialUser?: VFXUser;
+  // Sample VFX workflow data
+  const SAMPLE_NODES: MockNode = [ }
 
-// Sample VFX workflow data
-const SAMPLE_NODES: MockNode = [
-}
   { id: 'node-001', name: 'Character Input', type: 'input', x: 50, y: 100, width: 120, height: 80 },
   { id: 'node-002', name: 'Motion Blur', type: 'effect', x: 250, y: 100, width: 120, height: 80 },
   { id: 'node-003', name: 'Color Correction', type: 'color', x: 450, y: 100, width: 120, height: 80 },
@@ -100,285 +96,273 @@ const SAMPLE_CONNECTIONS: MockConnection = [
   { id: 'conn-006', source: 'node-007', target: 'node-004' },
   { id: 'conn-007', source: 'node-004', target: 'node-008' }
 ];
-const DEFAULT_USER: VFXUser = {,
+const DEFAULT_USER: VFXUser = { ,
   id: 'user-director',
   name: 'Sarah Director',
   role: 'director',
   email: 'sarah@vfxstudio.com',
   color: '#ff7c00',
-  avatar: '/avatars/director.jpg',
+  avatar: '/avatars/director.jpg' }
 };
 const TEAM_MEMBERS: VFXUser = [
   DEFAULT_USER,
-  {
-  id: 'user-vfx-sup',
+  { id: 'user-vfx-sup',
   name: 'Mike VFX Supervisor',
   role: 'vfx_supervisor',
   email: 'mike@vfxstudio.com',
   color: '#3b82f6',
-  avatar: '/avatars/vfx-supervisor.jpg',
-}
-  {
-  id: 'user-artist',
+  avatar: '/avatars/vfx-supervisor.jpg' }
+
+  { id: 'user-artist',
   name: 'Alex Artist',
   role: 'artist',
   email: 'alex@vfxstudio.com',
   color: '#10b981',
-  avatar: '/avatars/artist.jpg',
-}
-  {
-  id: 'user-pipeline',
+  avatar: '/avatars/artist.jpg' }
+
+  { id: 'user-pipeline',
   name: 'Jordan Pipeline TD',
   role: 'pipeline_td',
   email: 'jordan@vfxstudio.com',
-  color: '#8b5cf6',
+  color: '#8b5cf6' }
   avatar: '/avatars/pipeline-td.jpg'];
-}
-export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
-  className = '',
-  title = 'VFX Annotation Tools Demonstration',
-  showAllTools = true,
-  readonly = false,
+
+export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({ )
+  className = ''
+  title = 'VFX Annotation Tools Demonstration'
+  showAllTools = true
+  readonly = false }
   initialUser = DEFAULT_USER
-}) => {
-  // State for current user and selected tools
+}) => { // State for current user and selected tools
   const [currentUser, setCurrentUser] = useState<VFXUser>(initialUser);
   const [selectedNode, setSelectedNode] = useState<string | null>('node-002');
   const [activeAnnotationTool, setActiveAnnotationTool] = useState<'node' | 'drawing' | 'region' | 'connection'>('node');
   // Annotation data state
   const [nodeAnnotations, setNodeAnnotations] = useState<NodeAnnotation>([)
     {
-      id: 'node-ann-001',
-      nodeId: 'node-002',
-      type: 'review',
-      content: 'Motion blur intensity needs adjustment - currently too strong for this shot',
-      author: DEFAULT_USER,
-      priority: 'high',
-      status: 'open',
-      timestamp: '2025-07-22T09:00:00Z',
-      lastModified: '2025-07-22T09:00:00Z',
-      attachments: [],
-      replies: [,
+      id: 'node-ann-001'
+      nodeId: 'node-002'
+      type: 'review'
+      content: 'Motion blur intensity needs adjustment - currently too strong for this shot'
+      author: DEFAULT_USER
+      priority: 'high'
+      status: 'open'
+      timestamp: '2025-07-22T09:00:00Z'
+      lastModified: '2025-07-22T09:00:00Z'
+      attachments: []
+      replies: [
         {
-          id: 'reply-001',
-          content: 'I can reduce the blur amount by 30%. Will that work?',
+          id: 'reply-001'
+          content: 'I can reduce the blur amount by 30%. Will that work?'
           author: TEAM_MEMBERS[2], // Artist
-          timestamp: '2025-07-22T09:30:00Z',
+          timestamp: '2025-07-22T09:30:00Z' }
           reactions: { '👍': [DEFAULT_USER] }
-      ],
-      tags: ['motion-blur', 'adjustment', 'character'],
-      visibility: 'public',
-      linkedAnnotations: [],
+      ]
+      tags: ['motion-blur', 'adjustment', 'character']
+      visibility: 'public'
+      linkedAnnotations: []
       estimatedTime: 1;
-  }
-    {
-  id: 'node-ann-002',
-  nodeId: 'node-003',
-  type: 'creative',
-  content: 'Color temperature should be warmer to match the sunset mood',
-  author: DEFAULT_USER,
-  priority: 'medium',
-  status: 'in_progress',
-  timestamp: '2025-07-22T08:30:00Z',
-  lastModified: '2025-07-22T09:15:00Z',
-  attachments: [],
-  replies: [],
-  tags: ['color', 'creative', 'sunset'],
-  visibility: 'public',
-  linkedAnnotations: [],
-  assignee: TEAM_MEMBERS[2] // Artist,
-}
-    {
-      id: 'node-ann-003',
-      nodeId: 'node-006',
-      type: 'technical',
-      content: 'Lighting setup needs optimization - render time is too high',
+
+    { id: 'node-ann-002'
+  nodeId: 'node-003'
+  type: 'creative'
+  content: 'Color temperature should be warmer to match the sunset mood'
+  author: DEFAULT_USER
+  priority: 'medium'
+  status: 'in_progress'
+  timestamp: '2025-07-22T08:30:00Z'
+  lastModified: '2025-07-22T09:15:00Z'
+  attachments: []
+  replies: []
+  tags: ['color', 'creative', 'sunset']
+  visibility: 'public'
+  linkedAnnotations: []
+  assignee: TEAM_MEMBERS[2] // Artist }
+
+    { id: 'node-ann-003'
+      nodeId: 'node-006'
+      type: 'technical'
+      content: 'Lighting setup needs optimization - render time is too high'
       author: TEAM_MEMBERS[3], // Pipeline TD
-      priority: 'critical',
-      status: 'open',
-      timestamp: '2025-07-22T07:45:00Z',
-      lastModified: '2025-07-22T07:45:00Z',
-      attachments: [],
-      replies: [],
-      tags: ['performance', 'lighting', 'optimization'],
-      visibility: 'public',
-      linkedAnnotations: [],
+      priority: 'critical'
+      status: 'open'
+      timestamp: '2025-07-22T07:45:00Z'
+      lastModified: '2025-07-22T07:45:00Z'
+      attachments: []
+      replies: []
+      tags: ['performance', 'lighting', 'optimization']
+      visibility: 'public'
+      linkedAnnotations: []
       estimatedTime: 3]);
   const [drawingAnnotations, setDrawingAnnotations] = useState<DrawingAnnotation>([)
     {
-      id: 'draw-001',
-      type: 'arrow',
-      points: [{ x: 170, y: 140 }, { x: 250, y: 140 }],
-      style: {
-  color: '#ff7c00',
-  thickness: 4,
-  opacity: 1,
-  lineCap: 'round',
-  lineJoin: 'round',
-},
-  layer: 1,
-      author: DEFAULT_USER,
-      timestamp: '2025-07-22T09:00:00Z',
-      visible: true,
+      id: 'draw-001'
+      type: 'arrow' }
+      points: [{ x: 170, y: 140 }, { x: 250, y: 140 }]
+      style: { 
+  color: '#ff7c00'
+  thickness: 4
+  opacity: 1
+  lineCap: 'round'
+  lineJoin: 'round' }
+
+  layer: 1
+      author: DEFAULT_USER
+      timestamp: '2025-07-22T09:00:00Z'
+      visible: true
       locked: false;
-  }
-    {
-      id: 'draw-002',
-      type: 'circle',
-      points: [{ x: 310, y: 140 }, { x: 340, y: 170 }],
-      style: {
-  color: '#ef4444',
-  thickness: 3,
-  opacity: 0.8,
-  fillColor: '#ef4444',
-  fillOpacity: 0.1,
-  lineCap: 'round',
-  lineJoin: 'round',
-},
-  layer: 2,
-      author: DEFAULT_USER,
-      timestamp: '2025-07-22T09:05:00Z',
-      visible: true,
+
+    { id: 'draw-002'
+      type: 'circle' }
+      points: [{ x: 310, y: 140 }, { x: 340, y: 170 }]
+      style: { 
+  color: '#ef4444'
+  thickness: 3
+  opacity: 0.8
+  fillColor: '#ef4444'
+  fillOpacity: 0.1
+  lineCap: 'round'
+  lineJoin: 'round' }
+
+  layer: 2
+      author: DEFAULT_USER
+      timestamp: '2025-07-22T09:05:00Z'
+      visible: true
       locked: false;
-  }
-    {
-      id: 'draw-003',
-      type: 'text',
-      points: [{ x: 320, y: 200 }],
-      style: {
-  color: '#1f2937',
-  thickness: 1,
-  opacity: 1,
-  fontSize: 14,
-  fontFamily: 'Arial',
-  fontWeight: 'bold',
-  lineCap: 'round',
-  lineJoin: 'round',
-},
-  layer: 3,
-      author: DEFAULT_USER,
-      timestamp: '2025-07-22T09:07:00Z',
-      visible: true,
-      locked: false,
+
+    { id: 'draw-003'
+      type: 'text' }
+      points: [{ x: 320, y: 200 }]
+      style: { 
+  color: '#1f2937'
+  thickness: 1
+  opacity: 1
+  fontSize: 14
+  fontFamily: 'Arial'
+  fontWeight: 'bold'
+  lineCap: 'round'
+  lineJoin: 'round' }
+
+  layer: 3
+      author: DEFAULT_USER
+      timestamp: '2025-07-22T09:07:00Z'
+      visible: true
+      locked: false
       text: 'NEEDS ATTENTION']);
   const [regionAnnotations, setRegionAnnotations] = useState<RegionAnnotation>([)
-    {
-      id: 'region-001',
-      name: 'Character Pipeline',
-      type: 'mars_zone',
-      shape: 'rectangle',
+    { id: 'region-001'
+      name: 'Character Pipeline'
+      type: 'mars_zone'
+      shape: 'rectangle'
       area: {
-  shape: 'rectangle',
-        bounds: { x: 30, y: 80, width: 360, height: 120 },
-        points: [,
-          { x: 30, y: 80 },
+  shape: 'rectangle' }
+        bounds: { x: 30, y: 80, width: 360, height: 120 }
+        points: [
+          { x: 30, y: 80 }
           { x: 390, y: 200 }
         ]
-  },
-  style: {
-  borderColor: '#8b5cf6',
-  borderWidth: 3,
-  borderStyle: 'dashed',
-  fillColor: '#8b5cf6',
-  fillOpacity: 0.1,
-},
-  description: 'Primary character processing pipeline - critical path for hero shots',
+
+  style: { 
+  borderColor: '#8b5cf6'
+  borderWidth: 3
+  borderStyle: 'dashed'
+  fillColor: '#8b5cf6'
+  fillOpacity: 0.1 }
+
+  description: 'Primary character processing pipeline - critical path for hero shots'
       author: TEAM_MEMBERS[1], // VFX Supervisor
-      timestamp: '2025-07-22T08:00:00Z',
-      lastModified: '2025-07-22T08:00:00Z',
-      visible: true,
-      locked: false,
-      priority: 'critical',
-      status: 'active',
-      marsZone: 'subject_focus',
-      nodeIds: ['node-001', 'node-002', 'node-003'],
-      tags: ['character', 'hero', 'critical-path'],
-      metadata: {
-  nodeCount: 3,
-  totalComplexity: 240,
-  estimatedRenderTime: 12.5,
-  performanceImpact: 'high',
-  lastAnalysis: '2025-07-22T08:00:00Z',
-}
-    {
-      id: 'region-002',
-      name: 'Background Processing',
-      type: 'optimization_zone',
-      shape: 'rectangle',
+      timestamp: '2025-07-22T08:00:00Z'
+      lastModified: '2025-07-22T08:00:00Z'
+      visible: true
+      locked: false
+      priority: 'critical'
+      status: 'active'
+      marsZone: 'subject_focus'
+      nodeIds: ['node-001', 'node-002', 'node-003']
+      tags: ['character', 'hero', 'critical-path']
+      metadata: { 
+  nodeCount: 3
+  totalComplexity: 240
+  estimatedRenderTime: 12.5
+  performanceImpact: 'high'
+  lastAnalysis: '2025-07-22T08:00:00Z' }
+
+    { id: 'region-002'
+      name: 'Background Processing'
+      type: 'optimization_zone'
+      shape: 'rectangle'
       area: {
-  shape: 'rectangle',
-        bounds: { x: 30, y: 230, width: 360, height: 120 },
-        points: [,
-          { x: 30, y: 230 },
+  shape: 'rectangle' }
+        bounds: { x: 30, y: 230, width: 360, height: 120 }
+        points: [
+          { x: 30, y: 230 }
           { x: 390, y: 350 }
         ]
-  },
-  style: {
-  borderColor: '#10b981',
-  borderWidth: 2,
-  borderStyle: 'solid',
-  fillColor: '#10b981',
-  fillOpacity: 0.08,
-},
-  description: 'Background elements - optimization candidate for render performance',
+
+  style: { 
+  borderColor: '#10b981'
+  borderWidth: 2
+  borderStyle: 'solid'
+  fillColor: '#10b981'
+  fillOpacity: 0.08 }
+
+  description: 'Background elements - optimization candidate for render performance'
       author: TEAM_MEMBERS[3], // Pipeline TD
-      timestamp: '2025-07-22T07:30:00Z',
-      lastModified: '2025-07-22T09:00:00Z',
-      visible: true,
-      locked: false,
-      priority: 'medium',
-      status: 'active',
-      nodeIds: ['node-005', 'node-006', 'node-007'],
-      tags: ['background', 'optimization', 'performance'],
-      metadata: {
-  nodeCount: 3,
-  totalComplexity: 180,
-  estimatedRenderTime: 8.2,
-  performanceImpact: 'medium',
+      timestamp: '2025-07-22T07:30:00Z'
+      lastModified: '2025-07-22T09:00:00Z'
+      visible: true
+      locked: false
+      priority: 'medium'
+      status: 'active'
+      nodeIds: ['node-005', 'node-006', 'node-007']
+      tags: ['background', 'optimization', 'performance']
+      metadata: { 
+  nodeCount: 3
+  totalComplexity: 180
+  estimatedRenderTime: 8.2
+  performanceImpact: 'medium'
   lastAnalysis: '2025-07-22T08:30:00Z']);
   // UI state
   const [showGrid, setShowGrid] = useState(true);
   const [showPerformanceMetrics, setShowPerformanceMetrics] = useState(true);
   const [showTeamPanel, setShowTeamPanel] = useState(false);
   const [globalVisibility, setGlobalVisibility] = useState({)
-  nodeAnnotations: true,
-  drawingAnnotations: true,
-  regionAnnotations: true,
-  connectionAnnotations: true,
+  nodeAnnotations: true
+  drawingAnnotations: true
+  regionAnnotations: true
+  connectionAnnotations: true }
 });
   // Statistics calculations
-  const stats = useMemo(() => {
-  const totalAnnotations = nodeAnnotations.length + drawingAnnotations.length + regionAnnotations.length;
+  const stats = useMemo(() => { const totalAnnotations = nodeAnnotations.length + drawingAnnotations.length + regionAnnotations.length;
   const openIssues = nodeAnnotations.filter(a => ['open', 'in_progress'].includes(a.status)).length;
   const criticalIssues = nodeAnnotations.filter(a => a.priority === 'critical').length + ;
   regionAnnotations.filter(r => r.priority === 'critical').length;
   const teamMembers = new Set([);
-  ...nodeAnnotations.map(a => a.author.id),
-  ...drawingAnnotations.map(a => a.author.id),
+  ...nodeAnnotations.map(a => a.author.id)
+  ...drawingAnnotations.map(a => a.author.id)
   ...regionAnnotations.map(a => a.author.id)
   ]).size;
   const avgRenderTime = regionAnnotations.reduce((sum, r) => ;
   sum + (r.metadata.estimatedRenderTime || 0), 0
   ) / regionAnnotations.length || 0;
   return {
-  totalAnnotations,
-  openIssues,
-  criticalIssues,
-  teamMembers,
-  avgRenderTime: avgRenderTime.toFixed(1),
+  totalAnnotations
+  openIssues
+  criticalIssues
+  teamMembers
+  avgRenderTime: avgRenderTime.toFixed(1) }
 };
   }, [nodeAnnotations, drawingAnnotations, regionAnnotations]);
   // Annotation handlers
   const handleNodeAnnotationCreate = useCallback(;);
     (annotation: Omit<NodeAnnotation)
     'id' | 'timestamp' | 'lastModified' | 'replies'>
-  ) => {
-    const newAnnotation: NodeAnnotation = {
-      ...annotation,
+  ) => { const newAnnotation: NodeAnnotation = {
+      ...annotation }
       id: `node-ann-${Date.now()}`}
-},
-  timestamp: new Date().toISOString(),
-      lastModified: new Date().toISOString(),
+
+  timestamp: new Date().toISOString()
+      lastModified: new Date().toISOString()
       replies: [];
   };
     setNodeAnnotations(prev => [...prev, newAnnotation]);
@@ -391,19 +375,16 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
           : ann
     );
   }, []);
-  const handleNodeAnnotationDelete = useCallback((annotationId: string) => {
-    setNodeAnnotations(prev => prev.filter(ann => ann.id !== annotationId));
-  }, []);
+  const handleNodeAnnotationDelete = useCallback((annotationId: string) => { setNodeAnnotations(prev => prev.filter(ann => ann.id !== annotationId)) }, []);
   const handleReplyCreate = useCallback(;);
-    (annotationId: string);
-  reply: Omit<NodeAnnotation['replies'][0],
+    (annotationId: string)
+  reply: Omit<NodeAnnotation['replies'][0]
     'id' | 'timestamp' | 'reactions'>
-  ) => {
-    const newReply = {
-      ...reply,
+  ) => { const newReply = {
+      ...reply }
       id: `reply-${Date.now()}`}
-},
-  timestamp: new Date().toISOString(),
+
+  timestamp: new Date().toISOString()
       reactions: {}
     };
     setNodeAnnotations(prev => )
@@ -414,19 +395,18 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
     );
   }, []);
   // Export all annotations
-  const exportAnnotations = useCallback(() => {
-  const exportData = {
+  const exportAnnotations = useCallback(() => { const exportData = {
   metadata: {
-  exportedBy: currentUser,
-  exportedAt: new Date().toISOString(),
-  version: '1.0.0',
-  project: 'VFX Demo Scene',
-}
-      nodeAnnotations,
-      drawingAnnotations,
-      regionAnnotations,
-      nodes: SAMPLE_NODES,
-      connections: SAMPLE_CONNECTIONS,
+  exportedBy: currentUser
+  exportedAt: new Date().toISOString()
+  version: '1.0.0'
+  project: 'VFX Demo Scene' }
+
+      nodeAnnotations
+      drawingAnnotations
+      regionAnnotations
+      nodes: SAMPLE_NODES
+      connections: SAMPLE_CONNECTIONS
       stats
     };
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
@@ -438,13 +418,9 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
     URL.revokeObjectURL(url);
   }, [nodeAnnotations, drawingAnnotations, regionAnnotations, currentUser, stats]);
   // Get annotations for selected node
-  const selectedNodeAnnotations = useMemo(() => {
-  return selectedNode ? nodeAnnotations.filter(ann => ann.nodeId === selectedNode) : [];
-}, [nodeAnnotations, selectedNode]);
+  const selectedNodeAnnotations = useMemo(() => { return selectedNode ? nodeAnnotations.filter(ann => ann.nodeId === selectedNode) : [] }, [nodeAnnotations, selectedNode]);
   // Get selected node details
-  const selectedNodeDetails = useMemo(() => {
-  return selectedNode ? SAMPLE_NODES.find(node => node.id === selectedNode) : null;
-}, [selectedNode]);
+  const selectedNodeDetails = useMemo(() => { return selectedNode ? SAMPLE_NODES.find(node => node.id === selectedNode) : null }, [selectedNode]);
   return;
     <div className={`annotation-tools-demo ${className}`}>}
       <Card>
@@ -645,9 +621,9 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
                         {SAMPLE_NODES.map(node => ()
                           <div
                             key={node.id}
-                            className={`p-3 border rounded cursor-pointer transition-colors ${
-  selectedNode === node.id ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:bg-gray-50',
-}`}
+                            className={ `p-3 border rounded cursor-pointer transition-colors ${
+  selectedNode === node.id ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:bg-gray-50' }
+`}
                             onClick={() => setSelectedNode(node.id)}
                           >
                             <div className="font-medium text-sm">{node.name}</div>

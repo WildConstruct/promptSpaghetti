@@ -6,8 +6,7 @@
  * algorithms for data storage, transfer, and performance optimization.
  */
 import { z } from 'zod';
-export declare enum CompressionAlgorithm {
-    GZIP = "gzip",
+export declare enum CompressionAlgorithm { GZIP = "gzip",
     DEFLATE = "deflate",
     BROTLI = "brotli",
     LZ4 = "lz4",
@@ -27,22 +26,20 @@ export declare enum DataType {
     CSS = "css",
     JAVASCRIPT = "javascript",
     IMAGE = "image",
-    VIDEO = "video",
+    VIDEO = "video" }
     AUDIO = "audio"
 
 }
-export interface CompressionOptions {
-    algorithm: CompressionAlgorithm;
+}
+export interface CompressionOptions { algorithm: CompressionAlgorithm;
     level: CompressionLevel;
     dataType: DataType;
     threshold?: number;
     chunkSize?: number;
-    includeMetadata?: boolean;
-
-
+    includeMetadata?: boolean }
 }
-export interface CompressionResult {
-    success: boolean;
+}
+export interface CompressionResult { success: boolean;
     originalSize: number;
     compressedSize: number;
     compressionRatio: number;
@@ -51,45 +48,37 @@ export interface CompressionResult {
     compressionTime: number;
     data: Buffer;
     metadata?: CompressionMetadata;
-    error?: string;
-
-
+    error?: string }
 }
-export interface CompressionMetadata {
-    algorithm: CompressionAlgorithm;
+}
+export interface CompressionMetadata { algorithm: CompressionAlgorithm;
     level: CompressionLevel;
     originalSize: number;
     compressedAt: Date;
     dataType: DataType;
     checksum?: string;
-    version: string;
-
-
+    version: string }
 }
-export interface CompressionStats {
-    totalCompressions: number;
+}
+export interface CompressionStats { totalCompressions: number;
     totalDecompressions: number;
     totalBytesCompressed: number;
     totalBytesDecompressed: number;
     totalCompressionTime: number;
     totalDecompressionTime: number;
     averageCompressionRatio: number;
-    algorithmStats: Map<CompressionAlgorithm, AlgorithmStats>;
-
-
+    algorithmStats: Map<CompressionAlgorithm, AlgorithmStats> }
 }
-export interface AlgorithmStats {
-    algorithm: CompressionAlgorithm;
+}
+export interface AlgorithmStats { algorithm: CompressionAlgorithm;
     usageCount: number;
     totalBytesProcessed: number;
     totalProcessingTime: number;
     averageCompressionRatio: number;
-    averageSpeed: number;
-
-
+    averageSpeed: number }
 }
-export interface StreamCompressionOptions extends CompressionOptions {
-    bufferSize?: number;
+}
+export interface StreamCompressionOptions extends CompressionOptions { bufferSize?: number;
     onProgress?: (bytesProcessed: number, totalBytes?: number) => void;
     onChunk?: (chunk: Buffer, isLast: boolean) => void;
 
@@ -99,25 +88,19 @@ export declare const CompressionOptionsSchema: z.ZodObject<{
     dataType: z.ZodNativeEnum<typeof DataType>;
     threshold: z.ZodOptional<z.ZodNumber>;
     chunkSize: z.ZodOptional<z.ZodNumber>;
-    includeMetadata: z.ZodOptional<z.ZodBoolean>;
-}
-}, "strip", z.ZodTypeAny, {
-    level: CompressionLevel;
+    includeMetadata: z.ZodOptional<z.ZodBoolean> }
+}, "strip", z.ZodTypeAny, { level: CompressionLevel;
     dataType: DataType;
     algorithm: CompressionAlgorithm;
     includeMetadata?: boolean | undefined;
     threshold?: number | undefined;
-    chunkSize?: number | undefined;
-}, {
-    level: CompressionLevel;
+    chunkSize?: number | undefined }, { level: CompressionLevel;
     dataType: DataType;
     algorithm: CompressionAlgorithm;
     includeMetadata?: boolean | undefined;
     threshold?: number | undefined;
-    chunkSize?: number | undefined;
-}>;
-export declare class CompressionService {
-    private stats;
+    chunkSize?: number | undefined }>;
+export declare class CompressionService { private stats;
     private defaultOptions;
     private algorithmMap;
     constructor();
@@ -169,8 +152,8 @@ export declare class CompressionService {
      * Benchmark different algorithms on sample data
      */
     benchmarkAlgorithms();
-      data: string | Buffer | object,
-      dataType: DataType,
+      data: string | Buffer | object
+      dataType: DataType }
     ): Promise<Map<CompressionAlgorithm, CompressionResult>>;
     /**
      * Get current compression statistics
@@ -187,12 +170,10 @@ export declare class CompressionService {
     /**
      * Get compression efficiency report
      */
-    getEfficiencyReport(): {
-        totalSpaceSaved: number;
+    getEfficiencyReport(): { totalSpaceSaved: number;
         averageCompressionRatio: number;
         bestPerformingAlgorithm: CompressionAlgorithm;
-        recommendedSettings: CompressionOptions;
-    };
+        recommendedSettings: CompressionOptions };
     private prepareInputBuffer;
     private calculateChecksum;
     private initializeStats;

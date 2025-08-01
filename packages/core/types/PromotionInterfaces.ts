@@ -11,8 +11,7 @@ import { z } from 'zod';
 // Core Promotion Types and Enums
 // =============================================================================
 
-export enum PromotionType {
-  // Price-based promotions
+export enum PromotionType { // Price-based promotions
   PERCENTAGE_DISCOUNT = 'percentage_discount',
   FIXED_AMOUNT_DISCOUNT = 'fixed_amount_discount',
   BUY_ONE_GET_ONE = 'buy_one_get_one',
@@ -101,14 +100,14 @@ export enum PromotionType {
   promo_code?: string;
   usage_limit?: number;
   usage_count: number;
-  user_usage_limit?: number; // Per-user limit,
+  user_usage_limit?: number; // Per-user limit;
   // Targeting
   target_type: PromotionTargetType;
   targeting_rules: PromotionTargetingRule;
   // Priority and stacking
-  priority: number; // 1-100, higher = more important,
+  priority: number; // 1-100, higher = more important;
   stackable: boolean;
-  exclusive_with?: string; // IDs of mutually exclusive promotions,
+  exclusive_with?: string; // IDs of mutually exclusive promotions }
   // Analytics and tracking
   performance_metrics: PromotionPerformanceMetrics;
   // Metadata
@@ -124,11 +123,11 @@ export enum PromotionType {
   /**
   * Price-based discount promotion
   */
-}
-}
-}
-export interface DiscountPromotion extends BasePromotion {
-  type: ,
+
+
+
+
+export interface DiscountPromotion extends BasePromotion { type: ,
   | PromotionType.PERCENTAGE_DISCOUNT
   | PromotionType.FIXED_AMOUNT_DISCOUNT
   | PromotionType.BULK_DISCOUNT
@@ -211,7 +210,7 @@ export interface DiscountPromotion extends BasePromotion {
   // BOGO configuration
   buy_quantity?: number;
   get_quantity?: number;
-  get_discount_percentage?: number; // If not 100% free,
+  get_discount_percentage?: number; // If not 100% free }
   // Tiered discount (buy more, save more)
   tiers?: DiscountTier;
   // Currency for fixed amounts
@@ -219,19 +218,18 @@ export interface DiscountPromotion extends BasePromotion {
   // Compound settings
   compound_with_other_discounts: boolean;
   apply_to_sale_items: boolean;
-}
-}
-}
-export interface DiscountTier {
-  minimum_quantity: number;
+
+
+
+
+export interface DiscountTier { minimum_quantity: number;
   minimum_amount_cents?: number;
   discount_percentage?: number;
-  fixed_discount_cents?: number;
-}
-}
-}
-export interface ApplicableItemsFilter {
-  // Include criteria
+  fixed_discount_cents?: number }
+
+
+
+export interface ApplicableItemsFilter { // Include criteria
   include_categories?: string;
   include_tags?: string;
   include_creators?: string;
@@ -251,35 +249,34 @@ export interface ApplicableItemsFilter {
   min_download_count?: number;
   // Time filters
   created_after?: Date;
-  updated_after?: Date;
-}
-}
-}
-export interface PromotionTargetingRule {
-  type: PromotionTargetType;
+  updated_after?: Date }
+
+
+
+export interface PromotionTargetingRule { type: PromotionTargetType;
   conditions: TargetingCondition;
-  operator: 'AND' | 'OR'; // How to combine conditions,
-}
-}
-}
-export interface TargetingCondition {
-  field: string; // user.tier, user.location.country, user.total_purchases, etc.,
+  operator: 'AND' | 'OR'; // How to combine conditions }
+
+
+
+
+export interface TargetingCondition { field: string; // user.tier, user.location.country, user.total_purchases, etc.;
   operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'not_in';
   value: any;
-  weight?: number; // For weighted scoring,
-}
-}
-}
-export interface ContentSelectionStrategy {
-  method: 'manual' | 'automatic' | 'hybrid';
+  weight?: number; // For weighted scoring }
+
+
+
+
+export interface ContentSelectionStrategy { method: 'manual' | 'automatic' | 'hybrid' }
   automatic_refresh: boolean;
   refresh_interval_hours?: number;
   performance_based_rotation: boolean;
-}
-}
-}
-export interface ContentSelectionCriteria {
-  // Quality filters
+
+
+
+
+export interface ContentSelectionCriteria { // Quality filters
   min_rating?: number;
   min_download_count?: number;
   quality_score_threshold?: number;
@@ -301,21 +298,20 @@ export interface ContentSelectionCriteria {
   max_per_category?: number;
   diversification_rules?: ContentDiversificationRule;
   // Limits
-  max_content_count: number;
-}
-}
-}
-export interface ContentDiversificationRule {
-  attribute: 'creator' | 'category' | 'content_type' | 'price_range';
+  max_content_count: number }
+
+
+
+export interface ContentDiversificationRule { attribute: 'creator' | 'category' | 'content_type' | 'price_range' }
   max_percentage: number;
   enforce_minimum_variety: boolean;
-}
-}
-}
-export interface ContentDisplayConfiguration {
-  // Layout and positioning
-  display_location: string; // homepage_hero, category_top, sidebar, etc.,
-  layout_type: 'carousel' | 'grid' | 'list' | 'featured_card' | 'banner';
+
+
+
+
+export interface ContentDisplayConfiguration { // Layout and positioning
+  display_location: string; // homepage_hero, category_top, sidebar, etc.;
+  layout_type: 'carousel' | 'grid' | 'list' | 'featured_card' | 'banner' }
   max_visible_items: number;
   // Visual styling
   theme: string;
@@ -329,63 +325,60 @@ export interface ContentDisplayConfiguration {
   // Responsive behavior
   mobile_layout?: string;
   tablet_layout?: string;
-}
-}
-}
-export interface ContentRotationConfig {
-  rotation_type: 'fixed_time' | 'performance_based' | 'equal_time' | 'weighted';
+
+
+
+
+export interface ContentRotationConfig { rotation_type: 'fixed_time' | 'performance_based' | 'equal_time' | 'weighted';
   // Fixed time rotation
   rotation_interval_minutes?: number;
   // Performance-based rotation
-  performance_thresholds?: {
+  performance_thresholds?: { }
   min_ctr?: number;
   min_conversions?: number;
   max_time_minutes?: number;
-}
+
+
 };
   // Weighted rotation
-  weight_factors?: {
-  performance_weight: number;
+  weight_factors?: { performance_weight: number;
   recency_weight: number;
-  diversity_weight: number;
-};
+  diversity_weight: number };
   // General settings
   randomize_order: boolean;
   allow_repeat_within_session: boolean;
-}
-}
-export interface BundleConfiguration {
-  bundle_type: 'fixed' | 'flexible' | 'dynamic';
-  // Fixed bundles: exact items,
+
+
+export interface BundleConfiguration { bundle_type: 'fixed' | 'flexible' | 'dynamic';
+  // Fixed bundles: exact items;
   required_items?: string;
-  // Flexible bundles: choose X from category,
+  // Flexible bundles: choose X from category;
   flexible_options?: BundleFlexibleOption;
-  // Dynamic bundles: AI-driven recommendations,
+  // Dynamic bundles: AI-driven recommendations }
   dynamic_strategy?: 'collaborative_filtering' | 'content_similarity' | 'purchase_history';
   // Bundle constraints
   min_items: number;
   max_items: number;
   allow_duplicates: boolean;
-}
-}
-}
-export interface BundleFlexibleOption {
-  category: string;
+
+
+
+
+export interface BundleFlexibleOption { category: string;
   required_count: number;
-  available_items?: string;
-}
-}
-}
-export interface BundleItem {
-  item_id: string;
+  available_items?: string }
+
+
+
+export interface BundleItem { item_id: string;
   required: boolean;
-  discount_percentage?: number; // Individual item discount within bundle,
-  position?: number; // Display order,
-}
-}
-}
-export interface BundleRecommendationStrategy {
-  recommendation_engine: 'rule_based' | 'ml_powered' | 'hybrid';
+  discount_percentage?: number; // Individual item discount within bundle;
+  position?: number; // Display order }
+
+
+
+
+export interface BundleRecommendationStrategy { recommendation_engine: 'rule_based' | 'ml_powered' | 'hybrid';
   // Rule-based recommendations
   rules?: BundleRecommendationRule;
   // ML-powered settings
@@ -393,62 +386,62 @@ export interface BundleRecommendationStrategy {
   confidence_threshold?: number;
   // Display settings
   max_recommendations: number;
-  personalization_level: 'low' | 'medium' | 'high'
-}
-  }
-}
-export interface BundleRecommendationRule {
-  trigger_item_id?: string;
+  personalization_level: 'low' | 'medium' | 'high' }
+
+
+
+
+export interface BundleRecommendationRule { trigger_item_id?: string;
   trigger_category?: string;
   recommended_categories?: string;
   recommended_items?: string;
-  boost_score: number; // Multiplier for recommendation strength,
-}
-}
-}
-export interface BundleTrigger {
-  trigger_type: 'cart_add' | 'page_view' | 'checkout_start' | 'time_on_page';
+  boost_score: number; // Multiplier for recommendation strength }
+
+
+
+
+export interface BundleTrigger { trigger_type: 'cart_add' | 'page_view' | 'checkout_start' | 'time_on_page' }
   trigger_conditions: Record<string, any>;
   display_timing: 'immediate' | 'delayed' | 'on_exit_intent';
   delay_seconds?: number;
-}
-}
-}
-export interface CampaignChannel {
-  channel: 'email' | 'web' | 'mobile_app' | 'social_media' | 'external_ads';
+
+
+
+
+export interface CampaignChannel { channel: 'email' | 'web' | 'mobile_app' | 'social_media' | 'external_ads';
   enabled: boolean;
   channel_config: Record<string, any>;
   // Channel-specific tracking
-  channel_metrics: {
+  channel_metrics: { }
   impressions: number;
   clicks: number;
   conversions: number;
   spend?: number;
-}
+
+
 };
-}
-}
-export interface CampaignBudget {
-  total_budget_cents: number;
+
+
+export interface CampaignBudget { total_budget_cents: number;
   daily_budget_cents?: number;
   spend_to_date_cents: number;
-  budget_allocation: Record<string, number>; // Channel allocations,
+  budget_allocation: Record<string, number>; // Channel allocations }
   budget_alerts: BudgetAlert;
-}
-}
-}
-export interface BudgetAlert {
-  threshold_percentage: number; // Alert when X% of budget is spent,
-  alert_channels: ('email' | 'dashboard' | 'slack')[];
+
+
+
+
+export interface BudgetAlert { threshold_percentage: number; // Alert when X% of budget is spent;
+  alert_channels: ('email' | 'dashboard' | 'slack')[] }
   recipients: string;
   // =============================================================================
   // Metrics and Analytics Interfaces
   // =============================================================================
-}
-}
-}
-export interface PromotionPerformanceMetrics {
-  // Usage metrics
+
+
+
+
+export interface PromotionPerformanceMetrics { // Usage metrics
   total_uses: number;
   unique_users: number;
   conversion_rate: number;
@@ -456,7 +449,7 @@ export interface PromotionPerformanceMetrics {
   total_discount_given_cents: number;
   total_revenue_generated_cents: number;
   average_order_value_cents: number;
-  roi: number; // Return on Investment,
+  roi: number; // Return on Investment;
   // Traffic metrics
   impressions: number;
   clicks: number;
@@ -464,11 +457,12 @@ export interface PromotionPerformanceMetrics {
   // Time-based metrics
   first_use_date?: Date;
   last_use_date?: Date;
-  peak_usage_period?: {
+  peak_usage_period?: { }
   start: Date;
   end: Date;
   usage_count: number;
-}
+
+
 };
   // User behavior
   repeat_usage_rate: number;
@@ -478,10 +472,9 @@ export interface PromotionPerformanceMetrics {
   lift_vs_baseline?: number; // Percentage improvement vs. no promotion
   // Last updated
   metrics_updated_at: Date;
-}
-}
-export interface ContentPromotionMetrics {
-  content_id: string;
+
+
+export interface ContentPromotionMetrics { content_id: string;
   content_title: string;
   // Display metrics
   impressions: number;
@@ -500,15 +493,15 @@ export interface ContentPromotionMetrics {
   // Position and timing
   average_display_position: number;
   total_display_time_minutes: number;
-  performance_score: number; // 0-100,
+  performance_score: number; // 0-100 }
   // Last updated
   period_start: Date;
   period_end: Date;
-}
-}
-}
-export interface CampaignMetrics {
-  // Overall campaign performance
+
+
+
+
+export interface CampaignMetrics { // Overall campaign performance
   total_reach: number;
   total_impressions: number;
   total_clicks: number;
@@ -520,38 +513,36 @@ export interface CampaignMetrics {
   cost_per_conversion_cents: number;
   return_on_ad_spend: number;
   // Channel breakdown
-  channel_performance: Array<{
+  channel_performance: Array<{ }
   channel: string;
   impressions: number;
   clicks: number;
   conversions: number;
   spend_cents: number;
   roas: number;
-}
-}>;
+
+
+>;
   // Promotion breakdown
-  promotion_performance: Array<{
+  promotion_performance: Array<{ ,
   promotion_id: string;
   promotion_name: string;
   contribution_to_revenue: number;
-  usage_count: number;
-}>;
+  usage_count: number }>;
   // Time series data
-  daily_metrics: Array<{
+  daily_metrics: Array<{ ,
   date: string;
   impressions: number;
   clicks: number;
   conversions: number;
-  spend_cents: number;
-}>;
+  spend_cents: number }>;
 
 // =============================================================================
 // Management and Operations Interfaces
 // =============================================================================
-}
-}
-export interface PromotionRule {
-  id: string;
+
+
+export interface PromotionRule { id: string;
   name: string;
   description: string;
   // Rule conditions
@@ -567,32 +558,31 @@ export interface PromotionRule {
   success_rate: number;
   created_at: Date;
   updated_at: Date;
-  created_by: string;
-}
-}
-}
-export interface PromotionRuleCondition {
-  field: string; // cart.total, user.purchase_history, item.category, etc.,
+  created_by: string }
+
+
+
+export interface PromotionRuleCondition { field: string; // cart.total, user.purchase_history, item.category, etc.;
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'regex_match';
   value: any;
-  negate?: boolean; // NOT condition,
-}
-}
-}
-export interface PromotionRuleAction {
-  action_type: 'apply_promotion' | 'suggest_promotion' | 'trigger_campaign' | 'send_notification';
+  negate?: boolean; // NOT condition }
+
+
+
+
+export interface PromotionRuleAction { action_type: 'apply_promotion' | 'suggest_promotion' | 'trigger_campaign' | 'send_notification' }
   parameters: Record<string, any>;
   delay_seconds?: number;
-}
-}
-}
-export interface PromotionTemplate {
-  id: string;
+
+
+
+
+export interface PromotionTemplate { id: string;
   name: string;
   description: string;
   template_type: PromotionType;
   // Template configuration
-  default_settings: Partial<BasePromotion>;
+  default_settings: Partial<BasePromotion> }
   configurable_fields: PromotionTemplateField;
   // Template metadata
   category: string;
@@ -600,36 +590,36 @@ export interface PromotionTemplate {
   created_by: string;
   created_at: Date;
   usage_count: number;
-}
-}
-}
-export interface PromotionTemplateField {
-  field_name: string;
+
+
+
+
+export interface PromotionTemplateField { field_name: string;
   display_name: string;
-  field_type: 'text' | 'number' | 'boolean' | 'date' | 'select' | 'multi_select';
+  field_type: 'text' | 'number' | 'boolean' | 'date' | 'select' | 'multi_select' }
   required: boolean;
   default_value?: any;
   validation_rules?: ValidationRule;
-}
+
+
   options?: { value: any; label: string }[]; // For select fields
-}
-}
-export interface ValidationRule {
-  rule_type: 'min' | 'max' | 'pattern' | 'custom';
+
+
+export interface ValidationRule { rule_type: 'min' | 'max' | 'pattern' | 'custom' }
   value: any;
   error_message: string;
-}
-}
-}
-export interface PromotionAuditLog {
-  id: string;
+
+
+
+
+export interface PromotionAuditLog { id: string;
   promotion_id: string;
   // Action details
   action: 'created' | 'updated' | 'activated' | 'deactivated' | 'deleted' | 'applied' | 'expired';
   description: string;
   // Context
-  user_id?: string; // User who performed action or was affected,
-  admin_id?: string; // Admin who made the change,
+  user_id?: string; // User who performed action or was affected;
+  admin_id?: string; // Admin who made the change }
   ip_address?: string;
   user_agent?: string;
   // Changes
@@ -641,43 +631,40 @@ export interface PromotionAuditLog {
   // =============================================================================
   // API and Service Response Types
   // =============================================================================
-}
-}
-}
-export interface PromotionServiceResponse<T> {
-  success: boolean;
+
+
+
+
+export interface PromotionServiceResponse<T> { success: boolean;
   data?: T;
-  error?: {
+  error?: { }
   code: string;
   message: string;
   details?: any;
 };
-  metadata?: {
-  request_id: string;
+  metadata?: { request_id: string;
   timestamp: Date;
-  execution_time_ms: number;
-};
+  execution_time_ms: number };
 
-}
-export interface PromotionEligibilityCheck {
-  promotion_id: string;
+
+export interface PromotionEligibilityCheck { promotion_id: string;
   eligible: boolean;
-  reasons?: string; // Why eligible/not eligible,
+  reasons?: string; // Why eligible/not eligible;
   discount_amount_cents?: number;
   // Requirements not met
-  missing_requirements?: {
+  missing_requirements?: { }
   minimum_purchase_amount?: number;
   required_items?: string;
   user_criteria?: string;
-}
+
+
 };
   // Stacking information
   conflicts_with?: string; // Other promotion IDs that conflict
   can_stack_with?: string; // Other promotions that can be combined
-}
-}
-export interface PromotionApplicationResult {
-  success: boolean;
+
+
+export interface PromotionApplicationResult { success: boolean;
   promotion_id: string;
   discount_applied_cents: number;
   // Updated cart totals
@@ -685,21 +672,21 @@ export interface PromotionApplicationResult {
   new_total_cents: number;
   total_savings_cents: number;
   // Application details
-  items_affected: Array<{
+  items_affected: Array<{ }
   item_id: string;
   original_price_cents: number;
   discounted_price_cents: number;
   discount_amount_cents: number;
-}
-}>;
+
+
+>;
   // Metadata
   applied_at: Date;
   expires_at?: Date;
   usage_recorded: boolean;
-}
-}
-export interface PromotionSearchCriteria {
-  // Basic filters
+
+
+export interface PromotionSearchCriteria { // Basic filters
   status?: PromotionStatus;
   type?: PromotionType;
   enabled?: boolean;
@@ -710,10 +697,10 @@ export interface PromotionSearchCriteria {
   expires_after?: Date;
   expires_before?: Date;
   // Text search
-  search_query?: string; // Search in name, description, promo_code,
+  search_query?: string; // Search in name, description, promo_code;
   // Targeting filters
-  applicable_to_user?: string; // User ID to check eligibility,
-  applicable_to_items?: string; // Item IDs to check applicability,
+  applicable_to_user?: string; // User ID to check eligibility;
+  applicable_to_items?: string; // Item IDs to check applicability;
   // Performance filters
   min_usage_count?: number;
   min_conversion_rate?: number;
@@ -725,22 +712,23 @@ export interface PromotionSearchCriteria {
   page?: number;
   limit?: number;
   sort_by?: 'name' | 'created_at' | 'start_date' | 'usage_count' | 'roi';
-  sort_order?: 'asc' | 'desc'
-}
-  }
-}
-export interface PromotionSearchResult {
-  promotions: BasePromotion;
+  sort_order?: 'asc' | 'desc' }
+
+
+
+
+export interface PromotionSearchResult { promotions: BasePromotion;
   total_count: number;
   has_more: boolean;
   // Aggregates
-  aggregates: {
+  aggregates: { }
   total_active: number;
   total_scheduled: number;
   total_expired: number;
   total_discount_given_cents: number;
   average_conversion_rate: number;
-}
+
+
 };
   // Facets for filtering
   facets?: {
@@ -752,8 +740,8 @@ export interface PromotionSearchResult {
 // =============================================================================
 // Validation Schemas
 // =============================================================================
-}
-export const CreatePromotionSchema = z.object({)
+
+export const CreatePromotionSchema = z.object({ )
   type: z.nativeEnum(PromotionType),
   name: z.string().min(1).max(200),
   description: z.string().max(1000),
@@ -765,17 +753,17 @@ export const CreatePromotionSchema = z.object({)
   usage_limit: z.number().int().min(1).optional(),
   user_usage_limit: z.number().int().min(1).optional(),
   target_type: z.nativeEnum(PromotionTargetType),
-  targeting_rules: z.array(z.object({)
+  targeting_rules: z.array(z.object({),
   type: z.nativeEnum(PromotionTargetType),
   conditions: z.array(z.any()),
-  operator: z.enum(['AND', 'OR']),
+  operator: z.enum(['AND', 'OR']) }
 })),
   priority: z.number().int().min(1).max(100).default(50),
   stackable: z.boolean().default(false),
   metadata: z.record(z.any()).default({})
 });
 
-export const UpdatePromotionSchema = z.object({)
+export const UpdatePromotionSchema = z.object({ )
   name: z.string().min(1).max(200).optional(),
   description: z.string().max(1000).optional(),
   status: z.nativeEnum(PromotionStatus).optional(),
@@ -785,30 +773,29 @@ export const UpdatePromotionSchema = z.object({)
   usage_limit: z.number().int().min(1).optional(),
   priority: z.number().int().min(1).max(100).optional(),
   targeting_rules: z.array(z.any()).optional(),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.any()).optional() }
 });
 
-export const ApplyPromotionSchema = z.object({)
+export const ApplyPromotionSchema = z.object({ )
   promotion_id: z.string().uuid(),
   user_id: z.string().uuid(),
   cart_id: z.string().uuid().optional(),
   promo_code: z.string().optional(),
-  force_apply: z.boolean().default(false),
+  force_apply: z.boolean().default(false) }
 });
 
-export const CheckEligibilitySchema = z.object({)
+export const CheckEligibilitySchema = z.object({ )
   promotion_id: z.string().uuid(),
   user_id: z.string().uuid(),
   cart_id: z.string().uuid().optional(),
-  item_ids: z.array(z.string().uuid()).optional(),
+  item_ids: z.array(z.string().uuid()).optional() }
 });
 
 // =============================================================================
 // Export all types for convenience
 // =============================================================================
 
-export type {
-  BasePromotion,
+export type { BasePromotion,
   DiscountPromotion,
   ContentPromotion,
   BundlePromotion,
@@ -845,12 +832,11 @@ export type {
   PromotionServiceResponse,
   PromotionEligibilityCheck,
   PromotionApplicationResult,
-  PromotionSearchCriteria,
+  PromotionSearchCriteria }
   PromotionSearchResult
 };
 
-export {
-  PromotionType,
+export { PromotionType,
   PromotionStatus,
   PromotionTargetType,
   PromotionApplicationType,
@@ -858,6 +844,6 @@ export {
   PromotionTrigger,
   CreatePromotionSchema,
   UpdatePromotionSchema,
-  ApplyPromotionSchema,
+  ApplyPromotionSchema }
   CheckEligibilitySchema
 };

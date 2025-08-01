@@ -4,15 +4,13 @@
  *
  * Tracks the execution path of graph processing for visualization
  */
-import { 
-  ExecutionTracker,
+import { ExecutionTracker,
   ExecutionPath,
   NodeExecutionStep,
-  RandomChoiceInfo,
+  RandomChoiceInfo }
   ExecutionPathColor
 } from '../types/ExecutionPath.js';
-export declare class GraphExecutionTracker implements ExecutionTracker {
-    private static instance;
+export declare class GraphExecutionTracker implements ExecutionTracker { private static instance;
     private activeExecutions;
     private executionCounter;
     static getInstance(): GraphExecutionTracker;
@@ -49,14 +47,12 @@ export declare class GraphExecutionTracker implements ExecutionTracker {
      */
     getTrackingStats(): {
         activeExecutions: number;
-        totalExecutionsTracked: number;
-    };
+        totalExecutionsTracked: number };
 
 /**
  * Utility functions for execution path analysis
  */
-export declare class ExecutionPathAnalyzer {
-    /**
+export declare class ExecutionPathAnalyzer { /**
      * Calculate execution path variance across multiple results
      */
     static calculatePathVariance(paths: ExecutionPath[]): number;
@@ -66,8 +62,7 @@ export declare class ExecutionPathAnalyzer {
     static findCommonPatterns(paths: ExecutionPath[]): {
         commonNodes: string[];
         divergencePoints: string[];
-        sharedSequences: string[][];
-    };
+        sharedSequences: string[][] };
     /**
      * Assign colors to execution paths
      */
@@ -75,11 +70,9 @@ export declare class ExecutionPathAnalyzer {
     /**
      * Generate debugging information for an execution path
      */
-    static generateDebugInfo(path: ExecutionPath): {
-        performanceBreakdown: Record<string, number>;
+    static generateDebugInfo(path: ExecutionPath): { performanceBreakdown: Record<string, number>;
         bottleneckNodes: string[];
-        randomizationSummary: string;
-    };
+        randomizationSummary: string };
 
 export default GraphExecutionTracker;
 //# sourceMappingURL=ExecutionTracker.d.ts.map

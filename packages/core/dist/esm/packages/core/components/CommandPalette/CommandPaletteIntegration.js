@@ -108,7 +108,7 @@ const executeGenerationFlow = async (flow, params) => {
     const currentPosition = { ...startPosition };
     // 1. Character Name Generator
     const nameNode = createCharacterNode('Character Name', {});
-    choices: [,
+    choices: [
         { text: name || 'Main Character', weight: 100 }
     ];
 }
@@ -119,7 +119,8 @@ currentPosition.x += spacing;
 // 2. Personality Traits
 if (traits.length > 0) {
     const traitsNode = createCharacterNode('Personality Traits', {});
-    choices: traits.map((trait, index) => ({}), text, `${name} is ${trait.toLowerCase()}`);
+    choices: traits.map((trait, index) => ({}));
+    text: `${name} is ${trait.toLowerCase()}`;
 }
 weight: 100 - (index * 10); // Decreasing weights;
 currentPosition;
@@ -129,7 +130,8 @@ currentPosition.x += spacing;
 // 3. Character Flaws
 if (flaws.length > 0) {
     const flawsNode = createCharacterNode('Character Flaws', {});
-    choices: flaws.map((flaw, index) => ({}), text, `Struggles with ${flaw.replace('-', ' ').toLowerCase()}`);
+    choices: flaws.map((flaw, index) => ({}));
+    text: `Struggles with ${flaw.replace('-', ' ').toLowerCase()}`;
 }
 weight: 80 - (index * 10);
 currentPosition;
@@ -178,20 +180,11 @@ params: (Record),
 }
 {
     const { logline, 'target-_____audience': _____audience } = params;
-    const acts = [];
-    {
-        title: 'Act I - Setup', elements;
-        ['Inciting Incident', 'Character Introduction', 'World Building'];
-    }
-    {
-        title: 'Act II - Confrontation', elements;
-        ['Rising Action', 'Midpoint', 'Plot Complications'];
-    }
-    {
-        title: 'Act III - Resolution', elements;
-        ['Climax', 'Falling Action', 'Resolution'];
-    }
-    ;
+    const acts = [
+        { title: 'Act I - Setup', elements: ['Inciting Incident', 'Character Introduction', 'World Building'] },
+        { title: 'Act II - Confrontation', elements: ['Rising Action', 'Midpoint', 'Plot Complications'] },
+        { title: 'Act III - Resolution', elements: ['Climax', 'Falling Action', 'Resolution'] }
+    ];
     const currentPosition = { ...startPosition };
     const spacing = 250;
     for (const act of acts) {
@@ -322,37 +315,37 @@ weight: 100 - (index * 12);
 ;
 const generateDialogueStylesForTone = (tone) => {
     const toneStyles = {
-        dramatic: [,
+        dramatic: [
             'Intense, emotional exchanges with subtext',
             'Characters reveal deep truths about themselves',
             'Conflict-driven conversation with high stakes',
             'Moments of vulnerable honesty'
         ],
-        comedic: [,
+        comedic: [
             'Witty banter and clever wordplay',
             'Misunderstandings that escalate humor',
             'Characters interrupt each other frequently',
             'Physical comedy enhanced by dialogue'
         ],
-        tense: [,
+        tense: [
             'Short, clipped sentences building suspense',
             'Characters speak in coded language',
             'Uncomfortable silences between words',
             'Information revealed slowly and reluctantly'
         ],
-        romantic: [,
+        romantic: [
             'Flirtatious subtext in seemingly casual conversation',
             'Characters finish each others thoughts',
             'Meaningful looks accompanying dialogue',
             'Past relationship references create tension'
         ],
-        action: [,
+        action: [
             'Rapid-fire commands and status updates',
             'Dialogue interrupted by physical action',
             'Characters communicate through shorthand',
             'Urgency drives every exchange'
         ],
-        emotional: [,
+        emotional: [
             'Characters struggle to find the right words',
             'Dialogue reveals character growth and change',
             'Honest admissions of fear or hope',

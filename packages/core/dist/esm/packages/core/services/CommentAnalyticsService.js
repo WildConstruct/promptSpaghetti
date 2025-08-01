@@ -28,8 +28,9 @@ this.cache = new Map();
  * Get comprehensive comment analytics for a resource
  */
 async;
-getCommentAnalytics(resourceId, string);
-resourceType: CommentableResourceType,
+getCommentAnalytics(resourceId, string),
+    resourceType;
+CommentableResourceType,
     options;
 {
     startDate ?  : Date;
@@ -147,8 +148,9 @@ catch (error) {
  * Record a comment engagement event
  */
 async;
-recordEngagementEvent(commentId, string);
-userId: string | null,
+recordEngagementEvent(commentId, string),
+    userId;
+string | null,
     sessionId;
 string,
     engagementType;
@@ -346,8 +348,9 @@ return {
     confidence: totalConfidence / totalCount,
 };
 async;
-getTopicTrends(resourceId, string);
-resourceType: string,
+getTopicTrends(resourceId, string),
+    resourceType;
+string,
     startDate;
 Date,
     endDate;
@@ -369,8 +372,9 @@ Promise < TopicTrend > {
 return result.rows.map(row => ({}), topic, row.topic, mentionCount, parseInt(row.total_mentions), sentimentAverage, parseFloat(row.avg_sentiment), growthRate, parseFloat(row.avg_growth_rate));
 ;
 async;
-getTotalEngagements(resourceId, string);
-resourceType: string,
+getTotalEngagements(resourceId, string),
+    resourceType;
+string,
     startDate;
 Date,
     endDate;
@@ -385,8 +389,9 @@ Promise < number > {
 ;
 return parseInt(result.rows[0].total);
 async;
-calculateGrowthRate(resourceId, string);
-resourceType: string,
+calculateGrowthRate(resourceId, string),
+    resourceType;
+string,
     startDate;
 Date,
     endDate;
@@ -425,8 +430,9 @@ Promise < number > {
 ;
 return parseFloat(result.rows[0].velocity) || 0;
 async;
-getPeakEngagementTime(resourceId, string);
-resourceType: string,
+getPeakEngagementTime(resourceId, string),
+    resourceType;
+string,
     startDate;
 Date,
     endDate;
@@ -449,8 +455,9 @@ if (result.rows.length === 0)
 const hour = parseInt(result.rows[0].hour);
 return `${hour.toString().padStart(2, '0')}:00`;
 async;
-getAverageCommentLength(resourceId, string);
-resourceType: string,
+getAverageCommentLength(resourceId, string),
+    resourceType;
+string,
     startDate;
 Date,
     endDate;
@@ -464,8 +471,9 @@ Promise < number > {
 ;
 return parseFloat(result.rows[0].avg_length) || 0;
 async;
-getAverageResponseTime(resourceId, string);
-resourceType: string,
+getAverageResponseTime(resourceId, string),
+    resourceType;
+string,
     startDate;
 Date,
     endDate;
@@ -482,8 +490,9 @@ Promise < number > {
 ;
 return parseFloat(result.rows[0].avg_minutes) || 0;
 async;
-getQualityScore(resourceId, string);
-resourceType: string,
+getQualityScore(resourceId, string),
+    resourceType;
+string,
     startDate;
 Date,
     endDate;
@@ -505,8 +514,9 @@ Promise < number > {
 ;
 return parseFloat(result.rows[0].quality_score) || 70;
 async;
-getLanguageDistribution(resourceId, string);
-resourceType: string,
+getLanguageDistribution(resourceId, string),
+    resourceType;
+string,
     startDate;
 Date,
     endDate;

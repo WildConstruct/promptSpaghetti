@@ -5,17 +5,16 @@
  * and SLA tracking. Provides full ticket management capabilities.
  */
 import React, { useState, useMemo } from 'react';
-import {
-  MarketplaceTicket,
+import { MarketplaceTicket,
   TicketComment,
   TicketStatus,
   TicketPriority,
-  TicketAttachment,
+  TicketAttachment }
   Epic16TicketIntegrationService
-} from '../../services/Epic16TicketIntegrationService';
-}
-interface TicketDetailsViewProps {
-  ticket: MarketplaceTicket;
+ from '../../services/Epic16TicketIntegrationService';
+
+
+interface TicketDetailsViewProps { ticket: MarketplaceTicket;
   ticketService: Epic16TicketIntegrationService;
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
@@ -25,38 +24,35 @@ interface TicketDetailsViewProps {
   content: string;
   visibility: 'public' | 'internal' | 'private';
   attachments: File;
-  export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({,)
-  ticket,
-  ticketService,
-  userId,
-  userRole,
-  onClose,
+  export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({);
+  ticket;
+  ticketService;
+  userId;
+  userRole;
+  onClose }
   onTicketUpdate
-}
-}) => {
-  const [currentTicket, setCurrentTicket] = useState<MarketplaceTicket>(ticket);
+
+
+}) => { const [currentTicket, setCurrentTicket] = useState<MarketplaceTicket>(ticket);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [commentForm, setCommentForm] = useState<CommentFormData>({)
-  content: '',
-  visibility: 'public',
-  attachments: [],
+  content: ''
+  visibility: 'public'
+  attachments: [] }
 });
   const [showStatusUpdate, setShowStatusUpdate] = useState(false);
   const [showAssignment, setShowAssignment] = useState(false);
   const [showEscalation, setShowEscalation] = useState(false);
   // Permissions
-  const canModify = useMemo(() => {
-    return userRole === 'admin' || 
+  const canModify = useMemo(() => { return userRole === 'admin' || 
            (userRole === 'agent' && currentTicket.assignedTo === userId) ||
-           (currentTicket.metadata.userId === userId);
-  }, [userRole, currentTicket.assignedTo, currentTicket.metadata.userId, userId]);
+           (currentTicket.metadata.userId === userId) }, [userRole, currentTicket.assignedTo, currentTicket.metadata.userId, userId]);
   const canViewInternal = useMemo(() => {
     return userRole === 'admin' || userRole === 'agent'
   }, [userRole]);
   // SLA calculations
-  const slaStatus = useMemo(() => {
-  const now = new Date();
+  const slaStatus = useMemo(() => { const now = new Date();
   const responseDeadline = currentTicket.sla.responseTime.deadline;
   const resolutionDeadline = currentTicket.sla.resolutionTime.deadline;
   const responseTimeRemaining = responseDeadline.getTime() - now.getTime();
@@ -67,7 +63,7 @@ interface TicketDetailsViewProps {
   responseWarning: responseTimeRemaining > 0 && responseTimeRemaining < (currentTicket.sla.responseTime.warningThreshold * 60 * 1000),
   resolutionWarning: resolutionTimeRemaining > 0 && resolutionTimeRemaining < (currentTicket.sla.resolutionTime.warningThreshold * 60 * 1000),
   responseTimeRemaining: Math.max(0, responseTimeRemaining),
-  resolutionTimeRemaining: Math.max(0, resolutionTimeRemaining),
+  resolutionTimeRemaining: Math.max(0, resolutionTimeRemaining) }
 };
   }, [currentTicket]);
   // Format time remaining
@@ -77,14 +73,13 @@ interface TicketDetailsViewProps {
     if (hours > 24) {
       const days = Math.floor(hours / 24);
       return `${days}d ${hours % 24}h`;}
-    } else if (hours > 0) {
+ else if (hours > 0) {
       return `${hours}h ${minutes}m`;}
-    } else {
+ else {
       return `${minutes}m`;}
   };
   // Handle comment submission
-  const handleCommentSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleCommentSubmit = async (e: React.FormEvent) => { e.preventDefault();
   if (!commentForm.content.trim()) return;
   setLoading(true);
   setError(null);
@@ -95,80 +90,55 @@ interface TicketDetailsViewProps {
   authorType: userRole === 'user' ? 'user' : 'agent',
   visibility: commentForm.visibility,
   attachments: [], // Simplified - would handle file uploads,
-  mentions: [],
+  mentions: [] }
 });
-      if (newComment) {
-  const updatedTicket = {
+      if (newComment) { const updatedTicket = {
   ...currentTicket,
   comments: [...currentTicket.comments, newComment],
-  updatedAt: new Date(),
+  updatedAt: new Date() }
 };
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
         // Reset form
-        setCommentForm({)
+        setCommentForm({ )
   content: '',
   visibility: 'public',
-  attachments: [],
+  attachments: [] }
 });
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to add comment');
-} finally {
-      setLoading(false);
-  };
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to add comment') } finally { setLoading(false) };
   // Handle status update
-  const handleStatusUpdate = async (newStatus: TicketStatus) => {
-    setLoading(true);
+  const handleStatusUpdate = async (newStatus: TicketStatus) => { setLoading(true);
     setError(null);
     try {
       const updatedTicket = await ticketService.updateTicketStatus(currentTicket.id, newStatus, userId);
       if (updatedTicket) {
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
-        setShowStatusUpdate(false);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to update status');
-} finally {
-      setLoading(false);
-  };
+        setShowStatusUpdate(false) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to update status') } finally { setLoading(false) };
   // Handle assignment
-  const handleAssignment = async (assigneeId: string) => {
-    setLoading(true);
+  const handleAssignment = async (assigneeId: string) => { setLoading(true);
     setError(null);
     try {
       const updatedTicket = await ticketService.assignTicket(currentTicket.id, assigneeId, userId);
       if (updatedTicket) {
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
-        setShowAssignment(false);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to assign ticket');
-} finally {
-      setLoading(false);
-  };
+        setShowAssignment(false) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to assign ticket') } finally { setLoading(false) };
   // Handle escalation
-  const handleEscalation = async (reason: string) => {
-    setLoading(true);
+  const handleEscalation = async (reason: string) => { setLoading(true);
     setError(null);
     try {
       const updatedTicket = await ticketService.escalateTicket(currentTicket.id, reason, userId);
       if (updatedTicket) {
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
-        setShowEscalation(false);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to escalate ticket');
-} finally {
-      setLoading(false);
-  };
+        setShowEscalation(false) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to escalate ticket') } finally { setLoading(false) };
   // Filter comments based on visibility permissions
-  const visibleComments = useMemo(() => {
-    return currentTicket.comments.filter(comment => {)
+  const visibleComments = useMemo(() => { return currentTicket.comments.filter(comment => {)
   if (comment.visibility === 'public') return true;
       if (comment.visibility === 'internal' && canViewInternal) return true;
       if (comment.visibility === 'private' && (comment.author === userId || userRole === 'admin')) return true;
-      return false;
-    });
+      return false });
   }, [currentTicket.comments, canViewInternal, userId, userRole]);
   return;
     <div className="ticket-details-view h-full flex flex-col bg-white">
@@ -241,10 +211,10 @@ interface TicketDetailsViewProps {
           <div className="bg-gray-50 rounded-lg p-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Response SLA</span>
-              <span className={`text-xs font-medium ${
-  slaStatus.responseOverdue ? 'text-red-600' :,
-  slaStatus.responseWarning ? 'text-yellow-600' : 'text-green-600',
-}`}>
+              <span className={ `text-xs font-medium ${
+  slaStatus.responseOverdue ? 'text-red-600' :
+  slaStatus.responseWarning ? 'text-yellow-600' : 'text-green-600' }
+`}>
                 {currentTicket.sla.responseTime.actual 
                   ? `Responded in ${currentTicket.sla.responseTime.actual}m`}
                   : slaStatus.responseOverdue 
@@ -256,10 +226,10 @@ interface TicketDetailsViewProps {
           <div className="bg-gray-50 rounded-lg p-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Resolution SLA</span>
-              <span className={`text-xs font-medium ${
-  slaStatus.resolutionOverdue ? 'text-red-600' :,
-  slaStatus.resolutionWarning ? 'text-yellow-600' : 'text-green-600',
-}`}>
+              <span className={ `text-xs font-medium ${
+  slaStatus.resolutionOverdue ? 'text-red-600' :
+  slaStatus.resolutionWarning ? 'text-yellow-600' : 'text-green-600' }
+`}>
                 {currentTicket.sla.resolutionTime.actual 
                   ? `Resolved in ${Math.round(currentTicket.sla.resolutionTime.actual / 60)}h`}
                   : slaStatus.resolutionOverdue 
@@ -376,11 +346,11 @@ interface TicketDetailsViewProps {
                 {currentTicket.externalIntegrations.map((integration) => ()
                   <div key={integration.system} className="flex items-center justify-between p-2 bg-white rounded border">
                     <span className="text-sm font-medium">{integration.system}</span>
-                    <span className={`px-2 py-1 text-xs rounded ${
-  integration.status === 'synced' ? 'bg-green-100 text-green-800' :,
-  integration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :,
+                    <span className={ `px-2 py-1 text-xs rounded ${
+  integration.status === 'synced' ? 'bg-green-100 text-green-800' :
+  integration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : }
   'bg-red-100 text-red-800'
-}`}>
+`}>
                       {integration.status}
                     </span>
                   </div>
@@ -418,8 +388,7 @@ interface TicketDetailsViewProps {
 };
 
 // Helper Components
-const StatusBadge: React.FC<{ status: TicketStatus }> = ({ status }) => {
-  const colors = {
+const StatusBadge: React.FC<{ status: TicketStatus }> = ({ status }) => { const colors = {
   [TicketStatus.NEW]: 'bg-blue-100 text-blue-800',
   [TicketStatus.OPEN]: 'bg-green-100 text-green-800',
   [TicketStatus.IN_PROGRESS]: 'bg-yellow-100 text-yellow-800',
@@ -430,7 +399,7 @@ const StatusBadge: React.FC<{ status: TicketStatus }> = ({ status }) => {
   [TicketStatus.CLOSED]: 'bg-gray-100 text-gray-800',
   [TicketStatus.REOPENED]: 'bg-red-100 text-red-800',
   [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
-  [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700',
+  [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700' }
 };
   return;
     <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
@@ -438,13 +407,12 @@ const StatusBadge: React.FC<{ status: TicketStatus }> = ({ status }) => {
     </span>
   );
 };
-const PriorityBadge: React.FC<{ priority: TicketPriority }> = ({ priority }) => {
-  const colors = {
+const PriorityBadge: React.FC<{ priority: TicketPriority }> = ({ priority }) => { const colors = {
   [TicketPriority.LOW]: 'bg-gray-100 text-gray-800',
   [TicketPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
   [TicketPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
   [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
-  [TicketPriority.CRITICAL]: 'bg-red-500 text-white',
+  [TicketPriority.CRITICAL]: 'bg-red-500 text-white' }
 };
   return;
     <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
@@ -452,11 +420,10 @@ const PriorityBadge: React.FC<{ priority: TicketPriority }> = ({ priority }) => 
     </span>
   );
 };
-const CommentItem: React.FC<{ comment: TicketComment; _canViewInternal: boolean }> = ({ comment, canViewInternal }) => {
-  const visibilityColors = {
+const CommentItem: React.FC<{ comment: TicketComment; _canViewInternal: boolean }> = ({ comment, canViewInternal }) => { const visibilityColors = {
   public: 'bg-green-100 text-green-800',
   internal: 'bg-yellow-100 text-yellow-800',
-  private: 'bg-red-100 text-red-800',
+  private: 'bg-red-100 text-red-800' }
 };
   return;
     <div className="bg-white border border-gray-200 rounded-lg p-4">
@@ -494,11 +461,11 @@ const AttachmentItem: React.FC<{ attachment: TicketAttachment }> = ({ attachment
 };
 
 // Modal Components (simplified implementations)
-const StatusUpdateModal: React.FC<{,
+const StatusUpdateModal: React.FC<{ ,
   currentStatus: TicketStatus;
-  onStatusUpdate: (status: TicketStatus) => void;
+  onStatusUpdate: (status: TicketStatus) => void }
   onClose: () => void;
-}> = ({ currentStatus, onStatusUpdate, onClose }) => {
+> = ({ currentStatus, onStatusUpdate, onClose }) => {
   const [selectedStatus, setSelectedStatus] = useState(currentStatus);
   return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -537,11 +504,10 @@ const StatusUpdateModal: React.FC<{,
     </div>
   );
 };
-const AssignmentModal: React.FC<{
-  currentAssignee?: string;
-  onAssign: (assigneeId: string) => void;
+const AssignmentModal: React.FC<{ currentAssignee?: string;
+  onAssign: (assigneeId: string) => void }
   onClose: () => void;
-}> = ({ currentAssignee, onAssign, onClose }) => {
+> = ({ currentAssignee, onAssign, onClose }) => {
   const [selectedAssignee, setSelectedAssignee] = useState(currentAssignee || '');
   return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -580,10 +546,10 @@ const AssignmentModal: React.FC<{
     </div>
   );
 };
-const EscalationModal: React.FC<{,
-  onEscalate: (reason: string) => void;
+const EscalationModal: React.FC<{ ,
+  onEscalate: (reason: string) => void }
   onClose: () => void;
-}> = ({ onEscalate, onClose }) => {
+> = ({ onEscalate, onClose }) => {
   const [reason, setReason] = useState('');
   return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

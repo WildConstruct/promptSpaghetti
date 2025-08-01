@@ -8,47 +8,39 @@ import { AdvancedExecutionContext } from '../../runtime/advanced';
 // Mock performance.now for consistent testing
 const originalPerformanceNow = performance.now;
 let mockTime = 0;
-beforeAll(() => {
-  global.performance.now = jest.fn(() => mockTime);
-});
-afterAll(() => {
-  global.performance.now = originalPerformanceNow;
-});
-const createMockContext = (overrides: Partial<AdvancedExecutionContext> = {}): AdvancedExecutionContext => ({)
-  variables: new Map(),
-  nodeStates: new Map(),
-  evaluationDepth: 0,
-  cache: new Map(),
+beforeAll(() => { global.performance.now = jest.fn(() => mockTime) });
+afterAll(() => { global.performance.now = originalPerformanceNow });
+const createMockContext = (overrides: Partial<AdvancedExecutionContext> = {}): AdvancedExecutionContext => ({ )
+  variables: new Map()
+  nodeStates: new Map()
+  evaluationDepth: 0
+  cache: new Map()
   executionMeta: {
-  startTime: Date.now(),
-  executionId: 'test-exec-123',
-  nodeExecutionOrder: [],
-  performanceMetrics: new Map(),
-},
-  prng: () => Math.random(),
-  seed: 12345,
+  startTime: Date.now()
+  executionId: 'test-exec-123'
+  nodeExecutionOrder: []
+  performanceMetrics: new Map() }
+
+  prng: () => Math.random()
+  seed: 12345
   ...overrides
 });
-describe('PerformanceMonitor', () => {
-  let monitor: PerformanceMonitor;
+describe('PerformanceMonitor', () => { let monitor: PerformanceMonitor;
   beforeEach(() => {
   mockTime = 0;
   monitor = new PerformanceMonitor({)
-  enableMemoryTracking: true,
-  enableContextTracking: true,
-  enableAggregation: false, // Disable for faster testing,
-  enableAlerting: true,
-  slowExecutionThreshold: 100,
-  memoryThreshold: 1024 * 1024, // 1MB,
-  contextSizeThreshold: 100,
-  maxMetricsHistory: 1000,
+  enableMemoryTracking: true
+  enableContextTracking: true
+  enableAggregation: false, // Disable for faster testing
+  enableAlerting: true
+  slowExecutionThreshold: 100
+  memoryThreshold: 1024 * 1024, // 1MB
+  contextSizeThreshold: 100
+  maxMetricsHistory: 1000 }
 });
   });
-  afterEach(() => {
-    monitor.shutdown();
-  });
-  describe('Execution Tracking', () => {
-    it('should start and end execution tracking', () => {
+  afterEach(() => { monitor.shutdown() });
+  describe('Execution Tracking', () => { it('should start and end execution tracking', () => {
       const context = createMockContext();
       const trackingId = monitor.startExecution('test-node', 'TestType', context);
       expect(trackingId).toMatch(/test-node-test-exec-123-\d+/);
@@ -59,42 +51,31 @@ describe('PerformanceMonitor', () => {
       expect(metrics!.nodeId).toBe('test-node');
       expect(metrics!.nodeType).toBe('TestType');
       expect(metrics!.duration).toBe(50);
-      expect(metrics!.errors).toHaveLength(0);
-    });
-    it('should track execution with error', () => {
-      const context = createMockContext();
+      expect(metrics!.errors).toHaveLength(0) });
+    it('should track execution with error', () => { const context = createMockContext();
       const error = new Error('Test execution error');
       const trackingId = monitor.startExecution('error-node', 'ErrorType', context);
       mockTime += 25;
       const metrics = monitor.endExecution(trackingId, context, null, error);
       expect(metrics).toBeDefined();
       expect(metrics!.errors).toContain('Test execution error');
-      expect(metrics!.duration).toBe(25);
-    });
-    it('should handle unknown tracking IDs gracefully', () => {
-      const context = createMockContext();
+      expect(metrics!.duration).toBe(25) });
+    it('should handle unknown tracking IDs gracefully', () => { const context = createMockContext();
       const metrics = monitor.endExecution('unknown-tracking-id', context);
-      expect(metrics).toBeNull();
-    });
-    it('should emit execution events', async () => {
-      let eventsReceived = 0;
+      expect(metrics).toBeNull() });
+    it('should emit execution events', async () => { let eventsReceived = 0;
       const eventsPromise = new Promise<void>((resolve, reject) => {
         const timeout = setTimeout(() => {
-          reject(new Error('Events timeout after 3s'));
-        }, 3000);
-        monitor.on('execution_started', (data) => {
-          expect(data.nodeId).toBe('event-test');
+          reject(new Error('Events timeout after 3s')) }, 3000);
+        monitor.on('execution_started', (data) => { expect(data.nodeId).toBe('event-test');
           expect(data.nodeType).toBe('EventType');
-          eventsReceived++;
-        });
-        monitor.on('execution_completed', (data) => {
-          expect(data.metrics.nodeId).toBe('event-test');
+          eventsReceived++ });
+        monitor.on('execution_completed', (data) => { expect(data.metrics.nodeId).toBe('event-test');
           expect(data.success).toBe(true);
           eventsReceived++;
           if (eventsReceived === 2) {
             clearTimeout(timeout);
-            resolve();
-        });
+            resolve() });
       });
       const context = createMockContext();
       const trackingId = monitor.startExecution('event-test', 'EventType', context);
@@ -115,11 +96,11 @@ describe('PerformanceMonitor', () => {
       const trackingId = monitor.startExecution('context-test', 'ContextType', context);
       mockTime += 40;
       const metrics = monitor.endExecution(trackingId, context);
-      expect(metrics!.contextSize).toEqual({)
-  variableCount: 2,
-  stateCount: 1,
-  cacheSize: 1,
-  evaluationDepth: 3,
+      expect(metrics!.contextSize).toEqual({ )
+  variableCount: 2
+  stateCount: 1
+  cacheSize: 1
+  evaluationDepth: 3 }
 });
     });
     it('should detect cache hits', () => {
@@ -132,23 +113,19 @@ describe('PerformanceMonitor', () => {
       const metrics = monitor.endExecution(trackingId, context, result);
       expect(metrics!.cacheHit).toBe(true);
     });
-    it('should detect cache misses', () => {
-      const context = createMockContext(); // No cache data;
+    it('should detect cache misses', () => { const context = createMockContext(); // No cache data;
       const trackingId = monitor.startExecution('no-cache-test', 'NoCacheType', context);
       mockTime += 60;
       const metrics = monitor.endExecution(trackingId, context);
-      expect(metrics!.cacheHit).toBe(false);
-    });
+      expect(metrics!.cacheHit).toBe(false) });
   });
-  describe('Performance Analysis', () => {
-  it('should identify slow executions', () => {
+  describe('Performance Analysis', () => { it('should identify slow executions', () => {
   const context = createMockContext();
   const trackingId = monitor.startExecution('slow-node', 'SlowType', context);
   mockTime += 150; // Exceeds threshold of 100ms
   const metrics = monitor.endExecution(trackingId, context);
   expect(metrics!.warnings).toContainEqual()
-  expect.stringContaining('Slow execution: 150.00ms'));
-});
+  expect.stringContaining('Slow execution: 150.00ms')) });
     it('should track context size warnings', () => {
       const context = createMockContext();
       // Add many variables to exceed threshold
@@ -161,9 +138,8 @@ describe('PerformanceMonitor', () => {
         expect.stringContaining('Large context size: 120 items')
       );
     });
-    it('should track deep evaluation warnings', () => {
-  const context = createMockContext({)
-  evaluationDepth: 15 // Deep evaluation,
+    it('should track deep evaluation warnings', () => { const context = createMockContext({)
+  evaluationDepth: 15 // Deep evaluation }
 });
       const trackingId = monitor.startExecution('deep-node', 'DeepType', context);
       mockTime += 30;
@@ -173,34 +149,29 @@ describe('PerformanceMonitor', () => {
       );
     });
   });
-  describe('Alerting System', () => {
-    it('should create duration alerts for very slow executions', (done) => {
+  describe('Alerting System', () => { it('should create duration alerts for very slow executions', (done) => {
       monitor.on('alert_created', (alert) => {
         expect(alert.type).toBe('duration');
         expect(alert.severity).toBe('high');
         expect(alert.message).toContain('Very slow execution');
-        done();
-      });
+        done() });
       const context = createMockContext();
       const trackingId = monitor.startExecution('very-slow', 'SlowType', context);
       mockTime += 250; // Much slower than threshold * 2
       monitor.endExecution(trackingId, context);
     });
-    it('should create error alerts', (done) => {
-      monitor.on('alert_created', (alert) => {
+    it('should create error alerts', (done) => { monitor.on('alert_created', (alert) => {
         expect(alert.type).toBe('error_rate');
         expect(alert.severity).toBe('critical');
         expect(alert.message).toContain('Node execution error');
-        done();
-      });
+        done() });
       const context = createMockContext();
       const trackingId = monitor.startExecution('error-node', 'ErrorType', context);
       mockTime += 30;
       const error = new Error('Critical failure');
       monitor.endExecution(trackingId, context, null, error);
     });
-    it('should manage alert lifecycle', () => {
-      // Create an alert
+    it('should manage alert lifecycle', () => { // Create an alert
       const context = createMockContext();
       const trackingId = monitor.startExecution('alert-test', 'AlertType', context);
       mockTime += 250;
@@ -213,12 +184,10 @@ describe('PerformanceMonitor', () => {
       expect(resolved).toBe(true);
       const resolvedAlerts = monitor.getAlerts(true);
       expect(resolvedAlerts.length).toBe(1);
-      expect(resolvedAlerts[0].resolved).toBe(true);
-    });
-    it('should limit maximum alerts', () => {
-  const limitedMonitor = new PerformanceMonitor({)
+      expect(resolvedAlerts[0].resolved).toBe(true) });
+    it('should limit maximum alerts', () => { const limitedMonitor = new PerformanceMonitor({)
   maxAlerts: 2,
-  slowExecutionThreshold: 50,
+  slowExecutionThreshold: 50 }
 });
       try {
         // Create multiple slow executions to trigger alerts
@@ -229,12 +198,9 @@ describe('PerformanceMonitor', () => {
           limitedMonitor.endExecution(trackingId, context);
         const alerts = limitedMonitor.getAlerts(false);
         expect(alerts.length).toBeLessThanOrEqual(2);
-      } finally {
-        limitedMonitor.shutdown();
-    });
+ finally { limitedMonitor.shutdown() });
   });
-  describe('Metrics Retrieval', () => {
-    it('should retrieve node-specific metrics', () => {
+  describe('Metrics Retrieval', () => { it('should retrieve node-specific metrics', () => {
       const context = createMockContext();
       // Create multiple executions for the same node
       for (let i = 0; i < 3; i++) {
@@ -247,8 +213,7 @@ describe('PerformanceMonitor', () => {
       monitor.endExecution(otherTrackingId, context);
       const nodeMetrics = monitor.getNodeMetrics('target-node');
       expect(nodeMetrics).toHaveLength(3);
-      expect(nodeMetrics.every(m => m.nodeId === 'target-node')).toBe(true);
-    });
+      expect(nodeMetrics.every(m => m.nodeId === 'target-node')).toBe(true) });
     it('should provide comprehensive statistics summary', () => {
       const context = createMockContext();
       // Create successful executions
@@ -273,20 +238,17 @@ describe('PerformanceMonitor', () => {
       expect(summary.topPerformingTypes).toContain('FastType');
       expect(summary.underperformingTypes).toContain('SlowType');
     });
-    it('should handle empty metrics gracefully', () => {
-      const summary = monitor.getStatisticsSummary();
+    it('should handle empty metrics gracefully', () => { const summary = monitor.getStatisticsSummary();
       expect(summary.totalExecutions).toBe(0);
       expect(summary.averageExecutionTime).toBe(0);
       expect(summary.slowExecutions).toBe(0);
       expect(summary.errorRate).toBe(0);
       expect(summary.topPerformingTypes).toHaveLength(0);
-      expect(summary.underperformingTypes).toHaveLength(0);
-    });
+      expect(summary.underperformingTypes).toHaveLength(0) });
   });
-  describe('Memory Management', () => {
-  it('should enforce metrics history limits', () => {
+  describe('Memory Management', () => { it('should enforce metrics history limits', () => {
   const limitedMonitor = new PerformanceMonitor({)
-  maxMetricsHistory: 3,
+  maxMetricsHistory: 3 }
 });
       try {
         const context = createMockContext();
@@ -299,11 +261,8 @@ describe('PerformanceMonitor', () => {
         const allMetrics = limitedMonitor.getNodeMetrics('node-2'); // Should exist;
         expect(limitedMonitor.getNodeMetrics('node-0')).toHaveLength(0); // Should be cleaned up
         expect(limitedMonitor.getNodeMetrics('node-4')).toHaveLength(1); // Should exist
-      } finally {
-        limitedMonitor.shutdown();
-    });
-    it('should clear all data when requested', () => {
-      const context = createMockContext();
+ finally { limitedMonitor.shutdown() });
+    it('should clear all data when requested', () => { const context = createMockContext();
       // Create some data
       const trackingId = monitor.startExecution('test-node', 'TestType', context);
       mockTime += 30;
@@ -311,18 +270,15 @@ describe('PerformanceMonitor', () => {
       expect(monitor.getStatisticsSummary().totalExecutions).toBe(1);
       monitor.clear();
       expect(monitor.getStatisticsSummary().totalExecutions).toBe(0);
-      expect(monitor.getAlerts(false)).toHaveLength(0);
-    });
+      expect(monitor.getAlerts(false)).toHaveLength(0) });
   });
-  describe('Configuration', () => {
-  it('should respect disabled features', () => {
+  describe('Configuration', () => { it('should respect disabled features', () => {
   const disabledMonitor = new PerformanceMonitor({)
   enableMemoryTracking: false,
   enableContextTracking: false,
-  enableAlerting: false,
+  enableAlerting: false }
 });
-      try {
-        const context = createMockContext();
+      try { const context = createMockContext();
         context.variables.set('test', 'value');
         const trackingId = disabledMonitor.startExecution('test-node', 'TestType', context);
         mockTime += 200; // Would normally trigger alert
@@ -330,17 +286,12 @@ describe('PerformanceMonitor', () => {
         // Context tracking should be disabled
         expect(metrics!.contextSize.variableCount).toBe(0);
         // Alerting should be disabled
-        expect(disabledMonitor.getAlerts(false)).toHaveLength(0);
-      } finally {
-        disabledMonitor.shutdown();
-    });
-    it('should handle custom thresholds', () => {
-  const customMonitor = new PerformanceMonitor({)
+        expect(disabledMonitor.getAlerts(false)).toHaveLength(0) } finally { disabledMonitor.shutdown() });
+    it('should handle custom thresholds', () => { const customMonitor = new PerformanceMonitor({)
   slowExecutionThreshold: 200,
-  contextSizeThreshold: 5,
+  contextSizeThreshold: 5 }
 });
-      try {
-  const context = createMockContext();
+      try { const context = createMockContext();
   context.variables.set('v1', 'val1');
   context.variables.set('v2', 'val2');
   context.variables.set('v3', 'val3');
@@ -354,34 +305,23 @@ describe('PerformanceMonitor', () => {
   expect(metrics!.warnings.filter(w => w.includes('Slow execution'))).toHaveLength(0);
   // Should warn about context size (over 5 threshold)
   expect(metrics!.warnings).toContainEqual()
-  expect.stringContaining('Large context size: 6 items'));
-} finally {
-        customMonitor.shutdown();
-    });
+  expect.stringContaining('Large context size: 6 items')) } finally { customMonitor.shutdown() });
   });
-  describe('Event System', () => {
-    it('should emit monitor lifecycle events', (done) => {
+  describe('Event System', () => { it('should emit monitor lifecycle events', (done) => {
       let eventsReceived = 0;
       const testMonitor = new PerformanceMonitor();
       testMonitor.on('monitor_cleared', () => {
         eventsReceived++;
-        if (eventsReceived === 2) done();
-      });
-      testMonitor.on('monitor_shutdown', () => {
-        eventsReceived++;
-        if (eventsReceived === 2) done();
-      });
+        if (eventsReceived === 2) done() });
+      testMonitor.on('monitor_shutdown', () => { eventsReceived++;
+        if (eventsReceived === 2) done() });
       // Use setTimeout to ensure events are processed in next tick
-      setTimeout(() => {
-        testMonitor.clear();
-        testMonitor.shutdown();
-      }, 0);
+      setTimeout(() => { testMonitor.clear();
+        testMonitor.shutdown() }, 0);
     });
-    it('should emit alert resolution events', (done) => {
-      monitor.on('alert_resolved', (alert) => {
+    it('should emit alert resolution events', (done) => { monitor.on('alert_resolved', (alert) => {
         expect(alert.resolved).toBe(true);
-        done();
-      });
+        done() });
       // Create an alert
       const context = createMockContext();
       const trackingId = monitor.startExecution('alert-resolve-test', 'TestType', context);
@@ -391,8 +331,7 @@ describe('PerformanceMonitor', () => {
       monitor.resolveAlert(alerts[0].id);
     });
   });
-  describe('Edge Cases', () => {
-  it('should handle execution without execution metadata', () => {
+  describe('Edge Cases', () => { it('should handle execution without execution metadata', () => {
   const contextWithoutMeta = {
   variables: new Map(),
   nodeStates: new Map(),
@@ -400,8 +339,8 @@ describe('PerformanceMonitor', () => {
   cache: new Map(),
   executionMeta: undefined, // Missing metadata,
   prng: () => Math.random(),
-  seed: 12345,
-} as any;
+  seed: 12345 }
+ as any;
       const trackingId = monitor.startExecution('no-meta-node', 'NoMetaType', contextWithoutMeta);
       mockTime += 50;
       const metrics = monitor.endExecution(trackingId, contextWithoutMeta);
@@ -409,8 +348,7 @@ describe('PerformanceMonitor', () => {
       expect(metrics!.nodeId).toBe('no-meta-node');
       expect(metrics!.executionId).toMatch(/^exec-/); // Generated ID
     });
-    it('should handle concurrent executions', () => {
-      const context = createMockContext();
+    it('should handle concurrent executions', () => { const context = createMockContext();
       // Start multiple executions
       const tracking1 = monitor.startExecution('concurrent-1', 'ConcurrentType', context);
       const tracking2 = monitor.startExecution('concurrent-2', 'ConcurrentType', context);
@@ -422,15 +360,12 @@ describe('PerformanceMonitor', () => {
       expect(metrics1!.nodeId).toBe('concurrent-1');
       expect(metrics1!.duration).toBe(50); // Total time from start
       expect(metrics2!.nodeId).toBe('concurrent-2');
-      expect(metrics2!.duration).toBe(30);
-    });
-    it('should handle zero-duration executions', () => {
-      const context = createMockContext();
+      expect(metrics2!.duration).toBe(30) });
+    it('should handle zero-duration executions', () => { const context = createMockContext();
       const trackingId = monitor.startExecution('instant-node', 'InstantType', context);
       // Don't advance mockTime - zero duration
       const metrics = monitor.endExecution(trackingId, context);
       expect(metrics!.duration).toBe(0);
-      expect(metrics!.warnings.filter(w => w.includes('Slow execution'))).toHaveLength(0);
-    });
+      expect(metrics!.warnings.filter(w => w.includes('Slow execution'))).toHaveLength(0) });
   });
 });

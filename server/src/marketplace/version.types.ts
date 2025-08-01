@@ -7,14 +7,14 @@ export enum VersionStatus {
   PUBLISHED = 'published',
   DEPRECATED = 'deprecated',
   ARCHIVED = 'archived'
-}
+
 
 // Version visibility types
 export enum VersionVisibility {
   PUBLIC = 'public',
   PRIVATE = 'private',
   BETA = 'beta'
-}
+
 
 // Compatibility types
 export enum CompatibilityLevel {
@@ -22,7 +22,7 @@ export enum CompatibilityLevel {
   MAJOR = 'major',
   MINOR = 'minor',
   PATCH = 'patch'
-}
+
 
 // Version change types
 export enum ChangeType {
@@ -33,11 +33,12 @@ export enum ChangeType {
   BREAKING_CHANGE = 'breaking_change',
   DEPRECATION = 'deprecation',
   DOCUMENTATION = 'documentation'
-}
+
 
 // Enhanced template version interface
-}
-}
+
+
+
 export interface EnhancedTemplateVersion {
   id: string;
   template_id: string;
@@ -82,13 +83,15 @@ export interface EnhancedTemplateVersion {
   // Timestamps
   created_at: Date;
   updated_at: Date;
-}
-}
-}
+
+
+
+
 
 // Version comparison interface
-}
-}
+
+
+
 export interface VersionComparison {
   from_version: EnhancedTemplateVersion;
   to_version: EnhancedTemplateVersion;
@@ -96,13 +99,15 @@ export interface VersionComparison {
   compatibility_impact: CompatibilityImpact;
   migration_complexity: 'simple' | 'moderate' | 'complex';
   estimated_migration_time: number; // in minutes
-}
-}
-}
+
+
+
+
 
 // Version difference interface
-}
-}
+
+
+
 export interface VersionDifference {
   id: string;
   path: string;
@@ -112,13 +117,15 @@ export interface VersionDifference {
   description: string;
   impact: 'breaking' | 'non-breaking' | 'improvement';
   category: 'structure' | 'content' | 'metadata' | 'configuration';
-}
-}
-}
+
+
+
+
 
 // Compatibility impact interface
-}
-}
+
+
+
 export interface CompatibilityImpact {
   is_breaking: boolean;
   affected_components: string[];
@@ -126,13 +133,15 @@ export interface CompatibilityImpact {
   optional_updates: string[];
   deprecation_warnings: string[];
   risk_level: 'low' | 'medium' | 'high';
-}
-}
-}
+
+
+
+
 
 // Version deployment interface
-}
-}
+
+
+
 export interface VersionDeployment {
   id: string;
   version_id: string;
@@ -148,13 +157,15 @@ export interface VersionDeployment {
   deployed_at: Date;
   completed_at?: Date;
   rollback_at?: Date;
-}
-}
-}
+
+
+
+
 
 // Version analytics interface
-}
-}
+
+
+
 export interface VersionAnalytics {
   version_id: string;
   period_start: Date;
@@ -167,8 +178,9 @@ export interface VersionAnalytics {
     average_execution_time: number;
     satisfaction_score: number;
     adoption_rate: number;
-}
-}
+
+
+
   };
   performance_trends: Array<{
     date: string;
@@ -176,18 +188,19 @@ export interface VersionAnalytics {
     executions: number;
     errors: number;
     avg_time: number;
-  }>;
+>;
   user_feedback: Array<{
     rating: number;
     comment: string;
     user_id: string;
     created_at: Date;
-  }>;
-}
+>;
+
 
 // Version rollback interface
-}
-}
+
+
+
 export interface VersionRollback {
   id: string;
   template_id: string;
@@ -204,9 +217,10 @@ export interface VersionRollback {
   completed_at?: Date;
   success: boolean;
   issues_encountered: string[];
-}
-}
-}
+
+
+
+
 
 // Zod schemas for validation
 export const CreateVersionSchema = z.object({

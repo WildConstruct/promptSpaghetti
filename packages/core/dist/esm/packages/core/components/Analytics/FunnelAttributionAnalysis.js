@@ -45,7 +45,7 @@ const loadAttributionData = useCallback(async () => {
             cohorts: cohorts.map(c => c.id),
             metrics: ['attribution_analysis', 'journey_data', 'touchpoint_analysis'],
             aggregation: 'detailed',
-            filters: [,
+            filters: [
                 { field: 'attribution_models', operator: 'in', value: attributionConfig.models },
                 { field: 'channels', operator: 'in', value: channels.map(c => c.id) }
             ]
@@ -152,8 +152,7 @@ ChannelAttributionData => {
         ['discovery',
             'consideration',
             'conversion',
-            'retention']: as, const: 
-    })[Math.floor(Math.random() * 4)],
+            'retention']: as, const:  })[Math.floor(Math.random() * 4)],
         roleDistribution;
     {
         discovery: Math.random() * 0.4,
@@ -303,21 +302,41 @@ const generateROIAnalysis = (channelList) => {
 ;
 // Generate conversion paths
 const generateConversionPaths = (channelList) => {
-    const paths = [];
-    ['organic_search', 'email', 'direct'],
+    const paths = [
+        ['organic_search', 'email', 'direct'],
         ['social_media', 'display', 'organic_search'],
         ['paid_search', 'direct'],
         ['display', 'organic_search', 'email', 'direct'],
-        ['social_media', 'direct'];
+        ['social_media', 'direct']
+    ];
+    return paths.map((path, index) => ({}), pathId, `path-${index + 1}`);
 };
-;
-return paths.map((path, index) => ({}), pathId, `path-${index + 1}`, path, frequency, Math.floor(Math.random() * 500 + 50), conversionRate, Math.random() * 0.1 + 0.02, averageValue, Math.floor(Math.random() * 200 + 50), totalValue, 0, // Will be calculated
-pathLength, path.length, pathDuration, Math.floor(Math.random() * 15 + 2), efficiency, Math.random() * 0.4 + 0.6, optimization, {
+path,
+    frequency;
+Math.floor(Math.random() * 500 + 50),
+    conversionRate;
+Math.random() * 0.1 + 0.02,
+    averageValue;
+Math.floor(Math.random() * 200 + 50),
+    totalValue;
+0, // Will be calculated
+    pathLength;
+path.length,
+    pathDuration;
+Math.floor(Math.random() * 15 + 2),
+    efficiency;
+Math.random() * 0.4 + 0.6,
+    optimization;
+{
     bottlenecks: [],
-    opportunities: [],
-    alternativePaths: [],
-    expectedImprovement: Math.random() * 0.2 + 0.1,
-});
+        opportunities;
+    [],
+        alternativePaths;
+    [],
+        expectedImprovement;
+    Math.random() * 0.2 + 0.1,
+    ;
+}
 ;
 ;
 // Generate attribution trends
@@ -338,7 +357,7 @@ const generateAttributionInsights = (data) => {
             confidence: 0.85,
             affectedChannels: ['email'],
             actionable: true,
-            recommendations: [,
+            recommendations: [
                 { action: 'Review email campaign segmentation', impact: 0.15, effort: 'medium', timeline: '2 weeks', resources: ['Marketing Team'] },
                 { action: 'A/B test subject lines and content', impact: 0.12, effort: 'low', timeline: '1 week', resources: ['Content Team'] }
             ],
@@ -352,7 +371,7 @@ const generateAttributionInsights = (data) => {
             confidence: 0.78,
             affectedChannels: ['social_media', 'paid_search'],
             actionable: true,
-            recommendations: [,
+            recommendations: [
                 { action: 'Increase social media retargeting budget', impact: 0.18, effort: 'low', timeline: '1 week', resources: ['Media Buying Team'] }
             ],
             data: {}

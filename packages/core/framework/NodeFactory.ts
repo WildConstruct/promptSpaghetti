@@ -8,9 +8,8 @@ import { FrameworkNode, NodeDefinition, NodeFramework } from './NodeFramework';
 import { AdvancedNodeConfig } from '../runtime/advanced';
 import { NodeValidationService } from '../validation';
 
-}
-export interface NodeCreationOptions {
-  /** Validate node before creation */
+
+export interface NodeCreationOptions { /** Validate node before creation */
   validate?: boolean;
   /** Apply performance optimizations */
   optimize?: boolean;
@@ -19,22 +18,21 @@ export interface NodeCreationOptions {
   /** Additional metadata */
   metadata?: Record<string, any>;
   /** Template to base node on */
-  template?: string;
-}
-}
-}
-export interface NodeTemplate {
-  id: string;
+  template?: string }
+
+
+
+export interface NodeTemplate { id: string;
   name: string;
   description: string;
   nodeType: string;
   defaultConfig: AdvancedNodeConfig;
   defaultData: any;
   category: string;
-  tags: string;
-}
-}
-}
+  tags: string }
+
+
+
 export interface NodeFactoryConfig {
   /** Enable automatic node optimization */
   enableOptimization: boolean;
@@ -49,42 +47,40 @@ export interface NodeFactoryConfig {
   /**
   * Node Factory for creating and managing framework nodes
   */
-}
-}
-export class NodeFactory {
-  private framework: NodeFramework;
+
+
+export class NodeFactory { private framework: NodeFramework;
   private validationService: NodeValidationService;
   private config: NodeFactoryConfig;
   private templates = new Map<string, NodeTemplate>();
   private nodeCache = new Map<string, FrameworkNode>();
-  private creationHistory: Array<{
+  private creationHistory: Array<{ }
   timestamp: number;
   nodeType: string;
   nodeId: string;
   success: boolean;
   error?: string;
-}> = [];
+> = [];
   constructor();
     framework: NodeFramework,
     validationService: NodeValidationService,
     config: Partial<NodeFactoryConfig> = {}
     this.framework = framework;
     this.validationService = validationService;
-    this.config = {
-  enableOptimization: true,
-  enableTemplates: true,
-  defaultValidation: true,
-  enableCaching: false, // Nodes are typically unique,
-  maxCacheSize: 100,
+    this.config = { enableOptimization: true
+  enableTemplates: true
+  defaultValidation: true
+  enableCaching: false, // Nodes are typically unique
+  maxCacheSize: 100 }
   ...config
 };
   /**
    * Create a new node with optional validation and optimization
    */
   async createNode(type: string)
-    id: string,
-    config: AdvancedNodeConfig,
-    data: any,
+  id: string
+    config: AdvancedNodeConfig
+    data: any
     options: NodeCreationOptions = {}
   ): Promise<FrameworkNode> {
 
@@ -98,8 +94,7 @@ export class NodeFactory {
           finalConfig = { ...template.defaultConfig, ...config };
           finalData = { ...template.defaultData, ...data };
       // Validate node before creation if requested
-      if ((options.validate ?? this.config.defaultValidation)) {
-        await this.validateNodeData(type, id, finalConfig, finalData);
+      if ((options.validate ?? this.config.defaultValidation)) { await this.validateNodeData(type, id, finalConfig, finalData);
       // Apply optimizations if enabled
       if (options.optimize ?? this.config.enableOptimization) {
         finalConfig = this.optimizeNodeConfig(type, finalConfig);
@@ -114,20 +109,18 @@ export class NodeFactory {
         this.cacheNode(id, node);
       // Record successful creation
       this.recordCreation(type, id, true);
-      return node;
-    } catch (error) {
-  // Record failed creation
+      return node } catch (error) { // Record failed creation
   this.recordCreation(type, id, false, error instanceof Error ? error.message : 'Unknown error');
   throw error;
   /**
   * Create node from template
   */
   async createFromTemplate(templateId: string)
-  nodeId: string,
-  overrides: {
+  nodeId: string
+  overrides: { }
   config?: Partial<AdvancedNodeConfig>;
   data?: any;
-} = {}
+ = {}
   ): Promise<FrameworkNode> {
 
     const template = this.templates.get(templateId);
@@ -135,46 +128,43 @@ export class NodeFactory {
       throw new Error(`Template '${templateId}' not found`);}
     const config = { ...template.defaultConfig, ...overrides.config };
     const data = { ...template.defaultData, ...overrides.data };
-    return this.createNode(template.nodeType, nodeId, config, data, {)
-  template: templateId,
-  validate: true,
-  optimize: true,
+    return this.createNode(template.nodeType, nodeId, config, data, { )
+  template: templateId
+  validate: true
+  optimize: true }
 });
   /**
    * Bulk create multiple nodes
    */
-  async createNodeBatch(specs: Array<{)
+  async createNodeBatch(specs: Array<{ ) }
   type: string;
   id: string;
   config: AdvancedNodeConfig;
   data: any;
   options?: NodeCreationOptions;
-}>): Promise<FrameworkNode> {
+>): Promise<FrameworkNode> {
 
     const results: FrameworkNode = [];
     const errors: Array<{ spec: any; error: Error }> = [];
     // Process in parallel with controlled concurrency
     const batchSize = 5;
-    for (let i = 0; i < specs.length; i += batchSize) {
-      const batch = specs.slice(i, i + batchSize);
+    for (let i = 0; i < specs.length; i += batchSize) { const batch = specs.slice(i, i + batchSize);
       const batchPromises = batch.map(async (spec) => {
         try {
           const node = await this.createNode(;);
             spec.type,
             spec.id,
             spec.config,
-            spec.data,
+            spec.data }
             spec.options
           );
           return { success: true, node, spec };
-        } catch (error) {
+ catch (error) {
           return { success: false, error: error as Error, spec };
       });
       const batchResults = await Promise.all(batchPromises);
-      for (const result of batchResults) {
-        if (result.success) {
-          results.push(result.node);
-        } else {
+      for (const result of batchResults) { if (result.success) {
+          results.push(result.node) } else {
           errors.push({ spec: result.spec, error: result.error });
     // If there were errors, provide detailed information
     if (errors.length > 0) {
@@ -184,10 +174,9 @@ export class NodeFactory {
   /**
    * Clone an existing node with a new ID
    */
-  async cloneNode(sourceId: string, newId: string, overrides?: {)
+  async cloneNode(sourceId: string, newId: string, overrides?: { )
   config?: Partial<AdvancedNodeConfig>;
-  data?: any;
-}): Promise<FrameworkNode> {
+  data?: any }): Promise<FrameworkNode> {
 
     const sourceNode = this.framework.getNode(sourceId);
     if (!sourceNode) {
@@ -208,8 +197,7 @@ export class NodeFactory {
   /**
    * Register a node template
    */
-  registerTemplate(template: NodeTemplate): void {
-    if (!this.config.enableTemplates) {
+  registerTemplate(template: NodeTemplate): void { if (!this.config.enableTemplates) {
       throw new Error('Templates are disabled in factory configuration');
     // Validate template
     this.validateTemplate(template);
@@ -229,18 +217,18 @@ export class NodeFactory {
    * Create node with best practices applied
    */
   async createOptimizedNode(type: string)
-    id: string,
-    config: AdvancedNodeConfig,
-    data: any): Promise<FrameworkNode> {,
+  id: string
+    config: AdvancedNodeConfig
+    data: any): Promise<FrameworkNode> {
     // Apply comprehensive optimization
     return this.createNode(type, id, config, data, {)
-  validate: true,
-      optimize: true,
-      lifecycleHooks: {
+  validate: true
+      optimize: true
+      lifecycleHooks: { }
   beforeExecute: async (node, context) => {
           // Add performance monitoring
           console.debug(`Executing node ${node.id} of type ${type}`);}
-  },
+
   onError: async (node, error) => {
           // Enhanced error logging
           console.error(`Node ${node.id} execution failed:`, error);}
@@ -260,54 +248,49 @@ export class NodeFactory {
     const successful = this.creationHistory.filter(h => h.success).length;
     const failed = total - successful;
     const typeDistribution: Record<string, number> = {};
-    this.creationHistory.forEach(h => {)
-  typeDistribution[h.nodeType] = (typeDistribution[h.nodeType] || 0) + 1;
-    });
+    this.creationHistory.forEach(h => { )
+  typeDistribution[h.nodeType] = (typeDistribution[h.nodeType] || 0) + 1 });
     const recentFailures = this.creationHistory;
       .filter(h => !h.success && h.error)
       .slice(-10) // Last 10 failures
-      .map(h => ({)
-  nodeType: h.nodeType,
-  nodeId: h.nodeId,
-  error: h.error!,
-  timestamp: h.timestamp,
+      .map(h => ({ )
+  nodeType: h.nodeType
+  nodeId: h.nodeId
+  error: h.error!
+  timestamp: h.timestamp }
 }));
-    return {
-  totalCreated: total,
-  successfulCreations: successful,
-  failedCreations: failed,
-  successRate: total > 0 ? (successful / total) * 100 : 0,
-  averageCreationTime: 0, // Would need timing data,
-  typeDistribution,
+    return { totalCreated: total
+  successfulCreations: successful
+  failedCreations: failed
+  successRate: total > 0 ? (successful / total) * 100 : 0
+  averageCreationTime: 0, // Would need timing data
+  typeDistribution }
   recentFailures
 };
   /**
    * Clear creation history
    */
-  clearHistory(): void {
-  this.creationHistory = [];
+  clearHistory(): void { this.creationHistory = [];
   /**
   * Export templates to JSON
   */
-  exportTemplates(): string {,
+  exportTemplates(): string {
   const templates = Array.from(this.templates.values());
   return JSON.stringify(templates, null, 2);
   /**
   * Import templates from JSON
   */
-  importTemplates(json: string): void {,
-  try {
-  const templates: NodeTemplate = JSON.parse(json);
+  importTemplates(json: string): void { }
+  try { const templates: NodeTemplate = JSON.parse(json);
   templates.forEach(template => {)
-  this.registerTemplate(template);
-});
-    } catch (error) {
+  this.registerTemplate(template) });
+ catch (error) {
       throw new Error(`Failed to import templates: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   // Private helper methods
   private async validateNodeData(type: string)
-    id: string,
-    config: AdvancedNodeConfig,
-    data: any): Promise<void> {,
+  id: string
+    config: AdvancedNodeConfig
+    data: any): Promise<void> {
     const nodeData = { id, type, config, data };
     const result = await this.validationService.validateNode(nodeData);
     if (!result.valid) {
@@ -332,8 +315,7 @@ export class NodeFactory {
   private optimizeNodeData(type: string, data: any): any {
     const optimized = { ...data };
     // Apply type-specific data optimizations
-    switch (type) {
-    case 'WeightedChoice':
+    switch (type) { case 'WeightedChoice':
       // Normalize weights if they exist
       if (optimized.weights && Array.isArray(optimized.weights)) {
         const total = optimized.weights.reduce((sum: number, w: number) => sum + w, 0);
@@ -347,7 +329,7 @@ export class NodeFactory {
       break;
     return optimized;
   private normalizeTransitionMatrix(matrix: Record<string)
-    Record<string,
+    Record<string }
     number>>
   ): Record<string, Record<string, number>> {
     const normalized: Record<string, Record<string, number>> = {};
@@ -355,9 +337,7 @@ export class NodeFactory {
       const total = Object.values(transitions).reduce((sum, weight) => sum + weight, 0);
       if (total > 0) {
         normalized[state] = {};
-        for (const [targetState, weight] of Object.entries(transitions)) {
-          normalized[state][targetState] = weight / total;
-      } else {
+        for (const [targetState, weight] of Object.entries(transitions)) { normalized[state][targetState] = weight / total } else {
         normalized[state] = transitions;
     return normalized;
   private validateTemplate(template: NodeTemplate): void {
@@ -367,18 +347,17 @@ export class NodeFactory {
       throw new Error('Template must have a valid nodeType string');
     if (!this.framework.registry.getDefinition(template.nodeType)) {
       throw new Error(`Template references unknown node type: ${template.nodeType}`);}
-  private cacheNode(id: string, node: FrameworkNode): void {
-  if (this.nodeCache.size >= this.config.maxCacheSize) {
+  private cacheNode(id: string, node: FrameworkNode): void { if (this.nodeCache.size >= this.config.maxCacheSize) {
   // Remove oldest cached node
   const oldestKey = this.nodeCache.keys().next().value;
   this.nodeCache.delete(oldestKey);
   this.nodeCache.set(id, node);
-  private recordCreation(type: string, id: string, success: boolean, error?: string): void {,
+  private recordCreation(type: string, id: string, success: boolean, error?: string): void {
   this.creationHistory.push({)
-  timestamp: Date.now(),
-  nodeType: type,
-  nodeId: id,
-  success,
+  timestamp: Date.now()
+  nodeType: type
+  nodeId: id
+  success }
   error
 });
     // Keep history size manageable

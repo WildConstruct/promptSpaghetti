@@ -2,44 +2,39 @@
  * Epic 14 - A/B Testing Framework
  * Statistical Analysis Engine for experiment results
  */
-import {
-  ExperimentResults,
+import { ExperimentResults,
   VariantResults,
   MetricResult,
   StatisticalResults,
-  ExperimentMetric,
+  ExperimentMetric }
   ExperimentInsight
-} from '../types/experiment';
+ from '../types/experiment';
 
-}
-export interface StatisticalTestResult {
-  pValue: number;
+
+export interface StatisticalTestResult { pValue: number;
   testStatistic: number;
   effect: number;
   effectSize: number;
   confidenceInterval: [number, number];
   significant: boolean;
-  practicallySignificant: boolean;
-}
-}
-}
-export interface BayesianResult {
-  posteriorProbability: number;
+  practicallySignificant: boolean }
+
+
+
+export interface BayesianResult { posteriorProbability: number;
   credibleInterval: [number, number];
   probabilityToBeatControl: number;
-  expectedLoss: number;
-}
-}
-}
-export interface SampleSizeCalculation {
-  requiredSampleSize: number;
-  estimatedDuration: number; // hours,
+  expectedLoss: number }
+
+
+
+export interface SampleSizeCalculation { requiredSampleSize: number;
+  estimatedDuration: number; // hours }
   powerAchieved: number;
   minimumDetectableEffect: number;
-}
-}
-export class StatisticalEngine {
-  private confidenceLevel: number;
+
+
+export class StatisticalEngine { private confidenceLevel: number;
   private minimumPracticalEffect: number;
   constructor(confidenceLevel = 0.95, minimumPracticalEffect = 0.02) {
     this.confidenceLevel = confidenceLevel;
@@ -50,13 +45,12 @@ export class StatisticalEngine {
   analyzeExperimentResults();
     variants: VariantResults,
     metrics: ExperimentMetric,
-    controlVariantId: string): ExperimentResults {,
+    controlVariantId: string): ExperimentResults { }
     const controlVariant = variants.find(v => v.variantId === controlVariantId);
     if (!controlVariant) {
       throw new Error(`Control variant ${controlVariantId} not found`);}
     const primaryMetric = metrics.find(m => m.isPrimary);
-    if (!primaryMetric) {
-  throw new Error('No primary metric found');
+    if (!primaryMetric) { throw new Error('No primary metric found');
   // Calculate statistical results for primary metric
   const primaryResults = this.calculatePrimaryMetricResults(;);
   variants,
@@ -75,9 +69,9 @@ export class StatisticalEngine {
   experimentId: '',
   calculatedAt: new Date(),
   variants,
-  statistical: {
+  statistical: {,
   primaryMetric: primaryResults,
-  guardrailMetrics: guardrailResults,
+  guardrailMetrics: guardrailResults }
 },
   segments: [], // Would be populated from segment analysis
       insights
@@ -91,8 +85,7 @@ export class StatisticalEngine {
     power = 0.8,
     alpha = 0.05,
     twoTailed = true
-  ): SampleSizeCalculation {
-  // For proportion tests (conversion rates)
+  ): SampleSizeCalculation { // For proportion tests (conversion rates)
   if (baselineRate > 0 && baselineRate < 1) {
   return this.calculateProportionSampleSize()
   baselineRate,
@@ -142,7 +135,7 @@ export class StatisticalEngine {
   effectSize,
   confidenceInterval,
   significant: pValue < (1 - this.confidenceLevel),
-  practicallySignificant: Math.abs(relativeEffect) >= this.minimumPracticalEffect,
+  practicallySignificant: Math.abs(relativeEffect) >= this.minimumPracticalEffect }
 };
   /**
    * Perform chi-square test for proportions
@@ -151,7 +144,7 @@ export class StatisticalEngine {
     controlSuccesses: number,
     controlTotal: number,
     treatmentSuccesses: number,
-    treatmentTotal: number): StatisticalTestResult {,
+    treatmentTotal: number): StatisticalTestResult { ,
   const controlRate = controlSuccesses / controlTotal;
   const treatmentRate = treatmentSuccesses / treatmentTotal;
   // Chi-square test statistic
@@ -180,7 +173,7 @@ export class StatisticalEngine {
   effectSize: this.calculateCohensH(controlRate, treatmentRate),
   confidenceInterval,
   significant: pValue < (1 - this.confidenceLevel),
-  practicallySignificant: Math.abs(relativeEffect) >= this.minimumPracticalEffect,
+  practicallySignificant: Math.abs(relativeEffect) >= this.minimumPracticalEffect }
 };
   /**
    * Perform Bayesian analysis for conversion rates
@@ -192,8 +185,7 @@ export class StatisticalEngine {
     treatmentTotal: number,
     priorAlpha = 1,
     priorBeta = 1
-  ): BayesianResult {
-  // Beta-Binomial model
+  ): BayesianResult { // Beta-Binomial model
   const controlPosteriorAlpha = priorAlpha + controlSuccesses;
   const controlPosteriorBeta = priorBeta + controlTotal - controlSuccesses;
   const treatmentPosteriorAlpha = priorAlpha + treatmentSuccesses;
@@ -221,7 +213,7 @@ export class StatisticalEngine {
   return {
   posteriorProbability: probabilityToBeatControl,
   credibleInterval,
-  probabilityToBeatControl,
+  probabilityToBeatControl }
   expectedLoss
 };
   /**
@@ -237,8 +229,7 @@ export class StatisticalEngine {
     let bestVariant = controlVariant;
     let bestResult: StatisticalTestResult | null = null;
     let maxConfidence = 0;
-    for (const variant of variants) {
-  if (variant.variantId === controlVariantId) continue;
+    for (const variant of variants) { if (variant.variantId === controlVariantId) continue;
   const metricResult = variant.metrics.find(m => m.metricId === metric.id);
   const controlMetricResult = controlVariant.metrics.find(m => m.metricId === metric.id);
   if (!metricResult || !controlMetricResult) continue;
@@ -251,11 +242,10 @@ export class StatisticalEngine {
   result = this.chiSquareTest()
   controlSuccesses,
   controlVariant.sampleSize,
-  treatmentSuccesses,
+  treatmentSuccesses }
   variant.sampleSize
   );
-} else {
-        // Use t-test for continuous metrics
+ else { // Use t-test for continuous metrics
         // Note: This is simplified - in practice, you'd need raw data
         const treatmentValues = Array(variant.sampleSize).fill(metricResult.value);
         const controlValues = Array(controlVariant.sampleSize).fill(controlMetricResult.value);
@@ -273,30 +263,29 @@ export class StatisticalEngine {
     if (bestResult && bestVariant.variantId !== controlVariantId) {
       return {
         winner: bestVariant.variantId,
-        confidence: maxConfidence,
+        confidence: maxConfidence }
         reason: `Statistically significant improvement with ${(maxConfidence * 100).toFixed(1)}% confidence`}
       };
-    return {
-  confidence: maxConfidence,
+    return { confidence: maxConfidence,
   reason: maxConfidence > 0 ,
   ? 'Improvements detected but not statistically significant'
-  : 'No significant improvements detected',
+  : 'No significant improvements detected' }
 };
   // Private helper methods
-  private calculatePrimaryMetricResults(variants: VariantResults)
-    controlVariant: VariantResults,
-    metric: ExperimentMetric): StatisticalResults['primaryMetric'] {,
+  private calculatePrimaryMetricResults(variants: VariantResults),
+  controlVariant: VariantResults,
+    metric: ExperimentMetric): StatisticalResults['primaryMetric'] { ,
   const winnerDetection = this.detectWinner(variants, controlVariant.variantId, metric);
   return {
   winningVariant: winnerDetection.winner,
   pValue: 1 - winnerDetection.confidence,
   statisticalSignificance: winnerDetection.confidence >= this.confidenceLevel,
   practicalSignificance: winnerDetection.winner !== undefined,
-  confidenceLevel: this.confidenceLevel,
+  confidenceLevel: this.confidenceLevel }
 };
-  private calculateGuardrailResults(variants: VariantResults)
-    controlVariant: VariantResults,
-    guardrailMetrics: ExperimentMetric): StatisticalResults['guardrailMetrics'] {,
+  private calculateGuardrailResults(variants: VariantResults),
+  controlVariant: VariantResults,
+    guardrailMetrics: ExperimentMetric): StatisticalResults['guardrailMetrics'] { ,
   const results: StatisticalResults['guardrailMetrics'] = [];
   for (const metric of guardrailMetrics) {
   for (const variant of variants) {
@@ -314,12 +303,12 @@ export class StatisticalEngine {
   metricId: metric.id,
   passed,
   threshold,
-  actualValue: relativeChange,
+  actualValue: relativeChange }
 });
     return results;
-  private generateInsights(variants: VariantResults)
-    controlVariant: VariantResults,
-    metrics: ExperimentMetric): ExperimentInsight {,
+  private generateInsights(variants: VariantResults),
+  controlVariant: VariantResults,
+    metrics: ExperimentMetric): ExperimentInsight { ,
     const insights: ExperimentInsight = [];
     // Check for winner
     const primaryMetric = metrics.find(m => m.isPrimary);
@@ -328,59 +317,57 @@ export class StatisticalEngine {
       if (winnerDetection.winner) {
         insights.push({)
   type: 'winner_detected',
-          title: 'Statistical Winner Detected',
+          title: 'Statistical Winner Detected' }
           description: `Variant ${winnerDetection.winner} shows significant improvement`}
 },
   severity: 'high',
           actionable: true,
-          recommendations: [,
+          recommendations: [
             'Consider implementing the winning variant',
             'Monitor performance after rollout',
             'Document learnings for future experiments'
           ]
         });
     // Check for cost anomalies
-    for (const variant of variants) {
-      if (variant.totalCost && controlVariant.totalCost) {
+    for (const variant of variants) { if (variant.totalCost && controlVariant.totalCost) {
         const costIncrease = (variant.totalCost - controlVariant.totalCost) / controlVariant.totalCost;
         if (costIncrease > 0.5) { // 50% cost increase
           insights.push({)
   type: 'cost_anomaly',
-            title: 'High Cost Increase Detected',
+            title: 'High Cost Increase Detected' }
             description: `Variant ${variant.variantId} shows ${(costIncrease * 100).toFixed(1)}% cost increase`}
 },
   severity: 'high',
             actionable: true,
-            recommendations: [,
+            recommendations: [
               'Review cost-benefit ratio',
               'Consider optimizing variant configuration',
               'Monitor budget impact'
             ]
           });
     // Check for performance degradation
-    for (const variant of variants) {
-      if (variant.averageLatency && controlVariant.averageLatency) {
+    for (const variant of variants) { if (variant.averageLatency && controlVariant.averageLatency) {
         const latencyIncrease = (variant.averageLatency - controlVariant.averageLatency) / controlVariant.averageLatency;
         if (latencyIncrease > 0.2) { // 20% latency increase
           insights.push({)
   type: 'performance_degradation',
-            title: 'Performance Degradation Detected',
+            title: 'Performance Degradation Detected' }
             description: `Variant ${variant.variantId} shows ${(latencyIncrease * 100).toFixed(1)}% latency increase`}
 },
   severity: 'medium',
             actionable: true,
-            recommendations: [,
+            recommendations: [
               'Investigate performance bottlenecks',
               'Consider performance optimizations',
               'Monitor user experience metrics'
             ]
           });
     return insights;
-  private calculateProportionSampleSize(baselineRate: number)
-    minimumDetectableEffect: number,
+  private calculateProportionSampleSize(baselineRate: number),
+  minimumDetectableEffect: number,
     power: number,
     alpha: number,
-    twoTailed: boolean): SampleSizeCalculation {,
+    twoTailed: boolean): SampleSizeCalculation { ,
   const treatmentRate = baselineRate * (1 + minimumDetectableEffect);
   const pooledRate = (baselineRate + treatmentRate) / 2;
   const zAlpha = twoTailed ? this.getZStatistic(1 - alpha / 2) : this.getZStatistic(1 - alpha);
@@ -392,14 +379,14 @@ export class StatisticalEngine {
   return {
   requiredSampleSize: Math.ceil(sampleSizePerGroup * 2), // Total for both groups,
   estimatedDuration: 24, // Placeholder - would depend on traffic,
-  powerAchieved: power,
+  powerAchieved: power }
   minimumDetectableEffect
 };
-  private calculateContinuousSampleSize(baselineMean: number)
-    minimumDetectableEffect: number,
+  private calculateContinuousSampleSize(baselineMean: number),
+  minimumDetectableEffect: number,
     power: number,
     alpha: number,
-    twoTailed: boolean): SampleSizeCalculation {,
+    twoTailed: boolean): SampleSizeCalculation { ,
   // Simplified - assumes equal variances and standard deviation
   const effectSize = minimumDetectableEffect; // Cohen's d;
   const zAlpha = twoTailed ? this.getZStatistic(1 - alpha / 2) : this.getZStatistic(1 - alpha);
@@ -408,12 +395,11 @@ export class StatisticalEngine {
   return {
   requiredSampleSize: Math.ceil(sampleSizePerGroup * 2),
   estimatedDuration: 24,
-  powerAchieved: power,
+  powerAchieved: power }
   minimumDetectableEffect
 };
   // Statistical utility methods
-  private mean(values: number): number {
-    return values.reduce((sum, val) => sum + val, 0) / values.length;
+  private mean(values: number): number { return values.reduce((sum, val) => sum + val, 0) / values.length;
   private variance(values: number): number {
     const avg = this.mean(values);
     return values.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / (values.length - 1);
@@ -484,6 +470,6 @@ export class StatisticalEngine {
     const stdDev = Math.sqrt(variance);
     const margin = this.getZStatistic(probability) * stdDev;
     return [
-      Math.max(0, mean - margin),
+      Math.max(0, mean - margin) }
       Math.min(1, mean + margin)
     ];

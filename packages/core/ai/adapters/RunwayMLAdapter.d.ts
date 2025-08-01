@@ -7,15 +7,14 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface RunwayMLConfig {
-    apiKey: string;
+}
+export interface RunwayMLConfig { apiKey: string;
     baseURL?: string;
     timeout?: number;
-    maxRetries?: number;
-
+    maxRetries?: number }
 }
-export interface RunwayMLRequestOptions {
-    text_prompt: string;
+}
+export interface RunwayMLRequestOptions { text_prompt: string;
     image_prompt?: string;
     model?: 'gen2' | 'gen3' | 'gen3-turbo';
     duration?: number;
@@ -31,18 +30,17 @@ export interface RunwayMLRequestOptions {
     style_preset?: 'cinematic' | 'anime' | 'photorealistic' | 'abstract' | 'documentary';
     camera_motion?: 'static' | 'pan_left' | 'pan_right' | 'tilt_up' | 'tilt_down' | 'zoom_in' | 'zoom_out' | 'dolly_forward' | 'dolly_backward';
     enhance_prompt?: boolean;
-    negative_prompt?: string;
-
+    negative_prompt?: string }
 }
-export interface RunwayMLGenerationResult {
-    video: {
+}
+export interface RunwayMLGenerationResult { video: {
         url?: string;
         data?: ArrayBuffer;
         format: string;
         duration: number;
         resolution: {
             width: number;
-            height: number;
+            height: number }
 }
         };
         fps: number;
@@ -60,12 +58,11 @@ export interface RunwayMLGenerationResult {
         generation_time: number;
         status: 'completed' | 'processing' | 'failed'
   };
-    usage: {
-        credits_consumed: number;
+    usage: { credits_consumed: number;
         cost: number;
-        processing_time: number;
-    };
+        processing_time: number };
 
+}
 }
 export interface RunwayMLTask {
     id: string;
@@ -107,4 +104,5 @@ export declare class RunwayMLAdapter extends BaseAIModel {
 
 export default RunwayMLAdapter;
 //# sourceMappingURL=RunwayMLAdapter.d.ts.map
+}
 }

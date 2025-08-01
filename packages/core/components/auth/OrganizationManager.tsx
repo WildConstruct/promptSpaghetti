@@ -1,8 +1,7 @@
 // Epic 11.4 Organization Manager Component
 // React component for comprehensive organization management with settings and branding
 import React, { useState, useEffect } from 'react';
-import { 
-  Users, 
+import { Users, 
   Settings, 
   Building2, 
   Plus, 
@@ -12,12 +11,12 @@ import {
   Crown,
   Shield,
   BarChart3,
-  ChevronRight,
+  ChevronRight }
   Palette
-} from 'lucide-react';
-}
-interface Organization {
-  id: string;
+ from 'lucide-react';
+
+
+interface Organization { id: string;
   name: string;
   slug: string;
   description?: string;
@@ -34,30 +33,31 @@ interface Organization {
   totalTeams: number;
   activeTeams: number;
   recentActivity: number;
-  planLimits: {
+  planLimits: { }
   maxUsers: number;
   maxTeams: number;
   maxStorage: number;
-}
+
+
 };
-  usage: {
+  usage: { ,
   users: number;
   teams: number;
-  storage: number;
-};
-}
-interface CreateOrganizationData {
-  name: string;
+  storage: number };
+
+
+interface CreateOrganizationData { name: string;
   slug?: string;
   description?: string;
   website?: string;
   plan?: 'free' | 'pro' | 'enterprise';
   maxUsers?: number;
   settings?: Record<string, unknown>;
-  branding?: Record<string, unknown>;
-}
+  branding?: Record<string, unknown> }
+
+
 interface OrganizationManagerProps {
-}
+
   currentUser?: { id: string; name: string; email: string; role: string };
   onOrganizationChange?: (org: Organization) => void;
   onInvitationSent?: (invitation: { id: string; email: string; role: string }) => void;
@@ -71,88 +71,66 @@ export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // Form state for creating/editing organizations
-  const [formData, setFormData] = useState<CreateOrganizationData>({)
-  name: '',
-    slug: '',
-    description: '',
-    website: '',
-    plan: 'free',
-    settings: {},
+  const [formData, setFormData] = useState<CreateOrganizationData>({ )
+  name: ''
+    slug: ''
+    description: ''
+    website: ''
+    plan: 'free' }
+    settings: {}
     branding: {}
   });
-  useEffect(() => {
-    loadOrganizations();
-  }, []);
-  useEffect(() => {
-    if (selectedOrg) {
-      loadOrganizationStats(selectedOrg.id);
-  }, [selectedOrg]);
-  const loadOrganizations = async () => {
-  try {
+  useEffect(() => { loadOrganizations() }, []);
+  useEffect(() => { if (selectedOrg) {
+      loadOrganizationStats(selectedOrg.id) }, [selectedOrg]);
+  const loadOrganizations = async () => { try {
   setLoading(true);
   const response = await fetch('/api/auth/organizations/my', {)
-  credentials: 'include',
+  credentials: 'include' }
 });
-      if (!response.ok) {
-        throw new Error('Failed to load organizations');
+      if (!response.ok) { throw new Error('Failed to load organizations');
       const data = await response.json();
       setOrganizations(data.data);
       // Auto-select first organization
       if (data.data.length > 0 && !selectedOrg) {
-        setSelectedOrg(data.data[0]);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load organizations');
-} finally {
-      setLoading(false);
-  };
+        setSelectedOrg(data.data[0]) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to load organizations') } finally { setLoading(false) };
   const loadOrganizationStats = async (organizationId: string) => {
     try {
       const response = await fetch(`/api/auth/organizations/${organizationId}/stats`, {)}
-  },
-  credentials: 'include'
+
+  credentials: 'include';
   });
-      if (!response.ok) {
-        throw new Error('Failed to load organization stats');
+      if (!response.ok) { throw new Error('Failed to load organization stats');
       const data = await response.json();
-      setStats(data.data);
-    } catch (err) {
-  console.error('Failed to load organization stats:', err);
-};
-  const createOrganization = async () => {
-  try {
+      setStats(data.data) } catch (err) { console.error('Failed to load organization stats:', err) };
+  const createOrganization = async () => { try {
   const response = await fetch('/api/auth/organizations', {)
-  method: 'POST',
+  method: 'POST'
   headers: {
-  'Content-Type': 'application/json',
-},
-  credentials: 'include',
+  'Content-Type': 'application/json' }
+
+  credentials: 'include'
         body: JSON.stringify(formData);
   });
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!response.ok) { const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to create organization');
       const data = await response.json();
       setOrganizations(prev => [...prev, data.data]);
       setSelectedOrg(data.data);
       setShowCreateForm(false);
-      resetForm();
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to create organization');
-};
+      resetForm() } catch (err) { setError(err instanceof Error ? err.message : 'Failed to create organization') };
   const updateOrganization = async () => {
     if (!editingOrg) return;
     try {
       const response = await fetch(`/api/auth/organizations/${editingOrg.id}`, {)}
-  },
-  method: 'PUT',
-        headers: {
-  'Content-Type': 'application/json',
-},
-  credentials: 'include',
+
+  method: 'PUT'
+        headers: { 'Content-Type': 'application/json' }
+
+  credentials: 'include'
         body: JSON.stringify(formData);
   });
-      if (!response.ok) {
-  const errorData = await response.json();
+      if (!response.ok) { const errorData = await response.json();
   throw new Error(errorData.error || 'Failed to update organization');
   const data = await response.json();
   setOrganizations(prev => )
@@ -160,65 +138,52 @@ export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
   if (selectedOrg?.id === editingOrg.id) {
   setSelectedOrg(data.data);
   setEditingOrg(null);
-  resetForm();
-} catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to update organization');
-};
+  resetForm() } catch (err) { setError(err instanceof Error ? err.message : 'Failed to update organization') };
   const deleteOrganization = async (organizationId: string) => {
     if (!confirm('Are you sure you want to delete this organization? This action cannot be undone.')) {
       return;
     try {
       const response = await fetch(`/api/auth/organizations/${organizationId}`, {)}
-  },
-  method: 'DELETE',
-        credentials: 'include'
+
+  method: 'DELETE'
+        credentials: 'include';
   });
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!response.ok) { const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to delete organization');
       setOrganizations(prev => prev.filter(org => org.id !== organizationId));
       if (selectedOrg?.id === organizationId) {
-        setSelectedOrg(organizations.find(org => org.id !== organizationId) || null);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to delete organization');
-};
-  const resetForm = () => {
-    setFormData({)
-  name: '',
-      slug: '',
-      description: '',
-      website: '',
-      plan: 'free',
-      settings: {},
+        setSelectedOrg(organizations.find(org => org.id !== organizationId) || null) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to delete organization') };
+  const resetForm = () => { setFormData({)
+  name: ''
+      slug: ''
+      description: ''
+      website: ''
+      plan: 'free' }
+      settings: {}
       branding: {}
     });
   };
-  const startEditing = (org: Organization) => {
-  setEditingOrg(org);
+  const startEditing = (org: Organization) => { setEditingOrg(org);
   setFormData({)
-  name: org.name,
-  slug: org.slug,
-  description: org.description || '',
-  website: org.website || '',
-  plan: org.plan,
-  settings: org.settings,
-  branding: org.branding,
+  name: org.name
+  slug: org.slug
+  description: org.description || ''
+  website: org.website || ''
+  plan: org.plan
+  settings: org.settings
+  branding: org.branding }
 });
   };
-  const getPlanColor = (plan: string) => {
-  switch (plan) {
+  const getPlanColor = (plan: string) => { switch (plan) {
   case 'free': return 'text-gray-600';
   case 'pro': return 'text-blue-600';
   case 'enterprise': return 'text-purple-600';
-  default: return 'text-gray-600';
-};
-  const getPlanBadge = (plan: string) => {
-  switch (plan) {
+  default: return 'text-gray-600' };
+  const getPlanBadge = (plan: string) => { switch (plan) {
   case 'free': return 'bg-gray-100 text-gray-800';
   case 'pro': return 'bg-blue-100 text-blue-800';
   case 'enterprise': return 'bg-purple-100 text-purple-800';
-  default: return 'bg-gray-100 text-gray-800';
-};
+  default: return 'bg-gray-100 text-gray-800' };
   if (loading) {
     return;
       <div className="flex items-center justify-center h-64">
@@ -263,9 +228,9 @@ export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
                 <div
                   key={org.id}
                   onClick={() => setSelectedOrg(org)}
-                  className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
-  selectedOrg?.id === org.id ? 'bg-blue-50 border-r-2 border-blue-600' : '',
-}`}
+                  className={ `p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
+  selectedOrg?.id === org.id ? 'bg-blue-50 border-r-2 border-blue-600' : '' }
+`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
@@ -331,20 +296,20 @@ export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
               <div className="border-b border-gray-200">
                 <nav className="flex space-x-8 px-6">
                   {[
-                    { id: 'overview', label: 'Overview', icon: BarChart3 },
-                    { id: 'settings', label: 'Settings', icon: Settings },
-                    { id: 'branding', label: 'Branding', icon: Palette },
-                    { id: 'members', label: 'Members', icon: Users },
+                    { id: 'overview', label: 'Overview', icon: BarChart3 }
+                    { id: 'settings', label: 'Settings', icon: Settings }
+                    { id: 'branding', label: 'Branding', icon: Palette }
+                    { id: 'members', label: 'Members', icon: Users }
                     { id: 'teams', label: 'Teams', icon: Shield }
                   ].map((tab) => ()
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id as any)}
-                      className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                      className={ `flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
                     >
                       <tab.icon className="w-4 h-4 mr-2" />
                       {tab.label}
@@ -551,11 +516,10 @@ export const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null)
             </div>
             <div className="flex space-x-3 mt-6">
               <button
-                onClick={() => {
+                onClick={ () => {
                   setShowCreateForm(false);
                   setEditingOrg(null);
-                  resetForm();
-                }}
+                  resetForm() }}
                 className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
               >
                 Cancel

@@ -106,7 +106,7 @@ _jsxs("div", { style: {
             borderRadius: spinnerSize / 12,
             animation: 'bar-bounce 1.2s ease-in-out infinite',
             animationDelay: `${i * 0.1}s`
-        }), ", height: '100%', transformOrigin: 'bottom' }} /> ))}"] });
+        }), ", height: '100%', transformOrigin: 'bottom'; }} /> ))}"] });
 ;
 'ring';
 return;

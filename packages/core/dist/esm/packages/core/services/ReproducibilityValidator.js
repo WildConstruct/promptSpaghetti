@@ -208,8 +208,9 @@ if (typeof state.callCount !== 'number' || state.callCount < 0) {
 impact: 'reproducibility';
 ;
 ;
-validateNodeConfigurations(exportData, VFXExportFormat);
-report: ReproducibilityValidationReport,
+validateNodeConfigurations(exportData, VFXExportFormat),
+    report;
+ReproducibilityValidationReport,
     options;
 ReproducibilityValidationOptions;
 void {
@@ -268,6 +269,7 @@ validateNodeReproducibilityData(((node, report) => {
     }
 },
     impact), 'quality');
+;
 if (!reprData.configurationHash) {
     report.warnings.push({});
     code: 'MISSING_CONFIGURATION_HASH',
@@ -292,8 +294,9 @@ impact: 'reproducibility';
     'Recalculate configuration hash or check for data corruption';
 }
 ;
-validateVersionCompatibility(exportData, VFXExportFormat);
-report: ReproducibilityValidationReport,
+validateVersionCompatibility(exportData, VFXExportFormat),
+    report;
+ReproducibilityValidationReport,
     options;
 ReproducibilityValidationOptions;
 void {
@@ -369,8 +372,9 @@ if (!environment.nodeVersion || !environment.platform) {
 report.integrity.versionCompatible = report.errors.filter(e => );
 e.code.includes('VERSION') || e.code.includes('COMPATIBILITY');
 length === 0;
-validateDataIntegrity(exportData, VFXExportFormat);
-report: ReproducibilityValidationReport,
+validateDataIntegrity(exportData, VFXExportFormat),
+    report;
+ReproducibilityValidationReport,
     options;
 ReproducibilityValidationOptions;
 void {
@@ -477,8 +481,9 @@ number;
     const nodeCount = exportData.graph.nodes.length;
     const additionalMemory = nodeCount * 1024; // 1KB per node;
     return baseMemory + additionalMemory;
-    generateSuggestions(exportData, VFXExportFormat);
-    report: ReproducibilityValidationReport,
+    generateSuggestions(exportData, VFXExportFormat),
+        report;
+    ReproducibilityValidationReport,
         options;
     ReproducibilityValidationOptions;
     void {
@@ -561,30 +566,32 @@ number;
                      * Test actual reproduction by re-executing with exported data
                      */
                     async;
-                    testReproduction(((exportData, originalGraph) => {
-                        const startTime = Date.now();
-                        try {
-                            // Reconstruct RNG state
-                            const masterSeed = exportData.execution.randomization.masterSeed;
-                            // Simulate reproduction (in real implementation, would re-execute graph)
-                            const reproduced = {
-                                success: true,
-                                identicalResults: true,
-                                differences: [],
-                                reproductionTime: Date.now() - startTime,
-                            };
-                            return reproduced;
-                        }
-                        catch (error) {
-                            return {
-                                success: false,
-                                identicalResults: false,
-                                differences: [`Reproduction failed: ${error}`]
-                            };
-                        }
-                        reproductionTime: Date.now() - startTime;
-                    }));
+                    testReproduction(((exportData, originalGraph) => ), boolean);
+                    differences: string;
+                    reproductionTime: number;
                 }
+                 > {
+                    const: startTime = Date.now(),
+                    try: {
+                        // Reconstruct RNG state
+                        const: masterSeed = exportData.execution.randomization.masterSeed,
+                        // Simulate reproduction (in real implementation, would re-execute graph)
+                        const: reproduced = {
+                            success: true,
+                            identicalResults: true,
+                            differences: [],
+                            reproductionTime: Date.now() - startTime,
+                        },
+                        return: reproduced
+                    }, catch(error) {
+                        return {
+                            success: false,
+                            identicalResults: false,
+                            differences: [`Reproduction failed: ${error}`]
+                        };
+                    },
+                    reproductionTime: Date.now() - startTime
+                };
             }
         }
     }), private, calculateConfigurationHash(configuration, any), string, {

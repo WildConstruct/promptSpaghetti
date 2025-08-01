@@ -13,32 +13,34 @@ import {
   RevenueExportOptions,
   RevenueAPIResponse,
   RevenueError 
-} from '../types/revenue';
+ from '../types/revenue';
 import { revenueService } from '../services/revenueService';
 
-}
+
 export interface UseRevenueAnalyticsParams {
   scope: 'global' | 'creator' | 'template';
   entityId?: string;
   timeRange: RevenueTimeRange;
-  customDateRange?: {
+  customDateRange?: {,
   start: Date | null;,
   end: Date | null;
-}
+
+
 };
   filters: RevenueFilters;
   refreshInterval?: number; // milliseconds, 0 to disable
   autoRefresh?: boolean;
   cacheEnabled?: boolean;
-}
-}
+
+
+
 export interface UseRevenueAnalyticsReturn {
   // Data
   dashboardData: RevenueDashboardData | null;,
   metrics: RevenueMetrics | null;
   // Loading states
   isLoading: boolean;,
-  isRefreshing: boolean;
+  isRefreshing: boolean;,
   isExporting: boolean;
   // Error handling
   error: string | null;,
@@ -49,10 +51,11 @@ export interface UseRevenueAnalyticsReturn {
   clearError: () => void;
   // Metadata
   lastUpdated: Date | null;,
-  cacheHit: boolean;
+  cacheHit: boolean;,
   executionTime: number | null;
-}
-}
+
+
+
 export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseRevenueAnalyticsReturn => {
   // State
   const [dashboardData, setDashboardData] = useState<RevenueDashboardData | null>(null);
@@ -89,7 +92,7 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
       abortControllerRef.current = new AbortController();
       if (!isRefresh) {
         setIsLoading(true);
-      } else {
+ else {
   setIsRefreshing(true);
   setError(null);
   setLastError(null);
@@ -124,15 +127,15 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
   userId: 'current-user', // Would come from auth context,
   dashboardScope: params.scope,
   entityId: params.entityId,
-  metadata: {
+  metadata: {,
   timeRange: params.timeRange,
   filtersApplied: Object.keys(params.filters).length > 0,
   cacheHit: response.metadata?.cacheHit,
   executionTime: endTime - startTime,
 });
-      } else {
+ else {
         throw new Error(response.error || 'Failed to fetch dashboard data');
-    } catch (err) {
+ catch (err) {
   if (!mountedRef.current) return;
   if (err instanceof Error) {
   if (err.name === 'AbortError') {
@@ -144,7 +147,7 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
   timestamp: new Date(),
   retryable: true,
 });
-      } else {
+ else {
   setError('An unexpected error occurred');
   setLastError({)
   code: 'UNKNOWN_ERROR',
@@ -152,7 +155,7 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
   timestamp: new Date(),
   retryable: true,
 });
-    } finally {
+ finally {
       if (mountedRef.current) {
         setIsLoading(false);
         setIsRefreshing(false);
@@ -201,7 +204,7 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
   timeRange: params.timeRange,
   filtersApplied: Object.keys(params.filters).length > 0,
 });
-    } catch (err) {
+ catch (err) {
       if (err instanceof Error) {
         setError(`Export failed: ${err.message}`);}
         setLastError({)
@@ -210,7 +213,7 @@ export const useRevenueAnalytics = (params: UseRevenueAnalyticsParams): UseReven
   timestamp: new Date(),
   retryable: true,
 });
-    } finally {
+ finally {
       setIsExporting(false);
   }, [
     params.scope,

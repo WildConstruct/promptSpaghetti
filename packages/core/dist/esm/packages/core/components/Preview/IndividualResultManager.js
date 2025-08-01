@@ -28,14 +28,15 @@ import { usePreviewSeeds } from '../../usePreviewSeeds';
 const [showAnalytics, setShowAnalytics] = useState(false);
 const [resultAnalytics, setResultAnalytics] = useState(new Map());
 const [actionMenuIndex, setActionMenuIndex] = useState(null);
-const [lockDialog, setLockDialog] = useState({});
-visible: false,
-    resultIndex;
--1,
-    note;
-'',
-;
-;
+const [lockDialog, setLockDialog] = useState < {
+    visible: boolean,
+    resultIndex: number,
+    note: string
+} > ({
+    visible: false,
+    resultIndex: -1,
+    note: '',
+});
 const menuRef = useRef(null);
 // Calculate analytics for a result
 const calculateAnalytics = useCallback((content, index) => {
@@ -205,8 +206,8 @@ if (results[resultIndex] && !results[resultIndex].locked) {
     mimeType = 'application/json';
     break;
     'csv';
-    const csvData = [];
-    ['Field', 'Value'],
+    const csvData = [
+        ['Field', 'Value'],
         ['Seed', result.seed],
         ['Output', result.output || ''],
         ['Error', result.error || ''],
@@ -214,8 +215,8 @@ if (results[resultIndex] && !results[resultIndex].locked) {
         ['Locked', result.locked ? 'Yes' : 'No'],
         ['Word Count', analytics?.wordCount || ''],
         ['Readability Score', analytics?.readabilityScore || ''],
-        ['Sentiment', analytics?.sentiment || ''];
-    ;
+        ['Sentiment', analytics?.sentiment || '']
+    ];
     content = csvData.map(row => row.join(',')).join('\n');
     filename += '.csv';
     mimeType = 'text/csv';

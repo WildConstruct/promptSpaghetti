@@ -6,8 +6,8 @@
  * audit trails, appeal support, and analytics for content governance.
  */
 
-}
-}
+
+
 export interface ModerationDecision {
   id: string;
   caseId: string;
@@ -63,12 +63,13 @@ export interface ModerationDecision {
   updatedAt: Date;
   effectiveAt: Date;
   expiresAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DecisionAction {
   type: string;
   parameters: Record<string, any>;
@@ -76,12 +77,13 @@ export interface DecisionAction {
   completed: boolean;
   completedAt?: Date;
   result?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DecisionTemplate {
   id: string;
   name: string;
@@ -112,12 +114,13 @@ export interface DecisionTemplate {
   createdAt: Date;
   updatedAt: Date;
   lastUsed?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DecisionHistory {
   id: string;
   decisionId: string;
@@ -129,12 +132,13 @@ export interface DecisionHistory {
   changeSource: 'manual' | 'automated' | 'appeal' | 'review';
   metadata: Record<string, any>;
   createdAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DecisionAnalytics {
   date: string;
   moderatorId?: string;
@@ -161,27 +165,29 @@ export interface DecisionAnalytics {
   
   // Content breakdown
   contentTypeBreakdown: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DecisionFilter {
   contentTypes?: string[];
   decisionTypes?: string[];
   decisionStatus?: string[];
   moderatorIds?: string[];
-}
-}
+
+
+
   dateRange?: { start?: Date; end?: Date };
   caseIds?: string[];
   appealable?: boolean;
   confidenceRange?: { min?: number; max?: number };
-}
 
-}
-}
+
+
+
 export interface CreateDecisionRequest {
   caseId: string;
   contentId: string;
@@ -201,12 +207,13 @@ export interface CreateDecisionRequest {
   internalNotes?: string;
   effectiveAt?: Date;
   expiresAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UpdateDecisionRequest {
   decisionStatus?: string;
   detailedReasoning?: string;
@@ -218,9 +225,10 @@ export interface UpdateDecisionRequest {
   feedbackReceived?: string;
   metadata?: Record<string, any>;
   internalNotes?: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Decision Recording Service
@@ -237,14 +245,14 @@ export class Epic16DecisionRecordingService {
 
   private constructor() {
     this.initializeDefaultTemplates();
-  }
+
 
   static getInstance(): Epic16DecisionRecordingService {
     if (!Epic16DecisionRecordingService.instance) {
       Epic16DecisionRecordingService.instance = new Epic16DecisionRecordingService();
-    }
+
     return Epic16DecisionRecordingService.instance;
-  }
+
 
   /**
    * Decision Management
@@ -293,7 +301,7 @@ export class Epic16DecisionRecordingService {
     await this.updateAnalytics(decision);
     
     return decision;
-  }
+
 
   async updateDecision(
     decisionId: string,
@@ -315,12 +323,12 @@ export class Epic16DecisionRecordingService {
     await this.recordHistory(decisionId, 'updated', previousData, updatedDecision, updatedBy, 'manual');
     
     return updatedDecision;
-  }
+
 
   async getDecision(decisionId: string): Promise<ModerationDecision | null> {
 
     return this.decisions.get(decisionId) || null;
-  }
+
 
   async getDecisions(filter?: DecisionFilter): Promise<ModerationDecision[]> {
 
@@ -330,27 +338,27 @@ export class Epic16DecisionRecordingService {
 
     if (filter.contentTypes?.length) {
       decisions = decisions.filter(d => filter.contentTypes!.includes(d.contentType));
-    }
+
 
     if (filter.decisionTypes?.length) {
       decisions = decisions.filter(d => filter.decisionTypes!.includes(d.decisionType));
-    }
+
 
     if (filter.decisionStatus?.length) {
       decisions = decisions.filter(d => filter.decisionStatus!.includes(d.decisionStatus));
-    }
+
 
     if (filter.moderatorIds?.length) {
       decisions = decisions.filter(d => filter.moderatorIds!.includes(d.moderatorId));
-    }
+
 
     if (filter.caseIds?.length) {
       decisions = decisions.filter(d => filter.caseIds!.includes(d.caseId));
-    }
+
 
     if (filter.appealable !== undefined) {
       decisions = decisions.filter(d => d.isAppealable === filter.appealable);
-    }
+
 
     if (filter.confidenceRange) {
       decisions = decisions.filter(d => {
@@ -358,7 +366,7 @@ export class Epic16DecisionRecordingService {
         const max = filter.confidenceRange!.max ?? 5;
         return d.confidenceLevel >= min && d.confidenceLevel <= max;
       });
-    }
+
 
     if (filter.dateRange) {
       decisions = decisions.filter(d => {
@@ -366,22 +374,22 @@ export class Epic16DecisionRecordingService {
         return (!filter.dateRange!.start || date >= filter.dateRange!.start) &&
                (!filter.dateRange!.end || date <= filter.dateRange!.end);
       });
-    }
+
 
     return decisions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  }
+
 
   async getDecisionsByCase(caseId: string): Promise<ModerationDecision[]> {
 
     return this.getDecisions({ caseIds: [caseId] });
-  }
+
 
   async getDecisionsByContent(contentId: string, contentType: string): Promise<ModerationDecision[]> {
 
     return Array.from(this.decisions.values())
       .filter(d => d.contentId === contentId && d.contentType === contentType)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  }
+
 
   /**
    * Decision Templates
@@ -401,7 +409,7 @@ export class Epic16DecisionRecordingService {
 
     this.templates.set(template.id, template);
     return template;
-  }
+
 
   async getDecisionTemplates(category?: string): Promise<DecisionTemplate[]> {
 
@@ -409,12 +417,12 @@ export class Epic16DecisionRecordingService {
     
     if (category) {
       templates = templates.filter(t => t.category === category);
-    }
+
 
     return templates
       .filter(t => t.isActive)
       .sort((a, b) => a.name.localeCompare(b.name));
-  }
+
 
   async applyDecisionTemplate(
     templateId: string,
@@ -442,7 +450,7 @@ export class Epic16DecisionRecordingService {
       actionsTaken: template.suggestedActions,
       metadata: { templateId, placeholders }
     };
-  }
+
 
   /**
    * Decision History
@@ -450,7 +458,7 @@ export class Epic16DecisionRecordingService {
   async getDecisionHistory(decisionId: string): Promise<DecisionHistory[]> {
 
     return this.history.get(decisionId) || [];
-  }
+
 
   async recordHistory(
     decisionId: string,
@@ -478,7 +486,7 @@ export class Epic16DecisionRecordingService {
     const existingHistory = this.history.get(decisionId) || [];
     existingHistory.push(historyEntry);
     this.history.set(decisionId, existingHistory);
-  }
+
 
   /**
    * Appeals Management
@@ -494,7 +502,7 @@ export class Epic16DecisionRecordingService {
 
     if (decision.appealDeadline && new Date() > decision.appealDeadline) {
       return false; // Appeal deadline has passed
-    }
+
 
     const previousData = { ...decision };
     decision.decisionStatus = 'appealed';
@@ -505,7 +513,7 @@ export class Epic16DecisionRecordingService {
     await this.recordHistory(decisionId, 'appealed', previousData, decision, appealedBy, 'appeal');
     
     return true;
-  }
+
 
   async resolveAppeal(
     decisionId: string,
@@ -525,7 +533,7 @@ export class Epic16DecisionRecordingService {
     await this.recordHistory(decisionId, resolution, previousData, decision, resolvedBy, 'review', reason);
     
     return true;
-  }
+
 
   /**
    * Analytics and Reporting
@@ -561,7 +569,7 @@ export class Epic16DecisionRecordingService {
           contentTypeBreakdown: {}
         };
         analyticsMap.set(key, analytics);
-      }
+
 
       // Update metrics
       analytics.totalDecisions++;
@@ -574,10 +582,10 @@ export class Epic16DecisionRecordingService {
 
       if (decision.moderatorType === 'ai') {
         analytics.automatedDecisions++;
-      }
+
       if (decision.escalatedFrom) {
         analytics.escalatedDecisions++;
-      }
+
     });
 
     // Calculate quality metrics
@@ -596,7 +604,7 @@ export class Epic16DecisionRecordingService {
         if (decisionsWithDuration.length > 0) {
           analytics.averageDecisionTime = decisionsWithDuration
             .reduce((sum, d) => sum + (d.decisionDuration || 0), 0) / decisionsWithDuration.length;
-        }
+
 
         const appealedDecisions = relevantDecisions.filter(d => d.decisionStatus === 'appealed');
         analytics.appealRate = (appealedDecisions.length / relevantDecisions.length) * 100;
@@ -612,12 +620,12 @@ export class Epic16DecisionRecordingService {
         if (decisionsWithAccuracy.length > 0) {
           analytics.accuracyScore = decisionsWithAccuracy
             .reduce((sum, d) => sum + (d.accuracyRating || 0), 0) / decisionsWithAccuracy.length / 5;
-        }
-      }
+
+
     });
 
     return Array.from(analyticsMap.values()).sort((a, b) => a.date.localeCompare(b.date));
-  }
+
 
   async updateAnalytics(decision: ModerationDecision): Promise<void> {
 
@@ -636,13 +644,13 @@ export class Epic16DecisionRecordingService {
         contentTypeBreakdown: {}
       };
       this.analytics.set(dateKey, aggregateAnalytics);
-    }
+
 
     aggregateAnalytics.totalDecisions++;
     aggregateAnalytics.decisionsByType[decision.decisionType] = 
       (aggregateAnalytics.decisionsByType[decision.decisionType] || 0) + 1;
     // ... update other metrics
-  }
+
 
   /**
    * Utility Methods
@@ -650,19 +658,19 @@ export class Epic16DecisionRecordingService {
   private initializeDefaultTemplates(): void {
     // Default templates are created in the database migration
     // This method would load them from the database in a real implementation
-  }
+
 
   private generateDecisionId(): string {
     return `decision_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateTemplateId(): string {
     return `template_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateHistoryId(): string {
     return `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   /**
    * Search and Discovery
@@ -682,7 +690,7 @@ export class Epic16DecisionRecordingService {
       decision.secondaryReasons.some(reason => reason.toLowerCase().includes(queryLower)) ||
       (decision.feedbackReceived && decision.feedbackReceived.toLowerCase().includes(queryLower))
     );
-  }
+
 
   async findPrecedentCases(
     contentType: string,
@@ -704,7 +712,7 @@ export class Epic16DecisionRecordingService {
       .filter(d => d.decisionStatus === 'final' || d.decisionStatus === 'upheld')
       .sort((a, b) => (b.confidenceLevel - a.confidenceLevel) || (b.createdAt.getTime() - a.createdAt.getTime()))
       .slice(0, limit);
-  }
+
 
   /**
    * Quality Assurance
@@ -727,15 +735,15 @@ export class Epic16DecisionRecordingService {
 
     this.decisions.set(decisionId, decision);
     return true;
-  }
+
 
   async getDecisionsForQualityReview(): Promise<ModerationDecision[]> {
 
     return Array.from(this.decisions.values())
       .filter(d => d.metadata.qualityReviewFlag)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  }
-}
+
+
 
 // Export singleton instance
 export const epic16DecisionRecordingService = Epic16DecisionRecordingService.getInstance();

@@ -12,8 +12,7 @@
  * - Error handling and user feedback
  * - Integration with existing security services
  */
-export declare enum ResetStep {
-    REQUEST = "request",
+export declare enum ResetStep { REQUEST = "request",
     VERIFY = "verify",
     RESET = "reset",
     SUCCESS = "success"
@@ -21,12 +20,12 @@ export declare enum ResetStep {
 export declare enum PasswordStrength {
     WEAK = "weak",
     FAIR = "fair",
-    GOOD = "good",
+    GOOD = "good" }
     STRONG = "strong"
 
 }
-export interface PasswordValidation {
-    isValid: boolean;
+}
+export interface PasswordValidation { isValid: boolean;
     strength: PasswordStrength;
     score: number;
     feedback: string[];
@@ -35,25 +34,24 @@ export interface PasswordValidation {
         uppercase: boolean;
         lowercase: boolean;
         numbers: boolean;
-        symbols: boolean;
+        symbols: boolean }
 }
     };
 
 }
-export interface ResetToken {
-    token: string;
-    tokenId: string;
-    expiresAt: Date;
-
 }
-export interface UsePasswordResetOptions {
-    onStepChange?: (step: ResetStep) => void;
+export interface ResetToken { token: string;
+    tokenId: string;
+    expiresAt: Date }
+}
+}
+export interface UsePasswordResetOptions { onStepChange?: (step: ResetStep) => void;
     onSecurityEvent?: (event: string, details: any) => void;
     onError?: (error: Error) => void;
     customValidation?: (password: string) => PasswordValidation;
     autoAdvance?: boolean;
-    resendCooldown?: number;
-
+    resendCooldown?: number }
+}
 }
 export interface UsePasswordResetReturn {
     currentStep: ResetStep;
@@ -87,4 +85,5 @@ export interface UsePasswordResetReturn {
 export declare const usePasswordReset: (options?: UsePasswordResetOptions) => UsePasswordResetReturn;
 export default usePasswordReset;
 //# sourceMappingURL=usePasswordReset.d.ts.map
+}
 }

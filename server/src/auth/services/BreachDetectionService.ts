@@ -6,8 +6,8 @@
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
-}
-}
+
+
 export interface SecurityEvent {
   id: string;
   userId: string;
@@ -19,9 +19,10 @@ export interface SecurityEvent {
   metadata: Record<string, any>;
   riskScore: number;
   actionTaken?: SecurityAction;
-}
-}
-}
+
+
+
+
 
 export enum SecurityEventType {
   LOGIN_SUCCESS = 'login_success',
@@ -37,14 +38,14 @@ export enum SecurityEventType {
   CREDENTIAL_STUFFING = 'credential_stuffing',
   ACCOUNT_TAKEOVER = 'account_takeover',
   DATA_BREACH_INDICATOR = 'data_breach_indicator'
-}
+
 
 export enum SecuritySeverity {
   LOW = 'low',
   MEDIUM = 'medium', 
   HIGH = 'high',
   CRITICAL = 'critical'
-}
+
 
 export enum SecurityAction {
   NONE = 'none',
@@ -54,10 +55,10 @@ export enum SecurityAction {
   LOCK_ACCOUNT = 'lock_account',
   BLOCK_IP = 'block_ip',
   FORCE_PASSWORD_RESET = 'force_password_reset'
-}
 
-}
-}
+
+
+
 interface RiskProfile {
   userId: string;
   baselineScore: number;
@@ -66,12 +67,13 @@ interface RiskProfile {
   trustedLocations: GeolocationData[];
   riskFactors: RiskFactor[];
   lastAssessment: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface DeviceFingerprint {
   id: string;
   userAgent: string;
@@ -84,39 +86,42 @@ interface DeviceFingerprint {
   trusted: boolean;
   firstSeen: Date;
   lastSeen: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface GeolocationData {
   ip: string;
   country: string;
   region: string;
   city: string;
-}
-}
+
+
+
   coordinates?: { lat: number; lng: number };
   isp: string;
   isVPN: boolean;
   isProxy: boolean;
   trusted: boolean;
-}
 
-}
-}
+
+
+
 interface RiskFactor {
   type: string;
   value: number;
   description: string;
   weight: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface BreachPattern {
   name: string;
   description: string;
@@ -125,9 +130,10 @@ interface BreachPattern {
   threshold: number;
   riskScore: number;
   action: SecurityAction;
-}
-}
-}
+
+
+
+
 
 export class BreachDetectionService extends EventEmitter {
   private riskProfiles: Map<string, RiskProfile> = new Map();
@@ -139,7 +145,7 @@ export class BreachDetectionService extends EventEmitter {
     super();
     this.initializeBreachPatterns();
     this.startBackgroundTasks();
-  }
+
 
   private initializeBreachPatterns() {
     this.breachPatterns = [
@@ -151,7 +157,7 @@ export class BreachDetectionService extends EventEmitter {
         threshold: 5,
         riskScore: 80,
         action: SecurityAction.BLOCK_IP
-  }
+
       {
         name: 'Credential Stuffing',
         description: 'Failed logins across multiple accounts from same source',
@@ -160,7 +166,7 @@ export class BreachDetectionService extends EventEmitter {
         threshold: 20,
         riskScore: 90,
         action: SecurityAction.BLOCK_IP
-  }
+
       {
         name: 'Account Takeover Pattern',
         description: 'Successful login followed by suspicious changes',
@@ -173,7 +179,7 @@ export class BreachDetectionService extends EventEmitter {
         threshold: 1,
         riskScore: 95,
         action: SecurityAction.LOCK_ACCOUNT
-  }
+
       {
         name: 'Location Anomaly',
         description: 'Login from geographically impossible location',
@@ -182,7 +188,7 @@ export class BreachDetectionService extends EventEmitter {
         threshold: 1,
         riskScore: 70,
         action: SecurityAction.REQUIRE_MFA
-  }
+
       {
         name: 'MFA Bypass Attempt',
         description: 'Multiple MFA failures followed by different method',
@@ -191,9 +197,9 @@ export class BreachDetectionService extends EventEmitter {
         threshold: 3,
         riskScore: 85,
         action: SecurityAction.LOCK_ACCOUNT
-      }
+
     ];
-  }
+
 
   private startBackgroundTasks() {
     // Clean up old events every hour
@@ -210,7 +216,7 @@ export class BreachDetectionService extends EventEmitter {
     setInterval(() => {
       this.detectBreachPatterns();
     }, 60 * 1000);
-  }
+
 
   async recordSecurityEvent(eventData: Omit<SecurityEvent, 'id' | 'timestamp' | 'riskScore'>): Promise<SecurityEvent> {
 
@@ -230,13 +236,13 @@ export class BreachDetectionService extends EventEmitter {
     const threatLevel = await this.assessThreatLevel(event);
     if (threatLevel >= 80) {
       await this.handleHighRiskEvent(event);
-    }
+
 
     // Emit event for real-time monitoring
     this.emit('securityEvent', event);
     
     return event;
-  }
+
 
   private async calculateRiskScore(eventData: Partial<SecurityEvent>): Promise<number> {
 
@@ -264,13 +270,13 @@ export class BreachDetectionService extends EventEmitter {
     // Check IP reputation
     if (this.ipBlacklist.has(eventData.sourceIP!)) {
       score += 50;
-    }
+
 
     // Check for VPN/Proxy
     const geoData = await this.getGeolocationData(eventData.sourceIP!);
     if (geoData.isVPN || geoData.isProxy) {
       score += 30;
-    }
+
 
     // Check device fingerprint
     const deviceRisk = await this.assessDeviceRisk(eventData.userId!, eventData.userAgent!);
@@ -286,7 +292,7 @@ export class BreachDetectionService extends EventEmitter {
     score += Math.min(failureRate * 10, 50);
 
     return Math.min(score, 100);
-  }
+
 
   private async assessThreatLevel(event: SecurityEvent): Promise<number> {
 
@@ -299,17 +305,17 @@ export class BreachDetectionService extends EventEmitter {
     const highRiskEvents = recentEvents.filter(e => e.riskScore >= 70);
     if (highRiskEvents.length >= 3) {
       threatLevel += 30;
-    }
+
 
     // Check for known attack patterns
     for (const pattern of this.breachPatterns) {
       if (this.matchesPattern(recentEvents, pattern)) {
         threatLevel = Math.max(threatLevel, pattern.riskScore);
-      }
-    }
+
+
 
     return Math.min(threatLevel, 100);
-  }
+
 
   private matchesPattern(events: SecurityEvent[], pattern: BreachPattern): boolean {
     const windowStart = new Date(Date.now() - pattern.timeWindow * 60 * 1000);
@@ -319,7 +325,7 @@ export class BreachDetectionService extends EventEmitter {
     );
 
     return relevantEvents.length >= pattern.threshold;
-  }
+
 
   private async handleHighRiskEvent(event: SecurityEvent): Promise<void> {
 
@@ -328,11 +334,11 @@ export class BreachDetectionService extends EventEmitter {
 
     if (event.riskScore >= 95) {
       action = SecurityAction.LOCK_ACCOUNT;
-    } else if (event.riskScore >= 85) {
+ else if (event.riskScore >= 85) {
       action = SecurityAction.REQUIRE_MFA;
-    } else if (event.riskScore >= 70) {
+ else if (event.riskScore >= 70) {
       action = SecurityAction.NOTIFY_USER;
-    }
+
 
     // Execute security action
     await this.executeSecurityAction(event.userId, action, event);
@@ -342,7 +348,7 @@ export class BreachDetectionService extends EventEmitter {
 
     // Emit high-risk event for immediate attention
     this.emit('highRiskEvent', event);
-  }
+
 
   private async executeSecurityAction(userId: string, action: SecurityAction, event: SecurityEvent): Promise<void> {
 
@@ -366,8 +372,8 @@ export class BreachDetectionService extends EventEmitter {
     case SecurityAction.FORCE_PASSWORD_RESET:
       await this.forcePasswordReset(userId);
       break;
-    }
-  }
+
+
 
   private async lockUserAccount(userId: string, eventId: string): Promise<void> {
 
@@ -383,32 +389,32 @@ export class BreachDetectionService extends EventEmitter {
       userAgent: 'BreachDetectionService',
       metadata: { reason: 'automated_lock', triggerEvent: eventId }
     });
-  }
+
 
   private async requireAdditionalMFA(userId: string): Promise<void> {
 
     console.log(`🛡️ SECURITY: Requiring additional MFA for user ${userId}`);
     // Implementation would update user session requirements
-  }
+
 
   private async notifyUserOfSuspiciousActivity(userId: string, event: SecurityEvent): Promise<void> {
 
     console.log(`📧 SECURITY: Notifying user ${userId} of suspicious activity`);
     // Implementation would send notification via email/SMS
-  }
+
 
   private async forcePasswordReset(userId: string): Promise<void> {
 
     console.log(`🔑 SECURITY: Forcing password reset for user ${userId}`);
     // Implementation would invalidate current password and require reset
-  }
+
 
   private getRecentEvents(userId: string, minutes: number): SecurityEvent[] {
     const cutoff = new Date(Date.now() - minutes * 60 * 1000);
     return this.securityEvents.filter(e => 
       e.userId === userId && e.timestamp >= cutoff
     );
-  }
+
 
   private async getGeolocationData(ip: string): Promise<GeolocationData> {
 
@@ -423,7 +429,7 @@ export class BreachDetectionService extends EventEmitter {
       isProxy: false,
       trusted: true
     };
-  }
+
 
   private async assessDeviceRisk(userId: string, userAgent: string): Promise<number> {
 
@@ -435,14 +441,14 @@ export class BreachDetectionService extends EventEmitter {
     
     if (!knownDevice) {
       return 40; // New device, higher risk
-    }
+
     
     return knownDevice.trusted ? 0 : 20;
-  }
+
 
   private hashUserAgent(userAgent: string): string {
     return crypto.createHash('sha256').update(userAgent).digest('hex');
-  }
+
 
   private async updateUserRiskProfile(userId: string, event: SecurityEvent): Promise<void> {
 
@@ -459,13 +465,13 @@ export class BreachDetectionService extends EventEmitter {
         lastAssessment: new Date()
       };
       this.riskProfiles.set(userId, profile);
-    }
+
 
     // Add event to recent events (keep last 100)
     profile.recentEvents.push(event);
     if (profile.recentEvents.length > 100) {
       profile.recentEvents.shift();
-    }
+
 
     // Update device fingerprint
     const deviceHash = this.hashUserAgent(event.userAgent);
@@ -486,12 +492,12 @@ export class BreachDetectionService extends EventEmitter {
         lastSeen: new Date()
       };
       profile.knownDevices.push(device);
-    } else {
+ else {
       device.lastSeen = new Date();
-    }
+
 
     profile.lastAssessment = new Date();
-  }
+
 
   private detectBreachPatterns(): void {
     for (const pattern of this.breachPatterns) {
@@ -506,9 +512,9 @@ export class BreachDetectionService extends EventEmitter {
           events: recentEvents,
           severity: SecuritySeverity.HIGH
         });
-      }
-    }
-  }
+
+
+
 
   private updateRiskProfiles(): void {
     for (const [userId, profile] of this.riskProfiles) {
@@ -519,23 +525,23 @@ export class BreachDetectionService extends EventEmitter {
       // Update baseline score based on recent activity
       const riskEvents = profile.recentEvents.filter(e => e.riskScore >= 50);
       profile.baselineScore = Math.min(20 + riskEvents.length * 5, 80);
-    }
-  }
+
+
 
   private cleanupOldEvents(): void {
     const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); // 7 days
     this.securityEvents = this.securityEvents.filter(e => e.timestamp >= cutoff);
-  }
+
 
   private generateEventId(): string {
     return `SEC-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  }
+
 
   // Public API methods
   async getUserRiskProfile(userId: string): Promise<RiskProfile | null> {
 
     return this.riskProfiles.get(userId) || null;
-  }
+
 
   async getSecurityEvents(userId: string, hours: number = 24): Promise<SecurityEvent[]> {
 
@@ -543,12 +549,12 @@ export class BreachDetectionService extends EventEmitter {
     return this.securityEvents.filter(e => 
       e.userId === userId && e.timestamp >= cutoff
     );
-  }
+
 
   async isIPBlacklisted(ip: string): Promise<boolean> {
 
     return this.ipBlacklist.has(ip);
-  }
+
 
   async getSecuritySummary(userId: string): Promise<{
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -556,7 +562,7 @@ export class BreachDetectionService extends EventEmitter {
     suspiciousActivity: boolean;
     breachDetected: boolean;
     recommendations: string[];
-  }> {
+> {
 
     const profile = this.riskProfiles.get(userId);
     const recentEvents = this.getRecentEvents(userId, 24);
@@ -572,10 +578,10 @@ export class BreachDetectionService extends EventEmitter {
     const recommendations: string[] = [];
     if (profile && profile.knownDevices.length > 5) {
       recommendations.push('Review and remove unused devices');
-    }
+
     if (highRiskEvents.length > 0) {
       recommendations.push('Enable additional MFA methods');
-    }
+
 
     return {
       riskLevel,
@@ -584,5 +590,4 @@ export class BreachDetectionService extends EventEmitter {
       breachDetected: criticalEvents.length > 0,
       recommendations
     };
-  }
-}
+

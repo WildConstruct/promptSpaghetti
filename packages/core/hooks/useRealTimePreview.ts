@@ -2,50 +2,47 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { WeightControlOption } from '../components/Inspector/WeightControlSlider';
 import { substituteVariables } from '../utils/templateParser';
 
-}
-export interface PreviewVariant {
-  id: string;
+
+export interface PreviewVariant { id: string;
   seed: number;
   result: string;
   timestamp: number;
   executionTime: number;
   weightSnapshot: WeightControlOption;
-  variables: Record<string, string>;
-}
-}
-}
-export interface PreviewPerformance {
-  averageExecutionTime: number;
+  variables: Record<string, string> }
+
+
+
+export interface PreviewPerformance { averageExecutionTime: number;
   totalGenerations: number;
   successRate: number;
-  lastUpdate: number;
-}
-}
-}
-export interface RealTimePreviewConfig {
-  maxVariants: number;
+  lastUpdate: number }
+
+
+
+export interface RealTimePreviewConfig { maxVariants: number;
   debounceMs: number;
   maxExecutionTime: number;
   enablePerformanceTracking: boolean;
   autoRefresh: boolean;
-  const DEFAULT_CONFIG: RealTimePreviewConfig = {,
-  maxVariants: 3,
-  debounceMs: 300,
-  maxExecutionTime: 2000,
-  enablePerformanceTracking: true,
-  autoRefresh: true,
-}
+  const DEFAULT_CONFIG: RealTimePreviewConfig = {;
+  maxVariants: 3;
+  debounceMs: 300;
+  maxExecutionTime: 2000;
+  enablePerformanceTracking: true;
+  autoRefresh: true }
+
+
 };
-}
-export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}) => {
-  // State
+
+export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}) => { // State
   const [variants, setVariants] = useState<PreviewVariant>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [performance, setPerformance] = useState<PreviewPerformance>({)
-  averageExecutionTime: 0,
-  totalGenerations: 0,
-  successRate: 100,
-  lastUpdate: Date.now(),
+  averageExecutionTime: 0
+  totalGenerations: 0
+  successRate: 100
+  lastUpdate: Date.now() }
 });
   const [error, setError] = useState<string | null>(null);
   // Refs for managing async operations
@@ -54,8 +51,8 @@ export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}
   const generationCounterRef = useRef(0);
   // Generate preview variants based on current weights and template
   const generatePreview = useCallback(async (;);
-    weights: WeightControlOption,
-    force: boolean = false): Promise<void> => {,
+    weights: WeightControlOption
+    force: boolean = false): Promise<void> => {
     if (!template.trim() || (!force && isGenerating)) {
       return;
     // Cancel any existing generation
@@ -70,13 +67,12 @@ export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}
     try {
       // Simulate weighted selection and generation
       const newVariants = await Promise.all(;);
-        Array.from({ length: fullConfig.maxVariants }, async (_, index) => {
-          const seed = Math.floor(Math.random() * 1000000);
+        Array.from({ length: fullConfig.maxVariants }, async (_, index) => { const seed = Math.floor(Math.random() * 1000000);
           // Perform weighted selection based on weights
           const selectedOptions = performWeightedSelection(weights, seed);
           // Substitute variables in template
           const substitutedTemplate = substituteVariables(template, {)
-  ...variables,
+  ...variables }
             ...selectedOptions
           });
           // Simulate generation delay (would be actual AI generation)
@@ -88,147 +84,120 @@ export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}
             throw new Error('Generation aborted');
           return {
             id: `variant_${generationId}_${index}`}
-}
-            seed,
-            result: substitutedTemplate,
-            timestamp: Date.now(),
-            executionTime: performance.now() - startTime,
+
+            seed
+            result: substitutedTemplate
+            timestamp: Date.now()
+            executionTime: performance.now() - startTime
             weightSnapshot: weights.map(w => ({ ...w })), // Deep copy
             variables: { ...variables, ...selectedOptions }
           };
-  }
+
       );
       // Update variants if this is still the current generation
-      if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
-  setVariants(newVariants);
+      if (!abortController.signal.aborted && generationId === generationCounterRef.current) { setVariants(newVariants);
   // Update performance metrics
   if (fullConfig.enablePerformanceTracking) {
   const executionTime = performance.now() - startTime;
   setPerformance(prev => ({)
-  averageExecutionTime: (prev.averageExecutionTime * prev.totalGenerations + executionTime) / (prev.totalGenerations + 1),
-  totalGenerations: prev.totalGenerations + 1,
-  successRate: ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1)),
-  lastUpdate: Date.now(),
+  averageExecutionTime: (prev.averageExecutionTime * prev.totalGenerations + executionTime) / (prev.totalGenerations + 1)
+  totalGenerations: prev.totalGenerations + 1
+  successRate: ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1))
+  lastUpdate: Date.now() }
 }));
-    } catch (err) {
-  if (!abortController.signal.aborted) {
+ catch (err) { if (!abortController.signal.aborted) {
   const errorMessage = err instanceof Error ? err.message : 'Unknown error';
   setError(errorMessage);
   // Update performance metrics for failed generation
   if (fullConfig.enablePerformanceTracking) {
   setPerformance(prev => ({)
-  ...prev,
-  successRate: (prev.successRate * prev.totalGenerations) / (prev.totalGenerations + 1),
-  totalGenerations: prev.totalGenerations + 1,
-  lastUpdate: Date.now(),
+  ...prev
+  successRate: (prev.successRate * prev.totalGenerations) / (prev.totalGenerations + 1)
+  totalGenerations: prev.totalGenerations + 1
+  lastUpdate: Date.now() }
 }));
-    } finally {
-      if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
-        setIsGenerating(false);
-  }, [template, variables, fullConfig, isGenerating]);
+ finally { if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
+        setIsGenerating(false) }, [template, variables, fullConfig, isGenerating]);
   // Debounced preview update for weight changes
-  const requestPreview = useCallback((weights: WeightControlOption) => {
-    if (!fullConfig.autoRefresh) return;
+  const requestPreview = useCallback((weights: WeightControlOption) => { if (!fullConfig.autoRefresh) return;
     // Clear existing debounce timeout
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     // Set new debounced timeout
     debounceTimeoutRef.current = setTimeout(() => {
-      generatePreview(weights);
-    }, fullConfig.debounceMs);
+      generatePreview(weights) }, fullConfig.debounceMs);
   }, [generatePreview, fullConfig]);
   // Force immediate preview generation
-  const forcePreview = useCallback((weights: WeightControlOption) => {
-    // Clear any pending debounced calls
+  const forcePreview = useCallback((weights: WeightControlOption) => { // Clear any pending debounced calls
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
       debounceTimeoutRef.current = null;
-    generatePreview(weights, true);
-  }, [generatePreview]);
+    generatePreview(weights, true) }, [generatePreview]);
   // Refresh single variant
-  const refreshVariant = useCallback(async (variantId: string): Promise<void> => {
-    const variant = variants.find(v => v.id === variantId);
+  const refreshVariant = useCallback(async (variantId: string): Promise<void> => { const variant = variants.find(v => v.id === variantId);
     if (!variant) return;
     setIsGenerating(true);
     try {
       const startTime = performance.now();
       const selectedOptions = performWeightedSelection(variant.weightSnapshot, variant.seed + 1);
       const substitutedTemplate = substituteVariables(template, {)
-  ...variables,
+  ...variables }
         ...selectedOptions
       });
       await new Promise(resolve => setTimeout(resolve, 100)); // Simulate generation
-      const updatedVariant: PreviewVariant = {
-        ...variant,
-        result: substitutedTemplate,
-        timestamp: Date.now(),
-        executionTime: performance.now() - startTime,
+      const updatedVariant: PreviewVariant = { ...variant
+        result: substitutedTemplate
+        timestamp: Date.now()
+        executionTime: performance.now() - startTime }
         variables: { ...variables, ...selectedOptions }
       };
       setVariants(prev => prev.map(v => v.id === variantId ? updatedVariant : v));
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to refresh variant');
-} finally {
-      setIsGenerating(false);
-  }, [variants, template, variables]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to refresh variant') } finally { setIsGenerating(false) }, [variants, template, variables]);
   // Get variant by ID
-  const getVariant = useCallback((variantId: string) => {
-    return variants.find(v => v.id === variantId);
-  }, [variants]);
+  const getVariant = useCallback((variantId: string) => { return variants.find(v => v.id === variantId) }, [variants]);
   // Get performance insights
-  const getPerformanceInsights = useCallback(() => {
-  const insights: string = [];
+  const getPerformanceInsights = useCallback(() => { const insights: string = [];
   if (performance.averageExecutionTime > 1000) {
-  insights.push('⚠️ Slow generation times detected');
-} else if (performance.averageExecutionTime < 200) {
-      insights.push('⚡ Fast generation performance');
+  insights.push('⚠️ Slow generation times detected') } else if (performance.averageExecutionTime < 200) { insights.push('⚡ Fast generation performance');
     if (performance.successRate < 95) {
-      insights.push('❌ High error rate detected');
-    } else if (performance.successRate === 100) {
-      insights.push('✅ Perfect success rate');
+      insights.push('❌ High error rate detected') } else if (performance.successRate === 100) { insights.push('✅ Perfect success rate');
     if (performance.totalGenerations > 50) {
       insights.push('📊 Extensive testing performed');
-    return insights;
-  }, [performance]);
+    return insights }, [performance]);
   // Export variants for VFX pipeline
-  const exportVariants = useCallback(() => {
-  return {
+  const exportVariants = useCallback(() => { return {
   template,
   variables,
-  variants: variants.map(v => ({)
+  variants: variants.map(v => ({),
   seed: v.seed,
   result: v.result,
   weights: v.weightSnapshot,
   variables: v.variables,
   timestamp: v.timestamp,
-  executionTime: v.executionTime,
+  executionTime: v.executionTime }
 })),
       performance,
       exportTimestamp: Date.now();
   };
   }, [template, variables, variants, performance]);
   // Clear all variants
-  const clearVariants = useCallback(() => {
-  setVariants([]);
+  const clearVariants = useCallback(() => { setVariants([]);
   setError(null);
   setPerformance({)
   averageExecutionTime: 0,
   totalGenerations: 0,
   successRate: 100,
-  lastUpdate: Date.now(),
+  lastUpdate: Date.now() }
 });
   }, []);
   // Cleanup on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(() => { return () => {
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
       if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-    };
+        abortControllerRef.current.abort() };
   }, []);
-  return {
-  variants,
+  return { variants,
   isGenerating,
   performance,
   error,
@@ -242,7 +211,7 @@ export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}
   getPerformanceInsights,
   exportVariants,
   // Config
-  config: fullConfig,
+  config: fullConfig }
 };
 };
 
@@ -268,12 +237,10 @@ const performWeightedSelection = (;);
 };
 
 // Simple seeded random number generator
-const createSeededRandom = (seed: number) => {
-  let x = seed;
+const createSeededRandom = (seed: number) => { let x = seed;
   return () => {
     x = (x * 9301 + 49297) % 233280;
-    return x / 233280;
-  };
+    return x / 233280 };
 };
 
 // Export types for use in other components

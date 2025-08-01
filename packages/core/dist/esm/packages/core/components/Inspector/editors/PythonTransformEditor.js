@@ -4,11 +4,11 @@ import { TextFieldEditor } from '../TextFieldEditor';
 import { TextAreaEditor } from '../TextAreaEditor';
 import { SelectEditor } from '../SelectEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-const COMMON_MODULES = [];
-'json', 'math', 'datetime', 'random', 'string', 'itertools',
+const COMMON_MODULES = [
+    'json', 'math', 'datetime', 'random', 'string', 'itertools',
     'collections', 'functools', 'operator', 'copy', 'uuid', 'hashlib',
-    're', 'base64', 'urllib.parse';
-;
+    're', 'base64', 'urllib.parse'
+];
 export const PythonTransformEditor = (props) => {
     const { nodeData, onChange } = props;
     // Python specific fields
@@ -25,15 +25,18 @@ export const PythonTransformEditor = (props) => {
     const defaultOutput = pythonConfig.defaultOutput || '';
     // No manual collapse state needed - managed by ProgressiveDisclosureSection
     // State for validation
-    const [codeValidation, setCodeValidation] = useState(null);
+    const [codeValidation, setCodeValidation] = useState < {
+        valid: boolean,
+        errors: string,
+        warnings: string
+    } | null > (null);
     const [isValidating, setIsValidating] = useState(false);
     const handleFieldChange = (field, value) => {
         onChange({ [field]: value });
     };
     const handlePythonConfigChange = (field, value) => {
         onChange({});
-        pythonConfig: {
-        }
+        pythonConfig: { }
     };
 };
 pythonConfig,
@@ -79,95 +82,95 @@ const addCustomModule = () => {
             if (!code.includes('def transform(')) {
                 errors.push('Code must define a transform function');
                 // Check for dangerous patterns
-                const dangerousPatterns = [];
-                'eval(', 'exec(', '__import__', 'open(', 'file(';
-                'subprocess', 'os.system', 'socket.', 'urllib.';
+                const dangerousPatterns = [
+                    'eval(', 'exec(', '__import__', 'open(', 'file(',
+                    'subprocess', 'os.system', 'socket.', 'urllib.'
+                ];
+                for (const pattern of dangerousPatterns) {
+                    if (code.includes(pattern)) {
+                        warnings.push(`Potentially dangerous pattern detected: ${pattern}`);
+                    }
+                    // Check for infinite loops
+                    if (code.includes('while True:')) {
+                        warnings.push('Potential infinite loop detected');
+                        setCodeValidation({});
+                        valid: errors.length === 0,
+                            errors,
+                            warnings;
+                    }
+                    ;
+                }
+                try { }
+                catch (error) {
+                    setCodeValidation({});
+                    valid: false,
+                        errors;
+                    ['Validation service unavailable'],
+                        warnings;
+                    [],
+                    ;
+                }
+                ;
             }
+            try { }
+            finally {
+                setIsValidating(false);
+            }
+            ;
+            const getCodeEditorStyles = () => {
+                const baseStyles = {
+                    fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+                    fontSize: 12,
+                    lineHeight: 1.4,
+                    padding: 12,
+                    border: '1px solid #4a5568',
+                    borderRadius: 4,
+                    background: '#1a202c',
+                    color: '#e2e8f0',
+                    resize: 'vertical',
+                    minHeight: 200,
+                    maxHeight: 400,
+                };
+                if (codeValidation && !codeValidation.valid) {
+                    return { ...baseStyles, borderColor: '#e53e3e' };
+                    return baseStyles;
+                }
+                ;
+                return;
+                _jsx("div", { className: "python-transform-editor", children: _jsxs(ProgressiveDisclosureSection, { title: "Python Code", level: "basic", description: "Write Python functions to transform your story data", defaultExpanded: true, priority: "critical", fieldName: "code", children: [_jsx("div", { style: { marginBottom: 8 }, children: _jsxs("div", { style: {
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        marginBottom: 8,
+                                    }, children: [_jsx("label", { style: {
+                                                fontWeight: 500,
+                                                color: '#e2e8f0',
+                                                fontSize: 12,
+                                            }, children: "Transform Function" }), _jsxs("div", { style: { display: 'flex', gap: 8 }, children: [isValidating && ()
+                                                    < span, " style=", { fontSize: 10, color: '#4299e1' }, "> Validating..."] }), ")}", _jsx("button", { onClick: validateCode, disabled: isValidating, style: {
+                                                padding: '4px 8px',
+                                                fontSize: 10,
+                                                background: '#4299e1',
+                                                border: 'none',
+                                                borderRadius: 2,
+                                                color: 'white',
+                                                cursor: 'pointer',
+                                                opacity: isValidating ? 0.5 : 1,
+                                            }, children: "Validate" })] }) }), _jsx("textarea", { value: code, onChange: (e) => handleFieldChange('code', e.target.value), placeholder: "def transform(input_data):\\n    # Your Python code here\\n    return input_data", style: getCodeEditorStyles() }), codeValidation && ()
+                                < div, " style=", { marginTop: 8 }, ">", codeValidation.errors.length > 0 && ()
+                                < div, " style=", {
+                                background: 'rgba(229, 62, 62, 0.1)',
+                                border: '1px solid #e53e3e',
+                                borderRadius: 4,
+                                padding: 8,
+                                marginBottom: 8,
+                            }, ">", _jsx("div", { style: { color: '#e53e3e', fontSize: 10, fontWeight: 500, marginBottom: 4 }, children: "Validation Errors:" }), codeValidation.errors.map((error, index) => ()
+                                < div, key = { index }, style = {}, { color: '#e53e3e', fontSize: 10 }), "> \u2022 ", error] }) });
+            };
         }
         finally {
         }
     };
-};
-;
-for (const pattern of dangerousPatterns) {
-    if (code.includes(pattern)) {
-        warnings.push(`Potentially dangerous pattern detected: ${pattern}`);
-    }
-    // Check for infinite loops
-    if (code.includes('while True:')) {
-        warnings.push('Potential infinite loop detected');
-        setCodeValidation({});
-        valid: errors.length === 0,
-            errors,
-            warnings;
-    }
-    ;
-}
-try { }
-catch (error) {
-    setCodeValidation({});
-    valid: false,
-        errors;
-    ['Validation service unavailable'],
-        warnings;
-    [],
-    ;
-}
-;
-try { }
-finally {
-    setIsValidating(false);
-}
-;
-const getCodeEditorStyles = () => {
-    const baseStyles = {
-        fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
-        fontSize: 12,
-        lineHeight: 1.4,
-        padding: 12,
-        border: '1px solid #4a5568',
-        borderRadius: 4,
-        background: '#1a202c',
-        color: '#e2e8f0',
-        resize: 'vertical',
-        minHeight: 200,
-        maxHeight: 400,
-    };
-    if (codeValidation && !codeValidation.valid) {
-        return { ...baseStyles, borderColor: '#e53e3e' };
-        return baseStyles;
-    }
-    ;
-    return;
-    _jsx("div", { className: "python-transform-editor", children: _jsxs(ProgressiveDisclosureSection, { title: "Python Code", level: "basic", description: "Write Python functions to transform your story data", defaultExpanded: true, priority: "critical", fieldName: "code", children: [_jsx("div", { style: { marginBottom: 8 }, children: _jsxs("div", { style: {
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginBottom: 8,
-                        }, children: [_jsx("label", { style: {
-                                    fontWeight: 500,
-                                    color: '#e2e8f0',
-                                    fontSize: 12,
-                                }, children: "Transform Function" }), _jsxs("div", { style: { display: 'flex', gap: 8 }, children: [isValidating && ()
-                                        < span, " style=", { fontSize: 10, color: '#4299e1' }, "> Validating..."] }), ")}", _jsx("button", { onClick: validateCode, disabled: isValidating, style: {
-                                    padding: '4px 8px',
-                                    fontSize: 10,
-                                    background: '#4299e1',
-                                    border: 'none',
-                                    borderRadius: 2,
-                                    color: 'white',
-                                    cursor: 'pointer',
-                                    opacity: isValidating ? 0.5 : 1,
-                                }, children: "Validate" })] }) }), _jsx("textarea", { value: code, onChange: (e) => handleFieldChange('code', e.target.value), placeholder: "def transform(input_data):\\n    # Your Python code here\\n    return input_data", style: getCodeEditorStyles() }), codeValidation && ()
-                    < div, " style=", { marginTop: 8 }, ">", codeValidation.errors.length > 0 && ()
-                    < div, " style=", {
-                    background: 'rgba(229, 62, 62, 0.1)',
-                    border: '1px solid #e53e3e',
-                    borderRadius: 4,
-                    padding: 8,
-                    marginBottom: 8,
-                }, ">", _jsx("div", { style: { color: '#e53e3e', fontSize: 10, fontWeight: 500, marginBottom: 4 }, children: "Validation Errors:" }), codeValidation.errors.map((error, index) => ()
-                    < div, key = { index }, style = {}, { color: '#e53e3e', fontSize: 10 }), "> \u2022 ", error] }) });
 };
 div >
 ;

@@ -5,8 +5,9 @@ import { AnalyticsEventType } from './AnalyticsCollector';
 /**
  * User journey path segment
  */
-}
-}
+
+
+
 export interface JourneySegment {
   step: number;
   eventType: AnalyticsEventType;
@@ -15,15 +16,17 @@ export interface JourneySegment {
   timestamp: number;
   duration?: number;
   metadata?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Complete user journey
  */
-}
-}
+
+
+
 export interface UserJourney {
   journeyId: string;
   sessionId: string;
@@ -35,15 +38,17 @@ export interface UserJourney {
   outcome: 'completed' | 'abandoned' | 'error';
   conversionEvents: string[];
   dropoffPoint?: number;
-}
-}
-}
+
+
+
+
 
 /**
  * User journey pattern
  */
-}
-}
+
+
+
 export interface JourneyPattern {
   patternId: string;
   name: string;
@@ -53,21 +58,23 @@ export interface JourneyPattern {
   successRate: number;
   averageDuration: number;
   conversionRate: number;
-}
-}
+
+
+
   dropoffPoints: Array<{ step: number; rate: number }>;
   variants: Array<{
     path: string[];
     frequency: number;
     successRate: number;
-  }>;
-}
+>;
+
 
 /**
  * Funnel analysis result
  */
-}
-}
+
+
+
 export interface FunnelAnalysis {
   funnelId: string;
   name: string;
@@ -78,9 +85,10 @@ export interface FunnelAnalysis {
     conversionRate: number;
     dropoffRate: number;
     averageTimeToNext?: number;
-}
-}
-  }>;
+
+
+
+>;
   overallConversionRate: number;
   totalUsers: number;
   completedUsers: number;
@@ -89,13 +97,14 @@ export interface FunnelAnalysis {
     p95: number;
     average: number;
   };
-}
+
 
 /**
  * User flow analysis
  */
-}
-}
+
+
+
 export interface UserFlow {
   flowId: string;
   sourceStep: string;
@@ -104,9 +113,10 @@ export interface UserFlow {
   percentage: number;
   averageTime: number;
   successRate: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Advanced user journey analysis system
@@ -119,7 +129,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
   constructor(analyticsDAO: AnalyticsDAO) {
     super();
     this.analyticsDAO = analyticsDAO;
-  }
+
 
   /**
    * Analyze user journeys for a time period
@@ -133,7 +143,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
     
     if (this.journeyCache.has(cacheKey)) {
       return this.journeyCache.get(cacheKey)!;
-    }
+
 
     const journeys = this.buildUserJourneys(startTime, endTime, filters);
     this.journeyCache.set(cacheKey, journeys);
@@ -144,7 +154,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
     }, 300000);
 
     return journeys;
-  }
+
 
   /**
    * Identify common journey patterns
@@ -163,7 +173,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
       
       if (!pathGroups.has(pathKey)) {
         pathGroups.set(pathKey, []);
-      }
+
       pathGroups.get(pathKey)!.push(journey);
     });
 
@@ -178,11 +188,11 @@ export class UserJourneyAnalyzer extends EventEmitter {
           journeyGroup
         );
         patterns.push(pattern);
-      }
+
     });
 
     return patterns.sort((a, b) => b.frequency - a.frequency);
-  }
+
 
   /**
    * Perform funnel analysis
@@ -192,7 +202,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
       stepName: string;
       eventType: AnalyticsEventType;
       component?: string;
-    }>,
+>,
     startTime: number,
     endTime: number,
     filters?: AnalyticsFilters
@@ -209,7 +219,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
       completedUsers: funnelData.completedUsers,
       timeToComplete: funnelData.timeToComplete
     };
-  }
+
 
   /**
    * Analyze user flows between steps
@@ -239,15 +249,15 @@ export class UserJourneyAnalyzer extends EventEmitter {
             averageTime: 0,
             successRate: 0
           });
-        }
+
 
         const flow = flowMap.get(flowKey)!;
         flow.userCount++;
         
         if (nextSegment.duration) {
           flow.averageTime = (flow.averageTime + nextSegment.duration) / 2;
-        }
-      }
+
+
     });
 
     const flows = Array.from(flowMap.values());
@@ -259,7 +269,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
     });
 
     return flows.sort((a, b) => b.userCount - a.userCount);
-  }
+
 
   /**
    * Find common drop-off points
@@ -274,7 +284,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
     dropoffRate: number;
     affectedUsers: number;
     commonReasons: string[];
-  }> {
+> {
     const stepDropoffs = new Map<string, number>();
     const stepTotals = new Map<string, number>();
     
@@ -284,8 +294,8 @@ export class UserJourneyAnalyzer extends EventEmitter {
         if (segment) {
           const stepKey = `${segment.step}:${segment.eventType}:${segment.component}`;
           stepDropoffs.set(stepKey, (stepDropoffs.get(stepKey) || 0) + 1);
-        }
-      }
+
+
       
       journey.segments.forEach(segment => {
         const stepKey = `${segment.step}:${segment.eventType}:${segment.component}`;
@@ -300,7 +310,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
       dropoffRate: number;
       affectedUsers: number;
       commonReasons: string[];
-    }> = [];
+> = [];
 
     stepDropoffs.forEach((dropoffCount, stepKey) => {
       const total = stepTotals.get(stepKey) || 0;
@@ -316,11 +326,11 @@ export class UserJourneyAnalyzer extends EventEmitter {
           affectedUsers: dropoffCount,
           commonReasons: [] // Would analyze error patterns for reasons
         });
-      }
+
     });
 
     return dropoffPoints.sort((a, b) => b.dropoffRate - a.dropoffRate);
-  }
+
 
   /**
    * Generate journey optimization recommendations
@@ -336,7 +346,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
     affectedUsers: number;
     potentialImpact: number;
     actionItems: string[];
-  }> {
+> {
     const recommendations: Array<any> = [];
 
     // Analyze high-dropoff points
@@ -356,7 +366,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
             'Provide better guidance or tooltips'
           ]
         });
-      }
+
     });
 
     // Analyze successful patterns
@@ -376,7 +386,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
           'Create tutorials for optimal paths'
         ]
       });
-    }
+
 
     // Analyze conversion opportunities
     const lowConversionPatterns = patterns.filter(p => p.conversionRate < 0.5);
@@ -395,13 +405,13 @@ export class UserJourneyAnalyzer extends EventEmitter {
           'Reduce cognitive load'
         ]
       });
-    }
+
 
     return recommendations.sort((a, b) => {
       const priorityOrder = { high: 3, medium: 2, low: 1 };
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
-  }
+
 
   /**
    * Build user journeys from raw analytics data
@@ -423,7 +433,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
     events.forEach(event => {
       if (!sessionMap.has(event.sessionId)) {
         sessionMap.set(event.sessionId, []);
-      }
+
       sessionMap.get(event.sessionId)!.push(event);
     });
 
@@ -436,11 +446,11 @@ export class UserJourneyAnalyzer extends EventEmitter {
       if (sessionEvents.length > 0) {
         const journey = this.createUserJourney(sessionId, sessionEvents);
         journeys.push(journey);
-      }
+
     });
 
     return journeys;
-  }
+
 
   /**
    * Create user journey from session events
@@ -463,19 +473,19 @@ export class UserJourneyAnalyzer extends EventEmitter {
       // Calculate duration to next event
       if (index < events.length - 1) {
         segment.duration = events[index + 1].timestamp - event.timestamp;
-      }
+
 
       segments.push(segment);
 
       // Track conversion events
       if (this.isConversionEvent(event.type)) {
         conversionEvents.push(event.type);
-      }
+
 
       // Detect dropoff point
       if (event.type.includes('error') && !dropoffPoint) {
         dropoffPoint = index;
-      }
+
     });
 
     const startTime = events[0].timestamp;
@@ -486,9 +496,9 @@ export class UserJourneyAnalyzer extends EventEmitter {
     let outcome: 'completed' | 'abandoned' | 'error' = 'completed';
     if (dropoffPoint !== undefined) {
       outcome = 'error';
-    } else if (conversionEvents.length === 0 && totalDuration < 10000) {
+ else if (conversionEvents.length === 0 && totalDuration < 10000) {
       outcome = 'abandoned';
-    }
+
 
     return {
       journeyId: `journey_${sessionId}_${startTime}`,
@@ -502,7 +512,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
       conversionEvents,
       dropoffPoint
     };
-  }
+
 
   /**
    * Create journey pattern from grouped journeys
@@ -533,7 +543,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
       
       if (journey.dropoffPoint) {
         stepDropoffs.set(journey.dropoffPoint, (stepDropoffs.get(journey.dropoffPoint) || 0) + 1);
-      }
+
     });
 
     stepDropoffs.forEach((dropoffCount, step) => {
@@ -543,7 +553,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
           step,
           rate: dropoffCount / totalAtStep
         });
-      }
+
     });
 
     return {
@@ -558,7 +568,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
       dropoffPoints,
       variants: [] // Would group similar patterns as variants
     };
-  }
+
 
   /**
    * Build funnel data from journeys
@@ -569,7 +579,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
       stepName: string;
       eventType: AnalyticsEventType;
       component?: string;
-    }>
+>
   ): any {
     const stepUsers = new Map<number, Set<string>>();
     const stepTimings = new Map<number, number[]>();
@@ -596,12 +606,12 @@ export class UserJourneyAnalyzer extends EventEmitter {
             if (currentStep > 0) {
               const timeToStep = segment.timestamp - stepStartTime;
               stepTimings.get(currentStep)!.push(timeToStep);
-            }
+
             
             stepStartTime = segment.timestamp;
             currentStep++;
-          }
-        }
+
+
       });
     });
 
@@ -647,9 +657,9 @@ export class UserJourneyAnalyzer extends EventEmitter {
         median,
         p95,
         average
-      }
+
     };
-  }
+
 
   /**
    * Check if event type represents a conversion
@@ -660,5 +670,4 @@ export class UserJourneyAnalyzer extends EventEmitter {
       AnalyticsEventType.CONVERSION_EVENT
     ];
     return conversionEvents.includes(eventType);
-  }
-}
+

@@ -115,71 +115,80 @@ export function useCollaborativeReactFlow() {
     const getUserCursors = useCallback(() => {
         if (!isCollaborative)
             return [];
-        const cursors = [];
-        connectedUsers.forEach((user, userId) => {
-            if (user.cursor?.position && userId !== localPresence?.userId) {
-                cursors.push({
-                    userId,
-                    user,
-                    position: user.cursor.position,
-                    nodeId: user.cursor.nodeId,
-                });
-            }
-        });
-        return cursors;
-    }, [isCollaborative, connectedUsers, localPresence]);
-    // Get selected nodes by other users
-    const getRemoteSelections = useCallback(() => {
-        if (!isCollaborative)
-            return new Map();
-        const selections = new Map();
-        connectedUsers.forEach((user, userId) => {
-            if (user.selection && userId !== localPresence?.userId) {
-                user.selection.forEach(nodeId => {
-                    if (!selections.has(nodeId)) {
-                        selections.set(nodeId, []);
-                    }
-                    selections.get(nodeId).push(user);
-                });
-            }
-        });
-        return selections;
-    }, [isCollaborative, connectedUsers, localPresence]);
-    // Update React Flow viewport when needed
-    useEffect(() => {
-        if (reactFlowInstance && flowNodes.length > 0) {
-            // Fit view when nodes are first loaded
-            setTimeout(() => {
-                reactFlowInstance.fitView({ padding: 0.1 });
-            }, 100);
+        const cursors, string;
+        user: UserPresence;
+        position: {
+            x: number;
+            y: number;
         }
-    }, [reactFlowInstance, flowNodes.length]);
-    return {
-        // React Flow props
-        nodes: flowNodes,
-        edges: flowEdges,
-        onNodesChange,
-        onEdgesChange,
-        onConnect,
-        onNodeDrag,
-        onSelectionChange,
-        onPaneClick,
-        // Collaboration-specific actions
-        enableCollaboration,
-        disableCollaboration,
-        addNodeAtPosition,
-        // Collaboration state
-        isCollaborative,
-        collaborationEnabled,
-        connectionStatus,
-        connectedUsers,
-        // Presence and cursors
-        getUserCursors,
-        getRemoteSelections,
-        // Utility
-        isConnected: connectionStatus === 'connected',
-    };
+        ;
+        nodeId ?  : string;
+    },  > , []);
+    connectedUsers.forEach((user, userId) => {
+        if (user.cursor?.position && userId !== localPresence?.userId) {
+            cursors.push({
+                userId,
+                user,
+                position: user.cursor.position,
+                nodeId: user.cursor.nodeId,
+            });
+        }
+    });
+    return cursors;
 }
+[isCollaborative, connectedUsers, localPresence];
+;
+// Get selected nodes by other users
+const getRemoteSelections = useCallback(() => {
+    if (!isCollaborative)
+        return new Map();
+    const selections = new Map();
+    connectedUsers.forEach((user, userId) => {
+        if (user.selection && userId !== localPresence?.userId) {
+            user.selection.forEach(nodeId => {
+                if (!selections.has(nodeId)) {
+                    selections.set(nodeId, []);
+                }
+                selections.get(nodeId).push(user);
+            });
+        }
+    });
+    return selections;
+}, [isCollaborative, connectedUsers, localPresence]);
+// Update React Flow viewport when needed
+useEffect(() => {
+    if (reactFlowInstance && flowNodes.length > 0) {
+        // Fit view when nodes are first loaded
+        setTimeout(() => {
+            reactFlowInstance.fitView({ padding: 0.1 });
+        }, 100);
+    }
+}, [reactFlowInstance, flowNodes.length]);
+return {
+    // React Flow props
+    nodes: flowNodes,
+    edges: flowEdges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    onNodeDrag,
+    onSelectionChange,
+    onPaneClick,
+    // Collaboration-specific actions
+    enableCollaboration,
+    disableCollaboration,
+    addNodeAtPosition,
+    // Collaboration state
+    isCollaborative,
+    collaborationEnabled,
+    connectionStatus,
+    connectedUsers,
+    // Presence and cursors
+    getUserCursors,
+    getRemoteSelections,
+    // Utility
+    isConnected: connectionStatus === 'connected',
+};
 /**
  * Get users who are currently interacting with a specific node
  */

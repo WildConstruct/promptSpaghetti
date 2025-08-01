@@ -4,12 +4,12 @@ import {
   AnalyticsEventSchema,
   AnalyticsQuerySchema,
   CustomReportSchema,
-} from './analytics.types';
+ from './analytics.types';
 export class AnalyticsService {
   db;
   constructor(db) {
     this.db = db;
-  }
+
   // Event Tracking
   async trackEvent(eventData) {
     const validatedData = AnalyticsEventSchema.parse(eventData);
@@ -27,7 +27,7 @@ export class AnalyticsService {
       ]
     );
     return this.mapEventRow(event);
-  }
+
   async batchTrackEvents(events) {
     const validatedEvents = events.map(event => AnalyticsEventSchema.parse(event));
     const values = validatedEvents
@@ -51,14 +51,14 @@ export class AnalyticsService {
       params
     );
     return results.map(this.mapEventRow);
-  }
+
   // Query Analytics Data
   async queryAnalytics(queryInput) {
     const query = AnalyticsQuerySchema.parse(queryInput);
     const { sql, params } = this.buildAnalyticsQuery(query);
     const results = await this.db.query(sql, params);
     return results;
-  }
+
   // Template Metrics
   async getTemplateMetrics(templateId, timeRange, startDate, endDate) {
     const { start, end } = this.getTimeRangeDates(timeRange, startDate, endDate);
@@ -107,7 +107,7 @@ export class AnalyticsService {
       demographics,
       trends,
     };
-  }
+
   // Creator Dashboard
   async getCreatorDashboard(creatorId, timeRange, startDate, endDate) {
     const { start, end } = this.getTimeRangeDates(timeRange, startDate, endDate);
@@ -116,7 +116,7 @@ export class AnalyticsService {
     const templateIds = templates.map(t => t.id);
     if (templateIds.length === 0) {
       return this.getEmptyCreatorDashboard(creatorId, timeRange, start, end);
-    }
+
     // Get overview metrics
     const overview = await this.getCreatorOverview(templateIds, start, end);
     // Get performance summary
@@ -135,7 +135,7 @@ export class AnalyticsService {
       traffic_metrics: trafficMetrics,
       financial_metrics: financialMetrics,
     };
-  }
+
   // Custom Reports
   async createCustomReport(creatorId, reportData) {
     const validatedData = CustomReportSchema.parse(reportData);
@@ -154,18 +154,18 @@ export class AnalyticsService {
       ]
     );
     return this.mapReportRow(report);
-  }
+
   async getCustomReports(creatorId) {
     const reports = await this.db.query('SELECT * FROM custom_reports WHERE creator_id = $1 ORDER BY created_at DESC', [
       creatorId,
     ]);
     return reports.map(this.mapReportRow);
-  }
+
   async generateReport(reportId) {
     const [report] = await this.db.query('SELECT * FROM custom_reports WHERE id = $1', [reportId]);
     if (!report) {
       throw new Error('Report not found');
-    }
+
     const configuration = JSON.parse(report.configuration);
     const results = await this.queryAnalytics(configuration.query);
     return {
@@ -174,7 +174,7 @@ export class AnalyticsService {
       data: results,
       configuration: configuration.visualization,
     };
-  }
+
   // Analytics Insights
   async generateInsights(creatorId, templateIds) {
     const insights = [];
@@ -188,7 +188,7 @@ export class AnalyticsService {
     const opportunityInsights = await this.findOpportunities(creatorId, templateIds);
     insights.push(...opportunityInsights);
     return insights;
-  }
+
   // Helper Methods
   buildAnalyticsQuery(query) {
     let sql = 'SELECT ';
@@ -207,25 +207,25 @@ export class AnalyticsService {
           return `COUNT(DISTINCT CASE WHEN event_type = '${metric}' THEN user_id END) as ${metric}_unique`;
         default:
           return `COUNT(CASE WHEN event_type = '${metric}' THEN 1 END) as ${metric}_count`;
-      }
+
     });
     sql += metricSelects.join(', ');
     // Group by fields
     if (query.group_by && query.group_by.length > 0) {
       sql += ', ' + query.group_by.join(', ');
-    }
+
     sql += ' FROM analytics_events WHERE 1=1';
     // Add filters
     if (query.creator_id) {
       sql += ` AND template_id IN (SELECT id FROM templates WHERE creator_id = $${paramIndex})`;
       params.push(query.creator_id);
       paramIndex++;
-    }
+
     if (query.template_ids && query.template_ids.length > 0) {
       sql += ` AND template_id = ANY($${paramIndex})`;
       params.push(query.template_ids);
       paramIndex++;
-    }
+
     // Time range
     const { start, end } = this.getTimeRangeDates(query.time_range, query.start_date, query.end_date);
     sql += ` AND timestamp BETWEEN $${paramIndex} AND $${paramIndex + 1}`;
@@ -237,26 +237,26 @@ export class AnalyticsService {
         sql += ` AND metadata->>'location'->>'country' = ANY($${paramIndex})`;
         params.push(query.filters.countries);
         paramIndex++;
-      }
+
       if (query.filters.device_types && query.filters.device_types.length > 0) {
         sql += ` AND metadata->>'device_type' = ANY($${paramIndex})`;
         params.push(query.filters.device_types);
         paramIndex++;
-      }
-    }
+
+
     // Group by
     if (query.group_by && query.group_by.length > 0) {
       sql += ' GROUP BY ' + query.group_by.join(', ');
-    }
+
     // Sort
     if (query.sort) {
       sql += ` ORDER BY ${query.sort.field} ${query.sort.direction}`;
-    }
+
     // Limit and offset
     sql += ` LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
     params.push(query.limit || 100, query.offset || 0);
     return { sql, params };
-  }
+
   getTimeRangeDates(timeRange, startDate, endDate) {
     const end = endDate || new Date();
     let start;
@@ -284,9 +284,9 @@ export class AnalyticsService {
         break;
       default:
         start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
-    }
+
     return { start, end };
-  }
+
   async getTemplateDemographics(templateId, start, end) {
     // Implementation for demographics data
     const [countriesData, devicesData] = await Promise.all([
@@ -323,7 +323,7 @@ export class AnalyticsService {
       })),
       user_segments: [], // Placeholder for user segments
     };
-  }
+
   async getTemplateTrends(templateId, start, end) {
     const dailyMetrics = await this.db.query(
       `SELECT 
@@ -350,12 +350,12 @@ export class AnalyticsService {
         revenue_growth: 0,
       },
     };
-  }
+
   calculateConversionRate(metricsRow) {
     const views = parseInt(metricsRow.views) || 0;
     const downloads = parseInt(metricsRow.downloads) || 0;
     return views > 0 ? (downloads / views) * 100 : 0;
-  }
+
   getEmptyCreatorDashboard(creatorId, timeRange, start, end) {
     return {
       creator_id: creatorId,
@@ -400,7 +400,7 @@ export class AnalyticsService {
         revenue_by_template: [],
       },
     };
-  }
+
   async getCreatorOverview(templateIds, start, end) {
     // Implementation placeholder
     return {
@@ -418,7 +418,7 @@ export class AnalyticsService {
         revenue: 0,
       },
     };
-  }
+
   async getCreatorPerformance(templateIds, start, end) {
     // Implementation placeholder
     return {
@@ -429,7 +429,7 @@ export class AnalyticsService {
       market_share: 0,
       ranking_position: 0,
     };
-  }
+
   async getCreatorTraffic(templateIds, start, end) {
     // Implementation placeholder
     return {
@@ -439,7 +439,7 @@ export class AnalyticsService {
       average_session_duration: 0,
       top_referrers: [],
     };
-  }
+
   async getCreatorFinancials(templateIds, start, end) {
     // Implementation placeholder
     return {
@@ -449,19 +449,19 @@ export class AnalyticsService {
       payout_amount: 0,
       revenue_by_template: [],
     };
-  }
+
   async generateTrendInsights(creatorId, templateIds) {
     // Implementation placeholder
     return [];
-  }
+
   async detectAnomalies(creatorId, templateIds) {
     // Implementation placeholder
     return [];
-  }
+
   async findOpportunities(creatorId, templateIds) {
     // Implementation placeholder
     return [];
-  }
+
   mapEventRow(row) {
     return {
       id: row.id,
@@ -473,7 +473,7 @@ export class AnalyticsService {
       timestamp: new Date(row.timestamp),
       created_at: new Date(row.created_at),
     };
-  }
+
   mapReportRow(row) {
     return {
       id: row.id,
@@ -486,5 +486,5 @@ export class AnalyticsService {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at),
     };
-  }
-}
+
+

@@ -382,29 +382,29 @@ Promise;
                             const getTrustTierBenefits = useCallback((tier) => {
                                 const currentTier = tier || userTrustScore?.tier || 'unverified';
                                 const benefits = {
-                                    unverified: [,
+                                    unverified: [
                                         'Access to free templates',
                                         'Basic graph creation tools'
                                     ],
-                                    basic: [,
+                                    basic: [
                                         'Email support',
                                         'Access to premium templates (limited)',
                                         'Basic marketplace features'
                                     ],
-                                    verified: [,
+                                    verified: [
                                         'Priority support',
                                         'Full marketplace access',
                                         'Template creation & selling',
                                         'Collaboration features'
                                     ],
-                                    professional: [,
+                                    professional: [
                                         'Professional badge display',
                                         'Featured creator status',
                                         'Advanced analytics',
                                         'Custom branding options',
                                         'Direct industry connections'
                                     ],
-                                    expert: [,
+                                    expert: [
                                         'Expert verification badge',
                                         'Mentorship opportunities',
                                         'Early access to new features',

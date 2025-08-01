@@ -105,7 +105,7 @@ const getThemeColors = () => {
                         padding: 8,
                         background: draggedIndex === index ? colors.accent + '20' : colors.background,
                         border: `1px solid ${colors.border}`
-                    }, ", borderRadius: 6, cursor: 'move' }} >", _jsx("div", { style: {
+                    }, ", borderRadius: 6, cursor: 'move'; }} >", _jsx("div", { style: {
                             width: 8,
                             height: 16,
                             background: colors.border,
@@ -121,7 +121,7 @@ const getThemeColors = () => {
                                     padding: 4,
                                     background: colors.background,
                                     border: `1px solid ${colors.border}`
-                                } }), ", borderRadius: 4, color: colors.text, fontSize: 12, textAlign: 'center' }} min=\"0\" />", _jsx("span", { style: { fontSize: 12, color: colors.text, opacity: 0.7 }, children: "%" })] }), _jsx("button", { onClick: () => removeChoice(index), style: {
+                                } }), ", borderRadius: 4, color: colors.text, fontSize: 12, textAlign: 'center'; }} min=\"0\" />", _jsx("span", { style: { fontSize: 12, color: colors.text, opacity: 0.7 }, children: "%" })] }), _jsx("button", { onClick: () => removeChoice(index), style: {
                             background: colors.danger,
                             color: 'white',
                             border: 'none',
@@ -304,28 +304,13 @@ export const ConditionalEditor = ({
 });
 {
     const [conditionMode, setConditionMode] = useState('simple');
-    const commonConditions = [];
-    {
-        label: 'Variable exists', value;
-        '{{variable}} != null';
-    }
-    {
-        label: 'Variable equals', value;
-        '{{variable}} == "value"';
-    }
-    {
-        label: 'Variable contains', value;
-        '{{variable}}.includes("text")';
-    }
-    {
-        label: 'Number comparison', value;
-        '{{number}} > 0';
-    }
-    {
-        label: 'Multiple conditions', value;
-        '{{var1}} && {{var2}}';
-    }
-    ;
+    const commonConditions = [
+        { label: 'Variable exists', value: '{{variable}} != null' },
+        { label: 'Variable equals', value: '{{variable}} == "value"' },
+        { label: 'Variable contains', value: '{{variable}}.includes("text")' },
+        { label: 'Number comparison', value: '{{number}} > 0' },
+        { label: 'Multiple conditions', value: '{{var1}} && {{var2}}' }
+    ];
     return;
     _jsxs("div", { children: [_jsxs("div", { style: {
                     display: 'flex',
@@ -418,28 +403,13 @@ export const OutputEditor = ({
     theme = 'cinema'
 });
 {
-    const formats = [];
-    {
-        value: 'text', label;
-        'Plain Text';
-    }
-    {
-        value: 'json', label;
-        'JSON';
-    }
-    {
-        value: 'markdown', label;
-        'Markdown';
-    }
-    {
-        value: 'html', label;
-        'HTML';
-    }
-    {
-        value: 'csv', label;
-        'CSV';
-    }
-    ;
+    const formats = [
+        { value: 'text', label: 'Plain Text' },
+        { value: 'json', label: 'JSON' },
+        { value: 'markdown', label: 'Markdown' },
+        { value: 'html', label: 'HTML' },
+        { value: 'csv', label: 'CSV' }
+    ];
     return;
     _jsx("div", { children: _jsxs("div", { style: { marginBottom: 12 }, children: [_jsx("label", { style: {
                         display: 'block',

@@ -11,7 +11,8 @@ import { createPortal } from 'react-dom';
 import { JustInTimeConsentPrompt } from './JustInTimeConsentPrompt';
 import { useJustInTimeConsent } from '../../hooks/useJustInTimeConsent';
 import { UseJustInTimeReturn } from '../../types/consent';
-}
+
+
 interface JustInTimeConsentContextType extends UseJustInTimeReturn {
   triggerPromptForElement: (feature: string, action: string, element: HTMLElement) => Promise<boolean>;
   const JustInTimeConsentContext = createContext<JustInTimeConsentContextType | null>(null);
@@ -21,14 +22,16 @@ interface JustInTimeConsentContextType extends UseJustInTimeReturn {
   throw new Error('useJustInTimeConsentContext must be used within JustInTimeConsentProvider');
   return context;
 };
-}
+
+
 interface JustInTimeConsentProviderProps {
   children: React.ReactNode;
   portalTarget?: HTMLElement;
-  export const JustInTimeConsentProvider: React.FC<JustInTimeConsentProviderProps> = ({,)
+  export const JustInTimeConsentProvider: React.FC<JustInTimeConsentProviderProps> = ({),
   children,
   portalTarget
-}
+
+
 }) => {
   const justInTimeConsent = useJustInTimeConsent();
   const { activePrompts, showPrompt, dismissPrompt, respondToPrompt } = justInTimeConsent;
@@ -37,7 +40,7 @@ interface JustInTimeConsentProviderProps {
   useEffect(() => {
     if (portalTarget) {
       portalRef.current = portalTarget;
-    } else {
+ else {
       // Create default portal container
       let container = document.getElementById('jit-consent-portal');
       if (!container) {
@@ -71,11 +74,11 @@ interface JustInTimeConsentProviderProps {
   // Only allow same-origin or HTTPS URLs
   if (url.origin === window.location.origin || url.protocol === 'https:') {,
   window.location.href = originalHref;
-} else {
+ else {
   console.warn('Blocked navigation to untrusted URL:', originalHref);
-} catch {
+ catch {
   console.warn('Invalid URL blocked:', originalHref);
-} else {
+ else {
   // SECURITY FIX: Instead of eval(), trigger a click event,
   // This preserves functionality while eliminating code injection risk
   const clickEvent = new MouseEvent('click', {)
@@ -84,7 +87,7 @@ interface JustInTimeConsentProviderProps {
   view: window,
 });
               target.dispatchEvent(clickEvent);
-        } catch (error) {
+ catch (error) {
   console.error('Failed to show JIT consent prompt:', error);
 };
     // Add event listener for elements with consent attributes
@@ -100,7 +103,7 @@ interface JustInTimeConsentProviderProps {
     element: HTMLElement): Promise<boolean> => {,
     try {
       return await showPrompt(feature, action, element);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to trigger prompt for element:', error);
   return false;
 };
@@ -136,7 +139,7 @@ interface JustInTimeConsentProviderProps {
   ): Promise<boolean> => {
     try {
       return await showPrompt(feature, action, element);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to show consent prompt:', error);
   return false;
 }, [showPrompt]);

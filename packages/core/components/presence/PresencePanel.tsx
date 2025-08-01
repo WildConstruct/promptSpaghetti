@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import { UserAvatar, UserAvatarList } from './UserAvatar';
 
-}
-export interface PresenceUser {
-  userId: string;
+
+export interface PresenceUser { userId: string;
   userName?: string;
   userAvatar?: string;
   status: 'active' | 'idle' | 'away' | 'offline';
   lastSeen: number;
-  cursor?: {
+  cursor?: { }
   x: number;
   y: number;
   nodeId?: string;
-}
+
+
 };
   selection?: string;
   currentTool?: string;
   isTyping?: boolean;
   focusedNodeId?: string;
-}
-}
-export interface PresencePanelProps {
-  users: PresenceUser;
+
+
+export interface PresencePanelProps { users: PresenceUser;
   currentUserId: string;
   onUserClick?: (userId: string) => void;
   onFollowUser?: (userId: string) => void;
@@ -29,37 +28,34 @@ export interface PresencePanelProps {
   followingUserId?: string;
   showDetailedView?: boolean;
   maxAvatars?: number;
-  className?: string;
-}
-}
-export const PresencePanel: React.FC<PresencePanelProps> = ({)
-  users,
-  currentUserId,
-  onUserClick,
-  onFollowUser,
-  onUnfollowUser,
-  followingUserId,
-  showDetailedView = false,
-  maxAvatars = 5,
+  className?: string }
+
+export const PresencePanel: React.FC<PresencePanelProps> = ({ )
+  users
+  currentUserId
+  onUserClick
+  onFollowUser
+  onUnfollowUser
+  followingUserId
+  showDetailedView = false
+  maxAvatars = 5 }
   className = ''
-}) => {
-  const [expanded, setExpanded] = useState(false);
+}) => { const [expanded, setExpanded] = useState(false);
   const activeUsers = users.filter(user => user.status === 'active');
   const idleUsers = users.filter(user => user.status === 'idle');
   const awayUsers = users.filter(user => user.status === 'away');
   const typingUsers = users.filter(user => user.isTyping);
-  const formatLastSeen = (timestamp: number): string => {,
+  const formatLastSeen = (timestamp: number): string => { }
   const now = Date.now();
   const diff = now - timestamp;
   if (diff < 60000) { // Less than 1 minute
-  return 'Just now';
-} else if (diff < 3600000) { // Less than 1 hour
+  return 'Just now' } else if (diff < 3600000) { // Less than 1 hour
       const minutes = Math.floor(diff / 60000);
       return `${minutes}m ago`;}
-    } else if (diff < 86400000) { // Less than 1 day
+ else if (diff < 86400000) { // Less than 1 day
       const hours = Math.floor(diff / 3600000);
       return `${hours}h ago`;}
-    } else {
+ else {
       const days = Math.floor(diff / 86400000);
       return `${days}d ago`;}
   };
@@ -205,43 +201,38 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
     </div>
   );
 };
-}
-interface UserPresenceItemProps {
-  user: PresenceUser;
+
+
+interface UserPresenceItemProps { user: PresenceUser;
   isCurrentUser: boolean;
   isFollowing: boolean;
   onUserClick?: (userId: string) => void;
   onFollowUser?: (userId: string) => void;
   onUnfollowUser?: () => void;
-  formatLastSeen: (timestamp: number) => string;
+  formatLastSeen: (timestamp: number) => string
   getActivityText: (user: PresenceUser) => string;
-  const UserPresenceItem: React.FC<UserPresenceItemProps> = ({,)
-  user,
-  isCurrentUser,
-  isFollowing,
-  onUserClick,
-  onFollowUser,
-  onUnfollowUser,
-  formatLastSeen,
+  const UserPresenceItem: React.FC<UserPresenceItemProps> = ({);
+  user;
+  isCurrentUser;
+  isFollowing;
+  onUserClick;
+  onFollowUser;
+  onUnfollowUser;
+  formatLastSeen }
   getActivityText
-}
-}) => {
-  const handleClick = () => {
+
+
+}) => { const handleClick = () => {
     if (!isCurrentUser && onUserClick) {
-      onUserClick(user.userId);
-  };
-  const handleFollowClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+      onUserClick(user.userId) };
+  const handleFollowClick = (e: React.MouseEvent) => { e.stopPropagation();
     if (isFollowing && onUnfollowUser) {
-      onUnfollowUser();
-    } else if (!isFollowing && onFollowUser) {
-      onFollowUser(user.userId);
-  };
+      onUnfollowUser() } else if (!isFollowing && onFollowUser) { onFollowUser(user.userId) };
   return;
     <div
-      className={`flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 ${
-  !isCurrentUser && onUserClick ? 'cursor-pointer' : '',
-} ${isFollowing ? 'bg-blue-50 border border-blue-200' : ''}`}
+      className={ `flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 ${
+  !isCurrentUser && onUserClick ? 'cursor-pointer' : '' }
+ ${isFollowing ? 'bg-blue-50 border border-blue-200' : ''}`}
       onClick={handleClick}
     >
       <div className="flex items-center space-x-3 min-w-0 flex-1">
@@ -278,11 +269,11 @@ interface UserPresenceItemProps {
       {!isCurrentUser && (onFollowUser || onUnfollowUser) && ()
         <button
           onClick={handleFollowClick}
-          className={`px-2 py-1 text-xs font-medium rounded ${
+          className={ `px-2 py-1 text-xs font-medium rounded ${
   isFollowing
-  ? 'bg-blue-100 text-blue-800 hover:bg-blue-200',
-  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-}`}
+  ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+  : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }
+`}
         >
           {isFollowing ? 'Following' : 'Follow'}
         </button>

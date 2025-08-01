@@ -21,13 +21,13 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer
-} from 'recharts';
+ from 'recharts';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle
-} from '../ui/Card';
+ from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
@@ -42,20 +42,21 @@ import {
   Wrench,
   Bug,
   Clock
-} from 'lucide-react';
+ from 'lucide-react';
 import { CodeQualityMetrics } from '../../hooks/useQualityMetrics';
 
 // =============================================================================
 // Code Quality Metrics Component
 // =============================================================================
 
-}
+
 export interface CodeQualityMetricsProps {
   metrics: CodeQualityMetrics;
   compact?: boolean;
   className?: string;
-}
-}
+
+
+
 export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
   metrics,
   compact = false,
@@ -72,7 +73,7 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
   primary: '#6366f1',
 };
   // Prepare complexity distribution data
-  const complexityData = [;
+  const complexityData = [
     { range: '1-5 (Simple)', count: metrics.complexity.distribution['1-5'], color: chartColors.excellent },
     { range: '6-10 (Moderate)', count: metrics.complexity.distribution['6-10'], color: chartColors.good },
     { range: '11-20 (Complex)', count: metrics.complexity.distribution['11-20'], color: chartColors.fair },

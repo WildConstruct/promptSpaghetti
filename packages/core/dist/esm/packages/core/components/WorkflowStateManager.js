@@ -83,7 +83,7 @@ if (result.success) {
             }
             try { }
             catch (error) {
-                console.error(`Failed to ${action},)}
+                console.error(`Failed to ${action})},
   workflow:`, error);
             }
         }
@@ -116,7 +116,7 @@ if (result.success) {
             }
             try { }
             catch (error) {
-                console.error(`Failed to ${action},)}
+                console.error(`Failed to ${action})},
   lock:`, error);
             }
         }

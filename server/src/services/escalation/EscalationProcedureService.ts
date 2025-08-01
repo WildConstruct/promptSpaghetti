@@ -22,7 +22,7 @@ export enum EscalationTriggerType {
   AUTOMATED = 'automated',
   CONDITIONAL = 'conditional',
   PRIORITY_BASED = 'priority_based'
-}
+
 
 export enum EscalationStatus {
   PENDING = 'pending',
@@ -31,7 +31,7 @@ export enum EscalationStatus {
   RESOLVED = 'resolved',
   CANCELLED = 'cancelled',
   EXPIRED = 'expired'
-}
+
 
 export enum EscalationPriority {
   LOW = 'low',
@@ -39,7 +39,7 @@ export enum EscalationPriority {
   HIGH = 'high',
   URGENT = 'urgent',
   CRITICAL = 'critical'
-}
+
 
 export enum EscalationCategory {
   FRAUD_DETECTION = 'fraud_detection',
@@ -52,10 +52,10 @@ export enum EscalationCategory {
   TECHNICAL_ISSUE = 'technical_issue',
   BUSINESS_CRITICAL = 'business_critical',
   REGULATORY = 'regulatory'
-}
 
-}
-}
+
+
+
 export interface EscalationRule {
   ruleId: string;
   name: string;
@@ -85,12 +85,13 @@ export interface EscalationRule {
   createdAt: Date;
   lastModified: Date;
   version: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationCondition {
   conditionId: string;
   type: 'value' | 'time' | 'count' | 'percentage' | 'custom';
@@ -98,12 +99,13 @@ export interface EscalationCondition {
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'regex';
   value: string | number | boolean;
   logicalOperator?: 'AND' | 'OR';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationLevel {
   levelId: string;
   level: number; // 1, 2, 3, etc.
@@ -128,12 +130,13 @@ export interface EscalationLevel {
   
   // Escalation criteria for next level
   escalationCriteria?: EscalationCondition[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationMethod {
   type: 'email' | 'sms' | 'push' | 'slack' | 'teams' | 'webhook' | 'dashboard';
   address: string;
@@ -141,24 +144,26 @@ export interface NotificationMethod {
   immediateDelivery: boolean;
   retryCount?: number;
   retryInterval?: number; // minutes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationAction {
   actionId: string;
   type: 'notification' | 'assignment' | 'status_change' | 'data_collection' | 'external_api' | 'workflow' | 'custom';
   configuration: Record<string, any>;
   executeImmediately: boolean;
   rollbackable: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationCase {
   caseId: string;
   ruleId: string;
@@ -197,12 +202,13 @@ export interface EscalationCase {
   // Metadata
   tags: string[];
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationPathStep {
   stepId: string;
   level: number;
@@ -216,12 +222,13 @@ export interface EscalationPathStep {
   escalationReason?: string;
   notes?: string;
   timeSpent?: number; // minutes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationNotification {
   notificationId: string;
   method: string;
@@ -232,12 +239,13 @@ export interface EscalationNotification {
   failureReason?: string;
   retryCount: number;
   priority: EscalationPriority;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationActionLog {
   actionId: string;
   actionType: string;
@@ -248,12 +256,13 @@ export interface EscalationActionLog {
   error?: string;
   rollbackable: boolean;
   rolledBackAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationResolution {
   resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged' | 'expired';
   resolutionLevel: number;
@@ -262,12 +271,13 @@ export interface EscalationResolution {
   satisfactionRating?: number; // 1-5
   lessonsLearned?: string[];
   improvementSuggestions?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationMetrics {
   totalCases: number;
   activeCases: number;
@@ -293,12 +303,13 @@ export interface EscalationMetrics {
   // Quality metrics
   satisfactionScore: number; // 1-5 average
   ruleEffectivenessScore: number; // 0-100
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationCategoryMetrics {
   category: EscalationCategory;
   totalCases: number;
@@ -306,12 +317,13 @@ export interface EscalationCategoryMetrics {
   escalationRate: number;
   satisfactionScore: number;
   topIssues: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationLevelMetrics {
   level: number;
   totalCases: number;
@@ -320,12 +332,13 @@ export interface EscalationLevelMetrics {
   averageResolutionTime: number;
   escalationRate: number; // percentage escalated to next level
   workloadDistribution: Map<string, number>; // assignee -> case count
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationTrend {
   period: string; // 'hourly', 'daily', 'weekly', 'monthly'
   timestamp: Date;
@@ -333,12 +346,13 @@ export interface EscalationTrend {
   escalationRate: number;
   resolutionTime: number;
   satisfactionScore: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationDashboard {
   overview: {
     activeCases: number;
@@ -346,8 +360,9 @@ export interface EscalationDashboard {
     overdueResponses: number;
     overdueResolutions: number;
     averageWaitTime: number;
-}
-}
+
+
+
   };
   
   recentEscalations: EscalationCase[];
@@ -365,21 +380,21 @@ export interface EscalationDashboard {
     activeCases: number;
     overdueItems: number;
     utilizationRate: number;
-  }>;
+>;
   
   categoryBreakdown: Array<{
     category: EscalationCategory;
     count: number;
     percentage: number;
     trend: 'up' | 'down' | 'stable';
-  }>;
+>;
   
   alerts: EscalationAlert[];
   recommendations: EscalationRecommendation[];
-}
 
-}
-}
+
+
+
 export interface EscalationAlert {
   alertId: string;
   type: 'sla_breach' | 'high_volume' | 'system_issue' | 'quality_concern' | 'capacity_limit';
@@ -389,12 +404,13 @@ export interface EscalationAlert {
   affectedCases: string[];
   recommendedActions: string[];
   createdAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRecommendation {
   recommendationId: string;
   type: 'process_improvement' | 'resource_allocation' | 'rule_optimization' | 'training_need';
@@ -404,9 +420,10 @@ export interface EscalationRecommendation {
   implementationEffort: 'low' | 'medium' | 'high';
   priority: EscalationPriority;
   category?: EscalationCategory;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Main Escalation Procedure Service
@@ -430,7 +447,7 @@ export class EscalationProcedureService extends EventEmitter {
     this.database = database;
     this.auditService = auditService;
     this.metrics = this.initializeMetrics();
-  }
+
 
   /**
    * Initialize the escalation service
@@ -455,7 +472,7 @@ export class EscalationProcedureService extends EventEmitter {
     
     console.log('✅ Escalation Procedure Service initialized successfully');
     this.emit('service_initialized');
-  }
+
 
   // =============================================================================
   // Rule Management
@@ -496,7 +513,7 @@ export class EscalationProcedureService extends EventEmitter {
     // Add to active rules if enabled
     if (rule.enabled) {
       this.activeRules.set(rule.ruleId, rule);
-    }
+
 
     // Audit
     await this.auditService.logActivity({
@@ -507,13 +524,13 @@ export class EscalationProcedureService extends EventEmitter {
         name: rule.name,
         category: rule.category,
         enabled: rule.enabled
-  }
+
       timestamp: new Date()
-    } as any);
+ as any);
 
     this.emit('rule_created', rule);
     return rule;
-  }
+
 
   /**
    * Update an existing escalation rule
@@ -523,7 +540,7 @@ export class EscalationProcedureService extends EventEmitter {
     const existingRule = this.activeRules.get(ruleId);
     if (!existingRule) {
       throw new Error(`Escalation rule ${ruleId} not found`);
-    }
+
 
     const updatedRule: EscalationRule = {
       ...existingRule,
@@ -542,9 +559,9 @@ export class EscalationProcedureService extends EventEmitter {
     // Update active rules
     if (updatedRule.enabled) {
       this.activeRules.set(ruleId, updatedRule);
-    } else {
+ else {
       this.activeRules.delete(ruleId);
-    }
+
 
     // Audit
     await this.auditService.logActivity({
@@ -554,13 +571,13 @@ export class EscalationProcedureService extends EventEmitter {
         ruleId,
         changes: updates,
         version: updatedRule.version
-  }
+
       timestamp: new Date()
-    } as any);
+ as any);
 
     this.emit('rule_updated', updatedRule);
     return updatedRule;
-  }
+
 
   // =============================================================================
   // Case Management
@@ -580,12 +597,12 @@ export class EscalationProcedureService extends EventEmitter {
     // Find applicable rule if not provided
     if (!ruleId) {
       ruleId = await this.findApplicableRule(sourceType, sourceData);
-    }
+
 
     const rule = this.activeRules.get(ruleId);
     if (!rule) {
       throw new Error(`No applicable escalation rule found for ${sourceType}:${sourceId}`);
-    }
+
 
     const caseId = `case_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
@@ -631,13 +648,13 @@ export class EscalationProcedureService extends EventEmitter {
         sourceId,
         ruleId,
         priority: escalationCase.priority
-  }
+
       timestamp: now
-    } as any);
+ as any);
 
     this.emit('case_created', escalationCase);
     return escalationCase;
-  }
+
 
   /**
    * Escalate a case to the next level
@@ -647,17 +664,17 @@ export class EscalationProcedureService extends EventEmitter {
     const escalationCase = this.activeCases.get(caseId);
     if (!escalationCase) {
       throw new Error(`Escalation case ${caseId} not found`);
-    }
+
 
     const rule = this.activeRules.get(escalationCase.ruleId);
     if (!rule) {
       throw new Error(`Escalation rule ${escalationCase.ruleId} not found`);
-    }
+
 
     const nextLevel = escalationCase.currentLevel + 1;
     if (nextLevel >= rule.escalationPath.length) {
       throw new Error(`Case ${caseId} is already at maximum escalation level`);
-    }
+
 
     const levelConfig = rule.escalationPath[nextLevel];
     const now = new Date();
@@ -667,7 +684,7 @@ export class EscalationProcedureService extends EventEmitter {
       const currentStep = escalationCase.escalationPath[escalationCase.escalationPath.length - 1];
       currentStep.escalatedAt = now;
       currentStep.escalationReason = reason;
-    }
+
 
     // Create new escalation step
     const newStep: EscalationPathStep = {
@@ -694,8 +711,8 @@ export class EscalationProcedureService extends EventEmitter {
     if (levelConfig.automaticActions) {
       for (const action of levelConfig.automaticActions) {
         await this.executeEscalationAction(escalationCase, action);
-      }
-    }
+
+
 
     // Send notifications
     await this.sendLevelNotifications(escalationCase, levelConfig);
@@ -716,13 +733,13 @@ export class EscalationProcedureService extends EventEmitter {
         toLevel: nextLevel,
         reason,
         assignedTo: newStep.assignedTo
-  }
+
       timestamp: now
-    } as any);
+ as any);
 
     this.emit('case_escalated', { case: escalationCase, level: nextLevel });
     return escalationCase;
-  }
+
 
   /**
    * Resolve an escalation case
@@ -737,7 +754,7 @@ export class EscalationProcedureService extends EventEmitter {
     const escalationCase = this.activeCases.get(caseId);
     if (!escalationCase) {
       throw new Error(`Escalation case ${caseId} not found`);
-    }
+
 
     const now = new Date();
     const resolutionTime = (now.getTime() - escalationCase.createdAt.getTime()) / (1000 * 60); // minutes
@@ -748,7 +765,7 @@ export class EscalationProcedureService extends EventEmitter {
       currentStep.completedAt = now;
       currentStep.timeSpent = currentStep.assignedAt ? 
         (now.getTime() - currentStep.assignedAt.getTime()) / (1000 * 60) : 0;
-    }
+
 
     // Create resolution
     const resolution: EscalationResolution = {
@@ -769,7 +786,7 @@ export class EscalationProcedureService extends EventEmitter {
     if (this.timers.has(caseId)) {
       clearTimeout(this.timers.get(caseId)!);
       this.timers.delete(caseId);
-    }
+
 
     // Update database
     await this.saveEscalationCase(escalationCase);
@@ -789,13 +806,13 @@ export class EscalationProcedureService extends EventEmitter {
         resolutionType,
         resolutionTime: Math.round(resolutionTime),
         level: escalationCase.currentLevel
-  }
+
       timestamp: now
-    } as any);
+ as any);
 
     this.emit('case_resolved', { case: escalationCase, resolution });
     return escalationCase;
-  }
+
 
   // =============================================================================
   // Dashboard and Reporting
@@ -834,9 +851,9 @@ export class EscalationProcedureService extends EventEmitter {
         existing.activeCases++;
         if ((c.responseDeadline && c.responseDeadline < now) || (c.resolutionDeadline && c.resolutionDeadline < now)) {
           existing.overdueItems++;
-        }
+
         workloadMap.set(c.currentAssignee, existing);
-      }
+
     });
 
     const workloadDistribution = Array.from(workloadMap.entries()).map(([assignee, stats]) => ({
@@ -872,7 +889,7 @@ export class EscalationProcedureService extends EventEmitter {
         overdueResponses: overdueResponses.length,
         overdueResolutions: overdueResolutions.length,
         averageWaitTime: this.calculateAverageWaitTime(activeCases)
-  }
+
       recentEscalations,
       urgentCases,
       performance: {
@@ -880,20 +897,20 @@ export class EscalationProcedureService extends EventEmitter {
         firstCallResolution: this.metrics.firstLevelResolutionRate,
         customerSatisfaction: this.metrics.satisfactionScore,
         averageHandleTime: this.metrics.averageResolutionTime
-  }
+
       workloadDistribution,
       categoryBreakdown,
       alerts,
       recommendations
     };
-  }
+
 
   /**
    * Get escalation metrics
    */
   public getEscalationMetrics(): EscalationMetrics {
     return { ...this.metrics };
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -966,8 +983,8 @@ export class EscalationProcedureService extends EventEmitter {
 
     for (const schema of schemas) {
       await this.database.query(schema);
-    }
-  }
+
+
 
   private async loadEscalationRules(): Promise<void> {
 
@@ -994,10 +1011,10 @@ export class EscalationProcedureService extends EventEmitter {
       };
 
       this.activeRules.set(rule.ruleId, rule);
-    }
+
 
     console.log(`📋 Loaded ${this.activeRules.size} active escalation rules`);
-  }
+
 
   private async loadActiveCases(): Promise<void> {
 
@@ -1035,10 +1052,10 @@ export class EscalationProcedureService extends EventEmitter {
       };
 
       this.activeCases.set(escalationCase.caseId, escalationCase);
-    }
+
 
     console.log(`📊 Loaded ${this.activeCases.size} active escalation cases`);
-  }
+
 
   private setupPeriodicTasks(): void {
     // Update metrics every 5 minutes
@@ -1055,7 +1072,7 @@ export class EscalationProcedureService extends EventEmitter {
     setInterval(() => {
       this.cleanupExpiredCases();
     }, 24 * 60 * 60 * 1000);
-  }
+
 
   private setupEventHandlers(): void {
     // Listen for external events that might trigger escalations
@@ -1063,7 +1080,7 @@ export class EscalationProcedureService extends EventEmitter {
     this.on('appeal_submitted', this.handleAppealSubmitted.bind(this));
     this.on('policy_violation_detected', this.handlePolicyViolation.bind(this));
     this.on('system_incident_reported', this.handleSystemIncident.bind(this));
-  }
+
 
   private async resumeActiveEscalations(): Promise<void> {
 
@@ -1071,33 +1088,33 @@ export class EscalationProcedureService extends EventEmitter {
       const rule = this.activeRules.get(escalationCase.ruleId);
       if (rule) {
         this.scheduleEscalation(escalationCase, rule);
-      }
-    }
-  }
+
+
+
 
   private validateEscalationRule(rule: EscalationRule): void {
     if (!rule.name || rule.name.trim().length === 0) {
       throw new Error('Escalation rule name is required');
-    }
+
 
     if (rule.escalationPath.length === 0) {
       throw new Error('Escalation rule must have at least one escalation level');
-    }
+
 
     // Validate escalation path
     for (let i = 0; i < rule.escalationPath.length; i++) {
       const level = rule.escalationPath[i];
       if (level.level !== i) {
         throw new Error(`Escalation level ${i} has incorrect level number: ${level.level}`);
-      }
-    }
-  }
+
+
+
 
   private scheduleEscalation(escalationCase: EscalationCase, rule: EscalationRule): void {
     // Clear existing timer
     if (this.timers.has(escalationCase.caseId)) {
       clearTimeout(this.timers.get(escalationCase.caseId)!);
-    }
+
 
     // Calculate next escalation time
     let nextEscalationTime: number;
@@ -1105,23 +1122,23 @@ export class EscalationProcedureService extends EventEmitter {
     if (escalationCase.currentLevel === 0) {
       // Initial delay
       nextEscalationTime = (rule.initialDelay || 30) * 60 * 1000; // Convert to milliseconds
-    } else {
+ else {
       // Regular escalation interval
       nextEscalationTime = (rule.escalationInterval || 60) * 60 * 1000;
-    }
+
 
     // Schedule escalation
     const timer = setTimeout(async () => {
       try {
         await this.escalateCase(escalationCase.caseId, 'Automatic escalation due to timeout');
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to auto-escalate case ${escalationCase.caseId}:`, error);
         this.emit('escalation_error', { caseId: escalationCase.caseId, error });
-      }
+
     }, nextEscalationTime);
 
     this.timers.set(escalationCase.caseId, timer);
-  }
+
 
   private async saveEscalationRule(rule: EscalationRule): Promise<void> {
 
@@ -1156,7 +1173,7 @@ export class EscalationProcedureService extends EventEmitter {
         rule.version
       ]
     );
-  }
+
 
   private async saveEscalationCase(escalationCase: EscalationCase): Promise<void> {
 
@@ -1196,7 +1213,7 @@ export class EscalationProcedureService extends EventEmitter {
         JSON.stringify(escalationCase.metadata)
       ]
     );
-  }
+
 
   // Additional helper methods would continue here...
   // Due to length constraints, showing the core architecture and key methods.
@@ -1218,94 +1235,94 @@ export class EscalationProcedureService extends EventEmitter {
       satisfactionScore: 0,
       ruleEffectivenessScore: 0
     };
-  }
+
 
   private updateMetrics(): void {
     // Implementation for updating metrics
     this.lastMetricsUpdate = new Date();
-  }
+
 
   private async findApplicableRule(_____sourceType: string, _____sourceData: Record<string, any>): Promise<string> {
 
     // Implementation for finding applicable rule
     return Array.from(this.activeRules.keys())[0]; // Simplified
-  }
+
 
   private determinePriority(_____sourceType: string, _____sourceData: Record<string, any>): EscalationPriority {
     // Implementation for determining priority
     return EscalationPriority.MEDIUM; // Simplified
-  }
+
 
   private extractTags(sourceType: string, _____sourceData: Record<string, any>): string[] {
     // Implementation for extracting tags
     return [sourceType];
-  }
+
 
   private calculateDeadlines(_____escalationCase: EscalationCase, _____rule: EscalationRule): void {
     // Implementation for calculating deadlines
-  }
+
 
   private async resolveAssignment(levelConfig: EscalationLevel): Promise<string> {
 
     // Implementation for resolving assignment
     return levelConfig.assignmentTarget;
-  }
+
 
   private async executeEscalationAction(_____escalationCase: EscalationCase, _____action: EscalationAction): Promise<void> {
 
     // Implementation for executing escalation actions
-  }
+
 
   private async sendLevelNotifications(_____escalationCase: EscalationCase, _____levelConfig: EscalationLevel): Promise<void> {
 
     // Implementation for sending notifications
-  }
+
 
   private checkOverdueCases(): void {
     // Implementation for checking overdue cases
-  }
+
 
   private cleanupExpiredCases(): void {
     // Implementation for cleaning up expired cases
-  }
+
 
   private calculateAverageWaitTime(_____cases: EscalationCase[]): number {
     // Implementation for calculating average wait time
     return 0;
-  }
+
 
   private async generateEscalationAlerts(_____cases: EscalationCase[]): Promise<EscalationAlert[]> {
 
     // Implementation for generating alerts
     return [];
-  }
+
 
   private async generateEscalationRecommendations(_____cases: EscalationCase[]): Promise<EscalationRecommendation[]> {
 
     // Implementation for generating recommendations
     return [];
-  }
+
 
   // Event handlers
   private async handleFraudCaseCreated(data: Record<string, unknown>): Promise<void> {
 
     await this.createEscalationCase('fraud_case', data.caseId, data, undefined, EscalationPriority.HIGH);
-  }
+
 
   private async handleAppealSubmitted(data: Record<string, unknown>): Promise<void> {
 
     await this.createEscalationCase('appeal', data.appealId, data, undefined, EscalationPriority.MEDIUM);
-  }
+
 
   private async handlePolicyViolation(data: Record<string, unknown>): Promise<void> {
 
     await this.createEscalationCase('policy_violation', data.violationId, data, undefined, EscalationPriority.HIGH);
-  }
+
 
   private async handleSystemIncident(data: Record<string, unknown>): Promise<void> {
 
     await this.createEscalationCase('system_incident', data.incidentId, data, undefined, EscalationPriority.CRITICAL);
-  }
-}
+
+
 
 export default EscalationProcedureService;

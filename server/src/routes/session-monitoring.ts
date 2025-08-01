@@ -6,20 +6,21 @@ import { SessionMonitoringService } from '../auth/services/SessionMonitoringServ
 import { requireAuth } from '../auth/middleware/requireAuth';
 import { requirePermission } from '../auth/middleware/requirePermission';
 
-}
-}
+
+
 export interface SessionAnalyticsQuery {
   Querystring: {
     startDate?: string;
     endDate?: string;
     userId?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface AlertsQuery {
   Querystring: {
     userId?: string;
@@ -28,23 +29,25 @@ export interface AlertsQuery {
     resolved?: string;
     limit?: string;
     offset?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ResolveAlertBody {
   Body: {
     alertId: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface UpdateRuleBody {
   Body: {
     ruleId: string;
@@ -54,11 +57,12 @@ export interface UpdateRuleBody {
       threshold?: number;
       parameters?: Record<string, any>;
       action?: 'alert' | 'block' | 'require_2fa' | 'notify_user';
-}
-}
+
+
+
     };
   };
-}
+
 
 export async function sessionMonitoringRoutes(
   server: FastifyInstance,
@@ -79,16 +83,16 @@ export async function sessionMonitoringRoutes(
         if (!metrics) {
           // Collect fresh metrics if cache miss
           metrics = await sessionMonitoringService.collectMetrics();
-        }
+
 
         return reply.send(metrics);
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to retrieve session metrics'
         });
-      }
-    }
+
+
   });
 
   // Get session analytics
@@ -105,7 +109,7 @@ export async function sessionMonitoringRoutes(
         const timeRange = startDate && endDate ? {
           start: new Date(startDate),
           end: new Date(endDate)
-        } : undefined;
+ : undefined;
 
         const analytics = await sessionMonitoringService.getSessionAnalytics(
           targetUserId,
@@ -113,13 +117,13 @@ export async function sessionMonitoringRoutes(
         );
 
         return reply.send(analytics);
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to retrieve session analytics'
         });
-      }
-    }
+
+
   });
 
   // Get active alerts
@@ -135,9 +139,9 @@ export async function sessionMonitoringRoutes(
         
         if (user.roles?.includes('admin')) {
           if (userId) filters.userId = userId;
-        } else {
+ else {
           filters.userId = user.id;
-        }
+
 
         if (type) filters.type = type;
         if (severity) filters.severity = severity;
@@ -156,15 +160,15 @@ export async function sessionMonitoringRoutes(
             total: alerts.length,
             limit: parseInt(limit),
             offset: parseInt(offset)
-          }
+
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to retrieve alerts'
         });
-      }
-    }
+
+
   });
 
   // Resolve an alert
@@ -182,7 +186,7 @@ export async function sessionMonitoringRoutes(
           return reply.status(400).send({
             error: 'alertId is required'
           });
-        }
+
 
         await sessionMonitoringService.resolveAlert(alertId, resolvedBy);
 
@@ -190,13 +194,13 @@ export async function sessionMonitoringRoutes(
           success: true,
           message: 'Alert resolved successfully'
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to resolve alert'
         });
-      }
-    }
+
+
   });
 
   // Get monitoring rules
@@ -209,13 +213,13 @@ export async function sessionMonitoringRoutes(
       try {
         const rules = await sessionMonitoringService.getMonitoringRules();
         return reply.send(rules);
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to retrieve monitoring rules'
         });
-      }
-    }
+
+
   });
 
   // Update monitoring rule
@@ -232,7 +236,7 @@ export async function sessionMonitoringRoutes(
           return reply.status(400).send({
             error: 'ruleId and updates are required'
           });
-        }
+
 
         await sessionMonitoringService.updateMonitoringRule(ruleId, updates);
 
@@ -243,7 +247,7 @@ export async function sessionMonitoringRoutes(
           details: {
             ruleId,
             updates
-  }
+
           sessionId: request.sessionId,
           severity: 'info'
         });
@@ -252,13 +256,13 @@ export async function sessionMonitoringRoutes(
           success: true,
           message: 'Monitoring rule updated successfully'
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to update monitoring rule'
         });
-      }
-    }
+
+
   });
 
   // Start/stop monitoring (admin only)
@@ -285,7 +289,7 @@ export async function sessionMonitoringRoutes(
             success: true,
             message: 'Session monitoring started'
           });
-        } else if (action === 'stop') {
+ else if (action === 'stop') {
           sessionMonitoringService.stopMonitoring();
           
           await server.auditService.logEvent({
@@ -299,18 +303,18 @@ export async function sessionMonitoringRoutes(
             success: true,
             message: 'Session monitoring stopped'
           });
-        } else {
+ else {
           return reply.status(400).send({
             error: 'Invalid action. Use "start" or "stop"'
           });
-        }
-      } catch (error) {
+
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to control monitoring'
         });
-      }
-    }
+
+
   });
 
   // Real-time session monitoring dashboard data
@@ -348,15 +352,15 @@ export async function sessionMonitoringRoutes(
           analytics: {
             dailyPatterns: analytics.patterns,
             topMetrics: analytics.metrics
-          }
+
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to retrieve dashboard data'
         });
-      }
-    }
+
+
   });
 
   // Export session data for compliance/audit
@@ -373,7 +377,7 @@ export async function sessionMonitoringRoutes(
           return reply.status(400).send({
             error: 'startDate and endDate are required'
           });
-        }
+
 
         const timeRange = {
           start: new Date(startDate),
@@ -424,8 +428,8 @@ export async function sessionMonitoringRoutes(
             recordCount: {
               alerts: alertsResult.rows.length,
               sessions: sessionsResult.rows.length
-            }
-  }
+
+
           sessionId: request.sessionId,
           severity: 'info'
         });
@@ -438,12 +442,11 @@ export async function sessionMonitoringRoutes(
         );
 
         return reply.send(exportData);
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to export session data'
         });
-      }
-    }
+
+
   });
-}

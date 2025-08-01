@@ -11,7 +11,7 @@ import { AuditService } from '../../auth/services/AuditService';
 // Mock AuditService
 const mockAuditService = {
   logEvent: jest.fn().mockResolvedValue(undefined)
-} as unknown as AuditService;
+ as unknown as AuditService;
 
 describe('PolicyAuthoringService', () => {
   let service: PolicyAuthoringService;
@@ -47,14 +47,14 @@ describe('PolicyAuthoringService', () => {
             policyType: 'PRIVACY_POLICY',
             title: 'Test Privacy Policy',
             authorId: 'test-author-id'
-  }
+
   }
       );
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           eventType: 'POLICY_CREATED'
-  }
+
       );
     });
 
@@ -71,7 +71,7 @@ describe('PolicyAuthoringService', () => {
           company_name: 'ACME Corp',
           contact_email: 'privacy@acme.com',
           data_retention_period: 7
-        }
+
       };
 
       const result = await service.createPolicy(request, 'privacy-officer');
@@ -96,7 +96,7 @@ describe('PolicyAuthoringService', () => {
             value: 'Enhanced California consumer rights',
             priority: 1,
             enabled: true
-          }
+
         ]
       };
 
@@ -135,7 +135,7 @@ describe('PolicyAuthoringService', () => {
             requiresReacceptance: true,
             oldValue: 'Original introduction',
             newValue: 'Updated introduction with clearer language'
-          }
+
         ],
         description: 'Updated policy for clarity',
         impact: 'MEDIUM',
@@ -184,7 +184,7 @@ describe('PolicyAuthoringService', () => {
             description: 'Major structural changes',
             impact: 'CRITICAL',
             requiresReacceptance: true
-          }
+
         ],
         description: 'Critical policy restructuring',
         impact: 'CRITICAL',
@@ -236,7 +236,7 @@ describe('PolicyAuthoringService', () => {
           phases: [],
           rollbackCriteria: [],
           monitoringPeriod: 24
-  }
+
         notificationSettings: {
           enabled: true,
           channels: [
@@ -245,14 +245,14 @@ describe('PolicyAuthoringService', () => {
               configuration: { template: 'default' },
               enabled: true,
               priority: 1
-            }
+
           ],
           audiences: ['all-users'],
           template: 'deployment-notification',
           scheduling: {
             immediate: true
-          }
-        }
+
+
       };
 
       const result = await service.deployPolicy(deployRequest, 'deployer-1');
@@ -264,7 +264,7 @@ describe('PolicyAuthoringService', () => {
           eventType: 'POLICY_DEPLOYMENT_INITIATED',
           details: expect.objectContaining({
             environment: 'STAGING'
-  }
+
   }
       );
     });
@@ -303,8 +303,8 @@ describe('PolicyAuthoringService', () => {
                 metrics: ['acceptance_rate', 'error_rate'],
                 alertThresholds: { error_rate: 0.05 },
                 automatedActions: []
-              }
-  }
+
+
             {
               phaseId: 'phase-2',
               name: 'Full Rollout',
@@ -319,8 +319,8 @@ describe('PolicyAuthoringService', () => {
                 metrics: ['acceptance_rate'],
                 alertThresholds: {},
                 automatedActions: []
-              }
-            }
+
+
           ],
           rollbackCriteria: [
             {
@@ -330,14 +330,14 @@ describe('PolicyAuthoringService', () => {
                 threshold: 0.1,
                 duration: 60,
                 consecutive: true
-  }
+
               automatic: true,
               severity: 'HIGH',
               action: 'IMMEDIATE'
-            }
+
           ],
           monitoringPeriod: 72
-  }
+
         notificationSettings: {
           enabled: true,
           channels: [
@@ -346,13 +346,13 @@ describe('PolicyAuthoringService', () => {
               configuration: {},
               enabled: true,
               priority: 1
-  }
+
             {
               type: 'IN_APP',
               configuration: {},
               enabled: true,
               priority: 2
-            }
+
           ],
           audiences: ['all-users'],
           template: 'terms-update',
@@ -365,10 +365,10 @@ describe('PolicyAuthoringService', () => {
                 channel: 'EMAIL',
                 template: 'terms-reminder',
                 enabled: true
-              }
+
             ]
-          }
-        }
+
+
       };
 
       const result = await service.deployPolicy(deployRequest, 'devops-lead');
@@ -387,14 +387,14 @@ describe('PolicyAuthoringService', () => {
           phases: [],
           rollbackCriteria: [],
           monitoringPeriod: 24
-  }
+
         notificationSettings: {
           enabled: false,
           channels: [],
           audiences: [],
           template: 'default',
           scheduling: { immediate: true }
-        }
+
       };
 
       await expect(service.deployPolicy(deployRequest, 'deployer'))
@@ -411,7 +411,7 @@ describe('PolicyAuthoringService', () => {
           company_name: 'European Corp',
           contact_email: 'privacy@european.corp',
           data_retention_period: 5
-  }
+
         'compliance-officer'
       );
 
@@ -426,7 +426,7 @@ describe('PolicyAuthoringService', () => {
         {
           business_name: 'California Business Inc',
           contact_method: 'privacy@californiabiz.com'
-  }
+
         'legal-counsel'
       );
 
@@ -441,7 +441,7 @@ describe('PolicyAuthoringService', () => {
         {
           covered_entity: 'Healthcare Provider LLC',
           hipaa_officer: 'hipaa@healthcare.com'
-  }
+
         'compliance-manager'
       );
 
@@ -472,7 +472,7 @@ describe('PolicyAuthoringService', () => {
             framework: 'GDPR',
             score: expect.any(Number),
             status: expect.any(String)
-  }
+
         ]),
         recommendations: expect.any(Array)
       });
@@ -528,7 +528,7 @@ describe('PolicyAuthoringService', () => {
           requiresReacceptance: expect.any(Boolean),
           affectedUsers: expect.any(Number),
           riskLevel: expect.any(String)
-  }
+
       });
     });
   });
@@ -568,7 +568,7 @@ describe('PolicyAuthoringService', () => {
           eventType: 'POLICY_EXPORTED',
           details: expect.objectContaining({
             format: 'PDF'
-  }
+
   }
       );
     });
@@ -597,7 +597,7 @@ describe('PolicyAuthoringService', () => {
 
         expect(exported.downloadUrl).toContain(format.toLowerCase());
         expect(exported.size).toBeGreaterThan(0);
-      }
+
     });
 
     it('should throw error for non-existent policy export', async () => {
@@ -661,15 +661,15 @@ describe('PolicyAuthoringService', () => {
       // For now, we'll just verify the service doesn't crash
       try {
         await service.createPolicy(request, 'author-1');
-      } catch (error) {
+ catch (error) {
         expect(error).toBeInstanceOf(Error);
-      }
+
     });
 
     it('should handle audit service failures gracefully', async () => {
       const failingAuditService = {
         logEvent: jest.fn().mockRejectedValue(new Error('Audit service down'))
-      } as unknown as AuditService;
+ as unknown as AuditService;
 
       const serviceWithFailingAudit = new PolicyAuthoringService(failingAuditService);
 
@@ -714,7 +714,7 @@ describe('PolicyAuthoringService', () => {
             description: 'Enhanced user rights section',
             impact: 'MEDIUM',
             requiresReacceptance: true
-          }
+
         ],
         description: 'Enhanced user rights',
         impact: 'MEDIUM',
@@ -738,14 +738,14 @@ describe('PolicyAuthoringService', () => {
           phases: [],
           rollbackCriteria: [],
           monitoringPeriod: 24
-  }
+
         notificationSettings: {
           enabled: true,
           channels: [{ type: 'EMAIL', configuration: {}, enabled: true, priority: 1 }],
           audiences: ['test-users'],
           template: 'staging-notification',
           scheduling: { immediate: true }
-        }
+
       };
 
       const deployed = await service.deployPolicy(deployRequest, 'deployer-1');

@@ -9,26 +9,24 @@
 import { CommentableResourceType } from '../types/TrendingCommentsTypes';
 
 }
-export interface CommentModerationRequest {
-    commentId: string;
+}
+export interface CommentModerationRequest { commentId: string;
     action: CommentModerationAction;
     moderatorId: string;
     reason?: string;
     metadata?: Record<string, unknown>;
     notifyAuthor?: boolean;
-    scheduledFor?: Date;
-
+    scheduledFor?: Date }
 }
-export interface CommentModerationAction {
-    type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
+}
+export interface CommentModerationAction { type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
     severity?: 'low' | 'medium' | 'high' | 'critical';
     duration?: number;
     appealable?: boolean;
-    escalateTo?: string;
-
+    escalateTo?: string }
 }
-export interface CommentModerationResult {
-    commentId: string;
+}
+export interface CommentModerationResult { commentId: string;
     action: CommentModerationAction;
     status: 'success' | 'failed' | 'pending';
     moderatorId: string;
@@ -38,32 +36,25 @@ export interface CommentModerationResult {
     appealDeadline?: Date;
     notificationSent: boolean;
     workflowId?: string;
-    error?: string;
-
+    error?: string }
 }
-export interface CommentModerationFilters {
-    resourceId?: string;
+}
+export interface CommentModerationFilters { resourceId?: string;
     resourceType?: CommentableResourceType;
     status?: 'pending' | 'approved' | 'rejected' | 'flagged' | 'hidden' | 'deleted';
     moderatorId?: string;
     authorId?: string;
     dateRange?: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
-    toxicityRange?: {
-        min: number;
-        max: number;
-    };
-    qualityRange?: {
-        min: number;
-        max: number;
-    };
-    reportCount?: {
-        min: number;
-        max?: number;
-    };
+    toxicityRange?: { min: number;
+        max: number };
+    qualityRange?: { min: number;
+        max: number };
+    reportCount?: { min: number;
+        max?: number };
     sentiment?: 'positive' | 'neutral' | 'negative' | 'very_negative';
     hasReports?: boolean;
     isEscalated?: boolean;
@@ -74,8 +65,8 @@ export interface CommentModerationFilters {
     offset?: number;
 
 }
-export interface CommentModerationQueue {
-    queueId: string;
+}
+export interface CommentModerationQueue { queueId: string;
     name: string;
     description: string;
     filters: CommentModerationFilters;
@@ -84,19 +75,17 @@ export interface CommentModerationQueue {
     assignedModerators: string[];
     slaMinutes: number;
     enableAutoModeration: boolean;
-    escalationRules: EscalationRule[];
-
+    escalationRules: EscalationRule[] }
 }
-export interface EscalationRule {
-    condition: 'timeout' | 'toxicity_threshold' | 'report_count' | 'quality_threshold' | 'custom';
+}
+export interface EscalationRule { condition: 'timeout' | 'toxicity_threshold' | 'report_count' | 'quality_threshold' | 'custom';
     threshold: number;
     action: 'escalate' | 'auto_reject' | 'require_supervisor' | 'flag_urgent';
     escalateTo?: string;
-    notifyStakeholders: string[];
-
+    notifyStakeholders: string[] }
 }
-export interface CommentModerationStats {
-    totalComments: number;
+}
+export interface CommentModerationStats { totalComments: number;
     pendingReview: number;
     approvedToday: number;
     rejectedToday: number;
@@ -108,47 +97,40 @@ export interface CommentModerationStats {
         assignedComments: number;
         completedToday: number;
         avgTimeMinutes: number;
-        accuracy: number;
+        accuracy: number }
 }
     }>;
-    toxicityDistribution: {
-        low: number;
+    toxicityDistribution: { low: number;
         medium: number;
         high: number;
-        critical: number;
-    };
-    qualityDistribution: {
-        excellent: number;
+        critical: number };
+    qualityDistribution: { excellent: number;
         good: number;
         fair: number;
-        poor: number;
-    };
-    recentTrends: {
-        volumeChange24h: number;
+        poor: number };
+    recentTrends: { volumeChange24h: number;
         toxicityChange24h: number;
-        qualityChange24h: number;
-    };
+        qualityChange24h: number };
 
 }
-export interface BulkModerationRequest {
-    commentIds: string[];
+}
+export interface BulkModerationRequest { commentIds: string[];
     action: CommentModerationAction;
     moderatorId: string;
     reason: string;
     batchSize?: number;
     parallel?: boolean;
-    validateBeforeAction?: boolean;
-
+    validateBeforeAction?: boolean }
 }
-export interface BulkModerationResult {
-    batchId: string;
+}
+export interface BulkModerationResult { batchId: string;
     totalItems: number;
     successful: number;
     failed: number;
     results: CommentModerationResult[];
     errors: Array<{
         commentId: string;
-        error: string;
+        error: string }
 }
     }>;
     processingTimeMs: number;
@@ -159,8 +141,7 @@ export interface BulkModerationResult {
  * Provides specialized moderation capabilities for comments, integrating
  * with existing moderation infrastructure while adding comment-specific features.
  */
-export declare class CommentModerationService {
-    private automatedService;
+export declare class CommentModerationService { private automatedService;
     private workflowService;
     private analyticsService;
     private baseUrl;
@@ -182,15 +163,13 @@ export declare class CommentModerationService {
         items: any[];
         totalCount: number;
         queueInfo: CommentModerationQueue;
-        stats: Partial<CommentModerationStats>;
-    }>;
+        stats: Partial<CommentModerationStats> }>;
     /**
      * Get comprehensive moderation statistics
      */
-    getModerationStats(timeRange?: {)
+    getModerationStats(timeRange?: { )
         start: Date;
-        end: Date;
-    }): Promise<CommentModerationStats>;
+        end: Date }): Promise<CommentModerationStats>;
     /**
      * Create or update moderation queue
      */
@@ -202,19 +181,16 @@ export declare class CommentModerationService {
     /**
      * Auto-moderate comments based on ML analysis
      */
-    autoModerateComments(resourceId: string, resourceType: CommentableResourceType, options?: {)
+    autoModerateComments(resourceId: string, resourceType: CommentableResourceType, options?: { )
         toxicityThreshold?: number;
         qualityThreshold?: number;
         spamThreshold?: number;
         enableAutoApproval?: boolean;
-        enableAutoRejection?: boolean;
-    }): Promise<{
-        processed: number;
+        enableAutoRejection?: boolean }): Promise<{ processed: number;
         autoApproved: number;
         autoRejected: number;
         flaggedForReview: number;
-        errors: number;
-    }>;
+        errors: number }>;
     private initializeDefaultQueues;
     private validateModerationRequest;
     private getCommentData;

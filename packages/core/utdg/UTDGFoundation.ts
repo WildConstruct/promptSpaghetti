@@ -7,44 +7,43 @@ import { NodeMetadataManager, HistoricalEra, Genre, Style } from '../historical/
 import { DataSourceManager } from '../external-data/DataSourceManager';
 import { MedievalDemo } from '../demo/MedievalDemo';
 
-}
-export interface UTDGNode {
-  id: string;
+
+export interface UTDGNode { id: string;
   type: 'concept' | 'entity' | 'relationship' | 'attribute' | 'constraint';
   label: string;
   description: string;
   properties: Record<string, any>;
-  metadata: {
+  metadata: {;
   era?: HistoricalEra;
   genre?: Genre;
   style?: Style;
   tags: string;
-  confidence: number; // 0-1 accuracy score,
+  confidence: number; // 0-1 accuracy score }
   sources: string;
   lastUpdated: Date;
-}
+
+
 };
   relationships: UTDGRelationship;
-}
-}
-export interface UTDGRelationship {
-  id: string;
+
+
+export interface UTDGRelationship { id: string;
   sourceNodeId: string;
   targetNodeId: string;
   type: 'contains' | 'partOf' | 'influences' | 'requires' | 'excludes' | 'similar' | 'temporal' | 'causal';
-  strength: number; // 0-1 relationship strength,
+  strength: number; // 0-1 relationship strength;
   direction: 'bidirectional' | 'sourceToTarget' | 'targetToSource';
   context?: string;
-  temporalConstraints?: {
+  temporalConstraints?: {;
   before?: Date;
   after?: Date;
-  duration?: number; // milliseconds,
-}
+  duration?: number; // milliseconds }
+
+
 };
-}
-}
-export interface UTDGQuery {
-  nodeTypes?: string;
+
+
+export interface UTDGQuery { nodeTypes?: string;
   relationshipTypes?: string;
   eras?: HistoricalEra;
   genres?: Genre;
@@ -53,59 +52,54 @@ export interface UTDGQuery {
   confidenceThreshold?: number;
   maxResults?: number;
   includeRelationships?: boolean;
-  spatialConstraints?: {
+  spatialConstraints?: { }
   regions?: string;
   excludeRegions?: string;
-}
+
+
 };
-  temporalConstraints?: {
-  startYear?: number;
+  temporalConstraints?: { startYear?: number;
   endYear?: number;
-  seasons?: string;
-};
-  socialConstraints?: {
-  socialClasses?: string;
+  seasons?: string };
+  socialConstraints?: { socialClasses?: string;
   professions?: string;
-  genders?: string;
-};
-}
-}
-export interface UTDGContext {
-  historical: {
+  genders?: string };
+
+
+export interface UTDGContext { historical: { }
   era: HistoricalEra;
   year?: number;
   region?: string;
   culturalContext?: string;
-}
+
+
 };
-  creative: {
+  creative: { ,
   genre: Genre;
   style: Style;
   tone?: string;
-  audience?: string;
-};
-  technical: {
+  audience?: string };
+  technical: { ,
   accuracy: 'strict' | 'moderate' | 'creative';
-  sources: 'academic' | 'popular' | 'mixed';
+  sources: 'academic' | 'popular' | 'mixed' }
   validation: boolean;
 };
-}
-}
-export interface UTDGContentSuggestion {
-  type: 'character' | 'setting' | 'object' | 'event' | 'concept';
+
+
+export interface UTDGContentSuggestion { type: 'character' | 'setting' | 'object' | 'event' | 'concept';
   content: any;
   confidence: number;
   reasoning: string;
   alternatives: any;
-  historicalAccuracy: {
+  historicalAccuracy: { }
   score: number;
   violations: string;
   suggestions: string;
-}
+
+
 };
-}
-export class UTDGFoundation {
-  private nodes: Map<string, UTDGNode> = new Map();
+
+export class UTDGFoundation { private nodes: Map<string, UTDGNode> = new Map();
   private relationships: Map<string, UTDGRelationship> = new Map();
   private metadataManager: NodeMetadataManager;
   private dataSourceManager: DataSourceManager;
@@ -136,114 +130,110 @@ export class UTDGFoundation {
     // Historical Eras as core nodes
     const eras = await this.metadataManager.getAllEras();
     for (const era of eras) {
-      const eraNode: UTDGNode = {,
+      const eraNode: UTDGNode = { }
   id: `era_${era.id}`}
-},
-  type: 'concept',
-        label: era.name,
-        description: era.description,
-        properties: {
-  startYear: era.startYear,
-  endYear: era.endYear,
-  characteristics: era.characteristics,
-  socialStructure: era.socialStructure,
-  technology: era.technology,
-  artStyles: era.artStyles,
-},
-  metadata: {
-  era: era.id as HistoricalEra,
-  tags: ['historical_era', 'chronology'],
-  confidence: 1.0,
-  sources: ['Historical academic sources'],
-  lastUpdated: new Date(),
-},
+
+  type: 'concept'
+        label: era.name
+        description: era.description
+        properties: { 
+  startYear: era.startYear
+  endYear: era.endYear
+  characteristics: era.characteristics
+  socialStructure: era.socialStructure
+  technology: era.technology
+  artStyles: era.artStyles }
+
+  metadata: { 
+  era: era.id as HistoricalEra
+  tags: ['historical_era', 'chronology']
+  confidence: 1.0
+  sources: ['Historical academic sources']
+  lastUpdated: new Date() }
+
   relationships: [];
   };
       this.addNode(eraNode);
     // Genres as core nodes
     const genres = await this.metadataManager.getAllGenres();
-    for (const genre of genres) {
-      const genreNode: UTDGNode = {,
+    for (const genre of genres) { const genreNode: UTDGNode = { }
   id: `genre_${genre.id}`}
-},
-  type: 'concept',
-        label: genre.name,
-        description: genre.description,
-        properties: {
-  characteristics: genre.characteristics,
-  commonThemes: genre.commonThemes,
-  typicalElements: genre.typicalElements,
-  audienceExpectations: genre.audienceExpectations,
-},
-  metadata: {
-  genre: genre.id as Genre,
-  tags: ['literary_genre', 'creative_writing'],
-  confidence: 1.0,
-  sources: ['Literary theory', 'Genre studies'],
-  lastUpdated: new Date(),
-},
+
+  type: 'concept'
+        label: genre.name
+        description: genre.description
+        properties: { 
+  characteristics: genre.characteristics
+  commonThemes: genre.commonThemes
+  typicalElements: genre.typicalElements
+  audienceExpectations: genre.audienceExpectations }
+
+  metadata: { 
+  genre: genre.id as Genre
+  tags: ['literary_genre', 'creative_writing']
+  confidence: 1.0
+  sources: ['Literary theory', 'Genre studies']
+  lastUpdated: new Date() }
+
   relationships: [];
   };
       this.addNode(genreNode);
     // Social Classes as core entities
-    const socialClasses = [;
+    const socialClasses = [
       'peasant', 'merchant', 'craftsman', 'minor_noble', 'major_noble', 'clergy', 'royal'
     ];
-    for (const socialClass of socialClasses) {
-      const classNode: UTDGNode = {,
+    for (const socialClass of socialClasses) { const classNode: UTDGNode = { }
   id: `social_${socialClass}`}
-},
-  type: 'entity',
-        label: socialClass.replace('_', ' ').toUpperCase(),
+
+  type: 'entity'
+        label: socialClass.replace('_', ' ').toUpperCase()
         description: `Members of the ${socialClass} social class`}
-},
-  properties: {
-  economicPower: this.getSocialClassEconomicPower(socialClass),
-  politicalInfluence: this.getSocialClassPoliticalInfluence(socialClass),
-  socialMobility: this.getSocialClassMobility(socialClass),
-  typicalOccupations: this.getSocialClassOccupations(socialClass),
-},
-  metadata: {
-  tags: ['social_class', 'hierarchy', 'society'],
-  confidence: 0.9,
-  sources: ['Social history', 'Medieval studies'],
-  lastUpdated: new Date(),
-},
+
+  properties: { 
+  economicPower: this.getSocialClassEconomicPower(socialClass)
+  politicalInfluence: this.getSocialClassPoliticalInfluence(socialClass)
+  socialMobility: this.getSocialClassMobility(socialClass)
+  typicalOccupations: this.getSocialClassOccupations(socialClass) }
+
+  metadata: { 
+  tags: ['social_class', 'hierarchy', 'society']
+  confidence: 0.9
+  sources: ['Social history', 'Medieval studies']
+  lastUpdated: new Date() }
+
   relationships: [];
   };
       this.addNode(classNode);
   /**
    * Integrate medieval content into UTDG
    */
-  private async integrateMedievalContent(): Promise<void> {
-
-    const medievalContent = this.medievalDemo.getAllMedievalContent();
+  private async integrateMedievalContent(): Promise<void> { const medievalContent = this.medievalDemo.getAllMedievalContent();
     // Add clothing as entities
     for (const clothing of medievalContent.clothing) {
-      const clothingNode: UTDGNode = {,
+      const clothingNode: UTDGNode = { }
   id: `clothing_${clothing.id}`}
-},
-  type: 'entity',
-        label: clothing.name,
-        description: clothing.description,
-        properties: {
-  socialClass: clothing.socialClass,
-  gender: clothing.gender,
-  materials: clothing.materials,
-  colors: clothing.colors,
-  period: clothing.period,
-  regions: clothing.regions,
-  seasonality: clothing.seasonality,
-  occasions: clothing.occasions,
-},
-  metadata: {
-  era: 'medieval',
-  tags: ['clothing', 'material_culture', clothing.socialClass, clothing.gender],
-  confidence: clothing.historicalAccuracy === 'high' ? 0.9 : ,
-  clothing.historicalAccuracy === 'medium' ? 0.7 : 0.5,
-  sources: clothing.sources,
-  lastUpdated: new Date(),
-},
+
+  type: 'entity'
+        label: clothing.name
+        description: clothing.description
+        properties: { 
+  socialClass: clothing.socialClass
+  gender: clothing.gender
+  materials: clothing.materials
+  colors: clothing.colors
+  period: clothing.period
+  regions: clothing.regions
+  seasonality: clothing.seasonality
+  occasions: clothing.occasions }
+
+  metadata: { 
+  era: 'medieval'
+  tags: ['clothing', 'material_culture', clothing.socialClass, clothing.gender]
+  confidence: clothing.historicalAccuracy === 'high' ? 0.9 : 
+  clothing.historicalAccuracy === 'medium' ? 0.7 : 0.5
+  sources: clothing.sources
+  lastUpdated: new Date() }
+
   relationships: [];
   };
       this.addNode(clothingNode);
@@ -251,95 +241,92 @@ export class UTDGFoundation {
       if (clothing.socialClass) {
         this.addRelationship({)
   id: `${clothingNode.id}_worn_by_${clothing.socialClass}`}
-},
-  sourceNodeId: clothingNode.id,
+
+  sourceNodeId: clothingNode.id
           targetNodeId: `social_${clothing.socialClass}`}
-},
-  type: 'requires',
-          strength: 0.8,
-          direction: 'sourceToTarget',
+
+  type: 'requires'
+          strength: 0.8
+          direction: 'sourceToTarget'
           context: 'Appropriate social class for wearing this clothing';
   });
     // Add materials as entities
-    for (const material of medievalContent.materials) {
-      const materialNode: UTDGNode = {,
+    for (const material of medievalContent.materials) { const materialNode: UTDGNode = { }
   id: `material_${material.id}`}
-},
-  type: 'entity',
-        label: material.name,
+
+  type: 'entity'
+        label: material.name
         description: `${material.type} material used in medieval times`}
-},
-  properties: {
-  type: material.type,
-  availability: material.availability,
-  cost: material.cost,
-  durability: material.durability,
-  socialStatus: material.socialStatus,
-  tradingSources: material.tradingSources,
-  primaryUses: material.primaryUses,
-},
-  metadata: {
-  era: 'medieval',
-  tags: ['material', 'trade', 'economy', material.type],
-  confidence: 0.9,
-  sources: ['Archaeological evidence', 'Trade records'],
-  lastUpdated: new Date(),
-},
+
+  properties: { 
+  type: material.type
+  availability: material.availability
+  cost: material.cost
+  durability: material.durability
+  socialStatus: material.socialStatus
+  tradingSources: material.tradingSources
+  primaryUses: material.primaryUses }
+
+  metadata: { 
+  era: 'medieval'
+  tags: ['material', 'trade', 'economy', material.type]
+  confidence: 0.9
+  sources: ['Archaeological evidence', 'Trade records']
+  lastUpdated: new Date() }
+
   relationships: [];
   };
       this.addNode(materialNode);
     // Add characters as entities
-    for (const character of medievalContent.characters) {
-      const characterNode: UTDGNode = {,
+    for (const character of medievalContent.characters) { const characterNode: UTDGNode = { }
   id: `character_${character.id}`}
-},
-  type: 'entity',
-        label: character.name,
-        description: character.description,
-        properties: {
-  profession: character.profession,
-  socialClass: character.socialClass,
-  gender: character.gender,
-  age: character.age,
-  skills: character.skills,
-  possessions: character.possessions,
-  socialConnections: character.socialConnections,
-},
-  metadata: {
-  era: 'medieval',
-  tags: ['character', 'person', character.profession, character.socialClass],
-  confidence: 0.8,
-  sources: ['Historical records', 'Archaeological evidence'],
-  lastUpdated: new Date(),
-},
+
+  type: 'entity'
+        label: character.name
+        description: character.description
+        properties: { 
+  profession: character.profession
+  socialClass: character.socialClass
+  gender: character.gender
+  age: character.age
+  skills: character.skills
+  possessions: character.possessions
+  socialConnections: character.socialConnections }
+
+  metadata: { 
+  era: 'medieval'
+  tags: ['character', 'person', character.profession, character.socialClass]
+  confidence: 0.8
+  sources: ['Historical records', 'Archaeological evidence']
+  lastUpdated: new Date() }
+
   relationships: [];
   };
       this.addNode(characterNode);
     // Add locations as entities
-    for (const location of medievalContent.locations) {
-      const locationNode: UTDGNode = {,
+    for (const location of medievalContent.locations) { const locationNode: UTDGNode = { }
   id: `location_${location.id}`}
-},
-  type: 'entity',
-        label: location.name,
-        description: location.description,
-        properties: {
-  type: location.type,
-  socialContext: location.socialContext,
-  typicalActivities: location.typicalActivities,
-  socialClasses: location.socialClasses,
-  timeOfDay: location.timeOfDay,
-  season: location.season,
-  geographicalRegion: location.geographicalRegion,
-  politicalContext: location.politicalContext,
-},
-  metadata: {
-  era: 'medieval',
-  tags: ['location', 'setting', location.type],
-  confidence: 0.9,
-  sources: ['Archaeological sites', 'Historical documents'],
-  lastUpdated: new Date(),
-},
+
+  type: 'entity'
+        label: location.name
+        description: location.description
+        properties: { 
+  type: location.type
+  socialContext: location.socialContext
+  typicalActivities: location.typicalActivities
+  socialClasses: location.socialClasses
+  timeOfDay: location.timeOfDay
+  season: location.season
+  geographicalRegion: location.geographicalRegion
+  politicalContext: location.politicalContext }
+
+  metadata: { 
+  era: 'medieval'
+  tags: ['location', 'setting', location.type]
+  confidence: 0.9
+  sources: ['Archaeological sites', 'Historical documents']
+  lastUpdated: new Date() }
+
   relationships: [];
   };
       this.addNode(locationNode);
@@ -379,29 +366,28 @@ export class UTDGFoundation {
         context: 'Social hierarchy and power structure';
   });
     // Genre compatibility relationships
-    this.addRelationship({)
+    this.addRelationship({ )
   id: 'historical_fiction_medieval_era',
   sourceNodeId: 'genre_historical_fiction',
   targetNodeId: 'era_medieval',
   type: 'requires',
   strength: 0.9,
   direction: 'sourceToTarget',
-  context: 'Historical fiction often set in medieval period',
+  context: 'Historical fiction often set in medieval period' }
 });
-    this.addRelationship({)
+    this.addRelationship({ )
   id: 'fantasy_medieval_influences',
   sourceNodeId: 'genre_fantasy',
   targetNodeId: 'era_medieval',
   type: 'influences',
   strength: 0.7,
   direction: 'sourceToTarget',
-  context: 'Fantasy genre draws heavily from medieval aesthetics',
+  context: 'Fantasy genre draws heavily from medieval aesthetics' }
 });
   /**
    * Add node to the graph
    */
-  public addNode(node: UTDGNode): void {
-  this.nodes.set(node.id, node);
+  public addNode(node: UTDGNode): void { this.nodes.set(node.id, node);
   this.updateIndices(node);
   /**
   * Add relationship to the graph
@@ -463,17 +449,16 @@ export class UTDGFoundation {
   eras: [context.historical.era],
   genres: [context.creative.genre],
   confidenceThreshold: context.technical.accuracy === 'strict' ? 0.8 : 0.5,
-  maxResults: 20,
+  maxResults: 20 }
 });
     // Generate character suggestions
     const characters = relevantNodes.filter(node => ;);
       node.metadata.tags.includes('character') || node.type === 'entity' && node.id.startsWith('character_')
     );
-    if (characters.length > 0) {
-      suggestions.push({)
+    if (characters.length > 0) { suggestions.push({)
   type: 'character',
         content: characters[0],
-        confidence: characters[0].metadata.confidence,
+        confidence: characters[0].metadata.confidence }
         reasoning: `Character from ${context.historical.era} era matching ${context.creative.genre} genre`}
 },
   alternatives: characters.slice(1, 4),
@@ -483,11 +468,10 @@ export class UTDGFoundation {
     const settings = relevantNodes.filter(node => ;);
       node.metadata.tags.includes('location') || node.metadata.tags.includes('setting')
     );
-    if (settings.length > 0) {
-      suggestions.push({)
+    if (settings.length > 0) { suggestions.push({)
   type: 'setting',
         content: settings[0],
-        confidence: settings[0].metadata.confidence,
+        confidence: settings[0].metadata.confidence }
         reasoning: `Setting appropriate for ${context.historical.era} period and ${context.creative.genre} genre`}
 },
   alternatives: settings.slice(1, 4),
@@ -499,11 +483,10 @@ export class UTDGFoundation {
       node.metadata.tags.includes('material') ||
       node.metadata.tags.includes('object')
     );
-    if (objects.length > 0) {
-      suggestions.push({)
+    if (objects.length > 0) { suggestions.push({)
   type: 'object',
         content: objects[0],
-        confidence: objects[0].metadata.confidence,
+        confidence: objects[0].metadata.confidence }
         reasoning: `Objects and materials from ${context.historical.era} period`}
 },
   alternatives: objects.slice(1, 4),
@@ -513,7 +496,7 @@ export class UTDGFoundation {
   /**
    * Validate historical accuracy of content
    */
-  private validateHistoricalAccuracy(node: UTDGNode, context: UTDGContext): {
+  private validateHistoricalAccuracy(node: UTDGNode, context: UTDGContext): {,
   score: number;
     violations: string;
   suggestions: string;
@@ -542,8 +525,7 @@ export class UTDGFoundation {
   /**
    * Update search indices
    */
-  private updateIndices(node: UTDGNode): void {
-  // Type index
+  private updateIndices(node: UTDGNode): void { // Type index
   if (!this.indexByType.has(node.type)) {
   this.indexByType.set(node.type, new Set());
   this.indexByType.get(node.type)!.add(node.id);
@@ -565,11 +547,11 @@ export class UTDGFoundation {
   /**
   * Validate graph consistency
   */
-  private async validateGraphConsistency(): Promise<{,
+  private async validateGraphConsistency(): Promise<{ }
   isValid: boolean;
   errors: string;
   warnings: string;
-}> {
+> {
 
     const errors: string = [];
     const warnings: string = [];
@@ -589,16 +571,14 @@ export class UTDGFoundation {
     for (const node of this.nodes.values()) {
       if (node.metadata.confidence < 0 || node.metadata.confidence > 1) {
         errors.push(`Invalid confidence score ${node.metadata.confidence} for node ${node.id}`);}
-    return {
-  isValid: errors.length === 0,
-  errors,
+    return { isValid: errors.length === 0,
+  errors }
   warnings
 };
   /**
    * Check for circular dependencies in the graph
    */
-  private hasCircularDependency(nodeId: string, visited: Set<string>, recursionStack: Set<string>): boolean {
-  if (recursionStack.has(nodeId)) {
+  private hasCircularDependency(nodeId: string, visited: Set<string>, recursionStack: Set<string>): boolean { if (recursionStack.has(nodeId)) {
   return true;
   if (visited.has(nodeId)) {
   return false;
@@ -616,48 +596,45 @@ export class UTDGFoundation {
   /**
   * Helper methods for social class properties
   */
-  private getSocialClassEconomicPower(socialClass: string): number {,
-  const powerMap: Record<string, number> = {,
-  'peasant': 0.1,
-  'merchant': 0.4,
-  'craftsman': 0.3,
-  'minor_noble': 0.6,
-  'major_noble': 0.8,
-  'clergy': 0.5,
-  'royal': 1.0,
+  private getSocialClassEconomicPower(socialClass: string): number {
+  const powerMap: Record<string, number> = {
+  'peasant': 0.1
+  'merchant': 0.4
+  'craftsman': 0.3
+  'minor_noble': 0.6
+  'major_noble': 0.8
+  'clergy': 0.5
+  'royal': 1.0 }
 };
     return powerMap[socialClass] || 0.1;
-  private getSocialClassPoliticalInfluence(socialClass: string): number {
-  const influenceMap: Record<string, number> = {,
-  'peasant': 0.0,
-  'merchant': 0.2,
-  'craftsman': 0.1,
-  'minor_noble': 0.5,
-  'major_noble': 0.8,
-  'clergy': 0.6,
-  'royal': 1.0,
+  private getSocialClassPoliticalInfluence(socialClass: string): number { const influenceMap: Record<string, number> = {
+  'peasant': 0.0
+  'merchant': 0.2
+  'craftsman': 0.1
+  'minor_noble': 0.5
+  'major_noble': 0.8
+  'clergy': 0.6
+  'royal': 1.0 }
 };
     return influenceMap[socialClass] || 0.0;
-  private getSocialClassMobility(socialClass: string): number {
-  const mobilityMap: Record<string, number> = {,
-  'peasant': 0.1,
-  'merchant': 0.6,
-  'craftsman': 0.4,
-  'minor_noble': 0.3,
-  'major_noble': 0.2,
-  'clergy': 0.5,
-  'royal': 0.0,
+  private getSocialClassMobility(socialClass: string): number { const mobilityMap: Record<string, number> = {
+  'peasant': 0.1
+  'merchant': 0.6
+  'craftsman': 0.4
+  'minor_noble': 0.3
+  'major_noble': 0.2
+  'clergy': 0.5
+  'royal': 0.0 }
 };
     return mobilityMap[socialClass] || 0.1;
-  private getSocialClassOccupations(socialClass: string): string {
-  const occupationMap: Record<string, string> = {,
-  'peasant': ['farmer', 'laborer', 'serf', 'shepherd'],
-  'merchant': ['trader', 'banker', 'importer', 'shop owner'],
-  'craftsman': ['blacksmith', 'carpenter', 'weaver', 'potter', 'baker'],
-  'minor_noble': ['knight', 'lord of manor', 'court official'],
-  'major_noble': ['duke', 'earl', 'count', 'baron'],
-  'clergy': ['priest', 'monk', 'bishop', 'abbot'],
-  'royal': ['king', 'queen', 'prince', 'princess'],
+  private getSocialClassOccupations(socialClass: string): string { const occupationMap: Record<string, string> = {
+  'peasant': ['farmer', 'laborer', 'serf', 'shepherd']
+  'merchant': ['trader', 'banker', 'importer', 'shop owner']
+  'craftsman': ['blacksmith', 'carpenter', 'weaver', 'potter', 'baker']
+  'minor_noble': ['knight', 'lord of manor', 'court official']
+  'major_noble': ['duke', 'earl', 'count', 'baron']
+  'clergy': ['priest', 'monk', 'bishop', 'abbot']
+  'royal': ['king', 'queen', 'prince', 'princess'] }
 };
     return occupationMap[socialClass] || [];
   /**
@@ -672,36 +649,33 @@ export class UTDGFoundation {
     const nodesByType: Record<string, number> = {};
     const nodesByEra: Record<string, number> = {};
     let totalConfidence = 0;
-    for (const node of this.nodes.values()) {
-  nodesByType[node.type] = (nodesByType[node.type] || 0) + 1;
+    for (const node of this.nodes.values()) { nodesByType[node.type] = (nodesByType[node.type] || 0) + 1;
   if (node.metadata.era) {
   nodesByEra[node.metadata.era] = (nodesByEra[node.metadata.era] || 0) + 1;
   totalConfidence += node.metadata.confidence;
   return {
-  totalNodes: this.nodes.size,
-  totalRelationships: this.relationships.size,
-  nodesByType,
-  nodesByEra,
-  averageConfidence: this.nodes.size > 0 ? totalConfidence / this.nodes.size : 0,
+  totalNodes: this.nodes.size
+  totalRelationships: this.relationships.size
+  nodesByType
+  nodesByEra
+  averageConfidence: this.nodes.size > 0 ? totalConfidence / this.nodes.size : 0 }
 };
   /**
    * Export graph data for external use
    */
-  public exportGraph(): {
-  nodes: UTDGNode;
+  public exportGraph(): { nodes: UTDGNode;
   relationships: UTDGRelationship;
-  metadata: {
+  metadata: { }
   exportDate: Date;
   version: string;
   stats: any;
 };
-    return {
-  nodes: Array.from(this.nodes.values()),
-  relationships: Array.from(this.relationships.values()),
+    return { nodes: Array.from(this.nodes.values())
+  relationships: Array.from(this.relationships.values())
   metadata: {
-  exportDate: new Date(),
-  version: '1.0.0',
-  stats: this.getGraphStats(),
+  exportDate: new Date()
+  version: '1.0.0'
+  stats: this.getGraphStats() }
 };
 
 export default UTDGFoundation;

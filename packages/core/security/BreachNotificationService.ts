@@ -15,8 +15,7 @@ import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
 // Breach Classification
-export enum BreachSeverity {
-  LOW = 'low',
+export enum BreachSeverity { LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
@@ -56,12 +55,13 @@ export enum BreachSeverity {
   type: BreachType;
   category: BreachCategory;
   dataTypes: string;
-  dataSubjects: {
+  dataSubjects: { }
   category: DataSubjectCategory;
   count: number;
   countries: string;
-}
-}[];
+
+
+[];
   affectedSystems: string;
   rootCause?: string;
   containmentActions: string;
@@ -75,17 +75,15 @@ export enum BreachSeverity {
   riskAssessment: RiskAssessment;
   complianceRequirements: ComplianceRequirement;
   metadata: Record<string, any>;
-}
-export enum IncidentStatus {
-  DETECTED = 'detected',
-  INVESTIGATING = 'investigating',
-  CONTAINED = 'contained',
-  ERADICATING = 'eradicating',
-  RECOVERING = 'recovering',
-  LESSONS_LEARNED = 'lessons_learned',
+
+export enum IncidentStatus { DETECTED = 'detected'
+  INVESTIGATING = 'investigating'
+  CONTAINED = 'contained'
+  ERADICATING = 'eradicating'
+  RECOVERING = 'recovering'
+  LESSONS_LEARNED = 'lessons_learned' }
   CLOSED = 'closed'
-  export interface NotificationRecord {
-  id: string;
+  export interface NotificationRecord { id: string;
   type: NotificationType;
   recipient: string;
   channel: string;
@@ -94,152 +92,145 @@ export enum IncidentStatus {
   acknowledgedAt?: Date;
   content: string;
   status: 'pending' | 'sent' | 'delivered' | 'failed' | 'acknowledged';
-  metadata: Record<string, any>;
-}
-}
-}
-export interface EvidenceRecord {
-  id: string;
+  metadata: Record<string, any> }
+
+
+
+export interface EvidenceRecord { id: string;
   type: 'log' | 'screenshot' | 'document' | 'forensic' | 'witness';
   filename: string;
   hash: string;
   collectedAt: Date;
   collectedBy: string;
   description: string;
-  chainOfCustody: ChainOfCustodyEntry;
-}
-}
-}
-export interface ChainOfCustodyEntry {
-  timestamp: Date;
+  chainOfCustody: ChainOfCustodyEntry }
+
+
+
+export interface ChainOfCustodyEntry { timestamp: Date;
   action: 'collected' | 'transferred' | 'analyzed' | 'stored';
   person: string;
   location: string;
-  notes?: string;
-}
-}
-}
-export interface TimelineEvent {
-  timestamp: Date;
+  notes?: string }
+
+
+
+export interface TimelineEvent { timestamp: Date;
   event: string;
   actor: string;
-  details: Record<string, any>;
-}
-}
-}
-export interface RiskAssessment {
-  likelihood: 'low' | 'medium' | 'high';
+  details: Record<string, any> }
+
+
+
+export interface RiskAssessment { likelihood: 'low' | 'medium' | 'high';
   impact: 'low' | 'medium' | 'high';
-  overallRisk: 'low' | 'medium' | 'high' | 'critical';
+  overallRisk: 'low' | 'medium' | 'high' | 'critical' }
   factors: string;
   recommendations: string;
   residualRisk: string;
-}
-}
-}
-export interface ComplianceRequirement {
-  framework: 'GDPR' | 'NIST' | 'HIPAA' | 'PCI_DSS' | 'SOX';
+
+
+
+
+export interface ComplianceRequirement { framework: 'GDPR' | 'NIST' | 'HIPAA' | 'PCI_DSS' | 'SOX' }
   requirement: string;
   deadline: Date;
   status: 'pending' | 'in_progress' | 'completed' | 'overdue';
   evidence?: string;
   // Configuration
-}
-}
-}
-export interface BreachNotificationConfig {
-  detection: {
+
+
+
+
+export interface BreachNotificationConfig { detection: { }
   enabled: boolean;
   autoClassification: boolean;
   riskThreshold: BreachSeverity;
   monitoringSources: string;
-}
+
+
 };
-  notifications: {
-  gdpr: {
+  notifications: { ,
+  gdpr: {,
   enabled: boolean;
   supervisoryAuthority: string;
   contactEmail: string;
   autoFile: boolean;
-  deadline: number; // hours,
+  deadline: number; // hours }
 };
-    internal: {
+    internal: { ,
   securityTeam: string;
   management: string;
   legal: string;
-  dpo: string;
-};
-    external: {
-  customers: {
+  dpo: string };
+    external: { ,
+  customers: { }
   enabled: boolean;
   highRiskThreshold: BreachSeverity;
   template: string;
 };
-      media: {
+      media: { ,
   enabled: boolean;
   criticalThreshold: BreachSeverity;
-  contactList: string;
-};
+  contactList: string };
     };
   };
-  automation: {
+  automation: { ,
   containmentActions: boolean;
   evidenceCollection: boolean;
   reportGeneration: boolean;
-  statusUpdates: boolean;
-};
-  compliance: {
+  statusUpdates: boolean };
+  compliance: { ,
   frameworks: string;
   auditLogging: boolean;
-  retentionPeriod: string;
-};
-const DEFAULT_CONFIG: BreachNotificationConfig = {,
-  detection: {
+  retentionPeriod: string };
+const DEFAULT_CONFIG: BreachNotificationConfig = { ,
+  detection: {,
   enabled: true,
   autoClassification: true,
   riskThreshold: BreachSeverity.MEDIUM,
-  monitoringSources: ['security_logs', 'authentication_systems', 'data_access_logs'],
+  monitoringSources: ['security_logs', 'authentication_systems', 'data_access_logs'] }
 },
-  notifications: {
-  gdpr: {
+  notifications: { ,
+  gdpr: {,
   enabled: true,
   supervisoryAuthority: 'ICO',
   contactEmail: 'dpo@company.com',
   autoFile: false, // Require manual review,
-  deadline: 72,
+  deadline: 72 }
 },
-  internal: {
+  internal: { ,
   securityTeam: ['security@company.com'],
   management: ['ceo@company.com', 'ciso@company.com'],
   legal: ['legal@company.com'],
-  dpo: 'dpo@company.com',
+  dpo: 'dpo@company.com' }
 },
-  external: {
-  customers: {
+  external: { ,
+  customers: {,
   enabled: true,
   highRiskThreshold: BreachSeverity.HIGH,
-  template: 'customer_breach_notification',
+  template: 'customer_breach_notification' }
 },
-  media: {
+  media: { ,
   enabled: false,
   criticalThreshold: BreachSeverity.CRITICAL,
-  contactList: [],
+  contactList: [] }
 },
-  automation: {
+  automation: { ,
   containmentActions: true,
   evidenceCollection: true,
   reportGeneration: true,
-  statusUpdates: true,
+  statusUpdates: true }
 },
-  compliance: {
+  compliance: { ,
   frameworks: ['GDPR', 'NIST'],
   auditLogging: true,
-  retentionPeriod: '7 years',
+  retentionPeriod: '7 years' }
 };
 /**
  * Automated breach notification and incident response service
  */
-}
+
 export class BreachNotificationService extends EventEmitter {
   private incidents: Map<string, BreachIncident> = new Map();
   private config: BreachNotificationConfig;
@@ -251,7 +242,7 @@ export class BreachNotificationService extends EventEmitter {
   /**
    * Report a new breach incident
    */
-  public async reportBreach(incidentData: {)
+  public async reportBreach(incidentData: { ) }
   title: string;
   description: string;
   severity?: BreachSeverity;
@@ -262,32 +253,30 @@ export class BreachNotificationService extends EventEmitter {
   estimatedDataSubjects?: number;
   detectedBy?: string;
   metadata?: Record<string, any>;
-}): Promise<string> {
-
-    const incident: BreachIncident = {,
-  id: this.generateIncidentId(),
-      title: incidentData.title,
-      description: incidentData.description,
-      detectedAt: new Date(),
-      severity: incidentData.severity || await this.classifyBreach(incidentData),
-      type: incidentData.type || BreachType.CONFIDENTIALITY,
-      category: incidentData.category || BreachCategory.CYBER_ATTACK,
-      dataTypes: incidentData.dataTypes,
-      dataSubjects: [],
-      affectedSystems: incidentData.affectedSystems,
-      containmentActions: [],
-      mitigationMeasures: [],
-      status: IncidentStatus.DETECTED,
-      notifications: [],
-      evidence: [],
-      timeline: [{,
-  timestamp: new Date(),
-        event: 'Incident detected and reported',
-        actor: incidentData.detectedBy || 'system',
+}): Promise<string> { const incident: BreachIncident = {
+  id: this.generateIncidentId()
+      title: incidentData.title
+      description: incidentData.description
+      detectedAt: new Date()
+      severity: incidentData.severity || await this.classifyBreach(incidentData)
+      type: incidentData.type || BreachType.CONFIDENTIALITY
+      category: incidentData.category || BreachCategory.CYBER_ATTACK
+      dataTypes: incidentData.dataTypes
+      dataSubjects: []
+      affectedSystems: incidentData.affectedSystems
+      containmentActions: []
+      mitigationMeasures: []
+      status: IncidentStatus.DETECTED
+      notifications: []
+      evidence: []
+      timeline: [{
+  timestamp: new Date()
+        event: 'Incident detected and reported'
+        actor: incidentData.detectedBy || 'system' }
         details: incidentData.metadata || {}
-      }],
-      riskAssessment: await this.assessRisk(incidentData),
-      complianceRequirements: this.generateComplianceRequirements(incidentData.severity || BreachSeverity.MEDIUM),
+]
+      riskAssessment: await this.assessRisk(incidentData)
+      complianceRequirements: this.generateComplianceRequirements(incidentData.severity || BreachSeverity.MEDIUM)
       metadata: incidentData.metadata || {}
     };
     // Store incident
@@ -301,37 +290,35 @@ export class BreachNotificationService extends EventEmitter {
    * Update incident status and progress
    */
   public async updateIncident(
-    incidentId: string,
-    updates: Partial<BreachIncident>,
-    actor: string): Promise<void> {,
+    incidentId: string
+    updates: Partial<BreachIncident>
+    actor: string): Promise<void> {
     const incident = this.incidents.get(incidentId);
     if (!incident) {
       throw new Error(`Incident not found: ${incidentId}`);}
     // Create timeline entry
-    const timelineEvent: TimelineEvent = {,
-  timestamp: new Date(),
-  event: 'Incident updated',
-  actor,
-  details: updates,
+    const timelineEvent: TimelineEvent = { 
+  timestamp: new Date()
+  event: 'Incident updated'
+  actor
+  details: updates }
 };
     // Apply updates
-    const updatedIncident = {
-  ...incident,
-  ...updates,
-  timeline: [...incident.timeline, timelineEvent],
+    const updatedIncident = { ...incident
+  ...updates
+  timeline: [...incident.timeline, timelineEvent] }
 };
     this.incidents.set(incidentId, updatedIncident);
     // Handle status changes
-    if (updates.status && updates.status !== incident.status) {
-      await this.handleStatusChange(updatedIncident, incident.status);
+    if (updates.status && updates.status !== incident.status) { await this.handleStatusChange(updatedIncident, incident.status);
     this.emit('incidentUpdated', updatedIncident);
   /**
    * Send notification to specified recipients
    */
   public async sendNotification(
-    incidentId: string,
-    type: NotificationType,
-    recipients: string,
+    incidentId: string
+    type: NotificationType
+    recipients: string }
     template?: string
   ): Promise<NotificationRecord> {
 
@@ -339,22 +326,19 @@ export class BreachNotificationService extends EventEmitter {
     if (!incident) {
       throw new Error(`Incident not found: ${incidentId}`);}
     const notifications: NotificationRecord = [];
-    for (const recipient of recipients) {
-      const notification: NotificationRecord = {,
-  id: crypto.randomUUID(),
-        type,
-        recipient,
-        channel: this.determineChannel(type, recipient),
-        sentAt: new Date(),
-        content: await this.generateNotificationContent(incident, type, template),
-        status: 'pending',
+    for (const recipient of recipients) { const notification: NotificationRecord = {
+  id: crypto.randomUUID()
+        type
+        recipient
+        channel: this.determineChannel(type, recipient)
+        sentAt: new Date()
+        content: await this.generateNotificationContent(incident, type, template)
+        status: 'pending' }
         metadata: { incidentId, template }
       };
-      try {
-        await this.deliverNotification(notification);
+      try { await this.deliverNotification(notification);
         notification.status = 'sent';
-        notification.deliveredAt = new Date();
-      } catch (error) {
+        notification.deliveredAt = new Date() } catch (error) {
         notification.status = 'failed';
         notification.metadata.error = (error as Error).message;
       notifications.push(notification);
@@ -366,36 +350,34 @@ export class BreachNotificationService extends EventEmitter {
   /**
    * Generate GDPR notification for supervisory authority
    */
-  public async generateGDPRNotification(incidentId: string): Promise<{,
+  public async generateGDPRNotification(incidentId: string): Promise<{ ,
   content: string;
   deadline: Date;
-  recipients: string;
-}> {
+  recipients: string }> {
 
     const incident = this.incidents.get(incidentId);
     if (!incident) {
       throw new Error(`Incident not found: ${incidentId}`);}
     // Check if GDPR notification is required
-    if (!this.requiresGDPRNotification(incident)) {
-      throw new Error('Incident does not require GDPR notification');
+    if (!this.requiresGDPRNotification(incident)) { throw new Error('Incident does not require GDPR notification');
     // Calculate deadline (72 hours from detection)
     const deadline = new Date(incident.detectedAt.getTime() + (this.config.notifications.gdpr.deadline * 60 * 60 * 1000));
     // Generate notification content
     const content = await this.generateGDPRContent(incident);
     // Determine recipients
-    const recipients = [;
-      this.config.notifications.gdpr.contactEmail,
+    const recipients = [
+      this.config.notifications.gdpr.contactEmail }
       this.config.notifications.internal.dpo
     ];
     return { content, deadline, recipients };
   /**
    * Check GDPR compliance status
    */
-  public checkGDPRCompliance(incidentId: string): {
+  public checkGDPRCompliance(incidentId: string): { ,
   compliant: boolean;
-    timeRemaining: number; // milliseconds,
+    timeRemaining: number; // milliseconds }
   violations: string;
-    actions: string;
+  actions: string;
     const incident = this.incidents.get(incidentId);
     if (!incident) {
       throw new Error(`Incident not found: ${incidentId}`);}
@@ -404,8 +386,7 @@ export class BreachNotificationService extends EventEmitter {
     // Check 72-hour deadline
     const deadline = new Date(incident.detectedAt.getTime() + (72 * 60 * 60 * 1000));
     const timeRemaining = deadline.getTime() - Date.now();
-    if (timeRemaining < 0) {
-  violations.push('72-hour notification deadline exceeded');
+    if (timeRemaining < 0) { violations.push('72-hour notification deadline exceeded');
   // Check if notification was sent
   const gdprNotification = incident.notifications.find(n => n.type === NotificationType.REGULATORY_FILING);
   if (!gdprNotification && this.requiresGDPRNotification(incident)) {
@@ -421,7 +402,7 @@ export class BreachNotificationService extends EventEmitter {
   return {
   compliant: violations.length === 0,
   timeRemaining,
-  violations,
+  violations }
   actions
 };
   /**
@@ -448,8 +429,7 @@ export class BreachNotificationService extends EventEmitter {
     severity?: BreachSeverity;
     dateRange?: { start: Date; end: Date };
     assignee?: string;
-  }): BreachIncident {
-  let incidents = Array.from(this.incidents.values());
+  }): BreachIncident { let incidents = Array.from(this.incidents.values());
   if (filter) {
   if (filter.status) {
   incidents = incidents.filter(i => i.status === filter.status);
@@ -464,7 +444,7 @@ export class BreachNotificationService extends EventEmitter {
   incidents = incidents.filter(i => i.assignee === filter.assignee);
   return incidents.sort((a, b) => b.detectedAt.getTime() - a.detectedAt.getTime());
   // Private helper methods
-  private async initiateIncidentResponse(incident: BreachIncident): Promise<void> {,
+  private async initiateIncidentResponse(incident: BreachIncident): Promise<void> {
   // Send immediate internal notifications
   await this.sendInternalNotifications(incident);
   // Start automated containment if enabled
@@ -476,19 +456,19 @@ export class BreachNotificationService extends EventEmitter {
   // Start evidence collection
   if (this.config.automation.evidenceCollection) {
   await this.startEvidenceCollection(incident);
-  private async sendInternalNotifications(incident: BreachIncident): Promise<void> {,
-  const urgentRecipients = [;
+  private async sendInternalNotifications(incident: BreachIncident): Promise<void> {
+  const urgentRecipients = [
   ...this.config.notifications.internal.securityTeam
   ];
   if (incident.severity === BreachSeverity.HIGH || incident.severity === BreachSeverity.CRITICAL) {
   urgentRecipients.push(...this.config.notifications.internal.management);
   await this.sendNotification()
-  incident.id,
-  NotificationType.INTERNAL_ALERT,
-  urgentRecipients,
+  incident.id
+  NotificationType.INTERNAL_ALERT
+  urgentRecipients
   'internal_breach_alert'
   );
-  private requiresGDPRNotification(incident: BreachIncident): boolean {,
+  private requiresGDPRNotification(incident: BreachIncident): boolean {
   // GDPR notification required if personal data is involved and risk assessment indicates risk
   const hasPersonalData = incident.dataTypes.some(type => ;);
   ['email', 'phone', 'name', 'pii', 'personal_data'].includes(type.toLowerCase())
@@ -498,19 +478,16 @@ export class BreachNotificationService extends EventEmitter {
   incident.riskAssessment.overallRisk === 'high' ||
   incident.riskAssessment.overallRisk === 'critical';
   return hasPersonalData && hasSignificantRisk;
-  private async classifyBreach(incidentData: any): Promise<BreachSeverity> {,
+  private async classifyBreach(incidentData: any): Promise<BreachSeverity> { }
   // Simple classification logic - can be enhanced with ML
   let score = 0;
   // Data sensitivity
-  if (incidentData.dataTypes.includes('pii') || incidentData.dataTypes.includes('personal_data')) {
-  score += 3;
+  if (incidentData.dataTypes.includes('pii') || incidentData.dataTypes.includes('personal_data')) { score += 3;
   if (incidentData.dataTypes.includes('financial') || incidentData.dataTypes.includes('health')) {
   score += 4;
   // Scale
   if (incidentData.estimatedDataSubjects > 1000) {
-  score += 3;
-} else if (incidentData.estimatedDataSubjects > 100) {
-  score += 2;
+  score += 3 } else if (incidentData.estimatedDataSubjects > 100) { score += 2;
   // System criticality
   if (incidentData.affectedSystems.includes('authentication') ||
   incidentData.affectedSystems.includes('payment')) {
@@ -519,58 +496,53 @@ export class BreachNotificationService extends EventEmitter {
   if (score >= 6) return BreachSeverity.HIGH;
   if (score >= 3) return BreachSeverity.MEDIUM;
   return BreachSeverity.LOW;
-  private async assessRisk(incidentData: any): Promise<RiskAssessment> {,
+  private async assessRisk(incidentData: any): Promise<RiskAssessment> {
   // Simplified risk assessment - should be enhanced with proper methodology
   return {
-  likelihood: 'medium',
-  impact: 'high',
-  overallRisk: 'high',
-  factors: [,
-  'Personal data involved',
-  'Authentication system affected',
+  likelihood: 'medium'
+  impact: 'high'
+  overallRisk: 'high'
+  factors: [
+  'Personal data involved'
+  'Authentication system affected'
   'Potential for identity theft'
-  ],
-  recommendations: [,
-  'Notify affected individuals',
-  'Enhance monitoring',
+  ]
+  recommendations: [
+  'Notify affected individuals'
+  'Enhance monitoring'
   'Review access controls'
-  ],
-  residualRisk: 'Monitor for account takeover attempts',
+  ]
+  residualRisk: 'Monitor for account takeover attempts' }
 };
-  private generateComplianceRequirements(severity: BreachSeverity): ComplianceRequirement {
-  const requirements: ComplianceRequirement = [];
+  private generateComplianceRequirements(severity: BreachSeverity): ComplianceRequirement { const requirements: ComplianceRequirement = [];
   if (severity === BreachSeverity.HIGH || severity === BreachSeverity.CRITICAL) {
   requirements.push({)
-  framework: 'GDPR',
-  requirement: 'Notify supervisory authority within 72 hours',
-  deadline: new Date(Date.now() + 72 * 60 * 60 * 1000),
-  status: 'pending',
+  framework: 'GDPR'
+  requirement: 'Notify supervisory authority within 72 hours'
+  deadline: new Date(Date.now() + 72 * 60 * 60 * 1000)
+  status: 'pending' }
 });
-      requirements.push({)
-  framework: 'GDPR',
-  requirement: 'Notify affected data subjects if high risk',
-  deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days,
-  status: 'pending',
+      requirements.push({ )
+  framework: 'GDPR'
+  requirement: 'Notify affected data subjects if high risk'
+  deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+  status: 'pending' }
 });
     return requirements;
   private generateIncidentId(): string {
     const timestamp = Date.now().toString();
     const random = Math.random().toString(36).substring(2, 8);
     return `INC-${timestamp}-${random.toUpperCase()}`;}
-  private scheduleGDPRReminder(incident: BreachIncident): void {
-    // Schedule reminder 24 hours before deadline
+  private scheduleGDPRReminder(incident: BreachIncident): void { // Schedule reminder 24 hours before deadline
     const reminderTime = new Date(incident.detectedAt.getTime() + 48 * 60 * 60 * 1000);
     const timeout = setTimeout(() => {
-      this.emit('gdprDeadlineApproaching', incident);
-    }, reminderTime.getTime() - Date.now());
+      this.emit('gdprDeadlineApproaching', incident) }, reminderTime.getTime() - Date.now());
     this.timers.set(`gdpr-${incident.id}`, timeout);}
-  private startMonitoring(): void {
-    // Monitor for breach indicators from various sources
+  private startMonitoring(): void { // Monitor for breach indicators from various sources
     if (this.config.detection.enabled) {
       // This would integrate with actual monitoring systems
       setInterval(() => {
-        this.checkBreachIndicators();
-      }, 60000); // Check every minute
+        this.checkBreachIndicators() }, 60000); // Check every minute
   private checkBreachIndicators(): void {
     // Placeholder for breach detection logic
     // In production, this would integrate with SIEM, IDS, etc.

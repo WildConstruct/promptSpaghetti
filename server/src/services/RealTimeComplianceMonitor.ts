@@ -15,7 +15,7 @@ import {
   ComplianceCheck,
   ComplianceResult,
   ComplianceContext
-} from '../../../../packages/core/services/ComplianceMonitor';
+ from '../../../../packages/core/services/ComplianceMonitor';
 import { ComplianceRuleEngine } from './ComplianceRuleEngine';
 import { AuditService } from '../auth/services/AuditService';
 import { PolicyNotificationService } from './PolicyNotificationService';
@@ -23,8 +23,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
-}
-}
+
+
 export interface RealTimeMonitoringConfig {
   monitorId: string;
   enabled: boolean;
@@ -56,12 +56,13 @@ export interface RealTimeMonitoringConfig {
   enableAuditLogging: boolean;
   enableNotifications: boolean;
   enableAutoRemediation: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RealTimeEvent {
   eventId: string;
   eventType: ComplianceEventType;
@@ -72,12 +73,13 @@ export interface RealTimeEvent {
   priority: EventPriority;
   tags: string[];
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EventPayload {
   userId?: string;
   resourceId?: string;
@@ -88,12 +90,13 @@ export interface EventPayload {
   responseData?: unknown;
   duration?: number;
   error?: ErrorInfo;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataAccessInfo {
   dataType: string;
   dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
@@ -102,12 +105,13 @@ export interface DataAccessInfo {
   purpose: string;
   legalBasis?: string;
   consentId?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceViolationEvent {
   violationId: string;
   ruleId: string;
@@ -120,12 +124,13 @@ export interface ComplianceViolationEvent {
   detectedAt: Date;
   requiresImmediateAction: boolean;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationEvidence {
   type: 'log' | 'metric' | 'configuration' | 'data_sample' | 'user_action';
   source: string;
@@ -133,24 +138,26 @@ export interface ViolationEvidence {
   content: unknown;
   hash?: string;
   signature?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertThreshold {
   metric: string;
   operator: 'gt' | 'gte' | 'lt' | 'lte' | 'eq' | 'ne';
   value: number;
   timeWindow: number; // minutes
   consecutiveCount?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRule {
   ruleId: string;
   condition: string;
@@ -158,24 +165,26 @@ export interface EscalationRule {
   targetLevel: number;
   recipients: string[];
   actions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SuppressionRule {
   ruleId: string;
   pattern: string;
   duration: number; // minutes
   reason: string;
   approvedBy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MonitoringMetrics {
   eventsProcessed: number;
   violationsDetected: number;
@@ -185,9 +194,10 @@ export interface MonitoringMetrics {
   alertsGenerated: number;
   remediationsTriggered: number;
   timestamp: Date;
-}
-}
-}
+
+
+
+
 
 export type ComplianceEventType = 
   | 'data_access' 
@@ -250,7 +260,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       databaseService: DatabaseService;
       redisService: RedisService;
       analyticsCollector: AnalyticsCollector;
-    }
+
   ) {
     super();
     this.config = config;
@@ -266,7 +276,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
 
     // Initialize metrics
     this.metrics = this.initializeMetrics();
-  }
+
 
   /**
    * Initialize the real-time compliance monitor
@@ -275,7 +285,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
 
     if (this.isRunning) {
       throw new Error('Real-time compliance monitor is already running');
-    }
+
 
     // Load existing state from Redis if available
     await this.loadState();
@@ -298,11 +308,11 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         monitorId: this.config.monitorId,
         environment: this.config.environment,
         timestamp: new Date()
-      }
+
     });
 
     this.emit('monitor_started', { monitorId: this.config.monitorId });
-  }
+
 
   /**
    * Process a real-time compliance event
@@ -311,7 +321,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
 
     if (!this.isRunning) {
       throw new Error('Real-time compliance monitor is not running');
-    }
+
 
     // Validate event
     this.validateEvent(event);
@@ -320,13 +330,13 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     if (event.priority === 'critical') {
       // Process critical events immediately
       await this.processEventImmediate(event);
-    } else {
+ else {
       // Queue for batch processing
       this.enqueueEvent(event);
-    }
+
 
     this.metrics.eventsProcessed++;
-  }
+
 
   /**
    * Process multiple events in batch
@@ -335,8 +345,8 @@ export class RealTimeComplianceMonitor extends EventEmitter {
 
     for (const event of events) {
       await this.processEvent(event);
-    }
-  }
+
+
 
   /**
    * Process event immediately for critical violations
@@ -354,18 +364,17 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       // Process any violations found
       for (const violation of violations) {
         await this.processViolation(violation, event);
-      }
+
 
       // Update metrics
       const processingTime = Date.now() - startTime;
       this.updateProcessingMetrics(processingTime);
-
-    } catch (error) {
+ catch (error) {
       await this.handleProcessingError(error, event);
-    } finally {
+ finally {
       this.activeEvaluations--;
-    }
-  }
+
+
 
   /**
    * Evaluate event against compliance rules
@@ -382,7 +391,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         // Skip if rule is suppressed
         if (this.isRuleSuppressed(rule.id)) {
           continue;
-        }
+
 
         // Evaluate rule against event
         const ruleResult = await this.ruleEngine.evaluateRule(rule, event);
@@ -403,19 +412,19 @@ export class RealTimeComplianceMonitor extends EventEmitter {
               eventId: event.eventId,
               ruleVersion: rule.version,
               evaluationTime: new Date()
-            }
+
           };
 
           violations.push(violation);
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       console.error('Error evaluating event against rules:', error);
       throw error;
-    }
+
 
     return violations;
-  }
+
 
   /**
    * Process detected violation
@@ -430,7 +439,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
 
     if (this.config.persistViolations) {
       await this.persistViolation(violation);
-    }
+
 
     // Emit violation event
     this.emit('violation_detected', violation);
@@ -444,12 +453,12 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     // Handle notifications
     if (this.config.enableNotifications) {
       await this.sendViolationNotification(violation);
-    }
+
 
     // Handle auto-remediation
     if (this.config.enableAutoRemediation && violation.requiresImmediateAction) {
       await this.triggerAutoRemediation(violation);
-    }
+
 
     // Handle escalation
     await this.handleEscalation(violation);
@@ -465,10 +474,10 @@ export class RealTimeComplianceMonitor extends EventEmitter {
           severity: violation.severity,
           violationType: violation.violationType,
           requiresImmediateAction: violation.requiresImmediateAction
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Extract evidence from event and rule result
@@ -485,7 +494,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         eventType: event.eventType,
         payload: event.payload,
         context: event.context
-      }
+
     });
 
     // Rule evaluation evidence
@@ -496,7 +505,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         timestamp: new Date(),
         content: ruleResult.evidence
       });
-    }
+
 
     // Additional context evidence
     if (event.payload.dataAccessed) {
@@ -509,12 +518,12 @@ export class RealTimeComplianceMonitor extends EventEmitter {
           classification: event.payload.dataAccessed.dataClassification,
           recordCount: event.payload.dataAccessed.recordCount,
           purpose: event.payload.dataAccessed.purpose
-        }
+
       });
-    }
+
 
     return evidence;
-  }
+
 
   /**
    * Check if alert thresholds are exceeded
@@ -525,9 +534,9 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       const exceeded = await this.evaluateThreshold(threshold, violation);
       if (exceeded) {
         await this.triggerAlert(threshold, violation);
-      }
-    }
-  }
+
+
+
 
   /**
    * Evaluate a specific threshold against current metrics
@@ -557,8 +566,8 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       return metricValue !== threshold.value;
     default:
       return false;
-    }
-  }
+
+
 
   /**
    * Get metric value for threshold evaluation
@@ -576,8 +585,8 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       return this.metrics.averageProcessingTime;
     default:
       return 0;
-    }
-  }
+
+
 
   /**
    * Get violation count since specified time
@@ -588,10 +597,10 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     for (const violation of this.violationCache.values()) {
       if (violation.detectedAt >= since) {
         count++;
-      }
-    }
+
+
     return count;
-  }
+
 
   /**
    * Get critical violation count since specified time
@@ -602,10 +611,10 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     for (const violation of this.violationCache.values()) {
       if (violation.detectedAt >= since && violation.severity === 'critical') {
         count++;
-      }
-    }
+
+
     return count;
-  }
+
 
   /**
    * Trigger alert when threshold is exceeded
@@ -635,7 +644,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       priority: violation.severity,
       metadata: alert
     });
-  }
+
 
   /**
    * Send violation notification
@@ -652,9 +661,9 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         violationId: violation.violationId,
         ruleId: violation.ruleId,
         detectedAt: violation.detectedAt
-      }
+
     });
-  }
+
 
   /**
    * Trigger automated remediation
@@ -664,7 +673,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     try {
       for (const action of violation.suggestedActions) {
         await this.executeRemediationAction(action, violation);
-      }
+
       
       this.metrics.remediationsTriggered++;
       
@@ -674,12 +683,12 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         details: {
           violationId: violation.violationId,
           actions: violation.suggestedActions
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Auto-remediation failed:', error);
-    }
-  }
+
+
 
   /**
    * Execute a specific remediation action
@@ -708,8 +717,8 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       break;
     default:
       console.warn(`Unknown remediation action: ${action}`);
-    }
-  }
+
+
 
   /**
    * Handle escalation rules
@@ -719,9 +728,9 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     for (const rule of this.config.escalationRules) {
       if (this.shouldEscalate(rule, violation)) {
         await this.escalateViolation(rule, violation);
-      }
-    }
-  }
+
+
+
 
   /**
    * Check if violation should be escalated
@@ -729,7 +738,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
   private shouldEscalate(rule: EscalationRule, violation: ComplianceViolationEvent): boolean {
     // Implementation would check rule conditions against violation
     return violation.severity === 'critical' && violation.requiresImmediateAction;
-  }
+
 
   /**
    * Escalate violation
@@ -758,8 +767,8 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         priority: 'critical',
         metadata: { violation, escalationLevel }
       });
-    }
-  }
+
+
 
   /**
    * Enqueue event for batch processing
@@ -769,10 +778,10 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     if (this.eventQueue.length >= this.config.eventBufferSize) {
       // Remove oldest events if buffer is full
       this.eventQueue.splice(0, this.eventQueue.length - this.config.eventBufferSize + 1);
-    }
+
 
     this.eventQueue.push(event);
-  }
+
 
   /**
    * Start queue processor
@@ -781,7 +790,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     this.queueProcessor = setInterval(async () => {
       await this.processEventQueue();
     }, this.config.queueProcessingInterval);
-  }
+
 
   /**
    * Process queued events
@@ -791,7 +800,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     if (this.eventQueue.length === 0 || 
         this.activeEvaluations >= this.config.maxConcurrentEvaluations) {
       return;
-    }
+
 
     // Get batch of events to process
     const batchSize = Math.min(this.config.batchSize, this.eventQueue.length);
@@ -808,7 +817,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     );
 
     await Promise.allSettled(processingPromises);
-  }
+
 
   /**
    * Handle processing errors
@@ -828,9 +837,9 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         error: error.message,
         eventId: event.eventId,
         timestamp: new Date()
-      }
+
     });
-  }
+
 
   /**
    * Start metrics reporting
@@ -839,7 +848,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     this.metricsReporter = setInterval(async () => {
       await this.reportMetrics();
     }, 60000); // Report every minute
-  }
+
 
   /**
    * Report current metrics
@@ -850,7 +859,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
 
     if (this.config.enableMetrics) {
       await this.analyticsCollector.trackMetrics('realtime_compliance_monitor', this.metrics);
-    }
+
 
     this.emit('metrics_updated', this.metrics);
 
@@ -860,7 +869,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       JSON.stringify(this.metrics),
       3600 // 1 hour expiry
     );
-  }
+
 
   /**
    * Start health monitoring
@@ -869,7 +878,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     this.healthChecker = setInterval(async () => {
       await this.performHealthCheck();
     }, 300000); // Check every 5 minutes
-  }
+
 
   /**
    * Perform health check
@@ -887,26 +896,26 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     if (this.eventQueue.length > this.config.eventBufferSize * 0.8) {
       health.healthy = false;
       health.issues.push('Event queue nearly full');
-    }
+
 
     // Check error rate
     if (this.metrics.errorRate > 0.1) {
       health.healthy = false;
       health.issues.push('High error rate detected');
-    }
+
 
     // Check processing time
     if (this.metrics.averageProcessingTime > this.config.evaluationTimeout * 0.8) {
       health.healthy = false;
       health.issues.push('High processing latency');
-    }
+
 
     this.emit('health_check', health);
 
     if (!health.healthy) {
       console.warn('Real-time compliance monitor health issues:', health.issues);
-    }
-  }
+
+
 
   /**
    * Initialize metrics structure
@@ -921,7 +930,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       alertsGenerated: 0,
       remediationsTriggered: 0,
       timestamp: new Date(};
-  }
+
 
   /**
    * Update processing metrics
@@ -930,7 +939,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     // Update average processing time using exponential moving average
     this.metrics.averageProcessingTime = 
       (this.metrics.averageProcessingTime * 0.9) + (processingTime * 0.1);
-  }
+
 
   /**
    * Validate event structure
@@ -938,12 +947,12 @@ export class RealTimeComplianceMonitor extends EventEmitter {
   private validateEvent(event: RealTimeEvent): void {
     if (!event.eventId || !event.eventType || !event.timestamp) {
       throw new Error('Invalid event: missing required fields');
-    }
+
 
     if (!event.context || !event.payload) {
       throw new Error('Invalid event: missing context or payload');
-    }
-  }
+
+
 
   /**
    * Check if rule is currently suppressed
@@ -951,7 +960,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
   private isRuleSuppressed(ruleId: string): boolean {
     const suppressedUntil = this.suppressionState.get(ruleId);
     return suppressedUntil ? suppressedUntil > new Date() : false;
-  }
+
 
   /**
    * Persist violation to database
@@ -975,10 +984,10 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         violation.detectedAt,
         JSON.stringify(violation.metadata)
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to persist violation:', error);
-    }
-  }
+
+
 
   /**
    * Load previous state from Redis
@@ -990,11 +999,11 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       if (metricsData) {
         const savedMetrics = JSON.parse(metricsData);
         this.metrics = { ...this.metrics, ...savedMetrics };
-      }
-    } catch (error) {
+
+ catch (error) {
       console.warn('Failed to load previous state:', error);
-    }
-  }
+
+
 
   /**
    * Get current monitor status
@@ -1009,7 +1018,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       processingQueue: number;
       activeEvaluations: number;
     };
-    } {
+ {
     return {
       monitorId: this.config.monitorId,
       running: this.isRunning,
@@ -1019,9 +1028,9 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         eventQueue: this.eventQueue.length,
         processingQueue: this.processingQueue.length,
         activeEvaluations: this.activeEvaluations
-      }
+
     };
-  }
+
 
   /**
    * Stop the real-time monitor
@@ -1030,7 +1039,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
 
     if (!this.isRunning) {
       return;
-    }
+
 
     this.isRunning = false;
 
@@ -1038,23 +1047,23 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     if (this.queueProcessor) {
       clearInterval(this.queueProcessor);
       this.queueProcessor = undefined;
-    }
+
 
     if (this.metricsReporter) {
       clearInterval(this.metricsReporter);
       this.metricsReporter = undefined;
-    }
+
 
     if (this.healthChecker) {
       clearInterval(this.healthChecker);
       this.healthChecker = undefined;
-    }
+
 
     // Process remaining events
     if (this.eventQueue.length > 0) {
       console.log(`Processing ${this.eventQueue.length} remaining events...`);
       await this.processEventQueue();
-    }
+
 
     // Save final metrics
     await this.reportMetrics();
@@ -1066,9 +1075,8 @@ export class RealTimeComplianceMonitor extends EventEmitter {
         monitorId: this.config.monitorId,
         finalMetrics: this.metrics,
         timestamp: new Date()
-      }
+
     });
 
     this.emit('monitor_stopped', { monitorId: this.config.monitorId });
-  }
-}
+

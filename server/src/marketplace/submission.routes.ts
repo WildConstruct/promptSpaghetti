@@ -10,9 +10,9 @@ export async function submissionRoutes(fastify: FastifyInstance) {
   const authenticate = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       await request.jwtVerify();
-    } catch (err) {
+ catch (err) {
       reply.code(401).send({ error: 'Unauthorized' });
-    }
+
   };
 
   // Create new submission
@@ -46,10 +46,10 @@ export async function submissionRoutes(fastify: FastifyInstance) {
               moderation_notes: { type: 'string' },
               is_first_submission: { type: 'boolean' },
               previous_version_id: { type: 'string', format: 'uuid' }
-            }
-          }
-        }
-  }
+
+
+
+
       response: {
         201: {
           type: 'object',
@@ -59,16 +59,16 @@ export async function submissionRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             validation_results: { type: 'array' },
             created_at: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{
     Body: {
       template_id?: string;
       submission_data: any;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const submission = await submissionService.createSubmission(userId, request.body);
@@ -80,10 +80,10 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         validation_results: submission.validation_results,
         created_at: submission.created_at
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to create submission' });
-    }
+
   });
 
   // Get submission by ID
@@ -94,9 +94,9 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -112,26 +112,26 @@ export async function submissionRoutes(fastify: FastifyInstance) {
             review_score: { type: 'integer' },
             created_at: { type: 'string', format: 'date-time' },
             updated_at: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const submission = await submissionService.getSubmission(request.params.id, userId);
       
       if (!submission) {
         return reply.code(404).send({ error: 'Submission not found' });
-      }
+
       
       reply.send(submission);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to get submission' });
-    }
+
   });
 
   // Update submission
@@ -142,33 +142,33 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       body: {
         type: 'object',
         properties: {
           submission_data: { type: 'object' },
           status: { type: 'string', enum: ['draft', 'submitted', 'under_review', 'changes_requested', 'approved', 'rejected'] }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Body: {
       submission_data?: any;
       status?: SubmissionStatus;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const submission = await submissionService.updateSubmission(request.params.id, userId, request.body);
       
       reply.send(submission);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to update submission' });
-    }
+
   });
 
   // Submit for review
@@ -179,22 +179,22 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const submission = await submissionService.submitForReview(request.params.id, userId);
       
       reply.send(submission);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to submit for review' });
-    }
+
   });
 
   // Get user's submissions
@@ -205,8 +205,8 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'array',
@@ -219,23 +219,23 @@ export async function submissionRoutes(fastify: FastifyInstance) {
               version_number: { type: 'integer' },
               created_at: { type: 'string', format: 'date-time' },
               updated_at: { type: 'string', format: 'date-time' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: { limit?: number }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const submissions = await submissionService.getUserSubmissions(userId, request.query.limit);
       
       reply.send(submissions);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to get submissions' });
-    }
+
   });
 
   // Get submissions for review (admin only)
@@ -247,8 +247,8 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         properties: {
           status: { type: 'string', enum: ['submitted', 'under_review', 'changes_requested'] },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'array',
@@ -262,14 +262,14 @@ export async function submissionRoutes(fastify: FastifyInstance) {
               version_number: { type: 'integer' },
               submitted_at: { type: 'string', format: 'date-time' },
               validation_results: { type: 'array' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: { status?: SubmissionStatus; limit?: number }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const submissions = await submissionService.getSubmissionsForReview(
@@ -279,10 +279,10 @@ export async function submissionRoutes(fastify: FastifyInstance) {
       );
       
       reply.send(submissions);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to get review queue' });
-    }
+
   });
 
   // Create submission review (admin only)
@@ -293,9 +293,9 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       body: {
         type: 'object',
         required: ['decision', 'score', 'comments', 'detailed_feedback'],
@@ -315,12 +315,12 @@ export async function submissionRoutes(fastify: FastifyInstance) {
                 rating: { type: 'integer', minimum: 1, maximum: 5 },
                 comments: { type: 'string', minLength: 1, maxLength: 1000 },
                 suggestions: { type: 'array', items: { type: 'string' }, maxItems: 10 }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Body: {
@@ -332,18 +332,18 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         rating: number;
         comments: string;
         suggestions: string[];
-      }>;
-    }
-  }>, reply: FastifyReply) => {
+>;
+
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const review = await submissionService.createReview(request.params.id, userId, request.body);
       
       reply.code(201).send(review);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to create review' });
-    }
+
   });
 
   // Upload file to submission
@@ -354,9 +354,9 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       body: {
         type: 'object',
         required: ['file_type', 'filename', 'file_size', 'mime_type'],
@@ -365,9 +365,9 @@ export async function submissionRoutes(fastify: FastifyInstance) {
           filename: { type: 'string', minLength: 1, maxLength: 255 },
           file_size: { type: 'integer', minimum: 1, maximum: 10485760 },
           mime_type: { type: 'string', minLength: 1 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Body: {
@@ -375,17 +375,17 @@ export async function submissionRoutes(fastify: FastifyInstance) {
       filename: string;
       file_size: number;
       mime_type: string;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const file = await submissionService.uploadFile(request.params.id, userId, request.body);
       
       reply.code(201).send(file);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to upload file' });
-    }
+
   });
 
   // Get validation rules
@@ -398,16 +398,16 @@ export async function submissionRoutes(fastify: FastifyInstance) {
           category: { type: 'string' },
           severity: { type: 'string', enum: ['error', 'warning', 'info'] },
           active_only: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       category?: string;
       severity?: 'error' | 'warning' | 'info';
       active_only?: boolean;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const conditions = [];
       const params = [];
@@ -415,17 +415,17 @@ export async function submissionRoutes(fastify: FastifyInstance) {
 
       if (request.query.active_only !== false) {
         conditions.push('is_active = true');
-      }
+
 
       if (request.query.category) {
         conditions.push(`category = $${paramIndex++}`);
         params.push(request.query.category);
-      }
+
 
       if (request.query.severity) {
         conditions.push(`severity = $${paramIndex++}`);
         params.push(request.query.severity);
-      }
+
 
       const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
       
@@ -437,10 +437,10 @@ export async function submissionRoutes(fastify: FastifyInstance) {
       `, params);
 
       reply.send(result.rows);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: 'Failed to get validation rules' });
-    }
+
   });
 
   // Get submission statistics
@@ -457,10 +457,10 @@ export async function submissionRoutes(fastify: FastifyInstance) {
             pending_submissions: { type: 'integer' },
             avg_review_score: { type: 'number' },
             avg_review_time_hours: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
@@ -478,9 +478,8 @@ export async function submissionRoutes(fastify: FastifyInstance) {
       `, [userId]);
 
       reply.send(result.rows[0]);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: 'Failed to get submission statistics' });
-    }
+
   });
-}

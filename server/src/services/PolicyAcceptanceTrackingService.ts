@@ -4,8 +4,8 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface PolicyAcceptance {
   acceptanceId: string;
   userId: string;
@@ -23,12 +23,13 @@ export interface PolicyAcceptance {
   withdrawalReason?: string;
   status: AcceptanceStatus;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AcceptanceContext {
   ipAddress: string;
   userAgent: string;
@@ -39,12 +40,13 @@ export interface AcceptanceContext {
   deviceFingerprint: string;
   timestamp: Date;
   interactionMetrics: InteractionMetrics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConsentData {
   consentId: string;
   granularConsents: GranularConsent[];
@@ -57,12 +59,13 @@ export interface ConsentData {
   marketingConsent: MarketingConsent;
   cookieConsent: CookieConsent;
   dataTransfers: DataTransferConsent[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GranularConsent {
   consentId: string;
   purpose: string;
@@ -72,24 +75,26 @@ export interface GranularConsent {
   grantedAt?: Date;
   withdrawnAt?: Date;
   lastUpdated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LegalBasis {
   basisType: LegalBasisType;
   description: string;
   regulation: string;
   article?: string;
   justification: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProcessingPurpose {
   purposeId: string;
   name: string;
@@ -98,12 +103,13 @@ export interface ProcessingPurpose {
   dataTypes: string[];
   retentionPeriod: number;
   automated: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThirdPartyConsent {
   thirdPartyId: string;
   name: string;
@@ -113,12 +119,13 @@ export interface ThirdPartyConsent {
   safeguards: string[];
   consented: boolean;
   consentedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MarketingConsent {
   emailMarketing: boolean;
   smsMarketing: boolean;
@@ -127,12 +134,13 @@ export interface MarketingConsent {
   behavioralTargeting: boolean;
   thirdPartySharing: boolean;
   lastUpdated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CookieConsent {
   essential: boolean; // always true, non-optional
   functional: boolean;
@@ -141,12 +149,13 @@ export interface CookieConsent {
   thirdParty: boolean;
   categories: CookieCategory[];
   lastUpdated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CookieCategory {
   categoryId: string;
   name: string;
@@ -154,24 +163,26 @@ export interface CookieCategory {
   cookies: CookieDetails[];
   consented: boolean;
   required: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CookieDetails {
   name: string;
   purpose: string;
   duration: string;
   domain: string;
   thirdParty: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataTransferConsent {
   transferId: string;
   recipientCountry: string;
@@ -180,12 +191,13 @@ export interface DataTransferConsent {
   purposes: string[];
   consented: boolean;
   consentedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GeolocationData {
   country: string;
   region: string;
@@ -193,15 +205,16 @@ export interface GeolocationData {
   coordinates?: {
     latitude: number;
     longitude: number;
-}
-}
+
+
+
   };
   timezone: string;
   accuracy?: number;
-}
 
-}
-}
+
+
+
 export interface InteractionMetrics {
   timeOnPage: number; // seconds
   scrollPercentage: number;
@@ -209,12 +222,13 @@ export interface InteractionMetrics {
   documentsViewed: string[];
   viewDuration: number; // seconds
   hesitationTime: number; // seconds between page load and acceptance
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DigitalSignature {
   signatureId: string;
   signatureMethod: SignatureMethod;
@@ -223,12 +237,13 @@ export interface DigitalSignature {
   timestampService?: string;
   signedAt: Date;
   verificationStatus: VerificationStatus;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyAcceptanceRecord {
   recordId: string;
   userId: string;
@@ -238,12 +253,13 @@ export interface PolicyAcceptanceRecord {
   complianceFlags: ComplianceFlag[];
   riskScore: number;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConsentWithdrawal {
   withdrawalId: string;
   acceptanceId: string;
@@ -257,12 +273,13 @@ export interface ConsentWithdrawal {
   status: WithdrawalStatus;
   impactAssessment: WithdrawalImpact;
   dataActions: DataAction[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WithdrawalImpact {
   affectedServices: string[];
   dataToDelete: string[];
@@ -270,12 +287,13 @@ export interface WithdrawalImpact {
   notificationRequired: boolean;
   legalRequirements: string[];
   businessImpact: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataAction {
   actionId: string;
   actionType: DataActionType;
@@ -284,12 +302,13 @@ export interface DataAction {
   executedAt?: Date;
   status: DataActionStatus;
   evidence: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceFlag {
   flagId: string;
   flagType: ComplianceFlagType;
@@ -299,12 +318,13 @@ export interface ComplianceFlag {
   raisedAt: Date;
   resolvedAt?: Date;
   resolution?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConsentRenewal {
   renewalId: string;
   originalAcceptanceId: string;
@@ -315,12 +335,13 @@ export interface ConsentRenewal {
   renewalCompleted: boolean;
   newAcceptanceId?: string;
   renewalStrategy: RenewalStrategy;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationRecord {
   notificationId: string;
   channel: NotificationChannel;
@@ -329,44 +350,48 @@ export interface NotificationRecord {
   openedAt?: Date;
   clickedAt?: Date;
   responseAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RenewalStrategy {
   strategyType: RenewalStrategyType;
   reminderSchedule: ReminderSchedule[];
   gracePeriodDays: number;
   autoExpireAfterDays: number;
   escalationSteps: EscalationStep[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReminderSchedule {
   daysBefore: number;
   channels: NotificationChannel[];
   template: string;
   urgency: ReminderUrgency;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationStep {
   stepNumber: number;
   trigger: EscalationTrigger;
   action: EscalationAction;
   delayDays: number;
   responsible: string[];
-}
-}
-}
+
+
+
+
 
 export enum PolicyType {
   PRIVACY_POLICY = 'PRIVACY_POLICY',
@@ -375,14 +400,14 @@ export enum PolicyType {
   DATA_PROCESSING = 'DATA_PROCESSING',
   MARKETING_CONSENT = 'MARKETING_CONSENT',
   RESEARCH_CONSENT = 'RESEARCH_CONSENT'
-}
+
 
 export enum AcceptanceType {
   INITIAL = 'INITIAL',
   RENEWAL = 'RENEWAL',
   UPDATE = 'UPDATE',
   RECONFIRMATION = 'RECONFIRMATION'
-}
+
 
 export enum AcceptanceMethod {
   CLICK_THROUGH = 'CLICK_THROUGH',
@@ -391,7 +416,7 @@ export enum AcceptanceMethod {
   DIGITAL_SIGNATURE = 'DIGITAL_SIGNATURE',
   BIOMETRIC = 'BIOMETRIC',
   TWO_FACTOR = 'TWO_FACTOR'
-}
+
 
 export enum AcceptanceStatus {
   PENDING = 'PENDING',
@@ -400,7 +425,7 @@ export enum AcceptanceStatus {
   WITHDRAWN = 'WITHDRAWN',
   SUPERSEDED = 'SUPERSEDED',
   INVALID = 'INVALID'
-}
+
 
 export enum LegalBasisType {
   CONSENT = 'CONSENT',
@@ -409,34 +434,34 @@ export enum LegalBasisType {
   VITAL_INTERESTS = 'VITAL_INTERESTS',
   PUBLIC_TASK = 'PUBLIC_TASK',
   LEGITIMATE_INTERESTS = 'LEGITIMATE_INTERESTS'
-}
+
 
 export enum SignatureMethod {
   DIGITAL_CERTIFICATE = 'DIGITAL_CERTIFICATE',
   ELECTRONIC_SIGNATURE = 'ELECTRONIC_SIGNATURE',
   BIOMETRIC_SIGNATURE = 'BIOMETRIC_SIGNATURE',
   CRYPTOGRAPHIC_HASH = 'CRYPTOGRAPHIC_HASH'
-}
+
 
 export enum VerificationStatus {
   VERIFIED = 'VERIFIED',
   PENDING_VERIFICATION = 'PENDING_VERIFICATION',
   VERIFICATION_FAILED = 'VERIFICATION_FAILED',
   EXPIRED = 'EXPIRED'
-}
+
 
 export enum WithdrawalType {
   PARTIAL = 'PARTIAL',
   COMPLETE = 'COMPLETE',
   GRANULAR = 'GRANULAR'
-}
+
 
 export enum WithdrawalScope {
   SINGLE_CONSENT = 'SINGLE_CONSENT',
   POLICY_CONSENT = 'POLICY_CONSENT',
   ALL_CONSENTS = 'ALL_CONSENTS',
   SPECIFIC_PURPOSES = 'SPECIFIC_PURPOSES'
-}
+
 
 export enum WithdrawalStatus {
   REQUESTED = 'REQUESTED',
@@ -444,7 +469,7 @@ export enum WithdrawalStatus {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
   PARTIAL_COMPLETION = 'PARTIAL_COMPLETION'
-}
+
 
 export enum DataActionType {
   DELETE = 'DELETE',
@@ -452,7 +477,7 @@ export enum DataActionType {
   PSEUDONYMIZE = 'PSEUDONYMIZE',
   EXPORT = 'EXPORT',
   RESTRICT_PROCESSING = 'RESTRICT_PROCESSING'
-}
+
 
 export enum DataActionStatus {
   SCHEDULED = 'SCHEDULED',
@@ -460,7 +485,7 @@ export enum DataActionStatus {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
   SKIPPED = 'SKIPPED'
-}
+
 
 export enum ComplianceFlagType {
   MISSING_CONSENT = 'MISSING_CONSENT',
@@ -469,14 +494,14 @@ export enum ComplianceFlagType {
   CROSS_BORDER_TRANSFER = 'CROSS_BORDER_TRANSFER',
   MINOR_CONSENT = 'MINOR_CONSENT',
   HIGH_RISK_PROCESSING = 'HIGH_RISK_PROCESSING'
-}
+
 
 export enum FlagSeverity {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
-}
+
 
 export enum RenewalTrigger {
   EXPIRATION_DATE = 'EXPIRATION_DATE',
@@ -484,7 +509,7 @@ export enum RenewalTrigger {
   REGULATORY_CHANGE = 'REGULATORY_CHANGE',
   RISK_ASSESSMENT = 'RISK_ASSESSMENT',
   USER_REQUEST = 'USER_REQUEST'
-}
+
 
 export enum NotificationChannel {
   EMAIL = 'EMAIL',
@@ -492,7 +517,7 @@ export enum NotificationChannel {
   IN_APP = 'IN_APP',
   PUSH_NOTIFICATION = 'PUSH_NOTIFICATION',
   MAIL = 'MAIL'
-}
+
 
 export enum DeliveryStatus {
   SENT = 'SENT',
@@ -500,28 +525,28 @@ export enum DeliveryStatus {
   FAILED = 'FAILED',
   BOUNCED = 'BOUNCED',
   UNSUBSCRIBED = 'UNSUBSCRIBED'
-}
+
 
 export enum RenewalStrategyType {
   AUTOMATIC = 'AUTOMATIC',
   MANUAL = 'MANUAL',
   HYBRID = 'HYBRID',
   GRACE_PERIOD = 'GRACE_PERIOD'
-}
+
 
 export enum ReminderUrgency {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   URGENT = 'URGENT'
-}
+
 
 export enum EscalationTrigger {
   NO_RESPONSE = 'NO_RESPONSE',
   NEGATIVE_RESPONSE = 'NEGATIVE_RESPONSE',
   INCOMPLETE_RESPONSE = 'INCOMPLETE_RESPONSE',
   DEADLINE_APPROACHING = 'DEADLINE_APPROACHING'
-}
+
 
 export enum EscalationAction {
   SEND_REMINDER = 'SEND_REMINDER',
@@ -529,7 +554,7 @@ export enum EscalationAction {
   RESTRICT_ACCESS = 'RESTRICT_ACCESS',
   LEGAL_REVIEW = 'LEGAL_REVIEW',
   AUTO_WITHDRAW = 'AUTO_WITHDRAW'
-}
+
 
 export class PolicyAcceptanceTrackingService {
   private db: DatabaseService;
@@ -538,7 +563,7 @@ export class PolicyAcceptanceTrackingService {
   constructor(db: DatabaseService, audit: AuditService) {
     this.db = db;
     this.audit = audit;
-  }
+
 
   /**
    * Record policy acceptance
@@ -586,7 +611,7 @@ export class PolicyAcceptanceTrackingService {
       // Update previous acceptance if exists
       if (existingAcceptance) {
         await this.supersedePreviousAcceptance(existingAcceptance.acceptanceId);
-      }
+
 
       // Process granular consents
       await this.processGranularConsents(acceptanceId, acceptance.consentData.granularConsents);
@@ -607,12 +632,11 @@ export class PolicyAcceptanceTrackingService {
           policyVersion: acceptance.policyVersion,
           acceptanceMethod: acceptance.acceptanceMethod,
           consentTypes: acceptance.consentData.granularConsents.map(c => c.purpose)
-        }
+
       });
 
       return { acceptanceId };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'POLICY_ACCEPTANCE_ERROR',
         userId: acceptance.userId,
@@ -622,12 +646,12 @@ export class PolicyAcceptanceTrackingService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Withdraw consent
@@ -689,12 +713,11 @@ export class PolicyAcceptanceTrackingService {
           acceptanceId: withdrawal.acceptanceId,
           withdrawalType: withdrawal.withdrawalType,
           withdrawalScope: withdrawal.withdrawalScope
-        }
+
       });
 
       return { withdrawalId };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'CONSENT_WITHDRAWAL_ERROR',
         userId: withdrawal.userId,
@@ -704,12 +727,12 @@ export class PolicyAcceptanceTrackingService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Get user's current consent status
@@ -719,7 +742,7 @@ export class PolicyAcceptanceTrackingService {
     complianceFlags: ComplianceFlag[];
     riskScore: number;
     renewalRequests: ConsentRenewal[];
-  }> {
+> {
 
     const [acceptancesResult, flagsResult, renewalsResult] = await Promise.all([
       this.db.query(`
@@ -751,7 +774,7 @@ export class PolicyAcceptanceTrackingService {
       riskScore,
       renewalRequests
     };
-  }
+
 
   /**
    * Process consent renewals
@@ -769,13 +792,13 @@ export class PolicyAcceptanceTrackingService {
 
         await this.updateRenewalProgress(renewal.renewalId, notifications);
         processedRenewals++;
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to process renewal ${renewal.renewalId}:`, error);
-      }
-    }
+
+
 
     return { processedRenewals, notificationsSent };
-  }
+
 
   /**
    * Get compliance dashboard data
@@ -789,7 +812,7 @@ export class PolicyAcceptanceTrackingService {
     complianceMetrics: ComplianceMetrics;
     riskAnalysis: RiskAnalysis;
     renewalMetrics: RenewalMetrics;
-  }> {
+> {
 
     const acceptanceStats = await this.getAcceptanceStats(filters);
     const complianceMetrics = await this.getComplianceMetrics(filters);
@@ -802,7 +825,7 @@ export class PolicyAcceptanceTrackingService {
       riskAnalysis,
       renewalMetrics
     };
-  }
+
 
   /**
    * Export user data for GDPR compliance
@@ -812,7 +835,7 @@ export class PolicyAcceptanceTrackingService {
     acceptances: PolicyAcceptance[];
     consents: GranularConsent[];
     withdrawals: ConsentWithdrawal[];
-  }> {
+> {
     const [userResult, acceptancesResult, withdrawalsResult] = await Promise.all([
       this.db.query('SELECT * FROM users WHERE user_id = $1', [userId]),
       this.db.query('SELECT * FROM policy_acceptances WHERE user_id = $1', [userId]),
@@ -835,7 +858,7 @@ export class PolicyAcceptanceTrackingService {
       consents,
       withdrawals
     };
-  }
+
 
   // Private helper methods
 
@@ -843,24 +866,24 @@ export class PolicyAcceptanceTrackingService {
 
     if (!acceptance.userId) {
       throw new Error('User ID is required');
-    }
+
 
     if (!acceptance.policyId) {
       throw new Error('Policy ID is required');
-    }
+
 
     if (!acceptance.policyVersion) {
       throw new Error('Policy version is required');
-    }
+
 
     if (!acceptance.acceptanceContext?.ipAddress) {
       throw new Error('IP address is required for acceptance context');
-    }
+
 
     if (!acceptance.consentData?.granularConsents || acceptance.consentData.granularConsents.length === 0) {
       throw new Error('At least one granular consent is required');
-    }
-  }
+
+
 
   private async getLatestUserAcceptance(userId: string, policyId: string): Promise<PolicyAcceptance | null> {
 
@@ -873,10 +896,10 @@ export class PolicyAcceptanceTrackingService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapToPolicyAcceptance(result.rows[0]);
-  }
+
 
   private async supersedePreviousAcceptance(acceptanceId: string): Promise<void> {
 
@@ -885,7 +908,7 @@ export class PolicyAcceptanceTrackingService {
       SET status = $1, superseded_at = NOW()
       WHERE acceptance_id = $2
     `, [AcceptanceStatus.SUPERSEDED, acceptanceId]);
-  }
+
 
   private async processGranularConsents(acceptanceId: string, consents: GranularConsent[]): Promise<void> {
 
@@ -904,8 +927,8 @@ export class PolicyAcceptanceTrackingService {
         consent.granted,
         consent.grantedAt
       ]);
-    }
-  }
+
+
 
   private async scheduleConsentRenewal(acceptanceId: string, acceptance: PolicyAcceptance): Promise<void> {
 
@@ -928,22 +951,22 @@ export class PolicyAcceptanceTrackingService {
       renewalDate,
       JSON.stringify(this.getDefaultRenewalStrategy())
     ]);
-  }
+
 
   private async validateWithdrawalRequest(withdrawal: Partial<ConsentWithdrawal>): Promise<void> {
 
     if (!withdrawal.acceptanceId) {
       throw new Error('Acceptance ID is required');
-    }
+
 
     if (!withdrawal.userId) {
       throw new Error('User ID is required');
-    }
+
 
     if (!withdrawal.reason || withdrawal.reason.length < 10) {
       throw new Error('Withdrawal reason must be at least 10 characters');
-    }
-  }
+
+
 
   private async assessWithdrawalImpact(_____withdrawal: ConsentWithdrawal): Promise<WithdrawalImpact> {
 
@@ -956,7 +979,7 @@ export class PolicyAcceptanceTrackingService {
       legalRequirements: ['GDPR Article 17'],
       businessImpact: 'User will lose access to personalized features'
     };
-  }
+
 
   private async processWithdrawal(withdrawal: ConsentWithdrawal): Promise<void> {
 
@@ -970,7 +993,7 @@ export class PolicyAcceptanceTrackingService {
     // Execute data actions
     for (const action of withdrawal.dataActions) {
       await this.executeDataAction(action);
-    }
+
 
     // Update original acceptance
     await this.db.query(`
@@ -985,7 +1008,7 @@ export class PolicyAcceptanceTrackingService {
       SET status = $1, completed_at = NOW()
       WHERE withdrawal_id = $2
     `, [WithdrawalStatus.COMPLETED, withdrawal.withdrawalId]);
-  }
+
 
   private async executeDataAction(action: DataAction): Promise<void> {
 
@@ -995,7 +1018,7 @@ export class PolicyAcceptanceTrackingService {
       SET status = $1, executed_at = NOW()
       WHERE action_id = $2
     `, [DataActionStatus.COMPLETED, action.actionId]);
-  }
+
 
   private async calculateUserRiskScore(acceptances: PolicyAcceptance[], flags: ComplianceFlag[]): Promise<number> {
 
@@ -1019,11 +1042,11 @@ export class PolicyAcceptanceTrackingService {
       case FlagSeverity.LOW:
         score -= 5;
         break;
-      }
+
     });
 
     return Math.max(0, Math.min(100, score));
-  }
+
 
   private async getDueRenewals(): Promise<ConsentRenewal[]> {
 
@@ -1034,13 +1057,13 @@ export class PolicyAcceptanceTrackingService {
     `, []);
 
     return result.rows.map(this.mapToConsentRenewal);
-  }
+
 
   private async sendRenewalNotifications(_____renewal: ConsentRenewal): Promise<NotificationRecord[]> {
 
     // Implementation for sending renewal notifications
     return [];
-  }
+
 
   private async updateRenewalProgress(renewalId: string, notifications: NotificationRecord[]): Promise<void> {
 
@@ -1049,7 +1072,7 @@ export class PolicyAcceptanceTrackingService {
       SET notifications_sent = $1
       WHERE renewal_id = $2
     `, [JSON.stringify(notifications), renewalId]);
-  }
+
 
   private getDefaultRenewalStrategy(): RenewalStrategy {
     return {
@@ -1060,58 +1083,58 @@ export class PolicyAcceptanceTrackingService {
           channels: [NotificationChannel.EMAIL],
           template: 'consent_renewal_30_days',
           urgency: ReminderUrgency.LOW
-  }
+
         {
           daysBefore: 7,
           channels: [NotificationChannel.EMAIL, NotificationChannel.IN_APP],
           template: 'consent_renewal_7_days',
           urgency: ReminderUrgency.MEDIUM
-        }
+
       ],
       gracePeriodDays: 30,
       autoExpireAfterDays: 60,
       escalationSteps: []
     };
-  }
+
 
   private async getAcceptanceStats(filters?: Record<string, unknown>): Promise<AcceptanceStats> {
 
     // Implementation for acceptance statistics
     return {} as AcceptanceStats;
-  }
+
 
   private async getComplianceMetrics(filters?: Record<string, unknown>): Promise<ComplianceMetrics> {
 
     // Implementation for compliance metrics
     return {} as ComplianceMetrics;
-  }
+
 
   private async getRiskAnalysis(filters?: Record<string, unknown>): Promise<RiskAnalysis> {
 
     // Implementation for risk analysis
     return {} as RiskAnalysis;
-  }
+
 
   private async getRenewalMetrics(filters?: Record<string, unknown>): Promise<RenewalMetrics> {
 
     // Implementation for renewal metrics
     return {} as RenewalMetrics;
-  }
+
 
   private async generateAcceptanceId(): Promise<string> {
 
     return `PAC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async generateWithdrawalId(): Promise<string> {
 
     return `PWD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async generateRenewalId(): Promise<string> {
 
     return `PRN-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private mapToPolicyAcceptance(row: Record<string, unknown>): PolicyAcceptance {
     return {
@@ -1132,7 +1155,7 @@ export class PolicyAcceptanceTrackingService {
       status: row.status,
       metadata: JSON.parse(row.metadata || '{}')
     };
-  }
+
 
   private mapToComplianceFlag(row: Record<string, unknown>): ComplianceFlag {
     return {
@@ -1145,7 +1168,7 @@ export class PolicyAcceptanceTrackingService {
       resolvedAt: row.resolved_at,
       resolution: row.resolution
     };
-  }
+
 
   private mapToConsentRenewal(row: Record<string, unknown>): ConsentRenewal {
     return {
@@ -1159,7 +1182,7 @@ export class PolicyAcceptanceTrackingService {
       newAcceptanceId: row.new_acceptance_id,
       renewalStrategy: JSON.parse(row.renewal_strategy || '{}')
     };
-  }
+
 
   private mapToConsentWithdrawal(row: Record<string, unknown>): ConsentWithdrawal {
     return {
@@ -1176,50 +1199,54 @@ export class PolicyAcceptanceTrackingService {
       impactAssessment: JSON.parse(row.impact_assessment || '{}'),
       dataActions: JSON.parse(row.data_actions || '[]')
     };
-  }
-}
+
+
 
 // Supporting interfaces for dashboard metrics
-}
-}
+
+
+
 interface AcceptanceStats {
   totalAcceptances: number;
   acceptancesByType: Record<PolicyType, number>;
   acceptancesByMethod: Record<AcceptanceMethod, number>;
   recentAcceptances: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ComplianceMetrics {
   complianceRate: number;
   flagsByType: Record<ComplianceFlagType, number>;
   flagsBySeverity: Record<FlagSeverity, number>;
   resolvedFlags: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RiskAnalysis {
   averageRiskScore: number;
   highRiskUsers: number;
   riskDistribution: Record<string, number>;
-}
-}
-  riskTrends: Array<{ date: Date; score: number }>;
-}
 
-}
-}
+
+
+  riskTrends: Array<{ date: Date; score: number }>;
+
+
+
+
 interface RenewalMetrics {
   dueRenewals: number;
   renewalRate: number;
   overduRenewals: number;
   renewalsByStrategy: Record<RenewalStrategyType, number>;
-}
-}
-}
+
+
+

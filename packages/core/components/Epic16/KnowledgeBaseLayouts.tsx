@@ -5,8 +5,7 @@
  * with excellent UX for discovery and reading across the template marketplace ecosystem.
  */
 import React, { useState, useMemo, useCallback } from 'react';
-import { 
-  DocumentIcon,
+import { DocumentIcon,
   BookOpenIcon,
   AcademicCapIcon,
   LightBulbIcon,
@@ -25,59 +24,57 @@ import {
   StarIcon,
   ChevronRightIcon,
   ArrowRightIcon,
-  CheckIcon,
+  CheckIcon }
   PlayIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 
 // Import article types from ArticleManagement
 import type { Article, ArticleCategory, ArticleAuthor } from './ArticleManagement';
 
 // Additional types for knowledge base layouts
 
-}
-export interface KnowledgeBaseSection {
-  id: string;
+
+export interface KnowledgeBaseSection { id: string;
   title: string;
-  description: string;
-}
+  description: string }
+},
   icon: React.ComponentType<{ className?: string }>;
   articles: Article;
   color: string;
   featured: boolean;
-}
-}
-export interface LearningPath {
-  id: string;
+
+
+export interface LearningPath { id: string;
   title: string;
   description: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  estimatedTime: number; // in minutes,
+  estimatedTime: number; // in minutes;
   steps: LearningPathStep;
   prerequisites?: string;
-  completionRate: number; // percentage of users who complete,
+  completionRate: number; // percentage of users who complete }
   enrolledCount: number;
   completedCount: number;
   tags: string;
   author: ArticleAuthor;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
-export interface LearningPathStep {
-  id: string;
+
+
+
+
+export interface LearningPathStep { id: string;
   title: string;
   type: 'article' | 'video' | 'quiz' | 'exercise' | 'template';
-  resourceId: string; // ID of the actual resource,
+  resourceId: string; // ID of the actual resource }
   estimatedTime: number;
   required: boolean;
   completed?: boolean;
   order: number;
-}
-}
-}
-export interface SearchResult {
-  id: string;
+
+
+
+
+export interface SearchResult { id: string;
   title: string;
   excerpt: string;
   type: 'article' | 'learning-path' | 'template' | 'tutorial';
@@ -85,10 +82,10 @@ export interface SearchResult {
   relevanceScore: number;
   category: string;
   tags: string;
-  matchedTerms: string;
-}
-}
-}
+  matchedTerms: string }
+
+
+
 export interface KnowledgeBaseStats {
   totalArticles: number;
   totalViews: number;
@@ -98,19 +95,19 @@ export interface KnowledgeBaseStats {
   popularArticles: Article;
   featuredContent: Article;
   // Props for different layout components
-}
-}
-}
-export interface KnowledgeBaseHeroProps {
-  stats: KnowledgeBaseStats;
-  onSearch: (query: string) => void;
-  onBrowseCategory: (categoryId: string) => void;
+
+
+
+
+export interface KnowledgeBaseHeroProps { stats: KnowledgeBaseStats;
+  onSearch: (query: string) => void
+  onBrowseCategory: (categoryId: string) => void }
   featuredSections: KnowledgeBaseSection;
-}
-}
-}
-export interface ArticleCardProps {
-  article: Article;
+
+
+
+
+export interface ArticleCardProps { article: Article;
   variant?: 'compact' | 'detailed' | 'featured' | 'list';
   showAuthor?: boolean;
   showCategory?: boolean;
@@ -120,40 +117,35 @@ export interface ArticleCardProps {
   onBookmark?: (article: Article) => void;
   onLike?: (article: Article) => void;
   onShare?: (article: Article) => void;
-  className?: string;
-}
-}
-}
-export interface CategoryBrowserProps {
-  categories: ArticleCategory;
+  className?: string }
+
+
+
+export interface CategoryBrowserProps { categories: ArticleCategory;
   onSelectCategory: (category: ArticleCategory) => void;
   layout?: 'grid' | 'list' | 'tree';
-  showArticleCount?: boolean;
-}
-}
-}
-export interface LearningPathCardProps {
-  learningPath: LearningPath;
+  showArticleCount?: boolean }
+
+
+
+export interface LearningPathCardProps { learningPath: LearningPath;
   variant?: 'compact' | 'detailed';
   showProgress?: boolean;
-  currentUserProgress?: number; // percentage completed,
+  currentUserProgress?: number; // percentage completed }
   onClick?: (path: LearningPath) => void;
   onEnroll?: (path: LearningPath) => void;
   // Hero Section Component
-}
-}
-export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({)
-  stats,
-  onSearch,
-  onBrowseCategory,
+
+
+export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({ )
+  stats
+  onSearch
+  onBrowseCategory }
   featuredSections
-}) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const handleSearchSubmit = (e: React.FormEvent) => {,
+}) => { const [searchQuery, setSearchQuery] = useState('');
+  const handleSearchSubmit = (e: React.FormEvent) => { }
   e.preventDefault();
-  if (searchQuery.trim()) {
-  onSearch(searchQuery.trim());
-};
+  if (searchQuery.trim()) { onSearch(searchQuery.trim()) };
   return;
     <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="max-w-7xl mx-auto px-4 py-16">
@@ -163,7 +155,7 @@ export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({)
             Knowledge Base
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Discover comprehensive guides, tutorials, and best practices for prompt engineering,
+            Discover comprehensive guides, tutorials, and best practices for prompt engineering
             template creation, and marketplace success.
           </p>
           {/* Search Bar */}
@@ -234,29 +226,25 @@ export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({)
 };
 
 // Article Card Component with multiple variants
-export const ArticleCard: React.FC<ArticleCardProps> = ({)
-  article,
-  variant = 'detailed',
-  showAuthor = true,
-  showCategory = true,
-  showStats = true,
-  showExcerpt = true,
-  onClick,
-  onBookmark,
-  onLike,
-  onShare,
+export const ArticleCard: React.FC<ArticleCardProps> = ({ )
+  article
+  variant = 'detailed'
+  showAuthor = true
+  showCategory = true
+  showStats = true
+  showExcerpt = true
+  onClick
+  onBookmark
+  onLike
+  onShare }
   className = ''
-}) => {
-  const handleCardClick = useCallback(() => {
-    onClick?.(article);
-  }, [onClick, article]);
-  const getDifficultyColor = (difficulty: Article['difficulty']) => {
-  switch (difficulty) {
+}) => { const handleCardClick = useCallback(() => {
+    onClick?.(article) }, [onClick, article]);
+  const getDifficultyColor = (difficulty: Article['difficulty']) => { switch (difficulty) {
   case 'beginner': return 'bg-green-100 text-green-800';
   case 'intermediate': return 'bg-yellow-100 text-yellow-800';
   case 'advanced': return 'bg-red-100 text-red-800';
-  default: return 'bg-gray-100 text-gray-800';
-};
+  default: return 'bg-gray-100 text-gray-800' };
   if (variant === 'compact') {
     return;
       <div className={`bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer ${className}`}>}
@@ -395,25 +383,25 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
               </span>
             </div>
             <div className="flex items-center gap-1">
-              {onBookmark && ()
+              { onBookmark && ()
                 <button
-                  onClick={(e) => { e.stopPropagation(); onBookmark(article); }}
+                  onClick={(e) => { e.stopPropagation(); onBookmark(article) }}
                   className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded"
                 >
                   <BookmarkIcon className="h-4 w-4" />
                 </button>
               )}
-              {onLike && ()
+              { onLike && ()
                 <button
-                  onClick={(e) => { e.stopPropagation(); onLike(article); }}
+                  onClick={(e) => { e.stopPropagation(); onLike(article) }}
                   className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
                 >
                   <HeartIcon className="h-4 w-4" />
                 </button>
               )}
-              {onShare && ()
+              { onShare && ()
                 <button
-                  onClick={(e) => { e.stopPropagation(); onShare(article); }}
+                  onClick={(e) => { e.stopPropagation(); onShare(article) }}
                   className="p-1 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded"
                 >
                   <ShareIcon className="h-4 w-4" />
@@ -486,25 +474,25 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
           ))}
         </div>
         <div className="flex items-center gap-1">
-          {onBookmark && ()
+          { onBookmark && ()
             <button
-              onClick={(e) => { e.stopPropagation(); onBookmark(article); }}
+              onClick={(e) => { e.stopPropagation(); onBookmark(article) }}
               className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded"
             >
               <BookmarkIcon className="h-4 w-4" />
             </button>
           )}
-          {onLike && ()
+          { onLike && ()
             <button
-              onClick={(e) => { e.stopPropagation(); onLike(article); }}
+              onClick={(e) => { e.stopPropagation(); onLike(article) }}
               className="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
             >
               <HeartIcon className="h-4 w-4" />
             </button>
           )}
-          {onShare && ()
+          { onShare && ()
             <button
-              onClick={(e) => { e.stopPropagation(); onShare(article); }}
+              onClick={(e) => { e.stopPropagation(); onShare(article) }}
               className="p-1 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded"
             >
               <ShareIcon className="h-4 w-4" />
@@ -517,10 +505,10 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
 };
 
 // Category Browser Component
-export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({)
-  categories,
-  onSelectCategory,
-  layout = 'grid',
+export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({ )
+  categories
+  onSelectCategory
+  layout = 'grid' }
   showArticleCount = true
 }) => {
   if (layout === 'list') {
@@ -582,21 +570,18 @@ export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({)
 };
 
 // Learning Path Card Component
-export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
-  learningPath,
-  variant = 'detailed',
-  showProgress = true,
-  currentUserProgress = 0,
-  onClick,
+export const LearningPathCard: React.FC<LearningPathCardProps> = ({ )
+  learningPath
+  variant = 'detailed'
+  showProgress = true
+  currentUserProgress = 0
+  onClick }
   onEnroll
-}) => {
-  const getDifficultyColor = (difficulty: LearningPath['difficulty']) => {,
-  switch (difficulty) {
-  case 'beginner': return 'bg-green-100 text-green-800';
+}) => { const getDifficultyColor = (difficulty: LearningPath['difficulty']) => { }
+  switch (difficulty) { case 'beginner': return 'bg-green-100 text-green-800';
   case 'intermediate': return 'bg-yellow-100 text-yellow-800';
   case 'advanced': return 'bg-red-100 text-red-800';
-  default: return 'bg-gray-100 text-gray-800';
-};
+  default: return 'bg-gray-100 text-gray-800' };
   const completedSteps = learningPath.steps.filter(step => step.completed).length;
   const progressPercentage = currentUserProgress || (completedSteps / learningPath.steps.length) * 100;
   if (variant === 'compact') {
@@ -686,9 +671,9 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
           ))}
         </div>
         <div className="flex items-center gap-2">
-          {progressPercentage === 0 && onEnroll && ()
+          { progressPercentage === 0 && onEnroll && ()
             <button
-              onClick={(e) => { e.stopPropagation(); onEnroll(learningPath); }}
+              onClick={(e) => { e.stopPropagation(); onEnroll(learningPath) }}
               className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
             >
               Enroll
@@ -716,74 +701,67 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
 
 // Main Knowledge Base Layout Component
 
-}
-export interface KnowledgeBaseLayoutProps {
-  articles: Article;
+
+export interface KnowledgeBaseLayoutProps { articles: Article;
   categories: ArticleCategory;
   learningPaths?: LearningPath;
   stats: KnowledgeBaseStats;
   layout?: 'grid' | 'list' | 'masonry';
-  onSearch: (query: string) => void;
-  onSelectCategory: (category: ArticleCategory) => void;
+  onSearch: (query: string) => void
+  onSelectCategory: (category: ArticleCategory) => void }
   onSelectArticle: (article: Article) => void;
   onSelectLearningPath?: (path: LearningPath) => void;
   className?: string;
-}
-}
-export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({)
-  articles,
-  categories,
-  learningPaths = [],
-  stats,
-  layout = 'grid',
-  onSearch,
-  onSelectCategory,
-  onSelectArticle,
-  onSelectLearningPath,
+
+
+export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({ )
+  articles
+  categories
+  learningPaths = []
+  stats
+  layout = 'grid'
+  onSearch
+  onSelectCategory
+  onSelectArticle
+  onSelectLearningPath }
   className = ''
-}) => {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>(layout === 'list' ? 'list' : 'grid');
+}) => { const [viewMode, setViewMode] = useState<'grid' | 'list'>(layout === 'list' ? 'list' : 'grid');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const featuredSections: KnowledgeBaseSection = useMemo(() => [
   {
-  id: 'getting-started',
-  title: 'Getting Started',
-  description: 'Essential guides for new users',
-  icon: PlayIcon,
-  articles: articles.filter(a => a.tags.includes('getting-started')),
-  color: 'blue',
-  featured: true,
-}
-    {
-  id: 'templates',
-  title: 'Template Creation',
-  description: 'Learn to create effective templates',
-  icon: DocumentIcon,
-  articles: articles.filter(a => a.category.slug === 'templates'),
-  color: 'green',
-  featured: true,
-}
-    {
-  id: 'best-practices',
-  title: 'Best Practices',
-  description: 'Proven strategies and techniques',
-  icon: LightBulbIcon,
-  articles: articles.filter(a => a.tags.includes('best-practices')),
-  color: 'purple',
-  featured: true,
-}
-    {
-  id: 'advanced',
-  title: 'Advanced Topics',
-  description: 'Deep dives for experienced users',
-  icon: AcademicCapIcon,
-  articles: articles.filter(a => a.difficulty === 'advanced'),
-  color: 'orange',
+  id: 'getting-started'
+  title: 'Getting Started'
+  description: 'Essential guides for new users'
+  icon: PlayIcon
+  articles: articles.filter(a => a.tags.includes('getting-started'))
+  color: 'blue'
+  featured: true }
+
+    { id: 'templates'
+  title: 'Template Creation'
+  description: 'Learn to create effective templates'
+  icon: DocumentIcon
+  articles: articles.filter(a => a.category.slug === 'templates')
+  color: 'green'
+  featured: true }
+
+    { id: 'best-practices'
+  title: 'Best Practices'
+  description: 'Proven strategies and techniques'
+  icon: LightBulbIcon
+  articles: articles.filter(a => a.tags.includes('best-practices'))
+  color: 'purple'
+  featured: true }
+
+    { id: 'advanced'
+  title: 'Advanced Topics'
+  description: 'Deep dives for experienced users'
+  icon: AcademicCapIcon
+  articles: articles.filter(a => a.difficulty === 'advanced')
+  color: 'orange' }
   featured: true], [articles]);
-  const filteredArticles = useMemo(() => {
-  if (!selectedCategory) return articles;
-  return articles.filter(article => article.category.id === selectedCategory);
-}, [articles, selectedCategory]);
+  const filteredArticles = useMemo(() => { if (!selectedCategory) return articles;
+  return articles.filter(article => article.category.id === selectedCategory) }, [articles, selectedCategory]);
   return;
     <div className={`min-h-screen bg-gray-50 ${className}`}>}
       {/* Hero Section */}

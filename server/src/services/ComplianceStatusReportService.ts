@@ -6,8 +6,8 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { RegulatoryReportingService, ComplianceRegulation } from './RegulatoryReportingService';
 
-}
-}
+
+
 export interface ComplianceStatusReport {
   reportId: string;
   title: string;
@@ -26,20 +26,22 @@ export interface ComplianceStatusReport {
   nextActions: NextAction[];
   attachments: ReportAttachment[];
   metadata: ComplianceReportMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportPeriod {
   startDate: Date;
   endDate: Date;
   description: string;
   frequency: ReportFrequency;
-}
-}
-}
+
+
+
+
 
 export enum ReportFrequency {
   DAILY = 'DAILY',
@@ -48,7 +50,7 @@ export enum ReportFrequency {
   QUARTERLY = 'QUARTERLY',
   ANNUALLY = 'ANNUALLY',
   AD_HOC = 'AD_HOC'
-}
+
 
 export enum ComplianceStatus {
   FULLY_COMPLIANT = 'FULLY_COMPLIANT',
@@ -56,10 +58,10 @@ export enum ComplianceStatus {
   PARTIALLY_COMPLIANT = 'PARTIALLY_COMPLIANT',
   NON_COMPLIANT = 'NON_COMPLIANT',
   UNDER_REVIEW = 'UNDER_REVIEW'
-}
 
-}
-}
+
+
+
 export interface ExecutiveSummary {
   keyFindings: string[];
   criticalIssues: string[];
@@ -68,47 +70,50 @@ export interface ExecutiveSummary {
   budgetImpact: BudgetImpact;
   timelineForCompliance: string;
   regulatoryChanges: RegulatoryChange[];
-}
-}
-}
+
+
+
+
 
 export enum RiskLevel {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
-}
 
-}
-}
+
+
+
 export interface BudgetImpact {
   estimatedCost: number;
   currency: string;
   breakdown: CostBreakdown[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CostBreakdown {
   category: string;
   amount: number;
   description: string;
   urgency: Priority;
-}
-}
-}
+
+
+
+
 
 export enum Priority {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
-}
 
-}
-}
+
+
+
 export interface RegulatoryChange {
   changeId: string;
   title: string;
@@ -116,19 +121,20 @@ export interface RegulatoryChange {
   effectiveDate: Date;
   impact: ImpactLevel;
   actionRequired: boolean;
-}
-}
-}
+
+
+
+
 
 export enum ImpactLevel {
   MINIMAL = 'MINIMAL',
   MODERATE = 'MODERATE',
   SIGNIFICANT = 'SIGNIFICANT',
   MAJOR = 'MAJOR'
-}
 
-}
-}
+
+
+
 export interface ComplianceArea {
   areaId: string;
   name: string;
@@ -141,12 +147,13 @@ export interface ComplianceArea {
   nextAssessment: Date;
   controls: ControlAssessment[];
   gaps: ComplianceGap[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceRequirement {
   requirementId: string;
   title: string;
@@ -157,9 +164,10 @@ export interface ComplianceRequirement {
   evidence: Evidence[];
   lastVerified: Date;
   verifiedBy: string;
-}
-}
-}
+
+
+
+
 
 export enum RequirementStatus {
   COMPLIANT = 'COMPLIANT',
@@ -167,10 +175,10 @@ export enum RequirementStatus {
   PARTIALLY_COMPLIANT = 'PARTIALLY_COMPLIANT',
   NOT_APPLICABLE = 'NOT_APPLICABLE',
   PENDING_VERIFICATION = 'PENDING_VERIFICATION'
-}
 
-}
-}
+
+
+
 export interface Evidence {
   evidenceId: string;
   type: EvidenceType;
@@ -178,9 +186,10 @@ export interface Evidence {
   location: string;
   collectedAt: Date;
   validUntil?: Date;
-}
-}
-}
+
+
+
+
 
 export enum EvidenceType {
   DOCUMENT = 'DOCUMENT',
@@ -190,10 +199,10 @@ export enum EvidenceType {
   AUDIT_REPORT = 'AUDIT_REPORT',
   POLICY = 'POLICY',
   PROCEDURE = 'PROCEDURE'
-}
 
-}
-}
+
+
+
 export interface ControlAssessment {
   controlId: string;
   name: string;
@@ -204,9 +213,10 @@ export interface ControlAssessment {
   lastTested: Date;
   nextTest: Date;
   owner: string;
-}
-}
-}
+
+
+
+
 
 export enum ControlType {
   PREVENTIVE = 'PREVENTIVE',
@@ -215,17 +225,17 @@ export enum ControlType {
   ADMINISTRATIVE = 'ADMINISTRATIVE',
   TECHNICAL = 'TECHNICAL',
   PHYSICAL = 'PHYSICAL'
-}
+
 
 export enum ControlEffectiveness {
   EFFECTIVE = 'EFFECTIVE',
   PARTIALLY_EFFECTIVE = 'PARTIALLY_EFFECTIVE',
   INEFFECTIVE = 'INEFFECTIVE',
   NOT_TESTED = 'NOT_TESTED'
-}
 
-}
-}
+
+
+
 export interface TestResult {
   testId: string;
   testDate: Date;
@@ -234,19 +244,20 @@ export interface TestResult {
   result: TestOutcome;
   findings: string[];
   recommendations: string[];
-}
-}
-}
+
+
+
+
 
 export enum TestOutcome {
   PASS = 'PASS',
   FAIL = 'FAIL',
   PARTIAL = 'PARTIAL',
   INCONCLUSIVE = 'INCONCLUSIVE'
-}
 
-}
-}
+
+
+
 export interface ComplianceGap {
   gapId: string;
   requirement: string;
@@ -256,19 +267,20 @@ export interface ComplianceGap {
   rootCause: string;
   remediation: RemediationPlan;
   riskRating: number;
-}
-}
-}
+
+
+
+
 
 export enum GapSeverity {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
-}
 
-}
-}
+
+
+
 export interface RemediationPlan {
   planId: string;
   description: string;
@@ -277,9 +289,10 @@ export interface RemediationPlan {
   status: RemediationStatus;
   progress: number;
   resources: ResourceRequirement[];
-}
-}
-}
+
+
+
+
 
 export enum RemediationStatus {
   NOT_STARTED = 'NOT_STARTED',
@@ -287,18 +300,19 @@ export enum RemediationStatus {
   COMPLETED = 'COMPLETED',
   DELAYED = 'DELAYED',
   ON_HOLD = 'ON_HOLD'
-}
 
-}
-}
+
+
+
 export interface ResourceRequirement {
   type: ResourceType;
   quantity: number;
   cost: number;
   description: string;
-}
-}
-}
+
+
+
+
 
 export enum ResourceType {
   PERSONNEL = 'PERSONNEL',
@@ -307,10 +321,10 @@ export enum ResourceType {
   CONSULTING = 'CONSULTING',
   SOFTWARE = 'SOFTWARE',
   HARDWARE = 'HARDWARE'
-}
 
-}
-}
+
+
+
 export interface ViolationSummary {
   totalViolations: number;
   activeViolations: number;
@@ -319,49 +333,53 @@ export interface ViolationSummary {
   violationsBySeverity: ViolationBySeverity[];
   averageResolutionTime: number;
   trends: ViolationTrend[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationCategory {
   category: string;
   count: number;
   percentage: number;
   trend: TrendDirection;
-}
-}
-}
+
+
+
+
 
 export enum TrendDirection {
   IMPROVING = 'IMPROVING',
   STABLE = 'STABLE',
   WORSENING = 'WORSENING'
-}
 
-}
-}
+
+
+
 export interface ViolationBySeverity {
   severity: GapSeverity;
   count: number;
   percentage: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationTrend {
   period: string;
   count: number;
   severity: GapSeverity;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationSummary {
   totalPlans: number;
   completedPlans: number;
@@ -371,23 +389,25 @@ export interface RemediationSummary {
   investmentToDate: number;
   projectedCompletion: Date;
   resourceUtilization: ResourceUtilization[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceUtilization {
   resource: ResourceType;
   allocated: number;
   utilized: number;
   efficiency: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceTrend {
   metric: string;
   period: string;
@@ -395,12 +415,13 @@ export interface ComplianceTrend {
   previousValue: number;
   changePercentage: number;
   trend: TrendDirection;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Recommendation {
   recommendationId: string;
   title: string;
@@ -412,9 +433,10 @@ export interface Recommendation {
   timeline: string;
   benefits: string[];
   risks: string[];
-}
-}
-}
+
+
+
+
 
 export enum RecommendationCategory {
   POLICY = 'POLICY',
@@ -423,17 +445,17 @@ export enum RecommendationCategory {
   TRAINING = 'TRAINING',
   GOVERNANCE = 'GOVERNANCE',
   MONITORING = 'MONITORING'
-}
+
 
 export enum EffortLevel {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   VERY_HIGH = 'VERY_HIGH'
-}
 
-}
-}
+
+
+
 export interface NextAction {
   actionId: string;
   description: string;
@@ -442,12 +464,13 @@ export interface NextAction {
   priority: Priority;
   dependencies: string[];
   successCriteria: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportAttachment {
   attachmentId: string;
   name: string;
@@ -456,9 +479,10 @@ export interface ReportAttachment {
   location: string;
   size: number;
   createdAt: Date;
-}
-}
-}
+
+
+
+
 
 export enum AttachmentType {
   EVIDENCE_PACKAGE = 'EVIDENCE_PACKAGE',
@@ -466,10 +490,10 @@ export enum AttachmentType {
   RAW_DATA = 'RAW_DATA',
   SUPPORTING_DOCUMENTS = 'SUPPORTING_DOCUMENTS',
   REMEDIATION_PLANS = 'REMEDIATION_PLANS'
-}
 
-}
-}
+
+
+
 export interface ComplianceReportMetadata {
   version: string;
   template: string;
@@ -479,16 +503,17 @@ export interface ComplianceReportMetadata {
   approvers: string[];
   retention: number;
   confidentiality: ConfidentialityLevel;
-}
-}
-}
+
+
+
+
 
 export enum ConfidentialityLevel {
   PUBLIC = 'PUBLIC',
   INTERNAL = 'INTERNAL',
   CONFIDENTIAL = 'CONFIDENTIAL',
   RESTRICTED = 'RESTRICTED'
-}
+
 
 export class ComplianceStatusReportService {
   private db: DatabaseService;
@@ -503,7 +528,7 @@ export class ComplianceStatusReportService {
     this.db = db;
     this.auditService = auditService;
     this.regulatoryService = regulatoryService;
-  }
+
 
   async generateComplianceStatusReport(
     regulation: ComplianceRegulation,
@@ -567,14 +592,14 @@ export class ComplianceStatusReportService {
         approvers: ['dpo', 'ciso'],
         retention: 2555, // 7 years
         confidentiality: ConfidentialityLevel.CONFIDENTIAL
-      }
+
     };
 
     await this.saveComplianceReport(report);
     await this.logReportGeneration(report);
 
     return report;
-  }
+
 
   private async assessOverallCompliance(
     regulation: ComplianceRegulation,
@@ -600,7 +625,7 @@ export class ComplianceStatusReportService {
     if (complianceRate >= 0.85) return ComplianceStatus.SUBSTANTIALLY_COMPLIANT;
     if (complianceRate >= 0.70) return ComplianceStatus.PARTIALLY_COMPLIANT;
     return ComplianceStatus.NON_COMPLIANT;
-  }
+
 
   private async getComplianceAreas(
     regulation: ComplianceRegulation,
@@ -633,10 +658,10 @@ export class ComplianceStatusReportService {
         controls,
         gaps
       });
-    }
+
 
     return areas;
-  }
+
 
   private async getViolationSummary(
     regulation: ComplianceRegulation,
@@ -670,7 +695,7 @@ export class ComplianceStatusReportService {
       violationsBySeverity,
       trends
     };
-  }
+
 
   private async getRemediationSummary(
     regulation: ComplianceRegulation,
@@ -706,7 +731,7 @@ export class ComplianceStatusReportService {
       projectedCompletion,
       resourceUtilization
     };
-  }
+
 
   private async getComplianceTrends(
     regulation: ComplianceRegulation,
@@ -722,7 +747,7 @@ export class ComplianceStatusReportService {
         previousValue: 82,
         changePercentage: 3.7,
         trend: TrendDirection.IMPROVING
-  }
+
       {
         metric: 'Active Violations',
         period: period.description,
@@ -730,14 +755,14 @@ export class ComplianceStatusReportService {
         previousValue: 18,
         changePercentage: -33.3,
         trend: TrendDirection.IMPROVING
-      }
+
     ];
-  }
+
 
   private calculateOverallScore(areas: ComplianceArea[]): number {
     if (areas.length === 0) return 0;
     return Math.round(areas.reduce((sum, area) => sum + area.score, 0) / areas.length);
-  }
+
 
   private async generateExecutiveSummary(
     regulation: ComplianceRegulation,
@@ -765,7 +790,7 @@ export class ComplianceStatusReportService {
       timelineForCompliance: this.estimateComplianceTimeline(areas),
       regulatoryChanges: await this.getRecentRegulatoryChanges(regulation)
     };
-  }
+
 
   private generateRecommendations(
     areas: ComplianceArea[],
@@ -788,11 +813,11 @@ export class ComplianceStatusReportService {
           benefits: [`Improved ${area.name} compliance`, 'Reduced regulatory risk'],
           risks: ['Continued non-compliance', 'Potential regulatory penalties']
         });
-      }
-    }
+
+
 
     return recommendations;
-  }
+
 
   private generateNextActions(
     areas: ComplianceArea[],
@@ -818,11 +843,11 @@ export class ComplianceStatusReportService {
           dependencies: [],
           successCriteria: ['Gap closed', 'Compliance requirement met']
         });
-      }
-    }
+
+
 
     return actions;
-  }
+
 
   private async generateAttachments(
     reportId: string,
@@ -840,7 +865,7 @@ export class ComplianceStatusReportService {
         location: `/reports/${reportId}/evidence.zip`,
         size: 1024000,
         createdAt: new Date()
-  }
+
       {
         attachmentId: `att_${Date.now()}_2`,
         name: 'Detailed Findings',
@@ -849,9 +874,9 @@ export class ComplianceStatusReportService {
         location: `/reports/${reportId}/findings.pdf`,
         size: 512000,
         createdAt: new Date()
-      }
+
     ];
-  }
+
 
   // Helper methods (implementations would be more detailed)
   private getComplianceAreasConfig(regulation: ComplianceRegulation): unknown[] {
@@ -868,67 +893,67 @@ export class ComplianceStatusReportService {
     };
     
     return configs[regulation] || [];
-  }
+
 
   private async getRequirementsForArea(_____areaName: string, _____period: ReportPeriod): Promise<ComplianceRequirement[]> {
 
     // Implementation would fetch actual requirements
     return [];
-  }
+
 
   private async getControlsForArea(_____areaName: string, _____period: ReportPeriod): Promise<ControlAssessment[]> {
 
     // Implementation would fetch actual controls
     return [];
-  }
+
 
   private async getGapsForArea(_____areaName: string, _____period: ReportPeriod): Promise<ComplianceGap[]> {
 
     // Implementation would fetch actual gaps
     return [];
-  }
+
 
   private calculateAreaScore(_____requirements: ComplianceRequirement[], _____controls: ControlAssessment[]): number {
     // Implementation would calculate actual score
     return 85;
-  }
+
 
   private determineAreaStatus(score: number): ComplianceStatus {
     if (score >= 95) return ComplianceStatus.FULLY_COMPLIANT;
     if (score >= 85) return ComplianceStatus.SUBSTANTIALLY_COMPLIANT;
     if (score >= 70) return ComplianceStatus.PARTIALLY_COMPLIANT;
     return ComplianceStatus.NON_COMPLIANT;
-  }
+
 
   private calculateNextAssessment(): Date {
     const next = new Date();
     next.setMonth(next.getMonth() + 3); // Quarterly assessments
     return next;
-  }
+
 
   private async getViolationsByCategory(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ViolationCategory[]> {
 
     // Implementation would fetch actual violation categories
     return [];
-  }
+
 
   private async getViolationsBySeverity(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ViolationBySeverity[]> {
 
     // Implementation would fetch actual violation severities
     return [];
-  }
+
 
   private async getViolationTrends(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ViolationTrend[]> {
 
     // Implementation would fetch actual violation trends
     return [];
-  }
+
 
   private async getResourceUtilization(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ResourceUtilization[]> {
 
     // Implementation would fetch actual resource utilization
     return [];
-  }
+
 
   private async calculateProjectedCompletion(_____regulation: ComplianceRegulation): Promise<Date> {
 
@@ -936,14 +961,14 @@ export class ComplianceStatusReportService {
     const projected = new Date();
     projected.setMonth(projected.getMonth() + 6);
     return projected;
-  }
+
 
   private assessRiskLevel(violations: ViolationSummary, criticalGaps: number): RiskLevel {
     if (criticalGaps > 5 || violations.activeViolations > 20) return RiskLevel.CRITICAL;
     if (criticalGaps > 2 || violations.activeViolations > 10) return RiskLevel.HIGH;
     if (criticalGaps > 0 || violations.activeViolations > 5) return RiskLevel.MEDIUM;
     return RiskLevel.LOW;
-  }
+
 
   private async calculateBudgetImpact(_____areas: ComplianceArea[]): Promise<BudgetImpact> {
 
@@ -957,16 +982,16 @@ export class ComplianceStatusReportService {
           amount: 75000,
           description: 'System improvements for compliance',
           urgency: Priority.HIGH
-  }
+
         {
           category: 'Training',
           amount: 25000,
           description: 'Staff compliance training',
           urgency: Priority.MEDIUM
-        }
+
       ]
     };
-  }
+
 
   private estimateComplianceTimeline(areas: ComplianceArea[]): string {
     const criticalGaps = areas.flatMap(area => 
@@ -977,13 +1002,13 @@ export class ComplianceStatusReportService {
     if (criticalGaps > 2) return '6-12 months';
     if (criticalGaps > 0) return '3-6 months';
     return 'Currently compliant';
-  }
+
 
   private async getRecentRegulatoryChanges(_____regulation: ComplianceRegulation): Promise<RegulatoryChange[]> {
 
     // Implementation would fetch actual regulatory changes
     return [];
-  }
+
 
   private async saveComplianceReport(report: ComplianceStatusReport): Promise<void> {
 
@@ -1005,7 +1030,7 @@ export class ComplianceStatusReportService {
       report.overallScore,
       JSON.stringify(report)
     ]);
-  }
+
 
   private async logReportGeneration(report: ComplianceStatusReport): Promise<void> {
 
@@ -1017,8 +1042,7 @@ export class ComplianceStatusReportService {
         regulation: report.regulation,
         overallStatus: report.overallStatus,
         overallScore: report.overallScore
-  }
+
       timestamp: report.generatedAt
     });
-  }
-}
+

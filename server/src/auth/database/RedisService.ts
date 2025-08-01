@@ -36,12 +36,14 @@ export class RedisService {
   }
 
   async connect(): Promise<void> {
+
     if (this.client.status !== 'ready') {
       await this.client.connect();
     }
   }
 
   async get(key: string): Promise<string | null> {
+
     try {
       return await this.client.get(key);
     } catch (error) {
@@ -51,6 +53,7 @@ export class RedisService {
   }
 
   async set(key: string, value: string): Promise<void> {
+
     try {
       await this.client.set(key, value);
     } catch (error) {
@@ -60,6 +63,7 @@ export class RedisService {
   }
 
   async setex(key: string, seconds: number, value: string): Promise<void> {
+
     try {
       await this.client.setex(key, seconds, value);
     } catch (error) {
@@ -69,6 +73,7 @@ export class RedisService {
   }
 
   async exists(key: string): Promise<boolean> {
+
     try {
       const result = await this.client.exists(key);
       return result === 1;
@@ -79,6 +84,7 @@ export class RedisService {
   }
 
   async del(key: string): Promise<void> {
+
     try {
       await this.client.del(key);
     } catch (error) {
@@ -88,6 +94,7 @@ export class RedisService {
   }
 
   async incr(key: string): Promise<number> {
+
     try {
       return await this.client.incr(key);
     } catch (error) {
@@ -97,6 +104,7 @@ export class RedisService {
   }
 
   async expire(key: string, seconds: number): Promise<void> {
+
     try {
       await this.client.expire(key, seconds);
     } catch (error) {
@@ -106,6 +114,7 @@ export class RedisService {
   }
 
   async ttl(key: string): Promise<number> {
+
     try {
       return await this.client.ttl(key);
     } catch (error) {
@@ -125,6 +134,7 @@ export class RedisService {
     remaining: number;
     resetTime: Date;
   }> {
+
     try {
       const now = Date.now();
       const pipeline = this.client.pipeline();
@@ -172,37 +182,44 @@ export class RedisService {
 
   // Session management
   async storeSession(sessionId: string, data: any, ttl: number): Promise<void> {
+
     const key = `session:${sessionId}`;
     await this.setex(key, ttl, JSON.stringify(data));
   }
 
   async getSession(sessionId: string): Promise<any | null> {
+
     const key = `session:${sessionId}`;
     const data = await this.get(key);
     return data ? JSON.parse(data) : null;
   }
 
   async deleteSession(sessionId: string): Promise<void> {
+
     const key = `session:${sessionId}`;
     await this.del(key);
   }
 
   async extendSession(sessionId: string, ttl: number): Promise<void> {
+
     const key = `session:${sessionId}`;
     await this.expire(key, ttl);
   }
 
   // Cache management
   async cache(key: string, data: any, ttl: number): Promise<void> {
+
     await this.setex(key, ttl, JSON.stringify(data));
   }
 
   async getCache(key: string): Promise<any | null> {
+
     const data = await this.get(key);
     return data ? JSON.parse(data) : null;
   }
 
   async invalidateCache(pattern: string): Promise<void> {
+
     try {
       const keys = await this.client.keys(pattern);
       if (keys.length > 0) {
@@ -214,6 +231,7 @@ export class RedisService {
   }
 
   async healthCheck(): Promise<boolean> {
+
     try {
       const result = await this.client.ping();
       return result === 'PONG';
@@ -224,6 +242,7 @@ export class RedisService {
   }
 
   async getInfo(): Promise<any> {
+
     try {
       const info = await this.client.info();
       const lines = info.split('\r\n');
@@ -250,6 +269,7 @@ export class RedisService {
   }
 
   async close(): Promise<void> {
+
     await this.client.quit();
   }
 

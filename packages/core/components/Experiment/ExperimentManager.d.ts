@@ -6,6 +6,7 @@ import React from 'react';
 import { Experiment, ExperimentTemplate, KnowledgeBaseEntry } from '../../types/experiment';
 
 }
+}
 export interface ExperimentManagerProps {
     experiments: Experiment[];
     templates: ExperimentTemplate[];
@@ -26,4 +27,5 @@ export interface ExperimentManagerProps {
 export declare const ExperimentManager: React.FC<ExperimentManagerProps>;
 export default ExperimentManager;
 //# sourceMappingURL=ExperimentManager.d.ts.map
+}
 }

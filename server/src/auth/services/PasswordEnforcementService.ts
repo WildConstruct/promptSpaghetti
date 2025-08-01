@@ -6,8 +6,8 @@
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
-}
-}
+
+
 export interface EnforcementRule {
   id: string;
   name: string;
@@ -23,8 +23,9 @@ export interface EnforcementRule {
     lastLoginDays?: number; // Days since last login
     breachDetected?: boolean;
     consecutiveFailures?: number;
-}
-}
+
+
+
   };
   actions: {
     forceChange: boolean;
@@ -54,10 +55,10 @@ export interface EnforcementRule {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-}
 
-}
-}
+
+
+
 export interface EnforcementAction {
   id: string;
   userId: string;
@@ -79,13 +80,14 @@ export interface EnforcementAction {
     userNotified: boolean;
     adminNotified: boolean;
     attempts: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface UserEnforcementStatus {
   userId: string;
   lastChecked: Date;
@@ -102,13 +104,14 @@ export interface UserEnforcementStatus {
     triggeredAt: Date;
     resolvedAt?: Date;
     status: string;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 export interface EnforcementContext {
   userId: string;
   userRoles: string[];
@@ -118,12 +121,13 @@ export interface EnforcementContext {
   sessionId?: string;
   timestamp: Date;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnforcementResult {
   allowed: boolean;
   blocked: boolean;
@@ -134,9 +138,10 @@ export interface EnforcementResult {
   gracePeriodRemaining?: number;
   activeEnforcements: string[];
   suggestedActions: string[];
-}
-}
-}
+
+
+
+
 
 export class PasswordEnforcementService extends EventEmitter {
   private rules: Map<string, EnforcementRule> = new Map();
@@ -151,7 +156,7 @@ export class PasswordEnforcementService extends EventEmitter {
     super();
     this.initializeDefaultRules();
     this.startEnforcementTasks();
-  }
+
 
   /**
    * Create a new enforcement rule
@@ -180,7 +185,7 @@ export class PasswordEnforcementService extends EventEmitter {
 
     this.emit('ruleCreated', rule);
     return rule;
-  }
+
 
   /**
    * Check enforcement rules for a user action
@@ -218,9 +223,9 @@ export class PasswordEnforcementService extends EventEmitter {
         // If this rule blocks the action, stop processing (highest priority wins)
         if (result.blocked) {
           break;
-        }
-      }
-    }
+
+
+
 
     // Update user status
     await this.updateUserStatus(userId, result);
@@ -235,7 +240,7 @@ export class PasswordEnforcementService extends EventEmitter {
     });
 
     return result;
-  }
+
 
   /**
    * Force password change for a user
@@ -250,7 +255,7 @@ export class PasswordEnforcementService extends EventEmitter {
       requireMFA?: boolean;
       notifyUser?: boolean;
       allowOverride?: boolean;
-    } = {}
+ = {}
   ): Promise<EnforcementAction> {
 
     // Create a temporary enforcement rule
@@ -270,7 +275,7 @@ export class PasswordEnforcementService extends EventEmitter {
         notifyAdmin: true,
         logAudit: true,
         allowOverride: options.allowOverride || false
-  }
+
       enforcement: {
         blockLogin: options.lockAccount || false,
         blockApiAccess: options.lockAccount || false,
@@ -278,7 +283,7 @@ export class PasswordEnforcementService extends EventEmitter {
         redirectToChange: true,
         showWarningMessage: true,
         customMessage: `Password change required: ${reason}`
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: enforcedBy
@@ -300,7 +305,7 @@ export class PasswordEnforcementService extends EventEmitter {
     // Send notifications if requested
     if (options.notifyUser) {
       await this.sendUserNotification(userId, action);
-    }
+
 
     await this.logEnforcementEvent('password_change_forced', userId, enforcedBy, {
       reason,
@@ -311,7 +316,7 @@ export class PasswordEnforcementService extends EventEmitter {
 
     this.emit('passwordChangeForced', action);
     return action;
-  }
+
 
   /**
    * Override an active enforcement action
@@ -326,12 +331,12 @@ export class PasswordEnforcementService extends EventEmitter {
     const action = await this.getEnforcementAction(actionId);
     if (!action) {
       return { success: false, message: 'Enforcement action not found' };
-    }
+
 
     const rule = this.rules.get(action.ruleId);
     if (!rule || !rule.actions.allowOverride) {
       return { success: false, message: 'Override not allowed for this enforcement rule' };
-    }
+
 
     if (requiresApproval || rule.actions.overrideRequiresApproval) {
       // Mark as pending approval
@@ -347,7 +352,7 @@ export class PasswordEnforcementService extends EventEmitter {
         message: 'Override request submitted for approval',
         requiresApproval: true
       };
-    }
+
 
     // Direct override
     action.status = 'overridden';
@@ -369,7 +374,7 @@ export class PasswordEnforcementService extends EventEmitter {
 
     this.emit('enforcementOverridden', action);
     return { success: true, message: 'Enforcement successfully overridden' };
-  }
+
 
   /**
    * Complete an enforcement action (user changed password)
@@ -389,8 +394,8 @@ export class PasswordEnforcementService extends EventEmitter {
         action.metadata = { ...action.metadata, ...metadata };
 
         await this.updateEnforcementAction(action);
-      }
-    }
+
+
 
     // Refresh user status
     await this.refreshUserStatus(userId);
@@ -401,7 +406,7 @@ export class PasswordEnforcementService extends EventEmitter {
     });
 
     this.emit('enforcementCompleted', userId, actionType);
-  }
+
 
   /**
    * Get enforcement status for a user
@@ -413,17 +418,17 @@ export class PasswordEnforcementService extends EventEmitter {
     if (!status) {
       status = await this.createDefaultUserStatus(userId);
       this.userStatuses.set(userId, status);
-    }
+
 
     // Refresh if data is stale (older than 5 minutes)
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
     if (status.lastChecked < fiveMinutesAgo) {
       await this.refreshUserStatus(userId);
       status = this.userStatuses.get(userId)!;
-    }
+
 
     return status;
-  }
+
 
   /**
    * Express.js middleware for enforcement checks
@@ -432,7 +437,7 @@ export class PasswordEnforcementService extends EventEmitter {
     return async (req: any, res: any, next: any) => {
       if (!req.user || !req.user.id) {
         return next();
-      }
+
 
       const context: EnforcementContext = {
         userId: req.user.id,
@@ -454,26 +459,26 @@ export class PasswordEnforcementService extends EventEmitter {
             redirectUrl: result.redirectUrl,
             requiresPasswordChange: result.requiresPasswordChange
           });
-        }
+
 
         if (result.requiresPasswordChange) {
           res.setHeader('X-Password-Change-Required', 'true');
           res.setHeader('X-Grace-Period-Remaining', result.gracePeriodRemaining?.toString() || '0');
-        }
+
 
         if (result.requiresMFA) {
           res.setHeader('X-MFA-Required', 'true');
-        }
+
 
         // Add enforcement info to request
         req.enforcement = result;
         next();
-      } catch (error) {
+ catch (error) {
         console.error('Enforcement middleware error:', error);
         next(error);
-      }
+
     };
-  }
+
 
   // Private helper methods
 
@@ -487,7 +492,7 @@ export class PasswordEnforcementService extends EventEmitter {
       priority: 100,
       conditions: {
         passwordAge: 90 * 24 // 90 days in hours
-  }
+
       actions: {
         forceChange: true,
         gracePeriod: 24, // 24 hour grace period
@@ -498,7 +503,7 @@ export class PasswordEnforcementService extends EventEmitter {
         logAudit: true,
         allowOverride: true,
         overrideRequiresApproval: false
-  }
+
       enforcement: {
         blockLogin: false,
         blockApiAccess: false,
@@ -506,7 +511,7 @@ export class PasswordEnforcementService extends EventEmitter {
         redirectToChange: true,
         showWarningMessage: true,
         customMessage: 'Your password has expired and must be changed'
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -521,7 +526,7 @@ export class PasswordEnforcementService extends EventEmitter {
       priority: 200,
       conditions: {
         breachDetected: true
-  }
+
       actions: {
         forceChange: true,
         gracePeriod: 0,
@@ -531,7 +536,7 @@ export class PasswordEnforcementService extends EventEmitter {
         notifyAdmin: true,
         logAudit: true,
         allowOverride: false
-  }
+
       enforcement: {
         blockLogin: true,
         blockApiAccess: true,
@@ -539,7 +544,7 @@ export class PasswordEnforcementService extends EventEmitter {
         redirectToChange: true,
         showWarningMessage: true,
         customMessage: 'Security breach detected. Immediate password change required.'
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -547,18 +552,18 @@ export class PasswordEnforcementService extends EventEmitter {
 
     this.rules.set(expiredPasswordRule.id, expiredPasswordRule);
     this.rules.set(breachRule.id, breachRule);
-  }
+
 
   private async validateRule(rule: EnforcementRule): Promise<void> {
 
     if (rule.priority < 0 || rule.priority > 1000) {
       throw new Error('Rule priority must be between 0 and 1000');
-    }
+
 
     if (rule.actions.gracePeriod && rule.actions.gracePeriod < 0) {
       throw new Error('Grace period cannot be negative');
-    }
-  }
+
+
 
   private async getApplicableRules(context: EnforcementContext): Promise<EnforcementRule[]> {
 
@@ -569,11 +574,11 @@ export class PasswordEnforcementService extends EventEmitter {
       
       if (await this.ruleAppliesTo(rule, context)) {
         rules.push(rule);
-      }
-    }
+
+
 
     return rules.sort((a, b) => b.priority - a.priority);
-  }
+
 
   private async ruleAppliesTo(rule: EnforcementRule, context: EnforcementContext): Promise<boolean> {
 
@@ -583,21 +588,21 @@ export class PasswordEnforcementService extends EventEmitter {
     // Check user-specific conditions
     if (conditions.userIds && !conditions.userIds.includes(userId)) {
       return false;
-    }
+
 
     if (conditions.userRoles && !conditions.userRoles.some(role => userRoles.includes(role))) {
       return false;
-    }
+
 
     // Check schedule if defined
     if (rule.schedule) {
       const now = new Date();
       if (rule.schedule.startDate && now < rule.schedule.startDate) return false;
       if (rule.schedule.endDate && now > rule.schedule.endDate) return false;
-    }
+
 
     return true;
-  }
+
 
   private async evaluateRule(
     rule: EnforcementRule,
@@ -614,17 +619,17 @@ export class PasswordEnforcementService extends EventEmitter {
         const passwordAgeHours = (Date.now() - passwordStatus.setAt.getTime()) / (1000 * 60 * 60);
         if (passwordAgeHours >= conditions.passwordAge) {
           return { triggered: true, reason: `Password age exceeds ${conditions.passwordAge} hours` };
-        }
-      }
-    }
+
+
+
 
     // Check breach detection
     if (conditions.breachDetected) {
       const securitySummary = await this.breachDetectionService.getSecuritySummary(userId);
       if (securitySummary.breachDetected) {
         return { triggered: true, reason: 'Security breach detected' };
-      }
-    }
+
+
 
     // Check risk level
     if (conditions.riskLevel) {
@@ -635,11 +640,11 @@ export class PasswordEnforcementService extends EventEmitter {
       
       if (currentRiskIndex >= requiredRiskIndex) {
         return { triggered: true, reason: `Risk level ${securitySummary.riskLevel} meets threshold` };
-      }
-    }
+
+
 
     return { triggered: false };
-  }
+
 
   private async createEnforcementAction(
     rule: EnforcementRule,
@@ -664,7 +669,7 @@ export class PasswordEnforcementService extends EventEmitter {
         userNotified: false,
         adminNotified: false,
         attempts: 0
-      }
+
     };
 
     // Store enforcement action
@@ -673,7 +678,7 @@ export class PasswordEnforcementService extends EventEmitter {
     this.activeEnforcements.set(context.userId, userEnforcements);
 
     return action;
-  }
+
 
   private mergeEnforcementResults(
     current: EnforcementResult,
@@ -691,7 +696,7 @@ export class PasswordEnforcementService extends EventEmitter {
       redirectUrl: rule.enforcement.redirectToChange ? '/change-password' : current.redirectUrl,
       allowed: current.allowed && !rule.enforcement.blockLogin
     };
-  }
+
 
   private async createDefaultUserStatus(userId: string): Promise<UserEnforcementStatus> {
 
@@ -706,7 +711,7 @@ export class PasswordEnforcementService extends EventEmitter {
       mustChangePassword: false,
       enforcementHistory: []
     };
-  }
+
 
   private async refreshUserStatus(userId: string): Promise<void> {
 
@@ -727,7 +732,7 @@ export class PasswordEnforcementService extends EventEmitter {
     };
 
     this.userStatuses.set(userId, status);
-  }
+
 
   private startEnforcementTasks(): void {
     // Check for enforcement expirations every hour
@@ -739,37 +744,37 @@ export class PasswordEnforcementService extends EventEmitter {
     setInterval(() => {
       this.sendPeriodicNotifications();
     }, 4 * 60 * 60 * 1000); // Every 4 hours
-  }
+
 
   // Additional helper methods would continue here...
   // Due to length constraints, showing core implementation structure
 
   private generateRuleId(): string {
     return `ER-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  }
+
 
   private generateActionId(): string {
     return `EA-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private mapRouteToAction(path: string, method: string): 'login' | 'api_access' | 'password_reset' | 'password_change' {
     if (path.includes('/login')) return 'login';
     if (path.includes('/password-reset')) return 'password_reset';
     if (path.includes('/change-password')) return 'password_change';
     return 'api_access';
-  }
+
 
   private determineActionType(rule: EnforcementRule): string {
     if (rule.actions.forceChange) return 'force_password_change';
     if (rule.actions.lockAccount) return 'lock_account';
     if (rule.actions.requireMFA) return 'require_mfa';
     return 'general_enforcement';
-  }
+
 
   private matchesActionType(action: EnforcementAction, actionType: string): boolean {
     return action.action === actionType || 
            (actionType === 'password_change' && action.action === 'force_password_change');
-  }
+
 
   private calculateBlockedActions(enforcements: EnforcementAction[]): string[] {
     const blocked = new Set<string>();
@@ -780,25 +785,25 @@ export class PasswordEnforcementService extends EventEmitter {
         if (rule.enforcement.blockLogin) blocked.add('login');
         if (rule.enforcement.blockApiAccess) blocked.add('api_access');
         if (rule.enforcement.blockPasswordReset) blocked.add('password_reset');
-      }
-    }
+
+
     
     return Array.from(blocked);
-  }
+
 
   private hasBlockingEnforcement(enforcements: EnforcementAction[], blockType: string): boolean {
     return enforcements.some(enforcement => {
       const rule = this.rules.get(enforcement.ruleId);
       return rule && (rule.enforcement as any)[blockType];
     });
-  }
+
 
   private hasPasswordChangeEnforcement(enforcements: EnforcementAction[]): boolean {
     return enforcements.some(enforcement => {
       const rule = this.rules.get(enforcement.ruleId);
       return rule && rule.actions.forceChange;
     });
-  }
+
 
   private calculateGracePeriodEnd(enforcements: EnforcementAction[]): Date | undefined {
     const gracePeriods = enforcements
@@ -807,7 +812,7 @@ export class PasswordEnforcementService extends EventEmitter {
       .sort((a, b) => a!.getTime() - b!.getTime());
     
     return gracePeriods[0];
-  }
+
 
   private buildEnforcementHistory(enforcements: EnforcementAction[]): UserEnforcementStatus['enforcementHistory'] {
     return enforcements.map(enforcement => ({
@@ -816,43 +821,43 @@ export class PasswordEnforcementService extends EventEmitter {
       resolvedAt: enforcement.completedAt,
       status: enforcement.status
     }));
-  }
+
 
   private async updateUserStatus(userId: string, result: EnforcementResult): Promise<void> {
 
     await this.refreshUserStatus(userId);
-  }
+
 
   private async updateEnforcementAction(action: EnforcementAction): Promise<void> {
 
     // Implementation would persist to database
     console.log(`Updated enforcement action ${action.id}`);
-  }
+
 
   private async getEnforcementAction(actionId: string): Promise<EnforcementAction | null> {
 
     for (const userEnforcements of this.activeEnforcements.values()) {
       const action = userEnforcements.find(a => a.id === actionId);
       if (action) return action;
-    }
+
     return null;
-  }
+
 
   private async getUserRoles(userId: string): Promise<string[]> {
 
     // Mock implementation - would integrate with actual user service
     return ['user'];
-  }
+
 
   private async sendUserNotification(userId: string, action: EnforcementAction): Promise<void> {
 
     console.log(`Sending enforcement notification to user ${userId}`);
-  }
+
 
   private async sendApprovalRequest(action: EnforcementAction, requestedBy: string, reason: string): Promise<void> {
 
     console.log(`Sending approval request for enforcement action ${action.id}`);
-  }
+
 
   private async checkEnforcementExpirations(): Promise<void> {
 
@@ -867,10 +872,10 @@ export class PasswordEnforcementService extends EventEmitter {
           enforcement.completedAt = new Date();
           await this.updateEnforcementAction(enforcement);
           await this.refreshUserStatus(userId);
-        }
-      }
-    }
-  }
+
+
+
+
 
   private async sendPeriodicNotifications(): Promise<void> {
 
@@ -880,12 +885,11 @@ export class PasswordEnforcementService extends EventEmitter {
       if (pendingEnforcements.length > 0) {
         // Send reminder notification
         console.log(`Sending reminder notification to user ${userId}`);
-      }
-    }
-  }
+
+
+
 
   private async logEnforcementEvent(action: string, userId: string, performedBy: string, metadata: any): Promise<void> {
 
     console.log(`Enforcement Event: ${action} for user ${userId} by ${performedBy}`, metadata);
-  }
-}
+

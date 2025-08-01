@@ -14,8 +14,8 @@ import { DatabaseConnection } from '../database/connection';
 import { AuditService } from '../auth/AuditService';
 import { requirePermission } from '../middleware/auth';
 
-}
-}
+
+
 interface CloneRoleBody {
   sourceRoleId: string;
   targetName: string;
@@ -27,39 +27,43 @@ interface CloneRoleBody {
   cloneMetadata?: {
     templateVersion?: string;
     customProperties?: Record<string, unknown>;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface RoleCloneHistoryParams {
   roleId: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RoleTemplatesQuery {
   organizationId?: string;
   limit?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ValidateCloneBody {
   sourceRoleId: string;
   targetName: string;
   targetScope: string;
   organizationId?: string;
   includePermissions: string[];
-}
-}
-}
+
+
+
+
 
 export async function roleCloneRoutes(fastify: FastifyInstance) {
   const db = fastify.db as DatabaseConnection;
@@ -72,7 +76,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: CloneRoleBody;
-  }>('/clone', {
+>('/clone', {
     preHandler: requirePermission('perm_admin_roles'),
     schema: {
       body: {
@@ -88,20 +92,20 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
             type: 'array',
             items: { type: 'string' },
             minItems: 1
-  }
+
           excludePermissions: {
             type: 'array',
             items: { type: 'string' }
-  }
+
           cloneMetadata: {
             type: 'object',
             properties: {
               templateVersion: { type: 'string' },
               customProperties: { type: 'object' }
-            }
-          }
-        }
-  }
+
+
+
+
       response: {
         200: {
           type: 'object',
@@ -117,17 +121,17 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                 permissions: {
                   type: 'array',
                   items: { type: 'string' }
-  }
+
                 createdAt: { type: 'string' },
                 metadata: { type: 'object' }
-              }
-  }
+
+
             warnings: {
               type: 'array',
               items: { type: 'string' }
-            }
-          }
-  }
+
+
+
         400: {
           type: 'object',
           properties: {
@@ -136,17 +140,17 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
             validationErrors: {
               type: 'array',
               items: { type: 'string' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request: FastifyRequest<{ Body: CloneRoleBody }>, reply: FastifyReply) => {
     try {
       const user = request.user;
       if (!user) {
         return reply.code(401).send({ success: false, error: 'User not authenticated' });
-      }
+
 
       const cloneRequest: CloneRoleRequest = {
         sourceRoleId: request.body.sourceRoleId,
@@ -167,21 +171,20 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
           clonedRole: result.clonedRole,
           warnings: result.warnings
         });
-      } else {
+ else {
         return reply.code(400).send({
           success: false,
           error: result.error,
           validationErrors: result.validationErrors
         });
-      }
 
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Role clone operation failed');
       return reply.code(500).send({
         success: false,
         error: 'Internal server error during role cloning'
       });
-    }
+
   });
 
   /**
@@ -190,7 +193,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Params: RoleCloneHistoryParams;
-  }>('/:roleId/clone-history', {
+>('/:roleId/clone-history', {
     preHandler: requirePermission('perm_admin_roles'),
     schema: {
       params: {
@@ -198,8 +201,8 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
         required: ['roleId'],
         properties: {
           roleId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -220,29 +223,29 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                       roleName: { type: 'string' },
                       clonedAt: { type: 'string' },
                       clonedBy: { type: 'string' }
-                    }
-                  }
-  }
+
+
+
                 templateUsage: {
                   type: 'object',
                   properties: {
                     timesUsedAsTemplate: { type: 'number' },
                     lastUsedAsTemplate: { type: 'string' }
-                  }
-                }
-              }
-            }
-          }
-  }
+
+
+
+
+
+
         404: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Params: RoleCloneHistoryParams }>, reply: FastifyReply) => {
     try {
       const { roleId } = request.params;
@@ -253,20 +256,19 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Role not found or no clone history available'
         });
-      }
+
 
       return reply.code(200).send({
         success: true,
         history
       });
-
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get clone history');
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve clone history'
       });
-    }
+
   });
 
   /**
@@ -275,7 +277,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: RoleTemplatesQuery;
-  }>('/templates', {
+>('/templates', {
     preHandler: requirePermission('perm_admin_roles'),
     schema: {
       querystring: {
@@ -283,8 +285,8 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
         properties: {
           organizationId: { type: 'string' },
           limit: { type: 'string', pattern: '^[0-9]+$' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -302,21 +304,21 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                   permissions: {
                     type: 'array',
                     items: { type: 'string' }
-  }
+
                   metadata: {
                     type: 'object',
                     properties: {
                       cloneCount: { type: 'number' },
                       templateUsage: { type: 'object' }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
+
+
   }, async (request: FastifyRequest<{ Querystring: RoleTemplatesQuery }>, reply: FastifyReply) => {
     try {
       const { organizationId, limit } = request.query;
@@ -328,14 +330,13 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
         success: true,
         templates
       });
-
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get role templates');
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve role templates'
       });
-    }
+
   });
 
   /**
@@ -344,7 +345,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: ValidateCloneBody;
-  }>('/validate-clone', {
+>('/validate-clone', {
     preHandler: requirePermission('perm_admin_roles'),
     schema: {
       body: {
@@ -358,9 +359,9 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
           includePermissions: {
             type: 'array',
             items: { type: 'string' }
-          }
-        }
-  }
+
+
+
       response: {
         200: {
           type: 'object',
@@ -373,11 +374,11 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                 errors: {
                   type: 'array',
                   items: { type: 'string' }
-  }
+
                 warnings: {
                   type: 'array',
                   items: { type: 'string' }
-  }
+
                 conflicts: {
                   type: 'array',
                   items: {
@@ -387,15 +388,15 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                       permissionId: { type: 'string' },
                       description: { type: 'string' },
                       resolution: { type: 'string' }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
+
+
   }, async (request: FastifyRequest<{ Body: ValidateCloneBody }>, reply: FastifyReply) => {
     try {
       const validateRequest = request.body;
@@ -421,9 +422,9 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
             errors: ['Source role not found'],
             warnings: [],
             conflicts: []
-          }
+
         });
-      }
+
 
       // Validate the request
       const validation = await roleCloneService['validateCloneRequest'](cloneRequest, sourceRole);
@@ -442,16 +443,15 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
           errors: validation.errors,
           warnings: validation.warnings,
           conflicts: permissionResolution.conflicts
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       request.log.error({ error }, 'Failed to validate clone request');
       return reply.code(500).send({
         success: false,
         error: 'Failed to validate clone request'
       });
-    }
+
   });
 
   /**
@@ -467,8 +467,8 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
           limit: { type: 'string', pattern: '^[0-9]+$' },
           offset: { type: 'string', pattern: '^[0-9]+$' },
           organizationId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -488,17 +488,17 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                   clonedBy: { type: 'string' },
                   permissionsCloned: { type: 'number' },
                   permissionsSkipped: { type: 'number' }
-                }
-              }
-  }
+
+
+
             total: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ 
     Querystring: { limit?: string; offset?: string; organizationId?: string } 
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { limit = '20', offset = '0', organizationId } = request.query;
       const limitNum = parseInt(limit, 10);
@@ -551,15 +551,14 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
         })),
         total: countResult[0].total
       });
-
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get clone operations');
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve clone operations'
       });
-    }
+
   });
-}
+
 
 export default roleCloneRoutes;

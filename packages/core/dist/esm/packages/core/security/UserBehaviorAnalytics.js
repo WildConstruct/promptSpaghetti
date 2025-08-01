@@ -471,8 +471,9 @@ for (const recentEvent of recentEvents) {
         }, 24 * 60 * 60 * 1000); // 24 hours
         console.log(`🔍 BEHAVIOR ANOMALY: ${anomaly.anomalyType} (confidence: ${anomaly.confidence})`);
     }
-    createAnomaly(event, UserBehaviorEvent);
-    type: AnomalyType,
+    createAnomaly(event, UserBehaviorEvent),
+        type;
+    AnomalyType,
         confidence;
     number,
         description;

@@ -13,7 +13,7 @@ import {
   EvidenceAccessAction,
   EvidenceAccessOutcome,
   EvidenceAccessAuditEntry
-} from '../services/security/EvidenceAccessAuditService';
+ from '../services/security/EvidenceAccessAuditService';
 import { AccessControlFramework, AccessControlContext } from '../services/security/AccessControlFramework';
 import { AuditService } from '../auth/services/AuditService';
 import { EvidenceVersioningService } from '../services/EvidenceVersioningService';
@@ -43,7 +43,7 @@ const createTestContext = (): AccessControlContext => ({
     riskScore: 0.3,
     complianceStatus: 'COMPLIANT' as any,
     metadata: {}
-  }
+
   resource: {
     id: 'evidence789',
     type: 'EVIDENCE' as any,
@@ -56,7 +56,7 @@ const createTestContext = (): AccessControlContext => ({
     complianceFrameworks: [],
     legalHold: false,
     metadata: {}
-  }
+
   action: {
     id: 'read-action',
     type: 'READ' as any,
@@ -70,7 +70,7 @@ const createTestContext = (): AccessControlContext => ({
     requiresMFA: false,
     requiresJustification: false,
     metadata: { intent: 'investigation' }
-  }
+
   environment: {
     timestamp: new Date(),
     timezone: 'UTC',
@@ -90,7 +90,7 @@ const createTestContext = (): AccessControlContext => ({
     knownThreats: [],
     complianceMode: false,
     metadata: {}
-  }
+
   requestId: 'req-123',
   timestamp: new Date(),
   sourceIP: '192.168.1.100',
@@ -119,7 +119,7 @@ describe('EvidenceAccessAuditService', () => {
       getAuditStats: jest.fn<unknown[], unknown>().mockResolvedValue({} as unknown as unknown as unknown as unknown),
       logAction: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown as unknown),
       logResourceAccess: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown as unknown)
-    } as any;
+ as any;
     mockAccessControlFramework = {} as jest.Mocked<AccessControlFramework>;
     mockEvidenceVersioningService = {} as jest.Mocked<EvidenceVersioningService>;
     mockDatabaseService = {
@@ -132,10 +132,10 @@ describe('EvidenceAccessAuditService', () => {
       findUserById: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown as unknown as unknown),
       createUser: jest.fn<unknown[], unknown>(),
       updateUser: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
     mockUserAccessTransparency = {
       recordDataAccess: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown as unknown)
-    } as any;
+ as any;
 
     // Setup database connection mock
     mockConnection = {
@@ -209,7 +209,7 @@ describe('EvidenceAccessAuditService', () => {
         metadata: expect.objectContaining({
           riskLevel: expect.any(String),
           correlationId: result.correlationId
-  }
+
       });
 
       // Verify user access transparency update
@@ -368,7 +368,7 @@ describe('EvidenceAccessAuditService', () => {
           processing_time: 150,
           error_details: null,
           metadata: JSON.stringify({})
-        }
+
       ];
       
       mockConnection.query.mockResolvedValue({ rows: mockRows } as unknown as unknown as unknown as unknown);
@@ -386,11 +386,11 @@ describe('EvidenceAccessAuditService', () => {
           userId: 'user123',
           roles: ['analyst'],
           permissions: ['evidence:read']
-  }
+
         action: {
           type: EvidenceAccessAction.READ,
           operation: 'read'
-  }
+
         outcome: EvidenceAccessOutcome.SUCCESS
       });
 
@@ -434,7 +434,7 @@ describe('EvidenceAccessAuditService', () => {
           outcome: EvidenceAccessOutcome.SUCCESS,
           risk: { level: 'LOW', score: 20 } as any,
           processingTime: 100
-  }
+
         {
           id: 'audit2',
           timestamp: new Date('2023-06-01T11:00:00Z'),
@@ -444,7 +444,7 @@ describe('EvidenceAccessAuditService', () => {
           outcome: EvidenceAccessOutcome.DENIED,
           risk: { level: 'HIGH', score: 80 } as any,
           processingTime: 150
-        }
+
       ];
 
       jest.spyOn(
@@ -514,7 +514,7 @@ describe('EvidenceAccessAuditService', () => {
           outcome: EvidenceAccessOutcome.SUCCESS,
           risk: { level: 'LOW', score: 20 } as any,
           processingTime: 6000 // Slow operation (>5s)
-        }
+
       ];
 
       jest.spyOn(
@@ -540,13 +540,13 @@ describe('EvidenceAccessAuditService', () => {
           timestamp: new Date('2023-06-01T10:00:00Z'),
           contentHash: 'content1',
           chainHash: 'chain1'
-  }
+
         {
           id: 'audit2', 
           timestamp: new Date('2023-06-01T11:00:00Z'),
           contentHash: 'content2',
           chainHash: 'chain2'
-        }
+
       ];
 
       jest.spyOn(
@@ -581,13 +581,13 @@ describe('EvidenceAccessAuditService', () => {
           timestamp: new Date('2023-06-01T10:00:00Z'),
           contentHash: 'content1',
           chainHash: 'chain1'
-  }
+
         {
           id: 'audit2',
           timestamp: new Date('2023-06-01T11:00:00Z'),
           contentHash: 'content2',
           chainHash: 'wrong_chain_hash' // Broken chain
-        }
+
       ];
 
       jest.spyOn(
@@ -676,9 +676,9 @@ describe('EvidenceAccessAuditService', () => {
           level1: {
             level2: {
               level3: 'deep nested value'
-            }
-          }
-  }
+
+
+
         binaryData: Buffer.from('binary data').toString('base64')
       };
 

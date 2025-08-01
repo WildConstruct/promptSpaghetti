@@ -75,13 +75,13 @@ export async function activityTimelineRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof TimelineFilterSchema>
-  }>('/timeline', {
+>('/timeline', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'read_activities',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -95,7 +95,7 @@ export async function activityTimelineRoutes(
           error: 'Insufficient permissions',
           message: 'You can only access your own activity timeline'
         });
-      }
+
 
       const timeline = await activityTimelineService.generateUserTimeline(filter);
 
@@ -106,10 +106,9 @@ export async function activityTimelineRoutes(
           generatedAt: new Date().toISOString(),
           filters: filter,
           requestedBy: user.id
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting activity timeline:', error);
       
       if (error instanceof z.ZodError) {
@@ -118,14 +117,14 @@ export async function activityTimelineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to get activity timeline',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -134,13 +133,13 @@ export async function activityTimelineRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof ActivityStreamRequestSchema>
-  }>('/stream', {
+>('/stream', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'read_activities',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -153,7 +152,7 @@ export async function activityTimelineRoutes(
           success: false,
           error: 'Insufficient permissions'
         });
-      }
+
 
       const streamId = await activityTimelineService.createActivityStream(
         streamRequest.userId,
@@ -167,11 +166,10 @@ export async function activityTimelineRoutes(
           streamId,
           updateFrequency: streamRequest.updateFrequency,
           expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
-  }
+
         message: 'Activity stream created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating activity stream:', error);
       
       if (error instanceof z.ZodError) {
@@ -180,14 +178,14 @@ export async function activityTimelineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to create activity stream',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -196,7 +194,7 @@ export async function activityTimelineRoutes(
    */
   fastify.get<{
     Params: z.infer<typeof StreamParamsSchema>
-  }>('/stream/:streamId', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/stream/:streamId', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { streamId } = StreamParamsSchema.parse(request.params);
       const user = (request.user as any);
@@ -214,8 +212,7 @@ export async function activityTimelineRoutes(
         success: true,
         data: streamData
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting activity stream:', error);
       
       if (error instanceof z.ZodError) {
@@ -224,14 +221,14 @@ export async function activityTimelineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to get activity stream',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -240,13 +237,13 @@ export async function activityTimelineRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof CorrelationAnalysisSchema>
-  }>('/correlations', {
+>('/correlations', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'read_activities',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -259,7 +256,7 @@ export async function activityTimelineRoutes(
           success: false,
           error: 'Insufficient permissions'
         });
-      }
+
 
       const correlations = await activityTimelineService.findActivityCorrelations(
         analysisRequest.userId,
@@ -274,10 +271,9 @@ export async function activityTimelineRoutes(
           analysisDate: new Date().toISOString(),
           lookbackHours: analysisRequest.lookbackHours,
           correlationsFound: correlations.length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error analyzing activity correlations:', error);
       
       if (error instanceof z.ZodError) {
@@ -286,14 +282,14 @@ export async function activityTimelineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to analyze activity correlations',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -309,14 +305,14 @@ export async function activityTimelineRoutes(
       includeBehavior?: boolean;
       includeFeatures?: boolean;
       includeCollaboration?: boolean;
-    }
-  }>('/insights/:userId', {
+
+>('/insights/:userId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'read_activities',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -337,7 +333,7 @@ export async function activityTimelineRoutes(
           success: false,
           error: 'Insufficient permissions'
         });
-      }
+
 
       // Generate insights (this would be implemented in the service)
       const insights = {
@@ -346,7 +342,7 @@ export async function activityTimelineRoutes(
         timeRange: {
           start: query.startDate ? new Date(query.startDate) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           end: query.endDate ? new Date(query.endDate) : new Date()
-  }
+
         patterns: query.includePatterns !== false ? {
           mostActiveHours: [9, 10, 14, 15],
           mostActiveDays: ['Monday', 'Tuesday', 'Wednesday'],
@@ -354,25 +350,25 @@ export async function activityTimelineRoutes(
           totalSessions: 12,
           uniqueDevices: 2,
           locationHistory: []
-        } : undefined,
+ : undefined,
         behavior: query.includeBehavior !== false ? {
           activityScore: 85,
           consistencyScore: 78,
           productivityTrend: 'increasing' as const,
           riskLevel: 'low' as const,
           anomalyFlags: []
-        } : undefined,
+ : undefined,
         features: query.includeFeatures !== false ? {
           mostUsedFeatures: [],
           newFeatures: [],
           abandonedFeatures: []
-        } : undefined,
+ : undefined,
         collaboration: query.includeCollaboration !== false ? {
           collaborationScore: 65,
           averageSharesPerDay: 2.5,
           uniqueCollaborators: 3,
           teamInteractions: 12
-        } : undefined
+ : undefined
       };
 
       return reply.send({
@@ -382,10 +378,9 @@ export async function activityTimelineRoutes(
           generatedAt: new Date().toISOString(),
           dataPoints: 150,
           accuracy: 95.5
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting activity insights:', error);
       
       if (error instanceof z.ZodError) {
@@ -394,14 +389,14 @@ export async function activityTimelineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to get activity insights',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -410,13 +405,13 @@ export async function activityTimelineRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof ExportRequestSchema>
-  }>('/export', {
+>('/export', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'export_activities',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -429,7 +424,7 @@ export async function activityTimelineRoutes(
           success: false,
           error: 'Insufficient permissions'
         });
-      }
+
 
       const exportData = await activityTimelineService.exportTimeline(
         exportRequest.filters as TimelineFilter,
@@ -448,8 +443,7 @@ export async function activityTimelineRoutes(
       reply.header('Content-Disposition', `attachment; filename="${filename}"`);
       
       return reply.send(exportData);
-
-    } catch (error) {
+ catch (error) {
       console.error('Error exporting activity timeline:', error);
       
       if (error instanceof z.ZodError) {
@@ -458,14 +452,14 @@ export async function activityTimelineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to export activity timeline',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -477,14 +471,14 @@ export async function activityTimelineRoutes(
     Querystring: {
       timeframe?: string;
       granularity?: string;
-    }
-  }>('/stats/:userId', {
+
+>('/stats/:userId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'read_activities',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -501,7 +495,7 @@ export async function activityTimelineRoutes(
           success: false,
           error: 'Insufficient permissions'
         });
-      }
+
 
       const timeframe = query.timeframe || '30d';
       const granularity = query.granularity || 'day';
@@ -518,7 +512,7 @@ export async function activityTimelineRoutes(
           activeDays: 28,
           mostActiveHour: 14,
           mostActiveDay: 'Tuesday'
-  }
+
         trends: {
           daily: Array.from({ length: 30 }, (_, i) => ({
             date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -531,7 +525,7 @@ export async function activityTimelineRoutes(
             activities: Math.floor(Math.random() * 20) + 1,
             averageDuration: Math.floor(Math.random() * 10) + 2
           }))
-  }
+
         categories: {
           authentication: 45,
           content_creation: 320,
@@ -540,12 +534,12 @@ export async function activityTimelineRoutes(
           api_usage: 55,
           system_administration: 12,
           other: 30
-  }
+
         devices: {
           desktop: 890,
           mobile: 245,
           tablet: 113
-        }
+
       };
 
       return reply.send({
@@ -554,10 +548,9 @@ export async function activityTimelineRoutes(
         metadata: {
           generatedAt: new Date().toISOString(),
           dataAccuracy: 98.2
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting activity statistics:', error);
       
       if (error instanceof z.ZodError) {
@@ -566,14 +559,14 @@ export async function activityTimelineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to get activity statistics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -593,13 +586,13 @@ export async function activityTimelineRoutes(
           insightGeneration: 'operational',
           dataExport: 'operational',
           realtimeUpdates: 'operational'
-  }
+
         metrics: {
           activeStreams: 0, // Would get from service
           processingLatency: 45,
           accuracyScore: 96.8,
           uptime: process.uptime()
-  }
+
         environment: process.env.NODE_ENV || 'development'
       };
 
@@ -607,13 +600,11 @@ export async function activityTimelineRoutes(
         success: true,
         data: healthStatus
       });
-
-    } catch (error) {
+ catch (error) {
       return reply.code(503).send({
         success: false,
         error: 'Activity timeline service unhealthy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}

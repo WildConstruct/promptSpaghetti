@@ -5,6 +5,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { GraphCRDTAdapter } from './GraphCRDTAdapter';
+position ?  : { x: number, y: number };
 ;
 selection ?  : string;
 lastSeen: number;
@@ -60,7 +61,7 @@ export const useCollaborativeGraphStore = create()(subscribeWithSelector((set, g
             onConnectionStatus: (connected) => {
                 set({
                     isConnected: connected,
-                    connectionStatus: connected ? 'connected' : 'disconnected'
+                    connectionStatus: connected ? 'connected' : 'disconnected',
                 });
             }
         });
@@ -75,7 +76,7 @@ export const useCollaborativeGraphStore = create()(subscribeWithSelector((set, g
                 userId: options.userId,
                 name: 'You',
                 color: '#0066cc',
-                lastSeen: Date.now()
+                lastSeen: Date.now(),
             }
         });
     },
@@ -151,7 +152,7 @@ export const useCollaborativeGraphStore = create()(subscribeWithSelector((set, g
             const newGraph = {
                 ...graph,
                 nodes: graph.nodes.filter(node => node.id !== nodeId),
-                edges: graph.edges.filter(edge => edge.source !== nodeId && edge.target !== nodeId)
+                edges: graph.edges.filter(edge => , edge.source !== nodeId && edge.target !== nodeId)
             };
             set({ graph: newGraph });
         }
@@ -223,7 +224,7 @@ export const useCollaborativeGraphStore = create()(subscribeWithSelector((set, g
     updateUserSelection: (nodeIds) => {
         const { updateLocalPresence } = get();
         updateLocalPresence({
-            selection: nodeIds
+            selection: nodeIds,
         });
     },
     // Apply remote update
@@ -267,7 +268,7 @@ export const useCollaborativeActions = () => useCollaborativeGraphStore((state) 
     updateNodePosition: state.updateNodePosition,
     updateLocalPresence: state.updateLocalPresence,
     updateUserCursor: state.updateUserCursor,
-    updateUserSelection: state.updateUserSelection
+    updateUserSelection: state.updateUserSelection,
 }));
 export const useCollaborativeState = () => useCollaborativeGraphStore((state) => ({
     graph: state.graph,
@@ -277,5 +278,5 @@ export const useCollaborativeState = () => useCollaborativeGraphStore((state) =>
     localPresence: state.localPresence,
     isConnected: state.isConnected,
     connectionStatus: state.connectionStatus,
-    lastSyncTime: state.lastSyncTime
+    lastSyncTime: state.lastSyncTime,
 }));

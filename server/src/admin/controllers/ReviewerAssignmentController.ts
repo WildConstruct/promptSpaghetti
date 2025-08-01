@@ -23,7 +23,7 @@ import {
   BadRequestException,
   NotFoundException,
   ForbiddenException
-} from '@nestjs/common';
+ from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiTags,
@@ -31,7 +31,7 @@ import {
   ApiResponse,
   ApiQuery,
   ApiParam
-} from '@nestjs/swagger';
+ from '@nestjs/swagger';
 import { AdminAuthGuard } from '../guards/AdminAuthGuard';
 import { RequirePermissions } from '../decorators/RequirePermissions';
 import {
@@ -44,24 +44,26 @@ import {
   ReviewAssignment,
   WorkloadDistribution,
   AssignmentRequest
-} from '../../services/ReviewerAssignmentService';
+ from '../../services/ReviewerAssignmentService';
 import { AuditService } from '../../auth/services/AuditService';
 
 // Request/Response DTOs
-}
-}
+
+
+
 export interface CreateReviewerRequest {
   user_id: string;
   role: ReviewerRole;
   specializations: string[];
   capacity_limit: number;
   skill_ratings: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignReviewRequest {
   review_item_id: string;
   review_type: ReviewType;
@@ -73,41 +75,45 @@ export interface AssignReviewRequest {
   estimated_duration_hours?: number;
   assignment_strategy?: AssignmentStrategy;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ManualAssignRequest {
   reviewer_id: string;
   reason: string;
   due_date?: string;
   priority?: 'low' | 'medium' | 'high' | 'urgent';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReassignRequest {
   new_reviewer_id: string;
   reason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UpdateAvailabilityRequest {
   availability_status: 'available' | 'busy' | 'away' | 'unavailable';
   capacity_limit?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewerDashboard {
   total_reviewers: number;
   active_reviewers: number;
@@ -118,9 +124,10 @@ export interface ReviewerDashboard {
   average_review_time: number;
   workload_distribution: WorkloadDistribution[];
   recent_assignments: ReviewAssignment[];
-}
-}
-}
+
+
+
+
 
 @ApiTags('admin/reviewer-assignment')
 @ApiBearerAuth()
@@ -166,7 +173,7 @@ export class ReviewerAssignmentController {
       workload_distribution: workloadDistribution,
       recent_assignments: recentAssignments
     };
-  }
+
 
   @Get('workload-distribution')
   @ApiOperation({ summary: 'Get current workload distribution across all reviewers' })
@@ -177,7 +184,7 @@ export class ReviewerAssignmentController {
   ): Promise<WorkloadDistribution[]> {
 
     return this.reviewerService.getWorkloadDistribution(reviewType);
-  }
+
 
   // Reviewer Management
 
@@ -218,7 +225,7 @@ export class ReviewerAssignmentController {
           escalations_received: 0,
           current_streak: 0,
           last_review_date: new Date()
-  }
+
         created_at: new Date(),
         updated_at: new Date()
       })),
@@ -226,7 +233,7 @@ export class ReviewerAssignmentController {
       page: parseInt(page || '1'),
       limit: parseInt(limit || '20')
     };
-  }
+
 
   @Post('reviewers')
   @ApiOperation({ summary: 'Create new reviewer profile' })
@@ -256,7 +263,7 @@ export class ReviewerAssignmentController {
         escalations_received: 0,
         current_streak: 0,
         last_review_date: new Date()
-      }
+
     });
 
     await this.auditService.logEvent({
@@ -267,12 +274,12 @@ export class ReviewerAssignmentController {
         reviewer_user_id: request.user_id,
         role: request.role,
         specializations: request.specializations
-      }
+
     });
 
     this.logger.log(`Created reviewer profile ${profile.id} for user ${request.user_id}`);
     return profile;
-  }
+
 
   @Get('reviewers/:id')
   @ApiOperation({ summary: 'Get specific reviewer profile' })
@@ -282,7 +289,7 @@ export class ReviewerAssignmentController {
 
     // This would be implemented with proper database query
     throw new NotFoundException(`Reviewer ${reviewerId} not found`);
-  }
+
 
   @Put('reviewers/:id/availability')
   @ApiOperation({ summary: 'Update reviewer availability status' })
@@ -302,12 +309,12 @@ export class ReviewerAssignmentController {
       metadata: {
         availability_status: request.availability_status,
         capacity_limit: request.capacity_limit
-      }
+
     });
 
     this.logger.log(`Updated availability for reviewer ${reviewerId} to ${request.availability_status}`);
     return { success: true, message: 'Availability updated successfully' };
-  }
+
 
   // Assignment Management
 
@@ -322,7 +329,7 @@ export class ReviewerAssignmentController {
     // Validate review item exists
     if (!request.review_item_id || !request.review_type) {
       throw new BadRequestException('review_item_id and review_type are required');
-    }
+
 
     const assignmentRequest: AssignmentRequest = {
       review_item_id: request.review_item_id,
@@ -348,12 +355,12 @@ export class ReviewerAssignmentController {
         review_type: request.review_type,
         reviewer_id: assignment.reviewer_id,
         assignment_strategy: assignment.assignment_strategy
-      }
+
     });
 
     this.logger.log(`Auto-assigned review ${request.review_item_id} to reviewer ${assignment.reviewer_id}`);
     return assignment;
-  }
+
 
   @Post(':reviewItemId/:reviewType/assign-manual')
   @ApiOperation({ summary: 'Manually assign specific reviewer to a review item' })
@@ -385,12 +392,12 @@ export class ReviewerAssignmentController {
         review_type: reviewType,
         reviewer_id: request.reviewer_id,
         reason: request.reason
-      }
+
     });
 
     this.logger.log(`Manually assigned review ${reviewItemId} to reviewer ${request.reviewer_id}`);
     return assignment;
-  }
+
 
   @Put('assignments/:id/reassign')
   @ApiOperation({ summary: 'Reassign review to different reviewer' })
@@ -416,12 +423,12 @@ export class ReviewerAssignmentController {
       metadata: {
         new_reviewer_id: request.new_reviewer_id,
         reason: request.reason
-      }
+
     });
 
     this.logger.log(`Reassigned review ${assignmentId} to reviewer ${request.new_reviewer_id}`);
     return assignment;
-  }
+
 
   @Get('assignments')
   @ApiOperation({ summary: 'Get review assignments with filtering and pagination' })
@@ -452,7 +459,7 @@ export class ReviewerAssignmentController {
         status,
         parseInt(limit || '20')
       );
-    }
+
 
     return {
       assignments,
@@ -460,7 +467,7 @@ export class ReviewerAssignmentController {
       page: parseInt(page || '1'),
       limit: parseInt(limit || '20')
     };
-  }
+
 
   @Get('assignments/:id')
   @ApiOperation({ summary: 'Get specific assignment details' })
@@ -470,7 +477,7 @@ export class ReviewerAssignmentController {
 
     // Implementation would fetch assignment details
     throw new NotFoundException(`Assignment ${assignmentId} not found`);
-  }
+
 
   @Post('assignments/:id/complete')
   @ApiOperation({ summary: 'Mark assignment as completed' })
@@ -493,7 +500,7 @@ export class ReviewerAssignmentController {
 
     this.logger.log(`Completed assignment ${assignmentId}`);
     return { success: true, message: 'Assignment completed successfully' };
-  }
+
 
   // Analytics and Reporting
 
@@ -519,9 +526,9 @@ export class ReviewerAssignmentController {
         average_completion_time: 0,
         quality_score: 0,
         overdue_count: 0
-      }
+
     };
-  }
+
 
   @Get('analytics/workload-trends')
   @ApiOperation({ summary: 'Get workload trends over time' })
@@ -537,9 +544,9 @@ export class ReviewerAssignmentController {
         assignments_completed: [],
         average_workload: [],
         reviewer_capacity_utilization: []
-      }
+
     };
-  }
+
 
   // Bulk Operations
 
@@ -565,7 +572,7 @@ export class ReviewerAssignmentController {
         assignment_ids: request.assignment_ids,
         new_reviewer_id: request.new_reviewer_id,
         count: request.assignment_ids.length
-      }
+
     });
 
     return {
@@ -573,7 +580,7 @@ export class ReviewerAssignmentController {
       failed: results.filter(r => r.status === 'rejected').length,
       results
     };
-  }
+
 
   // Helper methods
 
@@ -581,14 +588,14 @@ export class ReviewerAssignmentController {
 
     // Implementation would fetch recent assignments
     return [];
-  }
+
 
   private async getOverallStatistics(): Promise<{
     pending_assignments: number;
     overdue_assignments: number;
     completion_rate: number;
     average_review_time: number;
-  }> {
+> {
 
     // Implementation would calculate overall statistics
     return {
@@ -597,5 +604,4 @@ export class ReviewerAssignmentController {
       completion_rate: 85.5,
       average_review_time: 18.2
     };
-  }
-}
+

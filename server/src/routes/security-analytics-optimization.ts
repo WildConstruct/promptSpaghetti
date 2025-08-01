@@ -12,11 +12,11 @@ import {
   OptimizationConfig, 
   OptimizationRecommendation,
   OptimizationResult 
-} from '../services/SecurityAnalyticsOptimizer';
+ from '../services/SecurityAnalyticsOptimizer';
 import { 
   SecurityAnalyticsIntegrationService,
   SecurityAnalyticsIntegrationConfig 
-} from '../services/SecurityAnalyticsIntegrationService';
+ from '../services/SecurityAnalyticsIntegrationService';
 import { AdminAuthGuard } from '../admin/guards/AdminAuthGuard';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../database/analytics-dao';
@@ -26,37 +26,40 @@ import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 // Global optimizer instance
 let securityAnalyticsOptimizer: SecurityAnalyticsOptimizer | null = null;
 
-}
-}
+
+
 interface OptimizationQuery {
   includeRecommendations?: boolean;
   includeHistory?: boolean;
   includeCacheMetrics?: boolean;
   includeStatus?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface OptimizationRequest {
   recommendationId?: string;
   autoImplement?: boolean;
   optimizationType?: 'performance' | 'memory' | 'cpu' | 'cache' | 'resource_allocation';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface OptimizationResponse {
   success: boolean;
   data?: any;
   error?: string;
   timestamp: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Initialize security analytics optimizer
@@ -65,7 +68,7 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
 
   if (securityAnalyticsOptimizer) {
     return securityAnalyticsOptimizer;
-  }
+
 
   // Initialize security analytics service first
   const analyticsServiceConfig: SecurityAnalyticsIntegrationConfig = {
@@ -79,7 +82,7 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
       performance_event_forwarding: true,
       batch_size: 50,
       flush_interval_ms: 10000
-  }
+
     epic17_admin_integration: {
       enabled: true,
       auth_guard: new AdminAuthGuard(),
@@ -87,7 +90,7 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
       diagnostic_service: new DiagnosticService(),
       admin_notification_enabled: true,
       security_alert_threshold: 5
-  }
+
     performance_monitoring: {
       real_time_monitoring_enabled: true,
       performance_threshold_ms: 1000,
@@ -95,14 +98,14 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
       cpu_threshold_percent: 80,
       alert_on_degradation: true,
       auto_optimization_enabled: false
-  }
+
     security_features: {
       threat_detection_enabled: true,
       anomaly_detection_sensitivity: 0.8,
       correlation_analysis_enabled: true,
       predictive_analytics_enabled: false,
       automated_response_enabled: false
-    }
+
   };
 
   const analyticsService = new SecurityAnalyticsIntegrationService(analyticsServiceConfig);
@@ -116,24 +119,24 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
       memory_threshold_mb: 512,
       cpu_threshold_percent: 80,
       latency_threshold_ms: 1000
-  }
+
     caching: {
       enabled: true,
       cache_ttl_seconds: 3600, // 1 hour default
       max_cache_size_mb: 100,
       cache_strategies: ['lru', 'ttl', 'predictive']
-  }
+
     resource_management: {
       auto_scaling_enabled: true,
       max_concurrent_operations: 10,
       resource_pool_size: 20,
       garbage_collection_interval_ms: 300000 // 5 minutes
-  }
+
     analytics_integration: {
       epic1_optimization_events: true,
       epic17_admin_notifications: true,
       optimization_metrics_tracking: true
-  }
+
     security_validation: {
       enabled: true,
       threat_detection_enabled: true,
@@ -142,7 +145,7 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
       rate_limit_optimization_requests: true,
       max_optimization_requests_per_hour: 10,
       security_scanning_enabled: true
-    }
+
   };
 
   const analyticsCollector = analyticsServiceConfig.epic1_analytics_integration.analytics_collector;
@@ -159,7 +162,7 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
 
   await securityAnalyticsOptimizer.initialize();
   return securityAnalyticsOptimizer;
-}
+
 
 export default async function securityAnalyticsOptimizationRoutes(fastify: FastifyInstance) {
   // Initialize optimizer
@@ -188,13 +191,13 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
                 monitoring_active: { type: 'boolean' },
                 cache_metrics: { type: 'object' },
                 optimizer_status: { type: 'object' }
-              }
-  }
+
+
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<OptimizationResponse> => {
     try {
       const status = optimizer.getOptimizerStatus();
@@ -210,17 +213,17 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
           auto_optimization_enabled: status.auto_optimization_enabled,
           cache_enabled: status.cache_enabled,
           monitoring_active: status.monitoring_active
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting optimization status:', error);
       return {
         success: false,
         error: 'Failed to get optimization status',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -239,9 +242,9 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
           includeHistory: { type: 'boolean' },
           includeCacheMetrics: { type: 'boolean' },
           includeStatus: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<{ Querystring: OptimizationQuery }>,
     reply: FastifyReply
@@ -252,39 +255,39 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
         includeHistory = false, 
         includeCacheMetrics = false,
         includeStatus = false 
-      } = request.query;
+ = request.query;
 
       const responseData: any = {};
 
       if (includeRecommendations) {
         responseData.recommendations = await optimizer.getOptimizationRecommendations();
-      }
+
 
       if (includeHistory) {
         responseData.optimization_history = optimizer.getOptimizationHistory();
-      }
+
 
       if (includeCacheMetrics) {
         responseData.cache_metrics = optimizer.getCacheStatus();
-      }
+
 
       if (includeStatus) {
         responseData.optimizer_status = optimizer.getOptimizerStatus();
-      }
+
 
       return {
         success: true,
         data: responseData,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting optimization recommendations:', error);
       return {
         success: false,
         error: 'Failed to get optimization recommendations',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -304,10 +307,10 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
           optimizationType: { 
             type: 'string',
             enum: ['performance', 'memory', 'cpu', 'cache', 'resource_allocation']
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (
     request: FastifyRequest<{ Body: OptimizationRequest }>,
     reply: FastifyReply
@@ -321,7 +324,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
           error: 'Either recommendationId or optimizationType must be provided',
           timestamp: Date.now()
         };
-      }
+
 
       let result: OptimizationResult;
 
@@ -336,7 +339,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             error: 'Recommendation not found',
             timestamp: Date.now()
           };
-        }
+
 
         if (!recommendation.auto_implementable && autoImplement) {
           return {
@@ -344,10 +347,10 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             error: 'Recommendation cannot be auto-implemented',
             timestamp: Date.now()
           };
-        }
+
 
         result = await optimizer.implementOptimization(recommendation);
-      } else {
+ else {
         // Generate and implement optimization based on type
         const recommendations = await optimizer.getOptimizationRecommendations();
         const typeRecommendation = recommendations.find(r => r.type === optimizationType);
@@ -358,10 +361,10 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             error: `No recommendations found for optimization type: ${optimizationType}`,
             timestamp: Date.now()
           };
-        }
+
 
         result = await optimizer.implementOptimization(typeRecommendation);
-      }
+
 
       return {
         success: true,
@@ -370,17 +373,17 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
           performance_improvement: result.performance_improvement,
           actions_taken: result.actions_taken,
           duration_ms: result.completed_at - result.started_at
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error implementing optimization:', error);
       return {
         success: false,
         error: error.message || 'Failed to implement optimization',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -392,7 +395,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
     schema: {
       description: 'Get security analytics optimization history',
       tags: ['Security Analytics', 'Optimization']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<OptimizationResponse> => {
     try {
       const history = optimizer.getOptimizationHistory();
@@ -416,18 +419,18 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             success_rate: history.length > 0 ? (successfulOptimizations.length / history.length) * 100 : 0,
             average_improvement: averageImprovement,
             most_recent: history.length > 0 ? history[history.length - 1] : null
-          }
-  }
+
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting optimization history:', error);
       return {
         success: false,
         error: 'Failed to get optimization history',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -439,7 +442,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
     schema: {
       description: 'Get security analytics cache performance metrics',
       tags: ['Security Analytics', 'Optimization', 'Cache']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<OptimizationResponse> => {
     try {
       const cacheMetrics = optimizer.getCacheStatus();
@@ -452,19 +455,19 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             hit_rate_status: cacheMetrics.hit_rate > 0.7 ? 'good' : cacheMetrics.hit_rate > 0.5 ? 'fair' : 'poor',
             size_status: cacheMetrics.cache_size_mb < 80 ? 'good' : cacheMetrics.cache_size_mb < 95 ? 'fair' : 'critical',
             access_time_status: cacheMetrics.avg_access_time_ms < 10 ? 'good' : cacheMetrics.avg_access_time_ms < 50 ? 'fair' : 'poor'
-  }
+
           recommendations: []
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting cache metrics:', error);
       return {
         success: false,
         error: 'Failed to get cache metrics',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -476,7 +479,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
     schema: {
       description: 'Clear security analytics optimization cache',
       tags: ['Security Analytics', 'Optimization', 'Cache', 'Admin']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<OptimizationResponse> => {
     try {
       // Clear cache - this would call a method on the optimizer
@@ -487,17 +490,17 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
         data: {
           cache_cleared: true,
           cleared_at: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error clearing optimization cache:', error);
       return {
         success: false,
         error: 'Failed to clear optimization cache',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -509,7 +512,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
     schema: {
       description: 'Get comprehensive optimization system diagnostics',
       tags: ['Security Analytics', 'Optimization', 'Admin', 'Diagnostics']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<OptimizationResponse> => {
     try {
       const diagnostics = {
@@ -521,12 +524,12 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
           memory_usage: process.memoryUsage(),
           uptime: process.uptime(),
           cpu_usage: process.cpuUsage()
-  }
+
         configuration: {
           auto_optimization_enabled: process.env.AUTO_OPTIMIZATION_ENABLED === 'true',
           cache_enabled: true,
           monitoring_active: true
-        }
+
       };
 
       return {
@@ -534,14 +537,14 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
         data: diagnostics,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting optimization diagnostics:', error);
       return {
         success: false,
         error: 'Failed to get optimization diagnostics',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -553,7 +556,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
     schema: {
       description: 'Get security threat detection metrics',
       tags: ['Security Analytics', 'Optimization', 'Security']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<OptimizationResponse> => {
     try {
       const threatMetrics = optimizer.getThreatDetectionMetrics();
@@ -571,23 +574,23 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             recent_security_events: threatMetrics.security_events,
             patterns_detected: threatMetrics.suspicious_patterns,
             anomalies_detected: threatMetrics.anomalies_detected
-  }
+
           recommendations: threatMetrics.risk_score > 50 ? [
             'Enable additional monitoring',
             'Review recent optimization requests',
             'Consider tightening security thresholds'
           ] : []
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting threat detection metrics:', error);
       return {
         success: false,
         error: 'Failed to get threat detection metrics',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -599,7 +602,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
     schema: {
       description: 'Generate comprehensive security monitoring report',
       tags: ['Security Analytics', 'Optimization', 'Security', 'Reports']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<OptimizationResponse> => {
     try {
       const securityReport = await optimizer.generateSecurityReport();
@@ -609,14 +612,14 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
         data: securityReport,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error generating security report:', error);
       return {
         success: false,
         error: 'Failed to generate security report',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -632,9 +635,9 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
         type: 'object',
         properties: {
           limit: { type: 'number', minimum: 1, maximum: 1000, default: 100 }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<{ Querystring: { limit?: number } }>,
     reply: FastifyReply
@@ -656,19 +659,19 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
               high_events: auditLog.filter(e => e.severity === 'high').length,
               medium_events: auditLog.filter(e => e.severity === 'medium').length,
               low_events: auditLog.filter(e => e.severity === 'low').length
-            }
-          }
-  }
+
+
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting security audit log:', error);
       return {
         success: false,
         error: 'Failed to get security audit log',
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -680,7 +683,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
     schema: {
       description: 'Trigger automatic optimization of security analytics system',
       tags: ['Security Analytics', 'Optimization', 'Admin']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<OptimizationResponse> => {
     try {
       // Get current recommendations
@@ -698,10 +701,10 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             message: 'No auto-implementable recommendations found',
             recommendations_reviewed: recommendations.length,
             auto_implementable: 0
-  }
+
           timestamp: Date.now()
         };
-      }
+
 
       const results: OptimizationResult[] = [];
       
@@ -721,18 +724,18 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             performance_improvement: result.performance_improvement,
             actions_taken: result.actions_taken,
             success: result.success
-          }
-  }
+
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error performing auto-optimization:', error);
       return {
         success: false,
         error: error.message || 'Failed to perform auto-optimization',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Setup optimizer event handlers for real-time updates
@@ -753,6 +756,5 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
   fastify.addHook('onClose', async () => {
     if (securityAnalyticsOptimizer) {
       await securityAnalyticsOptimizer.shutdown();
-    }
+
   });
-}

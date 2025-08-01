@@ -12,14 +12,14 @@ import {
   StandardComplianceReport, 
   ComplianceFramework,
   ComplianceReportType 
-} from './StandardComplianceReportingService';
+ from './StandardComplianceReportingService';
 import { 
   ValidationResult,
   ComplianceReportValidationService 
-} from './ComplianceReportValidationService';
+ from './ComplianceReportValidationService';
 
-}
-}
+
+
 export interface QualityAssessment {
   assessmentId: string;
   reportId: string;
@@ -33,12 +33,13 @@ export interface QualityAssessment {
   improvementActions: ImprovementAction[];
   certification: QualityCertification;
   auditTrail: QualityAuditEntry[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QualityDimension {
   dimensionId: string;
   name: string;
@@ -50,12 +51,13 @@ export interface QualityDimension {
   evidence: QualityEvidence[];
   feedback: string;
   recommendations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QualityCriteria {
   criteriaId: string;
   name: string;
@@ -66,35 +68,38 @@ export interface QualityCriteria {
   rubric: ScoringRubric;
   evidence: string[];
   assessorNotes: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScoringRubric {
   excellent: RubricLevel;
   good: RubricLevel;
   acceptable: RubricLevel;
   poor: RubricLevel;
   unacceptable: RubricLevel;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RubricLevel {
   scoreRange: [number, number];
   description: string;
   characteristics: string[];
   examples: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PeerReview {
   reviewId: string;
   reviewerId: string;
@@ -108,24 +113,26 @@ export interface PeerReview {
   recommendations: string[];
   approvalRequired: boolean;
   signoffDate?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewDimension {
   dimension: string;
   rating: number;
   confidence: 'low' | 'medium' | 'high';
   comments: string;
   evidence: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewComment {
   commentId: string;
   section: string;
@@ -135,12 +142,13 @@ export interface ReviewComment {
   status: 'open' | 'addressed' | 'resolved' | 'deferred';
   response?: string;
   responseDate?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BenchmarkComparison {
   benchmarkType: 'industry' | 'internal' | 'regulatory' | 'best_practice';
   comparisonDate: Date;
@@ -150,12 +158,13 @@ export interface BenchmarkComparison {
   peerGroupSize: number;
   comparisonDimensions: BenchmarkDimension[];
   insights: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BenchmarkDimension {
   dimension: string;
   benchmarkValue: number;
@@ -164,12 +173,13 @@ export interface BenchmarkDimension {
   variancePercentage: number;
   ranking: number;
   trend: 'improving' | 'declining' | 'stable';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImprovementAction {
   actionId: string;
   priority: 'critical' | 'high' | 'medium' | 'low';
@@ -184,36 +194,39 @@ export interface ImprovementAction {
   successMetrics: SuccessMetric[];
   dependencies: string[];
   resources: ResourceRequirement[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SuccessMetric {
   metricName: string;
   currentValue: number;
   targetValue: number;
   measurementMethod: string;
   reviewFrequency: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceRequirement {
   resourceType: 'budget' | 'personnel' | 'technology' | 'training' | 'external';
   description: string;
   estimatedCost: number;
   timeCommitment: string;
   skillsRequired: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QualityCertification {
   certificationId: string;
   certificationLevel: 'basic' | 'standard' | 'advanced' | 'premium';
@@ -223,12 +236,13 @@ export interface QualityCertification {
   certificationScope: string[];
   conditions: string[];
   attestation: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QualityAssessor {
   assessorId: string;
   name: string;
@@ -237,12 +251,13 @@ export interface QualityAssessor {
   certifications: string[];
   experienceYears: number;
   specializations: ComplianceFramework[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QualityEvidence {
   evidenceId: string;
   evidenceType: 'automated_check' | 'manual_review' | 'peer_validation' | 'benchmark_data';
@@ -251,12 +266,13 @@ export interface QualityEvidence {
   confidence: 'low' | 'medium' | 'high';
   timestamp: Date;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QualityAuditEntry {
   entryId: string;
   timestamp: Date;
@@ -264,18 +280,20 @@ export interface QualityAuditEntry {
   performedBy: string;
   details: Record<string, any>;
   impact: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QualityMetrics {
   reportingPeriod: {
     startDate: Date;
     endDate: Date;
-}
-}
+
+
+
   };
   totalReportsAssessed: number;
   averageQualityScore: number;
@@ -290,31 +308,33 @@ export interface QualityMetrics {
   frameworkPerformance: Map<ComplianceFramework, number>;
   commonIssues: CommonIssue[];
   improvementImpact: ImprovementImpact[];
-}
 
-}
-}
+
+
+
 export interface CommonIssue {
   issue: string;
   frequency: number;
   impact: 'low' | 'medium' | 'high';
   affectedFrameworks: ComplianceFramework[];
   recommendedActions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImprovementImpact {
   actionType: string;
   implementationCount: number;
   averageImprovementPercent: number;
   costEffectiveness: number;
   recommendedContinuation: boolean;
-}
-}
-}
+
+
+
+
 
 export class ComplianceQualityAssurance {
   private validationService: ComplianceReportValidationService;
@@ -323,7 +343,7 @@ export class ComplianceQualityAssurance {
 
   constructor(validationService: ComplianceReportValidationService) {
     this.validationService = validationService;
-  }
+
 
   /**
    * Perform comprehensive quality assessment of compliance report
@@ -376,12 +396,12 @@ export class ComplianceQualityAssurance {
         performedBy: assessor.assessorId,
         details: { assessmentLevel, qualityScore, qualityLevel },
         impact: 'Quality baseline established for report'
-      }]
+]
     };
 
     console.log(`✅ Quality assessment completed: ${qualityLevel} (${qualityScore}%)`);
     return assessment;
-  }
+
 
   /**
    * Initiate peer review process for report
@@ -421,13 +441,13 @@ export class ComplianceQualityAssurance {
       }));
 
       peerReviews.push(review);
-    }
+
 
     // Update assessment with peer reviews
     assessment.peerReviews = peerReviews;
 
     return peerReviews;
-  }
+
 
   /**
    * Process completed peer review
@@ -441,7 +461,7 @@ export class ComplianceQualityAssurance {
     const review = assessment.peerReviews.find(r => r.reviewId === reviewId);
     if (!review) {
       throw new Error(`Peer review ${reviewId} not found`);
-    }
+
 
     // Update review with submitted data
     Object.assign(review, reviewData);
@@ -450,14 +470,14 @@ export class ComplianceQualityAssurance {
     // Calculate overall rating from dimensions
     if (review.dimensions.length > 0) {
       review.overallRating = review.dimensions.reduce((sum, dim) => sum + dim.rating, 0) / review.dimensions.length;
-    }
+
 
     // Update quality assessment score based on peer feedback
     await this.updateQualityScoreWithPeerFeedback(assessment);
 
     console.log(`✅ Peer review completed by ${review.reviewerId}: ${review.overallRating}/5`);
     return review;
-  }
+
 
   /**
    * Generate quality improvement recommendations
@@ -476,7 +496,7 @@ export class ComplianceQualityAssurance {
     for (const dimension of lowScoringDimensions) {
       const actions = await this.generateDimensionImprovements(dimension, assessment);
       improvements.push(...actions);
-    }
+
 
     // Analyze peer review feedback
     const peerFeedbackActions = await this.analyzePeerFeedback(assessment.peerReviews);
@@ -491,7 +511,7 @@ export class ComplianceQualityAssurance {
       const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
       return priorityOrder[a.priority] - priorityOrder[b.priority];
     });
-  }
+
 
   /**
    * Track quality metrics over time
@@ -514,7 +534,7 @@ export class ComplianceQualityAssurance {
         acceptable: 0,
         poor: 0,
         unacceptable: 0
-  }
+
       frameworkPerformance: new Map(),
       commonIssues: [],
       improvementImpact: []
@@ -537,13 +557,13 @@ export class ComplianceQualityAssurance {
       const frameworkReports = this.getFrameworkReportCount(metrics, framework);
       const newScore = ((currentScore * frameworkReports) + assessment.qualityScore) / (frameworkReports + 1);
       metrics.frameworkPerformance.set(framework, newScore);
-    }
+
 
     this.qualityMetrics.set(periodKey, metrics);
     
     console.log(`📊 Quality metrics updated for period: ${periodKey}`);
     return metrics;
-  }
+
 
   // Private helper methods
 
@@ -563,7 +583,7 @@ export class ComplianceQualityAssurance {
     ];
 
     return dimensions;
-  }
+
 
   private async assessAccuracyDimension(
     report: StandardComplianceReport,
@@ -590,13 +610,13 @@ export class ComplianceQualityAssurance {
           rubric: this.getAccuracyRubric(),
           evidence: validation.checks.filter(c => c.category === 'calculation_verification').map(c => c.id),
           assessorNotes: 'Automated validation checks completed'
-        }
+
       ],
       evidence: [],
       feedback: this.generateAccuracyFeedback(accuracyScore),
       recommendations: this.generateAccuracyRecommendations(accuracyScore)
     };
-  }
+
 
   private async assessCompletenessDimension(
     report: StandardComplianceReport,
@@ -617,7 +637,7 @@ export class ComplianceQualityAssurance {
       feedback: this.generateCompletenessFeedback(completenessScore),
       recommendations: this.generateCompletenessRecommendations(completenessScore)
     };
-  }
+
 
   private async assessTimelinesssDimension(report: StandardComplianceReport): Promise<QualityDimension> {
 
@@ -643,7 +663,7 @@ export class ComplianceQualityAssurance {
       feedback: `Report generated ${daysDifference} days after period end`,
       recommendations: daysDifference > 15 ? ['Improve report generation timeline'] : []
     };
-  }
+
 
   private calculateQualityScore(dimensions: QualityDimension[]): number {
     let weightedScore = 0;
@@ -652,10 +672,10 @@ export class ComplianceQualityAssurance {
     for (const dimension of dimensions) {
       weightedScore += (dimension.score / dimension.maxScore) * dimension.weight * 100;
       totalWeight += dimension.weight;
-    }
+
 
     return Math.round(weightedScore / totalWeight);
-  }
+
 
   private determineQualityLevel(score: number): 'excellent' | 'good' | 'acceptable' | 'poor' | 'unacceptable' {
     if (score >= 95) return 'excellent';
@@ -663,7 +683,7 @@ export class ComplianceQualityAssurance {
     if (score >= 75) return 'acceptable';
     if (score >= 60) return 'poor';
     return 'unacceptable';
-  }
+
 
   private async performBenchmarkComparison(
     report: StandardComplianceReport,
@@ -681,7 +701,7 @@ export class ComplianceQualityAssurance {
       comparisonDimensions: [],
       insights: ['Report performs above industry average', 'Strong performance in accuracy dimension']
     };
-  }
+
 
   // Additional helper methods would be implemented...
   private async assessClarityDimension(_____report: StandardComplianceReport): Promise<QualityDimension> { return {} as QualityDimension; }
@@ -714,4 +734,3 @@ export class ComplianceQualityAssurance {
   private async generateBenchmarkImprovements(_____benchmark: BenchmarkComparison): Promise<ImprovementAction[]> { return []; }
   private async getReportFramework(_____reportId: string): Promise<ComplianceFramework | null> { return null; }
   private getFrameworkReportCount(_____metrics: QualityMetrics, _____framework: ComplianceFramework): number { return 1; }
-}

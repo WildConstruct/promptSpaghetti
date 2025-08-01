@@ -13,5 +13,5 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [MarketplaceController],
   providers: [MarketplaceService],
   exports: [MarketplaceService]
-  }
+
 export class MarketplaceModule {}

@@ -8,6 +8,7 @@ import React from 'react';
 import { FeatureToggleDependencyService } from '../../services/FeatureToggleDependencyService';
 
 }
+}
 interface DashboardProps {
     dependencyService: FeatureToggleDependencyService;
     selectedToggles?: string[];
@@ -18,4 +19,5 @@ interface DashboardProps {
 export declare const DependencyVisualizationDashboard: React.FC<DashboardProps>;
 export default DependencyVisualizationDashboard;
 //# sourceMappingURL=DependencyVisualizationDashboard.d.ts.map
+}
 }

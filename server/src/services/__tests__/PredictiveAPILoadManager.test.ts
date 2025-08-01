@@ -10,7 +10,7 @@ import {
   LoadPrediction,
   PredictiveAction,
   LoadPattern
-} from '../PredictiveAPILoadManager';
+ from '../PredictiveAPILoadManager';
 import { PerformanceMonitoringService } from '../../analytics/PerformanceMonitoringService';
 import { MetricsCollector } from '../../performance/MetricsCollector';
 import { LoadBalancer } from '../../../packages/core/ai/performance/LoadBalancer';
@@ -44,28 +44,28 @@ describe('PredictiveAPILoadManager', () => {
           seasonal_features: true,
           trend_features: true,
           external_factors: false
-        }
-  }
+
+
       prediction_models: {
         time_series_model: {
           enabled: true,
           model_type: 'arima',
           window_size: 100,
           forecast_horizon: 24
-  }
+
         machine_learning_model: {
           enabled: true,
           algorithm: 'random_forest',
           feature_importance_threshold: 0.1,
           retraining_interval_hours: 24
-  }
+
         anomaly_detection_model: {
           enabled: true,
           detection_algorithm: 'isolation_forest',
           anomaly_threshold: 0.1,
           baseline_window_hours: 168
-        }
-  }
+
+
       resource_management: {
         auto_scaling: {
           enabled: true,
@@ -74,40 +74,40 @@ describe('PredictiveAPILoadManager', () => {
           cooldown_period_minutes: 5,
           max_instances: 10,
           min_instances: 2
-  }
+
         load_balancing: {
           adaptive_strategy: true,
           health_check_interval_seconds: 30,
           failure_threshold: 3,
           recovery_threshold: 2
-  }
+
         rate_limiting: {
           dynamic_adjustment: true,
           burst_tolerance: 100,
           grace_period_seconds: 60,
           priority_queuing: true
-        }
-  }
+
+
       performance_optimization: {
         caching_strategy: {
           predictive_caching: true,
           cache_warming: true,
           intelligent_eviction: true,
           cache_hit_prediction: true
-  }
+
         request_routing: {
           intelligent_routing: true,
           latency_optimization: true,
           cost_optimization: false,
           failure_avoidance: true
-  }
+
         resource_preallocation: {
           enabled: true,
           preallocation_threshold: 0.8,
           resource_buffer_percentage: 20,
           deallocation_delay_minutes: 15
-        }
-  }
+
+
       monitoring: {
         real_time_monitoring: true,
         alert_thresholds: {
@@ -115,10 +115,10 @@ describe('PredictiveAPILoadManager', () => {
           anomaly_threshold: 0.9,
           performance_degradation_threshold: 50,
           resource_exhaustion_threshold: 90
-  }
+
         notification_channels: ['email', 'slack'],
         dashboard_integration: true
-      }
+
     };
 
     // Create mock instances
@@ -134,19 +134,19 @@ describe('PredictiveAPILoadManager', () => {
         memoryUsage: { name: 'memory.usage', type: 'gauge', value: 70, timestamp: Date.now(), labels: {}, tags: [] },
         cacheHitRate: { name: 'cache.hit.rate', type: 'counter', value: 85, timestamp: Date.now(), labels: {}, tags: [] },
         errorRate: { name: 'error.rate', type: 'counter', value: 2, timestamp: Date.now(), labels: {}, tags: [] }
-  }
+
       business: {
         activeUsers: { name: 'active.users', type: 'gauge', value: 500, timestamp: Date.now(), labels: {}, tags: [] },
         graphsCreated: { name: 'graphs.created', type: 'counter', value: 25, timestamp: Date.now(), labels: {}, tags: [] },
         revenueGenerated: { name: 'revenue.generated', type: 'counter', value: 1000, timestamp: Date.now(), labels: {}, tags: [] },
         featureUsage: { name: 'feature.usage', type: 'histogram', value: 80, timestamp: Date.now(), labels: {}, tags: [], buckets: [], percentiles: [], min: 0, max: 0, mean: 0, stdDev: 0 }
-  }
+
       infrastructure: {
         cpuUtilization: { name: 'cpu.utilization', type: 'gauge', value: 65, timestamp: Date.now(), labels: {}, tags: [] },
         memoryUtilization: { name: 'memory.utilization', type: 'gauge', value: 70, timestamp: Date.now(), labels: {}, tags: [] },
         diskIO: { name: 'disk.io', type: 'counter', value: 200, timestamp: Date.now(), labels: {}, tags: [] },
         networkLatency: { name: 'network.latency', type: 'histogram', value: 50, timestamp: Date.now(), labels: {}, tags: [], buckets: [], percentiles: [], min: 0, max: 0, mean: 0, stdDev: 0 }
-      }
+
     });
 
     // Create manager instance
@@ -163,7 +163,7 @@ describe('PredictiveAPILoadManager', () => {
     jest.clearAllMocks();
     if (predictiveLoadManager) {
       predictiveLoadManager.shutdown();
-    }
+
   });
 
   describe('Initialization', () => {
@@ -183,7 +183,7 @@ describe('PredictiveAPILoadManager', () => {
           prediction_enabled: true,
           auto_scaling_enabled: true,
           real_time_monitoring: true
-        }
+
       });
     });
 
@@ -245,7 +245,7 @@ describe('PredictiveAPILoadManager', () => {
             total_error_rate: expect.any(Number),
             timeout_rate: expect.any(Number),
             server_error_rate: expect.any(Number)
-  }
+
         }),
         risk_assessment: expect.objectContaining({
           overload_probability: expect.any(Number),
@@ -259,7 +259,7 @@ describe('PredictiveAPILoadManager', () => {
           training_data_points: expect.any(Number),
           accuracy_score: expect.any(Number),
           last_trained: expect.any(Number)
-  }
+
       }));
     });
 
@@ -365,7 +365,7 @@ describe('PredictiveAPILoadManager', () => {
           peak_load_times: expect.any(Array),
           resource_bottlenecks: expect.any(Array),
           optimization_recommendations: expect.any(Array)
-  }
+
       }));
     });
 
@@ -378,7 +378,7 @@ describe('PredictiveAPILoadManager', () => {
             opportunity_type: expect.any(String),
             potential_improvement: expect.any(String),
             implementation_effort: expect.stringMatching(/^(low|medium|high)$/)
-  }
+
         ])
       );
     });
@@ -440,7 +440,7 @@ describe('PredictiveAPILoadManager', () => {
           performance_improvement_percent: 25,
           resource_cost_change: 20,
           risk_reduction_percent: 40
-  }
+
         execution_time: Date.now(),
         confidence: 0.85,
         prerequisites: [],
@@ -476,7 +476,7 @@ describe('PredictiveAPILoadManager', () => {
           performance_improvement_percent: 15,
           resource_cost_change: 0,
           risk_reduction_percent: 30
-  }
+
         execution_time: Date.now(),
         confidence: 0.90,
         prerequisites: [],
@@ -512,7 +512,7 @@ describe('PredictiveAPILoadManager', () => {
           performance_improvement_percent: 20,
           resource_cost_change: 5,
           risk_reduction_percent: 25
-  }
+
         execution_time: Date.now(),
         confidence: 0.80,
         prerequisites: ['cache_system_available'],
@@ -558,7 +558,7 @@ describe('PredictiveAPILoadManager', () => {
         prediction_engine: {
           ...config.prediction_engine,
           confidence_threshold: 1.5 // Invalid threshold > 1
-        }
+
       };
 
       expect(() => {
@@ -581,7 +581,7 @@ describe('PredictiveAPILoadManager', () => {
           performance_improvement_percent: 25,
           resource_cost_change: 20,
           risk_reduction_percent: 40
-  }
+
         execution_time: Date.now(),
         confidence: 0.85,
         prerequisites: [],
@@ -636,7 +636,7 @@ describe('PredictiveAPILoadManager', () => {
       // Generate many predictions to test history limit
       for (let i = 0; i < 5; i++) {
         await predictiveLoadManager.executePredictiveLoadManagement();
-      }
+
 
       // Access private prediction history for testing
       const predictionHistory = (predictiveLoadManager as any).predictionHistory;
@@ -653,7 +653,7 @@ describe('PredictiveAPILoadManager', () => {
       // Update models multiple times with large datasets
       for (let i = 0; i < 5; i++) {
         await predictiveLoadManager.updatePredictiveModels();
-      }
+
 
       const memoryUsageAfter = process.memoryUsage();
 
@@ -718,28 +718,28 @@ describe('LoadPredictionEngine', () => {
           seasonal_features: true,
           trend_features: true,
           external_factors: false
-        }
-  }
+
+
       prediction_models: {
         time_series_model: {
           enabled: true,
           model_type: 'arima',
           window_size: 100,
           forecast_horizon: 24
-  }
+
         machine_learning_model: {
           enabled: true,
           algorithm: 'random_forest',
           feature_importance_threshold: 0.1,
           retraining_interval_hours: 24
-  }
+
         anomaly_detection_model: {
           enabled: true,
           detection_algorithm: 'isolation_forest',
           anomaly_threshold: 0.1,
           baseline_window_hours: 168
-        }
-  }
+
+
       resource_management: {
         auto_scaling: {
           enabled: true,
@@ -748,40 +748,40 @@ describe('LoadPredictionEngine', () => {
           cooldown_period_minutes: 5,
           max_instances: 10,
           min_instances: 2
-  }
+
         load_balancing: {
           adaptive_strategy: true,
           health_check_interval_seconds: 30,
           failure_threshold: 3,
           recovery_threshold: 2
-  }
+
         rate_limiting: {
           dynamic_adjustment: true,
           burst_tolerance: 100,
           grace_period_seconds: 60,
           priority_queuing: true
-        }
-  }
+
+
       performance_optimization: {
         caching_strategy: {
           predictive_caching: true,
           cache_warming: true,
           intelligent_eviction: true,
           cache_hit_prediction: true
-  }
+
         request_routing: {
           intelligent_routing: true,
           latency_optimization: true,
           cost_optimization: false,
           failure_avoidance: true
-  }
+
         resource_preallocation: {
           enabled: true,
           preallocation_threshold: 0.8,
           resource_buffer_percentage: 20,
           deallocation_delay_minutes: 15
-        }
-  }
+
+
       monitoring: {
         real_time_monitoring: true,
         alert_thresholds: {
@@ -789,10 +789,10 @@ describe('LoadPredictionEngine', () => {
           anomaly_threshold: 0.9,
           performance_degradation_threshold: 50,
           resource_exhaustion_threshold: 90
-  }
+
         notification_channels: ['email', 'slack'],
         dashboard_integration: true
-      }
+
     };
 
     loadPredictionEngine = new LoadPredictionEngine(config);
@@ -810,19 +810,19 @@ describe('LoadPredictionEngine', () => {
           memoryUsage: { name: 'memory.usage', type: 'gauge', value: 70, timestamp: Date.now(), labels: {}, tags: [] },
           cacheHitRate: { name: 'cache.hit.rate', type: 'counter', value: 85, timestamp: Date.now(), labels: {}, tags: [] },
           errorRate: { name: 'error.rate', type: 'counter', value: 2, timestamp: Date.now(), labels: {}, tags: [] }
-  }
+
         business: {
           activeUsers: { name: 'active.users', type: 'gauge', value: 500, timestamp: Date.now(), labels: {}, tags: [] },
           graphsCreated: { name: 'graphs.created', type: 'counter', value: 25, timestamp: Date.now(), labels: {}, tags: [] },
           revenueGenerated: { name: 'revenue.generated', type: 'counter', value: 1000, timestamp: Date.now(), labels: {}, tags: [] },
           featureUsage: { name: 'feature.usage', type: 'histogram', value: 80, timestamp: Date.now(), labels: {}, tags: [], buckets: [], percentiles: [], min: 0, max: 0, mean: 0, stdDev: 0 }
-  }
+
         infrastructure: {
           cpuUtilization: { name: 'cpu.utilization', type: 'gauge', value: 65, timestamp: Date.now(), labels: {}, tags: [] },
           memoryUtilization: { name: 'memory.utilization', type: 'gauge', value: 70, timestamp: Date.now(), labels: {}, tags: [] },
           diskIO: { name: 'disk.io', type: 'counter', value: 200, timestamp: Date.now(), labels: {}, tags: [] },
           networkLatency: { name: 'network.latency', type: 'histogram', value: 50, timestamp: Date.now(), labels: {}, tags: [], buckets: [], percentiles: [], min: 0, max: 0, mean: 0, stdDev: 0 }
-        }
+
       };
 
       const prediction = await loadPredictionEngine.generateLoadPrediction(mockCurrentMetrics);
@@ -857,7 +857,7 @@ describe('LoadPredictionEngine', () => {
           training_data_points: expect.any(Number),
           accuracy_score: expect.any(Number),
           last_trained: expect.any(Number)
-  }
+
       }));
     });
 
@@ -868,19 +868,19 @@ describe('LoadPredictionEngine', () => {
           memoryUsage: { name: 'memory.usage', type: 'gauge', value: 70, timestamp: Date.now(), labels: {}, tags: [] },
           cacheHitRate: { name: 'cache.hit.rate', type: 'counter', value: 85, timestamp: Date.now(), labels: {}, tags: [] },
           errorRate: { name: 'error.rate', type: 'counter', value: 2, timestamp: Date.now(), labels: {}, tags: [] }
-  }
+
         business: {
           activeUsers: { name: 'active.users', type: 'gauge', value: 500, timestamp: Date.now(), labels: {}, tags: [] },
           graphsCreated: { name: 'graphs.created', type: 'counter', value: 25, timestamp: Date.now(), labels: {}, tags: [] },
           revenueGenerated: { name: 'revenue.generated', type: 'counter', value: 1000, timestamp: Date.now(), labels: {}, tags: [] },
           featureUsage: { name: 'feature.usage', type: 'histogram', value: 80, timestamp: Date.now(), labels: {}, tags: [], buckets: [], percentiles: [], min: 0, max: 0, mean: 0, stdDev: 0 }
-  }
+
         infrastructure: {
           cpuUtilization: { name: 'cpu.utilization', type: 'gauge', value: 65, timestamp: Date.now(), labels: {}, tags: [] },
           memoryUtilization: { name: 'memory.utilization', type: 'gauge', value: 70, timestamp: Date.now(), labels: {}, tags: [] },
           diskIO: { name: 'disk.io', type: 'counter', value: 200, timestamp: Date.now(), labels: {}, tags: [] },
           networkLatency: { name: 'network.latency', type: 'histogram', value: 50, timestamp: Date.now(), labels: {}, tags: [], buckets: [], percentiles: [], min: 0, max: 0, mean: 0, stdDev: 0 }
-        }
+
       };
 
       const predictionPromise = loadPredictionEngine.generateLoadPrediction(mockCurrentMetrics);
@@ -926,7 +926,7 @@ describe('LoadPredictionEngine', () => {
           }),
           associated_events: expect.any(Array)
         }));
-      }
+
     });
 
     it('should emit pattern detection events', async () => {
@@ -988,7 +988,7 @@ describe('LoadPredictionEngine', () => {
       // Verify data retention limits are enforced
       for (const [metricName, data] of historicalData.entries()) {
         expect(data.length).toBeLessThanOrEqual(10000); // Max data points per metric
-      }
+
     });
   });
 });

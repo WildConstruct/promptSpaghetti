@@ -9,8 +9,8 @@ import { EventEmitter } from 'events';
 import { TimeoutManager, TimeoutMetrics } from './TimeoutManager';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
-}
-}
+
+
 export interface AlertConfig {
   timeoutThreshold: number;
   circuitBreakerThreshold: number;
@@ -19,23 +19,25 @@ export interface AlertConfig {
   enableEmailAlerts: boolean;
   enableSlackAlerts: boolean;
   enableWebhookAlerts: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook';
   config: {
     [key: string]: unknown;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface TimeoutAlert {
   id: string;
   type: 'timeout' | 'circuit_breaker' | 'error_rate';
@@ -46,12 +48,13 @@ export interface TimeoutAlert {
   metrics: unknown;
   resolved: boolean;
   resolvedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceMetrics {
   operation: string;
   totalRequests: number;
@@ -62,9 +65,10 @@ export interface PerformanceMetrics {
   timeoutRate: number;
   circuitBreakerTrips: number;
   lastUpdated: Date;
-}
-}
-}
+
+
+
+
 
 export class TimeoutMonitoringService extends EventEmitter {
   private alertConfig: AlertConfig;
@@ -94,7 +98,7 @@ export class TimeoutMonitoringService extends EventEmitter {
 
     this.analyticsCollector = analyticsCollector;
     this.setupEventListeners();
-  }
+
 
   /**
    * Setup event listeners for timeout manager
@@ -115,7 +119,7 @@ export class TimeoutMonitoringService extends EventEmitter {
     this.timeoutManager.on('fallback_used', (event) => {
       this.handleFallbackEvent(event);
     });
-  }
+
 
   /**
    * Handle timeout events
@@ -134,7 +138,7 @@ export class TimeoutMonitoringService extends EventEmitter {
         executionTime,
         totalTimeouts
       });
-    }
+
 
     // Check if alert threshold is reached
     if (totalTimeouts >= this.alertConfig.timeoutThreshold) {
@@ -145,10 +149,10 @@ export class TimeoutMonitoringService extends EventEmitter {
         message: `Operation ${metricKey} has timed out ${totalTimeouts} times`,
         metrics: { executionTime, totalTimeouts }
       });
-    }
+
 
     this.emit('timeout_recorded', event);
-  }
+
 
   /**
    * Handle circuit breaker events
@@ -163,7 +167,7 @@ export class TimeoutMonitoringService extends EventEmitter {
         operation: metricKey,
         failureCount
       });
-    }
+
 
     // Create critical alert for circuit breaker
     await this.createAlert({
@@ -175,7 +179,7 @@ export class TimeoutMonitoringService extends EventEmitter {
     });
 
     this.emit('circuit_breaker_opened', event);
-  }
+
 
   /**
    * Handle fallback events
@@ -190,10 +194,10 @@ export class TimeoutMonitoringService extends EventEmitter {
         operation: `${operationType}.${operationSubtype}`,
         fallbackSuccess
       });
-    }
+
 
     this.emit('fallback_used', event);
-  }
+
 
   /**
    * Record performance metric
@@ -201,7 +205,7 @@ export class TimeoutMonitoringService extends EventEmitter {
   private recordPerformanceMetric(operation: string, responseTime: number, _____success: boolean): void {
     if (!this.performanceHistory.has(operation)) {
       this.performanceHistory.set(operation, []);
-    }
+
 
     const history = this.performanceHistory.get(operation)!;
     history.push(responseTime);
@@ -209,8 +213,8 @@ export class TimeoutMonitoringService extends EventEmitter {
     // Keep only last 1000 measurements
     if (history.length > 1000) {
       history.shift();
-    }
-  }
+
+
 
   /**
    * Create alert
@@ -223,7 +227,7 @@ export class TimeoutMonitoringService extends EventEmitter {
     const lastAlert = this.alertCooldowns.get(alertKey);
     if (lastAlert && Date.now() - lastAlert.getTime() < this.alertConfig.alertCooldown) {
       return;
-    }
+
 
     const alert: TimeoutAlert = {
       id: `${alertKey}_${Date.now()}`,
@@ -246,10 +250,10 @@ export class TimeoutMonitoringService extends EventEmitter {
         severity: alert.severity,
         operation: alert.operation
       });
-    }
+
 
     this.emit('alert_created', alert);
-  }
+
 
   /**
    * Send alert through configured channels
@@ -268,14 +272,14 @@ export class TimeoutMonitoringService extends EventEmitter {
         case 'webhook':
           await this.sendWebhookAlert(alert, channel.config);
           break;
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error(`Failed to send alert via ${channel.type}:`, error);
-      }
+
     });
 
     await Promise.allSettled(promises);
-  }
+
 
   /**
    * Send email alert
@@ -284,7 +288,7 @@ export class TimeoutMonitoringService extends EventEmitter {
 
     // Implementation would depend on email service
     console.log(`Email alert: ${alert.message}`);
-  }
+
 
   /**
    * Send Slack alert
@@ -304,7 +308,7 @@ export class TimeoutMonitoringService extends EventEmitter {
           { title: 'Message', value: alert.message, short: false },
           { title: 'Timestamp', value: alert.timestamp.toISOString(), short: true }
         ]
-      }]
+]
     };
 
     const fetch = (await import('node-fetch')).default;
@@ -313,7 +317,7 @@ export class TimeoutMonitoringService extends EventEmitter {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-  }
+
 
   /**
    * Send webhook alert
@@ -329,7 +333,7 @@ export class TimeoutMonitoringService extends EventEmitter {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(alert)
     });
-  }
+
 
   /**
    * Resolve circuit breaker alert
@@ -349,10 +353,10 @@ export class TimeoutMonitoringService extends EventEmitter {
             operation: alert.operation,
             duration: alert.resolvedAt.getTime() - alert.timestamp.getTime()
           });
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Get severity for timeout count
@@ -362,7 +366,7 @@ export class TimeoutMonitoringService extends EventEmitter {
     if (timeouts >= 20) return 'high';
     if (timeouts >= 10) return 'medium';
     return 'low';
-  }
+
 
   /**
    * Get Slack color for severity
@@ -374,22 +378,22 @@ export class TimeoutMonitoringService extends EventEmitter {
     case 'medium': return '#ffeb3b';
     case 'low': return 'good';
     default: return '#cccccc';
-    }
-  }
+
+
 
   /**
    * Add alert channel
    */
   addAlertChannel(channel: AlertChannel): void {
     this.alertChannels.push(channel);
-  }
+
 
   /**
    * Remove alert channel
    */
   removeAlertChannel(type: string): void {
     this.alertChannels = this.alertChannels.filter(channel => channel.type !== type);
-  }
+
 
   /**
    * Get performance metrics for operation
@@ -412,7 +416,7 @@ export class TimeoutMonitoringService extends EventEmitter {
         circuitBreakerTrips: timeoutMetrics.circuitBreakerTrips,
         lastUpdated: new Date()
       };
-    }
+
 
     const sortedHistory = [...history].sort((a, b) => a - b);
     const p95Index = Math.floor(sortedHistory.length * 0.95);
@@ -428,7 +432,7 @@ export class TimeoutMonitoringService extends EventEmitter {
       timeoutRate: timeoutMetrics.timeouts / Math.max(timeoutMetrics.totalOperations, 1),
       circuitBreakerTrips: timeoutMetrics.circuitBreakerTrips,
       lastUpdated: new Date(};
-  }
+
 
   /**
    * Get all performance metrics
@@ -441,25 +445,25 @@ export class TimeoutMonitoringService extends EventEmitter {
       const metrics = this.getPerformanceMetrics(operation);
       if (metrics) {
         results.push(metrics);
-      }
-    }
+
+
 
     return results;
-  }
+
 
   /**
    * Get active alerts
    */
   getActiveAlerts(): TimeoutAlert[] {
     return Array.from(this.activeAlerts.values()).filter(alert => !alert.resolved);
-  }
+
 
   /**
    * Get all alerts
    */
   getAllAlerts(): TimeoutAlert[] {
     return Array.from(this.activeAlerts.values());
-  }
+
 
   /**
    * Get monitoring dashboard data
@@ -475,7 +479,7 @@ export class TimeoutMonitoringService extends EventEmitter {
     recentAlerts: TimeoutAlert[];
     circuitBreakerStates: unknown;
     healthStatus: unknown;
-    } {
+ {
     const allMetrics = this.timeoutManager.getMetrics() as Map<string, TimeoutMetrics>;
     const totalOperations = Array.from(allMetrics.values())
       .reduce((sum, metrics) => sum + metrics.totalOperations, 0);
@@ -497,12 +501,12 @@ export class TimeoutMonitoringService extends EventEmitter {
         totalTimeouts,
         activeCircuitBreakers,
         activeAlerts: activeAlerts.length
-  }
+
       performanceMetrics: this.getAllPerformanceMetrics(),
       recentAlerts,
       circuitBreakerStates: Object.fromEntries(circuitBreakerStates),
       healthStatus: this.timeoutManager.getHealthStatus(};
-  }
+
 
   /**
    * Update alert configuration
@@ -510,7 +514,7 @@ export class TimeoutMonitoringService extends EventEmitter {
   updateAlertConfig(updates: Partial<AlertConfig>): void {
     this.alertConfig = { ...this.alertConfig, ...updates };
     this.emit('config_updated', this.alertConfig);
-  }
+
 
   /**
    * Manually resolve alert
@@ -522,9 +526,9 @@ export class TimeoutMonitoringService extends EventEmitter {
       alert.resolvedAt = new Date();
       this.emit('alert_resolved', alert);
       return true;
-    }
+
     return false;
-  }
+
 
   /**
    * Clear old alerts and performance history
@@ -536,19 +540,19 @@ export class TimeoutMonitoringService extends EventEmitter {
     for (const [alertId, alert] of this.activeAlerts.entries()) {
       if (alert.timestamp < cutoff) {
         this.activeAlerts.delete(alertId);
-      }
-    }
+
+
 
     // Remove old cooldowns
     for (const [key, date] of this.alertCooldowns.entries()) {
       if (date < cutoff) {
         this.alertCooldowns.delete(key);
-      }
-    }
+
+
 
     this.emit('cleanup_completed', { maxAge, cutoff });
-  }
-}
+
+
 
 // Factory function
 export function createTimeoutMonitoringService(
@@ -557,4 +561,3 @@ export function createTimeoutMonitoringService(
   analyticsCollector?: AnalyticsCollector
 ): TimeoutMonitoringService {
   return new TimeoutMonitoringService(timeoutManager, alertConfig, analyticsCollector);
-}

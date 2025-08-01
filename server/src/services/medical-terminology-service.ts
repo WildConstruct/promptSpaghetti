@@ -45,27 +45,29 @@ type MedicalConcept = z.infer<typeof MedicalConceptSchema>;
 type TerminologySearchOptions = z.infer<typeof TerminologySearchOptionsSchema>;
 type ConceptValidation = z.infer<typeof ConceptValidationSchema>;
 
-}
-}
+
+
 interface TerminologySearchResult {
   concepts: MedicalConcept[];
   total: number;
   searchTime: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface VocabularyInfo {
   name: string;
   version: string;
   description: string;
   totalConcepts: number;
   lastUpdated: string;
-}
-}
-}
+
+
+
+
 
 export class MedicalTerminologyService {
   private vocabularyData: Map<string, Map<string, MedicalConcept>>;
@@ -75,7 +77,7 @@ export class MedicalTerminologyService {
     this.vocabularyData = new Map();
     this.vocabularyInfo = new Map();
     this.initializeVocabularies();
-  }
+
 
   /**
    * Search medical terminology across specified vocabularies
@@ -93,7 +95,7 @@ export class MedicalTerminologyService {
       includeSynonyms,
       exactMatch,
       semanticTypes
-    } = { ...TerminologySearchOptionsSchema.parse({}), ...options };
+ = { ...TerminologySearchOptionsSchema.parse({}), ...options };
 
     try {
       const allResults: MedicalConcept[] = [];
@@ -106,7 +108,7 @@ export class MedicalTerminologyService {
           { exactMatch, semanticTypes }
         );
         allResults.push(...vocabResults);
-      }
+
 
       // Sort by relevance (mock scoring based on query similarity)
       const scoredResults = allResults.map(concept => ({
@@ -130,11 +132,10 @@ export class MedicalTerminologyService {
         total: allResults.length,
         searchTime
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Terminology search failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Validate a medical concept ID against its vocabulary
@@ -154,7 +155,7 @@ export class MedicalTerminologyService {
           validationErrors: [`Vocabulary '${vocabulary}' not available`],
           alternativeConcepts: []
         };
-      }
+
 
       const concept = vocabData.get(conceptId);
       const isValid = !!concept;
@@ -168,8 +169,7 @@ export class MedicalTerminologyService {
         validationErrors: isValid ? [] : [`Concept ID '${conceptId}' not found in ${vocabulary}`],
         alternativeConcepts
       };
-
-    } catch (error) {
+ catch (error) {
       return {
         conceptId,
         vocabulary,
@@ -177,8 +177,8 @@ export class MedicalTerminologyService {
         validationErrors: [`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`],
         alternativeConcepts: []
       };
-    }
-  }
+
+
 
   /**
    * Get concept details by ID and vocabulary
@@ -189,14 +189,13 @@ export class MedicalTerminologyService {
       const vocabData = this.vocabularyData.get(vocabulary);
       if (!vocabData) {
         return null;
-      }
+
 
       return vocabData.get(conceptId) || null;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get concept details: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Map terms to standardized concepts
@@ -219,14 +218,13 @@ export class MedicalTerminologyService {
           term,
           mappedConcepts: searchResult.concepts
         });
-      }
+
 
       return mappingResults;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Term mapping failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get available vocabulary information
@@ -234,7 +232,7 @@ export class MedicalTerminologyService {
   async getVocabularyInfo(): Promise<VocabularyInfo[]> {
 
     return Array.from(this.vocabularyInfo.values());
-  }
+
 
   /**
    * Get concept relationships (hierarchical and associative)
@@ -247,10 +245,10 @@ export class MedicalTerminologyService {
     try {
       const concept = await this.getConceptDetails(conceptId, vocabulary);
       return concept?.relationships || [];
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get concept relationships: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get service health status
@@ -272,17 +270,17 @@ export class MedicalTerminologyService {
           vocabularies: vocabularyStatuses,
           totalConcepts: Array.from(this.vocabularyData.values())
             .reduce((total, vocab) => total + vocab.size, 0)
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         details: {
           error: error instanceof Error ? error.message : 'Unknown error'
-        }
+
       };
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -295,7 +293,7 @@ export class MedicalTerminologyService {
     const vocabData = this.vocabularyData.get(vocabulary);
     if (!vocabData) {
       return [];
-    }
+
 
     const results: MedicalConcept[] = [];
     const lowerQuery = query.toLowerCase();
@@ -307,24 +305,24 @@ export class MedicalTerminologyService {
         // Exact match against preferred name and synonyms
         matches = concept.preferredName.toLowerCase() === lowerQuery ||
           concept.synonyms.some(syn => syn.toLowerCase() === lowerQuery);
-      } else {
+ else {
         // Partial match against preferred name and synonyms
         matches = concept.preferredName.toLowerCase().includes(lowerQuery) ||
           concept.synonyms.some(syn => syn.toLowerCase().includes(lowerQuery));
-      }
+
 
       // Filter by semantic types if specified
       if (matches && options.semanticTypes && concept.semanticType) {
         matches = options.semanticTypes.includes(concept.semanticType);
-      }
+
 
       if (matches) {
         results.push(concept);
-      }
-    }
+
+
 
     return results;
-  }
+
 
   private calculateRelevanceScore(query: string, concept: MedicalConcept): number {
     const lowerQuery = query.toLowerCase();
@@ -335,15 +333,15 @@ export class MedicalTerminologyService {
     // Exact match gets highest score
     if (lowerName === lowerQuery) {
       score += 100;
-    } 
+ 
     // Starts with query gets high score
     else if (lowerName.startsWith(lowerQuery)) {
       score += 80;
-    }
+
     // Contains query gets medium score
     else if (lowerName.includes(lowerQuery)) {
       score += 60;
-    }
+
 
     // Check synonyms for additional scoring
     for (const synonym of concept.synonyms) {
@@ -351,17 +349,17 @@ export class MedicalTerminologyService {
       if (lowerSyn === lowerQuery) {
         score += 90;
         break;
-      } else if (lowerSyn.startsWith(lowerQuery)) {
+ else if (lowerSyn.startsWith(lowerQuery)) {
         score += 70;
         break;
-      } else if (lowerSyn.includes(lowerQuery)) {
+ else if (lowerSyn.includes(lowerQuery)) {
         score += 50;
         break;
-      }
-    }
+
+
 
     return score;
-  }
+
 
   private async findSimilarConcepts(conceptId: string, vocabulary: string): Promise<string[]> {
 
@@ -369,11 +367,11 @@ export class MedicalTerminologyService {
     const vocabData = this.vocabularyData.get(vocabulary);
     if (!vocabData) {
       return [];
-    }
+
 
     // Return first 3 concept IDs as alternatives (simplified)
     return Array.from(vocabData.keys()).slice(0, 3);
-  }
+
 
   private initializeVocabularies(): void {
     // Initialize mock vocabulary data
@@ -383,7 +381,7 @@ export class MedicalTerminologyService {
     this.initializeICD10();
     this.initializeCPT();
     this.initializeRxNorm();
-  }
+
 
   private initializeUMLS(): void {
     const umlsConcepts = new Map<string, MedicalConcept>();
@@ -402,9 +400,9 @@ export class MedicalTerminologyService {
             relationshipType: 'isa',
             relatedConceptId: 'C0007222',
             relatedConceptName: 'Cardiovascular Diseases'
-          }
+
         ]
-  }
+
       {
         conceptId: 'C0011847',
         preferredName: 'Diabetes',
@@ -413,7 +411,7 @@ export class MedicalTerminologyService {
         vocabulary: 'umls',
         semanticType: 'Disease or Syndrome',
         relationships: []
-  }
+
       {
         conceptId: 'C0004057',
         preferredName: 'Aspirin',
@@ -422,7 +420,7 @@ export class MedicalTerminologyService {
         vocabulary: 'umls',
         semanticType: 'Pharmacologic Substance',
         relationships: []
-      }
+
     ];
 
     sampleConcepts.forEach(concept => {
@@ -437,7 +435,7 @@ export class MedicalTerminologyService {
       totalConcepts: umlsConcepts.size,
       lastUpdated: '2023-05-01'
     });
-  }
+
 
   private initializeLOINC(): void {
     const loincConcepts = new Map<string, MedicalConcept>();
@@ -451,7 +449,7 @@ export class MedicalTerminologyService {
         vocabulary: 'loinc',
         semanticType: 'Laboratory or Test Result',
         relationships: []
-  }
+
       {
         conceptId: '33747-0',
         preferredName: 'General appearance of patient',
@@ -460,7 +458,7 @@ export class MedicalTerminologyService {
         vocabulary: 'loinc',
         semanticType: 'Clinical Observation',
         relationships: []
-      }
+
     ];
 
     sampleConcepts.forEach(concept => {
@@ -475,7 +473,7 @@ export class MedicalTerminologyService {
       totalConcepts: loincConcepts.size,
       lastUpdated: '2023-06-01'
     });
-  }
+
 
   private initializeSNOMED(): void {
     const snomedConcepts = new Map<string, MedicalConcept>();
@@ -489,7 +487,7 @@ export class MedicalTerminologyService {
         vocabulary: 'snomed',
         semanticType: 'Clinical Finding',
         relationships: []
-      }
+
     ];
 
     sampleConcepts.forEach(concept => {
@@ -504,7 +502,7 @@ export class MedicalTerminologyService {
       totalConcepts: snomedConcepts.size,
       lastUpdated: '2023-07-31'
     });
-  }
+
 
   private initializeICD10(): void {
     const icd10Concepts = new Map<string, MedicalConcept>();
@@ -518,7 +516,7 @@ export class MedicalTerminologyService {
         vocabulary: 'icd10',
         semanticType: 'Disease Code',
         relationships: []
-      }
+
     ];
 
     sampleConcepts.forEach(concept => {
@@ -533,7 +531,7 @@ export class MedicalTerminologyService {
       totalConcepts: icd10Concepts.size,
       lastUpdated: '2023-01-01'
     });
-  }
+
 
   private initializeCPT(): void {
     const cptConcepts = new Map<string, MedicalConcept>();
@@ -547,7 +545,7 @@ export class MedicalTerminologyService {
         vocabulary: 'cpt',
         semanticType: 'Procedure Code',
         relationships: []
-      }
+
     ];
 
     sampleConcepts.forEach(concept => {
@@ -562,7 +560,7 @@ export class MedicalTerminologyService {
       totalConcepts: cptConcepts.size,
       lastUpdated: '2023-01-01'
     });
-  }
+
 
   private initializeRxNorm(): void {
     const rxnormConcepts = new Map<string, MedicalConcept>();
@@ -576,7 +574,7 @@ export class MedicalTerminologyService {
         vocabulary: 'rxnorm',
         semanticType: 'Clinical Drug',
         relationships: []
-      }
+
     ];
 
     sampleConcepts.forEach(concept => {
@@ -591,5 +589,4 @@ export class MedicalTerminologyService {
       totalConcepts: rxnormConcepts.size,
       lastUpdated: '2023-07-01'
     });
-  }
-}
+

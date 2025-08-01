@@ -310,86 +310,78 @@ string;
                                                                             errors.push(`Text template validation error: ${error}`);
                                                                         }
                                                                         // Check for unused variables
-                                                                        const allRequired = [];
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            ...TemplateEngine.extractVariables(template.htmlTemplate),
-                                            ...TemplateEngine.extractVariables(template.textTemplate),
-                                            const: unique = Array.from(new Set(allRequired)),
-                                            const: provided = Object.keys(variables),
-                                            const: unused = provided.filter(variable => !unique.includes(variable)),
-                                            if(unused) { }, : .length > 0
-                                        };
-                                        {
-                                            warnings.push(`Unused variables provided: ${unused.join(', ')}`);
-                                        }
-                                        return {
-                                            valid: errors.length === 0,
-                                            errors,
-                                            warnings
-                                        };
-                                        /**
-                                         * Preview a template with sample data
-                                         */
-                                        previewTemplate(templateName, string, format, 'html' | 'text', 'html');
-                                        string | null;
-                                        {
-                                            const sampleVariables = {
-                                                displayName: 'John Doe',
-                                                emailAddress: 'john.doe@example.com',
-                                                code: '123456',
-                                                expiryMinutes: '10',
-                                                securityWarning: 'This login attempt appears to be from an unusual location.',
-                                                setupUrl: 'https://promptscape.com/mfa/setup',
-                                                trackingPixelUrl: 'https://analytics.promptscape.com/pixel.gif',
-                                            };
-                                            const result = this.renderTemplate(templateName, sampleVariables, format);
-                                            return result ? result.content : null;
-                                            /**
-                                             * Add or update a template
-                                             */
-                                            addTemplate(name, string, template, EmailTemplate);
-                                            void {
-                                                this: .templates.set(name, template),
-                                                /**
-                                                 * Remove a template
-                                                 */
-                                                removeTemplate(name) {
-                                                    return this.templates.delete(name);
-                                                    /**
-                                                     * Simple HTML minification
-                                                     */
-                                                }
-                                                /**
-                                                 * Simple HTML minification
-                                                 */
-                                                ,
-                                                /**
-                                                 * Simple HTML minification
-                                                 */
-                                                minifyHTML(html) {
-                                                    return html
-                                                        .replace(/\s+/g, ' ') // Collapse whitespace
-                                                        .replace(/>\s+</g, '><') // Remove whitespace between tags
-                                                        .trim();
-                                                    // ========================================
-                                                    // Template Creation Helpers
-                                                    // ========================================
-                                                }
-                                                // ========================================
-                                                // Template Creation Helpers
-                                                // ========================================
-                                                ,
-                                                // ========================================
-                                                // Template Creation Helpers
-                                                // ========================================
-                                                createSecurityAlertTemplate() {
-                                                    return `
+                                                                        const allRequired = [
+                                                                            ...TemplateEngine.extractVariables(template.htmlTemplate),
+                                                                            ...TemplateEngine.extractVariables(template.textTemplate)
+                                                                        ];
+                                                                        const unique = Array.from(new Set(allRequired));
+                                                                        const provided = Object.keys(variables);
+                                                                        const unused = provided.filter(variable => !unique.includes(variable));
+                                                                        if (unused.length > 0) {
+                                                                            warnings.push(`Unused variables provided: ${unused.join(', ')}`);
+                                                                        }
+                                                                        return {
+                                                                            valid: errors.length === 0,
+                                                                            errors,
+                                                                            warnings
+                                                                        };
+                                                                        /**
+                                                                         * Preview a template with sample data
+                                                                         */
+                                                                        previewTemplate(templateName, string, format, 'html' | 'text', 'html');
+                                                                        string | null;
+                                                                        {
+                                                                            const sampleVariables = {
+                                                                                displayName: 'John Doe',
+                                                                                emailAddress: 'john.doe@example.com',
+                                                                                code: '123456',
+                                                                                expiryMinutes: '10',
+                                                                                securityWarning: 'This login attempt appears to be from an unusual location.',
+                                                                                setupUrl: 'https://promptscape.com/mfa/setup',
+                                                                                trackingPixelUrl: 'https://analytics.promptscape.com/pixel.gif',
+                                                                            };
+                                                                            const result = this.renderTemplate(templateName, sampleVariables, format);
+                                                                            return result ? result.content : null;
+                                                                            /**
+                                                                             * Add or update a template
+                                                                             */
+                                                                            addTemplate(name, string, template, EmailTemplate);
+                                                                            void {
+                                                                                this: .templates.set(name, template),
+                                                                                /**
+                                                                                 * Remove a template
+                                                                                 */
+                                                                                removeTemplate(name) {
+                                                                                    return this.templates.delete(name);
+                                                                                    /**
+                                                                                     * Simple HTML minification
+                                                                                     */
+                                                                                }
+                                                                                /**
+                                                                                 * Simple HTML minification
+                                                                                 */
+                                                                                ,
+                                                                                /**
+                                                                                 * Simple HTML minification
+                                                                                 */
+                                                                                minifyHTML(html) {
+                                                                                    return html
+                                                                                        .replace(/\s+/g, ' ') // Collapse whitespace
+                                                                                        .replace(/>\s+</g, '><') // Remove whitespace between tags
+                                                                                        .trim();
+                                                                                    // ========================================
+                                                                                    // Template Creation Helpers
+                                                                                    // ========================================
+                                                                                }
+                                                                                // ========================================
+                                                                                // Template Creation Helpers
+                                                                                // ========================================
+                                                                                ,
+                                                                                // ========================================
+                                                                                // Template Creation Helpers
+                                                                                // ========================================
+                                                                                createSecurityAlertTemplate() {
+                                                                                    return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #dc2626;">Security Alert</h2>
       <p>Hi {{displayName}},</p>
@@ -402,9 +394,9 @@ string;
       </ul>
       <p>If this was not you, please contact security immediately.</p>
     </div>`;
-                                                },
-                                                createSecurityAlertTextTemplate() {
-                                                    return `
+                                                                                },
+                                                                                createSecurityAlertTextTemplate() {
+                                                                                    return `
 SECURITY ALERT
 Hi {{displayName}},
 {{alertMessage}},
@@ -414,9 +406,9 @@ Hi {{displayName}},
 - Time: {{timestamp}}
 If this was not you, please contact security immediately.
     `;
-                                                },
-                                                createAccountLockedTemplate() {
-                                                    return `
+                                                                                },
+                                                                                createAccountLockedTemplate() {
+                                                                                    return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #d97706;">Account Temporarily Locked</h2>
       <p>Hi {{displayName}},</p>
@@ -424,18 +416,18 @@ If this was not you, please contact security immediately.
       <p>Your account will be automatically unlocked at {{unlockTime}}.</p>
       <p>If you need immediate assistance, contact {{supportEmail}}.</p>
     </div>`;
-                                                },
-                                                createAccountLockedTextTemplate() {
-                                                    return `
+                                                                                },
+                                                                                createAccountLockedTextTemplate() {
+                                                                                    return `
 ACCOUNT TEMPORARILY LOCKED
 Hi {{displayName}},
 Your account has been temporarily locked due to {{lockReason}}.
 Your account will be automatically unlocked at {{unlockTime}}.
 If you need immediate assistance, contact {{supportEmail}}.
     `;
-                                                },
-                                                createMFAMethodAddedTemplate() {
-                                                    return `
+                                                                                },
+                                                                                createMFAMethodAddedTemplate() {
+                                                                                    return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #059669;">MFA Method Added</h2>
       <p>Hi {{displayName}},</p>
@@ -444,9 +436,9 @@ If you need immediate assistance, contact {{supportEmail}}.
       <p>Added on: {{timestamp}}</p>
       <p>If you didn't add this method, please contact security immediately.</p>
     </div>`;
-                                                },
-                                                createMFAMethodAddedTextTemplate() {
-                                                    return `
+                                                                                },
+                                                                                createMFAMethodAddedTextTemplate() {
+                                                                                    return `
 MFA METHOD ADDED
 Hi {{displayName}},
 A new MFA method has been added to your account:
@@ -454,9 +446,9 @@ A new MFA method has been added to your account:
 Added on: {{timestamp}}
 If you didn't add this method, please contact security immediately.
     `;
-                                                },
-                                                createMFAMethodRemovedTemplate() {
-                                                    return `
+                                                                                },
+                                                                                createMFAMethodRemovedTemplate() {
+                                                                                    return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #d97706;">MFA Method Removed</h2>
       <p>Hi {{displayName}},</p>
@@ -465,9 +457,9 @@ If you didn't add this method, please contact security immediately.
       <p>Removed on: {{timestamp}}</p>
       <p>If you didn't remove this method, please contact security immediately.</p>
     </div>`;
-                                                },
-                                                createMFAMethodRemovedTextTemplate() {
-                                                    return `
+                                                                                },
+                                                                                createMFAMethodRemovedTextTemplate() {
+                                                                                    return `
 MFA METHOD REMOVED
 Hi {{displayName}},
 An MFA method has been removed from your account:
@@ -475,57 +467,65 @@ An MFA method has been removed from your account:
 Removed on: {{timestamp}}
 If you didn't remove this method, please contact security immediately.
     `;
-                                                    // ========================================
-                                                    // Template Testing Utilities
-                                                    // ========================================
-                                                    export class TemplateTestUtils {
-                                                        /**
-                                                        * Generate test data for template previews
-                                                        */
-                                                        static generateTestData() {
-                                                            return {
-                                                                displayName: 'Alex Johnson',
-                                                                emailAddress: 'alex.johnson@example.com',
-                                                                code: Math.floor(100000 + Math.random() * 900000).toString(),
-                                                                expiryMinutes: '10',
-                                                                securityWarning: 'This login attempt appears to be from a new device in San Francisco, CA.',
-                                                                setupUrl: 'https://promptscape.com/mfa/setup?token=abc123',
-                                                                trackingPixelUrl: 'https://analytics.promptscape.com/pixel.gif?id=test',
-                                                                companyName: 'PromptScape',
-                                                                supportEmail: 'security@promptscape.com',
-                                                                locale: 'en-US',
-                                                                timezone: 'America/Los_Angeles',
-                                                            };
-                                                            /**
-                                                             * Test all templates with sample data
-                                                             */
-                                                        }
-                                                        /**
-                                                         * Test all templates with sample data
-                                                         */
-                                                        static testAllTemplates(manager) {
-                                                            const testData = this.generateTestData();
-                                                            const results = [];
-                                                            for (const [templateName] of manager.getAllTemplates()) {
-                                                                const validation = manager.validateTemplate(templateName, testData);
-                                                                results.push({});
-                                                                templateName,
-                                                                    valid;
-                                                                validation.valid,
-                                                                    errors;
-                                                                validation.errors,
-                                                                    warnings;
-                                                                validation.warnings,
-                                                                ;
+                                                                                    // ========================================
+                                                                                    // Template Testing Utilities
+                                                                                    // ========================================
+                                                                                    export class TemplateTestUtils {
+                                                                                        /**
+                                                                                        * Generate test data for template previews
+                                                                                        */
+                                                                                        static generateTestData() {
+                                                                                            return {
+                                                                                                displayName: 'Alex Johnson',
+                                                                                                emailAddress: 'alex.johnson@example.com',
+                                                                                                code: Math.floor(100000 + Math.random() * 900000).toString(),
+                                                                                                expiryMinutes: '10',
+                                                                                                securityWarning: 'This login attempt appears to be from a new device in San Francisco, CA.',
+                                                                                                setupUrl: 'https://promptscape.com/mfa/setup?token=abc123',
+                                                                                                trackingPixelUrl: 'https://analytics.promptscape.com/pixel.gif?id=test',
+                                                                                                companyName: 'PromptScape',
+                                                                                                supportEmail: 'security@promptscape.com',
+                                                                                                locale: 'en-US',
+                                                                                                timezone: 'America/Los_Angeles',
+                                                                                            };
+                                                                                            /**
+                                                                                             * Test all templates with sample data
+                                                                                             */
+                                                                                        }
+                                                                                        /**
+                                                                                         * Test all templates with sample data
+                                                                                         */
+                                                                                        static testAllTemplates(manager) {
+                                                                                            const testData = this.generateTestData();
+                                                                                            const results = [];
+                                                                                            for (const [templateName] of manager.getAllTemplates()) {
+                                                                                                const validation = manager.validateTemplate(templateName, testData);
+                                                                                                results.push({});
+                                                                                                templateName,
+                                                                                                    valid;
+                                                                                                validation.valid,
+                                                                                                    errors;
+                                                                                                validation.errors,
+                                                                                                    warnings;
+                                                                                                validation.warnings,
+                                                                                                ;
+                                                                                            }
+                                                                                            ;
+                                                                                            return results;
+                                                                                            export default EmailTemplateManager;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            };
+                                                                        }
+                                                                    }
+                                                                }
                                                             }
-                                                            ;
-                                                            return results;
-                                                            export default EmailTemplateManager;
                                                         }
                                                     }
                                                 }
-                                            };
-                                        }
+                                            }
+                                        };
                                     }
                                 }
                             }

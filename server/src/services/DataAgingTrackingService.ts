@@ -7,8 +7,8 @@ import { AuditService } from '../auth/services/AuditService';
 import { DataLifecycleAutomationService, LifecycleStage } from './DataLifecycleAutomationService';
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
-}
-}
+
+
 export interface DataAgingRecord {
   agingId: string;
   dataId: string;
@@ -24,12 +24,13 @@ export interface DataAgingRecord {
   predictiveAnalytics: PredictiveAnalytics;
   alerts: AgingAlert[];
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AgingMetrics {
   chronologicalAge: AgingPeriod;
   accessAge: AgingPeriod;
@@ -37,21 +38,23 @@ export interface AgingMetrics {
   businessAge: AgingPeriod;
   complianceAge: AgingPeriod;
   overallAgingScore: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AgingPeriod {
   days: number;
   months: number;
   years: number;
   category: AgeCategory;
   trend: AgingTrend;
-}
-}
-}
+
+
+
+
 
 export enum AgeCategory {
   FRESH = 'FRESH',           // 0-30 days
@@ -61,17 +64,17 @@ export enum AgeCategory {
   OLD = 'OLD',               // 3-7 years
   LEGACY = 'LEGACY',         // 7+ years
   STALE = 'STALE'            // No access for extended period
-}
+
 
 export enum AgingTrend {
   STABLE = 'STABLE',
   ACCELERATING = 'ACCELERATING',
   DECELERATING = 'DECELERATING',
   INACTIVE = 'INACTIVE'
-}
 
-}
-}
+
+
+
 export interface AccessAnalytics {
   totalAccesses: number;
   uniqueUsers: number;
@@ -80,21 +83,23 @@ export interface AccessAnalytics {
   hotspotPeriods: HotspotPeriod[];
   accessDecay: AccessDecayAnalysis;
   userBehavior: UserBehaviorAnalysis;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessFrequency {
   daily: number;
   weekly: number;
   monthly: number;
   quarterly: number;
   trend: FrequencyTrend;
-}
-}
-}
+
+
+
+
 
 export enum FrequencyTrend {
   INCREASING = 'INCREASING',
@@ -102,10 +107,10 @@ export enum FrequencyTrend {
   DECREASING = 'DECREASING',
   SPORADIC = 'SPORADIC',
   DORMANT = 'DORMANT'
-}
 
-}
-}
+
+
+
 export interface AccessPattern {
   patternId: string;
   type: PatternType;
@@ -113,9 +118,10 @@ export interface AccessPattern {
   frequency: number;
   lastOccurrence: Date;
   confidence: number;
-}
-}
-}
+
+
+
+
 
 export enum PatternType {
   REGULAR_BUSINESS_HOURS = 'REGULAR_BUSINESS_HOURS',
@@ -124,90 +130,95 @@ export enum PatternType {
   EVENT_DRIVEN = 'EVENT_DRIVEN',
   RANDOM = 'RANDOM',
   DECLINING = 'DECLINING'
-}
 
-}
-}
+
+
+
 export interface HotspotPeriod {
   periodStart: Date;
   periodEnd: Date;
   accessCount: number;
   reason: string;
   intensity: HotspotIntensity;
-}
-}
-}
+
+
+
+
 
 export enum HotspotIntensity {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   EXTREME = 'EXTREME'
-}
 
-}
-}
+
+
+
 export interface AccessDecayAnalysis {
   decayRate: number;
   halfLife: number; // days until access frequency halves
   projectedInactiveDate: Date;
   decayModel: DecayModel;
   confidence: number;
-}
-}
-}
+
+
+
+
 
 export enum DecayModel {
   EXPONENTIAL = 'EXPONENTIAL',
   LINEAR = 'LINEAR',
   LOGARITHMIC = 'LOGARITHMIC',
   CUSTOM = 'CUSTOM'
-}
 
-}
-}
+
+
+
 export interface UserBehaviorAnalysis {
   primaryUsers: UserAccessProfile[];
   accessDiversity: number;
   userRetention: UserRetentionAnalysis;
   behaviorChanges: BehaviorChange[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserAccessProfile {
   userId: string;
   accessCount: number;
   lastAccess: Date;
   accessPattern: string;
   importance: UserImportance;
-}
-}
-}
+
+
+
+
 
 export enum UserImportance {
   CRITICAL = 'CRITICAL',
   HIGH = 'HIGH',
   MEDIUM = 'MEDIUM',
   LOW = 'LOW'
-}
 
-}
-}
+
+
+
 export interface UserRetentionAnalysis {
   activeUsers30d: number;
   activeUsers90d: number;
   activeUsers365d: number;
   retentionRate: number;
   churnRate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BehaviorChange {
   changeId: string;
   type: BehaviorChangeType;
@@ -215,9 +226,10 @@ export interface BehaviorChange {
   description: string;
   impact: ChangeImpact;
   confidence: number;
-}
-}
-}
+
+
+
+
 
 export enum BehaviorChangeType {
   ACCESS_INCREASE = 'ACCESS_INCREASE',
@@ -225,49 +237,52 @@ export enum BehaviorChangeType {
   USER_CHANGE = 'USER_CHANGE',
   PATTERN_SHIFT = 'PATTERN_SHIFT',
   SEASONAL_CHANGE = 'SEASONAL_CHANGE'
-}
+
 
 export enum ChangeImpact {
   MINIMAL = 'MINIMAL',
   MODERATE = 'MODERATE',
   SIGNIFICANT = 'SIGNIFICANT',
   MAJOR = 'MAJOR'
-}
 
-}
-}
+
+
+
 export interface DataValueAssessment {
   businessValue: BusinessValueMetrics;
   technicalValue: TechnicalValueMetrics;
   complianceValue: ComplianceValueMetrics;
   overallValue: ValueScore;
   valueDecay: ValueDecayAnalysis;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BusinessValueMetrics {
   revenue: RevenueImpact;
   operational: OperationalImpact;
   strategic: StrategicImpact;
   riskmitigation: RiskMitigationValue;
   score: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RevenueImpact {
   directRevenue: number;
   indirectRevenue: number;
   potentialLoss: number;
   impactLevel: ImpactLevel;
-}
-}
-}
+
+
+
+
 
 export enum ImpactLevel {
   NONE = 'NONE',
@@ -275,55 +290,59 @@ export enum ImpactLevel {
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
-}
 
-}
-}
+
+
+
 export interface OperationalImpact {
   processEfficiency: number;
   decisionSupport: number;
   automation: number;
   costSavings: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StrategicImpact {
   competitiveAdvantage: number;
   innovation: number;
   marketInsight: number;
   futureOpportunity: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskMitigationValue {
   complianceRisk: number;
   securityRisk: number;
   operationalRisk: number;
   reputationalRisk: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TechnicalValueMetrics {
   dataQuality: DataQualityScore;
   uniqueness: UniquenessScore;
   relationships: RelationshipValue;
   technical: TechnicalScore;
   score: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataQualityScore {
   completeness: number;
   accuracy: number;
@@ -331,98 +350,107 @@ export interface DataQualityScore {
   timeliness: number;
   validity: number;
   overall: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UniquenessScore {
   duplicateLevel: number;
   rarityScore: number;
   replaceability: number;
   overall: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RelationshipValue {
   dependencies: number;
   references: number;
   criticalPaths: number;
   networkEffect: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TechnicalScore {
   storage: StorageMetrics;
   processing: ProcessingMetrics;
   maintenance: MaintenanceMetrics;
   overall: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StorageMetrics {
   size: number;
   growthRate: number;
   compressionRatio: number;
   accessSpeed: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProcessingMetrics {
   computeIntensity: number;
   processingFrequency: number;
   resourceConsumption: number;
   efficiency: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MaintenanceMetrics {
   updateFrequency: number;
   maintenanceCost: number;
   complexity: number;
   stability: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceValueMetrics {
   legalRequirement: number;
   auditEvidence: number;
   regulatoryImportance: number;
   retentionNecessity: number;
   score: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValueScore {
   overall: number;
   category: ValueCategory;
   trend: ValueTrend;
   projectedValue: number;
-}
-}
-}
+
+
+
+
 
 export enum ValueCategory {
   CRITICAL = 'CRITICAL',
@@ -430,35 +458,37 @@ export enum ValueCategory {
   MEDIUM = 'MEDIUM',
   LOW = 'LOW',
   MINIMAL = 'MINIMAL'
-}
+
 
 export enum ValueTrend {
   INCREASING = 'INCREASING',
   STABLE = 'STABLE',
   DECLINING = 'DECLINING',
   VOLATILE = 'VOLATILE'
-}
 
-}
-}
+
+
+
 export interface ValueDecayAnalysis {
   decayRate: number;
   valueHalfLife: number;
   projectedMinimalDate: Date;
   decayFactors: DecayFactor[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DecayFactor {
   factor: string;
   impact: number;
   trend: string;
-}
-}
-}
+
+
+
+
 
 export enum AgingStatus {
   FRESH = 'FRESH',
@@ -468,21 +498,22 @@ export enum AgingStatus {
   DORMANT = 'DORMANT',
   STALE = 'STALE',
   DEPRECATED = 'DEPRECATED'
-}
 
-}
-}
+
+
+
 export interface PredictiveAnalytics {
   predictions: AgingPrediction[];
   riskAssessment: AgingRiskAssessment;
   recommendations: AgingRecommendation[];
   models: PredictiveModel[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AgingPrediction {
   predictionId: string;
   type: PredictionType;
@@ -490,9 +521,10 @@ export interface AgingPrediction {
   prediction: Record<string, number | string | boolean>;
   confidence: number;
   factors: string[];
-}
-}
-}
+
+
+
+
 
 export enum PredictionType {
   ACCESS_PATTERN = 'ACCESS_PATTERN',
@@ -500,37 +532,39 @@ export enum PredictionType {
   LIFECYCLE_TRANSITION = 'LIFECYCLE_TRANSITION',
   COMPLIANCE_RISK = 'COMPLIANCE_RISK',
   COST_PROJECTION = 'COST_PROJECTION'
-}
 
-}
-}
+
+
+
 export interface AgingRiskAssessment {
   overallRisk: RiskLevel;
   riskFactors: RiskFactor[];
   mitigationStrategies: MitigationStrategy[];
   costOfInaction: number;
-}
-}
-}
+
+
+
+
 
 export enum RiskLevel {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
-}
 
-}
-}
+
+
+
 export interface RiskFactor {
   factor: string;
   impact: number;
   probability: number;
   riskScore: number;
   category: RiskCategory;
-}
-}
-}
+
+
+
+
 
 export enum RiskCategory {
   COMPLIANCE = 'COMPLIANCE',
@@ -538,29 +572,30 @@ export enum RiskCategory {
   OPERATIONAL = 'OPERATIONAL',
   STRATEGIC = 'STRATEGIC',
   TECHNICAL = 'TECHNICAL'
-}
 
-}
-}
+
+
+
 export interface MitigationStrategy {
   strategy: string;
   effectiveness: number;
   cost: number;
   timeline: number;
   priority: Priority;
-}
-}
-}
+
+
+
+
 
 export enum Priority {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   URGENT = 'URGENT'
-}
 
-}
-}
+
+
+
 export interface AgingRecommendation {
   recommendationId: string;
   type: RecommendationType;
@@ -570,9 +605,10 @@ export interface AgingRecommendation {
   effort: EffortLevel;
   urgency: Priority;
   expectedBenefit: number;
-}
-}
-}
+
+
+
+
 
 export enum RecommendationType {
   ARCHIVE = 'ARCHIVE',
@@ -582,7 +618,7 @@ export enum RecommendationType {
   ENHANCE = 'ENHANCE',
   MONITOR = 'MONITOR',
   RETAIN = 'RETAIN'
-}
+
 
 export enum EffortLevel {
   MINIMAL = 'MINIMAL',
@@ -590,10 +626,10 @@ export enum EffortLevel {
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
   EXTENSIVE = 'EXTENSIVE'
-}
 
-}
-}
+
+
+
 export interface PredictiveModel {
   modelId: string;
   name: string;
@@ -602,9 +638,10 @@ export interface PredictiveModel {
   lastTrained: Date;
   features: string[];
   parameters: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 export enum ModelType {
   LINEAR_REGRESSION = 'LINEAR_REGRESSION',
@@ -612,10 +649,10 @@ export enum ModelType {
   RANDOM_FOREST = 'RANDOM_FOREST',
   NEURAL_NETWORK = 'NEURAL_NETWORK',
   TIME_SERIES = 'TIME_SERIES'
-}
 
-}
-}
+
+
+
 export interface AgingAlert {
   alertId: string;
   type: AlertType;
@@ -626,9 +663,10 @@ export interface AgingAlert {
   acknowledgedAt?: Date;
   resolvedAt?: Date;
   conditions: AlertCondition[];
-}
-}
-}
+
+
+
+
 
 export enum AlertType {
   AGE_THRESHOLD = 'AGE_THRESHOLD',
@@ -637,25 +675,26 @@ export enum AlertType {
   COMPLIANCE_RISK = 'COMPLIANCE_RISK',
   COST_THRESHOLD = 'COST_THRESHOLD',
   STORAGE_GROWTH = 'STORAGE_GROWTH'
-}
+
 
 export enum AlertSeverity {
   INFO = 'INFO',
   WARNING = 'WARNING',
   CRITICAL = 'CRITICAL',
   EMERGENCY = 'EMERGENCY'
-}
 
-}
-}
+
+
+
 export interface AlertCondition {
   condition: string;
   threshold: number;
   currentValue: number;
   met: boolean;
-}
-}
-}
+
+
+
+
 
 export class DataAgingTrackingService {
   private db: DatabaseService;
@@ -670,7 +709,7 @@ export class DataAgingTrackingService {
     this.db = db;
     this.auditService = auditService;
     this.lifecycleService = lifecycleService;
-  }
+
 
   async initializeAgingTracking(
     dataId: string,
@@ -700,14 +739,14 @@ export class DataAgingTrackingService {
     await this.logAgingEvent('AGING_TRACKING_INITIALIZED', agingRecord);
 
     return agingRecord;
-  }
+
 
   async updateAgingMetrics(agingId: string): Promise<DataAgingRecord> {
 
     const record = await this.getAgingRecord(agingId);
     if (!record) {
       throw new Error(`Aging record not found: ${agingId}`);
-    }
+
 
     const now = new Date();
     
@@ -735,7 +774,7 @@ export class DataAgingTrackingService {
     await this.logAgingEvent('AGING_METRICS_UPDATED', record);
 
     return record;
-  }
+
 
   async generateAgingReport(
     category?: DataCategory,
@@ -759,7 +798,7 @@ export class DataAgingTrackingService {
 
     await this.saveAgingReport(report);
     return report;
-  }
+
 
   private async calculateInitialAgingMetrics(createdAt: Date): Promise<AgingMetrics> {
 
@@ -773,7 +812,7 @@ export class DataAgingTrackingService {
       complianceAge: chronologicalAge,
       overallAgingScore: this.calculateOverallAgingScore([chronologicalAge])
     };
-  }
+
 
   private async calculateAgingMetrics(record: DataAgingRecord, currentTime: Date): Promise<AgingMetrics> {
 
@@ -793,7 +832,7 @@ export class DataAgingTrackingService {
         chronologicalAge, accessAge, modificationAge, businessAge, complianceAge
       ])
     };
-  }
+
 
   private calculateChronologicalAge(createdAt: Date, currentTime: Date): AgingPeriod {
     const diffMs = currentTime.getTime() - createdAt.getTime();
@@ -808,23 +847,23 @@ export class DataAgingTrackingService {
       category: this.categorizeAge(days),
       trend: AgingTrend.STABLE
     };
-  }
+
 
   private calculateAccessAge(lastAccessedAt: Date | undefined, currentTime: Date): AgingPeriod {
     if (!lastAccessedAt) {
       return this.calculateChronologicalAge(currentTime, currentTime);
-    }
+
     
     return this.calculateChronologicalAge(lastAccessedAt, currentTime);
-  }
+
 
   private calculateModificationAge(lastModifiedAt: Date | undefined, currentTime: Date): AgingPeriod {
     if (!lastModifiedAt) {
       return this.calculateChronologicalAge(currentTime, currentTime);
-    }
+
     
     return this.calculateChronologicalAge(lastModifiedAt, currentTime);
-  }
+
 
   private async calculateBusinessAge(record: DataAgingRecord, currentTime: Date): Promise<AgingPeriod> {
 
@@ -842,7 +881,7 @@ export class DataAgingTrackingService {
       trend: record.valueAssessment.overallValue.trend === ValueTrend.DECLINING ? 
         AgingTrend.ACCELERATING : AgingTrend.STABLE
     };
-  }
+
 
   private async calculateComplianceAge(record: DataAgingRecord, currentTime: Date): Promise<AgingPeriod> {
 
@@ -860,7 +899,7 @@ export class DataAgingTrackingService {
       category: this.categorizeAge(adjustedDays),
       trend: AgingTrend.STABLE
     };
-  }
+
 
   private categorizeAge(days: number): AgeCategory {
     if (days <= 30) return AgeCategory.FRESH;
@@ -869,7 +908,7 @@ export class DataAgingTrackingService {
     if (days <= 1095) return AgeCategory.AGING; // 3 years
     if (days <= 2555) return AgeCategory.OLD; // 7 years
     return AgeCategory.LEGACY;
-  }
+
 
   private calculateOverallAgingScore(ages: AgingPeriod[]): number {
     const weights = [0.3, 0.2, 0.2, 0.15, 0.15]; // Weights for different age types
@@ -882,7 +921,7 @@ export class DataAgingTrackingService {
     });
     
     return Math.round(score);
-  }
+
 
   private initializeAccessAnalytics(): AccessAnalytics {
     return {
@@ -894,7 +933,7 @@ export class DataAgingTrackingService {
         monthly: 0,
         quarterly: 0,
         trend: FrequencyTrend.STABLE
-  }
+
       accessPatterns: [],
       hotspotPeriods: [],
       accessDecay: {
@@ -903,7 +942,7 @@ export class DataAgingTrackingService {
         projectedInactiveDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
         decayModel: DecayModel.EXPONENTIAL,
         confidence: 0.5
-  }
+
       userBehavior: {
         primaryUsers: [],
         accessDiversity: 0,
@@ -913,11 +952,11 @@ export class DataAgingTrackingService {
           activeUsers365d: 0,
           retentionRate: 0,
           churnRate: 0
-  }
+
         behaviorChanges: []
-      }
+
     };
-  }
+
 
   private async performInitialValueAssessment(
     category: DataCategory,
@@ -939,15 +978,15 @@ export class DataAgingTrackingService {
         category: this.categorizeValue(overallScore),
         trend: ValueTrend.STABLE,
         projectedValue: overallScore
-  }
+
       valueDecay: {
         decayRate: 0.1, // 10% per year default
         valueHalfLife: 2555, // 7 years default
         projectedMinimalDate: new Date(Date.now() + 7 * 365 * 24 * 60 * 60 * 1000),
         decayFactors: []
-      }
+
     };
-  }
+
 
   private categorizeValue(score: number): ValueCategory {
     if (score >= 90) return ValueCategory.CRITICAL;
@@ -955,7 +994,7 @@ export class DataAgingTrackingService {
     if (score >= 50) return ValueCategory.MEDIUM;
     if (score >= 25) return ValueCategory.LOW;
     return ValueCategory.MINIMAL;
-  }
+
 
   private determineAgingStatus(record: DataAgingRecord): AgingStatus {
     const agingScore = record.agingMetrics.overallAgingScore;
@@ -969,7 +1008,7 @@ export class DataAgingTrackingService {
     if (agingScore > 30) return AgingStatus.AGING_NORMALLY;
     
     return AgingStatus.STABLE;
-  }
+
 
   private async checkAndTriggerAlerts(record: DataAgingRecord): Promise<void> {
 
@@ -982,9 +1021,9 @@ export class DataAgingTrackingService {
         
         await this.sendAlert(record, alert);
         await this.logAgingEvent('ALERT_TRIGGERED', record, { alertType: alert.type });
-      }
-    }
-  }
+
+
+
 
   private async evaluateAlertConditions(record: DataAgingRecord, alert: AgingAlert): Promise<boolean> {
 
@@ -1002,24 +1041,24 @@ export class DataAgingTrackingService {
         condition.currentValue = record.valueAssessment.overallValue.overall;
         condition.met = condition.currentValue < condition.threshold;
         break;
-      }
-    }
+
+
     
     return alert.conditions.every(c => c.met);
-  }
+
 
   // Placeholder methods for complex operations
   private async updateAccessAnalytics(record: DataAgingRecord): Promise<AccessAnalytics> {
 
     // Implementation would analyze actual access logs
     return record.accessAnalytics;
-  }
+
 
   private async performValueAssessment(record: DataAgingRecord): Promise<DataValueAssessment> {
 
     // Implementation would reassess current value
     return record.valueAssessment;
-  }
+
 
   private async initializePredictiveAnalytics(): Promise<PredictiveAnalytics> {
 
@@ -1030,17 +1069,17 @@ export class DataAgingTrackingService {
         riskFactors: [],
         mitigationStrategies: [],
         costOfInaction: 0
-  }
+
       recommendations: [],
       models: []
     };
-  }
+
 
   private async updatePredictiveAnalytics(record: DataAgingRecord): Promise<PredictiveAnalytics> {
 
     // Implementation would update predictions based on current data
     return record.predictiveAnalytics;
-  }
+
 
   private async createDefaultAlerts(__category: DataCategory): Promise<AgingAlert[]> {
 
@@ -1058,11 +1097,11 @@ export class DataAgingTrackingService {
         threshold: 365,
         currentValue: 0,
         met: false
-      }]
+]
     });
 
     return alerts;
-  }
+
 
   private async assessBusinessValue(__category: DataCategory, __dataType: string): Promise<BusinessValueMetrics> {
 
@@ -1074,7 +1113,7 @@ export class DataAgingTrackingService {
       riskmitigation: { complianceRisk: 40, securityRisk: 40, operationalRisk: 40, reputationalRisk: 40 },
       score: 40
     };
-  }
+
 
   private async assessTechnicalValue(__category: DataCategory, __dataType: string): Promise<TechnicalValueMetrics> {
 
@@ -1088,10 +1127,10 @@ export class DataAgingTrackingService {
         processing: { computeIntensity: 50, processingFrequency: 50, resourceConsumption: 50, efficiency: 80 },
         maintenance: { updateFrequency: 20, maintenanceCost: 1000, complexity: 50, stability: 90 },
         overall: 70
-  }
+
       score: 70
     };
-  }
+
 
   private async assessComplianceValue(category: DataCategory): Promise<ComplianceValueMetrics> {
 
@@ -1112,13 +1151,13 @@ export class DataAgingTrackingService {
       retentionNecessity: score - 5,
       score
     };
-  }
+
 
   private async sendAlert(record: DataAgingRecord, alert: AgingAlert): Promise<void> {
 
     // Implementation would send actual alerts
     console.log(`Alert triggered for ${record.dataId}: ${alert.message}`);
-  }
+
 
   // Database operations
   private async saveAgingRecord(record: DataAgingRecord): Promise<void> {
@@ -1148,7 +1187,7 @@ export class DataAgingTrackingService {
       JSON.stringify(record.alerts),
       record.updatedAt
     ]);
-  }
+
 
   private async updateAgingRecord(record: DataAgingRecord): Promise<void> {
 
@@ -1172,14 +1211,14 @@ export class DataAgingTrackingService {
       record.updatedAt,
       record.agingId
     ]);
-  }
+
 
   private async getAgingRecord(agingId: string): Promise<DataAgingRecord | null> {
 
     const query = 'SELECT * FROM data_aging_records WHERE aging_id = $1';
     const result = await this.db.query(query, [agingId]);
     return result.rows[0] || null;
-  }
+
 
   private async getAgingRecords(
     category?: DataCategory,
@@ -1189,7 +1228,7 @@ export class DataAgingTrackingService {
 
     // Implementation would fetch filtered records
     return [];
-  }
+
 
   private async logAgingEvent(
     eventType: string,
@@ -1206,10 +1245,10 @@ export class DataAgingTrackingService {
         agingStatus: record.agingStatus,
         agingScore: record.agingMetrics.overallAgingScore,
         ...additionalData
-  }
+
       timestamp: new Date()
     });
-  }
+
 
   // Placeholder implementations for complex analytics
   private async generateAgingSummary(records: DataAgingRecord[]): Promise<unknown> {
@@ -1220,42 +1259,43 @@ export class DataAgingTrackingService {
       statusDistribution: {},
       valueDistribution: {}
     };
-  }
+
 
   private async calculateAgeDistribution(__records: DataAgingRecord[]): Promise<unknown> {
 
     return {};
-  }
+
 
   private async performRiskAnalysis(__records: DataAgingRecord[]): Promise<unknown> {
 
     return {};
-  }
+
 
   private async generateAgingRecommendations(__records: DataAgingRecord[]): Promise<AgingRecommendation[]> {
 
     return [];
-  }
+
 
   private async calculateAgingTrends(__records: DataAgingRecord[]): Promise<unknown[]> {
 
     return [];
-  }
+
 
   private async calculateAgingCosts(__records: DataAgingRecord[]): Promise<unknown> {
 
     return {};
-  }
+
 
   private async saveAgingReport(__report: AgingReport): Promise<void> {
 
     // Implementation would save aging report
-  }
-}
+
+
 
 // Supporting interfaces
-}
-}
+
+
+
 interface AgingReport {
   reportId: string;
   generatedAt: Date;
@@ -1266,6 +1306,6 @@ interface AgingReport {
   trends: unknown[];
   costs: unknown;
   records: DataAgingRecord[];
-}
-}
-}
+
+
+

@@ -3,56 +3,54 @@
 import React, { useState } from 'react';
 import { Bell, Clock, Lock, AlertTriangle, Check, Filter } from 'lucide-react';
 import { LockNotification } from '../types/locking';
-}
-interface LockNotificationsProps {
-  notifications: LockNotification;
+
+
+interface LockNotificationsProps { notifications: LockNotification;
   onMarkAsRead: (notificationId: string) => void;
-  export const LockNotifications: React.FC<LockNotificationsProps> = ({,)
-  notifications,
+  export const LockNotifications: React.FC<LockNotificationsProps> = ({);
+  notifications }
   onMarkAsRead
-}
-}) => {
-  const [filter, setFilter] = useState<'all' | 'unread' | 'type'>('all');
+
+
+}) => { const [filter, setFilter] = useState<'all' | 'unread' | 'type'>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
-  const getNotificationIcon = (type: string) => {,
+  const getNotificationIcon = (type: string) => {
   switch (type) {
-  case 'acquired':,
+  case 'acquired':
   return <Lock className="h-4 w-4 text-green-500" />;
-  case 'released':,
+  case 'released':
   return <Check className="h-4 w-4 text-blue-500" />;
-  case 'broken':,
+  case 'broken':
   return <AlertTriangle className="h-4 w-4 text-red-500" />;
-  case 'conflict':,
+  case 'conflict':
   return <AlertTriangle className="h-4 w-4 text-orange-500" />;
-  case 'queue_position':,
+  case 'queue_position':
   return <Clock className="h-4 w-4 text-blue-500" />;
-  case 'expiring':,
+  case 'expiring':
   return <Clock className="h-4 w-4 text-amber-500" />;
-  default:,
+  default: }
   return <Bell className="h-4 w-4 text-gray-500" />;
 };
-  const getNotificationColor = (type: string) => {
-  switch (type) {
-  case 'acquired':,
+  const getNotificationColor = (type: string) => { switch (type) {
+  case 'acquired':
   return 'border-l-green-500 bg-green-50';
-  case 'released':,
+  case 'released':
   return 'border-l-blue-500 bg-blue-50';
-  case 'broken':,
+  case 'broken':
   return 'border-l-red-500 bg-red-50';
-  case 'conflict':,
+  case 'conflict':
   return 'border-l-orange-500 bg-orange-50';
-  case 'queue_position':,
+  case 'queue_position':
   return 'border-l-blue-500 bg-blue-50';
-  case 'expiring':,
+  case 'expiring':
   return 'border-l-amber-500 bg-amber-50';
-  default:,
+  default: }
   return 'border-l-gray-500 bg-gray-50';
 };
-  const filteredNotifications = notifications.filter(notification => {)
+  const filteredNotifications = notifications.filter(notification => { )
   if (filter === 'unread' && notification.read_at) return false;
     if (typeFilter !== 'all' && notification.notification_type !== typeFilter) return false;
-    return true;
-  });
+    return true });
   const unreadCount = notifications.filter(n => !n.read_at).length;
   const notificationTypes = Array.from(new Set(notifications.map(n => n.notification_type)));
   const formatRelativeTime = (dateString: string) => {

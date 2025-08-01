@@ -25,7 +25,7 @@ const PERFORMANCE_TEST_CONFIG = {
       memoryUsage: 85,
       responseTime: 2000,
       errorRate: 5
-    }
+
   },
   loadTests: [
     {
@@ -48,7 +48,7 @@ const PERFORMANCE_TEST_CONFIG = {
       concurrency: 8,
       duration: 180000,
       delay: 90000      // 1.5 minute delay
-    }
+
   ],
   client: {
     monitoringDuration: 300000, // 5 minutes
@@ -64,7 +64,7 @@ const PERFORMANCE_TEST_CONFIG = {
     generateHTML: true,
     generateCharts: true,
     includeRecommendations: true
-  }
+
 };
 
 /**
@@ -81,7 +81,7 @@ class PerformanceTestOrchestrator {
       startTime: null,
       endTime: null
     };
-  }
+
 
   /**
    * Run comprehensive performance testing
@@ -125,21 +125,20 @@ class PerformanceTestOrchestrator {
 
       console.log('\n✅ Performance testing completed successfully!');
       return this.results;
-
-    } catch (error) {
+ catch (error) {
       console.error('\n❌ Performance testing failed:', error.message);
       this.results.endTime = new Date();
       
       // Generate partial report if possible
       try {
         await this.generateComprehensiveReport();
-      } catch (reportError) {
+ catch (reportError) {
         console.error('Failed to generate error report:', reportError.message);
-      }
+
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Start server performance profiling
@@ -185,12 +184,11 @@ process.on('SIGTERM', async () => {
 
       console.log(`✅ Server profiling started (PID: ${profilerProcess.pid})`);
       return profilerProcess;
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to start server profiling:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Stop server performance profiling
@@ -210,10 +208,10 @@ process.on('SIGTERM', async () => {
       });
 
       console.log('✅ Server profiling stopped');
-    } catch (error) {
+ catch (error) {
       console.error('Error stopping server profiling:', error);
-    }
-  }
+
+
 
   /**
    * Run staggered load tests
@@ -226,7 +224,7 @@ process.on('SIGTERM', async () => {
       if (testConfig.delay > 0) {
         console.log(`⏰ Waiting ${testConfig.delay / 1000}s before starting ${testConfig.name}...`);
         await this.delay(testConfig.delay);
-      }
+
 
       console.log(`🚀 Starting ${testConfig.name}`);
 
@@ -240,7 +238,7 @@ process.on('SIGTERM', async () => {
         
         console.log(`✅ ${testConfig.name} completed`);
         return result;
-      } catch (error) {
+ catch (error) {
         console.error(`❌ ${testConfig.name} failed:`, error.message);
         this.results.loadTestResults.push({
           name: testConfig.name,
@@ -248,12 +246,12 @@ process.on('SIGTERM', async () => {
           timestamp: new Date()
         });
         throw error;
-      }
+
     });
 
     await Promise.allSettled(loadTestPromises);
     console.log('✅ All load tests completed');
-  }
+
 
   /**
    * Run individual load test
@@ -269,7 +267,7 @@ process.on('SIGTERM', async () => {
           ...process.env,
           LOAD_TEST_CONCURRENCY: testConfig.concurrency,
           LOAD_TEST_DURATION: testConfig.duration
-        }
+
       });
 
       return {
@@ -278,8 +276,7 @@ process.on('SIGTERM', async () => {
         duration: Date.now() - startTime,
         concurrency: testConfig.concurrency
       };
-
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         error: error.message,
@@ -287,8 +284,8 @@ process.on('SIGTERM', async () => {
         stderr: error.stderr,
         duration: Date.now() - startTime
       };
-    }
-  }
+
+
 
   /**
    * Start client performance profiling
@@ -306,11 +303,11 @@ process.on('SIGTERM', async () => {
       console.log('   Open this file in a browser to start client-side profiling');
 
       return { htmlPath };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to create client profiler:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Stop client performance profiling
@@ -319,7 +316,7 @@ process.on('SIGTERM', async () => {
     console.log('⏹️  Client profiling configuration saved');
     // Client profiling is managed through the browser
     return clientProfiler;
-  }
+
 
   /**
    * Generate client profiler HTML
@@ -338,7 +335,7 @@ process.on('SIGTERM', async () => {
             margin: 0;
             padding: 20px;
             background: #f5f7fa;
-        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -346,46 +343,46 @@ process.on('SIGTERM', async () => {
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+
         .header {
             text-align: center;
             margin-bottom: 30px;
             color: #2c3e50;
-        }
+
         .controls {
             margin-bottom: 20px;
             padding: 20px;
             background: #ecf0f1;
             border-radius: 8px;
-        }
+
         .metrics {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 20px;
-        }
+
         .metric-card {
             background: #3498db;
             color: white;
             padding: 20px;
             border-radius: 8px;
             text-align: center;
-        }
+
         .metric-value {
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 5px;
-        }
+
         .metric-label {
             font-size: 14px;
             opacity: 0.9;
-        }
+
         .test-buttons {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin-top: 20px;
-        }
+
         .test-button {
             background: #27ae60;
             color: white;
@@ -395,14 +392,14 @@ process.on('SIGTERM', async () => {
             font-size: 16px;
             cursor: pointer;
             transition: background 0.3s;
-        }
+
         .test-button:hover {
             background: #219a52;
-        }
+
         .test-button:disabled {
             background: #95a5a6;
             cursor: not-allowed;
-        }
+
         button {
             background: #3498db;
             color: white;
@@ -411,23 +408,23 @@ process.on('SIGTERM', async () => {
             border-radius: 5px;
             margin: 5px;
             cursor: pointer;
-        }
+
         button:hover {
             background: #2980b9;
-        }
+
         .status {
             margin: 10px 0;
             padding: 10px;
             border-radius: 5px;
-        }
+
         .status.running {
             background: #d5e8d4;
             color: #2e7d32;
-        }
+
         .status.stopped {
             background: #ffebee;
             color: #c62828;
-        }
+
     </style>
 </head>
 <body>
@@ -481,7 +478,7 @@ process.on('SIGTERM', async () => {
                 this.metrics = [];
                 this.intervalId = null;
                 this.startTime = 0;
-            }
+
 
             start() {
                 if (this.isRunning) return;
@@ -498,7 +495,7 @@ process.on('SIGTERM', async () => {
                 }, 1000);
 
                 console.log('Client performance profiling started');
-            }
+
 
             stop() {
                 if (!this.isRunning) return;
@@ -513,7 +510,7 @@ process.on('SIGTERM', async () => {
 
                 console.log('Client performance profiling stopped');
                 this.exportToLocalStorage();
-            }
+
 
             collectMetrics() {
                 const now = performance.now();
@@ -522,7 +519,7 @@ process.on('SIGTERM', async () => {
                 let memoryUsage = 0;
                 if (performance.memory) {
                     memoryUsage = (performance.memory.usedJSHeapSize / performance.memory.totalJSHeapSize) * 100;
-                }
+
 
                 // Network metrics
                 const resources = performance.getEntriesByType('resource');
@@ -543,19 +540,19 @@ process.on('SIGTERM', async () => {
 
                 this.metrics.push(metrics);
                 this.updateDisplay(metrics);
-            }
+
 
             updateDisplay(metrics) {
                 document.getElementById('renderTime').textContent = metrics.renderTime.toFixed(1);
                 document.getElementById('memoryUsage').textContent = metrics.memoryUsage.toFixed(1);
                 document.getElementById('responseTime').textContent = metrics.responseTime.toFixed(0);
                 document.getElementById('layoutShift').textContent = metrics.layoutShift.toFixed(3);
-            }
+
 
             clear() {
                 this.metrics = [];
                 this.updateDisplay({ renderTime: 0, memoryUsage: 0, responseTime: 0, layoutShift: 0 });
-            }
+
 
             exportToLocalStorage() {
                 const report = {
@@ -568,7 +565,7 @@ process.on('SIGTERM', async () => {
 
                 localStorage.setItem('client-performance-report-' + Date.now(), JSON.stringify(report));
                 console.log('Performance report saved to localStorage');
-            }
+
 
             generateSummary() {
                 if (this.metrics.length === 0) return null;
@@ -580,27 +577,27 @@ process.on('SIGTERM', async () => {
                     averageResponseTime: this.metrics.reduce((sum, m) => sum + m.responseTime, 0) / this.metrics.length,
                     maxLayoutShift: Math.max(...this.metrics.map(m => m.layoutShift))
                 };
-            }
-        }
+
+
 
         const profiler = new ClientPerformanceProfiler();
 
         function startProfiling() {
             profiler.start();
-        }
+
 
         function stopProfiling() {
             profiler.stop();
-        }
+
 
         function clearMetrics() {
             profiler.clear();
-        }
+
 
         function exportResults() {
             profiler.exportToLocalStorage();
             alert('Results exported to localStorage. Check browser console.');
-        }
+
 
         function simulateTest(testName, url) {
             console.log('Simulating test:', testName, 'at', url);
@@ -618,7 +615,7 @@ process.on('SIGTERM', async () => {
                 const duration = performance.now() - startTime;
                 console.log(testName + ' simulation completed in', duration.toFixed(2) + 'ms');
             }, 1000 + Math.random() * 2000);
-        }
+
 
         // Auto-start profiling when page loads
         window.addEventListener('load', () => {
@@ -629,7 +626,7 @@ process.on('SIGTERM', async () => {
     </script>
 </body>
 </html>`;
-  }
+
 
   /**
    * Perform system health check
@@ -654,13 +651,13 @@ process.on('SIGTERM', async () => {
       if (response.ok) {
         const health = await response.json();
         healthData.server.details = health;
-      }
-    } catch (error) {
+
+ catch (error) {
       healthData.server = {
         available: false,
         error: error.message
       };
-    }
+
 
     // System metrics
     try {
@@ -670,14 +667,14 @@ process.on('SIGTERM', async () => {
         
         const memory = execSync('free -m | grep Mem', { encoding: 'utf8' });
         healthData.system.memory = memory.trim();
-      }
-    } catch (error) {
+
+ catch (error) {
       healthData.system.error = error.message;
-    }
+
 
     this.results.systemHealth.push(healthData);
     console.log(`✅ ${phase} health check completed`);
-  }
+
 
   /**
    * Generate comprehensive performance analysis report
@@ -707,11 +704,11 @@ process.on('SIGTERM', async () => {
     // Generate HTML report if requested
     if (this.config.reporting.generateHTML) {
       await this.generateHTMLReport(report);
-    }
+
 
     console.log(`✅ Performance analysis report generated: ${jsonPath}`);
     return report;
-  }
+
 
   /**
    * Generate executive summary
@@ -729,7 +726,7 @@ process.on('SIGTERM', async () => {
       systemStability: this.assessSystemStability(),
       overallPerformanceGrade: this.calculateOverallGrade()
     };
-  }
+
 
   /**
    * Assess system stability
@@ -740,7 +737,7 @@ process.on('SIGTERM', async () => {
 
     const serverAvailable = healthChecks.every(check => check.server?.available);
     return serverAvailable ? 'stable' : 'unstable';
-  }
+
 
   /**
    * Calculate overall performance grade
@@ -754,7 +751,7 @@ process.on('SIGTERM', async () => {
     if (summary.testSuccessRate >= 70) return 'C';
     if (summary.testSuccessRate >= 50) return 'D';
     return 'F';
-  }
+
 
   /**
    * Aggregate performance metrics
@@ -767,7 +764,7 @@ process.on('SIGTERM', async () => {
     };
 
     return metrics;
-  }
+
 
   /**
    * Load server metrics from profiles
@@ -790,11 +787,11 @@ process.on('SIGTERM', async () => {
         summary: profileData.summary,
         recommendations: profileData.recommendations
       };
-    } catch (error) {
+ catch (error) {
       console.warn('Failed to load server metrics:', error.message);
       return null;
-    }
-  }
+
+
 
   /**
    * Load client metrics from localStorage
@@ -805,7 +802,7 @@ process.on('SIGTERM', async () => {
     return {
       note: 'Client metrics available in browser localStorage after running client profiler'
     };
-  }
+
 
   /**
    * Aggregate load test metrics
@@ -824,7 +821,7 @@ process.on('SIGTERM', async () => {
       averageDuration: avgDuration,
       successRate: (successful.length / this.results.loadTestResults.length) * 100
     };
-  }
+
 
   /**
    * Generate performance recommendations
@@ -842,7 +839,7 @@ process.on('SIGTERM', async () => {
         recommendation: 'Investigate and resolve test failures to improve system reliability',
         impact: 'System may not handle expected load levels'
       });
-    }
+
 
     // System stability
     if (this.assessSystemStability() === 'unstable') {
@@ -853,7 +850,7 @@ process.on('SIGTERM', async () => {
         recommendation: 'Review server logs and system resources to identify stability issues',
         impact: 'Service interruptions may occur under load'
       });
-    }
+
 
     // Add generic performance recommendations
     recommendations.push({
@@ -865,7 +862,7 @@ process.on('SIGTERM', async () => {
     });
 
     return recommendations;
-  }
+
 
   /**
    * Generate chart data for visualization
@@ -880,9 +877,9 @@ process.on('SIGTERM', async () => {
       systemHealth: {
         timestamps: this.results.systemHealth.map(h => h.timestamp),
         serverAvailability: this.results.systemHealth.map(h => h.server?.available ? 1 : 0)
-      }
+
     };
-  }
+
 
   /**
    * Generate HTML report
@@ -970,7 +967,7 @@ process.on('SIGTERM', async () => {
     await fs.writeFile(htmlPath, htmlContent);
     
     console.log(`📄 HTML report generated: ${htmlPath}`);
-  }
+
 
   /**
    * Utility methods
@@ -978,15 +975,15 @@ process.on('SIGTERM', async () => {
   async ensureOutputDir(): Promise<void> {
     try {
       await fs.access(this.config.reporting.outputDir);
-    } catch (error) {
+ catch (error) {
       await fs.mkdir(this.config.reporting.outputDir, { recursive: true });
-    }
-  }
+
+
 
   delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-}
+
+
 
 /**
  * Main execution
@@ -1005,15 +1002,15 @@ async function runPerformanceAnalysis(): Promise<any> {
     console.log(`Total Duration: ${Math.round((results.endTime - results.startTime) / (1000 * 60))} minutes`);
     
     return results;
-  } catch (error) {
+ catch (error) {
     console.error('Performance analysis failed:', error);
     process.exit(1);
-  }
-}
+
+
 
 // Run if called directly
 if (require.main === module) {
   runPerformanceAnalysis().catch(console.error);
-}
+
 
 module.exports = { PerformanceTestOrchestrator, runPerformanceAnalysis };

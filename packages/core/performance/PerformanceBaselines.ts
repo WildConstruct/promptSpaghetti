@@ -7,8 +7,7 @@
 import { z } from 'zod';
 
 // Performance baseline categories
-export enum BaselineCategory {
-  CORE_ENGINE = 'core_engine',
+export enum BaselineCategory { CORE_ENGINE = 'core_engine',
   API_PERFORMANCE = 'api_performance',
   UI_RENDERING = 'ui_rendering',
   MEMORY_USAGE = 'memory_usage',
@@ -43,54 +42,54 @@ export enum BaselineCategory {
   timestamp: z.date(),
   environment: z.nativeEnum(TestEnvironment),
   metadata: z.record(z.unknown()).optional(),
-  tags: z.array(z.string()).optional(),
+  tags: z.array(z.string()).optional() }
 });
 
 export type PerformanceMeasurement = z.infer<typeof PerformanceMeasurementSchema>;
 
 // Performance baseline definition schema
-export const PerformanceBaselineSchema = z.object({)
-  id: z.string(),
-  name: z.string(),
-  description: z.string(),
-  category: z.nativeEnum(BaselineCategory),
-  type: z.nativeEnum(MeasurementType),
-  unit: z.string(),
+export const PerformanceBaselineSchema = z.object({ )
+  id: z.string()
+  name: z.string()
+  description: z.string()
+  category: z.nativeEnum(BaselineCategory)
+  type: z.nativeEnum(MeasurementType)
+  unit: z.string()
   // Baseline thresholds
-  target: z.number(),              // Target performance value,
-  warning: z.number(),             // Warning threshold,
-  critical: z.number(),            // Critical threshold,
+  target: z.number(),              // Target performance value
+  warning: z.number(),             // Warning threshold
+  critical: z.number(),            // Critical threshold
   // Baseline statistics
-  baseline: z.number(),            // Current baseline value,
-  minimum: z.number().optional(),  // Minimum acceptable value,
-  maximum: z.number().optional(),  // Maximum acceptable value,
+  baseline: z.number(),            // Current baseline value
+  minimum: z.number().optional(),  // Minimum acceptable value
+  maximum: z.number().optional(),  // Maximum acceptable value
   // Metadata
-  environment: z.nativeEnum(TestEnvironment),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  version: z.string(),
-  tags: z.array(z.string()),
+  environment: z.nativeEnum(TestEnvironment)
+  createdAt: z.date()
+  updatedAt: z.date()
+  version: z.string()
+  tags: z.array(z.string())
   // Historical data
-  measurements: z.array(PerformanceMeasurementSchema),
+  measurements: z.array(PerformanceMeasurementSchema)
   // Configuration
-  enabled: z.boolean(),
-  alerting: z.boolean(),
-  trending: z.boolean(),
+  enabled: z.boolean()
+  alerting: z.boolean()
+  trending: z.boolean() }
 });
 
 export type PerformanceBaseline = z.infer<typeof PerformanceBaselineSchema>;
 
 // Performance baseline collection schema
-export const PerformanceBaselineCollectionSchema = z.object({)
-  version: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  environment: z.nativeEnum(TestEnvironment),
-  baselines: z.array(PerformanceBaselineSchema),
-  metadata: z.object({,)
-  systemInfo: z.record(z.unknown()),
-  buildInfo: z.record(z.unknown()),
-  testConfig: z.record(z.unknown()),
+export const PerformanceBaselineCollectionSchema = z.object({ )
+  version: z.string()
+  createdAt: z.date()
+  updatedAt: z.date()
+  environment: z.nativeEnum(TestEnvironment)
+  baselines: z.array(PerformanceBaselineSchema)
+  metadata: z.object({);
+  systemInfo: z.record(z.unknown())
+  buildInfo: z.record(z.unknown())
+  testConfig: z.record(z.unknown()) }
 }).optional()
 });
 
@@ -100,16 +99,15 @@ export type PerformanceBaselineCollection = z.infer<typeof PerformanceBaselineCo
  * 
  * Central management system for performance baselines
  */
-export class PerformanceBaselineManager {
-  private baselines: Map<string, PerformanceBaseline> = new Map();
+export class PerformanceBaselineManager { private baselines: Map<string, PerformanceBaseline> = new Map();
   private measurements: PerformanceMeasurement = [];
   private environment: TestEnvironment;
-  constructor(environment: TestEnvironment = TestEnvironment.DEVELOPMENT) {,
+  constructor(environment: TestEnvironment = TestEnvironment.DEVELOPMENT) {
   this.environment = environment;
   /**
   * Create a new performance baseline
   */
-  createBaseline(config: {)
+  createBaseline(config: {) }
   id: string;
   name: string;
   description: string;
@@ -120,27 +118,26 @@ export class PerformanceBaselineManager {
   warning: number;
   critical: number;
   tags?: string;
-}): PerformanceBaseline {
-  const baseline: PerformanceBaseline = {,
-  id: config.id,
-  name: config.name,
-  description: config.description,
-  category: config.category,
-  type: config.type,
-  unit: config.unit,
-  target: config.target,
-  warning: config.warning,
-  critical: config.critical,
-  baseline: config.target, // Initial baseline equals target,
-  environment: this.environment,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  version: '1.0.0',
-  tags: config.tags || [],
-  measurements: [],
-  enabled: true,
-  alerting: true,
-  trending: true,
+}): PerformanceBaseline { const baseline: PerformanceBaseline = {
+  id: config.id
+  name: config.name
+  description: config.description
+  category: config.category
+  type: config.type
+  unit: config.unit
+  target: config.target
+  warning: config.warning
+  critical: config.critical
+  baseline: config.target, // Initial baseline equals target
+  environment: this.environment
+  createdAt: new Date()
+  updatedAt: new Date()
+  version: '1.0.0'
+  tags: config.tags || []
+  measurements: []
+  enabled: true
+  alerting: true
+  trending: true }
 };
     this.baselines.set(baseline.id, baseline);
     return baseline;
@@ -151,11 +148,10 @@ export class PerformanceBaselineManager {
     const baseline = this.baselines.get(baselineId);
     if (!baseline) {
       throw new Error(`Baseline not found: ${baselineId}`);}
-    const fullMeasurement: PerformanceMeasurement = {
-  ...measurement,
-  id: crypto.randomUUID(),
-  timestamp: new Date(),
-  environment: this.environment,
+    const fullMeasurement: PerformanceMeasurement = { ...measurement
+  id: crypto.randomUUID()
+  timestamp: new Date()
+  environment: this.environment }
 };
     baseline.measurements.push(fullMeasurement);
     this.measurements.push(fullMeasurement);
@@ -165,8 +161,7 @@ export class PerformanceBaselineManager {
   /**
    * Update baseline statistics based on recent measurements
    */
-  private updateBaselineStatistics(baselineId: string): void {
-    const baseline = this.baselines.get(baselineId);
+  private updateBaselineStatistics(baselineId: string): void { const baseline = this.baselines.get(baselineId);
     if (!baseline || baseline.measurements.length === 0) return;
     const recentMeasurements = baseline.measurements.slice(-50); // Last 50 measurements;
     const values = recentMeasurements.map(m => m.value);
@@ -188,7 +183,7 @@ export class PerformanceBaselineManager {
   /**
    * Check if a measurement violates baseline thresholds
    */
-  checkThreshold(baselineId: string, value: number): {
+  checkThreshold(baselineId: string, value: number): { }
   status: 'ok' | 'warning' | 'critical';
     message: string;
   baseline: PerformanceBaseline;
@@ -203,29 +198,28 @@ export class PerformanceBaselineManager {
       if (value >= baseline.critical) {
         status = 'critical';
         message = `Critical: ${value}${baseline.unit} exceeds critical threshold of ${baseline.critical}${baseline.unit}`;}
-      } else if (value >= baseline.warning) {
+ else if (value >= baseline.warning) {
         status = 'warning';
         message = `Warning: ${value}${baseline.unit} exceeds warning threshold of ${baseline.warning}${baseline.unit}`;}
-    } else {
+ else {
       if (value <= baseline.critical) {
         status = 'critical';
         message = `Critical: ${value}${baseline.unit} below critical threshold of ${baseline.critical}${baseline.unit}`;}
-      } else if (value <= baseline.warning) {
+ else if (value <= baseline.warning) {
         status = 'warning';
         message = `Warning: ${value}${baseline.unit} below warning threshold of ${baseline.warning}${baseline.unit}`;}
     return { status, message, baseline };
   /**
    * Determine if lower values are better for a given metric
    */
-  private isLowerBetter(category: BaselineCategory, type: MeasurementType): boolean {
-    // For most performance metrics, lower values are better
-    const lowerIsBetter = [;
+  private isLowerBetter(category: BaselineCategory, type: MeasurementType): boolean { // For most performance metrics, lower values are better
+    const lowerIsBetter = [
       MeasurementType.DURATION,
       MeasurementType.MEMORY,
       MeasurementType.BYTES
     ];
     // For some metrics, higher values are better
-    const higherIsBetter = [;
+    const higherIsBetter = [
       MeasurementType.THROUGHPUT,
       MeasurementType.PERCENTAGE // usually for success rates, etc.
     ];
@@ -247,7 +241,7 @@ export class PerformanceBaselineManager {
   /**
    * Get performance trend for a baseline
    */
-  getTrend(baselineId: string, days: number = 7): {
+  getTrend(baselineId: string, days: number = 7): { }
   trend: 'improving' | 'stable' | 'degrading';
     percentage: number;
   measurements: PerformanceMeasurement;
@@ -259,11 +253,10 @@ export class PerformanceBaselineManager {
     const recentMeasurements = baseline.measurements;
       .filter(m => m.timestamp >= cutoffDate)
       .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-    if (recentMeasurements.length < 2) {
-  return {
+    if (recentMeasurements.length < 2) { return {
   trend: 'stable',
   percentage: 0,
-  measurements: recentMeasurements,
+  measurements: recentMeasurements }
 };
     // Calculate trend
     const firstHalf = recentMeasurements.slice(0, Math.floor(recentMeasurements.length / 2));
@@ -275,35 +268,32 @@ export class PerformanceBaselineManager {
     let trend: 'improving' | 'stable' | 'degrading';
     if (Math.abs(percentage) < 5) {
       trend = 'stable'
-  } else if (isLowerBetter) {
-  trend = percentage < 0 ? 'improving' : 'degrading'
-  } else {
+ else if (isLowerBetter) { trend = percentage < 0 ? 'improving' : 'degrading' }
+ else {
       trend = percentage > 0 ? 'improving' : 'degrading';
     return { trend, percentage: Math.abs(percentage), measurements: recentMeasurements };
   /**
    * Generate baseline report
    */
-  generateReport(): {
-  summary: {
+  generateReport(): { summary: { }
   totalBaselines: number;
   activeBaselines: number;
   categories: Record<BaselineCategory, number>;
   alerts: number;
 };
-    baselines: Array<{
+    baselines: Array<{ ,
   baseline: PerformanceBaseline;
-  status: 'ok' | 'warning' | 'critical';
+  status: 'ok' | 'warning' | 'critical' }
   trend: 'improving' | 'stable' | 'degrading';
   lastMeasurement?: PerformanceMeasurement;
-}>;
+>;
     const baselines = Array.from(this.baselines.values());
     const categories = {} as Record<BaselineCategory, number>;
     let alerts = 0;
     // Count categories
-    Object.values(BaselineCategory).forEach(cat => {)
-  categories[cat] = baselines.filter(b => b.category === cat).length;
-    });
-    const baselineReports = baselines.map(baseline => {)
+    Object.values(BaselineCategory).forEach(cat => { )
+  categories[cat] = baselines.filter(b => b.category === cat).length });
+    const baselineReports = baselines.map(baseline => { )
   const lastMeasurement = baseline.measurements[baseline.measurements.length - 1];
   const status = lastMeasurement ;
   ? this.checkThreshold(baseline.id, lastMeasurement.value).status
@@ -311,230 +301,227 @@ export class PerformanceBaselineManager {
   if (status !== 'ok') alerts++;
   const trend = this.getTrend(baseline.id).trend;
   return {
-  baseline,
-  status,
-  trend,
+  baseline
+  status
+  trend }
   lastMeasurement
 };
     });
-    return {
-  summary: {
-  totalBaselines: baselines.length,
-  activeBaselines: baselines.filter(b => b.enabled).length,
-  categories,
+    return { summary: {
+  totalBaselines: baselines.length
+  activeBaselines: baselines.filter(b => b.enabled).length
+  categories }
   alerts
-},
+
   baselines: baselineReports;
   };
   /**
    * Export baselines to JSON
    */
-  export(): PerformanceBaselineCollection {
-  return {
-  version: '1.0.0',
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  environment: this.environment,
-  baselines: Array.from(this.baselines.values()),
+  export(): PerformanceBaselineCollection { return {
+  version: '1.0.0'
+  createdAt: new Date()
+  updatedAt: new Date()
+  environment: this.environment
+  baselines: Array.from(this.baselines.values())
   metadata: {
   systemInfo: {
-  nodeVersion: process.version,
-  platform: process.platform,
-  arch: process.arch,
-},
-  buildInfo: {
-  timestamp: new Date().toISOString(),
-},
-  testConfig: {
-  environment: this.environment,
+  nodeVersion: process.version
+  platform: process.platform
+  arch: process.arch }
+
+  buildInfo: { 
+  timestamp: new Date().toISOString() }
+
+  testConfig: { 
+  environment: this.environment }
 };
   /**
    * Import baselines from JSON
    */
-  import(collection: PerformanceBaselineCollection): void {
-  for (const baseline of collection.baselines) {
+  import(collection: PerformanceBaselineCollection): void { for (const baseline of collection.baselines) {
   this.baselines.set(baseline.id, baseline);
   /**
   * Clear all baselines and measurements
   */
-  clear(): void {,
+  clear(): void {
   this.baselines.clear();
   this.measurements = [];
   // Pre-defined performance baselines for PromptScape
-  export const createDefaultBaselines = (manager: PerformanceBaselineManager): void => {,
+  export const createDefaultBaselines = (manager: PerformanceBaselineManager): void => {
   // Core Engine Performance Baselines
   manager.createBaseline({)
-  id: 'core-engine-simple-execution',
-  name: 'Simple Graph Execution',
-  description: 'Time to execute a simple graph with basic nodes',
-  category: BaselineCategory.CORE_ENGINE,
-  type: MeasurementType.DURATION,
-  unit: 'ms',
-  target: 10,
-  warning: 50,
-  critical: 100,
-  tags: ['core', 'execution', 'basic'],
+  id: 'core-engine-simple-execution'
+  name: 'Simple Graph Execution'
+  description: 'Time to execute a simple graph with basic nodes'
+  category: BaselineCategory.CORE_ENGINE
+  type: MeasurementType.DURATION
+  unit: 'ms'
+  target: 10
+  warning: 50
+  critical: 100
+  tags: ['core', 'execution', 'basic'] }
 });
-  manager.createBaseline({)
-  id: 'core-engine-complex-execution',
-  name: 'Complex Graph Execution',
-  description: 'Time to execute complex graphs with advanced nodes',
-  category: BaselineCategory.CORE_ENGINE,
-  type: MeasurementType.DURATION,
-  unit: 'ms',
-  target: 100,
-  warning: 500,
-  critical: 1000,
-  tags: ['core', 'execution', 'complex'],
+  manager.createBaseline({ )
+  id: 'core-engine-complex-execution'
+  name: 'Complex Graph Execution'
+  description: 'Time to execute complex graphs with advanced nodes'
+  category: BaselineCategory.CORE_ENGINE
+  type: MeasurementType.DURATION
+  unit: 'ms'
+  target: 100
+  warning: 500
+  critical: 1000
+  tags: ['core', 'execution', 'complex'] }
 });
-  manager.createBaseline({)
-  id: 'core-engine-throughput',
-  name: 'Graph Execution Throughput',
-  description: 'Number of graph executions per second',
-  category: BaselineCategory.CORE_ENGINE,
-  type: MeasurementType.THROUGHPUT,
-  unit: 'ops/sec',
-  target: 100,
-  warning: 50,
-  critical: 10,
-  tags: ['core', 'throughput'],
+  manager.createBaseline({ )
+  id: 'core-engine-throughput'
+  name: 'Graph Execution Throughput'
+  description: 'Number of graph executions per second'
+  category: BaselineCategory.CORE_ENGINE
+  type: MeasurementType.THROUGHPUT
+  unit: 'ops/sec'
+  target: 100
+  warning: 50
+  critical: 10
+  tags: ['core', 'throughput'] }
 });
   // API Performance Baselines
-  manager.createBaseline({)
-  id: 'api-preview-endpoint',
-  name: 'Preview API Response Time',
-  description: 'Time for preview endpoint to generate variants',
-  category: BaselineCategory.API_PERFORMANCE,
-  type: MeasurementType.DURATION,
-  unit: 'ms',
-  target: 200,
-  warning: 400,
-  critical: 800,
-  tags: ['api', 'preview'],
+  manager.createBaseline({ )
+  id: 'api-preview-endpoint'
+  name: 'Preview API Response Time'
+  description: 'Time for preview endpoint to generate variants'
+  category: BaselineCategory.API_PERFORMANCE
+  type: MeasurementType.DURATION
+  unit: 'ms'
+  target: 200
+  warning: 400
+  critical: 800
+  tags: ['api', 'preview'] }
 });
-  manager.createBaseline({)
-  id: 'api-validation-endpoint',
-  name: 'Validation API Response Time',
-  description: 'Time for graph validation endpoint',
-  category: BaselineCategory.API_PERFORMANCE,
-  type: MeasurementType.DURATION,
-  unit: 'ms',
-  target: 50,
-  warning: 80,
-  critical: 150,
-  tags: ['api', 'validation'],
+  manager.createBaseline({ )
+  id: 'api-validation-endpoint'
+  name: 'Validation API Response Time'
+  description: 'Time for graph validation endpoint'
+  category: BaselineCategory.API_PERFORMANCE
+  type: MeasurementType.DURATION
+  unit: 'ms'
+  target: 50
+  warning: 80
+  critical: 150
+  tags: ['api', 'validation'] }
 });
   // UI Rendering Baselines
-  manager.createBaseline({)
-  id: 'ui-first-contentful-paint',
-  name: 'First Contentful Paint',
-  description: 'Time to first contentful paint (FCP)',
-  category: BaselineCategory.UI_RENDERING,
-  type: MeasurementType.DURATION,
-  unit: 'ms',
-  target: 800,
-  warning: 1200,
-  critical: 2000,
-  tags: ['ui', 'web-vitals', 'fcp'],
+  manager.createBaseline({ )
+  id: 'ui-first-contentful-paint'
+  name: 'First Contentful Paint'
+  description: 'Time to first contentful paint (FCP)'
+  category: BaselineCategory.UI_RENDERING
+  type: MeasurementType.DURATION
+  unit: 'ms'
+  target: 800
+  warning: 1200
+  critical: 2000
+  tags: ['ui', 'web-vitals', 'fcp'] }
 });
-  manager.createBaseline({)
-  id: 'ui-largest-contentful-paint',
-  name: 'Largest Contentful Paint',
-  description: 'Time to largest contentful paint (LCP)',
-  category: BaselineCategory.UI_RENDERING,
-  type: MeasurementType.DURATION,
-  unit: 'ms',
-  target: 1500,
-  warning: 2000,
-  critical: 4000,
-  tags: ['ui', 'web-vitals', 'lcp'],
+  manager.createBaseline({ )
+  id: 'ui-largest-contentful-paint'
+  name: 'Largest Contentful Paint'
+  description: 'Time to largest contentful paint (LCP)'
+  category: BaselineCategory.UI_RENDERING
+  type: MeasurementType.DURATION
+  unit: 'ms'
+  target: 1500
+  warning: 2000
+  critical: 4000
+  tags: ['ui', 'web-vitals', 'lcp'] }
 });
-  manager.createBaseline({)
-  id: 'ui-cumulative-layout-shift',
-  name: 'Cumulative Layout Shift',
-  description: 'Cumulative layout shift score (CLS)',
-  category: BaselineCategory.UI_RENDERING,
-  type: MeasurementType.RATIO,
-  unit: '',
-  target: 0.05,
-  warning: 0.08,
-  critical: 0.15,
-  tags: ['ui', 'web-vitals', 'cls'],
+  manager.createBaseline({ )
+  id: 'ui-cumulative-layout-shift'
+  name: 'Cumulative Layout Shift'
+  description: 'Cumulative layout shift score (CLS)'
+  category: BaselineCategory.UI_RENDERING
+  type: MeasurementType.RATIO
+  unit: ''
+  target: 0.05
+  warning: 0.08
+  critical: 0.15
+  tags: ['ui', 'web-vitals', 'cls'] }
 });
   // Memory Usage Baselines
-  manager.createBaseline({)
-  id: 'memory-heap-usage',
-  name: 'Heap Memory Usage',
-  description: 'Peak heap memory usage during execution',
-  category: BaselineCategory.MEMORY_USAGE,
-  type: MeasurementType.MEMORY,
-  unit: 'MB',
-  target: 50,
-  warning: 80,
-  critical: 100,
-  tags: ['memory', 'heap'],
+  manager.createBaseline({ )
+  id: 'memory-heap-usage'
+  name: 'Heap Memory Usage'
+  description: 'Peak heap memory usage during execution'
+  category: BaselineCategory.MEMORY_USAGE
+  type: MeasurementType.MEMORY
+  unit: 'MB'
+  target: 50
+  warning: 80
+  critical: 100
+  tags: ['memory', 'heap'] }
 });
-  manager.createBaseline({)
-  id: 'memory-graph-storage',
-  name: 'Graph Memory Storage',
-  description: 'Memory usage for storing large graphs',
-  category: BaselineCategory.MEMORY_USAGE,
-  type: MeasurementType.MEMORY,
-  unit: 'MB',
-  target: 10,
-  warning: 20,
-  critical: 50,
-  tags: ['memory', 'graph', 'storage'],
+  manager.createBaseline({ )
+  id: 'memory-graph-storage'
+  name: 'Graph Memory Storage'
+  description: 'Memory usage for storing large graphs'
+  category: BaselineCategory.MEMORY_USAGE
+  type: MeasurementType.MEMORY
+  unit: 'MB'
+  target: 10
+  warning: 20
+  critical: 50
+  tags: ['memory', 'graph', 'storage'] }
 });
   // Build Performance Baselines
-  manager.createBaseline({)
-  id: 'build-typescript-compilation',
-  name: 'TypeScript Compilation Time',
-  description: 'Time to compile TypeScript to JavaScript',
-  category: BaselineCategory.BUILD_PERFORMANCE,
-  type: MeasurementType.DURATION,
-  unit: 's',
-  target: 15,
-  warning: 30,
-  critical: 60,
-  tags: ['build', 'typescript'],
+  manager.createBaseline({ )
+  id: 'build-typescript-compilation'
+  name: 'TypeScript Compilation Time'
+  description: 'Time to compile TypeScript to JavaScript'
+  category: BaselineCategory.BUILD_PERFORMANCE
+  type: MeasurementType.DURATION
+  unit: 's'
+  target: 15
+  warning: 30
+  critical: 60
+  tags: ['build', 'typescript'] }
 });
-  manager.createBaseline({)
-  id: 'build-bundle-size',
-  name: 'Production Bundle Size',
-  description: 'Size of production JavaScript bundle',
-  category: BaselineCategory.BUILD_PERFORMANCE,
-  type: MeasurementType.BYTES,
-  unit: 'KB',
-  target: 500,
-  warning: 1000,
-  critical: 2000,
-  tags: ['build', 'bundle', 'size'],
+  manager.createBaseline({ )
+  id: 'build-bundle-size'
+  name: 'Production Bundle Size'
+  description: 'Size of production JavaScript bundle'
+  category: BaselineCategory.BUILD_PERFORMANCE
+  type: MeasurementType.BYTES
+  unit: 'KB'
+  target: 500
+  warning: 1000
+  critical: 2000
+  tags: ['build', 'bundle', 'size'] }
 });
   // Load Testing Baselines
-  manager.createBaseline({)
-  id: 'load-concurrent-users',
-  name: 'Concurrent Users Capacity',
-  description: 'Maximum concurrent users supported',
-  category: BaselineCategory.LOAD_TESTING,
-  type: MeasurementType.COUNT,
-  unit: 'users',
-  target: 100,
-  warning: 50,
-  critical: 10,
-  tags: ['load', 'concurrent', 'users'],
+  manager.createBaseline({ )
+  id: 'load-concurrent-users'
+  name: 'Concurrent Users Capacity'
+  description: 'Maximum concurrent users supported'
+  category: BaselineCategory.LOAD_TESTING
+  type: MeasurementType.COUNT
+  unit: 'users'
+  target: 100
+  warning: 50
+  critical: 10
+  tags: ['load', 'concurrent', 'users'] }
 });
-  manager.createBaseline({)
-  id: 'load-requests-per-second',
-  name: 'Requests Per Second',
-  description: 'Maximum requests per second under load',
-  category: BaselineCategory.LOAD_TESTING,
-  type: MeasurementType.THROUGHPUT,
-  unit: 'req/s',
-  target: 1000,
-  warning: 500,
-  critical: 100,
-  tags: ['load', 'throughput', 'rps'],
+  manager.createBaseline({ )
+  id: 'load-requests-per-second'
+  name: 'Requests Per Second'
+  description: 'Maximum requests per second under load'
+  category: BaselineCategory.LOAD_TESTING
+  type: MeasurementType.THROUGHPUT
+  unit: 'req/s'
+  target: 1000
+  warning: 500
+  critical: 100
+  tags: ['load', 'throughput', 'rps'] }
 });
 };
 

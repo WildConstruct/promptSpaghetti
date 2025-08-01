@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  ExportJob, 
+import { ExportJob, 
   ExportShare, 
-  CreateExportShare, 
+  CreateExportShare }
   ShareAccessLevel 
-} from '../../types/export';
-import { 
-  FiShare2, 
+ from '../../types/export';
+import { FiShare2, 
   FiX, 
   FiCopy, 
   FiEye, 
@@ -14,40 +12,38 @@ import {
   FiClock, 
   FiUsers,
   FiCheck,
-  FiAlertCircle,
+  FiAlertCircle }
   FiGlobe
-} from 'react-icons/fi';
-}
-interface ShareDialogProps {
-  exportJob: ExportJob;
+ from 'react-icons/fi';
+
+
+interface ShareDialogProps { exportJob: ExportJob;
   onClose: () => void;
   onShareCreated: (share: ExportShare) => void;
   className?: string;
-  const ACCESS_LEVELS: Array<{
+  const ACCESS_LEVELS: Array<{ }
   value: ShareAccessLevel;
   label: string;
   description: string;
   icon: React.ComponentType;
-}
-}> = [
-  {
-  value: 'public',
+
+
+> = [
+  { value: 'public',
   label: 'Public',
   description: 'Anyone with the link can access',
-  icon: FiGlobe,
-}
-  {
-  value: 'password_protected',
+  icon: FiGlobe }
+
+  { value: 'password_protected',
   label: 'Password Protected',
   description: 'Requires password to access',
-  icon: FiLock,
-}
-  {
-    value: 'private',
+  icon: FiLock }
+
+  { value: 'private',
     label: 'Private',
-    description: 'Only you can access',
+    description: 'Only you can access' }
     icon: FiEye];
-const EXPIRATION_OPTIONS = [;
+const EXPIRATION_OPTIONS = [
   { value: null, label: 'Never expires' },
   { value: 1, label: '1 day' },
   { value: 7, label: '1 week' },
@@ -55,30 +51,28 @@ const EXPIRATION_OPTIONS = [;
   { value: 90, label: '3 months' }
 ];
 
-export const ShareDialog: React.FC<ShareDialogProps> = ({)
-  exportJob,
-  onClose,
-  onShareCreated,
+export const ShareDialog: React.FC<ShareDialogProps> = ({ )
+  exportJob
+  onClose
+  onShareCreated }
   className = ''
-}) => {
-  const [shareData, setShareData] = useState<Partial<CreateExportShare>>({)
-  export_job_id: exportJob.id,
-  access_level: 'public',
-  password: '',
-  max_downloads: null,
-  expires_in_days: null,
-  description: '',
-  allow_download: true,
-  allow_preview: true,
-  track_access: true,
-  notify_on_access: false,
+}) => { const [shareData, setShareData] = useState<Partial<CreateExportShare>>({)
+  export_job_id: exportJob.id
+  access_level: 'public'
+  password: ''
+  max_downloads: null
+  expires_in_days: null
+  description: ''
+  allow_download: true
+  allow_preview: true
+  track_access: true
+  notify_on_access: false }
 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [createdShare, setCreatedShare] = useState<ExportShare | null>(null);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => { e.preventDefault();
   setLoading(true);
   setError(null);
   try {
@@ -91,45 +85,33 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
   const expireDate = new Date();
   expireDate.setDate(expireDate.getDate() + shareData.expires_in_days);
   expires_at = expireDate.toISOString();
-  const sharePayload: CreateExportShare = {,
-  ...shareData,
-  expires_at,
-  export_job_id: exportJob.id,
-} as CreateExportShare;
-      const response = await fetch('/api/export/shares', {)
-  method: 'POST',
+  const sharePayload: CreateExportShare = {
+  ...shareData
+  expires_at
+  export_job_id: exportJob.id }
+ as CreateExportShare;
+      const response = await fetch('/api/export/shares', { )
+  method: 'POST'
   headers: {
-  'Content-Type': 'application/json',
-},
+  'Content-Type': 'application/json' }
+
   body: JSON.stringify(sharePayload);
   });
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!response.ok) { const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to create share');
       const result = await response.json();
       const newShare = result.data;
       setCreatedShare(newShare);
-      onShareCreated(newShare);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to create share');
-} finally {
-      setLoading(false);
-  };
-  const handleCopyLink = async (shareUrl: string) => {
-    try {
+      onShareCreated(newShare) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to create share') } finally { setLoading(false) };
+  const handleCopyLink = async (shareUrl: string) => { try {
       await navigator.clipboard.writeText(shareUrl);
       setCopyFeedback('Link copied to clipboard!');
-      setTimeout(() => setCopyFeedback(null), 3000);
-    } catch (err) {
-      setCopyFeedback('Failed to copy link');
-      setTimeout(() => setCopyFeedback(null), 3000);
-  };
-  const formatFileSize = (bytes: number) => {
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      setTimeout(() => setCopyFeedback(null), 3000) } catch (err) { setCopyFeedback('Failed to copy link');
+      setTimeout(() => setCopyFeedback(null), 3000) };
+  const formatFileSize = (bytes: number) => { const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     if (bytes === 0) return '0 Bytes';
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
-  };
+    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i] };
   const getShareUrl = (share: ExportShare) => {
     return `${window.location.origin}/shared/${share.share_token}`;}
   };
@@ -277,20 +259,20 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
               return;
                 <label
                   key={level.value}
-                  className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors ${
+                  className={ `flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors ${
   shareData.access_level === level.value
-  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20',
-  : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800',
-}`}
+  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+  : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800' }
+`}
                 >
                   <input
                     type="radio"
                     name="access_level"
                     value={level.value}
                     checked={shareData.access_level === level.value}
-                    onChange={(e) => setShareData(prev => ({)
-  ...prev,
-  access_level: e.target.value as ShareAccessLevel,
+                    onChange={ (e) => setShareData(prev => ({)
+  ...prev
+  access_level: e.target.value as ShareAccessLevel }
 }))}
                     className="sr-only"
                   />
@@ -331,9 +313,9 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
           </label>
           <select
             value={shareData.expires_in_days || ''}
-            onChange={(e) => setShareData(prev => ({)
-  ...prev,
-  expires_in_days: e.target.value ? parseInt(e.target.value) : null,
+            onChange={ (e) => setShareData(prev => ({)
+  ...prev
+  expires_in_days: e.target.value ? parseInt(e.target.value) : null }
 }))}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
@@ -351,9 +333,9 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
           </label>
           <select
             value={shareData.max_downloads || ''}
-            onChange={(e) => setShareData(prev => ({)
-  ...prev,
-  max_downloads: e.target.value ? parseInt(e.target.value) : null,
+            onChange={ (e) => setShareData(prev => ({)
+  ...prev
+  max_downloads: e.target.value ? parseInt(e.target.value) : null }
 }))}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >

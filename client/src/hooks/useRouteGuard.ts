@@ -7,7 +7,7 @@ import { useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 
-}
+
 export interface RouteGuardOptions {
   requireAuth?: boolean;
   requiredRoles?: string;
@@ -15,8 +15,9 @@ export interface RouteGuardOptions {
   redirectTo?: string;
   onUnauthorized?: () => void;
   onForbidden?: () => void;
-}
-}
+
+
+
 export const useRouteGuard = (options: RouteGuardOptions = {}) => {
   const {
     requireAuth = true,
@@ -25,7 +26,7 @@ export const useRouteGuard = (options: RouteGuardOptions = {}) => {
     redirectTo = '/login',
     onUnauthorized,
     onForbidden
-  } = options;
+ = options;
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user, isLoading, setReturnUrl } = useAuthStore();
@@ -66,10 +67,10 @@ export const useRouteGuard = (options: RouteGuardOptions = {}) => {
         setReturnUrl(location.pathname + location.search);
         onUnauthorized?.();
         navigate(redirectTo, { replace: true });
-      } else if (accessResult.reason === 'insufficient_permissions') {
+ else if (accessResult.reason === 'insufficient_permissions') {
   onForbidden?.();
   navigate('/unauthorized', { )
-  state: {
+  state: {,
   from: location,
   reason: 'insufficient_permissions',
 },
@@ -102,7 +103,7 @@ export const useRouteGuard = (options: RouteGuardOptions = {}) => {
   const requireRole = useCallback((roles: string, requireAll = false) => {
   if (!canAccessRole(roles, requireAll)) {
   navigate('/unauthorized', { )
-  state: {
+  state: {,
   from: location,
   reason: 'insufficient_permissions',
 },

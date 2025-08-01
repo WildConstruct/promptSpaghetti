@@ -9,6 +9,7 @@ import { NodeProps } from 'reactflow';
 import '../../styles/smoothAnimations.css';
 
 }
+}
 export interface SmoothNodeWrapperProps extends NodeProps {
     children: React.ReactNode;
     nodeType?: string;
@@ -24,6 +25,7 @@ export declare const SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps>;
  */
 
 }
+}
 export interface NodeCreationAnimatorProps {
     children: React.ReactNode;
     isCreating: boolean;
@@ -32,4 +34,5 @@ export interface NodeCreationAnimatorProps {
 export declare const NodeCreationAnimator: React.FC<NodeCreationAnimatorProps>;
 export default SmoothNodeWrapper;
 //# sourceMappingURL=SmoothNodeWrapper.d.ts.map
+}
 }

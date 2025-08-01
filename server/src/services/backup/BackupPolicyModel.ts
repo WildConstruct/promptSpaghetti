@@ -60,8 +60,8 @@ export type PolicyStatus = 'draft' | 'active' | 'suspended' | 'expired' | 'archi
 // Core Policy Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface BackupPolicy {
   policy_id: string;
   name: string;
@@ -81,8 +81,9 @@ export interface BackupPolicy {
     business_units?: string[];
     inclusion_patterns?: string[];
     exclusion_patterns?: string[];
-}
-}
+
+
+
   };
   
   // Backup schedule configuration
@@ -164,10 +165,10 @@ export interface BackupPolicy {
   approval_required: boolean;
   approved_by?: string;
   approved_at?: Date;
-}
 
-}
-}
+
+
+
 export interface PolicyRule {
   rule_id: string;
   policy_id: string;
@@ -181,8 +182,9 @@ export interface PolicyRule {
     operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not_in' | 'contains' | 'regex';
     value: Error;
     data_type: 'string' | 'number' | 'boolean' | 'date' | 'array';
-}
-}
+
+
+
   };
   
   // Rule action
@@ -197,10 +199,10 @@ export interface PolicyRule {
   execution_order: number;
   created_at: Date;
   created_by: string;
-}
 
-}
-}
+
+
+
 export interface PolicyExecution {
   execution_id: string;
   policy_id: string;
@@ -225,12 +227,13 @@ export interface PolicyExecution {
   warnings: PolicyExecutionWarning[];
   
   executed_by: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyExecutionError {
   error_id: string;
   error_type: 'configuration' | 'resource' | 'permission' | 'storage' | 'network';
@@ -239,12 +242,13 @@ export interface PolicyExecutionError {
   is_recoverable: boolean;
   suggested_action?: string;
   occurred_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyExecutionWarning {
   warning_id: string;
   warning_type: 'performance' | 'capacity' | 'compliance' | 'quality';
@@ -252,16 +256,18 @@ export interface PolicyExecutionWarning {
   warning_context: Record<string, any>;
   impact_level: 'low' | 'medium' | 'high';
   occurred_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyAnalytics {
   policy_id: string;
-}
-}
+
+
+
   analysis_period: { start: Date; end: Date };
   
   // Execution metrics
@@ -309,8 +315,8 @@ export interface PolicyAnalytics {
     recommendation: string;
     estimated_savings: string;
     implementation_effort: 'low' | 'medium' | 'high';
-  }[];
-}
+[];
+
 
 // =============================================================================
 // Backup Policy Model Service Implementation
@@ -323,7 +329,7 @@ export class BackupPolicyModelService {
   constructor(database: Database, auditService: AuditService) {
     this.db = database;
     this.auditService = auditService;
-  }
+
 
   // =============================================================================
   // Policy Management
@@ -364,12 +370,12 @@ export class BackupPolicyModelService {
         scope_type: policy.scope.scope_type,
         frequency: policy.schedule.frequency,
         priority: policy.priority
-  }
+
       severity: 'info'
     });
 
     return policyId;
-  }
+
 
   /**
    * Get backup policy by ID
@@ -382,10 +388,10 @@ export class BackupPolicyModelService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapRowToBackupPolicy(result.rows[0]);
-  }
+
 
   /**
    * List backup policies with filtering
@@ -398,7 +404,7 @@ export class BackupPolicyModelService {
     compliance_framework?: ComplianceFramework;
     limit?: number;
     offset?: number;
-  } = {}): Promise<{ policies: BackupPolicy[]; total: number }> {
+ = {}): Promise<{ policies: BackupPolicy[]; total: number }> {
 
     let whereClause = '';
     const params: unknown[] = [];
@@ -407,31 +413,31 @@ export class BackupPolicyModelService {
     if (filters.status) {
       conditions.push(`status = $${params.length + 1}`);
       params.push(filters.status);
-    }
+
 
     if (filters.policy_type) {
       conditions.push(`policy_type = $${params.length + 1}`);
       params.push(filters.policy_type);
-    }
+
 
     if (filters.scope_type) {
       conditions.push(`scope->>'scope_type' = $${params.length + 1}`);
       params.push(filters.scope_type);
-    }
+
 
     if (filters.priority) {
       conditions.push(`priority = $${params.length + 1}`);
       params.push(filters.priority);
-    }
+
 
     if (filters.compliance_framework) {
       conditions.push(`compliance->'frameworks' @> $${params.length + 1}::jsonb`);
       params.push(JSON.stringify([filters.compliance_framework]));
-    }
+
 
     if (conditions.length > 0) {
       whereClause = `WHERE ${conditions.join(' AND ')}`;
-    }
+
 
     const result = await this.db.query(`
       SELECT *, COUNT(*) OVER() AS total_count
@@ -445,7 +451,7 @@ export class BackupPolicyModelService {
     const total = result.rows.length > 0 ? parseInt(result.rows[0].total_count) : 0;
 
     return { policies, total };
-  }
+
 
   /**
    * Update backup policy
@@ -459,7 +465,7 @@ export class BackupPolicyModelService {
     const existingPolicy = await this.getBackupPolicy(policyId);
     if (!existingPolicy) {
       throw new Error(`Backup policy not found: ${policyId}`);
-    }
+
 
     // Create updated policy with incremented version
     const updatedPolicy: BackupPolicy = {
@@ -486,10 +492,10 @@ export class BackupPolicyModelService {
         old_version: existingPolicy.version,
         new_version: updatedPolicy.version,
         changes: this.calculatePolicyChanges(existingPolicy, updatedPolicy)
-  }
+
       severity: 'info'
     });
-  }
+
 
   /**
    * Execute backup policy
@@ -504,11 +510,11 @@ export class BackupPolicyModelService {
     const policy = await this.getBackupPolicy(policyId);
     if (!policy) {
       throw new Error(`Backup policy not found: ${policyId}`);
-    }
+
 
     if (policy.status !== 'active') {
       throw new Error(`Cannot execute policy in status: ${policy.status}`);
-    }
+
 
     const executionId = `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -540,7 +546,7 @@ export class BackupPolicyModelService {
         execution_id: executionId,
         trigger_type: triggerType,
         policy_name: policy.name
-  }
+
       severity: 'info'
     });
 
@@ -550,7 +556,7 @@ export class BackupPolicyModelService {
     });
 
     return executionId;
-  }
+
 
   // =============================================================================
   // Policy Rules Management
@@ -568,7 +574,7 @@ export class BackupPolicyModelService {
     const policy = await this.getBackupPolicy(policyId);
     if (!policy) {
       throw new Error(`Backup policy not found: ${policyId}`);
-    }
+
 
     const ruleId = `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
@@ -591,12 +597,12 @@ export class BackupPolicyModelService {
         rule_id: ruleId,
         rule_type: rule.rule_type,
         rule_name: rule.name
-  }
+
       severity: 'info'
     });
 
     return ruleId;
-  }
+
 
   /**
    * Get policy rules
@@ -610,7 +616,7 @@ export class BackupPolicyModelService {
     `, [policyId]);
 
     return result.rows.map(row => this.mapRowToPolicyRule(row));
-  }
+
 
   // =============================================================================
   // Policy Analytics
@@ -627,7 +633,7 @@ export class BackupPolicyModelService {
     const policy = await this.getBackupPolicy(policyId);
     if (!policy) {
       throw new Error(`Backup policy not found: ${policyId}`);
-    }
+
 
     // Get execution metrics
     const executionMetrics = await this.db.query(`
@@ -669,7 +675,7 @@ export class BackupPolicyModelService {
         memory_percentage: 0,
         storage_percentage: 0,
         network_percentage: 0
-  }
+
       sla_compliance_rate: 95, // Simulated
       retention_compliance_rate: 98, // Simulated
       audit_completeness_percentage: 100,
@@ -686,7 +692,7 @@ export class BackupPolicyModelService {
     };
 
     return analytics;
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -699,28 +705,28 @@ export class BackupPolicyModelService {
     // Validate schedule configuration
     if (policy.schedule.frequency === 'continuous' && policy.schedule.backup_types.includes('full')) {
       errors.push('Full backups cannot be continuous');
-    }
+
 
     // Validate retention configuration
     if (policy.retention.minimum_recovery_points > policy.retention.maximum_recovery_points) {
       errors.push('Minimum recovery points cannot exceed maximum recovery points');
-    }
+
 
     // Validate storage configuration
     if (policy.storage.replication_factor < 1) {
       errors.push('Replication factor must be at least 1');
-    }
+
 
     // Validate compliance configuration
     if (policy.compliance.frameworks.includes('gdpr') && 
         !policy.compliance.audit_logging_required) {
       errors.push('GDPR compliance requires audit logging');
-    }
+
 
     if (errors.length > 0) {
       throw new Error(`Policy validation failed: ${errors.join(', ')}`);
-    }
-  }
+
+
 
   private async storePolicyConfiguration(policy: BackupPolicy): Promise<void> {
 
@@ -749,7 +755,7 @@ export class BackupPolicyModelService {
       policy.updated_at, policy.created_by, policy.updated_by, policy.version,
       policy.approval_required, policy.approved_by, policy.approved_at
     ]);
-  }
+
 
   private async storePolicyRule(rule: PolicyRule): Promise<void> {
 
@@ -763,7 +769,7 @@ export class BackupPolicyModelService {
       JSON.stringify(rule.condition), JSON.stringify(rule.action), rule.is_active,
       rule.execution_order, rule.created_at, rule.created_by
     ]);
-  }
+
 
   private async storePolicyExecution(execution: PolicyExecution): Promise<void> {
 
@@ -780,7 +786,7 @@ export class BackupPolicyModelService {
       execution.total_size_gb, JSON.stringify(execution.affected_entities),
       execution.executed_by
     ]);
-  }
+
 
   private mapRowToBackupPolicy(row: unknown): BackupPolicy {
     return {
@@ -808,7 +814,7 @@ export class BackupPolicyModelService {
       approved_by: row.approved_by,
       approved_at: row.approved_at
     };
-  }
+
 
   private mapRowToPolicyRule(row: unknown): PolicyRule {
     return {
@@ -824,35 +830,35 @@ export class BackupPolicyModelService {
       created_at: row.created_at,
       created_by: row.created_by
     };
-  }
+
 
   private incrementVersion(version: string): string {
     const parts = version.split('.');
     const patch = parseInt(parts[2] || '0') + 1;
     return `${parts[0]}.${parts[1]}.${patch}`;
-  }
+
 
   private calculatePolicyChanges(oldPolicy: BackupPolicy, newPolicy: BackupPolicy): Record<string, any> {
     const changes: Record<string, any> = {};
     
     if (oldPolicy.status !== newPolicy.status) {
       changes.status = { from: oldPolicy.status, to: newPolicy.status };
-    }
+
     
     if (oldPolicy.priority !== newPolicy.priority) {
       changes.priority = { from: oldPolicy.priority, to: newPolicy.priority };
-    }
+
     
     if (JSON.stringify(oldPolicy.schedule) !== JSON.stringify(newPolicy.schedule)) {
       changes.schedule_modified = true;
-    }
+
     
     if (JSON.stringify(oldPolicy.retention) !== JSON.stringify(newPolicy.retention)) {
       changes.retention_modified = true;
-    }
+
     
     return changes;
-  }
+
 
   private async performPolicyExecution(policy: BackupPolicy, execution: PolicyExecution): Promise<void> {
 
@@ -893,11 +899,10 @@ export class BackupPolicyModelService {
       ]);
 
       console.log(`Policy execution completed: ${execution.execution_id}`);
-      
-    } catch (error) {
+ catch (error) {
       await this.markPolicyExecutionFailed(execution.execution_id, error.message);
-    }
-  }
+
+
 
   private async updateExecutionStatus(executionId: string, status: string): Promise<void> {
 
@@ -906,7 +911,7 @@ export class BackupPolicyModelService {
       SET status = $2, started_at = CASE WHEN started_at IS NULL THEN NOW() ELSE started_at END
       WHERE execution_id = $1
     `, [executionId, status]);
-  }
+
 
   private async markPolicyExecutionFailed(executionId: string, _____errorMessage: string): Promise<void> {
 
@@ -917,7 +922,7 @@ export class BackupPolicyModelService {
           duration_seconds = EXTRACT(EPOCH FROM (NOW() - COALESCE(started_at, triggered_at)))
       WHERE execution_id = $1
     `, [executionId]);
-  }
+
 
   private async generateOptimizationRecommendations(
     policy: BackupPolicy, 
@@ -935,7 +940,7 @@ export class BackupPolicyModelService {
         estimated_savings: 'Improved reliability',
         implementation_effort: 'medium'
       });
-    }
+
     
     // Analyze retention settings
     if (policy.retention.full_backup_retention.value > 90 && policy.retention.full_backup_retention.unit === 'days') {
@@ -946,8 +951,7 @@ export class BackupPolicyModelService {
         estimated_savings: '20-30% storage cost reduction',
         implementation_effort: 'low'
       });
-    }
+
     
     return recommendations;
-  }
-}
+

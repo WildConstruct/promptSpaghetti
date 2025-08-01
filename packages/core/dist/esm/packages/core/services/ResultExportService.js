@@ -51,8 +51,9 @@ export class ResultExportService {
          * Export all results with comparison analysis
          */
         async;
-        exportComparison(results, PreviewResultWithPath);
-        options: ResultExportOptions,
+        exportComparison(results, PreviewResultWithPath),
+            options;
+        ResultExportOptions,
             sourceGraph ?  : any;
         Promise < ExportResult > {
             const: comparisonData = {
@@ -64,196 +65,192 @@ export class ResultExportService {
             },
             const: filename = options.filename || this.generateFilename(options.format, 'comparison', results.map(r => r.seed)),
             return: await this.performExport(comparisonData, options, filename, 'comparison'),
-            /**
-             * Get available export formats with descriptions
-             */
-            getAvailableFormats() {
-                return [
-                    {
-                        format: 'plain-text',
-                        name: 'Plain Text',
-                        description: 'Simple text output with basic metadata',
-                        category: 'text',
-                        supportsIndividual: true,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'json-simple',
-                        name: 'JSON (Simple)',
-                        description: 'Basic JSON with output and seed information',
-                        category: 'data',
-                        supportsIndividual: true,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'json-complete',
-                        name: 'JSON (Complete)',
-                        description: 'Full JSON with execution paths, metadata, and debug info',
-                        category: 'data',
-                        supportsIndividual: true,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'csv-analysis',
-                        name: 'CSV Analysis',
-                        description: 'Tabular data with performance and variance metrics',
-                        category: 'analysis',
-                        supportsIndividual: false,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'fountain-script',
-                        name: 'Fountain Script',
-                        description: 'Industry-standard screenplay format',
-                        category: 'film',
-                        supportsIndividual: true,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'final-draft',
-                        name: 'Final Draft',
-                        description: 'Final Draft XML format for professional screenwriting',
-                        category: 'film',
-                        supportsIndividual: true,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'controlnet-json',
-                        name: 'ControlNet JSON',
-                        description: 'VFX-ready format for Stable Diffusion ControlNet',
-                        category: 'vfx',
-                        supportsIndividual: true,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'mars-framework',
-                        name: 'MARS Framework',
-                        description: 'VFX professional format with structured tags',
-                        category: 'vfx',
-                        supportsIndividual: true,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'zada-natural',
-                        name: 'Zada Natural Language',
-                        description: 'Director-friendly natural language format',
-                        category: 'film',
-                        supportsIndividual: true,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'professional-report',
-                        name: 'Professional Report',
-                        description: 'Comprehensive analysis with recommendations',
-                        category: 'analysis',
-                        supportsIndividual: false,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'execution-timeline',
-                        name: 'Execution Timeline',
-                        description: 'Step-by-step execution visualization',
-                        category: 'analysis',
-                        supportsIndividual: true,
-                        supportsBatch: true,
-                    },
-                    {
-                        format: 'variance-report',
-                        name: 'Variance Report',
-                        description: 'Detailed creative variance analysis',
-                        category: 'analysis',
-                        supportsIndividual: false,
-                        supportsBatch: true
-                    }
-                ];
-                /**
-                 * Validate export options for the given format
-                 */
-                validateExportOptions(format, ExportFormat, options, ResultExportOptions);
-                string;
+            string,
+            description: string,
+            category: 'text' | 'data' | 'film' | 'vfx' | 'analysis',
+            supportsIndividual: boolean,
+            supportsBatch: boolean
+        } > {
+            return: [
                 {
-                    const errors = [];
-                    const formatInfo = this.getAvailableFormats().find(f => f.format === format);
-                    if (!formatInfo) {
-                        errors.push(`Unknown export format: ${format}`);
-                    }
-                    return errors;
-                    // Film format validations
-                    if (['fountain-script', 'final-draft'].includes(format)) {
-                        if (!options.filmOptions?.includeDirectorNotes && !options.includeMetadata) {
-                            errors.push('Film formats should include either director notes or metadata');
-                            // VFX format validations
-                            if (['controlnet-json', 'mars-framework'].includes(format)) {
-                                if (!options.includeExecutionPaths && !options.vfxOptions?.controlNetCompatible) {
-                                    errors.push('VFX formats require execution paths or ControlNet compatibility');
-                                    // Analysis format validations
-                                    if (['csv-analysis', 'professional-report', 'variance-report'].includes(format)) {
-                                        if (!options.analysisOptions?.performanceBreakdown && !options.analysisOptions?.varianceAnalysis) {
-                                            errors.push('Analysis formats require performance or variance analysis options');
-                                            return errors;
-                                            /**
-                                            * Estimate export size for UI feedback
-                                            */
-                                            estimateExportSize(results, PreviewResultWithPath, format, ExportFormat, options, ResultExportOptions);
-                                            {
-                                                estimatedSize: number;
-                                                unit: 'KB' | 'MB';
-                                                warning ?  : string;
-                                                const baseSize = results.reduce((total, result) => {
-                                                    return total + (result.output?.length || 0) + 200; // Base overhead
-                                                }, 0);
-                                                let multiplier = 1;
-                                                switch (format) {
-                                                    case 'plain-text':
-                                                        multiplier = 1.1;
-                                                        break;
-                                                    case 'json-simple':
-                                                        multiplier = 1.5;
-                                                        break;
-                                                    case 'json-complete':
-                                                        multiplier = 3.0;
-                                                        if (options.includeExecutionPaths)
-                                                            multiplier += 2.0;
-                                                        if (options.includeDebugInfo)
-                                                            multiplier += 1.5;
-                                                        break;
-                                                    case 'csv-analysis':
-                                                        multiplier = 1.2;
-                                                        break;
-                                                    case 'fountain-script':
-                                                    case 'final-draft':
-                                                        multiplier = 2.0;
-                                                        break;
-                                                    case 'controlnet-json':
-                                                    case 'mars-framework':
-                                                        multiplier = 4.0;
-                                                        break;
-                                                    case 'professional-report':
-                                                        multiplier = 5.0;
-                                                        break;
-                                                    default:
-                                                        multiplier = 2.0;
-                                                        const estimatedBytes = baseSize * multiplier;
-                                                        const estimatedKB = Math.ceil(estimatedBytes / 1024);
-                                                        if (estimatedKB > 1024) {
-                                                            return {
-                                                                estimatedSize: Math.ceil(estimatedKB / 1024),
-                                                                unit: 'MB',
-                                                                warning: estimatedKB > 10240 ? 'Large export size - may take time to generate' : undefined,
-                                                            };
-                                                            return {
-                                                                estimatedSize: estimatedKB,
-                                                                unit: 'KB',
-                                                                warning: estimatedKB > 5120 ? 'Large export size - consider reducing options' : undefined,
-                                                            };
-                                                            /**
-                                                             * Private helper methods
-                                                             */
-                                                        }
-                                                    /**
-                                                     * Private helper methods
-                                                     */
-                                                }
+                    format: 'plain-text',
+                    name: 'Plain Text',
+                    description: 'Simple text output with basic metadata',
+                    category: 'text',
+                    supportsIndividual: true,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'json-simple',
+                    name: 'JSON (Simple)',
+                    description: 'Basic JSON with output and seed information',
+                    category: 'data',
+                    supportsIndividual: true,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'json-complete',
+                    name: 'JSON (Complete)',
+                    description: 'Full JSON with execution paths, metadata, and debug info',
+                    category: 'data',
+                    supportsIndividual: true,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'csv-analysis',
+                    name: 'CSV Analysis',
+                    description: 'Tabular data with performance and variance metrics',
+                    category: 'analysis',
+                    supportsIndividual: false,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'fountain-script',
+                    name: 'Fountain Script',
+                    description: 'Industry-standard screenplay format',
+                    category: 'film',
+                    supportsIndividual: true,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'final-draft',
+                    name: 'Final Draft',
+                    description: 'Final Draft XML format for professional screenwriting',
+                    category: 'film',
+                    supportsIndividual: true,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'controlnet-json',
+                    name: 'ControlNet JSON',
+                    description: 'VFX-ready format for Stable Diffusion ControlNet',
+                    category: 'vfx',
+                    supportsIndividual: true,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'mars-framework',
+                    name: 'MARS Framework',
+                    description: 'VFX professional format with structured tags',
+                    category: 'vfx',
+                    supportsIndividual: true,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'zada-natural',
+                    name: 'Zada Natural Language',
+                    description: 'Director-friendly natural language format',
+                    category: 'film',
+                    supportsIndividual: true,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'professional-report',
+                    name: 'Professional Report',
+                    description: 'Comprehensive analysis with recommendations',
+                    category: 'analysis',
+                    supportsIndividual: false,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'execution-timeline',
+                    name: 'Execution Timeline',
+                    description: 'Step-by-step execution visualization',
+                    category: 'analysis',
+                    supportsIndividual: true,
+                    supportsBatch: true,
+                },
+                {
+                    format: 'variance-report',
+                    name: 'Variance Report',
+                    description: 'Detailed creative variance analysis',
+                    category: 'analysis',
+                    supportsIndividual: false,
+                    supportsBatch: true
+                }
+            ],
+            /**
+             * Validate export options for the given format
+             */
+            validateExportOptions(format, options) {
+                const errors = [];
+                const formatInfo = this.getAvailableFormats().find(f => f.format === format);
+                if (!formatInfo) {
+                    errors.push(`Unknown export format: ${format}`);
+                }
+                return errors;
+                // Film format validations
+                if (['fountain-script', 'final-draft'].includes(format)) {
+                    if (!options.filmOptions?.includeDirectorNotes && !options.includeMetadata) {
+                        errors.push('Film formats should include either director notes or metadata');
+                        // VFX format validations
+                        if (['controlnet-json', 'mars-framework'].includes(format)) {
+                            if (!options.includeExecutionPaths && !options.vfxOptions?.controlNetCompatible) {
+                                errors.push('VFX formats require execution paths or ControlNet compatibility');
+                                // Analysis format validations
+                                if (['csv-analysis', 'professional-report', 'variance-report'].includes(format)) {
+                                    if (!options.analysisOptions?.performanceBreakdown && !options.analysisOptions?.varianceAnalysis) {
+                                        errors.push('Analysis formats require performance or variance analysis options');
+                                        return errors;
+                                        /**
+                                        * Estimate export size for UI feedback
+                                        */
+                                        estimateExportSize(results, PreviewResultWithPath, format, ExportFormat, options, ResultExportOptions);
+                                        {
+                                            estimatedSize: number;
+                                            unit: 'KB' | 'MB';
+                                            warning ?  : string;
+                                            const baseSize = results.reduce((total, result) => {
+                                                return total + (result.output?.length || 0) + 200; // Base overhead
+                                            }, 0);
+                                            let multiplier = 1;
+                                            switch (format) {
+                                                case 'plain-text':
+                                                    multiplier = 1.1;
+                                                    break;
+                                                case 'json-simple':
+                                                    multiplier = 1.5;
+                                                    break;
+                                                case 'json-complete':
+                                                    multiplier = 3.0;
+                                                    if (options.includeExecutionPaths)
+                                                        multiplier += 2.0;
+                                                    if (options.includeDebugInfo)
+                                                        multiplier += 1.5;
+                                                    break;
+                                                case 'csv-analysis':
+                                                    multiplier = 1.2;
+                                                    break;
+                                                case 'fountain-script':
+                                                case 'final-draft':
+                                                    multiplier = 2.0;
+                                                    break;
+                                                case 'controlnet-json':
+                                                case 'mars-framework':
+                                                    multiplier = 4.0;
+                                                    break;
+                                                case 'professional-report':
+                                                    multiplier = 5.0;
+                                                    break;
+                                                default:
+                                                    multiplier = 2.0;
+                                                    const estimatedBytes = baseSize * multiplier;
+                                                    const estimatedKB = Math.ceil(estimatedBytes / 1024);
+                                                    if (estimatedKB > 1024) {
+                                                        return {
+                                                            estimatedSize: Math.ceil(estimatedKB / 1024),
+                                                            unit: 'MB',
+                                                            warning: estimatedKB > 10240 ? 'Large export size - may take time to generate' : undefined,
+                                                        };
+                                                        return {
+                                                            estimatedSize: estimatedKB,
+                                                            unit: 'KB',
+                                                            warning: estimatedKB > 5120 ? 'Large export size - consider reducing options' : undefined,
+                                                        };
+                                                        /**
+                                                         * Private helper methods
+                                                         */
+                                                    }
                                                 /**
                                                  * Private helper methods
                                                  */

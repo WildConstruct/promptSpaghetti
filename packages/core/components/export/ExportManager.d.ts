@@ -1,6 +1,7 @@
 import React from 'react';
 
 }
+}
 interface ExportManagerProps {
     projectId: string;
     className?: string;
@@ -8,4 +9,5 @@ interface ExportManagerProps {
 export declare const ExportManager: React.FC<ExportManagerProps>;
 export default ExportManager;
 //# sourceMappingURL=ExportManager.d.ts.map
+}
 }

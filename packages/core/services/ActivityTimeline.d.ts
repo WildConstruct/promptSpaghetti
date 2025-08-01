@@ -16,8 +16,8 @@
  */
 
 }
-export interface ActivityEvent {
-    id: string;
+}
+export interface ActivityEvent { id: string;
     timestamp: Date;
     userId: string;
     userDisplayName?: string;
@@ -52,11 +52,10 @@ export interface ActivityEvent {
     tags: string[];
     acknowledged?: boolean;
     bookmarked?: boolean;
-    archived?: boolean;
-
+    archived?: boolean }
 }
-export interface ActivityDetails {
-    nodeChanges?: NodeChange[];
+}
+export interface ActivityDetails { nodeChanges?: NodeChange[];
     connectionChanges?: ConnectionChange[];
     variableChanges?: VariableChange[];
     beforeValue?: unknown;
@@ -74,48 +73,43 @@ export interface ActivityDetails {
     externalId?: string;
     externalSource?: string;
     externalUrl?: string;
-    customData?: Record<string, unknown>;
-
+    customData?: Record<string, unknown> }
 }
-export interface NodeChange {
-    nodeId: string;
+}
+export interface NodeChange { nodeId: string;
     nodeType: string;
     changeType: 'created' | 'updated' | 'deleted' | 'moved';
     field?: string;
     oldValue?: unknown;
     newValue?: unknown;
-    position?: [number, number];
-
+    position?: [number, number] }
 }
-export interface ConnectionChange {
-    connectionId: string;
+}
+export interface ConnectionChange { connectionId: string;
     changeType: 'created' | 'deleted';
     sourceNodeId: string;
     targetNodeId: string;
     sourceHandle?: string;
-    targetHandle?: string;
-
+    targetHandle?: string }
 }
-export interface VariableChange {
-    variableName: string;
+}
+export interface VariableChange { variableName: string;
     oldValue?: string;
     newValue?: string;
-    scope: 'global' | 'local' | 'session';
-
+    scope: 'global' | 'local' | 'session' }
 }
-export interface ClientInfo {
-    userAgent: string;
+}
+export interface ClientInfo { userAgent: string;
     platform: string;
     browser: string;
     browserVersion: string;
     screenResolution: [number, number];
     viewport: [number, number];
     timezone: string;
-    language: string;
-
+    language: string }
 }
-export interface GeolocationInfo {
-    country?: string;
+}
+export interface GeolocationInfo { country?: string;
     region?: string;
     city?: string;
     coordinates?: [number, number];
@@ -125,11 +119,10 @@ export type ActivityType = 'user_interaction' | 'system_event' | 'graph_operatio
 export type ActivityCategory = 'graph_editing' | 'node_manipulation' | 'execution' | 'file_management' | 'user_management' | 'collaboration' | 'system_health' | 'security' | 'performance' | 'configuration';
 export type ActivitySource = 'web_ui' | 'mobile_app' | 'api' | 'cli' | 'webhook' | 'system' | 'background_task' | 'integration';
 export type ActivityImpact = 'none' | 'low' | 'medium' | 'high' | 'critical';
-export type ActivityVisibility = 'private' | 'team' | 'workspace' | 'public';
-
+export type ActivityVisibility = 'private' | 'team' | 'workspace' | 'public' }
 }
-export interface ActivityFilter {
-    userIds?: string[];
+}
+export interface ActivityFilter { userIds?: string[];
     types?: ActivityType[];
     categories?: ActivityCategory[];
     sources?: ActivitySource[];
@@ -138,7 +131,7 @@ export interface ActivityFilter {
     graphIds?: string[];
     dateRange?: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     impactLevels?: ActivityImpact[];
@@ -155,8 +148,8 @@ export interface ActivityFilter {
     sortDirection?: 'asc' | 'desc';
 
 }
-export interface ActivityStats {
-    totalEvents: number;
+}
+export interface ActivityStats { totalEvents: number;
     uniqueUsers: number;
     averageSessionDuration: number;
     byType: Record<ActivityType, number>;
@@ -167,15 +160,13 @@ export interface ActivityStats {
     eventsPerDay: Record<string, number>;
     peakActivity: {
         hour: number;
-        count: number;
+        count: number }
 }
     };
-    mostActiveUsers: Array<{
-        userId: string;
+    mostActiveUsers: Array<{ userId: string;
         displayName: string;
         eventCount: number;
-        lastActivity: Date;
-    }>;
+        lastActivity: Date }>;
     averageExecutionTime: number;
     errorRate: number;
     cacheHitRate: number;
@@ -184,8 +175,8 @@ export interface ActivityStats {
     sharingEvents: number;
 
 }
-export interface ActivitySession {
-    id: string;
+}
+export interface ActivitySession { id: string;
     userId: string;
     workspaceId?: string;
     projectId?: string;
@@ -224,13 +215,11 @@ export declare class ActivityTimelineService {
     trackGraphOperation(action: string, details: Partial<ActivityDetails> & {)
         nodeChanges?: NodeChange[];
         connectionChanges?: ConnectionChange[];
-        variableChanges?: VariableChange[];
+        variableChanges?: VariableChange[] }
 }
-    }, userId: string, context?: {
-        workspaceId?: string;
+    }, userId: string, context?: { workspaceId?: string;
         projectId?: string;
-        graphId?: string;
-    }): Promise<ActivityEvent>;
+        graphId?: string }): Promise<ActivityEvent>;
     /**
      * Track user interaction
      */
@@ -270,11 +259,10 @@ export declare class ActivityTimelineService {
     /**
      * Start a new user session
      */
-    startSession(userId: string, clientInfo: ClientInfo, context?: {)
+    startSession(userId: string, clientInfo: ClientInfo, context?: { )
         workspaceId?: string;
         projectId?: string;
-        location?: GeolocationInfo;
-    }): ActivitySession;
+        location?: GeolocationInfo }): ActivitySession;
     /**
      * End current user session
      */
@@ -300,11 +288,10 @@ export declare class ActivityTimelineService {
 
 export declare const activityTimeline: ActivityTimelineService;
 export declare const trackActivity: (event: Partial<ActivityEvent>) => Promise<ActivityEvent>;
-export declare const trackGraphOperation: (action: string, details: Partial<ActivityDetails>, userId: string, context?: {)
+export declare const trackGraphOperation: (action: string, details: Partial<ActivityDetails>, userId: string, context?: { )
     workspaceId?: string;
     projectId?: string;
-    graphId?: string;
-}) => Promise<ActivityEvent>;
+    graphId?: string }) => Promise<ActivityEvent>;
 export declare const trackUserInteraction: (action: string, element: string, details: Partial<ActivityDetails>, userId: string, context?: Record<string, unknown>) => Promise<ActivityEvent>;
 export declare const trackPerformance: (operation: string, duration: number, success: boolean, details?: Partial<ActivityDetails>, userId?: string) => Promise<ActivityEvent>;
 export declare const getActivities: (filter?: ActivityFilter) => ActivityEvent[];

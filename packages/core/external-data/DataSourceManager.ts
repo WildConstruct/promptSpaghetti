@@ -4,66 +4,64 @@ import { EventEmitter } from 'events';
 
 // Core interfaces for external data integration
 
-}
-export interface DataSource {
-  id: string;
+
+export interface DataSource { id: string;
   name: string;
   type: 'api' | 'database' | 'file' | 'static';
   enabled: boolean;
   // Connection configuration
   endpoint?: string;
-  authentication?: {
-  type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';
+  authentication?: {;
+  type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer' }
   credentials: Record<string, string>;
   headers?: Record<string, string>;
-}
+
+
 };
   // Caching strategy
-  caching: {
+  caching: { 
   enabled: boolean;
-  ttl: number; // Time to live in seconds,
-  strategy: 'memory' | 'disk' | 'hybrid';
-  maxSize: number; // Max cache size in MB,
+  ttl: number; // Time to live in seconds
+  strategy: 'memory' | 'disk' | 'hybrid'
+  maxSize: number; // Max cache size in MB }
 };
   // Data transformation pipeline
   transforms: DataTransform;
   // Rate limiting
-  rateLimit?: {
-  requests: number;
-  window: number; // Window in seconds,
+  rateLimit?: { requests: number;
+  window: number; // Window in seconds }
   burst?: number;
 };
   // Quality and reliability
-  reliability: {
+  reliability: { 
   timeout: number;
   retries: number;
   backoff: 'linear' | 'exponential';
-  healthCheck?: string; // URL for health checks,
+  healthCheck?: string; // URL for health checks }
 };
   // Metadata
-  metadata: {
+  metadata: { 
   description: string;
-  category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';
+  category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial' }
   tags: string;
   lastSync?: string;
   version?: string;
 };
-}
-}
-export interface DataTransform {
-  id: string;
+
+
+export interface DataTransform { id: string;
   name: string;
-  type: 'map' | 'filter' | 'aggregate' | 'validate' | 'normalize';
+  type: 'map' | 'filter' | 'aggregate' | 'validate' | 'normalize' }
   config: Record<string, any>;
   enabled: boolean;
-}
-}
-}
-export interface HistoricalQuery {
-  era: string | string; // e.g., 'medieval', 'renaissance',
-  region?: string | string; // e.g., 'europe', 'england',
-  category: string; // e.g., 'clothing', 'architecture', 'materials',
-  subcategory?: string; // e.g., 'nobility', 'peasant', 'clergy',
+
+
+
+
+export interface HistoricalQuery { era: string | string; // e.g., 'medieval', 'renaissance';
+  region?: string | string; // e.g., 'europe', 'england';
+  category: string; // e.g., 'clothing', 'architecture', 'materials';
+  subcategory?: string; // e.g., 'nobility', 'peasant', 'clergy';
   // Search parameters
   keywords?: string;
   filters: Record<string, any>;
@@ -71,14 +69,14 @@ export interface HistoricalQuery {
   limit?: number;
   offset?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc'
-}
-  }
-}
-export interface QueryResult<T = any> {
-  success: boolean;
+  sortOrder?: 'asc' | 'desc' }
+
+
+
+
+export interface QueryResult<T = any> { success: boolean;
   data: T;
-  metadata: {
+  metadata: { }
   total: number;
   offset: number;
   limit: number;
@@ -91,9 +89,9 @@ export interface QueryResult<T = any> {
   warnings?: string;
 
 // Cache interface
-}
-interface CacheEntry<T = any> {
-  data: T;
+
+
+interface CacheEntry<T = any> { data: T;
   timestamp: number;
   ttl: number;
   hits: number;
@@ -121,136 +119,132 @@ export class DataSourceManager extends EventEmitter {
   private initializeDefaultSources(): void {
     // Getty Research Institute
     this.registerDataSource({)
-  id: 'getty-research',
-      name: 'Getty Research Institute',
-      type: 'api',
-      enabled: true,
-      endpoint: 'https://data.getty.edu/vocab/api',
+  id: 'getty-research'
+      name: 'Getty Research Institute'
+      type: 'api'
+      enabled: true
+      endpoint: 'https://data.getty.edu/vocab/api'
       authentication: {
-  type: 'none',
+  type: 'none' }
         credentials: {}
-  },
-  caching: {
-  enabled: true,
-  ttl: 3600, // 1 hour,
-  strategy: 'hybrid',
-  maxSize: 50 // 50MB,
-},
-  transforms: [,
-        {
-  id: 'getty-normalize',
-  name: 'Getty Data Normalizer',
-  type: 'normalize',
+
+  caching: { 
+  enabled: true
+  ttl: 3600, // 1 hour
+  strategy: 'hybrid'
+  maxSize: 50 // 50MB }
+
+  transforms: [
+        { id: 'getty-normalize'
+  name: 'Getty Data Normalizer'
+  type: 'normalize'
   config: {
-  dateFormat: 'iso',
-  textFields: ['preferred_label', 'description'],
-  imageFields: ['thumbnail', 'image_url'],
-},
-  enabled: true],
-      rateLimit: {
-  requests: 100,
-  window: 60,
-  burst: 10,
-},
-  reliability: {
-  timeout: 10000,
-  retries: 3,
-  backoff: 'exponential',
-  healthCheck: 'https://data.getty.edu/vocab/api/health',
-},
-  metadata: {
-  description: 'Getty Research Institute Art & Architecture Thesaurus',
-  category: 'cultural',
-  tags: ['art', 'architecture', 'historical', 'authoritative'],
-  version: '1.0',
+  dateFormat: 'iso'
+  textFields: ['preferred_label', 'description']
+  imageFields: ['thumbnail', 'image_url'] }
+
+  enabled: true]
+      rateLimit: { 
+  requests: 100
+  window: 60
+  burst: 10 }
+
+  reliability: { 
+  timeout: 10000
+  retries: 3
+  backoff: 'exponential'
+  healthCheck: 'https://data.getty.edu/vocab/api/health' }
+
+  metadata: { 
+  description: 'Getty Research Institute Art & Architecture Thesaurus'
+  category: 'cultural'
+  tags: ['art', 'architecture', 'historical', 'authoritative']
+  version: '1.0' }
 });
     // Metropolitan Museum of Art
-    this.registerDataSource({)
-  id: 'met-museum',
-      name: 'Metropolitan Museum API',
-      type: 'api',
-      enabled: true,
-      endpoint: 'https://collectionapi.metmuseum.org/public/collection/v1',
+    this.registerDataSource({ )
+  id: 'met-museum'
+      name: 'Metropolitan Museum API'
+      type: 'api'
+      enabled: true
+      endpoint: 'https://collectionapi.metmuseum.org/public/collection/v1'
       authentication: {
-  type: 'none',
+  type: 'none' }
         credentials: {}
-  },
-  caching: {
-  enabled: true,
-  ttl: 7200, // 2 hours,
-  strategy: 'hybrid',
-  maxSize: 100 // 100MB,
-},
-  transforms: [,
-        {
-  id: 'met-mapper',
-  name: 'Met Data Mapper',
-  type: 'map',
+
+  caching: { 
+  enabled: true
+  ttl: 7200, // 2 hours
+  strategy: 'hybrid'
+  maxSize: 100 // 100MB }
+
+  transforms: [
+        { id: 'met-mapper'
+  name: 'Met Data Mapper'
+  type: 'map'
   config: {
   mapping: {
-  'title': 'name',
-  'artistDisplayName': 'artist',
-  'objectDate': 'era',
-  'culture': 'region',
-  'medium': 'materials',
-  'primaryImageSmall': 'image',
-},
-  enabled: true],
-      rateLimit: {
-  requests: 80,
-  window: 60,
-},
-  reliability: {
-  timeout: 15000,
-  retries: 2,
-  backoff: 'linear',
-},
-  metadata: {
-  description: 'Metropolitan Museum of Art Collection Database',
-  category: 'cultural',
-  tags: ['museum', 'art', 'artifacts', 'historical'],
-  version: '1.0',
+  'title': 'name'
+  'artistDisplayName': 'artist'
+  'objectDate': 'era'
+  'culture': 'region'
+  'medium': 'materials'
+  'primaryImageSmall': 'image' }
+
+  enabled: true]
+      rateLimit: { 
+  requests: 80
+  window: 60 }
+
+  reliability: { 
+  timeout: 15000
+  retries: 2
+  backoff: 'linear' }
+
+  metadata: { 
+  description: 'Metropolitan Museum of Art Collection Database'
+  category: 'cultural'
+  tags: ['museum', 'art', 'artifacts', 'historical']
+  version: '1.0' }
 });
     // Medieval clothing database (demo source)
-    this.registerDataSource({)
-  id: 'medieval-clothing',
-  name: 'Medieval Clothing Database',
-  type: 'static',
-  enabled: true,
+    this.registerDataSource({ )
+  id: 'medieval-clothing'
+  name: 'Medieval Clothing Database'
+  type: 'static'
+  enabled: true
   caching: {
-  enabled: true,
-  ttl: 86400, // 24 hours,
-  strategy: 'memory',
-  maxSize: 10 // 10MB,
-},
-  transforms: [,
-        {
-          id: 'medieval-classifier',
-          name: 'Medieval Period Classifier',
-          type: 'validate',
-          config: {
+  enabled: true
+  ttl: 86400, // 24 hours
+  strategy: 'memory'
+  maxSize: 10 // 10MB }
+
+  transforms: [
+        { id: 'medieval-classifier'
+          name: 'Medieval Period Classifier'
+          type: 'validate'
+          config: { }
   eraValidation: {
-              'early-medieval': { start: 500, end: 1000 },
-              'high-medieval': { start: 1000, end: 1300 },
+              'early-medieval': { start: 500, end: 1000 }
+              'high-medieval': { start: 1000, end: 1300 }
               'late-medieval': { start: 1300, end: 1500 }
-  },
-  enabled: true],
-      reliability: {
-  timeout: 1000,
-  retries: 1,
-  backoff: 'linear',
-},
-  metadata: {
-  description: 'Curated medieval clothing and materials database',
-  category: 'historical',
-  tags: ['medieval', 'clothing', 'materials', 'demo'],
-  version: '1.0',
+
+  enabled: true]
+      reliability: { 
+  timeout: 1000
+  retries: 1
+  backoff: 'linear' }
+
+  metadata: { 
+  description: 'Curated medieval clothing and materials database'
+  category: 'historical'
+  tags: ['medieval', 'clothing', 'materials', 'demo']
+  version: '1.0' }
 });
   /**
    * Register a new data source
    */
-  registerDataSource(source: DataSource): void {
-  this.dataSources.set(source.id, source);
+  registerDataSource(source: DataSource): void { this.dataSources.set(source.id, source);
   // Initialize rate limiter if needed
   if (source.rateLimit) {
   this.rateLimiters.set(source.id, new RateLimiter(source.rateLimit));
@@ -259,65 +253,60 @@ export class DataSourceManager extends EventEmitter {
   * Query historical data from configured sources
   */
   async queryHistoricalData(query: HistoricalQuery)
-  sourceIds?: string): Promise<QueryResult> {,
+  sourceIds?: string): Promise<QueryResult> { }
   const results: QueryResult = [];
   const sources = sourceIds ;
   ? Array.from(this.dataSources.values()).filter(s => sourceIds.includes(s.id))
   : Array.from(this.dataSources.values()).filter(s => s.enabled);
   const startTime = Date.now();
   // Execute queries in parallel
-  const queryPromises = sources.map(async (source) => {
-  try {
+  const queryPromises = sources.map(async (source) => { try {
   const result = await this.executeQuery(source, query);
   results.push(result);
-  return result;
-} catch (error) {
-  const errorResult: QueryResult = {,
-  success: false,
-  data: [],
+  return result } catch (error) { const errorResult: QueryResult = {
+  success: false
+  data: []
   metadata: {
-  total: 0,
-  offset: query.offset || 0,
-  limit: query.limit || 50,
-  query,
-  source: source.id,
-  cached: false,
-  executionTime: Date.now() - startTime,
-},
+  total: 0
+  offset: query.offset || 0
+  limit: query.limit || 50
+  query
+  source: source.id
+  cached: false
+  executionTime: Date.now() - startTime }
+
   error: error instanceof Error ? error.message : 'Unknown error';
   };
         results.push(errorResult);
         return errorResult;
     });
     await Promise.all(queryPromises);
-    this.emit('queryComplete', {)
-  query,
-  results,
-  totalTime: Date.now() - startTime,
+    this.emit('queryComplete', { )
+  query
+  results
+  totalTime: Date.now() - startTime }
 });
     return results;
   /**
    * Execute query against a specific data source
    */
-  private async executeQuery(source: DataSource, query: HistoricalQuery): Promise<QueryResult> {
-
-  const cacheKey = this.generateCacheKey(source.id, query);
+  private async executeQuery(source: DataSource, query: HistoricalQuery): Promise<QueryResult> { const cacheKey = this.generateCacheKey(source.id, query);
   const startTime = Date.now();
   // Check cache first
   if (source.caching.enabled) {
   const cached = this.getFromCache(cacheKey);
   if (cached) {
   return {
-  success: true,
-  data: cached.data,
+  success: true
+  data: cached.data
   metadata: {
-  total: cached.data.length,
-  offset: query.offset || 0,
-  limit: query.limit || 50,
-  query,
-  source: source.id,
-  cached: true,
-  executionTime: Date.now() - startTime,
+  total: cached.data.length
+  offset: query.offset || 0
+  limit: query.limit || 50
+  query
+  source: source.id
+  cached: true
+  executionTime: Date.now() - startTime }
 };
     // Check rate limiting
     const rateLimiter = this.rateLimiters.get(source.id);
@@ -325,17 +314,16 @@ export class DataSourceManager extends EventEmitter {
       throw new Error(`Rate limit exceeded for source: ${source.id}`);}
     // Execute actual query
     let data: any = [];
-    switch (source.type) {
-  case 'api':,
+    switch (source.type) { case 'api':
   data = await this.queryAPI(source, query);
   break;
-  case 'database':,
+  case 'database':
   data = await this.queryDatabase(source, query);
   break;
-  case 'file':,
+  case 'file':
   data = await this.queryFile(source, query);
   break;
-  case 'static':,
+  case 'static':
   data = await this.queryStaticData(source, query);
   break;
   // Apply transforms
@@ -344,16 +332,16 @@ export class DataSourceManager extends EventEmitter {
   if (source.caching.enabled && data.length > 0) {
   this.setCache(cacheKey, data, source.caching.ttl);
   return {
-  success: true,
-  data,
+  success: true
+  data
   metadata: {
-  total: data.length,
-  offset: query.offset || 0,
-  limit: query.limit || 50,
-  query,
-  source: source.id,
-  cached: false,
-  executionTime: Date.now() - startTime,
+  total: data.length
+  offset: query.offset || 0
+  limit: query.limit || 50
+  query
+  source: source.id
+  cached: false
+  executionTime: Date.now() - startTime }
 };
   /**
    * Query API data source
@@ -365,13 +353,10 @@ export class DataSourceManager extends EventEmitter {
     // Build query parameters based on source
     const params = this.buildAPIParams(source, query);
     const url = new URL(source.endpoint);
-    Object.entries(params).forEach(([key, value]) => {
-      url.searchParams.append(key, value.toString());
-    });
+    Object.entries(params).forEach(([key, value]) => { url.searchParams.append(key, value.toString()) });
     // Prepare headers
-    const headers: Record<string, string> = {
-  'Content-Type': 'application/json',
-  'User-Agent': 'Wild-Construct/1.0',
+    const headers: Record<string, string> = { 'Content-Type': 'application/json'
+  'User-Agent': 'Wild-Construct/1.0' }
   ...source.authentication?.headers
 };
     // Add authentication
@@ -387,10 +372,9 @@ export class DataSourceManager extends EventEmitter {
         const auth = btoa(`${source.authentication.credentials.username}:${source.authentication.credentials.password}`);}
         headers['Authorization'] = `Basic ${auth}`;}
         break;
-    const response = await fetch(url.toString(), {
-  method: 'GET',
-  headers,
-  signal: AbortSignal.timeout(source.reliability.timeout),
+    const response = await fetch(url.toString(), { method: 'GET'
+  headers
+  signal: AbortSignal.timeout(source.reliability.timeout) }
 });
     if (!response.ok) {
       throw new Error(`API request failed: ${response.status} ${response.statusText}`);}
@@ -399,9 +383,7 @@ export class DataSourceManager extends EventEmitter {
   /**
    * Query static/demo data
    */
-  private async queryStaticData(source: DataSource, query: HistoricalQuery): Promise<any> {
-
-    // Demo medieval clothing data
+  private async queryStaticData(source: DataSource, query: HistoricalQuery): Promise<any> { // Demo medieval clothing data
     if (source.id === 'medieval-clothing') {
       return this.getMedievalClothingData(query);
     return [];
@@ -409,69 +391,65 @@ export class DataSourceManager extends EventEmitter {
    * Get medieval clothing demo data
    */
   private getMedievalClothingData(query: HistoricalQuery): any {
-    const medievalData = [;
+    const medievalData = [
       {
-        id: 'medieval-tunic-001',
-        name: 'Noble Tunic',
-        category: 'clothing',
-        subcategory: 'nobility',
-        era: 'high-medieval',
-        period: { start: 1100, end: 1300 },
-        region: 'england',
-        description: 'Fine wool tunic with embroidered trim, worn by nobility',
-        materials: ['wool', 'silk thread', 'gold thread'],
-        colors: ['deep blue', 'crimson', 'forest green'],
-        authenticity: 0.9,
-        source: 'medieval-fashion-history',
+        id: 'medieval-tunic-001'
+        name: 'Noble Tunic'
+        category: 'clothing'
+        subcategory: 'nobility'
+        era: 'high-medieval' }
+        period: { start: 1100, end: 1300 }
+        region: 'england'
+        description: 'Fine wool tunic with embroidered trim, worn by nobility'
+        materials: ['wool', 'silk thread', 'gold thread']
+        colors: ['deep blue', 'crimson', 'forest green']
+        authenticity: 0.9
+        source: 'medieval-fashion-history'
         tags: ['noble', 'formal', 'embroidered', 'high-status']
-  }
-      {
-        id: 'medieval-hood-001',
-        name: 'Peasant Hood',
-        category: 'clothing',
-        subcategory: 'peasant',
-        era: 'high-medieval',
-        period: { start: 1000, end: 1400 },
-        region: 'europe',
-        description: 'Simple wool hood for protection from weather',
-        materials: ['coarse wool', 'hemp cord'],
-        colors: ['brown', 'grey', 'undyed'],
-        authenticity: 0.95,
-        source: 'archaeological-findings',
+
+      { id: 'medieval-hood-001'
+        name: 'Peasant Hood'
+        category: 'clothing'
+        subcategory: 'peasant'
+        era: 'high-medieval' }
+        period: { start: 1000, end: 1400 }
+        region: 'europe'
+        description: 'Simple wool hood for protection from weather'
+        materials: ['coarse wool', 'hemp cord']
+        colors: ['brown', 'grey', 'undyed']
+        authenticity: 0.95
+        source: 'archaeological-findings'
         tags: ['peasant', 'practical', 'weather-protection', 'common']
-  }
-      {
-        id: 'medieval-surcoat-001',
-        name: 'Knight Surcoat',
-        category: 'clothing',
-        subcategory: 'military',
-        era: 'high-medieval',
-        period: { start: 1150, end: 1350 },
-        region: 'france',
-        description: 'Sleeveless garment worn over armor with heraldic design',
-        materials: ['linen', 'wool', 'silk'],
-        colors: ['royal blue', 'gold', 'silver'],
-        authenticity: 0.88,
-        source: 'military-history',
+
+      { id: 'medieval-surcoat-001'
+        name: 'Knight Surcoat'
+        category: 'clothing'
+        subcategory: 'military'
+        era: 'high-medieval' }
+        period: { start: 1150, end: 1350 }
+        region: 'france'
+        description: 'Sleeveless garment worn over armor with heraldic design'
+        materials: ['linen', 'wool', 'silk']
+        colors: ['royal blue', 'gold', 'silver']
+        authenticity: 0.88
+        source: 'military-history'
         tags: ['knight', 'heraldic', 'armor', 'military', 'ceremonial']
     ];
     // Filter based on query
-    return medievalData.filter(item => {)
+    return medievalData.filter(item => { )
   if (query.era && !query.era.includes(item.era)) return false;
       if (query.region && !query.region.includes(item.region)) return false;
       if (query.category && item.category !== query.category) return false;
       if (query.subcategory && item.subcategory !== query.subcategory) return false;
-      return true;
-    });
+      return true });
   // Additional helper methods would continue here...
-  private buildAPIParams(source: DataSource, query: HistoricalQuery): Record<string, any> {
-  // Build API-specific parameters
+  private buildAPIParams(source: DataSource, query: HistoricalQuery): Record<string, any> { // Build API-specific parameters
   return {
-  q: query.keywords?.join(' '),
-  era: Array.isArray(query.era) ? query.era.join(',') : query.era,
-  category: query.category,
-  limit: query.limit || 50,
-  offset: query.offset || 0,
+  q: query.keywords?.join(' ')
+  era: Array.isArray(query.era) ? query.era.join(',') : query.era
+  category: query.category
+  limit: query.limit || 50
+  offset: query.offset || 0 }
 };
   private extractDataFromAPIResponse(source: DataSource, response: any): any {
     // Extract data based on source format
@@ -519,8 +497,7 @@ export class DataSourceManager extends EventEmitter {
   // Cache management methods
   private generateCacheKey(sourceId: string, query: HistoricalQuery): string {
     return `${sourceId}:${JSON.stringify(query)}`;}
-  private getFromCache<T>(key: string): CacheEntry<T> | null {
-  const entry = this.cache.get(key);
+  private getFromCache<T>(key: string): CacheEntry<T> | null { const entry = this.cache.get(key);
   if (!entry) return null;
   // Check if expired
   if (Date.now() - entry.timestamp > entry.ttl * 1000) {
@@ -528,24 +505,20 @@ export class DataSourceManager extends EventEmitter {
   return null;
   entry.hits++;
   return entry as CacheEntry<T>;
-  private setCache<T>(key: string, data: T, ttl: number): void {,
+  private setCache<T>(key: string, data: T, ttl: number): void {
   const size = JSON.stringify(data).length;
   this.cache.set(key, {)
-  data,
-  timestamp: Date.now(),
-  ttl,
-  hits: 0,
+  data
+  timestamp: Date.now()
+  ttl
+  hits: 0 }
   size
 });
   // Health check and cleanup
-  private startHealthChecks(): void {
-    setInterval(() => {
-      this.performHealthChecks();
-    }, 60000); // Every minute
-  private startCacheCleanup(): void {
-    setInterval(() => {
-      this.cleanupCache();
-    }, 300000); // Every 5 minutes
+  private startHealthChecks(): void { setInterval(() => {
+      this.performHealthChecks() }, 60000); // Every minute
+  private startCacheCleanup(): void { setInterval(() => {
+      this.cleanupCache() }, 300000); // Every 5 minutes
   private async performHealthChecks(): Promise<void> {
 
     // Perform health checks on all sources
@@ -584,7 +557,7 @@ export class DataSourceManager extends EventEmitter {
         return await this.queryXMLFile(source, query);
       default:
         throw new Error(`Unsupported file type: ${fileExtension}`);}
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to read file from ${source.endpoint}: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   /**
    * Generate mock database results for demo purposes
@@ -606,180 +579,164 @@ export class DataSourceManager extends EventEmitter {
         source: `${source.id}-database`}
 },
   timestamp: new Date().toISOString(),
-        metadata: {
+        metadata: { ,
   queryHash: this.generateQueryHash(query),
-  extractedAt: new Date().toISOString(),
+  extractedAt: new Date().toISOString() }
 };
       results.push(item);
     return results;
   /**
    * Query JSON file data source
    */
-  private async queryJSONFile(source: DataSource, query: HistoricalQuery): Promise<any> {
-
-    // Simulate file reading delay
+  private async queryJSONFile(source: DataSource, query: HistoricalQuery): Promise<any> { // Simulate file reading delay
     await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300));
     // Mock JSON file data
-    const jsonData = [;
+    const jsonData = [
       {
-        id: 'json-medieval-clothing-001',
-        name: 'Royal Ceremonial Robe',
-        category: 'clothing',
-        era: 'high-medieval',
-        period: { start: 1200, end: 1350 },
-        region: 'england',
-        description: 'Elaborate ceremonial robe worn by English royalty',
-        materials: ['silk', 'ermine', 'gold thread', 'precious stones'],
-        colors: ['deep purple', 'gold', 'silver'],
-        authenticity: 0.95,
-        source: 'british-museum-archives',
+        id: 'json-medieval-clothing-001'
+        name: 'Royal Ceremonial Robe'
+        category: 'clothing'
+        era: 'high-medieval' }
+        period: { start: 1200, end: 1350 }
+        region: 'england'
+        description: 'Elaborate ceremonial robe worn by English royalty'
+        materials: ['silk', 'ermine', 'gold thread', 'precious stones']
+        colors: ['deep purple', 'gold', 'silver']
+        authenticity: 0.95
+        source: 'british-museum-archives'
         tags: ['royal', 'ceremonial', 'luxury', 'court']
-  }
-      {
-        id: 'json-medieval-tools-002',
-        name: 'Blacksmith Hammer',
-        category: 'technology',
-        era: 'high-medieval',
-        period: { start: 1100, end: 1400 },
-        region: 'germany',
-        description: 'Heavy iron hammer used by medieval blacksmiths',
-        materials: ['iron', 'oak wood', 'leather wrapping'],
-        weight: '2.5kg',
-        authenticity: 0.88,
-        source: 'german-crafts-museum',
+
+      { id: 'json-medieval-tools-002'
+        name: 'Blacksmith Hammer'
+        category: 'technology'
+        era: 'high-medieval' }
+        period: { start: 1100, end: 1400 }
+        region: 'germany'
+        description: 'Heavy iron hammer used by medieval blacksmiths'
+        materials: ['iron', 'oak wood', 'leather wrapping']
+        weight: '2.5kg'
+        authenticity: 0.88
+        source: 'german-crafts-museum'
         tags: ['tools', 'blacksmithing', 'crafts', 'iron-working']
     ];
     // Filter data based on query
-    return jsonData.filter(item => {)
+    return jsonData.filter(item => { )
   if (query.category && item.category !== query.category) return false;
       if (query.era && item.era !== query.era) return false;
       if (query.region && item.region !== query.region) return false;
-      return true;
-    }).slice(0, query.limit || 50);
+      return true }).slice(0, query.limit || 50);
   /**
    * Query CSV file data source
    */
-  private async queryCSVFile(source: DataSource, query: HistoricalQuery): Promise<any> {
-
-  // Simulate file reading delay
+  private async queryCSVFile(source: DataSource, query: HistoricalQuery): Promise<any> { // Simulate file reading delay
   await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 400));
   // Mock CSV data converted to objects
-  const csvData = [;
+  const csvData = [
   {
-  id: 'csv-architecture-001',
-  name: 'Gothic Cathedral Spire',
-  category: 'architecture',
-  era: 'high-medieval',
-  region: 'france',
-  height: '95m',
-  construction_start: '1194',
-  construction_end: '1250',
-  materials: 'limestone,oak,iron',
-  style: 'gothic',
-  authenticity: 0.97,
-  source: 'french-heritage-database',
-}
-      {
-  id: 'csv-literature-002',
-  name: 'Illuminated Manuscript',
-  category: 'literature',
-  era: 'high-medieval',
-  region: 'ireland',
-  pages: '340',
-  language: 'latin',
-  scribe: 'Brother Marcus',
-  materials: 'vellum,gold leaf,mineral pigments',
-  authenticity: 0.92,
+  id: 'csv-architecture-001'
+  name: 'Gothic Cathedral Spire'
+  category: 'architecture'
+  era: 'high-medieval'
+  region: 'france'
+  height: '95m'
+  construction_start: '1194'
+  construction_end: '1250'
+  materials: 'limestone,oak,iron'
+  style: 'gothic'
+  authenticity: 0.97
+  source: 'french-heritage-database' }
+
+      { id: 'csv-literature-002'
+  name: 'Illuminated Manuscript'
+  category: 'literature'
+  era: 'high-medieval'
+  region: 'ireland'
+  pages: '340'
+  language: 'latin'
+  scribe: 'Brother Marcus'
+  materials: 'vellum,gold leaf,mineral pigments'
+  authenticity: 0.92
   source: 'trinity-college-library'];
   // Parse materials field (CSV format)
   const parsedData = csvData.map(item => ({)
-  ...item,
-  materials: item.materials ? item.materials.split(',').map(m => m.trim()) : [],
+  ...item
+  materials: item.materials ? item.materials.split(',').map(m => m.trim()) : [] }
 }));
     // Filter and return
-    return parsedData.filter(item => {)
+    return parsedData.filter(item => { )
   if (query.category && item.category !== query.category) return false;
       if (query.era && item.era !== query.era) return false;
       if (query.region && item.region !== query.region) return false;
-      return true;
-    }).slice(0, query.limit || 50);
+      return true }).slice(0, query.limit || 50);
   /**
    * Query XML file data source
    */
-  private async queryXMLFile(source: DataSource, query: HistoricalQuery): Promise<any> {
-
-    // Simulate file reading and XML parsing delay
+  private async queryXMLFile(source: DataSource, query: HistoricalQuery): Promise<any> { // Simulate file reading and XML parsing delay
     await new Promise(resolve => setTimeout(resolve, 400 + Math.random() * 500));
     // Mock XML data converted to objects
-    const xmlData = [;
+    const xmlData = [
       {
-        id: 'xml-artwork-001',
-        name: 'Stained Glass Window',
-        category: 'art',
-        era: 'high-medieval',
-        region: 'england',
-        description: 'Religious stained glass depicting biblical scenes',
-        dimensions: { width: '3.2m', height: '8.5m' },
-        materials: ['colored glass', 'lead came', 'iron framework'],
-        themes: ['religious', 'biblical', 'martyrs'],
-        location: 'Canterbury Cathedral',
-        commission_date: '1180',
-        authenticity: 0.94,
+        id: 'xml-artwork-001'
+        name: 'Stained Glass Window'
+        category: 'art'
+        era: 'high-medieval'
+        region: 'england'
+        description: 'Religious stained glass depicting biblical scenes' }
+        dimensions: { width: '3.2m', height: '8.5m' }
+        materials: ['colored glass', 'lead came', 'iron framework']
+        themes: ['religious', 'biblical', 'martyrs']
+        location: 'Canterbury Cathedral'
+        commission_date: '1180'
+        authenticity: 0.94
         source: 'cathedral-archives-xml'];
     // Filter and return
-    return xmlData.filter(item => {)
+    return xmlData.filter(item => { )
   if (query.category && item.category !== query.category) return false;
       if (query.era && item.era !== query.era) return false;
       if (query.region && item.region !== query.region) return false;
-      return true;
-    }).slice(0, query.limit || 50);
+      return true }).slice(0, query.limit || 50);
   /**
    * Utility methods for mock data generation
    */
-  private generateMockItemName(category: string, era: string | string): string {
-  const prefixes = {
-  'clothing': ['Noble', 'Peasant', 'Royal', 'Merchant', 'Ceremonial'],
-  'architecture': ['Gothic', 'Romanesque', 'Stone', 'Wooden', 'Fortified'],
-  'art': ['Illuminated', 'Religious', 'Secular', 'Decorative', 'Symbolic'],
-  'technology': ['Iron', 'Bronze', 'Wooden', 'Leather', 'Crafted'],
+  private generateMockItemName(category: string, era: string | string): string { const prefixes = {
+  'clothing': ['Noble', 'Peasant', 'Royal', 'Merchant', 'Ceremonial']
+  'architecture': ['Gothic', 'Romanesque', 'Stone', 'Wooden', 'Fortified']
+  'art': ['Illuminated', 'Religious', 'Secular', 'Decorative', 'Symbolic']
+  'technology': ['Iron', 'Bronze', 'Wooden', 'Leather', 'Crafted'] }
 };
-    const suffixes = {
-  'clothing': ['Tunic', 'Robe', 'Cloak', 'Hood', 'Shoes'],
-  'architecture': ['Cathedral', 'Castle', 'Bridge', 'Tower', 'Hall'],
-  'art': ['Manuscript', 'Sculpture', 'Painting', 'Tapestry', 'Jewelry'],
-  'technology': ['Tool', 'Weapon', 'Instrument', 'Machine', 'Device'],
+    const suffixes = { 'clothing': ['Tunic', 'Robe', 'Cloak', 'Hood', 'Shoes']
+  'architecture': ['Cathedral', 'Castle', 'Bridge', 'Tower', 'Hall']
+  'art': ['Manuscript', 'Sculpture', 'Painting', 'Tapestry', 'Jewelry']
+  'technology': ['Tool', 'Weapon', 'Instrument', 'Machine', 'Device'] }
 };
     const categoryPrefixes = prefixes[category as keyof typeof prefixes] || ['Medieval'];
     const categorySuffixes = suffixes[category as keyof typeof suffixes] || ['Item'];
     const prefix = categoryPrefixes[Math.floor(Math.random() * categoryPrefixes.length)];
     const suffix = categorySuffixes[Math.floor(Math.random() * categorySuffixes.length)];
     return `${prefix} ${suffix}`;}
-  private generateMockDescription(category: string): string {
-  const descriptions = {
-  'clothing': 'Traditional garment worn during medieval period with authentic materials and construction techniques.',
-  'architecture': 'Historical building structure representing typical medieval architectural styles and methods.',
-  'art': 'Artistic work from medieval period showcasing period-appropriate themes and artistic techniques.',
-  'technology': 'Tool or device used during medieval times demonstrating period craftsmanship and functionality.',
+  private generateMockDescription(category: string): string { const descriptions = {
+  'clothing': 'Traditional garment worn during medieval period with authentic materials and construction techniques.'
+  'architecture': 'Historical building structure representing typical medieval architectural styles and methods.'
+  'art': 'Artistic work from medieval period showcasing period-appropriate themes and artistic techniques.'
+  'technology': 'Tool or device used during medieval times demonstrating period craftsmanship and functionality.' }
 };
     return descriptions[category as keyof typeof descriptions] || 'Historical item from medieval period.';
-  private generateMockMaterials(category: string): string {
-  const materials = {
-  'clothing': ['wool', 'linen', 'silk', 'cotton', 'leather', 'fur'],
-  'architecture': ['stone', 'wood', 'iron', 'lead', 'lime mortar', 'clay'],
-  'art': ['pigments', 'gold leaf', 'vellum', 'ink', 'wood panel', 'canvas'],
-  'technology': ['iron', 'steel', 'bronze', 'wood', 'leather', 'bone'],
+  private generateMockMaterials(category: string): string { const materials = {
+  'clothing': ['wool', 'linen', 'silk', 'cotton', 'leather', 'fur']
+  'architecture': ['stone', 'wood', 'iron', 'lead', 'lime mortar', 'clay']
+  'art': ['pigments', 'gold leaf', 'vellum', 'ink', 'wood panel', 'canvas']
+  'technology': ['iron', 'steel', 'bronze', 'wood', 'leather', 'bone'] }
 };
     const categoryMaterials = materials[category as keyof typeof materials] || ['unknown'];
     const count = Math.floor(Math.random() * 3) + 1;
     return categoryMaterials
       .sort(() => Math.random() - 0.5)
       .slice(0, count);
-  private generateQueryHash(query: HistoricalQuery): string {
-  const queryString = JSON.stringify({)
-  era: query.era,
-  category: query.category,
-  region: query.region,
-  keywords: query.keywords,
+  private generateQueryHash(query: HistoricalQuery): string { const queryString = JSON.stringify({)
+  era: query.era
+  category: query.category
+  region: query.region
+  keywords: query.keywords }
 });
     // Simple hash function for demo purposes
     let hash = 0;

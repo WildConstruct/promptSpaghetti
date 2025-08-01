@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-}
+
+
 interface ModerationItem {
   id: string;,
-  type: 'content' | 'user' | 'template' | 'comment';
+  type: 'content' | 'user' | 'template' | 'comment';,
   content: string;,
   author: string;
   reportedBy?: string;
@@ -13,17 +14,17 @@ interface ModerationItem {
   reviewedAt?: Date;
   reviewedBy?: string;
   metadata?: Record<string, unknown>;
+  // interface ModerationAction { // Commented out unused interface
+  //   id: string;
+  //   action: 'approve' | 'reject' | 'flag' | 'delete' | 'warn';
+  //   reason: string;
+  //   moderatorId: string;
+  //   timestamp: Date;
 
-// interface ModerationAction { // Commented out unused interface
-//   id: string;
-//   action: 'approve' | 'reject' | 'flag' | 'delete' | 'warn';
-//   reason: string;
-//   moderatorId: string;
-//   timestamp: Date;
 
-}
 // }
-}
+
+
 interface ModerationManagementProps {
   items: ModerationItem;
   onApprove?: (itemId: string, reason: string) => void;
@@ -31,14 +32,15 @@ interface ModerationManagementProps {
   onFlag?: (itemId: string, reason: string) => void;
   onDelete?: (itemId: string, reason: string) => void;,
   currentModerator: string;
-  export const ModerationManagement: React.FC<ModerationManagementProps> = ({,)
+  export const ModerationManagement: React.FC<ModerationManagementProps> = ({),
   items,
   onApprove,
   onReject,
   onFlag,
   onDelete,
   currentModerator
-}
+
+
 }) => {
   const [selectedItems, setSelectedItems] = useState<string>([]);
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -48,7 +50,7 @@ interface ModerationManagementProps {
   const [pendingAction, setPendingAction] = useState<{
   action: 'approve' | 'reject' | 'flag' | 'delete';,
   itemId: string;
-} | null>(null);
+ | null>(null);
   const filteredItems = items.filter(item => {)
   if (filterStatus !== 'all' && item.status !== filterStatus) return false;
     if (filterType !== 'all' && item.type !== filterType) return false;
@@ -84,7 +86,7 @@ interface ModerationManagementProps {
   const reason = `Bulk ${action} by ${currentModerator}`;}
       if (action === 'approve') {
         onApprove?.(itemId, reason);
-      } else {
+ else {
         onReject?.(itemId, reason);
     });
     setSelectedItems([]);
@@ -158,9 +160,9 @@ interface ModerationManagementProps {
                 onChange={(e) => {
                   if (e.target.checked) {
                     setSelectedItems([...selectedItems, item.id]);
-                  } else {
+ else {
                     setSelectedItems(selectedItems.filter(id => id !== item.id));
-                }}
+}
               />
               <span 
                 className="priority-badge"
@@ -229,7 +231,7 @@ interface ModerationManagementProps {
             <p>
               {pendingAction?.action} this {pendingAction && 
                 filteredItems.find(i => i.id === pendingAction.itemId)?.type
-              }?
+?
             </p>
             <textarea
               placeholder="Reason for this action..."

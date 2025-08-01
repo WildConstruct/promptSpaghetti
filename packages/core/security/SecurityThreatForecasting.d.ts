@@ -12,6 +12,7 @@ import { SecurityEvent, ThreatType } from './PredictiveSecurityAnalytics';
 import { SecurityAnomaly } from './SecurityAnomalyDetector';
 
 }
+}
 export interface ThreatForecast {
     forecastId: string;
     timestamp: Date;
@@ -36,8 +37,9 @@ export declare enum ForecastType {
     SCENARIO_BASED = "scenario_based"
 
 }
-export interface SeasonalFactor {
-    period: SeasonalPeriod;
+}
+}
+export interface SeasonalFactor { period: SeasonalPeriod;
     amplitude: number;
     phase: number;
     strength: number;
@@ -45,15 +47,16 @@ export interface SeasonalFactor {
     historicalPattern: number[];
 
 export declare enum SeasonalPeriod {
-    HOURLY = "hourly",
-    DAILY = "daily",
-    WEEKLY = "weekly",
-    MONTHLY = "monthly",
+    HOURLY = "hourly";
+    DAILY = "daily";
+    WEEKLY = "weekly";
+    MONTHLY = "monthly" }
     QUARTERLY = "quarterly"
 
 }
-export interface TrendComponent {
-    trendType: TrendType;
+}
+}
+export interface TrendComponent { trendType: TrendType;
     direction: 'increasing' | 'decreasing' | 'stable';
     magnitude: number;
     acceleration: number;
@@ -62,42 +65,37 @@ export interface TrendComponent {
     changePoints: ChangePoint[];
 
 export declare enum TrendType {
-    LINEAR = "linear",
-    EXPONENTIAL = "exponential",
-    LOGARITHMIC = "logarithmic",
-    POLYNOMIAL = "polynomial",
-    CYCLICAL = "cyclical",
+    LINEAR = "linear";
+    EXPONENTIAL = "exponential";
+    LOGARITHMIC = "logarithmic";
+    POLYNOMIAL = "polynomial";
+    CYCLICAL = "cyclical" }
     VOLATILE = "volatile"
 
 }
-export interface ChangePoint {
-    timestamp: Date;
+}
+}
+export interface ChangePoint { timestamp: Date;
     magnitude: number;
     type: 'level_shift' | 'trend_change' | 'variance_change';
-    confidence: number;
-
-
+    confidence: number }
 }
-export interface ForecastRiskMetrics {
-    expectedValue: number;
+}
+export interface ForecastRiskMetrics { expectedValue: number;
     valueAtRisk: number;
     conditionalValueAtRisk: number;
     volatilityIndex: number;
     uncertaintyRange: [number, number];
-    scenarioRisks: ScenarioRisk[];
-
-
+    scenarioRisks: ScenarioRisk[] }
 }
-export interface ScenarioRisk {
-    scenario: string;
+}
+export interface ScenarioRisk { scenario: string;
     probability: number;
     impact: number;
-    description: string;
-
-
+    description: string }
 }
-export interface ForecastRecommendation {
-    type: RecommendationType;
+}
+export interface ForecastRecommendation { type: RecommendationType;
     priority: 'immediate' | 'high' | 'medium' | 'low';
     description: string;
     expectedBenefit: number;
@@ -106,17 +104,18 @@ export interface ForecastRecommendation {
     dependencies: string[];
 
 export declare enum RecommendationType {
-    PROACTIVE_DEFENSE = "proactive_defense",
-    RESOURCE_SCALING = "resource_scaling",
-    ALERT_TUNING = "alert_tuning",
-    POLICY_ADJUSTMENT = "policy_adjustment",
-    MONITORING_ENHANCEMENT = "monitoring_enhancement",
-    TRAINING_RECOMMENDATION = "training_recommendation",
+    PROACTIVE_DEFENSE = "proactive_defense";
+    RESOURCE_SCALING = "resource_scaling";
+    ALERT_TUNING = "alert_tuning";
+    POLICY_ADJUSTMENT = "policy_adjustment";
+    MONITORING_ENHANCEMENT = "monitoring_enhancement";
+    TRAINING_RECOMMENDATION = "training_recommendation" }
     INFRASTRUCTURE_CHANGE = "infrastructure_change"
 
 }
-export interface ForecastModelMetadata {
-    modelName: string;
+}
+}
+export interface ForecastModelMetadata { modelName: string;
     modelVersion: string;
     algorithm: ForecastAlgorithm;
     trainingPeriod: [Date, Date];
@@ -126,34 +125,31 @@ export interface ForecastModelMetadata {
     lastUpdated: Date;
 
 export declare enum ForecastAlgorithm {
-    ARIMA = "arima",
-    LSTM = "lstm",
-    PROPHET = "prophet",
-    SEASONAL_NAIVE = "seasonal_naive",
-    EXPONENTIAL_SMOOTHING = "exponential_smoothing",
-    RANDOM_FOREST = "random_forest",
-    GRADIENT_BOOSTING = "gradient_boosting",
+    ARIMA = "arima";
+    LSTM = "lstm";
+    PROPHET = "prophet";
+    SEASONAL_NAIVE = "seasonal_naive";
+    EXPONENTIAL_SMOOTHING = "exponential_smoothing";
+    RANDOM_FOREST = "random_forest";
+    GRADIENT_BOOSTING = "gradient_boosting" }
     ENSEMBLE = "ensemble"
 
 }
-export interface ModelAccuracyMetrics {
-    mape: number;
+}
+}
+export interface ModelAccuracyMetrics { mape: number;
     rmse: number;
     mae: number;
     r2Score: number;
-    directionalAccuracy: number;
-
-
+    directionalAccuracy: number }
 }
-export interface TimeSeriesData {
-    timestamp: Date;
+}
+export interface TimeSeriesData { timestamp: Date;
     value: number;
-    metadata: Record<string, unknown>;
-
-
+    metadata: Record<string, unknown> }
 }
-export interface ForecastingConfig {
-    enableRealTimeForecasting: boolean;
+}
+export interface ForecastingConfig { enableRealTimeForecasting: boolean;
     forecastUpdateInterval: number;
     defaultTimeHorizon: number;
     confidenceThreshold: number;
@@ -161,12 +157,10 @@ export interface ForecastingConfig {
     enableTrendAnalysis: boolean;
     enableEnsembleModels: boolean;
     maxHistoryDays: number;
-    minDataPointsForForecast: number;
-
-
+    minDataPointsForForecast: number }
 }
-export interface ThreatScenario {
-    scenarioId: string;
+}
+export interface ThreatScenario { scenarioId: string;
     name: string;
     description: string;
     threatTypes: ThreatType[];
@@ -174,16 +168,13 @@ export interface ThreatScenario {
     expectedDuration: number;
     expectedIntensity: number;
     likelihood: number;
-    impactAssessment: ScenarioImpact;
-
-
+    impactAssessment: ScenarioImpact }
 }
-export interface ScenarioTrigger {
-    triggerType: 'metric_threshold' | 'anomaly_count' | 'time_based' | 'external_event';
+}
+export interface ScenarioTrigger { triggerType: 'metric_threshold' | 'anomaly_count' | 'time_based' | 'external_event';
     condition: string;
-    weight: number;
-
-
+    weight: number }
+}
 }
 export interface ScenarioImpact {
     businessImpact: number;
@@ -268,4 +259,5 @@ export declare class SecurityThreatForecasting extends EventEmitter {
 
 export default SecurityThreatForecasting;
 //# sourceMappingURL=SecurityThreatForecasting.d.ts.map
+}
 }

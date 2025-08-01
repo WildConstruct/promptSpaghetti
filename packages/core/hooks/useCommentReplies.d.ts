@@ -5,8 +5,8 @@
 import { Comment } from '../types/workspace';
 
 }
-interface UseCommentRepliesOptions {
-    commentId: string;
+}
+interface UseCommentRepliesOptions { commentId: string;
     userId: string;
     limit?: number;
     sortOrder?: 'asc' | 'desc';
@@ -25,7 +25,7 @@ export declare function useCommentReplies(options: UseCommentRepliesOptions): {
     refresh: () => void;
     addReply: (newReply: Comment) => void;
     updateReply: (replyId: string, updatedReply: Comment) => void;
-    removeReply: (replyId: string) => void;
+    removeReply: (replyId: string) => void }
 }
 };
 export {};

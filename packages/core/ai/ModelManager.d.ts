@@ -8,48 +8,40 @@ import { BaseAIModel, AIRequest, AIResponse, HealthStatus, CostEstimate } from '
 import { ModelRegistration, FactoryConfig } from './AIModelFactory';
 
 }
-export interface CacheConfig {
-    maxSize: number;
+}
+export interface CacheConfig { maxSize: number;
     ttl: number;
     evictionPolicy: 'lru' | 'lfu' | 'ttl' | 'hybrid';
     enablePersistence?: boolean;
-    persistencePath?: string;
-
-
+    persistencePath?: string }
 }
-export interface LoadBalancingConfig {
-    strategy: 'round-robin' | 'least-connections' | 'response-time' | 'cost-aware' | 'capability-based';
+}
+export interface LoadBalancingConfig { strategy: 'round-robin' | 'least-connections' | 'response-time' | 'cost-aware' | 'capability-based';
     healthCheckInterval: number;
     maxConcurrentRequests: number;
     enableFailover: boolean;
-    failoverThreshold: number;
-
-
+    failoverThreshold: number }
 }
-export interface ModelPool {
-    id: string;
+}
+export interface ModelPool { id: string;
     models: BaseAIModel[];
     loadBalancer: LoadBalancer;
     healthMonitor: HealthMonitor;
     currentLoad: number;
-    lastUsed: Date;
-
-
+    lastUsed: Date }
 }
-export interface ModelPerformanceMetrics {
-    modelId: string;
+}
+export interface ModelPerformanceMetrics { modelId: string;
     averageLatency: number;
     throughput: number;
     errorRate: number;
     concurrentRequests: number;
     totalRequests: number;
     costPerRequest: number;
-    lastUpdated: Date;
-
-
+    lastUpdated: Date }
 }
-export interface WarmupStrategy {
-    enabled: boolean;
+}
+export interface WarmupStrategy { enabled: boolean;
     concurrency: number;
     sampleRequests: unknown[];
     timeout: number;
@@ -111,9 +103,9 @@ export declare class ModelManager {
     private loadBalancingConfig;
     private warmupStrategy;
     constructor();
-      factoryConfig?: FactoryConfig,
-      cacheConfig?: CacheConfig,
-      loadBalancingConfig?: LoadBalancingConfig,
+      factoryConfig?: FactoryConfig;
+      cacheConfig?: CacheConfig;
+      loadBalancingConfig?: LoadBalancingConfig }
       warmupStrategy?: WarmupStrategy
     );
     createModelPool(poolId: string, registrations: ModelRegistration[]): Promise<ModelPool>;
@@ -127,4 +119,5 @@ export declare class ModelManager {
 
 export default ModelManager;
 //# sourceMappingURL=ModelManager.d.ts.map
+}
 }

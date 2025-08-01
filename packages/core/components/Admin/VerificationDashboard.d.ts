@@ -8,22 +8,19 @@ import React from 'react';
 import type { IdentityValidationRequest } from '../../auth/IdentityValidation';
 
 }
-export interface VerificationDashboardProps {
-    className?: string;
-    onRequestSelect?: (request: IdentityValidationRequest) => void;
-
-
 }
-export interface AdminVerificationMetrics {
-    totalRequests: number;
+export interface VerificationDashboardProps { className?: string;
+    onRequestSelect?: (request: IdentityValidationRequest) => void }
+}
+}
+export interface AdminVerificationMetrics { totalRequests: number;
     pendingRequests: number;
     approvedToday: number;
     rejectedToday: number;
     averageProcessingTime: number;
     queueBacklog: number;
-    priorityRequests: number;
-
-
+    priorityRequests: number }
+}
 }
 export interface VerificationQueueItem extends IdentityValidationRequest {
     priority: 'low' | 'medium' | 'high' | 'urgent';

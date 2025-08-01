@@ -65,7 +65,8 @@ actions: {
     parameters: Record;
     expected_improvement_percent: number;
     implementation_cost: 'low' | 'medium' | 'high';
-    risk_level: 'low' | 'medium' | 'high';
+    risk_level: 'low' | 'medium' | 'high',
+    ;
 }
 ;
 // Rule effectiveness
@@ -127,7 +128,8 @@ recommendations: {
     immediate_actions: string;
     long_term_improvements: string;
     estimated_impact: string;
-    implementation_effort: 'low' | 'medium' | 'high';
+    implementation_effort: 'low' | 'medium' | 'high',
+    ;
 }
 ;
 // Resolution tracking
@@ -186,13 +188,20 @@ performance_summary: {
 }
 ;
 // Top optimization opportunities
-optimization_opportunities: Array;
+optimization_opportunities: Array < {
+    opportunity_type: string,
+    estimated_impact: string,
+    affected_queries: number,
+    implementation_effort: string,
+    priority_score: number
+} > ;
 // Performance trends
 trends: {
     query_volume_trend: 'increasing' | 'stable' | 'decreasing';
     performance_trend: 'improving' | 'stable' | 'degrading';
     cache_efficiency_trend: 'improving' | 'stable' | 'degrading';
-    resource_usage_trend: 'increasing' | 'stable' | 'decreasing';
+    resource_usage_trend: 'increasing' | 'stable' | 'decreasing',
+    ;
 }
 ;
 // Recommendations
@@ -569,8 +578,7 @@ void {
                 optimizations_applied: [],
                 optimization_time_ms: 0,
                 execution_plan: {
-                    plan_id: `plan_${executionId}`
-                }
+                    plan_id: `plan_${executionId}` }
             },
             plan_type: 'sequential',
             estimated_cost: 0,
@@ -671,12 +679,12 @@ void {
                 number;
                 {
                     // Extract time range from query (simplified)
-                    const timeRangePatterns = [];
-                    /(\d+)\s*(?:hour|hr|h)s?/i,
+                    const timeRangePatterns = [
+                        /(\d+)\s*(?:hour|hr|h)s?/i,
                         /(\d+)\s*(?:day|d)s?/i,
                         /(\d+)\s*(?:week|w)s?/i,
-                        /(\d+)\s*(?:month|m)s?/i;
-                    ;
+                        /(\d+)\s*(?:month|m)s?/i
+                    ];
                     for (const pattern of timeRangePatterns) {
                         const match = queryText.match(pattern);
                         if (match) {
@@ -693,14 +701,14 @@ void {
                             countJoins(queryText, string);
                             number;
                             {
-                                const joinPatterns = [];
-                                /\bINNER\s+JOIN\b/gi,
+                                const joinPatterns = [
+                                    /\bINNER\s+JOIN\b/gi,
                                     /\bLEFT\s+JOIN\b/gi,
                                     /\bRIGHT\s+JOIN\b/gi,
                                     /\bFULL\s+JOIN\b/gi,
                                     /\bCROSS\s+JOIN\b/gi,
-                                    /\bJOIN\b/gi;
-                                ;
+                                    /\bJOIN\b/gi
+                                ];
                                 let count = 0;
                                 for (const pattern of joinPatterns) {
                                     count += (queryText.match(pattern) || []).length;
@@ -714,14 +722,14 @@ void {
                                         countAggregations(queryText, string);
                                         number;
                                         {
-                                            const aggPatterns = [];
-                                            /\bCOUNT\s*\(/gi;
-                                            /\bSUM\s*\(/gi;
-                                            /\bAVG\s*\(/gi;
-                                            /\bMAX\s*\(/gi;
-                                            /\bMIN\s*\(/gi;
-                                            /\bGROUP\s+BY\b/gi;
-                                            ;
+                                            const aggPatterns = [
+                                                /\bCOUNT\s*\(/gi,
+                                                /\bSUM\s*\(/gi,
+                                                /\bAVG\s*\(/gi,
+                                                /\bMAX\s*\(/gi,
+                                                /\bMIN\s*\(/gi,
+                                                /\bGROUP\s+BY\b/gi
+                                            ];
                                             let count = 0;
                                             for (const pattern of aggPatterns) {
                                                 count += (queryText.match(pattern) || []).length;
@@ -750,12 +758,12 @@ void {
                                                         if (!cacheableTypes.includes(queryType))
                                                             return false;
                                                         // Check for non-cacheable patterns
-                                                        const nonCacheablePatterns = [];
-                                                        /\bNOW\(\)/i,
+                                                        const nonCacheablePatterns = [
+                                                            /\bNOW\(\)/i,
                                                             /\bCURRENT_TIMESTAMP\b/i,
                                                             /\bRAND\(\)/i,
-                                                            /\bUUID\(\)/i;
-                                                        ;
+                                                            /\bUUID\(\)/i
+                                                        ];
                                                         return !nonCacheablePatterns.some(pattern => pattern.test(queryText));
                                                         determineCacheStrategy(queryType, QueryPerformanceProfile['query_type']);
                                                         CacheStrategy;
@@ -892,8 +900,7 @@ void {
                                                                     } | null > {
                                                                         try: {
                                                                             switch(rule) { }, : .actions.optimization_type
-                                                                        } }
-                                                                } }, { case: , 'index_hints': , return: await, this: , applyIndexOptimization };
+                                                                        } } } }, { case: , 'index_hints': , return: await, this: , applyIndexOptimization };
                                                             (rule, profile, execution);
                                                             'query_rewrite';
                                                             return await this.applyQueryRewrite(rule, profile, execution);
@@ -1546,8 +1553,7 @@ void {
                                                                                                                         },
                                                                                                                         affected_queries: slowQueries.length,
                                                                                                                         implementation_effort: 'Medium',
-                                                                                                                        priority_score: Math.min(10, slowQueries.length + 5)
-                                                                                                                    },
+                                                                                                                        priority_score: Math.min(10, slowQueries.length + 5) },
                                                                                                                     // Index optimization
                                                                                                                     const: poorIndexQueries = profiles.filter(p => p.characteristics.index_utilization_score < 0.5),
                                                                                                                     if(poorIndexQueries) { }, : .length > 0

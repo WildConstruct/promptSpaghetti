@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { 
-  Activity, 
+import { Activity, 
   Filter, 
   RefreshCw, 
   Search, 
@@ -12,14 +11,14 @@ import {
   GitBranch,
   FileText,
   Settings,
-  Trash2,
+  Trash2 }
   ExternalLink
-} from 'lucide-react';
+ from 'lucide-react';
 import { useActivityFeed } from '../../hooks/useActivityFeed';
 import { ActivityEvent, ActivityEventType } from '../../types/ActivityTypes';
-}
-interface ActivityFeedProps {
-  workspaceId?: string;
+
+
+interface ActivityFeedProps { workspaceId?: string;
   projectId?: string;
   userId?: string;
   className?: string;
@@ -27,85 +26,80 @@ interface ActivityFeedProps {
   showFilters?: boolean;
   showSearch?: boolean;
   realTime?: boolean;
-  const ACTIVITY_ICONS: Record<ActivityEventType, React.ComponentType<unknown>> = {,
-  'project_created': FileText,
-  'project_updated': Edit3,
-  'project_deleted': Trash2,
-  'resource_created': FileText,
-  'resource_updated': Edit3,
-  'resource_deleted': Trash2,
-  'comment_added': MessageCircle,
-  'comment_updated': MessageCircle,
-  'comment_deleted': MessageCircle,
-  'member_added': Users,
-  'member_removed': Users,
-  'member_role_changed': Users,
-  'workflow_state_changed': GitBranch,
-  'approval_requested': GitBranch,
-  'approval_granted': GitBranch,
-  'approval_rejected': GitBranch,
-  'version_created': GitBranch,
-  'branch_created': GitBranch,
-  'branch_merged': GitBranch,
-  'template_applied': FileText,
-  'collaboration_started': Users,
-  'collaboration_ended': Users,
-}
+  const ACTIVITY_ICONS: Record<ActivityEventType, React.ComponentType<unknown>> = {;
+  'project_created': FileText;
+  'project_updated': Edit3;
+  'project_deleted': Trash2;
+  'resource_created': FileText;
+  'resource_updated': Edit3;
+  'resource_deleted': Trash2;
+  'comment_added': MessageCircle;
+  'comment_updated': MessageCircle;
+  'comment_deleted': MessageCircle;
+  'member_added': Users;
+  'member_removed': Users;
+  'member_role_changed': Users;
+  'workflow_state_changed': GitBranch;
+  'approval_requested': GitBranch;
+  'approval_granted': GitBranch;
+  'approval_rejected': GitBranch;
+  'version_created': GitBranch;
+  'branch_created': GitBranch;
+  'branch_merged': GitBranch;
+  'template_applied': FileText;
+  'collaboration_started': Users;
+  'collaboration_ended': Users }
+
+
 };
-const ACTIVITY_COLORS: Record<ActivityEventType, string> = {
-  'project_created': 'text-green-500',
-  'project_updated': 'text-blue-500',
-  'project_deleted': 'text-red-500',
-  'resource_created': 'text-green-500',
-  'resource_updated': 'text-blue-500',
-  'resource_deleted': 'text-red-500',
-  'comment_added': 'text-purple-500',
-  'comment_updated': 'text-purple-500',
-  'comment_deleted': 'text-red-500',
-  'member_added': 'text-green-500',
-  'member_removed': 'text-red-500',
-  'member_role_changed': 'text-orange-500',
-  'workflow_state_changed': 'text-blue-500',
-  'approval_requested': 'text-yellow-500',
-  'approval_granted': 'text-green-500',
-  'approval_rejected': 'text-red-500',
-  'version_created': 'text-blue-500',
-  'branch_created': 'text-green-500',
-  'branch_merged': 'text-purple-500',
-  'template_applied': 'text-blue-500',
-  'collaboration_started': 'text-green-500',
-  'collaboration_ended': 'text-gray-500',
+const ACTIVITY_COLORS: Record<ActivityEventType, string> = { 'project_created': 'text-green-500'
+  'project_updated': 'text-blue-500'
+  'project_deleted': 'text-red-500'
+  'resource_created': 'text-green-500'
+  'resource_updated': 'text-blue-500'
+  'resource_deleted': 'text-red-500'
+  'comment_added': 'text-purple-500'
+  'comment_updated': 'text-purple-500'
+  'comment_deleted': 'text-red-500'
+  'member_added': 'text-green-500'
+  'member_removed': 'text-red-500'
+  'member_role_changed': 'text-orange-500'
+  'workflow_state_changed': 'text-blue-500'
+  'approval_requested': 'text-yellow-500'
+  'approval_granted': 'text-green-500'
+  'approval_rejected': 'text-red-500'
+  'version_created': 'text-blue-500'
+  'branch_created': 'text-green-500'
+  'branch_merged': 'text-purple-500'
+  'template_applied': 'text-blue-500'
+  'collaboration_started': 'text-green-500'
+  'collaboration_ended': 'text-gray-500' }
 };
 
 export const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
   const [actorFilter, setActorFilter] = useState<string>('all');
-  const {
-    activities,
-    loading,
-    error,
-    hasMore,
-    stats,
-    actors,
-    refreshActivities,
-    loadMore,
+  const { activities
+    loading
+    error
+    hasMore
+    stats
+    actors
+    refreshActivities
+    loadMore }
     realTimeConnection
-  } = useActivityFeed({)
-  workspaceId,
-  projectId,
-  userId,
-  searchTerm,
-  typeFilter: typeFilter === 'all' ? undefined : typeFilter,
-  dateFilter: dateFilter === 'all' ? undefined : dateFilter,
-  actorFilter: actorFilter === 'all' ? undefined : actorFilter,
+ = useActivityFeed({ )
+  workspaceId
+  projectId
+  userId
+  searchTerm
+  typeFilter: typeFilter === 'all' ? undefined : typeFilter
+  dateFilter: dateFilter === 'all' ? undefined : dateFilter
+  actorFilter: actorFilter === 'all' ? undefined : actorFilter }
   realTime
 });
-  const handleRefresh = useCallback(() => {
-    refreshActivities();
-  }, [refreshActivities]);
-  const handleLoadMore = useCallback(() => {
-    if (hasMore && !loading) {
-      loadMore();
-  }, [hasMore, loading, loadMore]);
+  const handleRefresh = useCallback(() => { refreshActivities() }, [refreshActivities]);
+  const handleLoadMore = useCallback(() => { if (hasMore && !loading) {
+      loadMore() }, [hasMore, loading, loadMore]);
   const renderActivityItem = (activity: ActivityEvent) => {
     const Icon = ACTIVITY_ICONS[activity.type] || Activity;
     const iconColor = ACTIVITY_COLORS[activity.type] || 'text-gray-500';
@@ -185,12 +179,12 @@ export const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' |
           </div>
           <div className="flex items-center space-x-2">
             {/* Real-time connection indicator */}
-            {realTime && ()
+            { realTime && ()
               <div className={`w-2 h-2 rounded-full ${
-  realTimeConnection?.status === 'connected' ? 'bg-green-400' :,
-  realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' :,
+  realTimeConnection?.status === 'connected' ? 'bg-green-400' :
+  realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' : }
   'bg-red-400'
-}`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />}
+`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />}
             )}
             <button
               onClick={handleRefresh}

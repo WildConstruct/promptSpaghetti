@@ -47,13 +47,24 @@ backup: {
     lastBackup ?  : Date;
 }
 ;
+resize ?  : { width: number, height: number, maintainAspectRatio: boolean };
+optimize ?  : boolean;
+format ?  : 'jpeg' | 'png' | 'webp' | 'avif';
+quality ?  : number; // 1-100
+progressive ?  : boolean;
+watermark ?  : {
+    text: string,
+    image: string,
+    position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center',
+    opacity: number
+};
 ;
 video ?  : {
     transcode: {
         resolution: '480p' | '720p' | '1080p' | '4k',
         bitrate: number,
         framerate: number,
-        codec: 'h264' | 'h265' | 'vp9'
+        codec: 'h264' | 'h265' | 'vp9',
     },
     thumbnail: {
         count: number,
@@ -68,7 +79,7 @@ audio ?  : {
         bitrate: number,
         sampleRate: number,
         channels: number,
-        codec: 'mp3' | 'aac' | 'ogg' | 'flac'
+        codec: 'mp3' | 'aac' | 'ogg' | 'flac',
     },
     normalize: boolean,
     noiseReduction: boolean,
@@ -116,7 +127,7 @@ export class MultimediaContentSupport extends EventEmitter {
             storage: {
                 provider: 'local',
                 maxFileSize: 100 * 1024 * 1024, // 100MB,
-                allowedTypes: [,
+                allowedTypes: [
                     'image/jpeg', 'image/png', 'image/gif', 'image/webp',
                     'video/mp4', 'video/webm', 'video/avi',
                     'audio/mp3', 'audio/wav', 'audio/ogg',
@@ -149,7 +160,11 @@ export class MultimediaContentSupport extends EventEmitter {
         this.initializeProcessingWorkers();
         // Upload and process media asset
         async;
-        uploadAsset(file, File | Buffer(metadata, (Partial) = {}, options, MediaProcessingOptions = {}), Promise < string > {
+        uploadAsset(file, File | Buffer());
+        metadata: (Partial) = {},
+            options;
+        MediaProcessingOptions = {};
+        Promise < string > {
             try: {
                 // Validate file
                 await, this: .validateFile(file),
@@ -165,30 +180,56 @@ export class MultimediaContentSupport extends EventEmitter {
             const: asset, MediaAsset = {
                 id: assetId,
                 name: file instanceof File ? file.name : `asset_${assetId}` }
-        }, type, mediaType, mimeType, size, file instanceof File ? file.size : file.length, url, '', // Will be set after upload
-        metadata, {
+        },
+            type;
+        mediaType,
+            mimeType,
+            size;
+        file instanceof File ? file.size : file.length,
+            url;
+        '', // Will be set after upload
+            metadata;
+        {
             title: metadata.title,
-            description: metadata.description,
-            alt: metadata.alt,
-            caption: metadata.caption,
-            tags: metadata.tags || [],
-            author: metadata.author,
-            copyright: metadata.copyright,
-            quality: metadata.quality || 'original',
-            ...metadata
-        }, accessibility, {
+                description;
+            metadata.description,
+                alt;
+            metadata.alt,
+                caption;
+            metadata.caption,
+                tags;
+            metadata.tags || [],
+                author;
+            metadata.author,
+                copyright;
+            metadata.copyright,
+                quality;
+            metadata.quality || 'original',
+            ;
+            metadata;
+        }
+        accessibility: {
             altText: metadata.alt || '',
-            screenReaderOptimized: false,
-            ...this.generateDefaultAccessibility(mediaType)
-        }, processing, {
+                screenReaderOptimized;
+            false,
+            ;
+            this.generateDefaultAccessibility(mediaType);
+        }
+        processing: {
             status: 'pending',
-            progress: 0,
-            stages: this.generateProcessingStages(mediaType, options),
-            errors: [],
-        }, storage, {
+                progress;
+            0,
+                stages;
+            this.generateProcessingStages(mediaType, options),
+                errors;
+            [],
+            ;
+        }
+        storage: {
             provider: this.config.storage.provider,
-            path: `/${mediaType}s/${assetId}`
-        });
+                path;
+            `/${mediaType}s/${assetId}`;
+        }
     }
     compression;
     config;

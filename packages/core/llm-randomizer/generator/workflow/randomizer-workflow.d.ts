@@ -4,15 +4,14 @@ import { ParserResult } from '../../parser';
 import { Graph } from '../../../graphSchema';
 
 }
-export interface WorkflowOptions {
-    onProgress?: (message: string, progress?: number) => void;
+}
+export interface WorkflowOptions { onProgress?: (message: string, progress?: number) => void;
     validateIntermediateSteps?: boolean;
     includeDebugInfo?: boolean;
-    timeoutMs?: number;
-
+    timeoutMs?: number }
 }
-export interface WorkflowResult {
-    success: boolean;
+}
+export interface WorkflowResult { success: boolean;
     graph?: Graph;
     serializedGraph?: string;
     llmOutput?: string;
@@ -24,27 +23,24 @@ export interface WorkflowResult {
         llmAttempts: number;
         parsingTime: number;
         serializationTime: number;
-        totalTime: number;
+        totalTime: number }
 }
     };
-    debugInfo?: {
-        originalRequest: RandomizerParameters;
+    debugInfo?: { originalRequest: RandomizerParameters;
         llmRequest: UniversalAgentRequest;
         llmResponse: any;
         parserResult: ParserResult;
-        validationResult: any;
-    };
+        validationResult: any };
 
 }
-export interface WorkflowError {
-    stage: 'preparation' | 'llm' | 'parsing' | 'validation' | 'serialization';
+}
+export interface WorkflowError { stage: 'preparation' | 'llm' | 'parsing' | 'validation' | 'serialization';
     type: string;
     message: string;
-    details?: any;
-
+    details?: any }
 }
-export interface WorkflowWarning {
-    stage: string;
+}
+export interface WorkflowWarning { stage: string;
     message: string;
     suggestion?: string;
 /**
@@ -75,8 +71,8 @@ export declare class RandomizerWorkflow {
      * Generate multiple variations with different parameters
      */
     generateVariations();
-      baseParameters: RandomizerParameters,
-      variationCount?: number,
+      baseParameters: RandomizerParameters;
+      variationCount?: number }
       options?: WorkflowOptions
     ): Promise<WorkflowResult[]>;
     /**
@@ -86,10 +82,9 @@ export declare class RandomizerWorkflow {
     /**
      * Validate workflow parameters before generation
      */
-    validateWorkflowParameters(parameters: RandomizerParameters): {
-        isValid: boolean;
+    validateWorkflowParameters(parameters: RandomizerParameters): { isValid: boolean;
         errors: string[];
-        warnings: string[];
+        warnings: string[] }
 }
     };
 

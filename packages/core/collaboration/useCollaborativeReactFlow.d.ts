@@ -8,35 +8,32 @@ import { UserPresence } from './collaborativeGraphStore';
 /**
  * Hook that bridges collaborative graph store with React Flow
  */
-export declare function useCollaborativeReactFlow(): {
-    nodes: FlowNode[];
+export declare function useCollaborativeReactFlow(): { nodes: FlowNode[];
     edges: FlowEdge[];
     onNodesChange: (changes: NodeChange[]) => void;
     onEdgesChange: (changes: EdgeChange[]) => void;
     onConnect: (connection: Connection) => void;
     onNodeDrag: (event: React.MouseEvent, node: FlowNode) => void;
-    onSelectionChange: (params: {),
+    onSelectionChange: (params: {) }
         nodes: FlowNode[];
         edges: FlowEdge[];
     }) => void;
     onPaneClick: () => void;
     enableCollaboration: (options: import("./GraphCRDTAdapter").CollaborativeGraphOptions) => Promise<void>;
     disableCollaboration: () => void;
-    addNodeAtPosition: (node: Node, position: {)
+    addNodeAtPosition: (node: Node, position: { )
         x: number;
-        y: number;
-    }) => void;
+        y: number }) => void;
     isCollaborative: boolean;
     collaborationEnabled: boolean;
     connectionStatus: "error" | "disconnected" | "connecting" | "connected";
     connectedUsers: Map<string, UserPresence>;
-    getUserCursors: () => {,
+    getUserCursors: () => { 
         userId: string;
         user: UserPresence;
         position: {
             x: number;
-            y: number;
-        };
+            y: number };
         nodeId?: string;
     }[];
     getRemoteSelections: () => Map<any, any>;
@@ -49,11 +46,9 @@ export declare function useNodeCollaborators(nodeId: string): UserPresence[];
 /**
  * Hook for showing connection status indicator
  */
-export declare function useCollaborationStatus(): {
-    isCollaborative: boolean;
+export declare function useCollaborationStatus(): { isCollaborative: boolean;
     connectionStatus: "error" | "disconnected" | "connecting" | "connected";
     isConnected: boolean;
     connectedUserCount: number;
-    lastSyncTime: number | undefined;
-};
+    lastSyncTime: number | undefined };
 //# sourceMappingURL=useCollaborativeReactFlow.d.ts.map

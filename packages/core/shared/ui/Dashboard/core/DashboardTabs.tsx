@@ -7,24 +7,19 @@
 import React from 'react';
 import type { TabConfig } from './DashboardShell';
 
-}
-export interface DashboardTabsProps {
-  tabs: TabConfig;
+
+export interface DashboardTabsProps { tabs: TabConfig;
   activeTab: string;
   onTabChange: (tabId: string) => void;
-  className?: string;
-}
-}
-export const DashboardTabs: React.FC<DashboardTabsProps> = ({)
-  tabs,
-  activeTab,
-  onTabChange,
+  className?: string }
+
+export const DashboardTabs: React.FC<DashboardTabsProps> = ({ )
+  tabs
+  activeTab
+  onTabChange }
   className = ''
-}) => {
-  const handleTabClick = (tabId: string, disabled?: boolean) => {,
-  if (!disabled) {
-  onTabChange(tabId);
-};
+}) => { const handleTabClick = (tabId: string, disabled?: boolean) => { }
+  if (!disabled) { onTabChange(tabId) };
   return;
     <div className={`dashboard-tabs ${className}`}>}
       <div className="tabs-container">

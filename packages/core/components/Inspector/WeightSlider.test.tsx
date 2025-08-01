@@ -30,8 +30,8 @@ describe('WeightSlider', () => {
     if (sliderTrack) {
       // Simulate click at 75% of the track width
       const rect = { left: 0, width: 100 };
-      Object.defineProperty(sliderTrack, 'getBoundingClientRect', {)
-  value: () => rect,
+      Object.defineProperty(sliderTrack, 'getBoundingClientRect', { )
+  value: () => rect }
 });
       fireEvent.mouseDown(sliderTrack, { clientX: 75 });
       expect(mockOnChange).toHaveBeenCalledWith(75);
@@ -49,8 +49,8 @@ describe('WeightSlider', () => {
     const sliderTrack = container.querySelector('.slider-track');
     if (sliderTrack) {
       const rect = { left: 0, width: 100 };
-      Object.defineProperty(sliderTrack, 'getBoundingClientRect', {)
-  value: () => rect,
+      Object.defineProperty(sliderTrack, 'getBoundingClientRect', { )
+  value: () => rect }
 });
       // Click at 0% should result in min value (10)
       fireEvent.mouseDown(sliderTrack, { clientX: 0 });

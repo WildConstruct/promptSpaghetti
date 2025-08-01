@@ -8,8 +8,8 @@ import { AuditService } from './AuditService';
 import { RBACService } from './RBACService';
 import { TokenService } from './TokenService';
 
-}
-}
+
+
 export interface PrivilegeChangeEvent {
   userId: string;
   changeType: 'role_added' | 'role_removed' | 'permission_added' | 'permission_removed' | 'organization_change' | 'status_change';
@@ -17,23 +17,25 @@ export interface PrivilegeChangeEvent {
   newValue?: string | string[];
   reason?: string;
   performedBy?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionRotationResult {
   success: boolean;
   rotatedSessions: number;
   newSessionId?: string;
   errors?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionRotationPolicy {
   rotateOnRoleChange: boolean;
   rotateOnPermissionChange: boolean;
@@ -42,9 +44,10 @@ export interface SessionRotationPolicy {
   preserveCurrentSession: boolean;
   notifyUser: boolean;
   graceWindowMinutes: number;
-}
-}
-}
+
+
+
+
 
 export class SessionRotationService {
   private config: AuthConfig;
@@ -80,7 +83,7 @@ export class SessionRotationService {
       notifyUser: true,
       graceWindowMinutes: 5
     };
-  }
+
 
   async handlePrivilegeChange(
     event: PrivilegeChangeEvent,
@@ -98,7 +101,7 @@ export class SessionRotationService {
           success: true,
           rotatedSessions: 0
         };
-      }
+
 
       // Log the privilege change event
       await this.auditService.logEvent({
@@ -111,7 +114,7 @@ export class SessionRotationService {
           reason: event.reason,
           performedBy: event.performedBy,
           sessionRotationRequired: true
-  }
+
         severity: 'warning'
       });
 
@@ -123,7 +126,7 @@ export class SessionRotationService {
           success: true,
           rotatedSessions: 0
         };
-      }
+
 
       // Determine which sessions to rotate
       const sessionsToRotate = policy.preserveCurrentSession && currentSessionId
@@ -133,7 +136,7 @@ export class SessionRotationService {
       // Create grace window entries for sessions being rotated
       if (policy.graceWindowMinutes > 0) {
         await this.createGraceWindows(sessionsToRotate.map(s => s.id), policy.graceWindowMinutes);
-      }
+
 
       // Rotate sessions
       let rotatedCount = 0;
@@ -141,22 +144,22 @@ export class SessionRotationService {
         try {
           await this.rotateSession(session.id, event);
           rotatedCount++;
-        } catch (error) {
+ catch (error) {
           errors.push(`Failed to rotate session ${session.id}: ${error.message}`);
-        }
-      }
+
+
 
       // Create new session for current user if needed
       let newSessionId: string | undefined;
       if (!policy.preserveCurrentSession && currentSessionId) {
         const newSession = await this.createReplacementSession(event.userId, currentSessionId);
         newSessionId = newSession?.id;
-      }
+
 
       // Send notification if enabled
       if (policy.notifyUser) {
         await this.notifyUserOfSessionRotation(event.userId, event, rotatedCount);
-      }
+
 
       // Log rotation completion
       await this.auditService.logEvent({
@@ -168,7 +171,7 @@ export class SessionRotationService {
           graceWindowMinutes: policy.graceWindowMinutes,
           newSessionId,
           errors
-  }
+
         sessionId: currentSessionId,
         severity: 'info'
       });
@@ -179,22 +182,21 @@ export class SessionRotationService {
         newSessionId,
         errors: errors.length > 0 ? errors : undefined
       };
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         userId: event.userId,
         action: 'session_rotation_failed',
         details: {
           error: error.message,
           event
-  }
+
         sessionId: currentSessionId,
         severity: 'error'
       });
 
       throw error;
-    }
-  }
+
+
 
   private shouldRotateSessions(event: PrivilegeChangeEvent, policy: SessionRotationPolicy): boolean {
     switch (event.changeType) {
@@ -214,8 +216,8 @@ export class SessionRotationService {
       
     default:
       return true; // Default to rotating for unknown change types
-    }
-  }
+
+
 
   private async rotateSession(sessionId: string, event: PrivilegeChangeEvent): Promise<void> {
 
@@ -227,7 +229,7 @@ export class SessionRotationService {
 
     if (sessionResult.rows.length === 0) {
       return;
-    }
+
 
     const sessionToken = sessionResult.rows[0].session_token;
 
@@ -251,7 +253,7 @@ export class SessionRotationService {
       event.performedBy,
       new Date()
     ]);
-  }
+
 
   private async createGraceWindows(sessionIds: string[], graceMinutes: number): Promise<void> {
 
@@ -271,8 +273,8 @@ export class SessionRotationService {
         expiresAt,
         new Date()
       ]);
-    }
-  }
+
+
 
   private async createReplacementSession(userId: string, oldSessionId: string): Promise<any> {
 
@@ -284,7 +286,7 @@ export class SessionRotationService {
 
     if (oldSessionResult.rows.length === 0) {
       return null;
-    }
+
 
     const oldSession = oldSessionResult.rows[0];
 
@@ -294,9 +296,9 @@ export class SessionRotationService {
       deviceInfo: oldSession.device_info,
       location: {
         ipAddress: oldSession.ip_address
-      }
+
     });
-  }
+
 
   private async notifyUserOfSessionRotation(
     userId: string,
@@ -312,7 +314,7 @@ export class SessionRotationService {
 
     if (userResult.rows.length === 0) {
       return;
-    }
+
 
     const email = userResult.rows[0].email;
 
@@ -343,10 +345,10 @@ export class SessionRotationService {
         email,
         changeType: event.changeType,
         rotatedCount
-  }
+
       severity: 'info'
     });
-  }
+
 
   private generateNotificationBody(event: PrivilegeChangeEvent, rotatedCount: number): string {
     const changeDescriptions = {
@@ -376,7 +378,7 @@ You may need to sign in again on your devices. If you did not authorize this cha
 Best regards,
 Security Team
     `.trim();
-  }
+
 
   // Check if a session is in grace period
   async isSessionInGracePeriod(sessionId: string): Promise<boolean> {
@@ -387,7 +389,7 @@ Security Team
     `, [sessionId]);
 
     return result.rows.length > 0;
-  }
+
 
   // Clean up expired grace windows
   async cleanupExpiredGraceWindows(): Promise<number> {
@@ -405,13 +407,13 @@ Security Team
         action: 'grace_windows_cleanup',
         details: {
           cleanedCount
-  }
+
         severity: 'info'
       });
-    }
+
 
     return cleanedCount;
-  }
+
 
   // Get session rotation history for a user
   async getRotationHistory(userId: string, limit: number = 50): Promise<any[]> {
@@ -428,14 +430,14 @@ Security Team
       old_value: JSON.parse(row.old_value || 'null'),
       new_value: JSON.parse(row.new_value || 'null')
     }));
-  }
+
 
   // Get rotation statistics
   async getRotationStats(startDate?: Date, endDate?: Date): Promise<{
     totalRotations: number;
     byChangeType: Record<string, number>;
     topUsers: Array<{ userId: string; rotationCount: number }>;
-  }> {
+> {
     const dateFilter = startDate && endDate
       ? 'WHERE rotated_at BETWEEN $1 AND $2'
       : '';
@@ -478,5 +480,4 @@ Security Team
         rotationCount: parseInt(row.rotation_count)
       }))
     };
-  }
-}
+

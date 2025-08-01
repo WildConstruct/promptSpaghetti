@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface QueueSubmission {
-    id: string;
+}
+export interface QueueSubmission { id: string;
     template_id: string;
     submitter_id: string;
     submitter_name: string;
@@ -22,7 +22,7 @@ export interface QueueSubmission {
         categories: string[];
         price_cents: number;
         is_ai_generated?: boolean;
-        intended_use_cases: string[];
+        intended_use_cases: string[] }
 }
     };
     validation_results: ValidationResult[];
@@ -34,17 +34,16 @@ export interface QueueSubmission {
     complexity_score?: number;
 
 }
-export interface ValidationResult {
-    rule_id: string;
+}
+export interface ValidationResult { rule_id: string;
     severity: 'error' | 'warning' | 'info';
     category: string;
     message: string;
     field?: string;
-    auto_fixable: boolean;
-
+    auto_fixable: boolean }
 }
-export interface QueueMetrics {
-    total_pending: number;
+}
+export interface QueueMetrics { total_pending: number;
     total_under_review: number;
     total_changes_requested: number;
     average_wait_time_hours: number;
@@ -56,10 +55,11 @@ export interface QueueMetrics {
         reviewer_name: string;
         active_reviews: number;
         completed_today: number;
-        average_review_time: number;
+        average_review_time: number }
 }
     }>;
 
+}
 }
 export interface QueueFilters {
     status?: string[];
@@ -79,4 +79,5 @@ export interface QueueFilters {
 declare const SubmissionQueueDashboard: React.FC;
 export default SubmissionQueueDashboard;
 //# sourceMappingURL=SubmissionQueueDashboard.d.ts.map
+}
 }

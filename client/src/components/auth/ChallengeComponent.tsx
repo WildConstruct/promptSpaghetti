@@ -9,21 +9,24 @@ import { ChallengeType } from '../../../../server/src/auth/types';
 // ========================================
 // Types
 // ========================================
-}
+
+
 interface ChallengeData {
   id: string;,
-  type: ChallengeType;
-  data: {
+  type: ChallengeType;,
+  data: {,
   text?: string;
   imageUrl?: string;
   audioUrl?: string;
   options?: string;
   metadata?: Record<string, unknown>;
-}
+
+
 };
   expiresAt: string;,
   maxAttempts: number;
-}
+
+
 interface ChallengeComponentProps {
   onSuccess: (token: string) => void;,
   onError: (error: string) => void;
@@ -45,7 +48,8 @@ interface ChallengeComponentProps {
   script.onload = () => resolve();
   script.onerror = () => reject(new Error('Failed to load reCAPTCHA'));
   document.head.appendChild(script);
-}
+
+
 });
 };
 const loadHCaptchaScript = (): Promise<void> => {
@@ -98,7 +102,7 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
   theme: theme,
   callback: (token: string) => handleExternalCaptchaResponse(token),
 });
-    } else if (challengeData.type === ChallengeType.HCAPTCHA) {
+ else if (challengeData.type === ChallengeType.HCAPTCHA) {
   await loadHCaptchaScript();
   if (hcaptchaRef.current && window.hcaptcha) {
   hcaptchaWidgetId.current = window.hcaptcha.render(hcaptchaRef.current, {)
@@ -128,11 +132,11 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
       setSolution('');
       // Initialize external CAPTCHA if needed
       await initializeExternalCaptcha(data.challenge);
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Unknown error';
   setError(errorMessage);
   onError(errorMessage);
-} finally {
+ finally {
       setLoading(false);
   }, [challengeEndpoint, onError, initializeExternalCaptcha]);
   // Validate challenge solution
@@ -151,26 +155,26 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
         headers: {
   'Content-Type': 'application/json',
 },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   challengeId: challenge.id,
   solution: solutionToValidate,
-}
+
       });
       const data = await response.json();
       if (data.valid) {
         onSuccess(data.token);
         setChallenge(null);
-      } else {
+ else {
         setError(data.error || 'Invalid solution');
         setRemainingAttempts(data.remainingAttempts);
         if (data.remainingAttempts === 0) {
           // Generate new challenge if attempts exhausted
           await generateChallenge();
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Validation failed';
   setError(errorMessage);
   onError(errorMessage);
-} finally {
+ finally {
       setLoading(false);
   }, [challenge, solution, challengeEndpoint, onSuccess, onError, generateChallenge]);
   // Refresh challenge
@@ -185,9 +189,9 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
         headers: {
   'Content-Type': 'application/json',
 },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   challengeId: challenge.id,
-}
+
       });
       if (!response.ok) {
         throw new Error('Failed to refresh challenge');
@@ -196,11 +200,11 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
       setSolution('');
       setRemainingAttempts(data.challenge.maxAttempts);
       await initializeExternalCaptcha(data.challenge);
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Refresh failed';
   setError(errorMessage);
   onError(errorMessage);
-} finally {
+ finally {
       setLoading(false);
   }, [challenge, challengeEndpoint, onError, initializeExternalCaptcha]);
   // Auto-generate challenge on mount
@@ -323,8 +327,8 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
       <style>{`
         .challenge-component {
           max-width: 400px;,
-  margin: 0 auto;
-          padding: 20px;,
+  margin: 0 auto;,
+  padding: 20px;,
   border: 1px solid #ddd;
           border-radius: 8px;,
   background: #fff;
@@ -377,16 +381,16 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
           padding: 10px;,
   border: 2px solid #ddd;
           border-radius: 4px;,
-  background: #f5f5f5;
-          cursor: pointer;,
+  background: #f5f5f5;,
+  cursor: pointer;,
   transition: all 0.2s;
         .pattern-option:hover {
           border-color: #2196f3;,
   background: #e3f2fd;
         .pattern-option.selected {
           border-color: #2196f3;,
-  background: #2196f3;
-          color: #fff;
+  background: #2196f3;,
+  color: #fff;
         .dark .pattern-option {
           background: #444;
           border-color: #666;,
@@ -403,20 +407,20 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
         .challenge-submit,
         .challenge-refresh {
           flex: 1;,
-  padding: 10px;
-          border: none;
+  padding: 10px;,
+  border: none;
           border-radius: 4px;
           font-size: 16px;,
-  cursor: pointer;
-          transition: background 0.2s;
+  cursor: pointer;,
+  transition: background 0.2s;
         .challenge-submit {
           background: #2196f3;,
   color: #fff;
         .challenge-submit:hover:not(:disabled) {,
   background: #1976d2;
         .challenge-submit:disabled {,
-  background: #ccc;
-          cursor: not-allowed;
+  background: #ccc;,
+  cursor: not-allowed;
         .challenge-refresh {
           background: #f5f5f5;,
   color: #333;
@@ -440,8 +444,7 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({)
 // Type declarations for external libraries
 declare global {
   interface Window {
-    grecaptcha: unknown;,
+  grecaptcha: unknown;,
   hcaptcha: unknown;
+  export default ChallengeComponent;
 
-export default ChallengeComponent;
-}

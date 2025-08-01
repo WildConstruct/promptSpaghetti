@@ -7,8 +7,8 @@ import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 import { AuditService } from './AuditService';
 
-}
-}
+
+
 export interface BehaviorAnalyticsConfig {
   // Analysis parameters
   baselineWindowDays: number; // Days to establish baseline behavior
@@ -31,15 +31,16 @@ export interface BehaviorAnalyticsConfig {
     volumeAnomaly: number;
     velocityAnomaly: number;
     patternDeviation: number;
-}
-}
+
+
+
   };
   
   // Response configuration
   autoBlockThreshold: number; // Risk score to auto-block
   alertThreshold: number; // Risk score to alert
   requireManualReview: boolean;
-}
+
 
 export type BehaviorPatternType = 
   | 'login_time' 
@@ -50,8 +51,8 @@ export type BehaviorPatternType =
   | 'feature_usage'
   | 'navigation_flow';
 
-}
-}
+
+
 export interface UserBehaviorProfile {
   userId: string;
   baseline: BehaviorBaseline;
@@ -62,17 +63,19 @@ export interface UserBehaviorProfile {
   profileConfidence: number; // 0-1 scale
   dataPoints: number;
   status: 'learning' | 'established' | 'suspicious' | 'blocked';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BehaviorBaseline {
   // Temporal patterns
   typicalLoginTimes: TimeWindow[];
-}
-}
+
+
+
   typicalSessionDuration: { mean: number; stdDev: number };
   typicalActivityHours: number[]; // 0-23 hours
   weekdayVsWeekendRatio: number;
@@ -93,10 +96,10 @@ export interface BehaviorBaseline {
   navigationPaths: NavigationPath[];
   errorRate: number;
   retryPatterns: RetryPattern[];
-}
 
-}
-}
+
+
+
 export interface BehaviorPattern {
   id: string;
   type: BehaviorPatternType;
@@ -105,12 +108,13 @@ export interface BehaviorPattern {
   lastOccurrence: Date;
   confidence: number;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BehaviorAnomaly {
   id: string;
   timestamp: Date;
@@ -122,9 +126,10 @@ export interface BehaviorAnomaly {
   resolved: boolean;
   resolvedBy?: string;
   resolvedAt?: Date;
-}
-}
-}
+
+
+
+
 
 export type AnomalyType = 
   | 'unusual_login_time'
@@ -136,60 +141,65 @@ export type AnomalyType =
   | 'volume_spike'
   | 'bot_like_behavior';
 
-}
-}
+
+
 export interface TimeWindow {
   startHour: number;
   endHour: number;
   dayOfWeek: number; // 0-6
   probability: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActionSequence {
   actions: string[];
   frequency: number;
   averageTimeBetween: number[]; // ms between each action
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceAccess {
   resourceType: string;
   resourceId: string;
   frequency: number;
   averageAccessDuration: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NavigationPath {
   path: string[];
   frequency: number;
   averageDuration: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetryPattern {
   action: string;
   averageRetries: number;
   successRate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BehaviorAnalysisResult {
   userId: string;
   timestamp: Date;
@@ -199,12 +209,13 @@ export interface BehaviorAnalysisResult {
   recommendation: 'allow' | 'monitor' | 'challenge' | 'block';
   confidence: number; // 0-1
   reasoning: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionBehaviorData {
   sessionId: string;
   userId: string;
@@ -214,12 +225,13 @@ export interface SessionBehaviorData {
   resources: ResourceAccessLog[];
   interactions: InteractionEvent[];
   errors: ErrorEvent[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserAction {
   timestamp: Date;
   action: string;
@@ -227,44 +239,48 @@ export interface UserAction {
   metadata?: Record<string, any>;
   duration?: number;
   success: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceAccessLog {
   timestamp: Date;
   resourceType: string;
   resourceId: string;
   action: 'view' | 'edit' | 'delete' | 'create';
   duration: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface InteractionEvent {
   timestamp: Date;
   type: 'click' | 'scroll' | 'keypress' | 'focus' | 'blur';
   target?: string;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ErrorEvent {
   timestamp: Date;
   errorType: string;
   errorMessage: string;
   context: string;
   resolved: boolean;
-}
-}
-}
+
+
+
+
 
 export class BehaviorAnalyticsService {
   private db: DatabaseService;
@@ -297,13 +313,13 @@ export class BehaviorAnalyticsService {
         volumeAnomaly: 0.15,
         velocityAnomaly: 0.2,
         patternDeviation: 0.2
-  }
+
       autoBlockThreshold: 85,
       alertThreshold: 65,
       requireManualReview: true,
       ...config
     };
-  }
+
 
   /**
    * Initialize the behavior analytics service
@@ -318,8 +334,8 @@ export class BehaviorAnalyticsService {
         () => this.updateAllProfiles(),
         this.config.updateFrequencyMinutes * 60 * 1000
       );
-    }
-  }
+
+
 
   /**
    * Analyze user behavior for anomalies
@@ -338,7 +354,7 @@ export class BehaviorAnalyticsService {
         // Still learning, just record the data
         await this.recordSessionBehavior(sessionData);
         return this.createLearningModeResult(userId);
-      }
+
 
       // Analyze current session against baseline
       const anomalies = await this.detectAnomalies(sessionData, profile);
@@ -365,12 +381,11 @@ export class BehaviorAnalyticsService {
         confidence: profile.profileConfidence,
         reasoning: this.generateReasoning(anomalies, riskScore)
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error analyzing behavior:', error);
       throw new Error('Failed to analyze user behavior');
-    }
-  }
+
+
 
   /**
    * Detect anomalies in current session
@@ -402,14 +417,14 @@ export class BehaviorAnalyticsService {
     if (this.config.enablePatternDetection) {
       const patternAnomalies = await this.detectPatternDeviations(sessionData, profile);
       anomalies.push(...patternAnomalies);
-    }
+
     
     // Bot-like behavior detection
     const botAnomalies = this.detectBotBehavior(sessionData);
     anomalies.push(...botAnomalies);
     
     return anomalies;
-  }
+
 
   /**
    * Detect time-based anomalies
@@ -441,7 +456,7 @@ export class BehaviorAnalyticsService {
         affectedMetrics: ['login_time'],
         resolved: false
       });
-    }
+
     
     // Check session duration
     if (sessionData.endTime) {
@@ -461,11 +476,11 @@ export class BehaviorAnalyticsService {
           affectedMetrics: ['session_duration'],
           resolved: false
         });
-      }
-    }
+
+
     
     return anomalies;
-  }
+
 
   /**
    * Detect action sequence anomalies
@@ -496,8 +511,8 @@ export class BehaviorAnalyticsService {
           affectedMetrics: ['action_sequence'],
           resolved: false
         });
-      }
-    }
+
+
     
     // Check if sequences match baseline patterns
     const matchesBaseline = baseline.commonActionSequences.some(seq => 
@@ -515,10 +530,10 @@ export class BehaviorAnalyticsService {
         affectedMetrics: ['action_sequence'],
         resolved: false
       });
-    }
+
     
     return anomalies;
-  }
+
 
   /**
    * Detect volume anomalies
@@ -545,7 +560,7 @@ export class BehaviorAnalyticsService {
         affectedMetrics: ['action_volume'],
         resolved: false
       });
-    }
+
     
     // Check resource access volume
     const resourceTypes = new Map<string, number>();
@@ -566,11 +581,11 @@ export class BehaviorAnalyticsService {
           affectedMetrics: ['resource_access'],
           resolved: false
         });
-      }
-    }
+
+
     
     return anomalies;
-  }
+
 
   /**
    * Detect velocity anomalies
@@ -602,8 +617,8 @@ export class BehaviorAnalyticsService {
           affectedMetrics: ['click_velocity'],
           resolved: false
         });
-      }
-    }
+
+
     
     // Check action velocity (rapid-fire actions)
     const actionTimestamps = sessionData.actions.map(a => a.timestamp.getTime());
@@ -620,10 +635,10 @@ export class BehaviorAnalyticsService {
         affectedMetrics: ['action_velocity'],
         resolved: false
       });
-    }
+
     
     return anomalies;
-  }
+
 
   /**
    * Detect bot-like behavior
@@ -641,8 +656,8 @@ export class BehaviorAnalyticsService {
       const variance = this.calculateVariance(clickIntervals);
       if (variance < 100) { // Very consistent intervals
         indicators.push('mechanical_precision');
-      }
-    }
+
+
     
     // Check for lack of human-like behavior
     const hasScrolls = sessionData.interactions.some(i => i.type === 'scroll');
@@ -651,7 +666,7 @@ export class BehaviorAnalyticsService {
     
     if (!hasScrolls && !hasKeypress && !hasFocusBlur && sessionData.actions.length > 5) {
       indicators.push('no_human_interactions');
-    }
+
     
     // Check for impossible speeds
     const actionSpeeds = this.calculateActionSpeeds(sessionData.actions);
@@ -659,7 +674,7 @@ export class BehaviorAnalyticsService {
     
     if (impossibleSpeeds.length > sessionData.actions.length * 0.3) {
       indicators.push('impossible_speeds');
-    }
+
     
     if (indicators.length > 0) {
       anomalies.push({
@@ -672,10 +687,10 @@ export class BehaviorAnalyticsService {
         affectedMetrics: indicators,
         resolved: false
       });
-    }
+
     
     return anomalies;
-  }
+
 
   /**
    * Detect pattern deviations using stored patterns
@@ -702,11 +717,11 @@ export class BehaviorAnalyticsService {
           affectedMetrics: [pattern.type],
           resolved: false
         });
-      }
-    }
+
+
     
     return anomalies;
-  }
+
 
   /**
    * Calculate risk score from anomalies
@@ -740,14 +755,14 @@ export class BehaviorAnalyticsService {
       totalScore = Math.max(totalScore, 82); // Minimum >80 for bot detection
       if (botAnomaly.severity === 'critical') {
         totalScore = Math.max(totalScore, 95);
-      }
-    }
+
+
     
     // Apply profile confidence adjustment
     totalScore = totalScore * (0.7 + 0.3 * profile.profileConfidence);
     
     return Math.min(100, Math.max(0, totalScore));
-  }
+
 
   /**
    * Calculate score for a group of anomalies
@@ -772,7 +787,7 @@ export class BehaviorAnalyticsService {
     const multiplier = 1 + Math.min(0.5, (anomalies.length - 1) * 0.1);
     
     return severityScores[maxSeverity] * multiplier;
-  }
+
 
   /**
    * Get or create user behavior profile
@@ -786,10 +801,10 @@ export class BehaviorAnalyticsService {
     if (cached) {
       try {
         return JSON.parse(cached);
-      } catch (error) {
+ catch (error) {
         console.error('Error parsing cached profile:', error);
-      }
-    }
+
+
     
     // Get from database
     const result = await this.db.query(`
@@ -804,11 +819,11 @@ export class BehaviorAnalyticsService {
       await this.redis.setex(cacheKey, 3600, JSON.stringify(profile));
       
       return profile;
-    }
+
     
     // Create new profile
     return this.createNewProfile(userId);
-  }
+
 
   /**
    * Create new user profile
@@ -845,7 +860,7 @@ export class BehaviorAnalyticsService {
     ]);
     
     return profile;
-  }
+
 
   /**
    * Create empty baseline
@@ -868,7 +883,7 @@ export class BehaviorAnalyticsService {
       errorRate: 0.05, // 5% default error rate
       retryPatterns: []
     };
-  }
+
 
   /**
    * Record session behavior for learning
@@ -890,7 +905,7 @@ export class BehaviorAnalyticsService {
       JSON.stringify(sessionData.interactions),
       JSON.stringify(sessionData.errors)
     ]);
-  }
+
 
   /**
    * Update user profile with new data
@@ -909,7 +924,7 @@ export class BehaviorAnalyticsService {
     // Update baseline if in learning mode or established
     if (profile.status === 'learning' || profile.status === 'established') {
       await this.updateBaseline(profile, sessionData);
-    }
+
     
     // Add new anomalies
     profile.anomalies.push(...anomalies);
@@ -917,7 +932,7 @@ export class BehaviorAnalyticsService {
     // Keep only recent anomalies (last 100)
     if (profile.anomalies.length > 100) {
       profile.anomalies = profile.anomalies.slice(-100);
-    }
+
     
     // Update confidence
     profile.profileConfidence = Math.min(1, profile.dataPoints / 100);
@@ -925,11 +940,11 @@ export class BehaviorAnalyticsService {
     // Update status
     if (profile.dataPoints >= this.config.minimumDataPoints && profile.status === 'learning') {
       profile.status = 'established';
-    }
+
     
     // Save updated profile
     await this.saveUserProfile(profile);
-  }
+
 
   /**
    * Update baseline with new session data
@@ -953,21 +968,21 @@ export class BehaviorAnalyticsService {
     
     if (timeWindow) {
       timeWindow.probability = (timeWindow.probability * 0.9) + 0.1; // Exponential average
-    } else {
+ else {
       baseline.typicalLoginTimes.push({
         startHour: loginHour,
         endHour: loginHour,
         dayOfWeek,
         probability: 0.1
       });
-    }
+
     
     // Update session duration
     if (sessionData.endTime) {
       const duration = (sessionData.endTime.getTime() - sessionData.startTime.getTime()) / 60000;
       baseline.typicalSessionDuration.mean = 
         (baseline.typicalSessionDuration.mean * 0.95) + (duration * 0.05);
-    }
+
     
     // Update actions per session
     const actionCount = sessionData.actions.length;
@@ -984,21 +999,21 @@ export class BehaviorAnalyticsService {
       
       if (existingSequence) {
         existingSequence.frequency = (existingSequence.frequency * 0.95) + 0.05;
-      } else {
+ else {
         baseline.commonActionSequences.push({
           actions: sessionActions,
           frequency: 0.05,
           averageTimeBetween: []
         });
-      }
+
       
       // Keep only top 20 most frequent sequences
       baseline.commonActionSequences.sort((a, b) => b.frequency - a.frequency);
       baseline.commonActionSequences = baseline.commonActionSequences.slice(0, 20);
-    }
+
     
     // Update other metrics similarly...
-  }
+
 
   /**
    * Save user profile to database
@@ -1030,7 +1045,7 @@ export class BehaviorAnalyticsService {
     // Update cache
     const cacheKey = `behavior_profile:${profile.userId}`;
     await this.redis.setex(cacheKey, 3600, JSON.stringify(profile));
-  }
+
 
   /**
    * Log analysis result
@@ -1052,10 +1067,10 @@ export class BehaviorAnalyticsService {
         anomalyTypes: [...new Set(anomalies.map(a => a.type))],
         recommendation,
         severity: this.getRiskLevel(riskScore)
-  }
+
       severity: riskScore > 80 ? 'critical' : riskScore > 60 ? 'warning' : 'info'
     });
-  }
+
 
   /**
    * Helper methods
@@ -1065,10 +1080,10 @@ export class BehaviorAnalyticsService {
     for (let i = 0; i <= actions.length - sequence.length; i++) {
       if (sequence.every((action, j) => actions[i + j] === action)) {
         return true;
-      }
-    }
+
+
     return false;
-  }
+
 
   private sequenceSimilarity(seq1: string[], seq2: string[]): number {
     const set1 = new Set(seq1);
@@ -1076,30 +1091,30 @@ export class BehaviorAnalyticsService {
     const intersection = new Set([...set1].filter(x => set2.has(x)));
     const union = new Set([...set1, ...set2]);
     return intersection.size / union.size;
-  }
+
 
   private calculateIntervals(timestamps: number[]): number[] {
     const intervals: number[] = [];
     for (let i = 1; i < timestamps.length; i++) {
       intervals.push(timestamps[i] - timestamps[i - 1]);
-    }
+
     return intervals;
-  }
+
 
   private calculateVariance(values: number[]): number {
     const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
     const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
     return squaredDiffs.reduce((sum, val) => sum + val, 0) / values.length;
-  }
+
 
   private calculateActionSpeeds(actions: UserAction[]): number[] {
     const speeds: number[] = [];
     for (let i = 1; i < actions.length; i++) {
       const timeDiff = actions[i].timestamp.getTime() - actions[i - 1].timestamp.getTime();
       speeds.push(timeDiff);
-    }
+
     return speeds;
-  }
+
 
   private detectRapidFireActions(timestamps: number[]): number[][] {
     const bursts: number[][] = [];
@@ -1110,22 +1125,22 @@ export class BehaviorAnalyticsService {
       if (interval < 500) { // Less than 500ms between actions
         if (currentBurst.length === 0) {
           currentBurst.push(timestamps[i - 1]);
-        }
+
         currentBurst.push(timestamps[i]);
-      } else if (currentBurst.length > 3) {
+ else if (currentBurst.length > 3) {
         bursts.push(currentBurst);
         currentBurst = [];
-      } else {
+ else {
         currentBurst = [];
-      }
-    }
+
+
     
     if (currentBurst.length > 3) {
       bursts.push(currentBurst);
-    }
+
     
     return bursts;
-  }
+
 
   private getTimeSeverity(hour: number, typicalHours: number[]): 'low' | 'medium' | 'high' | 'critical' {
     if (typicalHours.includes(hour)) return 'low';
@@ -1138,14 +1153,14 @@ export class BehaviorAnalyticsService {
     if (hour >= 3 && hour <= 5) return 'high';
     
     return 'medium';
-  }
+
 
   private calculateTimeDeviation(hour: number, typicalHours: number[]): number {
     if (typicalHours.length === 0) return 0.5;
     
     const minDistance = Math.min(...typicalHours.map(h => Math.abs(h - hour)));
     return Math.min(1, minDistance / 12); // Normalize to 0-1
-  }
+
 
   private async calculatePatternDeviation(
     sessionData: SessionBehaviorData,
@@ -1155,7 +1170,7 @@ export class BehaviorAnalyticsService {
     // Simplified pattern deviation calculation
     // In production, this would use more sophisticated pattern matching
     return Math.random() * 0.5; // Placeholder
-  }
+
 
   private determineRecommendation(
     riskScore: number,
@@ -1166,25 +1181,25 @@ export class BehaviorAnalyticsService {
     
     if (riskScore >= this.config.autoBlockThreshold || hasCritical) {
       return 'block';
-    }
+
     
     if (riskScore >= 80) {
       return 'challenge';
-    }
+
     
     if (riskScore >= 40 || anomalies.length > 2) {
       return 'monitor';
-    }
+
     
     return 'allow';
-  }
+
 
   private getRiskLevel(riskScore: number): 'low' | 'medium' | 'high' | 'critical' {
     if (riskScore >= 80) return 'critical';
     if (riskScore >= 60) return 'high';
     if (riskScore >= 40) return 'medium';
     return 'low';
-  }
+
 
   private createLearningModeResult(userId: string): BehaviorAnalysisResult {
     return {
@@ -1197,7 +1212,7 @@ export class BehaviorAnalyticsService {
       confidence: 0,
       reasoning: ['Profile still in learning mode - insufficient data for analysis']
     };
-  }
+
 
   private generateReasoning(anomalies: BehaviorAnomaly[], riskScore: number): string[] {
     const reasoning: string[] = [];
@@ -1206,17 +1221,17 @@ export class BehaviorAnalyticsService {
     
     if (anomalies.length === 0) {
       reasoning.push('No behavioral anomalies detected');
-    } else {
+ else {
       reasoning.push(`Detected ${anomalies.length} anomalies`);
       
       const criticalAnomalies = anomalies.filter(a => a.severity === 'critical');
       if (criticalAnomalies.length > 0) {
         reasoning.push(`Critical anomalies: ${criticalAnomalies.map(a => a.type).join(', ')}`);
-      }
-    }
+
+
     
     return reasoning;
-  }
+
 
   private mapDatabaseProfile(row: any): UserBehaviorProfile {
     return {
@@ -1230,7 +1245,7 @@ export class BehaviorAnalyticsService {
       dataPoints: row.data_points,
       status: row.status
     };
-  }
+
 
   /**
    * Update all user profiles periodically
@@ -1247,11 +1262,11 @@ export class BehaviorAnalyticsService {
       
       for (const row of result.rows) {
         await this.updateProfilePatterns(row.user_id);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error updating profiles:', error);
-    }
-  }
+
+
 
   /**
    * Update patterns for a specific user
@@ -1266,7 +1281,7 @@ export class BehaviorAnalyticsService {
       
       if (sessions.length < this.config.minimumDataPoints) {
         return; // Not enough data
-      }
+
       
       // Detect patterns
       const patterns: BehaviorPattern[] = [];
@@ -1275,16 +1290,15 @@ export class BehaviorAnalyticsService {
         const detected = await this.detectPattern(patternType, sessions);
         if (detected) {
           patterns.push(detected);
-        }
-      }
+
+
       
       profile.patterns = patterns;
       await this.saveUserProfile(profile);
-      
-    } catch (error) {
+ catch (error) {
       console.error(`Error updating patterns for user ${userId}:`, error);
-    }
-  }
+
+
 
   /**
    * Get recent sessions for a user
@@ -1307,7 +1321,7 @@ export class BehaviorAnalyticsService {
       interactions: JSON.parse(row.interactions_data),
       errors: JSON.parse(row.errors_data)
     }));
-  }
+
 
   /**
    * Detect specific pattern type
@@ -1331,8 +1345,8 @@ export class BehaviorAnalyticsService {
       return this.detectSessionDurationPattern(sessions);
     default:
       return null;
-    }
-  }
+
+
 
   private detectLoginTimePattern(sessions: SessionBehaviorData[]): BehaviorPattern | null {
     const loginHours = sessions.map(s => s.startTime.getHours());
@@ -1357,10 +1371,10 @@ export class BehaviorAnalyticsService {
         confidence: Math.min(1, sessions.length / 50),
         metadata: { hourDistribution: Object.fromEntries(hourCounts) }
       };
-    }
+
     
     return null;
-  }
+
 
   private detectActionSequencePattern(sessions: SessionBehaviorData[]): BehaviorPattern | null {
     // Extract common action sequences
@@ -1371,7 +1385,7 @@ export class BehaviorAnalyticsService {
       for (let i = 0; i < actions.length - 2; i++) {
         const seq = actions.slice(i, i + 3).join('-');
         sequences.set(seq, (sequences.get(seq) || 0) + 1);
-      }
+
     });
     
     // Find most common sequences
@@ -1390,10 +1404,10 @@ export class BehaviorAnalyticsService {
         confidence: Math.min(1, sessions.length / 50),
         metadata: { sequences: commonSequences.map(s => ({ sequence: s[0], count: s[1] })) }
       };
-    }
+
     
     return null;
-  }
+
 
   private detectResourceAccessPattern(sessions: SessionBehaviorData[]): BehaviorPattern | null {
     const resourceTypes = new Map<string, number>();
@@ -1418,10 +1432,10 @@ export class BehaviorAnalyticsService {
         confidence: Math.min(1, sessions.length / 50),
         metadata: { resourceDistribution: Object.fromEntries(resourceTypes) }
       };
-    }
+
     
     return null;
-  }
+
 
   private detectSessionDurationPattern(sessions: SessionBehaviorData[]): BehaviorPattern | null {
     const durations = sessions
@@ -1442,10 +1456,10 @@ export class BehaviorAnalyticsService {
         confidence: Math.min(1, sessions.length / 50),
         metadata: { mean, stdDev, min: Math.min(...durations), max: Math.max(...durations) }
       };
-    }
+
     
     return null;
-  }
+
 
   /**
    * Initialize database schema
@@ -1522,7 +1536,7 @@ export class BehaviorAnalyticsService {
       CREATE INDEX IF NOT EXISTS idx_behavior_analysis_risk 
       ON behavior_analysis_results(risk_score);
     `);
-  }
+
 
   /**
    * Stop the service
@@ -1531,6 +1545,5 @@ export class BehaviorAnalyticsService {
 
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
-    }
-  }
-}
+
+

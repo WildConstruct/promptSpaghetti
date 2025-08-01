@@ -4,8 +4,7 @@
  * Manages operation history for undo/redo functionality with support for
  * snapshots, history limits, and inverse operation generation.
  */
-import {
-  GraphOperation,
+import { GraphOperation,
   OperationType,
   HistoryEntry,
   GraphSnapshot,
@@ -20,9 +19,9 @@ import {
   EdgeDeleteOperation,
   VariationAddOperation,
   VariationDeleteOperation,
-  VariationUpdateOperation,
+  VariationUpdateOperation }
   VariationReorderOperation
-} from './types';
+ from './types';
 /**
  * Operation history manager for undo/redo functionality
  */
@@ -34,14 +33,13 @@ export class OperationHistory {
   /**
    * Record an operation for potential undo
    */
-  record(operation: GraphOperation, snapshot: GraphSnapshot): void {
-  const entry: HistoryEntry = {,
+  record(operation: GraphOperation, snapshot: GraphSnapshot): void { const entry: HistoryEntry = {,
   operation,
   snapshot,
   timestamp: new Date(),
   description: this.generateDescription(operation),
   canUndo: this.canCreateInverseOperation(operation),
-  canRedo: false,
+  canRedo: false }
 };
     // Clear redo stack when new operation is recorded
     this.redoStack = [];
@@ -62,35 +60,31 @@ export class OperationHistory {
     if (!this.canUndo()) {
       return { success: false, error: 'Nothing to undo' };
     const entry = this.undoStack[this.historyPointer];
-    try {
-  // Create inverse operation
+    try { // Create inverse operation
   const inverseOperation = await this.createInverseOperation(entry.operation, entry.snapshot);
   // Execute inverse operation through the engine
   const result = await engine.execute(inverseOperation);
   if (result.success) {
   // Move entry to redo stack
   this.redoStack.push({)
-  ...entry,
-  canRedo: true,
+  ...entry
+  canRedo: true }
 });
         this.historyPointer--;
-        return {
-  success: true,
-  operation: entry.operation,
-  description: entry.description,
+        return { success: true
+  operation: entry.operation
+  description: entry.description }
 };
-      } else {
-        return {
-          success: false,
+ else { return {
+          success: false }
           error: `Undo failed: ${result.error}`}
-},
+
   operation: entry.operation;
   };
-    } catch (error) {
-  return {
-  success: false,
-  error: error instanceof Error ? error.message : String(error),
-  operation: entry.operation,
+ catch (error) { return {
+  success: false
+  error: error instanceof Error ? error.message : String(error)
+  operation: entry.operation }
 };
   /**
    * Redo the last undone operation
@@ -100,33 +94,30 @@ export class OperationHistory {
     if (!this.canRedo()) {
       return { success: false, error: 'Nothing to redo' };
     const entry = this.redoStack.pop()!;
-    try {
-  // Re-execute the original operation
+    try { // Re-execute the original operation
   const result = await engine.execute(entry.operation);
   if (result.success) {
   // Move back to undo stack
   this.undoStack.push(entry);
   this.historyPointer = this.undoStack.length - 1;
   return {
-  success: true,
-  operation: entry.operation,
-  description: entry.description,
+  success: true
+  operation: entry.operation
+  description: entry.description }
 };
-      } else {
-        // Put the entry back in redo stack if it failed
+ else { // Put the entry back in redo stack if it failed
         this.redoStack.push(entry);
         return {
-          success: false,
+          success: false }
           error: `Redo failed: ${result.error}`}
-},
+
   operation: entry.operation;
   };
-    } catch (error) {
-  this.redoStack.push(entry);
+ catch (error) { this.redoStack.push(entry);
   return {
-  success: false,
-  error: error instanceof Error ? error.message : String(error),
-  operation: entry.operation,
+  success: false
+  error: error instanceof Error ? error.message : String(error)
+  operation: entry.operation }
 };
   /**
    * Check if undo is available
@@ -160,11 +151,10 @@ export class OperationHistory {
   /**
    * Get history summary for UI display
    */
-  getHistorySummary(): { undoCount: number; redoCount: number; currentIndex: number } {
-  return {
+  getHistorySummary(): { undoCount: number; redoCount: number; currentIndex: number } { return {
   undoCount: this.historyPointer + 1,
   redoCount: this.redoStack.length,
-  currentIndex: this.historyPointer,
+  currentIndex: this.historyPointer }
 };
   /**
    * Get description of what would be undone
@@ -216,11 +206,10 @@ export class OperationHistory {
       return 'Clear graph';
     case OperationType.GRAPH_IMPORT:
       return 'Import graph';
-    case OperationType.GRAPH_MERGE: return 'Merge graph';
+    case OperationType.GRAPH_MERGE: return 'Merge graph';,
   default:
       return 'Unknown operation';
-  private canCreateInverseOperation(operation: GraphOperation): boolean {
-    // Some operations cannot be easily reversed
+  private canCreateInverseOperation(operation: GraphOperation): boolean { // Some operations cannot be easily reversed
     switch (operation.type) {
     case OperationType.GRAPH_CLEAR:
       return true; // We have snapshot
@@ -229,7 +218,7 @@ export class OperationHistory {
   default:
       return true; // Most operations can be reversed
   private async createInverseOperation(((
-    operation: GraphOperation,
+    operation: GraphOperation }
     snapshot: GraphSnapshot
   ): Promise<GraphOperation> {
 
@@ -259,147 +248,146 @@ export class OperationHistory {
     default:
       throw new Error(`Cannot create inverse operation for type: ${operation.type}`);}
   private createNodeDeleteInverse(operation: NodeAddOperation)
-    id: string,
-    timestamp: Date): NodeDeleteOperation {,
+  id: string
+    timestamp: Date): NodeDeleteOperation { 
   return {
-  id,
-  type: OperationType.NODE_DELETE,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.NODE_DELETE
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  nodeId: operation.payload.node.id,
-  snapshot: operation.payload.node,
-  connectedEdges: [] // Would be populated by the engine,
+  nodeId: operation.payload.node.id
+  snapshot: operation.payload.node
+  connectedEdges: [] // Would be populated by the engine }
 };
   private createNodeAddInverse(operation: NodeDeleteOperation)
-    id: string,
-    timestamp: Date): NodeAddOperation {,
+  id: string
+    timestamp: Date): NodeAddOperation { 
   return {
-  id,
-  type: OperationType.NODE_ADD,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.NODE_ADD
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  node: operation.payload.snapshot,
-  position: operation.payload.snapshot.position,
+  node: operation.payload.snapshot
+  position: operation.payload.snapshot.position }
 };
   private createNodeUpdateInverse(operation: NodeUpdateOperation)
-    id: string,
-    timestamp: Date): NodeUpdateOperation {,
+  id: string
+    timestamp: Date): NodeUpdateOperation { 
   return {
-  id,
-  type: OperationType.NODE_UPDATE,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.NODE_UPDATE
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  nodeId: operation.payload.nodeId,
-  updates: operation.payload.previousValues,
-  previousValues: operation.payload.updates,
+  nodeId: operation.payload.nodeId
+  updates: operation.payload.previousValues
+  previousValues: operation.payload.updates }
 };
   private createNodeMoveInverse(operation: NodeMoveOperation)
-    id: string,
-    timestamp: Date): NodeMoveOperation {,
+  id: string
+    timestamp: Date): NodeMoveOperation { 
   return {
-  id,
-  type: OperationType.NODE_MOVE,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.NODE_MOVE
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  nodeId: operation.payload.nodeId,
-  newPosition: operation.payload.previousPosition,
-  previousPosition: operation.payload.newPosition,
+  nodeId: operation.payload.nodeId
+  newPosition: operation.payload.previousPosition
+  previousPosition: operation.payload.newPosition }
 };
   private createEdgeDeleteInverse(operation: EdgeAddOperation)
-    id: string,
-    timestamp: Date): EdgeDeleteOperation {,
+  id: string
+    timestamp: Date): EdgeDeleteOperation { 
   return {
-  id,
-  type: OperationType.EDGE_DELETE,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.EDGE_DELETE
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  edgeId: operation.payload.edge.id!,
-  snapshot: operation.payload.edge,
+  edgeId: operation.payload.edge.id!
+  snapshot: operation.payload.edge }
 };
   private createEdgeAddInverse(operation: EdgeDeleteOperation)
-    id: string,
-    timestamp: Date): EdgeAddOperation {,
+  id: string
+    timestamp: Date): EdgeAddOperation { 
   return {
-  id,
-  type: OperationType.EDGE_ADD,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.EDGE_ADD
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  edge: operation.payload.snapshot,
+  edge: operation.payload.snapshot }
 };
   private createVariationDeleteInverse(operation: VariationAddOperation)
-    id: string,
-    timestamp: Date): VariationDeleteOperation {,
+  id: string
+    timestamp: Date): VariationDeleteOperation { 
   const index = operation.payload.index || 0; // Would need to be determined by engine;
   return {
-  id,
-  type: OperationType.VARIATION_DELETE,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.VARIATION_DELETE
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  nodeId: operation.payload.nodeId,
-  index,
-  snapshot: operation.payload.variation,
+  nodeId: operation.payload.nodeId
+  index
+  snapshot: operation.payload.variation }
 };
   private createVariationAddInverse(operation: VariationDeleteOperation)
-    id: string,
-    timestamp: Date): VariationAddOperation {,
+  id: string
+    timestamp: Date): VariationAddOperation { 
   return {
-  id,
-  type: OperationType.VARIATION_ADD,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.VARIATION_ADD
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  nodeId: operation.payload.nodeId,
-  variation: operation.payload.snapshot,
-  index: operation.payload.index,
+  nodeId: operation.payload.nodeId
+  variation: operation.payload.snapshot
+  index: operation.payload.index }
 };
   private createVariationUpdateInverse(operation: VariationUpdateOperation)
-    id: string,
-    timestamp: Date): VariationUpdateOperation {,
+  id: string
+    timestamp: Date): VariationUpdateOperation { 
   return {
-  id,
-  type: OperationType.VARIATION_UPDATE,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.VARIATION_UPDATE
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  nodeId: operation.payload.nodeId,
-  index: operation.payload.index,
-  newValue: operation.payload.previousValue,
-  previousValue: operation.payload.newValue,
+  nodeId: operation.payload.nodeId
+  index: operation.payload.index
+  newValue: operation.payload.previousValue
+  previousValue: operation.payload.newValue }
 };
   private createVariationReorderInverse(operation: VariationReorderOperation)
-    id: string,
-    timestamp: Date): VariationReorderOperation {,
+  id: string
+    timestamp: Date): VariationReorderOperation { 
   return {
-  id,
-  type: OperationType.VARIATION_REORDER,
-  timestamp,
-  userId: operation.userId,
-  sessionId: operation.sessionId,
+  id
+  type: OperationType.VARIATION_REORDER
+  timestamp
+  userId: operation.userId
+  sessionId: operation.sessionId
   payload: {
-  nodeId: operation.payload.nodeId,
-  fromIndex: operation.payload.toIndex,
-  toIndex: operation.payload.fromIndex,
-  previousOrder: operation.payload.previousOrder,
+  nodeId: operation.payload.nodeId
+  fromIndex: operation.payload.toIndex
+  toIndex: operation.payload.fromIndex
+  previousOrder: operation.payload.previousOrder }
 };
-  private updateRedoFlags(): void {
-  // Update canRedo flags based on current state
+  private updateRedoFlags(): void { // Update canRedo flags based on current state
   this.redoStack = this.redoStack.map(entry => ({)
-  ...entry,
-  canRedo: true,
+  ...entry
+  canRedo: true }
 }));

@@ -9,23 +9,20 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { devtools } from 'zustand/middleware';
 
-}
-export interface PreviewResult {
-  seed: number;
+
+export interface PreviewResult { seed: number;
   output?: string;
   error?: string;
   usedNodeIds?: string;
   usedEdgeIds?: string;
-  executionTimeMs?: number;
-}
+  executionTimeMs?: number }
+
   executionPath?: Array<{ nodeId: string; output: unknown }>;
-  weightChoices?: Array<{
-  nodeId: string;
+  weightChoices?: Array<{ nodeId: string;
   selectedOption: unknown;
   availableOptions: unknown;
   weights?: number;
-  selectionProbability?: number;
-}>;
+  selectionProbability?: number }>;
   locked?: boolean;
   lockedAt?: number;
   lockedNote?: string;
@@ -35,42 +32,41 @@ export interface PreviewResult {
     performanceBreakdown: Record<string, number>;
     memoryUsage?: { used: number; total: number };
   };
-}
-}
-export interface PreviewCache {
-  graphHash: string;
+
+
+export interface PreviewCache { graphHash: string;
   timestamp: number;
   results: PreviewResult;
-  performanceStats: {
+  performanceStats: { }
   totalTime: number;
   averageTime: number;
-}
-} | null;
-}
-}
-export interface PreviewPerformanceMetrics {
-  totalExecutionTime: number;
+
+
+ | null;
+
+
+export interface PreviewPerformanceMetrics { totalExecutionTime: number;
   averageExecutionTime: number;
   cacheHitRate: number;
   lastExecutionCount: number;
   peakMemoryUsage?: number;
-  networkLatency?: number;
-}
-}
-}
-export interface PreviewStateStore {
-  // Current preview state
+  networkLatency?: number }
+
+
+
+export interface PreviewStateStore { // Current preview state
   isLoading: boolean;
   error: string | null;
   results: PreviewResult;
   aggregateError: string | null;
-  performanceStats: {
+  performanceStats: { }
   totalTime: number;
   averageTime: number;
-}
-} | null;
+
+
+ | null;
   // Real-time sync state
-  lastGraphHash: string | null;
+  lastGraphHash: string | null
   lastUpdateTimestamp: number;
   isRealTimeEnabled: boolean;
   syncInterval: number; // milliseconds
@@ -90,34 +86,34 @@ export interface PreviewStateStore {
   autoRefreshInterval: number;
   autoRefreshThreshold: number; // Graph change significance threshold
   // Actions
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
-  setResults: (results: PreviewResult) => void;
-  setAggregateError: (error: string | null) => void;
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
+  setResults: (results: PreviewResult) => void
+  setAggregateError: (error: string | null) => void
   setPerformanceStats: (stats: { totalTime: number; averageTime: number } | null) => void;
   // Real-time sync actions
-  updateGraphHash: (hash: string) => void;
-  enableRealTimeSync: (enabled: boolean) => void;
+  updateGraphHash: (hash: string) => void
+  enableRealTimeSync: (enabled: boolean) => void
   setSyncInterval: (interval: number) => void;
   // Cache management
-  getCachedResults: (graphHash: string) => PreviewCache | null;
-  setCachedResults: (),
-    graphHash: string,
-    results: PreviewResult,
+  getCachedResults: (graphHash: string) => PreviewCache | null
+  setCachedResults: ()
+    graphHash: string
+    results: PreviewResult
     stats: { totalTime: number; averageTime: number }
   ) => void;
-  clearCache: () => void;
+  clearCache: () => void
   pruneCacheByAge: () => void;
   pruneCacheBySize: () => void;
   // Result management
   lockResult: (index: number, note?: string) => void;
-  unlockResult: (index: number) => void;
+  unlockResult: (index: number) => void
   setRegeneratingResult: (index: number, regenerating: boolean) => void;
   // Performance monitoring
-  updatePerformanceMetrics: (metrics: Partial<PreviewPerformanceMetrics>) => void;
+  updatePerformanceMetrics: (metrics: Partial<PreviewPerformanceMetrics>) => void
   addPerformanceSnapshot: () => void;
-  getPerformanceInsights: () => {,
-  trend: 'improving' | 'degrading' | 'stable';
+  getPerformanceInsights: () => { 
+  trend: 'improving' | 'degrading' | 'stable' }
   bottlenecks: string;
   recommendations: string;
 };
@@ -125,7 +121,7 @@ export interface PreviewStateStore {
   setAutoRefresh: (enabled: boolean, interval?: number) => void;
   shouldAutoRefresh: (changeSignificance?: number) => boolean;
   // Utility actions
-  resetState: () => void;
+  resetState: () => void
   getStateSnapshot: () => any;
   restoreFromSnapshot: (snapshot: Record<string, unknown>) => void;
 
@@ -138,36 +134,36 @@ const generateGraphHash = (graph: { nodes?: Array<{ id: string; type: string; da
       edges: graph.edges?.map((e) => ({ id: e.id, source: e.source, target: e.target })) || []
     });
     return btoa(graphString).substring(0, 16);
-  } catch {
+ catch {
     return `hash_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
 };
 
 // Default performance metrics
-const defaultPerformanceMetrics: PreviewPerformanceMetrics = {,
+const defaultPerformanceMetrics: PreviewPerformanceMetrics = { ,
   totalExecutionTime: 0,
   averageExecutionTime: 0,
   cacheHitRate: 0,
-  lastExecutionCount: 0,
+  lastExecutionCount: 0 }
 };
-}
+
 export // Update last update timestamp
-        set({ lastUpdateTimestamp: Date.now() });
-  },
+        set({ lastUpdateTimestamp: Date.now() })
+
   setAggregateError: (aggregateError) => set({ aggregateError }),
       setPerformanceStats: (performanceStats) => set({ performanceStats }),
       // Real-time sync actions
-      updateGraphHash: (hash) => {,
+      updateGraphHash: (hash) => { ,
   const state = get();
   if (state.lastGraphHash !== hash) {
   set({)
   lastGraphHash: hash,
-  lastUpdateTimestamp: Date.now(),
-});
-  },
+  lastUpdateTimestamp: Date.now() }
+})
+
   enableRealTimeSync: (enabled) => set({ isRealTimeEnabled: enabled }),
       setSyncInterval: (interval) => set({ syncInterval: Math.max(100, interval) }),
       // Cache management
-      getCachedResults: (graphHash) => {,
+      getCachedResults: (graphHash) => { ,
   const state = get();
   const cached = state.cache.get(graphHash);
   if (!cached) return null;
@@ -181,29 +177,28 @@ export // Update last update timestamp
   const totalRequests = currentMetrics.lastExecutionCount + 1;
   const cacheHits = Math.round(currentMetrics.cacheHitRate * currentMetrics.lastExecutionCount) + 1;
   set({)
-  performanceMetrics: {
+  performanceMetrics: {,
   ...currentMetrics,
   cacheHitRate: cacheHits / totalRequests,
-  lastExecutionCount: totalRequests,
+  lastExecutionCount: totalRequests }
 });
-        return cached;
-  },
-  setCachedResults: (graphHash, results, stats) => {
-        const state = get();
+        return cached
+
+  setCachedResults: (graphHash, results, stats) => { const state = get();
         const newCache = new Map(state.cache);
         // Add new cache entry
         newCache.set(graphHash, {)
   graphHash,
           timestamp: Date.now(),
-          results: [...results],
+          results: [...results] }
           performanceStats: stats ? { ...stats } : null
         });
         // Prune cache if needed
         if (newCache.size > state.maxCacheSize) {
           const oldestKey = Array.from(newCache.keys())[0];
           newCache.delete(oldestKey);
-        set({ cache: newCache });
-  },
+        set({ cache: newCache })
+
   clearCache: () => set({ cache: new Map() }),
       pruneCacheByAge: () => {,
         const state = get();
@@ -212,8 +207,8 @@ export // Update last update timestamp
         for (const [key, value] of state.cache.entries()) {
           if (value.timestamp > cutoffTime) {
             newCache.set(key, value);
-        set({ cache: newCache });
-  },
+        set({ cache: newCache })
+
   pruneCacheBySize: () => {,
         const state = get();
         if (state.cache.size <= state.maxCacheSize) return;
@@ -221,24 +216,23 @@ export // Update last update timestamp
           .sort(([ a], [ b]) => b.timestamp - a.timestamp)
           .slice(0, state.maxCacheSize);
         set({ cache: new Map(entries) });
-  }
+
       // Result management
-      lockResult: (index, note) => {
-  const state = get();
+      lockResult: (index, note) => { const state = get();
   const updatedResults = [...state.results];
   if (updatedResults[index]) {
   updatedResults[index] = {
   ...updatedResults[index],
   locked: true,
   lockedAt: Date.now(),
-  lockedNote: note,
+  lockedNote: note }
 };
-        set({)
+        set({ )
   results: updatedResults,
-  lockedResults: [...state.lockedResults, index],
-});
-  },
-  unlockResult: (index) => {,
+  lockedResults: [...state.lockedResults, index] }
+})
+
+  unlockResult: (index) => { ,
   const state = get();
   const updatedResults = [...state.results];
   if (updatedResults[index]) {
@@ -246,48 +240,48 @@ export // Update last update timestamp
   ...updatedResults[index],
   locked: false,
   lockedAt: undefined,
-  lockedNote: undefined,
+  lockedNote: undefined }
 };
-        set({)
+        set({ )
   results: updatedResults,
-  lockedResults: state.lockedResults.filter(i => i !== index),
-});
-  },
+  lockedResults: state.lockedResults.filter(i => i !== index) }
+})
+
   setRegeneratingResult: (index, regenerating) => {
         const state = get();
         const updatedRegenerating = regenerating;
           ? [...state.regeneratingResults, index]
           : state.regeneratingResults.filter(i => i !== index);
         set({ regeneratingResults: updatedRegenerating });
-  }
+
       // Performance monitoring
-      updatePerformanceMetrics: (newMetrics) => {,
+      updatePerformanceMetrics: (newMetrics) => { ,
   const state = get();
   set({)
   performanceMetrics: {
-  ...state.performanceMetrics,
+  ...state.performanceMetrics }
   ...newMetrics
-});
-  },
-  addPerformanceSnapshot: () => {,
+})
+
+  addPerformanceSnapshot: () => { ,
   const state = get();
-  const newHistory = [;
+  const newHistory = [
   ...state.performanceHistory,
   {
   ...state.performanceMetrics,
-  timestamp: Date.now(),
-} as any
+  timestamp: Date.now() }
+ as any
         ].slice(-state.maxHistoryLength);
-        set({ performanceHistory: newHistory });
-  },
-  getPerformanceInsights: () => {,
+        set({ performanceHistory: newHistory })
+
+  getPerformanceInsights: () => { ,
   const state = get();
   const history = state.performanceHistory;
   if (history.length < 2) {
   return {
   trend: 'stable' as const,
   bottlenecks: [],
-  recommendations: ['Need more data for analysis'],
+  recommendations: ['Need more data for analysis'] }
 };
         const recent = history.slice(-5);
         const avgRecent = recent.reduce((sum, h) => sum + h.averageExecutionTime, 0) / recent.length;
@@ -309,69 +303,65 @@ export // Update last update timestamp
           bottlenecks.push('High network latency');
           recommendations.push('Consider local caching or server optimization');
         return { trend, bottlenecks, recommendations };
-  }
+
       // Auto-refresh
       setAutoRefresh: (enabled, interval) => {
         const updates: Partial<PreviewStateStore> = { autoRefreshEnabled: enabled };
-        if (interval !== undefined) {
-          updates.autoRefreshInterval = Math.max(1000, interval);
-        set(updates);
-  },
-  shouldAutoRefresh: (changeSignificance = 0) => {,
+        if (interval !== undefined) { updates.autoRefreshInterval = Math.max(1000, interval);
+        set(updates) }
+  shouldAutoRefresh: (changeSignificance = 0) => { 
         const state = get();
         if (!state.autoRefreshEnabled) return false;
         if (state.isLoading) return false;
         const timeSinceLastUpdate = Date.now() - state.lastUpdateTimestamp;
         const intervalPassed = timeSinceLastUpdate > state.autoRefreshInterval;
         const significantChange = changeSignificance > state.autoRefreshThreshold;
-        return intervalPassed || significantChange;
-  }
+        return intervalPassed || significantChange }
       // Utility actions
-      resetState: () => {,
+      resetState: () => { 
   set({)
-  isLoading: false,
-  error: null,
-  results: [],
-  aggregateError: null,
-  performanceStats: null,
-  lockedResults: [],
-  regeneratingResults: [],
-  lastUpdateTimestamp: 0,
-  performanceMetrics: defaultPerformanceMetrics,
-});
-  },
-  getStateSnapshot: () => {,
+  isLoading: false
+  error: null
+  results: []
+  aggregateError: null
+  performanceStats: null
+  lockedResults: []
+  regeneratingResults: []
+  lastUpdateTimestamp: 0
+  performanceMetrics: defaultPerformanceMetrics }
+})
+
+  getStateSnapshot: () => { 
   const state = get();
   return {
-  results: state.results,
-  lockedResults: state.lockedResults,
-  performanceStats: state.performanceStats,
-  lastGraphHash: state.lastGraphHash,
-  lastUpdateTimestamp: state.lastUpdateTimestamp,
-  performanceMetrics: state.performanceMetrics,
-};
-  },
-  restoreFromSnapshot: (snapshot) => {,
+  results: state.results
+  lockedResults: state.lockedResults
+  performanceStats: state.performanceStats
+  lastGraphHash: state.lastGraphHash
+  lastUpdateTimestamp: state.lastUpdateTimestamp
+  performanceMetrics: state.performanceMetrics }
+
+
+  restoreFromSnapshot: (snapshot) => { 
   set({)
-  results: snapshot.results || [],
-  lockedResults: snapshot.lockedResults || [],
-  performanceStats: snapshot.performanceStats || null,
-  lastGraphHash: snapshot.lastGraphHash || null,
-  lastUpdateTimestamp: snapshot.lastUpdateTimestamp || 0,
-  performanceMetrics: snapshot.performanceMetrics || defaultPerformanceMetrics,
+  results: snapshot.results || []
+  lockedResults: snapshot.lockedResults || []
+  performanceStats: snapshot.performanceStats || null
+  lastGraphHash: snapshot.lastGraphHash || null
+  lastUpdateTimestamp: snapshot.lastUpdateTimestamp || 0
+  performanceMetrics: snapshot.performanceMetrics || defaultPerformanceMetrics }
 });
-    })),
-    {
-  name: 'preview-state-store',
-  partialize: (state) => ({,)
+    }))
+    { name: 'preview-state-store'
+  partialize: (state) => ({)
   // Only persist essential state
-  isRealTimeEnabled: state.isRealTimeEnabled,
-  syncInterval: state.syncInterval,
-  autoRefreshEnabled: state.autoRefreshEnabled,
-  autoRefreshInterval: state.autoRefreshInterval,
-  maxCacheSize: state.maxCacheSize,
-  cacheExpirationMs: state.cacheExpirationMs,
-}
+  isRealTimeEnabled: state.isRealTimeEnabled
+  syncInterval: state.syncInterval
+  autoRefreshEnabled: state.autoRefreshEnabled
+  autoRefreshInterval: state.autoRefreshInterval
+  maxCacheSize: state.maxCacheSize
+  cacheExpirationMs: state.cacheExpirationMs }
+
 );
 
 // Utility hooks for common state selections

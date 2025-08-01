@@ -17,7 +17,7 @@ export enum RateLimitAlgorithm {
   FIXED_WINDOW = 'fixed_window',
   LEAKY_BUCKET = 'leaky_bucket',
   ADAPTIVE = 'adaptive'
-}
+
 
 // Rate limit scopes
 export enum RateLimitScope {
@@ -27,7 +27,7 @@ export enum RateLimitScope {
   PER_IP = 'per_ip',
   PER_TENANT = 'per_tenant',
   PER_MESSAGE_TYPE = 'per_message_type'
-}
+
 
 // SMS message types with different priority levels
 export enum SMSMessageType {
@@ -39,11 +39,12 @@ export enum SMSMessageType {
   REMINDER = 'reminder',                      // Low priority - appointment reminders
   SUPPORT = 'support',                        // Medium priority - support communications
   SYSTEM_ALERT = 'system_alert'              // Highest priority - critical system alerts
-}
+
 
 // Rate limit configuration
-}
-}
+
+
+
 export interface RateLimitConfig {
   algorithm: RateLimitAlgorithm;
   scope: RateLimitScope;
@@ -53,13 +54,15 @@ export interface RateLimitConfig {
   refillRate?: number;            // For token bucket - tokens per second
   priority: number;               // Higher number = higher priority (1-10)
   enabled: boolean;
-}
-}
-}
+
+
+
+
 
 // SMS message data
-}
-}
+
+
+
 export interface SMSMessage {
   id: string;
   to: string;
@@ -75,13 +78,15 @@ export interface SMSMessage {
   retryCount: number;
   maxRetries: number;
   createdAt: Date;
-}
-}
-}
+
+
+
+
 
 // Rate limit result
-}
-}
+
+
+
 export interface RateLimitResult {
   allowed: boolean;
   reason?: string;
@@ -92,13 +97,15 @@ export interface RateLimitResult {
   limit: number;
   scope: string;
   metadata?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // Queue status
-}
-}
+
+
+
 export interface QueueStatus {
   pending: number;
   processing: number;
@@ -107,13 +114,15 @@ export interface QueueStatus {
   averageProcessingTime: number;
   oldestPendingAge: number; // milliseconds
   queueHealthScore: number; // 0-100
-}
-}
-}
+
+
+
+
 
 // Rate limiting storage interface
-}
-}
+
+
+
 interface RateLimitStorage {
   get(key: string): Promise<unknown>;
   set(key: string, value: Error, ttlMs?: number): Promise<void>;
@@ -121,9 +130,10 @@ interface RateLimitStorage {
   expire(key: string, ttlMs: number): Promise<void>;
   delete(key: string): Promise<boolean>;
   cleanup(): Promise<void>;
-}
-}
-}
+
+
+
+
 
 /**
  * In-memory rate limiting storage (for development/testing)
@@ -139,16 +149,16 @@ class MemoryRateLimitStorage implements RateLimitStorage {
     if (item.expires && item.expires < new Date()) {
       this.store.delete(key);
       return null;
-    }
+
     
     return item.value;
-  }
+
 
   async set(key: string, value: Error, ttlMs?: number): Promise<void> {
 
     const expires = ttlMs ? new Date(Date.now() + ttlMs) : undefined;
     this.store.set(key, { value, expires });
-  }
+
 
   async increment(key: string, amount: number = 1): Promise<number> {
 
@@ -156,20 +166,20 @@ class MemoryRateLimitStorage implements RateLimitStorage {
     const newValue = current + amount;
     await this.set(key, newValue);
     return newValue;
-  }
+
 
   async expire(key: string, ttlMs: number): Promise<void> {
 
     const item = this.store.get(key);
     if (item) {
       item.expires = new Date(Date.now() + ttlMs);
-    }
-  }
+
+
 
   async delete(key: string): Promise<boolean> {
 
     return this.store.delete(key);
-  }
+
 
   async cleanup(): Promise<void> {
 
@@ -177,10 +187,10 @@ class MemoryRateLimitStorage implements RateLimitStorage {
     for (const [key, item] of this.store.entries()) {
       if (item.expires && item.expires < now) {
         this.store.delete(key);
-      }
-    }
-  }
-}
+
+
+
+
 
 /**
  * SMS Rate Limiting Service
@@ -210,7 +220,7 @@ export class SMSRateLimitingService extends EventEmitter {
     this.initializeDefaultConfigs();
     this.startQueueProcessing();
     this.startCleanupInterval();
-  }
+
 
   /**
    * Initialize default rate limiting configurations
@@ -229,8 +239,8 @@ export class SMSRateLimitingService extends EventEmitter {
           refillRate: 2, // 2 tokens per second
           priority: 5,
           enabled: true
-        }
-  }
+
+
       // Per-user limits
       {
         id: 'per_user_sms_limit',
@@ -241,8 +251,8 @@ export class SMSRateLimitingService extends EventEmitter {
           maxRequests: 10,
           priority: 7,
           enabled: true
-        }
-  }
+
+
       // Per-phone limits (anti-spam)
       {
         id: 'per_phone_sms_limit',
@@ -253,8 +263,8 @@ export class SMSRateLimitingService extends EventEmitter {
           maxRequests: 5,
           priority: 8,
           enabled: true
-        }
-  }
+
+
       // Security alerts (highest priority)
       {
         id: 'security_alert_limit',
@@ -267,8 +277,8 @@ export class SMSRateLimitingService extends EventEmitter {
           refillRate: 1,
           priority: 10,
           enabled: true
-        }
-  }
+
+
       // Marketing messages (lower priority)
       {
         id: 'marketing_sms_limit',
@@ -279,14 +289,14 @@ export class SMSRateLimitingService extends EventEmitter {
           maxRequests: 3,
           priority: 2,
           enabled: true
-        }
-      }
+
+
     ];
 
     defaultConfigs.forEach(({ id, config }) => {
       this.configs.set(id, config);
     });
-  }
+
 
   /**
    * Check if SMS send is allowed by rate limits
@@ -317,8 +327,8 @@ export class SMSRateLimitingService extends EventEmitter {
           scope: `${config.scope}:${configId}`,
           metadata: { configId, algorithm: config.algorithm }
         };
-      }
-    }
+
+
 
     return {
       allowed: true,
@@ -328,7 +338,7 @@ export class SMSRateLimitingService extends EventEmitter {
       limit: 1000,
       scope: 'passed_all_checks'
     };
-  }
+
 
   /**
    * Queue SMS message for sending with rate limiting
@@ -347,13 +357,13 @@ export class SMSRateLimitingService extends EventEmitter {
     // Check if queue is full
     if (this.messageQueue.length >= this.config.maxQueueSize) {
       throw new Error('SMS queue is full. Please try again later.');
-    }
+
 
     // Check rate limits before queueing
     const rateLimitResult = await this.checkRateLimit(smsMessage);
     if (!rateLimitResult.allowed) {
       throw new Error(`Rate limit exceeded: ${rateLimitResult.reason}. Retry after ${rateLimitResult.retryAfter} seconds.`);
-    }
+
 
     // Add to queue with priority ordering
     this.messageQueue.push(smsMessage);
@@ -362,7 +372,7 @@ export class SMSRateLimitingService extends EventEmitter {
     this.emit('message_queued', { message: smsMessage, queueSize: this.messageQueue.length });
     
     return smsMessage.id;
-  }
+
 
   /**
    * Send SMS immediately (bypass queue) - for critical messages only
@@ -382,10 +392,10 @@ export class SMSRateLimitingService extends EventEmitter {
     const criticalTypes = [SMSMessageType.SECURITY_ALERT, SMSMessageType.SYSTEM_ALERT];
     if (!criticalTypes.includes(message.type)) {
       throw new Error('Immediate send only allowed for critical message types');
-    }
+
 
     return await this.processSMSMessage(smsMessage);
-  }
+
 
   /**
    * Get current queue status
@@ -404,14 +414,14 @@ export class SMSRateLimitingService extends EventEmitter {
       averageProcessingTime: totalProcessed > 0 ? totalProcessingTime / totalProcessed : 0,
       oldestPendingAge: oldestPending ? Date.now() - oldestPending.getTime() : 0,
       queueHealthScore: this.calculateQueueHealthScore(};
-  }
+
 
   /**
    * Register SMS provider
    */
   registerProvider(name: string, provider: SMSProvider): void {
     this.providers.set(name, provider);
-  }
+
 
   /**
    * Update rate limit configuration
@@ -420,11 +430,11 @@ export class SMSRateLimitingService extends EventEmitter {
     const existingConfig = this.configs.get(configId);
     if (!existingConfig) {
       throw new Error(`Rate limit config not found: ${configId}`);
-    }
+
 
     this.configs.set(configId, { ...existingConfig, ...config });
     this.emit('config_updated', { configId, config });
-  }
+
 
   /**
    * Get rate limit statistics
@@ -450,13 +460,13 @@ export class SMSRateLimitingService extends EventEmitter {
       for (const key of keys) {
         const usage = await this.getCurrentUsage(config, key);
         configStats.totalUsage += usage;
-      }
+
 
       stats[configId] = configStats;
-    }
+
 
     return stats;
-  }
+
 
   // Private methods
 
@@ -466,11 +476,11 @@ export class SMSRateLimitingService extends EventEmitter {
     for (const [configId, config] of this.configs) {
       if (this.isConfigApplicable(config, message)) {
         applicable.set(configId, config);
-      }
-    }
+
+
 
     return applicable;
-  }
+
 
   private isConfigApplicable(config: RateLimitConfig, message: SMSMessage): boolean {
     switch (config.scope) {
@@ -488,8 +498,8 @@ export class SMSRateLimitingService extends EventEmitter {
       return true; // All messages have a type
     default:
       return false;
-    }
-  }
+
+
 
   private generateRateLimitKey(config: RateLimitConfig, message: SMSMessage): string {
     const prefix = `sms_rate_limit:${config.scope}`;
@@ -509,8 +519,8 @@ export class SMSRateLimitingService extends EventEmitter {
       return `${prefix}:type:${message.type}`;
     default:
       return `${prefix}:unknown`;
-    }
-  }
+
+
 
   private async evaluateRateLimit(
     config: RateLimitConfig,
@@ -531,8 +541,8 @@ export class SMSRateLimitingService extends EventEmitter {
       return await this.evaluateAdaptive(config, key, message);
     default:
       throw new Error(`Unsupported rate limit algorithm: ${config.algorithm}`);
-    }
-  }
+
+
 
   private async evaluateTokenBucket(config: RateLimitConfig, key: string): Promise<RateLimitResult> {
 
@@ -560,7 +570,7 @@ export class SMSRateLimitingService extends EventEmitter {
         currentUsage: maxTokens - newTokens,
         limit: maxTokens
       };
-    }
+
     
     // Consume one token
     await this.storage.set(bucketKey, newTokens - 1, config.windowSizeMs);
@@ -573,7 +583,7 @@ export class SMSRateLimitingService extends EventEmitter {
       currentUsage: maxTokens - (newTokens - 1),
       limit: maxTokens
     };
-  }
+
 
   private async evaluateSlidingWindow(config: RateLimitConfig, key: string): Promise<RateLimitResult> {
 
@@ -600,7 +610,7 @@ export class SMSRateLimitingService extends EventEmitter {
         currentUsage: validRequests.length,
         limit: config.maxRequests
       };
-    }
+
     
     // Add current request
     validRequests.push(now);
@@ -613,7 +623,7 @@ export class SMSRateLimitingService extends EventEmitter {
       currentUsage: validRequests.length,
       limit: config.maxRequests
     };
-  }
+
 
   private async evaluateFixedWindow(config: RateLimitConfig, key: string): Promise<RateLimitResult> {
 
@@ -627,7 +637,7 @@ export class SMSRateLimitingService extends EventEmitter {
     if (windowData.windowStart !== windowStart) {
       windowData.count = 0;
       windowData.windowStart = windowStart;
-    }
+
     
     if (windowData.count >= config.maxRequests) {
       const resetTime = new Date(windowStart + config.windowSizeMs);
@@ -641,7 +651,7 @@ export class SMSRateLimitingService extends EventEmitter {
         currentUsage: windowData.count,
         limit: config.maxRequests
       };
-    }
+
     
     // Increment counter
     windowData.count++;
@@ -654,7 +664,7 @@ export class SMSRateLimitingService extends EventEmitter {
       currentUsage: windowData.count,
       limit: config.maxRequests
     };
-  }
+
 
   private async evaluateLeakyBucket(config: RateLimitConfig, key: string): Promise<RateLimitResult> {
 
@@ -683,7 +693,7 @@ export class SMSRateLimitingService extends EventEmitter {
         currentUsage: newLevel,
         limit: config.maxRequests
       };
-    }
+
     
     // Add current request to bucket
     await this.storage.set(bucketKey, newLevel + 1, config.windowSizeMs);
@@ -696,7 +706,7 @@ export class SMSRateLimitingService extends EventEmitter {
       currentUsage: newLevel + 1,
       limit: config.maxRequests
     };
-  }
+
 
   private async evaluateAdaptive(config: RateLimitConfig, key: string, message: SMSMessage): Promise<RateLimitResult> {
 
@@ -720,9 +730,9 @@ export class SMSRateLimitingService extends EventEmitter {
         adaptiveFactor,
         originalLimit: config.maxRequests,
         adaptedLimit
-      }
+
     };
-  }
+
 
   private calculateAdaptiveFactor(systemLoad: number, messagePriority: number): number {
     // Higher priority messages get higher adaptive factors
@@ -731,7 +741,7 @@ export class SMSRateLimitingService extends EventEmitter {
     
     // Combine factors with weighted average
     return (priorityFactor * 0.7) + (loadFactor * 0.3);
-  }
+
 
   private getMessagePriority(type: SMSMessageType): number {
     const priorities = {
@@ -746,7 +756,7 @@ export class SMSRateLimitingService extends EventEmitter {
     };
     
     return priorities[type] || 5;
-  }
+
 
   private async startQueueProcessing(): Promise<void> {
 
@@ -757,16 +767,16 @@ export class SMSRateLimitingService extends EventEmitter {
     const processQueue = async () => {
       try {
         await this.processNextMessages();
-      } catch (error) {
+ catch (error) {
         console.error('Queue processing error:', error);
         this.emit('processing_error', { error, timestamp: new Date() });
-      }
+
       
       setTimeout(processQueue, this.config.queueProcessingInterval);
     };
     
     processQueue();
-  }
+
 
   private async processNextMessages(): Promise<void> {
 
@@ -775,7 +785,7 @@ export class SMSRateLimitingService extends EventEmitter {
     
     if (availableSlots <= 0 || this.messageQueue.length === 0) {
       return;
-    }
+
     
     // Get next messages to process (up to available slots)
     const messagesToProcess = this.messageQueue.splice(0, availableSlots);
@@ -790,28 +800,28 @@ export class SMSRateLimitingService extends EventEmitter {
         if (success) {
           this.updateStats('completed', 1);
           this.emit('message_sent', { message, success: true, timestamp: new Date() });
-        } else {
+ else {
           // Retry if possible
           if (message.retryCount < message.maxRetries) {
             message.retryCount++;
             this.messageQueue.unshift(message); // Add back to front of queue
             this.emit('message_retry', { message, attempt: message.retryCount });
-          } else {
+ else {
             this.updateStats('failed', 1);
             this.emit('message_failed', { message, reason: 'Max retries exceeded' });
-          }
-        }
-      } catch (error) {
+
+
+ catch (error) {
         console.error(`Failed to process SMS ${message.id}:`, error);
         this.updateStats('failed', 1);
         this.emit('message_failed', { message, error, timestamp: new Date() });
-      } finally {
+ finally {
         this.processingQueue.delete(message.id);
-      }
+
     });
     
     await Promise.all(processPromises);
-  }
+
 
   private async processSMSMessage(message: SMSMessage): Promise<boolean> {
 
@@ -823,13 +833,13 @@ export class SMSRateLimitingService extends EventEmitter {
       if (!rateLimitResult.allowed) {
         this.emit('message_rate_limited', { message, rateLimitResult });
         return false;
-      }
+
       
       // Select provider and send SMS
       const provider = this.selectProvider(message);
       if (!provider) {
         throw new Error('No SMS provider available');
-      }
+
       
       const success = await provider.sendSMS(message);
       
@@ -838,27 +848,26 @@ export class SMSRateLimitingService extends EventEmitter {
       this.updateStats('totalProcessingTime', processingTime);
       
       return success;
-      
-    } catch (error) {
+ catch (error) {
       console.error('SMS processing error:', error);
       return false;
-    }
-  }
+
+
 
   private selectProvider(_____message: SMSMessage): SMSProvider | null {
     // Simple provider selection - could be enhanced with load balancing, failover, etc.
     const providers = Array.from(this.providers.values());
     return providers.find(provider => provider.isAvailable()) || providers[0] || null;
-  }
+
 
   private generateMessageId(): string {
     return `sms_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private updateStats(key: string, value: number): void {
     const current = this.stats.get(key) || 0;
     this.stats.set(key, current + value);
-  }
+
 
   private calculateQueueHealthScore(): number {
     const status = {
@@ -881,10 +890,10 @@ export class SMSRateLimitingService extends EventEmitter {
     if (total > 0) {
       const failureRate = status.failed / total;
       score -= failureRate * 50;
-    }
+
     
     return Math.max(0, score);
-  }
+
 
   private async getCurrentUsage(config: RateLimitConfig, key: string): Promise<number> {
 
@@ -901,36 +910,38 @@ export class SMSRateLimitingService extends EventEmitter {
       return data.count || 0;
     default:
       return 0;
-    }
-  }
+
+
 
   private async getAllKeysForConfig(_____config: RateLimitConfig): Promise<string[]> {
 
     // This is a placeholder - actual implementation would scan storage for keys matching the pattern
     return [];
-  }
+
 
   private startCleanupInterval(): void {
     setInterval(async () => {
       try {
         await this.storage.cleanup();
-      } catch (error) {
+ catch (error) {
         console.error('Storage cleanup error:', error);
-      }
+
     }, this.config.cleanupInterval);
-  }
-}
+
+
 
 // SMS Provider interface
-}
-}
+
+
+
 export interface SMSProvider {
   name: string;
   sendSMS(message: SMSMessage): Promise<boolean>;
   isAvailable(): boolean;
-}
-}
+
+
+
   getStatus(): { healthy: boolean; lastError?: string; };
-}
+
 
 export default SMSRateLimitingService;

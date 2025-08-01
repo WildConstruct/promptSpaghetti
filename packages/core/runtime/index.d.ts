@@ -1,12 +1,10 @@
 import { ExecutionContext, RuntimeNode } from './types.js';
 export { ExecutionContext, RuntimeNode } from './types.js';
 export { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } from './advanced.js';
-export declare class WeightedChoiceNode extends RuntimeNode<string> {
-    private choices;
+export declare class WeightedChoiceNode extends RuntimeNode<string> { private choices;
     constructor(id: string, choices: Array<{)
         value: string;
-        weight: number;
-    }>);
+        weight: number }>);
     run(ctx: ExecutionContext): string;
 
 export declare class ConcatNode extends RuntimeNode<string> {

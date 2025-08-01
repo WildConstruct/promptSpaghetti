@@ -1,22 +1,20 @@
-import {
-  AdvancedRuntimeNode,
+import { AdvancedRuntimeNode,
   AdvancedExecutionContext,
   AdvancedExecutionUtils,
   AdvancedNodeConfig,
   ValidationHelpers,
   SerializationHelpers,
-  AdvancedNodeData,
+  AdvancedNodeData }
   AdvancedRuntimeNodeWithIO
-} from '../runtime/advanced';
-describe('Advanced Runtime System - Comprehensive Tests', () => {
-  // Test implementation of AdvancedRuntimeNode
+ from '../runtime/advanced';
+describe('Advanced Runtime System - Comprehensive Tests', () => { // Test implementation of AdvancedRuntimeNode
   class TestAdvancedNode extends AdvancedRuntimeNode<string> {
   private testData: string;
-  constructor(id: string, testData: string, config?: Partial<AdvancedNodeConfig>) {,
+  constructor(id: string, testData: string, config?: Partial<AdvancedNodeConfig>) {
   super(id, {)
-  deterministic: true,
-  cacheable: true,
-  stateful: false,
+  deterministic: true
+  cacheable: true
+  stateful: false }
   ...config
 });
       this.testData = testData;
@@ -36,43 +34,40 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
           return `${this.testData}-${randomValue.toFixed(3)}-${state}`;}
         });
       });
-    validate() {
-      const errors = ValidationHelpers.validateRequired(this.testData, 'testData');
+    validate() { const errors = ValidationHelpers.validateRequired(this.testData, 'testData');
       return errors.length > 0
         ? ValidationHelpers.createInvalidResult(errors)
         : ValidationHelpers.createValidResult();
     serialize(): AdvancedNodeData {
       return SerializationHelpers.createAdvancedNodeData()
-        this.id,
-        'TestAdvanced',
-        this.config,
+        this.id
+        'TestAdvanced'
+        this.config }
         { testData: this.testData }
       );
   // Test stateful node
-  class StatefulTestNode extends AdvancedRuntimeNode<number> {
-  constructor(id: string) {,
+  class StatefulTestNode extends AdvancedRuntimeNode<number> { constructor(id: string) {
   super(id, {)
-  deterministic: true,
-  cacheable: false,
-  stateful: true,
+  deterministic: true
+  cacheable: false
+  stateful: true }
 });
-    run(ctx: AdvancedExecutionContext): number {
-  const count = this.getState(ctx) || 0;
+    run(ctx: AdvancedExecutionContext): number { const count = this.getState(ctx) || 0;
   this.setState(ctx, count + 1);
   return count;
   validate() {
   return ValidationHelpers.createValidResult();
-  serialize(): AdvancedNodeData {,
+  serialize(): AdvancedNodeData {
   return SerializationHelpers.createAdvancedNodeData()
-  this.id,
-  'StatefulTest',
+  this.id
+  'StatefulTest'
   this.config);
   describe('AdvancedRuntimeNode', () => {
   it('maintains configuration correctly', () => {
   const node = new TestAdvancedNode('test1', 'data', {)
-  deterministic: false,
-  cacheable: false,
-  stateful: true,
+  deterministic: false
+  cacheable: false
+  stateful: true }
 });
       const config = node.getConfig();
       expect(config.deterministic).toBe(false);
@@ -81,8 +76,8 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     });
     it('tracks execution order', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       const node1 = new TestAdvancedNode('node1', 'data1');
       const node2 = new TestAdvancedNode('node2', 'data2');
@@ -92,8 +87,8 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     });
     it('implements caching when enabled', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       const node = new TestAdvancedNode('cached', 'data', { cacheable: true });
       const result1 = node.run(ctx);
@@ -104,8 +99,8 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     });
     it('skips caching when disabled', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       const node = new TestAdvancedNode('uncached', 'data', { cacheable: false });
       node.run(ctx);
@@ -113,8 +108,8 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     });
     it('manages state correctly', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       const node = new StatefulTestNode('stateful');
       expect(node.run(ctx)).toBe(0);
@@ -125,11 +120,11 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('generates deterministic random numbers with same seed', () => {
       const node = new TestAdvancedNode('rng', 'data');
       const ctx1 = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
+  variables: {}
         seed: 'same-seed';
   });
       const ctx2 = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
+  variables: {}
         seed: 'same-seed';
   });
       expect(node.run(ctx1)).toBe(node.run(ctx2));
@@ -137,19 +132,19 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('generates different random numbers with different seeds', () => {
       const node = new TestAdvancedNode('rng', 'data');
       const ctx1 = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'seed1'
+  variables: {}
+        seed: 'seed1';
   });
       const ctx2 = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'seed2'
+  variables: {}
+        seed: 'seed2';
   });
       expect(node.run(ctx1)).not.toBe(node.run(ctx2));
     });
     it('records performance metrics', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       const node = new TestAdvancedNode('perf', 'data');
       node.run(ctx);
@@ -158,21 +153,18 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       expect(typeof duration).toBe('number');
       expect(duration).toBeGreaterThanOrEqual(0);
     });
-    it('validates correctly', () => {
-      const validNode = new TestAdvancedNode('valid', 'data');
+    it('validates correctly', () => { const validNode = new TestAdvancedNode('valid', 'data');
       const invalidNode = new TestAdvancedNode('invalid', '');
       expect(validNode.validate().valid).toBe(true);
       expect(invalidNode.validate().valid).toBe(false);
-      expect(invalidNode.validate().errors).toContain('testData is required');
-    });
-    it('serializes correctly', () => {
-  const node = new TestAdvancedNode('serialize', 'test-data', {)
-  deterministic: false,
-  cacheable: true,
-  stateful: false,
+      expect(invalidNode.validate().errors).toContain('testData is required') });
+    it('serializes correctly', () => { const node = new TestAdvancedNode('serialize', 'test-data', {)
+  deterministic: false
+  cacheable: true
+  stateful: false
   performanceHints: {
-  expectedExecutionTime: 'fast',
-  memoryUsage: 'low',
+  expectedExecutionTime: 'fast'
+  memoryUsage: 'low' }
 });
       const serialized = node.serialize();
       expect(serialized.id).toBe('serialize');
@@ -180,9 +172,9 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       expect(serialized.config.deterministic).toBe(false);
       expect(serialized.config.cacheable).toBe(true);
       expect(serialized.config.stateful).toBe(false);
-      expect(serialized.config.performanceHints).toEqual({)
-  expectedExecutionTime: 'fast',
-  memoryUsage: 'low',
+      expect(serialized.config.performanceHints).toEqual({ )
+  expectedExecutionTime: 'fast'
+  memoryUsage: 'low' }
 });
       expect(serialized.data.testData).toBe('test-data');
       expect(serialized.metadata?.version).toBe('1.0.0');
@@ -197,12 +189,11 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('creates node-specific seeds', () => {
       const node = new TestAdvancedNode('specific', 'data');
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'base'
+  variables: {}
+        seed: 'base';
   });
       // Access protected method through inheritance
-      class TestableNode extends TestAdvancedNode {
-  testSeededRNG(seed: string | number, specific?: string) {,
+      class TestableNode extends TestAdvancedNode { testSeededRNG(seed: string | number, specific?: string) { }
   return this.createSeededRNG(seed, specific);
   const testNode = new TestableNode('test', 'data');
   const rng1 = testNode.testSeededRNG('base');
@@ -226,8 +217,8 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     });
     it('clears execution state', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       // Add some state
       ctx.nodeStates.set('node1', { count: 5 });
@@ -247,8 +238,8 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     });
     it('detects infinite loops', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       ctx.evaluationDepth = 999;
       expect(AdvancedExecutionUtils.detectInfiniteLoop(ctx, 'node1')).toBe(false);
@@ -257,8 +248,8 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     });
     it('calculates execution statistics', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       // Simulate execution
       ctx.executionMeta.nodeExecutionOrder.push('node1', 'node2', 'node3');
@@ -273,8 +264,8 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     });
     it('handles optional inputs and outputs', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       ctx.inputs = { input1: 'value1' };
       ctx.outputs = { output1: 'result1' };
@@ -282,32 +273,26 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       expect(ctx.outputs?.output1).toBe('result1');
     });
   });
-  describe('ValidationHelpers', () => {
-    it('creates valid result', () => {
+  describe('ValidationHelpers', () => { it('creates valid result', () => {
       const result = ValidationHelpers.createValidResult();
       expect(result.valid).toBe(true);
       expect(result.errors).toEqual([]);
-      expect(result.warnings).toEqual([]);
-    });
-    it('creates invalid result', () => {
-      const result = ValidationHelpers.createInvalidResult(;);
-        ['Error 1', 'Error 2'],
+      expect(result.warnings).toEqual([]) });
+    it('creates invalid result', () => { const result = ValidationHelpers.createInvalidResult(;);
+        ['Error 1', 'Error 2'] }
         ['Warning 1']
       );
       expect(result.valid).toBe(false);
       expect(result.errors).toEqual(['Error 1', 'Error 2']);
       expect(result.warnings).toEqual(['Warning 1']);
     });
-    it('validates required fields', () => {
-      expect(ValidationHelpers.validateRequired('value', 'field')).toEqual([]);
+    it('validates required fields', () => { expect(ValidationHelpers.validateRequired('value', 'field')).toEqual([]);
       expect(ValidationHelpers.validateRequired('', 'field')).toEqual(['field is required']);
       expect(ValidationHelpers.validateRequired(null, 'field')).toEqual(['field is required']);
       expect(ValidationHelpers.validateRequired(undefined, 'field')).toEqual(['field is required']);
       expect(ValidationHelpers.validateRequired(0, 'field')).toEqual([]);
-      expect(ValidationHelpers.validateRequired(false, 'field')).toEqual([]);
-    });
-    it('validates arrays', () => {
-      expect(ValidationHelpers.validateArray([1, 2, 3], 'items')).toEqual([]);
+      expect(ValidationHelpers.validateRequired(false, 'field')).toEqual([]) });
+    it('validates arrays', () => { expect(ValidationHelpers.validateArray([1, 2, 3], 'items')).toEqual([]);
       expect(ValidationHelpers.validateArray([], 'items')).toEqual([]);
       expect(ValidationHelpers.validateArray([], 'items', 2)).toEqual([)
         'items must have at least 2 items'
@@ -317,10 +302,8 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       ]);
       expect(ValidationHelpers.validateArray(null, 'items')).toEqual([)
         'items must be an array'
-      ]);
-    });
-    it('validates numeric ranges', () => {
-      expect(ValidationHelpers.validateNumericRange(5, 'value')).toEqual([]);
+      ]) });
+    it('validates numeric ranges', () => { expect(ValidationHelpers.validateNumericRange(5, 'value')).toEqual([]);
       expect(ValidationHelpers.validateNumericRange(5, 'value', 0, 10)).toEqual([]);
       expect(ValidationHelpers.validateNumericRange(-1, 'value', 0)).toEqual([)
         'value must be at least 0'
@@ -333,20 +316,18 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       ]);
       expect(ValidationHelpers.validateNumericRange(NaN, 'value')).toEqual([)
         'value must be a valid number'
-      ]);
-    });
+      ]) });
   });
-  describe('SerializationHelpers', () => {
-  it('creates advanced node data', () => {
-  const config: AdvancedNodeConfig = {,
-  deterministic: true,
-  cacheable: false,
-  stateful: true,
+  describe('SerializationHelpers', () => { it('creates advanced node data', () => {
+  const config: AdvancedNodeConfig = {
+  deterministic: true
+  cacheable: false
+  stateful: true }
 };
       const nodeData = SerializationHelpers.createAdvancedNodeData(;);
-        'node-id',
-        'NodeType',
-        config,
+        'node-id'
+        'NodeType'
+        config
         { customData: 'value' }
       );
       expect(nodeData.id).toBe('node-id');
@@ -356,91 +337,84 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       expect(nodeData.metadata?.version).toBe('1.0.0');
       expect(nodeData.metadata?.created).toBeDefined();
     });
-    it('validates serialized data', () => {
-  const validData: AdvancedNodeData = {,
-  id: 'node-id',
-  type: 'NodeType',
+    it('validates serialized data', () => { const validData: AdvancedNodeData = {
+  id: 'node-id'
+  type: 'NodeType'
   config: {
-  deterministic: true,
-  cacheable: false,
-  stateful: true,
-},
+  deterministic: true
+  cacheable: false
+  stateful: true }
+
   data: { key: 'value' }
       };
       expect(SerializationHelpers.validateSerializedData(validData).valid).toBe(true);
       // Missing fields
       expect();
-        SerializationHelpers.validateSerializedData({)
-  ...validData,
-  id: '',
-} as any).valid
+        SerializationHelpers.validateSerializedData({ )
+  ...validData
+  id: '' }
+ as any).valid
       ).toBe(false);
       expect();
-        SerializationHelpers.validateSerializedData({)
-  ...validData,
-  type: undefined,
-} as any).valid
+        SerializationHelpers.validateSerializedData({ )
+  ...validData
+  type: undefined }
+ as any).valid
       ).toBe(false);
       expect();
-        SerializationHelpers.validateSerializedData({)
-  ...validData,
-  config: null,
-} as any).valid
+        SerializationHelpers.validateSerializedData({ )
+  ...validData
+  config: null }
+ as any).valid
       ).toBe(false);
       expect();
-        SerializationHelpers.validateSerializedData({)
-  ...validData,
-  data: undefined,
-} as any).valid
+        SerializationHelpers.validateSerializedData({ )
+  ...validData
+  data: undefined }
+ as any).valid
       ).toBe(false);
       // Invalid config types
       expect();
-        SerializationHelpers.validateSerializedData({)
-  ...validData,
+        SerializationHelpers.validateSerializedData({ )
+  ...validData
   config: {
-  deterministic: 'yes',
-  cacheable: false,
-  stateful: true,
-} as any).valid
+  deterministic: 'yes'
+  cacheable: false
+  stateful: true }
+ as any).valid
       ).toBe(false);
     });
   });
-  describe('AdvancedRuntimeNodeWithIO', () => {
-  class TestNodeWithIO extends AdvancedRuntimeNodeWithIO<string> {
-  constructor(id: string) {,
+  describe('AdvancedRuntimeNodeWithIO', () => { class TestNodeWithIO extends AdvancedRuntimeNodeWithIO<string> {
+  constructor(id: string) {
   super();
-  id,
+  id
   {
-  deterministic: true,
-  cacheable: false,
-  stateful: false,
-}
+  deterministic: true
+  cacheable: false
+  stateful: false }
+
           undefined // IO spec would be defined here
         );
-      run(ctx: AdvancedExecutionContext): string {
-  return 'test-output';
-  serialize(): AdvancedNodeData {,
+      run(ctx: AdvancedExecutionContext): string { return 'test-output';
+  serialize(): AdvancedNodeData {
   return SerializationHelpers.createAdvancedNodeData()
-  this.id,
-  'TestWithIO',
+  this.id
+  'TestWithIO' }
   this.config);
-  protected validateNodeConfig() {
-  return ValidationHelpers.createValidResult();
+  protected validateNodeConfig() { return ValidationHelpers.createValidResult();
   it('extends AdvancedRuntimeNode correctly', () => {
   const node = new TestNodeWithIO('io-test');
   expect(node).toBeInstanceOf(AdvancedRuntimeNode);
-  expect(node).toBeInstanceOf(AdvancedRuntimeNodeWithIO);
-});
-    it('validates without IO handler', () => {
-      const node = new TestNodeWithIO('io-test');
+  expect(node).toBeInstanceOf(AdvancedRuntimeNodeWithIO) });
+    it('validates without IO handler', () => { const node = new TestNodeWithIO('io-test');
       const result = node.validate();
-      expect(result.valid).toBe(true);
-    });
+      expect(result.valid).toBe(true) });
     it('runs correctly', () => {
       const node = new TestNodeWithIO('io-test');
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
       expect(node.run(ctx)).toBe('test-output');
     });
@@ -448,19 +422,17 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
   describe('Performance and edge cases', () => {
     it('handles high evaluation depth', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
-  variables: {},
-        seed: 'test'
+  variables: {}
+        seed: 'test';
   });
-      for (let i = 0; i < 1000; i++) {
-        ctx.evaluationDepth = i;
+      for (let i = 0; i < 1000; i++) { ctx.evaluationDepth = i;
         expect(AdvancedExecutionUtils.detectInfiniteLoop(ctx, 'node')).toBe(false);
       ctx.evaluationDepth = 1001;
-      expect(AdvancedExecutionUtils.detectInfiniteLoop(ctx, 'node')).toBe(true);
-    });
+      expect(AdvancedExecutionUtils.detectInfiniteLoop(ctx, 'node')).toBe(true) });
     it('handles large cache sizes', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test'
+        seed: 'test';
   });
       const node = new TestAdvancedNode('cache-test', 'data');
       // Simulate many cache entries
@@ -474,7 +446,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('handles concurrent state modifications', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test'
+        seed: 'test';
   });
       const node1 = new StatefulTestNode('node1');
       const node2 = new StatefulTestNode('node2');
@@ -489,13 +461,10 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
     it('measures very fast operations', () => {
       const ctx = AdvancedExecutionUtils.enhanceContext({)
   variables: {},
-        seed: 'test'
+        seed: 'test';
   });
-      class FastNode extends TestAdvancedNode {
-  measureFast(ctx: AdvancedExecutionContext) {,
-  return this.measureExecution(ctx, 'fast-op', () => {
-  return 1 + 1;
-});
+      class FastNode extends TestAdvancedNode { measureFast(ctx: AdvancedExecutionContext) { }
+  return this.measureExecution(ctx, 'fast-op', () => { return 1 + 1 });
       const node = new FastNode('fast', 'data');
       const result = node.measureFast(ctx);
       expect(result).toBe(2);

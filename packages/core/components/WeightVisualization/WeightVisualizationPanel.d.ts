@@ -9,6 +9,7 @@ import { ChartType } from './WeightDistributionChart';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 
 }
+}
 export interface WeightVisualizationPanelProps {
     options: WeightControlOption[];
     title?: string;
@@ -25,4 +26,5 @@ export interface WeightVisualizationPanelProps {
 export declare const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps>;
 export default WeightVisualizationPanel;
 //# sourceMappingURL=WeightVisualizationPanel.d.ts.map
+}
 }

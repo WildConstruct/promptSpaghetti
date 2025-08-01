@@ -8,8 +8,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { 
-  Settings,
+import { Settings,
   Shield,
   Users,
   ShoppingCart,
@@ -23,205 +22,191 @@ import {
   X,
   Info,
   Zap,
-  Clock,
+  Clock }
   Target
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
-export interface PolicyRule {
-  id: string;
+
+export interface PolicyRule { id: string;
   name: string;
   description: string;
   condition: string;
   action: string;
   enabled: boolean;
-  priority: number;
-}
-}
-}
-export interface MarketplacePolicyTemplate {
-  templateId: string;
+  priority: number }
+
+
+
+export interface MarketplacePolicyTemplate { templateId: string;
   name: string;
   description: string;
   category: 'creator' | 'buyer' | 'template' | 'transaction' | 'system';
   rules: PolicyRule;
   defaultSeverity: 'low' | 'medium' | 'high' | 'critical';
   isSystemTemplate: boolean;
-  configurable: {
+  configurable: { }
   thresholds: Record<string, number>;
   timeframes: Record<string, number>;
   actions: string;
-}
+
+
 };
-}
-}
-export interface MarketplacePolicyConfigProps {
-  className?: string;
-}
-}
+
+
+export interface MarketplacePolicyConfigProps { className?: string }
+
 export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = ({)
   className = ''
-}) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('creator');
+}) => { const [selectedCategory, setSelectedCategory] = useState<string>('creator');
   const [editingTemplate, setEditingTemplate] = useState<MarketplacePolicyTemplate | null>(null);
   const [_____isCreatingNew, setIsCreatingNew] = useState(false);
   // Marketplace-specific policy templates
   const [policyTemplates] = useState<MarketplacePolicyTemplate>([)
     {
-      templateId: 'creator-trust-policy',
-      name: 'Creator Trust Score Policy',
-      description: 'Enforces minimum trust scores for creators to maintain marketplace access',
-      category: 'creator',
-      defaultSeverity: 'high',
-      isSystemTemplate: false,
-      rules: [,
+      templateId: 'creator-trust-policy'
+      name: 'Creator Trust Score Policy'
+      description: 'Enforces minimum trust scores for creators to maintain marketplace access'
+      category: 'creator'
+      defaultSeverity: 'high'
+      isSystemTemplate: false
+      rules: [
         {
-          id: 'trust-minimum',
-          name: 'Minimum Trust Score',
-          description: 'Creator must maintain minimum trust score',
-          condition: 'user.trustScore >= {minTrustScore}',
-          action: 'suspend_marketplace_access',
-          enabled: true,
+          id: 'trust-minimum'
+          name: 'Minimum Trust Score'
+          description: 'Creator must maintain minimum trust score' }
+          condition: 'user.trustScore >= {minTrustScore}'
+          action: 'suspend_marketplace_access'
+          enabled: true
           priority: 1;
-  }
-        {
-          id: 'trust-warning',
-          name: 'Trust Score Warning',
-          description: 'Warn creator when trust score is declining',
+
+        { id: 'trust-warning'
+          name: 'Trust Score Warning'
+          description: 'Warn creator when trust score is declining' }
           condition: 'user.trustScore < {warningThreshold} AND user.trustTrend == "declining"',
           action: 'send_warning_notification',
           enabled: true,
           priority: 2],
-      configurable: {
-  thresholds: {
+      configurable: { ,
+  thresholds: {,
   minTrustScore: 60,
   warningThreshold: 70,
-  criticalThreshold: 50,
+  criticalThreshold: 50 }
 },
-  timeframes: {
+  timeframes: { ,
   evaluationPeriod: 7, // days,
-  warningCooldown: 24 // hours,
+  warningCooldown: 24 // hours }
 },
   actions: ['suspend_marketplace_access', 'restrict_new_uploads', 'require_verification', 'send_warning_notification']
-  }
-    {
-      templateId: 'template-quality-policy',
+
+    { templateId: 'template-quality-policy',
       name: 'Template Quality Standards',
       description: 'Maintains minimum quality standards for marketplace templates',
       category: 'template',
       defaultSeverity: 'medium',
       isSystemTemplate: false,
-      rules: [,
+      rules: [
         {
           id: 'quality-rating',
           name: 'Minimum Quality Rating',
-          description: 'Template must maintain minimum quality rating',
+          description: 'Template must maintain minimum quality rating' }
           condition: 'template.qualityScore >= {minQualityScore}',
           action: 'hide_from_marketplace',
           enabled: true,
           priority: 1;
-  }
-        {
-          id: 'review-count',
+
+        { id: 'review-count',
           name: 'Minimum Review Count',
-          description: 'Template must have minimum number of reviews',
+          description: 'Template must have minimum number of reviews' }
           condition: 'template.reviewCount >= {minReviews}',
           action: 'flag_for_promotion',
           enabled: false,
           priority: 3],
-      configurable: {
-  thresholds: {
+      configurable: { ,
+  thresholds: {,
   minQualityScore: 3.5,
   minReviews: 5,
-  maxRefundRate: 10 // percentage,
+  maxRefundRate: 10 // percentage }
 },
-  timeframes: {
+  timeframes: { ,
   evaluationPeriod: 30, // days,
-  gracePeriod: 7 // days,
+  gracePeriod: 7 // days }
 },
   actions: ['hide_from_marketplace', 'require_improvement', 'flag_for_review', 'flag_for_promotion']
-  }
-    {
-      templateId: 'transaction-fraud-policy',
+
+    { templateId: 'transaction-fraud-policy',
       name: 'Transaction Fraud Detection',
       description: 'Detects and prevents fraudulent transaction patterns',
       category: 'transaction',
       defaultSeverity: 'critical',
       isSystemTemplate: true,
-      rules: [,
+      rules: [
         {
           id: 'velocity-check',
           name: 'Transaction Velocity Check',
-          description: 'Detects unusually high transaction velocity',
+          description: 'Detects unusually high transaction velocity' }
           condition: 'user.transactionsLast24h > {maxTransactions24h}',
           action: 'block_transactions',
           enabled: true,
           priority: 1;
-  }
-        {
-          id: 'payment-failure',
+
+        { id: 'payment-failure',
           name: 'Payment Failure Pattern',
-          description: 'Detects multiple payment failures',
+          description: 'Detects multiple payment failures' }
           condition: 'user.failedPaymentsLast1h > {maxFailures1h}',
           action: 'temporary_block',
           enabled: true,
           priority: 1],
-      configurable: {
-  thresholds: {
+      configurable: { ,
+  thresholds: {,
   maxTransactions24h: 20,
   maxFailures1h: 3,
-  maxChargebacks: 2,
+  maxChargebacks: 2 }
 },
-  timeframes: {
+  timeframes: { ,
   velocityWindow: 24, // hours,
-  cooldownPeriod: 1 // hours,
+  cooldownPeriod: 1 // hours }
 },
   actions: ['block_transactions', 'temporary_block', 'require_verification', 'flag_for_review']
-  }
-    {
-      templateId: 'buyer-behavior-policy',
+
+    { templateId: 'buyer-behavior-policy',
       name: 'Buyer Behavior Standards',
       description: 'Monitors and enforces buyer behavior standards',
       category: 'buyer',
       defaultSeverity: 'medium',
       isSystemTemplate: false,
-      rules: [,
+      rules: [
         {
           id: 'dispute-rate',
           name: 'Maximum Dispute Rate',
-          description: 'Buyer dispute rate must not exceed threshold',
+          description: 'Buyer dispute rate must not exceed threshold' }
           condition: 'buyer.disputeRate > {maxDisputeRate}',
           action: 'require_payment_verification',
           enabled: true,
           priority: 2],
-      configurable: {
-  thresholds: {
+      configurable: { ,
+  thresholds: {,
   maxDisputeRate: 15, // percentage,
-  maxRefundRate: 25 // percentage,
+  maxRefundRate: 25 // percentage }
 },
-  timeframes: {
-  evaluationPeriod: 90 // days,
+  timeframes: { ,
+  evaluationPeriod: 90 // days }
 },
   actions: ['require_payment_verification', 'limit_purchases', 'flag_for_review']
   ]);
-  const getCategoryIcon = (category: string) => {
-  switch (category) {
+  const getCategoryIcon = (category: string) => { switch (category) {
   case 'creator': return Users;
   case 'buyer': return ShoppingCart;
   case 'template': return FileText;
   case 'transaction': return DollarSign;
   case 'system': return Settings;
-  default: return Shield;
-};
-  const getCategoryColor = (category: string) => {
-  switch (category) {
+  default: return Shield };
+  const getCategoryColor = (category: string) => { switch (category) {
   case 'creator': return 'text-blue-600 bg-blue-100';
   case 'buyer': return 'text-green-600 bg-green-100';
   case 'template': return 'text-purple-600 bg-purple-100';
   case 'transaction': return 'text-orange-600 bg-orange-100';
   case 'system': return 'text-gray-600 bg-gray-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
+  default: return 'text-gray-600 bg-gray-100' };
   const filteredTemplates = policyTemplates.filter(template => ;);
     selectedCategory === 'all' || template.category === selectedCategory
   );
@@ -293,12 +278,11 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           </div>
           <div className="stat-item">
             <span className="stat-label">Severity</span>
-            <Badge className={
-  template.defaultSeverity === 'critical' ? 'text-red-600 bg-red-100' :,
-  template.defaultSeverity === 'high' ? 'text-orange-600 bg-orange-100' :,
-  template.defaultSeverity === 'medium' ? 'text-yellow-600 bg-yellow-100' :,
+            <Badge className={ template.defaultSeverity === 'critical' ? 'text-red-600 bg-red-100' :
+  template.defaultSeverity === 'high' ? 'text-orange-600 bg-orange-100' :
+  template.defaultSeverity === 'medium' ? 'text-yellow-600 bg-yellow-100' : }
   'text-blue-600 bg-blue-100'
-}>
+>
               {template.defaultSeverity.toUpperCase()}
             </Badge>
           </div>
@@ -506,11 +490,11 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           </CardContent>
         </Card>
       </div>
-      <style>{`
+      <style>{ `
         .marketplace-policy-config {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
@@ -538,21 +522,21 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           display: flex;
           align-items: center;
   gap: 0.5rem;
-          padding: 0.75rem 1rem;
+          padding: 0.75rem 1rem
   border: 1px solid #e5e7eb;
           border-radius: 6px;
   background: white;
           cursor: pointer;
   transition: all 0.2s ease;
         .category-button:hover {
-          border-color: #3b82f6;
+          border-color: #3b82f6
   background: #f8fafc;
         .category-button.active {
-          border-color: #3b82f6;
+          border-color: #3b82f6
   background: #eff6ff;
           color: #1e40af;
         .count-badge {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   padding: 0.125rem 0.375rem;
         .templates-grid {
           display: grid;
@@ -563,7 +547,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         .template-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .template-info {
           flex: 1;
@@ -581,7 +565,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
   gap: 0.5rem;
         .template-description {
           color: #6b7280;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   margin: 0;
         .template-stats {
           display: flex;
@@ -597,11 +581,11 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           align-items: center;
   gap: 0.25rem;
         .stat-label {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
           font-weight: 500;
         .stat-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #1f2937;
           font-weight: 600;
         .template-rules h5 {
@@ -617,7 +601,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           display: flex;
           align-items: center;
   gap: 0.75rem;
-          padding: 0.5rem;
+          padding: 0.5rem
   border: 1px solid #e5e7eb;
           border-radius: 4px;
         .rule-info {
@@ -630,12 +614,12 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           font-weight: 500;
   color: #1f2937;
         .rule-description {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .more-rules {
           padding: 0.5rem;
           text-align: center;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           font-style: italic;
         .template-editor-overlay {
@@ -689,7 +673,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           font-weight: 500;
   color: #374151;
         .threshold-input, .timeframe-input {
-          padding: 0.5rem;
+          padding: 0.5rem
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
@@ -700,7 +684,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         .timeframe-input {
           flex: 1;
         .timeframe-unit {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .rules-editor {
           display: flex;
@@ -720,18 +704,18 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
   color: #1f2937;
           margin: 0 0 0.25rem 0;
         .rule-editor-info p {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin: 0;
         .rule-toggle {
           display: flex;
           align-items: center;
   gap: 0.5rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #374151;
         .rule-editor-details {
           display: grid;
-          grid-template-columns: 2fr 1fr;
+          grid-template-columns: 2fr 1fr
   gap: 1rem;
         .rule-condition label, .rule-action label {
           display: block;
@@ -742,14 +726,14 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         .condition-code {
           display: block;
   padding: 0.5rem;
-          background: #f3f4f6;
+          background: #f3f4f6
   border: 1px solid #d1d5db;
           border-radius: 4px;
           font-family: monospace;
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #374151;
         .action-select {
-          width: 100%;
+          width: 100%
   padding: 0.5rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -763,7 +747,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         .save-button {
           background: #059669;
           border-color: #059669;
-        .save-button:hover {,
+        .save-button:hover {
   background: #047857;
           border-color: #047857;
         .config-info {
@@ -774,7 +758,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
   gap: 1rem;
         .guide-section {
           display: flex;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 0.75rem;
         .guide-section h4 {
           font-weight: 600;
@@ -782,7 +766,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           margin: 0 0 0.25rem 0;
         .guide-section p {
           color: #6b7280;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   margin: 0;
         @media (max-width: 1200px) {
           .templates-grid {
@@ -807,7 +791,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           .stat-item {
             flex-direction: row;
             justify-content: space-between;
-          .thresholds-grid,
+          .thresholds-grid }
           .timeframes-grid {
             grid-template-columns: 1fr;
       `}</style>

@@ -12,10 +12,11 @@ import {
   ChevronDown, ChevronUp, AlertTriangle, User, 
   ExternalLink, RefreshCw, Settings, Shield,
   Zap, CheckCircle, Info
-} from 'lucide-react';
+ from 'lucide-react';
 import AlertIndicatorBadge, { AlertCount, AlertSeverity } from './AlertIndicatorBadge';
 import AlertStatusIndicator from './AlertStatusIndicator';
-}
+
+
 interface AlertItem {
   id: string;,
   type: string,
@@ -38,7 +39,8 @@ interface AlertItem {
   onRefresh?: () => void;
   onViewAll?: () => void;
   onAcknowledgeAll?: () => void;
-  }
+
+
 
 className?: string;
   maxRecentAlerts?: number;
@@ -54,7 +56,7 @@ className?: string;
   onAcknowledgeAll,
   className = '',
   maxRecentAlerts = 5
-}
+
 }) => {
   const [localExpanded, setLocalExpanded] = useState(isExpanded);
   useEffect(() => {
@@ -97,7 +99,7 @@ className?: string;
 };
     return icons[status] || AlertTriangle;
   };
-  const panelClasses = [;
+  const panelClasses = [
     'bg-white rounded-lg border border-gray-200 shadow-sm transition-all duration-200',
     hasActiveAlerts ? 'border-l-4 border-l-yellow-400' : '',
     className
@@ -219,7 +221,7 @@ className?: string;
   alert.severity === 'high' ? 'text-orange-500' :,
   alert.severity === 'medium' ? 'text-yellow-500' :,
   'text-blue-500'
-}`} />
+`} />
                     </div>
                     {/* Alert Content */}
                     <div className="flex-1 min-w-0">
@@ -232,7 +234,7 @@ className?: string;
   alert.status === 'resolved' ? 'text-green-500' :,
   alert.status === 'acknowledged' ? 'text-blue-500' :,
   'text-gray-400'
-}`} />
+`} />
                           <span className="text-xs text-gray-500">
                             {formatTimeAgo(alert.timestamp)}
                           </span>

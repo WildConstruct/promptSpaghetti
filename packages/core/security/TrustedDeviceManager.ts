@@ -16,18 +16,16 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import { 
-  DeviceFingerprintingService, 
+import { DeviceFingerprintingService, 
   DeviceFingerprint, 
   LocationData, 
   RiskLevel,
-  FingerprintContext,
+  FingerprintContext }
   FingerprintType
-} from './DeviceFingerprintingService';
+ from './DeviceFingerprintingService';
 
 // Trust status for devices
-export enum TrustStatus {
-  TRUSTED = 'trusted',
+export enum TrustStatus { TRUSTED = 'trusted',
   PENDING = 'pending',
   EXPIRED = 'expired',
   REVOKED = 'revoked',
@@ -58,7 +56,7 @@ export enum TrustStatus {
   // Trust information
   trustStatus: TrustStatus;
   trustLevel: TrustLevel;
-  trustScore: number; // 0-100,
+  trustScore: number; // 0-100;
   verificationMethod: VerificationMethod;
   verifiedAt: Date;
   verificationToken?: string;
@@ -78,21 +76,22 @@ export enum TrustStatus {
   failedAttempts: number;
   suspiciousActivities: number;
   // Configuration
-  settings: {
+  settings: {;
   requireLocationCheck: boolean;
   allowRoaming: boolean;
-  maxLocationRadius: number; // km,
+  maxLocationRadius: number; // km }
   notifyOnNewLogin: boolean;
   autoRenew: boolean;
   requirePeriodicVerification: boolean;
   verificationIntervalDays: number;
-}
+
+
 };
   metadata: Record<string, any>;
 
 // Device verification request
-}
-}
+
+
 export interface DeviceVerificationRequest {
   userId: string;
   deviceFingerprint: DeviceFingerprint;
@@ -101,42 +100,43 @@ export interface DeviceVerificationRequest {
   challenge?: string;
   metadata?: Record<string, any>;
   // Trust decision
-}
-}
-}
-export interface TrustDecision {
-  trusted: boolean;
+
+
+
+
+export interface TrustDecision { trusted: boolean;
   device?: TrustedDevice;
   reason: string;
   riskScore: number;
   requiresVerification: boolean;
   verificationMethods?: VerificationMethod;
-  factors: {
+  factors: { }
   deviceMatch: boolean;
   locationMatch: boolean;
   riskAcceptable: boolean;
   notExpired: boolean;
   notRevoked: boolean;
   recentlyVerified: boolean;
-}
+
+
 };
 
 // Configuration
-}
-}
-export interface TrustedDeviceConfig {
-  maxDevicesPerUser: number;
+
+
+export interface TrustedDeviceConfig { maxDevicesPerUser: number;
   defaultTrustDurationDays: number;
   defaultVerificationIntervalDays: number;
   maxLocationRadiusKm: number;
   requireLocationCheck: boolean;
   allowRoaming: boolean;
   autoExpireInactiveDays: number;
-  riskThreshold: {
-  full: number;    // Risk score threshold for full trust,
-  partial: number; // Risk score threshold for partial trust,
-  deny: number;    // Risk score above which to deny trust,
-}
+  riskThreshold: {;
+  full: number;    // Risk score threshold for full trust;
+  partial: number; // Risk score threshold for partial trust;
+  deny: number;    // Risk score above which to deny trust }
+
+
 };
   verificationMethods: VerificationMethod;
   enableAnomalyDetection: boolean;
@@ -144,44 +144,42 @@ export interface TrustedDeviceConfig {
 /**
  * Trusted Device Manager Service
  */
-}
+
 export class TrustedDeviceManager extends EventEmitter {
   private trustedDevices: Map<string, TrustedDevice> = new Map(); // userId -> devices
   private deviceLookup: Map<string, TrustedDevice> = new Map(); // deviceId -> device
   private verificationTokens: Map<string, { userId: string; deviceId: string; expires: Date }> = new Map();
   constructor();
-    private fingerprintService: DeviceFingerprintingService,
-    private config: TrustedDeviceConfig = {,
-  maxDevicesPerUser: 5,
-  defaultTrustDurationDays: 30,
-  defaultVerificationIntervalDays: 7,
-  maxLocationRadiusKm: 50,
-  requireLocationCheck: true,
-  allowRoaming: false,
-  autoExpireInactiveDays: 90,
+    private fingerprintService: DeviceFingerprintingService
+    private config: TrustedDeviceConfig = { 
+  maxDevicesPerUser: 5
+  defaultTrustDurationDays: 30
+  defaultVerificationIntervalDays: 7
+  maxLocationRadiusKm: 50
+  requireLocationCheck: true
+  allowRoaming: false
+  autoExpireInactiveDays: 90
   riskThreshold: {
-  full: 20,
-  partial: 50,
-  deny: 80,
-},
-  verificationMethods: [VerificationMethod.EMAIL, VerificationMethod.SMS],
-      enableAnomalyDetection: true,
-      enableAutoRenewal: true,
+  full: 20
+  partial: 50
+  deny: 80 }
+
+  verificationMethods: [VerificationMethod.EMAIL, VerificationMethod.SMS]
+      enableAnomalyDetection: true
+      enableAutoRenewal: true
     super();
     this.startMaintenanceTimer();
   /**
    * Check if a device is trusted for a user
    */
   public async checkDeviceTrust(
-    userId: string,
-    context: FingerprintContext,
+    userId: string
+    context: FingerprintContext
     location?: LocationData
-  ): Promise<TrustDecision> {
-
-  try {
+  ): Promise<TrustDecision> { try {
   // Generate fingerprint for the current device
   const fingerprint = await this.fingerprintService.generateFingerprint(;);
-  context,
+  context
   FingerprintType.ENHANCED
   );
   // Get user's trusted devices
@@ -190,73 +188,68 @@ export class TrustedDeviceManager extends EventEmitter {
   const matchingDevice = this.findMatchingDevice(userDevices, fingerprint, location);
   if (!matchingDevice) {
   return {
-  trusted: false,
-  reason: 'Device not recognized',
-  riskScore: 100,
-  requiresVerification: true,
-  verificationMethods: this.config.verificationMethods,
+  trusted: false
+  reason: 'Device not recognized'
+  riskScore: 100
+  requiresVerification: true
+  verificationMethods: this.config.verificationMethods
   factors: {
-  deviceMatch: false,
-  locationMatch: false,
-  riskAcceptable: false,
-  notExpired: false,
-  notRevoked: false,
-  recentlyVerified: false,
+  deviceMatch: false
+  locationMatch: false
+  riskAcceptable: false
+  notExpired: false
+  notRevoked: false
+  recentlyVerified: false }
 };
       // Evaluate trust factors
       const factors = this.evaluateTrustFactors(matchingDevice, fingerprint, location);
       const decision = this.makeTrustDecision(matchingDevice, factors);
       // Update device usage
-      if (decision.trusted) {
-  matchingDevice.lastUsed = new Date();
+      if (decision.trusted) { matchingDevice.lastUsed = new Date();
   matchingDevice.loginCount++;
   if (location) {
   matchingDevice.lastLocation = location;
   this.emit('deviceTrusted', {)
-  userId,
-  device: matchingDevice,
-  decision,
-  timestamp: new Date(),
+  userId
+  device: matchingDevice
+  decision
+  timestamp: new Date() }
 });
-      } else {
-  matchingDevice.failedAttempts++;
+ else { matchingDevice.failedAttempts++;
   this.emit('deviceUntrusted', {)
-  userId,
-  device: matchingDevice,
-  decision,
-  timestamp: new Date(),
+  userId
+  device: matchingDevice
+  decision
+  timestamp: new Date() }
 });
       return decision;
-    } catch (error) {
-  this.emit('error', {)
-  operation: 'checkDeviceTrust',
-  userId,
-  error: error instanceof Error ? error.message : 'Unknown error',
+ catch (error) { this.emit('error', {)
+  operation: 'checkDeviceTrust'
+  userId
+  error: error instanceof Error ? error.message : 'Unknown error' }
 });
-      return {
-  trusted: false,
-  reason: 'Error checking device trust',
-  riskScore: 100,
-  requiresVerification: true,
-  verificationMethods: this.config.verificationMethods,
+      return { trusted: false
+  reason: 'Error checking device trust'
+  riskScore: 100
+  requiresVerification: true
+  verificationMethods: this.config.verificationMethods
   factors: {
-  deviceMatch: false,
-  locationMatch: false,
-  riskAcceptable: false,
-  notExpired: false,
-  notRevoked: false,
-  recentlyVerified: false,
+  deviceMatch: false
+  locationMatch: false
+  riskAcceptable: false
+  notExpired: false
+  notRevoked: false
+  recentlyVerified: false }
 };
   /**
    * Register a new trusted device
    */
   public async registerTrustedDevice(
-    request: DeviceVerificationRequest): Promise<TrustedDevice> {,
+    request: DeviceVerificationRequest): Promise<TrustedDevice> {
     const { userId, deviceFingerprint, location, verificationMethod } = request;
     // Check device limit
     const userDevices = this.trustedDevices.get(userId) || [];
-    if (userDevices.length >= this.config.maxDevicesPerUser) {
-      // Remove oldest inactive device
+    if (userDevices.length >= this.config.maxDevicesPerUser) { // Remove oldest inactive device
       const oldestInactive = userDevices;
         .filter(d => d.trustStatus !== TrustStatus.TRUSTED)
         .sort((a, b) => a.lastUsed.getTime() - b.lastUsed.getTime())[0];
@@ -265,72 +258,67 @@ export class TrustedDeviceManager extends EventEmitter {
         // Remove from arrays
         const updatedDevices = userDevices.filter(d => d.id !== oldestInactive.id);
         this.trustedDevices.set(userId, updatedDevices);
-        this.deviceLookup.delete(oldestInactive.id);
-      } else {
-  throw new Error('Maximum number of trusted devices reached');
+        this.deviceLookup.delete(oldestInactive.id) } else { throw new Error('Maximum number of trusted devices reached');
   // Create trusted device record
   const deviceId = this.generateDeviceId();
-  const device: TrustedDevice = {,
-  id: deviceId,
-  userId,
-  deviceId,
-  fingerprintId: deviceFingerprint.id,
-  name: this.generateDeviceName(deviceFingerprint),
-  type: this.detectDeviceType(deviceFingerprint),
-  browser: deviceFingerprint.enhanced?.browser.name || 'Unknown',
-  platform: deviceFingerprint.basic.platform,
-  trustStatus: TrustStatus.PENDING,
-  trustLevel: TrustLevel.LIMITED,
-  trustScore: 0,
-  verificationMethod,
-  verifiedAt: new Date(),
-  createdAt: new Date(),
-  lastUsed: new Date(),
-  lastVerified: new Date(),
-  expiresAt: new Date(Date.now() + this.config.defaultTrustDurationDays * 24 * 60 * 60 * 1000),
-  primaryLocation: location,
-  lastLocation: location,
-  riskLevel: RiskLevel.LOW,
-  riskFactors: [],
-  loginCount: 0,
-  failedAttempts: 0,
-  suspiciousActivities: 0,
+  const device: TrustedDevice = {
+  id: deviceId
+  userId
+  deviceId
+  fingerprintId: deviceFingerprint.id
+  name: this.generateDeviceName(deviceFingerprint)
+  type: this.detectDeviceType(deviceFingerprint)
+  browser: deviceFingerprint.enhanced?.browser.name || 'Unknown'
+  platform: deviceFingerprint.basic.platform
+  trustStatus: TrustStatus.PENDING
+  trustLevel: TrustLevel.LIMITED
+  trustScore: 0
+  verificationMethod
+  verifiedAt: new Date()
+  createdAt: new Date()
+  lastUsed: new Date()
+  lastVerified: new Date()
+  expiresAt: new Date(Date.now() + this.config.defaultTrustDurationDays * 24 * 60 * 60 * 1000)
+  primaryLocation: location
+  lastLocation: location
+  riskLevel: RiskLevel.LOW
+  riskFactors: []
+  loginCount: 0
+  failedAttempts: 0
+  suspiciousActivities: 0
   settings: {
-  requireLocationCheck: this.config.requireLocationCheck,
-  allowRoaming: this.config.allowRoaming,
-  maxLocationRadius: this.config.maxLocationRadiusKm,
-  notifyOnNewLogin: true,
-  autoRenew: this.config.enableAutoRenewal,
-  requirePeriodicVerification: true,
-  verificationIntervalDays: this.config.defaultVerificationIntervalDays,
-},
+  requireLocationCheck: this.config.requireLocationCheck
+  allowRoaming: this.config.allowRoaming
+  maxLocationRadius: this.config.maxLocationRadiusKm
+  notifyOnNewLogin: true
+  autoRenew: this.config.enableAutoRenewal
+  requirePeriodicVerification: true
+  verificationIntervalDays: this.config.defaultVerificationIntervalDays }
+
   metadata: request.metadata || {}
     };
     // Generate verification token
     const verificationToken = this.generateVerificationToken();
     device.verificationToken = verificationToken;
-    this.verificationTokens.set(verificationToken, {)
-  userId,
-  deviceId,
-  expires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours,
+    this.verificationTokens.set(verificationToken, { )
+  userId
+  deviceId
+  expires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours }
 });
     // Store device
-    if (!this.trustedDevices.has(userId)) {
-  this.trustedDevices.set(userId, []);
+    if (!this.trustedDevices.has(userId)) { this.trustedDevices.set(userId, []);
   this.trustedDevices.get(userId)!.push(device);
   this.deviceLookup.set(deviceId, device);
   this.emit('deviceRegistered', {)
-  userId,
-  device,
-  timestamp: new Date(),
+  userId
+  device
+  timestamp: new Date() }
 });
     return device;
   /**
    * Verify a pending device
    */
-  public async verifyDevice(verificationToken: string): Promise<TrustedDevice> {
-
-  const tokenData = this.verificationTokens.get(verificationToken);
+  public async verifyDevice(verificationToken: string): Promise<TrustedDevice> { const tokenData = this.verificationTokens.get(verificationToken);
   if (!tokenData) {
   throw new Error('Invalid verification token');
   if (new Date() > tokenData.expires) {
@@ -349,17 +337,15 @@ export class TrustedDeviceManager extends EventEmitter {
   // Clean up token
   this.verificationTokens.delete(verificationToken);
   this.emit('deviceVerified', {)
-  userId: device.userId,
-  device,
-  timestamp: new Date(),
+  userId: device.userId
+  device
+  timestamp: new Date() }
 });
     return device;
   /**
    * Revoke device trust
    */
-  public async revokeDevice(deviceId: string, reason: string): Promise<void> {
-
-  const device = this.deviceLookup.get(deviceId);
+  public async revokeDevice(deviceId: string, reason: string): Promise<void> { const device = this.deviceLookup.get(deviceId);
   if (!device) {
   throw new Error('Device not found');
   device.trustStatus = TrustStatus.REVOKED;
@@ -367,52 +353,50 @@ export class TrustedDeviceManager extends EventEmitter {
   device.trustScore = 0;
   device.revokedAt = new Date();
   this.emit('deviceRevoked', {)
-  userId: device.userId,
-  device,
-  reason,
-  timestamp: new Date(),
+  userId: device.userId
+  device
+  reason
+  timestamp: new Date() }
 });
   /**
    * Get user's trusted devices
    */
-  public getUserDevices(userId: string): TrustedDevice {
-    return this.trustedDevices.get(userId) || [];
+  public getUserDevices(userId: string): TrustedDevice { return this.trustedDevices.get(userId) || [];
   /**
    * Update device settings
    */
   public updateDeviceSettings(((
-    deviceId: string,
+    deviceId: string }
     settings: Partial<TrustedDevice['settings']>
   ): TrustedDevice {
     const device = this.deviceLookup.get(deviceId);
     if (!device) {
       throw new Error('Device not found');
     device.settings = { ...device.settings, ...settings };
-    this.emit('deviceSettingsUpdated', {)
-  userId: device.userId,
-  device,
-  settings,
-  timestamp: new Date(),
+    this.emit('deviceSettingsUpdated', { )
+  userId: device.userId
+  device
+  settings
+  timestamp: new Date() }
 });
     return device;
   /**
    * Rename a trusted device
    */
-  public renameDevice(deviceId: string, newName: string): TrustedDevice {
-  const device = this.deviceLookup.get(deviceId);
+  public renameDevice(deviceId: string, newName: string): TrustedDevice { const device = this.deviceLookup.get(deviceId);
   if (!device) {
   throw new Error('Device not found');
   device.name = newName;
   this.emit('deviceRenamed', {)
-  userId: device.userId,
-  device,
-  newName,
-  timestamp: new Date(),
+  userId: device.userId
+  device
+  newName
+  timestamp: new Date() }
 });
     return device;
   // Private methods
   private findMatchingDevice(devices: TrustedDevice)
-    fingerprint: DeviceFingerprint,
+  fingerprint: DeviceFingerprint
     location?: LocationData
   ): TrustedDevice | null {
     // Find devices with matching fingerprint
@@ -424,8 +408,7 @@ export class TrustedDeviceManager extends EventEmitter {
       const similarity = this.calculateFingerprintSimilarity(device, fingerprint);
       return similarity > 0.85; // 85% similarity threshold
     });
-    if (matches.length === 0) {
-      return null;
+    if (matches.length === 0) { return null;
     // If multiple matches, select best one based on location and recent usage
     if (matches.length > 1) {
       return matches.sort((a, b) => {
@@ -438,24 +421,21 @@ export class TrustedDeviceManager extends EventEmitter {
           const distA = this.calculateDistance(a.lastLocation, location);
           const distB = this.calculateDistance(b.lastLocation, location);
           return distA - distB;
-        return 0;
-      })[0];
+        return 0 })[0];
     return matches[0];
   private evaluateTrustFactors(device: TrustedDevice)
-    fingerprint: DeviceFingerprint,
+  fingerprint: DeviceFingerprint
     location?: LocationData
-  ): TrustDecision['factors'] {
-  const factors: TrustDecision['factors'] = {,
-  deviceMatch: device.fingerprintId === fingerprint.id,
-  locationMatch: true,
-  riskAcceptable: true,
+  ): TrustDecision['factors'] { const factors: TrustDecision['factors'] = {
+  deviceMatch: device.fingerprintId === fingerprint.id
+  locationMatch: true
+  riskAcceptable: true
   notExpired: new Date() < device.expiresAt,
   notRevoked: device.trustStatus !== TrustStatus.REVOKED,
-  recentlyVerified: this.isRecentlyVerified(device),
+  recentlyVerified: this.isRecentlyVerified(device) }
 };
     // Check location if required
-    if (device.settings.requireLocationCheck && location) {
-  factors.locationMatch = this.isLocationTrusted(device, location);
+    if (device.settings.requireLocationCheck && location) { factors.locationMatch = this.isLocationTrusted(device, location);
   // Check risk assessment
   if (location) {
   const riskAssessment = this.fingerprintService.assessRisk(fingerprint, location);
@@ -499,14 +479,13 @@ export class TrustedDeviceManager extends EventEmitter {
   reason: reasons.length > 0 ? reasons.join('; ') : 'Device trusted',
   riskScore: 100 - trustScore,
   requiresVerification,
-  verificationMethods: requiresVerification ? this.config.verificationMethods : undefined,
+  verificationMethods: requiresVerification ? this.config.verificationMethods : undefined }
   factors
 };
   private calculateFingerprintSimilarity(((
     device: TrustedDevice,
     fingerprint: DeviceFingerprint
-  ): number {
-    // Simple similarity calculation based on key attributes
+  ): number { // Simple similarity calculation based on key attributes
     let matchCount = 0;
     let totalChecks = 0;
     // Check browser
@@ -532,7 +511,7 @@ export class TrustedDeviceManager extends EventEmitter {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   private isLocationTrusted(((
-    device: TrustedDevice,
+    device: TrustedDevice }
     location: LocationData
   ): boolean {
     if (!device.primaryLocation) {
@@ -558,8 +537,7 @@ export class TrustedDeviceManager extends EventEmitter {
     const platform = fingerprint.basic.platform || 'Unknown Platform';
     const date = new Date().toLocaleDateString();
     return `${browser} on ${platform} (Added ${date})`;}
-  private detectDeviceType(fingerprint: DeviceFingerprint): TrustedDevice['type'] {
-  const userAgent = fingerprint.basic.userAgent.toLowerCase();
+  private detectDeviceType(fingerprint: DeviceFingerprint): TrustedDevice['type'] { const userAgent = fingerprint.basic.userAgent.toLowerCase();
   if (/mobile|android|iphone|ipod/.test(userAgent)) {
   return 'mobile';
   if (/ipad|tablet/.test(userAgent)) {
@@ -567,13 +545,10 @@ export class TrustedDeviceManager extends EventEmitter {
   if (/windows|mac|linux/.test(userAgent)) {
   return 'desktop';
   return 'other';
-  private startMaintenanceTimer(): void {,
+  private startMaintenanceTimer(): void { }
   // Run maintenance every hour
-  setInterval(() => {
-  this.performMaintenance();
-}, 60 * 60 * 1000);
-  private performMaintenance(): void {
-  const now = new Date();
+  setInterval(() => { this.performMaintenance() }, 60 * 60 * 1000);
+  private performMaintenance(): void { const now = new Date();
   // Clean up expired verification tokens
   for (const [token, data] of this.verificationTokens) {
   if (now > data.expires) {
@@ -593,28 +568,26 @@ export class TrustedDeviceManager extends EventEmitter {
   this.emit('deviceExpired', {)
   userId,
   device,
-  timestamp: now,
+  timestamp: now }
 });
         // Check for inactive devices
         const daysSinceLastUse = (now.getTime() - device.lastUsed.getTime()) / (24 * 60 * 60 * 1000);
-        if (daysSinceLastUse > this.config.autoExpireInactiveDays) {
-  device.trustStatus = TrustStatus.EXPIRED;
+        if (daysSinceLastUse > this.config.autoExpireInactiveDays) { device.trustStatus = TrustStatus.EXPIRED;
   device.trustLevel = TrustLevel.NONE;
   this.emit('deviceInactive', {)
   userId,
   device,
   daysSinceLastUse,
-  timestamp: now,
+  timestamp: now }
 });
         // Auto-renew eligible devices
         if (device.settings.autoRenew && )
             device.trustStatus === TrustStatus.TRUSTED &&
-            this.shouldAutoRenew(device)) {
-  device.expiresAt = new Date(now.getTime() + this.config.defaultTrustDurationDays * 24 * 60 * 60 * 1000);
+            this.shouldAutoRenew(device)) { device.expiresAt = new Date(now.getTime() + this.config.defaultTrustDurationDays * 24 * 60 * 60 * 1000);
   this.emit('deviceAutoRenewed', {)
   userId,
   device,
-  timestamp: now,
+  timestamp: now }
 });
   private shouldAutoRenew(device: TrustedDevice): boolean {
     const now = new Date();

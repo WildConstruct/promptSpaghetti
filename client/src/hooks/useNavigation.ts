@@ -10,16 +10,17 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 import { useCallback, useMemo } from 'react';
-}
+
+
 interface NavigationOptions {
   requireAuth?: boolean;
   requiredRoles?: string;
   fallbackUrl?: string;
-
-export const useNavigation = () => {
+  export const useNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
-}
+
+
   const { user, isAuthenticated } = useAuthStore();
   // Check if user has required role
   const hasRole = useCallback((roles: string | string): boolean => {
@@ -61,37 +62,37 @@ export const useNavigation = () => {
   // Get available admin sections for current user
   const getAvailableAdminSections = useMemo(() => {
   if (!user || !user.roles) return [];
-  const adminSections = [;
+  const adminSections = [
   {
   id: 'feature-toggles',
   label: 'Feature Toggles',
   requiredRoles: ['admin', 'administrator', 'feature-admin'],
-}
+
       {
   id: 'users',
   label: 'User Management',
   requiredRoles: ['admin', 'administrator', 'user-admin'],
-}
+
       {
   id: 'content',
   label: 'Content Management',
   requiredRoles: ['admin', 'administrator', 'content-moderator'],
-}
+
       {
   id: 'api-management',
   label: 'API Management',
   requiredRoles: ['admin', 'administrator', 'api-admin'],
-}
+
       {
   id: 'marketplace',
   label: 'Marketplace Admin',
   requiredRoles: ['admin', 'administrator', 'marketplace-admin'],
-}
+
       {
   id: 'analytics',
   label: 'Analytics & Monitoring',
   requiredRoles: ['admin', 'administrator', 'analyst'],
-}
+
       {
   id: 'system',
   label: 'System Configuration',
@@ -130,7 +131,7 @@ export const useNavigation = () => {
   }, [location.pathname]);
   // Get user's allowed main app tabs
   const getAvailableTabs = useMemo(() => {
-    const baseTabs = [;
+    const baseTabs = [
       { id: 'editor', label: 'Graph Editor', path: '/' },
       { id: 'randomizer', label: 'LLM Randomizer', path: '/randomizer' }
     ];

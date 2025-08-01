@@ -12,8 +12,8 @@ import { SecurityStatisticalAnalysisEngine } from './SecurityStatisticalAnalysis
 import { SecurityMLToolsEngine } from './SecurityMLToolsEngine';
 import { SecurityIntelligenceIncidentResponse, SecurityIncident } from './SecurityIntelligenceIncidentResponse';
 
-}
-}
+
+
 export interface InvestigationQuery {
   query_id: string;
   name: string;
@@ -32,10 +32,11 @@ export interface InvestigationQuery {
         operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in' | 'regex';
         value: Error;
         logical_operator?: 'and' | 'or';
-}
-}
-      }>;
-    }>;
+
+
+
+>;
+>;
     
     time_range: {
       start_time: number;
@@ -62,7 +63,7 @@ export interface InvestigationQuery {
         operator: 'greater_than' | 'less_than' | 'equals';
         value: number;
       };
-    }>;
+>;
     
     correlation_rules: Array<{
       name: string;
@@ -71,10 +72,10 @@ export interface InvestigationQuery {
         operator: string;
         value: Error;
         time_window?: number; // seconds
-      }>;
+>;
       correlation_type: 'sequence' | 'co_occurrence' | 'frequency' | 'anomaly';
       threshold: number;
-    }>;
+>;
   };
   
   execution_config: {
@@ -93,10 +94,10 @@ export interface InvestigationQuery {
     export_permitted: boolean;
     modification_allowed: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface InvestigationResult {
   result_id: string;
   query_id: string;
@@ -113,8 +114,9 @@ export interface InvestigationResult {
     query_optimization_applied: boolean;
     warnings: string[];
     errors: string[];
-}
-}
+
+
+
   };
   
   raw_data: {
@@ -131,14 +133,14 @@ export interface InvestigationResult {
       timestamp: number;
       value: number;
       metric: string;
-    }>;
+>;
     entity_analysis: Array<{
       entity_id: string;
       entity_type: string;
       activity_count: number;
       risk_score: number;
       anomaly_indicators: string[];
-    }>;
+>;
     correlation_findings: Array<{
       correlation_id: string;
       correlation_type: string;
@@ -146,7 +148,7 @@ export interface InvestigationResult {
       entities_involved: string[];
       time_window: number;
       significance: number;
-    }>;
+>;
   };
   
   ml_insights: {
@@ -159,7 +161,7 @@ export interface InvestigationResult {
         description: string;
         affected_entities: string[];
         timestamp: number;
-      }>;
+>;
     };
     
     pattern_recognition: {
@@ -170,7 +172,7 @@ export interface InvestigationResult {
         confidence: number;
         description: string;
         examples: unknown[];
-      }>;
+>;
       
       attack_indicators: Array<{
         indicator_type: string;
@@ -178,7 +180,7 @@ export interface InvestigationResult {
         confidence: number;
         mitre_technique: string;
         kill_chain_stage: string;
-      }>;
+>;
     };
     
     behavioral_analysis: {
@@ -189,7 +191,7 @@ export interface InvestigationResult {
         current_value: number;
         deviation_percentage: number;
         statistical_significance: number;
-      }>;
+>;
       
       user_behavior_changes: Array<{
         user_id: string;
@@ -197,7 +199,7 @@ export interface InvestigationResult {
         change_magnitude: number;
         first_observed: number;
         pattern_description: string;
-      }>;
+>;
     };
     
     threat_classification: {
@@ -209,7 +211,7 @@ export interface InvestigationResult {
         threat_source: string;
         last_seen: number;
         context: string;
-      }>;
+>;
     };
   };
   
@@ -222,7 +224,7 @@ export interface InvestigationResult {
     estimated_effort: string;
     potential_impact: string;
     automated_query?: InvestigationQuery;
-  }>;
+>;
   
   visualization_data: {
     timeline_events: Array<{
@@ -231,7 +233,7 @@ export interface InvestigationResult {
       entity: string;
       severity: string;
       description: string;
-    }>;
+>;
     
     network_graph: {
       nodes: Array<{
@@ -240,14 +242,14 @@ export interface InvestigationResult {
         label: string;
         risk_score: number;
         properties: Record<string, any>;
-      }>;
+>;
       edges: Array<{
         source: string;
         target: string;
         relationship_type: string;
         strength: number;
         timestamp: number;
-      }>;
+>;
     };
     
     geographic_data: Array<{
@@ -256,19 +258,19 @@ export interface InvestigationResult {
       longitude: number;
       activity_count: number;
       risk_level: string;
-    }>;
+>;
     
     statistical_charts: Array<{
       chart_type: 'bar' | 'line' | 'pie' | 'scatter' | 'heatmap';
       title: string;
       data: Record<string, unknown>[];
       config: Record<string, any>;
-    }>;
+>;
   };
-}
 
-}
-}
+
+
+
 export interface Investigation {
   investigation_id: string;
   title: string;
@@ -285,8 +287,9 @@ export interface Investigation {
     category: 'incident_response' | 'threat_hunting' | 'compliance_audit' | 'forensic_analysis' | 'vulnerability_assessment';
     related_incidents: string[];
     related_tickets: string[];
-}
-}
+
+
+
   };
   
   investigation_timeline: Array<{
@@ -295,7 +298,7 @@ export interface Investigation {
     description: string;
     user: string;
     data: Record<string, any>;
-  }>;
+>;
   
   queries: string[]; // query_ids
   findings: Array<{
@@ -312,7 +315,7 @@ export interface Investigation {
       impact: number;
       overall_risk: number;
     };
-  }>;
+>;
   
   collaboration: {
     comments: Array<{
@@ -322,14 +325,14 @@ export interface Investigation {
       content: string;
       attachments: string[];
       mentions: string[];
-    }>;
+>;
     
     shared_workspaces: Array<{
       workspace_id: string;
       workspace_name: string;
       participants: string[];
       permissions: Record<string, string[]>;
-    }>;
+>;
     
     expert_consultations: Array<{
       consultation_id: string;
@@ -337,7 +340,7 @@ export interface Investigation {
       topic: string;
       status: 'requested' | 'in_progress' | 'completed';
       recommendations: string[];
-    }>;
+>;
   };
   
   reporting: {
@@ -347,7 +350,7 @@ export interface Investigation {
       generated_at: number;
       format: 'pdf' | 'html' | 'json' | 'csv';
       file_path: string;
-    }>;
+>;
     
     scheduled_updates: Array<{
       schedule_id: string;
@@ -355,12 +358,12 @@ export interface Investigation {
       recipients: string[];
       report_type: string;
       active: boolean;
-    }>;
+>;
   };
-}
 
-}
-}
+
+
+
 export interface QueryTemplate {
   template_id: string;
   name: string;
@@ -377,9 +380,10 @@ export interface QueryTemplate {
       required: boolean;
       default_value?: unknown;
       validation_rules?: Record<string, any>;
-}
-}
-    }>;
+
+
+
+>;
     
     example_values: Record<string, any>;
     expected_results: string;
@@ -395,7 +399,7 @@ export interface QueryTemplate {
     success_rate: number;
     tags: string[];
   };
-}
+
 
 export class SecurityAdHocAnalysisEngine extends EventEmitter {
   private analyticsFramework: SecurityMLAnalyticsFramework;
@@ -412,7 +416,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     query_id: string;
     execution_id: string;
     priority: number;
-  }> = [];
+> = [];
   private activeExecutions: Map<string, any> = new Map();
   private maxConcurrentExecutions: number = 5;
   
@@ -431,7 +435,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     
     this.setupAnalysisEngine();
     this.initializeQueryTemplates();
-  }
+
   
   private setupAnalysisEngine(): void {
     // Setup query execution processing
@@ -448,7 +452,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     setInterval(() => {
       this.monitorPerformance();
     }, 300000); // Monitor every 5 minutes
-  }
+
   
   private initializeQueryTemplates(): void {
     // User Behavior Analysis Template
@@ -470,38 +474,38 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
                 filters: [
                   { field: 'user_id', operator: 'equals', value: '{{user_id}}' }
                 ]
-              }
+
             ],
             analysis_scope: {
               entities: ['{{user_id}}'],
               behaviors: ['login', 'file_access', 'privilege_escalation'],
               risk_levels: ['medium', 'high', 'critical'],
               categories: ['insider_threat', 'compromised_account']
-            }
-          }
-  }
+
+
+
         parameters: [
           {
             name: 'user_id',
             type: 'string',
             description: 'User ID to analyze',
             required: true
-  }
+
           {
             name: 'time_period_days',
             type: 'number',
             description: 'Number of days to analyze',
             required: false,
             default_value: 30
-          }
+
         ],
         example_values: {
           user_id: 'john.doe',
           time_period_days: 14
-  }
+
         expected_results: 'User activity timeline, behavioral anomalies, risk assessment',
         performance_notes: 'Typically completes in 30-60 seconds for 30-day analysis'
-  }
+
       metadata: {
         created_by: 'system',
         created_at: Date.now(),
@@ -510,7 +514,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         average_execution_time: 45000,
         success_rate: 0.95,
         tags: ['user_analysis', 'behavioral', 'insider_threat']
-      }
+
     };
     
     this.queryTemplates.set('user_behavior_analysis', userBehaviorTemplate);
@@ -520,7 +524,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     this.createThreatHuntingTemplate();
     this.createIncidentForensicsTemplate();
     this.createComplianceAuditTemplate();
-  }
+
   
   private createNetworkTrafficAnalysisTemplate(): void {
     const networkTemplate: QueryTemplate = {
@@ -541,38 +545,38 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
                 filters: [
                   { field: 'source_ip', operator: 'equals', value: '{{source_ip}}' }
                 ]
-              }
+
             ],
             analysis_scope: {
               entities: ['{{source_ip}}'],
               behaviors: ['network_connection', 'data_transfer', 'dns_query'],
               risk_levels: ['medium', 'high', 'critical'],
               categories: ['lateral_movement', 'data_exfiltration', 'malware']
-            }
-          }
-  }
+
+
+
         parameters: [
           {
             name: 'source_ip',
             type: 'string',
             description: 'Source IP address to analyze',
             required: true
-  }
+
           {
             name: 'include_internal_traffic',
             type: 'boolean',
             description: 'Include internal network traffic',
             required: false,
             default_value: false
-          }
+
         ],
         example_values: {
           source_ip: '192.168.1.100',
           include_internal_traffic: true
-  }
+
         expected_results: 'Network communication patterns, suspicious destinations, data volumes',
         performance_notes: 'Performance varies based on traffic volume; use time filters for large datasets'
-  }
+
       metadata: {
         created_by: 'system',
         created_at: Date.now(),
@@ -581,23 +585,23 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         average_execution_time: 60000,
         success_rate: 0.92,
         tags: ['network_analysis', 'traffic', 'exfiltration']
-      }
+
     };
     
     this.queryTemplates.set('network_traffic_analysis', networkTemplate);
-  }
+
   
   private createThreatHuntingTemplate(): void {
     // Implementation for threat hunting template
-  }
+
   
   private createIncidentForensicsTemplate(): void {
     // Implementation for incident forensics template
-  }
+
   
   private createComplianceAuditTemplate(): void {
     // Implementation for compliance audit template
-  }
+
   
   // Core Analysis Methods
   async createInvestigationQuery(
@@ -623,14 +627,14 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     });
     
     return query_id;
-  }
+
   
   async executeQuery(query_id: string, force_refresh: boolean = false): Promise<string> {
 
     const query = this.queries.get(query_id);
     if (!query) {
       throw new Error(`Query ${query_id} not found`);
-    }
+
     
     const execution_id = `exec_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     
@@ -645,8 +649,8 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           result_id: cachedResult.result_id
         });
         return cachedResult.result_id;
-      }
-    }
+
+
     
     // Queue for execution
     const priority = this.calculateExecutionPriority(query);
@@ -660,7 +664,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     });
     
     return execution_id;
-  }
+
   
   private findCachedResult(query: InvestigationQuery): InvestigationResult | null {
     const cacheExpiryTime = Date.now() - (query.execution_config.cache_ttl_hours * 3600000);
@@ -670,24 +674,24 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           result.completed_at > cacheExpiryTime && 
           result.status === 'completed') {
         return result;
-      }
-    }
+
+
     
     return null;
-  }
+
   
   private calculateExecutionPriority(query: InvestigationQuery): number {
     const priorityMap = { urgent: 100, high: 75, medium: 50, low: 25 };
     return priorityMap[query.execution_config.priority] || 25;
-  }
+
   
   private async processExecutionQueue(): Promise<void> {
 
     while (this.executionQueue.length > 0 && this.activeExecutions.size < this.maxConcurrentExecutions) {
       const { query_id, execution_id } = this.executionQueue.shift()!;
       this.executeQueryAsync(query_id, execution_id);
-    }
-  }
+
+
   
   private async executeQueryAsync(query_id: string, execution_id: string): Promise<void> {
 
@@ -707,17 +711,16 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         result_id: result.result_id,
         duration_ms: Date.now() - startTime
       });
-      
-    } catch (error) {
+ catch (error) {
       this.emit('query_failed', {
         query_id,
         execution_id,
         error: (error as Error).message
       });
-    } finally {
+ finally {
       this.activeExecutions.delete(execution_id);
-    }
-  }
+
+
   
   private async performAnalysis(query: InvestigationQuery, execution_id: string): Promise<InvestigationResult> {
 
@@ -755,7 +758,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         query_optimization_applied: true,
         warnings: [],
         errors: []
-  }
+
       raw_data: rawData,
       aggregated_results: aggregatedResults,
       ml_insights: mlInsights,
@@ -764,7 +767,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     };
     
     return result;
-  }
+
   
   private async collectData(query: InvestigationQuery): Promise<unknown> {
 
@@ -779,7 +782,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           user_id: `user_${Math.floor(Math.random() * 100)}`,
           action: ['login', 'file_access', 'network_connection'][Math.floor(Math.random() * 3)],
           result: ['success', 'failure'][Math.floor(Math.random() * 2)]
-        }
+
       })),
       data_quality_score: Math.random() * 0.3 + 0.7,
       completeness_percentage: Math.random() * 20 + 80,
@@ -787,11 +790,11 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         'authentication_logs': Math.floor(Math.random() * 1000),
         'network_logs': Math.floor(Math.random() * 2000),
         'application_logs': Math.floor(Math.random() * 1500)
-      }
+
     };
     
     return mockData;
-  }
+
   
   private async performAggregation(rawData: unknown, query: InvestigationQuery): Promise<unknown> {
 
@@ -802,7 +805,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         unique_ips: Math.floor(Math.random() * 200) + 100,
         time_span_hours: 24,
         peak_activity_hour: Math.floor(Math.random() * 24)
-  }
+
       temporal_patterns: Array.from({ length: 24 }, (_, i) => ({
         timestamp: Date.now() - (23 - i) * 3600000,
         value: Math.floor(Math.random() * 100) + 10,
@@ -829,7 +832,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         significance: Math.random()
       }))
     };
-  }
+
   
   private async generateMLInsights(rawData: unknown, query: InvestigationQuery): Promise<unknown> {
 
@@ -840,7 +843,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           'behavioral': Math.floor(Math.random() * 10),
           'temporal': Math.floor(Math.random() * 8),
           'volumetric': Math.floor(Math.random() * 6)
-  }
+
         top_anomalies: Array.from({ length: 5 }, (_, i) => ({
           anomaly_id: `anom_${i}`,
           score: Math.random() * 50 + 50,
@@ -848,7 +851,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           affected_entities: [`entity_${i}`],
           timestamp: Date.now() - Math.random() * 86400000
         }))
-  }
+
       pattern_recognition: {
         patterns_identified: Array.from({ length: 3 }, (_, i) => ({
           pattern_id: `pattern_${i}`,
@@ -866,7 +869,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           mitre_technique: `T10${i + 1}0`,
           kill_chain_stage: ['reconnaissance', 'initial_access', 'persistence'][i]
         }))
-  }
+
       behavioral_analysis: {
         baseline_deviations: Array.from({ length: 5 }, (_, i) => ({
           entity_id: `entity_${i}`,
@@ -884,19 +887,19 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           first_observed: Date.now() - Math.random() * 604800000,
           pattern_description: `Behavior change pattern ${i + 1}`
         }))
-  }
+
       threat_classification: {
         threat_categories: {
           'insider_threat': Math.random() * 0.3,
           'external_attack': Math.random() * 0.4,
           'malware': Math.random() * 0.2,
           'phishing': Math.random() * 0.1
-  }
+
         confidence_scores: {
           'high_confidence': Math.random() * 0.4 + 0.6,
           'medium_confidence': Math.random() * 0.3 + 0.3,
           'low_confidence': Math.random() * 0.3
-  }
+
         ioc_matches: Array.from({ length: 2 }, (_, i) => ({
           ioc_type: ['ip', 'domain'][i],
           ioc_value: i === 0 ? '192.168.1.100' : 'suspicious.example.com',
@@ -904,9 +907,9 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           last_seen: Date.now() - Math.random() * 86400000,
           context: `Threat context ${i + 1}`
         }))
-      }
+
     };
-  }
+
   
   private async generateInvestigationLeads(
     rawData: unknown,
@@ -928,7 +931,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
       potential_impact: 'Could reveal broader security compromise',
       automated_query: undefined // Would generate automated query for follow-up
     }));
-  }
+
   
   private async generateVisualizationData(rawData: unknown, aggregatedResults: unknown): Promise<unknown> {
 
@@ -956,7 +959,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           strength: Math.random(),
           timestamp: Date.now() - Math.random() * 86400000
         }))
-  }
+
       geographic_data: Array.from({ length: 10 }, (_, i) => ({
         location: `Location ${i}`,
         latitude: Math.random() * 180 - 90,
@@ -971,16 +974,16 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           title: 'Activity Timeline',
           data: aggregatedResults.temporal_patterns,
           config: { xAxis: 'timestamp', yAxis: 'value' }
-  }
+
         {
           chart_type: 'bar',
           title: 'Entity Activity Distribution',
           data: aggregatedResults.entity_analysis,
           config: { xAxis: 'entity_id', yAxis: 'activity_count' }
-        }
+
       ]
     };
-  }
+
   
   // Investigation Management
   async createInvestigation(
@@ -1001,7 +1004,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         category: 'threat_hunting',
         related_incidents: [],
         related_tickets: []
-  }
+
       ...investigationDef
     };
     
@@ -1022,14 +1025,14 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     });
     
     return investigation_id;
-  }
+
   
   async addQueryToInvestigation(investigation_id: string, query_id: string): Promise<void> {
 
     const investigation = this.investigations.get(investigation_id);
     if (!investigation) {
       throw new Error(`Investigation ${investigation_id} not found`);
-    }
+
     
     investigation.queries.push(query_id);
     investigation.investigation_metadata.updated_at = Date.now();
@@ -1047,7 +1050,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
       action: 'query_added',
       query_id
     });
-  }
+
   
   async addFinding(
     investigation_id: string,
@@ -1058,7 +1061,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     const investigation = this.investigations.get(investigation_id);
     if (!investigation) {
       throw new Error(`Investigation ${investigation_id} not found`);
-    }
+
     
     const finding_id = `finding_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     const completeFinding = {
@@ -1084,7 +1087,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     });
     
     return finding_id;
-  }
+
   
   // Template Management
   async createQueryFromTemplate(template_id: string, parameters: Record<string, any>): Promise<string> {
@@ -1092,14 +1095,14 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     const template = this.queryTemplates.get(template_id);
     if (!template) {
       throw new Error(`Template ${template_id} not found`);
-    }
+
     
     // Validate parameters
     for (const param of template.template_definition.parameters) {
       if (param.required && !(param.name in parameters)) {
         throw new Error(`Required parameter '${param.name}' not provided`);
-      }
-    }
+
+
     
     // Apply parameters to base query
     const queryDefinition = this.applyParametersToTemplate(template, parameters);
@@ -1117,7 +1120,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     });
     
     return query_id;
-  }
+
   
   private applyParametersToTemplate(template: QueryTemplate, parameters: Record<string, any>): unknown {
     // Deep clone the base query
@@ -1130,7 +1133,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     for (const [key, value] of Object.entries(parameters)) {
       const placeholder = new RegExp(`{{${key}}}`, 'g');
       replacedString = replacedString.replace(placeholder, JSON.stringify(value));
-    }
+
     
     return {
       name: `${template.name} - ${Date.now()}`,
@@ -1144,16 +1147,16 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         cache_ttl_hours: 4,
         priority: 'medium',
         notification_on_completion: false
-  }
+
       sharing_config: {
         visibility: 'private',
         allowed_users: [],
         allowed_teams: [],
         export_permitted: true,
         modification_allowed: true
-      }
+
     };
-  }
+
   
   // Utility Methods
   private async cleanupExpiredResults(): Promise<void> {
@@ -1167,9 +1170,9 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         const expiryTime = result.completed_at + (query.execution_config.cache_ttl_hours * 3600000);
         if (now > expiryTime) {
           expiredResults.push(result_id);
-        }
-      }
-    }
+
+
+
     
     expiredResults.forEach(result_id => {
       this.results.delete(result_id);
@@ -1177,8 +1180,8 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     
     if (expiredResults.length > 0) {
       this.emit('cache_cleanup', { expired_results: expiredResults.length });
-    }
-  }
+
+
   
   private async monitorPerformance(): Promise<void> {
 
@@ -1193,11 +1196,11 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         average_execution_time: this.calculateAverageExecutionTime(),
         cache_hit_rate: this.calculateCacheHitRate(),
         success_rate: this.calculateSuccessRate()
-      }
+
     };
     
     this.emit('performance_stats', stats);
-  }
+
   
   private calculateAverageExecutionTime(): number {
     const completedResults = Array.from(this.results.values())
@@ -1209,12 +1212,12 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
       sum + result.execution_metadata.processing_time_ms, 0);
       
     return totalTime / completedResults.length;
-  }
+
   
   private calculateCacheHitRate(): number {
     // Would track cache hits/misses in real implementation
     return 0.15; // 15% cache hit rate
-  }
+
   
   private calculateSuccessRate(): number {
     const totalResults = this.results.size;
@@ -1224,24 +1227,24 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
       .filter(result => result.status === 'completed').length;
       
     return successfulResults / totalResults;
-  }
+
   
   // Public API Methods
   getQuery(query_id: string): InvestigationQuery | undefined {
     return this.queries.get(query_id);
-  }
+
   
   getResult(result_id: string): InvestigationResult | undefined {
     return this.results.get(result_id);
-  }
+
   
   getInvestigation(investigation_id: string): Investigation | undefined {
     return this.investigations.get(investigation_id);
-  }
+
   
   getQueryTemplate(template_id: string): QueryTemplate | undefined {
     return this.queryTemplates.get(template_id);
-  }
+
   
   getSystemStatistics(): unknown {
     return {
@@ -1249,24 +1252,23 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         total: this.queries.size,
         active_executions: this.activeExecutions.size,
         queued: this.executionQueue.length
-  }
+
       investigations: {
         total: this.investigations.size,
         active: Array.from(this.investigations.values())
           .filter(inv => inv.status === 'active').length
-  }
+
       templates: {
         total: this.queryTemplates.size,
         most_used: Array.from(this.queryTemplates.values())
           .sort((a, b) => b.metadata.usage_count - a.metadata.usage_count)
           .slice(0, 5)
           .map(t => ({ id: t.template_id, name: t.name, usage_count: t.metadata.usage_count }))
-  }
+
       performance: {
         average_execution_time_ms: this.calculateAverageExecutionTime(),
         cache_hit_rate: this.calculateCacheHitRate(),
         success_rate: this.calculateSuccessRate()
-      }
+
     };
-  }
-}
+

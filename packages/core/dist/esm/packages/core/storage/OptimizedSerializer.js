@@ -74,8 +74,9 @@ export class OptimizedSerializer {
                  * Incremental serialization - only serialize changes
                  */
                 async;
-                serializeIncremental(projectData, PSGFile);
-                projectId: string,
+                serializeIncremental(projectData, PSGFile),
+                    projectId;
+                string,
                     options;
                 SerializationOptions = { format: 'json', incremental: true };
                 Promise < SerializationResult & { isIncremental: boolean, deltaSize: number } > {

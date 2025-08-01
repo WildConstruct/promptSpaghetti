@@ -5,8 +5,7 @@
  * Provides standardized performance measurement, tracking, and comparison capabilities.
  */
 import { z } from 'zod';
-export declare enum BaselineCategory {
-    CORE_ENGINE = "core_engine",
+export declare enum BaselineCategory { CORE_ENGINE = "core_engine",
     API_PERFORMANCE = "api_performance",
     UI_RENDERING = "ui_rendering",
     MEMORY_USAGE = "memory_usage",
@@ -28,11 +27,10 @@ export declare enum TestEnvironment {
     DEVELOPMENT = "development",
     STAGING = "staging",
     PRODUCTION = "production",
-    CI_CD = "ci_cd",
+    CI_CD = "ci_cd" }
     LOCAL = "local"
 
-export declare const PerformanceMeasurementSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const PerformanceMeasurementSchema: z.ZodObject<{ id: z.ZodString;
     name: z.ZodString;
     category: z.ZodNativeEnum<typeof BaselineCategory>;
     type: z.ZodNativeEnum<typeof MeasurementType>;
@@ -41,9 +39,7 @@ export declare const PerformanceMeasurementSchema: z.ZodObject<{
     timestamp: z.ZodDate;
     environment: z.ZodNativeEnum<typeof TestEnvironment>;
     metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">> }, "strip", z.ZodTypeAny, { id: string;
     name: string;
     value: number;
     type: MeasurementType;
@@ -52,9 +48,7 @@ export declare const PerformanceMeasurementSchema: z.ZodObject<{
     environment: TestEnvironment;
     unit: string;
     tags?: string[] | undefined;
-    metadata?: Record<string, unknown> | undefined;
-}, {
-    id: string;
+    metadata?: Record<string, unknown> | undefined }, { id: string;
     name: string;
     value: number;
     type: MeasurementType;
@@ -63,11 +57,9 @@ export declare const PerformanceMeasurementSchema: z.ZodObject<{
     environment: TestEnvironment;
     unit: string;
     tags?: string[] | undefined;
-    metadata?: Record<string, unknown> | undefined;
-}>;
+    metadata?: Record<string, unknown> | undefined }>;
 export type PerformanceMeasurement = z.infer<typeof PerformanceMeasurementSchema>;
-export declare const PerformanceBaselineSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const PerformanceBaselineSchema: z.ZodObject<{ id: z.ZodString;
     name: z.ZodString;
     description: z.ZodString;
     category: z.ZodNativeEnum<typeof BaselineCategory>;
@@ -84,7 +76,7 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
     updatedAt: z.ZodDate;
     version: z.ZodString;
     tags: z.ZodArray<z.ZodString, "many">;
-    measurements: z.ZodArray<z.ZodObject<{,
+    measurements: z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         name: z.ZodString;
         category: z.ZodNativeEnum<typeof BaselineCategory>;
@@ -95,8 +87,7 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
         environment: z.ZodNativeEnum<typeof TestEnvironment>;
         metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
         tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         name: string;
         value: number;
         type: MeasurementType;
@@ -105,9 +96,7 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
         environment: TestEnvironment;
         unit: string;
         tags?: string[] | undefined;
-        metadata?: Record<string, unknown> | undefined;
-    }, {
-        id: string;
+        metadata?: Record<string, unknown> | undefined }, { id: string;
         name: string;
         value: number;
         type: MeasurementType;
@@ -116,13 +105,11 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
         environment: TestEnvironment;
         unit: string;
         tags?: string[] | undefined;
-        metadata?: Record<string, unknown> | undefined;
-    }>, "many">;
+        metadata?: Record<string, unknown> | undefined }>, "many">;
     enabled: z.ZodBoolean;
     alerting: z.ZodBoolean;
     trending: z.ZodBoolean;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     name: string;
@@ -149,13 +136,11 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
         environment: TestEnvironment;
         unit: string;
         tags?: string[] | undefined;
-        metadata?: Record<string, unknown> | undefined;
-    }[];
+        metadata?: Record<string, unknown> | undefined }[];
     trending: boolean;
     minimum?: number | undefined;
     maximum?: number | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     name: string;
@@ -182,19 +167,17 @@ export declare const PerformanceBaselineSchema: z.ZodObject<{
         environment: TestEnvironment;
         unit: string;
         tags?: string[] | undefined;
-        metadata?: Record<string, unknown> | undefined;
-    }[];
+        metadata?: Record<string, unknown> | undefined }[];
     trending: boolean;
     minimum?: number | undefined;
     maximum?: number | undefined;
 }>;
 export type PerformanceBaseline = z.infer<typeof PerformanceBaselineSchema>;
-export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
-    version: z.ZodString;
+export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{ version: z.ZodString;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     environment: z.ZodNativeEnum<typeof TestEnvironment>;
-    baselines: z.ZodArray<z.ZodObject<{,
+    baselines: z.ZodArray<z.ZodObject<{
         id: z.ZodString;
         name: z.ZodString;
         description: z.ZodString;
@@ -212,7 +195,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
         updatedAt: z.ZodDate;
         version: z.ZodString;
         tags: z.ZodArray<z.ZodString, "many">;
-        measurements: z.ZodArray<z.ZodObject<{,
+        measurements: z.ZodArray<z.ZodObject<{ }
             id: z.ZodString;
             name: z.ZodString;
             category: z.ZodNativeEnum<typeof BaselineCategory>;
@@ -223,8 +206,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
             environment: z.ZodNativeEnum<typeof TestEnvironment>;
             metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
             tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        }, "strip", z.ZodTypeAny, {
-            id: string;
+        }, "strip", z.ZodTypeAny, { id: string;
             name: string;
             value: number;
             type: MeasurementType;
@@ -233,9 +215,7 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
             environment: TestEnvironment;
             unit: string;
             tags?: string[] | undefined;
-            metadata?: Record<string, unknown> | undefined;
-        }, {
-            id: string;
+            metadata?: Record<string, unknown> | undefined }, { id: string;
             name: string;
             value: number;
             type: MeasurementType;
@@ -244,13 +224,11 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
             environment: TestEnvironment;
             unit: string;
             tags?: string[] | undefined;
-            metadata?: Record<string, unknown> | undefined;
-        }>, "many">;
+            metadata?: Record<string, unknown> | undefined }>, "many">;
         enabled: z.ZodBoolean;
         alerting: z.ZodBoolean;
         trending: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         name: string;
@@ -277,13 +255,11 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
             environment: TestEnvironment;
             unit: string;
             tags?: string[] | undefined;
-            metadata?: Record<string, unknown> | undefined;
-        }[];
+            metadata?: Record<string, unknown> | undefined }[];
         trending: boolean;
         minimum?: number | undefined;
         maximum?: number | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         name: string;
@@ -310,27 +286,20 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
             environment: TestEnvironment;
             unit: string;
             tags?: string[] | undefined;
-            metadata?: Record<string, unknown> | undefined;
-        }[];
+            metadata?: Record<string, unknown> | undefined }[];
         trending: boolean;
         minimum?: number | undefined;
         maximum?: number | undefined;
     }>, "many">;
-    metadata: z.ZodOptional<z.ZodObject<{,
+    metadata: z.ZodOptional<z.ZodObject<{ 
         systemInfo: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         buildInfo: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-        testConfig: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-    }, "strip", z.ZodTypeAny, {
-        systemInfo: Record<string, unknown>;
+        testConfig: z.ZodRecord<z.ZodString, z.ZodUnknown> }, "strip", z.ZodTypeAny, { systemInfo: Record<string, unknown>;
         buildInfo: Record<string, unknown>;
-        testConfig: Record<string, unknown>;
-    }, {
-        systemInfo: Record<string, unknown>;
+        testConfig: Record<string, unknown> }, { systemInfo: Record<string, unknown>;
         buildInfo: Record<string, unknown>;
-        testConfig: Record<string, unknown>;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    createdAt: Date;
+        testConfig: Record<string, unknown> }>>;
+}, "strip", z.ZodTypeAny, { createdAt: Date;
     updatedAt: Date;
     version: string;
     environment: TestEnvironment;
@@ -362,19 +331,15 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
             environment: TestEnvironment;
             unit: string;
             tags?: string[] | undefined;
-            metadata?: Record<string, unknown> | undefined;
-        }[];
+            metadata?: Record<string, unknown> | undefined }[];
         trending: boolean;
         minimum?: number | undefined;
         maximum?: number | undefined;
     }[];
-    metadata?: {
-        systemInfo: Record<string, unknown>;
+    metadata?: { systemInfo: Record<string, unknown>;
         buildInfo: Record<string, unknown>;
-        testConfig: Record<string, unknown>;
-    } | undefined;
-}, {
-    createdAt: Date;
+        testConfig: Record<string, unknown> } | undefined;
+}, { createdAt: Date;
     updatedAt: Date;
     version: string;
     environment: TestEnvironment;
@@ -406,17 +371,14 @@ export declare const PerformanceBaselineCollectionSchema: z.ZodObject<{
             environment: TestEnvironment;
             unit: string;
             tags?: string[] | undefined;
-            metadata?: Record<string, unknown> | undefined;
-        }[];
+            metadata?: Record<string, unknown> | undefined }[];
         trending: boolean;
         minimum?: number | undefined;
         maximum?: number | undefined;
     }[];
-    metadata?: {
-        systemInfo: Record<string, unknown>;
+    metadata?: { systemInfo: Record<string, unknown>;
         buildInfo: Record<string, unknown>;
-        testConfig: Record<string, unknown>;
-    } | undefined;
+        testConfig: Record<string, unknown> } | undefined;
 }>;
 export type PerformanceBaselineCollection = z.infer<typeof PerformanceBaselineCollectionSchema>;
 /**
@@ -424,8 +386,7 @@ export type PerformanceBaselineCollection = z.infer<typeof PerformanceBaselineCo
  *
  * Central management system for performance baselines
  */
-export declare class PerformanceBaselineManager {
-    private baselines;
+export declare class PerformanceBaselineManager { private baselines;
     private measurements;
     private environment;
     constructor(environment?: TestEnvironment);
@@ -442,14 +403,13 @@ export declare class PerformanceBaselineManager {
         target: number;
         warning: number;
         critical: number;
-        tags?: string[];
-    }): PerformanceBaseline;
+        tags?: string[] }): PerformanceBaseline;
     /**
      * Add a measurement to a baseline
      */
     addMeasurement();
-      baselineId: string,
-      measurement: Omit<PerformanceMeasurement,
+      baselineId: string
+      measurement: Omit<PerformanceMeasurement
       'id' | 'timestamp' | 'environment'>
     ): void;
     /**
@@ -467,11 +427,9 @@ export declare class PerformanceBaselineManager {
     /**
      * Check if a measurement violates baseline thresholds
      */
-    checkThreshold(baselineId: string, value: number): {
-        status: 'ok' | 'warning' | 'critical';
+    checkThreshold(baselineId: string, value: number): { status: 'ok' | 'warning' | 'critical';
         message: string;
-        baseline: PerformanceBaseline;
-    };
+        baseline: PerformanceBaseline };
     /**
      * Determine if lower values are better for a given metric
      */
@@ -479,27 +437,21 @@ export declare class PerformanceBaselineManager {
     /**
      * Get performance trend for a baseline
      */
-    getTrend(baselineId: string, days?: number): {
-        trend: 'improving' | 'stable' | 'degrading';
+    getTrend(baselineId: string, days?: number): { trend: 'improving' | 'stable' | 'degrading';
         percentage: number;
-        measurements: PerformanceMeasurement[];
-    };
+        measurements: PerformanceMeasurement[] };
     /**
      * Generate baseline report
      */
-    generateReport(): {
-        summary: {
+    generateReport(): { summary: {
             totalBaselines: number;
             activeBaselines: number;
             categories: Record<BaselineCategory, number>;
-            alerts: number;
-        };
-        baselines: Array<{
-            baseline: PerformanceBaseline;
+            alerts: number };
+        baselines: Array<{ baseline: PerformanceBaseline;
             status: 'ok' | 'warning' | 'critical';
             trend: 'improving' | 'stable' | 'degrading';
-            lastMeasurement?: PerformanceMeasurement;
-        }>;
+            lastMeasurement?: PerformanceMeasurement }>;
     };
     /**
      * Export baselines to JSON

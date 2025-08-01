@@ -15,7 +15,7 @@ import { UserRole, Permission, usePermissions } from './RouteGuard';
  * Enhanced user interface with role-based access control
  */
 
-}
+
 export interface AuthUser {
   id: string;,
   email: string;
@@ -23,13 +23,14 @@ export interface AuthUser {
   lastName?: string;
   displayName?: string;
   isEmailVerified: boolean;,
-  roles: UserRole;
+  roles: UserRole;,
   permissions: Permission;
-  preferences?: {
+  preferences?: {,
   theme?: 'light' | 'dark';
   notifications?: boolean;
   language?: string;
-}
+
+
 };
   metadata?: {
   createdAt: string;
@@ -40,12 +41,13 @@ export interface AuthUser {
 /**
  * Authentication context interface
  */
-}
-}
+
+
+
 export interface AuthContextValue {
   // Authentication state
   user: AuthUser | null;,
-  isAuthenticated: boolean;
+  isAuthenticated: boolean;,
   isLoading: boolean;,
   error: string | null;
   // Authentication actions
@@ -53,7 +55,8 @@ export interface AuthContextValue {
   logout: () => void;,
   register: (userData: unknown) => Promise<boolean>;
   // OAuth actions
-}
+
+},
   oauthLogin: (provider: string, returnUrl?: string) => Promise<{ url: string; state: string }>;
   processOAuthCallback: (provider: string, code: string, state: string) => Promise<boolean>;
   // Session management
@@ -72,7 +75,7 @@ export interface AuthContextValue {
   disableTwoFactor: (code: string) => Promise<boolean>;,
   verifyTwoFactor: (code: string) => Promise<boolean>;
   // Session information
-  sessionInfo: {
+  sessionInfo: {,
   tokenExpiration: number | null;
   lastActivity: number;
   sessionId?: string;
@@ -88,7 +91,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 /**
  * Hook to use authentication context
  */
-}
+
 export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
   if (!context) {
@@ -101,13 +104,15 @@ export function useAuth(): AuthContextValue {
 /**
  * Authentication provider props
  */
-}
+
+
 interface AuthProviderProps {
   children: React.ReactNode;
-/**
- * Enhanced authentication provider with comprehensive security features
- */
-}
+  /**
+  * Enhanced authentication provider with comprehensive security features
+  */
+
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const authStore = useAuthStore();
   const permissions = usePermissions();
@@ -126,11 +131,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     roles: (authStore.user.roles as UserRole) || ['user'],
     permissions: permissions.userPermissions,
     preferences: authStore.user.preferences,
-    metadata: {
+    metadata: {,
   createdAt: authStore.user.createdAt || new Date().toISOString(),
   lastLoginAt: authStore.user.lastLoginAt,
   lastActiveAt: new Date().toISOString(),
-} : null;
+ : null;
   // Track user activity
   useEffect(() => {
     const updateActivity = () => setLastActivity(Date.now());
@@ -167,7 +172,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Could generate session ID here
         setSessionId(`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);}
       return success;
-    } catch (error) {
+ catch (error) {
   console.error('Login error:', error);
   return false;
 };
@@ -179,14 +184,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (userData: unknown): Promise<boolean> => {
     try {
       return await authStore.register(userData);
-    } catch (error) {
+ catch (error) {
   console.error('Registration error:', error);
   return false;
 };
   const oauthLogin = async (provider: string, returnUrl?: string): Promise<{ url: string; state: string }> => {
     try {
       return await authStore.oauthLogin(provider, returnUrl);
-    } catch (error) {
+ catch (error) {
   console.error('OAuth login error:', error);
   throw error;
 };
@@ -197,7 +202,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setLastActivity(Date.now());
         setSessionId(`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);}
       return success;
-    } catch (error) {
+ catch (error) {
   console.error('OAuth callback error:', error);
   return false;
 };
@@ -207,14 +212,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (success) {
         setLastActivity(Date.now());
       return success;
-    } catch (error) {
+ catch (error) {
   console.error('Session refresh error:', error);
   return false;
 };
   const checkAuthStatus = async (): Promise<boolean> => {
     try {
       return await authStore.checkAuthStatus();
-    } catch (error) {
+ catch (error) {
   console.error('Auth status check error:', error);
   return false;
 };
@@ -235,7 +240,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         authStore.updateUser(updatedUser);
         return true;
       return false;
-    } catch (error) {
+ catch (error) {
   console.error('Profile update error:', error);
   return false;
 };
@@ -250,7 +255,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   body: JSON.stringify({ currentPassword, newPassword })
       });
       return response.ok;
-    } catch (error) {
+ catch (error) {
   console.error('Password change error:', error);
   return false;
 };
@@ -264,7 +269,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           'Authorization': `Bearer ${authStore.accessToken}`}
       });
       return response.ok;
-    } catch (error) {
+ catch (error) {
   console.error('2FA enable error:', error);
   return false;
 };
@@ -279,7 +284,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   body: JSON.stringify({ code })
       });
       return response.ok;
-    } catch (error) {
+ catch (error) {
   console.error('2FA disable error:', error);
   return false;
 };
@@ -294,7 +299,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   body: JSON.stringify({ code })
       });
       return response.ok;
-    } catch (error) {
+ catch (error) {
   console.error('2FA verify error:', error);
   return false;
 };
@@ -328,11 +333,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   disableTwoFactor,
   verifyTwoFactor,
   // Session information
-  sessionInfo: {
+  sessionInfo: {,
   tokenExpiration: authStore.tokenExpiration,
   lastActivity,
   sessionId
-}
+
     // Utility functions
     clearError: authStore.clearError,
     setReturnUrl: authStore.setReturnUrl;

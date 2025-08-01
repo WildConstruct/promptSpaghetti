@@ -12,8 +12,8 @@ import { ApiKeyUsageAnalytics } from './ApiManagementService';
 import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
-}
-}
+
+
 export interface ApiOptimizationRecommendation {
   id: string;
   type: 'performance' | 'security' | 'cost' | 'reliability' | 'scalability';
@@ -25,8 +25,9 @@ export interface ApiOptimizationRecommendation {
     performanceImprovement?: number; // Percentage improvement
     securityRisk?: 'low' | 'medium' | 'high' | 'critical';
     reliabilityImprovement?: number; // Uptime improvement percentage
-}
-}
+
+
+
   };
   recommendation: {
     action: string;
@@ -42,18 +43,19 @@ export interface ApiOptimizationRecommendation {
   };
   generatedAt: Date;
   category: string;
-}
 
-}
-}
+
+
+
 export interface ApiOptimizationInsights {
   summary: {
     totalRecommendations: number;
     criticalIssues: number;
     estimatedSavings: number;
     performanceGains: number;
-}
-}
+
+
+
   };
   recommendations: ApiOptimizationRecommendation[];
   trends: {
@@ -73,18 +75,19 @@ export interface ApiOptimizationInsights {
       uptime: number;
     };
   };
-}
 
-}
-}
+
+
+
 export interface OptimizationAnalysisConfig {
   timeWindow: number; // Days to analyze
   includeBenchmarks: boolean;
   focusAreas: Array<'performance' | 'security' | 'cost' | 'reliability'>;
   minimumUsage: number; // Minimum API calls to include in analysis
-}
-}
-}
+
+
+
+
 
 export class ApiOptimizationService {
   private databaseService: DatabaseService;
@@ -96,7 +99,7 @@ export class ApiOptimizationService {
   ) {
     this.databaseService = databaseService;
     this.auditService = auditService;
-  }
+
 
   /**
    * Generate comprehensive optimization insights for API management
@@ -132,7 +135,7 @@ export class ApiOptimizationService {
       trends,
       benchmarks
     };
-  }
+
 
   /**
    * Generate specific recommendations based on API analytics
@@ -148,23 +151,23 @@ export class ApiOptimizationService {
       // Performance optimization recommendations
       if (config.focusAreas.includes('performance')) {
         recommendations.push(...await this.generatePerformanceRecommendations(analytics));
-      }
+
 
       // Security optimization recommendations
       if (config.focusAreas.includes('security')) {
         recommendations.push(...await this.generateSecurityRecommendations(analytics));
-      }
+
 
       // Cost optimization recommendations
       if (config.focusAreas.includes('cost')) {
         recommendations.push(...await this.generateCostRecommendations(analytics));
-      }
+
 
       // Reliability optimization recommendations
       if (config.focusAreas.includes('reliability')) {
         recommendations.push(...await this.generateReliabilityRecommendations(analytics));
-      }
-    }
+
+
 
     // Sort by priority and severity
     return recommendations
@@ -173,9 +176,9 @@ export class ApiOptimizationService {
         const severityDiff = severityOrder[b.severity] - severityOrder[a.severity];
         if (severityDiff !== 0) return severityDiff;
         return b.recommendation.priority - a.recommendation.priority;
-  }
+
       .slice(0, 20); // Limit to top 20 recommendations
-  }
+
 
   /**
    * Generate performance-focused recommendations
@@ -197,7 +200,7 @@ export class ApiOptimizationService {
         impact: {
           performanceImprovement: 60,
           reliabilityImprovement: 25
-  }
+
         recommendation: {
           action: 'Optimize slow endpoints and implement caching',
           implementation: [
@@ -209,7 +212,7 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 8,
           priority: 9
-  }
+
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: analytics.endpoints
@@ -218,16 +221,16 @@ export class ApiOptimizationService {
           currentPerformance: {
             averageLatency: analytics.performance.averageLatency,
             p95Latency: analytics.performance.p95Latency
-  }
+
           expectedPerformance: {
             averageLatency: 400,
             p95Latency: 800
-          }
-  }
+
+
         generatedAt: new Date(),
         category: 'Response Time Optimization'
       });
-    }
+
 
     // High error rate detection
     if (analytics.usage.errorRate > 5) {
@@ -240,7 +243,7 @@ export class ApiOptimizationService {
         impact: {
           reliabilityImprovement: 80,
           performanceImprovement: 20
-  }
+
         recommendation: {
           action: 'Investigate and fix error-prone endpoints',
           implementation: [
@@ -252,7 +255,7 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 12,
           priority: 10
-  }
+
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: analytics.endpoints
@@ -261,19 +264,19 @@ export class ApiOptimizationService {
           currentPerformance: {
             errorRate: analytics.usage.errorRate,
             successRate: analytics.performance.successRate
-  }
+
           expectedPerformance: {
             errorRate: 2,
             successRate: 98
-          }
-  }
+
+
         generatedAt: new Date(),
         category: 'Error Rate Reduction'
       });
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Generate security-focused recommendations
@@ -294,7 +297,7 @@ export class ApiOptimizationService {
         description: `API key "${analytics.name}" shows ${analytics.security.suspiciousActivity} suspicious activities, indicating potential security risks.`,
         impact: {
           securityRisk: 'high'
-  }
+
         recommendation: {
           action: 'Implement enhanced security monitoring',
           implementation: [
@@ -306,23 +309,23 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 6,
           priority: 9
-  }
+
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: [],
           currentPerformance: {
             suspiciousActivity: analytics.security.suspiciousActivity,
             uniqueIPs: analytics.security.uniqueIPs
-  }
+
           expectedPerformance: {
             suspiciousActivity: 0,
             uniqueIPs: analytics.security.uniqueIPs
-          }
-  }
+
+
         generatedAt: new Date(),
         category: 'Security Enhancement'
       });
-    }
+
 
     // Too many unique IPs (potential security risk)
     if (analytics.security.uniqueIPs > 100) {
@@ -334,7 +337,7 @@ export class ApiOptimizationService {
         description: `API key "${analytics.name}" is being used from ${analytics.security.uniqueIPs} unique IP addresses, which may indicate key sharing or compromise.`,
         impact: {
           securityRisk: 'medium'
-  }
+
         recommendation: {
           action: 'Review IP usage patterns and implement restrictions',
           implementation: [
@@ -346,24 +349,24 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 4,
           priority: 6
-  }
+
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: [],
           currentPerformance: {
             uniqueIPs: analytics.security.uniqueIPs
-  }
+
           expectedPerformance: {
             uniqueIPs: 50
-          }
-  }
+
+
         generatedAt: new Date(),
         category: 'IP Management'
       });
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Generate cost optimization recommendations
@@ -388,7 +391,7 @@ export class ApiOptimizationService {
         impact: {
           estimatedSavings,
           performanceImprovement: 15
-  }
+
         recommendation: {
           action: 'Reduce failed requests to optimize costs',
           implementation: [
@@ -400,7 +403,7 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 6,
           priority: 7
-  }
+
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: analytics.endpoints
@@ -409,19 +412,19 @@ export class ApiOptimizationService {
           currentPerformance: {
             errorRate: analytics.usage.errorRate,
             wastedCalls
-  }
+
           expectedPerformance: {
             errorRate: 3,
             wastedCalls: analytics.usage.totalCalls * 0.03
-          }
-  }
+
+
         generatedAt: new Date(),
         category: 'Cost Optimization'
       });
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Generate reliability-focused recommendations
@@ -442,7 +445,7 @@ export class ApiOptimizationService {
         description: `API key "${analytics.name}" shows uptime of ${analytics.performance.uptime}%, below acceptable standards (>99%).`,
         impact: {
           reliabilityImprovement: 99.9 - analytics.performance.uptime
-  }
+
         recommendation: {
           action: 'Improve system reliability and monitoring',
           implementation: [
@@ -454,24 +457,24 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 16,
           priority: 10
-  }
+
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: [],
           currentPerformance: {
             uptime: analytics.performance.uptime
-  }
+
           expectedPerformance: {
             uptime: 99.9
-          }
-  }
+
+
         generatedAt: new Date(),
         category: 'Uptime Improvement'
       });
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Collect API analytics data for analysis
@@ -483,7 +486,7 @@ export class ApiOptimizationService {
     // This would integrate with the existing ApiManagementService
     // For now, return mock data structure
     return [];
-  }
+
 
   /**
    * Analyze performance and usage trends
@@ -495,7 +498,7 @@ export class ApiOptimizationService {
       usageTrend: 'increasing' as const,
       errorTrend: 'improving' as const
     };
-  }
+
 
   /**
    * Get industry benchmarks
@@ -506,7 +509,7 @@ export class ApiOptimizationService {
         responseTime: 300,
         errorRate: 2.5,
         uptime: 99.5
-  }
+
       yourPerformance: {
         responseTime: analyticsData.reduce(
           (acc,
@@ -514,9 +517,9 @@ export class ApiOptimizationService {
         ) => acc + data.performance.averageLatency, 0) / analyticsData.length || 0,
         errorRate: analyticsData.reduce((acc, data) => acc + data.usage.errorRate, 0) / analyticsData.length || 0,
         uptime: analyticsData.reduce((acc, data) => acc + data.performance.uptime, 0) / analyticsData.length || 0
-      }
+
     };
-  }
+
 
   /**
    * Get default benchmarks when not including industry data
@@ -527,14 +530,14 @@ export class ApiOptimizationService {
         responseTime: 300,
         errorRate: 2.5,
         uptime: 99.5
-  }
+
       yourPerformance: {
         responseTime: 0,
         errorRate: 0,
         uptime: 0
-      }
+
     };
-  }
+
 
   /**
    * Generate summary statistics
@@ -549,7 +552,7 @@ export class ApiOptimizationService {
         r
       ) => acc + (r.impact.performanceImprovement || 0), 0) / recommendations.length || 0
     };
-  }
+
 
   /**
    * Get optimization recommendations for a specific API key
@@ -567,7 +570,7 @@ export class ApiOptimizationService {
     return insights.recommendations.filter(rec => 
       rec.metrics.affectedKeys.includes(keyId)
     );
-  }
+
 
   /**
    * Generate executive summary report
@@ -581,7 +584,7 @@ export class ApiOptimizationService {
       performanceImprovement: number;
       securityEnhancement: string;
     };
-  }> {
+> {
 
     const insights = await this.generateOptimizationInsights();
     
@@ -601,9 +604,9 @@ export class ApiOptimizationService {
         costSavings: insights.summary.estimatedSavings,
         performanceImprovement: insights.summary.performanceGains,
         securityEnhancement: insights.recommendations.filter(r => r.type === 'security').length > 0 ? 'High' : 'Medium'
-      }
+
     };
-  }
-}
+
+
 
 export default ApiOptimizationService;

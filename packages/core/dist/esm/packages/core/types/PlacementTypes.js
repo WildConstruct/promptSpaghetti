@@ -35,8 +35,8 @@ export var PlacementArea;
         FLOATING = 'floating',
         INLINE = 'inline',
         OVERLAY = 'overlay';
-    ;
 }
+;
 ;
 animation ?  : PlacementAnimation;
 customCss ?  : string;
@@ -159,7 +159,8 @@ export var CampaignObjective;
     totalBudget ?  : number;
     dailyBudget ?  : number;
     currency: string;
-    spendingPace: 'even' | 'accelerated';
+    spendingPace: 'even' | 'accelerated',
+    ;
 }
 export var CampaignStatus;
 (function (CampaignStatus) {

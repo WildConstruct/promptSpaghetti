@@ -22,7 +22,7 @@ export class LocalModelAdapter extends BaseAIModel {
         const metadata = {
             name: config.modelName,
             version: '1.0',
-            description: `Local ${config.modelType || 'custom'},}
+            description: `Local ${config.modelType || 'custom'},},
   model: ${config.modelName}` };
     }
     provider;

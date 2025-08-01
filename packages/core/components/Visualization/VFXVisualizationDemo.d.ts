@@ -7,6 +7,7 @@
 import React from 'react';
 
 }
+}
 export interface VFXVisualizationDemoProps {
     className?: string;
     title?: string;
@@ -16,4 +17,5 @@ export interface VFXVisualizationDemoProps {
 export declare const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps>;
 export default VFXVisualizationDemo;
 //# sourceMappingURL=VFXVisualizationDemo.d.ts.map
+}
 }

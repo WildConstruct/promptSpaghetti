@@ -34,13 +34,14 @@ export enum AnalyticsEventType {
   FEATURE_USAGE = 'feature_usage',
   ERROR_OCCURRENCE = 'error_occurrence',
   CONVERSION_EVENT = 'conversion_event'
-}
+
 
 /**
  * Base analytics event structure
  */
-}
-}
+
+
+
 export interface AnalyticsEvent {
   id: string;
   type: AnalyticsEventType;
@@ -49,15 +50,17 @@ export interface AnalyticsEvent {
   userId?: string;
   organizationId?: string;
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Graph execution analytics event
  */
-}
-}
+
+
+
 export interface GraphExecutionEvent extends AnalyticsEvent {
   type: AnalyticsEventType.GRAPH_EXECUTION_START | 
         AnalyticsEventType.GRAPH_EXECUTION_COMPLETE | 
@@ -72,13 +75,14 @@ export interface GraphExecutionEvent extends AnalyticsEvent {
     errorMessage?: string;
     outputLength?: number;
   };
-}
+
 
 /**
  * Node execution analytics event
  */
-}
-}
+
+
+
 export interface NodeExecutionEvent extends AnalyticsEvent {
   type: AnalyticsEventType.NODE_EXECUTION_START | 
         AnalyticsEventType.NODE_EXECUTION_COMPLETE | 
@@ -93,13 +97,14 @@ export interface NodeExecutionEvent extends AnalyticsEvent {
     success: boolean;
     errorMessage?: string;
   };
-}
+
 
 /**
  * User interaction analytics event
  */
-}
-}
+
+
+
 export interface UserInteractionEvent extends AnalyticsEvent {
   type: AnalyticsEventType.NODE_CREATED | 
         AnalyticsEventType.NODE_UPDATED | 
@@ -115,13 +120,14 @@ export interface UserInteractionEvent extends AnalyticsEvent {
     interactionType?: string;
     graphId: string;
   };
-}
+
 
 /**
  * Token usage analytics event
  */
-}
-}
+
+
+
 export interface TokenUsageEvent extends AnalyticsEvent {
   type: AnalyticsEventType.TOKEN_USAGE;
   metadata: {
@@ -134,13 +140,14 @@ export interface TokenUsageEvent extends AnalyticsEvent {
     nodeId: string;
     graphId: string;
   };
-}
+
 
 /**
  * Performance metrics event
  */
-}
-}
+
+
+
 export interface PerformanceMetricEvent extends AnalyticsEvent {
   type: AnalyticsEventType.PERFORMANCE_METRIC;
   metadata: {
@@ -151,13 +158,14 @@ export interface PerformanceMetricEvent extends AnalyticsEvent {
     graphId?: string;
     component: string;
   };
-}
+
 
 /**
  * Analytics configuration
  */
-}
-}
+
+
+
 export interface AnalyticsConfig {
   /** Enable/disable analytics collection */
   enabled: boolean;
@@ -173,15 +181,17 @@ export interface AnalyticsConfig {
   maxEvents: number;
   /** Data retention period in milliseconds */
   retentionPeriod: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Analytics data aggregation window
  */
-}
-}
+
+
+
 export interface AnalyticsWindow {
   startTime: number;
   endTime: number;
@@ -195,10 +205,11 @@ export interface AnalyticsWindow {
     totalTokenUsage: number;
     totalCost: number;
     errorRate: number;
-}
-}
+
+
+
   };
-}
+
 
 /**
  * Comprehensive analytics collector extending existing metrics infrastructure
@@ -226,8 +237,8 @@ export class AnalyticsCollector extends EventEmitter {
 
     if (this.config.enabled) {
       this.startCollection();
-    }
-  }
+
+
 
   /**
    * Start analytics collection
@@ -247,7 +258,7 @@ export class AnalyticsCollector extends EventEmitter {
         userAgent: process.env.USER_AGENT || 'server',
         platform: process.platform,
         nodeVersion: process.version
-      }
+
     });
 
     // Start periodic flush
@@ -259,7 +270,7 @@ export class AnalyticsCollector extends EventEmitter {
     setInterval(() => {
       this.cleanupOldEvents();
     }, 60000); // cleanup every minute
-  }
+
 
   /**
    * Stop analytics collection
@@ -278,7 +289,7 @@ export class AnalyticsCollector extends EventEmitter {
       metadata: {
         sessionDuration: Date.now() - this.sessionStartTime,
         eventsRecorded: this.events.length
-      }
+
     });
 
     // Flush remaining events
@@ -287,8 +298,8 @@ export class AnalyticsCollector extends EventEmitter {
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
       this.flushTimer = null;
-    }
-  }
+
+
 
   /**
    * Record a graph execution start event
@@ -305,11 +316,11 @@ export class AnalyticsCollector extends EventEmitter {
         connectionCount,
         seed,
         success: false
-      }
+
     };
     
     this.recordEvent(event);
-  }
+
 
   /**
    * Record a graph execution completion event
@@ -333,11 +344,11 @@ export class AnalyticsCollector extends EventEmitter {
         executionTimeMs,
         outputLength,
         success: true
-      }
+
     };
     
     this.recordEvent(event);
-  }
+
 
   /**
    * Record a graph execution error event
@@ -361,11 +372,11 @@ export class AnalyticsCollector extends EventEmitter {
         executionTimeMs,
         errorMessage,
         success: false
-      }
+
     };
     
     this.recordEvent(event);
-  }
+
 
   /**
    * Record a node execution event
@@ -398,11 +409,11 @@ export class AnalyticsCollector extends EventEmitter {
         outputSize,
         success,
         errorMessage
-      }
+
     };
     
     this.recordEvent(event);
-  }
+
 
   /**
    * Record token usage event
@@ -430,11 +441,11 @@ export class AnalyticsCollector extends EventEmitter {
         estimatedCost,
         nodeId,
         graphId
-      }
+
     };
     
     this.recordEvent(event);
-  }
+
 
   /**
    * Record user interaction event
@@ -452,11 +463,11 @@ export class AnalyticsCollector extends EventEmitter {
       metadata: {
         graphId,
         ...metadata
-      }
+
     };
     
     this.recordEvent(event);
-  }
+
 
   /**
    * Record performance metric
@@ -481,11 +492,11 @@ export class AnalyticsCollector extends EventEmitter {
         component,
         nodeId,
         graphId
-      }
+
     };
     
     this.recordEvent(event);
-  }
+
 
   /**
    * Get analytics data for a time window
@@ -518,18 +529,18 @@ export class AnalyticsCollector extends EventEmitter {
         if (graphEvent.metadata.executionTimeMs) {
           totalExecutionTime += graphEvent.metadata.executionTimeMs;
           executionEventCount++;
-        }
-      }
+
+
 
       if (event.type === AnalyticsEventType.TOKEN_USAGE) {
         const tokenEvent = event as TokenUsageEvent;
         totalTokens += tokenEvent.metadata.totalTokens;
         totalCost += tokenEvent.metadata.estimatedCost;
-      }
+
 
       if (event.type.includes('error')) {
         errorCount++;
-      }
+
     });
 
     return {
@@ -545,9 +556,9 @@ export class AnalyticsCollector extends EventEmitter {
         totalTokenUsage: totalTokens,
         totalCost,
         errorRate: windowEvents.length > 0 ? (errorCount / windowEvents.length) * 100 : 0
-      }
+
     };
-  }
+
 
   /**
    * Get current analytics summary
@@ -565,7 +576,7 @@ export class AnalyticsCollector extends EventEmitter {
       bufferSize: this.events.length,
       isCollectionActive: this.config.enabled && this.flushTimer !== null
     };
-  }
+
 
   /**
    * Record an analytics event
@@ -576,12 +587,12 @@ export class AnalyticsCollector extends EventEmitter {
     // Apply sampling for non-critical events
     if (!this.isCriticalEvent(event.type) && Math.random() > this.config.sampleRate) {
       return;
-    }
+
 
     // Apply privacy mode if enabled
     if (this.config.privacyMode) {
       event = this.anonymizeEvent(event);
-    }
+
 
     this.events.push(event);
     this.emit('event_recorded', event);
@@ -589,13 +600,13 @@ export class AnalyticsCollector extends EventEmitter {
     // Check if buffer is full
     if (this.events.length >= this.config.bufferSize) {
       this.flushEvents();
-    }
+
 
     // Prevent memory overflow
     if (this.events.length > this.config.maxEvents) {
       this.events = this.events.slice(-this.config.maxEvents);
-    }
-  }
+
+
 
   /**
    * Check if an event type is critical (always recorded)
@@ -610,7 +621,7 @@ export class AnalyticsCollector extends EventEmitter {
     ];
     
     return criticalEvents.includes(eventType);
-  }
+
 
   /**
    * Anonymize sensitive data in events
@@ -621,16 +632,16 @@ export class AnalyticsCollector extends EventEmitter {
     // Remove or hash sensitive fields
     if (anonymized.userId) {
       anonymized.userId = this.hashString(anonymized.userId);
-    }
+
     
     // Remove sensitive metadata
     if (anonymized.metadata) {
       const { userAgent, ...cleanMetadata } = anonymized.metadata;
       anonymized.metadata = cleanMetadata;
-    }
+
     
     return anonymized;
-  }
+
 
   /**
    * Simple hash function for anonymization
@@ -641,9 +652,9 @@ export class AnalyticsCollector extends EventEmitter {
       const char = str.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32bit integer
-    }
+
     return Math.abs(hash).toString(16);
-  }
+
 
   /**
    * Flush events to persistent storage
@@ -658,7 +669,7 @@ export class AnalyticsCollector extends EventEmitter {
     this.emit('events_flushed', eventsToFlush);
     
     console.log(`Flushed ${eventsToFlush.length} analytics events`);
-  }
+
 
   /**
    * Clean up old events beyond retention period
@@ -672,8 +683,8 @@ export class AnalyticsCollector extends EventEmitter {
     const removedCount = originalLength - this.events.length;
     if (removedCount > 0) {
       console.log(`Cleaned up ${removedCount} old analytics events`);
-    }
-  }
+
+
 
   /**
    * Update configuration
@@ -683,10 +694,10 @@ export class AnalyticsCollector extends EventEmitter {
     
     if (!this.config.enabled && this.flushTimer) {
       this.stopCollection();
-    } else if (this.config.enabled && !this.flushTimer) {
+ else if (this.config.enabled && !this.flushTimer) {
       this.startCollection();
-    }
-  }
+
+
 
   /**
    * Export analytics data
@@ -699,7 +710,7 @@ export class AnalyticsCollector extends EventEmitter {
         config: this.config,
         events: this.events
       }, null, 2);
-    }
+
     
     // CSV export (simplified)
     const headers = ['id', 'type', 'timestamp', 'sessionId', 'userId', 'metadata'];
@@ -713,5 +724,4 @@ export class AnalyticsCollector extends EventEmitter {
     ]);
     
     return [headers, ...rows].map(row => row.join(',')).join('\n');
-  }
-}
+

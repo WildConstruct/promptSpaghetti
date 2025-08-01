@@ -8,104 +8,84 @@ import RecentFiles from '../RecentFiles';
 import { projectManager } from '../../../projectManager';
 
 // Mock the projectManager
-jest.mock('../../../projectManager', () => ({)
-  projectManager: {
+jest.mock('../../../projectManager', () => ({ )
+  projectManager: {,
   getRecentFiles: jest.fn(),
   getFavoriteFiles: jest.fn(),
   toggleFavorite: jest.fn(),
   addToRecentFiles: jest.fn(),
-  isFavorite: jest.fn(),
+  isFavorite: jest.fn() }
 }));
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
 
 // Mock localStorage
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
-};
+const localStorageMock = {};
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
-describe('RecentFiles Component', () => {
-  const mockFiles = [;
+describe('RecentFiles Component', () => { const mockFiles = [
   {
-  id: 'file1',
-  name: 'project1.psg',
-  path: '/projects/project1.psg',
-  size: 2048,
-  lastModified: new Date('2025-01-15T10:00:00Z'),
-  nodeCount: 10,
+  id: 'file1'
+  name: 'project1.psg'
+  path: '/projects/project1.psg'
+  size: 2048
+  lastModified: new Date('2025-01-15T10:00:00Z')
+  nodeCount: 10
   metadata: {
-  title: 'Project 1',
-  description: 'First project',
-  tags: ['test'],
-  author: 'User',
-  version: '1.0.0',
-  created: new Date('2025-01-10T10:00:00Z'),
-},
+  title: 'Project 1'
+  description: 'First project'
+  tags: ['test']
+  author: 'User'
+  version: '1.0.0'
+  created: new Date('2025-01-10T10:00:00Z') }
+
   isFavorite: true;
-  }
-    {
-  id: 'file2',
-  name: 'project2.psg',
-  path: '/projects/project2.psg',
-  size: 4096,
-  lastModified: new Date('2025-01-14T15:30:00Z'),
-  nodeCount: 20,
+
+    { id: 'file2'
+  name: 'project2.psg'
+  path: '/projects/project2.psg'
+  size: 4096
+  lastModified: new Date('2025-01-14T15:30:00Z')
+  nodeCount: 20
   metadata: {
-  title: 'Project 2',
-  description: 'Second project',
-  tags: ['example'],
-  author: 'User',
-  version: '2.0.0',
-  created: new Date('2025-01-12T12:00:00Z'),
-},
+  title: 'Project 2'
+  description: 'Second project'
+  tags: ['example']
+  author: 'User'
+  version: '2.0.0'
+  created: new Date('2025-01-12T12:00:00Z') }
+
   isFavorite: false];
-  beforeEach(() => {
-    jest.clearAllMocks();
+  beforeEach(() => { jest.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
     mockProjectManager.getRecentFiles.mockReturnValue(mockFiles);
     mockProjectManager.getFavoriteFiles.mockReturnValue([mockFiles[0]]);
-    mockProjectManager.isFavorite.mockImplementation((id) => id === 'file1');
-  });
-  describe('Basic Rendering', () => {
-    it('renders recent files list', () => {
+    mockProjectManager.isFavorite.mockImplementation((id) => id === 'file1') });
+  describe('Basic Rendering', () => { it('renders recent files list', () => {
       render(<RecentFiles />);
       expect(screen.getByText('Recent Files')).toBeInTheDocument();
       expect(screen.getByText('project1.psg')).toBeInTheDocument();
-      expect(screen.getByText('project2.psg')).toBeInTheDocument();
-    });
-    it('shows file details correctly', () => {
-      render(<RecentFiles />);
+      expect(screen.getByText('project2.psg')).toBeInTheDocument() });
+    it('shows file details correctly', () => { render(<RecentFiles />);
       expect(screen.getByText('10 nodes')).toBeInTheDocument();
       expect(screen.getByText('20 nodes')).toBeInTheDocument();
       expect(screen.getByText('2.00 KB')).toBeInTheDocument();
-      expect(screen.getByText('4.00 KB')).toBeInTheDocument();
-    });
-    it('displays last modified dates', () => {
-      render(<RecentFiles />);
+      expect(screen.getByText('4.00 KB')).toBeInTheDocument() });
+    it('displays last modified dates', () => { render(<RecentFiles />);
       expect(screen.getByText('1/15/2025')).toBeInTheDocument();
-      expect(screen.getByText('1/14/2025')).toBeInTheDocument();
-    });
+      expect(screen.getByText('1/14/2025')).toBeInTheDocument() });
   });
-  describe('Favorites Functionality', () => {
-    it('shows favorite star for favorited files', () => {
+  describe('Favorites Functionality', () => { it('shows favorite star for favorited files', () => {
       render(<RecentFiles />);
       const favoriteStars = screen.getAllByText('⭐');
-      expect(favoriteStars).toHaveLength(1);
-    });
-    it('toggles favorite status when star is clicked', () => {
-      mockProjectManager.toggleFavorite.mockReturnValue(false);
+      expect(favoriteStars).toHaveLength(1) });
+    it('toggles favorite status when star is clicked', () => { mockProjectManager.toggleFavorite.mockReturnValue(false);
       render(<RecentFiles />);
       const favoriteButton = screen.getAllByRole('button').find(btn => ;);
         btn.textContent?.includes('⭐')
       );
       if (favoriteButton) {
         fireEvent.click(favoriteButton);
-        expect(mockProjectManager.toggleFavorite).toHaveBeenCalledWith('file1');
-    });
-    it('adds favorite when non-favorite file is starred', () => {
-      mockProjectManager.toggleFavorite.mockReturnValue(true);
+        expect(mockProjectManager.toggleFavorite).toHaveBeenCalledWith('file1') });
+    it('adds favorite when non-favorite file is starred', () => { mockProjectManager.toggleFavorite.mockReturnValue(true);
       mockProjectManager.isFavorite.mockReturnValue(false);
       render(<RecentFiles />);
       // Click on star button for file2 (non-favorite)
@@ -114,79 +94,62 @@ describe('RecentFiles Component', () => {
       );
       if (starButtons.length > 1) {
         fireEvent.click(starButtons[1]);
-        expect(mockProjectManager.toggleFavorite).toHaveBeenCalledWith('file2');
-    });
+        expect(mockProjectManager.toggleFavorite).toHaveBeenCalledWith('file2') });
   });
-  describe('View Toggle Functionality', () => {
-    it('switches between recent and favorites view', () => {
+  describe('View Toggle Functionality', () => { it('switches between recent and favorites view', () => {
       render(<RecentFiles />);
       const favoritesButton = screen.getByText('Favorites');
       fireEvent.click(favoritesButton);
-      expect(mockProjectManager.getFavoriteFiles).toHaveBeenCalled();
-    });
-    it('shows correct button states for view toggle', () => {
-      render(<RecentFiles />);
+      expect(mockProjectManager.getFavoriteFiles).toHaveBeenCalled() });
+    it('shows correct button states for view toggle', () => { render(<RecentFiles />);
       const recentButton = screen.getByText('Recent');
       const favoritesButton = screen.getByText('Favorites');
       expect(recentButton).toHaveClass('bg-blue-500');
-      expect(favoritesButton).toHaveClass('bg-gray-200');
-    });
-    it('updates view when favorites button is clicked', () => {
-      render(<RecentFiles />);
+      expect(favoritesButton).toHaveClass('bg-gray-200') });
+    it('updates view when favorites button is clicked', () => { render(<RecentFiles />);
       const favoritesButton = screen.getByText('Favorites');
       fireEvent.click(favoritesButton);
       expect(favoritesButton).toHaveClass('bg-blue-500');
-      expect(screen.getByText('Recent')).toHaveClass('bg-gray-200');
-    });
+      expect(screen.getByText('Recent')).toHaveClass('bg-gray-200') });
   });
   describe('File Click Handling', () => {
     it('calls onClick handler when file is clicked', () => {
       const handleClick = jest.fn();
       render(<RecentFiles onClick={handleClick} />);
       const fileItem = screen.getByText('project1.psg').closest('div');
-      if (fileItem) {
-        fireEvent.click(fileItem);
-        expect(handleClick).toHaveBeenCalledWith(mockFiles[0]);
-    });
+      if (fileItem) { fireEvent.click(fileItem);
+        expect(handleClick).toHaveBeenCalledWith(mockFiles[0]) });
     it('does not call onClick when star button is clicked', () => {
       const handleClick = jest.fn();
       render(<RecentFiles onClick={handleClick} />);
       const starButton = screen.getAllByRole('button').find(btn => ;);
         btn.textContent?.includes('⭐')
       );
-      if (starButton) {
-        fireEvent.click(starButton);
-        expect(handleClick).not.toHaveBeenCalled();
-    });
+      if (starButton) { fireEvent.click(starButton);
+        expect(handleClick).not.toHaveBeenCalled() });
   });
-  describe('Empty States', () => {
-    it('shows empty state when no recent files', () => {
+  describe('Empty States', () => { it('shows empty state when no recent files', () => {
       mockProjectManager.getRecentFiles.mockReturnValue([]);
       render(<RecentFiles />);
-      expect(screen.getByText('No recent files')).toBeInTheDocument();
-    });
-    it('shows empty state when no favorite files', () => {
-      mockProjectManager.getFavoriteFiles.mockReturnValue([]);
+      expect(screen.getByText('No recent files')).toBeInTheDocument() });
+    it('shows empty state when no favorite files', () => { mockProjectManager.getFavoriteFiles.mockReturnValue([]);
       render(<RecentFiles />);
       const favoritesButton = screen.getByText('Favorites');
       fireEvent.click(favoritesButton);
-      expect(screen.getByText('No favorite files')).toBeInTheDocument();
-    });
+      expect(screen.getByText('No favorite files')).toBeInTheDocument() });
   });
   describe('Limit Functionality', () => {
     it('respects the limit prop', () => {
       render(<RecentFiles limit={1} />);
       expect(mockProjectManager.getRecentFiles).toHaveBeenCalledWith(1);
     });
-    it('uses default limit when not specified', () => {
-      render(<RecentFiles />);
-      expect(mockProjectManager.getRecentFiles).toHaveBeenCalledWith(10);
-    });
+    it('uses default limit when not specified', () => { render(<RecentFiles />);
+      expect(mockProjectManager.getRecentFiles).toHaveBeenCalledWith(10) });
   });
   describe('File Size Formatting', () => {
     it('formats file sizes correctly', () => {
-      const filesWithDifferentSizes = [;
-        { ...mockFiles[0], size: 512 },
+      const filesWithDifferentSizes = [
+        { ...mockFiles[0], size: 512 }
         { ...mockFiles[1], size: 1048576 }
       ];
       mockProjectManager.getRecentFiles.mockReturnValue(filesWithDifferentSizes);
@@ -195,31 +158,25 @@ describe('RecentFiles Component', () => {
       expect(screen.getByText('1.00 MB')).toBeInTheDocument();
     });
   });
-  describe('Date Formatting', () => {
-    it('formats dates consistently', () => {
+  describe('Date Formatting', () => { it('formats dates consistently', () => {
       render(<RecentFiles />);
       // Check that dates are formatted in MM/DD/YYYY format
       expect(screen.getByText('1/15/2025')).toBeInTheDocument();
-      expect(screen.getByText('1/14/2025')).toBeInTheDocument();
-    });
+      expect(screen.getByText('1/14/2025')).toBeInTheDocument() });
     it('handles invalid dates gracefully', () => {
-      const filesWithInvalidDate = [;
+      const filesWithInvalidDate = [
         { ...mockFiles[0], lastModified: new Date('invalid-date') }
       ];
       mockProjectManager.getRecentFiles.mockReturnValue(filesWithInvalidDate);
-      expect(() => {
-        render(<RecentFiles />);
-      }).not.toThrow();
+      expect(() => { render(<RecentFiles />) }).not.toThrow();
     });
   });
-  describe('Accessibility', () => {
-    it('has proper ARIA labels for buttons', () => {
+  describe('Accessibility', () => { it('has proper ARIA labels for buttons', () => {
       render(<RecentFiles />);
       const starButton = screen.getAllByRole('button').find(btn => ;);
         btn.getAttribute('aria-label')?.includes('favorite')
       );
-      expect(starButton).toHaveAttribute('aria-label');
-    });
+      expect(starButton).toHaveAttribute('aria-label') });
     it('supports keyboard navigation', () => {
       const handleClick = jest.fn();
       render(<RecentFiles onClick={handleClick} />);
@@ -245,28 +202,20 @@ describe('RecentFiles Component', () => {
       expect(mockProjectManager.getRecentFiles).toHaveBeenLastCalledWith(15);
     });
   });
-  describe('Error Handling', () => {
-    it('handles projectManager errors gracefully', () => {
+  describe('Error Handling', () => { it('handles projectManager errors gracefully', () => {
       mockProjectManager.getRecentFiles.mockImplementation(() => {
-        throw new Error('Failed to get recent files');
-      });
-      expect(() => {
-        render(<RecentFiles />);
-      }).not.toThrow();
+        throw new Error('Failed to get recent files') });
+      expect(() => { render(<RecentFiles />) }).not.toThrow();
       expect(screen.getByText('No recent files')).toBeInTheDocument();
     });
-    it('handles toggleFavorite errors gracefully', () => {
-      mockProjectManager.toggleFavorite.mockImplementation(() => {
-        throw new Error('Failed to toggle favorite');
-      });
+    it('handles toggleFavorite errors gracefully', () => { mockProjectManager.toggleFavorite.mockImplementation(() => {
+        throw new Error('Failed to toggle favorite') });
       render(<RecentFiles />);
       const starButton = screen.getAllByRole('button').find(btn => ;);
         btn.textContent?.includes('⭐')
       );
-      if (starButton) {
-        expect(() => {
-          fireEvent.click(starButton);
-        }).not.toThrow();
+      if (starButton) { expect(() => {
+          fireEvent.click(starButton) }).not.toThrow();
     });
   });
   describe('State Management', () => {
@@ -280,8 +229,7 @@ describe('RecentFiles Component', () => {
       // Should still be in favorites view
       expect(screen.getByText('Favorites')).toHaveClass('bg-blue-500');
     });
-    it('updates favorite status immediately', () => {
-      mockProjectManager.toggleFavorite.mockReturnValue(false);
+    it('updates favorite status immediately', () => { mockProjectManager.toggleFavorite.mockReturnValue(false);
       render(<RecentFiles />);
       const starButton = screen.getAllByRole('button').find(btn => ;);
         btn.textContent?.includes('⭐')
@@ -290,8 +238,7 @@ describe('RecentFiles Component', () => {
         fireEvent.click(starButton);
         // Should immediately update the UI
         waitFor(() => {
-          expect(screen.queryByText('⭐')).not.toBeInTheDocument();
-        });
+          expect(screen.queryByText('⭐')).not.toBeInTheDocument() });
     });
   });
 });

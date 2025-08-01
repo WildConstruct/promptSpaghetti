@@ -15,8 +15,7 @@
  * - Emergency accessibility bypass procedures
  */
 import { EventEmitter } from 'events';
-export declare enum AccessibilityNeed {
-    VISUAL_IMPAIRMENT = "visual_impairment",
+export declare enum AccessibilityNeed { VISUAL_IMPAIRMENT = "visual_impairment",
     HEARING_IMPAIRMENT = "hearing_impairment",
     MOTOR_IMPAIRMENT = "motor_impairment",
     COGNITIVE_IMPAIRMENT = "cognitive_impairment",
@@ -64,9 +63,10 @@ export declare enum InterfaceAdaptation {
     SIMPLIFIED_LAYOUT = "simplified_layout",
     AUDIO_DESCRIPTIONS = "audio_descriptions",
     CAPTIONS = "captions",
-    FOCUS_INDICATORS = "focus_indicators",
+    FOCUS_INDICATORS = "focus_indicators" }
     ERROR_CLARIFICATION = "error_clarification"
 
+}
 }
 export interface UserAccessibilityProfile {
     userId: string;
@@ -85,30 +85,25 @@ export interface UserAccessibilityProfile {
         animationsReduced: boolean;
         colorBlindnessType?: 'protanopia' | 'deuteranopia' | 'tritanopia' | 'monochromacy'
 }
+}
   };
-    verificationMethods: {
-        primary: string[];
+    verificationMethods: { primary: string[];
         fallback: string[];
-        emergency: string[];
-    };
-    emergencyContacts: Array<{
-        name: string;
+        emergency: string[] };
+    emergencyContacts: Array<{ name: string;
         relationship: string;
         phone: string;
         email: string;
-        canAuthorize: boolean;
-    }>;
-    documentation: {
-        medicalCertification?: string;
+        canAuthorize: boolean }>;
+    documentation: { medicalCertification?: string;
         accommodationLetter?: string;
-        renewalDate?: Date;
-    };
+        renewalDate?: Date };
     lastUpdated: Date;
     isActive: boolean;
 
 }
-export interface AccessibilityContext {
-    userAgent: string;
+}
+export interface AccessibilityContext { userAgent: string;
     screenReaderDetected: boolean;
     assistiveTechDetected: AssistiveTechnology[];
     deviceCapabilities: {
@@ -119,27 +114,23 @@ export interface AccessibilityContext {
         hasMouse: boolean;
         screenSize: {
             width: number;
-            height: number;
+            height: number }
 }
         };
         colorDepth: number;
     };
-    environmentalFactors: {
-        isNoisy: boolean;
+    environmentalFactors: { isNoisy: boolean;
         isLowLight: boolean;
         isPublicSpace: boolean;
-        hasTimeConstraints: boolean;
-    };
-    sessionContext: {
-        isEmergency: boolean;
+        hasTimeConstraints: boolean };
+    sessionContext: { isEmergency: boolean;
         attemptCount: number;
         timeRemaining: number;
-        lastSuccessfulMethod: string;
-    };
+        lastSuccessfulMethod: string };
 
 }
-export interface FallbackConfiguration {
-    method: FallbackMethod;
+}
+export interface FallbackConfiguration { method: FallbackMethod;
     enabled: boolean;
     priority: number;
     requirements: {
@@ -147,43 +138,37 @@ export interface FallbackConfiguration {
         needsVisual: boolean;
         needsInteraction: boolean;
         minimumTime: number;
-        maximumTime: number;
+        maximumTime: number }
 }
     };
-    accessibility: {
-        supportedNeeds: AccessibilityNeed[];
+    accessibility: { supportedNeeds: AccessibilityNeed[];
         incompatibleWith: AccessibilityNeed[];
-        assistiveTechSupport: AssistiveTechnology[];
-    };
-    implementation: {
-        component: string;
+        assistiveTechSupport: AssistiveTechnology[] };
+    implementation: { component: string;
         params: Record<string, unknown>;
-        validationRules: string[];
-    };
-    compliance: {
-        wcagLevel: 'A' | 'AA' | 'AAA';
+        validationRules: string[] };
+    compliance: { wcagLevel: 'A' | 'AA' | 'AAA';
         section508: boolean;
-        ada: boolean;
-    };
+        ada: boolean };
 
 }
-export interface AccessibilityValidationResult {
-    isAccessible: boolean;
+}
+export interface AccessibilityValidationResult { isAccessible: boolean;
     fallbacksRequired: FallbackMethod[];
     adaptationsNeeded: InterfaceAdaptation[];
     issues: Array<{
         type: 'critical' | 'major' | 'minor';
         description: string;
         wcagReference: string;
-        recommendation: string;
+        recommendation: string }
 }
     }>;
     score: number;
     complianceLevel: 'A' | 'AA' | 'AAA' | 'Non-compliant';
 
 }
-export interface EmergencyBypass {
-    id: string;
+}
+export interface EmergencyBypass { id: string;
     userId: string;
     reason: string;
     authorizedBy: string;
@@ -195,22 +180,19 @@ export interface EmergencyBypass {
         ipRestriction?: string[];
         timeRestriction?: {
             start: string;
-            end: string;
+            end: string }
 }
         };
         requiresNotification: boolean;
         requiresFollowUp: boolean;
     };
-    auditTrail: Array<{
-        timestamp: Date;
+    auditTrail: Array<{ timestamp: Date;
         action: string;
-        details: Record<string, unknown>;
-    }>;
+        details: Record<string, unknown> }>;
 /**
  * Comprehensive accessibility management service
  */
-export declare class AccessibilityManager extends EventEmitter {
-    private userProfiles;
+export declare class AccessibilityManager extends EventEmitter { private userProfiles;
     private fallbackConfigs;
     private emergencyBypasses;
     private accessibilityMetrics;
@@ -219,22 +201,20 @@ export declare class AccessibilityManager extends EventEmitter {
      * Create or update user accessibility profile
      */
     createAccessibilityProfile();
-      userId: string,
-      profileData: Partial<UserAccessibilityProfile>,
+      userId: string
+      profileData: Partial<UserAccessibilityProfile> }
     ): Promise<UserAccessibilityProfile>;
     /**
      * Analyze user context and recommend accessibility accommodations
      */
-    analyzeAccessibilityNeeds(userId: string, context: AccessibilityContext): Promise<{
-        recommendedFallbacks: FallbackMethod[];
+    analyzeAccessibilityNeeds(userId: string, context: AccessibilityContext): Promise<{ recommendedFallbacks: FallbackMethod[];
         requiredAdaptations: InterfaceAdaptation[];
         estimatedDifficulty: 'low' | 'medium' | 'high' | 'critical';
         alternatives: Array<{
             method: string;
             accessibility: number;
             estimated_time: number;
-            requirements: string[];
-        }>;
+            requirements: string[] }>;
     }>;
     /**
      * Validate accessibility compliance for authentication flow
@@ -256,23 +236,19 @@ export declare class AccessibilityManager extends EventEmitter {
     /**
      * Use emergency accessibility bypass
      */
-    useEmergencyBypass(bypassId: string, context: Record<string, unknown>): {
-        allowed: boolean;
+    useEmergencyBypass(bypassId: string, context: Record<string, unknown>): { allowed: boolean;
         reason?: string;
-        remainingUses?: number;
-    };
+        remainingUses?: number };
     /**
      * Get accessibility adaptation recommendations
      */
-    getAdaptationRecommendations(userId: string, _currentInterface: unknown): {
-        adaptations: Array<{
+    getAdaptationRecommendations(userId: string, _currentInterface: unknown): { adaptations: Array<{
             type: InterfaceAdaptation;
             priority: 'high' | 'medium' | 'low';
             implementation: {
                 css?: Record<string, string>;
                 js?: string;
-                html?: string;
-            };
+                html?: string };
             description: string;
         }>;
         estimatedImpact: number;
@@ -280,20 +256,16 @@ export declare class AccessibilityManager extends EventEmitter {
     /**
      * Get accessibility statistics and metrics
      */
-    getAccessibilityMetrics(): {
-        totalUsers: number;
+    getAccessibilityMetrics(): { totalUsers: number;
         usersWithProfiles: number;
         accessibilityNeeds: Record<AccessibilityNeed, number>;
         fallbackUsage: Record<FallbackMethod, number>;
         complianceScores: {
             average: number;
-            distribution: Record<'A' | 'AA' | 'AAA' | 'Non-compliant', number>;
-        };
-        emergencyBypasses: {
-            active: number;
+            distribution: Record<'A' | 'AA' | 'AAA' | 'Non-compliant', number> };
+        emergencyBypasses: { active: number;
             used: number;
-            expired: number;
-        };
+            expired: number };
         topIssues: Array<{
             issue: string;
             frequency: number;

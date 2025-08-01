@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface DataSource {
-    id: string;
+}
+export interface DataSource { id: string;
     name: string;
     type: 'api' | 'database' | 'file' | 'static';
     enabled: boolean;
@@ -10,46 +10,37 @@ export interface DataSource {
     authentication?: {
         type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';
         credentials: Record<string, string>;
-        headers?: Record<string, string>;
+        headers?: Record<string, string> }
 }
     };
-    caching: {
-        enabled: boolean;
+    caching: { enabled: boolean;
         ttl: number;
         strategy: 'memory' | 'disk' | 'hybrid';
-        maxSize: number;
-    };
+        maxSize: number };
     transforms: DataTransform[];
-    rateLimit?: {
-        requests: number;
+    rateLimit?: { requests: number;
         window: number;
-        burst?: number;
-    };
-    reliability: {
-        timeout: number;
+        burst?: number };
+    reliability: { timeout: number;
         retries: number;
         backoff: 'linear' | 'exponential';
-        healthCheck?: string;
-    };
-    metadata: {
-        description: string;
+        healthCheck?: string };
+    metadata: { description: string;
         category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';
         tags: string[];
         lastSync?: string;
-        version?: string;
-    };
+        version?: string };
 
 }
-export interface DataTransform {
-    id: string;
+}
+export interface DataTransform { id: string;
     name: string;
     type: 'map' | 'filter' | 'aggregate' | 'validate' | 'normalize';
     config: Record<string, any>;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface HistoricalQuery {
-    era: string | string[];
+}
+export interface HistoricalQuery { era: string | string[];
     region?: string | string[];
     category: string;
     subcategory?: string;
@@ -58,11 +49,10 @@ export interface HistoricalQuery {
     limit?: number;
     offset?: number;
     sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
-
+    sortOrder?: 'asc' | 'desc' }
 }
-export interface QueryResult<T = any> {
-    success: boolean;
+}
+export interface QueryResult<T = any> { success: boolean;
     data: T[];
     metadata: {
         total: number;
@@ -71,8 +61,7 @@ export interface QueryResult<T = any> {
         query: HistoricalQuery;
         source: string;
         cached: boolean;
-        executionTime: number;
-}
+        executionTime: number }
     };
     error?: string;
     warnings?: string[];

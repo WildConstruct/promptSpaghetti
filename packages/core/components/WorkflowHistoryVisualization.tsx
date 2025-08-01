@@ -1,8 +1,7 @@
 // Epic 9.4 - Workflow History Visualization Component
 // Component for displaying workflow history and audit trail
 import React, { useState, useEffect } from 'react';
-import { 
-  ClockIcon,
+import { ClockIcon,
   UserIcon,
   ArrowRightIcon,
   CheckCircleIcon,
@@ -12,13 +11,13 @@ import {
   LockOpenIcon,
   DocumentTextIcon,
   EyeIcon,
-  CalendarIcon,
+  CalendarIcon }
   FunnelIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
-}
-interface WorkflowHistoryEntry {
-  id: string;
+
+
+interface WorkflowHistoryEntry { id: string;
   workspace_id: string;
   resource_id: string;
   action_type: string;
@@ -36,28 +35,28 @@ interface WorkflowHistoryEntry {
   maxEntries?: number;
   showFilters?: boolean;
   compact?: boolean;
-  export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualizationProps> = ({,)
-  workspaceId,
-  resourceId,
-  maxEntries = 20,
-  showFilters = true,
+  export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualizationProps> = ({);
+  workspaceId;
+  resourceId;
+  maxEntries = 20;
+  showFilters = true }
   compact = false
-}
-}) => {
-  const {
+
+
+}) => { const {
     states,
     history,
     loading,
     error,
-    fetchStates,
+    fetchStates }
     fetchHistory
-  } = useWorkflowStore();
-  const [filters, setFilters] = useState({)
+ = useWorkflowStore();
+  const [filters, setFilters] = useState({ )
   resource_id: resourceId || '',
   actor_id: '',
   action_type: '',
   date_from: '',
-  date_to: '',
+  date_to: '' }
 });
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   // Load data on mount
@@ -65,31 +64,27 @@ interface WorkflowHistoryEntry {
     fetchStates(workspaceId);
     fetchHistory(workspaceId, { ...filters, limit: maxEntries });
   }, [workspaceId, fetchStates, fetchHistory, filters, maxEntries]);
-  const getStateName = (stateId?: string) => {
-  if (!stateId) return 'Unknown';
+  const getStateName = (stateId?: string) => { if (!stateId) return 'Unknown';
   const state = states.find(s => s.id === stateId);
-  return state ? state.name : 'Unknown'
-  };
-  const getStateColor = (stateId?: string) => {
-  if (!stateId) return '#6B7280';
-  const state = states.find(s => s.id === stateId);
-  return state ? state.color : '#6B7280';
+  return state ? state.name : 'Unknown' }
 };
-  const getActionIcon = (actionType: string) => {
-  switch (actionType) {
+  const getStateColor = (stateId?: string) => { if (!stateId) return '#6B7280';
+  const state = states.find(s => s.id === stateId);
+  return state ? state.color : '#6B7280' };
+  const getActionIcon = (actionType: string) => { switch (actionType) {
   case 'state_changed':,
   return <ArrowRightIcon className="h-4 w-4 text-blue-500" />;
-  case 'approval_requested':,
+  case 'approval_requested':
   return <ClockIcon className="h-4 w-4 text-yellow-500" />;
-  case 'approved':,
+  case 'approved':
   return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
-  case 'rejected':,
+  case 'rejected':
   return <XCircleIcon className="h-4 w-4 text-red-500" />;
-  case 'lock_acquired':,
+  case 'lock_acquired':
   return <LockClosedIcon className="h-4 w-4 text-orange-500" />;
-  case 'lock_released':,
+  case 'lock_released':
   return <LockOpenIcon className="h-4 w-4 text-orange-500" />;
-  default:,
+  default: }
   return <DocumentTextIcon className="h-4 w-4 text-gray-500" />;
 };
   const getActionDescription = (entry: WorkflowHistoryEntry) => {
@@ -109,29 +104,24 @@ interface WorkflowHistoryEntry {
   default:
       return `Performed ${entry.action_type}`;}
   };
-  const formatTimestamp = (timestamp: Date) => {
-    const date = new Date(timestamp);
+  const formatTimestamp = (timestamp: Date) => { const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
     if (diffInHours < 1) {
-      return 'Just now';
-    } else if (diffInHours < 24) {
+      return 'Just now' } else if (diffInHours < 24) {
       return `${diffInHours}h ago`;}
-    } else if (diffInHours < 168) {
+ else if (diffInHours < 168) {
       return `${Math.floor(diffInHours / 24)}d ago`;}
-    } else {
-      return date.toLocaleDateString();
-  };
+ else { return date.toLocaleDateString() };
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
-  const clearFilters = () => {
-  setFilters({)
+  const clearFilters = () => { setFilters({)
   resource_id: resourceId || '',
   actor_id: '',
   action_type: '',
   date_from: '',
-  date_to: '',
+  date_to: '' }
 });
   };
   if (loading) {
@@ -240,7 +230,7 @@ interface WorkflowHistoryEntry {
               key={entry.id}
               className={`flex items-start space-x-4 ${compact ? 'py-2' : 'py-4'} ${}
                 index < history.length - 1 ? 'border-b border-gray-200' : ''
-              }`}
+`}
             >
               {/* Timeline indicator */}
               <div className="flex-shrink-0 relative">
@@ -263,9 +253,9 @@ interface WorkflowHistoryEntry {
                         className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
                         style={{ 
                           backgroundColor: `${getStateColor(entry.new_state_id)}20`}
-},
+
   color: getStateColor(entry.new_state_id);
-  }}
+}
                       >
                         {getStateName(entry.new_state_id)}
                       </span>

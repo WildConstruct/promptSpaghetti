@@ -11,8 +11,7 @@ import { Progress } from '../ui/Progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { useBadgeSystem } from '../../hooks/useBadgeSystem';
-import { 
-  Trophy, 
+import { Trophy, 
   Star, 
   Award, 
   Target, 
@@ -24,43 +23,40 @@ import {
   Gift,
   Bell,
   X,
-  Filter,
+  Filter }
   SortAsc
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
-export interface BadgeShowcaseProps {
-  userId: string;
+
+export interface BadgeShowcaseProps { userId: string;
   variant?: 'full' | 'compact' | 'minimal';
   showProgressBars?: boolean;
   enableNotifications?: boolean;
-  className?: string;
-}
-}
-export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
-  userId,
-  variant = 'full',
-  showProgressBars = true,
-  enableNotifications = true,
+  className?: string }
+
+export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({ )
+  userId
+  variant = 'full'
+  showProgressBars = true
+  enableNotifications = true }
   className = ''
-}) => {
-  const {
-    userBadges,
-    availableBadges,
-    recentUnlocks,
-    getBadgesByCategory,
-    getBadgesByTier,
-    getNextBadges,
-    getBadgeProgress,
-    getStatistics,
-    getLeaderboardPosition,
-    markNotificationRead,
-    clearAllNotifications,
-    hasUnreadNotifications,
+}) => { const {
+    userBadges
+    availableBadges
+    recentUnlocks
+    getBadgesByCategory
+    getBadgesByTier
+    getNextBadges
+    getBadgeProgress
+    getStatistics
+    getLeaderboardPosition
+    markNotificationRead
+    clearAllNotifications
+    hasUnreadNotifications }
     isLoading
-  } = useBadgeSystem({ )
-    userId, 
-    autoCheckBadges: true, 
+ = useBadgeSystem({ )
+    userId
+    autoCheckBadges: true }
     enableNotifications 
   });
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -68,44 +64,39 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   const [sortBy, setSortBy] = useState<'date' | 'rarity' | 'points'>('date');
   const statistics = getStatistics();
   const leaderboardPosition = getLeaderboardPosition();
-  const getBadgeIcon = (iconString: string) => {
-  // Map emoji strings to React icons for consistency
-  const iconMap: Record<string, React.ReactNode> = {,
-  '✉️': <Shield className="w-4 h-4" />,
-  '🆔': <Award className="w-4 h-4" />,
-  '🎭': <Star className="w-4 h-4" />,
-  '🌟': <Zap className="w-4 h-4" />,
-  '🏆': <Trophy className="w-4 h-4" />,
-  '💎': <Crown className="w-4 h-4" />,
-  '💰': <Target className="w-4 h-4" />,
-  '🔥': <TrendingUp className="w-4 h-4" />,
-  '⭐': <Star className="w-4 h-4" />,
-  '🎓': <Users className="w-4 h-4" />,
-  '🚀': <Gift className="w-4 h-4" />,
-  '👥': <Users className="w-4 h-4" />,
-  '🎯': <Target className="w-4 h-4" />,
-  '👑': <Crown className="w-4 h-4" />,
+  const getBadgeIcon = (iconString: string) => { // Map emoji strings to React icons for consistency
+  const iconMap: Record<string, React.ReactNode> = {
+  '✉️': <Shield className="w-4 h-4" />
+  '🆔': <Award className="w-4 h-4" />
+  '🎭': <Star className="w-4 h-4" />
+  '🌟': <Zap className="w-4 h-4" />
+  '🏆': <Trophy className="w-4 h-4" />
+  '💎': <Crown className="w-4 h-4" />
+  '💰': <Target className="w-4 h-4" />
+  '🔥': <TrendingUp className="w-4 h-4" />
+  '⭐': <Star className="w-4 h-4" />
+  '🎓': <Users className="w-4 h-4" />
+  '🚀': <Gift className="w-4 h-4" />
+  '👥': <Users className="w-4 h-4" />
+  '🎯': <Target className="w-4 h-4" />
+  '👑': <Crown className="w-4 h-4" /> }
 };
     return iconMap[iconString] || <Award className="w-4 h-4" />;
   };
-  const getTierColor = (tier: string) => {
-  switch (tier) {
+  const getTierColor = (tier: string) => { switch (tier) {
   case 'diamond': return 'tier-diamond';
   case 'platinum': return 'tier-platinum';
   case 'gold': return 'tier-gold';
   case 'silver': return 'tier-silver';
   case 'bronze': return 'tier-bronze';
-  default: return 'tier-bronze';
-};
-  const getRarityColor = (rarity: string) => {
-  switch (rarity) {
+  default: return 'tier-bronze' };
+  const getRarityColor = (rarity: string) => { switch (rarity) {
   case 'legendary': return 'rarity-legendary';
   case 'epic': return 'rarity-epic';
   case 'rare': return 'rarity-rare';
   case 'uncommon': return 'rarity-uncommon';
   case 'common': return 'rarity-common';
-  default: return 'rarity-common';
-};
+  default: return 'rarity-common' };
   const renderOverview = () => (;);
     <div className="badge-overview">
       <div className="overview-stats">
@@ -341,24 +332,21 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
       </Card>
     );
   };
-  const getFilteredBadges = () => {
-  let filtered = availableBadges;
+  const getFilteredBadges = () => { let filtered = availableBadges;
   if (selectedCategory !== 'all') {
   filtered = getBadgesByCategory(selectedCategory as any);
   if (selectedTier !== 'all') {
   filtered = filtered.filter(badge => badge.tier === selectedTier);
   // Sort badges
   switch (sortBy) {
-  case 'date':,
-  filtered = [...filtered].sort((a, b) => {
-  const aUnlocked = userBadges.find(ub => ub.badgeId === a.id);
+  case 'date': }
+  filtered = [...filtered].sort((a, b) => { const aUnlocked = userBadges.find(ub => ub.badgeId === a.id);
   const bUnlocked = userBadges.find(ub => ub.badgeId === b.id);
   if (aUnlocked && bUnlocked) {
   return bUnlocked.unlockedAt - aUnlocked.unlockedAt;
   if (aUnlocked) return -1;
   if (bUnlocked) return 1;
-  return 0;
-});
+  return 0 });
       break;
     case 'points':
       filtered = [...filtered].sort((a, b) => b.points - a.points);
@@ -555,7 +543,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           </div>
         </TabsContent>
       </Tabs>
-      <style>{`
+      <style>{ `
         .badge-showcase {
           max-width: 1200px;
   margin: 0 auto;
@@ -581,7 +569,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           gap: 1rem;
         .stat-card {
           transition: transform 0.2s ease;
-        .stat-card:hover {,
+        .stat-card:hover {
   transform: translateY(-2px);
         .stat-content {
           display: flex;
@@ -597,7 +585,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           font-weight: 700;
   color: #1f2937;
         .stat-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .badge-grid {
           display: grid;
@@ -612,9 +600,9 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           border-left-color: #10b981;
         .badge-card.locked {
           background: #f9fafb;
-          border-left-color: #e5e7eb;
+          border-left-color: #e5e7eb
   opacity: 0.8;
-        .badge-card:hover {,
+        .badge-card:hover {
   transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         .badge-content {
@@ -627,7 +615,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
         .badge-icon {
           width: 3rem;
   height: 3rem;
-          border-radius: 50%;
+          border-radius: 50%
   display: flex;
           align-items: center;
           justify-content: center;
@@ -641,25 +629,23 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   color: #1f2937;
           margin-bottom: 0.5rem;
         .badge-description {
-          font-size: 0.875rem;
+          font-size: 0.875rem }
   color: #6b7280;
           margin-bottom: 0.5rem;
-        .badge-points {
-          font-size: 0.75rem;
+        .badge-points { font-size: 0.75rem;
           font-weight: 600;
   color: #059669;
-        .tier-diamond { border-left-color: #a855f7; }
-        .tier-platinum { border-left-color: #06b6d4; }
-        .tier-gold { border-left-color: #f59e0b; }
-        .tier-silver { border-left-color: #6b7280; }
-        .tier-bronze { border-left-color: #92400e; }
-        .rarity-legendary { background: linear-gradient(135deg, #7c3aed, #a855f7); }
-        .rarity-epic { background: linear-gradient(135deg, #2563eb, #3b82f6); }
-        .rarity-rare { background: linear-gradient(135deg, #059669, #10b981); }
-        .rarity-uncommon { background: linear-gradient(135deg, #d97706, #f59e0b); }
-        .rarity-common { background: linear-gradient(135deg, #6b7280, #9ca3af); }
-        .filters {
-          display: flex;
+        .tier-diamond { border-left-color: #a855f7 }
+        .tier-platinum { border-left-color: #06b6d4 }
+        .tier-gold { border-left-color: #f59e0b }
+        .tier-silver { border-left-color: #6b7280 }
+        .tier-bronze { border-left-color: #92400e }
+        .rarity-legendary { background: linear-gradient(135deg, #7c3aed, #a855f7) }
+        .rarity-epic { background: linear-gradient(135deg, #2563eb, #3b82f6) }
+        .rarity-rare { background: linear-gradient(135deg, #059669, #10b981) }
+        .rarity-uncommon { background: linear-gradient(135deg, #d97706, #f59e0b) }
+        .rarity-common { background: linear-gradient(135deg, #6b7280, #9ca3af) }
+        .filters { display: flex;
   gap: 1rem;
           margin-bottom: 1.5rem;
           flex-wrap: wrap;
@@ -682,14 +668,12 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: spin 1s linear infinite;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
         /* Compact and minimal variants */
-        .minimal {
-          padding: 0.5rem;
+        .minimal { padding: 0.5rem;
         .minimal-stats {
           display: flex;
   gap: 1rem;
@@ -698,7 +682,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           display: flex;
           align-items: center;
   gap: 0.25rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .compact .compact-overview {
           display: flex;
@@ -718,7 +702,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
         .recent-badge-mini {
           width: 2rem;
   height: 2rem;
-          border-radius: 50%;
+          border-radius: 50% }
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           color: white;
   display: flex;

@@ -3,8 +3,8 @@ export type NotificationPriority = 'high' | 'medium' | 'low';
 export type NotificationStatus = 'unread' | 'read' | 'archived';
 
 }
-export interface Notification {
-    id: string;
+}
+export interface Notification { id: string;
     user_id: string;
     workspace_id?: string;
     project_id?: string;
@@ -20,7 +20,7 @@ export interface Notification {
         workspace_name?: string;
         resource_id?: string;
         resource_name?: string;
-        [key: string]: any;
+        [key: string]: any }
 }
     };
     read_at?: string;
@@ -28,8 +28,8 @@ export interface Notification {
     updated_at: string;
 
 }
-export interface NotificationPreferences {
-    user_id: string;
+}
+export interface NotificationPreferences { user_id: string;
     workspace_id?: string;
     email_enabled: boolean;
     push_enabled: boolean;
@@ -38,23 +38,21 @@ export interface NotificationPreferences {
         [key in NotificationType]?: {
             in_app?: boolean;
             email?: boolean;
-            push?: boolean;
+            push?: boolean }
 }
         };
     };
-    quiet_hours: {
-        enabled: boolean;
+    quiet_hours: { enabled: boolean;
         start: string;
         end: string;
-        timezone: string;
-    };
+        timezone: string };
     digest_frequency: 'immediate' | 'hourly' | 'daily' | 'weekly' | 'never';
     created_at?: string;
     updated_at?: string;
 
 }
-export interface NotificationTemplate {
-    id: string;
+}
+export interface NotificationTemplate { id: string;
     type: NotificationType;
     name: string;
     title_template: string;
@@ -62,55 +60,50 @@ export interface NotificationTemplate {
     variables: string[];
     default_priority: NotificationPriority;
     created_at: string;
-    updated_at: string;
-
+    updated_at: string }
 }
-export interface NotificationDeliveryLog {
-    id: string;
+}
+export interface NotificationDeliveryLog { id: string;
     notification_id: string;
     delivery_method: 'in_app' | 'email' | 'push';
     status: 'pending' | 'sent' | 'delivered' | 'failed';
     error_message?: string;
     delivered_at?: string;
-    created_at: string;
-
+    created_at: string }
 }
-export interface NotificationStats {
-    total: number;
+}
+export interface NotificationStats { total: number;
     unread: number;
     by_type: Record<NotificationType, number>;
     by_priority: Record<NotificationPriority, number>;
     recent_activity: {
         today: number;
         this_week: number;
-        this_month: number;
+        this_month: number }
 }
     };
 
 }
-export interface RealTimeNotificationConnection {
-    status: 'connected' | 'connecting' | 'disconnected' | 'error';
+}
+export interface RealTimeNotificationConnection { status: 'connected' | 'connecting' | 'disconnected' | 'error';
     lastConnected?: Date;
     reconnectAttempts: number;
-    error?: string;
-
+    error?: string }
 }
-export interface NotificationEvent {
-    type: 'notification_created' | 'notification_updated' | 'notification_deleted';
+}
+export interface NotificationEvent { type: 'notification_created' | 'notification_updated' | 'notification_deleted';
     notification: Notification;
-    timestamp: string;
-
+    timestamp: string }
 }
-export interface NotificationListResponse {
-    notifications: Notification[];
+}
+export interface NotificationListResponse { notifications: Notification[];
     total: number;
     unread_count: number;
     has_more: boolean;
-    next_cursor?: string;
-
+    next_cursor?: string }
 }
-export interface NotificationCreateRequest {
-    user_id: string;
+}
+export interface NotificationCreateRequest { user_id: string;
     workspace_id?: string;
     project_id?: string;
     type: NotificationType;
@@ -118,8 +111,8 @@ export interface NotificationCreateRequest {
     title: string;
     message: string;
     action_url?: string;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
+}
 }
 export interface UseNotificationsReturn {
     notifications: Notification[];
@@ -137,4 +130,5 @@ export interface UseNotificationsReturn {
     setUnreadOnly: (unreadOnly: boolean) => void;
 
 //# sourceMappingURL=NotificationTypes.d.ts.map
+}
 }

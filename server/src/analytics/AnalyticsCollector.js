@@ -54,8 +54,8 @@ export class AnalyticsCollector extends EventEmitter {
     };
     if (this.config.enabled) {
       this.startCollection();
-    }
-  }
+
+
   /**
    * Start analytics collection
    */
@@ -82,7 +82,7 @@ export class AnalyticsCollector extends EventEmitter {
     setInterval(() => {
       this.cleanupOldEvents();
     }, 60000); // cleanup every minute
-  }
+
   /**
    * Stop analytics collection
    */
@@ -105,8 +105,8 @@ export class AnalyticsCollector extends EventEmitter {
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
       this.flushTimer = null;
-    }
-  }
+
+
   /**
    * Record a graph execution start event
    */
@@ -125,7 +125,7 @@ export class AnalyticsCollector extends EventEmitter {
       },
     };
     this.recordEvent(event);
-  }
+
   /**
    * Record a graph execution completion event
    */
@@ -145,7 +145,7 @@ export class AnalyticsCollector extends EventEmitter {
       },
     };
     this.recordEvent(event);
-  }
+
   /**
    * Record a graph execution error event
    */
@@ -165,7 +165,7 @@ export class AnalyticsCollector extends EventEmitter {
       },
     };
     this.recordEvent(event);
-  }
+
   /**
    * Record a node execution event
    */
@@ -188,7 +188,7 @@ export class AnalyticsCollector extends EventEmitter {
       },
     };
     this.recordEvent(event);
-  }
+
   /**
    * Record token usage event
    */
@@ -210,7 +210,7 @@ export class AnalyticsCollector extends EventEmitter {
       },
     };
     this.recordEvent(event);
-  }
+
   /**
    * Record user interaction event
    */
@@ -226,7 +226,7 @@ export class AnalyticsCollector extends EventEmitter {
       },
     };
     this.recordEvent(event);
-  }
+
   /**
    * Record performance metric
    */
@@ -246,7 +246,7 @@ export class AnalyticsCollector extends EventEmitter {
       },
     };
     this.recordEvent(event);
-  }
+
   /**
    * Get analytics data for a time window
    */
@@ -272,16 +272,16 @@ export class AnalyticsCollector extends EventEmitter {
         if (graphEvent.metadata.executionTimeMs) {
           totalExecutionTime += graphEvent.metadata.executionTimeMs;
           executionEventCount++;
-        }
-      }
+
+
       if (event.type === AnalyticsEventType.TOKEN_USAGE) {
         const tokenEvent = event;
         totalTokens += tokenEvent.metadata.totalTokens;
         totalCost += tokenEvent.metadata.estimatedCost;
-      }
+
       if (event.type.includes('error')) {
         errorCount++;
-      }
+
     });
     return {
       startTime,
@@ -298,7 +298,7 @@ export class AnalyticsCollector extends EventEmitter {
         errorRate: windowEvents.length > 0 ? (errorCount / windowEvents.length) * 100 : 0,
       },
     };
-  }
+
   /**
    * Get current analytics summary
    */
@@ -314,7 +314,7 @@ export class AnalyticsCollector extends EventEmitter {
       bufferSize: this.events.length,
       isCollectionActive: this.config.enabled && this.flushTimer !== null,
     };
-  }
+
   /**
    * Record an analytics event
    */
@@ -323,22 +323,22 @@ export class AnalyticsCollector extends EventEmitter {
     // Apply sampling for non-critical events
     if (!this.isCriticalEvent(event.type) && Math.random() > this.config.sampleRate) {
       return;
-    }
+
     // Apply privacy mode if enabled
     if (this.config.privacyMode) {
       event = this.anonymizeEvent(event);
-    }
+
     this.events.push(event);
     this.emit('event_recorded', event);
     // Check if buffer is full
     if (this.events.length >= this.config.bufferSize) {
       this.flushEvents();
-    }
+
     // Prevent memory overflow
     if (this.events.length > this.config.maxEvents) {
       this.events = this.events.slice(-this.config.maxEvents);
-    }
-  }
+
+
   /**
    * Check if an event type is critical (always recorded)
    */
@@ -351,7 +351,7 @@ export class AnalyticsCollector extends EventEmitter {
       AnalyticsEventType.USER_SESSION_END,
     ];
     return criticalEvents.includes(eventType);
-  }
+
   /**
    * Anonymize sensitive data in events
    */
@@ -360,14 +360,14 @@ export class AnalyticsCollector extends EventEmitter {
     // Remove or hash sensitive fields
     if (anonymized.userId) {
       anonymized.userId = this.hashString(anonymized.userId);
-    }
+
     // Remove sensitive metadata
     if (anonymized.metadata) {
       const { userAgent, ...cleanMetadata } = anonymized.metadata;
       anonymized.metadata = cleanMetadata;
-    }
+
     return anonymized;
-  }
+
   /**
    * Simple hash function for anonymization
    */
@@ -377,9 +377,9 @@ export class AnalyticsCollector extends EventEmitter {
       const char = str.charCodeAt(i);
       hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32bit integer
-    }
+
     return Math.abs(hash).toString(16);
-  }
+
   /**
    * Flush events to persistent storage
    */
@@ -390,7 +390,7 @@ export class AnalyticsCollector extends EventEmitter {
     // Emit flush event for storage handlers
     this.emit('events_flushed', eventsToFlush);
     console.log(`Flushed ${eventsToFlush.length} analytics events`);
-  }
+
   /**
    * Clean up old events beyond retention period
    */
@@ -401,8 +401,8 @@ export class AnalyticsCollector extends EventEmitter {
     const removedCount = originalLength - this.events.length;
     if (removedCount > 0) {
       console.log(`Cleaned up ${removedCount} old analytics events`);
-    }
-  }
+
+
   /**
    * Update configuration
    */
@@ -410,10 +410,10 @@ export class AnalyticsCollector extends EventEmitter {
     this.config = { ...this.config, ...newConfig };
     if (!this.config.enabled && this.flushTimer) {
       this.stopCollection();
-    } else if (this.config.enabled && !this.flushTimer) {
+ else if (this.config.enabled && !this.flushTimer) {
       this.startCollection();
-    }
-  }
+
+
   /**
    * Export analytics data
    */
@@ -429,7 +429,7 @@ export class AnalyticsCollector extends EventEmitter {
         null,
         2
       );
-    }
+
     // CSV export (simplified)
     const headers = ['id', 'type', 'timestamp', 'sessionId', 'userId', 'metadata'];
     const rows = this.events.map(event => [
@@ -441,5 +441,5 @@ export class AnalyticsCollector extends EventEmitter {
       JSON.stringify(event.metadata),
     ]);
     return [headers, ...rows].map(row => row.join(',')).join('\n');
-  }
-}
+
+

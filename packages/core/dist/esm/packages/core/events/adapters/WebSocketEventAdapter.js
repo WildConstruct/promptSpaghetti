@@ -140,7 +140,7 @@ void {
 {
     categories: [EventCategory.COLLABORATION],
         types;
-    [,
+    [
         'document_updated', 'node_created', 'node_updated', 'node_deleted',
         'edge_created', 'edge_updated', 'edge_deleted',
         'session_created', 'session_joined', 'session_left',

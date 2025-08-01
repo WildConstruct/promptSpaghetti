@@ -12,8 +12,7 @@
  */
 
 // Core Framework
-export {
-  SecurityDashboardFramework,
+export { SecurityDashboardFramework,
   DashboardType,
   DashboardTheme,
   SecurityRole,
@@ -24,64 +23,58 @@ export {
   type WidgetDefinition,
   type DashboardPermissions,
   type WidgetPermissions,
-  type ThemeConfig,
+  type ThemeConfig }
   type SecurityDashboardFrameworkOptions
-} from './SecurityDashboardFramework';
+ from './SecurityDashboardFramework';
 
 // Import SecurityRole and DashboardType for local use
 import { SecurityRole, DashboardType } from './SecurityDashboardFramework';
 
 // Dashboard Registry
-export {
-  DashboardRegistry,
+export { DashboardRegistry,
   type DashboardTemplate,
-  type DashboardPreset,
+  type DashboardPreset }
   type RegistryOptions
-} from './DashboardRegistry';
+ from './DashboardRegistry';
 
 // Dashboard Implementations
-export {
-  ExecutiveSecurityDashboard,
+export { ExecutiveSecurityDashboard,
   type ExecutiveMetrics,
-  type ExecutiveInsight,
+  type ExecutiveInsight }
   type ExecutiveSecurityDashboardProps
-} from './ExecutiveSecurityDashboard';
+ from './ExecutiveSecurityDashboard';
 
-export {
-  OperationalSecurityDashboard,
+export { OperationalSecurityDashboard,
   type SecurityAlert,
   type ResponseAction,
   type SystemStatus,
   type ThreatIntelligence,
-  type OperationalMetrics,
+  type OperationalMetrics }
   type OperationalSecurityDashboardProps
-} from './OperationalSecurityDashboard';
+ from './OperationalSecurityDashboard';
 
-export {
-  ComplianceSecurityDashboard,
+export { ComplianceSecurityDashboard,
   ComplianceFramework,
   ComplianceStatus,
   type ComplianceRequirement,
   type Evidence,
   type Finding,
   type AuditCycle,
-  type ComplianceMetrics,
+  type ComplianceMetrics }
   type ComplianceSecurityDashboardProps
-} from './ComplianceSecurityDashboard';
+ from './ComplianceSecurityDashboard';
 /**
  * Security Dashboard Framework Factory
  * 
  * Creates and configures a complete security dashboard framework instance
  * with registry, themes, and default dashboard types.
  */
-export class SecurityDashboardFactory {
-  private framework: SecurityDashboardFramework;
+export class SecurityDashboardFactory { private framework: SecurityDashboardFramework;
   private registry: DashboardRegistry;
-  constructor(options: {)
+  constructor(options: {) }
   frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
   registryOptions?: Partial<RegistryOptions>;
-} = {}) {
-  // Initialize framework
+ = {}) { // Initialize framework
   this.framework = new SecurityDashboardFramework(options.frameworkOptions);
   // Initialize registry
   this.registry = new DashboardRegistry(options.registryOptions);
@@ -90,20 +83,20 @@ export class SecurityDashboardFactory {
   /**
   * Get the framework instance
   */
-  getFramework(): SecurityDashboardFramework {,
+  getFramework(): SecurityDashboardFramework {
   return this.framework;
   /**
   * Get the registry instance
   */
-  getRegistry(): DashboardRegistry {,
+  getRegistry(): DashboardRegistry {
   return this.registry;
   /**
   * Create a dashboard from template
   */
   createDashboard();
-  templateId: string,
-  userId: string,
-  overrides?: Partial<DashboardConfig>): Promise<DashboardConfig | null> {,
+  templateId: string
+  userId: string
+  overrides?: Partial<DashboardConfig>): Promise<DashboardConfig | null> {
   const config = this.registry.createDashboardFromTemplate(templateId, overrides);
   if (!config) {
   return Promise.resolve(null);
@@ -113,9 +106,9 @@ export class SecurityDashboardFactory {
   * Create a dashboard from preset
   */
   createDashboardFromPreset();
-  presetId: string,
-  userId: string,
-  overrides?: Partial<DashboardConfig>): Promise<DashboardConfig | null> {,
+  presetId: string
+  userId: string
+  overrides?: Partial<DashboardConfig>): Promise<DashboardConfig | null> {
   const config = this.registry.createDashboardFromPreset(presetId, overrides);
   if (!config) {
   return Promise.resolve(null);
@@ -125,28 +118,28 @@ export class SecurityDashboardFactory {
   * Get available dashboards for user
   */
   getAvailableDashboards();
-  userId: string,
-  type?: DashboardType): DashboardConfig {,
+  userId: string
+  type?: DashboardType): DashboardConfig {
   return this.framework.listDashboards(userId, type);
   /**
   * Get dashboard templates
   */
   getTemplates();
-  type?: DashboardType,
-  role?: SecurityRole,
-  category?: string): DashboardTemplate {,
+  type?: DashboardType
+  role?: SecurityRole
+  category?: string): DashboardTemplate {
   return this.registry.getDashboardTemplates(type, role, category);
   /**
   * Get dashboard presets
   */
   getPresets();
-  dashboardType?: DashboardType,
-  layout?: string): DashboardPreset {,
+  dashboardType?: DashboardType
+  layout?: string): DashboardPreset {
   return this.registry.getDashboardPresets(dashboardType, layout);
   /**
   * Register default dashboard types with the framework
   */
-  private registerDefaultDashboards(): void {,
+  private registerDefaultDashboards(): void {
   const templates = this.registry.getDashboardTemplates();
   for (const template of templates) {
   // Create a default configuration from the template
@@ -158,30 +151,27 @@ export class SecurityDashboardFactory {
   * Get framework statistics
   */
   getStatistics(): {
-  framework: {
+  framework: { }
   dashboardCount: number;
   widgetCount: number;
   themeCount: number;
 };
-    registry: {
+    registry: { 
   dashboardCount: number;
   presetCount: number;
   widgetCount: number;
-  categoriesByType: Record<DashboardType, number>;
-};
-    return {
-  framework: {
-  dashboardCount: this.framework['dashboards'].size,
-  widgetCount: this.framework['widgets'].size,
-  themeCount: this.framework['themes'].size,
-},
+  categoriesByType: Record<DashboardType, number> };
+    return { framework: {
+  dashboardCount: this.framework['dashboards'].size
+  widgetCount: this.framework['widgets'].size
+  themeCount: this.framework['themes'].size }
+
   registry: this.registry.getRegistryStats();
   };
   /**
    * Destroy the factory and cleanup resources
    */
-  destroy(): void {
-  this.framework.destroy();
+  destroy(): void { this.framework.destroy();
   this.registry.clear();
   /**
   * Default factory instance for convenience
@@ -189,67 +179,58 @@ export class SecurityDashboardFactory {
   /**
   * Utility function to create a dashboard factory with custom options
   */
-  export function createSecurityDashboardFactory(options: {)
+  export function createSecurityDashboardFactory(options: {) }
   frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
   registryOptions?: Partial<RegistryOptions>;
-} = {}): SecurityDashboardFactory {
-  return new SecurityDashboardFactory(options);
+ = {}): SecurityDashboardFactory { return new SecurityDashboardFactory(options);
   /**
   * Utility function to get supported dashboard types
   */
-  export function getSupportedDashboardTypes(): {
+  export function getSupportedDashboardTypes(): { }
   type: DashboardType;
   name: string;
   description: string;
   targetRoles: SecurityRole;
-}[] {
-  return [
+[] { return [
   {
-  type: DashboardType.EXECUTIVE,
-  name: 'Executive Security Dashboard',
-  description: 'High-level security overview for C-level executives',
-  targetRoles: [SecurityRole.EXECUTIVE, SecurityRole.SECURITY_ADMIN],
-}
-    {
-  type: DashboardType.OPERATIONAL,
-  name: 'Security Operations Center',
-  description: 'Real-time threat monitoring and incident response',
-  targetRoles: [SecurityRole.SOC_ANALYST, SecurityRole.SECURITY_ANALYST, SecurityRole.INCIDENT_RESPONDER],
-}
-    {
-  type: DashboardType.COMPLIANCE,
-  name: 'Compliance Management',
-  description: 'Regulatory compliance tracking and audit management',
-  targetRoles: [SecurityRole.COMPLIANCE_OFFICER, SecurityRole.AUDITOR],
-}
-    {
-  type: DashboardType.INCIDENT_RESPONSE,
-  name: 'Incident Response',
-  description: 'Incident investigation and response coordination',
-  targetRoles: [SecurityRole.INCIDENT_RESPONDER, SecurityRole.SECURITY_ANALYST],
-}
-    {
-  type: DashboardType.THREAT_INTELLIGENCE,
-  name: 'Threat Intelligence',
-  description: 'Advanced threat analysis and intelligence feeds',
-  targetRoles: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-}
-    {
-  type: DashboardType.VULNERABILITY,
-  name: 'Vulnerability Management',
-  description: 'Vulnerability assessment and remediation tracking',
-  targetRoles: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-}
-    {
-  type: DashboardType.ANALYTICS,
-  name: 'Security Analytics',
-  description: 'Advanced security data analysis and reporting',
-  targetRoles: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-}
-    {
-      type: DashboardType.AUDIT,
-      name: 'Security Audit',
-      description: 'Security audit trail and forensic analysis',
+  type: DashboardType.EXECUTIVE
+  name: 'Executive Security Dashboard'
+  description: 'High-level security overview for C-level executives'
+  targetRoles: [SecurityRole.EXECUTIVE, SecurityRole.SECURITY_ADMIN] }
+
+    { type: DashboardType.OPERATIONAL
+  name: 'Security Operations Center'
+  description: 'Real-time threat monitoring and incident response'
+  targetRoles: [SecurityRole.SOC_ANALYST, SecurityRole.SECURITY_ANALYST, SecurityRole.INCIDENT_RESPONDER] }
+
+    { type: DashboardType.COMPLIANCE
+  name: 'Compliance Management'
+  description: 'Regulatory compliance tracking and audit management'
+  targetRoles: [SecurityRole.COMPLIANCE_OFFICER, SecurityRole.AUDITOR] }
+
+    { type: DashboardType.INCIDENT_RESPONSE
+  name: 'Incident Response'
+  description: 'Incident investigation and response coordination'
+  targetRoles: [SecurityRole.INCIDENT_RESPONDER, SecurityRole.SECURITY_ANALYST] }
+
+    { type: DashboardType.THREAT_INTELLIGENCE
+  name: 'Threat Intelligence'
+  description: 'Advanced threat analysis and intelligence feeds'
+  targetRoles: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN] }
+
+    { type: DashboardType.VULNERABILITY
+  name: 'Vulnerability Management'
+  description: 'Vulnerability assessment and remediation tracking'
+  targetRoles: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN] }
+
+    { type: DashboardType.ANALYTICS
+  name: 'Security Analytics'
+  description: 'Advanced security data analysis and reporting'
+  targetRoles: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN] }
+
+    { type: DashboardType.AUDIT
+      name: 'Security Audit'
+      description: 'Security audit trail and forensic analysis' }
       targetRoles: [SecurityRole.AUDITOR, SecurityRole.SECURITY_ADMIN]
   ];
 

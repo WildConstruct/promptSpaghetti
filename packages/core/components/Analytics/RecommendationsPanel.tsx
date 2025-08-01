@@ -5,8 +5,7 @@ import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
-import { 
-  Lightbulb, 
+import { Lightbulb, 
   TrendingUp, 
   DollarSign, 
   Zap, 
@@ -18,82 +17,61 @@ import {
   ArrowRight,
   RefreshCw,
   Star,
-  ThumbsUp,
+  ThumbsUp }
   ThumbsDown
-} from 'lucide-react';
+ from 'lucide-react';
 /**
  * Recommendation priority colors
  */
-const PRIORITY_COLORS = {
-  high: 'text-red-600 bg-red-50 border-red-200',
-  medium: 'text-yellow-600 bg-yellow-50 border-yellow-200',
-  low: 'text-green-600 bg-green-50 border-green-200',
-};
+const PRIORITY_COLORS = {};
 /**
  * Recommendation type icons
  */
-const RECOMMENDATION_TYPE_ICONS = {
-  model_switch: Settings,
-  usage_optimization: Zap,
-  budget_adjustment: DollarSign,
-  performance_improvement: TrendingUp,
-  cost_reduction: DollarSign,
-  feature_adoption: Star,
-};
+const RECOMMENDATION_TYPE_ICONS = {};
 /**
  * Recommendation item props
  */
-}
-interface RecommendationItemProps {
-  recommendation: unknown;
+
+
+interface RecommendationItemProps { recommendation: unknown;
   onApply?: (recommendationId: string) => void;
   onDismiss?: (recommendationId: string) => void;
   onFeedback?: (recommendationId: string, feedback: 'positive' | 'negative') => void;
   /**
   * Recommendation item component
   */
-  const RecommendationItem: React.FC<RecommendationItemProps> = ({,)
-  recommendation,
-  onApply,
-  onDismiss,
+  const RecommendationItem: React.FC<RecommendationItemProps> = ({);
+  recommendation;
+  onApply;
+  onDismiss }
   onFeedback
-}
-}) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+
+
+}) => { const [isExpanded, setIsExpanded] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [feedback, setFeedback] = useState<'positive' | 'negative' | null>(null);
   const handleApply = useCallback(async () => {
     if (onApply) {
       setIsProcessing(true);
       try {
-        await onApply(recommendation.id || 'unknown');
-      } finally {
-        setIsProcessing(false);
-  }, [recommendation.id, onApply]);
-  const handleDismiss = useCallback(async () => {
-    if (onDismiss) {
+        await onApply(recommendation.id || 'unknown') } finally { setIsProcessing(false) }, [recommendation.id, onApply]);
+  const handleDismiss = useCallback(async () => { if (onDismiss) {
       setIsProcessing(true);
       try {
-        await onDismiss(recommendation.id || 'unknown');
-      } finally {
-        setIsProcessing(false);
-  }, [recommendation.id, onDismiss]);
-  const handleFeedback = useCallback(async (feedbackType: 'positive' | 'negative') => {
-    if (onFeedback) {
+        await onDismiss(recommendation.id || 'unknown') } finally { setIsProcessing(false) }, [recommendation.id, onDismiss]);
+  const handleFeedback = useCallback(async (feedbackType: 'positive' | 'negative') => { if (onFeedback) {
       setFeedback(feedbackType);
-      await onFeedback(recommendation.id || 'unknown', feedbackType);
-  }, [recommendation.id, onFeedback]);
+      await onFeedback(recommendation.id || 'unknown', feedbackType) }, [recommendation.id, onFeedback]);
   const IconComponent = RECOMMENDATION_TYPE_ICONS[recommendation.type as keyof typeof RECOMMENDATION_TYPE_ICONS] || Lightbulb;
   const priorityClass = PRIORITY_COLORS[recommendation.priority as keyof typeof PRIORITY_COLORS] || PRIORITY_COLORS.medium;
-  const getImpactIcon = (impact: string) => {
-  switch (impact) {
+  const getImpactIcon = (impact: string) => { switch (impact) {
   case 'high':,
   return <TrendingUp className="w-4 h-4 text-red-600" />;
-  case 'medium':,
+  case 'medium':
   return <TrendingUp className="w-4 h-4 text-yellow-600" />;
-  case 'low':,
+  case 'low':
   return <TrendingUp className="w-4 h-4 text-green-600" />;
-  default:,
+  default: }
   return <TrendingUp className="w-4 h-4 text-gray-600" />;
 };
   return;
@@ -233,17 +211,18 @@ interface RecommendationItemProps {
 /**
  * Recommendation summary props
  */
-}
-interface RecommendationSummaryProps {
-  recommendations: unknown;
+
+
+interface RecommendationSummaryProps { recommendations: unknown;
   onRefresh?: () => void;
   /**
   * Recommendation summary component
   */
-  const RecommendationSummary: React.FC<RecommendationSummaryProps> = ({,)
-  recommendations,
+  const RecommendationSummary: React.FC<RecommendationSummaryProps> = ({);
+  recommendations }
   onRefresh
-}
+
+
 }) => {
   const totalSavings = recommendations.reduce((sum, rec) => sum + (rec.estimatedSavings || 0), 0);
   const highPriorityCount = recommendations.filter(rec => rec.priority === 'high').length;
@@ -316,7 +295,7 @@ interface RecommendationSummaryProps {
  * Recommendations panel props
  */
 
-}
+
 export interface RecommendationsPanelProps {
   recommendations: unknown;
   analyticsClient: AnalyticsClient;
@@ -327,25 +306,23 @@ export interface RecommendationsPanelProps {
   /**
   * Recommendations panel component
   */
-}
-}
-export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
-  recommendations,
-  analyticsClient,
-  userId,
-  organizationId,
-  onRefresh,
+
+
+export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({ )
+  recommendations
+  analyticsClient
+  userId
+  organizationId
+  onRefresh }
   className = ''
-}) => {
-  const [filter, setFilter] = useState<'all' | 'high' | 'medium' | 'low'>('all');
+}) => { const [filter, setFilter] = useState<'all' | 'high' | 'medium' | 'low'>('all');
   const [sortBy, setSortBy] = useState<'priority' | 'savings' | 'impact'>('priority');
   /**
    * Filter recommendations
    */
   const filteredRecommendations = recommendations.filter(rec => {)
   if (filter === 'all') return true;
-    return rec.priority === filter;
-  });
+    return rec.priority === filter });
   /**
    * Sort recommendations
    */
@@ -373,27 +350,23 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
   /**
    * Handle dismiss recommendation
    */
-  const handleDismissRecommendation = useCallback(async (recommendationId: string) => {
-  // This would implement the recommendation dismissal logic
-  console.log('Dismissing recommendation:', recommendationId);
-}, []);
+  const handleDismissRecommendation = useCallback(async (recommendationId: string) => { // This would implement the recommendation dismissal logic
+  console.log('Dismissing recommendation:', recommendationId) }, []);
   /**
    * Handle recommendation feedback
    */
   const handleRecommendationFeedback = useCallback(async (;);
     recommendationId: string, 
-    feedback: 'positive' | 'negative') => {,
+    feedback: 'positive' | 'negative') => { ,
   // This would send feedback to the analytics system
-  console.log('Recommendation feedback:', recommendationId, feedback);
-}, []);
+  console.log('Recommendation feedback:', recommendationId, feedback) }, []);
   /**
    * Group recommendations by type
    */
-  const getRecommendationsByType = () => {
-  const types = {
+  const getRecommendationsByType = () => { const types = {
   cost_reduction: recommendations.filter(r => r.type === 'model_switch' || r.type === 'usage_optimization' || r.type === 'budget_adjustment'),
   performance: recommendations.filter(r => r.type === 'performance_improvement'),
-  feature_adoption: recommendations.filter(r => r.type === 'feature_adoption'),
+  feature_adoption: recommendations.filter(r => r.type === 'feature_adoption') }
 };
     return types;
   };

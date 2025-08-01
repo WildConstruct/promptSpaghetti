@@ -490,8 +490,9 @@ if (extension.dependencies?.extensions) {
                                         if (circular.length > 0) {
                                             return circular;
                                             return [];
-                                            getUpgradePath(currentVersion, string);
-                                            targetVersion: string,
+                                            getUpgradePath(currentVersion, string),
+                                                targetVersion;
+                                            string,
                                                 availableVersions;
                                             string;
                                             UpgradePath;
@@ -622,10 +623,10 @@ if (extension.dependencies?.extensions) {
                                                     }
                                                 }
                                             }
-                                            export const extensionVersionManager = ExtensionVersionManager.getInstance();
                                         }
                                     }
                                 }
+                                export const extensionVersionManager = ExtensionVersionManager.getInstance();
                             }
                         }
                     }

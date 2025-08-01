@@ -267,8 +267,9 @@ export class DirectLinkSharing extends EventEmitter {
                                                         return scheduledShare;
                                                         // Team Management
                                                         async;
-                                                        shareWithTeam(linkId, string);
-                                                        teamId: string,
+                                                        shareWithTeam(linkId, string),
+                                                            teamId;
+                                                        string,
                                                             permissions;
                                                         string;
                                                         Promise < void  > {
@@ -846,9 +847,7 @@ export class DirectLinkSharing extends EventEmitter {
                                                                                                 message: string,
                                                                                                 clickEvent: ClickEvent,
                                                                                                 AccessResult
-                                                                                            }
-                                                                                        } }
-                                                                                }
+                                                                                            } } } }
                                                                             };
                                                                             {
                                                                                 return {
@@ -981,36 +980,15 @@ export class DirectLinkSharing extends EventEmitter {
                                                                                 errorRate: 0.01,
                                                                             };
                                                                             // Supporting Interfaces
-                                                                        },
-                                                                        interface, CreateLinkRequest
+                                                                        }
                                                                     };
-                                                                    {
-                                                                        originalUrl: string;
-                                                                        title ?  : string;
-                                                                        description ?  : string;
-                                                                        customSlug ?  : string;
-                                                                        domain ?  : string;
-                                                                        expires ?  : Date;
-                                                                        security ?  : Partial;
-                                                                        metadata ?  : Partial;
-                                                                        creator: UserInfo;
-                                                                        team ?  : TeamInfo;
-                                                                    }
                                                                 }
-                                                            },
-                                                            interface, UpdateLinkRequest };
-                                                        {
-                                                            originalUrl ?  : string;
-                                                            title ?  : string;
-                                                            description ?  : string;
-                                                            expires ?  : Date;
-                                                            status ?  : LinkStatus;
-                                                            security ?  : Partial;
-                                                            metadata ?  : Partial;
-                                                        }
+                                                            }
+                                                        };
                                                     }
-                                                },
-                                                interface, AccessContext }
+                                                }
+                                            },
+                                            interface, AccessContext
                                         };
                                         {
                                             ipAddress ?  : string;
@@ -1029,16 +1007,29 @@ export class DirectLinkSharing extends EventEmitter {
                                     }
                                 };
                             },
-                            type, AccessResultStatus = 'allowed' | 'not_found' | 'inactive' | 'expired' | 'restricted'
+                            interface, AccessValidation
                         };
-                    }
+                        {
+                            allowed: boolean;
+                            reason ?  : string;
+                        }
+                    },
+                    type, AccessResultStatus = 'allowed' | 'not_found' | 'inactive' | 'expired' | 'restricted'
                 };
-                colors ?  : { foreground: string, background: string };
-                logo ?  : { url: string, size: number };
-            }
+            },
+            interface, AccessResult
         };
+        {
+            status: AccessResultStatus;
+            link ?  : ShareLink;
+            message ?  : string;
+            clickEvent ?  : ClickEvent;
+            timestamp: Date;
+        }
     }
 }
+colors ?  : { foreground: string, background: string };
+logo ?  : { url: string, size: number };
 ;
 timeRange: {
     start: Date;

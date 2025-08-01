@@ -8,23 +8,22 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } fr
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, RunwayMLAdapter, StableVideoAdapter } from '../../ai';
 
-}
-export interface VideoConfig {
-  provider: 'runwayml' | 'stable-video' | 'pika-labs';
+
+export interface VideoConfig { provider: 'runwayml' | 'stable-video' | 'pika-labs';
   apiKey?: string;
   endpoint?: string;
   model?: string;
-  defaultParameters?: Record<string, any>;
-}
-}
-}
-export interface VideoMetadata {
-  duration: number;
+  defaultParameters?: Record<string, any> }
+
+
+
+export interface VideoMetadata { duration: number;
   format: string;
-  resolution: {
+  resolution: { }
   width: number;
   height: number;
-}
+
+
 };
   fps: number;
   frame_count: number;
@@ -35,16 +34,14 @@ export interface VideoMetadata {
   cost: number;
   codec?: string;
   bitrate?: number;
-}
-}
-export interface GeneratedVideo {
-  url?: string;
+
+
+export interface GeneratedVideo { url?: string;
   data?: ArrayBuffer;
   frames?: string;
   format: string;
-  metadata: VideoMetadata;
-}
-}
+  metadata: VideoMetadata }
+
 export class VideoGenerationNode extends AdvancedRuntimeNode {
   private modelFactory: AIModelFactory;
   private adapters: Map<string, any> = new Map();
@@ -85,15 +82,15 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
       if (!adapter) {
         throw new Error(`No adapter configured for provider: ${provider}`);}
       // Prepare generation options based on provider
-      const options = this._buildGenerationOptions(provider, {)
-  prompt,
-        image,
-        duration,
-        resolution,
-        fps,
-        motion,
-        style,
-        cameraMotion,
+      const options = this._buildGenerationOptions(provider, { )
+  prompt
+        image
+        duration
+        resolution
+        fps
+        motion
+        style
+        cameraMotion }
         seed
       });
       // Generate video
@@ -101,34 +98,33 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
       const result = await adapter.process(image || prompt, options);
       const generationTime = Date.now() - startTime;
       // Process results
-      const videoData: GeneratedVideo = {,
-  url: result.video.url,
-  data: result.video.data,
-  frames: result.video.frames,
-  format: result.video.format,
+      const videoData: GeneratedVideo = { 
+  url: result.video.url
+  data: result.video.data
+  frames: result.video.frames
+  format: result.video.format
   metadata: {
-  duration: result.video.duration,
-  format: result.video.format,
-  resolution: result.video.resolution,
-  fps: result.video.fps,
-  frame_count: result.video.frame_count || Math.ceil(result.video.duration * result.video.fps),
-  size: result.video.size,
-  provider,
-  model: result.metadata.model,
-  generation_time: generationTime,
-  cost: result.usage.cost || result.usage.estimated_cost,
+  duration: result.video.duration
+  format: result.video.format
+  resolution: result.video.resolution
+  fps: result.video.fps
+  frame_count: result.video.frame_count || Math.ceil(result.video.duration * result.video.fps)
+  size: result.video.size
+  provider
+  model: result.metadata.model
+  generation_time: generationTime
+  cost: result.usage.cost || result.usage.estimated_cost }
 };
-      return {
-  outputs: {
-  video: videoData,
-  metadata: videoData.metadata,
-  cost: videoData.metadata.cost,
-},
-  executionTime: generationTime,
-        tokensUsed: { input: prompt.length, output: 0 },
+      return { outputs: {
+  video: videoData
+  metadata: videoData.metadata
+  cost: videoData.metadata.cost }
+
+  executionTime: generationTime
+        tokensUsed: { input: prompt.length, output: 0 }
         cost: videoData.metadata.cost;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Video generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
 
@@ -150,52 +146,48 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
         case 'runwayml':
           adapter = new RunwayMLAdapter()
             `runwayml-${this.nodeId}`}
-}
-            {
-              apiKey: config.apiKey || '',
+
+            { apiKey: config.apiKey || '' }
               baseURL: config.endpoint);
           break;
         case 'stable-video':
           adapter = new StableVideoAdapter()
             `svd-${this.nodeId}`}
-}
-            {
-              endpoint: config.endpoint || 'http://localhost:7860',
-              apiType: 'automatic1111',
-              apiKey: config.apiKey,
+
+            { endpoint: config.endpoint || 'http://localhost:7860'
+              apiType: 'automatic1111'
+              apiKey: config.apiKey }
               defaultModel: config.model || 'svd-xt');
           break;
         default:
           throw new Error(`Unsupported video generation provider: ${config.provider}`);}
       await adapter.initialize();
       this.adapters.set(config.provider, adapter);
-    } catch (error) {
-      console.warn(`Failed to initialize ${config.provider},)}
+ catch (error) {
+      console.warn(`Failed to initialize ${config.provider})}
   adapter:`, error);}
   private _getConfiguredProvider(): string {
     return Array.from(this.adapters.keys())[0] || 'runwayml';
   private _buildGenerationOptions(provider: string, params: unknown): unknown {
     const { prompt, image, duration, resolution, fps, motion, style, cameraMotion, seed } = params;
-    switch (provider) {
-      case 'runwayml':
+    switch (provider) { case 'runwayml':
         return {
-          text_prompt: prompt,
-          ...(image && { image_prompt: image }),
-          duration,
-          resolution,
-          motion,
-          model: 'gen3',
-          ...(style && { style_preset: style }),
-          ...(cameraMotion && { camera_motion: cameraMotion }),
+          text_prompt: prompt }
+          ...(image && { image_prompt: image })
+          duration
+          resolution
+          motion
+          model: 'gen3'
+          ...(style && { style_preset: style })
+          ...(cameraMotion && { camera_motion: cameraMotion })
           ...(seed && { seed })
         };
       case 'stable-video':
-        return {
-          image: image || '', // SVD requires an input image
+        return { image: image || '', // SVD requires an input image
           motion_bucket_id: Math.round(motion * 25.5), // Convert 1-10 to 1-255
-          num_frames: Math.ceil(duration * fps),
-          fps,
-          model: 'svd-xt',
+          num_frames: Math.ceil(duration * fps)
+          fps
+          model: 'svd-xt' }
           ...(seed && { seed })
         };
       default:
@@ -232,32 +224,30 @@ export class VideoToVideoNode extends AdvancedRuntimeNode {
       if (!adapter) {
         throw new Error(`No adapter configured for provider: ${provider}`);}
       // Prepare transformation options
-      const options = {
-  init_video: sourceVideo,
-  text_prompt: prompt,
-  strength,
-  preserve_motion: preserveMotion,
+      const options = { init_video: sourceVideo
+  text_prompt: prompt
+  strength
+  preserve_motion: preserveMotion }
   style
 };
       // Transform video
       const startTime = Date.now();
       const result = await adapter.generateVideoToVideo(prompt, sourceVideo, options);
       const processingTime = Date.now() - startTime;
-      return {
-  outputs: {
-  transformed_video: result.video,
+      return { outputs: {
+  transformed_video: result.video
   metadata: {
-  original_prompt: prompt,
-  strength,
-  preserve_motion: preserveMotion,
-  processing_time: processingTime,
-  model: result.metadata.model,
-},
-  executionTime: processingTime,
-        tokensUsed: { input: prompt.length, output: 0 },
+  original_prompt: prompt
+  strength
+  preserve_motion: preserveMotion
+  processing_time: processingTime
+  model: result.metadata.model }
+
+  executionTime: processingTime
+        tokensUsed: { input: prompt.length, output: 0 }
         cost: result.usage.cost || 0;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Video transformation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _initializeAdapter(config: VideoConfig): Promise<void> {
 
@@ -266,9 +256,8 @@ export class VideoToVideoNode extends AdvancedRuntimeNode {
     if (config.provider === 'runwayml') {
       const adapter = new RunwayMLAdapter(;);
         `runwayml-v2v-${this.nodeId}`}
-}
-        {
-          apiKey: config.apiKey || '',
+
+        { apiKey: config.apiKey || '' }
           baseURL: config.endpoint);
       await adapter.initialize();
       this.adapters.set(config.provider, adapter);
@@ -301,9 +290,7 @@ export class VideoAnalysisNode extends AdvancedRuntimeNode {
       .output('metadata', 'object', 'Complete video metadata')
       .build();
     super(nodeId, 'video_analysis', ioSpec);
-  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
-
-  try {
+  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> { try {
   const videoFile = inputs.get('video_file');
   const analysisType = inputs.getString('analysis_type', 'basic');
   if (!videoFile) {
@@ -313,62 +300,59 @@ export class VideoAnalysisNode extends AdvancedRuntimeNode {
   const processingTime = Date.now() - startTime;
   return {
   outputs: {
-  duration: analysis.duration,
-  format: analysis.format,
-  resolution: analysis.resolution,
-  fps: analysis.fps,
-  frame_count: analysis.frame_count,
-  size: analysis.size,
-  codec: analysis.codec || 'unknown',
-  bitrate: analysis.bitrate || 0,
-  metadata: analysis,
-},
-  executionTime: processingTime,
-        tokensUsed: { input: 0, output: 0 },
+  duration: analysis.duration
+  format: analysis.format
+  resolution: analysis.resolution
+  fps: analysis.fps
+  frame_count: analysis.frame_count
+  size: analysis.size
+  codec: analysis.codec || 'unknown'
+  bitrate: analysis.bitrate || 0
+  metadata: analysis }
+
+  executionTime: processingTime
+        tokensUsed: { input: 0, output: 0 }
         cost: 0;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Video analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _analyzeVideo(videoFile: Error, analysisType: string): Promise<VideoMetadata> {
-
   // Basic video file analysis
   const size = videoFile instanceof ArrayBuffer ? videoFile.byteLength : (videoFile.size || 0);
   // Determine format from file type or extension
   let format = 'unknown';
   if (videoFile.type) {
   format = videoFile.type.split('/')[1] || 'unknown'
-  } else if (videoFile.name) {
-  const extension = videoFile.name.split('.').pop()?.toLowerCase();
+ else if (videoFile.name) { const extension = videoFile.name.split('.').pop()?.toLowerCase();
   format = extension || 'unknown';
   // Estimate properties (in real implementation, would use video analysis libraries)
   const estimatedDuration = this._estimateDuration(size, format);
   const estimatedResolution = this._estimateResolution(size, estimatedDuration);
-  const metadata: VideoMetadata = {,
-  duration: estimatedDuration,
-  format,
-  resolution: estimatedResolution,
-  fps: 24, // Default assumption,
-  frame_count: Math.ceil(estimatedDuration * 24),
-  size,
-  provider: 'local',
-  model: 'analysis',
-  generation_time: 0,
-  cost: 0,
+  const metadata: VideoMetadata = {
+  duration: estimatedDuration
+  format
+  resolution: estimatedResolution
+  fps: 24, // Default assumption
+  frame_count: Math.ceil(estimatedDuration * 24)
+  size
+  provider: 'local'
+  model: 'analysis'
+  generation_time: 0
+  cost: 0 }
 };
     // For detailed analysis, we would use actual video analysis libraries
-    if (analysisType === 'detailed') {
-  metadata.codec = this._guessCodec(format);
+    if (analysisType === 'detailed') { metadata.codec = this._guessCodec(format);
   metadata.bitrate = this._estimateBitrate(size, estimatedDuration);
   return metadata;
-  private _estimateDuration(size: number, format: string): number {,
+  private _estimateDuration(size: number, format: string): number {
   // Very rough estimation based on typical video compression rates
-  const compressionRates: Record<string, number> = {,
-  'mp4': 2000, // kbps typical,
-  'webm': 1500,
-  'avi': 3000,
-  'mov': 2500,
-  'mkv': 2000,
-  'unknown': 2000,
+  const compressionRates: Record<string, number> = {
+  'mp4': 2000, // kbps typical
+  'webm': 1500
+  'avi': 3000
+  'mov': 2500
+  'mkv': 2000
+  'unknown': 2000 }
 };
     const bitrate = compressionRates[format] || 2000;
     const durationSeconds = (size * 8) / (bitrate * 1000);
@@ -380,17 +364,16 @@ export class VideoAnalysisNode extends AdvancedRuntimeNode {
     // Very rough resolution estimation
     if (bitsPerSecond > 8000000) { // > 8 Mbps
       return { width: 1920, height: 1080 }; // Assume 1080p
-    } else if (bitsPerSecond > 3000000) { // > 3 Mbps
+ else if (bitsPerSecond > 3000000) { // > 3 Mbps
       return { width: 1280, height: 720 }; // Assume 720p
-    } else {
+ else {
       return { width: 854, height: 480 }; // Assume 480p
-  private _guessCodec(format: string): string {
-  const codecMap: Record<string, string> = {,
-  'mp4': 'h264',
-  'webm': 'vp9',
-  'avi': 'xvid',
-  'mov': 'h264',
-  'mkv': 'h264',
+  private _guessCodec(format: string): string { const codecMap: Record<string, string> = {
+  'mp4': 'h264'
+  'webm': 'vp9'
+  'avi': 'xvid'
+  'mov': 'h264'
+  'mkv': 'h264' }
 };
     return codecMap[format] || 'unknown';
   private _estimateBitrate(size: number, duration: number): number {
@@ -416,9 +399,7 @@ export class VideoEnhancementNode extends AdvancedRuntimeNode {
       .output('metadata', 'object', 'Enhancement metadata')
       .build();
     super(nodeId, 'video_enhancement', ioSpec);
-  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
-
-    try {
+  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> { try {
       const videoFile = inputs.get('video_file');
       const enhancementType = inputs.getString('enhancement_type');
       const upscaleFactor = inputs.getNumber('upscale_factor', 2);
@@ -431,33 +412,31 @@ export class VideoEnhancementNode extends AdvancedRuntimeNode {
       // For now, this is a placeholder implementation
       // In a real implementation, this would use video processing libraries
       const enhancedVideo = await this._enhanceVideo(videoFile, {)
-  enhancementType,
-        upscaleFactor,
-        denoiseStrength,
-        sharpenAmount,
+  enhancementType
+        upscaleFactor
+        denoiseStrength
+        sharpenAmount }
         colorEnhance
       });
       const processingTime = Date.now() - startTime;
-      const metadata = {
-  originalSize: videoFile instanceof ArrayBuffer ? videoFile.byteLength : (videoFile.size || 0),
-  enhancedSize: enhancedVideo.byteLength,
-  enhancementType,
-  upscaleFactor,
-  denoiseStrength,
-  sharpenAmount,
-  colorEnhance,
+      const metadata = { originalSize: videoFile instanceof ArrayBuffer ? videoFile.byteLength : (videoFile.size || 0)
+  enhancedSize: enhancedVideo.byteLength
+  enhancementType
+  upscaleFactor
+  denoiseStrength
+  sharpenAmount
+  colorEnhance }
   processingTime
 };
-      return {
-  outputs: {
-  enhanced_video: enhancedVideo,
+      return { outputs: {
+  enhanced_video: enhancedVideo }
   metadata
-},
-  executionTime: processingTime,
-        tokensUsed: { input: 0, output: 0 },
+
+  executionTime: processingTime
+        tokensUsed: { input: 0, output: 0 }
         cost: 0;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Video enhancement failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _enhanceVideo(videoFile: Error, options: unknown): Promise<ArrayBuffer> {
 
@@ -494,9 +473,7 @@ export class VideoCompositionNode extends AdvancedRuntimeNode {
       .output('metadata', 'object', 'Composition metadata')
       .build();
     super(nodeId, 'video_composition', ioSpec);
-  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
-
-    try {
+  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> { try {
       const videoClips = inputs.get('video_clips') as any;
       const compositionType = inputs.getString('composition_type', 'sequence');
       const transitions = inputs.get('transitions') as any || [];
@@ -507,31 +484,29 @@ export class VideoCompositionNode extends AdvancedRuntimeNode {
       const startTime = Date.now();
       // Compose video clips
       const composedVideo = await this._composeVideos(videoClips, {)
-  compositionType,
-        transitions,
-        audioTrack,
+  compositionType
+        transitions
+        audioTrack }
         textOverlays
       });
       const processingTime = Date.now() - startTime;
-      const metadata = {
-  clipCount: videoClips.length,
-  compositionType,
-  transitionCount: transitions.length,
-  hasAudioTrack: !!audioTrack,
-  textOverlayCount: textOverlays.length,
-  processingTime,
-  finalSize: composedVideo.byteLength,
+      const metadata = { clipCount: videoClips.length
+  compositionType
+  transitionCount: transitions.length
+  hasAudioTrack: !!audioTrack
+  textOverlayCount: textOverlays.length
+  processingTime
+  finalSize: composedVideo.byteLength }
 };
-      return {
-  outputs: {
-  composed_video: composedVideo,
+      return { outputs: {
+  composed_video: composedVideo }
   metadata
-},
-  executionTime: processingTime,
-        tokensUsed: { input: 0, output: 0 },
+
+  executionTime: processingTime
+        tokensUsed: { input: 0, output: 0 }
         cost: 0;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Video composition failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _composeVideos(clips: unknown, options: unknown): Promise<ArrayBuffer> {
 

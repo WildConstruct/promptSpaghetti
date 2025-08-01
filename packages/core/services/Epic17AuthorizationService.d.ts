@@ -11,28 +11,26 @@
 import { EventEmitter } from 'events';
 
 }
-export interface AuthorizationContext {
-    user: UserContext;
+}
+export interface AuthorizationContext { user: UserContext;
     resource?: ResourceContext;
     action: string;
     environment: EnvironmentContext;
     requestContext?: RequestMetadata;
-    additionalData?: Record<string, any>;
-
+    additionalData?: Record<string, any> }
 }
-export interface UserContext {
-    id: string;
+}
+export interface UserContext { id: string;
     email: string;
     roles: string[];
     groups: string[];
     permissions: Permission[];
     attributes: Record<string, any>;
     sessionId?: string;
-    lastLogin?: Date;
-
+    lastLogin?: Date }
 }
-export interface ResourceContext {
-    type: ResourceType;
+}
+export interface ResourceContext { type: ResourceType;
     id: string;
     owner?: string;
     attributes: Record<string, any>;
@@ -41,21 +39,22 @@ export interface ResourceContext {
     parentResource?: string;
 
 export declare enum ResourceType {
-    FEATURE_TOGGLE = "feature_toggle",
-    USER_ACCOUNT = "user_account",
-    CONTENT_ITEM = "content_item",
-    API_KEY = "api_key",
-    MARKETPLACE_ITEM = "marketplace_item",
-    SYSTEM_CONFIG = "system_config",
-    AUDIT_LOG = "audit_log",
-    DASHBOARD = "dashboard",
-    REPORT = "report",
-    ORGANIZATION = "organization",
+    FEATURE_TOGGLE = "feature_toggle";
+    USER_ACCOUNT = "user_account";
+    CONTENT_ITEM = "content_item";
+    API_KEY = "api_key";
+    MARKETPLACE_ITEM = "marketplace_item";
+    SYSTEM_CONFIG = "system_config";
+    AUDIT_LOG = "audit_log";
+    DASHBOARD = "dashboard";
+    REPORT = "report";
+    ORGANIZATION = "organization" }
     WORKSPACE = "workspace"
 
 }
-export interface Permission {
-    id: string;
+}
+}
+export interface Permission { id: string;
     name: string;
     resource: ResourceType | '*';
     actions: string[];
@@ -63,31 +62,30 @@ export interface Permission {
     scope: PermissionScope;
     inherited?: boolean;
     grantedAt: Date;
-    expiresAt?: Date;
-
+    expiresAt?: Date }
 }
-export interface PermissionCondition {
-    type: ConditionType;
+}
+export interface PermissionCondition { type: ConditionType;
     operator: ConditionOperator;
     value: any;
     attribute: string;
 
 export declare enum ConditionType {
-    USER_ATTRIBUTE = "user_attribute",
-    RESOURCE_ATTRIBUTE = "resource_attribute",
-    TIME_BASED = "time_based",
-    IP_BASED = "ip_based",
+    USER_ATTRIBUTE = "user_attribute";
+    RESOURCE_ATTRIBUTE = "resource_attribute";
+    TIME_BASED = "time_based";
+    IP_BASED = "ip_based";
     CONTEXT_BASED = "context_based"
 
 export declare enum ConditionOperator {
-    EQUALS = "equals",
-    NOT_EQUALS = "not_equals",
-    IN = "in",
-    NOT_IN = "not_in",
-    GREATER_THAN = "greater_than",
-    LESS_THAN = "less_than",
-    CONTAINS = "contains",
-    MATCHES = "matches",
+    EQUALS = "equals";
+    NOT_EQUALS = "not_equals";
+    IN = "in";
+    NOT_IN = "not_in";
+    GREATER_THAN = "greater_than";
+    LESS_THAN = "less_than";
+    CONTAINS = "contains";
+    MATCHES = "matches" }
     EXISTS = "exists"
 
 export declare enum PermissionScope {
@@ -98,27 +96,26 @@ export declare enum PermissionScope {
     SELF = "self"
 
 }
-export interface EnvironmentContext {
-    environment: 'development' | 'staging' | 'production';
+}
+}
+export interface EnvironmentContext { environment: 'development' | 'staging' | 'production';
     region: string;
     version: string;
     featureFlags: Record<string, boolean>;
     maintenanceMode?: boolean;
-    debugMode?: boolean;
-
+    debugMode?: boolean }
 }
-export interface RequestMetadata {
-    ip: string;
+}
+export interface RequestMetadata { ip: string;
     userAgent: string;
     timestamp: Date;
     requestId: string;
     method: string;
     path: string;
-    headers: Record<string, string>;
-
+    headers: Record<string, string> }
 }
-export interface Role {
-    id: string;
+}
+export interface Role { id: string;
     name: string;
     description: string;
     level: number;
@@ -126,17 +123,15 @@ export interface Role {
     inheritedRoles: string[];
     conditions: RoleCondition[];
     active: boolean;
-    metadata: RoleMetadata;
-
+    metadata: RoleMetadata }
 }
-export interface RoleCondition {
-    type: 'time_based' | 'attribute_based' | 'context_based';
+}
+export interface RoleCondition { type: 'time_based' | 'attribute_based' | 'context_based';
     rule: string;
-    parameters: Record<string, any>;
-
+    parameters: Record<string, any> }
 }
-export interface RoleMetadata {
-    category: 'system' | 'administrative' | 'functional' | 'custom';
+}
+export interface RoleMetadata { category: 'system' | 'administrative' | 'functional' | 'custom';
     department?: string;
     epic?: string;
     story?: string;
@@ -146,44 +141,39 @@ export interface RoleMetadata {
     created: Date;
     createdBy: string;
     lastModified: Date;
-    modifiedBy: string;
-
+    modifiedBy: string }
 }
-export interface AuthorizationResult {
-    granted: boolean;
+}
+export interface AuthorizationResult { granted: boolean;
     reason: string;
     decision: AuthorizationDecision;
     appliedPolicies: string[];
     conditions: EvaluatedCondition[];
-    metadata: AuthorizationMetadata;
-
+    metadata: AuthorizationMetadata }
 }
-export interface AuthorizationDecision {
-    result: 'allow' | 'deny' | 'conditional';
+}
+export interface AuthorizationDecision { result: 'allow' | 'deny' | 'conditional';
     confidence: number;
     riskScore: number;
     recommendedActions: string[];
-    alternatives: AlternativeAction[];
-
+    alternatives: AlternativeAction[] }
 }
-export interface EvaluatedCondition {
-    conditionId: string;
+}
+export interface EvaluatedCondition { conditionId: string;
     type: ConditionType;
     result: boolean;
     value: any;
     reason: string;
-    evaluationTime: number;
-
+    evaluationTime: number }
 }
-export interface AlternativeAction {
-    action: string;
+}
+export interface AlternativeAction { action: string;
     description: string;
     requiredConditions: string[];
-    riskLevel: 'low' | 'medium' | 'high';
-
+    riskLevel: 'low' | 'medium' | 'high' }
 }
-export interface AuthorizationMetadata {
-    evaluationId: string;
+}
+export interface AuthorizationMetadata { evaluationId: string;
     userId: string;
     resource?: string;
     action: string;
@@ -191,11 +181,10 @@ export interface AuthorizationMetadata {
     executionTime: number;
     cacheHit: boolean;
     policyVersion: string;
-    debugInfo?: Record<string, any>;
-
+    debugInfo?: Record<string, any> }
 }
-export interface AuthorizationPolicy {
-    id: string;
+}
+export interface AuthorizationPolicy { id: string;
     name: string;
     description: string;
     version: string;
@@ -205,41 +194,36 @@ export interface AuthorizationPolicy {
     effect: 'allow' | 'deny';
     obligations: PolicyObligation[];
     active: boolean;
-    metadata: PolicyMetadata;
-
+    metadata: PolicyMetadata }
 }
-export interface PolicyTarget {
-    users: string[];
+}
+export interface PolicyTarget { users: string[];
     roles: string[];
     resources: ResourceSelector[];
     actions: string[];
-    environments: string[];
-
+    environments: string[] }
 }
-export interface ResourceSelector {
-    type: ResourceType | '*';
+}
+export interface ResourceSelector { type: ResourceType | '*';
     id?: string;
     attributes?: Record<string, any>;
     tags?: string[];
-    namespace?: string;
-
+    namespace?: string }
 }
-export interface PolicyCondition {
-    id: string;
+}
+export interface PolicyCondition { id: string;
     type: ConditionType;
     expression: string;
     parameters: Record<string, any>;
-    required: boolean;
-
+    required: boolean }
 }
-export interface PolicyObligation {
-    type: 'log_access' | 'require_mfa' | 'limit_time' | 'require_approval';
+}
+export interface PolicyObligation { type: 'log_access' | 'require_mfa' | 'limit_time' | 'require_approval';
     parameters: Record<string, any>;
-    priority: number;
-
+    priority: number }
 }
-export interface PolicyMetadata {
-    category: string;
+}
+export interface PolicyMetadata { category: string;
     tags: string[];
     owner: string;
     reviewedBy?: string;
@@ -249,36 +233,29 @@ export interface PolicyMetadata {
     effectiveDate: Date;
     expirationDate?: Date;
     created: Date;
-    lastModified: Date;
-
+    lastModified: Date }
 }
-export interface AuthorizationConfig {
-    evaluation: {
+}
+export interface AuthorizationConfig { evaluation: {
         enableCaching: boolean;
         cacheTimeToLive: number;
         evaluationTimeout: number;
         maxPolicyDepth: number;
-        strictMode: boolean;
+        strictMode: boolean }
 }
     };
-    audit: {
-        enableAuditLogging: boolean;
+    audit: { enableAuditLogging: boolean;
         logLevel: 'basic' | 'detailed' | 'comprehensive';
         auditAllDecisions: boolean;
-        sensitiveDataRedaction: boolean;
-    };
-    permissions: {
-        defaultDenyMode: boolean;
+        sensitiveDataRedaction: boolean };
+    permissions: { defaultDenyMode: boolean;
         inheritanceEnabled: boolean;
         dynamicPermissions: boolean;
-        permissionCascading: boolean;
-    };
-    security: {
-        encryptSensitiveData: boolean;
+        permissionCascading: boolean };
+    security: { encryptSensitiveData: boolean;
         requireMfaForHighRisk: boolean;
         sessionValidation: boolean;
-        ipWhitelisting: boolean;
-    };
+        ipWhitelisting: boolean };
 /**
  * Epic 17 Authorization Service
  *

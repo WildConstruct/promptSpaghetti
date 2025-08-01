@@ -21,7 +21,7 @@ export class TrustScoreService {
     this.contentQualityService = contentQualityService;
     this.qualityService = qualityService;
     this.config = config || this.getDefaultConfig();
-  }
+
   // =============================================================================
   // User Trust Score Methods
   // =============================================================================
@@ -36,8 +36,8 @@ export class TrustScoreService {
       if (existing && this.isScoreRecent(existing.lastUpdated)) {
         console.log(`📋 Using cached trust score for user: ${userId}`);
         return existing;
-      }
-    }
+
+
     const startTime = Date.now();
     // Gather user data
     const [userProfile, userActivity, userTemplates, userTransactions, userReviews, securityEvents] = await Promise.all(
@@ -109,7 +109,7 @@ export class TrustScoreService {
     const calculationTime = Date.now() - startTime;
     console.log(`✅ User trust score calculated: ${trustScore.grade} (${overallScore}) in ${calculationTime}ms`);
     return trustScore;
-  }
+
   /**
    * Update user trust score based on specific events
    */
@@ -118,13 +118,13 @@ export class TrustScoreService {
     const currentScore = await this.getLatestUserTrustScore(userId);
     if (!currentScore) {
       return await this.calculateUserTrustScore(userId, true);
-    }
+
     // Apply incremental updates based on events
     const updatedScore = await this.applyTrustEvents(currentScore, events);
     // Store updated score
     await this.storeUserTrustScore(updatedScore);
     return updatedScore;
-  }
+
   /**
    * Get trust score for multiple users
    */
@@ -136,16 +136,16 @@ export class TrustScoreService {
           const score = await this.getLatestUserTrustScore(userId);
           if (!score || this.shouldRecalculate(score)) {
             return await this.calculateUserTrustScore(userId);
-          }
+
           return includeDetails ? score : this.sanitizeTrustScore(score);
-        } catch (error) {
+ catch (error) {
           console.error(`Error getting trust score for user ${userId}:`, error);
           return this.getDefaultUserTrustScore(userId);
-        }
+
       })
     );
     return trustScores;
-  }
+
   // =============================================================================
   // Template Trust Score Methods
   // =============================================================================
@@ -160,8 +160,8 @@ export class TrustScoreService {
       if (existing && this.isScoreRecent(existing.lastUpdated)) {
         console.log(`📋 Using cached trust score for template: ${templateId}`);
         return existing;
-      }
-    }
+
+
     const startTime = Date.now();
     // Gather template data
     const [templateData, qualityMetrics, usageMetrics, reviewsData, securityScan, performanceMetrics] =
@@ -219,7 +219,7 @@ export class TrustScoreService {
     const calculationTime = Date.now() - startTime;
     console.log(`✅ Template trust score calculated: ${trustScore.grade} (${overallScore}) in ${calculationTime}ms`);
     return trustScore;
-  }
+
   /**
    * Get trust factors for a template
    */
@@ -229,9 +229,9 @@ export class TrustScoreService {
     if (!trustScore) {
       const calculatedScore = await this.calculateTemplateTrustScore(templateId);
       return this.extractTrustFactors(calculatedScore.dimensions);
-    }
+
     return this.extractTrustFactors(trustScore.dimensions);
-  }
+
   // =============================================================================
   // Transaction Trust Score Methods
   // =============================================================================
@@ -284,7 +284,7 @@ export class TrustScoreService {
     // Store transaction trust score
     await this.storeTransactionTrustScore(transactionTrustScore);
     return transactionTrustScore;
-  }
+
   // =============================================================================
   // Analytics and Insights Methods
   // =============================================================================
@@ -322,7 +322,7 @@ export class TrustScoreService {
       insights,
       recommendations,
     };
-  }
+
   /**
    * Report suspicious activity
    */
@@ -333,17 +333,17 @@ export class TrustScoreService {
     // Trigger immediate trust score recalculation for affected entities
     if (report.userId) {
       await this.calculateUserTrustScore(report.userId, true);
-    }
+
     if (report.templateId) {
       await this.calculateTemplateTrustScore(report.templateId, true);
-    }
+
     // Update fraud detection models
     await this.updateFraudDetectionModels(report);
     // Send alerts if severity is high
     if (report.severity === 'high' || report.severity === 'critical') {
       await this.sendSecurityAlert(report);
-    }
-  }
+
+
   // =============================================================================
   // Private Helper Methods
   // =============================================================================
@@ -353,12 +353,12 @@ export class TrustScoreService {
     const hasSales = userTransactions && userTransactions.some(t => t.type === 'sale');
     if ((hasTemplates || hasSales) && hasPurchases) {
       return 'both';
-    } else if (hasTemplates || hasSales) {
+ else if (hasTemplates || hasSales) {
       return 'creator';
-    } else {
+ else {
       return 'buyer';
-    }
-  }
+
+
   async calculateUserTrustDimensions(userId, userProfile, userActivity, userTemplates, userTransactions, userReviews) {
     const _____weights = this.config._____weights.creator; // Use creator _____weights as baseline
     return {
@@ -368,7 +368,7 @@ export class TrustScoreService {
       security: await this.calculateSecurityScore(userId, userProfile),
       expertise: await this.calculateExpertiseScore(userId, userProfile, userTemplates),
     };
-  }
+
   async calculateCreatorTrustScore(userId, userTemplates, userReviews) {
     const [contentQuality, marketplaceReputation, customerSatisfaction, platformCompliance] = await Promise.all([
       this.calculateContentQualityTrustMetrics(userId, userTemplates),
@@ -400,7 +400,7 @@ export class TrustScoreService {
       badges: await this.getUserTrustBadges(userId),
       certifications: await this.getUserCertifications(userId),
     };
-  }
+
   async calculateBuyerTrustScore(userId, userTransactions, userReviews) {
     const [purchaseHistory, reviewQuality, communityContribution, paymentReliability] = await Promise.all([
       this.calculatePurchaseHistoryMetrics(userId, userTransactions),
@@ -426,7 +426,7 @@ export class TrustScoreService {
       disputeRate: purchaseHistory.disputeRate,
       refundRate: purchaseHistory.refundRate,
     };
-  }
+
   calculateOverallUserTrustScore(dimensions, creatorScore, buyerScore, userType) {
     const weights = userType === 'creator' ? this.config.weights.creator : this.config.weights.buyer;
     let baseScore = Math.round(
@@ -439,14 +439,14 @@ export class TrustScoreService {
     // Apply specialized score bonuses
     if (userType === 'creator' && creatorScore) {
       baseScore = Math.round(baseScore * 0.7 + creatorScore.score * 0.3);
-    } else if (userType === 'buyer' && buyerScore) {
+ else if (userType === 'buyer' && buyerScore) {
       baseScore = Math.round(baseScore * 0.7 + buyerScore.score * 0.3);
-    } else if (userType === 'both' && creatorScore && buyerScore) {
+ else if (userType === 'both' && creatorScore && buyerScore) {
       const specializedScore = Math.round((creatorScore.score + buyerScore.score) / 2);
       baseScore = Math.round(baseScore * 0.6 + specializedScore * 0.4);
-    }
+
     return Math.min(100, Math.max(0, baseScore));
-  }
+
   scoreToGrade(score) {
     if (score >= 97) return 'A+';
     if (score >= 93) return 'A';
@@ -456,7 +456,7 @@ export class TrustScoreService {
     if (score >= 80) return 'C';
     if (score >= 70) return 'D';
     return 'F';
-  }
+
   scoreToStatus(score, riskFactors) {
     const criticalRisks = riskFactors?.filter(r => r.severity === 'critical').length || 0;
     const highRisks = riskFactors?.filter(r => r.severity === 'high').length || 0;
@@ -466,15 +466,15 @@ export class TrustScoreService {
     if (score >= 90) return 'excellent';
     if (score >= 80) return 'good';
     return 'fair';
-  }
+
   isScoreRecent(lastUpdated) {
     const hoursSinceUpdate = (Date.now() - lastUpdated.getTime()) / (1000 * 60 * 60);
     return hoursSinceUpdate < 24; // Scores are fresh for 24 hours
-  }
+
   shouldRecalculate(trustScore) {
     const daysSinceUpdate = (Date.now() - trustScore.lastUpdated.getTime()) / (1000 * 60 * 60 * 24);
     return daysSinceUpdate > 7 || trustScore.confidence < 70;
-  }
+
   getDefaultConfig() {
     return {
       version: '1.0.0',
@@ -537,32 +537,32 @@ export class TrustScoreService {
         weekly: ['analytics', 'trends'],
       },
     };
-  }
+
   // Placeholder methods for data retrieval (would be implemented with actual database queries)
   async getUserProfile(_____userId) {
     return {};
-  }
+
   async getUserActivity(_____userId) {
     return {};
-  }
+
   async getUserTemplates(_____userId) {
     return [];
-  }
+
   async getUserTransactions(_____userId) {
     return [];
-  }
+
   async getUserReviews(_____userId) {
     return [];
-  }
+
   async getUserSecurityEvents(_____userId) {
     return [];
-  }
+
   async getLatestUserTrustScore(_____userId) {
     return null;
-  }
+
   async getLatestTemplateTrustScore(_____templateId) {
     return null;
-  }
+
   async storeUserTrustScore(_____trustScore) {}
   async storeTemplateTrustScore(_____trustScore) {}
   async storeTransactionTrustScore(_____trustScore) {}
@@ -621,7 +621,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('reliability', userId),
       lastUpdated: new Date(),
     };
-  }
+
   async calculateQualityScore(userId, userTemplates, userReviews) {
     const contentQualityScore = await this.calculateUserContentQuality(userId, userTemplates);
     const reviewQualityScore = this.calculateUserReviewQuality(userReviews);
@@ -674,7 +674,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('quality', userId),
       lastUpdated: new Date(),
     };
-  }
+
   async calculateCommunityScore(userId, userReviews, userActivity) {
     const helpfulnessScore = this.calculateHelpfulnessScore(userReviews);
     const engagementScore = this.calculateCommunityEngagement(userActivity);
@@ -727,7 +727,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('community', userId),
       lastUpdated: new Date(),
     };
-  }
+
   async calculateSecurityScore(userId, userProfile) {
     const accountSecurityScore = this.calculateAccountSecurity(userProfile);
     const complianceScore = await this.calculateUserCompliance(userId);
@@ -780,7 +780,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('security', userId),
       lastUpdated: new Date(),
     };
-  }
+
   async calculateExpertiseScore(userId, userProfile, userTemplates) {
     const skillScore = this.calculateSkillLevel(userProfile, userTemplates);
     const experienceScore = this.calculateExperienceLevel(userProfile);
@@ -833,7 +833,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('expertise', userId),
       lastUpdated: new Date(),
     };
-  }
+
   // =============================================================================
   // Template Trust Calculation Methods
   // =============================================================================
@@ -853,7 +853,7 @@ export class TrustScoreService {
       community: await this.calculateTemplateCommunityScore(templateId, reviewsData, usageMetrics),
       transparency: await this.calculateTemplateTransparency(templateId, templateData),
     };
-  }
+
   async calculateTemplateContentQuality(templateId, qualityMetrics, templateData) {
     const overallQuality = qualityMetrics?.overallQualityScore || 70;
     const codeQuality = this.assessCodeQuality(templateData);
@@ -906,7 +906,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('template_quality', templateId),
       lastUpdated: new Date(),
     };
-  }
+
   // =============================================================================
   // Supporting Calculation Methods
   // =============================================================================
@@ -917,37 +917,37 @@ export class TrustScoreService {
     if (daysSinceCreation >= 90) return 70;
     if (daysSinceCreation >= 30) return 55;
     return 40;
-  }
+
   calculateActivityConsistency(userActivity) {
     // Analyze login patterns, activity frequency, engagement levels
     const loginFrequency = userActivity.loginDays || 0;
     const activityLevels = userActivity.averageActivity || 0;
     const engagementConsistency = userActivity.consistencyScore || 0;
     return Math.round(loginFrequency * 0.4 + activityLevels * 0.3 + engagementConsistency * 0.3);
-  }
+
   calculateCommitmentScore(userTransactions) {
     if (userTransactions.length === 0) return 70;
     const completionRate = userTransactions.filter(t => t.status === 'completed').length / userTransactions.length;
     const disputeRate = userTransactions.filter(t => t.hasDispute).length / userTransactions.length;
     const cancelRate = userTransactions.filter(t => t.status === 'cancelled').length / userTransactions.length;
     return Math.round(completionRate * 100 * 0.5 + (1 - disputeRate) * 100 * 0.3 + (1 - cancelRate) * 100 * 0.2);
-  }
+
   async calculateResponsivenessScore(_____userId) {
     // Analyze response times to messages, support requests, etc.
     // Placeholder implementation
     return 82;
-  }
+
   formatTimeAgo(date) {
     const days = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
     if (days >= 365) return `${Math.floor(days / 365)} years ago`;
     if (days >= 30) return `${Math.floor(days / 30)} months ago`;
     return `${days} days ago`;
-  }
+
   calculateScoreTrend(_____dimension, _____entityId) {
     // Analyze historical data to determine trend
     // Placeholder implementation
     return 'stable';
-  }
+
   async calculateUserContentQuality(userId, userTemplates) {
     if (userTemplates.length === 0) return 60;
     const qualityScores = await Promise.all(
@@ -957,7 +957,7 @@ export class TrustScoreService {
       })
     );
     return Math.round(qualityScores.reduce((sum, score) => sum + score, 0) / qualityScores.length);
-  }
+
   calculateUserReviewQuality(userReviews) {
     if (userReviews.length === 0) return 70;
     const helpfulnessScores = userReviews.map(r => r.helpfulnessScore || 70);
@@ -965,38 +965,38 @@ export class TrustScoreService {
     const helpfulnessScore = helpfulnessScores.reduce((sum, score) => sum + score, 0) / helpfulnessScores.length;
     const lengthScore = Math.min(100, averageLength / 2); // Encourage detailed reviews
     return Math.round(helpfulnessScore * 0.7 + lengthScore * 0.3);
-  }
+
   calculateQualityImprovement(_____userId) {
     // Analyze quality trends over time
     // Placeholder implementation
     return 78;
-  }
+
   calculateInnovationScore(_____userTemplates) {
     // Assess innovation and uniqueness of templates
     // Placeholder implementation
     return 75;
-  }
+
   calculateHelpfulnessScore(userReviews) {
     if (userReviews.length === 0) return 70;
     const helpfulnessScores = userReviews.map(r => r.helpfulnessScore || 70);
     return Math.round(helpfulnessScores.reduce((sum, score) => sum + score, 0) / helpfulnessScores.length);
-  }
+
   calculateCommunityEngagement(userActivity) {
     const forumPosts = userActivity.forumPosts || 0;
     const helpfulAnswers = userActivity.helpfulAnswers || 0;
     const communityEvents = userActivity.communityEvents || 0;
     return Math.round(Math.min(100, forumPosts * 2 + helpfulAnswers * 3 + communityEvents * 5));
-  }
+
   async calculateMentoringScore(_____userId) {
     // Analyze mentoring activities and feedback
     // Placeholder implementation
     return 72;
-  }
+
   calculateCollaborationScore(_____userId) {
     // Assess collaboration activities and success
     // Placeholder implementation
     return 80;
-  }
+
   calculateAccountSecurity(userProfile) {
     let securityScore = 60; // Base score
     if (userProfile.twoFactorEnabled) securityScore += 20;
@@ -1004,53 +1004,53 @@ export class TrustScoreService {
     if (userProfile.verifiedEmail) securityScore += 5;
     if (userProfile.verifiedPhone) securityScore += 5;
     return Math.min(100, securityScore);
-  }
+
   async calculateUserCompliance(_____userId) {
     // Check compliance with platform policies
     // Placeholder implementation
     return 88;
-  }
+
   async calculateSecurityIncidentScore(_____userId) {
     // Check for security incidents and violations
     // Placeholder implementation - higher score = fewer incidents
     return 95;
-  }
+
   calculatePrivacyScore(_____userProfile) {
     // Assess privacy settings and data protection
     // Placeholder implementation
     return 85;
-  }
+
   calculateSkillLevel(userProfile, userTemplates) {
     const profileSkills = userProfile.skills?.length || 0;
     const templateComplexity =
       userTemplates.reduce((sum, t) => sum + (t.complexityScore || 50), 0) / Math.max(1, userTemplates.length);
     return Math.round(profileSkills * 5 + templateComplexity * 0.5);
-  }
+
   calculateExperienceLevel(userProfile) {
     const yearsExperience = userProfile.yearsExperience || 0;
     const projectCount = userProfile.projectCount || 0;
     return Math.round(Math.min(100, yearsExperience * 10 + projectCount * 2));
-  }
+
   async calculateCertificationScore(_____userId) {
     // Check for verified certifications
     // Placeholder implementation
     return 65;
-  }
+
   calculatePeerRecognition(_____userId) {
     // Assess peer recognition and awards
     // Placeholder implementation
     return 70;
-  }
+
   assessCodeQuality(_____templateData) {
     // Assess code structure, complexity, best practices
     // Placeholder implementation
     return 82;
-  }
+
   assessDocumentationQuality(_____templateData) {
     // Assess documentation completeness and quality
     // Placeholder implementation
     return 78;
-  }
+
   async calculateTemplateSafety(templateId, securityScan, _____templateData) {
     const securityScore = securityScan?.overallSecurity || 85;
     const privacyScore = securityScan?.privacyScore || 90;
@@ -1103,7 +1103,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('template_safety', templateId),
       lastUpdated: new Date(),
     };
-  }
+
   async calculateTemplateReliability(templateId, performanceMetrics, _____usageMetrics) {
     const uptimeScore = performanceMetrics?.uptime || 95;
     const errorRate = performanceMetrics?.errorRate || 2;
@@ -1156,7 +1156,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('template_reliability', templateId),
       lastUpdated: new Date(),
     };
-  }
+
   async calculateTemplateCommunityScore(templateId, reviewsData, usageMetrics) {
     const reviewScore = reviewsData?.averageRating ? (reviewsData.averageRating / 5) * 100 : 70;
     const adoptionScore = Math.min(100, (usageMetrics?.downloadCount || 0) / 10);
@@ -1209,7 +1209,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('template_community', templateId),
       lastUpdated: new Date(),
     };
-  }
+
   async calculateTemplateTransparency(templateId, templateData) {
     const documentationCompleteness = this.assessDocumentationCompleteness(templateData);
     const codeClarity = this.assessCodeClarity(templateData);
@@ -1262,7 +1262,7 @@ export class TrustScoreService {
       trend: this.calculateScoreTrend('template_transparency', templateId),
       lastUpdated: new Date(),
     };
-  }
+
   assessDocumentationCompleteness(templateData) {
     let score = 40; // Base score
     if (templateData.readme) score += 25;
@@ -1270,11 +1270,11 @@ export class TrustScoreService {
     if (templateData.apiDocs) score += 10;
     if (templateData.installInstructions) score += 10;
     return Math.min(100, score);
-  }
+
   assessCodeClarity(_____templateData) {
     // Assess code structure, comments, naming conventions
     return 78; // Placeholder
-  }
+
   // Additional placeholder methods for data retrieval
   async getTemplateData(templateId) {
     return {
@@ -1287,21 +1287,21 @@ export class TrustScoreService {
       license: 'MIT',
       changelog: true,
     };
-  }
+
   async getTemplateUsageMetrics(_____templateId) {
     return {
       downloadCount: 150,
       activeUsers: 75,
       avgSessionTime: 45,
     };
-  }
+
   async getTemplateReviews(_____templateId) {
     return {
       reviewCount: 12,
       averageRating: 4.2,
       positivityScore: 82,
     };
-  }
+
   async getTemplateSecurityScan(_____templateId) {
     return {
       overallSecurity: 88,
@@ -1309,14 +1309,14 @@ export class TrustScoreService {
       complianceScore: 85,
       vulnerabilityCount: 1,
     };
-  }
+
   async getTemplatePerformanceMetrics(_____templateId) {
     return {
       uptime: 98.5,
       errorRate: 1.2,
       averageResponseTime: 250,
     };
-  }
+
   calculateOverallTemplateTrustScore(dimensions) {
     const weights = this.config.weights.template;
     return Math.round(
@@ -1326,7 +1326,7 @@ export class TrustScoreService {
         dimensions.community.score * weights.community +
         dimensions.transparency.score * weights.transparency
     );
-  }
+
   generateTemplateQualityAssessment(qualityMetrics) {
     return {
       overallQuality: qualityMetrics?.overallQualityScore || 78,
@@ -1337,7 +1337,7 @@ export class TrustScoreService {
       maintenabilityScore: qualityMetrics?.maintainability?.score || 77,
       qualityTrend: 'improving',
     };
-  }
+
   generateTemplateSafetyAssessment(securityScan, _____templateData) {
     return {
       overallSafety: securityScan?.overallSecurity || 88,
@@ -1348,7 +1348,7 @@ export class TrustScoreService {
       safetyWarnings: [],
       lastSecurityScan: new Date(),
     };
-  }
+
   generateCommunityValidationMetrics(reviewsData, _____usageMetrics) {
     return {
       reviewCount: reviewsData?.reviewCount || 0,
@@ -1364,7 +1364,7 @@ export class TrustScoreService {
       reportedIssues: 0,
       communityFlags: [],
     };
-  }
+
   generateTemplatePerformanceMetrics(performanceMetrics, _____usageMetrics) {
     return {
       executionSuccessRate: 98.5,
@@ -1374,7 +1374,7 @@ export class TrustScoreService {
       scalabilityScore: 78,
       uptimePercentage: performanceMetrics?.uptime || 98.5,
     };
-  }
+
   async generateTemplateTrustIndicators(_____templateId, _____dimensions, _____qualityMetrics) {
     return [
       {
@@ -1392,7 +1392,7 @@ export class TrustScoreService {
         evidenceCount: 3,
       },
     ];
-  }
+
   async generateTemplateWarnings(templateId, safetyAssessment, _____performanceMetrics) {
     const warnings = [];
     if (safetyAssessment.vulnerabilityCount > 0) {
@@ -1406,24 +1406,24 @@ export class TrustScoreService {
         reportedDate: new Date(),
         status: 'active',
       });
-    }
+
     return warnings;
-  }
+
   calculateTemplateConfidence(dimensions, communityValidation) {
     const dataQuality = communityValidation.reviewCount > 5 ? 90 : 70;
     const consensusLevel = communityValidation.averageRating > 4 ? 85 : 75;
     return Math.round((dataQuality + consensusLevel) / 2);
-  }
+
   extractTrustFactors(dimensions) {
     const factors = [];
     Object.keys(dimensions).forEach(dimensionName => {
       const dimension = dimensions[dimensionName];
       if (dimension.factors) {
         factors.push(...dimension.factors);
-      }
+
     });
     return factors;
-  }
+
   calculateTransactionTrustFactors(buyerTrustScore, sellerTrustScore, templateTrustScore, transactionData) {
     return {
       buyerTrustScore: buyerTrustScore?.score || 70,
@@ -1433,7 +1433,7 @@ export class TrustScoreService {
       paymentMethod: transactionData?.paymentMethod || 'card',
       transactionHistory: 0, // Number of previous transactions between parties
     };
-  }
+
   async assessTransactionRisk(factors, context, _____transactionData) {
     const riskScore = this.calculateTransactionRiskScore(factors, context);
     return {
@@ -1443,7 +1443,7 @@ export class TrustScoreService {
       mitigationStrategies: ['Enhanced verification', 'Transaction monitoring'],
       recommendedActions: ['Proceed with caution', 'Additional verification recommended'],
     };
-  }
+
   calculateTransactionRiskScore(factors, context) {
     let riskScore = 20; // Base risk
     if (factors.buyerTrustScore < 60) riskScore += 20;
@@ -1452,7 +1452,7 @@ export class TrustScoreService {
     if (factors.transactionAmount > 1000) riskScore += 10;
     if (context?.locationInfo?.isVPN) riskScore += 15;
     return Math.min(100, riskScore);
-  }
+
   async calculateFraudScore(transactionData, context) {
     // Implement fraud detection algorithm
     let fraudScore = 10; // Base fraud probability
@@ -1461,7 +1461,7 @@ export class TrustScoreService {
     if (context?.behaviorInfo?.suspiciousActivity) fraudScore += 25;
     if (context?.locationInfo?.isVPN) fraudScore += 10;
     return Math.min(100, fraudScore);
-  }
+
   async detectFraudIndicators(transactionData, context, _____factors) {
     const indicators = [];
     if (context?.locationInfo?.isVPN) {
@@ -1473,9 +1473,9 @@ export class TrustScoreService {
         description: 'Transaction initiated through VPN',
         detectedDate: new Date(),
       });
-    }
+
     return indicators;
-  }
+
   calculateOverallTransactionTrustScore(factors, riskAssessment, fraudScore) {
     const weights = this.config.weights.transaction;
     const baseScore = Math.round(
@@ -1487,12 +1487,12 @@ export class TrustScoreService {
     const riskPenalty = riskAssessment.riskScore * 0.2;
     const fraudPenalty = fraudScore * 0.1;
     return Math.max(0, Math.round(baseScore - riskPenalty - fraudPenalty));
-  }
+
   calculateTransactionConfidence(factors, riskAssessment) {
     const dataCompleteness = Object.keys(factors).length * 15;
     const riskCertainty = 100 - riskAssessment.riskScore;
     return Math.round((dataCompleteness + riskCertainty) / 2);
-  }
+
   createAnalyticsPeriod(timeRange) {
     const end = new Date();
     let start;
@@ -1508,9 +1508,9 @@ export class TrustScoreService {
         break;
       default:
         start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
-    }
+
     return { startDate: start, endDate: end, timeRange };
-  }
+
   // Placeholder methods for analytics
   async calculateMarketplaceTrustMetrics(_____period) {
     return {
@@ -1528,13 +1528,13 @@ export class TrustScoreService {
       trustScoreImprovement: 5.2,
       communityTrustHealth: 82,
     };
-  }
+
   async calculateUserTrustDistribution(_____period) {
     return { excellent: 25, good: 35, fair: 25, warning: 10, critical: 3, suspended: 2 };
-  }
+
   async calculateTemplateTrustDistribution(_____period) {
     return { excellent: 30, good: 40, fair: 20, warning: 7, critical: 2, suspended: 1 };
-  }
+
   async analyzeTrustTrends(_____period) {
     return {
       overallTrend: 'improving',
@@ -1543,7 +1543,7 @@ export class TrustScoreService {
       seasonalPatterns: [],
       trustMilestones: [],
     };
-  }
+
   async analyzeRiskFactors(_____period) {
     return {
       overallRiskLevel: 'low',
@@ -1552,7 +1552,7 @@ export class TrustScoreService {
       suspiciousActivityCount: 5,
       riskTrends: [],
     };
-  }
+
   async generateTrustInsights(_____period) {
     return [
       {
@@ -1567,7 +1567,7 @@ export class TrustScoreService {
         generatedAt: new Date(),
       },
     ];
-  }
+
   async generateTrustRecommendations(_____period) {
     return [
       {
@@ -1586,7 +1586,7 @@ export class TrustScoreService {
         generatedAt: new Date(),
       },
     ];
-  }
+
   sanitizeTrustScore(trustScore) {
     // Remove sensitive information for public APIs
     return {
@@ -1594,7 +1594,7 @@ export class TrustScoreService {
       riskFactors: [], // Remove detailed risk factors
       history: trustScore.history.slice(-5), // Limit history
     };
-  }
+
   getDefaultUserTrustScore(userId) {
     return {
       userId,
@@ -1613,12 +1613,12 @@ export class TrustScoreService {
       dataQuality: { completeness: 0, accuracy: 0, freshness: 0, consistency: 0, overallQuality: 0 },
       calculationMethod: 'default',
     };
-  }
+
   async applyTrustEvents(currentScore, _____events) {
     // Apply incremental updates based on events
     // This would implement the actual event processing logic
     return currentScore;
-  }
+
   calculateDataQuality(userProfile, userActivity, userTemplates, userTransactions) {
     const completeness = this.calculateDataCompleteness(userProfile, userActivity, userTemplates, userTransactions);
     const accuracy = 85; // Placeholder
@@ -1631,7 +1631,7 @@ export class TrustScoreService {
       consistency,
       overallQuality: Math.round((completeness + accuracy + freshness + consistency) / 4),
     };
-  }
+
   calculateDataCompleteness(userProfile, userActivity, userTemplates, userTransactions) {
     let completeness = 0;
     if (userProfile?.email) completeness += 15;
@@ -1642,22 +1642,22 @@ export class TrustScoreService {
     if (userTransactions?.length > 0) completeness += 25;
     if (userActivity?.loginCount > 5) completeness += 10;
     return Math.min(100, completeness);
-  }
+
   calculateConfidence(dataQuality, trustFactors) {
     const dataQualityScore = dataQuality.overallQuality;
     const factorConfidence = trustFactors.length > 5 ? 90 : trustFactors.length * 15;
     return Math.round(dataQualityScore * 0.6 + factorConfidence * 0.4);
-  }
+
   async generateUserTrustFactors(userId, dimensions, creatorScore, buyerScore) {
     const factors = [];
     // Extract factors from dimensions
     Object.entries(dimensions).forEach(([dimensionName, dimension]) => {
       if (dimension.factors) {
         factors.push(...dimension.factors);
-      }
+
     });
     return factors;
-  }
+
   async assessUserRiskFactors(userId, userActivity, securityEvents, overallScore) {
     const riskFactors = [];
     if (overallScore < 60) {
@@ -1669,7 +1669,7 @@ export class TrustScoreService {
         description: 'Trust score below acceptable threshold',
         mitigation: ['Improve quality metrics', 'Increase community engagement'],
       });
-    }
+
     if (securityEvents.length > 0) {
       riskFactors.push({
         factor: 'security_incidents',
@@ -1679,13 +1679,13 @@ export class TrustScoreService {
         description: 'Previous security incidents detected',
         mitigation: ['Enhanced monitoring', 'Security training'],
       });
-    }
+
     return riskFactors;
-  }
+
   async getUserTrustHistory(_____userId) {
     // Retrieve historical trust scores
     return [];
-  }
+
   async calculateUserTrustTrends(_____userId) {
     return {
       direction: 'stable',
@@ -1693,13 +1693,13 @@ export class TrustScoreService {
       prediction: 75,
       confidence: 70,
     };
-  }
+
   async getUserTrustBadges(_____userId) {
     return [];
-  }
+
   async getUserCertifications(_____userId) {
     return [];
-  }
+
   async calculateContentQualityTrustMetrics(userId, userTemplates) {
     const averageQualityScore = userTemplates.length > 0 ? 78 : 60;
     return {
@@ -1709,7 +1709,7 @@ export class TrustScoreService {
       topPerformingTemplates: userTemplates.filter(t => t.qualityScore > 85).length,
       qualityBadges: ['high_quality_creator'],
     };
-  }
+
   async calculateReputationMetrics(_____userId, _____userReviews) {
     return {
       overallReputation: 82,
@@ -1718,7 +1718,7 @@ export class TrustScoreService {
       expertiseRecognition: 70,
       contributionScore: 85,
     };
-  }
+
   async calculateSatisfactionMetrics(_____userId, _____userReviews) {
     return {
       customerSatisfactionScore: 87,
@@ -1726,7 +1726,7 @@ export class TrustScoreService {
       customerRetentionRate: 85,
       supportSatisfaction: 82,
     };
-  }
+
   async calculateComplianceMetrics(_____userId) {
     return {
       complianceScore: 92,
@@ -1735,7 +1735,7 @@ export class TrustScoreService {
       complianceHistory: [],
       certificationStatus: [],
     };
-  }
+
   async calculatePurchaseHistoryMetrics(userId, userTransactions) {
     const purchases = userTransactions.filter(t => t.type === 'purchase');
     return {
@@ -1746,7 +1746,7 @@ export class TrustScoreService {
       disputeRate: (purchases.filter(p => p.hasDispute).length / Math.max(1, purchases.length)) * 100,
       refundRate: (purchases.filter(p => p.isRefunded).length / Math.max(1, purchases.length)) * 100,
     };
-  }
+
   async calculateReviewQualityMetrics(userId, userReviews) {
     const avgLength =
       userReviews.length > 0
@@ -1759,7 +1759,7 @@ export class TrustScoreService {
       reviewAccuracy: 85,
       constructiveFeedbackScore: 82,
     };
-  }
+
   async calculateCommunityContributionMetrics(_____userId) {
     return {
       helpfulnessScore: 75,
@@ -1768,7 +1768,7 @@ export class TrustScoreService {
       communityEngagement: 72,
       forumContributions: 15,
     };
-  }
+
   async calculatePaymentReliabilityMetrics(userId, userTransactions) {
     const payments = userTransactions.filter(t => t.type === 'payment');
     return {
@@ -1778,7 +1778,7 @@ export class TrustScoreService {
       paymentMethodsUsed: 2,
       paymentHistory: [],
     };
-  }
+
   async getTransactionData(transactionId) {
     return {
       id: transactionId,
@@ -1787,7 +1787,7 @@ export class TrustScoreService {
       paymentMethod: 'card',
       status: 'pending',
     };
-  }
+
   async getTransactionContext(_____transactionId) {
     return {
       deviceInfo: {
@@ -1817,19 +1817,19 @@ export class TrustScoreService {
         suspiciousActivity: false,
       },
     };
-  }
+
   async storeSuspiciousActivityReport(report) {
     // Store suspicious activity report in database
     console.log('📝 Storing suspicious activity report:', report.type);
-  }
+
   async updateFraudDetectionModels(_____report) {
     // Update machine learning models with new fraud data
     console.log('🤖 Updating fraud detection models');
-  }
+
   async sendSecurityAlert(report) {
     // Send security alerts to administrators
     console.log('🚨 Sending security alert:', report.severity);
-  }
+
   // =============================================================================
   // Enforcement Integration Methods
   // =============================================================================
@@ -1873,7 +1873,7 @@ export class TrustScoreService {
           medium: 2,
           high: 4,
           critical: 8,
-        }[action.severity] || 1;
+[action.severity] || 1;
       const actionImpact =
         {
           warning: 2,
@@ -1883,7 +1883,7 @@ export class TrustScoreService {
           account_termination: 20,
           content_removal: 4,
           marketplace_ban: 15,
-        }[action.action_type] || 2;
+[action.action_type] || 2;
       enforcementImpact += actionImpact * severityMultiplier;
     });
     const recentViolations = actions
@@ -1926,7 +1926,7 @@ export class TrustScoreService {
       enforcementImpact: Math.min(enforcementImpact, 50), // Cap at 50 points
       lastActionDate: actions.length > 0 ? new Date(actions[0].executed_at) : undefined,
     };
-  }
+
   /**
    * Evaluate if a trust score change should trigger enforcement actions
    */
@@ -1949,7 +1949,7 @@ export class TrustScoreService {
         description: 'Trust score below suspension threshold',
         mitigation: ['immediate_review', 'account_verification'],
       });
-    } else if (trustScore.score <= 40) {
+ else if (trustScore.score <= 40) {
       recommendations.push({
         actionType: 'account_restriction',
         severity: 'high',
@@ -1964,7 +1964,7 @@ export class TrustScoreService {
         description: 'Trust score indicates elevated risk',
         mitigation: ['enhanced_monitoring', 'verification_required'],
       });
-    } else if (trustScore.score <= 60) {
+ else if (trustScore.score <= 60) {
       recommendations.push({
         actionType: 'manual_review_required',
         severity: 'medium',
@@ -1979,7 +1979,7 @@ export class TrustScoreService {
         description: 'Trust score warrants review',
         mitigation: ['periodic_review', 'trust_building_measures'],
       });
-    }
+
     // Check for rapid score decline
     if (entityType === 'user') {
       const userScore = trustScore;
@@ -1999,8 +1999,8 @@ export class TrustScoreService {
           description: `Trust score declined ${recentDecline.decline} points recently`,
           mitigation: ['investigate_cause', 'user_education'],
         });
-      }
-    }
+
+
     // Check for specific risk factors
     if ('riskFactors' in trustScore && trustScore.riskFactors) {
       const criticalRisks = trustScore.riskFactors.filter(rf => rf.severity === 'critical');
@@ -2012,22 +2012,22 @@ export class TrustScoreService {
           reason: `Critical risk factors detected: ${criticalRisks.map(r => r.factor).join(', ')}`,
           priority: 1,
         });
-      } else if (highRisks.length >= 2) {
+ else if (highRisks.length >= 2) {
         recommendations.push({
           actionType: 'account_restriction',
           severity: 'high',
           reason: `Multiple high-risk factors detected: ${highRisks.map(r => r.factor).join(', ')}`,
           priority: 2,
         });
-      }
+
       riskFactors.push(...trustScore.riskFactors);
-    }
+
     return {
       shouldTriggerEnforcement: recommendations.length > 0,
       recommendedActions: recommendations.sort((a, b) => a.priority - b.priority),
       riskFactors,
     };
-  }
+
   /**
    * Create a violation report based on trust score analysis
    */
@@ -2077,7 +2077,7 @@ export class TrustScoreService {
     // Store the report in database
     await this.storeTrustBasedViolationReport(report);
     return report;
-  }
+
   /**
    * Get user verification status for enforcement exemptions
    */
@@ -2097,7 +2097,7 @@ export class TrustScoreService {
     );
     if (result.rows.length === 0) {
       return null;
-    }
+
     const row = result.rows[0];
     return {
       isVerified: row.is_verified,
@@ -2106,7 +2106,7 @@ export class TrustScoreService {
       verificationExpiry: row.verification_expires_at,
       verificationProvider: row.verification_provider,
     };
-  }
+
   /**
    * Update trust score based on enforcement action results
    */
@@ -2143,10 +2143,10 @@ export class TrustScoreService {
         critical: 2.0,
       };
       trustImpact *= severityMultipliers[action.severity];
-    } else if (actionResult === 'reversed') {
+ else if (actionResult === 'reversed') {
       // Positive impact for reversed actions (false positive)
       trustImpact = 3;
-    }
+
     // Apply the trust score update
     if (trustImpact !== 0) {
       // TODO: Implement recordTrustScoreEvent method
@@ -2166,15 +2166,15 @@ export class TrustScoreService {
       // });
       // Force recalculation on next request
       await this.invalidateTrustScoreCache(entityType, entityId);
-    }
-  }
+
+
   // =============================================================================
   // Private Helper Methods for Enforcement Integration
   // =============================================================================
   checkForRapidScoreDecline(history) {
     if (history.length < 2) {
       return { isRapid: false, decline: 0, severity: 'low' };
-    }
+
     // Check last 7 days for rapid decline
     const recentHistory = history
       .filter(h => {
@@ -2184,7 +2184,7 @@ export class TrustScoreService {
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     if (recentHistory.length < 2) {
       return { isRapid: false, decline: 0, severity: 'low' };
-    }
+
     const currentScore = recentHistory[0].score;
     const previousScore = recentHistory[recentHistory.length - 1].score;
     const decline = previousScore - currentScore;
@@ -2192,19 +2192,19 @@ export class TrustScoreService {
     let severity = 'low';
     if (decline >= 30) {
       severity = 'critical';
-    } else if (decline >= 25) {
+ else if (decline >= 25) {
       severity = 'high';
-    } else if (decline >= 20) {
+ else if (decline >= 20) {
       severity = 'medium';
-    }
+
     return { isRapid, decline, severity };
-  }
+
   mapTrustScoreToSeverity(score) {
     if (score <= 25) return 'critical';
     if (score <= 40) return 'high';
     if (score <= 60) return 'medium';
     return 'low';
-  }
+
   async captureEntitySnapshot(entityType, entityId) {
     try {
       switch (entityType) {
@@ -2219,12 +2219,12 @@ export class TrustScoreService {
           return transaction.rows[0] || null;
         default:
           return null;
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to capture entity snapshot:', error);
       return null;
-    }
-  }
+
+
   async storeTrustBasedViolationReport(report) {
     await this.db.query(
       `
@@ -2256,7 +2256,7 @@ export class TrustScoreService {
         JSON.stringify(report.tags),
       ]
     );
-  }
+
   async invalidateTrustScoreCache(entityType, entityId) {
     await this.db.query(
       `
@@ -2266,11 +2266,11 @@ export class TrustScoreService {
     `,
       [entityType, entityId]
     );
-  }
+
   generateReportId() {
     return `TR-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
   generateEvidenceId() {
     return `TE-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
-}
+
+

@@ -20,13 +20,13 @@ describe('Engine Advanced Node Integration', () => {
             distributionConfig: {
               type: 'linear',
               normalize: true
-            }
-  }
+
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['weighted-1']
-          }
+
         ],
         seed: 12345
       };
@@ -51,13 +51,13 @@ describe('Engine Advanced Node Integration', () => {
               type: 'exponential',
               parameters: { factor: 2 },
               normalize: true
-            }
-  }
+
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['weighted-exp']
-          }
+
         ],
         seed: 54321
       };
@@ -83,13 +83,13 @@ describe('Engine Advanced Node Integration', () => {
               type: 'gaussian',
               parameters: { mean: 0.5, std: 0.2 },
               normalize: true
-            }
-  }
+
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['weighted-gauss']
-          }
+
         ],
         seed: 9999
       };
@@ -107,12 +107,12 @@ describe('Engine Advanced Node Integration', () => {
             id: 'weighted-default',
             type: 'WeightedAdvanced'
             // No choices or distributionConfig - should use defaults
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['weighted-default']
-          }
+
         ],
         seed: 1111
       };
@@ -134,12 +134,12 @@ describe('Engine Advanced Node Integration', () => {
               { value: 'B', weight: 2 },
               { value: 'C', weight: 2 }
             ]
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['weighted-det']
-          }
+
         ],
         seed: 42
       };
@@ -161,12 +161,12 @@ describe('Engine Advanced Node Integration', () => {
               { value: 'Y', weight: 1 },
               { value: 'Z', weight: 1 }
             ]
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['weighted-diff']
-          }
+
         ],
         seed: 100
       };
@@ -181,7 +181,7 @@ describe('Engine Advanced Node Integration', () => {
         const g2 = { ...graph1, seed: 500 + i };
         allResults1.push((await executeGraph(g1)).outputs[0]);
         allResults2.push((await executeGraph(g2)).outputs[0]);
-      }
+
       
       // At least some results should be different
       expect(allResults1).not.toEqual(allResults2);
@@ -199,7 +199,7 @@ describe('Engine Advanced Node Integration', () => {
               { value: 'basic1', weight: 1 },
               { value: 'basic2', weight: 1 }
             ]
-  }
+
           {
             id: 'advanced-weighted',
             type: 'WeightedAdvanced',
@@ -210,18 +210,18 @@ describe('Engine Advanced Node Integration', () => {
             distributionConfig: {
               type: 'exponential',
               parameters: { factor: 1.5 }
-            }
-  }
+
+
           {
             id: 'concat-1',
             type: 'Concat',
             inputs: ['basic-weighted', 'advanced-weighted']
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['concat-1']
-          }
+
         ],
         seed: 7777
       };
@@ -240,13 +240,13 @@ describe('Engine Advanced Node Integration', () => {
             type: 'SetVariable',
             key: 'mood',
             value: 'happy'
-  }
+
           {
             id: 'get-var',
             type: 'GetVariable',
             key: 'mood',
             inputs: ['set-var'] // Ensure variable is set first
-  }
+
           {
             id: 'weighted-adv',
             type: 'WeightedAdvanced',
@@ -258,18 +258,18 @@ describe('Engine Advanced Node Integration', () => {
             distributionConfig: {
               type: 'linear',
               minWeight: 1
-            }
-  }
+
+
           {
             id: 'final-concat',
             type: 'Concat',
             inputs: ['get-var', 'weighted-adv']
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['final-concat']
-          }
+
         ],
         seed: 3333
       };
@@ -291,12 +291,12 @@ describe('Engine Advanced Node Integration', () => {
             choices: [
               { value: 'test', weight: -1 } // Invalid negative weight
             ]
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['invalid-weighted']
-          }
+
         ],
         seed: 8888
       };
@@ -327,9 +327,9 @@ describe('Engine Advanced Node Integration', () => {
           distributionConfig: {
             type: 'exponential' as const,
             parameters: { factor: 1.2 }
-          }
+
         });
-      }
+
       
       // Add output node
       nodes.push({
@@ -362,12 +362,12 @@ describe('Engine Advanced Node Integration', () => {
             id: 'basic-weighted',
             type: 'WeightedChoice',
             choices: [{ value: 'basic', weight: 1 }]
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['basic-weighted']
-          }
+
         ],
         seed: 5555
       };
@@ -383,12 +383,12 @@ describe('Engine Advanced Node Integration', () => {
             id: 'advanced-weighted',
             type: 'WeightedAdvanced',
             choices: [{ value: 'advanced', weight: 1 }]
-  }
+
           {
             id: 'output-1',
             type: 'Output',
             inputs: ['advanced-weighted']
-          }
+
         ],
         seed: 6666
       };

@@ -21,9 +21,10 @@ import {
   Save,
   Upload,
   X
-} from 'lucide-react';
+ from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
-}
+
+
 interface UserProfile {
   id: string;,
   userId: string;
@@ -40,37 +41,40 @@ interface UserProfile {
   profileCompleteness: number;
   interface UserPreferences {
   theme: 'light' | 'dark' | 'auto';,
-  language: string;
+  language: string;,
   timezone: string;,
-  dateFormat: string;
+  dateFormat: string;,
   timeFormat: '12h' | '24h';,
-  emailNotifications: {
+  emailNotifications: {,
   account: boolean;,
-  security: boolean;
+  security: boolean;,
   marketing: boolean;,
-  product: boolean;
+  product: boolean;,
   social: boolean;
-}
+
+
 };
-  pushNotifications: {
+  pushNotifications: {,
   account: boolean;
   security: boolean;,
-  marketing: boolean;
+  marketing: boolean;,
   product: boolean;,
   social: boolean;
 };
-  privacy: {
+  privacy: {,
   profileVisibility: 'public' | 'private';
   searchEngineIndexing: boolean;,
-  activityStatus: boolean;
+  activityStatus: boolean;,
   readReceipts: boolean;
 };
-}
+
+
 interface ProfileSettingsProps {
   className?: string;
-  export const ProfileSettings: React.FC<ProfileSettingsProps> = ({,)
+  export const ProfileSettings: React.FC<ProfileSettingsProps> = ({),
   className = ''
-}
+
+
 }) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
@@ -97,16 +101,16 @@ interface ProfileSettingsProps {
   },
   headers: {
             'Authorization': `Bearer ${token}`}
-}
+
             'Content-Type': 'application/json'
         }),
         fetch(`${API_BASE_URL}/auth/preferences`, {)}
   },
   headers: {
             'Authorization': `Bearer ${token}`}
-}
+
             'Content-Type': 'application/json'
-  }
+
       ]);
       if (!profileResponse.ok || !preferencesResponse.ok) {
         throw new Error('Failed to load user data');
@@ -114,10 +118,10 @@ interface ProfileSettingsProps {
       const preferencesData = await preferencesResponse.json();
       setProfile(profileData.profile);
       setPreferences(preferencesData.preferences);
-    } catch (error) {
+ catch (error) {
   console.error('Error loading user data:', error);
   setError('Failed to load user data');
-} finally {
+ finally {
       setLoading(false);
   };
   const updateProfile = async (updates: Partial<UserProfile>) => {
@@ -131,7 +135,7 @@ interface ProfileSettingsProps {
   method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify(updates);
@@ -143,10 +147,10 @@ interface ProfileSettingsProps {
       setProfile(data.profile);
       setSuccess('Profile updated successfully');
       setTimeout(() => setSuccess(null), 3000);
-    } catch (error) {
+ catch (error) {
   console.error('Error updating profile:', error);
   setError(error instanceof Error ? error.message : 'Failed to update profile');
-} finally {
+ finally {
       setSaving(false);
   };
   const updatePreferences = async (updates: Partial<UserPreferences>) => {
@@ -160,7 +164,7 @@ interface ProfileSettingsProps {
   method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify(updates);
@@ -172,10 +176,10 @@ interface ProfileSettingsProps {
       setPreferences(data.preferences);
       setSuccess('Preferences updated successfully');
       setTimeout(() => setSuccess(null), 3000);
-    } catch (error) {
+ catch (error) {
   console.error('Error updating preferences:', error);
   setError(error instanceof Error ? error.message : 'Failed to update preferences');
-} finally {
+ finally {
       setSaving(false);
   };
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -223,10 +227,10 @@ interface ProfileSettingsProps {
       setAvatarPreview(null);
       setSuccess('Avatar updated successfully');
       setTimeout(() => setSuccess(null), 3000);
-    } catch (error) {
+ catch (error) {
   console.error('Error uploading avatar:', error);
   setError(error instanceof Error ? error.message : 'Failed to upload avatar');
-} finally {
+ finally {
       setSaving(false);
   };
   const deleteAvatar = async () => {
@@ -247,13 +251,13 @@ interface ProfileSettingsProps {
       setProfile(prev => prev ? { ...prev, avatarUrl: undefined } : null);
       setSuccess('Avatar deleted successfully');
       setTimeout(() => setSuccess(null), 3000);
-    } catch (error) {
+ catch (error) {
   console.error('Error deleting avatar:', error);
   setError('Failed to delete avatar');
-} finally {
+ finally {
       setSaving(false);
   };
-  const tabs = [;
+  const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'preferences', label: 'Preferences', icon: Globe },
     { id: 'notifications', label: 'Notifications', icon: Bell },
@@ -308,7 +312,7 @@ interface ProfileSettingsProps {
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+`}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>
@@ -363,14 +367,14 @@ interface ProfileSettingsProps {
 
 // Profile Tab Component
 const ProfileTab: React.FC<{,
-  profile: UserProfile;
+  profile: UserProfile;,
   onUpdate: (updates: Partial<UserProfile>) => void;,
   onAvatarChange: (event: React.ChangeEvent<HTMLInputElement>) => void;,
-  onAvatarUpload: () => void;
+  onAvatarUpload: () => void;,
   onAvatarDelete: () => void;,
-  avatarPreview: string | null;
+  avatarPreview: string | null;,
   saving: boolean;
-}> = ({ profile, onUpdate, onAvatarChange, onAvatarUpload, onAvatarDelete, avatarPreview, saving }) => {
+> = ({ profile, onUpdate, onAvatarChange, onAvatarUpload, onAvatarDelete, avatarPreview, saving }) => {
   const [formData, setFormData] = useState({)
   displayName: profile.displayName || '',
   firstName: profile.firstName || '',
@@ -544,29 +548,29 @@ const ProfileTab: React.FC<{,
 // Additional tab components would be implemented here...
 // PreferencesTab, NotificationsTab, PrivacyTab, DangerZoneTab
 const PreferencesTab: React.FC<{,
-  preferences: UserPreferences;
+  preferences: UserPreferences;,
   onUpdate: (updates: Partial<UserPreferences>) => void;,
   saving: boolean;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-}> = ({ preferences, onUpdate, saving }) => {
+> = ({ preferences, onUpdate, saving }) => {
   // Implementation for preferences tab
   return <div>Preferences Tab - Coming Soon</div>;
 };
 const NotificationsTab: React.FC<{,
-  preferences: UserPreferences;
+  preferences: UserPreferences;,
   onUpdate: (updates: Partial<UserPreferences>) => void;,
   saving: boolean;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-}> = ({ preferences, onUpdate, saving }) => {
+> = ({ preferences, onUpdate, saving }) => {
   // Implementation for notifications tab
   return <div>Notifications Tab - Coming Soon</div>;
 };
 const PrivacyTab: React.FC<{,
-  preferences: UserPreferences;
+  preferences: UserPreferences;,
   onUpdate: (updates: Partial<UserPreferences>) => void;,
   saving: boolean;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-}> = ({ preferences, onUpdate, saving }) => {
+> = ({ preferences, onUpdate, saving }) => {
   // Implementation for privacy tab
   return <div>Privacy Tab - Coming Soon</div>;
 };

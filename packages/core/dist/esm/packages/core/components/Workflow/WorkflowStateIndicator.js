@@ -1,6 +1,97 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from 'react';
 import { FileText, Eye, CheckCircle, Globe, Archive, XCircle, Clock, AlertCircle } from 'lucide-react';
+review: {
+    id: 'review',
+        name;
+    'In Review',
+        description;
+    'Under review',
+        color;
+    'yellow',
+        icon;
+    'Eye',
+        is_initial;
+    false,
+        is_final;
+    false,
+        required_permissions;
+    [],
+    ;
+}
+approved: {
+    id: 'approved',
+        name;
+    'Approved',
+        description;
+    'Approved for publication',
+        color;
+    'green',
+        icon;
+    'CheckCircle',
+        is_initial;
+    false,
+        is_final;
+    false,
+        required_permissions;
+    [],
+    ;
+}
+published: {
+    id: 'published',
+        name;
+    'Published',
+        description;
+    'Live and public',
+        color;
+    'blue',
+        icon;
+    'Globe',
+        is_initial;
+    false,
+        is_final;
+    true,
+        required_permissions;
+    [],
+    ;
+}
+archived: {
+    id: 'archived',
+        name;
+    'Archived',
+        description;
+    'No longer active',
+        color;
+    'gray',
+        icon;
+    'Archive',
+        is_initial;
+    false,
+        is_final;
+    true,
+        required_permissions;
+    [],
+    ;
+}
+rejected: {
+    id: 'rejected',
+        name;
+    'Rejected',
+        description;
+    'Rejected during review',
+        color;
+    'red',
+        icon;
+    'XCircle',
+        is_initial;
+    false,
+        is_final;
+    false,
+        required_permissions;
+    [],
+    ;
+}
+;
 const STATE_ICONS = {
     FileText,
     Eye,

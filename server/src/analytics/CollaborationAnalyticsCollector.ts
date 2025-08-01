@@ -16,22 +16,24 @@ import {
   CollaborationContext,
   CollaborationTelemetrySchemas,
   EPIC_23_SUCCESS_CRITERIA
-} from './CollaborationTelemetry';
+ from './CollaborationTelemetry';
 import { AnalyticsWebSocketServer } from '../websocket/AnalyticsWebSocketServer';
 import { getDatabase } from '../database/connection';
 import { v4 as uuidv4 } from 'uuid';
 
 // Collaboration-specific metrics tracking
-}
-}
+
+
+
 interface CollaborationMetrics {
   realTimeLatency: {
     samples: number[];
     p50: number;
     p95: number;
     p99: number;
-}
-}
+
+
+
   };
   
   conflictResolution: {
@@ -61,11 +63,12 @@ interface CollaborationMetrics {
     websocketUptime: number;
     bandwidthUsage: number;
   };
-}
+
 
 // Real-time collaboration session tracking
-}
-}
+
+
+
 interface ActiveCollaborationSession {
   sessionId: string;
   workspaceId: string;
@@ -80,10 +83,11 @@ interface ActiveCollaborationSession {
     userAgent?: string;
     version?: string;
     device?: string;
-}
-}
+
+
+
   };
-}
+
 
 export class CollaborationAnalyticsCollector {
   private analyticsCollector: AnalyticsCollector;
@@ -109,29 +113,29 @@ export class CollaborationAnalyticsCollector {
         resolvedSuccessfully: 0, 
         averageResolutionTime: 0,
         resolutionMethods: {}
-  }
+
       workspaceAdoption: { 
         totalWorkspaces: 0, 
         activeWorkspaces: 0, 
         averageTeamSize: 0,
         adoptionRate: 0
-  }
+
       userEngagement: { 
         dailyActiveCollaborators: 0, 
         averageSessionDuration: 0,
         featureUsageRates: {},
         satisfactionScores: []
-  }
+
       performance: { 
         connectionQuality: {}, 
         syncSuccessRate: 0, 
         websocketUptime: 0,
         bandwidthUsage: 0
-      }
+
     };
     
     this.startMetricsCollection();
-  }
+
 
   /**
    * Record a collaboration telemetry event with validation and processing
@@ -143,7 +147,7 @@ export class CollaborationAnalyticsCollector {
       const schema = CollaborationTelemetrySchemas[event.eventType];
       if (!schema) {
         throw new Error(`Unknown collaboration event type: ${event.eventType}`);
-      }
+
       
       const validatedEvent = schema.parse(event);
       
@@ -163,8 +167,7 @@ export class CollaborationAnalyticsCollector {
       this.evaluateEpic23Criteria(validatedEvent);
       
       console.log(`📊 Recorded collaboration event: ${event.eventType}`);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Failed to record collaboration event:', error);
       
       // Record the error but don't fail the operation
@@ -176,10 +179,10 @@ export class CollaborationAnalyticsCollector {
           error: 'collaboration_event_recording_failed',
           originalEventType: event.eventType,
           errorMessage: error instanceof Error ? error.message : 'Unknown error'
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Track collaborative session lifecycle
@@ -200,7 +203,7 @@ export class CollaborationAnalyticsCollector {
       clientInfo: {
         userAgent: context.userAgent,
         version: context.clientVersion
-      }
+
     };
     
     this.activeSessions.set(sessionId, session);
@@ -215,9 +218,9 @@ export class CollaborationAnalyticsCollector {
         deviceType: this.detectDeviceType(context.userAgent),
         connectionQuality: 'good', // Default, should be measured
         previousSessionExists: await this.hasPreviousSession(context.userId, context.workspaceId)
-      }
+
     });
-  }
+
 
   /**
    * End collaborative session and record metrics
@@ -239,17 +242,17 @@ export class CollaborationAnalyticsCollector {
         userRole: 'collaborator', // Should be retrieved from session context
         timestamp: new Date(),
         sessionId
-  }
+
       data: {
         sessionDuration,
         activityCount: session.activityCount,
         finalPresenceStatus: session.presenceStatus,
         collaborationQuality: this.assessSessionQuality(session)
-      } as any
+ as any
     });
     
     this.activeSessions.delete(sessionId);
-  }
+
 
   /**
    * Track real-time conflict resolution
@@ -283,9 +286,9 @@ export class CollaborationAnalyticsCollector {
         automatedResolution: conflictData.resolutionStrategy !== 'manual_merge',
         userInterventionRequired: conflictData.resolutionStrategy === 'manual_merge',
         dataIntegrityMaintained: conflictData.success
-      }
+
     });
-  }
+
 
   /**
    * Measure and record collaboration latency
@@ -306,14 +309,14 @@ export class CollaborationAnalyticsCollector {
         threshold: {
           warning: EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET * 1.5,
           critical: EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET * 2
-  }
+
         performanceTier: this.classifyPerformance(latencyMs, EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET),
         networkConditions: {
           connectionType: 'unknown' // Should be detected from client
-        }
-      }
+
+
     });
-  }
+
 
   /**
    * Get real-time collaboration dashboard data
@@ -330,18 +333,18 @@ export class CollaborationAnalyticsCollector {
           current: this.metrics.realTimeLatency.p95,
           target: EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET,
           status: this.metrics.realTimeLatency.p95 <= EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET
-  }
+
         conflict_resolution_rate: {
           current: this.metrics.conflictResolution.resolvedSuccessfully / this.metrics.conflictResolution.totalConflicts || 0,
           target: EPIC_23_SUCCESS_CRITERIA.CONFLICT_RESOLUTION_SUCCESS_RATE,
           status: (this.metrics.conflictResolution.resolvedSuccessfully / this.metrics.conflictResolution.totalConflicts || 0) >= EPIC_23_SUCCESS_CRITERIA.CONFLICT_RESOLUTION_SUCCESS_RATE
-  }
+
         workspace_adoption: {
           current: this.metrics.workspaceAdoption.adoptionRate,
           target: EPIC_23_SUCCESS_CRITERIA.WORKSPACE_ADOPTION_RATE,
           status: this.metrics.workspaceAdoption.adoptionRate >= EPIC_23_SUCCESS_CRITERIA.WORKSPACE_ADOPTION_RATE
-        }
-  }
+
+
       active_collaboration: {
         total_sessions: activeSessions.length,
         unique_collaborators: new Set(activeSessions.map(s => s.userId)).size,
@@ -352,12 +355,12 @@ export class CollaborationAnalyticsCollector {
         ...this.metrics.performance,
         recent_latency: this.metrics.realTimeLatency,
         conflict_resolution: this.metrics.conflictResolution
-  }
+
       user_engagement: {
         ...this.metrics.userEngagement,
         satisfaction_average: this.calculateAverageSatisfaction(}
     };
-  }
+
 
   // Private helper methods
   
@@ -368,9 +371,9 @@ export class CollaborationAnalyticsCollector {
         this.metrics.realTimeLatency.samples.push(event.data.value);
         if (this.metrics.realTimeLatency.samples.length > 1000) {
           this.metrics.realTimeLatency.samples = this.metrics.realTimeLatency.samples.slice(-1000);
-        }
+
         this.updateLatencyPercentiles();
-      }
+
       break;
         
     case CollaborationEventType.CONFLICT_RESOLUTION_TRIGGERED:
@@ -381,10 +384,10 @@ export class CollaborationAnalyticsCollector {
       this.metrics.conflictResolution.resolvedSuccessfully++;
       if ('resolutionTimeMs' in event.data && event.data.resolutionTimeMs) {
         this.updateAverageResolutionTime(event.data.resolutionTimeMs);
-      }
+
       break;
-    }
-  }
+
+
 
   private updateLatencyPercentiles(): void {
     const sorted = [...this.metrics.realTimeLatency.samples].sort((a, b) => a - b);
@@ -394,16 +397,16 @@ export class CollaborationAnalyticsCollector {
       this.metrics.realTimeLatency.p50 = sorted[Math.floor(len * 0.5)];
       this.metrics.realTimeLatency.p95 = sorted[Math.floor(len * 0.95)];
       this.metrics.realTimeLatency.p99 = sorted[Math.floor(len * 0.99)];
-    }
-  }
+
+
 
   private updateSessionTracking(event: CollaborationTelemetryEvent): void {
     const session = this.activeSessions.get(event.context.sessionId);
     if (session) {
       session.lastActivity = new Date();
       session.activityCount++;
-    }
-  }
+
+
 
   private async storeCollaborationEvent(event: CollaborationTelemetryEvent): Promise<void> {
 
@@ -427,7 +430,7 @@ export class CollaborationAnalyticsCollector {
       JSON.stringify(event.data),
       JSON.stringify(event.context)
     ]);
-  }
+
 
   private async streamRealTimeUpdate(event: CollaborationTelemetryEvent): Promise<void> {
 
@@ -441,7 +444,7 @@ export class CollaborationAnalyticsCollector {
     };
     
     this.wsAnalyticsServer.broadcastToTopic('collaboration_analytics', update);
-  }
+
 
   private evaluateEpic23Criteria(event: CollaborationTelemetryEvent): void {
     // Check if event affects Epic 23 success criteria and emit alerts if needed
@@ -453,7 +456,7 @@ export class CollaborationAnalyticsCollector {
           measured: event.data.value,
           target: EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET
         });
-      }
+
       break;
         
     case CollaborationEventType.CONFLICT_RESOLUTION_COMPLETED:
@@ -464,26 +467,26 @@ export class CollaborationAnalyticsCollector {
           current: successRate,
           target: EPIC_23_SUCCESS_CRITERIA.CONFLICT_RESOLUTION_SUCCESS_RATE
         });
-      }
+
       break;
-    }
-  }
+
+
 
   // Utility methods
   
   private getActiveCollaboratorCount(workspaceId: string): number {
     return Array.from(this.activeSessions.values())
       .filter(session => session.workspaceId === workspaceId).length;
-  }
+
 
   private detectDeviceType(userAgent?: string): 'desktop' | 'tablet' | 'mobile' {
     if (!userAgent) return 'desktop';
     
     if (/Mobile|Android|iPhone|iPad/.test(userAgent)) {
       return /iPad|Tablet/.test(userAgent) ? 'tablet' : 'mobile';
-    }
+
     return 'desktop';
-  }
+
 
   private async hasPreviousSession(userId: string, workspaceId: string): Promise<boolean> {
 
@@ -494,7 +497,7 @@ export class CollaborationAnalyticsCollector {
     `, [userId, workspaceId, CollaborationEventType.COLLABORATIVE_SESSION_START]);
     
     return result[0]?.count > 0;
-  }
+
 
   private assessSessionQuality(session: ActiveCollaborationSession): string {
     // Assess session quality based on activity count and duration
@@ -505,27 +508,27 @@ export class CollaborationAnalyticsCollector {
     if (activityRate > 2) return 'moderately_engaged';
     if (activityRate > 0.5) return 'lightly_engaged';
     return 'passive';
-  }
+
 
   private assessConflictComplexity(conflictData: any): 'simple' | 'moderate' | 'complex' {
     if (conflictData.involvedUsers.length > 3) return 'complex';
     if (conflictData.conflictType === 'deletion' || conflictData.conflictType === 'creation') return 'moderate';
     return 'simple';
-  }
+
 
   private classifyPerformance(value: number, target: number): 'excellent' | 'good' | 'acceptable' | 'poor' {
     if (value <= target * 0.5) return 'excellent';
     if (value <= target) return 'good';
     if (value <= target * 1.5) return 'acceptable';
     return 'poor';
-  }
+
 
   private updateAverageResolutionTime(newTime: number): void {
     const current = this.metrics.conflictResolution.averageResolutionTime;
     const count = this.metrics.conflictResolution.resolvedSuccessfully;
     this.metrics.conflictResolution.averageResolutionTime = 
       (current * (count - 1) + newTime) / count;
-  }
+
 
   private calculateAverageSessionDuration(): number {
     const sessions = Array.from(this.activeSessions.values());
@@ -534,18 +537,18 @@ export class CollaborationAnalyticsCollector {
     const totalDuration = sessions.reduce((sum, session) => 
       sum + (Date.now() - session.startTime.getTime()), 0);
     return totalDuration / sessions.length;
-  }
+
 
   private getCurrentConcurrentPeak(): number {
     // Track daily peak concurrent users
     return Math.max(this.activeSessions.size, this.metrics.userEngagement.dailyActiveCollaborators);
-  }
+
 
   private calculateAverageSatisfaction(): number {
     const scores = this.metrics.userEngagement.satisfactionScores;
     if (scores.length === 0) return 0;
     return scores.reduce((sum, score) => sum + score, 0) / scores.length;
-  }
+
 
   private createEventSummary(event: CollaborationTelemetryEvent): any {
     // Create a summary for real-time streaming
@@ -557,9 +560,9 @@ export class CollaborationAnalyticsCollector {
       // Include relevant data points without full event data
       ...(event.eventType.includes('conflict') && { 
         conflictType: 'conflictType' in event.data ? event.data.conflictType : 'unknown' 
-  }
+
     };
-  }
+
 
   private emitEpic23Alert(alertType: string, data: any): void {
     console.warn(`🚨 Epic 23 Alert: ${alertType}`, data);
@@ -571,14 +574,14 @@ export class CollaborationAnalyticsCollector {
       timestamp: new Date(),
       severity: 'warning'
     });
-  }
+
 
   private startMetricsCollection(): void {
     // Update metrics every 30 seconds
     this.metricsUpdateInterval = setInterval(() => {
       this.updateAggregatedMetrics();
     }, 30000);
-  }
+
 
   private updateAggregatedMetrics(): void {
     // Update workspace adoption metrics
@@ -588,16 +591,16 @@ export class CollaborationAnalyticsCollector {
     // Update user engagement metrics
     this.metrics.userEngagement.dailyActiveCollaborators = 
       new Set(Array.from(this.activeSessions.values()).map(s => s.userId)).size;
-  }
+
 
   // Cleanup method
   public destroy(): void {
     if (this.metricsUpdateInterval) {
       clearInterval(this.metricsUpdateInterval);
-    }
+
     this.activeSessions.clear();
-  }
-}
+
+
 
 export { CollaborationAnalyticsCollector };
 export default CollaborationAnalyticsCollector;

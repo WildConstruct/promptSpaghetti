@@ -6,10 +6,11 @@ import {
   Typography,
   ListSubheader,
   Chip
-} from '@mui/material';
+ from '@mui/material';
 import { Autocomplete } from '@mui/material';
 import { Public as PublicIcon, Schedule as ScheduleIcon } from '@mui/icons-material';
-}
+
+
 interface TimezoneSelectProps {
   value: string;,
   onChange: (timezone: string) => void;
@@ -69,7 +70,8 @@ interface TimezoneSelectProps {
   'Africa/Lagos',
   'Africa/Casablanca'
   ]
-}
+
+
 };
 
 // Get all available timezones
@@ -110,13 +112,13 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ )
   const searchTerm = externalSearchTerm ?? internalSearchTerm;
   // Create timezone options
   const timezoneOptions = useMemo(() => {
-  const options: Array<{
+  const options: Array<{,
   value: string;,
-  label: string;
+  label: string;,
   offset: string;,
-  city: string;
+  city: string;,
   group: string;
-}> = [];
+> = [];
     // Add grouped timezones
     Object.entries(TIMEZONE_GROUPS).forEach(([group, timezones]) => {
   timezones.forEach(timezone => {)
@@ -174,7 +176,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ )
   const handleChange = (_event: unknown, newValue: unknown) => {
     if (newValue && typeof newValue === 'object' && 'value' in newValue) {
       onChange((newValue as { value: string }).value);
-    } else if (typeof newValue === 'string') {
+ else if (typeof newValue === 'string') {
       onChange(newValue);
   };
   return;
@@ -195,7 +197,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ )
             InputProps={{
               ...params.InputProps,
               startAdornment: <PublicIcon sx={{ mr: 1, color: 'action.active' }} />
-            }}
+}
           />
         )}
         renderOption={(props, option) => ()
@@ -228,7 +230,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ )
             option.value.toLowerCase().includes(search) ||
             option.offset.toLowerCase().includes(search)
           );
-        }}
+
         isOptionEqualToValue={(option, value) => option.value === value.value}
         sx={{ width: fullWidth ? '100%' : 300 }}
       />

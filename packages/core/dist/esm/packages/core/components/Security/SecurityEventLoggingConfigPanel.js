@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * alert rules, and compliance framework settings. Builds on existing PromptScape
  * UI patterns and integrates with the security event policy engine.
  */
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ComplianceFramework, securityEventPolicyEngine } from '../../security/SecurityEventLoggingPolicies';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -19,6 +19,28 @@ import { Select } from '../ui/Select';
 import { Checkbox } from '../ui/Checkbox';
 import { AlertRuleBuilder } from './AlertRuleBuilder';
 import './SecurityEventLoggingConfigPanel.css';
+compliance_settings: {
+    frameworks: [],
+        automated_reporting;
+    true,
+        external_notifications;
+    true,
+        validation_rules;
+    [],
+    ;
+}
+;
+const [activeTab, setActiveTab] = useState('overview');
+const [loading, setLoading] = useState(false);
+const [errors, setErrors] = useState([]);
+const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+const [policies, setPolicies] = useState([]);
+// Load current configuration and policies
+useEffect(() => {
+    loadConfiguration();
+    loadPolicies();
+}, []);
 const loadConfiguration = async () => {
     setLoading(true);
     try {
@@ -507,7 +529,7 @@ function getFrameworkDescription(framework) {
         // Simulate API call
         return {
             enabled: true,
-            destinations: [,
+            destinations: [
                 {
                     id: '1',
                     name: 'Primary Database',
@@ -528,7 +550,7 @@ function getFrameworkDescription(framework) {
                     credentials: { api_key: '***' }
                 }
             ],
-            event_types: [,
+            event_types: [
                 SecurityEventType.AUTHENTICATION_FAILURE,
                 SecurityEventType.CODE_INJECTION_ATTEMPT,
                 SecurityEventType.NETWORK_INTRUSION_ATTEMPT
@@ -559,7 +581,7 @@ function getFrameworkDescription(framework) {
                     await new Promise(resolve => setTimeout(resolve, 2000));
                     return {
                         success: true,
-                        tests: [,
+                        tests: [
                             { name: 'Database Connection', status: 'pass' },
                             { name: 'SIEM Integration', status: 'pass' },
                             { name: 'Event Processing', status: 'pass' }

@@ -131,13 +131,13 @@ duration: 0;
 // Simulate response (in real app, this would come via WebSocket)
 if (Math.random() > 0.7) {
     setTimeout(() => {
-        const responses = [];
-        'That\'s a great question! Let me help you with that.',
+        const responses = [
+            'That\'s a great question! Let me help you with that.',
             'Thanks for sharing! The community really appreciates your input.',
             'I see what you mean. Have you tried checking the documentation?',
             'Welcome to our marketplace! Feel free to browse our templates.',
-            'That\'s an interesting perspective. What do you think about...?';
-        ;
+            'That\'s an interesting perspective. What do you think about...?'
+        ];
         const responseMessage = {
             id: `response-${Date.now()}` };
     }, userId, 'support-bot', userName, 'Support Assistant', userAvatar, '/avatars/support-bot.png', message, responses[Math.floor(Math.random() * responses.length)], timestamp, new Date(), type, 'text');

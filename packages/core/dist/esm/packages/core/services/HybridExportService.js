@@ -23,7 +23,8 @@ FOCAL: {
     primary_focus: string; // Main visual focus point,
     secondary_focus ?  : string; // Supporting focus elements,
     background_treatment: 'blur' | 'sharp' | 'silhouette' | 'bokeh';
-    visual_hierarchy: 'foreground' | 'midground' | 'background';
+    visual_hierarchy: 'foreground' | 'midground' | 'background',
+    ;
 }
 ;
 ;
@@ -63,7 +64,8 @@ export class HybridPromptExportService {
             includeZada: boolean;
             includeHollywoodProtocol: boolean;
             quality: 'production' | 'preview' | 'debug';
-            targetAudience: 'director' | 'vfx_professional' | 'mixed_crew';
+            targetAudience: 'director' | 'vfx_professional' | 'mixed_crew',
+            ;
         }
         {
             includeMARS: true,
@@ -271,11 +273,11 @@ export class HybridPromptExportService {
         } // Default static
         , // Default static
         inferLensChoice(prompt, variables) {
-            const lensKeywords = [];
-            '24mm', '35mm', '50mm', '85mm', '135mm',
+            const lensKeywords = [
+                '24mm', '35mm', '50mm', '85mm', '135mm',
                 'wide-angle', 'standard', 'telephoto',
-                'fish-eye', 'macro', 'portrait lens';
-            ;
+                'fish-eye', 'macro', 'portrait lens'
+            ];
             for (const lens of lensKeywords) {
                 if (prompt.toLowerCase().includes(lens) ||
                     Object.values(variables).some(v => v.toLowerCase().includes(lens))) {
@@ -515,8 +517,9 @@ export class HybridPromptExportService {
         class: ZadaNaturalLanguageGenerator };
     {
         async;
-        generateNaturalLanguageVariants(prompt, string);
-        variables: (Record),
+        generateNaturalLanguageVariants(prompt, string),
+            variables;
+        (Record),
             targetAudience;
         'director' | 'vfx_professional' | 'mixed_crew';
         Promise < ZadaNaturalLanguageVariant > {
@@ -573,8 +576,9 @@ this.convertToDirectorNotes(prompt, variables),
 ;
 return variants;
 async;
-createDirectorAccessiblePrompt(prompt, string);
-variables: Record;
+createDirectorAccessiblePrompt(prompt, string),
+    variables;
+Record;
 Promise < DirectorAccessiblePrompt > {
     return: {
         screenplay_style: this.convertToScreenplayStyle(prompt, variables),
@@ -598,10 +602,10 @@ The shot captures ${this.createNaturalDescription(prompt, variables)}.`;
         },
         convertToStoryboardStyle(prompt, variables) {
             return `PANEL DESCRIPTION:
-Shot Type: ${this.inferShotTypeNaturally(prompt)},}
-  Composition: ${this.describeComposition(prompt, variables)},}
-  Subject: ${this.describeSubjectNaturally(prompt, variables)},}
-  Lighting: ${this.describeLightingNaturally(prompt, variables)},}
+Shot Type: ${this.inferShotTypeNaturally(prompt)},},
+  Composition: ${this.describeComposition(prompt, variables)},},
+  Subject: ${this.describeSubjectNaturally(prompt, variables)},},
+  Lighting: ${this.describeLightingNaturally(prompt, variables)},},
   Mood: ${this.extractMoodDirection(prompt, variables)}
 VISUAL NOTES:
 ${this.generateVisualNotes(prompt, variables)}`;

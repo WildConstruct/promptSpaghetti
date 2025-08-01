@@ -6,7 +6,8 @@ summary: {
     averagePerformance: number; // Score 0-100,
     reliabilityScore: number; // Score 0-100,
     efficiencyScore: number; // Score 0-100,
-    recommendation: 'excellent' | 'good' | 'needs_attention' | 'critical';
+    recommendation: 'excellent' | 'good' | 'needs_attention' | 'critical',
+    ;
 }
 ;
 // Detailed Metrics
@@ -15,7 +16,12 @@ performance: {
     p50ExecutionTime: number;
     p95ExecutionTime: number;
     p99ExecutionTime: number;
-    slowestNodes: Array;
+    slowestNodes: Array < {
+        nodeId: string,
+        nodeType: string,
+        averageDuration: number,
+        executionCount: number
+    } > ;
 }
 ;
 reliability: {
@@ -23,7 +29,11 @@ reliability: {
     errorRate: number;
     mostReliableTypes: string;
     leastReliableTypes: string;
-    errorPatterns: Array;
+    errorPatterns: Array < {
+        pattern: string,
+        frequency: number,
+        affectedNodes: string
+    } > ;
 }
 ;
 efficiency: {
@@ -38,7 +48,11 @@ trends: {
     performanceTrend: 'improving' | 'stable' | 'degrading';
     trendConfidence: number; // 0-1,
     projectedImprovement: number;
-    seasonalPatterns: Array;
+    seasonalPatterns: Array < {
+        period: string,
+        impact: number,
+        description: string
+    } > ;
 }
 ;
 alerts: {
@@ -46,7 +60,11 @@ alerts: {
     high: number;
     medium: number;
     low: number;
-    topAlertTypes: Array;
+    topAlertTypes: Array < {
+        type: string,
+        frequency: number,
+        severity: string
+    } > ;
 }
 ;
 ;
@@ -171,7 +189,7 @@ export class PerformanceAnalytics extends EventEmitter {
                 }
                 impact: 'medium',
                     actionItems;
-                [,
+                [
                     'Profile slow executing nodes',
                     'Consider caching optimization',
                     'Review algorithm complexity',
@@ -202,7 +220,7 @@ export class PerformanceAnalytics extends EventEmitter {
                     impact;
                 'high',
                     actionItems;
-                [,
+                [
                     'Implement memory pooling',
                     'Review data structure usage',
                     'Enable garbage collection optimization',
@@ -235,7 +253,7 @@ export class PerformanceAnalytics extends EventEmitter {
         }
         impact: 'high',
             actionItems;
-        [,
+        [
             'Investigate error patterns',
             'Improve input validation',
             'Add error recovery mechanisms',
@@ -275,7 +293,7 @@ Date.now(),
 `${alerts.length} active alerts, mostly ${mostCommonAlert[0]} (${mostCommonAlert[1]} instances)`;
 impact: 'medium',
     actionItems;
-[,
+[
     'Review alert thresholds',
     `Address ${mostCommonAlert[0]} alerts`,
     'Implement automated remediation',
@@ -307,7 +325,7 @@ if (avgCacheHitRate < 30 && aggregatedMetrics.length > 0) {
 }
 impact: 'medium',
     actionItems;
-[,
+[
     'Enable caching for frequently accessed nodes',
     'Optimize cache key strategies',
     'Implement intelligent cache warming',
@@ -480,7 +498,7 @@ if (insightArray.length > 100) {
                     errorRate: summary.errorRate,
                     mostReliableTypes: summary.topPerformingTypes,
                     leastReliableTypes: summary.underperformingTypes,
-                    errorPatterns: [,
+                    errorPatterns: [
                         {
                             pattern: 'Execution timeout',
                             frequency: Math.floor(summary.errorRate * 0.4),
@@ -490,7 +508,8 @@ if (insightArray.length > 100) {
                             pattern: 'Memory overflow',
                             frequency: Math.floor(summary.errorRate * 0.3),
                             affectedNodes: summary.underperformingTypes
-                        }]
+                        }
+                    ]
                 };
             }), private, analyzeEfficiency(((metrics, aggregated) => {
                 const summary = this.monitor.getStatisticsSummary();
@@ -502,7 +521,7 @@ if (insightArray.length > 100) {
                     cacheHitRate: avgCacheHitRate,
                     contextOptimization: 75, // Placeholder - would need context analysis,
                     resourceWaste: summary.memoryPressure,
-                    optimizationOpportunities: [,
+                    optimizationOpportunities: [
                         'Enable caching for frequently accessed nodes',
                         'Optimize memory usage patterns',
                         'Implement lazy loading for large datasets'

@@ -7,8 +7,8 @@
 import { PrerequisiteReport } from './Epic16PrerequisiteSystem';
 
 }
-export interface PrerequisiteRunnerOptions {
-    categories?: string[];
+}
+export interface PrerequisiteRunnerOptions { categories?: string[];
     skipChecks?: string[];
     onlyChecks?: string[];
     autoFix?: boolean;
@@ -19,12 +19,10 @@ export interface PrerequisiteRunnerOptions {
     verbose?: boolean;
     colors?: boolean;
     configFile?: string;
-    environment?: 'development' | 'staging' | 'production';
-
-
+    environment?: 'development' | 'staging' | 'production' }
 }
-export interface PrerequisiteRunnerResult {
-    success: boolean;
+}
+export interface PrerequisiteRunnerResult { success: boolean;
     report: PrerequisiteReport;
     autoFixResults?: Record<string, boolean>;
     outputPath?: string;
@@ -44,7 +42,7 @@ export declare class Epic16PrerequisiteRunner {
     getQuickStatus(): Promise<{
         status: 'healthy' | 'degraded' | 'critical';
         message: string;
-        details: any;
+        details: any }
 }
     }>;
     private buildSystemConfig;

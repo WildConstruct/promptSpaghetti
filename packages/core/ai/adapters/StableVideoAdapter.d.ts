@@ -7,17 +7,16 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface StableVideoConfig {
-    endpoint: string;
+}
+export interface StableVideoConfig { endpoint: string;
     apiType: 'stability-ai' | 'automatic1111' | 'comfyui' | 'custom';
     apiKey?: string;
     timeout?: number;
     maxRetries?: number;
-    defaultModel?: string;
-
+    defaultModel?: string }
 }
-export interface StableVideoRequestOptions {
-    image: string;
+}
+export interface StableVideoRequestOptions { image: string;
     model?: 'svd' | 'svd-xt' | 'svd-img2vid' | 'svd-xt-1-1';
     motion_bucket_id?: number;
     cond_aug?: number;
@@ -36,11 +35,10 @@ export interface StableVideoRequestOptions {
     interpolate_frames?: boolean;
     upscale_video?: boolean;
     remove_watermark?: boolean;
-    loop_video?: boolean;
-
+    loop_video?: boolean }
 }
-export interface StableVideoGenerationResult {
-    video: {
+}
+export interface StableVideoGenerationResult { video: {
         frames: string[];
         url?: string;
         data?: ArrayBuffer;
@@ -48,15 +46,14 @@ export interface StableVideoGenerationResult {
         duration: number;
         resolution: {
             width: number;
-            height: number;
+            height: number }
 }
         };
         fps: number;
         frame_count: number;
         size: number;
     };
-    metadata: {
-        model: string;
+    metadata: { model: string;
         input_image: string;
         motion_bucket_id: number;
         cond_aug: number;
@@ -64,14 +61,12 @@ export interface StableVideoGenerationResult {
         steps: number;
         cfg_scale: number;
         generation_time: number;
-        memory_usage?: number;
-    };
-    usage: {
-        compute_units: number;
+        memory_usage?: number };
+    usage: { compute_units: number;
         estimated_cost: number;
-        processing_time: number;
-    };
+        processing_time: number };
 
+}
 }
 export interface SVDModelInfo {
     name: string;
@@ -120,4 +115,5 @@ export declare class StableVideoAdapter extends BaseAIModel {
 
 export default StableVideoAdapter;
 //# sourceMappingURL=StableVideoAdapter.d.ts.map
+}
 }

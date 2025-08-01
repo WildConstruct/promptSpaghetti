@@ -9,16 +9,19 @@ import {
   Code,
   Info,
   Check
-} from 'lucide-react';
+ from 'lucide-react';
 import { Badge } from '../../common/Badge';
-}
+
+
 interface TargetingRule {
   id: string;,
-  attribute: string;
+  attribute: string;,
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'regex' | 'exists' | 'not_exists';,
   value: Error;
   logicalOperator?: 'AND' | 'OR';
-}
+
+
+
 interface UserSegment {
   id: string;,
   name: string;
@@ -26,14 +29,17 @@ interface UserSegment {
   rules: TargetingRule;
   estimatedUsers?: number;
   isActive: boolean;
-}
+
+
+
 interface TargetingRuleBuilderProps {
   initialRules?: TargetingRule;
   onRulesChange: (rules: TargetingRule) => void;
   segments?: UserSegment;
-}
+
+
   onTestRule?: (rules: TargetingRule) => Promise<{ matches: boolean; userCount: number }>;
-const AVAILABLE_ATTRIBUTES = [;
+const AVAILABLE_ATTRIBUTES = [
   { key: 'user_id', label: 'User ID', type: 'string', description: 'Unique user identifier' },
   { key: 'email', label: 'Email', type: 'string', description: 'User email address' },
   { key: 'org_id', label: 'Organization ID', type: 'string', description: 'Organization identifier' },
@@ -102,7 +108,7 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
   logicalOperator: 'AND',
 };
     const ruleIndex = rules.findIndex(rule => rule.id === id);
-    const updatedRules = [;
+    const updatedRules = [
       ...rules.slice(0, ruleIndex + 1),
       duplicatedRule,
       ...rules.slice(ruleIndex + 1)
@@ -116,9 +122,9 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
     try {
       const result = await onTestRule(rules);
       setTestResult(result);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to test rules:', error);
-} finally {
+ finally {
       setTesting(false);
   };
   const renderValueInput = (rule: TargetingRule) => {
@@ -136,7 +142,7 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
           onChange={(e) => {
             const values = e.target.value.split(',').map(v => v.trim()).filter(v => v);
             updateRule(rule.id, { value: values });
-          }}
+}
           rows={2}
         />
       );
@@ -192,9 +198,9 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
     let valueDisplay = '';
     if (rule.operator === 'exists' || rule.operator === 'not_exists') {
       valueDisplay = '';
-    } else if (Array.isArray(rule.value)) {
+ else if (Array.isArray(rule.value)) {
       valueDisplay = `[${rule.value.join(', ')}]`;}
-    } else {
+ else {
       valueDisplay = String(rule.value);
     return `${attribute?.label || rule.attribute} ${operator.symbol} ${valueDisplay}`.trim();}
   };
@@ -404,7 +410,7 @@ export const [testResult, setTestResult] = useState<{ matches: boolean; userCoun
                       // Apply segment rules
                       setRules(segment.rules);
                       onRulesChange(segment.rules);
-                    }}
+}
                   >
                     Apply Rules
                   </button>

@@ -96,16 +96,16 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
             endTime: Date.now()
           },
           generatedAt: Date.now()
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: 'Failed to retrieve analytics summary',
         details: error.message
       };
-    }
+
   });
   
   // Dashboard data endpoint
@@ -138,9 +138,9 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
             severity: 'warning',
             message: 'Response time increased by 15% in the last hour',
             timestamp: Date.now() - 3600000
-          }
+
         ]
-      }
+
     };
   });
   
@@ -152,7 +152,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
     if (!validMetrics.includes(metric)) {
       reply.status(400);
       return { success: false, error: 'Invalid metric' };
-    }
+
     
     // Generate mock time series data
     const dataPoints = [];
@@ -176,10 +176,10 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
         case 'errors':
           value = Math.floor(Math.random() * 5);
           break;
-      }
+
       
       dataPoints.push({ timestamp, value });
-    }
+
     
     return {
       success: true,
@@ -190,7 +190,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
       },
       meta: {
         totalDataPoints: dataPoints.length
-      }
+
     };
   });
   
@@ -210,8 +210,8 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
           compute: 156.78,
           storage: 34.12,
           bandwidth: 43.66
-        }
-      }
+
+
     };
   });
   
@@ -241,7 +241,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
           remaining: 265.44,
           alertThresholds: [75, 90],
           status: 'healthy'
-        }
+
       ]
     };
   });
@@ -268,7 +268,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
           message: 'Execution rate increased by 25% in the last 2 hours',
           timestamp: Date.now() - 7200000,
           acknowledged: true
-        }
+
       ]
     };
   });
@@ -281,7 +281,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
     if (!validTypes.includes(type)) {
       reply.status(400);
       return { success: false, error: 'Invalid pattern type' };
-    }
+
     
     // Generate mock pattern data
     const patterns = {
@@ -311,8 +311,8 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
           peakUsage: type === 'hourly' ? '2-4 PM' : type === 'daily' ? 'Wednesday' : 'Week 8',
           averageUsage: patterns[type].reduce((sum: number, p: any) => sum + p.usage, 0) / patterns[type].length,
           recommendation: 'Consider scaling resources during peak hours'
-        }
-      }
+
+
     };
   });
 
@@ -344,7 +344,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
       
       reply.type('text/csv');
       return csv;
-    }
+
     
     return {
       success: true,
@@ -353,7 +353,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   });
   
   return fastify;
-}
+
 
 async function startServer(): Promise<void> {
   try {
@@ -378,16 +378,15 @@ async function startServer(): Promise<void> {
     console.log(`  curl http://localhost:${port}/api/analytics/summary`);
     console.log('');
     console.log('✨ This demonstrates Epic 13 Analytics API functionality!');
-    
-  } catch (error) {
+ catch (error) {
     console.error('❌ Failed to start Epic 13 analytics server:', error);
     process.exit(1);
-  }
-}
+
+
 
 // Start server if run directly
 if (require.main === module) {
   startServer();
-}
+
 
 module.exports = { createMinimalAnalyticsAPI };

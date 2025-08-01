@@ -13,5 +13,4 @@ const handleStartLine = lines.findIndex((line: string) => line.includes('export 
 for (let i = handleStartLine; i < handleStartLine + 10; i++) {
   if (lines[i]) {
     console.log(`${i + 1}: ${lines[i]}`);
-  }
-}
+

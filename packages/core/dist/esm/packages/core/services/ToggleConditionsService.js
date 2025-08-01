@@ -72,7 +72,8 @@ export var ComparisonOperator;
     daysOfWeek ?  : number; // 0-6, Sunday=0,
     hoursOfDay ?  : number; // 0-23,
     recurring ?  : boolean;
-    recurrencePattern ?  : 'daily' | 'weekly' | 'monthly';
+    recurrencePattern ?  : 'daily' | 'weekly' | 'monthly',
+    ;
 }
 ;
 ;
@@ -95,7 +96,8 @@ experiments: {
     enableABTesting: boolean;
     defaultTrafficAllocation: number;
     maxVariants: number;
-    stickinessStrategy: 'user' | 'session' | 'device';
+    stickinessStrategy: 'user' | 'session' | 'device',
+    ;
 }
 ;
 export class ToggleConditionsService {
@@ -478,8 +480,7 @@ catch (error) {
                 ...condition,
                 parameters: {
                     percentage: experiment.trafficAllocation,
-                    salt: `ab_${experiment.experimentId}`
-                } }, context;
+                    salt: `ab_${experiment.experimentId}` } }, context;
             ;
             return {
                 included: percentageResult.included,

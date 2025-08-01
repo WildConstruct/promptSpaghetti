@@ -1,6 +1,5 @@
 import { z } from 'zod';
-export declare export declare const ParameterPresetSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare export declare const ParameterPresetSchema: z.ZodObject<{ id: z.ZodString;
     name: z.ZodString;
     description: z.ZodString;
     category: z.ZodString;
@@ -11,19 +10,15 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
         style: z.ZodEnum<["creative", "logical", "balanced"]>;
         domain: z.ZodOptional<z.ZodString>;
         userContext: z.ZodOptional<z.ZodString>;
-        nodeTypes: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        nodeTypes: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
             nodeType: z.ZodString;
             weight: z.ZodNumber;
             required: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            weight: number;
+        }, "strip", z.ZodTypeAny, { weight: number;
             required: boolean;
+            nodeType: string }, { weight: number;
             nodeType: string;
-        }, {
-            weight: number;
-            nodeType: string;
-            required?: boolean | undefined;
-        }>, "many">>;
+            required?: boolean | undefined }>, "many">>;
         specificRequirements: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         constraints: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         focusAreas: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -39,16 +34,14 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
         diversityScore: z.ZodDefault<z.ZodNumber>;
         outputFormat: z.ZodDefault<z.ZodEnum<["graph", "serialized", "both"]>>;
         includeExplanation: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        includeMetadata: boolean;
+    }, "strip", z.ZodTypeAny, { includeMetadata: boolean;
         validateOutput: boolean;
         style: "creative" | "logical" | "balanced";
         complexity: "simple" | "complex" | "moderate";
         nodeTypes: {
             weight: number;
             required: boolean;
-            nodeType: string;
-        }[];
+            nodeType: string }[];
         constraints: string[];
         temperature: number;
         nodeCount: number;
@@ -66,8 +59,7 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
         includeExplanation: boolean;
         domain?: string | undefined;
         userContext?: string | undefined;
-    }, {
-        style: "creative" | "logical" | "balanced";
+    }, { style: "creative" | "logical" | "balanced";
         complexity: "simple" | "complex" | "moderate";
         nodeCount: number;
         purpose: string;
@@ -76,8 +68,7 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
         nodeTypes?: {
             weight: number;
             nodeType: string;
-            required?: boolean | undefined;
-        }[] | undefined;
+            required?: boolean | undefined }[] | undefined;
         constraints?: string[] | undefined;
         temperature?: number | undefined;
         outputFormat?: "both" | "graph" | "serialized" | undefined;
@@ -98,8 +89,7 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
     isDefault: z.ZodDefault<z.ZodBoolean>;
     createdAt: z.ZodString;
     updatedAt: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: string;
     updatedAt: string;
     name: string;
@@ -112,8 +102,7 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
         nodeTypes: {
             weight: number;
             required: boolean;
-            nodeType: string;
-        }[];
+            nodeType: string }[];
         constraints: string[];
         temperature: number;
         nodeCount: number;
@@ -135,8 +124,7 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
     category: string;
     tags: string[];
     isDefault: boolean;
-}, {
-    id: string;
+}, { id: string;
     createdAt: string;
     updatedAt: string;
     name: string;
@@ -151,8 +139,7 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
         nodeTypes?: {
             weight: number;
             nodeType: string;
-            required?: boolean | undefined;
-        }[] | undefined;
+            required?: boolean | undefined }[] | undefined;
         constraints?: string[] | undefined;
         temperature?: number | undefined;
         outputFormat?: "both" | "graph" | "serialized" | undefined;
@@ -174,65 +161,46 @@ export declare export declare const ParameterPresetSchema: z.ZodObject<{
     isDefault?: boolean | undefined;
 }>;
 export type ParameterPreset = z.infer<typeof ParameterPresetSchema>;
-export declare const ValidationResultSchema: z.ZodObject<{
-    isValid: z.ZodBoolean;
-    errors: z.ZodArray<z.ZodObject<{,
+export declare const ValidationResultSchema: z.ZodObject<{ isValid: z.ZodBoolean;
+    errors: z.ZodArray<z.ZodObject<{ }
         field: z.ZodString;
         message: z.ZodString;
         code: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        code: string;
+    }, "strip", z.ZodTypeAny, { code: string;
         message: string;
-        field: string;
-    }, {
-        code: string;
+        field: string }, { code: string;
         message: string;
-        field: string;
-    }>, "many">;
-    warnings: z.ZodArray<z.ZodObject<{,
+        field: string }>, "many">;
+    warnings: z.ZodArray<z.ZodObject<{ 
         field: z.ZodString;
         message: z.ZodString;
-        suggestion: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        message: string;
+        suggestion: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { message: string;
         field: string;
-        suggestion?: string | undefined;
-    }, {
-        message: string;
+        suggestion?: string | undefined }, { message: string;
         field: string;
-        suggestion?: string | undefined;
-    }>, "many">;
-}, "strip", z.ZodTypeAny, {
-    isValid: boolean;
+        suggestion?: string | undefined }>, "many">;
+}, "strip", z.ZodTypeAny, { isValid: boolean;
     warnings: {
         message: string;
         field: string;
-        suggestion?: string | undefined;
-    }[];
-    errors: {
-        code: string;
+        suggestion?: string | undefined }[];
+    errors: { code: string;
         message: string;
-        field: string;
-    }[];
-}, {
-    isValid: boolean;
+        field: string }[];
+}, { isValid: boolean;
     warnings: {
         message: string;
         field: string;
-        suggestion?: string | undefined;
-    }[];
-    errors: {
-        code: string;
+        suggestion?: string | undefined }[];
+    errors: { code: string;
         message: string;
-        field: string;
-    }[];
+        field: string }[];
 }>;
 export type ValidationResult = z.infer<typeof ValidationResultSchema>;
 /**
  * Parameter validation class
  */
-export declare class ParameterValidator {
-    /**
+export declare class ParameterValidator { /**
      * Validate parameters against schema
      */
     static validate(parameters: Partial<RandomizerParameters>): ValidationResult;
@@ -247,8 +215,7 @@ export declare class ParameterValidator {
         nodeCount?: number;
         nodeTypes?: string[];
         temperature?: number;
-        focusAreas?: string[];
-    };
+        focusAreas?: string[] };
     /**
      * Suggest appropriate node types based on purpose
      */

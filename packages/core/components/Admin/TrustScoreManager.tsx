@@ -9,8 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Textarea } from '../ui/Textarea';
-import { 
-  User,
+import { User,
   Shield,
   Star,
   Award,
@@ -27,134 +26,121 @@ import {
   Filter,
   RefreshCw,
   Eye,
-  BarChart3,
+  BarChart3 }
   Settings
-} from 'lucide-react';
+ from 'lucide-react';
 import type { TrustScore } from '../../types/TrustTypes';
 
-}
-export interface UserTrustData {
-  userId: string;
+
+export interface UserTrustData { userId: string;
   userName: string;
   email: string;
   userType: 'creator' | 'buyer' | 'both';
   trustScore: TrustScore;
-  verificationStatus: {
+  verificationStatus: { }
   email: boolean;
   phone: boolean;
   identity: boolean;
   professional: boolean;
-}
+
+
 };
-  accountStatus: 'active' | 'suspended' | 'under_review';
+  accountStatus: 'active' | 'suspended' | 'under_review';,
   lastActivity: Date;
   joinDate: Date;
   riskFlags: string;
-}
-}
-export interface TrustScoreAdjustment {
-  userId: string;
+
+
+export interface TrustScoreAdjustment { userId: string;
   adjustmentType: 'manual_override' | 'penalty' | 'bonus' | 'reset';
   scoreChange: number;
   reason: string;
   adminId: string;
   timestamp: Date;
-  expiresAt?: Date;
-}
-}
-}
-export interface TrustScoreManagerProps {
-  className?: string;
-}
-}
+  expiresAt?: Date }
+
+
+
+export interface TrustScoreManagerProps { className?: string }
+
 export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   className = ''
-}) => {
-  const [searchTerm, setSearchTerm] = useState('');
+}) => { const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserTrustData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [adjustmentData, setAdjustmentData] = useState<Partial<TrustScoreAdjustment>>({)
-  adjustmentType: 'manual_override',
-  scoreChange: 0,
-  reason: '',
+  adjustmentType: 'manual_override'
+  scoreChange: 0
+  reason: '' }
 });
   const [filterType, setFilterType] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(false);
   // Mock data - in real implementation, this would come from API
   const [userTrustData, setUserTrustData] = useState<UserTrustData>([)
-    {
-  userId: 'user-1',
-  userName: 'John Director',
-  email: 'john@example.com',
-  userType: 'creator',
+    { userId: 'user-1'
+  userName: 'John Director'
+  email: 'john@example.com'
+  userType: 'creator'
   trustScore: {
-  score: 92,
-  grade: 'A',
-  status: 'excellent',
-  lastUpdated: new Date(),
-  version: '1.0',
-  confidence: 95,
-},
-  verificationStatus: {
-  email: true,
-  phone: true,
-  identity: true,
-  professional: true,
-},
-  accountStatus: 'active',
-      lastActivity: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-      joinDate: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000),
+  score: 92
+  grade: 'A'
+  status: 'excellent'
+  lastUpdated: new Date()
+  version: '1.0'
+  confidence: 95 }
+
+  verificationStatus: { 
+  email: true
+  phone: true
+  identity: true
+  professional: true }
+
+  accountStatus: 'active'
+      lastActivity: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+      joinDate: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000)
       riskFlags: [];
-  }
-    {
-  userId: 'user-2',
-  userName: 'Sarah Producer',
-  email: 'sarah@example.com',
-  userType: 'creator',
+
+    { userId: 'user-2'
+  userName: 'Sarah Producer'
+  email: 'sarah@example.com'
+  userType: 'creator'
   trustScore: {
-  score: 45,
-  grade: 'D',
-  status: 'warning',
-  lastUpdated: new Date(),
-  version: '1.0',
-  confidence: 70,
-},
-  verificationStatus: {
-  email: true,
-  phone: false,
-  identity: false,
-  professional: true,
-},
-  accountStatus: 'under_review',
-      lastActivity: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      joinDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000),
+  score: 45
+  grade: 'D'
+  status: 'warning'
+  lastUpdated: new Date()
+  version: '1.0'
+  confidence: 70 }
+
+  verificationStatus: { 
+  email: true
+  phone: false
+  identity: false
+  professional: true }
+
+  accountStatus: 'under_review'
+      lastActivity: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      joinDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000)
       riskFlags: ['unusual_activity', 'low_verification']
   ]);
-  const getTrustScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
+  const getTrustScoreColor = (score: number) => { if (score >= 90) return 'text-green-600';
     if (score >= 80) return 'text-blue-600';
     if (score >= 70) return 'text-yellow-600';
     if (score >= 60) return 'text-orange-600';
-    return 'text-red-600';
-  };
-  const getStatusColor = (status: string) => {
-  switch (status) {
+    return 'text-red-600' };
+  const getStatusColor = (status: string) => { switch (status) {
   case 'excellent': return 'text-green-600 bg-green-100';
   case 'good': return 'text-blue-600 bg-blue-100';
   case 'fair': return 'text-yellow-600 bg-yellow-100';
   case 'warning': return 'text-orange-600 bg-orange-100';
   case 'critical': return 'text-red-600 bg-red-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
-  const getAccountStatusColor = (status: string) => {
-  switch (status) {
+  default: return 'text-gray-600 bg-gray-100' };
+  const getAccountStatusColor = (status: string) => { switch (status) {
   case 'active': return 'text-green-600 bg-green-100';
   case 'suspended': return 'text-red-600 bg-red-100';
   case 'under_review': return 'text-yellow-600 bg-yellow-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
-  const handleApplyAdjustment = async () => {
-  if (!selectedUser || !adjustmentData.reason?.trim() || !adjustmentData.scoreChange) {
+  default: return 'text-gray-600 bg-gray-100' };
+  const handleApplyAdjustment = async () => { if (!selectedUser || !adjustmentData.reason?.trim() || !adjustmentData.scoreChange) {
   alert('Please fill in all required fields.');
   return;
   setIsLoading(true);
@@ -166,30 +152,26 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   if (user.userId === selectedUser.userId) {
   const newScore = Math.max(0, Math.min(100, user.trustScore.score + adjustmentData.scoreChange!));
   return {
-  ...user,
+  ...user
   trustScore: {
-  ...user.trustScore,
-  score: newScore,
-  grade: getGradeFromScore(newScore),
-  status: getStatusFromScore(newScore),
-  lastUpdated: new Date(),
+  ...user.trustScore
+  score: newScore
+  grade: getGradeFromScore(newScore)
+  status: getStatusFromScore(newScore)
+  lastUpdated: new Date() }
 };
         return user;
       });
       setUserTrustData(updatedUsers);
       setSelectedUser(updatedUsers.find(u => u.userId === selectedUser.userId) || null);
       setIsEditing(false);
-      setAdjustmentData({)
-  adjustmentType: 'manual_override',
-  scoreChange: 0,
-  reason: '',
+      setAdjustmentData({ )
+  adjustmentType: 'manual_override'
+  scoreChange: 0
+  reason: '' }
 });
-    } catch (error) {
-  console.error('Error applying adjustment:', error);
-  alert('Error applying adjustment. Please try again.');
-} finally {
-      setIsLoading(false);
-  };
+ catch (error) { console.error('Error applying adjustment:', error);
+  alert('Error applying adjustment. Please try again.') } finally { setIsLoading(false) };
   const getGradeFromScore = (score: number): TrustScore['grade'] => {
     if (score >= 97) return 'A+';
     if (score >= 93) return 'A';
@@ -207,7 +189,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
     if (score >= 60) return 'warning';
     return 'critical'
   };
-  const filteredUsers = userTrustData.filter(user => {)
+  const filteredUsers = userTrustData.filter(user => { )
   const matchesSearch = searchTerm === '' || ;
       user.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -218,8 +200,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
       (filterType === 'under_review' && user.accountStatus === 'under_review') ||
       (filterType === 'creators' && user.userType === 'creator') ||
       (filterType === 'buyers' && user.userType === 'buyer');
-    return matchesSearch && matchesFilter;
-  });
+    return matchesSearch && matchesFilter });
   const renderUserList = () => (;);
     <Card className="user-list">
       <CardHeader>
@@ -426,8 +407,8 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
                   <label>Adjustment Type</label>
                   <select
                     value={adjustmentData.adjustmentType}
-                    onChange={(e) => setAdjustmentData(prev => ({ )
-                      ...prev, 
+                    onChange={ (e) => setAdjustmentData(prev => ({ )
+                      ...prev }
                       adjustmentType: e.target.value as TrustScoreAdjustment['adjustmentType'];
   }))}
                     className="form-select"
@@ -445,15 +426,15 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
                     min="-100"
                     max="100"
                     value={adjustmentData.scoreChange || 0}
-                    onChange={(e) => setAdjustmentData(prev => ({ )
-                      ...prev, 
+                    onChange={ (e) => setAdjustmentData(prev => ({ )
+                      ...prev }
                       scoreChange: parseInt(e.target.value) || 0;
   }))}
                     className="form-input"
                   />
                   <span className="form-helper">
-                    New score: {Math.max()
-                      0,
+                    New score: { Math.max()
+                      0 }
                       Math.min(100)
                         selectedUser.trustScore.score + (adjustmentData.scoreChange || 0)
                         )))}
@@ -463,8 +444,8 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
                   <label>Reason *</label>
                   <Textarea
                     value={adjustmentData.reason || ''}
-                    onChange={(e) => setAdjustmentData(prev => ({ )
-                      ...prev, 
+                    onChange={ (e) => setAdjustmentData(prev => ({ )
+                      ...prev }
                       reason: e.target.value;
   }))}
                     placeholder="Provide a detailed reason for this adjustment..."
@@ -541,14 +522,14 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           {renderUserDetails()}
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .trust-score-manager {
           max-width: 1400px;
   margin: 0 auto;
           padding: 1.5rem;
         .manager-layout {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1.5rem;
         .users-section {
           display: flex;
@@ -570,24 +551,24 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
         .search-bar .lucide {
           position: absolute;
   left: 0.75rem;
-          top: 50%;
+          top: 50%
   transform: translateY(-50%);
           z-index: 1;
         .search-input {
-          width: 100%;
+          width: 100%
   padding: 0.5rem 0.75rem 0.5rem 2.25rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        .search-input:focus {,
+        .search-input:focus {
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .filter-select {
-          padding: 0.5rem;
+          padding: 0.5rem
   border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   background: white;
           min-width: 150px;
         .users-list {
@@ -603,10 +584,10 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   cursor: pointer;
           transition: all 0.2s ease;
         .user-item:hover {
-          border-color: #3b82f6;
+          border-color: #3b82f6
   background: #f8fafc;
         .user-item.selected {
-          border-color: #3b82f6;
+          border-color: #3b82f6
   background: #eff6ff;
         .user-header {
           display: flex;
@@ -621,7 +602,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           font-weight: 600;
   color: #1f2937;
         .user-email {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .user-badges {
           display: flex;
@@ -635,12 +616,12 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           align-items: center;
   gap: 0.5rem;
         .score-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .score-value {
           font-weight: 600;
         .score-grade {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .verification-indicators {
           display: flex;
@@ -650,7 +631,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           align-items: center;
   gap: 0.5rem;
           margin-top: 0.5rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #dc2626;
         .user-details-placeholder {
           height: 400px;
@@ -701,7 +682,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           margin-bottom: 1.5rem;
         .detail-item {
           display: flex;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
         .detail-label {
@@ -725,10 +706,10 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           border-radius: 6px;
           font-size: 0.875rem;
         .verification-item.verified {
-          background: #d1fae5;
+          background: #d1fae5
   color: #065f46;
         .verification-item.unverified {
-          background: #fee2e2;
+          background: #fee2e2
   color: #991b1b;
         .risk-section h4 {
           font-weight: 600;
@@ -754,19 +735,19 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           font-weight: 500;
   color: #374151;
         .form-select, .form-input, .form-textarea {
-          padding: 0.5rem;
+          padding: 0.5rem
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        .form-select:focus, .form-input:focus, .form-textarea:focus {,
+        .form-select:focus, .form-input:focus, .form-textarea:focus {
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .form-helper {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .adjustment-preview {
-          background: #f9fafb;
+          background: #f9fafb
   border: 1px solid #e5e7eb;
           border-radius: 6px;
   padding: 1rem;
@@ -785,7 +766,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
         .apply-button {
           background: #059669;
           border-color: #059669;
-        .apply-button:hover:not(:disabled) {,
+        .apply-button:hover:not(:disabled) {
   background: #047857;
           border-color: #047857;
         .adjustment-info {
@@ -793,7 +774,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   padding: 2rem;
         .info-message {
           display: flex;
-          align-items: flex-start;
+          align-items: flex-start }
   gap: 0.75rem;
           text-align: left;
   background: #eff6ff;

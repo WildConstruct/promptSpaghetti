@@ -13,7 +13,7 @@ import {
   CryptographicEvidenceSigningService,
   EvidenceSigningRequest,
   SigningPurpose
-} from '../services/CryptographicEvidenceSigningService';
+ from '../services/CryptographicEvidenceSigningService';
 import { KeyManagementService } from '../services/KeyManagementService';
 import AuditEvidenceMapper from '../services/AuditEvidenceMapper';
 import { AuditService } from '../auth/services/AuditService';
@@ -21,8 +21,9 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
 // Request/Response schemas
-}
-}
+
+
+
 interface SignEvidenceRequest {
   Body: {
     evidence_id: string;
@@ -33,13 +34,14 @@ interface SignEvidenceRequest {
     compliance_frameworks?: string[];
     metadata?: Record<string, any>;
     timestamp?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface SignBatchRequest {
   Body: {
     evidence_items: {
@@ -50,32 +52,35 @@ interface SignBatchRequest {
       signing_purpose: string;
       compliance_frameworks?: string[];
       metadata?: Record<string, any>;
-}
-}
-    }[];
-  };
-}
 
-}
-}
+
+
+[];
+  };
+
+
+
+
 interface VerifySignatureRequest {
   Params: {
     signatureId: string;
-}
-}
+
+
+
   };
   Body?: {
     evidence_data?: any;
   };
-}
 
-}
-}
+
+
+
 interface CustodyTransferRequest {
   Params: {
     evidenceId: string;
-}
-}
+
+
+
   };
   Body: {
     from_custodian: string;
@@ -83,7 +88,7 @@ interface CustodyTransferRequest {
     reason: string;
     witness?: string;
   };
-}
+
 
 export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
   // Initialize services
@@ -116,7 +121,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
         compliance_frameworks,
         metadata,
         timestamp
-      } = request.body;
+ = request.body;
 
       // Validate required fields
       if (!evidence_id || !evidence_type || !evidence_data || !collector_id || !signing_purpose) {
@@ -124,7 +129,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           error: 'Missing required fields',
           required: ['evidence_id', 'evidence_type', 'evidence_data', 'collector_id', 'signing_purpose']
         });
-      }
+
 
       // Validate signing purpose
       if (!Object.values(SigningPurpose).includes(signing_purpose as SigningPurpose)) {
@@ -132,7 +137,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           error: 'Invalid signing purpose',
           valid_purposes: Object.values(SigningPurpose)
         });
-      }
+
 
       // Create signing request
       const signingRequest: EvidenceSigningRequest = {
@@ -164,15 +169,15 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           data_hash: signature.dataHash,
           compliance_context: signature.complianceContext,
           verification_metadata: signature.verificationMetadata
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Evidence signing failed',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -190,7 +195,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({
           error: 'No evidence items provided for batch signing'
         });
-      }
+
 
       // Convert to signing requests
       const signingRequests: EvidenceSigningRequest[] = evidence_items.map(item => ({
@@ -211,8 +216,8 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
             evidence_id: request.evidenceId,
             invalid_purpose: request.signingPurpose
           });
-        }
-      }
+
+
 
       // Sign batch
       const batch = await signingService.signEvidenceBatch(signingRequests);
@@ -225,15 +230,15 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           batch_signature: batch.batchSignature,
           merkle_root: batch.merkleRoot,
           timestamp: batch.timestamp.toISOString()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Batch evidence signing failed',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -267,15 +272,15 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           warnings: verificationResult.warnings,
           errors: verificationResult.errors,
           metadata: verificationResult.metadata
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Signature verification failed',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -308,15 +313,15 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
             compliance_context: sig.complianceContext
           })),
           total_signatures: signatures.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Failed to retrieve evidence signatures',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -337,7 +342,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           error: 'Chain of custody not found',
           evidence_id: evidenceId
         });
-      }
+
 
       return reply.send({
         success: true,
@@ -356,15 +361,15 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
             reason: event.reason
           })),
           total_events: custody.custodyEvents.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Failed to retrieve chain of custody',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -384,7 +389,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           error: 'Missing required fields',
           required: ['from_custodian', 'to_custodian', 'reason']
         });
-      }
+
 
       await signingService.transferCustody(evidenceId, from_custodian, to_custodian, reason, witness);
 
@@ -397,15 +402,15 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           reason,
           witness,
           transfer_time: new Date().toISOString()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Custody transfer failed',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -432,7 +437,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           key_management: keyManagerHealthy,
           evidence_mapping: evidenceMapperHealthy,
           signing_service: true // Service initialized successfully if we reach this point
-        }
+
       };
 
       const overallHealthy = Object.values(health.checks).every(check => check);
@@ -441,7 +446,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
         success: overallHealthy,
         data: health
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(503).send({
         success: false,
@@ -449,7 +454,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   /**
@@ -478,7 +483,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           description
         })),
         total_purposes: Object.keys(purposes).length
-      }
+
     });
   });
 
@@ -510,12 +515,12 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
             acc[sig.complianceContext.evidenceLevel] = (acc[sig.complianceContext.evidenceLevel] || 0) + 1;
             return acc;
           }, {} as Record<string, number>)
-  }
+
         custody: {
           total_records: allCustodyRecords.length,
           total_events: allCustodyRecords.reduce((sum, record) => sum + record.custodyEvents.length, 0),
           integrity_maintained: allCustodyRecords.filter(r => r.integrityMaintained).length
-  }
+
         compliance: {
           frameworks_covered: [...new Set(allSignatures.flatMap(s => s.complianceContext.frameworks))],
           average_retention_period: allSignatures.length > 0 
@@ -524,7 +529,7 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
                 s
               ) => sum + s.complianceContext.retentionPeriod, 0) / allSignatures.length)
             : 0
-        }
+
       };
 
       return reply.send({
@@ -532,14 +537,14 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
         data: stats,
         generated_at: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Failed to retrieve statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
-}
+
 
 export default cryptographicEvidenceRoutes;

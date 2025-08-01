@@ -6,28 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
 onSubmit: (data) => void ;
 onCancel: () => void ;
-const ROLES = [];
-{
-    value: 'admin', label;
-    'Admin', description;
-    'Full workspace access and management';
-}
-{
-    value: 'editor', label;
-    'Editor', description;
-    'Can create and edit projects and resources';
-}
-{
-    value: 'commenter', label;
-    'Commenter', description;
-    'Can view content and add comments';
-}
-{
-    value: 'viewer', label;
-    'Viewer', description;
-    'Read-only access to content';
-}
-;
+const ROLES = [
+    { value: 'admin', label: 'Admin', description: 'Full workspace access and management' },
+    { value: 'editor', label: 'Editor', description: 'Can create and edit projects and resources' },
+    { value: 'commenter', label: 'Commenter', description: 'Can view content and add comments' },
+    { value: 'viewer', label: 'Viewer', description: 'Read-only access to content' }
+];
 export const InviteUserModal = ({
     workspaceId,
     workspaceName,

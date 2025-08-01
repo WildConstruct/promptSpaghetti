@@ -5,15 +5,14 @@
  * Event-driven policy system interfaces for real-time notifications,
  * workflow automation, and system integration.
  */
-import {
-  BasePolicy,
+import { BasePolicy,
   PolicyType,
   PolicyStatus,
   PolicyAssignment,
   PolicyEvaluation,
-  EvaluationContext,
+  EvaluationContext }
   ComplianceFramework
-} from './PolicyInterfaces';
+ from './PolicyInterfaces';
 
 // =============================================================================
 // Core Event System Interfaces
@@ -22,9 +21,8 @@ import {
  * Base policy event interface
  */
 
-}
-export interface BasePolicyEvent {
-  readonly eventId: string;
+
+export interface BasePolicyEvent { readonly eventId: string;
   readonly eventType: PolicyEventType;
   readonly timestamp: Date;
   readonly source: EventSource;
@@ -36,7 +34,7 @@ export interface BasePolicyEvent {
   data: PolicyEventData;
   // Event metadata
   correlationId?: string;
-  causationId?: string; // ID of event that caused this event,
+  causationId?: string; // ID of event that caused this event }
   version: string;
   // Processing information
   processed: boolean;
@@ -46,8 +44,8 @@ export interface BasePolicyEvent {
   retryCount: number;
   maxRetries: number;
   nextRetryAt?: Date;
-}
-}
+
+
 export type PolicyEventType =
   // Policy lifecycle events
   | 'policy.created'
@@ -114,10 +112,9 @@ export type EventSource =
   | 'user_action'
   | 'scheduled_task';
 
-}
-export interface PolicyEventData {
-  // Primary resource information
-  resourceType: 'policy' | 'assignment' | 'evaluation' | 'template' | 'workflow';
+
+export interface PolicyEventData { // Primary resource information
+  resourceType: 'policy' | 'assignment' | 'evaluation' | 'template' | 'workflow' }
   resourceId: string;
   resourceVersion?: string;
   // Change information (for update events)
@@ -128,17 +125,18 @@ export interface PolicyEventData {
   context?: EvaluationContext;
   // Additional event-specific data
   metadata?: Record<string, any>;
-}
-}
-}
-export interface PolicyEventChange {
-  field: string;
+
+
+
+
+export interface PolicyEventChange { field: string;
   oldValue: any;
   newValue: any;
-  changeType: 'added' | 'modified' | 'removed'
-}
-  }
-}
+  changeType: 'added' | 'modified' | 'removed' }
+
+
+
+
 export interface EventProcessingError {
   errorId: string;
   timestamp: Date;
@@ -151,15 +149,15 @@ export interface EventProcessingError {
   /**
   * Policy lifecycle event
   */
-}
-}
-}
-export interface PolicyLifecycleEvent extends BasePolicyEvent {
-  eventType: 'policy.created' | 'policy.updated' | 'policy.deleted' | ,
+
+
+
+
+export interface PolicyLifecycleEvent extends BasePolicyEvent { eventType: 'policy.created' | 'policy.updated' | 'policy.deleted' | ,
   'policy.activated' | 'policy.deactivated' | 'policy.deprecated' | 'policy.archived';
   data: PolicyLifecycleEventData;
   export interface PolicyLifecycleEventData extends PolicyEventData {
-  resourceType: 'policy';
+  resourceType: 'policy';,
   policy: BasePolicy;
   previousPolicy?: BasePolicy; // For update events,
   reason?: string;
@@ -173,7 +171,7 @@ export interface PolicyLifecycleEvent extends BasePolicyEvent {
   'assignment.conflict.detected' | 'assignment.conflict.resolved';
   data: PolicyAssignmentEventData;
   export interface PolicyAssignmentEventData extends PolicyEventData {
-  resourceType: 'assignment';
+  resourceType: 'assignment';,
   assignment: PolicyAssignment;
   previousAssignment?: PolicyAssignment; // For update events,
   conflicts?: AssignmentConflict;
@@ -182,10 +180,11 @@ export interface PolicyLifecycleEvent extends BasePolicyEvent {
   conflictType: 'priority' | 'contradiction' | 'circular_dependency';
   conflictingAssignments: string;
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical'
-}
-  }
-}
+  severity: 'low' | 'medium' | 'high' | 'critical' }
+
+
+
+
 export interface ConflictResolution {
   strategy: string;
   resolvedBy: string;
@@ -195,28 +194,29 @@ export interface ConflictResolution {
   /**
   * Evaluation event
   */
-}
-}
-}
-export interface PolicyEvaluationEvent extends BasePolicyEvent {
-  eventType: 'evaluation.requested' | 'evaluation.completed' | 'evaluation.failed' |,
+
+
+
+
+export interface PolicyEvaluationEvent extends BasePolicyEvent { eventType: 'evaluation.requested' | 'evaluation.completed' | 'evaluation.failed' |,
   'evaluation.cached' | 'evaluation.cache.expired';
   data: PolicyEvaluationEventData;
   export interface PolicyEvaluationEventData extends PolicyEventData {
-  resourceType: 'evaluation';
+  resourceType: 'evaluation';,
   evaluation: PolicyEvaluation;
   requestContext: EvaluationContext;
   performance: EvaluationPerformance;
   cacheInfo?: CacheInfo;
   export interface EvaluationPerformance {
-  evaluationTime: number; // milliseconds,
+  evaluationTime: number; // milliseconds }
   policiesEvaluated: number;
   cacheHits: number;
   cacheMisses: number;
   rulesProcessed: number;
-}
-}
-}
+
+
+
+
 export interface CacheInfo {
   cacheKey: string;
   cacheHit: boolean;
@@ -225,11 +225,11 @@ export interface CacheInfo {
   /**
   * Compliance event
   */
-}
-}
-}
-export interface ComplianceEvent extends BasePolicyEvent {
-  eventType: 'compliance.violation.detected' | 'compliance.violation.resolved' |,
+
+
+
+
+export interface ComplianceEvent extends BasePolicyEvent { eventType: 'compliance.violation.detected' | 'compliance.violation.resolved' |,
   'compliance.audit.started' | 'compliance.audit.completed' |
   'compliance.report.generated';
   data: ComplianceEventData;
@@ -249,7 +249,7 @@ export interface ComplianceEvent extends BasePolicyEvent {
   'security.suspicious.activity' | 'security.threat.detected';
   data: SecurityEventData;
   export interface SecurityEventData extends PolicyEventData {
-  threatLevel: 'low' | 'medium' | 'high' | 'critical';
+  threatLevel: 'low' | 'medium' | 'high' | 'critical';,
   threatType: string;
   sourceIp?: string;
   userAgent?: string;
@@ -266,16 +266,16 @@ export interface ComplianceEvent extends BasePolicyEvent {
   readonly handlerId: string;
   readonly name: string;
   readonly eventTypes: PolicyEventType;
-  readonly priority: number; // Higher numbers = higher priority,
+  readonly priority: number; // Higher numbers = higher priority }
   canHandle(event: BasePolicyEvent): boolean;
   handle(event: BasePolicyEvent): Promise<EventHandlerResult>;
   onError(event: BasePolicyEvent, error: Error): Promise<void>;
-}
-}
-}
-export interface EventHandlerResult {
-  success: boolean;
-  executionTime: number; // milliseconds,
+
+
+
+
+export interface EventHandlerResult { success: boolean;
+  executionTime: number; // milliseconds }
   processedData?: any;
   generatedEvents?: BasePolicyEvent;
   errors?: EventProcessingError;
@@ -283,11 +283,11 @@ export interface EventHandlerResult {
   /**
   * Event subscription interface
   */
-}
-}
-}
-export interface PolicyEventSubscription {
-  subscriptionId: string;
+
+
+
+
+export interface PolicyEventSubscription { subscriptionId: string;
   subscriberId: string;
   subscriberName: string;
   // Subscription configuration
@@ -298,31 +298,29 @@ export interface PolicyEventSubscription {
   deliveryConfig: DeliveryConfiguration;
   // Processing options
   batchSize: number;
-  batchTimeout: number; // milliseconds,
+  batchTimeout: number; // milliseconds }
   retryPolicy: RetryPolicy;
   // Status and metadata
   active: boolean;
   createdAt: Date;
   lastDeliveryAt?: Date;
   deliveryStats: DeliveryStats;
-}
-}
-}
-export interface EventFilter {
-  field: string;
+
+
+
+
+export interface EventFilter { field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'in' | 'not_in' | 'regex';
   value: any;
-  caseSensitive?: boolean;
-}
-}
+  caseSensitive?: boolean }
+
 export type DeliveryMethod = 'webhook' | 'queue' | 'email' | 'sms' | 'push' | 'database' | 'log';
 
-}
-export interface DeliveryConfiguration {
-  // Webhook configuration
+
+export interface DeliveryConfiguration { // Webhook configuration
   webhookUrl?: string;
   webhookHeaders?: Record<string, string>;
-  webhookTimeout?: number; // milliseconds,
+  webhookTimeout?: number; // milliseconds }
   // Queue configuration
   queueName?: string;
   queuePriority?: number;
@@ -338,30 +336,29 @@ export interface DeliveryConfiguration {
   // Database configuration
   databaseTable?: string;
   databaseFields?: Record<string, string>;
-}
-}
-}
-export interface RetryPolicy {
-  maxRetries: number;
+
+
+
+
+export interface RetryPolicy { maxRetries: number;
   backoffMultiplier: number;
-  initialDelay: number; // milliseconds,
-  maxDelay: number; // milliseconds,
+  initialDelay: number; // milliseconds;
+  maxDelay: number; // milliseconds }
   retryConditions: RetryCondition;
-}
-}
-}
-export interface RetryCondition {
-  errorType: string;
+
+
+
+
+export interface RetryCondition { errorType: string;
   errorPattern?: string;
-  shouldRetry: boolean;
-}
-}
-}
-export interface DeliveryStats {
-  totalEvents: number;
+  shouldRetry: boolean }
+
+
+
+export interface DeliveryStats { totalEvents: number;
   successfulDeliveries: number;
   failedDeliveries: number;
-  averageDeliveryTime: number; // milliseconds,
+  averageDeliveryTime: number; // milliseconds }
   lastError?: EventProcessingError;
   // =============================================================================
   // Event Publishing and Bus Interfaces
@@ -369,66 +366,61 @@ export interface DeliveryStats {
   /**
   * Event publisher interface
   */
-}
-}
-}
-export interface IPolicyEventPublisher {
-  publish(event: BasePolicyEvent): Promise<PublishResult>;
+
+
+
+
+export interface IPolicyEventPublisher { publish(event: BasePolicyEvent): Promise<PublishResult>;
   publishBatch(events: BasePolicyEvent): Promise<BatchPublishResult>;
   // Scheduled publishing
   scheduleEvent(event: BasePolicyEvent, scheduledTime: Date): Promise<ScheduledEventResult>;
   cancelScheduledEvent(eventId: string): Promise<void>;
   // Event validation
-  validateEvent(event: BasePolicyEvent): Promise<EventValidationResult>;
-}
-}
-}
-export interface PublishResult {
-  success: boolean;
+  validateEvent(event: BasePolicyEvent): Promise<EventValidationResult> }
+
+
+
+export interface PublishResult { success: boolean;
   eventId: string;
   publishedAt: Date;
   deliveryCount: number;
-  errors?: PublishError;
-}
-}
-}
-export interface BatchPublishResult {
-  totalEvents: number;
+  errors?: PublishError }
+
+
+
+export interface BatchPublishResult { totalEvents: number;
   successfulEvents: number;
   failedEvents: number;
-  results: PublishResult;
-}
-}
-}
-export interface ScheduledEventResult {
-  scheduleId: string;
+  results: PublishResult }
+
+
+
+export interface ScheduledEventResult { scheduleId: string;
   eventId: string;
   scheduledTime: Date;
-  status: 'scheduled' | 'cancelled' | 'executed'
-}
-  }
-}
-export interface PublishError {
-  subscriberId: string;
+  status: 'scheduled' | 'cancelled' | 'executed' }
+
+
+
+
+export interface PublishError { subscriberId: string;
   error: string;
-  retryable: boolean;
-}
-}
-}
-export interface EventValidationResult {
-  valid: boolean;
+  retryable: boolean }
+
+
+
+export interface EventValidationResult { valid: boolean;
   errors: EventValidationError;
-  warnings: EventValidationWarning;
-}
-}
-}
-export interface EventValidationError {
-  field: string;
+  warnings: EventValidationWarning }
+
+
+
+export interface EventValidationError { field: string;
   message: string;
-  code: string;
-}
-}
-}
+  code: string }
+
+
+
 export interface EventValidationWarning {
   field: string;
   message: string;
@@ -436,11 +428,11 @@ export interface EventValidationWarning {
   /**
   * Event bus interface
   */
-}
-}
-}
-export interface IPolicyEventBus {
-  // Event publishing
+
+
+
+
+export interface IPolicyEventBus { // Event publishing
   emit(event: BasePolicyEvent): Promise<void>;
   emitBatch(events: BasePolicyEvent): Promise<void>;
   // Subscription management
@@ -453,12 +445,11 @@ export interface IPolicyEventBus {
   replayEvents(criteria: EventReplayCriteria): Promise<EventReplayResult>;
   // System management
   getStats(): Promise<EventBusStats>;
-  health(): Promise<EventBusHealth>;
-}
-}
-}
-export interface EventHistoryCriteria {
-  eventTypes?: PolicyEventType;
+  health(): Promise<EventBusHealth> }
+
+
+
+export interface EventHistoryCriteria { eventTypes?: PolicyEventType;
   resourceTypes?: string;
   resourceIds?: string;
   startDate?: Date;
@@ -466,53 +457,50 @@ export interface EventHistoryCriteria {
   userId?: string;
   organizationId?: string;
   limit?: number;
-  offset?: number;
-}
-}
-}
-export interface EventHistoryResult {
-  events: BasePolicyEvent;
+  offset?: number }
+
+
+
+export interface EventHistoryResult { events: BasePolicyEvent;
   totalCount: number;
-  hasMore: boolean;
-}
-}
-}
-export interface EventReplayCriteria {
-  eventIds?: string;
+  hasMore: boolean }
+
+
+
+export interface EventReplayCriteria { eventIds?: string;
   criteria?: EventHistoryCriteria;
   subscriptionIds?: string;
-  dryRun?: boolean;
-}
-}
-}
-export interface EventReplayResult {
-  replayId: string;
+  dryRun?: boolean }
+
+
+
+export interface EventReplayResult { replayId: string;
   totalEvents: number;
   replayedEvents: number;
   failedEvents: number;
   startedAt: Date;
   completedAt?: Date;
-  errors?: EventProcessingError;
-}
-}
-}
-export interface EventBusStats {
-  eventsPublished: number;
+  errors?: EventProcessingError }
+
+
+
+export interface EventBusStats { eventsPublished: number;
   eventsDelivered: number;
   activeSubscriptions: number;
-  averageDeliveryTime: number; // milliseconds,
-  errorRate: number; // percentage,
-  throughput: number; // events per second,
-}
-}
-}
-export interface EventBusHealth {
-  status: 'healthy' | 'degraded' | 'critical';
+  averageDeliveryTime: number; // milliseconds;
+  errorRate: number; // percentage;
+  throughput: number; // events per second }
+
+
+
+
+export interface EventBusHealth { status: 'healthy' | 'degraded' | 'critical' }
   components: ComponentStatus;
   lastCheck: Date;
-}
-}
-}
+
+
+
+
 export interface ComponentStatus {
   component: string;
   status: 'healthy' | 'degraded' | 'critical';
@@ -524,11 +512,11 @@ export interface ComponentStatus {
   /**
   * Notification interface
   */
-}
-}
-}
-export interface PolicyNotification {
-  notificationId: string;
+
+
+
+
+export interface PolicyNotification { notificationId: string;
   type: NotificationType;
   priority: NotificationPriority;
   // Notification content
@@ -557,9 +545,8 @@ export interface PolicyNotification {
   // Expiration
   expiresAt?: Date;
   // Metadata
-  metadata?: Record<string, any>;
-}
-}
+  metadata?: Record<string, any> }
+
 export type NotificationType = 
   | 'info'
   | 'warning'
@@ -572,41 +559,38 @@ export type NotificationType =
 
 export type NotificationPriority = 'low' | 'normal' | 'high' | 'urgent';
 
-}
-export interface NotificationRecipient {
-  recipientId: string;
+
+export interface NotificationRecipient { recipientId: string;
   recipientType: 'user' | 'group' | 'role' | 'system';
   name: string;
   contactInfo: ContactInfo;
-  preferences?: NotificationPreferences;
-}
-}
-}
-export interface ContactInfo {
-  email?: string;
+  preferences?: NotificationPreferences }
+
+
+
+export interface ContactInfo { email?: string;
   phone?: string;
   pushTokens?: string;
   slackUserId?: string;
-  teamsUserId?: string;
-}
-}
-}
-export interface NotificationPreferences {
-  channels: NotificationChannel;
+  teamsUserId?: string }
+
+
+
+export interface NotificationPreferences { channels: NotificationChannel;
   quietHours?: QuietHours;
-  frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
+  frequency: 'immediate' | 'hourly' | 'daily' | 'weekly' }
   categories: NotificationCategory;
-}
-}
-}
-export interface QuietHours {
-  enabled: boolean;
-  startTime: string; // HH:MM format,
-  endTime: string; // HH:MM format,
+
+
+
+
+export interface QuietHours { enabled: boolean;
+  startTime: string; // HH:MM format;
+  endTime: string; // HH:MM format;
   timezone: string;
-  days: number; // 0-6, Sunday=0,
-}
-}
+  days: number; // 0-6, Sunday=0 }
+
+
 export type NotificationCategory = 
   | 'policy_changes'
   | 'compliance_alerts'
@@ -619,30 +603,28 @@ export type NotificationCategory =
 
 export type NotificationChannel = 'email' | 'sms' | 'push' | 'in_app' | 'slack' | 'teams' | 'webhook';
 
-}
-export interface NotificationDeliverySettings {
-  channels: NotificationChannelSettings;
+
+export interface NotificationDeliverySettings { channels: NotificationChannelSettings;
   retryPolicy: NotificationRetryPolicy;
   batchingEnabled: boolean;
   maxBatchSize?: number;
-  batchTimeout?: number; // milliseconds,
-}
-}
-}
-export interface NotificationChannelSettings {
-  channel: NotificationChannel;
+  batchTimeout?: number; // milliseconds }
+
+
+
+
+export interface NotificationChannelSettings { channel: NotificationChannel;
   template?: string;
-  customSettings?: Record<string, any>;
-}
-}
-}
-export interface NotificationRetryPolicy {
-  maxRetries: number;
-  retryDelay: number; // milliseconds,
+  customSettings?: Record<string, any> }
+
+
+
+export interface NotificationRetryPolicy { maxRetries: number;
+  retryDelay: number; // milliseconds }
   backoffMultiplier: number;
   retryChannels: NotificationChannel;
-}
-}
+
+
 export type NotificationStatus = 
   | 'pending'
   | 'scheduled'
@@ -656,9 +638,8 @@ export type NotificationStatus =
  * Notification service interface
  */
 
-}
-export interface IPolicyNotificationService {
-  // Notification creation and management
+
+export interface IPolicyNotificationService { // Notification creation and management
   createNotification(notification: CreateNotificationRequest): Promise<PolicyNotification>;
   updateNotification(id: string, updates: UpdateNotificationRequest): Promise<PolicyNotification>;
   getNotification(id: string): Promise<PolicyNotification>;
@@ -678,22 +659,19 @@ export interface IPolicyNotificationService {
   getPreferences(userId: string): Promise<NotificationPreferences>;
   // Analytics and reporting
   getDeliveryStats(criteria: DeliveryStatsCriteria): Promise<NotificationDeliveryStats>;
-  getEngagementMetrics(criteria: EngagementMetricsCriteria): Promise<NotificationEngagementMetrics>;
-}
-}
-}
-export interface CreateNotificationRequest {
-  notification: Omit<PolicyNotification, 'notificationId' | 'status' | 'createdAt'>;
-}
-}
-}
-export interface UpdateNotificationRequest {
-  notification: Partial<PolicyNotification>;
-}
-}
-}
-export interface NotificationSearchCriteria {
-  recipientIds?: string;
+  getEngagementMetrics(criteria: EngagementMetricsCriteria): Promise<NotificationEngagementMetrics> }
+
+
+
+export interface CreateNotificationRequest { notification: Omit<PolicyNotification, 'notificationId' | 'status' | 'createdAt'> }
+
+
+
+export interface UpdateNotificationRequest { notification: Partial<PolicyNotification> }
+
+
+
+export interface NotificationSearchCriteria { recipientIds?: string;
   types?: NotificationType;
   categories?: NotificationCategory;
   statuses?: NotificationStatus;
@@ -702,51 +680,46 @@ export interface NotificationSearchCriteria {
   createdBefore?: Date;
   tags?: string;
   limit?: number;
-  offset?: number;
-}
-}
-}
-export interface NotificationSearchResult {
-  notifications: PolicyNotification;
+  offset?: number }
+
+
+
+export interface NotificationSearchResult { notifications: PolicyNotification;
   totalCount: number;
-  hasMore: boolean;
-}
-}
-}
-export interface SendOptions {
-  forceDelivery?: boolean;
+  hasMore: boolean }
+
+
+
+export interface SendOptions { forceDelivery?: boolean;
   skipPreferences?: boolean;
   customTemplate?: string;
-  deliveryTime?: Date;
-}
-}
-}
-export interface NotificationDeliveryResult {
-  notificationId: string;
+  deliveryTime?: Date }
+
+
+
+export interface NotificationDeliveryResult { notificationId: string;
   success: boolean;
   deliveredChannels: NotificationChannel;
   failedChannels: NotificationChannelFailure;
-  deliveryTime: number; // milliseconds,
-}
-}
-}
-export interface NotificationChannelFailure {
-  channel: NotificationChannel;
+  deliveryTime: number; // milliseconds }
+
+
+
+
+export interface NotificationChannelFailure { channel: NotificationChannel;
   error: string;
-  retryable: boolean;
-}
-}
-}
-export interface BulkNotificationResult {
-  totalNotifications: number;
+  retryable: boolean }
+
+
+
+export interface BulkNotificationResult { totalNotifications: number;
   successfulDeliveries: number;
   failedDeliveries: number;
-  results: NotificationDeliveryResult;
-}
-}
-}
-export interface NotificationTemplate {
-  templateId: string;
+  results: NotificationDeliveryResult }
+
+
+
+export interface NotificationTemplate { templateId: string;
   name: string;
   category: NotificationCategory;
   type: NotificationType;
@@ -763,99 +736,95 @@ export interface NotificationTemplate {
   createdAt: Date;
   updatedAt: Date;
   version: string;
-  active: boolean;
-}
-}
-}
-export interface ChannelTemplate {
-  channel: NotificationChannel;
+  active: boolean }
+
+
+
+export interface ChannelTemplate { channel: NotificationChannel;
   template: string;
-  subject?: string; // For email,
+  subject?: string; // For email }
   customSettings?: Record<string, any>;
-}
-}
-}
-export interface TemplateVariable {
-  name: string;
+
+
+
+
+export interface TemplateVariable { name: string;
   type: 'string' | 'number' | 'boolean' | 'date' | 'object';
   required: boolean;
   description: string;
-  defaultValue?: any;
-}
-}
-}
-export interface DeliveryStatsCriteria {
-  startDate: Date;
+  defaultValue?: any }
+
+
+
+export interface DeliveryStatsCriteria { startDate: Date;
   endDate: Date;
   channels?: NotificationChannel;
   categories?: NotificationCategory;
-  recipientIds?: string;
-}
-}
-}
-export interface NotificationDeliveryStats {
-  totalNotifications: number;
+  recipientIds?: string }
+
+
+
+export interface NotificationDeliveryStats { totalNotifications: number;
   deliveredNotifications: number;
   failedNotifications: number;
-  deliveryRate: number; // percentage,
+  deliveryRate: number; // percentage;
   // By channel
   channelStats: ChannelDeliveryStats;
   // By category
   categoryStats: CategoryDeliveryStats;
   // Performance metrics
-  averageDeliveryTime: number; // milliseconds,
-  p95DeliveryTime: number; // milliseconds,
-}
-}
-}
-export interface ChannelDeliveryStats {
-  channel: NotificationChannel;
+  averageDeliveryTime: number; // milliseconds;
+  p95DeliveryTime: number; // milliseconds }
+
+
+
+
+export interface ChannelDeliveryStats { channel: NotificationChannel;
   sent: number;
   delivered: number;
   failed: number;
-  deliveryRate: number; // percentage,
-  averageDeliveryTime: number; // milliseconds,
-}
-}
-}
-export interface CategoryDeliveryStats {
-  category: NotificationCategory;
+  deliveryRate: number; // percentage;
+  averageDeliveryTime: number; // milliseconds }
+
+
+
+
+export interface CategoryDeliveryStats { category: NotificationCategory;
   sent: number;
   delivered: number;
   failed: number;
-  deliveryRate: number; // percentage,
-}
-}
-}
-export interface EngagementMetricsCriteria {
-  startDate: Date;
+  deliveryRate: number; // percentage }
+
+
+
+
+export interface EngagementMetricsCriteria { startDate: Date;
   endDate: Date;
   categories?: NotificationCategory;
-  recipientIds?: string;
-}
-}
-}
-export interface NotificationEngagementMetrics {
-  totalNotifications: number;
+  recipientIds?: string }
+
+
+
+export interface NotificationEngagementMetrics { totalNotifications: number;
   openedNotifications: number;
   clickedNotifications: number;
   // Rates
-  openRate: number; // percentage,
-  clickRate: number; // percentage,
+  openRate: number; // percentage;
+  clickRate: number; // percentage;
   // By category
   categoryEngagement: CategoryEngagementMetrics;
   // Time-based metrics
-  averageTimeToOpen: number; // milliseconds,
-  averageTimeToClick: number; // milliseconds,
-}
-}
-}
-export interface CategoryEngagementMetrics {
-  category: NotificationCategory;
+  averageTimeToOpen: number; // milliseconds;
+  averageTimeToClick: number; // milliseconds }
+
+
+
+
+export interface CategoryEngagementMetrics { category: NotificationCategory;
   sent: number;
   opened: number;
   clicked: number;
-  openRate: number; // percentage,
-  clickRate: number; // percentage,
-}
-}
+  openRate: number; // percentage;
+  clickRate: number; // percentage }
+
+

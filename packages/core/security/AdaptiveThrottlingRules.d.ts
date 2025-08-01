@@ -16,18 +16,17 @@ import { ApiUsagePatternQuotaRecommendations } from './ApiUsagePatternQuotaRecom
 import { ApiScalingAnalyticsIntegration } from './ApiScalingAnalyticsIntegration';
 
 }
-export interface ThrottlingAnalyticsConfig {
-    enableAnalyticsIntegration: boolean;
+}
+export interface ThrottlingAnalyticsConfig { enableAnalyticsIntegration: boolean;
     analyticsUpdateInterval: number;
     enablePatternBasedAdjustments: boolean;
     enableScalingInsights: boolean;
     enablePredictiveThrottling: boolean;
     enableAnomalyDetection: boolean;
-    confidenceThreshold: number;
-
+    confidenceThreshold: number }
 }
-export interface ThrottlingAnalyticsInsight {
-    insightId: string;
+}
+export interface ThrottlingAnalyticsInsight { insightId: string;
     timestamp: Date;
     insightType: 'pattern_detected' | 'scaling_recommendation' | 'anomaly_detected' | 'predictive_adjustment';
     confidence: number;
@@ -37,38 +36,31 @@ export interface ThrottlingAnalyticsInsight {
         adjustmentFactor: number;
         reason: string;
         expectedImpact: string;
-        validityPeriod: number;
+        validityPeriod: number }
 }
     };
-    metadata: {
-        patternType?: string;
+    metadata: { patternType?: string;
         usageMetrics?: Record<string, number>;
         scalingFactors?: Record<string, number>;
         anomalyScore?: number;
-        supportingData?: Record<string, unknown>;
-    };
+        supportingData?: Record<string, unknown> };
 
 }
-export interface ThrottlingDecisionContext extends ThrottlingContext {
-    analyticsInsights: ThrottlingAnalyticsInsight[];
+}
+export interface ThrottlingDecisionContext extends ThrottlingContext { analyticsInsights: ThrottlingAnalyticsInsight[];
     historicalPerformance: {
         requestVolume: number[];
         successRate: number[];
         averageLatency: number[];
-        errorRates: number[];
-    };
-    patternAnalysis: {
-        currentPattern: string;
+        errorRates: number[] };
+    patternAnalysis: { currentPattern: string;
         patternConfidence: number;
         predictedNextPattern: string;
-        patternTransitionProbability: number;
-    };
-    scalingContext: {
-        currentLoad: number;
+        patternTransitionProbability: number };
+    scalingContext: { currentLoad: number;
         predictedLoad: number;
         scalingRecommendation: string;
-        capacityUtilization: number;
-    };
+        capacityUtilization: number };
 
 export type ThrottlingMode = 'adaptive' | 'progressive' | 'circuit_breaker' | 'load_shedding' | 'bandwidth_shaping';
 export declare const ThrottlingMode: {
@@ -88,8 +80,8 @@ export declare const SystemCondition: {
   };
 
 }
-export interface ThrottlingRule {
-    id: string;
+}
+export interface ThrottlingRule { id: string;
     name: string;
     description: string;
     enabled: boolean;
@@ -117,29 +109,27 @@ export interface ThrottlingRule {
         throttlingEffectiveness: number;
         falsePositiveRate: number;
         adaptationSuccessRate: number;
-        lastOptimizationDate: Date;
+        lastOptimizationDate: Date }
 }
     };
 
 }
-export interface ThrottlingCondition {
-    type: 'endpoint' | 'method' | 'user_pattern' | 'system_load' | 'threat_level' | 'time_based' | 'custom';
+}
+export interface ThrottlingCondition { type: 'endpoint' | 'method' | 'user_pattern' | 'system_load' | 'threat_level' | 'time_based' | 'custom';
     operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in_range' | 'pattern_match';
     field?: string;
     value?: unknown;
-    threshold?: number;
-
+    threshold?: number }
 }
-export interface ThrottlingStep {
-    level: number;
+}
+export interface ThrottlingStep { level: number;
     delay: number;
     blockPercentage: number;
     duration: number;
-    condition: ThrottlingCondition;
-
+    condition: ThrottlingCondition }
 }
-export interface ThrottlingContext {
-    requestId: string;
+}
+export interface ThrottlingContext { requestId: string;
     endpoint: string;
     method: string;
     userId?: string;
@@ -149,11 +139,10 @@ export interface ThrottlingContext {
     systemLoad: number;
     threatLevel: ThreatLevel;
     recentFailures: number;
-    consecutiveFailures: number;
-
+    consecutiveFailures: number }
 }
-export interface ThrottlingResult {
-    action: 'allow' | 'throttle' | 'block' | 'shed';
+}
+export interface ThrottlingResult { action: 'allow' | 'throttle' | 'block' | 'shed';
     delay: number;
     reason: string;
     ruleId: string;
@@ -162,28 +151,26 @@ export interface ThrottlingResult {
         appliedMultiplier?: number;
         systemCondition: SystemCondition;
         escalationLevel?: number;
-        tokensRemaining?: number;
+        tokensRemaining?: number }
 }
     };
 
 }
-export interface CircuitBreakerState {
-    state: 'closed' | 'open' | 'half_open';
+}
+export interface CircuitBreakerState { state: 'closed' | 'open' | 'half_open';
     failureCount: number;
     lastFailureTime: Date;
     nextAttemptTime: Date;
-    successCount: number;
-
+    successCount: number }
 }
-export interface TokenBucketState {
-    tokens: number;
+}
+export interface TokenBucketState { tokens: number;
     lastRefill: Date;
     capacity: number;
-    refillRate: number;
-
+    refillRate: number }
 }
-export interface SystemMetrics {
-    cpuUsage: number;
+}
+export interface SystemMetrics { cpuUsage: number;
     memoryUsage: number;
     activeConnections: number;
     requestsPerSecond: number;
@@ -206,7 +193,7 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
     constructor(rateLimitingService: RateLimitingService, initializeDefaults?: boolean, analyticsConfig?: {)
         usagePatternAnalytics?: ApiUsagePatternQuotaRecommendations;
         scalingAnalytics?: ApiScalingAnalyticsIntegration;
-        enableAnalytics?: boolean;
+        enableAnalytics?: boolean }
 }
     });
     /**
@@ -228,14 +215,12 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
     /**
      * Get throttling statistics
      */
-    getStatistics(): {
-        rulesCount: number;
+    getStatistics(): { rulesCount: number;
         activeRules: number;
         circuitBreakers: Record<string, CircuitBreakerState>;
         tokenBuckets: Record<string, {
             tokens: number;
-            capacity: number;
-        }>;
+            capacity: number }>;
         systemCondition: SystemCondition;
         systemMetrics: SystemMetrics;
     };
@@ -326,8 +311,7 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
     /**
      * Get analytics-enhanced statistics
      */
-    getAnalyticsStatistics(): {
-        analyticsEnabled: boolean;
+    getAnalyticsStatistics(): { analyticsEnabled: boolean;
         lastUpdate: Date;
         totalInsights: number;
         insightsByType: Record<string, number>;
@@ -336,8 +320,7 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
         performanceMetrics: {
             averageEffectiveness: number;
             averageFalsePositiveRate: number;
-            averageAdaptationSuccessRate: number;
-        };
+            averageAdaptationSuccessRate: number };
     };
     private validateRule;
     private findMatchingRules;
@@ -375,13 +358,11 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
     /**
      * Get recent throttling attempts for integration with rate limiting
      */
-    getRecentThrottlingAttempts(identifier: string, endpoint: string): Array<{
-        timestamp: Date;
+    getRecentThrottlingAttempts(identifier: string, endpoint: string): Array<{ timestamp: Date;
         action: string;
         delay: number;
         ruleId: string;
-        success: boolean;
-    }>;
+        success: boolean }>;
     /**
      * Remove a rule
      */

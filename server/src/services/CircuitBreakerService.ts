@@ -10,10 +10,10 @@ export enum CircuitState {
   CLOSED = 'closed',      // Normal operation
   OPEN = 'open',          // Failing, blocking requests
   HALF_OPEN = 'half-open' // Testing if service has recovered
-}
 
-}
-}
+
+
+
 export interface CircuitBreakerOptions {
   failureThreshold: number;        // Number of failures before opening circuit
   successThreshold: number;        // Number of successes to close from half-open
@@ -21,12 +21,13 @@ export interface CircuitBreakerOptions {
   resetTimeout: number;           // Time to wait before attempting recovery
   monitoringPeriod: number;       // Window for failure counting (ms)
   name: string;                   // Circuit breaker name for identification
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CircuitBreakerMetrics {
   state: CircuitState;
   failures: number;
@@ -37,9 +38,10 @@ export interface CircuitBreakerMetrics {
   lastSuccessTime?: number;
   stateChangedTime: number;
   nextRetryTime?: number;
-}
-}
-}
+
+
+
+
 
 class CircuitBreaker extends EventEmitter {
   private state: CircuitState = CircuitState.CLOSED;
@@ -55,20 +57,20 @@ class CircuitBreaker extends EventEmitter {
   constructor(options: CircuitBreakerOptions) {
     super();
     this.options = options;
-  }
+
 
   private resetCounts(): void {
     this.failures = 0;
     this.successes = 0;
     this.requests = 0;
-  }
+
 
   private shouldAttemptReset(): boolean {
     return (
       this.state === CircuitState.OPEN &&
       Date.now() - this.stateChangedTime >= this.options.resetTimeout
     );
-  }
+
 
   private setState(newState: CircuitState): void {
     const previousState = this.state;
@@ -77,9 +79,9 @@ class CircuitBreaker extends EventEmitter {
 
     if (newState === CircuitState.OPEN) {
       this.nextRetryTime = Date.now() + this.options.resetTimeout;
-    } else {
+ else {
       this.nextRetryTime = undefined;
-    }
+
 
     logger.info(`Circuit breaker '${this.options.name}' state changed`, {
       previousState,
@@ -95,7 +97,7 @@ class CircuitBreaker extends EventEmitter {
       newState,
       timestamp: Date.now()
     });
-  }
+
 
   private cleanOldMetrics(): void {
     const now = Date.now();
@@ -105,8 +107,8 @@ class CircuitBreaker extends EventEmitter {
     // For this implementation, we'll reset counts if they're too old
     if (this.lastFailureTime && this.lastFailureTime < cutoff) {
       this.resetCounts();
-    }
-  }
+
+
 
   public getMetrics(): CircuitBreakerMetrics {
     const totalRequests = this.requests || 1; // Avoid division by zero
@@ -123,7 +125,7 @@ class CircuitBreaker extends EventEmitter {
       stateChangedTime: this.stateChangedTime,
       nextRetryTime: this.nextRetryTime
     };
-  }
+
 
   public async execute<T>(operation: () => Promise<T>): Promise<T> {
 
@@ -134,10 +136,10 @@ class CircuitBreaker extends EventEmitter {
     if (this.state === CircuitState.OPEN) {
       if (this.shouldAttemptReset()) {
         this.setState(CircuitState.HALF_OPEN);
-      } else {
+ else {
         throw new CircuitBreakerError(this.options.name, 'open');
-      }
-    }
+
+
 
     try {
       // Execute the operation with timeout
@@ -147,17 +149,17 @@ class CircuitBreaker extends EventEmitter {
           setTimeout(() => {
             reject(new Error(`Operation timed out after ${this.options.timeout}ms`));
           }, this.options.timeout);
-  }
+
       ]);
 
       // Success case
       this.onSuccess();
       return result;
-    } catch (error) {
+ catch (error) {
       this.onFailure();
       throw error;
-    }
-  }
+
+
 
   private onSuccess(): void {
     this.successes++;
@@ -167,12 +169,12 @@ class CircuitBreaker extends EventEmitter {
       if (this.successes >= this.options.successThreshold) {
         this.setState(CircuitState.CLOSED);
         this.resetCounts();
-      }
-    } else if (this.state === CircuitState.CLOSED) {
+
+ else if (this.state === CircuitState.CLOSED) {
       // Reset failure count on success
       this.failures = Math.max(0, this.failures - 1);
-    }
-  }
+
+
 
   private onFailure(): void {
     this.failures++;
@@ -181,23 +183,23 @@ class CircuitBreaker extends EventEmitter {
     if (this.state === CircuitState.CLOSED || this.state === CircuitState.HALF_OPEN) {
       if (this.failures >= this.options.failureThreshold) {
         this.setState(CircuitState.OPEN);
-      }
-    }
-  }
+
+
+
 
   public forceOpen(): void {
     this.setState(CircuitState.OPEN);
-  }
+
 
   public forceClosed(): void {
     this.setState(CircuitState.CLOSED);
     this.resetCounts();
-  }
+
 
   public forceHalfOpen(): void {
     this.setState(CircuitState.HALF_OPEN);
-  }
-}
+
+
 
 export class CircuitBreakerService {
   private circuitBreakers: Map<string, CircuitBreaker> = new Map();
@@ -206,9 +208,9 @@ export class CircuitBreakerService {
   static getInstance(): CircuitBreakerService {
     if (!CircuitBreakerService.instance) {
       CircuitBreakerService.instance = new CircuitBreakerService();
-    }
+
     return CircuitBreakerService.instance;
-  }
+
 
   public createCircuitBreaker(options: CircuitBreakerOptions): CircuitBreaker {
     const circuitBreaker = new CircuitBreaker(options);
@@ -220,11 +222,11 @@ export class CircuitBreakerService {
     });
 
     return circuitBreaker;
-  }
+
 
   public getCircuitBreaker(name: string): CircuitBreaker | undefined {
     return this.circuitBreakers.get(name);
-  }
+
 
   public getAllMetrics(): Record<string, CircuitBreakerMetrics> {
     const metrics: Record<string, CircuitBreakerMetrics> = {};
@@ -232,7 +234,7 @@ export class CircuitBreakerService {
       metrics[name] = breaker.getMetrics();
     });
     return metrics;
-  }
+
 
   public async executeWithBreaker<T>(
     breakerName: string,
@@ -254,10 +256,10 @@ export class CircuitBreakerService {
         ...options
       };
       breaker = this.createCircuitBreaker(defaultOptions);
-    }
+
 
     return breaker.execute(operation);
-  }
+
 
   // Predefined circuit breakers for common services
   public getDatabaseCircuitBreaker(): CircuitBreaker {
@@ -273,10 +275,10 @@ export class CircuitBreakerService {
         resetTimeout: 30000, // 30s before retry
         monitoringPeriod: 300000 // 5min window
       });
-    }
+
 
     return breaker;
-  }
+
 
   public getRedisCircuitBreaker(): CircuitBreaker {
     const name = 'redis';
@@ -291,10 +293,10 @@ export class CircuitBreakerService {
         resetTimeout: 15000, // 15s before retry
         monitoringPeriod: 120000 // 2min window
       });
-    }
+
 
     return breaker;
-  }
+
 
   public getExternalAPICircuitBreaker(serviceName: string): CircuitBreaker {
     const name = `external-api-${serviceName}`;
@@ -309,10 +311,10 @@ export class CircuitBreakerService {
         resetTimeout: 60000, // 1min before retry
         monitoringPeriod: 600000 // 10min window
       });
-    }
+
 
     return breaker;
-  }
+
 
   public getFileSystemCircuitBreaker(): CircuitBreaker {
     const name = 'filesystem';
@@ -327,11 +329,11 @@ export class CircuitBreakerService {
         resetTimeout: 20000, // 20s before retry
         monitoringPeriod: 180000 // 3min window
       });
-    }
+
 
     return breaker;
-  }
-}
+
+
 
 // Export singleton instance
 export const circuitBreakerService = CircuitBreakerService.getInstance();
@@ -342,7 +344,7 @@ export async function withDatabaseCircuitBreaker<T>(
 ): Promise<T> {
 
   return circuitBreakerService.getDatabaseCircuitBreaker().execute(operation);
-}
+
 
 // Helper function for Redis operations
 export async function withRedisCircuitBreaker<T>(
@@ -350,7 +352,7 @@ export async function withRedisCircuitBreaker<T>(
 ): Promise<T> {
 
   return circuitBreakerService.getRedisCircuitBreaker().execute(operation);
-}
+
 
 // Helper function for external API calls
 export async function withExternalAPICircuitBreaker<T>(
@@ -359,7 +361,7 @@ export async function withExternalAPICircuitBreaker<T>(
 ): Promise<T> {
 
   return circuitBreakerService.getExternalAPICircuitBreaker(serviceName).execute(operation);
-}
+
 
 // Helper function for file system operations
 export async function withFileSystemCircuitBreaker<T>(
@@ -367,6 +369,6 @@ export async function withFileSystemCircuitBreaker<T>(
 ): Promise<T> {
 
   return circuitBreakerService.getFileSystemCircuitBreaker().execute(operation);
-}
+
 
 export default CircuitBreakerService;

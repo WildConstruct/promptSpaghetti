@@ -8,8 +8,8 @@ import { ModelConfiguration, AIModelProvider } from './BaseAIModel';
 import { ModelRegistration } from './AIModelFactory';
 
 }
-export interface EnvironmentConfig {
-    name: string;
+}
+export interface EnvironmentConfig { name: string;
     description: string;
     models: ModelConfiguration[];
     defaults: {
@@ -17,55 +17,49 @@ export interface EnvironmentConfig {
         retries: number;
         rateLimit: {
             requestsPerMinute: number;
-            tokensPerMinute: number;
+            tokensPerMinute: number }
 }
         };
     };
-    features: {
-        enableCaching: boolean;
+    features: { enableCaching: boolean;
         enableLoadBalancing: boolean;
         enableHealthChecks: boolean;
-        enableMetrics: boolean;
-    };
+        enableMetrics: boolean };
 
 }
-export interface ConfigurationSchema {
-    version: string;
+}
+export interface ConfigurationSchema { version: string;
     environments: Record<string, EnvironmentConfig>;
     modelTemplates: Record<string, Partial<ModelConfiguration>>;
     providerDefaults: Record<AIModelProvider, Partial<ModelConfiguration>>;
-    validationRules: ValidationRule[];
-
+    validationRules: ValidationRule[] }
 }
-export interface ValidationRule {
-    id: string;
+}
+export interface ValidationRule { id: string;
     name: string;
     description: string;
-    validate: (config: ModelConfiguration) => ValidationResult;
-
+    validate: (config: ModelConfiguration) => ValidationResult }
 }
-export interface ValidationResult {
-    valid: boolean;
+}
+export interface ValidationResult { valid: boolean;
     errors: string[];
     warnings: string[];
-    suggestions: string[];
-
+    suggestions: string[] }
 }
-export interface ConfigurationUpdate {
-    path: string;
+}
+export interface ConfigurationUpdate { path: string;
     value: unknown;
     environment?: string;
     modelId?: string;
     timestamp: Date;
-    reason?: string;
-
+    reason?: string }
 }
-export interface ConfigurationHistory {
-    updates: ConfigurationUpdate[];
+}
+export interface ConfigurationHistory { updates: ConfigurationUpdate[];
     snapshots: Array<{
         timestamp: Date;
         config: ConfigurationSchema;
-        version: string;
+        version: string }
 }
     }>;
 

@@ -4,51 +4,45 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { HelpContent, BUILT_IN_HELP_CONTENT } from './ContextualHelpSystem';
 
-}
-export interface HelpContextState {
-  helpContent: HelpContent;
+
+export interface HelpContextState { helpContent: HelpContent;
   onboardingEnabled: boolean;
   onboardingStep: number;
   onboardingComplete: boolean;
   showHelpHints: boolean;
-  getHelpContent: (id: string) => HelpContent | undefined;
-  addHelpContent: (content: HelpContent) => void;
-  updateHelpContent: (id: string, updates: Partial<HelpContent>) => void;
-  removeHelpContent: (id: string) => void;
+  getHelpContent: (id: string) => HelpContent | undefined
+  addHelpContent: (content: HelpContent) => void
+  updateHelpContent: (id: string, updates: Partial<HelpContent>) => void
+  removeHelpContent: (id: string) => void
   startOnboarding: () => void;
-  nextOnboardingStep: () => void;
+  nextOnboardingStep: () => void
   previousOnboardingStep: () => void;
-  skipOnboarding: () => void;
+  skipOnboarding: () => void
   completeOnboarding: () => void;
-  toggleHelpHints: () => void;
+  toggleHelpHints: () => void }
   resetHelpSystem: () => void;
   const HelpContext = createContext<HelpContextState | undefined>(undefined);
-}
-}
-export const useHelpSystem = (): HelpContextState => {
-  const context = useContext(HelpContext);
+
+
+export const useHelpSystem = (): HelpContextState => { const context = useContext(HelpContext);
   if (!context) {
     throw new Error('useHelpSystem must be used within a HelpProvider');
-  return context;
-};
+  return context };
 
-}
-export interface HelpProviderProps {
-  children: React.ReactNode;
+
+export interface HelpProviderProps { children: React.ReactNode;
   customHelpContent?: HelpContent;
   enableOnboarding?: boolean;
-  enableHelpHints?: boolean;
-}
-}
-export const HelpProvider: React.FC<HelpProviderProps> = ({)
-  children,
-  customHelpContent = [],
-  enableOnboarding = true,
+  enableHelpHints?: boolean }
+
+export const HelpProvider: React.FC<HelpProviderProps> = ({ )
+  children
+  customHelpContent = []
+  enableOnboarding = true }
   enableHelpHints = true
-}) => {
-  // Core state
+}) => { // Core state
   const [helpContent, setHelpContent] = useState<HelpContent>([)
-  ...BUILT_IN_HELP_CONTENT,
+  ...BUILT_IN_HELP_CONTENT }
   ...customHelpContent
   ]);
   // Onboarding state
@@ -57,100 +51,66 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({)
   const [onboardingComplete, setOnboardingComplete] = useState(false);
   const [showHelpHints, setShowHelpHints] = useState(enableHelpHints);
   // Load onboarding state from localStorage
-  useEffect(() => {
-  const savedState = localStorage.getItem('wildConstruct_helpSystem');
+  useEffect(() => { const savedState = localStorage.getItem('wildConstruct_helpSystem');
   if (savedState) {
   try {
   const parsed = JSON.parse(savedState);
   setOnboardingComplete(parsed.onboardingComplete || false);
   setShowHelpHints(parsed.showHelpHints !== undefined ? parsed.showHelpHints : enableHelpHints);
-  setOnboardingStep(parsed.onboardingStep || 0);
-} catch (error) {
-  console.warn('Failed to parse help system state:', error);
-}, [enableHelpHints]);
+  setOnboardingStep(parsed.onboardingStep || 0) } catch (error) { console.warn('Failed to parse help system state:', error) }, [enableHelpHints]);
   // Save state to localStorage
-  const saveState = () => {
-  const state = {
-  onboardingComplete,
-  showHelpHints,
-  onboardingStep,
-  lastUpdated: Date.now(),
+  const saveState = () => { const state = {
+  onboardingComplete
+  showHelpHints
+  onboardingStep
+  lastUpdated: Date.now() }
 };
     localStorage.setItem('wildConstruct_helpSystem', JSON.stringify(state));
   };
   // Save state when it changes
-  useEffect(() => {
-    saveState();
-  }, [onboardingComplete, showHelpHints, onboardingStep]);
+  useEffect(() => { saveState() }, [onboardingComplete, showHelpHints, onboardingStep]);
   // Content management functions
-  const getHelpContent = (id: string): HelpContent | undefined => {
-    return helpContent.find(content => content.id === id);
-  };
-  const addHelpContent = React.useCallback((content: HelpContent) => {
-    setHelpContent(prev => {)
+  const getHelpContent = (id: string): HelpContent | undefined => { return helpContent.find(content => content.id === id) };
+  const addHelpContent = React.useCallback((content: HelpContent) => { setHelpContent(prev => {)
   // Check if content already exists
       const existingIndex = prev.findIndex(c => c.id === content.id);
       if (existingIndex >= 0) {
         // Update existing content
         const updated = [...prev];
         updated[existingIndex] = content;
-        return updated;
-      } else {
-        // Add new content
-        return [...prev, content];
-    });
+        return updated } else { // Add new content
+        return [...prev, content] });
   }, []);
   const updateHelpContent = React.useCallback((id: string, updates: Partial<HelpContent>) => {
     setHelpContent(prev => prev.map(content => )
       content.id === id ? { ...content, ...updates } : content
     ));
   }, []);
-  const removeHelpContent = React.useCallback((id: string) => {
-    setHelpContent(prev => prev.filter(content => content.id !== id));
-  }, []);
+  const removeHelpContent = React.useCallback((id: string) => { setHelpContent(prev => prev.filter(content => content.id !== id)) }, []);
   // Onboarding functions
-  const getOnboardingSteps = (): HelpContent => {
-  return helpContent
+  const getOnboardingSteps = (): HelpContent => { return helpContent
   .filter(content => content.category === 'onboarding')
-  .sort((a, b) => (a.priority === 'high' ? -1 : 1));
-};
-  const startOnboarding = () => {
-    setOnboardingStep(0);
+  .sort((a, b) => (a.priority === 'high' ? -1 : 1)) };
+  const startOnboarding = () => { setOnboardingStep(0);
     setOnboardingComplete(false);
-    setOnboardingEnabled(true);
-  };
-  const nextOnboardingStep = () => {
-    const steps = getOnboardingSteps();
+    setOnboardingEnabled(true) };
+  const nextOnboardingStep = () => { const steps = getOnboardingSteps();
     if (onboardingStep < steps.length - 1) {
-      setOnboardingStep(prev => prev + 1);
-    } else {
-      completeOnboarding();
-  };
-  const previousOnboardingStep = () => {
-    if (onboardingStep > 0) {
-      setOnboardingStep(prev => prev - 1);
-  };
-  const skipOnboarding = () => {
-    setOnboardingEnabled(false);
+      setOnboardingStep(prev => prev + 1) } else { completeOnboarding() };
+  const previousOnboardingStep = () => { if (onboardingStep > 0) {
+      setOnboardingStep(prev => prev - 1) };
+  const skipOnboarding = () => { setOnboardingEnabled(false);
+    setOnboardingComplete(true) };
+  const completeOnboarding = () => { setOnboardingEnabled(false);
     setOnboardingComplete(true);
-  };
-  const completeOnboarding = () => {
-    setOnboardingEnabled(false);
-    setOnboardingComplete(true);
-    setOnboardingStep(0);
-  };
-  const toggleHelpHints = () => {
-    setShowHelpHints(prev => !prev);
-  };
-  const resetHelpSystem = () => {
-    setOnboardingComplete(false);
+    setOnboardingStep(0) };
+  const toggleHelpHints = () => { setShowHelpHints(prev => !prev) };
+  const resetHelpSystem = () => { setOnboardingComplete(false);
     setOnboardingStep(0);
     setOnboardingEnabled(enableOnboarding);
     setShowHelpHints(enableHelpHints);
-    localStorage.removeItem('wildConstruct_helpSystem');
-  };
-  const contextValue: HelpContextState = {
-  helpContent,
+    localStorage.removeItem('wildConstruct_helpSystem') };
+  const contextValue: HelpContextState = { helpContent,
   onboardingEnabled: onboardingEnabled && !onboardingComplete,
   onboardingStep,
   onboardingComplete,
@@ -164,7 +124,7 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({)
   previousOnboardingStep,
   skipOnboarding,
   completeOnboarding,
-  toggleHelpHints,
+  toggleHelpHints }
   resetHelpSystem
 };
   return;
@@ -176,38 +136,28 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({)
 
 // Hook for easy help content registration
   // Register help content for a component
-  const registerHelpContent = (content: HelpContent | HelpContent) => {
-    if (Array.isArray(content)) {
-      content.forEach(addHelpContent);
-    } else {
-      addHelpContent(content);
-  };
+  const registerHelpContent = (content: HelpContent | HelpContent) => { if (Array.isArray(content)) {
+      content.forEach(addHelpContent) } else { addHelpContent(content) };
   // Register help content with automatic cleanup
-  const useHelpContent = (content: HelpContent | HelpContent) => {
-    React.useEffect(() => {
+  const useHelpContent = (content: HelpContent | HelpContent) => { React.useEffect(() => {
       registerHelpContent(content);
       // Cleanup function to remove content when component unmounts
       return () => {
         if (Array.isArray(content)) {
-          content.forEach(c => removeHelpContent(c.id));
-        } else {
-          removeHelpContent(content.id);
-      };
+          content.forEach(c => removeHelpContent(c.id)) } else { removeHelpContent(content.id) };
     }, []);
   };
-  return {
-    registerHelpContent,
+  return { registerHelpContent,
     useHelpContent,
-    updateHelpContent,
+    updateHelpContent }
     removeHelpContent
   };
 };
 
 // Specialized hooks for common help scenarios
-  React.useEffect(() => {
-  const content: HelpContent = {,
+  React.useEffect(() => { const content: HelpContent = {,
   ...stableHelpContent,
-  id: fieldId,
+  id: fieldId }
 };
     addHelpContent(content);
   }, [fieldId, stableHelpContent, addHelpContent]);
@@ -217,8 +167,7 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({)
     .filter(content => content.category === 'onboarding')
     .sort((a, b) => (a.priority === 'high' ? -1 : 1));
   const currentStepData = onboardingSteps[onboardingStep];
-  return {
-  isOnboardingActive: onboardingEnabled && !onboardingComplete,
+  return { isOnboardingActive: onboardingEnabled && !onboardingComplete,
   currentStep: currentStepData,
   currentStepIndex: onboardingStep,
   totalSteps: onboardingSteps.length,
@@ -228,36 +177,36 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({)
   skipOnboarding,
   completeOnboarding,
   startOnboarding,
-  isComplete: onboardingComplete,
+  isComplete: onboardingComplete }
 };
 };
 
 // Component for managing help system settings
   return;
     <div className={`help-system-settings ${className}`} style={{},}
-  background: '#2d3748',
-      border: '1px solid #4a5568',
-      borderRadius: 6,
+  background: '#2d3748'
+      border: '1px solid #4a5568'
+      borderRadius: 6
       padding: 12;
-  }}>
-      <h4 style={{
-  margin: '0 0 12px 0',
-  fontSize: 12,
-  fontWeight: 600,
-  color: '#e2e8f0',
-}}>
+}>
+      <h4 style={ {
+  margin: '0 0 12px 0'
+  fontSize: 12
+  fontWeight: 600
+  color: '#e2e8f0' }
+}>
         Help System Settings
       </h4>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {/* Show Help Hints Toggle */}
-        <label style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-  cursor: 'pointer',
-  fontSize: 11,
-  color: '#e2e8f0',
-}}>
+        <label style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8
+  cursor: 'pointer'
+  fontSize: 11
+  color: '#e2e8f0' }
+}>
           <input
             type="checkbox"
             checked={showHelpHints}
@@ -267,28 +216,28 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({)
           Show help tooltips and hints
         </label>
         {/* Onboarding Status */}
-        <div style={{
-  fontSize: 11,
-  color: '#a0aec0',
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-}}>
+        <div style={ {
+  fontSize: 11
+  color: '#a0aec0'
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8 }
+}>
           <span>
             Onboarding: {onboardingComplete ? '✅ Complete' : '🔄 Available'}
           </span>
           {onboardingComplete && ()
             <button
               onClick={startOnboarding}
-              style={{
-  padding: '2px 6px',
-  fontSize: 10,
-  background: '#4299e1',
-  border: 'none',
-  borderRadius: 2,
-  color: 'white',
-  cursor: 'pointer',
-}}
+              style={ {
+  padding: '2px 6px'
+  fontSize: 10
+  background: '#4299e1'
+  border: 'none'
+  borderRadius: 2
+  color: 'white'
+  cursor: 'pointer' }
+}
             >
               Restart Tour
             </button>
@@ -297,16 +246,16 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({)
         {/* Reset Button */}
         <button
           onClick={resetHelpSystem}
-          style={{
-  padding: '4px 8px',
-  fontSize: 10,
-  background: '#e53e3e',
-  border: 'none',
-  borderRadius: 3,
-  color: 'white',
-  cursor: 'pointer',
-  alignSelf: 'flex-start',
-}}
+          style={ {
+  padding: '4px 8px'
+  fontSize: 10
+  background: '#e53e3e'
+  border: 'none'
+  borderRadius: 3
+  color: 'white'
+  cursor: 'pointer'
+  alignSelf: 'flex-start' }
+}
         >
           Reset Help System
         </button>

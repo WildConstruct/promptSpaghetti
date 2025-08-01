@@ -1,5 +1,4 @@
-import { 
-  WorkflowConfig,
+import { WorkflowConfig,
   WorkflowInstance,
   WorkflowTransitionRequest,
   WorkflowStats,
@@ -10,11 +9,10 @@ import {
   AuditLogEntry,
   AuditFilter,
   WorkflowWebhook,
-  ScheduledExecution,
+  ScheduledExecution }
   ExecutionResult
 } from '../types/WorkflowTypes';
-declare class WorkflowService {
-    private baseUrl;
+declare class WorkflowService { private baseUrl;
     constructor(baseUrl?: string);
     getWorkflowConfigs(workspaceId?: string): Promise<WorkflowConfig[]>;
     getWorkflowConfig(configId: string): Promise<WorkflowConfig>;
@@ -23,10 +21,10 @@ declare class WorkflowService {
     deleteWorkflowConfig(configId: string): Promise<void>;
     getWorkflowInstance(resourceId: string, resourceType: string): Promise<WorkflowInstance | null>;
     createWorkflowInstance();
-      resourceId: string,
-      resourceType: string,
-      configId: string,
-      metadata?: Record<string,
+      resourceId: string
+      resourceType: string
+      configId: string
+      metadata?: Record<string }
       any>
     ): Promise<WorkflowInstance>;
     transitionWorkflow(instanceId: string, request: WorkflowTransitionRequest): Promise<WorkflowInstance>;
@@ -38,11 +36,9 @@ declare class WorkflowService {
     acquireLock(request: LockRequest): Promise<ResourceLock>;
     releaseLock(lockId: string): Promise<void>;
     breakLock(lockId: string, reason?: string): Promise<void>;
-    getAuditLogs(filter?: AuditFilter): Promise<{
-        entries: AuditLogEntry[];
+    getAuditLogs(filter?: AuditFilter): Promise<{ entries: AuditLogEntry[];
         total: number;
-        has_more: boolean;
-    }>;
+        has_more: boolean }>;
     createAuditEntry(entry: Omit<AuditLogEntry, 'id' | 'created_at'>): Promise<AuditLogEntry>;
     getWebhooks(configId?: string): Promise<WorkflowWebhook[]>;
     createWebhook(webhook: Omit<WorkflowWebhook, 'id' | 'created_at' | 'updated_at'>): Promise<WorkflowWebhook>;
@@ -50,7 +46,7 @@ declare class WorkflowService {
     deleteWebhook(webhookId: string): Promise<void>;
     getScheduledExecutions(resourceId?: string, resourceType?: string): Promise<ScheduledExecution[]>;
     createScheduledExecution();
-      execution: Omit<ScheduledExecution,
+      execution: Omit<ScheduledExecution
       'id' | 'created_at' | 'updated_at' | 'execution_count' | 'failure_count'>
     ): Promise<ScheduledExecution>;
     updateScheduledExecution(executionId: string, updates: Partial<ScheduledExecution>): Promise<ScheduledExecution>;

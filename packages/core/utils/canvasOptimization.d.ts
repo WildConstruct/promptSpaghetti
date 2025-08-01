@@ -8,17 +8,15 @@ import React from 'react';
 import { Edge, Node, Viewport } from 'reactflow';
 
 }
-export interface PerformanceConfig {
-    maxVisibleNodes: number;
+}
+export interface PerformanceConfig { maxVisibleNodes: number;
     cullingThreshold: number;
     animationFrameThrottle: number;
     renderDebounce: number;
-    memoryCleanupInterval: number;
-
-
+    memoryCleanupInterval: number }
 }
-export interface CanvasMetrics {
-    fps: number;
+}
+export interface CanvasMetrics { fps: number;
     renderTime: number;
     nodeCount: number;
     visibleNodes: number;
@@ -63,7 +61,7 @@ export declare class CanvasOptimizer {
      */
     optimizeNodeVisibility(nodes: Node[], viewport: Viewport, canvasSize: {)
         width: number;
-        height: number;
+        height: number }
 }
     }): Node[];
     /**
@@ -89,8 +87,7 @@ export declare class CanvasOptimizer {
     /**
      * Create optimized render settings
      */
-    getOptimizedRenderSettings(nodeCount: number, zoom: number): {
-        nodesDraggable: boolean;
+    getOptimizedRenderSettings(nodeCount: number, zoom: number): { nodesDraggable: boolean;
         nodesConnectable: boolean;
         elementsSelectable: boolean;
         showNodeLabels: boolean;
@@ -99,8 +96,7 @@ export declare class CanvasOptimizer {
         fitViewOnInit: boolean;
         animateTransitions: boolean;
         connectionLineType: string;
-        quality: string;
-    };
+        quality: string };
     /**
      * Throttled render function
      */
@@ -129,16 +125,15 @@ export declare class CanvasOptimizer {
 /**
  * Hook for using canvas optimization
  */
-export declare function useCanvasOptimization(config?: Partial<PerformanceConfig>): {
-    optimizer: CanvasOptimizer;
+export declare function useCanvasOptimization(config?: Partial<PerformanceConfig>): { optimizer: CanvasOptimizer;
     metrics: CanvasMetrics;
     isPerformanceGood: boolean;
-    recommendations: string[];
-};
+    recommendations: string[] };
 /**
  * Performance monitoring component
  */
 
+}
 }
 export interface PerformanceMonitorProps {
     optimizer: CanvasOptimizer;
@@ -146,4 +141,5 @@ export interface PerformanceMonitorProps {
 
 export declare const PerformanceMonitor: React.FC<PerformanceMonitorProps>;
 //# sourceMappingURL=canvasOptimization.d.ts.map
+}
 }

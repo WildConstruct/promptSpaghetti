@@ -5,9 +5,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NotificationManager } from './NotificationManager';
 
-}
-export interface Notification {
-  id: string;
+
+export interface Notification { id: string;
   user_id: string;
   workspace_id: string;
   event_id?: string;
@@ -15,7 +14,7 @@ export interface Notification {
   title: string;
   message: string;
   action_url?: string;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
+  priority: 'low' | 'normal' | 'high' | 'urgent' }
   delivery_channel: 'in_app' | 'email' | 'push';
   read_at?: string;
   delivered_at: string;
@@ -23,20 +22,17 @@ export interface Notification {
   icon?: string;
   color?: string;
   action_label?: string;
-  interface NotificationCenterProps {
-  notificationManager: NotificationManager;
+  interface NotificationCenterProps { notificationManager: NotificationManager;
   isOpen: boolean;
   onClose: () => void;
-  className?: string;
-}
-}
-export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
-  notificationManager,
-  isOpen,
-  onClose,
+  className?: string }
+
+export const NotificationCenter: React.FC<NotificationCenterProps> = ({ )
+  notificationManager
+  isOpen
+  onClose }
   className = ''
-}) => {
-  const [notifications, setNotifications] = useState<Notification>([]);
+}) => { const [notifications, setNotifications] = useState<Notification>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<'all' | 'unread' | 'mentions' | 'workspace'>('all');
@@ -44,44 +40,31 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
   const panelRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (isOpen) {
-      loadNotifications();
-  }, [isOpen, filter, sortBy]);
-  useEffect(() => {
-    // Set up real-time notification updates
+      loadNotifications() }, [isOpen, filter, sortBy]);
+  useEffect(() => { // Set up real-time notification updates
     const unsubscribe = notificationManager.onNotificationReceived((notification) => {
       setNotifications(prev => [notification, ...prev]);
       if (!notification.read_at) {
-        setUnreadCount(prev => prev + 1);
-    });
+        setUnreadCount(prev => prev + 1) });
     return unsubscribe;
   }, [notificationManager]);
-  useEffect(() => {
-  // Close panel when clicking outside
-  const handleClickOutside = (event: MouseEvent) => {,
-  if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
-  onClose();
-};
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+  useEffect(() => { // Close panel when clicking outside
+  const handleClickOutside = (event: MouseEvent) => { }
+  if (panelRef.current && !panelRef.current.contains(event.target as Node)) { onClose() };
+    if (isOpen) { document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+      document.removeEventListener('mousedown', handleClickOutside) };
   }, [isOpen, onClose]);
-  const loadNotifications = async () => {
-  try {
+  const loadNotifications = async () => { try {
   setLoading(true);
   const result = await notificationManager.getNotifications({)
-  filter,
-  sort_by: sortBy,
-  limit: 50,
+  filter
+  sort_by: sortBy
+  limit: 50 }
 });
       setNotifications(result.notifications);
       setUnreadCount(result.unread_count);
-    } catch (error) {
-  console.error('Failed to load notifications:', error);
-} finally {
-      setLoading(false);
-  };
+ catch (error) { console.error('Failed to load notifications:', error) } finally { setLoading(false) };
   const markAsRead = async (notificationId: string) => {
     try {
       await notificationManager.markAsRead(notificationId);
@@ -92,9 +75,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
             : n
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch (error) {
-  console.error('Failed to mark notification as read:', error);
-};
+ catch (error) { console.error('Failed to mark notification as read:', error) };
   const markAllAsRead = async () => {
     try {
       const unreadIds = notifications.filter(n => !n.read_at).map(n => n.id);
@@ -103,56 +84,46 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
         prev.map(n => ({ ...n, read_at: n.read_at || new Date().toISOString() }))
       );
       setUnreadCount(0);
-    } catch (error) {
-  console.error('Failed to mark all notifications as read:', error);
-};
-  const deleteNotification = async (notificationId: string) => {
-    try {
+ catch (error) { console.error('Failed to mark all notifications as read:', error) };
+  const deleteNotification = async (notificationId: string) => { try {
       await notificationManager.deleteNotification(notificationId);
-      setNotifications(prev => prev.filter(n => n.id !== notificationId));
-    } catch (error) {
-  console.error('Failed to delete notification:', error);
-};
-  const handleNotificationClick = (notification: Notification) => {
-    if (!notification.read_at) {
+      setNotifications(prev => prev.filter(n => n.id !== notificationId)) } catch (error) { console.error('Failed to delete notification:', error) };
+  const handleNotificationClick = (notification: Notification) => { if (!notification.read_at) {
       markAsRead(notification.id);
     if (notification.action_url) {
       // Navigate to the action URL
-      window.location.href = notification.action_url;
-  };
-  const getNotificationIcon = (notification: Notification): string => {
-  if (notification.icon) return notification.icon;
+      window.location.href = notification.action_url };
+  const getNotificationIcon = (notification: Notification): string => { if (notification.icon) return notification.icon;
   switch (notification.notification_type) {
-  case 'comment':,
+  case 'comment':
   return '💬';
-  case 'mention':,
+  case 'mention':
   return '@';
-  case 'collaboration':,
+  case 'collaboration':
   return '👥';
-  case 'workspace':,
+  case 'workspace':
   return '🏢';
-  case 'template':,
+  case 'template':
   return '📋';
-  case 'approval':,
+  case 'approval':
   return '✅';
-  case 'rejection':,
+  case 'rejection':
   return '❌';
-  case 'system':,
+  case 'system':
   return 'ℹ️';
-  default:,
+  default: }
   return '🔔';
 };
-  const getPriorityColor = (priority: string): string => {
-  switch (priority) {
-  case 'urgent':,
+  const getPriorityColor = (priority: string): string => { switch (priority) {
+  case 'urgent':
   return 'text-red-600 bg-red-100';
-  case 'high':,
+  case 'high':
   return 'text-orange-600 bg-orange-100';
-  case 'normal':,
+  case 'normal':
   return 'text-blue-600 bg-blue-100';
-  case 'low':,
+  case 'low':
   return 'text-gray-600 bg-gray-100';
-  default:,
+  default: }
   return 'text-gray-600 bg-gray-100';
 };
   const formatTimeAgo = (dateString: string): string => {
@@ -253,10 +224,9 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
         {/* Footer */}
         <div className="p-4 border-t border-gray-200">
           <button
-            onClick={() => {
+            onClick={ () => {
               // Navigate to notification preferences
-              window.location.href = '/settings/notifications';
-            }}
+              window.location.href = '/settings/notifications' }}
             className="w-full text-sm text-blue-600 hover:text-blue-800 transition-colors"
           >
             Notification Settings
@@ -266,31 +236,31 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
     </div>
   );
 };
-}
-interface NotificationItemProps {
-  notification: Notification;
+
+
+interface NotificationItemProps { notification: Notification;
   onClick: () => void;
-  onMarkAsRead: () => void;
+  onMarkAsRead: () => void
   onDelete: () => void;
-  getIcon: (notification: Notification) => string;
-  getPriorityColor: (priority: string) => string;
+  getIcon: (notification: Notification) => string
+  getPriorityColor: (priority: string) => string
   formatTimeAgo: (dateString: string) => string;
-  const NotificationItem: React.FC<NotificationItemProps> = ({,)
-  notification,
-  onClick,
-  onMarkAsRead,
-  onDelete,
-  getIcon,
-  getPriorityColor,
+  const NotificationItem: React.FC<NotificationItemProps> = ({);
+  notification;
+  onClick;
+  onMarkAsRead;
+  onDelete;
+  getIcon;
+  getPriorityColor }
   formatTimeAgo
-}
-}) => {
-  const [showActions, setShowActions] = useState(false);
+
+
+}) => { const [showActions, setShowActions] = useState(false);
   return;
   <div
-  className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer relative ${,}
-  !notification.read_at ? 'bg-blue-50 border-l-4 border-l-blue-500' : '',
-}`}
+  className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer relative ${ }
+  !notification.read_at ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
+`}
       onClick={onClick}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
@@ -327,14 +297,13 @@ interface NotificationItemProps {
           )}
         </div>
         {/* Action Buttons */}
-        {showActions && ()
+        { showActions && ()
           <div className="absolute top-2 right-2 flex space-x-1">
             {!notification.read_at && ()
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onMarkAsRead();
-                }}
+                  onMarkAsRead() }}
                 className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
                 title="Mark as read"
               >
@@ -344,10 +313,9 @@ interface NotificationItemProps {
               </button>
             )}
             <button
-              onClick={(e) => {
+              onClick={ (e) => {
                 e.stopPropagation();
-                onDelete();
-              }}
+                onDelete() }}
               className="p-1 text-gray-400 hover:text-red-600 transition-colors"
               title="Delete"
             >

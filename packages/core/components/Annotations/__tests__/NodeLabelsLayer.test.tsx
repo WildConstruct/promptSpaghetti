@@ -9,46 +9,34 @@ import { Node } from 'reactflow';
 import { NodeLabelsLayer } from '../NodeLabelsLayer';
 import { NodeLabelConfig, DEFAULT_NODE_LABEL_PREFERENCES } from '../../../types/CollaborationTypes';
 const mockNodes: Node = [
-  {
-    id: 'node-1',
-    type: 'default',
+  { id: 'node-1',
+    type: 'default' }
     position: { x: 100, y: 100 },
     data: { label: 'Node 1' },
     width: 180,
     height: 90;
-  }
-  {
-    id: 'node-2',
-    type: 'default',
+
+  { id: 'node-2',
+    type: 'default' }
     position: { x: 300, y: 200 },
     data: { label: 'Node 2' },
     width: 180,
     height: 90];
-const mockLabelConfigs: Record<string, NodeLabelConfig> = {
-  'label-1': {
-  id: 'label-1',
-  nodeId: 'node-1',
-  customLabel: 'Custom Label 1',
-  displayMode: 'always',
-  position: 'bottom',
-  style: 'default',
-  showIcon: false,
-  truncateLength: 50,
-  author: 'Test Author',
-  timestamp: '2024-01-01T12:00:00Z',
+const mockLabelConfigs: Record<string, NodeLabelConfig> = { 'label-1': {
+  id: 'label-1'
+  nodeId: 'node-1'
+  customLabel: 'Custom Label 1'
+  displayMode: 'always'
+  position: 'bottom'
+  style: 'default'
+  showIcon: false
+  truncateLength: 50
+  author: 'Test Author'
+  timestamp: '2024-01-01T12:00:00Z' }
 };
-const defaultProps = {
-  nodes: mockNodes,
-  labelConfigs: mockLabelConfigs,
-  onLabelConfigsChange: jest.fn<unknown, unknown>(),
-  labelPreferences: DEFAULT_NODE_LABEL_PREFERENCES,
-  author: 'Test Author',
-  readOnly: false,
-};
-describe('NodeLabelsLayer Component', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+const defaultProps = {};
+describe('NodeLabelsLayer Component', () => { beforeEach(() => {
+    jest.clearAllMocks() });
   describe('Rendering', () => {
     test('renders labels layer', () => {
       render(<NodeLabelsLayer {...defaultProps} />);
@@ -63,10 +51,10 @@ describe('NodeLabelsLayer Component', () => {
         <NodeLabelsLayer
           {...defaultProps}
           labelConfigs={{}}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'always',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'always' }
+}
         />
       );
       expect(screen.getByText('Node 1')).toBeInTheDocument();
@@ -77,10 +65,10 @@ describe('NodeLabelsLayer Component', () => {
         <NodeLabelsLayer
           {...defaultProps}
           labelConfigs={{}}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'selected',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'selected' }
+
           selectedNodeId={null}
         />
       );
@@ -89,10 +77,10 @@ describe('NodeLabelsLayer Component', () => {
         <NodeLabelsLayer
           {...defaultProps}
           labelConfigs={{}}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'selected',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'selected' }
+}
           selectedNodeId="node-1"
         />
       );
@@ -103,10 +91,10 @@ describe('NodeLabelsLayer Component', () => {
       const containers = screen.getAllByTestId(/node-label-/);
       const firstContainer = containers[0];
       // Check that container is positioned at node position
-      expect(firstContainer.parentElement).toHaveStyle({)
-  position: 'absolute',
-  left: '100px',
-  top: '100px',
+      expect(firstContainer.parentElement).toHaveStyle({ )
+  position: 'absolute'
+  left: '100px'
+  top: '100px' }
 });
     });
   });
@@ -182,8 +170,7 @@ describe('NodeLabelsLayer Component', () => {
       expect(onLabelConfigsChange).not.toHaveBeenCalled();
     });
   });
-  describe('Keyboard Shortcuts', () => {
-    beforeEach(() => {
+  describe('Keyboard Shortcuts', () => { beforeEach(() => {
       // Mock document.addEventListener and removeEventListener
       const originalAddEventListener = document.addEventListener;
       const originalRemoveEventListener = document.removeEventListener;
@@ -192,8 +179,7 @@ describe('NodeLabelsLayer Component', () => {
       // Restore original methods after test
       afterEach(() => {
         document.addEventListener = originalAddEventListener;
-        document.removeEventListener = originalRemoveEventListener;
-      });
+        document.removeEventListener = originalRemoveEventListener });
     });
     test('sets up keyboard event listeners', () => {
       render(<NodeLabelsLayer {...defaultProps} selectedNodeId="node-1" />);
@@ -223,10 +209,10 @@ describe('NodeLabelsLayer Component', () => {
       const { rerender } = render()
         <NodeLabelsLayer
           {...defaultProps}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'selected',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'selected' }
+}
           selectedNodeId={null}
         />
       );
@@ -235,10 +221,10 @@ describe('NodeLabelsLayer Component', () => {
       rerender();
         <NodeLabelsLayer
           {...defaultProps}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'selected',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'selected' }
+}
           selectedNodeId="node-1"
         />
       );
@@ -249,10 +235,10 @@ describe('NodeLabelsLayer Component', () => {
       const { rerender } = render()
         <NodeLabelsLayer
           {...defaultProps}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'hover',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'hover' }
+}
           hoveredNodeId={null}
         />
       );
@@ -261,10 +247,10 @@ describe('NodeLabelsLayer Component', () => {
       rerender();
         <NodeLabelsLayer
           {...defaultProps}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'hover',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'hover' }
+}
           hoveredNodeId="node-1"
         />
       );
@@ -275,10 +261,10 @@ describe('NodeLabelsLayer Component', () => {
       const { rerender } = render()
         <NodeLabelsLayer
           {...defaultProps}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'focus',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'focus' }
+}
           focusedNodeId={null}
         />
       );
@@ -286,10 +272,10 @@ describe('NodeLabelsLayer Component', () => {
       rerender();
         <NodeLabelsLayer
           {...defaultProps}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'focus',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'focus' }
+}
           focusedNodeId="node-1"
         />
       );
@@ -306,26 +292,26 @@ describe('NodeLabelsLayer Component', () => {
         />
       );
       const layer = screen.getByTestId('node-labels-layer');
-      expect(layer).toHaveStyle({)
-  position: 'absolute',
-  top: '0',
-  left: '0',
-  width: '100%',
-  height: '100%',
+      expect(layer).toHaveStyle({ )
+  position: 'absolute'
+  top: '0'
+  left: '0'
+  width: '100%'
+  height: '100%' }
 });
     });
     test('has correct z-index for layering', () => {
       render(<NodeLabelsLayer {...defaultProps} />);
       const layer = screen.getByTestId('node-labels-layer');
-      expect(layer).toHaveStyle({)
-  zIndex: '1500',
+      expect(layer).toHaveStyle({ )
+  zIndex: '1500' }
 });
     });
     test('allows graph interactions to pass through', () => {
       render(<NodeLabelsLayer {...defaultProps} />);
       const layer = screen.getByTestId('node-labels-layer');
-      expect(layer).toHaveStyle({)
-  pointerEvents: 'none',
+      expect(layer).toHaveStyle({ )
+  pointerEvents: 'none' }
 });
     });
   });
@@ -361,12 +347,12 @@ describe('NodeLabelsLayer Component', () => {
     test('handles large numbers of nodes efficiently', () => {
       const manyNodes = Array.from({ length: 100 }, (_, i) => ({)
   id: `node-${i}`}
-},
-  type: 'default',
-        position: { x: (i % 10) * 200, y: Math.floor(i / 10) * 150 },
+
+  type: 'default'
+        position: { x: (i % 10) * 200, y: Math.floor(i / 10) * 150 }
         data: { label: `Node ${i}` }
-},
-  width: 180,
+
+  width: 180
         height: 90;
   }));
       const startTime = performance.now();
@@ -375,10 +361,10 @@ describe('NodeLabelsLayer Component', () => {
           {...defaultProps}
           nodes={manyNodes}
           labelConfigs={{}}
-          labelPreferences={{
-  ...DEFAULT_NODE_LABEL_PREFERENCES,
-  defaultDisplayMode: 'always',
-}}
+          labelPreferences={ {
+  ...DEFAULT_NODE_LABEL_PREFERENCES
+  defaultDisplayMode: 'always' }
+}
         />
       );
       const endTime = performance.now();
@@ -397,14 +383,13 @@ describe('NodeLabelsLayer Component', () => {
       rerender(<TestWrapper nodes={mockNodes} />);
       expect(renderSpy).toHaveBeenCalledTimes(2);
       // Re-render with different nodes
-      const updatedNodes = [...mockNodes, {
-        id: 'node-3',
-        type: 'default',
-        position: { x: 500, y: 300 },
-        data: { label: 'Node 3' },
-        width: 180,
+      const updatedNodes = [...mockNodes, { id: 'node-3'
+        type: 'default' }
+        position: { x: 500, y: 300 }
+        data: { label: 'Node 3' }
+        width: 180
         height: 90;
-  }];
+];
       rerender(<TestWrapper nodes={updatedNodes} />);
       expect(renderSpy).toHaveBeenCalledTimes(3);
     });
@@ -427,15 +412,14 @@ describe('NodeLabelsLayer Component', () => {
       expect(screen.getByText('L')).toBeInTheDocument();
     });
   });
-  describe('Error Handling', () => {
-    test('handles missing node data gracefully', () => {
-      const nodesWithMissingData = [;
+  describe('Error Handling', () => { test('handles missing node data gracefully', () => {
+      const nodesWithMissingData = [
         {
-          id: 'node-1',
-          type: 'default',
-          position: { x: 100, y: 100 },
-          data: {},
-          width: 180,
+          id: 'node-1'
+          type: 'default' }
+          position: { x: 100, y: 100 }
+          data: {}
+          width: 180
           height: 90];
       expect(() => {
         render();
@@ -446,12 +430,11 @@ describe('NodeLabelsLayer Component', () => {
         );
       }).not.toThrow();
     });
-    test('handles invalid label configs gracefully', () => {
-  const invalidConfigs = {
+    test('handles invalid label configs gracefully', () => { const invalidConfigs = {
   'invalid-label': {
-  id: 'invalid-label',
-  nodeId: 'non-existent-node',
-} as any
+  id: 'invalid-label'
+  nodeId: 'non-existent-node' }
+ as any
       };
       expect(() => {
         render();

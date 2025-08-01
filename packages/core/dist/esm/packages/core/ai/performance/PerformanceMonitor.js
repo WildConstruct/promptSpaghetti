@@ -569,10 +569,10 @@ for (const [modelId, modelData] of this.models.entries()) {
                                 convertToCSV(data, ModelPerformanceData);
                                 string;
                                 {
-                                    const headers = [];
-                                    'modelId', 'modelType', 'provider', 'totalRequests', 'successfulRequests',
-                                        'averageResponseTime', 'successRate', 'errorRate', 'totalCost', 'healthStatus';
-                                    ;
+                                    const headers = [
+                                        'modelId', 'modelType', 'provider', 'totalRequests', 'successfulRequests',
+                                        'averageResponseTime', 'successRate', 'errorRate', 'totalCost', 'healthStatus'
+                                    ];
                                     const rows = data.map(model => []);
                                     model.modelId,
                                         model.modelType,

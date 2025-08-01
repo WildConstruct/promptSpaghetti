@@ -1,68 +1,43 @@
 import { EventEmitter } from 'events';
-import { 
-  WSMessage, 
+import { WSMessage, 
   WSMessageSchema, 
   GraphUpdatePayload, 
-  PresenceUpdatePayload,
+  PresenceUpdatePayload }
   WSMessageType
-} from '../../../server/src/websocket/types';
+ from '../../../server/src/websocket/types';
 
-}
-export interface WebSocketClientConfig {
-  url: string;
+export interface WebSocketClientConfig { url: string;
   reconnectInterval: number;
   maxReconnectAttempts: number;
   heartbeatInterval: number;
   connectionTimeout: number;
   enableOfflineQueue: boolean;
-  authToken?: string;
-}
-}
-}
-export interface ConnectionState {
-  status: 'disconnected' | 'connecting' | 'connected' | 'authenticating' | 'authenticated' | 'error';
+  authToken?: string }
+
+
+
+export interface ConnectionState { status: 'disconnected' | 'connecting' | 'connected' | 'authenticating' | 'authenticated' | 'error';
   lastConnected?: number;
   reconnectAttempts: number;
-  error?: string;
-}
-}
-export class WebSocketClient extends EventEmitter {
-  private ws: WebSocket | null = null;
-  private config: WebSocketClientConfig;
-  private state: ConnectionState;
-  private messageQueue: WSMessage[] = [];
-  private heartbeatInterval: number | null = null;
-  private reconnectTimeout: number | null = null;
-  private connectionTimeout: number | null = null;
-  private documentId: string | null = null;
-  private userId: string | null = null;
-  constructor(config: WebSocketClientConfig) {,
-  super();
-  this.config = config;
-  this.state = {
-  status: 'disconnected',
-  reconnectAttempts: 0,
-};
+  error?: string }
+
+export class WebSocketClient {};
   /**
    * Connect to WebSocket server
    */
-  async connect(documentId: string, userId?: string): Promise<void> {
-
-    if (this.state.status === 'connecting' || this.state.status === 'connected') {
+  async connect(documentId: string, userId?: string): Promise<void> { if (this.state.status === 'connecting' || this.state.status === 'connected') {
       return (
     this.documentId = documentId;
     this.userId = userId || 'anonymous';
     this.state.status = 'connecting';
     this.state.error = undefined;
     try {
-      await this.establishConnection();
-    } catch (error) {
-  this.handleConnectionError(error);
+      await this.establishConnection() } catch (error) { this.handleConnectionError(error);
   throw error;
   /**
   * Disconnect from WebSocket server
   */
-  disconnect(): void {,
+  disconnect(): void {
   this.clearTimeouts();
   if (this.ws) {
   this.ws.close();
@@ -72,80 +47,74 @@ export class WebSocketClient extends EventEmitter {
   /**
   * Send graph update
   */
-  sendGraphUpdate(update: GraphUpdatePayload): boolean {,
+  sendGraphUpdate(update: GraphUpdatePayload): boolean {
   return this.sendMessage({
-  type: 'graph_update',
-  payload: update,
-  timestamp: Date.now(),
-  documentId: this.documentId || undefined,
-  userId: this.userId || undefined,
+  type: 'graph_update'
+  payload: update
+  timestamp: Date.now()
+  documentId: this.documentId || undefined
+  userId: this.userId || undefined }
 });
   /**
    * Send presence update
    */
-  sendPresenceUpdate(presence: PresenceUpdatePayload): boolean {
-  return this.sendMessage({
-  type: 'presence_update',
-  payload: presence,
-  timestamp: Date.now(),
-  documentId: this.documentId || undefined,
-  userId: this.userId || undefined,
+  sendPresenceUpdate(presence: PresenceUpdatePayload): boolean { return this.sendMessage({
+  type: 'presence_update'
+  payload: presence
+  timestamp: Date.now()
+  documentId: this.documentId || undefined
+  userId: this.userId || undefined }
 });
   /**
    * Send cursor position update
    */
-  sendCursorUpdate(x: number, y: number, nodeId?: string, viewportBounds?: any): boolean {
-    return this.sendMessage({
-  type: 'cursor_update',
-      payload: { x, y, nodeId, viewportBounds },
-      timestamp: Date.now(),
-      documentId: this.documentId || undefined,
+  sendCursorUpdate(x: number, y: number, nodeId?: string, viewportBounds?: any): boolean { return this.sendMessage({
+  type: 'cursor_update' }
+      payload: { x, y, nodeId, viewportBounds }
+      timestamp: Date.now()
+      documentId: this.documentId || undefined
       userId: this.userId || undefined;
   });
   /**
    * Send selection update
    */
-  sendSelectionUpdate(nodeIds: string, edgeIds?: string, selectionBox?: any): boolean {
-    return this.sendMessage({
-  type: 'selection_update',
-      payload: { nodeIds, edgeIds, selectionBox },
-      timestamp: Date.now(),
-      documentId: this.documentId || undefined,
+  sendSelectionUpdate(nodeIds: string, edgeIds?: string, selectionBox?: any): boolean { return this.sendMessage({
+  type: 'selection_update' }
+      payload: { nodeIds, edgeIds, selectionBox }
+      timestamp: Date.now()
+      documentId: this.documentId || undefined
       userId: this.userId || undefined;
   });
   /**
    * Send activity update
    */
-  sendActivityUpdate(currentTool?: string, isTyping?: boolean, focusedNodeId?: string): boolean {
-    return this.sendMessage({
-  type: 'activity_update',
-      payload: { currentTool, isTyping, focusedNodeId },
-      timestamp: Date.now(),
-      documentId: this.documentId || undefined,
+  sendActivityUpdate(currentTool?: string, isTyping?: boolean, focusedNodeId?: string): boolean { return this.sendMessage({
+  type: 'activity_update' }
+      payload: { currentTool, isTyping, focusedNodeId }
+      timestamp: Date.now()
+      documentId: this.documentId || undefined
       userId: this.userId || undefined;
   });
   /**
    * Request presence data
    */
-  requestPresenceData(): boolean {
-    return this.sendMessage({
-  type: 'presence_request',
-      payload: {},
-      timestamp: Date.now(),
-      documentId: this.documentId || undefined,
+  requestPresenceData(): boolean { return this.sendMessage({
+  type: 'presence_request' }
+      payload: {}
+      timestamp: Date.now()
+      documentId: this.documentId || undefined
       userId: this.userId || undefined;
   });
   /**
    * Send authentication request
    */
-  sendAuthRequest(token: string): boolean {
-  return this.sendMessage({
-  type: 'auth_request',
+  sendAuthRequest(token: string): boolean { return this.sendMessage({
+  type: 'auth_request'
   payload: {
-  token,
-  documentId: this.documentId || '',
-  permissions: ['read', 'write'],
-},
+  token
+  documentId: this.documentId || ''
+  permissions: ['read', 'write'] }
+
   timestamp: Date.now();
   });
   /**
@@ -156,63 +125,49 @@ export class WebSocketClient extends EventEmitter {
   /**
    * Check if connected and authenticated
    */
-  isConnected(): boolean {
-  return this.state.status === 'authenticated' || this.state.status === 'connected';
+  isConnected(): boolean { return this.state.status === 'authenticated' || this.state.status === 'connected';
   /**
   * Check if currently connecting
   */
-  isConnecting(): boolean {,
+  isConnecting(): boolean {
   return this.state.status === 'connecting' || this.state.status === 'authenticating';
   /**
   * Get queued messages count
   */
-  getQueuedMessagesCount(): number {,
+  getQueuedMessagesCount(): number {
   return this.messageQueue.length;
   /**
   * Clear message queue
   */
-  clearMessageQueue(): void {,
+  clearMessageQueue(): void {
   this.messageQueue = [];
   /**
   * Establish WebSocket connection
   */
-  private async establishConnection(): Promise<void> {,
-  return new Promise((resolve, reject) => {
-  try {
+  private async establishConnection(): Promise<void> { }
+  return new Promise((resolve, reject) => { try {
   this.ws = new WebSocket(this.config.url);
   // Set connection timeout
   this.connectionTimeout = window.setTimeout(() => {
   if (this.state.status === 'connecting') {
-  reject(new Error('Connection timeout'));
-}, this.config.connectionTimeout);
-        this.ws.onopen = () => {
-          this.clearTimeouts();
+  reject(new Error('Connection timeout')) }, this.config.connectionTimeout);
+        this.ws.onopen = () => { this.clearTimeouts();
           this.state.status = 'connected';
           this.state.lastConnected = Date.now();
           this.state.reconnectAttempts = 0;
           this.startHeartbeat();
           this.processMessageQueue();
           this.emit('connected');
-          resolve();
-        };
-        this.ws.onmessage = (event) => {
-          this.handleMessage(event.data);
-        };
-        this.ws.onclose = (event) => {
-          this.handleDisconnection(event);
-        };
-        this.ws.onerror = (error) => {
-          this.handleConnectionError(error);
-          reject(error);
-        };
-      } catch (error) {
-        reject(error);
-    });
+          resolve() };
+        this.ws.onmessage = (event) => { this.handleMessage(event.data) };
+        this.ws.onclose = (event) => { this.handleDisconnection(event) };
+        this.ws.onerror = (error) => { this.handleConnectionError(error);
+          reject(error) };
+ catch (error) { reject(error) });
   /**
    * Handle incoming message
    */
-  private handleMessage(data: string): void {
-  try {
+  private handleMessage(data: string): void { try {
   const message = WSMessageSchema.parse(JSON.parse(data));
   switch (message.type) {
   case 'connect':
@@ -254,20 +209,18 @@ export class WebSocketClient extends EventEmitter {
   case 'error':
   this.emit('error', message.payload);
   break;
-  default:,
+  default: }
   console.warn('Unknown message type:', message.type);
-} catch (error) {
+ catch (error) {
       console.error('Failed to parse WebSocket message:', error);
   /**
    * Handle connection confirmation message
    */
   private handleConnectMessage(message: WSMessage): void {
     const { requiresAuthentication } = message.payload;
-    if (requiresAuthentication && this.config.authToken) {
-      // Send authentication request
+    if (requiresAuthentication && this.config.authToken) { // Send authentication request
       this.state.status = 'authenticating';
-      this.sendAuthRequest(this.config.authToken);
-    } else {
+      this.sendAuthRequest(this.config.authToken) } else {
       // No authentication required or no token provided
       this.state.status = 'authenticated';
       this.emit('authenticated');
@@ -276,27 +229,23 @@ export class WebSocketClient extends EventEmitter {
    */
   private handleAuthResponse(message: WSMessage): void {
     const { success, message: authMessage } = message.payload;
-    if (success) {
-      this.state.status = 'authenticated';
-      this.emit('authenticated');
-    } else {
-  this.state.status = 'error';
+    if (success) { this.state.status = 'authenticated';
+      this.emit('authenticated') } else { this.state.status = 'error';
   this.state.error = authMessage || 'Authentication failed';
   this.emit('auth_error', authMessage);
   /**
   * Handle disconnection
   */
-  private handleDisconnection(event: CloseEvent): void {,
+  private handleDisconnection(event: CloseEvent): void {
   this.clearTimeouts();
   this.state.status = 'disconnected';
   this.emit('disconnected', {)
-  code: event.code,
-  reason: event.reason,
-  wasClean: event.wasClean,
+  code: event.code
+  reason: event.reason
+  wasClean: event.wasClean }
 });
     // Attempt reconnection if not a clean close
-    if (!event.wasClean && this.state.reconnectAttempts < this.config.maxReconnectAttempts) {
-  this.scheduleReconnect();
+    if (!event.wasClean && this.state.reconnectAttempts < this.config.maxReconnectAttempts) { this.scheduleReconnect();
   /**
   * Handle connection error
   */
@@ -316,34 +265,27 @@ export class WebSocketClient extends EventEmitter {
   );
   this.emit('reconnecting', {)
   attempt: this.state.reconnectAttempts,
-  maxAttempts: this.config.maxReconnectAttempts,
+  maxAttempts: this.config.maxReconnectAttempts }
   delay
 });
-    this.reconnectTimeout = window.setTimeout(() => {
-  if (this.documentId) {
+    this.reconnectTimeout = window.setTimeout(() => { if (this.documentId) {
   this.connect(this.documentId, this.userId || undefined)
   .catch(error => {)
   console.error('Reconnection failed:', error);
   if (this.state.reconnectAttempts < this.config.maxReconnectAttempts) {
-  this.scheduleReconnect();
-} else {
-              this.emit('reconnect_failed');
-          });
+  this.scheduleReconnect() } else { this.emit('reconnect_failed') });
     }, delay);
   /**
    * Send message to server
    */
-  private sendMessage(message: WSMessage): boolean {
-    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+  private sendMessage(message: WSMessage): boolean { if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
       if (this.config.enableOfflineQueue) {
         this.messageQueue.push(message);
         return true;
       return false;
     try {
       this.ws.send(JSON.stringify(message));
-      return true;
-    } catch (error) {
-      console.error('Failed to send WebSocket message:', error);
+      return true } catch (error) { console.error('Failed to send WebSocket message:', error);
       return false;
   /**
    * Process queued messages
@@ -366,7 +308,7 @@ export class WebSocketClient extends EventEmitter {
       clearInterval(this.heartbeatInterval);
     this.heartbeatInterval = window.setInterval(() => {
       this.sendMessage({
-  type: 'ping',
+  type: 'ping' }
         payload: { timestamp: Date.now() },
         timestamp: Date.now();
   });

@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-interface Team {
-    id: string;
+}
+interface Team { id: string;
     organizationId: string;
     parentTeamId?: string;
     name: string;
@@ -11,27 +11,23 @@ interface Team {
     createdAt: Date;
     updatedAt: Date;
     level?: number;
-    path?: string[];
-
-
+    path?: string[] }
 }
-interface TeamManagerProps {
-    organizationId: string;
+}
+interface TeamManagerProps { organizationId: string;
     currentUser?: {
         id: string;
         name: string;
         email: string;
-        role: string;
-
+        role: string }
 }
     };
     onTeamChange?: (team: Team) => void;
-    onMembershipUpdated?: (membership: {)
+    onMembershipUpdated?: (membership: { )
         id: string;
         userId: string;
         teamId: string;
-        role: string;
-    }) => void;
+        role: string }) => void;
 
 export declare const TeamManager: React.FC<TeamManagerProps>;
 export {};

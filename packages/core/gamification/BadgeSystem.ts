@@ -9,9 +9,8 @@ import { identityValidationService, IdentityValidationType } from '../auth/Ident
 import { marketplaceMetrics } from '../analytics/MarketplaceMetrics';
 import { conversionTracker } from '../analytics/ConversionTracker';
 
-}
-export interface Badge {
-  id: string;
+
+export interface Badge { id: string;
   name: string;
   description: string;
   category: BadgeCategory;
@@ -25,13 +24,14 @@ export interface Badge {
   prerequisites?: string;
   isVisible: boolean;
   isActive: boolean;
-  metadata: {
+  metadata: { }
   createdAt: number;
   updatedAt: number;
   version: string;
-}
+
+
 };
-}
+
 export type BadgeCategory = 
   | 'verification'
   | 'creation'
@@ -57,38 +57,36 @@ export type BadgeRarity =
   | 'epic'
   | 'legendary';
 
-}
-export interface BadgeCriteria {
-  type: 'count' | 'threshold' | 'completion' | 'verification' | 'composite';
+
+export interface BadgeCriteria { type: 'count' | 'threshold' | 'completion' | 'verification' | 'composite';
   metric?: string;
   target?: number;
-  timeframe?: number; // milliseconds,
+  timeframe?: number; // milliseconds }
   conditions?: Record<string, any>;
   customLogic?: (user: UserBadgeProgress) => boolean;
-}
-}
-}
-export interface UserBadge {
-  badgeId: string;
+
+
+
+
+export interface UserBadge { badgeId: string;
   userId: string;
   unlockedAt: number;
   tier: BadgeTier;
   progress?: number;
   metadata?: Record<string, any>;
   isDisplayed: boolean;
-  isNotificationSent: boolean;
-}
-}
-}
-export interface UserBadgeProgress {
-  userId: string;
+  isNotificationSent: boolean }
+
+
+
+export interface UserBadgeProgress { userId: string;
   badges: Map<string, UserBadge>;
   totalPoints: number;
   level: number;
   experience: number;
   streak: number;
   lastActivity: number;
-  statistics: {
+  statistics: { }
   templatesCreated: number;
   templatesDownloaded: number;
   projectsCompleted: number;
@@ -99,29 +97,26 @@ export interface UserBadgeProgress {
   helpfulVotes: number;
   mentoringSessions: number;
   workshopsAttended: number;
-}
+
+
 };
-  achievements: {
+  achievements: { 
   firstTemplate: boolean;
   firstCollaboration: boolean;
   firstSale: boolean;
   expertRating: boolean;
-  communityLeader: boolean;
-};
-}
-}
-export interface BadgeUnlockEvent {
-  userId: string;
+  communityLeader: boolean };
+
+
+export interface BadgeUnlockEvent { userId: string;
   badgeId: string;
   unlockedAt: number;
   progress: number;
   isLevelUp: boolean;
   newLevel?: number;
-  pointsEarned: number;
-}
-}
-export class BadgeSystem {
-  private badges: Map<string, Badge> = new Map();
+  pointsEarned: number }
+
+export class BadgeSystem { private badges: Map<string, Badge> = new Map();
   private userProgress: Map<string, UserBadgeProgress> = new Map();
   private eventListeners: Map<string, ((event: BadgeUnlockEvent) => void)[]> = new Map();
   constructor() {
@@ -131,325 +126,304 @@ export class BadgeSystem {
     const defaultBadges: Badge = [
       // Verification Badges
       {
-        id: 'email-verified',
-        name: 'Email Verified',
-        description: 'Verified email address for secure account access',
-        category: 'verification',
-        tier: 'bronze',
-        icon: '✉️',
-        criteria: { type: 'verification', metric: 'email_verification' },
-        requirements: ['Verify your email address'],
-        unlockMessage: 'Your email has been verified! Your account is now more secure.',
-        rarity: 'common',
-        points: 50,
-        isVisible: true,
-        isActive: true,
+        id: 'email-verified'
+        name: 'Email Verified'
+        description: 'Verified email address for secure account access'
+        category: 'verification'
+        tier: 'bronze'
+        icon: '✉️' }
+        criteria: { type: 'verification', metric: 'email_verification' }
+        requirements: ['Verify your email address']
+        unlockMessage: 'Your email has been verified! Your account is now more secure.'
+        rarity: 'common'
+        points: 50
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
-      {
-        id: 'identity-verified',
-        name: 'Identity Verified',
-        description: 'Government-issued ID verification completed',
-        category: 'verification',
-        tier: 'gold',
-        icon: '🆔',
-        criteria: { type: 'verification', metric: 'government_id' },
-        requirements: ['Submit and verify government-issued ID'],
-        unlockMessage: 'Identity verified! You now have access to premium features.',
-        rarity: 'rare',
-        points: 300,
-        prerequisites: ['email-verified'],
-        isVisible: true,
-        isActive: true,
+
+      { id: 'identity-verified'
+        name: 'Identity Verified'
+        description: 'Government-issued ID verification completed'
+        category: 'verification'
+        tier: 'gold'
+        icon: '🆔' }
+        criteria: { type: 'verification', metric: 'government_id' }
+        requirements: ['Submit and verify government-issued ID']
+        unlockMessage: 'Identity verified! You now have access to premium features.'
+        rarity: 'rare'
+        points: 300
+        prerequisites: ['email-verified']
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
-      {
-        id: 'professional-verified',
-        name: 'Professional Verified',
-        description: 'Professional credentials and experience verified',
-        category: 'professional',
-        tier: 'platinum',
-        icon: '🎭',
-        criteria: { type: 'verification', metric: 'professional_credentials' },
-        requirements: ['Submit and verify professional credentials', 'Portfolio verification'],
-        unlockMessage: 'Professional status verified! You\'re now recognized as an industry professional.',
-        rarity: 'epic',
-        points: 500,
-        prerequisites: ['identity-verified'],
-        isVisible: true,
-        isActive: true,
+
+      { id: 'professional-verified'
+        name: 'Professional Verified'
+        description: 'Professional credentials and experience verified'
+        category: 'professional'
+        tier: 'platinum'
+        icon: '🎭' }
+        criteria: { type: 'verification', metric: 'professional_credentials' }
+        requirements: ['Submit and verify professional credentials', 'Portfolio verification']
+        unlockMessage: 'Professional status verified! You\'re now recognized as an industry professional.'
+        rarity: 'epic'
+        points: 500
+        prerequisites: ['identity-verified']
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
       // Creation Badges  
-      {
-        id: 'first-template',
-        name: 'Template Pioneer',
-        description: 'Created your first template',
-        category: 'creation',
-        tier: 'bronze',
-        icon: '🌟',
-        criteria: { type: 'count', metric: 'templates_created', target: 1 },
-        requirements: ['Create and publish your first template'],
-        unlockMessage: 'Welcome to the creator community! Your first template is live.',
-        rarity: 'common',
-        points: 100,
-        isVisible: true,
-        isActive: true,
+      { id: 'first-template'
+        name: 'Template Pioneer'
+        description: 'Created your first template'
+        category: 'creation'
+        tier: 'bronze'
+        icon: '🌟' }
+        criteria: { type: 'count', metric: 'templates_created', target: 1 }
+        requirements: ['Create and publish your first template']
+        unlockMessage: 'Welcome to the creator community! Your first template is live.'
+        rarity: 'common'
+        points: 100
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
-      {
-        id: 'prolific-creator',
-        name: 'Prolific Creator',
-        description: 'Created 25+ templates',
-        category: 'creation',
-        tier: 'gold',
-        icon: '🏆',
-        criteria: { type: 'count', metric: 'templates_created', target: 25 },
-        requirements: ['Create and publish 25 templates'],
-        unlockMessage: 'You\'re a prolific creator! Your dedication to the community is appreciated.',
-        rarity: 'uncommon',
-        points: 750,
-        prerequisites: ['first-template'],
-        isVisible: true,
-        isActive: true,
+
+      { id: 'prolific-creator'
+        name: 'Prolific Creator'
+        description: 'Created 25+ templates'
+        category: 'creation'
+        tier: 'gold'
+        icon: '🏆' }
+        criteria: { type: 'count', metric: 'templates_created', target: 25 }
+        requirements: ['Create and publish 25 templates']
+        unlockMessage: 'You\'re a prolific creator! Your dedication to the community is appreciated.'
+        rarity: 'uncommon'
+        points: 750
+        prerequisites: ['first-template']
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
-      {
-  id: 'template-master',
-  name: 'Template Master',
-  description: 'Created 100+ high-quality templates',
-  category: 'creation',
-  tier: 'diamond',
-  icon: '💎',
+
+      { id: 'template-master'
+  name: 'Template Master'
+  description: 'Created 100+ high-quality templates'
+  category: 'creation'
+  tier: 'diamond'
+  icon: '💎'
   criteria: {
-  type: 'composite',
-  customLogic: (user) => {,
+  type: 'composite'
+  customLogic: (user) => { }
   return user.statistics.templatesCreated >= 100 &&
-  user.statistics.ratingsReceived >= 4.5;
-},
-  requirements: ['Create 100+ templates', 'Maintain 4.5+ average rating'],
-        unlockMessage: 'Template Master achieved! You\'re among the elite creators on the platform.',
-        rarity: 'legendary',
-        points: 2000,
-        prerequisites: ['prolific-creator'],
-        isVisible: true,
-        isActive: true,
+  user.statistics.ratingsReceived >= 4.5
+
+  requirements: ['Create 100+ templates', 'Maintain 4.5+ average rating']
+        unlockMessage: 'Template Master achieved! You\'re among the elite creators on the platform.'
+        rarity: 'legendary'
+        points: 2000
+        prerequisites: ['prolific-creator']
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
       // Marketplace Badges
-      {
-        id: 'first-sale',
-        name: 'First Sale',
-        description: 'Made your first template sale',
-        category: 'marketplace',
-        tier: 'silver',
-        icon: '💰',
-        criteria: { type: 'count', metric: 'sales_count', target: 1 },
-        requirements: ['Sell your first template'],
-        unlockMessage: 'Congratulations on your first sale! Welcome to the marketplace.',
-        rarity: 'common',
-        points: 200,
-        isVisible: true,
-        isActive: true,
+      { id: 'first-sale'
+        name: 'First Sale'
+        description: 'Made your first template sale'
+        category: 'marketplace'
+        tier: 'silver'
+        icon: '💰' }
+        criteria: { type: 'count', metric: 'sales_count', target: 1 }
+        requirements: ['Sell your first template']
+        unlockMessage: 'Congratulations on your first sale! Welcome to the marketplace.'
+        rarity: 'common'
+        points: 200
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
-      {
-        id: 'bestseller',
-        name: 'Bestseller',
-        description: 'Template reached 1000+ downloads',
-        category: 'marketplace',
-        tier: 'gold',
-        icon: '🔥',
-        criteria: { type: 'threshold', metric: 'max_template_downloads', target: 1000 },
-        requirements: ['Have a template with 1000+ downloads'],
-        unlockMessage: 'Bestseller status achieved! Your template is a community favorite.',
-        rarity: 'rare',
-        points: 1000,
-        prerequisites: ['first-sale'],
-        isVisible: true,
-        isActive: true,
+
+      { id: 'bestseller'
+        name: 'Bestseller'
+        description: 'Template reached 1000+ downloads'
+        category: 'marketplace'
+        tier: 'gold'
+        icon: '🔥' }
+        criteria: { type: 'threshold', metric: 'max_template_downloads', target: 1000 }
+        requirements: ['Have a template with 1000+ downloads']
+        unlockMessage: 'Bestseller status achieved! Your template is a community favorite.'
+        rarity: 'rare'
+        points: 1000
+        prerequisites: ['first-sale']
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
       // Community Badges
-      {
-        id: 'helpful-reviewer',
-        name: 'Helpful Reviewer',
-        description: 'Provided 50+ helpful reviews',
-        category: 'community',
-        tier: 'silver',
-        icon: '⭐',
-        criteria: { type: 'count', metric: 'helpful_reviews', target: 50 },
-        requirements: ['Give 50 helpful reviews'],
-        unlockMessage: 'Thank you for being a helpful community member!',
-        rarity: 'uncommon',
-        points: 400,
-        isVisible: true,
-        isActive: true,
+      { id: 'helpful-reviewer'
+        name: 'Helpful Reviewer'
+        description: 'Provided 50+ helpful reviews'
+        category: 'community'
+        tier: 'silver'
+        icon: '⭐' }
+        criteria: { type: 'count', metric: 'helpful_reviews', target: 50 }
+        requirements: ['Give 50 helpful reviews']
+        unlockMessage: 'Thank you for being a helpful community member!'
+        rarity: 'uncommon'
+        points: 400
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
-      {
-        id: 'mentor',
-        name: 'Community Mentor',
-        description: 'Helped 100+ fellow creators',
-        category: 'community',
-        tier: 'platinum',
-        icon: '🎓',
-        criteria: { type: 'count', metric: 'mentoring_sessions', target: 100 },
-        requirements: ['Complete 100 mentoring sessions'],
-        unlockMessage: 'Community Mentor status! You\'re making a real difference.',
-        rarity: 'epic',
-        points: 1500,
-        isVisible: true,
-        isActive: true,
+
+      { id: 'mentor'
+        name: 'Community Mentor'
+        description: 'Helped 100+ fellow creators'
+        category: 'community'
+        tier: 'platinum'
+        icon: '🎓' }
+        criteria: { type: 'count', metric: 'mentoring_sessions', target: 100 }
+        requirements: ['Complete 100 mentoring sessions']
+        unlockMessage: 'Community Mentor status! You\'re making a real difference.'
+        rarity: 'epic'
+        points: 1500
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
       // Achievement Badges
-      {
-        id: 'early-adopter',
-        name: 'Early Adopter',
-        description: 'Joined during the platform beta',
-        category: 'special',
-        tier: 'diamond',
-        icon: '🚀',
+      { id: 'early-adopter'
+        name: 'Early Adopter'
+        description: 'Joined during the platform beta'
+        category: 'special'
+        tier: 'diamond'
+        icon: '🚀'
         criteria: {
-  type: 'completion', 
+  type: 'completion' }
           conditions: { joined_before: Date.now() + (30 * 24 * 60 * 60 * 1000) } // 30 days from now
-  },
-  requirements: ['Join during the beta period'],
-        unlockMessage: 'Welcome, Early Adopter! Thank you for believing in our vision.',
-        rarity: 'legendary',
-        points: 1000,
-        isVisible: true,
-        isActive: true,
+
+  requirements: ['Join during the beta period']
+        unlockMessage: 'Welcome, Early Adopter! Thank you for believing in our vision.'
+        rarity: 'legendary'
+        points: 1000
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
-      {
-        id: 'collaboration-king',
-        name: 'Collaboration King',
-        description: 'Completed 25+ successful collaborations',
-        category: 'collaboration',
-        tier: 'gold',
-        icon: '👥',
-        criteria: { type: 'count', metric: 'collaborations', target: 25 },
-        requirements: ['Complete 25 collaborative projects'],
-        unlockMessage: 'Collaboration King! You excel at working with others.',
-        rarity: 'rare',
-        points: 800,
-        isVisible: true,
-        isActive: true,
+
+      { id: 'collaboration-king'
+        name: 'Collaboration King'
+        description: 'Completed 25+ successful collaborations'
+        category: 'collaboration'
+        tier: 'gold'
+        icon: '👥' }
+        criteria: { type: 'count', metric: 'collaborations', target: 25 }
+        requirements: ['Complete 25 collaborative projects']
+        unlockMessage: 'Collaboration King! You excel at working with others.'
+        rarity: 'rare'
+        points: 800
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
       // Milestone Badges
-      {
-        id: 'level-10',
-        name: 'Experienced Creator',
-        description: 'Reached level 10',
-        category: 'milestone',
-        tier: 'silver',
-        icon: '🎯',
-        criteria: { type: 'threshold', metric: 'level', target: 10 },
-        requirements: ['Reach level 10'],
-        unlockMessage: 'Level 10 achieved! You\'re becoming an experienced creator.',
-        rarity: 'common',
-        points: 500,
-        isVisible: true,
-        isActive: true,
+      { id: 'level-10'
+        name: 'Experienced Creator'
+        description: 'Reached level 10'
+        category: 'milestone'
+        tier: 'silver'
+        icon: '🎯' }
+        criteria: { type: 'threshold', metric: 'level', target: 10 }
+        requirements: ['Reach level 10']
+        unlockMessage: 'Level 10 achieved! You\'re becoming an experienced creator.'
+        rarity: 'common'
+        points: 500
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
-  }
-      {
-        id: 'level-50',
-        name: 'Master Creator',
-        description: 'Reached level 50',
-        category: 'milestone',
-        tier: 'diamond',
-        icon: '👑',
-        criteria: { type: 'threshold', metric: 'level', target: 50 },
-        requirements: ['Reach level 50'],
-        unlockMessage: 'Master Creator status! You\'re among the platform elite.',
-        rarity: 'legendary',
-        points: 2500,
-        isVisible: true,
-        isActive: true,
+
+      { id: 'level-50'
+        name: 'Master Creator'
+        description: 'Reached level 50'
+        category: 'milestone'
+        tier: 'diamond'
+        icon: '👑' }
+        criteria: { type: 'threshold', metric: 'level', target: 50 }
+        requirements: ['Reach level 50']
+        unlockMessage: 'Master Creator status! You\'re among the platform elite.'
+        rarity: 'legendary'
+        points: 2500
+        isVisible: true
+        isActive: true
         metadata: { createdAt: Date.now(), updatedAt: Date.now(), version: '1.0' }
     ];
-    defaultBadges.forEach(badge => {)
-  this.badges.set(badge.id, badge);
-    });
-  private initializeMockUserData(): void {
-  // Initialize sample user progress
-  const sampleUsers = [;
+    defaultBadges.forEach(badge => { )
+  this.badges.set(badge.id, badge) });
+  private initializeMockUserData(): void { // Initialize sample user progress
+  const sampleUsers = [
   {
-  userId: 'creator-johnsmith',
+  userId: 'creator-johnsmith'
   progress: {
-  templatesCreated: 15,
-  templatesDownloaded: 47,
-  projectsCompleted: 8,
-  collaborations: 5,
-  ratingsGiven: 23,
-  ratingsReceived: 4.7,
-  forumPosts: 12,
-  helpfulVotes: 34,
-  mentoringSessions: 3,
-  workshopsAttended: 2,
-},
+  templatesCreated: 15
+  templatesDownloaded: 47
+  projectsCompleted: 8
+  collaborations: 5
+  ratingsGiven: 23
+  ratingsReceived: 4.7
+  forumPosts: 12
+  helpfulVotes: 34
+  mentoringSessions: 3
+  workshopsAttended: 2 }
+
   badges: ['email-verified', 'first-template', 'first-sale']
-  }
-      {
-  userId: 'creator-maryjones',
+
+      { userId: 'creator-maryjones'
   progress: {
-  templatesCreated: 32,
-  templatesDownloaded: 89,
-  projectsCompleted: 18,
-  collaborations: 12,
-  ratingsGiven: 45,
-  ratingsReceived: 4.5,
-  forumPosts: 28,
-  helpfulVotes: 67,
-  mentoringSessions: 8,
-  workshopsAttended: 5,
-},
+  templatesCreated: 32
+  templatesDownloaded: 89
+  projectsCompleted: 18
+  collaborations: 12
+  ratingsGiven: 45
+  ratingsReceived: 4.5
+  forumPosts: 28
+  helpfulVotes: 67
+  mentoringSessions: 8
+  workshopsAttended: 5 }
+
   badges: ['email-verified', 'identity-verified', 'first-template', 'prolific-creator', 'first-sale', 'helpful-reviewer']
     ];
-    sampleUsers.forEach(user => {)
-  const userProgress: UserBadgeProgress = {,
-  userId: user.userId,
-  badges: new Map(),
-  totalPoints: 0,
-  level: this.calculateLevel(user.progress.templatesCreated * 100),
-  experience: user.progress.templatesCreated * 100,
-  streak: 5,
-  lastActivity: Date.now(),
+    sampleUsers.forEach(user => { )
+  const userProgress: UserBadgeProgress = {
+  userId: user.userId
+  badges: new Map()
+  totalPoints: 0
+  level: this.calculateLevel(user.progress.templatesCreated * 100)
+  experience: user.progress.templatesCreated * 100
+  streak: 5
+  lastActivity: Date.now()
   statistics: {
-  templatesCreated: user.progress.templatesCreated,
-  templatesDownloaded: user.progress.templatesDownloaded,
-  projectsCompleted: user.progress.projectsCompleted,
-  collaborations: user.progress.collaborations,
-  ratingsGiven: user.progress.ratingsGiven,
-  ratingsReceived: user.progress.ratingsReceived,
-  forumPosts: user.progress.forumPosts,
-  helpfulVotes: user.progress.helpfulVotes,
-  mentoringSessions: user.progress.mentoringSessions,
-  workshopsAttended: user.progress.workshopsAttended,
-},
-  achievements: {
-  firstTemplate: user.progress.templatesCreated > 0,
-  firstCollaboration: user.progress.collaborations > 0,
-  firstSale: user.badges.includes('first-sale'),
-  expertRating: user.progress.ratingsReceived >= 4.5,
-  communityLeader: user.progress.helpfulVotes > 50,
+  templatesCreated: user.progress.templatesCreated
+  templatesDownloaded: user.progress.templatesDownloaded
+  projectsCompleted: user.progress.projectsCompleted
+  collaborations: user.progress.collaborations
+  ratingsGiven: user.progress.ratingsGiven
+  ratingsReceived: user.progress.ratingsReceived
+  forumPosts: user.progress.forumPosts
+  helpfulVotes: user.progress.helpfulVotes
+  mentoringSessions: user.progress.mentoringSessions
+  workshopsAttended: user.progress.workshopsAttended }
+
+  achievements: { 
+  firstTemplate: user.progress.templatesCreated > 0
+  firstCollaboration: user.progress.collaborations > 0
+  firstSale: user.badges.includes('first-sale')
+  expertRating: user.progress.ratingsReceived >= 4.5
+  communityLeader: user.progress.helpfulVotes > 50 }
 };
       // Add badges
-      user.badges.forEach(badgeId => {)
+      user.badges.forEach(badgeId => { )
   const badge = this.badges.get(badgeId);
   if (badge) {
   userProgress.badges.set(badgeId, {)
-  badgeId,
-  userId: user.userId,
-  unlockedAt: Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000,
-  tier: badge.tier,
-  progress: 100,
-  isDisplayed: true,
-  isNotificationSent: true,
+  badgeId
+  userId: user.userId
+  unlockedAt: Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
+  tier: badge.tier
+  progress: 100
+  isDisplayed: true
+  isNotificationSent: true }
 });
           userProgress.totalPoints += badge.points;
       });
@@ -479,25 +453,24 @@ export class BadgeSystem {
     return unlockedBadges;
   private checkBadgeCriteria(badge: Badge, userProgress: UserBadgeProgress): boolean {
     const { criteria } = badge;
-    switch (criteria.type) {
-  case 'verification':,
+    switch (criteria.type) { case 'verification':
   return this.checkVerificationCriteria(criteria.metric!, userProgress.userId);
-  case 'count':,
+  case 'count':
   const currentValue = this.getStatisticValue(criteria.metric!, userProgress);
   return currentValue >= (criteria.target || 0);
-  case 'threshold':,
+  case 'threshold':
   const thresholdValue = this.getStatisticValue(criteria.metric!, userProgress);
   return thresholdValue >= (criteria.target || 0);
-  case 'completion':,
+  case 'completion':
   return this.checkCompletionCriteria(criteria.conditions!, userProgress);
-  case 'composite':,
+  case 'composite':
   return criteria.customLogic ? criteria.customLogic(userProgress) : false;
-  default:,
+  default:
   return false;
-  private checkVerificationCriteria(metric: string, userId: string): boolean {,
+  private checkVerificationCriteria(metric: string, userId: string): boolean {
   const validationSummary = identityValidationService.getUserValidationSummary(userId);
   return validationSummary.completedValidations.includes(metric as IdentityValidationType);
-  private getStatisticValue(metric: string, userProgress: UserBadgeProgress): number {,
+  private getStatisticValue(metric: string, userProgress: UserBadgeProgress): number {
   const stats = userProgress.statistics;
   switch (metric) {
   case 'templates_created': return stats.templatesCreated;
@@ -508,14 +481,14 @@ export class BadgeSystem {
   case 'helpful_reviews': return stats.helpfulVotes;
   case 'mentoring_sessions': return stats.mentoringSessions;
   case 'level': return userProgress.level;
-  case 'sales_count': return 5; // Mock data,
-  case 'max_template_downloads': return 500; // Mock data,
+  case 'sales_count': return 5; // Mock data
+  case 'max_template_downloads': return 500; // Mock data
   default: return 0;
-  private checkCompletionCriteria(conditions: Record<string, any>, userProgress: UserBadgeProgress): boolean {,
+  private checkCompletionCriteria(conditions: Record<string, any>, userProgress: UserBadgeProgress): boolean {
   // Check custom conditions
   for (const [key, value] of Object.entries(conditions)) {
   switch (key) {
-  case 'joined_before':,
+  case 'joined_before':
   // This would check user registration date
   return Date.now() < value;
   default:,
@@ -533,7 +506,7 @@ export class BadgeSystem {
   tier: badge.tier,
   progress: 100,
   isDisplayed: true,
-  isNotificationSent: false,
+  isNotificationSent: false }
 };
     // Add to user progress
     userProgress.badges.set(badgeId, userBadge);
@@ -542,8 +515,7 @@ export class BadgeSystem {
     // Check for level up
     const newLevel = this.calculateLevel(userProgress.experience);
     const isLevelUp = newLevel > userProgress.level;
-    if (isLevelUp) {
-  userProgress.level = newLevel;
+    if (isLevelUp) { userProgress.level = newLevel;
   // Create unlock event
   const unlockEvent: BadgeUnlockEvent = {,
   userId,
@@ -552,27 +524,22 @@ export class BadgeSystem {
   progress: 100,
   isLevelUp,
   newLevel: isLevelUp ? newLevel : undefined,
-  pointsEarned: badge.points,
+  pointsEarned: badge.points }
 };
     // Trigger event listeners
     this.triggerBadgeUnlockEvent(unlockEvent);
     return unlockEvent;
-  private calculateLevel(experience: number): number {
-  // Level progression: 100 XP for level 1, then +100 per level,
+  private calculateLevel(experience: number): number { // Level progression: 100 XP for level 1, then +100 per level,
   return Math.floor(experience / 100) + 1;
-  private triggerBadgeUnlockEvent(event: BadgeUnlockEvent): void {,
+  private triggerBadgeUnlockEvent(event: BadgeUnlockEvent): void { }
   const listeners = this.eventListeners.get('badge_unlock') || [];
-  listeners.forEach(listener => {)
+  listeners.forEach(listener => { )
   try {
-  listener(event);
-} catch (error) {
-  console.error('Error in badge unlock listener:', error);
-});
+  listener(event) } catch (error) { console.error('Error in badge unlock listener:', error) });
   /**
    * Get user's badge progress
    */
-  public getUserProgress(userId: string): UserBadgeProgress | null {
-  return this.userProgress.get(userId) || null;
+  public getUserProgress(userId: string): UserBadgeProgress | null { return this.userProgress.get(userId) || null;
   /**
   * Get all available badges
   */
@@ -616,20 +583,19 @@ export class BadgeSystem {
   /**
   * Get leaderboard data
   */
-  public getLeaderboard(limit: number = 10): Array<{
+  public getLeaderboard(limit: number = 10): Array<{ }
   userId: string;
   totalPoints: number;
   level: number;
   badgeCount: number;
   rank: number;
-}> {
-  return Array.from(this.userProgress.values())
+> { return Array.from(this.userProgress.values())
   .map(progress => ({)
   userId: progress.userId,
   totalPoints: progress.totalPoints,
   level: progress.level,
   badgeCount: progress.badges.size,
-  rank: 0,
+  rank: 0 }
 }))
       .sort((a, b) => b.totalPoints - a.totalPoints)
       .map((item, index) => ({ ...item, rank: index + 1 }))
@@ -637,8 +603,7 @@ export class BadgeSystem {
   /**
    * Update user statistics
    */
-  public updateUserStatistics(userId: string, updates: Partial<UserBadgeProgress['statistics']>): BadgeUnlockEvent {
-  const userProgress = this.getUserProgress(userId);
+  public updateUserStatistics(userId: string, updates: Partial<UserBadgeProgress['statistics']>): BadgeUnlockEvent { const userProgress = this.getUserProgress(userId);
   if (!userProgress) return [];
   // Update statistics
   Object.assign(userProgress.statistics, updates);
@@ -648,14 +613,14 @@ export class BadgeSystem {
   /**
   * Add event listener for badge unlocks
   */
-  public onBadgeUnlock(listener: (event: BadgeUnlockEvent) => void): void {,
+  public onBadgeUnlock(listener: (event: BadgeUnlockEvent) => void): void {
   const listeners = this.eventListeners.get('badge_unlock') || [];
   listeners.push(listener);
   this.eventListeners.set('badge_unlock', listeners);
   /**
   * Remove event listener
   */
-  public removeEventListener(listener: (event: BadgeUnlockEvent) => void): void {,
+  public removeEventListener(listener: (event: BadgeUnlockEvent) => void): void {
   const listeners = this.eventListeners.get('badge_unlock') || [];
   const index = listeners.indexOf(listener);
   if (index > -1) {
@@ -684,10 +649,10 @@ export class BadgeSystem {
   .reduce((sum, progress) => sum + progress.badges.size, 0);
   const averageBadgesPerUser = totalUsers > 0 ? totalBadgesUnlocked / totalUsers : 0;
   return {
-  totalBadges,
-  totalUsers,
-  mostPopularBadge: mostPopular,
-  rarest,
+  totalBadges
+  totalUsers
+  mostPopularBadge: mostPopular
+  rarest }
   averageBadgesPerUser
 };
 

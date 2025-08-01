@@ -9,12 +9,11 @@ import React from 'react';
 import { LegalDocument, ContractAnalysis, ComplianceCheck, Citation, TermValidationResult } from './types';
 
 }
-interface LegalToolkitProps {
-    className?: string;
+}
+interface LegalToolkitProps { className?: string;
     initialDocument?: LegalDocument;
-    onWorkflowComplete?: (results: LegalToolkitResults) => void;
-
-
+    onWorkflowComplete?: (results: LegalToolkitResults) => void }
+}
 }
 interface LegalToolkitResults {
     document: LegalDocument;
@@ -26,4 +25,5 @@ interface LegalToolkitResults {
 export declare const LegalToolkit: React.FC<LegalToolkitProps>;
 export default LegalToolkit;
 //# sourceMappingURL=LegalToolkit.d.ts.map
+}
 }

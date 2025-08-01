@@ -1,8 +1,8 @@
 // Epic 16 Story 16.1 - Search Analytics Service
 import { Pool, PoolClient } from 'pg';
 
-}
-}
+
+
 interface SearchQuery {
   query: string;
   user_id?: string;
@@ -11,19 +11,21 @@ interface SearchQuery {
   session_id?: string;
   ip_address?: string;
   user_agent?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SearchAnalytics {
   period_start: Date;
   period_end: Date;
   total_searches: number;
   unique_users: number;
-}
-}
+
+
+
   top_queries: Array<{ query: string; count: number; avg_results: number }>;
   popular_filters: Array<{ filter: string; value: string; count: number }>;
   zero_result_queries: Array<{ query: string; count: number }>;
@@ -33,18 +35,19 @@ interface SearchAnalytics {
     search_to_purchase: number;
     avg_time_to_action: number;
   };
-}
 
-}
-}
+
+
+
 interface SearchSuggestion {
   suggestion: string;
   frequency: number;
   category?: string;
   result_count: number;
-}
-}
-}
+
+
+
+
 
 export class SearchAnalyticsService {
   constructor(private db: Pool) {}
@@ -67,10 +70,10 @@ export class SearchAnalyticsService {
         searchData.ip_address,
         searchData.user_agent
       ]);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getSearchAnalytics(
     startDate: Date,
@@ -208,12 +211,12 @@ export class SearchAnalyticsService {
           search_to_view: parseFloat(conversion.search_to_view) || 0,
           search_to_purchase: parseFloat(conversion.search_to_purchase) || 0,
           avg_time_to_action: parseFloat(conversion.avg_time_to_action_minutes) || 0
-        }
+
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getSearchSuggestions(query: string, limit: number = 10): Promise<SearchSuggestion[]> {
 
@@ -303,10 +306,10 @@ export class SearchAnalyticsService {
         category: row.category,
         result_count: parseInt(row.result_count)
       }));
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getPopularSearchTerms(
     timeframe: 'day' | 'week' | 'month' = 'week',
@@ -357,10 +360,10 @@ export class SearchAnalyticsService {
         count: parseInt(row.count),
         trend: row.trend
       }));
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getSearchInsights(): Promise<{
     trending_topics: string[];
@@ -368,7 +371,7 @@ export class SearchAnalyticsService {
     declining_queries: string[];
     zero_result_opportunities: string[];
     popular_categories: Array<{ category: string; searches: number }>;
-  }> {
+> {
     const client = await this.db.connect();
     try {
       // Trending topics (high growth in searches)
@@ -436,8 +439,7 @@ export class SearchAnalyticsService {
           searches: parseInt(row.searches)
         }))
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
-}
+
+

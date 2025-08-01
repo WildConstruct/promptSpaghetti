@@ -11,7 +11,7 @@ const generateMockEngagementMetrics = () => {
     const baseTimestamp = Date.now();
     return {
         timestamp: baseTimestamp,
-        metrics: [,
+        metrics: [
             {
                 metricId: 'daily_active_users',
                 value: Math.floor(Math.random() * 1000) + 2000,
@@ -46,7 +46,8 @@ const generateMockEngagementMetrics = () => {
                 change: (Math.random() - 0.5) * 0.1,
                 trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)],
                 confidence: Math.random() * 0.3 + 0.7
-            }],
+            }
+        ],
         segmentData: [],
         metadata: {
             lastUpdated: baseTimestamp,
@@ -54,41 +55,50 @@ const generateMockEngagementMetrics = () => {
             sampleSize: Math.floor(Math.random() * 5000) + 10000,
         }
     };
-    const generateTrendAnalysis = (metricId) => ({
-        metric: metricId,
-        trend: {
-            direction: ['increasing', 'decreasing', 'stable', 'volatile'][Math.floor(Math.random() * 4)],
-            strength: Math.random(),
-            duration: Math.floor(Math.random() * 30) + 7,
-            significance: Math.random(),
-            changeRate: (Math.random() - 0.5) * 10,
-        },
-        forecast: {
-            predictions: Array.from({ length: 7 }, (_, i) => ({}), timestamp, Date.now() + (i + 1) * 86400000, predictedValue, Math.random() * 100 + 50, confidence, Math.random() * 0.3 + 0.6, range, {
-                lower: Math.random() * 20 + 30,
-                upper: Math.random() * 20 + 70,
-            }),
-            accuracy: Math.random() * 0.3 + 0.7,
-            model: 'ARIMA',
-            factors: [,
-                { factor: 'seasonality', influence: Math.random() },
-                { factor: 'day_of_week', influence: Math.random() },
-                { factor: 'marketing_activity', influence: Math.random() }
-            ]
-        },
-        insights: [,
-            {
-                type: 'trend_shift',
-                message: `${metricId} showing ${Math.random() > 0.5 ? 'positive' : 'negative'} trend over past 7 days`
-            }] },
-        confidence), Math, random;
-    () * 0.3 + 0.7,
-        impact;
-    Math.random() > 0.5 ? 'high' : 'medium',
-        actionable;
-    true;
-    anomalies: [];
-};
+    const generateTrendAnalysis = (metricId) => ({});
+    metric: metricId,
+        trend;
+    {
+        direction: ['increasing', 'decreasing', 'stable', 'volatile'][Math.floor(Math.random() * 4)],
+            strength;
+        Math.random(),
+            duration;
+        Math.floor(Math.random() * 30) + 7,
+            significance;
+        Math.random(),
+            changeRate;
+        (Math.random() - 0.5) * 10,
+        ;
+    }
+    forecast: {
+        predictions: Array.from({ length: 7 }, (_, i) => ({}), timestamp, Date.now() + (i + 1) * 86400000, predictedValue, Math.random() * 100 + 50, confidence, Math.random() * 0.3 + 0.6, range, {
+            lower: Math.random() * 20 + 30,
+            upper: Math.random() * 20 + 70,
+        });
+        accuracy: Math.random() * 0.3 + 0.7,
+            model;
+        'ARIMA',
+            factors;
+        [
+            { factor: 'seasonality', influence: Math.random() },
+            { factor: 'day_of_week', influence: Math.random() },
+            { factor: 'marketing_activity', influence: Math.random() }
+        ];
+    }
+    insights: [
+        {
+            type: 'trend_shift',
+            message: `${metricId} showing ${Math.random() > 0.5 ? 'positive' : 'negative'} trend over past 7 days`
+        }
+    ];
+}, confidence;
+() * 0.3 + 0.7,
+    impact;
+Math.random() > 0.5 ? 'high' : 'medium',
+    actionable;
+true;
+anomalies: [];
+;
 // Main component
 export const EngagementMetricsTrendAnalysis = ({
     analyticsInfrastructure,
@@ -113,13 +123,13 @@ export const EngagementMetricsTrendAnalysis = ({
         });
         setMetricsData(historicalData);
         // Generate trend analyses
-        const analyses = [];
-        'daily_active_users',
+        const analyses = [
+            'daily_active_users',
             'session_duration',
             'pages_per_session',
             'engagement_score',
-            'interaction_rate';
-        map(generateTrendAnalysis);
+            'interaction_rate'
+        ].map(generateTrendAnalysis);
         setTrendAnalyses(analyses);
     }, []);
     const handleAnalyzeTrends = useCallback(() => {

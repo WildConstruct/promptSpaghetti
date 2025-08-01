@@ -5,8 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { TemplateVersion, VersionComparisonResult } from '../templates/TemplateVersionManager';
 import { ProjectTemplate } from '../templates/ProjectTemplateManager';
-import {
-  FiClock,
+import { FiClock,
   FiTag,
   FiGitBranch,
   FiDownload,
@@ -17,198 +16,173 @@ import {
   FiMoreVertical,
   FiEdit3,
   FiTrash2,
-  FiCopy,
+  FiCopy }
   FiUpload
-} from 'react-icons/fi';
-}
-interface TemplateVersionHistoryProps {
-  template: ProjectTemplate;
+ from 'react-icons/fi';
+
+
+interface TemplateVersionHistoryProps { template: ProjectTemplate;
   onVersionSelect?: (version: TemplateVersion) => void;
   onVersionCompare?: (fromVersion: string, toVersion: string) => void;
   onVersionRestore?: (version: TemplateVersion) => void;
   onVersionExport?: (version: TemplateVersion) => void;
-  className?: string;
-}
-interface VersionNode {
-  version: TemplateVersion;
+  className?: string }
+
+
+interface VersionNode { version: TemplateVersion;
   level: number;
   isLast: boolean;
-  hasBranches: boolean;
+  hasBranches: boolean }
 
-}
-export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ _____templateId, onVersionSelect }) => {
-  const [selectedVersions, setSelectedVersions] = useState<Set<string>>(new Set());
+export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ _____templateId, onVersionSelect }) => { const [selectedVersions, setSelectedVersions] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState<'timeline' | 'tree' | 'table'>('timeline');
   const [_____filterBranch, _____setFilterBranch] = useState<string>('all');
   const [showComparison, setShowComparison] = useState(false);
   const [comparisonResult, setComparisonResult] = useState<VersionComparisonResult | null>(null);
   useEffect(() => {
-    loadVersionHistory();
-  }, [template.id]);
-  const loadVersionHistory = async () => {
-  setLoading(true);
+    loadVersionHistory() }, [template.id]);
+  const loadVersionHistory = async () => { setLoading(true);
   try {
   // Mock version history - in real implementation, would call TemplateVersionManager
   const mockVersions: TemplateVersion = [
   {
-  id: 'v-1',
-  template_id: template.id,
-  version_number: '2.1.0',
-  title: 'Major UI improvements',
-  description: 'Added new node types and improved user interface',
-  changelog: '- Added ConditionalNode\n- Improved styling\n- Bug fixes',
-  branch_name: 'main',
-  commit_hash: 'abc123',
-  api_version: '2.0.0',
-  compatibility_level: 'minor',
-  migration_required: false,
-  created_by: 'user-1',
-  created_at: '2024-01-15T10:30:00Z',
-  published_at: '2024-01-15T11:00:00Z',
-  status: 'published',
-  visibility: 'public',
-  download_count: 142,
-  usage_count: 89,
-  rating: 4.7,
-  dependencies: [],
-  conflicts: [],
-  template_data: template,
-}
-        {
-  id: 'v-2',
-  template_id: template.id,
-  version_number: '2.0.0',
-  title: 'Major refactor',
-  description: 'Complete rewrite with new architecture',
-  changelog: '- Breaking changes\n- New API\n- Performance improvements',
-  branch_name: 'main',
-  commit_hash: 'def456',
-  api_version: '2.0.0',
-  compatibility_level: 'major',
-  migration_required: true,
-  created_by: 'user-1',
-  created_at: '2024-01-10T14:20:00Z',
-  published_at: '2024-01-10T15:00:00Z',
-  status: 'published',
-  visibility: 'public',
-  download_count: 89,
-  usage_count: 156,
-  rating: 4.5,
-  dependencies: [],
-  conflicts: [],
-  template_data: template,
-}
-        {
-  id: 'v-3',
-  template_id: template.id,
-  version_number: '1.9.1',
-  title: 'Hotfix release',
-  description: 'Critical bug fixes',
-  changelog: '- Fixed memory leak\n- Improved error handling',
-  branch_name: 'hotfix-1.9.1',
-  commit_hash: 'ghi789',
-  api_version: '1.9.0',
-  compatibility_level: 'patch',
-  migration_required: false,
-  created_by: 'user-2',
-  created_at: '2024-01-08T09:15:00Z',
-  published_at: '2024-01-08T09:30:00Z',
-  status: 'published',
-  visibility: 'public',
-  download_count: 67,
-  usage_count: 234,
-  rating: 4.3,
-  dependencies: [],
-  conflicts: [],
+  id: 'v-1'
+  template_id: template.id
+  version_number: '2.1.0'
+  title: 'Major UI improvements'
+  description: 'Added new node types and improved user interface'
+  changelog: '- Added ConditionalNode\n- Improved styling\n- Bug fixes'
+  branch_name: 'main'
+  commit_hash: 'abc123'
+  api_version: '2.0.0'
+  compatibility_level: 'minor'
+  migration_required: false
+  created_by: 'user-1'
+  created_at: '2024-01-15T10:30:00Z'
+  published_at: '2024-01-15T11:00:00Z'
+  status: 'published'
+  visibility: 'public'
+  download_count: 142
+  usage_count: 89
+  rating: 4.7
+  dependencies: []
+  conflicts: []
+  template_data: template }
+
+        { id: 'v-2'
+  template_id: template.id
+  version_number: '2.0.0'
+  title: 'Major refactor'
+  description: 'Complete rewrite with new architecture'
+  changelog: '- Breaking changes\n- New API\n- Performance improvements'
+  branch_name: 'main'
+  commit_hash: 'def456'
+  api_version: '2.0.0'
+  compatibility_level: 'major'
+  migration_required: true
+  created_by: 'user-1'
+  created_at: '2024-01-10T14:20:00Z'
+  published_at: '2024-01-10T15:00:00Z'
+  status: 'published'
+  visibility: 'public'
+  download_count: 89
+  usage_count: 156
+  rating: 4.5
+  dependencies: []
+  conflicts: []
+  template_data: template }
+
+        { id: 'v-3'
+  template_id: template.id
+  version_number: '1.9.1'
+  title: 'Hotfix release'
+  description: 'Critical bug fixes'
+  changelog: '- Fixed memory leak\n- Improved error handling'
+  branch_name: 'hotfix-1.9.1'
+  commit_hash: 'ghi789'
+  api_version: '1.9.0'
+  compatibility_level: 'patch'
+  migration_required: false
+  created_by: 'user-2'
+  created_at: '2024-01-08T09:15:00Z'
+  published_at: '2024-01-08T09:30:00Z'
+  status: 'published'
+  visibility: 'public'
+  download_count: 67
+  usage_count: 234
+  rating: 4.3
+  dependencies: []
+  conflicts: [] }
   template_data: template];
   setVersions(mockVersions);
-} catch (error) {
-  console.error('Failed to load version history:', error);
-} finally {
-      setLoading(false);
-  };
-  const handleVersionSelect = (version: TemplateVersion, isMultiSelect: boolean) => {
-    if (isMultiSelect) {
+ catch (error) { console.error('Failed to load version history:', error) } finally { setLoading(false) };
+  const handleVersionSelect = (version: TemplateVersion, isMultiSelect: boolean) => { if (isMultiSelect) {
       const newSelection = new Set(selectedVersions);
       if (newSelection.has(version.id)) {
-        newSelection.delete(version.id);
-      } else {
-        newSelection.add(version.id);
-      setSelectedVersions(newSelection);
-    } else {
-      setSelectedVersions(new Set([version.id]));
-      onVersionSelect?.(version);
-  };
-  const handleCompareVersions = async () => {
-    const selectedArray = Array.from(selectedVersions);
+        newSelection.delete(version.id) } else { newSelection.add(version.id);
+      setSelectedVersions(newSelection) } else { setSelectedVersions(new Set([version.id]));
+      onVersionSelect?.(version) };
+  const handleCompareVersions = async () => { const selectedArray = Array.from(selectedVersions);
     if (selectedArray.length !== 2) {
       alert('Please select exactly 2 versions to compare');
       return;
     setLoading(true);
     try {
       // Mock comparison - in real implementation, would call TemplateVersionManager
-      const mockComparison: VersionComparisonResult = {,
-  from_version: versions.find(v => v.id === selectedArray[0])!,
-        to_version: versions.find(v => v.id === selectedArray[1])!,
-        diff: {
-  metadata_changes: [,
+      const mockComparison: VersionComparisonResult = {
+  from_version: versions.find(v => v.id === selectedArray[0])!
+        to_version: versions.find(v => v.id === selectedArray[1])!
+        diff: { }
+  metadata_changes: [
             { field: 'name', old_value: 'Old Name', new_value: 'New Name', change_type: 'modified' }
-          ],
-          variable_changes: [,
+          ]
+          variable_changes: [
             { variable_id: 'var-1', change_type: 'added', new_variable: { id: 'var-1', name: 'new_var' } as any }
-          ],
-          customization_changes: [],
-          graph_changes: {
-  nodes_added: 2,
-  nodes_removed: 1,
-  nodes_modified: 3,
-  edges_added: 1,
-  edges_removed: 0,
-  edges_modified: 2,
-},
-  compatibility: {
-  breaking_changes: false,
-  api_changes: true,
-  schema_changes: false,
-  dependency_changes: true,
-},
-  migration_required: false,
-        migration_complexity: 'simple',
+          ]
+          customization_changes: []
+          graph_changes: { 
+  nodes_added: 2
+  nodes_removed: 1
+  nodes_modified: 3
+  edges_added: 1
+  edges_removed: 0
+  edges_modified: 2 }
+
+  compatibility: { 
+  breaking_changes: false
+  api_changes: true
+  schema_changes: false
+  dependency_changes: true }
+
+  migration_required: false
+        migration_complexity: 'simple'
         estimated_migration_time: 5;
   };
       setComparisonResult(mockComparison);
       setShowComparison(true);
-    } catch (error) {
-  console.error('Failed to compare versions:', error);
-} finally {
-      setLoading(false);
-  };
-  const getStatusColor = (status: string) => {
-  switch (status) {
+ catch (error) { console.error('Failed to compare versions:', error) } finally { setLoading(false) };
+  const getStatusColor = (status: string) => { switch (status) {
   case 'published': return 'text-green-600 bg-green-100';
   case 'draft': return 'text-yellow-600 bg-yellow-100';
   case 'deprecated': return 'text-red-600 bg-red-100';
   case 'archived': return 'text-gray-600 bg-gray-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
-  const getCompatibilityColor = (level: string) => {
-  switch (level) {
+  default: return 'text-gray-600 bg-gray-100' };
+  const getCompatibilityColor = (level: string) => { switch (level) {
   case 'patch': return 'text-green-600';
   case 'minor': return 'text-yellow-600';
   case 'major': return 'text-red-600';
-  default: return 'text-gray-600';
-};
+  default: return 'text-gray-600' };
   const renderTimelineView = () => (;);
     <div className="space-y-4">
       {versions.map((version, index) => ()
         <div
           key={version.id}
-          className={`relative flex items-start space-x-4 p-4 rounded-lg border-2 transition-colors cursor-pointer ${
+          className={ `relative flex items-start space-x-4 p-4 rounded-lg border-2 transition-colors cursor-pointer ${
   selectedVersions.has(version.id)
   ? 'border-blue-500 bg-blue-50'
-  : 'border-gray-200 bg-white hover:border-gray-300',
-}`}
+  : 'border-gray-200 bg-white hover:border-gray-300' }
+`}
           onClick={(e) => handleVersionSelect(version, e.metaKey || e.ctrlKey)}
         >
           {/* Timeline connector */}
@@ -216,9 +190,9 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
             <div className="absolute left-6 top-12 w-0.5 h-16 bg-gray-300" />
           )}
           {/* Version indicator */}
-          <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-  version.status === 'published' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600',
-}`}>
+          <div className={ `flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+  version.status === 'published' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600' }
+`}>
             <FiTag className="w-4 h-4" />
           </div>
           {/* Version info */}
@@ -242,20 +216,18 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
               </div>
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={(e) => {
+                  onClick={ (e) => {
                     e.stopPropagation();
-                    onVersionExport?.(version);
-                  }}
+                    onVersionExport?.(version) }}
                   className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
                   title="Export version"
                 >
                   <FiDownload className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={(e) => {
+                  onClick={ (e) => {
                     e.stopPropagation();
-                    onVersionRestore?.(version);
-                  }}
+                    onVersionRestore?.(version) }}
                   className="p-1 text-gray-400 hover:text-green-600 transition-colors"
                   title="Restore version"
                 >
@@ -319,12 +291,9 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
               <input
                 type="checkbox"
                 className="rounded border-gray-300"
-                onChange={(e) => {
+                onChange={ (e) => {
                   if (e.target.checked) {
-                    setSelectedVersions(new Set(versions.map(v => v.id)));
-                  } else {
-                    setSelectedVersions(new Set());
-                }}
+                    setSelectedVersions(new Set(versions.map(v => v.id))) } else { setSelectedVersions(new Set()) }}
               />
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -354,9 +323,9 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
           {versions.map((version) => ()
             <tr
               key={version.id}
-              className={`hover:bg-gray-50 cursor-pointer ${
-  selectedVersions.has(version.id) ? 'bg-blue-50' : '',
-}`}
+              className={ `hover:bg-gray-50 cursor-pointer ${
+  selectedVersions.has(version.id) ? 'bg-blue-50' : '' }
+`}
               onClick={(e) => handleVersionSelect(version, e.metaKey || e.ctrlKey)}
             >
               <td className="px-3 py-4 whitespace-nowrap">
@@ -404,19 +373,17 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div className="flex items-center justify-end space-x-2">
                   <button
-                    onClick={(e) => {
+                    onClick={ (e) => {
                       e.stopPropagation();
-                      onVersionExport?.(version);
-                    }}
+                      onVersionExport?.(version) }}
                     className="text-gray-400 hover:text-blue-600 transition-colors"
                   >
                     <FiDownload className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={(e) => {
+                    onClick={ (e) => {
                       e.stopPropagation();
-                      onVersionRestore?.(version);
-                    }}
+                      onVersionRestore?.(version) }}
                     className="text-gray-400 hover:text-green-600 transition-colors"
                   >
                     <FiUpload className="w-4 h-4" />
@@ -550,11 +517,11 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
               <button
                 key={mode}
                 onClick={() => setViewMode(mode as any)}
-                className={`px-3 py-1 text-sm font-medium transition-colors first:rounded-l-lg last:rounded-r-lg ${
+                className={ `px-3 py-1 text-sm font-medium transition-colors first:rounded-l-lg last:rounded-r-lg ${
   viewMode === mode
   ? 'bg-blue-600 text-white'
-  : 'text-gray-600 hover:text-gray-800',
-}`}
+  : 'text-gray-600 hover:text-gray-800' }
+`}
               >
                 {mode.charAt(0).toUpperCase() + mode.slice(1)}
               </button>

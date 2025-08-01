@@ -1,7 +1,14 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
  > ;
-performance_trends: Array;
+performance_trends: Array < {
+    date: string,
+    executions: number,
+    avg_time: number,
+    error_count: number,
+    quality_score: number,
+    impact_rating: number
+} > ;
 // Enhanced system metrics
 overall_quality_score: number;
 average_impact_rating: number;
@@ -139,8 +146,8 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Quality Score" }), _jsxs("div", { style: {
                                                 fontSize: '24px',
                                                 fontWeight: 600,
-                                                color: metrics.overall_quality_score >= 80 ? '#68d391' :
-                                                    metrics.overall_quality_score >= 60 ? '#fbb040' : '#e53e3e',
+                                                color: metrics.overall_quality_score >= 80 ? '#68d391' : ,
+                                                metrics, : .overall_quality_score >= 60 ? '#fbb040' : '#e53e3e',
                                             }, children: [metrics.overall_quality_score.toFixed(0), "/100"] }), _jsx("div", { style: { fontSize: '12px', color: '#a0aec0', marginTop: '4px' }, children: "Overall effectiveness" })] }), _jsxs("div", { style: {
                                         background: '#2a2e37',
                                         padding: '16px',
@@ -149,8 +156,8 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Impact Rating" }), _jsxs("div", { style: {
                                                 fontSize: '24px',
                                                 fontWeight: 600,
-                                                color: metrics.average_impact_rating >= 4 ? '#68d391' :
-                                                    metrics.average_impact_rating >= 3 ? '#fbb040' : '#e53e3e',
+                                                color: metrics.average_impact_rating >= 4 ? '#68d391' : ,
+                                                metrics, : .average_impact_rating >= 3 ? '#fbb040' : '#e53e3e',
                                             }, children: [metrics.average_impact_rating.toFixed(1), "/5"] }), _jsx("div", { style: { fontSize: '12px', color: '#a0aec0', marginTop: '4px' }, children: "Average significance" })] }), _jsxs("div", { style: {
                                         background: '#2a2e37',
                                         padding: '16px',
@@ -168,8 +175,8 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "False Positive Rate" }), _jsxs("div", { style: {
                                                 fontSize: '24px',
                                                 fontWeight: 600,
-                                                color: metrics.false_positive_rate > 10 ? '#e53e3e' :
-                                                    metrics.false_positive_rate > 5 ? '#fbb040' : '#68d391',
+                                                color: metrics.false_positive_rate > 10 ? '#e53e3e' : ,
+                                                metrics, : .false_positive_rate > 5 ? '#fbb040' : '#68d391',
                                             }, children: [metrics.false_positive_rate.toFixed(1), "%"] }), _jsx("div", { style: { fontSize: '12px', color: '#a0aec0', marginTop: '4px' }, children: metrics.false_positive_rate <= 5 ? 'Excellent accuracy' : 'Needs improvement' })] })] }), _jsxs("div", { children: [_jsx("h3", { style: { fontSize: '16px', fontWeight: 600, marginBottom: '16px' }, children: "Most Used Rules" }), _jsxs("div", { style: {
                                         background: '#2a2e37',
                                         borderRadius: '8px',
@@ -193,17 +200,17 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                                 borderBottom: '1px solid #444',
                                                 fontSize: '14px',
                                             }, children: [_jsx("div", { style: { fontWeight: 500 }, children: rule.rule_name }), _jsx("div", { children: rule.total_applications.toLocaleString() }), _jsx("div", { style: {
-                                                        color: rule.quality_score >= 80 ? '#68d391' :
-                                                            rule.quality_score >= 60 ? '#fbb040' : '#e53e3e',
+                                                        color: rule.quality_score >= 80 ? '#68d391' : ,
+                                                        rule, : .quality_score >= 60 ? '#fbb040' : '#e53e3e',
                                                     }, children: rule.quality_score.toFixed(0) }), _jsx("div", { style: {
-                                                        color: rule.impact_rating >= 4 ? '#68d391' :
-                                                            rule.impact_rating >= 3 ? '#fbb040' : '#e53e3e',
+                                                        color: rule.impact_rating >= 4 ? '#68d391' : ,
+                                                        rule, : .impact_rating >= 3 ? '#fbb040' : '#e53e3e',
                                                     }, children: rule.impact_rating.toFixed(1) }), _jsxs("div", { children: [rule.average_execution_time.toFixed(1), "ms"] }), _jsxs("div", { style: {
-                                                        color: rule.success_rate > 95 ? '#68d391' :
-                                                            rule.success_rate > 85 ? '#fbb040' : '#e53e3e',
+                                                        color: rule.success_rate > 95 ? '#68d391' : ,
+                                                        rule, : .success_rate > 85 ? '#fbb040' : '#e53e3e',
                                                     }, children: [rule.success_rate.toFixed(1), "%"] }), _jsx("div", { children: _jsx("span", { style: {
-                                                            color: rule.usage_trend === 'increasing' ? '#68d391' :
-                                                                rule.usage_trend === 'decreasing' ? '#e53e3e' : '#a0aec0',
+                                                            color: rule.usage_trend === 'increasing' ? '#68d391' : ,
+                                                            rule, : .usage_trend === 'decreasing' ? '#e53e3e' : '#a0aec0',
                                                             fontSize: '12px',
                                                         }, children: rule.usage_trend === 'increasing' ? '↗' :
                                                             rule.usage_trend === 'decreasing' ? '↘' : '→' }) })] }, rule.rule_id)))] })] }), _jsxs("div", { children: [_jsx("h3", { style: { fontSize: '16px', fontWeight: 600, marginBottom: '16px' }, children: "Performance Trends" }), _jsx("div", { style: {
@@ -253,8 +260,8 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                             }, children: [_jsx("h4", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "User Satisfaction" }), _jsxs("div", { style: {
                                                         fontSize: '24px',
                                                         fontWeight: 600,
-                                                        color: metrics.user_satisfaction_score >= 4 ? '#68d391' :
-                                                            metrics.user_satisfaction_score >= 3 ? '#fbb040' : '#e53e3e',
+                                                        color: metrics.user_satisfaction_score >= 4 ? '#68d391' : ,
+                                                        metrics, : .user_satisfaction_score >= 3 ? '#fbb040' : '#e53e3e',
                                                     }, children: [metrics.user_satisfaction_score.toFixed(1), "/5"] }), _jsx("div", { style: { fontSize: '12px', color: '#a0aec0', marginTop: '4px' }, children: "Average user rating" })] }))] })] }), _jsxs("div", { style: { display: 'flex', gap: '12px', justifyContent: 'flex-end' }, children: [_jsx("button", { onClick: fetchMetrics, style: {
                                         padding: '8px 16px',
                                         background: '#63b3ed',

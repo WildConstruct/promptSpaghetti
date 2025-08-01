@@ -13,7 +13,7 @@ import {
   CategorizationType,
   CategorizationStatus,
   ConfidenceLevel
-} from '../AutomatedCategorizationService';
+ from '../AutomatedCategorizationService';
 import { requirePermission } from '../../auth/middleware/permission-auth';
 
 // Request validation schemas
@@ -105,7 +105,7 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     permissions: string[];
   };
-}
+
 
 /**
  * Register automated categorization routes
@@ -140,17 +140,16 @@ export async function registerAutomatedCategorizationRoutes(
           requestId,
           status: 'submitted',
           message: 'Categorization request submitted for processing'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid categorization request data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to submit categorization request:', error);
       return reply.code(500).send({
@@ -158,7 +157,7 @@ export async function registerAutomatedCategorizationRoutes(
         error: 'Failed to submit categorization request',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Get categorization request status
@@ -175,20 +174,19 @@ export async function registerAutomatedCategorizationRoutes(
           success: false,
           error: 'Categorization request not found'
         });
-      }
+
 
       return reply.code(200).send({
         success: true,
         data: result
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to get categorization request ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve categorization request'
       });
-    }
+
   });
 
   // List categorization requests
@@ -205,7 +203,7 @@ export async function registerAutomatedCategorizationRoutes(
         offset,
         startDate,
         endDate 
-      } = request.query as {
+ = request.query as {
         itemType?: CategorizationType;
         status?: CategorizationStatus;
         priority?: 'low' | 'medium' | 'high' | 'critical';
@@ -232,17 +230,16 @@ export async function registerAutomatedCategorizationRoutes(
             requestedBy,
             startDate,
             endDate
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       fastify.log.error('Failed to list categorization requests:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve categorization requests'
       });
-    }
+
   });
 
   // Get categorization results
@@ -258,7 +255,7 @@ export async function registerAutomatedCategorizationRoutes(
         reviewRequired,
         limit,
         offset
-      } = request.query as {
+ = request.query as {
         itemType?: CategorizationType;
         category?: string;
         confidenceLevel?: ConfidenceLevel;
@@ -282,17 +279,16 @@ export async function registerAutomatedCategorizationRoutes(
             confidenceLevel,
             riskLevel,
             reviewRequired: reviewRequired === 'true'
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       fastify.log.error('Failed to list categorization results:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve categorization results'
       });
-    }
+
   });
 
   // Create categorization rule
@@ -312,18 +308,17 @@ export async function registerAutomatedCategorizationRoutes(
           ...ruleData,
           createdBy: request.user!.id,
           createdAt: new Date().toISOString()
-  }
+
         message: 'Categorization rule created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid categorization rule data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to create categorization rule:', error);
       return reply.code(500).send({
@@ -331,7 +326,7 @@ export async function registerAutomatedCategorizationRoutes(
         error: 'Failed to create categorization rule',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // List categorization rules
@@ -345,7 +340,7 @@ export async function registerAutomatedCategorizationRoutes(
         priority,
         limit,
         offset
-      } = request.query as {
+ = request.query as {
         itemType?: CategorizationType;
         enabled?: string;
         priority?: string;
@@ -365,17 +360,16 @@ export async function registerAutomatedCategorizationRoutes(
             itemType,
             enabled: enabled === 'true',
             minPriority: priority ? parseInt(priority, 10) : undefined
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       fastify.log.error('Failed to list categorization rules:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve categorization rules'
       });
-    }
+
   });
 
   // Update categorization rule
@@ -393,18 +387,17 @@ export async function registerAutomatedCategorizationRoutes(
           ruleId,
           ...updates,
           lastModified: new Date().toISOString()
-  }
+
         message: 'Categorization rule updated successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid rule update data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error(`Failed to update categorization rule ${request.params}:`, error);
       return reply.code(500).send({
@@ -412,7 +405,7 @@ export async function registerAutomatedCategorizationRoutes(
         error: 'Failed to update categorization rule',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Delete categorization rule
@@ -427,14 +420,13 @@ export async function registerAutomatedCategorizationRoutes(
         success: true,
         message: 'Categorization rule deleted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Failed to delete categorization rule ${request.params}:`, error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to delete categorization rule'
       });
-    }
+
   });
 
   // Create category definition
@@ -454,18 +446,17 @@ export async function registerAutomatedCategorizationRoutes(
           ...categoryData,
           createdBy: request.user!.id,
           createdAt: new Date().toISOString()
-  }
+
         message: 'Category definition created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid category definition data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to create category definition:', error);
       return reply.code(500).send({
@@ -473,7 +464,7 @@ export async function registerAutomatedCategorizationRoutes(
         error: 'Failed to create category definition',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // List category definitions
@@ -487,7 +478,7 @@ export async function registerAutomatedCategorizationRoutes(
         riskLevel,
         limit,
         offset
-      } = request.query as {
+ = request.query as {
         type?: CategorizationType;
         parentCategory?: string;
         riskLevel?: 'low' | 'medium' | 'high' | 'critical';
@@ -507,17 +498,16 @@ export async function registerAutomatedCategorizationRoutes(
             type,
             parentCategory,
             riskLevel
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       fastify.log.error('Failed to list category definitions:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve category definitions'
       });
-    }
+
   });
 
   // Get categorization analytics
@@ -529,7 +519,7 @@ export async function registerAutomatedCategorizationRoutes(
         timeframe,
         itemType,
         breakdown
-      } = request.query as {
+ = request.query as {
         timeframe?: 'hour' | 'day' | 'week' | 'month';
         itemType?: CategorizationType;
         breakdown?: 'category' | 'method' | 'confidence' | 'risk';
@@ -544,16 +534,15 @@ export async function registerAutomatedCategorizationRoutes(
           timeframe: timeframe || 'day',
           breakdown: breakdown || 'category',
           generatedAt: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Failed to get categorization analytics:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve categorization analytics'
       });
-    }
+
   });
 
   // Test categorization rules
@@ -579,22 +568,21 @@ export async function registerAutomatedCategorizationRoutes(
         success: true,
         data: testResults
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid test data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to test categorization rules:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to test categorization rules'
       });
-    }
+
   });
 
   // Get categorization metadata (for UI forms)
@@ -618,14 +606,13 @@ export async function registerAutomatedCategorizationRoutes(
         success: true,
         data: metadata
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get categorization metadata:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve categorization metadata'
       });
-    }
+
   });
 
   // Health check for categorization system
@@ -652,8 +639,7 @@ export async function registerAutomatedCategorizationRoutes(
         success: true,
         data: health
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Categorization system health check failed:', error);
       return reply.code(500).send({
         success: false,
@@ -661,9 +647,9 @@ export async function registerAutomatedCategorizationRoutes(
         data: {
           status: 'unhealthy',
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
-    }
+
   });
 
   // Bulk categorization endpoint
@@ -700,7 +686,7 @@ export async function registerAutomatedCategorizationRoutes(
           }
         );
         requestIds.push(requestId);
-      }
+
 
       return reply.code(202).send({
         success: true,
@@ -709,25 +695,24 @@ export async function registerAutomatedCategorizationRoutes(
           totalItems: bulkData.items.length,
           status: 'submitted',
           message: 'Bulk categorization requests submitted for processing'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid bulk categorization data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to submit bulk categorization:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to submit bulk categorization requests'
       });
-    }
+
   });
-}
+
 
 export default registerAutomatedCategorizationRoutes;

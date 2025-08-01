@@ -28,14 +28,14 @@ interface SearchResultsProps<T = unknown> {
   onItemClick,
   onItemDoubleClick,
   className = ''
-}: SearchResultsProps<T>) => {
+: SearchResultsProps<T>) => {
   const {
     results,
     isLoading,
     error,
     // query, // Commented out unused variable
     isQueryEmpty
-  } = useSearch();
+ = useSearch();
   const [currentViewMode, setCurrentViewMode] = useState(initialViewMode);
   const [currentPage, setCurrentPage] = useState(1);
   // Pagination calculations
@@ -65,16 +65,16 @@ interface SearchResultsProps<T = unknown> {
   backgroundColor: '#FFFFFF',
   cursor: onItemClick ? 'pointer' : 'default',
   transition: 'background-color 0.2s',
-}}
+}
       onClick={() => onItemClick?.(item, index)}
       onDoubleClick={() => onItemDoubleClick?.(item, index)}
       onMouseEnter={(e) => {
         if (onItemClick) {
           e.currentTarget.style.backgroundColor = '#f9fafb';
-      }}
+}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = '#FFFFFF';
-      }}
+}
     >
       <pre style={{
   margin: 0,
@@ -82,7 +82,7 @@ interface SearchResultsProps<T = unknown> {
   color: '#374151',
   whiteSpace: 'pre-wrap',
   fontFamily: 'inherit',
-}}>
+}>
         {JSON.stringify(item, null, 2)}
       </pre>
     </div>
@@ -93,7 +93,7 @@ interface SearchResultsProps<T = unknown> {
   textAlign: 'center',
   padding: '48px 24px',
   color: '#6b7280',
-}}>
+}>
       <div style={{ fontSize: '48px', marginBottom: '16px' }}>
         {isQueryEmpty ? '🔍' : '📭'}
       </div>
@@ -102,7 +102,7 @@ interface SearchResultsProps<T = unknown> {
   fontSize: '18px',
   fontWeight: '500',
   color: '#374151',
-}}>
+}>
         {isQueryEmpty ? 'Start searching' : 'No results found'}
       </h3>
       <p style={{ margin: 0, fontSize: '14px', lineHeight: '1.5' }}>
@@ -141,13 +141,13 @@ interface SearchResultsProps<T = unknown> {
   // Loading state
   if (isLoading) {
     return;
-      <div className={`search-results loading ${className}`} style={{},}
+      <div className={`search-results loading ${className}`} style={{},},
   display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '48px',
         color: '#6b7280';
-  }}>
+}>
         <div style={{
   width: '32px',
   height: '32px',
@@ -156,20 +156,20 @@ interface SearchResultsProps<T = unknown> {
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
   marginRight: '12px',
-}} />
+} />
         <span style={{ fontSize: '14px' }}>Searching...</span>
       </div>
     );
   // Error state
   if (error) {
     return;
-      <div className={`search-results error ${className}`} style={{},}
+      <div className={`search-results error ${className}`} style={{},},
   padding: '24px',
         backgroundColor: '#fef2f2',
         border: '1px solid #fecaca',
         borderRadius: '8px',
         color: '#dc2626';
-  }}>
+}>
         <div style={{ fontSize: '20px', marginBottom: '8px' }}>⚠️</div>
         <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600' }}>
           Search Error
@@ -196,7 +196,7 @@ interface SearchResultsProps<T = unknown> {
   marginBottom: '16px',
   paddingBottom: '12px',
   borderBottom: '1px solid #e5e7eb',
-}}>
+}>
         {/* Results stats */}
         <div style={{ fontSize: '14px', color: '#6b7280' }}>
           {showPagination ? ()
@@ -235,7 +235,7 @@ interface SearchResultsProps<T = unknown> {
   fontSize: '12px',
   cursor: 'pointer',
   textTransform: 'capitalize',
-}}
+
               >
                 {mode === 'list' && '☰'}
                 {mode === 'grid' && '⊞'}
@@ -254,13 +254,13 @@ interface SearchResultsProps<T = unknown> {
   backgroundColor: '#f8fafc',
   border: '1px solid #e2e8f0',
   borderRadius: '6px',
-}}>
+}>
           <h4 style={{
   margin: '0 0 8px 0',
   fontSize: '13px',
   fontWeight: '500',
   color: '#374151',
-}}>
+}>
             Filter by:
           </h4>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -280,7 +280,7 @@ interface SearchResultsProps<T = unknown> {
   display: 'flex',
   alignItems: 'center',
   gap: '4px',
-}}
+
                     title={`Filter by ${facetKey}: ${facetValue.value}`}
                   >
                     <span>{facetValue.value}</span>
@@ -289,7 +289,7 @@ interface SearchResultsProps<T = unknown> {
   borderRadius: '8px',
   padding: '0 4px',
   fontSize: '10px',
-}}>
+}>
                       {facetValue.count}
                     </span>
                   </button>
@@ -315,7 +315,7 @@ interface SearchResultsProps<T = unknown> {
   marginTop: '24px',
   paddingTop: '16px',
   borderTop: '1px solid #e5e7eb',
-}}>
+}>
           {/* Previous button */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
@@ -328,7 +328,7 @@ interface SearchResultsProps<T = unknown> {
   borderRadius: '4px',
   fontSize: '14px',
   cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
-}}
+
           >
             ← Previous
           </button>
@@ -349,7 +349,7 @@ interface SearchResultsProps<T = unknown> {
   fontSize: '14px',
   cursor: 'pointer',
   minWidth: '36px',
-}}
+
                 >
                   {page}
                 </button>
@@ -369,7 +369,7 @@ interface SearchResultsProps<T = unknown> {
   fontSize: '14px',
   cursor: 'pointer',
   minWidth: '36px',
-}}
+
                 >
                   {totalPages}
                 </button>
@@ -388,7 +388,7 @@ interface SearchResultsProps<T = unknown> {
   borderRadius: '4px',
   fontSize: '14px',
   cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
-}}
+
           >
             Next →
           </button>

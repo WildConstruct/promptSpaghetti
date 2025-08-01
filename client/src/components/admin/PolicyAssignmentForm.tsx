@@ -16,9 +16,10 @@ import {
   ConditionOperator,
   RiskLevel,
   AssignmentSource
-} from '../../types/PolicyAssignmentTypes';
+ from '../../types/PolicyAssignmentTypes';
 import './PolicyAssignmentForm.css';
-}
+
+
 interface PolicyAssignmentFormProps {
   assignment?: PolicyAssignment,
   onSubmit: (data: Partial<PolicyAssignment>) => Promise<void>;,
@@ -38,7 +39,8 @@ interface PolicyAssignmentFormProps {
   type: InheritanceType;,
   inheritanceDepth: number,
   blockInheritance: boolean;
-}
+
+
 };
   metadata: {
   reason: string,
@@ -134,9 +136,9 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({
   source: AssignmentSource.MANUAL
 };
       await onSubmit(submitData);
-    } catch (error) {
+ catch (error) {
   console.error('Error submitting form:', error);
-} finally {
+ finally {
       setIsSubmitting(false);
   };
   const updateFormData = (field: string, value: Error) => {
@@ -563,7 +565,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({
                   e.preventDefault();
                   addTag((e.target as HTMLInputElement).value);
                   (e.target as HTMLInputElement).value = '';
-              }}
+}
             />
           </div>
         </div>

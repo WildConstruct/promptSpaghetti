@@ -4,20 +4,20 @@
  */
 import React, { useState, useMemo } from 'react';
 import { WorkspaceWithMembership } from '../../types/workspace';
-}
-interface WorkspaceListProps {
-  workspaces: WorkspaceWithMembership;
+
+
+interface WorkspaceListProps { workspaces: WorkspaceWithMembership;
   selectedWorkspace: WorkspaceWithMembership | null;
   onWorkspaceSelect: (workspace: WorkspaceWithMembership) => void;
   loading?: boolean;
-  export const WorkspaceList: React.FC<WorkspaceListProps> = ({,)
-  workspaces,
-  selectedWorkspace,
-  onWorkspaceSelect,
+  export const WorkspaceList: React.FC<WorkspaceListProps> = ({);
+  workspaces;
+  selectedWorkspace;
+  onWorkspaceSelect }
   loading = false
-}
-}) => {
-  const [searchTerm, setSearchTerm] = useState('');
+
+
+}) => { const [searchTerm, setSearchTerm] = useState('');
   const [filterBy, setFilterBy] = useState<'all' | 'owner' | 'member'>('all');
   const filteredWorkspaces = useMemo(() => {
     let filtered = workspaces;
@@ -31,11 +31,8 @@ interface WorkspaceListProps {
     if (filterBy !== 'all') {
       filtered = filtered.filter(workspace => {)
   if (filterBy === 'owner') {
-          return workspace.owner_id === workspace.membership?.user_id;
-        } else if (filterBy === 'member') {
-          return workspace.owner_id !== workspace.membership?.user_id;
-        return true;
-      });
+          return workspace.owner_id === workspace.membership?.user_id } else if (filterBy === 'member') { return workspace.owner_id !== workspace.membership?.user_id;
+        return true });
     // Sort by name
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
   }, [workspaces, searchTerm, filterBy]);
@@ -106,16 +103,17 @@ interface WorkspaceListProps {
     </div>
   );
 };
-}
-interface WorkspaceItemProps {
-  workspace: WorkspaceWithMembership;
+
+
+interface WorkspaceItemProps { workspace: WorkspaceWithMembership;
   isSelected: boolean;
   onSelect: () => void;
-  const WorkspaceItem: React.FC<WorkspaceItemProps> = ({,)
-  workspace,
-  isSelected,
+  const WorkspaceItem: React.FC<WorkspaceItemProps> = ({);
+  workspace;
+  isSelected }
   onSelect
-}
+
+
 }) => {
   const isOwner = workspace.owner_id === workspace.membership?.user_id;
   const memberCount = 1; // TODO: Get actual member count from API;

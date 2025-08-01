@@ -292,58 +292,72 @@ export class MedievalDemo {
                 id: 'feast_preparation',
                 title: 'Great Hall Feast Preparation',
                 setting: this.locationDatabase.get('castle_great_hall'),
-                characters: [,
+                characters: [
                     this.characterDatabase.get('sir_gareth'),
                     this.characterDatabase.get('elena_weaver')
                 ],
-                timeContext: {
-                    season: 'autumn',
-                    timeOfDay: 'afternoon',
-                    weather: 'crisp and clear',
-                },
-                activities: ['setting tables', 'arranging tapestries', 'preparing entertainment'],
-                socialDynamics: ['noble-servant hierarchy', 'guest protocols', 'honor displays'],
-                historicalElements: ['feudal obligations', 'seasonal harvest celebration', 'alliance building'],
-                sensoryDetails: {
-                    sights: ['colorful banners', 'polished armor', 'golden candlelight'],
-                    sounds: ['bustling servants', 'clanking metal', 'minstrel practice'],
-                    smells: ['roasting meat', 'wood smoke', 'fresh rushes'],
-                    textures: ['rough stone walls', 'smooth wooden tables', 'soft fabric draping'],
-                },
-                narrativeHooks: ['unexpected guest arrival', 'political tension', 'romance brewing']
+                timeContext: {},
+                season: 'autumn',
+                timeOfDay: 'afternoon',
+                weather: 'crisp and clear',
             },
-            {
-                id: 'monastery_dawn',
-                title: 'Dawn Prayer in Monastery',
-                setting: this.locationDatabase.get('monastery_scriptorium'),
-                characters: [this.characterDatabase.get('brother_aldric')],
-                timeContext: {
-                    season: 'winter',
-                    timeOfDay: 'dawn',
-                    weather: 'frost on windows',
-                },
-                activities: ['morning prayers', 'manuscript copying', 'contemplation'],
-                socialDynamics: ['religious hierarchy', 'scholarly pursuit', 'spiritual discipline'],
-                historicalElements: ['preservation of knowledge', 'religious devotion', 'intellectual tradition'],
-                sensoryDetails: {
-                    sights: ['candlelit pages', 'frost patterns', 'illuminated letters'],
-                    sounds: ['chanted prayers', 'scratching quills', 'turning pages'],
-                    smells: ['incense', 'parchment', 'cold stone'],
-                    textures: ['smooth parchment', 'wooden writing desk', 'wool robes'],
-                },
-                narrativeHooks: ['ancient text discovery', 'visiting scholar', 'theological debate']
-            }
+            activities, ['setting tables', 'arranging tapestries', 'preparing entertainment'],
+            socialDynamics, ['noble-servant hierarchy', 'guest protocols', 'honor displays'],
+            historicalElements, ['feudal obligations', 'seasonal harvest celebration', 'alliance building'],
+            sensoryDetails, {},
+            sights, ['colorful banners', 'polished armor', 'golden candlelight'],
+            sounds, ['bustling servants', 'clanking metal', 'minstrel practice'],
+            smells, ['roasting meat', 'wood smoke', 'fresh rushes'],
+            textures, ['rough stone walls', 'smooth wooden tables', 'soft fabric draping'],
         ];
-        sceneData.forEach(scene => { });
-        this.sceneDatabase.set(scene.id, scene);
     }
-    ;
-    socialClass;
-    location;
-    timeOfDay;
-    season;
-    theme;
+    narrativeHooks;
 }
+{
+    id: 'monastery_dawn',
+        title;
+    'Dawn Prayer in Monastery',
+        setting;
+    this.locationDatabase.get('monastery_scriptorium'),
+        characters;
+    [this.characterDatabase.get('brother_aldric')],
+        timeContext;
+    {
+        season: 'winter',
+            timeOfDay;
+        'dawn',
+            weather;
+        'frost on windows',
+        ;
+    }
+    activities: ['morning prayers', 'manuscript copying', 'contemplation'],
+        socialDynamics;
+    ['religious hierarchy', 'scholarly pursuit', 'spiritual discipline'],
+        historicalElements;
+    ['preservation of knowledge', 'religious devotion', 'intellectual tradition'],
+        sensoryDetails;
+    {
+        sights: ['candlelit pages', 'frost patterns', 'illuminated letters'],
+            sounds;
+        ['chanted prayers', 'scratching quills', 'turning pages'],
+            smells;
+        ['incense', 'parchment', 'cold stone'],
+            textures;
+        ['smooth parchment', 'wooden writing desk', 'wool robes'],
+        ;
+    }
+    narrativeHooks: ['ancient text discovery', 'visiting scholar', 'theological debate'];
+    ;
+    sceneData.forEach(scene => { });
+    this.sceneDatabase.set(scene.id, scene);
+}
+;
+generateMedievalScene(options, {});
+socialClass ?  : string;
+location ?  : string;
+timeOfDay ?  : string;
+season ?  : string;
+theme ?  : string;
 { }
 MedievalScene | null;
 {
@@ -366,8 +380,8 @@ MedievalScene | null;
                     filteredScenes = availableScenes;
                     const randomIndex = Math.floor(Math.random() * filteredScenes.length);
                     return filteredScenes[randomIndex];
-                    getAppropriateClothing(character, MedievalCharacter, context, {});
-                    occasion ?  : string;
+                    getAppropriateClothing(character, MedievalCharacter, context, {}),
+                        occasion ?  : string;
                     season ?  : string;
                     socialSetting ?  : string;
                 }
@@ -500,7 +514,7 @@ MedievalScene | null;
                             string;
                             {
                                 return `
-Medieval Context (${scene.timeContext.season} ${scene.timeContext.timeOfDay}):},}
+Medieval Context (${scene.timeContext.season} ${scene.timeContext.timeOfDay}):},},
   Setting: ${scene.setting.name} - ${scene.setting.description}
 Political Context: ${scene.setting.politicalContext}
 Social Dynamics: ${scene.socialDynamics.join(', ')}

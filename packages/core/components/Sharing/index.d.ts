@@ -10,8 +10,7 @@ export { ShareModal } from './ShareModal';
 export { ShareButton } from './ShareButton';
 export { ShareAnalyticsDashboard } from './ShareAnalyticsDashboard';
 export { SharePreview } from './SharePreview';
-export type {
-  ShareableResourceType,
+export type { ShareableResourceType,
   ShareTarget,
   ShareFormat,
   SocialPlatform,
@@ -23,7 +22,7 @@ export type {
   CreateShareRequest,
   ShareResponse,
   ShareCollection,
-  SocialIntegration,
+  SocialIntegration }
 } from '../../types/sharingTypes';
 export { SharingService } from '../../services/SharingService';
 //# sourceMappingURL=index.d.ts.map

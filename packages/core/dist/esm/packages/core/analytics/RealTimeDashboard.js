@@ -46,6 +46,8 @@ integrationStatus: {
 ;
 topSources: Array;
 recentEvents: UnifiedAnalyticsEvent;
+config: configOverride = {},
+    onWidgetError;
 {
     // Configuration
     const config = useMemo(() => ({}), refreshInterval, 5000, maxEventsDisplay, 100, enableWebSocket, true, enableAutoRefresh, true, defaultTimeRange, 24, widgetLayout, 'grid', theme, 'light', ...configOverride);

@@ -27,7 +27,7 @@ const fixableRules = [
     name: 'Comma Dangle',
     rule: 'comma-dangle',
     description: 'Fix trailing commas'
-  }
+
 ];
 
 const priorityDirs = [
@@ -51,7 +51,7 @@ async function fixRule(rule: any, directory: string): Promise<any> {
     const beforeCount = 0; // No errors case
     console.log(`   ✅ No ${rule.name} issues found`);
     return { before: 0, after: 0 };
-  } catch (beforeError) {
+ catch (beforeError) {
     const beforeOutput = String(beforeError.stdout || beforeError.stderr || '');
     const beforeMatches = beforeOutput.match(new RegExp(rule.rule, 'g')) || [];
     const beforeCount = beforeMatches.length;
@@ -59,7 +59,7 @@ async function fixRule(rule: any, directory: string): Promise<any> {
     if (beforeCount === 0) {
       console.log(`   ✅ No ${rule.name} issues found`);
       return { before: 0, after: 0 };
-    }
+
     
     console.log(`   📊 Found ${beforeCount} ${rule.name} issues`);
     
@@ -71,7 +71,7 @@ async function fixRule(rule: any, directory: string): Promise<any> {
       );
       console.log(`   ✅ All ${rule.name} issues fixed!`);
       return { before: beforeCount, after: 0 };
-    } catch (afterError) {
+ catch (afterError) {
       const afterOutput = String(afterError.stdout || afterError.stderr || '');
       const afterMatches = afterOutput.match(new RegExp(rule.rule, 'g')) || [];
       const afterCount = afterMatches.length;
@@ -79,9 +79,9 @@ async function fixRule(rule: any, directory: string): Promise<any> {
       const fixed = beforeCount - afterCount;
       console.log(`   📈 Fixed ${fixed} ${rule.name} issues (${afterCount} remaining)`);
       return { before: beforeCount, after: afterCount };
-    }
-  }
-}
+
+
+
 
 async function main(): Promise<void> {
   console.log('🎯 Targeted Linting Fix - Auto-fixable Rules Only');
@@ -105,7 +105,7 @@ async function main(): Promise<void> {
       
       // Brief pause between directories
       await new Promise(resolve => setTimeout(resolve, 200));
-    }
+
     
     const ruleFixed = ruleBefore - ruleAfter;
     console.log(`   🎉 ${rule.name} Summary: ${ruleFixed} fixed, ${ruleAfter} remaining`);
@@ -113,7 +113,7 @@ async function main(): Promise<void> {
     totalResults.totalBefore += ruleBefore;
     totalResults.totalAfter += ruleAfter;
     totalResults.totalFixed += ruleFixed;
-  }
+
   
   console.log('\n📊 FINAL SUMMARY:');
   console.log(`🎉 Total Fixed: ${totalResults.totalFixed}`);
@@ -123,13 +123,13 @@ async function main(): Promise<void> {
   console.log('\n🔄 Running final lint check...');
   try {
     execSync('pnpm lint --format=summary', { stdio: 'inherit' });
-  } catch (error) {
+ catch (error) {
     console.log('📋 Lint check completed with remaining issues (expected)');
-  }
-}
+
+
 
 if (require.main === module) {
   main().catch(console.error);
-}
+
 
 module.exports = { fixRule, fixableRules, priorityDirs };

@@ -65,29 +65,29 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 interface CheckAccessRequest extends AuthenticatedRequest {
   Params: { resourceId: string };
   Body: z.infer<typeof CheckAccessSchema>;
-}
+
 
 interface RequestAccessRequest extends AuthenticatedRequest {
   Body: z.infer<typeof RequestAccessSchema>;
-}
+
 
 interface RevokeAccessRequest extends AuthenticatedRequest {
   Body: z.infer<typeof RevokeAccessSchema>;
-}
+
 
 interface AuditRequest extends AuthenticatedRequest {
   Params: { userId: string };
   Querystring: z.infer<typeof AuditQuerySchema>;
-}
+
 
 interface UserGrantsRequest extends AuthenticatedRequest {
   Params: { userId: string };
-}
+
 
 export async function dataAccessRoutes(fastify: FastifyInstance) {
   // Get the data access control service from the DI container
@@ -103,7 +103,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Valid authentication token required'
         });
-      }
+
 
       // Verify token (implementation depends on your JWT setup)
       const token = authHeader.slice(7);
@@ -114,15 +114,15 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Invalid authentication token'
         });
-      }
+
 
       request.user = user;
-    } catch (error) {
+ catch (error) {
       return reply.code(401).send({
         error: 'Unauthorized',
         message: 'Authentication failed'
       });
-    }
+
   };
 
   // Middleware to check admin permissions
@@ -132,7 +132,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         error: 'Forbidden',
         message: 'Admin privileges required'
       });
-    }
+
   };
 
   // Rate limiting configuration
@@ -153,9 +153,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           resourceId: { type: 'string' }
-  }
+
         required: ['resourceId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
@@ -163,10 +163,10 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           operation: { 
             type: 'string', 
             enum: ['read', 'write', 'delete', 'export', 'share', 'modify', 'create', 'list', 'search']
-          }
-  }
+
+
         required: ['resourceType', 'operation']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -185,14 +185,14 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
                   type: { type: 'string' },
                   value: { type: 'string' },
                   description: { type: 'string' }
-                }
-              }
-  }
+
+
+
             auditId: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: CheckAccessRequest, reply: FastifyReply) => {
     try {
       const { resourceId } = request.params;
@@ -207,19 +207,19 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           sessionId: request.headers['x-session-id'] as string,
           ipAddress: request.ip,
           userAgent: request.headers['user-agent']
-        }
+
       };
 
       const result = await dataAccessService.checkAccess(accessRequest);
       
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error checking access permissions:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to check access permissions'
       });
-    }
+
   });
 
   /**
@@ -238,7 +238,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           operation: { 
             type: 'string',
             enum: ['read', 'write', 'delete', 'export', 'share', 'modify', 'create', 'list', 'search']
-  }
+
           reason: { type: 'string', minLength: 10 },
           expiresAt: { type: 'string', format: 'date-time' },
           context: {
@@ -249,11 +249,11 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
               userAgent: { type: 'string' },
               purpose: { type: 'string' },
               requestedBy: { type: 'string' }
-            }
-          }
-  }
+
+
+
         required: ['resourceId', 'resourceType', 'operation', 'reason']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -262,10 +262,10 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
             status: { type: 'string', enum: ['approved', 'pending', 'denied'] },
             message: { type: 'string' },
             expiresAt: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: RequestAccessRequest, reply: FastifyReply) => {
     try {
       const validatedBody = RequestAccessSchema.parse(request.body);
@@ -279,27 +279,27 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           ipAddress: request.ip,
           userAgent: request.headers['user-agent'],
           ...validatedBody.context
-        }
+
       };
 
       const result = await dataAccessService.requestAccess(accessRequest);
       
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error requesting access:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to process access request'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -314,9 +314,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           userId: { type: 'string' }
-  }
+
         required: ['userId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
@@ -325,12 +325,12 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           operation: { 
             type: 'string',
             enum: ['read', 'write', 'delete', 'export', 'share', 'modify', 'create', 'list', 'search']
-  }
+
           allowed: { type: 'boolean' },
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -350,21 +350,21 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
                   accessLevel: { type: 'string' },
                   timestamp: { type: 'string', format: 'date-time' },
                   riskScore: { type: 'number' }
-                }
-              }
-  }
+
+
+
             pagination: {
               type: 'object',
               properties: {
                 limit: { type: 'integer' },
                 offset: { type: 'integer' },
                 total: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: AuditRequest, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
@@ -376,7 +376,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Cannot access audit logs for other users'
         });
-      }
+
 
       const auditEvents = await dataAccessService.getUserAccessHistory(
         userId,
@@ -391,25 +391,25 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         filteredEvents = filteredEvents.filter(event => 
           event.operation.toLowerCase() === queryParams.operation!.toLowerCase()
         );
-      }
+
 
       if (queryParams.allowed !== undefined) {
         filteredEvents = filteredEvents.filter(event => 
           event.allowed === queryParams.allowed
         );
-      }
+
 
       if (queryParams.startDate) {
         filteredEvents = filteredEvents.filter(event => 
           event.timestamp >= queryParams.startDate!
         );
-      }
+
 
       if (queryParams.endDate) {
         filteredEvents = filteredEvents.filter(event => 
           event.timestamp <= queryParams.endDate!
         );
-      }
+
 
       reply.send({
         data: filteredEvents,
@@ -417,23 +417,23 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           limit: queryParams.limit,
           offset: queryParams.offset,
           total: filteredEvents.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid query parameters',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error retrieving audit logs:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to retrieve audit logs'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -449,19 +449,19 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         properties: {
           grantId: { type: 'string' },
           reason: { type: 'string', minLength: 5 }
-  }
+
         required: ['grantId', 'reason']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: RevokeAccessRequest, reply: FastifyReply) => {
     try {
       const validatedBody = RevokeAccessSchema.parse(request.body);
@@ -477,27 +477,27 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           success: true,
           message: 'Access grant revoked successfully'
         });
-      } else {
+ else {
         reply.code(404).send({
           error: 'Not Found',
           message: 'Access grant not found or already revoked'
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error revoking access:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to revoke access grant'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -512,9 +512,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           userId: { type: 'string' }
-  }
+
         required: ['userId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -541,16 +541,16 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
                         type: { type: 'string' },
                         value: { type: 'string' },
                         description: { type: 'string' }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
+
+
+
   }, async (request: UserGrantsRequest, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
@@ -561,18 +561,18 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Cannot access grants for other users'
         });
-      }
+
 
       const grants = await dataAccessService.getUserAccessGrants(userId);
 
       reply.send({ grants });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving access grants:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve access grants'
       });
-    }
+
   });
 
   /**
@@ -588,8 +588,8 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         properties: {
           period: { type: 'string', enum: ['day', 'week', 'month'], default: 'week' },
           classification: { type: 'string', enum: ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'] }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -605,9 +605,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
                 properties: {
                   operation: { type: 'string' },
                   count: { type: 'integer' }
-                }
-              }
-  }
+
+
+
             classificationBreakdown: {
               type: 'object',
               properties: {
@@ -615,12 +615,12 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
                 INTERNAL: { type: 'integer' },
                 CONFIDENTIAL: { type: 'integer' },
                 RESTRICTED: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // This would typically query the audit logs and generate statistics
@@ -636,15 +636,15 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           INTERNAL: 0,
           CONFIDENTIAL: 0,
           RESTRICTED: 0
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving access statistics:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve access statistics'
       });
-    }
+
   });
 
   /**
@@ -661,10 +661,10 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' },
             version: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     reply.send({
       status: 'healthy',
@@ -672,9 +672,8 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
       version: '1.0.0'
     });
   });
-}
+
 
 // Register the plugin
 export default async function (fastify: FastifyInstance) {
   await fastify.register(dataAccessRoutes, { prefix: '/api/data-access' });
-}

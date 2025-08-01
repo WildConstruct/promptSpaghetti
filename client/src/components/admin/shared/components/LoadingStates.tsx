@@ -8,16 +8,18 @@ import React from 'react';
 import { Loader2, AlertCircle, Search, Database, Users } from 'lucide-react';
 
 // ===== LOADING SPINNER =====
-}
+
+
 interface LoadingSpinnerProps {
   size?: 'small' | 'medium' | 'large';
   message?: string;
   className?: string;
-  export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({,)
+  export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({),
   size = 'medium',
   message = 'Loading...',
   className = ''
-}
+
+
 }) => {
   const sizeConfig = {
     small: { spinner: 16, fontSize: '12px', gap: '8px' },
@@ -35,7 +37,7 @@ interface LoadingSpinnerProps {
   gap: config.gap,
   padding: '20px',
   color: '#6b7280',
-}}
+}
     >
       <Loader2 
         size={config.spinner} 
@@ -48,20 +50,22 @@ interface LoadingSpinnerProps {
 };
 
 // ===== ERROR STATE =====
-}
+
+
 interface ErrorStateProps {
   error?: string | Error;
   title?: string;
   onRetry?: () => void;
   retryText?: string;
   className?: string;
-  export const ErrorState: React.FC<ErrorStateProps> = ({,)
+  export const ErrorState: React.FC<ErrorStateProps> = ({),
   error,
   title = 'Something went wrong',
   onRetry,
   retryText = 'Try Again',
   className = ''
-}
+
+
 }) => {
   const errorMessage = error instanceof Error ? error.message : error || 'An unexpected error occurred.';
   return;
@@ -75,7 +79,7 @@ interface ErrorStateProps {
   padding: '40px 20px',
   textAlign: 'center',
   color: '#6b7280',
-}}
+}
     >
       <div
         style={{
@@ -87,7 +91,7 @@ interface ErrorStateProps {
   backgroundColor: '#fef2f2',
   borderRadius: '50%',
   marginBottom: '16px',
-}}
+}
       >
         <AlertCircle size={32} style={{ color: '#dc2626' }} />
       </div>
@@ -96,14 +100,14 @@ interface ErrorStateProps {
   fontSize: '18px',
   fontWeight: '600',
   color: '#111827',
-}}>
+}>
         {title}
       </h3>
       <p style={{
   margin: '0 0 20px 0',
   fontSize: '14px',
   maxWidth: '400px',
-}}>
+}>
         {errorMessage}
       </p>
       {onRetry && ()
@@ -119,13 +123,13 @@ interface ErrorStateProps {
   fontWeight: '500',
   cursor: 'pointer',
   transition: 'background-color 0.2s ease',
-}}
+
           onMouseOver={(e) => {
             e.currentTarget.style.backgroundColor = '#2563eb';
-          }}
+}
           onMouseOut={(e) => {
             e.currentTarget.style.backgroundColor = '#3b82f6';
-          }}
+}
         >
           {retryText}
         </button>
@@ -135,7 +139,8 @@ interface ErrorStateProps {
 };
 
 // ===== EMPTY STATE =====
-}
+
+
 interface EmptyStateProps {
   icon?: React.ComponentType<{ size?: number; style?: React.CSSProperties }>;
   title?: string;
@@ -146,7 +151,7 @@ interface EmptyStateProps {
 };
   className?: string;
 
-export const EmptyState: React.FC<EmptyStateProps> = ({,)
+export const EmptyState: React.FC<EmptyStateProps> = ({);
   icon: Icon = Database,
   title = 'No data found',
   description = 'There are no items to display at this time.',
@@ -164,7 +169,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({,)
   padding: '40px 20px',
   textAlign: 'center',
   color: '#6b7280',
-}}
+}
     >
       <div
         style={{
@@ -176,7 +181,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({,)
   backgroundColor: '#f3f4f6',
   borderRadius: '50%',
   marginBottom: '16px',
-}}
+}
       >
         <Icon size={32} style={{ color: '#9ca3af' }} />
       </div>
@@ -185,14 +190,14 @@ export const EmptyState: React.FC<EmptyStateProps> = ({,)
   fontSize: '18px',
   fontWeight: '600',
   color: '#111827',
-}}>
+}>
         {title}
       </h3>
       <p style={{
   margin: '0 0 20px 0',
   fontSize: '14px',
   maxWidth: '400px',
-}}>
+}>
         {description}
       </p>
       {action && ()
@@ -208,13 +213,13 @@ export const EmptyState: React.FC<EmptyStateProps> = ({,)
   fontWeight: '500',
   cursor: 'pointer',
   transition: 'background-color 0.2s ease',
-}}
+
           onMouseOver={(e) => {
             e.currentTarget.style.backgroundColor = '#2563eb';
-          }}
+}
           onMouseOut={(e) => {
             e.currentTarget.style.backgroundColor = '#3b82f6';
-          }}
+}
         >
           {action.label}
         </button>
@@ -224,16 +229,18 @@ export const EmptyState: React.FC<EmptyStateProps> = ({,)
 };
 
 // ===== EMPTY SEARCH STATE =====
-}
+
+
 interface EmptySearchStateProps {
   query?: string;
   onClearSearch?: () => void;
   className?: string;
-  export const EmptySearchState: React.FC<EmptySearchStateProps> = ({,)
+  export const EmptySearchState: React.FC<EmptySearchStateProps> = ({),
   query,
   onClearSearch,
   className = ''
-}
+
+
 }) => {
   return;
     <EmptyState
@@ -246,7 +253,7 @@ interface EmptySearchStateProps {
       action={onClearSearch ? {
   label: 'Clear Search',
   onClick: onClearSearch,
-} : undefined}
+ : undefined}
       className={className}
     />
   );
@@ -265,23 +272,25 @@ export const EmptyUsersState: React.FC<{ onAddUser?: () => void; className?: str
       action={onAddUser ? {
   label: 'Add User',
   onClick: onAddUser,
-} : undefined}
+ : undefined}
       className={className}
     />
   );
 };
 
 // ===== LOADING OVERLAY =====
-}
+
+
 interface LoadingOverlayProps {
   message?: string;
   transparent?: boolean;
   className?: string;
-  export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({,)
+  export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({),
   message = 'Loading...',
   transparent = false,
   className = ''
-}
+
+
 }) => {
   return;
     <div
@@ -297,7 +306,7 @@ interface LoadingOverlayProps {
   justifyContent: 'center',
   backgroundColor: transparent ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.95)',
   zIndex: 10,
-}}
+
     >
       <LoadingSpinner message={message} />
     </div>

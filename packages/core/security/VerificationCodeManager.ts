@@ -19,8 +19,7 @@ import { EventEmitter } from 'events';
 import { randomInt, createHash, timingSafeEqual } from 'crypto';
 
 // Verification Code Types
-export enum VerificationCodeType {
-  EMAIL_VERIFICATION = 'email_verification',
+export enum VerificationCodeType { EMAIL_VERIFICATION = 'email_verification',
   SMS_VERIFICATION = 'sms_verification',
   TOTP_BACKUP = 'totp_backup',
   PASSWORD_RESET = 'password_reset',
@@ -49,31 +48,27 @@ export enum VerificationCodeType {
   IN_APP = 'in_app'
   // Configuration interfaces
   export interface VerificationCodeConfig {
-  defaultExpiration: number;        // Default expiration in milliseconds,
-  maxExpiration: number;           // Maximum allowed expiration,
-  retryLimit: number;              // Maximum retry attempts per code,
-  rateLimitWindow: number;         // Rate limiting window in milliseconds,
-  rateLimitCount: number;          // Maximum codes per window,
-  cleanupInterval: number;         // Cleanup interval in milliseconds,
-  codeFormats: {
+  defaultExpiration: number;        // Default expiration in milliseconds;
+  maxExpiration: number;           // Maximum allowed expiration;
+  retryLimit: number;              // Maximum retry attempts per code;
+  rateLimitWindow: number;         // Rate limiting window in milliseconds;
+  rateLimitCount: number;          // Maximum codes per window;
+  cleanupInterval: number;         // Cleanup interval in milliseconds;
+  codeFormats: { }
   [key in VerificationCodeType]: CodeFormat;
-}
+
+
 };
-  expirationTimes: {
-  [key in VerificationCodeType]: number;
-};
-  retryLimits: {
-  [key in VerificationCodeType]: number;
-};
+  expirationTimes: { [key in VerificationCodeType]: number };
+  retryLimits: { [key in VerificationCodeType]: number };
   enableSecurityLogging: boolean;
   antiEnumerationDelay: number;    // Delay to prevent enumeration attacks
   requireSecureDelivery: boolean;  // Require secure delivery channels
 
 // Verification Code Data
-}
-}
-export interface VerificationCode {
-  id: string;
+
+
+export interface VerificationCode { id: string;
   userId: string;
   type: VerificationCodeType;
   format: CodeFormat;
@@ -90,7 +85,7 @@ export interface VerificationCode {
   deliveryAddress: string;
   ipAddress: string;
   userAgent: string;
-  metadata: {
+  metadata: { }
   purpose?: string;
   requestSource?: string;
   deviceFingerprint?: string;
@@ -99,18 +94,18 @@ export interface VerificationCode {
   deliveryStatus?: string;
   revocationReason?: string;
   additionalContext?: Record<string, any>;
-}
+
+
 };
-  securityFlags: {
+  securityFlags: { 
   highRisk: boolean;
   multipleAttempts: boolean;
   suspiciousActivity: boolean;
-  deviceMismatch: boolean;
-};
+  deviceMismatch: boolean };
 
 // Code Generation Request
-}
-}
+
+
 export interface CodeGenerationRequest {
   userId: string;
   type: VerificationCodeType;
@@ -122,9 +117,10 @@ export interface CodeGenerationRequest {
   maxAttempts?: number;
   metadata?: Record<string, any>;
   // Code Validation Request
-}
-}
-}
+
+
+
+
 export interface CodeValidationRequest {
   userId: string;
   code: string;
@@ -133,9 +129,10 @@ export interface CodeValidationRequest {
   userAgent: string;
   deviceFingerprint?: string;
   // Validation Result
-}
-}
-}
+
+
+
+
 export interface ValidationResult {
   valid: boolean;
   codeData?: VerificationCode;
@@ -144,27 +141,27 @@ export interface ValidationResult {
   securityWarnings?: string;
   riskScore?: number;
   // Rate Limiting Data
-}
-}
-}
+
+
+
+
 export interface RateLimitData {
   count: number;
   resetTime: number;
   lastRequest: Date;
   violations: number;
   // Security Events
-}
-}
-export enum SecurityEvent {
-  CODE_GENERATED = 'code_generated',
-  CODE_VALIDATED = 'code_validated',
-  CODE_USED = 'code_used',
-  CODE_EXPIRED = 'code_expired',
-  CODE_REVOKED = 'code_revoked',
-  INVALID_CODE_ATTEMPT = 'invalid_code_attempt',
-  RATE_LIMIT_EXCEEDED = 'rate_limit_exceeded',
-  SUSPICIOUS_ACTIVITY = 'suspicious_activity',
-  BRUTE_FORCE_DETECTED = 'brute_force_detected',
+
+
+export enum SecurityEvent { CODE_GENERATED = 'code_generated'
+  CODE_VALIDATED = 'code_validated'
+  CODE_USED = 'code_used'
+  CODE_EXPIRED = 'code_expired'
+  CODE_REVOKED = 'code_revoked'
+  INVALID_CODE_ATTEMPT = 'invalid_code_attempt'
+  RATE_LIMIT_EXCEEDED = 'rate_limit_exceeded'
+  SUSPICIOUS_ACTIVITY = 'suspicious_activity'
+  BRUTE_FORCE_DETECTED = 'brute_force_detected' }
   CODE_CLEANUP = 'code_cleanup'
   // Statistics
   export interface CodeStatistics {
@@ -183,8 +180,8 @@ export enum SecurityEvent {
   /**
   * Comprehensive verification code management service
   */
-}
-}
+
+
 export class VerificationCodeManager extends EventEmitter {
   private codes: Map<string, VerificationCode> = new Map();
   private rateLimits: Map<string, RateLimitData> = new Map();
@@ -197,16 +194,14 @@ export class VerificationCodeManager extends EventEmitter {
   /**
    * Generate a new verification code
    */
-  public async generateCode(request: CodeGenerationRequest): Promise<{ code: string; codeId: string } | null> {
-
-  try {
+  public async generateCode(request: CodeGenerationRequest): Promise<{ code: string; codeId: string } | null> { try {
   // Check rate limiting
   if (this.isRateLimited(request.userId, request.deliveryAddress, request.ipAddress)) {
   this.logSecurityEvent(SecurityEvent.RATE_LIMIT_EXCEEDED, {)
   userId: request.userId,
   type: request.type,
   deliveryChannel: request.deliveryChannel,
-  ipAddress: request.ipAddress,
+  ipAddress: request.ipAddress }
 });
         // Apply anti-enumeration delay
         await this.antiEnumerationDelay();
@@ -222,7 +217,7 @@ export class VerificationCodeManager extends EventEmitter {
       const expirationMs = this.calculateExpiration(request.type, request.expirationMinutes);
       const maxAttempts = request.maxAttempts || this.config.retryLimits[request.type];
       // Create code record
-      const codeRecord: VerificationCode = {,
+      const codeRecord: VerificationCode = { ,
   id: this.generateCodeId(),
         userId: request.userId,
         type: request.type,
@@ -238,7 +233,7 @@ export class VerificationCodeManager extends EventEmitter {
         deliveryAddress: request.deliveryAddress,
         ipAddress: request.ipAddress,
         userAgent: request.userAgent,
-        metadata: {
+        metadata: { }
   purpose: `${request.type}_verification`}
 },
   requestSource: 'verification_code_manager',
@@ -246,47 +241,43 @@ export class VerificationCodeManager extends EventEmitter {
           deliveryStatus: 'pending',
           ...request.metadata
   },
-  securityFlags: {
+  securityFlags: { ,
   highRisk: false,
   multipleAttempts: false,
   suspiciousActivity: false,
-  deviceMismatch: false,
+  deviceMismatch: false }
 };
       // Store the code
       this.codes.set(codeRecord.id, codeRecord);
       // Update rate limiting
       this.updateRateLimit(request.userId, request.deliveryAddress, request.ipAddress);
       // Log security event
-      this.logSecurityEvent(SecurityEvent.CODE_GENERATED, {)
+      this.logSecurityEvent(SecurityEvent.CODE_GENERATED, { )
   codeId: codeRecord.id,
   userId: request.userId,
   type: request.type,
   deliveryChannel: request.deliveryChannel,
-  expiresAt: codeRecord.expiresAt,
+  expiresAt: codeRecord.expiresAt }
 }, request.ipAddress, request.userAgent);
-      this.emit('codeGenerated', {)
+      this.emit('codeGenerated', { )
   codeId: codeRecord.id,
   userId: request.userId,
   type: request.type,
   deliveryChannel: request.deliveryChannel,
-  expiresAt: codeRecord.expiresAt,
+  expiresAt: codeRecord.expiresAt }
 });
-      return {
-  code: rawCode,
-  codeId: codeRecord.id,
+      return { code: rawCode,
+  codeId: codeRecord.id }
 };
-    } catch (error) {
-  this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
-  error: error instanceof Error ? error.message : 'Code generation error',
+ catch (error) { this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
+  error: error instanceof Error ? error.message : 'Code generation error' }
   request
 }, request.ipAddress, request.userAgent);
       return null;
   /**
    * Validate a verification code
    */
-  public async validateCode(request: CodeValidationRequest): Promise<ValidationResult> {
-
-    try {
+  public async validateCode(request: CodeValidationRequest): Promise<ValidationResult> { try {
       // Apply anti-enumeration delay
       await this.antiEnumerationDelay();
       // Find matching active codes for the user
@@ -303,73 +294,63 @@ export class VerificationCodeManager extends EventEmitter {
   code.attempts++;
         if (code.attempts >= code.maxAttempts) {
           code.status = CodeStatus.RATE_LIMITED;
-        this.codes.set(code.id, code);
-      });
+        this.codes.set(code.id, code) });
       // If all codes are rate limited, return specific reason
-      if (userCodes.length > 0 && userCodes.every(code => code.status === CodeStatus.RATE_LIMITED)) {
-  return {
-  valid: false,
-  reason: 'too_many_attempts',
-  riskScore: 70,
+      if (userCodes.length > 0 && userCodes.every(code => code.status === CodeStatus.RATE_LIMITED)) { return {
+  valid: false
+  reason: 'too_many_attempts'
+  riskScore: 70 }
 };
-      this.logSecurityEvent(SecurityEvent.INVALID_CODE_ATTEMPT, {)
-  userId: request.userId,
-  type: request.type,
-  codeLength: request.code.length,
+      this.logSecurityEvent(SecurityEvent.INVALID_CODE_ATTEMPT, { )
+  userId: request.userId
+  type: request.type
+  codeLength: request.code.length }
 }, request.ipAddress, request.userAgent);
-      return {
-  valid: false,
-  reason: 'invalid_code',
-  riskScore: 60,
+      return { valid: false
+  reason: 'invalid_code'
+  riskScore: 60 }
 };
-    } catch (error) {
-  this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
-  error: error instanceof Error ? error.message : 'Code validation error',
-  userId: request.userId,
+ catch (error) { this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
+  error: error instanceof Error ? error.message : 'Code validation error'
+  userId: request.userId }
 }, request.ipAddress, request.userAgent);
-      return {
-  valid: false,
-  reason: 'validation_error',
-  riskScore: 90,
+      return { valid: false
+  reason: 'validation_error'
+  riskScore: 90 }
 };
   /**
    * Use a verification code (marks it as used)
    */
-  public async useCode(request: CodeValidationRequest): Promise<{ success: boolean; codeData?: VerificationCode; reason?: string }> {
-
-  const validation = await this.validateCode(request);
+  public async useCode(request: CodeValidationRequest): Promise<{ success: boolean; codeData?: VerificationCode; reason?: string }> { const validation = await this.validateCode(request);
   if (!validation.valid || !validation.codeData) {
   return {
   success: false,
-  reason: validation.reason,
+  reason: validation.reason }
 };
     const code = validation.codeData;
     // Mark code as used
     code.status = CodeStatus.USED;
     code.usedAt = new Date();
     this.codes.set(code.id, code);
-    this.logSecurityEvent(SecurityEvent.CODE_USED, {)
+    this.logSecurityEvent(SecurityEvent.CODE_USED, { )
   codeId: code.id,
   userId: code.userId,
   type: code.type,
-  attempts: code.attempts,
+  attempts: code.attempts }
 }, request.ipAddress, request.userAgent);
-    this.emit('codeUsed', {)
+    this.emit('codeUsed', { )
   codeId: code.id,
   userId: code.userId,
   type: code.type,
-  usedAt: code.usedAt,
+  usedAt: code.usedAt }
 });
-    return {
-  success: true,
-  codeData: code,
+    return { success: true,
+  codeData: code }
 };
   /**
    * Revoke a specific verification code
    */
-  public async revokeCode(codeId: string, reason: string): Promise<boolean> {
-
-  const code = this.codes.get(codeId);
+  public async revokeCode(codeId: string, reason: string): Promise<boolean> { const code = this.codes.get(codeId);
   if (!code || code.status !== CodeStatus.ACTIVE) {
   return false;
   code.status = CodeStatus.REVOKED;
@@ -377,26 +358,26 @@ export class VerificationCodeManager extends EventEmitter {
   code.metadata.revocationReason = reason;
   this.codes.set(codeId, code);
   this.logSecurityEvent(SecurityEvent.CODE_REVOKED, {)
-  codeId,
-  userId: code.userId,
-  type: code.type,
+  codeId
+  userId: code.userId
+  type: code.type }
   reason
 });
-    this.emit('codeRevoked', {)
-  codeId,
-  userId: code.userId,
-  type: code.type,
-  reason,
-  revokedAt: code.revokedAt,
+    this.emit('codeRevoked', { )
+  codeId
+  userId: code.userId
+  type: code.type
+  reason
+  revokedAt: code.revokedAt }
 });
     return true;
   /**
    * Revoke all codes for a user of a specific type
    */
   public async revokeUserCodes(
-    userId: string,
-    type?: VerificationCodeType,
-    reason: string = 'user_requested'): Promise<number> {,
+    userId: string
+    type?: VerificationCodeType
+    reason: string = 'user_requested'): Promise<number> { 
   let revokedCount = 0;
   for (const [codeId, code] of this.codes) {
   if (code.userId === userId &&)
@@ -408,31 +389,30 @@ export class VerificationCodeManager extends EventEmitter {
   /**
   * Get verification code information (without sensitive data)
   */
-  public getCodeInfo(codeId: string): Partial<VerificationCode> | null {,
+  public getCodeInfo(codeId: string): Partial<VerificationCode> | null {
   const code = this.codes.get(codeId);
   if (!code) return null;
   // Return safe subset of code data
   return {
-  id: code.id,
-  userId: code.userId,
-  type: code.type,
-  format: code.format,
-  status: code.status,
-  createdAt: code.createdAt,
-  expiresAt: code.expiresAt,
-  usedAt: code.usedAt,
-  revokedAt: code.revokedAt,
-  attempts: code.attempts,
-  maxAttempts: code.maxAttempts,
-  deliveryChannel: code.deliveryChannel,
-  deliveryAddress: code.deliveryAddress,
-  securityFlags: code.securityFlags,
+  id: code.id
+  userId: code.userId
+  type: code.type
+  format: code.format
+  status: code.status
+  createdAt: code.createdAt
+  expiresAt: code.expiresAt
+  usedAt: code.usedAt
+  revokedAt: code.revokedAt
+  attempts: code.attempts
+  maxAttempts: code.maxAttempts
+  deliveryChannel: code.deliveryChannel
+  deliveryAddress: code.deliveryAddress
+  securityFlags: code.securityFlags }
 };
   /**
    * Get active codes for a user
    */
-  public getUserActiveCodes(userId: string, type?: VerificationCodeType): VerificationCode {
-    const userCodes: VerificationCode = [];
+  public getUserActiveCodes(userId: string, type?: VerificationCodeType): VerificationCode { const userCodes: VerificationCode = [];
     for (const code of this.codes.values()) {
       if (code.userId === userId &&)
           code.status === CodeStatus.ACTIVE &&
@@ -444,46 +424,44 @@ export class VerificationCodeManager extends EventEmitter {
    */
   public getStatistics(): CodeStatistics {
     const codes = Array.from(this.codes.values());
-    const stats: CodeStatistics = {,
-  totalCodes: codes.length,
-      activeCodes: 0,
-      usedCodes: 0,
-      expiredCodes: 0,
-      revokedCodes: 0,
-      codesByType: {} as Record<VerificationCodeType, number>,
-      codesByChannel: {} as Record<DeliveryChannel, number>,
-      successRate: 0,
-      averageAttempts: 0,
-      securityViolations: 0,
-      rateLimitViolations: 0,
+    const stats: CodeStatistics = {
+  totalCodes: codes.length
+      activeCodes: 0
+      usedCodes: 0
+      expiredCodes: 0
+      revokedCodes: 0 }
+      codesByType: {} as Record<VerificationCodeType, number>
+      codesByChannel: {} as Record<DeliveryChannel, number>
+      successRate: 0
+      averageAttempts: 0
+      securityViolations: 0
+      rateLimitViolations: 0
       averageCodeLifetime: 0;
   };
     // Initialize counters
-    Object.values(VerificationCodeType).forEach(type => {)
-  stats.codesByType[type] = 0;
-    });
-    Object.values(DeliveryChannel).forEach(channel => {)
-  stats.codesByChannel[channel] = 0;
-    });
+    Object.values(VerificationCodeType).forEach(type => { )
+  stats.codesByType[type] = 0 });
+    Object.values(DeliveryChannel).forEach(channel => { )
+  stats.codesByChannel[channel] = 0 });
     let totalAttempts = 0;
     let totalLifetime = 0;
     let completedCodes = 0;
     // Calculate statistics
-    codes.forEach(code => {)
+    codes.forEach(code => { )
   // Status counts
   switch (code.status) {
-  case CodeStatus.ACTIVE:,
+  case CodeStatus.ACTIVE:
   stats.activeCodes++;
   break;
-  case CodeStatus.USED:,
+  case CodeStatus.USED:
   stats.usedCodes++;
   completedCodes++;
   break;
-  case CodeStatus.EXPIRED:,
+  case CodeStatus.EXPIRED:
   stats.expiredCodes++;
   completedCodes++;
   break;
-  case CodeStatus.REVOKED:,
+  case CodeStatus.REVOKED: }
   stats.revokedCodes++;
   completedCodes++;
   break;
@@ -493,14 +471,12 @@ export class VerificationCodeManager extends EventEmitter {
   // Attempt tracking
   totalAttempts += code.attempts;
   // Lifetime calculation for completed codes
-  if (code.usedAt || code.revokedAt || code.status === CodeStatus.EXPIRED) {
-  const endTime = code.usedAt || code.revokedAt || code.expiresAt;
+  if (code.usedAt || code.revokedAt || code.status === CodeStatus.EXPIRED) { const endTime = code.usedAt || code.revokedAt || code.expiresAt;
   const lifetime = endTime.getTime() - code.createdAt.getTime();
   totalLifetime += lifetime;
   // Security violations
   if (code.securityFlags.suspiciousActivity) {
-  stats.securityViolations++;
-});
+  stats.securityViolations++ });
     // Calculate rates and averages
     stats.successRate = stats.totalCodes > 0 ? (stats.usedCodes / stats.totalCodes) * 100 : 0;
     stats.averageAttempts = stats.totalCodes > 0 ? totalAttempts / stats.totalCodes : 0;
@@ -513,66 +489,62 @@ export class VerificationCodeManager extends EventEmitter {
     this.config = this.mergeConfig(newConfig);
     this.emit('configUpdated', { config: this.config });
   // Private helper methods
-  private mergeConfig(config: Partial<VerificationCodeConfig>): VerificationCodeConfig {
-  return {
-  defaultExpiration: 10 * 60 * 1000, // 10 minutes,
-  maxExpiration: 60 * 60 * 1000, // 1 hour,
-  retryLimit: 3,
-  rateLimitWindow: 15 * 60 * 1000, // 15 minutes,
-  rateLimitCount: 5,
-  cleanupInterval: 30 * 60 * 1000, // 30 minutes,
+  private mergeConfig(config: Partial<VerificationCodeConfig>): VerificationCodeConfig { return {
+  defaultExpiration: 10 * 60 * 1000, // 10 minutes
+  maxExpiration: 60 * 60 * 1000, // 1 hour
+  retryLimit: 3
+  rateLimitWindow: 15 * 60 * 1000, // 15 minutes
+  rateLimitCount: 5
+  cleanupInterval: 30 * 60 * 1000, // 30 minutes
   codeFormats: {
-  [VerificationCodeType.EMAIL_VERIFICATION]: CodeFormat.NUMERIC_6,
-  [VerificationCodeType.SMS_VERIFICATION]: CodeFormat.NUMERIC_6,
-  [VerificationCodeType.TOTP_BACKUP]: CodeFormat.NUMERIC_8,
-  [VerificationCodeType.PASSWORD_RESET]: CodeFormat.ALPHANUMERIC_8,
-  [VerificationCodeType.ACCOUNT_RECOVERY]: CodeFormat.ALPHANUMERIC_8,
-  [VerificationCodeType.DEVICE_VERIFICATION]: CodeFormat.NUMERIC_6,
-  [VerificationCodeType.LOGIN_CONFIRMATION]: CodeFormat.NUMERIC_4,
-  [VerificationCodeType.TRANSACTION_APPROVAL]: CodeFormat.NUMERIC_6,
-},
-  expirationTimes: {
-  [VerificationCodeType.EMAIL_VERIFICATION]: 30 * 60 * 1000, // 30 minutes,
-  [VerificationCodeType.SMS_VERIFICATION]: 10 * 60 * 1000, // 10 minutes,
-  [VerificationCodeType.TOTP_BACKUP]: 5 * 60 * 1000, // 5 minutes,
-  [VerificationCodeType.PASSWORD_RESET]: 60 * 60 * 1000, // 1 hour,
-  [VerificationCodeType.ACCOUNT_RECOVERY]: 60 * 60 * 1000, // 1 hour,
-  [VerificationCodeType.DEVICE_VERIFICATION]: 15 * 60 * 1000, // 15 minutes,
-  [VerificationCodeType.LOGIN_CONFIRMATION]: 2 * 60 * 1000, // 2 minutes,
-  [VerificationCodeType.TRANSACTION_APPROVAL]: 5 * 60 * 1000 // 5 minutes,
-},
-  retryLimits: {
-  [VerificationCodeType.EMAIL_VERIFICATION]: 5,
-  [VerificationCodeType.SMS_VERIFICATION]: 3,
-  [VerificationCodeType.TOTP_BACKUP]: 3,
-  [VerificationCodeType.PASSWORD_RESET]: 5,
-  [VerificationCodeType.ACCOUNT_RECOVERY]: 5,
-  [VerificationCodeType.DEVICE_VERIFICATION]: 3,
-  [VerificationCodeType.LOGIN_CONFIRMATION]: 3,
-  [VerificationCodeType.TRANSACTION_APPROVAL]: 3,
-},
-  enableSecurityLogging: true,
+  [VerificationCodeType.EMAIL_VERIFICATION]: CodeFormat.NUMERIC_6
+  [VerificationCodeType.SMS_VERIFICATION]: CodeFormat.NUMERIC_6
+  [VerificationCodeType.TOTP_BACKUP]: CodeFormat.NUMERIC_8
+  [VerificationCodeType.PASSWORD_RESET]: CodeFormat.ALPHANUMERIC_8
+  [VerificationCodeType.ACCOUNT_RECOVERY]: CodeFormat.ALPHANUMERIC_8
+  [VerificationCodeType.DEVICE_VERIFICATION]: CodeFormat.NUMERIC_6
+  [VerificationCodeType.LOGIN_CONFIRMATION]: CodeFormat.NUMERIC_4
+  [VerificationCodeType.TRANSACTION_APPROVAL]: CodeFormat.NUMERIC_6 }
+
+  expirationTimes: { [VerificationCodeType.EMAIL_VERIFICATION]: 30 * 60 * 1000, // 30 minutes
+  [VerificationCodeType.SMS_VERIFICATION]: 10 * 60 * 1000, // 10 minutes
+  [VerificationCodeType.TOTP_BACKUP]: 5 * 60 * 1000, // 5 minutes
+  [VerificationCodeType.PASSWORD_RESET]: 60 * 60 * 1000, // 1 hour
+  [VerificationCodeType.ACCOUNT_RECOVERY]: 60 * 60 * 1000, // 1 hour
+  [VerificationCodeType.DEVICE_VERIFICATION]: 15 * 60 * 1000, // 15 minutes
+  [VerificationCodeType.LOGIN_CONFIRMATION]: 2 * 60 * 1000, // 2 minutes
+  [VerificationCodeType.TRANSACTION_APPROVAL]: 5 * 60 * 1000 // 5 minutes }
+
+  retryLimits: { [VerificationCodeType.EMAIL_VERIFICATION]: 5
+  [VerificationCodeType.SMS_VERIFICATION]: 3
+  [VerificationCodeType.TOTP_BACKUP]: 3
+  [VerificationCodeType.PASSWORD_RESET]: 5
+  [VerificationCodeType.ACCOUNT_RECOVERY]: 5
+  [VerificationCodeType.DEVICE_VERIFICATION]: 3
+  [VerificationCodeType.LOGIN_CONFIRMATION]: 3
+  [VerificationCodeType.TRANSACTION_APPROVAL]: 3 }
+
+  enableSecurityLogging: true
       antiEnumerationDelay: 1000, // 1 second
-      requireSecureDelivery: false,
+      requireSecureDelivery: false
       ...config
     };
-  private generateCodeByFormat(format: CodeFormat): string {
-  switch (format) {
-  case CodeFormat.NUMERIC_4:,
+  private generateCodeByFormat(format: CodeFormat): string { switch (format) {
+  case CodeFormat.NUMERIC_4:
   return this.generateNumericCode(4);
-  case CodeFormat.NUMERIC_6:,
+  case CodeFormat.NUMERIC_6:
   return this.generateNumericCode(6);
-  case CodeFormat.NUMERIC_8:,
+  case CodeFormat.NUMERIC_8:
   return this.generateNumericCode(8);
-  case CodeFormat.ALPHANUMERIC_6:,
+  case CodeFormat.ALPHANUMERIC_6:
   return this.generateAlphanumericCode(6);
-  case CodeFormat.ALPHANUMERIC_8:,
+  case CodeFormat.ALPHANUMERIC_8:
   return this.generateAlphanumericCode(8);
-  case CodeFormat.UUID:,
+  case CodeFormat.UUID:
   return this.generateUUID();
-  default:,
+  default:
   return this.generateNumericCode(6);
-  private generateNumericCode(length: number): string {,
+  private generateNumericCode(length: number): string {
   let code = '';
   for (let i = 0; i < length; i++) {
   code += randomInt(0, 10).toString();
@@ -583,12 +555,10 @@ export class VerificationCodeManager extends EventEmitter {
   for (let i = 0; i < length; i++) {
   code += chars[randomInt(0, chars.length)];
   return code;
-  private generateUUID(): string {,
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-  const r = randomInt(0, 16);
+  private generateUUID(): string { }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => { const r = randomInt(0, 16);
   const v = c === 'x' ? r : (r & 0x3 | 0x8);
-  return v.toString(16);
-});
+  return v.toString(16) });
   private generateSalt(): string {
     let salt = '';
     for (let i = 0; i < 32; i++) {
@@ -596,15 +566,14 @@ export class VerificationCodeManager extends EventEmitter {
     return salt;
   private generateCodeId(): string {
     return `code_${Date.now()}_${this.generateSalt().substring(0, 8)}`;}
-  private hashCode(code: string, salt: string): string {
-  return createHash('sha256').update(code + salt).digest('hex');
+  private hashCode(code: string, salt: string): string { return createHash('sha256').update(code + salt).digest('hex');
   private calculateExpiration(type: VerificationCodeType, requestedMinutes?: number): number {,
   let baseExpiration = this.config.expirationTimes[type] || this.config.defaultExpiration;
   if (requestedMinutes) {
   const requestedMs = requestedMinutes * 60 * 1000;
   baseExpiration = Math.min(requestedMs, this.config.maxExpiration);
   return baseExpiration;
-  private async validateFoundCode(code: VerificationCode, request: CodeValidationRequest): Promise<ValidationResult> {,
+  private async validateFoundCode(code: VerificationCode, request: CodeValidationRequest): Promise<ValidationResult> {
   // Check if code is expired
   if (code.expiresAt < new Date()) {
   code.status = CodeStatus.EXPIRED;
@@ -612,28 +581,25 @@ export class VerificationCodeManager extends EventEmitter {
   this.logSecurityEvent(SecurityEvent.CODE_EXPIRED, {)
   codeId: code.id,
   userId: code.userId,
-  type: code.type,
+  type: code.type }
 }, request.ipAddress, request.userAgent);
-      return {
-  valid: false,
+      return { valid: false,
   codeData: code,
   reason: 'code_expired',
-  riskScore: 20,
+  riskScore: 20 }
 };
     // Check if code is rate limited
-    if (code.status === CodeStatus.RATE_LIMITED || code.attempts >= code.maxAttempts) {
-  return {
+    if (code.status === CodeStatus.RATE_LIMITED || code.attempts >= code.maxAttempts) { return {
   valid: false,
   codeData: code,
   reason: 'too_many_attempts',
   attemptsRemaining: 0,
-  riskScore: 70,
+  riskScore: 70 }
 };
     // Check for suspicious activity
     const securityWarnings: string = [];
     let riskScore = 0;
-    if (code.ipAddress !== request.ipAddress) {
-  securityWarnings.push('ip_address_mismatch');
+    if (code.ipAddress !== request.ipAddress) { securityWarnings.push('ip_address_mismatch');
   riskScore += 30;
   if (code.userAgent !== request.userAgent) {
   securityWarnings.push('user_agent_mismatch');
@@ -649,18 +615,16 @@ export class VerificationCodeManager extends EventEmitter {
   codeId: code.id,
   userId: code.userId,
   type: code.type,
-  attempts: code.attempts,
+  attempts: code.attempts }
   riskScore
 }, request.ipAddress, request.userAgent);
-    return {
-  valid: true,
+    return { valid: true,
   codeData: code,
   attemptsRemaining: code.maxAttempts - code.attempts,
-  securityWarnings: securityWarnings.length > 0 ? securityWarnings : undefined,
+  securityWarnings: securityWarnings.length > 0 ? securityWarnings : undefined }
   riskScore
 };
-  private isRateLimited(userId: string, deliveryAddress: string, ipAddress: string): boolean {
-  const keys = [userId, deliveryAddress, ipAddress];
+  private isRateLimited(userId: string, deliveryAddress: string, ipAddress: string): boolean { const keys = [userId, deliveryAddress, ipAddress];
   for (const key of keys) {
   const rateLimit = this.rateLimits.get(key);
   if (!rateLimit) continue;
@@ -679,35 +643,30 @@ export class VerificationCodeManager extends EventEmitter {
   count: 1,
   resetTime,
   lastRequest: new Date(),
-  violations: existing?.violations || 0,
+  violations: existing?.violations || 0 }
 });
-      } else {
-  existing.count++;
+ else { existing.count++;
   existing.lastRequest = new Date();
   if (existing.count > this.config.rateLimitCount) {
   existing.violations++;
-  private async antiEnumerationDelay(): Promise<void> {,
-  return new Promise(resolve => {)
-  setTimeout(resolve, this.config.antiEnumerationDelay);
-});
+  private async antiEnumerationDelay(): Promise<void> { }
+  return new Promise(resolve => { )
+  setTimeout(resolve, this.config.antiEnumerationDelay) });
   private logSecurityEvent(event: SecurityEvent)
-    details: Record<string, any>,
-    ipAddress: string = 'system',
-    userAgent: string = 'system'): void {,
+  details: Record<string, any>
+    ipAddress: string = 'system'
+    userAgent: string = 'system'): void { 
   if (!this.config.enableSecurityLogging) return;
   this.emit('securityEvent', {)
-  event,
-  timestamp: new Date(),
-  ipAddress,
-  userAgent,
+  event
+  timestamp: new Date()
+  ipAddress
+  userAgent }
   details
 });
-  private startCleanupTimer(): void {
-    this.cleanupTimer = setInterval(() => {
-      this.performCleanup();
-    }, this.config.cleanupInterval);
-  private performCleanup(): void {
-  const now = new Date();
+  private startCleanupTimer(): void { this.cleanupTimer = setInterval(() => {
+      this.performCleanup() }, this.config.cleanupInterval);
+  private performCleanup(): void { const now = new Date();
   const cleanupThreshold = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago;
   let codesRemoved = 0;
   // Clean up expired, used, and revoked codes
@@ -727,11 +686,11 @@ export class VerificationCodeManager extends EventEmitter {
   this.logSecurityEvent(SecurityEvent.CODE_CLEANUP, {)
   codesRemoved,
   activeCodes: this.codes.size,
-  rateLimitEntries: this.rateLimits.size,
+  rateLimitEntries: this.rateLimits.size }
 });
-    this.emit('cleanupCompleted', {)
+    this.emit('cleanupCompleted', { )
   codesRemoved,
-  timestamp: now,
+  timestamp: now }
 });
   /**
    * Destroy the verification code manager and clean up resources

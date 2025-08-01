@@ -90,8 +90,9 @@ void {
                             client.isActive = true;
                             // State synchronization
                             async;
-                            broadcastStateChange(domain, string);
-                            change: (StateChange),
+                            broadcastStateChange(domain, string),
+                                change;
+                            (StateChange),
                                 excludeClient ?  : string;
                             Promise < void  > {
                                 const: message, SyncMessage = {

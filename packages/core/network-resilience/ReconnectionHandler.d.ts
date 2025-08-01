@@ -1,26 +1,23 @@
 import { EventEmitter } from 'events';
-export declare enum ReconnectionState {
-    IDLE = "idle",
+export declare enum ReconnectionState { IDLE = "idle",
     ATTEMPTING = "attempting",
     BACKING_OFF = "backing_off",
-    FAILED = "failed",
+    FAILED = "failed" }
     SUCCEEDED = "succeeded"
 
 }
-export interface ReconnectionAttempt {
-    attemptNumber: number;
+}
+export interface ReconnectionAttempt { attemptNumber: number;
     startTime: number;
     endTime?: number;
     duration?: number;
     success: boolean;
     error?: Error;
     backoffDelay: number;
-    connectionType: 'websocket' | 'http' | 'custom';
-
-
+    connectionType: 'websocket' | 'http' | 'custom' }
 }
-export interface ReconnectionConfig {
-    maxAttempts: number;
+}
+export interface ReconnectionConfig { maxAttempts: number;
     initialDelay: number;
     maxDelay: number;
     backoffFactor: number;
@@ -32,9 +29,8 @@ export interface ReconnectionConfig {
     circuitBreakerThreshold: number;
     circuitBreakerResetTime: number;
     quickReconnectWindow: number;
-    quickReconnectAttempts: number;
-
-
+    quickReconnectAttempts: number }
+}
 }
 export interface ReconnectionStats {
     totalAttempts: number;
@@ -165,4 +161,5 @@ export declare class ReconnectionHandler extends EventEmitter {
     private clearAllTimers;
 
 //# sourceMappingURL=ReconnectionHandler.d.ts.map
+}
 }

@@ -25,7 +25,7 @@ export class ServerProjectManager {
                     gridVisible: true,
                     snapToGrid: false,
                     miniMapVisible: true,
-                }
+                },
             };
             const response = await fetch(`${this.API_BASE}/projects`, {
                 method: 'POST',
@@ -34,27 +34,27 @@ export class ServerProjectManager {
                 },
                 body: JSON.stringify({
                     project,
-                    userId
-                })
+                    userId,
+                }),
             });
             if (!response.ok) {
                 const errorData = await response.json();
                 return {
                     success: false,
-                    error: errorData.error || `HTTP ${response.status}`
+                    error: errorData.error || `HTTP ${response.status}`,
                 };
             }
             const result = await response.json();
             return {
                 success: true,
                 fileName: `${options.name}.psg`,
-                projectId: result.projectId
+                projectId: result.projectId,
             };
         }
         catch (error) {
             return {
                 success: false,
-                error: `Failed to save project: ${error instanceof Error ? error.message : String(error)}`
+                error: `Failed to save project: ${error instanceof Error ? error.message : String(error)}`,
             };
         }
     }
@@ -76,7 +76,7 @@ export class ServerProjectManager {
                     fileFormatVersion: '1.0.0',
                 },
                 graph,
-                settings: settings || {}
+                settings: settings || {},
             };
             const response = await fetch(`${this.API_BASE}/projects/${projectId}`, {
                 method: 'PUT',
@@ -85,25 +85,25 @@ export class ServerProjectManager {
                 },
                 body: JSON.stringify({
                     project,
-                    userId
-                })
+                    userId,
+                }),
             });
             if (!response.ok) {
                 const errorData = await response.json();
                 return {
                     success: false,
-                    error: errorData.error || `HTTP ${response.status}`
+                    error: errorData.error || `HTTP ${response.status}`,
                 };
             }
             return {
                 success: true,
-                fileName: `${options.name}.psg`
+                fileName: `${options.name}.psg`,
             };
         }
         catch (error) {
             return {
                 success: false,
-                error: `Failed to update project: ${error instanceof Error ? error.message : String(error)}`
+                error: `Failed to update project: ${error instanceof Error ? error.message : String(error)}`,
             };
         }
     }
@@ -121,26 +121,26 @@ export class ServerProjectManager {
                 if (response.status === 404) {
                     return {
                         success: false,
-                        error: 'Project not found or access denied'
+                        error: 'Project not found or access denied',
                     };
                 }
                 const errorData = await response.json();
                 return {
                     success: false,
-                    error: errorData.error || `HTTP ${response.status}`
+                    error: errorData.error || `HTTP ${response.status}`,
                 };
             }
             const project = await response.json();
             return {
                 success: true,
                 data: project,
-                project
+                project,
             };
         }
         catch (error) {
             return {
                 success: false,
-                error: `Failed to load project: ${error instanceof Error ? error.message : String(error)}`
+                error: `Failed to load project: ${error instanceof Error ? error.message : String(error)}`,
             };
         }
     }
@@ -165,14 +165,14 @@ export class ServerProjectManager {
             if (!response.ok) {
                 const errorData = await response.json();
                 return {
-                    error: errorData.error || `HTTP ${response.status}`
+                    error: errorData.error || `HTTP ${response.status}`,
                 };
             }
             return await response.json();
         }
         catch (error) {
             return {
-                error: `Failed to fetch projects: ${error instanceof Error ? error.message : String(error)}`
+                error: `Failed to fetch projects: ${error instanceof Error ? error.message : String(error)}`,
             };
         }
     }
@@ -190,14 +190,14 @@ export class ServerProjectManager {
             if (!response.ok) {
                 const errorData = await response.json();
                 return {
-                    error: errorData.error || `HTTP ${response.status}`
+                    error: errorData.error || `HTTP ${response.status}`,
                 };
             }
             return await response.json();
         }
         catch (error) {
             return {
-                error: `Failed to fetch recent projects: ${error instanceof Error ? error.message : String(error)}`
+                error: `Failed to fetch recent projects: ${error instanceof Error ? error.message : String(error)}`,
             };
         }
     }
@@ -211,19 +211,19 @@ export class ServerProjectManager {
                 url.searchParams.set('userId', userId.toString());
             }
             const response = await fetch(url.toString(), {
-                method: 'DELETE'
+                method: 'DELETE',
             });
             if (!response.ok) {
                 if (response.status === 404) {
                     return {
                         success: false,
-                        error: 'Project not found or access denied'
+                        error: 'Project not found or access denied',
                     };
                 }
                 const errorData = await response.json();
                 return {
                     success: false,
-                    error: errorData.error || `HTTP ${response.status}`
+                    error: errorData.error || `HTTP ${response.status}`,
                 };
             }
             const result = await response.json();
@@ -232,7 +232,7 @@ export class ServerProjectManager {
         catch (error) {
             return {
                 success: false,
-                error: `Failed to delete project: ${error instanceof Error ? error.message : String(error)}`
+                error: `Failed to delete project: ${error instanceof Error ? error.message : String(error)}`,
             };
         }
     }
@@ -246,7 +246,7 @@ export class ServerProjectManager {
             limit,
             offset,
             sortBy: 'lastModified',
-            sortOrder: 'desc'
+            sortOrder: 'desc',
         });
     }
     /**
@@ -259,7 +259,7 @@ export class ServerProjectManager {
             limit,
             offset,
             sortBy: 'lastModified',
-            sortOrder: 'desc'
+            sortOrder: 'desc',
         });
     }
 }

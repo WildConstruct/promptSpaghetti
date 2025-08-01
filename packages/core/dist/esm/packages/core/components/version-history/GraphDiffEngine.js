@@ -9,6 +9,17 @@ position: {
 ;
 data: Record;
 style ?  : unknown;
+from: {
+    x: number;
+    y: number;
+}
+;
+to: {
+    x: number;
+    y: number;
+}
+;
+distance: number;
 ;
 significance: number; // 0-1 scale indicating how significant this change is
 ;
@@ -18,7 +29,11 @@ visualization_data: {
         change_types: string,
         intensity: number
     } > ;
-    change_paths: Array;
+    change_paths: Array < {
+        from_position: { x: number, y: number },
+        to_position: { x: number, y: number },
+        change_type: string
+    } > ;
 }
 ;
 created_at: string;
@@ -305,8 +320,9 @@ DiffChange;
                         }
                         ;
                         return changes;
-                        compareObjectProperties(fromObj, unknown);
-                        toObj: unknown,
+                        compareObjectProperties(fromObj, unknown),
+                            toObj;
+                        unknown,
                             basePath;
                         string;
                         Array < Omit < DiffChange, 'element_type' | 'element_id' >> {
@@ -481,120 +497,138 @@ DiffChange;
                                                                         return summary;
                                                                         generateVisualizationData(changes, DiffChange, fromGraph, GraphData, toGraph, GraphData);
                                                                         {
-                                                                            const changedRegions = [];
-                                                                            const changePaths = [];
-                                                                            // Group changes by spatial regions
-                                                                            const spatialGroups = this.groupChangesSpatially(changes, fromGraph, toGraph);
-                                                                            spatialGroups.forEach(group => { });
-                                                                            if (group.changes.length > 0) {
-                                                                                changedRegions.push({});
-                                                                                bounds: group.bounds,
-                                                                                    change_types;
-                                                                                [...new Set(group.changes.map(c => c.type))],
-                                                                                    intensity;
-                                                                                group.changes.reduce((sum, c) => sum + c.significance, 0) / group.changes.length,
-                                                                                ;
-                                                                            }
-                                                                            ;
+                                                                            const changedRegions, { x: number };
+                                                                            y: number;
+                                                                            width: number;
+                                                                            height: number;
                                                                         }
                                                                         ;
-                                                                        // Generate paths for moved elements
-                                                                        changes.filter(c => c.type === 'moved' && c.position_change).forEach(change => { });
-                                                                        changePaths.push({});
-                                                                        from_position: change.position_change.from,
-                                                                            to_position;
-                                                                        change.position_change.to,
-                                                                            change_type;
-                                                                        change.type,
-                                                                        ;
+                                                                        change_types: string;
+                                                                        intensity: number;
                                                                     }
-                                                                    ;
+                                                                     > ;
+                                                                    [];
+                                                                    const changePaths, { x: number };
+                                                                    y: number;
                                                                 }
                                                                 ;
-                                                                return {
-                                                                    changed_regions: changedRegions,
-                                                                    change_paths: changePaths,
-                                                                };
-                                                                groupChangesSpatially(changes, DiffChange, fromGraph, GraphData, toGraph, GraphData);
-                                                                {
-                                                                    const REGION_SIZE = 200; // pixels;
-                                                                    const regions = new Map();
-                                                                    // Get all nodes to establish coordinate system
-                                                                    const allNodes = [...fromGraph.nodes, ...toGraph.nodes];
-                                                                    changes.forEach(change => { });
-                                                                    let position = null;
-                                                                    // Find position for this change
-                                                                    if (change.element_type === 'node') {
-                                                                        const node = allNodes.find(n => n.id === change.element_id);
-                                                                        if (node) {
-                                                                            position = node.position;
+                                                                to_position: {
+                                                                    x: number;
+                                                                    y: number;
+                                                                }
+                                                                ;
+                                                                change_type: string;
+                                                            }
+                                                             > ;
+                                                            [];
+                                                            // Group changes by spatial regions
+                                                            const spatialGroups = this.groupChangesSpatially(changes, fromGraph, toGraph);
+                                                            spatialGroups.forEach(group => { });
+                                                            if (group.changes.length > 0) {
+                                                                changedRegions.push({});
+                                                                bounds: group.bounds,
+                                                                    change_types;
+                                                                [...new Set(group.changes.map(c => c.type))],
+                                                                    intensity;
+                                                                group.changes.reduce((sum, c) => sum + c.significance, 0) / group.changes.length,
+                                                                ;
+                                                            }
+                                                            ;
+                                                        }
+                                                        ;
+                                                        // Generate paths for moved elements
+                                                        changes.filter(c => c.type === 'moved' && c.position_change).forEach(change => { });
+                                                        changePaths.push({});
+                                                        from_position: change.position_change.from,
+                                                            to_position;
+                                                        change.position_change.to,
+                                                            change_type;
+                                                        change.type,
+                                                        ;
+                                                    }
+                                                    ;
+                                                }
+                                                ;
+                                                return {
+                                                    changed_regions: changedRegions,
+                                                    change_paths: changePaths,
+                                                };
+                                                groupChangesSpatially(changes, DiffChange, fromGraph, GraphData, toGraph, GraphData);
+                                                {
+                                                    const REGION_SIZE = 200; // pixels;
+                                                    const regions = new Map();
+                                                    // Get all nodes to establish coordinate system
+                                                    const allNodes = [...fromGraph.nodes, ...toGraph.nodes];
+                                                    changes.forEach(change => { });
+                                                    let position = null;
+                                                    // Find position for this change
+                                                    if (change.element_type === 'node') {
+                                                        const node = allNodes.find(n => n.id === change.element_id);
+                                                        if (node) {
+                                                            position = node.position;
+                                                        }
+                                                        else if (change.element_type === 'edge') {
+                                                            // For edges, use midpoint of connected nodes
+                                                            const edge = [...fromGraph.edges, ...toGraph.edges].find(e => e.id === change.element_id);
+                                                            if (edge) {
+                                                                const sourceNode = allNodes.find(n => n.id === edge.source);
+                                                                const targetNode = allNodes.find(n => n.id === edge.target);
+                                                                if (sourceNode && targetNode) {
+                                                                    position = {
+                                                                        x: (sourceNode.position.x + targetNode.position.x) / 2,
+                                                                        y: (sourceNode.position.y + targetNode.position.y) / 2,
+                                                                    };
+                                                                    if (position) {
+                                                                        // Determine which region this position belongs to
+                                                                        const regionX = Math.floor(position.x / REGION_SIZE) * REGION_SIZE;
+                                                                        const regionY = Math.floor(position.y / REGION_SIZE) * REGION_SIZE;
+                                                                        const regionKey = `${regionX},${regionY}`;
+                                                                    }
+                                                                    if (!regions.has(regionKey)) {
+                                                                        regions.set(regionKey, {});
+                                                                        bounds: {
+                                                                            x: regionX,
+                                                                                y;
+                                                                            regionY,
+                                                                                width;
+                                                                            REGION_SIZE,
+                                                                                height;
+                                                                            REGION_SIZE,
+                                                                            ;
                                                                         }
-                                                                        else if (change.element_type === 'edge') {
-                                                                            // For edges, use midpoint of connected nodes
-                                                                            const edge = [...fromGraph.edges, ...toGraph.edges].find(e => e.id === change.element_id);
-                                                                            if (edge) {
-                                                                                const sourceNode = allNodes.find(n => n.id === edge.source);
-                                                                                const targetNode = allNodes.find(n => n.id === edge.target);
-                                                                                if (sourceNode && targetNode) {
-                                                                                    position = {
-                                                                                        x: (sourceNode.position.x + targetNode.position.x) / 2,
-                                                                                        y: (sourceNode.position.y + targetNode.position.y) / 2,
-                                                                                    };
-                                                                                    if (position) {
-                                                                                        // Determine which region this position belongs to
-                                                                                        const regionX = Math.floor(position.x / REGION_SIZE) * REGION_SIZE;
-                                                                                        const regionY = Math.floor(position.y / REGION_SIZE) * REGION_SIZE;
-                                                                                        const regionKey = `${regionX},${regionY}`;
-                                                                                    }
-                                                                                    if (!regions.has(regionKey)) {
-                                                                                        regions.set(regionKey, {});
-                                                                                        bounds: {
-                                                                                            x: regionX,
-                                                                                                y;
-                                                                                            regionY,
-                                                                                                width;
-                                                                                            REGION_SIZE,
-                                                                                                height;
-                                                                                            REGION_SIZE,
-                                                                                            ;
-                                                                                        }
-                                                                                        changes: [];
-                                                                                    }
-                                                                                    ;
-                                                                                    regions.get(regionKey).changes.push(change);
-                                                                                }
-                                                                                ;
-                                                                                return Array.from(regions.values());
-                                                                                filterChanges(diff, GraphDiff, filters, {});
-                                                                                change_types ?  : string;
-                                                                                element_types ?  : string;
-                                                                                min_significance ?  : number;
-                                                                                max_significance ?  : number;
-                                                                            }
-                                                                            DiffChange;
-                                                                            {
-                                                                                let filteredChanges = diff.changes;
-                                                                                if (filters.change_types?.length) {
-                                                                                    filteredChanges = filteredChanges.filter(c => filters.change_types.includes(c.type));
-                                                                                    if (filters.element_types?.length) {
-                                                                                        filteredChanges = filteredChanges.filter(c => filters.element_types.includes(c.element_type));
-                                                                                        if (filters.min_significance !== undefined) {
-                                                                                            filteredChanges = filteredChanges.filter(c => c.significance >= filters.min_significance);
-                                                                                            if (filters.max_significance !== undefined) {
-                                                                                                filteredChanges = filteredChanges.filter(c => c.significance <= filters.max_significance);
-                                                                                                return filteredChanges;
-                                                                                                getChangesByElement(diff, GraphDiff, elementId, string);
-                                                                                                DiffChange;
-                                                                                                {
-                                                                                                    return diff.changes.filter(c => c.element_id === elementId);
-                                                                                                    getSignificantChanges(diff, GraphDiff, threshold, number = 0.7);
-                                                                                                    DiffChange;
-                                                                                                    {
-                                                                                                        return diff.changes.filter(c => c.significance >= threshold);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
+                                                                        changes: [];
+                                                                    }
+                                                                    ;
+                                                                    regions.get(regionKey).changes.push(change);
+                                                                }
+                                                                ;
+                                                                return Array.from(regions.values());
+                                                                filterChanges(diff, GraphDiff, filters, {});
+                                                                change_types ?  : string;
+                                                                element_types ?  : string;
+                                                                min_significance ?  : number;
+                                                                max_significance ?  : number;
+                                                            }
+                                                            DiffChange;
+                                                            {
+                                                                let filteredChanges = diff.changes;
+                                                                if (filters.change_types?.length) {
+                                                                    filteredChanges = filteredChanges.filter(c => filters.change_types.includes(c.type));
+                                                                    if (filters.element_types?.length) {
+                                                                        filteredChanges = filteredChanges.filter(c => filters.element_types.includes(c.element_type));
+                                                                        if (filters.min_significance !== undefined) {
+                                                                            filteredChanges = filteredChanges.filter(c => c.significance >= filters.min_significance);
+                                                                            if (filters.max_significance !== undefined) {
+                                                                                filteredChanges = filteredChanges.filter(c => c.significance <= filters.max_significance);
+                                                                                return filteredChanges;
+                                                                                getChangesByElement(diff, GraphDiff, elementId, string);
+                                                                                DiffChange;
+                                                                                {
+                                                                                    return diff.changes.filter(c => c.element_id === elementId);
+                                                                                    getSignificantChanges(diff, GraphDiff, threshold, number = 0.7);
+                                                                                    DiffChange;
+                                                                                    {
+                                                                                        return diff.changes.filter(c => c.significance >= threshold);
                                                                                     }
                                                                                 }
                                                                             }

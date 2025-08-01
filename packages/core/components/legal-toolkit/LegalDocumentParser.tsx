@@ -7,9 +7,9 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { LegalDocument, LegalDocumentParserProps, LegalDocumentMetadata } from './types';
 
-export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
-  onDocumentParsed,
-  supportedTypes = ['contract', 'policy', 'regulation', 'agreement', 'statute'],
+export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({ )
+  onDocumentParsed
+  supportedTypes = ['contract', 'policy', 'regulation', 'agreement', 'statute'] }
   maxFileSize = 10 * 1024 * 1024, // 10MB default
   className = ''
 }) => {
@@ -36,15 +36,13 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
     setIsProcessing(true);
     setUploadProgress(0);
     setProcessingStatus('Uploading document...');
-    try {
-      // Simulate file upload progress
+    try { // Simulate file upload progress
       const uploadInterval = setInterval(() => {
         setUploadProgress(prev => {)
   if (prev >= 90) {
             clearInterval(uploadInterval);
             return 90;
-          return prev + 10;
-        });
+          return prev + 10 });
       }, 200);
       // Read file content
       const content = await readFileContent(file);
@@ -57,47 +55,40 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
       setProcessingStatus('Extracting legal references...');
       await new Promise(resolve => setTimeout(resolve, 1500));
       // Create parsed document
-      const parsedDocument: LegalDocument = {,
+      const parsedDocument: LegalDocument = {
   id: `doc_${Date.now()}`}
-},
+
   title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
-        type: detectDocumentType(content, file.name),
-        content,
-        metadata,
-        status: 'draft',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        type: detectDocumentType(content, file.name)
+        content
+        metadata
+        status: 'draft'
+        createdAt: new Date()
+        updatedAt: new Date()
         version: '1.0';
   };
       setProcessingStatus('Document parsed successfully!');
       await new Promise(resolve => setTimeout(resolve, 500));
       onDocumentParsed(parsedDocument);
-    } catch (error) {
-  console.error('Document parsing error:', error);
-  setError(error instanceof Error ? error.message : 'Failed to parse document');
-} finally {
-      setIsProcessing(false);
+ catch (error) { console.error('Document parsing error:', error);
+  setError(error instanceof Error ? error.message : 'Failed to parse document') } finally { setIsProcessing(false);
       setUploadProgress(0);
-      setProcessingStatus('');
-  }, [maxFileSize, onDocumentParsed]);
-  const readFileContent = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
+      setProcessingStatus('') }, [maxFileSize, onDocumentParsed]);
+  const readFileContent = (file: File): Promise<string> => { return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = () => reject(new Error('Failed to read file'));
-      reader.readAsText(file);
-    });
+      reader.readAsText(file) });
   };
-  const extractDocumentMetadata = async (content: string, filename: string): Promise<LegalDocumentMetadata> => {
-  // In real implementation, this would use AI services to extract metadata
+  const extractDocumentMetadata = async (content: string, filename: string): Promise<LegalDocumentMetadata> => { // In real implementation, this would use AI services to extract metadata
   // For now, return mock metadata
   return {
-  jurisdiction: detectJurisdiction(content),
-  practiceArea: detectPracticeArea(content),
-  parties: extractParties(content),
-  tags: extractTags(content, filename),
-  references: [], // Would be extracted by AI,
-  confidentialityLevel: 'confidential',
+  jurisdiction: detectJurisdiction(content)
+  practiceArea: detectPracticeArea(content)
+  parties: extractParties(content)
+  tags: extractTags(content, filename)
+  references: [], // Would be extracted by AI
+  confidentialityLevel: 'confidential' }
 };
   };
   const detectDocumentType = (content: string, filename: string): LegalDocument['type'] => {
@@ -117,24 +108,20 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
     if (lowerContent.includes('federal') || lowerContent.includes('united states')) return 'Federal';
     return 'Unknown'
   };
-  const detectPracticeArea = (content: string): string => {
-  const areas: string = [];
+  const detectPracticeArea = (content: string): string => { const areas: string = [];
   const lowerContent = content.toLowerCase();
   if (lowerContent.includes('employment') || lowerContent.includes('employee')) areas.push('Employment');
   if (lowerContent.includes('intellectual property') || lowerContent.includes('copyright') || lowerContent.includes('patent')) areas.push('IP');
   if (lowerContent.includes('privacy') || lowerContent.includes('gdpr') || lowerContent.includes('data')) areas.push('Privacy');
   if (lowerContent.includes('real estate') || lowerContent.includes('property')) areas.push('Real Estate');
   if (lowerContent.includes('corporate') || lowerContent.includes('business')) areas.push('Corporate');
-  return areas.length > 0 ? areas : ['General'];
-};
-  const extractParties = (content: string): string => {
-  // Simple regex to find potential party names (this would be more sophisticated in real implementation)
+  return areas.length > 0 ? areas : ['General'] };
+  const extractParties = (content: string): string => { // Simple regex to find potential party names (this would be more sophisticated in real implementation)
   const partyPattern = /\b([A-Z][a-zA-Z\s&,.]+ (?:Inc|LLC|Corp|Corporation|Company|Ltd|Limited)\.?)\b/g;
   const matches = content.match(partyPattern);
-  return matches ? [...new Set(matches.slice(0, 5))] : []; // Limit to 5 unique parties,
+  return matches ? [...new Set(matches.slice(0, 5))] : []; // Limit to 5 unique parties }
 };
-  const extractTags = (content: string, filename: string): string => {
-  const tags: string = [];
+  const extractTags = (content: string, filename: string): string => { const tags: string = [];
   const lowerContent = content.toLowerCase();
   if (lowerContent.includes('confidential')) tags.push('confidential');
   if (lowerContent.includes('termination')) tags.push('termination');
@@ -142,39 +129,26 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
   if (lowerContent.includes('indemnify')) tags.push('indemnification');
   if (lowerContent.includes('dispute')) tags.push('dispute-resolution');
   if (filename.includes('draft')) tags.push('draft');
-  return tags;
-};
-  const handleDragEnter = (e: React.DragEvent) => {
-    e.preventDefault();
+  return tags };
+  const handleDragEnter = (e: React.DragEvent) => { e.preventDefault();
     e.stopPropagation();
-    setDragActive(true);
-  };
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
+    setDragActive(true) };
+  const handleDragLeave = (e: React.DragEvent) => { e.preventDefault();
     e.stopPropagation();
-    setDragActive(false);
-  };
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
+    setDragActive(false) };
+  const handleDragOver = (e: React.DragEvent) => { e.preventDefault();
+    e.stopPropagation() };
+  const handleDrop = (e: React.DragEvent) => { e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
     const files = e.dataTransfer.files;
-    handleFileSelect(files);
-  };
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleFileSelect(e.target.files);
-  };
-  const openFileDialog = () => {
-    fileInputRef.current?.click();
-  };
+    handleFileSelect(files) };
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { handleFileSelect(e.target.files) };
+  const openFileDialog = () => { fileInputRef.current?.click() };
   return;
     <div className={`legal-document-parser ${className}`}>}
       <style>
-        {`
+        { `
           .legal-document-parser {
             max-width: 600px;
   margin: 0 auto;
@@ -185,14 +159,14 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
   padding: 40px 20px;
             text-align: center;
   background: #f7fafc;
-            transition: all 0.2s ease;
+            transition: all 0.2s ease
   cursor: pointer;
             position: relative;
           .upload-area.drag-active {
-            border-color: #4299e1;
+            border-color: #4299e1
   background: #ebf8ff;
           .upload-area:hover {
-            border-color: #4299e1;
+            border-color: #4299e1
   background: #f0fff4;
           .upload-area.processing {
             pointer-events: none;
@@ -202,11 +176,11 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
             margin-bottom: 1rem;
   color: #718096;
           .upload-text {
-            font-size: 1.1rem;
+            font-size: 1.1rem
   color: #2d3748;
             margin-bottom: 0.5rem;
           .upload-subtext {
-            font-size: 0.9rem;
+            font-size: 0.9rem
   color: #718096;
           .file-input {
             display: none;
@@ -226,18 +200,18 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
             width: 200px;
   margin: 1rem 0;
           .progress-bar {
-            width: 100%;
+            width: 100%
   height: 8px;
             background: #e2e8f0;
             border-radius: 4px;
   overflow: hidden;
           .progress-fill {
-            height: 100%;
+            height: 100%
   background: #4299e1;
             border-radius: 4px;
   transition: width 0.3s ease;
           .processing-status {
-            font-size: 0.9rem;
+            font-size: 0.9rem
   color: #4a5568;
             margin-top: 0.5rem;
           .supported-types {
@@ -247,7 +221,7 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
             border-radius: 6px;
           .supported-types h4 {
             margin: 0 0 0.5rem 0;
-            font-size: 0.9rem;
+            font-size: 0.9rem
   color: #2d3748;
             font-weight: 600;
           .types-grid {
@@ -255,30 +229,29 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 0.5rem;
           .type-tag {
-            background: #fff;
+            background: #fff
   padding: 0.25rem 0.5rem;
             border-radius: 4px;
-            font-size: 0.8rem;
+            font-size: 0.8rem
   color: #4a5568;
             text-align: center;
   border: 1px solid #e2e8f0;
           .error-message {
-            background: #fed7d7;
+            background: #fed7d7
   color: #c53030;
             padding: 0.75rem;
             border-radius: 4px;
             margin-top: 1rem;
             font-size: 0.9rem;
           .spinner {
-            display: inline-block;
+            display: inline-block
   width: 20px;
             height: 20px;
   border: 3px solid #e2e8f0;
             border-radius: 50%;
-            border-top-color: #4299e1;
+            border-top-color: #4299e1 }
   animation: spin 1s ease-in-out infinite;
-          @keyframes spin {
-            to { transform: rotate(360deg); }
+          @keyframes spin { to { transform: rotate(360deg) }
         `}
       </style>
       <div 

@@ -56,20 +56,20 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
     const authHeader = request.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new Error('Missing or invalid authorization header');
-    }
+
     const token = authHeader.substring(7);
     return await authService.validateToken(token);
-  }
+
 
   // Enhanced Security Challenge Endpoint
   fastify.post('/security/challenge', {
     preHandler: async (request, reply) => {
       try {
         await getAuthenticatedUser(request);
-      } catch (error) {
+ catch (error) {
         reply.code(401).send({ error: 'Authentication required' });
-      }
-  }
+
+
     schema: {
       body: SecurityChallengeSchema,
       response: {
@@ -81,14 +81,14 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
             challenge: { type: 'object' },
             expiresAt: { type: 'string', format: 'date-time' },
             instructions: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: { error: { type: 'string' } }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof SecurityChallengeSchema> }>, reply: FastifyReply) => {
     try {
       const user = await getAuthenticatedUser(request);
@@ -106,19 +106,19 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
           challengeType,
           challengeId: challenge.challengeId,
           metadata
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'GDPR'],
           requirements: ['authentication_security'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       reply.send(challenge);
-    } catch (error) {
+ catch (error) {
       reply.code(400).send({ error: error.message || 'Failed to generate security challenge' });
-    }
+
   });
 
   // Advanced Session Management
@@ -126,10 +126,10 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
     preHandler: async (request, reply) => {
       try {
         await getAuthenticatedUser(request);
-      } catch (error) {
+ catch (error) {
         reply.code(401).send({ error: 'Authentication required' });
-      }
-  }
+
+
     schema: {
       body: SessionManagementSchema,
       response: {
@@ -140,10 +140,10 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
             message: { type: 'string' },
             affectedSessions: { type: 'number' },
             newSecurityLevel: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof SessionManagementSchema> }>, reply: FastifyReply) => {
     try {
       const user = await getAuthenticatedUser(request);
@@ -155,7 +155,7 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
         if (!sessionId) {
           reply.code(400).send({ error: 'Session ID required for terminate action' });
           return;
-        }
+
         result = await terminateSession(user.id, sessionId, reason);
         break;
       case 'terminate_all':
@@ -170,7 +170,7 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
       default:
         reply.code(400).send({ error: 'Invalid action' });
         return;
-      }
+
 
       await auditService.logEvent({
         eventType: 'SESSION_MANAGEMENT_ACTION',
@@ -182,19 +182,19 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
           sessionId,
           reason,
           result
-  }
+
         riskLevel: action === 'terminate_all' ? 'HIGH' : 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'GDPR'],
           requirements: ['session_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       reply.code(400).send({ error: error.message || 'Session management action failed' });
-    }
+
   });
 
   // Security Risk Assessment
@@ -202,10 +202,10 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
     preHandler: async (request, reply) => {
       try {
         await getAuthenticatedUser(request);
-      } catch (error) {
+ catch (error) {
         reply.code(401).send({ error: 'Authentication required' });
-      }
-  }
+
+
     schema: {
       body: SecurityAssessmentSchema,
       response: {
@@ -217,10 +217,10 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
             factors: { type: 'array' },
             recommendations: { type: 'array' },
             assessmentDate: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof SecurityAssessmentSchema> }>, reply: FastifyReply) => {
     try {
       const user = await getAuthenticatedUser(request);
@@ -238,19 +238,19 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
           riskLevel: assessment.riskLevel,
           factorCount: assessment.factors.length,
           options
-  }
+
         riskLevel: assessment.riskLevel,
         compliance: {
           frameworks: ['SOC2', 'GDPR', 'ISO27001'],
           requirements: ['risk_assessment', 'security_monitoring'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       reply.send(assessment);
-    } catch (error) {
+ catch (error) {
       reply.code(400).send({ error: error.message || 'Risk assessment failed' });
-    }
+
   });
 
   // Passwordless Authentication Preparation (WebAuthn/FIDO2 ready)
@@ -258,10 +258,10 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
     preHandler: async (request, reply) => {
       try {
         await getAuthenticatedUser(request);
-      } catch (error) {
+ catch (error) {
         reply.code(401).send({ error: 'Authentication required' });
-      }
-  }
+
+
     schema: {
       body: PasswordlessAuthRequestSchema,
       response: {
@@ -272,10 +272,10 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
             publicKeyCredentialRequestOptions: { type: 'object' },
             timeout: { type: 'number' },
             status: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof PasswordlessAuthRequestSchema> }>, reply: FastifyReply) => {
     try {
       const user = await getAuthenticatedUser(request);
@@ -298,19 +298,19 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
           challengeId: challengeResponse.challengeId,
           userVerification,
           credentialOptions: credentialRequestOptions
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2', 'GDPR', 'ISO27001'],
           requirements: ['authentication_methods'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       reply.send(challengeResponse);
-    } catch (error) {
+ catch (error) {
       reply.code(400).send({ error: error.message || 'Passwordless authentication setup failed' });
-    }
+
   });
 
   // Compliance Security Report
@@ -320,8 +320,8 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
       // Require admin or compliance officer role
       if (!user.roles?.includes('admin') && !user.roles?.includes('compliance_officer')) {
         reply.code(403).send({ error: 'Admin or Compliance Officer role required' });
-      }
-  }
+
+
     schema: {
       body: ComplianceReportRequestSchema,
       response: {
@@ -332,10 +332,10 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
             generatedAt: { type: 'string', format: 'date-time' },
             frameworks: { type: 'array' },
             summary: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof ComplianceReportRequestSchema> }>, reply: FastifyReply) => {
     try {
       const user = await getAuthenticatedUser(request);
@@ -353,13 +353,13 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
           dateRange,
           includeMetrics,
           reportSize: JSON.stringify(report).length
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: frameworks as any,
           requirements: ['compliance_reporting', 'audit_trail'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       reply.send({
@@ -368,9 +368,9 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
         frameworks,
         summary: report.summary
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: error.message || 'Failed to generate compliance report' });
-    }
+
   });
 
   // Security Monitoring Dashboard Data
@@ -379,8 +379,8 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
       const user = await getAuthenticatedUser(request);
       if (!user.roles?.includes('admin') && !user.roles?.includes('security_officer')) {
         reply.code(403).send({ error: 'Admin or Security Officer role required' });
-      }
-  }
+
+
     schema: {
       response: {
         200: {
@@ -391,10 +391,10 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
             threatIntelligence: { type: 'object' },
             complianceStatus: { type: 'object' },
             lastUpdated: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const user = await getAuthenticatedUser(request);
@@ -408,22 +408,22 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
         userAgent: request.headers['user-agent'],
         details: {
           dataPoints: Object.keys(dashboardData).length
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
           requirements: ['security_monitoring'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       reply.send({
         ...dashboardData,
         lastUpdated: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: error.message || 'Failed to fetch security monitoring data' });
-    }
+
   });
 
   // Health check for enhanced security features
@@ -439,15 +439,15 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
         timestamp: new Date().toISOString(),
         version: '1.0.0'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(503).send({
         status: 'unhealthy',
         error: error.message || 'Health check failed',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
-}
+
 
 // Helper functions for enhanced security features
 
@@ -468,54 +468,54 @@ async function generateSecurityChallenge(
       challenge: {
         requiredLocation: 'Verify your current location',
         allowedRadius: 1000 // meters
-  }
+
       expiresAt: expiresAt.toISOString(),
       instructions: 'Please verify your location to continue'
-  }
+
     device: {
       challengeId,
       challengeType: 'device',
       challenge: {
         deviceFingerprint: 'Verify device characteristics',
         trustedDevice: false
-  }
+
       expiresAt: expiresAt.toISOString(),
       instructions: 'Device verification required'
-  }
+
     behavior: {
       challengeId,
       challengeType: 'behavior',
       challenge: {
         behaviorPattern: 'Verify behavioral pattern',
         confidence: 0.8
-  }
+
       expiresAt: expiresAt.toISOString(),
       instructions: 'Behavioral verification in progress'
-  }
+
     time: {
       challengeId,
       challengeType: 'time',
       challenge: {
         timeWindow: 'Unusual access time detected',
         expectedHours: '9:00-17:00'
-  }
+
       expiresAt: expiresAt.toISOString(),
       instructions: 'Access outside normal hours detected'
-  }
+
     risk: {
       challengeId,
       challengeType: 'risk',
       challenge: {
         riskScore: 0.7,
         factors: ['unusual_location', 'new_device']
-  }
+
       expiresAt: expiresAt.toISOString(),
       instructions: 'Additional verification required due to risk factors'
-    }
+
   };
 
   return challenges[challengeType] || challenges.risk;
-}
+
 
 async function terminateSession(userId: string, sessionId: string, reason: string): Promise<any> {
 
@@ -526,7 +526,7 @@ async function terminateSession(userId: string, sessionId: string, reason: strin
     affectedSessions: 1,
     newSecurityLevel: 'standard'
   };
-}
+
 
 async function terminateAllSessions(userId: string, reason: string): Promise<any> {
 
@@ -537,7 +537,7 @@ async function terminateAllSessions(userId: string, reason: string): Promise<any
     affectedSessions: 3, // Example count
     newSecurityLevel: 'elevated'
   };
-}
+
 
 async function extendSession(userId: string, sessionId?: string): Promise<any> {
 
@@ -547,7 +547,7 @@ async function extendSession(userId: string, sessionId?: string): Promise<any> {
     affectedSessions: 1,
     newSecurityLevel: 'standard'
   };
-}
+
 
 async function refreshSessionSecurity(userId: string, request: FastifyRequest): Promise<any> {
 
@@ -557,7 +557,7 @@ async function refreshSessionSecurity(userId: string, request: FastifyRequest): 
     affectedSessions: 1,
     newSecurityLevel: 'enhanced'
   };
-}
+
 
 async function performSecurityRiskAssessment(
   user: any,
@@ -576,7 +576,7 @@ async function performSecurityRiskAssessment(
       impact: 0.1,
       description: 'Login from usual location'
     });
-  }
+
 
   // Device risk  
   if (options.includeDeviceFingerprint) {
@@ -585,7 +585,7 @@ async function performSecurityRiskAssessment(
       impact: 0.0,
       description: 'Recognized device'
     });
-  }
+
 
   // Behavior risk
   if (options.includeBehaviorAnalysis) {
@@ -594,7 +594,7 @@ async function performSecurityRiskAssessment(
       impact: 0.1,
       description: 'Normal user behavior pattern'
     });
-  }
+
 
   riskScore += factors.reduce((sum, f) => sum + f.impact, 0);
 
@@ -609,7 +609,7 @@ async function performSecurityRiskAssessment(
       'Regular security assessment recommended'
     ],
     assessmentDate: new Date().toISOString(};
-}
+
 
 async function preparePasswordlessChallenge(
   userId: string,
@@ -627,11 +627,11 @@ async function preparePasswordlessChallenge(
       timeout: 60000,
       userVerification,
       ...credentialOptions
-  }
+
     timeout: 60000,
     status: 'ready_for_webauthn'
   };
-}
+
 
 async function generateComplianceSecurityReport(
   frameworks: string[],
@@ -645,25 +645,25 @@ async function generateComplianceSecurityReport(
     dateRange: dateRange || {
       start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
       end: new Date().toISOString()
-  }
+
     summary: {
       overallCompliance: 98.5,
       criticalFindings: 0,
       recommendationsImplemented: 15,
       securityIncidents: 0
-  }
+
     details: {
       authentication: {
         mfaEnabled: 95,
         passwordPolicyCompliance: 100,
         sessionManagement: 98
-  }
+
       dataProtection: {
         encryptionCoverage: 100,
         accessControls: 97,
         auditLogging: 99
-      }
-    }
+
+
   };
 
   if (includeMetrics) {
@@ -674,12 +674,12 @@ async function generateComplianceSecurityReport(
         failedAttempts: 23,
         mfaUsage: 89,
         securityChallenges: 156
-      }
+
     };
-  }
+
 
   return report;
-}
+
 
 async function getSecurityMonitoringData(): Promise<any> {
 
@@ -689,20 +689,20 @@ async function getSecurityMonitoringData(): Promise<any> {
       failedLogins: 3,
       securityAlerts: 0,
       systemLoad: 0.6
-  }
+
     securityAlerts: [],
     threatIntelligence: {
       threatLevel: 'LOW',
       recentThreats: 0,
       blockedIPs: 5
-  }
+
     complianceStatus: {
       soc2: 'COMPLIANT',
       gdpr: 'COMPLIANT',
       iso27001: 'COMPLIANT'
-    }
+
   };
-}
+
 
 async function performSecurityHealthChecks(): Promise<Record<string, string>> {
   return {
@@ -713,4 +713,3 @@ async function performSecurityHealthChecks(): Promise<Record<string, string>> {
     complianceFramework: 'healthy',
     securityMonitoring: 'healthy'
   };
-}

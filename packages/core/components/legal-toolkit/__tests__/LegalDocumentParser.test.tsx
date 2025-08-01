@@ -15,20 +15,17 @@ import { LegalDocument } from '../types';
 // Mock data
 
 // Mock File for testing
-const createMockFile = (name: string, size: number, type: string, content?: string): File => {
-  const file = new File(;);
+const createMockFile = (name: string, size: number, type: string, content?: string): File => { const file = new File(;);
     [content || 'mock file content'],
-    name,
+    name }
     { type }
   );
   Object.defineProperty(file, 'size', { value: size });
   return file;
 };
-describe('LegalDocumentParser Component', () => {
-  const mockOnDocumentParsed = jest.fn<unknown, unknown>();
+describe('LegalDocumentParser Component', () => { const mockOnDocumentParsed = jest.fn<unknown, unknown>();
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks() });
   describe('Initial Rendering', () => {
     it('renders document parser interface', () => {
       render();
@@ -179,12 +176,8 @@ describe('LegalDocumentParser Component', () => {
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, validFile);
       expect(screen.getByText(/Extracting text/i)).toBeInTheDocument();
-      await waitFor(() => {
-        expect(screen.getByText(/Analyzing structure/i)).toBeInTheDocument();
-      });
-      await waitFor(() => {
-        expect(screen.getByText(/Extracting metadata/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/Analyzing structure/i)).toBeInTheDocument() });
+      await waitFor(() => { expect(screen.getByText(/Extracting metadata/i)).toBeInTheDocument() });
     });
     it('calls onDocumentParsed when parsing completes', async () => {
       const user = userEvent.setup();
@@ -197,24 +190,23 @@ describe('LegalDocumentParser Component', () => {
       const validFile = createMockFile('contract.pdf', 1000, 'application/pdf');
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, validFile);
-      await waitFor(() => {
-  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+      await waitFor(() => { expect(mockOnDocumentParsed).toHaveBeenCalledWith()
   expect.objectContaining({)
-  id: expect.any(String),
-  title: expect.any(String),
-  type: expect.any(String),
-  content: expect.any(String),
-  metadata: expect.objectContaining({,)
-  jurisdiction: expect.any(String),
-  practiceArea: expect.any(Array),
-  tags: expect.any(Array),
-  confidentialityLevel: expect.any(String),
-}),
-            status: expect.any(String),
-            createdAt: expect.any(Date),
-            updatedAt: expect.any(Date),
+  id: expect.any(String)
+  title: expect.any(String)
+  type: expect.any(String)
+  content: expect.any(String)
+  metadata: expect.objectContaining({)
+  jurisdiction: expect.any(String)
+  practiceArea: expect.any(Array)
+  tags: expect.any(Array)
+  confidentialityLevel: expect.any(String) }
+})
+            status: expect.any(String)
+            createdAt: expect.any(Date)
+            updatedAt: expect.any(Date)
             version: expect.any(String);
-  }
+
         );
       }, { timeout: 10000 });
     });
@@ -229,16 +221,14 @@ describe('LegalDocumentParser Component', () => {
       const contractFile = createMockFile('service-agreement.pdf', 1000, 'application/pdf');
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, contractFile);
-      await waitFor(() => {
-  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+      await waitFor(() => { expect(mockOnDocumentParsed).toHaveBeenCalledWith()
   expect.objectContaining({)
-  type: 'contract',
-  title: expect.stringMatching(/service.agreement/i),
-  metadata: expect.objectContaining({,)
-  practiceArea: expect.arrayContaining([expect.any(String)]),
-  tags: expect.arrayContaining([expect.any(String)]),
-}
-  }
+  type: 'contract'
+  title: expect.stringMatching(/service.agreement/i)
+  metadata: expect.objectContaining({)
+  practiceArea: expect.arrayContaining([expect.any(String)])
+  tags: expect.arrayContaining([expect.any(String)]) }
+
         );
       }, { timeout: 10000 });
     });
@@ -255,10 +245,8 @@ describe('LegalDocumentParser Component', () => {
       const validFile = createMockFile('contract.pdf', 1000, 'application/pdf');
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, validFile);
-      await waitFor(() => {
-        expect(screen.getByText(/Document Preview/i)).toBeInTheDocument();
-        expect(screen.getByText(/Document Information/i)).toBeInTheDocument();
-      }, { timeout: 10000 });
+      await waitFor(() => { expect(screen.getByText(/Document Preview/i)).toBeInTheDocument();
+        expect(screen.getByText(/Document Information/i)).toBeInTheDocument() }, { timeout: 10000 });
     });
     it('displays document metadata in preview', async () => {
       const user = userEvent.setup();
@@ -271,12 +259,10 @@ describe('LegalDocumentParser Component', () => {
       const validFile = createMockFile('contract.pdf', 1000, 'application/pdf');
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, validFile);
-      await waitFor(() => {
-  expect(screen.getByText(/Document Type:/i)).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText(/Document Type:/i)).toBeInTheDocument();
   expect(screen.getByText(/Jurisdiction:/i)).toBeInTheDocument();
   expect(screen.getByText(/Practice Areas:/i)).toBeInTheDocument();
-  expect(screen.getByText(/Parties:/i)).toBeInTheDocument();
-}, { timeout: 10000 });
+  expect(screen.getByText(/Parties:/i)).toBeInTheDocument() }, { timeout: 10000 });
     });
     it('shows extracted content preview', async () => {
       const user = userEvent.setup();
@@ -289,10 +275,8 @@ describe('LegalDocumentParser Component', () => {
       const validFile = createMockFile('contract.pdf', 1000, 'application/pdf');
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, validFile);
-      await waitFor(() => {
-        expect(screen.getByText(/Content Preview/i)).toBeInTheDocument();
-        expect(screen.getByText(/This is a comprehensive/i)).toBeInTheDocument();
-      }, { timeout: 10000 });
+      await waitFor(() => { expect(screen.getByText(/Content Preview/i)).toBeInTheDocument();
+        expect(screen.getByText(/This is a comprehensive/i)).toBeInTheDocument() }, { timeout: 10000 });
     });
     it('allows editing document metadata', async () => {
       const user = userEvent.setup();
@@ -305,13 +289,11 @@ describe('LegalDocumentParser Component', () => {
       const validFile = createMockFile('contract.pdf', 1000, 'application/pdf');
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, validFile);
-      await waitFor(async () => {
-        const editButton = screen.getByText(/Edit Metadata/i);
+      await waitFor(async () => { const editButton = screen.getByText(/Edit Metadata/i);
         await user.click(editButton);
         expect(screen.getByLabelText(/Document Title/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/Document Type/i)).toBeInTheDocument();
-        expect(screen.getByLabelText(/Jurisdiction/i)).toBeInTheDocument();
-      }, { timeout: 10000 });
+        expect(screen.getByLabelText(/Jurisdiction/i)).toBeInTheDocument() }, { timeout: 10000 });
     });
   });
   describe('Document Type Detection', () => {
@@ -324,17 +306,16 @@ describe('LegalDocumentParser Component', () => {
         />
       );
       const contractFile = createMockFile(;);
-        'service-contract.pdf', 
-        1000, 
-        'application/pdf', 
+        'service-contract.pdf'
+        1000
+        'application/pdf'
         'This agreement establishes terms between parties for services'
       );
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, contractFile);
-      await waitFor(() => {
-  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+      await waitFor(() => { expect(mockOnDocumentParsed).toHaveBeenCalledWith()
   expect.objectContaining({)
-  type: 'contract',
+  type: 'contract' }
 }
         );
       }, { timeout: 10000 });
@@ -348,17 +329,16 @@ describe('LegalDocumentParser Component', () => {
         />
       );
       const policyFile = createMockFile(;);
-        'privacy-policy.pdf', 
-        1000, 
-        'application/pdf', 
+        'privacy-policy.pdf'
+        1000
+        'application/pdf'
         'This privacy policy describes data collection and usage'
       );
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, policyFile);
-      await waitFor(() => {
-  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+      await waitFor(() => { expect(mockOnDocumentParsed).toHaveBeenCalledWith()
   expect.objectContaining({)
-  type: 'policy',
+  type: 'policy' }
 }
         );
       }, { timeout: 10000 });
@@ -372,17 +352,16 @@ describe('LegalDocumentParser Component', () => {
         />
       );
       const unknownFile = createMockFile(;);
-        'unknown.pdf', 
-        1000, 
-        'application/pdf', 
+        'unknown.pdf'
+        1000
+        'application/pdf'
         'Some generic legal text without clear type indicators'
       );
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, unknownFile);
-      await waitFor(() => {
-  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+      await waitFor(() => { expect(mockOnDocumentParsed).toHaveBeenCalledWith()
   expect.objectContaining({)
-  type: expect.oneOf(['contract', 'policy']) // Should default to first supported type,
+  type: expect.oneOf(['contract', 'policy']) // Should default to first supported type }
 }
         );
       }, { timeout: 10000 });
@@ -400,11 +379,9 @@ describe('LegalDocumentParser Component', () => {
       const corruptFile = createMockFile('corrupt.pdf', 1000, 'application/pdf', '[CORRUPT]');
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, corruptFile);
-      await waitFor(() => {
-        expect(screen.getByText(/Error parsing document/i)).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText(/Error parsing document/i)).toBeInTheDocument();
         expect(screen.getByText(/Unable to extract content/i)).toBeInTheDocument();
-        expect(screen.getByText(/Try Again/i)).toBeInTheDocument();
-      });
+        expect(screen.getByText(/Try Again/i)).toBeInTheDocument() });
     });
     it('handles unsupported file formats', async () => {
       const user = userEvent.setup();
@@ -430,12 +407,10 @@ describe('LegalDocumentParser Component', () => {
       const corruptFile = createMockFile('corrupt.pdf', 1000, 'application/pdf', '[CORRUPT]');
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, corruptFile);
-      await waitFor(async () => {
-        const retryButton = screen.getByText(/Try Again/i);
+      await waitFor(async () => { const retryButton = screen.getByText(/Try Again/i);
         expect(retryButton).toBeInTheDocument();
         await user.click(retryButton);
-        expect(screen.getByText(/Upload Document/i)).toBeInTheDocument();
-      });
+        expect(screen.getByText(/Upload Document/i)).toBeInTheDocument() });
     });
     it('clears error state when new file is uploaded', async () => {
       const user = userEvent.setup();
@@ -449,9 +424,7 @@ describe('LegalDocumentParser Component', () => {
       const corruptFile = createMockFile('corrupt.pdf', 1000, 'application/pdf', '[CORRUPT]');
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, corruptFile);
-      await waitFor(() => {
-        expect(screen.getByText(/Error parsing document/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/Error parsing document/i)).toBeInTheDocument() });
       // Upload valid file
       const validFile = createMockFile('contract.pdf', 1000, 'application/pdf');
       await user.upload(fileInput, validFile);
@@ -468,9 +441,9 @@ describe('LegalDocumentParser Component', () => {
         />
       );
       const dropZone = screen.getByTestId('upload-dropzone');
-      fireEvent.dragOver(dropZone, {)
+      fireEvent.dragOver(dropZone, { )
   dataTransfer: {
-  types: ['Files'],
+  types: ['Files'] }
 });
       expect(dropZone).toHaveClass('drag-over');
     });
@@ -483,13 +456,11 @@ describe('LegalDocumentParser Component', () => {
       );
       const dropZone = screen.getByTestId('upload-dropzone');
       const validFile = createMockFile('contract.pdf', 1000, 'application/pdf');
-      fireEvent.drop(dropZone, {)
+      fireEvent.drop(dropZone, { )
   dataTransfer: {
-  files: [validFile],
+  files: [validFile] }
 });
-      await waitFor(() => {
-        expect(screen.getByText(/Parsing document/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/Parsing document/i)).toBeInTheDocument() });
     });
     it('provides visual feedback during drag operations', async () => {
       render();

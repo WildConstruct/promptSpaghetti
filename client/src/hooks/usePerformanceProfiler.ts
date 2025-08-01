@@ -10,46 +10,48 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { clientProfiler, ClientPerformanceProfiler } from '../utils/clientPerformanceProfiler';
 
 // Import PerformanceSnapshot type from the profiler
-}
+
+
 type PerformanceSnapshot = {
   timestamp: number;,
-  render: {
+  render: {,
   componentCount: number;,
-  renderTime: number;
+  renderTime: number;,
   reRenderCount: number;,
-  mountTime: number;
+  mountTime: number;,
   updateTime: number;
 };
-  memory: {
+  memory: {,
   usedJSHeapSize: number;
   totalJSHeapSize: number;,
-  jsHeapSizeLimit: number;
+  jsHeapSizeLimit: number;,
   heapUtilization: number;
 };
-  network: {
+  network: {,
   requestCount: number;
   totalTransferSize: number;,
-  averageResponseTime: number;
+  averageResponseTime: number;,
   errorCount: number;,
   cacheHitRate: number;
 };
-  interactions: {
+  interactions: {,
   clickCount: number;
   scrollEvents: number;,
-  inputEvents: number;
+  inputEvents: number;,
   navigationCount: number;,
   averageInteractionTime: number;
 };
-  vitals: {
+  vitals: {,
   FCP: number;
   LCP: number;,
-  FID: number;
+  FID: number;,
   CLS: number;,
   TTFB: number;
 };
   customMetrics: Record<string, any>;
 };
-}
+
+
 interface UsePerformanceProfilerOptions {
   autoStart?: boolean;
   trackRenders?: boolean;
@@ -57,27 +59,32 @@ interface UsePerformanceProfilerOptions {
   componentName?: string;
   alertOnSlowRender?: boolean;
   slowRenderThreshold?: number;
-}
+
+
+
 interface PerformanceStats {
   renderTime: number;,
-  memoryUsage: number;
+  memoryUsage: number;,
   responseTime: number;,
-  layoutShift: number;
+  layoutShift: number;,
   interactionCount: number;
-}
+
+
+
 interface UsePerformanceProfilerReturn {
   isRunning: boolean;,
-  stats: PerformanceStats | null;
+  stats: PerformanceStats | null;,
   startProfiling: () => void;,
-  stopProfiling: () => PerformanceSnapshot;
+  stopProfiling: () => PerformanceSnapshot;,
   trackRender: (renderTime: number, isMount?: boolean) => void;
   trackInteraction: (interactionType: string, duration?: number) => void;
   addCustomMetric: (key: string, value: any) => void;,
   getCurrentStats: () => PerformanceStats | null;
-/**
- * Performance profiler hook for React components
- */
-}
+  /**
+  * Performance profiler hook for React components
+  */
+
+
 export function usePerformanceProfiler(options: UsePerformanceProfilerOptions = {})
 ): UsePerformanceProfilerReturn {
   const {
@@ -87,7 +94,7 @@ export function usePerformanceProfiler(options: UsePerformanceProfilerOptions = 
     componentName = 'Component',
     alertOnSlowRender = true,
     slowRenderThreshold = 16.67 // 60fps threshold
-  } = options;
+ = options;
   const [isRunning, setIsRunning] = useState(false);
   const [stats, setStats] = useState<PerformanceStats | null>(null);
   const renderStartTime = useRef<number>(0);
@@ -133,7 +140,7 @@ export function usePerformanceProfiler(options: UsePerformanceProfilerOptions = 
       clientProfiler.startProfiling();
       setIsRunning(true);
       console.log(`Performance profiling started for ${componentName}`);}
-    } catch (error) {
+ catch (error) {
   console.error('Failed to start performance profiling:', error);
 }, [componentName]);
   const stopProfiling = useCallback(() => {
@@ -143,7 +150,7 @@ export function usePerformanceProfiler(options: UsePerformanceProfilerOptions = 
       setStats(null);
       console.log(`Performance profiling stopped for ${componentName}. Collected ${snapshots.length} snapshots.`);}
       return snapshots;
-    } catch (error) {
+ catch (error) {
   console.error('Failed to stop performance profiling:', error);
   return [];
 }, [componentName]);
@@ -187,7 +194,7 @@ export function withPerformanceTracking<P extends object>()
       trackRender,
       trackInteraction,
       addCustomMetric
-    } = usePerformanceProfiler({)
+ = usePerformanceProfiler({)
   ...options,
       componentName
     });
@@ -205,7 +212,7 @@ export function withPerformanceTracking<P extends object>()
       trackRender,
       trackInteraction,
       addCustomMetric
-    } as P;
+ as P;
     return React.createElement(WrappedComponent, enhancedProps);
   };
 /**
@@ -279,11 +286,11 @@ export function useAsyncOperationTracking(operationName: string) {
   try {
   const result = await operation();
   return result;
-} catch (err) {
+ catch (err) {
       success = false;
       error = err as Error;
       throw err;
-    } finally {
+ finally {
       const duration = performance.now() - startTime;
       addCustomMetric(`async_${operationName}_duration`, duration);}
       addCustomMetric(`async_${operationName}_success`, success);}
@@ -324,21 +331,21 @@ export function useMemoryTracking(componentName: string, trackingInterval: numbe
  * Performance context for sharing profiler across components
  */
 import { createContext, useContext } from 'react';
-}
+
+
 interface PerformanceContextType {
   profiler: ClientPerformanceProfiler;,
-  isGlobalProfilingEnabled: boolean;
+  isGlobalProfilingEnabled: boolean;,
   startGlobalProfiling: () => void;,
   stopGlobalProfiling: () => void;
-const PerformanceContext = createContext<PerformanceContextType | null>(null);
-
-export function usePerformanceContext() {
+  const PerformanceContext = createContext<PerformanceContextType | null>(null);
+  export function usePerformanceContext() {
   const context = useContext(PerformanceContext);
   if (!context) {
-    throw new Error('usePerformanceContext must be used within a PerformanceProvider');
+  throw new Error('usePerformanceContext must be used within a PerformanceProvider');
   return context;
 
-}
+
 export function PerformanceProvider({ children }: { children: React.ReactNode }) {
   const [isGlobalProfilingEnabled, setIsGlobalProfilingEnabled] = useState(false);
   const startGlobalProfiling = useCallback(() => {

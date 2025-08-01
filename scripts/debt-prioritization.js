@@ -73,9 +73,9 @@ class DebtPrioritizationEngine {
         'medium': 7,
         'low': 5,
         'negative': 1
-      }
+
     };
-  }
+
 
   calculateScore(debtItem: any): number {
     const impact = this.calculateImpactScore(debtItem);
@@ -94,7 +94,7 @@ class DebtPrioritizationEngine {
     totalScore = this.applyAdjustmentFactors(debtItem, totalScore);
     
     return Math.min(100, Math.max(0, totalScore));
-  }
+
 
   calculateImpactScore(debtItem: any): number {
     // Infer impact from severity and category
@@ -104,31 +104,31 @@ class DebtPrioritizationEngine {
     if (debtItem.severity === 'critical') {
       businessImpact = 'critical';
       technicalImpact = 'critical';
-    } else if (debtItem.severity === 'high') {
+ else if (debtItem.severity === 'high') {
       businessImpact = 'high';
       technicalImpact = 'high';
-    } else if (debtItem.severity === 'medium') {
+ else if (debtItem.severity === 'medium') {
       businessImpact = 'medium';
       technicalImpact = 'medium';
-    } else if (debtItem.severity === 'low') {
+ else if (debtItem.severity === 'low') {
       businessImpact = 'low';
       technicalImpact = 'low';
-    }
+
     
     // Adjust based on category
     if (debtItem.category === 'security') {
       businessImpact = this.increaseLevel(businessImpact);
-    } else if (debtItem.category === 'performance') {
+ else if (debtItem.category === 'performance') {
       businessImpact = this.increaseLevel(businessImpact);
-    } else if (debtItem.category === 'maintainability') {
+ else if (debtItem.category === 'maintainability') {
       technicalImpact = this.increaseLevel(technicalImpact);
-    }
+
     
     const businessScore = this.scoringRules.businessImpact[businessImpact] || 5;
     const technicalScore = this.scoringRules.technicalImpact[technicalImpact] || 5;
     
     return (businessScore + technicalScore) / 2;
-  }
+
 
   calculateRiskScore(debtItem: any): number {
     let securityRisk = 'minimal';
@@ -136,23 +136,23 @@ class DebtPrioritizationEngine {
     
     if (debtItem.category === 'security') {
       securityRisk = debtItem.severity;
-    } else if (debtItem.category === 'reliability') {
+ else if (debtItem.category === 'reliability') {
       reliabilityRisk = debtItem.severity;
-    } else if (debtItem.category === 'performance') {
+ else if (debtItem.category === 'performance') {
       reliabilityRisk = debtItem.severity;
-    }
+
     
     // Adjust based on deployment blocker
     if (debtItem.blocksDeployment) {
       securityRisk = this.increaseLevel(securityRisk);
       reliabilityRisk = this.increaseLevel(reliabilityRisk);
-    }
+
     
     const securityScore = this.scoringRules.securityRisk[securityRisk] || 1;
     const reliabilityScore = this.scoringRules.reliabilityRisk[reliabilityRisk] || 1;
     
     return (securityScore + reliabilityScore) / 2;
-  }
+
 
   calculateEffortScore(debtItem: any): number {
     const developmentEffort = this.scoringRules.developmentEffort[debtItem.effort.toLowerCase()] || 5;
@@ -161,14 +161,14 @@ class DebtPrioritizationEngine {
     let testingEffort = 'medium';
     if (debtItem.remediation && debtItem.remediation.securityReviewRequired) {
       testingEffort = 'critical';
-    } else if (debtItem.remediation && debtItem.remediation.testingRequired) {
+ else if (debtItem.remediation && debtItem.remediation.testingRequired) {
       testingEffort = 'high';
-    }
+
     
     const testingScore = this.scoringRules.testingEffort[testingEffort] || 7;
     
     return (developmentEffort * 0.75) + (testingScore * 0.25);
-  }
+
 
   calculateStrategicScore(debtItem: any): number {
     // Infer strategic alignment from category and tags
@@ -178,26 +178,26 @@ class DebtPrioritizationEngine {
     if (debtItem.category === 'security') {
       architectureAlignment = 'high';
       businessAlignment = 'high';
-    } else if (debtItem.category === 'performance') {
+ else if (debtItem.category === 'performance') {
       businessAlignment = 'high';
-    } else if (debtItem.category === 'maintainability') {
+ else if (debtItem.category === 'maintainability') {
       architectureAlignment = 'high';
-    } else if (debtItem.category === 'developer_experience') {
+ else if (debtItem.category === 'developer_experience') {
       architectureAlignment = 'medium';
-    }
+
     
     // Adjust based on tags
     if (debtItem.tags.includes('architecture')) {
       architectureAlignment = 'high';
-    } else if (debtItem.tags.includes('refactoring')) {
+ else if (debtItem.tags.includes('refactoring')) {
       architectureAlignment = 'high';
-    }
+
     
     const architectureScore = this.scoringRules.architectureAlignment[architectureAlignment] || 5;
     const businessScore = this.scoringRules.businessAlignment[businessAlignment] || 5;
     
     return (architectureScore + businessScore) / 2;
-  }
+
 
   applyAdjustmentFactors(debtItem: any, baseScore: number): number {
     let adjustedScore = baseScore;
@@ -205,36 +205,36 @@ class DebtPrioritizationEngine {
     // Deployment blocker multiplier - significant boost
     if (debtItem.blocksDeployment) {
       adjustedScore *= 5.0; // Much higher multiplier for deployment blockers
-    }
+
     
     // Critical security multiplier
     if (debtItem.category === 'security' && debtItem.severity === 'critical') {
       adjustedScore *= 3.0; // High multiplier for critical security
-    }
+
     
     // High security multiplier
     if (debtItem.category === 'security' && debtItem.severity === 'high') {
       adjustedScore *= 2.0; // Moderate multiplier for high security
-    }
+
     
     // Performance impact multiplier
     if (debtItem.category === 'performance' && debtItem.severity === 'high') {
       adjustedScore *= 1.5;
-    }
+
     
     // Add base score boost for security items
     if (debtItem.category === 'security') {
       adjustedScore += 20; // Add flat 20 points for all security items
-    }
+
     
     return adjustedScore;
-  }
+
 
   increaseLevel(level: string): string {
     const levels = ['minimal', 'low', 'medium', 'high', 'critical'];
     const currentIndex = levels.indexOf(level);
     return levels[Math.min(currentIndex + 1, levels.length - 1)];
-  }
+
 
   assignPriority(score: number): string {
     if (score >= 90) return 'P0';
@@ -242,7 +242,7 @@ class DebtPrioritizationEngine {
     if (score >= 70) return 'P2';
     if (score >= 60) return 'P3';
     return 'P4';
-  }
+
 
   generatePrioritizedList(debtItems: any[]): any[] {
     const scoredItems = debtItems.map((item: any) => {
@@ -258,7 +258,7 @@ class DebtPrioritizationEngine {
     });
     
     return scoredItems.sort((a, b) => b.priorityScore - a.priorityScore);
-  }
+
 
   generateScoreBreakdown(debtItem: any): any {
     const impact = this.calculateImpactScore(debtItem);
@@ -276,15 +276,15 @@ class DebtPrioritizationEngine {
         risk: Math.round(risk * this.weights.risk * 10) / 10,
         effort: Math.round(effort * this.weights.effort * 10) / 10,
         strategic: Math.round(strategic * this.weights.strategic * 10) / 10
-      }
+
     };
-  }
-}
+
+
 
 class DebtReportGenerator {
   constructor() {
     this.prioritizationEngine = new DebtPrioritizationEngine();
-  }
+
 
   generateReport(prioritizedItems: any[]): any {
     const summary = this.generateSummary(prioritizedItems);
@@ -297,7 +297,7 @@ class DebtReportGenerator {
       recommendations,
       nextActions: this.generateNextActions(prioritizedItems)
     };
-  }
+
 
   generateSummary(items: any[]): any {
     const priorityDistribution = {
@@ -313,13 +313,13 @@ class DebtReportGenerator {
       
       if (!categoryDistribution[item.category]) {
         categoryDistribution[item.category] = 0;
-      }
+
       categoryDistribution[item.category]++;
       
       totalEffort += item.estimatedHours;
       if (item.calculatedPriority === 'P0' || item.calculatedPriority === 'P1') {
         criticalEffort += item.estimatedHours;
-      }
+
     });
     
     return {
@@ -330,7 +330,7 @@ class DebtReportGenerator {
       criticalEffort,
       averageScore: items.reduce((sum: number, item: any) => sum + item.priorityScore, 0) / items.length
     };
-  }
+
 
   generateRecommendations(items: any[]): any[] {
     const recommendations = [];
@@ -343,7 +343,7 @@ class DebtReportGenerator {
         items: criticalItems.map((item: any) => item.id),
         action: 'Allocate emergency resources to address these items within 24-48 hours'
       });
-    }
+
     
     const securityItems = items.filter((item: any) => item.category === 'security' && item.calculatedPriority !== 'P4');
     if (securityItems.length > 0) {
@@ -353,7 +353,7 @@ class DebtReportGenerator {
         items: securityItems.map((item: any) => item.id),
         action: 'Schedule security review and remediation within 2 weeks'
       });
-    }
+
     
     const quickWins = items.filter((item: any) => 
       item.estimatedHours <= 4 && (item.calculatedPriority === 'P1' || item.calculatedPriority === 'P2')
@@ -365,10 +365,10 @@ class DebtReportGenerator {
         items: quickWins.map((item: any) => item.id),
         action: 'Complete these items during sprint planning or maintenance windows'
       });
-    }
+
     
     return recommendations;
-  }
+
 
   generateNextActions(items: any[]): any[] {
     const nextActions = [];
@@ -383,7 +383,7 @@ class DebtReportGenerator {
         totalEffort: week1Items.slice(0, 3).reduce((sum: number, item: any) => sum + item.estimatedHours, 0),
         team: 'Senior Developer + Security Reviewer'
       });
-    }
+
     
     // Week 2-3: High priority items
     const week2Items = items.filter((item: any) => item.calculatedPriority === 'P1');
@@ -395,7 +395,7 @@ class DebtReportGenerator {
         totalEffort: week2Items.slice(0, 5).reduce((sum: number, item: any) => sum + item.estimatedHours, 0),
         team: 'Senior Developer + Mid-level Developer'
       });
-    }
+
     
     // Month 1-2: Medium priority items
     const month1Items = items.filter((item: any) => item.calculatedPriority === 'P2');
@@ -407,10 +407,10 @@ class DebtReportGenerator {
         totalEffort: month1Items.slice(0, 8).reduce((sum: number, item: any) => sum + item.estimatedHours, 0),
         team: 'Full Development Team'
       });
-    }
+
     
     return nextActions;
-  }
+
 
   generateMarkdownReport(report: any): string {
     const { timestamp, summary, prioritizedItems, recommendations, nextActions } = report;
@@ -483,8 +483,8 @@ This prioritization analysis provides a systematic approach to addressing techni
 
 ---
 *Generated by Technical Debt Prioritization Engine*`;
-  }
-}
+
+
 
 async function main(): Promise<void> {
   console.log('🚀 Starting Technical Debt Prioritization...\n');
@@ -494,7 +494,7 @@ async function main(): Promise<void> {
     const inventoryPath = path.join(__dirname, '..', 'docs', 'debt-inventory.json');
     if (!fs.existsSync(inventoryPath)) {
       throw new Error(`Debt inventory not found at ${inventoryPath}`);
-    }
+
     
     const inventoryData = JSON.parse(fs.readFileSync(inventoryPath, 'utf8'));
     const debtItems = inventoryData.items || [];
@@ -553,16 +553,15 @@ async function main(): Promise<void> {
       report.recommendations.forEach((rec: any) => {
         console.log(`   - ${rec.message}`);
       });
-    }
-    
-  } catch (error) {
+
+ catch (error) {
     console.error('❌ Prioritization failed:', error);
     process.exit(1);
-  }
-}
+
+
 
 if (require.main === module) {
   main();
-}
+
 
 module.exports = { DebtPrioritizationEngine, DebtReportGenerator };

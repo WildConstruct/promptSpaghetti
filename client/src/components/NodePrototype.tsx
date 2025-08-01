@@ -3,51 +3,51 @@ import React, { useState } from 'react';
 // Professional Design System (copied from EnhancedGraphEditor)
 const professionalColors = {
   background: {
-    primary: '#1e1e1e',
-    secondary: '#2a2a2a',
-    tertiary: '#353535',
-  },
+  primary: '#1e1e1e',
+  secondary: '#2a2a2a',
+  tertiary: '#353535'
+},
   text: {
-    primary: '#e8e8e8',
-    secondary: '#b8b8b8',
-    accent: '#ff7c00',
-  },
+  primary: '#e8e8e8',
+  secondary: '#b8b8b8',
+  accent: '#ff7c00'
+},
   accent: {
-    orange: '#ff7c00',
-    blue: '#4a9eff',
-    cyan: '#00d4ff',
-    purple: '#b45cff',
-    green: '#4ade80',
-    red: '#ef4444',
-  },
+  orange: '#ff7c00',
+  blue: '#4a9eff',
+  cyan: '#00d4ff',
+  purple: '#b45cff',
+  green: '#4ade80',
+  red: '#ef4444'
+},
   nodes: {
-    text: '#4f46e5',
-    logic: '#059669',
-    output: '#dc2626',
-    variable: '#7c3aed',
-    advanced: '#6366f1',
-    transform: '#f59e0b',
-  },
+  text: '#4f46e5',
+  logic: '#059669',
+  output: '#dc2626',
+  variable: '#7c3aed',
+  advanced: '#6366f1',
+  transform: '#f59e0b'
+},
   ui: {
-    border: '#404040',
-    borderHover: '#5a5a5a',
-    borderActive: '#ff7c00',
-    hover: '#2d2d2d',
-    selection: '#ff7c0040',
-  },
+  border: '#404040',
+  borderHover: '#5a5a5a',
+  borderActive: '#ff7c00',
+  hover: '#2d2d2d',
+  selection: '#ff7c0040'
+}
 };
 const professionalShadows = {
   node: {
-    default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
-    hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
-    selected: '0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
-  },
+  default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
+  hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
+  selected: '0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)'
+}
 };
 
 // Sample data for different node types
 const sampleNodeData = {
   panelArchetype: {
-    label: 'Panel Archetype',
+  label: 'Panel Archetype',
     description: 'Choose panel type: Cockpit, Bridge Console, Engineering Panel, etc.',
     options: [
       { label: 'Cockpit Control Surface (Fighter, Shuttle)', value: 'Cockpit Control Surface', weight: 1 },
@@ -56,40 +56,37 @@ const sampleNodeData = {
       { label: 'Data Terminal Interface (Info Access, Logs)', value: 'Data Terminal Interface', weight: 1 },
       { label: 'Handheld Device (Scanner, Commlink, Tricorder-like)', value: 'Handheld Device', weight: 1 },
       {
-        label: 'Wall-Mounted Utility Panel (Life Support, Door Control)',
-        value: 'Wall-Mounted Utility Panel',
-        weight: 1,
-      },
+  label: 'Wall-Mounted Utility Panel (Life Support, Door Control)',
+  value: 'Wall-Mounted Utility Panel',
+  weight: 1
+},
       { label: 'Mainframe Access Station (Bulky Computer Interface)', value: 'Mainframe Access Station', weight: 1 },
       {
-        label: 'Laboratory Equipment Interface (Scientific Instruments)',
-        value: 'Laboratory Equipment Interface',
-        weight: 1,
-      },
-    ],
+  label: 'Laboratory Equipment Interface (Scientific Instruments)',
+  value: 'Laboratory Equipment Interface',
+  weight: 1
+}]
   },
   factionAlignment: {
-    label: 'Faction Alignment',
+  label: 'Faction Alignment',
     description: 'Empire/Corporate, Rebel/Resistance, Civilian/Smuggler, etc.',
     options: [
       { label: 'Galactic Empire/Imperial Navy', value: 'Imperial', weight: 2 },
       { label: 'Rebel Alliance/Resistance', value: 'Rebel', weight: 2 },
       { label: 'Corporate/Trade Federation', value: 'Corporate', weight: 1 },
       { label: 'Smuggler/Independent', value: 'Independent', weight: 1.5 },
-      { label: 'Civilian/Merchant', value: 'Civilian', weight: 1 },
-    ],
+      { label: 'Civilian/Merchant', value: 'Civilian', weight: 1 }]
   },
   wearLevel: {
-    label: 'Wear Level',
+  label: 'Wear Level',
     description: 'Condition: Pristine, Lightly Used, Battle-Scarred, etc.',
     options: [
       { label: 'Pristine (New Old Stock - retro design, mint condition)', value: 'Pristine', weight: 1 },
       { label: 'Lightly Used (Minor scuffs, dust, fingerprints)', value: 'Lightly Used', weight: 2 },
       { label: 'Moderately Worn (Visible scratches, grime, faded labels)', value: 'Moderately Worn', weight: 3 },
       { label: 'Heavily Used / Jury-Rigged (Damage, patches, makeshift repairs)', value: 'Heavily Used', weight: 2 },
-      { label: 'Battle-Scarred / Field Repaired (Impact marks, welds)', value: 'Battle-Scarred', weight: 1.5 },
-    ],
-  },
+      { label: 'Battle-Scarred / Field Repaired (Impact marks, welds)', value: 'Battle-Scarred', weight: 1.5 }]
+  }
 };
 
 // Node prototype components
@@ -107,28 +104,28 @@ const CurrentNodeDesign = ({ data, selected = false }: { data: any; selected?: b
       transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
       backdropFilter: 'blur(8px)',
       position: 'relative',
-      margin: '10px',
+      margin: '10px'
     }}
   >
     <div
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '6px',
-        fontSize: '14px',
-        fontWeight: 600,
-        color: professionalColors.nodes.logic,
-      }}
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '6px',
+  fontSize: '14px',
+  fontWeight: 600,
+  color: professionalColors.nodes.logic
+}}
     >
       <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
       {data.label}
     </div>
     <div
       style={{
-        fontSize: '12px',
-        color: professionalColors.text.secondary,
-        lineHeight: 1.3,
-      }}
+  fontSize: '12px',
+  color: professionalColors.text.secondary,
+  lineHeight: 1.3
+}}
     >
       {data.description}
     </div>
@@ -152,18 +149,18 @@ const InlineOption1 = ({ data, selected = false }: { data: any; selected?: boole
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         backdropFilter: 'blur(8px)',
         position: 'relative',
-        margin: '10px',
+        margin: '10px'
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: '8px',
-          fontSize: '14px',
-          fontWeight: 600,
-          color: professionalColors.nodes.logic,
-        }}
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '8px',
+  fontSize: '14px',
+  fontWeight: 600,
+  color: professionalColors.nodes.logic
+}}
       >
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
@@ -177,16 +174,16 @@ const InlineOption1 = ({ data, selected = false }: { data: any; selected?: boole
           padding: '4px 8px',
           background: professionalColors.accent.orange + '20',
           borderRadius: '4px',
-          border: `1px solid ${professionalColors.accent.orange}40`,
+          border: `1px solid ${professionalColors.accent.orange}40`
         }}
       >
         📊 "{selectedOption.value}" ({percentage}%)
       </div>
       <div
         style={{
-          fontSize: '11px',
-          color: professionalColors.text.secondary,
-        }}
+  fontSize: '11px',
+  color: professionalColors.text.secondary
+}}
       >
         + {data.options.length - 1} more options
       </div>
@@ -209,18 +206,18 @@ const InlineOption2 = ({ data, selected = false }: { data: any; selected?: boole
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         backdropFilter: 'blur(8px)',
         position: 'relative',
-        margin: '10px',
+        margin: '10px'
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: '8px',
-          fontSize: '14px',
-          fontWeight: 600,
-          color: professionalColors.nodes.logic,
-        }}
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '8px',
+  fontSize: '14px',
+  fontWeight: 600,
+  color: professionalColors.nodes.logic
+}}
       >
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
@@ -232,7 +229,7 @@ const InlineOption2 = ({ data, selected = false }: { data: any; selected?: boole
             style={{
               marginBottom: '3px',
               paddingLeft: '8px',
-              borderLeft: `2px solid ${professionalColors.nodes.logic}40`,
+              borderLeft: `2px solid ${professionalColors.nodes.logic}40`
             }}
           >
             • {option.value}
@@ -241,11 +238,11 @@ const InlineOption2 = ({ data, selected = false }: { data: any; selected?: boole
         {data.options.length > 3 && (
           <div
             style={{
-              color: professionalColors.text.secondary,
-              fontSize: '11px',
-              marginTop: '4px',
-              fontStyle: 'italic',
-            }}
+  color: professionalColors.text.secondary,
+  fontSize: '11px',
+  marginTop: '4px',
+  fontStyle: 'italic'
+}}
           >
             + {data.options.length - 3} more...
           </div>
@@ -270,30 +267,30 @@ const InlineOption3 = ({ data, selected = false }: { data: any; selected?: boole
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         backdropFilter: 'blur(8px)',
         position: 'relative',
-        margin: '10px',
+        margin: '10px'
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: '8px',
-          fontSize: '14px',
-          fontWeight: 600,
-          color: professionalColors.nodes.logic,
-        }}
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '8px',
+  fontSize: '14px',
+  fontWeight: 600,
+  color: professionalColors.nodes.logic
+}}
       >
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
       </div>
       <div
         style={{
-          fontSize: '12px',
-          color: professionalColors.text.primary,
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '4px',
-        }}
+  fontSize: '12px',
+  color: professionalColors.text.primary,
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '4px'
+}}
       >
         {compactOptions.map((option: string, index: number) => (
           <span
@@ -303,7 +300,7 @@ const InlineOption3 = ({ data, selected = false }: { data: any; selected?: boole
               padding: '2px 6px',
               borderRadius: '3px',
               border: `1px solid ${professionalColors.ui.border}`,
-              fontSize: '11px',
+              fontSize: '11px'
             }}
           >
             {option}
@@ -312,10 +309,10 @@ const InlineOption3 = ({ data, selected = false }: { data: any; selected?: boole
         {data.options.length > 4 && (
           <span
             style={{
-              color: professionalColors.text.secondary,
-              fontSize: '11px',
-              alignSelf: 'center',
-            }}
+  color: professionalColors.text.secondary,
+  fontSize: '11px',
+  alignSelf: 'center'
+}}
           >
             +{data.options.length - 4}
           </span>
@@ -341,28 +338,28 @@ const InlineOption4 = ({ data, selected = false }: { data: any; selected?: boole
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         backdropFilter: 'blur(8px)',
         position: 'relative',
-        margin: '10px',
+        margin: '10px'
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: '8px',
-          fontSize: '14px',
-          fontWeight: 600,
-          color: professionalColors.nodes.logic,
-        }}
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '8px',
+  fontSize: '14px',
+  fontWeight: 600,
+  color: professionalColors.nodes.logic
+}}
       >
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
       </div>
       <div
         style={{
-          fontSize: '12px',
-          color: professionalColors.text.secondary,
-          marginBottom: '6px',
-        }}
+  fontSize: '12px',
+  color: professionalColors.text.secondary,
+  marginBottom: '6px'
+}}
       >
         Currently:
       </div>
@@ -375,18 +372,18 @@ const InlineOption4 = ({ data, selected = false }: { data: any; selected?: boole
           padding: '4px 8px',
           background: professionalColors.accent.blue + '20',
           borderRadius: '4px',
-          border: `1px solid ${professionalColors.accent.blue}40`,
+          border: `1px solid ${professionalColors.accent.blue}40`
         }}
       >
         {selectedOption.value}
       </div>
       <div
         style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '3px',
-          fontSize: '10px',
-        }}
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '3px',
+  fontSize: '10px'
+}}
       >
         {data.options.slice(0, 3).map((option: any, index: number) => (
           <button
@@ -402,7 +399,7 @@ const InlineOption4 = ({ data, selected = false }: { data: any; selected?: boole
               padding: '2px 6px',
               borderRadius: '3px',
               cursor: 'pointer',
-              fontSize: '10px',
+              fontSize: '10px'
             }}
           >
             {option.value.split(' ')[0]}
@@ -411,11 +408,11 @@ const InlineOption4 = ({ data, selected = false }: { data: any; selected?: boole
         {data.options.length > 3 && (
           <span
             style={{
-              color: professionalColors.text.secondary,
-              fontSize: '10px',
-              alignSelf: 'center',
-              padding: '2px',
-            }}
+  color: professionalColors.text.secondary,
+  fontSize: '10px',
+  alignSelf: 'center',
+  padding: '2px'
+}}
           >
             ...
           </span>
@@ -428,38 +425,38 @@ const InlineOption4 = ({ data, selected = false }: { data: any; selected?: boole
 export const NodePrototypePage = () => {
   const [selectedDesign, setSelectedDesign] = useState<string>('current');
   return (
-    <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-        background: professionalColors.background.primary,
-        padding: '20px',
-        overflow: 'auto',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif',
-      }}
+  <div
+  style={{
+  width: '100vw',
+  height: '100vh',
+  background: professionalColors.background.primary,
+  padding: '20px',
+  overflow: 'auto',
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif'
+}}
     >
       <div
         style={{
-          marginBottom: '30px',
-          color: professionalColors.text.primary,
-        }}
+  marginBottom: '30px',
+  color: professionalColors.text.primary
+}}
       >
         <h1
           style={{
-            fontSize: '28px',
-            fontWeight: 'bold',
-            marginBottom: '10px',
-            color: professionalColors.accent.orange,
-          }}
+  fontSize: '28px',
+  fontWeight: 'bold',
+  marginBottom: '10px',
+  color: professionalColors.accent.orange
+}}
         >
           Node Design Prototypes
         </h1>
         <p
           style={{
-            fontSize: '16px',
-            color: professionalColors.text.secondary,
-            marginBottom: '20px',
-          }}
+  fontSize: '16px',
+  color: professionalColors.text.secondary,
+  marginBottom: '20px'
+}}
         >
           Comparing different approaches to showing node content inline
         </p>
@@ -478,7 +475,7 @@ export const NodePrototypePage = () => {
                 padding: '8px 16px',
                 borderRadius: '6px',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: '14px'
               }}
             >
               {design === 'current' ? 'Current Design' : `Inline ${design.slice(-1)}`}
@@ -488,20 +485,20 @@ export const NodePrototypePage = () => {
       </div>
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '20px',
-          marginBottom: '40px',
-        }}
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+  gap: '20px',
+  marginBottom: '40px'
+}}
       >
         {Object.entries(sampleNodeData).map(([key, data]) => (
           <div key={key}>
             <h3
               style={{
-                color: professionalColors.text.primary,
-                marginBottom: '10px',
-                fontSize: '18px',
-              }}
+  color: professionalColors.text.primary,
+  marginBottom: '10px',
+  fontSize: '18px'
+}}
             >
               {data.label}
             </h3>
@@ -521,7 +518,7 @@ export const NodePrototypePage = () => {
           border: `1px solid ${professionalColors.ui.border}`,
           borderRadius: '8px',
           padding: '20px',
-          color: professionalColors.text.primary,
+          color: professionalColors.text.primary
         }}
       >
         <h3 style={{ marginBottom: '15px', color: professionalColors.accent.orange }}>Design Comparison</h3>

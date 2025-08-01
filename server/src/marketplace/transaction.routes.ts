@@ -9,7 +9,7 @@ import {
   ProcessPaymentSchema,
   CreateRefundRequestSchema,
   LicenseTransferSchema
-} from './transaction.types.js';
+ from './transaction.types.js';
 
 export async function transactionRoutes(fastify: FastifyInstance) {
   const transactionService = new TransactionService(fastify);
@@ -25,17 +25,17 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           cart: z.any().optional() // ShoppingCart type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const cart = await transactionService.getActiveCart(request.user.id);
       reply.send({ cart });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get cart error:', error);
       reply.code(500).send({ error: 'Failed to get cart' });
-    }
+
   });
 
   // Add items to cart
@@ -46,22 +46,22 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           cart: z.any() // ShoppingCart type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const cart = await transactionService.addToCart(request.user.id, request.body);
       reply.send({ cart });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Add to cart error:', error);
       
       if (error.message.includes('already own') || error.message.includes('not available')) {
         reply.code(400).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to add to cart' });
-      }
-    }
+
+
   });
 
   // Update cart item
@@ -75,23 +75,23 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           cart: z.any() // ShoppingCart type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { cartId } = request.params;
       const cart = await transactionService.updateCartItem(request.user.id, cartId, request.body);
       reply.send({ cart });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Update cart item error:', error);
       
       if (error.message.includes('not found') || error.message.includes('expired')) {
         reply.code(404).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to update cart item' });
-      }
-    }
+
+
   });
 
   // Clear cart
@@ -104,18 +104,18 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { cartId } = request.params;
       await transactionService.clearCart(request.user.id, cartId);
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Clear cart error:', error);
       reply.code(500).send({ error: 'Failed to clear cart' });
-    }
+
   });
 
   // =============================================
@@ -130,9 +130,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           payment_intent: z.any() // PaymentIntent type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const paymentIntent = await transactionService.createPaymentIntent(
@@ -140,15 +140,15 @@ export async function transactionRoutes(fastify: FastifyInstance) {
         request.body
       );
       reply.send({ payment_intent: paymentIntent });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Create payment intent error:', error);
       
       if (error.message.includes('Cart is empty') || error.message.includes('risk factors')) {
         reply.code(400).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to create payment intent' });
-      }
-    }
+
+
   });
 
   // Process payment
@@ -159,24 +159,24 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           order: z.any() // Order type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const order = await transactionService.processPayment(request.user.id, request.body);
       reply.send({ order });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Process payment error:', error);
       
       if (error.message.includes('not found') || 
           error.message.includes('requires authentication') ||
           error.message.includes('failed')) {
         reply.code(400).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Payment processing failed' });
-      }
-    }
+
+
   });
 
   // Get payment intent status
@@ -189,9 +189,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           payment_intent: z.any() // PaymentIntent type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { intentId } = request.params;
@@ -200,13 +200,13 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       if (!paymentIntent) {
         reply.code(404).send({ error: 'Payment intent not found' });
         return;
-      }
+
       
       reply.send({ payment_intent: paymentIntent });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get payment intent error:', error);
       reply.code(500).send({ error: 'Failed to get payment intent' });
-    }
+
   });
 
   // =============================================
@@ -229,9 +229,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           has_more: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { page, limit, status } = request.query;
@@ -243,7 +243,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       if (status) {
         whereClause += ' AND status = ?';
         params.push(status);
-      }
+
       
       const orders = await fastify.db.query(
         `SELECT * FROM orders WHERE ${whereClause} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
@@ -265,10 +265,10 @@ export async function transactionRoutes(fastify: FastifyInstance) {
         limit,
         has_more: hasMore
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get orders error:', error);
       reply.code(500).send({ error: 'Failed to get orders' });
-    }
+
   });
 
   // Get specific order
@@ -281,9 +281,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           order: z.any() // Order type with items
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { orderId } = request.params;
@@ -296,7 +296,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       if (orderResult.length === 0) {
         reply.code(404).send({ error: 'Order not found' });
         return;
-      }
+
       
       const order = orderResult[0];
       
@@ -311,10 +311,10 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       order.metadata = JSON.parse(order.metadata || '{}');
       
       reply.send({ order });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get order error:', error);
       reply.code(500).send({ error: 'Failed to get order' });
-    }
+
   });
 
   // =============================================
@@ -338,9 +338,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           has_more: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { template_id, status, page, limit } = request.query;
@@ -352,12 +352,12 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       if (template_id) {
         whereClause += ' AND template_id = ?';
         params.push(template_id);
-      }
+
       
       if (status) {
         whereClause += ' AND status = ?';
         params.push(status);
-      }
+
       
       const licenses = await fastify.db.query(
         `SELECT * FROM template_licenses WHERE ${whereClause} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
@@ -385,10 +385,10 @@ export async function transactionRoutes(fastify: FastifyInstance) {
         limit,
         has_more: hasMore
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get licenses error:', error);
       reply.code(500).send({ error: 'Failed to get licenses' });
-    }
+
   });
 
   // Validate license
@@ -403,9 +403,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
         200: z.object({
           valid: z.boolean(),
           license: z.any().optional() // TemplateLicense type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { license_key, template_id } = request.body;
@@ -422,14 +422,14 @@ export async function transactionRoutes(fastify: FastifyInstance) {
           license = result[0];
           license.restrictions = JSON.parse(license.restrictions || '{}');
           license.metadata = JSON.parse(license.metadata || '{}');
-        }
-      }
+
+
       
       reply.send({ valid, license });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Validate license error:', error);
       reply.code(500).send({ error: 'Failed to validate license' });
-    }
+
   });
 
   // Transfer license
@@ -440,9 +440,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           transfer_request: z.any() // LicenseTransfer type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { license_id, to_user_email, reason } = request.body;
@@ -456,7 +456,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       if (licenseResult.length === 0) {
         reply.code(404).send({ error: 'License not found or not owned by user' });
         return;
-      }
+
       
       const license = licenseResult[0];
       
@@ -464,7 +464,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       if (license.transfer_count >= license.max_transfers) {
         reply.code(400).send({ error: 'Maximum transfers exceeded for this license' });
         return;
-      }
+
       
       // Find target user
       const userResult = await fastify.db.query(
@@ -475,7 +475,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       if (userResult.length === 0) {
         reply.code(400).send({ error: 'Target user not found' });
         return;
-      }
+
       
       const toUserId = userResult[0].id;
       
@@ -496,10 +496,10 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       );
       
       reply.send({ transfer_request: transferRequest });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Transfer license error:', error);
       reply.code(500).send({ error: 'Failed to create license transfer request' });
-    }
+
   });
 
   // =============================================
@@ -514,24 +514,24 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           refund_request: z.any() // RefundRequest type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const refundRequest = await transactionService.createRefundRequest(request.user.id, request.body);
       reply.send({ refund_request: refundRequest });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Create refund request error:', error);
       
       if (error.message.includes('not found') || 
           error.message.includes('not eligible') ||
           error.message.includes('not owned')) {
         reply.code(400).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to create refund request' });
-      }
-    }
+
+
   });
 
   // Get refund requests
@@ -550,9 +550,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           has_more: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { status, page, limit } = request.query;
@@ -564,7 +564,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       if (status) {
         whereClause += ' AND status = ?';
         params.push(status);
-      }
+
       
       const refundRequests = await fastify.db.query(
         `SELECT * FROM refund_requests WHERE ${whereClause} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
@@ -586,10 +586,10 @@ export async function transactionRoutes(fastify: FastifyInstance) {
         limit,
         has_more: hasMore
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get refund requests error:', error);
       reply.code(500).send({ error: 'Failed to get refund requests' });
-    }
+
   });
 
   // =============================================
@@ -607,9 +607,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           analytics: z.any() // TransactionAnalytics type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { period, template_id } = request.query;
@@ -632,7 +632,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       if (template_id) {
         whereClause += ' AND EXISTS (SELECT 1 FROM order_items oi WHERE oi.order_id = orders.id AND oi.template_id = ?)';
         params.push(template_id);
-      }
+
       
       // Get transaction metrics
       const metricsResult = await fastify.db.query(
@@ -662,19 +662,18 @@ export async function transactionRoutes(fastify: FastifyInstance) {
           refund_rate: 0, // Would calculate from refunds
           dispute_rate: 0, // Would calculate from disputes
           fraud_rate: 0 // Would calculate from fraud flags
-  }
+
         payment_methods: [], // Would aggregate by payment method
         geography: [], // Would aggregate by country
         trends: {
           daily_revenue: [], // Would calculate daily totals
           daily_transactions: [] // Would calculate daily counts
-        }
+
       };
       
       reply.send({ analytics });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get transaction analytics error:', error);
       reply.code(500).send({ error: 'Failed to get transaction analytics' });
-    }
+
   });
-}

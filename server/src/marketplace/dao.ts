@@ -24,6 +24,7 @@ export class MarketplaceDAO {
 
   // Template operations
   async createTemplate(template: Partial<MarketplaceTemplate>, client?: PoolClient): Promise<MarketplaceTemplate> {
+
     const useClient = client || this.pool;
 
     const query = `
@@ -51,6 +52,7 @@ export class MarketplaceDAO {
   }
 
   async getTemplate(id: string): Promise<TemplateWithStats | null> {
+
     const query = `
       SELECT 
         t.*,
@@ -105,6 +107,7 @@ export class MarketplaceDAO {
     updates: Partial<MarketplaceTemplate>,
     client?: PoolClient
   ): Promise<MarketplaceTemplate | null> {
+
     const useClient = client || this.pool;
 
     const setClause = [];
@@ -155,6 +158,7 @@ export class MarketplaceDAO {
   }
 
   async deleteTemplate(id: string, client?: PoolClient): Promise<boolean> {
+
     const useClient = client || this.pool;
 
     const query = 'DELETE FROM marketplace_templates WHERE id = $1';
@@ -164,6 +168,7 @@ export class MarketplaceDAO {
 
   // Search functionality
   async searchTemplates(filters: SearchFilters): Promise<SearchResult> {
+
     const page = filters.page || 1;
     const limit = Math.min(filters.limit || 20, 100);
     const offset = (page - 1) * limit;
@@ -289,6 +294,7 @@ export class MarketplaceDAO {
 
   // Version operations
   async createVersion(version: Partial<TemplateVersion>, client?: PoolClient): Promise<TemplateVersion> {
+
     const useClient = client || this.pool;
 
     // Get next version number
@@ -327,6 +333,7 @@ export class MarketplaceDAO {
   }
 
   async getTemplateVersions(templateId: string): Promise<TemplateVersion[]> {
+
     const query = `
       SELECT * FROM template_versions 
       WHERE template_id = $1 
@@ -338,6 +345,7 @@ export class MarketplaceDAO {
   }
 
   async getVersion(id: string): Promise<TemplateVersion | null> {
+
     const query = 'SELECT * FROM template_versions WHERE id = $1';
     const result = await this.pool.query(query, [id]);
     return result.rows[0] || null;
@@ -345,6 +353,7 @@ export class MarketplaceDAO {
 
   // Purchase operations
   async createPurchase(purchase: Partial<MarketplacePurchase>, client?: PoolClient): Promise<MarketplacePurchase> {
+
     const useClient = client || this.pool;
 
     const query = `
@@ -374,6 +383,7 @@ export class MarketplaceDAO {
     updates: Partial<MarketplacePurchase>,
     client?: PoolClient
   ): Promise<MarketplacePurchase | null> {
+
     const useClient = client || this.pool;
 
     const setClause = [];
@@ -412,12 +422,14 @@ export class MarketplaceDAO {
   }
 
   async getPurchaseByStripeIntent(stripeIntentId: string): Promise<MarketplacePurchase | null> {
+
     const query = 'SELECT * FROM marketplace_purchases WHERE stripe_payment_intent_id = $1';
     const result = await this.pool.query(query, [stripeIntentId]);
     return result.rows[0] || null;
   }
 
   async getUserPurchases(userId: string, limit: number = 50): Promise<PurchaseWithDetails[]> {
+
     const query = `
       SELECT 
         p.*,
@@ -446,6 +458,7 @@ export class MarketplaceDAO {
 
   // Review operations
   async createReview(review: Partial<TemplateReview>, client?: PoolClient): Promise<TemplateReview> {
+
     const useClient = client || this.pool;
 
     // Check if user has purchased the template
@@ -481,6 +494,7 @@ export class MarketplaceDAO {
   }
 
   async getTemplateReviews(templateId: string, limit: number = 20): Promise<ReviewWithDetails[]> {
+
     const query = `
       SELECT 
         r.*,
@@ -505,6 +519,7 @@ export class MarketplaceDAO {
 
   // Analytics and events
   async recordEvent(event: Partial<MarketplaceEvent>, client?: PoolClient): Promise<void> {
+
     const useClient = client || this.pool;
 
     const query = `
@@ -530,6 +545,7 @@ export class MarketplaceDAO {
 
   // Categories
   async getCategories(): Promise<TemplateCategory[]> {
+
     const query = `
       SELECT * FROM template_categories 
       WHERE is_active = true 
@@ -542,10 +558,12 @@ export class MarketplaceDAO {
 
   // Utility methods
   async refreshSearchIndex(): Promise<void> {
+
     await this.pool.query('SELECT refresh_marketplace_search_index()');
   }
 
   async transaction<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');

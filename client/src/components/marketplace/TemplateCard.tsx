@@ -5,41 +5,45 @@ import { PriceDisplay } from './PriceDisplay';
 import { Badge } from '../common/Badge';
 import { PreviewModal } from './PreviewModal';
 import './TemplateCard.css';
-}
+
+
 interface Template {
   id: string;,
   title: string;
   description?: string;
   tags: string;,
-  price_cents: number;
+  price_cents: number;,
   avg_rating: number;,
-  total_reviews: number;
+  total_reviews: number;,
   total_purchases: number;
   categories?: string;
-  owner?: {
+  owner?: {,
   id: string;,
-  name: string;
+  name: string;,
   verified: boolean;
-}
+
+
 };
   featured_at?: string;
   created_at: string;
   is_ai_generated?: boolean;
   claude_compat: string;
-}
+
+
 interface TemplateCardProps {
   template: Template;,
   onClick: () => void;
   variant?: 'grid' | 'list' | 'featured';
   showStats?: boolean;
   className?: string;
-  export const TemplateCard: React.FC<TemplateCardProps> = ({,)
+  export const TemplateCard: React.FC<TemplateCardProps> = ({),
   template,
   onClick,
   variant = 'grid',
   showStats = true,
   className = ''
-}
+
+
 }) => {
   const [showPreview, setShowPreview] = useState(false);
   const {
@@ -55,7 +59,7 @@ interface TemplateCardProps {
     featured_at,
     is_ai_generated,
     claude_compat
-  } = template;
+ = template;
   const truncatedDescription = description && description.length > 120 ;
     ? description.substring(0, 120) + '...' 
     : description;
@@ -83,7 +87,7 @@ interface TemplateCardProps {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           onClick();
-      }}
+}
     >
       {/* Card Header */}
       <div className="card-header">

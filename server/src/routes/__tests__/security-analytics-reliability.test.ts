@@ -29,7 +29,7 @@ describe('Security Analytics Reliability API Routes', () => {
         if (!request.headers.authorization) {
           reply.status(401).send({ error: 'Unauthorized' });
           return;
-        }
+
       });
     });
 
@@ -50,7 +50,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/status',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -83,7 +83,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/health',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -100,7 +100,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/health?includeIncidents=true&includeCircuitBreakers=true',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -130,7 +130,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/circuit-breakers',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -164,11 +164,11 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           componentName: 'security_analytics_service',
           action: 'reset'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -188,11 +188,11 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           componentName: 'test_component'
           // Missing action
-        }
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -205,11 +205,11 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           componentName: 'test_component',
           action: 'invalid_action'
-        }
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -222,7 +222,7 @@ describe('Security Analytics Reliability API Routes', () => {
         payload: {
           componentName: 'test',
           action: 'reset'
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -236,7 +236,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/incidents',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -268,7 +268,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/disaster-recovery',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -301,11 +301,11 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           planId: 'security_analytics_failure',
           testMode: true
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -325,11 +325,11 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           planId: 'security_analytics_failure',
           testMode: false
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -346,12 +346,12 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           planId: 'security_analytics_failure',
           testMode: false,
           force: true
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -369,7 +369,7 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {}
       });
 
@@ -382,7 +382,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/disaster-recovery/execute',
         payload: {
           planId: 'test'
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -396,7 +396,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/metrics',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -429,7 +429,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/diagnostics',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -463,7 +463,7 @@ describe('Security Analytics Reliability API Routes', () => {
         url: '/api/security-analytics/reliability/test/chaos',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -507,7 +507,7 @@ describe('Security Analytics Reliability API Routes', () => {
           url: endpoint,
           headers: {
             authorization: authToken
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -517,7 +517,7 @@ describe('Security Analytics Reliability API Routes', () => {
         expect(data).toHaveProperty('timestamp');
         expect(typeof data.success).toBe('boolean');
         expect(typeof data.timestamp).toBe('number');
-      }
+
     });
   });
 
@@ -539,7 +539,7 @@ describe('Security Analytics Reliability API Routes', () => {
           url: endpoint,
           headers: {
             authorization: authToken
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -553,10 +553,10 @@ describe('Security Analytics Reliability API Routes', () => {
         
         if (data.success) {
           expect(data).toHaveProperty('data');
-        } else {
+ else {
           expect(data).toHaveProperty('error');
-        }
-      }
+
+
     });
   });
 
@@ -572,15 +572,15 @@ describe('Security Analytics Reliability API Routes', () => {
           headers: {
             authorization: authToken,
             'content-type': 'application/json'
-  }
+
           payload: {
             componentName: 'test_component',
             action: action
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
-      }
+
     });
 
     test('should validate disaster recovery schema', async () => {
@@ -591,11 +591,11 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           planId: 'valid_plan_id',
           testMode: true
-        }
+
       });
 
       expect(response.statusCode).toBe(200);

@@ -19,21 +19,22 @@ import {
   AppealDecisionRationale,
   AppealFilters,
   AppealReviewCriteria
-} from '../services/trust/AppealProcessService';
+ from '../services/trust/AppealProcessService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { requireAuth, requireAdmin, requireRole } from '../middleware/auth';
 
-}
-}
+
+
 interface AppealRoutes {
   '/appeals': {
     GET: {
       Querystring: AppealFilters & {
         include_timeline?: boolean;
         include_evidence?: boolean;
-}
-}
+
+
+
       };
     };
     POST: {
@@ -51,7 +52,7 @@ interface AppealRoutes {
           description: string;
           file_url?: string;
           content?: string;
-        }>;
+>;
       };
     };
   };
@@ -165,7 +166,7 @@ interface AppealRoutes {
       };
     };
   };
-}
+
 
 export default async function appealProcessRoutes(fastify: FastifyInstance) {
   // Initialize services
@@ -198,7 +199,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['enforcement_action', 'trust_score', 'policy_violation', 'verification_status', 
                 'content_moderation', 'account_restriction', 'transaction_block', 'marketplace_decision', 'other']
-  }
+
             subject: { type: 'string', maxLength: 500 },
             description: { type: 'string', maxLength: 5000 },
             requested_outcome: { type: 'string', maxLength: 2000 },
@@ -214,22 +215,22 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
                   description: { type: 'string' },
                   file_url: { type: 'string' },
                   content: { type: 'string' }
-                }
-              }
-            }
-          }
-  }
+
+
+
+
+
         response: {
           201: {
             type: 'object',
             properties: {
               message: { type: 'string' },
               appeal_id: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request, reply) => {
       try {
         const user = (request as any).user;
@@ -254,12 +255,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           message: 'Appeal submitted successfully',
           appeal_id: appealId
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error submitting appeal:', error);
         reply.status(500).send({ error: error.message || 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -284,10 +283,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             offset: { type: 'integer', minimum: 0, default: 0 },
             include_timeline: { type: 'boolean', default: false },
             include_evidence: { type: 'boolean', default: false }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const filters: AppealFilters = {
@@ -307,12 +306,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           limit: filters.limit,
           offset: filters.offset
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching appeals:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -330,18 +327,18 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           required: ['appealId'],
           properties: {
             appealId: { type: 'string' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           properties: {
             include_timeline: { type: 'boolean', default: true },
             include_evidence: { type: 'boolean', default: true },
             public_only: { type: 'boolean', default: false }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -351,7 +348,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         if (!appeal) {
           reply.status(404).send({ error: 'Appeal not found' });
           return;
-        }
+
 
         // Check access permissions
         const canViewAppeal = 
@@ -362,7 +359,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         if (!canViewAppeal) {
           reply.status(403).send({ error: 'Access denied' });
           return;
-        }
+
 
         // Filter timeline events if public_only requested or limited access
         if (
@@ -370,14 +367,13 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             'reviewer'].includes(user.role
           ) && appeal.appellant_id !== user.id)) {
           appeal.timeline = appeal.timeline?.filter(event => event.public_visible) || [];
-        }
+
 
         reply.send({ appeal });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching appeal:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
+
     }
   );
 
@@ -396,18 +392,18 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           required: ['appealId'],
           properties: {
             appealId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           properties: {
             description: { type: 'string', maxLength: 5000 },
             requested_outcome: { type: 'string', maxLength: 2000 },
             impact_statement: { type: 'string', maxLength: 2000 }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -417,27 +413,26 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         if (!appeal) {
           reply.status(404).send({ error: 'Appeal not found' });
           return;
-        }
+
 
         // Only appellant can update, and only before review starts
         if (appeal.appellant_id !== user.id) {
           reply.status(403).send({ error: 'Only the appellant can update the appeal' });
           return;
-        }
+
 
         if (appeal.status !== 'submitted') {
           reply.status(400).send({ error: 'Appeal cannot be updated after review has started' });
           return;
-        }
+
 
         // Update appeal (implementation would be in AppealProcessService)
         // This is a placeholder - would implement updateAppeal method
         reply.send({ message: 'Appeal updated successfully' });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error updating appeal:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
+
     }
   );
 
@@ -456,8 +451,8 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           required: ['appealId'],
           properties: {
             appealId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['evidence_type', 'title', 'description'],
@@ -468,10 +463,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             file_url: { type: 'string' },
             content: { type: 'string' },
             metadata: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -481,7 +476,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         if (!appeal) {
           reply.status(404).send({ error: 'Appeal not found' });
           return;
-        }
+
 
         // Check permissions
         const canAddEvidence = 
@@ -492,7 +487,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         if (!canAddEvidence) {
           reply.status(403).send({ error: 'Access denied' });
           return;
-        }
+
 
         const evidenceId = await appealService.addEvidence(appealId, {
           ...request.body,
@@ -503,12 +498,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           message: 'Evidence added successfully',
           evidence_id: evidenceId
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error adding evidence:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -527,8 +520,8 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           required: ['appealId'],
           properties: {
             appealId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['status'],
@@ -536,12 +529,12 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             status: { 
               type: 'string',
               enum: ['under_review', 'evidence_requested', 'investigation', 'pending_decision']
-  }
+
             notes: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -551,12 +544,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         await appealService.updateAppealStatus(appealId, status, user.id, notes);
 
         reply.send({ message: 'Appeal status updated successfully' });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error updating appeal status:', error);
         reply.status(500).send({ error: error.message || 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -575,8 +566,8 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           required: ['appealId'],
           properties: {
             appealId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['reviewer_id', 'reviewer_role'],
@@ -585,11 +576,11 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             reviewer_role: { 
               type: 'string',
               enum: ['tier1', 'tier2', 'specialist', 'senior', 'escalation']
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -598,12 +589,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         await appealService.assignReviewer(appealId, reviewer_id, reviewer_role as any);
 
         reply.send({ message: 'Reviewer assigned successfully' });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error assigning reviewer:', error);
         reply.status(500).send({ error: error.message || 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -622,8 +611,8 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           required: ['appealId'],
           properties: {
             appealId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['decision', 'rationale'],
@@ -631,7 +620,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             decision: {
               type: 'string',
               enum: ['approve', 'partially_approve', 'deny', 'dismiss']
-  }
+
             rationale: {
               type: 'object',
               required: ['primary_reasoning', 'policy_references'],
@@ -643,8 +632,8 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
                 policy_references: { type: 'array', items: { type: 'string' } },
                 risk_considerations: { type: 'array', items: { type: 'string' } },
                 recommended_actions: { type: 'array', items: { type: 'string' } }
-              }
-  }
+
+
             review_criteria: {
               type: 'object',
               properties: {
@@ -654,12 +643,12 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
                 proportionality: { type: 'integer', minimum: 1, maximum: 10 },
                 precedent_consistency: { type: 'integer', minimum: 1, maximum: 10 },
                 risk_assessment: { type: 'integer', minimum: 1, maximum: 10 }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -675,12 +664,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         );
 
         reply.send({ message: 'Decision made successfully' });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error making decision:', error);
         reply.status(500).send({ error: error.message || 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -703,17 +690,17 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['hour', 'day', 'week', 'month'],
               default: 'day'
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request, reply) => {
       try {
         const timeRange = request.query.start_date && request.query.end_date ? {
           start: new Date(request.query.start_date),
           end: new Date(request.query.end_date)
-        } : undefined;
+ : undefined;
 
         const statistics = await appealService.getAppealStatistics(timeRange);
 
@@ -722,12 +709,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           time_range: timeRange,
           granularity: request.query.granularity || 'day'
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching appeal statistics:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -746,10 +731,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 },
             offset: { type: 'integer', minimum: 0, default: 0 }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const user = (request as any).user;
@@ -772,12 +757,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           limit: request.query.limit || 10,
           offset: request.query.offset || 0
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching user appeals:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -799,10 +782,10 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             assigned_to_me: { type: 'boolean', default: false },
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
             offset: { type: 'integer', minimum: 0, default: 0 }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const user = (request as any).user;
@@ -817,7 +800,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         // Filter by assignment if requested
         if (request.query.assigned_to_me) {
           filters.assigned_reviewer = user.id;
-        }
+
 
         const result = await appealService.listAppeals(filters);
 
@@ -827,11 +810,8 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           limit: filters.limit,
           offset: filters.offset
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching review queue:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
-}

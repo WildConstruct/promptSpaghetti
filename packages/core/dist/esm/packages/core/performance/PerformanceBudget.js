@@ -158,7 +158,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Increased initial load time and delayed First Contentful Paint',
                 suggestions;
-            [,
+            [
                 'Enable code splitting for non-critical modules',
                 'Use dynamic imports for route-based code splitting',
                 'Remove unused dependencies and dead code',
@@ -186,7 +186,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Large vendor bundle increases initial load time',
                 suggestions;
-            [,
+            [
                 'Audit dependencies for size and necessity',
                 'Replace large libraries with lighter alternatives',
                 'Use CDN for common libraries',
@@ -214,7 +214,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Excessive total bundle size impacts all performance metrics',
                 suggestions;
-            [,
+            [
                 'Implement aggressive code splitting strategy',
                 'Lazy load non-critical features',
                 'Compress assets with Brotli/Gzip',
@@ -243,7 +243,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Large chunks delay loading of specific features',
                 suggestions;
-            [,
+            [
                 'Split large chunks into smaller modules',
                 'Move common code to shared chunks',
                 'Use webpack splitChunks optimization',
@@ -275,7 +275,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Slow FCP makes the app feel unresponsive to users',
                 suggestions;
-            [,
+            [
                 'Optimize critical rendering path',
                 'Minimize render-blocking resources',
                 'Use server-side rendering or static generation',
@@ -303,7 +303,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Slow LCP indicates main content takes too long to load',
                 suggestions;
-            [,
+            [
                 'Optimize largest element loading (images, text)',
                 'Use responsive images with proper sizing',
                 'Preload critical resources',
@@ -331,7 +331,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'High FID makes the app feel unresponsive to user interactions',
                 suggestions;
-            [,
+            [
                 'Reduce JavaScript execution time',
                 'Break up long-running tasks',
                 'Use web workers for heavy computations',
@@ -359,11 +359,12 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'High CLS causes visual instability and poor user experience',
                 suggestions;
-            [,
+            [
                 'Set explicit dimensions for images and videos',
                 'Reserve space for dynamic content',
                 'Avoid inserting content above existing content',
-                'Use font-display: swap for web fonts'],
+                'Use font-display: swap for web fonts'
+            ],
                 timestamp;
             Date.now(),
             ;
@@ -386,7 +387,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'High TTI delays when users can interact with the app',
                 suggestions;
-            [,
+            [
                 'Minimize main thread work',
                 'Reduce JavaScript parse and execution time',
                 'Remove unused JavaScript',
@@ -418,7 +419,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Slow graph execution affects user workflow and productivity',
                 suggestions;
-            [,
+            [
                 'Optimize graph traversal algorithms',
                 'Implement caching for repeated operations',
                 'Use background processing for complex graphs',
@@ -446,7 +447,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Slow preview generation reduces iteration speed',
                 suggestions;
-            [,
+            [
                 'Implement preview result caching',
                 'Optimize template rendering pipeline',
                 'Use streaming for large previews',
@@ -478,7 +479,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'High memory usage can cause browser slowdowns and crashes',
                 suggestions;
-            [,
+            [
                 'Implement object pooling for frequently created objects',
                 'Add memory cleanup in component unmount',
                 'Use weak references where appropriate',
@@ -509,7 +510,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                     impact;
                 'Memory leaks cause progressive performance degradation',
                     suggestions;
-                [,
+                [
                     'Audit event listeners for proper cleanup',
                     'Check for circular references',
                     'Use browser memory profiling tools',
@@ -542,7 +543,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Too many requests slow down initial page load',
                 suggestions;
-            [,
+            [
                 'Combine multiple small requests',
                 'Use HTTP/2 server push for critical resources',
                 'Implement resource bundling',
@@ -570,7 +571,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Large transfer size increases load time especially on slow connections',
                 suggestions;
-            [,
+            [
                 'Enable compression for all text-based resources',
                 'Optimize images and use modern formats',
                 'Remove unnecessary assets',
@@ -604,7 +605,7 @@ export class PerformanceBudgetManager extends EventEmitter {
                 impact;
             'Slow builds reduce developer productivity',
                 suggestions;
-            [,
+            [
                 'Enable build caching',
                 'Use incremental TypeScript compilation',
                 'Optimize webpack configuration',

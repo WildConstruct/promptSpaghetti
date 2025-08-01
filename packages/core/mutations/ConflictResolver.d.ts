@@ -5,11 +5,10 @@
  * Supports operational transformation, last-writer-wins, and manual resolution strategies.
  */
 import { EventEmitter } from 'events';
-import { 
-  GraphOperation,
+import { GraphOperation,
   ConflictResult,
   ConflictResolutionConfig,
-  ConflictResolutionOption,
+  ConflictResolutionOption }
   GraphState
 } from './types';
 /**

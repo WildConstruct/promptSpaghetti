@@ -9,23 +9,23 @@ import { UnifiedAnalyticsEvent, EventFilter } from './UnifiedEventBus';
 import { EventRepository } from './EventPersistenceLayer';
 
 // Validation Rule Schema
-export const ValidationRuleSchema = z.object({)
+export const ValidationRuleSchema = z.object({ )
   id: z.string(),
   name: z.string(),
   description: z.string(),
   category: z.enum(['integrity', 'consistency', 'completeness', 'accuracy', 'timeliness']),
   severity: z.enum(['critical', 'high', 'medium', 'low']),
   enabled: z.boolean().default(true),
-  conditions: z.object({,)
+  conditions: z.object({);
   eventTypes: z.array(z.string()).optional(),
   sources: z.array(z.string()).optional(),
-  timeRange: z.object({,)
+  timeRange: z.object({);
   start: z.number().optional(),
-  end: z.number().optional(),
+  end: z.number().optional() }
 }).optional()
   }),
-  validation: z.object({,)
-  rules: z.array(z.object({)
+  validation: z.object({ );
+  rules: z.array(z.object({),
   field: z.string(),
   operator: z.enum(),
   ['exists',
@@ -40,30 +40,29 @@ export const ValidationRuleSchema = z.object({)
   ),
   value: z.unknown().optional(),
   customFunction: z.string().optional(),
-  required: z.boolean().default(false),
+  required: z.boolean().default(false) }
 })),
-    crossFieldValidation: z.array(z.object({)
+    crossFieldValidation: z.array(z.object({ ),
   fields: z.array(z.string()),
   relationship: z.enum(['sum_equals', 'all_or_none', 'mutually_exclusive', 'sequential', 'custom']),
   expectedValue: z.unknown().optional(),
-  customFunction: z.string().optional(),
+  customFunction: z.string().optional() }
 })).optional()
-  }
+
 });
 
 export type ValidationRule = z.infer<typeof ValidationRuleSchema>;
 
 // Validation Result
 
-}
-export interface ValidationResult {
-  ruleId: string;
+
+export interface ValidationResult { ruleId: string;
   ruleName: string;
   passed: boolean;
   severity: string;
   message: string;
   affectedRecords: string;
-  details: {
+  details: { }
   expectedValue?: unknown;
   actualValue?: unknown;
   field?: string;
@@ -74,68 +73,65 @@ export interface ValidationResult {
   inconsistentEventCount?: number;
   orphanedEventCount?: number;
   [key: string]: unknown;
-}
+
+
 };
   timestamp: number;
 
 // Consistency Check Result
-}
-}
-export interface ConsistencyCheckResult {
-  checkId: string;
+
+
+export interface ConsistencyCheckResult { checkId: string;
   checkName: string;
   category: string;
   passed: boolean;
   severity: string;
-  summary: {
+  summary: { }
   totalRecords: number;
   validRecords: number;
   invalidRecords: number;
   warningRecords: number;
   errorRate: number;
-}
+
+
 };
   violations: ValidationResult;
   recommendations: string;
   timestamp: number;
 
 // Data Quality Metrics
-}
-}
-export interface DataQualityMetrics {
-  completeness: {
+
+
+export interface DataQualityMetrics { completeness: { }
   score: number;
-}
-    missingFields: { [field: string]: number };
+
+
+  missingFields: { [field: string]: number };
     requiredFieldsCoverage: number;
   };
-  accuracy: {
+  accuracy: { 
   score: number;
   invalidValues: number;
   formatErrors: number;
-  typeErrors: number;
-};
-  consistency: {
+  typeErrors: number };
+  consistency: { 
   score: number;
   duplicates: number;
   contradictions: number;
-  referentialIntegrityErrors: number;
-};
-  timeliness: {
+  referentialIntegrityErrors: number };
+  timeliness: { 
   score: number;
   lateArrivals: number;
   futureTimestamps: number;
-  timestampGaps: number;
-};
-  integrity: {
+  timestampGaps: number };
+  integrity: { 
   score: number;
   corruptedRecords: number;
   checksumFailures: number;
-  structuralErrors: number;
-};
-  overall: {
+  structuralErrors: number };
+  overall: { 
   score: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: 'A' | 'B' | 'C' | 'D' | 'F' }
   issueCount: number;
   recommendation: string;
 };
@@ -144,9 +140,8 @@ export interface DataQualityMetrics {
  * 
  * Provides comprehensive data validation and quality assurance for analytics data
  */
-}
-export class DataValidationSystem {
-  private eventRepository: EventRepository;
+
+export class DataValidationSystem { private eventRepository: EventRepository;
   private validationRules: Map<string, ValidationRule> = new Map();
   private validationHistory: ValidationResult = [];
   constructor(eventRepository: EventRepository) {
@@ -158,156 +153,152 @@ export class DataValidationSystem {
   private initializeDefaultRules(): void {
     // Data Completeness Rules
     this.addValidationRule({)
-  id: 'required-fields-check',
-      name: 'Required Fields Validation',
-      description: 'Ensures all required fields are present in analytics events',
-      category: 'completeness',
-      severity: 'critical',
-      enabled: true,
-      conditions: {},
+  id: 'required-fields-check'
+      name: 'Required Fields Validation'
+      description: 'Ensures all required fields are present in analytics events'
+      category: 'completeness'
+      severity: 'critical'
+      enabled: true }
+      conditions: {}
       validation: {
-  rules: [,
-          { field: 'id', operator: 'exists', required: true },
-          { field: 'type', operator: 'exists', required: true },
-          { field: 'timestamp', operator: 'exists', required: true },
-          { field: 'source', operator: 'exists', required: true },
-          { field: 'category', operator: 'exists', required: true },
+  rules: [
+          { field: 'id', operator: 'exists', required: true }
+          { field: 'type', operator: 'exists', required: true }
+          { field: 'timestamp', operator: 'exists', required: true }
+          { field: 'source', operator: 'exists', required: true }
+          { field: 'category', operator: 'exists', required: true }
           { field: 'severity', operator: 'exists', required: true }
         ]
     });
     // Data Accuracy Rules
-    this.addValidationRule({)
-  id: 'timestamp-accuracy',
-      name: 'Timestamp Accuracy Validation',
-      description: 'Validates timestamp fields are within reasonable ranges',
-      category: 'accuracy',
-      severity: 'high',
-      enabled: true,
-      conditions: {},
-      validation: {
-  rules: [,
+    this.addValidationRule({ )
+  id: 'timestamp-accuracy'
+      name: 'Timestamp Accuracy Validation'
+      description: 'Validates timestamp fields are within reasonable ranges'
+      category: 'accuracy'
+      severity: 'high'
+      enabled: true }
+      conditions: {}
+      validation: { 
+  rules: [
   {
-  field: 'timestamp',
-  operator: 'greater_than',
-  value: Date.now() - (365 * 24 * 60 * 60 * 1000), // Not older than 1 year,
-  required: true,
-}
-          {
-  field: 'timestamp',
-  operator: 'less_than',
-  value: Date.now() + (24 * 60 * 60 * 1000), // Not more than 1 day in future,
+  field: 'timestamp'
+  operator: 'greater_than'
+  value: Date.now() - (365 * 24 * 60 * 60 * 1000), // Not older than 1 year
+  required: true }
+
+          { field: 'timestamp'
+  operator: 'less_than'
+  value: Date.now() + (24 * 60 * 60 * 1000), // Not more than 1 day in future }
   required: true ];
-  });
+});
     // Data Consistency Rules
-    this.addValidationRule({)
-  id: 'user-session-consistency',
-      name: 'User Session Consistency',
-      description: 'Validates user and session relationships are consistent',
-      category: 'consistency',
-      severity: 'medium',
-      enabled: true,
-      conditions: {},
-      validation: {
-  rules: [,
+    this.addValidationRule({ )
+  id: 'user-session-consistency'
+      name: 'User Session Consistency'
+      description: 'Validates user and session relationships are consistent'
+      category: 'consistency'
+      severity: 'medium'
+      enabled: true }
+      conditions: {}
+      validation: { 
+  rules: [
   {
-  field: 'userId',
-  operator: 'custom',
-  customFunction: 'validateUserExists',
-  required: false],
-  crossFieldValidation: [,
+  field: 'userId'
+  operator: 'custom'
+  customFunction: 'validateUserExists'
+  required: false]
+  crossFieldValidation: [
   {
-  fields: ['userId', 'sessionId'],
+  fields: ['userId', 'sessionId'] }
   relationship: 'all_or_none'];
-  });
+});
     // Data Integrity Rules
-    this.addValidationRule({)
-  id: 'event-structure-integrity',
-      name: 'Event Structure Integrity',
-      description: 'Validates event data structure and format',
-      category: 'integrity',
-      severity: 'critical',
-      enabled: true,
-      conditions: {},
-      validation: {
-  rules: [,
+    this.addValidationRule({ )
+  id: 'event-structure-integrity'
+      name: 'Event Structure Integrity'
+      description: 'Validates event data structure and format'
+      category: 'integrity'
+      severity: 'critical'
+      enabled: true }
+      conditions: {}
+      validation: { 
+  rules: [
   {
-  field: 'data',
-  operator: 'custom',
-  customFunction: 'validateEventDataStructure',
-  required: true,
-}
-          {
-  field: 'metadata',
-  operator: 'custom',
-  customFunction: 'validateMetadataStructure',
+  field: 'data'
+  operator: 'custom'
+  customFunction: 'validateEventDataStructure'
+  required: true }
+
+          { field: 'metadata'
+  operator: 'custom'
+  customFunction: 'validateMetadataStructure' }
   required: false];
-  });
+});
     // Event Type Specific Rules
-    this.addValidationRule({)
-  id: 'graph-execution-validation',
-  name: 'Graph Execution Event Validation',
-  description: 'Validates graph execution events have required execution data',
-  category: 'completeness',
-  severity: 'high',
-  enabled: true,
+    this.addValidationRule({ )
+  id: 'graph-execution-validation'
+  name: 'Graph Execution Event Validation'
+  description: 'Validates graph execution events have required execution data'
+  category: 'completeness'
+  severity: 'high'
+  enabled: true
   conditions: {
-  eventTypes: ['graph_execution'],
-},
+  eventTypes: ['graph_execution'] }
+
   validation: {
-  rules: [,
-          { field: 'data.executionId', operator: 'exists', required: true },
-          { field: 'data.graphId', operator: 'exists', required: true },
-          { field: 'data.success', operator: 'exists', required: true },
-          {
-  field: 'data.executionTime',
-  operator: 'greater_than',
-  value: 0,
+  rules: [
+          { field: 'data.executionId', operator: 'exists', required: true }
+          { field: 'data.graphId', operator: 'exists', required: true }
+          { field: 'data.success', operator: 'exists', required: true }
+          { field: 'data.executionTime'
+  operator: 'greater_than'
+  value: 0 }
   required: false ];
-  });
+});
     // Security Event Rules
-    this.addValidationRule({)
-  id: 'security-event-validation',
-  name: 'Security Event Validation',
-  description: 'Validates security events have proper risk assessment',
-  category: 'accuracy',
-  severity: 'critical',
-  enabled: true,
+    this.addValidationRule({ )
+  id: 'security-event-validation'
+  name: 'Security Event Validation'
+  description: 'Validates security events have proper risk assessment'
+  category: 'accuracy'
+  severity: 'critical'
+  enabled: true
   conditions: {
-  eventTypes: ['security_event', 'fraud_detection'],
-},
-  validation: {
-  rules: [,
+  eventTypes: ['security_event', 'fraud_detection'] }
+
+  validation: { 
+  rules: [
   {
-  field: 'data.riskLevel',
-  operator: 'in_range',
-  value: ['low', 'medium', 'high', 'critical'],
-  required: true,
-}
-          { field: 'data.eventType', operator: 'exists', required: true },
+  field: 'data.riskLevel'
+  operator: 'in_range'
+  value: ['low', 'medium', 'high', 'critical']
+  required: true }
+
+          { field: 'data.eventType', operator: 'exists', required: true }
           { field: 'data.source', operator: 'exists', required: true }
         ]
     });
     // Performance Metric Rules
-    this.addValidationRule({)
-  id: 'performance-metric-validation',
-  name: 'Performance Metric Validation',
-  description: 'Validates performance metrics are within expected ranges',
-  category: 'accuracy',
-  severity: 'medium',
-  enabled: true,
+    this.addValidationRule({ )
+  id: 'performance-metric-validation'
+  name: 'Performance Metric Validation'
+  description: 'Validates performance metrics are within expected ranges'
+  category: 'accuracy'
+  severity: 'medium'
+  enabled: true
   conditions: {
-  eventTypes: ['performance_metric'],
-},
+  eventTypes: ['performance_metric'] }
+
   validation: {
-  rules: [,
-          { field: 'data.metric', operator: 'exists', required: true },
-          { field: 'data.value', operator: 'exists', required: true },
-          {
-  field: 'data.value',
-  operator: 'greater_than',
-  value: 0,
+  rules: [
+          { field: 'data.metric', operator: 'exists', required: true }
+          { field: 'data.value', operator: 'exists', required: true }
+          { field: 'data.value'
+  operator: 'greater_than'
+  value: 0 }
   required: true ];
-  });
+});
   /**
    * Validate single event
    */
@@ -345,14 +336,13 @@ export class DataValidationSystem {
 
     const checkId = `consistency_check_${Date.now()}`;}
     const startTime = Date.now();
-    try {
-  // Get events for validation
+    try { // Get events for validation
   const events = await this.eventRepository.findMany({)
   filter: {
-  ...filter,
-  startTime: timeRange?.start,
-  endTime: timeRange?.end,
-},
+  ...filter
+  startTime: timeRange?.start
+  endTime: timeRange?.end }
+
   limit: 10000 // Reasonable limit for consistency checking;
   });
       // Validate all events
@@ -367,48 +357,45 @@ export class DataValidationSystem {
       const errorRate = totalRecords > 0 ? (invalidRecords / totalRecords) * 100 : 0;
       // Generate recommendations
       const recommendations = this.generateRecommendations(violations, events);
-      const result: ConsistencyCheckResult = {
-  checkId,
-  checkName: 'Comprehensive Data Consistency Check',
-  category: 'consistency',
-  passed: errorViolations.length === 0,
-  severity: errorViolations.length > 0 ? 'high' : (warningViolations.length > 0 ? 'medium' : 'low'),
+      const result: ConsistencyCheckResult = { checkId
+  checkName: 'Comprehensive Data Consistency Check'
+  category: 'consistency'
+  passed: errorViolations.length === 0
+  severity: errorViolations.length > 0 ? 'high' : (warningViolations.length > 0 ? 'medium' : 'low')
   summary: {
-  totalRecords,
-  validRecords,
-  invalidRecords,
-  warningRecords,
-  errorRate: Math.round(errorRate * 100) / 100,
-}
-        violations,
-        recommendations,
+  totalRecords
+  validRecords
+  invalidRecords
+  warningRecords
+  errorRate: Math.round(errorRate * 100) / 100 }
+
+        violations
+        recommendations
         timestamp: Date.now();
   };
       console.log(`Consistency check ${checkId} completed in ${Date.now() - startTime},}
   ms:`, {}
-        totalRecords,
-        validRecords,
-        invalidRecords,
+        totalRecords
+        validRecords
+        invalidRecords
         errorRate: `${result.summary.errorRate}%`}
-},
+
   violationCount: violations.length;
   });
       return result;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Consistency check failed: ${error instanceof Error ? error.message : String(error)}`);}
   /**
    * Calculate data quality metrics
    */
   async calculateDataQualityMetrics(filter?: EventFilter)
     timeRange?: { start: number; end: number }
-  ): Promise<DataQualityMetrics> {
-
-  const events = await this.eventRepository.findMany({)
+  ): Promise<DataQualityMetrics> { const events = await this.eventRepository.findMany({)
   filter: {
-  ...filter,
-  startTime: timeRange?.start,
-  endTime: timeRange?.end,
-},
+  ...filter
+  startTime: timeRange?.start
+  endTime: timeRange?.end }
+
   limit: 50000 // Large sample for quality metrics;
   });
     const totalEvents = events.length;
@@ -438,23 +425,21 @@ export class DataValidationSystem {
         (sum)
         metric
       ) => sum + Object.values(metric).filter(v => typeof v === 'number' && v > 0).length, 0) - 5; // Subtract the 5 score properties
-    return {
-  completeness,
-  accuracy,
-  consistency,
-  timeliness,
-  integrity,
+    return { completeness
+  accuracy
+  consistency
+  timeliness
+  integrity
   overall: {
-  score: Math.round(overallScore * 100) / 100,
-  grade,
-  issueCount,
-  recommendation: this.getOverallRecommendation(overallScore, grade),
+  score: Math.round(overallScore * 100) / 100
+  grade
+  issueCount
+  recommendation: this.getOverallRecommendation(overallScore, grade) }
 };
   /**
    * Get applicable validation rules for event
    */
-  private getApplicableRules(event: UnifiedAnalyticsEvent): ValidationRule {
-    return Array.from(this.validationRules.values()).filter(rule => {)
+  private getApplicableRules(event: UnifiedAnalyticsEvent): ValidationRule { return Array.from(this.validationRules.values()).filter(rule => {)
   if (!rule.enabled) return false;
       // Check event type conditions
       if (rule.conditions.eventTypes && rule.conditions.eventTypes.length > 0) {
@@ -466,17 +451,14 @@ export class DataValidationSystem {
       if (rule.conditions.timeRange) {
         if (rule.conditions.timeRange.start && event.timestamp < rule.conditions.timeRange.start) return false;
         if (rule.conditions.timeRange.end && event.timestamp > rule.conditions.timeRange.end) return false;
-      return true;
-    });
+      return true });
   /**
    * Execute validation rule on event
    */
   private async executeValidationRule(((
     event: UnifiedAnalyticsEvent,
     rule: ValidationRule
-  ): Promise<ValidationResult> {
-
-  const results: ValidationResult = [];
+  ): Promise<ValidationResult> { const results: ValidationResult = [];
   // Validate individual field rules
   for (const fieldRule of rule.validation.rules) {
   const result = await this.validateField(event, fieldRule, rule);
@@ -491,43 +473,37 @@ export class DataValidationSystem {
   * Validate individual field
   */
   private async validateField(event: UnifiedAnalyticsEvent)
-  fieldRule: ValidationRule['validation']['rules'][0],
-  validationRule: ValidationRule): Promise<ValidationResult | null> {,
+  fieldRule: ValidationRule['validation']['rules'][0]
+  validationRule: ValidationRule): Promise<ValidationResult | null> {
   const fieldValue = this.getNestedProperty(event, fieldRule.field);
   let passed = true;
   const actualValue = fieldValue;
   const expectedValue = fieldRule.value;
   switch (fieldRule.operator) {
-  case 'exists':,
+  case 'exists':
   passed = fieldValue !== undefined && fieldValue !== null;
   break;
-  case 'not_exists':,
+  case 'not_exists':
   passed = fieldValue === undefined || fieldValue === null;
   break;
-  case 'equals':,
+  case 'equals':
   passed = fieldValue === fieldRule.value;
   break;
-  case 'not_equals':,
+  case 'not_equals':
   passed = fieldValue !== fieldRule.value;
   break;
-  case 'greater_than':,
+  case 'greater_than':
   passed = typeof fieldValue === 'number' && typeof fieldRule.value === 'number' && fieldValue > fieldRule.value;
   break;
-  case 'less_than':,
+  case 'less_than':
   passed = typeof fieldValue === 'number' && typeof fieldRule.value === 'number' && fieldValue < fieldRule.value;
   break;
-  case 'matches':,
-  if (typeof fieldValue === 'string' && typeof fieldRule.value === 'string') {
-  const regex = new RegExp(fieldRule.value);
-  passed = regex.test(fieldValue);
-} else {
-  passed = false;
+  case 'matches': }
+  if (typeof fieldValue === 'string' && typeof fieldRule.value === 'string') { const regex = new RegExp(fieldRule.value);
+  passed = regex.test(fieldValue) } else { passed = false;
   break;
-  case 'in_range':,
-  if (Array.isArray(fieldRule.value)) {
-  passed = fieldRule.value.includes(fieldValue);
-} else {
-  passed = false;
+  case 'in_range': }
+  if (Array.isArray(fieldRule.value)) { passed = fieldRule.value.includes(fieldValue) } else { passed = false;
   break;
   case 'custom':,
   if (fieldRule.customFunction) {
@@ -544,10 +520,10 @@ export class DataValidationSystem {
   severity: validationRule.severity,
   message: this.generateValidationMessage(validationRule, fieldRule, passed, fieldValue),
   affectedRecords: [event.id],
-  details: {
+  details: {,
   field: fieldRule.field,
   operator: fieldRule.operator,
-  expectedValue,
+  expectedValue }
   actualValue
 },
   timestamp: Date.now();
@@ -556,9 +532,9 @@ export class DataValidationSystem {
   /**
    * Validate cross-field relationships
    */
-  private async validateCrossFields(event: UnifiedAnalyticsEvent)
-    crossFieldRule: NonNullable<ValidationRule['validation']['crossFieldValidation']>[0],
-    validationRule: ValidationRule): Promise<ValidationResult | null> {,
+  private async validateCrossFields(event: UnifiedAnalyticsEvent),
+  crossFieldRule: NonNullable<ValidationRule['validation']['crossFieldValidation']>[0]
+    validationRule: ValidationRule): Promise<ValidationResult | null> {
     const fieldValues = crossFieldRule.fields.map((field: string) => ;
       this.getNestedProperty(event, field)
     );
@@ -580,7 +556,7 @@ export class DataValidationSystem {
       case 'sum_equals':
         const numericValues = fieldValues.filter((v: unknown) => typeof v === 'number');
         const sum = numericValues.reduce(;);
-          (a: unknown);
+          (a: unknown);,
   b: unknown) => (typeof a === 'number' ? a : 0) + (typeof b === 'number' ? b : 0), 0);
         passed = sum === crossFieldRule.expectedValue;
         message = passed ? 'Sum equals expectation' : 
@@ -589,14 +565,13 @@ export class DataValidationSystem {
       case 'sequential':
         // Check if numeric values are in ascending order
         const sortedValues = [...fieldValues].sort(;);
-          (a: unknown);
+          (a: unknown);,
   b: unknown) => (typeof a === 'number' ? a : 0) - (typeof b === 'number' ? b : 0));
         passed = JSON.stringify(fieldValues) === JSON.stringify(sortedValues);
         message = passed ? 'Sequential order maintained' : 'Sequential order violation';
         break;
       case 'custom':
-        if (crossFieldRule.customFunction) {
-  passed = await this.executeCustomCrossFieldValidation()
+        if (crossFieldRule.customFunction) { passed = await this.executeCustomCrossFieldValidation()
   fieldValues,
   crossFieldRule.customFunction,
   event
@@ -611,9 +586,9 @@ export class DataValidationSystem {
   severity: validationRule.severity,
   message,
   affectedRecords: [event.id],
-  details: {
+  details: {,
   expectedValue: crossFieldRule.expectedValue,
-  actualValue: fieldValues,
+  actualValue: fieldValues }
 },
   timestamp: Date.now();
   };
@@ -642,31 +617,29 @@ export class DataValidationSystem {
     for (const event of events) {
       // Create signature based on key fields
       const signature = `${event.type}_${event.source}_${event.timestamp}_${event.userId}_${JSON.stringify(event.data)}`;}
-      if (!eventSignatures.has(signature)) {
-        eventSignatures.set(signature, []);
+      if (!eventSignatures.has(signature)) { eventSignatures.set(signature, []);
       eventSignatures.get(signature)!.push(event.id);
     const duplicates = Array.from(eventSignatures.entries()).filter(([_, ids]) => ids.length > 1);
     if (duplicates.length > 0) {
       return {
-        ruleId: 'duplicate-detection',
-        ruleName: 'Duplicate Event Detection',
-        passed: false,
-        severity: 'medium',
+        ruleId: 'duplicate-detection'
+        ruleName: 'Duplicate Event Detection'
+        passed: false
+        severity: 'medium' }
         message: `Found ${duplicates.length} sets of duplicate events`}
-},
-  affectedRecords: duplicates.flatMap(([_, ids]) => ids),
-        details: {
-  duplicateCount: duplicates.length,
-  totalDuplicateEvents: duplicates.reduce((sum, [_, ids]) => sum + ids.length, 0),
-},
+
+  affectedRecords: duplicates.flatMap(([_, ids]) => ids)
+        details: { 
+  duplicateCount: duplicates.length
+  totalDuplicateEvents: duplicates.reduce((sum, [_, ids]) => sum + ids.length, 0) }
+
   timestamp: Date.now();
   };
     return null;
   /**
    * Check temporal consistency
    */
-  private checkTemporalConsistency(events: UnifiedAnalyticsEvent): ValidationResult | null {
-    const sortedEvents = events.sort((a, b) => a.timestamp - b.timestamp);
+  private checkTemporalConsistency(events: UnifiedAnalyticsEvent): ValidationResult | null { const sortedEvents = events.sort((a, b) => a.timestamp - b.timestamp);
     const inconsistentEvents: string = [];
     for (let i = 1; i < sortedEvents.length; i++) {
       const prev = sortedEvents[i - 1];
@@ -681,12 +654,12 @@ export class DataValidationSystem {
         ruleId: 'temporal-consistency',
         ruleName: 'Temporal Consistency Check',
         passed: false,
-        severity: 'low',
+        severity: 'low' }
         message: `Found ${inconsistentEvents.length} events with potential temporal inconsistencies`}
 },
   affectedRecords: inconsistentEvents,
-        details: {
-  inconsistentEventCount: inconsistentEvents.length,
+        details: { ,
+  inconsistentEventCount: inconsistentEvents.length }
 },
   timestamp: Date.now();
   };
@@ -694,9 +667,7 @@ export class DataValidationSystem {
   /**
    * Check referential integrity
    */
-  private async checkReferentialIntegrity(events: UnifiedAnalyticsEvent): Promise<ValidationResult> {
-
-    const results: ValidationResult = [];
+  private async checkReferentialIntegrity(events: UnifiedAnalyticsEvent): Promise<ValidationResult> { const results: ValidationResult = [];
     const userIds = new Set<string>();
     const sessionIds = new Set<string>();
     const orphanedEvents: string = [];
@@ -710,16 +681,16 @@ export class DataValidationSystem {
         orphanedEvents.push(event.id);
     if (orphanedEvents.length > 0) {
       results.push({)
-  ruleId: 'referential-integrity',
-        ruleName: 'Referential Integrity Check',
-        passed: false,
-        severity: 'medium',
+  ruleId: 'referential-integrity'
+        ruleName: 'Referential Integrity Check'
+        passed: false
+        severity: 'medium' }
         message: `Found ${orphanedEvents.length} events with referential integrity issues`}
-},
-  affectedRecords: orphanedEvents,
-        details: {
-  orphanedEventCount: orphanedEvents.length,
-},
+
+  affectedRecords: orphanedEvents
+        details: { 
+  orphanedEventCount: orphanedEvents.length }
+
   timestamp: Date.now();
   });
     return results;
@@ -727,8 +698,8 @@ export class DataValidationSystem {
    * Execute custom validation function
    */
   private async executeCustomValidation(value: unknown)
-    functionName: string,
-    event: UnifiedAnalyticsEvent): Promise<boolean> {,
+  functionName: string
+    event: UnifiedAnalyticsEvent): Promise<boolean> {
     switch (functionName) {
       case 'validateUserExists':
         // In production, this would check against user database
@@ -744,8 +715,8 @@ export class DataValidationSystem {
    * Execute custom cross-field validation
    */
   private async executeCustomCrossFieldValidation(values: unknown)
-    functionName: string,
-    event: UnifiedAnalyticsEvent): Promise<boolean> {,
+  functionName: string
+    event: UnifiedAnalyticsEvent): Promise<boolean> {
     // Custom cross-field validation implementations would go here
     return true;
   /**
@@ -755,8 +726,7 @@ export class DataValidationSystem {
     const requiredFields = ['id', 'type', 'timestamp', 'source', 'category', 'severity'];
     const missingFields: { [field: string]: number } = {};
     let totalMissingFields = 0;
-    for (const event of events) {
-  for (const field of requiredFields) {
+    for (const event of events) { for (const field of requiredFields) {
   const value = this.getNestedProperty(event, field);
   if (value === undefined || value === null || value === '') {
   missingFields[field] = (missingFields[field] ?? 0) + 1;
@@ -766,15 +736,14 @@ export class DataValidationSystem {
   ? ((totalPossibleFields - totalMissingFields) / totalPossibleFields) * 100
   : 100;
   return {
-  score: Math.round(completenessScore * 100) / 100,
-  missingFields,
-  requiredFieldsCoverage: Math.round(((requiredFields.length - Object.keys(missingFields).length) / requiredFields.length) * 100),
+  score: Math.round(completenessScore * 100) / 100
+  missingFields
+  requiredFieldsCoverage: Math.round(((requiredFields.length - Object.keys(missingFields).length) / requiredFields.length) * 100) }
 };
   /**
    * Calculate accuracy metrics
    */
-  private calculateAccuracyMetrics(events: UnifiedAnalyticsEvent): DataQualityMetrics['accuracy'] {
-  let invalidValues = 0;
+  private calculateAccuracyMetrics(events: UnifiedAnalyticsEvent): DataQualityMetrics['accuracy'] { let invalidValues = 0;
   let formatErrors = 0;
   let typeErrors = 0;
   for (const event of events) {
@@ -799,7 +768,7 @@ export class DataValidationSystem {
   return {
   score: Math.round(accuracyScore * 100) / 100,
   invalidValues,
-  formatErrors,
+  formatErrors }
   typeErrors
 };
   /**
@@ -818,8 +787,7 @@ export class DataValidationSystem {
       if (count > 0) duplicates++;
     // Check for contradictions (simplified example)
     const userSessions = new Map<string, Set<string>>();
-    for (const event of events) {
-  if (event.userId && event.sessionId) {
+    for (const event of events) { if (event.userId && event.sessionId) {
   if (!userSessions.has(event.userId)) {
   userSessions.set(event.userId, new Set());
   userSessions.get(event.userId)!.add(event.sessionId);
@@ -835,16 +803,15 @@ export class DataValidationSystem {
   ? ((totalConsistencyChecks - totalInconsistencies) / totalConsistencyChecks) * 100
   : 100;
   return {
-  score: Math.round(consistencyScore * 100) / 100,
-  duplicates,
-  contradictions,
+  score: Math.round(consistencyScore * 100) / 100
+  duplicates
+  contradictions }
   referentialIntegrityErrors
 };
   /**
    * Calculate timeliness metrics
    */
-  private calculateTimelinessMetrics(events: UnifiedAnalyticsEvent): DataQualityMetrics['timeliness'] {
-  const now = Date.now();
+  private calculateTimelinessMetrics(events: UnifiedAnalyticsEvent): DataQualityMetrics['timeliness'] { const now = Date.now();
   const oneDayAgo = now - (24 * 60 * 60 * 1000);
   const futureThreshold = now + (60 * 60 * 1000); // 1 hour from now;
   let lateArrivals = 0;
@@ -877,14 +844,13 @@ export class DataValidationSystem {
   return {
   score: Math.round(timelinessScore * 100) / 100,
   lateArrivals,
-  futureTimestamps,
+  futureTimestamps }
   timestampGaps
 };
   /**
    * Calculate integrity metrics
    */
-  private calculateIntegrityMetrics(events: UnifiedAnalyticsEvent): DataQualityMetrics['integrity'] {
-    let corruptedRecords = 0;
+  private calculateIntegrityMetrics(events: UnifiedAnalyticsEvent): DataQualityMetrics['integrity'] { let corruptedRecords = 0;
     let checksumFailures = 0;
     let structuralErrors = 0;
     for (const event of events) {
@@ -899,9 +865,7 @@ export class DataValidationSystem {
             typeof event.type !== 'string' ||
             typeof event.timestamp !== 'number' ||
             typeof event.source !== 'string') {
-          structuralErrors++;
-      } catch (error) {
-  structuralErrors++;
+          structuralErrors++ } catch (error) { structuralErrors++;
   // Simple checksum validation (if metadata contains checksum)
   if (event.metadata?.checksum) {
   // In production, this would validate actual checksums
@@ -916,23 +880,21 @@ export class DataValidationSystem {
   return {
   score: Math.round(integrityScore * 100) / 100,
   corruptedRecords,
-  checksumFailures,
+  checksumFailures }
   structuralErrors
 };
   /**
    * Calculate simple event checksum
    */
-  private calculateEventChecksum(event: UnifiedAnalyticsEvent): string {
-  // Simple checksum implementation
+  private calculateEventChecksum(event: UnifiedAnalyticsEvent): string { // Simple checksum implementation
   const eventString = JSON.stringify({)
   id: event.id,
   type: event.type,
   timestamp: event.timestamp,
-  data: event.data,
+  data: event.data }
 });
     let hash = 0;
-    for (let i = 0; i < eventString.length; i++) {
-      const char = eventString.charCodeAt(i);
+    for (let i = 0; i < eventString.length; i++) { const char = eventString.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32bit integer
     return hash.toString(16);
@@ -957,10 +919,10 @@ export class DataValidationSystem {
   /**
    * Generate validation message
    */
-  private generateValidationMessage(rule: ValidationRule)
-    fieldRule: ValidationRule['validation']['rules'][0],
+  private generateValidationMessage(rule: ValidationRule),
+  fieldRule: ValidationRule['validation']['rules'][0],
     passed: boolean,
-    actualValue: unknown): string {,
+    actualValue: unknown): string { }
     if (passed) {
       return `${rule.name}: Validation passed for field ${fieldRule.field}`;}
     switch (fieldRule.operator) {
@@ -973,7 +935,7 @@ export class DataValidationSystem {
       case 'equals':
         return `${rule.name}: Field '${fieldRule.field}' value ${actualValue} does not equal expected ${fieldRule.value}`;}
       case 'in_range':
-        return `${rule.name}: Field '${fieldRule.field}' value ${actualValue} is not in allowed range`;},}
+        return `${rule.name}: Field '${fieldRule.field}' value ${actualValue} is not in allowed range`;},},
   default:
         return `${rule.name}: Validation failed for field '${fieldRule.field}'`;}
   /**
@@ -1010,20 +972,19 @@ export class DataValidationSystem {
    */
   private getEmptyQualityMetrics(): DataQualityMetrics {
     return {
-      completeness: { score: 0, missingFields: {}, requiredFieldsCoverage: 0 },
-      accuracy: { score: 0, invalidValues: 0, formatErrors: 0, typeErrors: 0 },
-      consistency: { score: 0, duplicates: 0, contradictions: 0, referentialIntegrityErrors: 0 },
-      timeliness: { score: 0, lateArrivals: 0, futureTimestamps: 0, timestampGaps: 0 },
-      integrity: { score: 0, corruptedRecords: 0, checksumFailures: 0, structuralErrors: 0 },
+      completeness: { score: 0, missingFields: {}, requiredFieldsCoverage: 0 }
+      accuracy: { score: 0, invalidValues: 0, formatErrors: 0, typeErrors: 0 }
+      consistency: { score: 0, duplicates: 0, contradictions: 0, referentialIntegrityErrors: 0 }
+      timeliness: { score: 0, lateArrivals: 0, futureTimestamps: 0, timestampGaps: 0 }
+      integrity: { score: 0, corruptedRecords: 0, checksumFailures: 0, structuralErrors: 0 }
       overall: { score: 0, grade: 'F', issueCount: 0, recommendation: 'No data available for analysis' }
     };
   /**
    * Get nested property value
    */
-  private getNestedProperty(obj: unknown, path: string): unknown {
-  return path.split('.').reduce((current: Record<string, unknown> | unknown, key) =>,
+  private getNestedProperty(obj: unknown, path: string): unknown { return path.split('.').reduce((current: Record<string, unknown> | unknown, key) =>
   (current && typeof current === 'object' && current !== null) ?
-  (current as Record<string, unknown>)[key] :,
+  (current as Record<string, unknown>)[key] :
   undefined, obj);
   /**
   * Public API Methods
@@ -1031,37 +992,37 @@ export class DataValidationSystem {
   /**
   * Add validation rule
   */
-  addValidationRule(rule: ValidationRule): void {,
+  addValidationRule(rule: ValidationRule): void {
   this.validationRules.set(rule.id, rule);
   /**
   * Remove validation rule
   */
-  removeValidationRule(ruleId: string): boolean {,
+  removeValidationRule(ruleId: string): boolean {
   return this.validationRules.delete(ruleId);
   /**
   * Get validation rule
   */
-  getValidationRule(ruleId: string): ValidationRule | undefined {,
+  getValidationRule(ruleId: string): ValidationRule | undefined {
   return this.validationRules.get(ruleId);
   /**
   * List all validation rules
   */
-  listValidationRules(): ValidationRule {,
+  listValidationRules(): ValidationRule {
   return Array.from(this.validationRules.values());
   /**
   * Get validation history
   */
-  getValidationHistory(limit: number = 1000): ValidationResult {,
+  getValidationHistory(limit: number = 1000): ValidationResult {
   return this.validationHistory.slice(-limit);
   /**
   * Clear validation history
   */
-  clearValidationHistory(): void {,
+  clearValidationHistory(): void {
   this.validationHistory = [];
   /**
   * Enable/disable validation rule
   */
-  setValidationRuleEnabled(ruleId: string, enabled: boolean): boolean {,
+  setValidationRuleEnabled(ruleId: string, enabled: boolean): boolean {
   const rule = this.validationRules.get(ruleId);
   if (rule) {
   rule.enabled = enabled;
@@ -1080,11 +1041,11 @@ export class DataValidationSystem {
   const recentValidations = this.validationHistory.filter(v => v.timestamp > recentCutoff);
   const recentFailures = recentValidations.filter(v => !v.passed);
   return {
-  totalRules: this.validationRules.size,
-  enabledRules: Array.from(this.validationRules.values()).filter(r => r.enabled).length,
-  recentValidations: recentValidations.length,
-  recentFailures: recentFailures.length,
-  failureRate: recentValidations.length > 0 ? (recentFailures.length / recentValidations.length) * 100 : 0,
+  totalRules: this.validationRules.size
+  enabledRules: Array.from(this.validationRules.values()).filter(r => r.enabled).length
+  recentValidations: recentValidations.length
+  recentFailures: recentFailures.length
+  failureRate: recentValidations.length > 0 ? (recentFailures.length / recentValidations.length) * 100 : 0 }
 };
 
 export default DataValidationSystem;

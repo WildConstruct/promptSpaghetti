@@ -10,26 +10,28 @@ import { healthMonitoringService } from '../services/HealthMonitoringService';
 import { operationalMetricsService } from '../services/OperationalMetricsService';
 import { ErrorFactory } from '../types/errors';
 
-}
-}
+
+
 interface SystemStatusQuery {
   detailed?: boolean;
   include?: string; // comma-separated: 'metrics,health,circuits,retries,alerts'
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface MetricsQuery {
   minutes?: number;
   limit?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface AlertRuleBody {
   name: string;
   condition: string; // JavaScript expression
@@ -37,9 +39,10 @@ interface AlertRuleBody {
   description: string;
   enabled?: boolean;
   cooldownMs?: number;
-}
-}
-}
+
+
+
+
 
 export async function systemMonitoringRoutes(fastify: FastifyInstance) {
   // System status overview
@@ -52,10 +55,10 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           properties: {
             detailed: { type: 'boolean', default: false },
             include: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request: FastifyRequest<{ Querystring: SystemStatusQuery }>, reply: FastifyReply) => {
       const { detailed = false, include } = request.query;
       const includeItems = include ? include.split(',') : ['health'];
@@ -76,10 +79,10 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             score: healthSummary.score,
             issueCount: healthSummary.issues.length
           };
-        } catch (error) {
+ catch (error) {
           response.health = { error: 'Failed to collect health metrics' };
-        }
-      }
+
+
 
       // Operational metrics
       if (includeItems.includes('metrics')) {
@@ -92,10 +95,10 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             memoryUsage: Math.round(metrics.memoryUsage.heapUsed / 1024 / 1024), // MB
             cpuUsage: metrics.cpuUsage
           };
-        } catch (error) {
+ catch (error) {
           response.metrics = { error: 'Failed to collect operational metrics' };
-        }
-      }
+
+
 
       // Circuit breaker status
       if (includeItems.includes('circuits')) {
@@ -106,9 +109,9 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             [name]: {
               state: metrics.state,
               failureRate: metrics.failureRate
-            }
+
           }), {});
-      }
+
 
       // Retry service metrics
       if (includeItems.includes('retries')) {
@@ -119,9 +122,9 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             [name]: {
               successRate: metrics.successRate,
               averageAttempts: metrics.averageAttempts
-            }
+
           }), {});
-      }
+
 
       // Active alerts
       if (includeItems.includes('alerts')) {
@@ -131,10 +134,10 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           critical: alerts.filter(a => a.severity === 'critical').length,
           high: alerts.filter(a => a.severity === 'high').length
         };
-      }
+
 
       reply.send(response);
-    }
+
   );
 
   // Error metrics
@@ -149,7 +152,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
       errorHandlerService.resetMetrics();
       reply.send({ message: 'Error metrics reset successfully' });
     });
-  }
+
 
   // Health check endpoint with dependency details
   fastify.get('/system/health', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -173,17 +176,17 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         break;
       default:
         statusCode = 503;
-      }
+
 
       reply.status(statusCode).send(healthSummary);
-    } catch (error) {
+ catch (error) {
       reply.status(503).send({
         overall: 'critical',
         error: 'Health check system failure',
         message: error instanceof Error ? error.message : String(error),
         timestamp: Date.now()
       });
-    }
+
   });
 
   // Health monitoring metrics
@@ -208,14 +211,14 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             type: 'object',
             properties: { name: { type: 'string' } },
             required: ['name']
-  }
+
           body: {
             type: 'object',
             properties: { action: { type: 'string', enum: ['open', 'close', 'half-open'] } },
             required: ['action']
-          }
-        }
-  }
+
+
+
       async (request, reply) => {
         const { name } = request.params;
         const { action } = request.body;
@@ -223,7 +226,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         const breaker = circuitBreakerService.getCircuitBreaker(name);
         if (!breaker) {
           throw ErrorFactory.notFound(`Circuit breaker '${name}'`);
-        }
+
 
         switch (action) {
         case 'open':
@@ -235,12 +238,12 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         case 'half-open':
           breaker.forceHalfOpen();
           break;
-        }
+
 
         reply.send({ message: `Circuit breaker '${name}' ${action}ed successfully` });
-      }
+
     );
-  }
+
 
   // Retry strategy metrics
   fastify.get('/system/retry-strategies', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -258,20 +261,20 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           properties: {
             minutes: { type: 'number', minimum: 1, maximum: 1440 },
             limit: { type: 'number', minimum: 1, maximum: 1000 }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request: FastifyRequest<{ Querystring: MetricsQuery }>, reply: FastifyReply) => {
       const { minutes, limit } = request.query;
 
       if (minutes) {
         const summary = operationalMetricsService.getMetricsSummary(minutes);
         reply.send(summary);
-      } else {
+ else {
         const history = operationalMetricsService.getMetricsHistory(limit);
         reply.send(history);
-      }
+
     }
   );
 
@@ -308,16 +311,16 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             properties: {
               errorType: { type: 'string', enum: ['validation', 'timeout', 'external', 'database', 'internal'] },
               delay: { type: 'number', minimum: 0, maximum: 10000 }
-            }
-          }
-        }
-  }
+
+
+
+
       async (request, reply) => {
         const { errorType = 'internal', delay = 0 } = request.body;
 
         if (delay > 0) {
           await new Promise(resolve => setTimeout(resolve, delay));
-        }
+
 
         switch (errorType) {
         case 'validation':
@@ -332,8 +335,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           throw ErrorFactory.database('Test database error', 'SELECT', 'test_table');
         default:
           throw ErrorFactory.internal('Test internal server error');
-        }
-      }
+
     );
 
     fastify.post<{ Body: { count?: number; intervalMs?: number } }>(
@@ -345,10 +347,10 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             properties: {
               count: { type: 'number', minimum: 1, maximum: 1000 },
               intervalMs: { type: 'number', minimum: 0, maximum: 5000 }
-            }
-          }
-        }
-  }
+
+
+
+
       async (request, reply) => {
         const { count = 10, intervalMs = 100 } = request.body;
 
@@ -368,17 +370,17 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
 
           if (intervalMs > 0 && i < count - 1) {
             await new Promise(resolve => setTimeout(resolve, intervalMs));
-          }
-        }
+
+
 
         reply.send({
           message: `Generated ${count} test requests`,
           results,
           averageResponseTime: results.reduce((sum, r) => sum + r.responseTime, 0) / results.length
         });
-      }
+
     );
-  }
+
 
   // System resource usage
   fastify.get('/system/resources', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -393,18 +395,18 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024), // MB
         external: Math.round(memoryUsage.external / 1024 / 1024), // MB
         rss: Math.round(memoryUsage.rss / 1024 / 1024) // MB
-  }
+
       cpu: {
         user: cpuUsage.user / 1000, // ms
         system: cpuUsage.system / 1000 // ms
-  }
+
       nodejs: {
         version: process.version,
         platform: process.platform,
         arch: process.arch
-      }
+
     });
   });
-}
+
 
 export default systemMonitoringRoutes;

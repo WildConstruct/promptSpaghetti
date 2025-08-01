@@ -12,25 +12,25 @@ import {
   SecurityRiskScoringConfig, 
   SecurityRisk,
   RiskScoringReport 
-} from '../services/SecurityRiskScoringEngine';
+ from '../services/SecurityRiskScoringEngine';
 import { SecurityAPIIntegrationPlatform } from '../services/SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../services/SecurityPolicyAnalysisEngine';
 
 // Global risk scoring engine instance
 let riskScoringEngine: SecurityRiskScoringEngine | null = null;
 
-}
-}
+
+
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
   message?: string;
   timestamp: number;
-}
 
-}
-}
+
+
+
 interface CreateRiskRequest {
   risk_name: string;
   description: string;
@@ -41,8 +41,9 @@ interface CreateRiskRequest {
     severity_level: 'low' | 'medium' | 'high' | 'critical';
     affected_systems: string[];
     exploit_available: boolean;
-}
-}
+
+
+
   };
   threat_details?: {
     threat_source: string;
@@ -57,7 +58,7 @@ interface CreateRiskRequest {
       asset_type: 'server' | 'database' | 'application' | 'network_device' | 'endpoint' | 'cloud_service' | 'data';
       criticality_level: 'low' | 'medium' | 'high' | 'critical';
       business_function: string;
-    }[];
+[];
     business_impact_estimate: {
       revenue_impact: number;
       operational_disruption: 'minimal' | 'moderate' | 'significant' | 'severe';
@@ -78,12 +79,12 @@ interface CreateRiskRequest {
       reference_type: 'cve' | 'cwe' | 'capec' | 'mitre_attack' | 'nist' | 'vendor_advisory';
       reference_id: string;
       reference_url: string;
-    }[];
+[];
   };
-}
 
-}
-}
+
+
+
 interface UpdateRiskScoreRequest {
   update_reason: string;
   score_adjustments?: {
@@ -91,18 +92,19 @@ interface UpdateRiskScoreRequest {
     threat_score_adjustment?: number;
     asset_score_adjustment?: number;
     business_impact_adjustment?: number;
-}
-}
+
+
+
   };
   new_intelligence?: {
     threat_intelligence_updates: string[];
     exploit_developments: string[];
     asset_changes: string[];
   };
-}
 
-}
-}
+
+
+
 interface PrioritizeRisksRequest {
   risk_ids: string[];
   prioritization_criteria?: string[];
@@ -111,8 +113,9 @@ interface PrioritizeRisksRequest {
     business_priorities: string[];
     resource_constraints: string[];
     timeline_requirements: string;
-}
-}
+
+
+
   };
   filter_criteria?: {
     min_score?: number;
@@ -121,17 +124,18 @@ interface PrioritizeRisksRequest {
     priority_levels?: string[];
     affected_assets?: string[];
   };
-}
 
-}
-}
+
+
+
 interface GenerateReportRequest {
   report_scope: 'all_risks' | 'high_priority' | 'recent_risks' | 'custom';
   time_period?: {
     start_date: number;
     end_date: number;
-}
-}
+
+
+
   };
   risk_filters?: {
     risk_types?: string[];
@@ -147,7 +151,7 @@ interface GenerateReportRequest {
     include_executive_summary: boolean;
     format: 'detailed' | 'summary' | 'executive';
   };
-}
+
 
 /**
  * Initialize security risk scoring engine
@@ -159,7 +163,7 @@ async function initializeRiskScoringEngine(
 
   if (riskScoringEngine) {
     return riskScoringEngine;
-  }
+
 
   const config: SecurityRiskScoringConfig = {
     scoring_algorithms: {
@@ -169,7 +173,7 @@ async function initializeRiskScoringEngine(
       temporal_scoring_enabled: true,
       environmental_scoring_enabled: true,
       composite_scoring_enabled: true
-  }
+
     threat_prioritization: {
       priority_matrix_enabled: true,
       business_impact_weighting: true,
@@ -177,7 +181,7 @@ async function initializeRiskScoringEngine(
       threat_intelligence_integration: true,
       dynamic_prioritization: true,
       contextual_prioritization: true
-  }
+
     risk_factors: {
       vulnerability_severity: true,
       asset_criticality: true,
@@ -186,7 +190,7 @@ async function initializeRiskScoringEngine(
       business_impact: true,
       remediation_complexity: true,
       exposure_metrics: true
-  }
+
     scoring_models: {
       quantitative_models_enabled: true,
       qualitative_models_enabled: true,
@@ -194,7 +198,7 @@ async function initializeRiskScoringEngine(
       industry_benchmarking: true,
       peer_comparison: true,
       historical_analysis: true
-  }
+
     automation_settings: {
       real_time_scoring: true,
       automated_prioritization: true,
@@ -202,7 +206,7 @@ async function initializeRiskScoringEngine(
       escalation_automation: true,
       dashboard_integration: true,
       reporting_automation: true
-  }
+
     integration_settings: {
       threat_intelligence_feeds: true,
       vulnerability_scanners: true,
@@ -210,14 +214,14 @@ async function initializeRiskScoringEngine(
       incident_response_platforms: true,
       compliance_frameworks: true,
       business_systems: true
-    }
+
   };
 
   riskScoringEngine = new SecurityRiskScoringEngine(config, platform, policyEngine);
   await riskScoringEngine.initialize();
 
   return riskScoringEngine;
-}
+
 
 export default async function securityRiskScoringRoutes(
   fastify: FastifyInstance,
@@ -245,7 +249,7 @@ export default async function securityRiskScoringRoutes(
           risk_type: {
             type: 'string',
             enum: ['vulnerability', 'threat', 'compliance', 'operational', 'strategic', 'financial']
-  }
+
           vulnerability_details: {
             type: 'object',
             properties: {
@@ -254,14 +258,14 @@ export default async function securityRiskScoringRoutes(
               severity_level: {
                 type: 'string',
                 enum: ['low', 'medium', 'high', 'critical']
-  }
+
               affected_systems: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               exploit_available: { type: 'boolean' }
-            }
-  }
+
+
           threat_details: {
             type: 'object',
             properties: {
@@ -271,9 +275,9 @@ export default async function securityRiskScoringRoutes(
               sophistication_required: {
                 type: 'string',
                 enum: ['low', 'medium', 'high']
-              }
-            }
-  }
+
+
+
           asset_context: {
             type: 'object',
             properties: {
@@ -288,15 +292,15 @@ export default async function securityRiskScoringRoutes(
                     asset_type: {
                       type: 'string',
                       enum: ['server', 'database', 'application', 'network_device', 'endpoint', 'cloud_service', 'data']
-  }
+
                     criticality_level: {
                       type: 'string',
                       enum: ['low', 'medium', 'high', 'critical']
-  }
+
                     business_function: { type: 'string' }
-                  }
-                }
-  }
+
+
+
               business_impact_estimate: {
                 type: 'object',
                 properties: {
@@ -304,30 +308,30 @@ export default async function securityRiskScoringRoutes(
                   operational_disruption: {
                     type: 'string',
                     enum: ['minimal', 'moderate', 'significant', 'severe']
-  }
+
                   customer_impact: { type: 'number', minimum: 0 },
                   reputation_impact: {
                     type: 'string',
                     enum: ['minimal', 'moderate', 'significant', 'severe']
-                  }
-                }
-              }
-            }
-  }
+
+
+
+
+
           compliance_context: {
             type: 'object',
             properties: {
               affected_regulations: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               compliance_requirements: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               potential_penalties: { type: 'number', minimum: 0 }
-            }
-  }
+
+
           source_information: {
             type: 'object',
             properties: {
@@ -335,11 +339,11 @@ export default async function securityRiskScoringRoutes(
               identification_method: {
                 type: 'string',
                 enum: ['automated', 'manual', 'third_party', 'intelligence']
-  }
+
               source_systems: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               external_references: {
                 type: 'array',
                 items: {
@@ -348,17 +352,17 @@ export default async function securityRiskScoringRoutes(
                     reference_type: {
                       type: 'string',
                       enum: ['cve', 'cwe', 'capec', 'mitre_attack', 'nist', 'vendor_advisory']
-  }
+
                     reference_id: { type: 'string' },
                     reference_url: { type: 'string', format: 'uri' }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
+
   }, async (request: FastifyRequest<{ Body: CreateRiskRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const riskData = request.body;
@@ -378,8 +382,8 @@ export default async function securityRiskScoringRoutes(
               reference_url: `https://nvd.nist.gov/vuln/detail/${riskData.vulnerability_details.cve_id}`,
               reference_description: `CVE Reference for ${riskData.vulnerability_details.cve_id}`,
               relevance_score: 1.0
-            }] : []
-          }
+] : []
+
         }),
         
         // Map asset context if provided
@@ -398,12 +402,12 @@ export default async function securityRiskScoringRoutes(
                 authentication_required: true,
                 network_segmentation: true,
                 access_control_effectiveness: 80
-  }
+
               vulnerability_count: 0,
               security_controls: []
             }))
-          }
-  }
+
+
       };
 
       const scoredRisk = await engine.scoreSecurityRisk(riskConfig);
@@ -420,43 +424,43 @@ export default async function securityRiskScoringRoutes(
             priority_level: scoredRisk.prioritization.priority_level,
             priority_score: scoredRisk.prioritization.priority_score,
             scoring_methodology: scoredRisk.risk_scoring.scoring_methodology.primary_framework
-  }
+
           score_breakdown: {
             vulnerability_score: scoredRisk.risk_scoring.score_breakdown.vulnerability_score,
             threat_score: scoredRisk.risk_scoring.score_breakdown.threat_score,
             asset_score: scoredRisk.risk_scoring.score_breakdown.asset_score,
             business_impact_score: scoredRisk.risk_scoring.score_breakdown.business_impact_score,
             exploitability_score: scoredRisk.risk_scoring.score_breakdown.exploitability_score
-  }
+
           prioritization_summary: {
             priority_level: scoredRisk.prioritization.priority_level,
             sla_requirements: scoredRisk.prioritization.sla_requirements.length,
             escalation_triggers: scoredRisk.prioritization.escalation_triggers.length
-  }
+
           remediation_summary: {
             recommended_action: scoredRisk.remediation.recommended_action,
             effort_estimate_hours: scoredRisk.remediation.effort_estimate.person_hours,
             timeline_estimate_days: scoredRisk.remediation.timeline_estimate.expected_timeline,
             cost_estimate: scoredRisk.remediation.cost_estimate.total_cost
-  }
+
           next_steps: [
             'Review and validate risk assessment',
             'Assign to appropriate team member',
             'Develop detailed remediation plan',
             'Monitor for updates and changes'
           ]
-  }
+
         message: `Security risk '${scoredRisk.risk_name}' created and scored successfully`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error creating and scoring security risk:', error);
       return {
         success: false,
         error: `Failed to create and score security risk: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -473,8 +477,8 @@ export default async function securityRiskScoringRoutes(
         required: ['riskId'],
         properties: {
           riskId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['update_reason'],
@@ -487,28 +491,28 @@ export default async function securityRiskScoringRoutes(
               threat_score_adjustment: { type: 'number', minimum: -10, maximum: 10 },
               asset_score_adjustment: { type: 'number', minimum: -10, maximum: 10 },
               business_impact_adjustment: { type: 'number', minimum: -10, maximum: 10 }
-            }
-  }
+
+
           new_intelligence: {
             type: 'object',
             properties: {
               threat_intelligence_updates: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               exploit_developments: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               asset_changes: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (
     request: FastifyRequest<{ Params: { riskId: string }; Body: UpdateRiskScoreRequest }>,
     reply: FastifyReply
@@ -530,36 +534,36 @@ export default async function securityRiskScoringRoutes(
             new_priority_level: updatedRisk.prioritization.priority_level,
             score_history_entries: updatedRisk.risk_scoring.score_history.length,
             last_updated: updatedRisk.risk_scoring.last_updated
-  }
+
           score_changes: {
             composite_score_change: updatedRisk.risk_scoring.score_history.length > 0 ? 
               updatedRisk.risk_scoring.score_history[updatedRisk.risk_scoring.score_history.length - 1].score_change : 0,
             change_reason: update_reason,
             change_trigger: 'manual_adjustment'
-  }
+
           updated_breakdown: {
             vulnerability_score: updatedRisk.risk_scoring.score_breakdown.vulnerability_score,
             threat_score: updatedRisk.risk_scoring.score_breakdown.threat_score,
             asset_score: updatedRisk.risk_scoring.score_breakdown.asset_score,
             business_impact_score: updatedRisk.risk_scoring.score_breakdown.business_impact_score
-  }
+
           intelligence_updates: new_intelligence ? {
             threat_intelligence_count: new_intelligence.threat_intelligence_updates?.length || 0,
             exploit_developments_count: new_intelligence.exploit_developments?.length || 0,
             asset_changes_count: new_intelligence.asset_changes?.length || 0
-          } : null
-  }
+ : null
+
         message: `Risk score updated successfully for risk ${riskId}`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error updating risk score:', error);
       return {
         success: false,
         error: `Failed to update risk score: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -580,29 +584,29 @@ export default async function securityRiskScoringRoutes(
             minItems: 1,
             maxItems: 1000,
             items: { type: 'string' }
-  }
+
           prioritization_criteria: {
             type: 'array',
             items: { type: 'string' }
-  }
+
           business_context: {
             type: 'object',
             properties: {
               current_threat_level: {
                 type: 'string',
                 enum: ['low', 'medium', 'high', 'critical']
-  }
+
               business_priorities: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               resource_constraints: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               timeline_requirements: { type: 'string' }
-            }
-  }
+
+
           filter_criteria: {
             type: 'object',
             properties: {
@@ -611,20 +615,20 @@ export default async function securityRiskScoringRoutes(
               risk_types: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               priority_levels: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               affected_assets: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest<{ Body: PrioritizeRisksRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { risk_ids, prioritization_criteria, business_context, filter_criteria } = request.body;
@@ -644,7 +648,7 @@ export default async function securityRiskScoringRoutes(
           if (filter_criteria.priority_levels && !filter_criteria.priority_levels.includes(risk.prioritization.priority_level)) return false;
           return true;
         });
-      }
+
 
       return {
         success: true,
@@ -654,14 +658,14 @@ export default async function securityRiskScoringRoutes(
             filtered_risks_count: filteredRisks.length,
             prioritization_method: 'dynamic_weighted_scoring',
             business_context_applied: !!business_context
-  }
+
           priority_distribution: {
             critical: filteredRisks.filter(r => r.prioritization.priority_level === 'critical').length,
             high: filteredRisks.filter(r => r.prioritization.priority_level === 'high').length,
             medium: filteredRisks.filter(r => r.prioritization.priority_level === 'medium').length,
             low: filteredRisks.filter(r => r.prioritization.priority_level === 'low').length,
             informational: filteredRisks.filter(r => r.prioritization.priority_level === 'informational').length
-  }
+
           top_priority_risks: filteredRisks.slice(0, 10).map(risk => ({
             risk_id: risk.risk_id,
             risk_name: risk.risk_name,
@@ -678,25 +682,25 @@ export default async function securityRiskScoringRoutes(
             criteria_used: prioritization_criteria || ['business_impact', 'asset_criticality', 'threat_intelligence'],
             weighting_applied: true,
             contextual_adjustments: business_context ? Object.keys(business_context).length : 0
-  }
+
           recommended_actions: [
             'Address critical priority risks immediately',
             'Develop comprehensive remediation timeline',
             'Allocate resources based on priority ranking',
             'Monitor for priority changes due to new intelligence'
           ]
-  }
+
         message: `Successfully prioritized ${filteredRisks.length} security risks`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error prioritizing security risks:', error);
       return {
         success: false,
         error: `Failed to prioritize security risks: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -713,9 +717,9 @@ export default async function securityRiskScoringRoutes(
         required: ['riskId'],
         properties: {
           riskId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { riskId: string } }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { riskId } = request.params;
@@ -747,7 +751,7 @@ export default async function securityRiskScoringRoutes(
             current_status: 'active',
             created_date: Date.now() - 86400000 * 3,
             last_updated: Date.now() - 3600000
-  }
+
           risk_scoring: {
             composite_score: mockRisk.composite_score,
             scoring_methodology: 'CVSS 3.1 + Custom Business Impact',
@@ -757,10 +761,10 @@ export default async function securityRiskScoringRoutes(
               asset_criticality: 9.2,
               business_impact: 8.9,
               exploitability: 9.1
-  }
+
             score_confidence: 0.88,
             last_recalculated: Date.now() - 3600000
-  }
+
           threat_context: {
             threat_actors: mockRisk.threat_actors,
             attack_vectors: ['web_application', 'database_injection'],
@@ -768,7 +772,7 @@ export default async function securityRiskScoringRoutes(
             campaign_associations: ['operation_sql_storm'],
             geographic_threats: ['global'],
             threat_intelligence_sources: 3
-  }
+
           asset_impact: {
             affected_assets_count: mockRisk.affected_assets.length,
             critical_assets_affected: 1,
@@ -776,7 +780,7 @@ export default async function securityRiskScoringRoutes(
             estimated_downtime_hours: 4,
             data_exposure_risk: 'high',
             compliance_implications: ['PCI_DSS', 'GDPR']
-  }
+
           prioritization: {
             priority_level: mockRisk.priority_level,
             priority_score: mockRisk.priority_score,
@@ -784,7 +788,7 @@ export default async function securityRiskScoringRoutes(
             sla_response_time_hours: 4,
             escalation_required: true,
             business_justification: 'Critical customer data at risk'
-  }
+
           remediation: {
             recommended_action: 'Immediate patching and input validation implementation',
             effort_estimate_hours: 24,
@@ -793,25 +797,25 @@ export default async function securityRiskScoringRoutes(
             required_skills: ['web_security', 'database_administration'],
             remediation_options: 3,
             temporary_mitigations: ['WAF rule deployment', 'Enhanced monitoring']
-  }
+
           risk_history: {
             score_changes_count: 5,
             priority_changes_count: 2,
             last_major_update: Date.now() - 86400000,
             trend_direction: 'increasing',
             intelligence_updates: 3
-          }
-  }
+
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting risk details:', error);
       return {
         success: false,
         error: `Failed to get risk details: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -830,14 +834,14 @@ export default async function securityRiskScoringRoutes(
           report_scope: {
             type: 'string',
             enum: ['all_risks', 'high_priority', 'recent_risks', 'custom']
-  }
+
           time_period: {
             type: 'object',
             properties: {
               start_date: { type: 'number' },
               end_date: { type: 'number' }
-            }
-  }
+
+
           risk_filters: {
             type: 'object',
             properties: {
@@ -848,12 +852,12 @@ export default async function securityRiskScoringRoutes(
                 properties: {
                   min: { type: 'number' },
                   max: { type: 'number' }
-                }
-  }
+
+
               asset_types: { type: 'array', items: { type: 'string' } },
               business_units: { type: 'array', items: { type: 'string' } }
-            }
-  }
+
+
           report_options: {
             type: 'object',
             properties: {
@@ -864,12 +868,12 @@ export default async function securityRiskScoringRoutes(
               format: {
                 type: 'string',
                 enum: ['detailed', 'summary', 'executive']
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest<{ Body: GenerateReportRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const {
@@ -882,8 +886,8 @@ export default async function securityRiskScoringRoutes(
           include_detailed_findings: true,
           include_executive_summary: true,
           format: 'detailed'
-        }
-      } = request.body;
+
+ = request.body;
 
       const startDate = time_period?.start_date || Date.now() - 86400000 * 30;
       const endDate = time_period?.end_date || Date.now();
@@ -899,7 +903,7 @@ export default async function securityRiskScoringRoutes(
             report_scope: report_scope,
             reporting_period: report.reporting_period,
             total_risks_analyzed: report.summary_statistics.total_risks
-  }
+
           executive_summary: report_options.include_executive_summary ? {
             key_findings: [
               `Analyzed ${report.summary_statistics.total_risks} security risks`,
@@ -915,7 +919,7 @@ export default async function securityRiskScoringRoutes(
               'Update threat intelligence feeds',
               'Review and update risk scoring models'
             ]
-          } : undefined,
+ : undefined,
           
           summary_statistics: {
             total_risks: report.summary_statistics.total_risks,
@@ -923,7 +927,7 @@ export default async function securityRiskScoringRoutes(
             risk_types_breakdown: report.summary_statistics.risks_by_type,
             average_risk_score: report.summary_statistics.average_risk_score,
             score_distribution: report.summary_statistics.risk_score_distribution
-  }
+
           trend_analysis: report_options.include_trend_analysis ? {
             risk_trends: report.trend_analysis.risk_score_trends.map(trend => ({
               metric: trend.metric_name,
@@ -941,7 +945,7 @@ export default async function securityRiskScoringRoutes(
               'Increased exploit availability',
               'Geopolitical tensions affecting threat levels'
             ]
-          } : undefined,
+ : undefined,
           
           prioritization_insights: {
             top_risks: report.prioritization_insights.top_priority_risks.slice(0, 5).map(risk => ({
@@ -953,32 +957,32 @@ export default async function securityRiskScoringRoutes(
             emerging_threats: report.prioritization_insights.emerging_threats.length,
             overdue_remediations: report.prioritization_insights.overdue_remediations.length,
             risk_concentration: report.prioritization_insights.risk_concentration_areas.slice(0, 3)
-  }
+
           performance_metrics: {
             scoring_accuracy: report.performance_metrics.scoring_accuracy,
             prioritization_effectiveness: report.performance_metrics.prioritization_effectiveness,
             model_performance: {
               false_positive_rate: report.performance_metrics.false_positive_rate,
               false_negative_rate: report.performance_metrics.false_negative_rate
-            }
-  }
+
+
           recommendations: report_options.include_recommendations ? {
             immediate_actions: report.recommendations.immediate_actions.slice(0, 5),
             strategic_recommendations: report.recommendations.strategic_recommendations.slice(0, 3),
             process_improvements: report.recommendations.process_improvements.slice(0, 3)
-          } : undefined
-  }
+ : undefined
+
         message: `Risk scoring report generated successfully for ${report.summary_statistics.total_risks} risks`,
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error generating risk scoring report:', error);
       return {
         success: false,
         error: `Failed to generate risk scoring report: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -990,7 +994,7 @@ export default async function securityRiskScoringRoutes(
     schema: {
       description: 'Get comprehensive security risk scoring analytics and insights',
       tags: ['Security Risk Scoring', 'Analytics']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const analytics = engine.getRiskScoringAnalytics();
@@ -1022,17 +1026,17 @@ export default async function securityRiskScoringRoutes(
             'Regular model performance reviews'
           ],
           recent_activities: analytics.recent_activities.slice(0, 10)
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting risk scoring analytics:', error);
       return {
         success: false,
         error: `Failed to get risk scoring analytics: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -1043,7 +1047,7 @@ export default async function securityRiskScoringRoutes(
     schema: {
       description: 'Get security risk scoring engine health status',
       tags: ['Security Risk Scoring', 'Health Check']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const analytics = engine.getRiskScoringAnalytics();
@@ -1062,13 +1066,13 @@ export default async function securityRiskScoringRoutes(
             model_accuracy: analytics.scoring_performance.model_accuracy,
             scoring_consistency: analytics.scoring_performance.scoring_consistency,
             false_positive_rate: analytics.scoring_performance.false_positive_rate
-  }
+
           system_components: {
             ml_models_operational: true,
             threat_intelligence_feeds_connected: true,
             asset_inventory_synchronized: true,
             compliance_framework_updated: true
-  }
+
           capabilities: {
             real_time_scoring: true,
             automated_prioritization: true,
@@ -1076,18 +1080,18 @@ export default async function securityRiskScoringRoutes(
             business_impact_assessment: true,
             compliance_mapping: true,
             machine_learning_enhancement: true
-  }
+
           performance_metrics: {
             average_scoring_time_ms: 150,
             prioritization_throughput_per_minute: 100,
             model_calibration_last_updated: Date.now() - 86400000,
             threat_feed_last_synchronized: Date.now() - 3600000
-  }
+
           last_check: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting risk scoring engine health:', error);
       return {
         success: false,
@@ -1095,11 +1099,11 @@ export default async function securityRiskScoringRoutes(
           healthy: false,
           engine_status: 'error',
           error_message: error.message
-  }
+
         error: 'Failed to get engine health status',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Setup engine event handlers for logging
@@ -1156,6 +1160,5 @@ export default async function securityRiskScoringRoutes(
     if (riskScoringEngine) {
       await riskScoringEngine.shutdown();
       fastify.log.info('Security Risk Scoring Engine shut down');
-    }
+
   });
-}

@@ -478,13 +478,14 @@ if (this.events.length > 10000) {
                                                                     /**
                                                                     * Get events by criteria
                                                                     */
-                                                                    getEvents(criteria ?  : {});
-                                                                    classification ?  : DataClassificationLevel;
+                                                                    getEvents(criteria ?  : {}),
+                                                                        classification ?  : DataClassificationLevel;
                                                                     userId ?  : string;
                                                                     eventType ?  : string;
                                                                     startDate ?  : Date;
                                                                     endDate ?  : Date;
-                                                                    result ?  : 'SUCCESS' | 'FAILURE' | 'WARNING';
+                                                                    result ?  : 'SUCCESS' | 'FAILURE' | 'WARNING',
+                                                                    ;
                                                                 }
                                                                 MonitoringEvent;
                                                                 {

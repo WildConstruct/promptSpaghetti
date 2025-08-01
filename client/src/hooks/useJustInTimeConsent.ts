@@ -13,27 +13,27 @@ import {
   JustInTimePromptState,
   JustInTimeContext,
   UseJustInTimeReturn
-} from '../types/consent';
+ from '../types/consent';
 import { useConsent } from './useConsent';
 
 // Mock configuration - in real app this would come from API/config
 const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
-  analytics_view: {
+  analytics_view: {,
   triggerId: 'analytics_view',
   title: 'Analytics Consent',
   message: 'Allow analytics tracking to help us improve your experience?',
   contexts: [{,
   feature: 'analytics_dashboard',
   action: 'view',
-}],
-    appearance: {
+],
+    appearance: {,
   style: 'modal',
   theme: 'light',
   size: 'medium',
   showIcon: true,
   iconType: 'info',
 },
-  behavior: {
+  behavior: {,
   showOnce: false,
   cooldownPeriod: 60,
   maxShowsPerSession: 3,
@@ -41,15 +41,15 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   allowDismiss: true,
   blockInteraction: true,
 },
-  marketing_newsletter: {
+  marketing_newsletter: {,
   triggerId: 'marketing_newsletter',
   title: 'Marketing Communications',
   message: 'Subscribe to our newsletter for updates and promotions?',
   contexts: [{,
   feature: 'newsletter_signup',
   action: 'click',
-}],
-    appearance: {
+],
+    appearance: {,
   style: 'banner',
   position: 'bottom',
   theme: 'light',
@@ -57,28 +57,28 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   showIcon: true,
   iconType: 'info',
 },
-  behavior: {
+  behavior: {,
   showOnce: true,
   requireResponse: false,
   allowDismiss: true,
   blockInteraction: false,
 },
-  social_sharing: {
+  social_sharing: {,
   triggerId: 'social_sharing',
   title: 'Social Media Integration',
   message: 'Enable social media features for sharing content?',
   contexts: [{,
   feature: 'social_share',
   action: 'click',
-}],
-    appearance: {
+],
+    appearance: {,
   style: 'tooltip',
   theme: 'light',
   size: 'small',
   showIcon: true,
   iconType: 'question',
 },
-  behavior: {
+  behavior: {,
   showOnce: false,
   cooldownPeriod: 30,
   requireResponse: false,
@@ -86,15 +86,15 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   autoHideAfter: 10,
   blockInteraction: false,
 },
-  personalization_features: {
+  personalization_features: {,
   triggerId: 'personalization_features',
   title: 'Personalization',
   message: 'Allow personalization to customize your experience?',
   contexts: [{,
   feature: 'recommendations',
   action: 'view',
-}],
-    appearance: {
+],
+    appearance: {,
   style: 'sidebar',
   position: 'right',
   theme: 'light',
@@ -102,7 +102,7 @@ const DEFAULT_PROMPT_CONFIGS: Record<string, JustInTimePromptConfig> = {
   showIcon: true,
   iconType: 'shield',
 },
-  behavior: {
+  behavior: {,
   showOnce: false,
   cooldownPeriod: 120,
   maxShowsPerSession: 2,
@@ -137,14 +137,14 @@ export const useJustInTimeConsent = (): UseJustInTimeReturn => {
           Object.entries(parsed.cooldowns || {}).map(([key, value]) => [key, new Date(value as string)])
         );
         setPromptState(prev => ({ ...prev, ...parsed }));
-    } catch (error) {
+ catch (error) {
   console.warn('Failed to load JIT consent state from sessionStorage:', error);
 }, []);
   // Save state to sessionStorage when it changes
   useEffect(() => {
     try {
       sessionStorage.setItem('jit_consent_state', JSON.stringify(promptState));
-    } catch (error) {
+ catch (error) {
   console.warn('Failed to save JIT consent state to sessionStorage:', error);
 }, [promptState]);
   const isPromptAllowed = useCallback((triggerId: string): boolean => {
@@ -246,7 +246,7 @@ export const useJustInTimeConsent = (): UseJustInTimeReturn => {
       // Update consent based on response
       if (granted) {
         await grantConsent(prompt.consentType, 'just_in_time');
-      } else {
+ else {
         // Only withdraw if user previously had consent
         if (hasConsent(prompt.consentType)) {
           await withdrawConsent(prompt.consentType, 'just_in_time');
@@ -268,7 +268,7 @@ export const useJustInTimeConsent = (): UseJustInTimeReturn => {
             : prev.dismissedPrompts
         };
       });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to process consent response:', error);
   throw error;
 }, [promptState.activePrompts, grantConsent, withdrawConsent, hasConsent]);

@@ -9,15 +9,13 @@ import { ZodSchema, ZodTypeAny, z } from 'zod';
  * - onChange: Callback when form values change (debounced)
  */
 
-interface NodeData {
-  id: string;
+interface NodeData { id: string;
   type: string;
   data: Record<string, unknown>;
   export interface InspectorSidebarProps {
-  node: NodeData | null;
+  node: NodeData | null }
   schema: ZodSchema<Record<string, unknown>> | null;
   onChange: (partial: Record<string, unknown>) => void;
-
 
 export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema, onChange }) => {
   const [values, setValues] = React.useState<Record<string, unknown>>({});
@@ -60,15 +58,10 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
   if (schema) {
     const maybeShape: Record<string, ZodTypeAny> | (() => Record<string, ZodTypeAny>) | undefined = 
       (schema as unknown as { shape?: Record<string, ZodTypeAny> | (() => Record<string, ZodTypeAny>) }).shape;
-    if (typeof maybeShape === 'function') {
-      try {
-        shape = maybeShape();
-      } catch {
+    if (typeof maybeShape === 'function') { try {
+        shape = maybeShape() } catch {
         shape = {} as Record<string, ZodTypeAny>;
-
-    } else if (maybeShape) {
-      shape = maybeShape as Record<string, ZodTypeAny>;
-    } else if ((schema as unknown)._def?.shape) {
+ else if (maybeShape) { shape = maybeShape as Record<string, ZodTypeAny> } else if ((schema as unknown)._def?.shape) {
       const s = (schema as unknown)._def.shape;
       shape = typeof s === 'function' ? s() : s;
 
@@ -85,13 +78,10 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
               <input
                 id={`field-${key}`}
                 type={(zodType as unknown)._def?.typeName === 'ZodNumber' ? 'number' : 'text'}
-                value={
-  ((): unknown => {,
+                value={ ((): unknown => { }
   const v = values[key];
-  if (v === undefined || v === null) {
-  return (zodType as unknown)._def?.typeName === 'ZodNumber' ? 0 : '';
-  return v as unknown;
-})()
+  if (v === undefined || v === null) { return (zodType as unknown)._def?.typeName === 'ZodNumber' ? 0 : '';
+  return v as unknown })()
 
                 onChange={e => {
   const isNumber = zodType instanceof z.ZodNumber || (zodType as unknown)._def?.typeName === 'ZodNumber';

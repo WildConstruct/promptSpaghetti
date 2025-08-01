@@ -56,32 +56,32 @@ export var HelpRequestType;
             RESOLVED = 'resolved',
             CLOSED = 'closed',
             REOPENED = 'reopened';
-        ;
-        // Session context
-        sessionId: string;
-        pageUrl: string;
-        referrer: string;
-        userJourney: string;
-        // Application context
-        feature: string;
-        section: string;
-        templateId ?  : string;
-        marketplaceListingId ?  : string;
-        // Technical context
-        browserInfo: {
-            name: string;
-            version: string;
-            platform: string;
-        }
-        ;
-        screenResolution: string;
-        errorLogs ?  : string;
-        // Business context
-        subscriptionPlan: string;
-        accountAge: number; // days
-        previousTickets: number;
-        successfulTransactions: number;
     }
+    ;
+    // Session context
+    sessionId: string;
+    pageUrl: string;
+    referrer: string;
+    userJourney: string;
+    // Application context
+    feature: string;
+    section: string;
+    templateId ?  : string;
+    marketplaceListingId ?  : string;
+    // Technical context
+    browserInfo: {
+        name: string;
+        version: string;
+        platform: string;
+    }
+    ;
+    screenResolution: string;
+    errorLogs ?  : string;
+    // Business context
+    subscriptionPlan: string;
+    accountAge: number; // days
+    previousTickets: number;
+    successfulTransactions: number;
 }
 ;
 ;
@@ -693,51 +693,71 @@ Promise < {
                                         id: 'rule-001',
                                         name: 'High Value Customer Priority',
                                         description: 'Route premium/enterprise customers to senior agents',
-                                        conditions: [,
+                                        conditions: [
                                             { field: 'userTier', operator: 'in', value: ['premium', 'enterprise'], weight: 1.0 }
                                         ],
-                                        action: {
-                                            type: 'assign_to_agent',
-                                            target: 'senior_agent_queue',
-                                            parameters: { estimatedTime: 30 }
-                                        },
-                                        priority: 100,
-                                        active: true
+                                        action: {},
+                                        type: 'assign_to_agent',
+                                        target: 'senior_agent_queue',
+                                        parameters: { estimatedTime: 30 }
                                     },
-                                    {
-                                        id: 'rule-002',
-                                        name: 'Technical Issues to Specialists',
-                                        description: 'Route technical issues to technical specialists',
-                                        conditions: [,
-                                            { field: 'category', operator: 'equals', value: HelpCategory.TECHNICAL, weight: 0.8 },
-                                            { field: 'type', operator: 'equals', value: HelpRequestType.TECHNICAL_ISSUE, weight: 0.9 }
-                                        ],
-                                        action: {
-                                            type: 'assign_to_agent',
-                                            target: 'technical_specialist',
-                                            parameters: { estimatedTime: 45 }
-                                        },
-                                        priority: 80,
-                                        active: true
-                                    },
-                                    {
-                                        id: 'rule-003',
-                                        name: 'Billing to Finance Team',
-                                        description: 'Route billing inquiries to finance specialists',
-                                        conditions: [,
-                                            { field: 'category', operator: 'equals', value: HelpCategory.BILLING, weight: 1.0 }
-                                        ],
-                                        action: {
-                                            type: 'assign_to_agent',
-                                            target: 'finance_team',
-                                            parameters: { estimatedTime: 60 }
-                                        },
-                                        priority: 90,
-                                        active: true
-                                    }
+                                    priority, 100,
+                                    active, true
                                 ];
-                            },
-                            evaluateRoutingRule(rule, request) {
+                            }
+                        };
+                        {
+                            id: 'rule-002',
+                                name;
+                            'Technical Issues to Specialists',
+                                description;
+                            'Route technical issues to technical specialists',
+                                conditions;
+                            [
+                                { field: 'category', operator: 'equals', value: HelpCategory.TECHNICAL, weight: 0.8 },
+                                { field: 'type', operator: 'equals', value: HelpRequestType.TECHNICAL_ISSUE, weight: 0.9 }
+                            ],
+                                action;
+                            {
+                                type: 'assign_to_agent',
+                                    target;
+                                'technical_specialist',
+                                    parameters;
+                                {
+                                    estimatedTime: 45;
+                                }
+                            }
+                            priority: 80,
+                                active;
+                            true;
+                        }
+                        {
+                            id: 'rule-003',
+                                name;
+                            'Billing to Finance Team',
+                                description;
+                            'Route billing inquiries to finance specialists',
+                                conditions;
+                            [
+                                { field: 'category', operator: 'equals', value: HelpCategory.BILLING, weight: 1.0 }
+                            ],
+                                action;
+                            {
+                                type: 'assign_to_agent',
+                                    target;
+                                'finance_team',
+                                    parameters;
+                                {
+                                    estimatedTime: 60;
+                                }
+                            }
+                            priority: 90,
+                                active;
+                            true;
+                            ;
+                            evaluateRoutingRule(rule, RoutingRule, request, HelpRequest);
+                            number;
+                            {
                                 let totalScore = 0;
                                 let maxWeight = 0;
                                 for (const condition of rule.conditions) {
@@ -745,88 +765,95 @@ Promise < {
                                     if (this.evaluateCondition(condition, request)) {
                                         totalScore += condition.weight;
                                         return maxWeight > 0 ? totalScore / maxWeight : 0;
-                                    }
-                                }
-                            },
-                            evaluateCondition(condition, request) {
-                                const fieldValue = this.getFieldValue(condition.field, request);
-                                switch (condition.operator) {
-                                    case 'equals':
-                                        return fieldValue === condition.value;
-                                    case 'contains':
-                                        return String(fieldValue).toLowerCase().includes(String(condition.value).toLowerCase());
-                                    case 'in':
-                                        return Array.isArray(condition.value) && condition.value.includes(fieldValue);
-                                    case 'not_in':
-                                        return Array.isArray(condition.value) && !condition.value.includes(fieldValue);
-                                    case 'greater_than':
-                                        return Number(fieldValue) > Number(condition.value);
-                                    case 'less_than':
-                                        return Number(fieldValue) < Number(condition.value);
-                                    default:
-                                        return false;
-                                }
-                            },
-                            getFieldValue(field, request) {
-                                const fieldParts = field.split('.');
-                                let value = request;
-                                for (const part of fieldParts) {
-                                    value = value?.[part];
-                                    return value;
-                                }
-                            },
-                            enhanceRoutingDecision(decision, request) {
-                                // Enhance based on user context
-                                if (request.userTier === 'enterprise') {
-                                    decision.confidence += 0.1;
-                                    decision.estimatedResolutionTime = Math.floor(decision.estimatedResolutionTime * 0.8);
-                                    // Enhance based on urgency
-                                    if (request.priority === HelpPriority.CRITICAL) {
-                                        decision.strategy = 'specialist';
-                                        decision.confidence += 0.2;
-                                        return decision;
-                                    }
-                                }
-                            },
-                            generateAutoSuggestionMessage(articles) {
-                                const articleList = articles;
-                            },
-                            : 
-                                .slice(0, 3)
-                                .map(article => `• ${article.title}`)
-                        }
-                            .join('\n');
-                        return `I found some helpful articles that might resolve your issue:
+                                        evaluateCondition(condition, RoutingCondition, request, HelpRequest);
+                                        boolean;
+                                        {
+                                            const fieldValue = this.getFieldValue(condition.field, request);
+                                            switch (condition.operator) {
+                                                case 'equals':
+                                                    return fieldValue === condition.value;
+                                                case 'contains':
+                                                    return String(fieldValue).toLowerCase().includes(String(condition.value).toLowerCase());
+                                                case 'in':
+                                                    return Array.isArray(condition.value) && condition.value.includes(fieldValue);
+                                                case 'not_in':
+                                                    return Array.isArray(condition.value) && !condition.value.includes(fieldValue);
+                                                case 'greater_than':
+                                                    return Number(fieldValue) > Number(condition.value);
+                                                case 'less_than':
+                                                    return Number(fieldValue) < Number(condition.value);
+                                                default:
+                                                    return false;
+                                                    getFieldValue(field, string, request, HelpRequest);
+                                                    any;
+                                                    {
+                                                        const fieldParts = field.split('.');
+                                                        let value = request;
+                                                        for (const part of fieldParts) {
+                                                            value = value?.[part];
+                                                            return value;
+                                                            enhanceRoutingDecision(decision, RoutingDecision, request, HelpRequest);
+                                                            RoutingDecision;
+                                                            {
+                                                                // Enhance based on user context
+                                                                if (request.userTier === 'enterprise') {
+                                                                    decision.confidence += 0.1;
+                                                                    decision.estimatedResolutionTime = Math.floor(decision.estimatedResolutionTime * 0.8);
+                                                                    // Enhance based on urgency
+                                                                    if (request.priority === HelpPriority.CRITICAL) {
+                                                                        decision.strategy = 'specialist';
+                                                                        decision.confidence += 0.2;
+                                                                        return decision;
+                                                                        generateAutoSuggestionMessage(articles, KnowledgeBaseArticle);
+                                                                        string;
+                                                                        {
+                                                                            const articleList = articles;
+                                                                            slice(0, 3)
+                                                                                .map(article => `• ${article.title}`);
+                                                                        }
+                                                                        join('\n');
+                                                                        return `I found some helpful articles that might resolve your issue:
 ${articleList}
 Please review these resources. If they don't help, I'll connect you with our support team.`;
-                        async;
-                        assignToAvailableAgent(request, HelpRequest);
-                        Promise < string > {
-                            // Simplified agent assignment - in real implementation would check availability
-                            const: agents = ['agent-1', 'agent-2', 'agent-3', 'agent-4'],
-                            return: agents[request.id.length % agents.length],
-                            async assignToSpecialist(request) {
-                                // Route to appropriate specialist based on category
-                                const specialists = {
-                                    [HelpCategory.TECHNICAL]: 'tech-specialist-1',
-                                    [HelpCategory.BILLING]: 'billing-specialist-1',
-                                    [HelpCategory.TEMPLATES]: 'template-specialist-1',
-                                    [HelpCategory.MARKETPLACE]: 'marketplace-specialist-1',
-                                };
-                                return specialists[request.category] || 'general-specialist-1';
-                            },
-                            async routeToCommunity(request) {
-                                // Route to community forum - implementation would post to forum
-                                request.status = HelpRequestStatus.IN_PROGRESS;
-                                request.analytics.resolutionSource = 'community';
-                            },
-                            increasePriority(currentPriority) {
-                                const priorities = [HelpPriority.LOW, HelpPriority.MEDIUM, HelpPriority.HIGH, HelpPriority.URGENT, HelpPriority.CRITICAL];
-                                const currentIndex = priorities.indexOf(currentPriority);
-                                return priorities[Math.min(currentIndex + 1, priorities.length - 1)];
-                                export default Epic16HelpRequestService;
+                                                                        async;
+                                                                        assignToAvailableAgent(request, HelpRequest);
+                                                                        Promise < string > {
+                                                                            // Simplified agent assignment - in real implementation would check availability
+                                                                            const: agents = ['agent-1', 'agent-2', 'agent-3', 'agent-4'],
+                                                                            return: agents[request.id.length % agents.length],
+                                                                            async assignToSpecialist(request) {
+                                                                                // Route to appropriate specialist based on category
+                                                                                const specialists = {
+                                                                                    [HelpCategory.TECHNICAL]: 'tech-specialist-1',
+                                                                                    [HelpCategory.BILLING]: 'billing-specialist-1',
+                                                                                    [HelpCategory.TEMPLATES]: 'template-specialist-1',
+                                                                                    [HelpCategory.MARKETPLACE]: 'marketplace-specialist-1',
+                                                                                };
+                                                                                return specialists[request.category] || 'general-specialist-1';
+                                                                            },
+                                                                            async routeToCommunity(request) {
+                                                                                // Route to community forum - implementation would post to forum
+                                                                                request.status = HelpRequestStatus.IN_PROGRESS;
+                                                                                request.analytics.resolutionSource = 'community';
+                                                                            },
+                                                                            increasePriority(currentPriority) {
+                                                                                const priorities = [HelpPriority.LOW, HelpPriority.MEDIUM, HelpPriority.HIGH, HelpPriority.URGENT, HelpPriority.CRITICAL];
+                                                                                const currentIndex = priorities.indexOf(currentPriority);
+                                                                                return priorities[Math.min(currentIndex + 1, priorities.length - 1)];
+                                                                                export default Epic16HelpRequestService;
+                                                                            }
+                                                                        };
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                        };
+                        }
                     }
                 }
             }

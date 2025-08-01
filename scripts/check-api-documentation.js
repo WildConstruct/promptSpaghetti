@@ -79,7 +79,7 @@ function checkAPIDocumentation(filePath: string): any[] {
           message: `API route ${handler.method.toUpperCase()} ${handler.route} missing JSDoc documentation`
         });
         continue;
-      }
+
       
       // Check required documentation elements
       const missingTags = checkRequiredTags(jsdoc, handler);
@@ -103,14 +103,14 @@ function checkAPIDocumentation(filePath: string): any[] {
       // Check response documentation
       const responseIssues = checkResponseDocumentation(jsdoc, handler);
       violations.push(...responseIssues);
-    }
+
     
     return violations;
-  } catch (error) {
+ catch (error) {
     console.error(`Error checking ${filePath}:`, error.message);
     return [];
-  }
-}
+
+
 
 function findRouteHandlers(content: string): any[] {
   const handlers = [];
@@ -124,10 +124,10 @@ function findRouteHandlers(content: string): any[] {
       index: match.index,
       line: getLineNumber(content, match.index)
     });
-  }
+
   
   return handlers;
-}
+
 
 function findJSDocForHandler(content: string, handler: any): string | null {
   // Look backwards from handler position for JSDoc comment
@@ -143,25 +143,25 @@ function findJSDocForHandler(content: string, handler: any): string | null {
     
     if (line === '*/' && jsdocEnd === -1) {
       jsdocEnd = i;
-    }
+
     
     if (line.startsWith('/**') && jsdocEnd !== -1) {
       jsdocStart = i;
       break;
-    }
+
     
     // Stop if we hit another function or significant code
     if (line.includes('function') || line.includes('=>') || line.includes('fastify.')) {
       if (jsdocStart === -1) break;
-    }
-  }
+
+
   
   if (jsdocStart !== -1 && jsdocEnd !== -1) {
     return lines.slice(jsdocStart, jsdocEnd + 1).join('\n');
-  }
+
   
   return null;
-}
+
 
 function checkRequiredTags(jsdoc: string, handler: any): any[] {
   const missingTags = [];
@@ -172,26 +172,26 @@ function checkRequiredTags(jsdoc: string, handler: any): any[] {
   for (const tag of basicTags) {
     if (!jsdoc.includes(tag)) {
       missingTags.push(tag);
-    }
-  }
+
+
   
   // Check for parameter documentation if route has parameters
   if (handler.route.includes(':') && !jsdoc.includes('@param')) {
     missingTags.push('@param');
-  }
+
   
   // Check for response documentation
   if (!jsdoc.includes('@returns') && !jsdoc.includes('@response')) {
     missingTags.push('@returns');
-  }
+
   
   // Check for error documentation
   if (!jsdoc.includes('@throws') && !jsdoc.includes('@error')) {
     missingTags.push('@throws');
-  }
+
   
   return missingTags;
-}
+
 
 function checkSecurityDocumentation(content: string, handler: any, jsdoc: string): any[] {
   const issues = [];
@@ -218,7 +218,7 @@ function checkSecurityDocumentation(content: string, handler: any, jsdoc: string
       method: handler.method,
       message: `Missing security/access documentation for ${handler.method.toUpperCase()} ${handler.route}`
     });
-  }
+
   
   // Validate security documentation accuracy
   if (requiresAuth && jsdoc.includes('@access public')) {
@@ -229,7 +229,7 @@ function checkSecurityDocumentation(content: string, handler: any, jsdoc: string
       method: handler.method,
       message: `Route requires authentication but documented as public: ${handler.method.toUpperCase()} ${handler.route}`
     });
-  }
+
   
   if (requiresRole && !jsdoc.includes('@access admin') && !jsdoc.includes('@access role')) {
     issues.push({
@@ -239,10 +239,10 @@ function checkSecurityDocumentation(content: string, handler: any, jsdoc: string
       method: handler.method,
       message: `Route requires role-based access but not documented: ${handler.method.toUpperCase()} ${handler.route}`
     });
-  }
+
   
   return issues;
-}
+
 
 function checkParameterDocumentation(content: string, handler: any, jsdoc: string): any[] {
   const issues = [];
@@ -252,7 +252,7 @@ function checkParameterDocumentation(content: string, handler: any, jsdoc: strin
   const paramMatches = handler.route.matchAll(/:([a-zA-Z_$][a-zA-Z0-9_$]*)/g);
   for (const match of paramMatches) {
     routeParams.push(match[1]);
-  }
+
   
   // Check if all route parameters are documented
   for (const param of routeParams) {
@@ -266,8 +266,8 @@ function checkParameterDocumentation(content: string, handler: any, jsdoc: strin
         parameter: param,
         message: `Missing parameter documentation for '${param}' in ${handler.method.toUpperCase()} ${handler.route}`
       });
-    }
-  }
+
+
   
   // Check for body parameter documentation for POST/PUT/PATCH
   if (['post', 'put', 'patch'].includes(handler.method.toLowerCase())) {
@@ -280,11 +280,11 @@ function checkParameterDocumentation(content: string, handler: any, jsdoc: strin
         method: handler.method,
         message: `Missing request body documentation for ${handler.method.toUpperCase()} ${handler.route}`
       });
-    }
-  }
+
+
   
   return issues;
-}
+
 
 function checkResponseDocumentation(jsdoc: string, handler: any): any[] {
   const issues = [];
@@ -299,7 +299,7 @@ function checkResponseDocumentation(jsdoc: string, handler: any): any[] {
       method: handler.method,
       message: `Missing response documentation for ${handler.method.toUpperCase()} ${handler.route}`
     });
-  }
+
   
   // Check for error response documentation
   const hasErrorDoc = /@throws|@error|@failure/i.test(jsdoc);
@@ -311,14 +311,14 @@ function checkResponseDocumentation(jsdoc: string, handler: any): any[] {
       method: handler.method,
       message: `Missing error response documentation for ${handler.method.toUpperCase()} ${handler.route}`
     });
-  }
+
   
   return issues;
-}
+
 
 function getLineNumber(content: string, index: number): number {
   return content.substring(0, index).split('\n').length;
-}
+
 
 function main() {
   const filePaths = process.argv.slice(2);
@@ -328,7 +328,7 @@ function main() {
   if (filePaths.length === 0) {
     console.log('✅ Epic 17 API Documentation: No files to check');
     process.exit(0);
-  }
+
 
   console.log(`📚 Epic 17 API Documentation: Checking ${filePaths.length} files...`);
 
@@ -353,8 +353,8 @@ function main() {
           console.log(`      Line ${violation.line}: ${violation.message}`);
         });
       });
-    }
-  }
+
+
 
   if (hasErrors) {
     console.log(`\n💥 Epic 17 API Documentation: Found ${totalViolations} documentation issues`);
@@ -377,14 +377,14 @@ function main() {
       * @throws {401} Authentication required
       */`);
     process.exit(1);
-  } else {
+ else {
     console.log(`✅ Epic 17 API Documentation: All ${filePaths.length} files properly documented`);
     process.exit(0);
-  }
-}
+
+
 
 if (require.main === module) {
   main();
-}
+
 
 module.exports = { checkAPIDocumentation, DOC_REQUIREMENTS, SECURITY_PATTERNS };

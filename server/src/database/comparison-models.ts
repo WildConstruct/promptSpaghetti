@@ -230,32 +230,35 @@ export type ViewMode = z.infer<typeof ViewModeSchema>;
 export type HighlightMode = z.infer<typeof HighlightModeSchema>;
 
 // Graph data for comparison
-}
-}
+
+
+
 export interface GraphData {
   id: string;
   nodes: Array<{
     id: string;
     type: string;
-}
-}
+
+
+
     position: { x: number; y: number };
     data: Record<string, unknown>;
     [key: string]: unknown;
-  }>;
+>;
   edges: Array<{
     id: string;
     source: string;
     target: string;
     data?: Record<string, unknown>;
     [key: string]: unknown;
-  }>;
+>;
   metadata?: Record<string, unknown>;
-}
+
 
 // Comparison result with full details
-}
-}
+
+
+
 export interface DetailedComparison extends GraphComparison {
   source_data: GraphData;
   target_data: GraphData;
@@ -266,7 +269,7 @@ export interface DetailedComparison extends GraphComparison {
     performance_metrics: Record<string, number>;
     confidence_distribution: Record<string, number>;
   };
-}
+
 
 // Export all schemas for validation
 export const ComparisonSchemas = {

@@ -4,7 +4,8 @@ import { X, Save, AlertCircle, Info } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { ValidationMessage } from '../common/ValidationMessage';
 import { LoadingSpinner } from '../common/LoadingSpinner';
-}
+
+
 interface EditToggleModalProps {
   isOpen: boolean;,
   onClose: () => void,
@@ -20,14 +21,15 @@ interface EditToggleModalProps {
   claudeImpact: string;,
   enabled: boolean,
   version: number;
-  }
+
+
 
 export const EditToggleModal: React.FC<EditToggleModalProps> = ({
   isOpen,
   onClose,
   toggleId,
   onSave
-}
+
 }) => {
   const [toggle, setToggle] = useState<ToggleData | null>(null);
   const [formData, setFormData] = useState<Partial<ToggleData>>({});
@@ -58,9 +60,9 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
   claudeImpact: data.claudeImpact,
   enabled: data.enabled
 });
-    } catch (error) {
+ catch (error) {
       setErrors({ fetch: error instanceof Error ? error.message : 'Failed to load toggle' });
-    } finally {
+ finally {
       setLoading(false);
   }, [toggleId]);
   const validateForm = (): boolean => {
@@ -88,22 +90,22 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
   method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({),
           ...formData,
           reason
-  }
+
       });
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Failed to update toggle');
       onSave();
       onClose();
-    } catch (error) {
+ catch (error) {
       setErrors({ submit: error instanceof Error ? error.message : 'Failed to update toggle' });
-    } finally {
+ finally {
       setSaving(false);
   };
   const renderValueEditor = () => {
@@ -152,7 +154,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
           <div className="variants-editor">
             {formData.value?.variants?.map(()
               variant: { key?: string; value?: string; percentage?: number }, 
-              index: number) => (,
+              index: number) => (
               <div key={index} className="variant-row">
                 <input
                   type="text"
@@ -165,7 +167,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
   ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
-                  }}
+
                 />
                 <input
                   type="text"
@@ -178,7 +180,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
   ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
-                  }}
+
                 />
                 <input
                   type="number"
@@ -193,7 +195,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
   ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
-                  }}
+
                 />
                 <button
                   type="button"
@@ -204,7 +206,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
   ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
-                  }}
+
                 >
                     ×
                 </button>
@@ -219,12 +221,12 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
 },
   value: '',
                   percentage: 0;
-  }];
+];
                 setFormData(prev => ({
   ...prev,
                   value: { ...prev.value, variants: newVariants }
                 }));
-              }}
+
             >
                 Add Variant
             </button>
@@ -284,9 +286,9 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
               try {
                 const value = JSON.parse(e.target.value);
                 setFormData(prev => ({ ...prev, value }));
-              } catch {
+ catch {
                 // Invalid JSON, ignore
-            }}
+}
             rows={6}
             className="json-editor"
           />

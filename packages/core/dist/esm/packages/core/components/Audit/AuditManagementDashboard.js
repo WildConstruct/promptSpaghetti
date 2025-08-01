@@ -12,6 +12,9 @@ import { AuditEventType, AuditSeverity, ComplianceFramework, AuditStatus, auditM
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 const { TabPane } = Tabs;
+analytics: null,
+    anomalousPatterns;
+[];
 ;
 const [filters, setFilters] = useState({});
 dateRange: [undefined, undefined],
@@ -123,99 +126,72 @@ const renderAnomalousPatterns = () => {
 ;
 // Audit events table
 const renderAuditEventsTable = () => {
-    const columns = [];
-    {
-        title: 'Timestamp',
-            dataIndex;
-        'timestamp',
-            key;
-        'timestamp',
-            render;
-        (timestamp) => timestamp.toLocaleString(),
-            sorter;
-        true,
-        ;
-    }
-    {
-        title: 'Event Type',
-            dataIndex;
-        'event_type',
-            key;
-        'event_type',
-            render;
-        (type) => _jsx(Tag, { children: type.replace('_', ' ').toUpperCase() });
-    }
-    {
-        title: 'Severity',
-            dataIndex;
-        'severity',
-            key;
-        'severity',
-            render;
-        renderSeverityBadge,
-        ;
-    }
-    {
-        title: 'Title',
-            dataIndex;
-        'title',
-            key;
-        'title',
-            ellipsis;
-        true,
-        ;
-    }
-    {
-        title: 'User',
-            dataIndex;
-        'user_id',
-            key;
-        'user_id',
-            render;
-        (userId) => userId ? _jsx(Tag, { icon: _jsx(UserOutlined, {}), children: userId }) : 'System';
-    }
-    {
-        title: 'Risk Score',
-            dataIndex;
-        'risk_score',
-            key;
-        'risk_score',
-            render;
-        renderRiskScore,
-            sorter;
-        true,
-        ;
-    }
-    {
-        title: 'Status',
-            dataIndex;
-        'status',
-            key;
-        'status',
-            render;
-        (status) => {
-            const colors = {
+    const columns = [
+        {
+            title: 'Timestamp',
+            dataIndex: 'timestamp',
+            key: 'timestamp',
+            render: (timestamp) => timestamp.toLocaleString(),
+            sorter: true,
+        },
+        {
+            title: 'Event Type',
+            dataIndex: 'event_type',
+            key: 'event_type',
+            render: (type) => _jsx(Tag, { children: type.replace('_', ' ').toUpperCase() })
+        },
+        {
+            title: 'Severity',
+            dataIndex: 'severity',
+            key: 'severity',
+            render: renderSeverityBadge,
+        },
+        {
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
+            ellipsis: true,
+        },
+        {
+            title: 'User',
+            dataIndex: 'user_id',
+            key: 'user_id',
+            render: (userId) => userId ? _jsx(Tag, { icon: _jsx(UserOutlined, {}), children: userId }) : 'System'
+        },
+        {
+            title: 'Risk Score',
+            dataIndex: 'risk_score',
+            key: 'risk_score',
+            render: renderRiskScore,
+            sorter: true,
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => { },
+            const: colors = {
                 [AuditStatus.ACTIVE]: 'blue',
                 [AuditStatus.RESOLVED]: 'green',
                 [AuditStatus.INVESTIGATING]: 'orange',
                 [AuditStatus.SUPPRESSED]: 'gray',
                 [AuditStatus.ESCALATED]: 'red',
-            };
-            return _jsx(Tag, { color: colors[status], children: status.toUpperCase() });
-        };
-        {
-            title: 'Compliance',
-                dataIndex;
-            'compliance_frameworks',
-                key;
-            'compliance_frameworks',
-                render;
-            (frameworks) => (),
-                _jsx("div", { children: frameworks.map(framework => ()
-                        < Tag, key = { framework }, size = "small" > { framework, : .toUpperCase() }) });
-        }
-    }
+            },
+            [status]: 
+        } > { status, : .toUpperCase() }, Tag > 
+    ];
 };
+{
+    title: 'Compliance',
+        dataIndex;
+    'compliance_frameworks',
+        key;
+    'compliance_frameworks',
+        render;
+    (frameworks) => (),
+        _jsx("div", { children: frameworks.map(framework => ()
+                < Tag, key = { framework }, size = "small" > { framework, : .toUpperCase() }) });
+}
 div >
 ;
 {

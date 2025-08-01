@@ -19,11 +19,11 @@ class PerformanceProfiler {
       system: {},
       summary: {}
     };
-  }
+
 
   startTiming(name: string): void {
     performance.mark(`${name}-start`);
-  }
+
 
   endTiming(name: string): number {
     performance.mark(`${name}-end`);
@@ -34,7 +34,7 @@ class PerformanceProfiler {
     
     this.recordMetric(name, duration);
     return duration;
-  }
+
 
   recordMetric(name: string, value: number): void {
     if (!this.metrics.has(name)) {
@@ -45,18 +45,18 @@ class PerformanceProfiler {
         min: Infinity,
         max: -Infinity
       });
-    }
+
     
     const metric = this.metrics.get(name);
     metric.values.push(value);
     metric.min = Math.min(metric.min, value);
     metric.max = Math.max(metric.max, value);
     metric.average = metric.values.reduce((a, b) => a + b, 0) / metric.values.length;
-  }
+
 
   getMetrics(): any[] {
     return Array.from(this.metrics.values());
-  }
+
 
   async runBundleAnalysis(): Promise<any> {
     console.log('🔍 Running bundle analysis...');
@@ -69,7 +69,7 @@ class PerformanceProfiler {
         this.results.frontend.bundleSize = 0;
         this.results.frontend.buildTime = 0;
         return { bundleSize: 0, buildTime: 0 };
-      }
+
       
       // Run build and capture bundle size
       const buildStart = Date.now();
@@ -87,20 +87,20 @@ class PerformanceProfiler {
       console.log(`   Build time: ${buildTime}ms`);
       
       return { bundleSize, buildTime };
-    } catch (error) {
+ catch (error) {
       console.log('   ⚠️  Bundle analysis skipped:', error.message);
       this.results.frontend.bundleSize = 0;
       this.results.frontend.buildTime = 0;
       return { bundleSize: 0, buildTime: 0 };
-    }
-  }
+
+
 
   calculateDirectorySize(dirPath: string): number {
     let totalSize = 0;
     
     if (!fs.existsSync(dirPath)) {
       return totalSize;
-    }
+
     
     const files = fs.readdirSync(dirPath);
     
@@ -110,13 +110,13 @@ class PerformanceProfiler {
       
       if (stats.isDirectory()) {
         totalSize += this.calculateDirectorySize(filePath);
-      } else {
+ else {
         totalSize += stats.size;
-      }
-    }
+
+
     
     return totalSize;
-  }
+
 
   async runDependencyAnalysis(): Promise<any> {
     console.log('📦 Running dependency analysis...');
@@ -145,11 +145,11 @@ class PerformanceProfiler {
       console.log(`   Audit time: ${auditTime}ms`);
       
       return audit;
-    } catch (error) {
+ catch (error) {
       console.error('   ❌ Dependency analysis failed:', error.message);
       return { metadata: { vulnerabilities: {} } };
-    }
-  }
+
+
 
   async runTestPerformance(): Promise<any> {
     console.log('🧪 Running test performance analysis...');
@@ -162,7 +162,7 @@ class PerformanceProfiler {
         this.results.system.testTime = 0;
         this.results.system.coverage = {};
         return { testTime: 0, coverage: {} };
-      }
+
       
       const testStart = Date.now();
       execSync('npm test -- --coverage --passWithNoTests', { stdio: 'pipe' });
@@ -174,10 +174,10 @@ class PerformanceProfiler {
         const coveragePath = path.join(process.cwd(), 'coverage', 'coverage-summary.json');
         if (fs.existsSync(coveragePath)) {
           coverage = JSON.parse(fs.readFileSync(coveragePath, 'utf8'));
-        }
-      } catch (error) {
+
+ catch (error) {
         console.warn('   ⚠️  Could not read coverage report');
-      }
+
       
       this.results.system.testTime = testTime;
       this.results.system.coverage = coverage;
@@ -186,13 +186,13 @@ class PerformanceProfiler {
       console.log(`   Coverage: ${JSON.stringify(coverage.total || {})}`);
       
       return { testTime, coverage };
-    } catch (error) {
+ catch (error) {
       console.log('   ⚠️  Test performance analysis skipped:', error.message);
       this.results.system.testTime = 0;
       this.results.system.coverage = {};
       return { testTime: 0, coverage: {} };
-    }
-  }
+
+
 
   async runLintAnalysis(): Promise<any> {
     console.log('🔍 Running lint analysis...');
@@ -206,7 +206,7 @@ class PerformanceProfiler {
         this.results.system.eslintErrors = 0;
         this.results.system.eslintWarnings = 0;
         return { lintTime: 0, totalErrors: 0, totalWarnings: 0 };
-      }
+
       
       const lintStart = Date.now();
       
@@ -234,14 +234,14 @@ class PerformanceProfiler {
       console.log(`   ESLint warnings: ${totalWarnings}`);
       
       return { lintTime, totalErrors, totalWarnings };
-    } catch (error) {
+ catch (error) {
       console.log('   ⚠️  Lint analysis skipped:', error.message);
       this.results.system.lintTime = 0;
       this.results.system.eslintErrors = 0;
       this.results.system.eslintWarnings = 0;
       return { lintTime: 0, totalErrors: 0, totalWarnings: 0 };
-    }
-  }
+
+
 
   async runMemoryAnalysis(): Promise<any> {
     console.log('🧠 Running memory analysis...');
@@ -260,7 +260,7 @@ class PerformanceProfiler {
     // Force garbage collection if available
     if (global.gc) {
       global.gc();
-    }
+
     
     // Measure memory after cleanup
     const memAfter = process.memoryUsage();
@@ -274,7 +274,7 @@ class PerformanceProfiler {
     console.log(`   After cleanup: ${(memAfter.heapUsed / 1024 / 1024).toFixed(2)} MB`);
     
     return { memStart, memDuring, memAfter };
-  }
+
 
   generateReport(): any {
     const report = {
@@ -286,11 +286,11 @@ class PerformanceProfiler {
         passedTests: this.metrics.size, // Simplified for this analysis
         failedTests: 0,
         overallScore: this.calculateOverallScore()
-      }
+
     };
     
     return report;
-  }
+
 
   calculateOverallScore(): number {
     let score = 100;
@@ -298,15 +298,15 @@ class PerformanceProfiler {
     // Deduct points for performance issues
     if (this.results.frontend.bundleSize > 500 * 1024) {
       score -= 10; // Bundle too large
-    }
+
     
     if (this.results.system.eslintErrors > 0) {
       score -= 20; // ESLint errors
-    }
+
     
     if (this.results.system.eslintWarnings > 100) {
       score -= 10; // Too many warnings
-    }
+
     
     // Check vulnerabilities
     const vulns = this.results.system.vulnerabilities || {};
@@ -315,7 +315,7 @@ class PerformanceProfiler {
     if (vulns.low > 0) score -= 10;
     
     return Math.max(0, score);
-  }
+
 
   async saveReport(report: any): Promise<void> {
     const reportPath = path.join(process.cwd(), 'docs', 'performance-report.json');
@@ -328,7 +328,7 @@ class PerformanceProfiler {
     
     console.log(`📊 Performance report saved to: ${reportPath}`);
     console.log(`📋 Human-readable report saved to: ${humanReportPath}`);
-  }
+
 
   generateHumanReport(report: any): string {
     return `# Performance Analysis Report
@@ -376,42 +376,42 @@ ${report.metrics.map((metric: any) =>
 - Samples: ${metric.values.length}
 `).join('\n')}
 `;
-  }
+
 
   generateRecommendations(report: any): string {
     const recommendations = [];
     
     if (report.results.frontend.bundleSize > 500 * 1024) {
       recommendations.push('- 🔴 Bundle size exceeds 500KB - consider code splitting');
-    }
+
     
     if (report.results.system.eslintErrors > 0) {
       recommendations.push('- 🔴 Fix ESLint errors before deployment');
-    }
+
     
     if (report.results.system.eslintWarnings > 100) {
       recommendations.push('- 🟡 High number of ESLint warnings - consider cleanup');
-    }
+
     
     const vulns = report.results.system.vulnerabilities;
     if (vulns?.high > 0) {
       recommendations.push('- 🔴 High severity vulnerabilities found - update dependencies');
-    }
+
     if (vulns?.moderate > 0) {
       recommendations.push('- 🟡 Moderate severity vulnerabilities found - review and update');
-    }
+
     
     if (report.results.system.testTime > 30000) {
       recommendations.push('- 🟡 Test suite takes longer than 30 seconds - consider optimization');
-    }
+
     
     if (recommendations.length === 0) {
       recommendations.push('- ✅ No critical performance issues detected');
-    }
+
     
     return recommendations.join('\n');
-  }
-}
+
+
 
 async function main(): Promise<void> {
   console.log('🚀 Starting Epic 18.1.4 Performance Analysis...\n');
@@ -436,20 +436,19 @@ async function main(): Promise<void> {
     if (report.summary.overallScore < 80) {
       console.log('⚠️  Performance issues detected - review the report for recommendations');
       process.exit(1);
-    } else {
+ else {
       console.log('🎉 Performance analysis passed!');
       process.exit(0);
-    }
-    
-  } catch (error) {
+
+ catch (error) {
     console.error('❌ Performance analysis failed:', error);
     process.exit(1);
-  }
-}
+
+
 
 // Run the analysis
 if (require.main === module) {
   main();
-}
+
 
 module.exports = { PerformanceProfiler };

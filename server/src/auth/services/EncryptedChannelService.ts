@@ -6,8 +6,8 @@
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
-}
-}
+
+
 export interface EncryptedChannel {
   id: string;
   name: string;
@@ -23,13 +23,14 @@ export interface EncryptedChannel {
     maxParticipants: number;
     ttl?: number; // Time to live in seconds
     requireMFA?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface EncryptedMessage {
   id: string;
   channelId: string;
@@ -44,13 +45,14 @@ export interface EncryptedMessage {
     contentLength: number;
     checksum: string;
     priority: 'low' | 'normal' | 'high' | 'urgent';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ChannelKey {
   version: number;
   key: Buffer;
@@ -58,21 +60,23 @@ export interface ChannelKey {
   createdAt: Date;
   expiresAt?: Date;
   algorithm: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MessageTransmissionResult {
   success: boolean;
   messageId?: string;
   error?: string;
   deliveredTo: string[];
   failedDeliveries: string[];
-}
-}
-}
+
+
+
+
 
 export class EncryptedChannelService extends EventEmitter {
   private channels: Map<string, EncryptedChannel> = new Map();
@@ -83,7 +87,7 @@ export class EncryptedChannelService extends EventEmitter {
   constructor(private masterKey: string) {
     super();
     this.startMaintenanceTasks();
-  }
+
 
   /**
    * Create a new encrypted communication channel
@@ -122,13 +126,13 @@ export class EncryptedChannelService extends EventEmitter {
         maxParticipants: options.maxParticipants || 10,
         ttl: options.ttl,
         requireMFA: options.requireMFA || false
-      }
+
     };
 
     // Validate participant count
     if (channel.participants.length > channel.metadata.maxParticipants) {
       throw new Error(`Too many participants. Maximum allowed: ${channel.metadata.maxParticipants}`);
-    }
+
 
     // Store channel and key
     this.channels.set(channelId, channel);
@@ -146,7 +150,7 @@ export class EncryptedChannelService extends EventEmitter {
 
     this.emit('channelCreated', channel);
     return channel;
-  }
+
 
   /**
    * Send an encrypted message to a channel
@@ -167,7 +171,7 @@ export class EncryptedChannelService extends EventEmitter {
         deliveredTo: [],
         failedDeliveries: []
       };
-    }
+
 
     // Verify sender is participant
     if (!channel.participants.includes(senderId)) {
@@ -177,7 +181,7 @@ export class EncryptedChannelService extends EventEmitter {
         deliveredTo: [],
         failedDeliveries: []
       };
-    }
+
 
     // Get current channel key
     const keyMap = this.channelKeys.get(channelId);
@@ -189,7 +193,7 @@ export class EncryptedChannelService extends EventEmitter {
         deliveredTo: [],
         failedDeliveries: []
       };
-    }
+
 
     try {
       // Encrypt message content
@@ -214,7 +218,7 @@ export class EncryptedChannelService extends EventEmitter {
           contentLength: content.length,
           checksum: this.calculateChecksum(content),
           priority
-        }
+
       };
 
       // Store message
@@ -238,11 +242,11 @@ export class EncryptedChannelService extends EventEmitter {
           if (activeParticipants.has(participantId)) {
             await this.deliverMessage(participantId, message);
             deliveredTo.push(participantId);
-          }
-        } catch (error) {
+
+ catch (error) {
           failedDeliveries.push(participantId);
-        }
-      }
+
+
 
       // Log message event
       await this.logChannelEvent(channelId, 'message_sent', senderId, {
@@ -260,15 +264,15 @@ export class EncryptedChannelService extends EventEmitter {
         deliveredTo,
         failedDeliveries
       };
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         error: `Encryption failed: ${error.message}`,
         deliveredTo: [],
         failedDeliveries: []
       };
-    }
-  }
+
+
 
   /**
    * Retrieve and decrypt messages from a channel
@@ -285,11 +289,11 @@ export class EncryptedChannelService extends EventEmitter {
     timestamp: Date;
     messageType: string;
     priority: string;
-  }>> {
+>> {
     const channel = this.channels.get(channelId);
     if (!channel || !channel.participants.includes(userId)) {
       throw new Error('Access denied to channel');
-    }
+
 
     const channelMessages = this.messages.get(channelId) || [];
     let filteredMessages = channelMessages;
@@ -297,7 +301,7 @@ export class EncryptedChannelService extends EventEmitter {
     // Filter by timestamp if specified
     if (before) {
       filteredMessages = channelMessages.filter(m => m.timestamp < before);
-    }
+
 
     // Sort by timestamp (newest first) and limit
     const sortedMessages = filteredMessages
@@ -313,7 +317,7 @@ export class EncryptedChannelService extends EventEmitter {
         if (!messageKey) {
           console.warn(`Key version ${message.keyVersion} not found for message ${message.id}`);
           continue;
-        }
+
 
         const decryptedContent = await this.decryptContent(
           message.encryptedContent,
@@ -328,7 +332,7 @@ export class EncryptedChannelService extends EventEmitter {
         if (calculatedChecksum !== message.metadata.checksum) {
           console.warn(`Checksum mismatch for message ${message.id}`);
           continue;
-        }
+
 
         decryptedMessages.push({
           id: message.id,
@@ -338,10 +342,10 @@ export class EncryptedChannelService extends EventEmitter {
           messageType: message.messageType,
           priority: message.metadata.priority
         });
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to decrypt message ${message.id}:`, error.message);
-      }
-    }
+
+
 
     // Log access
     await this.logChannelEvent(channelId, 'messages_accessed', userId, {
@@ -351,7 +355,7 @@ export class EncryptedChannelService extends EventEmitter {
     });
 
     return decryptedMessages.reverse(); // Return in chronological order
-  }
+
 
   /**
    * Add participants to a channel
@@ -365,7 +369,7 @@ export class EncryptedChannelService extends EventEmitter {
     const channel = this.channels.get(channelId);
     if (!channel || !channel.participants.includes(addedBy)) {
       return { success: false, added: [], failed: newParticipants };
-    }
+
 
     const added: string[] = [];
     const failed: string[] = [];
@@ -374,16 +378,16 @@ export class EncryptedChannelService extends EventEmitter {
       if (channel.participants.includes(participantId)) {
         failed.push(participantId); // Already a participant
         continue;
-      }
+
 
       if (channel.participants.length >= channel.metadata.maxParticipants) {
         failed.push(participantId); // Would exceed max participants
         continue;
-      }
+
 
       channel.participants.push(participantId);
       added.push(participantId);
-    }
+
 
     if (added.length > 0) {
       // Rotate channel key for forward secrecy
@@ -394,10 +398,10 @@ export class EncryptedChannelService extends EventEmitter {
         failed,
         newParticipantCount: channel.participants.length
       });
-    }
+
 
     return { success: added.length > 0, added, failed };
-  }
+
 
   /**
    * Remove participants from a channel
@@ -411,7 +415,7 @@ export class EncryptedChannelService extends EventEmitter {
     const channel = this.channels.get(channelId);
     if (!channel || !channel.participants.includes(removedBy)) {
       return { success: false, removed: [], failed: participantsToRemove };
-    }
+
 
     const removed: string[] = [];
     const failed: string[] = [];
@@ -420,12 +424,12 @@ export class EncryptedChannelService extends EventEmitter {
       if (!channel.participants.includes(participantId)) {
         failed.push(participantId); // Not a participant
         continue;
-      }
+
 
       if (participantId === removedBy) {
         failed.push(participantId); // Can't remove self
         continue;
-      }
+
 
       const index = channel.participants.indexOf(participantId);
       channel.participants.splice(index, 1);
@@ -435,8 +439,8 @@ export class EncryptedChannelService extends EventEmitter {
       const activeConnections = this.activeConnections.get(channelId);
       if (activeConnections) {
         activeConnections.delete(participantId);
-      }
-    }
+
+
 
     if (removed.length > 0) {
       // Rotate channel key for forward secrecy
@@ -447,10 +451,10 @@ export class EncryptedChannelService extends EventEmitter {
         failed,
         newParticipantCount: channel.participants.length
       });
-    }
+
 
     return { success: removed.length > 0, removed, failed };
-  }
+
 
   /**
    * Connect user to channel for real-time messaging
@@ -460,13 +464,13 @@ export class EncryptedChannelService extends EventEmitter {
     const channel = this.channels.get(channelId);
     if (!channel || !channel.participants.includes(userId)) {
       return false;
-    }
+
 
     let connections = this.activeConnections.get(channelId);
     if (!connections) {
       connections = new Set();
       this.activeConnections.set(channelId, connections);
-    }
+
 
     connections.add(userId);
     
@@ -474,7 +478,7 @@ export class EncryptedChannelService extends EventEmitter {
     this.emit('userConnected', channelId, userId);
     
     return true;
-  }
+
 
   /**
    * Disconnect user from channel
@@ -486,12 +490,12 @@ export class EncryptedChannelService extends EventEmitter {
       connections.delete(userId);
       if (connections.size === 0) {
         this.activeConnections.delete(channelId);
-      }
-    }
+
+
 
     await this.logChannelEvent(channelId, 'user_disconnected', userId);
     this.emit('userDisconnected', channelId, userId);
-  }
+
 
   /**
    * Rotate channel encryption key
@@ -503,7 +507,7 @@ export class EncryptedChannelService extends EventEmitter {
     
     if (!channel || !keyMap) {
       throw new Error('Channel or key map not found');
-    }
+
 
     const newVersion = channel.keyVersion + 1;
     const newKey = await this.generateChannelKey(channelId, channel.algorithm, newVersion);
@@ -516,15 +520,15 @@ export class EncryptedChannelService extends EventEmitter {
     for (const version of keyMap.keys()) {
       if (!versionsToKeep.includes(version)) {
         keyMap.delete(version);
-      }
-    }
+
+
 
     await this.logChannelEvent(channelId, 'key_rotated', 'system', {
       newVersion,
       reason,
       activeVersions: versionsToKeep
     });
-  }
+
 
   /**
    * Generate channel encryption key
@@ -545,7 +549,7 @@ export class EncryptedChannelService extends EventEmitter {
       createdAt: new Date(),
       algorithm
     };
-  }
+
 
   /**
    * Encrypt content using specified algorithm
@@ -571,7 +575,7 @@ export class EncryptedChannelService extends EventEmitter {
       iv: iv.toString('base64'),
       tag: tag.toString('base64')
     };
-  }
+
 
   /**
    * Decrypt content
@@ -593,26 +597,26 @@ export class EncryptedChannelService extends EventEmitter {
     ]);
 
     return decrypted.toString('utf8');
-  }
+
 
   private calculateChecksum(content: string): string {
     return crypto.createHash('sha256').update(content).digest('hex').substring(0, 16);
-  }
+
 
   private generateChannelId(): string {
     return `EC-${Date.now()}-${crypto.randomBytes(8).toString('hex')}`;
-  }
+
 
   private generateMessageId(): string {
     return `EM-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private async deliverMessage(participantId: string, message: EncryptedMessage): Promise<void> {
 
     // Implementation would deliver message via WebSocket, SSE, or other real-time mechanism
     console.log(`Delivering message ${message.id} to participant ${participantId}`);
     this.emit('messageDelivered', participantId, message);
-  }
+
 
   private async logChannelEvent(
     channelId: string,
@@ -622,7 +626,7 @@ export class EncryptedChannelService extends EventEmitter {
   ): Promise<void> {
 
     console.log(`Channel Event [${channelId}]: ${action} by ${userId || 'system'}`, metadata);
-  }
+
 
   private startMaintenanceTasks(): void {
     // Clean up expired channels every hour
@@ -634,7 +638,7 @@ export class EncryptedChannelService extends EventEmitter {
     setInterval(() => {
       this.rotateActiveChannelKeys();
     }, 24 * 60 * 60 * 1000);
-  }
+
 
   private cleanupExpiredChannels(): void {
     const now = new Date();
@@ -644,18 +648,18 @@ export class EncryptedChannelService extends EventEmitter {
         const expiryTime = new Date(channel.createdAt.getTime() + channel.metadata.ttl * 1000);
         if (now > expiryTime) {
           this.deactivateChannel(channelId, 'expired');
-        }
-      }
-    }
-  }
+
+
+
+
 
   private async rotateActiveChannelKeys(): void {
     for (const [channelId, channel] of this.channels) {
       if (channel.isActive) {
         await this.rotateChannelKey(channelId, 'scheduled_rotation');
-      }
-    }
-  }
+
+
+
 
   private async deactivateChannel(channelId: string, reason: string): Promise<void> {
 
@@ -666,8 +670,8 @@ export class EncryptedChannelService extends EventEmitter {
       
       await this.logChannelEvent(channelId, 'channel_deactivated', 'system', { reason });
       this.emit('channelDeactivated', channel, reason);
-    }
-  }
+
+
 
   // Public utility methods
 
@@ -678,11 +682,11 @@ export class EncryptedChannelService extends EventEmitter {
     const channel = this.channels.get(channelId);
     if (!channel || !channel.participants.includes(userId)) {
       return null;
-    }
+
 
     const { keyVersion, ...channelInfo } = channel;
     return channelInfo;
-  }
+
 
   /**
    * List user's channels
@@ -694,11 +698,11 @@ export class EncryptedChannelService extends EventEmitter {
       if (channel.participants.includes(userId)) {
         const { keyVersion, ...channelInfo } = channel;
         userChannels.push(channelInfo);
-      }
-    }
+
+
 
     return userChannels.sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime());
-  }
+
 
   /**
    * Get channel statistics
@@ -709,11 +713,11 @@ export class EncryptedChannelService extends EventEmitter {
     activeParticipants: number;
     lastActivity: Date;
     keyRotations: number;
-  } | null {
+ | null {
     const channel = this.channels.get(channelId);
     if (!channel || !channel.participants.includes(userId)) {
       return null;
-    }
+
 
     const keyMap = this.channelKeys.get(channelId);
     const activeConnections = this.activeConnections.get(channelId);
@@ -725,5 +729,4 @@ export class EncryptedChannelService extends EventEmitter {
       lastActivity: channel.lastActivity,
       keyRotations: keyMap ? keyMap.size - 1 : 0
     };
-  }
-}
+

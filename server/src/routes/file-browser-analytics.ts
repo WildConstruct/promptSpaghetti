@@ -12,8 +12,9 @@ import { FileBrowserAnalytics, DeveloperInsights, UsageAnalytics } from '../anal
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
 // Request/Response type definitions
-}
-}
+
+
+
 interface AnalyticsQuery {
   startDate?: string;
   endDate?: string;
@@ -22,43 +23,47 @@ interface AnalyticsQuery {
   operation?: string;
   limit?: number;
   offset?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface TrackOperationBody {
   operationType: string;
   fileName: string;
   filePath: string;
   success?: boolean;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface TrackSearchBody {
   searchTerm: string;
   resultsCount: number;
   clickedResults?: number;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface TrackPerformanceBody {
   operationType: string;
   duration: number;
   success?: boolean;
   metadata?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // Initialize analytics services (these would typically be dependency injected)
 const analyticsCollector = new AnalyticsCollector({
@@ -84,7 +89,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
   // Track file operation
   fastify.post<{
     Body: TrackOperationBody;
-  }>('/api/file-browser/analytics/track-operation', {
+>('/api/file-browser/analytics/track-operation', {
     schema: {
       body: {
         type: 'object',
@@ -95,8 +100,8 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           filePath: { type: 'string' },
           success: { type: 'boolean' },
           metadata: { type: 'object' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -104,10 +109,10 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
             success: { type: 'boolean' },
             eventId: { type: 'string' },
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: TrackOperationBody }>, reply: FastifyReply) => {
     try {
       const { operationType, fileName, filePath, success = true, metadata = {} } = request.body;
@@ -135,20 +140,19 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         eventId: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         timestamp: Date.now()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error tracking file operation:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to track file operation'
       });
-    }
+
   });
 
   // Track search operation
   fastify.post<{
     Body: TrackSearchBody;
-  }>('/api/file-browser/analytics/track-search', {
+>('/api/file-browser/analytics/track-search', {
     schema: {
       body: {
         type: 'object',
@@ -158,9 +162,9 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           resultsCount: { type: 'number' },
           clickedResults: { type: 'number' },
           metadata: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: TrackSearchBody }>, reply: FastifyReply) => {
     try {
       const { searchTerm, resultsCount, clickedResults = 0, metadata = {} } = request.body;
@@ -185,20 +189,19 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         eventId: `search-${Date.now()}`,
         timestamp: Date.now()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error tracking search:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to track search operation'
       });
-    }
+
   });
 
   // Track performance metric
   fastify.post<{
     Body: TrackPerformanceBody;
-  }>('/api/file-browser/analytics/track-performance', {
+>('/api/file-browser/analytics/track-performance', {
     schema: {
       body: {
         type: 'object',
@@ -208,9 +211,9 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           duration: { type: 'number' },
           success: { type: 'boolean' },
           metadata: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: TrackPerformanceBody }>, reply: FastifyReply) => {
     try {
       const { operationType, duration, success = true, metadata = {} } = request.body;
@@ -233,28 +236,27 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         success: true,
         timestamp: Date.now()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error tracking performance:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to track performance metric'
       });
-    }
+
   });
 
   // Get download statistics for a specific file
   fastify.get<{
     Params: { filePath: string };
-  }>('/api/file-browser/analytics/download-stats/:filePath', {
+>('/api/file-browser/analytics/download-stats/:filePath', {
     schema: {
       params: {
         type: 'object',
         properties: {
           filePath: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { filePath: string } }>, reply: FastifyReply) => {
     try {
       const { filePath } = request.params;
@@ -267,7 +269,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           error: 'Not Found',
           message: 'No download statistics found for this file'
         });
-      }
+
 
       // Convert Maps to objects for JSON serialization
       const serializedStats = {
@@ -277,7 +279,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           daily: Object.fromEntries(stats.downloadsByTimeframe.daily),
           weekly: Object.fromEntries(stats.downloadsByTimeframe.weekly),
           monthly: Object.fromEntries(stats.downloadsByTimeframe.monthly)
-  }
+
         downloadsByUserAgent: Object.fromEntries(stats.downloadsByUserAgent),
         downloadsByLocation: Object.fromEntries(stats.downloadsByLocation)
       };
@@ -286,20 +288,19 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         success: true,
         data: serializedStats
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving download stats:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve download statistics'
       });
-    }
+
   });
 
   // Get usage analytics for a date range
   fastify.get<{
     Querystring: AnalyticsQuery;
-  }>('/api/file-browser/analytics/usage', {
+>('/api/file-browser/analytics/usage', {
     schema: {
       querystring: {
         type: 'object',
@@ -311,15 +312,15 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           operation: { type: 'string' },
           limit: { type: 'number' },
           offset: { type: 'number' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: AnalyticsQuery }>, reply: FastifyReply) => {
     try {
       const { 
         startDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
         endDate = new Date().toISOString() 
-      } = request.query;
+ = request.query;
 
       const start = new Date(startDate);
       const end = new Date(endDate);
@@ -330,7 +331,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           error: 'Bad Request',
           message: 'Start date must be before end date'
         });
-      }
+
 
       // Limit date range to prevent excessive queries
       const maxDays = 90;
@@ -339,7 +340,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           error: 'Bad Request',
           message: `Date range cannot exceed ${maxDays} days`
         });
-      }
+
 
       const analytics = await fileBrowserAnalytics.getUsageAnalytics(start, end);
 
@@ -354,14 +355,13 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         success: true,
         data: serializedAnalytics
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error retrieving usage analytics:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve usage analytics'
       });
-    }
+
   });
 
   // Get developer insights
@@ -373,7 +373,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           error: 'Forbidden',
           message: 'Developer insights require admin privileges'
         });
-      }
+
 
       const insights = await fileBrowserAnalytics.generateInsights();
 
@@ -382,14 +382,13 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         data: insights,
         generatedAt: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error generating insights:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to generate developer insights'
       });
-    }
+
   });
 
   // Get analytics summary dashboard data
@@ -414,20 +413,20 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
             users: todayAnalytics.overview.uniqueUsers,
             downloads: todayAnalytics.overview.totalDownloads,
             errorRate: todayAnalytics.overview.errorRate
-  }
+
           thisWeek: {
             operations: weekAnalytics.overview.totalOperations,
             users: weekAnalytics.overview.uniqueUsers,
             downloads: weekAnalytics.overview.totalDownloads,
             errorRate: weekAnalytics.overview.errorRate
-  }
+
           thisMonth: {
             operations: monthAnalytics.overview.totalOperations,
             users: monthAnalytics.overview.uniqueUsers,
             downloads: monthAnalytics.overview.totalDownloads,
             errorRate: monthAnalytics.overview.errorRate
-          }
-  }
+
+
         topOperations: Object.fromEntries(
           Array.from(weekAnalytics.operationBreakdown.entries())
             .sort(([,a], [,b]) => b - a)
@@ -441,7 +440,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         performanceMetrics: {
           averageLoadTime: weekAnalytics.performanceMetrics.averageLoadTime,
           averageOperationTime: weekAnalytics.performanceMetrics.averageOperationTime
-  }
+
         searchMetrics: weekAnalytics.searchMetrics,
         generatedAt: new Date().toISOString()
       };
@@ -450,28 +449,27 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         success: true,
         data: dashboard
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error generating dashboard data:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to generate dashboard data'
       });
-    }
+
   });
 
   // Export analytics data
   fastify.get<{
     Querystring: { format?: 'json' | 'csv' };
-  }>('/api/file-browser/analytics/export', {
+>('/api/file-browser/analytics/export', {
     schema: {
       querystring: {
         type: 'object',
         properties: {
           format: { type: 'string', enum: ['json', 'csv'] }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { format?: 'json' | 'csv' } }>, reply: FastifyReply) => {
     try {
       // Check if user has admin/developer privileges
@@ -480,7 +478,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           error: 'Forbidden',
           message: 'Data export requires admin privileges'
         });
-      }
+
 
       const { format = 'json' } = request.query;
       const exportData = fileBrowserAnalytics.exportAnalyticsData(format);
@@ -491,14 +489,13 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
       reply.header('Content-Disposition', `attachment; filename="${filename}"`);
       
       return reply.send(exportData);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error exporting analytics data:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to export analytics data'
       });
-    }
+
   });
 
   // Health check endpoint for analytics service
@@ -515,11 +512,10 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           bufferSize: analyticsStatus.bufferSize,
           sessionDuration: analyticsStatus.sessionDuration,
           lastHourMetrics: analyticsStatus.lastHour
-  }
+
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error checking analytics health:', error);
       return reply.code(500).send({
         success: false,
@@ -527,11 +523,11 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         error: error.message,
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   fastify.log.info('File browser analytics routes registered successfully');
-}
+
 
 // Export the analytics instances for use in other parts of the application
 export { fileBrowserAnalytics, analyticsCollector };

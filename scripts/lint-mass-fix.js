@@ -24,7 +24,7 @@ const phases = [
     name: 'Phase 3: Import/Export Fixes', 
     command: `npx eslint --config .eslintrc.relaxed.js --fix --ext .js,.mjs . --rule '{"import/no-unresolved": "off"}'`,
     description: 'Fix module import/export issues'
-  }
+
 ];
 
 async function runPhase(phase: any): Promise<boolean> {
@@ -41,12 +41,12 @@ async function runPhase(phase: any): Promise<boolean> {
     
     console.log(`✅ ${phase.name} completed successfully`);
     return true;
-  } catch (error) {
+ catch (error) {
     console.log(`⚠️  ${phase.name} completed with issues (expected)`);
     console.log(`📊 Error count: ${(error.stdout || error.stderr || '').split('\n').filter(line => line.includes('error')).length}`);
     return false;
-  }
-}
+
+
 
 async function main(): Promise<void> {
   console.log('🎯 Starting Mass Linting Fix Process');
@@ -55,10 +55,10 @@ async function main(): Promise<void> {
   // Get initial error count
   try {
     execSync('pnpm lint --config .eslintrc.relaxed.js', { stdio: 'pipe' });
-  } catch (error) {
+ catch (error) {
     const initialErrors = (error.stdout || error.stderr || '').match(/(\d+) errors?/);
     console.log(`📈 Initial error count: ${initialErrors ? initialErrors[1] : 'Unknown'}`);
-  }
+
 
   for (const phase of phases) {
     await runPhase(phase);
@@ -66,24 +66,24 @@ async function main(): Promise<void> {
     // Get updated count after each phase
     try {
       execSync('pnpm lint --config .eslintrc.relaxed.js', { stdio: 'pipe' });
-    } catch (error) {
+ catch (error) {
       const currentErrors = (error.stdout || error.stderr || '').match(/(\d+) errors?/);
       console.log(`📊 Current error count: ${currentErrors ? currentErrors[1] : 'Unknown'}`);
-    }
+
     
     // Small delay between phases
     await new Promise(resolve => setTimeout(resolve, 1000));
-  }
+
 
   console.log('\n🎉 Mass fix process completed!');
   console.log('📝 Next steps:');
   console.log('   1. Review changes with git diff');
   console.log('   2. Run tests to ensure nothing broke');
   console.log('   3. Gradually tighten linting rules');
-}
+
 
 if (require.main === module) {
   main().catch(console.error);
-}
+
 
 module.exports = { runPhase, phases };

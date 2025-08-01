@@ -15,7 +15,7 @@ import {
   TransactionType,
   PaymentProvider,
   DEFAULT_TRANSACTION_TRACKING_CONFIG
-} from '../../../../packages/core/types/TransactionTrackingTypes';
+ from '../../../../packages/core/types/TransactionTrackingTypes';
 
 // Mock Database
 jest.mock('../../database/connection');
@@ -37,7 +37,7 @@ describe('TransactionTrackingService', () => {
       discount: 0,
       refundable: 95.00,
       refunded: 0
-  }
+
     currency: 'USD',
     buyer: {
       id: 'user_buyer_123',
@@ -45,14 +45,14 @@ describe('TransactionTrackingService', () => {
       displayName: 'John Doe',
       email: 'john@example.com',
       accountStatus: 'active'
-  }
+
     seller: {
       id: 'user_seller_456',
       type: 'creator',
       displayName: 'Jane Creator',
       email: 'jane@example.com',
       accountStatus: 'active'
-  }
+
     template: {
       id: 'template_789',
       title: 'Test Template',
@@ -61,30 +61,30 @@ describe('TransactionTrackingService', () => {
       version: '1.0',
       creatorId: 'user_seller_456',
       creatorName: 'Jane Creator'
-  }
+
     paymentMethod: {
       type: 'card',
       last4: '4242',
       brand: 'visa'
-  }
+
     provider: {
       provider: 'stripe',
       providerTransactionId: 'stripe_tx_456',
       providerFees: 3.00,
       processingTime: 1500,
       webhookReceived: true
-  }
+
     riskAssessment: {
       score: 25,
       level: 'low',
       factors: []
-  }
+
     fraudFlags: [],
     timestamps: {
       initiated: new Date('2024-01-15T10:00:00Z'),
       completed: new Date('2024-01-15T10:00:05Z'),
       lastUpdated: new Date('2024-01-15T10:00:05Z')
-  }
+
     lifecycle: [],
     adminNotes: [],
     flags: [],
@@ -92,7 +92,7 @@ describe('TransactionTrackingService', () => {
       processingTime: 1500,
       retryCount: 0,
       errorCount: 0
-  }
+
     metadata: {},
     tags: []
   };
@@ -100,7 +100,7 @@ describe('TransactionTrackingService', () => {
   beforeEach(() => {
     mockDb = {
       query: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
     service = new TransactionTrackingService(mockDb);
   });
 
@@ -152,7 +152,7 @@ describe('TransactionTrackingService', () => {
           created_at: '2024-01-15T10:00:00Z',
           updated_at: '2024-01-15T10:00:05Z',
           completed_at: '2024-01-15T10:00:05Z'
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown as unknown);
@@ -195,14 +195,14 @@ describe('TransactionTrackingService', () => {
           amount_cents: 5000,
           total_count: '2'
           // ... other required fields
-  }
+
         {
           id: 'tx_2',
           status: 'failed',
           amount_cents: 7500,
           total_count: '2'
           // ... other required fields
-        }
+
       ]
     };
 
@@ -211,7 +211,7 @@ describe('TransactionTrackingService', () => {
       mockDb.query.mockImplementation((query: string) => {
         if (query.includes('COUNT(*)')) {
           return Promise.resolve({ rows: [] }); // Empty aggregations
-        }
+
         return Promise.resolve(mockSearchResults);
       });
     });
@@ -327,9 +327,9 @@ describe('TransactionTrackingService', () => {
               median_transaction_value: '95.00',
               largest_transaction: '500.00',
               smallest_transaction: '10.00'
-            }]
+]
           });
-        } else if (query.includes('provider')) {
+ else if (query.includes('provider')) {
           return Promise.resolve({
             rows: [
               { status: 'succeeded', provider: 'stripe', count: '100', avg_processing_time: '1200', avg_fee: '5.50' },
@@ -337,7 +337,7 @@ describe('TransactionTrackingService', () => {
               { status: 'succeeded', provider: 'paypal', count: '35', avg_processing_time: '2000', avg_fee: '6.25' }
             ]
           });
-        } else if (query.includes('risk_score')) {
+ else if (query.includes('risk_score')) {
           return Promise.resolve({
             rows: [
               { risk_score: '15', fraud_flags: [], count: '120' },
@@ -345,11 +345,11 @@ describe('TransactionTrackingService', () => {
               { risk_score: '85', fraud_flags: ['location', 'payment_method'], count: '5' }
             ]
           });
-        } else if (query.includes('previous_revenue')) {
+ else if (query.includes('previous_revenue')) {
           return Promise.resolve({
             rows: [{ previous_revenue: '12000.00' }]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
     });
@@ -407,7 +407,7 @@ describe('TransactionTrackingService', () => {
           category: 'general',
           is_private: false,
           created_at: '2024-01-15T12:00:00Z'
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown as unknown);
@@ -440,7 +440,7 @@ describe('TransactionTrackingService', () => {
           category: 'investigation',
           is_private: true,
           created_at: '2024-01-15T12:30:00Z'
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown as unknown);
@@ -469,7 +469,7 @@ describe('TransactionTrackingService', () => {
           reason: 'Unusual transaction pattern detected',
           flagged_by: 'admin_456',
           flagged_at: '2024-01-15T13:00:00Z'
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(mockResult as unknown as unknown as unknown);
@@ -509,7 +509,7 @@ describe('TransactionTrackingService', () => {
         pagination: { page: 1, pageSize: 50, total: 1, totalPages: 1 },
         aggregations: {} as any,
         filters: { count: 0, filters: [] }
-      } as unknown as unknown as unknown);
+ as unknown as unknown as unknown);
     });
 
     it('should export transactions in CSV format', async () => {
@@ -662,7 +662,7 @@ describe('TransactionTrackingService', () => {
         rows: [{
           id: 'tx_malformed'
           // Missing required fields
-        }]
+]
       };
 
       mockDb.query.mockResolvedValue(malformedResult as unknown as unknown as unknown);
@@ -704,7 +704,7 @@ describe('TransactionTrackingService Integration', () => {
   beforeEach(() => {
     mockDb = {
       query: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
     service = new TransactionTrackingService(mockDb);
   });
 
@@ -721,7 +721,7 @@ describe('TransactionTrackingService Integration', () => {
           buyer_name: 'John Doe',
           seller_name: 'Jane Creator',
           created_at: '2024-01-15T10:00:00Z'
-        }
+
       ]
     });
 
@@ -742,7 +742,7 @@ describe('TransactionTrackingService Integration', () => {
     mockDb.query
       .mockResolvedValueOnce({
         rows: [{ total_transactions: '1', total_revenue: '100.00' }]
-  }
+
       .mockResolvedValueOnce({ rows: [] })
       .mockResolvedValueOnce({ rows: [] })
       .mockResolvedValueOnce({ rows: [] });

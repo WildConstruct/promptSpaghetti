@@ -11,8 +11,7 @@ export type ShareableResourceType = 'template' | 'graph' | 'collection' | 'case_
 export type ShareTarget = 'public' | 'workspace' | 'organization' | 'private' | 'unlisted';
 export type ShareFormat = 'link' | 'embed' | 'export' | 'clone';
 export type SocialPlatform = 'twitter' | 'linkedin' | 'discord' | 'slack' | 'teams' | 'email' | 'github';
-export declare const SharePermissionSchema: z.ZodObject<{
-    canView: z.ZodDefault<z.ZodBoolean>;
+export declare const SharePermissionSchema: z.ZodObject<{ canView: z.ZodDefault<z.ZodBoolean>;
     canComment: z.ZodDefault<z.ZodBoolean>;
     canClone: z.ZodDefault<z.ZodBoolean>;
     canEdit: z.ZodDefault<z.ZodBoolean>;
@@ -23,9 +22,7 @@ export declare const SharePermissionSchema: z.ZodObject<{
     allowedDomains: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     expiresAt: z.ZodOptional<z.ZodDate>;
     maxViews: z.ZodOptional<z.ZodNumber>;
-    maxShares: z.ZodOptional<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    canEdit: boolean;
+    maxShares: z.ZodOptional<z.ZodNumber> }, "strip", z.ZodTypeAny, { canEdit: boolean;
     canView: boolean;
     canComment: boolean;
     canClone: boolean;
@@ -36,9 +33,7 @@ export declare const SharePermissionSchema: z.ZodObject<{
     allowedDomains?: string[] | undefined;
     expiresAt?: Date | undefined;
     maxViews?: number | undefined;
-    maxShares?: number | undefined;
-}, {
-    allowedDomains?: string[] | undefined;
+    maxShares?: number | undefined }, { allowedDomains?: string[] | undefined;
     canEdit?: boolean | undefined;
     expiresAt?: Date | undefined;
     canView?: boolean | undefined;
@@ -49,11 +44,9 @@ export declare const SharePermissionSchema: z.ZodObject<{
     canDownload?: boolean | undefined;
     requiresAuth?: boolean | undefined;
     maxViews?: number | undefined;
-    maxShares?: number | undefined;
-}>;
+    maxShares?: number | undefined }>;
 export type SharePermission = z.infer<typeof SharePermissionSchema>;
-export declare const ShareConfigSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ShareConfigSchema: z.ZodObject<{ id: z.ZodString;
     resourceId: z.ZodString;
     resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
     shareTarget: z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>;
@@ -62,7 +55,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
     description: z.ZodOptional<z.ZodString>;
     thumbnailUrl: z.ZodOptional<z.ZodString>;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    permissions: z.ZodObject<{,
+    permissions: z.ZodObject<{ }
         canView: z.ZodDefault<z.ZodBoolean>;
         canComment: z.ZodDefault<z.ZodBoolean>;
         canClone: z.ZodDefault<z.ZodBoolean>;
@@ -75,8 +68,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
         expiresAt: z.ZodOptional<z.ZodDate>;
         maxViews: z.ZodOptional<z.ZodNumber>;
         maxShares: z.ZodOptional<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        canEdit: boolean;
+    }, "strip", z.ZodTypeAny, { canEdit: boolean;
         canView: boolean;
         canComment: boolean;
         canClone: boolean;
@@ -87,9 +79,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
         allowedDomains?: string[] | undefined;
         expiresAt?: Date | undefined;
         maxViews?: number | undefined;
-        maxShares?: number | undefined;
-    }, {
-        allowedDomains?: string[] | undefined;
+        maxShares?: number | undefined }, { allowedDomains?: string[] | undefined;
         canEdit?: boolean | undefined;
         expiresAt?: Date | undefined;
         canView?: boolean | undefined;
@@ -100,140 +90,109 @@ export declare const ShareConfigSchema: z.ZodObject<{
         canDownload?: boolean | undefined;
         requiresAuth?: boolean | undefined;
         maxViews?: number | undefined;
-        maxShares?: number | undefined;
-    }>;
-    customization: z.ZodDefault<z.ZodObject<{,
-        branding: z.ZodOptional<z.ZodObject<{,
+        maxShares?: number | undefined }>;
+    customization: z.ZodDefault<z.ZodObject<{ 
+        branding: z.ZodOptional<z.ZodObject<{
             showLogo: z.ZodDefault<z.ZodBoolean>;
             showAttribution: z.ZodDefault<z.ZodBoolean>;
             customLogo: z.ZodOptional<z.ZodString>;
-            customColors: z.ZodOptional<z.ZodObject<{,
+            customColors: z.ZodOptional<z.ZodObject<{ }
                 primary: z.ZodOptional<z.ZodString>;
                 background: z.ZodOptional<z.ZodString>;
                 text: z.ZodOptional<z.ZodString>;
-            }, "strip", z.ZodTypeAny, {
-                text?: string | undefined;
+            }, "strip", z.ZodTypeAny, { text?: string | undefined;
                 background?: string | undefined;
-                primary?: string | undefined;
-            }, {
-                text?: string | undefined;
+                primary?: string | undefined }, { text?: string | undefined;
                 background?: string | undefined;
-                primary?: string | undefined;
-            }>>;
-        }, "strip", z.ZodTypeAny, {
-            showLogo: boolean;
+                primary?: string | undefined }>>;
+        }, "strip", z.ZodTypeAny, { showLogo: boolean;
             showAttribution: boolean;
             customLogo?: string | undefined;
             customColors?: {
                 text?: string | undefined;
                 background?: string | undefined;
-                primary?: string | undefined;
-            } | undefined;
-        }, {
-            showLogo?: boolean | undefined;
+                primary?: string | undefined } | undefined;
+        }, { showLogo?: boolean | undefined;
             showAttribution?: boolean | undefined;
             customLogo?: string | undefined;
             customColors?: {
                 text?: string | undefined;
                 background?: string | undefined;
-                primary?: string | undefined;
-            } | undefined;
+                primary?: string | undefined } | undefined;
         }>>;
-        layout: z.ZodOptional<z.ZodObject<{,
+        layout: z.ZodOptional<z.ZodObject<{ 
             width: z.ZodDefault<z.ZodNumber>;
             height: z.ZodDefault<z.ZodNumber>;
             showHeader: z.ZodDefault<z.ZodBoolean>;
             showFooter: z.ZodDefault<z.ZodBoolean>;
             showToolbar: z.ZodDefault<z.ZodBoolean>;
-            responsive: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            width: number;
+            responsive: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { width: number;
             height: number;
             showHeader: boolean;
             showFooter: boolean;
             showToolbar: boolean;
-            responsive: boolean;
-        }, {
-            width?: number | undefined;
+            responsive: boolean }, { width?: number | undefined;
             height?: number | undefined;
             showHeader?: boolean | undefined;
             showFooter?: boolean | undefined;
             showToolbar?: boolean | undefined;
-            responsive?: boolean | undefined;
-        }>>;
-        features: z.ZodOptional<z.ZodObject<{,
+            responsive?: boolean | undefined }>>;
+        features: z.ZodOptional<z.ZodObject<{ 
             allowComments: z.ZodDefault<z.ZodBoolean>;
             allowRating: z.ZodDefault<z.ZodBoolean>;
             showMetrics: z.ZodDefault<z.ZodBoolean>;
             enableInteraction: z.ZodDefault<z.ZodBoolean>;
-            autoPlay: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            autoPlay: boolean;
+            autoPlay: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { autoPlay: boolean;
             allowComments: boolean;
             showMetrics: boolean;
             allowRating: boolean;
-            enableInteraction: boolean;
-        }, {
-            autoPlay?: boolean | undefined;
+            enableInteraction: boolean }, { autoPlay?: boolean | undefined;
             allowComments?: boolean | undefined;
             showMetrics?: boolean | undefined;
             allowRating?: boolean | undefined;
-            enableInteraction?: boolean | undefined;
-        }>>;
-    }, "strip", z.ZodTypeAny, {
-        layout?: {
+            enableInteraction?: boolean | undefined }>>;
+    }, "strip", z.ZodTypeAny, { layout?: {
             width: number;
             height: number;
             showHeader: boolean;
             showFooter: boolean;
             showToolbar: boolean;
-            responsive: boolean;
-        } | undefined;
-        branding?: {
-            showLogo: boolean;
+            responsive: boolean } | undefined;
+        branding?: { showLogo: boolean;
             showAttribution: boolean;
             customLogo?: string | undefined;
             customColors?: {
                 text?: string | undefined;
                 background?: string | undefined;
-                primary?: string | undefined;
-            } | undefined;
+                primary?: string | undefined } | undefined;
         } | undefined;
-        features?: {
-            autoPlay: boolean;
+        features?: { autoPlay: boolean;
             allowComments: boolean;
             showMetrics: boolean;
             allowRating: boolean;
-            enableInteraction: boolean;
-        } | undefined;
-    }, {
-        layout?: {
+            enableInteraction: boolean } | undefined;
+    }, { layout?: {
             width?: number | undefined;
             height?: number | undefined;
             showHeader?: boolean | undefined;
             showFooter?: boolean | undefined;
             showToolbar?: boolean | undefined;
-            responsive?: boolean | undefined;
-        } | undefined;
-        branding?: {
-            showLogo?: boolean | undefined;
+            responsive?: boolean | undefined } | undefined;
+        branding?: { showLogo?: boolean | undefined;
             showAttribution?: boolean | undefined;
             customLogo?: string | undefined;
             customColors?: {
                 text?: string | undefined;
                 background?: string | undefined;
-                primary?: string | undefined;
-            } | undefined;
+                primary?: string | undefined } | undefined;
         } | undefined;
-        features?: {
-            autoPlay?: boolean | undefined;
+        features?: { autoPlay?: boolean | undefined;
             allowComments?: boolean | undefined;
             showMetrics?: boolean | undefined;
             allowRating?: boolean | undefined;
-            enableInteraction?: boolean | undefined;
-        } | undefined;
+            enableInteraction?: boolean | undefined } | undefined;
     }>>;
-    metadata: z.ZodObject<{,
+    metadata: z.ZodObject<{ ,
         createdBy: z.ZodString;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -242,9 +201,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
         difficulty: z.ZodOptional<z.ZodEnum<["beginner", "intermediate", "advanced"]>>;
         estimatedTime: z.ZodOptional<z.ZodNumber>;
         prerequisites: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        relatedResources: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        createdAt: Date;
+        relatedResources: z.ZodDefault<z.ZodArray<z.ZodString, "many">> }, "strip", z.ZodTypeAny, { createdAt: Date;
         updatedAt: Date;
         version: string;
         createdBy: string;
@@ -252,9 +209,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
         relatedResources: string[];
         category?: string | undefined;
         difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
-        estimatedTime?: number | undefined;
-    }, {
-        createdAt: Date;
+        estimatedTime?: number | undefined }, { createdAt: Date;
         updatedAt: Date;
         createdBy: string;
         category?: string | undefined;
@@ -262,10 +217,8 @@ export declare const ShareConfigSchema: z.ZodObject<{
         difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
         prerequisites?: string[] | undefined;
         estimatedTime?: number | undefined;
-        relatedResources?: string[] | undefined;
-    }>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+        relatedResources?: string[] | undefined }>;
+}, "strip", z.ZodTypeAny, { id: string;
     tags: string[];
     metadata: {
         createdAt: Date;
@@ -276,11 +229,9 @@ export declare const ShareConfigSchema: z.ZodObject<{
         relatedResources: string[];
         category?: string | undefined;
         difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
-        estimatedTime?: number | undefined;
-    };
+        estimatedTime?: number | undefined };
     title: string;
-    permissions: {
-        canEdit: boolean;
+    permissions: { canEdit: boolean;
         canView: boolean;
         canComment: boolean;
         canClone: boolean;
@@ -291,43 +242,35 @@ export declare const ShareConfigSchema: z.ZodObject<{
         allowedDomains?: string[] | undefined;
         expiresAt?: Date | undefined;
         maxViews?: number | undefined;
-        maxShares?: number | undefined;
-    };
+        maxShares?: number | undefined };
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
     shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
     shareFormat: "link" | "embed" | "clone" | "export";
-    customization: {
-        layout?: {
+    customization: { layout?: {
             width: number;
             height: number;
             showHeader: boolean;
             showFooter: boolean;
             showToolbar: boolean;
-            responsive: boolean;
-        } | undefined;
-        branding?: {
-            showLogo: boolean;
+            responsive: boolean } | undefined;
+        branding?: { showLogo: boolean;
             showAttribution: boolean;
             customLogo?: string | undefined;
             customColors?: {
                 text?: string | undefined;
                 background?: string | undefined;
-                primary?: string | undefined;
-            } | undefined;
+                primary?: string | undefined } | undefined;
         } | undefined;
-        features?: {
-            autoPlay: boolean;
+        features?: { autoPlay: boolean;
             allowComments: boolean;
             showMetrics: boolean;
             allowRating: boolean;
-            enableInteraction: boolean;
-        } | undefined;
+            enableInteraction: boolean } | undefined;
     };
     description?: string | undefined;
     thumbnailUrl?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     metadata: {
         createdAt: Date;
         updatedAt: Date;
@@ -337,11 +280,9 @@ export declare const ShareConfigSchema: z.ZodObject<{
         difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
         prerequisites?: string[] | undefined;
         estimatedTime?: number | undefined;
-        relatedResources?: string[] | undefined;
-    };
+        relatedResources?: string[] | undefined };
     title: string;
-    permissions: {
-        allowedDomains?: string[] | undefined;
+    permissions: { allowedDomains?: string[] | undefined;
         canEdit?: boolean | undefined;
         expiresAt?: Date | undefined;
         canView?: boolean | undefined;
@@ -352,8 +293,7 @@ export declare const ShareConfigSchema: z.ZodObject<{
         canDownload?: boolean | undefined;
         requiresAuth?: boolean | undefined;
         maxViews?: number | undefined;
-        maxShares?: number | undefined;
-    };
+        maxShares?: number | undefined };
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
     shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
@@ -361,251 +301,194 @@ export declare const ShareConfigSchema: z.ZodObject<{
     description?: string | undefined;
     tags?: string[] | undefined;
     thumbnailUrl?: string | undefined;
-    customization?: {
-        layout?: {
+    customization?: { layout?: {
             width?: number | undefined;
             height?: number | undefined;
             showHeader?: boolean | undefined;
             showFooter?: boolean | undefined;
             showToolbar?: boolean | undefined;
-            responsive?: boolean | undefined;
-        } | undefined;
-        branding?: {
-            showLogo?: boolean | undefined;
+            responsive?: boolean | undefined } | undefined;
+        branding?: { showLogo?: boolean | undefined;
             showAttribution?: boolean | undefined;
             customLogo?: string | undefined;
             customColors?: {
                 text?: string | undefined;
                 background?: string | undefined;
-                primary?: string | undefined;
-            } | undefined;
+                primary?: string | undefined } | undefined;
         } | undefined;
-        features?: {
-            autoPlay?: boolean | undefined;
+        features?: { autoPlay?: boolean | undefined;
             allowComments?: boolean | undefined;
             showMetrics?: boolean | undefined;
             allowRating?: boolean | undefined;
-            enableInteraction?: boolean | undefined;
-        } | undefined;
+            enableInteraction?: boolean | undefined } | undefined;
     } | undefined;
 }>;
 export type ShareConfig = z.infer<typeof ShareConfigSchema>;
-export declare const ShareLinkSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ShareLinkSchema: z.ZodObject<{ id: z.ZodString;
     shareConfigId: z.ZodString;
     shortCode: z.ZodString;
     fullUrl: z.ZodString;
     shortUrl: z.ZodString;
     qrCode: z.ZodOptional<z.ZodString>;
     socialTags: z.ZodObject<{,
-        openGraph: z.ZodObject<{,
+        openGraph: z.ZodObject<{ }
             title: z.ZodString;
             description: z.ZodString;
             image: z.ZodOptional<z.ZodString>;
             url: z.ZodString;
             type: z.ZodDefault<z.ZodString>;
             siteName: z.ZodDefault<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            description: string;
+        }, "strip", z.ZodTypeAny, { description: string;
             type: string;
             title: string;
             url: string;
             siteName: string;
-            image?: string | undefined;
-        }, {
-            description: string;
+            image?: string | undefined }, { description: string;
             title: string;
             url: string;
             type?: string | undefined;
             image?: string | undefined;
-            siteName?: string | undefined;
-        }>;
-        twitter: z.ZodObject<{,
+            siteName?: string | undefined }>;
+        twitter: z.ZodObject<{ ,
             card: z.ZodDefault<z.ZodEnum<["summary", "summary_large_image"]>>;
             title: z.ZodString;
             description: z.ZodString;
             image: z.ZodOptional<z.ZodString>;
-            creator: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            description: string;
+            creator: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { description: string;
             title: string;
             card: "summary" | "summary_large_image";
             image?: string | undefined;
-            creator?: string | undefined;
-        }, {
-            description: string;
+            creator?: string | undefined }, { description: string;
             title: string;
             image?: string | undefined;
             creator?: string | undefined;
-            card?: "summary" | "summary_large_image" | undefined;
-        }>;
-        schema: z.ZodObject<{,
+            card?: "summary" | "summary_large_image" | undefined }>;
+        schema: z.ZodObject<{ ,
             type: z.ZodDefault<z.ZodString>;
             name: z.ZodString;
             description: z.ZodString;
             url: z.ZodString;
-            author: z.ZodOptional<z.ZodObject<{,
+            author: z.ZodOptional<z.ZodObject<{ }
                 type: z.ZodDefault<z.ZodString>;
                 name: z.ZodString;
-            }, "strip", z.ZodTypeAny, {
-                name: string;
-                type: string;
-            }, {
-                name: string;
-                type?: string | undefined;
-            }>>;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
+            }, "strip", z.ZodTypeAny, { name: string;
+                type: string }, { name: string;
+                type?: string | undefined }>>;
+        }, "strip", z.ZodTypeAny, { name: string;
             description: string;
             type: string;
             url: string;
             author?: {
                 name: string;
-                type: string;
-            } | undefined;
-        }, {
-            name: string;
+                type: string } | undefined;
+        }, { name: string;
             description: string;
             url: string;
             type?: string | undefined;
             author?: {
                 name: string;
-                type?: string | undefined;
-            } | undefined;
+                type?: string | undefined } | undefined;
         }>;
-    }, "strip", z.ZodTypeAny, {
-        schema: {
+    }, "strip", z.ZodTypeAny, { schema: {
             name: string;
             description: string;
             type: string;
             url: string;
             author?: {
                 name: string;
-                type: string;
-            } | undefined;
+                type: string } | undefined;
         };
-        twitter: {
-            description: string;
+        twitter: { description: string;
             title: string;
             card: "summary" | "summary_large_image";
             image?: string | undefined;
-            creator?: string | undefined;
-        };
-        openGraph: {
-            description: string;
+            creator?: string | undefined };
+        openGraph: { description: string;
             type: string;
             title: string;
             url: string;
             siteName: string;
-            image?: string | undefined;
-        };
-    }, {
-        schema: {
+            image?: string | undefined };
+    }, { schema: {
             name: string;
             description: string;
             url: string;
             type?: string | undefined;
             author?: {
                 name: string;
-                type?: string | undefined;
-            } | undefined;
+                type?: string | undefined } | undefined;
         };
-        twitter: {
-            description: string;
+        twitter: { description: string;
             title: string;
             image?: string | undefined;
             creator?: string | undefined;
-            card?: "summary" | "summary_large_image" | undefined;
-        };
-        openGraph: {
-            description: string;
+            card?: "summary" | "summary_large_image" | undefined };
+        openGraph: { description: string;
             title: string;
             url: string;
             type?: string | undefined;
             image?: string | undefined;
-            siteName?: string | undefined;
-        };
+            siteName?: string | undefined };
     }>;
-    embedCode: z.ZodOptional<z.ZodObject<{,
+    embedCode: z.ZodOptional<z.ZodObject<{ 
         iframe: z.ZodString;
         javascript: z.ZodOptional<z.ZodString>;
-        responsive: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        iframe: string;
+        responsive: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { iframe: string;
         javascript?: string | undefined;
-        responsive?: string | undefined;
-    }, {
-        iframe: string;
+        responsive?: string | undefined }, { iframe: string;
         javascript?: string | undefined;
-        responsive?: string | undefined;
-    }>>;
-    analytics: z.ZodDefault<z.ZodObject<{,
+        responsive?: string | undefined }>>;
+    analytics: z.ZodDefault<z.ZodObject<{ 
         trackingEnabled: z.ZodDefault<z.ZodBoolean>;
         utmSource: z.ZodOptional<z.ZodString>;
         utmMedium: z.ZodOptional<z.ZodString>;
         utmCampaign: z.ZodOptional<z.ZodString>;
-        customParams: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
-    }, "strip", z.ZodTypeAny, {
-        trackingEnabled: boolean;
+        customParams: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>> }, "strip", z.ZodTypeAny, { trackingEnabled: boolean;
         customParams: Record<string, string>;
         utmSource?: string | undefined;
         utmMedium?: string | undefined;
-        utmCampaign?: string | undefined;
-    }, {
-        trackingEnabled?: boolean | undefined;
+        utmCampaign?: string | undefined }, { trackingEnabled?: boolean | undefined;
         utmSource?: string | undefined;
         utmMedium?: string | undefined;
         utmCampaign?: string | undefined;
-        customParams?: Record<string, string> | undefined;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+        customParams?: Record<string, string> | undefined }>>;
+}, "strip", z.ZodTypeAny, { id: string;
     analytics: {
         trackingEnabled: boolean;
         customParams: Record<string, string>;
         utmSource?: string | undefined;
         utmMedium?: string | undefined;
-        utmCampaign?: string | undefined;
-    };
+        utmCampaign?: string | undefined };
     shareConfigId: string;
     shortCode: string;
     fullUrl: string;
     shortUrl: string;
-    socialTags: {
-        schema: {
+    socialTags: { schema: {
             name: string;
             description: string;
             type: string;
             url: string;
             author?: {
                 name: string;
-                type: string;
-            } | undefined;
+                type: string } | undefined;
         };
-        twitter: {
-            description: string;
+        twitter: { description: string;
             title: string;
             card: "summary" | "summary_large_image";
             image?: string | undefined;
-            creator?: string | undefined;
-        };
-        openGraph: {
-            description: string;
+            creator?: string | undefined };
+        openGraph: { description: string;
             type: string;
             title: string;
             url: string;
             siteName: string;
-            image?: string | undefined;
-        };
+            image?: string | undefined };
     };
     qrCode?: string | undefined;
-    embedCode?: {
-        iframe: string;
+    embedCode?: { iframe: string;
         javascript?: string | undefined;
-        responsive?: string | undefined;
-    } | undefined;
-}, {
-    id: string;
+        responsive?: string | undefined } | undefined;
+}, { id: string;
     shareConfigId: string;
     shortCode: string;
     fullUrl: string;
@@ -618,42 +501,32 @@ export declare const ShareLinkSchema: z.ZodObject<{
             type?: string | undefined;
             author?: {
                 name: string;
-                type?: string | undefined;
-            } | undefined;
+                type?: string | undefined } | undefined;
         };
-        twitter: {
-            description: string;
+        twitter: { description: string;
             title: string;
             image?: string | undefined;
             creator?: string | undefined;
-            card?: "summary" | "summary_large_image" | undefined;
-        };
-        openGraph: {
-            description: string;
+            card?: "summary" | "summary_large_image" | undefined };
+        openGraph: { description: string;
             title: string;
             url: string;
             type?: string | undefined;
             image?: string | undefined;
-            siteName?: string | undefined;
-        };
+            siteName?: string | undefined };
     };
-    analytics?: {
-        trackingEnabled?: boolean | undefined;
+    analytics?: { trackingEnabled?: boolean | undefined;
         utmSource?: string | undefined;
         utmMedium?: string | undefined;
         utmCampaign?: string | undefined;
-        customParams?: Record<string, string> | undefined;
-    } | undefined;
+        customParams?: Record<string, string> | undefined } | undefined;
     qrCode?: string | undefined;
-    embedCode?: {
-        iframe: string;
+    embedCode?: { iframe: string;
         javascript?: string | undefined;
-        responsive?: string | undefined;
-    } | undefined;
+        responsive?: string | undefined } | undefined;
 }>;
 export type ShareLink = z.infer<typeof ShareLinkSchema>;
-export declare const ShareAnalyticsEventSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ShareAnalyticsEventSchema: z.ZodObject<{ id: z.ZodString;
     shareLinkId: z.ZodString;
     eventType: z.ZodEnum<["view", "click", "share", "embed_load", "comment", "rating", "clone", "download", "social_share", "referral"]>;
     timestamp: z.ZodDate;
@@ -663,41 +536,31 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
     userAgent: z.ZodOptional<z.ZodString>;
     referer: z.ZodOptional<z.ZodString>;
     platform: z.ZodOptional<z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>>;
-    geolocation: z.ZodOptional<z.ZodObject<{,
+    geolocation: z.ZodOptional<z.ZodObject<{ }
         country: z.ZodOptional<z.ZodString>;
         region: z.ZodOptional<z.ZodString>;
         city: z.ZodOptional<z.ZodString>;
         timezone: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        region?: string | undefined;
+    }, "strip", z.ZodTypeAny, { region?: string | undefined;
         country?: string | undefined;
         city?: string | undefined;
-        timezone?: string | undefined;
-    }, {
-        region?: string | undefined;
+        timezone?: string | undefined }, { region?: string | undefined;
         country?: string | undefined;
         city?: string | undefined;
-        timezone?: string | undefined;
-    }>>;
-    deviceInfo: z.ZodOptional<z.ZodObject<{,
+        timezone?: string | undefined }>>;
+    deviceInfo: z.ZodOptional<z.ZodObject<{ 
         type: z.ZodOptional<z.ZodEnum<["desktop", "mobile", "tablet"]>>;
         os: z.ZodOptional<z.ZodString>;
         browser: z.ZodOptional<z.ZodString>;
-        screenSize: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        type?: "mobile" | "desktop" | "tablet" | undefined;
+        screenSize: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { type?: "mobile" | "desktop" | "tablet" | undefined;
         browser?: string | undefined;
         os?: string | undefined;
-        screenSize?: string | undefined;
-    }, {
-        type?: "mobile" | "desktop" | "tablet" | undefined;
+        screenSize?: string | undefined }, { type?: "mobile" | "desktop" | "tablet" | undefined;
         browser?: string | undefined;
         os?: string | undefined;
-        screenSize?: string | undefined;
-    }>>;
+        screenSize?: string | undefined }>>;
     contextData: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     timestamp: Date;
     eventType: "view" | "rating" | "comment" | "download" | "click" | "clone" | "share" | "referral" | "embed_load" | "social_share";
     shareLinkId: string;
@@ -711,17 +574,13 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
         region?: string | undefined;
         country?: string | undefined;
         city?: string | undefined;
-        timezone?: string | undefined;
-    } | undefined;
+        timezone?: string | undefined } | undefined;
     referer?: string | undefined;
-    deviceInfo?: {
-        type?: "mobile" | "desktop" | "tablet" | undefined;
+    deviceInfo?: { type?: "mobile" | "desktop" | "tablet" | undefined;
         browser?: string | undefined;
         os?: string | undefined;
-        screenSize?: string | undefined;
-    } | undefined;
-}, {
-    id: string;
+        screenSize?: string | undefined } | undefined;
+}, { id: string;
     timestamp: Date;
     eventType: "view" | "rating" | "comment" | "download" | "click" | "clone" | "share" | "referral" | "embed_load" | "social_share";
     shareLinkId: string;
@@ -734,31 +593,23 @@ export declare const ShareAnalyticsEventSchema: z.ZodObject<{
         region?: string | undefined;
         country?: string | undefined;
         city?: string | undefined;
-        timezone?: string | undefined;
-    } | undefined;
+        timezone?: string | undefined } | undefined;
     referer?: string | undefined;
-    deviceInfo?: {
-        type?: "mobile" | "desktop" | "tablet" | undefined;
+    deviceInfo?: { type?: "mobile" | "desktop" | "tablet" | undefined;
         browser?: string | undefined;
         os?: string | undefined;
-        screenSize?: string | undefined;
-    } | undefined;
+        screenSize?: string | undefined } | undefined;
     contextData?: Record<string, unknown> | undefined;
 }>;
 export type ShareAnalyticsEvent = z.infer<typeof ShareAnalyticsEventSchema>;
-export declare const ShareMetricsSchema: z.ZodObject<{
-    shareLinkId: z.ZodString;
-    timeRange: z.ZodObject<{,
+export declare const ShareMetricsSchema: z.ZodObject<{ shareLinkId: z.ZodString;
+    timeRange: z.ZodObject<{ }
         start: z.ZodDate;
         end: z.ZodDate;
-    }, "strip", z.ZodTypeAny, {
-        start: Date;
-        end: Date;
-    }, {
-        start: Date;
-        end: Date;
-    }>;
-    metrics: z.ZodObject<{,
+    }, "strip", z.ZodTypeAny, { start: Date;
+        end: Date }, { start: Date;
+        end: Date }>;
+    metrics: z.ZodObject<{ ,
         totalViews: z.ZodDefault<z.ZodNumber>;
         uniqueViews: z.ZodDefault<z.ZodNumber>;
         totalShares: z.ZodDefault<z.ZodNumber>;
@@ -769,9 +620,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         totalDownloads: z.ZodDefault<z.ZodNumber>;
         conversionRate: z.ZodDefault<z.ZodNumber>;
         viralCoefficient: z.ZodDefault<z.ZodNumber>;
-        engagementScore: z.ZodDefault<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        averageRating: number;
+        engagementScore: z.ZodDefault<z.ZodNumber> }, "strip", z.ZodTypeAny, { averageRating: number;
         conversionRate: number;
         totalViews: number;
         uniqueViews: number;
@@ -781,9 +630,7 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         totalClones: number;
         totalDownloads: number;
         viralCoefficient: number;
-        engagementScore: number;
-    }, {
-        averageRating?: number | undefined;
+        engagementScore: number }, { averageRating?: number | undefined;
         conversionRate?: number | undefined;
         totalViews?: number | undefined;
         uniqueViews?: number | undefined;
@@ -793,90 +640,57 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         totalClones?: number | undefined;
         totalDownloads?: number | undefined;
         viralCoefficient?: number | undefined;
-        engagementScore?: number | undefined;
-    }>;
-    breakdowns: z.ZodDefault<z.ZodObject<{,
+        engagementScore?: number | undefined }>;
+    breakdowns: z.ZodDefault<z.ZodObject<{ 
         byPlatform: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         byGeography: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         byDevice: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         byTimeOfDay: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
         byDayOfWeek: z.ZodDefault<z.ZodArray<z.ZodNumber, "many">>;
-        byReferrer: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>>;
-    }, "strip", z.ZodTypeAny, {
-        byPlatform: Record<string, number>;
+        byReferrer: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodNumber>> }, "strip", z.ZodTypeAny, { byPlatform: Record<string, number>;
         byGeography: Record<string, number>;
         byDevice: Record<string, number>;
         byTimeOfDay: number[];
         byDayOfWeek: number[];
-        byReferrer: Record<string, number>;
-    }, {
-        byPlatform?: Record<string, number> | undefined;
+        byReferrer: Record<string, number> }, { byPlatform?: Record<string, number> | undefined;
         byGeography?: Record<string, number> | undefined;
         byDevice?: Record<string, number> | undefined;
         byTimeOfDay?: number[] | undefined;
         byDayOfWeek?: number[] | undefined;
-        byReferrer?: Record<string, number> | undefined;
+        byReferrer?: Record<string, number> | undefined }>>;
+    trends: z.ZodDefault<z.ZodObject<{ 
+        viewsOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
+            timestamp: z.ZodDate;
+            value: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, { value: number;
+            timestamp: Date }, { value: number;
+            timestamp: Date }>, "many">>;
+        sharesOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
+            timestamp: z.ZodDate;
+            value: z.ZodNumber }, "strip", z.ZodTypeAny, { value: number;
+            timestamp: Date }, { value: number;
+            timestamp: Date }>, "many">>;
+        engagementOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
+            timestamp: z.ZodDate;
+            value: z.ZodNumber }, "strip", z.ZodTypeAny, { value: number;
+            timestamp: Date }, { value: number;
+            timestamp: Date }>, "many">>;
+    }, "strip", z.ZodTypeAny, { viewsOverTime: {
+            value: number;
+            timestamp: Date }[];
+        sharesOverTime: { value: number;
+            timestamp: Date }[];
+        engagementOverTime: { value: number;
+            timestamp: Date }[];
+    }, { viewsOverTime?: {
+            value: number;
+            timestamp: Date }[] | undefined;
+        sharesOverTime?: { value: number;
+            timestamp: Date }[] | undefined;
+        engagementOverTime?: { value: number;
+            timestamp: Date }[] | undefined;
     }>>;
-    trends: z.ZodDefault<z.ZodObject<{,
-        viewsOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{,
-            timestamp: z.ZodDate;
-            value: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            value: number;
-            timestamp: Date;
-        }, {
-            value: number;
-            timestamp: Date;
-        }>, "many">>;
-        sharesOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{,
-            timestamp: z.ZodDate;
-            value: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            value: number;
-            timestamp: Date;
-        }, {
-            value: number;
-            timestamp: Date;
-        }>, "many">>;
-        engagementOverTime: z.ZodDefault<z.ZodArray<z.ZodObject<{,
-            timestamp: z.ZodDate;
-            value: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            value: number;
-            timestamp: Date;
-        }, {
-            value: number;
-            timestamp: Date;
-        }>, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        viewsOverTime: {
-            value: number;
-            timestamp: Date;
-        }[];
-        sharesOverTime: {
-            value: number;
-            timestamp: Date;
-        }[];
-        engagementOverTime: {
-            value: number;
-            timestamp: Date;
-        }[];
-    }, {
-        viewsOverTime?: {
-            value: number;
-            timestamp: Date;
-        }[] | undefined;
-        sharesOverTime?: {
-            value: number;
-            timestamp: Date;
-        }[] | undefined;
-        engagementOverTime?: {
-            value: number;
-            timestamp: Date;
-        }[] | undefined;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    metrics: {
+}, "strip", z.ZodTypeAny, { metrics: {
         averageRating: number;
         conversionRate: number;
         totalViews: number;
@@ -887,37 +701,25 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         totalClones: number;
         totalDownloads: number;
         viralCoefficient: number;
-        engagementScore: number;
-    };
-    trends: {
-        viewsOverTime: {
+        engagementScore: number };
+    trends: { viewsOverTime: {
             value: number;
-            timestamp: Date;
-        }[];
-        sharesOverTime: {
-            value: number;
-            timestamp: Date;
-        }[];
-        engagementOverTime: {
-            value: number;
-            timestamp: Date;
-        }[];
+            timestamp: Date }[];
+        sharesOverTime: { value: number;
+            timestamp: Date }[];
+        engagementOverTime: { value: number;
+            timestamp: Date }[];
     };
-    timeRange: {
-        start: Date;
-        end: Date;
-    };
-    breakdowns: {
-        byPlatform: Record<string, number>;
+    timeRange: { start: Date;
+        end: Date };
+    breakdowns: { byPlatform: Record<string, number>;
         byGeography: Record<string, number>;
         byDevice: Record<string, number>;
         byTimeOfDay: number[];
         byDayOfWeek: number[];
-        byReferrer: Record<string, number>;
-    };
+        byReferrer: Record<string, number> };
     shareLinkId: string;
-}, {
-    metrics: {
+}, { metrics: {
         averageRating?: number | undefined;
         conversionRate?: number | undefined;
         totalViews?: number | undefined;
@@ -928,111 +730,81 @@ export declare const ShareMetricsSchema: z.ZodObject<{
         totalClones?: number | undefined;
         totalDownloads?: number | undefined;
         viralCoefficient?: number | undefined;
-        engagementScore?: number | undefined;
-    };
-    timeRange: {
-        start: Date;
-        end: Date;
-    };
+        engagementScore?: number | undefined };
+    timeRange: { start: Date;
+        end: Date };
     shareLinkId: string;
-    trends?: {
-        viewsOverTime?: {
+    trends?: { viewsOverTime?: {
             value: number;
-            timestamp: Date;
-        }[] | undefined;
-        sharesOverTime?: {
-            value: number;
-            timestamp: Date;
-        }[] | undefined;
-        engagementOverTime?: {
-            value: number;
-            timestamp: Date;
-        }[] | undefined;
+            timestamp: Date }[] | undefined;
+        sharesOverTime?: { value: number;
+            timestamp: Date }[] | undefined;
+        engagementOverTime?: { value: number;
+            timestamp: Date }[] | undefined;
     } | undefined;
-    breakdowns?: {
-        byPlatform?: Record<string, number> | undefined;
+    breakdowns?: { byPlatform?: Record<string, number> | undefined;
         byGeography?: Record<string, number> | undefined;
         byDevice?: Record<string, number> | undefined;
         byTimeOfDay?: number[] | undefined;
         byDayOfWeek?: number[] | undefined;
-        byReferrer?: Record<string, number> | undefined;
-    } | undefined;
+        byReferrer?: Record<string, number> | undefined } | undefined;
 }>;
 export type ShareMetrics = z.infer<typeof ShareMetricsSchema>;
-export declare const SocialIntegrationSchema: z.ZodObject<{
-    platform: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;
+export declare const SocialIntegrationSchema: z.ZodObject<{ platform: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;
     enabled: z.ZodDefault<z.ZodBoolean>;
-    configuration: z.ZodOptional<z.ZodObject<{,
+    configuration: z.ZodOptional<z.ZodObject<{ }
         appId: z.ZodOptional<z.ZodString>;
         appSecret: z.ZodOptional<z.ZodString>;
         webhookUrl: z.ZodOptional<z.ZodString>;
         defaultHashtags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         customMessage: z.ZodOptional<z.ZodString>;
         autoPost: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        defaultHashtags: string[];
+    }, "strip", z.ZodTypeAny, { defaultHashtags: string[];
         autoPost: boolean;
         webhookUrl?: string | undefined;
         appId?: string | undefined;
         appSecret?: string | undefined;
-        customMessage?: string | undefined;
-    }, {
-        webhookUrl?: string | undefined;
+        customMessage?: string | undefined }, { webhookUrl?: string | undefined;
         appId?: string | undefined;
         appSecret?: string | undefined;
         defaultHashtags?: string[] | undefined;
         customMessage?: string | undefined;
-        autoPost?: boolean | undefined;
-    }>>;
-    templates: z.ZodDefault<z.ZodObject<{,
+        autoPost?: boolean | undefined }>>;
+    templates: z.ZodDefault<z.ZodObject<{ 
         shareMessage: z.ZodDefault<z.ZodString>;
         embedMessage: z.ZodDefault<z.ZodString>;
-        achievementMessage: z.ZodDefault<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        shareMessage: string;
+        achievementMessage: z.ZodDefault<z.ZodString> }, "strip", z.ZodTypeAny, { shareMessage: string;
         embedMessage: string;
-        achievementMessage: string;
-    }, {
-        shareMessage?: string | undefined;
+        achievementMessage: string }, { shareMessage?: string | undefined;
         embedMessage?: string | undefined;
-        achievementMessage?: string | undefined;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    enabled: boolean;
+        achievementMessage?: string | undefined }>>;
+}, "strip", z.ZodTypeAny, { enabled: boolean;
     templates: {
         shareMessage: string;
         embedMessage: string;
-        achievementMessage: string;
-    };
+        achievementMessage: string };
     platform: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord";
-    configuration?: {
-        defaultHashtags: string[];
+    configuration?: { defaultHashtags: string[];
         autoPost: boolean;
         webhookUrl?: string | undefined;
         appId?: string | undefined;
         appSecret?: string | undefined;
-        customMessage?: string | undefined;
-    } | undefined;
-}, {
-    platform: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord";
+        customMessage?: string | undefined } | undefined;
+}, { platform: "email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord";
     configuration?: {
         webhookUrl?: string | undefined;
         appId?: string | undefined;
         appSecret?: string | undefined;
         defaultHashtags?: string[] | undefined;
         customMessage?: string | undefined;
-        autoPost?: boolean | undefined;
-    } | undefined;
+        autoPost?: boolean | undefined } | undefined;
     enabled?: boolean | undefined;
-    templates?: {
-        shareMessage?: string | undefined;
+    templates?: { shareMessage?: string | undefined;
         embedMessage?: string | undefined;
-        achievementMessage?: string | undefined;
-    } | undefined;
+        achievementMessage?: string | undefined } | undefined;
 }>;
 export type SocialIntegration = z.infer<typeof SocialIntegrationSchema>;
-export declare const ShareCollectionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ShareCollectionSchema: z.ZodObject<{ id: z.ZodString;
     name: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
     resourceIds: z.ZodArray<z.ZodString, "many">;
@@ -1046,7 +818,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         description: z.ZodOptional<z.ZodString>;
         thumbnailUrl: z.ZodOptional<z.ZodString>;
         tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        permissions: z.ZodObject<{,
+        permissions: z.ZodObject<{ }
             canView: z.ZodDefault<z.ZodBoolean>;
             canComment: z.ZodDefault<z.ZodBoolean>;
             canClone: z.ZodDefault<z.ZodBoolean>;
@@ -1059,8 +831,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             expiresAt: z.ZodOptional<z.ZodDate>;
             maxViews: z.ZodOptional<z.ZodNumber>;
             maxShares: z.ZodOptional<z.ZodNumber>;
-        }, "strip", z.ZodTypeAny, {
-            canEdit: boolean;
+        }, "strip", z.ZodTypeAny, { canEdit: boolean;
             canView: boolean;
             canComment: boolean;
             canClone: boolean;
@@ -1071,9 +842,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             allowedDomains?: string[] | undefined;
             expiresAt?: Date | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        }, {
-            allowedDomains?: string[] | undefined;
+            maxShares?: number | undefined }, { allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
             canView?: boolean | undefined;
@@ -1084,140 +853,109 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             canDownload?: boolean | undefined;
             requiresAuth?: boolean | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        }>;
-        customization: z.ZodDefault<z.ZodObject<{,
-            branding: z.ZodOptional<z.ZodObject<{,
+            maxShares?: number | undefined }>;
+        customization: z.ZodDefault<z.ZodObject<{ 
+            branding: z.ZodOptional<z.ZodObject<{
                 showLogo: z.ZodDefault<z.ZodBoolean>;
                 showAttribution: z.ZodDefault<z.ZodBoolean>;
                 customLogo: z.ZodOptional<z.ZodString>;
-                customColors: z.ZodOptional<z.ZodObject<{,
+                customColors: z.ZodOptional<z.ZodObject<{ }
                     primary: z.ZodOptional<z.ZodString>;
                     background: z.ZodOptional<z.ZodString>;
                     text: z.ZodOptional<z.ZodString>;
-                }, "strip", z.ZodTypeAny, {
-                    text?: string | undefined;
+                }, "strip", z.ZodTypeAny, { text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                }, {
-                    text?: string | undefined;
+                    primary?: string | undefined }, { text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                }>>;
-            }, "strip", z.ZodTypeAny, {
-                showLogo: boolean;
+                    primary?: string | undefined }>>;
+            }, "strip", z.ZodTypeAny, { showLogo: boolean;
                 showAttribution: boolean;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
-            }, {
-                showLogo?: boolean | undefined;
+                    primary?: string | undefined } | undefined;
+            }, { showLogo?: boolean | undefined;
                 showAttribution?: boolean | undefined;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             }>>;
-            layout: z.ZodOptional<z.ZodObject<{,
+            layout: z.ZodOptional<z.ZodObject<{ 
                 width: z.ZodDefault<z.ZodNumber>;
                 height: z.ZodDefault<z.ZodNumber>;
                 showHeader: z.ZodDefault<z.ZodBoolean>;
                 showFooter: z.ZodDefault<z.ZodBoolean>;
                 showToolbar: z.ZodDefault<z.ZodBoolean>;
-                responsive: z.ZodDefault<z.ZodBoolean>;
-            }, "strip", z.ZodTypeAny, {
-                width: number;
+                responsive: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { width: number;
                 height: number;
                 showHeader: boolean;
                 showFooter: boolean;
                 showToolbar: boolean;
-                responsive: boolean;
-            }, {
-                width?: number | undefined;
+                responsive: boolean }, { width?: number | undefined;
                 height?: number | undefined;
                 showHeader?: boolean | undefined;
                 showFooter?: boolean | undefined;
                 showToolbar?: boolean | undefined;
-                responsive?: boolean | undefined;
-            }>>;
-            features: z.ZodOptional<z.ZodObject<{,
+                responsive?: boolean | undefined }>>;
+            features: z.ZodOptional<z.ZodObject<{ 
                 allowComments: z.ZodDefault<z.ZodBoolean>;
                 allowRating: z.ZodDefault<z.ZodBoolean>;
                 showMetrics: z.ZodDefault<z.ZodBoolean>;
                 enableInteraction: z.ZodDefault<z.ZodBoolean>;
-                autoPlay: z.ZodDefault<z.ZodBoolean>;
-            }, "strip", z.ZodTypeAny, {
-                autoPlay: boolean;
+                autoPlay: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { autoPlay: boolean;
                 allowComments: boolean;
                 showMetrics: boolean;
                 allowRating: boolean;
-                enableInteraction: boolean;
-            }, {
-                autoPlay?: boolean | undefined;
+                enableInteraction: boolean }, { autoPlay?: boolean | undefined;
                 allowComments?: boolean | undefined;
                 showMetrics?: boolean | undefined;
                 allowRating?: boolean | undefined;
-                enableInteraction?: boolean | undefined;
-            }>>;
-        }, "strip", z.ZodTypeAny, {
-            layout?: {
+                enableInteraction?: boolean | undefined }>>;
+        }, "strip", z.ZodTypeAny, { layout?: {
                 width: number;
                 height: number;
                 showHeader: boolean;
                 showFooter: boolean;
                 showToolbar: boolean;
-                responsive: boolean;
-            } | undefined;
-            branding?: {
-                showLogo: boolean;
+                responsive: boolean } | undefined;
+            branding?: { showLogo: boolean;
                 showAttribution: boolean;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay: boolean;
+            features?: { autoPlay: boolean;
                 allowComments: boolean;
                 showMetrics: boolean;
                 allowRating: boolean;
-                enableInteraction: boolean;
-            } | undefined;
-        }, {
-            layout?: {
+                enableInteraction: boolean } | undefined;
+        }, { layout?: {
                 width?: number | undefined;
                 height?: number | undefined;
                 showHeader?: boolean | undefined;
                 showFooter?: boolean | undefined;
                 showToolbar?: boolean | undefined;
-                responsive?: boolean | undefined;
-            } | undefined;
-            branding?: {
-                showLogo?: boolean | undefined;
+                responsive?: boolean | undefined } | undefined;
+            branding?: { showLogo?: boolean | undefined;
                 showAttribution?: boolean | undefined;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay?: boolean | undefined;
+            features?: { autoPlay?: boolean | undefined;
                 allowComments?: boolean | undefined;
                 showMetrics?: boolean | undefined;
                 allowRating?: boolean | undefined;
-                enableInteraction?: boolean | undefined;
-            } | undefined;
+                enableInteraction?: boolean | undefined } | undefined;
         }>>;
-        metadata: z.ZodObject<{,
+        metadata: z.ZodObject<{ ,
             createdBy: z.ZodString;
             createdAt: z.ZodDate;
             updatedAt: z.ZodDate;
@@ -1226,9 +964,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             difficulty: z.ZodOptional<z.ZodEnum<["beginner", "intermediate", "advanced"]>>;
             estimatedTime: z.ZodOptional<z.ZodNumber>;
             prerequisites: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-            relatedResources: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        }, "strip", z.ZodTypeAny, {
-            createdAt: Date;
+            relatedResources: z.ZodDefault<z.ZodArray<z.ZodString, "many">> }, "strip", z.ZodTypeAny, { createdAt: Date;
             updatedAt: Date;
             version: string;
             createdBy: string;
@@ -1236,9 +972,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             relatedResources: string[];
             category?: string | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
-            estimatedTime?: number | undefined;
-        }, {
-            createdAt: Date;
+            estimatedTime?: number | undefined }, { createdAt: Date;
             updatedAt: Date;
             createdBy: string;
             category?: string | undefined;
@@ -1246,10 +980,8 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            relatedResources?: string[] | undefined;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+            relatedResources?: string[] | undefined }>;
+    }, "strip", z.ZodTypeAny, { id: string;
         tags: string[];
         metadata: {
             createdAt: Date;
@@ -1260,11 +992,9 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             relatedResources: string[];
             category?: string | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
-            estimatedTime?: number | undefined;
-        };
+            estimatedTime?: number | undefined };
         title: string;
-        permissions: {
-            canEdit: boolean;
+        permissions: { canEdit: boolean;
             canView: boolean;
             canComment: boolean;
             canClone: boolean;
@@ -1275,43 +1005,35 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             allowedDomains?: string[] | undefined;
             expiresAt?: Date | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        };
+            maxShares?: number | undefined };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
         shareFormat: "link" | "embed" | "clone" | "export";
-        customization: {
-            layout?: {
+        customization: { layout?: {
                 width: number;
                 height: number;
                 showHeader: boolean;
                 showFooter: boolean;
                 showToolbar: boolean;
-                responsive: boolean;
-            } | undefined;
-            branding?: {
-                showLogo: boolean;
+                responsive: boolean } | undefined;
+            branding?: { showLogo: boolean;
                 showAttribution: boolean;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay: boolean;
+            features?: { autoPlay: boolean;
                 allowComments: boolean;
                 showMetrics: boolean;
                 allowRating: boolean;
-                enableInteraction: boolean;
-            } | undefined;
+                enableInteraction: boolean } | undefined;
         };
         description?: string | undefined;
         thumbnailUrl?: string | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         metadata: {
             createdAt: Date;
             updatedAt: Date;
@@ -1321,11 +1043,9 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            relatedResources?: string[] | undefined;
-        };
+            relatedResources?: string[] | undefined };
         title: string;
-        permissions: {
-            allowedDomains?: string[] | undefined;
+        permissions: { allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
             canView?: boolean | undefined;
@@ -1336,8 +1056,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             canDownload?: boolean | undefined;
             requiresAuth?: boolean | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        };
+            maxShares?: number | undefined };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
@@ -1345,74 +1064,59 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         description?: string | undefined;
         tags?: string[] | undefined;
         thumbnailUrl?: string | undefined;
-        customization?: {
-            layout?: {
+        customization?: { layout?: {
                 width?: number | undefined;
                 height?: number | undefined;
                 showHeader?: boolean | undefined;
                 showFooter?: boolean | undefined;
                 showToolbar?: boolean | undefined;
-                responsive?: boolean | undefined;
-            } | undefined;
-            branding?: {
-                showLogo?: boolean | undefined;
+                responsive?: boolean | undefined } | undefined;
+            branding?: { showLogo?: boolean | undefined;
                 showAttribution?: boolean | undefined;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay?: boolean | undefined;
+            features?: { autoPlay?: boolean | undefined;
                 allowComments?: boolean | undefined;
                 showMetrics?: boolean | undefined;
                 allowRating?: boolean | undefined;
-                enableInteraction?: boolean | undefined;
-            } | undefined;
+                enableInteraction?: boolean | undefined } | undefined;
         } | undefined;
     }>;
-    organization: z.ZodOptional<z.ZodObject<{,
+    organization: z.ZodOptional<z.ZodObject<{ 
         sequence: z.ZodArray<z.ZodString, "many">;
         grouping: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodArray<z.ZodString, "many">>>;
-        navigation: z.ZodDefault<z.ZodObject<{,
+        navigation: z.ZodDefault<z.ZodObject<{ }
             showIndex: z.ZodDefault<z.ZodBoolean>;
             showProgress: z.ZodDefault<z.ZodBoolean>;
             allowJumping: z.ZodDefault<z.ZodBoolean>;
             autoAdvance: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            showProgress: boolean;
+        }, "strip", z.ZodTypeAny, { showProgress: boolean;
             showIndex: boolean;
             allowJumping: boolean;
-            autoAdvance: boolean;
-        }, {
-            showProgress?: boolean | undefined;
+            autoAdvance: boolean }, { showProgress?: boolean | undefined;
             showIndex?: boolean | undefined;
             allowJumping?: boolean | undefined;
-            autoAdvance?: boolean | undefined;
-        }>>;
-    }, "strip", z.ZodTypeAny, {
-        sequence: string[];
+            autoAdvance?: boolean | undefined }>>;
+    }, "strip", z.ZodTypeAny, { sequence: string[];
         navigation: {
             showProgress: boolean;
             showIndex: boolean;
             allowJumping: boolean;
-            autoAdvance: boolean;
-        };
+            autoAdvance: boolean };
         grouping: Record<string, string[]>;
-    }, {
-        sequence: string[];
+    }, { sequence: string[];
         navigation?: {
             showProgress?: boolean | undefined;
             showIndex?: boolean | undefined;
             allowJumping?: boolean | undefined;
-            autoAdvance?: boolean | undefined;
-        } | undefined;
+            autoAdvance?: boolean | undefined } | undefined;
         grouping?: Record<string, string[]> | undefined;
     }>>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     name: string;
     resourceIds: string[];
     shareConfig: {
@@ -1427,11 +1131,9 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             relatedResources: string[];
             category?: string | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
-            estimatedTime?: number | undefined;
-        };
+            estimatedTime?: number | undefined };
         title: string;
-        permissions: {
-            canEdit: boolean;
+        permissions: { canEdit: boolean;
             canView: boolean;
             canComment: boolean;
             canClone: boolean;
@@ -1442,55 +1144,45 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             allowedDomains?: string[] | undefined;
             expiresAt?: Date | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        };
+            maxShares?: number | undefined };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
         shareFormat: "link" | "embed" | "clone" | "export";
-        customization: {
-            layout?: {
+        customization: { layout?: {
                 width: number;
                 height: number;
                 showHeader: boolean;
                 showFooter: boolean;
                 showToolbar: boolean;
-                responsive: boolean;
-            } | undefined;
-            branding?: {
-                showLogo: boolean;
+                responsive: boolean } | undefined;
+            branding?: { showLogo: boolean;
                 showAttribution: boolean;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay: boolean;
+            features?: { autoPlay: boolean;
                 allowComments: boolean;
                 showMetrics: boolean;
                 allowRating: boolean;
-                enableInteraction: boolean;
-            } | undefined;
+                enableInteraction: boolean } | undefined;
         };
         description?: string | undefined;
         thumbnailUrl?: string | undefined;
     };
     description?: string | undefined;
-    organization?: {
-        sequence: string[];
+    organization?: { sequence: string[];
         navigation: {
             showProgress: boolean;
             showIndex: boolean;
             allowJumping: boolean;
-            autoAdvance: boolean;
-        };
+            autoAdvance: boolean };
         grouping: Record<string, string[]>;
     } | undefined;
-}, {
-    id: string;
+}, { id: string;
     name: string;
     resourceIds: string[];
     shareConfig: {
@@ -1504,11 +1196,9 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            relatedResources?: string[] | undefined;
-        };
+            relatedResources?: string[] | undefined };
         title: string;
-        permissions: {
-            allowedDomains?: string[] | undefined;
+        permissions: { allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
             canView?: boolean | undefined;
@@ -1519,8 +1209,7 @@ export declare const ShareCollectionSchema: z.ZodObject<{
             canDownload?: boolean | undefined;
             requiresAuth?: boolean | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        };
+            maxShares?: number | undefined };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
@@ -1528,55 +1217,46 @@ export declare const ShareCollectionSchema: z.ZodObject<{
         description?: string | undefined;
         tags?: string[] | undefined;
         thumbnailUrl?: string | undefined;
-        customization?: {
-            layout?: {
+        customization?: { layout?: {
                 width?: number | undefined;
                 height?: number | undefined;
                 showHeader?: boolean | undefined;
                 showFooter?: boolean | undefined;
                 showToolbar?: boolean | undefined;
-                responsive?: boolean | undefined;
-            } | undefined;
-            branding?: {
-                showLogo?: boolean | undefined;
+                responsive?: boolean | undefined } | undefined;
+            branding?: { showLogo?: boolean | undefined;
                 showAttribution?: boolean | undefined;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay?: boolean | undefined;
+            features?: { autoPlay?: boolean | undefined;
                 allowComments?: boolean | undefined;
                 showMetrics?: boolean | undefined;
                 allowRating?: boolean | undefined;
-                enableInteraction?: boolean | undefined;
-            } | undefined;
+                enableInteraction?: boolean | undefined } | undefined;
         } | undefined;
     };
     description?: string | undefined;
-    organization?: {
-        sequence: string[];
+    organization?: { sequence: string[];
         navigation?: {
             showProgress?: boolean | undefined;
             showIndex?: boolean | undefined;
             allowJumping?: boolean | undefined;
-            autoAdvance?: boolean | undefined;
-        } | undefined;
+            autoAdvance?: boolean | undefined } | undefined;
         grouping?: Record<string, string[]> | undefined;
     } | undefined;
 }>;
 export type ShareCollection = z.infer<typeof ShareCollectionSchema>;
-export declare const CreateShareRequestSchema: z.ZodObject<{
-    resourceId: z.ZodString;
+export declare const CreateShareRequestSchema: z.ZodObject<{ resourceId: z.ZodString;
     resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
     shareTarget: z.ZodDefault<z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>>;
     shareFormat: z.ZodDefault<z.ZodEnum<["link", "embed", "export", "clone"]>>;
     title: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
-    permissions: z.ZodOptional<z.ZodObject<{,
+    permissions: z.ZodOptional<z.ZodObject<{ }
         canView: z.ZodDefault<z.ZodBoolean>;
         canComment: z.ZodDefault<z.ZodBoolean>;
         canClone: z.ZodDefault<z.ZodBoolean>;
@@ -1589,8 +1269,7 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
         expiresAt: z.ZodOptional<z.ZodDate>;
         maxViews: z.ZodOptional<z.ZodNumber>;
         maxShares: z.ZodOptional<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        canEdit: boolean;
+    }, "strip", z.ZodTypeAny, { canEdit: boolean;
         canView: boolean;
         canComment: boolean;
         canClone: boolean;
@@ -1601,9 +1280,7 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
         allowedDomains?: string[] | undefined;
         expiresAt?: Date | undefined;
         maxViews?: number | undefined;
-        maxShares?: number | undefined;
-    }, {
-        allowedDomains?: string[] | undefined;
+        maxShares?: number | undefined }, { allowedDomains?: string[] | undefined;
         canEdit?: boolean | undefined;
         expiresAt?: Date | undefined;
         canView?: boolean | undefined;
@@ -1614,12 +1291,10 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
         canDownload?: boolean | undefined;
         requiresAuth?: boolean | undefined;
         maxViews?: number | undefined;
-        maxShares?: number | undefined;
-    }>>;
+        maxShares?: number | undefined }>>;
     customization: z.ZodOptional<z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>>;
     socialPlatforms: z.ZodDefault<z.ZodArray<z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>, "many">>;
-}, "strip", z.ZodTypeAny, {
-    title: string;
+}, "strip", z.ZodTypeAny, { title: string;
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
     shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
@@ -1638,11 +1313,9 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
         allowedDomains?: string[] | undefined;
         expiresAt?: Date | undefined;
         maxViews?: number | undefined;
-        maxShares?: number | undefined;
-    } | undefined;
+        maxShares?: number | undefined } | undefined;
     customization?: {} | undefined;
-}, {
-    title: string;
+}, { title: string;
     resourceId: string;
     resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
     description?: string | undefined;
@@ -1658,15 +1331,13 @@ export declare const CreateShareRequestSchema: z.ZodObject<{
         canDownload?: boolean | undefined;
         requiresAuth?: boolean | undefined;
         maxViews?: number | undefined;
-        maxShares?: number | undefined;
-    } | undefined;
+        maxShares?: number | undefined } | undefined;
     shareTarget?: "private" | "public" | "organization" | "workspace" | "unlisted" | undefined;
     shareFormat?: "link" | "embed" | "clone" | "export" | undefined;
     customization?: {} | undefined;
     socialPlatforms?: ("email" | "slack" | "twitter" | "linkedin" | "github" | "teams" | "discord")[] | undefined;
 }>;
-export declare const ShareResponseSchema: z.ZodObject<{
-    shareConfig: z.ZodObject<{,
+export declare const ShareResponseSchema: z.ZodObject<{ shareConfig: z.ZodObject<{,
         id: z.ZodString;
         resourceId: z.ZodString;
         resourceType: z.ZodEnum<["template", "graph", "collection", "case_study", "tutorial", "marketplace_item"]>;
@@ -1676,7 +1347,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
         description: z.ZodOptional<z.ZodString>;
         thumbnailUrl: z.ZodOptional<z.ZodString>;
         tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        permissions: z.ZodObject<{,
+        permissions: z.ZodObject<{ }
             canView: z.ZodDefault<z.ZodBoolean>;
             canComment: z.ZodDefault<z.ZodBoolean>;
             canClone: z.ZodDefault<z.ZodBoolean>;
@@ -1689,8 +1360,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             expiresAt: z.ZodOptional<z.ZodDate>;
             maxViews: z.ZodOptional<z.ZodNumber>;
             maxShares: z.ZodOptional<z.ZodNumber>;
-        }, "strip", z.ZodTypeAny, {
-            canEdit: boolean;
+        }, "strip", z.ZodTypeAny, { canEdit: boolean;
             canView: boolean;
             canComment: boolean;
             canClone: boolean;
@@ -1701,9 +1371,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             allowedDomains?: string[] | undefined;
             expiresAt?: Date | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        }, {
-            allowedDomains?: string[] | undefined;
+            maxShares?: number | undefined }, { allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
             canView?: boolean | undefined;
@@ -1714,140 +1382,109 @@ export declare const ShareResponseSchema: z.ZodObject<{
             canDownload?: boolean | undefined;
             requiresAuth?: boolean | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        }>;
-        customization: z.ZodDefault<z.ZodObject<{,
-            branding: z.ZodOptional<z.ZodObject<{,
+            maxShares?: number | undefined }>;
+        customization: z.ZodDefault<z.ZodObject<{ 
+            branding: z.ZodOptional<z.ZodObject<{
                 showLogo: z.ZodDefault<z.ZodBoolean>;
                 showAttribution: z.ZodDefault<z.ZodBoolean>;
                 customLogo: z.ZodOptional<z.ZodString>;
-                customColors: z.ZodOptional<z.ZodObject<{,
+                customColors: z.ZodOptional<z.ZodObject<{ }
                     primary: z.ZodOptional<z.ZodString>;
                     background: z.ZodOptional<z.ZodString>;
                     text: z.ZodOptional<z.ZodString>;
-                }, "strip", z.ZodTypeAny, {
-                    text?: string | undefined;
+                }, "strip", z.ZodTypeAny, { text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                }, {
-                    text?: string | undefined;
+                    primary?: string | undefined }, { text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                }>>;
-            }, "strip", z.ZodTypeAny, {
-                showLogo: boolean;
+                    primary?: string | undefined }>>;
+            }, "strip", z.ZodTypeAny, { showLogo: boolean;
                 showAttribution: boolean;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
-            }, {
-                showLogo?: boolean | undefined;
+                    primary?: string | undefined } | undefined;
+            }, { showLogo?: boolean | undefined;
                 showAttribution?: boolean | undefined;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             }>>;
-            layout: z.ZodOptional<z.ZodObject<{,
+            layout: z.ZodOptional<z.ZodObject<{ 
                 width: z.ZodDefault<z.ZodNumber>;
                 height: z.ZodDefault<z.ZodNumber>;
                 showHeader: z.ZodDefault<z.ZodBoolean>;
                 showFooter: z.ZodDefault<z.ZodBoolean>;
                 showToolbar: z.ZodDefault<z.ZodBoolean>;
-                responsive: z.ZodDefault<z.ZodBoolean>;
-            }, "strip", z.ZodTypeAny, {
-                width: number;
+                responsive: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { width: number;
                 height: number;
                 showHeader: boolean;
                 showFooter: boolean;
                 showToolbar: boolean;
-                responsive: boolean;
-            }, {
-                width?: number | undefined;
+                responsive: boolean }, { width?: number | undefined;
                 height?: number | undefined;
                 showHeader?: boolean | undefined;
                 showFooter?: boolean | undefined;
                 showToolbar?: boolean | undefined;
-                responsive?: boolean | undefined;
-            }>>;
-            features: z.ZodOptional<z.ZodObject<{,
+                responsive?: boolean | undefined }>>;
+            features: z.ZodOptional<z.ZodObject<{ 
                 allowComments: z.ZodDefault<z.ZodBoolean>;
                 allowRating: z.ZodDefault<z.ZodBoolean>;
                 showMetrics: z.ZodDefault<z.ZodBoolean>;
                 enableInteraction: z.ZodDefault<z.ZodBoolean>;
-                autoPlay: z.ZodDefault<z.ZodBoolean>;
-            }, "strip", z.ZodTypeAny, {
-                autoPlay: boolean;
+                autoPlay: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { autoPlay: boolean;
                 allowComments: boolean;
                 showMetrics: boolean;
                 allowRating: boolean;
-                enableInteraction: boolean;
-            }, {
-                autoPlay?: boolean | undefined;
+                enableInteraction: boolean }, { autoPlay?: boolean | undefined;
                 allowComments?: boolean | undefined;
                 showMetrics?: boolean | undefined;
                 allowRating?: boolean | undefined;
-                enableInteraction?: boolean | undefined;
-            }>>;
-        }, "strip", z.ZodTypeAny, {
-            layout?: {
+                enableInteraction?: boolean | undefined }>>;
+        }, "strip", z.ZodTypeAny, { layout?: {
                 width: number;
                 height: number;
                 showHeader: boolean;
                 showFooter: boolean;
                 showToolbar: boolean;
-                responsive: boolean;
-            } | undefined;
-            branding?: {
-                showLogo: boolean;
+                responsive: boolean } | undefined;
+            branding?: { showLogo: boolean;
                 showAttribution: boolean;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay: boolean;
+            features?: { autoPlay: boolean;
                 allowComments: boolean;
                 showMetrics: boolean;
                 allowRating: boolean;
-                enableInteraction: boolean;
-            } | undefined;
-        }, {
-            layout?: {
+                enableInteraction: boolean } | undefined;
+        }, { layout?: {
                 width?: number | undefined;
                 height?: number | undefined;
                 showHeader?: boolean | undefined;
                 showFooter?: boolean | undefined;
                 showToolbar?: boolean | undefined;
-                responsive?: boolean | undefined;
-            } | undefined;
-            branding?: {
-                showLogo?: boolean | undefined;
+                responsive?: boolean | undefined } | undefined;
+            branding?: { showLogo?: boolean | undefined;
                 showAttribution?: boolean | undefined;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay?: boolean | undefined;
+            features?: { autoPlay?: boolean | undefined;
                 allowComments?: boolean | undefined;
                 showMetrics?: boolean | undefined;
                 allowRating?: boolean | undefined;
-                enableInteraction?: boolean | undefined;
-            } | undefined;
+                enableInteraction?: boolean | undefined } | undefined;
         }>>;
-        metadata: z.ZodObject<{,
+        metadata: z.ZodObject<{ ,
             createdBy: z.ZodString;
             createdAt: z.ZodDate;
             updatedAt: z.ZodDate;
@@ -1856,9 +1493,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             difficulty: z.ZodOptional<z.ZodEnum<["beginner", "intermediate", "advanced"]>>;
             estimatedTime: z.ZodOptional<z.ZodNumber>;
             prerequisites: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-            relatedResources: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        }, "strip", z.ZodTypeAny, {
-            createdAt: Date;
+            relatedResources: z.ZodDefault<z.ZodArray<z.ZodString, "many">> }, "strip", z.ZodTypeAny, { createdAt: Date;
             updatedAt: Date;
             version: string;
             createdBy: string;
@@ -1866,9 +1501,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             relatedResources: string[];
             category?: string | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
-            estimatedTime?: number | undefined;
-        }, {
-            createdAt: Date;
+            estimatedTime?: number | undefined }, { createdAt: Date;
             updatedAt: Date;
             createdBy: string;
             category?: string | undefined;
@@ -1876,10 +1509,8 @@ export declare const ShareResponseSchema: z.ZodObject<{
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            relatedResources?: string[] | undefined;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+            relatedResources?: string[] | undefined }>;
+    }, "strip", z.ZodTypeAny, { id: string;
         tags: string[];
         metadata: {
             createdAt: Date;
@@ -1890,11 +1521,9 @@ export declare const ShareResponseSchema: z.ZodObject<{
             relatedResources: string[];
             category?: string | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
-            estimatedTime?: number | undefined;
-        };
+            estimatedTime?: number | undefined };
         title: string;
-        permissions: {
-            canEdit: boolean;
+        permissions: { canEdit: boolean;
             canView: boolean;
             canComment: boolean;
             canClone: boolean;
@@ -1905,43 +1534,35 @@ export declare const ShareResponseSchema: z.ZodObject<{
             allowedDomains?: string[] | undefined;
             expiresAt?: Date | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        };
+            maxShares?: number | undefined };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
         shareFormat: "link" | "embed" | "clone" | "export";
-        customization: {
-            layout?: {
+        customization: { layout?: {
                 width: number;
                 height: number;
                 showHeader: boolean;
                 showFooter: boolean;
                 showToolbar: boolean;
-                responsive: boolean;
-            } | undefined;
-            branding?: {
-                showLogo: boolean;
+                responsive: boolean } | undefined;
+            branding?: { showLogo: boolean;
                 showAttribution: boolean;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay: boolean;
+            features?: { autoPlay: boolean;
                 allowComments: boolean;
                 showMetrics: boolean;
                 allowRating: boolean;
-                enableInteraction: boolean;
-            } | undefined;
+                enableInteraction: boolean } | undefined;
         };
         description?: string | undefined;
         thumbnailUrl?: string | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         metadata: {
             createdAt: Date;
             updatedAt: Date;
@@ -1951,11 +1572,9 @@ export declare const ShareResponseSchema: z.ZodObject<{
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            relatedResources?: string[] | undefined;
-        };
+            relatedResources?: string[] | undefined };
         title: string;
-        permissions: {
-            allowedDomains?: string[] | undefined;
+        permissions: { allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
             canView?: boolean | undefined;
@@ -1966,8 +1585,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             canDownload?: boolean | undefined;
             requiresAuth?: boolean | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        };
+            maxShares?: number | undefined };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
@@ -1975,35 +1593,29 @@ export declare const ShareResponseSchema: z.ZodObject<{
         description?: string | undefined;
         tags?: string[] | undefined;
         thumbnailUrl?: string | undefined;
-        customization?: {
-            layout?: {
+        customization?: { layout?: {
                 width?: number | undefined;
                 height?: number | undefined;
                 showHeader?: boolean | undefined;
                 showFooter?: boolean | undefined;
                 showToolbar?: boolean | undefined;
-                responsive?: boolean | undefined;
-            } | undefined;
-            branding?: {
-                showLogo?: boolean | undefined;
+                responsive?: boolean | undefined } | undefined;
+            branding?: { showLogo?: boolean | undefined;
                 showAttribution?: boolean | undefined;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay?: boolean | undefined;
+            features?: { autoPlay?: boolean | undefined;
                 allowComments?: boolean | undefined;
                 showMetrics?: boolean | undefined;
                 allowRating?: boolean | undefined;
-                enableInteraction?: boolean | undefined;
-            } | undefined;
+                enableInteraction?: boolean | undefined } | undefined;
         } | undefined;
     }>;
-    shareLink: z.ZodObject<{,
+    shareLink: z.ZodObject<{ ,
         id: z.ZodString;
         shareConfigId: z.ZodString;
         shortCode: z.ZodString;
@@ -2011,214 +1623,164 @@ export declare const ShareResponseSchema: z.ZodObject<{
         shortUrl: z.ZodString;
         qrCode: z.ZodOptional<z.ZodString>;
         socialTags: z.ZodObject<{,
-            openGraph: z.ZodObject<{,
+            openGraph: z.ZodObject<{ }
                 title: z.ZodString;
                 description: z.ZodString;
                 image: z.ZodOptional<z.ZodString>;
                 url: z.ZodString;
                 type: z.ZodDefault<z.ZodString>;
                 siteName: z.ZodDefault<z.ZodString>;
-            }, "strip", z.ZodTypeAny, {
-                description: string;
+            }, "strip", z.ZodTypeAny, { description: string;
                 type: string;
                 title: string;
                 url: string;
                 siteName: string;
-                image?: string | undefined;
-            }, {
-                description: string;
+                image?: string | undefined }, { description: string;
                 title: string;
                 url: string;
                 type?: string | undefined;
                 image?: string | undefined;
-                siteName?: string | undefined;
-            }>;
-            twitter: z.ZodObject<{,
+                siteName?: string | undefined }>;
+            twitter: z.ZodObject<{ ,
                 card: z.ZodDefault<z.ZodEnum<["summary", "summary_large_image"]>>;
                 title: z.ZodString;
                 description: z.ZodString;
                 image: z.ZodOptional<z.ZodString>;
-                creator: z.ZodOptional<z.ZodString>;
-            }, "strip", z.ZodTypeAny, {
-                description: string;
+                creator: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { description: string;
                 title: string;
                 card: "summary" | "summary_large_image";
                 image?: string | undefined;
-                creator?: string | undefined;
-            }, {
-                description: string;
+                creator?: string | undefined }, { description: string;
                 title: string;
                 image?: string | undefined;
                 creator?: string | undefined;
-                card?: "summary" | "summary_large_image" | undefined;
-            }>;
-            schema: z.ZodObject<{,
+                card?: "summary" | "summary_large_image" | undefined }>;
+            schema: z.ZodObject<{ ,
                 type: z.ZodDefault<z.ZodString>;
                 name: z.ZodString;
                 description: z.ZodString;
                 url: z.ZodString;
-                author: z.ZodOptional<z.ZodObject<{,
+                author: z.ZodOptional<z.ZodObject<{ }
                     type: z.ZodDefault<z.ZodString>;
                     name: z.ZodString;
-                }, "strip", z.ZodTypeAny, {
-                    name: string;
-                    type: string;
-                }, {
-                    name: string;
-                    type?: string | undefined;
-                }>>;
-            }, "strip", z.ZodTypeAny, {
-                name: string;
+                }, "strip", z.ZodTypeAny, { name: string;
+                    type: string }, { name: string;
+                    type?: string | undefined }>>;
+            }, "strip", z.ZodTypeAny, { name: string;
                 description: string;
                 type: string;
                 url: string;
                 author?: {
                     name: string;
-                    type: string;
-                } | undefined;
-            }, {
-                name: string;
+                    type: string } | undefined;
+            }, { name: string;
                 description: string;
                 url: string;
                 type?: string | undefined;
                 author?: {
                     name: string;
-                    type?: string | undefined;
-                } | undefined;
+                    type?: string | undefined } | undefined;
             }>;
-        }, "strip", z.ZodTypeAny, {
-            schema: {
+        }, "strip", z.ZodTypeAny, { schema: {
                 name: string;
                 description: string;
                 type: string;
                 url: string;
                 author?: {
                     name: string;
-                    type: string;
-                } | undefined;
+                    type: string } | undefined;
             };
-            twitter: {
-                description: string;
+            twitter: { description: string;
                 title: string;
                 card: "summary" | "summary_large_image";
                 image?: string | undefined;
-                creator?: string | undefined;
-            };
-            openGraph: {
-                description: string;
+                creator?: string | undefined };
+            openGraph: { description: string;
                 type: string;
                 title: string;
                 url: string;
                 siteName: string;
-                image?: string | undefined;
-            };
-        }, {
-            schema: {
+                image?: string | undefined };
+        }, { schema: {
                 name: string;
                 description: string;
                 url: string;
                 type?: string | undefined;
                 author?: {
                     name: string;
-                    type?: string | undefined;
-                } | undefined;
+                    type?: string | undefined } | undefined;
             };
-            twitter: {
-                description: string;
+            twitter: { description: string;
                 title: string;
                 image?: string | undefined;
                 creator?: string | undefined;
-                card?: "summary" | "summary_large_image" | undefined;
-            };
-            openGraph: {
-                description: string;
+                card?: "summary" | "summary_large_image" | undefined };
+            openGraph: { description: string;
                 title: string;
                 url: string;
                 type?: string | undefined;
                 image?: string | undefined;
-                siteName?: string | undefined;
-            };
+                siteName?: string | undefined };
         }>;
-        embedCode: z.ZodOptional<z.ZodObject<{,
+        embedCode: z.ZodOptional<z.ZodObject<{ 
             iframe: z.ZodString;
             javascript: z.ZodOptional<z.ZodString>;
-            responsive: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            iframe: string;
+            responsive: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { iframe: string;
             javascript?: string | undefined;
-            responsive?: string | undefined;
-        }, {
-            iframe: string;
+            responsive?: string | undefined }, { iframe: string;
             javascript?: string | undefined;
-            responsive?: string | undefined;
-        }>>;
-        analytics: z.ZodDefault<z.ZodObject<{,
+            responsive?: string | undefined }>>;
+        analytics: z.ZodDefault<z.ZodObject<{ 
             trackingEnabled: z.ZodDefault<z.ZodBoolean>;
             utmSource: z.ZodOptional<z.ZodString>;
             utmMedium: z.ZodOptional<z.ZodString>;
             utmCampaign: z.ZodOptional<z.ZodString>;
-            customParams: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
-        }, "strip", z.ZodTypeAny, {
-            trackingEnabled: boolean;
+            customParams: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>> }, "strip", z.ZodTypeAny, { trackingEnabled: boolean;
             customParams: Record<string, string>;
             utmSource?: string | undefined;
             utmMedium?: string | undefined;
-            utmCampaign?: string | undefined;
-        }, {
-            trackingEnabled?: boolean | undefined;
+            utmCampaign?: string | undefined }, { trackingEnabled?: boolean | undefined;
             utmSource?: string | undefined;
             utmMedium?: string | undefined;
             utmCampaign?: string | undefined;
-            customParams?: Record<string, string> | undefined;
-        }>>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+            customParams?: Record<string, string> | undefined }>>;
+    }, "strip", z.ZodTypeAny, { id: string;
         analytics: {
             trackingEnabled: boolean;
             customParams: Record<string, string>;
             utmSource?: string | undefined;
             utmMedium?: string | undefined;
-            utmCampaign?: string | undefined;
-        };
+            utmCampaign?: string | undefined };
         shareConfigId: string;
         shortCode: string;
         fullUrl: string;
         shortUrl: string;
-        socialTags: {
-            schema: {
+        socialTags: { schema: {
                 name: string;
                 description: string;
                 type: string;
                 url: string;
                 author?: {
                     name: string;
-                    type: string;
-                } | undefined;
+                    type: string } | undefined;
             };
-            twitter: {
-                description: string;
+            twitter: { description: string;
                 title: string;
                 card: "summary" | "summary_large_image";
                 image?: string | undefined;
-                creator?: string | undefined;
-            };
-            openGraph: {
-                description: string;
+                creator?: string | undefined };
+            openGraph: { description: string;
                 type: string;
                 title: string;
                 url: string;
                 siteName: string;
-                image?: string | undefined;
-            };
+                image?: string | undefined };
         };
         qrCode?: string | undefined;
-        embedCode?: {
-            iframe: string;
+        embedCode?: { iframe: string;
             javascript?: string | undefined;
-            responsive?: string | undefined;
-        } | undefined;
-    }, {
-        id: string;
+            responsive?: string | undefined } | undefined;
+    }, { id: string;
         shareConfigId: string;
         shortCode: string;
         fullUrl: string;
@@ -2231,56 +1793,41 @@ export declare const ShareResponseSchema: z.ZodObject<{
                 type?: string | undefined;
                 author?: {
                     name: string;
-                    type?: string | undefined;
-                } | undefined;
+                    type?: string | undefined } | undefined;
             };
-            twitter: {
-                description: string;
+            twitter: { description: string;
                 title: string;
                 image?: string | undefined;
                 creator?: string | undefined;
-                card?: "summary" | "summary_large_image" | undefined;
-            };
-            openGraph: {
-                description: string;
+                card?: "summary" | "summary_large_image" | undefined };
+            openGraph: { description: string;
                 title: string;
                 url: string;
                 type?: string | undefined;
                 image?: string | undefined;
-                siteName?: string | undefined;
-            };
+                siteName?: string | undefined };
         };
-        analytics?: {
-            trackingEnabled?: boolean | undefined;
+        analytics?: { trackingEnabled?: boolean | undefined;
             utmSource?: string | undefined;
             utmMedium?: string | undefined;
             utmCampaign?: string | undefined;
-            customParams?: Record<string, string> | undefined;
-        } | undefined;
+            customParams?: Record<string, string> | undefined } | undefined;
         qrCode?: string | undefined;
-        embedCode?: {
-            iframe: string;
+        embedCode?: { iframe: string;
             javascript?: string | undefined;
-            responsive?: string | undefined;
-        } | undefined;
+            responsive?: string | undefined } | undefined;
     }>;
     socialLinks: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodString>>;
-    embedCodes: z.ZodObject<{,
+    embedCodes: z.ZodObject<{ ,
         basic: z.ZodString;
         responsive: z.ZodString;
-        customizable: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        basic: string;
+        customizable: z.ZodString }, "strip", z.ZodTypeAny, { basic: string;
         customizable: string;
-        responsive: string;
-    }, {
-        basic: string;
+        responsive: string }, { basic: string;
         customizable: string;
-        responsive: string;
-    }>;
+        responsive: string }>;
     qrCode: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    shareConfig: {
+}, "strip", z.ZodTypeAny, { shareConfig: {
         id: string;
         tags: string[];
         metadata: {
@@ -2292,11 +1839,9 @@ export declare const ShareResponseSchema: z.ZodObject<{
             relatedResources: string[];
             category?: string | undefined;
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
-            estimatedTime?: number | undefined;
-        };
+            estimatedTime?: number | undefined };
         title: string;
-        permissions: {
-            canEdit: boolean;
+        permissions: { canEdit: boolean;
             canView: boolean;
             canComment: boolean;
             canClone: boolean;
@@ -2307,98 +1852,78 @@ export declare const ShareResponseSchema: z.ZodObject<{
             allowedDomains?: string[] | undefined;
             expiresAt?: Date | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        };
+            maxShares?: number | undefined };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
         shareFormat: "link" | "embed" | "clone" | "export";
-        customization: {
-            layout?: {
+        customization: { layout?: {
                 width: number;
                 height: number;
                 showHeader: boolean;
                 showFooter: boolean;
                 showToolbar: boolean;
-                responsive: boolean;
-            } | undefined;
-            branding?: {
-                showLogo: boolean;
+                responsive: boolean } | undefined;
+            branding?: { showLogo: boolean;
                 showAttribution: boolean;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay: boolean;
+            features?: { autoPlay: boolean;
                 allowComments: boolean;
                 showMetrics: boolean;
                 allowRating: boolean;
-                enableInteraction: boolean;
-            } | undefined;
+                enableInteraction: boolean } | undefined;
         };
         description?: string | undefined;
         thumbnailUrl?: string | undefined;
     };
-    shareLink: {
-        id: string;
+    shareLink: { id: string;
         analytics: {
             trackingEnabled: boolean;
             customParams: Record<string, string>;
             utmSource?: string | undefined;
             utmMedium?: string | undefined;
-            utmCampaign?: string | undefined;
-        };
+            utmCampaign?: string | undefined };
         shareConfigId: string;
         shortCode: string;
         fullUrl: string;
         shortUrl: string;
-        socialTags: {
-            schema: {
+        socialTags: { schema: {
                 name: string;
                 description: string;
                 type: string;
                 url: string;
                 author?: {
                     name: string;
-                    type: string;
-                } | undefined;
+                    type: string } | undefined;
             };
-            twitter: {
-                description: string;
+            twitter: { description: string;
                 title: string;
                 card: "summary" | "summary_large_image";
                 image?: string | undefined;
-                creator?: string | undefined;
-            };
-            openGraph: {
-                description: string;
+                creator?: string | undefined };
+            openGraph: { description: string;
                 type: string;
                 title: string;
                 url: string;
                 siteName: string;
-                image?: string | undefined;
-            };
+                image?: string | undefined };
         };
         qrCode?: string | undefined;
-        embedCode?: {
-            iframe: string;
+        embedCode?: { iframe: string;
             javascript?: string | undefined;
-            responsive?: string | undefined;
-        } | undefined;
+            responsive?: string | undefined } | undefined;
     };
     socialLinks: Record<string, string>;
-    embedCodes: {
-        basic: string;
+    embedCodes: { basic: string;
         customizable: string;
-        responsive: string;
-    };
+        responsive: string };
     qrCode?: string | undefined;
-}, {
-    shareConfig: {
+}, { shareConfig: {
         id: string;
         metadata: {
             createdAt: Date;
@@ -2409,11 +1934,9 @@ export declare const ShareResponseSchema: z.ZodObject<{
             difficulty?: "advanced" | "intermediate" | "beginner" | undefined;
             prerequisites?: string[] | undefined;
             estimatedTime?: number | undefined;
-            relatedResources?: string[] | undefined;
-        };
+            relatedResources?: string[] | undefined };
         title: string;
-        permissions: {
-            allowedDomains?: string[] | undefined;
+        permissions: { allowedDomains?: string[] | undefined;
             canEdit?: boolean | undefined;
             expiresAt?: Date | undefined;
             canView?: boolean | undefined;
@@ -2424,8 +1947,7 @@ export declare const ShareResponseSchema: z.ZodObject<{
             canDownload?: boolean | undefined;
             requiresAuth?: boolean | undefined;
             maxViews?: number | undefined;
-            maxShares?: number | undefined;
-        };
+            maxShares?: number | undefined };
         resourceId: string;
         resourceType: "template" | "graph" | "tutorial" | "collection" | "case_study" | "marketplace_item";
         shareTarget: "private" | "public" | "organization" | "workspace" | "unlisted";
@@ -2433,36 +1955,29 @@ export declare const ShareResponseSchema: z.ZodObject<{
         description?: string | undefined;
         tags?: string[] | undefined;
         thumbnailUrl?: string | undefined;
-        customization?: {
-            layout?: {
+        customization?: { layout?: {
                 width?: number | undefined;
                 height?: number | undefined;
                 showHeader?: boolean | undefined;
                 showFooter?: boolean | undefined;
                 showToolbar?: boolean | undefined;
-                responsive?: boolean | undefined;
-            } | undefined;
-            branding?: {
-                showLogo?: boolean | undefined;
+                responsive?: boolean | undefined } | undefined;
+            branding?: { showLogo?: boolean | undefined;
                 showAttribution?: boolean | undefined;
                 customLogo?: string | undefined;
                 customColors?: {
                     text?: string | undefined;
                     background?: string | undefined;
-                    primary?: string | undefined;
-                } | undefined;
+                    primary?: string | undefined } | undefined;
             } | undefined;
-            features?: {
-                autoPlay?: boolean | undefined;
+            features?: { autoPlay?: boolean | undefined;
                 allowComments?: boolean | undefined;
                 showMetrics?: boolean | undefined;
                 allowRating?: boolean | undefined;
-                enableInteraction?: boolean | undefined;
-            } | undefined;
+                enableInteraction?: boolean | undefined } | undefined;
         } | undefined;
     };
-    shareLink: {
-        id: string;
+    shareLink: { id: string;
         shareConfigId: string;
         shortCode: string;
         fullUrl: string;
@@ -2475,44 +1990,33 @@ export declare const ShareResponseSchema: z.ZodObject<{
                 type?: string | undefined;
                 author?: {
                     name: string;
-                    type?: string | undefined;
-                } | undefined;
+                    type?: string | undefined } | undefined;
             };
-            twitter: {
-                description: string;
+            twitter: { description: string;
                 title: string;
                 image?: string | undefined;
                 creator?: string | undefined;
-                card?: "summary" | "summary_large_image" | undefined;
-            };
-            openGraph: {
-                description: string;
+                card?: "summary" | "summary_large_image" | undefined };
+            openGraph: { description: string;
                 title: string;
                 url: string;
                 type?: string | undefined;
                 image?: string | undefined;
-                siteName?: string | undefined;
-            };
+                siteName?: string | undefined };
         };
-        analytics?: {
-            trackingEnabled?: boolean | undefined;
+        analytics?: { trackingEnabled?: boolean | undefined;
             utmSource?: string | undefined;
             utmMedium?: string | undefined;
             utmCampaign?: string | undefined;
-            customParams?: Record<string, string> | undefined;
-        } | undefined;
+            customParams?: Record<string, string> | undefined } | undefined;
         qrCode?: string | undefined;
-        embedCode?: {
-            iframe: string;
+        embedCode?: { iframe: string;
             javascript?: string | undefined;
-            responsive?: string | undefined;
-        } | undefined;
+            responsive?: string | undefined } | undefined;
     };
-    embedCodes: {
-        basic: string;
+    embedCodes: { basic: string;
         customizable: string;
-        responsive: string;
-    };
+        responsive: string };
     qrCode?: string | undefined;
     socialLinks?: Record<string, string> | undefined;
 }>;
@@ -2524,23 +2028,21 @@ declare const ShareFormatSchema: z.ZodEnum<["link", "embed", "export", "clone"]>
 declare const SocialPlatformSchema: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;
 
 }
-export interface ShareSystemConfig {
-    enabledPlatforms: SocialPlatform[];
+}
+export interface ShareSystemConfig { enabledPlatforms: SocialPlatform[];
     defaultPermissions: SharePermission;
     analyticsRetentionDays: number;
     maxSharesPerUser: number;
     rateLimiting: {
         sharesPerHour: number;
-        embedsPerHour: number;
+        embedsPerHour: number }
 }
     };
-    customization: {
-        allowCustomBranding: boolean;
+    customization: { allowCustomBranding: boolean;
         allowCustomDomains: boolean;
         maxEmbedSize: {
             width: number;
-            height: number;
-        };
+            height: number };
     };
 
 export { SharePermissionSchema, ShareConfigSchema, ShareLinkSchema, ShareAnalyticsEventSchema, ShareMetricsSchema, SocialIntegrationSchema, ShareCollectionSchema, CreateShareRequestSchema, ShareResponseSchema, ShareableResourceTypeSchema, ShareTargetSchema, ShareFormatSchema, SocialPlatformSchema };

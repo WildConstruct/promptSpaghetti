@@ -4,19 +4,18 @@
  */
 
 }
-export interface RestoreOptions {
-    create_backup?: boolean;
+}
+export interface RestoreOptions { create_backup?: boolean;
     backup_title?: string;
     restore_mode?: 'full' | 'selective' | 'merge';
     conflict_resolution?: 'abort' | 'overwrite' | 'merge' | 'prompt';
     preserve_current_changes?: boolean;
     restore_metadata?: boolean;
     restore_workflow_state?: boolean;
-    notify_collaborators?: boolean;
-
+    notify_collaborators?: boolean }
 }
-export interface RestoreConflict {
-    id: string;
+}
+export interface RestoreConflict { id: string;
     type: 'data_conflict' | 'workflow_conflict' | 'permission_conflict' | 'dependency_conflict';
     element_id: string;
     element_type: 'node' | 'edge' | 'property' | 'metadata';
@@ -25,11 +24,10 @@ export interface RestoreConflict {
     restore_value: any;
     suggested_resolution: 'keep_current' | 'use_restore' | 'merge' | 'manual';
     severity: 'low' | 'medium' | 'high' | 'critical';
-    auto_resolvable: boolean;
-
+    auto_resolvable: boolean }
 }
-export interface RestorePreview {
-    restore_id: string;
+}
+export interface RestorePreview { restore_id: string;
     snapshot_id: string;
     conflicts: RestoreConflict[];
     changes_summary: {
@@ -39,21 +37,19 @@ export interface RestorePreview {
         edges_to_add: number;
         edges_to_remove: number;
         edges_to_modify: number;
-        properties_to_change: number;
+        properties_to_change: number }
 }
     };
     estimated_duration: number;
     risk_level: 'low' | 'medium' | 'high' | 'critical';
     backup_required: boolean;
-    collaborator_impact: {
-        active_users: string[];
+    collaborator_impact: { active_users: string[];
         potential_conflicts: string[];
-        recommended_actions: string[];
-    };
+        recommended_actions: string[] };
 
 }
-export interface RestoreResult {
-    success: boolean;
+}
+export interface RestoreResult { success: boolean;
     restore_id: string;
     backup_snapshot_id?: string;
     conflicts_resolved: number;
@@ -65,7 +61,7 @@ export interface RestoreResult {
         edges_added: number;
         edges_removed: number;
         edges_modified: number;
-        properties_changed: number;
+        properties_changed: number }
 }
     };
     duration_ms: number;
@@ -73,8 +69,8 @@ export interface RestoreResult {
     errors: string[];
 
 }
-export interface RestoreState {
-    id: string;
+}
+export interface RestoreState { id: string;
     status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
     progress: number;
     current_step: string;
@@ -94,13 +90,12 @@ export declare class VersionRestoreManager {
     constructor(apiClient: any, projectId: string, userId: string, versionHistoryManager: any);
     createRestorePreview(snapshotId: string, currentGraphData: any, options?: RestoreOptions): Promise<RestorePreview>;
     executeRestore();
-      snapshotId: string,
-      options?: RestoreOptions,
-      conflictResolutions?: Record<string,
+      snapshotId: string;
+      options?: RestoreOptions;
+      conflictResolutions?: Record<string }
       'keep_current' | 'use_restore' | 'merge' | 'custom'>
-    ): Promise<{
-        restoreId: string;
-        result: Promise<RestoreResult>;
+    ): Promise<{ restoreId: string;
+        result: Promise<RestoreResult> }
 }
     }>;
     private performRestore;

@@ -11,7 +11,8 @@ cacheStrategy: {
     enabled: boolean;
     ttlMs: number;
     maxSize: number;
-    evictionPolicy: 'lru' | 'lfu' | 'ttl';
+    evictionPolicy: 'lru' | 'lfu' | 'ttl',
+    ;
 }
 ;
 scalingRules: {
@@ -195,11 +196,12 @@ Promise < string > {
                             ;
                         },
                         return: false,
-                        /**
-                         * Get cache statistics for all categories
-                         */
-                        getCacheStatistics() {
-                            const stats, number;
+                        number,
+                        hitRate: number,
+                        evictions: number
+                    } > {
+                        const: stats, Record() {
+                            size: number;
                             maxSize: number;
                             hitRate: number;
                             evictions: number;
@@ -396,8 +398,7 @@ Promise < string > {
                                                     if(totalActiveNodes) { }
                                                 } >= this.config.globalSettings.maxConcurrentOperations
                                             }
-                                        }
-                                    }
+                                        } }
                                 };
                                 {
                                     return false;

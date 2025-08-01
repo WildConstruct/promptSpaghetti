@@ -352,8 +352,7 @@ export class Epic17AuthorizationService extends EventEmitter {
                                                                                 confidence,
                                                                                 riskScore,
                                                                                 recommendedActions: this.generateRecommendations(context, finalDecision),
-                                                                                alternatives: this.generateAlternatives(context),
-                                                                            },
+                                                                                alternatives: this.generateAlternatives(context), },
                                                                             appliedPolicies,
                                                                             conditions: evaluatedConditions,
                                                                             metadata: {} // Will be filled by caller
@@ -584,13 +583,13 @@ void {
         generateCacheKey(context, AuthorizationContext);
         string;
         {
-            const keyParts = [];
-            context.user.id,
+            const keyParts = [
+                context.user.id,
                 context.action,
                 context.resource?.type || 'none',
                 context.resource?.id || 'none',
-                context.environment.environment;
-            ;
+                context.environment.environment
+            ];
             return keyParts.join('_');
             isCacheValid(result, AuthorizationResult);
             boolean;

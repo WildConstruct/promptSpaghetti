@@ -7,8 +7,8 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
-}
-}
+
+
 export interface ReferrerPolicyConfig {
   id: string;
   name: string;
@@ -24,14 +24,15 @@ export interface ReferrerPolicyConfig {
       method?: string | string[];
       policy: ReferrerPolicyValue;
       exactMatch: boolean;
-}
-}
-    }>;
+
+
+
+>;
     domainSpecific?: Array<{
       domain: string;
       policy: ReferrerPolicyValue;
       includeSubdomains: boolean;
-    }>;
+>;
   };
   
   scope: {
@@ -68,7 +69,7 @@ export interface ReferrerPolicyConfig {
     tags: string[];
     businessJustification?: string;
   };
-}
+
 
 export type ReferrerPolicyValue = 
   | 'no-referrer'
@@ -80,8 +81,8 @@ export type ReferrerPolicyValue =
   | 'strict-origin-when-cross-origin'
   | 'unsafe-url';
 
-}
-}
+
+
 export interface ReferrerViolation {
   id: string;
   timestamp: Date;
@@ -92,8 +93,9 @@ export interface ReferrerViolation {
     userAgent: string;
     ip: string;
     userId?: string;
-}
-}
+
+
+
   };
   
   referrer: {
@@ -125,10 +127,10 @@ export interface ReferrerViolation {
     userType?: string;
     tags: string[];
   };
-}
 
-}
-}
+
+
+
 export interface ReferrerPolicyStatistics {
   timeRange: { start: Date; end: Date };
   
@@ -163,9 +165,9 @@ export interface ReferrerPolicyStatistics {
       currentPolicy: ReferrerPolicyValue;
       recommendedPolicy: ReferrerPolicyValue;
       reason: string;
-    }>;
+>;
   };
-}
+
 
 export class ReferrerPolicyService {
   private db: DatabaseService;
@@ -198,7 +200,7 @@ export class ReferrerPolicyService {
     };
     
     this.initializeDefaultConfigs();
-  }
+
 
   /**
    * Fastify middleware to apply referrer policy headers
@@ -228,9 +230,9 @@ export class ReferrerPolicyService {
                 message: 'Request blocked due to unsafe referrer'
               });
               return;
-            }
-          }
-        }
+
+
+
         
         // Apply the referrer policy header
         reply.header('Referrer-Policy', policy);
@@ -239,7 +241,7 @@ export class ReferrerPolicyService {
         if (policyConfig?.security.strictMode) {
           reply.header('X-Frame-Options', 'DENY');
           reply.header('X-Content-Type-Options', 'nosniff');
-        }
+
         
         // Update statistics
         await this.updateStatistics(policy, Date.now() - startTime);
@@ -247,15 +249,14 @@ export class ReferrerPolicyService {
         // Log for monitoring
         if (policyConfig?.reporting.enabled) {
           await this.logPolicyApplication(request, policy, policyConfig);
-        }
 
-      } catch (error) {
+ catch (error) {
         console.error('Error applying referrer policy:', error);
         // Apply default policy as fallback
         reply.header('Referrer-Policy', this.config.defaultPolicy);
-      }
+
     };
-  }
+
 
   /**
    * Create a new referrer policy configuration
@@ -270,7 +271,7 @@ export class ReferrerPolicyService {
     success: boolean;
     configId?: string;
     message: string;
-  }> {
+> {
 
     try {
       // Validate policy values
@@ -280,7 +281,7 @@ export class ReferrerPolicyService {
           success: false,
           message: `Invalid policy configuration: ${validation.errors.join(', ')}`
         };
-      }
+
 
       const config: ReferrerPolicyConfig = {
         ...configData,
@@ -291,7 +292,7 @@ export class ReferrerPolicyService {
           createdAt: new Date(),
           tags: configData.tags || [],
           businessJustification: configData.businessJustification
-        }
+
       };
 
       // Store configuration
@@ -306,15 +307,14 @@ export class ReferrerPolicyService {
         configId: config.id,
         message: 'Referrer policy configuration created successfully'
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating policy configuration:', error);
       return {
         success: false,
         message: 'Failed to create policy configuration'
       };
-    }
-  }
+
+
 
   /**
    * Update an existing policy configuration
@@ -327,7 +327,7 @@ export class ReferrerPolicyService {
   ): Promise<{
     success: boolean;
     message: string;
-  }> {
+> {
 
     try {
       const existingConfig = this.configs.get(configId);
@@ -336,7 +336,7 @@ export class ReferrerPolicyService {
           success: false,
           message: 'Policy configuration not found'
         };
-      }
+
 
       // Create updated configuration
       const updatedConfig: ReferrerPolicyConfig = {
@@ -348,7 +348,7 @@ export class ReferrerPolicyService {
           ...existingConfig.metadata,
           lastModifiedBy: updates.lastModifiedBy,
           lastModifiedAt: new Date()
-        }
+
       };
 
       // Validate updated configuration
@@ -358,7 +358,7 @@ export class ReferrerPolicyService {
           success: false,
           message: `Invalid policy configuration: ${validation.errors.join(', ')}`
         };
-      }
+
 
       // Store updated configuration
       this.configs.set(configId, updatedConfig);
@@ -371,15 +371,14 @@ export class ReferrerPolicyService {
         success: true,
         message: 'Policy configuration updated successfully'
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error updating policy configuration:', error);
       return {
         success: false,
         message: 'Failed to update policy configuration'
       };
-    }
-  }
+
+
 
   /**
    * Get policy recommendations based on current usage patterns
@@ -393,7 +392,7 @@ export class ReferrerPolicyService {
     reason: string;
     confidence: number;
     impact: 'low' | 'medium' | 'high';
-  }>> {
+>> {
     try {
       const recommendations: Array<{
         path: string;
@@ -402,7 +401,7 @@ export class ReferrerPolicyService {
         reason: string;
         confidence: number;
         impact: 'low' | 'medium' | 'high';
-      }> = [];
+> = [];
 
       // Analyze violation patterns
       const violations = this.violations.filter(v => 
@@ -415,7 +414,7 @@ export class ReferrerPolicyService {
         const path = new URL(violation.request.url).pathname;
         if (!violationsByPath.has(path)) {
           violationsByPath.set(path, []);
-        }
+
         violationsByPath.get(path)!.push(violation);
       });
 
@@ -436,7 +435,7 @@ export class ReferrerPolicyService {
               confidence: 90,
               impact: 'high'
             });
-          } else if (totalViolations > 50) {
+ else if (totalViolations > 50) {
             recommendations.push({
               path,
               currentPolicy,
@@ -445,8 +444,8 @@ export class ReferrerPolicyService {
               confidence: 75,
               impact: 'medium'
             });
-          }
-        }
+
+
       });
 
       // Analyze sensitive routes
@@ -465,16 +464,15 @@ export class ReferrerPolicyService {
             confidence: 95,
             impact: 'high'
           });
-        }
+
       });
 
       return recommendations.sort((a, b) => b.confidence - a.confidence);
-
-    } catch (error) {
+ catch (error) {
       console.error('Error generating policy recommendations:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Get comprehensive referrer policy statistics
@@ -500,23 +498,23 @@ export class ReferrerPolicyService {
           filteredViolations = filteredViolations.filter(v => 
             filters.configIds!.includes(v.metadata.configId)
           );
-        }
+
         if (filters.paths) {
           filteredViolations = filteredViolations.filter(v => 
             filters.paths!.some(path => v.request.url.includes(path))
           );
-        }
+
         if (filters.policies) {
           filteredViolations = filteredViolations.filter(v => 
             filters.policies!.includes(v.referrer.expectedPolicy)
           );
-        }
+
         if (filters.severities) {
           filteredViolations = filteredViolations.filter(v => 
             filters.severities!.includes(v.violation.severity)
           );
-        }
-      }
+
+
 
       // Calculate statistics
       const totalRequests = this.statistics.get('total_requests') || 0;
@@ -531,34 +529,33 @@ export class ReferrerPolicyService {
           violationsDetected: filteredViolations.length,
           blockedRequests: filteredViolations.filter(v => v.violation.blocked).length,
           averageResponseTime
-  }
+
         policies: {
           byValue: this.groupByProperty(filteredViolations, v => v.referrer.expectedPolicy),
           byPath: this.calculatePolicyByPath(filteredViolations),
           byDomain: this.calculatePolicyByDomain(filteredViolations),
           effectiveness: this.calculatePolicyEffectiveness(filteredViolations)
-  }
+
         violations: {
           byType: this.groupByProperty(filteredViolations, v => v.violation.type),
           bySeverity: this.groupByProperty(filteredViolations, v => v.violation.severity),
           byOrigin: this.groupByProperty(filteredViolations, v => v.referrer.origin),
           trends: this.calculateViolationTrends(filteredViolations)
-  }
+
         compliance: {
           policyCompliance: this.calculatePolicyCompliance(filteredViolations),
           securityScore: this.calculateSecurityScore(filteredViolations),
           privacyScore: this.calculatePrivacyScore(filteredViolations),
           recommendedPolicies: await this.getPolicyRecommendations(timeRange)
-        }
+
       };
 
       return statistics;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error generating referrer policy statistics:', error);
       throw new Error('Failed to generate statistics');
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -570,7 +567,7 @@ export class ReferrerPolicyService {
       
       if (cached) {
         return JSON.parse(cached);
-      }
+
 
       // Find matching policy configuration
       const configs = Array.from(this.configs.values())
@@ -581,16 +578,15 @@ export class ReferrerPolicyService {
         if (this.matchesScope(request, config)) {
           await this.redis.setex(cacheKey, this.config.cacheTimeout, JSON.stringify(config));
           return config;
-        }
-      }
+
+
 
       return null;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting policy for request:', error);
       return null;
-    }
-  }
+
+
 
   private determinePolicyValue(
     request: FastifyRequest, 
@@ -598,7 +594,7 @@ export class ReferrerPolicyService {
   ): ReferrerPolicyValue {
     if (!config) {
       return this.config.defaultPolicy;
-    }
+
 
     // Check path-specific policies
     if (config.policy.pathSpecific) {
@@ -606,10 +602,10 @@ export class ReferrerPolicyService {
         if (this.matchesPath(request.url, pathPolicy.path, pathPolicy.exactMatch)) {
           if (!pathPolicy.method || this.matchesMethod(request.method, pathPolicy.method)) {
             return pathPolicy.policy;
-          }
-        }
-      }
-    }
+
+
+
+
 
     // Check domain-specific policies
     if (config.policy.domainSpecific) {
@@ -618,13 +614,13 @@ export class ReferrerPolicyService {
         for (const domainPolicy of config.policy.domainSpecific) {
           if (this.matchesDomain(host, domainPolicy.domain, domainPolicy.includeSubdomains)) {
             return domainPolicy.policy;
-          }
-        }
-      }
-    }
+
+
+
+
 
     return config.policy.default;
-  }
+
 
   private async validateReferrer(
     request: FastifyRequest,
@@ -634,7 +630,7 @@ export class ReferrerPolicyService {
     valid: boolean;
     shouldBlock: boolean;
     reason?: string;
-  }> {
+> {
 
     try {
       const referrerUrl = new URL(referrerHeader);
@@ -648,7 +644,7 @@ export class ReferrerPolicyService {
           shouldBlock: true,
           reason: 'Referrer from blocked origin'
         };
-      }
+
 
       // Check if referrer violates expected policy
       const violatesPolicy = this.checkPolicyViolation(referrerUrl, requestUrl, expectedPolicy);
@@ -658,18 +654,17 @@ export class ReferrerPolicyService {
           shouldBlock: config?.security.strictMode || false,
           reason: 'Referrer violates expected policy'
         };
-      }
+
 
       return { valid: true, shouldBlock: false };
-
-    } catch (error) {
+ catch (error) {
       return {
         valid: false,
         shouldBlock: true,
         reason: 'Invalid referrer URL format'
       };
-    }
-  }
+
+
 
   private checkPolicyViolation(
     referrerUrl: URL,
@@ -692,69 +687,69 @@ export class ReferrerPolicyService {
     case 'strict-origin-when-cross-origin':
       if (referrerUrl.origin !== requestUrl.origin) {
         return referrerUrl.protocol === 'https:' && requestUrl.protocol === 'http:';
-      }
+
       return false;
       
     default:
       return false;
-    }
-  }
+
+
 
   private matchesScope(request: FastifyRequest, config: ReferrerPolicyConfig): boolean {
     if (!config.scope.global) {
       // Check environment
       if (config.scope.environments && !config.scope.environments.includes(process.env.NODE_ENV || 'development')) {
         return false;
-      }
+
       
       // Check route types
       const url = request.url;
       if (config.scope.sensitiveRoutes && !config.scope.sensitiveRoutes.some(route => url.includes(route))) {
         return false;
-      }
+
       if (config.scope.apiRoutes && !url.startsWith('/api/')) {
         return false;
-      }
+
       if (config.scope.adminRoutes && !url.startsWith('/admin/')) {
         return false;
-      }
-    }
+
+
 
     return true;
-  }
+
 
   private matchesPath(requestUrl: string, pattern: string, exactMatch: boolean): boolean {
     if (exactMatch) {
       return requestUrl === pattern;
-    }
+
     return requestUrl.includes(pattern);
-  }
+
 
   private matchesMethod(requestMethod: string, allowedMethods: string | string[]): boolean {
     const methods = Array.isArray(allowedMethods) ? allowedMethods : [allowedMethods];
     return methods.includes(requestMethod.toUpperCase());
-  }
+
 
   private matchesDomain(host: string, pattern: string, includeSubdomains: boolean): boolean {
     if (includeSubdomains) {
       return host === pattern || host.endsWith(`.${pattern}`);
-    }
+
     return host === pattern;
-  }
+
 
   private validatePolicyConfig(config: Partial<ReferrerPolicyConfig>): {
     valid: boolean;
     errors: string[];
-  } {
+ {
     const errors: string[] = [];
 
     if (!config.name) {
       errors.push('Name is required');
-    }
+
 
     if (!config.policy?.default) {
       errors.push('Default policy is required');
-    }
+
 
     const validPolicies: ReferrerPolicyValue[] = [
       'no-referrer', 'no-referrer-when-downgrade', 'origin',
@@ -764,24 +759,24 @@ export class ReferrerPolicyService {
 
     if (config.policy?.default && !validPolicies.includes(config.policy.default)) {
       errors.push('Invalid default policy value');
-    }
+
 
     if (config.policy?.pathSpecific) {
       config.policy.pathSpecific.forEach((pathPolicy, index) => {
         if (!pathPolicy.path) {
           errors.push(`Path-specific policy ${index}: path is required`);
-        }
+
         if (!validPolicies.includes(pathPolicy.policy)) {
           errors.push(`Path-specific policy ${index}: invalid policy value`);
-        }
+
       });
-    }
+
 
     return {
       valid: errors.length === 0,
       errors
     };
-  }
+
 
   private async logViolation(
     request: FastifyRequest,
@@ -800,30 +795,30 @@ export class ReferrerPolicyService {
           userAgent: (request.headers['user-agent'] as string) || 'unknown',
           ip: request.ip,
           userId: (request as any).user?.id
-  }
+
         referrer: {
           header: referrerHeader,
           expectedPolicy,
           origin: new URL(referrerHeader).origin,
           isSecure: referrerHeader.startsWith('https:')
-  }
+
         violation: {
           type: this.determineViolationType(validation.reason),
           severity: this.determineSeverity(validation.reason),
           description: validation.reason || 'Unknown violation',
           blocked: validation.shouldBlock,
           action: validation.shouldBlock ? 'block' : 'warn'
-  }
+
         response: {
           status: validation.shouldBlock ? 403 : 200,
           headers: {},
           redirected: false
-  }
+
         metadata: {
           configId: 'default',
           environment: process.env.NODE_ENV || 'development',
           tags: ['security', 'referrer-policy']
-        }
+
       };
 
       this.violations.push(violation);
@@ -831,12 +826,11 @@ export class ReferrerPolicyService {
       // Trim violation history if needed
       if (this.violations.length > this.config.maxViolationHistory) {
         this.violations = this.violations.slice(-this.config.maxViolationHistory);
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error('Error logging referrer policy violation:', error);
-    }
-  }
+
+
 
   private async updateStatistics(policy: ReferrerPolicyValue, responseTime: number): Promise<void> {
 
@@ -848,7 +842,7 @@ export class ReferrerPolicyService {
     this.statistics.set('avg_response_time', (avgResponseTime * (totalRequests - 1) + responseTime) / totalRequests);
     
     this.statistics.set(`policy_${policy}`, (this.statistics.get(`policy_${policy}`) || 0) + 1);
-  }
+
 
   private async logPolicyApplication(
     request: FastifyRequest,
@@ -864,8 +858,8 @@ export class ReferrerPolicyService {
         configId: config.id,
         timestamp: new Date()
       });
-    }
-  }
+
+
 
   private async savePolicyConfig(config: ReferrerPolicyConfig): Promise<void> {
 
@@ -874,7 +868,7 @@ export class ReferrerPolicyService {
       86400,
       JSON.stringify(config)
     );
-  }
+
 
   private async clearPolicyCache(): Promise<void> {
 
@@ -882,10 +876,10 @@ export class ReferrerPolicyService {
     try {
       // For now, implement a simpler cache clearing approach
       await this.redis.del('referrer_policy_cache');
-    } catch (error) {
+ catch (error) {
       console.warn('Could not clear policy cache:', error);
-    }
-  }
+
+
 
   private initializeDefaultConfigs(): void {
     const defaultConfig: ReferrerPolicyConfig = {
@@ -902,22 +896,22 @@ export class ReferrerPolicyService {
             path: '/admin',
             policy: 'no-referrer',
             exactMatch: false
-  }
+
           {
             path: '/api/auth',
             policy: 'no-referrer',
             exactMatch: false
-  }
+
           {
             path: '/api/payment',
             policy: 'no-referrer',
             exactMatch: false
-          }
+
         ]
-  }
+
       scope: {
         global: true
-  }
+
       security: {
         strictMode: true,
         preventDowngrade: true,
@@ -925,22 +919,22 @@ export class ReferrerPolicyService {
         blockUnsafeReferrers: true,
         allowedOrigins: ['https://localhost:3000'],
         blockedOrigins: []
-  }
+
       reporting: {
         enabled: true,
         reportOnlyMode: false,
         sampleRate: 10,
         includeUserAgent: true
-  }
+
       metadata: {
         createdBy: 'system',
         createdAt: new Date(),
         tags: ['default', 'security', 'privacy']
-      }
+
     };
 
     this.configs.set(defaultConfig.id, defaultConfig);
-  }
+
 
   private determineViolationType(reason?: string): ReferrerViolation['violation']['type'] {
     if (!reason) return 'policy_violation';
@@ -948,14 +942,14 @@ export class ReferrerPolicyService {
     if (reason.includes('downgrade')) return 'policy_downgrade';
     if (reason.includes('unsafe')) return 'unsafe_referrer';
     return 'policy_violation';
-  }
+
 
   private determineSeverity(reason?: string): ReferrerViolation['violation']['severity'] {
     if (!reason) return 'medium';
     if (reason.includes('critical') || reason.includes('blocked')) return 'high';
     if (reason.includes('unsafe') || reason.includes('downgrade')) return 'medium';
     return 'low';
-  }
+
 
   private groupByProperty<T>(items: T[], getProperty: (item: T) => string): Record<string, number> {
     return items.reduce((acc, item) => {
@@ -963,7 +957,7 @@ export class ReferrerPolicyService {
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-  }
+
 
   private calculatePolicyByPath(violations: ReferrerViolation[]): Record<string, { policy: ReferrerPolicyValue; count: number }> {
     const pathPolicies: Record<string, { policy: ReferrerPolicyValue; count: number }> = {};
@@ -975,12 +969,12 @@ export class ReferrerPolicyService {
           policy: violation.referrer.expectedPolicy,
           count: 0
         };
-      }
+
       pathPolicies[path].count++;
     });
 
     return pathPolicies;
-  }
+
 
   private calculatePolicyByDomain(violations: ReferrerViolation[]): Record<string, { policy: ReferrerPolicyValue; count: number }> {
     const domainPolicies: Record<string, { policy: ReferrerPolicyValue; count: number }> = {};
@@ -992,12 +986,12 @@ export class ReferrerPolicyService {
           policy: violation.referrer.expectedPolicy,
           count: 0
         };
-      }
+
       domainPolicies[domain].count++;
     });
 
     return domainPolicies;
-  }
+
 
   private calculatePolicyEffectiveness(violations: ReferrerViolation[]): Record<ReferrerPolicyValue, { applied: number; violations: number }> {
     const effectiveness: Record<string, { applied: number; violations: number }> = {};
@@ -1006,7 +1000,7 @@ export class ReferrerPolicyService {
       const policy = violation.referrer.expectedPolicy;
       if (!effectiveness[policy]) {
         effectiveness[policy] = { applied: 0, violations: 0 };
-      }
+
       effectiveness[policy].violations++;
     });
 
@@ -1016,13 +1010,13 @@ export class ReferrerPolicyService {
         const policy = key.replace('policy_', '') as ReferrerPolicyValue;
         if (!effectiveness[policy]) {
           effectiveness[policy] = { applied: 0, violations: 0 };
-        }
+
         effectiveness[policy].applied = count;
-      }
+
     });
 
     return effectiveness as Record<ReferrerPolicyValue, { applied: number; violations: number }>;
-  }
+
 
   private calculateViolationTrends(violations: ReferrerViolation[]): Array<{ hour: number; violations: number; blocked: number }> {
     const trends = Array.from({ length: 24 }, (_, hour) => ({
@@ -1036,17 +1030,17 @@ export class ReferrerPolicyService {
       trends[hour].violations++;
       if (violation.violation.blocked) {
         trends[hour].blocked++;
-      }
+
     });
 
     return trends;
-  }
+
 
   private calculatePolicyCompliance(violations: ReferrerViolation[]): number {
     const totalRequests = this.statistics.get('total_requests') || 1;
     const violationRate = violations.length / totalRequests;
     return Math.max(0, Math.round((1 - violationRate) * 100));
-  }
+
 
   private calculateSecurityScore(violations: ReferrerViolation[]): number {
     const securityViolations = violations.filter(v => 
@@ -1056,7 +1050,7 @@ export class ReferrerPolicyService {
     const totalRequests = this.statistics.get('total_requests') || 1;
     const securityViolationRate = securityViolations / totalRequests;
     return Math.max(0, Math.round((1 - securityViolationRate * 2) * 100));
-  }
+
 
   private calculatePrivacyScore(violations: ReferrerViolation[]): number {
     const privacyViolations = violations.filter(v => 
@@ -1066,19 +1060,18 @@ export class ReferrerPolicyService {
     const totalRequests = this.statistics.get('total_requests') || 1;
     const privacyViolationRate = privacyViolations / totalRequests;
     return Math.max(0, Math.round((1 - privacyViolationRate * 1.5) * 100));
-  }
+
 
   private generateConfigId(): string {
     return `RPC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateViolationId(): string {
     return `RPV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   destroy(): void {
     this.configs.clear();
     this.violations = [];
     this.statistics.clear();
-  }
-}
+

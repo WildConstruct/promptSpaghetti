@@ -7,8 +7,8 @@ import { EventEmitter } from 'events';
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
-}
-}
+
+
 export interface SessionActivity {
   id: string;
   sessionId: string;
@@ -22,8 +22,9 @@ export interface SessionActivity {
     action: string;
     resource?: string;
     method?: string;
-}
-}
+
+
+
   };
   
   context: {
@@ -72,10 +73,10 @@ export interface SessionActivity {
     parentActivityId?: string;
     childActivities?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface ActivityPattern {
   id: string;
   name: string;
@@ -90,9 +91,10 @@ export interface ActivityPattern {
       field: string;
       operator: 'equals' | 'contains' | 'gt' | 'lt' | 'in' | 'regex';
       value: any;
-}
-}
-    }>;
+
+
+
+>;
   };
   
   detection: {
@@ -112,10 +114,10 @@ export interface ActivityPattern {
       channels: ('email' | 'sms' | 'webhook' | 'slack')[];
     };
   };
-}
 
-}
-}
+
+
+
 export interface ActivitySummary {
   sessionId: string;
   userId: string;
@@ -123,8 +125,9 @@ export interface ActivitySummary {
     start: Date;
     end: Date;
     duration: number; // seconds
-}
-}
+
+
+
   };
   
   statistics: {
@@ -151,7 +154,7 @@ export interface ActivitySummary {
       activity: string;
       riskScore: number;
       reason: string;
-    }>;
+>;
     overallRiskScore: number;
   };
   
@@ -160,22 +163,22 @@ export interface ActivitySummary {
       activity: string;
       responseTime: number;
       timestamp: Date;
-    }>;
+>;
     failedOperations: Array<{
       activity: string;
       error: string;
       timestamp: Date;
-    }>;
+>;
     resourceUsage: {
       bandwidth: number; // bytes
       apiCalls: number;
       dbQueries: number;
     };
   };
-}
 
-}
-}
+
+
+
 export interface RealTimeActivityStream {
   sessionId: string;
   userId: string;
@@ -186,8 +189,9 @@ export interface RealTimeActivityStream {
     subscribers: number;
     bufferSize: number;
     latency: number; // milliseconds
-}
-}
+
+
+
   };
   
   filters: {
@@ -203,7 +207,7 @@ export interface RealTimeActivityStream {
     droppedEvents: number;
     backpressure: boolean;
   };
-}
+
 
 export class SessionActivityTrackingService extends EventEmitter {
   private db: DatabaseService;
@@ -243,7 +247,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     };
     this.initializeDefaultPatterns();
     this.startFlushTimer();
-  }
+
 
   /**
    * Track a session activity
@@ -257,13 +261,13 @@ export class SessionActivityTrackingService extends EventEmitter {
     activityId?: string;
     warnings?: string[];
     blocked?: boolean;
-  }> {
+> {
 
     try {
       // Apply sampling
       if (this.config.samplingRate < 1 && Math.random() > this.config.samplingRate) {
         return { tracked: false };
-      }
+
 
       // Create activity record
       const activityRecord: SessionActivity = {
@@ -278,7 +282,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       if (this.config.anonymizePII) {
         activityRecord.context.ipAddress = this.anonymizeIP(activityRecord.context.ipAddress);
         delete activityRecord.context.location?.coordinates;
-      }
+
 
       // Check security patterns
       const securityCheck = await this.checkSecurityPatterns(activityRecord);
@@ -286,7 +290,7 @@ export class SessionActivityTrackingService extends EventEmitter {
         activityRecord.security.blocked = true;
         activityRecord.outcome.success = false;
         activityRecord.outcome.errorType = 'security_blocked';
-      }
+
 
       // Buffer activity
       this.bufferActivity(activityRecord);
@@ -294,13 +298,13 @@ export class SessionActivityTrackingService extends EventEmitter {
       // Stream real-time if enabled
       if (this.config.realTimeEnabled) {
         await this.streamActivity(activityRecord);
-      }
+
 
       // Check for patterns
       const patternMatches = await this.detectPatterns(activityRecord);
       if (patternMatches.length > 0) {
         await this.handlePatternMatches(activityRecord, patternMatches);
-      }
+
 
       // Update session metrics in Redis
       await this.updateSessionMetrics(sessionId, activityRecord);
@@ -320,15 +324,14 @@ export class SessionActivityTrackingService extends EventEmitter {
         warnings: securityCheck.warnings,
         blocked: securityCheck.blocked
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error tracking activity:', error);
       return {
         tracked: false,
         warnings: ['Failed to track activity']
       };
-    }
-  }
+
+
 
   /**
    * Get activity history for a session
@@ -342,12 +345,12 @@ export class SessionActivityTrackingService extends EventEmitter {
       limit?: number;
       offset?: number;
       includeMetadata?: boolean;
-    } = {}
+ = {}
   ): Promise<{
     activities: SessionActivity[];
     total: number;
     hasMore: boolean;
-  }> {
+> {
 
     try {
       const query = this.buildActivityQuery(sessionId, options);
@@ -367,16 +370,15 @@ export class SessionActivityTrackingService extends EventEmitter {
         total,
         hasMore: activities.length === (options.limit || 100)
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting session activities:', error);
       return {
         activities: [],
         total: 0,
         hasMore: false
       };
-    }
-  }
+
+
 
   /**
    * Generate activity summary for a session
@@ -392,14 +394,14 @@ export class SessionActivityTrackingService extends EventEmitter {
       const cached = this.summaryCache.get(cacheKey);
       if (cached && this.isCacheValid(cached)) {
         return cached;
-      }
+
 
       // Get all activities for the session
       const activities = await this.getAllSessionActivities(sessionId, timeRange);
       
       if (activities.length === 0) {
         return this.createEmptySummary(sessionId, '', timeRange);
-      }
+
 
       const userId = activities[0].userId;
       const summary = this.calculateActivitySummary(sessionId, userId, activities, timeRange);
@@ -408,12 +410,11 @@ export class SessionActivityTrackingService extends EventEmitter {
       this.summaryCache.set(cacheKey, summary);
       
       return summary;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error generating activity summary:', error);
       throw new Error('Failed to generate activity summary');
-    }
-  }
+
+
 
   /**
    * Stream real-time activities for a session
@@ -425,11 +426,11 @@ export class SessionActivityTrackingService extends EventEmitter {
   ): Promise<{
     streamId: string;
     stream: RealTimeActivityStream;
-  }> {
+> {
 
     if (!this.config.realTimeEnabled) {
       throw new Error('Real-time streaming is disabled');
-    }
+
 
     const streamId = this.generateStreamId();
     const stream: RealTimeActivityStream = {
@@ -441,17 +442,17 @@ export class SessionActivityTrackingService extends EventEmitter {
         subscribers: 1,
         bufferSize: 100,
         latency: 0
-  }
+
       filters: filters || {
         includePerformance: true,
         includeSecurity: true
-  }
+
       metrics: {
         activitiesPerMinute: 0,
         averageProcessingTime: 0,
         droppedEvents: 0,
         backpressure: false
-      }
+
     };
 
     this.realTimeStreams.set(streamId, stream);
@@ -466,7 +467,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     });
 
     return { streamId, stream };
-  }
+
 
   /**
    * Search activities across sessions
@@ -480,13 +481,13 @@ export class SessionActivityTrackingService extends EventEmitter {
       minRiskScore?: number;
       outcome?: 'success' | 'failure';
       resource?: string;
-  }
+
     options: {
       limit?: number;
       offset?: number;
       sortBy?: 'timestamp' | 'risk' | 'responseTime';
       sortOrder?: 'asc' | 'desc';
-    } = {}
+ = {}
   ): Promise<{
     activities: SessionActivity[];
     total: number;
@@ -496,7 +497,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       avgResponseTime: number;
       totalRiskEvents: number;
     };
-  }> {
+> {
     try {
       const searchQuery = this.buildSearchQuery(criteria, options);
       
@@ -517,14 +518,13 @@ export class SessionActivityTrackingService extends EventEmitter {
           byOutcome: this.parseAggregation(aggResult.rows[0]?.by_outcome),
           avgResponseTime: parseFloat(aggResult.rows[0]?.avg_response_time || '0'),
           totalRiskEvents: parseInt(aggResult.rows[0]?.risk_events || '0')
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       console.error('Error searching activities:', error);
       throw new Error('Failed to search activities');
-    }
-  }
+
+
 
   /**
    * Detect anomalous activity patterns
@@ -540,10 +540,10 @@ export class SessionActivityTrackingService extends EventEmitter {
       timestamp: Date;
       relatedActivities: string[];
       recommendation: string;
-    }>;
+>;
     riskScore: number;
     requiresAction: boolean;
-  }> {
+> {
     try {
       const activities = await this.getRecentActivities(sessionId, lookbackMinutes);
       const anomalies = [];
@@ -576,16 +576,15 @@ export class SessionActivityTrackingService extends EventEmitter {
         riskScore,
         requiresAction: riskScore > 70 || anomalies.some(a => a.severity === 'high')
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error detecting anomalies:', error);
       return {
         anomalies: [],
         riskScore: 0,
         requiresAction: false
       };
-    }
-  }
+
+
 
   /**
    * Export activity data
@@ -595,19 +594,19 @@ export class SessionActivityTrackingService extends EventEmitter {
       sessionId?: string;
       userId?: string;
       dateRange: { start: Date; end: Date };
-  }
+
     format: 'json' | 'csv' | 'parquet' = 'json',
     options: {
       includeMetadata?: boolean;
       anonymize?: boolean;
       compress?: boolean;
-    } = {}
+ = {}
   ): Promise<{
     data: Buffer;
     filename: string;
     mimeType: string;
     recordCount: number;
-  }> {
+> {
 
     try {
       // Get activities based on criteria
@@ -616,7 +615,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       // Apply anonymization if requested
       if (options.anonymize) {
         activities.forEach(activity => this.anonymizeActivity(activity));
-      }
+
       
       // Convert to requested format
       let data: Buffer;
@@ -636,12 +635,12 @@ export class SessionActivityTrackingService extends EventEmitter {
       default:
         data = Buffer.from(JSON.stringify(activities, null, 2));
         mimeType = 'application/json';
-      }
+
       
       // Compress if requested
       if (options.compress) {
         data = await this.compressData(data);
-      }
+
       
       const filename = `activities_${Date.now()}.${format}${options.compress ? '.gz' : ''}`;
       
@@ -654,12 +653,11 @@ export class SessionActivityTrackingService extends EventEmitter {
         mimeType,
         recordCount: activities.length
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error exporting activities:', error);
       throw new Error('Failed to export activities');
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -670,10 +668,10 @@ export class SessionActivityTrackingService extends EventEmitter {
     // Maintain buffer size limit
     if (sessionBuffer.length > this.config.bufferSize) {
       sessionBuffer.splice(0, sessionBuffer.length - this.config.bufferSize);
-    }
+
     
     this.activityBuffer.set(activity.sessionId, sessionBuffer);
-  }
+
 
   private async flushBuffer(): Promise<void> {
 
@@ -685,14 +683,14 @@ export class SessionActivityTrackingService extends EventEmitter {
       
       try {
         await this.batchInsertActivities(activities);
-      } catch (error) {
+ catch (error) {
         console.error(`Error flushing buffer for session ${sessionId}:`, error);
         // Re-add to buffer for retry
         const currentBuffer = this.activityBuffer.get(sessionId) || [];
         this.activityBuffer.set(sessionId, [...activities, ...currentBuffer]);
-      }
-    }
-  }
+
+
+
 
   private async batchInsertActivities(activities: SessionActivity[]): Promise<void> {
 
@@ -722,12 +720,12 @@ export class SessionActivityTrackingService extends EventEmitter {
     `;
     
     await this.db.query(query, values.flat());
-  }
+
 
   private async checkSecurityPatterns(activity: SessionActivity): Promise<{
     blocked: boolean;
     warnings: string[];
-  }> {
+> {
 
     const warnings: string[] = [];
     let shouldBlock = false;
@@ -738,7 +736,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       activity.security.violations = [...(activity.security.violations || []), 'sql_injection'];
       activity.security.riskScore = Math.max(activity.security.riskScore, 90);
       shouldBlock = true;
-    }
+
     
     // Check for XSS patterns
     if (this.containsXSS(activity)) {
@@ -746,7 +744,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       activity.security.violations = [...(activity.security.violations || []), 'xss_attempt'];
       activity.security.riskScore = Math.max(activity.security.riskScore, 85);
       shouldBlock = true;
-    }
+
     
     // Check for path traversal
     if (this.containsPathTraversal(activity)) {
@@ -754,13 +752,13 @@ export class SessionActivityTrackingService extends EventEmitter {
       activity.security.violations = [...(activity.security.violations || []), 'path_traversal'];
       activity.security.riskScore = Math.max(activity.security.riskScore, 80);
       shouldBlock = true;
-    }
+
     
     return {
       blocked: shouldBlock,
       warnings
     };
-  }
+
 
   private containsSQLInjection(activity: SessionActivity): boolean {
     const patterns = [
@@ -771,7 +769,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     
     const checkString = JSON.stringify(activity.activity);
     return patterns.some(pattern => pattern.test(checkString));
-  }
+
 
   private containsXSS(activity: SessionActivity): boolean {
     const patterns = [
@@ -782,7 +780,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     
     const checkString = JSON.stringify(activity.activity);
     return patterns.some(pattern => pattern.test(checkString));
-  }
+
 
   private containsPathTraversal(activity: SessionActivity): boolean {
     const patterns = [
@@ -792,7 +790,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     
     const resource = activity.activity.resource || '';
     return patterns.some(pattern => pattern.test(resource));
-  }
+
 
   private async streamActivity(activity: SessionActivity): Promise<void> {
 
@@ -804,9 +802,9 @@ export class SessionActivityTrackingService extends EventEmitter {
     for (const [streamId, stream] of this.realTimeStreams) {
       if (stream.sessionId === activity.sessionId) {
         this.updateStreamMetrics(streamId, activity);
-      }
-    }
-  }
+
+
+
 
   private async detectPatterns(activity: SessionActivity): Promise<ActivityPattern[]> {
 
@@ -819,18 +817,18 @@ export class SessionActivityTrackingService extends EventEmitter {
       if (pattern.detection.lastDetected) {
         const cooldownEnd = new Date(pattern.detection.lastDetected.getTime() + pattern.detection.cooldown * 1000);
         if (cooldownEnd > new Date()) continue;
-      }
+
       
       // Check pattern match
       if (await this.matchesPattern(activity, pattern)) {
         matches.push(pattern);
         pattern.detection.lastDetected = new Date();
         pattern.detection.detectionCount++;
-      }
-    }
+
+
     
     return matches;
-  }
+
 
   private async matchesPattern(activity: SessionActivity, pattern: ActivityPattern): boolean {
     // Check conditions
@@ -856,11 +854,11 @@ export class SessionActivityTrackingService extends EventEmitter {
       case 'regex':
         if (!new RegExp(condition.value).test(String(fieldValue))) return false;
         break;
-      }
-    }
+
+
     
     return true;
-  }
+
 
   private getFieldValue(activity: SessionActivity, field: string): any {
     const parts = field.split('.');
@@ -869,10 +867,10 @@ export class SessionActivityTrackingService extends EventEmitter {
     for (const part of parts) {
       value = value?.[part];
       if (value === undefined) break;
-    }
+
     
     return value;
-  }
+
 
   private async handlePatternMatches(activity: SessionActivity, patterns: ActivityPattern[]): Promise<void> {
 
@@ -894,7 +892,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       case 'terminate':
         await this.requestSessionTermination(activity.sessionId, pattern);
         break;
-      }
+
       
       this.emit('patternDetected', {
         pattern: pattern.name,
@@ -902,8 +900,8 @@ export class SessionActivityTrackingService extends EventEmitter {
         sessionId: activity.sessionId,
         severity: pattern.response.severity
       });
-    }
-  }
+
+
 
   private async updateSessionMetrics(sessionId: string, activity: SessionActivity): Promise<void> {
 
@@ -915,20 +913,20 @@ export class SessionActivityTrackingService extends EventEmitter {
     
     if (!activity.outcome.success) {
       await this.redis.hincrby(metricsKey, 'errors', 1);
-    }
+
     
     if (activity.security.suspicious) {
       await this.redis.hincrby(metricsKey, 'suspicious_activities', 1);
-    }
+
     
     // Update response time average
     if (activity.performance.responseTime) {
       await this.redis.hincrbyfloat(metricsKey, 'total_response_time', activity.performance.responseTime);
-    }
+
     
     // Set expiry
     await this.redis.expire(metricsKey, 86400); // 24 hours
-  }
+
 
   private calculateActivitySummary(
     sessionId: string,
@@ -978,13 +976,13 @@ export class SessionActivityTrackingService extends EventEmitter {
         start,
         end,
         duration: (end.getTime() - start.getTime()) / 1000
-  }
+
       statistics: stats,
       breakdown,
       security,
       performance
     };
-  }
+
 
   private detectRapidActivity(activities: SessionActivity[]): any {
     const timeWindow = 60000; // 1 minute
@@ -996,7 +994,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       
       for (let j = i + 1; j < activities.length && activities[j].timestamp.getTime() <= windowEnd; j++) {
         count++;
-      }
+
       
       if (count >= threshold) {
         return {
@@ -1007,11 +1005,11 @@ export class SessionActivityTrackingService extends EventEmitter {
           relatedActivities: activities.slice(i, i + count).map(a => a.id),
           recommendation: 'Review for automated/bot activity'
         };
-      }
-    }
+
+
     
     return null;
-  }
+
 
   private calculateAverageResponseTime(activities: SessionActivity[]): number {
     const times = activities
@@ -1020,7 +1018,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     
     if (times.length === 0) return 0;
     return times.reduce((sum, time) => sum + time, 0) / times.length;
-  }
+
 
   private calculateIdleTime(activities: SessionActivity[]): number {
     if (activities.length < 2) return 0;
@@ -1032,11 +1030,11 @@ export class SessionActivityTrackingService extends EventEmitter {
       const gap = activities[i].timestamp.getTime() - activities[i - 1].timestamp.getTime();
       if (gap > idleThreshold) {
         totalIdleTime += gap;
-      }
-    }
+
+
     
     return totalIdleTime / 1000; // Convert to seconds
-  }
+
 
   private groupByProperty<T>(items: T[], getProperty: (item: T) => string): Record<string, number> {
     return items.reduce((acc, item) => {
@@ -1044,7 +1042,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-  }
+
 
   private calculateHourlyDistribution(activities: SessionActivity[]): Array<{ hour: number; count: number }> {
     const hourCounts: Record<number, number> = {};
@@ -1057,26 +1055,26 @@ export class SessionActivityTrackingService extends EventEmitter {
     return Object.entries(hourCounts)
       .map(([hour, count]) => ({ hour: parseInt(hour), count }))
       .sort((a, b) => a.hour - b.hour);
-  }
+
 
   private anonymizeIP(ip: string): string {
     const parts = ip.split('.');
     if (parts.length === 4) {
       return `${parts[0]}.${parts[1]}.${parts[2]}.xxx`;
-    }
+
     return 'xxx.xxx.xxx.xxx';
-  }
+
 
   private anonymizeActivity(activity: SessionActivity): void {
     activity.context.ipAddress = this.anonymizeIP(activity.context.ipAddress);
     delete activity.context.location?.coordinates;
     activity.userId = this.hashUserId(activity.userId);
-  }
+
 
   private hashUserId(userId: string): string {
     const crypto = require('crypto');
     return crypto.createHash('sha256').update(userId).digest('hex').substr(0, 16);
-  }
+
 
   private initializeDefaultPatterns(): void {
     const defaultPatterns: Array<Omit<ActivityPattern, 'id'>> = [
@@ -1092,13 +1090,13 @@ export class SessionActivityTrackingService extends EventEmitter {
             { field: 'outcome.success', operator: 'equals', value: false },
             { field: 'activity.type', operator: 'equals', value: 'authentication' }
           ]
-  }
+
         detection: {
           enabled: true,
           sensitivity: 'high',
           cooldown: 600,
           detectionCount: 0
-  }
+
         response: {
           action: 'alert',
           severity: 'warning',
@@ -1106,9 +1104,9 @@ export class SessionActivityTrackingService extends EventEmitter {
             enabled: true,
             recipients: ['security@example.com'],
             channels: ['email', 'slack']
-          }
-        }
-  }
+
+
+
       {
         name: 'Data Exfiltration',
         description: 'Detect unusual data export patterns',
@@ -1119,13 +1117,13 @@ export class SessionActivityTrackingService extends EventEmitter {
             { field: 'activity.type', operator: 'equals', value: 'data_export' },
             { field: 'performance.bytesTransferred', operator: 'gt', value: 1000000 }
           ]
-  }
+
         detection: {
           enabled: true,
           sensitivity: 'medium',
           cooldown: 3600,
           detectionCount: 0
-  }
+
         response: {
           action: 'block',
           severity: 'critical',
@@ -1133,43 +1131,42 @@ export class SessionActivityTrackingService extends EventEmitter {
             enabled: true,
             recipients: ['security@example.com'],
             channels: ['email', 'sms']
-          }
-        }
-      }
+
+
+
     ];
     
     defaultPatterns.forEach(pattern => {
       const id = this.generatePatternId();
       this.patterns.set(id, { ...pattern, id });
     });
-  }
+
 
   private startFlushTimer(): void {
     this.flushTimer = setInterval(() => {
       this.flushBuffer();
     }, this.config.flushInterval);
-  }
+
 
   private generateActivityId(): string {
     return `ACT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateStreamId(): string {
     return `STR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generatePatternId(): string {
     return `PAT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   destroy(): void {
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
-    }
+
     this.flushBuffer(); // Final flush
     this.activityBuffer.clear();
     this.patterns.clear();
     this.realTimeStreams.clear();
     this.summaryCache.clear();
-  }
-}
+

@@ -11,8 +11,8 @@ import { HelpContentManager, UserProfile } from '../components/ContextualHelp/He
 import { MarketplaceTicket } from './Epic16TicketIntegrationService';
 
 }
-export interface MarketplaceHelpContext {
-    currentView: MarketplaceView;
+}
+export interface MarketplaceHelpContext { currentView: MarketplaceView;
     templateId?: string;
     searchQuery?: string;
     selectedCategory?: string;
@@ -25,20 +25,20 @@ export interface MarketplaceHelpContext {
         purchaseHistory: number;
         favoriteCategories: string[];
         searchHistory: string[];
-        currentFilters: Record<string, any>;
+        currentFilters: Record<string, any> }
 }
     };
 
 export type MarketplaceView = 'home' | 'search' | 'template-detail' | 'purchase-flow' | 'user-profile' | 'seller-dashboard' | 'transaction-history' | 'support' | 'getting-started';
 
 }
-export interface IntegratedHelpSystem {
-    graphContext?: {
+}
+export interface IntegratedHelpSystem { graphContext?: {
         nodes: any[];
         edges: any[];
         selectedNodeId?: string;
         isEditing: boolean;
-        currentTool?: string;
+        currentTool?: string }
 }
     };
     marketplaceContext?: MarketplaceHelpContext;
@@ -46,8 +46,8 @@ export interface IntegratedHelpSystem {
     transitionContext?: TransitionContext;
 
 }
-export interface HelpSession {
-    id: string;
+}
+export interface HelpSession { id: string;
     userId: string;
     startTime: Date;
     currentStep: number;
@@ -61,11 +61,10 @@ export interface HelpSession {
     escalationLevel: number;
     requiresHumanAssistance: boolean;
 
-export type HelpSessionType = 'onboarding' | 'feature-discovery' | 'troubleshooting' | 'purchase-assistance' | 'template-creation' | 'marketplace-navigation';
-
+export type HelpSessionType = 'onboarding' | 'feature-discovery' | 'troubleshooting' | 'purchase-assistance' | 'template-creation' | 'marketplace-navigation' }
 }
-export interface TransitionContext {
-    fromSystem: 'graph-editor' | 'marketplace';
+}
+export interface TransitionContext { fromSystem: 'graph-editor' | 'marketplace';
     toSystem: 'graph-editor' | 'marketplace';
     transitionReason: string;
     preserveContext: boolean;
@@ -102,8 +101,8 @@ export declare class Epic16HelpIntegrationArchitecture {
     private detectTransitionReason;
     private generateEscalationDescription;
     private determineSupportPriority;
-    private mapHelpCategoryToTicketCategory;
-
+    private mapHelpCategoryToTicketCategory }
+}
 }
 export interface IntegrationPoint {
     id: string;
@@ -115,4 +114,5 @@ export interface IntegrationPoint {
 
 export default Epic16HelpIntegrationArchitecture;
 //# sourceMappingURL=Epic16HelpIntegrationArchitecture.d.ts.map
+}
 }

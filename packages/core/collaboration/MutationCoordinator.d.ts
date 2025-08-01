@@ -4,12 +4,11 @@
  * Coordinates graph mutations with operational transform and conflict resolution
  * Handles concurrent operations and maintains data consistency
  */
-import { 
-  MutationOperation,
+import { MutationOperation,
   BatchMutationOperation,
   ResolutionStrategy,
   ConflictOperation,
-  ConflictResolution,
+  ConflictResolution }
   OperationPriority
 } from './GraphMutations';
 import { GraphCRDT } from './GraphCRDT';
@@ -17,6 +16,7 @@ import { GraphCRDT } from './GraphCRDT';
  * Result of operational transformation
  */
 
+}
 }
 export interface TransformResult {
     op1: MutationOperation | null;
@@ -29,6 +29,8 @@ export interface TransformResult {
  * Batch operation result
  */
 
+}
+}
 }
 export interface BatchResult {
     success: boolean;
@@ -43,8 +45,9 @@ export interface BatchResult {
  */
 
 }
-export interface QueuedOperation {
-    operation: MutationOperation;
+}
+}
+export interface QueuedOperation { operation: MutationOperation;
     priority: OperationPriority;
     dependencies: string[];
     retryCount: number;
@@ -73,7 +76,7 @@ export declare class MutationCoordinator {
     constructor(graphCRDT: GraphCRDT, documentId: string, clientId: string, userId: string, options?: {)
         conflictResolutionStrategy?: ResolutionStrategy;
         maxOperationHistory?: number;
-        operationTimeout?: number;
+        operationTimeout?: number }
 }
     });
     /**
@@ -183,12 +186,11 @@ export declare class MutationCoordinator {
     /**
      * Set event handlers
      */
-    setEventHandlers(handlers: {)
+    setEventHandlers(handlers: { )
         onOperationApplied?: (operation: MutationOperation) => void;
         onConflictDetected?: (conflict: ConflictOperation) => void;
         onConflictResolved?: (resolution: ConflictResolution) => void;
-        onBatchCompleted?: (result: BatchResult) => void;
-    }): void;
+        onBatchCompleted?: (result: BatchResult) => void }): void;
     /**
      * Set conflict resolution strategy
      */
@@ -196,11 +198,9 @@ export declare class MutationCoordinator {
     /**
      * Get current configuration
      */
-    getConfiguration(): {
-        conflictResolutionStrategy: ResolutionStrategy;
+    getConfiguration(): { conflictResolutionStrategy: ResolutionStrategy;
         maxOperationHistory: number;
-        operationTimeout: number;
-    };
+        operationTimeout: number };
 
 export default MutationCoordinator;
 //# sourceMappingURL=MutationCoordinator.d.ts.map

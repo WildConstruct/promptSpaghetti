@@ -133,7 +133,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           url: '/protected',
           headers: {
             Authorization: `Bearer ${validToken}`
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -147,7 +147,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         tokenService.validateToken.mockResolvedValue({
           valid: false,
           error: 'Invalid token signature'
-        } as unknown as unknown);
+ as unknown as unknown);
 
         fastify.get('/protected', async (request, reply) => {
           return { message: 'Success' };
@@ -158,7 +158,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           url: '/protected',
           headers: {
             Authorization: `Bearer ${invalidToken}`
-          }
+
         });
 
         expect(response.statusCode).toBe(401);
@@ -172,7 +172,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           valid: false,
           error: 'Token expired',
           expired: true
-        } as unknown as unknown);
+ as unknown as unknown);
 
         fastify.get('/protected', async (request, reply) => {
           return { message: 'Success' };
@@ -183,7 +183,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           url: '/protected',
           headers: {
             Authorization: `Bearer ${expiredToken}`
-          }
+
         });
 
         expect(response.statusCode).toBe(401);
@@ -201,7 +201,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           accessToken: newAccessToken,
           refreshToken: 'new.refresh.token',
           expiresIn: 3600
-        } as unknown as unknown);
+ as unknown as unknown);
 
         fastify.post('/auth/refresh', async (request, reply) => {
           const { refreshToken } = request.body as { refreshToken: string };
@@ -240,7 +240,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           valid: true,
           apiKey: mockApiKey,
           user: mockUser
-        } as unknown as unknown);
+ as unknown as unknown);
 
         fastify.get('/api/protected', async (request, reply) => {
           return { message: 'API Success', user: request.user };
@@ -251,7 +251,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           url: '/api/protected',
           headers: {
             'X-API-Key': 'ak_test_123_secret_key'
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -263,7 +263,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         apiKeyService.validateApiKey.mockResolvedValue({
           valid: false,
           error: 'Invalid API key'
-        } as unknown as unknown);
+ as unknown as unknown);
 
         fastify.get('/api/protected', async (request, reply) => {
           return { message: 'API Success' };
@@ -274,7 +274,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           url: '/api/protected',
           headers: {
             'X-API-Key': 'invalid_api_key'
-          }
+
         });
 
         expect(response.statusCode).toBe(401);
@@ -285,7 +285,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           valid: true,
           apiKey: { ...mockApiKey, scopes: ['read:users'] }, // Only read scope
           user: mockUser
-        } as unknown as unknown);
+ as unknown as unknown);
 
         // Mock RBAC to check scopes
         rbacService.hasPermission.mockImplementation(async (userId, permission) => {
@@ -296,7 +296,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           const hasReadScope = await rbacService.hasPermission(request.user.id, 'read:users');
           if (!hasReadScope) {
             return reply.code(403).send({ error: 'Insufficient scope' });
-          }
+
           return { users: [] };
         });
 
@@ -304,7 +304,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           const hasWriteScope = await rbacService.hasPermission(request.user.id, 'write:users');
           if (!hasWriteScope) {
             return reply.code(403).send({ error: 'Insufficient scope' });
-          }
+
           return { success: true };
         });
 
@@ -331,7 +331,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           valid: true,
           apiKey: mockApiKey,
           user: mockUser
-        } as unknown as unknown);
+ as unknown as unknown);
 
         apiKeyService.recordUsage.mockResolvedValue();
         apiKeyService.checkRateLimit.mockResolvedValue(
@@ -361,12 +361,12 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           initiateFlow: jest.fn<unknown[], unknown>().mockResolvedValue({
             authorizationUrl: 'https://provider.com/oauth/authorize?client_id=123&redirect_uri=callback',
             state: 'random_state'
-          } as unknown as unknown),
+ as unknown as unknown),
           exchangeCodeForToken: jest.fn<unknown[], unknown>().mockResolvedValue({
             accessToken: 'oauth_access_token',
             refreshToken: 'oauth_refresh_token',
             userInfo: { id: 'oauth_123', email: 'oauth@example.com' }
-          } as unknown as unknown)
+ as unknown as unknown)
         };
 
         fastify.get('/auth/oauth/google', async (request, reply) => {
@@ -415,7 +415,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           const hasPermission = await rbacService.hasPermission(request.user.id, 'admin:dashboard');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Forbidden' });
-          }
+
           return { dashboard: 'admin-data' };
         });
 
@@ -460,7 +460,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           const hasPermission = await rbacService.hasPermission(request.user.id, 'admin:system');
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Forbidden' });
-          }
+
           return { system: 'super-admin-only-data' };
         });
 
@@ -494,7 +494,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Cannot access other user profiles' });
-          }
+
           return { profile: `User ${id} profile` };
         });
 
@@ -528,7 +528,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         rbacService.hasPermission.mockImplementation(async (userId, permission, context) => {
           if (permission === 'admin:sensitive' && !isBusinessHours()) {
             return false; // Sensitive operations only during business hours
-          }
+
           return true;
         });
 
@@ -541,7 +541,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           
           if (!hasPermission) {
             return reply.code(403).send({ error: 'Access restricted to business hours' });
-          }
+
           return { data: 'sensitive-data' };
         });
 
@@ -570,7 +570,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
               error: 'Account temporarily locked due to too many failed attempts',
               lockoutRemaining: 1800 // 30 minutes
             };
-          }
+
           
           return {
             success: false,
@@ -585,7 +585,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           
           if (!result.success) {
             return reply.code(401).send(result);
-          }
+
           return result;
         });
 
@@ -600,11 +600,11 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           if (i < 5) {
             expect(response.statusCode).toBe(401);
             expect(JSON.parse(response.body)).toHaveProperty('attemptsRemaining');
-          } else {
+ else {
             expect(response.statusCode).toBe(401);
             expect(JSON.parse(response.body).error).toContain('temporarily locked');
-          }
-        }
+
+
       });
 
       it('should implement progressive delay on failed attempts', async () => {
@@ -639,7 +639,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             url: '/auth/login',
             payload: { email: 'test@example.com', password: 'wrong-password' }
           });
-        }
+
 
         expect(attemptDelays).toHaveLength(3);
         expect(attemptDelays[1]).toBeGreaterThan(attemptDelays[0]);
@@ -656,17 +656,17 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailRegex.test(email)) {
             return reply.code(400).send({ error: 'Invalid email format' });
-          }
+
           
           // Validate password complexity
           if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
             return reply.code(400).send({ error: 'Password does not meet complexity requirements' });
-          }
+
           
           // Validate username (no special characters that could be used for injection)
           if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
             return reply.code(400).send({ error: 'Username contains invalid characters' });
-          }
+
           
           return { success: true };
         });
@@ -679,7 +679,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             email: 'test@example.com',
             password: 'SecurePass123',
             username: 'validuser'
-          }
+
         });
         expect(validResponse.statusCode).toBe(200);
 
@@ -691,7 +691,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             email: '\'; DROP TABLE users; --',
             password: 'SecurePass123',
             username: 'testuser'
-          }
+
         });
         expect(sqlInjectionResponse.statusCode).toBe(400);
 
@@ -703,7 +703,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             email: 'test@example.com',
             password: 'SecurePass123',
             username: '<script>alert("xss")</script>'
-          }
+
         });
         expect(xssResponse.statusCode).toBe(400);
       });
@@ -716,8 +716,8 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           for (const [key, value] of Object.entries(query)) {
             if (Array.isArray(value)) {
               return reply.code(400).send({ error: `Parameter ${key} should not be an array` });
-            }
-          }
+
+
           
           return { users: [], query };
         });
@@ -759,14 +759,14 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             userAgentMatch: true,
             notExpired: true,
             notConcurrentlyUsed: true
-          }
-        } as unknown as unknown);
+
+ as unknown as unknown);
 
         fastify.get('/secure/profile', async (request, reply) => {
           const sessionId = request.headers['x-session-id'] as string;
           if (!sessionId) {
             return reply.code(401).send({ error: 'Session ID required' });
-          }
+
 
           const validation = await sessionService.validateSession(sessionId, {
             ipAddress: request.ip,
@@ -775,7 +775,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
 
           if (!validation.valid) {
             return reply.code(401).send({ error: 'Invalid session', details: validation.securityChecks });
-          }
+
 
           return { profile: 'user-profile' };
         });
@@ -786,7 +786,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           headers: {
             'x-session-id': 'secure-session-123',
             'user-agent': 'Mozilla/5.0...'
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -805,9 +805,9 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             userAgentMatch: false,
             notExpired: true,
             notConcurrentlyUsed: true
-  }
+
           suspiciousActivity: true
-        } as unknown as unknown);
+ as unknown as unknown);
 
         auditService.logSecurityEvent.mockResolvedValue();
 
@@ -827,11 +827,11 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
                 ipAddress: request.ip,
                 userAgent: request.headers['user-agent'],
                 securityChecks: validation.securityChecks
-              }
+
             });
 
             return reply.code(403).send({ error: 'Suspicious session activity detected' });
-          }
+
 
           return { data: 'secure-data' };
         });
@@ -842,7 +842,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           headers: {
             'x-session-id': 'hijacked-session',
             'user-agent': 'Different-Browser/1.0'
-          }
+
         });
 
         expect(response.statusCode).toBe(403);
@@ -854,8 +854,8 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             securityChecks: expect.objectContaining({
               ipMatch: false,
               userAgentMatch: false
-  }
-  }
+
+
         });
       });
     });
@@ -870,7 +870,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           success: true, 
           user: mfaUser, 
           requiresMfa: true 
-        } as unknown as unknown);
+ as unknown as unknown);
 
         const mockTotpService = {
           verifyToken: jest.fn<unknown[], unknown>().mockResolvedValue({ valid: true } as unknown as unknown)
@@ -882,7 +882,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           
           if (!verification.valid) {
             return reply.code(401).send({ error: 'Invalid MFA token' });
-          }
+
 
           // Complete authentication
           const fullToken = await tokenService.generateToken(request.user);
@@ -892,7 +892,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         fastify.get('/mfa-protected', async (request, reply) => {
           if (request.user.mfaEnabled && !request.user.mfaVerified) {
             return reply.code(401).send({ error: 'MFA verification required' });
-          }
+
           return { data: 'mfa-protected-data' };
         });
 
@@ -900,7 +900,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         authService.authenticate.mockResolvedValue({ 
           success: true, 
           user: { ...mfaUser, mfaVerified: false }
-        } as unknown as unknown);
+ as unknown as unknown);
 
         const mfaResponse = await fastify.inject({
           method: 'GET',
@@ -927,7 +927,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           
           if (!verification.valid) {
             return reply.code(401).send({ error: 'Invalid backup code' });
-          }
+
 
           await mockBackupCodeService.invalidateBackupCode(request.user.id, backupCode);
           return { 
@@ -940,7 +940,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         authService.authenticate.mockResolvedValue({ 
           success: true, 
           user: { ...mockUser, mfaEnabled: true, mfaVerified: false }
-        } as unknown as unknown);
+ as unknown as unknown);
 
         const response = await fastify.inject({
           method: 'POST',
@@ -978,8 +978,8 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
                 error: 'Device trust score too low',
                 requiredActions: ['verify_device', 'complete_challenge']
               });
-            }
-          }
+
+
         });
 
         fastify.get('/secure/sensitive-operation', async (request, reply) => {
@@ -991,7 +991,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
               currentScore: trust.score,
               requiredScore: 80
             });
-          }
+
           
           return { operation: 'completed', trustScore: trust.score };
         });
@@ -1005,7 +1005,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             Authorization: 'Bearer valid_token',
             'User-Agent': 'Known-Browser/1.0',
             'X-Device-ID': 'trusted-device-123'
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -1036,7 +1036,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
               method: request.method,
               timestamp: new Date().toISOString()
             });
-          }
+
         });
 
         fastify.get('/protected/resource', async (request, reply) => {
@@ -1080,7 +1080,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         authService.authenticate.mockResolvedValue({ 
           success: true, 
           user: { ...mockUser, roles: ['admin'] }
-        } as unknown as unknown);
+ as unknown as unknown);
 
         const response = await fastify.inject({
           method: 'GET',
@@ -1176,12 +1176,12 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             success: true,
             userId: 2,
             verificationToken: 'verify-123'
-          } as unknown as unknown),
+ as unknown as unknown),
           verifyEmail: jest.fn<unknown[], unknown>().mockResolvedValue({ success: true } as unknown as unknown),
           setupMfa: jest.fn<unknown[], unknown>().mockResolvedValue({ 
             qrCode: 'data:image/png;base64,...',
             backupCodes: ['backup1', 'backup2']
-          } as unknown as unknown)
+ as unknown as unknown)
         };
 
         // Registration endpoint
@@ -1227,7 +1227,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           user: { ...mockUser, id: 2, email: registrationData.email, emailVerified: true },
           token: 'auth-token-123',
           requiresMfa: false
-        } as unknown as unknown);
+ as unknown as unknown);
 
         fastify.post('/auth/login', async (request, reply) => {
           const { email, password } = request.body as { email: string; password: string };
@@ -1246,7 +1246,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         authService.authenticate.mockResolvedValue({ 
           success: true, 
           user: { ...mockUser, id: 2, email: registrationData.email, emailVerified: true }
-        } as unknown as unknown);
+ as unknown as unknown);
 
         fastify.get('/protected/welcome', async (request, reply) => {
           return { message: `Welcome ${request.user.email}!`, userId: request.user.id };
@@ -1273,7 +1273,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             differentIpAddresses: ['192.168.1.1', '10.0.0.1', '172.16.0.1'],
             timeWindow: '5 minutes',
             possibleBruteForce: true
-          }
+
         };
 
         const mockIncidentService = {
@@ -1281,12 +1281,12 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             incidentId: 'INC-12345',
             autoActions: ['account_locked', 'admin_notified', 'ip_blocked'],
             requiresManualReview: true
-          } as unknown as unknown),
+ as unknown as unknown),
           getIncidentStatus: jest.fn<unknown[], unknown>().mockResolvedValue({
             status: 'investigating',
             assignedTo: 'security-team',
             actions: ['account_locked', 'user_notified']
-          } as unknown as unknown)
+ as unknown as unknown)
         };
 
         fastify.post('/security/report-incident', async (request, reply) => {
@@ -1299,7 +1299,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             details: {
               incidentId: response.incidentId,
               autoActions: response.autoActions
-            }
+
           });
           
           return response;

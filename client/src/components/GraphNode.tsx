@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 const GraphNode = memo(({ data, selected }: NodeProps) => {
-  return;
-  <div
+  return (
+    <div
   style={{
   padding: 12,
   border: '1px solid #666',

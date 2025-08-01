@@ -39,7 +39,8 @@ recovery: {
     autoRecovery: boolean;
     recoveryTimeout: number; // milliseconds,
     maxRecoveryAttempts: number;
-    fallbackStrategy: 'latest' | 'stable' | 'manual';
+    fallbackStrategy: 'latest' | 'stable' | 'manual',
+    ;
 }
 ;
 [];

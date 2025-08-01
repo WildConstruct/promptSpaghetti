@@ -16,7 +16,7 @@ import {
   ChargebackType,
   EvidenceType,
   ChargebackOutcome
-} from '../marketplace/chargeback.types.js';
+ from '../marketplace/chargeback.types.js';
 import { PaymentProvider } from '../marketplace/transaction.types.js';
 
 describe('Chargeback Tracking System', () => {
@@ -67,11 +67,11 @@ describe('Chargeback Tracking System', () => {
           payment_intent_id: 'pi-123',
           user_id: 'user-123',
           provider: PaymentProvider.STRIPE
-        }])
+])
         .mockResolvedValueOnce([]) // getChargebackByProviderIds (no existing)
         .mockResolvedValueOnce([{ // getOrderByTransactionId
           id: 'order-123'
-        }])
+])
         .mockResolvedValueOnce({}); // insert chargeback
 
       const chargebackData = {
@@ -122,10 +122,10 @@ describe('Chargeback Tracking System', () => {
           payment_intent_id: 'pi-123',
           user_id: 'user-123',
           provider: PaymentProvider.STRIPE
-        }])
+])
         .mockResolvedValueOnce([{ // getChargebackByProviderIds (existing found)
           id: 'existing-chargeback'
-        }]);
+]);
 
       const chargebackData = {
         transaction_id: 'txn-123',
@@ -157,7 +157,7 @@ describe('Chargeback Tracking System', () => {
           payment_intent_id: 'pi-123',
           user_id: 'user-123',
           provider: PaymentProvider.STRIPE
-        }])
+])
         .mockResolvedValueOnce([]) // no existing chargeback
         .mockResolvedValueOnce([{ id: 'order-123' }]) // order
         .mockResolvedValueOnce({}); // insert
@@ -186,7 +186,7 @@ describe('Chargeback Tracking System', () => {
           payment_intent_id: 'pi-123',
           user_id: 'user-123',
           provider: PaymentProvider.STRIPE
-        }])
+])
         .mockResolvedValueOnce([])
         .mockResolvedValueOnce([{ id: 'order-123' }])
         .mockResolvedValueOnce({});
@@ -253,7 +253,7 @@ describe('Chargeback Tracking System', () => {
         .mockResolvedValueOnce([{
           ...existingChargeback,
           status: ChargebackStatus.UNDER_REVIEW
-        }]); // get updated chargeback
+]); // get updated chargeback
 
       const statusUpdate = {
         status: ChargebackStatus.UNDER_REVIEW,
@@ -300,7 +300,7 @@ describe('Chargeback Tracking System', () => {
         status: ChargebackStatus.EVIDENCE_REQUESTED,
         due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
         // ... other required fields (simplified for test)
-      } as Chargeback;
+ as Chargeback;
 
       mockDb.query
         .mockResolvedValueOnce([chargeback]) // getChargeback
@@ -315,12 +315,12 @@ describe('Chargeback Tracking System', () => {
             type: EvidenceType.RECEIPT,
             title: 'Transaction Receipt',
             text_content: 'Receipt details...'
-  }
+
           {
             type: EvidenceType.CUSTOMER_COMMUNICATION,
             title: 'Email Thread',
             text_content: 'Customer communication history...'
-          }
+
         ]
       };
 
@@ -337,7 +337,7 @@ describe('Chargeback Tracking System', () => {
         id: 'cb-closed',
         status: ChargebackStatus.CLOSED
         // ... other fields
-      } as Chargeback;
+ as Chargeback;
 
       mockDb.query.mockResolvedValueOnce([closedChargeback]);
 
@@ -347,7 +347,7 @@ describe('Chargeback Tracking System', () => {
           type: EvidenceType.RECEIPT,
           title: 'Late Receipt',
           text_content: 'Receipt details...'
-        }]
+]
       };
 
       const result = await chargebackService.submitEvidence(evidenceData);
@@ -361,7 +361,7 @@ describe('Chargeback Tracking System', () => {
         id: 'cb-123',
         transaction_id: 'txn-123'
         // ... other fields
-      } as Chargeback;
+ as Chargeback;
 
       mockDb.query.mockResolvedValueOnce([chargeback]);
 
@@ -435,12 +435,12 @@ describe('Chargeback Tracking System', () => {
           operator: 'greater_than',
           value: 100000, // $1000 in cents
           weight: 1.0
-        }],
+],
         actions: [{
           type: 'manual_review',
           parameters: { reason: 'High value transaction' },
           auto_execute: true
-        }]
+]
       };
 
       const result = await chargebackService.createPreventionRule(ruleData);
@@ -534,7 +534,7 @@ describe('Chargeback Tracking System', () => {
           payment_intent_id: 'pi-123',
           user_id: 'user-123',
           provider: PaymentProvider.STRIPE
-        }])
+])
         .mockResolvedValueOnce([]) // no existing
         .mockResolvedValueOnce([{ id: 'order-123' }]) // order
         .mockResolvedValueOnce({}); // insert
@@ -558,12 +558,12 @@ describe('Chargeback Tracking System', () => {
         .mockResolvedValueOnce([{
           ...createResult.data,
           status: ChargebackStatus.INITIATED
-        }])
+])
         .mockResolvedValueOnce({})
         .mockResolvedValueOnce([{
           ...createResult.data,
           status: ChargebackStatus.EVIDENCE_REQUESTED
-        }]);
+]);
 
       const statusResult = await chargebackService.updateChargebackStatus(chargebackId, {
         status: ChargebackStatus.EVIDENCE_REQUESTED
@@ -577,7 +577,7 @@ describe('Chargeback Tracking System', () => {
           ...createResult.data,
           status: ChargebackStatus.EVIDENCE_REQUESTED,
           due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-        }])
+])
         .mockResolvedValueOnce({}) // insert evidence
         .mockResolvedValueOnce({}); // update chargeback
 
@@ -587,7 +587,7 @@ describe('Chargeback Tracking System', () => {
           type: EvidenceType.RECEIPT,
           title: 'Transaction Receipt',
           text_content: 'Receipt details...'
-        }]
+]
       });
 
       expect(evidenceResult.success).toBe(true);
@@ -597,14 +597,14 @@ describe('Chargeback Tracking System', () => {
         .mockResolvedValueOnce([{
           ...createResult.data,
           status: ChargebackStatus.EVIDENCE_SUBMITTED
-        }])
+])
         .mockResolvedValueOnce({})
         .mockResolvedValueOnce({})
         .mockResolvedValueOnce([{
           ...createResult.data,
           status: ChargebackStatus.WON,
           outcome: ChargebackOutcome.WON
-        }]);
+]);
 
       const finalResult = await chargebackService.updateChargebackStatus(chargebackId, {
         status: ChargebackStatus.WON,
@@ -626,7 +626,7 @@ describe('Chargeback Tracking System', () => {
       // Mock multiple database operations
       for (let i = 0; i < 100; i++) {
         mockDb.query.mockResolvedValueOnce({});
-      }
+
 
       // Simulate bulk status updates
       const bulkResults = [];
@@ -634,18 +634,18 @@ describe('Chargeback Tracking System', () => {
         mockDb.query.mockResolvedValueOnce([{
           id: `cb-${i}`,
           status: ChargebackStatus.INITIATED
-        }]);
+]);
         mockDb.query.mockResolvedValueOnce({});
         mockDb.query.mockResolvedValueOnce([{
           id: `cb-${i}`,
           status: ChargebackStatus.UNDER_REVIEW
-        }]);
+]);
 
         const result = await chargebackService.updateChargebackStatus(`cb-${i}`, {
           status: ChargebackStatus.UNDER_REVIEW
         });
         bulkResults.push(result);
-      }
+
 
       const endTime = Date.now();
       const duration = endTime - startTime;
@@ -697,4 +697,3 @@ function createMockChargeback(overrides: Partial<Chargeback> = {}): Chargeback {
     last_updated_by: 'system',
     ...overrides
   };
-}

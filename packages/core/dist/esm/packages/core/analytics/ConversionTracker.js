@@ -57,7 +57,7 @@ export class ConversionTracker {
             description: 'Complete onboarding flow for film industry professionals',
             timeWindow: 7 * 24 * 60 * 60 * 1000, // 7 days,
             category: 'activation',
-            steps: [,
+            steps: [
                 {
                     id: 'signup',
                     name: 'Account Created',
@@ -99,7 +99,7 @@ export class ConversionTracker {
             description: 'Complete creative workflow from idea to export',
             timeWindow: 2 * 60 * 60 * 1000, // 2 hours,
             category: 'activation',
-            steps: [,
+            steps: [
                 {
                     id: 'node-create',
                     name: 'First Node Created',
@@ -129,7 +129,8 @@ export class ConversionTracker {
                     name: 'Export Generated',
                     eventType: 'export_generated',
                     required: false
-                }]
+                }
+            ]
         };
         // Subscription Conversion Funnel
         const subscriptionFunnel = {
@@ -138,7 +139,7 @@ export class ConversionTracker {
             description: 'Conversion from trial to paid subscription',
             timeWindow: 14 * 24 * 60 * 60 * 1000, // 14 days,
             category: 'revenue',
-            steps: [,
+            steps: [
                 {
                     id: 'trial-start',
                     name: 'Trial Started',
@@ -162,7 +163,8 @@ export class ConversionTracker {
                     name: 'Payment Completed',
                     eventType: 'payment_completed',
                     required: true
-                }]
+                }
+            ]
         };
         this.funnels.set(directorOnboardingFunnel.id, directorOnboardingFunnel);
         this.funnels.set(creativeWorkflowFunnel.id, creativeWorkflowFunnel);
@@ -234,8 +236,9 @@ void {
         context;
     }
     ;
-    trackEngagement(engagementType, 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation');
-    details: (Record) = {};
+    trackEngagement(engagementType, 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation'),
+        details;
+    (Record) = {};
     void {
         const: baseProperties = {
             engagement_type: engagementType,
@@ -400,8 +403,9 @@ getDashboardData();
             funnelPerformance,
             recentEvents: recentEvents.slice(-50) // Last 50 events;
         };
-        trackExperimentConversion(experimentId, string);
-        variantId: string,
+        trackExperimentConversion(experimentId, string),
+            variantId;
+        string,
             eventType;
         ConversionEventType,
             properties;

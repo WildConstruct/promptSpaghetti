@@ -9,31 +9,30 @@ import { AuditIntegration, createAuditIntegration } from '../AuditIntegration';
 import { DataClassificationLevel, type OperationContext } from '../../types/DataClassification';
 
 // Mock the dependencies to avoid complex setup
-jest.mock('../DataClassifier', () => ({)
+jest.mock('../DataClassifier', () => ({ )
   DataClassifier: jest.fn<unknown, unknown>().mockImplementation(() => ({)
   classifyData: jest.fn<unknown, unknown>().mockResolvedValue({)
-  level: DataClassificationLevel.CONFIDENTIAL,
-      confidence: 0.9,
-      matchedPatterns: ['ssn'],
+  level: DataClassificationLevel.CONFIDENTIAL
+      confidence: 0.9
+      matchedPatterns: ['ssn'] }
       fieldClassifications: { ssn: DataClassificationLevel.RESTRICTED }
-    } as unknown as unknown),
+ as unknown as unknown)
     on: jest.fn<unknown, unknown>()
   }))
 }));
-jest.mock('../ClassificationEnforcer', () => ({)
-  ClassificationEnforcer: jest.fn<unknown, unknown>().mockImplementation(() => ({,)
-  enforceClassification: jest.fn<unknown, unknown>().mockResolvedValue({,)
-  allowed: true,
-  riskScore: 25,
-  appliedControls: ['encryption'],
-  missingControls: [],
-  reason: 'Access granted',
-} as unknown as unknown),
+jest.mock('../ClassificationEnforcer', () => ({ )
+  ClassificationEnforcer: jest.fn<unknown, unknown>().mockImplementation(() => ({)
+  enforceClassification: jest.fn<unknown, unknown>().mockResolvedValue({)
+  allowed: true
+  riskScore: 25
+  appliedControls: ['encryption']
+  missingControls: []
+  reason: 'Access granted' }
+ as unknown as unknown)
     on: jest.fn<unknown, unknown>()
   }))
 }));
-describe('AuditIntegration', () => {
-  let auditLogger: AuditLogger;
+describe('AuditIntegration', () => { let auditLogger: AuditLogger;
   let auditIntegration: AuditIntegration;
   let mockDate: Date;
   beforeEach(() => {
@@ -41,42 +40,38 @@ describe('AuditIntegration', () => {
   jest.useFakeTimers();
   jest.setSystemTime(mockDate);
   auditLogger = createAuditLogger({)
-  bufferSize: 1, // Force immediate writing,
-  asyncLogging: false,
-  hashSensitiveData: false // Disable hashing for test,
+  bufferSize: 1, // Force immediate writing
+  asyncLogging: false
+  hashSensitiveData: false // Disable hashing for test }
 });
-    auditIntegration = createAuditIntegration({)
-  auditLogger,
-  logAllOperations: false,
-  enrichWithClassification: true,
-  logDeniedAccess: false // Prevent duplicate logs for denied access,
+    auditIntegration = createAuditIntegration({ )
+  auditLogger
+  logAllOperations: false
+  enrichWithClassification: true
+  logDeniedAccess: false // Prevent duplicate logs for denied access }
 });
   });
-  afterEach(() => {
-    auditLogger.destroy();
+  afterEach(() => { auditLogger.destroy();
     jest.clearAllTimers();
-    jest.useRealTimers();
-  });
-  describe('Data Access Logging', () => {
-  it('should log data access with context enrichment', async () => {
-  const context: OperationContext = {,
-  userId: 'analyst123',
-  userRole: 'data_analyst',
-  purpose: 'customer_analysis',
-  ipAddress: '10.0.0.100',
-  sessionId: 'session_abc123',
-  requestedAt: new Date(),
+    jest.useRealTimers() });
+  describe('Data Access Logging', () => { it('should log data access with context enrichment', async () => {
+  const context: OperationContext = {
+  userId: 'analyst123'
+  userRole: 'data_analyst'
+  purpose: 'customer_analysis'
+  ipAddress: '10.0.0.100'
+  sessionId: 'session_abc123'
+  requestedAt: new Date() }
 };
-      const testData = {
-  name: 'John Doe',
-  ssn: '123-45-6789',
-  email: 'john@example.com',
+      const testData = { name: 'John Doe'
+  ssn: '123-45-6789'
+  email: 'john@example.com' }
 };
       await auditIntegration.logDataAccess()
-        context,
-        'customer_profile',
-        'cust_456',
-        testData,
+        context
+        'customer_profile'
+        'cust_456'
+        testData
         { purpose: 'compliance_check' }
       );
       const logs = await auditLogger.query({});
@@ -96,30 +91,30 @@ describe('AuditIntegration', () => {
       // Mock enforcer to deny access
       const { ClassificationEnforcer } = require('../ClassificationEnforcer');
       const mockEnforcer = new ClassificationEnforcer();
-      mockEnforcer.enforceClassification.mockResolvedValue({)
-  allowed: false,
-  riskScore: 85,
-  appliedControls: [],
-  missingControls: ['multi_factor_auth'],
-  reason: 'Insufficient authentication',
-} as unknown as unknown);
-      const denialIntegration = createAuditIntegration({)
-  auditLogger,
-  classificationEnforcer: mockEnforcer,
-  logDeniedAccess: true,
+      mockEnforcer.enforceClassification.mockResolvedValue({ )
+  allowed: false
+  riskScore: 85
+  appliedControls: []
+  missingControls: ['multi_factor_auth']
+  reason: 'Insufficient authentication' }
+ as unknown as unknown);
+      const denialIntegration = createAuditIntegration({ )
+  auditLogger
+  classificationEnforcer: mockEnforcer
+  logDeniedAccess: true }
 });
-      const context: OperationContext = {,
-  userId: 'unauthorized_user',
-  userRole: 'guest',
-  purpose: 'unauthorized_access',
-  ipAddress: '203.0.113.1',
-  requestedAt: new Date(),
+      const context: OperationContext = { 
+  userId: 'unauthorized_user'
+  userRole: 'guest'
+  purpose: 'unauthorized_access'
+  ipAddress: '203.0.113.1'
+  requestedAt: new Date() }
 };
       await denialIntegration.logDataAccess()
-        context,
-        'sensitive_data',
-        'secret_123',
-        null,
+        context
+        'sensitive_data'
+        'secret_123'
+        null
         { attemptedAccess: true }
       );
       const logs = await auditLogger.query({});
@@ -129,26 +124,23 @@ describe('AuditIntegration', () => {
       expect(deniedLogs.length).toBeGreaterThan(0);
     });
   });
-  describe('Administrative Operations', () => {
-  it('should log admin operations correctly', async () => {
-  const adminContext: OperationContext = {,
-  userId: 'admin001',
-  userRole: 'security_admin',
-  purpose: 'access_management',
-  ipAddress: '10.0.0.5',
-  requestedAt: new Date(),
+  describe('Administrative Operations', () => { it('should log admin operations correctly', async () => {
+  const adminContext: OperationContext = {
+  userId: 'admin001'
+  userRole: 'security_admin'
+  purpose: 'access_management'
+  ipAddress: '10.0.0.5'
+  requestedAt: new Date() }
 };
       await auditIntegration.logAdminOperation()
-        'GRANT_ACCESS',
-        adminContext,
-        {
-  userId: 'analyst456',
-  resourceType: 'financial_data',
-  resourceId: 'Q4_2024',
-  classification: DataClassificationLevel.CONFIDENTIAL,
-}
-        {
-          reason: 'Quarterly analysis approval',
+        'GRANT_ACCESS'
+        adminContext
+        { userId: 'analyst456'
+  resourceType: 'financial_data'
+  resourceId: 'Q4_2024'
+  classification: DataClassificationLevel.CONFIDENTIAL }
+
+        { reason: 'Quarterly analysis approval' }
           expiresIn: '30 days');
       const logs = await auditLogger.query({});
       expect(logs).toHaveLength(1);
@@ -160,24 +152,23 @@ describe('AuditIntegration', () => {
       expect(log.metadata?.targetUserId).toBe('analyst456');
     });
   });
-  describe('Batch Operations', () => {
-  it('should log batch operations with highest classification', async () => {
-  const context: OperationContext = {,
-  userId: 'batch_user',
-  userRole: 'system',
-  purpose: 'batch_export',
-  requestedAt: new Date(),
+  describe('Batch Operations', () => { it('should log batch operations with highest classification', async () => {
+  const context: OperationContext = {
+  userId: 'batch_user'
+  userRole: 'system'
+  purpose: 'batch_export'
+  requestedAt: new Date() }
 };
-      const resources = [;
-        { type: 'customer', id: 'cust_001', classification: DataClassificationLevel.INTERNAL },
-        { type: 'customer', id: 'cust_002', classification: DataClassificationLevel.CONFIDENTIAL },
+      const resources = [
+        { type: 'customer', id: 'cust_001', classification: DataClassificationLevel.INTERNAL }
+        { type: 'customer', id: 'cust_002', classification: DataClassificationLevel.CONFIDENTIAL }
         { type: 'customer', id: 'cust_003', classification: DataClassificationLevel.RESTRICTED }
       ];
       await auditIntegration.logBatchOperation()
-        context,
-        AuditOperation.EXPORT,
-        resources,
-        true,
+        context
+        AuditOperation.EXPORT
+        resources
+        true
         { exportFormat: 'JSON' }
       );
       const logs = await auditLogger.query({});
@@ -190,22 +181,20 @@ describe('AuditIntegration', () => {
       expect(log.metadata?.resourceCount).toBe(3);
     });
   });
-  describe('Security Events', () => {
-  it('should log security events', async () => {
-  const context: OperationContext = {,
-  userId: 'suspicious_user',
-  userRole: 'contractor',
-  purpose: 'data_mining',
-  ipAddress: '203.0.113.50',
-  requestedAt: new Date(),
+  describe('Security Events', () => { it('should log security events', async () => {
+  const context: OperationContext = {
+  userId: 'suspicious_user'
+  userRole: 'contractor'
+  purpose: 'data_mining'
+  ipAddress: '203.0.113.50'
+  requestedAt: new Date() }
 };
       await auditIntegration.logSecurityEvent()
-        'ANOMALOUS_ACCESS_PATTERN',
-        context,
-        {
-          pattern: 'rapid_sequential_access',
-          accessCount: 100,
-          timeWindow: '2 minutes',
+        'ANOMALOUS_ACCESS_PATTERN'
+        context
+        { pattern: 'rapid_sequential_access'
+          accessCount: 100
+          timeWindow: '2 minutes' }
           riskScore: 95);
       const logs = await auditLogger.query({});
       expect(logs).toHaveLength(1);
@@ -218,18 +207,17 @@ describe('AuditIntegration', () => {
       expect(log.metadata?.eventType).toBe('ANOMALOUS_ACCESS_PATTERN');
     });
   });
-  describe('Audit Trails', () => {
-  it('should create workflow audit trails', async () => {
-  const context: OperationContext = {,
-  userId: 'ml_engineer',
-  userRole: 'data_scientist',
-  purpose: 'model_training',
-  systemId: 'ml_pipeline',
-  requestedAt: new Date(),
+  describe('Audit Trails', () => { it('should create workflow audit trails', async () => {
+  const context: OperationContext = {
+  userId: 'ml_engineer'
+  userRole: 'data_scientist'
+  purpose: 'model_training'
+  systemId: 'ml_pipeline'
+  requestedAt: new Date() }
 };
       const correlationId = await auditIntegration.startAuditTrail(;);
-        'training_workflow_001',
-        context,
+        'training_workflow_001'
+        context
         { modelType: 'classification' }
       );
       expect(correlationId).toMatch(/^workflow_training_workflow_001_/);
@@ -242,48 +230,42 @@ describe('AuditIntegration', () => {
       expect(log.metadata?.workflowStart).toBe(true);
     });
   });
-  describe('Compliance Reporting', () => {
-  beforeEach(async () => {
+  describe('Compliance Reporting', () => { beforeEach(async () => {
   // Add test data for compliance report
-  const testLogs = [;
+  const testLogs = [
   {
-  userId: 'user1',
-  operation: AuditOperation.READ,
-  resourceType: 'customer_data',
-  resourceId: 'data1',
-  dataClassification: DataClassificationLevel.CONFIDENTIAL,
-  success: true,
-  sensitiveAccess: true,
-}
-        {
-  userId: 'user1',
-  operation: AuditOperation.READ,
-  resourceType: 'public_data',
-  resourceId: 'data2',
-  dataClassification: DataClassificationLevel.PUBLIC,
-  success: true,
-  sensitiveAccess: false,
-}
-        {
-  userId: 'user2',
-  operation: AuditOperation.WRITE,
-  resourceType: 'restricted_data',
-  resourceId: 'data3',
-  dataClassification: DataClassificationLevel.RESTRICTED,
-  success: false,
-  authorized: false,
-  sensitiveAccess: true,
-  anomalyDetected: true,
+  userId: 'user1'
+  operation: AuditOperation.READ
+  resourceType: 'customer_data'
+  resourceId: 'data1'
+  dataClassification: DataClassificationLevel.CONFIDENTIAL
+  success: true
+  sensitiveAccess: true }
+
+        { userId: 'user1'
+  operation: AuditOperation.READ
+  resourceType: 'public_data'
+  resourceId: 'data2'
+  dataClassification: DataClassificationLevel.PUBLIC
+  success: true
+  sensitiveAccess: false }
+
+        { userId: 'user2'
+  operation: AuditOperation.WRITE
+  resourceType: 'restricted_data'
+  resourceId: 'data3'
+  dataClassification: DataClassificationLevel.RESTRICTED
+  success: false
+  authorized: false
+  sensitiveAccess: true
+  anomalyDetected: true }
   riskScore: 85];
-  for (const logData of testLogs) {
-  await auditLogger.log(logData);
-});
-    it('should generate compliance reports', async () => {
-      const startDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  for (const logData of testLogs) { await auditLogger.log(logData) });
+    it('should generate compliance reports', async () => { const startDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
       const endDate = new Date();
       const report = await auditIntegration.generateComplianceReport(;);
-        startDate,
-        endDate,
+        startDate
+        endDate }
         { includeDetails: false }
       );
       expect(report.totalAccess).toBe(3);
@@ -299,35 +281,33 @@ describe('AuditIntegration', () => {
       expect(report.operationBreakdown[AuditOperation.READ]).toBe(2);
       expect(report.operationBreakdown[AuditOperation.WRITE]).toBe(1);
     });
-    it('should include details when requested', async () => {
-      const startDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    it('should include details when requested', async () => { const startDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
       const endDate = new Date();
       const report = await auditIntegration.generateComplianceReport(;);
-        startDate,
-        endDate,
+        startDate
+        endDate }
         { includeDetails: true }
       );
       expect(report.details).toBeDefined();
       expect(report.details).toHaveLength(3);
     });
   });
-  describe('Error Handling', () => {
-  it('should handle missing optional components gracefully', async () => {
+  describe('Error Handling', () => { it('should handle missing optional components gracefully', async () => {
   const minimalIntegration = createAuditIntegration({)
-  auditLogger,
-  enrichWithClassification: false,
-  logDeniedAccess: false // Prevent duplicate logs for denied access,
+  auditLogger
+  enrichWithClassification: false
+  logDeniedAccess: false // Prevent duplicate logs for denied access }
 });
-      const context: OperationContext = {,
-  userId: 'test_user',
-  purpose: 'test',
-  requestedAt: new Date(),
+      const context: OperationContext = { 
+  userId: 'test_user'
+  purpose: 'test'
+  requestedAt: new Date() }
 };
       await expect()
         minimalIntegration.logDataAccess()
-          context,
-          'test_resource',
-          'test_123',
+          context
+          'test_resource'
+          'test_123'
           { some: 'data' }
       ).resolves.not.toThrow();
       const logs = await auditLogger.query({});
@@ -335,12 +315,11 @@ describe('AuditIntegration', () => {
     });
   });
 });
-describe('Factory Functions', () => {
-  it('should create audit integration with factory', () => {
+describe('Factory Functions', () => { it('should create audit integration with factory', () => {
   const logger = createAuditLogger();
   const integration = createAuditIntegration({)
-  auditLogger: logger,
-  logAllOperations: true,
+  auditLogger: logger
+  logAllOperations: true }
 });
     expect(integration).toBeInstanceOf(AuditIntegration);
     logger.destroy();

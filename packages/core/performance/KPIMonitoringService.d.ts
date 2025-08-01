@@ -7,8 +7,8 @@ import { KPISnapshot } from './PerformanceKPIs';
 import { BaselineSnapshot } from './PerformanceBaseline';
 
 }
-export interface KPIAlert {
-    id: string;
+}
+export interface KPIAlert { id: string;
     kpiId: string;
     kpiName: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -20,38 +20,31 @@ export interface KPIAlert {
     message: string;
     recommendations: string[];
     timestamp: number;
-    acknowledged: boolean;
-
+    acknowledged: boolean }
 }
-export interface KPIMonitoringConfig {
-    monitoringInterval: number;
+}
+export interface KPIMonitoringConfig { monitoringInterval: number;
     alertingEnabled: boolean;
     alertThresholds: {
         critical: number;
         consecutive: number;
-        degradationThreshold: number;
+        degradationThreshold: number }
 }
     };
-    kpiFilters: {
-        categories: string[];
+    kpiFilters: { categories: string[];
         priorities: string[];
-        enabled: string[];
-    };
-    baseline: {
-        autoCapture: boolean;
+        enabled: string[] };
+    baseline: { autoCapture: boolean;
         captureInterval: number;
-        retentionPeriod: number;
-    };
-    reporting: {
-        enabled: boolean;
+        retentionPeriod: number };
+    reporting: { enabled: boolean;
         interval: number;
         includeRecommendations: boolean;
-        emailRecipients: string[];
-    };
+        emailRecipients: string[] };
 
 }
-export interface KPITrendAnalysis {
-    kpiId: string;
+}
+export interface KPITrendAnalysis { kpiId: string;
     trend: 'improving' | 'stable' | 'degrading';
     changePercent: number;
     periodDays: number;
@@ -59,15 +52,14 @@ export interface KPITrendAnalysis {
     projection: {
         nextWeek: number;
         nextMonth: number;
-        confidence: number;
+        confidence: number }
 }
     };
 /**
  * KPI Monitoring Service
  * Provides real-time monitoring, alerting, and trend analysis for performance KPIs
  */
-export declare class KPIMonitoringService extends EventEmitter {
-    private config;
+export declare class KPIMonitoringService extends EventEmitter { private config;
     private baseline;
     private dashboard;
     private alerts;
@@ -130,17 +122,14 @@ export declare class KPIMonitoringService extends EventEmitter {
             totalKPIs: number;
             monitoredKPIs: number;
             alertsActive: number;
-            averageScore: number;
-        };
-        kpiStatus: Array<{
-            kpiId: string;
+            averageScore: number };
+        kpiStatus: Array<{ kpiId: string;
             name: string;
             category: string;
             status: string;
             value: number;
             target: number;
-            trend: string;
-        }>;
+            trend: string }>;
         alerts: KPIAlert[];
         trends: KPITrendAnalysis[];
         recommendations: string[];
@@ -151,12 +140,10 @@ export declare class KPIMonitoringService extends EventEmitter {
     /**
      * Get current KPI status
      */
-    getCurrentKPIStatus(): Array<{
-        kpiId: string;
+    getCurrentKPIStatus(): Array<{ kpiId: string;
         status: string;
         value: number;
-        trend: string;
-    }>;
+        trend: string }>;
     /**
      * Get active alerts
      */
@@ -188,22 +175,18 @@ export declare class KPIMonitoringService extends EventEmitter {
     /**
      * Export monitoring data
      */
-    exportData(): {
-        config: KPIMonitoringConfig;
+    exportData(): { config: KPIMonitoringConfig;
         alerts: KPIAlert[];
         kpiHistory: Record<string, KPISnapshot[]>;
-        baselines: BaselineSnapshot[];
-    };
+        baselines: BaselineSnapshot[] };
     /**
      * Get monitoring status
      */
-    getMonitoringStatus(): {
-        isRunning: boolean;
+    getMonitoringStatus(): { isRunning: boolean;
         uptime: number;
         kpisMonitored: number;
         activeAlerts: number;
-        lastCycle?: number;
-    };
+        lastCycle?: number };
 
 export default KPIMonitoringService;
 //# sourceMappingURL=KPIMonitoringService.d.ts.map

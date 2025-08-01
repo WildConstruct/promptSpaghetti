@@ -10,18 +10,20 @@ import { ConsentType, ConsentBannerState, ConsentConfiguration } from '../../typ
 import { useConsent } from '../../hooks/useConsent';
 import { ConsentPreferencesModal } from './ConsentPreferencesModal';
 import './ConsentBanner.css';
-}
+
+
 interface ConsentBannerProps {
   onAcceptAll?: () => void;
   onRejectAll?: () => void;
   onCustomize?: () => void;
   onClose?: () => void;
-  export const ConsentBanner: React.FC<ConsentBannerProps> = ({,)
+  export const ConsentBanner: React.FC<ConsentBannerProps> = ({),
   onAcceptAll,
   onRejectAll,
   onCustomize,
   onClose
-}
+
+
 }) => {
   const {
   preferences,
@@ -32,7 +34,7 @@ interface ConsentBannerProps {
   withdrawConsent,
   updatePreferences,
   refreshConfig
-} = useConsent();
+ = useConsent();
   const [bannerState, setBannerState] = useState<ConsentBannerState>({)
   isVisible: true,
   mode: 'compact',
@@ -56,7 +58,7 @@ interface ConsentBannerProps {
   hasInteracted: Boolean(hasInteracted),
   isVisible: !hasInteracted,
 }));
-      } catch (error) {
+ catch (error) {
   console.error('Failed to initialize consent banner:', error);
   setBannerState(prev => ({)
   ...prev,
@@ -80,7 +82,7 @@ interface ConsentBannerProps {
   isVisible: false,
 }));
       onAcceptAll?.();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to accept all consents:', error);
   setBannerState(prev => ({)
   ...prev,
@@ -103,7 +105,7 @@ interface ConsentBannerProps {
   isVisible: false,
 }));
       onRejectAll?.();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to reject consents:', error);
   setBannerState(prev => ({)
   ...prev,
@@ -129,7 +131,7 @@ interface ConsentBannerProps {
   isVisible: false,
   showPreferences: false,
 }));
-    } catch (error) {
+ catch (error) {
   console.error('Failed to save preferences:', error);
   setBannerState(prev => ({)
   ...prev,
@@ -158,7 +160,7 @@ interface ConsentBannerProps {
   fontFamily: bannerConfig?.styling?.fontFamily,
   zIndex: bannerConfig?.styling?.zIndex || 9999,
   boxShadow: bannerConfig?.styling?.boxShadow,
-}}
+
         role="dialog"
         aria-labelledby="consent-banner-title"
         aria-describedby="consent-banner-description"
@@ -211,7 +213,7 @@ interface ConsentBannerProps {
                 style={{
   backgroundColor: bannerConfig?.styling?.primaryButtonColor,
   color: bannerConfig?.styling?.primaryButtonTextColor,
-}}
+}
                 aria-label="Accept all cookies"
               >
                 {bannerState.isLoading ? 'Saving...' : (content?.acceptAllText || 'Accept All')}
@@ -225,7 +227,7 @@ interface ConsentBannerProps {
                 style={{
   backgroundColor: bannerConfig?.styling?.secondaryButtonColor,
   color: bannerConfig?.styling?.secondaryButtonTextColor,
-}}
+}
                 aria-label="Reject all non-essential cookies"
               >
                 {content?.rejectAllText || 'Reject All'}
@@ -239,7 +241,7 @@ interface ConsentBannerProps {
                 style={{
   backgroundColor: bannerConfig?.styling?.secondaryButtonColor,
   color: bannerConfig?.styling?.secondaryButtonTextColor,
-}}
+}
                 aria-label="Customize cookie preferences"
               >
                 {content?.customizeText || 'Customize'}

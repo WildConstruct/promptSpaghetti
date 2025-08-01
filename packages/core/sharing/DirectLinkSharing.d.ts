@@ -19,390 +19,341 @@
 import { EventEmitter } from 'events';
 
 }
-export interface ShareConfig {
-    domainConfig: DomainConfig;
+}
+export interface ShareConfig { domainConfig: DomainConfig;
     security: SecurityConfig;
     analytics: AnalyticsConfig;
     branding: BrandingConfig;
     limits: LimitsConfig;
     features: FeatureConfig;
-    integrations: IntegrationConfig;
-
+    integrations: IntegrationConfig }
 }
-export interface DomainConfig {
-    primaryDomain: string;
+}
+export interface DomainConfig { primaryDomain: string;
     customDomains: CustomDomain[];
     defaultScheme: 'http' | 'https';
     subdomainStrategy: 'random' | 'hash' | 'sequential' | 'custom';
     pathPrefix?: string;
     enableShortening: boolean;
-    shorteningStrategy: 'base62' | 'base36' | 'uuid' | 'custom';
-
+    shorteningStrategy: 'base62' | 'base36' | 'uuid' | 'custom' }
 }
-export interface CustomDomain {
-    domain: string;
+}
+export interface CustomDomain { domain: string;
     verified: boolean;
     sslEnabled: boolean;
     brandingEnabled: boolean;
     createdAt: Date;
     expiresAt?: Date;
     owner: string;
-    usage: DomainUsage;
-
+    usage: DomainUsage }
 }
-export interface DomainUsage {
-    totalLinks: number;
+}
+export interface DomainUsage { totalLinks: number;
     totalClicks: number;
     monthlyLimit: number;
     currentMonthUsage: number;
-    lastReset: Date;
-
+    lastReset: Date }
 }
-export interface SecurityConfig {
-    tokenGeneration: TokenConfig;
+}
+export interface SecurityConfig { tokenGeneration: TokenConfig;
     accessControl: AccessControlConfig;
     validation: ValidationConfig;
     rateLimit: RateLimitConfig;
     fraud: FraudDetectionConfig;
-    privacy: PrivacyConfig;
-
+    privacy: PrivacyConfig }
 }
-export interface TokenConfig {
-    algorithm: 'random' | 'hash' | 'jwt' | 'signed';
+}
+export interface TokenConfig { algorithm: 'random' | 'hash' | 'jwt' | 'signed';
     length: number;
     charset: string;
     collisionHandling: 'retry' | 'increment' | 'error';
     caseSensitive: boolean;
-    excludeAmbiguous: boolean;
-
+    excludeAmbiguous: boolean }
 }
-export interface AccessControlConfig {
-    requireAuthentication: boolean;
+}
+export interface AccessControlConfig { requireAuthentication: boolean;
     allowedRoles: string[];
     ipWhitelist: string[];
     geoRestrictions: GeoRestriction[];
     deviceRestrictions: DeviceRestriction[];
-    timeRestrictions: TimeRestriction[];
-
+    timeRestrictions: TimeRestriction[] }
 }
-export interface GeoRestriction {
-    type: 'allow' | 'deny';
+}
+export interface GeoRestriction { type: 'allow' | 'deny';
     countries: string[];
     regions: string[];
-    cities: string[];
-
+    cities: string[] }
 }
-export interface DeviceRestriction {
-    type: 'allow' | 'deny';
+}
+export interface DeviceRestriction { type: 'allow' | 'deny';
     deviceTypes: ('desktop' | 'mobile' | 'tablet')[];
     browsers: string[];
-    operatingSystems: string[];
-
+    operatingSystems: string[] }
 }
-export interface TimeRestriction {
-    type: 'allow' | 'deny';
+}
+export interface TimeRestriction { type: 'allow' | 'deny';
     schedule: TimeSchedule;
-    timezone: string;
-
+    timezone: string }
 }
-export interface TimeSchedule {
-    days: string[];
+}
+export interface TimeSchedule { days: string[];
     hours: {
         start: string;
-        end: string;
+        end: string }
 }
     };
-    dateRange?: {
-        start: Date;
-        end: Date;
-    };
+    dateRange?: { start: Date;
+        end: Date };
 
 }
-export interface ValidationConfig {
-    enableLinkValidation: boolean;
+}
+export interface ValidationConfig { enableLinkValidation: boolean;
     contentValidation: ContentValidation;
     urlValidation: URLValidation;
     malwareScanning: boolean;
-    phishingDetection: boolean;
-
+    phishingDetection: boolean }
 }
-export interface ContentValidation {
-    enabled: boolean;
+}
+export interface ContentValidation { enabled: boolean;
     allowedContentTypes: string[];
     maxContentSize: number;
     scanForMalware: boolean;
-    requireApproval: boolean;
-
+    requireApproval: boolean }
 }
-export interface URLValidation {
-    enabled: boolean;
+}
+export interface URLValidation { enabled: boolean;
     allowedDomains: string[];
     blockedDomains: string[];
     requireHTTPS: boolean;
-    validateDNS: boolean;
-
+    validateDNS: boolean }
 }
-export interface RateLimitConfig {
-    enabled: boolean;
+}
+export interface RateLimitConfig { enabled: boolean;
     requests: number;
     windowMs: number;
     skipAuthenticated: boolean;
-    storage: 'memory' | 'redis' | 'database';
-
+    storage: 'memory' | 'redis' | 'database' }
 }
-export interface FraudDetectionConfig {
-    enabled: boolean;
+}
+export interface FraudDetectionConfig { enabled: boolean;
     botDetection: boolean;
     clickFraud: boolean;
     velocityChecks: boolean;
     fingerprintTracking: boolean;
-    anomalyDetection: boolean;
-
+    anomalyDetection: boolean }
 }
-export interface PrivacyConfig {
-    anonymizeIPs: boolean;
+}
+export interface PrivacyConfig { anonymizeIPs: boolean;
     respectDoNotTrack: boolean;
     gdprCompliance: boolean;
     dataRetentionDays: number;
     allowOptOut: boolean;
-    consentRequired: boolean;
-
+    consentRequired: boolean }
 }
-export interface AnalyticsConfig {
-    enabled: boolean;
+}
+export interface AnalyticsConfig { enabled: boolean;
     trackClicks: boolean;
     trackReferrers: boolean;
     trackUserAgents: boolean;
     trackGeolocation: boolean;
     realTimeUpdates: boolean;
     attributionTracking: boolean;
-    customEvents: string[];
-
+    customEvents: string[] }
 }
-export interface BrandingConfig {
-    enabled: boolean;
+}
+export interface BrandingConfig { enabled: boolean;
     logoUrl?: string;
     brandName?: string;
     brandColors: BrandColors;
     customPages: CustomPageConfig;
-    socialMediaCards: SocialMediaConfig;
-
+    socialMediaCards: SocialMediaConfig }
 }
-export interface BrandColors {
-    primary: string;
+}
+export interface BrandColors { primary: string;
     secondary: string;
     accent: string;
     background: string;
-    text: string;
-
+    text: string }
 }
-export interface CustomPageConfig {
-    landingPage?: PageTemplate;
+}
+export interface CustomPageConfig { landingPage?: PageTemplate;
     errorPage?: PageTemplate;
     expiredPage?: PageTemplate;
-    restrictedPage?: PageTemplate;
-
+    restrictedPage?: PageTemplate }
 }
-export interface PageTemplate {
-    template: string;
+}
+export interface PageTemplate { template: string;
     variables: Record<string, string>;
     css?: string;
-    javascript?: string;
-
+    javascript?: string }
 }
-export interface SocialMediaConfig {
-    enabled: boolean;
+}
+export interface SocialMediaConfig { enabled: boolean;
     openGraph: OpenGraphConfig;
     twitterCard: TwitterCardConfig;
-    linkedIn: LinkedInConfig;
-
+    linkedIn: LinkedInConfig }
 }
-export interface OpenGraphConfig {
-    title?: string;
+}
+export interface OpenGraphConfig { title?: string;
     description?: string;
     image?: string;
     type?: string;
-    siteName?: string;
-
+    siteName?: string }
 }
-export interface TwitterCardConfig {
-    card?: 'summary' | 'summary_large_image' | 'app' | 'player';
+}
+export interface TwitterCardConfig { card?: 'summary' | 'summary_large_image' | 'app' | 'player';
     title?: string;
     description?: string;
     image?: string;
-    creator?: string;
-
+    creator?: string }
 }
-export interface LinkedInConfig {
-    title?: string;
+}
+export interface LinkedInConfig { title?: string;
     description?: string;
-    image?: string;
-
+    image?: string }
 }
-export interface LimitsConfig {
-    maxLinksPerUser: number;
+}
+export interface LimitsConfig { maxLinksPerUser: number;
     maxLinksPerDay: number;
     maxClicksPerLink: number;
     linkExpirationDays: number;
-    customLimits: CustomLimit[];
-
+    customLimits: CustomLimit[] }
 }
-export interface CustomLimit {
-    name: string;
+}
+export interface CustomLimit { name: string;
     type: 'user' | 'domain' | 'ip' | 'global';
     value: number;
     period: 'hour' | 'day' | 'week' | 'month' | 'year';
-    action: 'block' | 'throttle' | 'notify';
-
+    action: 'block' | 'throttle' | 'notify' }
 }
-export interface FeatureConfig {
-    qrCodes: QRCodeConfig;
+}
+export interface FeatureConfig { qrCodes: QRCodeConfig;
     preview: PreviewConfig;
     scheduling: SchedulingConfig;
     collaboration: CollaborationConfig;
-    automation: AutomationConfig;
-
+    automation: AutomationConfig }
 }
-export interface QRCodeConfig {
-    enabled: boolean;
+}
+export interface QRCodeConfig { enabled: boolean;
     defaultSize: number;
     formats: ('png' | 'svg' | 'pdf')[];
     errorCorrection: 'low' | 'medium' | 'quartile' | 'high';
-    customization: QRCustomization;
-
+    customization: QRCustomization }
 }
-export interface QRCustomization {
-    colors: {
+}
+export interface QRCustomization { colors: {
         foreground: string;
-        background: string;
+        background: string }
 }
     };
-    logo?: {
-        url: string;
-        size: number;
-    };
+    logo?: { url: string;
+        size: number };
     style: 'square' | 'rounded' | 'circular';
     margin: number;
 
 }
-export interface PreviewConfig {
-    enabled: boolean;
+}
+export interface PreviewConfig { enabled: boolean;
     generatePreviews: boolean;
     cacheLifetime: number;
     supportedTypes: string[];
-    maxPreviewSize: number;
-
+    maxPreviewSize: number }
 }
-export interface SchedulingConfig {
-    enabled: boolean;
+}
+export interface SchedulingConfig { enabled: boolean;
     maxScheduleDays: number;
     timezoneSupport: boolean;
-    recurringShares: boolean;
-
+    recurringShares: boolean }
 }
-export interface CollaborationConfig {
-    enabled: boolean;
+}
+export interface CollaborationConfig { enabled: boolean;
     allowTeamSharing: boolean;
     permissions: CollaborationPermission[];
-    notifications: NotificationConfig;
-
+    notifications: NotificationConfig }
 }
-export interface CollaborationPermission {
-    role: string;
+}
+export interface CollaborationPermission { role: string;
     actions: ('create' | 'edit' | 'delete' | 'view' | 'share')[];
-    limits?: Record<string, number>;
-
+    limits?: Record<string, number> }
 }
-export interface NotificationConfig {
-    email: boolean;
+}
+export interface NotificationConfig { email: boolean;
     webhook: boolean;
     inApp: boolean;
-    events: string[];
-
+    events: string[] }
 }
-export interface AutomationConfig {
-    enabled: boolean;
+}
+export interface AutomationConfig { enabled: boolean;
     autoExpiration: boolean;
     autoArchiving: boolean;
     smartRedirects: boolean;
-    bulkOperations: boolean;
-
+    bulkOperations: boolean }
 }
-export interface IntegrationConfig {
-    attribution: AttributionIntegration;
+}
+export interface IntegrationConfig { attribution: AttributionIntegration;
     analytics: AnalyticsIntegration;
     social: SocialIntegration;
-    webhooks: WebhookIntegration;
-
+    webhooks: WebhookIntegration }
 }
-export interface AttributionIntegration {
-    enabled: boolean;
+}
+export interface AttributionIntegration { enabled: boolean;
     trackingParameters: string[];
     defaultSource: string;
     defaultMedium: string;
-    campaignTracking: boolean;
-
+    campaignTracking: boolean }
 }
-export interface AnalyticsIntegration {
-    providers: AnalyticsProvider[];
+}
+export interface AnalyticsIntegration { providers: AnalyticsProvider[];
     realTimeSync: boolean;
     customDimensions: string[];
-    eventTracking: boolean;
-
+    eventTracking: boolean }
 }
-export interface AnalyticsProvider {
-    name: string;
+}
+export interface AnalyticsProvider { name: string;
     type: 'google_analytics' | 'adobe_analytics' | 'mixpanel' | 'segment' | 'custom';
     apiKey: string;
     config: Record<string, any>;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface SocialIntegration {
-    platforms: SocialPlatform[];
+}
+export interface SocialIntegration { platforms: SocialPlatform[];
     autoPosting: boolean;
     hashtagSuggestions: boolean;
-    optimalTiming: boolean;
-
+    optimalTiming: boolean }
 }
-export interface SocialPlatform {
-    name: string;
+}
+export interface SocialPlatform { name: string;
     apiCredentials: Record<string, string>;
     enabled: boolean;
-    defaultSettings: Record<string, any>;
-
+    defaultSettings: Record<string, any> }
 }
-export interface WebhookIntegration {
-    endpoints: WebhookEndpoint[];
+}
+export interface WebhookIntegration { endpoints: WebhookEndpoint[];
     events: string[];
     retryPolicy: RetryPolicy;
-    security: WebhookSecurity;
-
+    security: WebhookSecurity }
 }
-export interface WebhookEndpoint {
-    name: string;
+}
+export interface WebhookEndpoint { name: string;
     url: string;
     events: string[];
     headers: Record<string, string>;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface RetryPolicy {
-    maxAttempts: number;
+}
+export interface RetryPolicy { maxAttempts: number;
     backoffStrategy: 'linear' | 'exponential' | 'fixed';
     baseDelay: number;
-    maxDelay: number;
-
+    maxDelay: number }
 }
-export interface WebhookSecurity {
-    signatureVerification: boolean;
+}
+export interface WebhookSecurity { signatureVerification: boolean;
     secretKey?: string;
     ipWhitelist: string[];
-    requireHTTPS: boolean;
-
+    requireHTTPS: boolean }
 }
-export interface ShareLink {
-    id: string;
+}
+export interface ShareLink { id: string;
     shortCode: string;
     originalUrl: string;
     shortUrl: string;
@@ -418,11 +369,10 @@ export interface ShareLink {
     created: Date;
     updated: Date;
     expires?: Date;
-    lastAccessed?: Date;
-
+    lastAccessed?: Date }
 }
-export interface LinkMetadata {
-    contentType?: string;
+}
+export interface LinkMetadata { contentType?: string;
     fileSize?: number;
     preview?: PreviewData;
     tags: string[];
@@ -431,55 +381,49 @@ export interface LinkMetadata {
     source?: string;
     medium?: string;
     utm: UTMParameters;
-    custom: Record<string, any>;
-
+    custom: Record<string, any> }
 }
-export interface PreviewData {
-    title: string;
+}
+export interface PreviewData { title: string;
     description: string;
     image?: string;
     favicon?: string;
     siteName?: string;
-    type: 'website' | 'article' | 'video' | 'image' | 'document';
-
+    type: 'website' | 'article' | 'video' | 'image' | 'document' }
 }
-export interface UTMParameters {
-    source?: string;
+}
+export interface UTMParameters { source?: string;
     medium?: string;
     campaign?: string;
     term?: string;
     content?: string;
-    custom: Record<string, string>;
-
+    custom: Record<string, string> }
 }
-export interface LinkSecurity {
-    accessLevel: AccessLevel;
+}
+export interface LinkSecurity { accessLevel: AccessLevel;
     password?: string;
     allowedUsers: string[];
     allowedRoles: string[];
     restrictions: AccessRestriction[];
     verification: VerificationConfig;
 
-export type AccessLevel = 'public' | 'restricted' | 'private' | 'team' | 'custom';
-
+export type AccessLevel = 'public' | 'restricted' | 'private' | 'team' | 'custom' }
 }
-export interface AccessRestriction {
-    type: RestrictionType;
+}
+export interface AccessRestriction { type: RestrictionType;
     config: Record<string, any>;
     message?: string;
 
-export type RestrictionType = 'geo' | 'time' | 'device' | 'ip' | 'referrer' | 'user_agent' | 'click_limit' | 'rate_limit';
-
+export type RestrictionType = 'geo' | 'time' | 'device' | 'ip' | 'referrer' | 'user_agent' | 'click_limit' | 'rate_limit' }
 }
-export interface VerificationConfig {
-    requireEmail: boolean;
+}
+export interface VerificationConfig { requireEmail: boolean;
     requirePhone: boolean;
     requireCaptcha: boolean;
-    require2FA: boolean;
-
+    require2FA: boolean }
 }
-export interface LinkAnalytics {
-    totalClicks: number;
+}
+export interface LinkAnalytics { totalClicks: number;
     uniqueClicks: number;
     clicksByCountry: Record<string, number>;
     clicksByDevice: Record<string, number>;
@@ -488,59 +432,52 @@ export interface LinkAnalytics {
     lastClickAt?: Date;
     conversionRate?: number;
     revenue?: number;
-    goals: GoalTracking[];
-
+    goals: GoalTracking[] }
 }
-export interface GoalTracking {
-    goalId: string;
+}
+export interface GoalTracking { goalId: string;
     goalName: string;
     conversions: number;
     conversionRate: number;
     value: number;
-    lastConversion?: Date;
-
+    lastConversion?: Date }
 }
-export interface LinkBranding {
-    domain: string;
+}
+export interface LinkBranding { domain: string;
     customSlug?: string;
     favicon?: string;
     logo?: string;
     colors: BrandColors;
     landingPage?: string;
 
-export type LinkStatus = 'active' | 'paused' | 'expired' | 'disabled' | 'archived' | 'pending' | 'error';
-
+export type LinkStatus = 'active' | 'paused' | 'expired' | 'disabled' | 'archived' | 'pending' | 'error' }
 }
-export interface UserInfo {
-    id: string;
+}
+export interface UserInfo { id: string;
     email: string;
     name: string;
     role: string;
-    permissions: string[];
-
+    permissions: string[] }
 }
-export interface TeamInfo {
-    id: string;
+}
+export interface TeamInfo { id: string;
     name: string;
     members: TeamMember[];
-    permissions: TeamPermission[];
-
+    permissions: TeamPermission[] }
 }
-export interface TeamMember {
-    userId: string;
+}
+export interface TeamMember { userId: string;
     role: string;
     joinedAt: Date;
-    permissions: string[];
-
+    permissions: string[] }
 }
-export interface TeamPermission {
-    action: string;
+}
+export interface TeamPermission { action: string;
     resource: string;
-    conditions?: Record<string, any>;
-
+    conditions?: Record<string, any> }
 }
-export interface ClickEvent {
-    id: string;
+}
+export interface ClickEvent { id: string;
     linkId: string;
     shortCode: string;
     timestamp: Date;
@@ -548,11 +485,10 @@ export interface ClickEvent {
     request: RequestInfo;
     response: ResponseInfo;
     attribution: ClickAttribution;
-    conversion?: ConversionInfo;
-
+    conversion?: ConversionInfo }
 }
-export interface VisitorInfo {
-    id: string;
+}
+export interface VisitorInfo { id: string;
     isUnique: boolean;
     sessionId: string;
     fingerprint?: string;
@@ -560,76 +496,68 @@ export interface VisitorInfo {
     userAgent: string;
     geo: GeoLocation;
     device: DeviceInfo;
-    referrer?: ReferrerInfo;
-
+    referrer?: ReferrerInfo }
 }
-export interface GeoLocation {
-    country: string;
+}
+export interface GeoLocation { country: string;
     countryCode: string;
     region?: string;
     city?: string;
     latitude?: number;
     longitude?: number;
     timezone?: string;
-    isp?: string;
-
+    isp?: string }
 }
-export interface DeviceInfo {
-    type: 'desktop' | 'mobile' | 'tablet' | 'tv' | 'bot';
+}
+export interface DeviceInfo { type: 'desktop' | 'mobile' | 'tablet' | 'tv' | 'bot';
     os: string;
     osVersion?: string;
     browser: string;
     browserVersion?: string;
     screenResolution?: string;
-    language?: string;
-
+    language?: string }
 }
-export interface ReferrerInfo {
-    url?: string;
+}
+export interface ReferrerInfo { url?: string;
     domain?: string;
     type: 'direct' | 'search' | 'social' | 'email' | 'paid' | 'referral' | 'other';
     searchTerm?: string;
-    socialPlatform?: string;
-
+    socialPlatform?: string }
 }
-export interface RequestInfo {
-    method: string;
+}
+export interface RequestInfo { method: string;
     headers: Record<string, string>;
     queryParams: Record<string, string>;
     body?: any;
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface ResponseInfo {
-    statusCode: number;
+}
+export interface ResponseInfo { statusCode: number;
     redirectUrl: string;
     responseTime: number;
     cacheHit: boolean;
-    errors?: string[];
-
+    errors?: string[] }
 }
-export interface ClickAttribution {
-    touchPointId?: string;
+}
+export interface ClickAttribution { touchPointId?: string;
     campaignId?: string;
     source: string;
     medium: string;
     campaign?: string;
     content?: string;
     term?: string;
-    custom: Record<string, string>;
-
+    custom: Record<string, string> }
 }
-export interface ConversionInfo {
-    type: string;
+}
+export interface ConversionInfo { type: string;
     value: number;
     currency?: string;
     goalId?: string;
     timestamp: Date;
-    attribution: string;
-
+    attribution: string }
 }
-export interface BulkOperation {
-    id: string;
+}
+export interface BulkOperation { id: string;
     type: BulkOperationType;
     status: OperationStatus;
     request: BulkRequest;
@@ -641,40 +569,35 @@ export interface BulkOperation {
     error?: string;
 
 export type BulkOperationType = 'create' | 'update' | 'delete' | 'archive' | 'export' | 'import';
-export type OperationStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
-
+export type OperationStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled' }
 }
-export interface BulkRequest {
-    items: any[];
+}
+export interface BulkRequest { items: any[];
     options: Record<string, any>;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface OperationProgress {
-    total: number;
+}
+export interface OperationProgress { total: number;
     completed: number;
     failed: number;
     percentage: number;
     estimatedCompletion?: Date;
-    currentItem?: string;
-
+    currentItem?: string }
 }
-export interface BulkResults {
-    successful: BulkResultItem[];
+}
+export interface BulkResults { successful: BulkResultItem[];
     failed: BulkResultItem[];
-    summary: ResultSummary;
-
+    summary: ResultSummary }
 }
-export interface BulkResultItem {
-    index: number;
+}
+export interface BulkResultItem { index: number;
     input: any;
     output?: any;
     error?: string;
-    duration: number;
-
+    duration: number }
 }
-export interface ResultSummary {
-    totalProcessed: number;
+}
+export interface ResultSummary { totalProcessed: number;
     successCount: number;
     failureCount: number;
     averageProcessingTime: number;
@@ -697,17 +620,15 @@ export declare class DirectLinkSharing extends EventEmitter {
     accessLink(shortCode: string, accessContext: AccessContext): Promise<AccessResult>;
     getLinkAnalytics(linkId: string, timeRange?: {)
         start: Date;
-        end: Date;
+        end: Date }
 }
     }): Promise<LinkAnalyticsReport>;
-    getBulkAnalytics(linkIds: string[], timeRange?: {)
+    getBulkAnalytics(linkIds: string[], timeRange?: { )
         start: Date;
-        end: Date;
-    }): Promise<BulkAnalyticsReport>;
-    getUserAnalytics(userId: string, timeRange?: {)
+        end: Date }): Promise<BulkAnalyticsReport>;
+    getUserAnalytics(userId: string, timeRange?: { )
         start: Date;
-        end: Date;
-    }): Promise<UserAnalyticsReport>;
+        end: Date }): Promise<UserAnalyticsReport>;
     createBulkLinks(requests: CreateLinkRequest[]): Promise<BulkOperation>;
     getBulkOperation(operationId: string): Promise<BulkOperation | null>;
     generateQRCode(linkId: string, options?: QRCodeOptions): Promise<QRCodeResult>;
@@ -758,8 +679,8 @@ export declare class DirectLinkSharing extends EventEmitter {
     private getPerformanceMetrics;
 
 }
-export interface CreateLinkRequest {
-    originalUrl: string;
+}
+export interface CreateLinkRequest { originalUrl: string;
     title?: string;
     description?: string;
     customSlug?: string;
@@ -768,21 +689,19 @@ export interface CreateLinkRequest {
     security?: Partial<LinkSecurity>;
     metadata?: Partial<LinkMetadata>;
     creator: UserInfo;
-    team?: TeamInfo;
-
+    team?: TeamInfo }
 }
-export interface UpdateLinkRequest {
-    originalUrl?: string;
+}
+export interface UpdateLinkRequest { originalUrl?: string;
     title?: string;
     description?: string;
     expires?: Date;
     status?: LinkStatus;
     security?: Partial<LinkSecurity>;
-    metadata?: Partial<LinkMetadata>;
-
+    metadata?: Partial<LinkMetadata> }
 }
-export interface AccessContext {
-    ipAddress?: string;
+}
+export interface AccessContext { ipAddress?: string;
     userAgent?: string;
     headers?: Record<string, string>;
     queryParams?: Record<string, string>;
@@ -793,151 +712,128 @@ export interface AccessContext {
     geo?: GeoLocation;
     device?: DeviceInfo;
     referrer?: ReferrerInfo;
-    attribution?: ClickAttribution;
-
+    attribution?: ClickAttribution }
 }
-export interface AccessValidation {
-    allowed: boolean;
+}
+export interface AccessValidation { allowed: boolean;
     reason?: string;
 
-export type AccessResultStatus = 'allowed' | 'not_found' | 'inactive' | 'expired' | 'restricted';
-
+export type AccessResultStatus = 'allowed' | 'not_found' | 'inactive' | 'expired' | 'restricted' }
 }
-export interface AccessResult {
-    status: AccessResultStatus;
+}
+export interface AccessResult { status: AccessResultStatus;
     link?: ShareLink;
     message?: string;
     clickEvent?: ClickEvent;
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface QRCodeOptions {
-    size?: number;
+}
+export interface QRCodeOptions { size?: number;
     format?: 'png' | 'svg' | 'pdf';
     errorCorrection?: 'low' | 'medium' | 'quartile' | 'high';
     colors?: {
         foreground: string;
-        background: string;
+        background: string }
 }
     };
-    logo?: {
-        url: string;
-        size: number;
-    };
+    logo?: { url: string;
+        size: number };
 
 }
-export interface QRCodeResult {
-    url: string;
+}
+export interface QRCodeResult { url: string;
     dataUrl: string;
     svg: string;
     size: number;
-    format: string;
-
+    format: string }
 }
-export interface ShareSchedule {
-    publishAt: Date;
+}
+export interface ShareSchedule { publishAt: Date;
     timezone: string;
     recurring?: {
         frequency: 'daily' | 'weekly' | 'monthly';
         interval: number;
-        endDate?: Date;
+        endDate?: Date }
 }
     };
 
 }
-export interface ScheduledShare {
-    id: string;
+}
+export interface ScheduledShare { id: string;
     request: CreateLinkRequest;
     schedule: ShareSchedule;
     status: 'pending' | 'published' | 'failed' | 'cancelled';
     created: Date;
     publishedAt?: Date;
-    error?: string;
-
+    error?: string }
 }
-export interface LinkAnalyticsReport {
-    linkId: string;
+}
+export interface LinkAnalyticsReport { linkId: string;
     timeRange: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
-    summary: {
-        totalClicks: number;
+    summary: { totalClicks: number;
         uniqueClicks: number;
         conversionRate: number;
-        averageClicksPerDay: number;
-    };
-    breakdown: {
-        byCountry: Record<string, number>;
+        averageClicksPerDay: number };
+    breakdown: { byCountry: Record<string, number>;
         byDevice: Record<string, number>;
         byReferrer: Record<string, number>;
-        byHour: Record<string, number>;
-    };
-    trends: Array<{
-        date: Date;
-        clicks: number;
-    }>;
+        byHour: Record<string, number> };
+    trends: Array<{ date: Date;
+        clicks: number }>;
     generatedAt: Date;
 
 }
-export interface BulkAnalyticsReport {
-    totalLinks: number;
+}
+export interface BulkAnalyticsReport { totalLinks: number;
     summary: {
         totalClicks: number;
         uniqueClicks: number;
         conversionRate: number;
-        averageClicksPerDay: number;
+        averageClicksPerDay: number }
 }
     };
-    topPerformers: Array<{
-        linkId: string;
-        clicks: number;
-    }>;
-    trends: Array<{
-        date: Date;
-        clicks: number;
-    }>;
+    topPerformers: Array<{ linkId: string;
+        clicks: number }>;
+    trends: Array<{ date: Date;
+        clicks: number }>;
     generatedAt: Date;
 
 }
-export interface UserAnalyticsReport {
-    userId: string;
+}
+export interface UserAnalyticsReport { userId: string;
     totalLinks: number;
     activeLinks: number;
     summary: {
         totalClicks: number;
         uniqueClicks: number;
         conversionRate: number;
-        averageClicksPerDay: number;
+        averageClicksPerDay: number }
 }
     };
-    topLinks: Array<{
-        linkId: string;
-        clicks: number;
-    }>;
+    topLinks: Array<{ linkId: string;
+        clicks: number }>;
     generatedAt: Date;
 
 }
-export interface SystemStats {
-    totalLinks: number;
+}
+export interface SystemStats { totalLinks: number;
     activeLinks: number;
     totalClicks: number;
     uniqueVisitors: number;
     averageClicksPerLink: number;
     topDomains: Array<{
         domain: string;
-        count: number;
+        count: number }
 }
     }>;
-    recentActivity: Array<{
-        type: string;
+    recentActivity: Array<{ type: string;
         timestamp: Date;
-        data: any;
-    }>;
+        data: any }>;
     performanceMetrics: any;
-declare const _default: {
-    DirectLinkSharing: typeof DirectLinkSharing;
-};
+declare const _default: { DirectLinkSharing: typeof DirectLinkSharing };
 export default _default;
 //# sourceMappingURL=DirectLinkSharing.d.ts.map

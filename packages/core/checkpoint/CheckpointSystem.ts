@@ -20,9 +20,8 @@ import { EventEmitter } from 'events';
 
 // Core checkpoint interfaces
 
-}
-export interface CheckpointMetadata {
-  id: string;
+
+export interface CheckpointMetadata { id: string;
   name: string;
   description?: string;
   timestamp: Date;
@@ -33,85 +32,83 @@ export interface CheckpointMetadata {
   compressionRatio: number;
   isAutomated: boolean;
   creator: string;
-  executionContext?: {
+  executionContext?: { }
   nodeId: string;
   stepNumber: number;
   totalSteps: number;
   elapsedTime: number;
-}
+
+
 };
-}
-}
-export interface CheckpointData {
-  metadata: CheckpointMetadata;
-  state: {
+
+
+export interface CheckpointData { metadata: CheckpointMetadata;
+  state: { }
   graphState: any;
   variables: Record<string, any>;
   executionHistory: any;
   nodeStates: Record<string, any>;
   settings: Record<string, any>;
-}
+
+
 };
-  validation: {
+  validation: { ,
   checksum: string;
   stateHash: string;
   integrityScore: number;
   isValid: boolean;
-  validationErrors: string;
-};
-}
-}
-export interface CheckpointPolicy {
-  autoSave: {
+  validationErrors: string };
+
+
+export interface CheckpointPolicy { autoSave: {;
   enabled: boolean;
-  interval: number; // milliseconds,
+  interval: number; // milliseconds }
   maxAutoSaves: number;
   triggerEvents: ('node_complete' | 'variable_change' | 'error' | 'manual')[];
-}
+
+
 };
-  retention: {
+  retention: { ,
   maxCheckpoints: number;
   maxAge: number; // days,
   compressionThreshold: number; // bytes,
-  archiveAfter: number; // days,
+  archiveAfter: number; // days }
 };
-  recovery: {
+  recovery: { ,
   autoRecovery: boolean;
   recoveryTimeout: number; // milliseconds,
   maxRecoveryAttempts: number;
-  fallbackStrategy: 'latest' | 'stable' | 'manual'
-  };
-}
-}
-export interface CheckpointDiff {
-  checkpointId: string;
+  fallbackStrategy: 'latest' | 'stable' | 'manual' }
+};
+
+
+export interface CheckpointDiff { checkpointId: string;
   previousCheckpointId: string | null;
-  changes: {
-  type: 'added' | 'modified' | 'deleted';
+  changes: {;
+  type: 'added' | 'modified' | 'deleted' }
   path: string;
   oldValue?: any;
   newValue?: any;
   size: number;
-}
-}[];
-  summary: {
+
+
+[];
+  summary: { ,
   additions: number;
   modifications: number;
   deletions: number;
   totalChanges: number;
-  impactScore: number;
-};
-}
-}
-export interface RecoveryOptions {
-  checkpointId: string;
+  impactScore: number };
+
+
+export interface RecoveryOptions { checkpointId: string;
   preserveCurrentState: boolean;
   createBackup: boolean;
   validateBeforeRestore: boolean;
-  progressCallback?: (progress: number, step: string) => void;
-}
-}
-}
+  progressCallback?: (progress: number, step: string) => void }
+
+
+
 export interface CheckpointCompressionResult {
   originalSize: number;
   compressedSize: number;
@@ -119,93 +116,79 @@ export interface CheckpointCompressionResult {
   algorithm: string;
   processingTime: number;
   // Main Checkpoint System Class
-}
-}
-export class CheckpointSystem extends EventEmitter {
-  private checkpoints: Map<string, CheckpointData> = new Map();
-  private policy: CheckpointPolicy;
-  private autoSaveTimer: NodeJS.Timeout | null = null;
-  private compressionWorker: Worker | null = null;
-  private isRecovering = false;
-  private performanceMetrics = {
-  totalCheckpoints: 0,
-  averageCreateTime: 0,
-  averageRestoreTime: 0,
-  totalStorageUsed: 0,
-  compressionSavings: 0,
-};
-  constructor(policy?: Partial<CheckpointPolicy>) {
-  super();
+
+
+export class CheckpointSystem {};
+  constructor(policy?: Partial<CheckpointPolicy>) { super();
   this.policy = {
   autoSave: {
-  enabled: true,
-  interval: 30000, // 30 seconds,
-  maxAutoSaves: 10,
-  triggerEvents: ['node_complete', 'variable_change', 'error'],
-},
-  retention: {
-  maxCheckpoints: 50,
-  maxAge: 30, // 30 days,
-  compressionThreshold: 1024 * 1024, // 1MB,
-  archiveAfter: 7 // 7 days,
-},
-  recovery: {
-  autoRecovery: true,
-  recoveryTimeout: 5000,
-  maxRecoveryAttempts: 3,
-  fallbackStrategy: 'latest',
-}
+  enabled: true
+  interval: 30000, // 30 seconds
+  maxAutoSaves: 10
+  triggerEvents: ['node_complete', 'variable_change', 'error'] }
+
+  retention: { 
+  maxCheckpoints: 50
+  maxAge: 30, // 30 days
+  compressionThreshold: 1024 * 1024, // 1MB
+  archiveAfter: 7 // 7 days }
+
+  recovery: { 
+  autoRecovery: true
+  recoveryTimeout: 5000
+  maxRecoveryAttempts: 3
+  fallbackStrategy: 'latest' }
+
       ...policy
     };
     this.initializeAutoSave();
     this.initializeCompressionWorker();
   // Create checkpoint with automatic compression and validation
   async createCheckpoint(state: any, (
-    metadata: Partial<CheckpointMetadata> = {},
+    metadata: Partial<CheckpointMetadata> = {}
     options: { compress?: boolean; validate?: boolean } = {}
   ): Promise<string> {
 
     const startTime = performance.now();
     try {
       const checkpointId = `checkpoint_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-      const fullMetadata: CheckpointMetadata = {,
-  id: checkpointId,
+      const fullMetadata: CheckpointMetadata = { 
+  id: checkpointId }
         name: metadata.name || `Checkpoint ${new Date().toISOString()}`}
-},
-  description: metadata.description,
-        timestamp: new Date(),
-        version: '1.0.0',
-        parentCheckpointId: metadata.parentCheckpointId,
-        tags: metadata.tags || [],
-        size: 0,
-        compressionRatio: 1,
-        isAutomated: metadata.isAutomated || false,
-        creator: metadata.creator || 'system',
+
+  description: metadata.description
+        timestamp: new Date()
+        version: '1.0.0'
+        parentCheckpointId: metadata.parentCheckpointId
+        tags: metadata.tags || []
+        size: 0
+        compressionRatio: 1
+        isAutomated: metadata.isAutomated || false
+        creator: metadata.creator || 'system'
         executionContext: metadata.executionContext;
   };
       // Prepare checkpoint data
-      const checkpointData: CheckpointData = {,
-  metadata: fullMetadata,
-        state: {
-  graphState: this.deepClone(state.graphState || {}),
-          variables: this.deepClone(state.variables || {}),
-          executionHistory: this.deepClone(state.executionHistory || []),
-          nodeStates: this.deepClone(state.nodeStates || {}),
+      const checkpointData: CheckpointData = { 
+  metadata: fullMetadata
+        state: { }
+  graphState: this.deepClone(state.graphState || {})
+          variables: this.deepClone(state.variables || {})
+          executionHistory: this.deepClone(state.executionHistory || [])
+          nodeStates: this.deepClone(state.nodeStates || {})
           settings: this.deepClone(state.settings || {})
-  },
-  validation: {
-  checksum: '',
-  stateHash: '',
-  integrityScore: 0,
-  isValid: false,
-  validationErrors: [],
+
+  validation: { 
+  checksum: ''
+  stateHash: ''
+  integrityScore: 0
+  isValid: false
+  validationErrors: [] }
 };
       // Calculate initial size
       const serializedData = JSON.stringify(checkpointData.state);
       checkpointData.metadata.size = new Blob([serializedData]).size;
       // Compress if needed
-      if (options.compress !== false && checkpointData.metadata.size > this.policy.retention.compressionThreshold) {
-  const compressionResult = await this.compressCheckpoint(checkpointData);
+      if (options.compress !== false && checkpointData.metadata.size > this.policy.retention.compressionThreshold) { const compressionResult = await this.compressCheckpoint(checkpointData);
   checkpointData.metadata.compressionRatio = compressionResult.compressionRatio;
   this.performanceMetrics.compressionSavings += (compressionResult.originalSize - compressionResult.compressedSize);
   // Validate if requested
@@ -219,22 +202,21 @@ export class CheckpointSystem extends EventEmitter {
   // Cleanup old checkpoints
   await this.cleanupCheckpoints();
   this.emit('checkpointCreated', {)
-  checkpointId,
-  metadata: fullMetadata,
-  createTime,
-  size: checkpointData.metadata.size,
+  checkpointId
+  metadata: fullMetadata
+  createTime
+  size: checkpointData.metadata.size }
 });
       return checkpointId;
-    } catch (error) {
-  this.emit('checkpointError', {)
-  operation: 'create',
-  error: error.message,
-  state: 'failed',
+ catch (error) { this.emit('checkpointError', {)
+  operation: 'create'
+  error: error.message
+  state: 'failed' }
 });
       throw error;
   // Restore from checkpoint with validation and progress tracking
   async restoreCheckpoint(((
-    checkpointId: string,
+    checkpointId: string
     options: Partial<RecoveryOptions> = {}
   ): Promise<any> {
 
@@ -254,20 +236,18 @@ export class CheckpointSystem extends EventEmitter {
           throw new Error(`Checkpoint validation failed: ${validation.validationErrors.join(', ')}`);}
       options.progressCallback?.(30, 'Creating backup');
       // Create backup if requested
-      if (options.preserveCurrentState || options.createBackup) {
-        await this.createCheckpoint()
-          this.getCurrentState(), 
+      if (options.preserveCurrentState || options.createBackup) { await this.createCheckpoint()
+          this.getCurrentState() }
           {
             name: `Backup before restore ${checkpointId}`}
-},
-  isAutomated: true,
+
+  isAutomated: true
             tags: ['backup', 'restore']
         );
       options.progressCallback?.(50, 'Decompressing data');
       // Decompress if needed
       let restoredState = checkpoint.state;
-      if (checkpoint.metadata.compressionRatio < 1) {
-  restoredState = await this.decompressCheckpoint(checkpoint);
+      if (checkpoint.metadata.compressionRatio < 1) { restoredState = await this.decompressCheckpoint(checkpoint);
   options.progressCallback?.(70, 'Restoring state');
   // Restore state
   await this.applyState(restoredState);
@@ -279,18 +259,17 @@ export class CheckpointSystem extends EventEmitter {
   this.emit('checkpointRestored', {)
   checkpointId,
   restoreTime,
-  size: checkpoint.metadata.size,
+  size: checkpoint.metadata.size }
 });
       return restoredState;
-    } catch (error) {
-  this.emit('checkpointError', {)
+ catch (error) { this.emit('checkpointError', {)
   operation: 'restore',
   error: error.message,
   checkpointId,
-  state: 'failed',
+  state: 'failed' }
 });
       throw error;
-    } finally {
+ finally {
       this.isRecovering = false;
   // Generate diff between checkpoints
   async generateDiff(currentCheckpointId: string, previousCheckpointId?: string): Promise<CheckpointDiff> {
@@ -302,27 +281,24 @@ export class CheckpointSystem extends EventEmitter {
       ? this.checkpoints.get(previousCheckpointId)
       : this.findPreviousCheckpoint(currentCheckpointId);
     const changes: CheckpointDiff['changes'] = [];
-    if (previousCheckpoint) {
-      this.compareObjects()
-        previousCheckpoint.state,
-        currentCheckpoint.state,
-        '',
+    if (previousCheckpoint) { this.compareObjects()
+        previousCheckpoint.state
+        currentCheckpoint.state
+        '' }
         changes
       );
-    } else {
-  // If no previous checkpoint, all current state is "added"
+ else { // If no previous checkpoint, all current state is "added"
   this.extractAllPaths(currentCheckpoint.state, '', changes, 'added');
   const summary = {
-  additions: changes.filter(c => c.type === 'added').length,
-  modifications: changes.filter(c => c.type === 'modified').length,
-  deletions: changes.filter(c => c.type === 'deleted').length,
-  totalChanges: changes.length,
-  impactScore: this.calculateImpactScore(changes),
+  additions: changes.filter(c => c.type === 'added').length
+  modifications: changes.filter(c => c.type === 'modified').length
+  deletions: changes.filter(c => c.type === 'deleted').length
+  totalChanges: changes.length
+  impactScore: this.calculateImpactScore(changes) }
 };
-    return {
-  checkpointId: currentCheckpointId,
-  previousCheckpointId: previousCheckpointId || null,
-  changes,
+    return { checkpointId: currentCheckpointId
+  previousCheckpointId: previousCheckpointId || null
+  changes }
   summary
 };
   // List all checkpoints with filtering and sorting
@@ -362,56 +338,49 @@ export class CheckpointSystem extends EventEmitter {
           throw new Error(`Cannot delete checkpoint ${checkpointId}: ${dependents.length} dependent checkpoints exist`);}
       this.checkpoints.delete(checkpointId);
       this.performanceMetrics.totalStorageUsed -= checkpoint.metadata.size;
-      this.emit('checkpointDeleted', {)
-  checkpointId,
-  metadata: checkpoint.metadata,
+      this.emit('checkpointDeleted', { )
+  checkpointId
+  metadata: checkpoint.metadata }
 });
       return true;
-    } catch (error) {
-  this.emit('checkpointError', {)
-  operation: 'delete',
-  error: error.message,
-  checkpointId,
-  state: 'failed',
+ catch (error) { this.emit('checkpointError', {)
+  operation: 'delete'
+  error: error.message
+  checkpointId
+  state: 'failed' }
 });
       throw error;
   // Get performance metrics
-  getPerformanceMetrics() {
-  return {
-  ...this.performanceMetrics,
-  totalCheckpoints: this.checkpoints.size,
-  totalStorageUsed: Array.from(this.checkpoints.values()),
-  .reduce((total, cp) => total + cp.metadata.size, 0),
-  averageCompressionRatio: this.calculateAverageCompressionRatio(),
+  getPerformanceMetrics() { return {
+  ...this.performanceMetrics
+  totalCheckpoints: this.checkpoints.size
+  totalStorageUsed: Array.from(this.checkpoints.values())
+  .reduce((total, cp) => total + cp.metadata.size, 0)
+  averageCompressionRatio: this.calculateAverageCompressionRatio() }
 };
   // Enable/disable auto-save
-  setAutoSave(enabled: boolean, interval?: number): void {
-    this.policy.autoSave.enabled = enabled;
+  setAutoSave(enabled: boolean, interval?: number): void { this.policy.autoSave.enabled = enabled;
     if (interval) {
       this.policy.autoSave.interval = interval;
     if (enabled) {
-      this.initializeAutoSave();
-    } else {
+      this.initializeAutoSave() } else {
       this.stopAutoSave();
   // Update checkpoint policy
   updatePolicy(policy: Partial<CheckpointPolicy>): void {
     this.policy = { ...this.policy, ...policy };
-    if (policy.autoSave) {
-  this.initializeAutoSave();
+    if (policy.autoSave) { this.initializeAutoSave();
   // Cleanup resources
-  destroy(): void {,
+  destroy(): void {
   this.stopAutoSave();
   if (this.compressionWorker) {
   this.compressionWorker.terminate();
   this.checkpoints.clear();
   this.removeAllListeners();
   // Private methods
-  private initializeAutoSave(): void {,
+  private initializeAutoSave(): void { }
   this.stopAutoSave();
-  if (this.policy.autoSave.enabled) {
-  this.autoSaveTimer = setInterval(() => {
-  this.performAutoSave();
-}, this.policy.autoSave.interval);
+  if (this.policy.autoSave.enabled) { this.autoSaveTimer = setInterval(() => {
+  this.performAutoSave() }, this.policy.autoSave.interval);
   private stopAutoSave(): void {
     if (this.autoSaveTimer) {
       clearInterval(this.autoSaveTimer);
@@ -423,13 +392,13 @@ export class CheckpointSystem extends EventEmitter {
       if (this.shouldCreateAutoSave(currentState)) {
         await this.createCheckpoint(currentState, {)
   name: `Auto-save ${new Date().toISOString()}`}
-},
-  isAutomated: true,
+
+  isAutomated: true
           tags: ['auto-save'];
   });
         // Cleanup old auto-saves
         await this.cleanupAutoSaves();
-    } catch (error) {
+ catch (error) {
       this.emit('autoSaveError', error);
   private shouldCreateAutoSave(currentState: any): boolean {
     // Implement logic to determine if auto-save should be created
@@ -438,13 +407,12 @@ export class CheckpointSystem extends EventEmitter {
   private async cleanupAutoSaves(): Promise<void> {
 
     const autoSaves = this.listCheckpoints({ isAutomated: true });
-    if (autoSaves.length > this.policy.autoSave.maxAutoSaves) {
-  const toDelete = autoSaves;
+    if (autoSaves.length > this.policy.autoSave.maxAutoSaves) { const toDelete = autoSaves;
   .slice(this.policy.autoSave.maxAutoSaves)
   .map(cp => cp.id);
   for (const id of toDelete) {
   await this.deleteCheckpoint(id, true);
-  private async cleanupCheckpoints(): Promise<void> {,
+  private async cleanupCheckpoints(): Promise<void> {
   const now = new Date();
   const maxAge = this.policy.retention.maxAge * 24 * 60 * 60 * 1000;
   const checkpoints = Array.from(this.checkpoints.values());
@@ -459,7 +427,7 @@ export class CheckpointSystem extends EventEmitter {
   const toDelete = sorted.slice(0, this.checkpoints.size - this.policy.retention.maxCheckpoints);
   for (const checkpoint of toDelete) {
   await this.deleteCheckpoint(checkpoint.metadata.id, true);
-  private async compressCheckpoint(checkpoint: CheckpointData): Promise<CheckpointCompressionResult> {,
+  private async compressCheckpoint(checkpoint: CheckpointData): Promise<CheckpointCompressionResult> {
   const startTime = performance.now();
   const originalData = JSON.stringify(checkpoint.state);
   const originalSize = new Blob([originalData]).size;
@@ -467,17 +435,15 @@ export class CheckpointSystem extends EventEmitter {
   const compressedData = this.simulateCompression(originalData);
   const compressedSize = new Blob([compressedData]).size;
   return {
-  originalSize,
-  compressedSize,
-  compressionRatio: compressedSize / originalSize,
-  algorithm: 'gzip',
-  processingTime: performance.now() - startTime,
+  originalSize
+  compressedSize
+  compressionRatio: compressedSize / originalSize
+  algorithm: 'gzip'
+  processingTime: performance.now() - startTime }
 };
-  private async decompressCheckpoint(checkpoint: CheckpointData): Promise<any> {
-
-  // Simulate decompression
+  private async decompressCheckpoint(checkpoint: CheckpointData): Promise<any> { // Simulate decompression
   return checkpoint.state;
-  private async validateCheckpoint(checkpoint: CheckpointData): Promise<CheckpointData['validation']> {,
+  private async validateCheckpoint(checkpoint: CheckpointData): Promise<CheckpointData['validation']> {
   const errors: string = [];
   let integrityScore = 100;
   try {
@@ -493,18 +459,17 @@ export class CheckpointSystem extends EventEmitter {
   const checksum = this.generateChecksum(stateString);
   const stateHash = this.generateHash(stateString);
   return {
-  checksum,
-  stateHash,
-  integrityScore,
-  isValid: errors.length === 0,
-  validationErrors: errors,
+  checksum
+  stateHash
+  integrityScore
+  isValid: errors.length === 0
+  validationErrors: errors }
 };
-    } catch (error) {
-      return {
-        checksum: '',
-        stateHash: '',
-        integrityScore: 0,
-        isValid: false,
+ catch (error) { return {
+        checksum: ''
+        stateHash: ''
+        integrityScore: 0
+        isValid: false }
         validationErrors: [`Validation error: ${error.message}`]}
       };
   private compareObjects(obj1: any, obj2: any, path: string, changes: CheckpointDiff['changes']): void {
@@ -516,76 +481,67 @@ export class CheckpointSystem extends EventEmitter {
       const currentPath = path ? `${path}.${key}` : key;}
       const value1 = obj1?.[key];
       const value2 = obj2?.[key];
-      if (!(key in (obj1 || {}))) {
-  changes.push({)
-  type: 'added',
-  path: currentPath,
-  newValue: value2,
-  size: JSON.stringify(value2).length,
+      if (!(key in (obj1 || {}))) { changes.push({)
+  type: 'added'
+  path: currentPath
+  newValue: value2
+  size: JSON.stringify(value2).length }
 });
-      } else if (!(key in (obj2 || {}))) {
-  changes.push({)
-  type: 'deleted',
-  path: currentPath,
-  oldValue: value1,
-  size: JSON.stringify(value1).length,
+ else if (!(key in (obj2 || {}))) { changes.push({)
+  type: 'deleted'
+  path: currentPath
+  oldValue: value1
+  size: JSON.stringify(value1).length }
 });
-      } else if (JSON.stringify(value1) !== JSON.stringify(value2)) {
-        if (typeof value1 === 'object' && typeof value2 === 'object') {
-          this.compareObjects(value1, value2, currentPath, changes);
-        } else {
-  changes.push({)
-  type: 'modified',
-  path: currentPath,
-  oldValue: value1,
-  newValue: value2,
-  size: JSON.stringify(value2).length,
+ else if (JSON.stringify(value1) !== JSON.stringify(value2)) { if (typeof value1 === 'object' && typeof value2 === 'object') {
+          this.compareObjects(value1, value2, currentPath, changes) } else { changes.push({)
+  type: 'modified'
+  path: currentPath
+  oldValue: value1
+  newValue: value2
+  size: JSON.stringify(value2).length }
 });
-  private extractAllPaths(obj: any, path: string, changes: CheckpointDiff['changes'], type: 'added' | 'deleted'): void {
-  if (typeof obj !== 'object' || obj === null) {
+  private extractAllPaths(obj: any, path: string, changes: CheckpointDiff['changes'], type: 'added' | 'deleted'): void { if (typeof obj !== 'object' || obj === null) {
   changes.push({)
-  type,
-  path,
-  newValue: type === 'added' ? obj : undefined,
-  oldValue: type === 'deleted' ? obj : undefined,
-  size: JSON.stringify(obj).length,
+  type
+  path
+  newValue: type === 'added' ? obj : undefined
+  oldValue: type === 'deleted' ? obj : undefined
+  size: JSON.stringify(obj).length }
 });
       return;
     for (const [key, value] of Object.entries(obj)) {
       const currentPath = path ? `${path}.${key}` : key;}
       this.extractAllPaths(value, currentPath, changes, type);
-  private calculateImpactScore(changes: CheckpointDiff['changes']): number {
-  let score = 0;
+  private calculateImpactScore(changes: CheckpointDiff['changes']): number { let score = 0;
   for (const change of changes) {
   switch (change.type) {
-  case 'added':,
+  case 'added':
   score += 1;
   break;
-  case 'modified':,
+  case 'modified':
   score += 2;
   break;
-  case 'deleted':,
+  case 'deleted':
   score += 3;
   break;
   return score;
-  private findPreviousCheckpoint(checkpointId: string): CheckpointData | null {,
+  private findPreviousCheckpoint(checkpointId: string): CheckpointData | null {
   const checkpoint = this.checkpoints.get(checkpointId);
   if (checkpoint?.metadata.parentCheckpointId) {
   return this.checkpoints.get(checkpoint.metadata.parentCheckpointId) || null;
   return null;
-  private findDependentCheckpoints(checkpointId: string): string {,
+  private findDependentCheckpoints(checkpointId: string): string {
   const dependents: string = [];
   for (const [id, checkpoint] of this.checkpoints) {
   if (checkpoint.metadata.parentCheckpointId === checkpointId) {
   dependents.push(id);
   return dependents;
-  private updatePerformanceMetrics(operation: 'create' | 'restore', time: number, size: number): void {,
-  if (operation === 'create') {
-  this.performanceMetrics.totalCheckpoints++;
+  private updatePerformanceMetrics(operation: 'create' | 'restore', time: number, size: number): void { }
+  if (operation === 'create') { this.performanceMetrics.totalCheckpoints++;
   this.performanceMetrics.averageCreateTime =
   (this.performanceMetrics.averageCreateTime + time) / 2;
-  this.performanceMetrics.totalStorageUsed += size;
-} else {
+  this.performanceMetrics.totalStorageUsed += size } else {
       this.performanceMetrics.averageRestoreTime = 
         (this.performanceMetrics.averageRestoreTime + time) / 2;
   private calculateAverageCompressionRatio(): number {
@@ -600,10 +556,10 @@ export class CheckpointSystem extends EventEmitter {
     // This method should return the current application state
     // Implementation depends on your state management system
     return {
-      graphState: {},
-      variables: {},
-      executionHistory: [],
-      nodeStates: {},
+      graphState: {}
+      variables: {}
+      executionHistory: []
+      nodeStates: {}
       settings: {}
     };
   private async applyState(state: any): Promise<void> {
@@ -635,21 +591,17 @@ export class CheckpointManager {
     this.checkpointSystem = new CheckpointSystem(policy);
     this.currentSessionId = `session_${Date.now()}`;}
   // Simplified API for common operations
-  async saveProgress(name?: string): Promise<string> {
-
-    return await this.checkpointSystem.createCheckpoint()
-      this.getCurrentState(),
+  async saveProgress(name?: string): Promise<string> { return await this.checkpointSystem.createCheckpoint()
+      this.getCurrentState() }
       {
         name: name || `Progress ${new Date().toLocaleTimeString()}`}
-},
+
   tags: ['progress', this.currentSessionId]
     );
-  async loadProgress(checkpointId: string): Promise<void> {
-
-  await this.checkpointSystem.restoreCheckpoint(checkpointId);
-  async undoLastChange(): Promise<void> {,
+  async loadProgress(checkpointId: string): Promise<void> { await this.checkpointSystem.restoreCheckpoint(checkpointId);
+  async undoLastChange(): Promise<void> {
   const checkpoints = this.checkpointSystem.listCheckpoints({)
-  tags: [this.currentSessionId],
+  tags: [this.currentSessionId] }
 });
     if (checkpoints.length >= 2) {
       const previousCheckpoint = checkpoints[1]; // Second most recent;
@@ -661,14 +613,13 @@ export class CheckpointManager {
   private getCurrentState(): any {
     // Implementation depends on your application's state management
     return {
-      graphState: {},
-      variables: {},
-      executionHistory: [],
-      nodeStates: {},
+      graphState: {}
+      variables: {}
+      executionHistory: []
+      nodeStates: {}
       settings: {}
     };
 
-export default {
-  CheckpointSystem,
+export default { CheckpointSystem }
   CheckpointManager
 };

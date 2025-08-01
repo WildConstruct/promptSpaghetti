@@ -33,12 +33,12 @@ export class DatabaseTimeoutIntegration {
       async () => {
         const stmt = this.db.prepare(sql);
         return params ? stmt.all(...params) : stmt.all();
-  }
+
       'database',
       'query',
       operationId
     );
-  }
+
 
   /**
    * Execute database query with fallback to read replica
@@ -50,21 +50,21 @@ export class DatabaseTimeoutIntegration {
   ): Promise<OperationResult<T[]>> {
     if (!readOnlyDb) {
       return this.query(sql, params);
-    }
+
 
     return this.timeoutManager.executeWithFallback(
       async () => {
         const stmt = this.db.prepare(sql);
         return params ? stmt.all(...params) : stmt.all();
-  }
+
       async () => {
         const stmt = readOnlyDb.prepare(sql);
         return params ? stmt.all(...params) : stmt.all();
-  }
+
       'database',
       'query'
     );
-  }
+
 
   /**
    * Execute transaction with timeout
@@ -76,12 +76,12 @@ export class DatabaseTimeoutIntegration {
     return this.timeoutManager.executeWithTimeout(
       async () => {
         return this.db.transaction(operation)();
-  }
+
       'database',
       'transaction',
       operationId
     );
-  }
+
 
   /**
    * Run database migrations with extended timeout
@@ -93,13 +93,13 @@ export class DatabaseTimeoutIntegration {
     return this.timeoutManager.executeWithTimeout(
       async () => {
         this.db.exec(migrationSql);
-  }
+
       'database',
       'migration',
       operationId
     );
-  }
-}
+
+
 
 /**
  * Redis Integration
@@ -122,7 +122,7 @@ export class RedisTimeoutIntegration {
       'operation',
       operationId
     );
-  }
+
 
   /**
    * Redis pipeline with timeout
@@ -137,7 +137,7 @@ export class RedisTimeoutIntegration {
       'pipeline',
       operationId
     );
-  }
+
 
   /**
    * Redis publish with timeout
@@ -151,12 +151,12 @@ export class RedisTimeoutIntegration {
       async () => {
         const client = this.redis.getClient();
         return client.publish(channel, message);
-  }
+
       'redis',
       'publish',
       operationId
     );
-  }
+
 
   /**
    * Cache operation with fallback to in-memory
@@ -177,15 +177,15 @@ export class RedisTimeoutIntegration {
         const value = await getValue();
         await this.redis.cache(key, value, ttl);
         return value;
-  }
+
       async () => {
         // Fallback to in-memory cache
         if (inMemoryCache) {
           const cached = inMemoryCache.get(key);
           if (cached && cached.expires > Date.now()) {
             return cached.value;
-          }
-        }
+
+
 
         // Generate value and cache in memory
         const value = await getValue();
@@ -194,14 +194,14 @@ export class RedisTimeoutIntegration {
             value,
             expires: Date.now() + ttl * 1000
           });
-        }
+
         return value;
-  }
+
       'redis',
       'operation'
     );
-  }
-}
+
+
 
 /**
  * Authentication Integration
@@ -222,7 +222,7 @@ export class AuthTimeoutIntegration {
       'login',
       operationId
     );
-  }
+
 
   /**
    * Registration with timeout
@@ -237,7 +237,7 @@ export class AuthTimeoutIntegration {
       'register',
       operationId
     );
-  }
+
 
   /**
    * Password reset with timeout
@@ -252,7 +252,7 @@ export class AuthTimeoutIntegration {
       'passwordReset',
       operationId
     );
-  }
+
 
   /**
    * Token refresh with timeout
@@ -267,7 +267,7 @@ export class AuthTimeoutIntegration {
       'tokenRefresh',
       operationId
     );
-  }
+
 
   /**
    * CAPTCHA verification with timeout
@@ -283,7 +283,7 @@ export class AuthTimeoutIntegration {
       'captcha',
       operationId
     );
-  }
+
 
   /**
    * Two-factor authentication with timeout
@@ -298,8 +298,8 @@ export class AuthTimeoutIntegration {
       'twoFactor',
       operationId
     );
-  }
-}
+
+
 
 /**
  * File Operations Integration
@@ -320,7 +320,7 @@ export class FileTimeoutIntegration {
       'upload',
       operationId
     );
-  }
+
 
   /**
    * File download with timeout
@@ -335,20 +335,20 @@ export class FileTimeoutIntegration {
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`Download failed: ${response.statusText}`);
-        }
+
         
         if (response.body) {
           await pipeline(
             response.body,
             createWriteStream(destinationPath)
           );
-        }
-  }
+
+
       'file',
       'download',
       operationId
     );
-  }
+
 
   /**
    * File processing with timeout
@@ -363,7 +363,7 @@ export class FileTimeoutIntegration {
       'processing',
       operationId
     );
-  }
+
 
   /**
    * File validation with timeout
@@ -378,8 +378,8 @@ export class FileTimeoutIntegration {
       'validation',
       operationId
     );
-  }
-}
+
+
 
 /**
  * Email Integration
@@ -402,7 +402,7 @@ export class EmailTimeoutIntegration {
       'send',
       operationId
     );
-  }
+
 
   /**
    * Verify email configuration with timeout
@@ -414,7 +414,7 @@ export class EmailTimeoutIntegration {
       'verify',
       operationId
     );
-  }
+
 
   /**
    * Send email with fallback to different transporter
@@ -425,7 +425,7 @@ export class EmailTimeoutIntegration {
   ): Promise<OperationResult<nodemailer.SentMessageInfo>> {
     if (!fallbackTransporter) {
       return this.sendEmail(emailOptions);
-    }
+
 
     return this.timeoutManager.executeWithFallback(
       () => this.transporter.sendMail(emailOptions),
@@ -433,8 +433,8 @@ export class EmailTimeoutIntegration {
       'email',
       'send'
     );
-  }
-}
+
+
 
 /**
  * External API Integration
@@ -457,15 +457,15 @@ export class APITimeoutIntegration {
         
         if (!response.ok) {
           throw new Error(`API call failed: ${response.status} ${response.statusText}`);
-        }
+
         
         return response.json() as T;
-  }
+
       'api',
       apiType,
       operationId
     );
-  }
+
 
   /**
    * Webhook call with timeout
@@ -481,11 +481,11 @@ export class APITimeoutIntegration {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-  }
+
       'webhook',
       operationId
     );
-  }
+
 
   /**
    * Notification API call with fallback
@@ -506,21 +506,21 @@ export class APITimeoutIntegration {
         const response = await fetch(primaryUrl, options);
         if (!response.ok) {
           throw new Error(`Notification failed: ${response.statusText}`);
-        }
+
         return response.json();
-  }
+
       async () => {
         const response = await fetch(fallbackUrl, options);
         if (!response.ok) {
           throw new Error(`Fallback notification failed: ${response.statusText}`);
-        }
+
         return response.json();
-  }
+
       'api',
       'notification'
     );
-  }
-}
+
+
 
 /**
  * Health Check Integration
@@ -536,12 +536,12 @@ export class HealthCheckTimeoutIntegration {
       async () => {
         const result = db.prepare('SELECT 1 as test').get() as { test: number };
         return result.test === 1;
-  }
+
       'database',
       'query',
       'health_check_db'
     );
-  }
+
 
   /**
    * Redis health check with timeout
@@ -553,7 +553,7 @@ export class HealthCheckTimeoutIntegration {
       'operation',
       'health_check_redis'
     );
-  }
+
 
   /**
    * External service health check
@@ -563,12 +563,12 @@ export class HealthCheckTimeoutIntegration {
       async () => {
         const response = await fetch(`${url}/health`);
         return response.ok;
-  }
+
       'api',
       'authentication',
       'health_check_external'
     );
-  }
+
 
   /**
    * Comprehensive health check
@@ -583,7 +583,7 @@ export class HealthCheckTimeoutIntegration {
     redis: OperationResult<boolean>;
     externalServices: { [url: string]: OperationResult<boolean> };
     timeoutManagerHealth: unknown;
-  }> {
+> {
     const [dbResult, redisResult] = await Promise.all([
       this.checkDatabase(db),
       this.checkRedis(redis)
@@ -593,7 +593,7 @@ export class HealthCheckTimeoutIntegration {
     
     for (const serviceUrl of externalServices) {
       externalResults[serviceUrl] = await this.checkExternalService(serviceUrl);
-    }
+
 
     const overall = dbResult.success && 
                    redisResult.success && 
@@ -606,34 +606,33 @@ export class HealthCheckTimeoutIntegration {
       externalServices: externalResults,
       timeoutManagerHealth: this.timeoutManager.getHealthStatus()
     };
-  }
-}
+
+
 
 // Export factory functions for easy integration
 export function createDatabaseIntegration(db: Database): DatabaseTimeoutIntegration {
   return new DatabaseTimeoutIntegration(db);
-}
+
 
 export function createRedisIntegration(redis: RedisService): RedisTimeoutIntegration {
   return new RedisTimeoutIntegration(redis);
-}
+
 
 export function createAuthIntegration(): AuthTimeoutIntegration {
   return new AuthTimeoutIntegration();
-}
+
 
 export function createFileIntegration(): FileTimeoutIntegration {
   return new FileTimeoutIntegration();
-}
+
 
 export function createEmailIntegration(transporter: nodemailer.Transporter): EmailTimeoutIntegration {
   return new EmailTimeoutIntegration(transporter);
-}
+
 
 export function createAPIIntegration(): APITimeoutIntegration {
   return new APITimeoutIntegration();
-}
+
 
 export function createHealthCheckIntegration(): HealthCheckTimeoutIntegration {
   return new HealthCheckTimeoutIntegration();
-}

@@ -18,8 +18,8 @@ import * as bcrypt from 'bcrypt';
 // Epic 17 Password Management Types
 // =============================================================================
 
-}
-}
+
+
 export interface Epic17PasswordConfig {
   // API Key Secret Management
   apiKeySecretLength: number;
@@ -34,8 +34,9 @@ export interface Epic17PasswordConfig {
     requireNumbers: boolean;
     requireSymbols: boolean;
     minUniqueChars: number;
-}
-}
+
+
+
   };
   adminPasswordMaxAge: number; // days
   adminPasswordHistoryCount: number;
@@ -60,10 +61,10 @@ export interface Epic17PasswordConfig {
   auditAllAccess: boolean;
   complianceMode: 'standard' | 'strict' | 'enterprise';
   retentionDays: number;
-}
 
-}
-}
+
+
+
 export interface ApiKeySecret {
   keyId: string;
   secretId: string;
@@ -80,13 +81,14 @@ export interface ApiKeySecret {
     rotationReason?: string;
     strength: number;
     entropy: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface AdminCredential {
   credentialId: string;
   userId: string;
@@ -116,13 +118,14 @@ export interface AdminCredential {
     lastModifiedBy?: string;
     reasonForChange?: string;
     approvedBy?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ServiceAuthentication {
   serviceId: string;
   serviceName: string;
@@ -132,8 +135,9 @@ export interface ServiceAuthentication {
     backup?: string;
     certificate?: string;
     privateKey?: string;
-}
-}
+
+
+
   };
   encryptionMethod: string;
   rotationSchedule: {
@@ -149,10 +153,10 @@ export interface ServiceAuthentication {
     environment: string;
     dependencies: string[];
   };
-}
 
-}
-}
+
+
+
 export interface PasswordSecurityEvent {
   eventId: string;
   eventType: 'creation' | 'rotation' | 'access' | 'failure' | 'breach' | 'compromise';
@@ -166,16 +170,17 @@ export interface PasswordSecurityEvent {
     userAgent?: string;
     location?: string;
     riskScore?: number;
-}
-}
+
+
+
   };
   timestamp: Date;
   resolved: boolean;
   resolutionNotes?: string;
-}
 
-}
-}
+
+
+
 export interface VaultEntry {
   vaultId: string;
   entryType: 'api_key_secret' | 'admin_password' | 'service_token' | 'encryption_key';
@@ -187,17 +192,18 @@ export interface VaultEntry {
     algorithm: string;
     iterations: number;
     salt: string;
-}
-}
+
+
+
   };
   accessLog: Array<{
     accessedAt: Date;
     accessedBy: string;
     operation: 'read' | 'write' | 'rotate';
-  }>;
+>;
   createdAt: Date;
   expiresAt?: Date;
-}
+
 
 // =============================================================================
 // Epic 17 Password Management Service Implementation
@@ -230,7 +236,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
         requireNumbers: true,
         requireSymbols: true,
         minUniqueChars: 8
-  }
+
       adminPasswordMaxAge: 90,
       adminPasswordHistoryCount: 12,
       
@@ -259,7 +265,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
     };
 
     this.initializeService();
-  }
+
 
   // =============================================================================
   // API Key Secret Management
@@ -293,13 +299,13 @@ export class Epic17PasswordManagementService extends EventEmitter {
           createdBy,
           strength,
           entropy
-        }
+
       };
       
       // Store in vault if enabled
       if (this.config.vaultEnabled) {
         await this.storeInVault('api_key_secret', secretId, secret);
-      }
+
       
       // Store secret metadata in database
       await this.database.query(`
@@ -316,7 +322,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
       if (this.config.apiKeySecretRotationDays > 0) {
         const rotationDate = new Date(Date.now() + this.config.apiKeySecretRotationDays * 24 * 60 * 60 * 1000);
         this.scheduleRotation(keyId, rotationDate);
-      }
+
       
       await this.logSecurityEvent({
         eventType: 'creation',
@@ -329,12 +335,11 @@ export class Epic17PasswordManagementService extends EventEmitter {
       this.emit('api_key_secret_created', { keyId, secretId });
       
       return { secret, secretId };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error generating API key secret:', error);
       throw new Error('Failed to generate API key secret');
-    }
-  }
+
+
 
   /**
    * Verify API key secret with rate limiting and logging
@@ -353,7 +358,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           metadata: { lockReason: lockStatus.reason }
         });
         return false;
-      }
+
       
       // Get active secret
       const secretData = await this.database.query(`
@@ -372,13 +377,13 @@ export class Epic17PasswordManagementService extends EventEmitter {
           metadata: {}
         });
         return false;
-      }
+
       
       const { hashed_secret, salt, algorithm, failed_attempts, status } = secretData.rows[0];
       
       if (status !== 'active') {
         return false;
-      }
+
       
       // Verify the secret
       const isValid = await bcrypt.compare(providedSecret, hashed_secret);
@@ -398,8 +403,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           description: `Successful secret verification for key ${keyId}`,
           metadata: {}
         });
-        
-      } else {
+ else {
         // Increment failed attempts
         const newFailedAttempts = (failed_attempts || 0) + 1;
         
@@ -412,7 +416,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
         // Lock key if too many failures
         if (newFailedAttempts >= this.config.maxFailedAttempts) {
           await this.lockApiKey(keyId, 'too_many_failures');
-        }
+
         
         await this.logSecurityEvent({
           eventType: 'failure',
@@ -421,11 +425,10 @@ export class Epic17PasswordManagementService extends EventEmitter {
           description: `Failed secret verification for key ${keyId} (attempt ${newFailedAttempts})`,
           metadata: { failedAttempts: newFailedAttempts }
         });
-      }
+
       
       return isValid;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error verifying API key secret:', error);
       await this.logSecurityEvent({
         eventType: 'failure',
@@ -435,8 +438,8 @@ export class Epic17PasswordManagementService extends EventEmitter {
         metadata: { error: error.message }
       });
       return false;
-    }
-  }
+
+
 
   /**
    * Rotate API key secret with zero-downtime strategy
@@ -474,7 +477,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
       // Store in vault
       if (this.config.vaultEnabled) {
         await this.storeInVault('api_key_secret', newSecretId, newSecret);
-      }
+
       
       // Schedule cleanup of old secret (after grace period)
       setTimeout(async () => {
@@ -496,12 +499,11 @@ export class Epic17PasswordManagementService extends EventEmitter {
       this.emit('api_key_secret_rotated', { keyId, newSecretId, rotatedBy });
       
       return { newSecret, secretId: newSecretId };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error rotating API key secret:', error);
       throw new Error('Failed to rotate API key secret');
-    }
-  }
+
+
 
   // =============================================================================
   // Administrative Password Management
@@ -522,21 +524,21 @@ export class Epic17PasswordManagementService extends EventEmitter {
       const validation = this.validateAdminPassword(password);
       if (!validation.isValid) {
         throw new Error(`Password validation failed: ${validation.errors.join(', ')}`);
-      }
+
       
       // Check password history
       const historyCheck = await this.checkPasswordHistory(userId, password);
       if (!historyCheck.allowed) {
         throw new Error(`Password reuse detected: ${historyCheck.reason}`);
-      }
+
       
       // Check for breached passwords if enabled
       if (this.config.passwordBreachChecking) {
         const breachCheck = await this.checkPasswordBreach(password);
         if (breachCheck.isBreached) {
           throw new Error(`Password found in breach database: ${breachCheck.breachCount} occurrences`);
-        }
-      }
+
+
       
       const credentialId = crypto.randomUUID();
       const salt = await bcrypt.genSalt(14); // Higher rounds for admin passwords
@@ -567,7 +569,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
         auditTrail: {
           createdBy: setBy || 'system',
           reasonForChange: isTemporary ? 'temporary_password' : 'password_reset'
-        }
+
       };
       
       // Store credential
@@ -590,7 +592,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
       // Store in vault if enabled
       if (this.config.vaultEnabled) {
         await this.storeInVault('admin_password', credentialId, password);
-      }
+
       
       await this.logSecurityEvent({
         eventType: 'creation',
@@ -602,18 +604,17 @@ export class Epic17PasswordManagementService extends EventEmitter {
           isTemporary, 
           setBy: setBy || 'system',
           complianceFlags: credential.complianceFlags
-        }
+
       });
       
       this.emit('admin_password_created', { userId, credentialId, isTemporary, setBy });
       
       return { credentialId, mustChangeAt };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error setting admin password:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Verify administrative password with enhanced security checks
@@ -640,7 +641,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           metadata: { sourceIP }
         });
         return false;
-      }
+
       
       const credential = credData.rows[0];
       
@@ -655,7 +656,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           metadata: { sourceIP, expiredAt: credential.expires_at }
         });
         return false;
-      }
+
       
       if (credential.must_change_at && now > credential.must_change_at) {
         await this.logSecurityEvent({
@@ -666,7 +667,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           metadata: { sourceIP, mustChangeAt: credential.must_change_at }
         });
         return false;
-      }
+
       
       // Check account lockout
       if (credential.failed_attempts >= this.config.maxFailedAttempts) {
@@ -680,8 +681,8 @@ export class Epic17PasswordManagementService extends EventEmitter {
             metadata: { sourceIP, lockoutExpiry, failedAttempts: credential.failed_attempts }
           });
           return false;
-        }
-      }
+
+
       
       // Verify password
       const isValid = await bcrypt.compare(password, credential.hashed_value);
@@ -703,8 +704,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
         });
         
         this.emit('admin_password_verified', { userId, sourceIP });
-        
-      } else {
+ else {
         // Increment failed attempts
         const newFailedAttempts = (credential.failed_attempts || 0) + 1;
         
@@ -723,11 +723,10 @@ export class Epic17PasswordManagementService extends EventEmitter {
         });
         
         this.emit('admin_password_failed', { userId, sourceIP, failedAttempts: newFailedAttempts });
-      }
+
       
       return isValid;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error verifying admin password:', error);
       await this.logSecurityEvent({
         eventType: 'failure',
@@ -737,8 +736,8 @@ export class Epic17PasswordManagementService extends EventEmitter {
         metadata: { sourceIP, error: error.message }
       });
       return false;
-    }
-  }
+
+
 
   // =============================================================================
   // Service Authentication Management
@@ -780,14 +779,14 @@ export class Epic17PasswordManagementService extends EventEmitter {
           privateKey: certData.privateKey
         };
         break;
-      }
+
       
       // Encrypt credentials if required
       let encryptionMethod = 'none';
       if (this.config.serviceTokenEncryption) {
         credentials = await this.encryptServiceCredentials(credentials);
         encryptionMethod = 'aes-256-gcm';
-      }
+
       
       const nextRotationAt = new Date(Date.now() + rotationIntervalHours * 60 * 60 * 1000);
       
@@ -801,7 +800,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           enabled: rotationIntervalHours > 0,
           intervalHours: rotationIntervalHours,
           nextRotationAt
-  }
+
         accessScope: scope,
         status: 'active',
         metadata: {
@@ -809,7 +808,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           purpose,
           environment: process.env.NODE_ENV || 'development',
           dependencies: []
-        }
+
       };
       
       // Store service authentication
@@ -829,12 +828,12 @@ export class Epic17PasswordManagementService extends EventEmitter {
       // Store in vault
       if (this.config.vaultEnabled) {
         await this.storeInVault('service_token', serviceId, JSON.stringify(credentials));
-      }
+
       
       // Schedule rotation
       if (serviceAuth.rotationSchedule.enabled) {
         this.scheduleServiceRotation(serviceId, nextRotationAt);
-      }
+
       
       await this.logSecurityEvent({
         eventType: 'creation',
@@ -847,18 +846,17 @@ export class Epic17PasswordManagementService extends EventEmitter {
           purpose, 
           rotationEnabled: serviceAuth.rotationSchedule.enabled,
           scope: scope.join(',')
-        }
+
       });
       
       this.emit('service_auth_created', { serviceId, serviceName, authType });
       
       return serviceAuth;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error creating service authentication:', error);
       throw new Error('Failed to create service authentication');
-    }
-  }
+
+
 
   // =============================================================================
   // Vault and Encryption Management
@@ -900,7 +898,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           algorithm: 'pbkdf2',
           iterations: 100000,
           salt: salt.toString('hex')
-  }
+
         accessLog: [],
         createdAt: new Date()
       };
@@ -916,12 +914,11 @@ export class Epic17PasswordManagementService extends EventEmitter {
         vaultEntry.encryptionAlgorithm, vaultEntry.iv,
         JSON.stringify(vaultEntry.keyDerivationParams), authTag.toString('hex')
       ]);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error storing in vault:', error);
       throw error;
-    }
-  }
+
+
 
   // =============================================================================
   // Security and Validation Utilities
@@ -937,10 +934,10 @@ export class Epic17PasswordManagementService extends EventEmitter {
     
     for (let i = 0; i < length; i++) {
       result += charset[values[i] % charset.length];
-    }
+
     
     return result;
-  }
+
 
   /**
    * Calculate entropy of a password/secret
@@ -954,11 +951,11 @@ export class Epic17PasswordManagementService extends EventEmitter {
     charSets.forEach(regex => {
       if (regex.test(password)) {
         charsetSize += 26; // Approximation
-      }
+
     });
     
     return password.length * Math.log2(charsetSize || 1);
-  }
+
 
   /**
    * Calculate password strength score
@@ -977,7 +974,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
     
     // Pattern penalties
     if (/(.)\1{2
-}/.test(password)) score -= 10; // Repeated characters
+/.test(password)) score -= 10; // Repeated characters
     if (/123|abc|qwe/i.test(password)) score -= 15; // Sequential characters
     
     // Entropy bonus
@@ -986,7 +983,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
     if (entropy > 75) score += 15;
     
     return Math.max(0, Math.min(100, score));
-  }
+
 
   /**
    * Validate admin password against policy
@@ -997,42 +994,42 @@ export class Epic17PasswordManagementService extends EventEmitter {
     
     if (password.length < this.config.adminPasswordMinLength) {
       errors.push(`Password must be at least ${this.config.adminPasswordMinLength} characters long`);
-    }
+
     
     if (config.requireUppercase && !/[A-Z]/.test(password)) {
       errors.push('Password must contain uppercase letters');
-    }
+
     
     if (config.requireLowercase && !/[a-z]/.test(password)) {
       errors.push('Password must contain lowercase letters');
-    }
+
     
     if (config.requireNumbers && !/[0-9]/.test(password)) {
       errors.push('Password must contain numbers');
-    }
+
     
     if (config.requireSymbols && !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
       errors.push('Password must contain symbols');
-    }
+
     
     // Check unique characters
     const uniqueChars = new Set(password).size;
     if (uniqueChars < config.minUniqueChars) {
       errors.push(`Password must contain at least ${config.minUniqueChars} unique characters`);
-    }
+
     
     const strength = this.calculateStrength(password);
     
     if (strength < 60) {
       errors.push('Password strength is too low (minimum 60/100 required)');
-    }
+
     
     return {
       isValid: errors.length === 0,
       strength,
       errors
     };
-  }
+
 
   // =============================================================================
   // Security Event Logging
@@ -1073,7 +1070,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           severity: event.severity,
           description: event.description,
           metadata: event.metadata
-        }
+
       });
       
       // Emit event for real-time monitoring
@@ -1082,12 +1079,11 @@ export class Epic17PasswordManagementService extends EventEmitter {
       // Handle critical events immediately
       if (event.severity === 'critical') {
         this.emit('critical_security_event', securityEvent);
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       console.error('Error logging security event:', error);
-    }
-  }
+
+
 
   // =============================================================================
   // Private Helper Methods
@@ -1102,37 +1098,36 @@ export class Epic17PasswordManagementService extends EventEmitter {
       // Start rotation scheduler
       if (this.config.apiKeySecretRotationDays > 0 || this.config.vaultRotationEnabled) {
         this.startRotationScheduler();
-      }
+
       
       // Start cleanup scheduler
       this.startCleanupScheduler();
       
       console.log('✅ Epic 17 Password Management Service initialized successfully');
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error initializing Epic 17 Password Management Service:', error);
       throw error;
-    }
-  }
+
+
 
   private async initializeTables(): Promise<void> {
 
     // This would contain the CREATE TABLE statements for all Epic 17 password management tables
     // Implementation would include proper schema creation
     console.log('📊 Epic 17 password management database tables initialized');
-  }
+
 
   private generateVaultKey(): string {
     return crypto.randomBytes(32).toString('hex');
-  }
+
 
   private scheduleRotation(keyId: string, rotationDate: Date): void {
     this.rotationQueue.set(keyId, rotationDate);
-  }
+
 
   private scheduleServiceRotation(serviceId: string, rotationDate: Date): void {
     this.rotationQueue.set(`service_${serviceId}`, rotationDate);
-  }
+
 
   private startRotationScheduler(): void {
     setInterval(async () => {
@@ -1141,21 +1136,21 @@ export class Epic17PasswordManagementService extends EventEmitter {
         if (now >= scheduledTime) {
           if (key.startsWith('service_')) {
             await this.rotateServiceCredentials(key.substring(8));
-          } else {
+ else {
             await this.rotateApiKeySecret(key, 'system', 'scheduled_rotation');
-          }
+
           this.rotationQueue.delete(key);
-        }
-      }
+
+
     }, 60000); // Check every minute
-  }
+
 
   private startCleanupScheduler(): void {
     setInterval(async () => {
       await this.cleanupExpiredSecrets();
       await this.cleanupSecurityEvents();
     }, 3600000); // Run every hour
-  }
+
 
   private async cleanupExpiredSecrets(): Promise<void> {
 
@@ -1168,11 +1163,11 @@ export class Epic17PasswordManagementService extends EventEmitter {
       
       if (result.rowCount > 0) {
         console.log(`🧹 Cleaned up ${result.rowCount} expired API key secrets`);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error cleaning up expired secrets:', error);
-    }
-  }
+
+
 
   private async cleanupSecurityEvents(): Promise<void> {
 
@@ -1186,11 +1181,11 @@ export class Epic17PasswordManagementService extends EventEmitter {
       
       if (result.rowCount > 0) {
         console.log(`🧹 Cleaned up ${result.rowCount} old security events`);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error cleaning up security events:', error);
-    }
-  }
+
+
 
   // Additional helper methods would be implemented here...
   
@@ -1198,30 +1193,30 @@ export class Epic17PasswordManagementService extends EventEmitter {
 
     // Implementation for checking if a key is locked
     return { isLocked: false };
-  }
+
 
   private async lockApiKey(keyId: string, reason: string): Promise<void> {
 
     // Implementation for locking an API key
     console.log(`🔒 Locked API key ${keyId}: ${reason}`);
-  }
+
 
   private async checkPasswordHistory(userId: string, password: string): Promise<{ allowed: boolean; reason?: string }> {
 
     // Implementation for checking password history
     return { allowed: true };
-  }
+
 
   private async checkPasswordBreach(password: string): Promise<{ isBreached: boolean; breachCount?: number }> {
 
     // Implementation for checking password breaches
     return { isBreached: false };
-  }
+
 
   private async addToPasswordHistory(userId: string, hashedPassword: string, credentialId: string): Promise<void> {
 
     // Implementation for adding to password history
-  }
+
 
   private assessComplianceFlags(validation: any, isTemporary: boolean): string[] {
     const flags: string[] = [];
@@ -1232,7 +1227,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
     if (this.config.complianceMode === 'enterprise') flags.push('enterprise_compliant');
     
     return flags;
-  }
+
 
   private async generateServiceCertificate(serviceName: string): Promise<{ certificate: string; privateKey: string }> {
 
@@ -1241,19 +1236,19 @@ export class Epic17PasswordManagementService extends EventEmitter {
       certificate: '-----BEGIN CERTIFICATE-----\n[certificate data]\n-----END CERTIFICATE-----',
       privateKey: '-----BEGIN PRIVATE KEY-----\n[private key data]\n-----END PRIVATE KEY-----'
     };
-  }
+
 
   private async encryptServiceCredentials(credentials: any): Promise<any> {
 
     // Implementation for encrypting service credentials
     return credentials;
-  }
+
 
   private async rotateServiceCredentials(serviceId: string): Promise<void> {
 
     // Implementation for rotating service credentials
     console.log(`🔄 Rotating credentials for service ${serviceId}`);
-  }
+
 
   // Public management methods
   async getPasswordSecurityMetrics(): Promise<any> {
@@ -1270,18 +1265,18 @@ export class Epic17PasswordManagementService extends EventEmitter {
       `);
       
       return metrics.rows[0];
-    } catch (error) {
+ catch (error) {
       console.error('Error getting password security metrics:', error);
       return null;
-    }
-  }
+
+
 
   async forceRotateAllSecrets(): Promise<void> {
 
     // Emergency rotation of all secrets
     console.log('🚨 Starting emergency rotation of all secrets...');
     // Implementation would handle bulk rotation
-  }
-}
+
+
 
 export default Epic17PasswordManagementService;

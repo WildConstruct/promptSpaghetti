@@ -10,11 +10,10 @@
  * - Policy enforcement for data handling
  * - Integration with existing security middleware
  */
-import { 
-  DataClassificationLevel,
+import { DataClassificationLevel,
   HandlingRequirements,
   AccessRequirements,
-  OperationContext,
+  OperationContext }
   ClassificationAuditEvent
 } from '../types/DataClassification';
 /**
@@ -22,8 +21,8 @@ import {
  */
 
 }
-export interface ClassificationEnforcementConfig {
-    /** Strict mode - blocks all non-compliant operations */
+}
+export interface ClassificationEnforcementConfig { /** Strict mode - blocks all non-compliant operations */
     strictMode: boolean;
     /** Enable real-time monitoring of access attempts */
     realtimeMonitoring: boolean;
@@ -41,8 +40,7 @@ export interface ClassificationEnforcementConfig {
     exemptions?: {
         users?: string[];
         roles?: string[];
-        conditions?: string[];
-
+        conditions?: string[] }
 }
     };
 
@@ -50,6 +48,7 @@ export interface ClassificationEnforcementConfig {
  * Enforcement result
  */
 
+}
 }
 export interface EnforcementResult {
     allowed: boolean;
@@ -67,8 +66,9 @@ export interface EnforcementResult {
  */
 
 }
-export interface AccessDecision {
-    granted: boolean;
+}
+}
+export interface AccessDecision { granted: boolean;
     reason: string;
     requiredAuthentication?: string;
     requiredAuthorization?: string[];
@@ -88,27 +88,26 @@ export declare class ClassificationEnforcer {
      * Enforce classification policies for an operation
      */
     enforceClassification();
-      classification: DataClassificationLevel,
-      operation: OperationContext,
+      classification: DataClassificationLevel;
+      operation: OperationContext;
       currentControls?: string[]
     ): Promise<EnforcementResult>;
     /**
      * Make an access control decision
      */
     makeAccessDecision();
-      userId: string,
-      dataId: string,
-      classification: DataClassificationLevel,
-      operation: string,
-      context: Partial<OperationContext>,
+      userId: string;
+      dataId: string;
+      classification: DataClassificationLevel;
+      operation: string;
+      context: Partial<OperationContext> }
     ): Promise<AccessDecision>;
     /**
      * Validate an operation against classification policies
      */
-    validateOperation(operation: OperationContext, classification: DataClassificationLevel, dataElement: any): Promise<{
-        valid: boolean;
+    validateOperation(operation: OperationContext, classification: DataClassificationLevel, dataElement: any): Promise<{ valid: boolean;
         issues: string[];
-        controls: string[];
+        controls: string[] }
 }
     }>;
     /**

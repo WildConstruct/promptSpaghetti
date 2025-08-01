@@ -61,13 +61,13 @@ export class OpenAIGraphAgent {
                                 currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction)
                             };
                             {
-                                console.log(`Attempt ${attempts},)}
+                                console.log(`Attempt ${attempts})},
   failed:`, response.error);
                             }
                         }
                         try { }
                         catch (error) {
-                            console.error(`Attempt ${attempts},)}
+                            console.error(`Attempt ${attempts})},
   error:`, error);
                         }
                         // Reduce temperature for retry
@@ -197,10 +197,10 @@ Generate creative, functional graphs that solve real problems.`;
                     `\nFocus areas: ${request.focusAreas.join(', ')}`;
                 }
                 '';
-                return `Generate a ${request.complexity} Prompt Spaghetti graph for: ${request.purpose},}
+                return `Generate a ${request.complexity} Prompt Spaghetti graph for: ${request.purpose},},
   Complexity: ${complexityGuide[request.complexity]}
 Target nodes: ~${request.nodeCount} nodes}
-${nodeTypeGuide}${requirements}${focus},}
+${nodeTypeGuide}${requirements}${focus},},
   Style: ${request.style || 'balanced'} approach}
 ${request.domain ? `Domain: ${request.domain}` : ''}
 Create a complete, valid graph that follows the format specification exactly. Be creative but ensure functionality.

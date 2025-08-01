@@ -5,8 +5,8 @@ import { SearchFilters, TemplateWithStats } from './types';
 import { MarketplaceDAO } from './dao';
 import { Pool } from 'pg';
 
-}
-}
+
+
 interface ElasticsearchTemplate {
   id: string;
   title: string;
@@ -24,24 +24,26 @@ interface ElasticsearchTemplate {
   featured_at?: string;
   created_at: string;
   updated_at: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SearchResponse {
   templates: TemplateWithStats[];
   total: number;
   aggregations?: {
-}
-}
+
+
+
     categories: Array<{ name: string; count: number }>;
     price_ranges: Array<{ min: number; max: number; count: number }>;
     avg_ratings: Array<{ rating: number; count: number }>;
     tags: Array<{ name: string; count: number }>;
   };
-}
+
 
 @Injectable()
 export class ElasticsearchService {
@@ -58,13 +60,13 @@ export class ElasticsearchService {
       auth: process.env.ELASTICSEARCH_AUTH ? {
         username: process.env.ELASTICSEARCH_USERNAME || 'elastic',
         password: process.env.ELASTICSEARCH_PASSWORD || 'changeme'
-      } : undefined,
+ : undefined,
       requestTimeout: 30000,
       maxRetries: 3
     });
 
     this.initializeIndex();
-  }
+
 
   /**
    * Advanced search with Elasticsearch
@@ -88,12 +90,12 @@ export class ElasticsearchService {
         total: response.body.hits.total.value,
         aggregations
       };
-    } catch (error) {
+ catch (error) {
       console.error('Elasticsearch search error:', error);
       // Fallback to PostgreSQL search
       return this.fallbackToPostgresSearch(filters);
-    }
-  }
+
+
 
   /**
    * Get search suggestions and autocomplete
@@ -111,18 +113,18 @@ export class ElasticsearchService {
                 field: 'title_suggest',
                 size: limit,
                 skip_duplicates: true
-              }
-  }
+
+
             tag_suggest: {
               prefix: query,
               completion: {
                 field: 'tags_suggest',
                 size: limit,
                 skip_duplicates: true
-              }
-            }
-          }
-        }
+
+
+
+
       });
 
       const suggestions = new Set<string>();
@@ -138,11 +140,11 @@ export class ElasticsearchService {
       });
 
       return Array.from(suggestions).slice(0, limit);
-    } catch (error) {
+ catch (error) {
       console.error('Error getting search suggestions:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Index a template in Elasticsearch
@@ -174,10 +176,10 @@ export class ElasticsearchService {
         id: template.id,
         body: doc
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error indexing template:', error);
-    }
-  }
+
+
 
   /**
    * Remove a template from Elasticsearch
@@ -189,10 +191,10 @@ export class ElasticsearchService {
         index: this.INDEX_NAME,
         id: templateId
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error removing template from index:', error);
-    }
-  }
+
+
 
   /**
    * Reindex all templates from database
@@ -220,14 +222,14 @@ export class ElasticsearchService {
         ]);
 
         await this.client.bulk({ body });
-      }
+
 
       console.log(`Reindexed ${templates.templates.length} templates`);
-    } catch (error) {
+ catch (error) {
       console.error('Error reindexing templates:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get search analytics
@@ -243,44 +245,44 @@ export class ElasticsearchService {
             range: {
               created_at: {
                 gte: `now-${timeRange}`
-              }
-            }
-  }
+
+
+
           aggs: {
             popular_searches: {
               terms: {
                 field: 'title.keyword',
                 size: 10
-              }
-  }
+
+
             category_distribution: {
               terms: {
                 field: 'categories.keyword',
                 size: 20
-              }
-  }
+
+
             price_distribution: {
               histogram: {
                 field: 'price_cents',
                 interval: 500
-              }
-  }
+
+
             rating_distribution: {
               histogram: {
                 field: 'avg_rating',
                 interval: 0.5
-              }
-            }
-          }
-        }
+
+
+
+
       });
 
       return response.body.aggregations;
-    } catch (error) {
+ catch (error) {
       console.error('Error getting search analytics:', error);
       return {};
-    }
-  }
+
+
 
   /**
    * Initialize Elasticsearch index with proper mappings
@@ -305,10 +307,10 @@ export class ElasticsearchService {
                     type: 'custom',
                     tokenizer: 'standard',
                     filter: ['lowercase', 'stop', 'stemmer']
-                  }
-                }
-              }
-  }
+
+
+
+
             mappings: {
               properties: {
                 id: { type: 'keyword' },
@@ -318,18 +320,18 @@ export class ElasticsearchService {
                   fields: {
                     keyword: { type: 'keyword' },
                     suggest: { type: 'completion' }
-                  }
-  }
+
+
                 description: {
                   type: 'text',
                   analyzer: 'custom_text'
-  }
+
                 tags: {
                   type: 'keyword',
                   fields: {
                     suggest: { type: 'completion' }
-                  }
-  }
+
+
                 price_cents: { type: 'integer' },
                 avg_rating: { type: 'float' },
                 total_reviews: { type: 'integer' },
@@ -339,25 +341,25 @@ export class ElasticsearchService {
                   type: 'text',
                   fields: {
                     keyword: { type: 'keyword' }
-                  }
-  }
+
+
                 owner_verified: { type: 'boolean' },
                 is_ai_generated: { type: 'boolean' },
                 claude_compat: { type: 'keyword' },
                 featured_at: { type: 'date' },
                 created_at: { type: 'date' },
                 updated_at: { type: 'date' }
-              }
-            }
-          }
+
+
+
         });
 
         console.log('Elasticsearch index created successfully');
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error initializing Elasticsearch index:', error);
-    }
-  }
+
+
 
   /**
    * Build Elasticsearch query from filters
@@ -374,27 +376,27 @@ export class ElasticsearchService {
           fields: ['title^3', 'description^2', 'tags^2', 'categories', 'owner_name'],
           type: 'best_fields',
           fuzziness: 'AUTO'
-        }
+
       });
-    }
+
 
     // Category filter
     if (filters.categories && filters.categories.length > 0) {
       filter.push({
         terms: {
           categories: filters.categories
-        }
+
       });
-    }
+
 
     // Tag filter
     if (filters.tags && filters.tags.length > 0) {
       filter.push({
         terms: {
           tags: filters.tags
-        }
+
       });
-    }
+
 
     // Price filters
     if (filters.price_min !== undefined || filters.price_max !== undefined) {
@@ -405,9 +407,9 @@ export class ElasticsearchService {
       filter.push({
         range: {
           price_cents: range
-        }
+
       });
-    }
+
 
     // Rating filter
     if (filters.rating_min !== undefined) {
@@ -415,45 +417,45 @@ export class ElasticsearchService {
         range: {
           avg_rating: {
             gte: filters.rating_min
-          }
-        }
+
+
       });
-    }
+
 
     // Free/paid filter
     if (filters.is_free === true) {
       filter.push({
         term: {
           price_cents: 0
-        }
+
       });
-    } else if (filters.is_free === false) {
+ else if (filters.is_free === false) {
       filter.push({
         range: {
           price_cents: {
             gt: 0
-          }
-        }
+
+
       });
-    }
+
 
     // Featured filter
     if (filters.is_featured === true) {
       filter.push({
         exists: {
           field: 'featured_at'
-        }
+
       });
-    }
+
 
     // Claude model compatibility
     if (filters.claude_models && filters.claude_models.length > 0) {
       filter.push({
         terms: {
           claude_compat: filters.claude_models
-        }
+
       });
-    }
+
 
     // Build sort
     const sort = this.buildElasticsearchSort(filters.sort_by, !!filters.query);
@@ -464,8 +466,8 @@ export class ElasticsearchService {
         terms: {
           field: 'categories',
           size: 50
-        }
-  }
+
+
       price_ranges: {
         range: {
           field: 'price_cents',
@@ -475,21 +477,21 @@ export class ElasticsearchService {
             { key: 'medium', from: 1000, to: 5000 },
             { key: 'high', from: 5000 }
           ]
-        }
-  }
+
+
       avg_ratings: {
         histogram: {
           field: 'avg_rating',
           interval: 1,
           min_doc_count: 1
-        }
-  }
+
+
       tags: {
         terms: {
           field: 'tags',
           size: 20
-        }
-      }
+
+
     };
 
     return {
@@ -497,12 +499,12 @@ export class ElasticsearchService {
         bool: {
           must: must.length > 0 ? must : [{ match_all: {} }],
           filter
-        }
-  }
+
+
       sort,
       aggs
     };
-  }
+
 
   /**
    * Build Elasticsearch sort
@@ -535,15 +537,15 @@ export class ElasticsearchService {
           { featured_at: { order: 'desc', missing: '_last' } },
           { avg_rating: { order: 'desc' } }
         ];
-      } else {
+ else {
         return [
           { featured_at: { order: 'desc', missing: '_last' } },
           { avg_rating: { order: 'desc' } },
           { total_purchases: { order: 'desc' } }
         ];
-      }
-    }
-  }
+
+
+
 
   /**
    * Process Elasticsearch search results
@@ -597,11 +599,11 @@ export class ElasticsearchService {
         name: row.owner_name,
         email: row.owner_email,
         verified: true
-      }
-    }]));
+
+]));
 
     return templateIds.map((id: string) => templateMap.get(id)).filter(Boolean);
-  }
+
 
   /**
    * Process Elasticsearch aggregations
@@ -628,7 +630,7 @@ export class ElasticsearchService {
         count: bucket.doc_count
       })) || []
     };
-  }
+
 
   /**
    * Fallback to PostgreSQL search when Elasticsearch fails
@@ -640,7 +642,7 @@ export class ElasticsearchService {
       templates: result.templates,
       total: result.total
     };
-  }
+
 
   /**
    * Convert template to Elasticsearch document
@@ -664,5 +666,4 @@ export class ElasticsearchService {
       created_at: template.created_at,
       updated_at: template.updated_at
     };
-  }
-}
+

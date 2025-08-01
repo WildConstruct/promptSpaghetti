@@ -8,49 +8,47 @@ import { ActivityFilters } from './ActivityFilters';
 import { ActivityStats } from './ActivityStats';
 import { useActivityFeed } from '../../hooks/useActivityFeed';
 import { ActivityEventWithActorInfo, ActivityEventFilter } from '../../types/workspace';
-}
-interface ActivityFeedProps {
-  workspaceId: string;
+
+
+interface ActivityFeedProps { workspaceId: string;
   userId: string;
   projectId?: string;
   showStats?: boolean;
   showFilters?: boolean;
   maxItems?: number;
   compact?: boolean;
-  export const ActivityFeed: React.FC<ActivityFeedProps> = ({
-  workspaceId,
-  userId,
-  projectId,
-  showStats = true,
-  showFilters = true,
-  maxItems,
+  export const ActivityFeed: React.FC<ActivityFeedProps> = ({;
+  workspaceId;
+  userId;
+  projectId;
+  showStats = true;
+  showFilters = true;
+  maxItems }
   compact = false
-}
+
+
 }) => {
   const [filters, setFilters] = useState<ActivityEventFilter>({})
-  project_id: projectId,
+  project_id: projectId
 });
   const [selectedEvent, setSelectedEvent] = useState<ActivityEventWithActorInfo | null>(null);
-  const {
-    activities,
-    loading,
-    error,
-    hasMore,
-    stats,
-    eventTypes,
-    loadMore,
+  const { activities
+    loading
+    error
+    hasMore
+    stats
+    eventTypes
+    loadMore }
     refresh
-  } = useActivityFeed(workspaceId, userId, filters, {)
-  limit: maxItems || 20,
-  autoRefresh: true,
+ = useActivityFeed(workspaceId, userId, filters, { )
+  limit: maxItems || 20
+  autoRefresh: true }
 });
   const handleFilterChange = (newFilters: Partial<ActivityEventFilter>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
-  const handleEventClick = (event: ActivityEventWithActorInfo) => {
-    if (!compact) {
-      setSelectedEvent(event);
-  };
+  const handleEventClick = (event: ActivityEventWithActorInfo) => { if (!compact) {
+      setSelectedEvent(event) };
   if (error) {
     return;
       <div className="activity-feed activity-feed--error">
@@ -152,11 +150,11 @@ interface ActivityFeedProps {
     </div>
   );
 };
-}
-interface ActivityFeedSkeletonProps {
-  count: number;
-  compact: boolean;
-}
+
+
+interface ActivityFeedSkeletonProps { count: number;
+  compact: boolean }
+
 const ActivityFeedSkeleton: React.FC<ActivityFeedSkeletonProps> = ({ count, compact }) => ()
   <>
     {Array.from({ length: count }, (_, i) => ()
@@ -175,11 +173,11 @@ const ActivityFeedSkeleton: React.FC<ActivityFeedSkeletonProps> = ({ count, comp
     ))}
   </>
 );
-}
-interface ActivityEventModalProps {
-  event: ActivityEventWithActorInfo;
-  onClose: () => void;
-}
+
+
+interface ActivityEventModalProps { event: ActivityEventWithActorInfo;
+  onClose: () => void }
+
 const ActivityEventModal: React.FC<ActivityEventModalProps> = ({ event, onClose }) => ()
   <div className="modal-overlay">
     <div className="modal modal--medium">

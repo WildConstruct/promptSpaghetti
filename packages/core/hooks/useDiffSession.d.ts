@@ -1,13 +1,12 @@
-import { 
-  VisualDiffSession,
+import { VisualDiffSession,
   DetailedComparison,
-  CreateDiffSessionRequest,
+  CreateDiffSessionRequest }
   UpdateDiffSessionRequest
 } from '../types/comparison';
 
 }
-interface UseDiffSessionResult {
-    session: VisualDiffSession | null;
+}
+interface UseDiffSessionResult { session: VisualDiffSession | null;
     comparison: DetailedComparison | null;
     loading: boolean;
     error: string | null;
@@ -16,7 +15,7 @@ interface UseDiffSessionResult {
     deleteSession: (sessionId: string) => Promise<void>;
     clearError: () => void;
 
-export declare const useDiffSession: () => UseDiffSessionResult;
+export declare const useDiffSession: () => UseDiffSessionResult }
 }
 export {};
 //# sourceMappingURL=useDiffSession.d.ts.map

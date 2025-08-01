@@ -72,6 +72,12 @@ replicated: boolean;
 replication_factor: number;
 geographic_distribution: string;
 ;
+usage_patterns: {
+    min_frequency_per_day ?  : number;
+    min_user_count ?  : number;
+}
+;
+;
 // Optimization actions
 actions: {
     index_recommendations: IndexRecommendation;
@@ -223,8 +229,9 @@ export class SecurityQueryOptimizer extends EventEmitter {
         this.startPerformanceTuning();
         // Query Profiling and Analysis
         async;
-        profileQuery(queryText, string);
-        queryType: QueryProfile['query_type'],
+        profileQuery(queryText, string),
+            queryType;
+        QueryProfile['query_type'],
             executedBy;
         string;
         Promise < string > {
@@ -462,8 +469,9 @@ export class SecurityQueryOptimizer extends EventEmitter {
             else if (queryType === 'threat_hunt' || queryType === 'correlation') {
                 return 'range_partitioning_by_severity';
                 return 'default_partitioning';
-                suggestCachingStrategy(queryText, string);
-                queryType: QueryProfile['query_type'],
+                suggestCachingStrategy(queryText, string),
+                    queryType;
+                QueryProfile['query_type'],
                     characteristics;
                 QueryProfile['characteristics'];
                 CachingStrategy;

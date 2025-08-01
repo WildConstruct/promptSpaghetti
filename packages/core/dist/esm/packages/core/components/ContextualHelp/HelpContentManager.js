@@ -70,7 +70,7 @@ export class HelpContentManager {
                 title: 'Welcome to Wild Construct',
                 content: 'You\'re about to explore a powerful tool for creative storytelling. This canvas lets you build narrative flows that can generate unlimited variations of your creative vision.',
                 filmTerminology: 'Think of this as your digital script supervisor - it helps you maintain creative consistency while exploring new possibilities.',
-                actionItems: [,
+                actionItems: [
                     'Start with a simple story element using the Output node',
                     'Add creative variations with WeightedChoice nodes',
                     'Connect nodes to build your narrative flow',
@@ -78,9 +78,8 @@ export class HelpContentManager {
                 ],
                 relatedFeatures: ['Canvas', 'Node Palette', 'Preview System'],
                 level: 'beginner',
-                context: {
-                    conditions: { nodeCount: 0 }
-                }
+                context: {},
+                conditions: { nodeCount: 0 }
             },
             {
                 id: 'output-node-scene',
@@ -88,16 +87,15 @@ export class HelpContentManager {
                 title: 'Creating Your First Scene',
                 content: 'Output nodes are the foundation of your creative work. They represent final content that will appear in your generated results.',
                 filmTerminology: 'Like the master shot that establishes your scene - everything else builds around this core element.',
-                actionItems: [,
+                actionItems: [
                     'Drag an Output node from the palette',
                     'Write your core narrative text',
                     'Connect it to other nodes to build complexity'
                 ],
                 level: 'beginner',
-                context: {
-                    nodeTypes: ['Output'],
-                    actions: ['node-creation'],
-                }
+                context: {},
+                nodeTypes: ['Output'],
+                actions: ['node-creation'],
             },
             {
                 id: 'weighted-choice-takes',
@@ -105,7 +103,7 @@ export class HelpContentManager {
                 title: 'Managing Multiple Takes',
                 content: 'WeightedChoice nodes let you manage multiple creative options with different probabilities. Perfect for exploring variations while maintaining creative control.',
                 filmTerminology: 'Like having multiple takes of the same scene - you can favor the best performance while keeping alternatives available for different contexts.',
-                actionItems: [,
+                actionItems: [
                     'Add multiple variations in the text areas',
                     'Adjust weights to favor preferred options',
                     'Use the preview to see how different weights affect results',
@@ -113,10 +111,9 @@ export class HelpContentManager {
                 ],
                 relatedFeatures: ['Weight Controls', 'Preview System', 'Variance Analysis'],
                 level: 'intermediate',
-                context: {
-                    nodeTypes: ['WeightedChoice'],
-                    actions: ['weight-adjustment'],
-                }
+                context: {},
+                nodeTypes: ['WeightedChoice'],
+                actions: ['weight-adjustment'],
             },
             {
                 id: 'connection-editing-decisions',
@@ -124,16 +121,15 @@ export class HelpContentManager {
                 title: 'Making Creative Connections',
                 content: 'Connections determine how your creative elements flow together. Each connection is a decision about how your narrative unfolds.',
                 filmTerminology: 'Like editing decisions in post-production - you\'re choosing which shots follow each other to create the desired emotional impact.',
-                actionItems: [,
+                actionItems: [
                     'Drag from an output port to an input port',
                     'Create branching paths for multiple story directions',
                     'Test different connection patterns in preview mode',
                     'Use conditional connections for smart narrative flow'
                 ],
                 level: 'beginner',
-                context: {
-                    actions: ['connection-creation', 'edge-editing'],
-                }
+                context: {},
+                actions: ['connection-creation', 'edge-editing'],
             },
             {
                 id: 'preview-dailies-review',
@@ -141,7 +137,7 @@ export class HelpContentManager {
                 title: 'Reviewing Your Creative Dailies',
                 content: 'The preview system is your digital dailies room. Generate multiple versions to see how your creative decisions play out.',
                 filmTerminology: 'Just like reviewing dailies with the director and DP - you can see different takes and choose the best creative direction.',
-                actionItems: [,
+                actionItems: [
                     'Use the Director Preview Toolbar for real-time feedback',
                     'Generate multiple variants to compare creative options',
                     'Rate and tag versions you like',
@@ -149,10 +145,9 @@ export class HelpContentManager {
                 ],
                 relatedFeatures: ['Real-time Preview', 'Enhanced Preview Modal', 'Creative Analysis'],
                 level: 'intermediate',
-                context: {
-                    actions: ['preview-generation'],
-                    triggerElements: ['preview-button', 'director-toolbar'],
-                }
+                context: {},
+                actions: ['preview-generation'],
+                triggerElements: ['preview-button', 'director-toolbar'],
             },
             {
                 id: 'conditional-smart-direction',
@@ -160,17 +155,16 @@ export class HelpContentManager {
                 title: 'Smart Creative Direction',
                 content: 'Conditional nodes enable intelligent creative decisions based on story context. Build adaptive narratives that respond to creative conditions.',
                 filmTerminology: 'Like having different coverage plans for different scenarios - your story adapts intelligently based on the creative context.',
-                actionItems: [,
+                actionItems: [
                     'Define conditions that trigger different creative paths',
                     'Use variables to carry story information between scenes',
                     'Test edge cases to ensure robust storytelling',
                     'Combine with WeightedChoice for sophisticated narrative control'
                 ],
                 level: 'advanced',
-                context: {
-                    nodeTypes: ['Conditional', 'GetVariable', 'SetVariable'],
-                    conditions: { hasConditionals: true }
-                }
+                context: {},
+                nodeTypes: ['Conditional', 'GetVariable', 'SetVariable'],
+                conditions: { hasConditionals: true }
             },
             {
                 id: 'professional-pipeline-export',
@@ -178,7 +172,7 @@ export class HelpContentManager {
                 title: 'Production Pipeline Integration',
                 content: 'Export your creative work in professional formats that integrate seamlessly with VFX and post-production workflows.',
                 filmTerminology: 'Like creating the final deliverables for post - structured exports with metadata that fit your production pipeline requirements.',
-                actionItems: [,
+                actionItems: [
                     'Use project export for complete creative packages',
                     'Generate bundle exports for VFX pipeline integration',
                     'Include metadata and version information',
@@ -186,10 +180,9 @@ export class HelpContentManager {
                 ],
                 relatedFeatures: ['Project Export', 'Bundle Generation', 'Version Control'],
                 level: 'professional',
-                context: {
-                    actions: ['project-export', 'bundle-export'],
-                    conditions: { projectsCompleted: 1 }
-                }
+                context: {},
+                actions: ['project-export', 'bundle-export'],
+                conditions: { projectsCompleted: 1 }
             }
         ];
         defaultContent.forEach(content => { });
@@ -203,7 +196,7 @@ export class HelpContentManager {
                 name: 'Director Fundamentals',
                 description: 'Essential skills for creative directors using Wild Construct',
                 targetRole: 'director',
-                steps: [,
+                steps: [
                     { contentId: 'director-welcome' },
                     { contentId: 'output-node-scene', requiredProgress: { nodesCreated: 1 } },
                     { contentId: 'weighted-choice-takes', requiredProgress: { nodesCreated: 3 } },
@@ -216,7 +209,7 @@ export class HelpContentManager {
                 name: 'Advanced Creative Storytelling',
                 description: 'Professional techniques for complex narrative structures',
                 targetRole: 'director',
-                steps: [,
+                steps: [
                     { contentId: 'conditional-smart-direction', unlockConditions: ['director-fundamentals'] },
                     { contentId: 'professional-pipeline-export', requiredProgress: { projectsCompleted: 1 } }
                 ]

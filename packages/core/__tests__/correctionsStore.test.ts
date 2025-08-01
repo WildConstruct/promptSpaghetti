@@ -10,9 +10,7 @@ beforeEach(() => {
   // Clear the store before each test
   useCorrectionsStore.getState().clearAllRules();
 });
-afterEach(() => {
-  process.env = originalEnv;
-});
+afterEach(() => { process.env = originalEnv });
 describe('useCorrectionsStore', () => {
   it('should initialize with empty rules', () => {
     const { result } = renderHook(() => useCorrectionsStore());
@@ -20,15 +18,14 @@ describe('useCorrectionsStore', () => {
   });
   it('should add a new rule', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Test Rule',
   description: 'Test description',
   findPattern: 'test',
   replaceWith: 'TEST',
   isRegex: false,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
     });
     expect(result.current.rules).toHaveLength(1);
@@ -39,22 +36,20 @@ describe('useCorrectionsStore', () => {
   });
   it('should update an existing rule', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Test Rule',
   description: 'Test description',
   findPattern: 'test',
   replaceWith: 'TEST',
   isRegex: false,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
     });
     const ruleId = result.current.rules[0].id;
-    act(() => {
-  result.current.updateRule(ruleId, {)
+    act(() => { result.current.updateRule(ruleId, {)
   name: 'Updated Rule',
-  replaceWith: 'UPDATED',
+  replaceWith: 'UPDATED' }
 });
     });
     expect(result.current.rules[0].name).toBe('Updated Rule');
@@ -63,71 +58,60 @@ describe('useCorrectionsStore', () => {
   });
   it('should delete a rule', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Test Rule',
   description: 'Test description',
   findPattern: 'test',
   replaceWith: 'TEST',
   isRegex: false,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
     });
     const ruleId = result.current.rules[0].id;
-    act(() => {
-      result.current.deleteRule(ruleId);
-    });
+    act(() => { result.current.deleteRule(ruleId) });
     expect(result.current.rules).toHaveLength(0);
   });
   it('should toggle a rule active state', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Test Rule',
   description: 'Test description',
   findPattern: 'test',
   replaceWith: 'TEST',
   isRegex: false,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
     });
     const ruleId = result.current.rules[0].id;
-    act(() => {
-      result.current.toggleRule(ruleId);
-    });
+    act(() => { result.current.toggleRule(ruleId) });
     expect(result.current.rules[0].isActive).toBe(false);
-    act(() => {
-      result.current.toggleRule(ruleId);
-    });
+    act(() => { result.current.toggleRule(ruleId) });
     expect(result.current.rules[0].isActive).toBe(true);
   });
   it('should reorder rules', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Rule 1',
   description: '',
   findPattern: 'test1',
   replaceWith: 'TEST1',
   isRegex: false,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
-      result.current.addRule({)
+      result.current.addRule({ )
   name: 'Rule 2',
   description: '',
   findPattern: 'test2',
   replaceWith: 'TEST2',
   isRegex: false,
   isActive: true,
-  priority: 2,
+  priority: 2 }
 });
     });
-    act(() => {
-      result.current.reorderRules(0, 1);
-    });
+    act(() => { result.current.reorderRules(0, 1) });
     expect(result.current.rules[0].name).toBe('Rule 2');
     expect(result.current.rules[1].name).toBe('Rule 1');
     expect(result.current.rules[0].priority).toBe(0);
@@ -135,43 +119,39 @@ describe('useCorrectionsStore', () => {
   });
   it('should clear all rules', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Test Rule 1',
   description: '',
   findPattern: 'test1',
   replaceWith: 'TEST1',
   isRegex: false,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
-      result.current.addRule({)
+      result.current.addRule({ )
   name: 'Test Rule 2',
   description: '',
   findPattern: 'test2',
   replaceWith: 'TEST2',
   isRegex: false,
   isActive: true,
-  priority: 2,
+  priority: 2 }
 });
     });
     expect(result.current.rules).toHaveLength(2);
-    act(() => {
-      result.current.clearAllRules();
-    });
+    act(() => { result.current.clearAllRules() });
     expect(result.current.rules).toHaveLength(0);
   });
   it('should apply corrections to text', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Fix typo',
   description: '',
   findPattern: 'teh',
   replaceWith: 'the',
   isRegex: false,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
     });
     const corrected = result.current.applyCorrections('This is teh test');
@@ -179,15 +159,14 @@ describe('useCorrectionsStore', () => {
   });
   it('should apply regex corrections', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Fix multiple spaces',
   description: '',
   findPattern: '\\s+',
   replaceWith: ' ',
   isRegex: true,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
     });
     const corrected = result.current.applyCorrections('This  has   multiple    spaces');
@@ -195,24 +174,23 @@ describe('useCorrectionsStore', () => {
   });
   it('should apply multiple corrections in priority order', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Fix typo',
   description: '',
   findPattern: 'teh',
   replaceWith: 'the',
   isRegex: false,
   isActive: true,
-  priority: 2,
+  priority: 2 }
 });
-      result.current.addRule({)
+      result.current.addRule({ )
   name: 'Fix spaces',
   description: '',
   findPattern: '  +',
   replaceWith: ' ',
   isRegex: true,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
     });
     const corrected = result.current.applyCorrections('This  is  teh  test');
@@ -220,15 +198,14 @@ describe('useCorrectionsStore', () => {
   });
   it('should skip inactive rules', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Inactive rule',
   description: '',
   findPattern: 'test',
   replaceWith: 'TEST',
   isRegex: false,
   isActive: false,
-  priority: 1,
+  priority: 1 }
 });
     });
     const corrected = result.current.applyCorrections('This is a test');
@@ -237,15 +214,14 @@ describe('useCorrectionsStore', () => {
   it('should handle regex errors gracefully', () => {
     const { result } = renderHook(() => useCorrectionsStore());
     const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Invalid regex',
   description: '',
   findPattern: '[',
   replaceWith: 'fixed',
   isRegex: true,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
     });
     const corrected = result.current.applyCorrections('This is a test');
@@ -258,24 +234,23 @@ describe('useCorrectionsStore', () => {
   });
   it('should return active rules only', () => {
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Active rule',
   description: '',
   findPattern: 'test1',
   replaceWith: 'TEST1',
   isRegex: false,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
-      result.current.addRule({)
+      result.current.addRule({ )
   name: 'Inactive rule',
   description: '',
   findPattern: 'test2',
   replaceWith: 'TEST2',
   isRegex: false,
   isActive: false,
-  priority: 2,
+  priority: 2 }
 });
     });
     const activeRules = result.current.getActiveRules();
@@ -287,15 +262,14 @@ describe('useCorrectionsStore', () => {
     process.env.NODE_ENV = 'production';
     process.env.ENABLE_CORRECTIONS = 'false';
     const { result } = renderHook(() => useCorrectionsStore());
-    act(() => {
-  result.current.addRule({)
+    act(() => { result.current.addRule({)
   name: 'Test rule',
   description: '',
   findPattern: 'test',
   replaceWith: 'TEST',
   isRegex: false,
   isActive: true,
-  priority: 1,
+  priority: 1 }
 });
     });
     const corrected = result.current.applyCorrections('This is a test');

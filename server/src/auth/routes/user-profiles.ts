@@ -16,7 +16,7 @@ import {
   PreferenceCategory,
   ProfileUpdate,
   ProfileSearchQuery,
-} from '../services/UserProfileService';
+ from '../services/UserProfileService';
 import { requirePermission } from '../middleware/permission-auth';
 
 // Request validation schemas
@@ -98,7 +98,7 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     permissions: string[];
   };
-}
+
 
 /**
  * Register user profile routes
@@ -107,6 +107,7 @@ export async function registerUserProfileRoutes(
   fastify: FastifyInstance,
   profileService: UserProfileService
 ): Promise<void> {
+
   // Get user's own profile
   fastify.get(
     '/profile',
@@ -126,19 +127,19 @@ export async function registerUserProfileRoutes(
             success: false,
             error: 'Profile not found',
           });
-        }
+
 
         return reply.code(200).send({
           success: true,
           data: profile,
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get user profile:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve profile',
         });
-      }
+
     }
   );
 
@@ -163,20 +164,19 @@ export async function registerUserProfileRoutes(
             success: false,
             error: 'Profile not found or not accessible',
           });
-        }
+
 
         return reply.code(200).send({
           success: true,
           data: profile,
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error(`Failed to get profile ${request.params}:`, error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve profile',
         });
-      }
-    }
+
   );
 
   // Update user profile
@@ -196,14 +196,14 @@ export async function registerUserProfileRoutes(
           data: updatedProfile,
           message: 'Profile updated successfully',
         });
-      } catch (error) {
+ catch (error) {
         if (error instanceof z.ZodError) {
           return reply.code(400).send({
             success: false,
             error: 'Invalid profile data',
             details: error.errors,
           });
-        }
+
 
         fastify.log.error('Failed to update profile:', error);
         return reply.code(500).send({
@@ -211,8 +211,7 @@ export async function registerUserProfileRoutes(
           error: 'Failed to update profile',
           details: error instanceof Error ? error.message : String(error),
         });
-      }
-    }
+
   );
 
   // Search profiles
@@ -244,22 +243,21 @@ export async function registerUserProfileRoutes(
             query: searchQuery,
           },
         });
-      } catch (error) {
+ catch (error) {
         if (error instanceof z.ZodError) {
           return reply.code(400).send({
             success: false,
             error: 'Invalid search parameters',
             details: error.errors,
           });
-        }
+
 
         fastify.log.error('Failed to search profiles:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to search profiles',
         });
-      }
-    }
+
   );
 
   // Get user preferences
@@ -278,13 +276,13 @@ export async function registerUserProfileRoutes(
           success: true,
           data: preferences,
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get preferences:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve preferences',
         });
-      }
+
     }
   );
 
@@ -310,22 +308,21 @@ export async function registerUserProfileRoutes(
           data: updatedPreferences,
           message: 'Preferences updated successfully',
         });
-      } catch (error) {
+ catch (error) {
         if (error instanceof z.ZodError) {
           return reply.code(400).send({
             success: false,
             error: 'Invalid preferences data',
             details: error.errors,
           });
-        }
+
 
         fastify.log.error('Failed to update preferences:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to update preferences',
         });
-      }
-    }
+
   );
 
   // Follow/unfollow user
@@ -344,7 +341,7 @@ export async function registerUserProfileRoutes(
             success: false,
             error: 'Cannot follow yourself',
           });
-        }
+
 
         const connection = await profileService.updateConnection(request.user!.id, userId, action, connectionType);
 
@@ -358,14 +355,14 @@ export async function registerUserProfileRoutes(
                 ? 'User blocked successfully'
                 : 'User followed successfully',
         });
-      } catch (error) {
+ catch (error) {
         if (error instanceof z.ZodError) {
           return reply.code(400).send({
             success: false,
             error: 'Invalid connection action',
             details: error.errors,
           });
-        }
+
 
         fastify.log.error(`Failed to update connection for ${request.params}:`, error);
         return reply.code(500).send({
@@ -373,8 +370,7 @@ export async function registerUserProfileRoutes(
           error: 'Failed to update connection',
           details: error instanceof Error ? error.message : String(error),
         });
-      }
-    }
+
   );
 
   // Get user's connections (followers/following)
@@ -396,13 +392,13 @@ export async function registerUserProfileRoutes(
           success: false,
           error: 'Connections listing not yet implemented',
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get connections:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve connections',
         });
-      }
+
     }
   );
 
@@ -420,14 +416,13 @@ export async function registerUserProfileRoutes(
           success: true,
           data: analytics,
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get profile analytics:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve profile analytics',
         });
-      }
-    }
+
   );
 
   // Upload profile avatar
@@ -444,13 +439,13 @@ export async function registerUserProfileRoutes(
           success: false,
           error: 'Avatar upload not yet implemented',
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to upload avatar:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to upload avatar',
         });
-      }
+
     }
   );
 
@@ -469,7 +464,7 @@ export async function registerUserProfileRoutes(
             success: false,
             error: 'Profile not found',
           });
-        }
+
 
         return reply.code(200).send({
           success: true,
@@ -486,14 +481,13 @@ export async function registerUserProfileRoutes(
             ].filter((_, index) => profile.completionScore < (index + 1) * 20),
           },
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get profile completion:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve profile completion status',
         });
-      }
-    }
+
   );
 
   // Get popular skills for autocomplete
@@ -549,13 +543,13 @@ export async function registerUserProfileRoutes(
             popularity: Math.floor(Math.random() * 100) + 1,
           })),
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get popular skills:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve popular skills',
         });
-      }
+
     }
   );
 
@@ -616,14 +610,13 @@ export async function registerUserProfileRoutes(
           success: true,
           data: metadata,
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get profile metadata:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve profile metadata',
         });
-      }
-    }
+
   );
 
   // Admin endpoint to get profile statistics
@@ -652,14 +645,13 @@ export async function registerUserProfileRoutes(
           success: true,
           data: stats,
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Failed to get profile statistics:', error);
         return reply.code(500).send({
           success: false,
           error: 'Failed to retrieve profile statistics',
         });
-      }
-    }
+
   );
 
   // Health check for profile system
@@ -682,7 +674,7 @@ export async function registerUserProfileRoutes(
           success: true,
           data: health,
         });
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Profile system health check failed:', error);
         return reply.code(500).send({
           success: false,
@@ -692,9 +684,8 @@ export async function registerUserProfileRoutes(
             error: error instanceof Error ? error.message : String(error),
           },
         });
-      }
-    }
+
   );
-}
+
 
 export default registerUserProfileRoutes;

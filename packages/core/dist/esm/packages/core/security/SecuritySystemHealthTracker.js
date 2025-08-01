@@ -8,6 +8,9 @@
  */
 import { EventEmitter } from 'events';
 ;
+connection_timeout_ms: number;
+read_timeout_ms: number;
+;
 // Health check configuration
 health_checks: {
     enabled: boolean;
@@ -16,7 +19,12 @@ health_checks: {
     retry_attempts: number;
     retry_delay_ms: number;
     // Check types
-    checks: Array;
+    checks: Array < {
+        type: 'ping' | 'http_status' | 'database_query' | 'custom_script' | 'port_check' | 'ssl_cert' | 'disk_space' | 'memory_usage' | 'cpu_usage',
+        name: string,
+        configuration: (Record),
+        success_criteria: SuccessCriteria,
+        weight: number } > ;
 }
 ;
 // Performance monitoring
@@ -96,7 +104,8 @@ enabled: boolean;
 health_impact: {
     weight: number;
     contribution_to_health_score: number;
-    severity: 'info' | 'warning' | 'critical';
+    severity: 'info' | 'warning' | 'critical',
+    ;
 }
 ;
 ;
@@ -110,7 +119,15 @@ availability: {
 }
 ;
 // Downtime breakdown
-downtime_incidents: Array;
+downtime_incidents: Array < {
+    start_time: number,
+    end_time: number,
+    duration_minutes: number,
+    type: 'planned' | 'unplanned',
+    reason: string,
+    impact_level: 'low' | 'medium' | 'high' | 'critical',
+    root_cause: string
+} > ;
 // Performance summary
 performance_summary: {
     avg_response_time_ms: number;
@@ -127,7 +144,8 @@ trends: {
     availability_trend: 'improving' | 'stable' | 'degrading';
     performance_trend: 'improving' | 'stable' | 'degrading';
     reliability_score: number; // 0-100,
-    recommendation_priority: 'low' | 'medium' | 'high';
+    recommendation_priority: 'low' | 'medium' | 'high',
+    ;
 }
 ;
 ;
@@ -762,7 +780,7 @@ Promise < void  > {
                                 async;
                                 sendEscalationNotifications(alert, SystemAlert, recipients, string);
                                 Promise < void  > {
-                                    console, : .log(`Sending escalation notifications for alert ${alert.id},)}
+                                    console, : .log(`Sending escalation notifications for alert ${alert.id})},
   to:`, recipients)
                                 };
                                 async;

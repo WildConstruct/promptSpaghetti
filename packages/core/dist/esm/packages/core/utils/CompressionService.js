@@ -392,11 +392,11 @@ export class CompressionService {
                                     async;
                                     benchmarkAlgorithms((data, dataType) => {
                                         const results = new Map();
-                                        const algorithms = [];
-                                        CompressionAlgorithm.GZIP,
+                                        const algorithms = [
+                                            CompressionAlgorithm.GZIP,
                                             CompressionAlgorithm.DEFLATE,
-                                            CompressionAlgorithm.BROTLI;
-                                        ;
+                                            CompressionAlgorithm.BROTLI
+                                        ];
                                         for (const algorithm of algorithms) {
                                             try {
                                                 const result = await this.compress(data, {});

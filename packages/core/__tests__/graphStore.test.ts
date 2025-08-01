@@ -4,140 +4,114 @@ import '@testing-library/jest-dom';
 import { Node, Edge } from 'reactflow';
 
 // Reset store between tests
-beforeEach(() => {
-  const store = useGraphStore.getState();
+beforeEach(() => { const store = useGraphStore.getState();
   act(() => {
     store.setNodes([]);
-    store.setEdges([]);
-  });
+    store.setEdges([]) });
 });
-describe('Graph Store', () => {
-  describe('Initial state', () => {
+describe('Graph Store', () => { describe('Initial state', () => {
     it('should initialize with empty nodes and edges arrays', () => {
       const state = useGraphStore.getState();
       expect(state.nodes).toEqual([]);
-      expect(state.edges).toEqual([]);
-    });
+      expect(state.edges).toEqual([]) });
   });
-  describe('setNodes', () => {
-    it('should replace the nodes array with a new array', () => {
+  describe('setNodes', () => { it('should replace the nodes array with a new array', () => {
       const mockNodes: Node = [
         {
           id: 'n1',
-          type: 'default',
+          type: 'default' }
           position: { x: 100, y: 100 },
           data: { label: 'Node 1' }
-  }
-        {
-          id: 'n2',
-          type: 'default',
+
+        { id: 'n2',
+          type: 'default' }
           position: { x: 200, y: 200 },
           data: { label: 'Node 2' }
 
       ];
       const store = useGraphStore.getState();
-      act(() => {
-        store.setNodes(mockNodes);
-      });
+      act(() => { store.setNodes(mockNodes) });
       expect(useGraphStore.getState().nodes).toHaveLength(2);
       expect(useGraphStore.getState().nodes).toEqual(mockNodes);
     });
   });
-  describe('setEdges', () => {
-  it('should replace the edges array with a new array', () => {
+  describe('setEdges', () => { it('should replace the edges array with a new array', () => {
   const mockEdges: Edge = [
   {
   id: 'e1',
   source: 'n1',
-  target: 'n2',
-}
-        {
-  id: 'e2',
-  source: 'n2',
+  target: 'n2' }
+
+        { id: 'e2',
+  source: 'n2' }
   target: 'n3'];
   const store = useGraphStore.getState();
-  act(() => {
-  store.setEdges(mockEdges);
-});
+  act(() => { store.setEdges(mockEdges) });
       expect(useGraphStore.getState().edges).toHaveLength(2);
       expect(useGraphStore.getState().edges).toEqual(mockEdges);
     });
   });
-  describe('addNode', () => {
-    it('should add a new node to the nodes array', () => {
+  describe('addNode', () => { it('should add a new node to the nodes array', () => {
       const mockNode: Node = {,
   id: 'n1',
-        type: 'default',
+        type: 'default' }
         position: { x: 100, y: 100 },
         data: { label: 'New Node' }
       };
       const store = useGraphStore.getState();
-      act(() => {
-        store.addNode(mockNode);
-      });
+      act(() => { store.addNode(mockNode) });
       expect(useGraphStore.getState().nodes).toHaveLength(1);
       expect(useGraphStore.getState().nodes[0]).toEqual(mockNode);
       // Add a second node and check both exist
-      const secondNode: Node = {,
+      const secondNode: Node = { ,
   id: 'n2',
-        type: 'output',
+        type: 'output' }
         position: { x: 200, y: 200 },
         data: { label: 'Another Node' }
       };
-      act(() => {
-        store.addNode(secondNode);
-      });
+      act(() => { store.addNode(secondNode) });
       expect(useGraphStore.getState().nodes).toHaveLength(2);
       expect(useGraphStore.getState().nodes[1]).toEqual(secondNode);
     });
   });
-  describe('addEdge', () => {
-  it('should add a new edge to the edges array', () => {
+  describe('addEdge', () => { it('should add a new edge to the edges array', () => {
   const mockEdge: Edge = {,
   id: 'e1',
   source: 'n1',
-  target: 'n2',
+  target: 'n2' }
 };
       const store = useGraphStore.getState();
-      act(() => {
-        store.addEdge(mockEdge);
-      });
+      act(() => { store.addEdge(mockEdge) });
       expect(useGraphStore.getState().edges).toHaveLength(1);
       expect(useGraphStore.getState().edges[0]).toEqual(mockEdge);
       // Add a second edge and check both exist
-      const secondEdge: Edge = {,
+      const secondEdge: Edge = { ,
   id: 'e2',
   source: 'n2',
-  target: 'n3',
+  target: 'n3' }
 };
-      act(() => {
-        store.addEdge(secondEdge);
-      });
+      act(() => { store.addEdge(secondEdge) });
       expect(useGraphStore.getState().edges).toHaveLength(2);
       expect(useGraphStore.getState().edges[1]).toEqual(secondEdge);
     });
   });
-  describe('updateNode', () => {
-    it('should update a node with the provided partial data', () => {
+  describe('updateNode', () => { it('should update a node with the provided partial data', () => {
       // Setup initial nodes
       const mockNodes: Node = [
         {
           id: 'n1',
-          type: 'default',
+          type: 'default' }
           position: { x: 100, y: 100 },
           data: { label: 'Node 1', value: 'old' }
-  }
-        {
-          id: 'n2',
-          type: 'default',
+
+        { id: 'n2',
+          type: 'default' }
           position: { x: 200, y: 200 },
           data: { label: 'Node 2', value: 'test' }
 
       ];
       const store = useGraphStore.getState();
-      act(() => {
-        store.setNodes(mockNodes);
-      });
+      act(() => { store.setNodes(mockNodes) });
       // Update node n1
       act(() => {
         store.updateNode('n1', { value: 'new', extra: 'data' });
@@ -153,20 +127,17 @@ describe('Graph Store', () => {
       const untouchedNode = updatedNodes.find(node => node.id === 'n2');
       expect(untouchedNode?.data).toEqual({ label: 'Node 2', value: 'test' });
     });
-    it('should not modify any nodes if the nodeId is not found', () => {
-      // Setup initial nodes
+    it('should not modify any nodes if the nodeId is not found', () => { // Setup initial nodes
       const mockNodes: Node = [
         {
           id: 'n1',
-          type: 'default',
+          type: 'default' }
           position: { x: 100, y: 100 },
           data: { label: 'Node 1' }
 
       ];
       const store = useGraphStore.getState();
-      act(() => {
-        store.setNodes(mockNodes);
-      });
+      act(() => { store.setNodes(mockNodes) });
       // Attempt to update non-existent node
       act(() => {
         store.updateNode('non-existent', { value: 'new' });

@@ -24,10 +24,10 @@ import {
   ContextMenuOptions,
   DragDropData,
   FileOperation
-} from './types';
+ from './types';
 
 // Mock data for development - will be replaced with API calls
-const mockFiles: TreeNode = [
+const mockFiles: TreeNode[] = [
   {
   id: 'root',
   name: 'My Projects',
@@ -36,7 +36,7 @@ const mockFiles: TreeNode = [
   lastModified: new Date('2024-01-15'),
   createdAt: new Date('2024-01-01'),
   tags: [],
-  children: [,
+  children: [
   {
   id: 'f1',
   name: 'Workflows',
@@ -45,7 +45,7 @@ const mockFiles: TreeNode = [
   lastModified: new Date('2024-01-10'),
   createdAt: new Date('2024-01-05'),
   tags: ['category'],
-  children: [,
+  children: [
   {
   id: 'file1',
   name: 'Customer Service Bot.psg',
@@ -58,13 +58,14 @@ const mockFiles: TreeNode = [
   extension: 'psg',
   mimeType: 'application/psg',
   metadata: {
-  nodeCount: 15,
-  edgeCount: 18,
+    
+  nodeCount: 15;
+  edgeCount: 18;
   description: 'Automated customer service workflow',
   author: 'John Doe'],
-  isExpanded: false,
-  childCount: 1,
-}
+  isExpanded: false;
+  childCount: 1;
+
       {
   id: 'f2',
   name: 'Templates',
@@ -73,7 +74,7 @@ const mockFiles: TreeNode = [
   lastModified: new Date('2024-01-14'),
   createdAt: new Date('2024-01-02'),
   tags: ['templates'],
-  children: [,
+  children: [
   {
   id: 'file2',
   name: 'Basic Prompt Chain.psg',
@@ -86,19 +87,22 @@ const mockFiles: TreeNode = [
   extension: 'psg',
   mimeType: 'application/psg',
   metadata: {
-  nodeCount: 8,
-  edgeCount: 7,
+    
+  nodeCount: 8;
+  edgeCount: 7;
   description: 'Simple prompt chaining template',
   author: 'Jane Smith'],
-  isExpanded: false,
+  isExpanded: false;
   childCount: 1],
-  isExpanded: true,
+  isExpanded: true;
   childCount: 2];
   // Type guard functions
-  const isFileNode = (item: FileItem): item is FileNode => {,
+  const isFileNode = (item: FileItem): item is FileNode => {
+    
   return item.type === 'file';
 };
-const initialState: FileBrowserState = {,
+const initialState: FileBrowserState[] = {
+    
   rootPath: '/',
   currentPath: '/',
   selectedItems: [],
@@ -108,8 +112,8 @@ const initialState: FileBrowserState = {,
   sortOrder: 'asc',
   searchTerm: '',
   filterTags: [],
-  isLoading: false,
-  error: null,
+  isLoading: false;
+  error: null;
 };
 
 export const FileBrowser: React.FC<FileBrowserProps> = ({)
@@ -127,18 +131,18 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   const analytics = useFileOperationTracking();
   const [state, setState] = useState<FileBrowserState>({)
   ...initialState,
-  currentPath: initialPath,
+  currentPath: initialPath;
 });
   const [treeData, setTreeData] = useState<TreeNode>(mockFiles);
   const [contextMenu, setContextMenu] = useState<ContextMenuOptions | null>(null);
   const [operations, setOperations] = useState<FileOperation>([]);
   const [searchOptions, setSearchOptions] = useState({)
-  includeContents: false,
-  caseSensitive: false,
-  useRegex: false,
-  includeFolders: true,
-  fileTypes: ['.psg', '.txt', '.md', '.json'],
-});
+  includeContents: false;
+  caseSensitive: false;
+  useRegex: false;
+  includeFolders: true;
+  fileTypes: ['.psg', '.txt', '.md', '.json']
+  });
   // Load initial data
   useEffect(() => {
     if (isAuthenticated) {
@@ -159,16 +163,16 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
       await analytics.trackDirectoryLoad(path, mockFiles.length);
       stopTimer();
       setState(prev => ({ ...prev, isLoading: false }));
-    } catch (error) {
+ catch (error) {
   stopTimer();
   // Track failed directory load
   await analytics.trackFileOperation('directory_load', '', path, false, {)
-  errorMessage: error instanceof Error ? error.message : 'Failed to load directory',
-});
+  errorMessage: error instanceof Error?: error.message : 'Failed to load directory'
+  });
       setState(prev => ({ )
         ...prev, 
         isLoading: false, 
-        error: error instanceof Error ? error.message : 'Failed to load directory';
+        error: error instanceof Error?: error.message : 'Failed to load directory';
   }));
   }, [analytics]);
   const handleItemSelect = useCallback((itemId: string, multiSelect = false) => {
@@ -178,24 +182,23 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   newSelection = prev.selectedItems.includes(itemId)
   ? prev.selectedItems.filter(id => id !== itemId)
   : [...prev.selectedItems, itemId];
-} else {
+ else {
   newSelection = [itemId];
   // Track file selection
   analytics.trackFileOperation('select', itemId, itemId, true, {)
   multiSelect,
-  selectionCount: newSelection.length,
-});
+  selectionCount: newSelection.length
+  });
       onSelectionChange?.(newSelection);
-      return { ...prev, selectedItems: newSelection };
-    });
+      return { ...prev, selectedItems: newSelection }});
   }, [allowMultiSelect, onSelectionChange, analytics]);
   const handleFolderExpand = useCallback((folderId: string) => {
   // Track folder expansion
   analytics.trackFileOperation('expand_folder', '', folderId, true);
   setState(prev => ({)
   ...prev,
-  expandedFolders: new Set([...prev.expandedFolders, folderId]),
-}));
+  expandedFolders: new Set([...prev.expandedFolders, folderId])
+  }));
   }, [analytics]);
   const handleFolderCollapse = useCallback((folderId: string) => {
     // Track folder collapse
@@ -203,43 +206,43 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
     setState(prev => {)
   const newExpanded = new Set(prev.expandedFolders);
       newExpanded.delete(folderId);
-      return { ...prev, expandedFolders: newExpanded };
-    });
+      return { ...prev, expandedFolders: newExpanded }});
   }, [analytics]);
   const handleContextMenu = useCallback((item: FileItem, x: number, y: number) => {
   // Track context menu usage
   analytics.trackFileOperation('context_menu', item.name, item.path, true);
-  const menuItems = [;
+  const menuItems = [
   {
   id: 'open',
   label: item.type === 'folder' ? 'Open Folder' : 'Open File',
   icon: '📂',
-  onClick: () => {,
+  onClick: () => {
+    
   if (isFileNode(item)) {
   analytics.trackFileOperation('open', item.name, item.path, true);
   onFileDoubleClick?.(item);
-}
+
       { id: 'sep1', label: '', separator: true },
       {
   id: 'rename',
   label: 'Rename',
   icon: '✏️',
   onClick: () => handleRename(item),
-}
+
       {
   id: 'duplicate',
   label: 'Duplicate',
   icon: '📋',
   disabled: item.type === 'folder',
   onClick: () => handleDuplicate(item),
-}
+
       { id: 'sep2', label: '', separator: true },
       {
   id: 'delete',
   label: 'Delete',
   icon: '🗑️',
   onClick: () => handleDelete(item),
-}
+
       { id: 'sep3', label: '', separator: true },
       {
         id: 'properties',
@@ -250,7 +253,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   }, [onFileDoubleClick, analytics, handleDelete, handleDuplicate, handleRename]);
   const handleDrop = useCallback(async (dragData: DragDropData) => {
     // Create operation record for tracking
-    const operation: FileOperation = {,
+    const operation: FileOperation[] = {
+    
   id: `op-${Date.now()}`}
 },
   type: dragData.operation === 'copy' ? 'copy' : 'move',
@@ -267,7 +271,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
           const targetItemPath = `${dragData.targetPath}/${item.name}`;}
           if (dragData.operation === 'copy') {
             return await fileService.copyFile(item.path, targetItemPath);
-          } else {
+ else {
             return await fileService.moveFile(item.path, targetItemPath);
   }
       );
@@ -283,12 +287,12 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
         analytics.trackFileOperation({)
   operation: dragData.operation,
   itemCount: dragData.sourceItems.length,
-  success: true,
+  success: true;
 });
         // Refresh the directory view
         const updatedData = await fileService.listDirectory(state.currentPath);
         setTreeData(updatedData);
-      } else {
+ else {
         // Handle partial failures
         const failedResults = results.filter(result => !result.success);
         const errorMessage = failedResults.map(result => result.error || result.message).join(', ');
@@ -300,12 +304,12 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
         analytics.trackFileOperation({)
   operation: dragData.operation,
   itemCount: dragData.sourceItems.length,
-  success: false,
-  error: errorMessage,
+  success: false;
+  error: errorMessage;
 });
-    } catch (error) {
+ catch (error) {
       // Handle operation failure
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      const errorMessage = error instanceof Error?: error.message : 'Unknown error occurred';
       setOperations(prev => prev.map(op => )
         op.id === operation.id 
           ? { ...op, status: 'error' as const, error: errorMessage }
@@ -314,8 +318,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
       analytics.trackFileOperation({)
   operation: dragData.operation,
   itemCount: dragData.sourceItems.length,
-  success: false,
-  error: errorMessage,
+  success: false;
+  error: errorMessage;
 });
       console.error('Drag and drop operation failed:', error);
   }, [analytics, state.currentPath]);
@@ -331,13 +335,13 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   setTreeData(updatedData);
   analytics.trackFileOperation({)
   operation: 'rename',
-  itemCount: 1,
-  success: true,
+  itemCount: 1;
+  success: true;
 });
-        } else {
+ else {
           alert(`Failed to rename file: ${result.error || result.message}`);}
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+ catch (error) {
+        const errorMessage = error instanceof Error?: error.message : 'Unknown error occurred';
         alert(`Failed to rename file: ${errorMessage}`);}
         console.error('Rename operation failed:', error);
   }, [analytics, state.currentPath]);
@@ -355,13 +359,13 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   setTreeData(updatedData);
   analytics.trackFileOperation({)
   operation: 'copy',
-  itemCount: 1,
-  success: true,
+  itemCount: 1;
+  success: true;
 });
-      } else {
+ else {
         alert(`Failed to duplicate file: ${result.error || result.message}`);}
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+ catch (error) {
+      const errorMessage = error instanceof Error?: error.message : 'Unknown error occurred';
       alert(`Failed to duplicate file: ${errorMessage}`);}
       console.error('Duplicate operation failed:', error);
   }, [analytics, state.currentPath]);
@@ -375,13 +379,13 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   setTreeData(updatedData);
   analytics.trackFileOperation({)
   operation: 'delete',
-  itemCount: 1,
-  success: true,
+  itemCount: 1;
+  success: true;
 });
-        } else {
+ else {
           alert(`Failed to delete file: ${result.error || result.message}`);}
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+ catch (error) {
+        const errorMessage = error instanceof Error?: error.message : 'Unknown error occurred';
         alert(`Failed to delete file: ${errorMessage}`);}
         console.error('Delete operation failed:', error);
   }, [analytics, state.currentPath]);
@@ -390,19 +394,19 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
       const properties = await fileService.getProperties(item.path);
       if (properties) {
         // For now, show properties in an alert - later this would be a proper modal
-        const info = [;
+        const info = [
           `Name: ${properties.name}`}
-}
+
           `Type: ${properties.type}`}
-}
+
           `Path: ${properties.path}`}
-}
-          `Size: ${properties.size ? Math.round(properties.size / 1024) + ' KB' : 'N/A'}`}
-}
+
+          `Size: ${properties.size?: Math.round(properties.size / 1024) + ' KB' : 'N/A'}`}
+
           `Created: ${properties.createdAt.toLocaleDateString()}`}
-}
+
           `Modified: ${properties.lastModified.toLocaleDateString()}`}
-}
+
           `Tags: ${properties.tags.join(', ') || 'None'}`}
         ];
         if (properties.metadata) {
@@ -412,9 +416,9 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
           if (properties.metadata.version) info.push(`Version: ${properties.metadata.version}`);}
           if (properties.metadata.description) info.push(`Description: ${properties.metadata.description}`);}
         alert(`Properties for ${item.name}:\n\n${info.join('\n')}`);}
-      } else {
+ else {
         alert('Unable to load file properties');
-    } catch (error) {
+ catch (error) {
   console.error('Failed to get properties:', error);
   alert('Failed to load file properties');
 };
@@ -429,13 +433,13 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   setTreeData(updatedData);
   analytics.trackFileOperation({)
   operation: 'create',
-  itemCount: 1,
-  success: true,
+  itemCount: 1;
+  success: true;
 });
-        } else {
+ else {
           alert(`Failed to create folder: ${result.error || result.message}`);}
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+ catch (error) {
+        const errorMessage = error instanceof Error?: error.message : 'Unknown error occurred';
         alert(`Failed to create folder: ${errorMessage}`);}
         console.error('Create folder operation failed:', error);
   };
@@ -461,17 +465,17 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   setTreeData(updatedData);
   analytics.trackFileOperation({)
   operation: 'upload',
-  itemCount: successCount,
-  success: true,
+  itemCount: successCount;
+  success: true;
 });
             if (failCount === 0) {
               alert(`Successfully uploaded ${successCount} file(s)`);}
-            } else {
+ else {
               alert(`Uploaded ${successCount} file(s), ${failCount} failed`);}
-          } else {
+ else {
             alert('All uploads failed');
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+ catch (error) {
+          const errorMessage = error instanceof Error?: error.message : 'Unknown error occurred';
           alert(`Failed to upload files: ${errorMessage}`);}
           console.error('Upload operation failed:', error);
     };
@@ -499,15 +503,16 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   ...prev,
   filterTags: prev.filterTags.includes(tag) ,
   ? prev.filterTags.filter(t => t !== tag)
-  : [...prev.filterTags, tag],
-}));
+  : [...prev.filterTags, tag]
+  }));
   }, []);
   const filteredAndSortedData = React.useMemo(() => {
   // Deep clone to avoid mutating original data
-  const cloneTree = (nodes: TreeNode): TreeNode => {,
+  const cloneTree = (nodes: TreeNode): TreeNode[] => {
+    
   return nodes.map(node => ({)
   ...node,
-  children: node.children ? cloneTree(node.children) : undefined,
+  children: node.children?: cloneTree(node.children) : undefined;
 }));
     };
     let processedData = cloneTree(treeData);
@@ -516,24 +521,26 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   let searchTerm = state.searchTerm.trim();
   if (!searchOptions.caseSensitive) {
   searchTerm = searchTerm.toLowerCase();
-  const filterTree = (nodes: TreeNode): TreeNode => {,
-  return nodes.reduce((acc: TreeNode, node) => {,
+  const filterTree = (nodes: TreeNode): TreeNode[] => {
+    
+  return nodes.reduce((acc: TreeNode, node) => {
+    
   // Skip folders if not included in search options
   if (node.type === 'folder' && !searchOptions.includeFolders) {
   // Still process children
-  const filteredChildren = node.children ? filterTree(node.children) : [];
+  const filteredChildren = node.children?: filterTree(node.children) : [];
   if (filteredChildren.length > 0) {
   acc.push({)
   ...node,
-  children: filteredChildren,
-  isExpanded: true,
+  children: filteredChildren;
+  isExpanded: true;
 });
             return acc;
           // Filter by file type if it's a file
           if (node.type === 'file' && node.extension) {
   const hasAllowedExtension = searchOptions.fileTypes.includes(node.extension);
   if (!hasAllowedExtension) return acc;
-  const getValue = (text: string) => searchOptions.caseSensitive ? text : text.toLowerCase();
+  const getValue = (text: string) => searchOptions.caseSensitive?: text : text.toLowerCase();
   let matchesName = false;
   let matchesTags = false;
   let matchesPath = false;
@@ -548,7 +555,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   regex.test(node.metadata.description ?? '') ||
   regex.test(node.metadata.author ?? '')
   );
-} catch {
+ catch {
               // Fall back to simple string matching on regex error
               matchesName = getValue(node.name).includes(searchTerm);
               matchesTags = node.tags?.some(tag => getValue(tag).includes(searchTerm)) || false;
@@ -557,7 +564,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
                 getValue(node.metadata.description ?? '').includes(searchTerm) ||
                 getValue(node.metadata.author ?? '').includes(searchTerm)
               );
-          } else {
+ else {
   matchesName = getValue(node.name).includes(searchTerm);
   matchesTags = node.tags?.some(tag => getValue(tag).includes(searchTerm)) || false;
   matchesPath = getValue(node.path).includes(searchTerm);
@@ -568,43 +575,45 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   // Check if this node matches
   const nodeMatches = matchesName || matchesTags || matchesPath || matchesMetadata;
   // Process children recursively
-  const filteredChildren = node.children ? filterTree(node.children) : [];
+  const filteredChildren = node.children?: filterTree(node.children) : [];
   const hasMatchingChildren = filteredChildren.length > 0;
   // Include node if it matches or has matching children
   if (nodeMatches || hasMatchingChildren) {
   acc.push({)
   ...node,
-  children: filteredChildren.length > 0 ? filteredChildren : node.children,
+  children: filteredChildren.length > 0?: filteredChildren : node.children,
   // Auto-expand folders with matches during search
-  isExpanded: hasMatchingChildren || node.isExpanded,
-});
+  isExpanded: hasMatchingChildren || node.isExpanded
+  });
           return acc;
         }, []);
       };
       processedData = filterTree(processedData);
     // Apply tag filters
     if (state.filterTags.length > 0) {
-  const filterByTags = (nodes: TreeNode): TreeNode => {,
-  return nodes.reduce((acc: TreeNode, node) => {,
+  const filterByTags = (nodes: TreeNode): TreeNode[] => {
+    
+  return nodes.reduce((acc: TreeNode, node) => {
+    
   const hasRequiredTags = state.filterTags.every(tag => ;);
   node.tags?.some(nodeTag => nodeTag.toLowerCase() === tag.toLowerCase())
   );
-  const filteredChildren = node.children ? filterByTags(node.children) : [];
+  const filteredChildren = node.children?: filterByTags(node.children) : [];
   const hasMatchingChildren = filteredChildren.length > 0;
   if (hasRequiredTags || hasMatchingChildren) {
   acc.push({)
   ...node,
-  children: filteredChildren.length > 0 ? filteredChildren : node.children,
-});
+  children: filteredChildren.length > 0?: filteredChildren : node.children
+  });
           return acc;
         }, []);
       };
       processedData = filterByTags(processedData);
     // Apply sorting
-    const sortNodes = (nodes: TreeNode): TreeNode => {
+    const sortNodes = (nodes: TreeNode): TreeNode[] => {
   return nodes.map(node => ({)
   ...node,
-  children: node.children ? sortNodes(node.children) : undefined,
+  children: node.children?: sortNodes(node.children) : undefined;
 })).sort((a, b) => {
   // Always sort folders before files
   if (a.type === 'folder' && b.type === 'file') return -1;
@@ -619,37 +628,39 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   comparison = a.lastModified.getTime() - b.lastModified.getTime();
   break;
   case 'size': {
+    
   const sizeA = a.type === 'file' ? a.size ?? 0 : 0;
   const sizeB = b.type === 'file' ? b.size ?? 0 : 0;
   comparison = sizeA - sizeB;
   break;
   case 'type': {
+    
   const extA = a.type === 'file' ? a.extension ?? '' : '';
   const extB = b.type === 'file' ? b.extension ?? '' : '';
   comparison = extA.localeCompare(extB);
   break;
   default:,
   comparison = a.name.localeCompare(b.name);
-  return isAscending ? comparison : -comparison;
+  return isAscending?: comparison : -comparison;
 });
     };
     return sortNodes(processedData);
   }, [treeData, state.searchTerm, state.filterTags, state.sortBy, state.sortOrder, searchOptions]);
   if (!isAuthenticated) {
-  return;
-  <div style={{
+  return (
+    <div style={{
   padding: '20px',
   textAlign: 'center',
   color: '#666',
   height: typeof height === 'number' ? height : '400px',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
-}}>
+  justifyContent: 'center'
+  }>
         Please log in to access your files.
       </div>
-    );
-  return;
+  );
+  return (
     <div 
       className={`file-browser ${className}`}
       style={{
@@ -658,8 +669,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   borderRadius: '4px',
   backgroundColor: '#fff',
   display: 'flex',
-  flexDirection: 'column',
-}}
+  flexDirection: 'column'
+  }
     >
       {/* Header with search and actions */}
       <div style={{
@@ -668,8 +679,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   display: 'flex',
   gap: '12px',
   alignItems: 'center',
-  backgroundColor: '#f8f9fa',
-}}>
+  backgroundColor: '#f8f9fa'
+  }>
         <FileSearchBar
           value={state.searchTerm}
           onChange={handleSearch}
@@ -689,7 +700,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   borderRadius: '4px',
   fontSize: '12px',
   backgroundColor: '#fff',
-}}
+
             title="Sort by"
           >
             <option value="name">Name</option>
@@ -709,7 +720,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   borderRadius: '4px',
   cursor: 'pointer',
   fontSize: '12px',
-}}
+
             title={`Sort ${state.sortOrder === 'asc' ? 'descending' : 'ascending'}`}
           >
             {state.sortOrder === 'asc' ? '↑' : '↓'}
@@ -726,15 +737,15 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   fontSize: '11px',
   display: 'flex',
   alignItems: 'center',
-  gap: '4px',
-}}
+  gap: '4px'
+  }
             >
               {tag}
               <button
                 onClick={() => setState(prev => ({)
   ...prev,
-  filterTags: prev.filterTags.filter(t => t !== tag),
-}))}
+  filterTags: prev.filterTags.filter(t => t !== tag)
+  }))}
                 style={{
   border: 'none',
   backgroundColor: 'transparent',
@@ -742,7 +753,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   cursor: 'pointer',
   fontSize: '10px',
   padding: '0',
-}}
+
               >
                 ✕
               </button>
@@ -759,8 +770,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   backgroundColor: '#fff',
   borderRadius: '4px',
   cursor: 'pointer',
-  fontSize: '12px',
-}}
+  fontSize: '12px'
+  }
               title="Create Folder"
             >
               📁+
@@ -775,8 +786,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   backgroundColor: '#fff',
   borderRadius: '4px',
   cursor: 'pointer',
-  fontSize: '12px',
-}}
+  fontSize: '12px'
+  }
               title="Upload Files"
             >
               ⬆️
@@ -792,8 +803,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  color: '#666',
-}}>
+  color: '#666'
+  }>
             Loading files...
           </div>
         ) : state.error ? ()
@@ -803,8 +814,8 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
   left: '50%',
   transform: 'translate(-50%, -50%)',
   color: '#dc3545',
-  textAlign: 'center',
-}}>
+  textAlign: 'center'
+  }>
             <div>Error loading files:</div>
             <div style={{ fontSize: '14px', marginTop: '4px' }}>{state.error}</div>
           </div>
@@ -829,7 +840,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
           onItemClick={(item) => {
             item.onClick?.();
             setContextMenu(null);
-          }}
+}
         />
       )}
       {/* File Operations Toast */}
@@ -838,7 +849,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
           operations={operations.filter(op => op.status === 'pending')}
           onClose={(operationId) => {
             setOperations(prev => prev.filter(op => op.id !== operationId));
-          }}
+}
         />
       )}
     </div>
@@ -846,3 +857,61 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({)
 };
 
 export default FileBrowser;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}

@@ -18,8 +18,9 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
 // OpenID Connect Types and Interfaces
-}
-}
+
+
+
 export interface OpenIDConnectConfiguration {
   issuer: string;
   authorization_endpoint: string;
@@ -51,12 +52,13 @@ export interface OpenIDConnectConfiguration {
   op_policy_uri?: string;
   op_tos_uri?: string;
   code_challenge_methods_supported: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface IDTokenClaims {
   iss: string;           // Issuer identifier
   sub: string;           // Subject identifier  
@@ -90,12 +92,13 @@ export interface IDTokenClaims {
   phone_number_verified?: boolean;
   address?: AddressClaim;
   updated_at?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AddressClaim {
   formatted?: string;
   street_address?: string;
@@ -103,12 +106,13 @@ export interface AddressClaim {
   region?: string;
   postal_code?: string;
   country?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserInfoClaims {
   sub: string;
   name?: string;
@@ -130,12 +134,13 @@ export interface UserInfoClaims {
   phone_number_verified?: boolean;
   address?: AddressClaim;
   updated_at?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface JWKSKey {
   kty: string;           // Key type
   use: string;           // Public key use
@@ -148,20 +153,22 @@ export interface JWKSKey {
   x5t_S256?: string;     // X.509 thumbprint (SHA-256)
   n: string;             // RSA modulus
   e: string;             // RSA exponent
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface JWKSDocument {
   keys: JWKSKey[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OIDCAuthenticationContext {
   userId: string;
   sessionId: string;
@@ -172,9 +179,10 @@ export interface OIDCAuthenticationContext {
   scopes: string[];
   nonce?: string;
   maxAge?: number;
-}
-}
-}
+
+
+
+
 
 /**
  * OpenID Connect Service
@@ -215,7 +223,7 @@ export class OpenIDConnectService {
     this.issuer = config.issuer;
     this.keyId = 'oidc-signing-key-1';
     this.loadKeys();
-  }
+
 
   /**
    * Generate OpenID Connect Discovery Document
@@ -318,7 +326,7 @@ export class OpenIDConnectService {
       op_tos_uri: `${this.baseUrl}/terms`,
       code_challenge_methods_supported: ['S256', 'plain']
     };
-  }
+
 
   /**
    * Generate ID Token for OpenID Connect
@@ -334,7 +342,7 @@ export class OpenIDConnectService {
       const user = await this.getUserById(authContext.userId);
       if (!user) {
         throw new Error('User not found for ID token generation');
-      }
+
 
       // Build ID token claims
       const now = Math.floor(Date.now() / 1000);
@@ -352,22 +360,22 @@ export class OpenIDConnectService {
       // Add nonce if provided (prevents replay attacks)
       if (authContext.nonce) {
         claims.nonce = authContext.nonce;
-      }
+
 
       // Add access token hash if access token provided
       if (accessToken) {
         claims.at_hash = this.generateTokenHash(accessToken);
-      }
+
 
       // Add ACR (Authentication Context Class Reference)
       if (authContext.acr) {
         claims.acr = authContext.acr;
-      }
+
 
       // Add AMR (Authentication Methods References)
       if (authContext.amr && authContext.amr.length > 0) {
         claims.amr = authContext.amr;
-      }
+
 
       // Add standard claims based on requested scopes
       await this.addStandardClaims(claims, user, authContext.scopes);
@@ -387,36 +395,35 @@ export class OpenIDConnectService {
           scopes: authContext.scopes,
           hasNonce: !!authContext.nonce,
           tokenLength: idToken.length
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['id_token_generation'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return idToken;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'OIDC_ID_TOKEN_GENERATION_FAILED',
         details: {
           userId: authContext.userId,
           clientId: authContext.clientId,
           error: error.message
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['error_handling'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       throw new Error(`ID token generation failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Validate ID Token
@@ -435,13 +442,13 @@ export class OpenIDConnectService {
       // Verify nonce if provided
       if (nonce && decoded.nonce !== nonce) {
         throw new Error('Invalid nonce in ID token');
-      }
+
 
       // Verify auth_time if max_age was specified
       const now = Math.floor(Date.now() / 1000);
       if (decoded.auth_time && (now - decoded.auth_time) > 3600) {
         throw new Error('ID token auth_time too old');
-      }
+
 
       await this.auditService.logEvent({
         eventType: 'OIDC_ID_TOKEN_VALIDATED',
@@ -450,36 +457,35 @@ export class OpenIDConnectService {
           sub: decoded.sub,
           hasNonce: !!decoded.nonce,
           authTime: decoded.auth_time
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['id_token_validation'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return decoded;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'OIDC_ID_TOKEN_VALIDATION_FAILED',
         details: {
           clientId,
           error: error.message,
           hasNonce: !!nonce
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['security'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       throw new Error(`ID token validation failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Get UserInfo Claims
@@ -495,7 +501,7 @@ export class OpenIDConnectService {
       const user = await this.getUserById(tokenPayload.sub);
       if (!user) {
         throw new Error('User not found');
-      }
+
 
       // Build UserInfo claims based on scopes
       const scopes = requestedScopes || tokenPayload.scopes || [];
@@ -513,35 +519,34 @@ export class OpenIDConnectService {
           clientId: tokenPayload.aud,
           scopes,
           claimsReturned: Object.keys(userInfo).length
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0', 'GDPR'],
           requirements: ['userinfo_endpoint', 'data_access'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return userInfo;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'OIDC_USERINFO_ACCESS_FAILED',
         details: {
           error: error.message,
           tokenProvided: !!accessToken
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['security'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       throw new Error(`UserInfo access failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Generate JWKS Document
@@ -552,7 +557,7 @@ export class OpenIDConnectService {
     try {
       if (!this.publicKey) {
         throw new Error('Public key not available for JWKS generation');
-      }
+
 
       // Extract RSA components from public key
       const publicKeyObject = crypto.createPublicKey(this.publicKey);
@@ -579,35 +584,34 @@ export class OpenIDConnectService {
           keyId: this.keyId,
           algorithm: 'RS256',
           keyCount: jwks.keys.length
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['jwks_endpoint'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return jwks;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'OIDC_JWKS_GENERATION_FAILED',
         details: {
           error: error.message,
           keyId: this.keyId
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['error_handling'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       throw new Error(`JWKS generation failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Generate Subject Identifier
@@ -619,11 +623,11 @@ export class OpenIDConnectService {
       const hash = crypto.createHash('sha256');
       hash.update(`${userId}:${clientId}:${this.issuer}`);
       return hash.digest('hex');
-    }
+
     
     // Return public subject identifier (same across all clients)
     return userId;
-  }
+
 
   /**
    * Generate Token Hash
@@ -636,7 +640,7 @@ export class OpenIDConnectService {
     // Use left-most half of hash
     const leftHalf = digest.slice(0, digest.length / 2);
     return leftHalf.toString('base64url');
-  }
+
 
   /**
    * Add Standard Claims to Token
@@ -664,15 +668,15 @@ export class OpenIDConnectService {
       if (user.zoneinfo) claims.zoneinfo = user.zoneinfo;
       if (user.locale) claims.locale = user.locale;
       if (user.updated_at) claims.updated_at = Math.floor(user.updated_at.getTime() / 1000);
-    }
+
 
     // Email scope claims
     if (scopes.includes('email')) {
       if (user.email) {
         claims.email = user.email;
         claims.email_verified = user.email_verified || false;
-      }
-    }
+
+
 
     // Address scope claims
     if (scopes.includes('address') && user.address) {
@@ -684,16 +688,16 @@ export class OpenIDConnectService {
         postal_code: user.address.postal_code,
         country: user.address.country
       };
-    }
+
 
     // Phone scope claims
     if (scopes.includes('phone')) {
       if (user.phone_number) {
         claims.phone_number = user.phone_number;
         claims.phone_number_verified = user.phone_number_verified || false;
-      }
-    }
-  }
+
+
+
 
   /**
    * Get User by ID
@@ -729,11 +733,11 @@ export class OpenIDConnectService {
       `, [userId]);
 
       return result.rows[0] || null;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get user by ID:', error);
       return null;
-    }
-  }
+
+
 
   /**
    * Load Signing Keys
@@ -745,19 +749,19 @@ export class OpenIDConnectService {
       if (process.env.JWT_PRIVATE_KEY && process.env.JWT_PUBLIC_KEY) {
         this.privateKey = Buffer.from(process.env.JWT_PRIVATE_KEY, 'base64').toString('utf8');
         this.publicKey = Buffer.from(process.env.JWT_PUBLIC_KEY, 'base64').toString('utf8');
-      } else {
+ else {
         const keyPath = process.env.JWT_KEYS_PATH || './keys';
         const fs = require('fs');
         const path = require('path');
         
         this.privateKey = fs.readFileSync(path.join(keyPath, 'private.pem'), 'utf8');
         this.publicKey = fs.readFileSync(path.join(keyPath, 'public.pem'), 'utf8');
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to load OIDC signing keys:', error);
       throw new Error('OIDC signing keys not configured properly');
-    }
-  }
+
+
 
   /**
    * Health Check
@@ -769,7 +773,7 @@ export class OpenIDConnectService {
       // Verify keys are loaded
       if (!this.privateKey || !this.publicKey) {
         return false;
-      }
+
 
       // Test JWT signing/verification
       const testPayload = { sub: 'test', aud: 'test', exp: Math.floor(Date.now() / 1000) + 60 };
@@ -777,11 +781,11 @@ export class OpenIDConnectService {
       jwt.verify(testToken, this.publicKey, { algorithms: ['RS256'] });
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('OIDC health check failed:', error);
       return false;
-    }
-  }
-}
+
+
+
 
 export default OpenIDConnectService;

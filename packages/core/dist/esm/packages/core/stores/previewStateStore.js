@@ -1,5 +1,11 @@
 executionPath ?  : Array;
-weightChoices ?  : Array;
+weightChoices ?  : Array < {
+    nodeId: string,
+    selectedOption: unknown,
+    availableOptions: unknown,
+    weights: number,
+    selectionProbability: number
+} > ;
 locked ?  : boolean;
 lockedAt ?  : number;
 lockedNote ?  : string;
@@ -250,13 +256,13 @@ setAggregateError: (aggregateError) => set({ aggregateError }),
                 addPerformanceSnapshot;
             () => {
                 const state = get();
-                const newHistory = [];
-                state.performanceHistory,
+                const newHistory = [
+                    ...state.performanceHistory,
                     {
                         ...state.performanceMetrics,
                         timestamp: Date.now(),
-                    };
-                slice(-state.maxHistoryLength);
+                    }
+                ].slice(-state.maxHistoryLength);
                 set({ performanceHistory: newHistory });
             },
                 getPerformanceInsights;

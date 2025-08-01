@@ -33,7 +33,7 @@ export type Permission =
  * Route access requirements
  */
 
-}
+
 export interface RouteAccessRequirements {
   /** Required authentication status */
   requireAuth?: boolean;
@@ -47,10 +47,12 @@ export interface RouteAccessRequirements {
   unauthorizedRedirect?: string;
   /** Redirect destination for unauthenticated access */
   unauthenticatedRedirect?: string;
-/**
- * RouteGuard component props
- */
-}
+  /**
+  * RouteGuard component props
+  */
+
+
+
 interface RouteGuardProps {
   children: React.ReactNode;
   access?: RouteAccessRequirements;
@@ -58,13 +60,13 @@ interface RouteGuardProps {
   loadingComponent?: React.ReactNode;
   /** Fallback component for unauthorized access */
   unauthorizedComponent?: React.ReactNode;
-
-// =============================================================================
-// Default Access Requirements by Route
-// =============================================================================
-const DEFAULT_ROUTE_ACCESS: Record<string, RouteAccessRequirements> = {
+  // =============================================================================
+  // Default Access Requirements by Route
+  // =============================================================================
+  const DEFAULT_ROUTE_ACCESS: Record<string, RouteAccessRequirements> = {,
   // Public routes - no authentication required
-}
+
+
   '/login': { requireAuth: false },
   '/register': { requireAuth: false },
   '/reset-password': { requireAuth: false },
@@ -75,26 +77,26 @@ const DEFAULT_ROUTE_ACCESS: Record<string, RouteAccessRequirements> = {
   '/': {
   requireAuth: true,
   requiredPermissions: ['graphs:read'],
-}
+
   '/randomizer': {
   requireAuth: true,
   requiredPermissions: ['randomizer:use'],
-}
+
   '/epic-status': {
   requireAuth: true,
   requiredPermissions: ['epic:view'],
-}
+
   // Admin routes - admin role required
   '/admin': {
   requireAuth: true,
   requiredRoles: ['admin'],
   unauthorizedRedirect: '/unauthorized',
-}
+
   '/admin/users': {
   requireAuth: true,
   requiredRoles: ['admin'],
   requiredPermissions: ['admin:users'],
-}
+
   '/admin/settings': {
   requireAuth: true,
   requiredRoles: ['admin'],
@@ -109,14 +111,14 @@ const DEFAULT_ROUTE_ACCESS: Record<string, RouteAccessRequirements> = {
  */
 const ROLE_PERMISSIONS: Record<UserRole, Permission> = {
   viewer: ['graphs:read', 'epic:view'],
-  user: [,
+  user: [
   'graphs:read',
   'graphs:write',
   'graphs:export',
   'graphs:share',
   'randomizer:use',
   'epic:view'],
-  moderator: [,
+  moderator: [
   'graphs:read',
   'graphs:write',
   'graphs:export',
@@ -125,7 +127,7 @@ const ROLE_PERMISSIONS: Record<UserRole, Permission> = {
   'randomizer:use',
   'epic:view',
   'epic:manage'],
-  admin: [,
+  admin: [
   'graphs:read',
   'graphs:write',
   'graphs:export',
@@ -137,7 +139,7 @@ const ROLE_PERMISSIONS: Record<UserRole, Permission> = {
   'admin:users',
   'admin:settings',
   'admin:analytics'];
-  };
+};
 /**
  * Check if user has required role
  */
@@ -166,7 +168,7 @@ function hasRequiredRole(userRoles: UserRole, requiredRoles: UserRole): boolean 
 /**
  * Enhanced route guard with role-based access control
  */
-}
+
 export const RouteGuard: React.FC<RouteGuardProps> = ({)
   children,
   access,
@@ -180,7 +182,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({)
     user, 
     checkAuthStatus, 
     setReturnUrl 
-  } = useAuthStore();
+ = useAuthStore();
   const [accessCheckStatus, setAccessCheckStatus] = useState<'checking' | 'granted' | 'denied' | 'unauthenticated'>('checking');
   const [ setCustomCheckResult] = useState<boolean | null>(null);
   // Determine access requirements for current route
@@ -235,7 +237,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({)
   return;
   // All checks passed
   setAccessCheckStatus('granted');
-} catch (error) {
+ catch (error) {
   console.error('Access check error:', error);
   setAccessCheckStatus('denied');
   performAccessCheck();
@@ -250,19 +252,19 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({)
   height: '100vh',
   flexDirection: 'column',
   backgroundColor: '#f8f9fa',
-}}>
+}>
         <div style={{
   fontSize: '18px',
   fontWeight: '500',
   marginBottom: '12px',
   color: '#333',
-}}>
+}>
           Loading...
         </div>
         <div style={{
   fontSize: '14px',
   color: '#666',
-}}>
+}>
           Checking access permissions...
         </div>
       </div>
@@ -285,7 +287,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({)
   flexDirection: 'column',
   backgroundColor: '#f8f9fa',
   padding: '20px',
-}}>
+}>
         <div style={{
   maxWidth: '500px',
   textAlign: 'center',
@@ -293,19 +295,19 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({)
   padding: '40px',
   borderRadius: '8px',
   boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-}}>
+}>
           <h1 style={{
   fontSize: '24px',
   color: '#dc3545',
   marginBottom: '16px',
-}}>
+}>
             Access Denied
           </h1>
           <p style={{
   fontSize: '16px',
   color: '#666',
   marginBottom: '20px',
-}}>
+}>
             You don&apos;t have permission to access this page.
           </p>
           {routeAccess.requiredRoles && ()
@@ -328,7 +330,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({)
   borderRadius: '4px',
   cursor: 'pointer',
   fontSize: '14px',
-}}
+}
           >
             Go Back
           </button>
@@ -354,7 +356,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({)
 export function usePermissions(): {
   hasPermission: (permission: Permission) => boolean;,
   hasRole: (role: UserRole) => boolean;,
-  userRoles: UserRole;
+  userRoles: UserRole;,
   userPermissions: Permission;
   const { user } = useAuthStore();
   const userRoles: UserRole = user?.roles?.length > 0 ? user.roles as UserRole : ['user'];
@@ -376,7 +378,7 @@ export function usePermissions(): {
  */
 export function useRouteAccess(pathname?: string): {
   isAccessible: boolean;,
-  isLoading: boolean;
+  isLoading: boolean;,
   requiresAuth: boolean;
   const location = useLocation();
   const { isAuthenticated, user } = useAuthStore();

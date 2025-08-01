@@ -9,14 +9,14 @@ import {
   VerificationLevel,
   VerificationRequestStatus,
   DocumentType
-} from './verification.types';
+ from './verification.types';
 
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
     id: string;
     roles?: string[];
   };
-}
+
 
 export async function verificationRoutes(
   fastify: FastifyInstance,
@@ -28,7 +28,7 @@ export async function verificationRoutes(
       requested_level: VerificationLevel;
       information: any;
     };
-  }>('/verification/requests', {
+>('/verification/requests', {
     preHandler: [fastify.jwtAuth],
     schema: {
       description: 'Create a new verification request',
@@ -39,7 +39,7 @@ export async function verificationRoutes(
           requested_level: { 
             type: 'string', 
             enum: ['basic', 'intermediate', 'advanced', 'premium'] 
-  }
+
           information: {
             type: 'object',
             properties: {
@@ -57,8 +57,8 @@ export async function verificationRoutes(
                   postal_code: { type: 'string' },
                   address_line_1: { type: 'string' },
                   address_line_2: { type: 'string' }
-                }
-  }
+
+
               professional_info: {
                 type: 'object',
                 properties: {
@@ -69,8 +69,8 @@ export async function verificationRoutes(
                   linkedin_url: { type: 'string', format: 'uri' },
                   website_url: { type: 'string', format: 'uri' },
                   portfolio_url: { type: 'string', format: 'uri' }
-                }
-  }
+
+
               business_info: {
                 type: 'object',
                 properties: {
@@ -87,18 +87,18 @@ export async function verificationRoutes(
                       postal_code: { type: 'string' },
                       address_line_1: { type: 'string' },
                       address_line_2: { type: 'string' }
-                    }
-                  }
-                }
-  }
+
+
+
+
               verification_purpose: { type: 'string', minLength: 10, maxLength: 1000 },
               additional_notes: { type: 'string', maxLength: 2000 }
-  }
+
             required: ['personal_info', 'verification_purpose']
-          }
-  }
+
+
         required: ['requested_level', 'information']
-  }
+
       response: {
         201: {
           type: 'object',
@@ -112,12 +112,12 @@ export async function verificationRoutes(
                 requested_level: { type: 'string' },
                 status: { type: 'string' },
                 created_at: { type: 'string', format: 'date-time' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const { requested_level, information } = request.body;
@@ -141,20 +141,20 @@ export async function verificationRoutes(
         data: verificationRequest,
         message: 'Verification request created successfully'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error creating verification request:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create verification request'
       });
-    }
+
   });
 
   // Update verification request information
   fastify.put<{
     Params: { requestId: string };
     Body: { information: any };
-  }>('/verification/requests/:requestId', {
+>('/verification/requests/:requestId', {
     preHandler: [fastify.jwtAuth],
     schema: {
       description: 'Update verification request information',
@@ -163,10 +163,10 @@ export async function verificationRoutes(
         type: 'object',
         properties: {
           requestId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['requestId']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
@@ -186,19 +186,19 @@ export async function verificationRoutes(
         data: updatedRequest,
         message: 'Verification request updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error updating verification request:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to update verification request'
       });
-    }
+
   });
 
   // Submit verification request for review
   fastify.post<{
     Params: { requestId: string };
-  }>('/verification/requests/:requestId/submit', {
+>('/verification/requests/:requestId/submit', {
     preHandler: [fastify.jwtAuth],
     schema: {
       description: 'Submit verification request for review',
@@ -207,10 +207,10 @@ export async function verificationRoutes(
         type: 'object',
         properties: {
           requestId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['requestId']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
@@ -228,13 +228,13 @@ export async function verificationRoutes(
         data: submittedRequest,
         message: 'Verification request submitted successfully'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error submitting verification request:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to submit verification request'
       });
-    }
+
   });
 
   // Create document upload
@@ -246,7 +246,7 @@ export async function verificationRoutes(
       file_size: number;
       file_type: string;
     };
-  }>('/verification/documents/upload', {
+>('/verification/documents/upload', {
     preHandler: [fastify.jwtAuth],
     schema: {
       description: 'Create presigned URL for document upload',
@@ -258,13 +258,13 @@ export async function verificationRoutes(
           document_type: { 
             type: 'string', 
             enum: ['identity', 'business_license', 'tax_document', 'bank_statement', 'portfolio', 'credential', 'other']
-  }
+
           file_name: { type: 'string', minLength: 1, maxLength: 255 },
           file_size: { type: 'integer', minimum: 1, maximum: 52428800 }, // 50MB max
           file_type: { type: 'string', pattern: '^(image|application|text)/[\\w\\-\\.]+$' }
-  }
+
         required: ['verification_request_id', 'document_type', 'file_name', 'file_size', 'file_type']
-  }
+
       response: {
         201: {
           type: 'object',
@@ -280,15 +280,15 @@ export async function verificationRoutes(
                     document_type: { type: 'string' },
                     file_name: { type: 'string' },
                     status: { type: 'string' }
-                  }
-  }
+
+
                 upload_url: { type: 'string', format: 'uri' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const documentData = request.body;
@@ -310,19 +310,19 @@ export async function verificationRoutes(
         data: result,
         message: 'Document upload URL created successfully'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error creating document upload:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create document upload'
       });
-    }
+
   });
 
   // Confirm document upload completion
   fastify.post<{
     Params: { documentId: string };
-  }>('/verification/documents/:documentId/confirm', {
+>('/verification/documents/:documentId/confirm', {
     preHandler: [fastify.jwtAuth],
     schema: {
       description: 'Confirm document upload completion',
@@ -331,10 +331,10 @@ export async function verificationRoutes(
         type: 'object',
         properties: {
           documentId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['documentId']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const { documentId } = request.params;
@@ -352,19 +352,19 @@ export async function verificationRoutes(
         data: document,
         message: 'Document upload confirmed successfully'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error confirming document upload:', error);
       reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to confirm document upload'
       });
-    }
+
   });
 
   // Get user's verification requests
   fastify.get<{
     Querystring: { limit?: number; offset?: number };
-  }>('/verification/requests', {
+>('/verification/requests', {
     preHandler: [fastify.jwtAuth],
     schema: {
       description: 'Get user verification requests',
@@ -374,9 +374,9 @@ export async function verificationRoutes(
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 10 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const { limit, offset } = request.query;
@@ -392,13 +392,13 @@ export async function verificationRoutes(
         data: result,
         message: 'Verification requests retrieved successfully'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error retrieving verification requests:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve verification requests'
       });
-    }
+
   });
 
   // Get user's verification status
@@ -407,7 +407,7 @@ export async function verificationRoutes(
     schema: {
       description: 'Get user verification status',
       tags: ['verification']
-    }
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const userId = request.user.id;
@@ -419,13 +419,13 @@ export async function verificationRoutes(
         data: status,
         message: 'Verification status retrieved successfully'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error retrieving verification status:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve verification status'
       });
-    }
+
   });
 
   // Admin/reviewer routes
@@ -437,7 +437,7 @@ export async function verificationRoutes(
       offset?: number; 
       status?: VerificationRequestStatus;
     };
-  }>('/verification/admin/queue', {
+>('/verification/admin/queue', {
     preHandler: [fastify.jwtAuth, async (request: AuthenticatedRequest, reply: FastifyReply) => {
       const user = request.user;
       if (!user.roles?.some(role => ['admin', 'reviewer', 'security'].includes(role))) {
@@ -446,8 +446,8 @@ export async function verificationRoutes(
           error: 'Admin, reviewer, or security role required' 
         });
         return;
-      }
-    }],
+
+],
     schema: {
       description: 'Get verification review queue',
       tags: ['verification', 'admin'],
@@ -460,10 +460,10 @@ export async function verificationRoutes(
             type: 'string', 
             enum: ['submitted', 'under_review', 'requires_additional_info'],
             default: 'submitted'
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const { limit, offset, status } = request.query;
@@ -480,13 +480,13 @@ export async function verificationRoutes(
         data: queue,
         message: 'Verification queue retrieved successfully'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error retrieving verification queue:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve verification queue'
       });
-    }
+
   });
 
   // Health check endpoint
@@ -494,7 +494,7 @@ export async function verificationRoutes(
     schema: {
       description: 'Verification system health check',
       tags: ['verification', 'health']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Basic health checks
@@ -514,14 +514,14 @@ export async function verificationRoutes(
         timestamp: new Date().toISOString(),
         version: '1.0.0'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Verification health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -529,7 +529,7 @@ export async function verificationRoutes(
     schema: {
       description: 'Verification system documentation',
       tags: ['verification', 'docs']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     reply.send({
       title: 'Marketplace Verification System API',
@@ -549,25 +549,25 @@ export async function verificationRoutes(
           description: 'Email and basic information verification',
           requirements: ['Personal information', 'Email verification'],
           trust_score_threshold: 25
-  }
+
         {
           level: 'intermediate', 
           description: 'Professional credentials and portfolio verification',
           requirements: ['Basic verification', 'Professional information', 'Portfolio/credentials'],
           trust_score_threshold: 50
-  }
+
         {
           level: 'advanced',
           description: 'Business entity verification with documentation',
           requirements: ['Intermediate verification', 'Business documentation', 'Tax/registration documents'],
           trust_score_threshold: 75
-  }
+
         {
           level: 'premium',
           description: 'Premium verification with enhanced trust status',
           requirements: ['Advanced verification', 'Additional security checks', 'Manual review'],
           trust_score_threshold: 90
-        }
+
       ],
       endpoints: {
         user: [
@@ -588,7 +588,7 @@ export async function verificationRoutes(
           'GET /verification/health - Health check',
           'GET /verification/docs - This documentation'
         ]
-  }
+
       document_types: [
         'identity - Government-issued ID documents',
         'business_license - Business registration/license',
@@ -600,4 +600,3 @@ export async function verificationRoutes(
       ]
     });
   });
-}

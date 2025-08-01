@@ -55,7 +55,7 @@ export class IncludeNode extends RuntimeNode {
         this.lookup = lookup;
     }
     run(ctx) {
-        // Security: Validate lookup object and key
+        // Security: Validate lookup object and key,
         if (!this.lookup || typeof this.lookup !== 'object') {
             return ctx.variables['defaultText'] || '';
         }
@@ -83,7 +83,7 @@ export class SetVariableNode extends RuntimeNode {
         this.value = value;
     }
     run(ctx) {
-        // Security: Validate variable name using the new alphanumeric pattern with 64 char limit
+        // Security: Validate variable name using the new alphanumeric pattern with 64 char limit,
         if (!SecurityValidation.validateVariableName(this.key)) {
             return; // Silently ignore invalid variable names
         }
@@ -118,7 +118,7 @@ export class GetVariableNode extends RuntimeNode {
         this.key = key;
     }
     run(ctx) {
-        // Security: Validate variable name using the same validation as SetVariable
+        // Security: Validate variable name using the same validation as SetVariable,
         if (!SecurityValidation.validateVariableName(this.key)) {
             return undefined; // Return undefined for invalid variable names
         }

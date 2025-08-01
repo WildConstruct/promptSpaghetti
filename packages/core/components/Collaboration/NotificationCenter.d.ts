@@ -1,6 +1,7 @@
 import React from 'react';
 
 }
+}
 interface NotificationCenterProps {
     userId: string;
     workspaceId?: string;
@@ -10,4 +11,5 @@ interface NotificationCenterProps {
 declare const NotificationCenter: React.FC<NotificationCenterProps>;
 export default NotificationCenter;
 //# sourceMappingURL=NotificationCenter.d.ts.map
+}
 }

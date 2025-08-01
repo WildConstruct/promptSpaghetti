@@ -13,10 +13,10 @@ import {
   ComplianceFramework, 
   ComplianceReportType,
   ReportingPeriod 
-} from './StandardComplianceReportingService';
+ from './StandardComplianceReportingService';
 
-}
-}
+
+
 export interface ValidationResult {
   isValid: boolean;
   overallScore: number;
@@ -28,12 +28,13 @@ export interface ValidationResult {
   validatedAt: Date;
   validatedBy: string;
   nextValidationDue?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationSummary {
   totalChecks: number;
   passedChecks: number;
@@ -44,12 +45,13 @@ export interface ValidationSummary {
   completenessScore: number;
   accuracyScore: number;
   complianceScore: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationCheck {
   id: string;
   category: ValidationCategory;
@@ -68,12 +70,13 @@ export interface ValidationCheck {
   regulation?: string;
   executedAt: Date;
   executionTimeMs: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationThreshold {
   minValue?: number;
   maxValue?: number;
@@ -81,12 +84,13 @@ export interface ValidationThreshold {
   requiredPattern?: string;
   allowedValues?: unknown[];
   customRule?: ValidationRule;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationRule {
   ruleId: string;
   ruleName: string;
@@ -94,12 +98,13 @@ export interface ValidationRule {
   expression: string;
   parameters: Record<string, any>;
   errorMessage: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationRecommendation {
   id: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -111,24 +116,26 @@ export interface ValidationRecommendation {
   timeline: string;
   actionItems: ActionItem[];
   relatedChecks: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActionItem {
   action: string;
   owner: string;
   dueDate: Date;
   status: 'pending' | 'in_progress' | 'completed';
   dependencies?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationEvidence {
   evidenceId: string;
   evidenceType: 'calculation' | 'query_result' | 'system_log' | 'document' | 'screenshot';
@@ -137,9 +144,10 @@ export interface ValidationEvidence {
   timestamp: Date;
   hash: string;
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export enum ValidationCategory {
   DATA_COMPLETENESS = 'data_completeness',
@@ -152,27 +160,28 @@ export enum ValidationCategory {
   FORMAT_STANDARDS = 'format_standards',
   SECURITY_REQUIREMENTS = 'security_requirements',
   AUDIT_TRAIL = 'audit_trail'
-}
 
-}
-}
+
+
+
 export interface ValidationConfiguration {
   enabledCategories: ValidationCategory[];
   severityThresholds: {
     critical: number;
     high: number;
     medium: number;
-}
-}
+
+
+
   };
   frameworkSpecificRules: Map<ComplianceFramework, ValidationRule[]>;
   customValidators: CustomValidator[];
   evidenceRetentionDays: number;
   autoRemediationEnabled: boolean;
-}
 
-}
-}
+
+
+
 export interface CustomValidator {
   validatorId: string;
   name: string;
@@ -180,9 +189,10 @@ export interface CustomValidator {
   category: ValidationCategory;
   applicableFrameworks: ComplianceFramework[];
   validatorFunction: (report: StandardComplianceReport) => Promise<ValidationCheck>;
-}
-}
-}
+
+
+
+
 
 export class ComplianceReportValidationService {
   private validationRules: Map<string, ValidationRule> = new Map();
@@ -192,7 +202,7 @@ export class ComplianceReportValidationService {
   constructor(private config: ValidationConfiguration) {
     this.initializeValidationRules();
     this.registerCustomValidators();
-  }
+
 
   /**
    * Perform comprehensive validation of compliance report
@@ -220,7 +230,7 @@ export class ComplianceReportValidationService {
         // Collect evidence for the check
         const checkEvidence = await this.collectEvidence(report, check);
         evidence.push(...checkEvidence);
-      }
+
 
       // Calculate overall validation result
       const summary = this.calculateValidationSummary(checks);
@@ -248,12 +258,11 @@ export class ComplianceReportValidationService {
 
       console.log(`✅ Validation completed for ${report.id}: ${validationLevel} (${overallScore}%)`);
       return result;
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Validation failed for report ${report.id}:`, error);
       throw new Error(`Validation process failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Validate specific data elements within report
@@ -291,16 +300,16 @@ export class ComplianceReportValidationService {
       check.score = 0;
       check.message = `Expected ${expectedValue}, but found ${elementValue}`;
       check.suggestions.push(`Update data element to expected value: ${expectedValue}`);
-    } else if (elementValue === null || elementValue === undefined) {
+ else if (elementValue === null || elementValue === undefined) {
       check.status = 'warning';
       check.score = 50;
       check.message = 'Data element is missing or null';
       check.suggestions.push('Provide value for this data element');
-    }
+
 
     check.executionTimeMs = Date.now() - startTime;
     return check;
-  }
+
 
   /**
    * Execute cross-reference validation between related data points
@@ -337,7 +346,7 @@ export class ComplianceReportValidationService {
 
     // Additional cross-reference validations would be added here
     return checks;
-  }
+
 
   /**
    * Validate regulatory compliance requirements
@@ -355,14 +364,14 @@ export class ComplianceReportValidationService {
     for (const rule of frameworkRules) {
       const check = await this.executeRegulatoryRule(report, rule);
       checks.push(check);
-    }
+
 
     // Common regulatory requirements
     const commonChecks = await this.validateCommonRequirements(report);
     checks.push(...commonChecks);
 
     return checks;
-  }
+
 
   /**
    * Validate calculations and mathematical accuracy
@@ -392,16 +401,16 @@ export class ComplianceReportValidationService {
         executedAt: new Date(),
         executionTimeMs: 0
       });
-    }
+
 
     // Validate risk score calculations
     if (report.riskAssessment?.riskScore) {
       const riskCalcCheck = await this.validateRiskCalculation(report);
       checks.push(riskCalcCheck);
-    }
+
 
     return checks;
-  }
+
 
   /**
    * Generate validation recommendations based on findings
@@ -419,7 +428,7 @@ export class ComplianceReportValidationService {
     checks.filter(c => c.status !== 'passed').forEach(check => {
       if (!issuesByCategory.has(check.category)) {
         issuesByCategory.set(check.category, []);
-      }
+
       issuesByCategory.get(check.category)!.push(check);
     });
 
@@ -427,7 +436,7 @@ export class ComplianceReportValidationService {
     for (const [category, categoryChecks] of issuesByCategory) {
       const recommendation = await this.generateCategoryRecommendation(category, categoryChecks);
       recommendations.push(recommendation);
-    }
+
 
     // Add framework-specific recommendations
     const frameworkRecs = await this.generateFrameworkRecommendations(report);
@@ -437,7 +446,7 @@ export class ComplianceReportValidationService {
       const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
       return priorityOrder[a.priority] - priorityOrder[b.priority];
     });
-  }
+
 
   // Private helper methods
 
@@ -451,7 +460,7 @@ export class ComplianceReportValidationService {
         expression: 'value >= 0 && value <= 100',
         parameters: { field: 'overallComplianceScore' },
         errorMessage: 'Compliance score must be between 0 and 100'
-  }
+
       {
         ruleId: 'VR002',
         ruleName: 'Required Fields Present',
@@ -459,7 +468,7 @@ export class ComplianceReportValidationService {
         expression: 'value !== null && value !== undefined',
         parameters: { requiredFields: ['id', 'framework', 'generatedAt'] },
         errorMessage: 'Required fields must be present'
-  }
+
       {
         ruleId: 'VR003',
         ruleName: 'Date Format Validation',
@@ -467,17 +476,17 @@ export class ComplianceReportValidationService {
         expression: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}',
         parameters: { dateFields: ['generatedAt', 'reportingPeriod.startDate'] },
         errorMessage: 'Dates must be in ISO format'
-      }
+
     ];
 
     rules.forEach(rule => this.validationRules.set(rule.ruleId, rule));
-  }
+
 
   private registerCustomValidators(): void {
     this.config.customValidators.forEach(validator => {
       this.customValidators.set(validator.validatorId, validator);
     });
-  }
+
 
   private async getValidationChecks(
     report: StandardComplianceReport,
@@ -494,8 +503,8 @@ export class ComplianceReportValidationService {
       return allRules;
     default:
       return allRules.filter(rule => !rule.ruleId.startsWith('VR99')); // Exclude advanced rules
-    }
-  }
+
+
 
   private async executeValidationCheck(
     report: StandardComplianceReport,
@@ -527,17 +536,16 @@ export class ComplianceReportValidationService {
         check.status = 'failed';
         check.score = 0;
         check.message = rule.errorMessage;
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       check.status = 'failed';
       check.score = 0;
       check.message = `Rule execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
-    }
+
 
     check.executionTimeMs = Date.now() - startTime;
     return check;
-  }
+
 
   private async evaluateRule(
     report: StandardComplianceReport,
@@ -554,8 +562,8 @@ export class ComplianceReportValidationService {
       return this.evaluatePatternRule(report, rule);
     default:
       return true;
-    }
-  }
+
+
 
   private evaluateMathematicalRule(report: StandardComplianceReport, rule: ValidationRule): boolean {
     const field = rule.parameters.field;
@@ -564,10 +572,10 @@ export class ComplianceReportValidationService {
     // Simple range check for compliance score
     if (field === 'overallComplianceScore') {
       return value >= 0 && value <= 100;
-    }
+
     
     return true;
-  }
+
 
   private evaluateLogicalRule(report: StandardComplianceReport, rule: ValidationRule): boolean {
     const requiredFields = rule.parameters.requiredFields as string[];
@@ -576,11 +584,11 @@ export class ComplianceReportValidationService {
       const value = this.getValueByPath(report, field);
       if (value === null || value === undefined) {
         return false;
-      }
-    }
+
+
     
     return true;
-  }
+
 
   private evaluatePatternRule(report: StandardComplianceReport, rule: ValidationRule): boolean {
     const dateFields = rule.parameters.dateFields as string[];
@@ -590,15 +598,15 @@ export class ComplianceReportValidationService {
       const value = this.getValueByPath(report, field);
       if (value && !pattern.test(value.toString())) {
         return false;
-      }
-    }
+
+
     
     return true;
-  }
+
 
   private getValueByPath(obj: unknown, path: string): unknown {
     return path.split('.').reduce((current, key) => current?.[key], obj);
-  }
+
 
   private calculateValidationSummary(checks: ValidationCheck[]): ValidationSummary {
     const totalChecks = checks.length;
@@ -623,7 +631,7 @@ export class ComplianceReportValidationService {
       accuracyScore,
       complianceScore
     };
-  }
+
 
   private calculateCategoryScore(checks: ValidationCheck[], category: ValidationCategory): number {
     const categoryChecks = checks.filter(c => c.category === category);
@@ -631,7 +639,7 @@ export class ComplianceReportValidationService {
     
     const totalScore = categoryChecks.reduce((sum, check) => sum + check.score, 0);
     return Math.round(totalScore / categoryChecks.length);
-  }
+
 
   private calculateOverallScore(summary: ValidationSummary): number {
     if (summary.totalChecks === 0) return 100;
@@ -650,13 +658,13 @@ export class ComplianceReportValidationService {
       summary.accuracyScore * weights.accuracy +
       summary.complianceScore * weights.compliance
     );
-  }
+
 
   private determineValidationLevel(summary: ValidationSummary): 'passed' | 'warning' | 'failed' {
     if (summary.criticalIssues > 0) return 'failed';
     if (summary.failedChecks > 0 || summary.warningChecks > summary.totalChecks * 0.2) return 'warning';
     return 'passed';
-  }
+
 
   private calculateNextValidationDate(report: StandardComplianceReport): Date {
     const nextValidation = new Date();
@@ -674,10 +682,10 @@ export class ComplianceReportValidationService {
       break;
     default:
       nextValidation.setMonth(nextValidation.getMonth() + 6);
-    }
+
     
     return nextValidation;
-  }
+
 
   private async collectEvidence(
     report: StandardComplianceReport,
@@ -699,12 +707,12 @@ export class ComplianceReportValidationService {
         reportId: report.id,
         framework: report.framework,
         validationScore: check.score
-      }
+
     };
 
     evidence.push(checkEvidence);
     return evidence;
-  }
+
 
   private async storeValidationEvidence(
     reportId: string,
@@ -713,37 +721,37 @@ export class ComplianceReportValidationService {
 
     this.evidenceStore.set(reportId, evidence);
     console.log(`📋 Stored ${evidence.length} validation evidence items for report: ${reportId}`);
-  }
+
 
   // Additional helper methods would be implemented...
   private async calculateScoreFromFindings(_____findings: unknown): Promise<number> { return 94.2; }
   private async validateRiskCalculation(_____report: StandardComplianceReport): Promise<ValidationCheck> {
 
     return {} as ValidationCheck; 
-  }
+
   private async executeRegulatoryRule(
     _____report: StandardComplianceReport,
     _____rule: ValidationRule
   ): Promise<ValidationCheck> {
 
     return {} as ValidationCheck; 
-  }
+
   private async validateCommonRequirements(_____report: StandardComplianceReport): Promise<ValidationCheck[]> {
 
     return []; 
-  }
+
   private async generateCategoryRecommendation(
     _____category: ValidationCategory,
     _____checks: ValidationCheck[]
   ): Promise<ValidationRecommendation> {
 
     return {} as ValidationRecommendation; 
-  }
+
   private async generateFrameworkRecommendations(_____report: StandardComplianceReport): Promise<ValidationRecommendation[]> {
 
     return []; 
-  }
-}
+
+
 
 // Configuration factory for different environments
 export class ValidationConfigurationFactory {
@@ -754,13 +762,13 @@ export class ValidationConfigurationFactory {
         critical: 0,
         high: 70,
         medium: 85
-  }
+
       frameworkSpecificRules: new Map(),
       customValidators: [],
       evidenceRetentionDays: 2555, // 7 years
       autoRemediationEnabled: false
     };
-  }
+
 
   static createDevelopmentConfig(): ValidationConfiguration {
     return {
@@ -773,11 +781,10 @@ export class ValidationConfigurationFactory {
         critical: 0,
         high: 60,
         medium: 80
-  }
+
       frameworkSpecificRules: new Map(),
       customValidators: [],
       evidenceRetentionDays: 30,
       autoRemediationEnabled: true
     };
-  }
-}
+

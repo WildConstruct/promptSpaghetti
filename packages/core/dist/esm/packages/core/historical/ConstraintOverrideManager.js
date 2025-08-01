@@ -87,8 +87,8 @@ boolean;
                                                 /**
                                                 * Get override history for audit purposes
                                                 */
-                                                getOverrideHistory(filters ?  : {});
-                                                constraintId ?  : string;
+                                                getOverrideHistory(filters ?  : {}),
+                                                    constraintId ?  : string;
                                                 userId ?  : string;
                                                 fromDate ?  : string;
                                                 toDate ?  : string;
@@ -212,8 +212,9 @@ boolean;
                                                                                                         // Import history if provided
                                                                                                         if (data.history) {
                                                                                                             this.overrideHistory = [...data.history];
-                                                                                                            matchesOverrideConditions(override, ConstraintOverride);
-                                                                                                            context: {
+                                                                                                            matchesOverrideConditions(override, ConstraintOverride),
+                                                                                                                context;
+                                                                                                            {
                                                                                                                 era ?  : Era;
                                                                                                                 nodeTypes ?  : string;
                                                                                                                 socialClasses ?  : string;

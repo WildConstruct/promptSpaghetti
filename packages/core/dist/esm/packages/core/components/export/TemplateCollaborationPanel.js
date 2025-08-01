@@ -362,7 +362,7 @@ div >
                         borderRadius: '50%',
                         background: collaborator.avatar,
                     }
-                        ? `url(${collaborator.avatar}) center/cover` :  }), ": 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: '600' }} >", !collaborator.avatar && collaborator.name.charAt(0).toUpperCase()] })
+                        ? `url(${collaborator.avatar}) center/cover` :  }), ": 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: '600'; }} >", !collaborator.avatar && collaborator.name.charAt(0).toUpperCase()] })
             ,
                 _jsxs("div", { children: [_jsx("div", { style: { fontSize: '14px', fontWeight: '500', color: '#374151' }, children: collaborator.name }), _jsxs("div", { style: { fontSize: '12px', color: '#6b7280' }, children: [collaborator.email, " \u2022 Joined ", formatDate(collaborator.joinedAt)] })] }));
 div >

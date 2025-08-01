@@ -1,16 +1,15 @@
 import { Graph } from '../../graphSchema';
 
 }
-export interface SerializationMetadata {
-    name?: string;
+}
+export interface SerializationMetadata { name?: string;
     description?: string;
     author?: string;
     created?: string;
-    tags?: string[];
-
+    tags?: string[] }
 }
-export interface SerializationOptions {
-    includeChecksum?: boolean;
+}
+export interface SerializationOptions { includeChecksum?: boolean;
     includeMetadata?: boolean;
     compactFormat?: boolean;
     validateOnSerialize?: boolean;
@@ -54,7 +53,7 @@ export declare class GraphSerializer {
  * Utility function for easy serialization
  */
 export declare function serializeGraph(graph: Graph)
-  metadata?: SerializationMetadata,
+  metadata?: SerializationMetadata }
   options?: SerializationOptions
 ): string;
 /**
@@ -62,4 +61,5 @@ export declare function serializeGraph(graph: Graph)
  */
 export declare function createDefaultMetadata(): SerializationMetadata;
 //# sourceMappingURL=serializer.d.ts.map
+}
 }

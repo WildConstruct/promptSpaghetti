@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-export interface ConflictData {
-    id: string;
+}
+export interface ConflictData { id: string;
     type: string;
     description: string;
     operations: Array<{
@@ -11,7 +11,7 @@ export interface ConflictData {
         userName?: string;
         timestamp: number;
         oldValue: Error;
-        newValue: Error;
+        newValue: Error }
 }
     }>;
     nodeId?: string;
@@ -21,15 +21,16 @@ export interface ConflictData {
     autoResolved: boolean;
 
 }
-export interface ConflictPanelProps {
-    conflicts: ConflictData[];
+}
+export interface ConflictPanelProps { conflicts: ConflictData[];
     onResolveConflict: (conflictId: string, strategy: string, userSelection?: Record<string, unknown>) => void;
     onViewConflict: (conflictId: string) => void;
     currentUserId: string;
     className?: string;
 
 export declare const ConflictPanel: React.FC<ConflictPanelProps>;
-export default ConflictPanel;
+export default ConflictPanel }
+}
 }
 interface ConflictNotificationProps {
     conflict: ConflictData;
@@ -38,4 +39,5 @@ interface ConflictNotificationProps {
 
 export declare const ConflictNotification: React.FC<ConflictNotificationProps>;
 //# sourceMappingURL=ConflictPanel.d.ts.map
+}
 }

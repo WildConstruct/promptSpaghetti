@@ -7,52 +7,41 @@
 import React from 'react';
 
 }
-export interface VerificationAnalyticsData {
-    period: {
+}
+export interface VerificationAnalyticsData { period: {
         start: Date;
         end: Date;
-        label: string;
+        label: string }
 }
     };
-    overview: {
-        totalRequests: number;
+    overview: { totalRequests: number;
         approvedRequests: number;
         rejectedRequests: number;
         pendingRequests: number;
         averageProcessingTime: number;
-        approvalRate: number;
-    };
-    requestsByType: Array<{
-        type: string;
+        approvalRate: number };
+    requestsByType: Array<{ type: string;
         count: number;
         approvalRate: number;
-        averageProcessingTime: number;
-    }>;
-    processingTrends: Array<{
-        date: Date;
+        averageProcessingTime: number }>;
+    processingTrends: Array<{ date: Date;
         requests: number;
         approved: number;
         rejected: number;
-        averageTime: number;
-    }>;
-    trustScoreDistribution: Array<{
-        range: string;
+        averageTime: number }>;
+    trustScoreDistribution: Array<{ range: string;
         count: number;
-        percentage: number;
-    }>;
-    riskAnalysis: {
-        highRiskUsers: number;
+        percentage: number }>;
+    riskAnalysis: { highRiskUsers: number;
         flaggedDocuments: number;
         fraudAttempts: number;
-        suspendedAccounts: number;
-    };
-    performanceMetrics: {
-        slaCompliance: number;
+        suspendedAccounts: number };
+    performanceMetrics: { slaCompliance: number;
         qualityScore: number;
         reviewerProductivity: number;
-        systemUptime: number;
-    };
+        systemUptime: number };
 
+}
 }
 export interface VerificationAnalyticsProps {
     className?: string;
@@ -60,4 +49,5 @@ export interface VerificationAnalyticsProps {
 export declare const VerificationAnalytics: React.FC<VerificationAnalyticsProps>;
 export default VerificationAnalytics;
 //# sourceMappingURL=VerificationAnalytics.d.ts.map
+}
 }

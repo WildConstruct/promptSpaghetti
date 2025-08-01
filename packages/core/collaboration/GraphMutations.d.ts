@@ -11,6 +11,7 @@ import { NodeTypeEnum, Node } from '../graphSchema';
  */
 
 }
+}
 export interface BaseMutationOperation {
     operationId: string;
     documentId: string;
@@ -24,29 +25,30 @@ export interface BaseMutationOperation {
  */
 
 }
-export interface VersionVector {
-    [clientId: string]: number;
+}
+}
+export interface VersionVector { [clientId: string]: number;
 /**
  * Operation priority for conflict resolution
  */
 export declare enum OperationPriority {
-    LOW = 1,
-    MEDIUM = 2,
-    HIGH = 3,
+    LOW = 1;
+    MEDIUM = 2;
+    HIGH = 3 }
     CRITICAL = 4
 /**
  * Node Addition Operation
  */
 
 }
-export interface NodeAddOperation extends BaseMutationOperation {
-    type: 'NODE_ADD';
+}
+}
+export interface NodeAddOperation extends BaseMutationOperation { type: 'NODE_ADD';
     nodeId: string;
     nodeType: z.infer<typeof NodeTypeEnum>;
     position: {
         x: number;
-        y: number;
-}
+        y: number }
     };
     initialData?: Record<string, any>;
     parentId?: string;
@@ -55,6 +57,7 @@ export interface NodeAddOperation extends BaseMutationOperation {
  * Node Update Operation
  */
 
+}
 }
 export interface NodeUpdateOperation extends BaseMutationOperation {
     type: 'NODE_UPDATE';
@@ -70,6 +73,7 @@ export interface NodeUpdateOperation extends BaseMutationOperation {
  */
 
 }
+}
 export interface NodeRemoveOperation extends BaseMutationOperation {
     type: 'NODE_REMOVE';
     nodeId: string;
@@ -81,6 +85,7 @@ export interface NodeRemoveOperation extends BaseMutationOperation {
  * Edge data structure
  */
 
+}
 }
 export interface GraphEdge {
     id: string;
@@ -94,6 +99,8 @@ export interface GraphEdge {
  * Edge Addition Operation
  */
 
+}
+}
 }
 export interface EdgeAddOperation extends BaseMutationOperation {
     type: 'EDGE_ADD';
@@ -110,6 +117,7 @@ export interface EdgeAddOperation extends BaseMutationOperation {
  */
 
 }
+}
 export interface EdgeUpdateOperation extends BaseMutationOperation {
     type: 'EDGE_UPDATE';
     edgeId: string;
@@ -122,6 +130,7 @@ export interface EdgeUpdateOperation extends BaseMutationOperation {
  */
 
 }
+}
 export interface EdgeRemoveOperation extends BaseMutationOperation {
     type: 'EDGE_REMOVE';
     edgeId: string;
@@ -133,6 +142,7 @@ export interface EdgeRemoveOperation extends BaseMutationOperation {
  * Parameter Update Operation
  */
 
+}
 }
 export interface ParameterUpdateOperation extends BaseMutationOperation {
     type: 'PARAMETER_UPDATE';
@@ -149,8 +159,8 @@ export interface ParameterUpdateOperation extends BaseMutationOperation {
  */
 
 }
-export interface BatchMutationOperation extends BaseMutationOperation {
-    type: 'BATCH_MUTATION';
+}
+export interface BatchMutationOperation extends BaseMutationOperation { type: 'BATCH_MUTATION';
     batchId: string;
     operations: MutationOperation[];
     atomic: boolean;
@@ -172,32 +182,33 @@ export type EdgeMutationOperation = EdgeAddOperation | EdgeUpdateOperation | Edg
  * Conflict types for different scenarios
  */
 export declare enum ConflictType {
-    NODE_CREATION = "node_creation",
-    NODE_DELETION = "node_deletion",
-    NODE_PROPERTIES = "node_properties",
-    NODE_POSITION = "node_position",
-    EDGE_CREATION = "edge_creation",
-    EDGE_DELETION = "edge_deletion",
-    EDGE_PROPERTIES = "edge_properties",
-    PARAMETER_UPDATE = "parameter_update",
-    CIRCULAR_DEPENDENCY = "circular_dependency",
+    NODE_CREATION = "node_creation"
+    NODE_DELETION = "node_deletion"
+    NODE_PROPERTIES = "node_properties"
+    NODE_POSITION = "node_position"
+    EDGE_CREATION = "edge_creation"
+    EDGE_DELETION = "edge_deletion"
+    EDGE_PROPERTIES = "edge_properties"
+    PARAMETER_UPDATE = "parameter_update"
+    CIRCULAR_DEPENDENCY = "circular_dependency"
     VALIDATION_ERROR = "validation_error"
 /**
  * Conflict resolution strategies
  */
 export declare enum ResolutionStrategy {
-    ACCEPT_LOCAL = "accept_local",
-    ACCEPT_REMOTE = "accept_remote",
-    LAST_WRITER_WINS = "last_writer_wins",
-    FIRST_WRITER_WINS = "first_writer_wins",
-    MERGE_CHANGES = "merge_changes",
-    MANUAL_RESOLUTION = "manual_resolution",
-    ROLLBACK_OPERATION = "rollback_operation",
+    ACCEPT_LOCAL = "accept_local"
+    ACCEPT_REMOTE = "accept_remote"
+    LAST_WRITER_WINS = "last_writer_wins"
+    FIRST_WRITER_WINS = "first_writer_wins"
+    MERGE_CHANGES = "merge_changes"
+    MANUAL_RESOLUTION = "manual_resolution"
+    ROLLBACK_OPERATION = "rollback_operation" }
     AUTO_MERGE = "auto_merge"
 /**
  * Conflict resolution data
  */
 
+}
 }
 export interface ConflictResolution {
     conflictId: string;
@@ -213,6 +224,8 @@ export interface ConflictResolution {
  * Conflict operation for manual resolution UI
  */
 
+}
+}
 }
 export interface ConflictOperation {
     id: string;
@@ -234,6 +247,8 @@ export interface ConflictOperation {
  */
 
 }
+}
+}
 export interface ResolutionOption {
     strategy: ResolutionStrategy;
     label: string;
@@ -244,6 +259,8 @@ export interface ResolutionOption {
  * Graph mutation message for WebSocket transport
  */
 
+}
+}
 }
 export interface GraphMutationMessage {
     type: 'GRAPH_MUTATION';
@@ -260,6 +277,8 @@ export interface GraphMutationMessage {
  */
 
 }
+}
+}
 export interface BatchMutationMessage {
     type: 'BATCH_MUTATION';
     batchId: string;
@@ -272,6 +291,8 @@ export interface BatchMutationMessage {
  * Conflict detected message
  */
 
+}
+}
 }
 export interface ConflictDetectedMessage {
     type: 'CONFLICT_DETECTED';
@@ -289,6 +310,8 @@ export interface ConflictDetectedMessage {
  */
 
 }
+}
+}
 export interface ConflictResolvedMessage {
     type: 'CONFLICT_RESOLVED';
     conflictId: string;
@@ -300,6 +323,8 @@ export interface ConflictResolvedMessage {
  * Delta synchronization message
  */
 
+}
+}
 }
 export interface DeltaSyncMessage {
     type: 'DELTA_SYNC';
@@ -313,6 +338,8 @@ export interface DeltaSyncMessage {
  * State verification message
  */
 
+}
+}
 }
 export interface StateVerificationMessage {
     type: 'STATE_VERIFICATION';
@@ -329,8 +356,9 @@ export interface StateVerificationMessage {
  */
 
 }
-export interface OperationAckMessage {
-    type: 'OPERATION_ACK';
+}
+}
+export interface OperationAckMessage { type: 'OPERATION_ACK';
     operationId: string;
     documentId: string;
     success: boolean;
@@ -346,34 +374,25 @@ export declare const VersionVectorSchema: z.ZodRecord<z.ZodString, z.ZodNumber>;
  */
 export declare const PositionSchema: z.ZodObject<{
     x: z.ZodNumber;
-    y: z.ZodNumber;
+    y: z.ZodNumber }
 }
-}, "strip", z.ZodTypeAny, {
-    x: number;
-    y: number;
-}, {
-    x: number;
-    y: number;
-}>;
+}, "strip", z.ZodTypeAny, { x: number;
+    y: number }, { x: number;
+    y: number }>;
 /**
  * Node add operation validation schema
  */
-export declare const NodeAddOperationSchema: z.ZodObject<{
-    type: z.ZodLiteral<"NODE_ADD">;
+export declare const NodeAddOperationSchema: z.ZodObject<{ type: z.ZodLiteral<"NODE_ADD">;
     operationId: z.ZodString;
     documentId: z.ZodString;
     nodeId: z.ZodString;
     nodeType: z.ZodEnum<["WeightedChoice", "Concat", "Output", "Include", "SetVariable", "GetVariable", "WeightedAdvanced", "Conditional", "Sequential", "Markov", "PythonTransform"]>;
-    position: z.ZodObject<{,
+    position: z.ZodObject<{ }
         x: z.ZodNumber;
         y: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        x: number;
-        y: number;
-    }, {
-        x: number;
-        y: number;
-    }>;
+    }, "strip", z.ZodTypeAny, { x: number;
+        y: number }, { x: number;
+        y: number }>;
     initialData: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
     parentId: z.ZodOptional<z.ZodString>;
     timestamp: z.ZodNumber;
@@ -382,12 +401,10 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
     operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
     dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-}, "strip", z.ZodTypeAny, {
-    type: "NODE_ADD";
+}, "strip", z.ZodTypeAny, { type: "NODE_ADD";
     position: {
         x: number;
-        y: number;
-    };
+        y: number };
     timestamp: number;
     nodeType: "WeightedChoice" | "Concat" | "Output" | "Include" | "SetVariable" | "GetVariable" | "WeightedAdvanced" | "Conditional" | "Sequential" | "Markov" | "PythonTransform";
     userId: string;
@@ -400,12 +417,10 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
     initialData?: Record<string, unknown> | undefined;
     clientId?: string | undefined;
     operationVector?: Record<string, number> | undefined;
-}, {
-    type: "NODE_ADD";
+}, { type: "NODE_ADD";
     position: {
         x: number;
-        y: number;
-    };
+        y: number };
     timestamp: number;
     nodeType: "WeightedChoice" | "Concat" | "Output" | "Include" | "SetVariable" | "GetVariable" | "WeightedAdvanced" | "Conditional" | "Sequential" | "Markov" | "PythonTransform";
     userId: string;
@@ -422,8 +437,7 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
 /**
  * Node update operation validation schema
  */
-export declare const NodeUpdateOperationSchema: z.ZodObject<{
-    type: z.ZodLiteral<"NODE_UPDATE">;
+export declare const NodeUpdateOperationSchema: z.ZodObject<{ type: z.ZodLiteral<"NODE_UPDATE">;
     operationId: z.ZodString;
     documentId: z.ZodString;
     nodeId: z.ZodString;
@@ -437,9 +451,7 @@ export declare const NodeUpdateOperationSchema: z.ZodObject<{
     clientId: z.ZodOptional<z.ZodString>;
     operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
     dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-}, "strip", z.ZodTypeAny, {
-    type: "NODE_UPDATE";
+    priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>> }, "strip", z.ZodTypeAny, { type: "NODE_UPDATE";
     timestamp: number;
     userId: string;
     nodeId: string;
@@ -453,9 +465,7 @@ export declare const NodeUpdateOperationSchema: z.ZodObject<{
     operationVector?: Record<string, number> | undefined;
     oldValue?: unknown;
     newValue?: unknown;
-    validationSchema?: string | undefined;
-}, {
-    type: "NODE_UPDATE";
+    validationSchema?: string | undefined }, { type: "NODE_UPDATE";
     timestamp: number;
     userId: string;
     nodeId: string;
@@ -469,13 +479,11 @@ export declare const NodeUpdateOperationSchema: z.ZodObject<{
     operationVector?: Record<string, number> | undefined;
     oldValue?: unknown;
     newValue?: unknown;
-    validationSchema?: string | undefined;
-}>;
+    validationSchema?: string | undefined }>;
 /**
  * Edge add operation validation schema
  */
-export declare const EdgeAddOperationSchema: z.ZodObject<{
-    type: z.ZodLiteral<"EDGE_ADD">;
+export declare const EdgeAddOperationSchema: z.ZodObject<{ type: z.ZodLiteral<"EDGE_ADD">;
     operationId: z.ZodString;
     documentId: z.ZodString;
     edgeId: z.ZodString;
@@ -490,9 +498,7 @@ export declare const EdgeAddOperationSchema: z.ZodObject<{
     clientId: z.ZodOptional<z.ZodString>;
     operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
     dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-}, "strip", z.ZodTypeAny, {
-    type: "EDGE_ADD";
+    priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>> }, "strip", z.ZodTypeAny, { type: "EDGE_ADD";
     timestamp: number;
     userId: string;
     edgeId: string;
@@ -507,9 +513,7 @@ export declare const EdgeAddOperationSchema: z.ZodObject<{
     clientId?: string | undefined;
     sourcePort?: string | undefined;
     targetPort?: string | undefined;
-    operationVector?: Record<string, number> | undefined;
-}, {
-    type: "EDGE_ADD";
+    operationVector?: Record<string, number> | undefined }, { type: "EDGE_ADD";
     timestamp: number;
     userId: string;
     edgeId: string;
@@ -524,27 +528,21 @@ export declare const EdgeAddOperationSchema: z.ZodObject<{
     clientId?: string | undefined;
     sourcePort?: string | undefined;
     targetPort?: string | undefined;
-    operationVector?: Record<string, number> | undefined;
-}>;
+    operationVector?: Record<string, number> | undefined }>;
 /**
  * All mutation operation schemas union
  */
-export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
-    type: z.ZodLiteral<"NODE_ADD">;
+export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{ type: z.ZodLiteral<"NODE_ADD">;
     operationId: z.ZodString;
     documentId: z.ZodString;
     nodeId: z.ZodString;
     nodeType: z.ZodEnum<["WeightedChoice", "Concat", "Output", "Include", "SetVariable", "GetVariable", "WeightedAdvanced", "Conditional", "Sequential", "Markov", "PythonTransform"]>;
-    position: z.ZodObject<{,
+    position: z.ZodObject<{ }
         x: z.ZodNumber;
         y: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        x: number;
-        y: number;
-    }, {
-        x: number;
-        y: number;
-    }>;
+    }, "strip", z.ZodTypeAny, { x: number;
+        y: number }, { x: number;
+        y: number }>;
     initialData: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
     parentId: z.ZodOptional<z.ZodString>;
     timestamp: z.ZodNumber;
@@ -553,12 +551,10 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
     dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-}, "strip", z.ZodTypeAny, {
-    type: "NODE_ADD";
+}, "strip", z.ZodTypeAny, { type: "NODE_ADD";
     position: {
         x: number;
-        y: number;
-    };
+        y: number };
     timestamp: number;
     nodeType: "WeightedChoice" | "Concat" | "Output" | "Include" | "SetVariable" | "GetVariable" | "WeightedAdvanced" | "Conditional" | "Sequential" | "Markov" | "PythonTransform";
     userId: string;
@@ -571,12 +567,10 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     initialData?: Record<string, unknown> | undefined;
     clientId?: string | undefined;
     operationVector?: Record<string, number> | undefined;
-}, {
-    type: "NODE_ADD";
+}, { type: "NODE_ADD";
     position: {
         x: number;
-        y: number;
-    };
+        y: number };
     timestamp: number;
     nodeType: "WeightedChoice" | "Concat" | "Output" | "Include" | "SetVariable" | "GetVariable" | "WeightedAdvanced" | "Conditional" | "Sequential" | "Markov" | "PythonTransform";
     userId: string;
@@ -589,8 +583,7 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     initialData?: Record<string, unknown> | undefined;
     clientId?: string | undefined;
     operationVector?: Record<string, number> | undefined;
-}>, z.ZodObject<{
-    type: z.ZodLiteral<"NODE_UPDATE">;
+}>, z.ZodObject<{ type: z.ZodLiteral<"NODE_UPDATE">;
     operationId: z.ZodString;
     documentId: z.ZodString;
     nodeId: z.ZodString;
@@ -604,9 +597,7 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     clientId: z.ZodOptional<z.ZodString>;
     operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
     dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-}, "strip", z.ZodTypeAny, {
-    type: "NODE_UPDATE";
+    priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>> }, "strip", z.ZodTypeAny, { type: "NODE_UPDATE";
     timestamp: number;
     userId: string;
     nodeId: string;
@@ -620,9 +611,7 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     operationVector?: Record<string, number> | undefined;
     oldValue?: unknown;
     newValue?: unknown;
-    validationSchema?: string | undefined;
-}, {
-    type: "NODE_UPDATE";
+    validationSchema?: string | undefined }, { type: "NODE_UPDATE";
     timestamp: number;
     userId: string;
     nodeId: string;
@@ -636,8 +625,7 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     operationVector?: Record<string, number> | undefined;
     oldValue?: unknown;
     newValue?: unknown;
-    validationSchema?: string | undefined;
-}>]>;
+    validationSchema?: string | undefined }>]>;
 /**
  * Generate a unique operation ID
  */
@@ -674,8 +662,7 @@ export declare function getAffectedNodeIds(operation: MutationOperation): string
  * Extract all edge IDs affected by an operation
  */
 export declare function getAffectedEdgeIds(operation: MutationOperation): string[];
-declare const _default: {
-    ConflictType: typeof ConflictType;
+declare const _default: { ConflictType: typeof ConflictType;
     ResolutionStrategy: typeof ResolutionStrategy;
     OperationPriority: typeof OperationPriority;
     NodeAddOperationSchema: z.ZodObject<{,
@@ -684,16 +671,12 @@ declare const _default: {
         documentId: z.ZodString;
         nodeId: z.ZodString;
         nodeType: z.ZodEnum<["WeightedChoice", "Concat", "Output", "Include", "SetVariable", "GetVariable", "WeightedAdvanced", "Conditional", "Sequential", "Markov", "PythonTransform"]>;
-        position: z.ZodObject<{,
+        position: z.ZodObject<{ }
             x: z.ZodNumber;
             y: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            x: number;
-            y: number;
-        }, {
-            x: number;
-            y: number;
-        }>;
+        }, "strip", z.ZodTypeAny, { x: number;
+            y: number }, { x: number;
+            y: number }>;
         initialData: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
         parentId: z.ZodOptional<z.ZodString>;
         timestamp: z.ZodNumber;
@@ -702,12 +685,10 @@ declare const _default: {
         operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-    }, "strip", z.ZodTypeAny, {
-        type: "NODE_ADD";
+    }, "strip", z.ZodTypeAny, { type: "NODE_ADD";
         position: {
             x: number;
-            y: number;
-        };
+            y: number };
         timestamp: number;
         nodeType: "WeightedChoice" | "Concat" | "Output" | "Include" | "SetVariable" | "GetVariable" | "WeightedAdvanced" | "Conditional" | "Sequential" | "Markov" | "PythonTransform";
         userId: string;
@@ -720,12 +701,10 @@ declare const _default: {
         initialData?: Record<string, unknown> | undefined;
         clientId?: string | undefined;
         operationVector?: Record<string, number> | undefined;
-    }, {
-        type: "NODE_ADD";
+    }, { type: "NODE_ADD";
         position: {
             x: number;
-            y: number;
-        };
+            y: number };
         timestamp: number;
         nodeType: "WeightedChoice" | "Concat" | "Output" | "Include" | "SetVariable" | "GetVariable" | "WeightedAdvanced" | "Conditional" | "Sequential" | "Markov" | "PythonTransform";
         userId: string;
@@ -739,7 +718,7 @@ declare const _default: {
         clientId?: string | undefined;
         operationVector?: Record<string, number> | undefined;
     }>;
-    NodeUpdateOperationSchema: z.ZodObject<{,
+    NodeUpdateOperationSchema: z.ZodObject<{ ,
         type: z.ZodLiteral<"NODE_UPDATE">;
         operationId: z.ZodString;
         documentId: z.ZodString;
@@ -754,9 +733,7 @@ declare const _default: {
         clientId: z.ZodOptional<z.ZodString>;
         operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-    }, "strip", z.ZodTypeAny, {
-        type: "NODE_UPDATE";
+        priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>> }, "strip", z.ZodTypeAny, { type: "NODE_UPDATE";
         timestamp: number;
         userId: string;
         nodeId: string;
@@ -770,9 +747,7 @@ declare const _default: {
         operationVector?: Record<string, number> | undefined;
         oldValue?: unknown;
         newValue?: unknown;
-        validationSchema?: string | undefined;
-    }, {
-        type: "NODE_UPDATE";
+        validationSchema?: string | undefined }, { type: "NODE_UPDATE";
         timestamp: number;
         userId: string;
         nodeId: string;
@@ -786,9 +761,8 @@ declare const _default: {
         operationVector?: Record<string, number> | undefined;
         oldValue?: unknown;
         newValue?: unknown;
-        validationSchema?: string | undefined;
-    }>;
-    EdgeAddOperationSchema: z.ZodObject<{,
+        validationSchema?: string | undefined }>;
+    EdgeAddOperationSchema: z.ZodObject<{ ,
         type: z.ZodLiteral<"EDGE_ADD">;
         operationId: z.ZodString;
         documentId: z.ZodString;
@@ -804,9 +778,7 @@ declare const _default: {
         clientId: z.ZodOptional<z.ZodString>;
         operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-    }, "strip", z.ZodTypeAny, {
-        type: "EDGE_ADD";
+        priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>> }, "strip", z.ZodTypeAny, { type: "EDGE_ADD";
         timestamp: number;
         userId: string;
         edgeId: string;
@@ -821,9 +793,7 @@ declare const _default: {
         clientId?: string | undefined;
         sourcePort?: string | undefined;
         targetPort?: string | undefined;
-        operationVector?: Record<string, number> | undefined;
-    }, {
-        type: "EDGE_ADD";
+        operationVector?: Record<string, number> | undefined }, { type: "EDGE_ADD";
         timestamp: number;
         userId: string;
         edgeId: string;
@@ -838,24 +808,18 @@ declare const _default: {
         clientId?: string | undefined;
         sourcePort?: string | undefined;
         targetPort?: string | undefined;
-        operationVector?: Record<string, number> | undefined;
-    }>;
-    MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
-        type: z.ZodLiteral<"NODE_ADD">;
+        operationVector?: Record<string, number> | undefined }>;
+    MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{ type: z.ZodLiteral<"NODE_ADD">;
         operationId: z.ZodString;
         documentId: z.ZodString;
         nodeId: z.ZodString;
         nodeType: z.ZodEnum<["WeightedChoice", "Concat", "Output", "Include", "SetVariable", "GetVariable", "WeightedAdvanced", "Conditional", "Sequential", "Markov", "PythonTransform"]>;
-        position: z.ZodObject<{,
+        position: z.ZodObject<{ }
             x: z.ZodNumber;
             y: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            x: number;
-            y: number;
-        }, {
-            x: number;
-            y: number;
-        }>;
+        }, "strip", z.ZodTypeAny, { x: number;
+            y: number }, { x: number;
+            y: number }>;
         initialData: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
         parentId: z.ZodOptional<z.ZodString>;
         timestamp: z.ZodNumber;
@@ -864,12 +828,10 @@ declare const _default: {
         operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-    }, "strip", z.ZodTypeAny, {
-        type: "NODE_ADD";
+    }, "strip", z.ZodTypeAny, { type: "NODE_ADD";
         position: {
             x: number;
-            y: number;
-        };
+            y: number };
         timestamp: number;
         nodeType: "WeightedChoice" | "Concat" | "Output" | "Include" | "SetVariable" | "GetVariable" | "WeightedAdvanced" | "Conditional" | "Sequential" | "Markov" | "PythonTransform";
         userId: string;
@@ -882,12 +844,10 @@ declare const _default: {
         initialData?: Record<string, unknown> | undefined;
         clientId?: string | undefined;
         operationVector?: Record<string, number> | undefined;
-    }, {
-        type: "NODE_ADD";
+    }, { type: "NODE_ADD";
         position: {
             x: number;
-            y: number;
-        };
+            y: number };
         timestamp: number;
         nodeType: "WeightedChoice" | "Concat" | "Output" | "Include" | "SetVariable" | "GetVariable" | "WeightedAdvanced" | "Conditional" | "Sequential" | "Markov" | "PythonTransform";
         userId: string;
@@ -900,8 +860,7 @@ declare const _default: {
         initialData?: Record<string, unknown> | undefined;
         clientId?: string | undefined;
         operationVector?: Record<string, number> | undefined;
-    }>, z.ZodObject<{
-        type: z.ZodLiteral<"NODE_UPDATE">;
+    }>, z.ZodObject<{ type: z.ZodLiteral<"NODE_UPDATE">;
         operationId: z.ZodString;
         documentId: z.ZodString;
         nodeId: z.ZodString;
@@ -915,9 +874,7 @@ declare const _default: {
         clientId: z.ZodOptional<z.ZodString>;
         operationVector: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>>;
-    }, "strip", z.ZodTypeAny, {
-        type: "NODE_UPDATE";
+        priority: z.ZodOptional<z.ZodNativeEnum<typeof OperationPriority>> }, "strip", z.ZodTypeAny, { type: "NODE_UPDATE";
         timestamp: number;
         userId: string;
         nodeId: string;
@@ -931,9 +888,7 @@ declare const _default: {
         operationVector?: Record<string, number> | undefined;
         oldValue?: unknown;
         newValue?: unknown;
-        validationSchema?: string | undefined;
-    }, {
-        type: "NODE_UPDATE";
+        validationSchema?: string | undefined }, { type: "NODE_UPDATE";
         timestamp: number;
         userId: string;
         nodeId: string;
@@ -947,19 +902,13 @@ declare const _default: {
         operationVector?: Record<string, number> | undefined;
         oldValue?: unknown;
         newValue?: unknown;
-        validationSchema?: string | undefined;
-    }>]>;
+        validationSchema?: string | undefined }>]>;
     VersionVectorSchema: z.ZodRecord<z.ZodString, z.ZodNumber>;
-    PositionSchema: z.ZodObject<{,
+    PositionSchema: z.ZodObject<{ ,
         x: z.ZodNumber;
-        y: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        x: number;
-        y: number;
-    }, {
-        x: number;
-        y: number;
-    }>;
+        y: z.ZodNumber }, "strip", z.ZodTypeAny, { x: number;
+        y: number }, { x: number;
+        y: number }>;
     generateOperationId: typeof generateOperationId;
     generateNodeId: typeof generateNodeId;
     generateEdgeId: typeof generateEdgeId;

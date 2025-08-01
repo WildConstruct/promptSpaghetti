@@ -2,14 +2,12 @@
  * Extension Lifecycle Manager - Epic 8.4 Story 8.4.2
  * Manages the complete lifecycle of extensions including loading, activation, and disposal
  */
-import { 
-  BaseExtension,
+import { BaseExtension,
   ExtensionContext,
-  ExtensionLifecycleState,
+  ExtensionLifecycleState }
   ExtensionHealthStatus
 } from './interfaces/ExtensionInterfaces';
-export declare class ExtensionLifecycleManager {
-    private static instance;
+export declare class ExtensionLifecycleManager { private static instance;
     private extensions;
     private contexts;
     private eventEmitter;
@@ -102,17 +100,15 @@ export declare class ExtensionLifecycleManager {
     private createRuntime;
     private createUIContext;
     private createAPIContext;
-    private isValidVersion;
-
+    private isValidVersion }
 }
-interface ExtensionStatistics {
-    total: number;
+interface ExtensionStatistics { total: number;
     byState: Record<ExtensionLifecycleState, number>;
     byType: Record<string, number>;
     errors: number;
     healthy: number;
 
-export declare const extensionLifecycleManager: ExtensionLifecycleManager;
+export declare const extensionLifecycleManager: ExtensionLifecycleManager }
 }
 export {};
 //# sourceMappingURL=ExtensionLifecycleManager.d.ts.map

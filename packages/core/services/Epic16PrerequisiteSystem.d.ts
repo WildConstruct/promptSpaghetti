@@ -8,8 +8,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface PrerequisiteCheck {
-    id: string;
+}
+export interface PrerequisiteCheck { id: string;
     name: string;
     description: string;
     category: 'epic_dependency' | 'infrastructure' | 'service' | 'configuration' | 'security';
@@ -18,35 +18,31 @@ export interface PrerequisiteCheck {
     check: () => Promise<PrerequisiteResult>;
     autoFix?: () => Promise<boolean>;
     manualFixInstructions?: string;
-    estimatedFixTime?: number;
-
+    estimatedFixTime?: number }
 }
-export interface PrerequisiteResult {
-    passed: boolean;
+}
+export interface PrerequisiteResult { passed: boolean;
     message: string;
     details?: Record<string, any>;
     timestamp: Date;
     errorCode?: string;
     severity?: 'critical' | 'high' | 'medium' | 'low';
     recommendation?: string;
-    checkDuration?: number;
-
+    checkDuration?: number }
 }
-export interface PrerequisiteReport {
-    overall: {
+}
+export interface PrerequisiteReport { overall: {
         passed: boolean;
         totalChecks: number;
         passedChecks: number;
         failedChecks: number;
         criticalFailures: number;
-        estimatedFixTime: number;
+        estimatedFixTime: number }
 }
     };
-    categories: Record<string, {
-        passed: boolean;
+    categories: Record<string, { passed: boolean;
         checks: number;
-        failures: number;
-    }>;
+        failures: number }>;
     results: Record<string, PrerequisiteResult>;
     dependencies: PrerequisiteDependencyMap;
     recommendations: string[];
@@ -55,17 +51,19 @@ export interface PrerequisiteReport {
     version: string;
 
 }
+}
 export interface PrerequisiteDependencyMap {
     [checkId: string]: {
         dependsOn: string[];
         requiredBy: string[];
         status: 'pending' | 'checking' | 'passed' | 'failed' | 'skipped'
 }
+}
   };
 
 }
-export interface Epic16PrerequisiteConfig {
-    enabledCategories: string[];
+}
+export interface Epic16PrerequisiteConfig { enabledCategories: string[];
     skipChecks: string[];
     autoFixEnabled: boolean;
     timeoutMs: number;
@@ -81,14 +79,13 @@ export interface Epic16PrerequisiteConfig {
         redis?: string;
         postgres?: string;
         stripe?: string;
-        claude?: string;
+        claude?: string }
 }
     };
     environment: 'development' | 'staging' | 'production';
     region?: string;
 
-export declare class Epic16PrerequisiteSystem extends EventEmitter {
-    private config;
+export declare class Epic16PrerequisiteSystem extends EventEmitter { private config;
     private checks;
     private lastReport;
     constructor(config?: Partial<Epic16PrerequisiteConfig>);
@@ -127,8 +124,7 @@ export declare class Epic16PrerequisiteSystem extends EventEmitter {
         overall: 'healthy' | 'degraded' | 'critical';
         criticalFailures: number;
         totalChecks: number;
-        lastCheckTime?: Date;
-    }>;
+        lastCheckTime?: Date }>;
     private buildDependencyMap;
     private executeChecksWithDependencies;
     private processCheckAsync;

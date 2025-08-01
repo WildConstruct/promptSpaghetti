@@ -32,7 +32,8 @@ infrastructure: {
     database_health: number;
     network_latency: number;
     storage_usage: number;
-    backup_status: 'success' | 'warning' | 'error';
+    backup_status: 'success' | 'warning' | 'error',
+    ;
 }
 ;
 // Mock data hook (would be replaced with real API calls)
@@ -52,7 +53,50 @@ const useDashboardData = () => {
         0.08,
         ;
     }
-}, performance, analytics, infrastructure;
+};
+performance: {
+    system_health: 94,
+        avg_response_time;
+    245,
+        requests_per_minute;
+    1820,
+        error_rate;
+    0.012,
+        cpu_usage;
+    68,
+        memory_usage;
+    72,
+    ;
+}
+analytics: {
+    active_users: 2847,
+        daily_sessions;
+    15624,
+        conversion_rate;
+    0.034,
+        bounce_rate;
+    0.28,
+        page_views_today;
+    89453,
+        revenue_today;
+    24890.50,
+    ;
+}
+infrastructure: {
+    services_up: 28,
+        services_total;
+    30,
+        database_health;
+    98,
+        network_latency;
+    23,
+        storage_usage;
+    0.67,
+        backup_status;
+    'success',
+    ;
+}
+;
 const [alerts, setAlerts] = useState([]);
 {
     id: 'alert_001',

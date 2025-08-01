@@ -12,102 +12,120 @@ import './PaymentAnalyticsDashboard.css';
 
 // Payment Analytics Types
 
-}
+
 export interface PaymentProviderMetrics {
-  provider: PaymentProvider;,
+  provider: PaymentProvider;
   totalAttempts: number;
-  successfulPayments: number;,
+  successfulPayments: number;
   failedPayments: number;
-  successRate: number;,
+  successRate: number;
   averageProcessingTime: number;
-  p95ProcessingTime: number;,
+  p95ProcessingTime: number;
   totalVolume: number;
-  totalFees: number;,
+  totalFees: number;
   averageFeeRate: number;
   failuresByReason: Record<string, number>;
-  retrySuccessRate: number;,
+  retrySuccessRate: number;
   performanceByCountry: Array<{
-  countryCode: string;,
+    
+  countryCode: string;
   successRate: number;
   averageProcessingTime: number;
-}
-}>;
+
+
+>;
   performanceByHour: Array<{
+    
   hour: number;
-  successRate: number;,
+  successRate: number;
   volume: number;
-}>;
-}
-}
+>;
+
+
+
 export interface PaymentMethodMetrics {
-  methodType: PaymentMethodType;,
+  methodType: PaymentMethodType;
   provider: PaymentProvider;
-  successRate: number;,
+  successRate: number;
   averageProcessingTime: number;
-  totalVolume: number;,
+  totalVolume: number;
   userPreferenceRank: number;
-  conversionRate: number;,
+  conversionRate: number;
   ageGroupPerformance: Array<{
-  ageGroup: string;,
+    
+  ageGroup: string;
   successRate: number;
   usage: number;
-}
-}>;
+
+
+>;
   devicePerformance: Array<{
+    
   deviceType: 'mobile' | 'desktop' | 'tablet';
-  successRate: number;,
+  successRate: number;
   usage: number;
-}>;
-}
-}
+>;
+
+
+
 export interface PaymentFailureAnalysis {
-  failureCode: string;,
+  failureCode: string;
   provider: PaymentProvider;
-  frequency: number;,
+  frequency: number;
   percentage: number;
-  description: string;,
+  description: string;
   suggestedAction: string;
-  isRetryable: boolean;,
+  isRetryable: boolean;
   averageRetrySuccess: number;
   timePattern: Array<{
-  hour: number;,
+    
+  hour: number;
   frequency: number;
-}
-}>;
+
+
+>;
   geographicPattern: Array<{
+    
   countryCode: string;
   frequency: number;
-}>;
+>;
   amountPattern: Array<{
+    
   amountRange: string;
   frequency: number;
-}>;
-}
-}
+>;
+
+
+
 export interface PaymentAnalyticsData {
-  providerMetrics: PaymentProviderMetrics;,
+  providerMetrics: PaymentProviderMetrics;
   methodMetrics: PaymentMethodMetrics;
-  failureAnalysis: PaymentFailureAnalysis;,
+  failureAnalysis: PaymentFailureAnalysis;
   lastUpdated: Date;
   timeRange: {
-  start: Date;,
+    
+  start: Date;
   end: Date;
-}
+
+
 };
-}
-}
+
+
+
 export interface PaymentAnalyticsDashboardProps {
   className?: string;
   timeRange?: RevenueTimeRange;
   customDateRange?: {
-  start: Date | null;,
+    
+  start: Date | null;
   end: Date | null;
-}
+
+
 };
   providers?: PaymentProvider;
   autoRefresh?: boolean;
   refreshInterval?: number;
-}
+
 export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps> = ({)
   className = '',
   timeRange = RevenueTimeRange.LAST_30D,
@@ -124,7 +142,7 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
     loading,
     error,
     refresh
-  } = usePaymentAnalytics({)
+ = usePaymentAnalytics({)
   timeRange,
     customDateRange,
     providers,
@@ -138,11 +156,11 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
   const exportData = {
   providerMetrics: data?.providerMetrics || [],
   timeRange: data?.timeRange,
-  exportedAt: new Date().toISOString(),
-};
+  exportedAt: new Date().toISOString()
+  };
       const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-  type: 'application/json',
-});
+  type: 'application/json'
+  });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -151,9 +169,9 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    } catch (error) {
+ catch (error) {
   console.error('Export failed:', error);
-} finally {
+ finally {
       setIsExporting(false);
   }, [data, selectedProvider]);
   const selectedProviderMetrics = data?.providerMetrics.find(;);
@@ -166,18 +184,18 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
     f => f.provider === selectedProvider
   ) || [];
   if (loading) {
-    return;
-      <div className={`payment-analytics-dashboard payment-analytics-dashboard--loading ${className}`}>}
+    return (
+    <div className={`payment-analytics-dashboard payment-analytics-dashboard--loading ${className}`}>}
         <div className="payment-analytics__skeleton">
           <div className="skeleton-header"></div>
           <div className="skeleton-metrics"></div>
           <div className="skeleton-chart"></div>
         </div>
       </div>
-    );
+  );
   if (error) {
-    return;
-      <div className={`payment-analytics-dashboard payment-analytics-dashboard--error ${className}`}>}
+    return (
+    <div className={`payment-analytics-dashboard payment-analytics-dashboard--error ${className}`}>}
         <div className="error-message">
           <h3>Failed to load payment analytics</h3>
           <p>{error}</p>
@@ -186,8 +204,8 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
           </button>
         </div>
       </div>
-    );
-  return;
+  );
+  return (
     <div className={`payment-analytics-dashboard ${className}`}>}
       {/* Header */}
       <div className="payment-analytics__header">
@@ -326,10 +344,11 @@ export const PaymentAnalyticsDashboard: React.FC<PaymentAnalyticsDashboardProps>
 };
 
 // Sub-components for different tabs
-const PaymentOverviewPanel: React.FC<{,
+const PaymentOverviewPanel: React.FC<{
+    
   metrics: PaymentProviderMetrics;
   timeRange: RevenueTimeRange;
-}> = ({ metrics }) => ()
+> = ({ metrics }) => ()
   <div className="payment-overview-panel">
     <div className="overview-charts">
       <div className="chart-container">
@@ -360,11 +379,12 @@ const PaymentOverviewPanel: React.FC<{,
       </div>
     </div>
   </div>
-);
-const PaymentMethodsPanel: React.FC<{,
+  );
+const PaymentMethodsPanel: React.FC<{
+    
   methods: PaymentMethodMetrics;
   provider: PaymentProvider;
-}> = ({ methods }) => ()
+> = ({ methods }) => ()
   <div className="payment-methods-panel">
     <div className="methods-grid">
       {methods.map(method => ()
@@ -401,11 +421,12 @@ const PaymentMethodsPanel: React.FC<{,
       ))}
     </div>
   </div>
-);
-const PaymentFailuresPanel: React.FC<{,
+  );
+const PaymentFailuresPanel: React.FC<{
+    
   failures: PaymentFailureAnalysis;
   provider: PaymentProvider;
-}> = ({ failures }) => ()
+> = ({ failures }) => ()
   <div className="payment-failures-panel">
     <div className="failures-list">
       {failures.map(failure => ()
@@ -468,14 +489,15 @@ const PaymentFailuresPanel: React.FC<{,
       ))}
     </div>
   </div>
-);
-const PaymentOptimizationPanel: React.FC<{,
+  );
+const PaymentOptimizationPanel: React.FC<{
+    
   metrics: PaymentProviderMetrics;
-  methods: PaymentMethodMetrics;,
+  methods: PaymentMethodMetrics;
   failures: PaymentFailureAnalysis;
-}> = ({ metrics, methods, failures }) => {
+> = ({ metrics, methods, failures }) => {
   const recommendations = generateOptimizationRecommendations(metrics, methods, failures);
-  return;
+  return (
     <div className="payment-optimization-panel">
       <div className="optimization-recommendations">
         <h3>Optimization Recommendations</h3>
@@ -521,15 +543,15 @@ const PaymentOptimizationPanel: React.FC<{,
 };
 
 // Helper function to generate optimization recommendations
-function generateOptimizationRecommendations(metrics: PaymentProviderMetrics,)
-  methods: PaymentMethodMetrics,
+function generateOptimizationRecommendations(metrics: PaymentProviderMetrics);
+  methods: PaymentMethodMetrics;
   failures: PaymentFailureAnalysis): Array<{;
-  title: string;,
+  title: string;
   description: string;
-  priority: 'high' | 'medium' | 'low';,
+  priority: 'high' | 'medium' | 'low';
   impact: string;
   effort: string;
-}> {
+> {
   const recommendations = [];
   // Success rate analysis
   if (metrics.successRate < 95) {
@@ -586,3 +608,11 @@ function generateOptimizationRecommendations(metrics: PaymentProviderMetrics,)
   return recommendations;
 
 export default PaymentAnalyticsDashboard;
+}
+}
+}
+}
+}
+}
+}
+}

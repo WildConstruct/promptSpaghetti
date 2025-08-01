@@ -88,10 +88,10 @@ export async function timeoutManagementRoutes(
           properties: {
             config: { type: 'object' },
             lastUpdated: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     return {
       config: timeoutManager.getConfig(),
@@ -112,10 +112,10 @@ export async function timeoutManagementRoutes(
             success: { type: 'boolean' },
             config: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof TimeoutConfigUpdateSchema> }>, reply: FastifyReply) => {
     try {
       timeoutManager.updateConfig(request.body);
@@ -125,12 +125,12 @@ export async function timeoutManagementRoutes(
         config: timeoutManager.getConfig(),
         message: 'Timeout configuration updated successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400).send({
         success: false,
         message: `Failed to update configuration: ${error instanceof Error ? error.message : 'Unknown error'}`
       });
-    }
+
   });
 
   // Get timeout metrics
@@ -142,18 +142,18 @@ export async function timeoutManagementRoutes(
         type: 'object',
         properties: {
           operation: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             metrics: { type: 'object' },
             timestamp: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { operation?: string } }>, reply: FastifyReply) => {
     const { operation } = request.query;
     
@@ -165,10 +165,10 @@ export async function timeoutManagementRoutes(
           message: `No metrics found for operation: ${operation}`
         });
         return;
-      }
-    } else {
+
+ else {
       metrics = Object.fromEntries(timeoutManager.getMetrics() as Map<string, any>);
-    }
+
 
     return {
       metrics,
@@ -193,13 +193,13 @@ export async function timeoutManagementRoutes(
                 open: { type: 'number' },
                 halfOpen: { type: 'number' },
                 closed: { type: 'number' }
-              }
-  }
+
+
             timestamp: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const circuitBreakers = Object.fromEntries(timeoutManager.getCircuitBreakerStates());
     
@@ -229,10 +229,10 @@ export async function timeoutManagementRoutes(
             status: { type: 'string' },
             health: { type: 'object' },
             timestamp: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const health = timeoutManager.getHealthStatus();
     const status = health.openCircuitBreakers === 0 && health.activeOperations < 100 ? 'healthy' : 'degraded';
@@ -257,10 +257,10 @@ export async function timeoutManagementRoutes(
             success: { type: 'boolean' },
             cancelledCount: { type: 'number' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof OperationCancelSchema> }>, reply: FastifyReply) => {
     const { operationIds, cancelAll } = request.body;
     
@@ -268,13 +268,13 @@ export async function timeoutManagementRoutes(
     
     if (cancelAll) {
       cancelledCount = timeoutManager.cancelAllOperations();
-    } else if (operationIds) {
+ else if (operationIds) {
       for (const operationId of operationIds) {
         if (timeoutManager.cancelOperation(operationId)) {
           cancelledCount++;
-        }
-      }
-    }
+
+
+
 
     return {
       success: true,
@@ -295,10 +295,10 @@ export async function timeoutManagementRoutes(
             success: { type: 'boolean' },
             message: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     timeoutManager.reset();
     
@@ -322,10 +322,10 @@ export async function timeoutManagementRoutes(
             properties: {
               dashboard: { type: 'object' },
               timestamp: { type: 'string', format: 'date-time' }
-            }
-          }
-        }
-      }
+
+
+
+
     }, async (request: FastifyRequest, reply: FastifyReply) => {
       return {
         dashboard: monitoringService.getDashboardData(),
@@ -342,18 +342,18 @@ export async function timeoutManagementRoutes(
           type: 'object',
           properties: {
             operation: { type: 'string' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               metrics: { type: 'array' },
               timestamp: { type: 'string', format: 'date-time' }
-            }
-          }
-        }
-      }
+
+
+
+
     }, async (request: FastifyRequest<{ Querystring: { operation?: string } }>, reply: FastifyReply) => {
       const { operation } = request.query;
       
@@ -361,9 +361,9 @@ export async function timeoutManagementRoutes(
       if (operation) {
         const metric = monitoringService.getPerformanceMetrics(operation);
         metrics = metric ? [metric] : [];
-      } else {
+ else {
         metrics = monitoringService.getAllPerformanceMetrics();
-      }
+
 
       return {
         metrics,
@@ -380,8 +380,8 @@ export async function timeoutManagementRoutes(
           type: 'object',
           properties: {
             active: { type: 'boolean' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -389,10 +389,10 @@ export async function timeoutManagementRoutes(
               alerts: { type: 'array' },
               count: { type: 'number' },
               timestamp: { type: 'string', format: 'date-time' }
-            }
-          }
-        }
-      }
+
+
+
+
     }, async (request: FastifyRequest<{ Querystring: { active?: boolean } }>, reply: FastifyReply) => {
       const { active } = request.query;
       
@@ -414,19 +414,19 @@ export async function timeoutManagementRoutes(
           type: 'object',
           properties: {
             alertId: { type: 'string' }
-  }
+
           required: ['alertId']
-  }
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
+
+
+
+
     }, async (request: FastifyRequest<{ Params: { alertId: string } }>, reply: FastifyReply) => {
       const { alertId } = request.params;
       
@@ -437,12 +437,12 @@ export async function timeoutManagementRoutes(
           success: true,
           message: 'Alert resolved successfully'
         };
-      } else {
+ else {
         reply.status(404).send({
           success: false,
           message: 'Alert not found or already resolved'
         });
-      }
+
     });
 
     // Update alert configuration
@@ -457,10 +457,10 @@ export async function timeoutManagementRoutes(
             properties: {
               success: { type: 'boolean' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
+
+
+
+
     }, async (request: FastifyRequest<{ Body: z.infer<typeof AlertConfigUpdateSchema> }>, reply: FastifyReply) => {
       try {
         monitoringService.updateAlertConfig(request.body);
@@ -469,12 +469,12 @@ export async function timeoutManagementRoutes(
           success: true,
           message: 'Alert configuration updated successfully'
         };
-      } catch (error) {
+ catch (error) {
         reply.status(400).send({
           success: false,
           message: `Failed to update alert configuration: ${error instanceof Error ? error.message : 'Unknown error'}`
         });
-      }
+
     });
 
     // Add alert channel
@@ -489,10 +489,10 @@ export async function timeoutManagementRoutes(
             properties: {
               success: { type: 'boolean' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
+
+
+
+
     }, async (request: FastifyRequest<{ Body: z.infer<typeof AlertChannelSchema> }>, reply: FastifyReply) => {
       try {
         monitoringService.addAlertChannel(request.body);
@@ -501,12 +501,12 @@ export async function timeoutManagementRoutes(
           success: true,
           message: 'Alert channel added successfully'
         };
-      } catch (error) {
+ catch (error) {
         reply.status(400).send({
           success: false,
           message: `Failed to add alert channel: ${error instanceof Error ? error.message : 'Unknown error'}`
         });
-      }
+
     });
 
     // Remove alert channel
@@ -518,19 +518,19 @@ export async function timeoutManagementRoutes(
           type: 'object',
           properties: {
             type: { type: 'string', enum: ['email', 'slack', 'webhook'] }
-  }
+
           required: ['type']
-  }
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
+
+
+
+
     }, async (request: FastifyRequest<{ Params: { type: string } }>, reply: FastifyReply) => {
       const { type } = request.params;
       
@@ -551,18 +551,18 @@ export async function timeoutManagementRoutes(
           type: 'object',
           properties: {
             maxAge: { type: 'number', minimum: 3600000 } // Minimum 1 hour
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
+
+
+
+
     }, async (request: FastifyRequest<{ Body: { maxAge?: number } }>, reply: FastifyReply) => {
       const { maxAge } = request.body;
       
@@ -573,5 +573,4 @@ export async function timeoutManagementRoutes(
         message: 'Cleanup completed successfully'
       };
     });
-  }
-}
+

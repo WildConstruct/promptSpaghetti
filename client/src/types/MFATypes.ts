@@ -14,7 +14,7 @@ export const MFAMethodType = {
   TOTP: 'totp' as const,
   EMAIL: 'email' as const,
   SMS: 'sms' as const,
-} as const;
+ as const;
 
 export type MFAMethodStatus = 
   | 'pending'
@@ -28,7 +28,7 @@ export const MFAMethodStatus = {
   ACTIVE: 'active' as const,
   DISABLED: 'disabled' as const,
   REVOKED: 'revoked' as const,
-} as const;
+ as const;
 
 export type MFAVerificationResult = 
   | 'success'
@@ -46,88 +46,103 @@ export const MFAVerificationResult = {
   RATE_LIMITED: 'rate_limited' as const,
   METHOD_DISABLED: 'method_disabled' as const,
   USER_LOCKED: 'user_locked' as const,
-} as const;
+ as const;
 
 // Frontend-specific interfaces
 
-}
+
 export interface BaseMFAConfiguration {
   id: string;,
-  userId: string;
+  userId: string;,
   methodType: MFAMethodType;,
-  status: MFAMethodStatus;
+  status: MFAMethodStatus;,
   isPrimary: boolean;,
-  displayName: string;
+  displayName: string;,
   createdAt: string; // ISO string for frontend,
   updatedAt: string;
   lastUsedAt?: string;
   failedAttempts: number;
   lockedUntil?: string;
-}
-}
-}
+
+
+
+
+
 export interface TOTPSecret {
   secret: string;,
-  qrCodeDataUrl: string;
+  qrCodeDataUrl: string;,
   manualEntryKey: string;,
-  issuer: string;
+  issuer: string;,
   accountName: string;
-}
-}
-}
+
+
+
+
+
 export interface TOTPEnrollmentData {
   configurationId: string;,
-  secret: TOTPSecret;
+  secret: TOTPSecret;,
   backupCodes: string;,
   expiresAt: string; // ISO string,
-}
-}
-}
+
+
+
+
+
 export interface MFAEnrollmentRequest {
   methodType: MFAMethodType;,
   displayName: string;
   emailAddress?: string;
   phoneNumber?: string;
-}
-}
-}
+
+
+
+
+
 export interface MFAEnrollmentResponse {
   configurationId: string;,
   methodType: MFAMethodType;
   enrollmentData?: TOTPEnrollmentData;
   requiresVerification: boolean;,
   expiresAt: string;
-}
-}
-}
+
+
+
+
+
 export interface MFAVerificationRequest {
   configurationId: string;,
   code: string;
   backupCode?: boolean;
-}
-}
-}
+
+
+
+
+
 export interface MFAVerificationResponse {
   success: boolean;,
   result: MFAVerificationResult;
   remainingAttempts?: number;
   lockoutDuration?: number;
   nextMethodSuggested?: MFAMethodType;
-}
-}
-}
+
+
+
+
+
 export interface UserMFAProfile {
   userId: string;,
-  isEnabled: boolean;
+  isEnabled: boolean;,
   hasAnyMethodConfigured: boolean;
   primaryMethod?: MFAMethodType;
   configuredMethods: MFAMethodType;
-  lastUsed?: {
+  lastUsed?: {,
   methodType: MFAMethodType;,
   timestamp: string;
-}
+
+
 };
-  securityMetrics: {
+  securityMetrics: {,
   totalAttempts: number;
   successfulAttempts: number;,
   failedAttempts: number;
@@ -135,16 +150,17 @@ export interface UserMFAProfile {
   accountLocked: boolean;
   lockedUntil?: string;
 };
-  preferences: {
+  preferences: {,
   defaultMethod: MFAMethodType;
   backupMethodEnabled: boolean;,
   securityNotifications: boolean;
 };
-}
-}
+
+
+
 export interface MFAListResponse {
   configurations: BaseMFAConfiguration;,
-  profile: UserMFAProfile;
+  profile: UserMFAProfile;,
   availableBackupCodes: number;
-}
-}
+
+

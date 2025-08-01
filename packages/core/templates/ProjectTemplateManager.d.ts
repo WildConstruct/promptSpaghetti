@@ -4,8 +4,8 @@
  */
 
 }
-export interface ProjectTemplate {
-    id: string;
+}
+export interface ProjectTemplate { id: string;
     name: string;
     description: string;
     category: string;
@@ -15,7 +15,7 @@ export interface ProjectTemplate {
     author: {
         id: string;
         name: string;
-        avatar?: string;
+        avatar?: string }
 }
     };
     created_at: string;
@@ -33,8 +33,8 @@ export interface ProjectTemplate {
     learning_objectives: string[];
 
 }
-export interface TemplateVariable {
-    id: string;
+}
+export interface TemplateVariable { id: string;
     name: string;
     label: string;
     type: 'text' | 'number' | 'boolean' | 'select' | 'textarea';
@@ -45,32 +45,30 @@ export interface TemplateVariable {
         min?: number;
         max?: number;
         pattern?: string;
-        options?: string[];
+        options?: string[] }
 }
     };
 
 }
-export interface CustomizationPoint {
-    id: string;
+}
+export interface CustomizationPoint { id: string;
     name: string;
     type: 'node_properties' | 'graph_structure' | 'styling' | 'behavior';
     target_nodes: string[];
     properties: string[];
     description: string;
-    ui_component: 'input' | 'select' | 'color_picker' | 'slider' | 'toggle';
-
+    ui_component: 'input' | 'select' | 'color_picker' | 'slider' | 'toggle' }
 }
-export interface TemplateCategory {
-    id: string;
+}
+export interface TemplateCategory { id: string;
     name: string;
     description: string;
     icon: string;
     color: string;
-    parent_id?: string;
-
+    parent_id?: string }
 }
-export interface TemplateUsageAnalytics {
-    template_id: string;
+}
+export interface TemplateUsageAnalytics { template_id: string;
     total_uses: number;
     unique_users: number;
     success_rate: number;
@@ -79,23 +77,22 @@ export interface TemplateUsageAnalytics {
     most_used_customizations: string[];
     trend_data: {
         date: string;
-        uses: number;
+        uses: number }
 }
     }[];
 
-export declare class ProjectTemplateManager {
-    private apiClient;
+export declare class ProjectTemplateManager { private apiClient;
     private templates;
     private categories;
     private analytics;
     constructor(apiClient: any);
     createTemplate();
-      template: Omit<ProjectTemplate,
+      template: Omit<ProjectTemplate }
       'id' | 'created_at' | 'updated_at' | 'usage_count' | 'rating'>
     ): Promise<ProjectTemplate>;
     updateTemplate(id: string, updates: Partial<ProjectTemplate>): Promise<ProjectTemplate>;
     deleteTemplate(id: string): Promise<void>;
-    searchTemplates(criteria: {)
+    searchTemplates(criteria: { )
         query?: string;
         category?: string;
         tags?: string[];
@@ -104,11 +101,8 @@ export declare class ProjectTemplateManager {
         min_rating?: number;
         sort_by?: 'popularity' | 'rating' | 'newest' | 'name';
         limit?: number;
-        offset?: number;
-    }): Promise<{
-        templates: ProjectTemplate[];
-        total: number;
-    }>;
+        offset?: number }): Promise<{ templates: ProjectTemplate[];
+        total: number }>;
     getFeaturedTemplates(): Promise<ProjectTemplate[]>;
     getRecommendedTemplates(userId: string): Promise<ProjectTemplate[]>;
     instantiateTemplate(templateId: string, customizations: Record<string, any>): Promise<any>;

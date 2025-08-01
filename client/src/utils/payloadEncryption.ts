@@ -1,7 +1,7 @@
 // Client-side Payload Encryption Utilities
 // Provides easy-to-use encryption/decryption for API payloads
 
-}
+
 export interface EncryptedPayload {
   data: string; // Base64 encoded encrypted data,
   iv: string; // Base64 encoded initialization vector,
@@ -10,15 +10,18 @@ export interface EncryptedPayload {
   algorithm: string;,
   timestamp: number;
   compressed?: boolean;
-}
-}
-}
+
+
+
+
+
 export interface EncryptionConfig {
   algorithm: 'aes-256-gcm' | 'aes-256-cbc' | 'chacha20-poly1305';,
-  compressionEnabled: boolean;
+  compressionEnabled: boolean;,
   maxPayloadSize: number;
-}
-}
+
+
+
 export class PayloadEncryptionClient {
   private config: EncryptionConfig;
   private keyCache: Map<string, CryptoKey> = new Map();
@@ -33,10 +36,10 @@ export class PayloadEncryptionClient {
    * Check if the server supports payload encryption
    */
   async checkEncryptionSupport(baseUrl: string): Promise<{,
-  supported: boolean;
+  supported: boolean;,
   algorithms: string;,
   compressionSupported: boolean;
-}> {
+> {
 
     try {
       const response = await fetch(`${baseUrl}/api/encryption/health`, {)}
@@ -59,7 +62,7 @@ export class PayloadEncryptionClient {
   algorithms: [],
   compressionSupported: false,
 };
-    } catch (error) {
+ catch (error) {
   console.error('Failed to check encryption support:', error);
   return {
   supported: false,
@@ -83,7 +86,7 @@ export class PayloadEncryptionClient {
         throw new Error(`Failed to get encryption key: ${response.status}`);}
       const data = await response.json();
       return data.publicKey || 'client-key-placeholder'; // In real implementation, server would provide client encryption key
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get encryption key:', error);
       throw error;
   /**
@@ -126,7 +129,7 @@ export class PayloadEncryptionClient {
   timestamp: Date.now(),
   compressed
 };
-    } catch (error) {
+ catch (error) {
       console.error('Client-side encryption failed:', error);
       throw new Error(`Encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   /**
@@ -155,14 +158,14 @@ export class PayloadEncryptionClient {
         decryptedData = atob(decryptedData); // Reverse base64 compression placeholder
       // Parse JSON
       return JSON.parse(decryptedData);
-    } catch (error) {
+ catch (error) {
       console.error('Client-side decryption failed:', error);
       throw new Error(`Decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   /**
    * Make encrypted API request
    */
-  async encryptedFetch(url: string, )
-    options: RequestInit = {}, 
+  async encryptedFetch(url: string);
+  options: RequestInit = {}, 
     authToken?: string,
     encryptRequest: boolean = false,
     decryptResponse: boolean = false): Promise<Response> {,
@@ -182,7 +185,7 @@ export class PayloadEncryptionClient {
   const encryptedPayload = await this.encryptPayload(parsedBody);
   body = JSON.stringify(encryptedPayload);
   headers.set('Content-Type', 'application/json');
-} catch (error) {
+ catch (error) {
   console.error('Failed to encrypt request:', error);
   throw error;
   const response = await fetch(url, {)
@@ -204,7 +207,7 @@ export class PayloadEncryptionClient {
   statusText: response.statusText,
   headers: response.headers,
 });
-      } catch (error) {
+ catch (error) {
         console.error('Failed to decrypt response:', error);
         // Return original response if decryption fails
         return response;
@@ -212,15 +215,14 @@ export class PayloadEncryptionClient {
   /**
    * Convenience method for encrypted POST requests
    */
-  async encryptedPost(url: string, )
-    data: unknown, 
+  async encryptedPost(url: string);
+  data: unknown, 
     authToken?: string,
     options: RequestInit = {}
   ): Promise<Response> {
-
   return this.encryptedFetch(url, {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
   ...options.headers
 },
@@ -232,13 +234,12 @@ export class PayloadEncryptionClient {
 export const payloadEncryption = new PayloadEncryptionClient();
 
 // Convenience functions
-export async function encryptedFetch(url: string, )
+export async function encryptedFetch(url: string);
   options: RequestInit = {}, 
   authToken?: string
 ): Promise<Response> {
-
   return payloadEncryption.encryptedFetch(url, options, authToken, true, true);
-  export async function encryptedPost(url: string,)
+  export async function encryptedPost(url: string),
   data: unknown,
   authToken?: string): Promise<Response> {,
   return payloadEncryption.encryptedPost(url, data, authToken);

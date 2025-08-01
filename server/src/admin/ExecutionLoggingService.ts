@@ -21,8 +21,8 @@ import { EventEmitter } from 'events';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface ExecutionLog {
   id: string;
   executionId: string;
@@ -81,12 +81,13 @@ export interface ExecutionLog {
   createdAt: Date;
   updatedAt: Date;
   archivedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionContext {
   // System context
   hostName: string;
@@ -118,12 +119,13 @@ export interface ExecutionContext {
   
   // Custom context
   customFields: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionError {
   id: string;
   errorCode: string;
@@ -138,12 +140,13 @@ export interface ExecutionError {
   resolution?: string;
   resolvedAt?: Date;
   resolvedBy?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionWarning {
   id: string;
   warningCode: string;
@@ -156,12 +159,13 @@ export interface ExecutionWarning {
   acknowledged: boolean;
   acknowledgedBy?: string;
   acknowledgedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceMetrics {
   // Timing metrics
   queueTime?: number;
@@ -195,12 +199,13 @@ export interface PerformanceMetrics {
   
   // Custom metrics
   customMetrics: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceUsage {
   // CPU metrics
   cpuTime: number; // milliseconds
@@ -238,12 +243,13 @@ export interface ResourceUsage {
   // Cost metrics
   estimatedCost?: number;
   computeUnits?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityContext {
   // Authentication
   authenticatedUser?: string;
@@ -272,21 +278,23 @@ export interface SecurityContext {
   // Risk assessment
   riskScore?: number;
   riskFactors: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PermissionCheck {
   resource: string;
   action: string;
   granted: boolean;
   checkedAt: Date;
   reason?: string;
-}
-}
-}
+
+
+
+
 
 export enum ExecutionType {
   // Admin operations
@@ -326,7 +334,7 @@ export enum ExecutionType {
   
   // Custom operations
   CUSTOM_OPERATION = 'custom_operation'
-}
+
 
 export enum InitiatorType {
   USER = 'user',
@@ -337,7 +345,7 @@ export enum InitiatorType {
   AUTOMATED_PROCESS = 'automated_process',
   EXTERNAL_SERVICE = 'external_service',
   INTERNAL_SERVICE = 'internal_service'
-}
+
 
 export enum Environment {
   DEVELOPMENT = 'development',
@@ -345,7 +353,7 @@ export enum Environment {
   STAGING = 'staging',
   PRODUCTION = 'production',
   SANDBOX = 'sandbox'
-}
+
 
 export enum ExecutionStatus {
   QUEUED = 'queued',
@@ -358,7 +366,7 @@ export enum ExecutionStatus {
   TIMEOUT = 'timeout',
   RETRYING = 'retrying',
   PARTIALLY_COMPLETED = 'partially_completed'
-}
+
 
 export enum ExecutionPriority {
   LOW = 'low',
@@ -366,7 +374,7 @@ export enum ExecutionPriority {
   HIGH = 'high',
   URGENT = 'urgent',
   CRITICAL = 'critical'
-}
+
 
 export enum ErrorType {
   VALIDATION_ERROR = 'validation_error',
@@ -383,7 +391,7 @@ export enum ErrorType {
   RESOURCE_ERROR = 'resource_error',
   SECURITY_ERROR = 'security_error',
   UNKNOWN_ERROR = 'unknown_error'
-}
+
 
 export enum ErrorSeverity {
   LOW = 'low',
@@ -391,7 +399,7 @@ export enum ErrorSeverity {
   HIGH = 'high',
   CRITICAL = 'critical',
   FATAL = 'fatal'
-}
+
 
 export enum WarningType {
   PERFORMANCE_WARNING = 'performance_warning',
@@ -402,14 +410,14 @@ export enum WarningType {
   BUSINESS_WARNING = 'business_warning',
   DEPRECATION_WARNING = 'deprecation_warning',
   CAPACITY_WARNING = 'capacity_warning'
-}
+
 
 export enum WarningSeverity {
   INFO = 'info',
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high'
-}
+
 
 export enum SecurityLevel {
   PUBLIC = 'public',
@@ -417,10 +425,10 @@ export enum SecurityLevel {
   CONFIDENTIAL = 'confidential',
   RESTRICTED = 'restricted',
   TOP_SECRET = 'top_secret'
-}
 
-}
-}
+
+
+
 export interface ExecutionQuery {
   // Basic filters
   executionIds?: string[];
@@ -444,8 +452,9 @@ export interface ExecutionQuery {
   durationRange?: {
     min?: number;
     max?: number;
-}
-}
+
+
+
   };
   
   // Hierarchy filters
@@ -482,7 +491,7 @@ export interface ExecutionQuery {
   includeMetrics?: boolean;
   includeChildren?: boolean;
   includeContext?: boolean;
-}
+
 
 export enum ExecutionSortField {
   STARTED_AT = 'started_at',
@@ -495,10 +504,10 @@ export enum ExecutionSortField {
   MEMORY_USED = 'memory_used',
   ERROR_COUNT = 'error_count',
   WARNING_COUNT = 'warning_count'
-}
 
-}
-}
+
+
+
 export interface ExecutionStatistics {
   // General statistics
   totalExecutions: number;
@@ -535,8 +544,9 @@ export interface ExecutionStatistics {
   warningsByType: Record<WarningType, number>;
   
   // Time-based trends
-}
-}
+
+
+
   executionsPerHour: Array<{ hour: number; count: number }>;
   executionsPerDay: Array<{ date: string; count: number }>;
   
@@ -544,7 +554,7 @@ export interface ExecutionStatistics {
   overallSuccessRate: number;
   successRateByType: Record<ExecutionType, number>;
   successRateByOperation: Record<string, number>;
-}
+
 
 /**
  * Execution Logging Service
@@ -569,7 +579,7 @@ export class ExecutionLoggingService extends EventEmitter {
     this.setupMetricsCollection();
     this.startCleanupScheduler();
     this.startMetricsAggregation();
-  }
+
   
   /**
    * Start logging an execution
@@ -592,7 +602,7 @@ export class ExecutionLoggingService extends EventEmitter {
       totalSteps?: number;
       tags?: string[];
       metadata?: Record<string, any>;
-    } = {}
+ = {}
   ): Promise<ExecutionLog> {
 
     try {
@@ -619,7 +629,7 @@ export class ExecutionLoggingService extends EventEmitter {
           applicationVersion: this.config.applicationVersion,
           customFields: {},
           ...options.context
-  }
+
         status: ExecutionStatus.INITIALIZING,
         priority: options.priority || ExecutionPriority.NORMAL,
         startedAt: now,
@@ -632,12 +642,12 @@ export class ExecutionLoggingService extends EventEmitter {
         performanceMetrics: {
           executionTime: 0,
           customMetrics: {}
-  }
+
         resourceUsage: {
           cpuTime: 0,
           memoryUsed: 0,
           memoryPeak: 0
-  }
+
         securityContext: {
           permissions: [],
           roles: [],
@@ -652,7 +662,7 @@ export class ExecutionLoggingService extends EventEmitter {
           auditRequired: false,
           riskFactors: [],
           ...options.securityContext
-  }
+
         complianceFlags: [],
         tags: options.tags || [],
         metadata: options.metadata || {},
@@ -669,18 +679,17 @@ export class ExecutionLoggingService extends EventEmitter {
       // Initialize performance tracking
       if (this.config.enablePerformanceTracking) {
         this.startPerformanceTracking(executionId);
-      }
+
       
       // Emit event
       this.emit('execution_started', executionLog);
       
       return executionLog;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Failed to start execution logging:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Update execution progress
@@ -695,7 +704,7 @@ export class ExecutionLoggingService extends EventEmitter {
     const execution = this.activeExecutions.get(executionId);
     if (!execution) {
       throw new Error('Execution not found');
-    }
+
     
     execution.completedSteps = completedSteps;
     execution.currentStep = currentStep;
@@ -704,19 +713,19 @@ export class ExecutionLoggingService extends EventEmitter {
     
     if (metrics) {
       execution.performanceMetrics = { ...execution.performanceMetrics, ...metrics };
-    }
+
     
     // Update status if progressing
     if (execution.status === ExecutionStatus.INITIALIZING) {
       execution.status = ExecutionStatus.RUNNING;
-    }
+
     
     // Update in database
     await this.updateExecutionLog(execution);
     
     // Emit event
     this.emit('execution_progress', execution);
-  }
+
   
   /**
    * Log an error during execution
@@ -732,13 +741,13 @@ export class ExecutionLoggingService extends EventEmitter {
       step?: string;
       severity?: ErrorSeverity;
       retryable?: boolean;
-    } = {}
+ = {}
   ): Promise<void> {
 
     const execution = this.activeExecutions.get(executionId);
     if (!execution) {
       throw new Error('Execution not found');
-    }
+
     
     const error: ExecutionError = {
       id: this.generateErrorId(),
@@ -759,7 +768,7 @@ export class ExecutionLoggingService extends EventEmitter {
     // Update status if critical error
     if (error.severity === ErrorSeverity.FATAL || error.severity === ErrorSeverity.CRITICAL) {
       execution.status = ExecutionStatus.FAILED;
-    }
+
     
     // Update in database
     await this.updateExecutionLog(execution);
@@ -770,8 +779,8 @@ export class ExecutionLoggingService extends EventEmitter {
     // Send alert if configured
     if (this.shouldSendAlert(error)) {
       await this.sendErrorAlert(execution, error);
-    }
-  }
+
+
   
   /**
    * Complete execution logging
@@ -785,7 +794,7 @@ export class ExecutionLoggingService extends EventEmitter {
     const execution = this.activeExecutions.get(executionId);
     if (!execution) {
       throw new Error('Execution not found');
-    }
+
     
     const now = new Date();
     execution.status = status;
@@ -798,7 +807,7 @@ export class ExecutionLoggingService extends EventEmitter {
     if (status === ExecutionStatus.COMPLETED) {
       execution.completedSteps = execution.totalSteps;
       execution.progressPercentage = 100;
-    }
+
     
     // Collect final performance metrics
     if (this.config.enablePerformanceTracking) {
@@ -807,7 +816,7 @@ export class ExecutionLoggingService extends EventEmitter {
       
       const resourceUsage = await this.collectResourceUsage(executionId);
       execution.resourceUsage = { ...execution.resourceUsage, ...resourceUsage };
-    }
+
     
     // Update in database
     await this.updateExecutionLog(execution);
@@ -824,10 +833,10 @@ export class ExecutionLoggingService extends EventEmitter {
     // Archive if configured
     if (this.config.autoArchive && this.shouldArchiveExecution(execution)) {
       await this.scheduleArchival(execution);
-    }
+
     
     return execution;
-  }
+
   
   /**
    * Query execution logs
@@ -836,7 +845,7 @@ export class ExecutionLoggingService extends EventEmitter {
     executions: ExecutionLog[];
     totalCount: number;
     hasMore: boolean;
-  }> {
+> {
 
     const conditions = [];
     const values = [];
@@ -846,51 +855,51 @@ export class ExecutionLoggingService extends EventEmitter {
     if (query.executionIds && query.executionIds.length > 0) {
       conditions.push(`execution_id = ANY($${paramIndex++})`);
       values.push(query.executionIds);
-    }
+
     
     if (query.executionTypes && query.executionTypes.length > 0) {
       conditions.push(`execution_type = ANY($${paramIndex++})`);
       values.push(query.executionTypes);
-    }
+
     
     if (query.statuses && query.statuses.length > 0) {
       conditions.push(`status = ANY($${paramIndex++})`);
       values.push(query.statuses);
-    }
+
     
     if (query.initiatedBy && query.initiatedBy.length > 0) {
       conditions.push(`initiated_by = ANY($${paramIndex++})`);
       values.push(query.initiatedBy);
-    }
+
     
     if (query.startedAfter) {
       conditions.push(`started_at >= $${paramIndex++}`);
       values.push(query.startedAfter);
-    }
+
     
     if (query.startedBefore) {
       conditions.push(`started_at <= $${paramIndex++}`);
       values.push(query.startedBefore);
-    }
+
     
     if (query.hasErrors !== undefined) {
       if (query.hasErrors) {
         conditions.push('jsonb_array_length(errors) > 0');
-      } else {
+ else {
         conditions.push('jsonb_array_length(errors) = 0');
-      }
-    }
+
+
     
     if (query.searchTerm) {
       conditions.push(`(operation ILIKE $${paramIndex} OR component ILIKE $${paramIndex})`);
       values.push(`%${query.searchTerm}%`);
       paramIndex++;
-    }
+
     
     if (query.tags && query.tags.length > 0) {
       conditions.push(`tags && $${paramIndex++}`);
       values.push(query.tags);
-    }
+
     
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     
@@ -922,7 +931,7 @@ export class ExecutionLoggingService extends EventEmitter {
       totalCount,
       hasMore: offset + executions.length < totalCount
     };
-  }
+
   
   /**
    * Get execution statistics
@@ -931,7 +940,7 @@ export class ExecutionLoggingService extends EventEmitter {
     dateRange?: { start: Date; end: Date };
     executionTypes?: ExecutionType[];
     components?: string[];
-  } = {}): Promise<ExecutionStatistics> {
+ = {}): Promise<ExecutionStatistics> {
 
     // Implementation would generate comprehensive statistics
     const stats: ExecutionStatistics = {
@@ -963,95 +972,95 @@ export class ExecutionLoggingService extends EventEmitter {
     };
     
     return stats;
-  }
+
   
   // Private helper methods
   
   private generateExecutionId(): string {
     return `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateLogId(): string {
     return `log_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateErrorId(): string {
     return `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private getCurrentEnvironment(): Environment {
     return (process.env.NODE_ENV as Environment) || Environment.DEVELOPMENT;
-  }
+
   
   private shouldSendAlert(error: ExecutionError): boolean {
     return error.severity === ErrorSeverity.CRITICAL || error.severity === ErrorSeverity.FATAL;
-  }
+
   
   private shouldArchiveExecution(execution: ExecutionLog): boolean {
     const age = Date.now() - execution.createdAt.getTime();
     return age > this.config.archiveAfterMs;
-  }
+
   
   // Placeholder methods that would be fully implemented
   
   private async storeExecutionLog(execution: ExecutionLog): Promise<void> {
 
     // Implementation would store in database
-  }
+
   
   private async updateExecutionLog(execution: ExecutionLog): Promise<void> {
 
     // Implementation would update database
-  }
+
   
   private startPerformanceTracking(executionId: string): void {
     // Implementation would start performance monitoring
-  }
+
   
   private stopPerformanceTracking(executionId: string): void {
     // Implementation would stop performance monitoring
-  }
+
   
   private async collectFinalMetrics(executionId: string): Promise<Partial<PerformanceMetrics>> {
     // Implementation would collect final performance metrics
     return {};
-  }
+
   
   private async collectResourceUsage(executionId: string): Promise<Partial<ResourceUsage>> {
     // Implementation would collect resource usage data
     return {};
-  }
+
   
   private async sendErrorAlert(execution: ExecutionLog, error: ExecutionError): Promise<void> {
 
     // Implementation would send alert notifications
-  }
+
   
   private async scheduleArchival(execution: ExecutionLog): Promise<void> {
 
     // Implementation would schedule archival
-  }
+
   
   private mapExecutionLogRow(row: any): ExecutionLog {
     // Implementation would map database row to ExecutionLog
     return {} as ExecutionLog;
-  }
+
   
   private setupMetricsCollection(): void {
     // Implementation would setup metrics collection
-  }
+
   
   private startCleanupScheduler(): void {
     // Implementation would start cleanup scheduler
-  }
+
   
   private startMetricsAggregation(): void {
     // Implementation would start metrics aggregation
-  }
-}
 
-}
-}
+
+
+
+
 export interface ExecutionLoggingConfig {
   applicationVersion: string;
   enablePerformanceTracking: boolean;
@@ -1067,11 +1076,12 @@ export interface ExecutionLoggingConfig {
     averageDuration: number;
     memoryUsage: number;
     cpuUsage: number;
-}
-}
+
+
+
   };
   enableRealTimeAlerts: boolean;
   enableMetricsAggregation: boolean;
-}
+
 
 export default ExecutionLoggingService;

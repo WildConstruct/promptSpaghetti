@@ -5,62 +5,46 @@ import { v4 as uuidv4 } from 'uuid';
 import { UINode, ExtractedVariable } from './ui-schema';
 import { Node as InternalNode, AnyNodeSchema } from './graphSchema';
 
-export class NodeAdapter {
-  /**
-  * Convert internal node to UI representation
-  * Hides all technical fields from users
-  */
-  static toUI(internal: InternalNode): UINode {,
-  const baseUI = {
-  name: this.extractUserFriendlyName(internal),
-  description: this.extractDescription(internal),
-};
-    switch (internal.type) {
-  case 'WeightedChoice':,
+export class NodeAdapter {};
+    switch (internal.type) { case 'WeightedChoice':,
   return {
   ...baseUI,
   type: 'WeightedChoice',
-  choices: this.extractChoices(internal),
+  choices: this.extractChoices(internal) }
 };
     case 'Concat':
-      return {
-  ...baseUI,
+      return { ...baseUI,
   type: 'Concat',
-  separator: this.extractSeparator(internal),
+  separator: this.extractSeparator(internal) }
 };
     case 'Output':
-      return {
-  ...baseUI,
+      return { ...baseUI,
   type: 'Output',
-  template: this.extractTemplate(internal),
+  template: this.extractTemplate(internal) }
 };
     case 'SetVariable':
-      return {
-  ...baseUI,
+      return { ...baseUI,
   type: 'SetVariable',
   variableName: internal.key || '',
-  value: internal.value || '',
+  value: internal.value || '' }
 };
     case 'GetVariable':
-      return {
-  ...baseUI,
+      return { ...baseUI,
   type: 'GetVariable',
   variableName: internal.key || '',
-  defaultValue: this.extractDefaultValue(internal),
+  defaultValue: this.extractDefaultValue(internal) }
 };
     case 'Conditional':
-      return {
-  ...baseUI,
+      return { ...baseUI,
   type: 'Conditional',
   conditions: this.extractConditions(internal),
-  otherwise: this.extractDefaultOutput(internal),
+  otherwise: this.extractDefaultOutput(internal) }
 };
     case 'Sequential':
-      return {
-  ...baseUI,
+      return { ...baseUI,
   type: 'Sequential',
   items: this.extractSequenceItems(internal),
-  mode: this.extractSequenceMode(internal),
+  mode: this.extractSequenceMode(internal) }
 };
     default:
       throw new Error(`Unsupported node type for UI conversion: ${internal.type}`);}
@@ -68,64 +52,56 @@ export class NodeAdapter {
    * Convert UI node to internal representation
    * Generates all technical fields automatically
    */
-  static toInternal(ui: UINode, existingId?: string): InternalNode {
-  const baseInternal = {
+  static toInternal(ui: UINode, existingId?: string): InternalNode { const baseInternal = {
   id: existingId || uuidv4(),
-  inputs: [] // Will be set by graph connection logic,
+  inputs: [] // Will be set by graph connection logic }
 };
-    switch (ui.type) {
-  case 'WeightedChoice':,
+    switch (ui.type) { case 'WeightedChoice':,
   return {
   ...baseInternal,
   type: 'WeightedChoice',
-  choices: ui.choices.map(choice => ({)
+  choices: ui.choices.map(choice => ({),
   value: choice,
-  weight: 1 // Default equal weights,
+  weight: 1 // Default equal weights }
 }))
       };
     case 'Concat':
-      return {
-  ...baseInternal,
-  type: 'Concat',
+      return { ...baseInternal,
+  type: 'Concat' }
   // Internal concat nodes don't need additional config
 };
     case 'Output':
-      return {
-  ...baseInternal,
-  type: 'Output',
+      return { ...baseInternal,
+  type: 'Output' }
   // Internal output nodes don't need additional config
 };
     case 'SetVariable':
-      return {
-  ...baseInternal,
+      return { ...baseInternal,
   type: 'SetVariable',
   key: ui.variableName,
-  value: ui.value,
+  value: ui.value }
 };
     case 'GetVariable':
-      return {
-  ...baseInternal,
+      return { ...baseInternal,
   type: 'GetVariable',
-  key: ui.variableName,
+  key: ui.variableName }
 };
     case 'Conditional':
-      return {
-  ...baseInternal,
+      return { ...baseInternal,
   type: 'Conditional',
-  branches: ui.conditions.map(condition => ({)
+  branches: ui.conditions.map(condition => ({),
   condition: condition.when,
   output: condition.then,
-  label: condition.label,
+  label: condition.label }
 })),
         defaultOutput: ui.otherwise;
   };
     case 'Sequential':
-      return {
-  ...baseInternal,
+      return { ...baseInternal,
   type: 'Sequential',
   sequence: ui.items,
-  pattern: {
-  type: this.mapSequenceMode(ui.mode),
+  pattern: {,
+  type: this.mapSequenceMode(ui.mode) }
 };
     default:
       throw new Error(`Unsupported UI node type: ${ui.type}`);}
@@ -137,11 +113,10 @@ export class NodeAdapter {
     const variableRegex = /\{(\w+)\}/g;
     const variables: ExtractedVariable = [];
     let match;
-    while ((match = variableRegex.exec(template)) !== null) {
-  variables.push({)
+    while ((match = variableRegex.exec(template)) !== null) { variables.push({)
   name: match[1],
   placeholder: match[0],
-  position: match.index,
+  position: match.index }
 });
     return variables;
   /**
@@ -158,10 +133,9 @@ export class NodeAdapter {
     if (template.includes('{}')) {
       errors.push('Empty variable names not allowed');
     // Check for nested braces
-    if (template.includes('{{') || template.includes('}}')) {
-  errors.push('Nested braces not supported');
+    if (template.includes('{{') || template.includes('}}')) { errors.push('Nested braces not supported');
   return {
-  valid: errors.length === 0,
+  valid: errors.length === 0 }
   errors
 };
   /**
@@ -189,12 +163,11 @@ export class NodeAdapter {
     return (internal as any).template || undefined;
   private static extractDefaultValue(internal: InternalNode): string | undefined {
     return (internal as any).defaultValue || undefined;
-  private static extractConditions(internal: InternalNode): Array<{when: string; then: string; label?: string}> {
-  const branches = (internal as any).branches || [];
-  return branches.map((branch: any) => ({,)
+  private static extractConditions(internal: InternalNode): Array<{when: string; then: string; label?: string}> { const branches = (internal as any).branches || [];
+  return branches.map((branch: any) => ({),
   when: branch.condition || '',
   then: branch.output || '',
-  label: branch.label,
+  label: branch.label }
 }));
   private static extractDefaultOutput(internal: InternalNode): string | undefined {
     return (internal as any).defaultOutput || undefined;
@@ -230,10 +203,9 @@ export class TemplateUtils {
    */
   static generateSampleVariables(variables: ExtractedVariable): Record<string, string> {
     const samples: Record<string, string> = {};
-    variables.forEach(variable => {)
+    variables.forEach(variable => { )
   // Generate contextual sample values based on variable names
-      samples[variable.name] = this.getSampleValue(variable.name);
-    });
+      samples[variable.name] = this.getSampleValue(variable.name) });
     return samples;
   private static getSampleValue(variableName: string): string {
     const lowerName = variableName.toLowerCase();

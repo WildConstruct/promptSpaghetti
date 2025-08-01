@@ -45,7 +45,7 @@ export class YGraph extends Y.AbstractType<any> {
   this.doc.transact(() => {
   this.nodes.set(node.id, node);
 });
-    } else {
+ else {
       // Direct set for testing
       this.nodes.set(node.id, node);
   /**
@@ -58,7 +58,7 @@ export class YGraph extends Y.AbstractType<any> {
         if (node) {
           this.nodes.set(nodeId, { ...node, ...updates });
       });
-    } else {
+ else {
       const node = this.nodes.get(nodeId);
       if (node) {
         this.nodes.set(nodeId, { ...node, ...updates });
@@ -76,7 +76,7 @@ export class YGraph extends Y.AbstractType<any> {
             this.edges.delete(edgeId);
         });
       });
-    } else {
+ else {
       // Direct operations for testing
       this.nodes.delete(nodeId);
       this.edges.forEach((edge, edgeId) => {
@@ -93,7 +93,7 @@ export class YGraph extends Y.AbstractType<any> {
         if (this.nodes.has(edge.source) && this.nodes.has(edge.target)) {
           this.edges.set(edge.id, edge);
       });
-    } else {
+ else {
       // Direct operations for testing
       if (this.nodes.has(edge.source) && this.nodes.has(edge.target)) {
         this.edges.set(edge.id, edge);
@@ -114,7 +114,7 @@ export class YGraph extends Y.AbstractType<any> {
       this.doc.transact(() => {
         this.edges.delete(edgeId);
       });
-    } else {
+ else {
   this.edges.delete(edgeId);
   /**
   * Get all nodes as an array
@@ -142,7 +142,7 @@ export class YGraph extends Y.AbstractType<any> {
   applyOperation(operation: GraphOperation): void {,
   if (operation.type === 'node') {
   this._applyNodeOperation(operation);
-} else if (operation.type === 'edge') {
+ else if (operation.type === 'edge') {
       this._applyEdgeOperation(operation);
   private _applyNodeOperation(operation: NodeOperation): void {
     switch (operation.action) {

@@ -75,7 +75,7 @@ describe('Standardized Authentication Framework', () => {
           details: expect.objectContaining({
             providerId: 'github',
             name: 'GitHub Webhooks'
-  }
+
   }
       );
     });
@@ -297,7 +297,7 @@ describe('Standardized Authentication Framework', () => {
         keyId: 'key-123',
         userId: 'user-456',
         scopes: ['read:data', 'write:data']
-      } as unknown as unknown as unknown);
+ as unknown as unknown as unknown);
 
       mockRequest.headers = {
         'x-api-key': 'sk_test_api_key'
@@ -353,7 +353,7 @@ describe('Standardized Authentication Framework', () => {
         keyId: 'key-123',
         userId: 'user-456',
         scopes: ['read:data'] // Missing write:data scope
-      } as unknown as unknown as unknown);
+ as unknown as unknown as unknown);
 
       mockRequest.headers = {
         'x-api-key': 'sk_test_api_key'
@@ -439,7 +439,7 @@ describe('Standardized Authentication Framework', () => {
         keyId: 'key-123',
         userId: 'user-456',
         scopes: ['read:data']
-      } as unknown as unknown as unknown);
+ as unknown as unknown as unknown);
 
       mockRequest.headers = {
         'authorization': 'Bearer invalid-jwt-token',
@@ -500,7 +500,7 @@ describe('Standardized Authentication Framework', () => {
         keyId: 'key-123',
         userId: 'user-456',
         scopes: ['admin:*']
-      } as unknown as unknown as unknown);
+ as unknown as unknown as unknown);
 
       // Test JWT auth
       const jwtRequest: Partial<FastifyRequest> = {

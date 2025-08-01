@@ -11,77 +11,90 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
-}
+
+
 interface SecurityMetrics {
   totalProviders: number;,
-  activeProviders: number;
+  activeProviders: number;,
   inactiveProviders: number;,
-  errorProviders: number;
+  errorProviders: number;,
   totalLogins: number;,
-  successfulLogins: number;
+  successfulLogins: number;,
   failedLogins: number;,
-  averageResponseTime: number;
+  averageResponseTime: number;,
   uptime: number;,
-  securityScore: number;
+  securityScore: number;,
   complianceScore: number;,
   lastUpdated: Date;
-}
+
+
+
 interface SecurityEvent {
   id: string;,
-  timestamp: Date;
+  timestamp: Date;,
   eventType: SecurityEventType;,
-  providerId: string;
+  providerId: string;,
   providerName: string;,
-  severity: SecurityEventSeverity;
+  severity: SecurityEventSeverity;,
   description: string;,
   details: Record<string, unknown>;
   resolved: boolean;
   resolvedAt?: Date;
   resolvedBy?: string;
-}
+
+
+
 interface ComplianceStatus {
   framework: string;,
-  status: 'compliant' | 'non_compliant' | 'partial' | 'unknown';
+  status: 'compliant' | 'non_compliant' | 'partial' | 'unknown';,
   score: number;,
-  issues: ComplianceIssue;
+  issues: ComplianceIssue;,
   lastAssessment: Date;
-}
+
+
+
 interface ComplianceIssue {
   id: string;,
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   category: string;,
-  description: string;
+  description: string;,
   recommendation: string;
   providerId?: string;
-}
+
+
+
 interface ThreatDetection {
   threatId: string;,
-  timestamp: Date;
+  timestamp: Date;,
   threatType: ThreatType;,
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   description: string;,
-  source: string;
+  source: string;,
   status: 'active' | 'mitigated' | 'false_positive';,
-  affectedProviders: string;
+  affectedProviders: string;,
   indicators: ThreatIndicator;
-}
+
+
+
 interface ThreatIndicator {
   type: string;,
-  value: string;
+  value: string;,
   confidence: number;
-}
+
+
+
 interface AuditLogEntry {
   id: string;,
-  timestamp: Date;
+  timestamp: Date;,
   userId: string;,
-  userName: string;
+  userName: string;,
   action: string;,
-  resource: string;
+  resource: string;,
   details: Record<string, unknown>;
   result: 'success' | 'failure' | 'partial';,
-  ipAddress: string;
+  ipAddress: string;,
   userAgent: string;
-enum SecurityEventType {
+  enum SecurityEventType {
   LOGIN_FAILURE = 'login_failure',
   TOKEN_EXPIRED = 'token_expired',
   INVALID_SIGNATURE = 'invalid_signature',
@@ -92,12 +105,12 @@ enum SecurityEventType {
   CONFIGURATION_CHANGE = 'configuration_change',
   PROVIDER_ADDED = 'provider_added',
   PROVIDER_REMOVED = 'provider_removed'
-enum SecurityEventSeverity {
+  enum SecurityEventSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-enum ThreatType {
+  enum ThreatType {
   BRUTE_FORCE = 'brute_force',
   CREDENTIAL_STUFFING = 'credential_stuffing',
   OAUTH_HIJACKING = 'oauth_hijacking',
@@ -105,8 +118,7 @@ enum ThreatType {
   TOKEN_THEFT = 'token_theft',
   PHISHING = 'phishing',
   MALICIOUS_REDIRECT = 'malicious_redirect'
-
-export const OAuthSecurityDashboard: React.FC = () => {
+  export const OAuthSecurityDashboard: React.FC = () => {,
   // State management
   const [metrics, setMetrics] = useState<SecurityMetrics | null>(null);
   const [securityEvents, setSecurityEvents] = useState<SecurityEvent>([]);
@@ -119,7 +131,8 @@ export const OAuthSecurityDashboard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
   // Auth store for API calls
-}
+
+
   const { authenticatedFetch } = useAuthStore();
   // Auto-refresh effect
   useEffect(() => {
@@ -145,10 +158,10 @@ export const OAuthSecurityDashboard: React.FC = () => {
         loadThreatDetection(),
         loadAuditLogs();
       ]);
-    } catch (err) {
+ catch (err) {
   setError('Failed to load dashboard data');
   console.error('Failed to load dashboard data:', err);
-} finally {
+ finally {
       setLoading(false);
   }, [loading, loadAuditLogs, loadComplianceStatus, loadSecurityEvents, loadSecurityMetrics, loadThreatDetection]);
   const loadSecurityMetrics = useCallback(async () => {
@@ -339,7 +352,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+`}
             >
               <span className="mr-2">{tab.icon}</span>
               {tab.label}
@@ -470,7 +483,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
   compliance.status === 'compliant' ? 'bg-green-400' :,
   compliance.status === 'partial' ? 'bg-yellow-400' :,
   'bg-red-400'
-}`}></span>
+`}></span>
                     </div>
                   </div>
                 ))}
@@ -533,7 +546,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
   event.resolved ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800',
-}`}>
+`}>
                         {event.resolved ? 'Resolved' : 'Active'}
                       </span>
                     </td>
@@ -558,7 +571,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
   compliance.status === 'compliant' ? 'bg-green-400' :,
   compliance.status === 'partial' ? 'bg-yellow-400' :,
   'bg-red-400'
-}`}></span>
+`}></span>
                 </div>
               </div>
               <div className="text-sm text-gray-600 mb-4">
@@ -574,7 +587,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
   issue.severity === 'high' ? 'bg-orange-50 border-orange-200' :,
   issue.severity === 'medium' ? 'bg-yellow-50 border-yellow-200' :,
   'bg-blue-50 border-blue-200'
-}`}>
+`}>
                         <div className="flex justify-between items-start">
                           <div>
                             <div className="font-medium text-gray-900">{issue.description}</div>
@@ -616,7 +629,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
   threat.severity === 'high' ? 'border-orange-300 bg-orange-50' :,
   threat.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :,
   'border-blue-300 bg-blue-50'
-}`}>
+`}>
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-semibold text-gray-900">{threat.threatType.replace()
                         /_/g,
@@ -630,7 +643,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
   threat.status === 'active' ? 'bg-red-100 text-red-800' :,
   threat.status === 'mitigated' ? 'bg-green-100 text-green-800' :,
   'bg-gray-100 text-gray-800'
-}`}>
+`}>
                           {threat.status}
                         </span>
                       </div>
@@ -711,7 +724,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
   log.result === 'success' ? 'bg-green-100 text-green-800' :,
   log.result === 'partial' ? 'bg-yellow-100 text-yellow-800' :,
   'bg-red-100 text-red-800'
-}`}>
+`}>
                         {log.result}
                       </span>
                     </td>

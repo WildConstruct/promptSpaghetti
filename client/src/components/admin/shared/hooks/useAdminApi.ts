@@ -5,7 +5,8 @@
  * Provides authenticated API calls, error handling, and loading states
  */
 import { useState, useCallback, useRef } from 'react';
-}
+
+
 interface ApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
@@ -13,18 +14,19 @@ interface ApiOptions {
   signal?: AbortSignal;
   interface ApiResponse<T = any> {
   data: T;,
-  status: number;
+  status: number;,
   headers: Headers;
   interface UseAdminApiReturn {
   loading: boolean;,
-  error: string | null;
+  error: string | null;,
   apiCall: <T = any>(endpoint: string, options?: ApiOptions) => Promise<ApiResponse<T>>;
   clearError: () => void;,
   abort: () => void;
   // Mock auth token getter - replace with actual auth implementation
   const getAuthToken = (): string | null => {,
   return localStorage.getItem('admin_token') || localStorage.getItem('token');
-}
+
+
 };
 
 export const useAdminApi = (): UseAdminApiReturn => {
@@ -51,11 +53,11 @@ export const useAdminApi = (): UseAdminApiReturn => {
   headers: {
   ...defaultHeaders,
   ...options.headers
-}
+
         signal,
         ...(options.body && {)
   body: typeof options.body === 'string' ? options.body : JSON.stringify(options.body),
-}
+
       };
       // Ensure endpoint starts with / or is a full URL
       const url = endpoint.startsWith('http') ? endpoint :
@@ -66,7 +68,7 @@ export const useAdminApi = (): UseAdminApiReturn => {
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
-      } else {
+ else {
         data = await response.text() as any;
       if (!response.ok) {
         // Extract error message from response
@@ -81,18 +83,18 @@ export const useAdminApi = (): UseAdminApiReturn => {
   status: response.status,
   headers: response.headers,
 };
-    } catch (err) {
+ catch (err) {
       if (err instanceof Error) {
         if (err.name === 'AbortError') {
           // Request was aborted, don't set error state
           throw err;
         setError(err.message);
         throw err;
-      } else {
+ else {
         const errorMessage = 'An unexpected error occurred';
         setError(errorMessage);
         throw new Error(errorMessage);
-    } finally {
+ finally {
       setLoading(false);
   }, []);
   const clearError = useCallback(() => {
@@ -112,24 +114,7 @@ export const useAdminApi = (): UseAdminApiReturn => {
 };
 
 // Specialized hooks for common admin operations
-export const useAdminUserApi = () => {
-  const { apiCall, loading, error, clearError } = useAdminApi();
-  const getUsers = useCallback(async (params?: {)
-  page?: number;
-  limit?: number;
-  search?: string;
-  role?: string;
-  status?: string;
-}) => {
-    const searchParams = new URLSearchParams();
-    if (params?.page) searchParams.set('page', params.page.toString());
-    if (params?.limit) searchParams.set('limit', params.limit.toString());
-    if (params?.search) searchParams.set('search', params.search);
-    if (params?.role) searchParams.set('role', params.role);
-    if (params?.status) searchParams.set('status', params.status);
-    const query = searchParams.toString();
-    return apiCall(`/api/admin/users${query ? `?${query}` : ''}`);}
-  }, [apiCall]);
+export const useAdminUserApi = () => { return null; }, [apiCall]);
   const updateUserStatus = useCallback(async (userId: string, status: string, reason: string) => {
     return apiCall(`/api/admin/users/${userId}/status`, {)}
   },
@@ -154,24 +139,7 @@ export const useAdminUserApi = () => {
   };
 };
 
-export const useAdminFeatureToggleApi = () => {
-  const { apiCall, loading, error, clearError } = useAdminApi();
-  const getToggles = useCallback(async (params?: {)
-  page?: number;
-  limit?: number;
-  search?: string;
-  enabled?: boolean;
-  type?: string;
-}) => {
-    const searchParams = new URLSearchParams();
-    if (params?.page) searchParams.set('page', params.page.toString());
-    if (params?.limit) searchParams.set('limit', params.limit.toString());
-    if (params?.search) searchParams.set('search', params.search);
-    if (params?.enabled !== undefined) searchParams.set('enabled', params.enabled.toString());
-    if (params?.type) searchParams.set('type', params.type);
-    const query = searchParams.toString();
-    return apiCall(`/api/admin/feature-toggles${query ? `?${query}` : ''}`);}
-  }, [apiCall]);
+export const useAdminFeatureToggleApi = () => { return null; }, [apiCall]);
   const createToggle = useCallback(async (toggleData: any) => {
   return apiCall('/api/admin/feature-toggles', {)
   method: 'POST',

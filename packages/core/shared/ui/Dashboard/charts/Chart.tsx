@@ -10,25 +10,23 @@ import './Chart.css';
 
 export type ChartType = 'line' | 'bar' | 'pie' | 'area' | 'donut';
 
-}
-export interface ChartDataPoint {
-  label: string;
+
+export interface ChartDataPoint { label: string;
   value: number;
   color?: string;
-  metadata?: Record<string, any>;
-}
-}
-}
-export interface ChartSeries {
-  name: string;
+  metadata?: Record<string, any> }
+
+
+
+export interface ChartSeries { name: string;
   data: ChartDataPoint;
   color?: string;
-  type?: ChartType; // Override for mixed charts,
-}
-}
-}
-export interface ChartProps {
-  // Core data
+  type?: ChartType; // Override for mixed charts }
+
+
+
+
+export interface ChartProps { // Core data
   series: ChartSeries;
   type?: ChartType;
   // Layout and sizing
@@ -55,13 +53,14 @@ export interface ChartProps {
   error?: string;
   className?: string;
   const defaultColors = {
-  default: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'],
-  success: ['#16a34a', '#22c55e', '#4ade80', '#86efac'],
-  warning: ['#d97706', '#f59e0b', '#fbbf24', '#fcd34d'],
-  error: ['#dc2626', '#ef4444', '#f87171', '#fca5a5'],
-  info: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'],
-  custom: [],
-}
+  default: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+  success: ['#16a34a', '#22c55e', '#4ade80', '#86efac'];
+  warning: ['#d97706', '#f59e0b', '#fbbf24', '#fcd34d'];
+  error: ['#dc2626', '#ef4444', '#f87171', '#fca5a5'];
+  info: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'];
+  custom: [] }
+
+
 };
 const formatDefaultValue = (value: number): string => {
   if (value >= 1000000) {
@@ -70,58 +69,53 @@ const formatDefaultValue = (value: number): string => {
     return `${(value / 1000).toFixed(1)}K`;}
   return value.toString();
 };
-}
-export const Chart: React.FC<ChartProps> = ({)
-  series,
-  type = 'line',
-  height = 300,
-  width = '100%',
-  aspectRatio = '16/9',
-  variant = 'default',
-  colorScheme = 'default',
-  showLegend = true,
-  showGrid = true,
-  showAxes = true,
-  interactive = true,
-  onDataPointClick,
-  onDataPointHover,
-  title,
-  xAxisLabel,
-  yAxisLabel,
-  valueFormatter = formatDefaultValue,
-  loading = false,
-  error,
+
+export const Chart: React.FC<ChartProps> = ({ )
+  series
+  type = 'line'
+  height = 300
+  width = '100%'
+  aspectRatio = '16/9'
+  variant = 'default'
+  colorScheme = 'default'
+  showLegend = true
+  showGrid = true
+  showAxes = true
+  interactive = true
+  onDataPointClick
+  onDataPointHover
+  title
+  xAxisLabel
+  yAxisLabel
+  valueFormatter = formatDefaultValue
+  loading = false
+  error }
   className = ''
-}) => {
-  const [hoveredPoint, setHoveredPoint] = React.useState<{
+}) => { const [hoveredPoint, setHoveredPoint] = React.useState<{
   point: ChartDataPoint;
   series: ChartSeries;
   x: number;
-  y: number;
-} | null>(null);
+  y: number } | null>(null);
   const chartRef = React.useRef<HTMLDivElement>(null);
   const colors = defaultColors[colorScheme] || defaultColors.default;
   // Calculate chart dimensions and scales
-  const chartData = React.useMemo(() => {
-  if (!series.length) return null;
+  const chartData = React.useMemo(() => { if (!series.length) return null;
   const allPoints = series.flatMap(s => s.data);
   const maxValue = Math.max(...allPoints.map(p => p.value));
   const minValue = Math.min(...allPoints.map(p => p.value));
   return {
-  maxValue,
-  minValue,
-  range: maxValue - minValue,
-  totalPoints: allPoints.length,
+  maxValue
+  minValue
+  range: maxValue - minValue
+  totalPoints: allPoints.length }
 };
   }, [series]);
-  const getSeriesColor = (seriesIndex: number, series: ChartSeries): string => {
-    return series.color || colors[seriesIndex % colors.length];
-  };
+  const getSeriesColor = (seriesIndex: number, series: ChartSeries): string => { return series.color || colors[seriesIndex % colors.length] };
   const handleDataPointInteraction = (;);
-    point: ChartDataPoint,
-    series: ChartSeries,
-    event: React.MouseEvent,
-    action: 'click' | 'hover') => {,
+    point: ChartDataPoint
+    series: ChartSeries
+    event: React.MouseEvent
+    action: 'click' | 'hover') => { 
   if (!interactive) return;
   if (action === 'click' && onDataPointClick) {
   onDataPointClick(point, series);
@@ -129,17 +123,15 @@ export const Chart: React.FC<ChartProps> = ({)
   const rect = chartRef.current?.getBoundingClientRect();
   if (rect) {
   setHoveredPoint({)
-  point,
-  series,
-  x: event.clientX - rect.left,
-  y: event.clientY - rect.top,
+  point
+  series
+  x: event.clientX - rect.left
+  y: event.clientY - rect.top }
 });
       onDataPointHover?.(point, series);
   };
-  const handleMouseLeave = () => {
-    setHoveredPoint(null);
-    onDataPointHover?.(null, null);
-  };
+  const handleMouseLeave = () => { setHoveredPoint(null);
+    onDataPointHover?.(null, null) };
   const renderLineChart = () => {
     if (!chartData) return null;
     const chartWidth = typeof width === 'number' ? width : 800;
@@ -353,13 +345,13 @@ export const Chart: React.FC<ChartProps> = ({)
           const x2 = centerX + radius * Math.cos(((currentAngle + angle) * Math.PI) / 180);
           const y2 = centerY + radius * Math.sin(((currentAngle + angle) * Math.PI) / 180);
           const largeArcFlag = angle > 180 ? 1 : 0;
-          const pathData = [;
+          const pathData = [
             `M ${centerX} ${centerY}`}
-}
+
             `L ${x1} ${y1}`}
-}
+
             `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`}
-}
+
             'Z'
           ].join(' ');
           const color = point.color || getSeriesColor(index, series[0]);
@@ -379,8 +371,7 @@ export const Chart: React.FC<ChartProps> = ({)
       </svg>
     );
   };
-  const renderChart = () => {
-  switch (type) {
+  const renderChart = () => { switch (type) {
   case 'bar':,
   return renderBarChart();
   case 'pie':,
@@ -388,7 +379,7 @@ export const Chart: React.FC<ChartProps> = ({)
   return renderPieChart();
   case 'line':,
   case 'area':,
-  default:,
+  default: }
   return renderLineChart();
 };
   if (loading) {
@@ -429,13 +420,13 @@ export const Chart: React.FC<ChartProps> = ({)
       <div className="chart-container">
         {renderChart()}
         {/* Tooltip */}
-        {hoveredPoint && ()
+        { hoveredPoint && ()
           <div 
             className="chart-tooltip"
             style={{
-  left: hoveredPoint.x,
-  top: hoveredPoint.y - 10,
-}}
+  left: hoveredPoint.x
+  top: hoveredPoint.y - 10 }
+}
           >
             <div className="tooltip-series">{hoveredPoint.series.name}</div>
             <div className="tooltip-label">{hoveredPoint.point.label}</div>

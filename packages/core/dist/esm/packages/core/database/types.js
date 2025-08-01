@@ -4,6 +4,9 @@
  * This file contains foundational type definitions used across the application
  * for database operations, pagination, and RBAC (Role-Based Access Control).
  */
+ > ;
+timestamp: Date;
+executionTime ?  : number;
 totalCount: number,
     options;
 PaginationOptions;

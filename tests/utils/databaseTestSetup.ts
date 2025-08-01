@@ -16,7 +16,7 @@ export interface DatabaseConfig {
   database: string;
   username: string;
   password: string;
-}
+
 
 export class DatabaseTestManager {
   private container: StartedPostgreSqlContainer | null = null;
@@ -32,7 +32,7 @@ export class DatabaseTestManager {
     persistData?: boolean;
     migrationsPath?: string;
     seedsPath?: string;
-  } = {}) {
+ = {}) {
     this.options = {
       image: 'postgres:15-alpine',
       database: 'test_db',
@@ -43,7 +43,7 @@ export class DatabaseTestManager {
       seedsPath: path.join(__dirname, '../fixtures/seeds'),
       ...options
     };
-  }
+
 
   /**
    * Start PostgreSQL container and establish connection
@@ -51,7 +51,7 @@ export class DatabaseTestManager {
   async start(): Promise<DatabaseConfig> {
     if (this.container) {
       throw new Error('Container is already running');
-    }
+
 
     console.log('Starting PostgreSQL test container...');
     
@@ -97,20 +97,19 @@ export class DatabaseTestManager {
 
       console.log('Database test container ready');
       return this.config;
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to start database container:', error);
       await this.cleanup();
       throw error;
-    }
-  }
+
+
 
   /**
    * Stop container and cleanup connections
    */
   async stop(): Promise<void> {
     await this.cleanup();
-  }
+
 
   /**
    * Get database configuration
@@ -118,9 +117,9 @@ export class DatabaseTestManager {
   getConfig(): DatabaseConfig {
     if (!this.config) {
       throw new Error('Container not started');
-    }
+
     return this.config;
-  }
+
 
   /**
    * Get connection pool for tests
@@ -128,9 +127,9 @@ export class DatabaseTestManager {
   getPool(): Pool {
     if (!this.pool) {
       throw new Error('Database not initialized');
-    }
+
     return this.pool;
-  }
+
 
   /**
    * Get direct client connection
@@ -138,9 +137,9 @@ export class DatabaseTestManager {
   getClient(): Client {
     if (!this.client) {
       throw new Error('Database not initialized');
-    }
+
     return this.client;
-  }
+
 
   /**
    * Run database migrations
@@ -148,14 +147,14 @@ export class DatabaseTestManager {
   async runMigrations(): Promise<void> {
     if (!this.client) {
       throw new Error('Database not initialized');
-    }
+
 
     const migrationsPath = this.options.migrationsPath!;
     
     if (!fs.existsSync(migrationsPath)) {
       console.warn(`Migrations path not found: ${migrationsPath}`);
       return;
-    }
+
 
     console.log('Running database migrations...');
 
@@ -185,7 +184,7 @@ export class DatabaseTestManager {
         
         if (appliedVersions.has(version)) {
           continue; // Skip already applied migrations
-        }
+
 
         console.log(`Applying migration: ${file}`);
         
@@ -201,19 +200,18 @@ export class DatabaseTestManager {
           );
           await this.client.query('COMMIT');
           console.log(`Migration ${version} applied successfully`);
-        } catch (error) {
+ catch (error) {
           await this.client.query('ROLLBACK');
           throw new Error(`Migration ${version} failed: ${error.message}`);
-        }
-      }
+
+
 
       console.log('Migrations completed successfully');
-
-    } catch (error) {
+ catch (error) {
       console.error('Migration failed:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Seed test data
@@ -221,14 +219,14 @@ export class DatabaseTestManager {
   async seedTestData(seedName?: string): Promise<void> {
     if (!this.client) {
       throw new Error('Database not initialized');
-    }
+
 
     const seedsPath = this.options.seedsPath!;
     
     if (!fs.existsSync(seedsPath)) {
       console.warn(`Seeds path not found: ${seedsPath}`);
       return;
-    }
+
 
     try {
       if (seedName) {
@@ -238,10 +236,10 @@ export class DatabaseTestManager {
           console.log(`Running seed: ${seedName}`);
           const seedSql = fs.readFileSync(seedFile, 'utf8');
           await this.client.query(seedSql);
-        } else {
+ else {
           console.warn(`Seed file not found: ${seedFile}`);
-        }
-      } else {
+
+ else {
         // Run all seed files
         const seedFiles = fs.readdirSync(seedsPath)
           .filter(file => file.endsWith('.sql'))
@@ -251,16 +249,15 @@ export class DatabaseTestManager {
           console.log(`Running seed: ${file}`);
           const seedSql = fs.readFileSync(path.join(seedsPath, file), 'utf8');
           await this.client.query(seedSql);
-        }
-      }
+
+
 
       console.log('Test data seeded successfully');
-
-    } catch (error) {
+ catch (error) {
       console.error('Seeding failed:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Clean all test data while preserving schema
@@ -268,7 +265,7 @@ export class DatabaseTestManager {
   async cleanTestData(): Promise<void> {
     if (!this.client) {
       throw new Error('Database not initialized');
-    }
+
 
     try {
       // Get all tables except migrations
@@ -288,18 +285,17 @@ export class DatabaseTestManager {
       // Truncate all tables
       for (const table of tables) {
         await this.client.query(`TRUNCATE TABLE "${table}" RESTART IDENTITY CASCADE`);
-      }
+
 
       // Re-enable foreign key constraints
       await this.client.query('SET session_replication_role = DEFAULT');
 
       console.log(`Cleaned ${tables.length} tables`);
-
-    } catch (error) {
+ catch (error) {
       console.error('Data cleanup failed:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Execute custom SQL query
@@ -307,9 +303,9 @@ export class DatabaseTestManager {
   async query(sql: string, params?: unknown[]): Promise<unknown> {
     if (!this.client) {
       throw new Error('Database not initialized');
-    }
+
     return this.client.query(sql, params);
-  }
+
 
   /**
    * Check if container is healthy
@@ -317,15 +313,15 @@ export class DatabaseTestManager {
   async healthCheck(): Promise<boolean> {
     if (!this.client) {
       return false;
-    }
+
 
     try {
       await this.client.query('SELECT 1');
       return true;
-    } catch {
+ catch {
       return false;
-    }
-  }
+
+
 
   /**
    * Get database statistics
@@ -333,7 +329,7 @@ export class DatabaseTestManager {
   async getStats() {
     if (!this.client) {
       throw new Error('Database not initialized');
-    }
+
 
     const stats = await this.client.query(`
       SELECT 
@@ -348,7 +344,7 @@ export class DatabaseTestManager {
     `);
 
     return stats.rows;
-  }
+
 
   /**
    * Create database snapshot for test isolation
@@ -356,11 +352,11 @@ export class DatabaseTestManager {
   async createSnapshot(name: string): Promise<void> {
     if (!this.client) {
       throw new Error('Database not initialized');
-    }
+
 
     // This would create a savepoint for transaction-based isolation
     await this.client.query(`SAVEPOINT ${name}`);
-  }
+
 
   /**
    * Restore database snapshot
@@ -368,10 +364,10 @@ export class DatabaseTestManager {
   async restoreSnapshot(name: string): Promise<void> {
     if (!this.client) {
       throw new Error('Database not initialized');
-    }
+
 
     await this.client.query(`ROLLBACK TO SAVEPOINT ${name}`);
-  }
+
 
   /**
    * Cleanup resources
@@ -381,27 +377,26 @@ export class DatabaseTestManager {
       if (this.client) {
         await this.client.end();
         this.client = null;
-      }
+
 
       if (this.pool) {
         await this.pool.end();
         this.pool = null;
-      }
+
 
       if (this.container) {
         console.log('Stopping PostgreSQL container...');
         await this.container.stop();
         this.container = null;
         console.log('Container stopped successfully');
-      }
+
 
       this.config = null;
-
-    } catch (error) {
+ catch (error) {
       console.error('Cleanup error:', error);
-    }
-  }
-}
+
+
+
 
 // Singleton instance for tests
 let globalDbManager: DatabaseTestManager | null = null;
@@ -412,9 +407,9 @@ let globalDbManager: DatabaseTestManager | null = null;
 export function getTestDatabase(): DatabaseTestManager {
   if (!globalDbManager) {
     globalDbManager = new DatabaseTestManager();
-  }
+
   return globalDbManager;
-}
+
 
 /**
  * Setup database for test suite
@@ -422,7 +417,7 @@ export function getTestDatabase(): DatabaseTestManager {
 export async function setupTestDatabase(): Promise<DatabaseConfig> {
   const dbManager = getTestDatabase();
   return await dbManager.start();
-}
+
 
 /**
  * Cleanup database after test suite
@@ -431,8 +426,8 @@ export async function teardownTestDatabase(): Promise<void> {
   if (globalDbManager) {
     await globalDbManager.stop();
     globalDbManager = null;
-  }
-}
+
+
 
 /**
  * Jest setup helpers
@@ -446,7 +441,7 @@ export
     afterAll(async () => {
       if (dbManager) {
         await dbManager.stop();
-      }
+
     });
 
     return () => dbManager;
@@ -467,13 +462,13 @@ export
       if (dbManager) {
         await dbManager.cleanTestData();
         await dbManager.seedTestData();
-      }
+
     });
 
     afterAll(async () => {
       if (dbManager) {
         await dbManager.stop();
-      }
+
     });
 
     return () => dbManager;
@@ -501,11 +496,11 @@ export
     afterAll(async () => {
       if (dbManager) {
         await dbManager.stop();
-      }
+
     });
 
     return () => dbManager;
-  }
+
 };
 
 export { DatabaseTestManager };

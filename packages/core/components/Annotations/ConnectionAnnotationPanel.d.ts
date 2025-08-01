@@ -2,8 +2,8 @@ import React from 'react';
 import { AnnotatedEdge } from './ConnectionAnnotations';
 
 }
-interface ConnectionAnnotationPanelProps {
-    edges: AnnotatedEdge[];
+}
+interface ConnectionAnnotationPanelProps { edges: AnnotatedEdge[];
     selectedEdgeId: string | null;
     labelEditMode: boolean;
     smartPositioning: boolean;
@@ -28,7 +28,7 @@ export declare const ConnectionAnnotationToolbar: React.FC<{
     labelEditMode: boolean;
     onSetLabelEditMode: (enabled: boolean) => void;
     visibleLabelsCount: number;
-    totalLabelsCount: number;
+    totalLabelsCount: number }
 }
 }>;
 export {};

@@ -6,17 +6,14 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DragSelectBox } from '../DragSelectBox';
-const defaultProps = {
-  onSelectionComplete: jest.fn<unknown, unknown>(),
-  onSelectionCancel: jest.fn<unknown, unknown>(),
-  canvasOffset: { x: 0, y: 0 },
-  zoom: 1,
+const defaultProps = { onSelectionComplete: jest.fn<unknown, unknown>()
+  onSelectionCancel: jest.fn<unknown, unknown>() }
+  canvasOffset: { x: 0, y: 0 }
+  zoom: 1
   isActive: true;
   };
-describe('DragSelectBox Component', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+describe('DragSelectBox Component', () => { beforeEach(() => {
+    jest.clearAllMocks() });
   describe('Rendering', () => {
     test('renders overlay when active', () => {
       render(<DragSelectBox {...defaultProps} />);
@@ -49,11 +46,11 @@ describe('DragSelectBox Component', () => {
       // Move mouse
       fireEvent.mouseMove(document, { clientX: 200, clientY: 200 });
       const selectionBox = screen.getByTestId('drag-select-box');
-      expect(selectionBox).toHaveStyle({)
-  left: '100px',
-  top: '100px',
-  width: '100px',
-  height: '100px',
+      expect(selectionBox).toHaveStyle({ )
+  left: '100px'
+  top: '100px'
+  width: '100px'
+  height: '100px' }
 });
     });
     test('completes selection on mouse up with sufficient size', () => {
@@ -65,11 +62,11 @@ describe('DragSelectBox Component', () => {
       fireEvent.mouseMove(document, { clientX: 250, clientY: 250 });
       // End drag
       fireEvent.mouseUp(document);
-      expect(defaultProps.onSelectionComplete).toHaveBeenCalledWith({)
-  x: 100,
-  y: 100,
-  width: 150,
-  height: 150,
+      expect(defaultProps.onSelectionComplete).toHaveBeenCalledWith({ )
+  x: 100
+  y: 100
+  width: 150
+  height: 150 }
 });
     });
     test('cancels selection if area too small', () => {
@@ -92,19 +89,18 @@ describe('DragSelectBox Component', () => {
       // Move mouse in opposite direction
       fireEvent.mouseMove(document, { clientX: 100, clientY: 100 });
       const selectionBox = screen.getByTestId('drag-select-box');
-      expect(selectionBox).toHaveStyle({)
-  left: '100px',
-  top: '100px',
-  width: '100px',
-  height: '100px',
+      expect(selectionBox).toHaveStyle({ )
+  left: '100px'
+  top: '100px'
+  width: '100px'
+  height: '100px' }
 });
     });
   });
-  describe('Canvas Integration', () => {
-    test('applies canvas offset to selection bounds', () => {
+  describe('Canvas Integration', () => { test('applies canvas offset to selection bounds', () => {
       const propsWithOffset = {
-        ...defaultProps,
-        canvasOffset: { x: -50, y: -25 },
+        ...defaultProps }
+        canvasOffset: { x: -50, y: -25 }
         zoom: 1;
   };
       render(<DragSelectBox {...propsWithOffset} />);
@@ -113,17 +109,16 @@ describe('DragSelectBox Component', () => {
       fireEvent.mouseDown(overlay, { clientX: 100, clientY: 100 });
       fireEvent.mouseMove(document, { clientX: 200, clientY: 200 });
       fireEvent.mouseUp(document);
-      expect(defaultProps.onSelectionComplete).toHaveBeenCalledWith({)
-  x: 150, // (100 - (-50)) / 1,
-  y: 125, // (100 - (-25)) / 1,
-  width: 100,
-  height: 100,
+      expect(defaultProps.onSelectionComplete).toHaveBeenCalledWith({ )
+  x: 150, // (100 - (-50)) / 1
+  y: 125, // (100 - (-25)) / 1
+  width: 100
+  height: 100 }
 });
     });
-    test('applies zoom factor to selection bounds', () => {
-      const propsWithZoom = {
-        ...defaultProps,
-        canvasOffset: { x: 0, y: 0 },
+    test('applies zoom factor to selection bounds', () => { const propsWithZoom = {
+        ...defaultProps }
+        canvasOffset: { x: 0, y: 0 }
         zoom: 0.5;
   };
       render(<DragSelectBox {...propsWithZoom} />);
@@ -132,11 +127,11 @@ describe('DragSelectBox Component', () => {
       fireEvent.mouseDown(overlay, { clientX: 100, clientY: 100 });
       fireEvent.mouseMove(document, { clientX: 200, clientY: 200 });
       fireEvent.mouseUp(document);
-      expect(defaultProps.onSelectionComplete).toHaveBeenCalledWith({)
-  x: 200, // 100 / 0.5,
-  y: 200, // 100 / 0.5,
-  width: 200, // 100 / 0.5,
-  height: 200 // 100 / 0.5,
+      expect(defaultProps.onSelectionComplete).toHaveBeenCalledWith({ )
+  x: 200, // 100 / 0.5
+  y: 200, // 100 / 0.5
+  width: 200, // 100 / 0.5
+  height: 200 // 100 / 0.5 }
 });
     });
   });
@@ -184,10 +179,9 @@ describe('DragSelectBox Component', () => {
       fireEvent.mouseMove(document, { clientX: 250, clientY: 200 });
       expect(screen.getByText('150 × 100')).toBeInTheDocument();
     });
-    test('applies zoom factor to displayed dimensions', () => {
-  const propsWithZoom = {
-  ...defaultProps,
-  zoom: 0.5,
+    test('applies zoom factor to displayed dimensions', () => { const propsWithZoom = {
+  ...defaultProps
+  zoom: 0.5 }
 };
       render(<DragSelectBox {...propsWithZoom} />);
       const overlay = screen.getByTestId('drag-select-overlay');
@@ -206,15 +200,15 @@ describe('DragSelectBox Component', () => {
       const mockPreventDefault = jest.fn<unknown, unknown>();
       const mockStopPropagation = jest.fn<unknown, unknown>();
       const mouseDownEvent = new MouseEvent('mousedown', { )
-        bubbles: true,
-        clientX: 100,
+        bubbles: true
+        clientX: 100 }
         clientY: 100;
   });
-      Object.defineProperty(mouseDownEvent, 'preventDefault', {)
-  value: mockPreventDefault,
+      Object.defineProperty(mouseDownEvent, 'preventDefault', { )
+  value: mockPreventDefault }
 });
-      Object.defineProperty(mouseDownEvent, 'stopPropagation', {)
-  value: mockStopPropagation,
+      Object.defineProperty(mouseDownEvent, 'stopPropagation', { )
+  value: mockStopPropagation }
 });
       fireEvent(overlay, mouseDownEvent);
       expect(mockPreventDefault).toHaveBeenCalled();
@@ -252,10 +246,10 @@ describe('DragSelectBox Component', () => {
       // Move mouse
       fireEvent.mouseMove(document, { clientX: 200, clientY: 150 });
       const infoElement = screen.getByText('100 × 50');
-      expect(infoElement).toHaveStyle({)
-  position: 'absolute',
-  left: '210px', // max(startX, currentX) + 10,
-  top: '65px'    // min(startY, currentY) - 35,
+      expect(infoElement).toHaveStyle({ )
+  position: 'absolute'
+  left: '210px', // max(startX, currentX) + 10
+  top: '65px'    // min(startY, currentY) - 35 }
 });
     });
     test('provides clear visual feedback', () => {
@@ -264,10 +258,10 @@ describe('DragSelectBox Component', () => {
       // Start drag
       fireEvent.mouseDown(overlay, { clientX: 100, clientY: 100 });
       const selectionBox = screen.getByTestId('drag-select-box');
-      expect(selectionBox).toHaveStyle({)
-  border: '2px dashed #3b82f6',
-  background: 'rgba(59, 130, 246, 0.1)',
-  borderRadius: '4px',
+      expect(selectionBox).toHaveStyle({ )
+  border: '2px dashed #3b82f6'
+  background: 'rgba(59, 130, 246, 0.1)'
+  borderRadius: '4px' }
 });
     });
   });

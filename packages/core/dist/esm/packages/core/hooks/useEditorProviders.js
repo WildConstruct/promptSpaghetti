@@ -206,7 +206,8 @@ loadGraph: (data) => {
                                         return Array.from(providerRegistry.values()).sort((a, b) => a.priority - b.priority);
                                     }, []);
                                     // Provider registry implementation
-                                    const registry = useMemo(() => ({}), register, (hook) => {
+                                    const registry = useMemo(() => ({}));
+                                    register: (hook) => {
                                         if (providerRegistry.has(hook.id)) {
                                             console.warn(`Provider hook ${hook.id} is already registered. Replacing existing hook.`);
                                         }
@@ -230,216 +231,215 @@ loadGraph: (data) => {
                                                     hookName;
                                                 T,
                                                 ;
-                                            }
-                                        };
-                                    }, ...args, any);
-                                    {
-                                        const hooks = getSortedHooks();
-                                        for (const hook of hooks) {
-                                            const hookFn = hook[hookName];
-                                            if (typeof hookFn === 'function') {
-                                                await hookFn(...args);
-                                            }
-                                            executeCustomAction: (hookId, actionName, ...args) => {
-                                                const hook = providerRegistry.get(hookId);
-                                                if (hook?.customActions?.[actionName]) {
-                                                    return hook.customActions[actionName](editorContext, ...args);
-                                                    throw new Error(`Custom action ${actionName} not found in provider ${hookId}`);
+                                                args: any;
+                                                {
+                                                    const hooks = getSortedHooks();
+                                                    for (const hook of hooks) {
+                                                        const hookFn = hook[hookName];
+                                                        if (typeof hookFn === 'function') {
+                                                            await(hookFn)(...args);
+                                                        }
+                                                        executeCustomAction: (hookId, actionName, ...args) => {
+                                                            const hook = providerRegistry.get(hookId);
+                                                            if (hook?.customActions?.[actionName]) {
+                                                                return hook.customActions[actionName](editorContext, ...args);
+                                                                throw new Error(`Custom action ${actionName} not found in provider ${hookId}`);
+                                                            }
+                                                        };
+                                                        [editorContext, editorActions, getSortedHooks, providersInitialized];
+                                                        ;
+                                                        // Initialize provider hooks on mount
+                                                        useEffect(() => {
+                                                            const hooks = getSortedHooks();
+                                                            hooks.forEach(hook => { });
+                                                            if (hook.onInit) {
+                                                                hook.onInit(editorContext, editorActions);
+                                                            }
+                                                        });
+                                                        setProvidersInitialized(true);
+                                                        return () => {
+                                                            hooks.forEach(hook => { });
+                                                            if (hook.onDestroy) {
+                                                                hook.onDestroy();
+                                                            }
+                                                            ;
+                                                        };
+                                                    }
+                                                    [];
+                                                    ; // Only run on mount/unmount
+                                                    // Handle nodes changes
+                                                    useEffect(() => {
+                                                        if (providersInitialized && prevNodesRef.current !== initialNodes) {
+                                                            const hooks = getSortedHooks();
+                                                            hooks.forEach(hook => { });
+                                                            if (hook.onNodesChange) {
+                                                                hook.onNodesChange(initialNodes, prevNodesRef.current);
+                                                            }
+                                                        }
+                                                    });
+                                                    prevNodesRef.current = initialNodes;
                                                 }
-                                            };
-                                            [editorContext, editorActions, getSortedHooks, providersInitialized];
+                                                [initialNodes, providersInitialized, getSortedHooks];
+                                                ;
+                                                // Handle edges changes
+                                                useEffect(() => {
+                                                    if (providersInitialized && prevEdgesRef.current !== initialEdges) {
+                                                        const hooks = getSortedHooks();
+                                                        hooks.forEach(hook => { });
+                                                        if (hook.onEdgesChange) {
+                                                            hook.onEdgesChange(initialEdges, prevEdgesRef.current);
+                                                        }
+                                                    }
+                                                });
+                                                prevEdgesRef.current = initialEdges;
+                                            }
+                                            [initialEdges, providersInitialized, getSortedHooks];
                                             ;
-                                            // Initialize provider hooks on mount
+                                            // Handle selection changes
                                             useEffect(() => {
-                                                const hooks = getSortedHooks();
-                                                hooks.forEach(hook => { });
-                                                if (hook.onInit) {
-                                                    hook.onInit(editorContext, editorActions);
+                                                if (providersInitialized && prevSelectedRef.current !== selectedNodeId) {
+                                                    const hooks = getSortedHooks();
+                                                    hooks.forEach(hook => { });
+                                                    if (hook.onSelectionChange) {
+                                                        hook.onSelectionChange(selectedNodeId);
+                                                    }
                                                 }
                                             });
-                                            setProvidersInitialized(true);
-                                            return () => {
-                                                hooks.forEach(hook => { });
-                                                if (hook.onDestroy) {
-                                                    hook.onDestroy();
-                                                }
-                                                ;
-                                            };
-                                        }
-                                        [];
-                                        ; // Only run on mount/unmount
-                                        // Handle nodes changes
+                                            prevSelectedRef.current = selectedNodeId;
+                                        }, [selectedNodeId, providersInitialized, getSortedHooks];
+                                        ;
+                                        // Handle validation changes
                                         useEffect(() => {
-                                            if (providersInitialized && prevNodesRef.current !== initialNodes) {
+                                            if (providersInitialized) {
                                                 const hooks = getSortedHooks();
                                                 hooks.forEach(hook => { });
-                                                if (hook.onNodesChange) {
-                                                    hook.onNodesChange(initialNodes, prevNodesRef.current);
+                                                if (hook.onValidationChange) {
+                                                    hook.onValidationChange(validationErrors);
                                                 }
                                             }
                                         });
-                                        prevNodesRef.current = initialNodes;
-                                    }
-                                    [initialNodes, providersInitialized, getSortedHooks];
+                                    }, [validationErrors, providersInitialized, getSortedHooks];
                                     ;
-                                    // Handle edges changes
-                                    useEffect(() => {
-                                        if (providersInitialized && prevEdgesRef.current !== initialEdges) {
-                                            const hooks = getSortedHooks();
-                                            hooks.forEach(hook => { });
-                                            if (hook.onEdgesChange) {
-                                                hook.onEdgesChange(initialEdges, prevEdgesRef.current);
-                                            }
-                                        }
-                                    });
-                                    prevEdgesRef.current = initialEdges;
+                                    return {
+                                        registry,
+                                        editorContext,
+                                        editorActions,
+                                        isLoading
+                                    };
                                 }
-                                [initialEdges, providersInitialized, getSortedHooks];
                                 ;
-                                // Handle selection changes
-                                useEffect(() => {
-                                    if (providersInitialized && prevSelectedRef.current !== selectedNodeId) {
-                                        const hooks = getSortedHooks();
-                                        hooks.forEach(hook => { });
-                                        if (hook.onSelectionChange) {
-                                            hook.onSelectionChange(selectedNodeId);
-                                        }
-                                    }
-                                });
-                                prevSelectedRef.current = selectedNodeId;
+                                // Helper function to create provider hooks
+                                export const createProviderHook = (config) => {
+                                    return {
+                                        priority: 100, // Default priority,
+                                        ...config
+                                    };
+                                };
+                                // Built-in provider hooks examples
+                                export const createConsoleLoggerHook = () => createProviderHook({});
+                                id: 'console-logger',
+                                    name;
+                                'Console Logger',
+                                    version;
+                                '1.0.0',
+                                    priority;
+                                1000, // Low priority,
+                                    onInit;
+                                (context, actions) => {
+                                    console.log('[EditorProvider] Console logger initialized', context);
+                                },
+                                    onNodesChange;
+                                (nodes, prevNodes) => {
+                                    console.log('[EditorProvider] Nodes changed', {});
+                                    count: nodes.length,
+                                        prevCount;
+                                    prevNodes.length,
+                                    ;
+                                };
+                                ;
                             }
-                            [selectedNodeId, providersInitialized, getSortedHooks];
+                            onEdgesChange: (edges, prevEdges) => {
+                                console.log('[EditorProvider] Edges changed', {});
+                                count: edges.length,
+                                    prevCount;
+                                prevEdges.length,
+                                ;
+                            };
                             ;
-                            // Handle validation changes
-                            useEffect(() => {
-                                if (providersInitialized) {
-                                    const hooks = getSortedHooks();
-                                    hooks.forEach(hook => { });
-                                    if (hook.onValidationChange) {
-                                        hook.onValidationChange(validationErrors);
-                                    }
-                                }
-                            });
                         }
-                        [validationErrors, providersInitialized, getSortedHooks];
+                        onSelectionChange: (selectedNodeId) => {
+                            console.log('[EditorProvider] Selection changed', { selectedNodeId });
+                        };
                         ;
-                        return {
-                            registry,
-                            editorContext,
-                            editorActions,
-                            isLoading
+                        export const createAutoSaveHook = (interval = 30000) => {
+                            let autoSaveTimer = null;
+                            return createProviderHook({});
+                            id: 'auto-save',
+                                name;
+                            'Auto Save',
+                                version;
+                            '1.0.0',
+                                priority;
+                            50, // High priority,
+                                onInit;
+                            (context, actions) => {
+                                autoSaveTimer = setInterval(() => {
+                                    if (context.hasUnsavedChanges) {
+                                        console.log('[EditorProvider] Auto-saving...');
+                                        actions.saveGraph();
+                                    }
+                                    interval;
+                                });
+                            },
+                                onDestroy;
+                            () => {
+                                if (autoSaveTimer) {
+                                    clearInterval(autoSaveTimer);
+                                    autoSaveTimer = null;
+                                }
+                                ;
+                            };
+                            export const createValidationHook = () => createProviderHook({});
+                            id: 'validation',
+                                name;
+                            'Validation Provider',
+                                version;
+                            '1.0.0',
+                                priority;
+                            10, // Very high priority,
+                                onNodeAdd;
+                            (node, context) => {
+                                // Add validation metadata to new nodes
+                                return {
+                                    ...node,
+                                    data: {
+                                        ...node.data,
+                                        _validated: false,
+                                        _validationTimestamp: Date.now(),
+                                    }
+                                },
+                                    onNodeUpdate;
+                                (nodeId, updates, context) => {
+                                    // Add validation metadata to updates
+                                    return {
+                                        ...updates,
+                                        _validated: false,
+                                        _validationTimestamp: Date.now(),
+                                    };
+                                },
+                                    onValidationChange;
+                                (errors) => {
+                                    if (errors.length > 0) {
+                                        console.warn('[EditorProvider] Validation errors detected', errors);
+                                    }
+                                    ;
+                                };
+                            };
                         };
                     }
-                    ;
-                    // Helper function to create provider hooks
-                    export const createProviderHook = (config) => {
-                        return {
-                            priority: 100, // Default priority,
-                            ...config
-                        };
-                    };
-                    // Built-in provider hooks examples
-                    export const createConsoleLoggerHook = () => createProviderHook({});
-                    id: 'console-logger',
-                        name;
-                    'Console Logger',
-                        version;
-                    '1.0.0',
-                        priority;
-                    1000, // Low priority,
-                        onInit;
-                    (context, actions) => {
-                        console.log('[EditorProvider] Console logger initialized', context);
-                    },
-                        onNodesChange;
-                    (nodes, prevNodes) => {
-                        console.log('[EditorProvider] Nodes changed', {});
-                        count: nodes.length,
-                            prevCount;
-                        prevNodes.length,
-                        ;
-                    };
-                    ;
                 }
-                onEdgesChange: (edges, prevEdges) => {
-                    console.log('[EditorProvider] Edges changed', {});
-                    count: edges.length,
-                        prevCount;
-                    prevEdges.length,
-                    ;
-                };
-                ;
             }
             finally { }
-            onSelectionChange: (selectedNodeId) => {
-                console.log('[EditorProvider] Selection changed', { selectedNodeId });
-            };
-            ;
-            export const createAutoSaveHook = (interval = 30000) => {
-                let autoSaveTimer = null;
-                return createProviderHook({});
-                id: 'auto-save',
-                    name;
-                'Auto Save',
-                    version;
-                '1.0.0',
-                    priority;
-                50, // High priority,
-                    onInit;
-                (context, actions) => {
-                    autoSaveTimer = setInterval(() => {
-                        if (context.hasUnsavedChanges) {
-                            console.log('[EditorProvider] Auto-saving...');
-                            actions.saveGraph();
-                        }
-                        interval;
-                    });
-                },
-                    onDestroy;
-                () => {
-                    if (autoSaveTimer) {
-                        clearInterval(autoSaveTimer);
-                        autoSaveTimer = null;
-                    }
-                    ;
-                };
-                export const createValidationHook = () => createProviderHook({});
-                id: 'validation',
-                    name;
-                'Validation Provider',
-                    version;
-                '1.0.0',
-                    priority;
-                10, // Very high priority,
-                    onNodeAdd;
-                (node, context) => {
-                    // Add validation metadata to new nodes
-                    return {
-                        ...node,
-                        data: {
-                            ...node.data,
-                            _validated: false,
-                            _validationTimestamp: Date.now(),
-                        }
-                    },
-                        onNodeUpdate;
-                    (nodeId, updates, context) => {
-                        // Add validation metadata to updates
-                        return {
-                            ...updates,
-                            _validated: false,
-                            _validationTimestamp: Date.now(),
-                        };
-                    },
-                        onValidationChange;
-                    (errors) => {
-                        if (errors.length > 0) {
-                            console.warn('[EditorProvider] Validation errors detected', errors);
-                        }
-                        ;
-                    };
-                };
-            };
         };
     };
 };

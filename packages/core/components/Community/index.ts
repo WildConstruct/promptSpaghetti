@@ -14,8 +14,7 @@ export { QualityAssessmentDashboard } from './QualityAssessmentDashboard';
 export type { QualityAssessmentDashboardProps } from './QualityAssessmentDashboard';
 
 // Core Data Models and Services
-export type {
-  CommunityContent,
+export type { CommunityContent,
   ContentVersion,
   ContentVersionDiff,
   ContentContributor,
@@ -25,17 +24,16 @@ export type {
   ReviewFeedback,
   PlagiarismResult,
   FactCheckResult,
-  ContentMediaAttachment,
+  ContentMediaAttachment }
   ContentBundle
-} from '../../community/ContentVersionManager';
+ from '../../community/ContentVersionManager';
 
 export { ContentVersionManager } from '../../community/ContentVersionManager';
 
 // Import ContentVersion for local use
 import { ContentVersion } from '../../community/ContentVersionManager';
 
-export type {
-  CommunityContentQualityMetrics,
+export type { CommunityContentQualityMetrics,
   EditorialQualityMetrics,
   TechnicalQualityMetrics,
   ContentEngagementMetrics,
@@ -44,14 +42,13 @@ export type {
   EditorialReview,
   QualityRecommendation,
   QualityFlag,
-  QualityAssessmentWorkflow,
+  QualityAssessmentWorkflow }
   AutomatedIssue
-} from '../../community/ContentQualityAssessment';
+ from '../../community/ContentQualityAssessment';
 
-export { 
-  ContentQualityAssessmentService,
+export { ContentQualityAssessmentService }
   QUALITY_ASSESSMENT_CONFIG 
-} from '../../community/ContentQualityAssessment';
+ from '../../community/ContentQualityAssessment';
 
 // Component configuration types
 export type ContentVersionControlMode = 'author' | 'editor' | 'reviewer' | 'admin';
@@ -64,10 +61,11 @@ export type WorkflowStage = 'automated_analysis' | 'editorial_review' | 'special
 // Integration helpers for Epic 16 components
 // Event types for component communication
 
-}
+
 export interface CommunityComponentEvents {
   // Version control events
-}
+
+
   'version:created': { version: ContentVersion; contentId: string };
   'version:published': { version: ContentVersion; contentId: string };
   'version:reviewed': { version: ContentVersion; feedback: ReviewFeedback };
@@ -81,34 +79,29 @@ export interface CommunityComponentEvents {
   'workflow:completed': { workflow: QualityAssessmentWorkflow; outcome: string };
 
 // Utility functions for common operations
-}
+
 export const bParts = b.split('.').map(Number);
-    for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
-      const aVal = aParts[i] || 0;
+    for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) { const aVal = aParts[i] || 0;
       const bVal = bParts[i] || 0;
       if (aVal !== bVal) {
         return aVal - bVal;
-    return 0;
-  }
+    return 0 }
   // Quality score calculation
-  calculateOverallScore: (dimensions: Record<string, number>): number => {
-  const weights = {
-  editorial: 0.3,
-  technical: 0.25,
-  engagement: 0.25,
-  community: 0.2,
+  calculateOverallScore: (dimensions: Record<string, number>): number => { const weights = {
+  editorial: 0.3
+  technical: 0.25
+  engagement: 0.25
+  community: 0.2 }
 };
     let totalScore = 0;
     let totalWeight = 0;
-    Object.entries(dimensions).forEach(([dimension, score]) => {
-      const weight = weights[dimension as keyof typeof weights] || 0.1;
+    Object.entries(dimensions).forEach(([dimension, score]) => { const weight = weights[dimension as keyof typeof weights] || 0.1;
       totalScore += score * weight;
-      totalWeight += weight;
-    });
+      totalWeight += weight });
     return totalWeight > 0 ? totalScore / totalWeight : 0;
-  }
+
   // Grade calculation
-  calculateGrade: (score: number): 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F' => {,
+  calculateGrade: (score: number): 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F' => {
     if (score >= 95) return 'A+';
     if (score >= 90) return 'A';
     if (score >= 85) return 'B+';
@@ -117,24 +110,23 @@ export const bParts = b.split('.').map(Number);
     if (score >= 70) return 'C';
     if (score >= 60) return 'D';
     return 'F'
-  }
+
   // Workflow stage validation
-  validateWorkflowTransition: (),
-    currentStage: WorkflowStage,
-    targetStage: WorkflowStage,
-    userRole: ContentVersionControlMode): boolean => {,
-  const allowedTransitions: Record<WorkflowStage, WorkflowStage> = {,
-  'automated_analysis': ['editorial_review'],
-  'editorial_review': ['specialist_review', 'final_approval'],
-  'specialist_review': ['final_approval'],
-  'final_approval': ['published'],
-  'published': [],
+  validateWorkflowTransition: ()
+    currentStage: WorkflowStage
+    targetStage: WorkflowStage
+    userRole: ContentVersionControlMode): boolean => { 
+  const allowedTransitions: Record<WorkflowStage, WorkflowStage> = {
+  'automated_analysis': ['editorial_review']
+  'editorial_review': ['specialist_review', 'final_approval']
+  'specialist_review': ['final_approval']
+  'final_approval': ['published']
+  'published': [] }
 };
-    const rolePermissions: Record<ContentVersionControlMode, WorkflowStage> = {
-  'author': ['automated_analysis'],
-  'editor': ['automated_analysis', 'editorial_review'],
-  'reviewer': ['editorial_review', 'specialist_review'],
-  'admin': ['automated_analysis', 'editorial_review', 'specialist_review', 'final_approval', 'published'],
+    const rolePermissions: Record<ContentVersionControlMode, WorkflowStage> = { 'author': ['automated_analysis']
+  'editor': ['automated_analysis', 'editorial_review']
+  'reviewer': ['editorial_review', 'specialist_review']
+  'admin': ['automated_analysis', 'editorial_review', 'specialist_review', 'final_approval', 'published'] }
 };
     return allowedTransitions[currentStage]?.includes(targetStage) && 
            rolePermissions[userRole]?.includes(targetStage);

@@ -1,5 +1,4 @@
-import { 
-  ProjectBranch,
+import { ProjectBranch,
   BranchCommit,
   BranchMergeRequest,
   BranchMergeReview,
@@ -16,13 +15,13 @@ import {
   UpdateReviewRequest,
   MergeBranchRequest,
   SyncBranchRequest,
-  BranchFilter,
+  BranchFilter }
   MergeRequestFilter
 } from '../types/branching';
 
 }
-interface UseBranchingReturn {
-    loading: boolean;
+}
+interface UseBranchingReturn { loading: boolean;
     error: string | null;
     createBranch: (request: CreateBranchRequest) => Promise<ProjectBranch>;
     updateBranch: (branchId: string, request: UpdateBranchRequest) => Promise<ProjectBranch>;
@@ -43,8 +42,7 @@ interface UseBranchingReturn {
     getBranchStats: (projectId: string) => Promise<BranchStatsResponse>;
     getBranchTimeline: (projectId: string, dateRange?: {)
         start: Date;
-        end: Date;
-
+        end: Date }
 }
     }) => Promise<BranchTimelineResponse>;
     getBranchHierarchy: (projectId: string) => Promise<BranchHierarchy[]>;

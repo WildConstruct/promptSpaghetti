@@ -5,7 +5,7 @@ import {
   EnhancedDeviceIdentificationService,
   EnhancedDeviceProfile,
   AnomalyReport
-} from '../services/EnhancedDeviceIdentificationService';
+ from '../services/EnhancedDeviceIdentificationService';
 import { DeviceFingerprintingService } from '../services/DeviceFingerprintingService';
 import { GeolocationService, GeolocationData } from '../auth/services/GeolocationService';
 import { DatabaseService } from '../auth/database/DatabaseService';
@@ -17,7 +17,7 @@ class MockDeviceFingerprintingService {
   async generateFingerprint(components: unknown): Promise<string> {
 
     return `fp_${JSON.stringify(components).split('').reduce((a, b) => a + b.charCodeAt(0), 0)}`;
-  }
+
 
   async calculateTrustScore(fingerprint: string, context: unknown): Promise<number> {
 
@@ -25,8 +25,8 @@ class MockDeviceFingerprintingService {
     if (fingerprint.includes('suspicious')) return 20;
     if (fingerprint.includes('trusted')) return 90;
     return 65;
-  }
-}
+
+
 
 class MockGeolocationService {
   async getGeolocationData(ipAddress: string): Promise<GeolocationData> {
@@ -42,7 +42,7 @@ class MockGeolocationService {
         coordinates: { latitude: 37.7749, longitude: -122.4194 },
         confidence: 0.9,
         source: 'ipapi'
-  }
+
       '8.8.8.8': {
         country: 'United States',
         countryCode: 'US',
@@ -54,7 +54,7 @@ class MockGeolocationService {
         isVpn: true,
         confidence: 0.8,
         source: 'ipapi'
-  }
+
       '1.2.3.4': {
         country: 'Germany',
         countryCode: 'DE',
@@ -66,7 +66,7 @@ class MockGeolocationService {
         isTor: true,
         confidence: 0.7,
         source: 'ipapi'
-      }
+
     };
 
     return mockData[ipAddress] || {
@@ -79,8 +79,8 @@ class MockGeolocationService {
       confidence: 0.1,
       source: 'fallback'
     };
-  }
-}
+
+
 
 class MockDatabaseService {
   private tables: Map<string, any[]> = new Map([
@@ -97,12 +97,12 @@ class MockDatabaseService {
     // Handle CREATE TABLE
     if (sql.includes('CREATE TABLE')) {
       return { rows: [] };
-    }
+
 
     // Handle CREATE INDEX
     if (sql.includes('CREATE INDEX')) {
       return { rows: [] };
-    }
+
 
     // Handle INSERT INTO device_fingerprints
     if (sql.includes('INSERT INTO device_fingerprints')) {
@@ -120,7 +120,7 @@ class MockDatabaseService {
         collection_errors: '[]'
       });
       return { rows: [] };
-    }
+
 
     // Handle INSERT INTO device_user_associations
     if (sql.includes('INSERT INTO device_user_associations')) {
@@ -133,7 +133,7 @@ class MockDatabaseService {
         existing.last_seen = new Date();
         existing.login_count++;
         existing.verified = existing.verified || params[6];
-      } else {
+ else {
         associations.push({
           device_fingerprint: params[0],
           user_id: params[1],
@@ -143,28 +143,28 @@ class MockDatabaseService {
           verified: params[6],
           trust_level: 50
         });
-      }
+
       return { rows: [] };
-    }
+
 
     // Handle SELECT from device_fingerprints
     if (sql.includes('SELECT') && sql.includes('device_fingerprints') && sql.includes('WHERE fingerprint = $1')) {
       const fingerprint = params[0];
       const device = this.tables.get('device_fingerprints')!.find(d => d.fingerprint === fingerprint);
       return { rows: device ? [device] : [] };
-    }
+
 
     // Handle SELECT from device_user_associations
     if (sql.includes('SELECT') && sql.includes('device_user_associations')) {
       const associations = this.tables.get('device_user_associations')!;
       if (sql.includes('WHERE device_fingerprint = $1')) {
         return { rows: associations.filter(a => a.device_fingerprint === params[0]) };
-      }
+
       if (sql.includes('WHERE user_id = $1')) {
         return { rows: associations.filter(a => a.user_id === params[0]) };
-      }
+
       return { rows: associations };
-    }
+
 
     // Handle UPDATE device_fingerprints
     if (sql.includes('UPDATE device_fingerprints')) {
@@ -177,27 +177,27 @@ class MockDatabaseService {
         if (sql.includes('last_seen =')) device.last_seen = params[1];
         if (sql.includes('update_count =')) device.update_count = params[2];
         if (sql.includes('trust_level =')) device.trust_level = params[0];
-      }
+
       return { rows: [] };
-    }
+
 
     // Handle other SELECT queries with empty results
     if (sql.includes('SELECT')) {
       return { rows: [] };
-    }
+
 
     return { rows: [] };
-  }
+
 
   // Helper methods for testing
   setMockData(table: string, data: any[]) {
     this.tables.set(table, data);
-  }
+
 
   getMockData(table: string) {
     return this.tables.get(table) || [];
-  }
-}
+
+
 
 class MockRedisService {
   private cache: Map<string, string> = new Map();
@@ -205,22 +205,22 @@ class MockRedisService {
   async setex(key: string, expiry: number, value: string): Promise<void> {
 
     this.cache.set(key, value);
-  }
+
 
   async get(key: string): Promise<string | null> {
 
     return this.cache.get(key) || null;
-  }
+
 
   async del(key: string): Promise<void> {
 
     this.cache.delete(key);
-  }
+
 
   clearCache() {
     this.cache.clear();
-  }
-}
+
+
 
 class MockAuditService {
   public events: any[] = [];
@@ -231,18 +231,18 @@ class MockAuditService {
       ...event,
       timestamp: new Date()
     });
-  }
+
 
   getEvents(action?: string): any[] {
     return action 
       ? this.events.filter(e => e.action === action)
       : this.events;
-  }
+
 
   clearEvents() {
     this.events = [];
-  }
-}
+
+
 
 describe('EnhancedDeviceIdentificationService', () => {
   let enhancedDeviceService: EnhancedDeviceIdentificationService;
@@ -273,14 +273,14 @@ describe('EnhancedDeviceIdentificationService', () => {
           locationStability: 0.15,
           securityEvents: 0.15,
           verificationLevel: 0.10
-  }
+
         thresholds: {
           highTrust: 80,
           mediumTrust: 60,
           lowTrust: 40,
           suspiciousChange: 30,
           criticalAnomaly: 50
-        }
+
       }
     );
   });
@@ -303,7 +303,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           audioFingerprint: 'audio123',
           availableFonts: ['Arial', 'Times New Roman'],
           plugins: []
-  }
+
         ipAddress: '192.168.1.1',
         userId: 'user123',
         sessionId: 'session123'
@@ -332,7 +332,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           audioFingerprint: 'audio456',
           availableFonts: ['Arial'],
           plugins: []
-  }
+
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -355,7 +355,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
           canvasFingerprint: 'original_canvas',
           webglFingerprint: 'original_webgl'
-  }
+
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -369,7 +369,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
           canvasFingerprint: 'changed_canvas',
           webglFingerprint: 'changed_webgl'
-  }
+
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -410,7 +410,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         components: {
           userAgent: 'Mozilla/5.0',
           spoofingDetected: true
-  }
+
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -427,7 +427,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         components: {
           userAgent: 'Mozilla/5.0',
           canvasFingerprint: 'trusted_canvas'
-  }
+
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -442,7 +442,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           userAgent: 'Mozilla/5.0',
           spoofingDetected: true,
           canvasFingerprint: 'suspicious_canvas'
-  }
+
         ipAddress: '1.2.3.4', // Tor IP
         userId: 'user123'
       };
@@ -599,11 +599,11 @@ describe('EnhancedDeviceIdentificationService', () => {
         {
           fingerprint: 'device1',
           components: JSON.stringify({ canvasFingerprint: 'same_canvas' })
-  }
+
         {
           fingerprint: 'device2',
           components: JSON.stringify({ canvasFingerprint: 'same_canvas' })
-        }
+
       ]);
 
       const result = await enhancedDeviceService.detectDeviceCloning('device1');
@@ -618,7 +618,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         {
           fingerprint: 'unique_device',
           components: JSON.stringify({ canvasFingerprint: 'unique_canvas' })
-        }
+
       ]);
 
       const result = await enhancedDeviceService.detectDeviceCloning('unique_device');
@@ -670,7 +670,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           severity: 'high',
           timestamp: new Date(),
           details: '{}'
-        }
+
       ]);
 
       const result = await enhancedDeviceService.getDeviceTrustScore('risky_device');
@@ -685,7 +685,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         components: {
           canvasFingerprint: 'original_canvas',
           webglFingerprint: 'original_webgl'
-  }
+
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -697,7 +697,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         components: {
           canvasFingerprint: 'changed_canvas',
           webglFingerprint: 'changed_webgl'
-  }
+
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -716,7 +716,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           webglFingerprint: 'changed',
           audioFingerprint: 'changed',
           userAgent: 'changed'
-  }
+
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -730,7 +730,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           webglFingerprint: 'original',
           audioFingerprint: 'original',
           userAgent: 'original'
-        }
+
       });
 
       const result = await enhancedDeviceService.identifyDevice(request);
@@ -776,7 +776,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         query: jest.fn<unknown[], unknown>().mockImplementation((sql: string) => {
           queries.push(sql);
           return Promise.resolve({ rows: [] });
-  }
+
       };
 
       const service = new EnhancedDeviceIdentificationService(

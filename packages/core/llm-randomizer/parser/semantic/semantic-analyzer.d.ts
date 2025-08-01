@@ -2,20 +2,17 @@ import { GraphAST, NodeDefinitionAST, ParseError } from '../ast/ast-builder';
 import { Graph } from '../../../graphSchema';
 
 }
-export interface SemanticError extends ParseError {
-    nodeId?: string;
-    errorCode: string;
-
 }
-export interface ValidationContext {
-    nodeIds: Set<string>;
+export interface SemanticError extends ParseError { nodeId?: string;
+    errorCode: string }
+}
+export interface ValidationContext { nodeIds: Set<string>;
     nodeMap: Map<string, NodeDefinitionAST>;
     edgeMap: Map<string, Set<string>>;
     reverseEdgeMap: Map<string, Set<string>>;
     visitedNodes: Set<string>;
-    currentPath: string[];
-
-
+    currentPath: string[] }
+}
 }
 export interface SemanticAnalysisResult {
     graph: Graph | null;
@@ -124,4 +121,5 @@ export declare class SemanticAnalyzer {
     private addWarning;
 
 //# sourceMappingURL=semantic-analyzer.d.ts.map
+}
 }

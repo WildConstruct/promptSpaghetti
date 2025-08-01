@@ -22,7 +22,7 @@ describe('VerificationThresholdService', () => {
       country: 'US',
       city: 'San Francisco',
       timezone: 'America/Los_Angeles'
-  }
+
     timestamp: new Date('2024-01-15T14:30:00Z')
   };
 
@@ -56,11 +56,11 @@ describe('VerificationThresholdService', () => {
         behaviorAnomalies: 20,
         timeFactors: 15,
         securityEvents: 10
-  }
+
       actionThresholds: {
         'password_change': { baseThreshold: 40, riskMultiplier: 1.5 },
         'admin_action': { baseThreshold: 60, riskMultiplier: 1.2 }
-      }
+
     };
 
     thresholdService = new VerificationThresholdService(
@@ -98,7 +98,7 @@ describe('VerificationThresholdService', () => {
           successful_logins: '19',
           first_seen: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // 15 days ago
           last_seen: new Date(Date.now() - 60 * 60 * 1000) // 1 hour ago
-        }]
+]
       });
 
       const requirement = await thresholdService.assessVerificationRequirement(testContext);
@@ -130,7 +130,7 @@ describe('VerificationThresholdService', () => {
           city: 'San Francisco',
           access_count: '15',
           last_access: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago
-        }]
+]
       });
 
       const requirement = await thresholdService.assessVerificationRequirement(testContext);
@@ -149,7 +149,7 @@ describe('VerificationThresholdService', () => {
           city: 'New York',
           access_count: '5',
           last_access: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-        }]
+]
       });
 
       const requirement = await thresholdService.assessVerificationRequirement(testContext);
@@ -350,7 +350,7 @@ describe('VerificationThresholdService', () => {
             login_count: '20', 
             successful_logins: '19',
             first_seen: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-          }] 
+] 
         }) // device: low risk
         .mockResolvedValueOnce({ 
           rows: [{ 
@@ -358,7 +358,7 @@ describe('VerificationThresholdService', () => {
             city: 'San Francisco', 
             access_count: '15',
             last_access: new Date()
-          }] 
+] 
         }) // location: low risk
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rows: [{ rapid_count: '2' }] })
@@ -385,7 +385,7 @@ describe('VerificationThresholdService', () => {
             action: 'suspicious_activity', 
             event_count: '1',
             last_occurrence: new Date()
-          }] 
+] 
         }); // security events
 
       const requirement = await thresholdService.assessVerificationRequirement(testContext);
@@ -453,7 +453,7 @@ describe('VerificationThresholdService', () => {
       if (requirement.riskScore < 75) { // High risk threshold
         expect(requirement.bypass?.available).toBe(true);
         expect(requirement.bypass?.reason).toContain('Admin user');
-      }
+
     });
 
     it('should not allow bypass for high risk scenarios', async () => {
@@ -492,7 +492,7 @@ describe('VerificationThresholdService', () => {
             method: 'authenticator_app',
             success: true,
             gracePeriodSeconds: 1800
-  }
+
   }
       );
     });
@@ -506,7 +506,7 @@ describe('VerificationThresholdService', () => {
           details: expect.objectContaining({
             success: false,
             gracePeriodSeconds: 0
-  }
+
   }
       );
     });
@@ -552,7 +552,7 @@ describe('VerificationThresholdService', () => {
           admin_approvals: '2',
           avg_risk_score: '42.5',
           max_risk_score: '89.3'
-        }]
+]
       });
 
       const stats = await thresholdService.getVerificationStatistics('week');
@@ -597,7 +597,7 @@ describe('VerificationThresholdService', () => {
             riskScore: expect.any(Number),
             threshold: expect.any(Number),
             verificationRequired: expect.any(Boolean)
-  }
+
   }
       );
     });
@@ -634,7 +634,7 @@ describe('VerificationThresholdService', () => {
             action: 'suspicious_activity',
             event_count: '1',
             last_occurrence: new Date()
-          }]
+]
         });
 
       const requirement = await thresholdService.assessVerificationRequirement(testContext);
@@ -643,7 +643,7 @@ describe('VerificationThresholdService', () => {
         expect(requirement.recommendations).toContain(
           'High risk detected - consider temporary account restrictions'
         );
-      }
+
     });
   });
 });

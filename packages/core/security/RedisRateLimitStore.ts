@@ -9,10 +9,9 @@ import { RateLimitStore, RateLimitData } from './RateLimiter';
 // Redis Client Interface
 // ========================================
 
-}
-export interface RedisClient {
-  get(key: string): Promise<string | null>;
-}
+
+export interface RedisClient { get(key: string): Promise<string | null> }
+
   set(key: string, value: string, options?: { EX?: number; PX?: number }): Promise<string | null>;
   incr(key: string): Promise<number>;
   expire(key: string, seconds: number): Promise<number>;
@@ -27,8 +26,8 @@ export interface RedisClient {
 // ========================================
 // Redis Configuration
 // ========================================
-}
-}
+
+
 export interface RedisRateLimitConfig {
   keyPrefix?: string;
   client: RedisClient;
@@ -37,27 +36,27 @@ export interface RedisRateLimitConfig {
   retryAttempts?: number;
   retryDelay?: number;
   fallbackToMemory?: boolean;
-
-// ========================================
-// Lua Scripts for Atomic Operations
-// ========================================
-class RedisLuaScripts {
+  // ========================================
+  // Lua Scripts for Atomic Operations
+  // ========================================
+  class RedisLuaScripts {
   /**
-   * Atomic increment with expiration
-   * Returns current count and TTL
-   */
+  * Atomic increment with expiration
+  * Returns current count and TTL
+  */
   static readonly INCREMENT_WITH_EXPIRY = `
-    local key = KEYS[1]
-    local window_ms = tonumber(ARGV[1])
-    local current_time = tonumber(ARGV[2])
-    -- Get current value and TTL
-    local current = redis.call('GET', key)
-    local ttl = redis.call('PTTL', key)
-    if current == false then
-        -- Key doesn't exist, create new window
-        redis.call('SET', key, 1)
-        redis.call('PEXPIRE', key, window_ms)
-}
+  local key = KEYS[1]
+  local window_ms = tonumber(ARGV[1])
+  local current_time = tonumber(ARGV[2])
+  -- Get current value and TTL
+  local current = redis.call('GET', key)
+  local ttl = redis.call('PTTL', key)
+  if current == false then
+  -- Key doesn't exist, create new window
+  redis.call('SET', key, 1)
+  redis.call('PEXPIRE', key, window_ms)
+
+
         return {1, current_time + window_ms}
     else
         -- Key exists, increment
@@ -116,59 +115,55 @@ class RedisLuaScripts {
 // ========================================
 class MemoryFallbackStore {
   private store: Map<string, { data: RateLimitData; expiry: number }> = new Map();
-  set(key: string, data: RateLimitData, ttlMs: number): void {
-  this.store.set(key, {)
-  data,
-  expiry: Date.now() + ttlMs,
+  set(key: string, data: RateLimitData, ttlMs: number): void { this.store.set(key, {)
+  data
+  expiry: Date.now() + ttlMs }
 });
-  get(key: string): RateLimitData | null {
-  const item = this.store.get(key);
+  get(key: string): RateLimitData | null { const item = this.store.get(key);
   if (!item) return null;
   if (Date.now() > item.expiry) {
   this.store.delete(key);
   return null;
   return item.data;
-  delete(key: string): void {,
+  delete(key: string): void {
   this.store.delete(key);
-  cleanup(): void {,
+  cleanup(): void {
   const now = Date.now();
   for (const [key, item] of this.store.entries()) {
   if (now > item.expiry) {
   this.store.delete(key);
-  clear(): void {,
+  clear(): void {
   this.store.clear();
-  size(): number {,
+  size(): number { }
   return this.store.size;
   // ========================================
   // Redis Rate Limit Store Implementation
   // ========================================
-}
-export class RedisRateLimitStore implements RateLimitStore {
-  private config: RedisRateLimitConfig;
+
+export class RedisRateLimitStore implements RateLimitStore { private config: RedisRateLimitConfig;
   private client: RedisClient;
   private fallbackStore?: MemoryFallbackStore;
   private isRedisAvailable: boolean = true;
   private connectionCheckInterval?: NodeJS.Timeout;
   private keyPrefix: string;
-  constructor(config: RedisRateLimitConfig) {,
+  constructor(config: RedisRateLimitConfig) {
   this.config = {
-  keyPrefix: 'rate_limit:',
-  enableScripting: true,
-  connectionTimeout: 5000,
-  retryAttempts: 3,
-  retryDelay: 1000,
-  fallbackToMemory: true,
+  keyPrefix: 'rate_limit:'
+  enableScripting: true
+  connectionTimeout: 5000
+  retryAttempts: 3
+  retryDelay: 1000
+  fallbackToMemory: true }
   ...config
 };
     this.client = config.client;
     this.keyPrefix = this.config.keyPrefix!;
-    if (this.config.fallbackToMemory) {
-  this.fallbackStore = new MemoryFallbackStore();
+    if (this.config.fallbackToMemory) { this.fallbackStore = new MemoryFallbackStore();
   this.startConnectionMonitoring();
   /**
   * Get rate limit data for a key
   */
-  async get(key: string): Promise<RateLimitData | null> {,
+  async get(key: string): Promise<RateLimitData | null> {
   const fullKey = this.keyPrefix + key;
   try {
   if (!this.isRedisAvailable && this.fallbackStore) {
@@ -181,22 +176,21 @@ export class RedisRateLimitStore implements RateLimitStore {
   const [hits, ttl] = result;
   if (hits === 0) return null;
   return {
-  hits: Number(hits),
-  resetTime: Date.now() + Number(ttl),
-  windowStart: Date.now() - (this.config.connectionTimeout! - Number(ttl)),
+  hits: Number(hits)
+  resetTime: Date.now() + Number(ttl)
+  windowStart: Date.now() - (this.config.connectionTimeout! - Number(ttl)) }
 };
-      } else {
-  // Fallback to basic Redis operations
+ else { // Fallback to basic Redis operations
   const value = await this.executeWithRetry(() => this.client.get(fullKey));
   if (!value) return null;
   const ttl = await this.executeWithRetry(() => this.client.ttl(fullKey));
   const hits = parseInt(value, 10);
   return {
-  hits,
-  resetTime: Date.now() + (ttl * 1000),
-  windowStart: Date.now() - (this.config.connectionTimeout! - (ttl * 1000)),
+  hits
+  resetTime: Date.now() + (ttl * 1000)
+  windowStart: Date.now() - (this.config.connectionTimeout! - (ttl * 1000)) }
 };
-    } catch (error) {
+ catch (error) {
       console.error('Redis get operation failed:', error);
       this.handleRedisError();
       if (this.fallbackStore) {
@@ -217,21 +211,15 @@ export class RedisRateLimitStore implements RateLimitStore {
         this.client.set(fullKey, value, { PX: ttlMs })
       );
       // Also update fallback if available
-      if (this.fallbackStore) {
-        this.fallbackStore.set(fullKey, data, ttlMs);
-    } catch (error) {
-  console.error('Redis set operation failed:', error);
+      if (this.fallbackStore) { this.fallbackStore.set(fullKey, data, ttlMs) } catch (error) { console.error('Redis set operation failed:', error);
   this.handleRedisError();
   if (this.fallbackStore) {
-  this.fallbackStore.set(fullKey, data, ttlMs);
-} else {
+  this.fallbackStore.set(fullKey, data, ttlMs) } else {
         throw error;
   /**
    * Atomically increment counter and return current count
    */
-  async increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }> {
-
-  const fullKey = this.keyPrefix + key;
+  async increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }> { const fullKey = this.keyPrefix + key;
   const currentTime = Date.now();
   try {
   if (!this.isRedisAvailable && this.fallbackStore) {
@@ -247,18 +235,16 @@ export class RedisRateLimitStore implements RateLimitStore {
   const [hits, resetTime] = result;
   const response = {
   hits: Number(hits),
-  resetTime: new Date(Number(resetTime)),
+  resetTime: new Date(Number(resetTime)) }
 };
           // Update fallback store if available
-          if (this.fallbackStore) {
-  this.fallbackStore.set(fullKey, {)
+          if (this.fallbackStore) { this.fallbackStore.set(fullKey, {)
   hits: response.hits,
   resetTime: response.resetTime.getTime(),
-  windowStart: currentTime,
+  windowStart: currentTime }
 }, windowMs);
           return response;
-      } else {
-  // Fallback to basic Redis operations (less atomic)
+ else { // Fallback to basic Redis operations (less atomic)
   const hits = await this.executeWithRetry(() => this.client.incr(fullKey));
   if (hits === 1) {
   // First hit in window, set expiration
@@ -269,11 +255,10 @@ export class RedisRateLimitStore implements RateLimitStore {
   this.fallbackStore.set(fullKey, {)
   hits,
   resetTime: resetTime.getTime(),
-  windowStart: currentTime,
+  windowStart: currentTime }
 }, windowMs);
         return { hits, resetTime };
-    } catch (error) {
-  console.error('Redis increment operation failed:', error);
+ catch (error) { console.error('Redis increment operation failed:', error);
   this.handleRedisError();
   if (this.fallbackStore) {
   return this.incrementFallback(fullKey, windowMs, currentTime);
@@ -282,54 +267,44 @@ export class RedisRateLimitStore implements RateLimitStore {
   /**
   * Reset rate limit for a key
   */
-  async reset(key: string): Promise<void> {,
+  async reset(key: string): Promise<void> { }
   const fullKey = this.keyPrefix + key;
-  try {
-  if (!this.isRedisAvailable && this.fallbackStore) {
+  try { if (!this.isRedisAvailable && this.fallbackStore) {
   this.fallbackStore.delete(fullKey);
   return;
   await this.executeWithRetry(() => this.client.del(fullKey));
   // Also reset fallback if available
   if (this.fallbackStore) {
-  this.fallbackStore.delete(fullKey);
-} catch (error) {
-  console.error('Redis reset operation failed:', error);
+  this.fallbackStore.delete(fullKey) } catch (error) { console.error('Redis reset operation failed:', error);
   this.handleRedisError();
   if (this.fallbackStore) {
-  this.fallbackStore.delete(fullKey);
-} else {
-  throw error;
+  this.fallbackStore.delete(fullKey) } else { throw error;
   /**
   * Cleanup expired keys
   */
-  async cleanup(): Promise<void> {,
-  try {
-  if (!this.isRedisAvailable && this.fallbackStore) {
+  async cleanup(): Promise<void> { }
+  try { if (!this.isRedisAvailable && this.fallbackStore) {
   this.fallbackStore.cleanup();
   return;
   if (this.config.enableScripting) {
   const pattern = this.keyPrefix + '*';
   await this.executeWithRetry(() =>
   this.client.eval(RedisLuaScripts.CLEANUP_EXPIRED, [pattern], ['100'])
-  );
-} else {
-        // Manual cleanup using SCAN
+  ) } else { // Manual cleanup using SCAN
         await this.cleanupManually();
       // Also cleanup fallback
       if (this.fallbackStore) {
-        this.fallbackStore.cleanup();
-    } catch (error) {
-  console.error('Redis cleanup operation failed:', error);
+        this.fallbackStore.cleanup() } catch (error) { console.error('Redis cleanup operation failed:', error);
   if (this.fallbackStore) {
   this.fallbackStore.cleanup();
   /**
   * Get statistics about the store
   */
-  async getStats(): Promise<{,
+  async getStats(): Promise<{ }
   redisAvailable: boolean;
   totalKeys: number;
   fallbackKeys: number;
-}> {
+> {
 
     let totalKeys = 0;
     try {
@@ -337,47 +312,38 @@ export class RedisRateLimitStore implements RateLimitStore {
         // Count keys with pattern
         const pattern = this.keyPrefix + '*';
         const reply = await this.client.scanStream({ match: pattern, count: 100 });
-        for await (const keys of reply) {
-          totalKeys += keys.length;
-    } catch (error) {
-  console.error('Failed to get Redis stats:', error);
+        for await (const keys of reply) { totalKeys += keys.length } catch (error) { console.error('Failed to get Redis stats:', error);
   return {
   redisAvailable: this.isRedisAvailable,
   totalKeys,
-  fallbackKeys: this.fallbackStore?.size() || 0,
+  fallbackKeys: this.fallbackStore?.size() || 0 }
 };
   /**
    * Close connections and cleanup
    */
-  async close(): Promise<void> {
-
-    if (this.connectionCheckInterval) {
+  async close(): Promise<void> { if (this.connectionCheckInterval) {
       clearInterval(this.connectionCheckInterval);
     try {
-      await this.client.quit();
-    } catch (error) {
-      console.error('Error closing Redis connection:', error);
+      await this.client.quit() } catch (error) { console.error('Error closing Redis connection:', error);
     if (this.fallbackStore) {
       this.fallbackStore.clear();
   // ========================================
   // Private Helper Methods
   // ========================================
-  private async incrementFallback(key: string, )
-    windowMs: number, 
-    currentTime: number): Promise<{ hits: number; resetTime: Date }> {
-
-  const existing = this.fallbackStore!.get(key);
+  private async incrementFallback(key: string);
+  windowMs: number }
+    currentTime: number): Promise<{ hits: number; resetTime: Date }> { const existing = this.fallbackStore!.get(key);
   if (!existing || currentTime > existing.resetTime) {
   // New window
   const resetTime = new Date(currentTime + windowMs);
   const data: RateLimitData = {,
   hits: 1,
   resetTime: resetTime.getTime(),
-  windowStart: currentTime,
+  windowStart: currentTime }
 };
       this.fallbackStore!.set(key, data, windowMs);
       return { hits: 1, resetTime };
-    } else {
+ else {
       // Increment existing
       existing.hits++;
       this.fallbackStore!.set(key, existing, windowMs);
@@ -387,55 +353,46 @@ export class RedisRateLimitStore implements RateLimitStore {
     const pattern = this.keyPrefix + '*';
     try {
       const scanStream = this.client.scanStream({ match: pattern, count: 100 });
-      for await (const keys of scanStream) {
-        for (const key of keys) {
+      for await (const keys of scanStream) { for (const key of keys) {
           const ttl = await this.client.ttl(key);
           if (ttl === -2) { // Key expired
-            await this.client.del(key);
-    } catch (error) {
-  console.error('Manual cleanup failed:', error);
-  private async executeWithRetry<T>(operation: () => Promise<T>): Promise<T> {,
+            await this.client.del(key) } catch (error) { console.error('Manual cleanup failed:', error);
+  private async executeWithRetry<T>(operation: () => Promise<T>): Promise<T> {
   let lastError: Error;
   for (let attempt = 1; attempt <= this.config.retryAttempts!; attempt++) {
   try {
   return await Promise.race([)
-  operation(),
+  operation() }
   new Promise<never>((_, reject) =>
   setTimeout(() => reject(new Error('Operation timeout')), this.config.connectionTimeout)
   ]);
-} catch (error) {
-  lastError = error as Error;
+ catch (error) { lastError = error as Error;
   if (attempt === this.config.retryAttempts) {
   throw lastError;
   // Wait before retry with exponential backoff
   const delay = this.config.retryDelay! * Math.pow(2, attempt - 1);
   await new Promise(resolve => setTimeout(resolve, delay));
   throw lastError!;
-  private handleRedisError(): void {,
+  private handleRedisError(): void {
   this.isRedisAvailable = false;
   console.warn('Redis is unavailable, falling back to memory store');
-  private startConnectionMonitoring(): void {,
-  this.connectionCheckInterval = setInterval(async () => {
-  try {
+  private startConnectionMonitoring(): void { }
+  this.connectionCheckInterval = setInterval(async () => { try {
   await this.client.ping();
   if (!this.isRedisAvailable) {
   console.log('Redis connection restored');
-  this.isRedisAvailable = true;
-} catch (error) {
-  if (this.isRedisAvailable) {
+  this.isRedisAvailable = true } catch (error) { if (this.isRedisAvailable) {
   console.error('Redis connection lost:', error);
-  this.handleRedisError();
-}, 30000); // Check every 30 seconds
+  this.handleRedisError() }, 30000); // Check every 30 seconds
 
 // ========================================
 // Redis Connection Factory
 // ========================================
 
-export class RedisConnectionFactory {
-  /**
+export class RedisConnectionFactory { /**
   * Create Redis client for different environments
   */
-  static async createClient(_config: {)
+  static async createClient(_config: {) }
   host?: string;
   port?: number;
   password?: string;
@@ -444,14 +401,12 @@ export class RedisConnectionFactory {
   url?: string;
   maxRetriesPerRequest?: number;
   retryDelayOnFailover?: number;
-}): Promise<RedisClient> {
-
-    // This is a mock implementation - in real usage, you'd use ioredis or node-redis
+}): Promise<RedisClient> { // This is a mock implementation - in real usage, you'd use ioredis or node-redis
     throw new Error('Redis client implementation required. Install and configure ioredis or node-redis.');
   /**
    * Create Redis cluster client
    */
-  static async createClusterClient(_config: {)
+  static async createClusterClient(_config: {) }
   nodes: Array<{ host: string; port: number }>;
     password?: string;
     maxRetriesPerRequest?: number;
@@ -471,12 +426,9 @@ export class MockRedisClient implements RedisClient {
 
     this.checkExpiry(key);
     return this.data.get(key) || null;
-  async set(key: string, value: string, options?: { EX?: number; PX?: number }): Promise<string | null> {
-
-    this.data.set(key, value);
+  async set(key: string, value: string, options?: { EX?: number; PX?: number }): Promise<string | null> { this.data.set(key, value);
     if (options?.EX) {
-      this.expiries.set(key, Date.now() + options.EX * 1000);
-    } else if (options?.PX) {
+      this.expiries.set(key, Date.now() + options.EX * 1000) } else if (options?.PX) {
       this.expiries.set(key, Date.now() + options.PX);
     return 'OK';
   async incr(key: string): Promise<number> {

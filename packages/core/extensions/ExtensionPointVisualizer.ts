@@ -4,43 +4,39 @@
  */
 import { ExtensionPoint, ExtensionPointCategory, extensionPointRegistry } from './ExtensionPointRegistry';
 
-}
-export interface VisualizationOptions {
-  format?: 'mermaid' | 'graphviz' | 'json';
+
+export interface VisualizationOptions { format?: 'mermaid' | 'graphviz' | 'json';
   includeInternal?: boolean;
   groupByCategory?: boolean;
   showDependencies?: boolean;
   showInterfaces?: boolean;
-  theme?: 'light' | 'dark'
-}
-  }
-}
-export interface ExtensionPointNode {
-  id: string;
+  theme?: 'light' | 'dark' }
+
+
+
+
+export interface ExtensionPointNode { id: string;
   name: string;
   category: ExtensionPointCategory;
   priority: string;
   lifecycle: string;
   interfaces: string;
   dependencies: string;
-  location: string;
-}
-}
-}
-export interface ExtensionPointEdge {
-  source: string;
+  location: string }
+
+
+
+export interface ExtensionPointEdge { source: string;
   target: string;
   type: 'dependency' | 'interface' | 'inheritance';
-  label?: string;
-}
-}
-}
-export interface ExtensionPointGraph {
-  nodes: ExtensionPointNode;
+  label?: string }
+
+
+
+export interface ExtensionPointGraph { nodes: ExtensionPointNode;
   edges: ExtensionPointEdge;
-  categories: Record<ExtensionPointCategory, ExtensionPointNode>;
-}
-}
+  categories: Record<ExtensionPointCategory, ExtensionPointNode> }
+
 export class ExtensionPointVisualizer {
   private static instance: ExtensionPointVisualizer;
   private constructor() {}
@@ -81,7 +77,7 @@ export class ExtensionPointVisualizer {
           });
           mermaid += '    end\n';
       });
-    } else {
+ else {
       // Add all nodes
       extensionPoints.forEach(ep => {)
   const nodeId = this.sanitizeId(ep.id);
@@ -135,8 +131,7 @@ export class ExtensionPointVisualizer {
   /**
    * Generate architecture overview
    */
-  public generateArchitectureOverview(options: VisualizationOptions = {}): string {
-  let mermaid = 'graph TB\n';
+  public generateArchitectureOverview(options: VisualizationOptions = {}): string { let mermaid = 'graph TB\n';
   // Core system components
   mermaid += '    subgraph core["Core System"]\n';
   mermaid += '        runtime["Runtime Engine"]\n';
@@ -174,51 +169,48 @@ export class ExtensionPointVisualizer {
   /**
   * Build graph structure from extension points
   */
-  private buildGraph(options: VisualizationOptions): ExtensionPointGraph {,
+  private buildGraph(options: VisualizationOptions): ExtensionPointGraph {
   const registry = extensionPointRegistry;
   const extensionPoints = registry.getAll();
   const nodes: ExtensionPointNode = extensionPoints.map(ep => ({)
-  id: ep.id,
-  name: ep.name,
-  category: ep.category,
-  priority: ep.priority,
-  lifecycle: ep.lifecycle,
-  interfaces: ep.interfaces.map(i => i.name),
-  dependencies: ep.dependencies || [],
-  location: ep.location.file,
+  id: ep.id
+  name: ep.name
+  category: ep.category
+  priority: ep.priority
+  lifecycle: ep.lifecycle
+  interfaces: ep.interfaces.map(i => i.name)
+  dependencies: ep.dependencies || []
+  location: ep.location.file }
 }));
     const edges: ExtensionPointEdge = [];
     // Add dependency edges
-    if (options.showDependencies !== false) {
-  extensionPoints.forEach(ep => {)
+    if (options.showDependencies !== false) { extensionPoints.forEach(ep => {)
   if (ep.dependencies && ep.dependencies.length > 0) {
   ep.dependencies.forEach(dep => {)
   edges.push({)
-  source: ep.id,
-  target: dep,
-  type: 'dependency',
-  label: 'depends on',
+  source: ep.id
+  target: dep
+  type: 'dependency'
+  label: 'depends on' }
 });
           });
       });
     // Add interface edges
-    if (options.showInterfaces !== false) {
-      extensionPoints.forEach(ep => {)
+    if (options.showInterfaces !== false) { extensionPoints.forEach(ep => {)
   ep.interfaces.forEach(iface => {)
   edges.push({)
-  source: ep.id,
+  source: ep.id }
             target: `${ep.id}.${iface.name}`}
-},
-  type: 'interface',
-            label: 'provides'
+
+  type: 'interface'
+            label: 'provides';
   });
         });
       });
     // Group by category
     const categories: Record<ExtensionPointCategory, ExtensionPointNode> = {} as any;
-    Object.values(ExtensionPointCategory).forEach(category => {)
-  categories[category] = nodes.filter(node => node.category === category);
-    });
+    Object.values(ExtensionPointCategory).forEach(category => { )
+  categories[category] = nodes.filter(node => node.category === category) });
     return { nodes, edges, categories };
   /**
    * Generate Mermaid diagram
@@ -236,7 +228,7 @@ export class ExtensionPointVisualizer {
           });
           mermaid += '    end\n';
       });
-    } else {
+ else {
       // Add all nodes
       graph.nodes.forEach(node => {)
   const nodeId = this.sanitizeId(node.id);
@@ -270,7 +262,7 @@ export class ExtensionPointVisualizer {
     if (options.groupByCategory) {
       Object.entries(graph.categories).forEach(([category, nodes]) => {
         if (nodes.length > 0) {
-          dot += `    subgraph cluster_${category} {\n`;}
+          dot += `    subgraph cluster_${category} { \n` }
           dot += `        label="${category.toUpperCase()}";\n`;}
           dot += '        style=filled;\n';
           dot += '        color=lightgrey;\n';
@@ -280,7 +272,7 @@ export class ExtensionPointVisualizer {
           });
           dot += '    }\n';
       });
-    } else {
+ else {
       graph.nodes.forEach(node => {)
   const nodeId = this.sanitizeId(node.id).replace(/[.-]/g, '_');
         dot += `    ${nodeId} [label="${node.name}"];\n`;}
@@ -305,26 +297,23 @@ export class ExtensionPointVisualizer {
   /**
    * Generate JSON representation
    */
-  private generateJSON(graph: ExtensionPointGraph, options: VisualizationOptions): string {
-  const visualization = {
-  version: '1.0.0',
-  generated: new Date().toISOString(),
-  options: options,
-  graph: graph,
+  private generateJSON(graph: ExtensionPointGraph, options: VisualizationOptions): string { const visualization = {
+  version: '1.0.0'
+  generated: new Date().toISOString()
+  options: options
+  graph: graph }
 };
     return JSON.stringify(visualization, null, 2);
   /**
    * Generate Mermaid styling
    */
-  private generateMermaidStyling(options: VisualizationOptions): string {
-  let styling = '\n';
+  private generateMermaidStyling(options: VisualizationOptions): string { let styling = '\n';
   if (options.theme === 'dark') {
   styling += '    classDef default fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#e2e8f0;\n';
   styling += '    classDef critical fill:#dc3545,stroke:#c82333,stroke-width:2px,color:#fff;\n';
   styling += '    classDef high fill:#fd7e14,stroke:#e8590c,stroke-width:2px,color:#fff;\n';
   styling += '    classDef medium fill:#ffc107,stroke:#e0a800,stroke-width:2px,color:#000;\n';
-  styling += '    classDef low fill:#6c757d,stroke:#5a6268,stroke-width:2px,color:#fff;\n';
-} else {
+  styling += '    classDef low fill:#6c757d,stroke:#5a6268,stroke-width:2px,color:#fff;\n' } else {
       styling += '    classDef default fill:#f8f9fa,stroke:#6c757d,stroke-width:2px,color:#495057;\n';
       styling += '    classDef critical fill:#dc3545,stroke:#c82333,stroke-width:2px,color:#fff;\n';
       styling += '    classDef high fill:#fd7e14,stroke:#e8590c,stroke-width:2px,color:#fff;\n';

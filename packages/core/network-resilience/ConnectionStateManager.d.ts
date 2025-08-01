@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events';
-export declare enum ConnectionState {
-    CONNECTED = "connected",
+export declare enum ConnectionState { CONNECTED = "connected",
     CONNECTING = "connecting",
     DISCONNECTED = "disconnected",
     RECONNECTING = "reconnecting",
@@ -11,29 +10,27 @@ export declare enum ConnectionQuality {
     EXCELLENT = "excellent",
     GOOD = "good",
     FAIR = "fair",
-    POOR = "poor",
+    POOR = "poor" }
     UNKNOWN = "unknown"
 
 }
-export interface ConnectionMetrics {
-    latency: number;
+}
+export interface ConnectionMetrics { latency: number;
     packetLoss: number;
     bandwidth: number;
     jitter: number;
     lastMeasurement: number;
-    measurementCount: number;
-
+    measurementCount: number }
 }
-export interface NetworkInfo {
-    type: 'wifi' | 'cellular' | 'ethernet' | 'unknown';
+}
+export interface NetworkInfo { type: 'wifi' | 'cellular' | 'ethernet' | 'unknown';
     effectiveType: '2g' | '3g' | '4g' | 'slow-2g' | 'unknown';
     downlink: number;
     rtt: number;
-    saveData: boolean;
-
+    saveData: boolean }
 }
-export interface ConnectionStateData {
-    state: ConnectionState;
+}
+export interface ConnectionStateData { state: ConnectionState;
     quality: ConnectionQuality;
     isOnline: boolean;
     lastConnected: number | null;
@@ -45,33 +42,30 @@ export interface ConnectionStateData {
     stateHistory: Array<{
         state: ConnectionState;
         timestamp: number;
-        reason?: string;
+        reason?: string }
 }
     }>;
 
 }
-export interface ConnectionStateConfig {
-    pingInterval: number;
+}
+export interface ConnectionStateConfig { pingInterval: number;
     qualityCheckInterval: number;
     latencyThreshold: {
         excellent: number;
         good: number;
-        fair: number;
+        fair: number }
 }
     };
-    packetLossThreshold: {
-        excellent: number;
+    packetLossThreshold: { excellent: number;
         good: number;
-        fair: number;
-    };
+        fair: number };
     maxHistorySize: number;
     offlineDetectionTimeout: number;
     onlineCheckUrl: string;
     enableNetworkInfoAPI: boolean;
     enablePerformanceMonitoring: boolean;
 
-export declare class ConnectionStateManager extends EventEmitter {
-    private state;
+export declare class ConnectionStateManager extends EventEmitter { private state;
     private quality;
     private config;
     private stateData;
@@ -131,8 +125,7 @@ export declare class ConnectionStateManager extends EventEmitter {
         measurementCount: number;
         stateFrequency: Record<ConnectionState, number>;
         reliability: number;
-        lastMeasurement: number;
-    };
+        lastMeasurement: number };
     /**
      * Reset connection state and metrics
      */

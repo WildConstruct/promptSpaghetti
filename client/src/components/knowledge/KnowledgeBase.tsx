@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/environment';
-}
+
+
 interface Author {
   id: string;,
   display_name: string;
@@ -12,50 +13,50 @@ interface Author {
   verification_status?: string;
   interface KnowledgeArticle {
   id: string;,
-  title: string;
+  title: string;,
   content: string;
   summary?: string;
   slug: string;,
-  category: string;
+  category: string;,
   tags: string;,
-  author: Author;
+  author: Author;,
   difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';,
-  estimated_read_time: number;
+  estimated_read_time: number;,
   views_count: number;,
-  likes_count: number;
+  likes_count: number;,
   helpful_count: number;,
-  is_featured: boolean;
+  is_featured: boolean;,
   is_community_contributed: boolean;,
-  created_at: string;
+  created_at: string;,
   last_updated_at: string;
   interface Tutorial {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  slug: string;
+  slug: string;,
   category: string;,
-  tags: string;
+  tags: string;,
   author: Author;,
-  difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';,
   estimated_duration: number;,
-  completion_count: number;
+  completion_count: number;,
   rating: number;,
-  review_count: number;
+  review_count: number;,
   is_interactive: boolean;,
   created_at: string;
   interface CaseStudy {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  slug: string;
+  slug: string;,
   category: string;,
-  tags: string;
+  tags: string;,
   author: Author;,
-  industry: string;
+  industry: string;,
   use_case: string;,
-  views_count: number;
+  views_count: number;,
   likes_count: number;,
-  is_featured: boolean;
+  is_featured: boolean;,
   created_at: string;
   interface SearchFilters {
   category?: string;
@@ -67,7 +68,8 @@ interface Author {
   intermediate: 'bg-yellow-100 text-yellow-800',
   advanced: 'bg-orange-100 text-orange-800',
   expert: 'bg-red-100 text-red-800',
-}
+
+
 };
 const DIFFICULTY_LABELS = {
   beginner: 'Beginner',
@@ -108,7 +110,7 @@ export const [tutorials, setTutorials] = useState<Tutorial>([]);
         fetch(`${API_URL}/api/marketplace/knowledge/case-studies?limit=6`, {)}
   },
   headers: getAuthHeaders();
-  }
+
       ]);
       if (!articlesRes.ok || !tutorialsRes.ok || !caseStudiesRes.ok) {
         throw new Error('Failed to fetch knowledge base content');
@@ -125,9 +127,9 @@ export const [tutorials, setTutorials] = useState<Tutorial>([]);
       [...(articlesData.articles || []), ...(tutorialsData.tutorials || []), ...(caseStudiesData.case_studies || [])]
         .forEach(item => allCategories.add(item.category));
       setCategories(Array.from(allCategories).sort());
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load knowledge base');
-} finally {
+ finally {
       setLoading(false);
   }, []);
   const handleSearch = useCallback(async () => {
@@ -149,9 +151,9 @@ export const [tutorials, setTutorials] = useState<Tutorial>([]);
       const data = await response.json();
       setSearchResults(data.results || []);
       setActiveTab('search');
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Search failed');
-} finally {
+ finally {
       setLoading(false);
   }, [searchQuery, filters.category, filters.difficulty_level, filters.content_type]);
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -159,7 +161,7 @@ export const [tutorials, setTutorials] = useState<Tutorial>([]);
       handleSearch();
   };
   const rateContent = useCallback(;);
-    async (type: 'articles' | 'tutorials' | 'case-studies');
+    async (type: 'articles' | 'tutorials' | 'case-studies');,
   id: string,
     isHelpful: boolean) => {,
     try {
@@ -172,7 +174,7 @@ export const [tutorials, setTutorials] = useState<Tutorial>([]);
       if (response.ok) {
         // Optionally update local state to reflect the rating
         console.log('Content rated successfully');
-    } catch (error: unknown) {
+ catch (error: unknown) {
   console.error('Failed to rate content:', error);
 }, []);
   const getDifficultyBadge = (level: string) => (;);
@@ -187,7 +189,7 @@ export const [tutorials, setTutorials] = useState<Tutorial>([]);
   tier === 'gold' ? 'bg-yellow-100 text-yellow-800' :,
   tier === 'silver' ? 'bg-gray-100 text-gray-800' :,
   'bg-amber-100 text-amber-800'
-}`}>
+`}>
         {tier.charAt(0).toUpperCase() + tier.slice(1)}
       </span>
       {verified === 'verified' && ()
@@ -485,7 +487,7 @@ export const [tutorials, setTutorials] = useState<Tutorial>([]);
   activeTab === tab.key
   ? 'bg-blue-600 text-white'
   : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50',
-}`}
+`}
               >
                 {tab.label} ({tab.count})
               </button>

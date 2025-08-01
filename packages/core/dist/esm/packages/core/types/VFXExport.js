@@ -62,6 +62,19 @@ humanReadable ?  : VFXHumanReadableLayer;
 controlNetTags ?  : VFXControlNetTags;
 ;
 ;
+originalPosition: {
+    x: number;
+    y: number;
+}
+;
+originalSize: {
+    width: number;
+    height: number;
+}
+;
+creationTimestamp: string;
+lastModified: string;
+configurationHash: string;
 ;
 ;
 target: {
@@ -71,6 +84,25 @@ target: {
 ;
 dataType: 'text' | 'number' | 'boolean' | 'array' | 'object';
 label ?  : string;
+nodeSeed: {
+    [nodeId, string];
+    number;
+}
+;
+rngState ?  : string; // Serialized RNG state for reproduction
+reproducibilityHash ?  : string; // Hash for validating reproduction integrity
+nodeRngStates ?  : {
+    [nodeId]: string
+};
+{
+    seed: number;
+    state: string;
+    callCount: number;
+    lastValue: number;
+}
+;
+;
+executionSequence ?  : string; // Node execution order for reproducible results
 ;
 // Performance metrics
 performance: {
@@ -112,7 +144,7 @@ animation ?  : {
     frameCount: number,
     fps: number,
     keyframes: VFXKeyframe,
-    interpolation: 'linear' | 'ease' | 'ease-in-out' | 'bezier'
+    interpolation: 'linear' | 'ease' | 'ease-in-out' | 'bezier',
 };
 // 3D scene integration
 scene3D ?  : {
@@ -170,6 +202,46 @@ background ?  : {
 };
 ;
 ;
+;
+demographics: {
+    totalPopulation: number;
+    socialClasses: {
+        [className, string];
+        {
+            percentage: number;
+            occupations: string;
+            clothingStyles: string;
+        }
+        ;
+    }
+    ;
+    ageDistribution: {
+        children: number; // 0-1 percentage,
+        adults: number;
+        elderly: number;
+    }
+    ;
+    genderRatio: {
+        male: number;
+        female: number;
+    }
+    ;
+}
+;
+behavior: {
+    activities: string;
+    interactions: string;
+    socialMixing: boolean;
+    culturalPatterns: string;
+}
+;
+validation: {
+    historicalAccuracy: number; // 0-1,
+    constraintViolations: string;
+    suggestions: string;
+}
+;
+;
 // VFX pipeline integration
 pipeline: {
     format: 'json' | 'xml' | 'csv' | 'maya' | 'blender';
@@ -180,17 +252,99 @@ pipeline: {
 }
 ;
 ;
+location: {
+    type: 'urban' | 'rural' | 'interior' | 'natural';
+    description: string;
+    authenticity: number; // 0-1,
+    socialContext: string; // e.g., "noble court", "peasant village",
+}
+;
+atmosphere: {
+    timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
+    season: 'spring' | 'summer' | 'autumn' | 'winter';
+    weather: string;
+    mood: string;
+}
+;
+assets: {
+    buildings: BackdropAsset;
+    props: BackdropAsset;
+    vegetation: BackdropAsset;
+    terrain: BackdropAsset;
+}
+;
+;
 // 3D scene integration
 scene3D: {
     coordinate: [number, number, number]; // World coordinates,
     scale: [number, number, number];
     lighting: {
         ambientColor: [number, number, number];
-        directionalLights: Array;
+        directionalLights: Array < {
+            direction: [number, number, number],
+            color: [number, number, number],
+            intensity: number
+        } > ;
     }
     ;
 }
 ;
+;
+weather: {
+    condition: string;
+    temperature: number; // Celsius,
+    humidity: number; // 0-1,
+    windSpeed: number; // m/s,
+    precipitation: number; // 0-1,
+    visibility: number; // meters,
+}
+;
+effects: {
+    particles: Array < {
+        type: 'rain' | 'snow' | 'fog' | 'dust' | 'smoke' | 'mist',
+        density: number, // 0-1,
+        size: number,
+        velocity: [number, number, number],
+        color: [number, number, number, number]
+    } > ;
+    volumetrics: {
+        enabled: boolean;
+        scattering: number;
+        absorption: number;
+    }
+    ;
+}
+;
+historicalAccuracy: {
+    score: number; // 0-1,
+    factors: string;
+    references: string;
+}
+;
+;
+;
+timing: {
+    duration: number; // seconds,
+    keyMoments: Array < {
+        time: number, // seconds,
+        event: string,
+        priority: 'high' | 'medium' | 'low',
+    } > ;
+}
+;
+coordination: {
+    crowdControl: boolean;
+    backdrop: boolean;
+    meteor: boolean;
+    dependencies: string;
+}
+;
+historicalContext: {
+    narrative: string;
+    culturalSignificance: string;
+    historicalEvents: string;
+    accuracy: number; // 0-1,
+}
 ;
 ;
 // Rendering coordination
@@ -218,23 +372,43 @@ historical: {
         name: string;
         period: [number, number];
         regions: string;
-        accuracy: 'high' | 'medium' | 'creative';
+        accuracy: 'high' | 'medium' | 'creative',
+        ;
     }
     ;
-    constraints: Array;
+    constraints: Array < {
+        type: 'temporal' | 'regional' | 'social' | 'technical',
+        rule: string,
+        enforcement: 'strict' | 'warning' | 'suggestion',
+        context: string
+    } > ;
     validation: {
         overallScore: number; // 0-1,
-        violations: Array;
+        violations: Array < {
+            severity: 'error' | 'warning' | 'info',
+            message: string,
+            suggestions: string
+        } > ;
     }
     ;
 }
 ;
 // Data sources and provenance
-dataSources: Array;
+dataSources: Array < {
+    id: string,
+    name: string,
+    type: 'museum' | 'academic' | 'archaeological' | 'specialist',
+    url: string,
+    reliability: number, // 0-1,
+    coverage: string
+} > ;
 // VFX pipeline metadata
 vfxMetadata: {
     textureCategories: string;
-    materialProperties: Array;
+    materialProperties: Array < {
+        name: string,
+        values: (Record),
+        historicalBasis: string } > ;
     compatibilityFlags: {
         maya: boolean;
         blender: boolean;
@@ -261,6 +435,23 @@ vfxProperties: {
 }
 ;
 ;
+scene: {
+    location: 'interior' | 'exterior' | 'studio' | 'practical-location' | 'virtual-set';
+    timeOfDay: 'golden-hour' | 'blue-hour' | 'day' | 'night' | 'magic-hour' | 'overcast';
+    season: 'spring' | 'summer' | 'autumn' | 'winter' | 'timeless';
+    weather: 'clear' | 'cloudy' | 'rainy' | 'stormy' | 'foggy' | 'snowy' | 'windy';
+    atmosphere: 'calm' | 'tense' | 'chaotic' | 'serene' | 'ominous' | 'festive' | 'melancholic',
+    ;
+}
+;
+technical: {
+    filmStock: 'digital' | '35mm' | '16mm' | 'super8' | 'imax' | 'alexa' | 'red' | 'blackmagic';
+    colorSpace: 'rec709' | 'rec2020' | 'dci-p3' | 'aces' | 'log' | 'srgb';
+    resolution: '2k' | '4k' | '6k' | '8k' | 'hd' | 'uhd' | 'cinema4k';
+    frameRate: 24 | 25 | 30 | 48 | 50 | 60 | 120;
+}
+;
+;
 // [SUBJ] - Subject and character actions  
 actions: {
     primary: {
@@ -274,13 +465,15 @@ actions: {
         emotionalState: 'neutral' | 'happy' | 'sad' | 'angry' | 'fearful' | 'surprised' | 'disgusted' | 'contemptuous';
         intensity: 'subtle' | 'moderate' | 'intense' | 'extreme';
         bodyLanguage: 'open' | 'closed' | 'confident' | 'nervous' | 'aggressive' | 'passive' | 'theatrical';
-        facialExpression: 'natural' | 'exaggerated' | 'stoic' | 'animated' | 'pensive' | 'determined';
+        facialExpression: 'natural' | 'exaggerated' | 'stoic' | 'animated' | 'pensive' | 'determined',
+        ;
     }
     ;
     movement: {
         pace: 'slow' | 'moderate' | 'fast' | 'frenetic' | 'static';
         direction: 'left-to-right' | 'right-to-left' | 'toward-camera' | 'away-from-camera' | 'circular' | 'chaotic';
-        choreography: 'natural' | 'staged' | 'dance-like' | 'combat' | 'athletic' | 'ceremonial';
+        choreography: 'natural' | 'staged' | 'dance-like' | 'combat' | 'athletic' | 'ceremonial',
+        ;
     }
     ;
 }
@@ -303,7 +496,8 @@ rendering: {
         particles: ('sparks' | 'embers' | 'ash' | 'pollen' | 'debris' | 'magical' | 'digital' | 'organic')[];
         postProcessing: {
             colorGrading: 'natural' | 'cinematic' | 'stylized' | 'desaturated' | 'high-contrast' | 'vintage' | 'futuristic';
-            filtration: 'clean' | 'film-grain' | 'digital-noise' | 'softening' | 'sharpening' | 'glow' | 'bloom';
+            filtration: 'clean' | 'film-grain' | 'digital-noise' | 'softening' | 'sharpening' | 'glow' | 'bloom',
+            ;
         }
         ;
     }
@@ -362,7 +556,8 @@ content: {
 metadata: {
     targetAudience: 'director' | 'cinematographer' | 'vfx-supervisor' | 'editor' | 'producer' | 'general';
     expertiseLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-    context: 'pre-production' | 'production' | 'post-production' | 'presentation' | 'documentation';
+    context: 'pre-production' | 'production' | 'post-production' | 'presentation' | 'documentation',
+    ;
 }
 ;
 equivalence: {
@@ -420,7 +615,7 @@ reproducibility: {
     }
     ;
     hardwareFingerprint: string; // Hardware configuration hash,
-    lastValidated: string; // ISO timestamp of last validation
+    lastValidated: string; // ISO timestamp of last validation,
     validationNotes: string; // Notes from validation process
 }
 ;
@@ -544,6 +739,40 @@ marsIntegration: {
     tagProcessingOrder: string; // Order to process MARS tags for optimal results
 }
 ;
+;
+// Pose control for character/creature positioning
+pose ?  : {
+    enabled: boolean,
+    strength: number,
+    preprocessor: 'openpose' | 'dwpose' | 'animal_pose',
+    detectHands: boolean,
+    detectFace: boolean
+};
+// Edge detection for composition control
+canny ?  : {
+    enabled: boolean,
+    strength: number,
+    lowThreshold: number, // Canny edge detection low threshold,
+    highThreshold: number
+};
+// Normal map control for surface detail
+normal ?  : {
+    enabled: boolean,
+    strength: number,
+    preprocessor: 'normal' | 'bae',
+};
+// Segmentation for precise subject control
+segmentation ?  : {
+    enabled: boolean,
+    strength: number,
+    preprocessor: 'seg' | 'ade20k',
+};
+// Scribble/sketch control for artistic direction
+scribble ?  : {
+    enabled: boolean,
+    strength: number,
+    preprocessor: 'scribble' | 'fake_scribble',
+};
 ;
 // VFX pipeline rendering hints
 renderingHints: {

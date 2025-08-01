@@ -7,56 +7,38 @@ import { AlertTriangle, DollarSign, TrendingUp, Clock, X, Check, BellOff, Filter
 /**
  * Alert severity colors
  */
-const SEVERITY_COLORS = {
-  info: 'text-blue-600 bg-blue-50 border-blue-200',
-  warning: 'text-yellow-600 bg-yellow-50 border-yellow-200',
-  critical: 'text-red-600 bg-red-50 border-red-200',
-};
+const SEVERITY_COLORS = {};
 /**
  * Alert type icons
  */
-const ALERT_TYPE_ICONS = {
-  threshold: AlertTriangle,
-  budget_exceeded: DollarSign,
-  unusual_usage: TrendingUp,
-  performance: Clock,
-  error: X,
-};
+const ALERT_TYPE_ICONS = {};
 /**
  * Alert item props
  */
-}
+
+
 interface AlertItemProps {
   alert: unknown;
   onAcknowledge: (alertId: string) => void;
   onDismiss?: (alertId: string) => void;
-/**
- * Alert item component
- */
-}
-const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  /**
+  * Alert item component
+  */
+
+
+const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }) => { const [isExpanded, setIsExpanded] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const handleAcknowledge = useCallback(async () => {
     setIsProcessing(true);
     try {
-      await onAcknowledge(alert.id);
-    } finally {
-      setIsProcessing(false);
-  }, [alert.id, onAcknowledge]);
-  const handleDismiss = useCallback(async () => {
-    if (onDismiss) {
+      await onAcknowledge(alert.id) } finally { setIsProcessing(false) }, [alert.id, onAcknowledge]);
+  const handleDismiss = useCallback(async () => { if (onDismiss) {
       setIsProcessing(true);
       try {
-        await onDismiss(alert.id);
-      } finally {
-        setIsProcessing(false);
-  }, [alert.id, onDismiss]);
+        await onDismiss(alert.id) } finally { setIsProcessing(false) }, [alert.id, onDismiss]);
   const IconComponent = ALERT_TYPE_ICONS[alert.alertType as keyof typeof ALERT_TYPE_ICONS] || AlertTriangle;
   const severityClass = SEVERITY_COLORS[alert.severity as keyof typeof SEVERITY_COLORS] || SEVERITY_COLORS.info;
-  const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp).toLocaleString();
-  };
+  const formatTimestamp = (timestamp: number) => { return new Date(timestamp).toLocaleString() };
   return;
     <Card className={`alert-item ${severityClass} border-l-4`}>}
       <CardHeader className="pb-2">
@@ -142,16 +124,17 @@ const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }
 /**
  * Alert summary card props
  */
-}
-interface AlertSummaryProps {
-  alerts: unknown;
+
+
+interface AlertSummaryProps { alerts: unknown;
   title: string;
-  icon: React.ReactNode;
+  icon: React.ReactNode }
   color: string;
-/**
- * Alert summary card component
- */
-}
+  /**
+  * Alert summary card component
+  */
+
+
 const AlertSummaryCard: React.FC<AlertSummaryProps> = ({ alerts, title, icon, color }) => {
   return;
     <Card>
@@ -181,7 +164,7 @@ const AlertSummaryCard: React.FC<AlertSummaryProps> = ({ alerts, title, icon, co
  * Alerts panel props
  */
 
-}
+
 export interface AlertsPanelProps {
   alerts: unknown;
   onAcknowledge: (alertId: string) => void;
@@ -191,24 +174,22 @@ export interface AlertsPanelProps {
   /**
   * Alerts panel component
   */
-}
-}
-export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
-  alerts,
-  onAcknowledge,
-  onDismiss,
-  showSummary = true,
+
+
+export const AlertsPanel: React.FC<AlertsPanelProps> = ({ )
+  alerts
+  onAcknowledge
+  onDismiss
+  showSummary = true }
   className = ''
-}) => {
-  const [filter, setFilter] = useState<'all' | 'critical' | 'warning' | 'info'>('all');
+}) => { const [filter, setFilter] = useState<'all' | 'critical' | 'warning' | 'info'>('all');
   const [sortBy, setSortBy] = useState<'timestamp' | 'severity'>('timestamp');
   /**
    * Filter alerts based on selected filter
    */
   const filteredAlerts = alerts.filter(alert => {)
   if (filter === 'all') return true;
-    return alert.severity === filter;
-  });
+    return alert.severity === filter });
   /**
    * Sort alerts
    */
@@ -224,12 +205,11 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
   /**
    * Get alert counts by type
    */
-  const getAlertCounts = () => {
-  const counts = {
+  const getAlertCounts = () => { const counts = {
   all: alerts.length,
   critical: alerts.filter(a => a.severity === 'critical').length,
   warning: alerts.filter(a => a.severity === 'warning').length,
-  info: alerts.filter(a => a.severity === 'info').length,
+  info: alerts.filter(a => a.severity === 'info').length }
 };
     return counts;
   };
@@ -360,23 +340,21 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => {
+                onClick={ () => {
                   alerts.filter(a => !a.acknowledged).forEach(alert => {)
-  onAcknowledge(alert.id);
-                  });
-                }}
+  onAcknowledge(alert.id) });
+}
               >
                 Acknowledge All
               </Button>
-              {onDismiss && ()
+              { onDismiss && ()
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => {
                     alerts.forEach(alert => {)
-  onDismiss(alert.id);
-                    });
-                  }}
+  onDismiss(alert.id) });
+}
                 >
                   Dismiss All
                 </Button>
@@ -392,11 +370,10 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
  * Alerts panel styles
  */
 const styles = `;
-  .alerts-panel {
-    width: 100%;
+  .alerts-panel { width: 100%;
   .alert-item {
     transition: all 0.2s ease-in-out;
-  .alert-item:hover {,
+  .alert-item:hover { }
   transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   .alert-item.border-l-4 {

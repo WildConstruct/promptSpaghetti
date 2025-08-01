@@ -11,7 +11,7 @@ import {
   UpdateFeatureRequest,
   FeatureToggleAdmin,
   FeatureDashboardStats
-} from '../../../admin/feature-management.service';
+ from '../../../admin/feature-management.service';
 
 // Request schemas for validation
 const createFeatureSchema = {
@@ -23,25 +23,25 @@ const createFeatureSchema = {
       pattern: '^[a-z0-9_.-]+$',
       minLength: 3,
       maxLength: 100
-  }
+
     name: { 
       type: 'string', 
       minLength: 1, 
       maxLength: 255 
-  }
+
     description: { 
       type: 'string', 
       maxLength: 1000 
-  }
+
     type: { 
       type: 'string', 
       enum: ['boolean', 'string', 'number', 'json', 'percentage', 'experiment'] 
-  }
+
     value: {},
     enabled: { 
       type: 'boolean',
       default: false
-  }
+
     user_targeting: {
       type: 'object',
       properties: {
@@ -58,14 +58,14 @@ const createFeatureSchema = {
               operator: { 
                 type: 'string', 
                 enum: ['equals', 'not_equals', 'in', 'not_in', 'contains', 'regex', 'greater_than', 'less_than']
-  }
+
               value: {},
               condition: { type: 'string', enum: ['and', 'or'] }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     scheduling: {
       type: 'object',
       properties: {
@@ -74,15 +74,15 @@ const createFeatureSchema = {
         rollout_strategy: { type: 'string', enum: ['immediate', 'gradual', 'scheduled'] },
         rollout_percentage: { type: 'number', minimum: 0, maximum: 100 },
         rollout_duration_hours: { type: 'number', minimum: 1, maximum: 168 }
-      }
-  }
+
+
     dependencies: {
       type: 'object',
       properties: {
         requires: { type: 'array', items: { type: 'string' } },
         conflicts_with: { type: 'array', items: { type: 'string' } }
-      }
-  }
+
+
     monitoring: {
       type: 'object',
       properties: {
@@ -100,12 +100,12 @@ const createFeatureSchema = {
               operator: { type: 'string', enum: ['greater_than', 'less_than', 'equals'] },
               window_minutes: { type: 'number', minimum: 1, maximum: 1440 },
               action: { type: 'string', enum: ['disable', 'rollback', 'alert'] }
-            }
-          }
-        }
-      }
-    }
-  }
+
+
+
+
+
+
 };
 
 const updateFeatureSchema = {
@@ -120,7 +120,7 @@ const updateFeatureSchema = {
     dependencies: createFeatureSchema.properties.dependencies,
     monitoring: createFeatureSchema.properties.monitoring,
     reason: { type: 'string', maxLength: 500 }
-  }
+
 };
 
 const emergencyOverrideSchema = {
@@ -131,8 +131,8 @@ const emergencyOverrideSchema = {
       type: 'string', 
       minLength: 10, 
       maxLength: 1000 
-    }
-  }
+
+
 };
 
 export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
@@ -155,7 +155,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
       return reply.code(403).send({ 
         error: 'Administrative permissions required for feature management' 
       });
-    }
+
   };
 
   // Dashboard - Get feature management dashboard statistics
@@ -165,7 +165,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
       description: 'Get comprehensive feature management dashboard statistics',
       tags: ['admin', 'features'],
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const stats = await featureManagementService.getDashboardStats();
@@ -174,13 +174,13 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         data: stats,
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error fetching dashboard stats:', error);
       return reply.code(500).send({ 
         error: 'Failed to fetch dashboard statistics',
         details: error.message 
       });
-    }
+
   });
 
   // List all administrative features with filtering
@@ -199,10 +199,10 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           search: { type: 'string', minLength: 1, maxLength: 100 },
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'number', minimum: 0, default: 0 }
-        }
-  }
+
+
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const filters = request.query as any;
@@ -215,15 +215,15 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           limit: filters.limit || 50,
           offset: filters.offset || 0,
           total: features.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error listing features:', error);
       return reply.code(500).send({ 
         error: 'Failed to list features',
         details: error.message 
       });
-    }
+
   });
 
   // Create new administrative feature
@@ -234,7 +234,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
       tags: ['admin', 'features'],
       body: createFeatureSchema,
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const featureData = request.body as CreateFeatureRequest;
@@ -247,7 +247,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         data: feature,
         message: `Feature '${feature.key}' created successfully`
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error creating feature:', error);
       
       if (error.message.includes('already exists')) {
@@ -255,20 +255,20 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           error: 'Feature key already exists',
           details: error.message 
         });
-      }
+
       
       if (error.message.includes('Required features not found')) {
         return reply.code(400).send({ 
           error: 'Invalid dependencies',
           details: error.message 
         });
-      }
+
       
       return reply.code(400).send({ 
         error: 'Failed to create feature',
         details: error.message 
       });
-    }
+
   });
 
   // Get specific feature by ID with full details
@@ -282,10 +282,10 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         required: ['id'],
         properties: {
           id: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -296,7 +296,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           error: 'Feature not found',
           feature_id: id 
         });
-      }
+
       
       // Get additional audit information
       const auditLog = await featureManagementService.getFeatureAuditLog(id, 20);
@@ -306,15 +306,15 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         data: {
           ...feature,
           recent_audit: auditLog
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error fetching feature:', error);
       return reply.code(500).send({ 
         error: 'Failed to fetch feature',
         details: error.message 
       });
-    }
+
   });
 
   // Update administrative feature
@@ -328,11 +328,11 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         required: ['id'],
         properties: {
           id: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: updateFeatureSchema,
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -346,7 +346,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         data: feature,
         message: `Feature '${feature.key}' updated successfully`
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error updating feature:', error);
       
       if (error.message.includes('not found')) {
@@ -354,13 +354,13 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           error: 'Feature not found',
           feature_id: id 
         });
-      }
+
       
       return reply.code(400).send({ 
         error: 'Failed to update feature',
         details: error.message 
       });
-    }
+
   });
 
   // Toggle feature enabled/disabled state
@@ -374,18 +374,18 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         required: ['id'],
         properties: {
           id: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['enabled'],
         properties: {
           enabled: { type: 'boolean' },
           reason: { type: 'string', maxLength: 500 }
-        }
-  }
+
+
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -399,7 +399,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         message: `Feature ${enabled ? 'enabled' : 'disabled'} successfully`,
         data: { feature_id: id, enabled, reason }
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error toggling feature:', error);
       
       if (error.message.includes('not found')) {
@@ -407,13 +407,13 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           error: 'Feature not found',
           feature_id: id 
         });
-      }
+
       
       return reply.code(400).send({ 
         error: 'Failed to toggle feature',
         details: error.message 
       });
-    }
+
   });
 
   // Emergency disable feature
@@ -427,11 +427,11 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         required: ['id'],
         properties: {
           id: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: emergencyOverrideSchema,
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -455,9 +455,9 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           feature_id: id, 
           disabled_at: new Date().toISOString(),
           reason 
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error emergency disabling feature:', error);
       
       if (error.message.includes('not found')) {
@@ -465,13 +465,13 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           error: 'Feature not found',
           feature_id: id 
         });
-      }
+
       
       return reply.code(500).send({ 
         error: 'Failed to emergency disable feature',
         details: error.message 
       });
-    }
+
   });
 
   // Delete/archive feature
@@ -485,16 +485,16 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         required: ['id'],
         properties: {
           id: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', maxLength: 500 }
-        }
-  }
+
+
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -504,7 +504,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
       await featureManagementService.deleteFeature(id, user.id, reason);
       
       return reply.code(204).send();
-    } catch (error) {
+ catch (error) {
       request.log.error('Error deleting feature:', error);
       
       if (error.message.includes('not found')) {
@@ -512,20 +512,20 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           error: 'Feature not found',
           feature_id: id 
         });
-      }
+
       
       if (error.message.includes('required by')) {
         return reply.code(409).send({ 
           error: 'Cannot delete feature due to dependencies',
           details: error.message 
         });
-      }
+
       
       return reply.code(400).send({ 
         error: 'Failed to delete feature',
         details: error.message 
       });
-    }
+
   });
 
   // Get audit log for specific feature
@@ -539,16 +539,16 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         required: ['id'],
         properties: {
           id: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'number', minimum: 1, maximum: 500, default: 100 }
-        }
-  }
+
+
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -562,15 +562,15 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         pagination: {
           limit,
           total: auditLog.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error fetching audit log:', error);
       return reply.code(500).send({ 
         error: 'Failed to fetch audit log',
         details: error.message 
       });
-    }
+
   });
 
   // Health check endpoint for administrative features
@@ -580,7 +580,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
       description: 'Get health status of all administrative features',
       tags: ['admin', 'features', 'health'],
       security: [{ bearer: [] }]
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Get all features with health status
@@ -604,13 +604,13 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         data: healthSummary,
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error fetching health status:', error);
       return reply.code(500).send({ 
         error: 'Failed to fetch health status',
         details: error.message 
       });
-    }
+
   });
 
   // System health check
@@ -629,18 +629,17 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
       // Test database connection
       try {
         await db.query('SELECT 1');
-      } catch (dbError) {
+ catch (dbError) {
         healthCheck.status = 'unhealthy';
         healthCheck.database_connection = false;
-      }
+
       
       return reply.code(healthCheck.status === 'healthy' ? 200 : 503).send(healthCheck);
-    } catch (error) {
+ catch (error) {
       return reply.code(503).send({ 
         status: 'unhealthy', 
         error: error.message,
         timestamp: new Date().toISOString()
       });
-    }
+
   });
-}

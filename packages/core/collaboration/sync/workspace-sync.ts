@@ -5,89 +5,54 @@ import { WorkspaceDAO } from '../dao/workspace-dao';
 
 // Extended Yjs types for workspace collaboration
 
-}
-export interface YGraph extends Y.Map<unknown> {
-  // Graph-specific methods and properties
+
+export interface YGraph extends Y.Map<unknown> { // Graph-specific methods and properties
   export interface WorkspaceSyncState {
   workspaceId: WorkspaceId;
   projectId?: ProjectId;
   resourceId?: ResourceId;
-  participants: Set<UserId>;
+  participants: Set<UserId> }
   lastSyncTime: number;
   conflictCount: number;
   isConnected: boolean;
-}
-}
-}
-export interface SyncEvent {
-  type: 'state_change' | 'participant_join' | 'participant_leave' | 'conflict_detected' | 'sync_complete';
+
+
+
+
+export interface SyncEvent { type: 'state_change' | 'participant_join' | 'participant_leave' | 'conflict_detected' | 'sync_complete' }
   workspaceId: WorkspaceId;
   userId?: UserId;
   data?: unknown;
   timestamp: number;
-}
-}
-}
-export interface ConflictResolution {
-  strategy: 'manual' | 'automatic' | 'last_writer_wins';
-  resolver?: (conflicts: Conflict) => Resolution;
-}
-}
-}
-export interface Conflict {
-  id: string;
+
+
+
+
+export interface ConflictResolution { strategy: 'manual' | 'automatic' | 'last_writer_wins';
+  resolver?: (conflicts: Conflict) => Resolution }
+
+
+
+export interface Conflict { id: string;
   type: 'content' | 'metadata' | 'structure';
   resourceId: ResourceId;
   conflictingChanges: Change;
-  timestamp: number;
-}
-}
-}
-export interface Change {
-  userId: UserId;
+  timestamp: number }
+
+
+
+export interface Change { userId: UserId;
   operation: Y.YEvent;
   timestamp: number;
-  clientId: number;
-}
-}
-}
-export interface Resolution {
-  conflictId: string;
+  clientId: number }
+
+
+
+export interface Resolution { conflictId: string;
   selectedChange: Change;
-  reason: string;
-}
-}
-export class WorkspaceStateSync extends EventEmitter {
-  private syncStates: Map<string, WorkspaceSyncState> = new Map();
-  private ydocs: Map<string, Y.Doc> = new Map();
-  private conflictResolvers: Map<WorkspaceId, ConflictResolution> = new Map();
-  constructor(private dao: WorkspaceDAO) {,
-  super();
-  this.setupEventHandlers();
-  private setupEventHandlers(): void {,
-  this.on('conflict_detected', this.handleConflict.bind(this));
-  this.on('participant_join', this.handleParticipantJoin.bind(this));
-  this.on('participant_leave', this.handleParticipantLeave.bind(this));
-  // Initialize workspace synchronization
-  async initializeWorkspaceSync(workspaceId: WorkspaceId)
-  userId: UserId,
-  conflictResolution?: ConflictResolution): Promise<Y.Doc> {,
-  const key = this.getSyncKey(workspaceId);
-  // Create or get existing Y.Doc
-  let ydoc = this.ydocs.get(key);
-  if (!ydoc) {
-  ydoc = new Y.Doc();
-  this.ydocs.set(key, ydoc);
-  // Set up document event handlers
-  this.setupDocumentHandlers(ydoc, workspaceId);
-  // Initialize sync state
-  const syncState: WorkspaceSyncState = {,
-  workspaceId,
-  participants: new Set([userId]),
-  lastSyncTime: Date.now(),
-  conflictCount: 0,
-  isConnected: true,
-};
+  reason: string }
+
+export class WorkspaceStateSync {};
     this.syncStates.set(key, syncState);
     // Set conflict resolution strategy
     if (conflictResolution) {
@@ -98,21 +63,21 @@ export class WorkspaceStateSync extends EventEmitter {
     return ydoc;
   // Initialize project-specific synchronization
   async initializeProjectSync(workspaceId: WorkspaceId)
-    projectId: ProjectId,
-    userId: UserId): Promise<Y.Doc> {,
+  projectId: ProjectId
+    userId: UserId): Promise<Y.Doc> { 
   const key = this.getSyncKey(workspaceId, projectId);
   let ydoc = this.ydocs.get(key);
   if (!ydoc) {
   ydoc = new Y.Doc();
   this.ydocs.set(key, ydoc);
   this.setupDocumentHandlers(ydoc, workspaceId, projectId);
-  const syncState: WorkspaceSyncState = {,
-  workspaceId,
-  projectId,
-  participants: new Set([userId]),
-  lastSyncTime: Date.now(),
-  conflictCount: 0,
-  isConnected: true,
+  const syncState: WorkspaceSyncState = {
+  workspaceId
+  projectId
+  participants: new Set([userId])
+  lastSyncTime: Date.now()
+  conflictCount: 0
+  isConnected: true }
 };
     this.syncStates.set(key, syncState);
     await this.loadProjectData(projectId, ydoc);
@@ -120,23 +85,23 @@ export class WorkspaceStateSync extends EventEmitter {
     return ydoc;
   // Initialize resource-specific synchronization
   async initializeResourceSync(workspaceId: WorkspaceId)
-    projectId: ProjectId,
-    resourceId: ResourceId,
-    userId: UserId): Promise<YGraph> {,
+  projectId: ProjectId
+    resourceId: ResourceId
+    userId: UserId): Promise<YGraph> { 
   const key = this.getSyncKey(workspaceId, projectId, resourceId);
   let ydoc = this.ydocs.get(key);
   if (!ydoc) {
   ydoc = new Y.Doc();
   this.ydocs.set(key, ydoc);
   this.setupDocumentHandlers(ydoc, workspaceId, projectId);
-  const syncState: WorkspaceSyncState = {,
-  workspaceId,
-  projectId,
-  resourceId,
-  participants: new Set([userId]),
-  lastSyncTime: Date.now(),
-  conflictCount: 0,
-  isConnected: true,
+  const syncState: WorkspaceSyncState = {
+  workspaceId
+  projectId
+  resourceId
+  participants: new Set([userId])
+  lastSyncTime: Date.now()
+  conflictCount: 0
+  isConnected: true }
 };
     this.syncStates.set(key, syncState);
     // Create YGraph for graph resources
@@ -144,22 +109,19 @@ export class WorkspaceStateSync extends EventEmitter {
     await this.loadResourceData(resourceId, ygraph);
     this.emit('resource_sync_initialized', { workspaceId, projectId, resourceId, userId });
     return ygraph;
-  private setupDocumentHandlers(ydoc: Y.Doc, )
-    workspaceId: WorkspaceId, 
+  private setupDocumentHandlers(ydoc: Y.Doc);
+  workspaceId: WorkspaceId
     projectId?: ProjectId
-  ): void {
-  // Handle document updates
-  ydoc.on('update', (update: Uint8Array, origin: unknown) => {,
+  ): void { // Handle document updates
+  ydoc.on('update', (update: Uint8Array, origin: unknown) => { }
   this.handleDocumentUpdate(workspaceId, projectId, update, origin);
 });
     // Handle awareness changes (user presence)
-    ydoc.on('subdocs', ({ added, removed }: { added: Set<Y.Doc>; removed: Set<Y.Doc> }) => {
-      this.handleSubdocChanges(workspaceId, added, removed);
-    });
+    ydoc.on('subdocs', ({ added, removed }: { added: Set<Y.Doc>; removed: Set<Y.Doc> }) => { this.handleSubdocChanges(workspaceId, added, removed) });
   private async handleDocumentUpdate(workspaceId: WorkspaceId)
-    projectId: ProjectId | undefined,
-    update: Uint8Array,
-    origin: unknown): Promise<void> {,
+  projectId: ProjectId | undefined
+    update: Uint8Array
+    origin: unknown): Promise<void> {
     const key = this.getSyncKey(workspaceId, projectId);
     const syncState = this.syncStates.get(key);
     if (!syncState) return (
@@ -172,18 +134,18 @@ export class WorkspaceStateSync extends EventEmitter {
       this.emit('conflict_detected', { workspaceId, projectId, conflicts });
     // Persist changes to database
     await this.persistChanges(workspaceId, projectId, update);
-    this.emit('state_change', {)
-  type: 'state_change',
-      workspaceId,
-      data: { syncState },
+    this.emit('state_change', { )
+  type: 'state_change'
+      workspaceId }
+      data: { syncState }
       timestamp: Date.now();
   });
   private async detectConflicts(workspaceId: WorkspaceId)
-    projectId: ProjectId | undefined,
-    update: Uint8Array): Promise<Conflict> {,
+  projectId: ProjectId | undefined
+    update: Uint8Array): Promise<Conflict> {
     // Implement conflict detection logic
     // This would analyze the Y.js update to detect concurrent modifications
-    const conflicts: Conflict[] = [];
+    const conflicts: Conflict = [];
     // For now, return empty array - full implementation would:
     // 1. Parse the Y.js update
     // 2. Check for concurrent modifications to the same elements
@@ -208,27 +170,23 @@ export class WorkspaceStateSync extends EventEmitter {
       // Emit event for manual resolution
       this.emit('manual_conflict_resolution_required', { workspaceId, conflicts });
       break;
-  private async resolveConflictsAutomatically(conflicts: Conflict): Promise<void> {
-
-  // Implement automatic conflict resolution
+  private async resolveConflictsAutomatically(conflicts: Conflict): Promise<void> { // Implement automatic conflict resolution
   for (const conflict of conflicts) {
-  // Simple strategy: prefer the most recent change,
+  // Simple strategy: prefer the most recent change
   const latestChange = conflict.conflictingChanges.reduce((latest, current) => ;
   current.timestamp > latest.timestamp ? current : latest);
   await this.applyResolution({
-  conflictId: conflict.id,
-  selectedChange: latestChange,
-  reason: 'Automatic resolution: most recent change',
+  conflictId: conflict.id
+  selectedChange: latestChange
+  reason: 'Automatic resolution: most recent change' }
 });
-  private async resolveConflictsLastWriterWins(conflicts: Conflict): Promise<void> {
-
-  // Implement last writer wins strategy
+  private async resolveConflictsLastWriterWins(conflicts: Conflict): Promise<void> { // Implement last writer wins strategy
   for (const conflict of conflicts) {
   const lastChange = conflict.conflictingChanges[conflict.conflictingChanges.length - 1];
   await this.applyResolution({
-  conflictId: conflict.id,
-  selectedChange: lastChange,
-  reason: 'Last writer wins strategy',
+  conflictId: conflict.id
+  selectedChange: lastChange
+  reason: 'Last writer wins strategy' }
 });
   private async applyResolution(resolution: Resolution): Promise<void> {
 
@@ -239,9 +197,7 @@ export class WorkspaceStateSync extends EventEmitter {
     // 2. Remove conflicting changes
     // 3. Update the document state
     // 4. Notify participants of the resolution
-  private async handleParticipantJoin(event: SyncEvent): Promise<void> {
-
-    if (!event.userId) return (
+  private async handleParticipantJoin(event: SyncEvent): Promise<void> { if (!event.userId) return (
     const key = this.getSyncKey(event.workspaceId);
     const syncState = this.syncStates.get(key);
     if (syncState) {
@@ -259,8 +215,8 @@ export class WorkspaceStateSync extends EventEmitter {
       if (syncState.participants.size === 0) {
         await this.cleanupSync(event.workspaceId);
   private async handleSubdocChanges(workspaceId: WorkspaceId)
-    added: Set<Y.Doc>,
-    removed: Set<Y.Doc>): Promise<void> {,
+  added: Set<Y.Doc>
+    removed: Set<Y.Doc>): Promise<void> { }
     // Handle subdocument changes for nested collaborative structures
     for (const doc of added) {
       this.setupDocumentHandlers(doc, workspaceId);
@@ -274,25 +230,23 @@ export class WorkspaceStateSync extends EventEmitter {
       console.warn(`No active sync session for workspace ${workspaceId}`);}
       return null;
     syncState.participants.add(userId);
-    this.emit('participant_join', {)
-  type: 'participant_join',
-  workspaceId,
-  userId,
-  timestamp: Date.now(),
+    this.emit('participant_join', { )
+  type: 'participant_join'
+  workspaceId
+  userId
+  timestamp: Date.now() }
 });
     return ydoc;
   // Leave a workspace sync session
-  async leaveWorkspaceSync(workspaceId: WorkspaceId, userId: UserId): Promise<void> {
-
-  const key = this.getSyncKey(workspaceId);
+  async leaveWorkspaceSync(workspaceId: WorkspaceId, userId: UserId): Promise<void> { const key = this.getSyncKey(workspaceId);
   const syncState = this.syncStates.get(key);
   if (syncState) {
   syncState.participants.delete(userId);
   this.emit('participant_leave', {)
-  type: 'participant_leave',
-  workspaceId,
-  userId,
-  timestamp: Date.now(),
+  type: 'participant_leave'
+  workspaceId
+  userId
+  timestamp: Date.now() }
 });
   // Get current sync state
   getSyncState(workspaceId: WorkspaceId, projectId?: ProjectId, resourceId?: ResourceId): WorkspaceSyncState | null {
@@ -315,14 +269,12 @@ export class WorkspaceStateSync extends EventEmitter {
     const state = Y.encodeStateAsUpdate(ydoc);
     await this.persistChanges(workspaceId, syncState.projectId, state);
     syncState.lastSyncTime = Date.now();
-    this.emit('sync_complete', {)
-  type: 'sync_complete',
-  workspaceId,
-  timestamp: Date.now(),
+    this.emit('sync_complete', { )
+  type: 'sync_complete'
+  workspaceId
+  timestamp: Date.now() }
 });
-  private async loadWorkspaceData(workspaceId: WorkspaceId, ydoc: Y.Doc): Promise<void> {
-
-    // Load workspace data from database into Y.Doc
+  private async loadWorkspaceData(workspaceId: WorkspaceId, ydoc: Y.Doc): Promise<void> { // Load workspace data from database into Y.Doc
     const workspace = await this.dao.getWorkspace(workspaceId);
     if (workspace) {
       const ymap = ydoc.getMap('workspace');
@@ -357,8 +309,8 @@ export class WorkspaceStateSync extends EventEmitter {
         yedges.insert(0, resource.content.edges);
         ygraph.set('edges', yedges);
   private async persistChanges(workspaceId: WorkspaceId)
-    projectId: ProjectId | undefined,
-    update: Uint8Array): Promise<void> {,
+  projectId: ProjectId | undefined
+    update: Uint8Array): Promise<void> { }
     // Persist Y.js update to database
     // This would be implemented based on your storage strategy
     console.log(`Persisting changes for workspace ${workspaceId}, project ${projectId}`);}
@@ -382,8 +334,8 @@ export class WorkspaceStateSync extends EventEmitter {
     this.syncStates.delete(key);
     this.conflictResolvers.delete(workspaceId);
     console.log(`Cleaned up sync for workspace ${workspaceId}`);}
-  private getSyncKey(workspaceId: WorkspaceId, )
-    projectId?: ProjectId, 
+  private getSyncKey(workspaceId: WorkspaceId)
+    projectId?: ProjectId
     resourceId?: ResourceId
   ): string {
     let key = `workspace:${workspaceId}`;}

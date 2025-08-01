@@ -12,12 +12,12 @@ describe('Graph to GeneratorBundle conversion', () => {
         type: 'SetVariable',
         key: 'greeting',
         value: 'Hello'
-  }
+
       {
         id: 'var2',
         type: 'GetVariable',
         key: 'greeting'
-  }
+
       {
         id: 'wc1',
         type: 'WeightedChoice',
@@ -25,22 +25,22 @@ describe('Graph to GeneratorBundle conversion', () => {
           { value: 'World', weight: 1 },
           { value: 'Universe', weight: 0.5 }
         ]
-  }
+
       {
         id: 'concat1',
         type: 'Concat',
         inputs: ['var2', 'wc1']
-  }
+
       {
         id: 'include1',
         type: 'Include',
         name: 'external_template'
-  }
+
       {
         id: 'output1',
         type: 'Output',
         inputs: ['concat1']
-      }
+
     ]
   };
 
@@ -99,12 +99,12 @@ describe('Graph to GeneratorBundle conversion', () => {
       metadata: {
         name: 'Invalid Bundle'
         // Missing version, author, created
-  }
+
       variables: {},
       // Missing grammar field
       entry_points: {
         default: 'output1'
-      }
+
     };
     
     expect(validateGeneratorBundle(invalidBundle)).toBe(false);
@@ -118,11 +118,11 @@ describe('Graph to GeneratorBundle conversion', () => {
         version: '1.0.0',
         author: 'Test Author',
         created: new Date().toISOString()
-  }
+
       variables: {
         greeting: 'Hello',
         target: 'World'
-  }
+
       grammar: {
         'choice1': [
           { text: 'Universe', weight: 1 },
@@ -131,13 +131,13 @@ describe('Graph to GeneratorBundle conversion', () => {
         'sequence1': {
           type: 'sequential',
           items: ['var_greeting', 'choice1']
-  }
+
         'include1': { $include: 'template1' },
         'output1': ['sequence1']
-  }
+
       entry_points: {
         default: 'output1'
-  }
+
       seed: 456
     };
 
@@ -159,7 +159,7 @@ describe('Graph to GeneratorBundle conversion', () => {
     if (choiceNode?.type === 'WeightedChoice') {
       expect(choiceNode.choices).toHaveLength(2);
       expect(choiceNode.choices[0].value).toBe('Universe');
-    }
+
     
     // Check that the output node exists
     const outputNode = graph.nodes.find(n => n.type === 'Output');
@@ -178,7 +178,7 @@ describe('Graph to GeneratorBundle conversion', () => {
             { value: 'Hello', weight: 1 },
             { value: 'Hi', weight: 0.5 }
           ]
-  }
+
         {
           id: 'wc2',
           type: 'WeightedChoice',
@@ -186,17 +186,17 @@ describe('Graph to GeneratorBundle conversion', () => {
             { value: 'World', weight: 1 },
             { value: 'Universe', weight: 0.5 }
           ]
-  }
+
         {
           id: 'concat1',
           type: 'Concat',
           inputs: ['wc1', 'wc2']
-  }
+
         {
           id: 'out1',
           type: 'Output',
           inputs: ['concat1']
-        }
+
       ]
     };
     
@@ -223,7 +223,7 @@ describe('Graph to GeneratorBundle conversion', () => {
           expect(resultNode.choices[idx].value).toBe(originalChoice.value);
           expect(resultNode.choices[idx].weight).toBe(originalChoice.weight);
         });
-      }
+
       
       // Check connections
       if (originalNode.inputs) {
@@ -232,8 +232,8 @@ describe('Graph to GeneratorBundle conversion', () => {
         originalNode.inputs.forEach(input => {
           expect(resultNode?.inputs?.includes(input)).toBe(true);
         });
-      }
-    }
+
+
   });
   
   it('should handle edge cases in graph conversion', () => {
@@ -243,12 +243,12 @@ describe('Graph to GeneratorBundle conversion', () => {
         {
           id: 'empty_output',
           type: 'Output'
-  }
+
         // Concat node with no inputs
         {
           id: 'empty_concat',
           type: 'Concat'
-        }
+
       ]
     };
     
@@ -277,7 +277,7 @@ describe('Graph to GeneratorBundle conversion', () => {
         version: '1.0.0',
         author: 'Test Author',
         created: new Date().toISOString()
-  }
+
       variables: {},
       grammar: {
         'conditional1': {
@@ -286,17 +286,17 @@ describe('Graph to GeneratorBundle conversion', () => {
             { condition: 'x > 10', value: 'Large' },
             { condition: 'x <= 10', value: 'Small' }
           ]
-  }
+
         'modifier1': {
           type: 'modifier_chain',
           base: 'conditional1',
           mods: ['uppercase', 'trim']
-  }
+
         'output1': ['modifier1']
-  }
+
       entry_points: {
         default: 'output1'
-      }
+
     };
     
     // Convert to graph

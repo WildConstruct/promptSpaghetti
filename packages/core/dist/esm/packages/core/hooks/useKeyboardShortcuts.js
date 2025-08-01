@@ -280,43 +280,25 @@ export const formatKeyCombo = (shortcut) => {
                      * Check if a keyboard shortcut conflicts with browser shortcuts
                      */
                     export const checkBrowserConflicts = (shortcut) => {
-                        const browserShortcuts = [];
-                        {
-                            key: 'r', cmd;
-                            true;
-                        }
-                        {
-                            key: 't', cmd;
-                            true;
-                        }
-                        {
-                            key: 'w', cmd;
-                            true;
-                        }
-                        {
-                            key: 'l', cmd;
-                            true;
-                        }
-                        {
-                            key: 'j', cmd;
-                            true;
-                        }
-                        {
-                            key: 'k', cmd;
-                            true;
-                        }
+                        const browserShortcuts = [
+                            { key: 'r', cmd: true }, // Refresh
+                            { key: 't', cmd: true }, // New tab
+                            { key: 'w', cmd: true }, // Close tab
+                            { key: 'l', cmd: true }, // Address bar
+                            { key: 'j', cmd: true }, // Downloads
+                            { key: 'k', cmd: true }, // Search
+                        ];
+                        return browserShortcuts.some(browser => );
+                        browser.key === shortcut.key.toLowerCase() &&
+                            !!browser.cmd === !!shortcut.cmd &&
+                            !shortcut.shift && // We use shift to avoid conflicts
+                            !shortcut.alt;
                     };
                 }
             }
         }
     }
-}; // Search
-;
-return browserShortcuts.some(browser => );
-browser.key === shortcut.key.toLowerCase() &&
-    !!browser.cmd === !!shortcut.cmd &&
-    !shortcut.shift && // We use shift to avoid conflicts
-    !shortcut.alt;
+};
 ;
 ;
 export default useKeyboardShortcuts;

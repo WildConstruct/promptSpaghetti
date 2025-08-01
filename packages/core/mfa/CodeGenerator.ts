@@ -17,24 +17,21 @@ import { EventEmitter } from 'events';
 
 // Types and Interfaces
 
-}
-export interface CodeGenerationOptions {
-  length: number;
+
+export interface CodeGenerationOptions { length: number;
   format: 'numeric' | 'alphanumeric' | 'alphabetic';
   excludeAmbiguous: boolean;
-  customAlphabet?: string;
-}
-}
-}
-export interface CodeValidationOptions {
-  allowedAttempts: number;
+  customAlphabet?: string }
+
+
+
+export interface CodeValidationOptions { allowedAttempts: number;
   timeWindowMinutes: number;
-  constantTimeValidation: boolean;
-}
-}
-}
-export interface VerificationCodeData {
-  id: string;
+  constantTimeValidation: boolean }
+
+
+
+export interface VerificationCodeData { id: string;
   codeHash: string;
   algorithm: string;
   salt: string;
@@ -45,38 +42,38 @@ export interface VerificationCodeData {
   attempts: number;
   maxAttempts: number;
   used: boolean;
-  metadata?: Record<string, any>;
-}
-}
-}
-export interface ValidationResult {
-  valid: boolean;
+  metadata?: Record<string, any> }
+
+
+
+export interface ValidationResult { valid: boolean;
   code?: VerificationCodeData;
   reason?: 'expired' | 'used' | 'invalid' | 'rate_limited' | 'not_found';
   attemptsRemaining?: number;
   // Security Configuration
   const SECURITY_CONFIG = {
   // Hash algorithms (SHA-3 family preferred for new implementations)
-  HASH_ALGORITHM: 'sha256', // Using SHA-256 for broad compatibility,
-  HASH_ITERATIONS: 100000,   // PBKDF2 iterations,
-  SALT_LENGTH: 32,           // 256-bit salt,
+  HASH_ALGORITHM: 'sha256', // Using SHA-256 for broad compatibility;
+  HASH_ITERATIONS: 100000,   // PBKDF2 iterations;
+  SALT_LENGTH: 32,           // 256-bit salt;
   // Code generation
-  DEFAULT_LENGTH: 6,
-  MIN_LENGTH: 4,
-  MAX_LENGTH: 12,
+  DEFAULT_LENGTH: 6;
+  MIN_LENGTH: 4;
+  MAX_LENGTH: 12;
   // Timing attack protection
-  CONSTANT_TIME_DELAY_MS: 100,
+  CONSTANT_TIME_DELAY_MS: 100;
   // Character sets (excluding ambiguous characters)
-  ALPHABETS: {
-  numeric: '0123456789',
-  alphanumeric: 'ABCDEFGHJKMNPQRSTUVWXYZ23456789', // Excludes 0,O,1,I,L,
-  alphabetic: 'ABCDEFGHJKMNPQRSTUVWXYZ',
-}
-} as const;
+  ALPHABETS: {;
+  numeric: '0123456789';
+  alphanumeric: 'ABCDEFGHJKMNPQRSTUVWXYZ23456789', // Excludes 0,O,1,I,L;
+  alphabetic: 'ABCDEFGHJKMNPQRSTUVWXYZ' }
+
+
+ as const;
 /**
  * Secure verification code generator with cryptographic best practices
  */
-}
+
 export class SecureCodeGenerator extends EventEmitter {
   private readonly config: typeof SECURITY_CONFIG;
   constructor(config?: Partial<typeof SECURITY_CONFIG>) {
@@ -85,11 +82,10 @@ export class SecureCodeGenerator extends EventEmitter {
   /**
    * Generate a cryptographically secure verification code
    */
-  public generateCode(options: Partial<CodeGenerationOptions> = {}): string {
-  const opts: CodeGenerationOptions = {,
-  length: this.config.DEFAULT_LENGTH,
-  format: 'numeric',
-  excludeAmbiguous: true,
+  public generateCode(options: Partial<CodeGenerationOptions> = {}): string { const opts: CodeGenerationOptions = {
+  length: this.config.DEFAULT_LENGTH
+  format: 'numeric'
+  excludeAmbiguous: true }
   ...options
 };
     // Validate input parameters
@@ -99,31 +95,27 @@ export class SecureCodeGenerator extends EventEmitter {
     // Generate cryptographically secure random code
     const code = this.generateSecureRandomCode(alphabet, opts.length);
     // Emit generation event for monitoring
-    this.emit('codeGenerated', {)
-  length: opts.length,
-  format: opts.format,
-  timestamp: new Date(),
+    this.emit('codeGenerated', { )
+  length: opts.length
+  format: opts.format
+  timestamp: new Date() }
 });
     return code;
   /**
    * Create a complete verification code record with secure hashing
    */
   public async createVerificationCode(
-    code: string,
-    userId: string,
-    purpose: string,
-    options: {
-  expirationMinutes?: number;
+    code: string
+    userId: string
+    purpose: string
+    options: { expirationMinutes?: number;
   maxAttempts?: number;
-  metadata?: Record<string, any>;
-} = {}
-  ): Promise<VerificationCodeData> {
-
-    const {
-      expirationMinutes = 15,
-      maxAttempts = 5,
+  metadata?: Record<string, any> } = {}
+  ): Promise<VerificationCodeData> { const {
+      expirationMinutes = 15
+      maxAttempts = 5 }
       metadata = {}
-    } = options;
+ = options;
     // Generate unique ID
     const id = crypto.randomUUID();
     // Generate salt for this specific code
@@ -133,26 +125,25 @@ export class SecureCodeGenerator extends EventEmitter {
     // Calculate expiration
     const createdAt = new Date();
     const expiresAt = new Date(createdAt.getTime() + expirationMinutes * 60 * 1000);
-    const verificationCode: VerificationCodeData = {
-  id,
-  codeHash,
-  algorithm: this.config.HASH_ALGORITHM,
-  salt: salt.toString('base64'),
-  purpose,
-  userId,
-  createdAt,
-  expiresAt,
-  attempts: 0,
-  maxAttempts,
-  used: false,
+    const verificationCode: VerificationCodeData = { id
+  codeHash
+  algorithm: this.config.HASH_ALGORITHM
+  salt: salt.toString('base64')
+  purpose
+  userId
+  createdAt
+  expiresAt
+  attempts: 0
+  maxAttempts
+  used: false }
   metadata
 };
     // Emit creation event for audit logging
-    this.emit('codeCreated', {)
-  id,
-      userId,
-      purpose,
-      expiresAt,
+    this.emit('codeCreated', { )
+  id
+      userId
+      purpose
+      expiresAt }
       metadata: { ...metadata, codeLength: code.length }
     });
     return verificationCode;
@@ -160,20 +151,17 @@ export class SecureCodeGenerator extends EventEmitter {
    * Validate a verification code with timing attack protection
    */
   public async validateCode(
-    inputCode: string,
-    storedCode: VerificationCodeData,
+    inputCode: string
+    storedCode: VerificationCodeData
     options: Partial<CodeValidationOptions> = {}
-  ): Promise<ValidationResult> {
-
-  const opts: CodeValidationOptions = {,
-  allowedAttempts: storedCode.maxAttempts,
-  timeWindowMinutes: 15,
-  constantTimeValidation: true,
+  ): Promise<ValidationResult> { const opts: CodeValidationOptions = {
+  allowedAttempts: storedCode.maxAttempts
+  timeWindowMinutes: 15
+  constantTimeValidation: true }
   ...options
 };
     const startTime = Date.now();
-    try {
-  // Check if code is already used
+    try { // Check if code is already used
   if (storedCode.used) {
   return this.createValidationResult(false, storedCode, 'used');
   // Check expiration
@@ -184,33 +172,32 @@ export class SecureCodeGenerator extends EventEmitter {
   return this.createValidationResult(false, storedCode, 'rate_limited');
   // Perform constant-time validation
   const isValid = await this.constantTimeValidation(;);
-  inputCode,
-  storedCode.codeHash,
+  inputCode
+  storedCode.codeHash
   Buffer.from(storedCode.salt, 'base64')
   );
   // Update attempt count (this should be done in the calling code/database)
   const updatedCode = {
-  ...storedCode,
-  attempts: storedCode.attempts + 1,
-  used: isValid,
+  ...storedCode
+  attempts: storedCode.attempts + 1
+  used: isValid }
 };
       const result = this.createValidationResult(;);
-        isValid,
-        updatedCode,
+        isValid
+        updatedCode
         isValid ? undefined : 'invalid'
       );
       // Emit validation event
-      this.emit('codeValidated', {)
-  id: storedCode.id,
-  userId: storedCode.userId,
-  purpose: storedCode.purpose,
-  valid: isValid,
-  attempts: updatedCode.attempts,
-  timestamp: new Date(),
+      this.emit('codeValidated', { )
+  id: storedCode.id
+  userId: storedCode.userId
+  purpose: storedCode.purpose
+  valid: isValid
+  attempts: updatedCode.attempts
+  timestamp: new Date() }
 });
       return result;
-    } finally {
-  // Implement constant-time delay to prevent timing attacks
+ finally { // Implement constant-time delay to prevent timing attacks
   if (opts.constantTimeValidation) {
   const elapsed = Date.now() - startTime;
   const delay = Math.max(0, this.config.CONSTANT_TIME_DELAY_MS - elapsed);
@@ -219,21 +206,21 @@ export class SecureCodeGenerator extends EventEmitter {
   /**
   * Generate recovery codes (longer, single-use codes)
   */
-  public generateRecoveryCodes(count: number = 10): string {,
+  public generateRecoveryCodes(count: number = 10): string {
   const codes: string = [];
   for (let i = 0; i < count; i++) {
   // Recovery codes are longer and alphanumeric for better entropy
   const code = this.generateCode({)
   length: 12,
   format: 'alphanumeric',
-  excludeAmbiguous: true,
+  excludeAmbiguous: true }
 });
       // Format with hyphens for readability: XXXX-XXXX-XXXX
       const formattedCode = code.match(/.{1,4}/g)?.join('-') || code;
       codes.push(formattedCode);
-    this.emit('recoveryCodesGenerated', {)
+    this.emit('recoveryCodesGenerated', { )
   count,
-  timestamp: new Date(),
+  timestamp: new Date() }
 });
     return codes;
   /**
@@ -247,9 +234,8 @@ export class SecureCodeGenerator extends EventEmitter {
       return { valid: false, reason: 'Code must be a non-empty string' };
     // Remove common formatting (spaces, hyphens)
     const cleanCode = code.replace(/[\s-]/g, '');
-    if (cleanCode.length < this.config.MIN_LENGTH || cleanCode.length > this.config.MAX_LENGTH) {
-      return { 
-        valid: false, 
+    if (cleanCode.length < this.config.MIN_LENGTH || cleanCode.length > this.config.MAX_LENGTH) { return { 
+        valid: false }
         reason: `Code length must be between ${this.config.MIN_LENGTH} and ${this.config.MAX_LENGTH} characters` }
       };
     // Validate against expected character set
@@ -265,54 +251,49 @@ export class SecureCodeGenerator extends EventEmitter {
       throw new Error()
         `Code length must be between ${this.config.MIN_LENGTH} and ${this.config.MAX_LENGTH}`}
       );
-    if (options.customAlphabet && options.customAlphabet.length < 2) {
-  throw new Error('Custom alphabet must contain at least 2 characters');
+    if (options.customAlphabet && options.customAlphabet.length < 2) { throw new Error('Custom alphabet must contain at least 2 characters');
   private getAlphabet(options: CodeGenerationOptions): string {,
   if (options.customAlphabet) {
   return options.customAlphabet;
   return this.config.ALPHABETS[options.format];
-  private generateSecureRandomCode(alphabet: string, length: number): string {,
+  private generateSecureRandomCode(alphabet: string, length: number): string { }
   const code: string = [];
   const alphabetLength = alphabet.length;
   // Calculate how many random bytes we need to avoid bias
   const maxValidValue = Math.floor(256 / alphabetLength) * alphabetLength - 1;
-  for (let i = 0; i < length; i++) {
-  let randomByte: number;
+  for (let i = 0; i < length; i++) { let randomByte: number;
   // Rejection sampling to avoid modulo bias
   do {
-  randomByte = crypto.randomBytes(1)[0];
-} while (randomByte > maxValidValue);
+  randomByte = crypto.randomBytes(1)[0] } while (randomByte > maxValidValue);
       const index = randomByte % alphabetLength;
       code.push(alphabet[index]);
     return code.join('');
-  private hashCode(code: string, salt: Buffer): string {
-  return crypto.pbkdf2Sync()
+  private hashCode(code: string, salt: Buffer): string { return crypto.pbkdf2Sync()
   code,
   salt,
   this.config.HASH_ITERATIONS,
   32, // 256-bit output
   this.config.HASH_ALGORITHM
   ).toString('base64');
-  private async constantTimeValidation(inputCode: string)
+  private async constantTimeValidation(inputCode: string),
   storedHash: string,
-  salt: Buffer): Promise<boolean> {,
+  salt: Buffer): Promise<boolean> {
   // Hash the input code with the same parameters
   const inputHash = this.hashCode(inputCode, salt);
   // Constant-time comparison to prevent timing attacks
   return crypto.timingSafeEqual()
-  Buffer.from(storedHash, 'base64'),
+  Buffer.from(storedHash, 'base64')
   Buffer.from(inputHash, 'base64')
   );
   private createValidationResult(valid: boolean)
-  code: VerificationCodeData,
-  reason?: ValidationResult['reason']): ValidationResult {,
-  const result: ValidationResult = {,
-  valid,
-  code,
-  attemptsRemaining: Math.max(0, code.maxAttempts - code.attempts),
+  code: VerificationCodeData
+  reason?: ValidationResult['reason']): ValidationResult {
+  const result: ValidationResult = {
+  valid
+  code
+  attemptsRemaining: Math.max(0, code.maxAttempts - code.attempts) }
 };
-    if (!valid && reason) {
-      result.reason = reason;
+    if (!valid && reason) { result.reason = reason;
     return result;
   private sleep(ms: number): Promise<void> {
 
@@ -328,21 +309,18 @@ export class VerificationCodeFactory {
    * Create an email verification code
    */
   async createEmailVerificationCode(((
-    userId: string,
+    userId: string }
     email: string
-  ): Promise<{ code: string; data: VerificationCodeData }> {
-
-  const code = this.generator.generateCode({)
+  ): Promise<{ code: string; data: VerificationCodeData }> { const code = this.generator.generateCode({)
   length: 6,
-  format: 'numeric',
+  format: 'numeric' }
 });
     const data = await this.generator.createVerificationCode(;);
       code,
       userId,
       'email_verification',
-      {
-        expirationMinutes: 15,
-        maxAttempts: 5,
+      { expirationMinutes: 15,
+        maxAttempts: 5 }
         metadata: { email }
     );
     return { code, data };
@@ -352,11 +330,9 @@ export class VerificationCodeFactory {
   async createSMSVerificationCode(((
     userId: string,
     phoneNumber: string
-  ): Promise<{ code: string; data: VerificationCodeData }> {
-
-  const code = this.generator.generateCode({)
+  ): Promise<{ code: string; data: VerificationCodeData }> { const code = this.generator.generateCode({)
   length: 6,
-  format: 'numeric',
+  format: 'numeric' }
 });
     const data = await this.generator.createVerificationCode(;);
       code,
@@ -374,37 +350,31 @@ export class VerificationCodeFactory {
   async createPasswordResetCode(((
     userId: string,
     email: string
-  ): Promise<{ code: string; data: VerificationCodeData }> {
-
-  const code = this.generator.generateCode({)
+  ): Promise<{ code: string; data: VerificationCodeData }> { const code = this.generator.generateCode({)
   length: 8,
-  format: 'alphanumeric',
+  format: 'alphanumeric' }
 });
     const data = await this.generator.createVerificationCode(;);
       code,
       userId,
       'password_reset',
-      {
-        expirationMinutes: 30,
-        maxAttempts: 3,
+      { expirationMinutes: 30,
+        maxAttempts: 3 }
         metadata: { email }
     );
     return { code, data };
   /**
    * Create TOTP backup codes
    */
-  async createTOTPBackupCodes(userId: string): Promise<{,
+  async createTOTPBackupCodes(userId: string): Promise<{ ,
   codes: string;
-  data: VerificationCodeData;
-}> {
-
-    const rawCodes = this.generator.generateRecoveryCodes(10);
+  data: VerificationCodeData }> { const rawCodes = this.generator.generateRecoveryCodes(10);
     const data: VerificationCodeData = [];
     for (const code of rawCodes) {
       const codeData = await this.generator.createVerificationCode(;);
         code,
         userId,
-        'totp_backup',
+        'totp_backup' }
         {
           expirationMinutes: 525600, // 1 year
           maxAttempts: 1,             // Single use only
@@ -433,30 +403,22 @@ export const CodeUtils = {
    */
   formatCodeForDisplay(code: string, separator: string = '-', groupSize: number = 4): string {
     return code.match(new RegExp(`.{1,${groupSize}}`, 'g'))?.join(separator) || code;}
-  }
   /**
    * Clean user input (remove formatting, normalize case)
    */
-  cleanUserInput(input: string): string {
-    return input.replace(/[\s-]/g, '').toUpperCase();
-  }
+  cleanUserInput(input: string): string { return input.replace(/[\s-]/g, '').toUpperCase() }
   /**
    * Generate a secure random token for API keys, etc.
    */
-  generateSecureToken(length: number = 32): string {
-    return crypto.randomBytes(length).toString('base64url');
-  }
+  generateSecureToken(length: number = 32): string { return crypto.randomBytes(length).toString('base64url') }
   /**
    * Calculate entropy bits for a given alphabet and length
    */
-  calculateEntropy(alphabetSize: number, length: number): number {
-    return Math.log2(Math.pow(alphabetSize, length));
-};
+  calculateEntropy(alphabetSize: number, length: number): number { return Math.log2(Math.pow(alphabetSize, length)) };
 
-export default {
-  SecureCodeGenerator,
-  VerificationCodeFactory,
-  codeGenerator,
-  verificationCodeFactory,
+export default { SecureCodeGenerator
+  VerificationCodeFactory
+  codeGenerator
+  verificationCodeFactory }
   CodeUtils
 };

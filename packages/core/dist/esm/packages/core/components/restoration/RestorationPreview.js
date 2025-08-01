@@ -52,77 +52,77 @@ const getChangeIcon = (type) => {
                     return 'default';
             }
             ;
-            const nodeColumns = [];
-            {
-                title: 'Action',
-                    dataIndex;
-                'action',
-                    key;
-                'action',
-                    width;
-                80,
-                    render;
-                (action) => (),
-                    _jsx(Tag, { color: getChangeColor(action), icon: getChangeIcon(action), children: action.toUpperCase() });
-            }
-            {
-                title: 'Node ID',
-                    dataIndex;
-                'id',
-                    key;
-                'id',
-                    width;
-                200,
-                    render;
-                (id) => (),
-                    _jsx(Text, { code: true, style: { fontSize: '12px' }, children: id });
-            }
-            {
-                title: 'Type',
-                    dataIndex;
-                'type',
-                    key;
-                'type',
-                    width;
-                120,
-                ;
-            }
-            {
-                title: 'Label',
-                    dataIndex;
-                'label',
-                    key;
-                'label',
-                    render;
-                (label) => label || _jsx(Text, { type: "secondary", children: "No label" }),
-                ;
-            }
-            {
-                title: 'Properties',
-                    dataIndex;
-                'properties',
-                    key;
-                'properties',
-                    render;
-                (properties) => (),
-                    _jsxs(Text, { type: "secondary", children: [properties ? Object.keys(properties).length : 0, " properties"] });
-            }
+            const nodeColumns = [
+                {
+                    title: 'Action',
+                    dataIndex: 'action',
+                    key: 'action',
+                    width: 80,
+                    render: (action) => (),
+                }
+                    < Tag, color = { getChangeColor(action) { }, as, any }, icon = {} >
+                    { action, : .toUpperCase() }
+            ];
         };
     };
 };
+Tag >
 ;
-const edgeColumns = [];
 {
-    title: 'Action',
+    title: 'Node ID',
         dataIndex;
-    'action',
+    'id',
         key;
-    'action',
+    'id',
         width;
-    80,
+    200,
         render;
-    (action) => (),
-        _jsx(Tag, { color: getChangeColor(action), icon: getChangeIcon(action), children: action.toUpperCase() });
+    (id) => (),
+        _jsx(Text, { code: true, style: { fontSize: '12px' }, children: id });
+}
+{
+    title: 'Type',
+        dataIndex;
+    'type',
+        key;
+    'type',
+        width;
+    120,
+    ;
+}
+{
+    title: 'Label',
+        dataIndex;
+    'label',
+        key;
+    'label',
+        render;
+    (label) => label || _jsx(Text, { type: "secondary", children: "No label" }),
+    ;
+}
+{
+    title: 'Properties',
+        dataIndex;
+    'properties',
+        key;
+    'properties',
+        render;
+    (properties) => (),
+        _jsxs(Text, { type: "secondary", children: [properties ? Object.keys(properties).length : 0, " properties"] });
+    ;
+    const edgeColumns = [
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
+            width: 80,
+            render: (action) => (),
+        }
+            < Tag, color = { getChangeColor(action) { }, as, any }, icon = {} >
+            { action, : .toUpperCase() }
+    ];
+    Tag >
+    ;
 }
 {
     title: 'Edge ID',
@@ -169,92 +169,88 @@ const edgeColumns = [];
         width;
     120;
     ;
-    const conflictColumns = [];
-    {
-        title: 'Conflict',
-            dataIndex;
-        'conflictType',
-            key;
-        'conflictType',
-            width;
-        150,
-            render;
-        (type) => (),
-            _jsx(Tooltip, { title: CONFLICT_DESCRIPTIONS[type], children: _jsx(Tag, { color: "warning", icon: _jsx(WarningOutlined, {}), children: type.replace('_', ' ').toUpperCase() }) });
-    }
-    {
-        title: 'Resource',
-            dataIndex;
-        'resourceId',
-            key;
-        'resourceId',
-            width;
-        200,
-            render;
-        (resourceId, record) => ()
-            < div >
-            (_jsx(Text, { code: true, style: { fontSize: '12px' }, children: resourceId })
-                ,
-                    _jsx("br", {})
-                        ,
-                            _jsx(Text, { type: "secondary", style: { fontSize: '11px' }, children: record.resourceType }));
-        div >
-        ;
-    }
-    {
-        title: 'Description',
-            dataIndex;
-        'conflictDescription',
-            key;
-        'conflictDescription',
-            render;
-        (description) => description || _jsx(Text, { type: "secondary", children: "No description" }),
-        ;
-    }
-    {
-        title: 'Resolution',
-            dataIndex;
-        'id',
-            key;
-        'resolution',
-            width;
-        200,
-            render;
-        (conflictId) => (),
-            _jsx(Select, { placeholder: "Choose resolution", style: { width: '100%' }, value: conflictResolutions[conflictId], onChange: (value) => handleConflictResolution(conflictId, value), children: Object.entries(RESOLUTION_STRATEGY_DESCRIPTIONS).map(([key, description]) => ()
-                    < Option, key = { key }, value = { key } >
-                    _jsx(Tooltip, { title: description, children: key.replace('_', ' ').toUpperCase() })) });
-    }
-    Select >
+    const conflictColumns = [
+        {
+            title: 'Conflict',
+            dataIndex: 'conflictType',
+            key: 'conflictType',
+            width: 150,
+            render: (type) => (),
+        }
+            < Tooltip, title = { CONFLICT_DESCRIPTIONS, [type]:  } >
+            _jsx(Tag, { color: "warning", icon: _jsx(WarningOutlined, {}), children: type.replace('_', ' ').toUpperCase() })
+    ];
+    Tooltip >
     ;
+}
+{
+    title: 'Resource',
+        dataIndex;
+    'resourceId',
+        key;
+    'resourceId',
+        width;
+    200,
+        render;
+    (resourceId, record) => ()
+        < div >
+        (_jsx(Text, { code: true, style: { fontSize: '12px' }, children: resourceId })
+            ,
+                _jsx("br", {})
+                    ,
+                        _jsx(Text, { type: "secondary", style: { fontSize: '11px' }, children: record.resourceType }));
+    div >
     ;
-    const allNodeChanges = [];
-    preview.preview.nodesToAdd.map((node) => ({ ...node, action: 'add' })),
+}
+{
+    title: 'Description',
+        dataIndex;
+    'conflictDescription',
+        key;
+    'conflictDescription',
+        render;
+    (description) => description || _jsx(Text, { type: "secondary", children: "No description" }),
     ;
-    preview.preview.nodesToUpdate.map((node) => ({ ...node, action: 'update' })),
-    ;
-    preview.preview.nodesToDelete.map((id) => ({ id, action: 'delete' }));
-    ;
-    const allEdgeChanges = [];
-    preview.preview.edgesToAdd.map((edge) => ({ ...edge, action: 'add' })),
-    ;
-    preview.preview.edgesToUpdate.map((edge) => ({ ...edge, action: 'update' })),
-    ;
-    preview.preview.edgesToDelete.map((id) => ({ id, action: 'delete' }));
-    ;
-    const unresolvedConflicts = preview.conflicts.filter();
-    ;
-    conflict => !conflictResolutions[conflict.id];
-    ;
-    return;
-    _jsxs("div", { children: [_jsxs(Row, { gutter: 16, style: { marginBottom: '24px' }, children: [_jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Total Changes", value: preview.summary.totalChanges, prefix: _jsx(EditOutlined, {}) }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Conflicts", value: preview.summary.totalConflicts, prefix: _jsx(WarningOutlined, {}), valueStyle: { color: preview.summary.totalConflicts > 0 ? '#ff4d4f' : '#3f8600' } }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Estimated Duration", value: preview.summary.estimatedDuration, suffix: "ms", prefix: _jsx(InfoCircleOutlined, {}) }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Risk Level", value: preview.summary.riskLevel.toUpperCase(), prefix: _jsx(QuestionCircleOutlined, {}), valueStyle: { color: getRiskLevelColor(preview.summary.riskLevel) } }) }) })] }), preview.summary.totalConflicts > 0 && ()
-                < Alert, "type=\"warning\" message=\"Conflicts Detected\" description=", _jsxs("div", { children: [_jsxs(Text, { children: [preview.summary.totalConflicts, " conflicts were detected that require resolution."] }), unresolvedConflicts.length > 0 && ()
-                        < Text, " type=\"secondary\">", ' ', "(", unresolvedConflicts.length, " unresolved)"] }), ")}"] });
-    showIcon;
-    style = {};
-    {
-        marginBottom: '16px';
-    }
+}
+{
+    title: 'Resolution',
+        dataIndex;
+    'id',
+        key;
+    'resolution',
+        width;
+    200,
+        render;
+    (conflictId) => (),
+        _jsx(Select, { placeholder: "Choose resolution", style: { width: '100%' }, value: conflictResolutions[conflictId], onChange: (value) => handleConflictResolution(conflictId, value), children: Object.entries(RESOLUTION_STRATEGY_DESCRIPTIONS).map(([key, description]) => ()
+                < Option, key = { key }, value = { key } >
+                _jsx(Tooltip, { title: description, children: key.replace('_', ' ').toUpperCase() })) });
+}
+Select >
+;
+;
+const allNodeChanges = [
+    ...preview.preview.nodesToAdd.map((node) => ({ ...node, action: 'add' })),
+    ...preview.preview.nodesToUpdate.map((node) => ({ ...node, action: 'update' })),
+    ...preview.preview.nodesToDelete.map((id) => ({ id, action: 'delete' }))
+];
+const allEdgeChanges = [
+    ...preview.preview.edgesToAdd.map((edge) => ({ ...edge, action: 'add' })),
+    ...preview.preview.edgesToUpdate.map((edge) => ({ ...edge, action: 'update' })),
+    ...preview.preview.edgesToDelete.map((id) => ({ id, action: 'delete' }))
+];
+const unresolvedConflicts = preview.conflicts.filter();
+;
+conflict => !conflictResolutions[conflict.id];
+;
+return;
+_jsxs("div", { children: [_jsxs(Row, { gutter: 16, style: { marginBottom: '24px' }, children: [_jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Total Changes", value: preview.summary.totalChanges, prefix: _jsx(EditOutlined, {}) }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Conflicts", value: preview.summary.totalConflicts, prefix: _jsx(WarningOutlined, {}), valueStyle: { color: preview.summary.totalConflicts > 0 ? '#ff4d4f' : '#3f8600' } }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Estimated Duration", value: preview.summary.estimatedDuration, suffix: "ms", prefix: _jsx(InfoCircleOutlined, {}) }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Risk Level", value: preview.summary.riskLevel.toUpperCase(), prefix: _jsx(QuestionCircleOutlined, {}), valueStyle: { color: getRiskLevelColor(preview.summary.riskLevel) } }) }) })] }), preview.summary.totalConflicts > 0 && ()
+            < Alert, "type=\"warning\" message=\"Conflicts Detected\" description=", _jsxs("div", { children: [_jsxs(Text, { children: [preview.summary.totalConflicts, " conflicts were detected that require resolution."] }), unresolvedConflicts.length > 0 && ()
+                    < Text, " type=\"secondary\">", ' ', "(", unresolvedConflicts.length, " unresolved)"] }), ")}"] });
+showIcon;
+style = {};
+{
+    marginBottom: '16px';
 }
 />;
 { /* Main Content Tabs */ }

@@ -8,7 +8,7 @@
 import { z } from 'zod';
 
 // Security: Input validation schemas to prevent injection attacks
-export const tutorialContentSchema = z.object({)
+export const tutorialContentSchema = z.object({ )
   title: z.string().min(1).max(200).regex(/^[a-zA-Z0-9\s\-_.,!?()]+$/, 'Invalid characters in title'),
   description: z.string().min(10).max(2000),
   content: z.string().min(50).max(50000),
@@ -17,53 +17,53 @@ export const tutorialContentSchema = z.object({)
   estimatedDuration: z.number().min(1).max(600), // minutes,
   category: z.string().min(1).max(100),
   prerequisites: z.array(z.string()).optional(),
-  objectives: z.array(z.string()).min(1).max(10),
+  objectives: z.array(z.string()).min(1).max(10) }
 });
 
-export const tutorialStepSchema = z.object({)
+export const tutorialStepSchema = z.object({ )
   id: z.string().uuid(),
   title: z.string().min(1).max(100),
   content: z.string().min(10).max(10000),
   type: z.enum(['text', 'video', 'interactive', 'quiz', 'code', 'image']),
   order: z.number().min(0),
   estimatedTime: z.number().min(1).max(60), // minutes,
-  resources: z.array(z.object({)
+  resources: z.array(z.object({),
   type: z.enum(['link', 'file', 'image', 'video']),
   url: z.string().url().refine(url => {)
   // Security: Only allow HTTPS URLs and specific domains,
-  return url.startsWith('https://') &&,
+  return url.startsWith('https://') && }
   (url.includes('example.com') || url.includes('tutorials.internal'));
 }, 'Invalid resource URL'),
     title: z.string().min(1).max(100);
   })).optional(),
-  validation: z.object({,)
+  validation: z.object({ );
   required: z.boolean().default(false),
-  criteria: z.array(z.string()).optional(),
+  criteria: z.array(z.string()).optional() }
 }).optional()
 });
 
-export const tutorialMetadataSchema = z.object({)
-  author: z.object({,)
+export const tutorialMetadataSchema = z.object({ )
+  author: z.object({);
   id: z.string().uuid(),
   name: z.string().min(1).max(100),
   email: z.string().email(),
-  reputation: z.number().min(0).max(10000).default(0),
+  reputation: z.number().min(0).max(10000).default(0) }
 }),
   version: z.string().regex(/^\d+\.\d+\.\d+$/, 'Invalid version format'),
   lastUpdated: z.date(),
   language: z.string().length(2), // ISO 639-1 codes
-  accessibility: z.object({,)
+  accessibility: z.object({ );
   screenReaderCompatible: z.boolean().default(false),
   captionsAvailable: z.boolean().default(false),
-  transcriptAvailable: z.boolean().default(false),
+  transcriptAvailable: z.boolean().default(false) }
 }).optional(),
-  licensing: z.object({,)
+  licensing: z.object({ );
   type: z.enum(['cc0', 'cc-by', 'cc-by-sa', 'proprietary', 'internal']),
-  attribution: z.string().optional(),
-}
+  attribution: z.string().optional() }
+
 });
 
-export const tutorialCompletionSchema = z.object({)
+export const tutorialCompletionSchema = z.object({ )
   userId: z.string().uuid(),
   tutorialId: z.string().uuid(),
   startedAt: z.date(),
@@ -74,28 +74,28 @@ export const tutorialCompletionSchema = z.object({)
   timeSpent: z.number().min(0), // minutes,
   notes: z.string().max(1000).optional(),
   rating: z.number().min(1).max(5).optional(),
-  feedback: z.string().max(2000).optional(),
+  feedback: z.string().max(2000).optional() }
 });
 
 // Main tutorial schema with comprehensive validation
-export const tutorialSchema = z.object({)
+export const tutorialSchema = z.object({ )
   id: z.string().uuid(),
   content: tutorialContentSchema,
   steps: z.array(tutorialStepSchema).min(1).max(50),
   metadata: tutorialMetadataSchema,
-  settings: z.object({,)
+  settings: z.object({);
   isPublic: z.boolean().default(false),
   allowComments: z.boolean().default(true),
   requiresApproval: z.boolean().default(true),
   maxAttempts: z.number().min(1).max(10).default(3),
-  certificateEnabled: z.boolean().default(false),
+  certificateEnabled: z.boolean().default(false) }
 }),
-  analytics: z.object({,)
+  analytics: z.object({ );
   totalViews: z.number().min(0).default(0),
   totalCompletions: z.number().min(0).default(0),
   averageRating: z.number().min(0).max(5).default(0),
   averageCompletionTime: z.number().min(0).default(0), // minutes,
-  completionRate: z.number().min(0).max(100).default(0),
+  completionRate: z.number().min(0).max(100).default(0) }
 }).optional(),
   status: z.enum(['draft', 'review', 'published', 'archived', 'suspended']).default('draft')
 });
@@ -108,21 +108,21 @@ export type TutorialCompletion = z.infer<typeof tutorialCompletionSchema>;
 export type Tutorial = z.infer<typeof tutorialSchema>;
 
 // Tutorial collection for learning paths
-export const learningPathSchema = z.object({)
-  id: z.string().uuid(),
-  title: z.string().min(1).max(200),
-  description: z.string().min(10).max(2000),
-  tutorialIds: z.array(z.string().uuid()).min(1).max(20),
-  prerequisites: z.array(z.string().uuid()).optional(),
-  estimatedDuration: z.number().min(1), // minutes,
-  difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
-  category: z.string().min(1).max(100),
-  author: z.object({,)
-  id: z.string().uuid(),
-  name: z.string().min(1).max(100),
-}),
-  isPublic: z.boolean().default(false),
-  createdAt: z.date(),
+export const learningPathSchema = z.object({ )
+  id: z.string().uuid()
+  title: z.string().min(1).max(200)
+  description: z.string().min(10).max(2000)
+  tutorialIds: z.array(z.string().uuid()).min(1).max(20)
+  prerequisites: z.array(z.string().uuid()).optional()
+  estimatedDuration: z.number().min(1), // minutes
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert'])
+  category: z.string().min(1).max(100)
+  author: z.object({);
+  id: z.string().uuid()
+  name: z.string().min(1).max(100) }
+})
+  isPublic: z.boolean().default(false)
+  createdAt: z.date()
   updatedAt: z.date();
   });
 
@@ -134,10 +134,9 @@ export class TutorialSecurity {
    * Validates tutorial content for security threats
    * Prevents XSS, injection attacks, and malicious content
    */
-  static validateContent(content: string): { isValid: boolean; errors: string } {
-  const errors: string = [];
+  static validateContent(content: string): { isValid: boolean; errors: string } { const errors: string = [];
   // Check for script tags and dangerous HTML
-  if (/<script|javascript:|data:|vbscript:/i.test(content)) {,
+  if (/<script|javascript:|data:|vbscript:/i.test(content)) {
   errors.push('Potentially dangerous script content detected');
   // Check for SQL injection patterns
   if (/union\s+select|drop\s+table|delete\s+from/i.test(content)) {
@@ -150,7 +149,7 @@ export class TutorialSecurity {
   if (content.length > 100000) {
   errors.push('Content exceeds maximum length limit');
   return {
-  isValid: errors.length === 0,
+  isValid: errors.length === 0 }
   errors
 };
   /**
@@ -183,75 +182,66 @@ export class TutorialDataAccess {
   /**
    * Creates a new tutorial with security validation
    */
-  static async createTutorial(tutorialData: Tutorial, userId: string): Promise<{ success: boolean; tutorialId?: string; errors?: string }> {
-
-    try {
+  static async createTutorial(tutorialData: Tutorial, userId: string): Promise<{ success: boolean; tutorialId?: string; errors?: string }> { try {
       // Validate input schema
       const validation = tutorialSchema.safeParse(tutorialData);
       if (!validation.success) {
         return {
-          success: false,
+          success: false }
           errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)}
         };
       // Security validation
       const contentValidation = TutorialSecurity.validateContent(tutorialData.content.content);
-      if (!contentValidation.isValid) {
-  return {
+      if (!contentValidation.isValid) { return {
   success: false,
-  errors: contentValidation.errors,
+  errors: contentValidation.errors }
 };
       // Validate each step content
-      for (const step of tutorialData.steps) {
-        const stepValidation = TutorialSecurity.validateContent(step.content);
+      for (const step of tutorialData.steps) { const stepValidation = TutorialSecurity.validateContent(step.content);
         if (!stepValidation.isValid) {
           return {
-            success: false,
+            success: false }
             errors: [`Step "${step.title}": ${stepValidation.errors.join(', ')}`]}
           };
       // Rate limiting check (example implementation)
       const userTutorialCount = await this.getUserTutorialCount(userId);
-      if (userTutorialCount > 100) {
-  return {
+      if (userTutorialCount > 100) { return {
   success: false,
-  errors: ['User has exceeded tutorial creation limit'],
+  errors: ['User has exceeded tutorial creation limit'] }
 };
       // TODO: Actual database implementation
       const tutorialId = crypto.randomUUID();
-      return {
-  success: true,
+      return { success: true }
   tutorialId
 };
-    } catch (error) {
-  return {
+ catch (error) { return {
   success: false,
-  errors: ['Internal server error'],
+  errors: ['Internal server error'] }
 };
   /**
    * Gets user tutorial count for rate limiting
    */
-  private static async getUserTutorialCount(userId: string): Promise<number> {
-
-  // TODO: Implement actual database query,
+  private static async getUserTutorialCount(userId: string): Promise<number> { // TODO: Implement actual database query
   return 0;
   /**
   * Searches tutorials with security filtering
   */
-  static async searchTutorials(query: string, userId?: string): Promise<Tutorial> {,
+  static async searchTutorials(query: string, userId?: string): Promise<Tutorial> {
   // Sanitize search query
   const sanitizedQuery = TutorialSecurity.sanitizeInput(query);
-  // TODO: Implement actual search with security filters,
+  // TODO: Implement actual search with security filters
   // - Filter by user permissions
   // - Apply content moderation
   // - Rate limit search requests
   return [];
   // Export all schemas for validation
   export const schemas = {
-  tutorial: tutorialSchema,
-  tutorialContent: tutorialContentSchema,
-  tutorialStep: tutorialStepSchema,
-  tutorialMetadata: tutorialMetadataSchema,
-  tutorialCompletion: tutorialCompletionSchema,
-  learningPath: learningPathSchema,
+  tutorial: tutorialSchema
+  tutorialContent: tutorialContentSchema
+  tutorialStep: tutorialStepSchema
+  tutorialMetadata: tutorialMetadataSchema
+  tutorialCompletion: tutorialCompletionSchema
+  learningPath: learningPathSchema }
 };
 
 export default TutorialDataAccess;

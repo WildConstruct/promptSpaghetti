@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import './ModerationQueueManager.css';
-}
+
+
 interface ModerationItem {
   id: string;,
-  type: 'content' | 'user' | 'template' | 'comment' | 'report';
+  type: 'content' | 'user' | 'template' | 'comment' | 'report';,
   content: string;,
   author: string;
   reportedBy?: string;
@@ -14,25 +15,30 @@ interface ModerationItem {
   reviewedAt?: Date;
   reviewedBy?: string;
   tags: string;,
-  category: string;
+  category: string;,
   riskScore: number;,
-  automatedFlags: string;
+  automatedFlags: string;,
   source: 'user_report' | 'automated_detection' | 'proactive_review';
   metadata?: Record<string, unknown>;
-}
+
+
+
 interface QueueFilters {
   status: string;,
-  type: string;
+  type: string;,
   priority: string;,
-  source: string;
+  source: string;,
   assignee: string;,
-  dateRange: string;
+  dateRange: string;,
   riskLevel: string;,
   searchTerm: string;
-}
+
+
+
 interface ModerationQueueManagerProps {
   items: ModerationItem;,
-}
+
+},
   moderators: Array<{ id: string; name: string; online: boolean }>;
   onItemAction: (itemId: string, action: string, data: Record<string, unknown>) => void;
   onBulkAction: (itemIds: string, action: string, data: Record<string, unknown>) => void;
@@ -101,7 +107,7 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({)
   const handleSelectAll = () => {
     if (selectedItems.length === filteredAndSortedItems.length) {
       setSelectedItems([]);
-    } else {
+ else {
       setSelectedItems(filteredAndSortedItems.map(item => item.id));
   };
   const handleItemSelect = (itemId: string) => {

@@ -24,7 +24,7 @@ export class EnhancedServer {
     // Load TLS configuration from environment
     const tlsConfig = loadTLSConfigFromEnv();
     this.tlsManager = new TLSConfigManager(tlsConfig);
-  }
+
 
   /**
    * Create HTTP server instance
@@ -39,10 +39,10 @@ export class EnhancedServer {
       server.register(fastifyHttpsRedirect, {
         port: this.tlsManager.getConfig().port
       });
-    }
+
 
     return server;
-  }
+
 
   /**
    * Create HTTPS server instance
@@ -64,7 +64,7 @@ export class EnhancedServer {
     });
 
     return server;
-  }
+
 
   /**
    * Initialize server instances
@@ -79,11 +79,11 @@ export class EnhancedServer {
       
       if (!validation.valid) {
         throw new Error(`TLS configuration validation failed: ${validation.errors.join(', ')}`);
-      }
+
 
       if (validation.warnings.length > 0) {
         console.warn('TLS configuration warnings:', validation.warnings);
-      }
+
 
       // Create HTTPS server
       this.httpsServer = this.createHTTPSServer();
@@ -94,7 +94,7 @@ export class EnhancedServer {
         console.log(`Certificate file changed: ${filename}, event: ${event}`);
         // TODO: Implement certificate reload logic
       });
-    }
+
 
     // Always create HTTP server (for health checks or redirects)
     this.httpServer = this.createHTTPServer();
@@ -102,7 +102,7 @@ export class EnhancedServer {
 
     // Setup routes on both servers
     await this.setupRoutes();
-  }
+
 
   /**
    * Setup routes on server instances
@@ -114,7 +114,7 @@ export class EnhancedServer {
     
     if (this.httpsServer) {
       await setupRoutes(this.httpsServer);
-    }
+
     
     if (this.httpServer) {
       // For HTTP server, only setup essential routes (health check, redirect)
@@ -126,8 +126,8 @@ export class EnhancedServer {
           timestamp: new Date().toISOString()
         };
       });
-    }
-  }
+
+
 
   /**
    * Start the server(s)
@@ -136,7 +136,7 @@ export class EnhancedServer {
 
     if (this.isStarted) {
       throw new Error('Server is already started');
-    }
+
 
     const config = this.tlsManager.getConfig();
     const httpPort = process.env.PORT ? parseInt(process.env.PORT) : 8000;
@@ -149,7 +149,7 @@ export class EnhancedServer {
           host: '0.0.0.0' 
         });
         console.log(`HTTP server listening on port ${httpPort}`);
-      }
+
 
       // Start HTTPS server if enabled
       if (this.httpsServer && config.enabled) {
@@ -164,22 +164,21 @@ export class EnhancedServer {
           const testResult = await this.tlsManager.testTLSConnection('localhost', config.port);
           if (testResult.connected) {
             console.log(`TLS test successful: ${testResult.protocol}, cipher: ${testResult.cipher?.name}`);
-          } else {
+ else {
             console.warn(`TLS test failed: ${testResult.error}`);
-          }
-        } catch (error) {
+
+ catch (error) {
           console.warn('TLS connection test failed:', error);
-        }
-      }
+
+
 
       this.isStarted = true;
       console.log('Server startup complete');
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to start server:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Stop the server(s)
@@ -188,7 +187,7 @@ export class EnhancedServer {
 
     if (!this.isStarted) {
       return;
-    }
+
 
     console.log('Stopping servers...');
 
@@ -200,22 +199,21 @@ export class EnhancedServer {
       if (this.httpsServer) {
         await this.httpsServer.close();
         console.log('HTTPS server stopped');
-      }
+
 
       // Stop HTTP server
       if (this.httpServer) {
         await this.httpServer.close();
         console.log('HTTP server stopped');
-      }
+
 
       this.isStarted = false;
       console.log('All servers stopped');
-
-    } catch (error) {
+ catch (error) {
       console.error('Error during server shutdown:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get server status information
@@ -224,14 +222,14 @@ export class EnhancedServer {
     http: { running: boolean; port?: number };
     https: { running: boolean; port?: number; tls?: any };
     config: any;
-    } {
+ {
     const config = this.tlsManager.getConfig();
     
     return {
       http: {
         running: !!this.httpServer && this.isStarted,
         port: process.env.PORT ? parseInt(process.env.PORT) : 8000
-  }
+
       https: {
         running: !!this.httpsServer && this.isStarted && config.enabled,
         port: config.port,
@@ -239,14 +237,14 @@ export class EnhancedServer {
           minVersion: config.options.minVersion,
           maxVersion: config.options.maxVersion,
           hsts: config.hsts
-        } : undefined
-  }
+ : undefined
+
       config: {
         tlsEnabled: config.enabled,
         environment: process.env.NODE_ENV,
         validation: this.tlsManager.validateConfiguration(}
     };
-  }
+
 
   /**
    * Reload TLS certificates
@@ -255,7 +253,7 @@ export class EnhancedServer {
 
     if (!this.tlsManager.getConfig().enabled || !this.httpsServer) {
       throw new Error('TLS is not enabled or HTTPS server is not running');
-    }
+
 
     console.log('Reloading TLS certificates...');
 
@@ -264,7 +262,7 @@ export class EnhancedServer {
       const validation = this.tlsManager.validateConfiguration();
       if (!validation.valid) {
         throw new Error(`Certificate validation failed: ${validation.errors.join(', ')}`);
-      }
+
 
       // Create new HTTPS options
       const newTLSOptions = this.tlsManager.createHTTPSOptions();
@@ -275,19 +273,18 @@ export class EnhancedServer {
       
       console.log('Certificate reload would require server restart');
       console.log('Consider implementing graceful certificate reload for production');
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to reload certificates:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get TLS manager for advanced operations
    */
   getTLSManager(): TLSConfigManager {
     return this.tlsManager;
-  }
+
 
   /**
    * Get server instances for testing or advanced configuration
@@ -297,8 +294,8 @@ export class EnhancedServer {
       http: this.httpServer,
       https: this.httpsServer
     };
-  }
-}
+
+
 
 // ========================================
 // Server Bootstrap Function
@@ -318,21 +315,21 @@ export async function startEnhancedServer(): Promise<EnhancedServer> {
       try {
         await server.stop();
         process.exit(0);
-      } catch (error) {
+ catch (error) {
         console.error('Error during shutdown:', error);
         process.exit(1);
-      }
+
     };
 
     process.on('SIGTERM', () => shutdown('SIGTERM'));
     process.on('SIGINT', () => shutdown('SIGINT'));
 
     return server;
-  } catch (error) {
+ catch (error) {
     console.error('Failed to start enhanced server:', error);
     throw error;
-  }
-}
+
+
 
 // ========================================
 // Default Export

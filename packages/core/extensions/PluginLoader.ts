@@ -15,54 +15,48 @@ import { join, resolve, dirname } from 'path';
 import { createRequire } from 'module';
 import * as semver from 'semver';
 
-}
-export interface PluginSource {
-  type: 'filesystem' | 'npm' | 'git' | 'url' | 'registry';
+
+export interface PluginSource { type: 'filesystem' | 'npm' | 'git' | 'url' | 'registry';
   location: string;
   version?: string;
-  credentials?: {
+  credentials?: { }
   token?: string;
   username?: string;
   password?: string;
-}
+
+
 };
-  options?: {
-  cache?: boolean;
+  options?: { cache?: boolean;
   timeout?: number;
-  allowPrerelease?: boolean;
-};
-}
-}
-export interface LoadedPlugin {
-  manifest: ExtensionManifest;
+  allowPrerelease?: boolean };
+
+
+export interface LoadedPlugin { manifest: ExtensionManifest;
   source: PluginSource;
   exports: any;
   sandbox: PluginSandbox;
   loadedAt: Date;
   dependencies: string;
   status: 'loaded' | 'active' | 'inactive' | 'error';
-  error?: Error;
-}
-}
-}
-export interface PluginLoadOptions {
-  enableSandbox: boolean;
+  error?: Error }
+
+
+
+export interface PluginLoadOptions { enableSandbox: boolean;
   allowRemoteSources: boolean;
   maxConcurrentLoads: number;
   cacheDirectory?: string;
   skipDependencyResolution?: boolean;
   developmentMode?: boolean;
-  permissionsCheck?: boolean;
-}
-}
-}
-export interface PluginRegistry {
-  plugins: Map<string, LoadedPlugin>;
+  permissionsCheck?: boolean }
+
+
+
+export interface PluginRegistry { plugins: Map<string, LoadedPlugin>;
   manifests: Map<string, ExtensionManifest>;
   dependencyGraph: DependencyGraph;
-  loadOrder: LoadOrder;
-}
-}
+  loadOrder: LoadOrder }
+
 export class PluginLoader {
   private registry: ExtensionPointRegistry;
   private versionManager: ExtensionVersionManager;
@@ -72,8 +66,7 @@ export class PluginLoader {
   private pluginCache: Map<string, any>;
   private loadingQueue: Map<string, Promise<LoadedPlugin>>;
   private options: PluginLoadOptions;
-  constructor(options: Partial<PluginLoadOptions> = {}) {
-  this.registry = ExtensionPointRegistry.getInstance();
+  constructor(options: Partial<PluginLoadOptions> = {}) { this.registry = ExtensionPointRegistry.getInstance();
   this.versionManager = new ExtensionVersionManager();
   this.lifecycleManager = ExtensionLifecycleManager.getInstance();
   this.dependencyResolver = new DependencyResolver(this.versionManager);
@@ -81,21 +74,19 @@ export class PluginLoader {
   this.pluginCache = new Map();
   this.loadingQueue = new Map();
   this.options = {
-  enableSandbox: true,
-  allowRemoteSources: false,
-  maxConcurrentLoads: 5,
-  cacheDirectory: join(process.cwd(), '.plugin-cache'),
-  skipDependencyResolution: false,
-  developmentMode: process.env.NODE_ENV === 'development',
-  permissionsCheck: true,
+  enableSandbox: true
+  allowRemoteSources: false
+  maxConcurrentLoads: 5
+  cacheDirectory: join(process.cwd(), '.plugin-cache')
+  skipDependencyResolution: false
+  developmentMode: process.env.NODE_ENV === 'development'
+  permissionsCheck: true }
   ...options
 };
   /**
    * Load a plugin from a source
    */
-  async loadPlugin(source: PluginSource): Promise<LoadedPlugin> {
-
-    const pluginKey = this.getPluginKey(source);
+  async loadPlugin(source: PluginSource): Promise<LoadedPlugin> { const pluginKey = this.getPluginKey(source);
     // Check if already loaded
     const existing = this.loadedPlugins.get(pluginKey);
     if (existing) {
@@ -110,21 +101,17 @@ export class PluginLoader {
     try {
       const plugin = await loadPromise;
       this.loadedPlugins.set(pluginKey, plugin);
-      return plugin;
-    } finally {
-  this.loadingQueue.delete(pluginKey);
+      return plugin } finally { this.loadingQueue.delete(pluginKey);
   /**
   * Load multiple plugins with dependency resolution
   */
-  async loadPlugins(sources: PluginSource): Promise<Map<string, LoadedPlugin>> {,
-  if (this.options.skipDependencyResolution) {
-  // Simple parallel loading without dependency resolution
+  async loadPlugins(sources: PluginSource): Promise<Map<string, LoadedPlugin>> { }
+  if (this.options.skipDependencyResolution) { // Simple parallel loading without dependency resolution
   const loadPromises = sources.map(source => this.loadPlugin(source));
   const plugins = await Promise.all(loadPromises);
   const result = new Map<string, LoadedPlugin>();
   plugins.forEach(plugin => {)
-  result.set(plugin.manifest.id, plugin);
-});
+  result.set(plugin.manifest.id, plugin) });
       return result;
     // Load manifests first to resolve dependencies
     const manifests = await this.loadManifests(sources);
@@ -144,17 +131,17 @@ export class PluginLoader {
           // Activate plugin after loading
           await this.lifecycleManager.activateExtension(plugin.manifest.id);
           plugin.status = 'active'
-  } catch (error) {
+ catch (error) {
           console.error(`Failed to load plugin ${pluginId}:`, error);}
           // Create error plugin entry
-          const errorPlugin: LoadedPlugin = {,
-  manifest: manifests.get(pluginId)!,
-            source,
-            exports: {},
-            sandbox: null as any,
-            loadedAt: new Date(),
-            dependencies: [],
-            status: 'error',
+          const errorPlugin: LoadedPlugin = { 
+  manifest: manifests.get(pluginId)!
+            source }
+            exports: {}
+            sandbox: null as any
+            loadedAt: new Date()
+            dependencies: []
+            status: 'error'
             error: error as Error;
   };
           result.set(pluginId, errorPlugin);
@@ -162,9 +149,7 @@ export class PluginLoader {
   /**
    * Resolve and install plugin dependencies
    */
-  async resolvePluginDependencies(manifest: ExtensionManifest): Promise<string> {
-
-    const dependencies: string = [];
+  async resolvePluginDependencies(manifest: ExtensionManifest): Promise<string> { const dependencies: string = [];
     if (manifest.dependencies) {
       for (const [depName, versionRange] of Object.entries(manifest.dependencies)) {
         // Check if dependency is already loaded
@@ -173,7 +158,7 @@ export class PluginLoader {
         if (loaded) {
           // Verify version compatibility
           if (!this.versionManager.isVersionCompatible()
-            loaded.manifest.version, 
+            loaded.manifest.version }
             versionRange
           )) {
             throw new Error()
@@ -183,17 +168,13 @@ export class PluginLoader {
           continue;
         // Try to resolve dependency from available sources
         const depPlugin = await this.resolveDependency(depName, versionRange);
-        if (depPlugin) {
-          dependencies.push(depName);
-        } else {
+        if (depPlugin) { dependencies.push(depName) } else {
           throw new Error(`Cannot resolve dependency: ${depName}@${versionRange}`);}
     return dependencies;
   /**
    * Unload a plugin and its dependents
    */
-  async unloadPlugin(pluginId: string): Promise<void> {
-
-    const plugin = this.loadedPlugins.get(pluginId);
+  async unloadPlugin(pluginId: string): Promise<void> { const plugin = this.loadedPlugins.get(pluginId);
     if (!plugin) {
       return;
     // Find and unload dependents first
@@ -208,8 +189,7 @@ export class PluginLoader {
       // Clean up sandbox
       if (plugin.sandbox) {
         plugin.sandbox.dispose();
-      this.loadedPlugins.delete(pluginId);
-    } catch (error) {
+      this.loadedPlugins.delete(pluginId) } catch (error) {
       console.error(`Error unloading plugin ${pluginId}:`, error);}
       plugin.status = 'error';
       plugin.error = error as Error;
@@ -227,32 +207,30 @@ export class PluginLoader {
   /**
    * Get plugin registry information
    */
-  getPluginRegistry(): PluginRegistry {
-  const manifests = new Map<string, ExtensionManifest>();
+  getPluginRegistry(): PluginRegistry { const manifests = new Map<string, ExtensionManifest>();
   for (const [id, plugin] of this.loadedPlugins) {
   manifests.set(id, plugin.manifest);
   return {
-  plugins: new Map(this.loadedPlugins),
-  manifests,
-  dependencyGraph: this.dependencyResolver.getLastDependencyGraph(),
-  loadOrder: this.dependencyResolver.getLastLoadOrder(),
+  plugins: new Map(this.loadedPlugins)
+  manifests
+  dependencyGraph: this.dependencyResolver.getLastDependencyGraph()
+  loadOrder: this.dependencyResolver.getLastLoadOrder() }
 };
   /**
    * Check for plugin updates
    */
   async checkForUpdates(): Promise<Array<{ pluginId: string; currentVersion: string; availableVersion: string }>> {
     const updates: Array<{ pluginId: string; currentVersion: string; availableVersion: string }> = [];
-    for (const [id, plugin] of this.loadedPlugins) {
-  if (plugin.source.type === 'npm' || plugin.source.type === 'registry') {
+    for (const [id, plugin] of this.loadedPlugins) { if (plugin.source.type === 'npm' || plugin.source.type === 'registry') {
   try {
   const availableVersion = await this.getLatestVersion(plugin.source);
   if (availableVersion && semver.gt(availableVersion, plugin.manifest.version)) {
   updates.push({)
   pluginId: id,
-  currentVersion: plugin.manifest.version,
+  currentVersion: plugin.manifest.version }
   availableVersion
 });
-        } catch (error) {
+ catch (error) {
           console.warn(`Failed to check updates for plugin ${id}:`, error);}
     return updates;
   /**
@@ -264,20 +242,17 @@ export class PluginLoader {
     if (!plugin) {
       throw new Error(`Plugin ${pluginId} not found`);}
     const latestVersion = await this.getLatestVersion(plugin.source);
-    if (!latestVersion || !semver.gt(latestVersion, plugin.manifest.version)) {
-  return plugin; // No update available
+    if (!latestVersion || !semver.gt(latestVersion, plugin.manifest.version)) { return plugin; // No update available
   // Create updated source
-  const updatedSource: PluginSource = {,
-  ...plugin.source,
-  version: latestVersion,
+  const updatedSource: PluginSource = {
+  ...plugin.source
+  version: latestVersion }
 };
     // Reload with new version
     await this.unloadPlugin(pluginId);
     return this.loadPlugin(updatedSource);
   // Private methods
-  private async loadPluginInternal(source: PluginSource): Promise<LoadedPlugin> {
-
-  try {
+  private async loadPluginInternal(source: PluginSource): Promise<LoadedPlugin> { try {
   // 1. Resolve and download plugin source
   const pluginPath = await this.resolvePluginSource(source);
   // 2. Load and validate manifest
@@ -295,17 +270,17 @@ export class PluginLoader {
   const exports = await this.loadPluginExports(pluginPath, sandbox);
   // 7. Register with lifecycle manager
   await this.lifecycleManager.registerExtension(manifest);
-  const plugin: LoadedPlugin = {,
-  manifest,
-  source,
-  exports,
-  sandbox: sandbox!,
-  loadedAt: new Date(),
-  dependencies,
-  status: 'loaded',
+  const plugin: LoadedPlugin = {
+  manifest
+  source
+  exports
+  sandbox: sandbox!
+  loadedAt: new Date()
+  dependencies
+  status: 'loaded' }
 };
       return plugin;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to load plugin from ${source.location}: ${error.message}`);}
   private async resolvePluginSource(source: PluginSource): Promise<string> {
 
@@ -322,24 +297,18 @@ export class PluginLoader {
       return this.downloadFromRegistry(source);
     default:
       throw new Error(`Unsupported plugin source type: ${(source as any).type}`);}
-  private async loadPluginManifest(pluginPath: string): Promise<ExtensionManifest> {
-
-  const manifestPath = join(pluginPath, 'plugin.json') || join(pluginPath, 'package.json');
+  private async loadPluginManifest(pluginPath: string): Promise<ExtensionManifest> { const manifestPath = join(pluginPath, 'plugin.json') || join(pluginPath, 'package.json');
   try {
   const content = await fs.readFile(manifestPath, 'utf-8');
   const manifest = JSON.parse(content);
   // Validate manifest against schema
   if (!manifest.id || !manifest.version) {
   throw new Error('Invalid plugin manifest: missing id or version');
-  return manifest;
-} catch (error) {
+  return manifest } catch (error) {
       throw new Error(`Failed to load manifest from ${manifestPath}: ${error.message}`);}
-  private async loadPluginExports(pluginPath: string, sandbox: PluginSandbox | null): Promise<any> {
-
-    const entryPoint = join(pluginPath, 'index.js') || join(pluginPath, 'main.js');
+  private async loadPluginExports(pluginPath: string, sandbox: PluginSandbox | null): Promise<any> { const entryPoint = join(pluginPath, 'index.js') || join(pluginPath, 'main.js');
     if (sandbox) {
-      return sandbox.loadModule(entryPoint);
-    } else {
+      return sandbox.loadModule(entryPoint) } else {
       // Direct module import (no sandbox)
       const require = createRequire(import.meta.url);
       return require(entryPoint);
@@ -355,30 +324,26 @@ export class PluginLoader {
           `Plugin requests dangerous permissions: ${requestedDangerous.join(', ')}. ` +}
           'Enable development mode to allow dangerous permissions.'
         );
-  private async loadManifests(sources: PluginSource): Promise<Map<string, ExtensionManifest>> {
-    const manifests = new Map<string, ExtensionManifest>();
+  private async loadManifests(sources: PluginSource): Promise<Map<string, ExtensionManifest>> { const manifests = new Map<string, ExtensionManifest>();
     await Promise.all(sources.map(async (source) => {
       try {
         const pluginPath = await this.resolvePluginSource(source);
         const manifest = await this.loadPluginManifest(pluginPath);
-        manifests.set(manifest.id, manifest);
-      } catch (error) {
+        manifests.set(manifest.id, manifest) } catch (error) {
         console.warn(`Failed to load manifest for ${source.location}:`, error);}
     }));
     return manifests;
-  private async resolveDependency(depName: string, versionRange: string): Promise<LoadedPlugin | null> {
-
-  // Try to find dependency in available sources or registries
+  private async resolveDependency(depName: string, versionRange: string): Promise<LoadedPlugin | null> { // Try to find dependency in available sources or registries
   // This is a simplified implementation - in production you'd want
   // integration with npm, plugin registries, etc.
   try {
-  const npmSource: PluginSource = {,
-  type: 'npm',
-  location: depName,
-  version: versionRange,
+  const npmSource: PluginSource = {
+  type: 'npm'
+  location: depName
+  version: versionRange }
 };
       return await this.loadPlugin(npmSource);
-    } catch (error) {
+ catch (error) {
       console.warn(`Failed to resolve dependency ${depName}@${versionRange}:`, error);}
       return null;
   private findDependents(pluginId: string): string {

@@ -15,9 +15,7 @@ describe('DragReorderList', () => {
   const mockOnReorder = jest.fn<unknown, unknown>();
   const mockOnWeightChange = jest.fn<unknown, unknown>();
   const mockOnTextChange = jest.fn<unknown, unknown>();
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   describe('Basic Rendering', () => {
     it('renders all options with drag handles', () => {
       render();
@@ -143,7 +141,7 @@ describe('DragReorderList', () => {
     });
     it('disables weight controls for locked options', () => {
       const lockedOptions: WeightControlOption = [
-        { id: '1', text: 'Locked Option', weight: 50, locked: true },
+        { id: '1', text: 'Locked Option', weight: 50, locked: true }
         { id: '2', text: 'Normal Option', weight: 50, locked: false }
       ];
       render();
@@ -287,14 +285,14 @@ describe('DragReorderList', () => {
       const dragHandle = screen.getAllByText('⋮⋮')[0];
       // Multi-touch should be ignored
       fireEvent.touchStart(dragHandle, {)
-  touches: [,
-          { clientX: 100, clientY: 100 },
+  touches: [
+          { clientX: 100, clientY: 100 }
           { clientX: 200, clientY: 200 }
         ]
       });
       fireEvent.touchMove(document, {)
-  touches: [,
-          { clientX: 110, clientY: 110 },
+  touches: [
+          { clientX: 110, clientY: 110 }
           { clientX: 210, clientY: 210 }
         ]
       });
@@ -346,10 +344,9 @@ describe('DragReorderList', () => {
         />
       );
       const items = container.querySelectorAll('[style*="cursor"]');
-      items.forEach(item => {)
+      items.forEach(item => { )
   if (item.textContent?.includes('⋮⋮')) {
-  expect(item).toHaveStyle('cursor: default');
-});
+  expect(item).toHaveStyle('cursor: default') });
     });
     it('disables text and weight inputs when disabled', () => {
       render();
@@ -364,12 +361,10 @@ describe('DragReorderList', () => {
       );
       const textInputs = screen.getAllByRole('textbox');
       const sliders = screen.getAllByRole('slider');
-      textInputs.forEach(input => {)
-  expect(input).toBeDisabled();
-      });
-      sliders.forEach(slider => {)
-  expect(slider).toBeDisabled();
-      });
+      textInputs.forEach(input => { )
+  expect(input).toBeDisabled() });
+      sliders.forEach(slider => { )
+  expect(slider).toBeDisabled() });
     });
   });
   describe('Ghost Element', () => {
@@ -437,13 +432,11 @@ describe('DragReorderList', () => {
       const textInputs = screen.getAllByRole('textbox');
       const sliders = screen.getAllByRole('slider');
       // Text inputs should be focusable
-      textInputs.forEach(input => {)
-  expect(input).not.toHaveAttribute('tabindex', '-1');
-      });
+      textInputs.forEach(input => { )
+  expect(input).not.toHaveAttribute('tabindex', '-1') });
       // Sliders should be focusable
-      sliders.forEach(slider => {)
-  expect(slider).not.toHaveAttribute('tabindex', '-1');
-      });
+      sliders.forEach(slider => { )
+  expect(slider).not.toHaveAttribute('tabindex', '-1') });
     });
     it('maintains text content accessibility during drag', async () => {
       render();

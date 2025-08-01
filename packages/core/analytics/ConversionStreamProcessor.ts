@@ -15,76 +15,67 @@
 import { EventEmitter } from 'events';
 import { EnhancedConversionEvent, FunnelStreamConfig } from './ConversionFunnelArchitecture';
 
-}
-export interface StreamEvent {
-  id: string;
+
+export interface StreamEvent { id: string;
   type: 'conversion_event' | 'funnel_step' | 'attribution_update' | 'session_event';
   payload: EnhancedConversionEvent;
   partition: number;
   offset: number;
   timestamp: number;
   headers: Record<string, string>;
-  retryCount: number;
-}
-}
-}
-export interface StreamPartition {
-  id: number;
+  retryCount: number }
+
+
+
+export interface StreamPartition { id: number;
   events: StreamEvent;
   offset: number;
   lastProcessed: number;
   consumerCount: number;
-  lag: number;
-}
-}
-}
-export interface StreamConsumer {
-  id: string;
+  lag: number }
+
+
+
+export interface StreamConsumer { id: string;
   groupId: string;
   assignedPartitions: number;
   lastHeartbeat: number;
   processedOffset: Map<number, number>;
   isActive: boolean;
-  processingRate: number;
-}
-}
-}
-export interface StreamMetrics {
-  totalEvents: number;
+  processingRate: number }
+
+
+
+export interface StreamMetrics { totalEvents: number;
   eventsPerSecond: number;
   averageLatency: number;
-  partitionMetrics: Map<number, {,
+  partitionMetrics: Map<number, { }
   events: number;
   lag: number;
   throughput: number;
-}
-}>;
-  consumerMetrics: Map<string, {
-  processedEvents: number;
+
+
+>;
+  consumerMetrics: Map<string, { processedEvents: number;
   errorCount: number;
-  avgProcessingTime: number;
-}>;
-  deadLetterQueue: {
+  avgProcessingTime: number }>;
+  deadLetterQueue: { 
   size: number;
-  oldestEvent: number;
-};
-}
-}
-export interface ProcessingResult {
-  success: boolean;
+  oldestEvent: number };
+
+
+export interface ProcessingResult { success: boolean;
   eventId: string;
   processingTime: number;
   error?: string;
-  retryable: boolean;
-}
-}
+  retryable: boolean }
+
 export type EventProcessor = (event: StreamEvent) => Promise<ProcessingResult>;
 /**
  * Conversion Stream Processor
  * Manages real-time conversion event streaming with fault tolerance
  */
-export class ConversionStreamProcessor extends EventEmitter {
-  private config: FunnelStreamConfig;
+export class ConversionStreamProcessor extends EventEmitter { private config: FunnelStreamConfig;
   private partitions: Map<number, StreamPartition> = new Map();
   private consumers: Map<string, StreamConsumer> = new Map();
   private processors: Map<string, EventProcessor> = new Map();
@@ -93,92 +84,82 @@ export class ConversionStreamProcessor extends EventEmitter {
   private metricsInterval: NodeJS.Timeout | null = null;
   private heartbeatInterval: NodeJS.Timeout | null = null;
   private cleanupInterval: NodeJS.Timeout | null = null;
-  private metrics: StreamMetrics = {,
-  totalEvents: 0,
-    eventsPerSecond: 0,
-    averageLatency: 0,
-    partitionMetrics: new Map(),
-    consumerMetrics: new Map(),
+  private metrics: StreamMetrics = {
+  totalEvents: 0
+    eventsPerSecond: 0
+    averageLatency: 0
+    partitionMetrics: new Map()
+    consumerMetrics: new Map() }
     deadLetterQueue: { size: 0, oldestEvent: 0 }
   };
-  constructor(config: FunnelStreamConfig) {
-  super();
+  constructor(config: FunnelStreamConfig) { super();
   this.config = {
-  streamName: config.streamName || 'conversion-events',
-  batchSize: config.batchSize || 100,
-  flushInterval: config.flushInterval || 5000,
-  retryPolicy: config.retryPolicy || {,
-  maxRetries: 3,
-  backoffMultiplier: 2,
-  maxBackoffTime: 30000,
-},
-  deadLetterQueue: config.deadLetterQueue || {,
-  enabled: true,
-  maxAge: 24,
-},
-  partitioning: config.partitioning || {,
-  strategy: 'user_id',
-  partitionCount: 10,
+  streamName: config.streamName || 'conversion-events'
+  batchSize: config.batchSize || 100
+  flushInterval: config.flushInterval || 5000
+  retryPolicy: config.retryPolicy || {
+  maxRetries: 3
+  backoffMultiplier: 2
+  maxBackoffTime: 30000 }
+
+  deadLetterQueue: config.deadLetterQueue || { 
+  enabled: true
+  maxAge: 24 }
+
+  partitioning: config.partitioning || { 
+  strategy: 'user_id'
+  partitionCount: 10 }
 };
     this.initializePartitions();
     this.startBackgroundTasks();
   /**
    * Initialize stream partitions
    */
-  private initializePartitions(): void {
-  for (let i = 0; i < this.config.partitioning.partitionCount; i++) {
+  private initializePartitions(): void { for (let i = 0; i < this.config.partitioning.partitionCount; i++) {
   this.partitions.set(i, {)
   id: i,
   events: [],
   offset: 0,
   lastProcessed: Date.now(),
   consumerCount: 0,
-  lag: 0,
+  lag: 0 }
 });
-      this.metrics.partitionMetrics.set(i, {)
+      this.metrics.partitionMetrics.set(i, { )
   events: 0,
   lag: 0,
-  throughput: 0,
+  throughput: 0 }
 });
   /**
    * Start background monitoring and maintenance tasks
    */
-  private startBackgroundTasks(): void {
-    // Metrics collection
+  private startBackgroundTasks(): void { // Metrics collection
     this.metricsInterval = setInterval(() => {
       this.updateMetrics();
-      this.emit('metrics_updated', this.metrics);
-    }, 10000); // Every 10 seconds
+      this.emit('metrics_updated', this.metrics) }, 10000); // Every 10 seconds
     // Consumer heartbeat monitoring
-    this.heartbeatInterval = setInterval(() => {
-      this.checkConsumerHeartbeats();
-    }, 30000); // Every 30 seconds
+    this.heartbeatInterval = setInterval(() => { this.checkConsumerHeartbeats() }, 30000); // Every 30 seconds
     // Cleanup dead letter queue
-    this.cleanupInterval = setInterval(() => {
-      this.cleanupDeadLetterQueue();
-    }, 3600000); // Every hour
+    this.cleanupInterval = setInterval(() => { this.cleanupDeadLetterQueue() }, 3600000); // Every hour
   /**
    * Publish conversion event to stream
    */
   public async publishEvent(
     event: EnhancedConversionEvent,
     headers: Record<string, string> = {}
-  ): Promise<boolean> {
-
-  try {
+  ): Promise<boolean> { try {
   const partition = this.selectPartition(event);
-  const streamEvent: StreamEvent = {,
-  id: this.generateEventId(),
-  type: this.getEventType(event),
-  payload: event,
-  partition,
-  offset: this.getNextOffset(partition),
-  timestamp: Date.now(),
+  const streamEvent: StreamEvent = {
+  id: this.generateEventId()
+  type: this.getEventType(event)
+  payload: event
+  partition
+  offset: this.getNextOffset(partition)
+  timestamp: Date.now()
   headers: {
-  'content-type': 'application/json',
-  'source': 'conversion-architecture',
+  'content-type': 'application/json'
+  'source': 'conversion-architecture' }
   ...headers
-},
+
   retryCount: 0;
   };
       // Add to partition
@@ -194,10 +175,8 @@ export class ConversionStreamProcessor extends EventEmitter {
       // Emit event for real-time processing
       this.emit('event_published', streamEvent);
       // Trigger processing if batch size reached
-      if (partitionData.events.length >= this.config.batchSize) {
-        this.processPartition(partition);
-      return true;
-    } catch (error) {
+      if (partitionData.events.length >= this.config.batchSize) { this.processPartition(partition);
+      return true } catch (error) {
       this.emit('publish_error', { event, error });
       return false;
   /**
@@ -210,47 +189,43 @@ export class ConversionStreamProcessor extends EventEmitter {
    * Register stream consumer
    */
   public registerConsumer(consumerId: string)
-    groupId: string,
-    partitions: number = []): StreamConsumer {,
+  groupId: string
+    partitions: number = []): StreamConsumer { 
   // Auto-assign partitions if not specified
   const assignedPartitions = partitions.length > 0 ;
   ? partitions
   : this.autoAssignPartitions();
-  const consumer: StreamConsumer = {,
-  id: consumerId,
-  groupId,
-  assignedPartitions,
-  lastHeartbeat: Date.now(),
-  processedOffset: new Map(),
-  isActive: true,
-  processingRate: 0,
+  const consumer: StreamConsumer = {
+  id: consumerId
+  groupId
+  assignedPartitions
+  lastHeartbeat: Date.now()
+  processedOffset: new Map()
+  isActive: true
+  processingRate: 0 }
 };
     this.consumers.set(consumerId, consumer);
     // Update partition consumer counts
-    assignedPartitions.forEach(partitionId => {)
+    assignedPartitions.forEach(partitionId => { )
   const partition = this.partitions.get(partitionId);
       if (partition) {
-        partition.consumerCount++;
-    });
+        partition.consumerCount++ });
     this.emit('consumer_registered', consumer);
     return consumer;
   /**
    * Start stream processing
    */
-  public start(): void {
-    if (this.isRunning) return;
+  public start(): void { if (this.isRunning) return;
     this.isRunning = true;
     // Start periodic processing
     setInterval(() => {
       if (this.isRunning) {
-        this.processAllPartitions();
-    }, this.config.flushInterval);
+        this.processAllPartitions() }, this.config.flushInterval);
     this.emit('processor_started');
   /**
    * Stop stream processing
    */
-  public stop(): void {
-  this.isRunning = false;
+  public stop(): void { this.isRunning = false;
   // Clear intervals
   if (this.metricsInterval) clearInterval(this.metricsInterval);
   if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
@@ -259,7 +234,7 @@ export class ConversionStreamProcessor extends EventEmitter {
   /**
   * Process all partitions
   */
-  private async processAllPartitions(): Promise<void> {,
+  private async processAllPartitions(): Promise<void> {
   const promises = Array.from(this.partitions.keys()).map(partitionId => ;);
   this.processPartition(partitionId)
   );
@@ -267,7 +242,7 @@ export class ConversionStreamProcessor extends EventEmitter {
   /**
   * Process single partition
   */
-  private async processPartition(partitionId: number): Promise<void> {,
+  private async processPartition(partitionId: number): Promise<void> {
   const partition = this.partitions.get(partitionId);
   if (!partition || partition.events.length === 0) return;
   const eventsToProcess = partition.events.splice(0, this.config.batchSize);
@@ -283,7 +258,7 @@ export class ConversionStreamProcessor extends EventEmitter {
   /**
   * Process individual event
   */
-  private async processEvent(event: StreamEvent): Promise<void> {,
+  private async processEvent(event: StreamEvent): Promise<void> {
   const startTime = Date.now();
   try {
   // Process with all registered processors
@@ -293,46 +268,39 @@ export class ConversionStreamProcessor extends EventEmitter {
   const result = await processor(event);
   // Update consumer metrics
   const consumerMetrics = this.metrics.consumerMetrics.get(name) || {
-  processedEvents: 0,
-  errorCount: 0,
-  avgProcessingTime: 0,
+  processedEvents: 0
+  errorCount: 0
+  avgProcessingTime: 0 }
 };
             consumerMetrics.processedEvents++;
             const processingTime = Date.now() - startTime;
             consumerMetrics.avgProcessingTime = 
               (consumerMetrics.avgProcessingTime + processingTime) / 2;
-            if (!result.success) {
-              consumerMetrics.errorCount++;
+            if (!result.success) { consumerMetrics.errorCount++;
               if (result.retryable && event.retryCount < this.config.retryPolicy.maxRetries) {
-                await this.retryEvent(event);
-              } else {
-                this.sendToDeadLetterQueue(event, result.error || 'Processing failed');
+                await this.retryEvent(event) } else { this.sendToDeadLetterQueue(event, result.error || 'Processing failed');
             this.metrics.consumerMetrics.set(name, consumerMetrics);
-            return result;
-          } catch (error) {
+            return result } catch (error) {
             this.emit('processing_error', { event, processor: name, error });
-            return {
-  success: false,
+            return { success: false,
   eventId: event.id,
   processingTime: Date.now() - startTime,
   error: String(error),
-  retryable: true,
+  retryable: true }
 });
       await Promise.allSettled(processingPromises);
       this.emit('event_processed', event);
-    } catch (error) {
+ catch (error) {
       this.emit('processing_error', { event, error });
       await this.retryEvent(event);
   /**
    * Retry event processing
    */
-  private async retryEvent(event: StreamEvent): Promise<void> {
-
-    event.retryCount++;
+  private async retryEvent(event: StreamEvent): Promise<void> { event.retryCount++;
     if (event.retryCount <= this.config.retryPolicy.maxRetries) {
       // Calculate backoff delay
       const delay = Math.min(;);
-        this.config.retryPolicy.backoffMultiplier ** event.retryCount * 1000,
+        this.config.retryPolicy.backoffMultiplier ** event.retryCount * 1000 }
         this.config.retryPolicy.maxBackoffTime
       );
       setTimeout(() => {
@@ -341,8 +309,7 @@ export class ConversionStreamProcessor extends EventEmitter {
           partition.events.unshift(event); // Add to front for priority
       }, delay);
       this.emit('event_retried', { event, delay });
-    } else {
-  this.sendToDeadLetterQueue(event, 'Max retries exceeded');
+ else { this.sendToDeadLetterQueue(event, 'Max retries exceeded');
   /**
   * Send event to dead letter queue
   */
@@ -350,10 +317,10 @@ export class ConversionStreamProcessor extends EventEmitter {
   if (!this.config.deadLetterQueue.enabled) return;
   this.deadLetterQueue.push({)
   ...event,
-  headers: {
+  headers: {,
   ...event.headers,
   'dlq-reason': reason,
-  'dlq-timestamp': Date.now().toString(),
+  'dlq-timestamp': Date.now().toString() }
 });
     this.metrics.deadLetterQueue.size = this.deadLetterQueue.length;
     if (this.deadLetterQueue.length === 1) {
@@ -391,8 +358,7 @@ export class ConversionStreamProcessor extends EventEmitter {
     // Assign to least loaded partitions
     const assignmentCount = Math.max(1, Math.floor(this.config.partitioning.partitionCount / 4));
     return partitionLoads.slice(0, assignmentCount).map(p => p.id);
-  private getEventType(event: EnhancedConversionEvent): StreamEvent['type'] {
-  if (event.type.includes('funnel')) return 'funnel_step';
+  private getEventType(event: EnhancedConversionEvent): StreamEvent['type'] { if (event.type.includes('funnel')) return 'funnel_step';
   if (event.type.includes('attribution')) return 'attribution_update';
   if (event.type.includes('session')) return 'session_event';
   return 'conversion_event';
@@ -413,19 +379,17 @@ export class ConversionStreamProcessor extends EventEmitter {
   this.metrics.averageLatency = recentProcessingTimes.length > 0
   ? recentProcessingTimes.reduce((sum, t) => sum + t, 0) / recentProcessingTimes.length
   : 0;
-  private checkConsumerHeartbeats(): void {,
+  private checkConsumerHeartbeats(): void { }
   const now = Date.now();
   const staleThreshold = 60000; // 1 minute;
-  for (const [consumerId, consumer] of this.consumers.entries()) {
-  if ((now - consumer.lastHeartbeat) > staleThreshold) {
+  for (const [consumerId, consumer] of this.consumers.entries()) { if ((now - consumer.lastHeartbeat) > staleThreshold) {
   consumer.isActive = false;
   this.emit('consumer_stale', consumer);
   // Reassign partitions
   consumer.assignedPartitions.forEach(partitionId => {)
   const partition = this.partitions.get(partitionId);
   if (partition) {
-  partition.consumerCount--;
-});
+  partition.consumerCount-- });
   private cleanupDeadLetterQueue(): void {
     if (!this.config.deadLetterQueue.enabled) return;
     const now = Date.now();

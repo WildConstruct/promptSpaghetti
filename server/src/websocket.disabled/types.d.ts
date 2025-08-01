@@ -321,6 +321,7 @@ export declare const RestoreSnapshotPayloadSchema: z.ZodObject<{
 export type RestoreSnapshotPayload = z.infer<typeof RestoreSnapshotPayloadSchema>;
 }
 }
+}
 export interface ConnectionInfo {
     id: string;
     userId: string;
@@ -339,11 +340,15 @@ export interface ConnectionInfo {
 }
 }
 }
+}
+}
 export interface DocumentSession {
     documentId: string;
     connections: Map<string, ConnectionInfo>;
     lastActivity: number;
     version: number;
+}
+}
 }
 }
 }
@@ -362,6 +367,8 @@ export interface WSServerConfig {
 }
 }
 }
+}
+}
 export interface HealthMetrics {
     totalConnections: number;
     activeDocuments: number;
@@ -369,6 +376,7 @@ export interface HealthMetrics {
     uptime: number;
     memoryUsage: number;
     lastUpdated: number;
+}
 }
 }
 }

@@ -24,11 +24,11 @@ import {
   QuotaEventLog,
   QuotaType,
   EnforcementAction
-} from '../../../../packages/core/types/UsageQuotaTypes';
+ from '../../../../packages/core/types/UsageQuotaTypes';
 import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
-}
-}
+
+
 export interface QuotaIntegrationConfig {
   rateLimitingEnabled: boolean;
   adaptiveThrottlingEnabled: boolean;
@@ -45,9 +45,10 @@ export interface QuotaIntegrationConfig {
   stakeholderNotifications: boolean;
   systemAdminAlerts: boolean;
   userNotifications: boolean;
-}
-}
-}
+
+
+
+
 
 export class QuotaIntegrationService {
   private quotaService: UsageQuotaService;
@@ -97,7 +98,7 @@ export class QuotaIntegrationService {
     };
 
     this.initializeIntegrations();
-  }
+
 
   // =============================================================================
   // Core Integration Methods
@@ -119,12 +120,12 @@ export class QuotaIntegrationService {
       // 2. Rate limiting integration
       if (this.config.rateLimitingEnabled && quotaResult.utilizationPercentage >= this.config.rateLimitingThreshold) {
         await this.integrateWithRateLimiting(request, quotaResult);
-      }
+
 
       // 3. Adaptive throttling integration
       if (this.config.adaptiveThrottlingEnabled && !quotaResult.allowed) {
         await this.integrateWithThrottling(request, quotaResult);
-      }
+
 
       // 4. Enhanced result with integration data
       const integratedResult = await this.enhanceQuotaResult(quotaResult, request);
@@ -132,12 +133,11 @@ export class QuotaIntegrationService {
       // 5. Post-check integrations
       if (!quotaResult.allowed) {
         await this.handleQuotaViolationIntegration(request, integratedResult);
-      }
+
 
       console.log(`✅ Integrated quota check completed in ${Date.now() - startTime}ms`);
       return integratedResult;
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error in integrated quota check:', error);
       
       // Log integration failure
@@ -148,14 +148,14 @@ export class QuotaIntegrationService {
           request,
           error: error.message,
           integrationServices: Object.keys(this.integrationHealth)
-  }
+
         severity: 'error'
       });
 
       // Fallback to basic quota check
       return this.quotaService.checkQuota(request);
-    }
-  }
+
+
 
   /**
    * Handle quota violation with integrated response
@@ -171,25 +171,24 @@ export class QuotaIntegrationService {
       // 1. Fraud detection integration
       if (this.config.fraudDetectionEnabled) {
         await this.integrateWithFraudDetection(request, result);
-      }
+
 
       // 2. Enforcement actions integration
       if (this.config.enforcementActionsEnabled) {
         await this.integrateWithEnforcementActions(request, result);
-      }
+
 
       // 3. Audit logging integration
       if (this.config.auditLoggingEnabled) {
         await this.integrateWithAuditLogging(request, result);
-      }
+
 
       // 4. Notification integration
       await this.handleIntegratedNotifications(request, result);
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error handling integrated quota violation:', error);
-    }
-  }
+
+
 
   // =============================================================================
   // Service-Specific Integrations
@@ -226,12 +225,11 @@ export class QuotaIntegrationService {
       );
 
       console.log(`🎚️ Applied rate limit adjustment: ${adjustedLimit} requests/hour`);
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Rate limiting integration error:', error);
       this.integrationHealth.set('rate_limiting', false);
-    }
-  }
+
+
 
   /**
    * Integrate with adaptive throttling
@@ -253,13 +251,13 @@ export class QuotaIntegrationService {
         conditions: {
           userId: [request.userId],
           quotaViolated: true
-  }
+
         actions: {
           throttleMode: 'circuit_breaker' as const,
           throttlePercentage: 50,
           rateLimitMultiplier: 0.5,
           delayMultiplier: 2.0
-  }
+
         systemCondition: 'elevated' as const,
         timeWindow: 3600, // 1 hour
         cooldownPeriod: 1800, // 30 minutes
@@ -267,18 +265,17 @@ export class QuotaIntegrationService {
           requestsPerSecond: 1,
           errorRate: 25,
           responseTime: 5000
-        }
+
       };
 
       this.throttlingEngine.addRule(throttleRule);
 
       console.log('🔄 Added throttling rule for quota violation');
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Adaptive throttling integration error:', error);
       this.integrationHealth.set('adaptive_throttling', false);
-    }
-  }
+
+
 
   /**
    * Integrate with fraud detection service
@@ -308,20 +305,19 @@ export class QuotaIntegrationService {
               quotaId: result.quotaId,
               exceeded: result.currentUsage - result.quotaLimit,
               utilizationPercentage: result.utilizationPercentage
-  }
+
             requestMetadata: request.metadata
-  }
+
           timestamp: new Date()
         });
 
         console.log('⚠️ Reported quota abuse pattern to fraud detection');
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error('❌ Fraud detection integration error:', error);
       this.integrationHealth.set('fraud_detection', false);
-    }
-  }
+
+
 
   /**
    * Integrate with enforcement actions service
@@ -350,7 +346,7 @@ export class QuotaIntegrationService {
             actualUsage: result.currentUsage,
             exceededBy: result.currentUsage - result.quotaLimit,
             enforcementAction: result.enforcementAction
-  }
+
           duration: this.calculateEnforcementDuration(result),
           scheduledFor: new Date(),
           createdBy: 'quota_system',
@@ -359,13 +355,12 @@ export class QuotaIntegrationService {
         });
 
         console.log(`⚖️ Created enforcement action: ${enforcementSeverity}`);
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error('❌ Enforcement actions integration error:', error);
       this.integrationHealth.set('enforcement_actions', false);
-    }
-  }
+
+
 
   /**
    * Integrate with audit logging service
@@ -398,18 +393,17 @@ export class QuotaIntegrationService {
             adaptiveThrottling: this.integrationHealth.get('adaptive_throttling'),
             fraudDetection: this.integrationHealth.get('fraud_detection'),
             enforcementActions: this.integrationHealth.get('enforcement_actions')
-          }
-  }
+
+
         severity: this.mapQuotaToAuditSeverity(result)
       });
 
       console.log('📋 Audit log entry created for quota violation');
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Audit logging integration error:', error);
       this.integrationHealth.set('audit_logging', false);
-    }
-  }
+
+
 
   // =============================================================================
   // Enhanced Quota Management
@@ -437,7 +431,7 @@ export class QuotaIntegrationService {
           description: 'Some protective measures may not be active',
           priority: 'medium'
         });
-      }
+
 
       // Add user-specific recommendations based on violation history
       const violationHistory = await this.getRecentUserViolations(request.userId);
@@ -448,7 +442,7 @@ export class QuotaIntegrationService {
           description: `You have ${violationHistory.length} recent quota violations. Consider optimizing your usage.`,
           priority: 'high'
         });
-      }
+
 
       // Add adaptive throttling status
       if (this.throttlingEngine.isEnabled()) {
@@ -460,15 +454,14 @@ export class QuotaIntegrationService {
             description: `Your requests are being throttled due to ${throttleStatus.reason}`,
             priority: 'high'
           });
-        }
-      }
 
-    } catch (error) {
+
+ catch (error) {
       console.error('❌ Error enhancing quota result:', error);
-    }
+
 
     return enhancedResult;
-  }
+
 
   /**
    * Handle integrated notifications
@@ -484,22 +477,21 @@ export class QuotaIntegrationService {
       // User notifications
       if (this.config.userNotifications) {
         await this.sendUserQuotaNotification(request.userId, result);
-      }
+
 
       // System admin alerts for critical violations
       if (this.config.systemAdminAlerts && result.utilizationPercentage > 95) {
         await this.sendSystemAdminAlert(request, result);
-      }
+
 
       // Stakeholder notifications for business-critical quotas
       if (this.config.stakeholderNotifications && this.isBusinessCriticalQuota(request.quotaType)) {
         await this.sendStakeholderNotification(request, result);
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error('❌ Notification integration error:', error);
-    }
-  }
+
+
 
   // =============================================================================
   // Integration Health and Monitoring
@@ -522,15 +514,15 @@ export class QuotaIntegrationService {
         // Perform basic health check (implement per service)
         const isHealthy = await this.performServiceHealthCheck(check.service);
         this.integrationHealth.set(check.name, isHealthy);
-      } catch (error) {
+ catch (error) {
         console.error(`Health check failed for ${check.name}:`, error);
         this.integrationHealth.set(check.name, false);
-      }
-    }
+
+
 
     this.lastHealthCheck = new Date();
     return new Map(this.integrationHealth);
-  }
+
 
   /**
    * Get integration status summary
@@ -540,14 +532,14 @@ export class QuotaIntegrationService {
     services: Record<string, boolean>;
     lastHealthCheck: Date;
     config: QuotaIntegrationConfig;
-    } {
+ {
     const services: Record<string, boolean> = {};
     let overallHealth = true;
 
     for (const [service, healthy] of this.integrationHealth.entries()) {
       services[service] = healthy;
       if (!healthy) overallHealth = false;
-    }
+
 
     return {
       overallHealth,
@@ -555,7 +547,7 @@ export class QuotaIntegrationService {
       lastHealthCheck: this.lastHealthCheck,
       config: this.config
     };
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -585,31 +577,30 @@ export class QuotaIntegrationService {
       }, 300000); // Every 5 minutes
 
       console.log('✅ Quota service integrations initialized');
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize quota integrations:', error);
       throw error;
-    }
-  }
+
+
 
   private async performServiceHealthCheck(service: Error): Promise<boolean> {
 
     // Basic health check implementation
     return service && typeof service === 'object';
-  }
+
 
   private async getRecentUserViolations(_____userId: string): Promise<QuotaViolation[]> {
 
     // Implementation would fetch recent violations from database
     return [];
-  }
+
 
   private calculateFraudSeverity(violations: QuotaViolation[]): ActionSeverity {
     if (violations.length >= 10) return 'critical';
     if (violations.length >= 5) return 'high';
     if (violations.length >= 3) return 'medium';
     return 'low';
-  }
+
 
   private mapQuotaToEnforcementSeverity(result: QuotaCheckResult): ActionSeverity | null {
     if (result.utilizationPercentage > 200) return 'critical';
@@ -617,7 +608,7 @@ export class QuotaIntegrationService {
     if (result.utilizationPercentage > 120) return 'medium';
     if (result.utilizationPercentage > 100) return 'low';
     return null;
-  }
+
 
   private mapQuotaEnforcementToActionType(enforcement: EnforcementAction): string {
     const mapping: Record<EnforcementAction, string> = {
@@ -631,25 +622,25 @@ export class QuotaIntegrationService {
       'upgrade_prompt': 'upgrade_required'
     };
     return mapping[enforcement] || 'warning';
-  }
+
 
   private calculateEnforcementDuration(result: QuotaCheckResult): number {
     // Calculate duration in minutes based on violation severity
     const baseMinutes = 60;
     const severityMultiplier = Math.min(result.utilizationPercentage / 100, 3);
     return Math.floor(baseMinutes * severityMultiplier);
-  }
+
 
   private requiresEnforcementApproval(severity: ActionSeverity): boolean {
     return severity === 'critical' || severity === 'high';
-  }
+
 
   private mapQuotaToAuditSeverity(result: QuotaCheckResult): 'info' | 'warning' | 'error' | 'critical' {
     if (result.utilizationPercentage > 200) return 'critical';
     if (result.utilizationPercentage > 150) return 'error';
     if (result.utilizationPercentage > 100) return 'warning';
     return 'info';
-  }
+
 
   private isBusinessCriticalQuota(quotaType: QuotaType): boolean {
     const criticalTypes: QuotaType[] = [
@@ -659,19 +650,19 @@ export class QuotaIntegrationService {
       'processing_time'
     ];
     return criticalTypes.includes(quotaType);
-  }
+
 
   private async sendUserQuotaNotification(userId: string, _____result: QuotaCheckResult): Promise<void> {
 
     // Implementation for user notifications
     console.log(`📬 Sending quota notification to user ${userId}`);
-  }
+
 
   private async sendSystemAdminAlert(_____request: QuotaCheckRequest, _____result: QuotaCheckResult): Promise<void> {
 
     // Implementation for admin alerts
     console.log('🚨 Sending admin alert for critical quota violation');
-  }
+
 
   private async sendStakeholderNotification(
     _____request: QuotaCheckRequest,
@@ -680,5 +671,4 @@ export class QuotaIntegrationService {
 
     // Implementation for stakeholder notifications
     console.log('📊 Sending stakeholder notification for business-critical quota');
-  }
-}
+

@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-interface CommentEditorProps {
-    initialContent?: string;
+}
+interface CommentEditorProps { initialContent?: string;
     onSave: (content: string, mentions: string[]) => void;
     onCancel: () => void;
     placeholder?: string;
@@ -14,7 +14,7 @@ interface CommentEditorProps {
     allowMentions?: boolean;
     allowAttachments?: boolean;
 
-export declare const CommentEditor: React.FC<CommentEditorProps>;
+export declare const CommentEditor: React.FC<CommentEditorProps> }
 }
 export {};
 //# sourceMappingURL=CommentEditor.d.ts.map

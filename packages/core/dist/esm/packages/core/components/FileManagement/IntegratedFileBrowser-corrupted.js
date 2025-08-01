@@ -13,7 +13,11 @@ export const IntegratedFileBrowser = ({ onFileSelected, onProjectLoad, onNewProj
     const [recentFiles, setRecentFiles] = useState([]);
     const [favoriteFiles, setFavoriteFiles] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [contextMenu, setContextMenu] = useState(null);
+    const [contextMenu, setContextMenu] = useState < {
+        x: number,
+        y: number,
+        file: PSGFile
+    } | null > (null);
     const [viewState, setViewState] = useState({
         viewMode: 'grid',
         sortBy: 'modified',
@@ -189,7 +193,7 @@ export const IntegratedFileBrowser = ({ onFileSelected, onProjectLoad, onNewProj
             metadata: {
                 ...file.metadata,
                 title: file.metadata.title + ' Copy',
-                created: new Date()
+                created: new Date(),
             }
         };
         setFiles(prev => [duplicatedFile, ...prev]);
@@ -202,26 +206,26 @@ export const IntegratedFileBrowser = ({ onFileSelected, onProjectLoad, onNewProj
             id: 'open',
             label: 'Open',
             icon: '📂',
-            action: handleFileDoubleClick
+            action: handleFileDoubleClick,
         },
         {
             id: 'favorite',
             label: contextMenu?.file.isFavorite ? 'Remove from Favorites' : 'Add to Favorites',
             icon: contextMenu?.file.isFavorite ? '⭐' : '☆',
-            action: handleToggleFavorite
+            action: handleToggleFavorite,
         },
         { id: 'sep1', label: '', icon: '', action: () => { }, separator: true },
         {
             id: 'rename',
             label: 'Rename',
             icon: '✏️',
-            action: handleFileRename
+            action: handleFileRename,
         },
         {
             id: 'duplicate',
             label: 'Duplicate',
             icon: '📄',
-            action: handleFileDuplicate
+            action: handleFileDuplicate,
         },
         { id: 'sep2', label: '', icon: '', action: () => { }, separator: true },
         {
@@ -229,7 +233,7 @@ export const IntegratedFileBrowser = ({ onFileSelected, onProjectLoad, onNewProj
             label: 'Delete',
             icon: '🗑️',
             action: handleFileDelete,
-            destructive: true
+            destructive: true,
         }
     ];
     // Close context menu on click outside
@@ -254,7 +258,7 @@ export const IntegratedFileBrowser = ({ onFileSelected, onProjectLoad, onNewProj
             month: 'short',
             day: 'numeric',
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
         }).format(new Date(date));
     };
     return (_jsxs("div", { style: {
@@ -438,7 +442,7 @@ export const IntegratedFileBrowser = ({ onFileSelected, onProjectLoad, onNewProj
                                         padding: viewState.viewMode === 'grid' ? '16px' : '8px 12px',
                                         backgroundColor: selectedFile?.id === file.id ? styles.selection : 'transparent',
                                         border: `1px solid ${selectedFile?.id === file.id ? styles.accent : 'transparent'}`
-                                    }, ", borderRadius: '8px', cursor: 'pointer', transition: 'all 0.15s ease', display: 'flex', flexDirection: viewState.viewMode === 'grid' ? 'column' : 'row', alignItems: viewState.viewMode === 'grid' ? 'center' : 'center', gap: viewState.viewMode === 'grid' ? '8px' : '12px' }} onMouseOver=", (e) => {
+                                    }, ", borderRadius: '8px', cursor: 'pointer', transition: 'all 0.15s ease', display: 'flex', flexDirection: viewState.viewMode === 'grid' ? 'column' : 'row', alignItems: viewState.viewMode === 'grid' ? 'center' : 'center', gap: viewState.viewMode === 'grid' ? '8px' : '12px'; }} onMouseOver=", (e) => {
                                         if (selectedFile?.id !== file.id) {
                                             e.currentTarget.style.backgroundColor = styles.hover;
                                         }

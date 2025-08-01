@@ -9,8 +9,8 @@ import { OptimizedGraphStorage } from './OptimizedGraphStorage';
  */
 
 }
-interface CacheMetrics {
-    totalExecutions: number;
+}
+interface CacheMetrics { totalExecutions: number;
     cacheHits: number;
     cacheMisses: number;
     averageExecutionTime: number;
@@ -38,28 +38,26 @@ export declare class ExecutionCache {
     getOptimizedGraph(nodes: Node[], edges: Edge[], graphId?: string): Promise<{
         storage: OptimizedGraphStorage;
         isFromCache: boolean;
-        nodeMap: Map<string, Node>;
+        nodeMap: Map<string, Node> }
 }
     }>;
     /**
      * Cache execution result with dependency tracking
      */
     cacheExecutionResult();
-      key: string,
-      result: any,
-      dependencies: string[],
-      executionTime: number,
-      inputs?: any,
+      key: string
+      result: any
+      dependencies: string[]
+      executionTime: number
+      inputs?: any
       seed?: string | number
     ): Promise<void>;
     /**
      * Get cached execution result if valid
      */
-    getCachedResult(key: string, currentInputs?: any, currentSeed?: string | number): Promise<{
-        result: any;
+    getCachedResult(key: string, currentInputs?: any, currentSeed?: string | number): Promise<{ result: any;
         fromCache: boolean;
-        executionTime: number;
-    } | null>;
+        executionTime: number } | null>;
     /**
      * Invalidate cache entries based on changed nodes
      */
@@ -79,12 +77,10 @@ export declare class ExecutionCache {
     /**
      * Get cache size statistics
      */
-    getSizeStats(): {
-        graphCacheEntries: number;
+    getSizeStats(): { graphCacheEntries: number;
         resultCacheEntries: number;
         estimatedMemoryMB: number;
-        oldestEntry?: number;
-    };
+        oldestEntry?: number };
     private calculateGraphHash;
     private addToResultCache;
     private updateLRU;

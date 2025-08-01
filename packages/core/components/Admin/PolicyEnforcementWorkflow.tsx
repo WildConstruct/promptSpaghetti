@@ -8,8 +8,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { 
-  Workflow,
+import { Workflow,
   Play,
   Pause,
   Square,
@@ -29,59 +28,58 @@ import {
   Target,
   Activity,
   Bell,
-  Mail,
+  Mail }
   MessageSquare
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
-export interface EnforcementAction {
-  id: string;
+
+export interface EnforcementAction { id: string;
   type: 'suspend_user' | 'restrict_access' | 'hide_template' | 'block_transaction' | 'send_warning' | 'require_verification';
   name: string;
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical' }
   automated: boolean;
   requiresApproval: boolean;
   reversible: boolean;
-}
-}
-}
-export interface EnforcementWorkflow {
-  workflowId: string;
+
+
+
+
+export interface EnforcementWorkflow { workflowId: string;
   name: string;
   description: string;
   policyId: string;
   policyName: string;
-  trigger: {
-  type: 'violation_detected' | 'manual_trigger' | 'scheduled_check';
+  trigger: {;
+  type: 'violation_detected' | 'manual_trigger' | 'scheduled_check' }
   conditions: string;
-}
+
+
 };
   steps: EnforcementStep;
   status: 'active' | 'paused' | 'disabled';
   executionCount: number;
   lastExecuted?: Date;
   successRate: number;
-}
-}
-export interface EnforcementStep {
-  stepId: string;
+
+
+export interface EnforcementStep { stepId: string;
   name: string;
   type: 'condition_check' | 'enforcement_action' | 'notification' | 'human_review' | 'data_collection';
-  config: {
+  config: {;
   action?: EnforcementAction;
   approvers?: string;
-  timeout?: number; // minutes,
+  timeout?: number; // minutes }
   retryPolicy?: 'none' | 'linear' | 'exponential';
   notificationChannels?: ('email' | 'sms' | 'in_app' | 'webhook')[];
-}
+
+
 };
   order: number;
   enabled: boolean;
-}
-}
-export interface WorkflowExecution {
-  executionId: string;
+
+
+export interface WorkflowExecution { executionId: string;
   workflowId: string;
   workflowName: string;
   triggeredBy: string;
@@ -89,102 +87,94 @@ export interface WorkflowExecution {
   status: 'running' | 'completed' | 'failed' | 'cancelled' | 'pending_approval';
   currentStep: number;
   totalSteps: number;
-  entityType: 'user' | 'template' | 'transaction';
+  entityType: 'user' | 'template' | 'transaction' }
   entityId: string;
   context: Record<string, any>;
-}
-}
-}
-export interface PolicyEnforcementWorkflowProps {
-  className?: string;
-}
-}
+
+
+
+
+export interface PolicyEnforcementWorkflowProps { className?: string }
+
 export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps> = ({)
   className = ''
-}) => {
-  const [activeTab, setActiveTab] = useState('workflows');
+}) => { const [activeTab, setActiveTab] = useState('workflows');
   const [selectedWorkflow, setSelectedWorkflow] = useState<EnforcementWorkflow | null>(null);
   const [_____isDesignerOpen, setIsDesignerOpen] = useState(false);
   // Mock enforcement actions
   const [enforcementActions] = useState<EnforcementAction>([)
   {
-  id: 'suspend-user',
-  type: 'suspend_user',
-  name: 'Suspend User Account',
-  description: 'Temporarily suspend user account and marketplace access',
-  severity: 'high',
-  automated: true,
-  requiresApproval: true,
-  reversible: true,
-}
-    {
-  id: 'restrict-access',
-  type: 'restrict_access',
-  name: 'Restrict Marketplace Access',
-  description: 'Limit user access to specific marketplace features',
-  severity: 'medium',
-  automated: true,
-  requiresApproval: false,
-  reversible: true,
-}
-    {
-  id: 'send-warning',
-  type: 'send_warning',
-  name: 'Send Warning Notification',
-  description: 'Send warning notification to user about policy violation',
-  severity: 'low',
-  automated: true,
-  requiresApproval: false,
+  id: 'suspend-user'
+  type: 'suspend_user'
+  name: 'Suspend User Account'
+  description: 'Temporarily suspend user account and marketplace access'
+  severity: 'high'
+  automated: true
+  requiresApproval: true
+  reversible: true }
+
+    { id: 'restrict-access'
+  type: 'restrict_access'
+  name: 'Restrict Marketplace Access'
+  description: 'Limit user access to specific marketplace features'
+  severity: 'medium'
+  automated: true
+  requiresApproval: false
+  reversible: true }
+
+    { id: 'send-warning'
+  type: 'send_warning'
+  name: 'Send Warning Notification'
+  description: 'Send warning notification to user about policy violation'
+  severity: 'low'
+  automated: true
+  requiresApproval: false
   reversible: false]);
   // Mock workflows
   const [workflows] = useState<EnforcementWorkflow>([)
   {
-  workflowId: 'wf-trust-score-low',
-  name: 'Low Trust Score Response',
-  description: 'Automated response to users with critically low trust scores',
-  policyId: 'policy-trust-001',
-  policyName: 'Trust Score Minimum Threshold',
+  workflowId: 'wf-trust-score-low'
+  name: 'Low Trust Score Response'
+  description: 'Automated response to users with critically low trust scores'
+  policyId: 'policy-trust-001'
+  policyName: 'Trust Score Minimum Threshold'
   trigger: {
-  type: 'violation_detected',
-  conditions: ['user.trustScore < 50', 'user.trustTrend == "declining"'],
+  type: 'violation_detected'
+  conditions: ['user.trustScore < 50', 'user.trustTrend == "declining"'] }
 },
-  steps: [,
-        {
-          stepId: 'step-1',
+  steps: [
+        { stepId: 'step-1',
           name: 'Collect User Data',
-          type: 'data_collection',
+          type: 'data_collection' }
           config: {},
           order: 1,
           enabled: true;
-  }
-        {
-  stepId: 'step-2',
+
+        { stepId: 'step-2',
   name: 'Send Warning Notification',
   type: 'enforcement_action',
-  config: {
+  config: {,
   action: enforcementActions[2],
-  notificationChannels: ['email', 'in_app'],
+  notificationChannels: ['email', 'in_app'] }
 },
   order: 2,
           enabled: true;
-  }
-        {
-  stepId: 'step-3',
+
+        { stepId: 'step-3',
   name: 'Human Review Required',
   type: 'human_review',
-  config: {
+  config: {,
   approvers: ['admin-trust', 'admin-security'],
-  timeout: 120 // 2 hours,
+  timeout: 120 // 2 hours }
 },
   order: 3,
           enabled: true;
-  }
-        {
-  stepId: 'step-4',
+
+        { stepId: 'step-4',
   name: 'Restrict Access',
   type: 'enforcement_action',
-  config: {
-  action: enforcementActions[1],
+  config: {,
+  action: enforcementActions[1] }
 },
   order: 4,
           enabled: true],
@@ -192,34 +182,31 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
       executionCount: 23,
       lastExecuted: new Date(Date.now() - 2 * 60 * 60 * 1000),
       successRate: 87.5;
-  }
-    {
-  workflowId: 'wf-fraud-detection',
+
+    { workflowId: 'wf-fraud-detection',
   name: 'Fraud Detection Response',
   description: 'Immediate response to detected fraudulent activity',
   policyId: 'policy-fraud-001',
   policyName: 'Suspicious Transaction Detection',
-  trigger: {
+  trigger: {,
   type: 'violation_detected',
-  conditions: ['fraud.confidence > 0.8'],
+  conditions: ['fraud.confidence > 0.8'] }
 },
-  steps: [,
-        {
-          stepId: 'step-1',
+  steps: [
+        { stepId: 'step-1',
           name: 'Block Transaction',
           type: 'enforcement_action',
-          config: {
+          config: { }
   action: { id: 'block-txn', type: 'block_transaction', name: 'Block Transaction', description: 'Immediately block suspicious transaction', severity: 'critical', automated: true, requiresApproval: false, reversible: true }
   },
   order: 1,
           enabled: true;
-  }
-        {
-  stepId: 'step-2',
+
+        { stepId: 'step-2',
   name: 'Notify Security Team',
   type: 'notification',
-  config: {
-  notificationChannels: ['email', 'webhook'],
+  config: {,
+  notificationChannels: ['email', 'webhook'] }
 },
   order: 2,
           enabled: true],
@@ -229,40 +216,37 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
       successRate: 100]);
   // Mock executions
   const [executions] = useState<WorkflowExecution>([)
-    {
-  executionId: 'exec-001',
-  workflowId: 'wf-trust-score-low',
-  workflowName: 'Low Trust Score Response',
-  triggeredBy: 'system',
-  triggeredAt: new Date(Date.now() - 30 * 60 * 1000),
-  status: 'pending_approval',
-  currentStep: 3,
-  totalSteps: 4,
-  entityType: 'user',
-  entityId: 'user-123',
+    { executionId: 'exec-001'
+  workflowId: 'wf-trust-score-low'
+  workflowName: 'Low Trust Score Response'
+  triggeredBy: 'system'
+  triggeredAt: new Date(Date.now() - 30 * 60 * 1000)
+  status: 'pending_approval'
+  currentStep: 3
+  totalSteps: 4
+  entityType: 'user'
+  entityId: 'user-123'
   context: {
-  trustScore: 42,
-  previousScore: 58,
-  violationCount: 3,
-}
-    {
-  executionId: 'exec-002',
-  workflowId: 'wf-fraud-detection',
-  workflowName: 'Fraud Detection Response',
-  triggeredBy: 'automated_detection',
-  triggeredAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
-  status: 'completed',
-  currentStep: 2,
-  totalSteps: 2,
-  entityType: 'transaction',
-  entityId: 'txn-456',
+  trustScore: 42
+  previousScore: 58
+  violationCount: 3 }
+
+    { executionId: 'exec-002'
+  workflowId: 'wf-fraud-detection'
+  workflowName: 'Fraud Detection Response'
+  triggeredBy: 'automated_detection'
+  triggeredAt: new Date(Date.now() - 4 * 60 * 60 * 1000)
+  status: 'completed'
+  currentStep: 2
+  totalSteps: 2
+  entityType: 'transaction'
+  entityId: 'txn-456'
   context: {
-  fraudScore: 0.92,
-  suspiciousPatterns: ['multiple_cards', 'velocity_anomaly'],
+  fraudScore: 0.92
+  suspiciousPatterns: ['multiple_cards', 'velocity_anomaly']
   blockedAmount: 2500]);
-  const getStatusColor = (status: string) => {,
-  switch (status) {
-  case 'active': return 'text-green-600 bg-green-100';
+  const getStatusColor = (status: string) => { }
+  switch (status) { case 'active': return 'text-green-600 bg-green-100';
   case 'paused': return 'text-yellow-600 bg-yellow-100';
   case 'disabled': return 'text-gray-600 bg-gray-100';
   case 'running': return 'text-blue-600 bg-blue-100';
@@ -270,25 +254,20 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   case 'failed': return 'text-red-600 bg-red-100';
   case 'cancelled': return 'text-gray-600 bg-gray-100';
   case 'pending_approval': return 'text-orange-600 bg-orange-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
-  const getSeverityColor = (severity: string) => {
-  switch (severity) {
+  default: return 'text-gray-600 bg-gray-100' };
+  const getSeverityColor = (severity: string) => { switch (severity) {
   case 'critical': return 'text-red-600 bg-red-100';
   case 'high': return 'text-orange-600 bg-orange-100';
   case 'medium': return 'text-yellow-600 bg-yellow-100';
   case 'low': return 'text-blue-600 bg-blue-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
-  const getStepIcon = (type: string) => {
-  switch (type) {
+  default: return 'text-gray-600 bg-gray-100' };
+  const getStepIcon = (type: string) => { switch (type) {
   case 'enforcement_action': return Zap;
   case 'notification': return Bell;
   case 'human_review': return Users;
   case 'condition_check': return CheckCircle;
   case 'data_collection': return FileText;
-  default: return Activity;
-};
+  default: return Activity };
   const renderWorkflowsList = () => (;);
     <div className="workflows-section">
       <div className="workflows-header">
@@ -422,7 +401,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
                         className="progress-fill" 
                         style={{ 
                           width: `${(execution.currentStep / execution.totalSteps) * 100}%` }
-                        }}
+}
                       ></div>
                     </div>
                     <span className="progress-text">
@@ -611,11 +590,11 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
         )}
       </div>
       {selectedWorkflow && renderWorkflowDetails()}
-      <style>{`
+      <style>{ `
         .policy-enforcement-workflow {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
@@ -640,14 +619,14 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           display: flex;
           align-items: center;
   gap: 0.5rem;
-          padding: 0.75rem 1rem;
+          padding: 0.75rem 1rem
   border: none;
           background: none;
   color: #6b7280;
           cursor: pointer;
-          border-bottom: 2px solid transparent;
+          border-bottom: 2px solid transparent
   transition: all 0.2s ease;
-        .tab-button:hover {,
+        .tab-button:hover {
   color: #374151;
         .tab-button.active {
           color: #3b82f6;
@@ -673,7 +652,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
         .workflow-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .workflow-info h4 {
           font-weight: 600;
@@ -681,7 +660,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           margin: 0 0 0.5rem 0;
         .workflow-info p {
           color: #6b7280;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   margin: 0;
         .workflow-details {
           display: grid;
@@ -695,10 +674,10 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           display: flex;
           justify-content: space-between;
         .detail-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .detail-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #1f2937;
           font-weight: 500;
         .workflow-steps-preview h5 {
@@ -714,13 +693,13 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           display: flex;
           align-items: center;
   gap: 0.375rem;
-          padding: 0.375rem 0.5rem;
+          padding: 0.375rem 0.5rem
   background: #f3f4f6;
           border-radius: 4px;
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #374151;
         .more-steps {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
           font-style: italic;
         .workflow-actions {
@@ -755,26 +734,26 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           display: flex;
           align-items: center;
   gap: 0.5rem;
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .execution-progress {
           display: flex;
           flex-direction: column;
-          align-items: flex-end;
+          align-items: flex-end
   gap: 0.25rem;
           min-width: 120px;
         .progress-bar {
-          width: 100%;
+          width: 100%
   height: 6px;
           background: #e5e7eb;
           border-radius: 3px;
   overflow: hidden;
         .progress-fill {
-          height: 100%;
+          height: 100%
   background: #3b82f6;
           transition: width 0.3s ease;
         .progress-text {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .execution-actions {
           display: flex;
@@ -783,15 +762,15 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
         .approve-btn {
           background: #059669;
           border-color: #059669;
-        .approve-btn:hover {,
+        .approve-btn:hover {
   background: #047857;
           border-color: #047857;
         .reject-btn {
           color: #dc2626;
           border-color: #dc2626;
-        .reject-btn:hover {,
-  background: #dc2626;
-          color: white;
+        .reject-btn:hover {
+  background: #dc2626
+  color: white;
         .execution-context h6 {
           font-weight: 600;
   color: #1f2937;
@@ -865,7 +844,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
         .step-node.disabled {
           opacity: 0.5;
         .step-icon {
-          padding: 0.5rem;
+          padding: 0.5rem
   background: #eff6ff;
           border-radius: 50%;
         .step-content {
@@ -876,7 +855,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           margin: 0 0 0.25rem 0;
           font-size: 0.875rem;
         .step-content p {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
           margin: 0 0 0.5rem 0;
         .step-connector {
@@ -894,7 +873,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           gap: 1rem;
         .config-item {
           display: flex;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
@@ -922,14 +901,14 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           margin: 0;
         .action-card p {
           color: #6b7280;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   margin: 0 0 1rem 0;
         .action-properties {
           display: flex;
           flex-wrap: wrap;
   gap: 0.5rem;
         .property-badge {
-          font-size: 0.75rem;
+          font-size: 0.75rem }
   padding: 0.125rem 0.375rem;
         @media (max-width: 1200px) {
           .workflows-grid {

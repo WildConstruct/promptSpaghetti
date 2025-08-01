@@ -8,9 +8,8 @@
 import React, { useState } from 'react';
 import { CaseStudy, CaseStudyType, IndustryCategory } from '../../models/CaseStudyDataModel';
 
-}
-export interface CaseStudyCardProps {
-  caseStudy: CaseStudy;
+
+export interface CaseStudyCardProps { caseStudy: CaseStudy;
   variant?: 'compact' | 'standard' | 'featured';
   showMetrics?: boolean;
   showTemplates?: boolean;
@@ -21,21 +20,20 @@ export interface CaseStudyCardProps {
   onBookmark?: (caseStudyId: string) => void;
   onLike?: (caseStudyId: string) => void;
   onShare?: (caseStudy: CaseStudy) => void;
-  className?: string;
-}
-}
-export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
-  caseStudy,
-  variant = 'standard',
-  showMetrics = true,
-  showTemplates = true,
-  showAuthor = true,
-  onClick,
-  onTemplateClick,
-  onAuthorClick,
-  onBookmark,
-  onLike,
-  onShare,
+  className?: string }
+
+export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ )
+  caseStudy
+  variant = 'standard'
+  showMetrics = true
+  showTemplates = true
+  showAuthor = true
+  onClick
+  onTemplateClick
+  onAuthorClick
+  onBookmark
+  onLike
+  onShare }
   className = ''
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -44,32 +42,31 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
   // Get type icon and color
   const getTypeDisplay = (type: CaseStudyType) => {
     const typeConfig = {
-      'template-success': { icon: '🎯', color: '#10B981', label: 'Success Story' },
-      'user-story': { icon: '👤', color: '#3B82F6', label: 'User Story' },
-      'roi-analysis': { icon: '💰', color: '#F59E0B', label: 'ROI Analysis' },
-      'before-after': { icon: '📊', color: '#8B5CF6', label: 'Before/After' },
-      'industry-showcase': { icon: '🏭', color: '#EF4444', label: 'Industry Case' },
-      'community-highlight': { icon: '⭐', color: '#EC4899', label: 'Community' },
+      'template-success': { icon: '🎯', color: '#10B981', label: 'Success Story' }
+      'user-story': { icon: '👤', color: '#3B82F6', label: 'User Story' }
+      'roi-analysis': { icon: '💰', color: '#F59E0B', label: 'ROI Analysis' }
+      'before-after': { icon: '📊', color: '#8B5CF6', label: 'Before/After' }
+      'industry-showcase': { icon: '🏭', color: '#EF4444', label: 'Industry Case' }
+      'community-highlight': { icon: '⭐', color: '#EC4899', label: 'Community' }
       'innovation-case': { icon: '🚀', color: '#06B6D4', label: 'Innovation' }
     };
     return typeConfig[type] || { icon: '📄', color: '#6B7280', label: 'Case Study' };
   };
   // Get industry icon
-  const getIndustryIcon = (industry: IndustryCategory) => {
-  const industryIcons = {
-  'film-production': '🎬',
-  'advertising': '📢',
-  'gaming': '🎮',
-  'publishing': '📚',
-  'education': '🎓',
-  'healthcare': '⚕️',
-  'finance': '💳',
-  'technology': '💻',
-  'legal': '⚖️',
-  'consulting': '💼',
-  'e-commerce': '🛒',
-  'non-profit': '🤝',
-  'other': '🏢',
+  const getIndustryIcon = (industry: IndustryCategory) => { const industryIcons = {
+  'film-production': '🎬'
+  'advertising': '📢'
+  'gaming': '🎮'
+  'publishing': '📚'
+  'education': '🎓'
+  'healthcare': '⚕️'
+  'finance': '💳'
+  'technology': '💻'
+  'legal': '⚖️'
+  'consulting': '💼'
+  'e-commerce': '🛒'
+  'non-profit': '🤝'
+  'other': '🏢' }
 };
     return industryIcons[industry] || '🏢';
   };
@@ -80,33 +77,25 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
     const currency = caseStudy.roiMetrics.costSavings.currency;
     if (amount >= 1000000) {
       return `${currency}${(amount / 1000000).toFixed(1)}M`;}
-    } else if (amount >= 1000) {
+ else if (amount >= 1000) {
       return `${currency}${(amount / 1000).toFixed(1)}K`;}
-    } else {
+ else {
       return `${currency}${amount.toFixed(0)}`;}
   };
   // Handle card click
-  const handleCardClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    onClick?.(caseStudy);
-  };
+  const handleCardClick = (e: React.MouseEvent) => { e.preventDefault();
+    onClick?.(caseStudy) };
   // Handle bookmark
-  const handleBookmark = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleBookmark = (e: React.MouseEvent) => { e.stopPropagation();
     setIsBookmarked(!isBookmarked);
-    onBookmark?.(caseStudy.id);
-  };
+    onBookmark?.(caseStudy.id) };
   // Handle like
-  const handleLike = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleLike = (e: React.MouseEvent) => { e.stopPropagation();
     setIsLiked(!isLiked);
-    onLike?.(caseStudy.id);
-  };
+    onLike?.(caseStudy.id) };
   // Handle share
-  const handleShare = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onShare?.(caseStudy);
-  };
+  const handleShare = (e: React.MouseEvent) => { e.stopPropagation();
+    onShare?.(caseStudy) };
   const typeDisplay = getTypeDisplay(caseStudy.type);
   const roiDisplay = getROIDisplay();
   const industryIcon = getIndustryIcon(caseStudy.industry);
@@ -240,10 +229,9 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
                   <button
                     key={template.templateId}
                     className="template-chip"
-                    onClick={(e) => {
+                    onClick={ (e) => {
                       e.stopPropagation();
-                      onTemplateClick?.(template.templateId);
-                    }}
+                      onTemplateClick?.(template.templateId) }}
                   >
                     {template.templateName}
                   </button>
@@ -275,13 +263,12 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
         {/* Footer */}
         <div className="card-footer">
           {/* Author */}
-          {showAuthor && caseStudy.config.showAuthor && ()
+          { showAuthor && caseStudy.config.showAuthor && ()
             <div 
               className="author-section"
               onClick={(e) => {
                 e.stopPropagation();
-                onAuthorClick?.(caseStudy.author.userId);
-              }}
+                onAuthorClick?.(caseStudy.author.userId) }}
             >
               {caseStudy.author.avatar ? ()
                 <img
@@ -336,7 +323,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
           {caseStudy.difficulty}
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .case-study-card {
           position: relative;
   background: #ffffff;
@@ -346,7 +333,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
   transition: all 0.3s ease;
           cursor: pointer;
   border: 1px solid #e0e4e7;
-        .case-study-card:hover {,
+        .case-study-card:hover {
   transform: translateY(-4px);
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
           border-color: #3b82f6;
@@ -363,7 +350,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
           left: 12px;
           z-index: 3;
   background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
-          color: #ffffff;
+          color: #ffffff
   padding: 4px 8px;
           border-radius: 12px;
           font-size: 11px;
@@ -383,14 +370,14 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
         .case-study-card.featured .card-image {
           height: 240px;
         .card-image img {
-          width: 100%;
+          width: 100%
   height: 100%;
           object-fit: cover;
   transition: transform 0.3s ease;
-        .case-study-card:hover .card-image img {,
+        .case-study-card:hover .card-image img {
   transform: scale(1.05);
         .image-placeholder {
-          width: 100%;
+          width: 100%
   height: 100%;
           background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
           display: flex;
@@ -422,12 +409,12 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
           gap: 6px;
   opacity: 0;
           transition: opacity 0.3s ease;
-        .case-study-card:hover .quick-actions {,
+        .case-study-card:hover .quick-actions {
   opacity: 1;
         .action-btn {
           background: rgba(255, 255, 255, 0.9);
           border: none;
-          border-radius: 50%;
+          border-radius: 50%
   width: 32px;
           height: 32px;
   display: flex;
@@ -437,11 +424,11 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
           transition: all 0.2s ease;
           backdrop-filter: blur(4px);
           font-size: 14px;
-        .action-btn:hover {,
-  transform: scale(1.1);
-          background: #ffffff;
+        .action-btn:hover {
+  transform: scale(1.1)
+  background: #ffffff;
         .action-btn.active {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
         .card-content {
           padding: 20px;
@@ -475,7 +462,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
           display: flex;
           align-items: center;
   gap: 4px;
-          background: #f3f4f6;
+          background: #f3f4f6
   padding: 4px 8px;
           border-radius: 8px;
           font-size: 12px;
@@ -530,17 +517,17 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
           flex-wrap: wrap;
   gap: 6px;
         .template-chip {
-          background: #e0f2fe;
+          background: #e0f2fe
   color: #0369a1;
-          border: 1px solid #bae6fd;
+          border: 1px solid #bae6fd
   padding: 4px 8px;
           border-radius: 12px;
           font-size: 11px;
   cursor: pointer;
           transition: all 0.2s ease;
-        .template-chip:hover {,
-  background: #0369a1;
-          color: #ffffff;
+        .template-chip:hover {
+  background: #0369a1
+  color: #ffffff;
         .template-more {
           font-size: 11px;
   color: #6b7280;
@@ -551,7 +538,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
   gap: 6px;
           margin-bottom: 16px;
         .tag {
-          background: #f3f4f6;
+          background: #f3f4f6
   color: #4b5563;
           padding: 3px 6px;
           border-radius: 4px;
@@ -574,7 +561,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
   gap: 8px;
           cursor: pointer;
   transition: opacity 0.2s ease;
-        .author-section:hover {,
+        .author-section:hover {
   opacity: 0.8;
         .author-avatar {
           width: 32px;
@@ -584,7 +571,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
         .author-avatar-placeholder {
           width: 32px;
   height: 32px;
-          border-radius: 50%;
+          border-radius: 50%
   background: #e5e7eb;
           display: flex;
           align-items: center;
@@ -631,16 +618,16 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
           text-transform: uppercase;
           letter-spacing: 0.5px;
         .difficulty-beginner {
-          background: #dcfce7;
+          background: #dcfce7
   color: #166534;
         .difficulty-intermediate {
-          background: #fef3c7;
+          background: #fef3c7
   color: #92400e;
         .difficulty-advanced {
-          background: #fecaca;
+          background: #fecaca
   color: #991b1b;
         .difficulty-expert {
-          background: #e0e7ff;
+          background: #e0e7ff
   color: #3730a3;
         @media (max-width: 768px) {
           .case-study-card {
@@ -659,14 +646,14 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
             gap: 8px;
           .card-header {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: flex-start
   gap: 8px;
           .title-section {
             margin-right: 0;
           .industry-badge {
             align-self: flex-start;
         @media (max-width: 480px) {
-          .case-study-card.compact .card-content,
+          .case-study-card.compact .card-content }
           .case-study-card.standard .card-content {
             padding: 12px;
           .case-study-title {

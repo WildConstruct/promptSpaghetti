@@ -16,8 +16,8 @@ const mockFastify = {
     info: jest.fn(),
     warn: jest.fn(),
     error: jest.fn()
-  }
-} as unknown as FastifyInstance;
+
+ as unknown as FastifyInstance;
 
 // Test data factories
 const createMockTransaction = (overrides: Partial<Transaction> = {}): Transaction => ({
@@ -140,7 +140,7 @@ describe('TransactionMonitoringService', () => {
           fraud_flags: JSON.stringify(['unusual_amount']),
           metadata: JSON.stringify({ risk_assessment_id: 'risk_123' }),
           user_email: 'user@example.com'
-        }])
+])
         .mockResolvedValueOnce([]) // risk assessment
         .mockResolvedValueOnce([]) // refund requests
         .mockResolvedValueOnce([]); // related transactions
@@ -174,7 +174,7 @@ describe('TransactionMonitoringService', () => {
           ...mockTransaction,
           fraud_flags: JSON.stringify([]),
           metadata: JSON.stringify({})
-        }])
+])
         .mockResolvedValueOnce([]) // risk assessment
         .mockResolvedValueOnce([]) // refund requests
         .mockResolvedValueOnce([]) // related transactions
@@ -215,7 +215,7 @@ describe('TransactionMonitoringService', () => {
           ...transaction,
           fraud_flags: JSON.stringify([]),
           metadata: JSON.stringify({})
-        }])
+])
         .mockResolvedValueOnce([{ age_days: 2 }]) // new user
         .mockResolvedValueOnce([{ count: 1, total_amount: 75000 }]) // recent activity
         .mockResolvedValueOnce([{ failed_count: 0 }]); // failed payments
@@ -239,7 +239,7 @@ describe('TransactionMonitoringService', () => {
           ...transaction,
           fraud_flags: JSON.stringify(['multiple_failed_payments']),
           metadata: JSON.stringify({})
-        }])
+])
         .mockResolvedValueOnce([{ age_days: 1 }]) // very new user
         .mockResolvedValueOnce([{ count: 8, total_amount: 200000 }]) // high velocity
         .mockResolvedValueOnce([{ failed_count: 5 }]); // many failed payments
@@ -307,7 +307,7 @@ describe('TransactionAnomalyDetectionService', () => {
           ...transaction,
           fraud_flags: JSON.stringify([]),
           metadata: JSON.stringify({})
-        }])
+])
         .mockResolvedValueOnce([{ count: 8, total_amount: 40000 }]) // high velocity
         .mockResolvedValueOnce([]); // save anomaly
 
@@ -327,7 +327,7 @@ describe('TransactionAnomalyDetectionService', () => {
           ...transaction,
           fraud_flags: JSON.stringify([]),
           metadata: JSON.stringify({})
-        }])
+])
         .mockResolvedValueOnce([{ count: 2, total_amount: 10000 }]) // low velocity
         .mockResolvedValueOnce([{ 
           avg_amount: 2500, 
@@ -335,7 +335,7 @@ describe('TransactionAnomalyDetectionService', () => {
           stddev_amount: 1000, 
           count: 10,
           p95_amount: 4000
-        }]) // historical data showing this is unusual
+]) // historical data showing this is unusual
         .mockResolvedValueOnce([]); // save anomaly
 
       const anomalies = await service.detectAnomaliesForTransaction(transaction.id);
@@ -354,7 +354,7 @@ describe('TransactionAnomalyDetectionService', () => {
           ...transaction,
           fraud_flags: JSON.stringify([]),
           metadata: JSON.stringify({})
-        }])
+])
         .mockResolvedValueOnce([{ count: 2, total_amount: 10000 }]) // low velocity
         .mockResolvedValueOnce([{ 
           avg_amount: 5000, 
@@ -362,7 +362,7 @@ describe('TransactionAnomalyDetectionService', () => {
           stddev_amount: 2000, 
           count: 5,
           p95_amount: 8000
-        }]) // normal amount pattern
+]) // normal amount pattern
         .mockResolvedValueOnce([
           { status: 'failed', count: 5 },
           { status: 'succeeded', count: 1 }
@@ -387,7 +387,7 @@ describe('TransactionAnomalyDetectionService', () => {
           ...transaction,
           fraud_flags: JSON.stringify([]),
           metadata: JSON.stringify({})
-        }])
+])
         .mockResolvedValueOnce([{ count: 2, total_amount: 10000 }]) // low velocity
         .mockResolvedValueOnce([{ 
           avg_amount: 5000, 
@@ -395,7 +395,7 @@ describe('TransactionAnomalyDetectionService', () => {
           stddev_amount: 2000, 
           count: 5,
           p95_amount: 8000
-        }]) // normal amount
+]) // normal amount
         .mockResolvedValueOnce([
           { status: 'succeeded', count: 1 }
         ]) // normal behavior
@@ -405,7 +405,7 @@ describe('TransactionAnomalyDetectionService', () => {
           total_amount: 100000,
           transaction_count: 10,
           user_ids: 'user1,user2,user3,user4,user5,user6'
-        }]) // shared payment method
+]) // shared payment method
         .mockResolvedValueOnce([]); // save anomaly
 
       const anomalies = await service.detectAnomaliesForTransaction(transaction.id);
@@ -428,7 +428,7 @@ describe('TransactionAnomalyDetectionService', () => {
           transaction_count: 15,
           first_transaction: new Date(Date.now() - 3600000), // 1 hour ago
           last_transaction: new Date()
-        }])
+])
         .mockResolvedValueOnce([]); // pattern groups query
 
       const fraudRings = await service.detectFraudRings();
@@ -452,7 +452,7 @@ describe('TransactionAnomalyDetectionService', () => {
           transaction_count: 9,
           first_transaction: new Date(Date.now() - 7200000), // 2 hours ago
           last_transaction: new Date()
-        }]);
+]);
 
       const fraudRings = await service.detectFraudRings();
 
@@ -526,7 +526,7 @@ describe('Integration Tests', () => {
         ...transaction,
         fraud_flags: JSON.stringify([]),
         metadata: JSON.stringify({})
-      }])
+])
       .mockResolvedValueOnce([{ age_days: 2 }]) // new user
       .mockResolvedValueOnce([{ count: 3, total_amount: 150000 }]) // moderate velocity
       .mockResolvedValueOnce([{ failed_count: 1 }]); // few failed payments
@@ -539,7 +539,7 @@ describe('Integration Tests', () => {
         ...transaction,
         fraud_flags: JSON.stringify([]),
         metadata: JSON.stringify({})
-      }])
+])
       .mockResolvedValueOnce([{ count: 3, total_amount: 150000 }]) // velocity check
       .mockResolvedValueOnce([{
         avg_amount: 2000,
@@ -547,7 +547,7 @@ describe('Integration Tests', () => {
         stddev_amount: 1500,
         count: 8,
         p95_amount: 4500
-      }]) // amount anomaly check
+]) // amount anomaly check
       .mockResolvedValueOnce([]); // save anomaly
 
     const anomalies = await anomalyService.detectAnomaliesForTransaction(transaction.id);
@@ -588,7 +588,7 @@ describe('Integration Tests', () => {
       reason: 'Multiple failed attempts followed by large successful transaction',
       status: 'active',
       admin_email: 'admin@example.com'
-    }]);
+]);
 
     const flags = await monitoringService.getTransactionFlags(transactionId);
 

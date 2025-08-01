@@ -6,33 +6,33 @@
  */
 import { IdentityValidationType, IdentityValidationData, ValidationStatus } from '../auth/IdentityValidation';
 }
-interface VerificationRequestsHook {
-    isLoading: boolean;
+}
+interface VerificationRequestsHook { isLoading: boolean;
     isSubmitting: boolean;
     error: string | null;
     verifications: VerificationSummary | null;
     trustScore: TrustScore | null;
     submitVerificationRequest: (type: IdentityValidationType, data: Partial<IdentityValidationData>) => Promise<{
         requestId: string;
-        status: string;
+        status: string }
 }
     }>;
     refreshStatus: () => Promise<void>;
     uploadDocuments: (requestId: string, files: File[]) => Promise<void>;
     getVerificationTypes: () => Promise<VerificationType[]>;
 }
-interface VerificationSummary {
-    totalRequests: number;
+}
+interface VerificationSummary { totalRequests: number;
     approvedCount: number;
     pendingCount: number;
     rejectedCount: number;
     trustScore: TrustScore | null;
     completedValidations: IdentityValidationType[];
     missingValidations: IdentityValidationType[];
-    requests: VerificationRequest[];
+    requests: VerificationRequest[] }
 }
-interface VerificationRequest {
-    requestId: string;
+}
+interface VerificationRequest { requestId: string;
     type: IdentityValidationType;
     status: ValidationStatus;
     timestamp: number;
@@ -40,22 +40,23 @@ interface VerificationRequest {
         ipAddress: string;
         userAgent: string;
         sessionId: string;
-        requestSource: string;
+        requestSource: string }
 }
     };
 }
-interface TrustScore {
-    overall: number;
+}
+interface TrustScore { overall: number;
     components: {
         identity: number;
         professional: number;
         community: number;
-        activity: number;
+        activity: number }
 }
     };
     tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
     badges: string[];
     lastUpdated: number;
+}
 }
 interface VerificationType {
     type: IdentityValidationType;
@@ -71,4 +72,5 @@ interface VerificationType {
 export declare function useVerificationRequests(userId: string): VerificationRequestsHook;
 export default useVerificationRequests;
 //# sourceMappingURL=useVerificationRequests.d.ts.map
+}
 }

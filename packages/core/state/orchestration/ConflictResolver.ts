@@ -8,11 +8,10 @@ import { StateChange } from '../containers/BaseStateContainer';
 
 // Conflict resolution types
 
-}
-export interface StateConflict<T = any> {
-  id: string;
+
+export interface StateConflict<T = any> { id: string;
   timestamp: number;
-  localChange: StateChange<T>;
+  localChange: StateChange<T>
   remoteChange: StateChange<T>;
   conflictType: ConflictType;
   severity: ConflictSeverity;
@@ -45,48 +44,45 @@ export interface StateConflict<T = any> {
   appliedChanges: StateChange<T>[];
   rejectedChanges: StateChange<T>[];
   userAction?: 'approved' | 'rejected' | 'modified';
-  confidence: number; // 0-1 confidence in resolution,
-  export interface ConflictResolutionRule {
-  name: string;
+  confidence: number; // 0-1 confidence in resolution }
+  export interface ConflictResolutionRule { name: string;
   domain?: string;
   pathPattern?: RegExp;
   conflictTypes: ConflictType;
   strategy: ResolutionStrategy;
   priority: number;
   condition?: (conflict: StateConflict) => boolean;
-  customResolver?: (conflict: StateConflict) => ConflictResolution;
-}
-}
-}
+  customResolver?: (conflict: StateConflict) => ConflictResolution }
+
+
+
 export interface OperationalTransform {
   apply(operation: any, state: any): any;
   transform(op1: any, op2: any): [any, any];
   compose(ops: any): any;
   inverse(operation: any): any;
   // Graph-specific operational transforms
-}
-}
-}
-export interface GraphMutation {
-  type: 'ADD_NODE' | 'REMOVE_NODE' | 'UPDATE_NODE' | 'ADD_EDGE' | 'REMOVE_EDGE' | 'UPDATE_EDGE';
+
+
+
+
+export interface GraphMutation { type: 'ADD_NODE' | 'REMOVE_NODE' | 'UPDATE_NODE' | 'ADD_EDGE' | 'REMOVE_EDGE' | 'UPDATE_EDGE';
   nodeId?: string;
   edgeId?: string;
-  data?: any;
-}
+  data?: any }
+
   position?: { x: number; y: number };
   timestamp: number;
-}
-}
-export interface Permission {
-  resource: string;
+
+
+export interface Permission { resource: string;
   action: string;
   level: 'none' | 'read' | 'write' | 'admin';
-  conditions?: Record<string, any>;
-}
-}
-}
-export interface DashboardLayout {
-  widgets: Array<{
+  conditions?: Record<string, any> }
+
+
+
+export interface DashboardLayout { widgets: Array<{ }
   id: string;
   x: number;
   y: number;
@@ -95,15 +91,15 @@ export interface DashboardLayout {
   minW?: number;
   minH?: number;
   static?: boolean;
-}
-}>;
+
+
+>;
   breakpoints: Record<string, number>;
   cols: Record<string, number>;
 
 // Main conflict resolver class
-}
-export class ConflictResolver {
-  private resolutionRules: ConflictResolutionRule = [];
+
+export class ConflictResolver { private resolutionRules: ConflictResolutionRule = [];
   private activeConflicts = new Map<string, StateConflict>();
   private resolutionHistory: ConflictResolution = [];
   private maxHistorySize = 1000;
@@ -111,30 +107,28 @@ export class ConflictResolver {
   this.setupDefaultRules();
   // Main conflict detection and resolution
   async detectAndResolveConflicts<T>(localChanges: StateChange<T>[])
-  remoteChanges: StateChange<T>[],
-  currentState: T,
-  domain: string): Promise<ConflictResolution<T>[]> {,
+  remoteChanges: StateChange<T>[]
+  currentState: T
+  domain: string): Promise<ConflictResolution<T>[]> { }
   // Detect conflicts
   const conflicts = this.detectConflicts(localChanges, remoteChanges, currentState, domain);
   // Resolve each conflict
   const resolutions: ConflictResolution<T>[] = [];
-  for (const conflict of conflicts) {
-  try {
+  for (const conflict of conflicts) { try {
   const resolution = await this.resolveConflict(conflict);
   resolutions.push(resolution);
   // Store in history
   this.addToHistory(resolution);
   // Remove from active conflicts
-  this.activeConflicts.delete(conflict.id);
-} catch (error) {
+  this.activeConflicts.delete(conflict.id) } catch (error) {
         console.error(`Failed to resolve conflict ${conflict.id}:`, error);}
         // Keep in active conflicts for retry
         this.activeConflicts.set(conflict.id, conflict);
     return resolutions;
   private detectConflicts<T>(localChanges: StateChange<T>[])
-    remoteChanges: StateChange<T>[],
-    currentState: T,
-    domain: string): StateConflict<T>[] {,
+  remoteChanges: StateChange<T>[]
+    currentState: T
+    domain: string): StateConflict<T>[] { 
   const conflicts: StateConflict<T>[] = [];
   // Check for overlapping changes
   for (const localChange of localChanges) {
@@ -144,9 +138,9 @@ export class ConflictResolver {
   conflicts.push(conflict);
   return conflicts;
   private analyzeChangePair<T>(localChange: StateChange<T>)
-  remoteChange: StateChange<T>,
-  currentState: T,
-  domain: string): StateConflict<T> | null {,
+  remoteChange: StateChange<T>
+  currentState: T
+  domain: string): StateConflict<T> | null {
   // Check if changes affect overlapping paths
   const localPaths = this.extractAffectedPaths(localChange);
   const remotePaths = this.extractAffectedPaths(remoteChange);
@@ -159,17 +153,17 @@ export class ConflictResolver {
   const conflictType = this.determineConflictType(localChange, remoteChange);
   const severity = this.assessConflictSeverity(conflictType, overlappingPaths, domain);
   return {
-  id: this.generateConflictId(),
-  timestamp: Date.now(),
-  localChange,
-  remoteChange,
-  conflictType,
-  severity,
-  affectedPaths: overlappingPaths,
+  id: this.generateConflictId()
+  timestamp: Date.now()
+  localChange
+  remoteChange
+  conflictType
+  severity
+  affectedPaths: overlappingPaths
   metadata: {
-  domain,
-  localTimestamp: localChange.timestamp,
-  remoteTimestamp: remoteChange.timestamp,
+  domain
+  localTimestamp: localChange.timestamp
+  remoteTimestamp: remoteChange.timestamp }
 };
   private async resolveConflict<T>(conflict: StateConflict<T>): Promise<ConflictResolution<T>> {
     // Find applicable resolution rule
@@ -178,13 +172,10 @@ export class ConflictResolver {
       throw new Error(`No resolution rule found for conflict ${conflict.id}`);}
     // Apply resolution strategy
     let resolution: ConflictResolution<T>;
-    if (rule.customResolver) {
-      resolution = rule.customResolver(conflict);
-    } else {
-      resolution = await this.applyResolutionStrategy(conflict, rule.strategy);
+    if (rule.customResolver) { resolution = rule.customResolver(conflict) } else { resolution = await this.applyResolutionStrategy(conflict, rule.strategy);
     return resolution;
   private async applyResolutionStrategy<T>(((
-    conflict: StateConflict<T>,
+    conflict: StateConflict<T> }
     strategy: ResolutionStrategy
   ): Promise<ConflictResolution<T>> {
     switch (strategy) {
@@ -203,23 +194,21 @@ export class ConflictResolver {
       default:
         throw new Error(`Unsupported resolution strategy: ${strategy}`);}
   // Resolution strategy implementations
-  private lastWriterWins<T>(conflict: StateConflict<T>): ConflictResolution<T> {
-  const winner = conflict.localChange.timestamp > conflict.remoteChange.timestamp;
+  private lastWriterWins<T>(conflict: StateConflict<T>): ConflictResolution<T> { const winner = conflict.localChange.timestamp > conflict.remoteChange.timestamp;
   ? conflict.localChange
   : conflict.remoteChange;
   const loser = winner === conflict.localChange ? conflict.remoteChange : conflict.localChange;
   return {
-  id: this.generateResolutionId(),
-  conflictId: conflict.id,
-  strategy: 'LAST_WRITER_WINS',
-  resolvedState: this.applyChangeToState(winner),
-  timestamp: Date.now(),
-  appliedChanges: [winner],
-  rejectedChanges: [loser],
-  confidence: 0.8,
+  id: this.generateResolutionId()
+  conflictId: conflict.id
+  strategy: 'LAST_WRITER_WINS'
+  resolvedState: this.applyChangeToState(winner)
+  timestamp: Date.now()
+  appliedChanges: [winner]
+  rejectedChanges: [loser]
+  confidence: 0.8 }
 };
-  private firstWriterWins<T>(conflict: StateConflict<T>): ConflictResolution<T> {
-  const winner = conflict.localChange.timestamp < conflict.remoteChange.timestamp;
+  private firstWriterWins<T>(conflict: StateConflict<T>): ConflictResolution<T> { const winner = conflict.localChange.timestamp < conflict.remoteChange.timestamp;
   ? conflict.localChange
   : conflict.remoteChange;
   const loser = winner === conflict.localChange ? conflict.remoteChange : conflict.localChange;
@@ -231,38 +220,35 @@ export class ConflictResolver {
   timestamp: Date.now(),
   appliedChanges: [winner],
   rejectedChanges: [loser],
-  confidence: 0.7,
+  confidence: 0.7 }
 };
-  private mergeChanges<T>(conflict: StateConflict<T>): ConflictResolution<T> {
-  // Intelligent merge based on change types and data
+  private mergeChanges<T>(conflict: StateConflict<T>): ConflictResolution<T> { // Intelligent merge based on change types and data
   const mergedPayload = this.mergePaylods(;);
-  conflict.localChange.payload,
+  conflict.localChange.payload
   conflict.remoteChange.payload
   );
-  const mergedChange: StateChange<T> = {,
-  ...conflict.localChange,
-  id: this.generateChangeId(),
-  timestamp: Date.now(),
-  payload: mergedPayload,
-  source: 'system',
+  const mergedChange: StateChange<T> = {
+  ...conflict.localChange
+  id: this.generateChangeId()
+  timestamp: Date.now()
+  payload: mergedPayload
+  source: 'system' }
 };
-    return {
-  id: this.generateResolutionId(),
-  conflictId: conflict.id,
-  strategy: 'MERGE_CHANGES',
-  resolvedState: this.applyChangeToState(mergedChange),
-  timestamp: Date.now(),
-  appliedChanges: [mergedChange],
-  rejectedChanges: [],
-  confidence: 0.6,
+    return { id: this.generateResolutionId()
+  conflictId: conflict.id
+  strategy: 'MERGE_CHANGES'
+  resolvedState: this.applyChangeToState(mergedChange)
+  timestamp: Date.now()
+  appliedChanges: [mergedChange]
+  rejectedChanges: []
+  confidence: 0.6 }
 };
-  private operationalTransform<T>(conflict: StateConflict<T>): ConflictResolution<T> {
-  // Apply operational transform based on conflict type
+  private operationalTransform<T>(conflict: StateConflict<T>): ConflictResolution<T> { // Apply operational transform based on conflict type
   if (conflict.conflictType === 'CONCURRENT_UPDATE') {
   return this.applyOperationalTransform(conflict);
   // Fallback to merge for non-OT cases
   return this.mergeChanges(conflict);
-  private securityPriorityResolution<T>(conflict: StateConflict<T>): ConflictResolution<T> {,
+  private securityPriorityResolution<T>(conflict: StateConflict<T>): ConflictResolution<T> {
   // Security conflicts always favor more restrictive permissions
   const isSecurityRelated = (change: StateChange<T>) => ;
   JSON.stringify(change.payload).includes('permission') ||
@@ -271,42 +257,41 @@ export class ConflictResolver {
   if (isSecurityRelated(conflict.localChange) || isSecurityRelated(conflict.remoteChange)) {
   // Choose the more restrictive change
   const moreRestrictive = this.selectMoreRestrictiveChange(;);
-  conflict.localChange,
+  conflict.localChange
   conflict.remoteChange
   );
   const lessRestrictive = moreRestrictive === conflict.localChange ;
   ? conflict.remoteChange
   : conflict.localChange;
   return {
-  id: this.generateResolutionId(),
-  conflictId: conflict.id,
-  strategy: 'SECURITY_PRIORITY',
-  resolvedState: this.applyChangeToState(moreRestrictive),
-  timestamp: Date.now(),
-  appliedChanges: [moreRestrictive],
-  rejectedChanges: [lessRestrictive],
-  confidence: 0.9,
+  id: this.generateResolutionId()
+  conflictId: conflict.id
+  strategy: 'SECURITY_PRIORITY'
+  resolvedState: this.applyChangeToState(moreRestrictive)
+  timestamp: Date.now()
+  appliedChanges: [moreRestrictive]
+  rejectedChanges: [lessRestrictive]
+  confidence: 0.9 }
 };
     // Non-security conflicts use last writer wins
     return this.lastWriterWins(conflict);
-  private async requestUserIntervention<T>(conflict: StateConflict<T>): Promise<ConflictResolution<T>> {
-    // Store conflict for user review
+  private async requestUserIntervention<T>(conflict: StateConflict<T>): Promise<ConflictResolution<T>> { // Store conflict for user review
     this.activeConflicts.set(conflict.id, conflict);
     // Create pending resolution
     return {
-      id: this.generateResolutionId(),
-      conflictId: conflict.id,
-      strategy: 'USER_INTERVENTION',
+      id: this.generateResolutionId()
+      conflictId: conflict.id
+      strategy: 'USER_INTERVENTION' }
       resolvedState: {} as T, // Will be filled when user resolves
-      timestamp: Date.now(),
-      appliedChanges: [],
-      rejectedChanges: [],
+      timestamp: Date.now()
+      appliedChanges: []
+      rejectedChanges: []
       confidence: 0.0;
   };
   // Specialized conflict resolution methods
   resolveGraphConflicts();
-    localChanges: GraphMutation,
-    remoteChanges: GraphMutation): GraphMutation {,
+    localChanges: GraphMutation
+    remoteChanges: GraphMutation): GraphMutation { 
     // Implement operational transform for graph operations
     const resolvedMutations: GraphMutation = [];
     // Group mutations by type and apply transforms
@@ -319,8 +304,8 @@ export class ConflictResolver {
       resolvedMutations.push(...resolved);
     return resolvedMutations;
   resolveSecurityConflicts();
-    localPermissions: Permission,
-    remotePermissions: Permission): Permission {,
+    localPermissions: Permission
+    remotePermissions: Permission): Permission { }
     // Security conflicts always favor more restrictive permissions
     const mergedPermissions = new Map<string, Permission>();
     // Process local permissions
@@ -332,77 +317,66 @@ export class ConflictResolver {
     remotePermissions.forEach(remotePerm => {)
   const key = `${remotePerm.resource}:${remotePerm.action}`;}
       const localPerm = mergedPermissions.get(key);
-      if (!localPerm) {
-        mergedPermissions.set(key, remotePerm);
-      } else {
-        // Choose more restrictive permission
+      if (!localPerm) { mergedPermissions.set(key, remotePerm) } else { // Choose more restrictive permission
         const moreRestrictive = this.selectMoreRestrictivePermission(localPerm, remotePerm);
-        mergedPermissions.set(key, moreRestrictive);
-    });
+        mergedPermissions.set(key, moreRestrictive) });
     return Array.from(mergedPermissions.values());
   resolveDashboardConflicts();
-    localLayout: DashboardLayout,
-    remoteLayout: DashboardLayout): DashboardLayout {,
+    localLayout: DashboardLayout
+    remoteLayout: DashboardLayout): DashboardLayout { 
     // Merge dashboard layouts using spatial conflict resolution
     const mergedWidgets = new Map<string, any>();
     // Add local widgets
     localLayout.widgets.forEach(widget => {)
-  mergedWidgets.set(widget.id, widget);
-    });
+  mergedWidgets.set(widget.id, widget) });
     // Merge remote widgets, resolving spatial conflicts
-    remoteLayout.widgets.forEach(remoteWidget => {)
+    remoteLayout.widgets.forEach(remoteWidget => { )
   const localWidget = mergedWidgets.get(remoteWidget.id);
       if (!localWidget) {
         // New widget, check for spatial conflicts
         const resolved = this.resolveSpatialConflict(remoteWidget, Array.from(mergedWidgets.values()));
-        mergedWidgets.set(remoteWidget.id, resolved);
-      } else {
-        // Existing widget, merge properties
+        mergedWidgets.set(remoteWidget.id, resolved) } else { // Existing widget, merge properties
         const merged = this.mergeWidgetProperties(localWidget, remoteWidget);
-        mergedWidgets.set(remoteWidget.id, merged);
-    });
-    return {
-      widgets: Array.from(mergedWidgets.values()),
-      breakpoints: { ...localLayout.breakpoints, ...remoteLayout.breakpoints },
+        mergedWidgets.set(remoteWidget.id, merged) });
+    return { widgets: Array.from(mergedWidgets.values()) }
+      breakpoints: { ...localLayout.breakpoints, ...remoteLayout.breakpoints }
       cols: { ...localLayout.cols, ...remoteLayout.cols }
     };
   // Setup default resolution rules
-  private setupDefaultRules(): void {
-  // Graph editor rules
+  private setupDefaultRules(): void { // Graph editor rules
   this.addResolutionRule({)
-  name: 'graph-concurrent-updates',
-  domain: 'graph-editor',
-  conflictTypes: ['CONCURRENT_UPDATE'],
-  strategy: 'OPERATIONAL_TRANSFORM',
-  priority: 100,
+  name: 'graph-concurrent-updates'
+  domain: 'graph-editor'
+  conflictTypes: ['CONCURRENT_UPDATE']
+  strategy: 'OPERATIONAL_TRANSFORM'
+  priority: 100 }
 });
     // Security rules
-    this.addResolutionRule({)
-  name: 'security-priority',
-  domain: 'security',
-  conflictTypes: ['CONCURRENT_UPDATE', 'PERMISSION_CONFLICT'],
-  strategy: 'SECURITY_PRIORITY',
-  priority: 200,
+    this.addResolutionRule({ )
+  name: 'security-priority'
+  domain: 'security'
+  conflictTypes: ['CONCURRENT_UPDATE', 'PERMISSION_CONFLICT']
+  strategy: 'SECURITY_PRIORITY'
+  priority: 200 }
 });
     // Admin dashboard rules
-    this.addResolutionRule({)
-  name: 'dashboard-layout',
-  domain: 'admin-dashboard',
-  pathPattern: /^layout\./,
-  conflictTypes: ['CONCURRENT_UPDATE'],
-  strategy: 'MERGE_CHANGES',
-  priority: 150,
+    this.addResolutionRule({ )
+  name: 'dashboard-layout'
+  domain: 'admin-dashboard'
+  pathPattern: /^layout\./
+  conflictTypes: ['CONCURRENT_UPDATE']
+  strategy: 'MERGE_CHANGES'
+  priority: 150 }
 });
     // General fallback rule
-    this.addResolutionRule({)
-  name: 'fallback-last-writer',
-  conflictTypes: ['CONCURRENT_UPDATE', 'DELETE_UPDATE', 'CREATE_CREATE'],
-  strategy: 'LAST_WRITER_WINS',
-  priority: 1,
+    this.addResolutionRule({ )
+  name: 'fallback-last-writer'
+  conflictTypes: ['CONCURRENT_UPDATE', 'DELETE_UPDATE', 'CREATE_CREATE']
+  strategy: 'LAST_WRITER_WINS'
+  priority: 1 }
 });
   // Utility methods
-  private findResolutionRule(conflict: StateConflict): ConflictResolutionRule | null {
-    return this.resolutionRules
+  private findResolutionRule(conflict: StateConflict): ConflictResolutionRule | null { return this.resolutionRules
       .filter(rule => {)
   // Check domain match
         if (rule.domain && rule.domain !== conflict.metadata?.domain) {
@@ -416,8 +390,7 @@ export class ConflictResolver {
         // Check custom condition
         if (rule.condition && !rule.condition(conflict)) {
           return false;
-        return true;
-  }
+        return true }
       .sort((a, b) => b.priority - a.priority)[0] || null;
   // Public API methods
   addResolutionRule(rule: ConflictResolutionRule): void {
@@ -460,24 +433,22 @@ export class ConflictResolver {
     return {} as T;
   private mergePaylods(local: any, remote: any): any {
     return { ...local, ...remote };
-  private applyOperationalTransform<T>(conflict: StateConflict<T>): ConflictResolution<T> {
-  // Implement operational transform logic
+  private applyOperationalTransform<T>(conflict: StateConflict<T>): ConflictResolution<T> { // Implement operational transform logic
   return this.lastWriterWins(conflict);
-  private selectMoreRestrictiveChange<T>(local: StateChange<T>, remote: StateChange<T>): StateChange<T> {,
+  private selectMoreRestrictiveChange<T>(local: StateChange<T>, remote: StateChange<T>): StateChange<T> {
   // Logic to determine which change is more restrictive
   return local;
-  private selectMoreRestrictivePermission(local: Permission, remote: Permission): Permission {,
+  private selectMoreRestrictivePermission(local: Permission, remote: Permission): Permission {
   const levels = ['none', 'read', 'write', 'admin'];
   const localLevel = levels.indexOf(local.level);
   const remoteLevel = levels.indexOf(remote.level);
   return localLevel < remoteLevel ? local : remote;
-  private groupMutationsByType(mutations: GraphMutation): Map<string, GraphMutation> {,
+  private groupMutationsByType(mutations: GraphMutation): Map<string, GraphMutation> { }
   const groups = new Map<string, GraphMutation>();
-  mutations.forEach(mutation => {)
+  mutations.forEach(mutation => { )
   const existing = groups.get(mutation.type) || [];
   existing.push(mutation);
-  groups.set(mutation.type, existing);
-});
+  groups.set(mutation.type, existing) });
     return groups;
   private resolveGraphMutationType(type: string, local: GraphMutation, remote: GraphMutation): GraphMutation {
     // Graph-specific resolution logic

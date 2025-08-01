@@ -8,23 +8,21 @@
  * Task: E17-1753114397315-003606 - Create promotion data model
  * Epic: 17 - Backstage Admin Controls
  */
-import { 
-  PlacementSlot, 
+import { PlacementSlot, 
   ContentPlacement, 
   PlacementTargetingRules,
   PlacementStyling,
   ContentType,
-  PlacementStatus,
+  PlacementStatus }
   MetricsPeriod
-} from './PlacementTypes';
+ from './PlacementTypes';
 
 // ==========================================
 // CORE PROMOTION ENTITIES
 // ==========================================
 
-}
-export interface PromotionCampaign {
-  campaignId: string;
+
+export interface PromotionCampaign { campaignId: string;
   name: string;
   displayName: string;
   description: string;
@@ -63,15 +61,15 @@ export interface PromotionCampaign {
   tags: string;
   categories: string;
   // Integration Points
-  integrationConfig?: {
+  integrationConfig?: { }
   analyticsTracking: AnalyticsTrackingConfig;
   externalPlatforms?: ExternalPlatformConfig;
   customEventTracking?: CustomEventConfig;
-}
+
+
 };
-}
-export enum PromotionType {
-  // Content-Based Promotions
+
+export enum PromotionType { // Content-Based Promotions
   FEATURED_TEMPLATES = 'featured_templates',
   NEW_RELEASES = 'new_releases',
   TRENDING_NOW = 'trending_now',
@@ -135,7 +133,7 @@ export enum PromotionType {
   contentId: string;
   templateId: string;
   // Content Details
-  contentInfo: {
+  contentInfo: { }
   title: string;
   description: string;
   creatorId: string;
@@ -143,17 +141,17 @@ export enum PromotionType {
   tags: string;
   thumbnailUrl?: string;
   previewUrl?: string;
-}
+
+
 };
   // Promotion Configuration
-  promotionConfig: {
+  promotionConfig: { ,
   priority: number;
   weight?: number;
   customMessage?: string;
   callToAction?: string;
   promotionalBadges?: PromotionalBadge;
-  customStyling?: Partial<PlacementStyling>;
-};
+  customStyling?: Partial<PlacementStyling> };
   // Performance Data
   performanceScore: number;
   metrics: ContentPromotionMetrics;
@@ -171,20 +169,17 @@ export enum PromotionType {
   // A/B Testing
   experimentVariant?: string;
   controlGroup?: boolean;
-}
-}
-export interface PromotionalBadge {
-  badgeId: string;
+
+
+export interface PromotionalBadge { badgeId: string;
   type: BadgeType;
   text: string;
   style: BadgeStyle;
   position: BadgePosition;
   visibility: BadgeVisibility;
-  conditions?: BadgeConditions;
-}
-}
-export enum BadgeType {
-  NEW = 'new',
+  conditions?: BadgeConditions }
+
+export enum BadgeType { NEW = 'new',
   FEATURED = 'featured',
   TRENDING = 'trending',
   BESTSELLER = 'bestseller',
@@ -201,42 +196,36 @@ export enum BadgeType {
   fontSize?: string;
   fontWeight?: string;
   borderRadius?: number;
-  animation?: 'pulse' | 'glow' | 'bounce' | 'none'
-}
-  }
-export enum BadgePosition {
-  TOP_LEFT = 'top_left',
+  animation?: 'pulse' | 'glow' | 'bounce' | 'none' }
+
+
+export enum BadgePosition { TOP_LEFT = 'top_left',
   TOP_RIGHT = 'top_right',
   BOTTOM_LEFT = 'bottom_left',
   BOTTOM_RIGHT = 'bottom_right',
-  CENTER = 'center',
+  CENTER = 'center' }
   OVERLAY = 'overlay'
-  export interface BadgeVisibility {
-  showOnHover?: boolean;
+  export interface BadgeVisibility { showOnHover?: boolean;
   showAlways?: boolean;
   showOnMobile?: boolean;
-  minScreenWidth?: number;
-}
-}
-}
-export interface BadgeConditions {
-  timeframe?: {
+  minScreenWidth?: number }
+
+
+
+export interface BadgeConditions { timeframe?: { }
   start: Date;
   end: Date;
-}
+
+
 };
-  performanceThreshold?: {
-  metric: string;
+  performanceThreshold?: { metric: string;
   value: number;
-  operator: 'gt' | 'lt' | 'eq'
-  };
-  userConditions?: {
-  segments: string;
-  excludeSegments?: string;
+  operator: 'gt' | 'lt' | 'eq' }
 };
-}
-export enum ContentPromotionStatus {
-  ELIGIBLE = 'eligible',
+  userConditions?: { segments: string;
+  excludeSegments?: string };
+
+export enum ContentPromotionStatus { ELIGIBLE = 'eligible',
   ACTIVE = 'active',
   PAUSED = 'paused',
   EXPIRED = 'expired',
@@ -247,7 +236,7 @@ export enum ContentPromotionStatus {
   // ==========================================
   export interface ContentSelectionCriteria {
   // Template Attributes
-  templateCriteria: {
+  templateCriteria: {;
   categories?: string;
   excludeCategories?: string;
   tags?: string;
@@ -256,53 +245,49 @@ export enum ContentPromotionStatus {
   createdBefore?: Date;
   creatorIds?: string;
   excludeCreatorIds?: string;
-  priceRange?: {
+  priceRange?: { }
   min: number;
   max: number;
-}
+
+
 };
   };
   // Performance Requirements
-  performanceCriteria: {
-  minRating?: number;
+  performanceCriteria: { minRating?: number;
   minPurchases?: number;
   minRevenue?: number;
   maxAge?: number; // days,
   performancePercentile?: number; // top X%,
-  engagementScore?: {
+  engagementScore?: { }
   min: number;
   max?: number;
 };
   };
   // Quality Standards
-  qualityCriteria: {
-  hasPreview?: boolean;
+  qualityCriteria: { hasPreview?: boolean;
   hasDocumentation?: boolean;
   isVerified?: boolean;
   moderationStatus?: 'approved' | 'pending' | 'rejected';
-  qualityScore?: {
+  qualityScore?: { }
   min: number;
   max?: number;
 };
   };
   // Content Freshness
-  freshnessCriteria: {
-  preferNew?: boolean;
+  freshnessCriteria: { preferNew?: boolean;
   newThresholdDays?: number;
-  updateRecency?: number; // days,
+  updateRecency?: number; // days }
   trendingWeight?: number;
   seasonalRelevance?: string;
 };
   // Diversity Requirements
-  diversityCriteria: {
-  maxPerCreator?: number;
+  diversityCriteria: { maxPerCreator?: number;
   maxPerCategory?: number;
   ensureVariety?: boolean;
-  balancePopularAndNiche?: number; // ratio,
+  balancePopularAndNiche?: number; // ratio }
 };
   // Exclusion Rules
-  exclusionRules: {
-  recentlyPromoted?: number; // days,
+  exclusionRules: { recentlyPromoted?: number; // days }
   currentlyPromoted?: boolean;
   userPurchaseHistory?: boolean;
   competitorTemplates?: boolean;
@@ -312,10 +297,9 @@ export enum ContentPromotionStatus {
 // ==========================================
 // SCHEDULING AND ROTATION
 // ==========================================
-}
-}
-export interface PromotionSchedule {
-  scheduleId: string;
+
+
+export interface PromotionSchedule { scheduleId: string;
   // Basic Timing
   startDate: Date;
   endDate?: Date;
@@ -332,11 +316,9 @@ export interface PromotionSchedule {
   isActive: boolean;
   nextExecution?: Date;
   lastExecution?: Date;
-  executionHistory: ScheduleExecution;
-}
-}
-export enum ScheduleType {
-  FIXED_DURATION = 'fixed_duration',
+  executionHistory: ScheduleExecution }
+
+export enum ScheduleType { FIXED_DURATION = 'fixed_duration',
   PERFORMANCE_BASED = 'performance_based',
   DYNAMIC_ROTATION = 'dynamic_rotation',
   EVENT_TRIGGERED = 'event_triggered',
@@ -349,58 +331,57 @@ export enum ScheduleType {
   daysOfWeek?: number;
   excludeDays?: number;
   // Special Time Periods
-  peakHours?: {
-  start: string; // "09:00",
-  end: string; // "17:00",
+  peakHours?: {;
+  start: string; // "09:00";
+  end: string; // "17:00" }
   multiplier: number;
-}
+
+
 };
   // Geographic Time Zones
   primaryTimezones?: string;
   followUserTimezone?: boolean;
   // Seasonal Adjustments
   seasonalPatterns?: SeasonalPattern;
-}
-}
-export interface SeasonalPattern {
-  season: 'spring' | 'summer' | 'fall' | 'winter' | 'holiday' | 'back_to_school';
+
+
+export interface SeasonalPattern { season: 'spring' | 'summer' | 'fall' | 'winter' | 'holiday' | 'back_to_school' }
   adjustmentFactor: number;
   specificDates?: Date;
   geographicRegions?: string;
-}
-}
-}
-export interface RecurrenceConfig {
-  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+
+
+
+
+export interface RecurrenceConfig { frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
   interval: number;
-  endCondition: 'date' | 'count' | 'performance';
+  endCondition: 'date' | 'count' | 'performance' }
   endValue: Date | number;
   exceptions?: Date;
-}
-}
-}
-export interface DynamicSchedulingRule {
-  ruleId: string;
+
+
+
+
+export interface DynamicSchedulingRule { ruleId: string;
   name: string;
-  condition: {
+  condition: {;
   metric: string;
   threshold: number;
   operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
-  timeWindow: number; // minutes,
-}
+  timeWindow: number; // minutes }
+
+
 };
-  action: {
+  action: { ,
   type: 'extend' | 'pause' | 'rotate' | 'boost' | 'end';
-  parameters: Record<string, any>;
-};
+  parameters: Record<string, any> };
   priority: number;
   isActive: boolean;
-}
-}
-export interface ScheduleExecution {
-  executionId: string;
+
+
+export interface ScheduleExecution { executionId: string;
   executedAt: Date;
-  duration: number; // minutes,
+  duration: number; // minutes }
   contentRotated: number;
   performanceSnapshot: Record<string, number>;
   issues?: string;
@@ -408,11 +389,11 @@ export interface ScheduleExecution {
   // ==========================================
   // ROTATION AND OPTIMIZATION
   // ==========================================
-}
-}
-}
-export interface RotationConfiguration {
-  rotationId: string;
+
+
+
+
+export interface RotationConfiguration { rotationId: string;
   // Rotation Strategy
   strategy: RotationStrategy;
   // Timing Configuration
@@ -421,7 +402,7 @@ export interface RotationConfiguration {
   // Content Management
   maxActiveContent: number;
   minActiveContent: number;
-  contentBuffer: number; // extra content ready,
+  contentBuffer: number; // extra content ready }
   // Performance-Based Rotation
   performanceThresholds: PerformanceThreshold;
   // Weighting System
@@ -432,10 +413,9 @@ export interface RotationConfiguration {
   // Quality Assurance
   preRotationChecks: QualityCheck;
   postRotationValidation: QualityCheck;
-}
-}
-export enum RotationStrategy {
-  ROUND_ROBIN = 'round_robin',
+
+
+export enum RotationStrategy { ROUND_ROBIN = 'round_robin',
   WEIGHTED_RANDOM = 'weighted_random',
   PERFORMANCE_OPTIMIZED = 'performance_optimized',
   TIME_BASED = 'time_based',
@@ -443,70 +423,70 @@ export enum RotationStrategy {
   MACHINE_LEARNING = 'machine_learning'
   export interface RotationFrequency {
   type: 'fixed_interval' | 'performance_based' | 'traffic_based' | 'hybrid';
-  interval?: number; // minutes,
+  interval?: number; // minutes }
   minInterval?: number;
   maxInterval?: number;
   conditions?: RotationCondition;
-}
-}
-}
-export interface RotationTrigger {
-  triggerId: string;
+
+
+
+
+export interface RotationTrigger { triggerId: string;
   type: 'time' | 'performance' | 'user_activity' | 'external_event' | 'manual';
-  condition: {
+  condition: { }
   metric?: string;
   threshold?: number;
   operator?: 'gt' | 'lt' | 'eq';
   timeWindow?: number;
-}
+
+
 };
   priority: number;
   isActive: boolean;
   lastTriggered?: Date;
-}
-}
-export interface PerformanceThreshold {
-  metric: string;
+
+
+export interface PerformanceThreshold { metric: string;
   threshold: number;
   action: 'promote' | 'demote' | 'pause' | 'remove' | 'boost';
-  timeWindow: number; // minutes,
+  timeWindow: number; // minutes }
   sampleSize?: number;
-}
-}
-}
-export interface WeightingFactor {
-  factor: string;
+
+
+
+
+export interface WeightingFactor { factor: string;
   weight: number;
   source: 'historical_performance' | 'real_time_metrics' | 'user_preference' | 'content_attributes' | 'external_signals';
-  decayRate?: number; // how quickly influence diminishes,
-}
-}
-}
-export interface RotationCondition {
-  conditionId: string;
+  decayRate?: number; // how quickly influence diminishes }
+
+
+
+
+export interface RotationCondition { conditionId: string;
   metric: string;
-  operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
+  operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte' }
   value: number;
   timeWindow: number;
-}
-}
-}
-export interface QualityCheck {
-  checkId: string;
+
+
+
+
+export interface QualityCheck { checkId: string;
   name: string;
   type: 'content_availability' | 'performance_validation' | 'user_experience' | 'technical_health';
   isRequired: boolean;
-  timeout: number; // seconds,
+  timeout: number; // seconds }
   retryCount: number;
   // ==========================================
   // TARGETING AND PERSONALIZATION
   // ==========================================
-}
-}
-}
-export interface PromotionTargeting extends PlacementTargetingRules {
-  // Advanced User Targeting
-  userTargeting: {
+
+
+
+
+export interface PromotionTargeting extends PlacementTargetingRules { // Advanced User Targeting
+  userTargeting: { }
   segments: string;
   excludeSegments?: string;
   lifeCycleStage?: UserLifeCycleStage;
@@ -515,40 +495,32 @@ export interface PromotionTargeting extends PlacementTargetingRules {
   purchaseHistory?: PurchaseHistoryTargeting;
 };
   // Contextual Targeting
-  contextualTargeting: {
-  currentPage?: string;
+  contextualTargeting: { currentPage?: string;
   referrerSource?: string;
   searchQuery?: string;
   userIntent?: UserIntent;
   sessionStage?: SessionStage;
-  deviceCapabilities?: DeviceCapability;
-};
+  deviceCapabilities?: DeviceCapability };
   // Behavioral Targeting
-  behavioralTargeting: {
+  behavioralTargeting: { ,
   browsingPatterns: BrowsingPattern;
   interactionHistory: InteractionPattern;
   purchasePatterns: PurchasePattern;
   contentPreferences: ContentPreference;
-  temporalPatterns: TemporalPattern;
-};
+  temporalPatterns: TemporalPattern };
   // Performance-Based Targeting
-  performanceTargeting: {
-  highValueUsers?: boolean;
+  performanceTargeting: { highValueUsers?: boolean;
   likelyConverters?: boolean;
   activeEngagers?: boolean;
   newUserFocus?: boolean;
-  retentionRisk?: boolean;
-};
+  retentionRisk?: boolean };
   // Social and Network Targeting
-  socialTargeting?: {
-  socialConnections?: string;
+  socialTargeting?: { socialConnections?: string;
   communityMembership?: string;
   influencerFollowers?: string;
-  viralContent?: boolean;
-};
+  viralContent?: boolean };
 
-export enum UserLifeCycleStage {
-  NEW_VISITOR = 'new_visitor',
+export enum UserLifeCycleStage { NEW_VISITOR = 'new_visitor',
   FIRST_PURCHASE = 'first_purchase',
   REPEAT_CUSTOMER = 'repeat_customer',
   VIP_CUSTOMER = 'vip_customer',
@@ -566,27 +538,22 @@ export enum UserLifeCycleStage {
   HIGHLY_ENGAGED = 'highly_engaged',
   POWER_USER = 'power_user'
   export interface PurchaseHistoryTargeting {
-  totalPurchases?: {
+  totalPurchases?: { }
   min: number;
   max?: number;
-}
+
+
 };
-  recentPurchases?: {
-  days: number;
-  count: number;
-};
+  recentPurchases?: { days: number;
+  count: number };
   categoryPurchases?: string;
-  avgOrderValue?: {
-  min: number;
+  avgOrderValue?: { min: number;
+  max?: number };
+  purchaseFrequency?: { min: number; // purchases per month }
   max?: number;
 };
-  purchaseFrequency?: {
-  min: number; // purchases per month,
-  max?: number;
-};
-}
-export enum UserIntent {
-  BROWSING = 'browsing',
+
+export enum UserIntent { BROWSING = 'browsing',
   RESEARCHING = 'researching',
   COMPARING = 'comparing',
   PURCHASING = 'purchasing',
@@ -603,48 +570,48 @@ export enum UserIntent {
   screenSize: 'small' | 'medium' | 'large' | 'xlarge';
   touchSupport: boolean;
   connectionSpeed: 'slow' | 'medium' | 'fast';
-  processingPower: 'low' | 'medium' | 'high'
-}
-  }
-}
-export interface BrowsingPattern {
-  patternType: 'sequential' | 'comparative' | 'exploratory' | 'focused';
+  processingPower: 'low' | 'medium' | 'high' }
+
+
+
+
+export interface BrowsingPattern { patternType: 'sequential' | 'comparative' | 'exploratory' | 'focused' }
   categoryDepth: number;
   sessionDuration: number;
   pageViews: number;
   bounceRate: number;
-}
-}
-}
-export interface InteractionPattern {
-  interactionType: 'click' | 'scroll' | 'hover' | 'search' | 'filter' | 'share';
+
+
+
+
+export interface InteractionPattern { interactionType: 'click' | 'scroll' | 'hover' | 'search' | 'filter' | 'share';
   frequency: number;
   intensity: 'low' | 'medium' | 'high';
-  recency: number; // hours ago,
-}
-}
-}
-export interface PurchasePattern {
-  frequency: 'impulse' | 'regular' | 'seasonal' | 'occasional';
+  recency: number; // hours ago }
+
+
+
+
+export interface PurchasePattern { frequency: 'impulse' | 'regular' | 'seasonal' | 'occasional';
   timing: 'morning' | 'afternoon' | 'evening' | 'weekend' | 'weekday';
   categories: string;
-  priceRange: {
+  priceRange: { }
   min: number;
   max: number;
-}
+
+
 };
-}
-}
-export interface ContentPreference {
-  categories: string;
+
+
+export interface ContentPreference { categories: string;
   creators: string;
   styles: string;
   complexity: 'beginner' | 'intermediate' | 'advanced';
   topics: string;
-  formats: string;
-}
-}
-}
+  formats: string }
+
+
+
 export interface TemporalPattern {
   timeOfDay: number;
   dayOfWeek: number;
@@ -653,11 +620,11 @@ export interface TemporalPattern {
   // ==========================================
   // PERSONALIZATION SYSTEM
   // ==========================================
-}
-}
-}
-export interface PersonalizationRule {
-  ruleId: string;
+
+
+
+
+export interface PersonalizationRule { ruleId: string;
   name: string;
   description: string;
   // Rule Configuration
@@ -675,39 +642,35 @@ export interface PersonalizationRule {
   // Metadata
   createdAt: Date;
   createdBy: string;
-  version: string;
-}
-}
-export enum PersonalizationRuleType {
-  CONTENT_BOOST = 'content_boost',
+  version: string }
+
+export enum PersonalizationRuleType { CONTENT_BOOST = 'content_boost',
   CONTENT_SUPPRESS = 'content_suppress',
   LAYOUT_MODIFICATION = 'layout_modification',
   TIMING_ADJUSTMENT = 'timing_adjustment',
-  MESSAGING_CUSTOMIZATION = 'messaging_customization',
+  MESSAGING_CUSTOMIZATION = 'messaging_customization' }
   TARGETING_REFINEMENT = 'targeting_refinement'
-  export interface PersonalizationCondition {
-  conditionId: string;
+  export interface PersonalizationCondition { conditionId: string;
   type: 'user_attribute' | 'behavior' | 'context' | 'performance' | 'time';
   attribute: string;
   operator: 'eq' | 'neq' | 'gt' | 'lt' | 'in' | 'contains' | 'matches';
   value: any;
-  weight: number;
-}
-}
-}
-export interface PersonalizationAction {
-  actionId: string;
+  weight: number }
+
+
+
+export interface PersonalizationAction { actionId: string;
   type: 'boost_content' | 'change_position' | 'modify_message' | 'adjust_timing' | 'add_badge' | 'change_style';
   parameters: Record<string, any>;
-  impact: number; // expected impact score,
+  impact: number; // expected impact score }
   // ==========================================
   // PERFORMANCE AND OPTIMIZATION
   // ==========================================
-}
-}
-}
-export interface PromotionGoal {
-  goalId: string;
+
+
+
+
+export interface PromotionGoal { goalId: string;
   name: string;
   type: GoalType;
   // Goal Configuration
@@ -717,33 +680,29 @@ export interface PromotionGoal {
   timeframe: GoalTimeframe;
   // Progress Tracking
   currentValue: number;
-  progress: number; // percentage,
+  progress: number; // percentage;
   trend: 'improving' | 'declining' | 'stable';
   // Priority and Weight
   priority: GoalPriority;
-  weight: number; // for composite scoring,
+  weight: number; // for composite scoring }
   // Status
   status: GoalStatus;
   achievedAt?: Date;
   lastUpdated: Date;
-}
-}
-export enum GoalType {
-  VISIBILITY = 'visibility',
+
+
+export enum GoalType { VISIBILITY = 'visibility',
   ENGAGEMENT = 'engagement',
   CONVERSION = 'conversion',
   REVENUE = 'revenue',
-  RETENTION = 'retention',
+  RETENTION = 'retention' }
   BRAND_AWARENESS = 'brand_awareness'
-  export interface GoalTimeframe {
-  type: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'campaign_duration';
+  export interface GoalTimeframe { type: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'campaign_duration';
   duration?: number;
   endDate?: Date;
-  milestone?: boolean;
-}
-}
-export enum GoalPriority {
-  LOW = 'low',
+  milestone?: boolean }
+
+export enum GoalPriority { LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
@@ -756,70 +715,68 @@ export enum GoalPriority {
   export interface OptimizationSettings {
   // Optimization Strategy
   optimizationStrategy: OptimizationStrategy;
-  optimizationGoals: string; // goal IDs,
+  optimizationGoals: string; // goal IDs;
   // Machine Learning Configuration
   mlConfig?: MachineLearningConfig;
   // Real-Time Optimization
   realTimeOptimization: boolean;
-  optimizationFrequency: number; // minutes,
+  optimizationFrequency: number; // minutes }
   minSampleSize: number;
   confidenceThreshold: number;
   // Constraints
   constraints: OptimizationConstraint;
   // Fallback Rules
   fallbackRules: FallbackRule;
-}
-}
-export enum OptimizationStrategy {
-  MANUAL_CONTROL = 'manual_control',
+
+
+export enum OptimizationStrategy { MANUAL_CONTROL = 'manual_control',
   RULE_BASED = 'rule_based',
   MACHINE_LEARNING = 'machine_learning',
   HYBRID_APPROACH = 'hybrid_approach',
   MULTI_ARMED_BANDIT = 'multi_armed_bandit',
   BAYESIAN_OPTIMIZATION = 'bayesian_optimization'
   export interface MachineLearningConfig {
-  algorithm: 'collaborative_filtering' | 'content_based' | 'deep_learning' | 'ensemble';
+  algorithm: 'collaborative_filtering' | 'content_based' | 'deep_learning' | 'ensemble' }
   features: MLFeature;
   trainingData: MLTrainingConfig;
   modelUpdate: MLModelUpdateConfig;
   explainability: boolean;
-}
-}
-}
-export interface MLFeature {
-  name: string;
+
+
+
+
+export interface MLFeature { name: string;
   type: 'categorical' | 'numerical' | 'text' | 'boolean';
   importance: number;
-  preprocessing: string;
-}
-}
-}
-export interface MLTrainingConfig {
-  dataWindow: number; // days,
+  preprocessing: string }
+
+
+
+export interface MLTrainingConfig { dataWindow: number; // days }
   minSamples: number;
   validationSplit: number;
   crossValidation: boolean;
   hyperparameterTuning: boolean;
-}
-}
-}
-export interface MLModelUpdateConfig {
-  updateFrequency: 'hourly' | 'daily' | 'weekly';
+
+
+
+
+export interface MLModelUpdateConfig { updateFrequency: 'hourly' | 'daily' | 'weekly' }
   performanceDrift: number;
   retrainingTrigger: number;
   modelVersion: boolean;
-}
-}
-}
-export interface OptimizationConstraint {
-  constraintId: string;
+
+
+
+
+export interface OptimizationConstraint { constraintId: string;
   type: 'min_value' | 'max_value' | 'equality' | 'ratio' | 'budget';
   parameter: string;
   value: number;
-  priority: number;
-}
-}
-}
+  priority: number }
+
+
+
 export interface FallbackRule {
   ruleId: string;
   trigger: string;
@@ -828,11 +785,11 @@ export interface FallbackRule {
   // ==========================================
   // A/B TESTING FRAMEWORK
   // ==========================================
-}
-}
-}
-export interface ABTestConfiguration {
-  testId: string;
+
+
+
+
+export interface ABTestConfiguration { testId: string;
   name: string;
   description: string;
   // Test Design
@@ -847,7 +804,7 @@ export interface ABTestConfiguration {
   significanceLevel: number;
   power: number;
   minSampleSize: number;
-  maxDuration: number; // days,
+  maxDuration: number; // days }
   // Test Management
   status: ABTestStatus;
   startDate: Date;
@@ -857,64 +814,60 @@ export interface ABTestConfiguration {
   qualityChecks: ABTestQualityCheck;
   biasDetection: boolean;
   multipleComparisonCorrection: boolean;
-}
-}
-export enum ABTestType {
-  SIMPLE_AB = 'simple_ab',
+
+
+export enum ABTestType { SIMPLE_AB = 'simple_ab',
   MULTIVARIATE = 'multivariate',
-  MULTI_ARMED_BANDIT = 'multi_armed_bandit',
+  MULTI_ARMED_BANDIT = 'multi_armed_bandit' }
   SEQUENTIAL = 'sequential'
-  export interface ABTestVariant {
-  variantId: string;
+  export interface ABTestVariant { variantId: string;
   name: string;
   description: string;
   configuration: Record<string, any>;
   trafficPercentage: number;
-  isControl: boolean;
-}
-}
-}
-export interface TrafficAllocation {
-  strategy: 'random' | 'deterministic' | 'weighted';
+  isControl: boolean }
+
+
+
+export interface TrafficAllocation { strategy: 'random' | 'deterministic' | 'weighted' }
   totalTrafficPercentage: number;
   segments?: string;
   exclusionRules?: string;
-}
-}
-export enum ABTestStatus {
-  DRAFT = 'draft',
-  SCHEDULED = 'scheduled',
-  RUNNING = 'running',
-  PAUSED = 'paused',
-  COMPLETED = 'completed',
+
+
+export enum ABTestStatus { DRAFT = 'draft'
+  SCHEDULED = 'scheduled'
+  RUNNING = 'running'
+  PAUSED = 'paused'
+  COMPLETED = 'completed'
   FAILED = 'failed'
   export interface ABTestResult {
   variantId: string;
   metric: string;
   value: number;
   sampleSize: number;
-  confidenceInterval: {
+  confidenceInterval: { }
   lower: number;
   upper: number;
-}
+
+
 };
   pValue: number;
   effect: number;
   significance: boolean;
-}
-}
-export interface ABTestQualityCheck {
-  checkType: 'sample_ratio' | 'novelty_effect' | 'external_validity' | 'implementation';
+
+
+export interface ABTestQualityCheck { checkType: 'sample_ratio' | 'novelty_effect' | 'external_validity' | 'implementation' }
   status: 'pass' | 'fail' | 'warning';
   details: string;
   // ==========================================
   // BUDGET AND RESOURCE MANAGEMENT
   // ==========================================
-}
-}
-}
-export interface PromotionBudget {
-  budgetId: string;
+
+
+
+
+export interface PromotionBudget { budgetId: string;
   // Budget Configuration
   totalBudget: number;
   currency: string;
@@ -930,7 +883,7 @@ export interface PromotionBudget {
   // Tracking and Alerts
   spentAmount: number;
   remainingBudget: number;
-  spendingRate: number; // per day,
+  spendingRate: number; // per day }
   budgetAlerts: BudgetAlert;
   // Performance
   costPerClick: number;
@@ -939,61 +892,58 @@ export interface PromotionBudget {
   // Allocation
   allocationBySlot: Record<string, number>;
   allocationByTime: Record<string, number>;
-}
-}
-export enum BudgetType {
-  LIFETIME = 'lifetime',
-  DAILY = 'daily',
-  WEEKLY = 'weekly',
-  MONTHLY = 'monthly',
+
+
+export enum BudgetType { LIFETIME = 'lifetime'
+  DAILY = 'daily'
+  WEEKLY = 'weekly'
+  MONTHLY = 'monthly'
   CAMPAIGN_DURATION = 'campaign_duration'
   export enum SpendingPace {
-  EVEN = 'even',
-  ACCELERATED = 'accelerated',
-  FRONT_LOADED = 'front_loaded',
+  EVEN = 'even'
+  ACCELERATED = 'accelerated'
+  FRONT_LOADED = 'front_loaded'
   BACK_LOADED = 'back_loaded'
   export interface CostModel {
-  model: 'cpm' | 'cpc' | 'cpa' | 'cpcv' | 'fixed';
+  model: 'cpm' | 'cpc' | 'cpa' | 'cpcv' | 'fixed' }
   baseRate: number;
   multipliers?: CostMultiplier;
-}
-}
-}
-export interface CostMultiplier {
-  factor: string;
+
+
+
+
+export interface CostMultiplier { factor: string;
   multiplier: number;
-  conditions?: Record<string, any>;
-}
-}
-}
-export interface BidStrategy {
-  strategy: 'manual' | 'target_cpa' | 'target_roas' | 'maximize_clicks' | 'maximize_conversions';
+  conditions?: Record<string, any> }
+
+
+
+export interface BidStrategy { strategy: 'manual' | 'target_cpa' | 'target_roas' | 'maximize_clicks' | 'maximize_conversions';
   targetValue?: number;
-  constraints?: BidConstraint;
-}
-}
-}
-export interface BidConstraint {
-  type: 'min_bid' | 'max_bid' | 'bid_adjustment';
+  constraints?: BidConstraint }
+
+
+
+export interface BidConstraint { type: 'min_bid' | 'max_bid' | 'bid_adjustment' }
   value: number;
   conditions?: Record<string, any>;
-}
-}
-}
-export interface BudgetAlert {
-  alertId: string;
+
+
+
+
+export interface BudgetAlert { alertId: string;
   threshold: number;
-  thresholdType: 'percentage' | 'amount';
+  thresholdType: 'percentage' | 'amount' }
   alertType: 'email' | 'dashboard' | 'webhook';
   recipients: string;
   isActive: boolean;
   triggered?: boolean;
   lastTriggered?: Date;
-}
-}
-}
-export interface ResourceAllocation {
-  // Slot Allocation
+
+
+
+
+export interface ResourceAllocation { // Slot Allocation
   slotPriority: Record<string, number>;
   slotBudgetShare: Record<string, number>;
   // Time Allocation
@@ -1006,10 +956,11 @@ export interface ResourceAllocation {
   // Performance Allocation
   performanceBasedReallocation: boolean;
   reallocationThreshold: number;
-  reallocationFrequency: number; // hours,
-}
-}
-}
+  reallocationFrequency: number; // hours }
+
+
+
+
 export interface TimeDistribution {
   timeSlot: string;
   percentage: number;
@@ -1017,11 +968,11 @@ export interface TimeDistribution {
   // ==========================================
   // ANALYTICS AND INSIGHTS
   // ==========================================
-}
-}
-}
-export interface PromotionMetrics {
-  campaignId: string;
+
+
+
+
+export interface PromotionMetrics { campaignId: string;
   period: MetricsPeriod;
   lastUpdated: Date;
   // Visibility Metrics
@@ -1058,12 +1009,11 @@ export interface PromotionMetrics {
   // Segmentation
   performanceBySegment: SegmentPerformance;
   performanceBySlot: SlotPerformance;
-  performanceByTime: TimePerformance;
-}
-}
-}
-export interface ContentPromotionMetrics {
-  contentId: string;
+  performanceByTime: TimePerformance }
+
+
+
+export interface ContentPromotionMetrics { contentId: string;
   period: MetricsPeriod;
   // Content-Specific Metrics
   promotionImpressions: number;
@@ -1084,73 +1034,71 @@ export interface ContentPromotionMetrics {
   saveRate: number;
   // Lifecycle Metrics
   promotionFrequency: number;
-  totalPromotionTime: number; // hours,
+  totalPromotionTime: number; // hours }
   averagePromotionDuration: number;
   lastPromotionDate: Date;
-}
-}
-}
-export interface PerformanceComparison {
-  metric: string;
+
+
+
+
+export interface PerformanceComparison { metric: string;
   current: number;
   baseline: number;
   change: number;
   changePercent: number;
   significance: number;
-  trend: 'improving' | 'declining' | 'stable'
-}
-  }
-}
-export interface GoalComparison {
-  goalId: string;
+  trend: 'improving' | 'declining' | 'stable' }
+
+
+
+
+export interface GoalComparison { goalId: string;
   goalName: string;
   target: number;
   actual: number;
-  achievement: number; // percentage,
-  status: 'ahead' | 'on_track' | 'behind' | 'achieved'
-}
-  }
-}
-export interface CompetitiveBenchmark {
-  metric: string;
+  achievement: number; // percentage;
+  status: 'ahead' | 'on_track' | 'behind' | 'achieved' }
+
+
+
+
+export interface CompetitiveBenchmark { metric: string;
   ourValue: number;
   industryAverage: number;
   topPerformer: number;
-  percentile: number;
-}
-}
-}
-export interface SegmentPerformance {
-  segmentId: string;
+  percentile: number }
+
+
+
+export interface SegmentPerformance { segmentId: string;
   segmentName: string;
   metrics: Record<string, number>;
   sampleSize: number;
-  significance: boolean;
-}
-}
-}
-export interface SlotPerformance {
-  slotId: string;
+  significance: boolean }
+
+
+
+export interface SlotPerformance { slotId: string;
   slotName: string;
   metrics: Record<string, number>;
-  performance: 'high' | 'medium' | 'low';
+  performance: 'high' | 'medium' | 'low' }
   ranking: number;
-}
-}
-}
-export interface TimePerformance {
-  timeSlot: string;
+
+
+
+
+export interface TimePerformance { timeSlot: string;
   metrics: Record<string, number>;
-  trend: 'increasing' | 'decreasing' | 'stable';
+  trend: 'increasing' | 'decreasing' | 'stable' }
   seasonality: number;
   // ==========================================
   // INSIGHTS AND RECOMMENDATIONS
   // ==========================================
-}
-}
-}
-export interface PromotionInsight {
-  insightId: string;
+
+
+
+
+export interface PromotionInsight { insightId: string;
   campaignId: string;
   // Insight Classification
   category: InsightCategory;
@@ -1174,241 +1122,228 @@ export interface PromotionInsight {
   // Follow-up
   actionTaken?: boolean;
   actionDate?: Date;
-  actionResult?: ActionResult;
-}
-}
-export enum InsightCategory {
-  PERFORMANCE = 'performance',
-  AUDIENCE = 'audience',
-  CONTENT = 'content',
-  TIMING = 'timing',
-  BUDGET = 'budget',
-  COMPETITION = 'competition',
-  TECHNICAL = 'technical',
+  actionResult?: ActionResult }
+
+export enum InsightCategory { PERFORMANCE = 'performance'
+  AUDIENCE = 'audience'
+  CONTENT = 'content'
+  TIMING = 'timing'
+  BUDGET = 'budget'
+  COMPETITION = 'competition'
+  TECHNICAL = 'technical'
   CREATIVE = 'creative'
   export enum InsightType {
-  ANOMALY = 'anomaly',
-  TREND = 'trend',
-  PATTERN = 'pattern',
-  OPPORTUNITY = 'opportunity',
-  RISK = 'risk',
-  OPTIMIZATION = 'optimization',
+  ANOMALY = 'anomaly'
+  TREND = 'trend'
+  PATTERN = 'pattern'
+  OPPORTUNITY = 'opportunity'
+  RISK = 'risk'
+  OPTIMIZATION = 'optimization'
   ALERT = 'alert'
   export enum InsightPriority {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
+  LOW = 'low'
+  MEDIUM = 'medium'
+  HIGH = 'high' }
   CRITICAL = 'critical'
-  export interface InsightFinding {
-  metric: string;
+  export interface InsightFinding { metric: string;
   observation: string;
   value: number;
   context: string;
-  timeframe: string;
-}
-}
-}
-export interface InsightEvidence {
-  type: 'chart' | 'table' | 'comparison' | 'statistical_test';
+  timeframe: string }
+
+
+
+export interface InsightEvidence { type: 'chart' | 'table' | 'comparison' | 'statistical_test' }
   data: any;
   description: string;
-}
-}
-export enum ImpactLevel {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
+
+
+export enum ImpactLevel { LOW = 'low'
+  MEDIUM = 'medium'
+  HIGH = 'high'
   CRITICAL = 'critical'
   export interface InsightRecommendation {
   recommendationId: string;
   action: string;
   description: string;
   expectedImpact: string;
-  effort: 'low' | 'medium' | 'high';
+  effort: 'low' | 'medium' | 'high' }
   timeframe: string;
   priority: number;
-}
-}
-}
-export interface ActionResult {
-  implemented: boolean;
+
+
+
+
+export interface ActionResult { implemented: boolean;
   implementationDate: Date;
-  result: 'positive' | 'negative' | 'neutral' | 'inconclusive';
+  result: 'positive' | 'negative' | 'neutral' | 'inconclusive' }
   impactMeasured: number;
   notes: string;
   // ==========================================
   // STATUS AND LIFECYCLE MANAGEMENT
   // ==========================================
-}
-}
-export enum PromotionStatus {
-  DRAFT = 'draft',
-  PENDING_APPROVAL = 'pending_approval',
-  APPROVED = 'approved',
-  SCHEDULED = 'scheduled',
-  ACTIVE = 'active',
-  PAUSED = 'paused',
-  COMPLETED = 'completed',
-  CANCELLED = 'cancelled',
+
+
+export enum PromotionStatus { DRAFT = 'draft'
+  PENDING_APPROVAL = 'pending_approval'
+  APPROVED = 'approved'
+  SCHEDULED = 'scheduled'
+  ACTIVE = 'active'
+  PAUSED = 'paused'
+  COMPLETED = 'completed'
+  CANCELLED = 'cancelled' }
   ARCHIVED = 'archived'
-  export interface PromotionLifecycle {
-  currentStage: LifecycleStage;
+  export interface PromotionLifecycle { currentStage: LifecycleStage;
   stages: LifecycleStageHistory;
   nextStage?: LifecycleStage;
-  stageTransitionRules: StageTransitionRule;
-}
-}
-export enum LifecycleStage {
-  PLANNING = 'planning',
-  APPROVAL = 'approval',
-  SETUP = 'setup',
-  LAUNCH = 'launch',
-  OPTIMIZATION = 'optimization',
-  MONITORING = 'monitoring',
-  COMPLETION = 'completion',
-  ANALYSIS = 'analysis',
+  stageTransitionRules: StageTransitionRule }
+
+export enum LifecycleStage { PLANNING = 'planning'
+  APPROVAL = 'approval'
+  SETUP = 'setup'
+  LAUNCH = 'launch'
+  OPTIMIZATION = 'optimization'
+  MONITORING = 'monitoring'
+  COMPLETION = 'completion'
+  ANALYSIS = 'analysis'
   ARCHIVAL = 'archival'
   export interface LifecycleStageHistory {
   stage: LifecycleStage;
   enteredAt: Date;
   exitedAt?: Date;
-  duration?: number; // minutes,
+  duration?: number; // minutes }
   status: 'completed' | 'in_progress' | 'failed' | 'skipped';
   notes?: string;
   performedBy: string;
-}
-}
-}
-export interface StageTransitionRule {
-  fromStage: LifecycleStage;
+
+
+
+
+export interface StageTransitionRule { fromStage: LifecycleStage;
   toStage: LifecycleStage;
   conditions: TransitionCondition;
   isAutomatic: boolean;
-  requiredRole?: string;
-}
-}
-}
-export interface TransitionCondition {
-  type: 'approval' | 'performance' | 'time' | 'budget' | 'manual';
+  requiredRole?: string }
+
+
+
+export interface TransitionCondition { type: 'approval' | 'performance' | 'time' | 'budget' | 'manual' }
   condition: string;
   value?: any;
   isMet: boolean;
-}
-}
-}
-export interface ApprovalRecord {
-  recordId: string;
+
+
+
+
+export interface ApprovalRecord { recordId: string;
   stage: LifecycleStage;
   approver: string;
   approverRole: string;
-  action: 'approved' | 'rejected' | 'requested_changes';
+  action: 'approved' | 'rejected' | 'requested_changes' }
   timestamp: Date;
   comments?: string;
   conditions?: string;
   // ==========================================
   // INTEGRATION AND EXTERNAL PLATFORMS
   // ==========================================
-}
-}
-}
-export interface AnalyticsTrackingConfig {
-  enabled: boolean;
+
+
+
+
+export interface AnalyticsTrackingConfig { enabled: boolean;
   trackingId: string;
   customEvents: CustomEventDefinition;
   conversionTracking: ConversionTrackingConfig;
   crossDomainTracking?: boolean;
-  privacyCompliant: boolean;
-}
-}
-}
-export interface CustomEventDefinition {
-  eventName: string;
+  privacyCompliant: boolean }
+
+
+
+export interface CustomEventDefinition { eventName: string;
   eventCategory: string;
   parameters: Record<string, any>;
-  trackingCode: string;
-}
-}
-}
-export interface ConversionTrackingConfig {
-  conversionEvents: string;
+  trackingCode: string }
+
+
+
+export interface ConversionTrackingConfig { conversionEvents: string;
   conversionValue: boolean;
   attributionModel: 'first_click' | 'last_click' | 'linear' | 'time_decay' | 'position_based';
-  lookbackWindow: number; // days,
-}
-}
-}
-export interface ExternalPlatformConfig {
-  platform: 'google_ads' | 'facebook_ads' | 'microsoft_ads' | 'twitter_ads' | 'linkedin_ads' | 'custom';
+  lookbackWindow: number; // days }
+
+
+
+
+export interface ExternalPlatformConfig { platform: 'google_ads' | 'facebook_ads' | 'microsoft_ads' | 'twitter_ads' | 'linkedin_ads' | 'custom' }
   accountId: string;
   campaignSync: boolean;
   bidSync: boolean;
   audienceSync: boolean;
   conversionSync: boolean;
   apiCredentials: Record<string, string>;
-}
-}
-}
-export interface CustomEventConfig {
-  eventId: string;
+
+
+
+
+export interface CustomEventConfig { eventId: string;
   eventName: string;
-  eventType: 'impression' | 'click' | 'conversion' | 'custom';
+  eventType: 'impression' | 'click' | 'conversion' | 'custom' }
   parameters: Record<string, any>;
   frequency: 'once' | 'session' | 'always';
   conditions?: Record<string, any>;
   // ==========================================
   // UTILITY TYPES AND HELPERS
   // ==========================================
-}
-}
-}
-export interface PromotionFilterCriteria {
-  campaignIds?: string;
+
+
+
+
+export interface PromotionFilterCriteria { campaignIds?: string;
   status?: PromotionStatus;
   types?: PromotionType;
-  dateRange?: {
+  dateRange?: { }
   start: Date;
   end: Date;
-}
+
+
 };
-  performance?: {
-  metric: string;
+  performance?: { metric: string;
   threshold: number;
-  operator: 'gt' | 'lt' | 'eq'
-  };
+  operator: 'gt' | 'lt' | 'eq' }
+};
   tags?: string;
   createdBy?: string;
   approvalStatus?: string;
-}
-}
-export interface PromotionSortOptions {
-  field: 'createdAt' | 'performance' | 'budget' | 'status' | 'name';
+
+
+export interface PromotionSortOptions { field: 'createdAt' | 'performance' | 'budget' | 'status' | 'name' }
   direction: 'asc' | 'desc';
   secondarySort?: PromotionSortOptions;
-}
-}
-}
-export interface PromotionBulkOperation {
-  operationType: 'activate' | 'pause' | 'cancel' | 'duplicate' | 'update' | 'delete';
+
+
+
+
+export interface PromotionBulkOperation { operationType: 'activate' | 'pause' | 'cancel' | 'duplicate' | 'update' | 'delete' }
   campaignIds: string;
   parameters?: Record<string, any>;
   dryRun?: boolean;
-}
-}
-}
-export interface PromotionValidationError {
-  errorCode: string;
+
+
+
+
+export interface PromotionValidationError { errorCode: string;
   field: string;
   message: string;
-  severity: 'error' | 'warning' | 'info'
-}
-  }
-}
-export interface PromotionTemplate {
-  templateId: string;
+  severity: 'error' | 'warning' | 'info' }
+
+
+
+
+export interface PromotionTemplate { templateId: string;
   name: string;
   description: string;
   category: string;
-  template: Partial<PromotionCampaign>;
+  template: Partial<PromotionCampaign> }
   usageCount: number;
   averagePerformance: Record<string, number>;
   isPublic: boolean;
@@ -1417,53 +1352,52 @@ export interface PromotionTemplate {
   // ==========================================
   // DATA MODEL EXPORTS
   // ==========================================
-}
-}
-export type {
-  // Core Entities
-  PromotionCampaign,
-  PromotionContent,
-  PromotionSchedule,
-  RotationConfiguration,
-  PromotionTargeting,
-  PersonalizationRule,
-  PromotionGoal,
-  OptimizationSettings,
-  ABTestConfiguration,
-  PromotionBudget,
-  ResourceAllocation,
-  PromotionMetrics,
-  ContentPromotionMetrics,
-  PromotionInsight,
-  PromotionLifecycle,
+
+
+export type { // Core Entities
+  PromotionCampaign
+  PromotionContent
+  PromotionSchedule
+  RotationConfiguration
+  PromotionTargeting
+  PersonalizationRule
+  PromotionGoal
+  OptimizationSettings
+  ABTestConfiguration
+  PromotionBudget
+  ResourceAllocation
+  PromotionMetrics
+  ContentPromotionMetrics
+  PromotionInsight
+  PromotionLifecycle
   // Configuration Objects
-  ContentSelectionCriteria,
-  PromotionalBadge,
-  TimeBasedRules,
-  RecurrenceConfig,
-  DynamicSchedulingRule,
-  RotationTrigger,
-  PerformanceThreshold,
-  WeightingFactor,
-  MachineLearningConfig,
-  ABTestVariant,
-  TrafficAllocation,
-  CostModel,
-  BidStrategy,
+  ContentSelectionCriteria
+  PromotionalBadge
+  TimeBasedRules
+  RecurrenceConfig
+  DynamicSchedulingRule
+  RotationTrigger
+  PerformanceThreshold
+  WeightingFactor
+  MachineLearningConfig
+  ABTestVariant
+  TrafficAllocation
+  CostModel
+  BidStrategy
   // Analytics and Performance
-  PerformanceComparison,
-  GoalComparison,
-  CompetitiveBenchmark,
-  SegmentPerformance,
-  SlotPerformance,
-  TimePerformance,
-  InsightFinding,
-  InsightEvidence,
-  InsightRecommendation,
+  PerformanceComparison
+  GoalComparison
+  CompetitiveBenchmark
+  SegmentPerformance
+  SlotPerformance
+  TimePerformance
+  InsightFinding
+  InsightEvidence
+  InsightRecommendation
   // Utility Types
-  PromotionFilterCriteria,
-  PromotionSortOptions,
-  PromotionBulkOperation,
-  PromotionValidationError,
+  PromotionFilterCriteria
+  PromotionSortOptions
+  PromotionBulkOperation
+  PromotionValidationError }
   PromotionTemplate
 };

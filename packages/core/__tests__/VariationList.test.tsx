@@ -3,22 +3,19 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { VariationList } from '../components/Inspector/VariationList';
 
 // Mock the graph store
-jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({,)
+jest.mock('../graphStore', () => ({ )
+  useGraphStore: () => ({);
   addVariation: jest.fn(),
   removeVariation: jest.fn(),
   updateVariation: jest.fn(),
-  reorderVariations: jest.fn(),
-}
+  reorderVariations: jest.fn() }
+
 }));
-describe('VariationList', () => {
-  const defaultProps = {
+describe('VariationList', () => { const defaultProps = {
   nodeId: 'test-node',
-  variations: ['variation 1', 'variation 2', 'variation 3'],
+  variations: ['variation 1', 'variation 2', 'variation 3'] }
 };
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   it('renders variations correctly', () => {
     render(<VariationList {...defaultProps} />);
     expect(screen.getByText('variation 1')).toBeInTheDocument();
@@ -53,9 +50,8 @@ describe('VariationList', () => {
   it('makes variations draggable', () => {
     render(<VariationList {...defaultProps} />);
     const variations = screen.getAllByText(/variation [123]/);
-    variations.forEach(variation => {)
+    variations.forEach(variation => { )
   const parent = variation.closest('div[draggable="true"]');
-      expect(parent).toHaveAttribute('draggable', 'true');
-    });
+      expect(parent).toHaveAttribute('draggable', 'true') });
   });
 });

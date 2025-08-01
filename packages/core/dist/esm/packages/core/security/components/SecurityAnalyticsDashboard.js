@@ -210,7 +210,7 @@ if (state.isLoading && !state.summary) {
     _jsxs("div", { style: { display: 'flex', gap: '16px', alignItems: 'center' }, children: [_jsx("select", { value: state.selectedTimeframe, onChange: (e) => handleTimeframeChange(e.target.value), style: {
                     background: themeStyles.secondary,
                     border: `1px solid ${themeStyles.border}`
-                } }), ", borderRadius: '6px', padding: '8px 12px', color: themeStyles.text, fontSize: '14px' }} >", _jsx("option", { value: "1h", children: "Last Hour" }), _jsx("option", { value: "24h", children: "Last 24 Hours" }), _jsx("option", { value: "7d", children: "Last 7 Days" }), _jsx("option", { value: "30d", children: "Last 30 Days" })] });
+                } }), ", borderRadius: '6px', padding: '8px 12px', color: themeStyles.text, fontSize: '14px'; }} >", _jsx("option", { value: "1h", children: "Last Hour" }), _jsx("option", { value: "24h", children: "Last 24 Hours" }), _jsx("option", { value: "7d", children: "Last 7 Days" }), _jsx("option", { value: "30d", children: "Last 30 Days" })] });
     { /* Category Filter */ }
     _jsx("select", { value: state.selectedCategory, onChange: (e) => handleCategoryChange(e.target.value), style: {
             background: themeStyles.secondary,
@@ -414,7 +414,7 @@ _jsxs("div", { style: {
     }, children: [_jsx("div", { style: {
                 background: themeStyles.secondary,
                 border: `1px solid ${themeStyles.border}`
-            } }), ", borderRadius: '12px', padding: '24px' }}>", _jsxs("h3", { style: {
+            } }), ", borderRadius: '12px', padding: '24px'; }}>", _jsxs("h3", { style: {
                 margin: '0 0 20px 0',
                 fontSize: '18px',
                 fontWeight: 600,

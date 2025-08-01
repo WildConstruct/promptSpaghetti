@@ -11,13 +11,13 @@ import {
   TransactionType,
   PaymentProvider,
   LicenseType 
-} from '../../marketplace/transaction.types';
+ from '../../marketplace/transaction.types';
 import { AnalyticsCollector } from '../../analytics/AnalyticsCollector';
 
 // Mock dependencies
 const mockAnalyticsCollector = {
   track: jest.fn<unknown[], unknown>()
-} as unknown as AnalyticsCollector;
+ as unknown as AnalyticsCollector;
 
 const mockDbConnection = {
   query: jest.fn<unknown[], unknown>()
@@ -74,7 +74,7 @@ describe('RevenueCollectionService', () => {
             total_price_cents: 10000,
             fulfillment_status: 'fulfilled',
             metadata: {}
-          }
+
         ],
         subtotal_cents: 10000,
         tax_cents: 0,
@@ -89,7 +89,7 @@ describe('RevenueCollectionService', () => {
           state: 'CA',
           postal_code: '94105',
           country: 'US'
-  }
+
         fulfillment_status: 'fulfilled',
         metadata: {},
         created_at: new Date(),
@@ -105,14 +105,14 @@ describe('RevenueCollectionService', () => {
           source: 'google',
           medium: 'cpc',
           campaign: 'test-campaign'
-        }
+
       };
 
       // Mock template info
       jest.spyOn(revenueService as any, 'getTemplateInfo').mockResolvedValue({
         creator_id: 'creator-123',
         commission_rate: 0.7
-      } as unknown as unknown);
+ as unknown as unknown);
 
       // Act
       const result = await revenueService.recordTransactionRevenue(
@@ -139,7 +139,7 @@ describe('RevenueCollectionService', () => {
           revenue_data: expect.objectContaining({
             amount_cents: 9700,
             revenue_type: 'purchase'
-  }
+
   }
       );
 
@@ -203,7 +203,7 @@ describe('RevenueCollectionService', () => {
           state: 'CA',
           postal_code: '94105',
           country: 'US'
-  }
+
         fulfillment_status: 'fulfilled',
         metadata: {},
         created_at: new Date(),
@@ -369,7 +369,7 @@ describe('RevenueCollectionService', () => {
           state: 'CA',
           postal_code: '94105',
           country: 'US'
-  }
+
         fulfillment_status: 'fulfilled',
         metadata: {},
         created_at: new Date(),
@@ -435,7 +435,7 @@ describe('RevenueCollectionService', () => {
           state: 'CA',
           postal_code: '94105',
           country: 'US'
-  }
+
         fulfillment_status: 'fulfilled',
         metadata: {},
         created_at: new Date(),

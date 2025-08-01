@@ -2,29 +2,26 @@
  * Epic 14 Story 14.2 - Traffic Allocation & Randomization
  * Service for managing user assignments and traffic allocation
  */
-import { 
-  AssignmentRequest,
+import { AssignmentRequest,
   AssignmentResponse,
   UserAssignment,
-  Experiment,
+  Experiment }
   AllocationServiceConfig
 } from '../types/experiment';
 
 }
-export interface AllocationCache {
-    get(key: string): Promise<string | null>;
+}
+export interface AllocationCache { get(key: string): Promise<string | null>;
     set(key: string, value: string, ttlSeconds: number): Promise<void>;
-    del(key: string): Promise<void>;
-
+    del(key: string): Promise<void> }
 }
-export interface AssignmentStorage {
-    getAssignment(userId: string, experimentId: string): Promise<UserAssignment | null>;
+}
+export interface AssignmentStorage { getAssignment(userId: string, experimentId: string): Promise<UserAssignment | null>;
     saveAssignment(assignment: UserAssignment): Promise<void>;
-    getExperiment(experimentId: string): Promise<Experiment | null>;
-
+    getExperiment(experimentId: string): Promise<Experiment | null> }
 }
-export interface AssignmentMetrics {
-    recordAssignment(assignment: UserAssignment): Promise<void>;
+}
+export interface AssignmentMetrics { recordAssignment(assignment: UserAssignment): Promise<void>;
     recordOverride(userId: string, experimentId: string, variantId: string, reason: string): Promise<void>;
     recordExclusion(userId: string, experimentId: string, reason: string): Promise<void>;
 
@@ -34,10 +31,10 @@ export declare class AllocationService {
     private storage;
     private metrics;
     constructor();
-      config: AllocationServiceConfig,
-      cache: AllocationCache,
-      storage: AssignmentStorage,
-      metrics: AssignmentMetrics,
+      config: AllocationServiceConfig;
+      cache: AllocationCache;
+      storage: AssignmentStorage;
+      metrics: AssignmentMetrics;
     );
     /**
      * Assign a user to an experiment variant
@@ -47,19 +44,19 @@ export declare class AllocationService {
      * Get assignments for multiple experiments
      */
     bulkAssignUser();
-      userId: string,
-      experimentIds: string[],
-      sessionId?: string,
+      userId: string;
+      experimentIds: string[];
+      sessionId?: string;
       debugMode?: boolean
     ): Promise<Record<string, AssignmentResponse>>;
     /**
      * Force assign a user to a specific variant (for debugging/testing)
      */
     forceAssignUser();
-      userId: string,
-      experimentId: string,
-      variantId: string,
-      reason: string,
+      userId: string;
+      experimentId: string;
+      variantId: string;
+      reason: string;
       sessionId?: string
     ): Promise<AssignmentResponse>;
     /**
@@ -93,9 +90,10 @@ export declare class AllocationService {
  * Factory function to create allocation service with Redis cache
  */
 export declare function createAllocationService(config: AllocationServiceConfig)
-  storage: AssignmentStorage,
-  metrics: AssignmentMetrics,
+  storage: AssignmentStorage;
+  metrics: AssignmentMetrics }
   cache?: AllocationCache
 ): AllocationService;
 //# sourceMappingURL=AllocationService.d.ts.map
+}
 }

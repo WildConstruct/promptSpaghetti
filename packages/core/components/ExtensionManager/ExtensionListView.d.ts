@@ -7,6 +7,7 @@ import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 
 }
+}
 export interface ExtensionListViewProps {
     extensions: ExtensionManifest[];
     selectedExtension: ExtensionManifest | null;
@@ -20,4 +21,5 @@ export interface ExtensionListViewProps {
 export declare const ExtensionListView: React.FC<ExtensionListViewProps>;
 export default ExtensionListView;
 //# sourceMappingURL=ExtensionListView.d.ts.map
+}
 }

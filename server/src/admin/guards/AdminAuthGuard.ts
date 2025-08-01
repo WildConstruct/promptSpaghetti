@@ -14,13 +14,13 @@ import {
   UnauthorizedException,
   ForbiddenException,
   Logger
-} from '@nestjs/common';
+ from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Pool } from 'pg';
 import { AuthService } from '../../auth/services/AuthService';
 
-}
-}
+
+
 export interface AdminUser {
   id: string;
   email: string;
@@ -28,21 +28,23 @@ export interface AdminUser {
   permissions: string[];
   adminGroups: string[];
   isActive: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AdminPermissionCheck {
   userId: string;
   requiredPermissions: string[];
   userPermissions: string[];
   hasAccess: boolean;
   deniedPermissions: string[];
-}
-}
-}
+
+
+
+
 
 @Injectable()
 export class AdminAuthGuard implements CanActivate {
@@ -63,23 +65,23 @@ export class AdminAuthGuard implements CanActivate {
       const token = this.extractTokenFromHeader(request);
       if (!token) {
         throw new UnauthorizedException('Admin access requires authentication');
-      }
+
 
       // Validate token and get user info
       const userInfo = await this.authService.validateToken(token);
       if (!userInfo || !userInfo.userId) {
         throw new UnauthorizedException('Invalid authentication token');
-      }
+
 
       // Get admin user details with permissions
       const adminUser = await this.getAdminUserDetails(userInfo.userId);
       if (!adminUser) {
         throw new ForbiddenException('Admin access not authorized for this user');
-      }
+
 
       if (!adminUser.isActive) {
         throw new ForbiddenException('Admin account is inactive');
-      }
+
 
       // Check required permissions if specified
       const requiredPermissions = this.reflector.get<string[]>(
@@ -94,8 +96,8 @@ export class AdminAuthGuard implements CanActivate {
           throw new ForbiddenException(
             `Insufficient permissions. Missing: ${permissionCheck.deniedPermissions.join(', ')}`
           );
-        }
-      }
+
+
 
       // Attach admin user to request for use in controllers
       request.adminUser = adminUser;
@@ -104,24 +106,23 @@ export class AdminAuthGuard implements CanActivate {
       await this.logAdminAccess(adminUser.id, request);
 
       return true;
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof UnauthorizedException || error instanceof ForbiddenException) {
         throw error;
-      }
+
 
       this.logger.error('Admin authentication error:', error);
       throw new UnauthorizedException('Admin authentication failed');
-    }
-  }
+
+
 
   private extractTokenFromHeader(request: any): string | null {
     const authHeader = request.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return null;
-    }
+
     return authHeader.substring(7);
-  }
+
 
   private async getAdminUserDetails(userId: string): Promise<AdminUser | null> {
 
@@ -150,7 +151,7 @@ export class AdminAuthGuard implements CanActivate {
       
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       const row = result.rows[0];
       
@@ -158,7 +159,7 @@ export class AdminAuthGuard implements CanActivate {
       if (!row.admin_groups || row.admin_groups.length === 0 || 
           (row.admin_groups.length === 1 && row.admin_groups[0] === null)) {
         return null; // User has no admin access
-      }
+
 
       return {
         id: row.id,
@@ -168,12 +169,11 @@ export class AdminAuthGuard implements CanActivate {
         adminGroups: row.admin_groups || [],
         isActive: row.is_active
       };
-
-    } catch (error) {
+ catch (error) {
       this.logger.error('Error fetching admin user details:', error);
       return null;
-    }
-  }
+
+
 
   private parsePermissions(permissionsJson: any): string[] {
     try {
@@ -185,14 +185,14 @@ export class AdminAuthGuard implements CanActivate {
 
       if (Array.isArray(permissions)) {
         return permissions.filter(p => p && typeof p === 'string');
-      }
+
       
       return [];
-    } catch (error) {
+ catch (error) {
       this.logger.warn('Error parsing user permissions:', error);
       return [];
-    }
-  }
+
+
 
   private checkPermissions(
     adminUser: AdminUser, 
@@ -204,8 +204,8 @@ export class AdminAuthGuard implements CanActivate {
     for (const required of requiredPermissions) {
       if (!this.hasPermission(userPermissions, required)) {
         deniedPermissions.push(required);
-      }
-    }
+
+
 
     return {
       userId: adminUser.id,
@@ -214,13 +214,13 @@ export class AdminAuthGuard implements CanActivate {
       hasAccess: deniedPermissions.length === 0,
       deniedPermissions
     };
-  }
+
 
   private hasPermission(userPermissions: string[], requiredPermission: string): boolean {
     // Direct permission match
     if (userPermissions.includes(requiredPermission)) {
       return true;
-    }
+
 
     // Wildcard permission matching (e.g., "admin:*" grants all admin permissions)
     for (const userPerm of userPermissions) {
@@ -228,17 +228,17 @@ export class AdminAuthGuard implements CanActivate {
         const prefix = userPerm.slice(0, -1); // Remove the '*'
         if (requiredPermission.startsWith(prefix)) {
           return true;
-        }
-      }
-    }
+
+
+
 
     // Super admin permission
     if (userPermissions.includes('admin:*:*') || userPermissions.includes('super_admin')) {
       return true;
-    }
+
 
     return false;
-  }
+
 
   private async logAdminAccess(userId: string, request: any): Promise<void> {
 
@@ -267,12 +267,11 @@ export class AdminAuthGuard implements CanActivate {
         request.get('User-Agent'),
         request.sessionID || null
       ]);
-
-    } catch (error) {
+ catch (error) {
       // Log error but don't fail the request
       this.logger.error('Failed to log admin access:', error);
-    }
-  }
+
+
 
   private async logAccessDenied(
     userId: string, 
@@ -305,11 +304,10 @@ export class AdminAuthGuard implements CanActivate {
         request.ip || request.connection?.remoteAddress,
         request.get('User-Agent')
       ]);
-
-    } catch (error) {
+ catch (error) {
       this.logger.error('Failed to log access denied:', error);
-    }
-  }
+
+
 
   /**
    * Check if user has specific admin permission (utility method for services)
@@ -337,11 +335,11 @@ export class AdminAuthGuard implements CanActivate {
     try {
       const result = await pool.query(query, [userId, permission]);
       return result.rows.length > 0;
-    } catch (error) {
+ catch (error) {
       console.error('Error checking user permission:', error);
       return false;
-    }
-  }
+
+
 
   /**
    * Get all permissions for a user (utility method)
@@ -359,9 +357,8 @@ export class AdminAuthGuard implements CanActivate {
     try {
       const result = await pool.query(query, [userId]);
       return result.rows.map(row => row.permission);
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching user permissions:', error);
       return [];
-    }
-  }
-}
+
+

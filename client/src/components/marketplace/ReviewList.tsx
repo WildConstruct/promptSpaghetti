@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 import { StarRating } from './StarRating';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './ReviewList.css';
-}
+
+
 interface Review {
   id: string;,
-  buyer_id: string;
+  buyer_id: string;,
   buyer_name: string;,
   stars: number;
   comment?: string;
   created_at: string;,
-  helpful_count: number;
+  helpful_count: number;,
   verified_purchase: boolean;
   interface ReviewListProps {
   reviews: Review;,
@@ -21,12 +22,13 @@ interface Review {
   interface NewReview {
   stars: number;,
   comment: string;
-  export const ReviewList: React.FC<ReviewListProps> = ({,)
+  export const ReviewList: React.FC<ReviewListProps> = ({),
   reviews,
   templateId,
   onReviewAdded,
   className = ''
-}
+
+
 }) => {
   const [showAddReview, setShowAddReview] = useState(false);
   const [newReview, setNewReview] = useState<NewReview>({ stars: 5, comment: '' });
@@ -50,24 +52,24 @@ interface Review {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`}
   },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   template_id: templateId,
   stars: newReview.stars,
   comment: newReview.comment.trim(),
-}
+
       });
       if (response.ok) {
         setNewReview({ stars: 5, comment: '' });
         setShowAddReview(false);
         onReviewAdded?.();
-      } else {
+ else {
         const errorData = await response.json();
         setError(errorData.error || 'Failed to submit review');
-    } catch (_err) {
+ catch (_err) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.debug('Review submission error:', _err);
   setError('Failed to submit review');
-} finally {
+ finally {
       setSubmitting(false);
   };
   const sortedReviews = [...reviews].sort((a, b) => {

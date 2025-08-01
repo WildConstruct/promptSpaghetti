@@ -15,8 +15,7 @@
  * - Email template management and tracking
  */
 import { EventEmitter } from 'events';
-export declare enum DeliveryStatus {
-    PENDING = "pending",
+export declare enum DeliveryStatus { PENDING = "pending",
     QUEUED = "queued",
     PROCESSING = "processing",
     SENT = "sent",
@@ -57,12 +56,12 @@ export declare enum BounceSubType {
     SUPPRESSED = "suppressed",
     MAILBOX_FULL = "mailbox_full",
     MESSAGE_TOO_LARGE = "message_too_large",
-    CONTENT_REJECTED = "content_rejected",
+    CONTENT_REJECTED = "content_rejected" }
     ATTACHMENT_REJECTED = "attachment_rejected"
 
 }
-export interface EmailMetadata {
-    userId: string;
+}
+export interface EmailMetadata { userId: string;
     sessionId?: string;
     templateId?: string;
     templateVersion?: string;
@@ -77,13 +76,13 @@ export interface EmailMetadata {
         clickTracking?: boolean;
         openTracking?: boolean;
         subscriptionTracking?: boolean;
-        ganalytics?: boolean;
+        ganalytics?: boolean }
 }
     };
 
 }
-export interface EmailDeliveryRecord {
-    id: string;
+}
+export interface EmailDeliveryRecord { id: string;
     messageId: string;
     provider: EmailProvider;
     type: EmailType;
@@ -105,53 +104,47 @@ export interface EmailDeliveryRecord {
         subType: BounceSubType;
         reason: string;
         diagnosticCode?: string;
-        remoteMta?: string;
+        remoteMta?: string }
 }
     };
-    tracking: {
-        opens: EmailOpenEvent[];
+    tracking: { opens: EmailOpenEvent[];
         clicks: EmailClickEvent[];
-        unsubscribes: EmailUnsubscribeEvent[];
-    };
+        unsubscribes: EmailUnsubscribeEvent[] };
     providerData: Record<string, any>;
 
 }
-export interface EmailDeliveryAttempt {
-    attemptNumber: number;
+}
+export interface EmailDeliveryAttempt { attemptNumber: number;
     timestamp: Date;
     status: DeliveryStatus;
     providerResponse?: string;
     error?: string;
-    retryAfter?: Date;
-
+    retryAfter?: Date }
 }
-export interface EmailOpenEvent {
-    timestamp: Date;
+}
+export interface EmailOpenEvent { timestamp: Date;
     ipAddress: string;
     userAgent: string;
     location?: string;
-    deviceType?: string;
-
+    deviceType?: string }
 }
-export interface EmailClickEvent {
-    timestamp: Date;
+}
+export interface EmailClickEvent { timestamp: Date;
     ipAddress: string;
     userAgent: string;
     url: string;
     linkId?: string;
     location?: string;
-    deviceType?: string;
-
+    deviceType?: string }
 }
-export interface EmailUnsubscribeEvent {
-    timestamp: Date;
+}
+export interface EmailUnsubscribeEvent { timestamp: Date;
     ipAddress: string;
     userAgent: string;
-    reason?: string;
-
+    reason?: string }
 }
-export interface DeliveryStatistics {
-    totalEmails: number;
+}
+export interface DeliveryStatistics { totalEmails: number;
     sentEmails: number;
     deliveredEmails: number;
     openedEmails: number;
@@ -170,28 +163,24 @@ export interface DeliveryStatistics {
             count: number;
             deliveryRate: number;
             openRate: number;
-            bounceRate: number;
+            bounceRate: number }
 }
         };
     };
-    statisticsByProvider: {
-        [key in EmailProvider]: {
+    statisticsByProvider: { [key in EmailProvider]: {
             count: number;
             deliveryRate: number;
-            averageDeliveryTime: number;
-        };
+            averageDeliveryTime: number };
     };
     averageDeliveryTime: number;
     averageOpenTime: number;
-    peakSendTimes: Array<{
-        hour: number;
+    peakSendTimes: Array<{ hour: number;
         count: number;
-        deliveryRate: number;
-    }>;
+        deliveryRate: number }>;
 
 }
-export interface EmailDeliveryConfig {
-    defaultProvider: EmailProvider;
+}
+export interface EmailDeliveryConfig { defaultProvider: EmailProvider;
     retryAttempts: number;
     retryDelayMs: number;
     trackingEnabled: boolean;
@@ -203,21 +192,21 @@ export interface EmailDeliveryConfig {
         [key in EmailProvider]?: {
             apiKey?: string;
             endpoint?: string;
-            customSettings?: Record<string, any>;
+            customSettings?: Record<string, any> }
 }
         };
     };
 
 }
-export interface EmailSendRequest {
-    type: EmailType;
+}
+export interface EmailSendRequest { type: EmailType;
     recipient: string;
     subject: string;
     content: {
         text?: string;
         html?: string;
         templateId?: string;
-        templateData?: Record<string, any>;
+        templateData?: Record<string, any> }
 }
     };
     metadata: EmailMetadata;

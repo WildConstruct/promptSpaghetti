@@ -16,16 +16,15 @@ jest.mock('react-beautiful-dnd', () => ({)
   Droppable: ({ children }: unknown) => {
     const provided = {
       droppableProps: {},
-      innerRef: jest.fn<unknown, unknown>(),
+      innerRef: jest.fn<unknown, unknown>()
       placeholder: <div data-testid="placeholder" />;
   };
     const snapshot = { isDraggingOver: false };
-    return <div data-testid="droppable">{children(provided, snapshot)}</div>;
-  },
-  Draggable: ({ children, draggableId }: unknown) => {
-    const provided = {
-      innerRef: jest.fn<unknown, unknown>(),
-      draggableProps: { 'data-rbd-draggable-context-id': '1' },
+    return <div data-testid="droppable">{children(provided, snapshot)}</div>
+
+  Draggable: ({ children, draggableId }: unknown) => { const provided = {
+      innerRef: jest.fn<unknown, unknown>() }
+      draggableProps: { 'data-rbd-draggable-context-id': '1' }
       dragHandleProps: { 'data-testid': `drag-handle-${draggableId}` }
     };
     const snapshot = { isDragging: false };
@@ -38,13 +37,10 @@ describe('DragReorderWeightManager', () => {
     { id: '3', text: 'Option 3', weight: 30 },
     { id: '4', text: 'Option 4', weight: 5, locked: true }
   ];
-  const defaultProps = {
-  options: mockOptions,
-  onChange: jest.fn<unknown, unknown>(),
+  const defaultProps = { options: mockOptions,
+  onChange: jest.fn<unknown, unknown>() }
 };
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   describe('Basic Rendering', () => {
     test('renders weight manager with default props', () => {
       render(<DragReorderWeightManager {...defaultProps} />);
@@ -54,9 +50,8 @@ describe('DragReorderWeightManager', () => {
     });
     test('renders all options', () => {
       render(<DragReorderWeightManager {...defaultProps} />);
-      mockOptions.forEach(option => {)
-  expect(screen.getByText(option.text)).toBeInTheDocument();
-      });
+      mockOptions.forEach(option => { )
+  expect(screen.getByText(option.text)).toBeInTheDocument() });
     });
     test('displays weights and percentages by default', () => {
       render(<DragReorderWeightManager {...defaultProps} />);
@@ -235,9 +230,9 @@ describe('DragReorderWeightManager', () => {
       // Should set all unlocked weights to equal values (100/4 = 25)
       expect(onChange).toHaveBeenCalledWith()
         expect.arrayContaining([)
-          expect.objectContaining({ id: '1', weight: 25 }),
-          expect.objectContaining({ id: '2', weight: 25 }),
-          expect.objectContaining({ id: '3', weight: 25 }),
+          expect.objectContaining({ id: '1', weight: 25 })
+          expect.objectContaining({ id: '2', weight: 25 })
+          expect.objectContaining({ id: '3', weight: 25 })
           expect.objectContaining({ id: '4', weight: 5, locked: true }) // Locked item unchanged
         ])
       );
@@ -254,9 +249,9 @@ describe('DragReorderWeightManager', () => {
       // Current total is 65, so multiply each by 100/65
       expect(onChange).toHaveBeenCalledWith()
         expect.arrayContaining([)
-          expect.objectContaining({ id: '1', weight: expect.closeTo(15.38, 1) }),
-          expect.objectContaining({ id: '2', weight: expect.closeTo(30.77, 1) }),
-          expect.objectContaining({ id: '3', weight: expect.closeTo(46.15, 1) }),
+          expect.objectContaining({ id: '1', weight: expect.closeTo(15.38, 1) })
+          expect.objectContaining({ id: '2', weight: expect.closeTo(30.77, 1) })
+          expect.objectContaining({ id: '3', weight: expect.closeTo(46.15, 1) })
           expect.objectContaining({ id: '4', weight: expect.closeTo(7.69, 1) })
         ])
       );
@@ -291,7 +286,7 @@ describe('DragReorderWeightManager', () => {
   describe('Categories', () => {
     test('displays categories when options have them', () => {
       const optionsWithCategories: WeightedOption = [
-        { id: '1', text: 'Option 1', weight: 10, category: 'Category A' },
+        { id: '1', text: 'Option 1', weight: 10, category: 'Category A' }
         { id: '2', text: 'Option 2', weight: 20, category: 'Category B' }
       ];
       render();
@@ -342,9 +337,9 @@ describe('DragReorderWeightManager', () => {
     test('handles large number of options efficiently', () => {
       const manyOptions: WeightedOption = Array.from({ length: 100 }, (_, i) => ({)
   id: `option-${i}`}
-},
+
   text: `Option ${i + 1}`}
-},
+
   weight: Math.random() * 100;
   }));
       const startTime = performance.now();
@@ -365,9 +360,8 @@ describe('DragReorderWeightManager', () => {
     test('supports keyboard navigation', () => {
       render(<DragReorderWeightManager {...defaultProps} allowWeightEditing={true} />);
       const weightInputs = screen.getAllByText(/\d+\.0/);
-      weightInputs.forEach(input => {)
-  expect(input).toBeInTheDocument();
-      });
+      weightInputs.forEach(input => { )
+  expect(input).toBeInTheDocument() });
     });
     test('provides proper focus management', async () => {
       const user = userEvent.setup();
@@ -393,7 +387,7 @@ describe('DragReorderWeightManager', () => {
     });
     test('handles missing option properties', () => {
       const incompleteOptions: WeightedOption = [
-        { id: '1', text: '', weight: 0 },
+        { id: '1', text: '', weight: 0 }
         { id: '2', text: 'Valid Option', weight: 10 }
       ];
       render(<DragReorderWeightManager options={incompleteOptions} onChange={jest.fn<unknown, unknown>()} />);

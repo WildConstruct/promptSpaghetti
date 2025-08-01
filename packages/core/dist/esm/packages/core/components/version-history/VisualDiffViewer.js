@@ -179,12 +179,9 @@ div >
 const renderSummaryStats = () => {
     if (!diff)
         return null;
-    const stats = [];
-    {
-        label: 'Similarity', value;
-        `${Math.round(diff.summary.similarity_score * 100)}%`, color;
-        'text-green-600';
-    }
+    const stats = [
+        { label: 'Similarity', value: `${Math.round(diff.summary.similarity_score * 100)}%`, color: 'text-green-600' }
+    ];
 };
 {
     label: 'Complexity', value;

@@ -16,27 +16,27 @@ export interface PythonTransformEditorProps extends Omit<BaseNodeEditorProps, 'c
  * - Debug: Raw configuration, executor settings, and technical details
  */
 const MEMORY_LIMIT_OPTIONS: SelectOption = [
-  { value: '64MB', label: '64MB' },
-  { value: '128MB', label: '128MB' },
-  { value: '256MB', label: '256MB' },
-  { value: '512MB', label: '512MB' },
+  { value: '64MB', label: '64MB' }
+  { value: '128MB', label: '128MB' }
+  { value: '256MB', label: '256MB' }
+  { value: '512MB', label: '512MB' }
   { value: '1GB', label: '1GB' }
 ];
 const TIMEOUT_OPTIONS: SelectOption = [
-  { value: '5', label: '5 seconds' },
-  { value: '10', label: '10 seconds' },
-  { value: '30', label: '30 seconds' },
-  { value: '60', label: '1 minute' },
+  { value: '5', label: '5 seconds' }
+  { value: '10', label: '10 seconds' }
+  { value: '30', label: '30 seconds' }
+  { value: '60', label: '1 minute' }
   { value: '300', label: '5 minutes' }
 ];
 const FALLBACK_BEHAVIOR_OPTIONS: SelectOption = [
-  { value: 'error', label: 'Throw Error' },
-  { value: 'skip', label: 'Skip (Empty Output)' },
+  { value: 'error', label: 'Throw Error' }
+  { value: 'skip', label: 'Skip (Empty Output)' }
   { value: 'default', label: 'Use Default Value' }
 ];
-const COMMON_MODULES = [;
-  'json', 'math', 'datetime', 'random', 'string', 'itertools',
-  'collections', 'functools', 'operator', 'copy', 'uuid', 'hashlib',
+const COMMON_MODULES = [
+  'json', 'math', 'datetime', 'random', 'string', 'itertools'
+  'collections', 'functools', 'operator', 'copy', 'uuid', 'hashlib'
   're', 'base64', 'urllib.parse'
 ];
 
@@ -56,20 +56,17 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
   const defaultOutput = pythonConfig.defaultOutput || '';
   // No manual collapse state needed - managed by ProgressiveDisclosureSection
   // State for validation
-  const [codeValidation, setCodeValidation] = useState<{
-  valid: boolean;
+  const [codeValidation, setCodeValidation] = useState<{ valid: boolean;
   errors: string;
-  warnings: string;
-} | null>(null);
+  warnings: string } | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
   };
-  const handlePythonConfigChange = (field: string, value: unknown) => {
-  onChange({ )
-  pythonConfig: {
+  const handlePythonConfigChange = (field: string, value: unknown) => { onChange({ )
+  pythonConfig: {,
   ...pythonConfig,
-  [field]: value,
+  [field]: value }
 });
   };
   const handleModuleToggle = (module: string) => {
@@ -87,11 +84,9 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
     onChange({ allowedModules: allowedModules.filter(m => m !== module) });
   };
   // Validate code on change (debounced)
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  useEffect(() => { const timer = setTimeout(() => {
       if (code.trim()) {
-        validateCode();
-    }, 1000);
+        validateCode() }, 1000);
     return () => clearTimeout(timer);
   }, [code]);
   const validateCode = async () => {
@@ -105,7 +100,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
       if (!code.includes('def transform(')) {
         errors.push('Code must define a transform function');
       // Check for dangerous patterns
-      const dangerousPatterns = [;
+      const dangerousPatterns = [
         'eval(', 'exec(', '__import__', 'open(', 'file(')
         'subprocess', 'os.system', 'socket.', 'urllib.'
       ];
@@ -113,24 +108,19 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
         if (code.includes(pattern)) {
           warnings.push(`Potentially dangerous pattern detected: ${pattern}`);}
       // Check for infinite loops
-      if (code.includes('while True:')) {
-  warnings.push('Potential infinite loop detected');
+      if (code.includes('while True:')) { warnings.push('Potential infinite loop detected');
   setCodeValidation({)
   valid: errors.length === 0,
-  errors,
+  errors }
   warnings
 });
-    } catch (error) {
-  setCodeValidation({)
+ catch (error) { setCodeValidation({)
   valid: false,
   errors: ['Validation service unavailable'],
-  warnings: [],
+  warnings: [] }
 });
-    } finally {
-      setIsValidating(false);
-  };
-  const getCodeEditorStyles = () => {
-  const baseStyles = {
+ finally { setIsValidating(false) };
+  const getCodeEditorStyles = () => { const baseStyles = {
   fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
   fontSize: 12,
   lineHeight: 1.4,
@@ -141,7 +131,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
   color: '#e2e8f0',
   resize: 'vertical' as const,
   minHeight: 200,
-  maxHeight: 400,
+  maxHeight: 400 }
 };
     if (codeValidation && !codeValidation.valid) {
       return { ...baseStyles, borderColor: '#e53e3e' };
@@ -159,17 +149,17 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
         fieldName="code"
       >
         <div style={{ marginBottom: 8 }}>
-          <div style={{
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 8,
-}}>
-            <label style={{
-  fontWeight: 500,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}>
+          <div style={ {
+  display: 'flex'
+  justifyContent: 'space-between'
+  alignItems: 'center'
+  marginBottom: 8 }
+}>
+            <label style={ {
+  fontWeight: 500
+  color: '#e2e8f0'
+  fontSize: 12 }
+}>
               Transform Function
             </label>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -181,16 +171,16 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
               <button
                 onClick={validateCode}
                 disabled={isValidating}
-                style={{
-  padding: '4px 8px',
-  fontSize: 10,
-  background: '#4299e1',
-  border: 'none',
-  borderRadius: 2,
-  color: 'white',
-  cursor: 'pointer',
-  opacity: isValidating ? 0.5 : 1,
-}}
+                style={ {
+  padding: '4px 8px'
+  fontSize: 10
+  background: '#4299e1'
+  border: 'none'
+  borderRadius: 2
+  color: 'white'
+  cursor: 'pointer'
+  opacity: isValidating ? 0.5 : 1 }
+
               >
                 Validate
               </button>
@@ -205,14 +195,14 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
           {/* Validation Results */}
           {codeValidation && ()
             <div style={{ marginTop: 8 }}>
-              {codeValidation.errors.length > 0 && ()
+              { codeValidation.errors.length > 0 && ()
                 <div style={{
-  background: 'rgba(229, 62, 62, 0.1)',
-  border: '1px solid #e53e3e',
-  borderRadius: 4,
-  padding: 8,
-  marginBottom: 8,
-}}>
+  background: 'rgba(229, 62, 62, 0.1)'
+  border: '1px solid #e53e3e'
+  borderRadius: 4
+  padding: 8
+  marginBottom: 8 }
+}>
                   <div style={{ color: '#e53e3e', fontSize: 10, fontWeight: 500, marginBottom: 4 }}>
                     Validation Errors:
                   </div>
@@ -223,14 +213,14 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
                   ))}
                 </div>
               )}
-              {codeValidation.warnings.length > 0 && ()
+              { codeValidation.warnings.length > 0 && ()
                 <div style={{
-  background: 'rgba(237, 137, 54, 0.1)',
-  border: '1px solid #ed8936',
-  borderRadius: 4,
-  padding: 8,
-  marginBottom: 8,
-}}>
+  background: 'rgba(237, 137, 54, 0.1)'
+  border: '1px solid #ed8936'
+  borderRadius: 4
+  padding: 8
+  marginBottom: 8 }
+}>
                   <div style={{ color: '#ed8936', fontSize: 10, fontWeight: 500, marginBottom: 4 }}>
                     Validation Warnings:
                   </div>
@@ -241,14 +231,14 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
                   ))}
                 </div>
               )}
-              {codeValidation.valid && codeValidation.errors.length === 0 && ()
+              { codeValidation.valid && codeValidation.errors.length === 0 && ()
                 <div style={{
-  background: 'rgba(56, 178, 172, 0.1)',
-  border: '1px solid #38b2ac',
-  borderRadius: 4,
-  padding: 8,
-  marginBottom: 8,
-}}>
+  background: 'rgba(56, 178, 172, 0.1)'
+  border: '1px solid #38b2ac'
+  borderRadius: 4
+  padding: 8
+  marginBottom: 8 }
+}>
                   <div style={{ color: '#38b2ac', fontSize: 10, fontWeight: 500 }}>
                     ✓ Code validation passed
                   </div>
@@ -256,11 +246,11 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
               )}
             </div>
           )}
-          <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  lineHeight: 1.4,
-}}>
+          <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  lineHeight: 1.4 }
+}>
             <strong>Requirements:</strong><br />
             • Must define a <code>transform(input_data)</code> function<br />
             • Function should return a string or value that can be converted to string<br />
@@ -294,41 +284,41 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
           zodType={null as any}
           onChange={(value) => handleFieldChange('timeout', parseInt(value as string))}
         />
-        <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  lineHeight: 1.4,
-  marginTop: 8,
-}}>
+        <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  lineHeight: 1.4
+  marginTop: 8 }
+}>
           Resource limits help prevent runaway code from consuming excessive system resources.
           Set appropriate limits based on your expected processing requirements.
         </div>
         <div style={{ marginBottom: 16 }}>
           <div style={{ marginBottom: 12 }}>
-            <div style={{
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 8,
-}}>
-              <label style={{
-  fontWeight: 500,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}>
+            <div style={ {
+  display: 'flex'
+  justifyContent: 'space-between'
+  alignItems: 'center'
+  marginBottom: 8 }
+}>
+              <label style={ {
+  fontWeight: 500
+  color: '#e2e8f0'
+  fontSize: 12 }
+}>
               Available Modules
               </label>
               <button
                 onClick={addCustomModule}
-                style={{
-  padding: '4px 8px',
-  fontSize: 10,
-  background: '#4299e1',
-  border: 'none',
-  borderRadius: 2,
-  color: 'white',
-  cursor: 'pointer',
-}}
+                style={ {
+  padding: '4px 8px'
+  fontSize: 10
+  background: '#4299e1'
+  border: 'none'
+  borderRadius: 2
+  color: 'white'
+  cursor: 'pointer' }
+}
               >
               + Custom
               </button>
@@ -342,16 +332,16 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
                   <button
                     key={module}
                     onClick={() => handleModuleToggle(module)}
-                    style={{
-  padding: '2px 6px',
-  fontSize: 10,
-  background: allowedModules.includes(module) ? '#4299e1' : '#4a5568',
-  border: 'none',
-  borderRadius: 2,
-  color: 'white',
-  cursor: 'pointer',
-  opacity: allowedModules.includes(module) ? 1 : 0.7,
-}}
+                    style={ {
+  padding: '2px 6px'
+  fontSize: 10
+  background: allowedModules.includes(module) ? '#4299e1' : '#4a5568'
+  border: 'none'
+  borderRadius: 2
+  color: 'white'
+  cursor: 'pointer'
+  opacity: allowedModules.includes(module) ? 1 : 0.7 }
+
                   >
                     {module}
                   </button>
@@ -366,31 +356,31 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
                 {allowedModules.map((module) => ()
                   <div
                     key={module}
-                    style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 4,
-  padding: '2px 6px',
-  background: '#2d3748',
-  border: '1px solid #4a5568',
-  borderRadius: 2,
-  fontSize: 10,
-  color: '#e2e8f0',
-}}
+                    style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 4
+  padding: '2px 6px'
+  background: '#2d3748'
+  border: '1px solid #4a5568'
+  borderRadius: 2
+  fontSize: 10
+  color: '#e2e8f0' }
+}
                   >
                     {module}
                     <button
                       onClick={() => removeModule(module)}
-                      style={{
-  background: 'none',
-  border: 'none',
-  color: '#e53e3e',
-  cursor: 'pointer',
-  fontSize: 10,
-  padding: 0,
-  width: 12,
-  height: 12,
-}}
+                      style={ {
+  background: 'none'
+  border: 'none'
+  color: '#e53e3e'
+  cursor: 'pointer'
+  fontSize: 10
+  padding: 0
+  width: 12
+  height: 12 }
+}
                     >
                     ✕
                     </button>
@@ -411,62 +401,62 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
         fieldName="debug"
       >
         <div style={{ marginBottom: 16 }}>
-          <label style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-  fontSize: 12,
-  color: '#e2e8f0',
-  cursor: 'pointer',
-}}>
+          <label style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8
+  fontSize: 12
+  color: '#e2e8f0'
+  cursor: 'pointer' }
+}>
             <input
               type="checkbox"
               checked={strictMode}
               onChange={(e) => handlePythonConfigChange('strictMode', e.target.checked)}
-              style={{
-  width: 14,
-  height: 14,
-  cursor: 'pointer',
-}}
+              style={ {
+  width: 14
+  height: 14
+  cursor: 'pointer' }
+}
             />
             Strict Mode
           </label>
-          <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 2,
-  marginLeft: 22,
-}}>
+          <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 2
+  marginLeft: 22 }
+}>
             Enable additional security restrictions and validation
           </div>
         </div>
         <div style={{ marginBottom: 16 }}>
-          <label style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-  fontSize: 12,
-  color: '#e2e8f0',
-  cursor: 'pointer',
-}}>
+          <label style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8
+  fontSize: 12
+  color: '#e2e8f0'
+  cursor: 'pointer' }
+}>
             <input
               type="checkbox"
               checked={enableCaching}
               onChange={(e) => handlePythonConfigChange('enableCaching', e.target.checked)}
-              style={{
-  width: 14,
-  height: 14,
-  cursor: 'pointer',
-}}
+              style={ {
+  width: 14
+  height: 14
+  cursor: 'pointer' }
+}
             />
             Enable Caching
           </label>
-          <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 2,
-  marginLeft: 22,
-}}>
+          <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 2
+  marginLeft: 22 }
+}>
             Cache execution results for identical inputs to improve performance
           </div>
         </div>
@@ -506,14 +496,14 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
           />
         )}
         <div style={{ marginTop: 16 }}>
-          <div style={{
-  background: '#1a202c',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  padding: 12,
-  fontSize: 12,
-  color: '#e2e8f0',
-}}>
+          <div style={ {
+  background: '#1a202c'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  padding: 12
+  fontSize: 12
+  color: '#e2e8f0' }
+}>
             <div style={{ marginBottom: 8, fontWeight: 500 }}>
             Python Execution Configuration:
             </div>
@@ -540,22 +530,22 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
                 <span style={{ color: '#a0aec0' }}>Custom Executor:</span> {executorUrl}
               </div>
             )}
-            <div style={{
-  marginTop: 8,
-  padding: 8,
-  background: 'rgba(66, 153, 225, 0.1)',
-  borderRadius: 2,
-}}>
+            <div style={ {
+  marginTop: 8
+  padding: 8
+  background: 'rgba(66, 153, 225, 0.1)'
+  borderRadius: 2 }
+}>
               <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
               Code Preview:
               </div>
-              <div style={{
-  fontFamily: 'monospace',
-  fontSize: 9,
-  maxHeight: 100,
-  overflow: 'auto',
-  whiteSpace: 'pre-wrap',
-}}>
+              <div style={ {
+  fontFamily: 'monospace'
+  fontSize: 9
+  maxHeight: 100
+  overflow: 'auto'
+  whiteSpace: 'pre-wrap' }
+}>
                 {code.slice(0, 200)}{code.length > 200 ? '...' : ''}
               </div>
             </div>

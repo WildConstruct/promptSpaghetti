@@ -42,7 +42,7 @@ describe('DataAccessDashboard', () => {
   mockUseDataAccess.mockReturnValue({)
   ...mockHookReturn,
   loading: true,
-} as unknown as unknown);
+ as unknown as unknown);
     render(<DataAccessDashboard userId="user-123" />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
@@ -50,7 +50,7 @@ describe('DataAccessDashboard', () => {
   mockUseDataAccess.mockReturnValue({)
   ...mockHookReturn,
   error: 'Failed to load data',
-} as unknown as unknown);
+ as unknown as unknown);
     render(<DataAccessDashboard userId="user-123" />);
     expect(screen.getByText(/Failed to load data/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '×' })).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('DataAccessDashboard', () => {
   mockUseDataAccess.mockReturnValue({)
   ...mockHookReturn,
   error: 'Test error',
-} as unknown as unknown);
+ as unknown as unknown);
     render(<DataAccessDashboard userId="user-123" />);
     const closeButton = screen.getByRole('button', { name: '×' });
     fireEvent.click(closeButton);
@@ -83,11 +83,11 @@ describe('DataAccessDashboard', () => {
   expiresAt: new Date('2024-01-01'),
   reason: 'Business need',
   restrictions: [],
-}];
+];
       mockUseDataAccess.mockReturnValue({)
   ...mockHookReturn,
   grants: mockGrants,
-} as unknown as unknown);
+ as unknown as unknown);
       render(<DataAccessDashboard userId="user-123" />);
       expect(screen.getByText('resource-123')).toBeInTheDocument();
       expect(screen.getByText('customer_data')).toBeInTheDocument();
@@ -130,11 +130,11 @@ describe('DataAccessDashboard', () => {
   accessLevel: 'GRANTED',
   timestamp: new Date('2023-12-01'),
   riskScore: 25,
-}];
+];
       mockUseDataAccess.mockReturnValue({)
   ...mockHookReturn,
   history: mockHistory,
-} as unknown as unknown);
+ as unknown as unknown);
       render(<DataAccessDashboard userId="user-123" />);
       const historyTab = screen.getByText('Access History');
       fireEvent.click(historyTab);
@@ -169,7 +169,7 @@ describe('DataAccessDashboard', () => {
   requestId: 'req-123',
   status: 'approved',
   message: 'Request approved',
-} as unknown as unknown);
+ as unknown as unknown);
       const resourceIdInput = screen.getByLabelText('Resource ID');
       const resourceTypeSelect = screen.getByLabelText('Resource Type');
       const operationSelect = screen.getByLabelText('Operation');
@@ -214,7 +214,7 @@ describe('DataAccessDashboard', () => {
   });
   describe('Classification colors', () => {
   it('applies correct colors for different classifications', () => {
-  const mockGrants = [;
+  const mockGrants = [
   {
   id: 'grant-1',
   resourceId: 'resource-123',
@@ -226,7 +226,7 @@ describe('DataAccessDashboard', () => {
   expiresAt: new Date(),
   reason: 'Test',
   restrictions: [],
-}
+
         {
   id: 'grant-2',
   resourceId: 'resource-456',
@@ -241,7 +241,7 @@ describe('DataAccessDashboard', () => {
   mockUseDataAccess.mockReturnValue({)
   ...mockHookReturn,
   grants: mockGrants,
-} as unknown as unknown);
+ as unknown as unknown);
       render(<DataAccessDashboard userId="user-123" />);
       const publicBadge = screen.getByText('PUBLIC');
       const restrictedBadge = screen.getByText('RESTRICTED');

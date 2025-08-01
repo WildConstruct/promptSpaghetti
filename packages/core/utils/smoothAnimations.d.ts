@@ -5,8 +5,7 @@
  * Provides professional animation utilities for 60fps interactions
  */
 import React from 'react';
-export declare const easingFunctions: {
-    cinema4d: {
+export declare const easingFunctions: { cinema4d: {
         ease: string;
         easeIn: string;
         easeOut: string;
@@ -15,27 +14,22 @@ export declare const easingFunctions: {
         sharp: string;
         anticipate: string;
         bounce: string;
-        substance: string;
-    };
+        substance: string };
 };
-export declare const animationDurations: {
-    micro: number;
+export declare const animationDurations: { micro: number;
     fast: number;
     normal: number;
     smooth: number;
     panel: number;
     complex: number;
-    loading: number;
-};
-export declare const cssAnimationClasses: {
-    nodeCreate: string;
+    loading: number };
+export declare const cssAnimationClasses: { nodeCreate: string;
     nodeDelete: string;
     nodeHover: string;
     panelExpand: string;
     panelCollapse: string;
     loadingSpinner: string;
-    hoverLift: string;
-};
+    hoverLift: string };
 /**
  * Creates smooth animation styles for React components
  */
@@ -47,11 +41,9 @@ export declare function createSmoothTransition(properties: string[], duration?: 
 /**
  * Animation state management hook
  */
-export declare function useAnimation(initialState?: boolean): {
-    isAnimating: boolean;
+export declare function useAnimation(initialState?: boolean): { isAnimating: boolean;
     startAnimation: (duration?: number) => void;
-    stopAnimation: () => void;
-};
+    stopAnimation: () => void };
 /**
  * Smooth scroll utilities
  */
@@ -59,8 +51,7 @@ export declare function smoothScrollTo(element: HTMLElement, top: number, durati
 /**
  * Performance-optimized animation utilities
  */
-export declare class AnimationManager {
-    private activeAnimations;
+export declare class AnimationManager { private activeAnimations;
     private rafId;
     /**
      * Register an animation to prevent overlapping animations
@@ -92,28 +83,25 @@ export declare function useSmoothHover(duration?: number): {
     isTransitioning: boolean;
     hoverProps: {
         onMouseEnter: () => void;
-        onMouseLeave: () => void;
-    };
+        onMouseLeave: () => void };
 };
 /**
  * Loading animation utilities
  */
-export declare const loadingAnimations: {
-    /**
+export declare const loadingAnimations: { /**
      * Creates a spinning animation for loading spinners
      */
     createSpinner(): React.CSSProperties;
     /**
      * Creates a pulsing animation for loading states
      */
-    createPulse(): React.CSSProperties;
-};
+    createPulse(): React.CSSProperties };
 /**
  * React component wrapper for smooth animations
  */
 }
-interface AnimatedProps {
-    children: React.ReactNode;
+}
+interface AnimatedProps { children: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
     animationType?: 'fade' | 'slide' | 'scale' | 'lift';
@@ -121,7 +109,7 @@ interface AnimatedProps {
     delay?: number;
     isVisible?: boolean;
 
-export declare const AnimatedContainer: React.FC<AnimatedProps>;
+export declare const AnimatedContainer: React.FC<AnimatedProps> }
 }
 export {};
 //# sourceMappingURL=smoothAnimations.d.ts.map

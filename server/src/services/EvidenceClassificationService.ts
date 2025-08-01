@@ -17,8 +17,8 @@ import * as crypto from 'crypto';
 // Evidence Classification Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface EvidenceClassificationConfig {
   enabled: boolean;
   autoClassificationEnabled: boolean;
@@ -28,8 +28,9 @@ export interface EvidenceClassificationConfig {
     enabled: boolean;
     patterns: SensitivityPattern[];
     scoring: SensitivityScoring;
-}
-}
+
+
+
   };
   contentAnalysis: {
     enabled: boolean;
@@ -48,10 +49,10 @@ export interface EvidenceClassificationConfig {
     notifyOnHighRisk: boolean;
     notifyOnClassificationFailure: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface EvidenceClassificationRule {
   id: string;
   name: string;
@@ -66,24 +67,26 @@ export interface EvidenceClassificationRule {
   actions: ClassificationAction[];
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceClassificationCondition {
   field: 'content' | 'metadata' | 'filename' | 'size' | 'source' | 'evidence_type' | 'compliance_framework';
   operator: 'contains' | 'matches' | 'equals' | 'gt' | 'lt' | 'in' | 'pattern' | 'exists';
   value: string | number | string[] | RegExp;
   caseSensitive?: boolean;
   weight?: number; // Weight for confidence calculation
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SensitivityPattern {
   id: string;
   name: string;
@@ -92,20 +95,22 @@ export interface SensitivityPattern {
   sensitivity: DataClassification;
   weight: number;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SensitivityScoring {
   thresholds: {
     public: number;
     internal: number;
     confidential: number;
     restricted: number;
-}
-}
+
+
+
   };
   weightingFactors: {
     contentMatch: number;
@@ -113,19 +118,20 @@ export interface SensitivityScoring {
     structuralMatch: number;
     contextMatch: number;
   };
-}
 
-}
-}
+
+
+
 export interface ClassificationAction {
   type: 'notify' | 'encrypt' | 'restrict_access' | 'require_approval' | 'audit_log';
   parameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceClassificationResult {
   evidenceId: string;
   classification: DataClassification;
@@ -136,12 +142,13 @@ export interface EvidenceClassificationResult {
   recommendations: string[];
   warnings: string[];
   timestamp: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SensitivityAnalysisResult {
   overallScore: number;
   patterns: {
@@ -149,18 +156,19 @@ export interface SensitivityAnalysisResult {
     matches: number;
     score: number;
     locations: string[];
-}
-}
-  }[];
+
+
+
+[];
   contentAnalysis: {
     textScore: number;
     metadataScore: number;
     structuralScore: number;
   };
-}
 
-}
-}
+
+
+
 export interface EvidenceItem {
   id: string;
   type: string;
@@ -177,10 +185,11 @@ export interface EvidenceItem {
     classifiedBy: string;
     method: string;
     confidence: number;
-}
-}
+
+
+
   };
-}
+
 
 // =============================================================================
 // Main Service Class
@@ -203,7 +212,7 @@ export class EvidenceClassificationService {
     this.auditEvidenceMapper = new AuditEvidenceMapper();
     
     this.initializeService();
-  }
+
 
   // =============================================================================
   // Public API Methods
@@ -221,20 +230,19 @@ export class EvidenceClassificationService {
       // Manual classification takes precedence
       if (manualClassification) {
         return this.applyManualClassification(evidence, manualClassification);
-      }
+
 
       // Automatic classification
       if (this.config.autoClassificationEnabled) {
         return await this.performAutomaticClassification(evidence);
-      }
+
 
       // Fallback to inherited classification
       return this.performInheritedClassification(evidence);
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Evidence classification failed: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Bulk classify multiple evidence items
@@ -247,7 +255,7 @@ export class EvidenceClassificationService {
       try {
         const result = await this.classifyEvidence(evidence);
         results.push(result);
-      } catch (error) {
+ catch (error) {
         // Continue with other items, log error
         console.error(`Failed to classify evidence ${evidence.id}:`, error);
         results.push({
@@ -260,11 +268,11 @@ export class EvidenceClassificationService {
           warnings: [`Classification failed: ${error instanceof Error ? error.message : String(error)}`],
           timestamp: new Date()
         });
-      }
-    }
+
+
     
     return results;
-  }
+
 
   /**
    * Re-classify evidence based on updated rules or requirements
@@ -274,7 +282,7 @@ export class EvidenceClassificationService {
     const evidence = await this.loadEvidence(evidenceId);
     if (!evidence) {
       throw new Error(`Evidence not found: ${evidenceId}`);
-    }
+
 
     const result = await this.classifyEvidence(evidence);
     
@@ -283,11 +291,11 @@ export class EvidenceClassificationService {
     if (previousClassification && previousClassification !== result.classification) {
       if (this.config.notifications.notifyOnReclassification) {
         await this.notifyClassificationChange(evidenceId, previousClassification, result.classification);
-      }
-    }
+
+
     
     return result;
-  }
+
 
   /**
    * Get classification recommendations for evidence
@@ -297,7 +305,7 @@ export class EvidenceClassificationService {
     alternatives: DataClassification[];
     reasoning: string[];
     confidence: number;
-  }> {
+> {
 
     const analysis = await this.performSensitivityAnalysis(evidence);
     const matchingRules = await this.findMatchingRules(evidence);
@@ -310,7 +318,7 @@ export class EvidenceClassificationService {
       reasoning: recommendations.reasoning,
       confidence: recommendations.confidence
     };
-  }
+
 
   /**
    * Update classification configuration
@@ -319,7 +327,7 @@ export class EvidenceClassificationService {
 
     this.config = { ...this.config, ...config };
     await this.saveConfig();
-  }
+
 
   /**
    * Add new classification rule
@@ -340,7 +348,7 @@ export class EvidenceClassificationService {
     await this.saveConfig();
     
     return newRule.id;
-  }
+
 
   // =============================================================================
   // Core Classification Methods
@@ -375,7 +383,7 @@ export class EvidenceClassificationService {
       recommendations: classification.recommendations,
       warnings: classification.warnings,
       timestamp: new Date(};
-  }
+
 
   private async performSensitivityAnalysis(evidence: EvidenceItem): Promise<SensitivityAnalysisResult> {
 
@@ -395,8 +403,8 @@ export class EvidenceClassificationService {
           locations: matches
         });
         overallScore += score;
-      }
-    }
+
+
 
     // Analyze metadata
     const metadataScore = this.analyzeMetadataSensitivity(evidence.metadata);
@@ -411,15 +419,15 @@ export class EvidenceClassificationService {
         textScore: overallScore,
         metadataScore,
         structuralScore
-      }
+
     };
-  }
+
 
   private async performContentAnalysis(evidence: EvidenceItem): Promise<unknown> {
 
     if (!this.config.contentAnalysis.enabled) {
       return { enabled: false };
-    }
+
 
     const analysis: unknown = {
       enabled: true,
@@ -430,30 +438,30 @@ export class EvidenceClassificationService {
 
     if (this.config.contentAnalysis.textAnalysisEnabled) {
       analysis.textAnalysis = this.analyzeTextContent(evidence.content);
-    }
+
 
     if (this.config.contentAnalysis.metadataAnalysisEnabled) {
       analysis.metadataAnalysis = this.analyzeMetadataContent(evidence.metadata);
-    }
+
 
     if (this.config.contentAnalysis.structuralAnalysisEnabled) {
       analysis.structuralAnalysis = this.analyzeStructuralContent(evidence);
-    }
+
 
     return analysis;
-  }
+
 
   private async performComplianceAnalysis(evidence: EvidenceItem): Promise<unknown> {
 
     if (!evidence.complianceFramework) {
       return { applicable: false };
-    }
+
 
     // Get evidence type requirements
     const evidenceType = await this.auditEvidenceMapper.evidenceTypes.get(evidence.type);
     if (!evidenceType) {
       return { applicable: false, error: 'Unknown evidence type' };
-    }
+
 
     // Determine classification based on compliance requirements
     const requiredClassification = this.getComplianceRequiredClassification(
@@ -468,7 +476,7 @@ export class EvidenceClassificationService {
       requiredClassification,
       sensitivity: evidenceType.sensitivity
     };
-  }
+
 
   private async findMatchingRules(evidence: EvidenceItem): Promise<EvidenceClassificationRule[]> {
 
@@ -480,13 +488,13 @@ export class EvidenceClassificationService {
       // Check if rule applies to this evidence type
       if (rule.evidenceTypes.length > 0 && !rule.evidenceTypes.includes(evidence.type)) {
         continue;
-      }
+
 
       // Check if rule applies to this compliance framework
       if (rule.complianceFrameworks.length > 0 && evidence.complianceFramework && 
           !rule.complianceFrameworks.includes(evidence.complianceFramework)) {
         continue;
-      }
+
 
       // Check all conditions
       const conditionsMet = rule.conditions.every(condition => 
@@ -495,12 +503,12 @@ export class EvidenceClassificationService {
 
       if (conditionsMet) {
         matchingRules.push(rule);
-      }
-    }
+
+
 
     // Sort by priority
     return matchingRules.sort((a, b) => b.priority - a.priority);
-  }
+
 
   private calculateWeightedClassification(
     sensitivityAnalysis: SensitivityAnalysisResult,
@@ -512,7 +520,7 @@ export class EvidenceClassificationService {
     confidence: number;
     recommendations: string[];
     warnings: string[];
-  } {
+ {
     const classifications: { [key in DataClassification]: number } = {
       public: 0,
       internal: 0,
@@ -530,13 +538,13 @@ export class EvidenceClassificationService {
     // Weight from matching rules
     for (const rule of matchingRules) {
       classifications[rule.classification] += rule.confidence;
-    }
+
 
     // Weight from compliance analysis
     if (complianceAnalysis.applicable && complianceAnalysis.requiredClassification) {
       classifications[complianceAnalysis.requiredClassification] += 0.9;
       recommendations.push(`Compliance framework ${complianceAnalysis.framework} recommends ${complianceAnalysis.requiredClassification}`);
-    }
+
 
     // Find the highest weighted classification
     const maxWeight = Math.max(...Object.values(classifications));
@@ -550,7 +558,7 @@ export class EvidenceClassificationService {
     // Generate warnings for low confidence
     if (confidence < 0.7) {
       warnings.push(`Low classification confidence (${Math.round(confidence * 100)}%). Manual review recommended.`);
-    }
+
 
     return {
       classification: finalClassification,
@@ -558,7 +566,7 @@ export class EvidenceClassificationService {
       recommendations,
       warnings
     };
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -577,7 +585,7 @@ export class EvidenceClassificationService {
       recommendations: [],
       warnings: [],
       timestamp: new Date(};
-  }
+
 
   private performInheritedClassification(evidence: EvidenceItem): EvidenceClassificationResult {
     // Try to inherit from audit requirement or evidence type
@@ -586,10 +594,10 @@ export class EvidenceClassificationService {
     if (evidence.auditRequirement) {
       // Inherit from audit requirement
       inheritedClassification = this.getAuditRequirementClassification(evidence.auditRequirement);
-    } else if (evidence.type) {
+ else if (evidence.type) {
       // Inherit from evidence type
       inheritedClassification = this.getEvidenceTypeClassification(evidence.type);
-    }
+
 
     return {
       evidenceId: evidence.id,
@@ -600,7 +608,7 @@ export class EvidenceClassificationService {
       recommendations: [`Classification inherited from ${evidence.auditRequirement ? 'audit requirement' : 'evidence type'}`],
       warnings: [],
       timestamp: new Date(};
-  }
+
 
   private findPatternMatches(content: string, pattern: SensitivityPattern): string[] {
     const matches: string[] = [];
@@ -611,21 +619,21 @@ export class EvidenceClassificationService {
         const regexMatches = content.match(regex);
         if (regexMatches) {
           matches.push(...regexMatches);
-        }
-      } else if (pattern.type === 'keyword') {
+
+ else if (pattern.type === 'keyword') {
         const keywords = Array.isArray(pattern.pattern) ? pattern.pattern : [pattern.pattern];
         for (const keyword of keywords) {
           if (content.toLowerCase().includes(keyword.toString().toLowerCase())) {
             matches.push(keyword.toString());
-          }
-        }
-      }
-    } catch (error) {
+
+
+
+ catch (error) {
       console.warn(`Pattern matching failed for pattern ${pattern.id}:`, error);
-    }
+
     
     return matches;
-  }
+
 
   private analyzeMetadataSensitivity(metadata: Record<string, any>): number {
     let score = 0;
@@ -636,18 +644,18 @@ export class EvidenceClassificationService {
     for (const [key, value] of Object.entries(metadata)) {
       if (sensitiveFields.some(field => key.toLowerCase().includes(field))) {
         score += 0.5;
-      }
+
       
       if (typeof value === 'string' && value.length > 0) {
         // Check for patterns in metadata values
         if (this.containsSensitivePattern(value)) {
           score += 0.3;
-        }
-      }
-    }
+
+
+
     
     return Math.min(score, 1.0);
-  }
+
 
   private analyzeStructuralSensitivity(evidence: EvidenceItem): number {
     let score = 0;
@@ -655,18 +663,18 @@ export class EvidenceClassificationService {
     // File size indicators
     if (evidence.size > 10485760) { // > 10MB
       score += 0.1;
-    }
+
     
     // Source indicators
     if (evidence.source) {
       const secureSourcePatterns = ['secure', 'protected', 'encrypted', 'vault'];
       if (secureSourcePatterns.some(pattern => evidence.source.toLowerCase().includes(pattern))) {
         score += 0.3;
-      }
-    }
+
+
     
     return Math.min(score, 1.0);
-  }
+
 
   private analyzeTextContent(content: string): unknown {
     return {
@@ -676,7 +684,7 @@ export class EvidenceClassificationService {
       hasSpecialChars: /[!@#$%^&*(),.?":{}|<>]/.test(content),
       entropy: this.calculateEntropy(content)
     };
-  }
+
 
   private analyzeMetadataContent(metadata: Record<string, any>): unknown {
     return {
@@ -684,7 +692,7 @@ export class EvidenceClassificationService {
       hasNestedObjects: Object.values(metadata).some(v => typeof v === 'object'),
       sensitiveFieldCount: this.countSensitiveFields(metadata)
     };
-  }
+
 
   private analyzeStructuralContent(evidence: EvidenceItem): unknown {
     return {
@@ -692,7 +700,7 @@ export class EvidenceClassificationService {
       fileExtension: evidence.filename ? evidence.filename.split('.').pop() : null,
       sizeCategory: this.categorizeSizeType(evidence.size)
     };
-  }
+
 
   private evaluateCondition(evidence: EvidenceItem, condition: EvidenceClassificationCondition): boolean {
     let fieldValue: Error;
@@ -721,10 +729,10 @@ export class EvidenceClassificationService {
       break;
     default:
       return false;
-    }
+
 
     return this.evaluateOperator(fieldValue, condition.operator, condition.value, condition.caseSensitive);
-  }
+
 
   private evaluateOperator(
     fieldValue: Error,
@@ -753,22 +761,22 @@ export class EvidenceClassificationService {
       return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
     default:
       return false;
-    }
-  }
+
+
 
   private mapScoreToClassification(score: number): { classification: DataClassification; confidence: number } {
     const thresholds = this.config.sensitivityAnalysis.scoring.thresholds;
     
     if (score >= thresholds.restricted) {
       return { classification: 'restricted', confidence: 0.9 };
-    } else if (score >= thresholds.confidential) {
+ else if (score >= thresholds.confidential) {
       return { classification: 'confidential', confidence: 0.8 };
-    } else if (score >= thresholds.internal) {
+ else if (score >= thresholds.internal) {
       return { classification: 'internal', confidence: 0.7 };
-    } else {
+ else {
       return { classification: 'public', confidence: 0.6 };
-    }
-  }
+
+
 
   private generateRecommendations(
     analysis: SensitivityAnalysisResult,
@@ -778,7 +786,7 @@ export class EvidenceClassificationService {
     alternatives: DataClassification[];
     reasoning: string[];
     confidence: number;
-  } {
+ {
     const classifications = new Map<DataClassification, number>();
     const reasoning: string[] = [];
 
@@ -787,14 +795,14 @@ export class EvidenceClassificationService {
       const mapped = this.mapScoreToClassification(analysis.overallScore);
       classifications.set(mapped.classification, mapped.confidence);
       reasoning.push(`Sensitivity analysis suggests ${mapped.classification} (score: ${analysis.overallScore.toFixed(2)})`);
-    }
+
 
     // Add reasoning from matching rules
     for (const rule of matchingRules) {
       const current = classifications.get(rule.classification) || 0;
       classifications.set(rule.classification, Math.max(current, rule.confidence));
       reasoning.push(`Rule "${rule.name}" recommends ${rule.classification} (confidence: ${rule.confidence})`);
-    }
+
 
     const sorted = Array.from(classifications.entries())
       .sort((a, b) => b[1] - a[1]);
@@ -805,7 +813,7 @@ export class EvidenceClassificationService {
       reasoning,
       confidence: sorted[0]?.[1] || 0.5
     };
-  }
+
 
   // =============================================================================
   // Utility Methods
@@ -816,18 +824,18 @@ export class EvidenceClassificationService {
       /\b\d{3}-\d{2}-\d{4}\b/, // SSN
       /\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b/, // Credit card
       /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2
-}/ // Email
+/ // Email
     ];
     
     return patterns.some(pattern => pattern.test(text));
-  }
+
 
   private calculateEntropy(text: string): number {
     const charFreq: { [key: string]: number } = {};
     
     for (const char of text) {
       charFreq[char] = (charFreq[char] || 0) + 1;
-    }
+
     
     const textLength = text.length;
     let entropy = 0;
@@ -835,17 +843,17 @@ export class EvidenceClassificationService {
     for (const count of Object.values(charFreq)) {
       const probability = count / textLength;
       entropy -= probability * Math.log2(probability);
-    }
+
     
     return entropy;
-  }
+
 
   private countSensitiveFields(metadata: Record<string, any>): number {
     const sensitiveFieldNames = ['password', 'token', 'key', 'secret', 'ssn', 'credit_card'];
     return Object.keys(metadata).filter(key => 
       sensitiveFieldNames.some(sensitive => key.toLowerCase().includes(sensitive))
     ).length;
-  }
+
 
   private categorizeSizeType(size: number): string {
     if (size < 1024) return 'tiny';
@@ -853,11 +861,11 @@ export class EvidenceClassificationService {
     if (size < 102400) return 'medium';
     if (size < 1048576) return 'large';
     return 'huge';
-  }
+
 
   private generateRuleId(): string {
     return `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private getComplianceRequiredClassification(
     frameworkId: string,
@@ -866,29 +874,29 @@ export class EvidenceClassificationService {
     // Map compliance requirements to classifications
     if (frameworkId === 'hipaa-1996' || frameworkId === 'gdpr-2018') {
       return 'confidential'; // Healthcare and privacy data
-    }
+
     if (frameworkId === 'soc2-2017') {
       return evidenceType.sensitivity as DataClassification || 'internal';
-    }
+
     return evidenceType.sensitivity as DataClassification || 'internal';
-  }
+
 
   private getAuditRequirementClassification(__requirementId: string): DataClassification {
     // This would typically query the audit requirements
     return 'internal'; // Default
-  }
+
 
   private getEvidenceTypeClassification(evidenceType: string): DataClassification {
     const evidenceTypeObj = this.auditEvidenceMapper.evidenceTypes?.get?.(evidenceType);
     return evidenceTypeObj?.sensitivity as DataClassification || 'internal';
-  }
+
 
   private async loadEvidence(__evidenceId: string): Promise<EvidenceItem | null> {
 
     // This would load from database
     // Implementation depends on evidence storage schema
     return null;
-  }
+
 
   private async notifyClassificationChange(
     evidenceId: string,
@@ -903,9 +911,9 @@ export class EvidenceClassificationService {
         oldClassification,
         newClassification,
         timestamp: new Date()
-      }
+
     });
-  }
+
 
   private async saveConfig(): Promise<void> {
 
@@ -914,7 +922,7 @@ export class EvidenceClassificationService {
       'INSERT OR REPLACE INTO evidence_classification_config (id, config) VALUES (1, ?)',
       [JSON.stringify(this.config)]
     );
-  }
+
 
   private async loadConfig(): Promise<void> {
 
@@ -924,14 +932,14 @@ export class EvidenceClassificationService {
     
     if (result.length > 0) {
       this.config = { ...this.config, ...JSON.parse(result[0].config) };
-    }
-  }
+
+
 
   private initializeService(): void {
     this.loadConfig().catch(error => {
       console.warn('Failed to load classification config:', error);
     });
-  }
+
 
   private getDefaultConfig(): EvidenceClassificationConfig {
     return {
@@ -950,7 +958,7 @@ export class EvidenceClassificationService {
             sensitivity: 'restricted',
             weight: 1.0,
             description: 'Detects US Social Security Numbers'
-  }
+
           {
             id: 'cc_pattern',
             name: 'Credit Card Number',
@@ -959,17 +967,17 @@ export class EvidenceClassificationService {
             sensitivity: 'restricted',
             weight: 1.0,
             description: 'Detects credit card numbers'
-  }
+
           {
             id: 'email_pattern',
             name: 'Email Address',
             pattern: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2
-}/g,
+/g,
             type: 'regex',
             sensitivity: 'confidential',
             weight: 0.6,
             description: 'Detects email addresses'
-          }
+
         ],
         scoring: {
           thresholds: {
@@ -977,34 +985,34 @@ export class EvidenceClassificationService {
             internal: 0.3,
             confidential: 0.7,
             restricted: 1.0
-  }
+
           weightingFactors: {
             contentMatch: 0.4,
             metadataMatch: 0.2,
             structuralMatch: 0.2,
             contextMatch: 0.2
-          }
-        }
-  }
+
+
+
       contentAnalysis: {
         enabled: true,
         textAnalysisEnabled: true,
         metadataAnalysisEnabled: true,
         structuralAnalysisEnabled: true
-  }
+
       auditIntegration: {
         enabled: true,
         inheritFromRequirement: true,
         escalateOnHighRisk: true
-  }
+
       notifications: {
         enabled: true,
         notifyOnReclassification: true,
         notifyOnHighRisk: true,
         notifyOnClassificationFailure: true
-      }
+
     };
-  }
-}
+
+
 
 export default EvidenceClassificationService;

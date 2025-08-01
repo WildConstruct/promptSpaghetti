@@ -20,8 +20,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface ReputationIntegrationConfig {
   enabled: boolean;
   enableRealtimeCalculation: boolean;
@@ -46,8 +46,9 @@ export interface ReputationIntegrationConfig {
     suddenDropThreshold: number;
     fraudRiskThreshold: number;
     disputeRateThreshold: number;
-}
-}
+
+
+
   };
   
   // Badge Settings
@@ -56,7 +57,7 @@ export interface ReputationIntegrationConfig {
   
   // Reputation Configuration
   reputationConfig: ReputationConfig;
-}
+
 
 /**
  * Reputation System Integration Service
@@ -94,7 +95,7 @@ export class ReputationIntegration {
     this.databaseService = dependencies.databaseService;
     this.redisService = dependencies.redisService;
     this.auditService = dependencies.auditService;
-  }
+
 
   /**
    * Initialize reputation system integration
@@ -104,7 +105,7 @@ export class ReputationIntegration {
     if (!this.config.enabled) {
       console.log('⏭️  Reputation system disabled in configuration');
       return;
-    }
+
 
     console.log('🏆 Initializing Reputation System Integration...');
 
@@ -127,30 +128,30 @@ export class ReputationIntegration {
       // Setup platform integrations
       if (this.config.integrateWithMarketplace) {
         await this.setupMarketplaceIntegration();
-      }
+
       
       if (this.config.integrateWithReviews) {
         await this.setupReviewIntegration();
-      }
+
       
       if (this.config.integrateWithPayments) {
         await this.setupPaymentIntegration();
-      }
+
       
       // Setup automated processing
       if (this.config.enableRealtimeCalculation) {
         await this.setupRealtimeProcessing();
-      }
+
       
       // Setup badge automation
       if (this.config.enableAutomatedBadges) {
         await this.setupAutomatedBadges();
-      }
+
       
       // Setup fraud detection
       if (this.config.enableFraudDetection) {
         await this.setupFraudDetection();
-      }
+
       
       // Setup monitoring
       await this.setupIntegrationMonitoring();
@@ -158,12 +159,11 @@ export class ReputationIntegration {
       this.integrationActive = true;
       
       console.log('✅ Reputation System Integration initialized successfully');
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize Reputation System Integration:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Register reputation system routes with Fastify server
@@ -174,22 +174,22 @@ export class ReputationIntegration {
     // Register dashboard API routes
     if (this.dashboardAPI) {
       this.dashboardAPI.registerRoutes(server);
-    }
+
     
     // Register verification display API routes
     if (this.verificationDisplayAPI) {
       this.verificationDisplayAPI.registerRoutes(server);
-    }
+
     
     // Register enforcement tools API routes
     if (this.enforcementToolsAPI) {
       this.enforcementToolsAPI.registerRoutes(server);
-    }
+
     
     // Register refund processing API routes
     if (this.refundProcessingAPI) {
       this.refundProcessingAPI.registerRoutes(server);
-    }
+
 
     // Register integration status endpoints
     server.get('/api/admin/reputation/integration/status', async (request, reply) => {
@@ -199,12 +199,12 @@ export class ReputationIntegration {
           success: true,
           data: status
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     // Register webhook endpoints for external integrations
@@ -218,7 +218,7 @@ export class ReputationIntegration {
     server.get('/api/users/:userId/badges/public', this.handleGetPublicBadges.bind(this));
 
     console.log('🔗 Reputation system integration routes registered');
-  }
+
 
   /**
    * Handle marketplace transaction event
@@ -233,7 +233,7 @@ export class ReputationIntegration {
           success: false,
           error: 'Missing required fields: userId, transactionType'
         });
-      }
+
 
       // Process transaction impact on reputation
       await this.processTransactionImpact(userId, {
@@ -251,13 +251,13 @@ export class ReputationIntegration {
         success: true,
         message: 'Transaction processed for reputation impact'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Handle review submitted event
@@ -278,7 +278,7 @@ export class ReputationIntegration {
         });
         
         await this.queueReputationRecalculation(reviewerId, 'review_submitted');
-      }
+
       
       // Process review impact for template creator
       if (templateCreatorId) {
@@ -290,19 +290,19 @@ export class ReputationIntegration {
         });
         
         await this.queueReputationRecalculation(templateCreatorId, 'review_received');
-      }
+
 
       return reply.code(200).send({
         success: true,
         message: 'Review processed for reputation impact'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Handle payment completed event
@@ -328,13 +328,13 @@ export class ReputationIntegration {
         success: true,
         message: 'Payment completion processed for reputation impact'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Handle dispute created event
@@ -364,13 +364,13 @@ export class ReputationIntegration {
         success: true,
         message: 'Dispute processed for reputation impact'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get public reputation data (limited info for display)
@@ -402,13 +402,13 @@ export class ReputationIntegration {
         success: true,
         data: publicReputation
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get public badges for user
@@ -437,13 +437,13 @@ export class ReputationIntegration {
         success: true,
         data: publicBadges
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get reputation integration status
@@ -466,16 +466,16 @@ export class ReputationIntegration {
           reviewIntegration: this.config.integrateWithReviews ? 'active' : 'disabled',
           paymentIntegration: this.config.integrateWithPayments ? 'active' : 'disabled',
           fraudDetection: this.config.enableFraudDetection ? 'active' : 'disabled'
-  }
+
         lastUpdate: new Date()
-  }
+
       metrics: {
         totalUsers: metrics.totalUsers,
         averageTrustScore: metrics.trustTrends.averageTrustScore,
         verificationRate: metrics.verificationStats.verificationRate,
         highRiskUsers: metrics.riskAnalysis.highRiskUsers,
         fraudPrevented: metrics.riskAnalysis.fraudPrevented
-  }
+
       processing: {
         recalculationInterval: this.config.recalculationInterval,
         batchSize: this.config.batchSize,
@@ -486,9 +486,9 @@ export class ReputationIntegration {
         automatedBadges: this.config.enableAutomatedBadges,
         fraudDetection: this.config.enableFraudDetection,
         alerting: this.config.enableReputationAlerts
-      }
+
     };
-  }
+
 
   /**
    * Shutdown reputation integration
@@ -500,11 +500,11 @@ export class ReputationIntegration {
     // Stop periodic processing
     if (this.batchProcessingInterval) {
       clearInterval(this.batchProcessingInterval);
-    }
+
     
     if (this.badgeEvaluationInterval) {
       clearInterval(this.badgeEvaluationInterval);
-    }
+
     
     // Clear event listeners
     this.eventListeners.clear();
@@ -512,7 +512,7 @@ export class ReputationIntegration {
     this.integrationActive = false;
     
     console.log('✅ Reputation System Integration shut down successfully');
-  }
+
 
   // Private initialization methods
 
@@ -538,7 +538,7 @@ export class ReputationIntegration {
     this.setupReputationEventListeners();
     
     console.log('✅ Reputation System initialized');
-  }
+
 
   /**
    * Initialize dashboard API
@@ -548,7 +548,7 @@ export class ReputationIntegration {
     if (!this.config.enableAdminDashboard) {
       console.log('⏭️  Admin dashboard disabled in configuration');
       return;
-    }
+
 
     console.log('📊 Initializing Dashboard API...');
     
@@ -561,7 +561,7 @@ export class ReputationIntegration {
     );
     
     console.log('✅ Dashboard API initialized');
-  }
+
 
   /**
    * Initialize verification display API
@@ -571,7 +571,7 @@ export class ReputationIntegration {
     if (!this.config.enableAdminDashboard) {
       console.log('⏭️  Verification display API disabled (admin dashboard disabled)');
       return;
-    }
+
 
     console.log('🔧 Initializing Verification Display API...');
     
@@ -582,7 +582,7 @@ export class ReputationIntegration {
     });
     
     console.log('✅ Verification Display API initialized');
-  }
+
 
   /**
    * Initialize enforcement tools API
@@ -592,7 +592,7 @@ export class ReputationIntegration {
     if (!this.config.enableAdminDashboard) {
       console.log('⏭️  Enforcement tools API disabled (admin dashboard disabled)');
       return;
-    }
+
 
     console.log('⚖️ Initializing Enforcement Tools API...');
     
@@ -611,7 +611,7 @@ export class ReputationIntegration {
     });
     
     console.log('✅ Enforcement Tools API initialized');
-  }
+
 
   /**
    * Initialize refund processing API
@@ -621,7 +621,7 @@ export class ReputationIntegration {
     if (!this.config.enableAdminDashboard) {
       console.log('⏭️  Refund processing API disabled (admin dashboard disabled)');
       return;
-    }
+
 
     console.log('💰 Initializing Refund Processing API...');
     
@@ -641,7 +641,7 @@ export class ReputationIntegration {
     });
     
     console.log('✅ Refund Processing API initialized');
-  }
+
 
   /**
    * Setup marketplace integration
@@ -654,7 +654,7 @@ export class ReputationIntegration {
     // to automatically trigger reputation updates on transactions
     
     console.log('✅ Marketplace integration configured');
-  }
+
 
   /**
    * Setup review system integration
@@ -667,7 +667,7 @@ export class ReputationIntegration {
     // to automatically update reputation based on review activity
     
     console.log('✅ Review system integration configured');
-  }
+
 
   /**
    * Setup payment integration
@@ -680,7 +680,7 @@ export class ReputationIntegration {
     // to track transaction reliability and payment behavior
     
     console.log('✅ Payment integration configured');
-  }
+
 
   /**
    * Setup real-time processing
@@ -695,7 +695,7 @@ export class ReputationIntegration {
     }, this.config.recalculationInterval * 60 * 60 * 1000);
     
     console.log('✅ Real-time processing configured');
-  }
+
 
   /**
    * Setup automated badge awards
@@ -710,7 +710,7 @@ export class ReputationIntegration {
     }, this.config.badgeEvaluationInterval * 60 * 60 * 1000);
     
     console.log('✅ Automated badge awards configured');
-  }
+
 
   /**
    * Setup fraud detection
@@ -723,7 +723,7 @@ export class ReputationIntegration {
     // This would integrate with AI/ML systems for fraud detection
     
     console.log('✅ Fraud detection configured');
-  }
+
 
   /**
    * Setup integration monitoring
@@ -738,7 +738,7 @@ export class ReputationIntegration {
     }, 5 * 60 * 1000); // Every 5 minutes
     
     console.log('✅ Integration monitoring configured');
-  }
+
 
   /**
    * Setup reputation event listeners
@@ -755,7 +755,7 @@ export class ReputationIntegration {
     this.reputationSystem.on('user_flagged', (event) => {
       console.log(`🚩 User flagged: ${event.userId} - ${event.reason}`);
     });
-  }
+
 
   // Helper methods for processing different events
 
@@ -763,51 +763,51 @@ export class ReputationIntegration {
 
     // Process the impact of marketplace transactions on reputation
     // This would update transaction metrics and queue recalculation
-  }
+
 
   private async processReviewImpact(userId: string, review: any): Promise<void> {
 
     // Process the impact of reviews on reputation
     // This would update review metrics and quality scores
-  }
+
 
   private async processPaymentSuccess(buyerId: string, sellerId: string, payment: any): Promise<void> {
 
     // Process successful payment completion
     // This would update transaction reliability metrics
-  }
+
 
   private async processDisputeImpact(buyerId: string, sellerId: string, dispute: any): Promise<void> {
 
     // Process dispute impact on reputation
     // This would update dispute rates and reliability scores
-  }
+
 
   private async checkDisputeRateAlerts(userId: string): Promise<void> {
 
     // Check if user's dispute rate exceeds thresholds and create alerts
-  }
+
 
   private async queueReputationRecalculation(userId: string, reason: string): Promise<void> {
 
     // Queue user for reputation recalculation
     // This would use Redis or database queue for batch processing
-  }
+
 
   private async processBatchReputationCalculations(): Promise<void> {
 
     // Process queued reputation calculations in batches
-  }
+
 
   private async evaluateAutomaticBadgeAwards(): Promise<void> {
 
     // Evaluate users for automatic badge awards
-  }
+
 
   private async checkIntegrationHealth(): Promise<void> {
 
     // Monitor integration health and performance
-  }
+
 
   // Utility methods
 
@@ -815,14 +815,14 @@ export class ReputationIntegration {
     // Determine if a badge should be private (not shown publicly)
     const privateBadges = ['fraud_reporter', 'beta_tester'];
     return privateBadges.includes(badgeType);
-  }
+
 
   private calculateSuccessRate(transactionMetrics: any): number {
     // Calculate public-safe transaction success rate
     if (transactionMetrics.totalPurchases + transactionMetrics.totalSales === 0) return 0;
     return Math.round((transactionMetrics.successfulTransactions / 
       (transactionMetrics.totalPurchases + transactionMetrics.totalSales)) * 100);
-  }
+
 
   private estimateMembershipDuration(reputation: any): string {
     // Estimate membership duration for public display
@@ -833,12 +833,12 @@ export class ReputationIntegration {
     if (diffMonths < 1) return 'New member';
     if (diffMonths < 12) return `${diffMonths} months`;
     return `${Math.floor(diffMonths / 12)} years`;
-  }
+
 
   // Placeholder methods for queue and processing rate calculations
   private async getRecalculationQueueSize(): Promise<number> { return 0; }
   private async getProcessingRate(): Promise<number> { return 0; }
-}
+
 
 /**
  * Factory function to create and initialize reputation integration
@@ -855,7 +855,7 @@ export async function createReputationIntegration(
   const integration = new ReputationIntegration(config, dependencies);
   await integration.initialize();
   return integration;
-}
+
 
 /**
  * Default configuration for reputation integration

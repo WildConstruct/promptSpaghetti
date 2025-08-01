@@ -6,57 +6,50 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { 
-  PasswordStrengthIndicator, 
+import { PasswordStrengthIndicator }
   usePasswordStrength 
-} from '../components/PasswordStrengthIndicator';
-import { 
-  PasswordComplexityValidator, 
+ from '../components/PasswordStrengthIndicator';
+import { PasswordComplexityValidator }
   PasswordValidationContext 
-} from '../auth/PasswordComplexityValidator';
+ from '../auth/PasswordComplexityValidator';
 
 // Mock the PasswordComplexityValidator for controlled testing
 jest.mock('../auth/PasswordComplexityValidator');
-describe('PasswordStrengthIndicator', () => {
-  let mockValidator: jest.Mocked<PasswordComplexityValidator>;
+describe('PasswordStrengthIndicator', () => { let mockValidator: jest.Mocked<PasswordComplexityValidator>;
   beforeEach(() => {
   mockValidator = new PasswordComplexityValidator() as jest.Mocked<PasswordComplexityValidator>;
   // Default mock implementation
   mockValidator.validatePassword.mockResolvedValue({)
-  valid: true,
-  score: 75,
-  strength: 'good',
-  ruleResults: [,
+  valid: true
+  score: 75
+  strength: 'good'
+  ruleResults: [
   {
-  passed: true,
-  score: 8,
-  message: 'Length requirement met (12 characters)',
-}
-        {
-  passed: true,
-  score: 7,
-  message: 'Uppercase requirement met (1 found)',
-}
-        {
-  passed: false,
-  score: 0,
-  message: 'Not enough special characters (0/1)',
-  suggestion: 'Add 1 special character(s)'],
-  errors: [],
-  warnings: [],
-  suggestions: ['Add 1 special character(s)'],
-  passedRules: 2,
-  totalRules: 3,
-  entropy: 45.2,
+  passed: true
+  score: 8
+  message: 'Length requirement met (12 characters)' }
+
+        { passed: true
+  score: 7
+  message: 'Uppercase requirement met (1 found)' }
+
+        { passed: false
+  score: 0
+  message: 'Not enough special characters (0/1)'
+  suggestion: 'Add 1 special character(s)']
+  errors: []
+  warnings: []
+  suggestions: ['Add 1 special character(s)']
+  passedRules: 2
+  totalRules: 3
+  entropy: 45.2
   estimatedCrackTime: {
-  offline: '2 hours',
-  online: '3 days',
-  unit: 'average time',
+  offline: '2 hours'
+  online: '3 days'
+  unit: 'average time' }
 });
   });
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  afterEach(() => { jest.clearAllMocks() });
   describe('Basic Rendering', () => {
     test('should not render when password is empty', () => {
       const { container } = render()
@@ -71,24 +64,21 @@ describe('PasswordStrengthIndicator', () => {
           validator={mockValidator}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Password Strength')).toBeInTheDocument();
-        expect(screen.getByText('Good (75/100)')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Password Strength')).toBeInTheDocument();
+        expect(screen.getByText('Good (75/100)')).toBeInTheDocument() });
     });
-    test('should show loading state during validation', () => {
-  // Delay the mock validation
+    test('should show loading state during validation', () => { // Delay the mock validation
   mockValidator.validatePassword.mockImplementation()
   () => new Promise(resolve => setTimeout(() => resolve({)
-  valid: true,
-  score: 75,
-  strength: 'good',
-  ruleResults: [],
-  errors: [],
-  warnings: [],
-  suggestions: [],
-  passedRules: 0,
-  totalRules: 0,
+  valid: true
+  score: 75
+  strength: 'good'
+  ruleResults: []
+  errors: []
+  warnings: []
+  suggestions: []
+  passedRules: 0
+  totalRules: 0 }
 }), 100))
       );
       render();
@@ -102,26 +92,26 @@ describe('PasswordStrengthIndicator', () => {
     });
   });
   describe('Strength Visualization', () => {
-    const strengthTestCases = [;
-      { score: 10, strength: 'very-weak', color: '#dc2626' },
-      { score: 30, strength: 'weak', color: '#ea580c' },
-      { score: 50, strength: 'fair', color: '#d97706' },
-      { score: 70, strength: 'good', color: '#65a30d' },
-      { score: 85, strength: 'strong', color: '#16a34a' },
+    const strengthTestCases = [
+      { score: 10, strength: 'very-weak', color: '#dc2626' }
+      { score: 30, strength: 'weak', color: '#ea580c' }
+      { score: 50, strength: 'fair', color: '#d97706' }
+      { score: 70, strength: 'good', color: '#65a30d' }
+      { score: 85, strength: 'strong', color: '#16a34a' }
       { score: 95, strength: 'very-strong', color: '#059669' }
     ];
     strengthTestCases.forEach(({ score, strength, color }) => {
       test(`should display correct color and label for ${strength} password`, async () => {}
-        mockValidator.validatePassword.mockResolvedValue({)
-  valid: score >= 70,
-  score,
-  strength: strength as any,
-  ruleResults: [],
-  errors: [],
-  warnings: [],
-  suggestions: [],
-  passedRules: 0,
-  totalRules: 0,
+        mockValidator.validatePassword.mockResolvedValue({ )
+  valid: score >= 70
+  score
+  strength: strength as any
+  ruleResults: []
+  errors: []
+  warnings: []
+  suggestions: []
+  passedRules: 0
+  totalRules: 0 }
 });
         render();
           <PasswordStrengthIndicator 
@@ -145,11 +135,9 @@ describe('PasswordStrengthIndicator', () => {
           compact={true}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Good')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Good')).toBeInTheDocument();
         // Should not show detailed requirements in compact mode
-        expect(screen.queryByText('Requirements')).not.toBeInTheDocument();
-      });
+        expect(screen.queryByText('Requirements')).not.toBeInTheDocument() });
     });
     test('should hide details in compact mode', async () => {
       render();
@@ -161,10 +149,8 @@ describe('PasswordStrengthIndicator', () => {
           showSuggestions={true}
         />
       );
-      await waitFor(() => {
-        expect(screen.queryByText('Requirements')).not.toBeInTheDocument();
-        expect(screen.queryByText('Suggestions')).not.toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.queryByText('Requirements')).not.toBeInTheDocument();
+        expect(screen.queryByText('Suggestions')).not.toBeInTheDocument() });
     });
   });
   describe('Detailed Display', () => {
@@ -176,12 +162,10 @@ describe('PasswordStrengthIndicator', () => {
           showDetails={true}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Requirements')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Requirements')).toBeInTheDocument();
         expect(screen.getByText('2/3 met')).toBeInTheDocument();
         expect(screen.getByText('Length requirement met (12 characters)')).toBeInTheDocument();
-        expect(screen.getByText('Uppercase requirement met (1 found)')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Uppercase requirement met (1 found)')).toBeInTheDocument() });
     });
     test('should show suggestions when showSuggestions is true', async () => {
       render();
@@ -191,10 +175,8 @@ describe('PasswordStrengthIndicator', () => {
           showSuggestions={true}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Suggestions')).toBeInTheDocument();
-        expect(screen.getByText('Add 1 special character(s)')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Suggestions')).toBeInTheDocument();
+        expect(screen.getByText('Add 1 special character(s)')).toBeInTheDocument() });
     });
     test('should show entropy when showEntropy is true', async () => {
       render();
@@ -204,10 +186,8 @@ describe('PasswordStrengthIndicator', () => {
           showEntropy={true}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Entropy')).toBeInTheDocument();
-        expect(screen.getByText('45.2 bits')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Entropy')).toBeInTheDocument();
+        expect(screen.getByText('45.2 bits')).toBeInTheDocument() });
     });
     test('should show crack time when showCrackTime is true', async () => {
       render();
@@ -217,25 +197,22 @@ describe('PasswordStrengthIndicator', () => {
           showCrackTime={true}
         />
       );
-      await waitFor(() => {
-  expect(screen.getByText('Crack Time')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Crack Time')).toBeInTheDocument();
   expect(screen.getByText('Online: 3 days')).toBeInTheDocument();
-  expect(screen.getByText('Offline: 2 hours')).toBeInTheDocument();
-});
+  expect(screen.getByText('Offline: 2 hours')).toBeInTheDocument() });
     });
   });
-  describe('Error and Warning Display', () => {
-  test('should display errors', async () => {
+  describe('Error and Warning Display', () => { test('should display errors', async () => {
   mockValidator.validatePassword.mockResolvedValue({)
-  valid: false,
-  score: 25,
-  strength: 'weak',
-  ruleResults: [],
-  errors: ['Password too short', 'Missing special characters'],
-  warnings: [],
-  suggestions: [],
-  passedRules: 0,
-  totalRules: 2,
+  valid: false
+  score: 25
+  strength: 'weak'
+  ruleResults: []
+  errors: ['Password too short', 'Missing special characters']
+  warnings: []
+  suggestions: []
+  passedRules: 0
+  totalRules: 2 }
 });
       render();
         <PasswordStrengthIndicator 
@@ -243,23 +220,20 @@ describe('PasswordStrengthIndicator', () => {
           validator={mockValidator}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Errors')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Errors')).toBeInTheDocument();
         expect(screen.getByText('Password too short')).toBeInTheDocument();
-        expect(screen.getByText('Missing special characters')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Missing special characters')).toBeInTheDocument() });
     });
-    test('should display warnings', async () => {
-  mockValidator.validatePassword.mockResolvedValue({)
-  valid: true,
-  score: 75,
-  strength: 'good',
-  ruleResults: [],
-  errors: [],
-  warnings: ['Contains common sequence', 'Low entropy'],
-  suggestions: [],
-  passedRules: 2,
-  totalRules: 2,
+    test('should display warnings', async () => { mockValidator.validatePassword.mockResolvedValue({)
+  valid: true
+  score: 75
+  strength: 'good'
+  ruleResults: []
+  errors: []
+  warnings: ['Contains common sequence', 'Low entropy']
+  suggestions: []
+  passedRules: 2
+  totalRules: 2 }
 });
       render();
         <PasswordStrengthIndicator 
@@ -267,23 +241,20 @@ describe('PasswordStrengthIndicator', () => {
           validator={mockValidator}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Warnings')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Warnings')).toBeInTheDocument();
         expect(screen.getByText('Contains common sequence')).toBeInTheDocument();
-        expect(screen.getByText('Low entropy')).toBeInTheDocument();
-      });
+        expect(screen.getByText('Low entropy')).toBeInTheDocument() });
     });
-    test('should not show warnings in compact mode', async () => {
-  mockValidator.validatePassword.mockResolvedValue({)
-  valid: true,
-  score: 75,
-  strength: 'good',
-  ruleResults: [],
-  errors: [],
-  warnings: ['Contains common sequence'],
-  suggestions: [],
-  passedRules: 2,
-  totalRules: 2,
+    test('should not show warnings in compact mode', async () => { mockValidator.validatePassword.mockResolvedValue({)
+  valid: true
+  score: 75
+  strength: 'good'
+  ruleResults: []
+  errors: []
+  warnings: ['Contains common sequence']
+  suggestions: []
+  passedRules: 2
+  totalRules: 2 }
 });
       render();
         <PasswordStrengthIndicator 
@@ -292,18 +263,15 @@ describe('PasswordStrengthIndicator', () => {
           compact={true}
         />
       );
-      await waitFor(() => {
-        expect(screen.queryByText('Warnings')).not.toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.queryByText('Warnings')).not.toBeInTheDocument() });
     });
   });
-  describe('Context-Aware Validation', () => {
-  test('should pass context to validator', async () => {
-  const context: PasswordValidationContext = {,
-  username: 'testuser',
-  email: 'test@example.com',
-  firstName: 'Test',
-  lastName: 'User',
+  describe('Context-Aware Validation', () => { test('should pass context to validator', async () => {
+  const context: PasswordValidationContext = {
+  username: 'testuser'
+  email: 'test@example.com'
+  firstName: 'Test'
+  lastName: 'User' }
 };
       render();
         <PasswordStrengthIndicator 
@@ -312,9 +280,8 @@ describe('PasswordStrengthIndicator', () => {
           validator={mockValidator}
         />
       );
-      await waitFor(() => {
-        expect(mockValidator.validatePassword).toHaveBeenCalledWith()
-          'TestPassword123',
+      await waitFor(() => { expect(mockValidator.validatePassword).toHaveBeenCalledWith()
+          'TestPassword123' }
           context
         );
       });
@@ -330,12 +297,11 @@ describe('PasswordStrengthIndicator', () => {
           onValidationChange={onValidationChange}
         />
       );
-      await waitFor(() => {
-  expect(onValidationChange).toHaveBeenCalledWith()
+      await waitFor(() => { expect(onValidationChange).toHaveBeenCalledWith()
   expect.objectContaining({)
-  valid: true,
-  score: 75,
-  strength: 'good',
+  valid: true
+  score: 75
+  strength: 'good' }
 }
         );
       });
@@ -350,9 +316,7 @@ describe('PasswordStrengthIndicator', () => {
           theme="light"
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Password Strength')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Password Strength')).toBeInTheDocument() });
     });
     test('should support dark theme', async () => {
       render();
@@ -362,23 +326,20 @@ describe('PasswordStrengthIndicator', () => {
           theme="dark"
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Password Strength')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Password Strength')).toBeInTheDocument() });
     });
-    test('should auto-detect theme', async () => {
-  // Mock matchMedia for auto theme detection
+    test('should auto-detect theme', async () => { // Mock matchMedia for auto theme detection
   Object.defineProperty(window, 'matchMedia', {)
-  writable: true,
+  writable: true
   value: jest.fn().mockImplementation(query => ({)
-  matches: query.includes('dark'),
-  media: query,
-  onchange: null,
-  addListener: jest.fn(),
-  removeListener: jest.fn(),
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
-  dispatchEvent: jest.fn(),
+  matches: query.includes('dark')
+  media: query
+  onchange: null
+  addListener: jest.fn()
+  removeListener: jest.fn()
+  addEventListener: jest.fn()
+  removeEventListener: jest.fn()
+  dispatchEvent: jest.fn() }
 }))
       });
       render();
@@ -388,9 +349,7 @@ describe('PasswordStrengthIndicator', () => {
           theme="auto"
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Password Strength')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Password Strength')).toBeInTheDocument() });
     });
   });
   describe('Debouncing', () => {
@@ -418,10 +377,8 @@ describe('PasswordStrengthIndicator', () => {
         />
       );
       // Should only call validator once after debounce period
-      await waitFor(() => {
-        expect(mockValidator.validatePassword).toHaveBeenCalledTimes(1);
-        expect(mockValidator.validatePassword).toHaveBeenCalledWith('abc', undefined);
-      }, { timeout: 200 });
+      await waitFor(() => { expect(mockValidator.validatePassword).toHaveBeenCalledTimes(1);
+        expect(mockValidator.validatePassword).toHaveBeenCalledWith('abc', undefined) }, { timeout: 200 });
     });
   });
   describe('Error Handling', () => {
@@ -435,32 +392,29 @@ describe('PasswordStrengthIndicator', () => {
           validator={mockValidator}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Errors')).toBeInTheDocument();
-        expect(screen.getByText('Validation failed')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Errors')).toBeInTheDocument();
+        expect(screen.getByText('Validation failed')).toBeInTheDocument() });
       consoleSpy.mockRestore();
     });
   });
-  describe('Suggestion Limiting', () => {
-  test('should limit suggestions display to 3 items', async () => {
+  describe('Suggestion Limiting', () => { test('should limit suggestions display to 3 items', async () => {
   mockValidator.validatePassword.mockResolvedValue({)
-  valid: false,
-  score: 25,
-  strength: 'weak',
-  ruleResults: [],
-  errors: [],
-  warnings: [],
-  suggestions: [,
-  'Add uppercase letters',
-  'Add lowercase letters',
-  'Add numbers',
-  'Add special characters',
-  'Increase length',
+  valid: false
+  score: 25
+  strength: 'weak'
+  ruleResults: []
+  errors: []
+  warnings: []
+  suggestions: [
+  'Add uppercase letters'
+  'Add lowercase letters'
+  'Add numbers'
+  'Add special characters'
+  'Increase length'
   'Remove common patterns'
-  ],
-  passedRules: 0,
-  totalRules: 6,
+  ]
+  passedRules: 0
+  totalRules: 6 }
 });
       render();
         <PasswordStrengthIndicator 
@@ -469,12 +423,10 @@ describe('PasswordStrengthIndicator', () => {
           showSuggestions={true}
         />
       );
-      await waitFor(() => {
-        expect(screen.getByText('Add uppercase letters')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('Add uppercase letters')).toBeInTheDocument();
         expect(screen.getByText('Add lowercase letters')).toBeInTheDocument();
         expect(screen.getByText('Add numbers')).toBeInTheDocument();
-        expect(screen.getByText('+3 more suggestions')).toBeInTheDocument();
-      });
+        expect(screen.getByText('+3 more suggestions')).toBeInTheDocument() });
     });
   });
   describe('Custom Styling', () => {
@@ -490,25 +442,22 @@ describe('PasswordStrengthIndicator', () => {
     });
   });
 });
-describe('usePasswordStrength Hook', () => {
-  let mockValidator: jest.Mocked<PasswordComplexityValidator>;
+describe('usePasswordStrength Hook', () => { let mockValidator: jest.Mocked<PasswordComplexityValidator>;
   beforeEach(() => {
   mockValidator = new PasswordComplexityValidator() as jest.Mocked<PasswordComplexityValidator>;
   mockValidator.validatePassword.mockResolvedValue({)
-  valid: true,
-  score: 85,
-  strength: 'strong',
-  ruleResults: [],
-  errors: [],
-  warnings: [],
-  suggestions: ['Consider adding more special characters'],
-  passedRules: 5,
-  totalRules: 6,
+  valid: true
+  score: 85
+  strength: 'strong'
+  ruleResults: []
+  errors: []
+  warnings: []
+  suggestions: ['Consider adding more special characters']
+  passedRules: 5
+  totalRules: 6 }
 });
   });
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  afterEach(() => { jest.clearAllMocks() });
   test('should return password strength data', async () => {
     const TestComponent = () => {
       const { result, isValidating, isValid, score, strength, suggestions, errors } = 
@@ -525,12 +474,10 @@ describe('usePasswordStrength Hook', () => {
       );
     };
     render(<TestComponent />);
-    await waitFor(() => {
-      expect(screen.getByTestId('is-valid')).toHaveTextContent('true');
+    await waitFor(() => { expect(screen.getByTestId('is-valid')).toHaveTextContent('true');
       expect(screen.getByTestId('score')).toHaveTextContent('85');
       expect(screen.getByTestId('strength')).toHaveTextContent('strong');
-      expect(screen.getByTestId('suggestions')).toHaveTextContent('Consider adding more special characters');
-    });
+      expect(screen.getByTestId('suggestions')).toHaveTextContent('Consider adding more special characters') });
   });
   test('should handle empty password', () => {
     const TestComponent = () => {
@@ -555,10 +502,8 @@ describe('usePasswordStrength Hook', () => {
     };
     render(<TestComponent />);
     // Should not throw and should render some score
-    await waitFor(() => {
-      const scoreElement = screen.getByTestId('score');
-      expect(scoreElement).toBeInTheDocument();
-    });
+    await waitFor(() => { const scoreElement = screen.getByTestId('score');
+      expect(scoreElement).toBeInTheDocument() });
   });
 });
 describe('Integration Tests', () => {
@@ -575,9 +520,7 @@ describe('Integration Tests', () => {
       />
     );
     // Should render without errors
-    await waitFor(() => {
-      expect(screen.getByText('Password Strength')).toBeInTheDocument();
-    }, { timeout: 1000 });
+    await waitFor(() => { expect(screen.getByText('Password Strength')).toBeInTheDocument() }, { timeout: 1000 });
   });
   test('should handle rapid password changes', async () => {
     const realValidator = new PasswordComplexityValidator();
@@ -602,8 +545,6 @@ describe('Integration Tests', () => {
         />
       );
     // Should eventually call validation change
-    await waitFor(() => {
-      expect(onValidationChange).toHaveBeenCalled();
-    }, { timeout: 1000 });
+    await waitFor(() => { expect(onValidationChange).toHaveBeenCalled() }, { timeout: 1000 });
   });
 });

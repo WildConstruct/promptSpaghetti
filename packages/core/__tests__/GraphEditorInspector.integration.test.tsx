@@ -6,7 +6,7 @@ import { GraphEditor } from '../GraphEditor';
 import { nodeSchemas } from '../nodeSchemas';
 import type { Edge } from 'reactflow';
 describe('GraphEditor integration: InspectorSidebar', () => {
-  const nodes = [;
+  const nodes = [
     { id: 'n1', type: 'Concat', data: { label: 'Concat', delimiter: ', ' }, position: { x: 0, y: 0 } },
     { id: 'n2', type: 'Output', data: { label: 'Output', prompt: 'Hello' }, position: { x: 100, y: 0 } }
   ];
@@ -29,9 +29,7 @@ describe('GraphEditor integration: InspectorSidebar', () => {
     // Change delimiter field
     await userEvent.clear(delimiterInput);
     await userEvent.type(delimiterInput, '; ');
-    await waitFor(() => {
-      expect((delimiterInput as HTMLInputElement).value).toBe('; ');
-    });
+    await waitFor(() => { expect((delimiterInput as HTMLInputElement).value).toBe('; ') });
   });
   it('debounces and re-validates on node param change', async () => {
     const validateConnection = jest.fn(() => []);
@@ -48,8 +46,6 @@ describe('GraphEditor integration: InspectorSidebar', () => {
     await userEvent.clear(delimiterInput);
     await userEvent.type(delimiterInput, '|');
     // Wait for debounce (300ms)
-    await waitFor(() => {
-      expect(validateConnection).toHaveBeenCalled();
-    }, { timeout: 500 });
+    await waitFor(() => { expect(validateConnection).toHaveBeenCalled() }, { timeout: 500 });
   });
 });

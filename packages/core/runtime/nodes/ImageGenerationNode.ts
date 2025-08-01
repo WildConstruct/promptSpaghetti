@@ -8,18 +8,16 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } fr
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, DALLEAdapter, MidjourneyAdapter, StableDiffusionAdapter } from '../../ai';
 
-}
-export interface ImageGenerationConfig {
-  provider: 'dalle' | 'midjourney' | 'stable-diffusion';
+
+export interface ImageGenerationConfig { provider: 'dalle' | 'midjourney' | 'stable-diffusion';
   model?: string;
   apiKey?: string;
   endpoint?: string;
-  defaultParameters?: Record<string, any>;
-}
-}
-}
-export interface ImageMetadata {
-  width: number;
+  defaultParameters?: Record<string, any> }
+
+
+
+export interface ImageMetadata { width: number;
   height: number;
   format: string;
   model: string;
@@ -28,16 +26,14 @@ export interface ImageMetadata {
   cost: number;
   seed?: number;
   prompt: string;
-  negativePrompt?: string;
-}
-}
-}
-export interface GeneratedImage {
-  url?: string;
+  negativePrompt?: string }
+
+
+
+export interface GeneratedImage { url?: string;
   base64?: string;
-  metadata: ImageMetadata;
-}
-}
+  metadata: ImageMetadata }
+
 export class ImageGenerationNode extends AdvancedRuntimeNode {
   private modelFactory: AIModelFactory;
   private adapters: Map<string, any> = new Map();
@@ -75,13 +71,13 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
       if (!adapter) {
         throw new Error(`No adapter configured for provider: ${provider}`);}
       // Prepare generation options based on provider
-      const options = this._buildGenerationOptions(provider, {)
-  prompt,
-        negativePrompt,
-        width,
-        height,
-        style,
-        quality,
+      const options = this._buildGenerationOptions(provider, { )
+  prompt
+        negativePrompt
+        width
+        height
+        style
+        quality }
         seed
       });
       // Generate images
@@ -89,41 +85,39 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
       const result = await adapter.process(prompt, options);
       const generationTime = Date.now() - startTime;
       // Process results
-      const images: GeneratedImage = result.images.map((img: unknown) => ({,)
-  url: img.url,
-  base64: img.base64,
+      const images: GeneratedImage = result.images.map((img: unknown) => ({ );
+  url: img.url
+  base64: img.base64
   metadata: {
-  width: img.metadata?.size?.split('x')[0] || width,
-  height: img.metadata?.size?.split('x')[1] || height,
-  format: 'png',
-  model: img.metadata?.model || adapter.metadata.name,
-  provider,
-  generationTime,
-  cost: result.usage?.totalCost || result.usage?.estimatedCost || 0,
-  seed: img.seed || seed,
-  prompt,
-  negativePrompt: negativePrompt || undefined,
+  width: img.metadata?.size?.split('x')[0] || width
+  height: img.metadata?.size?.split('x')[1] || height
+  format: 'png'
+  model: img.metadata?.model || adapter.metadata.name
+  provider
+  generationTime
+  cost: result.usage?.totalCost || result.usage?.estimatedCost || 0
+  seed: img.seed || seed
+  prompt
+  negativePrompt: negativePrompt || undefined }
 }));
       const totalCost = images.reduce((sum, img) => sum + img.metadata.cost, 0);
-      const metadata = {
-  provider,
-  model: adapter.metadata.name,
-  generationTime,
-  imageCount: images.length,
-  totalCost,
-  parameters: options,
+      const metadata = { provider
+  model: adapter.metadata.name
+  generationTime
+  imageCount: images.length
+  totalCost
+  parameters: options }
 };
-      return {
-  outputs: {
-  images,
-  metadata,
-  cost: totalCost,
-},
-  executionTime: generationTime,
-        tokensUsed: { input: 0, output: 0 },
+      return { outputs: {
+  images
+  metadata
+  cost: totalCost }
+
+  executionTime: generationTime
+        tokensUsed: { input: 0, output: 0 }
         cost: totalCost;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Image generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
 
@@ -145,37 +139,34 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
         case 'dalle':
           adapter = new DALLEAdapter()
             `dalle-${this.nodeId}`}
-}
-            {
-  apiKey: config.apiKey || '',
-  baseURL: config.endpoint,
-}
+
+            { apiKey: config.apiKey || ''
+  baseURL: config.endpoint }
+
             config.model || 'dall-e-3'
           );
           break;
         case 'midjourney':
           adapter = new MidjourneyAdapter()
             `midjourney-${this.nodeId}`}
-}
-            {
-              serverUrl: config.endpoint || 'http://localhost:8062',
+
+            { serverUrl: config.endpoint || 'http://localhost:8062' }
               apiKey: config.apiKey);
           break;
         case 'stable-diffusion':
           adapter = new StableDiffusionAdapter()
             `sd-${this.nodeId}`}
-}
-            {
-              endpoint: config.endpoint || 'http://localhost:7860',
-              apiType: 'automatic1111',
+
+            { endpoint: config.endpoint || 'http://localhost:7860'
+              apiType: 'automatic1111' }
               apiKey: config.apiKey);
           break;
         default:
           throw new Error(`Unsupported image generation provider: ${config.provider}`);}
       await adapter.initialize();
       this.adapters.set(config.provider, adapter);
-    } catch (error) {
-      console.warn(`Failed to initialize ${config.provider},)}
+ catch (error) {
+      console.warn(`Failed to initialize ${config.provider})}
   adapter:`, error);}
   private _getConfiguredProvider(): string {
     return Array.from(this.adapters.keys())[0] || 'dalle';
@@ -185,25 +176,23 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
       case 'dalle':
         return {
           size: `${width}x${height}`}
-},
-  quality: quality === 'hd' ? 'hd' : 'standard',
-          style: style === 'natural' ? 'natural' : 'vivid',
+
+  quality: quality === 'hd' ? 'hd' : 'standard'
+          style: style === 'natural' ? 'natural' : 'vivid'
           ...(seed && { seed })
         };
       case 'midjourney':
-        return {
-          aspectRatio: this._calculateAspectRatio(width, height),
-          quality: quality === 'hd' ? 2 : 1,
-          stylize: style ? this._mapStyleToStylize(style) : 100,
+        return { aspectRatio: this._calculateAspectRatio(width, height)
+          quality: quality === 'hd' ? 2 : 1
+          stylize: style ? this._mapStyleToStylize(style) : 100 }
           ...(seed && { seed })
         };
       case 'stable-diffusion':
-        return {
-          width,
-          height,
-          negative_prompt: negativePrompt,
-          quality: quality === 'hd' ? 'hd' : 'standard',
-          ...(seed && { seed }),
+        return { width
+          height
+          negative_prompt: negativePrompt
+          quality: quality === 'hd' ? 'hd' : 'standard' }
+          ...(seed && { seed })
           ...(style && { style_preset: style })
         };
       default:
@@ -216,17 +205,16 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
     // Map to common aspect ratios
     const ratio = `${aspectWidth}:${aspectHeight}`;}
     const commonRatios = ['1:1', '2:3', '3:2', '4:5', '5:4', '9:16', '16:9'];
-    if (commonRatios.includes(ratio)) {
-  return ratio;
+    if (commonRatios.includes(ratio)) { return ratio;
   // Default to closest common ratio
   return width >= height ? '3:2' : '2:3';
-  private _mapStyleToStylize(style: string): number {,
-  const styleMap: Record<string, number> = {,
-  'minimal': 50,
-  'natural': 100,
-  'artistic': 250,
-  'dramatic': 500,
-  'experimental': 750,
+  private _mapStyleToStylize(style: string): number {
+  const styleMap: Record<string, number> = {
+  'minimal': 50
+  'natural': 100
+  'artistic': 250
+  'dramatic': 500
+  'experimental': 750 }
 };
     return styleMap[style.toLowerCase()] || 100;
 
@@ -243,9 +231,7 @@ export class ImageVariationNode extends AdvancedRuntimeNode {
       .build();
     super(nodeId, 'image_variation', ioSpec);
     this.modelFactory = new AIModelFactory();
-  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
-
-  try {
+  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> { try {
   const sourceImage = inputs.getString('source_image');
   const variationPrompt = inputs.getString('variation_prompt', '');
   const strength = inputs.getNumber('strength', 0.75);
@@ -259,26 +245,25 @@ export class ImageVariationNode extends AdvancedRuntimeNode {
   // Simulate variation generation
   variations.push({)
   url: sourceImage, // Placeholder - would be actual variation,
-  metadata: {
+  metadata: {,
   sourceImage,
   variationPrompt,
   strength,
-  index: i,
+  index: i }
 });
-      return {
-  outputs: {
+      return { outputs: {,
   variations,
-  metadata: {
+  metadata: {,
   sourceImage,
   variationPrompt,
   strength,
-  count: variations.length,
+  count: variations.length }
 },
   executionTime: 5000,
         tokensUsed: { input: 0, output: 0 },
         cost: 0.02 * count;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Image variation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
 
@@ -301,9 +286,7 @@ export class ImageUpscaleNode extends AdvancedRuntimeNode {
       .output('metadata', 'object', 'Upscaling metadata')
       .build();
     super(nodeId, 'image_upscale', ioSpec);
-  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
-
-  try {
+  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> { try {
   const image = inputs.getString('image');
   const scaleFactor = inputs.getNumber('scale_factor', 2);
   const method = inputs.getString('method', 'esrgan');
@@ -312,21 +295,20 @@ export class ImageUpscaleNode extends AdvancedRuntimeNode {
   // Simulate upscaling process
   const upscaledImage = image; // Placeholder - would be actual upscaled image;
   const metadata = {
-  originalImage: image,
-  scaleFactor,
-  method,
-  processedAt: new Date(),
+  originalImage: image
+  scaleFactor
+  method
+  processedAt: new Date() }
 };
-      return {
-  outputs: {
-  upscaled_image: upscaledImage,
+      return { outputs: {
+  upscaled_image: upscaledImage }
   metadata
-},
-  executionTime: 8000,
-        tokensUsed: { input: 0, output: 0 },
+
+  executionTime: 8000
+        tokensUsed: { input: 0, output: 0 }
         cost: 0.01 * scaleFactor;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Image upscaling failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
 
@@ -348,9 +330,7 @@ export class ImageEditNode extends AdvancedRuntimeNode {
       .output('metadata', 'object', 'Edit metadata')
       .build();
     super(nodeId, 'image_edit', ioSpec);
-  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
-
-  try {
+  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> { try {
   const image = inputs.getString('image');
   const mask = inputs.getString('mask', '');
   const editPrompt = inputs.getString('edit_prompt');
@@ -360,22 +340,21 @@ export class ImageEditNode extends AdvancedRuntimeNode {
   // Simulate image editing process
   const editedImage = image; // Placeholder - would be actual edited image;
   const metadata = {
-  originalImage: image,
-  mask,
-  editPrompt,
-  strength,
-  processedAt: new Date(),
+  originalImage: image
+  mask
+  editPrompt
+  strength
+  processedAt: new Date() }
 };
-      return {
-  outputs: {
-  edited_image: editedImage,
+      return { outputs: {
+  edited_image: editedImage }
   metadata
-},
-  executionTime: 15000,
-        tokensUsed: { input: 0, output: 0 },
+
+  executionTime: 15000
+        tokensUsed: { input: 0, output: 0 }
         cost: 0.04;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Image editing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
 

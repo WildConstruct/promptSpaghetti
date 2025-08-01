@@ -56,7 +56,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({)
   height: '1px',
   backgroundColor: '#e0e0e0',
   margin: '4px 0',
-}}
+}
         />
       );
     return;
@@ -66,7 +66,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({)
         onClick={() => {
           if (!item.disabled) {
             onItemClick(item);
-        }}
+}
         style={{
   display: 'flex',
   alignItems: 'center',
@@ -76,14 +76,14 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({)
   backgroundColor: 'transparent',
   color: item.disabled ? '#999' : '#333',
   transition: 'background-color 0.1s ease',
-}}
+
         onMouseEnter={(e) => {
           if (!item.disabled) {
             (e.target as HTMLElement).style.backgroundColor = '#f0f0f0';
-        }}
+}
         onMouseLeave={(e) => {
           (e.target as HTMLElement).style.backgroundColor = 'transparent';
-        }}
+}
       >
         {item.icon && ()
           <span
@@ -91,7 +91,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({)
   marginRight: '8px',
   fontSize: '16px',
   opacity: item.disabled ? 0.5 : 1,
-}}
+}
           >
             {item.icon}
           </span>
@@ -121,7 +121,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({)
   zIndex: 1000,
   padding: '4px 0',
   userSelect: 'none',
-}}
+
     >
       {options.items.map(renderMenuItem)}
     </div>

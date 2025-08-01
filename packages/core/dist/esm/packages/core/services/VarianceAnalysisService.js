@@ -329,8 +329,9 @@ number;
                     if (score < 0.7)
                         return 'medium';
                     return 'high';
-                    generateVarianceSuggestions(diversityMetrics, VarianceMetrics['diversityMetrics']);
-                    creativeRange: VarianceMetrics['creativeRange'],
+                    generateVarianceSuggestions(diversityMetrics, VarianceMetrics['diversityMetrics']),
+                        creativeRange;
+                    VarianceMetrics['creativeRange'],
                         overallVariance;
                     'low' | 'medium' | 'high',
                         executionPaths;

@@ -8,6 +8,7 @@
 import React from 'react';
 
 }
+}
 interface Epic16LearningPathsProps {
     userId: string;
     userRole: 'user' | 'creator' | 'admin';
@@ -18,4 +19,5 @@ interface Epic16LearningPathsProps {
 export declare const Epic16LearningPaths: React.FC<Epic16LearningPathsProps>;
 export default Epic16LearningPaths;
 //# sourceMappingURL=Epic16LearningPaths.d.ts.map
+}
 }

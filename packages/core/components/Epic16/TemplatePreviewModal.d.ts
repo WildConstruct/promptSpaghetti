@@ -8,15 +8,14 @@ import React from 'react';
 import { MarketplaceTemplate } from './MarketplaceCard';
 
 }
-interface PreviewResult {
-    output: string;
+}
+interface PreviewResult { output: string;
     cost: number;
     qualityScore: number;
     tokens: number;
     model: string;
-    executionTime: number;
-
-
+    executionTime: number }
+}
 }
 interface TemplatePreviewModalProps {
     template: MarketplaceTemplate;
@@ -29,6 +28,7 @@ interface TemplatePreviewModalProps {
         id: string;
         name: string;
         tier: 'free' | 'pro' | 'enterprise'
+}
 }
   };
 

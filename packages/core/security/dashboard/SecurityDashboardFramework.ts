@@ -41,8 +41,7 @@ import { SecurityLogger, SecurityEventType, LogLevel } from '../SecurityLogger';
 import { DataClassificationLevel } from '../DataClassificationAccessControl';
 
 // Core Dashboard Types
-export enum DashboardType {
-  EXECUTIVE = 'executive',           // High-level overview for executives
+export enum DashboardType { EXECUTIVE = 'executive',           // High-level overview for executives
   OPERATIONAL = 'operational',       // Day-to-day security operations
   INCIDENT_RESPONSE = 'incident',    // Incident response and investigation
   COMPLIANCE = 'compliance',         // Regulatory compliance tracking
@@ -86,35 +85,35 @@ export enum DashboardType {
   layout: DashboardLayout;
   widgets: WidgetConfiguration;
   permissions: DashboardPermissions;
-  refreshInterval: number; // milliseconds,
+  refreshInterval: number; // milliseconds }
   autoRefresh: boolean;
   theme: DashboardTheme;
   customStyles?: Record<string, any>;
   metadata: DashboardMetadata;
   dataClassification: DataClassificationLevel;
   // Layout Configuration
-}
-}
-}
-export interface DashboardLayout {
-  type: 'grid' | 'masonry' | 'custom';
+
+
+
+
+export interface DashboardLayout { type: 'grid' | 'masonry' | 'custom' }
   columns: number;
   rows?: number;
   gap: number;
   responsive: boolean;
   breakpoints?: LayoutBreakpoint;
   regions?: LayoutRegion;
-}
-}
-}
-export interface LayoutBreakpoint {
-  name: string;
+
+
+
+
+export interface LayoutBreakpoint { name: string;
   minWidth: number;
   columns: number;
-  gap?: number;
-}
-}
-}
+  gap?: number }
+
+
+
 export interface LayoutRegion {
   id: string;
   name: string;
@@ -124,11 +123,11 @@ export interface LayoutRegion {
   resizable?: boolean;
   collapsible?: boolean;
   // Widget Configuration
-}
-}
-}
-export interface WidgetConfiguration {
-  id: string;
+
+
+
+
+export interface WidgetConfiguration { id: string;
   type: string;
   category: WidgetCategory;
   title: string;
@@ -139,18 +138,17 @@ export interface WidgetConfiguration {
   permissions: WidgetPermissions;
   refreshInterval?: number;
   autoRefresh?: boolean;
-  customStyles?: Record<string, any>;
-}
-}
-}
-export interface WidgetPosition {
-  x: number;
+  customStyles?: Record<string, any> }
+
+
+
+export interface WidgetPosition { x: number;
   y: number;
   order?: number;
-  region?: string;
-}
-}
-}
+  region?: string }
+
+
+
 export interface WidgetSize {
   width: number;
   height: number;
@@ -160,11 +158,11 @@ export interface WidgetSize {
   maxHeight?: number;
   resizable?: boolean;
   // Data Source Configuration
-}
-}
-}
-export interface DataSourceConfig {
-  type: 'realtime' | 'batch' | 'static';
+
+
+
+
+export interface DataSourceConfig { type: 'realtime' | 'batch' | 'static' }
   source: string;
   endpoint?: string;
   query?: string;
@@ -172,49 +170,48 @@ export interface DataSourceConfig {
   aggregation?: AggregationConfig;
   caching?: CachingConfig;
   authentication?: AuthenticationConfig;
-}
-}
-}
-export interface AggregationConfig {
-  groupBy: string;
+
+
+
+
+export interface AggregationConfig { groupBy: string;
   timeWindow: string;
-  functions: AggregationFunction;
-}
-}
-}
-export interface AggregationFunction {
-  field: string;
+  functions: AggregationFunction }
+
+
+
+export interface AggregationFunction { field: string;
   function: 'sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct';
-  alias?: string;
-}
-}
-}
-export interface CachingConfig {
-  enabled: boolean;
-  ttl: number; // seconds,
+  alias?: string }
+
+
+
+export interface CachingConfig { enabled: boolean;
+  ttl: number; // seconds }
   invalidationRules?: string;
-}
-}
-}
+
+
+
+
 export interface AuthenticationConfig {
   required: boolean;
   method: 'oauth' | 'apikey' | 'certificate' | 'none';
   credentials?: Record<string, string>;
   // Permission System
-}
-}
-}
-export interface DashboardPermissions {
-  view: SecurityRole;
+
+
+
+
+export interface DashboardPermissions { view: SecurityRole;
   edit: SecurityRole;
   delete: SecurityRole;
   export: SecurityRole;
   share: SecurityRole;
   adminOnly: boolean;
-  dataClassificationRequirement?: DataClassificationLevel;
-}
-}
-}
+  dataClassificationRequirement?: DataClassificationLevel }
+
+
+
 export interface WidgetPermissions {
   view: SecurityRole;
   configure: SecurityRole;
@@ -222,11 +219,11 @@ export interface WidgetPermissions {
   drillDown: SecurityRole;
   dataAccess: DataClassificationLevel;
   // Metadata
-}
-}
-}
-export interface DashboardMetadata {
-  version: string;
+
+
+
+
+export interface DashboardMetadata { version: string;
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
@@ -235,37 +232,36 @@ export interface DashboardMetadata {
   category: string;
   organization: string;
   compliance: ComplianceMetadata;
-  usage: UsageMetadata;
-}
-}
-}
-export interface ComplianceMetadata {
-  frameworks: string;
+  usage: UsageMetadata }
+
+
+
+export interface ComplianceMetadata { frameworks: string;
   requirements: string;
   auditRequired: boolean;
-  retentionPeriod: number; // days,
+  retentionPeriod: number; // days }
   dataResidency: string;
-}
-}
-}
-export interface UsageMetadata {
-  viewCount: number;
+
+
+
+
+export interface UsageMetadata { viewCount: number;
   lastViewed: Date;
   popularWidgets: string;
-  averageSessionDuration: number; // seconds,
+  averageSessionDuration: number; // seconds }
   peakUsageHours: number;
   // Widget Registry
-}
-}
-}
-export interface WidgetDefinition {
-  type: string;
+
+
+
+
+export interface WidgetDefinition { type: string;
   name: string;
   category: WidgetCategory;
   description: string;
   icon: string;
-  component: string; // React component name,
-  configSchema: any; // JSON schema for configuration,
+  component: string; // React component name;
+  configSchema: any; // JSON schema for configuration }
   dataRequirements: DataRequirement;
   minSize: WidgetSize;
   maxSize: WidgetSize;
@@ -273,29 +269,28 @@ export interface WidgetDefinition {
   permissions: WidgetPermissions;
   tags: string;
   version: string;
-}
-}
-}
-export interface DataRequirement {
-  field: string;
+
+
+
+
+export interface DataRequirement { field: string;
   type: 'number' | 'string' | 'boolean' | 'date' | 'object';
   required: boolean;
   description: string;
   format?: string;
-  validation?: ValidationRule;
-}
-}
-}
-export interface ValidationRule {
-  type: 'range' | 'pattern' | 'enum' | 'custom';
+  validation?: ValidationRule }
+
+
+
+export interface ValidationRule { type: 'range' | 'pattern' | 'enum' | 'custom' }
   params: Record<string, any>;
   message: string;
   // Theme Configuration
-}
-}
-}
-export interface ThemeConfig {
-  name: DashboardTheme;
+
+
+
+
+export interface ThemeConfig { name: DashboardTheme;
   displayName: string;
   colors: ColorPalette;
   typography: TypographyConfig;
@@ -303,12 +298,11 @@ export interface ThemeConfig {
   shadows: ShadowConfig;
   borders: BorderConfig;
   animations: AnimationConfig;
-  accessibility: AccessibilityConfig;
-}
-}
-}
-export interface ColorPalette {
-  primary: string;
+  accessibility: AccessibilityConfig }
+
+
+
+export interface ColorPalette { primary: string;
   secondary: string;
   accent: string;
   background: string;
@@ -322,13 +316,12 @@ export interface ColorPalette {
   critical: string;
   info: string;
   border: string;
-  shadow: string;
-}
-}
-}
-export interface TypographyConfig {
-  fontFamily: string;
-  fontSize: {
+  shadow: string }
+
+
+
+export interface TypographyConfig { fontFamily: string;
+  fontSize: { }
   xs: string;
   sm: string;
   base: string;
@@ -336,87 +329,81 @@ export interface TypographyConfig {
   xl: string;
   '2xl': string;
   '3xl': string;
-}
+
+
 };
-  fontWeight: {
+  fontWeight: { 
   light: number;
   normal: number;
   medium: number;
   semibold: number;
-  bold: number;
-};
-  lineHeight: {
+  bold: number };
+  lineHeight: { 
   tight: number;
   normal: number;
-  relaxed: number;
-};
-}
-}
-export interface SpacingConfig {
-  xs: string;
+  relaxed: number };
+
+
+export interface SpacingConfig { xs: string;
   sm: string;
   md: string;
   lg: string;
   xl: string;
   '2xl': string;
-  '3xl': string;
-}
-}
-}
-export interface ShadowConfig {
-  sm: string;
+  '3xl': string }
+
+
+
+export interface ShadowConfig { sm: string;
   md: string;
   lg: string;
-  xl: string;
-}
-}
-}
-export interface BorderConfig {
-  width: {
+  xl: string }
+
+
+
+export interface BorderConfig { width: { }
   thin: string;
   normal: string;
   thick: string;
-}
+
+
 };
-  radius: {
+  radius: { 
   sm: string;
   md: string;
   lg: string;
-  full: string;
-};
-}
-}
-export interface AnimationConfig {
-  duration: {
+  full: string };
+
+
+export interface AnimationConfig { duration: { }
   fast: string;
   normal: string;
   slow: string;
-}
+
+
 };
-  easing: {
+  easing: { 
   linear: string;
   easeIn: string;
   easeOut: string;
-  easeInOut: string;
-};
-}
-}
-export interface AccessibilityConfig {
-  focusRing: string;
+  easeInOut: string };
+
+
+export interface AccessibilityConfig { focusRing: string;
   screenReaderOnly: string;
   highContrast: boolean;
   reducedMotion: boolean;
-  fontSize: {
+  fontSize: { }
   min: string;
   max: string;
-}
+
+
 };
 
 // Dashboard Framework Events
-}
-}
-export interface DashboardFrameworkEvents {
-  'dashboard:loaded': (dashboard: DashboardConfig) => void;
+
+
+export interface DashboardFrameworkEvents { 'dashboard:loaded': (dashboard: DashboardConfig) => void;
   'dashboard:error': (error: Error, dashboardId: string) => void;
   'widget:loaded': (widget: WidgetConfiguration) => void;
   'widget:error': (error: Error, widgetId: string) => void;
@@ -425,19 +412,18 @@ export interface DashboardFrameworkEvents {
   'user:interaction': (event: UserInteractionEvent) => void;
   'permission:denied': (event: PermissionDeniedEvent) => void;
   'theme:changed': (theme: DashboardTheme) => void;
-  'layout:changed': (layout: DashboardLayout) => void;
-}
-}
-}
-export interface UserInteractionEvent {
-  userId: string;
+  'layout:changed': (layout: DashboardLayout) => void }
+
+
+
+export interface UserInteractionEvent { userId: string;
   action: string;
   target: string;
   timestamp: Date;
-  metadata: Record<string, any>;
-}
-}
-}
+  metadata: Record<string, any> }
+
+
+
 export interface PermissionDeniedEvent {
   userId: string;
   requiredRole: SecurityRole;
@@ -446,24 +432,24 @@ export interface PermissionDeniedEvent {
   action: string;
   timestamp: Date;
   // Main Framework Class
-}
-}
-}
-export interface SecurityDashboardFrameworkOptions {
-  enableAuditLogging: boolean;
+
+
+
+
+export interface SecurityDashboardFrameworkOptions { enableAuditLogging: boolean;
   enablePerformanceMonitoring: boolean;
   enableCaching: boolean;
   defaultTheme: DashboardTheme;
   maxWidgetsPerDashboard: number;
   maxDashboardsPerUser: number;
-  sessionTimeout: number; // minutes,
-  dataRetention: number; // days,
+  sessionTimeout: number; // minutes;
+  dataRetention: number; // days }
   complianceMode: boolean;
   /**
   * Main Security Dashboard Framework Class
   */
-}
-}
+
+
 export class SecurityDashboardFramework extends EventEmitter {
   private dashboards: Map<string, DashboardConfig> = new Map();
   private widgets: Map<string, WidgetDefinition> = new Map();
@@ -471,32 +457,29 @@ export class SecurityDashboardFramework extends EventEmitter {
   private dataSources: Map<string, any> = new Map();
   private securityLogger: SecurityLogger;
   private options: SecurityDashboardFrameworkOptions;
-  constructor(options: Partial<SecurityDashboardFrameworkOptions> = {}) {
-  super();
+  constructor(options: Partial<SecurityDashboardFrameworkOptions> = {}) { super();
   this.options = {
-  enableAuditLogging: true,
-  enablePerformanceMonitoring: true,
-  enableCaching: true,
-  defaultTheme: DashboardTheme.CINEMA,
-  maxWidgetsPerDashboard: 50,
-  maxDashboardsPerUser: 20,
-  sessionTimeout: 480, // 8 hours,
-  dataRetention: 365,
-  complianceMode: true,
+  enableAuditLogging: true
+  enablePerformanceMonitoring: true
+  enableCaching: true
+  defaultTheme: DashboardTheme.CINEMA
+  maxWidgetsPerDashboard: 50
+  maxDashboardsPerUser: 20
+  sessionTimeout: 480, // 8 hours
+  dataRetention: 365
+  complianceMode: true }
   ...options
 };
-    this.securityLogger = new SecurityLogger({)
-  component: 'SecurityDashboardFramework',
-  enableAuditTrail: this.options.enableAuditLogging,
-  enableMetrics: this.options.enablePerformanceMonitoring,
+    this.securityLogger = new SecurityLogger({ )
+  component: 'SecurityDashboardFramework'
+  enableAuditTrail: this.options.enableAuditLogging
+  enableMetrics: this.options.enablePerformanceMonitoring }
 });
     this.initializeFramework();
   /**
    * Initialize the dashboard framework
    */
-  private async initializeFramework(): Promise<void> {
-
-  try {
+  private async initializeFramework(): Promise<void> { try {
   // Load default themes
   this.loadDefaultThemes();
   // Register built-in widgets
@@ -506,29 +489,26 @@ export class SecurityDashboardFramework extends EventEmitter {
   // Load saved dashboards
   await this.loadDashboards();
   this.securityLogger.logSecurityEvent({)
-  type: SecurityEventType.SECURITY_ALERT,
-  level: LogLevel.INFO,
-  message: 'Security dashboard framework initialized successfully',
+  type: SecurityEventType.SECURITY_ALERT
+  level: LogLevel.INFO
+  message: 'Security dashboard framework initialized successfully'
   details: {
-  widgetCount: this.widgets.size,
-  dashboardCount: this.dashboards.size,
-  themeCount: this.themes.size,
+  widgetCount: this.widgets.size
+  dashboardCount: this.dashboards.size
+  themeCount: this.themes.size }
 });
       this.emit('framework:initialized');
-    } catch (error) {
-      this.securityLogger.logSecurityEvent({)
-  type: SecurityEventType.SECURITY_ALERT,
-        level: LogLevel.ERROR,
-        message: 'Failed to initialize security dashboard framework',
+ catch (error) { this.securityLogger.logSecurityEvent({)
+  type: SecurityEventType.SECURITY_ALERT
+        level: LogLevel.ERROR
+        message: 'Failed to initialize security dashboard framework' }
         details: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       throw error;
   /**
    * Register a new dashboard
    */
-  async registerDashboard(config: DashboardConfig, userId: string): Promise<boolean> {
-
-  try {
+  async registerDashboard(config: DashboardConfig, userId: string): Promise<boolean> { try {
   // Validate configuration
   this.validateDashboardConfig(config);
   // Check permissions
@@ -536,81 +516,77 @@ export class SecurityDashboardFramework extends EventEmitter {
   throw new Error('Insufficient permissions to register dashboard');
   // Store dashboard
   this.dashboards.set(config.id, {)
-  ...config,
+  ...config
   metadata: {
-  ...config.metadata,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  createdBy: userId,
+  ...config.metadata
+  createdAt: new Date()
+  updatedAt: new Date()
+  createdBy: userId }
 });
-      this.securityLogger.logSecurityEvent({)
-  type: SecurityEventType.SECURITY_ALERT,
-  level: LogLevel.INFO,
-  message: 'Dashboard registered successfully',
+      this.securityLogger.logSecurityEvent({ )
+  type: SecurityEventType.SECURITY_ALERT
+  level: LogLevel.INFO
+  message: 'Dashboard registered successfully'
   details: {
-  dashboardId: config.id,
-  type: config.type,
-  widgetCount: config.widgets.length,
-  createdBy: userId,
+  dashboardId: config.id
+  type: config.type
+  widgetCount: config.widgets.length
+  createdBy: userId }
 });
       this.emit('dashboard:registered', config);
       return true;
-    } catch (error) {
-  this.securityLogger.logSecurityEvent({)
-  type: SecurityEventType.SECURITY_ALERT,
-  level: LogLevel.ERROR,
-  message: 'Failed to register dashboard',
+ catch (error) { this.securityLogger.logSecurityEvent({)
+  type: SecurityEventType.SECURITY_ALERT
+  level: LogLevel.ERROR
+  message: 'Failed to register dashboard'
   details: {
-  dashboardId: config.id,
-  error: error instanceof Error ? error.message : 'Unknown error',
+  dashboardId: config.id
+  error: error instanceof Error ? error.message : 'Unknown error' }
 });
       return false;
   /**
    * Register a new widget type
    */
-  registerWidget(definition: WidgetDefinition): boolean {
-  try {
+  registerWidget(definition: WidgetDefinition): boolean { try {
   this.validateWidgetDefinition(definition);
   this.widgets.set(definition.type, definition);
   this.securityLogger.logSecurityEvent({)
-  type: SecurityEventType.SECURITY_ALERT,
-  level: LogLevel.INFO,
-  message: 'Widget type registered successfully',
+  type: SecurityEventType.SECURITY_ALERT
+  level: LogLevel.INFO
+  message: 'Widget type registered successfully'
   details: {
-  widgetType: definition.type,
-  category: definition.category,
-  version: definition.version,
+  widgetType: definition.type
+  category: definition.category
+  version: definition.version }
 });
       return true;
-    } catch (error) {
-  this.securityLogger.logSecurityEvent({)
-  type: SecurityEventType.SECURITY_ALERT,
-  level: LogLevel.ERROR,
-  message: 'Failed to register widget type',
+ catch (error) { this.securityLogger.logSecurityEvent({)
+  type: SecurityEventType.SECURITY_ALERT
+  level: LogLevel.ERROR
+  message: 'Failed to register widget type'
   details: {
-  widgetType: definition.type,
-  error: error instanceof Error ? error.message : 'Unknown error',
+  widgetType: definition.type
+  error: error instanceof Error ? error.message : 'Unknown error' }
 });
       return false;
   /**
    * Get dashboard by ID
    */
-  getDashboard(id: string, userId: string): DashboardConfig | null {
-  const dashboard = this.dashboards.get(id);
+  getDashboard(id: string, userId: string): DashboardConfig | null { const dashboard = this.dashboards.get(id);
   if (!dashboard) return null;
   // Check view permissions
   const userRoles = this.getUserRoles(userId);
   const canView = dashboard.permissions.view.some(role => userRoles.includes(role));
   if (!canView) {
   this.securityLogger.logSecurityEvent({)
-  type: SecurityEventType.SECURITY_ALERT,
-  level: LogLevel.WARN,
-  message: 'Dashboard access denied',
+  type: SecurityEventType.SECURITY_ALERT
+  level: LogLevel.WARN
+  message: 'Dashboard access denied'
   details: {
-  dashboardId: id,
-  userId,
-  userRoles,
-  requiredRoles: dashboard.permissions.view,
+  dashboardId: id
+  userId
+  userRoles
+  requiredRoles: dashboard.permissions.view }
 });
       return null;
     return dashboard;

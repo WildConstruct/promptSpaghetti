@@ -296,8 +296,9 @@ void  > {
                                                                                 return `snapshot_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                                                                             }
                                                                             async;
-                                                                            profileStateUpdate(newState, T);
-                                                                            prevState: T,
+                                                                            profileStateUpdate(newState, T),
+                                                                                prevState;
+                                                                            T,
                                                                                 change;
                                                                             StateChange;
                                                                             Promise < void  > {
@@ -356,8 +357,8 @@ void  > {
                                                                         try { }
                                                                         catch (error) {
                                                                             console.warn('DevTools recording failed:', error);
-                                                                            enableDevTools(options, {});
-                                                                            enableTimeTravel ?  : boolean;
+                                                                            enableDevTools(options, {}),
+                                                                                enableTimeTravel ?  : boolean;
                                                                             enableProfiling ?  : boolean;
                                                                             enableValidation ?  : boolean;
                                                                         }

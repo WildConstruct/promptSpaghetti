@@ -44,7 +44,12 @@ metadata: {
 ;
 ;
 ;
-secondary: Array;
+secondary: Array < {
+    stepId: string,
+    requirements: ConditionLogic,
+    weight: number,
+    isOptional: boolean
+} > ;
 scoreCalculation: {
     method: 'weighted' | 'binary' | 'progressive' | 'custom';
     customFormula ?  : string;
@@ -97,7 +102,8 @@ state: {
     lastUpdated: number;
     growthRate: number;
     churnRate: number;
-    status: 'active' | 'paused' | 'archived';
+    status: 'active' | 'paused' | 'archived',
+    ;
 }
 ;
 // Performance metrics
@@ -442,8 +448,7 @@ export class ConversionDataRelationshipManager {
                                         return {
                                             id: templateId,
                                             metadata: {
-                                                name: `Template ${templateId}`
-                                            }
+                                                name: `Template ${templateId}` }
                                         },
                                             description;
                                         'Sample template',
@@ -535,13 +540,13 @@ export class ConversionDataRelationshipManager {
                                         },
                                         calculateProfileCompleteness(user) {
                                             let completeness = 0;
-                                            const fields = [];
-                                            user.profile.email,
+                                            const fields = [
+                                                user.profile.email,
                                                 user.profile.name,
                                                 user.preferences.privacySettings,
                                                 user.behavior.devicePreferences.length > 0,
-                                                user.segmentation.currentSegments.length > 0;
-                                            ;
+                                                user.segmentation.currentSegments.length > 0
+                                            ];
                                             fields.forEach(field => { });
                                             if (field)
                                                 completeness += 0.2;
@@ -588,10 +593,8 @@ export class ConversionDataRelationshipManager {
                                         /**
                                          * Factory function to create ConversionDataRelationshipManager
                                          */
-                                        export: 
-                                    },
-                                    export: , default: ConversionDataRelationshipManager
-                                }
+                                        export:  },
+                                    export: , default: ConversionDataRelationshipManager }
                             };
                         }
                     };

@@ -9,7 +9,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 // Mock data generators
 const generateUserPreferenceData = () => ({});
 userId: `user_${Math.random().toString(36).substr(2, 8)}`;
-preferences: [,
+preferences: [
     {
         category: 'content_type',
         subcategory: 'templates',
@@ -27,7 +27,8 @@ preferences: [,
         source: 'explicit',
         timestamp: Date.now() - Math.random() * 86400000 * 30,
         confidence: Math.random() * 0.3 + 0.7
-    }],
+    }
+],
     implicit;
 [],
     explicit;
@@ -51,7 +52,7 @@ preferences: [,
     const generateRecommendationPerformance = () => ({
         algorithmId: `algo_${Math.random().toString(36).substr(2, 6)}` });
 }
-metrics: [,
+metrics: [
     {
         metric: 'click_through_rate',
         value: Math.random() * 0.15 + 0.05,
@@ -69,7 +70,8 @@ metrics: [,
         value: Math.random() * 2 + 3.5,
         benchmark: 4.0,
         change: (Math.random() - 0.5) * 0.5
-    }],
+    }
+],
     abTestResults;
 [],
     userFeedback;
@@ -130,8 +132,7 @@ const handleExport = useCallback(() => {
             analysisTimestamp: Date.now(),
             metadata: {
                 totalUsers: userPreferences.length,
-                averagePreferenceConfidence: userPreferences.reduce(),
-            }(sum),
+                averagePreferenceConfidence: userPreferences.reduce(), }(sum),
             u };
     }
 });

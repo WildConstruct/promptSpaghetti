@@ -9,11 +9,10 @@ export type { LoadingStateProps } from './LoadingState';
 export { default as ErrorState } from './ErrorState';
 export type { ErrorStateProps } from './ErrorState';
 
-export {
-  default as EmptyState,
+export { default as EmptyState,
   EmptySearchState,
   EmptyFilterState,
   EmptyCreateState,
-  EmptyChartState,
-} from './EmptyState';
+  EmptyChartState }
+ from './EmptyState';
 export type { EmptyStateProps } from './EmptyState';

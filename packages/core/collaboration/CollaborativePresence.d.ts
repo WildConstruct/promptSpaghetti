@@ -5,13 +5,13 @@
 import React from 'react';
 import { UserPresence } from './collaborativeGraphStore';
 }
-interface CollaborativePresenceProps {
-    userCursors: Array<{
+}
+interface CollaborativePresenceProps { userCursors: Array<{
         userId: string;
         user: UserPresence;
         position: {
             x: number;
-            y: number;
+            y: number }
 }
         };
         nodeId?: string;
@@ -23,25 +23,25 @@ interface CollaborativePresenceProps {
  */
 export declare const CollaborativePresence: React.FC<CollaborativePresenceProps>;
 }
-interface CollaborationStatusProps {
-    isCollaborative: boolean;
+}
+interface CollaborationStatusProps { isCollaborative: boolean;
     connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error';
     connectedUserCount: number;
     className?: string;
 /**
  * Connection status indicator component
  */
-export declare const CollaborationStatus: React.FC<CollaborationStatusProps>;
+export declare const CollaborationStatus: React.FC<CollaborationStatusProps> }
 }
-interface UserAvatarsProps {
-    connectedUsers: Map<string, UserPresence>;
+}
+interface UserAvatarsProps { connectedUsers: Map<string, UserPresence>;
     localUserId?: string;
     maxVisible?: number;
     className?: string;
 /**
  * Connected users avatar list
  */
-export declare const UserAvatars: React.FC<UserAvatarsProps>;
+export declare const UserAvatars: React.FC<UserAvatarsProps> }
 }
 export {};
 //# sourceMappingURL=CollaborativePresence.d.ts.map

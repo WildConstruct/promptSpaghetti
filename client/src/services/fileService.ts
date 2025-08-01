@@ -7,81 +7,96 @@ import { useAuthStore } from '../stores/authStore';
 
 // Dependency Injection Interfaces
 
-}
+
 export interface HttpClient {
   request<T>(url: string, options?: RequestInit): Promise<T>;
-}
-}
-}
+
+
+
+
+
 export interface AuthProvider {
   getToken(): string | null;
-}
-}
-}
+
+
+
+
+
 export interface Logger {
   error(message: string, context?: Record<string, unknown>): void;
   info(message: string, context?: Record<string, unknown>): void;
   warn(message: string, context?: Record<string, unknown>): void;
-}
-}
-}
+
+
+
+
+
 export interface FileServiceConfig {
   baseUrl: string;,
   enableMockFallback: boolean;
-}
-}
-}
+
+
+
+
+
 export interface FileServiceDependencies {
   httpClient: HttpClient;,
-  authProvider: AuthProvider;
+  authProvider: AuthProvider;,
   logger: Logger;,
   config: FileServiceConfig;
-}
-}
-}
+
+
+
+
+
 export interface FileOperationResponse {
   success: boolean;
   message?: string;
   data?: unknown;
   error?: string;
-}
-}
-}
+
+
+
+
+
 export interface TreeNode {
   id: string;,
-  name: string;
+  name: string;,
   type: 'file' | 'folder';,
   path: string;
   size?: number;
   lastModified: Date;,
-  createdAt: Date;
+  createdAt: Date;,
   tags: string;
   children?: TreeNode;
   isExpanded?: boolean;
-  metadata?: {
+  metadata?: {,
   nodeCount?: number;
   edgeCount?: number;
   description?: string;
   author?: string;
   version?: string;
   thumbnail?: string;
-}
+
+
 };
   permissions?: {
   read: boolean;,
-  write: boolean;
+  write: boolean;,
   delete: boolean;,
   share: boolean;
 };
-}
-}
+
+
+
 export interface FileStats {
   totalFiles: number;,
-  totalFolders: number;
+  totalFolders: number;,
   totalSize: number;,
   recentFiles: TreeNode;
-class FileService {
-}
+  class FileService {
+
+
   constructor(private deps: FileServiceDependencies) {}
   // Factory method for creating with default dependencies
   static createDefault(): FileService {
@@ -89,7 +104,7 @@ class FileService {
   httpClient: new DefaultHttpClient(),
   authProvider: new AuthStoreProvider(),
   logger: new ConsoleLogger(),
-  config: {
+  config: {,
   baseUrl: import.meta.env.VITE_API_URL || '',
   enableMockFallback: true,
 });
@@ -108,7 +123,7 @@ class FileService {
   private async makeRequest<T>(url: string, options: RequestInit = {}): Promise<T> {
 
     return this.deps.httpClient.request<T>(`${this.deps.config.baseUrl}${url}`, {)}
-  }
+
       ...options,
       headers: {
         ...this.getHeaders(),
@@ -121,7 +136,7 @@ class FileService {
 
     try {
       return await this.makeRequest<TreeNode>(`/api/files/list?path=${encodeURIComponent(path)}`);}
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to list directory', {)
   error: errorMessage,
@@ -142,7 +157,7 @@ class FileService {
   method: 'POST',
         body: JSON.stringify({ sourcePath, targetPath })
       });
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to move file', {)
   error: errorMessage,
@@ -169,7 +184,7 @@ class FileService {
   method: 'POST',
         body: JSON.stringify({ sourcePath, targetPath })
       });
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to copy file', {)
   error: errorMessage,
@@ -196,7 +211,7 @@ class FileService {
   method: 'POST',
         body: JSON.stringify({ path, newName })
       });
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to rename file', {)
   error: errorMessage,
@@ -223,7 +238,7 @@ class FileService {
   method: 'DELETE',
         body: JSON.stringify({ path })
       });
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to delete file', {)
   error: errorMessage,
@@ -249,7 +264,7 @@ class FileService {
   method: 'POST',
         body: JSON.stringify({ parentPath, folderName })
       });
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to create folder', {)
   error: errorMessage,
@@ -288,7 +303,7 @@ class FileService {
       if (!response.ok) {
         throw new Error(`Upload failed: ${response.status}`);}
       return await response.json();
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to upload file', {)
   error: errorMessage,
@@ -313,7 +328,7 @@ class FileService {
 
     try {
       return await this.makeRequest<TreeNode>(`/api/files/properties?path=${encodeURIComponent(path)}`);}
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to get file properties', {)
   error: errorMessage,
@@ -328,7 +343,7 @@ class FileService {
 
     try {
       return await this.makeRequest<TreeNode>(`/api/files/search?q=${encodeURIComponent(query)}&searchIn=${searchIn}`);}
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to search files', {)
   error: errorMessage,
@@ -344,7 +359,7 @@ class FileService {
 
     try {
       return await this.makeRequest<FileStats>(`/api/files/stats?path=${encodeURIComponent(path)}`);}
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to get file stats', {)
   error: errorMessage,
@@ -365,7 +380,7 @@ class FileService {
     try {
       const response = await this.makeRequest<{ exists: boolean }>(`/api/files/exists?path=${encodeURIComponent(path)}`);}
       return response.exists;
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to check file existence', {)
   error: errorMessage,
@@ -376,8 +391,8 @@ class FileService {
   /**
    * Batch file operations (move, copy, delete multiple items)
    */
-  async batchOperation(operation: 'move' | 'copy' | 'delete',)
-    paths: string,
+  async batchOperation(operation: 'move' | 'copy' | 'delete');
+  paths: string,
     targetPath?: string
   ): Promise<FileOperationResponse> {
 
@@ -386,7 +401,7 @@ class FileService {
   method: 'POST',
         body: JSON.stringify({ operation, paths, targetPath })
       });
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
   this.deps.logger.error('Failed to perform batch operation', {)
   error: errorMessage,
@@ -418,7 +433,7 @@ class FileService {
         createdAt: new Date('2024-01-01'),
         tags: ['root'],
         permissions: { read: true, write: true, delete: false, share: true },
-        children: [,
+        children: [
           {
             id: 'f1',
             name: 'Workflows',
@@ -428,7 +443,7 @@ class FileService {
             createdAt: new Date('2024-01-05'),
             tags: ['category'],
             permissions: { read: true, write: true, delete: true, share: true },
-            children: [,
+            children: [
               {
                 id: 'file1',
                 name: 'Character Generator.psg',
@@ -439,13 +454,13 @@ class FileService {
                 createdAt: new Date('2024-01-08'),
                 tags: ['character', 'rpg'],
                 permissions: { read: true, write: true, delete: true, share: true },
-                metadata: {
+                metadata: {,
   nodeCount: 12,
   edgeCount: 15,
   description: 'RPG character generator with stats and background',
   author: 'User',
   version: '1.2',
-}
+
               {
                 id: 'file2',
                 name: 'Story Prompt.psg',
@@ -456,13 +471,13 @@ class FileService {
                 createdAt: new Date('2024-01-06'),
                 tags: ['story', 'creative'],
                 permissions: { read: true, write: true, delete: true, share: true },
-                metadata: {
+                metadata: {,
   nodeCount: 8,
   edgeCount: 10,
   description: 'Creative story prompt generator',
   author: 'User',
   version: '1.0'];
-  }
+
           {
             id: 'f2',
             name: 'Templates',
@@ -472,7 +487,7 @@ class FileService {
             createdAt: new Date('2024-01-03'),
             tags: ['templates'],
             permissions: { read: true, write: true, delete: true, share: true },
-            children: [,
+            children: [
               {
                 id: 'file3',
                 name: 'Basic Prompt.psg',
@@ -483,13 +498,12 @@ class FileService {
                 createdAt: new Date('2024-01-12'),
                 tags: ['basic', 'template'],
                 permissions: { read: true, write: true, delete: true, share: true },
-                metadata: {
+                metadata: {,
   nodeCount: 3,
   edgeCount: 2,
   description: 'Simple prompt template',
   author: 'System',
-  version: '1.0'],
-  ]
+  version: '1.0']]
   ];
   if (path === '/') {
   return mockData;
@@ -515,7 +529,7 @@ class DefaultHttpClient implements HttpClient {
       let errorData = { message: `Request failed with status ${response.status}` };}
       try {
         errorData = await response.json();
-      } catch {
+ catch {
         // Use default error data if JSON parsing fails
       throw new Error(errorData.message ?? `Request failed with status ${response.status}`);}
     return await response.json();
@@ -533,5 +547,5 @@ class ConsoleLogger implements Logger {
 // Export singleton instance with default dependencies
 
 // Export class for custom dependency injection
-}
+
 export { FileService };

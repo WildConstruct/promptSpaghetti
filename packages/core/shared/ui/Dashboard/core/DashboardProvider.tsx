@@ -6,9 +6,8 @@
  */
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
-}
-export interface DashboardContextValue {
-  // Time range state
+
+export interface DashboardContextValue { // Time range state
   timeRange: string;
   setTimeRange: (timeRange: string) => void;
   // Loading and refresh state
@@ -20,7 +19,7 @@ export interface DashboardContextValue {
   // Filter state
   filters: Record<string, any>;
   setFilters: (filters: Record<string, any>) => void;
-  updateFilter: (key: string, value: any) => void;
+  updateFilter: (key: string, value: any) => void
   clearFilters: () => void;
   // Search state
   searchTerm: string;
@@ -30,9 +29,9 @@ export interface DashboardContextValue {
   setViewMode: (mode: 'grid' | 'list' | 'table') => void;
   // Selection state (for bulk operations)
   selectedItems: Set<string>;
-  selectItem: (id: string) => void;
-  deselectItem: (id: string) => void;
-  selectAll: (ids: string) => void;
+  selectItem: (id: string) => void
+  deselectItem: (id: string) => void
+  selectAll: (ids: string) => void }
   clearSelection: () => void;
   isSelected: (id: string) => boolean;
   // Actions
@@ -40,22 +39,21 @@ export interface DashboardContextValue {
   onExport?: (format: 'csv' | 'pdf' | 'excel') => void;
   onTimeRangeChange?: (timeRange: string) => void;
   const DashboardContext = createContext<DashboardContextValue | undefined>(undefined);
-}
-}
-}
-export interface DashboardProviderProps {
-  children: React.ReactNode;
+
+
+
+
+export interface DashboardProviderProps { children: React.ReactNode;
   timeRange?: string;
   onTimeRangeChange?: (timeRange: string) => void;
   onRefresh?: () => void;
-  onExport?: (format: 'csv' | 'pdf' | 'excel') => void;
-}
-}
-export const DashboardProvider: React.FC<DashboardProviderProps> = ({)
-  children,
-  timeRange: initialTimeRange = '7d',
-  onTimeRangeChange,
-  onRefresh,
+  onExport?: (format: 'csv' | 'pdf' | 'excel') => void }
+
+export const DashboardProvider: React.FC<DashboardProviderProps> = ({ )
+  children
+  timeRange: initialTimeRange = '7d'
+  onTimeRangeChange
+  onRefresh }
   onExport
 }) => {
   const [timeRange, setTimeRange] = useState(initialTimeRange);
@@ -65,10 +63,8 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({)
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'table'>('grid');
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
-  const handleTimeRangeChange = useCallback((newTimeRange: string) => {
-    setTimeRange(newTimeRange);
-    onTimeRangeChange?.(newTimeRange);
-  }, [onTimeRangeChange]);
+  const handleTimeRangeChange = useCallback((newTimeRange: string) => { setTimeRange(newTimeRange);
+    onTimeRangeChange?.(newTimeRange) }, [onTimeRangeChange]);
   const updateFilter = useCallback((key: string, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   }, []);
@@ -76,48 +72,37 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({)
     setFilters({});
     setSearchTerm('');
   }, []);
-  const selectItem = useCallback((id: string) => {
-    setSelectedItems(prev => new Set([...prev, id]));
-  }, []);
-  const deselectItem = useCallback((id: string) => {
-    setSelectedItems(prev => {)
+  const selectItem = useCallback((id: string) => { setSelectedItems(prev => new Set([...prev, id])) }, []);
+  const deselectItem = useCallback((id: string) => { setSelectedItems(prev => {)
   const newSet = new Set(prev);
       newSet.delete(id);
-      return newSet;
-    });
+      return newSet });
   }, []);
-  const selectAll = useCallback((ids: string) => {
-    setSelectedItems(new Set(ids));
-  }, []);
-  const clearSelection = useCallback(() => {
-    setSelectedItems(new Set());
-  }, []);
-  const isSelected = useCallback((id: string) => {
-    return selectedItems.has(id);
-  }, [selectedItems]);
-  const contextValue: DashboardContextValue = {
-  timeRange,
-  setTimeRange: handleTimeRangeChange,
-  refreshing,
-  setRefreshing,
-  exporting,
-  setExporting,
-  filters,
-  setFilters,
-  updateFilter,
-  clearFilters,
-  searchTerm,
-  setSearchTerm,
-  viewMode,
-  setViewMode,
-  selectedItems,
-  selectItem,
-  deselectItem,
-  selectAll,
-  clearSelection,
-  isSelected,
-  onRefresh,
-  onExport,
+  const selectAll = useCallback((ids: string) => { setSelectedItems(new Set(ids)) }, []);
+  const clearSelection = useCallback(() => { setSelectedItems(new Set()) }, []);
+  const isSelected = useCallback((id: string) => { return selectedItems.has(id) }, [selectedItems]);
+  const contextValue: DashboardContextValue = { timeRange
+  setTimeRange: handleTimeRangeChange
+  refreshing
+  setRefreshing
+  exporting
+  setExporting
+  filters
+  setFilters
+  updateFilter
+  clearFilters
+  searchTerm
+  setSearchTerm
+  viewMode
+  setViewMode
+  selectedItems
+  selectItem
+  deselectItem
+  selectAll
+  clearSelection
+  isSelected
+  onRefresh
+  onExport }
   onTimeRangeChange
 };
   return;
@@ -127,11 +112,9 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({)
   );
 };
 
-export const useDashboard = (): DashboardContextValue => {
-  const context = useContext(DashboardContext);
+export const useDashboard = (): DashboardContextValue => { const context = useContext(DashboardContext);
   if (context === undefined) {
     throw new Error('useDashboard must be used within a DashboardProvider');
-  return context;
-};
+  return context };
 
 export default DashboardProvider;

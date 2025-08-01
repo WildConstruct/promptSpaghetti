@@ -70,73 +70,53 @@ export const VFXPipelineVisualizer = ({
 ;
 // Historical Accuracy Dashboard
 const HistoricalAccuracyDashboard = ({ scene }) => {
-    const accuracyMetrics = [];
-    {
-        label: 'Architecture', value;
-        scene.accuracy.architecture, icon;
-        _jsx(Map, { className: "w-4 h-4" });
-    }
-    {
-        label: 'Clothing', value;
-        scene.accuracy.clothing, icon;
-        _jsx(Users, { className: "w-4 h-4" });
-    }
-    {
-        label: 'Technology', value;
-        scene.accuracy.technology, icon;
-        _jsx(Zap, { className: "w-4 h-4" });
-    }
-    {
-        label: 'Culture', value;
-        scene.accuracy.culture, icon;
-        _jsx(Globe, { className: "w-4 h-4" });
-    }
-    {
-        label: 'Timeline', value;
-        scene.accuracy.timeline, icon;
-        _jsx(Clock, { className: "w-4 h-4" });
-    }
-};
-;
-const getAccuracyColor = (value) => {
-    if (value >= 90)
-        return 'text-green-600 bg-green-100';
-    if (value >= 80)
-        return 'text-blue-600 bg-blue-100';
-    if (value >= 70)
-        return 'text-yellow-600 bg-yellow-100';
-    if (value >= 60)
-        return 'text-orange-600 bg-orange-100';
-    return 'text-red-600 bg-red-100';
-};
-const getSeverityColor = (severity) => {
-    switch (severity) {
-        case 'critical': return 'bg-red-100 text-red-800';
-        case 'high': return 'bg-orange-100 text-orange-800';
-        case 'medium': return 'bg-yellow-100 text-yellow-800';
-        case 'low': return 'bg-blue-100 text-blue-800';
-        default: return 'bg-gray-100 text-gray-800';
-    }
-    ;
-    return;
-    _jsx("div", { className: "space-y-6", children: _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center justify-between", children: [_jsxs("span", { className: "flex items-center gap-2", children: [_jsx(CheckCircle, { className: "w-5 h-5 text-green-600" }), "Historical Accuracy Score"] }), _jsx(Badge, { variant: scene.accuracy.expertValidated ? 'default' : 'secondary', children: scene.accuracy.expertValidated ? 'Expert Validated' : 'Pending Review' })] }) }), _jsxs(CardContent, { children: [_jsx("div", { className: "flex items-center justify-center mb-6", children: _jsxs("div", { className: "relative w-32 h-32", children: [_jsxs("svg", { className: "w-full h-full transform -rotate-90", children: [_jsx("circle", { cx: "64", cy: "64", r: "56", stroke: "#e5e7eb", strokeWidth: "8", fill: "none" }), _jsx("circle", { cx: "64", cy: "64", r: "56", stroke: scene.accuracy.overall >= 80 ? '#10b981' : scene.accuracy.overall >= 60 ? '#f59e0b' : '#ef4444', strokeWidth: "8", fill: "none", strokeDasharray: `${(scene.accuracy.overall / 100) * 351.86} 351.86`, strokeLinecap: "round" })] }), _jsxs("div", { className: "absolute inset-0 flex flex-col items-center justify-center", children: [_jsxs("span", { className: "text-3xl font-bold text-gray-900", children: [scene.accuracy.overall, "%"] }), _jsx("span", { className: "text-sm text-gray-600", children: "Accurate" })] })] }) }), _jsxs("div", { className: "grid grid-cols-2 md:grid-cols-3 gap-4", children: [accuracyMetrics.map(metric => ()
-                                    < div, key = { metric, : .label }, className = {} `p-3 rounded-lg ${getAccuracyColor(metric.value)}`), ">}", _jsxs("div", { className: "flex items-center gap-2 mb-2", children: [metric.icon, _jsx("span", { className: "text-sm font-medium", children: metric.label })] }), _jsxs("div", { className: "text-lg font-bold", children: [metric.value, "%"] })] }), "))}"] })] }) });
-    { /* Accuracy Violations */ }
-    {
-        scene.accuracy.violations.length > 0 && ()
-            < Card >
-            (_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(AlertTriangle, { className: "w-5 h-5 text-orange-600" }), "Accuracy Violations (", scene.accuracy.violations.length, ")"] }) })
-                ,
-                    _jsxs(CardContent, { children: [_jsx("div", { className: "space-y-3", children: scene.accuracy.violations.map((violation, index) => ()
-                                    < div, key = { index }, className = "border rounded-lg p-4" >
-                                    (_jsx("div", { className: "flex items-start justify-between mb-2", children: _jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Badge, { className: getSeverityColor(violation.severity), children: violation.severity.toUpperCase() }), _jsx(Badge, { variant: "outline", children: violation.type.toUpperCase() })] }) })
-                                        ,
-                                            _jsx("p", { className: "text-sm font-medium text-gray-900 mb-1", children: violation.element })
-                                                ,
-                                                    _jsx("p", { className: "text-sm text-gray-600 mb-2", children: violation.description })
-                                                        ,
-                                                            _jsxs("div", { className: "text-xs text-blue-600 bg-blue-50 p-2 rounded", children: ["\uD83D\uDCA1 Suggestion: ", violation.suggestion] }))) }), "))}"] }));
-    }
+    const accuracyMetrics = [
+        { label: 'Architecture', value: scene.accuracy.architecture, icon: _jsx(Map, { className: "w-4 h-4" }) },
+        { label: 'Clothing', value: scene.accuracy.clothing, icon: _jsx(Users, { className: "w-4 h-4" }) },
+        { label: 'Technology', value: scene.accuracy.technology, icon: _jsx(Zap, { className: "w-4 h-4" }) },
+        { label: 'Culture', value: scene.accuracy.culture, icon: _jsx(Globe, { className: "w-4 h-4" }) },
+        { label: 'Timeline', value: scene.accuracy.timeline, icon: _jsx(Clock, { className: "w-4 h-4" }) }
+    ];
+    const getAccuracyColor = (value) => {
+        if (value >= 90)
+            return 'text-green-600 bg-green-100';
+        if (value >= 80)
+            return 'text-blue-600 bg-blue-100';
+        if (value >= 70)
+            return 'text-yellow-600 bg-yellow-100';
+        if (value >= 60)
+            return 'text-orange-600 bg-orange-100';
+        return 'text-red-600 bg-red-100';
+    };
+    const getSeverityColor = (severity) => {
+        switch (severity) {
+            case 'critical': return 'bg-red-100 text-red-800';
+            case 'high': return 'bg-orange-100 text-orange-800';
+            case 'medium': return 'bg-yellow-100 text-yellow-800';
+            case 'low': return 'bg-blue-100 text-blue-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
+        ;
+        return;
+        _jsx("div", { className: "space-y-6", children: _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center justify-between", children: [_jsxs("span", { className: "flex items-center gap-2", children: [_jsx(CheckCircle, { className: "w-5 h-5 text-green-600" }), "Historical Accuracy Score"] }), _jsx(Badge, { variant: scene.accuracy.expertValidated ? 'default' : 'secondary', children: scene.accuracy.expertValidated ? 'Expert Validated' : 'Pending Review' })] }) }), _jsxs(CardContent, { children: [_jsx("div", { className: "flex items-center justify-center mb-6", children: _jsxs("div", { className: "relative w-32 h-32", children: [_jsxs("svg", { className: "w-full h-full transform -rotate-90", children: [_jsx("circle", { cx: "64", cy: "64", r: "56", stroke: "#e5e7eb", strokeWidth: "8", fill: "none" }), _jsx("circle", { cx: "64", cy: "64", r: "56", stroke: scene.accuracy.overall >= 80 ? '#10b981' : scene.accuracy.overall >= 60 ? '#f59e0b' : '#ef4444', strokeWidth: "8", fill: "none", strokeDasharray: `${(scene.accuracy.overall / 100) * 351.86} 351.86`, strokeLinecap: "round" })] }), _jsxs("div", { className: "absolute inset-0 flex flex-col items-center justify-center", children: [_jsxs("span", { className: "text-3xl font-bold text-gray-900", children: [scene.accuracy.overall, "%"] }), _jsx("span", { className: "text-sm text-gray-600", children: "Accurate" })] })] }) }), _jsxs("div", { className: "grid grid-cols-2 md:grid-cols-3 gap-4", children: [accuracyMetrics.map(metric => ()
+                                        < div, key = { metric, : .label }, className = {} `p-3 rounded-lg ${getAccuracyColor(metric.value)}`), ">}", _jsxs("div", { className: "flex items-center gap-2 mb-2", children: [metric.icon, _jsx("span", { className: "text-sm font-medium", children: metric.label })] }), _jsxs("div", { className: "text-lg font-bold", children: [metric.value, "%"] })] }), "))}"] })] }) });
+        { /* Accuracy Violations */ }
+        {
+            scene.accuracy.violations.length > 0 && ()
+                < Card >
+                (_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(AlertTriangle, { className: "w-5 h-5 text-orange-600" }), "Accuracy Violations (", scene.accuracy.violations.length, ")"] }) })
+                    ,
+                        _jsxs(CardContent, { children: [_jsx("div", { className: "space-y-3", children: scene.accuracy.violations.map((violation, index) => ()
+                                        < div, key = { index }, className = "border rounded-lg p-4" >
+                                        (_jsx("div", { className: "flex items-start justify-between mb-2", children: _jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Badge, { className: getSeverityColor(violation.severity), children: violation.severity.toUpperCase() }), _jsx(Badge, { variant: "outline", children: violation.type.toUpperCase() })] }) })
+                                            ,
+                                                _jsx("p", { className: "text-sm font-medium text-gray-900 mb-1", children: violation.element })
+                                                    ,
+                                                        _jsx("p", { className: "text-sm text-gray-600 mb-2", children: violation.description })
+                                                            ,
+                                                                _jsxs("div", { className: "text-xs text-blue-600 bg-blue-50 p-2 rounded", children: ["\uD83D\uDCA1 Suggestion: ", violation.suggestion] }))) }), "))}"] }));
+        }
+    };
 };
 CardContent >
 ;
@@ -301,12 +281,12 @@ if (!selectedScene) {
     return;
     _jsxs("div", { className: `vfx-pipeline-visualizer ${className}`, children: ["}", _jsxs(Tabs, { value: activeView, onValueChange: setActiveView, children: [_jsx("div", { className: "mb-6", children: _jsxs(TabsList, { className: "grid w-full grid-cols-4", children: [_jsxs(TabsTrigger, { value: "scene", className: "flex items-center gap-2", children: [_jsx(Camera, { className: "w-4 h-4" }), "Scene"] }), _jsxs(TabsTrigger, { value: "accuracy", className: "flex items-center gap-2", children: [_jsx(CheckCircle, { className: "w-4 h-4" }), "Accuracy"] }), _jsxs(TabsTrigger, { value: "assets", className: "flex items-center gap-2", children: [_jsx(Layers, { className: "w-4 h-4" }), "Assets"] }), _jsxs(TabsTrigger, { value: "timeline", className: "flex items-center gap-2", children: [_jsx(Clock, { className: "w-4 h-4" }), "Timeline"] })] }) }), _jsxs(TabsContent, { value: "scene", className: "space-y-6", children: [_jsx(SceneVisualization3D, { scene: selectedScene }), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsx(PerformanceMetricsVisualizer, { scene: selectedScene }), _jsx(CrowdVisualization, { characters: selectedScene.characters })] })] }), _jsx(TabsContent, { value: "accuracy", className: "space-y-6", children: _jsx(HistoricalAccuracyDashboard, { scene: selectedScene }) }), _jsxs(TabsContent, { value: "assets", className: "space-y-6", children: [_jsx(MaterialPropertiesVisualizer, { assets: selectedScene.assets }), _jsx(AssetRelationshipGraph, { assets: selectedScene.assets })] }), _jsx(TabsContent, { value: "timeline", className: "space-y-6", children: _jsx(TimelineVisualization, { scenes: scenes }) })] }), _jsx("style", { children: `
         .vfx-pipeline-visualizer {
-          max-width: 1200px;
+          max-width: 1200px;,
   margin: 0 auto;
         .scene-visualization {
-          position: relative;
+          position: relative;,
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 12px;
+          border-radius: 12px;,
   overflow: hidden;
         .accuracy-indicator {
           animation: pulse-accuracy 2s ease-in-out infinite;

@@ -8,8 +8,8 @@ import { EventEmitter } from 'events';
 import { PerformanceMonitor } from '../monitoring';
 
 }
-export interface CategoryPerformanceConfig {
-    enableCategoryOptimization: boolean;
+}
+export interface CategoryPerformanceConfig { enableCategoryOptimization: boolean;
     enableDynamicThresholds: boolean;
     enablePredictiveScaling: boolean;
     categories: Record<string, CategoryConfig>;
@@ -17,20 +17,20 @@ export interface CategoryPerformanceConfig {
         maxConcurrentOperations: number;
         memoryThreshold: number;
         cpuThreshold: number;
-        responseTimeTarget: number;
+        responseTimeTarget: number }
 }
     };
 
 }
-export interface CategoryConfig {
-    name: string;
+}
+export interface CategoryConfig { name: string;
     priority: 'low' | 'medium' | 'high' | 'critical';
     optimizationStrategy: 'throughput' | 'latency' | 'memory' | 'balanced';
     resourceLimits: {
         maxMemoryMB: number;
         maxExecutionTimeMs: number;
         maxConcurrentNodes: number;
-        queueLimit: number;
+        queueLimit: number }
 }
     };
     cacheStrategy: {
@@ -39,16 +39,14 @@ export interface CategoryConfig {
         maxSize: number;
         evictionPolicy: 'lru' | 'lfu' | 'ttl'
   };
-    scalingRules: {
-        scaleUpThreshold: number;
+    scalingRules: { scaleUpThreshold: number;
         scaleDownThreshold: number;
         cooldownMs: number;
-        maxInstances: number;
-    };
+        maxInstances: number };
 
 }
-export interface CategoryMetrics {
-    categoryName: string;
+}
+export interface CategoryMetrics { categoryName: string;
     totalNodes: number;
     activeNodes: number;
     queuedNodes: number;
@@ -62,11 +60,10 @@ export interface CategoryMetrics {
     optimizationLevel: number;
     bottlenecks: string[];
     recommendations: string[];
-    lastUpdated: number;
-
+    lastUpdated: number }
 }
-export interface OptimizationAction {
-    id: string;
+}
+export interface OptimizationAction { id: string;
     category: string;
     action: 'scale_up' | 'scale_down' | 'cache_optimize' | 'throttle' | 'priority_boost';
     reason: string;
@@ -74,7 +71,7 @@ export interface OptimizationAction {
     expectedImpact: {
         performanceGain: number;
         resourceCost: number;
-        confidence: number;
+        confidence: number }
 }
     };
     timestamp: number;
@@ -82,8 +79,7 @@ export interface OptimizationAction {
 /**
  * Category-based performance optimization manager
  */
-export declare class CategoryPerformanceManager extends EventEmitter {
-    private config;
+export declare class CategoryPerformanceManager extends EventEmitter { private config;
     private performanceMonitor;
     private categoryMetrics;
     private nodeQueues;
@@ -115,8 +111,7 @@ export declare class CategoryPerformanceManager extends EventEmitter {
         category: string;
         recommendations: string[];
         priority: 'low' | 'medium' | 'high' | 'critical';
-        estimatedImpact: number;
-    }>;
+        estimatedImpact: number }>;
     /**
      * Apply optimization action to a category
      */
@@ -124,12 +119,10 @@ export declare class CategoryPerformanceManager extends EventEmitter {
     /**
      * Get cache statistics for all categories
      */
-    getCacheStatistics(): Record<string, {
-        size: number;
+    getCacheStatistics(): Record<string, { size: number;
         maxSize: number;
         hitRate: number;
-        evictions: number;
-    }>;
+        evictions: number }>;
     /**
      * Force optimization for a specific category
      */

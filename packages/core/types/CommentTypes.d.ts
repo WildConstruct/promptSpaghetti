@@ -2,8 +2,8 @@ export type CommentStatus = 'active' | 'deleted' | 'resolved';
 export type CommentTargetType = 'project' | 'resource' | 'node' | 'region';
 
 }
-export interface Comment {
-    id: string;
+}
+export interface Comment { id: string;
     resource_id: string;
     target_type: CommentTargetType;
     target_data?: Record<string, any>;
@@ -19,11 +19,10 @@ export interface Comment {
     resolved_at?: string;
     replies?: Comment[];
     created_at: string;
-    updated_at: string;
-
+    updated_at: string }
 }
-export interface CommentThread {
-    id: string;
+}
+export interface CommentThread { id: string;
     resource_id: string;
     target_type: CommentTargetType;
     target_data?: Record<string, any>;
@@ -34,78 +33,71 @@ export interface CommentThread {
     participants: Array<{
         user_id: string;
         user_name: string;
-        user_avatar?: string;
+        user_avatar?: string }
 }
     }>;
 
 }
-export interface CommentStats {
-    total: number;
+}
+export interface CommentStats { total: number;
     resolved: number;
     unresolved: number;
     by_author: Record<string, number>;
     recent_activity: {
         today: number;
         this_week: number;
-        this_month: number;
+        this_month: number }
 }
     };
 
 }
-export interface CommentCreateRequest {
-    content: string;
+}
+export interface CommentCreateRequest { content: string;
     mentions?: string[];
     parent_id?: string;
-    target_data?: Record<string, any>;
-
+    target_data?: Record<string, any> }
 }
-export interface CommentUpdateRequest {
-    content?: string;
+}
+export interface CommentUpdateRequest { content?: string;
     mentions?: string[];
-    status?: CommentStatus;
-
+    status?: CommentStatus }
 }
-export interface CommentFilter {
-    status?: CommentStatus;
+}
+export interface CommentFilter { status?: CommentStatus;
     author_id?: string;
     search?: string;
     has_replies?: boolean;
     created_from?: string;
-    created_to?: string;
-
+    created_to?: string }
 }
-export interface CommentListResponse {
-    comments: Comment[];
+}
+export interface CommentListResponse { comments: Comment[];
     total: number;
     has_more: boolean;
     next_cursor?: string;
-    stats?: CommentStats;
-
+    stats?: CommentStats }
 }
-export interface CommentRealTimeConnection {
-    status: 'connected' | 'connecting' | 'disconnected' | 'error';
+}
+export interface CommentRealTimeConnection { status: 'connected' | 'connecting' | 'disconnected' | 'error';
     lastConnected?: Date;
     reconnectAttempts: number;
-    error?: string;
-
+    error?: string }
 }
-export interface CommentRealTimeEvent {
-    type: 'comment_created' | 'comment_updated' | 'comment_deleted' | 'comment_resolved' | 'comment_unresolved';
+}
+export interface CommentRealTimeEvent { type: 'comment_created' | 'comment_updated' | 'comment_deleted' | 'comment_resolved' | 'comment_unresolved';
     comment: Comment;
-    timestamp: string;
-
+    timestamp: string }
 }
-export interface UseCommentsOptions {
-    resourceId: string;
+}
+export interface UseCommentsOptions { resourceId: string;
     resourceType: CommentTargetType;
     workspaceId?: string;
     userId: string;
     realTime?: boolean;
-    autoLoad?: boolean;
-
+    autoLoad?: boolean }
 }
-export interface UseCommentsReturn {
-    comments: Comment[];
+}
+export interface UseCommentsReturn { comments: Comment[];
     loading: boolean;
     error: Error | null;
     stats: CommentStats | null;
@@ -117,22 +109,20 @@ export interface UseCommentsReturn {
     unresolveComment: (id: string) => Promise<Comment>;
     refreshComments: () => Promise<void>;
     setFilter: (filter: CommentFilter) => void;
-    clearFilter: () => void;
-
+    clearFilter: () => void }
 }
-export interface MentionUser {
-    id: string;
+}
+export interface MentionUser { id: string;
     name: string;
     email?: string;
     avatar_url?: string;
     role?: 'owner' | 'admin' | 'editor' | 'viewer';
-    online?: boolean;
-
+    online?: boolean }
 }
-export interface MentionSearchResponse {
-    users: MentionUser[];
-    total: number;
-
+}
+export interface MentionSearchResponse { users: MentionUser[];
+    total: number }
+}
 }
 export interface CommentNotification {
     id: string;
@@ -143,4 +133,5 @@ export interface CommentNotification {
     created_at: string;
 
 //# sourceMappingURL=CommentTypes.d.ts.map
+}
 }

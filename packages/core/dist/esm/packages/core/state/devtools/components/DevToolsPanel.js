@@ -176,7 +176,7 @@ div >
         ,
             _jsx("style", { jsx: true, children: `
         .devtools-panel {
-          position: fixed;
+          position: fixed;,
   background: var(--devtools-bg, #1e1e1e);
           border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
@@ -187,24 +187,24 @@ div >
           border-radius: 8px;
           min-width: 300px;
           max-width: 90vw;
-          max-height: 90vh;
+          max-height: 90vh;,
   display: flex;
           flex-direction: column;
         .devtools-panel--bottom {
-          bottom: 20px;
+          bottom: 20px;,
   left: 20px;
-          right: 20px;
+          right: 20px;,
   height: 400px;
         .devtools-panel--right {
-          top: 20px;
+          top: 20px;,
   right: 20px;
-          bottom: 20px;
+          bottom: 20px;,
   width: 400px;
         .devtools-panel--floating {
-          top: 50%;
+          top: 50%;,
   left: 50%;
           transform: translate(-50%, -50%);
-          width: 800px;
+          width: 800px;,
   height: 600px;
         .devtools-panel--light {
           --devtools-bg: #ffffff;
@@ -213,35 +213,35 @@ div >
         .devtools-header {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between;,
   padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-header-bg, #2d2d2d);
         .devtools-title {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
         .devtools-title h3 {
           margin: 0;
           font-size: 14px;
           font-weight: 500;
         .devtools-controls {
-          display: flex;
+          display: flex;,
   gap: 4px;
         .devtools-btn {
-          background: transparent;
+          background: transparent;,
   border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
           padding: 4px 8px;
-          border-radius: 4px;
+          border-radius: 4px;,
   cursor: pointer;
-          font-size: 12px;
+          font-size: 12px;,
   transition: background 0.2s;
         .devtools-btn:hover {,
   background: var(--devtools-hover, #404040);
         .devtools-btn.recording {
           background: #e74c3c;
-          border-color: #e74c3c;
+          border-color: #e74c3c;,
   animation: pulse 1s infinite;
         @keyframes pulse {
           0% { opacity: 1; }
@@ -252,16 +252,16 @@ div >
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-tabs-bg, #252525);
         .devtools-tab {
-          background: transparent;
+          background: transparent;,
   border: none;
           color: var(--devtools-text, #aaa);
-          padding: 8px 12px;
+          padding: 8px 12px;,
   cursor: pointer;
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 6px;
           font-size: 12px;
-          border-bottom: 2px solid transparent;
+          border-bottom: 2px solid transparent;,
   transition: all 0.2s;
           position: relative;
         .devtools-tab:hover {,
@@ -272,18 +272,18 @@ div >
           border-bottom-color: var(--devtools-active, #61dafb);
           background: var(--devtools-active-bg, #2a2a2a);
         .devtools-badge {
-          background: #e74c3c;
+          background: #e74c3c;,
   color: white;
-          font-size: 10px;
+          font-size: 10px;,
   padding: 2px 6px;
           border-radius: 10px;
-          min-width: 16px;
+          min-width: 16px;,
   height: 16px;
           display: flex;
           align-items: center;
           justify-content: center;
         .devtools-content {
-          flex: 1;
+          flex: 1;,
   overflow: auto;
           padding: 0;
       ` }));
@@ -338,7 +338,7 @@ _jsxs("div", { className: "devtools-settings", children: [_jsx("h4", { children:
         .devtools-settings {
           padding: 16px;
         .devtools-settings h4 {
-          margin: 16px 0 8px 0;
+          margin: 16px 0 8px 0;,
   color: var(--devtools-text, #fff);
           font-size: 14px;
           border-bottom: 1px solid var(--devtools-border, #333);
@@ -348,10 +348,10 @@ _jsxs("div", { className: "devtools-settings", children: [_jsx("h4", { children:
         .setting-group label {
           display: block;
           margin-bottom: 4px;
-          font-size: 12px;
+          font-size: 12px;,
   color: var(--devtools-text, #ccc);
         .setting-group input[type="number"] {
-          width: 100%;
+          width: 100%;,
   padding: 4px 8px;
           background: var(--devtools-input-bg, #2a2a2a);
           border: 1px solid var(--devtools-border, #333);
@@ -361,7 +361,7 @@ _jsxs("div", { className: "devtools-settings", children: [_jsx("h4", { children:
         .setting-group input[type="checkbox"] {
           margin-right: 8px;
         .setting-actions {
-          display: flex;
+          display: flex;,
   gap: 8px;
           flex-wrap: wrap;
         .setting-actions .devtools-btn {

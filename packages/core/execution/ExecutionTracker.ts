@@ -4,15 +4,14 @@
  * 
  * Tracks the execution path of graph processing for visualization
  */
-import {
-  ExecutionTracker,
+import { ExecutionTracker,
   ExecutionPath,
   NodeExecutionStep,
   RandomChoiceInfo,
   ExecutionInput,
-  EXECUTION_PATH_COLORS,
+  EXECUTION_PATH_COLORS }
   ExecutionPathColor
-} from '../types/ExecutionPath.js';
+ from '../types/ExecutionPath.js';
 
 export class GraphExecutionTracker implements ExecutionTracker {
   private static instance: GraphExecutionTracker;
@@ -27,13 +26,13 @@ export class GraphExecutionTracker implements ExecutionTracker {
    */
   startTracking(seed: number): string {
     const executionId = `exec_${seed}_${this.executionCounter++}_${Date.now()}`;}
-    const execution: Partial<ExecutionPath> = {,
-  id: executionId,
-  seed,
-  startTime: Date.now(),
-  steps: [],
-  nodeExecutionOrder: [],
-  randomizationPoints: [],
+    const execution: Partial<ExecutionPath> = { 
+  id: executionId
+  seed
+  startTime: Date.now()
+  steps: []
+  nodeExecutionOrder: []
+  randomizationPoints: [] }
 };
     this.activeExecutions.set(executionId, execution);
     return executionId;
@@ -48,9 +47,9 @@ export class GraphExecutionTracker implements ExecutionTracker {
     execution.steps = execution.steps || [];
     execution.nodeExecutionOrder = execution.nodeExecutionOrder || [];
     // Add step to execution path
-    execution.steps.push({)
-  ...step,
-  stepIndex: execution.steps.length,
+    execution.steps.push({ )
+  ...step
+  stepIndex: execution.steps.length }
 });
     // Track node execution order
     if (!execution.nodeExecutionOrder.includes(step.nodeId)) {
@@ -77,16 +76,16 @@ export class GraphExecutionTracker implements ExecutionTracker {
     if (!execution) {
       throw new Error(`Execution ${executionId} not found`);}
     const endTime = Date.now();
-    const completePath: ExecutionPath = {,
-  id: executionId,
-  seed: execution.seed!,
-  startTime: execution.startTime!,
-  endTime,
-  totalExecutionTime: endTime - execution.startTime!,
-  steps: execution.steps || [],
-  finalOutput: output,
-  nodeExecutionOrder: execution.nodeExecutionOrder || [],
-  randomizationPoints: execution.randomizationPoints || [],
+    const completePath: ExecutionPath = { 
+  id: executionId
+  seed: execution.seed!
+  startTime: execution.startTime!
+  endTime
+  totalExecutionTime: endTime - execution.startTime!
+  steps: execution.steps || []
+  finalOutput: output
+  nodeExecutionOrder: execution.nodeExecutionOrder || []
+  randomizationPoints: execution.randomizationPoints || [] }
 };
     // Clean up
     this.activeExecutions.delete(executionId);
@@ -94,29 +93,27 @@ export class GraphExecutionTracker implements ExecutionTracker {
   /**
    * Get current execution path (for debugging)
    */
-  getExecutionPath(executionId: string): ExecutionPath | null {
-  const execution = this.activeExecutions.get(executionId);
+  getExecutionPath(executionId: string): ExecutionPath | null { const execution = this.activeExecutions.get(executionId);
   if (!execution) return null;
   return {
-  id: executionId,
-  seed: execution.seed!,
-  startTime: execution.startTime!,
-  endTime: Date.now(),
-  totalExecutionTime: Date.now() - execution.startTime!,
-  steps: execution.steps || [],
-  finalOutput: '',
-  nodeExecutionOrder: execution.nodeExecutionOrder || [],
-  randomizationPoints: execution.randomizationPoints || [],
+  id: executionId
+  seed: execution.seed!
+  startTime: execution.startTime!
+  endTime: Date.now()
+  totalExecutionTime: Date.now() - execution.startTime!
+  steps: execution.steps || []
+  finalOutput: ''
+  nodeExecutionOrder: execution.nodeExecutionOrder || []
+  randomizationPoints: execution.randomizationPoints || [] }
 };
   /**
    * Clear tracking data
    */
-  clearTracker(executionId: string): void {
-  this.activeExecutions.delete(executionId);
+  clearTracker(executionId: string): void { this.activeExecutions.delete(executionId);
   /**
   * Clear all tracking data (cleanup)
   */
-  clearAllTrackers(): void {,
+  clearAllTrackers(): void {
   this.activeExecutions.clear();
   /**
   * Get statistics about active executions
@@ -125,32 +122,29 @@ export class GraphExecutionTracker implements ExecutionTracker {
   activeExecutions: number;
   totalExecutionsTracked: number;
   return {
-  activeExecutions: this.activeExecutions.size,
-  totalExecutionsTracked: this.executionCounter,
+  activeExecutions: this.activeExecutions.size
+  totalExecutionsTracked: this.executionCounter }
 };
 /**
  * Utility functions for execution path analysis
  */
-export class ExecutionPathAnalyzer {
-  /**
+export class ExecutionPathAnalyzer { /**
   * Calculate execution path variance across multiple results
   */
-  static calculatePathVariance(paths: ExecutionPath): number {,
+  static calculatePathVariance(paths: ExecutionPath): number { }
   if (paths.length <= 1) return 0;
   const nodeUsageCounts = new Map<string, number>();
   const totalPaths = paths.length;
   // Count how often each node is used
-  paths.forEach(path => {)
+  paths.forEach(path => { )
   path.nodeExecutionOrder.forEach(nodeId => {)
-  nodeUsageCounts.set(nodeId, (nodeUsageCounts.get(nodeId) || 0) + 1);
-});
+  nodeUsageCounts.set(nodeId, (nodeUsageCounts.get(nodeId) || 0) + 1) });
     });
     // Calculate variance based on node usage diversity
     let totalVariance = 0;
-    nodeUsageCounts.forEach(count => {)
+    nodeUsageCounts.forEach(count => { )
   const probability = count / totalPaths;
-      totalVariance += probability * (1 - probability);
-    });
+      totalVariance += probability * (1 - probability) });
     return totalVariance / nodeUsageCounts.size;
   /**
    * Find common execution patterns
@@ -158,16 +152,15 @@ export class ExecutionPathAnalyzer {
   static findCommonPatterns(paths: ExecutionPath): {
   commonNodes: string;
     divergencePoints: string;
-  sharedSequences: string[];
+  sharedSequences: string;
     if (paths.length === 0) {
       return { commonNodes: [], divergencePoints: [], sharedSequences: [] };
     const nodeFrequency = new Map<string, number>();
     const sequences = new Map<string, number>();
     // Count node frequencies
-    paths.forEach(path => {)
+    paths.forEach(path => { )
   path.nodeExecutionOrder.forEach(nodeId => {)
-  nodeFrequency.set(nodeId, (nodeFrequency.get(nodeId) || 0) + 1);
-      });
+  nodeFrequency.set(nodeId, (nodeFrequency.get(nodeId) || 0) + 1) });
       // Track sequential patterns
       for (let i = 0; i < path.nodeExecutionOrder.length - 1; i++) {
         const sequence = `${path.nodeExecutionOrder[i]}->${path.nodeExecutionOrder[i + 1]}`;}
@@ -190,12 +183,10 @@ export class ExecutionPathAnalyzer {
   /**
    * Assign colors to execution paths
    */
-  static assignPathColors(paths: ExecutionPath): Map<string, ExecutionPathColor> {
-    const colorMap = new Map<string, ExecutionPathColor>();
+  static assignPathColors(paths: ExecutionPath): Map<string, ExecutionPathColor> { const colorMap = new Map<string, ExecutionPathColor>();
     paths.forEach((path, index) => {
       const colorIndex = index % EXECUTION_PATH_COLORS.length;
-      colorMap.set(path.id, EXECUTION_PATH_COLORS[colorIndex]);
-    });
+      colorMap.set(path.id, EXECUTION_PATH_COLORS[colorIndex]) });
     return colorMap;
   /**
    * Generate debugging information for an execution path
@@ -207,10 +198,9 @@ export class ExecutionPathAnalyzer {
     const performanceBreakdown: Record<string, number> = {};
     const nodeExecutionTimes: Record<string, number> = {};
     // Calculate performance breakdown by node type
-    path.steps.forEach(step => {)
+    path.steps.forEach(step => { )
   performanceBreakdown[step.nodeType] = (performanceBreakdown[step.nodeType] || 0) + step.executionTimeMs;
-      nodeExecutionTimes[step.nodeId] = (nodeExecutionTimes[step.nodeId] || 0) + step.executionTimeMs;
-    });
+      nodeExecutionTimes[step.nodeId] = (nodeExecutionTimes[step.nodeId] || 0) + step.executionTimeMs });
     // Find bottleneck nodes (top 20% execution time)
     const sortedNodes = Object.entries(nodeExecutionTimes);
       .sort(([ timeA], [ timeB]) => timeB - timeA);
@@ -221,9 +211,8 @@ export class ExecutionPathAnalyzer {
     const randomizationSummary = randomChoices.length === 0 ;
       ? 'No randomization points detected'
       : `${randomChoices.length} randomization point(s): ${randomChoices.map(c => c.choiceType).join(', ')}`;}
-    return {
-      performanceBreakdown,
-      bottleneckNodes,
+    return { performanceBreakdown
+      bottleneckNodes }
       randomizationSummary
     };
 

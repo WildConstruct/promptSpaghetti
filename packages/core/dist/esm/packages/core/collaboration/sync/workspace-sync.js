@@ -16,8 +16,9 @@ export class WorkspaceStateSync extends EventEmitter {
         this.on('participant_leave', this.handleParticipantLeave.bind(this));
         // Initialize workspace synchronization
         async;
-        initializeWorkspaceSync(workspaceId, WorkspaceId);
-        userId: UserId,
+        initializeWorkspaceSync(workspaceId, WorkspaceId),
+            userId;
+        UserId,
             conflictResolution ?  : ConflictResolution;
         Promise < Y.Doc > {
             const: key = this.getSyncKey(workspaceId),
@@ -46,8 +47,9 @@ export class WorkspaceStateSync extends EventEmitter {
                     return ydoc;
                     // Initialize project-specific synchronization
                     async;
-                    initializeProjectSync(workspaceId, WorkspaceId);
-                    projectId: ProjectId,
+                    initializeProjectSync(workspaceId, WorkspaceId),
+                        projectId;
+                    ProjectId,
                         userId;
                     UserId;
                     Promise < Y.Doc > {
@@ -71,8 +73,9 @@ export class WorkspaceStateSync extends EventEmitter {
                             return ydoc;
                             // Initialize resource-specific synchronization
                             async;
-                            initializeResourceSync(workspaceId, WorkspaceId);
-                            projectId: ProjectId,
+                            initializeResourceSync(workspaceId, WorkspaceId),
+                                projectId;
+                            ProjectId,
                                 resourceId;
                             ResourceId,
                                 userId;

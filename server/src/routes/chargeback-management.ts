@@ -17,7 +17,7 @@ import {
   SubmitEvidenceSchema,
   CreatePreventionRuleSchema,
   CreateResponseTemplateSchema
-} from '../marketplace/chargeback.types.js';
+ from '../marketplace/chargeback.types.js';
 
 // Request/Response schemas
 const ChargebackParamsSchema = z.object({
@@ -71,7 +71,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
   // Create new chargeback
   fastify.post<{
     Body: typeof CreateChargebackSchema._type;
-  }>('/chargebacks', {
+>('/chargebacks', {
     schema: {
       description: 'Create a new chargeback record',
       tags: ['Chargebacks'],
@@ -83,42 +83,42 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             data: { type: 'object' },
             metadata: { type: 'object' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             error: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const result = await chargebackService.createChargeback(request.body);
       
       if (result.success) {
         return reply.code(201).send(result);
-      } else {
+ else {
         return reply.code(400).send(result);
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Error in POST /chargebacks:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // Get chargeback by ID
   fastify.get<{
     Params: typeof ChargebackParamsSchema._type;
-  }>('/chargebacks/:id', {
+>('/chargebacks/:id', {
     schema: {
       description: 'Get chargeback details by ID',
       tags: ['Chargebacks'],
@@ -129,17 +129,17 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             error: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -147,26 +147,26 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
       
       if (result.success) {
         return reply.code(200).send(result);
-      } else {
+ else {
         return reply.code(404).send(result);
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Error in GET /chargebacks/:id:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // Update chargeback status
   fastify.patch<{
     Params: typeof ChargebackParamsSchema._type;
     Body: typeof UpdateChargebackStatusSchema._type;
-  }>('/chargebacks/:id/status', {
+>('/chargebacks/:id/status', {
     schema: {
       description: 'Update chargeback status and outcome',
       tags: ['Chargebacks'],
@@ -178,17 +178,17 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             error: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -196,25 +196,25 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
       
       if (result.success) {
         return reply.code(200).send(result);
-      } else {
+ else {
         return reply.code(400).send(result);
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Error in PATCH /chargebacks/:id/status:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // Search and list chargebacks
   fastify.get<{
     Querystring: typeof ChargebackSearchQuerySchema._type;
-  }>('/chargebacks', {
+>('/chargebacks', {
     schema: {
       description: 'Search and list chargebacks with filtering, sorting, and pagination',
       tags: ['Chargebacks'],
@@ -225,10 +225,10 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const criteria: ChargebackSearchCriteria = {
@@ -241,17 +241,16 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
 
       const result = await chargebackService.searchChargebacks(criteria);
       return reply.code(200).send(result);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error in GET /chargebacks (search):', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // =============================================================================
@@ -261,7 +260,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
   // Submit evidence for chargeback
   fastify.post<{
     Body: typeof SubmitEvidenceSchema._type;
-  }>('/chargebacks/evidence', {
+>('/chargebacks/evidence', {
     schema: {
       description: 'Submit evidence for a chargeback dispute',
       tags: ['Evidence'],
@@ -272,42 +271,42 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'array' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             error: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const result = await chargebackService.submitEvidence(request.body);
       
       if (result.success) {
         return reply.code(201).send(result);
-      } else {
+ else {
         return reply.code(400).send(result);
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Error in POST /chargebacks/evidence:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // Generate automatic evidence
   fastify.post<{
     Params: typeof ChargebackParamsSchema._type;
-  }>('/chargebacks/:id/evidence/generate', {
+>('/chargebacks/:id/evidence/generate', {
     schema: {
       description: 'Generate automatic evidence for a chargeback',
       tags: ['Evidence'],
@@ -318,10 +317,10 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -329,19 +328,19 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
       
       if (result.success) {
         return reply.code(201).send(result);
-      } else {
+ else {
         return reply.code(400).send(result);
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Error in POST /chargebacks/:id/evidence/generate:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // =============================================================================
@@ -351,7 +350,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
   // Get chargeback analytics
   fastify.get<{
     Querystring: typeof AnalyticsQuerySchema._type;
-  }>('/chargebacks/analytics', {
+>('/chargebacks/analytics', {
     schema: {
       description: 'Get chargeback analytics and metrics for a time period',
       tags: ['Analytics'],
@@ -362,10 +361,10 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = request.query as any;
@@ -375,17 +374,16 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
 
       const result = await chargebackService.getChargebackAnalytics(periodStart, periodEnd, userId);
       return reply.code(200).send(result);
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error in GET /chargebacks/analytics:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // =============================================================================
@@ -395,7 +393,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
   // Create prevention rule
   fastify.post<{
     Body: typeof CreatePreventionRuleSchema._type;
-  }>('/chargebacks/prevention/rules', {
+>('/chargebacks/prevention/rules', {
     schema: {
       description: 'Create a new chargeback prevention rule',
       tags: ['Prevention'],
@@ -406,35 +404,35 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const result = await chargebackService.createPreventionRule(request.body);
       
       if (result.success) {
         return reply.code(201).send(result);
-      } else {
+ else {
         return reply.code(400).send(result);
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Error in POST /chargebacks/prevention/rules:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // Create response template
   fastify.post<{
     Body: typeof CreateResponseTemplateSchema._type;
-  }>('/chargebacks/templates', {
+>('/chargebacks/templates', {
     schema: {
       description: 'Create a new chargeback response template',
       tags: ['Templates'],
@@ -445,29 +443,29 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const result = await chargebackService.createResponseTemplate(request.body);
       
       if (result.success) {
         return reply.code(201).send(result);
-      } else {
+ else {
         return reply.code(400).send(result);
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Error in POST /chargebacks/templates:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // =============================================================================
@@ -477,7 +475,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
   // Bulk chargeback actions
   fastify.post<{
     Body: typeof BulkActionSchema._type;
-  }>('/chargebacks/bulk', {
+>('/chargebacks/bulk', {
     schema: {
       description: 'Perform bulk actions on multiple chargebacks',
       tags: ['Bulk Operations'],
@@ -488,10 +486,10 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { action, chargeback_ids, parameters } = request.body as any;
@@ -514,14 +512,14 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
             if (statusResult.success) {
               bulkResult.successful++;
               bulkResult.results.push({ chargeback_id: chargebackId, success: true });
-            } else {
+ else {
               bulkResult.failed++;
               bulkResult.results.push({ 
                 chargeback_id: chargebackId, 
                 success: false, 
                 error: statusResult.error?.message 
               });
-            }
+
             break;
               
           case 'add_tags':
@@ -539,32 +537,31 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
               success: false, 
               error: `Unsupported action: ${action}` 
             });
-          }
-        } catch (error) {
+
+ catch (error) {
           bulkResult.failed++;
           bulkResult.results.push({ 
             chargeback_id: chargebackId, 
             success: false, 
             error: error instanceof Error ? error.message : 'Unknown error' 
           });
-        }
-      }
+
+
 
       return reply.code(200).send({
         success: true,
         data: bulkResult
       });
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error in POST /chargebacks/bulk:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'An unexpected error occurred'
-        }
+
       });
-    }
+
   });
 
   // =============================================================================
@@ -577,7 +574,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
     Headers: {
       'stripe-signature'?: string;
     };
-  }>('/chargebacks/webhooks/stripe', {
+>('/chargebacks/webhooks/stripe', {
     schema: {
       description: 'Handle Stripe chargeback webhook events',
       tags: ['Webhooks'],
@@ -585,9 +582,9 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           'stripe-signature': { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Verify Stripe webhook signature
@@ -599,9 +596,9 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           error: {
             code: 'MISSING_SIGNATURE',
             message: 'Missing Stripe signature header'
-          }
+
         });
-      }
+
 
       // Process webhook event
       const event = request.body;
@@ -630,20 +627,19 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
           
       default:
         fastify.log.info('Unhandled Stripe event type:', event.type);
-      }
+
 
       return reply.code(200).send({ received: true });
-      
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error in POST /chargebacks/webhooks/stripe:', error);
       return reply.code(500).send({
         success: false,
         error: {
           code: 'WEBHOOK_PROCESSING_ERROR',
           message: 'Failed to process webhook'
-        }
+
       });
-    }
+
   });
 
   // =============================================================================
@@ -667,19 +663,19 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
     };
 
     await chargebackService.createChargeback(chargebackData);
-  }
+
 
   async function handleStripeDisputeUpdated(dispute: any) {
     // Find existing chargeback and update status
     // Implementation would query database and update accordingly
     fastify.log.info('Updating Stripe dispute:', dispute.id);
-  }
+
 
   async function handleStripeDisputeClosed(dispute: any) {
     // Update chargeback with final outcome
     // Implementation would map Stripe outcome to our system
     fastify.log.info('Closing Stripe dispute:', dispute.id);
-  }
+
 
   function mapStripeReason(stripeReason: string): string {
     const reasonMapping: Record<string, string> = {
@@ -694,5 +690,4 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
     };
     
     return reasonMapping[stripeReason] || 'other';
-  }
-}
+

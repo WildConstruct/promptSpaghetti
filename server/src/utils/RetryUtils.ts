@@ -6,8 +6,8 @@
  * comprehensive error handling for robust system operations.
  */
 
-}
-}
+
+
 export interface RetryOptions {
   maxAttempts?: number;
   baseDelay?: number;
@@ -18,12 +18,13 @@ export interface RetryOptions {
   onAttempt?: (attempt: number, error: Error) => void;
   onSuccess?: <T>(attempt: number, result: T) => void;
   onFailure?: (attempts: number, finalError: Error) => void;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetryResult<T> {
   success: boolean;
   result?: T;
@@ -31,10 +32,10 @@ export interface RetryResult<T> {
   attempts: number;
   totalTime: number;
   retryHistory: RetryAttempt[];
-}
 
-}
-}
+
+
+
 export interface RetryAttempt {
   attempt: number;
   startTime: number;
@@ -42,9 +43,10 @@ export interface RetryAttempt {
   success: boolean;
   error?: Error;
   delay?: number;
-}
-}
-}
+
+
+
+
 
 export class RetryError extends Error {
   constructor(
@@ -55,8 +57,8 @@ export class RetryError extends Error {
   ) {
     super(message);
     this.name = 'RetryError';
-  }
-}
+
+
 
 export class RetryUtils {
   private static readonly DEFAULT_OPTIONS: Required<RetryOptions> = {
@@ -100,8 +102,7 @@ export class RetryUtils {
 
         config.onSuccess(attempt, result);
         return result;
-
-      } catch (error) {
+ catch (error) {
         const duration = Date.now() - attemptStart;
         lastError = error instanceof Error ? error : new Error(String(error));
         
@@ -118,20 +119,20 @@ export class RetryUtils {
         // Check if error is retryable
         if (!this.isRetryableError(lastError, config.retryableErrors)) {
           break;
-        }
+
 
         // If this was the last attempt, don't wait
         if (attempt === config.maxAttempts) {
           break;
-        }
+
 
         // Calculate delay for next attempt
         const delay = this.calculateDelay(attempt, config);
         retryHistory[retryHistory.length - 1].delay = delay;
         
         await this.sleep(delay);
-      }
-    }
+
+
 
     const totalTime = Date.now() - startTime;
     config.onFailure(config.maxAttempts, lastError!);
@@ -142,7 +143,7 @@ export class RetryUtils {
       lastError!,
       retryHistory
     );
-  }
+
 
   /**
    * Execute a function with retry logic and return detailed result
@@ -162,7 +163,7 @@ export class RetryUtils {
         totalTime: Date.now() - startTime,
         retryHistory: []
       };
-    } catch (error) {
+ catch (error) {
       if (error instanceof RetryError) {
         return {
           success: false,
@@ -171,7 +172,7 @@ export class RetryUtils {
           totalTime: Date.now() - startTime,
           retryHistory: error.retryHistory
         };
-      }
+
       
       return {
         success: false,
@@ -180,8 +181,8 @@ export class RetryUtils {
         totalTime: Date.now() - startTime,
         retryHistory: []
       };
-    }
-  }
+
+
 
   /**
    * Create a retryable version of an async function
@@ -193,7 +194,7 @@ export class RetryUtils {
     return async (...args: TArgs): Promise<TReturn> => {
       return this.execute(() => fn(...args), options);
     };
-  }
+
 
   /**
    * Retry with exponential backoff specifically for database operations
@@ -222,7 +223,7 @@ export class RetryUtils {
     };
 
     return this.execute(operation, dbOptions);
-  }
+
 
   /**
    * Retry with exponential backoff specifically for HTTP operations
@@ -251,7 +252,7 @@ export class RetryUtils {
     };
 
     return this.execute(operation, httpOptions);
-  }
+
 
   /**
    * Retry with circuit breaker pattern
@@ -266,7 +267,7 @@ export class RetryUtils {
     
     if (circuitState.isOpen()) {
       throw new Error(`Circuit breaker is OPEN for ${circuitBreakerKey}`);
-    }
+
 
     try {
       const result = await this.execute(operation, {
@@ -274,19 +275,19 @@ export class RetryUtils {
         onFailure: (attempts, error) => {
           circuitState.recordFailure();
           options.onFailure?.(attempts, error);
-  }
+
         onSuccess: (attempt, result) => {
           circuitState.recordSuccess();
           options.onSuccess?.(attempt, result);
-        }
+
       });
       
       return result;
-    } catch (error) {
+ catch (error) {
       circuitState.recordFailure();
       throw error;
-    }
-  }
+
+
 
   /**
    * Calculate delay with exponential backoff and jitter
@@ -303,10 +304,10 @@ export class RetryUtils {
       const jitterRange = exponentialDelay * 0.1;
       const jitter = Math.random() * jitterRange * 2 - jitterRange;
       return Math.max(0, exponentialDelay + jitter);
-    }
+
 
     return exponentialDelay;
-  }
+
 
   /**
    * Check if an error is retryable
@@ -314,12 +315,12 @@ export class RetryUtils {
   private static isRetryableError(error: Error, retryableErrors: Array<string | number | RegExp>): boolean {
     if (retryableErrors.length === 0) {
       return true; // Retry all errors if no specific errors specified
-    }
+
 
     return retryableErrors.some(pattern => {
       if (typeof pattern === 'string') {
         return error.message.includes(pattern) || error.name === pattern;
-      }
+
       
       if (typeof pattern === 'number') {
         // For HTTP status codes
@@ -327,15 +328,15 @@ export class RetryUtils {
           error as Record<string,
           unknown>
         ).status === pattern || (error as Record<string, unknown>).statusCode === pattern;
-      }
+
       
       if (pattern instanceof RegExp) {
         return pattern.test(error.message) || pattern.test(error.name);
-      }
+
       
       return false;
     });
-  }
+
 
   /**
    * Sleep for specified milliseconds
@@ -343,7 +344,7 @@ export class RetryUtils {
   private static sleep(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   /**
    * Circuit breaker state management
@@ -353,10 +354,10 @@ export class RetryUtils {
   private static getCircuitState(key: string): CircuitBreakerState {
     if (!this.circuitStates.has(key)) {
       this.circuitStates.set(key, new CircuitBreakerState());
-    }
+
     return this.circuitStates.get(key)!;
-  }
-}
+
+
 
 /**
  * Circuit Breaker State Management
@@ -374,16 +375,16 @@ class CircuitBreakerState {
       if (Date.now() - this.lastFailureTime > this.resetTimeout) {
         this.state = 'HALF_OPEN';
         return false;
-      }
+
       return true;
-    }
+
     return false;
-  }
+
   
   recordSuccess(): void {
     this.failures = 0;
     this.state = 'CLOSED';
-  }
+
   
   recordFailure(): void {
     this.failures++;
@@ -391,9 +392,9 @@ class CircuitBreakerState {
     
     if (this.failures >= this.maxFailures) {
       this.state = 'OPEN';
-    }
-  }
-}
+
+
+
 
 /**
  * Retry decorators for class methods
@@ -403,14 +404,14 @@ export function retryable(options: RetryOptions = {}) {
     if (!descriptor) {
       console.warn(`@retryable decorator: PropertyDescriptor is undefined for ${propertyKey}`);
       return descriptor;
-    }
+
     
     const originalMethod = descriptor.value;
     
     if (typeof originalMethod !== 'function') {
       console.warn(`@retryable decorator: ${propertyKey} is not a function`);
       return descriptor;
-    }
+
     
     descriptor.value = async function (...args: unknown[]) {
       return RetryUtils.execute(() => originalMethod.apply(this, args), options);
@@ -418,21 +419,21 @@ export function retryable(options: RetryOptions = {}) {
     
     return descriptor;
   };
-}
+
 
 export function retryableDatabase(options: Partial<RetryOptions> = {}) {
   return function (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
     if (!descriptor) {
       console.warn(`@retryableDatabase decorator: PropertyDescriptor is undefined for ${propertyKey}`);
       return descriptor;
-    }
+
     
     const originalMethod = descriptor.value;
     
     if (typeof originalMethod !== 'function') {
       console.warn(`@retryableDatabase decorator: ${propertyKey} is not a function`);
       return descriptor;
-    }
+
     
     descriptor.value = async function (...args: unknown[]) {
       return RetryUtils.executeDatabase(() => originalMethod.apply(this, args), options);
@@ -440,21 +441,21 @@ export function retryableDatabase(options: Partial<RetryOptions> = {}) {
     
     return descriptor;
   };
-}
+
 
 export function retryableHttp(options: Partial<RetryOptions> = {}) {
   return function (target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
     if (!descriptor) {
       console.warn(`@retryableHttp decorator: PropertyDescriptor is undefined for ${propertyKey}`);
       return descriptor;
-    }
+
     
     const originalMethod = descriptor.value;
     
     if (typeof originalMethod !== 'function') {
       console.warn(`@retryableHttp decorator: ${propertyKey} is not a function`);
       return descriptor;
-    }
+
     
     descriptor.value = async function (...args: unknown[]) {
       return RetryUtils.executeHttp(() => originalMethod.apply(this, args), options);
@@ -462,7 +463,7 @@ export function retryableHttp(options: Partial<RetryOptions> = {}) {
     
     return descriptor;
   };
-}
+
 
 /**
  * Utility functions for common patterns
@@ -486,7 +487,7 @@ export class RetryPatterns {
         /resource.*temporarily.*unavailable/i
       ]
     });
-  }
+
 
   /**
    * Retry pattern for external API calls
@@ -502,9 +503,9 @@ export class RetryPatterns {
       retryableErrors: [500, 502, 503, 504, 408, 429],
       onAttempt: (attempt, error) => {
         console.warn(`API call to ${serviceName || 'external service'} failed (attempt ${attempt}):`, error.message);
-      }
+
     });
-  }
+
 
   /**
    * Retry pattern for log analysis operations
@@ -525,7 +526,6 @@ export class RetryPatterns {
       ],
       onAttempt: (attempt, error) => {
         console.warn(`Log analysis operation failed (attempt ${attempt}):`, error.message);
-      }
+
     });
-  }
-}
+

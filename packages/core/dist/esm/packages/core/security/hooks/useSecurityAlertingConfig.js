@@ -35,6 +35,21 @@ utils: {
     getRecommendations: () => ConfigRecommendation;
 }
 ;
+correlationRules: [],
+    responseAutomation;
+{
+    enabledActions: [],
+        approvalRequired;
+    true,
+        maxAutomatedActions;
+    5,
+        cooldownPeriod;
+    900000, // 15 minutes,
+        emergencyOverride;
+    false,
+    ;
+}
+;
 export const useSecurityAlertingConfig = (initialConfig) => options, UseSecurityAlertingConfigOptions = {};
 UseSecurityAlertingConfigReturn => {
     const { configId = 'default', autoSave = false, autoSaveInterval = 30000, // 30 seconds

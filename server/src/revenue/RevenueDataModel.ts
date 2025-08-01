@@ -14,7 +14,7 @@ import {
   LicenseType,
   Order,
   OrderItem 
-} from '../marketplace/transaction.types';
+ from '../marketplace/transaction.types';
 import { AnalyticsEvent, AnalyticsEventType } from '../analytics/AnalyticsCollector';
 
 // Revenue Event Types extending Epic 1 analytics
@@ -40,11 +40,12 @@ export enum RevenueEventType {
   // Attribution Events
   REVENUE_ATTRIBUTED = 'revenue_attributed',
   CREATOR_PAYOUT_PROCESSED = 'creator_payout_processed'
-}
+
 
 // Revenue Attribution Models
-}
-}
+
+
+
 export interface RevenueAttribution {
   id: string;
   transaction_id: string;
@@ -57,13 +58,15 @@ export interface RevenueAttribution {
   revenue_cents: number;
   commission_cents: number;
   created_at: Date;
-}
-}
-}
+
+
+
+
 
 // Template Revenue Performance
-}
-}
+
+
+
 export interface TemplateRevenueMetrics {
   template_id: string;
   version_id?: string;
@@ -87,9 +90,10 @@ export interface TemplateRevenueMetrics {
     license_type: LicenseType;
     count: number;
     revenue_cents: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Time-based Metrics
   first_sale_at?: Date;
@@ -98,11 +102,12 @@ export interface TemplateRevenueMetrics {
   period_end: Date;
   
   updated_at: Date;
-}
+
 
 // Creator Revenue Analytics
-}
-}
+
+
+
 export interface CreatorRevenueMetrics {
   creator_id: string;
   
@@ -125,9 +130,10 @@ export interface CreatorRevenueMetrics {
     license_type: LicenseType;
     count: number;
     revenue_cents: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Payout Information
   payout_frequency: 'weekly' | 'monthly' | 'quarterly';
@@ -137,11 +143,12 @@ export interface CreatorRevenueMetrics {
   period_start: Date;
   period_end: Date;
   updated_at: Date;
-}
+
 
 // Revenue Event extending Epic 1 AnalyticsEvent
-}
-}
+
+
+
 export interface RevenueEvent extends AnalyticsEvent {
   type: RevenueEventType;
   revenue_data: {
@@ -175,11 +182,12 @@ export interface RevenueEvent extends AnalyticsEvent {
     utm_medium?: string;
     utm_campaign?: string;
   };
-}
+
 
 // Pricing Tier and Discount Tracking
-}
-}
+
+
+
 export interface PricingTier {
   id: string;
   name: string;
@@ -192,16 +200,17 @@ export interface PricingTier {
   volume_discounts: Array<{
     min_quantity: number;
     discount_percentage: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Geographic Pricing
   regional_pricing: Array<{
     country_code: string;
     price_cents: number;
     currency: string;
-  }>;
+>;
   
   // Temporal Settings
   valid_from: Date;
@@ -210,11 +219,12 @@ export interface PricingTier {
   
   created_at: Date;
   updated_at: Date;
-}
+
 
 // Discount and Promotion Tracking
-}
-}
+
+
+
 export interface DiscountCode {
   id: string;
   code: string;
@@ -243,13 +253,15 @@ export interface DiscountCode {
   
   created_at: Date;
   updated_at: Date;
-}
-}
-}
+
+
+
+
 
 // Revenue Aggregation for Real-time Analytics
-}
-}
+
+
+
 export interface RevenueAggregation {
   id: string;
   aggregation_type: 'hourly' | 'daily' | 'weekly' | 'monthly';
@@ -269,38 +281,40 @@ export interface RevenueAggregation {
     revenue_cents: number;
     transaction_count: number;
     success_rate: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Geographic Breakdown
   geographic_breakdown: Array<{
     country_code: string;
     revenue_cents: number;
     transaction_count: number;
-  }>;
+>;
   
   // Template Performance
   top_templates: Array<{
     template_id: string;
     revenue_cents: number;
     transaction_count: number;
-  }>;
+>;
   
   // Creator Performance
   top_creators: Array<{
     creator_id: string;
     revenue_cents: number;
     template_count: number;
-  }>;
+>;
   
   created_at: Date;
   updated_at: Date;
-}
+
 
 // Revenue Forecast Data
-}
-}
+
+
+
 export interface RevenueForecast {
   id: string;
   forecast_type: 'template' | 'creator' | 'global';
@@ -327,9 +341,10 @@ export interface RevenueForecast {
     predicted_revenue_cents: number;
     confidence_interval_upper: number;
     confidence_interval_lower: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Model Performance
   mae: number; // Mean Absolute Error
@@ -338,7 +353,7 @@ export interface RevenueForecast {
   
   generated_at: Date;
   valid_until: Date;
-}
+
 
 // Validation Schemas
 export const RevenueEventSchema = z.object({
@@ -357,7 +372,7 @@ export const RevenueEventSchema = z.object({
     utm_source: z.string().optional(),
     utm_medium: z.string().optional(),
     utm_campaign: z.string().optional()
-  }
+
 });
 
 export const PricingTierSchema = z.object({

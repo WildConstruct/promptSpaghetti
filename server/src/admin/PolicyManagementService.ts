@@ -13,12 +13,12 @@ import {
   AutomatedEnforcementService,
   EnforcementPolicy,
   EnforcementAction
-} from '../services/trust/AutomatedEnforcementService';
+ from '../services/trust/AutomatedEnforcementService';
 import { TrustScoreService } from '../services/trust/TrustScoreService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface PolicyTemplate {
   templateId: string;
   name: string;
@@ -29,12 +29,13 @@ export interface PolicyTemplate {
   isSystemTemplate: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyViolation {
   violationId: string;
   policyId: string;
@@ -49,12 +50,13 @@ export interface PolicyViolation {
   reviewedAt?: Date;
   notes?: string;
   enforcementActions?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AdminEnforcementRequest {
   requestId: string;
   entityType: 'user' | 'template' | 'transaction';
@@ -70,12 +72,13 @@ export interface AdminEnforcementRequest {
   approvedBy?: string;
   approvedAt?: Date;
   rejectionReason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyEnforcementStats {
   totalPolicies: number;
   activePolicies: number;
@@ -88,10 +91,11 @@ export interface PolicyEnforcementStats {
     policyId: string;
     policyName: string;
     violationCount: number;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 export class PolicyManagementService {
   private db: Database;
@@ -109,7 +113,7 @@ export class PolicyManagementService {
     this.automatedEnforcement = automatedEnforcement;
     this.trustScoreService = trustScoreService;
     this.auditService = auditService;
-  }
+
 
   // =============================================================================
   // Policy Template Management
@@ -147,7 +151,7 @@ export class PolicyManagementService {
     ]);
 
     return newTemplate;
-  }
+
 
   /**
    * Get all policy templates
@@ -157,7 +161,7 @@ export class PolicyManagementService {
     isSystemTemplate?: boolean;
     limit?: number;
     offset?: number;
-  } = {}): Promise<{ templates: PolicyTemplate[]; total: number }> {
+ = {}): Promise<{ templates: PolicyTemplate[]; total: number }> {
 
     const { category, isSystemTemplate, limit = 50, offset = 0 } = options;
     
@@ -172,12 +176,12 @@ export class PolicyManagementService {
     if (category) {
       params.push(category);
       query += ` AND category = $${params.length}`;
-    }
+
 
     if (isSystemTemplate !== undefined) {
       params.push(isSystemTemplate);
       query += ` AND is_system_template = $${params.length}`;
-    }
+
 
     query += ' ORDER BY created_at DESC';
 
@@ -206,7 +210,7 @@ export class PolicyManagementService {
     }));
 
     return { templates, total };
-  }
+
 
   /**
    * Create policy from template
@@ -219,7 +223,7 @@ export class PolicyManagementService {
     const template = await this.getPolicyTemplate(templateId);
     if (!template) {
       throw new Error(`Policy template not found: ${templateId}`);
-    }
+
 
     const policy: EnforcementPolicy = {
       policyId: this.generatePolicyId(),
@@ -241,12 +245,12 @@ export class PolicyManagementService {
         templateId: template.templateId,
         policyId: policy.policyId,
         policyName: policy.name
-  }
+
       severity: 'info'
     });
 
     return policy;
-  }
+
 
   // =============================================================================
   // Violation Detection and Management
@@ -260,7 +264,7 @@ export class PolicyManagementService {
     entityIds?: string[];
     policyIds?: string[];
     severity?: 'low' | 'medium' | 'high' | 'critical';
-  } = {}): Promise<PolicyViolation[]> {
+ = {}): Promise<PolicyViolation[]> {
 
     console.log('🔍 Scanning for policy violations', options);
     
@@ -270,15 +274,15 @@ export class PolicyManagementService {
     for (const policy of policies) {
       const policyViolations = await this.scanPolicyViolations(policy, options);
       violations.push(...policyViolations);
-    }
+
 
     // Store violations in database
     for (const violation of violations) {
       await this.storeViolation(violation);
-    }
+
 
     return violations;
-  }
+
 
   /**
    * Get policy violations
@@ -289,7 +293,7 @@ export class PolicyManagementService {
     severity?: 'low' | 'medium' | 'high' | 'critical';
     limit?: number;
     offset?: number;
-  } = {}): Promise<{ violations: PolicyViolation[]; total: number }> {
+ = {}): Promise<{ violations: PolicyViolation[]; total: number }> {
 
     const { status, entityType, severity, limit = 50, offset = 0 } = options;
     
@@ -305,17 +309,17 @@ export class PolicyManagementService {
     if (status) {
       params.push(status);
       query += ` AND status = $${params.length}`;
-    }
+
 
     if (entityType) {
       params.push(entityType);
       query += ` AND entity_type = $${params.length}`;
-    }
+
 
     if (severity) {
       params.push(severity);
       query += ` AND severity = $${params.length}`;
-    }
+
 
     query += ' ORDER BY detected_at DESC';
 
@@ -346,7 +350,7 @@ export class PolicyManagementService {
     }));
 
     return { violations, total };
-  }
+
 
   /**
    * Review violation
@@ -362,7 +366,7 @@ export class PolicyManagementService {
     const violation = await this.getViolation(violationId);
     if (!violation) {
       throw new Error(`Violation not found: ${violationId}`);
-    }
+
 
     if (decision === 'enforce') {
       // Create enforcement action
@@ -381,8 +385,7 @@ export class PolicyManagementService {
             enforcement_actions = $4
         WHERE violation_id = $1
       `, [violationId, reviewedBy, notes, JSON.stringify([enforcementAction.actionId])]);
-
-    } else {
+ else {
       // Dismiss violation
       await this.db.query(`
         UPDATE policy_violations 
@@ -392,7 +395,7 @@ export class PolicyManagementService {
             notes = $3
         WHERE violation_id = $1
       `, [violationId, reviewedBy, notes]);
-    }
+
 
     await this.auditService.logEvent({
       userId: reviewedBy,
@@ -403,10 +406,10 @@ export class PolicyManagementService {
         notes,
         entityType: violation.entityType,
         entityId: violation.entityId
-  }
+
       severity: decision === 'enforce' ? 'warning' : 'info'
     });
-  }
+
 
   // =============================================================================
   // Manual Enforcement Requests
@@ -454,12 +457,12 @@ export class PolicyManagementService {
         entityType: newRequest.entityType,
         entityId: newRequest.entityId,
         actionType: newRequest.actionType
-  }
+
       severity: 'info'
     });
 
     return newRequest;
-  }
+
 
   /**
    * Process enforcement request
@@ -474,7 +477,7 @@ export class PolicyManagementService {
     const request = await this.getEnforcementRequest(requestId);
     if (!request) {
       throw new Error(`Enforcement request not found: ${requestId}`);
-    }
+
 
     if (decision === 'approve') {
       // Create and execute enforcement action
@@ -486,14 +489,13 @@ export class PolicyManagementService {
         SET status = 'executed', approved_by = $2, approved_at = NOW()
         WHERE request_id = $1
       `, [requestId, approvedBy]);
-
-    } else {
+ else {
       await this.db.query(`
         UPDATE enforcement_requests 
         SET status = 'rejected', approved_by = $2, approved_at = NOW(), rejection_reason = $3
         WHERE request_id = $1
       `, [requestId, approvedBy, rejectionReason]);
-    }
+
 
     await this.auditService.logEvent({
       userId: approvedBy,
@@ -504,10 +506,10 @@ export class PolicyManagementService {
         rejectionReason,
         entityType: request.entityType,
         entityId: request.entityId
-  }
+
       severity: decision === 'approve' ? 'warning' : 'info'
     });
-  }
+
 
   // =============================================================================
   // Statistics and Analytics
@@ -548,7 +550,7 @@ export class PolicyManagementService {
       enforcementByAction,
       topViolatedPolicies: topViolated
     };
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -577,21 +579,21 @@ export class PolicyManagementService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
+
 
   private async getActivePolicies(policyIds?: string[]): Promise<EnforcementPolicy[]> {
 
     // This would integrate with AutomatedEnforcementService to get active policies
     // For now, return empty array as placeholder
     return [];
-  }
+
 
   private async scanPolicyViolations(policy: EnforcementPolicy, options: unknown): Promise<PolicyViolation[]> {
 
     // Implementation would scan for violations based on policy rules
     // This is a placeholder that would integrate with trust scoring and detection logic
     return [];
-  }
+
 
   private async storeViolation(violation: PolicyViolation): Promise<void> {
 
@@ -612,7 +614,7 @@ export class PolicyManagementService {
       violation.detectedAt,
       violation.status
     ]);
-  }
+
 
   private async getViolation(violationId: string): Promise<PolicyViolation | null> {
 
@@ -638,7 +640,7 @@ export class PolicyManagementService {
       notes: row.notes,
       enforcementActions: JSON.parse(row.enforcement_actions || '[]')
     };
-  }
+
 
   private async createEnforcementFromViolation(
     violation: PolicyViolation, 
@@ -659,7 +661,7 @@ export class PolicyManagementService {
       reviewRequired: true,
       ...overrides
     };
-  }
+
 
   private async getEnforcementRequest(requestId: string): Promise<AdminEnforcementRequest | null> {
 
@@ -686,7 +688,7 @@ export class PolicyManagementService {
       approvedAt: row.approved_at,
       rejectionReason: row.rejection_reason
     };
-  }
+
 
   private async createEnforcementFromRequest(request: AdminEnforcementRequest): Promise<EnforcementAction> {
 
@@ -704,38 +706,38 @@ export class PolicyManagementService {
       reviewRequired: false,
       expiresAt: request.expiresAt
     };
-  }
+
 
   private async storeEnforcementPolicy(policy: EnforcementPolicy): Promise<void> {
 
     // This would integrate with AutomatedEnforcementService's config system
     console.log(`📝 Storing enforcement policy: ${policy.name}`);
-  }
+
 
   // Statistics helper methods
   private async getTotalPoliciesCount(): Promise<number> {
 
     const result = await this.db.query('SELECT COUNT(*) FROM policy_templates');
     return parseInt(result.rows[0].count);
-  }
+
 
   private async getActivePoliciesCount(): Promise<number> {
 
     // This would count active policies from the enforcement system
     return 0;
-  }
+
 
   private async getTotalViolationsCount(): Promise<number> {
 
     const result = await this.db.query('SELECT COUNT(*) FROM policy_violations');
     return parseInt(result.rows[0].count || '0');
-  }
+
 
   private async getPendingViolationsCount(): Promise<number> {
 
     const result = await this.db.query('SELECT COUNT(*) FROM policy_violations WHERE status = \'pending\'');
     return parseInt(result.rows[0].count || '0');
-  }
+
 
   private async getTodayEnforcementCount(): Promise<number> {
 
@@ -744,39 +746,39 @@ export class PolicyManagementService {
       WHERE action_timestamp >= CURRENT_DATE
     `);
     return parseInt(result.rows[0].count || '0');
-  }
+
 
   private async getViolationsByCategory(): Promise<Record<string, number>> {
     // Placeholder implementation
     return {};
-  }
+
 
   private async getEnforcementByAction(): Promise<Record<string, number>> {
     // Placeholder implementation  
     return {};
-  }
+
 
   private async getTopViolatedPolicies(): Promise<Array<{ policyId: string; policyName: string; violationCount: number }>> {
     // Placeholder implementation
     return [];
-  }
+
 
   // ID generation methods
   private generateTemplateId(): string {
     return `TPL-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generatePolicyId(): string {
     return `POL-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateRequestId(): string {
     return `REQ-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateActionId(): string {
     return `ACT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private getDefaultActionForSeverity(severity: 'low' | 'medium' | 'high' | 'critical'): 'suspend' | 'restrict' | 'flag' | 'require_verification' | 'block_transaction' | 'quarantine_template' {
     switch (severity) {
@@ -785,6 +787,5 @@ export class PolicyManagementService {
     case 'medium': return 'flag';
     case 'low': return 'flag';
     default: return 'flag';
-    }
-  }
-}
+
+

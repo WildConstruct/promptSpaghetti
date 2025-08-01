@@ -6,7 +6,7 @@
  * analytics infrastructure, providing comprehensive insights into learning effectiveness,
  * community engagement, and knowledge base usage.
  */
-import { LearningAnalyticsEvent, TutorialAnalyticsEvent, KnowledgeBaseAnalyticsEvent, CommunityAnalyticsEvent } from './LearningAnalyticsExtension';
+import { LearningAnalyticsEvent } from './LearningAnalyticsExtension';
 import { TimeRange } from '../../../server/src/marketplace/analytics.types';
 export class LearningAnalyticsServiceImpl {
     apiClient;

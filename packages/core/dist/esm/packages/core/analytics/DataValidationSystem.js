@@ -56,6 +56,12 @@ timestamp: number;
 violations: ValidationResult;
 recommendations: string;
 timestamp: number;
+missingFields: {
+    [field, string];
+    number;
+}
+;
+requiredFieldsCoverage: number;
 ;
 accuracy: {
     score: number;
@@ -123,7 +129,7 @@ export class DataValidationSystem {
             conditions;
         { }
         validation: {
-            rules: [,
+            rules: [
                 { field: 'id', operator: 'exists', required: true },
                 { field: 'type', operator: 'exists', required: true },
                 { field: 'timestamp', operator: 'exists', required: true },
@@ -149,7 +155,7 @@ export class DataValidationSystem {
             conditions;
         { }
         validation: {
-            rules: [,
+            rules: [
                 {
                     field: 'timestamp',
                     operator: 'greater_than',
@@ -161,7 +167,8 @@ export class DataValidationSystem {
                     operator: 'less_than',
                     value: Date.now() + (24 * 60 * 60 * 1000), // Not more than 1 day in future,
                     required: true
-                }];
+                }
+            ];
         }
         ;
         // Data Consistency Rules
@@ -180,19 +187,21 @@ export class DataValidationSystem {
             conditions;
         { }
         validation: {
-            rules: [,
+            rules: [
                 {
                     field: 'userId',
                     operator: 'custom',
                     customFunction: 'validateUserExists',
                     required: false
-                }],
+                }
+            ],
                 crossFieldValidation;
-            [,
+            [
                 {
                     fields: ['userId', 'sessionId'],
                     relationship: 'all_or_none'
-                }];
+                }
+            ];
         }
         ;
         // Data Integrity Rules
@@ -211,7 +220,7 @@ export class DataValidationSystem {
             conditions;
         { }
         validation: {
-            rules: [,
+            rules: [
                 {
                     field: 'data',
                     operator: 'custom',
@@ -223,7 +232,8 @@ export class DataValidationSystem {
                     operator: 'custom',
                     customFunction: 'validateMetadataStructure',
                     required: false
-                }];
+                }
+            ];
         }
         ;
         // Event Type Specific Rules
@@ -245,7 +255,7 @@ export class DataValidationSystem {
             ;
         }
         validation: {
-            rules: [,
+            rules: [
                 { field: 'data.executionId', operator: 'exists', required: true },
                 { field: 'data.graphId', operator: 'exists', required: true },
                 { field: 'data.success', operator: 'exists', required: true },
@@ -254,7 +264,8 @@ export class DataValidationSystem {
                     operator: 'greater_than',
                     value: 0,
                     required: false
-                }];
+                }
+            ];
         }
         ;
         // Security Event Rules
@@ -276,7 +287,7 @@ export class DataValidationSystem {
             ;
         }
         validation: {
-            rules: [,
+            rules: [
                 {
                     field: 'data.riskLevel',
                     operator: 'in_range',
@@ -307,7 +318,7 @@ export class DataValidationSystem {
             ;
         }
         validation: {
-            rules: [,
+            rules: [
                 { field: 'data.metric', operator: 'exists', required: true },
                 { field: 'data.value', operator: 'exists', required: true },
                 {
@@ -315,7 +326,8 @@ export class DataValidationSystem {
                     operator: 'greater_than',
                     value: 0,
                     required: true
-                }];
+                }
+            ];
         }
         ;
         /**
@@ -361,8 +373,7 @@ export class DataValidationSystem {
                         try {
                             // Get events for validation
                             const events = await this.eventRepository.findMany({});
-                            filter: {
-                            }
+                            filter: { }
                         }
                         finally {
                         }
@@ -403,7 +414,7 @@ export class DataValidationSystem {
                 recommendations,
                 timestamp: Date.now()
             },
-            console, : .log(`Consistency check ${checkId} completed in ${Date.now() - startTime},}
+            console, : .log(`Consistency check ${checkId} completed in ${Date.now() - startTime},},
   ms:`, {}, totalRecords, validRecords, invalidRecords, errorRate, `${result.summary.errorRate}%`)
         };
     }
@@ -612,8 +623,9 @@ if (totalEvents === 0) {
                         };
                         return null;
                         async;
-                        validateCrossFields(event, UnifiedAnalyticsEvent);
-                        crossFieldRule: NonNullable < ValidationRule['validation']['crossFieldValidation'] > [0],
+                        validateCrossFields(event, UnifiedAnalyticsEvent),
+                            crossFieldRule;
+                        NonNullable < ValidationRule['validation']['crossFieldValidation'] > [0],
                             validationRule;
                         ValidationRule;
                         Promise < ValidationResult | null > {
@@ -1242,8 +1254,9 @@ if (totalEvents === 0) {
                                     if (grade === 'D')
                                         return 'Poor data quality. Immediate attention required.';
                                     return 'Critical data quality issues. Comprehensive remediation needed.';
-                                    generateValidationMessage(rule, ValidationRule);
-                                    fieldRule: ValidationRule['validation']['rules'][0],
+                                    generateValidationMessage(rule, ValidationRule),
+                                        fieldRule;
+                                    ValidationRule['validation']['rules'][0],
                                         passed;
                                     boolean,
                                         actualValue;

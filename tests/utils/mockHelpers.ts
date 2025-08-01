@@ -28,7 +28,7 @@ export   return {
     }),
     get length() {
       return storage.size;
-    }
+
   };
 };
 
@@ -40,7 +40,7 @@ export
     addEventListener: jest.fn((event: string, listener: Function) => {
       if (!eventListeners.has(event)) {
         eventListeners.set(event, []);
-      }
+
       eventListeners.get(event)!.push(listener);
     }),
     removeEventListener: jest.fn((event: string, listener: Function) => {
@@ -49,8 +49,8 @@ export
         const index = listeners.indexOf(listener);
         if (index > -1) {
           listeners.splice(index, 1);
-        }
-      }
+
+
     }),
     dispatchEvent: jest.fn((event: unknown) => {
       const listeners = eventListeners.get(event.type) || [];
@@ -126,15 +126,15 @@ export const mockDate = (isoDate: string) => {
     constructor(...args: unknown[]) {
       if (args.length === 0) {
         super(mockDate.getTime());
-      } else {
+ else {
         super(...args);
-      }
-    }
+
+
     
     static now() {
       return mockDate.getTime();
-    }
-  } as any;
+
+ as any;
   
   // Copy static methods from original Date
   Object.setPrototypeOf(MockDate, Date);
@@ -192,7 +192,7 @@ export
     mock: fetchMock,
     restore: () => {
       delete (global as any).fetch;
-    }
+
   };
 };
 

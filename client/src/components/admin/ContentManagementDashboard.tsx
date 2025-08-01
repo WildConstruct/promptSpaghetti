@@ -15,11 +15,12 @@ import {
   Star, Archive, CheckSquare,
   ChevronLeft, ChevronRight,
   Clock, User
-} from 'lucide-react';
+ from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types
-}
+
+
 interface ContentItem {
   id: string;,
   title: string;
@@ -41,13 +42,15 @@ interface ContentItem {
   expiresAt?: string;
   publishedAt?: string,
   customFields: Record<string, unknown>;
-}
+
+
 };
   organizationId?: string;
   parentId?: string,
   createdAt: string;,
   updatedAt: string;
-}
+
+
 interface ContentFilter {
   searchTerm: string;,
   typeFilter: string,
@@ -59,9 +62,11 @@ interface ContentFilter {
   dateRange?: {
   start: string;,
   end: string;
-}
+
+
 };
-}
+
+
 interface ContentStatistics {
   totalItems: number;,
   byType: Record<string, number>;
@@ -72,18 +77,20 @@ interface ContentStatistics {
   created24h: number;,
   updated24h: number,
   published24h: number;
-}
+
+
 };
-  topCategories: Array<{
+  topCategories: Array<{,
   category: string,
   count: number;
-}>;
-  topAuthors: Array<{
+>;
+  topAuthors: Array<{,
   authorId: string,
   authorName: string;,
   count: number;
-}>;
-}
+>;
+
+
 interface DashboardState {
   items: ContentItem;,
   loading: boolean,
@@ -97,53 +104,13 @@ interface DashboardState {
   statistics: ContentStatistics | null,
   showFilters: boolean;,
   showBulkActions: boolean;
-}
 
-const ContentManagementDashboard: React.FC = () => {
-  const navigate = useNavigate();
-}
-  const { user } = useAuthStore();
-  // State management
-  const [state, setState] = useState<DashboardState>({
-  items: [],
-  loading: true,
-  error: null,
-  filters: {
-  searchTerm: '',
-  typeFilter: '',
-  statusFilter: '',
-  visibilityFilter: '',
-  authorFilter: '',
-  categoryFilter: ''
-},
-  selectedItems: new Set<string>(),
-    viewMode: 'table',
-    currentPage: 1,
-    pageSize: 25,
-    totalItems: 0,
-    statistics: null,
-    showFilters: false,
-    showBulkActions: false;
-  });
-  // Fetch content items
-  const fetchContent = useCallback(async () => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
-    try {
-      const params = new URLSearchParams();
-      if (state.filters.searchTerm) params.append('search', state.filters.searchTerm);
-      if (state.filters.typeFilter) params.append('type', state.filters.typeFilter);
-      if (state.filters.statusFilter) params.append('status', state.filters.statusFilter);
-      if (state.filters.visibilityFilter) params.append('visibility', state.filters.visibilityFilter);
-      if (state.filters.authorFilter) params.append('author', state.filters.authorFilter);
-      if (state.filters.categoryFilter) params.append('category', state.filters.categoryFilter);
-      if (state.filters.featuredFilter !== undefined) params.append('featured', state.filters.featuredFilter.toString());
-      params.append('limit', state.pageSize.toString());
-      params.append('offset', ((state.currentPage - 1) * state.pageSize).toString());
-      const response = await fetch(`/api/content-management/content?${params}`, {)}
-  },
+
+
+const ContentManagementDashboard = () => { return null; },
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
       });
       if (!response.ok) {
@@ -155,7 +122,7 @@ const ContentManagementDashboard: React.FC = () => {
   totalItems: data.pagination.total,
   loading: false
 }));
-    } catch (error) {
+ catch (error) {
   setState(prev => ({
   ...prev,
   loading: false,
@@ -170,13 +137,13 @@ const ContentManagementDashboard: React.FC = () => {
       const response = await fetch('/api/content-management/content/statistics', {
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
       });
       if (response.ok) {
         const data = await response.json();
         setState(prev => ({ ...prev, statistics: data.data }));
-    } catch (error) {
+ catch (error) {
   console.error('Failed to fetch statistics:', error);
 }, [user]);
   useEffect(() => {
@@ -214,13 +181,13 @@ const ContentManagementDashboard: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
       });
       if (!response.ok) {
         throw new Error('Failed to publish content');
       fetchContent();
-    } catch (error) {
+ catch (error) {
   alert(error instanceof Error ? error.message : 'Failed to publish content');
 }, [fetchContent]);
   const handleArchive = useCallback(async (contentId: string) => {
@@ -230,13 +197,13 @@ const ContentManagementDashboard: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
       });
       if (!response.ok) {
         throw new Error('Failed to archive content');
       fetchContent();
-    } catch (error) {
+ catch (error) {
   alert(error instanceof Error ? error.message : 'Failed to archive content');
 }, [fetchContent]);
   const handleFeature = useCallback(async (contentId: string, featured: boolean) => {
@@ -246,7 +213,7 @@ const ContentManagementDashboard: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({ featured })
@@ -254,7 +221,7 @@ const ContentManagementDashboard: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to update featured status');
       fetchContent();
-    } catch (error) {
+ catch (error) {
   alert(error instanceof Error ? error.message : 'Failed to update featured status');
 }, [fetchContent]);
   const handleBulkStatusUpdate = useCallback(async (status: string) => {
@@ -264,19 +231,19 @@ const ContentManagementDashboard: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({
   contentIds: Array.from(state.selectedItems),
   status
-}
+
       });
       if (!response.ok) {
         throw new Error('Failed to perform bulk update');
       setState(prev => ({ ...prev, selectedItems: new Set() }));
       fetchContent();
-    } catch (error) {
+ catch (error) {
   alert(error instanceof Error ? error.message : 'Failed to perform bulk update');
 }, [state.selectedItems, fetchContent]);
   // Filter and selection handlers
@@ -292,7 +259,7 @@ const ContentManagementDashboard: React.FC = () => {
   const newSelected = new Set(prev.selectedItems);
       if (newSelected.has(itemId)) {
         newSelected.delete(itemId);
-      } else {
+ else {
         newSelected.add(itemId);
       return { ...prev, selectedItems: newSelected };
     });

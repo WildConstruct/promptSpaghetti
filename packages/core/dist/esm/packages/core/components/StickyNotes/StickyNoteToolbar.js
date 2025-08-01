@@ -31,44 +31,14 @@ const CATEGORIES = [
     { value: 'action-item', label: 'Action Item', icon: '🎯' },
     { value: 'reference', label: 'Reference', icon: '📚' }
 ];
-const QUICK_TEMPLATES = [];
-{
-    color: 'yellow', category;
-    'general', content;
-    'General note...', icon;
-    '📝';
-}
-{
-    color: 'blue', category;
-    'technical', content;
-    'Technical note: ', icon;
-    '⚙️';
-}
-{
-    color: 'green', category;
-    'decision', content;
-    'Decision: ', icon;
-    '✅';
-}
-{
-    color: 'red', category;
-    'action-item', content;
-    'TODO: ', icon;
-    '🎯';
-}
-{
-    color: 'purple', category;
-    'creative', content;
-    'Idea: ', icon;
-    '💡';
-}
-{
-    color: 'orange', category;
-    'question', content;
-    'Question: ', icon;
-    '❓';
-}
-;
+const QUICK_TEMPLATES = [
+    { color: 'yellow', category: 'general', content: 'General note...', icon: '📝' },
+    { color: 'blue', category: 'technical', content: 'Technical note: ', icon: '⚙️' },
+    { color: 'green', category: 'decision', content: 'Decision: ', icon: '✅' },
+    { color: 'red', category: 'action-item', content: 'TODO: ', icon: '🎯' },
+    { color: 'purple', category: 'creative', content: 'Idea: ', icon: '💡' },
+    { color: 'orange', category: 'question', content: 'Question: ', icon: '❓' }
+];
 export const StickyNoteToolbar = ({
     selectedNotes,
     onColorChange,
@@ -153,7 +123,8 @@ export const StickyNoteToolbar = ({
                         }), "onClick=", () => onColorChange(color.value), "title=", `${color.label} notes`, "onMouseEnter=", (e) => {
                             e.currentTarget.style.borderColor = color.border;
                         }, "onMouseLeave=", (e) => {
-                            e.currentTarget.style.borderColor = hasSelection ? color.border : 'transparent';
+                            e.currentTarget.style.borderColor = hasSelection ? color.border : 'transparent',
+                            ;
                         }, "/> ))}"] })] });
         { /* Categories */ }
         _jsxs("div", { style: sectionStyle, children: [_jsx("div", { style: { fontSize: 11, fontWeight: 600, color: '#6B7280', marginBottom: 8 }, children: "Categories" }), _jsxs("div", { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, maxWidth: 200 }, children: [CATEGORIES.map(category => ()
@@ -169,7 +140,8 @@ export const StickyNoteToolbar = ({
                             e.currentTarget.style.backgroundColor =
                                 hasSelection && selectedNotes.every(n => n.appearance.category === category.value)
                                     ? '#EBF8FF'
-                                    : 'transparent';
+                                    : 'transparent',
+                            ;
                         }, ">", _jsx("span", { children: category.icon }), _jsx("span", { children: category.label })] }), "))}"] });
         div >
         ;

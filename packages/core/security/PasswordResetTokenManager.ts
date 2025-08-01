@@ -19,8 +19,7 @@ import { EventEmitter } from 'events';
 import { createHash, randomBytes, pbkdf2Sync, timingSafeEqual } from 'crypto';
 
 // Token Types and States
-export enum TokenType {
-  PASSWORD_RESET = 'password_reset',
+export enum TokenType { PASSWORD_RESET = 'password_reset',
   EMAIL_VERIFICATION = 'email_verification',
   ACCOUNT_RECOVERY = 'account_recovery',
   TWO_FACTOR_SETUP = 'two_factor_setup',
@@ -37,24 +36,24 @@ export enum TokenType {
   MAXIMUM = 'maximum'        // Highest security for sensitive operations
   // Token Configuration
   export interface TokenConfig {
-  defaultExpiration: number;          // Default expiration time in milliseconds,
-  maxExpiration: number;              // Maximum allowed expiration time,
-  tokenLength: number;                // Length of generated tokens,
-  hashRounds: number;                 // Number of PBKDF2 rounds for hashing,
-  rateLimitWindow: number;            // Rate limit window in milliseconds,
-  rateLimitCount: number;             // Maximum requests per window,
-  cleanupInterval: number;            // Cleanup interval in milliseconds,
-  securityLevel: SecurityLevel;       // Default security level,
-  antiEnumerationDelay: number;       // Delay to prevent enumeration attacks,
-  enableAuditLogging: boolean;        // Enable detailed audit logging,
-  requireEmailVerification: boolean;  // Require email verification for tokens,
-  allowMultipleTokens: boolean;       // Allow multiple active tokens per user,
+  defaultExpiration: number;          // Default expiration time in milliseconds;
+  maxExpiration: number;              // Maximum allowed expiration time;
+  tokenLength: number;                // Length of generated tokens;
+  hashRounds: number;                 // Number of PBKDF2 rounds for hashing;
+  rateLimitWindow: number;            // Rate limit window in milliseconds;
+  rateLimitCount: number;             // Maximum requests per window;
+  cleanupInterval: number;            // Cleanup interval in milliseconds;
+  securityLevel: SecurityLevel;       // Default security level;
+  antiEnumerationDelay: number;       // Delay to prevent enumeration attacks;
+  enableAuditLogging: boolean;        // Enable detailed audit logging;
+  requireEmailVerification: boolean;  // Require email verification for tokens;
+  allowMultipleTokens: boolean;       // Allow multiple active tokens per user }
   // Token Data
-}
-}
-}
-export interface ResetToken {
-  id: string;
+
+
+
+
+export interface ResetToken { id: string;
   userId: string;
   email: string;
   type: TokenType;
@@ -68,20 +67,21 @@ export interface ResetToken {
   ipAddress: string;
   userAgent: string;
   securityLevel: SecurityLevel;
-  metadata: {
+  metadata: { }
   requestSource?: string;
   deviceFingerprint?: string;
   locationData?: any;
   additionalContext?: Record<string, any>;
-}
+
+
 };
   usageCount: number;
   maxUsageCount: number;
   revocationReason?: string;
 
 // Token Request Data
-}
-}
+
+
 export interface TokenRequest {
   userId: string;
   email: string;
@@ -92,9 +92,10 @@ export interface TokenRequest {
   securityLevel?: SecurityLevel;
   metadata?: Record<string, any>;
   // Token Validation Result
-}
-}
-}
+
+
+
+
 export interface TokenValidation {
   valid: boolean;
   token?: ResetToken;
@@ -102,26 +103,26 @@ export interface TokenValidation {
   securityEvents?: string;
   riskScore?: number;
   // Rate Limiting Data
-}
-}
-}
+
+
+
+
 export interface RateLimitData {
   count: number;
   resetTime: number;
   lastRequest: Date;
   violationCount: number;
   // Security Events
-}
-}
-export enum SecurityEvent {
-  TOKEN_CREATED = 'token_created',
-  TOKEN_VALIDATED = 'token_validated',
-  TOKEN_USED = 'token_used',
-  TOKEN_EXPIRED = 'token_expired',
-  TOKEN_REVOKED = 'token_revoked',
-  INVALID_TOKEN_ATTEMPT = 'invalid_token_attempt',
-  RATE_LIMIT_EXCEEDED = 'rate_limit_exceeded',
-  SUSPICIOUS_ACTIVITY = 'suspicious_activity',
+
+
+export enum SecurityEvent { TOKEN_CREATED = 'token_created'
+  TOKEN_VALIDATED = 'token_validated'
+  TOKEN_USED = 'token_used'
+  TOKEN_EXPIRED = 'token_expired'
+  TOKEN_REVOKED = 'token_revoked'
+  INVALID_TOKEN_ATTEMPT = 'invalid_token_attempt'
+  RATE_LIMIT_EXCEEDED = 'rate_limit_exceeded'
+  SUSPICIOUS_ACTIVITY = 'suspicious_activity' }
   TOKEN_CLEANUP = 'token_cleanup'
   // Audit Log Entry
   export interface AuditLogEntry {
@@ -136,11 +137,11 @@ export enum SecurityEvent {
   riskScore: number;
   sessionId?: string;
   // Statistics and Metrics
-}
-}
-}
-export interface TokenStatistics {
-  totalTokens: number;
+
+
+
+
+export interface TokenStatistics { totalTokens: number;
   activeTokens: number;
   usedTokens: number;
   expiredTokens: number;
@@ -151,16 +152,17 @@ export interface TokenStatistics {
   usageRate: number;
   securityViolations: number;
   rateLimitViolations: number;
-  cleanupStats: {
+  cleanupStats: { }
   lastCleanup: Date;
   tokensRemoved: number;
   auditLogsRemoved: number;
-}
+
+
 };
 /**
  * Comprehensive password reset token management service
  */
-}
+
 export class PasswordResetTokenManager extends EventEmitter {
   private tokens: Map<string, ResetToken> = new Map();
   private rateLimits: Map<string, RateLimitData> = new Map();
@@ -174,15 +176,13 @@ export class PasswordResetTokenManager extends EventEmitter {
   /**
    * Generate a new password reset token
    */
-  public async generateToken(request: TokenRequest): Promise<{ token: string; tokenId: string } | null> {
-
-  try {
+  public async generateToken(request: TokenRequest): Promise<{ token: string; tokenId: string } | null> { try {
   // Check rate limiting
   if (this.isRateLimited(request.email, request.ipAddress)) {
   this.logSecurityEvent(SecurityEvent.RATE_LIMIT_EXCEEDED, {)
   email: request.email,
   ipAddress: request.ipAddress,
-  userAgent: request.userAgent,
+  userAgent: request.userAgent }
 });
         // Apply anti-enumeration delay
         await this.antiEnumerationDelay();
@@ -197,7 +197,7 @@ export class PasswordResetTokenManager extends EventEmitter {
         request.securityLevel || this.config.securityLevel
       );
       // Create token record
-      const tokenRecord: ResetToken = {,
+      const tokenRecord: ResetToken = { ,
   id: this.generateTokenId(),
   userId: request.userId,
   email: request.email,
@@ -210,16 +210,15 @@ export class PasswordResetTokenManager extends EventEmitter {
   ipAddress: request.ipAddress,
   userAgent: request.userAgent,
   securityLevel: request.securityLevel || this.config.securityLevel,
-  metadata: {
-  requestSource: 'password_reset_manager',
+  metadata: {,
+  requestSource: 'password_reset_manager' }
   ...request.metadata
 },
   usageCount: 0,
         maxUsageCount: 1;
   };
       // Revoke existing tokens if not allowed multiple
-      if (!this.config.allowMultipleTokens) {
-  await this.revokeUserTokens(request.userId, request.type, 'new_token_generated');
+      if (!this.config.allowMultipleTokens) { await this.revokeUserTokens(request.userId, request.type, 'new_token_generated');
   // Store token
   this.tokens.set(tokenRecord.id, tokenRecord);
   // Update rate limiting
@@ -231,21 +230,19 @@ export class PasswordResetTokenManager extends EventEmitter {
   email: request.email,
   type: request.type,
   securityLevel: tokenRecord.securityLevel,
-  expiresAt: tokenRecord.expiresAt,
+  expiresAt: tokenRecord.expiresAt }
 }, request.ipAddress, request.userAgent);
-      this.emit('tokenGenerated', {)
+      this.emit('tokenGenerated', { )
   tokenId: tokenRecord.id,
   userId: request.userId,
   type: request.type,
-  expiresAt: tokenRecord.expiresAt,
+  expiresAt: tokenRecord.expiresAt }
 });
-      return {
-  token: rawToken,
-  tokenId: tokenRecord.id,
+      return { token: rawToken,
+  tokenId: tokenRecord.id }
 };
-    } catch (error) {
-  this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
-  error: error instanceof Error ? error.message : 'Unknown error',
+ catch (error) { this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
+  error: error instanceof Error ? error.message : 'Unknown error' }
   request
 }, request.ipAddress, request.userAgent);
       return null;
@@ -255,51 +252,47 @@ export class PasswordResetTokenManager extends EventEmitter {
   public async validateToken(
     tokenValue: string,
     ipAddress: string,
-    userAgent: string): Promise<TokenValidation> {,
+    userAgent: string): Promise<TokenValidation> { 
   try {
   const validation = await this.performTokenValidation(tokenValue, ipAddress, userAgent);
   // Log validation attempt
   this.logSecurityEvent()
-  validation.valid ? SecurityEvent.TOKEN_VALIDATED : SecurityEvent.INVALID_TOKEN_ATTEMPT,
+  validation.valid ? SecurityEvent.TOKEN_VALIDATED : SecurityEvent.INVALID_TOKEN_ATTEMPT
   {
-  tokenValid: validation.valid,
-  reason: validation.reason,
-  riskScore: validation.riskScore,
-}
-        ipAddress,
+  tokenValid: validation.valid
+  reason: validation.reason
+  riskScore: validation.riskScore }
+
+        ipAddress
         userAgent
       );
-      this.emit('tokenValidated', {)
-  valid: validation.valid,
-  tokenId: validation.token?.id,
-  reason: validation.reason,
-  riskScore: validation.riskScore,
+      this.emit('tokenValidated', { )
+  valid: validation.valid
+  tokenId: validation.token?.id
+  reason: validation.reason
+  riskScore: validation.riskScore }
 });
       return validation;
-    } catch (error) {
-  this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
-  error: error instanceof Error ? error.message : 'Token validation error',
-  tokenValue: tokenValue.substring(0, 8) + '...' // Log only prefix for security,
+ catch (error) { this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
+  error: error instanceof Error ? error.message : 'Token validation error'
+  tokenValue: tokenValue.substring(0, 8) + '...' // Log only prefix for security }
 }, ipAddress, userAgent);
-      return {
-  valid: false,
-  reason: 'validation_error',
-  riskScore: 90,
+      return { valid: false
+  reason: 'validation_error'
+  riskScore: 90 }
 };
   /**
    * Use a password reset token (marks it as used)
    */
   public async useToken(
-    tokenValue: string,
-    ipAddress: string,
-    userAgent: string): Promise<{ success: boolean; token?: ResetToken; reason?: string }> {
-
-  try {
+    tokenValue: string
+    ipAddress: string
+    userAgent: string): Promise<{ success: boolean; token?: ResetToken; reason?: string }> { try {
   const validation = await this.validateToken(tokenValue, ipAddress, userAgent);
   if (!validation.valid || !validation.token) {
   return {
   success: false,
-  reason: validation.reason || 'invalid_token',
+  reason: validation.reason || 'invalid_token' }
 };
       const token = validation.token;
       // Mark token as used
@@ -308,29 +301,26 @@ export class PasswordResetTokenManager extends EventEmitter {
       token.usageCount++;
       this.tokens.set(token.id, token);
       // Log usage
-      this.logSecurityEvent(SecurityEvent.TOKEN_USED, {)
+      this.logSecurityEvent(SecurityEvent.TOKEN_USED, { )
   tokenId: token.id,
   userId: token.userId,
   type: token.type,
-  usageCount: token.usageCount,
+  usageCount: token.usageCount }
 }, ipAddress, userAgent);
-      this.emit('tokenUsed', {)
+      this.emit('tokenUsed', { )
   tokenId: token.id,
   userId: token.userId,
   type: token.type,
-  usedAt: token.usedAt,
+  usedAt: token.usedAt }
 });
-      return {
-  success: true,
+      return { success: true }
   token
 };
-    } catch (error) {
-  this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
-  error: error instanceof Error ? error.message : 'Token usage error',
+ catch (error) { this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
+  error: error instanceof Error ? error.message : 'Token usage error' }
 }, ipAddress, userAgent);
-      return {
-  success: false,
-  reason: 'usage_error',
+      return { success: false,
+  reason: 'usage_error' }
 };
   /**
    * Revoke a specific token
@@ -339,7 +329,7 @@ export class PasswordResetTokenManager extends EventEmitter {
     tokenId: string,
     reason: string,
     ipAddress: string = 'system',
-    userAgent: string = 'system'): Promise<boolean> {,
+    userAgent: string = 'system'): Promise<boolean> { 
   const token = this.tokens.get(tokenId);
   if (!token || token.status !== TokenStatus.ACTIVE) {
   return false;
@@ -348,25 +338,25 @@ export class PasswordResetTokenManager extends EventEmitter {
   token.revocationReason = reason;
   this.tokens.set(tokenId, token);
   this.logSecurityEvent(SecurityEvent.TOKEN_REVOKED, {)
-  tokenId,
-  userId: token.userId,
-  reason,
-  originalExpiration: token.expiresAt,
+  tokenId
+  userId: token.userId
+  reason
+  originalExpiration: token.expiresAt }
 }, ipAddress, userAgent);
-    this.emit('tokenRevoked', {)
-  tokenId,
-  userId: token.userId,
-  reason,
-  revokedAt: token.revokedAt,
+    this.emit('tokenRevoked', { )
+  tokenId
+  userId: token.userId
+  reason
+  revokedAt: token.revokedAt }
 });
     return true;
   /**
    * Revoke all tokens for a user
    */
   public async revokeUserTokens(
-    userId: string,
-    type?: TokenType,
-    reason: string = 'user_requested'): Promise<number> {,
+    userId: string
+    type?: TokenType
+    reason: string = 'user_requested'): Promise<number> { 
   let revokedCount = 0;
   for (const [tokenId, token] of this.tokens) {
   if (token.userId === userId && )
@@ -375,39 +365,37 @@ export class PasswordResetTokenManager extends EventEmitter {
   await this.revokeToken(tokenId, reason);
   revokedCount++;
   this.emit('userTokensRevoked', {)
-  userId,
-  type,
-  reason,
-  count: revokedCount,
+  userId
+  type
+  reason
+  count: revokedCount }
 });
     return revokedCount;
   /**
    * Get token information (without sensitive data)
    */
-  public getTokenInfo(tokenId: string): Partial<ResetToken> | null {
-  const token = this.tokens.get(tokenId);
+  public getTokenInfo(tokenId: string): Partial<ResetToken> | null { const token = this.tokens.get(tokenId);
   if (!token) return null;
   // Return safe subset of token data
   return {
-  id: token.id,
-  userId: token.userId,
-  email: token.email,
-  type: token.type,
-  status: token.status,
-  createdAt: token.createdAt,
-  expiresAt: token.expiresAt,
-  usedAt: token.usedAt,
-  revokedAt: token.revokedAt,
-  securityLevel: token.securityLevel,
-  usageCount: token.usageCount,
-  maxUsageCount: token.maxUsageCount,
-  revocationReason: token.revocationReason,
+  id: token.id
+  userId: token.userId
+  email: token.email
+  type: token.type
+  status: token.status
+  createdAt: token.createdAt
+  expiresAt: token.expiresAt
+  usedAt: token.usedAt
+  revokedAt: token.revokedAt
+  securityLevel: token.securityLevel
+  usageCount: token.usageCount
+  maxUsageCount: token.maxUsageCount
+  revocationReason: token.revocationReason }
 };
   /**
    * Get tokens for a specific user
    */
-  public getUserTokens(userId: string, type?: TokenType): Partial<ResetToken>[] {
-    const userTokens: Partial<ResetToken>[] = [];
+  public getUserTokens(userId: string, type?: TokenType): Partial<ResetToken>[] { const userTokens: Partial<ResetToken>[] = [];
     for (const token of this.tokens.values()) {
       if (token.userId === userId && (!type || token.type === type)) {
         const tokenInfo = this.getTokenInfo(token.id);
@@ -422,47 +410,45 @@ export class PasswordResetTokenManager extends EventEmitter {
   public getStatistics(): TokenStatistics {
     const tokens = Array.from(this.tokens.values());
     const now = new Date();
-    const stats: TokenStatistics = {,
-  totalTokens: tokens.length,
-      activeTokens: 0,
-      usedTokens: 0,
-      expiredTokens: 0,
-      revokedTokens: 0,
-      tokensByType: {} as Record<TokenType, number>,
-      tokensBySecurityLevel: {} as Record<SecurityLevel, number>,
-      averageTokenLifetime: 0,
-      usageRate: 0,
-      securityViolations: 0,
-      rateLimitViolations: 0,
-      cleanupStats: {
-  lastCleanup: new Date(),
-  tokensRemoved: 0,
-  auditLogsRemoved: 0,
+    const stats: TokenStatistics = {
+  totalTokens: tokens.length
+      activeTokens: 0
+      usedTokens: 0
+      expiredTokens: 0
+      revokedTokens: 0 }
+      tokensByType: {} as Record<TokenType, number>
+      tokensBySecurityLevel: {} as Record<SecurityLevel, number>
+      averageTokenLifetime: 0
+      usageRate: 0
+      securityViolations: 0
+      rateLimitViolations: 0
+      cleanupStats: { 
+  lastCleanup: new Date()
+  tokensRemoved: 0
+  auditLogsRemoved: 0 }
 };
     // Initialize counters
-    Object.values(TokenType).forEach(type => {)
-  stats.tokensByType[type] = 0;
-    });
-    Object.values(SecurityLevel).forEach(level => {)
-  stats.tokensBySecurityLevel[level] = 0;
-    });
+    Object.values(TokenType).forEach(type => { )
+  stats.tokensByType[type] = 0 });
+    Object.values(SecurityLevel).forEach(level => { )
+  stats.tokensBySecurityLevel[level] = 0 });
     let totalLifetime = 0;
     let usedTokensCount = 0;
     // Calculate statistics
-    tokens.forEach(token => {)
+    tokens.forEach(token => { )
   // Status counts
   switch (token.status) {
-  case TokenStatus.ACTIVE:,
+  case TokenStatus.ACTIVE:
   stats.activeTokens++;
   break;
-  case TokenStatus.USED:,
+  case TokenStatus.USED:
   stats.usedTokens++;
   usedTokensCount++;
   break;
-  case TokenStatus.EXPIRED:,
+  case TokenStatus.EXPIRED:
   stats.expiredTokens++;
   break;
-  case TokenStatus.REVOKED:,
+  case TokenStatus.REVOKED: }
   stats.revokedTokens++;
   break;
   // Type counts
@@ -470,11 +456,9 @@ export class PasswordResetTokenManager extends EventEmitter {
   // Security level counts
   stats.tokensBySecurityLevel[token.securityLevel]++;
   // Calculate lifetime for used/expired tokens
-  if (token.usedAt || token.status === TokenStatus.EXPIRED) {
-  const endTime = token.usedAt || token.expiresAt;
+  if (token.usedAt || token.status === TokenStatus.EXPIRED) { const endTime = token.usedAt || token.expiresAt;
   const lifetime = endTime.getTime() - token.createdAt.getTime();
-  totalLifetime += lifetime;
-});
+  totalLifetime += lifetime });
     // Calculate averages
     const lifetimeTokens = stats.usedTokens + stats.expiredTokens;
     stats.averageTokenLifetime = lifetimeTokens > 0 ? totalLifetime / lifetimeTokens : 0;
@@ -494,36 +478,34 @@ export class PasswordResetTokenManager extends EventEmitter {
     this.config = this.mergeConfig(newConfig);
     this.emit('configUpdated', { config: this.config });
   // Private helper methods
-  private mergeConfig(config: Partial<TokenConfig>): TokenConfig {
-  return {
-  defaultExpiration: 60 * 60 * 1000, // 1 hour,
-  maxExpiration: 24 * 60 * 60 * 1000, // 24 hours,
-  tokenLength: 32,
-  hashRounds: 100000,
-  rateLimitWindow: 15 * 60 * 1000, // 15 minutes,
-  rateLimitCount: 3,
-  cleanupInterval: 60 * 60 * 1000, // 1 hour,
-  securityLevel: SecurityLevel.STANDARD,
-  antiEnumerationDelay: 1000, // 1 second,
-  enableAuditLogging: true,
-  requireEmailVerification: false,
-  allowMultipleTokens: false,
+  private mergeConfig(config: Partial<TokenConfig>): TokenConfig { return {
+  defaultExpiration: 60 * 60 * 1000, // 1 hour
+  maxExpiration: 24 * 60 * 60 * 1000, // 24 hours
+  tokenLength: 32
+  hashRounds: 100000
+  rateLimitWindow: 15 * 60 * 1000, // 15 minutes
+  rateLimitCount: 3
+  cleanupInterval: 60 * 60 * 1000, // 1 hour
+  securityLevel: SecurityLevel.STANDARD
+  antiEnumerationDelay: 1000, // 1 second
+  enableAuditLogging: true
+  requireEmailVerification: false
+  allowMultipleTokens: false }
   ...config
 };
   private generateSecureToken(): string {
     return randomBytes(this.config.tokenLength).toString('hex');
   private generateTokenId(): string {
     return `token_${Date.now()}_${randomBytes(8).toString('hex')}`;}
-  private hashToken(token: string, salt: string): string {
-  return pbkdf2Sync(token, salt, this.config.hashRounds, 64, 'sha512').toString('hex');
-  private calculateExpiration(requestedMinutes?: number, securityLevel: SecurityLevel = SecurityLevel.STANDARD): number {,
+  private hashToken(token: string, salt: string): string { return pbkdf2Sync(token, salt, this.config.hashRounds, 64, 'sha512').toString('hex');
+  private calculateExpiration(requestedMinutes?: number, securityLevel: SecurityLevel = SecurityLevel.STANDARD): number {
   let baseExpiration = this.config.defaultExpiration;
   // Adjust based on security level
   switch (securityLevel) {
-  case SecurityLevel.ENHANCED:,
+  case SecurityLevel.ENHANCED:
   baseExpiration = Math.min(baseExpiration, 30 * 60 * 1000); // Max 30 minutes
   break;
-  case SecurityLevel.MAXIMUM:,
+  case SecurityLevel.MAXIMUM:
   baseExpiration = Math.min(baseExpiration, 15 * 60 * 1000); // Max 15 minutes
   break;
   if (requestedMinutes) {
@@ -531,8 +513,8 @@ export class PasswordResetTokenManager extends EventEmitter {
   baseExpiration = Math.min(requestedMs, this.config.maxExpiration);
   return baseExpiration;
   private async performTokenValidation(tokenValue: string)
-  ipAddress: string,
-  userAgent: string): Promise<TokenValidation> {,
+  ipAddress: string
+  userAgent: string): Promise<TokenValidation> {
   // Apply anti-enumeration delay
   await this.antiEnumerationDelay();
   // Find matching token by comparing hashes
@@ -544,58 +526,50 @@ export class PasswordResetTokenManager extends EventEmitter {
   // Check if token is already used
   if (token.status === TokenStatus.USED) {
   return {
-  valid: false,
-  reason: 'token_already_used',
-  riskScore: 40,
+  valid: false
+  reason: 'token_already_used'
+  riskScore: 40 }
 };
       // Check if token is revoked
-      if (token.status === TokenStatus.REVOKED) {
-  return {
-  valid: false,
-  reason: 'token_revoked',
-  riskScore: 50,
+      if (token.status === TokenStatus.REVOKED) { return {
+  valid: false
+  reason: 'token_revoked'
+  riskScore: 50 }
 };
       // Check expiration
-      if (token.expiresAt < new Date()) {
-  token.status = TokenStatus.EXPIRED;
+      if (token.expiresAt < new Date()) { token.status = TokenStatus.EXPIRED;
   this.tokens.set(token.id, token);
   this.logSecurityEvent(SecurityEvent.TOKEN_EXPIRED, {)
   tokenId: token.id,
-  userId: token.userId,
+  userId: token.userId }
 }, ipAddress, userAgent);
-        return {
-  valid: false,
+        return { valid: false,
   reason: 'token_expired',
-  riskScore: 20,
+  riskScore: 20 }
 };
       // Check if not active
-      if (token.status !== TokenStatus.ACTIVE) {
-  return {
+      if (token.status !== TokenStatus.ACTIVE) { return {
   valid: false,
   reason: 'token_inactive',
-  riskScore: 30,
+  riskScore: 30 }
 };
       // Check usage count
-      if (token.usageCount >= token.maxUsageCount) {
-  return {
+      if (token.usageCount >= token.maxUsageCount) { return {
   valid: false,
   reason: 'token_already_used',
-  riskScore: 40,
+  riskScore: 40 }
 };
       // Calculate risk score
       const riskScore = this.calculateRiskScore(token, ipAddress, userAgent);
-      return {
-  valid: true,
-  token,
+      return { valid: true,
+  token }
   riskScore
 };
-    return {
-  valid: false,
+    return { valid: false,
   reason: 'token_not_found',
-  riskScore: 60,
+  riskScore: 60 }
 };
-  private calculateRiskScore(token: ResetToken, ipAddress: string, userAgent: string): number {
-  let riskScore = 0;
+  private calculateRiskScore(token: ResetToken, ipAddress: string, userAgent: string): number { let riskScore = 0;
   // Check IP address change
   if (token.ipAddress !== ipAddress) {
   riskScore += 30;
@@ -635,45 +609,39 @@ export class PasswordResetTokenManager extends EventEmitter {
   count: 1,
   resetTime,
   lastRequest: new Date(),
-  violationCount: existing?.violationCount || 0,
+  violationCount: existing?.violationCount || 0 }
 });
-      } else {
-  existing.count++;
+ else { existing.count++;
   existing.lastRequest = new Date();
   if (existing.count > this.config.rateLimitCount) {
   existing.violationCount++;
-  private async antiEnumerationDelay(): Promise<void> {,
-  return new Promise(resolve => {)
-  setTimeout(resolve, this.config.antiEnumerationDelay);
-});
+  private async antiEnumerationDelay(): Promise<void> { }
+  return new Promise(resolve => { )
+  setTimeout(resolve, this.config.antiEnumerationDelay) });
   private logSecurityEvent(event: SecurityEvent)
-    details: Record<string, any>,
-    ipAddress: string = 'system',
-    userAgent: string = 'system'): void {,
+  details: Record<string, any>
+    ipAddress: string = 'system'
+    userAgent: string = 'system'): void { 
     if (!this.config.enableAuditLogging) return;
-    const logEntry: AuditLogEntry = {,
+    const logEntry: AuditLogEntry = { }
   id: `audit_${Date.now()}_${randomBytes(4).toString('hex')}`}
-}
-      event,
-      timestamp: new Date(),
-      userId: details.userId,
-      tokenId: details.tokenId,
-      ipAddress,
-      userAgent,
-      details,
+
+      event
+      timestamp: new Date()
+      userId: details.userId
+      tokenId: details.tokenId
+      ipAddress
+      userAgent
+      details
       riskScore: details.riskScore || 0;
   };
     this.auditLog.push(logEntry);
     this.emit('securityEvent', logEntry);
     // Trim audit log if it gets too large
-    if (this.auditLog.length > 10000) {
-  this.auditLog = this.auditLog.slice(-5000);
-  private startCleanupTimer(): void {,
-  this.cleanupTimer = setInterval(() => {
-  this.performCleanup();
-}, this.config.cleanupInterval);
-  private performCleanup(): void {
-  const now = new Date();
+    if (this.auditLog.length > 10000) { this.auditLog = this.auditLog.slice(-5000);
+  private startCleanupTimer(): void { }
+  this.cleanupTimer = setInterval(() => { this.performCleanup() }, this.config.cleanupInterval);
+  private performCleanup(): void { const now = new Date();
   const expiredThreshold = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago;
   let tokensRemoved = 0;
   let auditLogsRemoved = 0;
@@ -703,12 +671,12 @@ export class PasswordResetTokenManager extends EventEmitter {
   tokensRemoved,
   auditLogsRemoved,
   activeTokens: this.tokens.size,
-  auditLogSize: this.auditLog.length,
+  auditLogSize: this.auditLog.length }
 });
-    this.emit('cleanupCompleted', {)
+    this.emit('cleanupCompleted', { )
   tokensRemoved,
   auditLogsRemoved,
-  timestamp: now,
+  timestamp: now }
 });
   /**
    * Destroy the token manager and clean up resources

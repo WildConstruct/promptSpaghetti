@@ -57,7 +57,7 @@ const defaultBudget = {
     typeCheckTime: 15,      // 15s type check
     lintTime: 10,           // 10s linting
     testTime: 30            // 30s test execution
-  }
+
 };
 
 class PerformanceBudgetChecker {
@@ -81,19 +81,19 @@ class PerformanceBudgetChecker {
         high: 0,
         medium: 0,
         low: 0
-      }
+
     };
-  }
+
 
   loadBudgetConfig() {
     if (this.options.config && fs.existsSync(this.options.config)) {
       try {
         const configContent = fs.readFileSync(this.options.config, 'utf8');
         return JSON.parse(configContent);
-      } catch (error) {
+ catch (error) {
         console.warn(`${colors.yellow}Warning: Failed to load config ${this.options.config}, using defaults${colors.reset}`);
-      }
-    }
+
+
 
     // Look for performance budget in package.json
     const packageJsonPath = path.join(process.cwd(), 'package.json');
@@ -102,14 +102,14 @@ class PerformanceBudgetChecker {
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
         if (packageJson.performanceBudget) {
           return { ...defaultBudget, ...packageJson.performanceBudget };
-        }
-      } catch (error) {
+
+ catch (error) {
         console.warn(`${colors.yellow}Warning: Failed to parse package.json${colors.reset}`);
-      }
-    }
+
+
 
     return defaultBudget;
-  }
+
 
   async checkPerformance() {
     console.log(`${colors.blue}${colors.bright}🚀 Performance Budget Check${colors.reset}`);
@@ -130,14 +130,13 @@ class PerformanceBudgetChecker {
       
       // Handle results
       this.handleResults();
-      
-    } catch (error) {
+ catch (error) {
       console.error(`${colors.red}Error during performance check: ${error.message}${colors.reset}`);
       if (this.options.exitOnFailure) {
         process.exit(1);
-      }
-    }
-  }
+
+
+
 
   async checkBundleSizes() {
     console.log(`${colors.cyan}📦 Checking Bundle Sizes...${colors.reset}`);
@@ -146,7 +145,7 @@ class PerformanceBudgetChecker {
     if (!buildDir) {
       console.log(`${colors.yellow}⚠️  No build directory found, skipping bundle size check${colors.reset}`);
       return;
-    }
+
 
     const bundleStats = this.analyzeBundles(buildDir);
     
@@ -162,7 +161,7 @@ class PerformanceBudgetChecker {
           'Remove unused dependencies and dead code'
         ]
       });
-    }
+
 
     // Check vendor bundle
     if (bundleStats.vendor > this.budget.bundles.vendor) {
@@ -176,7 +175,7 @@ class PerformanceBudgetChecker {
           'Use CDN for common libraries'
         ]
       });
-    }
+
 
     // Check total bundle size
     if (bundleStats.total > this.budget.bundles.total) {
@@ -190,12 +189,12 @@ class PerformanceBudgetChecker {
           'Compress assets with Brotli/Gzip'
         ]
       });
-    }
+
 
     console.log(`   ${bundleStats.main <= this.budget.bundles.main ? '✅' : '❌'} Main: ${bundleStats.main}KB (budget: ${this.budget.bundles.main}KB)`);
     console.log(`   ${bundleStats.vendor <= this.budget.bundles.vendor ? '✅' : '❌'} Vendor: ${bundleStats.vendor}KB (budget: ${this.budget.bundles.vendor}KB)`);
     console.log(`   ${bundleStats.total <= this.budget.bundles.total ? '✅' : '❌'} Total: ${bundleStats.total}KB (budget: ${this.budget.bundles.total}KB)\n`);
-  }
+
 
   async checkBuildPerformance() {
     console.log(`${colors.cyan}⚡ Checking Build Performance...${colors.reset}`);
@@ -214,7 +213,7 @@ class PerformanceBudgetChecker {
           'Optimize webpack configuration'
         ]
       });
-    }
+
 
     // Check TypeScript compilation time
     if (buildMetrics.typeCheckTime > this.budget.build.typeCheckTime) {
@@ -228,11 +227,11 @@ class PerformanceBudgetChecker {
           'Optimize tsconfig.json settings'
         ]
       });
-    }
+
 
     console.log(`   ${buildMetrics.buildTime <= this.budget.build.buildTime ? '✅' : '❌'} Build: ${buildMetrics.buildTime}s (budget: ${this.budget.build.buildTime}s)`);
     console.log(`   ${buildMetrics.typeCheckTime <= this.budget.build.typeCheckTime ? '✅' : '❌'} TypeCheck: ${buildMetrics.typeCheckTime}s (budget: ${this.budget.build.typeCheckTime}s)\n`);
-  }
+
 
   async checkRuntimePerformance() {
     console.log(`${colors.cyan}🏃 Checking Runtime Performance...${colors.reset}`);
@@ -257,18 +256,17 @@ class PerformanceBudgetChecker {
               'Use server-side rendering'
             ]
           });
-        }
+
 
         console.log(`   ${(metrics.fcp || 0) <= this.budget.runtime.firstContentfulPaint ? '✅' : '❌'} FCP: ${metrics.fcp || 'N/A'}ms (budget: ${this.budget.runtime.firstContentfulPaint}ms)`);
-        
-      } catch (error) {
+ catch (error) {
         console.log(`   ${colors.yellow}⚠️  Failed to parse performance metrics${colors.reset}`);
-      }
-    } else {
+
+ else {
       console.log(`   ${colors.yellow}⚠️  No runtime metrics available (run lighthouse or similar tool)${colors.reset}`);
-    }
+
     console.log();
-  }
+
 
   findBuildDirectory() {
     const possibleDirs = ['dist', 'build', 'out', 'public'];
@@ -277,11 +275,11 @@ class PerformanceBudgetChecker {
       const fullPath = path.join(process.cwd(), dir);
       if (fs.existsSync(fullPath)) {
         return fullPath;
-      }
-    }
+
+
     
     return null;
-  }
+
 
   analyzeBundles(buildDir) {
     const stats = { main: 0, vendor: 0, chunks: [], total: 0 };
@@ -297,20 +295,19 @@ class PerformanceBudgetChecker {
         const fileName = path.basename(file);
         if (fileName.includes('main') || fileName.includes('index')) {
           stats.main += size;
-        } else if (fileName.includes('vendor') || fileName.includes('chunk')) {
+ else if (fileName.includes('vendor') || fileName.includes('chunk')) {
           stats.vendor += size;
           stats.chunks.push(size);
-        } else {
+ else {
           stats.chunks.push(size);
-        }
-      }
-      
-    } catch (error) {
+
+
+ catch (error) {
       console.warn(`Warning: Failed to analyze bundles: ${error.message}`);
-    }
+
     
     return stats;
-  }
+
 
   getAllFiles(dir) {
     const files = [];
@@ -324,15 +321,15 @@ class PerformanceBudgetChecker {
         
         if (stat.isDirectory()) {
           walk(fullPath);
-        } else {
+ else {
           files.push(fullPath);
-        }
-      }
-    }
+
+
+
     
     walk(dir);
     return files;
-  }
+
 
   async measureBuildPerformance() {
     const metrics = { buildTime: 0, typeCheckTime: 0, lintTime: 0, testTime: 0 };
@@ -346,16 +343,15 @@ class PerformanceBudgetChecker {
       
       // Estimate build time (would integrate with actual build process)
       metrics.buildTime = Math.round(metrics.typeCheckTime * 2.5);
-      
-    } catch (error) {
+ catch (error) {
       console.warn(`   Warning: Could not measure build performance: ${error.message}`);
       // Use default estimates
       metrics.buildTime = 30;
       metrics.typeCheckTime = 10;
-    }
+
     
     return metrics;
-  }
+
 
   addViolation(category, metric, details) {
     const violation = {
@@ -371,8 +367,8 @@ class PerformanceBudgetChecker {
     
     if (details.severity === 'critical' || details.severity === 'high') {
       this.results.passed = false;
-    }
-  }
+
+
 
   calculateSeverity(actual, budget) {
     const ratio = actual / budget;
@@ -380,7 +376,7 @@ class PerformanceBudgetChecker {
     if (ratio >= 1.5) return 'high';
     if (ratio >= 1.2) return 'medium';
     return 'low';
-  }
+
 
   generateReport() {
     // Calculate performance score
@@ -394,10 +390,10 @@ class PerformanceBudgetChecker {
     // Generate report based on output format
     if (this.options.output === 'json') {
       console.log(JSON.stringify(this.results, null, 2));
-    } else {
+ else {
       this.generateConsoleReport();
-    }
-  }
+
+
 
   generateConsoleReport() {
     console.log(`${colors.bright}📊 Performance Budget Report${colors.reset}`);
@@ -430,20 +426,20 @@ class PerformanceBudgetChecker {
           violation.suggestions.forEach(suggestion => {
             console.log(`     • ${suggestion}`);
           });
-        }
+
       });
-    } else {
+ else {
       console.log(`${colors.green}✅ No budget violations detected!${colors.reset}`);
-    }
+
     
     console.log(`\n${colors.bright}================================${colors.reset}`);
-  }
+
 
   getScoreColor() {
     if (this.results.score >= 90) return colors.green;
     if (this.results.score >= 70) return colors.yellow;
     return colors.red;
-  }
+
 
   getSeverityColor(severity) {
     switch (severity) {
@@ -452,18 +448,18 @@ class PerformanceBudgetChecker {
     case 'medium': return colors.yellow;
     case 'low': return colors.cyan;
     default: return colors.white;
-    }
-  }
+
+
 
   handleResults() {
     if (!this.results.passed && this.options.exitOnFailure) {
       console.log(`\n${colors.red}Performance budget check failed!${colors.reset}`);
       process.exit(1);
-    } else if (this.results.passed) {
+ else if (this.results.passed) {
       console.log(`\n${colors.green}Performance budget check passed!${colors.reset}`);
-    }
-  }
-}
+
+
+
 
 // CLI interface
 function main(): void {
@@ -504,15 +500,15 @@ Examples:
         `);
       process.exit(0);
       break;
-    }
-  }
+
+
   
   const checker = new PerformanceBudgetChecker(options);
   checker.checkPerformance();
-}
+
 
 if (require.main === module) {
   main();
-}
+
 
 module.exports = PerformanceBudgetChecker;

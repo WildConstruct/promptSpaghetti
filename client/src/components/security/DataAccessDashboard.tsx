@@ -4,63 +4,71 @@ import React, { useState, useEffect, useCallback } from 'react';
 import './DataAccessDashboard.css';
 
 // Types
-}
+
+
 interface DataAccessGrant {
   id: string;,
-  resourceId: string;
+  resourceId: string;,
   resourceType: string;,
-  operations: string;
+  operations: string;,
   classification: string;,
-  grantedBy: string;
+  grantedBy: string;,
   grantedAt: Date;,
-  expiresAt: Date;
+  expiresAt: Date;,
   reason: string;,
   restrictions: AccessRestriction;
-}
+
+
+
 interface AccessRestriction {
   type: string;,
-  value: string;
+  value: string;,
   description: string;
-}
+
+
+
 interface AccessHistoryEvent {
   id: string;,
-  userId: string;
+  userId: string;,
   resourceId: string;,
-  operation: string;
+  operation: string;,
   allowed: boolean;,
-  reason: string;
+  reason: string;,
   classification: string;,
-  accessLevel: string;
+  accessLevel: string;,
   timestamp: Date;,
   riskScore: number;
-}
+
+
+
 interface AccessRequest {
   resourceId: string;,
-  resourceType: string;
+  resourceType: string;,
   operation: string;,
   reason: string;
   expiresAt?: Date;
+  // interface AccessPermissions { // Commented out unused interface
+  //   allowed: boolean;
+  //   reason: string;
+  //   classification: string;
+  //   accessLevel: string;
+  //   requiredPermissions: string;
+  //   actualPermissions: string;
+  //   restrictions: AccessRestriction;
+  //   auditId: string;
 
-// interface AccessPermissions { // Commented out unused interface
-//   allowed: boolean;
-//   reason: string;
-//   classification: string;
-//   accessLevel: string;
-//   requiredPermissions: string;
-//   actualPermissions: string;
-//   restrictions: AccessRestriction;
-//   auditId: string;
 
-}
 // }
-}
+
+
 interface DataAccessDashboardProps {
   userId: string;
   apiBaseUrl?: string;
-  const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({,)
+  const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({),
   userId,
   apiBaseUrl = '/api'
-}
+
+
 }) => {
   // State
   const [activeTab, setActiveTab] = useState<'permissions' | 'requests' | 'history'>('permissions');
@@ -87,12 +95,12 @@ interface DataAccessDashboardProps {
   const apiRequest = useCallback(async (endpoint: string, options: RequestInit = {}) => {
     const token = localStorage.getItem('authToken'); // Adjust based on your auth system;
     const response = await fetch(`${apiBaseUrl}${endpoint}`, {)}
-  }
+
       ...options,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`}
-}
+
         ...options.headers
     });
     if (!response.ok) {
@@ -106,9 +114,9 @@ interface DataAccessDashboardProps {
       setLoading(true);
       const response = await apiRequest(`/data-access/grants/${userId}`);}
       setGrants(response.grants || []);
-    } catch (err) {
+ catch (err) {
       setError(`Failed to load access grants: ${err instanceof Error ? err.message : 'Unknown error'}`);}
-    } finally {
+ finally {
       setLoading(false);
   }, [userId, apiRequest]);
   const loadHistory = useCallback(async () => {
@@ -124,9 +132,9 @@ interface DataAccessDashboardProps {
       });
       const response = await apiRequest(`/data-access/audit/${userId}?${queryParams}`);}
       setHistory(response.data || []);
-    } catch (err) {
+ catch (err) {
       setError(`Failed to load access history: ${err instanceof Error ? err.message : 'Unknown error'}`);}
-    } finally {
+ finally {
       setLoading(false);
   }, [userId, historyFilter, apiRequest]);
   // Submit access request
@@ -147,9 +155,9 @@ interface DataAccessDashboardProps {
       // Reload grants to show any auto-approved requests
       await loadGrants();
       alert('Access request submitted successfully!');
-    } catch (err) {
+ catch (err) {
       setError(`Failed to submit access request: ${err instanceof Error ? err.message : 'Unknown error'}`);}
-    } finally {
+ finally {
       setLoading(false);
   };
   // Check specific resource access - commented out as unused
@@ -165,7 +173,7 @@ interface DataAccessDashboardProps {
   useEffect(() => {
     if (activeTab === 'permissions') {
       loadGrants();
-    } else if (activeTab === 'history') {
+ else if (activeTab === 'history') {
       loadHistory();
   }, [activeTab, historyFilter, loadGrants, loadHistory]);
   // Render helpers

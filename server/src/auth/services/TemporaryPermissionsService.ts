@@ -18,8 +18,8 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { RBACService } from './RBACService';
 
-}
-}
+
+
 export interface TemporaryRoleAssignment {
   id: string;
   userId: string;
@@ -35,12 +35,13 @@ export interface TemporaryRoleAssignment {
   scopeContext?: Record<string, any>;
   autoRevoke: boolean;
   notificationSent: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DirectPermissionGrant {
   id: string;
   userId: string;
@@ -59,12 +60,13 @@ export interface DirectPermissionGrant {
   scopeContext?: Record<string, any>;
   autoRevoke: boolean;
   notificationSent: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemporaryPermissionRequest {
   userId: string;
   roleId?: string;
@@ -73,19 +75,20 @@ export interface TemporaryPermissionRequest {
     action: string;
     scope: 'global' | 'organization' | 'team' | 'own';
     conditions?: Record<string, any>;
-}
-}
-  }[];
+
+
+
+[];
   reason: string;
   duration: number; // Duration in hours
   requestedBy: string;
   emergencyAccess?: boolean;
   approvalRequired?: boolean;
   scopeContext?: Record<string, any>;
-}
 
-}
-}
+
+
+
 export interface EmergencyAccessGrant {
   id: string;
   userId: string;
@@ -100,12 +103,13 @@ export interface EmergencyAccessGrant {
   reviewRequired: boolean;
   reviewedBy?: string;
   reviewedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PermissionEscalation {
   id: string;
   userId: string;
@@ -119,9 +123,10 @@ export interface PermissionEscalation {
   originalExpiresAt?: Date;
   autoDowngrade: boolean;
   notificationsSent: string[];
-}
-}
-}
+
+
+
+
 
 export class TemporaryPermissionsService {
   private config: AuthConfig;
@@ -145,7 +150,7 @@ export class TemporaryPermissionsService {
 
     // Start automatic cleanup process
     this.startAutomaticCleanup();
-  }
+
 
   /**
    * Grant temporary role assignment to a user
@@ -157,7 +162,7 @@ export class TemporaryPermissionsService {
 
     if (!request.roleId) {
       throw new Error('Role ID is required for temporary role assignment');
-    }
+
 
     const assignmentId = require('crypto').randomUUID();
     const now = new Date();
@@ -172,7 +177,7 @@ export class TemporaryPermissionsService {
       
       if (roleExists.rows.length === 0) {
         throw new Error(`Role ${request.roleId} not found`);
-      }
+
 
       // Create temporary role assignment record
       await this.dbService.query(`
@@ -215,7 +220,7 @@ export class TemporaryPermissionsService {
           reason: request.reason,
           expiresAt: expiresAt.toISOString(),
           emergencyAccess: request.emergencyAccess || false
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -235,8 +240,7 @@ export class TemporaryPermissionsService {
         autoRevoke: true,
         notificationSent: false
       };
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'temporary_role_grant_failed',
         userId: request.requestedBy,
@@ -246,15 +250,15 @@ export class TemporaryPermissionsService {
           roleId: request.roleId,
           reason: request.reason,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Grant direct temporary permissions without role assignment
@@ -266,7 +270,7 @@ export class TemporaryPermissionsService {
 
     if (!request.directPermissions || request.directPermissions.length === 0) {
       throw new Error('Direct permissions are required for direct permission grant');
-    }
+
 
     const now = new Date();
     const expiresAt = new Date(now.getTime() + (request.duration * 60 * 60 * 1000));
@@ -317,7 +321,7 @@ export class TemporaryPermissionsService {
           autoRevoke: true,
           notificationSent: false
         });
-      }
+
 
       await transaction.commit();
 
@@ -333,7 +337,7 @@ export class TemporaryPermissionsService {
           reason: request.reason,
           expiresAt: expiresAt.toISOString(),
           emergencyAccess: request.emergencyAccess || false
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -341,8 +345,7 @@ export class TemporaryPermissionsService {
       });
 
       return grants;
-
-    } catch (error) {
+ catch (error) {
       await transaction.rollback();
       
       await this.auditService.logAction({
@@ -354,7 +357,7 @@ export class TemporaryPermissionsService {
           permissions: request.directPermissions?.map(p => `${p.resource}:${p.action}`),
           reason: request.reason,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -362,8 +365,8 @@ export class TemporaryPermissionsService {
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Grant emergency access with elevated permissions
@@ -378,7 +381,7 @@ export class TemporaryPermissionsService {
       severity?: 'low' | 'medium' | 'high' | 'critical';
       incidentId?: string;
       reviewRequired?: boolean;
-    } = {},
+ = {},
     context: { ipAddress?: string; userAgent?: string; sessionId?: string } = {}
   ): Promise<EmergencyAccessGrant> {
 
@@ -425,7 +428,7 @@ export class TemporaryPermissionsService {
           incidentId: options.incidentId,
           reviewRequired,
           expiresAt: expiresAt.toISOString()
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -445,8 +448,7 @@ export class TemporaryPermissionsService {
         incidentId: options.incidentId,
         reviewRequired
       };
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'emergency_access_grant_failed',
         userId: grantedBy,
@@ -456,7 +458,7 @@ export class TemporaryPermissionsService {
           permissions,
           reason,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -464,8 +466,8 @@ export class TemporaryPermissionsService {
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Revoke temporary permissions before expiration
@@ -508,14 +510,14 @@ export class TemporaryPermissionsService {
             roleId,
             reason,
             revokedAt: now.toISOString()
-  }
+
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           sessionId: context.sessionId,
           severity: 'warning'
         });
         return;
-      }
+
 
       // Try to revoke direct permission grants
       const permResult = await this.dbService.query(`
@@ -538,14 +540,14 @@ export class TemporaryPermissionsService {
             permission: `${resource}:${action}`,
             reason,
             revokedAt: now.toISOString()
-  }
+
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           sessionId: context.sessionId,
           severity: 'warning'
         });
         return;
-      }
+
 
       // Try to revoke emergency access
       const emergencyResult = await this.dbService.query(`
@@ -568,18 +570,17 @@ export class TemporaryPermissionsService {
             permissions: JSON.parse(permissions),
             reason,
             revokedAt: now.toISOString()
-  }
+
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           sessionId: context.sessionId,
           severity: 'critical'
         });
         return;
-      }
+
 
       throw new Error(`Permission grant ${grantId} not found or already revoked`);
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'permission_revocation_failed',
         userId: revokedBy,
@@ -588,7 +589,7 @@ export class TemporaryPermissionsService {
         details: {
           reason,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -596,8 +597,8 @@ export class TemporaryPermissionsService {
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Get all active temporary permissions for a user
@@ -606,7 +607,7 @@ export class TemporaryPermissionsService {
     roleAssignments: TemporaryRoleAssignment[];
     directGrants: DirectPermissionGrant[];
     emergencyAccess: EmergencyAccessGrant[];
-  }> {
+> {
 
     const [roleResults, permResults, emergencyResults] = await Promise.all([
       this.dbService.query(`
@@ -633,7 +634,7 @@ export class TemporaryPermissionsService {
       directGrants: permResults.rows.map(this.mapDirectPermissionGrant),
       emergencyAccess: emergencyResults.rows.map(this.mapEmergencyAccessGrant)
     };
-  }
+
 
   /**
    * Start automatic cleanup process for expired permissions
@@ -650,7 +651,7 @@ export class TemporaryPermissionsService {
     this.cleanupExpiredPermissions().catch(error => {
       console.error('Failed to run initial permission cleanup:', error);
     });
-  }
+
 
   /**
    * Clean up expired permissions
@@ -693,12 +694,11 @@ export class TemporaryPermissionsService {
             expiredDirectGrants: expiredPerms.rows.length,
             expiredEmergencyAccess: expiredEmergency.rows.length,
             cleanupAt: now.toISOString()
-  }
+
           severity: 'info'
         });
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error('Error during permission cleanup:', error);
       
       await this.auditService.logAction({
@@ -706,11 +706,11 @@ export class TemporaryPermissionsService {
         details: {
           error: error instanceof Error ? error.message : String(error),
           cleanupAt: now.toISOString()
-  }
+
         severity: 'error'
       });
-    }
-  }
+
+
 
   /**
    * Stop automatic cleanup process
@@ -719,8 +719,8 @@ export class TemporaryPermissionsService {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
       this.cleanupInterval = undefined;
-    }
-  }
+
+
 
   // Database mapping helpers
   private mapTemporaryRoleAssignment(row: any): TemporaryRoleAssignment {
@@ -740,7 +740,7 @@ export class TemporaryPermissionsService {
       autoRevoke: row.auto_revoke,
       notificationSent: row.notification_sent
     };
-  }
+
 
   private mapDirectPermissionGrant(row: any): DirectPermissionGrant {
     return {
@@ -762,7 +762,7 @@ export class TemporaryPermissionsService {
       autoRevoke: row.auto_revoke,
       notificationSent: row.notification_sent
     };
-  }
+
 
   private mapEmergencyAccessGrant(row: any): EmergencyAccessGrant {
     return {
@@ -780,5 +780,4 @@ export class TemporaryPermissionsService {
       reviewedBy: row.reviewed_by,
       reviewedAt: row.reviewed_at
     };
-  }
-}
+

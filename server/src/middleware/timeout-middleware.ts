@@ -8,8 +8,8 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { getTimeoutManager } from '../services/TimeoutManager';
 
-}
-}
+
+
 export interface TimeoutMiddlewareConfig {
   // Default timeouts by route pattern
   routeTimeouts: {
@@ -17,8 +17,9 @@ export interface TimeoutMiddlewareConfig {
       operationType: string;
       operationSubtype: string;
       timeout?: number;
-}
-}
+
+
+
     };
   };
   
@@ -33,27 +34,29 @@ export interface TimeoutMiddlewareConfig {
     userId: string;
     operationId: string;
   };
-}
 
-}
-}
+
+
+
 export interface RequestTimeoutContext {
   operationId: string;
   operationType: string;
   operationSubtype: string;
   startTime: number;
   timeoutManager: ReturnType<typeof getTimeoutManager>;
-}
-}
-}
+
+
+
+
 
 declare module 'fastify' {
   interface FastifyRequest {
     timeoutContext?: RequestTimeoutContext;
-}
-}
-  }
-}
+
+
+
+
+
 
 const defaultConfig: TimeoutMiddlewareConfig = {
   routeTimeouts: {
@@ -61,60 +64,60 @@ const defaultConfig: TimeoutMiddlewareConfig = {
       operationType: 'api',
       operationSubtype: 'export',
       timeout: 30000
-  }
+
     '/auth/login': {
       operationType: 'auth',
       operationSubtype: 'login'
-  }
+
     '/auth/register': {
       operationType: 'auth',
       operationSubtype: 'register'
-  }
+
     '/auth/password-reset': {
       operationType: 'auth',
       operationSubtype: 'passwordReset'
-  }
+
     '/auth/refresh': {
       operationType: 'auth',
       operationSubtype: 'tokenRefresh'
-  }
+
     '/auth/verify-captcha': {
       operationType: 'auth',
       operationSubtype: 'captcha'
-  }
+
     '/auth/verify-2fa': {
       operationType: 'auth',
       operationSubtype: 'twoFactor'
-  }
+
     '/api/workspace': {
       operationType: 'database',
       operationSubtype: 'query'
-  }
+
     '/api/workflow': {
       operationType: 'database',
       operationSubtype: 'transaction'
-  }
+
     '/api/corrections': {
       operationType: 'database',
       operationSubtype: 'query'
-  }
+
     '/api/randomizer': {
       operationType: 'api',
       operationSubtype: 'export'
-  }
+
     '/api/analytics': {
       operationType: 'database',
       operationSubtype: 'query'
-  }
+
     '/api/marketplace': {
       operationType: 'api',
       operationSubtype: 'authentication'
-  }
+
     '/health': {
       operationType: 'database',
       operationSubtype: 'query'
-    }
-  }
+
+
   defaultTimeout: 30000,
   enableRequestTracking: true,
   enableMetricsCollection: true,
@@ -122,7 +125,7 @@ const defaultConfig: TimeoutMiddlewareConfig = {
     sessionId: 'x-session-id',
     userId: 'x-user-id',
     operationId: 'x-operation-id'
-  }
+
 };
 
 /**
@@ -159,7 +162,7 @@ export function createTimeoutMiddleware(config?: Partial<TimeoutMiddlewareConfig
             timeout: operationContext.timeout
           });
         });
-      }
+
     });
 
     // Track request completion metrics
@@ -182,8 +185,8 @@ export function createTimeoutMiddleware(config?: Partial<TimeoutMiddlewareConfig
             success,
             statusCode: reply.statusCode
           }, 'Request completed');
-        }
-      }
+
+
     });
 
     // Add timeout utility methods to request
@@ -193,7 +196,7 @@ export function createTimeoutMiddleware(config?: Partial<TimeoutMiddlewareConfig
     ) {
       if (!this.timeoutContext) {
         throw new Error('Timeout context not initialized');
-      }
+
 
       return this.timeoutContext.timeoutManager.executeWithTimeout(
         operation,
@@ -210,7 +213,7 @@ export function createTimeoutMiddleware(config?: Partial<TimeoutMiddlewareConfig
     ) {
       if (!this.timeoutContext) {
         throw new Error('Timeout context not initialized');
-      }
+
 
       return this.timeoutContext.timeoutManager.executeWithFallback(
         primaryOperation,
@@ -223,14 +226,14 @@ export function createTimeoutMiddleware(config?: Partial<TimeoutMiddlewareConfig
     fastify.decorateRequest('cancelOperation', function(this: FastifyRequest) {
       if (!this.timeoutContext) {
         return false;
-      }
+
 
       return this.timeoutContext.timeoutManager.cancelOperation(
         this.timeoutContext.operationId
       );
     });
   };
-}
+
 
 /**
  * Get operation context from request
@@ -243,7 +246,7 @@ function getOperationContext(
   operationType: string;
   operationSubtype: string;
   timeout?: number;
-} {
+ {
   // Extract headers
   const sessionId = request.headers[config.operationHeaders.sessionId] as string;
   const userId = request.headers[config.operationHeaders.userId] as string;
@@ -260,7 +263,7 @@ function getOperationContext(
       operationSubtype: routeConfig.operationSubtype,
       timeout: routeConfig.timeout
     };
-  }
+
 
   // Default to API operation
   return {
@@ -269,7 +272,7 @@ function getOperationContext(
     operationSubtype: categorizeOperation(request),
     timeout: config.defaultTimeout
   };
-}
+
 
 /**
  * Find route configuration by URL pattern matching
@@ -281,17 +284,17 @@ function findRouteConfig(
   // Exact match first
   if (routeTimeouts[url]) {
     return routeTimeouts[url];
-  }
+
 
   // Pattern matching
   for (const [pattern, config] of Object.entries(routeTimeouts)) {
     if (url.startsWith(pattern)) {
       return config;
-    }
-  }
+
+
 
   return null;
-}
+
 
 /**
  * Categorize operation based on request characteristics
@@ -309,7 +312,7 @@ function categorizeOperation(request: FastifyRequest): string {
     if (url.includes('/captcha')) return 'captcha';
     if (url.includes('/2fa')) return 'twoFactor';
     return 'authentication';
-  }
+
 
   // File operations
   if (url.includes('/upload')) return 'upload';
@@ -322,7 +325,7 @@ function categorizeOperation(request: FastifyRequest): string {
 
   // Default
   return 'authentication';
-}
+
 
 /**
  * Timeout-aware route wrapper
@@ -346,15 +349,15 @@ export function withTimeout<T extends any[], R>(
 
       if (!result.success) {
         throw result.error || new Error('Operation failed');
-      }
+
 
       return result.data!;
-    }
+
 
     // Fallback to direct execution if no timeout context
     return handler.apply(this, args);
   };
-}
+
 
 /**
  * Database query wrapper with timeout
@@ -364,7 +367,7 @@ export function withDatabaseTimeout<T extends any[], R>(
   queryType: 'query' | 'transaction' | 'migration' = 'query'
 ) {
   return withTimeout(handler, 'database', queryType);
-}
+
 
 /**
  * Redis operation wrapper with timeout
@@ -374,7 +377,7 @@ export function withRedisTimeout<T extends any[], R>(
   operationType: 'operation' | 'pipeline' | 'publish' = 'operation'
 ) {
   return withTimeout(handler, 'redis', operationType);
-}
+
 
 /**
  * External API wrapper with timeout
@@ -384,7 +387,7 @@ export function withAPITimeout<T extends any[], R>(
   apiType: 'authentication' | 'webhook' | 'notification' | 'export' = 'authentication'
 ) {
   return withTimeout(handler, 'api', apiType);
-}
+
 
 /**
  * Authentication wrapper with timeout
@@ -394,7 +397,7 @@ export function withAuthTimeout<T extends any[], R>(
   authType: 'login' | 'register' | 'passwordReset' | 'tokenRefresh' | 'captcha' | 'twoFactor'
 ) {
   return withTimeout(handler, 'auth', authType);
-}
+
 
 /**
  * File operation wrapper with timeout
@@ -404,7 +407,7 @@ export function withFileTimeout<T extends any[], R>(
   fileType: 'upload' | 'download' | 'processing' | 'validation'
 ) {
   return withTimeout(handler, 'file', fileType);
-}
+
 
 /**
  * Email operation wrapper with timeout
@@ -414,7 +417,7 @@ export function withEmailTimeout<T extends any[], R>(
   emailType: 'send' | 'verify' | 'template' = 'send'
 ) {
   return withTimeout(handler, 'email', emailType);
-}
+
 
 // Extended request interface for TypeScript
 declare module 'fastify' {
@@ -425,7 +428,7 @@ declare module 'fastify' {
       fallbackOperation: () => Promise<T>
     ): Promise<import('../services/TimeoutManager').OperationResult<T>>;
     cancelOperation(): boolean;
-}
-}
-  }
-}
+
+
+
+

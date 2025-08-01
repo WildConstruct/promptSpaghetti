@@ -3,13 +3,10 @@
  */
 import { ConversionArchitectureManager, TouchPoint, LinkingSignal } from '../ConversionFunnelArchitecture';
 import { ConversionEvent } from '../ConversionTracker';
-describe('ConversionArchitectureManager', () => {
-  let manager: ConversionArchitectureManager;
+describe('ConversionArchitectureManager', () => { let manager: ConversionArchitectureManager;
   beforeEach(() => {
-  manager = new ConversionArchitectureManager();
-});
-  describe('Enhanced Conversion Events', () => {
-    it('should create enhanced conversion event with attribution', () => {
+  manager = new ConversionArchitectureManager() });
+  describe('Enhanced Conversion Events', () => { it('should create enhanced conversion event with attribution', () => {
       const baseEvent: ConversionEvent = {,
   id: 'test-event-001',
         userId: 'user-123',
@@ -17,24 +14,22 @@ describe('ConversionArchitectureManager', () => {
         timestamp: Date.now(),
         type: 'template_purchased',
         category: 'revenue',
-        value: 25.00,
+        value: 25.00 }
         properties: { templateId: 'tpl-001' },
-        metadata: {
+        metadata: { ,
   userAgent: 'test-agent',
-  referrer: 'https://example.com',
+  referrer: 'https://example.com' }
 };
       const touchpoints: TouchPoint = [
-        {
-  id: 'touch-001',
+        { id: 'touch-001',
   timestamp: Date.now() - 3600000, // 1 hour ago,
   channel: 'organic_search',
   source: 'google',
   medium: 'organic',
   position: 1,
-  influence: 0.4,
-}
-        {
-  id: 'touch-002',
+  influence: 0.4 }
+
+        { id: 'touch-002',
   timestamp: Date.now() - 1800000, // 30 minutes ago,
   channel: 'social_organic',
   source: 'twitter',
@@ -45,7 +40,7 @@ describe('ConversionArchitectureManager', () => {
   tracking: true,
   analytics: true,
   personalization: true,
-  crossDevice: true,
+  crossDevice: true }
 };
       const enhancedEvent = manager.createEnhancedEvent(baseEvent, touchpoints, privacyConsent);
       expect(enhancedEvent).toBeDefined();
@@ -57,43 +52,39 @@ describe('ConversionArchitectureManager', () => {
       expect(enhancedEvent.realTimeProcessing.streamId).toBeDefined();
       expect(enhancedEvent.realTimeProcessing.batchId).toBeDefined();
     });
-    it('should respect privacy consent for device fingerprinting', () => {
-      const baseEvent: ConversionEvent = {,
+    it('should respect privacy consent for device fingerprinting', () => { const baseEvent: ConversionEvent = {,
   id: 'test-event-002',
         userId: 'user-123',
         sessionId: 'session-456',
         timestamp: Date.now(),
         type: 'template_viewed',
-        category: 'activation',
+        category: 'activation' }
         properties: {},
-        metadata: {
+        metadata: { ,
   userAgent: 'test-agent',
-  referrer: '',
+  referrer: '' }
 };
       const touchpoints: TouchPoint = [];
       // No tracking consent
-      const noTrackingConsent = {
-  tracking: false,
+      const noTrackingConsent = { tracking: false,
   analytics: true,
   personalization: false,
-  crossDevice: false,
+  crossDevice: false }
 };
       const eventNoTracking = manager.createEnhancedEvent(baseEvent, touchpoints, noTrackingConsent);
       expect(eventNoTracking.deviceFingerprint).toBeUndefined();
       expect(eventNoTracking.crossDeviceUserId).toBeUndefined();
       // With tracking consent
-      const withTrackingConsent = {
-  tracking: true,
+      const withTrackingConsent = { tracking: true,
   analytics: true,
   personalization: true,
-  crossDevice: true,
+  crossDevice: true }
 };
       const eventWithTracking = manager.createEnhancedEvent(baseEvent, touchpoints, withTrackingConsent);
       expect(eventWithTracking.deviceFingerprint).toBeDefined();
     });
   });
-  describe('Attribution Calculation', () => {
-  it('should calculate first-touch attribution correctly', () => {
+  describe('Attribution Calculation', () => { it('should calculate first-touch attribution correctly', () => {
   const touchpoints: TouchPoint = [
   {
   id: 'touch-001',
@@ -103,10 +94,9 @@ describe('ConversionArchitectureManager', () => {
   medium: 'cpc',
   position: 1,
   influence: 0.3,
-  value: 100,
-}
-        {
-          id: 'touch-002',
+  value: 100 }
+
+        { id: 'touch-002',
           timestamp: Date.now() - 3600000, // 1 hour ago
           channel: 'social_organic',
           source: 'facebook',
@@ -121,17 +111,16 @@ describe('ConversionArchitectureManager', () => {
         timestamp: Date.now(),
         type: 'subscription_upgraded',
         category: 'revenue',
-        value: 50,
+        value: 50 }
         properties: {},
-        metadata: {
+        metadata: { ,
   userAgent: 'test-agent',
-  referrer: '',
+  referrer: '' }
 };
-      const privacyConsent = {
-  tracking: true,
+      const privacyConsent = { tracking: true,
   analytics: true,
   personalization: true,
-  crossDevice: false,
+  crossDevice: false }
 };
       const enhancedEvent = manager.createEnhancedEvent(baseEvent, touchpoints, privacyConsent);
       expect(enhancedEvent.attributionData.touchpoints).toHaveLength(2);
@@ -139,8 +128,7 @@ describe('ConversionArchitectureManager', () => {
       expect(enhancedEvent.attributionData.assistedAttribution).toBeDefined();
       expect(enhancedEvent.attributionData.assistedAttribution.length).toBeGreaterThan(0);
     });
-    it('should handle single touchpoint attribution', () => {
-      const touchpoints: TouchPoint = [
+    it('should handle single touchpoint attribution', () => { const touchpoints: TouchPoint = [
         {
           id: 'touch-001',
           timestamp: Date.now() - 300000, // 5 minutes ago
@@ -157,17 +145,16 @@ describe('ConversionArchitectureManager', () => {
         timestamp: Date.now(),
         type: 'template_purchased',
         category: 'revenue',
-        value: 25,
+        value: 25 }
         properties: {},
-        metadata: {
+        metadata: { ,
   userAgent: 'test-agent',
-  referrer: '',
+  referrer: '' }
 };
-      const privacyConsent = {
-  tracking: true,
+      const privacyConsent = { tracking: true,
   analytics: true,
   personalization: false,
-  crossDevice: false,
+  crossDevice: false }
 };
       const enhancedEvent = manager.createEnhancedEvent(baseEvent, touchpoints, privacyConsent);
       expect(enhancedEvent.attributionData.touchpoints).toHaveLength(1);
@@ -175,8 +162,7 @@ describe('ConversionArchitectureManager', () => {
       expect(enhancedEvent.attributionData.primaryAttribution.attribution_value).toBe(25);
     });
   });
-  describe('Cross-Device Identity Linking', () => {
-  it('should link device identities with strong signals', () => {
+  describe('Cross-Device Identity Linking', () => { it('should link device identities with strong signals', () => {
   const userId = 'user-789';
   const deviceIdentity = {
   deviceId: 'device-001',
@@ -186,19 +172,17 @@ describe('ConversionArchitectureManager', () => {
   lastSeen: Date.now(),
   userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)',
   linkedAt: Date.now(),
-  linkingSignals: [],
+  linkingSignals: [] }
 };
       const strongSignals: LinkingSignal = [
-        {
-          type: 'login',
+        { type: 'login',
           strength: 1.0,
-          timestamp: Date.now(),
+          timestamp: Date.now() }
           metadata: { loginMethod: 'email' }
-  }
-        {
-          type: 'email',
+
+        { type: 'email',
           strength: 0.9,
-          timestamp: Date.now() - 60000,
+          timestamp: Date.now() - 60000 }
           metadata: { emailVerified: true }
 
       ];
@@ -207,8 +191,7 @@ describe('ConversionArchitectureManager', () => {
       const identity = manager.getCrossDeviceIdentity(userId);
       expect(identity).toBeDefined();
     });
-    it('should reject weak linking signals', () => {
-  const userId = 'user-890';
+    it('should reject weak linking signals', () => { const userId = 'user-890';
   const deviceIdentity = {
   deviceId: 'device-002',
   deviceType: 'desktop' as const,
@@ -217,13 +200,12 @@ describe('ConversionArchitectureManager', () => {
   lastSeen: Date.now(),
   userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
   linkedAt: Date.now(),
-  linkingSignals: [],
+  linkingSignals: [] }
 };
       const weakSignals: LinkingSignal = [
-        {
-          type: 'behavioral',
+        { type: 'behavioral',
           strength: 0.3,
-          timestamp: Date.now(),
+          timestamp: Date.now() }
           metadata: { similarity: 0.3 }
 
       ];
@@ -231,8 +213,7 @@ describe('ConversionArchitectureManager', () => {
       expect(linked).toBe(false);
     });
   });
-  describe('Enhanced Funnel Configuration', () => {
-    it('should retrieve enhanced funnel configuration', () => {
+  describe('Enhanced Funnel Configuration', () => { it('should retrieve enhanced funnel configuration', () => {
       const funnel = manager.getEnhancedFunnel('marketplace-discovery-enhanced');
       expect(funnel).toBeDefined();
       expect(funnel?.crossDeviceTracking).toBe(true);
@@ -241,15 +222,11 @@ describe('ConversionArchitectureManager', () => {
       expect(funnel?.conversionDefinition.microConversions).toBeDefined();
       expect(funnel?.conversionDefinition.macroConversions).toBeDefined();
       expect(funnel?.segmentation.userSegments).toBeDefined();
-      expect(funnel?.anomalyDetection.enabled).toBe(true);
-    });
-    it('should return null for non-existent funnel', () => {
-      const funnel = manager.getEnhancedFunnel('non-existent-funnel');
-      expect(funnel).toBeNull();
-    });
+      expect(funnel?.anomalyDetection.enabled).toBe(true) });
+    it('should return null for non-existent funnel', () => { const funnel = manager.getEnhancedFunnel('non-existent-funnel');
+      expect(funnel).toBeNull() });
   });
-  describe('Conversion Pattern Analysis', () => {
-    it('should analyze conversion patterns and provide insights', () => {
+  describe('Conversion Pattern Analysis', () => { it('should analyze conversion patterns and provide insights', () => {
       const insights = manager.analyzeConversionPatterns('marketplace-discovery-enhanced');
       expect(insights).toBeDefined();
       expect(insights?.pattern.id).toBe('high-intent-purchase');
@@ -259,34 +236,29 @@ describe('ConversionArchitectureManager', () => {
       expect(insights?.segments.at_risk).toBeDefined();
       expect(insights?.recommendations.optimization).toBeDefined();
       expect(insights?.recommendations.targeting).toBeDefined();
-      expect(insights?.recommendations.personalization).toBeDefined();
-    });
-    it('should return null for invalid funnel analysis', () => {
-      const insights = manager.analyzeConversionPatterns('invalid-funnel');
-      expect(insights).toBeNull();
-    });
+      expect(insights?.recommendations.personalization).toBeDefined() });
+    it('should return null for invalid funnel analysis', () => { const insights = manager.analyzeConversionPatterns('invalid-funnel');
+      expect(insights).toBeNull() });
   });
-  describe('Privacy Compliance', () => {
-    it('should enforce privacy settings in enhanced events', () => {
+  describe('Privacy Compliance', () => { it('should enforce privacy settings in enhanced events', () => {
       const baseEvent: ConversionEvent = {,
   id: 'privacy-test-001',
         userId: 'user-privacy',
         sessionId: 'session-privacy',
         timestamp: Date.now(),
         type: 'template_viewed',
-        category: 'activation',
+        category: 'activation' }
         properties: {},
-        metadata: {
+        metadata: { ,
   userAgent: 'test-agent',
-  referrer: '',
+  referrer: '' }
 };
       const touchpoints: TouchPoint = [];
       // Minimal consent
-      const minimalConsent = {
-  tracking: false,
+      const minimalConsent = { tracking: false,
   analytics: true,
   personalization: false,
-  crossDevice: false,
+  crossDevice: false }
 };
       const event = manager.createEnhancedEvent(baseEvent, touchpoints, minimalConsent);
       expect(event.deviceFingerprint).toBeUndefined();
@@ -297,8 +269,7 @@ describe('ConversionArchitectureManager', () => {
       expect(event.privacyConsent.crossDevice).toBe(false);
     });
   });
-  describe('Real-time Processing', () => {
-    it('should include real-time processing metadata', () => {
+  describe('Real-time Processing', () => { it('should include real-time processing metadata', () => {
       const baseEvent: ConversionEvent = {,
   id: 'realtime-test-001',
         userId: 'user-realtime',
@@ -306,18 +277,17 @@ describe('ConversionArchitectureManager', () => {
         timestamp: Date.now(),
         type: 'subscription_upgraded',
         category: 'revenue',
-        value: 50,
+        value: 50 }
         properties: {},
-        metadata: {
+        metadata: { ,
   userAgent: 'test-agent',
-  referrer: '',
+  referrer: '' }
 };
       const touchpoints: TouchPoint = [];
-      const privacyConsent = {
-  tracking: true,
+      const privacyConsent = { tracking: true,
   analytics: true,
   personalization: true,
-  crossDevice: true,
+  crossDevice: true }
 };
       const event = manager.createEnhancedEvent(baseEvent, touchpoints, privacyConsent);
       expect(event.realTimeProcessing.streamId).toBeDefined();
@@ -329,13 +299,10 @@ describe('ConversionArchitectureManager', () => {
     });
   });
 });
-describe('Attribution Models', () => {
-  let manager: ConversionArchitectureManager;
+describe('Attribution Models', () => { let manager: ConversionArchitectureManager;
   beforeEach(() => {
-  manager = new ConversionArchitectureManager();
-});
-  it('should calculate time decay attribution with proper weights', () => {
-  const touchpoints: TouchPoint = [
+  manager = new ConversionArchitectureManager() });
+  it('should calculate time decay attribution with proper weights', () => { const touchpoints: TouchPoint = [
   {
   id: 'touch-1',
   timestamp: Date.now() - 14 * 24 * 60 * 60 * 1000, // 14 days ago,
@@ -344,20 +311,18 @@ describe('Attribution Models', () => {
   medium: 'cpc',
   position: 1,
   influence: 0.2,
-  value: 100,
-}
-      {
-  id: 'touch-2',
+  value: 100 }
+
+      { id: 'touch-2',
   timestamp: Date.now() - 7 * 24 * 60 * 60 * 1000, // 7 days ago,
   channel: 'social_organic',
   source: 'facebook',
   medium: 'social',
   position: 2,
   influence: 0.3,
-  value: 50,
-}
-      {
-        id: 'touch-3',
+  value: 50 }
+
+      { id: 'touch-3',
         timestamp: Date.now() - 60 * 60 * 1000, // 1 hour ago
         channel: 'direct',
         source: 'direct',
@@ -372,25 +337,23 @@ describe('Attribution Models', () => {
       timestamp: Date.now(),
       type: 'template_purchased',
       category: 'revenue',
-      value: 30,
+      value: 30 }
       properties: {},
-      metadata: {
+      metadata: { ,
   userAgent: 'test-agent',
-  referrer: '',
+  referrer: '' }
 };
-    const privacyConsent = {
-  tracking: true,
+    const privacyConsent = { tracking: true,
   analytics: true,
   personalization: true,
-  crossDevice: false,
+  crossDevice: false }
 };
     const event = manager.createEnhancedEvent(baseEvent, touchpoints, privacyConsent);
     // Time decay should favor more recent touchpoints
     expect(event.attributionData.primaryAttribution.name).toBe('time_decay');
     expect(event.attributionData.primaryAttribution.touchpoint.id).toBe('touch-3'); // Most recent should have highest weight
   });
-  it('should calculate position-based attribution correctly', () => {
-  const touchpoints: TouchPoint = [
+  it('should calculate position-based attribution correctly', () => { const touchpoints: TouchPoint = [
   {
   id: 'first-touch',
   timestamp: Date.now() - 3600000,
@@ -399,20 +362,18 @@ describe('Attribution Models', () => {
   medium: 'organic',
   position: 1,
   influence: 0.4,
-  value: 50,
-}
-      {
-  id: 'middle-touch',
+  value: 50 }
+
+      { id: 'middle-touch',
   timestamp: Date.now() - 1800000,
   channel: 'social_organic',
   source: 'twitter',
   medium: 'social',
   position: 2,
   influence: 0.2,
-  value: 25,
-}
-      {
-        id: 'last-touch',
+  value: 25 }
+
+      { id: 'last-touch',
         timestamp: Date.now() - 300000,
         channel: 'direct',
         source: 'direct',
@@ -427,17 +388,16 @@ describe('Attribution Models', () => {
       timestamp: Date.now(),
       type: 'subscription_upgraded',
       category: 'revenue',
-      value: 100,
+      value: 100 }
       properties: {},
-      metadata: {
+      metadata: { ,
   userAgent: 'test-agent',
-  referrer: '',
+  referrer: '' }
 };
-    const privacyConsent = {
-  tracking: true,
+    const privacyConsent = { tracking: true,
   analytics: true,
   personalization: true,
-  crossDevice: false,
+  crossDevice: false }
 };
     const event = manager.createEnhancedEvent(baseEvent, touchpoints, privacyConsent);
     // Should have position-based attribution among assisted models

@@ -93,8 +93,9 @@ export var AuditActivityType;
             recurrence_pattern;
         z.nativeEnum(RecurrencePattern),
             recurrence_config;
-        z.object({});
-        interval: z.number().min(1).optional(),
+        z.object({}),
+            interval;
+        z.number().min(1).optional(),
             end_date;
         z.date().optional(),
             max_occurrences;
@@ -330,8 +331,8 @@ export class AuditCalendarSystem {
                                 /**
                                 * Complete a schedule and update progress
                                 */
-                                completeSchedule(scheduleId, string, completionData, {});
-                                actual_end ?  : Date;
+                                completeSchedule(scheduleId, string, completionData, {}),
+                                    actual_end ?  : Date;
                                 completion_notes ?  : string;
                                 deliverables_completed ?  : string;
                                 final_report_path ?  : string;
@@ -350,13 +351,14 @@ export class AuditCalendarSystem {
                                     progress: {
                                         ...schedule.progress,
                                         completion_percentage: 100,
-                                        notes: [,
+                                        notes: [
                                             ...(schedule.progress?.notes || []),
                                             {
                                                 timestamp: new Date(),
                                                 author: 'system',
                                                 content: completionData.completion_notes || 'Schedule completed'
-                                            }]
+                                            }
+                                        ]
                                     },
                                     // Mark deliverables as completed
                                     if(completionData) { }, : .deliverables_completed
@@ -371,7 +373,18 @@ export class AuditCalendarSystem {
                                     */
                                     generateCalendarView(config, CalendarViewConfig);
                                     {
-                                        events: Array;
+                                        events: Array < {
+                                            id: string,
+                                            title: string,
+                                            start: Date,
+                                            end: Date,
+                                            type: AuditActivityType,
+                                            priority: SchedulePriority,
+                                            status: ScheduleStatus,
+                                            assignee: string,
+                                            color: string,
+                                            description: string
+                                        } > ;
                                         summary: {
                                             total_events: number;
                                             by_status: Record;
@@ -466,122 +479,136 @@ export class AuditCalendarSystem {
                                                     instances, : .push(instance),
                                                     currentDate = nextDate,
                                                     return: instances,
-                                                    let, notificationsSent = 0,
-                                                    let, schedulesUpdated = 0,
-                                                    // Check for overdue schedules
-                                                    const: overdueSchedules = this.getOverdueSchedules(),
-                                                    overdueSchedules, : .forEach(schedule => { }),
-                                                    alerts, : .push({}),
-                                                    type: 'overdue',
-                                                    schedule_id: schedule.id,
-                                                    message: `Schedule "${schedule.title}" is overdue` };
+                                                    'overdue':  | 'upcoming' | 'dependency' | 'resource',
+                                                    schedule_id: string,
+                                                    message: string,
+                                                    severity: 'low' | 'medium' | 'high' | 'critical',
+                                                    action_required: string } > ;
+                                                notifications_sent: number;
+                                                schedules_updated: number;
+                                                const alerts = [];
+                                                let notificationsSent = 0;
+                                                let schedulesUpdated = 0;
+                                                // Check for overdue schedules
+                                                const overdueSchedules = this.getOverdueSchedules();
+                                                overdueSchedules.forEach(schedule => { });
+                                                alerts.push({});
+                                                type: 'overdue',
+                                                    schedule_id;
+                                                schedule.id,
+                                                    message;
+                                                `Schedule "${schedule.title}" is overdue`;
                                             }
-                                            severity: schedule.priority === SchedulePriority.CRITICAL ? 'critical' : 'high',
-                                                action_required;
-                                            'Immediate attention required';
                                         }
-                                        ;
-                                        // Update status
-                                        if (schedule.status !== ScheduleStatus.OVERDUE) {
-                                            this.updateSchedule(schedule.id, { status: ScheduleStatus.OVERDUE });
-                                            schedulesUpdated++;
-                                        }
-                                        ;
-                                        // Check for upcoming deadlines
-                                        const upcomingDeadlines = this.getUpcomingDeadlines(3); // Next 3 days;
-                                        upcomingDeadlines.forEach(schedule => { });
-                                        alerts.push({});
-                                        type: 'upcoming',
-                                            schedule_id;
-                                        schedule.id,
-                                            message;
-                                        `Schedule "${schedule.title}" due in ${this.getDaysUntil(schedule.scheduled_start)} days`;
+                                        severity: schedule.priority === SchedulePriority.CRITICAL ? 'critical' : 'high',
+                                            action_required;
+                                        'Immediate attention required';
                                     }
+                                    ;
+                                    // Update status
+                                    if (schedule.status !== ScheduleStatus.OVERDUE) {
+                                        this.updateSchedule(schedule.id, { status: ScheduleStatus.OVERDUE });
+                                        schedulesUpdated++;
+                                    }
+                                    ;
+                                    // Check for upcoming deadlines
+                                    const upcomingDeadlines = this.getUpcomingDeadlines(3); // Next 3 days;
+                                    upcomingDeadlines.forEach(schedule => { });
+                                    alerts.push({});
+                                    type: 'upcoming',
+                                        schedule_id;
+                                    schedule.id,
+                                        message;
+                                    `Schedule "${schedule.title}" due in ${this.getDaysUntil(schedule.scheduled_start)} days`;
                                 }
-                                severity: schedule.priority === SchedulePriority.REGULATORY ? 'critical' : 'medium',
-                                    action_required;
-                                'Prepare for upcoming audit activity';
                             }
-                            ;
+                            severity: schedule.priority === SchedulePriority.REGULATORY ? 'critical' : 'medium',
+                                action_required;
+                            'Prepare for upcoming audit activity';
                         }
                         ;
-                        // Process notifications
-                        const notifications = this.processScheduleNotifications();
-                        notificationsSent = notifications.length;
-                        return {
-                            alerts,
-                            notifications_sent: notificationsSent,
-                            schedules_updated: schedulesUpdated,
-                        };
-                        /**
-                         * Generate audit schedule analytics
-                         */
-                        generateScheduleAnalytics(dateRange, { start: Date, end: Date });
-                        {
-                            summary: {
-                                total_schedules: number;
-                                completed_schedules: number;
-                                overdue_schedules: number;
-                                completion_rate: number;
-                                average_duration: number;
-                            }
-                            ;
-                            activity_breakdown: Record;
-                            priority_distribution: Record;
-                            timeline_analysis: Array;
-                            resource_utilization: {
-                                by_assignee: Record;
-                                by_activity_type: Record;
-                            }
-                            ;
-                            const schedules = Array.from(this.schedules.values()).filter(schedule => );
-                            ;
-                            schedule.scheduled_start >= dateRange.start && schedule.scheduled_start <= dateRange.end;
-                            ;
-                            // Summary statistics
-                            const totalSchedules = schedules.length;
-                            const completedSchedules = schedules.filter(s => s.status === ScheduleStatus.COMPLETED).length;
-                            const overdueSchedules = schedules.filter(s => s.status === ScheduleStatus.OVERDUE).length;
-                            const completionRate = totalSchedules > 0 ? (completedSchedules / totalSchedules) * 100 : 0;
-                            // Calculate average duration
-                            const completedWithDuration = schedules.filter(s => s.actual_start && s.actual_end);
-                            const avgDuration = completedWithDuration.length > 0;
-                            completedWithDuration.reduce()(sum);
-                            s;
-                            sum + (s.actual_end.getTime() - s.actual_start.getTime()), 0;
-                            / completedWithDuration.length /(1000 * 60 * 60); // hours
-                            0;
-                            // Activity breakdown
-                            const activityBreakdown = {};
-                            Object.values(AuditActivityType).forEach(type => { });
-                            activityBreakdown[type] = schedules.filter(s => s.activity_type === type).length;
-                        }
-                        ;
-                        // Priority distribution
-                        const priorityDistribution = {};
-                        Object.values(SchedulePriority).forEach(priority => { });
-                        priorityDistribution[priority] = schedules.filter(s => s.priority === priority).length;
                     }
                     ;
-                    // Timeline analysis (weekly buckets)
-                    const timelineAnalysis = this.generateTimelineAnalysis(schedules, dateRange);
-                    // Resource utilization
-                    const resourceUtilization = this.calculateResourceUtilization(schedules);
+                    // Process notifications
+                    const notifications = this.processScheduleNotifications();
+                    notificationsSent = notifications.length;
                     return {
-                        summary: {
-                            total_schedules: totalSchedules,
-                            completed_schedules: completedSchedules,
-                            overdue_schedules: overdueSchedules,
-                            completion_rate: Math.round(completionRate * 100) / 100,
-                            average_duration: Math.round(avgDuration * 100) / 100,
-                        },
-                        activity_breakdown: activityBreakdown,
-                        priority_distribution: priorityDistribution,
-                        timeline_analysis: timelineAnalysis,
-                        resource_utilization: resourceUtilization
+                        alerts,
+                        notifications_sent: notificationsSent,
+                        schedules_updated: schedulesUpdated,
                     };
-                    // Private helper methods
+                    /**
+                     * Generate audit schedule analytics
+                     */
+                    generateScheduleAnalytics(dateRange, { start: Date, end: Date });
+                    {
+                        summary: {
+                            total_schedules: number;
+                            completed_schedules: number;
+                            overdue_schedules: number;
+                            completion_rate: number;
+                            average_duration: number;
+                        }
+                        ;
+                        activity_breakdown: Record;
+                        priority_distribution: Record;
+                        timeline_analysis: Array < {
+                            date: string,
+                            scheduled: number,
+                            completed: number,
+                            overdue: number
+                        } > ;
+                        resource_utilization: {
+                            by_assignee: Record;
+                            by_activity_type: Record;
+                        }
+                        ;
+                        const schedules = Array.from(this.schedules.values()).filter(schedule => );
+                        ;
+                        schedule.scheduled_start >= dateRange.start && schedule.scheduled_start <= dateRange.end;
+                        ;
+                        // Summary statistics
+                        const totalSchedules = schedules.length;
+                        const completedSchedules = schedules.filter(s => s.status === ScheduleStatus.COMPLETED).length;
+                        const overdueSchedules = schedules.filter(s => s.status === ScheduleStatus.OVERDUE).length;
+                        const completionRate = totalSchedules > 0 ? (completedSchedules / totalSchedules) * 100 : 0;
+                        // Calculate average duration
+                        const completedWithDuration = schedules.filter(s => s.actual_start && s.actual_end);
+                        const avgDuration = completedWithDuration.length > 0;
+                        completedWithDuration.reduce()(sum);
+                        s;
+                        sum + (s.actual_end.getTime() - s.actual_start.getTime()), 0;
+                        / completedWithDuration.length /(1000 * 60 * 60); // hours
+                        0;
+                        // Activity breakdown
+                        const activityBreakdown = {};
+                        Object.values(AuditActivityType).forEach(type => { });
+                        activityBreakdown[type] = schedules.filter(s => s.activity_type === type).length;
+                    }
+                    ;
+                    // Priority distribution
+                    const priorityDistribution = {};
+                    Object.values(SchedulePriority).forEach(priority => { });
+                    priorityDistribution[priority] = schedules.filter(s => s.priority === priority).length;
                 }
+                ;
+                // Timeline analysis (weekly buckets)
+                const timelineAnalysis = this.generateTimelineAnalysis(schedules, dateRange);
+                // Resource utilization
+                const resourceUtilization = this.calculateResourceUtilization(schedules);
+                return {
+                    summary: {
+                        total_schedules: totalSchedules,
+                        completed_schedules: completedSchedules,
+                        overdue_schedules: overdueSchedules,
+                        completion_rate: Math.round(completionRate * 100) / 100,
+                        average_duration: Math.round(avgDuration * 100) / 100,
+                    },
+                    activity_breakdown: activityBreakdown,
+                    priority_distribution: priorityDistribution,
+                    timeline_analysis: timelineAnalysis,
+                    resource_utilization: resourceUtilization
+                };
                 // Private helper methods
             }
             // Private helper methods

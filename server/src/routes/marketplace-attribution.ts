@@ -14,15 +14,16 @@ import {
   CreateAttributionClaimRequestSchema,
   UpdateRevenueAttributionRequestSchema,
   MarketplaceAttributionFilterSchema
-} from '../../../packages/core/types/marketplaceAttribution';
+ from '../../../packages/core/types/marketplaceAttribution';
 
-}
-}
+
+
 interface AttributionRouteOptions {
   database: Database;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Request/Response Schemas for Validation
@@ -42,11 +43,11 @@ const templateAttributionResponseSchema = {
         collaborators: { type: 'array' },
         revenueSharing: { type: 'object' },
         isVerified: { type: 'boolean' }
-      }
-  }
+
+
     relatedTemplates: { type: 'array' },
     revenueStatistics: { type: 'object' }
-  }
+
 };
 
 const createAttributionRequestSchema = {
@@ -66,12 +67,12 @@ const createAttributionRequestSchema = {
           contributionType: {
             type: 'string',
             enum: ['co-creator', 'contributor', 'reviewer', 'editor', 'advisor']
-  }
+
           contributionPercentage: { type: 'number', minimum: 0, maximum: 100 },
           contributionDescription: { type: 'string' }
-        }
-      }
-  }
+
+
+
     derivedFrom: {
       type: 'object',
       required: ['originalTemplateId', 'derivationType', 'attributionPercentage'],
@@ -80,17 +81,17 @@ const createAttributionRequestSchema = {
         derivationType: {
           type: 'string',
           enum: ['fork', 'remix', 'inspired', 'adaptation']
-  }
+
         attributionPercentage: { type: 'number', minimum: 0, maximum: 100 }
-      }
-  }
+
+
     attributionMethod: {
       type: 'string',
       enum: ['manual', 'git_history', 'session_tracking', 'ai_analysis', 'user_declaration'],
       default: 'manual'
-  }
+
     sourceMetadata: { type: 'object' }
-  }
+
 };
 
 const attributionClaimRequestSchema = {
@@ -100,14 +101,14 @@ const attributionClaimRequestSchema = {
     claimType: {
       type: 'string',
       enum: ['ownership', 'collaboration', 'derivation', 'inspiration']
-  }
+
     claimDescription: { type: 'string', minLength: 10, maxLength: 1000 },
     evidenceUrls: {
       type: 'array',
       items: { type: 'string', format: 'uri' }
-  }
+
     metadata: { type: 'object' }
-  }
+
 };
 
 const revenueDistributionRequestSchema = {
@@ -117,7 +118,7 @@ const revenueDistributionRequestSchema = {
     totalRevenueCents: { type: 'integer', minimum: 0 },
     buyerId: { type: 'string', format: 'uuid' },
     templateVersion: { type: 'string' }
-  }
+
 };
 
 export default async function marketplaceAttributionRoutes(
@@ -134,7 +135,7 @@ export default async function marketplaceAttributionRoutes(
   const requireAuth = async (request: FastifyRequest, reply: FastifyReply) => {
     if (!request.user) {
       return reply.code(401).send({ error: 'Authentication required' });
-    }
+
   };
 
   // Middleware for admin/creator verification
@@ -142,7 +143,7 @@ export default async function marketplaceAttributionRoutes(
     const user = (request as any).user;
     if (!user || (!user.permissions?.includes('creator') && !user.permissions?.includes('admin'))) {
       return reply.code(403).send({ error: 'Creator or admin access required' });
-    }
+
   };
 
   // =============================================================================
@@ -159,10 +160,10 @@ export default async function marketplaceAttributionRoutes(
         required: ['templateId'],
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: createAttributionRequestSchema
-    }
+
   }, async (request, reply) => {
     try {
       const { templateId } = request.params as { templateId: string };
@@ -175,12 +176,12 @@ export default async function marketplaceAttributionRoutes(
       
       if (templateResult.rows.length === 0) {
         return reply.code(404).send({ error: 'Template not found' });
-      }
+
 
       const templateOwnerId = templateResult.rows[0].owner_id;
       if (templateOwnerId !== user.id && !user.permissions?.includes('admin')) {
         return reply.code(403).send({ error: 'Only template owner or admin can create attribution' });
-      }
+
 
       // Create attribution
       const result = await attributionService.createTemplateAttribution({
@@ -193,7 +194,7 @@ export default async function marketplaceAttributionRoutes(
           success: false,
           errors: result.errors
         });
-      }
+
 
       return reply.send({
         success: true,
@@ -201,13 +202,13 @@ export default async function marketplaceAttributionRoutes(
         attribution: result.attribution,
         warnings: result.warnings
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to create template attribution:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/marketplace-attribution/templates/:templateId/attribution
@@ -219,12 +220,12 @@ export default async function marketplaceAttributionRoutes(
         required: ['templateId'],
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       response: {
         200: templateAttributionResponseSchema
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { templateId } = request.params as { templateId: string };
@@ -236,19 +237,19 @@ export default async function marketplaceAttributionRoutes(
           success: false,
           error: 'Template attribution not found'
         });
-      }
+
 
       return reply.send({
         success: true,
         ...attribution
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get template attribution:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // PUT /api/marketplace-attribution/templates/:templateId/attribution/verify
@@ -261,16 +262,16 @@ export default async function marketplaceAttributionRoutes(
         required: ['templateId'],
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
           verified: { type: 'boolean' },
           notes: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { templateId } = request.params as { templateId: string };
@@ -279,7 +280,7 @@ export default async function marketplaceAttributionRoutes(
 
       if (!user.permissions?.includes('admin')) {
         return reply.code(403).send({ error: 'Admin access required' });
-      }
+
 
       const updateQuery = `
         UPDATE template_attributions 
@@ -292,7 +293,7 @@ export default async function marketplaceAttributionRoutes(
       
       if (result.rows.length === 0) {
         return reply.code(404).send({ error: 'Template attribution not found' });
-      }
+
 
       return reply.send({
         success: true,
@@ -300,13 +301,13 @@ export default async function marketplaceAttributionRoutes(
         verifiedBy: user.id,
         verifiedAt: new Date()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to verify template attribution:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -324,10 +325,10 @@ export default async function marketplaceAttributionRoutes(
         properties: {
           templateId: { type: 'string', format: 'uuid' },
           purchaseId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: revenueDistributionRequestSchema
-    }
+
   }, async (request, reply) => {
     try {
       const { templateId, purchaseId } = request.params as { templateId: string; purchaseId: string };
@@ -337,7 +338,7 @@ export default async function marketplaceAttributionRoutes(
       // Verify purchase exists and user has permission
       if (!user.permissions?.includes('admin') && !user.permissions?.includes('revenue_system')) {
         return reply.code(403).send({ error: 'Revenue system or admin access required' });
-      }
+
 
       const result = await attributionService.createRevenueAttribution(
         templateId,
@@ -352,7 +353,7 @@ export default async function marketplaceAttributionRoutes(
           success: false,
           errors: result.errors
         });
-      }
+
 
       return reply.send({
         success: true,
@@ -362,15 +363,15 @@ export default async function marketplaceAttributionRoutes(
           totalAmount: result.totalAmount,
           holdAmount: result.holdAmount,
           immediateRelease: result.immediateRelease
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to create revenue attribution:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/marketplace-attribution/revenue/:distributionId
@@ -383,9 +384,9 @@ export default async function marketplaceAttributionRoutes(
         required: ['distributionId'],
         properties: {
           distributionId: { type: 'string', format: 'uuid' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { distributionId } = request.params as { distributionId: string };
@@ -422,7 +423,7 @@ export default async function marketplaceAttributionRoutes(
       
       if (result.rows.length === 0) {
         return reply.code(404).send({ error: 'Revenue distribution not found' });
-      }
+
 
       const row = result.rows[0];
 
@@ -432,7 +433,7 @@ export default async function marketplaceAttributionRoutes(
 
       if (!canViewRevenue) {
         return reply.code(403).send({ error: 'Access denied to revenue details' });
-      }
+
 
       return reply.send({
         success: true,
@@ -444,15 +445,15 @@ export default async function marketplaceAttributionRoutes(
           purchaseDate: row.purchase_date,
           isVerified: row.is_verified,
           attributions: row.attributions
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get revenue distribution:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -469,10 +470,10 @@ export default async function marketplaceAttributionRoutes(
         required: ['templateId'],
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: attributionClaimRequestSchema
-    }
+
   }, async (request, reply) => {
     try {
       const { templateId } = request.params as { templateId: string };
@@ -493,7 +494,7 @@ export default async function marketplaceAttributionRoutes(
           success: false,
           errors: result.errors
         });
-      }
+
 
       return reply.send({
         success: true,
@@ -501,13 +502,13 @@ export default async function marketplaceAttributionRoutes(
         estimatedResolutionDate: result.estimatedResolutionDate,
         requiresEvidence: result.requiresEvidence
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to create attribution claim:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // GET /api/marketplace-attribution/templates/:templateId/claims
@@ -520,20 +521,20 @@ export default async function marketplaceAttributionRoutes(
         required: ['templateId'],
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           status: {
             type: 'string',
             enum: ['pending', 'approved', 'rejected', 'disputed']
-  }
+
           limit: { type: 'number', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'number', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { templateId } = request.params as { templateId: string };
@@ -546,7 +547,7 @@ export default async function marketplaceAttributionRoutes(
       if (status) {
         whereClause += ' AND ac.status = $2';
         queryParams.push(status);
-      }
+
 
       const query = `
         SELECT 
@@ -580,15 +581,15 @@ export default async function marketplaceAttributionRoutes(
           limit,
           offset,
           hasMore: result.rows.length === limit
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get attribution claims:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -605,9 +606,9 @@ export default async function marketplaceAttributionRoutes(
         required: ['userId'],
         properties: {
           userId: { type: 'string', format: 'uuid' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { userId } = request.params as { userId: string };
@@ -616,25 +617,25 @@ export default async function marketplaceAttributionRoutes(
       // Verify access to dashboard
       if (userId !== user.id && !user.permissions?.includes('admin')) {
         return reply.code(403).send({ error: 'Access denied to this dashboard' });
-      }
+
 
       const dashboard = await attributionService.getCreatorDashboard(userId);
       
       if (!dashboard) {
         return reply.code(404).send({ error: 'Creator profile not found' });
-      }
+
 
       return reply.send({
         success: true,
         ...dashboard
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get creator dashboard:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // PUT /api/marketplace-attribution/creators/:userId/profile
@@ -647,8 +648,8 @@ export default async function marketplaceAttributionRoutes(
         required: ['userId'],
         properties: {
           userId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
@@ -656,9 +657,9 @@ export default async function marketplaceAttributionRoutes(
           profileBio: { type: 'string', maxLength: 500 },
           profileUrl: { type: 'string', format: 'uri' },
           attributionSettings: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { userId } = request.params as { userId: string };
@@ -668,7 +669,7 @@ export default async function marketplaceAttributionRoutes(
       // Verify access to profile
       if (userId !== user.id) {
         return reply.code(403).send({ error: 'Can only update your own profile' });
-      }
+
 
       const updateFields: string[] = [];
       const updateValues: any[] = [];
@@ -677,26 +678,26 @@ export default async function marketplaceAttributionRoutes(
       if (updates.displayName) {
         updateFields.push(`display_name = $${++paramCount}`);
         updateValues.push(updates.displayName);
-      }
+
 
       if (updates.profileBio !== undefined) {
         updateFields.push(`profile_bio = $${++paramCount}`);
         updateValues.push(updates.profileBio);
-      }
+
 
       if (updates.profileUrl !== undefined) {
         updateFields.push(`profile_url = $${++paramCount}`);
         updateValues.push(updates.profileUrl);
-      }
+
 
       if (updates.attributionSettings) {
         updateFields.push(`attribution_settings = $${++paramCount}`);
         updateValues.push(JSON.stringify(updates.attributionSettings));
-      }
+
 
       if (updateFields.length === 0) {
         return reply.code(400).send({ error: 'No valid fields to update' });
-      }
+
 
       updateFields.push('updated_at = NOW()');
       updateValues.push(userId);
@@ -712,19 +713,19 @@ export default async function marketplaceAttributionRoutes(
       
       if (result.rows.length === 0) {
         return reply.code(404).send({ error: 'Creator profile not found' });
-      }
+
 
       return reply.send({
         success: true,
         message: 'Profile updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to update creator profile:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -743,12 +744,12 @@ export default async function marketplaceAttributionRoutes(
             type: 'string',
             enum: ['24h', '7d', '30d', '90d'],
             default: '30d'
-  }
+
           templateId: { type: 'string', format: 'uuid' },
           creatorId: { type: 'string', format: 'uuid' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { timeframe, templateId, creatorId } = request.query as any;
@@ -771,7 +772,7 @@ export default async function marketplaceAttributionRoutes(
       case '90d':
         startDate.setDate(startDate.getDate() - 90);
         break;
-      }
+
 
       // Build analytics query based on filters
       let whereClause = 'WHERE created_at BETWEEN $1 AND $2';
@@ -780,12 +781,12 @@ export default async function marketplaceAttributionRoutes(
       if (templateId) {
         whereClause += ` AND template_id = $${queryParams.length + 1}`;
         queryParams.push(templateId);
-      }
+
 
       if (creatorId) {
         whereClause += ` AND primary_creator_id = $${queryParams.length + 1}`;
         queryParams.push(creatorId);
-      }
+
 
       // Mock analytics response - would implement actual analytics queries
       const analyticsData = {
@@ -797,12 +798,12 @@ export default async function marketplaceAttributionRoutes(
           totalClaims: 8,
           averageResolutionTime: '3.2 days',
           verificationRate: 92.5
-  }
+
         trends: {
           attributionsCreated: [10, 15, 12, 18, 14, 16, 20],
           revenueDistributed: [2500, 3200, 2800, 3600, 3100, 3400, 4200],
           claimsResolved: [2, 1, 3, 0, 1, 2, 1]
-  }
+
         topCreators: [
           { creatorId: 'creator-1', templatesCreated: 25, totalRevenue: 15000 },
           { creatorId: 'creator-2', templatesCreated: 18, totalRevenue: 12000 }
@@ -813,13 +814,13 @@ export default async function marketplaceAttributionRoutes(
         success: true,
         analytics: analyticsData
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get attribution analytics:', error);
       return reply.code(500).send({
         success: false,
         error: 'Internal server error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -835,13 +836,13 @@ export default async function marketplaceAttributionRoutes(
         service: 'marketplace-attribution',
         version: '1.0.0'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
-}
+
 
 export { marketplaceAttributionRoutes };

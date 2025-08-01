@@ -9,18 +9,17 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { StickyNote } from './StickyNote';
 import { StickyNoteContextMenu } from './StickyNoteContextMenu';
-import { 
-  StickyNote as StickyNoteType, 
+import { StickyNote as StickyNoteType, 
   StickyNoteAction,
   StickyNoteColor,
-  StickyNoteContextMenuOptions,
+  StickyNoteContextMenuOptions }
   DEFAULT_STICKY_NOTE 
-} from '../../types/CollaborationTypes';
-}
-interface StickyNotesLayerProps {
-  notes: StickyNoteType;
-  onNotesChange: (notes: StickyNoteType) => void;
-}
+ from '../../types/CollaborationTypes';
+
+
+interface StickyNotesLayerProps { notes: StickyNoteType;
+  onNotesChange: (notes: StickyNoteType) => void }
+},
   canvasSize: { width: number; height: number };
   canvasOffset: { x: number; y: number };
   zoom: number;
@@ -33,19 +32,18 @@ export const layerRef = useRef<HTMLDivElement>(null);
     return `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   }, []);
   // Handle sticky note actions
-  const handleNoteAction = useCallback((action: StickyNoteAction) => {
-  const noteId = action.noteId;
+  const handleNoteAction = useCallback((action: StickyNoteAction) => { const noteId = action.noteId;
   switch (action.type) {
   case 'create': {
-  const newNote: StickyNoteType = {,
-  ...DEFAULT_STICKY_NOTE,
-  id: generateNoteId(),
-  author,
-  timestamp: new Date().toISOString(),
-  position: action.position || DEFAULT_STICKY_NOTE.position,
-  content: action.content || '',
-  color: action.color || DEFAULT_STICKY_NOTE.color,
-  zIndex: Math.max(...notes.map(n => n.zIndex || 1000), 1000) + 1,
+  const newNote: StickyNoteType = {
+  ...DEFAULT_STICKY_NOTE
+  id: generateNoteId()
+  author
+  timestamp: new Date().toISOString()
+  position: action.position || DEFAULT_STICKY_NOTE.position
+  content: action.content || ''
+  color: action.color || DEFAULT_STICKY_NOTE.color
+  zIndex: Math.max(...notes.map(n => n.zIndex || 1000), 1000) + 1 }
 };
         onNotesChange([...notes, newNote]);
         setSelectedNoteId(newNote.id);
@@ -59,8 +57,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
         );
         onNotesChange(updatedNotes);
         break;
-      case 'delete': {
-        if (!noteId) break;
+      case 'delete': { if (!noteId) break;
         const filteredNotes = notes.filter(note => note.id !== noteId);
         onNotesChange(filteredNotes);
         if (selectedNoteId === noteId) {
@@ -71,8 +68,8 @@ export const layerRef = useRef<HTMLDivElement>(null);
         const updatedNotes = notes.map(note => ;);
           note.id === noteId 
             ? { 
-                ...note, 
-                position: action.position!,
+                ...note
+                position: action.position! }
                 zIndex: Math.max(...notes.map(n => n.zIndex || 1000), 1000) + 1 
             : note
         );
@@ -87,11 +84,10 @@ export const layerRef = useRef<HTMLDivElement>(null);
         );
         onNotesChange(updatedNotes);
         break;
-      case 'startEdit': {
-  if (!noteId) break;
+      case 'startEdit': { if (!noteId) break;
   const updatedNotes = notes.map(note => ({)
-  ...note,
-  isEditing: note.id === noteId,
+  ...note
+  isEditing: note.id === noteId }
 }));
         onNotesChange(updatedNotes);
         setSelectedNoteId(noteId);
@@ -107,44 +103,43 @@ export const layerRef = useRef<HTMLDivElement>(null);
         break;
   }, [notes, onNotesChange, author, generateNoteId, selectedNoteId]);
   // Handle context menu
-  const handleContextMenu = useCallback((e: React.MouseEvent, noteId: string) => {
-    if (readOnly) return;
+  const handleContextMenu = useCallback((e: React.MouseEvent, noteId: string) => { if (readOnly) return;
     e.preventDefault();
     e.stopPropagation();
     const note = notes.find(n => n.id === noteId);
     if (!note) return;
     setContextMenu({)
-  x: e.clientX,
-      y: e.clientY,
-      noteId,
-      canEdit: !readOnly,
-      canDelete: !readOnly,
-      onEdit: () => {,
+  x: e.clientX
+      y: e.clientY
+      noteId
+      canEdit: !readOnly
+      canDelete: !readOnly
+      onEdit: () => { }
         handleNoteAction({ type: 'startEdit', noteId });
-        setContextMenu(null);
-  },
-  onDelete: () => {,
+        setContextMenu(null)
+
+  onDelete: () => {
         handleNoteAction({ type: 'delete', noteId });
-        setContextMenu(null);
-  },
-  onChangeColor: (color: StickyNoteColor) => {,
+        setContextMenu(null)
+
+  onChangeColor: (color: StickyNoteColor) => { 
         handleNoteAction({ )
-          type: 'update', 
-          noteId, 
+          type: 'update'
+          noteId }
           note: { color } 
         });
-        setContextMenu(null);
-  },
-  onDuplicate: () => {,
-  const duplicatedNote: StickyNoteType = {,
-  ...note,
-  id: generateNoteId(),
+        setContextMenu(null)
+
+  onDuplicate: () => { 
+  const duplicatedNote: StickyNoteType = {
+  ...note
+  id: generateNoteId()
   position: {
-  x: note.position.x + 20,
-  y: note.position.y + 20,
-},
-  timestamp: new Date().toISOString(),
-          author,
+  x: note.position.x + 20
+  y: note.position.y + 20 }
+
+  timestamp: new Date().toISOString()
+          author
           isEditing: false;
   };
         onNotesChange([...notes, duplicatedNote]);
@@ -153,8 +148,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
     });
   }, [notes, readOnly, handleNoteAction, author, generateNoteId, onNotesChange]);
   // Handle canvas double-click to create new note
-  const handleCanvasDoubleClick = useCallback((e: React.MouseEvent) => {
-  if (readOnly) return;
+  const handleCanvasDoubleClick = useCallback((e: React.MouseEvent) => { if (readOnly) return;
   // Only create note if clicking on empty canvas (not on existing notes)
   const target = e.target as HTMLElement;
   if (target.closest('.sticky-note')) return;
@@ -163,33 +157,25 @@ export const layerRef = useRef<HTMLDivElement>(null);
   const rect = layerRef.current?.getBoundingClientRect();
   if (!rect) return;
   const position = {
-  x: (e.clientX - rect.left - canvasOffset.x) / zoom,
-  y: (e.clientY - rect.top - canvasOffset.y) / zoom,
+  x: (e.clientX - rect.left - canvasOffset.x) / zoom
+  y: (e.clientY - rect.top - canvasOffset.y) / zoom }
 };
-    handleNoteAction({)
-  type: 'create',
+    handleNoteAction({ )
+  type: 'create' }
   position
 });
   }, [readOnly, canvasOffset, zoom, handleNoteAction]);
   // Handle click outside to deselect notes
-  const handleLayerClick = useCallback((e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
+  const handleLayerClick = useCallback((e: React.MouseEvent) => { const target = e.target as HTMLElement;
     if (!target.closest('.sticky-note')) {
-      setSelectedNoteId(null);
-  }, []);
+      setSelectedNoteId(null) }, []);
   // Handle note selection
-  const handleNoteClick = useCallback((noteId: string) => {
-    setSelectedNoteId(noteId);
-  }, []);
+  const handleNoteClick = useCallback((noteId: string) => { setSelectedNoteId(noteId) }, []);
   // Close context menu on outside click
-  useEffect(() => {
-    const handleClickOutside = () => {
-      setContextMenu(null);
-    };
-    if (contextMenu) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
-  }, [contextMenu]);
+  useEffect(() => { const handleClickOutside = () => {
+      setContextMenu(null) };
+    if (contextMenu) { document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside) }, [contextMenu]);
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -200,10 +186,8 @@ export const layerRef = useRef<HTMLDivElement>(null);
         if (selectedNote && !selectedNote.isEditing) {
           handleNoteAction({ type: 'delete', noteId: selectedNoteId });
       // Escape to deselect
-      if (e.key === 'Escape') {
-        setSelectedNoteId(null);
-        setContextMenu(null);
-    };
+      if (e.key === 'Escape') { setSelectedNoteId(null);
+        setContextMenu(null) };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [readOnly, selectedNoteId, notes, handleNoteAction]);
@@ -212,16 +196,16 @@ export const layerRef = useRef<HTMLDivElement>(null);
       <div
         ref={layerRef}
         className="sticky-notes-layer"
-        style={{
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  width: canvasSize.width,
-  height: canvasSize.height,
-  pointerEvents: 'none', // Allow graph interactions to pass through,
-  zIndex: 1000,
-  overflow: 'hidden',
-}}
+        style={ {
+  position: 'absolute'
+  top: 0
+  left: 0
+  width: canvasSize.width
+  height: canvasSize.height
+  pointerEvents: 'none', // Allow graph interactions to pass through
+  zIndex: 1000
+  overflow: 'hidden' }
+
         onDoubleClick={handleCanvasDoubleClick}
         onClick={handleLayerClick}
       >

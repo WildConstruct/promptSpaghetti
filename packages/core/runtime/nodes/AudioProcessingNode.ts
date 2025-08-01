@@ -8,18 +8,16 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } fr
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, OpenAITTSAdapter, ElevenLabsAdapter, WhisperAdapter } from '../../ai';
 
-}
-export interface AudioConfig {
-  provider: 'openai-tts' | 'elevenlabs' | 'whisper';
+
+export interface AudioConfig { provider: 'openai-tts' | 'elevenlabs' | 'whisper';
   apiKey?: string;
   endpoint?: string;
   model?: string;
-  defaultParameters?: Record<string, any>;
-}
-}
-}
-export interface AudioMetadata {
-  duration: number;
+  defaultParameters?: Record<string, any> }
+
+
+
+export interface AudioMetadata { duration: number;
   format: string;
   sample_rate: number;
   channels: number;
@@ -28,34 +26,32 @@ export interface AudioMetadata {
   provider: string;
   model: string;
   generation_time: number;
-  cost: number;
-}
-}
-}
-export interface GeneratedAudio {
-  data: ArrayBuffer | string;
+  cost: number }
+
+
+
+export interface GeneratedAudio { data: ArrayBuffer | string }
   format: string;
   metadata: AudioMetadata;
-}
-}
-}
-export interface TranscriptionResult {
-  text: string;
+
+
+
+
+export interface TranscriptionResult { text: string;
   language?: string;
   confidence?: number;
-  segments?: Array<{
+  segments?: Array<{ }
   start: number;
   end: number;
   text: string;
-}
-}>;
-  words?: Array<{
-  word: string;
+
+
+>;
+  words?: Array<{ word: string;
   start: number;
-  end: number;
-}>;
+  end: number }>;
   metadata: AudioMetadata;
-}
+
 export class TextToSpeechNode extends AdvancedRuntimeNode {
   private modelFactory: AIModelFactory;
   private adapters: Map<string, any> = new Map();
@@ -92,13 +88,13 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
       if (!adapter) {
         throw new Error(`No adapter configured for provider: ${provider}`);}
       // Prepare synthesis options based on provider
-      const options = this._buildSynthesisOptions(provider, {)
-  text,
-        voice,
-        language,
-        speed,
-        pitch,
-        volume,
+      const options = this._buildSynthesisOptions(provider, { )
+  text
+        voice
+        language
+        speed
+        pitch
+        volume }
         format
       });
       // Generate speech
@@ -106,32 +102,31 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
       const result = await adapter.process(text, options);
       const generationTime = Date.now() - startTime;
       // Process results
-      const audioData: GeneratedAudio = {,
-  data: result.audio.data,
-  format: result.audio.format,
+      const audioData: GeneratedAudio = { 
+  data: result.audio.data
+  format: result.audio.format
   metadata: {
-  duration: result.audio.duration,
-  format: result.audio.format,
-  sample_rate: result.audio.sample_rate,
-  channels: result.audio.channels,
-  bitrate: result.audio.bitrate,
-  size: result.audio.data instanceof ArrayBuffer ? result.audio.data.byteLength : result.audio.data.length,
-  provider,
-  model: result.metadata.model,
-  generation_time: generationTime,
-  cost: result.usage.cost,
+  duration: result.audio.duration
+  format: result.audio.format
+  sample_rate: result.audio.sample_rate
+  channels: result.audio.channels
+  bitrate: result.audio.bitrate
+  size: result.audio.data instanceof ArrayBuffer ? result.audio.data.byteLength : result.audio.data.length
+  provider
+  model: result.metadata.model
+  generation_time: generationTime
+  cost: result.usage.cost }
 };
-      return {
-  outputs: {
-  audio: audioData,
-  metadata: audioData.metadata,
-  cost: result.usage.cost,
-},
-  executionTime: generationTime,
-        tokensUsed: { input: result.usage.characters || 0, output: 0 },
+      return { outputs: {
+  audio: audioData
+  metadata: audioData.metadata
+  cost: result.usage.cost }
+
+  executionTime: generationTime
+        tokensUsed: { input: result.usage.characters || 0, output: 0 }
         cost: result.usage.cost;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Text-to-speech generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
 
@@ -151,59 +146,54 @@ export class TextToSpeechNode extends AdvancedRuntimeNode {
         case 'openai-tts':
           adapter = new OpenAITTSAdapter()
             `tts-${this.nodeId}`}
-}
-            {
-  apiKey: config.apiKey || '',
-  baseURL: config.endpoint,
-}
+
+            { apiKey: config.apiKey || ''
+  baseURL: config.endpoint }
+
             config.model || 'tts-1'
           );
           break;
         case 'elevenlabs':
           adapter = new ElevenLabsAdapter()
             `elevenlabs-${this.nodeId}`}
-}
-            {
-              apiKey: config.apiKey || '',
+
+            { apiKey: config.apiKey || '' }
               baseURL: config.endpoint);
           break;
         default:
           throw new Error(`Unsupported TTS provider: ${config.provider}`);}
       await adapter.initialize();
       this.adapters.set(config.provider, adapter);
-    } catch (error) {
-      console.warn(`Failed to initialize ${config.provider},)}
+ catch (error) {
+      console.warn(`Failed to initialize ${config.provider})}
   adapter:`, error);}
   private _getConfiguredProvider(): string {
     return Array.from(this.adapters.keys())[0] || 'openai-tts';
   private _buildSynthesisOptions(provider: string, params: unknown): unknown {
     const { text, voice, language, speed, pitch, volume, format } = params;
-    switch (provider) {
-  case 'openai-tts':,
+    switch (provider) { case 'openai-tts':
   return {
-  voice: voice || 'alloy',
-  model: 'tts-1',
-  response_format: format === 'wav' ? 'wav' : 'mp3',
-  speed: Math.max(0.25, Math.min(4.0, speed || 1.0)),
+  voice: voice || 'alloy'
+  model: 'tts-1'
+  response_format: format === 'wav' ? 'wav' : 'mp3'
+  speed: Math.max(0.25, Math.min(4.0, speed || 1.0)) }
 };
       case 'elevenlabs':
-        return {
-  voice_id: voice || undefined,
-  output_format: this._mapToElevenLabsFormat(format),
+        return { voice_id: voice || undefined
+  output_format: this._mapToElevenLabsFormat(format)
   voice_settings: {
-  stability: 0.5,
-  similarity_boost: 0.5,
-  style: 0,
-  use_speaker_boost: true,
+  stability: 0.5
+  similarity_boost: 0.5
+  style: 0
+  use_speaker_boost: true }
 };
       default:
         return params;
-  private _mapToElevenLabsFormat(format: string): string {
-  const formatMap: Record<string, string> = {,
-  'mp3': 'mp3_44100_128',
-  'wav': 'pcm_44100',
-  'pcm': 'pcm_22050',
-  'ogg': 'mp3_44100_128' // Fallback to mp3,
+  private _mapToElevenLabsFormat(format: string): string { const formatMap: Record<string, string> = {
+  'mp3': 'mp3_44100_128'
+  'wav': 'pcm_44100'
+  'pcm': 'pcm_22050'
+  'ogg': 'mp3_44100_128' // Fallback to mp3 }
 };
     return formatMap[format.toLowerCase()] || 'mp3_44100_128';
 
@@ -242,11 +232,11 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
       if (!adapter) {
         throw new Error(`No adapter configured for provider: ${provider}`);}
       // Prepare transcription options
-      const options = this._buildTranscriptionOptions(provider, {)
-  language,
-        task,
-        format,
-        temperature,
+      const options = this._buildTranscriptionOptions(provider, { )
+  language
+        task
+        format
+        temperature }
         prompt
       });
       // Perform transcription
@@ -254,35 +244,34 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
       const result = await adapter.process(audioFile, options);
       const processingTime = Date.now() - startTime;
       // Process results
-      const transcription: TranscriptionResult = {,
-  text: result.text,
-  language: result.language,
-  confidence: result.metadata.confidence_score,
-  segments: result.segments,
-  words: result.words,
+      const transcription: TranscriptionResult = { 
+  text: result.text
+  language: result.language
+  confidence: result.metadata.confidence_score
+  segments: result.segments
+  words: result.words
   metadata: {
-  duration: result.metadata.duration,
-  format: 'transcription',
-  sample_rate: 0,
-  channels: 0,
-  size: audioFile instanceof ArrayBuffer ? audioFile.byteLength : audioFile.size || 0,
-  provider,
-  model: result.metadata.model,
-  generation_time: processingTime,
-  cost: result.usage.cost,
+  duration: result.metadata.duration
+  format: 'transcription'
+  sample_rate: 0
+  channels: 0
+  size: audioFile instanceof ArrayBuffer ? audioFile.byteLength : audioFile.size || 0
+  provider
+  model: result.metadata.model
+  generation_time: processingTime
+  cost: result.usage.cost }
 };
-      return {
-  outputs: {
-  text: transcription.text,
-  segments: transcription.segments || [],
-  metadata: transcription.metadata,
-  cost: result.usage.cost,
-},
-  executionTime: processingTime,
-        tokensUsed: { input: 0, output: transcription.text.length },
+      return { outputs: {
+  text: transcription.text
+  segments: transcription.segments || []
+  metadata: transcription.metadata
+  cost: result.usage.cost }
+
+  executionTime: processingTime
+        tokensUsed: { input: 0, output: transcription.text.length }
         cost: result.usage.cost;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Audio transcription failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   async validateInputs(inputs: Record<string, any>): Promise<string> {
 
@@ -302,32 +291,30 @@ export class AudioTranscriptionNode extends AdvancedRuntimeNode {
         case 'whisper':
           adapter = new WhisperAdapter()
             `whisper-${this.nodeId}`}
-}
-            {
-              apiKey: config.apiKey || '',
+
+            { apiKey: config.apiKey || '' }
               baseURL: config.endpoint);
           break;
         default:
           throw new Error(`Unsupported transcription provider: ${config.provider}`);}
       await adapter.initialize();
       this.adapters.set(config.provider, adapter);
-    } catch (error) {
-      console.warn(`Failed to initialize ${config.provider},)}
+ catch (error) {
+      console.warn(`Failed to initialize ${config.provider})}
   adapter:`, error);}
   private _getConfiguredProvider(): string {
     return Array.from(this.adapters.keys())[0] || 'whisper';
   private _buildTranscriptionOptions(provider: string, params: unknown): unknown {
     const { language, task, format, temperature, prompt } = params;
-    switch (provider) {
-  case 'whisper':,
+    switch (provider) { case 'whisper':
   return {
-  model: 'whisper-1',
-  language: language || undefined,
-  task: task || 'transcribe',
-  response_format: format || 'verbose_json',
-  temperature: temperature || 0,
-  prompt: prompt || undefined,
-  timestamp_granularities: ['segment', 'word'],
+  model: 'whisper-1'
+  language: language || undefined
+  task: task || 'transcribe'
+  response_format: format || 'verbose_json'
+  temperature: temperature || 0
+  prompt: prompt || undefined
+  timestamp_granularities: ['segment', 'word'] }
 };
       default:
         return params;
@@ -346,9 +333,7 @@ export class AudioAnalysisNode extends AdvancedRuntimeNode {
       .output('metadata', 'object', 'Complete audio metadata')
       .build();
     super(nodeId, 'audio_analysis', ioSpec);
-  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
-
-  try {
+  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> { try {
   const audioFile = inputs.get('audio_file');
   const analysisType = inputs.getString('analysis_type', 'basic');
   if (!audioFile) {
@@ -358,63 +343,60 @@ export class AudioAnalysisNode extends AdvancedRuntimeNode {
   const processingTime = Date.now() - startTime;
   return {
   outputs: {
-  duration: analysis.duration,
-  format: analysis.format,
-  sample_rate: analysis.sample_rate,
-  channels: analysis.channels,
-  bitrate: analysis.bitrate || 0,
-  size: analysis.size,
-  metadata: analysis,
-},
-  executionTime: processingTime,
-        tokensUsed: { input: 0, output: 0 },
+  duration: analysis.duration
+  format: analysis.format
+  sample_rate: analysis.sample_rate
+  channels: analysis.channels
+  bitrate: analysis.bitrate || 0
+  size: analysis.size
+  metadata: analysis }
+
+  executionTime: processingTime
+        tokensUsed: { input: 0, output: 0 }
         cost: 0;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Audio analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _analyzeAudio(audioFile: Error, analysisType: string): Promise<AudioMetadata> {
-
   // Basic audio file analysis
   const size = audioFile instanceof ArrayBuffer ? audioFile.byteLength : (audioFile.size || 0);
   // Determine format from file type or extension
   let format = 'unknown';
   if (audioFile.type) {
   format = audioFile.type.split('/')[1] || 'unknown'
-  } else if (audioFile.name) {
-  const extension = audioFile.name.split('.').pop()?.toLowerCase();
+ else if (audioFile.name) { const extension = audioFile.name.split('.').pop()?.toLowerCase();
   format = extension || 'unknown';
   // Estimate duration (very rough estimate based on file size)
   const estimatedDuration = this._estimateDuration(size, format);
   // Default audio properties
-  const metadata: AudioMetadata = {,
-  duration: estimatedDuration,
-  format,
-  sample_rate: 44100, // Default assumption,
-  channels: 2, // Default stereo,
-  size,
-  provider: 'local',
-  model: 'analysis',
-  generation_time: 0,
-  cost: 0,
+  const metadata: AudioMetadata = {
+  duration: estimatedDuration
+  format
+  sample_rate: 44100, // Default assumption
+  channels: 2, // Default stereo
+  size
+  provider: 'local'
+  model: 'analysis'
+  generation_time: 0
+  cost: 0 }
 };
     // For more detailed analysis, we would use actual audio analysis libraries
-    if (analysisType === 'detailed') {
-  // In a real implementation, this would use libraries like:,
+    if (analysisType === 'detailed') { // In a real implementation, this would use libraries like:
   // - Web Audio API for browser environments
   // - FFmpeg or similar for server environments
   // - Audio analysis libraries for extracting features
   metadata.bitrate = this._estimateBitrate(size, estimatedDuration);
   return metadata;
-  private _estimateDuration(size: number, format: string): number {,
+  private _estimateDuration(size: number, format: string): number {
   // Very rough estimation based on typical compression rates
-  const compressionRates: Record<string, number> = {,
-  'mp3': 128, // kbps,
-  'wav': 1411, // kbps (uncompressed),
-  'flac': 500, // kbps (lossless),
-  'ogg': 128, // kbps,
-  'aac': 128, // kbps,
-  'm4a': 128, // kbps,
-  'unknown': 128 // Default assumption,
+  const compressionRates: Record<string, number> = {
+  'mp3': 128, // kbps
+  'wav': 1411, // kbps (uncompressed)
+  'flac': 500, // kbps (lossless)
+  'ogg': 128, // kbps
+  'aac': 128, // kbps
+  'm4a': 128, // kbps
+  'unknown': 128 // Default assumption }
 };
     const bitrate = compressionRates[format] || 128;
     const durationSeconds = (size * 8) / (bitrate * 1000);
@@ -441,9 +423,7 @@ export class AudioConversionNode extends AdvancedRuntimeNode {
       .output('metadata', 'object', 'Conversion metadata')
       .build();
     super(nodeId, 'audio_conversion', ioSpec);
-  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> {
-
-    try {
+  async executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult> { try {
       const audioFile = inputs.get('audio_file');
       const targetFormat = inputs.getString('target_format');
       const targetBitrate = inputs.getNumber('target_bitrate');
@@ -455,32 +435,30 @@ export class AudioConversionNode extends AdvancedRuntimeNode {
       // For now, this is a placeholder implementation
       // In a real implementation, this would use audio processing libraries
       const convertedAudio = await this._convertAudio(audioFile, {)
-  targetFormat,
-        targetBitrate,
-        targetSampleRate,
+  targetFormat
+        targetBitrate
+        targetSampleRate }
         normalize
       });
       const processingTime = Date.now() - startTime;
-      const metadata = {
-  originalFormat: this._getFormatFromFile(audioFile),
-  targetFormat,
-  processingTime,
-  originalSize: audioFile instanceof ArrayBuffer ? audioFile.byteLength : (audioFile.size || 0),
-  convertedSize: convertedAudio.byteLength,
-  compressionRatio: audioFile instanceof ArrayBuffer ,
+      const metadata = { originalFormat: this._getFormatFromFile(audioFile)
+  targetFormat
+  processingTime
+  originalSize: audioFile instanceof ArrayBuffer ? audioFile.byteLength : (audioFile.size || 0)
+  convertedSize: convertedAudio.byteLength
+  compressionRatio: audioFile instanceof ArrayBuffer 
   ? audioFile.byteLength / convertedAudio.byteLength
-  : (audioFile.size || 0) / convertedAudio.byteLength,
+  : (audioFile.size || 0) / convertedAudio.byteLength }
 };
-      return {
-  outputs: {
-  converted_audio: convertedAudio,
+      return { outputs: {
+  converted_audio: convertedAudio }
   metadata
-},
-  executionTime: processingTime,
-        tokensUsed: { input: 0, output: 0 },
+
+  executionTime: processingTime
+        tokensUsed: { input: 0, output: 0 }
         cost: 0;
   };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Audio conversion failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   private async _convertAudio(audioFile: Error, options: unknown): Promise<ArrayBuffer> {
 

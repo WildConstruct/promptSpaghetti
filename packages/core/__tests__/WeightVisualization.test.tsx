@@ -44,7 +44,7 @@ describe('WeightVisualization', () => {
     });
     it('handles zero weights', () => {
       const zeroWeightOptions: WeightControlOption = [
-        { id: '1', text: 'Option A', weight: 0 },
+        { id: '1', text: 'Option A', weight: 0 }
         { id: '2', text: 'Option B', weight: 0 }
       ];
       render();
@@ -78,8 +78,8 @@ describe('WeightVisualization', () => {
     });
     it('skips labels for small slices', () => {
       const smallSliceOptions: WeightControlOption = [
-        { id: '1', text: 'Major Option', weight: 95 },
-        { id: '2', text: 'Minor Option', weight: 5 },
+        { id: '1', text: 'Major Option', weight: 95 }
+        { id: '2', text: 'Minor Option', weight: 5 }
         { id: '3', text: 'Tiny Option', weight: 1 } // <5%, should not show label
       ];
       render();
@@ -134,7 +134,7 @@ describe('WeightVisualization', () => {
     });
     it('truncates long option names', () => {
       const longNameOptions: WeightControlOption = [
-        { id: '1', text: 'Very Long Option Name That Should Be Truncated', weight: 50 },
+        { id: '1', text: 'Very Long Option Name That Should Be Truncated', weight: 50 }
         { id: '2', text: 'Short', weight: 50 }
       ];
       render();
@@ -152,7 +152,7 @@ describe('WeightVisualization', () => {
     });
     it('handles zero heights correctly', () => {
       const zeroWeightOptions: WeightControlOption = [
-        { id: '1', text: 'Option A', weight: 0 },
+        { id: '1', text: 'Option A', weight: 0 }
         { id: '2', text: 'Option B', weight: 100 }
       ];
       render();
@@ -192,10 +192,10 @@ describe('WeightVisualization', () => {
     });
     it('cycles through color palette correctly', () => {
       // Test with more options than available colors
-      const manyOptions: WeightControlOption = Array.from({ length: 15 }, (_, i) => ({)
-  id: String(i),
+      const manyOptions: WeightControlOption = Array.from({ length: 15 }, (_, i) => ({ )
+  id: String(i) }
         text: `Option ${i}`}
-},
+
   weight: 10;
   }));
       render();
@@ -253,9 +253,9 @@ describe('WeightVisualization', () => {
 });
 describe('WeightLegend', () => {
   const mockOptions: WeightControlOption = [
-    { id: '1', text: 'Dragon Attack', weight: 40 },
-    { id: '2', text: 'Peaceful Negotiation', weight: 30 },
-    { id: '3', text: 'Strategic Retreat', weight: 20 },
+    { id: '1', text: 'Dragon Attack', weight: 40 }
+    { id: '2', text: 'Peaceful Negotiation', weight: 30 }
+    { id: '3', text: 'Strategic Retreat', weight: 20 }
     { id: '4', text: 'Magic Spell', weight: 10 }
   ];
   it('renders legend with correct percentages', () => {
@@ -271,7 +271,7 @@ describe('WeightLegend', () => {
   });
   it('handles zero total weight', () => {
     const zeroWeightOptions: WeightControlOption = [
-      { id: '1', text: 'Option A', weight: 0 },
+      { id: '1', text: 'Option A', weight: 0 }
       { id: '2', text: 'Option B', weight: 0 }
     ];
     render(<WeightLegend options={zeroWeightOptions} />);
@@ -301,8 +301,8 @@ describe('WeightLegend', () => {
   });
   it('rounds percentages correctly', () => {
     const preciseOptions: WeightControlOption = [
-      { id: '1', text: 'Option A', weight: 33.33 },
-      { id: '2', text: 'Option B', weight: 33.33 },
+      { id: '1', text: 'Option A', weight: 33.33 }
+      { id: '2', text: 'Option B', weight: 33.33 }
       { id: '3', text: 'Option C', weight: 33.34 }
     ];
     render(<WeightLegend options={preciseOptions} />);
@@ -312,8 +312,8 @@ describe('WeightLegend', () => {
 });
 describe('Integration Tests', () => {
   const mockOptions: WeightControlOption = [
-    { id: '1', text: 'Fire Spell', weight: 45 },
-    { id: '2', text: 'Ice Spell', weight: 35 },
+    { id: '1', text: 'Fire Spell', weight: 45 }
+    { id: '2', text: 'Ice Spell', weight: 35 }
     { id: '3', text: 'Lightning Spell', weight: 20 }
   ];
   it('visualization and legend show consistent data', () => {
@@ -387,8 +387,7 @@ describe('Integration Tests', () => {
     const svg = screen.getByRole('img', { hidden: true });
     expect(svg).toBeInTheDocument();
     // All text should be readable
-    mockOptions.forEach(option => {)
-  expect(screen.getByText(option.text)).toBeInTheDocument();
-    });
+    mockOptions.forEach(option => { )
+  expect(screen.getByText(option.text)).toBeInTheDocument() });
   });
 });

@@ -6,6 +6,7 @@ import React from 'react';
 import { Comment } from '../../types/workspace';
 
 }
+}
 interface CommentItemProps {
     comment: Comment;
     userId: string;
@@ -21,4 +22,5 @@ interface CommentItemProps {
 export declare const CommentItem: React.FC<CommentItemProps>;
 export default CommentItem;
 //# sourceMappingURL=CommentItem.d.ts.map
+}
 }

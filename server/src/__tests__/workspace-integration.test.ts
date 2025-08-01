@@ -14,7 +14,7 @@ import {
   CreateProject, 
   CreateUser,
   ROLE_PERMISSIONS
-} from '../database/workspace-models';
+ from '../database/workspace-models';
 
 // Mock database setup
 const mockDb = {
@@ -25,7 +25,7 @@ const mockDb = {
   }),
   exec: jest.fn<unknown[], unknown>(),
   close: jest.fn<unknown[], unknown>()
-} as unknown as Database;
+ as unknown as Database;
 
 // Mock request/reply objects
 const createMockRequest = (user?: unknown, params?: unknown, body?: unknown, query?: unknown) => ({
@@ -35,8 +35,8 @@ const createMockRequest = (user?: unknown, params?: unknown, body?: unknown, que
   query: query || {},
   headers: {
     authorization: user ? `Bearer mock-token-${user.id}` : undefined
-  }
-} as any);
+
+ as any);
 
 const createMockReply = () => {
   const reply = {
@@ -94,7 +94,7 @@ describe('Workspace Integration Tests', () => {
         userId: mockUser.id,
         email: mockUser.email,
         sessionId: 'session-123'
-      } as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown);
     });
 
     it('should authenticate user with valid JWT token', async () => {
@@ -158,7 +158,7 @@ describe('Workspace Integration Tests', () => {
           is_system_role: true,
           created_at: new Date( as unknown as unknown),
           updated_at: new Date()
-        }]
+]
       });
     });
 
@@ -459,7 +459,7 @@ describe('Workspace Integration Tests', () => {
           created_at: new Date( as unknown as unknown),
           actor_name: 'Test User',
           actor_avatar: undefined
-        }],
+],
         pagination: {
           page: 1,
           limit: 20,
@@ -467,7 +467,7 @@ describe('Workspace Integration Tests', () => {
           total_pages: 1,
           has_next: false,
           has_prev: false
-        }
+
       });
     });
 

@@ -73,7 +73,7 @@ describe('PaymentAnalyticsCollector', () => {
               amount: 2000,
               currency: 'usd',
               country: 'US'
-  }
+
   }
         );
 
@@ -142,8 +142,7 @@ describe('PaymentAnalyticsCollector', () => {
               fees: 60,
               netAmount: 1940,
               riskScore: 25
-  }
-  }
+
         );
       });
 
@@ -213,8 +212,7 @@ describe('PaymentAnalyticsCollector', () => {
               failureReason: 'Card was declined',
               errorCode: 'card_declined',
               isRetryable: true
-  }
-  }
+
         );
       });
 
@@ -244,7 +242,7 @@ describe('PaymentAnalyticsCollector', () => {
           expect.objectContaining({
             metadata: expect.objectContaining({
               isRetryable: true
-  }
+
   }
         );
 
@@ -260,7 +258,7 @@ describe('PaymentAnalyticsCollector', () => {
           expect.objectContaining({
             metadata: expect.objectContaining({
               isRetryable: false
-  }
+
   }
         );
       });
@@ -278,8 +276,8 @@ describe('PaymentAnalyticsCollector', () => {
               id: 'pi_test_123',
               amount: 2000,
               currency: 'usd'
-            }
-          }
+
+
         };
 
         await collector.processWebhook(
@@ -349,7 +347,7 @@ describe('PaymentAnalyticsCollector', () => {
             p95_processing_time: 800,
             total_volume: 200000,
             total_fees: 6000
-          }
+
         ];
 
         mockDbConnection.query.mockResolvedValue(mockResults as unknown as unknown);
@@ -375,7 +373,7 @@ describe('PaymentAnalyticsCollector', () => {
             totalVolume: 200000,
             totalFees: 6000,
             averageFeeRate: 3
-  }
+
         );
       });
 
@@ -389,7 +387,7 @@ describe('PaymentAnalyticsCollector', () => {
             p95_processing_time: 800,
             total_volume: 200000,
             total_fees: 6000
-          }
+
         ];
 
         mockDbConnection.query.mockResolvedValue(mockResults as unknown as unknown);
@@ -416,7 +414,7 @@ describe('PaymentAnalyticsCollector', () => {
             successful_payments: 475,
             avg_processing_time: 300,
             total_volume: 100000
-          }
+
         ];
 
         mockDbConnection.query.mockResolvedValue(mockResults as unknown as unknown);
@@ -451,13 +449,13 @@ describe('PaymentAnalyticsCollector', () => {
             description: 'Card was declined',
             frequency: 150,
             retry_success_rate: 0.45
-  }
+
           {
             failure_code: 'insufficient_funds',
             description: 'Insufficient funds',
             frequency: 80,
             retry_success_rate: 0.25
-          }
+
         ];
 
         mockDbConnection.query.mockResolvedValue(mockResults as unknown as unknown);
@@ -482,7 +480,7 @@ describe('PaymentAnalyticsCollector', () => {
             suggestedAction: 'Ask customer to try a different payment method',
             isRetryable: true,
             averageRetrySuccess: 45
-  }
+
         );
       });
     });
@@ -667,8 +665,7 @@ describe('PaymentAnalyticsCollector', () => {
             // Optional fields should be undefined
             country: undefined,
             userAgent: undefined
-  }
-  }
+
       );
     });
   });
@@ -693,7 +690,7 @@ describe('PaymentAnalyticsCollector Integration', () => {
       mockDbConnection,
       {
         stripeSecretKey: 'sk_test_123'
-      }
+
     );
   });
 
@@ -737,7 +734,7 @@ describe('PaymentAnalyticsCollector Integration', () => {
     expect(mockAnalyticsCollector.track).toHaveBeenNthCalledWith(2,
       expect.objectContaining({
         type: PaymentAnalyticsEventType.PAYMENT_SUCCESS
-  }
+
     );
 
     // Verify database events were stored

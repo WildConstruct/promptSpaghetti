@@ -2,6 +2,7 @@ import React from 'react';
 import { ZodSchema } from 'zod';
 
 }
+}
 export interface PropertiesSectionProps {
     node: Error;
     schema: ZodSchema<unknown>;
@@ -10,4 +11,5 @@ export interface PropertiesSectionProps {
 
 export declare const PropertiesSection: React.FC<PropertiesSectionProps>;
 //# sourceMappingURL=PropertiesSection.d.ts.map
+}
 }

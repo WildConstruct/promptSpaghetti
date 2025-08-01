@@ -5,8 +5,7 @@
  * Provides conflict-free operations with automatic synchronization
  */
 import * as Y from 'yjs';
-import { 
-  MutationOperation,
+import { MutationOperation,
   NodeAddOperation,
   NodeUpdateOperation,
   NodeRemoveOperation,
@@ -14,7 +13,7 @@ import {
   EdgeUpdateOperation,
   EdgeRemoveOperation,
   ParameterUpdateOperation,
-  GraphEdge,
+  GraphEdge }
   ConflictType
 } from './GraphMutations';
 import { Graph } from '../graphSchema';
@@ -23,30 +22,28 @@ import { Graph } from '../graphSchema';
  */
 
 }
-export interface GraphNodeCRDT {
-    id: string;
+}
+export interface GraphNodeCRDT { id: string;
     type: string;
     position: {
         x: number;
-        y: number;
+        y: number }
 }
     };
     data: Record<string, any>;
     inputs: string[];
-    metadata: {
-        version: number;
+    metadata: { version: number;
         lastModified: string;
         modifiedBy: string;
         created: string;
-        createdBy: string;
-    };
+        createdBy: string };
 /**
  * CRDT representation of a graph edge
  */
 
 }
-export interface GraphEdgeCRDT {
-    id: string;
+}
+export interface GraphEdgeCRDT { id: string;
     sourceNodeId: string;
     targetNodeId: string;
     sourcePort?: string;
@@ -58,7 +55,7 @@ export interface GraphEdgeCRDT {
         modifiedBy: string;
         created: string;
         createdBy: string;
-        [key: string]: any;
+        [key: string]: any }
 }
     };
 /**
@@ -66,8 +63,8 @@ export interface GraphEdgeCRDT {
  */
 
 }
-export interface OperationRecord {
-    operationId: string;
+}
+export interface OperationRecord { operationId: string;
     type: string;
     nodeId?: string;
     edgeId?: string;
@@ -195,7 +192,7 @@ export declare class GraphCRDT {
     setEventHandlers(handlers: {)
         onOperationApplied?: (operation: MutationOperation) => void;
         onConflictDetected?: (conflictType: ConflictType, operations: MutationOperation[]) => void;
-        onStateChanged?: (documentId: string) => void;
+        onStateChanged?: (documentId: string) => void }
 }
     }): void;
     /**

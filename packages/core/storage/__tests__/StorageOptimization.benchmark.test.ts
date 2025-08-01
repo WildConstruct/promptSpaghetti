@@ -20,7 +20,7 @@ describe('Storage Optimization Benchmarks', () => {
 },
   type: 'WeightedChoice',
         position: { x: (i % 50) * 100, y: Math.floor(i / 50) * 100 },
-        data: {
+        data: {,
   label: `Node ${i}`}
 },
   type: 'WeightedChoice',
@@ -37,7 +37,7 @@ describe('Storage Optimization Benchmarks', () => {
 },
   target: `node-${i+1}`}
 },
-  type: 'default'
+  type: 'default';
   });
       // Add some branching connections
       if (i % 10 === 0 && i + 10 < 1000) {
@@ -48,7 +48,7 @@ describe('Storage Optimization Benchmarks', () => {
 },
   target: `node-${i+10}`}
 },
-  type: 'default'
+  type: 'default';
   });
   });
   describe('Node Lookup Performance', () => {
@@ -74,33 +74,28 @@ describe('Storage Optimization Benchmarks', () => {
       // Map-based should be significantly faster
       expect(mapBasedTime).toBeLessThan(arrayBasedTime);
     });
-    it('should demonstrate efficient node filtering by type', () => {
-      const storage = new OptimizedGraphStorage(largeGraphNodes, largeGraphEdges);
+    it('should demonstrate efficient node filtering by type', () => { const storage = new OptimizedGraphStorage(largeGraphNodes, largeGraphEdges);
       const indexedTime = measureTime(() => {
         for (let i = 0; i < 100; i++) {
           const weightedNodes = storage.getNodesByType('WeightedChoice');
-          expect(weightedNodes.length).toBe(1000);
-      });
-      const manualFilterTime = measureTime(() => {
-        for (let i = 0; i < 100; i++) {
+          expect(weightedNodes.length).toBe(1000) });
+      const manualFilterTime = measureTime(() => { for (let i = 0; i < 100; i++) {
           const weightedNodes = largeGraphNodes.filter(n => n.type === 'WeightedChoice');
-          expect(weightedNodes.length).toBe(1000);
-      });
+          expect(weightedNodes.length).toBe(1000) });
       console.log(`Indexed type lookup: ${indexedTime}ms`);}
       console.log(`Manual filter: ${manualFilterTime}ms`);}
       console.log(`Type filtering improvement: ${Math.round(manualFilterTime / indexedTime)}x faster`);}
       expect(indexedTime).toBeLessThan(manualFilterTime);
     });
   });
-  describe('Memory Usage Optimization', () => {
-  it('should demonstrate memory efficiency of hybrid storage', () => {
+  describe('Memory Usage Optimization', () => { it('should demonstrate memory efficiency of hybrid storage', () => {
   const storage = new OptimizedGraphStorage(largeGraphNodes, largeGraphEdges);
   const stats = storage.getStats();
-  console.log('Optimized storage stats:', {,)
+  console.log('Optimized storage stats:', {),
   nodeCount: stats.nodeCount,
   edgeCount: stats.edgeCount,
   estimatedMemoryMB: Math.round(stats.memoryUsage.estimatedBytes / 1024 / 1024),
-  connectivity: stats.connectivityStats,
+  connectivity: stats.connectivityStats }
 });
       // Should efficiently handle large graphs
       expect(stats.nodeCount).toBe(1000);
@@ -120,29 +115,24 @@ describe('Storage Optimization Benchmarks', () => {
       console.log(`Storage format size: ${Math.round(regularSize / 1024)}KB`);}
     });
   });
-  describe('Serialization Performance', () => {
-  it('should demonstrate serialization optimization', async () => {
+  describe('Serialization Performance', () => { it('should demonstrate serialization optimization', async () => {
   const testData = {
-  metadata: {
+  metadata: {,
   name: 'Large Test Graph',
   version: '1.0.0',
   createdAt: new Date().toISOString(),
   lastModified: new Date().toISOString(),
-  fileFormatVersion: '2.0.0',
+  fileFormatVersion: '2.0.0' }
 },
   graph: { nodes: largeGraphNodes, edges: largeGraphEdges },
         settings: {}
       };
       // Test pretty-printed serialization (old way)
-      const prettyTime = measureTime(() => {
-        const pretty = JSON.stringify(testData, null, 2);
-        return pretty;
-      });
+      const prettyTime = measureTime(() => { const pretty = JSON.stringify(testData, null, 2);
+        return pretty });
       // Test compact serialization (optimized)
-      const compactTime = measureTime(() => {
-        const compact = JSON.stringify(testData);
-        return compact;
-      });
+      const compactTime = measureTime(() => { const compact = JSON.stringify(testData);
+        return compact });
       // Test advanced serialization
       const serializer = new OptimizedSerializer();
       const advancedTime = await measureTimeAsync(async () => {
@@ -192,14 +182,13 @@ describe('Storage Optimization Benchmarks', () => {
       expect(metrics.cacheHits).toBeGreaterThan(0);
     });
   });
-  describe('Complex Graph Operations', () => {
-    it('should handle bulk operations efficiently', () => {
+  describe('Complex Graph Operations', () => { it('should handle bulk operations efficiently', () => {
       const storage = new OptimizedGraphStorage(largeGraphNodes, largeGraphEdges);
       const bulkUpdateTime = measureTime(() => {
         // Update 100 nodes at once
         for (let i = 0; i < 100; i++) {
           const updates = {
-            data: {
+            data: { }
   label: `Updated Node ${i}`}
 },
   timestamp: Date.now();
@@ -236,15 +225,14 @@ describe('Storage Optimization Benchmarks', () => {
         const testEdges = largeGraphEdges.slice(0, 100);
         return cache.getOptimizedGraph(testNodes, testEdges, `temp-graph-${i}`);}
       });
-      Promise.all(promises).then(() => {
-  const midStats = cache.getSizeStats();
+      Promise.all(promises).then(() => { const midStats = cache.getSizeStats();
   // Trigger cleanup
   cache.cleanupIfNeeded();
   const finalStats = cache.getSizeStats();
-  console.log('Memory management stats:', {,)
+  console.log('Memory management stats:', {),
   initial: initialStats,
   mid: midStats,
-  final: finalStats,
+  final: finalStats }
 });
         // Should manage memory efficiently
         expect(finalStats.estimatedMemoryMB).toBeLessThan(midStats.estimatedMemoryMB * 2);

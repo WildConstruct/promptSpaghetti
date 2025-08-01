@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useRef } from 'react';
 import { FiUpload, FiX, FiCheck, FiAlertCircle, FiInfo } from 'react-icons/fi';
-const SUPPORTED_FORMATS = [];
-'application/json',
+const SUPPORTED_FORMATS = [
+    'application/json',
     'text/yaml',
     'application/x-yaml',
     'text/yml',
@@ -10,8 +10,8 @@ const SUPPORTED_FORMATS = [];
     'text/xml',
     'text/csv',
     'text/markdown',
-    'application/zip';
-;
+    'application/zip'
+];
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB;
 export const ImportDialog = ({
     onClose,

@@ -17,8 +17,8 @@ import { promisify } from 'util';
 // Evidence Versioning Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface EvidenceVersionConfig {
   enabled: boolean;
   immutableHistory: boolean;
@@ -28,8 +28,9 @@ export interface EvidenceVersionConfig {
     enabled: boolean;
     algorithm: 'sha256' | 'sha512' | 'blake2b';
     chainValidation: boolean;
-}
-}
+
+
+
   };
   retention: {
     enabled: boolean;
@@ -42,10 +43,10 @@ export interface EvidenceVersionConfig {
     conflictResolution: 'last_writer_wins' | 'merge' | 'manual';
     distributedNodes: string[];
   };
-}
 
-}
-}
+
+
+
 export interface EvidenceVersion {
   id: string;
   evidenceId: string;
@@ -90,12 +91,13 @@ export interface EvidenceVersion {
   storageLocation: string;
   compressionType?: 'gzip' | 'brotli' | 'lz4';
   archivalStatus: 'active' | 'compressed' | 'archived' | 'deleted';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceVersionDiff {
   fromVersion: number;
   toVersion: number;
@@ -105,8 +107,9 @@ export interface EvidenceVersionDiff {
       added: string[];
       removed: string[];
       modified: string[];
-}
-}
+
+
+
     };
     metadata?: {
       added: Record<string, any>;
@@ -124,10 +127,10 @@ export interface EvidenceVersionDiff {
     metadataFieldsChanged: number;
     significanceScore: number; // 0-1 indicating how significant the change is
   };
-}
 
-}
-}
+
+
+
 export interface EvidenceVersionChain {
   evidenceId: string;
   versions: EvidenceVersion[];
@@ -137,8 +140,9 @@ export interface EvidenceVersionChain {
     brokenLinks: number[];
     hashMismatches: number[];
     lastVerified: Date;
-}
-}
+
+
+
   };
   statistics: {
     totalVersions: number;
@@ -147,10 +151,10 @@ export interface EvidenceVersionChain {
     newestVersion: Date;
     averageVersionSize: number;
   };
-}
 
-}
-}
+
+
+
 export interface EvidenceVersionBranch {
   name: string;
   baseVersion: number;
@@ -159,12 +163,13 @@ export interface EvidenceVersionBranch {
   createdBy: string;
   createdAt: Date;
   status: 'active' | 'merged' | 'abandoned';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VersionConflict {
   evidenceId: string;
   conflictType: 'concurrent_modification' | 'classification_mismatch' | 'integrity_failure';
@@ -173,21 +178,23 @@ export interface VersionConflict {
   conflictDetails: Record<string, any>;
   resolutionSuggestions: string[];
   timestamp: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VersionMergeResult {
   success: boolean;
   mergedVersion?: EvidenceVersion;
   conflicts: VersionConflict[];
   warnings: string[];
   changes: EvidenceVersionDiff;
-}
-}
-}
+
+
+
+
 
 export type VersionChangeType = 
   | 'initial_creation'
@@ -220,7 +227,7 @@ export class EvidenceVersioningService {
     );
     
     this.initializeService();
-  }
+
 
   // =============================================================================
   // Core Versioning Operations
@@ -257,7 +264,7 @@ export class EvidenceVersioningService {
           source: 'evidence_versioning_service'
         });
         classification = classificationResult.classification;
-      }
+
 
       const version: EvidenceVersion = {
         id: this.generateVersionId(),
@@ -304,7 +311,7 @@ export class EvidenceVersioningService {
       if (version.encrypted) {
         version.content = await this.encryptContent(content);
         version.signature = await this.signContent(version.content, createdBy);
-      }
+
 
       // Store version
       await this.storeVersion(version);
@@ -318,15 +325,14 @@ export class EvidenceVersioningService {
           createdBy,
           classification,
           size: version.size
-        }
+
       });
 
       return version;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to create evidence: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Create new version of existing evidence
@@ -338,7 +344,7 @@ export class EvidenceVersioningService {
       metadata?: Record<string, any>;
       classification?: DataClassification;
       filename?: string;
-  }
+
     modifiedBy: string,
     changeReason: string,
     options?: {
@@ -353,7 +359,7 @@ export class EvidenceVersioningService {
       const currentVersion = await this.getLatestVersion(evidenceId, options?.branchName);
       if (!currentVersion) {
         throw new Error(`Evidence not found: ${evidenceId}`);
-      }
+
 
       // Determine what changed
       const hasContentChange = updates.content !== undefined && updates.content !== currentVersion.content;
@@ -364,7 +370,7 @@ export class EvidenceVersioningService {
 
       if (!hasContentChange && !hasMetadataChange && !hasClassificationChange) {
         throw new Error('No changes detected - version not created');
-      }
+
 
       // Create new version
       const newVersionNumber = options?.forceVersion || (currentVersion.version + 1);
@@ -384,9 +390,9 @@ export class EvidenceVersioningService {
           source: 'evidence_versioning_service'
         });
         newClassification = classificationResult.classification;
-      } else if (!newClassification) {
+ else if (!newClassification) {
         newClassification = currentVersion.classification;
-      }
+
 
       const newVersion: EvidenceVersion = {
         id: this.generateVersionId(),
@@ -437,7 +443,7 @@ export class EvidenceVersioningService {
       if (newVersion.encrypted) {
         newVersion.content = await this.encryptContent(newContent);
         newVersion.signature = await this.signContent(newVersion.content, modifiedBy);
-      }
+
 
       // Store new version
       await this.storeVersion(newVersion);
@@ -452,15 +458,14 @@ export class EvidenceVersioningService {
           modifiedBy,
           changeType: newVersion.changeType,
           sizeChange: newVersion.size - currentVersion.size
-        }
+
       });
 
       return newVersion;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to update evidence: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Get specific version of evidence
@@ -475,21 +480,20 @@ export class EvidenceVersioningService {
 
       if (result.length === 0) {
         return null;
-      }
+
 
       const versionData = this.deserializeVersion(result[0]);
       
       // Decrypt content if encrypted
       if (versionData.encrypted) {
         versionData.content = await this.decryptContent(versionData.content);
-      }
+
 
       return versionData;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get evidence version: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Get latest version of evidence
@@ -506,20 +510,19 @@ export class EvidenceVersioningService {
 
       if (result.length === 0) {
         return null;
-      }
+
 
       const versionData = this.deserializeVersion(result[0]);
       
       if (versionData.encrypted) {
         versionData.content = await this.decryptContent(versionData.content);
-      }
+
 
       return versionData;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get latest evidence version: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Get complete version history for evidence
@@ -537,7 +540,7 @@ export class EvidenceVersioningService {
 
       if (!options?.includeBranches) {
         query += ' AND branch_name IS NULL';
-      }
+
 
       query += ' ORDER BY version DESC';
 
@@ -548,8 +551,8 @@ export class EvidenceVersioningService {
         if (options?.offset) {
           query += ' OFFSET ?';
           params.push(options.offset);
-        }
-      }
+
+
 
       const result = await this.databaseService.query(query, params);
       const versions: EvidenceVersion[] = [];
@@ -560,19 +563,18 @@ export class EvidenceVersioningService {
         // Optionally exclude content for performance
         if (!options?.includeContent) {
           versionData.content = '';
-        } else if (versionData.encrypted) {
+ else if (versionData.encrypted) {
           versionData.content = await this.decryptContent(versionData.content);
-        }
+
         
         versions.push(versionData);
-      }
+
 
       return versions;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get version history: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Generate diff between two versions
@@ -587,14 +589,13 @@ export class EvidenceVersioningService {
 
       if (!from || !to) {
         throw new Error('One or both versions not found');
-      }
+
 
       return this.computeVersionDiff(from, to);
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to generate diff: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Verify integrity of version chain
@@ -604,7 +605,7 @@ export class EvidenceVersioningService {
     issues: string[];
     brokenLinks: number[];
     hashMismatches: number[];
-  }> {
+> {
 
     try {
       const versions = await this.getVersionHistory(evidenceId, { 
@@ -627,7 +628,7 @@ export class EvidenceVersioningService {
         if (version.contentHash !== expectedContentHash) {
           hashMismatches.push(version.version);
           issues.push(`Version ${version.version}: Content hash mismatch`);
-        }
+
 
         // Verify chain linkage
         if (i > 0) {
@@ -635,8 +636,8 @@ export class EvidenceVersioningService {
           if (version.previousVersionHash !== previousVersion.chainHash) {
             brokenLinks.push(version.version);
             issues.push(`Version ${version.version}: Broken link to previous version`);
-          }
-        }
+
+
 
         // Verify chain hash
         const expectedChainHash = this.generateChainHash(
@@ -646,8 +647,8 @@ export class EvidenceVersioningService {
         if (version.chainHash !== expectedChainHash) {
           hashMismatches.push(version.version);
           issues.push(`Version ${version.version}: Chain hash mismatch`);
-        }
-      }
+
+
 
       return {
         valid: issues.length === 0,
@@ -655,11 +656,10 @@ export class EvidenceVersioningService {
         brokenLinks,
         hashMismatches
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to verify integrity: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Create branch from specific version
@@ -677,13 +677,13 @@ export class EvidenceVersioningService {
       const baseVersionData = await this.getVersion(evidenceId, baseVersion);
       if (!baseVersionData) {
         throw new Error(`Base version ${baseVersion} not found`);
-      }
+
 
       // Check if branch name already exists
       const existingBranch = await this.getBranch(evidenceId, branchName);
       if (existingBranch) {
         throw new Error(`Branch '${branchName}' already exists`);
-      }
+
 
       const branch: EvidenceVersionBranch = {
         name: branchName,
@@ -704,15 +704,14 @@ export class EvidenceVersioningService {
           branchName,
           baseVersion,
           createdBy
-        }
+
       });
 
       return branch;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to create branch: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   /**
    * Rollback to previous version
@@ -728,7 +727,7 @@ export class EvidenceVersioningService {
       const targetVersionData = await this.getVersion(evidenceId, targetVersion);
       if (!targetVersionData) {
         throw new Error(`Target version ${targetVersion} not found`);
-      }
+
 
       // Create new version that's a copy of the target version
       const rollbackVersion = await this.updateEvidence(
@@ -738,7 +737,7 @@ export class EvidenceVersioningService {
           metadata: targetVersionData.metadata,
           classification: targetVersionData.classification,
           filename: targetVersionData.filename
-  }
+
         rolledBackBy,
         `Rollback to version ${targetVersion}: ${reason}`
       );
@@ -748,11 +747,10 @@ export class EvidenceVersioningService {
       await this.updateVersionMetadata(rollbackVersion.id, { changeType: 'rollback' });
 
       return rollbackVersion;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to rollback: ${error instanceof Error ? error.message : String(error)}`);
-    }
-  }
+
+
 
   // =============================================================================
   // Private Helper Methods
@@ -779,7 +777,7 @@ export class EvidenceVersioningService {
       version.retentionExpiry?.toISOString(), version.legalHold, JSON.stringify(version.complianceFrameworks), JSON.stringify(version.auditRequirements),
       version.storageLocation, version.compressionType, version.archivalStatus
     ]);
-  }
+
 
   private async storeBranch(evidenceId: string, branch: EvidenceVersionBranch): Promise<void> {
 
@@ -791,7 +789,7 @@ export class EvidenceVersioningService {
       evidenceId, branch.name, branch.baseVersion, branch.headVersion, 
       branch.description, branch.createdBy, branch.createdAt.toISOString(), branch.status
     ]);
-  }
+
 
   private async getBranch(evidenceId: string, branchName: string): Promise<EvidenceVersionBranch | null> {
 
@@ -800,7 +798,7 @@ export class EvidenceVersioningService {
     `, [evidenceId, branchName]);
 
     return result.length > 0 ? this.deserializeBranch(result[0]) : null;
-  }
+
 
   private deserializeVersion(row: unknown): EvidenceVersion {
     return {
@@ -836,7 +834,7 @@ export class EvidenceVersioningService {
       compressionType: row.compression_type,
       archivalStatus: row.archival_status
     };
-  }
+
 
   private deserializeBranch(row: unknown): EvidenceVersionBranch {
     return {
@@ -848,25 +846,25 @@ export class EvidenceVersioningService {
       createdAt: new Date(row.created_at),
       status: row.status
     };
-  }
+
 
   private generateVersionId(): string {
     return `ev_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateContentHash(content: string): string {
     return crypto.createHash('sha256').update(content, 'utf8').digest('hex');
-  }
+
 
   private generateChainHash(contentHash: string, previousChainHash?: string): string {
     const data = previousChainHash ? `${contentHash}:${previousChainHash}` : contentHash;
     return crypto.createHash('sha256').update(data, 'utf8').digest('hex');
-  }
+
 
   private generateStorageLocation(evidenceId: string, version: number): string {
     const hash = crypto.createHash('md5').update(evidenceId).digest('hex');
     return `/evidence/${hash.substr(0, 2)}/${hash.substr(2, 2)}/${evidenceId}/v${version}`;
-  }
+
 
   private async encryptContent(content: string): Promise<string> {
 
@@ -887,7 +885,7 @@ export class EvidenceVersioningService {
       iv: iv.toString('base64'),
       authTag: authTag.toString('base64')
     });
-  }
+
 
   private async decryptContent(encryptedContent: string): Promise<string> {
 
@@ -905,16 +903,16 @@ export class EvidenceVersioningService {
       decrypted += decipher.final('utf8');
       
       return decrypted;
-    } catch (error) {
+ catch (error) {
       throw new Error('Failed to decrypt content');
-    }
-  }
+
+
 
   private async signContent(content: string, signedBy: string): Promise<string> {
 
     const hash = crypto.createHash('sha256').update(content + signedBy).digest('hex');
     return `signature_${hash.substr(0, 16)}`;
-  }
+
 
   private determineChangeType(
     hasContentChange: boolean, 
@@ -925,7 +923,7 @@ export class EvidenceVersioningService {
     if (hasContentChange) return 'content_update';
     if (hasMetadataChange) return 'metadata_update';
     return 'content_update';
-  }
+
 
   private generateChangeDescription(
     previousVersion: EvidenceVersion,
@@ -938,21 +936,21 @@ export class EvidenceVersioningService {
     if (newContent !== previousVersion.content) {
       const sizeDiff = Buffer.byteLength(newContent, 'utf8') - previousVersion.size;
       changes.push(`Content updated (${sizeDiff > 0 ? '+' : ''}${sizeDiff} bytes)`);
-    }
+
     
     if (JSON.stringify(newMetadata) !== JSON.stringify(previousVersion.metadata)) {
       const addedFields = Object.keys(newMetadata).filter(k => !previousVersion.metadata.hasOwnProperty(k));
       const removedFields = Object.keys(previousVersion.metadata).filter(k => !newMetadata.hasOwnProperty(k));
       if (addedFields.length > 0) changes.push(`Added metadata: ${addedFields.join(', ')}`);
       if (removedFields.length > 0) changes.push(`Removed metadata: ${removedFields.join(', ')}`);
-    }
+
     
     if (newClassification !== previousVersion.classification) {
       changes.push(`Classification: ${previousVersion.classification} → ${newClassification}`);
-    }
+
     
     return changes.join('; ') || 'No changes detected';
-  }
+
 
   private computeVersionDiff(from: EvidenceVersion, to: EvidenceVersion): EvidenceVersionDiff {
     const diff: EvidenceVersionDiff = {
@@ -964,7 +962,7 @@ export class EvidenceVersioningService {
         contentSizeChange: to.size - from.size,
         metadataFieldsChanged: 0,
         significanceScore: 0
-      }
+
     };
 
     // Content changes (simplified - in practice, would use proper diff algorithm)
@@ -974,7 +972,7 @@ export class EvidenceVersioningService {
         removed: [],
         modified: ['Content modified'] // Simplified
       };
-    }
+
 
     // Metadata changes
     const fromMetaKeys = Object.keys(from.metadata);
@@ -998,7 +996,7 @@ export class EvidenceVersioningService {
       };
       
       diff.statistics.metadataFieldsChanged = addedKeys.length + removedKeys.length + modifiedKeys.length;
-    }
+
 
     // Classification changes
     if (from.classification !== to.classification) {
@@ -1006,7 +1004,7 @@ export class EvidenceVersioningService {
         from: from.classification,
         to: to.classification
       };
-    }
+
 
     // Calculate significance score (0-1)
     let significance = 0;
@@ -1018,7 +1016,7 @@ export class EvidenceVersioningService {
     diff.statistics.significanceScore = Math.min(significance, 1.0);
 
     return diff;
-  }
+
 
   private async updateVersionMetadata(versionId: string, updates: Partial<EvidenceVersion>): Promise<void> {
 
@@ -1028,15 +1026,15 @@ export class EvidenceVersioningService {
     if (updates.changeType !== undefined) {
       updateFields.push('change_type = ?');
       updateValues.push(updates.changeType);
-    }
+
     
     if (updateFields.length > 0) {
       updateValues.push(versionId);
       await this.databaseService.query(`
         UPDATE evidence_versions SET ${updateFields.join(', ')} WHERE id = ?
       `, updateValues);
-    }
-  }
+
+
 
   private getDefaultConfig(): EvidenceVersionConfig {
     return {
@@ -1048,27 +1046,27 @@ export class EvidenceVersioningService {
         enabled: true,
         algorithm: 'sha256',
         chainValidation: true
-  }
+
       retention: {
         enabled: true,
         retentionPeriodDays: 2555, // 7 years
         archivalEnabled: true,
         compressionAfterDays: 365
-  }
+
       synchronization: {
         enabled: false,
         conflictResolution: 'last_writer_wins',
         distributedNodes: []
-      }
+
     };
-  }
+
 
   private initializeService(): void {
     // Initialize database tables if needed
     this.initializeDatabase().catch(error => {
       console.warn('Failed to initialize evidence versioning database:', error);
     });
-  }
+
 
   private async initializeDatabase(): Promise<void> {
 
@@ -1136,7 +1134,7 @@ export class EvidenceVersioningService {
     await this.databaseService.query(`
       CREATE INDEX IF NOT EXISTS idx_evidence_versions_created_at ON evidence_versions(created_at)
     `);
-  }
-}
+
+
 
 export default EvidenceVersioningService;

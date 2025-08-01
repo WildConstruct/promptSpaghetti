@@ -19,13 +19,14 @@ export enum ReplayEventType {
   CONSOLE_LOG = 'console_log',
   ERROR = 'error',
   NAVIGATION = 'navigation'
-}
+
 
 /**
  * Replay event data structure
  */
-}
-}
+
+
+
 export interface ReplayEvent {
   id: string;
   sessionId: string;
@@ -36,10 +37,11 @@ export interface ReplayEvent {
   viewport: {
     width: number;
     height: number;
-}
-}
+
+
+
   };
-}
+
 
 /**
  * Union type for all replay event data
@@ -57,19 +59,20 @@ export type ReplayEventData =
   | ErrorData
   | NavigationData;
 
-}
-}
+
+
 export interface MouseMoveData {
   x: number;
   y: number;
   elementId?: string;
   elementType?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MouseClickData {
   x: number;
   y: number;
@@ -77,52 +80,57 @@ export interface MouseClickData {
   elementId?: string;
   elementType?: string;
   elementText?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyPressData {
   key: string;
   code: string;
   elementId?: string;
   elementType?: string;
   isInputField: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScrollData {
   scrollX: number;
   scrollY: number;
   elementId?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResizeData {
   width: number;
   height: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FocusData {
   elementId?: string;
   elementType?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DOMData {
   mutationType: 'childList' | 'attributes' | 'characterData';
   target: string;
@@ -130,12 +138,13 @@ export interface DOMData {
   removedNodes?: string[];
   attributeName?: string;
   attributeValue?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NetworkData {
   url: string;
   method: string;
@@ -143,47 +152,52 @@ export interface NetworkData {
   duration?: number;
   requestSize?: number;
   responseSize?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConsoleData {
   level: 'log' | 'warn' | 'error' | 'info';
   message: string;
   args?: unknown[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ErrorData {
   message: string;
   stack?: string;
   filename?: string;
   lineno?: number;
   colno?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NavigationData {
   from: string;
   to: string;
   type: 'navigate' | 'reload' | 'back' | 'forward';
-}
-}
-}
+
+
+
+
 
 /**
  * Session replay recording
  */
-}
-}
+
+
+
 export interface SessionReplay {
   id: string;
   sessionId: string;
@@ -198,8 +212,9 @@ export interface SessionReplay {
     screenResolution: string;
     timezone: string;
     language: string;
-}
-}
+
+
+
   };
   summary: {
     totalEvents: number;
@@ -214,13 +229,14 @@ export interface SessionReplay {
     maskText: boolean;
     excludeNetworkData: boolean;
   };
-}
+
 
 /**
  * Session replay configuration
  */
-}
-}
+
+
+
 export interface ReplayConfig {
   enabled: boolean;
   maxRecordingDuration: number; // milliseconds
@@ -233,9 +249,10 @@ export interface ReplayConfig {
   maskSensitiveData: boolean;
   excludeElements: string[]; // CSS selectors
   minSessionDuration: number; // minimum duration to save
-}
-}
-}
+
+
+
+
 
 /**
  * Session replay system for user interaction recording
@@ -277,7 +294,7 @@ export class SessionReplaySystem extends EventEmitter {
     };
 
     this.setupEventListeners();
-  }
+
 
   /**
    * Start recording a session
@@ -289,16 +306,16 @@ export class SessionReplaySystem extends EventEmitter {
   ): boolean {
     if (!this.config.enabled) {
       return false;
-    }
+
 
     // Apply sampling rate
     if (Math.random() > this.config.samplingRate) {
       return false;
-    }
+
 
     if (this.activeRecordings.has(sessionId)) {
       return false; // Already recording
-    }
+
 
     const replay: SessionReplay = {
       id: uuidv4(),
@@ -312,7 +329,7 @@ export class SessionReplaySystem extends EventEmitter {
         screenResolution: metadata?.screenResolution || 'unknown',
         timezone: metadata?.timezone || 'unknown',
         language: metadata?.language || 'unknown'
-  }
+
       summary: {
         totalEvents: 0,
         clicks: 0,
@@ -320,12 +337,12 @@ export class SessionReplaySystem extends EventEmitter {
         scrolls: 0,
         errors: 0,
         networkRequests: 0
-  }
+
       privacySettings: {
         maskInputs: this.config.maskSensitiveData,
         maskText: this.config.privacyMode,
         excludeNetworkData: !this.config.captureNetworkRequests
-      }
+
     };
 
     this.activeRecordings.set(sessionId, replay);
@@ -340,7 +357,7 @@ export class SessionReplaySystem extends EventEmitter {
     console.log(`Started session replay recording: ${sessionId}`);
 
     return true;
-  }
+
 
   /**
    * Stop recording a session
@@ -350,7 +367,7 @@ export class SessionReplaySystem extends EventEmitter {
     
     if (!replay) {
       return false;
-    }
+
 
     replay.endTime = Date.now();
     replay.duration = replay.endTime - replay.startTime;
@@ -358,7 +375,7 @@ export class SessionReplaySystem extends EventEmitter {
     // Only save if session meets minimum duration
     if (replay.duration >= this.config.minSessionDuration) {
       this.saveReplay(replay);
-    }
+
 
     this.activeRecordings.delete(sessionId);
     this.eventSequence.delete(sessionId);
@@ -373,7 +390,7 @@ export class SessionReplaySystem extends EventEmitter {
 
     console.log(`Stopped session replay recording: ${sessionId} (${reason})`);
     return true;
-  }
+
 
   /**
    * Record a replay event
@@ -388,19 +405,19 @@ export class SessionReplaySystem extends EventEmitter {
     
     if (!replay) {
       return false;
-    }
+
 
     // Check event limit
     if (replay.events.length >= this.config.maxEventsPerSession) {
       this.stopRecording(sessionId, 'error');
       return false;
-    }
+
 
     // Apply privacy filters
     const filteredData = this.applyPrivacyFilters(eventType, eventData);
     if (!filteredData) {
       return false; // Event filtered out
-    }
+
 
     const sequence = this.eventSequence.get(sessionId) || 0;
     this.eventSequence.set(sessionId, sequence + 1);
@@ -423,7 +440,7 @@ export class SessionReplaySystem extends EventEmitter {
 
     this.emit('event_recorded', { sessionId, event });
     return true;
-  }
+
 
   /**
    * Get session replay by ID
@@ -432,7 +449,7 @@ export class SessionReplaySystem extends EventEmitter {
     // This would typically query the database
     // For now, return null as we need to implement database storage
     return null;
-  }
+
 
   /**
    * Get replays for a session
@@ -441,7 +458,7 @@ export class SessionReplaySystem extends EventEmitter {
     // This would typically query the database
     // For now, return empty array
     return [];
-  }
+
 
   /**
    * Search replays by criteria
@@ -457,7 +474,7 @@ export class SessionReplaySystem extends EventEmitter {
     // This would typically query the database
     // For now, return empty array
     return [];
-  }
+
 
   /**
    * Generate replay player data
@@ -469,18 +486,18 @@ export class SessionReplaySystem extends EventEmitter {
       eventType: ReplayEventType;
       description: string;
       data: unknown;
-    }>;
+>;
     insights: {
       userFriction: string[];
       performanceIssues: string[];
       errorPatterns: string[];
     };
-  } | null {
+ | null {
     const replay = this.getReplay(replayId);
     
     if (!replay) {
       return null;
-    }
+
 
     const timeline = replay.events.map(event => ({
       timestamp: event.timestamp,
@@ -496,7 +513,7 @@ export class SessionReplaySystem extends EventEmitter {
       timeline,
       insights
     };
-  }
+
 
   /**
    * Export replay data
@@ -506,7 +523,7 @@ export class SessionReplaySystem extends EventEmitter {
     
     if (!replay) {
       throw new Error('Replay not found');
-    }
+
 
     switch (format) {
     case 'json':
@@ -520,8 +537,8 @@ export class SessionReplaySystem extends EventEmitter {
       
     default:
       throw new Error(`Unsupported format: ${format}`);
-    }
-  }
+
+
 
   /**
    * Setup event listeners
@@ -531,14 +548,14 @@ export class SessionReplaySystem extends EventEmitter {
     this.analyticsCollector.on('event_recorded', (event) => {
       if (event.type === AnalyticsEventType.USER_SESSION_END) {
         this.stopRecording(event.sessionId, 'manual');
-      }
+
     });
 
     // Clean up old recordings periodically
     setInterval(() => {
       this.cleanupOldRecordings();
     }, 60000); // Every minute
-  }
+
 
   /**
    * Apply privacy filters to event data
@@ -549,7 +566,7 @@ export class SessionReplaySystem extends EventEmitter {
   ): ReplayEventData | null {
     if (!this.config.privacyMode) {
       return eventData;
-    }
+
 
     switch (eventType) {
     case ReplayEventType.KEY_PRESS:
@@ -560,31 +577,31 @@ export class SessionReplaySystem extends EventEmitter {
           key: '*',
           code: 'masked'
         };
-      }
+
       return keyData;
 
     case ReplayEventType.NETWORK_REQUEST:
       if (!this.config.captureNetworkRequests) {
         return null;
-      }
+
       return eventData;
 
     case ReplayEventType.CONSOLE_LOG:
       if (!this.config.captureConsoleMessages) {
         return null;
-      }
+
       return eventData;
 
     case ReplayEventType.ERROR:
       if (!this.config.captureErrors) {
         return null;
-      }
+
       return eventData;
 
     default:
       return eventData;
-    }
-  }
+
+
 
   /**
    * Update summary counters
@@ -606,8 +623,8 @@ export class SessionReplaySystem extends EventEmitter {
     case ReplayEventType.NETWORK_REQUEST:
       summary.networkRequests++;
       break;
-    }
-  }
+
+
 
   /**
    * Save replay to database
@@ -623,7 +640,7 @@ export class SessionReplaySystem extends EventEmitter {
     });
     
     console.log(`Saved session replay: ${replay.id} (${replay.events.length} events)`);
-  }
+
 
   /**
    * Clean up old recordings that haven't been properly stopped
@@ -634,9 +651,9 @@ export class SessionReplaySystem extends EventEmitter {
     this.activeRecordings.forEach((replay, sessionId) => {
       if (replay.startTime < cutoffTime) {
         this.stopRecording(sessionId, 'timeout');
-      }
+
     });
-  }
+
 
   /**
    * Generate event description for timeline
@@ -665,8 +682,8 @@ export class SessionReplaySystem extends EventEmitter {
       
     default:
       return `${event.type} event`;
-    }
-  }
+
+
 
   /**
    * Generate replay insights
@@ -675,7 +692,7 @@ export class SessionReplaySystem extends EventEmitter {
     userFriction: string[];
     performanceIssues: string[];
     errorPatterns: string[];
-  } {
+ {
     const insights = {
       userFriction: [],
       performanceIssues: [],
@@ -685,11 +702,11 @@ export class SessionReplaySystem extends EventEmitter {
     // Analyze user friction
     if (replay.summary.clicks > 50) {
       insights.userFriction.push('High number of clicks may indicate UI complexity');
-    }
+
 
     if (replay.summary.scrolls > 100) {
       insights.userFriction.push('Excessive scrolling may indicate poor information architecture');
-    }
+
 
     // Analyze performance issues
     const networkEvents = replay.events.filter(e => e.type === ReplayEventType.NETWORK_REQUEST);
@@ -700,16 +717,16 @@ export class SessionReplaySystem extends EventEmitter {
 
     if (slowRequests.length > 0) {
       insights.performanceIssues.push(`${slowRequests.length} slow network requests detected`);
-    }
+
 
     // Analyze error patterns
     const errorEvents = replay.events.filter(e => e.type === ReplayEventType.ERROR);
     if (errorEvents.length > 0) {
       insights.errorPatterns.push(`${errorEvents.length} JavaScript errors occurred`);
-    }
+
 
     return insights;
-  }
+
 
   /**
    * Convert replay to HAR format
@@ -722,7 +739,7 @@ export class SessionReplaySystem extends EventEmitter {
         creator: {
           name: 'SessionReplaySystem',
           version: '1.0'
-  }
+
         entries: replay.events
           .filter(e => e.type === ReplayEventType.NETWORK_REQUEST)
           .map(e => {
@@ -733,21 +750,21 @@ export class SessionReplaySystem extends EventEmitter {
                 method: netData.method,
                 url: netData.url,
                 headers: []
-  }
+
               response: {
                 status: netData.status || 0,
                 headers: []
-  }
+
               timings: {
                 wait: netData.duration || 0
-              }
+
             };
-  }
-      }
+
+
     };
 
     return JSON.stringify(harData, null, 2);
-  }
+
 
   /**
    * Convert replay to CSV format
@@ -763,5 +780,4 @@ export class SessionReplaySystem extends EventEmitter {
     ]);
 
     return [headers, ...rows].map(row => row.join(',')).join('\n');
-  }
-}
+

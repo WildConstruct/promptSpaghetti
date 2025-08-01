@@ -8,8 +8,8 @@ import { DataSensitivityLevel } from '../../../packages/core/security/DataSensit
 import { DataClassificationService } from '../../../packages/core/security/DataClassificationHelpers';
 import { AccessControlManager } from './AccessControlManager';
 
-}
-}
+
+
 export interface DataAccessRequest {
   userId: string;
   resourceId: string;
@@ -19,12 +19,13 @@ export interface DataAccessRequest {
   requestedBy?: string;
   reason?: string;
   expiresAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataAccessResponse {
   allowed: boolean;
   reason: string;
@@ -34,12 +35,13 @@ export interface DataAccessResponse {
   accessLevel: AccessLevel;
   restrictions?: AccessRestriction[];
   auditId: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessGrant {
   id: string;
   userId: string;
@@ -53,19 +55,21 @@ export interface AccessGrant {
   reason: string;
   active: boolean;
   restrictions?: AccessRestriction[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessRestriction {
   type: 'time' | 'location' | 'operation' | 'export' | 'share';
   value: string;
   description: string;
-}
-}
-}
+
+
+
+
 
 export type DataOperation = 
   | 'READ' 
@@ -85,20 +89,21 @@ export type AccessLevel =
   | 'ELEVATED' 
   | 'FULL_ACCESS';
 
-}
-}
+
+
 export interface UserRole {
   id: string;
   name: string;
   permissions: string[];
   dataAccessLevels: Record<DataSensitivityLevel, DataOperation[]>;
   hierarchy: number; // 1=lowest, 10=highest
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessAuditEvent {
   id: string;
   userId: string;
@@ -113,9 +118,10 @@ export interface AccessAuditEvent {
   ipAddress?: string;
   userAgent?: string;
   riskScore?: number;
-}
-}
-}
+
+
+
+
 
 export class DataAccessControlService {
   private db: DatabaseService;
@@ -140,7 +146,7 @@ export class DataAccessControlService {
     this.redis = redis || {} as RedisService; // Mock Redis if not provided
     this.classificationService = classificationService || {} as DataClassificationService;
     this.accessControlManager = accessControlManager || {} as AccessControlManager;
-  }
+
 
   /**
    * Check if user has access to perform operation on resource
@@ -209,8 +215,7 @@ export class DataAccessControlService {
         restrictions: restrictions.length > 0 ? restrictions : undefined,
         auditId
       };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'DATA_ACCESS_ERROR',
         userId: request.userId,
@@ -220,7 +225,7 @@ export class DataAccessControlService {
         success: false,
         metadata: { 
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       return {
@@ -231,8 +236,8 @@ export class DataAccessControlService {
         accessLevel: 'NONE',
         auditId
       };
-    }
-  }
+
+
 
   /**
    * Request elevated access to a resource
@@ -242,7 +247,7 @@ export class DataAccessControlService {
     status: 'approved' | 'pending' | 'denied';
     message: string;
     expiresAt?: Date;
-  }> {
+> {
 
     const requestId = await this.generateRequestId();
     
@@ -255,7 +260,7 @@ export class DataAccessControlService {
           status: 'denied',
           message: validation.reason
         };
-      }
+
 
       // 2. Check if auto-approval is possible
       const autoApproval = await this.checkAutoApproval(request);
@@ -285,7 +290,7 @@ export class DataAccessControlService {
             grantId: grant.id,
             operation: request.operation,
             autoApproved: true
-          }
+
         });
 
         return {
@@ -294,7 +299,7 @@ export class DataAccessControlService {
           message: 'Access granted automatically',
           expiresAt: grant.expiresAt
         };
-      }
+
 
       // 3. Store pending request for manual approval
       await this.storePendingRequest(requestId, request);
@@ -310,7 +315,7 @@ export class DataAccessControlService {
           requestId,
           operation: request.operation,
           requiresApproval: true
-        }
+
       });
 
       return {
@@ -318,8 +323,7 @@ export class DataAccessControlService {
         status: 'pending',
         message: 'Access request submitted for approval'
       };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'DATA_ACCESS_REQUEST_ERROR',
         userId: request.userId,
@@ -330,7 +334,7 @@ export class DataAccessControlService {
         metadata: {
           requestId,
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       return {
@@ -338,8 +342,8 @@ export class DataAccessControlService {
         status: 'denied',
         message: 'Request failed due to system error'
       };
-    }
-  }
+
+
 
   /**
    * Get user's access history
@@ -362,7 +366,7 @@ export class DataAccessControlService {
     `, [userId, limit, offset]);
 
     return result.rows.map(this.mapAccessAuditEvent);
-  }
+
 
   /**
    * Revoke specific access grant
@@ -383,16 +387,16 @@ export class DataAccessControlService {
 
       if (result.rowCount === 0) {
         return false;
-      }
+
 
       const grant = result.rows[0];
       
       // Clear cache (if Redis is available)
       try {
         await this.redis?.del?.(`${this.ACCESS_CACHE_PREFIX}${grant.user_id}:${grant.resource_id}`);
-      } catch (error) {
+ catch (error) {
         // Redis unavailable, continue without caching
-      }
+
 
       await this.audit.logSecurityEvent({
         type: 'DATA_ACCESS_REVOKED',
@@ -405,12 +409,11 @@ export class DataAccessControlService {
           grantId,
           revokedBy,
           reason
-        }
+
       });
 
       return true;
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'DATA_ACCESS_REVOKE_ERROR',
         userId: undefined,
@@ -422,11 +425,11 @@ export class DataAccessControlService {
           grantId,
           revokedBy,
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
       return false;
-    }
-  }
+
+
 
   /**
    * Get active access grants for user
@@ -445,7 +448,7 @@ export class DataAccessControlService {
     `, [userId]);
 
     return result.rows.map(this.mapAccessGrant);
-  }
+
 
   // Private helper methods
 
@@ -460,7 +463,7 @@ export class DataAccessControlService {
     
     if (cached) {
       return cached as DataSensitivityLevel;
-    }
+
 
     // Get classification from database or classify dynamically
     const result = await this.db.query(`
@@ -473,7 +476,7 @@ export class DataAccessControlService {
     
     if (result.rows.length > 0) {
       classification = result.rows[0].classification;
-    } else {
+ else {
       // Use classification service to determine
       classification = await this.classificationService.classifyResource(
         resourceId, 
@@ -487,13 +490,13 @@ export class DataAccessControlService {
         ON CONFLICT (resource_id, resource_type) 
         DO UPDATE SET classification = $3, classified_at = NOW()
       `, [resourceId, resourceType, classification]);
-    }
+
 
     // Cache result
     await this.redis.setex(cacheKey, this.CACHE_TTL, classification);
     
     return classification;
-  }
+
 
   private async getUserRoles(userId: string): Promise<UserRole[]> {
 
@@ -502,7 +505,7 @@ export class DataAccessControlService {
     
     if (cached) {
       return JSON.parse(cached);
-    }
+
 
     const result = await this.db.query(`
       SELECT r.id, r.name, r.permissions, r.data_access_levels, r.hierarchy
@@ -523,7 +526,7 @@ export class DataAccessControlService {
     await this.redis.setex(cacheKey, this.CACHE_TTL, JSON.stringify(roles));
     
     return roles;
-  }
+
 
   private aggregatePermissions(roles: UserRole[]): string[] {
     const permissions = new Set<string>();
@@ -535,7 +538,7 @@ export class DataAccessControlService {
     });
 
     return Array.from(permissions);
-  }
+
 
   private getRequiredPermissions(
     classification: DataSensitivityLevel,
@@ -547,22 +550,22 @@ export class DataAccessControlService {
     // Add classification-specific permissions
     if (classification === 'CONFIDENTIAL' || classification === 'RESTRICTED') {
       basePermissions.push(`data:${classification.toLowerCase()}:access`);
-    }
+
 
     // Add operation-specific permissions
     if (operation === 'EXPORT') {
       basePermissions.push('data:export', `data:export:${classification.toLowerCase()}`);
-    }
+
     
     if (operation === 'SHARE') {
       basePermissions.push('data:share', `data:share:${classification.toLowerCase()}`);
-    }
+
 
     // Add resource-type specific permissions
     basePermissions.push(`${resourceType}:${operation.toLowerCase()}`);
 
     return basePermissions;
-  }
+
 
   private async evaluateAccess(
     request: DataAccessRequest,
@@ -574,7 +577,7 @@ export class DataAccessControlService {
     reason: string;
     accessLevel: AccessLevel;
     riskScore?: number;
-  }> {
+> {
 
     // Check basic permission match
     const hasRequiredPermissions = requiredPermissions.every(permission =>
@@ -587,7 +590,7 @@ export class DataAccessControlService {
         reason: 'Insufficient permissions',
         accessLevel: 'NONE'
       };
-    }
+
 
     // Use existing access control manager for advanced policies
     const accessResult = await this.accessControlManager.checkAccess({
@@ -598,7 +601,7 @@ export class DataAccessControlService {
         classification,
         resourceType: request.resourceType,
         ...request.context
-      }
+
     });
 
     return {
@@ -607,7 +610,7 @@ export class DataAccessControlService {
       accessLevel: this.mapToAccessLevel(accessResult.accessLevel || 'standard'),
       riskScore: accessResult.riskScore
     };
-  }
+
 
   private async getAccessRestrictions(
     userId: string,
@@ -626,8 +629,8 @@ export class DataAccessControlService {
           value: '09:00-17:00',
           description: 'Restricted data export only allowed during business hours'
         });
-      }
-    }
+
+
 
     // Check user-specific restrictions
     const userRestrictions = await this.db.query(`
@@ -645,13 +648,13 @@ export class DataAccessControlService {
     });
 
     return restrictions;
-  }
+
 
   private async validateAccessRequest(request: DataAccessRequest): Promise<{
     valid: boolean;
     reason: string;
     classification?: DataSensitivityLevel;
-  }> {
+> {
 
     // Check if resource exists and get classification
     let classification: DataSensitivityLevel;
@@ -661,12 +664,12 @@ export class DataAccessControlService {
         request.resourceId, 
         request.resourceType
       );
-    } catch (error) {
+ catch (error) {
       return {
         valid: false,
         reason: 'Resource not found or inaccessible'
       };
-    }
+
 
     // Check if user exists and is active
     const userResult = await this.db.query(`
@@ -678,19 +681,19 @@ export class DataAccessControlService {
         valid: false,
         reason: 'User not found or inactive'
       };
-    }
+
 
     return {
       valid: true,
       reason: 'Valid request',
       classification
     };
-  }
+
 
   private async checkAutoApproval(request: DataAccessRequest): Promise<{
     canAutoApprove: boolean;
     defaultExpiry?: Date;
-  }> {
+> {
 
     // Auto-approve READ operations for PUBLIC and INTERNAL data
     const classification = await this.getResourceClassification(
@@ -706,10 +709,10 @@ export class DataAccessControlService {
         canAutoApprove: true,
         defaultExpiry: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
       };
-    }
+
 
     return { canAutoApprove: false };
-  }
+
 
   private async createAccessGrant(grant: Omit<AccessGrant, 'id' | 'grantedAt' | 'active'>): Promise<AccessGrant> {
 
@@ -735,7 +738,7 @@ export class DataAccessControlService {
       grantedAt,
       active: true
     };
-  }
+
 
   private async storePendingRequest(requestId: string, request: DataAccessRequest): Promise<void> {
 
@@ -749,7 +752,7 @@ export class DataAccessControlService {
       request.operation, JSON.stringify(request.context || {}),
       request.requestedBy, request.reason, request.expiresAt
     ]);
-  }
+
 
   private async logAccessAttempt(event: AccessAuditEvent): Promise<void> {
 
@@ -779,9 +782,9 @@ export class DataAccessControlService {
         classification: event.classification,
         accessLevel: event.accessLevel,
         riskScore: event.riskScore
-      }
+
     });
-  }
+
 
   private mapToAccessLevel(level: string): AccessLevel {
     switch (level.toLowerCase()) {
@@ -791,8 +794,8 @@ export class DataAccessControlService {
     case 'elevated': return 'ELEVATED';
     case 'full': return 'FULL_ACCESS';
     default: return 'STANDARD';
-    }
-  }
+
+
 
   private mapAccessAuditEvent(row: Event): AccessAuditEvent {
     return {
@@ -810,7 +813,7 @@ export class DataAccessControlService {
       userAgent: row.user_agent,
       riskScore: row.risk_score
     };
-  }
+
 
   private mapAccessGrant(row: unknown): AccessGrant {
     return {
@@ -827,17 +830,17 @@ export class DataAccessControlService {
       active: row.active,
       restrictions: row.restrictions ? JSON.parse(row.restrictions) : undefined
     };
-  }
+
 
   private async generateAuditId(): Promise<string> {
 
     return `audit_${Date.now()}_${require('crypto').randomBytes(8).toString('hex')}`;
-  }
+
 
   private async generateRequestId(): Promise<string> {
 
     return `req_${Date.now()}_${require('crypto').randomBytes(8).toString('hex')}`;
-  }
+
 
   /**
    * Initialize database schema
@@ -943,5 +946,4 @@ export class DataAccessControlService {
       CREATE INDEX IF NOT EXISTS idx_access_requests_status 
       ON access_requests(status, created_at DESC)
     `);
-  }
-}
+

@@ -6,9 +6,9 @@ import { GraphCRDTAdapter } from '../../collaboration/GraphCRDTAdapter';
 import { Graph, Node, Edge } from '../../graphSchema';
 
 // Mock the CRDT research package for testing
-jest.mock('../../../crdt-research/src/graph-sync', () => ({)
-  GraphSyncHandler: jest.fn().mockImplementation(() => ({,)
-  getGraph: jest.fn().mockReturnValue({;)
+jest.mock('../../../crdt-research/src/graph-sync', () => ({ )
+  GraphSyncHandler: jest.fn().mockImplementation(() => ({);
+  getGraph: jest.fn().mockReturnValue({;),
   addNode: jest.fn(),
       updateNode: jest.fn(),
       deleteNode: jest.fn(),
@@ -16,7 +16,7 @@ jest.mock('../../../crdt-research/src/graph-sync', () => ({)
       deleteEdge: jest.fn(),
       getNodes: jest.fn().mockReturnValue([]),
       getEdges: jest.fn().mockReturnValue([]),
-      observe: jest.fn(),
+      observe: jest.fn() }
       toJSON: jest.fn().mockReturnValue({ nodes: [], edges: [] })
     }),
     onDocumentUpdate: jest.fn(),
@@ -30,8 +30,7 @@ jest.mock('../../../crdt-research/src/graph-sync', () => ({)
     destroy: jest.fn();
   }))
 }));
-describe('GraphCRDTAdapter', () => {
-  let adapter: GraphCRDTAdapter;
+describe('GraphCRDTAdapter', () => { let adapter: GraphCRDTAdapter;
   let mockOnGraphChange: jest.Mock;
   let mockOnUserPresence: jest.Mock;
   beforeEach(() => {
@@ -41,18 +40,15 @@ describe('GraphCRDTAdapter', () => {
   documentId: 'test-doc',
   userId: 'user1',
   onGraphChange: mockOnGraphChange,
-  onUserPresence: mockOnUserPresence,
+  onUserPresence: mockOnUserPresence }
 });
   });
-  afterEach(() => {
-    adapter.destroy();
-  });
-  describe('Node Conversion', () => {
-    test('should convert WeightedChoice node to CRDT format', () => {
+  afterEach(() => { adapter.destroy() });
+  describe('Node Conversion', () => { test('should convert WeightedChoice node to CRDT format', () => {
       const node: Node = {,
   id: 'node1',
-        type: 'WeightedChoice',
-        choices: [,
+        type: 'WeightedChoice' }
+        choices: [
           { value: 'Option A', weight: 0.5 },
           { value: 'Option B', weight: 0.5 }
         ],
@@ -62,46 +58,43 @@ describe('GraphCRDTAdapter', () => {
       // Verify the adapter processes the node correctly
       expect(adapter.getGraph().nodes).toHaveLength(0); // Mock returns empty
     });
-    test('should convert Output node to CRDT format', () => {
-  const node: Node = {,
+    test('should convert Output node to CRDT format', () => { const node: Node = {,
   id: 'output1',
   type: 'Output',
-  inputs: ['node1'],
+  inputs: ['node1'] }
 };
       adapter.addNode(node);
       expect(adapter.getGraph().nodes).toHaveLength(0); // Mock returns empty
     });
-    test('should convert SetVariable node to CRDT format', () => {
-  const node: Node = {,
+    test('should convert SetVariable node to CRDT format', () => { const node: Node = {,
   id: 'var1',
   type: 'SetVariable',
   variableName: 'testVar',
   value: 'testValue',
-  inputs: [],
+  inputs: [] }
 };
       adapter.addNode(node);
       expect(adapter.getGraph().nodes).toHaveLength(0); // Mock returns empty
     });
   });
-  describe('Edge Operations', () => {
-  test('should add edges between nodes', () => {
+  describe('Edge Operations', () => { test('should add edges between nodes', () => {
   const sourceNode: Node = {,
   id: 'source',
   type: 'WeightedChoice',
   choices: [],
-  inputs: [],
+  inputs: [] }
 };
-      const targetNode: Node = {,
+      const targetNode: Node = { ,
   id: 'target',
   type: 'Output',
-  inputs: [],
+  inputs: [] }
 };
-      const edge: Edge = {,
+      const edge: Edge = { ,
   id: 'edge1',
   source: 'source',
   target: 'target',
   sourceHandle: 'output',
-  targetHandle: 'input',
+  targetHandle: 'input' }
 };
       // Add nodes first
       adapter.addNode(sourceNode);
@@ -115,30 +108,28 @@ describe('GraphCRDTAdapter', () => {
       expect(adapter.getGraph().edges).toHaveLength(0); // Mock returns empty
     });
   });
-  describe('Graph Import', () => {
-    test('should import existing graph into CRDT', () => {
+  describe('Graph Import', () => { test('should import existing graph into CRDT', () => {
       const existingGraph: Graph = {,
-  nodes: [,
+  nodes: [
           {
             id: 'node1',
-            type: 'WeightedChoice',
+            type: 'WeightedChoice' }
             choices: [{ value: 'A', weight: 1 }],
             inputs: [];
-  }
-          {
-  id: 'node2',
+
+          { id: 'node2',
   type: 'Output',
   inputs: ['node1']],
-  edges: [,
+  edges: [
   {
   id: 'edge1',
-  source: 'node1',
+  source: 'node1' }
   target: 'node2'];
-  };
-      const adapterWithGraph = new GraphCRDTAdapter({)
+};
+      const adapterWithGraph = new GraphCRDTAdapter({ )
   documentId: 'test-doc',
   userId: 'user1',
-  onGraphChange: mockOnGraphChange,
+  onGraphChange: mockOnGraphChange }
 }, existingGraph);
       expect(adapterWithGraph.getGraph()).toBeDefined();
       adapterWithGraph.destroy();
@@ -147,7 +138,7 @@ describe('GraphCRDTAdapter', () => {
   describe('Collaborative Operations', () => {
     test('should handle node updates', () => {
       const updates = {
-        choices: [,
+        choices: [
           { value: 'Updated A', weight: 0.7 },
           { value: 'Updated B', weight: 0.3 }
         ]
@@ -180,26 +171,20 @@ describe('GraphCRDTAdapter', () => {
       expect(adapter.getSyncState()).toBeDefined();
     });
   });
-  describe('Synchronization', () => {
-    test('should apply remote updates', () => {
+  describe('Synchronization', () => { test('should apply remote updates', () => {
       const mockUpdate = new Uint8Array([1, 2, 3]);
       adapter.applyRemoteUpdate(mockUpdate);
       // Verify update was applied
-      expect(adapter.getDocumentState()).toBeDefined();
-    });
-    test('should create snapshots', () => {
-      const snapshot = adapter.createSnapshot();
+      expect(adapter.getDocumentState()).toBeDefined() });
+    test('should create snapshots', () => { const snapshot = adapter.createSnapshot();
       expect(snapshot).toBeDefined();
-      expect(snapshot).toBeInstanceOf(Uint8Array);
-    });
-    test('should provide metrics', () => {
-      const metrics = adapter.getMetrics();
+      expect(snapshot).toBeInstanceOf(Uint8Array) });
+    test('should provide metrics', () => { const metrics = adapter.getMetrics();
       expect(metrics).toBeDefined();
       expect(metrics.documentSize).toBeDefined();
       expect(metrics.nodeCount).toBeDefined();
       expect(metrics.edgeCount).toBeDefined();
-      expect(metrics.syncState).toBeDefined();
-    });
+      expect(metrics.syncState).toBeDefined() });
   });
   describe('Schema Compatibility', () => {
     test('should handle all node types from schema', () => {
@@ -211,10 +196,8 @@ describe('GraphCRDTAdapter', () => {
         { type: 'GetVariable', data: { variableName: 'test' } },
         { type: 'Include', data: { name: 'test' } }
       ];
-      nodeTypes.forEach(({ type, data }, index) => {
-        const node: Node = {,
+      nodeTypes.forEach(({ type, data }, index) => { const node: Node = { }
   id: `node${index}`}
-}
           type,
           inputs: [],
           ...data
@@ -224,11 +207,10 @@ describe('GraphCRDTAdapter', () => {
       // All node types should be processed without errors
       expect(adapter.getGraph()).toBeDefined();
     });
-    test('should preserve node inputs', () => {
-  const node: Node = {,
+    test('should preserve node inputs', () => { const node: Node = {,
   id: 'node1',
   type: 'Concat',
-  inputs: ['input1', 'input2', 'input3'],
+  inputs: ['input1', 'input2', 'input3'] }
 };
       adapter.addNode(node);
       // Inputs should be preserved in metadata
@@ -242,11 +224,10 @@ describe('GraphCRDTAdapter', () => {
       // Should not throw error
       expect(adapter.getGraph()).toBeDefined();
     });
-    test('should handle invalid edges gracefully', () => {
-  const invalidEdge: Edge = {,
+    test('should handle invalid edges gracefully', () => { const invalidEdge: Edge = {,
   id: 'invalid',
   source: 'nonexistent1',
-  target: 'nonexistent2',
+  target: 'nonexistent2' }
 };
       adapter.addEdge(invalidEdge);
       // Should not throw error

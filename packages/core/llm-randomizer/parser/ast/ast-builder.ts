@@ -3,48 +3,44 @@
 // AST construction from lexer tokens
 import { Token, TokenType, LexerPosition } from '../lexer/graph-lexer';
 
-}
-export interface ASTNode {
-  type: string;
+
+export interface ASTNode { type: string;
   position: LexerPosition;
-  children?: ASTNode;
-}
-}
-}
-export interface GraphAST extends ASTNode {
-  type: 'Graph';
+  children?: ASTNode }
+
+
+
+export interface GraphAST extends ASTNode { type: 'Graph';
   version?: string;
   checksum?: string;
   metadata?: MetadataNode;
   nodes: NodeDefinitionAST;
   edges: EdgeDefinitionAST;
   export interface MetadataNode extends ASTNode {
-  type: 'Metadata';
+  type: 'Metadata';,
   properties: Record<string, any>;
   export interface NodeDefinitionAST extends ASTNode {
-  type: 'NodeDefinition';
+  type: 'NodeDefinition'
   id: string;
   nodeType: string;
   properties?: Record<string, any>;
   inputs?: string;
   export interface EdgeDefinitionAST extends ASTNode {
-  type: 'EdgeDefinition';
+  type: 'EdgeDefinition'
   source: string;
   target: string;
   export interface PropertyNode extends ASTNode {
-  type: 'Property';
+  type: 'Property'
   key: string;
   value: any;
   export interface ArrayNode extends ASTNode {
-  type: 'Array';
+  type: 'Array' }
   elements: any;
-  export interface ParseError {
-  message: string;
+  export interface ParseError { message: string;
   position: LexerPosition;
   severity: 'error' | 'warning';
-  suggestion?: string;
-}
-}
+  suggestion?: string }
+
 export class ASTBuilder {
   private tokens: Token;
   private current: number = 0;
@@ -60,52 +56,40 @@ export class ASTBuilder {
     try {
       const ast = this.parseGraph();
       return { ast, errors: this.errors };
-    } catch (error) {
+ catch (error) {
       this.addError(error instanceof Error ? error.message : 'Unknown parsing error', 'error');
       return { ast: null, errors: this.errors };
   /**
    * Parse complete graph structure
    */
-  private parseGraph(): GraphAST {
-  const start = this.currentToken();
-  const graph: GraphAST = {,
-  type: 'Graph',
-  position: start.position,
-  nodes: [],
-  edges: [],
+  private parseGraph(): GraphAST { const start = this.currentToken();
+  const graph: GraphAST = {
+  type: 'Graph'
+  position: start.position
+  nodes: []
+  edges: [] }
 };
     // Parse header section
     this.parseHeader(graph);
     // Parse sections
-    while (!this.isAtEnd()) {
-      const token = this.currentToken();
+    while (!this.isAtEnd()) { const token = this.currentToken();
       if (token.type === TokenType.SECTION_DELIMITER) {
-        this.parseSection(graph);
-      } else if (token.type === TokenType.NEWLINE) {
+        this.parseSection(graph) } else if (token.type === TokenType.NEWLINE) {
         this.advance(); // Skip newlines between sections
-      } else {
+ else {
         this.addError(`Unexpected token: ${token.value}`, 'error');}
         this.advance();
     return graph;
   /**
    * Parse header section (version, checksum, metadata)
    */
-  private parseHeader(graph: GraphAST): void {
-    while (!this.isAtEnd() && this.currentToken().type !== TokenType.SECTION_DELIMITER) {
+  private parseHeader(graph: GraphAST): void { while (!this.isAtEnd() && this.currentToken().type !== TokenType.SECTION_DELIMITER) {
       const token = this.currentToken();
       if (token.type === TokenType.VERSION || )
           (token.type === TokenType.KEY && token.value === 'version')) {
-        graph.version = this.parseHeaderValue();
-      } else if (token.type === TokenType.CHECKSUM || )
-                 (token.type === TokenType.KEY && token.value === 'checksum')) {
-        graph.checksum = this.parseHeaderValue();
-      } else if (token.type === TokenType.METADATA || )
-                 (token.type === TokenType.KEY && token.value === 'metadata')) {
-        graph.metadata = this.parseMetadata();
-      } else if (token.type === TokenType.NEWLINE) {
-        this.advance();
-      } else {
-        this.advance(); // Skip unexpected tokens in header
+        graph.version = this.parseHeaderValue() } else if (token.type === TokenType.CHECKSUM || )
+                 (token.type === TokenType.KEY && token.value === 'checksum')) { graph.checksum = this.parseHeaderValue() } else if (token.type === TokenType.METADATA || )
+                 (token.type === TokenType.KEY && token.value === 'metadata')) { graph.metadata = this.parseMetadata() } else if (token.type === TokenType.NEWLINE) { this.advance() } else { this.advance(); // Skip unexpected tokens in header
   /**
    * Parse header key-value pair
    */
@@ -125,24 +109,20 @@ export class ASTBuilder {
     const start = this.currentToken();
     this.advance(); // Skip 'metadata'
     this.expect(TokenType.COLON, 'Expected colon after metadata');
-    const metadata: MetadataNode = {,
-  type: 'Metadata',
-      position: start.position,
+    const metadata: MetadataNode = {
+  type: 'Metadata'
+      position: start.position }
       properties: {}
     };
     // Parse metadata properties
-    if (this.currentToken().type === TokenType.INDENT) {
-      this.advance(); // Skip indent
+    if (this.currentToken().type === TokenType.INDENT) { this.advance(); // Skip indent
       while (!this.isAtEnd() && this.currentToken().type !== TokenType.DEDENT && 
              this.currentToken().type !== TokenType.SECTION_DELIMITER) {
         if (this.currentToken().type === TokenType.KEY) {
           const key = this.advance().value;
           this.expect(TokenType.COLON, 'Expected colon after metadata key');
           const value = this.parseValue();
-          metadata.properties[key] = value;
-        } else if (this.currentToken().type === TokenType.NEWLINE) {
-          this.advance();
-        } else {
+          metadata.properties[key] = value } else if (this.currentToken().type === TokenType.NEWLINE) { this.advance() } else {
           this.advance(); // Skip unexpected tokens
       if (this.currentToken().type === TokenType.DEDENT) {
         this.advance();
@@ -168,8 +148,7 @@ export class ASTBuilder {
   /**
    * Parse nodes section
    */
-  private parseNodesSection(graph: GraphAST): void {
-  while (!this.isAtEnd() && this.currentToken().type !== TokenType.SECTION_DELIMITER) {
+  private parseNodesSection(graph: GraphAST): void { while (!this.isAtEnd() && this.currentToken().type !== TokenType.SECTION_DELIMITER) {
   if (this.currentToken().type === TokenType.NEWLINE) {
   this.advance();
   continue;
@@ -179,7 +158,7 @@ export class ASTBuilder {
   /**
   * Parse individual node definition
   */
-  private parseNodeDefinition(): NodeDefinitionAST | null {,
+  private parseNodeDefinition(): NodeDefinitionAST | null {
   const token = this.currentToken();
   if (token.type !== TokenType.KEY) {
   this.addError('Expected node ID', 'error');
@@ -187,11 +166,11 @@ export class ASTBuilder {
   return null;
   const nodeId = this.advance().value;
   this.expect(TokenType.COLON, 'Expected colon after node ID');
-  const node: NodeDefinitionAST = {,
-  type: 'NodeDefinition',
-  id: nodeId,
-  nodeType: '',
-  position: token.position,
+  const node: NodeDefinitionAST = {
+  type: 'NodeDefinition'
+  id: nodeId
+  nodeType: ''
+  position: token.position }
 };
     // Parse node properties
     if (this.currentToken().type === TokenType.INDENT) {
@@ -214,9 +193,7 @@ export class ASTBuilder {
           default:
             this.addError(`Unknown node property: ${key}`, 'warning', 'Use type, props, or inputs');}
             this.parseValue(); // Skip unknown property
-        } else if (this.currentToken().type === TokenType.NEWLINE) {
-          this.advance();
-        } else {
+ else if (this.currentToken().type === TokenType.NEWLINE) { this.advance() } else {
           this.advance(); // Skip unexpected tokens
       if (this.currentToken().type === TokenType.DEDENT) {
         this.advance();
@@ -226,24 +203,19 @@ export class ASTBuilder {
    */
   private parseProperties(): Record<string, any> {
     const properties: Record<string, any> = {};
-    if (this.currentToken().type === TokenType.INDENT) {
-      this.advance(); // Skip indent
+    if (this.currentToken().type === TokenType.INDENT) { this.advance(); // Skip indent
       while (!this.isAtEnd() && this.currentToken().type !== TokenType.DEDENT) {
         if (this.currentToken().type === TokenType.KEY) {
           const key = this.advance().value;
           this.expect(TokenType.COLON, 'Expected colon after property key');
-          properties[key] = this.parseValue();
-        } else if (this.currentToken().type === TokenType.NEWLINE) {
-          this.advance();
-        } else {
-  this.advance(); // Skip unexpected tokens
+          properties[key] = this.parseValue() } else if (this.currentToken().type === TokenType.NEWLINE) { this.advance() } else { this.advance(); // Skip unexpected tokens
   if (this.currentToken().type === TokenType.DEDENT) {
   this.advance();
   return properties;
   /**
   * Parse edges section
   */
-  private parseEdgesSection(graph: GraphAST): void {,
+  private parseEdgesSection(graph: GraphAST): void {
   while (!this.isAtEnd() && this.currentToken().type !== TokenType.SECTION_DELIMITER) {
   if (this.currentToken().type === TokenType.NEWLINE) {
   this.advance();
@@ -254,7 +226,7 @@ export class ASTBuilder {
   /**
   * Parse individual edge definition
   */
-  private parseEdgeDefinition(): EdgeDefinitionAST | null {,
+  private parseEdgeDefinition(): EdgeDefinitionAST | null {
   const start = this.currentToken();
   if (start.type !== TokenType.KEY && start.type !== TokenType.VALUE) {
   this.addError('Expected source node ID', 'error');
@@ -271,16 +243,15 @@ export class ASTBuilder {
   return null;
   const target = this.advance().value;
   return {
-  type: 'EdgeDefinition',
-  source,
-  target,
-  position: start.position,
+  type: 'EdgeDefinition'
+  source
+  target
+  position: start.position }
 };
   /**
    * Parse generic value (string, number, boolean, array, object)
    */
-  private parseValue(): any {
-    const token = this.currentToken();
+  private parseValue(): any { const token = this.currentToken();
     switch (token.type) {
     case TokenType.STRING:
     case TokenType.VALUE:
@@ -297,7 +268,7 @@ export class ASTBuilder {
       return null;
     case TokenType.ARRAY_START:
       return this.parseArray();
-    case TokenType.INDENT: return this.parseObject();
+    case TokenType.INDENT: return this.parseObject() }
   default:
       this.addError(`Unexpected token in value: ${token.value}`, 'error');}
       this.advance();
@@ -324,15 +295,10 @@ export class ASTBuilder {
   private parseObject(): Record<string, any> {
     const obj: Record<string, any> = {};
     this.expect(TokenType.INDENT, 'Expected indentation');
-    while (!this.isAtEnd() && this.currentToken().type !== TokenType.DEDENT) {
-      if (this.currentToken().type === TokenType.KEY) {
+    while (!this.isAtEnd() && this.currentToken().type !== TokenType.DEDENT) { if (this.currentToken().type === TokenType.KEY) {
         const key = this.advance().value;
         this.expect(TokenType.COLON, 'Expected colon after key');
-        obj[key] = this.parseValue();
-      } else if (this.currentToken().type === TokenType.NEWLINE) {
-        this.advance();
-      } else {
-        this.advance(); // Skip unexpected tokens
+        obj[key] = this.parseValue() } else if (this.currentToken().type === TokenType.NEWLINE) { this.advance() } else { this.advance(); // Skip unexpected tokens
     if (this.currentToken().type === TokenType.DEDENT) {
       this.advance();
     return obj;
@@ -348,33 +314,32 @@ export class ASTBuilder {
   private currentToken(): Token {
     if (this.isAtEnd()) {
       return this.tokens[this.tokens.length - 1] || { 
-        type: TokenType.EOF, 
-        value: '', 
+        type: TokenType.EOF
+        value: '' }
         position: { line: 1, column: 1, offset: 0 } 
       };
     return this.tokens[this.current];
-  private advance(): Token {
-  if (!this.isAtEnd()) this.current++;
+  private advance(): Token { if (!this.isAtEnd()) this.current++;
   return this.tokens[this.current - 1];
-  private isAtEnd(): boolean {,
+  private isAtEnd(): boolean {
   return this.current >= this.tokens.length || this.currentToken().type === TokenType.EOF;
-  private expect(type: TokenType, message: string): boolean {,
+  private expect(type: TokenType, message: string): boolean {
   if (this.currentToken().type === type) {
   this.advance();
   return true;
   this.addError(message, 'error');
   return false;
-  private synchronize(): void {,
+  private synchronize(): void {
   // Skip to next synchronization point (newline or section delimiter)
   while (!this.isAtEnd()) {
   if (this.currentToken().type === TokenType.NEWLINE ||
   this.currentToken().type === TokenType.SECTION_DELIMITER) {
   break;
   this.advance();
-  private addError(message: string, severity: 'error' | 'warning', suggestion?: string): void {,
+  private addError(message: string, severity: 'error' | 'warning', suggestion?: string): void {
   this.errors.push({)
-  message,
-  position: this.currentToken().position,
-  severity,
+  message
+  position: this.currentToken().position
+  severity }
   suggestion
 });

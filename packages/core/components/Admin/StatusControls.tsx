@@ -12,8 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { 
-  Power,
+import { Power,
   PlayCircle,
   PauseCircle,
   StopCircle,
@@ -41,9 +40,9 @@ import {
   UserCheck,
   UserX,
   Pause,
-  Play,
+  Play }
   RotateCcw
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Status Types
 export type SystemStatus = 'operational' | 'degraded' | 'down' | 'maintenance';
@@ -51,15 +50,14 @@ export type ServiceStatus = 'running' | 'stopped' | 'error' | 'starting' | 'stop
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'locked' | 'pending';
 export type ProcessStatus = 'running' | 'idle' | 'busy' | 'error' | 'stopped';
 
-}
-export interface SystemService {
-  id: string;
+
+export interface SystemService { id: string;
   name: string;
   displayName: string;
   description: string;
   status: ServiceStatus;
-  health: number; // 0-100,
-  uptime: number; // milliseconds,
+  health: number; // 0-100;
+  uptime: number; // milliseconds }
   lastRestart: Date;
   autoRestart: boolean;
   dependencies: string;
@@ -67,31 +65,30 @@ export interface SystemService {
   url?: string;
   logs: ServiceLog;
   metrics: ServiceMetrics;
-}
-}
-}
-export interface ServiceLog {
-  id: string;
+
+
+
+
+export interface ServiceLog { id: string;
   timestamp: Date;
-  level: 'info' | 'warn' | 'error' | 'debug';
+  level: 'info' | 'warn' | 'error' | 'debug' }
   message: string;
   service: string;
   details?: Record<string, any>;
-}
-}
-}
-export interface ServiceMetrics {
-  cpuUsage: number;
+
+
+
+
+export interface ServiceMetrics { cpuUsage: number;
   memoryUsage: number;
   requestCount: number;
   errorRate: number;
   responseTime: number;
-  throughput: number;
-}
-}
-}
-export interface SystemOverview {
-  overallStatus: SystemStatus;
+  throughput: number }
+
+
+
+export interface SystemOverview { overallStatus: SystemStatus;
   totalServices: number;
   runningServices: number;
   erroredServices: number;
@@ -101,41 +98,41 @@ export interface SystemOverview {
   networkLatency: number;
   uptime: number;
   activeUsers: number;
-  backgroundJobs: number;
-}
-}
-}
-export interface StatusControlsProps {
-  className?: string;
+  backgroundJobs: number }
+
+
+
+export interface StatusControlsProps { className?: string;
   adminLevel?: 'admin' | 'super_admin' | 'system';
   onServiceAction?: (serviceId: string, action: string) => void;
   onSystemAction?: (action: string) => void;
   const SERVICE_STATUS_CONFIG = {
-  running: {
-  color: 'text-green-600 bg-green-100',
-  icon: CheckCircle,
-  actions: ['stop', 'restart', 'pause'],
-}
+  running: {;
+  color: 'text-green-600 bg-green-100';
+  icon: CheckCircle;
+  actions: ['stop', 'restart', 'pause'] }
+
+
 },
-  stopped: {
+  stopped: { ,
   color: 'text-gray-600 bg-gray-100',
   icon: StopCircle,
-  actions: ['start'],
+  actions: ['start'] }
 },
-  error: {
+  error: { ,
   color: 'text-red-600 bg-red-100',
   icon: XCircle,
-  actions: ['restart', 'stop'],
+  actions: ['restart', 'stop'] }
 },
-  starting: {
+  starting: { ,
   color: 'text-yellow-600 bg-yellow-100',
   icon: PlayCircle,
-  actions: [],
+  actions: [] }
 },
-  stopping: {
+  stopping: { ,
   color: 'text-orange-600 bg-orange-100',
   icon: PauseCircle,
-  actions: [],
+  actions: [] }
 };
 const SYSTEM_STATUS_CONFIG = {
   operational: { color: 'text-green-600 bg-green-100', icon: CheckCircle },
@@ -143,14 +140,13 @@ const SYSTEM_STATUS_CONFIG = {
   down: { color: 'text-red-600 bg-red-100', icon: XCircle },
   maintenance: { color: 'text-blue-600 bg-blue-100', icon: Settings }
 };
-}
-export const StatusControls: React.FC<StatusControlsProps> = ({)
-  className = '',
-  adminLevel = 'admin',
-  onServiceAction,
+
+export const StatusControls: React.FC<StatusControlsProps> = ({ )
+  className = ''
+  adminLevel = 'admin'
+  onServiceAction }
   onSystemAction
-}) => {
-  const [activeTab, setActiveTab] = useState('overview');
+}) => { const [activeTab, setActiveTab] = useState('overview');
   const [services, setServices] = useState<SystemService>([]);
   const [systemOverview, setSystemOverview] = useState<SystemOverview | null>(null);
   const [selectedService, setSelectedService] = useState<SystemService | null>(null);
@@ -163,129 +159,118 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
     const interval = setInterval(loadSystemData, 5000);
     setRefreshInterval(interval as any);
     return () => {
-      if (interval) clearInterval(interval);
-    };
+      if (interval) clearInterval(interval) };
   }, []);
-  const loadSystemData = async () => {
-  try {
+  const loadSystemData = async () => { try {
   setIsLoading(true);
   // Mock system overview
-  const overview: SystemOverview = {,
-  overallStatus: 'operational',
-  totalServices: 8,
-  runningServices: 7,
-  erroredServices: 1,
-  systemLoad: 0.65,
-  memoryUsage: 0.72,
-  diskUsage: 0.45,
-  networkLatency: 23,
-  uptime: 7 * 24 * 60 * 60 * 1000, // 7 days,
-  activeUsers: 142,
-  backgroundJobs: 3,
+  const overview: SystemOverview = {
+  overallStatus: 'operational'
+  totalServices: 8
+  runningServices: 7
+  erroredServices: 1
+  systemLoad: 0.65
+  memoryUsage: 0.72
+  diskUsage: 0.45
+  networkLatency: 23
+  uptime: 7 * 24 * 60 * 60 * 1000, // 7 days
+  activeUsers: 142
+  backgroundJobs: 3 }
 };
       setSystemOverview(overview);
       // Mock services
       const mockServices: SystemService = [
-        {
-  id: 'web-server',
-  name: 'nginx',
-  displayName: 'Web Server',
-  description: 'Primary web server handling HTTP requests',
-  status: 'running',
-  health: 98,
-  uptime: 6 * 24 * 60 * 60 * 1000,
-  lastRestart: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
-  autoRestart: true,
-  dependencies: [],
-  port: 80,
-  url: 'http://localhost',
-  logs: [],
+        { id: 'web-server'
+  name: 'nginx'
+  displayName: 'Web Server'
+  description: 'Primary web server handling HTTP requests'
+  status: 'running'
+  health: 98
+  uptime: 6 * 24 * 60 * 60 * 1000
+  lastRestart: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
+  autoRestart: true
+  dependencies: []
+  port: 80
+  url: 'http://localhost'
+  logs: []
   metrics: {
-  cpuUsage: 5.2,
-  memoryUsage: 128,
-  requestCount: 1250,
-  errorRate: 0.02,
-  responseTime: 45,
-  throughput: 850,
-}
-        {
-  id: 'api-server',
-  name: 'fastify',
-  displayName: 'API Server',
-  description: 'Backend API server for application logic',
-  status: 'running',
-  health: 95,
-  uptime: 5 * 24 * 60 * 60 * 1000,
-  lastRestart: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-  autoRestart: true,
-  dependencies: ['database', 'redis'],
-  port: 8000,
-  url: 'http://localhost:8000',
-  logs: [],
+  cpuUsage: 5.2
+  memoryUsage: 128
+  requestCount: 1250
+  errorRate: 0.02
+  responseTime: 45
+  throughput: 850 }
+
+        { id: 'api-server'
+  name: 'fastify'
+  displayName: 'API Server'
+  description: 'Backend API server for application logic'
+  status: 'running'
+  health: 95
+  uptime: 5 * 24 * 60 * 60 * 1000
+  lastRestart: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+  autoRestart: true
+  dependencies: ['database', 'redis']
+  port: 8000
+  url: 'http://localhost:8000'
+  logs: []
   metrics: {
-  cpuUsage: 12.8,
-  memoryUsage: 256,
-  requestCount: 2840,
-  errorRate: 0.05,
-  responseTime: 125,
-  throughput: 420,
-}
-        {
-  id: 'database',
-  name: 'postgresql',
-  displayName: 'PostgreSQL Database',
-  description: 'Primary database server',
-  status: 'running',
-  health: 92,
-  uptime: 7 * 24 * 60 * 60 * 1000,
-  lastRestart: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-  autoRestart: true,
-  dependencies: [],
-  port: 5432,
-  logs: [],
+  cpuUsage: 12.8
+  memoryUsage: 256
+  requestCount: 2840
+  errorRate: 0.05
+  responseTime: 125
+  throughput: 420 }
+
+        { id: 'database'
+  name: 'postgresql'
+  displayName: 'PostgreSQL Database'
+  description: 'Primary database server'
+  status: 'running'
+  health: 92
+  uptime: 7 * 24 * 60 * 60 * 1000
+  lastRestart: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  autoRestart: true
+  dependencies: []
+  port: 5432
+  logs: []
   metrics: {
-  cpuUsage: 8.5,
-  memoryUsage: 512,
-  requestCount: 5600,
-  errorRate: 0.01,
-  responseTime: 15,
-  throughput: 1200,
-}
-        {
-  id: 'redis',
-  name: 'redis',
-  displayName: 'Redis Cache',
-  description: 'In-memory cache and session store',
-  status: 'error',
-  health: 0,
-  uptime: 0,
-  lastRestart: new Date(Date.now() - 2 * 60 * 60 * 1000),
-  autoRestart: false,
-  dependencies: [],
-  port: 6379,
-  logs: [],
+  cpuUsage: 8.5
+  memoryUsage: 512
+  requestCount: 5600
+  errorRate: 0.01
+  responseTime: 15
+  throughput: 1200 }
+
+        { id: 'redis'
+  name: 'redis'
+  displayName: 'Redis Cache'
+  description: 'In-memory cache and session store'
+  status: 'error'
+  health: 0
+  uptime: 0
+  lastRestart: new Date(Date.now() - 2 * 60 * 60 * 1000)
+  autoRestart: false
+  dependencies: []
+  port: 6379
+  logs: []
   metrics: {
-  cpuUsage: 0,
-  memoryUsage: 0,
-  requestCount: 0,
-  errorRate: 1,
-  responseTime: 0,
+  cpuUsage: 0
+  memoryUsage: 0
+  requestCount: 0
+  errorRate: 1
+  responseTime: 0 }
   throughput: 0];
   setServices(mockServices);
-} catch (error) {
-  console.error('Failed to load system data:', error);
-} finally {
-      setIsLoading(false);
-  };
-  const handleServiceAction = async (serviceId: string, action: string) => {
-  try {
+ catch (error) { console.error('Failed to load system data:', error) } finally { setIsLoading(false) };
+  const handleServiceAction = async (serviceId: string, action: string) => { try {
   setServices(prev => prev.map(service => )
   service.id === serviceId
   ? {
-  ...service,
-  status: action === 'start' ? 'starting' : ,
-  action === 'stop' ? 'stopping' :,
-  action === 'restart' ? 'starting' :,
+  ...service
+  status: action === 'start' ? 'starting' : 
+  action === 'stop' ? 'stopping' :
+  action === 'restart' ? 'starting' :
   service.status
   : service));
   // Simulate action delay
@@ -293,20 +278,18 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
   setServices(prev => prev.map(service => )
   service.id === serviceId
   ? {
-  ...service,
-  status: action === 'stop' ? 'stopped' : 'running',
-  lastRestart: action === 'restart' ? new Date() : service.lastRestart,
-  uptime: action === 'restart' ? 0 : service.uptime,
+  ...service
+  status: action === 'stop' ? 'stopped' : 'running'
+  lastRestart: action === 'restart' ? new Date() : service.lastRestart
+  uptime: action === 'restart' ? 0 : service.uptime }
   : service));
 }, 2000);
       onServiceAction?.(serviceId, action);
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to ${action} service ${serviceId}:`, error);}
   };
-  const handleSystemAction = async (action: string) => {
-    try {
-      onSystemAction?.(action);
-    } catch (error) {
+  const handleSystemAction = async (action: string) => { try {
+      onSystemAction?.(action) } catch (error) {
       console.error(`Failed to execute system action ${action}:`, error);}
   };
   const renderOverview = () => {
@@ -629,18 +612,18 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
           adminLevel={adminLevel}
         />
       )}
-      <style>{`
+      <style>{ `
         .status-controls {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
         .controls-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
@@ -678,12 +661,12 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
           gap: 1rem;
         .metric-item {
           display: flex;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 0.75rem;
         .metric-info {
           flex: 1;
         .metric-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin-bottom: 0.25rem;
         .metric-value {
@@ -692,13 +675,13 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
   color: #1f2937;
           margin-bottom: 0.25rem;
         .metric-status {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .metric-status.running {
           color: #059669;
         .metric-status.active {
           color: #3b82f6;
-        .load-bar,
+        .load-bar
         .memory-bar {
           height: 4px;
   background: #e5e7eb;
@@ -706,11 +689,11 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
   overflow: hidden;
           margin-top: 0.25rem;
         .load-fill {
-          height: 100%;
+          height: 100%
   background: #059669;
           transition: width 0.3s ease;
         .memory-fill {
-          height: 100%;
+          height: 100%
   background: #8b5cf6;
           transition: width 0.3s ease;
         .alerts-section {
@@ -727,19 +710,19 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
           border-radius: 6px;
           font-size: 0.875rem;
         .alert-item.error {
-          background: #fef2f2;
+          background: #fef2f2
   color: #991b1b;
           border: 1px solid #fecaca;
         .alert-item.warning {
-          background: #fffbeb;
+          background: #fffbeb
   color: #92400e;
           border: 1px solid #fed7aa;
         .alert-item.info {
-          background: #eff6ff;
+          background: #eff6ff
   color: #1e40af;
           border: 1px solid #bfdbfe;
         .alert-item.success {
-          background: #f0fdf4;
+          background: #f0fdf4
   color: #166534;
           border: 1px solid #bbf7d0;
         .services-section {
@@ -772,7 +755,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
         .process-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
@@ -783,7 +766,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
   color: #1f2937;
           margin-bottom: 0.25rem;
         .process-description {
-          font-size: 0.875rem;
+          font-size: 0.875rem }
   color: #6b7280;
         .process-actions {
           display: flex;
@@ -813,23 +796,23 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
 };
 
 // Service Card Component
-}
-interface ServiceCardProps {
-  service: SystemService;
-  onAction: (serviceId: string, action: string) => void;
-  onSelect: (service: SystemService) => void;
+
+
+interface ServiceCardProps { service: SystemService;
+  onAction: (serviceId: string, action: string) => void
+  onSelect: (service: SystemService) => void
   adminLevel: string;
-  const ServiceCard: React.FC<ServiceCardProps> = ({ ),
-  service,
-  onAction,
-  onSelect,
+  const ServiceCard: React.FC<ServiceCardProps> = ({ );
+  service;
+  onAction;
+  onSelect }
   adminLevel
-}
-}) => {
-  const statusConfig = SERVICE_STATUS_CONFIG[service.status];
+
+
+}) => { const statusConfig = SERVICE_STATUS_CONFIG[service.status];
   const StatusIcon = statusConfig.icon;
   const canControl = adminLevel === 'super_admin' || adminLevel === 'admin';
-  const getHealthColor = (health: number) => {,
+  const getHealthColor = (health: number) => { }
   if (health >= 90) return 'text-green-600';
   if (health >= 70) return 'text-yellow-600';
   if (health >= 50) return 'text-orange-600';
@@ -909,7 +892,7 @@ interface ServiceCardProps {
           ))}
         </div>
       </CardContent>
-      <style>{`
+      <style>{ `
         .service-card {
           transition: box-shadow 0.2s ease;
         .service-card:hover {
@@ -924,7 +907,7 @@ interface ServiceCardProps {
   color: #1f2937;
           margin-bottom: 0.25rem;
         .service-description {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           line-height: 1.4;
         .service-metrics {
@@ -939,9 +922,9 @@ interface ServiceCardProps {
           display: flex;
           justify-content: space-between;
           font-size: 0.875rem;
-        .metric-row span:first-child {,
+        .metric-row span:first-child {
   color: #6b7280;
-        .metric-row span:last-child {,
+        .metric-row span:last-child { }
   color: #1f2937;
           font-weight: 500;
         .service-actions {
@@ -954,18 +937,19 @@ interface ServiceCardProps {
 };
 
 // Service Detail Modal Component
-}
-interface ServiceDetailModalProps {
-  service: SystemService;
+
+
+interface ServiceDetailModalProps { service: SystemService;
   onClose: () => void;
-  onAction: (serviceId: string, action: string) => void;
+  onAction: (serviceId: string, action: string) => void
   adminLevel: string;
-  const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({,)
-  service,
-  onClose,
-  onAction,
+  const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({);
+  service;
+  onClose;
+  onAction }
   adminLevel
-}
+
+
 }) => {
   const statusConfig = SERVICE_STATUS_CONFIG[service.status];
   const StatusIcon = statusConfig.icon;
@@ -1060,10 +1044,9 @@ interface ServiceDetailModalProps {
           {canControl && statusConfig.actions.map(action => ()
             <Button
               key={action}
-              onClick={() => {
+              onClick={ () => {
                 onAction(service.id, action);
-                onClose();
-              }}
+                onClose() }}
               variant={action === 'stop' ? 'outline' : 'default'}
             >
               {action.charAt(0).toUpperCase() + action.slice(1)} Service
@@ -1071,7 +1054,7 @@ interface ServiceDetailModalProps {
           ))}
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .modal-overlay {
           position: fixed;
   inset: 0;
@@ -1090,7 +1073,7 @@ interface ServiceDetailModalProps {
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
         .modal-title {
@@ -1105,7 +1088,7 @@ interface ServiceDetailModalProps {
           padding: 1.5rem;
         .service-details-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1.5rem;
           margin-bottom: 1.5rem;
         .detail-section h3 {
@@ -1137,7 +1120,7 @@ interface ServiceDetailModalProps {
   gap: 0.5rem;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
+          justify-content: flex-end }
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;

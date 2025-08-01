@@ -33,6 +33,8 @@ const SECURITY_CONFIG = {
         alphabetic: 'ABCDEFGHJKMNPQRSTUVWXYZ',
     }
 };
+as;
+const ;
 export class SecureCodeGenerator extends EventEmitter {
     config;
     constructor(config) {
@@ -282,8 +284,9 @@ Promise < ValidationResult > {
                                             this.config.HASH_ALGORITHM;
                                         toString('base64');
                                         async;
-                                        constantTimeValidation(inputCode, string);
-                                        storedHash: string,
+                                        constantTimeValidation(inputCode, string),
+                                            storedHash;
+                                        string,
                                             salt;
                                         Buffer;
                                         Promise < boolean > {
@@ -414,38 +417,43 @@ Promise < ValidationResult > {
                                                                                 formatCodeForDisplay(code, separator = '-', groupSize = 4) {
                                                                                     return code.match(new RegExp(`.{1,${groupSize}}`, 'g'))?.join(separator) || code;
                                                                                 }
-                                                                            };
-                                                                            /**
-                                                                             * Clean user input (remove formatting, normalize case)
-                                                                             */
-                                                                            cleanUserInput(input, string);
-                                                                            string;
-                                                                            {
-                                                                                return input.replace(/[\s-]/g, '').toUpperCase();
-                                                                            }
-                                                                            /**
-                                                                             * Generate a secure random token for API keys, etc.
-                                                                             */
-                                                                            generateSecureToken(length, number = 32);
-                                                                            string;
-                                                                            {
-                                                                                return crypto.randomBytes(length).toString('base64url');
-                                                                            }
-                                                                            /**
-                                                                             * Calculate entropy bits for a given alphabet and length
-                                                                             */
-                                                                            calculateEntropy(alphabetSize, number, length, number);
-                                                                            number;
-                                                                            {
-                                                                                return Math.log2(Math.pow(alphabetSize, length));
-                                                                            }
-                                                                            ;
-                                                                            export default {
-                                                                                SecureCodeGenerator,
-                                                                                VerificationCodeFactory,
-                                                                                codeGenerator,
-                                                                                verificationCodeFactory,
-                                                                                CodeUtils
+                                                                                /**
+                                                                                 * Clean user input (remove formatting, normalize case)
+                                                                                 */
+                                                                                ,
+                                                                                /**
+                                                                                 * Clean user input (remove formatting, normalize case)
+                                                                                 */
+                                                                                cleanUserInput(input) {
+                                                                                    return input.replace(/[\s-]/g, '').toUpperCase();
+                                                                                }
+                                                                                /**
+                                                                                 * Generate a secure random token for API keys, etc.
+                                                                                 */
+                                                                                ,
+                                                                                /**
+                                                                                 * Generate a secure random token for API keys, etc.
+                                                                                 */
+                                                                                generateSecureToken(length = 32) {
+                                                                                    return crypto.randomBytes(length).toString('base64url');
+                                                                                }
+                                                                                /**
+                                                                                 * Calculate entropy bits for a given alphabet and length
+                                                                                 */
+                                                                                ,
+                                                                                /**
+                                                                                 * Calculate entropy bits for a given alphabet and length
+                                                                                 */
+                                                                                calculateEntropy(alphabetSize, length) {
+                                                                                    return Math.log2(Math.pow(alphabetSize, length));
+                                                                                },
+                                                                                export: , default: {
+                                                                                    SecureCodeGenerator,
+                                                                                    VerificationCodeFactory,
+                                                                                    codeGenerator,
+                                                                                    verificationCodeFactory,
+                                                                                    CodeUtils
+                                                                                }
                                                                             };
                                                                         });
                                                                 }

@@ -14,39 +14,42 @@
 import { Graph } from '../../../../packages/core/graphSchema';
 import crypto from 'crypto';
 
-}
-}
+
+
 export interface PreviewResult {
   seed: number;
   output: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CachedPreviewResult {
   results: PreviewResult[];
   timestamp: number;
   ttl: number;
   executionTimeMs: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PreviewCacheConfig {
   maxCacheSize: number;
   defaultTtlMs: number;
   enableDeduplication: boolean;
   enableMetrics: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PreviewCacheMetrics {
   cacheHits: number;
   cacheMisses: number;
@@ -55,9 +58,10 @@ export interface PreviewCacheMetrics {
   averageExecutionTime: number;
   cacheSize: number;
   deduplicationHits: number;
-}
-}
-}
+
+
+
+
 
 /**
  * LRU Cache implementation with TTL support
@@ -68,7 +72,7 @@ class LRUCache<K, V> {
 
   constructor(maxSize: number) {
     this.maxSize = maxSize;
-  }
+
 
   get(key: K): V | null {
     const entry = this.cache.get(key);
@@ -78,7 +82,7 @@ class LRUCache<K, V> {
     if (Date.now() - entry.timestamp > entry.ttl) {
       this.cache.delete(key);
       return null;
-    }
+
 
     // Update access info for LRU
     entry.accessCount++;
@@ -88,14 +92,14 @@ class LRUCache<K, V> {
     this.cache.set(key, entry);
 
     return entry.value;
-  }
+
 
   set(key: K, value: V, ttlMs: number): void {
     // Remove oldest entry if cache is full
     if (this.cache.size >= this.maxSize) {
       const firstKey = this.cache.keys().next().value;
       this.cache.delete(firstKey);
-    }
+
 
     this.cache.set(key, {
       value,
@@ -103,15 +107,15 @@ class LRUCache<K, V> {
       ttl: ttlMs,
       accessCount: 1
     });
-  }
+
 
   size(): number {
     return this.cache.size;
-  }
+
 
   clear(): void {
     this.cache.clear();
-  }
+
 
   // Remove expired entries
   cleanup(): void {
@@ -119,10 +123,10 @@ class LRUCache<K, V> {
     for (const [key, entry] of this.cache.entries()) {
       if (now - entry.timestamp > entry.ttl) {
         this.cache.delete(key);
-      }
-    }
-  }
-}
+
+
+
+
 
 /**
  * Request deduplication to prevent concurrent identical requests
@@ -135,7 +139,7 @@ class RequestDeduplicator {
     // Check if there's already a pending request for this key
     if (this.pendingRequests.has(key)) {
       return this.pendingRequests.get(key) as Promise<T>;
-    }
+
 
     // Create new promise for this request
     const promise = executor().finally(() => {
@@ -145,12 +149,12 @@ class RequestDeduplicator {
 
     this.pendingRequests.set(key, promise as Promise<PreviewResult[]>);
     return promise;
-  }
+
 
   getPendingCount(): number {
     return this.pendingRequests.size;
-  }
-}
+
+
 
 /**
  * Main preview caching service
@@ -184,7 +188,7 @@ export class PreviewCache {
 
     // Periodic cleanup of expired entries
     setInterval(() => this.cache.cleanup(), 60000); // Every minute
-  }
+
 
   /**
    * Generate cache key from graph content and parameters
@@ -202,7 +206,7 @@ export class PreviewCache {
     hash.update(`${runs}:${seedStart}`);
     
     return hash.digest('hex');
-  }
+
 
   /**
    * Get cached preview results or execute if not found
@@ -218,7 +222,7 @@ export class PreviewCache {
     
     if (this.config.enableMetrics) {
       this.metrics.totalRequests++;
-    }
+
 
     // Check cache first
     const cached = this.cache.get(cacheKey);
@@ -226,14 +230,14 @@ export class PreviewCache {
       if (this.config.enableMetrics) {
         this.metrics.cacheHits++;
         this.updateMetrics();
-      }
+
       return cached.results;
-    }
+
 
     // Cache miss - execute with optional deduplication
     if (this.config.enableMetrics) {
       this.metrics.cacheMisses++;
-    }
+
 
     if (this.config.enableDeduplication) {
       return this.deduplicator.deduplicate(cacheKey, async () => {
@@ -251,11 +255,11 @@ export class PreviewCache {
 
         if (this.config.enableMetrics) {
           this.updateMetrics();
-        }
+
 
         return results;
       });
-    } else {
+ else {
       const startTime = Date.now();
       const results = await executor();
       const executionTime = Date.now() - startTime;
@@ -270,11 +274,11 @@ export class PreviewCache {
 
       if (this.config.enableMetrics) {
         this.updateMetrics();
-      }
+
 
       return results;
-    }
-  }
+
+
 
   /**
    * Update cache metrics
@@ -285,7 +289,7 @@ export class PreviewCache {
       : 0;
     this.metrics.cacheSize = this.cache.size();
     this.metrics.deduplicationHits = this.deduplicator.getPendingCount();
-  }
+
 
   /**
    * Get cache performance metrics
@@ -293,7 +297,7 @@ export class PreviewCache {
   getMetrics(): PreviewCacheMetrics {
     this.updateMetrics();
     return { ...this.metrics };
-  }
+
 
   /**
    * Clear cache (useful for testing or memory management)
@@ -310,23 +314,23 @@ export class PreviewCache {
         cacheSize: 0,
         deduplicationHits: 0
       };
-    }
-  }
+
+
 
   /**
    * Update cache configuration
    */
   updateConfig(newConfig: Partial<PreviewCacheConfig>): void {
     this.config = { ...this.config, ...newConfig };
-  }
+
 
   /**
    * Get cache configuration
    */
   getConfig(): PreviewCacheConfig {
     return { ...this.config };
-  }
-}
+
+
 
 // Global cache instance
 let globalPreviewCache: PreviewCache | null = null;
@@ -344,14 +348,13 @@ export function getPreviewCache(): PreviewCache {
     };
 
     globalPreviewCache = new PreviewCache(config);
-  }
+
 
   return globalPreviewCache;
-}
+
 
 /**
  * Reset global cache (useful for testing)
  */
 export function resetPreviewCache(): void {
   globalPreviewCache = null;
-}

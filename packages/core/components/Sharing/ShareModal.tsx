@@ -7,58 +7,56 @@
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
 import React, { useState } from 'react';
-import {
-  ShareableResourceType,
+import { ShareableResourceType,
   ShareTarget,
   ShareFormat,
   SocialPlatform,
   CreateShareRequest,
-  ShareResponse,
+  ShareResponse }
   SharePermission
-} from '../../types/sharingTypes';
+ from '../../types/sharingTypes';
 import { SharingService } from '../../services/SharingService';
-}
-interface ShareModalProps {
-  isOpen: boolean;
+
+
+interface ShareModalProps { isOpen: boolean;
   onClose: () => void;
   resourceId: string;
   resourceType: ShareableResourceType;
   resourceTitle: string;
   resourceDescription?: string;
   onShareCreated?: (shareResponse: ShareResponse) => void;
-  export const ShareModal: React.FC<ShareModalProps> = ({,)
-  isOpen,
-  onClose,
-  resourceId,
-  resourceType,
-  resourceTitle,
-  resourceDescription,
+  export const ShareModal: React.FC<ShareModalProps> = ({);
+  isOpen;
+  onClose;
+  resourceId;
+  resourceType;
+  resourceTitle;
+  resourceDescription }
   onShareCreated
-}
-}) => {
-  const [shareTarget, setShareTarget] = useState<ShareTarget>('public');
+
+
+}) => { const [shareTarget, setShareTarget] = useState<ShareTarget>('public');
   const [shareFormat, setShareFormat] = useState<ShareFormat>('link');
   const [selectedPlatforms, setSelectedPlatforms] = useState<SocialPlatform>([]);
   const [permissions, setPermissions] = useState<SharePermission>({)
-  canView: true,
-  canComment: true,
-  canClone: false,
-  canEdit: false,
-  canShare: true,
-  canEmbed: true,
-  canDownload: false,
-  requiresAuth: false,
+  canView: true
+  canComment: true
+  canClone: false
+  canEdit: false
+  canShare: true
+  canEmbed: true
+  canDownload: false
+  requiresAuth: false }
 });
   const [customTitle, setCustomTitle] = useState(resourceTitle);
   const [customDescription, setCustomDescription] = useState(resourceDescription || '');
   const [isLoading, setIsLoading] = useState(false);
   const [shareResponse, setShareResponse] = useState<ShareResponse | null>(null);
   const [activeTab, setActiveTab] = useState<'options' | 'permissions' | 'preview'>('options');
-  const sharingService = new SharingService({)
-  baseUrl: 'https://prompt-spaghetti.vercel.app',
+  const sharingService = new SharingService({ )
+  baseUrl: 'https://prompt-spaghetti.vercel.app' }
 });
-  const handleCreateShare = async () => {
-  setIsLoading(true);
+  const handleCreateShare = async () => { setIsLoading(true);
   try {
   const request: CreateShareRequest = {,
   resourceId,
@@ -68,72 +66,63 @@ interface ShareModalProps {
   title: customTitle,
   description: customDescription,
   permissions,
-  socialPlatforms: selectedPlatforms,
+  socialPlatforms: selectedPlatforms }
 };
       const response = await sharingService.createShare(request);
       setShareResponse(response);
       onShareCreated?.(response);
       setActiveTab('preview');
-    } catch (error) {
-  console.error('Failed to create share:', error);
-} finally {
-      setIsLoading(false);
-  };
-  const handlePlatformToggle = (platform: SocialPlatform) => {
-  setSelectedPlatforms(prev => )
+ catch (error) { console.error('Failed to create share:', error) } finally { setIsLoading(false) };
+  const handlePlatformToggle = (platform: SocialPlatform) => { setSelectedPlatforms(prev => )
   prev.includes(platform)
   ? prev.filter(p => p !== platform)
-  : [...prev, platform]);
-};
-  const copyToClipboard = async (text: string) => {
-  try {
+  : [...prev, platform]) };
+  const copyToClipboard = async (text: string) => { try {
   await navigator.clipboard.writeText(text);
-  // TODO: Show success toast,
-} catch (error) {
-  console.error('Failed to copy to clipboard:', error);
-};
+  // TODO: Show success toast }
+ catch (error) { console.error('Failed to copy to clipboard:', error) };
   if (!isOpen) return null;
   return;
-    <div style={{
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 1000,
-}}>
-      <div style={{
-  backgroundColor: 'white',
-  borderRadius: '12px',
-  width: '90%',
-  maxWidth: '600px',
-  maxHeight: '90vh',
-  overflow: 'hidden',
-  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-}}>
+    <div style={ {
+  position: 'fixed'
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  zIndex: 1000 }
+}>
+      <div style={ {
+  backgroundColor: 'white'
+  borderRadius: '12px'
+  width: '90%'
+  maxWidth: '600px'
+  maxHeight: '90vh'
+  overflow: 'hidden'
+  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }
+}>
         {/* Header */}
-        <div style={{
-  padding: '24px 24px 0 24px',
-  borderBottom: '1px solid #e5e7eb',
-}}>
+        <div style={ {
+  padding: '24px 24px 0 24px'
+  borderBottom: '1px solid #e5e7eb' }
+}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '600', color: '#111827' }}>
               Share {resourceType}
             </h2>
             <button
               onClick={onClose}
-              style={{
-  background: 'none',
-  border: 'none',
-  fontSize: '24px',
-  cursor: 'pointer',
-  color: '#6b7280',
-  padding: '4px',
-}}
+              style={ {
+  background: 'none'
+  border: 'none'
+  fontSize: '24px'
+  cursor: 'pointer'
+  color: '#6b7280'
+  padding: '4px' }
+}
             >
               ×
             </button>
@@ -144,17 +133,17 @@ interface ShareModalProps {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                style={{
-  padding: '8px 16px',
-  border: 'none',
-  backgroundColor: activeTab === tab ? '#3b82f6' : 'transparent',
-  color: activeTab === tab ? 'white' : '#6b7280',
-  borderRadius: '6px',
-  cursor: 'pointer',
-  textTransform: 'capitalize',
-  fontSize: '14px',
-  fontWeight: '500',
-}}
+                style={ {
+  padding: '8px 16px'
+  border: 'none'
+  backgroundColor: activeTab === tab ? '#3b82f6' : 'transparent'
+  color: activeTab === tab ? 'white' : '#6b7280'
+  borderRadius: '6px'
+  cursor: 'pointer'
+  textTransform: 'capitalize'
+  fontSize: '14px'
+  fontWeight: '500' }
+
               >
                 {tab}
               </button>
@@ -174,13 +163,13 @@ interface ShareModalProps {
                   type="text"
                   value={customTitle}
                   onChange={(e) => setCustomTitle(e.target.value)}
-                  style={{
-  width: '100%',
-  padding: '8px 12px',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '14px',
-}}
+                  style={ {
+  width: '100%'
+  padding: '8px 12px'
+  border: '1px solid #d1d5db'
+  borderRadius: '6px'
+  fontSize: '14px' }
+}
                 />
               </div>
               <div>
@@ -191,14 +180,14 @@ interface ShareModalProps {
                   value={customDescription}
                   onChange={(e) => setCustomDescription(e.target.value)}
                   rows={3}
-                  style={{
-  width: '100%',
-  padding: '8px 12px',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '14px',
-  resize: 'vertical',
-}}
+                  style={ {
+  width: '100%'
+  padding: '8px 12px'
+  border: '1px solid #d1d5db'
+  borderRadius: '6px'
+  fontSize: '14px'
+  resize: 'vertical' }
+
                 />
               </div>
               {/* Share Options */}
@@ -210,13 +199,13 @@ interface ShareModalProps {
                   <select
                     value={shareTarget}
                     onChange={(e) => setShareTarget(e.target.value as ShareTarget)}
-                    style={{
-  width: '100%',
-  padding: '8px 12px',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '14px',
-}}
+                    style={ {
+  width: '100%'
+  padding: '8px 12px'
+  border: '1px solid #d1d5db'
+  borderRadius: '6px'
+  fontSize: '14px' }
+}
                   >
                     <option value="public">Public</option>
                     <option value="unlisted">Unlisted</option>
@@ -232,13 +221,13 @@ interface ShareModalProps {
                   <select
                     value={shareFormat}
                     onChange={(e) => setShareFormat(e.target.value as ShareFormat)}
-                    style={{
-  width: '100%',
-  padding: '8px 12px',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '14px',
-}}
+                    style={ {
+  width: '100%'
+  padding: '8px 12px'
+  border: '1px solid #d1d5db'
+  borderRadius: '6px'
+  fontSize: '14px' }
+}
                   >
                     <option value="link">Share Link</option>
                     <option value="embed">Embed Code</option>
@@ -257,17 +246,17 @@ interface ShareModalProps {
                     <button
                       key={platform}
                       onClick={() => handlePlatformToggle(platform as SocialPlatform)}
-                      style={{
-                        padding: '8px 12px',
+                      style={ {
+                        padding: '8px 12px' }
                         border: `1px solid ${selectedPlatforms.includes(platform as SocialPlatform) ? '#3b82f6' : '#d1d5db'}`}
-},
-  backgroundColor: selectedPlatforms.includes(platform as SocialPlatform) ? '#eff6ff' : 'white',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        textTransform: 'capitalize',
+
+  backgroundColor: selectedPlatforms.includes(platform as SocialPlatform) ? '#eff6ff' : 'white'
+                        borderRadius: '6px'
+                        cursor: 'pointer'
+                        fontSize: '12px'
+                        textTransform: 'capitalize'
                         color: selectedPlatforms.includes(platform as SocialPlatform) ? '#3b82f6' : '#6b7280';
-  }}
+
                     >
                       {platform}
                     </button>
@@ -314,26 +303,26 @@ interface ShareModalProps {
                     type="text"
                     value={shareResponse.shareLink.shortUrl}
                     readOnly
-                    style={{
-  flex: 1,
-  padding: '8px 12px',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '14px',
-  backgroundColor: '#f9fafb',
-}}
+                    style={ {
+  flex: 1
+  padding: '8px 12px'
+  border: '1px solid #d1d5db'
+  borderRadius: '6px'
+  fontSize: '14px'
+  backgroundColor: '#f9fafb' }
+
                   />
                   <button
                     onClick={() => copyToClipboard(shareResponse.shareLink.shortUrl)}
-                    style={{
-  padding: '8px 16px',
-  backgroundColor: '#3b82f6',
-  color: 'white',
-  border: 'none',
-  borderRadius: '6px',
-  cursor: 'pointer',
-  fontSize: '14px',
-}}
+                    style={ {
+  padding: '8px 16px'
+  backgroundColor: '#3b82f6'
+  color: 'white'
+  border: 'none'
+  borderRadius: '6px'
+  cursor: 'pointer'
+  fontSize: '14px' }
+
                   >
                     Copy
                   </button>
@@ -348,23 +337,23 @@ interface ShareModalProps {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {Object.entries(shareResponse.socialLinks).map(([platform, url]) => ()
                       <div key={platform} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                        <span style={{
-  fontSize: '12px',
-  textTransform: 'capitalize',
-  minWidth: '80px',
-  color: '#6b7280',
-}}>
+                        <span style={ {
+  fontSize: '12px'
+  textTransform: 'capitalize'
+  minWidth: '80px'
+  color: '#6b7280' }
+}>
                           {platform}:
                         </span>
                         <a
                           href={url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          style={{
-  color: '#3b82f6',
-  textDecoration: 'none',
-  fontSize: '14px',
-}}
+                          style={ {
+  color: '#3b82f6'
+  textDecoration: 'none'
+  fontSize: '14px' }
+
                         >
                           Open {platform}
                         </a>
@@ -383,28 +372,28 @@ interface ShareModalProps {
                     value={shareResponse.embedCodes.responsive}
                     readOnly
                     rows={4}
-                    style={{
-  width: '100%',
-  padding: '8px 12px',
-  border: '1px solid #d1d5db',
-  borderRadius: '6px',
-  fontSize: '12px',
-  fontFamily: 'monospace',
-  backgroundColor: '#f9fafb',
-}}
+                    style={ {
+  width: '100%'
+  padding: '8px 12px'
+  border: '1px solid #d1d5db'
+  borderRadius: '6px'
+  fontSize: '12px'
+  fontFamily: 'monospace'
+  backgroundColor: '#f9fafb' }
+}
                   />
                   <button
                     onClick={() => copyToClipboard(shareResponse.embedCodes.responsive)}
-                    style={{
-  marginTop: '8px',
-  padding: '6px 12px',
-  backgroundColor: '#6b7280',
-  color: 'white',
-  border: 'none',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  fontSize: '12px',
-}}
+                    style={ {
+  marginTop: '8px'
+  padding: '6px 12px'
+  backgroundColor: '#6b7280'
+  color: 'white'
+  border: 'none'
+  borderRadius: '4px'
+  cursor: 'pointer'
+  fontSize: '12px' }
+
                   >
                     Copy Embed Code
                   </button>
@@ -414,24 +403,24 @@ interface ShareModalProps {
           )}
         </div>
         {/* Footer */}
-        <div style={{
-  padding: '16px 24px',
-  borderTop: '1px solid #e5e7eb',
-  display: 'flex',
-  justifyContent: 'flex-end',
-  gap: '12px',
-}}>
+        <div style={ {
+  padding: '16px 24px'
+  borderTop: '1px solid #e5e7eb'
+  display: 'flex'
+  justifyContent: 'flex-end'
+  gap: '12px' }
+}>
           <button
             onClick={onClose}
-            style={{
-  padding: '8px 16px',
-  border: '1px solid #d1d5db',
-  backgroundColor: 'white',
-  borderRadius: '6px',
-  cursor: 'pointer',
-  fontSize: '14px',
-  color: '#374151',
-}}
+            style={ {
+  padding: '8px 16px'
+  border: '1px solid #d1d5db'
+  backgroundColor: 'white'
+  borderRadius: '6px'
+  cursor: 'pointer'
+  fontSize: '14px'
+  color: '#374151' }
+}
           >
             Cancel
           </button>
@@ -439,16 +428,16 @@ interface ShareModalProps {
             <button
               onClick={handleCreateShare}
               disabled={isLoading}
-              style={{
-  padding: '8px 16px',
-  backgroundColor: isLoading ? '#9ca3af' : '#3b82f6',
-  color: 'white',
-  border: 'none',
-  borderRadius: '6px',
-  cursor: isLoading ? 'not-allowed' : 'pointer',
-  fontSize: '14px',
-  fontWeight: '500',
-}}
+              style={ {
+  padding: '8px 16px'
+  backgroundColor: isLoading ? '#9ca3af' : '#3b82f6'
+  color: 'white'
+  border: 'none'
+  borderRadius: '6px'
+  cursor: isLoading ? 'not-allowed' : 'pointer'
+  fontSize: '14px'
+  fontWeight: '500' }
+
             >
               {isLoading ? 'Creating...' : 'Create Share'}
             </button>

@@ -13,8 +13,7 @@ export { ShareAnalyticsDashboard } from './ShareAnalyticsDashboard';
 export { SharePreview } from './SharePreview';
 
 // Re-export types for convenience
-export type {
-  ShareableResourceType,
+export type { ShareableResourceType,
   ShareTarget,
   ShareFormat,
   SocialPlatform,
@@ -26,8 +25,8 @@ export type {
   CreateShareRequest,
   ShareResponse,
   ShareCollection,
-  SocialIntegration,
-} from '../../types/sharingTypes';
+  SocialIntegration }
+ from '../../types/sharingTypes';
 
 // Re-export service for convenience
 export { SharingService } from '../../services/SharingService';

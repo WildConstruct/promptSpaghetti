@@ -38,16 +38,17 @@ export type ReviewerExpertise =
 // Review Framework Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface ReviewCriteria {
   factual_accuracy: {
     score: number; // 1-10
     notes: string;
     evidence_verification: boolean;
     fact_checking_complete: boolean;
-}
-}
+
+
+
   };
   policy_compliance: {
     score: number; // 1-10
@@ -80,10 +81,10 @@ export interface ReviewCriteria {
     consistency_rating: 'highly_consistent' | 'consistent' | 'inconsistent' | 'highly_inconsistent';
     precedent_cases: string[];
   };
-}
 
-}
-}
+
+
+
 export interface ReviewRecommendation {
   primary_decision: ReviewDecision;
   confidence_level: number; // 1-100
@@ -92,8 +93,9 @@ export interface ReviewRecommendation {
     supporting_evidence: string[];
     mitigating_circumstances: string[];
     aggravating_factors: string[];
-}
-}
+
+
+
   };
   implementation: {
     immediate_actions: string[];
@@ -106,10 +108,10 @@ export interface ReviewRecommendation {
     impact_severity: 'minimal' | 'low' | 'moderate' | 'high' | 'severe';
     mitigation_strategies: string[];
   };
-}
 
-}
-}
+
+
+
 export interface ReviewWorkflow {
   review_id: string;
   appeal_id: string;
@@ -158,12 +160,13 @@ export interface ReviewWorkflow {
   review_notes: string;
   internal_comments: string;
   public_summary: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewTemplate {
   template_id: string;
   name: string;
@@ -188,16 +191,18 @@ export interface ReviewTemplate {
   
   usage_count: number;
   last_updated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewQualityMetrics {
   reviewer_id: string;
-}
-}
+
+
+
   time_period: { start: Date; end: Date };
   
   // Volume metrics
@@ -223,16 +228,16 @@ export interface ReviewQualityMetrics {
     cases_handled: number;
     avg_quality_score: number;
     avg_time_hours: number;
-  }>;
+>;
   
   // Development indicators
   improvement_trend: 'improving' | 'stable' | 'declining';
   training_recommendations: string[];
   certification_status: Record<ReviewerExpertise, 'certified' | 'provisional' | 'training'>;
-}
 
-}
-}
+
+
+
 export interface PrecedentMatch {
   precedent_id: string;
   appeal_id: string;
@@ -252,9 +257,10 @@ export interface PrecedentMatch {
   policy_version_match: boolean;
   
   relevance_notes: string;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Appeal Review Service Implementation
@@ -276,7 +282,7 @@ export class AppealReviewService {
     this.auditService = auditService;
     this.appealService = appealService;
     this.policyService = policyService;
-  }
+
 
   // =============================================================================
   // Review Workflow Management
@@ -294,7 +300,7 @@ export class AppealReviewService {
     const appeal = await this.appealService.getAppeal(appealId);
     if (!appeal) {
       throw new Error(`Appeal not found: ${appealId}`);
-    }
+
 
     const template = templateId ? await this.getReviewTemplate(templateId) : null;
     
@@ -357,12 +363,12 @@ export class AppealReviewService {
         complexity,
         priority,
         estimated_hours: estimatedHours
-  }
+
       severity: 'info'
     });
 
     return reviewId;
-  }
+
 
   /**
    * Get review workflow by ID
@@ -375,10 +381,10 @@ export class AppealReviewService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapRowToReviewWorkflow(result.rows[0]);
-  }
+
 
   /**
    * Update review workflow status and progress
@@ -394,19 +400,19 @@ export class AppealReviewService {
         decision_drafted: boolean;
         peer_review_completed: boolean;
         quality_assurance_completed: boolean;
-      }>;
+>;
       criteria?: Partial<ReviewCriteria>;
       recommendation?: Partial<ReviewRecommendation>;
       draft_decision?: ReviewDecision;
       notes?: string;
       internal_comments?: string;
-    }
+
   ): Promise<void> {
 
     const workflow = await this.getReviewWorkflow(reviewId);
     if (!workflow) {
       throw new Error(`Review workflow not found: ${reviewId}`);
-    }
+
 
     const updateFields = [];
     const params = [];
@@ -414,39 +420,39 @@ export class AppealReviewService {
     if (updates.status) {
       updateFields.push(`status = $${params.length + 1}`);
       params.push(updates.status);
-    }
+
 
     if (updates.phase_completions) {
       Object.entries(updates.phase_completions).forEach(([phase, completed]) => {
         updateFields.push(`${phase} = $${params.length + 1}`);
         params.push(completed);
       });
-    }
+
 
     if (updates.criteria) {
       updateFields.push(`criteria = $${params.length + 1}`);
       params.push(JSON.stringify({ ...workflow.criteria, ...updates.criteria }));
-    }
+
 
     if (updates.recommendation) {
       updateFields.push(`recommendation = $${params.length + 1}`);
       params.push(JSON.stringify({ ...workflow.recommendation, ...updates.recommendation }));
-    }
+
 
     if (updates.draft_decision) {
       updateFields.push(`draft_decision = $${params.length + 1}`);
       params.push(updates.draft_decision);
-    }
+
 
     if (updates.notes) {
       updateFields.push(`review_notes = $${params.length + 1}`);
       params.push(updates.notes);
-    }
+
 
     if (updates.internal_comments) {
       updateFields.push(`internal_comments = $${params.length + 1}`);
       params.push(updates.internal_comments);
-    }
+
 
     updateFields.push('updated_at = NOW()');
     params.push(reviewId);
@@ -456,7 +462,7 @@ export class AppealReviewService {
       SET ${updateFields.join(', ')}
       WHERE review_id = $${params.length}
     `, params);
-  }
+
 
   // =============================================================================
   // Precedent Analysis and Case Matching
@@ -470,7 +476,7 @@ export class AppealReviewService {
     const appeal = await this.appealService.getAppeal(appealId);
     if (!appeal) {
       throw new Error(`Appeal not found: ${appealId}`);
-    }
+
 
     // Query for similar cases based on multiple factors
     const result = await this.db.query(`
@@ -516,11 +522,11 @@ export class AppealReviewService {
         
         relevance_notes: similarity.notes
       });
-    }
+
 
     // Sort by similarity score
     return matches.sort((a, b) => b.similarity_score - a.similarity_score);
-  }
+
 
   /**
    * Create precedent case from completed review
@@ -530,12 +536,12 @@ export class AppealReviewService {
     const workflow = await this.getReviewWorkflow(reviewId);
     if (!workflow || !workflow.final_decision) {
       throw new Error('Cannot create precedent from incomplete review');
-    }
+
 
     const appeal = await this.appealService.getAppeal(workflow.appeal_id);
     if (!appeal) {
       throw new Error(`Appeal not found: ${workflow.appeal_id}`);
-    }
+
 
     const precedentId = `precedent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -564,7 +570,7 @@ export class AppealReviewService {
     ]);
 
     return precedentId;
-  }
+
 
   // =============================================================================
   // Review Quality Assessment
@@ -581,7 +587,7 @@ export class AppealReviewService {
     const workflow = await this.getReviewWorkflow(reviewId);
     if (!workflow) {
       throw new Error(`Review workflow not found: ${reviewId}`);
-    }
+
 
     let qualityScore = 0;
     const qualityNotes: string[] = [];
@@ -594,7 +600,7 @@ export class AppealReviewService {
     if (completenessScore < 80) {
       qualityNotes.push(`Incomplete review sections (${completenessScore}%)`);
       suggestions.push('Complete all required review sections');
-    }
+
 
     // Assess evidence analysis quality (25% of score)  
     const evidenceScore = workflow.criteria.evidence_quality.score * 10;
@@ -603,7 +609,7 @@ export class AppealReviewService {
     if (evidenceScore < 70) {
       qualityNotes.push('Evidence analysis needs improvement');
       suggestions.push('Provide more thorough evidence evaluation');
-    }
+
 
     // Assess policy compliance analysis (20% of score)
     const policyScore = workflow.criteria.policy_compliance.score * 10;
@@ -612,7 +618,7 @@ export class AppealReviewService {
     if (policyScore < 70) {
       qualityNotes.push('Policy compliance analysis insufficient');
       suggestions.push('Reference specific policies and regulations');
-    }
+
 
     // Assess precedent analysis (15% of score)
     const precedentScore = workflow.criteria.precedent_analysis.score * 10;
@@ -621,7 +627,7 @@ export class AppealReviewService {
     if (precedentScore < 70 || workflow.criteria.precedent_analysis.similar_cases_reviewed < 3) {
       qualityNotes.push('Insufficient precedent analysis');
       suggestions.push('Review at least 3 similar precedent cases');
-    }
+
 
     // Assess reasoning clarity (10% of score)
     const reasoningScore = this.assessReasoningClarity(workflow);
@@ -630,7 +636,7 @@ export class AppealReviewService {
     if (reasoningScore < 70) {
       qualityNotes.push('Decision reasoning needs clarification');
       suggestions.push('Provide clearer rationale and supporting arguments');
-    }
+
 
     // Store quality assessment
     await this.db.query(`
@@ -653,7 +659,7 @@ export class AppealReviewService {
       quality_notes: qualityNotes.join('; '),
       improvement_suggestions: suggestions
     };
-  }
+
 
   /**
    * Get reviewer performance metrics
@@ -729,7 +735,7 @@ export class AppealReviewService {
       training_recommendations: this.generateTrainingRecommendations(stats, domainPerformance),
       certification_status: {} as Record<ReviewerExpertise, 'certified' | 'provisional' | 'training'>
     };
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -751,7 +757,7 @@ export class AppealReviewService {
       JSON.stringify(workflow.recommendation), workflow.draft_decision,
       workflow.review_notes, workflow.internal_comments, workflow.public_summary
     ]);
-  }
+
 
   private mapRowToReviewWorkflow(row: unknown): ReviewWorkflow {
     return {
@@ -796,7 +802,7 @@ export class AppealReviewService {
       internal_comments: row.internal_comments || '',
       public_summary: row.public_summary || ''
     };
-  }
+
 
   private async assessReviewComplexity(appeal: Appeal): Promise<ReviewComplexity> {
 
@@ -820,7 +826,7 @@ export class AppealReviewService {
     if (complexityScore >= 3) return 'complex';
     if (complexityScore >= 1) return 'standard';
     return 'routine';
-  }
+
 
   private async determinePriority(appeal: Appeal): Promise<'routine' | 'expedited' | 'urgent' | 'critical'> {
 
@@ -831,8 +837,8 @@ export class AppealReviewService {
     case 'medium': return 'expedited';
     case 'low': return 'routine';
     default: return 'routine';
-    }
-  }
+
+
 
   private calculateEstimatedHours(complexity: ReviewComplexity, ____category: string): number {
     const baseHours = {
@@ -843,7 +849,7 @@ export class AppealReviewService {
     };
     
     return baseHours[complexity];
-  }
+
 
   private calculateReviewDeadline(
     appeal: Appeal,
@@ -859,14 +865,14 @@ export class AppealReviewService {
     
     const deadlineHours = hours[complexity][priority as keyof typeof hours.routine];
     return new Date(Date.now() + deadlineHours * 60 * 60 * 1000);
-  }
+
 
   private async getReviewerExpertise(____reviewerId: string): Promise<ReviewerExpertise[]> {
 
     // Would query reviewer expertise from user/reviewer profile
     // For now, return default expertise
     return ['trust_scoring', 'policy_enforcement'];
-  }
+
 
   private initializeReviewCriteria(template?: ReviewTemplate | null): ReviewCriteria {
     return {
@@ -877,7 +883,7 @@ export class AppealReviewService {
       proportionality: { score: 0, notes: '', punishment_severity: 'appropriate', alternatives_considered: false },
       precedent_analysis: { score: 0, notes: '', similar_cases_reviewed: 0, consistency_rating: 'inconsistent', precedent_cases: [] }
     };
-  }
+
 
   private initializeRecommendation(): ReviewRecommendation {
     return {
@@ -887,13 +893,13 @@ export class AppealReviewService {
       implementation: { immediate_actions: [], follow_up_actions: [], monitoring_requirements: [], appeal_period: 30 },
       risk_assessment: { reoccurrence_likelihood: 'medium', impact_severity: 'moderate', mitigation_strategies: [] }
     };
-  }
+
 
   private async getReviewTemplate(____templateId: string): Promise<ReviewTemplate | null> {
 
     // Would implement template retrieval
     return null;
-  }
+
 
   private async calculateSimilarityScore(
     appeal: Appeal, 
@@ -908,23 +914,23 @@ export class AppealReviewService {
     if (appeal.category === precedentRow.precedent_category) {
       score += 40;
       matchingFactors.push('Same category');
-    } else {
+ else {
       differences.push('Different categories');
-    }
+
 
     // Decision type match (30% weight)
     if (appeal.original_decision_type === precedentRow.precedent_decision_type) {
       score += 30;
       matchingFactors.push('Same decision type');
-    } else {
+ else {
       differences.push('Different decision types');
-    }
+
 
     // Priority similarity (20% weight)
     if (appeal.priority === precedentRow.priority) {
       score += 20;
       matchingFactors.push('Same priority');
-    }
+
 
     // Additional factors (10% weight)
     // Would implement more sophisticated matching logic
@@ -936,7 +942,7 @@ export class AppealReviewService {
       policyMatch: true, // Would implement policy version matching
       notes: `Similarity based on ${matchingFactors.length} matching factors`
     };
-  }
+
 
   private extractKeyFacts(appeal: Appeal, workflow: ReviewWorkflow): unknown {
     return {
@@ -946,7 +952,7 @@ export class AppealReviewService {
       decision_factors: workflow.recommendation.reasoning.key_factors,
       policy_violations: workflow.criteria.policy_compliance.policies_referenced
     };
-  }
+
 
   private assessCompleteness(workflow: ReviewWorkflow): number {
     let completedSections = 0;
@@ -960,7 +966,7 @@ export class AppealReviewService {
     if (workflow.quality_assurance_completed) completedSections++;
 
     return (completedSections / totalSections) * 100;
-  }
+
 
   private assessReasoningClarity(workflow: ReviewWorkflow): number {
     let score = 50; // Base score
@@ -971,12 +977,12 @@ export class AppealReviewService {
     if (workflow.public_summary.length >= 100) score += 15;
 
     return Math.min(score, 100);
-  }
+
 
   private getWeeksBetween(start: Date, end: Date): number {
     const msPerWeek = 1000 * 60 * 60 * 24 * 7;
     return (end.getTime() - start.getTime()) / msPerWeek;
-  }
+
 
   private generateTrainingRecommendations(
     stats: unknown, 
@@ -986,19 +992,18 @@ export class AppealReviewService {
     
     if (parseFloat(stats.avg_quality_score) < 75) {
       recommendations.push('General review quality training');
-    }
+
     
     if (parseFloat(stats.avg_review_time) > 6) {
       recommendations.push('Efficiency and time management training');
-    }
+
 
     // Add domain-specific recommendations based on performance
     Object.entries(domainPerformance).forEach(([domain, performance]) => {
       if (performance.avg_quality_score < 70) {
         recommendations.push(`${domain} specialized training`);
-      }
+
     });
 
     return recommendations;
-  }
-}
+

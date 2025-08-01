@@ -15,11 +15,12 @@ import {
   ApiStatus,
   ApiVisibility,
   HttpMethod
-} from '../registry/ApiRegistryModel';
+ from '../registry/ApiRegistryModel';
 
 // Request/Response Types
-}
-}
+
+
+
 interface RegisterServiceRequest {
   name: string;
   description?: string;
@@ -35,8 +36,9 @@ interface RegisterServiceRequest {
     externalDocs?: {
       description: string;
       url: string;
-}
-}
+
+
+
     };
   };
   owner?: string;
@@ -46,10 +48,10 @@ interface RegisterServiceRequest {
   tags?: string[];
   categories?: string[];
   complianceLabels?: string[];
-}
 
-}
-}
+
+
+
 interface RegisterEndpointRequest {
   name: string;
   description?: string;
@@ -68,8 +70,9 @@ interface RegisterEndpointRequest {
     location?: string;
     name?: string;
     scheme?: string;
-}
-}
+
+
+
   };
   permissions?: string[];
   scopes?: string[];
@@ -96,10 +99,10 @@ interface RegisterEndpointRequest {
   categories?: string[];
   owner?: string;
   maintainer?: string;
-}
 
-}
-}
+
+
+
 interface UpdateEndpointRequest {
   name?: string;
   description?: string;
@@ -108,16 +111,17 @@ interface UpdateEndpointRequest {
   documentation?: {
     summary?: string;
     description?: string;
-}
-}
+
+
+
   };
   tags?: string[];
   categories?: string[];
   rateLimits?: any;
-}
 
-}
-}
+
+
+
 interface SearchQuery {
   serviceIds?: string;
   statuses?: string;
@@ -131,12 +135,13 @@ interface SearchQuery {
   offset?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface AnalyticsQuery {
   startDate: string;
   endDate: string;
@@ -144,9 +149,10 @@ interface AnalyticsQuery {
   includeHealth?: boolean;
   includeGrowth?: boolean;
   includeCompliance?: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Register API registry routes
@@ -156,7 +162,7 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
 
   if (!registryService) {
     throw new Error('ApiRegistryService not registered with Fastify instance');
-  }
+
 
   // =============================================================================
   // Service Management Routes
@@ -187,9 +193,9 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           tags: { type: 'array', items: { type: 'string' } },
           categories: { type: 'array', items: { type: 'string' } },
           complianceLabels: { type: 'array', items: { type: 'string' } }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: RegisterServiceRequest }>, reply: FastifyReply) => {
     try {
       const registeredBy = (request.user as any)?.id || 'anonymous';
@@ -202,13 +208,13 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         data: service,
         message: 'Service registered successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to register service'
       };
-    }
+
   });
 
   /**
@@ -226,9 +232,9 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           environment: { type: 'string' },
           limit: { type: 'number', default: 20, maximum: 100 },
           offset: { type: 'number', default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
     try {
       const services = await registryService.getAllServices();
@@ -239,19 +245,19 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
       
       if (status) {
         filteredServices = filteredServices.filter(s => s.status === status);
-      }
+
       if (visibility) {
         filteredServices = filteredServices.filter(s => s.visibility === visibility);
-      }
+
       if (owner) {
         filteredServices = filteredServices.filter(s => s.owner === owner);
-      }
+
       if (team) {
         filteredServices = filteredServices.filter(s => s.team === team);
-      }
+
       if (environment) {
         filteredServices = filteredServices.filter(s => s.environment === environment);
-      }
+
       
       // Apply pagination
       const total = filteredServices.length;
@@ -266,16 +272,16 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
             limit,
             offset,
             hasMore: offset + limit < total
-          }
-        }
+
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get services'
       };
-    }
+
   });
 
   /**
@@ -288,9 +294,9 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         required: ['serviceId'],
         properties: {
           serviceId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { serviceId: string } }>, reply: FastifyReply) => {
     try {
       const service = await registryService.getService(request.params.serviceId);
@@ -301,19 +307,19 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Service not found'
         };
-      }
+
 
       return {
         success: true,
         data: service
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get service'
       };
-    }
+
   });
 
   // =============================================================================
@@ -350,9 +356,9 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           categories: { type: 'array', items: { type: 'string' } },
           owner: { type: 'string' },
           maintainer: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: RegisterEndpointRequest }>, reply: FastifyReply) => {
     try {
       const registeredBy = (request.user as any)?.id || 'anonymous';
@@ -370,13 +376,13 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         data: endpoint,
         message: 'Endpoint registered successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to register endpoint'
       };
-    }
+
   });
 
   /**
@@ -389,9 +395,9 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         required: ['endpointId'],
         properties: {
           endpointId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { endpointId: string } }>, reply: FastifyReply) => {
     try {
       const endpoint = await registryService.getEndpoint(request.params.endpointId);
@@ -402,19 +408,19 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Endpoint not found'
         };
-      }
+
 
       return {
         success: true,
         data: endpoint
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get endpoint'
       };
-    }
+
   });
 
   /**
@@ -427,8 +433,8 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         required: ['endpointId'],
         properties: {
           endpointId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
@@ -440,13 +446,13 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           tags: { type: 'array', items: { type: 'string' } },
           categories: { type: 'array', items: { type: 'string' } },
           rateLimits: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { endpointId: string };
     Body: UpdateEndpointRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const updatedBy = (request.user as any)?.id || 'anonymous';
       
@@ -462,20 +468,20 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Endpoint not found'
         };
-      }
+
 
       return {
         success: true,
         data: endpoint,
         message: 'Endpoint updated successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to update endpoint'
       };
-    }
+
   });
 
   /**
@@ -488,19 +494,19 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         required: ['endpointId'],
         properties: {
           endpointId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', maxLength: 500 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { endpointId: string };
     Body: { reason?: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const deprecatedBy = (request.user as any)?.id || 'anonymous';
       
@@ -516,19 +522,19 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Endpoint not found or cannot be deprecated'
         };
-      }
+
 
       return {
         success: true,
         message: 'Endpoint deprecated successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to deprecate endpoint'
       };
-    }
+
   });
 
   // =============================================================================
@@ -555,9 +561,9 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           offset: { type: 'number', default: 0 },
           sortBy: { type: 'string' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'] }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: SearchQuery }>, reply: FastifyReply) => {
     try {
       const filters: ApiRegistryFilters = {};
@@ -565,25 +571,25 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
       // Parse comma-separated values
       if (request.query.serviceIds) {
         filters.serviceIds = request.query.serviceIds.split(',');
-      }
+
       if (request.query.statuses) {
         filters.statuses = request.query.statuses.split(',') as ApiStatus[];
-      }
+
       if (request.query.visibilities) {
         filters.visibilities = request.query.visibilities.split(',') as ApiVisibility[];
-      }
+
       if (request.query.methods) {
         filters.methods = request.query.methods.split(',') as HttpMethod[];
-      }
+
       if (request.query.tags) {
         filters.tags = request.query.tags.split(',');
-      }
+
       if (request.query.categories) {
         filters.categories = request.query.categories.split(',');
-      }
+
       if (request.query.owners) {
         filters.owners = request.query.owners.split(',');
-      }
+
       
       // Set other filters
       filters.search = request.query.search;
@@ -598,13 +604,13 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         success: true,
         data: result
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to search registry'
       };
-    }
+
   });
 
   /**
@@ -617,9 +623,9 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         required: ['endpointId'],
         properties: {
           endpointId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { endpointId: string } }>, reply: FastifyReply) => {
     try {
       const discovery = await registryService.discoverApi(request.params.endpointId);
@@ -630,19 +636,19 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'API endpoint not found for discovery'
         };
-      }
+
 
       return {
         success: true,
         data: discovery
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to discover API'
       };
-    }
+
   });
 
   // =============================================================================
@@ -664,9 +670,9 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           includeHealth: { type: 'boolean', default: true },
           includeGrowth: { type: 'boolean', default: true },
           includeCompliance: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: AnalyticsQuery }>, reply: FastifyReply) => {
     try {
       const timeRange = {
@@ -680,13 +686,13 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         success: true,
         data: analytics
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to generate analytics'
       };
-    }
+
   });
 
   // =============================================================================
@@ -705,15 +711,15 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         data: {
           ...status,
           timestamp: new Date().toISOString()
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get registry status'
       };
-    }
+
   });
 
   /**
@@ -740,7 +746,7 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
           'Comprehensive search and filtering'
         ]
       };
-    } catch (error) {
+ catch (error) {
       reply.status(503);
       return {
         status: 'unhealthy',
@@ -748,10 +754,10 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       };
-    }
+
   });
 
   console.log('🔍 API Registry routes registered successfully');
-}
+
 
 export default apiRegistryRoutes;

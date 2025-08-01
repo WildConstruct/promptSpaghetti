@@ -451,7 +451,7 @@ string;
                                                                             threshold,
                                                                             deviationFactor: sample.metrics.duration / mean,
                                                                         },
-                                                                        possibleCauses: [,
+                                                                        possibleCauses: [
                                                                             'Large data processing',
                                                                             'Memory pressure',
                                                                             'External dependency delay',
@@ -512,7 +512,7 @@ string;
                                                                         evidence;
                                                                     samples.filter(s => s.metrics.memoryDelta > 0),
                                                                         recommendations;
-                                                                    [,
+                                                                    [
                                                                         'Review object lifecycle management',
                                                                         'Check for event listener cleanup',
                                                                         'Analyze large object retention',
@@ -538,7 +538,7 @@ string;
                                                                         evidence;
                                                                     samples,
                                                                         recommendations;
-                                                                    [,
+                                                                    [
                                                                         'Implement operation caching',
                                                                         'Add performance monitoring',
                                                                         'Identify and optimize slow paths',
@@ -576,7 +576,7 @@ string;
                                                                 prerequisites;
                                                             ['Performance profiling setup'],
                                                                 steps;
-                                                            [,
+                                                            [
                                                                 'Identify computation-heavy sections',
                                                                 'Implement memoization for expensive calculations',
                                                                 'Add result caching where appropriate',
@@ -640,8 +640,9 @@ string;
                                             sample.metrics.renderTime,
                                             sample;
                                         ;
-                                        createAlert(level, PerformanceAlert['level']);
-                                        message: string,
+                                        createAlert(level, PerformanceAlert['level']),
+                                            message;
+                                        string,
                                             metric;
                                         string,
                                             value;
@@ -669,19 +670,19 @@ string;
                                             string;
                                             {
                                                 const suggestionMap = {
-                                                    duration: [,
+                                                    duration: [
                                                         'Consider memoization for expensive calculations',
                                                         'Implement result caching',
                                                         'Optimize algorithm complexity',
                                                         'Use batch processing for multiple operations'
                                                     ],
-                                                    memory: [,
+                                                    memory: [
                                                         'Check for memory leaks',
                                                         'Implement object pooling',
                                                         'Review large object retention',
                                                         'Add memory cleanup in lifecycle hooks'
                                                     ],
-                                                    renderTime: [,
+                                                    renderTime: [
                                                         'Use React.memo for component optimization',
                                                         'Implement virtual scrolling for large lists',
                                                         'Optimize re-render cycles',

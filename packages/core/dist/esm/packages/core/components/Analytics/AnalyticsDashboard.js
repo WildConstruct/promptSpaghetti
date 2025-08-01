@@ -20,33 +20,13 @@ import { RealTimeMetrics } from './RealTimeMetrics';
 /**
  * Time range options
  */
-const TIME_RANGES = [];
-{
-    value: 'hour', label;
-    'Last Hour', duration;
-    60 * 60 * 1000;
-}
-{
-    value: '24h', label;
-    'Last 24 Hours', duration;
-    24 * 60 * 60 * 1000;
-}
-{
-    value: '7d', label;
-    'Last 7 Days', duration;
-    7 * 24 * 60 * 60 * 1000;
-}
-{
-    value: '30d', label;
-    'Last 30 Days', duration;
-    30 * 24 * 60 * 60 * 1000;
-}
-{
-    value: '90d', label;
-    'Last 90 Days', duration;
-    90 * 24 * 60 * 60 * 1000;
-}
-;
+const TIME_RANGES = [
+    { value: 'hour', label: 'Last Hour', duration: 60 * 60 * 1000 },
+    { value: '24h', label: 'Last 24 Hours', duration: 24 * 60 * 60 * 1000 },
+    { value: '7d', label: 'Last 7 Days', duration: 7 * 24 * 60 * 60 * 1000 },
+    { value: '30d', label: 'Last 30 Days', duration: 30 * 24 * 60 * 60 * 1000 },
+    { value: '90d', label: 'Last 90 Days', duration: 90 * 24 * 60 * 60 * 1000 }
+];
 export const AnalyticsDashboard = ({
     analyticsClient,
     userId,
@@ -233,72 +213,72 @@ if (state.loading && !state.summary) {
     const styles = `;
   .analytics-dashboard {
     display: flex;
-    flex-direction: column;
+    flex-direction: column;,
   gap: 1rem;
     padding: 1rem;
-    max-width: 100%;
+    max-width: 100%;,
   overflow: hidden;
   .dashboard-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center;,
   padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;,
   background: white;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   .header-title {
     display: flex;
-    align-items: center;
+    align-items: center;,
   gap: 1rem;
   .header-title h1 {
     margin: 0;
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: 600;,
   color: #1f2937;
   .header-controls {
     display: flex;
-    align-items: center;
+    align-items: center;,
   gap: 0.5rem;
   .alerts-bar {
     margin-bottom: 1rem;
   .dashboard-tabs {
-    flex: 1;
+    flex: 1;,
   display: flex;
-    flex-direction: column;
+    flex-direction: column;,
   overflow: hidden;
   .tab-content {
-    flex: 1;
+    flex: 1;,
   overflow: auto;
     padding: 1rem 0;
   .overview-grid {
-    display: grid;
+    display: grid;,
   gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   .insights-grid {
-    display: grid;
+    display: grid;,
   gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   .loading-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center;,
   padding: 4rem;
     gap: 1rem;
   .loading-spinner {
-    width: 2rem;
+    width: 2rem;,
   height: 2rem;
     border: 2px solid #e5e7eb;
     border-top: 2px solid #3b82f6;
-    border-radius: 50%;
+    border-radius: 50%;,
   animation: spin 1s linear infinite;
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   @media (max-width: 768px) {
     .dashboard-header {
-      flex-direction: column;
+      flex-direction: column;,
   gap: 1rem;
       align-items: stretch;
     .header-controls {

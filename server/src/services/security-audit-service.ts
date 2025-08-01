@@ -4,8 +4,8 @@
 import { FastifyInstance } from 'fastify';
 import { auditSecurityHeaders, SecurityAuditResult } from '../middleware/security-headers';
 
-}
-}
+
+
 export interface SecurityAuditConfig {
   enabled: boolean;
   intervalMinutes: number;
@@ -14,27 +14,29 @@ export interface SecurityAuditConfig {
     scoreThreshold: number;
     criticalIssues: number;
     highIssues: number;
-}
-}
+
+
+
   };
   notifications: {
     enabled: boolean;
     webhookUrl?: string;
     emailRecipients?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface AuditRecord {
   id: string;
   timestamp: Date;
   endpoint: string;
   result: SecurityAuditResult;
   alerts: string[];
-}
-}
-}
+
+
+
+
 
 export class SecurityAuditService {
   private config: SecurityAuditConfig;
@@ -45,14 +47,14 @@ export class SecurityAuditService {
   constructor(server: FastifyInstance, config: SecurityAuditConfig) {
     this.server = server;
     this.config = config;
-  }
+
 
   // Start regular security audits
   start(): void {
     if (!this.config.enabled) {
       console.log('Security audit service is disabled');
       return;
-    }
+
 
     console.log(`Starting security audit service (interval: ${this.config.intervalMinutes} minutes)`);
     
@@ -63,7 +65,7 @@ export class SecurityAuditService {
     this.intervalId = setInterval(() => {
       this.performAudit();
     }, this.config.intervalMinutes * 60 * 1000);
-  }
+
 
   // Stop the audit service
   stop(): void {
@@ -71,8 +73,8 @@ export class SecurityAuditService {
       clearInterval(this.intervalId);
       this.intervalId = undefined;
       console.log('Security audit service stopped');
-    }
-  }
+
+
 
   // Perform security audit on all configured endpoints
   private async performAudit(): Promise<void> {
@@ -82,11 +84,11 @@ export class SecurityAuditService {
     for (const endpoint of this.config.endpoints) {
       try {
         await this.auditEndpoint(endpoint);
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to audit endpoint ${endpoint}:`, error);
-      }
-    }
-  }
+
+
+
 
   // Audit a specific endpoint
   private async auditEndpoint(endpoint: string): Promise<AuditRecord> {
@@ -117,16 +119,16 @@ export class SecurityAuditService {
       // Send alerts if necessary
       if (alerts.length > 0) {
         await this.sendAlerts(record);
-      }
+
 
       console.log(`Security audit completed for ${endpoint}: Score ${auditResult.score}/${auditResult.maxScore}`);
       
       return record;
-    } catch (error) {
+ catch (error) {
       console.error(`Security audit failed for ${endpoint}:`, error);
       throw error;
-    }
-  }
+
+
 
   // Make a request to audit endpoint headers
   private async makeAuditRequest(endpoint: string): Promise<{ headers: Record<string, string> }> {
@@ -139,7 +141,7 @@ export class SecurityAuditService {
         method: 'HEAD',
         headers: {
           'User-Agent': 'SecurityAuditService/1.0'
-        }
+
       });
 
       // Convert Headers to plain object
@@ -149,11 +151,11 @@ export class SecurityAuditService {
       });
 
       return { headers };
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to make audit request to ${endpoint}:`, error);
       throw error;
-    }
-  }
+
+
 
   // Generate alerts based on audit results
   private generateAlerts(result: SecurityAuditResult): string[] {
@@ -163,38 +165,38 @@ export class SecurityAuditService {
     const scorePercentage = (result.score / result.maxScore) * 100;
     if (scorePercentage < this.config.alertThresholds.scoreThreshold) {
       alerts.push(`Security score below threshold: ${scorePercentage.toFixed(1)}% (threshold: ${this.config.alertThresholds.scoreThreshold}%)`);
-    }
+
 
     // Check critical issues
     if (result.summary.critical > this.config.alertThresholds.criticalIssues) {
       alerts.push(`Too many critical security issues: ${result.summary.critical} (threshold: ${this.config.alertThresholds.criticalIssues})`);
-    }
+
 
     // Check high issues
     if (result.summary.high > this.config.alertThresholds.highIssues) {
       alerts.push(`Too many high-severity security issues: ${result.summary.high} (threshold: ${this.config.alertThresholds.highIssues})`);
-    }
+
 
     // Specific header alerts
     result.headers.forEach(header => {
       if (!header.present) {
         if (header.severity === 'critical') {
           alerts.push(`CRITICAL: Missing security header: ${header.name}`);
-        } else if (header.severity === 'high') {
+ else if (header.severity === 'high') {
           alerts.push(`HIGH: Missing security header: ${header.name}`);
-        }
-      }
+
+
     });
 
     return alerts;
-  }
+
 
   // Send alerts via configured notification methods
   private async sendAlerts(record: AuditRecord): Promise<void> {
 
     if (!this.config.notifications.enabled || record.alerts.length === 0) {
       return;
-    }
+
 
     const alertMessage = this.formatAlertMessage(record);
 
@@ -202,18 +204,18 @@ export class SecurityAuditService {
       // Send webhook notification
       if (this.config.notifications.webhookUrl) {
         await this.sendWebhookAlert(alertMessage, record);
-      }
+
 
       // Send email notifications
       if (this.config.notifications.emailRecipients?.length) {
         await this.sendEmailAlerts(alertMessage, record);
-      }
+
 
       console.log(`Security alerts sent for ${record.endpoint}`);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to send security alerts:', error);
-    }
-  }
+
+
 
   // Format alert message
   private formatAlertMessage(record: AuditRecord): string {
@@ -239,7 +241,7 @@ ${alerts.map(alert => `- ${alert}`).join('\n')}
 Missing Headers:
 ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): ${h.recommendation}`).join('\n')}
     `.trim();
-  }
+
 
   // Send webhook alert
   private async sendWebhookAlert(message: string, record: AuditRecord): Promise<void> {
@@ -255,29 +257,29 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
             title: 'Endpoint',
             value: record.endpoint,
             short: true
-  }
+
           {
             title: 'Score',
             value: `${record.result.score}/${record.result.maxScore}`,
             short: true
-  }
+
           {
             title: 'Alerts',
             value: record.alerts.length.toString(),
             short: true
-          }
+
         ]
-      }]
+]
     };
 
     await fetch(this.config.notifications.webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-  }
+
       body: JSON.stringify(payload)
     });
-  }
+
 
   // Send email alerts (placeholder - would integrate with email service)
   private async sendEmailAlerts(message: string, _____record: AuditRecord): Promise<void> {
@@ -285,22 +287,22 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
     // TODO: Integrate with email service (SendGrid, AWS SES, etc.)
     console.log('Email alerts would be sent to:', this.config.notifications.emailRecipients);
     console.log('Alert message:', message);
-  }
+
 
   // Trim audit history to prevent memory issues
   private trimAuditHistory(): void {
     const maxRecords = 1000; // Keep last 1000 audit records
     if (this.auditHistory.length > maxRecords) {
       this.auditHistory = this.auditHistory.slice(-maxRecords);
-    }
-  }
+
+
 
   // Get audit history
   getAuditHistory(limit = 50): AuditRecord[] {
     return this.auditHistory
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
       .slice(0, limit);
-  }
+
 
   // Get latest audit results
   getLatestAuditResults(): Record<string, AuditRecord> {
@@ -309,11 +311,11 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
     for (const record of this.auditHistory) {
       if (!latest[record.endpoint] || record.timestamp > latest[record.endpoint].timestamp) {
         latest[record.endpoint] = record;
-      }
-    }
+
+
 
     return latest;
-  }
+
 
   // Get audit statistics
   getAuditStatistics(): {
@@ -326,8 +328,8 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
       score: number;
       passed: boolean;
       alertCount: number;
-    }>;
-    } {
+>;
+ {
     const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentRecords = this.auditHistory.filter(r => r.timestamp > last24h);
     
@@ -354,7 +356,7 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
       alertsLast24h,
       endpoints
     };
-  }
+
 
   // Trigger manual audit
   async triggerManualAudit(endpoint?: string): Promise<AuditRecord[]> {
@@ -366,14 +368,14 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
       try {
         const result = await this.auditEndpoint(ep);
         results.push(result);
-      } catch (error) {
+ catch (error) {
         console.error(`Manual audit failed for ${ep}:`, error);
-      }
-    }
+
+
 
     return results;
-  }
-}
+
+
 
 // Default configuration
 export const defaultAuditConfig: SecurityAuditConfig = {
@@ -391,10 +393,10 @@ export const defaultAuditConfig: SecurityAuditConfig = {
     scoreThreshold: 70, // Alert if score below 70%
     criticalIssues: 0,  // Alert on any critical issues
     highIssues: 2       // Alert if more than 2 high issues
-  }
+
   notifications: {
     enabled: process.env.SECURITY_ALERTS_ENABLED === 'true',
     webhookUrl: process.env.SECURITY_WEBHOOK_URL,
     emailRecipients: process.env.SECURITY_EMAIL_RECIPIENTS?.split(',')
-  }
+
 };

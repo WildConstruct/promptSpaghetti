@@ -10,8 +10,7 @@ import { z } from 'zod';
 // Types and Interfaces
 // ========================================
 
-export enum CodeType {
-  EMAIL_VERIFICATION = 'email_verification',
+export enum CodeType { EMAIL_VERIFICATION = 'email_verification',
   SMS_VERIFICATION = 'sms_verification',
   TOTP_SECRET = 'totp_secret',
   BACKUP_CODE = 'backup_code',
@@ -29,48 +28,48 @@ export enum CodeType {
   format: CodeFormat;
   length: number;
   expiryMinutes?: number;
-  userContext?: {
+  userContext?: { }
   userId: string;
   ipAddress: string;
   userAgent: string;
-}
+
+
 };
   customCharset?: string;
   excludeSimilar?: boolean;      // Exclude 0, O, I, l, 1
   enforceComplexity?: boolean;   // For passwords/tokens
-}
-}
-export interface GeneratedCode {
-  code: string;
+
+
+export interface GeneratedCode { code: string;
   hashedCode: string;
   salt: string;
   type: CodeType;
   format: CodeFormat;
   expiresAt?: Date;
-  metadata: {
+  metadata: { }
   generatedAt: Date;
   userId?: string;
   ipAddress?: string;
   entropy: number;
   algorithm: string;
-}
+
+
 };
-}
-}
-export interface CodeValidationResult {
-  valid: boolean;
+
+
+export interface CodeValidationResult { valid: boolean;
   reason?: 'expired' | 'invalid' | 'rate_limited' | 'used' | 'format_mismatch';
   remainingAttempts?: number;
-  metadata?: {
+  metadata?: { }
   validatedAt: Date;
   timingAttackSafe: boolean;
   processingTimeMs: number;
-}
+
+
 };
-}
-}
-export interface CodeValidationOptions {
-  allowExpired?: boolean;
+
+
+export interface CodeValidationOptions { allowExpired?: boolean;
   constantTimeValidation?: boolean;
   rateLimitingEnabled?: boolean;
   maxAttempts?: number;
@@ -78,57 +77,56 @@ export interface CodeValidationOptions {
   // Character Sets and Patterns
   // ========================================
   const CHARACTER_SETS = {
-  [CodeFormat.NUMERIC]: '0123456789',
-  [CodeFormat.ALPHA]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  [CodeFormat.ALPHANUMERIC]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
-  [CodeFormat.BASE32]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
-  [CodeFormat.HEX]: '0123456789ABCDEF',
-}
+  [CodeFormat.NUMERIC]: '0123456789';
+  [CodeFormat.ALPHA]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  [CodeFormat.ALPHANUMERIC]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  [CodeFormat.BASE32]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  [CodeFormat.HEX]: '0123456789ABCDEF' }
+
+
 };
 const SIMILAR_CHARACTERS = ['0', 'O', 'I', 'l', '1'];
-const CODE_PATTERNS = {
-  [CodeFormat.NUMERIC]: /^\d+$/,
+const CODE_PATTERNS = { [CodeFormat.NUMERIC]: /^\d+$/,
   [CodeFormat.ALPHA]: /^[A-Z]+$/,
   [CodeFormat.ALPHANUMERIC]: /^[A-Z0-9]+$/,
   [CodeFormat.BASE32]: /^[A-Z2-7]+$/,
-  [CodeFormat.HEX]: /^[0-9A-F]+$/i,
+  [CodeFormat.HEX]: /^[0-9A-F]+$/i }
   [CodeFormat.UUID]: /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 };
 
 // ========================================
 // Validation Schemas
 // ========================================
-const CodeGenerationSchema = z.object({)
+const CodeGenerationSchema = z.object({ )
   type: z.nativeEnum(CodeType),
   format: z.nativeEnum(CodeFormat),
   length: z.number().min(4).max(64),
   expiryMinutes: z.number().min(1).max(43200).optional(), // Max 30 days,
-  userContext: z.object({,)
+  userContext: z.object({);
   userId: z.string().uuid(),
   ipAddress: z.string().ip(),
-  userAgent: z.string().min(1),
+  userAgent: z.string().min(1) }
 }).optional(),
   customCharset: z.string().min(2).optional(),
   excludeSimilar: z.boolean().optional(),
   enforceComplexity: z.boolean().optional();
   });
-const CodeValidationSchema = z.object({)
+const CodeValidationSchema = z.object({ )
   code: z.string().min(1),
   hashedCode: z.string().min(1),
   salt: z.string().min(1),
-  options: z.object({,)
+  options: z.object({);
   allowExpired: z.boolean().optional(),
   constantTimeValidation: z.boolean().optional(),
   rateLimitingEnabled: z.boolean().optional(),
-  maxAttempts: z.number().min(1).max(10).optional(),
+  maxAttempts: z.number().min(1).max(10).optional() }
 }).optional()
 });
 
 // ========================================
 // Entropy Calculator
 // ========================================
-class EntropyCalculator {
-  /**
+class EntropyCalculator { /**
    * Calculate the entropy of a generated code
    */
   static calculateEntropy(code: string, charset: string): number {
@@ -140,7 +138,7 @@ class EntropyCalculator {
   /**
    * Calculate the theoretical time to crack a code
    */
-  static calculateCrackTime(entropy: number, attemptsPerSecond: number = 1000): {
+  static calculateCrackTime(entropy: number, attemptsPerSecond: number = 1000): { }
   averageTime: number;
     worstCase: number;
   unit: string;
@@ -152,68 +150,67 @@ class EntropyCalculator {
     // Convert to appropriate time unit
     if (averageSeconds < 60) {
       return { averageTime: averageSeconds, worstCase: worstCaseSeconds, unit: 'seconds' };
-    } else if (averageSeconds < 3600) {
+ else if (averageSeconds < 3600) {
       return { averageTime: averageSeconds / 60, worstCase: worstCaseSeconds / 60, unit: 'minutes' };
-    } else if (averageSeconds < 86400) {
+ else if (averageSeconds < 86400) {
       return { averageTime: averageSeconds / 3600, worstCase: worstCaseSeconds / 3600, unit: 'hours' };
-    } else if (averageSeconds < 31536000) {
+ else if (averageSeconds < 31536000) {
       return { averageTime: averageSeconds / 86400, worstCase: worstCaseSeconds / 86400, unit: 'days' };
-    } else {
+ else {
       return { averageTime: averageSeconds / 31536000, worstCase: worstCaseSeconds / 31536000, unit: 'years' };
   /**
    * Validate minimum entropy requirements
    */
-  static validateEntropyRequirements(entropy: number, codeType: CodeType): boolean {
-  const requirements = {
+  static validateEntropyRequirements(entropy: number, codeType: CodeType): boolean { const requirements = {
   [CodeType.EMAIL_VERIFICATION]: 20,  // ~6-digit numeric,
   [CodeType.SMS_VERIFICATION]: 20,    // ~6-digit numeric,
   [CodeType.TOTP_SECRET]: 128,        // ~32 bytes base32,
   [CodeType.BACKUP_CODE]: 40,         // ~8-character alphanumeric,
   [CodeType.RECOVERY_TOKEN]: 128,     // ~32 bytes,
-  [CodeType.API_TOKEN]: 256           // ~64 bytes,
+  [CodeType.API_TOKEN]: 256           // ~64 bytes }
 };
     return entropy >= requirements[codeType];
 
 // ========================================
 // Rate Limiting Service
 // ========================================
-}
+
+
 interface RateLimitState {
   attempts: number;
   windowStart: Date;
   lastAttempt: Date;
-class RateLimitService {
+  class RateLimitService {
   private limitStates: Map<string, RateLimitState> = new Map();
   private readonly limits = {
-}
-    [CodeType.EMAIL_VERIFICATION]: { maxAttempts: 5, windowMinutes: 15 },
-    [CodeType.SMS_VERIFICATION]: { maxAttempts: 3, windowMinutes: 15 },
-    [CodeType.TOTP_SECRET]: { maxAttempts: 10, windowMinutes: 60 },
-    [CodeType.BACKUP_CODE]: { maxAttempts: 3, windowMinutes: 60 },
-    [CodeType.RECOVERY_TOKEN]: { maxAttempts: 3, windowMinutes: 60 },
+
+
+    [CodeType.EMAIL_VERIFICATION]: { maxAttempts: 5, windowMinutes: 15 }
+    [CodeType.SMS_VERIFICATION]: { maxAttempts: 3, windowMinutes: 15 }
+    [CodeType.TOTP_SECRET]: { maxAttempts: 10, windowMinutes: 60 }
+    [CodeType.BACKUP_CODE]: { maxAttempts: 3, windowMinutes: 60 }
+    [CodeType.RECOVERY_TOKEN]: { maxAttempts: 3, windowMinutes: 60 }
     [CodeType.API_TOKEN]: { maxAttempts: 10, windowMinutes: 60 }
   };
-  checkRateLimit(key: string, codeType: CodeType): { allowed: boolean; remainingAttempts: number } {
-  const limit = this.limits[codeType];
+  checkRateLimit(key: string, codeType: CodeType): { allowed: boolean; remainingAttempts: number } { const limit = this.limits[codeType];
   const state = this.limitStates.get(key);
   const now = new Date();
   if (!state) {
   // First attempt
   this.limitStates.set(key, {)
-  attempts: 1,
-  windowStart: now,
-  lastAttempt: now,
+  attempts: 1
+  windowStart: now
+  lastAttempt: now }
 });
       return { allowed: true, remainingAttempts: limit.maxAttempts - 1 };
     // Check if window has expired
     const windowAge = now.getTime() - state.windowStart.getTime();
     const windowDuration = limit.windowMinutes * 60 * 1000;
-    if (windowAge > windowDuration) {
-  // Reset window
+    if (windowAge > windowDuration) { // Reset window
   this.limitStates.set(key, {)
-  attempts: 1,
-  windowStart: now,
-  lastAttempt: now,
+  attempts: 1
+  windowStart: now
+  lastAttempt: now }
 });
       return { allowed: true, remainingAttempts: limit.maxAttempts - 1 };
     // Check attempts within window
@@ -223,12 +220,10 @@ class RateLimitService {
     state.attempts++;
     state.lastAttempt = now;
     this.limitStates.set(key, state);
-    return {
-  allowed: true,
-  remainingAttempts: limit.maxAttempts - state.attempts,
+    return { allowed: true
+  remainingAttempts: limit.maxAttempts - state.attempts }
 };
-  resetRateLimit(key: string): void {
-  this.limitStates.delete(key);
+  resetRateLimit(key: string): void { this.limitStates.delete(key);
   getRateLimitInfo(key: string, codeType: CodeType): {
   currentAttempts: number;
   maxAttempts: number;
@@ -238,25 +233,24 @@ class RateLimitService {
   const state = this.limitStates.get(key);
   if (!state) {
   return {
-  currentAttempts: 0,
-  maxAttempts: limit.maxAttempts,
-  windowMinutes: limit.windowMinutes,
+  currentAttempts: 0
+  maxAttempts: limit.maxAttempts
+  windowMinutes: limit.windowMinutes }
 };
     const now = new Date();
     const windowAge = now.getTime() - state.windowStart.getTime();
     const windowDuration = limit.windowMinutes * 60 * 1000;
     const timeUntilReset = Math.max(0, windowDuration - windowAge);
-    return {
-  currentAttempts: state.attempts,
-  maxAttempts: limit.maxAttempts,
-  windowMinutes: limit.windowMinutes,
-  timeUntilReset: timeUntilReset > 0 ? timeUntilReset : undefined,
+    return { currentAttempts: state.attempts
+  maxAttempts: limit.maxAttempts
+  windowMinutes: limit.windowMinutes
+  timeUntilReset: timeUntilReset > 0 ? timeUntilReset : undefined }
 };
 
 // ========================================
 // Main Code Generation Service
 // ========================================
-}
+
 export class CodeGenerationService {
   private rateLimitService: RateLimitService;
   private hashingAlgorithm: string = 'sha256';
@@ -285,77 +279,70 @@ export class CodeGenerationService {
     const expiresAt = validatedOptions.expiryMinutes ;
       ? new Date(Date.now() + validatedOptions.expiryMinutes * 60 * 1000)
       : undefined;
-    return {
-  code,
-  hashedCode,
-  salt,
-  type: validatedOptions.type,
-  format: validatedOptions.format,
-  expiresAt,
+    return { code
+  hashedCode
+  salt
+  type: validatedOptions.type
+  format: validatedOptions.format
+  expiresAt
   metadata: {
-  generatedAt: new Date(),
-  userId: validatedOptions.userContext?.userId,
-  ipAddress: validatedOptions.userContext?.ipAddress,
-  entropy,
-  algorithm: this.hashingAlgorithm,
+  generatedAt: new Date()
+  userId: validatedOptions.userContext?.userId
+  ipAddress: validatedOptions.userContext?.ipAddress
+  entropy
+  algorithm: this.hashingAlgorithm }
 };
   /**
    * Validate a code against stored hash
    */
-  async validateCode(inputCode: string(
-    storedData: GeneratedCode,
+  async validateCode(inputCode: string(;
+  storedData: GeneratedCode
     options: CodeValidationOptions = {}
-  ): Promise<CodeValidationResult> {
-
-  const startTime = Date.now();
-  const defaultOptions: Required<CodeValidationOptions> = {,
-  allowExpired: false,
-  constantTimeValidation: true,
-  rateLimitingEnabled: true,
-  maxAttempts: 5,
+  ): Promise<CodeValidationResult> { const startTime = Date.now();
+  const defaultOptions: Required<CodeValidationOptions> = {
+  allowExpired: false
+  constantTimeValidation: true
+  rateLimitingEnabled: true
+  maxAttempts: 5 }
   ...options
 };
-    try {
-  // Validate input format
+    try { // Validate input format
   const validationInput = CodeValidationSchema.parse({)
-  code: inputCode,
-  hashedCode: storedData.hashedCode,
-  salt: storedData.salt,
-  options: defaultOptions,
+  code: inputCode
+  hashedCode: storedData.hashedCode
+  salt: storedData.salt
+  options: defaultOptions }
 });
       // Check rate limiting
       if (defaultOptions.rateLimitingEnabled && storedData.metadata.userId) {
         const rateLimitKey = `${storedData.metadata.userId}:${storedData.type}`;}
         const rateLimit = this.rateLimitService.checkRateLimit(rateLimitKey, storedData.type);
-        if (!rateLimit.allowed) {
-  return {
-  valid: false,
-  reason: 'rate_limited',
-  remainingAttempts: rateLimit.remainingAttempts,
+        if (!rateLimit.allowed) { return {
+  valid: false
+  reason: 'rate_limited'
+  remainingAttempts: rateLimit.remainingAttempts
   metadata: {
-  validatedAt: new Date(),
-  timingAttackSafe: false,
-  processingTimeMs: Date.now() - startTime,
+  validatedAt: new Date()
+  timingAttackSafe: false
+  processingTimeMs: Date.now() - startTime }
 };
       // Check expiry
-      if (!defaultOptions.allowExpired && storedData.expiresAt && storedData.expiresAt < new Date()) {
-  return {
+      if (!defaultOptions.allowExpired && storedData.expiresAt && storedData.expiresAt < new Date()) { return {
   valid: false,
   reason: 'expired',
-  metadata: {
+  metadata: {,
   validatedAt: new Date(),
   timingAttackSafe: defaultOptions.constantTimeValidation,
-  processingTimeMs: Date.now() - startTime,
+  processingTimeMs: Date.now() - startTime }
 };
       // Validate format
-      if (!this.validateCodeFormat(inputCode, storedData.format)) {
-  return {
+      if (!this.validateCodeFormat(inputCode, storedData.format)) { return {
   valid: false,
   reason: 'format_mismatch',
-  metadata: {
+  metadata: {,
   validatedAt: new Date(),
   timingAttackSafe: defaultOptions.constantTimeValidation,
-  processingTimeMs: Date.now() - startTime,
+  processingTimeMs: Date.now() - startTime }
 };
       // Hash input code and compare
       const inputHash = this.hashCode(inputCode, storedData.salt);
@@ -365,53 +352,47 @@ export class CodeGenerationService {
       // Calculate processing time for timing attack protection
       const processingTime = Date.now() - startTime;
       // Ensure minimum processing time for constant-time validation
-      if (defaultOptions.constantTimeValidation) {
-  const minProcessingTime = 10; // 10ms minimum;
+      if (defaultOptions.constantTimeValidation) { const minProcessingTime = 10; // 10ms minimum;
   if (processingTime < minProcessingTime) {
   await new Promise(resolve => setTimeout(resolve, minProcessingTime - processingTime));
   return {
   valid: isValid,
   reason: isValid ? undefined : 'invalid',
-  metadata: {
+  metadata: {,
   validatedAt: new Date(),
   timingAttackSafe: defaultOptions.constantTimeValidation,
-  processingTimeMs: Date.now() - startTime,
+  processingTimeMs: Date.now() - startTime }
 };
-    } catch (error) {
-  return {
+ catch (error) { return {
   valid: false,
   reason: 'invalid',
-  metadata: {
+  metadata: {,
   validatedAt: new Date(),
   timingAttackSafe: false,
-  processingTimeMs: Date.now() - startTime,
+  processingTimeMs: Date.now() - startTime }
 };
   /**
    * Generate TOTP secret with proper formatting
    */
-  async generateTOTPSecret(userId: string): Promise<{,
+  async generateTOTPSecret(userId: string): Promise<{ ,
   secret: string;
   qrCodeData: string;
   manualEntryKey: string;
-  backupCodes: string;
-}> {
-
-    // Generate 32-byte secret for TOTP
+  backupCodes: string }> { // Generate 32-byte secret for TOTP
     const secretOptions: CodeGenerationOptions = {,
   type: CodeType.TOTP_SECRET,
       format: CodeFormat.BASE32,
-      length: 32,
+      length: 32 }
       userContext: { userId, ipAddress: '0.0.0.0', userAgent: 'totp-generation' }
     };
     const secretData = await this.generateCode(secretOptions);
     // Generate backup codes
     const backupCodes: string = [];
-    for (let i = 0; i < 10; i++) {
-  const backupOptions: CodeGenerationOptions = {,
+    for (let i = 0; i < 10; i++) { const backupOptions: CodeGenerationOptions = {,
   type: CodeType.BACKUP_CODE,
   format: CodeFormat.ALPHANUMERIC,
   length: 8,
-  excludeSimilar: true,
+  excludeSimilar: true }
 };
       const backupData = await this.generateCode(backupOptions);
       // Format as XXXX-XXXX
@@ -423,20 +404,17 @@ export class CodeGenerationService {
     const issuer = 'PromptScape';
     const accountName = userId; // Could be email or username;
     const qrCodeData = `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(accountName)}?secret=${secretData.code}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=6&period=30`;}
-    return {
-  secret: secretData.code,
+    return { secret: secretData.code,
   qrCodeData,
-  manualEntryKey,
+  manualEntryKey }
   backupCodes
 };
   /**
    * Generate recovery token for account recovery
    */
-  async generateRecoveryToken(userId: string): Promise<GeneratedCode> {
-
-    return this.generateCode({)
-  type: CodeType.RECOVERY_TOKEN,
-      format: CodeFormat.HEX,
+  async generateRecoveryToken(userId: string): Promise<GeneratedCode> { return this.generateCode({)
+  type: CodeType.RECOVERY_TOKEN
+      format: CodeFormat.HEX }
       length: 64, // 32 bytes
       expiryMinutes: 60, // 1 hour
       userContext: { userId, ipAddress: '0.0.0.0', userAgent: 'recovery-generation' }
@@ -444,13 +422,11 @@ export class CodeGenerationService {
   /**
    * Generate API token
    */
-  async generateAPIToken(userId: string, expiryDays?: number): Promise<GeneratedCode> {
-
-    return this.generateCode({)
-  type: CodeType.API_TOKEN,
-      format: CodeFormat.HEX,
+  async generateAPIToken(userId: string, expiryDays?: number): Promise<GeneratedCode> { return this.generateCode({)
+  type: CodeType.API_TOKEN
+      format: CodeFormat.HEX
       length: 64, // 32 bytes
-      expiryMinutes: expiryDays ? expiryDays * 24 * 60 : undefined,
+      expiryMinutes: expiryDays ? expiryDays * 24 * 60 : undefined }
       userContext: { userId, ipAddress: '0.0.0.0', userAgent: 'api-token-generation' }
     });
   /**
@@ -468,8 +444,7 @@ export class CodeGenerationService {
   // ========================================
   // Private Helper Methods
   // ========================================
-  private generateSecureCode(options: CodeGenerationOptions): string {
-  if (options.format === CodeFormat.UUID) {
+  private generateSecureCode(options: CodeGenerationOptions): string { if (options.format === CodeFormat.UUID) {
   return crypto.randomUUID();
   const charset = this.getCharset(options);
   const codeArray: string = [];
@@ -529,10 +504,10 @@ export class CodeGenerationService {
   /**
   * Analyze the strength of a generated code
   */
-  static analyzeCodeStrength(generatedCode: GeneratedCode): {
+  static analyzeCodeStrength(generatedCode: GeneratedCode): {,
   entropy: number;
   strength: 'weak' | 'moderate' | 'strong' | 'very_strong';
-  crackTime: {
+  crackTime: { }
   averageTime: number;
   worstCase: number;
   unit: string;
@@ -546,8 +521,7 @@ export class CodeGenerationService {
     else if (entropy < 80) strength = 'strong';
     else strength = 'very_strong';
     const recommendations: string = [];
-    if (entropy < 40) {
-      recommendations.push('Consider increasing code length');
+    if (entropy < 40) { recommendations.push('Consider increasing code length');
     if (generatedCode.format === CodeFormat.NUMERIC) {
       recommendations.push('Consider using alphanumeric format for better security');
     if (!generatedCode.expiresAt) {
@@ -555,7 +529,7 @@ export class CodeGenerationService {
     return {
       entropy,
       strength,
-      crackTime,
+      crackTime }
       recommendations
     };
   /**

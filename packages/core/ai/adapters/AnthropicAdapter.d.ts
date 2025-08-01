@@ -7,15 +7,14 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface AnthropicConfig {
-    apiKey: string;
+}
+export interface AnthropicConfig { apiKey: string;
     baseURL?: string;
     timeout?: number;
-    maxRetries?: number;
-
+    maxRetries?: number }
 }
-export interface AnthropicRequestOptions {
-    model?: string;
+}
+export interface AnthropicRequestOptions { model?: string;
     temperature?: number;
     max_tokens?: number;
     top_p?: number;
@@ -26,41 +25,39 @@ export interface AnthropicRequestOptions {
     tools?: unknown[];
     tool_choice?: {
         type: 'auto' | 'any' | 'tool';
-        name?: string;
+        name?: string }
 }
     };
 
 }
-export interface ClaudeMessage {
-    role: 'user' | 'assistant';
+}
+export interface ClaudeMessage { role: 'user' | 'assistant';
     content: string | Array<{
         type: 'text' | 'image';
         text?: string;
         source?: {
             type: 'base64';
             media_type: string;
-            data: string;
+            data: string }
 }
         };
     }>;
 
 }
-export interface AnthropicResponse {
-    id: string;
+}
+export interface AnthropicResponse { id: string;
     type: 'message';
     role: 'assistant';
     content: Array<{
         type: 'text';
-        text: string;
+        text: string }
 }
     }>;
     model: string;
     stop_reason: 'end_turn' | 'max_tokens' | 'stop_sequence' | 'tool_use';
     stop_sequence?: string;
-    usage: {
-        input_tokens: number;
-        output_tokens: number;
-    };
+    usage: { input_tokens: number;
+        output_tokens: number };
 
 export declare class AnthropicAdapter extends BaseAIModel {
     private config;

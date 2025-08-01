@@ -4,8 +4,7 @@
  */
 import { z } from 'zod';
 import { BaseExtension, ExtensionValidationResult } from './interfaces/ExtensionInterfaces';
-export declare class ExtensionInterfaceValidator {
-    private static instance;
+export declare class ExtensionInterfaceValidator { private static instance;
     private validationCache;
     private schemaCache;
     private constructor();
@@ -18,16 +17,16 @@ export declare class ExtensionInterfaceValidator {
      * Validate extension interface compatibility
      */
     validateInterfaceCompatibility();
-      extension: any,
-      requiredInterface: string,
+      extension: any
+      requiredInterface: string
       version?: string
     ): ExtensionValidationResult;
     /**
      * Validate method signatures
      */
     validateMethodSignatures();
-      extension: any,
-      expectedSignatures: Record<string,
+      extension: any
+      expectedSignatures: Record<string
       MethodSignature>
     ): ExtensionValidationResult;
     /**
@@ -38,8 +37,8 @@ export declare class ExtensionInterfaceValidator {
      * Validate extension dependencies
      */
     validateExtensionDependencies();
-      extension: any,
-      availableExtensions: Map<string,
+      extension: any
+      availableExtensions: Map<string }
       BaseExtension>
     ): ExtensionValidationResult;
     /**
@@ -64,8 +63,7 @@ export declare class ExtensionInterfaceValidator {
     private isValidSemanticVersion;
     private getBaseMethodSignatures;
 
-export declare class ExtensionRuntimeTypeChecker {
-    private static instance;
+export declare class ExtensionRuntimeTypeChecker { private static instance;
     private typeCache;
     private constructor();
     static getInstance(): ExtensionRuntimeTypeChecker;
@@ -90,37 +88,29 @@ export declare class ExtensionRuntimeTypeChecker {
     private getObjectMethods;
     private getObjectProperties;
     private isExtension;
-    private isAsyncFunction;
-
+    private isAsyncFunction }
 }
-interface MethodSignature {
-    parameterCount?: number;
+interface MethodSignature { parameterCount?: number;
     parameterTypes?: string[];
     returnType?: string;
-    async?: boolean;
-
-
+    async?: boolean }
 }
-interface ExtensionValidationReport {
-    extensionId: string;
+}
+interface ExtensionValidationReport { extensionId: string;
     extensionName: string;
     version: string;
     timestamp: Date;
     overallValid: boolean;
-    validations: ValidationResult[];
-
-
+    validations: ValidationResult[] }
 }
-interface ValidationResult {
-    name: string;
+}
+interface ValidationResult { name: string;
     valid: boolean;
     errors: string[];
-    warnings: string[];
-
-
+    warnings: string[] }
 }
-interface RuntimeTypeInfo {
-    type: string;
+}
+interface RuntimeTypeInfo { type: string;
     constructor: string;
     prototype: string;
     methods: string[];
@@ -128,7 +118,7 @@ interface RuntimeTypeInfo {
     isExtension: boolean;
 
 export declare const extensionValidator: ExtensionInterfaceValidator;
-export declare const runtimeTypeChecker: ExtensionRuntimeTypeChecker;
+export declare const runtimeTypeChecker: ExtensionRuntimeTypeChecker }
 }
 export {};
 //# sourceMappingURL=ExtensionInterfaceValidator.d.ts.map

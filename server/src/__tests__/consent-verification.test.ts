@@ -14,11 +14,11 @@ describe('ConsentBasedDataFilterService', () => {
   beforeEach(() => {
     mockDb = {
       query: jest.fn()
-    } as any;
+ as any;
 
     mockAudit = {
       logEvent: jest.fn().mockResolvedValue('audit-id-123')
-    } as any;
+ as any;
 
     service = new ConsentBasedDataFilterService(mockDb, mockAudit);
   });
@@ -35,7 +35,7 @@ describe('ConsentBasedDataFilterService', () => {
         ipAddress: '192.168.1.1',
         userAgent: 'test-agent',
         timestamp: new Date()
-      }
+
     };
 
     it('should allow access when valid consent exists', async () => {
@@ -49,9 +49,9 @@ describe('ConsentBasedDataFilterService', () => {
               granted: true,
               grantedAt: new Date(),
               expiresAt: new Date(Date.now() + 86400000) // 1 day from now
-            }]
-          }
-        }]
+]
+
+]
       });
 
       const result = await service.filterDataAccess(baseRequest);
@@ -72,9 +72,9 @@ describe('ConsentBasedDataFilterService', () => {
               granted: false,
               grantedAt: null,
               expiresAt: null
-            }]
-          }
-        }]
+]
+
+]
       });
 
       const result = await service.filterDataAccess(baseRequest);
@@ -95,9 +95,9 @@ describe('ConsentBasedDataFilterService', () => {
               granted: true,
               grantedAt: new Date(Date.now() - 172800000), // 2 days ago
               expiresAt: new Date(Date.now() - 86400000) // 1 day ago (expired)
-            }]
-          }
-        }]
+]
+
+]
       });
 
       const result = await service.filterDataAccess(baseRequest);
@@ -130,9 +130,9 @@ describe('ConsentBasedDataFilterService', () => {
               granted: true,
               grantedAt: new Date(),
               expiresAt: new Date(Date.now() + 86400000)
-            }]
-          }
-        }]
+]
+
+]
       });
 
       const analyticsRequest = {
@@ -165,7 +165,7 @@ describe('ConsentBasedDataFilterService', () => {
             granted: true,
             grantedAt: new Date(),
             expiresAt: null
-  }
+
           {
             purpose: 'marketing',
             dataTypes: ['email', 'preferences'],
@@ -173,7 +173,7 @@ describe('ConsentBasedDataFilterService', () => {
             granted: false,
             grantedAt: null,
             expiresAt: null
-          }
+
         ]
       };
 
@@ -221,15 +221,15 @@ describe('ConsentBasedDataFilterService', () => {
                 purpose: 'service_delivery',
                 dataTypes: ['user_profile'],
                 granted: true
-  }
+
               {
                 purpose: 'analytics',
                 dataTypes: ['user_profile'],
                 granted: true
-              }
+
             ]
-          }
-        }]
+
+]
       });
 
       const fields = await service.getFilterableFields('user-123', 'user_profile');
@@ -248,9 +248,9 @@ describe('ConsentBasedDataFilterService', () => {
               purpose: 'marketing',
               dataTypes: ['user_profile'],
               granted: false
-            }]
-          }
-        }]
+]
+
+]
       });
 
       const fields = await service.getFilterableFields('user-123', 'user_profile');
@@ -270,7 +270,7 @@ describe('ConsentBasedDataFilterService', () => {
       mockDb.query.mockResolvedValue({
         rows: [{
           consent_data: null
-        }]
+]
       });
 
       await expect(service.filterDataAccess(baseRequest)).rejects.toThrow();
@@ -291,7 +291,7 @@ describe('ConsentBasedDataFilterService', () => {
             dataType: 'personal_data',
             operation: 'read',
             purpose: 'service_delivery'
-  }
+
   }
       );
     });

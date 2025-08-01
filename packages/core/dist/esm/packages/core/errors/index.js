@@ -120,7 +120,7 @@ if (Error.captureStackTrace) {
                 {
                     userMessage: 'The graph structure has validation errors that prevent execution.',
                         suggestions;
-                    [,
+                    [
                         'Check that all nodes have required properties',
                         'Ensure connections between nodes are valid',
                         'Verify node types are supported'
@@ -142,13 +142,13 @@ if (Error.captureStackTrace) {
                             userMessage;
                         'The graph failed to execute properly.',
                             suggestions;
-                        [,
+                        [
                             'Check node configurations for errors',
                             'Verify all required inputs are connected',
                             'Try running individual nodes to isolate the issue'
                         ],
                             recoveryActions;
-                        [,
+                        [
                             {
                                 type: 'retry',
                                 description: 'Retry execution with the same parameters',
@@ -156,8 +156,8 @@ if (Error.captureStackTrace) {
                             {
                                 type: 'reset',
                                 description: 'Reset graph state and try again'
-                            }],
-                        ;
+                            }
+                        ];
                         ;
                         export class NodeExecutionError extends BaseError {
                             nodeId;
@@ -177,8 +177,9 @@ if (Error.captureStackTrace) {
                         userMessage: `Node "${nodeId}" encountered an error during execution.`
                     };
             }
-            suggestions: [,
-                `Check the configuration of node "${nodeId}"`];
+            suggestions: [
+                `Check the configuration of node "${nodeId}"`
+            ];
         }
     }
     'Verify input values are correct',
@@ -199,12 +200,12 @@ if (Error.captureStackTrace) {
         {
             cause,
             userMessage: 'Unable to connect to the database. Please try again later.',
-            suggestions: [,
+            suggestions: [
                 'Check database server status',
                 'Verify connection configuration',
                 'Ensure network connectivity'
             ],
-            recoveryActions: [,
+            recoveryActions: [
                 {
                     type: 'retry',
                     description: 'Retry database connection',
@@ -213,7 +214,8 @@ if (Error.captureStackTrace) {
                 {
                     type: 'fallback',
                     description: 'Use cached data if available'
-                }],
+                }
+            ],
             class: ConnectionFactoryError, extends: BaseError
         };
     {
@@ -226,7 +228,7 @@ if (Error.captureStackTrace) {
                 context,
                 {
                     userMessage: 'Connection setup failed. Please check configuration.',
-                    suggestions: [,
+                    suggestions: [
                         'Ensure connection factory is properly configured',
                         'Check network settings',
                         'Verify authentication credentials'
@@ -246,17 +248,18 @@ if (Error.captureStackTrace) {
                         context,
                         {
                             userMessage: 'Authentication failed. Please check your credentials.',
-                            suggestions: [,
+                            suggestions: [
                                 'Verify your email and password are correct',
                                 'Check if account is locked or suspended',
                                 'Try resetting your password'
                             ],
-                            recoveryActions: [,
+                            recoveryActions: [
                                 {
                                     type: 'redirect',
                                     description: 'Go to login page',
                                     url: '/login'
-                                }],
+                                }
+                            ],
                             class: MFAError, extends: BaseError
                         };
                     {
@@ -269,7 +272,7 @@ if (Error.captureStackTrace) {
                                 { ...context, metadata: { mfaType } },
                                 {
                                     userMessage: 'Multi-factor authentication failed.',
-                                    suggestions: [,
+                                    suggestions: [
                                         'Check your authentication code',
                                         'Ensure your device time is synchronized',
                                         'Try using a backup code if available'
@@ -289,17 +292,18 @@ if (Error.captureStackTrace) {
                                         { ...context, metadata: { projectId } },
                                         {
                                             userMessage: 'This project is currently locked and cannot be edited.',
-                                            suggestions: [,
+                                            suggestions: [
                                                 'Wait for the lock to be released',
                                                 'Contact the user who has locked the project',
                                                 'Try refreshing the page'
                                             ],
-                                            recoveryActions: [,
+                                            recoveryActions: [
                                                 {
                                                     type: 'retry',
                                                     description: 'Check lock status again',
                                                     delay: 5000
-                                                }],
+                                                }
+                                            ],
                                             /**
                                              * Workflow and State errors
                                              */
@@ -315,7 +319,7 @@ if (Error.captureStackTrace) {
                                                 context,
                                                 {
                                                     userMessage: 'Invalid workflow state transition.',
-                                                    suggestions: [,
+                                                    suggestions: [
                                                         'Check current workflow state',
                                                         'Ensure proper permissions',
                                                         'Follow the correct workflow sequence'
@@ -342,18 +346,19 @@ if (Error.captureStackTrace) {
                                             {
                                                 userMessage: statusCode >= 500,
                                                 'Server error occurred. Please try again later.': 'Request failed. Please check your input and try again.',
-                                                suggestions: [,
+                                                suggestions: [
                                                     statusCode === 401 ? 'Check authentication credentials' : '',
                                                     statusCode === 403 ? 'Verify permissions' : '',
                                                     statusCode === 429 ? 'Wait before making more requests' : '',
                                                     'Try refreshing the page'
                                                 ].filter(Boolean),
-                                                recoveryActions: statusCode >= 500 ? [,
+                                                recoveryActions: statusCode >= 500 ? [
                                                     {
                                                         type: 'retry',
                                                         description: 'Retry request',
                                                         delay: 2000
-                                                    }] : [],
+                                                    }
+                                                ] : [],
                                                 /**
                                                  * Validation errors
                                                  */
@@ -378,8 +383,9 @@ if (Error.captureStackTrace) {
                                             userMessage: `The ${field} field has an invalid value.`
                                         };
                                 }
-                                suggestions: [,
-                                    `${field} should be ${expected}`];
+                                suggestions: [
+                                    `${field} should be ${expected}`
+                                ];
                             }
                         }
                         'Check the input format',
@@ -397,7 +403,7 @@ if (Error.captureStackTrace) {
                                     { ...context, metadata: { configKey } },
                                     {
                                         userMessage: 'Configuration error detected. Please contact support.',
-                                        suggestions: [,
+                                        suggestions: [
                                             'Check environment variables',
                                             'Verify configuration files',
                                             'Contact system administrator'

@@ -15,8 +15,7 @@
  * - Emergency session termination capabilities
  */
 import { EventEmitter } from 'events';
-export declare enum SessionSecurityLevel {
-    LOW = "low",
+export declare enum SessionSecurityLevel { LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
@@ -35,12 +34,12 @@ export declare enum SessionTerminationReason {
     SUSPICIOUS_ACTIVITY = "suspicious_activity",
     ADMIN_TERMINATION = "admin_termination",
     DEVICE_LOST = "device_lost",
-    PASSWORD_CHANGE = "password_change",
+    PASSWORD_CHANGE = "password_change" }
     MFA_CHANGE = "mfa_change"
 
 }
-export interface SessionConfiguration {
-    maxAge: number;
+}
+export interface SessionConfiguration { maxAge: number;
     rotationInterval: number;
     securityLevel: SessionSecurityLevel;
     allowMultipleDevices: boolean;
@@ -53,13 +52,13 @@ export interface SessionConfiguration {
         algorithm: string;
         keyDerivation: 'pbkdf2' | 'scrypt' | 'argon2';
         iterations: number;
-        saltLength: number;
+        saltLength: number }
 }
     };
 
 }
-export interface SecureSession {
-    id: string;
+}
+export interface SecureSession { id: string;
     userId: string;
     deviceId: string;
     createdAt: Date;
@@ -81,17 +80,15 @@ export interface SecureSession {
             type: 'desktop' | 'mobile' | 'tablet' | 'unknown';
             os: string;
             browser: string;
-            version: string;
+            version: string }
 }
         };
-        location: {
-            country?: string;
+        location: { country?: string;
             region?: string;
             city?: string;
             coordinates?: {
                 lat: number;
-                lon: number;
-            };
+                lon: number };
         };
         security: {
             isVpn: boolean;
@@ -100,68 +97,60 @@ export interface SecureSession {
             trustLevel: 'low' | 'medium' | 'high'
   };
     };
-    activities: Array<{
-        timestamp: Date;
+    activities: Array<{ timestamp: Date;
         action: string;
         endpoint: string;
         riskScore: number;
-        anomalyDetected: boolean;
-    }>;
-    rotationHistory: Array<{
-        timestamp: Date;
+        anomalyDetected: boolean }>;
+    rotationHistory: Array<{ timestamp: Date;
         oldTokenHash: string;
         newTokenHash: string;
-        reason: string;
-    }>;
+        reason: string }>;
 
 }
-export interface SessionContext {
-    ipAddress: string;
+}
+export interface SessionContext { ipAddress: string;
     userAgent: string;
     deviceFingerprint: string;
     requestHeaders: Record<string, string>;
     geolocation?: {
         country: string;
         region: string;
-        city: string;
+        city: string }
 }
     };
-    securityFlags: {
-        isSuspiciousLocation: boolean;
+    securityFlags: { isSuspiciousLocation: boolean;
         isNewDevice: boolean;
         hasVpn: boolean;
-        hasProxy: boolean;
-    };
+        hasProxy: boolean };
 
 }
-export interface SessionValidationResult {
-    isValid: boolean;
+}
+export interface SessionValidationResult { isValid: boolean;
     session?: SecureSession;
     requiresRotation: boolean;
     requiresReauthentication: boolean;
     securityIssues: Array<{
         type: 'warning' | 'critical';
         description: string;
-        recommendation: string;
+        recommendation: string }
 }
     }>;
-    anomalies: Array<{
-        type: string;
+    anomalies: Array<{ type: string;
         severity: 'low' | 'medium' | 'high';
         description: string;
-        confidence: number;
-    }>;
+        confidence: number }>;
 
 }
-export interface ActivityPattern {
-    userId: string;
+}
+export interface ActivityPattern { userId: string;
     deviceId: string;
     pattern: {
         typicalHours: number[];
         typicalDays: number[];
         commonLocations: string[];
         usualEndpoints: string[];
-        averageSessionDuration: number;
+        averageSessionDuration: number }
 }
     };
     lastUpdated: Date;
@@ -169,8 +158,7 @@ export interface ActivityPattern {
 /**
  * Comprehensive secure session management service
  */
-export declare class SecureSessionManager extends EventEmitter {
-    private sessions;
+export declare class SecureSessionManager extends EventEmitter { private sessions;
     private userSessions;
     private deviceSessions;
     private activityPatterns;
@@ -184,12 +172,10 @@ export declare class SecureSessionManager extends EventEmitter {
     createSession();
       userId: string,
       context: SessionContext,
-      securityLevel?: SessionSecurityLevel,
+      securityLevel?: SessionSecurityLevel }
       mfaVerified?: boolean
-    ): Promise<{
-        session: SecureSession;
-        token: string;
-    }>;
+    ): Promise<{ session: SecureSession;
+        token: string }>;
     /**
      * Validate and refresh session
      */
@@ -206,8 +192,8 @@ export declare class SecureSessionManager extends EventEmitter {
      * Terminate all sessions for a user
      */
     terminateAllUserSessions();
-      userId: string,
-      reason: SessionTerminationReason,
+      userId: string
+      reason: SessionTerminationReason
       excludeSessionId?: string
     ): Promise<number>;
     /**
@@ -221,15 +207,13 @@ export declare class SecureSessionManager extends EventEmitter {
     /**
      * Get session statistics
      */
-    getSessionStatistics(): {
-        total: number;
+    getSessionStatistics(): { total: number;
         active: number;
         expired: number;
         revoked: number;
         bySecurityLevel: Record<SessionSecurityLevel, number>;
         byDevice: Record<string, number>;
-        averageSessionDuration: number;
-    };
+        averageSessionDuration: number };
     private generateSecureToken;
     private generateCSRFToken;
     private generateDeviceId;

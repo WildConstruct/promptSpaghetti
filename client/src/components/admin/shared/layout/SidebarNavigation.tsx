@@ -18,18 +18,21 @@ import {
   Lock,
   ChevronDown,
   ChevronRight
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface NavItem {
   id: string;,
   label: string;
   href?: string;
-}
+
+
   icon?: React.ComponentType<{ size?: number }>;
   children?: NavItem;
   permission?: string;
   badge?: string | number;
-}
+
+
 interface SidebarNavigationProps {
   collapsed?: boolean;
   onToggle?: () => void;
@@ -40,91 +43,92 @@ interface SidebarNavigationProps {
   label: 'Dashboard',
   href: '/admin',
   icon: Home,
-}
-}
+
+
+
   {
     id: 'users',
     label: 'User Management',
     icon: Users,
-    children: [,
+    children: [
       { id: 'users-list', label: 'All Users', href: '/admin/users' },
       { id: 'users-roles', label: 'Roles & Permissions', href: '/admin/users/roles' },
       { id: 'users-groups', label: 'User Groups', href: '/admin/users/groups' }
     ]
-  }
+
   {
     id: 'features',
     label: 'Feature Toggles',
     icon: ToggleLeft,
-    children: [,
+    children: [
       { id: 'features-list', label: 'All Toggles', href: '/admin/features' },
       { id: 'features-create', label: 'Create Toggle', href: '/admin/features/create' },
       { id: 'features-audit', label: 'Audit Log', href: '/admin/features/audit' }
     ]
-  }
+
   {
     id: 'policies',
     label: 'Policy Management',
     icon: Shield,
-    children: [,
+    children: [
       { id: 'policies-list', label: 'Policies', href: '/admin/policies' },
       { id: 'policies-assignments', label: 'Assignments', href: '/admin/policies/assignments' },
       { id: 'policies-compliance', label: 'Compliance', href: '/admin/policies/compliance' }
     ]
-  }
+
   {
     id: 'analytics',
     label: 'Analytics',
     icon: BarChart3,
-    children: [,
+    children: [
       { id: 'analytics-usage', label: 'Usage Metrics', href: '/admin/analytics/usage' },
       { id: 'analytics-performance', label: 'Performance', href: '/admin/analytics/performance' },
       { id: 'analytics-reports', label: 'Reports', href: '/admin/analytics/reports' }
     ]
-  }
+
   {
     id: 'data',
     label: 'Data Management',
     icon: Database,
-    children: [,
+    children: [
       { id: 'data-sources', label: 'Data Sources', href: '/admin/data/sources' },
       { id: 'data-classification', label: 'Classification', href: '/admin/data/classification' },
       { id: 'data-retention', label: 'Retention', href: '/admin/data/retention' }
     ]
-  }
+
   {
     id: 'audit',
     label: 'Audit & Compliance',
     icon: FileText,
-    children: [,
+    children: [
       { id: 'audit-logs', label: 'Audit Logs', href: '/admin/audit/logs' },
       { id: 'audit-reports', label: 'Reports', href: '/admin/audit/reports' },
       { id: 'audit-calendar', label: 'Calendar', href: '/admin/audit/calendar' }
     ]
-  }
+
   {
   id: 'notifications',
   label: 'Notifications',
   href: '/admin/notifications',
   icon: Bell,
   badge: 3,
-}
+
   {
     id: 'security',
     label: 'Security',
     icon: Lock,
-    children: [,
+    children: [
       { id: 'security-monitoring', label: 'Monitoring', href: '/admin/security/monitoring' },
       { id: 'security-incidents', label: 'Incidents', href: '/admin/security/incidents' },
       { id: 'security-settings', label: 'Settings', href: '/admin/security/settings' }
     ]
-  }
+
   {
   id: 'settings',
   label: 'System Settings',
   href: '/admin/settings',
   icon: Settings];
-  export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({,)
+  export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({),
   collapsed = false,
   currentPath = '/admin'
 }) => {
@@ -135,7 +139,7 @@ interface SidebarNavigationProps {
   const newSet = new Set(prev);
   if (newSet.has(itemId)) {
   newSet.delete(itemId);
-} else {
+ else {
         newSet.add(itemId);
       return newSet;
     });
@@ -161,9 +165,9 @@ interface SidebarNavigationProps {
           onClick={() => {
             if (hasChildren) {
               toggleExpanded(item.id);
-            } else if (item.href) {
+ else if (item.href) {
               window.location.href = item.href;
-          }}
+}
         >
           {/* Icon */}
           {item.icon && level === 0 && ()

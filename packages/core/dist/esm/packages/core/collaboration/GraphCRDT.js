@@ -795,8 +795,8 @@ void {
             /**
             * Set event handlers
             */
-            setEventHandlers(handlers, {});
-            onOperationApplied ?  : (operation) => void ;
+            setEventHandlers(handlers, {}),
+                onOperationApplied ?  : (operation) => void ;
             onConflictDetected ?  : (conflictType, operations) => void ;
             onStateChanged ?  : (documentId) => void ;
         }

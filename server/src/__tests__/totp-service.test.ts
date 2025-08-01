@@ -124,7 +124,7 @@ describe('TOTPService', () => {
           label: `PromptSpaghetti:${testEmail}`,
           created_at: new Date(),
           backup_codes: JSON.stringify(['ABC123', 'DEF456'])
-        }]
+]
       });
     });
 
@@ -224,7 +224,7 @@ describe('TOTPService', () => {
           backup_codes: JSON.stringify(['ABC123', 'DEF456'] as unknown as unknown),
           last_used_code: null,
           last_used_at: null
-        }]
+]
       });
     });
 
@@ -280,7 +280,7 @@ describe('TOTPService', () => {
         rows: [{
           backup_codes: JSON.stringify(['ABC123', 'DEF456', 'GHI789'] as unknown as unknown),
           used_backup_codes: JSON.stringify(['ABC123']) // One code already used
-        }]
+]
       });
     });
 
@@ -331,7 +331,7 @@ describe('TOTPService', () => {
           attempts: 10,
           window_start: new Date(Date.now() - 60000),
           blocked_until: futureBlockTime
-        }]
+]
       });
 
       const result = await totpService.checkRateLimit(testUserId, ipAddress, 'authentication');
@@ -348,8 +348,8 @@ describe('TOTPService', () => {
             attempts: 5,
             window_start: pastWindowStart,
             blocked_until: null
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ rows: [] }); // Update query
 
       const result = await totpService.checkRateLimit(testUserId, ipAddress, 'authentication');
@@ -410,7 +410,7 @@ describe('TOTPService', () => {
           authentications_today: '342',
           failed_attempts_today: '12',
           avg_backup_codes: '8.5'
-        }]
+]
       });
 
       const result = await totpService.getTOTPStatistics();

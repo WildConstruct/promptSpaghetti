@@ -11,53 +11,43 @@ import { RateLimitingService } from './RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 import { ApiUsagePatternQuotaRecommendations } from './ApiUsagePatternQuotaRecommendations';
 import { ApiScalingAnalyticsIntegration } from './ApiScalingAnalyticsIntegration';
-import { 
-  AdaptiveRateLimitingIntegration,
+import { AdaptiveRateLimitingIntegration,
   IntegrationMode,
-  CoordinationStrategy,
+  CoordinationStrategy }
   FallbackBehavior
 } from './AdaptiveRateLimitingIntegration';
 
 }
-export interface UnifiedSecurityConfig {
-    rateLimiting: {
+}
+export interface UnifiedSecurityConfig { rateLimiting: {
         enabled: boolean;
         strictMode: boolean;
-        customEndpoints?: Record<string, any>;
+        customEndpoints?: Record<string, any> }
 }
     };
-    throttling: {
-        enabled: boolean;
+    throttling: { enabled: boolean;
         analyticsEnabled: boolean;
-        defaultRules: boolean;
-    };
-    integration: {
-        mode: IntegrationMode;
+        defaultRules: boolean };
+    integration: { mode: IntegrationMode;
         strategy: CoordinationStrategy;
         fallback: FallbackBehavior;
         priorities: {
             rateLimiting: number;
-            throttling: number;
-        };
+            throttling: number };
     };
-    analytics: {
-        enableUsagePatterns: boolean;
+    analytics: { enableUsagePatterns: boolean;
         enableScalingAnalytics: boolean;
         enableCrossSystemLearning: boolean;
-        enableAnalyticsInsights: boolean;
-    };
-    monitoring: {
-        enableMetrics: boolean;
+        enableAnalyticsInsights: boolean };
+    monitoring: { enableMetrics: boolean;
         enableHealthChecks: boolean;
         alertThresholds: {
             errorRate: number;
             responseTime: number;
-            systemHealth: number;
-        };
+            systemHealth: number };
     };
 
-export declare enum SecurityProfile {
-    DEVELOPMENT = "development",// Relaxed settings for development
+export declare enum SecurityProfile { DEVELOPMENT = "development",// Relaxed settings for development
     STAGING = "staging",// Balanced settings for testing
     PRODUCTION = "production",// Strict settings for production
     HIGH_SECURITY = "high_security",// Maximum security for sensitive applications
@@ -73,8 +63,7 @@ export declare class UnifiedSecurityProtectionFactory {
         integration: AdaptiveRateLimitingIntegration;
         analytics?: {
             usagePatterns?: ApiUsagePatternQuotaRecommendations;
-            scalingAnalytics?: ApiScalingAnalyticsIntegration;
-        };
+            scalingAnalytics?: ApiScalingAnalyticsIntegration };
     };
     /**
      * Create a lightweight rate limiting only system
@@ -119,11 +108,9 @@ export declare class UnifiedSecurityProtectionFactory {
     /**
      * Validate configuration
      */
-    static validateConfiguration(config: UnifiedSecurityConfig): {
-        isValid: boolean;
+    static validateConfiguration(config: UnifiedSecurityConfig): { isValid: boolean;
         errors: string[];
-        warnings: string[];
-    };
+        warnings: string[] };
 
 export default UnifiedSecurityProtectionFactory;
 //# sourceMappingURL=UnifiedSecurityProtectionFactory.d.ts.map

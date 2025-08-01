@@ -15,7 +15,7 @@ import {
   useMemoryMonitoring,
   useBatchedUpdates,
   memoryUtils
-} from '../memoryOptimization';
+ from '../memoryOptimization';
 
 // Mock IntersectionObserver
 const mockIntersectionObserver = {
@@ -246,7 +246,7 @@ describe('useVirtualScrolling', () => {
     act(() => {
       const mockEvent = {
         currentTarget: { scrollTop: 500 }
-      } as React.UIEvent<HTMLDivElement>;
+ as React.UIEvent<HTMLDivElement>;
       result.current.onScroll(mockEvent);
     });
     expect(result.current.visibleItems).not.toEqual(initialVisibleItems);

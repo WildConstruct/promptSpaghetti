@@ -7,14 +7,14 @@ export enum PaymentProvider {
   PAYPAL = 'paypal',
   APPLE_PAY = 'apple_pay',
   GOOGLE_PAY = 'google_pay'
-}
+
 
 export enum PaymentMethodType {
   CARD = 'card',
   BANK_TRANSFER = 'bank_transfer',
   DIGITAL_WALLET = 'digital_wallet',
   CRYPTO = 'crypto'
-}
+
 
 export enum TransactionType {
   PURCHASE = 'purchase',
@@ -22,14 +22,14 @@ export enum TransactionType {
   PARTIAL_REFUND = 'partial_refund',
   SUBSCRIPTION = 'subscription',
   SUBSCRIPTION_RENEWAL = 'subscription_renewal'
-}
+
 
 export enum EscrowStatus {
   HELD = 'held',
   RELEASED = 'released',
   DISPUTED = 'disputed',
   EXPIRED = 'expired'
-}
+
 
 export enum LicenseType {
   PERSONAL = 'personal',
@@ -37,7 +37,7 @@ export enum LicenseType {
   ENTERPRISE = 'enterprise',
   EDUCATIONAL = 'educational',
   UNLIMITED = 'unlimited'
-}
+
 
 export enum LicenseStatus {
   ACTIVE = 'active',
@@ -45,11 +45,12 @@ export enum LicenseStatus {
   EXPIRED = 'expired',
   REVOKED = 'revoked',
   TRANSFERRED = 'transferred'
-}
+
 
 // Shopping Cart interfaces
-}
-}
+
+
+
 export interface CartItem {
   id: string;
   template_id: string;
@@ -59,12 +60,13 @@ export interface CartItem {
   unit_price_cents: number;
   discount_cents?: number;
   added_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ShoppingCart {
   id: string;
   user_id: string;
@@ -76,13 +78,15 @@ export interface ShoppingCart {
   created_at: Date;
   updated_at: Date;
   expires_at: Date;
-}
-}
-}
+
+
+
+
 
 // Payment Processing interfaces
-}
-}
+
+
+
 export interface PaymentMethod {
   id: string;
   user_id: string;
@@ -95,12 +99,13 @@ export interface PaymentMethod {
   is_default: boolean;
   metadata: Record<string, any>;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PaymentIntent {
   id: string;
   cart_id: string;
@@ -116,13 +121,15 @@ export interface PaymentIntent {
   metadata: Record<string, any>;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
+
+
+
+
 
 // Enhanced Transaction interface
-}
-}
+
+
+
 export interface Transaction {
   id: string;
   payment_intent_id: string;
@@ -143,13 +150,15 @@ export interface Transaction {
   metadata: Record<string, any>;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
+
+
+
+
 
 // License Management interfaces
-}
-}
+
+
+
 export interface TemplateLicense {
   id: string;
   purchase_id: string;
@@ -170,12 +179,13 @@ export interface TemplateLicense {
   created_at: Date;
   updated_at: Date;
   last_used_at?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LicenseTransfer {
   id: string;
   license_id: string;
@@ -185,13 +195,15 @@ export interface LicenseTransfer {
   approved_by?: string;
   approved_at?: Date;
   created_at: Date;
-}
-}
-}
+
+
+
+
 
 // Order and Receipt interfaces
-}
-}
+
+
+
 export interface Order {
   id: string;
   user_id: string;
@@ -213,12 +225,13 @@ export interface Order {
   created_at: Date;
   updated_at: Date;
   completed_at?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OrderItem {
   id: string;
   order_id: string;
@@ -231,12 +244,13 @@ export interface OrderItem {
   license_id?: string;
   fulfillment_status: 'pending' | 'fulfilled' | 'failed';
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BillingAddress {
   name: string;
   email: string;
@@ -247,13 +261,15 @@ export interface BillingAddress {
   postal_code: string;
   country: string;
   tax_id?: string;
-}
-}
-}
+
+
+
+
 
 // Refund interfaces
-}
-}
+
+
+
 export interface RefundRequest {
   id: string;
   purchase_id: string;
@@ -266,12 +282,13 @@ export interface RefundRequest {
   processed_by?: string;
   processed_at?: Date;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Refund {
   id: string;
   refund_request_id: string;
@@ -283,13 +300,15 @@ export interface Refund {
   metadata: Record<string, any>;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
+
+
+
+
 
 // Fraud and Risk Management
-}
-}
+
+
+
 export interface RiskAssessment {
   id: string;
   payment_intent_id: string;
@@ -304,13 +323,15 @@ export interface RiskAssessment {
   recommendation: 'approve' | 'review' | 'decline';
   automated_decision: boolean;
   created_at: Date;
-}
-}
-}
+
+
+
+
 
 // Tax interfaces
-}
-}
+
+
+
 export interface TaxCalculation {
   id: string;
   cart_id: string;
@@ -324,11 +345,12 @@ export interface TaxCalculation {
     type: string;
     rate: number;
     amount_cents: number;
-}
-}
-  }>;
+
+
+
+>;
   calculated_at: Date;
-}
+
 
 // Validation Schemas
 export const CartItemSchema = z.object({
@@ -362,7 +384,7 @@ export const CreatePaymentIntentSchema = z.object({
     postal_code: z.string().min(1),
     country: z.string().min(2).max(2),
     tax_id: z.string().optional()
-  }
+
 });
 
 export const ProcessPaymentSchema = z.object({
@@ -383,8 +405,9 @@ export const LicenseTransferSchema = z.object({
 });
 
 // Analytics interfaces for transactions
-}
-}
+
+
+
 export interface TransactionAnalytics {
   period_start: Date;
   period_end: Date;
@@ -396,25 +419,26 @@ export interface TransactionAnalytics {
     refund_rate: number;
     dispute_rate: number;
     fraud_rate: number;
-}
-}
+
+
+
   };
   payment_methods: Array<{
     provider: PaymentProvider;
     type: PaymentMethodType;
     count: number;
     revenue_cents: number;
-  }>;
+>;
   geography: Array<{
     country: string;
     revenue_cents: number;
     transactions: number;
-  }>;
+>;
   trends: {
     daily_revenue: Array<{ date: string; revenue_cents: number }>;
     daily_transactions: Array<{ date: string; count: number }>;
   };
-}
+
 
 export type {
   CartItem,

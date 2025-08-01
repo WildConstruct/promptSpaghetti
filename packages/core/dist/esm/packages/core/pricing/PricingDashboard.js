@@ -115,7 +115,7 @@ export class PricingDashboard extends EventEmitter {
                                         competitiveAdvantage: number,
                                         marketGaps: string,
                                         pricingRecommendations: string,
-                                        threatLevel: 'low' | 'medium' | 'high'
+                                        threatLevel: 'low' | 'medium' | 'high',
                                     } > {
                                         // Aggregate competitive analysis from all models
                                         const: models = this.getAllModels(),
@@ -125,16 +125,16 @@ export class PricingDashboard extends EventEmitter {
                                         sum
                                     } + (analysis.marketShare * 100), 0;
                                     / competitiveAnalyses.length;
-                                    const marketGaps = [];
-                                    'AI-powered script analysis',
+                                    const marketGaps = [
+                                        'AI-powered script analysis',
                                         'Real-time collaboration features',
-                                        'Industry-specific templates';
-                                    ;
-                                    const pricingRecommendations = [];
-                                    'Consider premium tier for blockbuster productions',
+                                        'Industry-specific templates'
+                                    ];
+                                    const pricingRecommendations = [
+                                        'Consider premium tier for blockbuster productions',
                                         'Introduce volume discounts for studio clients',
-                                        'Seasonal pricing for festival submissions';
-                                    ;
+                                        'Seasonal pricing for festival submissions'
+                                    ];
                                     return {
                                         currentPosition: this.metrics.marketPosition,
                                         competitiveAdvantage: avgAdvantage,
@@ -158,7 +158,7 @@ export class PricingDashboard extends EventEmitter {
                                     }
                                     seasonalPerformance: this.metrics.seasonalTrends.map(trend => ({}), season, trend.period, multiplier, 1 + trend.growth / 100, revenue, trend.revenue);
                                 }
-                                contentTypeAnalysis: [,
+                                contentTypeAnalysis: [
                                     { type: 'Script Generation', demand: 85, pricing: 120 },
                                     { type: 'Storyboard Creation', demand: 70, pricing: 180 },
                                     { type: 'Concept Art', demand: 90, pricing: 250 },
@@ -183,9 +183,10 @@ export class PricingDashboard extends EventEmitter {
                                 }
                                 else {
                                     // Simple CSV export for metrics only
-                                    const csvRows = [];
-                                    'Metric,Value,Updated',
-                                        `Total Revenue,${this.metrics.totalRevenue},${new Date(this.metrics.updatedAt).toISOString()}`;
+                                    const csvRows = [
+                                        'Metric,Value,Updated',
+                                        `Total Revenue,${this.metrics.totalRevenue},${new Date(this.metrics.updatedAt).toISOString()}`
+                                    ];
                                 }
                             }
                             `Revenue Growth Rate,${this.metrics.revenueGrowthRate}%,${new Date(this.metrics.updatedAt).toISOString()}`;
@@ -344,19 +345,20 @@ void {
         impact;
     'high',
         actionItems;
-    [,
+    [
         'Consider scaling successful pricing models',
         'Increase marketing investment',
         'Expand to new market segments'
     ],
         dataPoints;
-    [,
+    [
         {
             metric: 'Revenue Growth Rate',
             current: this.metrics.revenueGrowthRate,
             previous: 5,
             change: this.metrics.revenueGrowthRate - 5
-        }],
+        }
+    ],
         createdAt;
     Date.now(),
     ;
@@ -378,19 +380,20 @@ confidence: 0.85,
     impact;
 'high',
     actionItems;
-[,
+[
     'Expand AI optimization to more models',
     'Increase prediction frequency',
     'Fine-tune optimization algorithms'
 ],
     dataPoints;
-[,
+[
     {
         metric: 'AI Optimization Impact',
         current: this.metrics.aiOptimizationImpact,
         previous: 5,
         change: this.metrics.aiOptimizationImpact - 5
-    }],
+    }
+],
     createdAt;
 Date.now(),
 ;
@@ -484,12 +487,12 @@ Promise < RevenueProjection > {
             lower: projectedRevenue * 0.85,
             upper: projectedRevenue * 1.15,
         },
-        assumptions: [,
+        assumptions: [
             'Current growth rate continues',
             'No major market disruptions',
             'Competitive position remains stable'
         ],
-        keyFactors: [,
+        keyFactors: [
             {
                 factor: 'Revenue Growth Rate',
                 impact: growthRate,
@@ -499,7 +502,8 @@ Promise < RevenueProjection > {
                 factor: 'Market Seasonality',
                 impact: 0.1,
                 confidence: 0.7
-            }]
+            }
+        ]
     },
     getAllModels() {
         // This would need to be implemented to access models from the optimizer

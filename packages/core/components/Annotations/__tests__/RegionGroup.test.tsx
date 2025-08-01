@@ -7,13 +7,13 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RegionGroup } from '../RegionGroup';
 import { RegionGroup as RegionGroupType, REGION_GROUP_COLORS } from '../../../types/CollaborationTypes';
-const mockGroup: RegionGroupType = {,
+const mockGroup: RegionGroupType = { ,
   id: 'test-group-1',
   label: 'Test Group',
   description: 'Test group description',
   color: '#3b82f6',
   backgroundColor: 'rgba(59, 130, 246, 0.1)',
-  opacity: 0.8,
+  opacity: 0.8 }
   bounds: { x: 100, y: 100, width: 300, height: 200 },
   nodeIds: ['node-1', 'node-2'],
   collapsed: false,
@@ -30,10 +30,8 @@ const mockGroup: RegionGroupType = {,
   lastModified: '2024-01-01T12:00:00Z';
   };
 const mockOnAction = jest.fn<unknown, unknown>();
-describe('RegionGroup Component', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+describe('RegionGroup Component', () => { beforeEach(() => {
+    jest.clearAllMocks() });
   describe('Rendering', () => {
     test('renders group with correct styling and position', () => {
       render();
@@ -45,13 +43,13 @@ describe('RegionGroup Component', () => {
       );
       const groupElement = screen.getByTestId('region-group-test-group-1');
       expect(groupElement).toBeInTheDocument();
-      expect(groupElement).toHaveStyle({)
-  position: 'absolute',
-  left: '100px',
-  top: '100px',
-  width: '300px',
-  height: '200px',
-  border: '2px solid #3b82f6',
+      expect(groupElement).toHaveStyle({ )
+  position: 'absolute'
+  left: '100px'
+  top: '100px'
+  width: '300px'
+  height: '200px'
+  border: '2px solid #3b82f6' }
 });
     });
     test('displays group label and node count', () => {
@@ -137,9 +135,9 @@ describe('RegionGroup Component', () => {
       );
       const collapseButton = screen.getByTitle('Collapse group');
       await user.click(collapseButton);
-      expect(mockOnAction).toHaveBeenCalledWith({)
-  type: 'collapse',
-  groupId: 'test-group-1',
+      expect(mockOnAction).toHaveBeenCalledWith({ )
+  type: 'collapse'
+  groupId: 'test-group-1' }
 });
     });
     test('handles expand when collapsed', async () => {
@@ -154,9 +152,9 @@ describe('RegionGroup Component', () => {
       );
       const expandButton = screen.getByTitle('Expand group');
       await user.click(expandButton);
-      expect(mockOnAction).toHaveBeenCalledWith({)
-  type: 'expand',
-  groupId: 'test-group-1',
+      expect(mockOnAction).toHaveBeenCalledWith({ )
+  type: 'expand'
+  groupId: 'test-group-1' }
 });
     });
     test('starts label editing on double-click', async () => {
@@ -202,9 +200,9 @@ describe('RegionGroup Component', () => {
       const input = screen.getByDisplayValue('Test Group');
       await user.clear(input);
       await user.type(input, 'Updated Label{enter}');
-      expect(mockOnAction).toHaveBeenCalledWith({)
-  type: 'update',
-        groupId: 'test-group-1',
+      expect(mockOnAction).toHaveBeenCalledWith({ )
+  type: 'update'
+        groupId: 'test-group-1' }
         group: { label: 'Updated Label' }
       });
     });
@@ -330,9 +328,9 @@ describe('RegionGroup Component', () => {
         />
       );
       const groupElement = screen.getByTestId('region-group-test-group-1');
-      expect(groupElement).toHaveStyle({)
-  transform: 'scale(1.02)',
-  zIndex: '100' // Base zIndex + selected bonus,
+      expect(groupElement).toHaveStyle({ )
+  transform: 'scale(1.02)'
+  zIndex: '100' // Base zIndex + selected bonus }
 });
     });
     test('applies hover effects during interaction', () => {
@@ -346,9 +344,9 @@ describe('RegionGroup Component', () => {
       const groupElement = screen.getByTestId('region-group-test-group-1');
       // Simulate drag start
       fireEvent.mouseDown(groupElement, { clientX: 150, clientY: 150 });
-      expect(groupElement).toHaveStyle({)
-  cursor: 'grabbing',
-  transition: 'none',
+      expect(groupElement).toHaveStyle({ )
+  cursor: 'grabbing'
+  transition: 'none' }
 });
     });
     test('shows appropriate cursor based on interaction state', () => {

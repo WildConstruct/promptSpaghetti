@@ -364,13 +364,13 @@ actual: matches?.length || 0;
 noCommonSequences();
 PasswordComplexityRule;
 {
-    const sequences = [];
-    '123', '234', '345', '456', '567', '678', '789', '890',
+    const sequences = [
+        '123', '234', '345', '456', '567', '678', '789', '890',
         'abc', 'bcd', 'cde', 'def', 'efg', 'fgh', 'ghi', 'hij',
         'qwe', 'wer', 'ert', 'rty', 'tyu', 'yui', 'uio', 'iop',
         'asd', 'sdf', 'dfg', 'fgh', 'ghj', 'hjk', 'jkl',
-        'zxc', 'xcv', 'cvb', 'vbn', 'bnm';
-    ;
+        'zxc', 'xcv', 'cvb', 'vbn', 'bnm'
+    ];
     return {
         id: 'no-common-sequences',
         name: 'No Common Sequences',
@@ -417,69 +417,63 @@ PasswordComplexityRule;
                         message: 'No personal information to check against',
                     };
                     const lowerPassword = password.toLowerCase();
-                    const personalInfo = [];
-                    context.username,
+                    const personalInfo = [
+                        context.username,
                         context.email?.split('@')[0],
                         context.firstName,
                         context.lastName,
                         context.organizationName,
+                        ...(context.personalInfo || [])
+                    ].filter(Boolean).map(info => info.toLowerCase());
+                    const foundInfo = personalInfo.filter(info => );
+                    ;
+                    info.length >= 3 && lowerPassword.includes(info);
+                    ;
+                    const passed = foundInfo.length === 0;
+                    return {
+                        passed,
+                        score: passed ? 10 : Math.max(1, 10 - foundInfo.length * 3),
+                        message: passed,
+                        'No personal information found': `Contains personal information: ${foundInfo.join(', ')}`
+                    };
+                }
+                suggestion: passed ? undefined : 'Remove personal information and use unrelated words or phrases',
+                    details;
+                {
+                    expected: 'No personal information',
+                        actual;
+                    foundInfo,
                     ;
                 }
+                ;
             },
-            ...(context.personalInfo || []),
-            : .filter(Boolean).map(info => info.toLowerCase()),
-            const: foundInfo = personalInfo.filter(info => ),
-            info, : .length >= 3 && lowerPassword.includes(info),
-            const: passed = foundInfo.length === 0,
-            return: {
-                passed,
-                score: passed ? 10 : Math.max(1, 10 - foundInfo.length * 3),
-                message: passed,
-                'No personal information found': `Contains personal information: ${foundInfo.join(', ')}`
+            /**
+             * Entropy/randomness check
+             */
+            static minimumEntropy(minEntropy = 50) {
+                return {
+                    id: 'minimum-entropy',
+                    name: 'Minimum Entropy',
+                    description: `Password must have at least ${minEntropy} bits of entropy`
+                };
+            },
+            enabled: true,
+            required: false,
+            weight: 9,
+            category: 'entropy',
+            severity: 'warning',
+            validate: (password) => {
+                const entropy = PasswordComplexityValidator.calculateEntropy(password);
+                const passed = entropy >= minEntropy;
+                const score = Math.min(10, (entropy / minEntropy) * 10);
+                return {
+                    passed,
+                    score: passed ? score : Math.max(1, score),
+                    message: passed,
+                } `Entropy requirement met (${entropy.toFixed(1)} bits)`;
             }
-        },
-            suggestion;
-        passed ? undefined : 'Remove personal information and use unrelated words or phrases',
-            details;
-        {
-            expected: 'No personal information',
-                actual;
-            foundInfo,
-            ;
-        }
-        ;
+        } `Low entropy (${entropy.toFixed(1)}/${minEntropy} bits)`;
     }
-    ;
-    minimumEntropy(minEntropy, number = 50);
-    PasswordComplexityRule;
-    {
-        return {
-            id: 'minimum-entropy',
-            name: 'Minimum Entropy',
-            description: `Password must have at least ${minEntropy} bits of entropy`
-        };
-    }
-    enabled: true,
-        required;
-    false,
-        weight;
-    9,
-        category;
-    'entropy',
-        severity;
-    'warning',
-        validate;
-    (password) => {
-        const entropy = PasswordComplexityValidator.calculateEntropy(password);
-        const passed = entropy >= minEntropy;
-        const score = Math.min(10, (entropy / minEntropy) * 10);
-        return {
-            passed,
-            score: passed ? score : Math.max(1, score),
-            message: passed,
-        } `Entropy requirement met (${entropy.toFixed(1)} bits)`;
-    };
-    `Low entropy (${entropy.toFixed(1)}/${minEntropy} bits)`;
 }
 suggestion: passed ? undefined : 'Increase randomness by mixing character types and avoiding patterns',
     details;
@@ -526,8 +520,7 @@ true,
             'Password matches a recently used password': 'Password is not in recent history',
             suggestion: isReused ? 'Choose a password you have not used recently' : undefined,
             details: {
-                expected: `Not in last ${historyCount} passwords`
-            }
+                expected: `Not in last ${historyCount} passwords` }
         },
             actual;
         isReused ? 'Found in history' : 'Not in history';
@@ -649,93 +642,105 @@ export class PasswordComplexityValidator {
             */
             loadCommonPasswords() {
                 // In a real implementation, this would load from a file or API
-                const commonPasswords = [];
-                'password', '123456', '123456789', 'qwerty', 'abc123',
+                const commonPasswords = [
+                    'password', '123456', '123456789', 'qwerty', 'abc123',
                     'password123', 'admin', 'letmein', 'welcome', 'monkey',
                     'dragon', 'master', 'hello', 'freedom', 'whatever',
-                    'qazwsx', 'trustno1', 'jordan23', 'harley', 'robert';
-            } };
-        ;
-        commonPasswords.forEach(pwd => this.commonPasswords.add(pwd.toLowerCase()));
-        /**
-        * Validate password against all configured rules
-        */
-        async;
-        validatePassword(password, string);
-        context ?  : PasswordValidationContext;
-        Promise < PasswordValidationResult > {
-            : .config.enabled };
-        {
-            return {
-                valid: true,
-                score: 100,
-                strength: 'very-strong',
-                ruleResults: [],
-                errors: [],
-                warnings: [],
-                suggestions: [],
-                passedRules: 0,
-                totalRules: 0,
-            };
-            const ruleResults = [];
-            const errors = [];
-            const warnings = [];
-            const suggestions = [];
-            // Validate against all enabled rules
-            for (const rule of this.config.rules) {
-                if (!rule.enabled)
-                    continue;
-                try {
-                    const result = rule.validate(password, context);
-                    ruleResults.push(result);
-                    if (!result.passed) {
-                        if (rule.severity === 'error' && rule.required) {
-                            errors.push(result.message);
-                        }
-                        else if (rule.severity === 'warning') {
-                            warnings.push(result.message);
-                            if (result.suggestion) {
-                                suggestions.push(result.suggestion);
+                    'qazwsx', 'trustno1', 'jordan23', 'harley', 'robert'
+                ];
+                commonPasswords.forEach(pwd => this.commonPasswords.add(pwd.toLowerCase()));
+                /**
+                * Validate password against all configured rules
+                */
+                async;
+                validatePassword(password, string),
+                    context ?  : PasswordValidationContext;
+                Promise < PasswordValidationResult > {
+                    : .config.enabled };
+                {
+                    return {
+                        valid: true,
+                        score: 100,
+                        strength: 'very-strong',
+                        ruleResults: [],
+                        errors: [],
+                        warnings: [],
+                        suggestions: [],
+                        passedRules: 0,
+                        totalRules: 0,
+                    };
+                    const ruleResults = [];
+                    const errors = [];
+                    const warnings = [];
+                    const suggestions = [];
+                    // Validate against all enabled rules
+                    for (const rule of this.config.rules) {
+                        if (!rule.enabled)
+                            continue;
+                        try {
+                            const result = rule.validate(password, context);
+                            ruleResults.push(result);
+                            if (!result.passed) {
+                                if (rule.severity === 'error' && rule.required) {
+                                    errors.push(result.message);
+                                }
+                                else if (rule.severity === 'warning') {
+                                    warnings.push(result.message);
+                                    if (result.suggestion) {
+                                        suggestions.push(result.suggestion);
+                                    }
+                                    try { }
+                                    catch (error) {
+                                        console.error(`Error validating rule ${rule.id}:`, error);
+                                    }
+                                    ruleResults.push({});
+                                    passed: false,
+                                        score;
+                                    0,
+                                        message;
+                                    `Rule validation failed: ${rule.name}`;
+                                }
                             }
-                            try { }
-                            catch (error) {
-                                console.error(`Error validating rule ${rule.id}:`, error);
+                            ;
+                            // Check against common passwords
+                            if (this.isCommonPassword(password)) {
+                                errors.push('Password is too common');
+                                suggestions.push('Choose a more unique password');
+                                // Calculate overall score
+                                const score = this.calculateOverallScore(ruleResults);
+                                const strength = this.determineStrength(score);
+                                const valid = errors.length === 0 && score >= this.config.minimumScore;
+                                // Calculate entropy and crack time estimates
+                                const entropy = PasswordComplexityValidator.calculateEntropy(password);
+                                const crackTime = this.estimateCrackTime(entropy);
+                                const passedRules = ruleResults.filter(r => r.passed).length;
+                                const totalRules = ruleResults.length;
+                                return {
+                                    valid,
+                                    score,
+                                    strength,
+                                    ruleResults,
+                                    errors,
+                                    warnings,
+                                    suggestions: [...new Set(suggestions)], // Remove duplicates,
+                                    estimatedCrackTime: crackTime,
+                                    entropy,
+                                    passedRules,
+                                    totalRules
+                                };
+                                /**
+                                 * Calculate password entropy
+                                 */
                             }
-                            ruleResults.push({});
-                            passed: false,
-                                score;
-                            0,
-                                message;
-                            `Rule validation failed: ${rule.name}`;
+                            /**
+                             * Calculate password entropy
+                             */
                         }
-                    }
-                    ;
-                    // Check against common passwords
-                    if (this.isCommonPassword(password)) {
-                        errors.push('Password is too common');
-                        suggestions.push('Choose a more unique password');
-                        // Calculate overall score
-                        const score = this.calculateOverallScore(ruleResults);
-                        const strength = this.determineStrength(score);
-                        const valid = errors.length === 0 && score >= this.config.minimumScore;
-                        // Calculate entropy and crack time estimates
-                        const entropy = PasswordComplexityValidator.calculateEntropy(password);
-                        const crackTime = this.estimateCrackTime(entropy);
-                        const passedRules = ruleResults.filter(r => r.passed).length;
-                        const totalRules = ruleResults.length;
-                        return {
-                            valid,
-                            score,
-                            strength,
-                            ruleResults,
-                            errors,
-                            warnings,
-                            suggestions: [...new Set(suggestions)], // Remove duplicates,
-                            estimatedCrackTime: crackTime,
-                            entropy,
-                            passedRules,
-                            totalRules
-                        };
+                        /**
+                         * Calculate password entropy
+                         */
+                        finally {
+                        }
                         /**
                          * Calculate password entropy
                          */
@@ -747,105 +752,112 @@ export class PasswordComplexityValidator {
                 /**
                  * Calculate password entropy
                  */
-                finally {
-                }
-                /**
-                 * Calculate password entropy
-                 */
             }
             /**
              * Calculate password entropy
              */
-        }
-        /**
-         * Calculate password entropy
-         */
-    }
-    /**
-     * Calculate password entropy
-     */
-    static calculateEntropy(password) {
-        let charsetSize = 0;
-        if (/[a-z]/.test(password))
-            charsetSize += 26;
-        if (/[A-Z]/.test(password))
-            charsetSize += 26;
-        if (/[0-9]/.test(password))
-            charsetSize += 10;
-        if (/[^a-zA-Z0-9]/.test(password))
-            charsetSize += 32;
-        return password.length * Math.log2(charsetSize);
-        /**
-         * Check if password is in common passwords list
-         */
-    }
-    /**
-     * Check if password is in common passwords list
-     */
-    isCommonPassword(password) {
-        return this.commonPasswords.has(password.toLowerCase());
-        /**
-         * Calculate overall score from rule results
-         */
-    }
-    /**
-     * Calculate overall score from rule results
-     */
-    calculateOverallScore(ruleResults) {
-        if (ruleResults.length === 0)
-            return 0;
-        let totalScore = 0;
-        let totalWeight = 0;
-        for (const result of ruleResults) {
-            const rule = this.config.rules.find(r => r.id === result.message.split(' ')[0]);
-            const weight = rule?.weight || 5;
-            totalScore += result.score * weight;
-            totalWeight += weight;
-            return totalWeight > 0 ? Math.round((totalScore / totalWeight) * 10) : 0;
+            ,
+            /**
+             * Calculate password entropy
+             */
+            static calculateEntropy(password) {
+                let charsetSize = 0;
+                if (/[a-z]/.test(password))
+                    charsetSize += 26;
+                if (/[A-Z]/.test(password))
+                    charsetSize += 26;
+                if (/[0-9]/.test(password))
+                    charsetSize += 10;
+                if (/[^a-zA-Z0-9]/.test(password))
+                    charsetSize += 32;
+                return password.length * Math.log2(charsetSize);
+                /**
+                 * Check if password is in common passwords list
+                 */
+            }
+            /**
+             * Check if password is in common passwords list
+             */
+            ,
+            /**
+             * Check if password is in common passwords list
+             */
+            isCommonPassword(password) {
+                return this.commonPasswords.has(password.toLowerCase());
+                /**
+                 * Calculate overall score from rule results
+                 */
+            }
+            /**
+             * Calculate overall score from rule results
+             */
+            ,
+            /**
+             * Calculate overall score from rule results
+             */
+            calculateOverallScore(ruleResults) {
+                if (ruleResults.length === 0)
+                    return 0;
+                let totalScore = 0;
+                let totalWeight = 0;
+                for (const result of ruleResults) {
+                    const rule = this.config.rules.find(r => r.id === result.message.split(' ')[0]);
+                    const weight = rule?.weight || 5;
+                    totalScore += result.score * weight;
+                    totalWeight += weight;
+                    return totalWeight > 0 ? Math.round((totalScore / totalWeight) * 10) : 0;
+                    /**
+                     * Determine password strength category
+                     */
+                }
+                /**
+                 * Determine password strength category
+                 */
+            }
             /**
              * Determine password strength category
              */
-        }
-        /**
-         * Determine password strength category
-         */
+            ,
+            /**
+             * Determine password strength category
+             */
+            determineStrength(score) {
+                if (score >= 90)
+                    return 'very-strong';
+                if (score >= 75)
+                    return 'strong';
+                if (score >= 60)
+                    return 'good';
+                if (score >= 40)
+                    return 'fair';
+                if (score >= 20)
+                    return 'weak';
+                return 'very-weak';
+                /**
+                 * Estimate crack time based on entropy
+                 */
+            }
+            /**
+             * Estimate crack time based on entropy
+             */
+            ,
+            const: combinations = Math.pow(2, entropy),
+            const: avgCombinations = combinations / 2,
+            // Offline cracking (1 billion guesses per second)
+            const: offlineSeconds = avgCombinations / 1e9,
+            // Online cracking (1000 guesses per second with rate limiting)
+            const: onlineSeconds = avgCombinations / 1000,
+            const: formatTime = (seconds) => {
+                if (seconds < 60)
+                    return `${Math.round(seconds)} seconds`;
+            },
+            if(seconds, , ) { }, return: `${Math.round(seconds / 60)} minutes` };
+        if (seconds < 86400)
+            return `${Math.round(seconds / 3600)} hours`;
     }
-    /**
-     * Determine password strength category
-     */
-    determineStrength(score) {
-        if (score >= 90)
-            return 'very-strong';
-        if (score >= 75)
-            return 'strong';
-        if (score >= 60)
-            return 'good';
-        if (score >= 40)
-            return 'fair';
-        if (score >= 20)
-            return 'weak';
-        return 'very-weak';
-        /**
-         * Estimate crack time based on entropy
-         */
-    }
-    combinations = Math.pow(2, entropy);
-    avgCombinations = combinations / 2;
-    // Offline cracking (1 billion guesses per second)
-    offlineSeconds = avgCombinations / 1e9;
-    // Online cracking (1000 guesses per second with rate limiting)
-    onlineSeconds = avgCombinations / 1000;
-    formatTime = (seconds) => {
-        if (seconds < 60)
-            return `${Math.round(seconds)} seconds`;
-    };
     if(seconds, , ) { }
 }
-return `${Math.round(seconds / 60)} minutes`;
-if (seconds < 86400)
-    return `${Math.round(seconds / 3600)} hours`;
-if (seconds < 31536000)
-    return `${Math.round(seconds / 86400)} days`;
+return `${Math.round(seconds / 86400)} days`;
 return `${Math.round(seconds / 31536000)} years`;
 ;
 return {

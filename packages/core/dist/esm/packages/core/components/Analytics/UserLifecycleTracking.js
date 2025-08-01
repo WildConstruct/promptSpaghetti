@@ -323,7 +323,7 @@ Date.now() - (stages.length - currentStageIndex) * 86400000 * 30,
                     0.85,
                     ;
                 }
-                recommendations: [,
+                recommendations: [
                     {
                         recommendationId: 'rec_1',
                         action: 'Optimize onboarding flow',
@@ -332,7 +332,8 @@ Date.now() - (stages.length - currentStageIndex) * 86400000 * 30,
                         effort: 'low',
                         expectedOutcome: 'Maintain accelerated progression',
                         successMetrics: ['progression_rate', 'user_satisfaction']
-                    }],
+                    }
+                ],
                     data;
                 {
                     charts: [],
@@ -484,7 +485,15 @@ div >
 ;
 ;
 ;
-recommendations: Array;
+recommendations: Array < {
+    recommendationId: string,
+    action: string,
+    rationale: string,
+    priority: string,
+    effort: string,
+    expectedOutcome: string,
+    successMetrics: string
+} > ;
 data: {
     charts: unknown;
     tables: unknown;

@@ -31,20 +31,19 @@ export { createDefaultMiddleware, MiddlewareFactory } from './middleware/StateMi
 
 // State management configuration
 
-}
-export interface StateSystemConfig {
-  enableValidation: boolean;
+
+export interface StateSystemConfig { enableValidation: boolean;
   enableHistory: boolean;
   maxHistorySize: number;
   enablePersistence: boolean;
   enableDebug: boolean;
   enableCrossDomainSync: boolean;
-  conflictResolutionStrategy: 'last_writer_wins' | 'merge' | 'user_intervention';
+  conflictResolutionStrategy: 'last_writer_wins' | 'merge' | 'user_intervention' }
   performanceMonitoring: boolean;
   securityRules: boolean;
-}
-}
-export const defaultStateConfig: StateSystemConfig = {,
+
+
+export const defaultStateConfig: StateSystemConfig = { ,
   enableValidation: true,
   enableHistory: true,
   maxHistorySize: 100,
@@ -53,7 +52,7 @@ export const defaultStateConfig: StateSystemConfig = {,
   enableCrossDomainSync: true,
   conflictResolutionStrategy: 'last_writer_wins',
   performanceMonitoring: true,
-  securityRules: true,
+  securityRules: true }
 };
 
 // State system initialization
@@ -65,17 +64,16 @@ export async function initializeStateSystem(config: Partial<StateSystemConfig> =
   console.log('State management system initialized with config:', finalConfig);
 
 // State system health check
-export function getStateSystemHealth(): {
-  orchestrator: any;
+export function getStateSystemHealth(): { orchestrator: any;
   conflictResolver: any;
   domains: string;
   status: 'healthy' | 'degraded' | 'error';
   return {
-  orchestrator: globalStateOrchestrator.getHealthStatus(),
+  orchestrator: globalStateOrchestrator.getHealthStatus()
   conflictResolver: {
-  activeConflicts: globalConflictResolver.getActiveConflicts().length,
-  resolutionHistory: globalConflictResolver.getResolutionHistory().length,
-},
-  domains: globalStateOrchestrator.getRegisteredDomains(),
-    status: 'healthy'
+  activeConflicts: globalConflictResolver.getActiveConflicts().length
+  resolutionHistory: globalConflictResolver.getResolutionHistory().length }
+
+  domains: globalStateOrchestrator.getRegisteredDomains()
+    status: 'healthy';
   };

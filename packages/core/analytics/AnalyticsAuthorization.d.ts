@@ -6,8 +6,7 @@
  */
 import { z } from 'zod';
 import { UnifiedAnalyticsEvent, EventFilter } from './UnifiedEventBus';
-export declare const AuthContextSchema: z.ZodObject<{
-    userId: z.ZodString;
+export declare const AuthContextSchema: z.ZodObject<{ userId: z.ZodString;
     organizationId: z.ZodOptional<z.ZodString>;
     roles: z.ZodArray<z.ZodString, "many">;
     permissions: z.ZodArray<z.ZodString, "many">;
@@ -15,9 +14,7 @@ export declare const AuthContextSchema: z.ZodObject<{
     workspaceId: z.ZodOptional<z.ZodString>;
     environment: z.ZodDefault<z.ZodString>;
     tokenType: z.ZodEnum<["jwt", "api_key", "session"]>;
-    expiresAt: z.ZodOptional<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    userId: string;
+    expiresAt: z.ZodOptional<z.ZodNumber> }, "strip", z.ZodTypeAny, { userId: string;
     environment: string;
     sessionId: string;
     permissions: string[];
@@ -25,9 +22,7 @@ export declare const AuthContextSchema: z.ZodObject<{
     tokenType: "session" | "jwt" | "api_key";
     workspaceId?: string | undefined;
     expiresAt?: number | undefined;
-    organizationId?: string | undefined;
-}, {
-    userId: string;
+    organizationId?: string | undefined }, { userId: string;
     sessionId: string;
     permissions: string[];
     roles: string[];
@@ -35,39 +30,36 @@ export declare const AuthContextSchema: z.ZodObject<{
     environment?: string | undefined;
     workspaceId?: string | undefined;
     expiresAt?: number | undefined;
-    organizationId?: string | undefined;
-}>;
+    organizationId?: string | undefined }>;
 export type AuthContext = z.infer<typeof AuthContextSchema>;
-export declare enum AnalyticsPermission {
-    PUBLISH_EVENTS = "analytics:publish_events",
-    VIEW_EVENTS = "analytics:view_events",
-    VIEW_ALL_EVENTS = "analytics:view_all_events",
-    DELETE_EVENTS = "analytics:delete_events",
-    VIEW_ANALYTICS = "analytics:view_analytics",
-    VIEW_ORGANIZATION_ANALYTICS = "analytics:view_org_analytics",
-    EXPORT_ANALYTICS = "analytics:export_analytics",
-    VIEW_SENSITIVE_DATA = "analytics:view_sensitive_data",
-    VIEW_DASHBOARD = "analytics:view_dashboard",
-    VIEW_ADMIN_DASHBOARD = "analytics:view_admin_dashboard",
-    MANAGE_DASHBOARDS = "analytics:manage_dashboards",
-    MANAGE_ANALYTICS = "analytics:manage_analytics",
-    VIEW_SYSTEM_METRICS = "analytics:view_system_metrics",
-    CONFIGURE_RETENTION = "analytics:configure_retention",
-    MANAGE_INTEGRATIONS = "analytics:manage_integrations",
+export declare enum AnalyticsPermission { PUBLISH_EVENTS = "analytics:publish_events"
+    VIEW_EVENTS = "analytics:view_events"
+    VIEW_ALL_EVENTS = "analytics:view_all_events"
+    DELETE_EVENTS = "analytics:delete_events"
+    VIEW_ANALYTICS = "analytics:view_analytics"
+    VIEW_ORGANIZATION_ANALYTICS = "analytics:view_org_analytics"
+    EXPORT_ANALYTICS = "analytics:export_analytics"
+    VIEW_SENSITIVE_DATA = "analytics:view_sensitive_data"
+    VIEW_DASHBOARD = "analytics:view_dashboard"
+    VIEW_ADMIN_DASHBOARD = "analytics:view_admin_dashboard"
+    MANAGE_DASHBOARDS = "analytics:manage_dashboards"
+    MANAGE_ANALYTICS = "analytics:manage_analytics"
+    VIEW_SYSTEM_METRICS = "analytics:view_system_metrics"
+    CONFIGURE_RETENTION = "analytics:configure_retention"
+    MANAGE_INTEGRATIONS = "analytics:manage_integrations" }
     VIEW_INTEGRATION_ANALYTICS = "analytics:view_integration_analytics"
 
 }
-export interface AuthorizationPolicy {
-    id: string;
+}
+export interface AuthorizationPolicy { id: string;
     name: string;
     description: string;
     rules: AuthorizationRule[];
     priority: number;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface AuthorizationRule {
-    id: string;
+}
+export interface AuthorizationRule { id: string;
     condition: {
         eventTypes?: string[];
         categories?: string[];
@@ -76,19 +68,17 @@ export interface AuthorizationRule {
         userMatch?: 'self' | 'organization' | 'any';
         organizationMatch?: 'self' | 'any';
         requiredPermissions: string[];
-        requiredRoles?: string[];
+        requiredRoles?: string[] }
 }
     };
     action: 'allow' | 'deny';
-    fields?: {
-        allowed?: string[];
+    fields?: { allowed?: string[];
         denied?: string[];
-        redacted?: string[];
-    };
+        redacted?: string[] };
 
 }
-export interface AuthorizationResult {
-    allowed: boolean;
+}
+export interface AuthorizationResult { allowed: boolean;
     reason?: string;
     filteredEvent?: Partial<UnifiedAnalyticsEvent>;
     redactedFields?: string[];
@@ -111,8 +101,8 @@ export declare class AnalyticsAuthorizationService {
      * Authorize event publication
      */
     authorizeEventPublication();
-      event: Partial<UnifiedAnalyticsEvent>,
-      authContext: AuthContext,
+      event: Partial<UnifiedAnalyticsEvent>;
+      authContext: AuthContext }
     ): Promise<AuthorizationResult>;
     /**
      * Authorize event access/viewing
@@ -121,10 +111,9 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Authorize analytics query with filtering
      */
-    authorizeAnalyticsQuery(filter: EventFilter, authContext: AuthContext): Promise<{
-        allowed: boolean;
+    authorizeAnalyticsQuery(filter: EventFilter, authContext: AuthContext): Promise<{ allowed: boolean;
         filteredQuery?: EventFilter;
-        reason?: string;
+        reason?: string }
 }
     }>;
     /**
@@ -181,8 +170,7 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Get authorization summary for user
      */
-    getAuthorizationSummary(authContext: AuthContext): {
-        userId: string;
+    getAuthorizationSummary(authContext: AuthContext): { userId: string;
         organizationId?: string;
         roles: string[];
         permissions: string[];
@@ -193,8 +181,7 @@ export declare class AnalyticsAuthorizationService {
             canViewOrganizationAnalytics: boolean;
             canViewDashboard: boolean;
             canViewAdminDashboard: boolean;
-            canManageAnalytics: boolean;
-        };
+            canManageAnalytics: boolean };
     };
 
 export default AnalyticsAuthorizationService;

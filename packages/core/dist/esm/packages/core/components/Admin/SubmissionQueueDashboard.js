@@ -12,7 +12,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Queue, Clock, User, FileText, Eye, CheckCircle, AlertTriangle, Search, RefreshCw, Download, Calendar, BarChart3, TrendingUp, Users, } from 'lucide-react';
 ;
-validation_results: ValidationResult[];
+validation_results: ValidationResult;
 submitted_at: Date;
 updated_at: Date;
 assigned_reviewer ?  : string;
@@ -179,277 +179,277 @@ const SubmissionQueueDashboard = () => {
                                                             }
                                                         }, className: "checkbox" }) }), _jsxs("div", { className: "submission-info", children: [_jsxs("div", { className: "submission-header", children: [_jsx("h4", { className: "submission-title", children: submission.submission_data.title }), _jsxs("div", { className: "submission-badges", children: [_jsx(Badge, { className: getPriorityColor(submission.review_priority), children: submission.review_priority }), _jsx(Badge, { className: getStatusColor(submission.status), children: submission.status.replace('_', ' ') })] })] }), _jsxs("div", { className: "submission-details", children: [_jsxs("div", { className: "detail-item", children: [_jsx(User, { className: "w-4 h-4 text-gray-400" }), _jsx("span", { children: submission.submitter_name })] }), _jsxs("div", { className: "detail-item", children: [_jsx(Calendar, { className: "w-4 h-4 text-gray-400" }), _jsx("span", { children: formatTimeAgo(submission.submitted_at) })] }), _jsxs("div", { className: "detail-item", children: [_jsx(FileText, { className: "w-4 h-4 text-gray-400" }), _jsxs("span", { children: ["v", submission.version_number] })] }), submission.complexity_score && (_jsxs("div", { className: "detail-item", children: [_jsx(BarChart3, { className: "w-4 h-4 text-gray-400" }), _jsxs("span", { children: ["Complexity: ", submission.complexity_score, "/10"] })] })), submission.estimated_review_time && (_jsxs("div", { className: "detail-item", children: [_jsx(Clock, { className: "w-4 h-4 text-gray-400" }), _jsxs("span", { children: ["Est. ", submission.estimated_review_time, "m"] })] }))] }), submission.validation_results.some(r => r.severity === 'error') && (_jsxs("div", { className: "validation-warnings", children: [_jsx(AlertTriangle, { className: "w-4 h-4 text-red-500" }), _jsxs("span", { className: "text-red-600", children: [submission.validation_results.filter(r => r.severity === 'error').length, " validation errors"] })] }))] }), _jsxs("div", { className: "submission-actions", children: [_jsxs("select", { value: submission.review_priority, onChange: e => handleUpdatePriority(submission.id, e.target.value), className: "priority-select", children: [_jsx("option", { value: "low", children: "Low Priority" }), _jsx("option", { value: "medium", children: "Medium Priority" }), _jsx("option", { value: "high", children: "High Priority" }), _jsx("option", { value: "urgent", children: "Urgent" })] }), _jsxs("select", { value: submission.assigned_reviewer || '', onChange: e => e.target.value && handleAssignReviewer(submission.id, e.target.value), className: "reviewer-select", disabled: submission.status === 'approved' || submission.status === 'rejected', children: [_jsx("option", { value: "", children: "Assign Reviewer" }), metrics?.reviewer_workload.map(reviewer => (_jsxs("option", { value: reviewer.reviewer_id, children: [reviewer.reviewer_name, " (", reviewer.active_reviews, " active)"] }, reviewer.reviewer_id)))] }), _jsxs(Button, { size: "sm", onClick: () => window.open(`/admin/submissions/${submission.id}`, '_blank'), children: [_jsx(Eye, { className: "w-4 h-4 mr-1" }), "Review"] })] })] }, submission.id))) })) }) })] }), _jsx(TabsContent, { value: "reviewers", className: "reviewers-content", children: _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center", children: [_jsx(Users, { className: "w-5 h-5 mr-2" }), "Reviewer Workload"] }) }), _jsx(CardContent, { children: metrics?.reviewer_workload.map(reviewer => (_jsxs("div", { className: "reviewer-card", children: [_jsxs("div", { className: "reviewer-info", children: [_jsx("h4", { className: "reviewer-name", children: reviewer.reviewer_name }), _jsxs("div", { className: "reviewer-stats", children: [_jsxs("span", { children: [reviewer.active_reviews, " active reviews"] }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [reviewer.completed_today, " completed today"] }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: ["Avg: ", reviewer.average_review_time.toFixed(1), "h"] })] })] }), _jsx("div", { className: "workload-bar", children: _jsx("div", { className: "workload-fill", style: { width: `${Math.min(reviewer.active_reviews * 10, 100)}%` } }) })] }, reviewer.reviewer_id))) })] }) }), _jsx(TabsContent, { value: "analytics", className: "analytics-content", children: _jsx("div", { className: "analytics-grid", children: _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center", children: [_jsx(TrendingUp, { className: "w-5 h-5 mr-2" }), "Queue Trends"] }) }), _jsx(CardContent, { children: _jsxs("div", { className: "trend-metrics", children: [_jsxs("div", { className: "trend-item", children: [_jsx("span", { className: "trend-label", children: "Queue Velocity" }), _jsxs("span", { className: "trend-value", children: [metrics?.queue_velocity.toFixed(1), " sub/day"] })] }), _jsxs("div", { className: "trend-item", children: [_jsx("span", { className: "trend-label", children: "Avg Review Time" }), _jsxs("span", { className: "trend-value", children: [metrics?.average_review_time_hours.toFixed(1), "h"] })] })] }) })] }) }) })] }), _jsx("style", { children: `
         .submission-queue-dashboard {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 24px;
-          background: #f8fafc;
-          min-height: 100vh;
-        }
+  max-width: 1400px;,
+  margin: 0 auto;
+  padding: 24px;,
+  background: #f8fafc;
+  min-height: 100vh;
+}
         .queue-header {
-          background: white;
-          border-radius: 12px;
-          padding: 24px;
-          margin-bottom: 24px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
+  background: white;
+  border-radius: 12px;,
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
         .header-content {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 24px;
-        }
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
         .title-section {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-        }
+  display: flex;
+  align-items: center;,
+  gap: 16px;
+}
         .header-actions {
-          display: flex;
-          gap: 12px;
-        }
+  display: flex;,
+  gap: 12px;
+}
         .metrics-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 16px;
-          margin-top: 24px;
-        }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
         .metric-card {
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-        }
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
         .queue-tabs {
-          background: white;
-          border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
+  background: white;
+  border-radius: 12px;,
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
         .filter-card {
-          margin-bottom: 24px;
-          border: 1px solid #e2e8f0;
-        }
+  margin-bottom: 24px;,
+  border: 1px solid #e2e8f0;
+}
         .filter-section {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
+  display: flex;
+  flex-direction: column;,
+  gap: 16px;
+}
         .search-bar {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 12px;
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          background: #f8fafc;
-        }
+  display: flex;
+  align-items: center;,
+  gap: 12px;
+  padding: 12px;,
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;,
+  background: #f8fafc;
+}
         .filter-controls {
-          display: flex;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
+  display: flex;,
+  gap: 12px;
+  flex-wrap: wrap;
+}
         .filter-select {
-          padding: 8px 12px;
-          border: 1px solid #e2e8f0;
-          border-radius: 6px;
-          background: white;
-          min-width: 150px;
-        }
+  padding: 8px 12px;,
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;,
+  background: white;
+  min-width: 150px;
+}
         .bulk-actions {
-          display: flex;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 8px;
-          padding: 12px;
-          background: #f1f5f9;
-          border-radius: 8px;
-        }
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;,
+  gap: 8px;
+  padding: 12px;,
+  background: #f1f5f9;
+  border-radius: 8px;
+}
         .submissions-table {
-          border: 1px solid #e2e8f0;
-        }
+  border: 1px solid #e2e8f0;
+}
         .loading-state, .empty-state {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 64px;
-          text-align: center;
-        }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;,
+  padding: 64px;
+  text-align: center;
+}
         .submissions-list {
-          divide-y: 1px solid #e2e8f0;
-        }
+  divide-y: 1px solid #e2e8f0;
+}
         .submission-row {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          padding: 16px;
-          transition: background-color 0.2s;
-        }
-        .submission-row:hover {
-          background: #f8fafc;
-        }
+  display: flex;
+  align-items: center;,
+  gap: 16px;
+  padding: 16px;,
+  transition: background-color 0.2s;
+}
+        .submission-row:hover {,
+  background: #f8fafc;
+}
         .row-checkbox {
-          flex-shrink: 0;
-        }
+  flex-shrink: 0;
+}
         .checkbox {
-          width: 16px;
-          height: 16px;
-          accent-color: #3b82f6;
-        }
+  width: 16px;,
+  height: 16px;
+  accent-color: #3b82f6;
+}
         .submission-info {
-          flex: 1;
-          min-width: 0;
-        }
+  flex: 1;
+  min-width: 0;
+}
         .submission-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 8px;
-        }
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
         .submission-title {
-          font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-          margin: 0;
-          line-height: 1.4;
-        }
+  font-size: 16px;
+  font-weight: 600;,
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.4;
+}
         .submission-badges {
-          display: flex;
-          gap: 8px;
-          flex-shrink: 0;
-        }
+  display: flex;,
+  gap: 8px;
+  flex-shrink: 0;
+}
         .submission-details {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 16px;
-          margin-bottom: 8px;
-        }
+  display: flex;
+  flex-wrap: wrap;,
+  gap: 16px;
+  margin-bottom: 8px;
+}
         .detail-item {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 14px;
-          color: #6b7280;
-        }
+  display: flex;
+  align-items: center;,
+  gap: 4px;
+  font-size: 14px;,
+  color: #6b7280;
+}
         .validation-warnings {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 14px;
-        }
+  display: flex;
+  align-items: center;,
+  gap: 4px;
+  font-size: 14px;
+}
         .submission-actions {
-          display: flex;
-          gap: 8px;
-          align-items: center;
-          flex-shrink: 0;
-        }
+  display: flex;,
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
         .priority-select, .reviewer-select {
-          padding: 6px 10px;
-          border: 1px solid #e2e8f0;
-          border-radius: 4px;
-          background: white;
-          font-size: 14px;
-          min-width: 120px;
-        }
+  padding: 6px 10px;,
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;,
+  background: white;
+  font-size: 14px;
+  min-width: 120px;
+}
         .reviewer-card {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 16px;
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          margin-bottom: 12px;
-        }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;,
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
         .reviewer-info {
-          flex: 1;
-        }
+  flex: 1;
+}
         .reviewer-name {
-          font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-          margin: 0 0 4px 0;
-        }
+  font-size: 16px;
+  font-weight: 600;,
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
         .reviewer-stats {
-          font-size: 14px;
-          color: #6b7280;
-          display: flex;
-          gap: 8px;
-          align-items: center;
-        }
+  font-size: 14px;,
+  color: #6b7280;
+  display: flex;,
+  gap: 8px;
+  align-items: center;
+}
         .workload-bar {
-          width: 100px;
-          height: 8px;
-          background: #f3f4f6;
-          border-radius: 4px;
-          overflow: hidden;
-        }
+  width: 100px;,
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 4px;,
+  overflow: hidden;
+}
         .workload-fill {
-          height: 100%;
-          background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
-          transition: width 0.3s;
-        }
+  height: 100%;,
+  background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+  transition: width 0.3s;
+}
         .analytics-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 16px;
-        }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
         .trend-metrics {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
+  display: flex;
+  flex-direction: column;,
+  gap: 16px;
+}
         .trend-item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px;
-          background: #f8fafc;
-          border-radius: 6px;
-        }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;,
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 6px;
+}
         .trend-label {
-          font-size: 14px;
-          color: #6b7280;
-        }
+  font-size: 14px;,
+  color: #6b7280;
+}
         .trend-value {
-          font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+  font-size: 16px;
+  font-weight: 600;,
+  color: #1f2937;
+}
         @media (max-width: 768px) {
-          .submission-queue-dashboard {
-            padding: 16px;
-          }
+  .submission-queue-dashboard {
+  padding: 16px;
+}
           .header-content {
-            flex-direction: column;
-            gap: 16px;
-            align-items: stretch;
-          }
+  flex-direction: column;,
+  gap: 16px;
+  align-items: stretch;
+}
           .metrics-grid {
-            grid-template-columns: 1fr;
-          }
+  grid-template-columns: 1fr;
+}
           .filter-controls {
-            flex-direction: column;
-          }
+  flex-direction: column;
+}
           .filter-select {
-            min-width: auto;
-          }
+  min-width: auto;
+}
           .submission-row {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 12px;
-          }
+  flex-direction: column;
+  align-items: stretch;,
+  gap: 12px;
+}
           .submission-header {
-            flex-direction: column;
-            gap: 8px;
-          }
+  flex-direction: column;,
+  gap: 8px;
+}
           .submission-badges {
-            flex-wrap: wrap;
-          }
+  flex-wrap: wrap;
+}
           .submission-actions {
-            justify-content: stretch;
-          }
+  justify-content: stretch;
+}
           .priority-select, .reviewer-select {
-            flex: 1;
-            min-width: auto;
-          }
+  flex: 1;
+  min-width: auto;
+}
         }
       ` })] }));
 };

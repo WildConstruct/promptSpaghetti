@@ -9,132 +9,116 @@ import { ShareRecord } from './SocialPlatformIntegration';
 import { Template } from './TemplatePreviewModal';
 
 }
-export interface ShareTrackingManagerProps {
-    templateId: string;
+}
+export interface ShareTrackingManagerProps { templateId: string;
     template?: Template;
     shares?: ShareRecord[];
     onShareUpdate?: (share: ShareRecord) => void;
     onAnalyticsRefresh?: () => void;
     className?: string;
     realTimeUpdates?: boolean;
-    showAdvancedMetrics?: boolean;
-
+    showAdvancedMetrics?: boolean }
 }
-export interface ShareTrackingData {
-    totalShares: number;
+}
+export interface ShareTrackingData { totalShares: number;
     platformBreakdown: Record<string, PlatformShareData>;
     timeSeriesData: TimeSeriesPoint[];
     conversionFunnel: ConversionFunnelData;
     demographicInsights: DemographicAnalysis;
     performanceMetrics: AggregatedMetrics;
     alerts: ShareAlert[];
-    recommendations: ShareRecommendation[];
-
+    recommendations: ShareRecommendation[] }
 }
-export interface PlatformShareData {
-    platform: string;
+}
+export interface PlatformShareData { platform: string;
     totalShares: number;
     successRate: number;
     averageEngagement: number;
     revenueGenerated: number;
     topPerformingContent: string;
-    trends: TrendData;
-
+    trends: TrendData }
 }
-export interface TimeSeriesPoint {
-    timestamp: Date;
+}
+export interface TimeSeriesPoint { timestamp: Date;
     shares: number;
     views: number;
     clicks: number;
     conversions: number;
     revenue: number;
-    platform?: string;
-
+    platform?: string }
 }
-export interface ConversionFunnelData {
-    awareness: FunnelStage;
+}
+export interface ConversionFunnelData { awareness: FunnelStage;
     interest: FunnelStage;
     consideration: FunnelStage;
     purchase: FunnelStage;
-    advocacy: FunnelStage;
-
+    advocacy: FunnelStage }
 }
-export interface FunnelStage {
-    stage: string;
+}
+export interface FunnelStage { stage: string;
     count: number;
     percentage: number;
     dropOffRate: number;
-    averageTime: number;
-
+    averageTime: number }
 }
-export interface DemographicAnalysis {
-    topAgeGroups: {
+}
+export interface DemographicAnalysis { topAgeGroups: {
         group: string;
         percentage: number;
-        engagement: number;
+        engagement: number }
 }
     }[];
-    topLocations: {
-        location: string;
+    topLocations: { location: string;
         shares: number;
-        revenue: number;
-    }[];
-    topInterests: {
-        interest: string;
+        revenue: number }[];
+    topInterests: { interest: string;
         affinity: number;
-        conversion: number;
-    }[];
-    devicePreferences: {
-        device: string;
+        conversion: number }[];
+    devicePreferences: { device: string;
         usage: number;
-        performance: number;
-    }[];
+        performance: number }[];
 
 }
-export interface AggregatedMetrics {
-    totalReach: number;
+}
+export interface AggregatedMetrics { totalReach: number;
     engagementRate: number;
     clickThroughRate: number;
     conversionRate: number;
     viralCoefficient: number;
     customerAcquisitionCost: number;
     lifetimeValue: number;
-    returnOnInvestment: number;
-
+    returnOnInvestment: number }
 }
-export interface TrendData {
-    direction: 'up' | 'down' | 'stable';
+}
+export interface TrendData { direction: 'up' | 'down' | 'stable';
     percentage: number;
     significance: 'high' | 'medium' | 'low';
-    period: string;
-
+    period: string }
 }
-export interface ShareAlert {
-    id: string;
+}
+export interface ShareAlert { id: string;
     type: 'success' | 'warning' | 'error' | 'info';
     title: string;
     message: string;
     timestamp: Date;
     platform?: string;
     actionRequired: boolean;
-    dismissed: boolean;
-
+    dismissed: boolean }
 }
-export interface ShareRecommendation {
-    id: string;
+}
+export interface ShareRecommendation { id: string;
     type: 'content' | 'timing' | 'platform' | 'targeting';
     priority: 'high' | 'medium' | 'low';
     title: string;
     description: string;
     impact: string;
     effort: 'low' | 'medium' | 'high';
-    confidence: number;
-
+    confidence: number }
 }
-export interface ShareTrackingFilters {
-    dateRange: {
+}
+export interface ShareTrackingFilters { dateRange: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     platforms: string[];
@@ -143,11 +127,9 @@ export interface ShareTrackingFilters {
     regions: string[];
     devices: string[];
 
-export declare const ShareTrackingUtils: {
-    calculateTrend: (current: number, previous: number) => TrendData;
+export declare const ShareTrackingUtils: { calculateTrend: (current: number, previous: number) => TrendData;
     aggregateShareData: (shares: ShareRecord[]) => ShareTrackingData;
-    formatMetric: (value: number, type: "currency" | "percentage" | "number") => string;
-};
+    formatMetric: (value: number, type: "currency" | "percentage" | "number") => string };
 export declare const ShareTrackingManager: React.FC<ShareTrackingManagerProps>;
 export default ShareTrackingManager;
 //# sourceMappingURL=ShareTrackingManager.d.ts.map

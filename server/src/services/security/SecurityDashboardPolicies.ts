@@ -15,7 +15,7 @@ import {
   DataClassificationLevel,
   DataOperation,
   SecurityContext
-} from '../../../../packages/core/security/DataClassificationAccessControl';
+ from '../../../../packages/core/security/DataClassificationAccessControl';
 
 export enum DashboardRole {
   VIEWER = 'VIEWER',
@@ -25,7 +25,7 @@ export enum DashboardRole {
   COMPLIANCE_OFFICER = 'COMPLIANCE_OFFICER',
   AUDITOR = 'AUDITOR',
   EXECUTIVE = 'EXECUTIVE'
-}
+
 
 export enum DashboardPermission {
   VIEW_ALERTS = 'VIEW_ALERTS',
@@ -52,7 +52,7 @@ export enum DashboardPermission {
   VIEW_AUDIT_LOGS = 'VIEW_AUDIT_LOGS',
   VIEW_SENSITIVE_DATA = 'VIEW_SENSITIVE_DATA',
   PERFORM_INVESTIGATIONS = 'PERFORM_INVESTIGATIONS'
-}
+
 
 export enum DataSensitivityLevel {
   PUBLIC = 'PUBLIC',
@@ -60,10 +60,10 @@ export enum DataSensitivityLevel {
   CONFIDENTIAL = 'CONFIDENTIAL',
   RESTRICTED = 'RESTRICTED',
   TOP_SECRET = 'TOP_SECRET'
-}
 
-}
-}
+
+
+
 export interface DashboardPolicy {
   id: string;
   name: string;
@@ -102,36 +102,39 @@ export interface DashboardPolicy {
   createdAt: Date;
   updatedAt: Date;
   version: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessSchedule {
   allowedDays: number[]; // 0-6 (Sunday-Saturday)
   allowedHours: {
     start: string; // HH:MM format
     end: string;
-}
-}
+
+
+
   };
   timezone: string;
   exceptions: ScheduleException[];
-}
 
-}
-}
+
+
+
 export interface ScheduleException {
   date: string; // YYYY-MM-DD
   type: 'ALLOW' | 'DENY';
   reason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ContentFilter {
   type: 'FIELD' | 'VALUE' | 'REGEX' | 'CLASSIFICATION' | 'KEYWORD';
   field?: string;
@@ -139,35 +142,38 @@ export interface ContentFilter {
   value: Error;
   action: 'HIDE' | 'MASK' | 'REDACT' | 'AGGREGATE';
   maskingPattern?: string; // e.g., '***' or 'X' repeated
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataRetentionPolicy {
   retentionPeriod: number; // days
   archiveAfter: number; // days
   purgeAfter: number; // days
   complianceHolds: string[]; // Legal hold IDs
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyCondition {
   type: 'USER_ATTRIBUTE' | 'TIME' | 'LOCATION' | 'DEVICE' | 'CONTEXT' | 'RISK_SCORE';
   field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'IN' | 'NOT_IN' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN';
   value: Error;
   weight: number; // 0-1
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyEvaluationContext {
   userId: string;
   userRoles: DashboardRole[];
@@ -179,8 +185,9 @@ export interface PolicyEvaluationContext {
     userAgent: string;
     timestamp: Date;
     sessionId: string;
-}
-}
+
+
+
   };
   requestedData: {
     type: string;
@@ -189,10 +196,10 @@ export interface PolicyEvaluationContext {
     operations: DataOperation[];
   };
   riskScore?: number;
-}
 
-}
-}
+
+
+
 export interface PolicyEvaluationResult {
   allowed: boolean;
   policy: DashboardPolicy;
@@ -202,22 +209,24 @@ export interface PolicyEvaluationResult {
   auditRequired: boolean;
   sessionTimeout?: number;
   warnings: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyRestriction {
   type: 'TIME_LIMIT' | 'DATA_LIMIT' | 'OPERATION_LIMIT' | 'EXPORT_DISABLED' | 'APPROVAL_REQUIRED';
   description: string;
   parameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DashboardViewConfiguration {
   userId: string;
   allowedSections: string[];
@@ -230,13 +239,14 @@ export interface DashboardViewConfiguration {
     allowExport: boolean;
     allowedFormats: string[];
     watermarkRequired: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ComplianceReport {
   id: string;
   framework: string;
@@ -245,8 +255,9 @@ export interface ComplianceReport {
   period: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   
   summary: {
@@ -265,10 +276,10 @@ export interface ComplianceReport {
     attestationDate?: Date;
     comments?: string;
   };
-}
 
-}
-}
+
+
+
 export interface ComplianceFinding {
   id: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -278,24 +289,26 @@ export interface ComplianceFinding {
   evidence: ComplianceEvidence[];
   remediation: string;
   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceEvidence {
   type: 'AUDIT_LOG' | 'CONFIGURATION' | 'SCREENSHOT' | 'DOCUMENT';
   source: string;
   timestamp: Date;
   data: Record<string, unknown>;
   hash: string; // For integrity verification
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceRecommendation {
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
   category: 'POLICY' | 'CONFIGURATION' | 'TRAINING' | 'PROCESS';
@@ -303,9 +316,10 @@ export interface ComplianceRecommendation {
   implementation: string;
   impact: string;
   effort: 'LOW' | 'MEDIUM' | 'HIGH';
-}
-}
-}
+
+
+
+
 
 /**
  * Security Dashboard Policy Management System
@@ -325,7 +339,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     setInterval(() => this.cleanupEvaluationCache(), 300000); // 5 minutes
     
     logger.info('Security Dashboard Policies initialized');
-  }
+
   
   /**
    * Evaluate policies for a given context
@@ -340,7 +354,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     
     if (cachedResult && this.isCacheValid(cachedResult, context)) {
       return [cachedResult];
-    }
+
     
     try {
       for (const policy of this.policies.values()) {
@@ -349,8 +363,8 @@ export class SecurityDashboardPolicies extends EventEmitter {
         const result = await this.evaluatePolicy(policy, context);
         if (result.allowed) {
           results.push(result);
-        }
-      }
+
+
       
       // Find the most permissive policy
       const finalResult = this.mergePolicyResults(results);
@@ -361,18 +375,17 @@ export class SecurityDashboardPolicies extends EventEmitter {
         
         // Log policy evaluation
         this.logPolicyEvaluation(context, finalResult);
-      }
+
       
       return results;
-      
-    } catch (error) {
+ catch (error) {
       logger.error('Policy evaluation failed', {
         userId: context.userId,
         error: error instanceof Error ? error.message : String(error)
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Get dashboard view configuration for a user
@@ -391,13 +404,13 @@ export class SecurityDashboardPolicies extends EventEmitter {
         userAgent: 'Unknown',
         timestamp: new Date(),
         sessionId: 'default'
-  }
+
       requestedData: {
         type: 'dashboard',
         classification: DataClassificationLevel.INTERNAL,
         sensitivityLevel: DataSensitivityLevel.INTERNAL,
         operations: [DataOperation.READ]
-  }
+
       ...context
     };
     
@@ -418,12 +431,12 @@ export class SecurityDashboardPolicies extends EventEmitter {
           allowExport: false,
           allowedFormats: [],
           watermarkRequired: true
-        }
+
       };
-    }
+
     
     return this.buildDashboardConfiguration(effectivePolicy, fullContext);
-  }
+
   
   /**
    * Create new policy
@@ -446,7 +459,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     const validation = this.validatePolicy(policy);
     if (!validation.valid) {
       throw new Error(`Policy validation failed: ${validation.errors.join(', ')}`);
-    }
+
     
     this.policies.set(policy.id, policy);
     
@@ -462,7 +475,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     });
     
     return policy;
-  }
+
   
   /**
    * Update existing policy
@@ -476,7 +489,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     const existingPolicy = this.policies.get(policyId);
     if (!existingPolicy) {
       throw new Error(`Policy not found: ${policyId}`);
-    }
+
     
     const updatedPolicy: DashboardPolicy = {
       ...existingPolicy,
@@ -489,7 +502,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     const validation = this.validatePolicy(updatedPolicy);
     if (!validation.valid) {
       throw new Error(`Policy validation failed: ${validation.errors.join(', ')}`);
-    }
+
     
     this.policies.set(policyId, updatedPolicy);
     
@@ -510,7 +523,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     });
     
     return updatedPolicy;
-  }
+
   
   /**
    * Delete policy
@@ -520,7 +533,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     const policy = this.policies.get(policyId);
     if (!policy) {
       throw new Error(`Policy not found: ${policyId}`);
-    }
+
     
     this.policies.delete(policyId);
     
@@ -534,7 +547,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
       name: policy.name,
       deletedBy
     });
-  }
+
   
   /**
    * Get all policies
@@ -544,28 +557,28 @@ export class SecurityDashboardPolicies extends EventEmitter {
     role?: DashboardRole;
     workspaceId?: string;
     projectId?: string;
-  } = {}): DashboardPolicy[] {
+ = {}): DashboardPolicy[] {
     let policies = Array.from(this.policies.values());
     
     if (filters.enabled !== undefined) {
       policies = policies.filter(p => p.enabled === filters.enabled);
-    }
+
     if (filters.role) {
       policies = policies.filter(p => p.roles.includes(filters.role!));
-    }
+
     if (filters.workspaceId) {
       policies = policies.filter(p => 
         !p.workspaceIds || p.workspaceIds.includes(filters.workspaceId!)
       );
-    }
+
     if (filters.projectId) {
       policies = policies.filter(p =>
         !p.projectIds || p.projectIds.includes(filters.projectId!)
       );
-    }
+
     
     return policies.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
-  }
+
   
   /**
    * Generate compliance report
@@ -589,7 +602,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     for (const policy of frameworkPolicies) {
       const policyFindings = await this.analyzePolicyCompliance(policy, framework);
       findings.push(...policyFindings);
-    }
+
     
     // Generate recommendations
     recommendations.push(...this.generateComplianceRecommendations(findings, framework));
@@ -605,18 +618,18 @@ export class SecurityDashboardPolicies extends EventEmitter {
         activePolicies: frameworkPolicies.length,
         violations: findings.filter(f => f.type === 'VIOLATION').length,
         warnings: findings.filter(f => f.type === 'WARNING').length
-  }
+
       findings,
       recommendations,
       attestation: {
         attested: false
-      }
+
     };
     
     this.emit('complianceReportGenerated', { report, generatedBy });
     
     return report;
-  }
+
   
   /**
    * Apply data classification filters
@@ -630,10 +643,10 @@ export class SecurityDashboardPolicies extends EventEmitter {
     
     for (const filter of filters) {
       filteredData = this.applyContentFilter(filteredData, filter, userContext);
-    }
+
     
     return filteredData;
-  }
+
   
   // PRIVATE HELPER METHODS
   
@@ -654,11 +667,11 @@ export class SecurityDashboardPolicies extends EventEmitter {
           type: 'OPERATION_LIMIT',
           description: 'Insufficient role permissions',
           parameters: { requiredRoles: policy.roles }
-        }],
+],
         auditRequired: false,
         warnings: ['User does not have required roles']
       };
-    }
+
     
     // Check workspace/project scope
     if (policy.workspaceIds && context.workspaceId && 
@@ -672,11 +685,11 @@ export class SecurityDashboardPolicies extends EventEmitter {
           type: 'OPERATION_LIMIT',
           description: 'Access denied for this workspace',
           parameters: { workspaceId: context.workspaceId }
-        }],
+],
         auditRequired: false,
         warnings: ['Workspace not in policy scope']
       };
-    }
+
     
     // Check data classification limits
     if (this.getClassificationLevel(context.requestedData.classification) >
@@ -692,12 +705,12 @@ export class SecurityDashboardPolicies extends EventEmitter {
           parameters: { 
             maxClassification: policy.maxDataClassification,
             requestedClassification: context.requestedData.classification
-          }
-        }],
+
+],
         auditRequired: true,
         warnings: ['Attempted access to data above clearance level']
       };
-    }
+
     
     // Evaluate conditions
     const conditionResults = await Promise.all(
@@ -715,11 +728,11 @@ export class SecurityDashboardPolicies extends EventEmitter {
           type: 'OPERATION_LIMIT',
           description: 'Policy conditions not met',
           parameters: { conditions: policy.conditions }
-        }],
+],
         auditRequired: false,
         warnings: ['One or more policy conditions failed']
       };
-    }
+
     
     // Check time-based restrictions
     const timeRestriction = this.checkTimeRestrictions(policy, context);
@@ -735,7 +748,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
       sessionTimeout: policy.sessionTimeout,
       warnings: []
     };
-  }
+
   
   private async evaluateCondition(
     condition: PolicyCondition,
@@ -765,10 +778,10 @@ export class SecurityDashboardPolicies extends EventEmitter {
       break;
     default:
       return false;
-    }
+
     
     return this.compareValues(contextValue, condition.operator, condition.value);
-  }
+
   
   private compareValues(actual: unknown, operator: string, expected: unknown): boolean {
     switch (operator) {
@@ -790,8 +803,8 @@ export class SecurityDashboardPolicies extends EventEmitter {
                Number(actual) <= Number(expected[1]);
     default:
       return false;
-    }
-  }
+
+
   
   private mergePolicyResults(results: PolicyEvaluationResult[]): PolicyEvaluationResult | null {
     if (results.length === 0) return null;
@@ -816,8 +829,8 @@ export class SecurityDashboardPolicies extends EventEmitter {
       if (result.auditRequired) auditRequired = true;
       if (result.sessionTimeout && (!minSessionTimeout || result.sessionTimeout < minSessionTimeout)) {
         minSessionTimeout = result.sessionTimeout;
-      }
-    }
+
+
     
     return {
       allowed: true,
@@ -829,7 +842,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
       sessionTimeout: minSessionTimeout,
       warnings: mergedWarnings
     };
-  }
+
   
   private buildDashboardConfiguration(
     policyResult: PolicyEvaluationResult,
@@ -841,22 +854,22 @@ export class SecurityDashboardPolicies extends EventEmitter {
     const allowedSections: string[] = [];
     if (permissions.includes(DashboardPermission.VIEW_ALERTS)) {
       allowedSections.push('alerts', 'alert-management');
-    }
+
     if (permissions.includes(DashboardPermission.VIEW_METRICS)) {
       allowedSections.push('metrics', 'analytics');
-    }
+
     if (permissions.includes(DashboardPermission.VIEW_SYSTEM_HEALTH)) {
       allowedSections.push('system-health', 'monitoring');
-    }
+
     if (permissions.includes(DashboardPermission.VIEW_THREAT_INTELLIGENCE)) {
       allowedSections.push('threat-intelligence', 'security-feeds');
-    }
+
     if (permissions.includes(DashboardPermission.VIEW_COMPLIANCE_DATA)) {
       allowedSections.push('compliance', 'audit');
-    }
+
     if (permissions.includes(DashboardPermission.VIEW_USER_BEHAVIOR)) {
       allowedSections.push('user-analytics', 'behavior-analysis');
-    }
+
     
     // Process content filters to determine field visibility
     const hiddenFields: string[] = [];
@@ -865,16 +878,16 @@ export class SecurityDashboardPolicies extends EventEmitter {
     for (const filter of policyResult.contentFilters) {
       if (filter.action === 'HIDE' && filter.field) {
         hiddenFields.push(filter.field);
-      } else if (filter.action === 'MASK' && filter.field) {
+ else if (filter.action === 'MASK' && filter.field) {
         maskedFields[filter.field] = filter.maskingPattern || '***';
-      }
-    }
+
+
     
     // Determine aggregated views for sensitive data
     const aggregatedViews: string[] = [];
     if (policyResult.policy.maxSensitivityLevel === DataSensitivityLevel.CONFIDENTIAL) {
       aggregatedViews.push('user-summaries', 'system-summaries');
-    }
+
     
     return {
       userId: context.userId,
@@ -889,9 +902,9 @@ export class SecurityDashboardPolicies extends EventEmitter {
         allowedFormats: permissions.includes(DashboardPermission.CREATE_REPORTS) ? 
           ['json', 'csv', 'pdf'] : ['json'],
         watermarkRequired: policyResult.policy.maxSensitivityLevel !== DataSensitivityLevel.PUBLIC
-      }
+
     };
-  }
+
   
   private checkTimeRestrictions(
     policy: DashboardPolicy,
@@ -911,9 +924,9 @@ export class SecurityDashboardPolicies extends EventEmitter {
         parameters: { 
           currentDay,
           allowedDays: policy.accessSchedule.allowedDays
-        }
+
       };
-    }
+
     
     // Check allowed hours
     const schedule = policy.accessSchedule.allowedHours;
@@ -925,12 +938,12 @@ export class SecurityDashboardPolicies extends EventEmitter {
           currentTime,
           allowedStart: schedule.start,
           allowedEnd: schedule.end
-        }
+
       };
-    }
+
     
     return null;
-  }
+
   
   private applyContentFilter(
     data: Record<string, unknown>,
@@ -950,8 +963,8 @@ export class SecurityDashboardPolicies extends EventEmitter {
       return this.applyKeywordFilter(data, filter);
     default:
       return data;
-    }
-  }
+
+
   
   private applyFieldFilter(data: Record<string, unknown>, filter: ContentFilter): unknown {
     if (!filter.field) return data;
@@ -965,22 +978,22 @@ export class SecurityDashboardPolicies extends EventEmitter {
     case 'MASK':
       if (result[filter.field]) {
         result[filter.field] = filter.maskingPattern || '***';
-      }
+
       break;
     case 'REDACT':
       if (result[filter.field]) {
         result[filter.field] = '[REDACTED]';
-      }
+
       break;
-    }
+
     
     return result;
-  }
+
   
   private applyValueFilter(data: Record<string, unknown>, _____filter: ContentFilter): unknown {
     // Implementation would recursively search for values to filter
     return data;
-  }
+
   
   private applyClassificationFilter(
     data: Record<string, unknown>,
@@ -989,12 +1002,12 @@ export class SecurityDashboardPolicies extends EventEmitter {
   ): unknown {
     // Implementation would filter based on data classification levels
     return data;
-  }
+
   
   private applyKeywordFilter(data: Record<string, unknown>, _____filter: ContentFilter): unknown {
     // Implementation would filter based on sensitive keywords
     return data;
-  }
+
   
   private async analyzePolicyCompliance(
     policy: DashboardPolicy,
@@ -1014,10 +1027,10 @@ export class SecurityDashboardPolicies extends EventEmitter {
     case 'HIPAA':
       findings.push(...this.analyzeHIPAACompliance(policy));
       break;
-    }
+
     
     return findings;
-  }
+
   
   private analyzeGDPRCompliance(policy: DashboardPolicy): ComplianceFinding[] {
     const findings: ComplianceFinding[] = [];
@@ -1034,10 +1047,10 @@ export class SecurityDashboardPolicies extends EventEmitter {
         remediation: 'Review and adjust retention period to comply with data minimization principle',
         status: 'OPEN'
       });
-    }
+
     
     return findings;
-  }
+
   
   private analyzeSOXCompliance(policy: DashboardPolicy): ComplianceFinding[] {
     const findings: ComplianceFinding[] = [];
@@ -1054,10 +1067,10 @@ export class SecurityDashboardPolicies extends EventEmitter {
         remediation: 'Enable audit logging for this policy',
         status: 'OPEN'
       });
-    }
+
     
     return findings;
-  }
+
   
   private analyzeHIPAACompliance(policy: DashboardPolicy): ComplianceFinding[] {
     const findings: ComplianceFinding[] = [];
@@ -1074,10 +1087,10 @@ export class SecurityDashboardPolicies extends EventEmitter {
         remediation: 'Review permissions and apply principle of least privilege',
         status: 'OPEN'
       });
-    }
+
     
     return findings;
-  }
+
   
   private generateComplianceRecommendations(
     findings: ComplianceFinding[],
@@ -1096,38 +1109,38 @@ export class SecurityDashboardPolicies extends EventEmitter {
         impact: 'Reduces compliance risk and potential penalties',
         effort: 'MEDIUM'
       });
-    }
+
     
     return recommendations;
-  }
+
   
   private validatePolicy(policy: DashboardPolicy): { valid: boolean; errors: string[] } {
     const errors: string[] = [];
     
     if (!policy.name || policy.name.trim() === '') {
       errors.push('Policy name is required');
-    }
+
     
     if (policy.roles.length === 0) {
       errors.push('At least one role must be specified');
-    }
+
     
     if (policy.permissions.length === 0) {
       errors.push('At least one permission must be specified');
-    }
+
     
     // Validate content filters
     policy.contentFilters.forEach((filter, index) => {
       if (filter.type === 'FIELD' && !filter.field) {
         errors.push(`Content filter ${index} requires a field when type is FIELD`);
-      }
+
     });
     
     return {
       valid: errors.length === 0,
       errors
     };
-  }
+
   
   private initializeDefaultPolicies(): void {
     // Create default policies for each role
@@ -1153,20 +1166,20 @@ export class SecurityDashboardPolicies extends EventEmitter {
             value: null,
             action: 'MASK',
             maskingPattern: '***@***'
-          }
+
         ],
         dataRetentionPolicy: {
           retentionPeriod: 30,
           archiveAfter: 30,
           purgeAfter: 365,
           complianceHolds: []
-  }
+
         complianceFrameworks: [],
         auditRequired: false,
         approvalRequired: false,
         conditions: [],
         sessionTimeout: 3600000 // 1 hour
-  }
+
       {
         name: 'Security Administrator Policy',
         description: 'Full administrative permissions for security dashboards',
@@ -1182,12 +1195,12 @@ export class SecurityDashboardPolicies extends EventEmitter {
           archiveAfter: 90,
           purgeAfter: 2555, // 7 years
           complianceHolds: []
-  }
+
         complianceFrameworks: ['SOX', 'GDPR'],
         auditRequired: true,
         approvalRequired: false,
         conditions: []
-      }
+
     ];
     
     // Create policies with system user
@@ -1202,8 +1215,8 @@ export class SecurityDashboardPolicies extends EventEmitter {
       };
       
       this.policies.set(policy.id, policy);
-    }
-  }
+
+
   
   private initializeRolePermissions(): void {
     this.rolePermissions.set(DashboardRole.VIEWER, [
@@ -1228,19 +1241,19 @@ export class SecurityDashboardPolicies extends EventEmitter {
     ]);
     
     this.rolePermissions.set(DashboardRole.ADMIN, Object.values(DashboardPermission));
-  }
+
   
   // Mock methods for external integrations
   private async getUserRoles(_____userId: string): Promise<DashboardRole[]> {
 
     // In real implementation, this would query user management system
     return [DashboardRole.VIEWER];
-  }
+
   
   private async getUserAttributes(_____userId: string): Promise<Record<string, any>> {
     // In real implementation, this would fetch user attributes
     return {};
-  }
+
   
   private getClassificationLevel(classification: DataClassificationLevel): number {
     const levels = {
@@ -1250,7 +1263,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
       [DataClassificationLevel.RESTRICTED]: 3
     };
     return levels[classification] || 0;
-  }
+
   
   private calculateRefreshInterval(policy: DashboardPolicy): number {
     // Base refresh interval on sensitivity level
@@ -1263,22 +1276,22 @@ export class SecurityDashboardPolicies extends EventEmitter {
       return 30000; // 30 seconds
     default:
       return 60000; // 1 minute
-    }
-  }
+
+
   
   private generateCacheKey(context: PolicyEvaluationContext): string {
     return `${context.userId}-${context.workspaceId || 'none'}-${context.requestedData.type}`;
-  }
+
   
   private isCacheValid(cachedResult: PolicyEvaluationResult, context: PolicyEvaluationContext): boolean {
     // Simple time-based cache validation
     const cacheAge = Date.now() - context.sessionContext.timestamp.getTime();
     return cacheAge < 300000; // 5 minutes
-  }
+
   
   private cleanupEvaluationCache(): void {
     this.evaluationCache.clear();
-  }
+
   
   private logPolicyEvaluation(context: PolicyEvaluationContext, result: PolicyEvaluationResult): void {
     if (result.auditRequired) {
@@ -1293,7 +1306,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
           projectId: context.projectId,
           ipAddress: context.sessionContext.ipAddress,
           userAgent: context.sessionContext.userAgent
-        }
+
       };
       
       this.auditLog.push(auditEntry);
@@ -1301,21 +1314,21 @@ export class SecurityDashboardPolicies extends EventEmitter {
       // Keep only recent entries
       if (this.auditLog.length > 10000) {
         this.auditLog.splice(0, 1000);
-      }
-    }
-  }
+
+
+
   
   private generatePolicyId(): string {
     return `policy-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateReportId(): string {
     return `report-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateFindingId(): string {
     return `finding-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   /**
    * Cleanup resources
@@ -1324,11 +1337,11 @@ export class SecurityDashboardPolicies extends EventEmitter {
     this.removeAllListeners();
     this.evaluationCache.clear();
     logger.info('Security Dashboard Policies destroyed');
-  }
-}
 
-}
-}
+
+
+
+
 interface PolicyAuditEntry {
   timestamp: Date;
   userId: string;
@@ -1340,9 +1353,10 @@ interface PolicyAuditEntry {
     projectId?: string;
     ipAddress: string;
     userAgent: string;
-}
-}
+
+
+
   };
-}
+
 
 export default SecurityDashboardPolicies;

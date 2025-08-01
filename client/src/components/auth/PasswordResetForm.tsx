@@ -16,18 +16,20 @@ const PasswordResetConfirmSchema = z.object({)
   message: 'Passwords don\'t match',
   path: ['confirmPassword'],
 });
-}
+
+
 interface PasswordResetFormProps {
   mode: 'request' | 'confirm';
   token?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
-  export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({,)
+  export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({),
   mode,
   token,
   onSuccess,
   onCancel
-}
+
+
 }) => {
   const [formData, setFormData] = useState({)
   email: '',
@@ -43,7 +45,7 @@ interface PasswordResetFormProps {
   validateToken,
   loading,
   error: hookError,
-} = usePasswordReset();
+ = usePasswordReset();
   // Validate token on component mount for confirm mode
   React.useEffect(() => {
     if (mode === 'confirm' && token) {
@@ -54,13 +56,13 @@ interface PasswordResetFormProps {
     try {
       if (mode === 'request') {
         PasswordResetRequestSchema.parse({ email: formData.email });
-      } else {
+ else {
   PasswordResetConfirmSchema.parse({)
   newPassword: formData.newPassword,
   confirmPassword: formData.confirmPassword,
 });
       return true;
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
         error.errors.forEach((err) => {
@@ -78,13 +80,13 @@ interface PasswordResetFormProps {
     try {
       if (mode === 'request') {
         await requestPasswordReset(formData.email);
-      } else if (mode === 'confirm' && token) {
+ else if (mode === 'confirm' && token) {
         await confirmPasswordReset(token, formData.newPassword, formData.confirmPassword);
       onSuccess?.();
-    } catch (error) {
+ catch (error) {
   // Error handling is managed by the hook
   console.error('Password reset error:', error);
-} finally {
+ finally {
       setIsSubmitting(false);
   }, [validateForm, mode, formData.email, token, formData.newPassword, formData.confirmPassword, requestPasswordReset, confirmPasswordReset, onSuccess]);
   const handleInputChange = (field: string, value: string) => {
@@ -155,8 +157,8 @@ interface PasswordResetFormProps {
         <style>{`
           .password-reset-form {
             max-width: 400px;,
-  margin: 0 auto;
-            padding: 2rem 1rem;
+  margin: 0 auto;,
+  padding: 2rem 1rem;
           .auth-card {
             background: white;
             border-radius: 8px;,
@@ -201,8 +203,8 @@ interface PasswordResetFormProps {
             border-color: #ef4444;
           .form-input:disabled {
             background-color: #f8fafc;,
-  color: #94a3b8;
-            cursor: not-allowed;
+  color: #94a3b8;,
+  cursor: not-allowed;
           .error-message {
             color: #ef4444;
             font-size: 0.875rem;
@@ -220,35 +222,35 @@ interface PasswordResetFormProps {
             border-radius: 6px;
             font-weight: 500;
             font-size: 0.875rem;,
-  cursor: pointer;
-            transition: all 0.2s ease;
+  cursor: pointer;,
+  transition: all 0.2s ease;
             text-decoration: none;,
   display: inline-flex;
             align-items: center;
             justify-content: center;,
-  gap: 0.5rem;
-            border: none;
+  gap: 0.5rem;,
+  border: none;
           .btn-primary {
             background: #4f46e5;,
   color: white;
           .btn-primary:hover:not(:disabled) {,
   background: #4338ca;
           .btn-primary:disabled {,
-  background: #9ca3af;
-            cursor: not-allowed;
+  background: #9ca3af;,
+  cursor: not-allowed;
           .btn-full {
             width: 100%;
           .btn-link {
             background: none;,
-  color: #4f46e5;
-            padding: 0.5rem;
+  color: #4f46e5;,
+  padding: 0.5rem;
           .btn-link:hover:not(:disabled) {,
   color: #4338ca;
             text-decoration: underline;
           .spinner {
             width: 1rem;,
-  height: 1rem;
-            border: 2px solid transparent;
+  height: 1rem;,
+  border: 2px solid transparent;
             border-top: 2px solid currentColor;
             border-radius: 50%;,
   animation: spin 1s linear infinite;
@@ -360,8 +362,8 @@ interface PasswordResetFormProps {
       <style>{`
         .password-reset-form {
           max-width: 400px;,
-  margin: 0 auto;
-          padding: 2rem 1rem;
+  margin: 0 auto;,
+  padding: 2rem 1rem;
         .auth-card {
           background: white;
           border-radius: 8px;,
@@ -401,8 +403,8 @@ interface PasswordResetFormProps {
   border: 2px solid #e2e8f0;
           border-radius: 6px;
           font-size: 1rem;,
-  transition: border-color 0.2s ease;
-          width: 100%;
+  transition: border-color 0.2s ease;,
+  width: 100%;
         .form-input:focus {,
   outline: none;
           border-color: #4f46e5;
@@ -411,14 +413,14 @@ interface PasswordResetFormProps {
           border-color: #ef4444;
         .form-input:disabled {
           background-color: #f8fafc;,
-  color: #94a3b8;
-          cursor: not-allowed;
+  color: #94a3b8;,
+  cursor: not-allowed;
         .password-toggle {
           position: absolute;,
-  right: 0.75rem;
-          background: none;,
-  border: none;
-          cursor: pointer;,
+  right: 0.75rem;,
+  background: none;,
+  border: none;,
+  cursor: pointer;,
   padding: 0.25rem;
           font-size: 1rem;,
   color: #6b7280;
@@ -426,8 +428,8 @@ interface PasswordResetFormProps {
         .password-toggle:hover:not(:disabled) {,
   background: #f3f4f6;
         .password-toggle:disabled {,
-  cursor: not-allowed;
-          opacity: 0.5;
+  cursor: not-allowed;,
+  opacity: 0.5;
         .error-message {
           color: #ef4444;
           font-size: 0.875rem;
@@ -445,35 +447,35 @@ interface PasswordResetFormProps {
           border-radius: 6px;
           font-weight: 500;
           font-size: 0.875rem;,
-  cursor: pointer;
-          transition: all 0.2s ease;
+  cursor: pointer;,
+  transition: all 0.2s ease;
           text-decoration: none;,
   display: inline-flex;
           align-items: center;
           justify-content: center;,
-  gap: 0.5rem;
-          border: none;
+  gap: 0.5rem;,
+  border: none;
         .btn-primary {
           background: #4f46e5;,
   color: white;
         .btn-primary:hover:not(:disabled) {,
   background: #4338ca;
         .btn-primary:disabled {,
-  background: #9ca3af;
-          cursor: not-allowed;
+  background: #9ca3af;,
+  cursor: not-allowed;
         .btn-full {
           width: 100%;
         .btn-link {
           background: none;,
-  color: #4f46e5;
-          padding: 0.5rem;
+  color: #4f46e5;,
+  padding: 0.5rem;
         .btn-link:hover:not(:disabled) {,
   color: #4338ca;
           text-decoration: underline;
         .spinner {
           width: 1rem;,
-  height: 1rem;
-          border: 2px solid transparent;
+  height: 1rem;,
+  border: 2px solid transparent;
           border-top: 2px solid currentColor;
           border-radius: 50%;,
   animation: spin 1s linear infinite;

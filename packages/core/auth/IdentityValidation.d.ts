@@ -13,6 +13,7 @@
  */
 
 }
+}
 export interface IdentityValidationRequest {
     userId: string;
     requestId: string;
@@ -26,14 +27,15 @@ export interface IdentityValidationRequest {
         sessionId: string;
         requestSource: 'profile_setup' | 'manual_request' | 'system_triggered'
 }
+}
   };
 
 export type IdentityValidationType = 'basic_profile' | 'email_verification' | 'phone_verification' | 'government_id' | 'professional_credentials' | 'industry_affiliation' | 'portfolio_verification' | 'social_media_verification' | 'address_verification' | 'payment_method_verification';
 export type ValidationStatus = 'pending' | 'in_review' | 'approved' | 'rejected' | 'expired' | 'requires_update';
 
 }
-export interface IdentityValidationData {
-    fullName?: string;
+}
+export interface IdentityValidationData { fullName?: string;
     dateOfBirth?: string;
     profilePhoto?: string;
     email?: string;
@@ -43,53 +45,42 @@ export interface IdentityValidationData {
         city: string;
         state: string;
         postalCode: string;
-        country: string;
+        country: string }
 }
     };
-    governmentId?: {
-        type: 'passport' | 'drivers_license' | 'national_id';
+    governmentId?: { type: 'passport' | 'drivers_license' | 'national_id';
         number: string;
         expirationDate: string;
         issuingAuthority: string;
-        documentImages: string[];
-    };
-    professionalCredentials?: {
-        role: 'director' | 'producer' | 'screenwriter' | 'cinematographer' | 'editor' | 'other';
+        documentImages: string[] };
+    professionalCredentials?: { role: 'director' | 'producer' | 'screenwriter' | 'cinematographer' | 'editor' | 'other';
         experience: 'student' | 'emerging' | 'professional' | 'veteran';
         credentials: ProfessionalCredential[];
-        portfolio: PortfolioItem[];
-    };
-    industryAffiliations?: {
-        unions: string[];
+        portfolio: PortfolioItem[] };
+    industryAffiliations?: { unions: string[];
         organizations: string[];
-        certifications: Certification[];
-    };
-    socialMediaProfiles?: {
-        platform: 'linkedin' | 'twitter' | 'instagram' | 'imdb' | 'website';
+        certifications: Certification[] };
+    socialMediaProfiles?: { platform: 'linkedin' | 'twitter' | 'instagram' | 'imdb' | 'website';
         url: string;
         verified: boolean;
         followerCount?: number;
-        verificationDate?: number;
-    }[];
-    paymentMethod?: {
-        type: 'bank_account' | 'credit_card' | 'paypal';
+        verificationDate?: number }[];
+    paymentMethod?: { type: 'bank_account' | 'credit_card' | 'paypal';
         last4: string;
         verified: boolean;
-        country: string;
-    };
+        country: string };
 
 }
-export interface ProfessionalCredential {
-    type: 'degree' | 'certificate' | 'award' | 'credit';
+}
+export interface ProfessionalCredential { type: 'degree' | 'certificate' | 'award' | 'credit';
     title: string;
     institution: string;
     year: number;
     verificationStatus: ValidationStatus;
-    documentUrl?: string;
-
+    documentUrl?: string }
 }
-export interface PortfolioItem {
-    type: 'film' | 'video' | 'demo_reel' | 'template' | 'project';
+}
+export interface PortfolioItem { type: 'film' | 'video' | 'demo_reel' | 'template' | 'project';
     title: string;
     description: string;
     url?: string;
@@ -97,20 +88,18 @@ export interface PortfolioItem {
     year: number;
     role: string;
     verificationStatus: ValidationStatus;
-    imdbUrl?: string;
-
+    imdbUrl?: string }
 }
-export interface Certification {
-    name: string;
+}
+export interface Certification { name: string;
     issuingBody: string;
     certificationNumber?: string;
     issueDate: number;
     expirationDate?: number;
-    verificationStatus: ValidationStatus;
-
+    verificationStatus: ValidationStatus }
 }
-export interface ValidationResult {
-    requestId: string;
+}
+export interface ValidationResult { requestId: string;
     userId: string;
     type: IdentityValidationType;
     status: ValidationStatus;
@@ -121,40 +110,36 @@ export interface ValidationResult {
     evidence: ValidationEvidence[];
     flags: ValidationFlag[];
     reviewNotes?: string;
-    nextSteps?: string[];
-
+    nextSteps?: string[] }
 }
-export interface ValidationEvidence {
-    type: 'document_scan' | 'api_verification' | 'manual_review' | 'third_party_check';
+}
+export interface ValidationEvidence { type: 'document_scan' | 'api_verification' | 'manual_review' | 'third_party_check';
     source: string;
     confidence: number;
     timestamp: number;
-    data: Record<string, unknown>;
-
+    data: Record<string, unknown> }
 }
-export interface ValidationFlag {
-    type: 'warning' | 'error' | 'info';
+}
+export interface ValidationFlag { type: 'warning' | 'error' | 'info';
     code: string;
     message: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
-    requiresAction: boolean;
-
+    requiresAction: boolean }
 }
-export interface TrustScore {
-    overall: number;
+}
+export interface TrustScore { overall: number;
     components: {
         identity: number;
         professional: number;
         community: number;
-        activity: number;
+        activity: number }
 }
     };
     tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
     badges: string[];
     lastUpdated: number;
 
-export declare class IdentityValidationService {
-    private validationRequests;
+export declare class IdentityValidationService { private validationRequests;
     private validationResults;
     private userTrustScores;
     private emailVerificationService;
@@ -167,14 +152,12 @@ export declare class IdentityValidationService {
      * Submit identity validation request
      */
     submitValidationRequest();
-      userId: string,
-      type: IdentityValidationType,
-      data: Partial<IdentityValidationData>,
+      userId: string
+      type: IdentityValidationType
+      data: Partial<IdentityValidationData> }
       metadata?: Partial<IdentityValidationRequest['metadata']>
-    ): Promise<{
-        requestId: string;
-        status: ValidationStatus;
-    }>;
+    ): Promise<{ requestId: string;
+        status: ValidationStatus }>;
     private processValidationRequest;
     private performValidation;
     private validateProfessionalCredentials;
@@ -207,15 +190,13 @@ export declare class IdentityValidationService {
     /**
      * Get user validation summary
      */
-    getUserValidationSummary(userId: string): {
-        totalRequests: number;
+    getUserValidationSummary(userId: string): { totalRequests: number;
         approvedCount: number;
         pendingCount: number;
         rejectedCount: number;
         trustScore: TrustScore | null;
         completedValidations: IdentityValidationType[];
-        missingValidations: IdentityValidationType[];
-    };
+        missingValidations: IdentityValidationType[] };
     private generateRequestId;
 
 export declare const identityValidationService: IdentityValidationService;

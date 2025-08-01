@@ -95,35 +95,38 @@ DataSensitivityLevel;
 detectFromFieldName(fieldName, string);
 DataSensitivityLevel | null;
 {
-    const fieldPatterns = [
-        // PII patterns
-        { pattern: /email/i, level: DataSensitivityLevel.RESTRICTED },
-        { pattern: /phone|mobile|tel/i, level: DataSensitivityLevel.RESTRICTED },
-        { pattern: /ssn|social.?security/i, level: DataSensitivityLevel.RESTRICTED },
-        { pattern: /credit.?card|payment/i, level: DataSensitivityLevel.RESTRICTED },
-        { pattern: /password|passwd|pwd/i, level: DataSensitivityLevel.RESTRICTED },
-        { pattern: /name|address|zip|postal/i, level: DataSensitivityLevel.RESTRICTED },
-        // Authentication patterns
-        { pattern: /token|secret|key|auth/i, level: DataSensitivityLevel.RESTRICTED },
-        { pattern: /session|cookie/i, level: DataSensitivityLevel.RESTRICTED },
-        // Business patterns
-        { pattern: /financial|revenue|profit|salary/i, level: DataSensitivityLevel.CONFIDENTIAL },
-        { pattern: /customer|client|contract/i, level: DataSensitivityLevel.CONFIDENTIAL },
-        { pattern: /strategic|plan|roadmap/i, level: DataSensitivityLevel.CONFIDENTIAL },
-        // Internal patterns
-        { pattern: /internal|employee|staff/i, level: DataSensitivityLevel.INTERNAL },
-        { pattern: /policy|procedure|process/i, level: DataSensitivityLevel.INTERNAL },
-        // Public patterns
-        { pattern: /public|marketing|press|blog/i, level: DataSensitivityLevel.PUBLIC },
-        { pattern: /website|announcement|news/i, level: DataSensitivityLevel.PUBLIC }
-    ];
-    for (const { pattern, level } of fieldPatterns) {
-        if (pattern.test(fieldName)) {
-            return level;
-        }
-    }
-    return null;
+    const fieldPatterns, RegExp;
+    level: DataSensitivityLevel;
 }
+ > ;
+[
+    // PII patterns
+    { pattern: /email/i, level: DataSensitivityLevel.RESTRICTED },
+    { pattern: /phone|mobile|tel/i, level: DataSensitivityLevel.RESTRICTED },
+    { pattern: /ssn|social.?security/i, level: DataSensitivityLevel.RESTRICTED },
+    { pattern: /credit.?card|payment/i, level: DataSensitivityLevel.RESTRICTED },
+    { pattern: /password|passwd|pwd/i, level: DataSensitivityLevel.RESTRICTED },
+    { pattern: /name|address|zip|postal/i, level: DataSensitivityLevel.RESTRICTED },
+    // Authentication patterns
+    { pattern: /token|secret|key|auth/i, level: DataSensitivityLevel.RESTRICTED },
+    { pattern: /session|cookie/i, level: DataSensitivityLevel.RESTRICTED },
+    // Business patterns
+    { pattern: /financial|revenue|profit|salary/i, level: DataSensitivityLevel.CONFIDENTIAL },
+    { pattern: /customer|client|contract/i, level: DataSensitivityLevel.CONFIDENTIAL },
+    { pattern: /strategic|plan|roadmap/i, level: DataSensitivityLevel.CONFIDENTIAL },
+    // Internal patterns
+    { pattern: /internal|employee|staff/i, level: DataSensitivityLevel.INTERNAL },
+    { pattern: /policy|procedure|process/i, level: DataSensitivityLevel.INTERNAL },
+    // Public patterns
+    { pattern: /public|marketing|press|blog/i, level: DataSensitivityLevel.PUBLIC },
+    { pattern: /website|announcement|news/i, level: DataSensitivityLevel.PUBLIC }
+];
+for (const { pattern, level } of fieldPatterns) {
+    if (pattern.test(fieldName)) {
+        return level;
+    }
+}
+return null;
 detectFromContext(context, (Record));
 DataSensitivityLevel | null;
 {
@@ -155,8 +158,10 @@ DataSensitivityLevel | null;
     }
     return null;
 }
-enforceSecurityPolicies(element, EnhancedDataElement);
-currentSecurity: {
+enforceSecurityPolicies(element, EnhancedDataElement),
+    currentSecurity;
+{
+    ;
     encrypted: boolean;
     accessControl: string;
     monitoring: string;
@@ -224,8 +229,9 @@ currentSecurity: {
                     requiredActions,
                     riskScore
                 };
-                assessDataFlowSecurity(sourceLevel, DataSensitivityLevel);
-                targetLevel: DataSensitivityLevel,
+                assessDataFlowSecurity(sourceLevel, DataSensitivityLevel),
+                    targetLevel;
+                DataSensitivityLevel,
                     transferMethod;
                 string,
                     encryptionInPlace;
@@ -269,8 +275,9 @@ currentSecurity: {
                                 riskLevel,
                                 complianceImpact
                             };
-                            generateComplianceReport(elements, EnhancedDataElement);
-                            currentPolicies: Record;
+                            generateComplianceReport(elements, EnhancedDataElement),
+                                currentPolicies;
+                            Record;
                             {
                                 summary: {
                                     totalElements: number;
@@ -280,7 +287,12 @@ currentSecurity: {
                                 }
                                 ;
                                 levelBreakdown: Record;
-                                violations: Array;
+                                violations: Array < {
+                                    elementId: string,
+                                    sensitivityLevel: DataSensitivityLevel,
+                                    violations: string,
+                                    riskScore: number
+                                } > ;
                                 recommendations: string;
                                 const summary = {
                                     totalElements: elements.length,
@@ -294,127 +306,134 @@ currentSecurity: {
                                     [DataSensitivityLevel.CONFIDENTIAL]: 0,
                                     [DataSensitivityLevel.RESTRICTED]: 0,
                                 };
-                                const violations = [];
-                                const recommendationSet = new Set();
-                                // Analyze each element
-                                for (const element of elements) {
-                                    if (!element.sensitivityLevel)
-                                        continue;
-                                    levelBreakdown[element.sensitivityLevel]++;
-                                    // Check compliance
-                                    const policyResult = this.enforceSecurityPolicies(element, {});
-                                    encrypted: currentPolicies.encryption || false,
-                                        accessControl;
-                                    currentPolicies.accessControl || [],
-                                        monitoring;
-                                    currentPolicies.monitoring || 'none',
-                                        retention;
-                                    currentPolicies.retention || 'indefinite',
-                                    ;
-                                }
+                                const violations, string;
+                                sensitivityLevel: DataSensitivityLevel;
+                                violations: string;
+                                riskScore: number;
+                            }
+                             > ;
+                            [];
+                            const recommendationSet = new Set();
+                            // Analyze each element
+                            for (const element of elements) {
+                                if (!element.sensitivityLevel)
+                                    continue;
+                                levelBreakdown[element.sensitivityLevel]++;
+                                // Check compliance
+                                const policyResult = this.enforceSecurityPolicies(element, {});
+                                encrypted: currentPolicies.encryption || false,
+                                    accessControl;
+                                currentPolicies.accessControl || [],
+                                    monitoring;
+                                currentPolicies.monitoring || 'none',
+                                    retention;
+                                currentPolicies.retention || 'indefinite',
                                 ;
-                                if (policyResult.compliant) {
-                                    summary.compliantElements++;
-                                }
-                                else {
-                                    summary.violationCount += policyResult.violations.length;
-                                    violations.push({});
-                                    elementId: element.id,
-                                        sensitivityLevel;
-                                    element.sensitivityLevel,
-                                        violations;
-                                    policyResult.violations,
-                                        riskScore;
-                                    policyResult.riskScore,
-                                    ;
-                                }
+                            }
+                            ;
+                            if (policyResult.compliant) {
+                                summary.compliantElements++;
+                            }
+                            else {
+                                summary.violationCount += policyResult.violations.length;
+                                violations.push({});
+                                elementId: element.id,
+                                    sensitivityLevel;
+                                element.sensitivityLevel,
+                                    violations;
+                                policyResult.violations,
+                                    riskScore;
+                                policyResult.riskScore,
                                 ;
-                                if (policyResult.riskScore >= 3) {
-                                    summary.highRiskElements++;
-                                    // Collect recommendations
-                                    policyResult.recommendations.forEach(rec => recommendationSet.add(rec));
-                                    return {
-                                        summary,
-                                        levelBreakdown,
-                                        violations,
-                                        recommendations: Array.from(recommendationSet),
-                                    };
-                                    validateFieldValue(fieldName, string);
-                                    value: any,
-                                        sensitivityLevel;
-                                    DataSensitivityLevel;
-                                    {
-                                        ;
-                                        valid: boolean;
-                                        errors: string;
-                                        sanitizedValue ?  : any;
-                                        const errors = [];
-                                        let sanitizedValue = value;
-                                        // Apply security validation based on sensitivity level
-                                        if (sensitivityLevel === DataSensitivityLevel.RESTRICTED) {
-                                            // Strict validation for restricted data
-                                            if (typeof value === 'string') {
-                                                if (!SecurityValidation.validateSafeString(value)) {
-                                                    errors.push('String contains dangerous patterns for restricted data');
-                                                    sanitizedValue = SecurityValidation.sanitizeString(value);
-                                                    if (fieldName.toLowerCase().includes('password') && typeof value === 'string') {
-                                                        if (value.length < 8) {
-                                                            errors.push('Password must be at least 8 characters for restricted data');
-                                                            // Validate field name for all levels
-                                                            if (!SecurityValidation.validateSafePropertyKey(fieldName)) {
-                                                                errors.push('Field name contains unsafe characters');
-                                                                // Validate value size limits based on sensitivity level
-                                                                if (typeof value === 'string') {
-                                                                    const maxLength = sensitivityLevel === DataSensitivityLevel.PUBLIC ? 50000 : 10000;
-                                                                    if (value.length > maxLength) {
-                                                                        errors.push(`Value exceeds maximum length of ${maxLength} characters for ${sensitivityLevel} data`);
-                                                                    }
-                                                                    sanitizedValue = value.substring(0, maxLength);
-                                                                    return {
-                                                                        valid: errors.length === 0,
-                                                                        errors,
-                                                                        sanitizedValue
+                            }
+                            ;
+                            if (policyResult.riskScore >= 3) {
+                                summary.highRiskElements++;
+                                // Collect recommendations
+                                policyResult.recommendations.forEach(rec => recommendationSet.add(rec));
+                                return {
+                                    summary,
+                                    levelBreakdown,
+                                    violations,
+                                    recommendations: Array.from(recommendationSet),
+                                };
+                                validateFieldValue(fieldName, string),
+                                    value;
+                                any,
+                                    sensitivityLevel;
+                                DataSensitivityLevel;
+                                {
+                                    ;
+                                    valid: boolean;
+                                    errors: string;
+                                    sanitizedValue ?  : any;
+                                    const errors = [];
+                                    let sanitizedValue = value;
+                                    // Apply security validation based on sensitivity level
+                                    if (sensitivityLevel === DataSensitivityLevel.RESTRICTED) {
+                                        // Strict validation for restricted data
+                                        if (typeof value === 'string') {
+                                            if (!SecurityValidation.validateSafeString(value)) {
+                                                errors.push('String contains dangerous patterns for restricted data');
+                                                sanitizedValue = SecurityValidation.sanitizeString(value);
+                                                if (fieldName.toLowerCase().includes('password') && typeof value === 'string') {
+                                                    if (value.length < 8) {
+                                                        errors.push('Password must be at least 8 characters for restricted data');
+                                                        // Validate field name for all levels
+                                                        if (!SecurityValidation.validateSafePropertyKey(fieldName)) {
+                                                            errors.push('Field name contains unsafe characters');
+                                                            // Validate value size limits based on sensitivity level
+                                                            if (typeof value === 'string') {
+                                                                const maxLength = sensitivityLevel === DataSensitivityLevel.PUBLIC ? 50000 : 10000;
+                                                                if (value.length > maxLength) {
+                                                                    errors.push(`Value exceeds maximum length of ${maxLength} characters for ${sensitivityLevel} data`);
+                                                                }
+                                                                sanitizedValue = value.substring(0, maxLength);
+                                                                return {
+                                                                    valid: errors.length === 0,
+                                                                    errors,
+                                                                    sanitizedValue
+                                                                };
+                                                                /**
+                                                                 * Integration adapter for existing DataClassifier
+                                                                 */
+                                                                export class DataClassifierIntegration {
+                                                                    sensitivityLevel = DataClassificationHelpers.convertClassificationResult(result);
+                                                                    handlingRequirements = DataSensitivityUtils.getHandlingRequirements(sensitivityLevel);
+                                                                    securityMarkings = DataSensitivityUtils.generateSecurityMarkings(sensitivityLevel);
+                                                                }
+                                                                return {
+                                                                    ...result,
+                                                                    sensitivityLevel,
+                                                                    handlingRequirements,
+                                                                    securityMarkings
+                                                                };
+                                                                createDataElementFromSensitive(id, string),
+                                                                    fieldName;
+                                                                string,
+                                                                    value;
+                                                                any,
+                                                                    sensitivityLevel;
+                                                                DataSensitivityLevel,
+                                                                    source;
+                                                                string = 'unknown';
+                                                                EnhancedDataElement;
+                                                                {
+                                                                    const baseElement = {
+                                                                        id,
+                                                                        fieldName,
+                                                                        value,
+                                                                        dataType: typeof value,
+                                                                        context: {
+                                                                            sensitivityLevel,
+                                                                            detectedAt: new Date().toISOString(),
+                                                                        },
+                                                                        source,
+                                                                        timestamp: new Date()
                                                                     };
-                                                                    /**
-                                                                     * Integration adapter for existing DataClassifier
-                                                                     */
-                                                                    export class DataClassifierIntegration {
-                                                                        sensitivityLevel = DataClassificationHelpers.convertClassificationResult(result);
-                                                                        handlingRequirements = DataSensitivityUtils.getHandlingRequirements(sensitivityLevel);
-                                                                        securityMarkings = DataSensitivityUtils.generateSecurityMarkings(sensitivityLevel);
-                                                                    }
-                                                                    return {
-                                                                        ...result,
-                                                                        sensitivityLevel,
-                                                                        handlingRequirements,
-                                                                        securityMarkings
-                                                                    };
-                                                                    createDataElementFromSensitive(id, string);
-                                                                    fieldName: string,
-                                                                        value;
-                                                                    any,
-                                                                        sensitivityLevel;
-                                                                    DataSensitivityLevel,
-                                                                        source;
-                                                                    string = 'unknown';
-                                                                    EnhancedDataElement;
-                                                                    {
-                                                                        const baseElement = {
-                                                                            id,
-                                                                            fieldName,
-                                                                            value,
-                                                                            dataType: typeof value,
-                                                                            context: {
-                                                                                sensitivityLevel,
-                                                                                detectedAt: new Date().toISOString(),
-                                                                            },
-                                                                            source,
-                                                                            timestamp: new Date()
-                                                                        };
-                                                                        return DataClassificationHelpers.enhanceDataElement(baseElement, sensitivityLevel);
-                                                                        // Export all utilities (classes already exported with their declarations)
-                                                                        export default DataClassificationHelpers;
-                                                                    }
+                                                                    return DataClassificationHelpers.enhanceDataElement(baseElement, sensitivityLevel);
+                                                                    // Export all utilities (classes already exported with their declarations)
+                                                                    export default DataClassificationHelpers;
                                                                 }
                                                             }
                                                         }

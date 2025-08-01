@@ -11,8 +11,8 @@ import { CommandPalette } from '../../packages/core/components/CommandPalette/Co
 import { IntegratedFileBrowser, PSGFile, ProjectManager } from '../../packages/core';
 
 interface GraphEditorProps {
-  initialNodes?: unknown[];
-  initialEdges?: unknown[];
+  initialNodes?: unknown;
+  initialEdges?: unknown;
 }
 
 interface RandomizerPanelProps {
@@ -20,7 +20,6 @@ interface RandomizerPanelProps {
   onError?: (error: Error) => void;
   className?: string;
 }
-
 // Enhanced import approach - try full core, fallback to enhanced editor with professional features
 let GraphEditor: React.ComponentType<GraphEditorProps> = EnhancedGraphEditor;
 let RandomizerPanel: React.ComponentType<RandomizerPanelProps>;
@@ -51,7 +50,7 @@ try {
         height: '100%',
         backgroundColor: 'var(--color-bg-primary, #1e1e1e)',
         flexDirection: 'column',
-        padding: '40px',
+        padding: '40px'
       }}
     >
       <div
@@ -59,10 +58,10 @@ try {
           fontSize: '32px',
           fontWeight: 'bold',
           marginBottom: '20px',
-          color: 'var(--color-text-primary, #e8e8e8)',
+          color: 'var(--color-text-primary, #e8e8e8)'
         }}
       >
-        🎲 Professional Graph Editor
+        {'🎲 Professional Graph Editor'}
       </div>
       <div
         style={{
@@ -71,7 +70,7 @@ try {
           textAlign: 'center',
           maxWidth: '600px',
           lineHeight: 1.6,
-          marginBottom: '20px',
+          marginBottom: '20px'
         }}
       >
         The professional-grade nodal prompt randomizer with Cinema 4D-inspired design. Full professional features are
@@ -82,7 +81,7 @@ try {
           fontSize: '14px',
           color: 'var(--color-text-secondary, #b8b8b8)',
           textAlign: 'center',
-          fontStyle: 'italic',
+          fontStyle: 'italic'
         }}
       >
         Command palette, undo/redo, multi-selection, and keyboard shortcuts included.
@@ -125,12 +124,12 @@ function MainApp(): React.ReactElement {
   const activeTab = getActiveTab();
   const handleTabChange = useCallback(
     (tab: 'editor' | 'randomizer' | 'files' | 'prototype') => {
-      const paths = {
-        editor: '/',
-        randomizer: '/randomizer',
-        files: '/files',
-        prototype: '/prototype',
-      };
+  const paths = {
+  editor: '/',
+  randomizer: '/randomizer',
+  files: '/files',
+  prototype: '/prototype'
+};
       navigate(paths[tab] || '/');
     },
     [navigate]
@@ -148,13 +147,13 @@ function MainApp(): React.ReactElement {
   }, []);
   // Menu bar handlers
   const menuBarHandlers = {
-    // File operations
-    onNew: useCallback(() => {
-      if (confirm('Create a new graph? Unsaved changes will be lost.')) {
-        setGeneratedGraph(null);
-        navigate('/');
-      }
-    }, [navigate]),
+  // File operations
+  onNew: useCallback(() => {
+    if (confirm('Create a new graph? Unsaved changes will be lost.')) {
+      setGeneratedGraph(null);
+      navigate('/');
+    }
+  }, [navigate]),
     onOpen: useCallback(() => {
       // Switch to Files tab to enable file selection
       handleTabChange('files');
@@ -233,7 +232,7 @@ function MainApp(): React.ReactElement {
       const event = new KeyboardEvent('keydown', {
         key: '?',
         shiftKey: true,
-        bubbles: true,
+        bubbles: true
       });
       document.dispatchEvent(event);
     }, []),
@@ -255,7 +254,7 @@ function MainApp(): React.ReactElement {
     }, []),
     onCommandPalette: useCallback(() => {
       setShowCommandPalette(true);
-    }, []),
+    }, [])
   };
   // File browser handlers
   const fileBrowserHandlers = {
@@ -296,7 +295,7 @@ function MainApp(): React.ReactElement {
         navigate('/'); // Switch to editor tab
       },
       [navigate, projectManager]
-    ),
+    )
   };
   // Command palette specific handlers
   const commandPaletteHandlers = {
@@ -308,7 +307,7 @@ function MainApp(): React.ReactElement {
       console.log('Starting generation flow:', flow.name, params);
       setShowCommandPalette(false);
     }, []),
-    onNodeCreate: useCallback((nodeType: string, position: { x: number; y: number }, data?: any) => {
+    onNodeCreate: useCallback((nodeType: string, position: { x: number, y: number }, data?: any) => {
       // TODO: Integrate with node creation
       console.log('Creating node:', nodeType, position, data);
       setShowCommandPalette(false);
@@ -322,11 +321,10 @@ function MainApp(): React.ReactElement {
       // TODO: Integrate with template system
       console.log('Applying template:', templateId);
       setShowCommandPalette(false);
-    }, []),
+    }, [])
   };
   // Custom actions for command palette that integrate with menu bar
-  const customCommandPaletteActions = [
-    // File operations
+    const customCommandPaletteActions = [
     {
       id: 'file-new',
       title: 'New Graph',
@@ -338,7 +336,7 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onNew();
-      },
+      }
     },
     {
       id: 'file-open',
@@ -351,7 +349,7 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onOpen();
-      },
+      }
     },
     {
       id: 'file-save',
@@ -364,7 +362,7 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onSave();
-      },
+      }
     },
     {
       id: 'export-json',
@@ -376,9 +374,8 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onExport('json');
-      },
+      }
     },
-    // View operations
     {
       id: 'view-fit',
       title: 'Fit View',
@@ -390,7 +387,7 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onFitView();
-      },
+      }
     },
     {
       id: 'view-fullscreen',
@@ -403,7 +400,7 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onToggleFullscreen();
-      },
+      }
     },
     {
       id: 'theme-switch',
@@ -416,9 +413,8 @@ function MainApp(): React.ReactElement {
         setShowCommandPalette(false);
         const nextTheme = theme === 'cinema' ? 'dark' : theme === 'dark' ? 'light' : 'cinema';
         menuBarHandlers.onToggleTheme(nextTheme);
-      },
+      }
     },
-    // Navigation
     {
       id: 'nav-randomizer',
       title: 'Go to LLM Randomizer',
@@ -429,7 +425,7 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onViewRandomizer();
-      },
+      }
     },
     {
       id: 'nav-files',
@@ -441,9 +437,8 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onViewFiles();
-      },
+      }
     },
-    // Help
     {
       id: 'help-shortcuts',
       title: 'Show Keyboard Shortcuts',
@@ -455,7 +450,7 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onKeyboardShortcuts();
-      },
+      }
     },
     {
       id: 'help-about',
@@ -467,9 +462,10 @@ function MainApp(): React.ReactElement {
       action: () => {
         setShowCommandPalette(false);
         menuBarHandlers.onAbout();
-      },
-    },
+      }
+    }
   ];
+
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Professional Menu Bar */}
@@ -516,90 +512,90 @@ function MainApp(): React.ReactElement {
       {/* Tab Content Area - now hidden behind menu bar */}
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          borderBottom: '1px solid var(--color-ui-border, #404040)',
-          backgroundColor: 'var(--color-bg-secondary, #2a2a2a)',
-          padding: '0',
-          height: '40px',
-          alignItems: 'center',
-        }}
+  display: 'flex',
+  justifyContent: 'space-between',
+  borderBottom: '1px solid var(--color-ui-border, #404040)',
+  backgroundColor: 'var(--color-bg-secondary, #2a2a2a)',
+  padding: '0',
+  height: '40px',
+  alignItems: 'center'
+}}
       >
         <div style={{ display: 'flex' }}>
           <button
             onClick={() => handleTabChange('editor')}
             style={{
-              padding: '8px 16px',
-              border: 'none',
-              backgroundColor: activeTab === 'editor' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom:
-                activeTab === 'editor' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
-              cursor: 'pointer',
-              fontSize: '12px',
-              fontWeight: activeTab === 'editor' ? 'bold' : 'normal',
-              color: 'var(--color-text-primary, #e8e8e8)',
-            }}
+  padding: '8px 16px',
+  border: 'none',
+  backgroundColor: activeTab === 'editor' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
+  borderBottom:
+  activeTab === 'editor' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+  cursor: 'pointer',
+  fontSize: '12px',
+  fontWeight: activeTab === 'editor' ? 'bold' : 'normal',
+  color: 'var(--color-text-primary, #e8e8e8)'
+}}
           >
-            📊 Graph Editor
+            {'📊 Graph Editor'}
           </button>
           <button
             onClick={() => handleTabChange('randomizer')}
             style={{
-              padding: '8px 16px',
-              border: 'none',
-              backgroundColor: activeTab === 'randomizer' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom:
-                activeTab === 'randomizer' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
-              cursor: 'pointer',
-              fontSize: '12px',
-              fontWeight: activeTab === 'randomizer' ? 'bold' : 'normal',
-              color: 'var(--color-text-primary, #e8e8e8)',
-            }}
+  padding: '8px 16px',
+  border: 'none',
+  backgroundColor: activeTab === 'randomizer' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
+  borderBottom:
+  activeTab === 'randomizer' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+  cursor: 'pointer',
+  fontSize: '12px',
+  fontWeight: activeTab === 'randomizer' ? 'bold' : 'normal',
+  color: 'var(--color-text-primary, #e8e8e8)'
+}}
           >
-            🎲 LLM Randomizer
+            {'🎲 LLM Randomizer'}
           </button>
           <button
             onClick={() => handleTabChange('files')}
             style={{
-              padding: '8px 16px',
-              border: 'none',
-              backgroundColor: activeTab === 'files' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom:
-                activeTab === 'files' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
-              cursor: 'pointer',
-              fontSize: '12px',
-              fontWeight: activeTab === 'files' ? 'bold' : 'normal',
-              color: 'var(--color-text-primary, #e8e8e8)',
-            }}
+  padding: '8px 16px',
+  border: 'none',
+  backgroundColor: activeTab === 'files' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
+  borderBottom:
+  activeTab === 'files' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+  cursor: 'pointer',
+  fontSize: '12px',
+  fontWeight: activeTab === 'files' ? 'bold' : 'normal',
+  color: 'var(--color-text-primary, #e8e8e8)'
+}}
           >
-            📁 Files
+            {'📁 Files'}
           </button>
           <button
             onClick={() => handleTabChange('prototype')}
             style={{
-              padding: '8px 16px',
-              border: 'none',
-              backgroundColor: activeTab === 'prototype' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom:
-                activeTab === 'prototype' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
-              cursor: 'pointer',
-              fontSize: '12px',
-              fontWeight: activeTab === 'prototype' ? 'bold' : 'normal',
-              color: 'var(--color-text-primary, #e8e8e8)',
-            }}
+  padding: '8px 16px',
+  border: 'none',
+  backgroundColor: activeTab === 'prototype' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
+  borderBottom:
+  activeTab === 'prototype' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+  cursor: 'pointer',
+  fontSize: '12px',
+  fontWeight: activeTab === 'prototype' ? 'bold' : 'normal',
+  color: 'var(--color-text-primary, #e8e8e8)'
+}}
           >
-            🔬 Prototype
+            {'🔬 Prototype'}
           </button>
         </div>
         {/* Status indicator */}
         <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            paddingRight: '20px',
-            color: 'var(--color-text-secondary, #666)',
-            fontSize: '12px',
-          }}
+  display: 'flex',
+  alignItems: 'center',
+  paddingRight: '20px',
+  color: 'var(--color-text-secondary, #666)',
+  fontSize: '12px'
+}}
         >
           {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} |{' '}
           {theme === 'cinema' ? '🎬 Cinema 4D' : theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
@@ -615,11 +611,11 @@ function MainApp(): React.ReactElement {
         ) : activeTab === 'randomizer' ? (
           <div
             style={{
-              padding: '20px',
-              height: '100%',
-              overflow: 'auto',
-              backgroundColor: 'var(--color-bg-primary, #1e1e1e)',
-            }}
+  padding: '20px',
+  height: '100%',
+  overflow: 'auto',
+  backgroundColor: 'var(--color-bg-primary, #1e1e1e)'
+}}
           >
             <RandomizerPanel
               onGraphGenerated={handleGraphGenerated}
@@ -642,6 +638,8 @@ function MainApp(): React.ReactElement {
     </div>
   );
 }
+
+
 /**
  * Root App component with routing.
  * Simplified version with authentication disabled.

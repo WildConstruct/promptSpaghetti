@@ -29,21 +29,21 @@ export async function securityAuditRoutes(
         })),
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get audit status:', error);
       reply.code(500).send({
         error: 'Failed to retrieve audit status',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get audit history
   fastify.get<{
     Querystring: { limit?: string; endpoint?: string };
-  }>('/security/audit/history', async (request: FastifyRequest<{
+>('/security/audit/history', async (request: FastifyRequest<{
     Querystring: { limit?: string; endpoint?: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const limit = request.query.limit ? parseInt(request.query.limit) : 50;
       const endpoint = request.query.endpoint;
@@ -53,7 +53,7 @@ export async function securityAuditRoutes(
       // Filter by endpoint if specified
       if (endpoint) {
         history = history.filter(record => record.endpoint === endpoint);
-      }
+
 
       return {
         history: history.map(record => ({
@@ -74,21 +74,21 @@ export async function securityAuditRoutes(
         })),
         totalRecords: history.length
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get audit history:', error);
       reply.code(500).send({
         error: 'Failed to retrieve audit history',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Trigger manual security audit
   fastify.post<{
     Body: { endpoint?: string };
-  }>('/security/audit/trigger', async (request: FastifyRequest<{
+>('/security/audit/trigger', async (request: FastifyRequest<{
     Body: { endpoint?: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { endpoint } = request.body || {};
       
@@ -107,21 +107,21 @@ export async function securityAuditRoutes(
           summary: record.result.summary
         }))
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to trigger manual audit:', error);
       reply.code(500).send({
         error: 'Failed to trigger manual audit',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get detailed audit report for specific endpoint
   fastify.get<{
     Params: { endpoint: string };
-  }>('/security/audit/report/:endpoint', async (request: FastifyRequest<{
+>('/security/audit/report/:endpoint', async (request: FastifyRequest<{
     Params: { endpoint: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { endpoint } = request.params;
       const decodedEndpoint = decodeURIComponent(endpoint);
@@ -135,7 +135,7 @@ export async function securityAuditRoutes(
           message: `No audit data available for endpoint: ${decodedEndpoint}`
         });
         return;
-      }
+
 
       return {
         endpoint: decodedEndpoint,
@@ -161,13 +161,13 @@ export async function securityAuditRoutes(
             recommendation: h.recommendation
           }))
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get audit report:', error);
       reply.code(500).send({
         error: 'Failed to retrieve audit report',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get security audit dashboard data
@@ -213,7 +213,7 @@ export async function securityAuditRoutes(
           passRate: statistics.passRate.toFixed(1),
           alertsLast24h: statistics.alertsLast24h,
           averageScoreLast24h: averageScoreLast24h.toFixed(1)
-  }
+
         endpoints: Object.entries(statistics.endpoints).map(([endpoint, data]) => ({
           endpoint,
           lastAudit: data.lastAudit,
@@ -225,7 +225,7 @@ export async function securityAuditRoutes(
         trends: {
           scoreHistory,
           alertsByType
-  }
+
         recentAlerts: recentHistory
           .filter(r => r.alerts.length > 0)
           .slice(0, 10)
@@ -237,13 +237,13 @@ export async function securityAuditRoutes(
               r.alerts.some(a => a.includes('HIGH')) ? 'high' : 'medium'
           }))
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get dashboard data:', error);
       reply.code(500).send({
         error: 'Failed to retrieve dashboard data',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // CSP violation reporting endpoint
@@ -261,13 +261,13 @@ export async function securityAuditRoutes(
               'source-file': { type: 'string' },
               'line-number': { type: 'number' },
               'column-number': { type: 'number' }
-  }
+
             required: ['document-uri', 'violated-directive']
-          }
-  }
+
+
         required: ['csp-report']
-      }
-    }
+
+
   }, handleCSPViolation);
 
   // Security headers documentation endpoint
@@ -281,37 +281,37 @@ export async function securityAuditRoutes(
           description: 'Prevents XSS attacks by controlling resource loading',
           severity: 'high',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP'
-  }
+
         {
           name: 'X-Frame-Options',
           description: 'Prevents clickjacking attacks',
           severity: 'medium',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options'
-  }
+
         {
           name: 'X-Content-Type-Options',
           description: 'Prevents MIME type sniffing attacks',
           severity: 'medium',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options'
-  }
+
         {
           name: 'Strict-Transport-Security',
           description: 'Enforces HTTPS connections',
           severity: 'high',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security'
-  }
+
         {
           name: 'Referrer-Policy',
           description: 'Controls referrer information disclosure',
           severity: 'low',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy'
-  }
+
         {
           name: 'Permissions-Policy',
           description: 'Controls browser feature access',
           severity: 'medium',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy'
-        }
+
       ],
       auditCriteria: {
         scoreCalculation: 'Each header has a point value based on security importance',
@@ -321,8 +321,7 @@ export async function securityAuditRoutes(
           high: 'Significant security concern',
           medium: 'Moderate security improvement',
           low: 'Minor security enhancement'
-        }
-      }
+
+
     };
   });
-}

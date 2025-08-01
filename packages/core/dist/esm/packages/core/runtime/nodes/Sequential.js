@@ -214,8 +214,7 @@ export class LinearPattern {
                                                                             prng: () => Math.random(),
                                                                             executionMeta: {
                                                                                 startTime: Date.now(),
-                                                                                executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-                                                                            }
+                                                                                executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` }
                                                                         }, nodeExecutionOrder, performanceMetrics;
                                                                         ();
                                                                     }
@@ -255,9 +254,7 @@ export class LinearPattern {
                                                                             sequence: this.sequence,
                                                                             pattern: {
                                                                                 type: this.pattern.type,
-                                                                                config: this.pattern instanceof WeightedPattern ?  : ,
-                                                                            }
-                                                                        }
+                                                                                config: this.pattern instanceof WeightedPattern ?  : , } }
                                                                     };
                                                                     {
                                                                         weights: this.pattern.config.weights;

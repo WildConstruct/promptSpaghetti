@@ -76,8 +76,8 @@ function checkNamingConventions(filePath: string): any[] {
           line: getLineNumber(content, match.index),
           message: `Function '${name}' should be camelCase`
         });
-      }
-    }
+
+
 
     // Check variable names
     PATTERNS.variableDeclaration.lastIndex = 0;
@@ -101,8 +101,8 @@ function checkNamingConventions(filePath: string): any[] {
           line: getLineNumber(content, match.index),
           message: `Variable '${name}' should be camelCase or CONSTANT_CASE (React components should be PascalCase)`
         });
-      }
-    }
+
+
 
     // Check class names
     PATTERNS.classDefinition.lastIndex = 0;
@@ -115,8 +115,8 @@ function checkNamingConventions(filePath: string): any[] {
           line: getLineNumber(content, match.index),
           message: `Class '${name}' should be PascalCase`
         });
-      }
-    }
+
+
 
     // Check interface names
     PATTERNS.interfaceDefinition.lastIndex = 0;
@@ -129,8 +129,8 @@ function checkNamingConventions(filePath: string): any[] {
           line: getLineNumber(content, match.index),
           message: `Interface '${name}' should be PascalCase`
         });
-      }
-    }
+
+
 
     // Check type names
     PATTERNS.typeDefinition.lastIndex = 0;
@@ -143,19 +143,19 @@ function checkNamingConventions(filePath: string): any[] {
           line: getLineNumber(content, match.index),
           message: `Type '${name}' should be PascalCase`
         });
-      }
-    }
+
+
 
     return violations;
-  } catch (error) {
+ catch (error) {
     console.error(`Error checking ${filePath}:`, error.message);
     return [];
-  }
-}
+
+
 
 function getLineNumber(content: string, index: number): number {
   return content.substring(0, index).split('\n').length;
-}
+
 
 function main(): void {
   const filePaths = process.argv.slice(2);
@@ -165,7 +165,7 @@ function main(): void {
   if (filePaths.length === 0) {
     console.log('✅ Epic 17 Naming Conventions: No files to check');
     process.exit(0);
-  }
+
 
   console.log(`🔍 Epic 17 Naming Conventions: Checking ${filePaths.length} files...`);
 
@@ -180,8 +180,8 @@ function main(): void {
       violations.forEach(violation => {
         console.log(`   Line ${violation.line}: ${violation.message} (${violation.type})`);
       });
-    }
-  }
+
+
 
   if (hasErrors) {
     console.log(`\n💥 Epic 17 Naming Conventions: Found ${totalViolations} violations`);
@@ -191,14 +191,14 @@ function main(): void {
     console.log('   • Use SCREAMING_SNAKE_CASE for constants');
     console.log('   • Consistent naming improves code readability and maintainability');
     process.exit(1);
-  } else {
+ else {
     console.log(`✅ Epic 17 Naming Conventions: All ${filePaths.length} files follow conventions`);
     process.exit(0);
-  }
-}
+
+
 
 if (require.main === module) {
   main();
-}
+
 
 module.exports = { checkNamingConventions, NAMING_RULES, EXCEPTIONS };

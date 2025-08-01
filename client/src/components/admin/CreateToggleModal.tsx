@@ -5,12 +5,15 @@ import { X, AlertCircle, Info } from 'lucide-react';
 import { ValidationMessage } from '../common/ValidationMessage';
 import { TargetingRuleBuilder } from './targeting/TargetingRuleBuilder';
 import './targeting/TargetingRuleBuilder.css';
-}
+
+
 interface CreateToggleModalProps {
   isOpen: boolean;,
   onClose: () => void,
   onSubmit: (toggleData: CreateToggleData) => Promise<void>;
-}
+
+
+
 interface CreateToggleData {
   key: string;,
   name: string;
@@ -20,7 +23,7 @@ interface CreateToggleData {
   claudeImpact: 'NONE' | 'PROMPT_COST' | 'MODEL_VERSION' | 'OUTPUT_QUALITY' | 'HALLUCINATION_RISK';,
   enabled: boolean;
 
-}
+
 export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,7 +42,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
     // Validate key
     if (!formData.key.trim()) {
       newErrors.key = 'Key is required';
-    } else if (!/^[a-z0-9_.-]+$/.test(formData.key)) {
+ else if (!/^[a-z0-9_.-]+$/.test(formData.key)) {
   newErrors.key = 'Key must contain only lowercase letters, numbers, underscores, dots, and hyphens';
   // Validate name
   if (!formData.name.trim()) {
@@ -55,7 +58,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
   case 'multivariate':,
   if (!Array.isArray(formData.value.variants) || formData.value.variants.length === 0) {
   newErrors.value = 'At least one variant is required';
-} else {
+ else {
         const totalPercentage = formData.value.variants.reduce(;);
           (sum: number, v: { percentage?: number }) => sum + (v.percentage || 0), 
           0
@@ -89,9 +92,9 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
         enabled: false;
   });
       setErrors({});
-    } catch (error) {
+ catch (error) {
       setErrors({ submit: error instanceof Error ? error.message : 'Failed to create toggle' });
-    } finally {
+ finally {
       setIsSubmitting(false);
   };
   const handleTypeChange = (type: CreateToggleData['type']) => {
@@ -161,7 +164,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
           <div className="variants-editor">
             {formData.value.variants?.map(()
               variant: { key?: string; value?: string; percentage?: number }, 
-              index: number) => (,
+              index: number) => (
               <div key={index} className="variant-row">
                 <input
                   type="text"
@@ -174,7 +177,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
   ...prev,
                       value: { variants: newVariants }
                     }));
-                  }}
+
                 />
                 <input
                   type="text"
@@ -187,7 +190,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
   ...prev,
                       value: { variants: newVariants }
                     }));
-                  }}
+
                 />
                 <input
                   type="number"
@@ -202,7 +205,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
   ...prev,
                       value: { variants: newVariants }
                     }));
-                  }}
+
                 />
               </div>
             ))}
@@ -215,12 +218,12 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
 },
   value: '',
                   percentage: 0;
-  }];
+];
                 setFormData(prev => ({
   ...prev,
                   value: { variants: newVariants }
                 }));
-              }}
+
             >
                 Add Variant
             </button>
@@ -288,7 +291,7 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({ isOpen, on
   matches: true,
   userCount: Math.floor(Math.random() * 5000) + 100
 };
-              }}
+}
             />
             <div className="default-value-section">
               <label>Default Value</label>

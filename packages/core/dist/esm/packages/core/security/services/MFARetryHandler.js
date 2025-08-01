@@ -65,6 +65,7 @@ globalTimeoutMs: number;
 enableMetrics: boolean;
 enableLogging: boolean;
 ;
+;
 errorMetrics: {
     [key in FailureType];
     number;
@@ -493,7 +494,7 @@ for (let attempt = 1; attempt <= config.maxAttempts; attempt++) {
                                                                             backoffMultiplier: 2,
                                                                             jitterMs: 100,
                                                                             timeoutMs: 10000,
-                                                                            retryableErrors: [,
+                                                                            retryableErrors: [
                                                                                 FailureType.NETWORK_ERROR,
                                                                                 FailureType.TIMEOUT,
                                                                                 FailureType.SERVICE_UNAVAILABLE
@@ -506,8 +507,7 @@ for (let attempt = 1; attempt <= config.maxAttempts; attempt++) {
                                                                                     maxAttempts: 2,
                                                                                     timeoutMs: 5000,
                                                                                     retryableErrors: [FailureType.NETWORK_ERROR, FailureType.TIMEOUT],
-                                                                                }[MFAOperation.SMS_SEND]
-                                                                            }
+                                                                                }[MFAOperation.SMS_SEND] }
                                                                         };
                                                                         {
                                                                         }
@@ -515,7 +515,7 @@ for (let attempt = 1; attempt <= config.maxAttempts; attempt++) {
                                                                     ...defaultRetryConfig,
                                                                     maxAttempts: 3,
                                                                     timeoutMs: 15000,
-                                                                    retryableErrors: [,
+                                                                    retryableErrors: [
                                                                         FailureType.NETWORK_ERROR,
                                                                         FailureType.TIMEOUT,
                                                                         FailureType.SERVICE_UNAVAILABLE
@@ -539,7 +539,7 @@ for (let attempt = 1; attempt <= config.maxAttempts; attempt++) {
                                                                 timeoutMs;
                                                             20000,
                                                                 retryableErrors;
-                                                            [,
+                                                            [
                                                                 FailureType.NETWORK_ERROR,
                                                                 FailureType.TIMEOUT,
                                                                 FailureType.SERVICE_UNAVAILABLE
@@ -575,7 +575,7 @@ for (let attempt = 1; attempt <= config.maxAttempts; attempt++) {
                                                                 timeoutMs;
                                                             15000,
                                                                 retryableErrors;
-                                                            [,
+                                                            [
                                                                 FailureType.NETWORK_ERROR,
                                                                 FailureType.TIMEOUT,
                                                                 FailureType.SERVICE_UNAVAILABLE
@@ -589,7 +589,7 @@ for (let attempt = 1; attempt <= config.maxAttempts; attempt++) {
                                                                 timeoutMs;
                                                             20000,
                                                                 retryableErrors;
-                                                            [,
+                                                            [
                                                                 FailureType.NETWORK_ERROR,
                                                                 FailureType.TIMEOUT,
                                                                 FailureType.SERVICE_UNAVAILABLE

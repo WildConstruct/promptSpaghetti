@@ -10,30 +10,29 @@ import { DiffNodeRenderer } from './DiffNodeRenderer';
 import { DiffEdgeRenderer } from './DiffEdgeRenderer';
 import { useDiffSession } from '../../hooks/useDiffSession';
 import { useGraphVersions } from '../../hooks/useGraphVersions';
-import {
-  DetailedComparison,
+import { DetailedComparison,
   VisualDiffSession,
   ViewMode,
   HighlightMode,
-  NodeChange,
+  NodeChange }
   EdgeChange
-} from '../../types/comparison';
+ from '../../types/comparison';
 
-}
-export interface VisualDiffPanelProps {
-  graphId: string;
+
+export interface VisualDiffPanelProps { graphId: string;
   initialSourceVersionId?: string;
   initialTargetVersionId?: string;
   onClose?: () => void;
   className?: string;
-  const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ ),
-  graphId,
-  sourceVersionId,
-  initialSourceVersionId,
-  initialTargetVersionId,
-  onClose,
+  const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ );
+  graphId;
+  sourceVersionId;
+  initialSourceVersionId;
+  initialTargetVersionId;
+  onClose }
   className = ''
-}
+
+
 }) => {
   const [targetVersionId, setTargetVersionId] = useState<string>(initialTargetVersionId || '');
   const [viewMode, setViewMode] = useState<ViewMode>('side-by-side');
@@ -43,49 +42,38 @@ export interface VisualDiffPanelProps {
   const [zoomLevel, setZoomLevel] = useState(1.0);
   // Hooks
   const { versions, loading: versionsLoading } = useGraphVersions(graphId);
-  const {
-  session,
-  comparison,
-  loading: sessionLoading,
-  error: sessionError,
-  createSession,
+  const { session
+  comparison
+  loading: sessionLoading
+  error: sessionError
+  createSession }
   updateSession
-} = useDiffSession();
+ = useDiffSession();
   // Effects
-  useEffect(() => {
-  if (sourceVersionId && targetVersionId && sourceVersionId !== targetVersionId) {
+  useEffect(() => { if (sourceVersionId && targetVersionId && sourceVersionId !== targetVersionId) {
   createSession({)
-  graph_id: graphId,
-  source_version_id: sourceVersionId,
-  target_version_id: targetVersionId,
-  view_mode: viewMode,
-  highlight_mode: highlightMode,
+  graph_id: graphId
+  source_version_id: sourceVersionId
+  target_version_id: targetVersionId
+  view_mode: viewMode
+  highlight_mode: highlightMode }
 });
   }, [sourceVersionId, targetVersionId, graphId]);
-  useEffect(() => {
-  if (session) {
+  useEffect(() => { if (session) {
   updateSession(session.id, {)
-  view_mode: viewMode,
-  highlight_mode: highlightMode,
-  show_unchanged: showUnchanged,
-  show_metadata: showMetadata,
-  zoom_level: zoomLevel,
+  view_mode: viewMode
+  highlight_mode: highlightMode
+  show_unchanged: showUnchanged
+  show_metadata: showMetadata
+  zoom_level: zoomLevel }
 });
   }, [viewMode, highlightMode, showUnchanged, showMetadata, zoomLevel, session?.id]);
   // Handlers
-  const handleVersionChange = useCallback((source: string, target: string) => {
-    setSourceVersionId(source);
-    setTargetVersionId(target);
-  }, []);
-  const handleViewModeChange = useCallback((mode: ViewMode) => {
-    setViewMode(mode);
-  }, []);
-  const handleHighlightModeChange = useCallback((mode: HighlightMode) => {
-    setHighlightMode(mode);
-  }, []);
-  const handleZoomChange = useCallback((zoom: number) => {
-    setZoomLevel(zoom);
-  }, []);
+  const handleVersionChange = useCallback((source: string, target: string) => { setSourceVersionId(source);
+    setTargetVersionId(target) }, []);
+  const handleViewModeChange = useCallback((mode: ViewMode) => { setViewMode(mode) }, []);
+  const handleHighlightModeChange = useCallback((mode: HighlightMode) => { setHighlightMode(mode) }, []);
+  const handleZoomChange = useCallback((zoom: number) => { setZoomLevel(zoom) }, []);
   // Prepare nodes and edges for visualization
   const prepareVisualizationData = useCallback(() => {
     if (!comparison) return { sourceNodes: [], sourceEdges: [], targetNodes: [], targetEdges: [] };
@@ -96,9 +84,9 @@ export interface VisualDiffPanelProps {
     return { sourceNodes, sourceEdges, targetNodes, targetEdges };
   }, [comparison, highlightMode, showUnchanged]);
   const prepareNodes = useCallback((;);
-    nodes: unknown,
-    nodeMatches: unknown,
-    side: 'source' | 'target'): Node => {,
+    nodes: unknown
+    nodeMatches: unknown
+    side: 'source' | 'target'): Node => {
     if (!comparison) return [];
     return nodes.map(node => {)
   const match = nodeMatches.find(m => ;);
@@ -106,8 +94,7 @@ export interface VisualDiffPanelProps {
       );
       let diffState = 'unchanged';
       let changeDetails = {};
-      if (match) {
-        switch (match.match_type) {
+      if (match) { switch (match.match_type) {
         case 'added':
           diffState = 'added';
           break;
@@ -137,25 +124,24 @@ export interface VisualDiffPanelProps {
           if (diffState !== 'removed') return null;
           break;
       return {
-        id: node.id,
-        type: 'diffNode',
-        position: node.position || { x: 0, y: 0 },
-        data: {
-  ...node.data,
-  originalNode: node,
-  diffState,
-  changeDetails,
-  showMetadata,
+        id: node.id
+        type: 'diffNode' }
+        position: node.position || { x: 0, y: 0 }
+        data: { ...node.data
+  originalNode: node
+  diffState
+  changeDetails
+  showMetadata }
   side
-},
+
   style: getDiffNodeStyle(diffState, highlightMode)
       };
     }).filter(Boolean) as Node;
   }, [comparison, highlightMode, showUnchanged, showMetadata]);
   const prepareEdges = useCallback((;);
-    edges: unknown,
-    edgeMatches: unknown,
-    side: 'source' | 'target'): Edge => {,
+    edges: unknown
+    edgeMatches: unknown
+    side: 'source' | 'target'): Edge => {
     if (!comparison) return [];
     return edges.map(edge => {)
   const match = edgeMatches.find(m => ;);
@@ -163,20 +149,19 @@ export interface VisualDiffPanelProps {
       );
       let diffState = 'unchanged';
       let changeDetails = {};
-      if (match) {
-  switch (match.match_type) {
-  case 'added':,
+      if (match) { switch (match.match_type) {
+  case 'added':
   diffState = 'added';
   break;
-  case 'removed':,
+  case 'removed':
   diffState = 'removed';
   break;
-  case 'modified':,
-  case 'similar':,
+  case 'modified':
+  case 'similar':
   diffState = 'modified';
   changeDetails = match.property_changes;
   break;
-  case 'exact':,
+  case 'exact':
   diffState = 'unchanged';
   break;
   // Filter based on highlight mode and show unchanged setting
@@ -184,37 +169,36 @@ export interface VisualDiffPanelProps {
   return null;
   if (highlightMode !== 'all') {
   switch (highlightMode) {
-  case 'changes':,
+  case 'changes':
   if (diffState === 'unchanged') return null;
   break;
-  case 'additions':,
+  case 'additions':
   if (diffState !== 'added') return null;
   break;
-  case 'deletions':,
+  case 'deletions':
   if (diffState !== 'removed') return null;
   break;
   return {
-  id: edge.id,
-  source: edge.source,
-  target: edge.target,
-  type: 'diffEdge',
+  id: edge.id
+  source: edge.source
+  target: edge.target
+  type: 'diffEdge'
   data: {
-  ...edge.data,
-  originalEdge: edge,
-  diffState,
-  changeDetails,
+  ...edge.data
+  originalEdge: edge
+  diffState
+  changeDetails }
   side
-},
+
   style: getDiffEdgeStyle(diffState, highlightMode)
       };
     }).filter(Boolean) as Edge;
   }, [comparison, highlightMode, showUnchanged]);
   // Get node styling based on diff state
-  const getDiffNodeStyle = (diffState: string, __highlightMode: HighlightMode) => {
-  const baseStyle = {
-  border: '2px solid',
-  borderRadius: '6px',
-  transition: 'all 0.2s ease',
+  const getDiffNodeStyle = (diffState: string, __highlightMode: HighlightMode) => { const baseStyle = {
+  border: '2px solid'
+  borderRadius: '6px'
+  transition: 'all 0.2s ease' }
 };
     switch (diffState) {
     case 'added':
@@ -227,10 +211,9 @@ export interface VisualDiffPanelProps {
       return { ...baseStyle, borderColor: '#6b7280', backgroundColor: '#f9fafb' };
   };
   // Get edge styling based on diff state
-  const getDiffEdgeStyle = (diffState: string, __highlightMode: HighlightMode) => {
-  const baseStyle = {
-  strokeWidth: 2,
-  transition: 'all 0.2s ease',
+  const getDiffEdgeStyle = (diffState: string, __highlightMode: HighlightMode) => { const baseStyle = {
+  strokeWidth: 2
+  transition: 'all 0.2s ease' }
 };
     switch (diffState) {
     case 'added':
@@ -273,12 +256,10 @@ export interface VisualDiffPanelProps {
     );
   const { sourceNodes, sourceEdges, targetNodes, targetEdges } = prepareVisualizationData();
   // Custom node types
-  const nodeTypes = {
-  diffNode: DiffNodeRenderer,
+  const nodeTypes = { diffNode: DiffNodeRenderer }
 };
   // Custom edge types
-  const edgeTypes = {
-  diffEdge: DiffEdgeRenderer,
+  const edgeTypes = { diffEdge: DiffEdgeRenderer }
 };
   return;
     <div className={`visual-diff-panel ${className}`}>}
@@ -437,5 +418,5 @@ export interface VisualDiffPanelProps {
     </div>
   );
 };
-}
+
 export default VisualDiffPanel;

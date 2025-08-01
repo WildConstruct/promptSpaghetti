@@ -18,7 +18,7 @@ parameters: {
     businessRules ?  : string; // Business rule identifiers,
     signatureVerification ?  : {
         publicKeyPath: string,
-        algorithmSuite: 'RSA' | 'ECDSA' | 'EdDSA'
+        algorithmSuite: 'RSA' | 'ECDSA' | 'EdDSA',
     };
 }
 ;
@@ -138,7 +138,11 @@ lastSeen: number;
 occurrenceCount: number;
 ;
 // Error information
-errors ?  : Array;
+errors ?  : Array < {
+    recordId: string,
+    error: string,
+    severity: 'warning' | 'error' | 'critical',
+} > ;
 // Verification
 verification: {
     verificationRun: boolean;
@@ -162,7 +166,8 @@ systemImpact: {
     averageCpuUsage: number;
     averageMemoryUsage: number;
     averageIoUsage: number;
-    performanceImpact: 'minimal' | 'low' | 'medium' | 'high';
+    performanceImpact: 'minimal' | 'low' | 'medium' | 'high',
+    ;
 }
 ;
 timeRange: {
@@ -225,7 +230,8 @@ integrations: {
     audit: {
         enabled: boolean;
         auditAllChanges: boolean;
-        auditLevel: 'basic' | 'detailed' | 'comprehensive';
+        auditLevel: 'basic' | 'detailed' | 'comprehensive',
+        ;
     }
     ;
 }
@@ -246,294 +252,296 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
     checkHistory = new Map();
     // Finding and remediation tracking
     activeFindings = new Map();
-    remediationQueue = [];
-    // Metrics and performance tracking
-    metrics;
-    performanceCounters = new Map();
-    // Scheduling and automation
-    scheduledChecks = new Map();
-    remediationProcessor;
-    // Data storage and caching
-    checksumCache = new Map();
-    baselineData = new Map();
-    constructor(config = {}) {
-        super();
-        this.config = {
-            enabled: true,
-            defaultHashAlgorithm: 'sha256',
-            maxConcurrentChecks: 5,
-            checkTimeout: 30 * 60 * 1000, // 30 minutes,
-            storage: {
-                resultRetentionDays: 90,
-                backupRetentionDays: 30,
-                logRetentionDays: 365,
-                compressionEnabled: true,
-                encryptionEnabled: true,
-            },
-            performance: {
-                maxResourceUsage: {
-                    cpu: 20,
-                    memory: 15,
-                    io: 10,
-                },
-                throttling: {
-                    enabled: true,
-                    maxRecordsPerSecond: 1000,
-                    pauseDuration: 100,
-                },
-                batchSize: 1000
-            },
-            alerting: {
-                enabled: true,
-                immediateNotification: {
-                    severityThreshold: 'high',
-                    recipients: ['security-team@company.com'],
-                    channels: ['email', 'slack'],
-                },
-                summaryReports: {
-                    enabled: true,
-                    frequency: 'daily',
-                    recipients: ['security-admin@company.com'],
-                    includeMetrics: true,
-                },
-                integrations: {
-                    siem: {
-                        enabled: true,
-                        endpoint: 'https://siem.company.com/api/events',
-                        apiKey: '',
-                        eventTypes: ['corruption', 'tampering', 'inconsistency'],
-                    },
-                    backup: {
-                        enabled: true,
-                        backupLocation: '/secure/backups/integrity',
-                        encryptBackups: true,
-                        compressionLevel: 6,
-                    },
-                    audit: {
-                        enabled: true,
-                        auditAllChanges: true,
-                        auditLevel: 'comprehensive',
-                    },
-                    compliance: {
-                        frameworks: ['SOX', 'GDPR', 'HIPAA'],
-                        requireDigitalSignatures: true,
-                        immutableLogging: true,
-                        changeApprovalRequired: true,
-                    },
-                    ...config
-                },
-                this: .metrics = this.initializeMetrics(),
-                this: .initialize(),
-                /**
-                 * Initialize the integrity monitoring system
-                 */
-                async initialize() {
-                    console.log('🔐 Initializing Security Data Integrity Monitor...');
-                    // Load default integrity checks
-                    await this.loadDefaultIntegrityChecks();
-                    // Start scheduled checks
-                    this.startScheduledChecks();
-                    // Start remediation processor
-                    this.startRemediationProcessor();
-                    // Setup cleanup routines
-                    this.setupCleanupRoutines();
-                    console.log('✅ Security Data Integrity Monitor initialized');
-                    this.emit('monitor_initialized');
-                    /**
-                    * Register a new integrity check
-                    */
-                    async;
-                    registerIntegrityCheck(check, (Omit));
-                    Promise < string > {
-                        const: checkId = this.generateCheckId(),
-                        const: fullCheck, DataIntegrityCheck = {
-                            ...check,
-                            id: checkId,
-                            createdAt: Date.now(),
-                            lastUpdated: Date.now(),
-                        },
-                        this: .integrityChecks.set(checkId, fullCheck),
-                        // Schedule if enabled
-                        if(fullCheck) { }, : .schedule.enabled && fullCheck.enabled };
-                    {
-                        this.scheduleCheck(checkId, fullCheck);
-                        this.emit('check_registered', { checkId, check: fullCheck });
-                        console.log(`📋 Registered integrity check: ${check.name} (${checkId})`);
-                    }
-                    return checkId;
-                    /**
-                     * Execute an integrity check
-                     */
-                    async;
-                    executeIntegrityCheck(checkId, string);
-                    triggeredBy: 'schedule' | 'event' | 'manual';
-                    'manual',
-                        correlationId ?  : string;
-                    Promise < string > {
-                        const: check = this.integrityChecks.get(checkId),
-                        if(, check) {
-                            throw new Error(`Integrity check ${checkId} not found`);
-                        },
-                        if(, check) { }, : .enabled
-                    };
-                    {
-                        throw new Error(`Integrity check ${checkId} is disabled`);
-                    }
-                    // Check for concurrent execution limits
-                    if (this.activeExecutions.size >= this.config.maxConcurrentChecks) {
-                        throw new Error('Maximum concurrent integrity checks exceeded');
-                        const executionId = this.generateExecutionId();
-                        const startTime = Date.now();
-                        // Initialize result object
-                        const result = {
-                            checkId,
-                            executionId,
-                            startTime,
-                            endTime: 0,
-                            status: 'failed',
-                            summary: {
-                                totalRecords: 0,
-                                recordsChecked: 0,
-                                recordsPassed: 0,
-                                recordsFailed: 0,
-                                recordsSkipped: 0,
-                                errorRate: 0,
-                            },
-                            findings: [],
-                            performance: {
-                                executionTime: 0,
-                                throughput: 0,
-                                resourceUsage: {
-                                    cpu: 0,
-                                    memory: 0,
-                                    io: 0,
-                                },
-                                metadata: {
-                                    checksum: '',
-                                    version: '1.0',
-                                    environment: process.env.NODE_ENV || 'development',
-                                    triggeredBy,
-                                    correlationId
-                                },
-                                this: .activeExecutions.set(executionId, result),
-                                try: {
-                                    console, : .log(`🔍 Executing integrity check: ${check.name} (${executionId})`)
-                                }
-                                // Execute the appropriate check type
-                                ,
-                                // Execute the appropriate check type
-                                switch(check) { }, : .type
-                            } }, { case: , 'hash_verification': await, this:  };
-                    }
-                }, : .executeHashVerification(check, result),
-                break: ,
-                case: 'schema_validation',
-                await, this: .executeSchemaValidation(check, result),
-                break: ,
-                case: 'referential_integrity',
-                await, this: .executeReferentialIntegrityCheck(check, result),
-                break: ,
-                case: 'temporal_consistency',
-                await, this: .executeTemporalConsistencyCheck(check, result),
-                break: ,
-                case: 'business_rule',
-                await, this: .executeBusinessRuleCheck(check, result),
-                break: ,
-                case: 'digital_signature',
-                await, this: .executeDigitalSignatureVerification(check, result),
-                break: ,
-                default: ,
-                throw: new Error(`Unknown check type: ${check.type}`)
-            }
-            // Calculate final metrics
-            ,
-            // Calculate final metrics
-            result, : .endTime = Date.now(),
-            result, : .performance.executionTime = result.endTime - result.startTime,
-            result, : .performance.throughput = result.summary.recordsChecked / (result.performance.executionTime / 1000),
-            result, : .summary.errorRate = result.summary.recordsFailed / Math.max(result.summary.recordsChecked, 1),
-            // Determine overall status
-            if(result) { }, : .summary.recordsFailed === 0
-        };
-        {
-            result.status = 'passed';
-        }
-        if (result.summary.errorRate <= check.thresholds.errorRate) {
-            result.status = 'warning';
-        }
-        else {
-            result.status = 'failed';
-            // Generate result checksum for integrity
-            result.metadata.checksum = this.generateResultChecksum(result);
-            // Store result
-            this.storeCheckResult(checkId, result);
-            // Process findings
-            if (result.findings.length > 0) {
-                await this.processFindings(result.findings, check);
-                // Update metrics
-                this.updateMetrics(result);
-                // Send notifications if needed
-                if (result.status === 'failed' || result.findings.some(f => f.severity === 'critical' || f.severity === 'high')) {
-                    await this.sendImmediateNotification(check, result);
-                    this.emit('check_completed', { checkId, executionId, result });
-                    console.log(`✅ Integrity check completed: ${check.name} (${result.status})`);
-                }
-            }
-            try { }
-            catch (error) {
-                console.error(`❌ Integrity check failed: ${check.name}`, error);
-            }
-            result.endTime = Date.now();
-            result.status = 'error';
-            result.performance.executionTime = result.endTime - result.startTime;
-            // Create error finding
-            const errorFinding = {
-                id: this.generateFindingId(),
-                severity: 'critical',
-                category: 'corruption',
-                title: 'Integrity Check Execution Error',
-                description: `Failed to execute integrity check: ${error.message}` };
-        }
-        affectedData: {
-            location: check.target.location,
-                recordIds;
-            [],
-                fields;
-            [],
-                estimatedImpact;
-            'high',
-            ;
-        }
-        evidence: {
-            actualValue: error.message,
-            ;
-        }
-        context: {
-            relatedFindings: [],
-                possibleCauses;
-            ['System error', 'Configuration issue', 'Resource constraints'],
-                riskAssessment;
-            'High - integrity verification failed',
-                businessImpact;
-            'Cannot verify data integrity',
-                technicalImpact;
-            'Integrity monitoring compromised',
-            ;
-        }
-        resolution: {
-            status: 'open',
-            ;
-        }
-        firstDetected: Date.now(),
-            lastSeen;
-        Date.now(),
-            occurrenceCount;
-        1;
-    }
-    ;
-    result;
-    findings;
+    remediationQueue;
+    string;
+    actionId;
+    priority;
+    scheduledTime;
 }
+ > ;
+[];
+metrics: DataIntegrityMetrics;
+performanceCounters: (Map) = new Map();
+scheduledChecks: (Map) = new Map();
+remediationProcessor ?  : NodeJS.Timeout;
+checksumCache: (Map) = new Map();
+baselineData: (Map) = new Map();
+constructor(config, (Partial) = {});
+{
+    super();
+    this.config = {
+        enabled: true,
+        defaultHashAlgorithm: 'sha256',
+        maxConcurrentChecks: 5,
+        checkTimeout: 30 * 60 * 1000, // 30 minutes,
+        storage: {
+            resultRetentionDays: 90,
+            backupRetentionDays: 30,
+            logRetentionDays: 365,
+            compressionEnabled: true,
+            encryptionEnabled: true,
+        },
+        performance: {
+            maxResourceUsage: {
+                cpu: 20,
+                memory: 15,
+                io: 10,
+            },
+            throttling: {
+                enabled: true,
+                maxRecordsPerSecond: 1000,
+                pauseDuration: 100,
+            },
+            batchSize: 1000
+        },
+        alerting: {
+            enabled: true,
+            immediateNotification: {
+                severityThreshold: 'high',
+                recipients: ['security-team@company.com'],
+                channels: ['email', 'slack'],
+            },
+            summaryReports: {
+                enabled: true,
+                frequency: 'daily',
+                recipients: ['security-admin@company.com'],
+                includeMetrics: true,
+            },
+            integrations: {
+                siem: {
+                    enabled: true,
+                    endpoint: 'https://siem.company.com/api/events',
+                    apiKey: '',
+                    eventTypes: ['corruption', 'tampering', 'inconsistency'],
+                },
+                backup: {
+                    enabled: true,
+                    backupLocation: '/secure/backups/integrity',
+                    encryptBackups: true,
+                    compressionLevel: 6,
+                },
+                audit: {
+                    enabled: true,
+                    auditAllChanges: true,
+                    auditLevel: 'comprehensive',
+                },
+                compliance: {
+                    frameworks: ['SOX', 'GDPR', 'HIPAA'],
+                    requireDigitalSignatures: true,
+                    immutableLogging: true,
+                    changeApprovalRequired: true,
+                },
+                ...config
+            },
+            this: .metrics = this.initializeMetrics(),
+            this: .initialize(),
+            /**
+             * Initialize the integrity monitoring system
+             */
+            async initialize() {
+                console.log('🔐 Initializing Security Data Integrity Monitor...');
+                // Load default integrity checks
+                await this.loadDefaultIntegrityChecks();
+                // Start scheduled checks
+                this.startScheduledChecks();
+                // Start remediation processor
+                this.startRemediationProcessor();
+                // Setup cleanup routines
+                this.setupCleanupRoutines();
+                console.log('✅ Security Data Integrity Monitor initialized');
+                this.emit('monitor_initialized');
+                /**
+                * Register a new integrity check
+                */
+                async;
+                registerIntegrityCheck(check, (Omit));
+                Promise < string > {
+                    const: checkId = this.generateCheckId(),
+                    const: fullCheck, DataIntegrityCheck = {
+                        ...check,
+                        id: checkId,
+                        createdAt: Date.now(),
+                        lastUpdated: Date.now(),
+                    },
+                    this: .integrityChecks.set(checkId, fullCheck),
+                    // Schedule if enabled
+                    if(fullCheck) { }, : .schedule.enabled && fullCheck.enabled };
+                {
+                    this.scheduleCheck(checkId, fullCheck);
+                    this.emit('check_registered', { checkId, check: fullCheck });
+                    console.log(`📋 Registered integrity check: ${check.name} (${checkId})`);
+                }
+                return checkId;
+                /**
+                 * Execute an integrity check
+                 */
+                async;
+                executeIntegrityCheck(checkId, string),
+                    triggeredBy;
+                'schedule' | 'event' | 'manual';
+                'manual',
+                    correlationId ?  : string;
+                Promise < string > {
+                    const: check = this.integrityChecks.get(checkId),
+                    if(, check) {
+                        throw new Error(`Integrity check ${checkId} not found`);
+                    },
+                    if(, check) { }, : .enabled
+                };
+                {
+                    throw new Error(`Integrity check ${checkId} is disabled`);
+                }
+                // Check for concurrent execution limits
+                if (this.activeExecutions.size >= this.config.maxConcurrentChecks) {
+                    throw new Error('Maximum concurrent integrity checks exceeded');
+                    const executionId = this.generateExecutionId();
+                    const startTime = Date.now();
+                    // Initialize result object
+                    const result = {
+                        checkId,
+                        executionId,
+                        startTime,
+                        endTime: 0,
+                        status: 'failed',
+                        summary: {
+                            totalRecords: 0,
+                            recordsChecked: 0,
+                            recordsPassed: 0,
+                            recordsFailed: 0,
+                            recordsSkipped: 0,
+                            errorRate: 0,
+                        },
+                        findings: [],
+                        performance: {
+                            executionTime: 0,
+                            throughput: 0,
+                            resourceUsage: {
+                                cpu: 0,
+                                memory: 0,
+                                io: 0,
+                            },
+                            metadata: {
+                                checksum: '',
+                                version: '1.0',
+                                environment: process.env.NODE_ENV || 'development',
+                                triggeredBy,
+                                correlationId
+                            },
+                            this: .activeExecutions.set(executionId, result),
+                            try: {
+                                console, : .log(`🔍 Executing integrity check: ${check.name} (${executionId})`)
+                            }
+                            // Execute the appropriate check type
+                            ,
+                            // Execute the appropriate check type
+                            switch(check) { }, : .type } }, { case: , 'hash_verification': await, this:  };
+                }
+            }, : .executeHashVerification(check, result),
+            break: ,
+            case: 'schema_validation',
+            await, this: .executeSchemaValidation(check, result),
+            break: ,
+            case: 'referential_integrity',
+            await, this: .executeReferentialIntegrityCheck(check, result),
+            break: ,
+            case: 'temporal_consistency',
+            await, this: .executeTemporalConsistencyCheck(check, result),
+            break: ,
+            case: 'business_rule',
+            await, this: .executeBusinessRuleCheck(check, result),
+            break: ,
+            case: 'digital_signature',
+            await, this: .executeDigitalSignatureVerification(check, result),
+            break: ,
+            default: ,
+            throw: new Error(`Unknown check type: ${check.type}`) }
+        // Calculate final metrics
+        ,
+        // Calculate final metrics
+        result, : .endTime = Date.now(),
+        result, : .performance.executionTime = result.endTime - result.startTime,
+        result, : .performance.throughput = result.summary.recordsChecked / (result.performance.executionTime / 1000),
+        result, : .summary.errorRate = result.summary.recordsFailed / Math.max(result.summary.recordsChecked, 1),
+        // Determine overall status
+        if(result) { }, : .summary.recordsFailed === 0
+    };
+    {
+        result.status = 'passed';
+    }
+    if (result.summary.errorRate <= check.thresholds.errorRate) {
+        result.status = 'warning';
+    }
+    else {
+        result.status = 'failed';
+        // Generate result checksum for integrity
+        result.metadata.checksum = this.generateResultChecksum(result);
+        // Store result
+        this.storeCheckResult(checkId, result);
+        // Process findings
+        if (result.findings.length > 0) {
+            await this.processFindings(result.findings, check);
+            // Update metrics
+            this.updateMetrics(result);
+            // Send notifications if needed
+            if (result.status === 'failed' || result.findings.some(f => f.severity === 'critical' || f.severity === 'high')) {
+                await this.sendImmediateNotification(check, result);
+                this.emit('check_completed', { checkId, executionId, result });
+                console.log(`✅ Integrity check completed: ${check.name} (${result.status})`);
+            }
+        }
+        try { }
+        catch (error) {
+            console.error(`❌ Integrity check failed: ${check.name}`, error);
+        }
+        result.endTime = Date.now();
+        result.status = 'error';
+        result.performance.executionTime = result.endTime - result.startTime;
+        // Create error finding
+        const errorFinding = {
+            id: this.generateFindingId(),
+            severity: 'critical',
+            category: 'corruption',
+            title: 'Integrity Check Execution Error',
+            description: `Failed to execute integrity check: ${error.message}` };
+    }
+    affectedData: {
+        location: check.target.location,
+            recordIds;
+        [],
+            fields;
+        [],
+            estimatedImpact;
+        'high',
+        ;
+    }
+    evidence: {
+        actualValue: error.message,
+        ;
+    }
+    context: {
+        relatedFindings: [],
+            possibleCauses;
+        ['System error', 'Configuration issue', 'Resource constraints'],
+            riskAssessment;
+        'High - integrity verification failed',
+            businessImpact;
+        'Cannot verify data integrity',
+            technicalImpact;
+        'Integrity monitoring compromised',
+        ;
+    }
+    resolution: {
+        status: 'open',
+        ;
+    }
+    firstDetected: Date.now(),
+        lastSeen;
+    Date.now(),
+        occurrenceCount;
+    1;
+}
+;
+result.findings.push(errorFinding);
 this.storeCheckResult(checkId, result);
 this.emit('check_error', { checkId, executionId, error: error.message });
 try { }
@@ -558,8 +566,8 @@ finally {
             /**
             * Get active findings
             */
-            getActiveFindings(filters ?  : {});
-            severity ?  : IntegrityFinding['severity'];
+            getActiveFindings(filters ?  : {}),
+                severity ?  : IntegrityFinding['severity'];
             category ?  : IntegrityFinding['category'];
             status ?  : IntegrityFinding['resolution']['status'];
             dataType ?  : DataIntegrityCheck['target']['dataType'];
@@ -586,8 +594,9 @@ finally {
                              * Resolve a finding
                              */
                             async;
-                            resolveFinding(findingId, string);
-                            resolution: 'resolved' | 'false_positive' | 'accepted_risk',
+                            resolveFinding(findingId, string),
+                                resolution;
+                            'resolved' | 'false_positive' | 'accepted_risk',
                                 resolvedBy;
                             string,
                                 notes ?  : string,
@@ -613,8 +622,9 @@ finally {
                                 * Trigger automatic remediation for a finding
                                 */
                                 async;
-                                triggerRemediation(findingId, string);
-                                actionId: string,
+                                triggerRemediation(findingId, string),
+                                    actionId;
+                                string,
                                     priority;
                                 number = 1,
                                     delay;
@@ -659,6 +669,7 @@ finally {
                                         {
                                             ;
                                             summary: {
+                                                ;
                                                 reportId: string;
                                                 generatedAt: number;
                                                 timeRange: {
@@ -673,7 +684,14 @@ finally {
                                                 criticalFindings: number;
                                             }
                                             ;
-                                            checksExecuted: Array;
+                                            checksExecuted: Array < {
+                                                checkId: string,
+                                                checkName: string,
+                                                executionCount: number,
+                                                successRate: number,
+                                                averageExecutionTime: number,
+                                                findingsGenerated: number
+                                            } > ;
                                             findingsSummary: {
                                                 bySeverity: Record;
                                                 byCategory: Record;
@@ -1579,17 +1597,18 @@ finally {
                                         ;
                                     }
                                     ;
-                                    createNotificationMessage(check, DataIntegrityCheck);
-                                    result: IntegrityCheckResult,
+                                    createNotificationMessage(check, DataIntegrityCheck),
+                                        result;
+                                    IntegrityCheckResult,
                                         findings;
                                     IntegrityFinding;
                                     string;
                                     {
                                         return `
 🔐 DATA INTEGRITY ALERT
-Check: ${check.name},}
+Check: ${check.name},},
   Status: ${result.status.toUpperCase()}
-Execution ID: ${result.executionId},}
+Execution ID: ${result.executionId},},
   Summary:
 - Records Checked: ${result.summary.recordsChecked}
 - Records Failed: ${result.summary.recordsFailed}
@@ -1765,488 +1784,474 @@ View full report: /integrity/reports/${result.executionId}
                                                                 }
                                                             },
                                                             async loadDefaultIntegrityChecks() {
-                                                                const defaultChecks = [];
-                                                                {
-                                                                    name: 'Audit Log Hash Verification',
-                                                                        description;
-                                                                    'Verify hash integrity of audit log entries',
-                                                                        type;
-                                                                    'hash_verification',
-                                                                        target;
+                                                                const defaultChecks = [
                                                                     {
+                                                                        name: 'Audit Log Hash Verification',
+                                                                        description: 'Verify hash integrity of audit log entries',
+                                                                        type: 'hash_verification',
+                                                                        target: {},
                                                                         dataType: 'audit_logs',
-                                                                            location;
-                                                                        'audit_logs_table',
-                                                                            scope;
-                                                                        'incremental',
-                                                                        ;
-                                                                    }
-                                                                    parameters: {
-                                                                        hashAlgorithm: 'sha256',
-                                                                        ;
-                                                                    }
-                                                                    schedule: {
-                                                                        enabled: true,
-                                                                            frequency;
-                                                                        'hourly',
-                                                                        ;
-                                                                    }
-                                                                    thresholds: {
-                                                                        errorThreshold: 5,
-                                                                            errorRate;
-                                                                        0.01,
-                                                                            severityMapping;
-                                                                        {
-                                                                            minor: 0.001,
-                                                                                major;
-                                                                            0.01,
-                                                                                critical;
-                                                                            0.05,
-                                                                            ;
-                                                                        }
-                                                                        remediation: {
-                                                                            autoRemediate: false,
-                                                                                actions;
-                                                                            [],
-                                                                                rollbackSupported;
-                                                                            true,
-                                                                                requiresApproval;
-                                                                            true,
-                                                                            ;
-                                                                        }
-                                                                        createdBy: 'system',
-                                                                            enabled;
-                                                                        true;
-                                                                    }
-                                                                    {
-                                                                        name: 'Security Event Schema Validation',
-                                                                            description;
-                                                                        'Validate security events against expected schema',
-                                                                            type;
-                                                                        'schema_validation',
-                                                                            target;
-                                                                        {
-                                                                            dataType: 'security_events',
-                                                                                location;
-                                                                            'security_events_table',
-                                                                                scope;
-                                                                            'incremental',
-                                                                            ;
-                                                                        }
-                                                                        parameters: {
-                                                                            expectedSchema: {
-                                                                                id: 'string',
-                                                                                    timestamp;
-                                                                                'number',
-                                                                                    type;
-                                                                                'string',
-                                                                                    severity;
-                                                                                'string',
-                                                                                    source;
-                                                                                'string',
-                                                                                ;
-                                                                            }
-                                                                            schedule: {
-                                                                                enabled: true,
-                                                                                    frequency;
-                                                                                'daily',
-                                                                                ;
-                                                                            }
-                                                                            thresholds: {
-                                                                                errorThreshold: 10,
-                                                                                    errorRate;
-                                                                                0.02,
-                                                                                    severityMapping;
-                                                                                {
-                                                                                    minor: 0.01,
-                                                                                        major;
-                                                                                    0.05,
-                                                                                        critical;
-                                                                                    0.1,
-                                                                                    ;
-                                                                                }
-                                                                                remediation: {
-                                                                                    autoRemediate: true,
-                                                                                        actions;
-                                                                                    [],
-                                                                                        rollbackSupported;
-                                                                                    false,
-                                                                                        requiresApproval;
-                                                                                    false,
-                                                                                    ;
-                                                                                }
-                                                                                createdBy: 'system',
-                                                                                    enabled;
-                                                                                true;
-                                                                                ;
-                                                                                for (const checkDef of defaultChecks) {
-                                                                                    await this.registerIntegrityCheck(checkDef);
-                                                                                    console.log(`📝 Loaded ${defaultChecks.length} default integrity checks`);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
+                                                                        location: 'audit_logs_table',
+                                                                        scope: 'incremental',
+                                                                    },
+                                                                    parameters, {},
+                                                                    hashAlgorithm, 'sha256',
+                                                                ];
                                                             },
-                                                            initializeMetrics() {
-                                                                return {
-                                                                    overallIntegrityScore: 100,
-                                                                    dataHealthTrend: 'stable',
-                                                                    checksRun: 0,
-                                                                    checksTotal: 0,
-                                                                    checkSuccessRate: 1.0,
-                                                                    averageCheckDuration: 0,
-                                                                    totalFindings: 0,
-                                                                    findingsBySeverity: {
-                                                                        critical: 0,
-                                                                        high: 0,
-                                                                        medium: 0,
-                                                                        low: 0,
-                                                                        info: 0,
-                                                                    },
-                                                                    findingsByCategory: {
-                                                                        corruption: 0,
-                                                                        tampering: 0,
-                                                                        inconsistency: 0,
-                                                                        missing_data: 0,
-                                                                        unauthorized_change: 0,
-                                                                        schema_violation: 0,
-                                                                        business_rule_violation: 0,
-                                                                    },
-                                                                    findingTrends: {
-                                                                        newFindings: 0,
-                                                                        resolvedFindings: 0,
-                                                                        recurringFindings: 0,
-                                                                    },
-                                                                    remediationSuccessRate: 1.0,
-                                                                    averageRemediationTime: 0,
-                                                                    automaticRemediations: 0,
-                                                                    manualRemediations: 0,
-                                                                    dataQualityScore: 95,
-                                                                    corruptionRate: 0,
-                                                                    consistencyScore: 100,
-                                                                    completenessScore: 100,
-                                                                    systemImpact: {
-                                                                        averageCpuUsage: 5,
-                                                                        averageMemoryUsage: 10,
-                                                                        averageIoUsage: 8,
-                                                                        performanceImpact: 'minimal',
-                                                                    },
-                                                                    timeRange: {
-                                                                        start: Date.now(),
-                                                                        end: Date.now(),
-                                                                    },
-                                                                    // Additional helper methods for report generation
-                                                                    getResultsInTimeRange(timeRange) {
-                                                                        const results = [];
-                                                                        for (const history of this.checkHistory.values()) {
-                                                                            const filtered = history.filter(result => );
-                                                                            ;
-                                                                            result.startTime >= timeRange.start && result.startTime <= timeRange.end;
-                                                                            ;
-                                                                            results.push(...filtered);
-                                                                            return results;
-                                                                        }
-                                                                    },
-                                                                    getFindingsInTimeRange(timeRange) {
-                                                                        return Array.from(this.activeFindings.values()).filter(finding => );
-                                                                        finding.firstDetected >= timeRange.start && finding.firstDetected <= timeRange.end;
-                                                                        ;
-                                                                    }
-                                                                }(results, IntegrityCheckResult, findings, IntegrityFinding);
-                                                                number;
-                                                                {
-                                                                    if (results.length === 0)
-                                                                        return 100;
-                                                                    const successfulChecks = results.filter(r => r.status === 'passed').length;
-                                                                    const checkSuccessRate = successfulChecks / results.length;
-                                                                    const criticalFindings = findings.filter(f => f.severity === 'critical').length;
-                                                                    const highFindings = findings.filter(f => f.severity === 'high').length;
-                                                                    const findingsPenalty = (criticalFindings * 20) + (highFindings * 10);
-                                                                    return Math.max(0, Math.round((checkSuccessRate * 100) - findingsPenalty));
-                                                                }
+                                                            schedule: {
+                                                                enabled: true,
+                                                                frequency: 'hourly',
+                                                            },
+                                                            thresholds: {
+                                                                errorThreshold: 5,
+                                                                errorRate: 0.01,
+                                                                severityMapping: {
+                                                                    minor: 0.001,
+                                                                    major: 0.01,
+                                                                    critical: 0.05,
+                                                                },
+                                                                remediation: {
+                                                                    autoRemediate: false,
+                                                                    actions: [],
+                                                                    rollbackSupported: true,
+                                                                    requiresApproval: true,
+                                                                },
+                                                                createdBy: 'system',
+                                                                enabled: true
                                                             }
-                                                        }(score, number, criticalFindings, number), 'healthy':  | 'warning' | 'critical'
+                                                        }
                                                     };
                                                     {
-                                                        if (criticalFindings > 0 || score < 70)
-                                                            return 'critical';
-                                                        if (score < 85)
-                                                            return 'warning';
-                                                        return 'healthy';
-                                                        aggregateCheckExecutions(results, IntegrityCheckResult);
-                                                        Array < {
-                                                            checkId: string,
-                                                            checkName: string,
-                                                            executionCount: number,
-                                                            successRate: number,
-                                                            averageExecutionTime: number,
-                                                            findingsGenerated: number
-                                                        } > {
-                                                            const: checkMap = new Map(),
-                                                            for(, result, of, results) {
-                                                                if (!checkMap.has(result.checkId)) {
-                                                                    const check = this.integrityChecks.get(result.checkId);
-                                                                    checkMap.set(result.checkId, {});
-                                                                    executions: [],
-                                                                        name;
-                                                                    check?.name || 'Unknown Check',
+                                                        name: 'Security Event Schema Validation',
+                                                            description;
+                                                        'Validate security events against expected schema',
+                                                            type;
+                                                        'schema_validation',
+                                                            target;
+                                                        {
+                                                            dataType: 'security_events',
+                                                                location;
+                                                            'security_events_table',
+                                                                scope;
+                                                            'incremental',
+                                                            ;
+                                                        }
+                                                        parameters: {
+                                                            expectedSchema: {
+                                                                id: 'string',
+                                                                    timestamp;
+                                                                'number',
+                                                                    type;
+                                                                'string',
+                                                                    severity;
+                                                                'string',
+                                                                    source;
+                                                                'string',
+                                                                ;
+                                                            }
+                                                            schedule: {
+                                                                enabled: true,
+                                                                    frequency;
+                                                                'daily',
+                                                                ;
+                                                            }
+                                                            thresholds: {
+                                                                errorThreshold: 10,
+                                                                    errorRate;
+                                                                0.02,
+                                                                    severityMapping;
+                                                                {
+                                                                    minor: 0.01,
+                                                                        major;
+                                                                    0.05,
+                                                                        critical;
+                                                                    0.1,
                                                                     ;
                                                                 }
+                                                                remediation: {
+                                                                    autoRemediate: true,
+                                                                        actions;
+                                                                    [],
+                                                                        rollbackSupported;
+                                                                    false,
+                                                                        requiresApproval;
+                                                                    false,
+                                                                    ;
+                                                                }
+                                                                createdBy: 'system',
+                                                                    enabled;
+                                                                true;
                                                                 ;
-                                                                checkMap.get(result.checkId).executions.push(result);
-                                                                return Array.from(checkMap.entries()).map(([checkId, data]) => {
-                                                                    const successful = data.executions.filter(e => e.status === 'passed').length;
-                                                                    const totalFindings = data.executions.reduce((sum, e) => sum + e.findings.length, 0);
-                                                                    const totalTime = data.executions.reduce((sum, e) => sum + e.performance.executionTime, 0);
+                                                                for (const checkDef of defaultChecks) {
+                                                                    await this.registerIntegrityCheck(checkDef);
+                                                                    console.log(`📝 Loaded ${defaultChecks.length} default integrity checks`);
+                                                                }
+                                                                initializeMetrics();
+                                                                DataIntegrityMetrics;
+                                                                {
                                                                     return {
-                                                                        checkId,
-                                                                        checkName: data.name,
-                                                                        executionCount: data.executions.length,
-                                                                        successRate: successful / data.executions.length,
-                                                                        averageExecutionTime: totalTime / data.executions.length,
-                                                                        findingsGenerated: totalFindings,
-                                                                    };
-                                                                });
-                                                            },
-                                                            summarizeFindings(findings) {
-                                                                const bySeverity = findings.reduce((acc, f) => {
-                                                                    acc[f.severity] = (acc[f.severity] || 0) + 1;
-                                                                    return acc;
-                                                                }, {});
-                                                                const byCategory = findings.reduce((acc, f) => {
-                                                                    acc[f.category] = (acc[f.category] || 0) + 1;
-                                                                    return acc;
-                                                                }, {});
-                                                                const resolutionStats = findings.reduce((acc, f) => {
-                                                                    const status = f.resolution.status;
-                                                                    if (status === 'resolved')
-                                                                        acc.resolved++;
-                                                                    else if (status === 'false_positive')
-                                                                        acc.falsePositives++;
-                                                                    else if (status === 'accepted_risk')
-                                                                        acc.acceptedRisks++;
-                                                                    else
-                                                                        acc.open++;
-                                                                    return acc;
-                                                                }, { resolved: 0, open: 0, falsePositives: 0, acceptedRisks: 0 });
-                                                                return {
-                                                                    bySeverity,
-                                                                    byCategory,
-                                                                    topAffectedDataTypes: this.getTopAffectedDataTypes(findings),
-                                                                    resolutionStats
-                                                                };
-                                                            },
-                                                            getTopAffectedDataTypes(findings) {
-                                                                const dataTypeCount = new Map();
-                                                                for (const finding of findings) {
-                                                                    const location = finding.affectedData.location;
-                                                                    // Extract data type from location (simplified)
-                                                                    let dataType = 'unknown';
-                                                                    if (location.includes('audit'))
-                                                                        dataType = 'audit_logs';
-                                                                    else if (location.includes('security'))
-                                                                        dataType = 'security_events';
-                                                                    else if (location.includes('user'))
-                                                                        dataType = 'user_data';
-                                                                    dataTypeCount.set(dataType, (dataTypeCount.get(dataType) || 0) + 1);
-                                                                    return Array.from(dataTypeCount.entries())
-                                                                        .map(([dataType, count]) => ({ dataType, count }))
-                                                                        .sort((a, b) => b.count - a.count)
-                                                                        .slice(0, 5);
-                                                                }
-                                                            },
-                                                            summarizeRemediations(results) {
-                                                                const remediations = results.flatMap(r => r.remediationResults || []);
-                                                                const successful = remediations.filter(r => r.status === 'success').length;
-                                                                const failed = remediations.filter(r => r.status === 'failed').length;
-                                                                const totalTime = remediations.reduce((sum, r) => sum + (r.endTime - r.startTime), 0);
-                                                                const actionCounts = new Map();
-                                                                for (const remediation of remediations) {
-                                                                    const current = actionCounts.get(remediation.actionName) || { count: 0, successful: 0 };
-                                                                    current.count++;
-                                                                    if (remediation.status === 'success')
-                                                                        current.successful++;
-                                                                    actionCounts.set(remediation.actionName, current);
-                                                                    const topActions = Array.from(actionCounts.entries());
-                                                                }
-                                                            },
-                                                            : 
-                                                                .map(([action, stats]) => ({}), action, count, stats.count, successRate, stats.successful / stats.count)
-                                                        };
-                                                        sort((a, b) => b.count - a.count)
-                                                            .slice(0, 5);
-                                                        return {
-                                                            totalRemediations: remediations.length,
-                                                            successfulRemediations: successful,
-                                                            failedRemediations: failed,
-                                                            averageRemediationTime: remediations.length > 0 ? totalTime / remediations.length : 0,
-                                                            topRemediationActions: topActions,
-                                                        };
-                                                        generateRecommendations(((results, findings) => {
-                                                            const recommendations = [];
-                                                            // Check success rate recommendations
-                                                            const failedResults = results.filter(r => r.status === 'failed').length;
-                                                            if (failedResults / results.length > 0.1) {
-                                                                recommendations.push('High check failure rate detected - review check configurations and system health');
-                                                                // Finding severity recommendations
-                                                                const criticalFindings = findings.filter(f => f.severity === 'critical').length;
-                                                                if (criticalFindings > 0) {
-                                                                    recommendations.push(`${criticalFindings} critical integrity issues require immediate attention`);
-                                                                }
-                                                                // Performance recommendations
-                                                                const avgExecutionTime = results.reduce((sum, r) => sum + r.performance.executionTime, 0) / results.length;
-                                                                if (avgExecutionTime > 60000) { // 1 minute
-                                                                    recommendations.push('Check execution times are high - consider optimizing check parameters or system resources');
-                                                                    // Category-specific recommendations
-                                                                    const tamperingFindings = findings.filter(f => f.category === 'tampering').length;
-                                                                    if (tamperingFindings > 0) {
-                                                                        recommendations.push('Data tampering detected - review access controls and audit trails');
-                                                                        const corruptionFindings = findings.filter(f => f.category === 'corruption').length;
-                                                                        if (corruptionFindings > 0) {
-                                                                            recommendations.push('Data corruption detected - check system integrity and backup procedures');
-                                                                            return recommendations;
+                                                                        overallIntegrityScore: 100,
+                                                                        dataHealthTrend: 'stable',
+                                                                        checksRun: 0,
+                                                                        checksTotal: 0,
+                                                                        checkSuccessRate: 1.0,
+                                                                        averageCheckDuration: 0,
+                                                                        totalFindings: 0,
+                                                                        findingsBySeverity: {
+                                                                            critical: 0,
+                                                                            high: 0,
+                                                                            medium: 0,
+                                                                            low: 0,
+                                                                            info: 0,
+                                                                        },
+                                                                        findingsByCategory: {
+                                                                            corruption: 0,
+                                                                            tampering: 0,
+                                                                            inconsistency: 0,
+                                                                            missing_data: 0,
+                                                                            unauthorized_change: 0,
+                                                                            schema_violation: 0,
+                                                                            business_rule_violation: 0,
+                                                                        },
+                                                                        findingTrends: {
+                                                                            newFindings: 0,
+                                                                            resolvedFindings: 0,
+                                                                            recurringFindings: 0,
+                                                                        },
+                                                                        remediationSuccessRate: 1.0,
+                                                                        averageRemediationTime: 0,
+                                                                        automaticRemediations: 0,
+                                                                        manualRemediations: 0,
+                                                                        dataQualityScore: 95,
+                                                                        corruptionRate: 0,
+                                                                        consistencyScore: 100,
+                                                                        completenessScore: 100,
+                                                                        systemImpact: {
+                                                                            averageCpuUsage: 5,
+                                                                            averageMemoryUsage: 10,
+                                                                            averageIoUsage: 8,
+                                                                            performanceImpact: 'minimal',
+                                                                        },
+                                                                        timeRange: {
+                                                                            start: Date.now(),
+                                                                            end: Date.now(),
+                                                                        },
+                                                                        // Additional helper methods for report generation
+                                                                        getResultsInTimeRange(timeRange) {
+                                                                            const results = [];
+                                                                            for (const history of this.checkHistory.values()) {
+                                                                                const filtered = history.filter(result => );
+                                                                                ;
+                                                                                result.startTime >= timeRange.start && result.startTime <= timeRange.end;
+                                                                                ;
+                                                                                results.push(...filtered);
+                                                                                return results;
+                                                                            }
+                                                                        },
+                                                                        getFindingsInTimeRange(timeRange) {
+                                                                            return Array.from(this.activeFindings.values()).filter(finding => );
+                                                                            finding.firstDetected >= timeRange.start && finding.firstDetected <= timeRange.end;
+                                                                            ;
+                                                                        }
+                                                                    }(results, IntegrityCheckResult, findings, IntegrityFinding);
+                                                                    number;
+                                                                    {
+                                                                        if (results.length === 0)
+                                                                            return 100;
+                                                                        const successfulChecks = results.filter(r => r.status === 'passed').length;
+                                                                        const checkSuccessRate = successfulChecks / results.length;
+                                                                        const criticalFindings = findings.filter(f => f.severity === 'critical').length;
+                                                                        const highFindings = findings.filter(f => f.severity === 'high').length;
+                                                                        const findingsPenalty = (criticalFindings * 20) + (highFindings * 10);
+                                                                        return Math.max(0, Math.round((checkSuccessRate * 100) - findingsPenalty));
+                                                                        determineHealthStatus((score, criticalFindings) => {
+                                                                            if (criticalFindings > 0 || score < 70)
+                                                                                return 'critical';
+                                                                            if (score < 85)
+                                                                                return 'warning';
+                                                                            return 'healthy';
+                                                                        }, private, aggregateCheckExecutions(results, IntegrityCheckResult), Array < {
+                                                                            checkId: string,
+                                                                            checkName: string,
+                                                                            executionCount: number,
+                                                                            successRate: number,
+                                                                            averageExecutionTime: number,
+                                                                            findingsGenerated: number
+                                                                        } > {
+                                                                            const: checkMap = new Map < string,
+                                                                        }, {
+                                                                            executions: IntegrityCheckResult,
+                                                                            name: string
+                                                                        } > ());
+                                                                        for (const result of results) {
+                                                                            if (!checkMap.has(result.checkId)) {
+                                                                                const check = this.integrityChecks.get(result.checkId);
+                                                                                checkMap.set(result.checkId, {});
+                                                                                executions: [],
+                                                                                    name;
+                                                                                check?.name || 'Unknown Check',
+                                                                                ;
+                                                                            }
+                                                                            ;
+                                                                            checkMap.get(result.checkId).executions.push(result);
+                                                                            return Array.from(checkMap.entries()).map(([checkId, data]) => {
+                                                                                const successful = data.executions.filter(e => e.status === 'passed').length;
+                                                                                const totalFindings = data.executions.reduce((sum, e) => sum + e.findings.length, 0);
+                                                                                const totalTime = data.executions.reduce((sum, e) => sum + e.performance.executionTime, 0);
+                                                                                return {
+                                                                                    checkId,
+                                                                                    checkName: data.name,
+                                                                                    executionCount: data.executions.length,
+                                                                                    successRate: successful / data.executions.length,
+                                                                                    averageExecutionTime: totalTime / data.executions.length,
+                                                                                    findingsGenerated: totalFindings,
+                                                                                };
+                                                                            });
+                                                                            summarizeFindings(findings, IntegrityFinding);
+                                                                            any;
+                                                                            {
+                                                                                const bySeverity = findings.reduce((acc, f) => {
+                                                                                    acc[f.severity] = (acc[f.severity] || 0) + 1;
+                                                                                    return acc;
+                                                                                }, {});
+                                                                                const byCategory = findings.reduce((acc, f) => {
+                                                                                    acc[f.category] = (acc[f.category] || 0) + 1;
+                                                                                    return acc;
+                                                                                }, {});
+                                                                                const resolutionStats = findings.reduce((acc, f) => {
+                                                                                    const status = f.resolution.status;
+                                                                                    if (status === 'resolved')
+                                                                                        acc.resolved++;
+                                                                                    else if (status === 'false_positive')
+                                                                                        acc.falsePositives++;
+                                                                                    else if (status === 'accepted_risk')
+                                                                                        acc.acceptedRisks++;
+                                                                                    else
+                                                                                        acc.open++;
+                                                                                    return acc;
+                                                                                }, { resolved: 0, open: 0, falsePositives: 0, acceptedRisks: 0 });
+                                                                                return {
+                                                                                    bySeverity,
+                                                                                    byCategory,
+                                                                                    topAffectedDataTypes: this.getTopAffectedDataTypes(findings),
+                                                                                    resolutionStats
+                                                                                };
+                                                                                getTopAffectedDataTypes(findings, IntegrityFinding);
+                                                                                Array < { dataType: string, count: number } > {
+                                                                                    const: dataTypeCount = new Map(),
+                                                                                    for(, finding, of, findings) {
+                                                                                        const location = finding.affectedData.location;
+                                                                                        // Extract data type from location (simplified)
+                                                                                        let dataType = 'unknown';
+                                                                                        if (location.includes('audit'))
+                                                                                            dataType = 'audit_logs';
+                                                                                        else if (location.includes('security'))
+                                                                                            dataType = 'security_events';
+                                                                                        else if (location.includes('user'))
+                                                                                            dataType = 'user_data';
+                                                                                        dataTypeCount.set(dataType, (dataTypeCount.get(dataType) || 0) + 1);
+                                                                                        return Array.from(dataTypeCount.entries())
+                                                                                            .map(([dataType, count]) => ({ dataType, count }))
+                                                                                            .sort((a, b) => b.count - a.count)
+                                                                                            .slice(0, 5);
+                                                                                    },
+                                                                                    summarizeRemediations(results) {
+                                                                                        const remediations = results.flatMap(r => r.remediationResults || []);
+                                                                                        const successful = remediations.filter(r => r.status === 'success').length;
+                                                                                        const failed = remediations.filter(r => r.status === 'failed').length;
+                                                                                        const totalTime = remediations.reduce((sum, r) => sum + (r.endTime - r.startTime), 0);
+                                                                                        const actionCounts = new Map();
+                                                                                        for (const remediation of remediations) {
+                                                                                            const current = actionCounts.get(remediation.actionName) || { count: 0, successful: 0 };
+                                                                                            current.count++;
+                                                                                            if (remediation.status === 'success')
+                                                                                                current.successful++;
+                                                                                            actionCounts.set(remediation.actionName, current);
+                                                                                            const topActions = Array.from(actionCounts.entries());
+                                                                                        }
+                                                                                    },
+                                                                                    : 
+                                                                                        .map(([action, stats]) => ({}), action, count, stats.count, successRate, stats.successful / stats.count)
+                                                                                };
+                                                                                sort((a, b) => b.count - a.count)
+                                                                                    .slice(0, 5);
+                                                                                return {
+                                                                                    totalRemediations: remediations.length,
+                                                                                    successfulRemediations: successful,
+                                                                                    failedRemediations: failed,
+                                                                                    averageRemediationTime: remediations.length > 0 ? totalTime / remediations.length : 0,
+                                                                                    topRemediationActions: topActions,
+                                                                                };
+                                                                                generateRecommendations(((results, findings) => {
+                                                                                    const recommendations = [];
+                                                                                    // Check success rate recommendations
+                                                                                    const failedResults = results.filter(r => r.status === 'failed').length;
+                                                                                    if (failedResults / results.length > 0.1) {
+                                                                                        recommendations.push('High check failure rate detected - review check configurations and system health');
+                                                                                        // Finding severity recommendations
+                                                                                        const criticalFindings = findings.filter(f => f.severity === 'critical').length;
+                                                                                        if (criticalFindings > 0) {
+                                                                                            recommendations.push(`${criticalFindings} critical integrity issues require immediate attention`);
+                                                                                        }
+                                                                                        // Performance recommendations
+                                                                                        const avgExecutionTime = results.reduce((sum, r) => sum + r.performance.executionTime, 0) / results.length;
+                                                                                        if (avgExecutionTime > 60000) { // 1 minute
+                                                                                            recommendations.push('Check execution times are high - consider optimizing check parameters or system resources');
+                                                                                            // Category-specific recommendations
+                                                                                            const tamperingFindings = findings.filter(f => f.category === 'tampering').length;
+                                                                                            if (tamperingFindings > 0) {
+                                                                                                recommendations.push('Data tampering detected - review access controls and audit trails');
+                                                                                                const corruptionFindings = findings.filter(f => f.category === 'corruption').length;
+                                                                                                if (corruptionFindings > 0) {
+                                                                                                    recommendations.push('Data corruption detected - check system integrity and backup procedures');
+                                                                                                    return recommendations;
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }), private, assessComplianceStatus(findings, IntegrityFinding), Array < {
+                                                                                    framework: string,
+                                                                                    compliant: boolean,
+                                                                                    issues: string
+                                                                                } > {
+                                                                                    return: this.config.compliance.frameworks.map(framework => { }),
+                                                                                    const: issues = [],
+                                                                                    // Framework-specific compliance checks
+                                                                                    switch(framework) {
+                                                                                    },
+                                                                                    case: 'SOX',
+                                                                                    const: financialFindings = findings.filter(f => )
+                                                                                });
+                                                                                f.affectedData.location.includes('financial') ||
+                                                                                    f.category === 'business_rule_violation';
+                                                                                ;
+                                                                                if (financialFindings.length > 0) {
+                                                                                    issues.push(`${financialFindings.length} financial data integrity issues`);
+                                                                                }
+                                                                                break;
+                                                                                'GDPR';
+                                                                                const personalDataFindings = findings.filter(f => );
+                                                                                ;
+                                                                                f.affectedData.location.includes('user') ||
+                                                                                    f.affectedData.location.includes('personal');
+                                                                                ;
+                                                                                if (personalDataFindings.length > 0) {
+                                                                                    issues.push(`${personalDataFindings.length} personal data integrity issues`);
+                                                                                }
+                                                                                break;
+                                                                                'HIPAA';
+                                                                                const healthDataFindings = findings.filter(f => );
+                                                                                ;
+                                                                                f.affectedData.location.includes('health') ||
+                                                                                    f.affectedData.location.includes('medical');
+                                                                                ;
+                                                                                if (healthDataFindings.length > 0) {
+                                                                                    issues.push(`${healthDataFindings.length} health data integrity issues`);
+                                                                                }
+                                                                                break;
+                                                                                return {
+                                                                                    framework,
+                                                                                    compliant: issues.length === 0,
+                                                                                    issues
+                                                                                };
+                                                                            }
+                                                                            ;
+                                                                            calculateMetricsForTimeRange(timeRange, { start: number, end: number });
+                                                                            DataIntegrityMetrics;
+                                                                            {
+                                                                                const relevantResults = this.getResultsInTimeRange(timeRange);
+                                                                                const relevantFindings = this.getFindingsInTimeRange(timeRange);
+                                                                                // Calculate metrics based on time range data
+                                                                                const successfulChecks = relevantResults.filter(r => r.status === 'passed').length;
+                                                                                const checkSuccessRate = relevantResults.length > 0 ? successfulChecks / relevantResults.length : 1.0;
+                                                                                const avgDuration = relevantResults.length > 0;
+                                                                                relevantResults.reduce((sum, r) => sum + r.performance.executionTime, 0) / relevantResults.length;
+                                                                                0;
+                                                                                const findingsBySeverity = relevantFindings.reduce((acc, f) => {
+                                                                                    acc[f.severity]++;
+                                                                                    return acc;
+                                                                                }, { critical: 0, high: 0, medium: 0, low: 0, info: 0 });
+                                                                                const findingsByCategory = relevantFindings.reduce((acc, f) => {
+                                                                                    acc[f.category]++;
+                                                                                    return acc;
+                                                                                }, {
+                                                                                    corruption: 0,
+                                                                                    tampering: 0,
+                                                                                    inconsistency: 0,
+                                                                                    missing_data: 0,
+                                                                                    unauthorized_change: 0,
+                                                                                    schema_violation: 0,
+                                                                                    business_rule_violation: 0,
+                                                                                });
+                                                                                return {
+                                                                                    ...this.metrics,
+                                                                                    checksRun: relevantResults.length,
+                                                                                    checkSuccessRate,
+                                                                                    averageCheckDuration: avgDuration,
+                                                                                    totalFindings: relevantFindings.length,
+                                                                                    findingsBySeverity,
+                                                                                    findingsByCategory,
+                                                                                    overallIntegrityScore: this.calculateIntegrityScore(relevantResults, relevantFindings),
+                                                                                    timeRange
+                                                                                };
+                                                                                generateCheckId();
+                                                                                string;
+                                                                                {
+                                                                                    return `check-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                                                                                }
+                                                                                generateExecutionId();
+                                                                                string;
+                                                                                {
+                                                                                    return `exec-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
+                                                                                }
+                                                                                generateFindingId();
+                                                                                string;
+                                                                                {
+                                                                                    return `finding-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                                                                                }
+                                                                                generateReportId();
+                                                                                string;
+                                                                                {
+                                                                                    return `report-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
+                                                                                }
+                                                                                generateResultChecksum(result, IntegrityCheckResult);
+                                                                                string;
+                                                                                {
+                                                                                    const dataToHash = {
+                                                                                        checkId: result.checkId,
+                                                                                        executionId: result.executionId,
+                                                                                        summary: result.summary,
+                                                                                        findingsCount: result.findings.length,
+                                                                                        status: result.status,
+                                                                                    };
+                                                                                    return crypto.createHash('sha256')
+                                                                                        .update(JSON.stringify(dataToHash))
+                                                                                        .digest('hex');
+                                                                                    /**
+                                                                                     * Shutdown the integrity monitor
+                                                                                     */
+                                                                                    shutdown();
+                                                                                    void {
+                                                                                        : .scheduledChecks.values()
+                                                                                    };
+                                                                                    {
+                                                                                        clearInterval(timer);
+                                                                                        this.scheduledChecks.clear();
+                                                                                        // Clear remediation processor
+                                                                                        if (this.remediationProcessor) {
+                                                                                            clearInterval(this.remediationProcessor);
+                                                                                            // Clear data
+                                                                                            this.activeExecutions.clear();
+                                                                                            this.remediationQueue = [];
+                                                                                            this.emit('monitor_shutdown');
+                                                                                            console.log('🔐 Security Data Integrity Monitor shutdown complete');
+                                                                                            export default SecurityDataIntegrityMonitor;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
                                                                         }
                                                                     }
-                                                                }
-                                                            }
-                                                        }), private, assessComplianceStatus(findings, IntegrityFinding), Array < {
-                                                            framework: string,
-                                                            compliant: boolean,
-                                                            issues: string
-                                                        } > {
-                                                            return: this.config.compliance.frameworks.map(framework => { }),
-                                                            const: issues = [],
-                                                            // Framework-specific compliance checks
-                                                            switch(framework) {
-                                                            },
-                                                            case: 'SOX',
-                                                            const: financialFindings = findings.filter(f => )
-                                                        });
-                                                        f.affectedData.location.includes('financial') ||
-                                                            f.category === 'business_rule_violation';
-                                                        ;
-                                                        if (financialFindings.length > 0) {
-                                                            issues.push(`${financialFindings.length} financial data integrity issues`);
-                                                        }
-                                                        break;
-                                                        'GDPR';
-                                                        const personalDataFindings = findings.filter(f => );
-                                                        ;
-                                                        f.affectedData.location.includes('user') ||
-                                                            f.affectedData.location.includes('personal');
-                                                        ;
-                                                        if (personalDataFindings.length > 0) {
-                                                            issues.push(`${personalDataFindings.length} personal data integrity issues`);
-                                                        }
-                                                        break;
-                                                        'HIPAA';
-                                                        const healthDataFindings = findings.filter(f => );
-                                                        ;
-                                                        f.affectedData.location.includes('health') ||
-                                                            f.affectedData.location.includes('medical');
-                                                        ;
-                                                        if (healthDataFindings.length > 0) {
-                                                            issues.push(`${healthDataFindings.length} health data integrity issues`);
-                                                        }
-                                                        break;
-                                                        return {
-                                                            framework,
-                                                            compliant: issues.length === 0,
-                                                            issues
-                                                        };
-                                                    }
-                                                    ;
-                                                    calculateMetricsForTimeRange(timeRange, { start: number, end: number });
-                                                    DataIntegrityMetrics;
-                                                    {
-                                                        const relevantResults = this.getResultsInTimeRange(timeRange);
-                                                        const relevantFindings = this.getFindingsInTimeRange(timeRange);
-                                                        // Calculate metrics based on time range data
-                                                        const successfulChecks = relevantResults.filter(r => r.status === 'passed').length;
-                                                        const checkSuccessRate = relevantResults.length > 0 ? successfulChecks / relevantResults.length : 1.0;
-                                                        const avgDuration = relevantResults.length > 0;
-                                                        relevantResults.reduce((sum, r) => sum + r.performance.executionTime, 0) / relevantResults.length;
-                                                        0;
-                                                        const findingsBySeverity = relevantFindings.reduce((acc, f) => {
-                                                            acc[f.severity]++;
-                                                            return acc;
-                                                        }, { critical: 0, high: 0, medium: 0, low: 0, info: 0 });
-                                                        const findingsByCategory = relevantFindings.reduce((acc, f) => {
-                                                            acc[f.category]++;
-                                                            return acc;
-                                                        }, {
-                                                            corruption: 0,
-                                                            tampering: 0,
-                                                            inconsistency: 0,
-                                                            missing_data: 0,
-                                                            unauthorized_change: 0,
-                                                            schema_violation: 0,
-                                                            business_rule_violation: 0,
-                                                        });
-                                                        return {
-                                                            ...this.metrics,
-                                                            checksRun: relevantResults.length,
-                                                            checkSuccessRate,
-                                                            averageCheckDuration: avgDuration,
-                                                            totalFindings: relevantFindings.length,
-                                                            findingsBySeverity,
-                                                            findingsByCategory,
-                                                            overallIntegrityScore: this.calculateIntegrityScore(relevantResults, relevantFindings),
-                                                            timeRange
-                                                        };
-                                                        generateCheckId();
-                                                        string;
-                                                        {
-                                                            return `check-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-                                                        }
-                                                        generateExecutionId();
-                                                        string;
-                                                        {
-                                                            return `exec-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-                                                        }
-                                                        generateFindingId();
-                                                        string;
-                                                        {
-                                                            return `finding-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-                                                        }
-                                                        generateReportId();
-                                                        string;
-                                                        {
-                                                            return `report-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-                                                        }
-                                                        generateResultChecksum(result, IntegrityCheckResult);
-                                                        string;
-                                                        {
-                                                            const dataToHash = {
-                                                                checkId: result.checkId,
-                                                                executionId: result.executionId,
-                                                                summary: result.summary,
-                                                                findingsCount: result.findings.length,
-                                                                status: result.status,
-                                                            };
-                                                            return crypto.createHash('sha256')
-                                                                .update(JSON.stringify(dataToHash))
-                                                                .digest('hex');
-                                                            /**
-                                                             * Shutdown the integrity monitor
-                                                             */
-                                                            shutdown();
-                                                            void {
-                                                                : .scheduledChecks.values()
-                                                            };
-                                                            {
-                                                                clearInterval(timer);
-                                                                this.scheduledChecks.clear();
-                                                                // Clear remediation processor
-                                                                if (this.remediationProcessor) {
-                                                                    clearInterval(this.remediationProcessor);
-                                                                    // Clear data
-                                                                    this.activeExecutions.clear();
-                                                                    this.remediationQueue = [];
-                                                                    this.emit('monitor_shutdown');
-                                                                    console.log('🔐 Security Data Integrity Monitor shutdown complete');
-                                                                    export default SecurityDataIntegrityMonitor;
                                                                 }
                                                             }
                                                         }

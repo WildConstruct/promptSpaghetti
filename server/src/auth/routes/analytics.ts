@@ -52,10 +52,10 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof FieldInteractionSchema> }>, reply: FastifyReply) => {
     try {
       await analyticsService.trackFormFieldInteraction(
@@ -70,9 +70,9 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       );
 
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ success: false, error: error.message });
-    }
+
   });
 
   // Track form steps
@@ -84,10 +84,10 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof FormStepSchema> }>, reply: FastifyReply) => {
     try {
       await analyticsService.trackRegistrationFunnel(
@@ -97,15 +97,15 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           stepData: {
             formType: request.body.formType,
             stepNumber: request.body.stepNumber
-  }
+
           durationMs: request.body.durationMs
         }
       );
 
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ success: false, error: error.message });
-    }
+
   });
 
   // Track form completion
@@ -117,10 +117,10 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof FormCompletionSchema> }>, reply: FastifyReply) => {
     try {
       const eventType = request.body.success ? 'completed' : 'failed';
@@ -132,13 +132,13 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           totalTime: request.body.totalTime,
           fieldInteractions: request.body.fieldInteractions,
           stepTimes: request.body.stepTimes
-        }
+
       });
 
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ success: false, error: error.message });
-    }
+
   });
 
   // Track form abandonment
@@ -150,10 +150,10 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof FormAbandonmentSchema> }>, reply: FastifyReply) => {
     try {
       await analyticsService.trackRegistrationEvent('abandoned', {
@@ -164,13 +164,13 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           timeOnForm: request.body.timeOnForm,
           reason: request.body.reason,
           fieldInteractions: request.body.fieldInteractions
-        }
+
       });
 
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ success: false, error: error.message });
-    }
+
   });
 
   // Get registration metrics (admin only)
@@ -181,15 +181,15 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       if (process.env.NODE_ENV === 'production') {
         reply.code(403).send({ error: 'Access denied' });
         return;
-      }
-  }
+
+
     schema: {
       querystring: {
         type: 'object',
         properties: {
           timeframe: { type: 'string', enum: ['day', 'week', 'month'] }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -207,22 +207,22 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                   step: { type: 'string' },
                   count: { type: 'number' },
                   percentage: { type: 'number' }
-                }
-              }
-  }
+
+
+
             sourceBreakdown: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { timeframe?: 'day' | 'week' | 'month' } }>, reply: FastifyReply) => {
     try {
       const timeframe = request.query.timeframe || 'week';
       const metrics = await analyticsService.getRegistrationMetrics(timeframe);
       reply.send(metrics);
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: error.message });
-    }
+
   });
 
   // Get form analytics (admin only)
@@ -232,15 +232,15 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       if (process.env.NODE_ENV === 'production') {
         reply.code(403).send({ error: 'Access denied' });
         return;
-      }
-  }
+
+
     schema: {
       querystring: {
         type: 'object',
         properties: {
           timeframe: { type: 'string', enum: ['day', 'week', 'month'] }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -255,22 +255,22 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                   field: { type: 'string' },
                   errorRate: { type: 'number' },
                   averageTime: { type: 'number' }
-                }
-              }
-  }
+
+
+
             stepCompletionRates: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { timeframe?: 'day' | 'week' | 'month' } }>, reply: FastifyReply) => {
     try {
       const timeframe = request.query.timeframe || 'week';
       const analytics = await analyticsService.getFormAnalytics(timeframe);
       reply.send(analytics);
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: error.message });
-    }
+
   });
 
   // Get A/B test results (admin only)
@@ -280,16 +280,16 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       if (process.env.NODE_ENV === 'production') {
         reply.code(403).send({ error: 'Access denied' });
         return;
-      }
-  }
+
+
     schema: {
       params: {
         type: 'object',
         properties: {
           experimentName: { type: 'string' }
-  }
+
         required: ['experimentName']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -303,22 +303,22 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                   participants: { type: 'number' },
                   conversions: { type: 'number' },
                   conversionRate: { type: 'number' }
-                }
-              }
-  }
+
+
+
             winner: { type: 'string' },
             confidence: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Params: { experimentName: string } }>, reply: FastifyReply) => {
     try {
       const results = await analyticsService.getABTestResults(request.params.experimentName);
       reply.send(results);
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: error.message });
-    }
+
   });
 
   // Get email delivery stats (admin only)
@@ -328,15 +328,15 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       if (process.env.NODE_ENV === 'production') {
         reply.code(403).send({ error: 'Access denied' });
         return;
-      }
-  }
+
+
     schema: {
       querystring: {
         type: 'object',
         properties: {
           timeframe: { type: 'string', enum: ['day', 'week', 'month'] }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -345,18 +345,18 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
             openRates: { type: 'object' },
             clickRates: { type: 'object' },
             bounceRates: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { timeframe?: 'day' | 'week' | 'month' } }>, reply: FastifyReply) => {
     try {
       const timeframe = request.query.timeframe || 'week';
       const stats = await analyticsService.getEmailDeliveryStats(timeframe);
       reply.send(stats);
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: error.message });
-    }
+
   });
 
   // Track custom events
@@ -368,18 +368,18 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           eventName: { type: 'string' },
           eventData: { type: 'object' },
           sessionId: { type: 'string' }
-  }
+
         required: ['eventName']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: { eventName: string; eventData?: any; sessionId?: string } }>, reply: FastifyReply) => {
     try {
       await analyticsService.trackRegistrationEvent(request.body.eventName, {
@@ -387,11 +387,10 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       });
 
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ success: false, error: error.message });
-    }
+
   });
 
   // Store analytics service reference
   fastify.decorate('analyticsService', analyticsService);
-}

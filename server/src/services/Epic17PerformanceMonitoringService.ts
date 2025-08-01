@@ -10,10 +10,10 @@ import { FastifyInstance } from 'fastify';
 import { 
   Epic17PerformanceMonitor, 
   Epic17MonitorConfig 
-} from '../monitoring/Epic17PerformanceMonitor';
+ from '../monitoring/Epic17PerformanceMonitor';
 import { 
   PerformanceMonitorConfig 
-} from '../monitoring/PerformanceMonitor';
+ from '../monitoring/PerformanceMonitor';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
@@ -40,7 +40,7 @@ export class Epic17PerformanceMonitoringService {
     if (this.isInitialized) {
       console.log('⚠️ Epic 17 Performance Monitoring Service already initialized');
       return;
-    }
+
 
     try {
       console.log('🚀 Initializing Epic 17 Performance Monitoring Service...');
@@ -86,35 +86,34 @@ export class Epic17PerformanceMonitoringService {
           config: {
             baseConfig: baseConfig,
             epic17Config: epic17Config
-          }
-  }
+
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['system_monitoring'],
           evidenceLevel: 'STANDARD'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('❌ Failed to initialize Epic 17 Performance Monitoring Service:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get performance monitor instance
    */
   public getPerformanceMonitor(): Epic17PerformanceMonitor | null {
     return this.performanceMonitor;
-  }
+
 
   /**
    * Check if service is initialized
    */
   public isServiceInitialized(): boolean {
     return this.isInitialized;
-  }
+
 
   /**
    * Shutdown the performance monitoring service
@@ -123,7 +122,7 @@ export class Epic17PerformanceMonitoringService {
 
     if (!this.isInitialized || !this.performanceMonitor) {
       return;
-    }
+
 
     try {
       console.log('⏹️ Shutting down Epic 17 Performance Monitoring Service...');
@@ -131,7 +130,7 @@ export class Epic17PerformanceMonitoringService {
       // Stop monitoring
       if (typeof (this.performanceMonitor as any).stop === 'function') {
         await (this.performanceMonitor as any).stop();
-      }
+
 
       // Log shutdown event
       await this.dependencies.auditService.logEvent({
@@ -139,24 +138,24 @@ export class Epic17PerformanceMonitoringService {
         userId: 'system',
         details: {
           timestamp: new Date()
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['system_monitoring'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       this.performanceMonitor = null;
       this.isInitialized = false;
 
       console.log('✅ Epic 17 Performance Monitoring Service shutdown completed');
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error during Epic 17 Performance Monitoring Service shutdown:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Create base performance monitor configuration
@@ -166,22 +165,22 @@ export class Epic17PerformanceMonitoringService {
       systemMonitoring: {
         enabled: true,
         interval: 30000 // 30 seconds
-  }
+
       bufferFlushInterval: 10000, // 10 seconds
       maxBufferSize: 1000,
       defaultTags: {
         service: 'epic17-admin-controls',
         environment: process.env.NODE_ENV || 'development',
         version: process.env.BUILD_VERSION || '1.0.0'
-  }
+
       startTime: new Date(),
       alerting: {
         enabled: true,
         webhookUrl: process.env.PERFORMANCE_WEBHOOK_URL,
         emailRecipients: (process.env.PERFORMANCE_ALERT_EMAILS || '').split(',').filter(Boolean)
-      }
+
     };
-  }
+
 
   /**
    * Create Epic 17-specific configuration
@@ -191,28 +190,28 @@ export class Epic17PerformanceMonitoringService {
       adminMonitoring: {
         enabled: true,
         interval: 15000 // 15 seconds for more frequent admin monitoring
-  }
+
       integrationMonitoring: {
         enabled: true,
         interval: 60000 // 1 minute for integration health checks
-  }
+
       complianceMonitoring: {
         enabled: true,
         interval: 300000 // 5 minutes for compliance checks
-  }
+
       defaultTags: {
         epic: 'epic17',
         component: 'backstage-admin-controls',
         monitoring_level: 'comprehensive'
-  }
+
       alerting: {
         enabled: true,
         webhookUrl: process.env.EPIC17_ALERT_WEBHOOK_URL,
         emailRecipients: (process.env.EPIC17_ALERT_EMAILS || '').split(',').filter(Boolean),
         slackChannel: process.env.EPIC17_SLACK_CHANNEL || '#epic17-alerts'
-      }
+
     };
-  }
+
 
   /**
    * Set up performance tracking hooks for all requests
@@ -229,7 +228,7 @@ export class Epic17PerformanceMonitoringService {
         
         const startTime = Date.now();
         (request as any).performanceStartTime = startTime;
-      }
+
     });
 
     // Post-response hook to record metrics
@@ -258,10 +257,10 @@ export class Epic17PerformanceMonitoringService {
           impactScope: this.determineImpactScope(route, statusCode),
           complianceLevel: this.determineComplianceLevel(route),
           performanceImpact: this.determinePerformanceImpact(duration)
-        }
+
       );
     });
-  }
+
 
   /**
    * Set up specific admin operation tracking
@@ -274,7 +273,7 @@ export class Epic17PerformanceMonitoringService {
       // Add request ID for tracking
       (request as any).requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     });
-  }
+
 
   /**
    * Map route to admin operation
@@ -300,11 +299,11 @@ export class Epic17PerformanceMonitoringService {
     for (const [pattern, operation] of Object.entries(routeMap)) {
       if (route.includes(pattern)) {
         return operation;
-      }
-    }
+
+
 
     return 'system_configuration'; // Default
-  }
+
 
   /**
    * Map route to admin category
@@ -320,7 +319,7 @@ export class Epic17PerformanceMonitoringService {
     if (route.includes('/monitoring')) return 'system_health';
     
     return 'system_health'; // Default
-  }
+
 
   /**
    * Map route to backstage component
@@ -336,7 +335,7 @@ export class Epic17PerformanceMonitoringService {
     if (route.includes('/alerts')) return 'alert_manager';
     
     return 'admin_portal'; // Default
-  }
+
 
   /**
    * Map route to configuration area
@@ -351,7 +350,7 @@ export class Epic17PerformanceMonitoringService {
     if (route.includes('/security')) return 'security';
     
     return 'authentication'; // Default
-  }
+
 
   /**
    * Map route to system integration
@@ -368,7 +367,7 @@ export class Epic17PerformanceMonitoringService {
     if (route.includes('/backup')) return 'backup_systems';
     
     return 'database_cluster'; // Default
-  }
+
 
   /**
    * Determine impact scope based on route and status
@@ -379,7 +378,7 @@ export class Epic17PerformanceMonitoringService {
     if (route.includes('/users/')) return 'user_group';
     
     return 'single_user'; // Default
-  }
+
 
   /**
    * Determine compliance level
@@ -390,7 +389,7 @@ export class Epic17PerformanceMonitoringService {
     if (route.includes('/admin/')) return 'standard';
     
     return 'basic'; // Default
-  }
+
 
   /**
    * Determine performance impact level
@@ -402,7 +401,7 @@ export class Epic17PerformanceMonitoringService {
     if (duration > 500) return 'low';
     
     return 'minimal';
-  }
+
 
   /**
    * Get service health status
@@ -412,14 +411,14 @@ export class Epic17PerformanceMonitoringService {
     initialized: boolean;
     monitoring: boolean;
     timestamp: Date;
-    } {
+ {
     return {
       status: this.isInitialized ? 'healthy' : 'not_initialized',
       initialized: this.isInitialized,
       monitoring: this.performanceMonitor !== null,
       timestamp: new Date()
     };
-  }
+
 
   /**
    * Get service statistics
@@ -429,7 +428,7 @@ export class Epic17PerformanceMonitoringService {
       return {
         error: 'Service not initialized'
       };
-    }
+
 
     // Get basic statistics from the dashboard
     const dashboard = this.performanceMonitor.getAdminPerformanceDashboard();
@@ -443,7 +442,7 @@ export class Epic17PerformanceMonitoringService {
       resourceUtilization: dashboard.resourceUtilization,
       timestamp: dashboard.timestamp
     };
-  }
-}
+
+
 
 export default Epic17PerformanceMonitoringService;

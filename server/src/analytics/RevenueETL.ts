@@ -13,13 +13,13 @@ import {
   RevenueAggregation, 
   TemplateRevenueMetrics, 
   CreatorRevenueMetrics 
-} from '../revenue/RevenueDataModel';
+ from '../revenue/RevenueDataModel';
 import { 
   Transaction, 
   Order, 
   PaymentProvider, 
   LicenseType 
-} from '../marketplace/transaction.types';
+ from '../marketplace/transaction.types';
 
 // ETL Job Types
 export enum ETLJobType {
@@ -28,7 +28,7 @@ export enum ETLJobType {
   CREATOR_METRICS_AGGREGATION = 'creator_metrics_aggregation',
   REVENUE_RECONCILIATION = 'revenue_reconciliation',
   HISTORICAL_BACKFILL = 'historical_backfill'
-}
+
 
 // ETL Job Status
 export enum ETLJobStatus {
@@ -37,11 +37,12 @@ export enum ETLJobStatus {
   COMPLETED = 'completed',
   FAILED = 'failed',
   RETRYING = 'retrying'
-}
+
 
 // ETL Job Configuration
-}
-}
+
+
+
 export interface ETLJobConfig {
   id: string;
   type: ETLJobType;
@@ -59,13 +60,15 @@ export interface ETLJobConfig {
   error_message?: string;
   retry_count: number;
   max_retries: number;
-}
-}
-}
+
+
+
+
 
 // Revenue Fact Table Schema
-}
-}
+
+
+
 export interface RevenueFact {
   id: string;
   
@@ -119,9 +122,10 @@ export interface RevenueFact {
   
   created_at: Date;
   updated_at: Date;
-}
-}
-}
+
+
+
+
 
 export class RevenueETLService extends EventEmitter {
   private dbConnection: any;
@@ -135,14 +139,14 @@ export class RevenueETLService extends EventEmitter {
       batchSize?: number;
       retryMaxAttempts?: number;
       retryDelayMs?: number;
-    } = {}
+ = {}
   ) {
     super();
     this.dbConnection = dbConnection;
     this.batchSize = options.batchSize || 1000;
     this.retryMaxAttempts = options.retryMaxAttempts || 3;
     this.retryDelayMs = options.retryDelayMs || 5000;
-  }
+
 
   /**
    * Execute ETL job
@@ -175,7 +179,7 @@ export class RevenueETLService extends EventEmitter {
           break;
         default:
           throw new Error(`Unknown ETL job type: ${jobConfig.type}`);
-      }
+
       
       // Update job status to completed
       await this.updateJobStatus(jobConfig.id, ETLJobStatus.COMPLETED, undefined, new Date());
@@ -186,12 +190,11 @@ export class RevenueETLService extends EventEmitter {
         type: jobConfig.type, 
         duration 
       });
-      
-    } catch (error) {
+ catch (error) {
       await this.handleJobError(jobConfig, error as Error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Load revenue events into fact table with dimensional modeling
@@ -262,7 +265,7 @@ export class RevenueETLService extends EventEmitter {
       if (events.rows.length === 0) {
         hasMoreData = false;
         break;
-      }
+
 
       // Transform events to revenue facts
       const revenueFacts = await Promise.all(
@@ -282,9 +285,9 @@ export class RevenueETLService extends EventEmitter {
       
       if (events.rows.length < this.batchSize) {
         hasMoreData = false;
-      }
-    }
-  }
+
+
+
 
   /**
    * Transform revenue event to fact table format
@@ -365,7 +368,7 @@ export class RevenueETLService extends EventEmitter {
       
       created_at: new Date(),
       updated_at: new Date(};
-  }
+
 
   /**
    * Aggregate template revenue metrics
@@ -439,7 +442,7 @@ export class RevenueETLService extends EventEmitter {
       jobConfig.start_date,
       jobConfig.end_date
     ]);
-  }
+
 
   /**
    * Aggregate creator revenue metrics
@@ -519,7 +522,7 @@ export class RevenueETLService extends EventEmitter {
       jobConfig.start_date,
       jobConfig.end_date
     ]);
-  }
+
 
   /**
    * Execute revenue reconciliation
@@ -563,7 +566,7 @@ export class RevenueETLService extends EventEmitter {
       jobConfig.start_date,
       jobConfig.end_date
     ]);
-  }
+
 
   /**
    * Execute historical backfill
@@ -617,7 +620,7 @@ export class RevenueETLService extends EventEmitter {
       jobConfig.start_date,
       jobConfig.end_date
     ]);
-  }
+
 
   // Helper methods
   private async loadRevenueFactsBatch(facts: RevenueFact[]): Promise<void> {
@@ -653,26 +656,26 @@ export class RevenueETLService extends EventEmitter {
     `;
 
     await this.dbConnection.query(query, params);
-  }
+
 
   // Utility methods for date formatting
   private formatDateKey(date: Date): string {
     return date.toISOString().slice(0, 10).replace(/-/g, '');
-  }
+
 
   private formatQuarterKey(date: Date): string {
     const quarter = Math.ceil((date.getMonth() + 1) / 3);
     return `${date.getFullYear()}Q${quarter}`;
-  }
+
 
   private formatMonthKey(date: Date): string {
     return date.toISOString().slice(0, 7).replace('-', '');
-  }
+
 
   private formatWeekKey(date: Date): string {
     const week = this.getWeekNumber(date);
     return `${date.getFullYear()}W${week.toString().padStart(2, '0')}`;
-  }
+
 
   private getWeekNumber(date: Date): number {
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -680,13 +683,13 @@ export class RevenueETLService extends EventEmitter {
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
-  }
+
 
   private async calculateDaysSinceLastPurchase(userId: string, currentDate: Date): Promise<number> {
 
     // Implementation would query for last purchase date
     return 0; // Placeholder
-  }
+
 
   private calculateDataQualityScore(event: any): number {
     let score = 1.0;
@@ -703,7 +706,7 @@ export class RevenueETLService extends EventEmitter {
     if (event.amount_cents === 0) score -= 0.1; // Zero amounts
     
     return Math.max(0, score);
-  }
+
 
   private detectSuspiciousTransaction(event: any): boolean {
     // Simple suspicious transaction detection
@@ -711,16 +714,16 @@ export class RevenueETLService extends EventEmitter {
     if (event.amount_cents < 0 && event.revenue_type !== 'refund') return true;
     
     return false;
-  }
+
 
   private async calculateCommission(event: any): Promise<number> {
 
     if (event.creator_id && event.revenue_type === 'purchase') {
       // Default commission rate - would be fetched from creator settings
       return Math.round(event.amount_cents * 0.7);
-    }
+
     return 0;
-  }
+
 
   private async updateJobStatus(
     jobId: string, 
@@ -735,16 +738,16 @@ export class RevenueETLService extends EventEmitter {
     if (startedAt) {
       updates.push('started_at = $3');
       params.push(startedAt);
-    }
+
     
     if (completedAt) {
       updates.push('completed_at = $' + (params.length + 1));
       params.push(completedAt);
-    }
+
 
     const query = `UPDATE etl_jobs SET ${updates.join(', ')} WHERE id = $1`;
     await this.dbConnection.query(query, params);
-  }
+
 
   private async handleJobError(jobConfig: ETLJobConfig, error: Error): Promise<void> {
 
@@ -762,7 +765,7 @@ export class RevenueETLService extends EventEmitter {
         retryCount, 
         error: error.message 
       });
-    } else {
+ else {
       // Mark as failed
       await this.dbConnection.query(
         'UPDATE etl_jobs SET status = $1, error_message = $2 WHERE id = $3',
@@ -773,8 +776,8 @@ export class RevenueETLService extends EventEmitter {
         jobId: jobConfig.id, 
         error: error.message 
       });
-    }
-  }
-}
+
+
+
 
 export { ETLJobType, ETLJobStatus, ETLJobConfig, RevenueFact };

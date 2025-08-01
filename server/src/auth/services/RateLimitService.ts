@@ -9,7 +9,7 @@ export class RateLimitService implements IRateLimitService {
 
   constructor(redis: RedisService) {
     this.redis = redis;
-  }
+
 
   async checkRateLimit(key: string, rule: RateLimitRule): Promise<RateLimitResult> {
 
@@ -28,7 +28,7 @@ export class RateLimitService implements IRateLimitService {
         resetTime: result.resetTime,
         totalRequests: result.count
       };
-    } catch (error) {
+ catch (error) {
       console.error(`Rate limit check error for key ${key}:`, error);
       
       // Default to allowing the request if Redis is down
@@ -38,8 +38,8 @@ export class RateLimitService implements IRateLimitService {
         resetTime: new Date(Date.now() + rule.window * 1000),
         totalRequests: 1
       };
-    }
-  }
+
+
 
   async resetRateLimit(key: string): Promise<void> {
 
@@ -47,11 +47,11 @@ export class RateLimitService implements IRateLimitService {
     
     try {
       await this.redis.del(rateLimitKey);
-    } catch (error) {
+ catch (error) {
       console.error(`Rate limit reset error for key ${key}:`, error);
       throw error;
-    }
-  }
+
+
 
   // Advanced rate limiting with multiple rules
   async checkMultipleRateLimits(
@@ -63,10 +63,10 @@ export class RateLimitService implements IRateLimitService {
     for (const { name, rule } of rules) {
       const ruleKey = `${key}:${name}`;
       results[name] = await this.checkRateLimit(ruleKey, rule);
-    }
+
     
     return results;
-  }
+
 
   // Get rate limit status without incrementing
   async getRateLimitStatus(key: string, rule: RateLimitRule): Promise<RateLimitResult> {
@@ -90,7 +90,7 @@ export class RateLimitService implements IRateLimitService {
         resetTime,
         totalRequests: count
       };
-    } catch (error) {
+ catch (error) {
       console.error(`Rate limit status error for key ${key}:`, error);
       
       return {
@@ -99,8 +99,8 @@ export class RateLimitService implements IRateLimitService {
         resetTime: new Date(Date.now() + rule.window * 1000),
         totalRequests: 0
       };
-    }
-  }
+
+
 
   // IP-based rate limiting
   async checkIPRateLimit(
@@ -111,7 +111,7 @@ export class RateLimitService implements IRateLimitService {
 
     const key = `ip:${ip}:${endpoint}`;
     return this.checkRateLimit(key, rule);
-  }
+
 
   // User-based rate limiting
   async checkUserRateLimit(
@@ -122,7 +122,7 @@ export class RateLimitService implements IRateLimitService {
 
     const key = `user:${userId}:${endpoint}`;
     return this.checkRateLimit(key, rule);
-  }
+
 
   // Global rate limiting
   async checkGlobalRateLimit(
@@ -132,7 +132,7 @@ export class RateLimitService implements IRateLimitService {
 
     const key = `global:${endpoint}`;
     return this.checkRateLimit(key, rule);
-  }
+
 
   // Generic rate limiting with custom key (for PasswordResetService)
   async checkLimit(
@@ -151,8 +151,8 @@ export class RateLimitService implements IRateLimitService {
     if (!result.allowed) {
       const resetInMinutes = Math.ceil((result.resetTime.getTime() - Date.now()) / (1000 * 60));
       throw new Error(`Rate limit exceeded. Try again in ${resetInMinutes} minutes.`);
-    }
-  }
+
+
 
   // Adaptive rate limiting based on response times
   async adaptiveRateLimit(
@@ -168,13 +168,13 @@ export class RateLimitService implements IRateLimitService {
     if (avgResponseTime > targetResponseTime * 2) {
       // High response time - reduce limit by 50%
       adjustedMax = Math.max(1, Math.floor(baseRule.max * 0.5));
-    } else if (avgResponseTime > targetResponseTime) {
+ else if (avgResponseTime > targetResponseTime) {
       // Moderate response time - reduce limit by 25%
       adjustedMax = Math.max(1, Math.floor(baseRule.max * 0.75));
-    } else if (avgResponseTime < targetResponseTime * 0.5) {
+ else if (avgResponseTime < targetResponseTime * 0.5) {
       // Fast response time - increase limit by 25%
       adjustedMax = Math.floor(baseRule.max * 1.25);
-    }
+
     
     const adaptedRule: RateLimitRule = {
       ...baseRule,
@@ -182,7 +182,7 @@ export class RateLimitService implements IRateLimitService {
     };
     
     return this.checkRateLimit(key, adaptedRule);
-  }
+
 
   // Rate limiting with buckets (token bucket algorithm)
   async tokenBucketRateLimit(
@@ -207,7 +207,7 @@ export class RateLimitService implements IRateLimitService {
         const parsed = JSON.parse(bucketData);
         tokens = parsed.tokens;
         lastRefill = parsed.lastRefill;
-      }
+
       
       // Calculate tokens to add based on time elapsed
       const timeElapsed = now - lastRefill;
@@ -219,7 +219,7 @@ export class RateLimitService implements IRateLimitService {
       
       if (allowed) {
         tokens -= tokensRequested;
-      }
+
       
       // Store updated bucket state
       await this.redis.setex(
@@ -237,7 +237,7 @@ export class RateLimitService implements IRateLimitService {
         resetTime: new Date((now + (capacity - tokens) / refillRate) * 1000),
         totalRequests: capacity - Math.floor(tokens)
       };
-    } catch (error) {
+ catch (error) {
       console.error(`Token bucket rate limit error for key ${key}:`, error);
       
       return {
@@ -246,8 +246,8 @@ export class RateLimitService implements IRateLimitService {
         resetTime: new Date(Date.now() + 60000),
         totalRequests: tokensRequested
       };
-    }
-  }
+
+
 
   // Clean up expired rate limit data
   async cleanup(): Promise<void> {
@@ -265,23 +265,23 @@ export class RateLimitService implements IRateLimitService {
           // Key exists but has no expiry - clean it up
           await this.redis.del(key);
           cleanedCount++;
-        }
-      }
+
+
       
       if (cleanedCount > 0) {
         console.log(`Cleaned up ${cleanedCount} expired rate limit keys`);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Rate limit cleanup error:', error);
-    }
-  }
+
+
 
   // Get rate limit statistics
   async getStats(pattern: string = 'rate_limit:*'): Promise<{
     totalKeys: number;
     activeKeys: number;
     topKeys: Array<{ key: string; count: number }>;
-  }> {
+> {
     try {
       const client = this.redis.getClient();
       const keys = await client.keys(pattern);
@@ -294,8 +294,8 @@ export class RateLimitService implements IRateLimitService {
         if (count > 0) {
           activeKeys++;
           keyCounts.push({ key: key.replace('rate_limit:', ''), count });
-        }
-      }
+
+
       
       // Sort by count descending
       keyCounts.sort((a, b) => b.count - a.count);
@@ -305,13 +305,12 @@ export class RateLimitService implements IRateLimitService {
         activeKeys,
         topKeys: keyCounts.slice(0, 10)
       };
-    } catch (error) {
+ catch (error) {
       console.error('Rate limit stats error:', error);
       return {
         totalKeys: 0,
         activeKeys: 0,
         topKeys: []
       };
-    }
-  }
-}
+
+

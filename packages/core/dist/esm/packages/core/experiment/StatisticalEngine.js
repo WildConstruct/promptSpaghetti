@@ -324,8 +324,9 @@ export class StatisticalEngine {
         practicalSignificance: winnerDetection.winner !== undefined,
         confidenceLevel: this.confidenceLevel,
     };
-    calculateGuardrailResults(variants, VariantResults);
-    controlVariant: VariantResults,
+    calculateGuardrailResults(variants, VariantResults),
+        controlVariant;
+    VariantResults,
         guardrailMetrics;
     ExperimentMetric;
     StatisticalResults['guardrailMetrics'];
@@ -354,8 +355,9 @@ export class StatisticalEngine {
                 }
                 ;
                 return results;
-                generateInsights(variants, VariantResults);
-                controlVariant: VariantResults,
+                generateInsights(variants, VariantResults),
+                    controlVariant;
+                VariantResults,
                     metrics;
                 ExperimentMetric;
                 ExperimentInsight;
@@ -378,7 +380,7 @@ export class StatisticalEngine {
                         actionable;
                     true,
                         recommendations;
-                    [,
+                    [
                         'Consider implementing the winning variant',
                         'Monitor performance after rollout',
                         'Document learnings for future experiments'
@@ -402,7 +404,7 @@ export class StatisticalEngine {
                         actionable;
                     true,
                         recommendations;
-                    [,
+                    [
                         'Review cost-benefit ratio',
                         'Consider optimizing variant configuration',
                         'Monitor budget impact'
@@ -426,7 +428,7 @@ export class StatisticalEngine {
                         actionable;
                     true,
                         recommendations;
-                    [,
+                    [
                         'Investigate performance bottlenecks',
                         'Consider performance optimizations',
                         'Monitor user experience metrics'
@@ -434,8 +436,9 @@ export class StatisticalEngine {
                 }
                 ;
                 return insights;
-                calculateProportionSampleSize(baselineRate, number);
-                minimumDetectableEffect: number,
+                calculateProportionSampleSize(baselineRate, number),
+                    minimumDetectableEffect;
+                number,
                     power;
                 number,
                     alpha;
@@ -459,8 +462,9 @@ export class StatisticalEngine {
                         powerAchieved: power,
                         minimumDetectableEffect
                     };
-                    calculateContinuousSampleSize(baselineMean, number);
-                    minimumDetectableEffect: number,
+                    calculateContinuousSampleSize(baselineMean, number),
+                        minimumDetectableEffect;
+                    number,
                         power;
                     number,
                         alpha;

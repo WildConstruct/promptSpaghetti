@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  FileText, 
+import { FileText, 
   Search, 
   Filter, 
   Star, 
@@ -11,34 +10,34 @@ import {
   Users,
   Grid,
   List,
-  SortAsc,
+  SortAsc }
   Tag
-} from 'lucide-react';
+ from 'lucide-react';
 import { TemplateCard } from './TemplateCard';
 import { TemplatePreview } from './TemplatePreview';
 import { TemplateCreationDialog } from './TemplateCreationDialog';
 import { useTemplates } from '../../hooks/useTemplates';
 import { ProjectTemplate, TemplateCategory, TemplateDifficulty } from '../../types/TemplateTypes';
-}
-interface TemplateGalleryProps {
-  workspaceId?: string;
+
+
+interface TemplateGalleryProps { workspaceId?: string;
   onSelectTemplate?: (template: ProjectTemplate) => void;
   onCreateFromTemplate?: (template: ProjectTemplate, customization: Record<string, any>) => void;
   className?: string;
   showCreateButton?: boolean;
   allowCreation?: boolean;
   viewMode?: 'grid' | 'list';
-  const TemplateGallery: React.FC<TemplateGalleryProps> = ({ ),
-  workspaceId,
-  onSelectTemplate,
-  onCreateFromTemplate,
-  className,
-  showCreateButton = true,
-  allowCreation = true,
+  const TemplateGallery: React.FC<TemplateGalleryProps> = ({ );
+  workspaceId;
+  onSelectTemplate;
+  onCreateFromTemplate;
+  className;
+  showCreateButton = true;
+  allowCreation = true }
   viewMode = 'grid'
-}
-}) => {
-  const [categoryFilter, setCategoryFilter] = useState<TemplateCategory | 'all'>('all');
+
+
+}) => { const [categoryFilter, setCategoryFilter] = useState<TemplateCategory | 'all'>('all');
   const [difficultyFilter, setDifficultyFilter] = useState<TemplateDifficulty | 'all'>('all');
   const [sortBy, setSortBy] = useState<'popular' | 'recent' | 'name' | 'rating'>('popular');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(initialViewMode);
@@ -46,44 +45,32 @@ interface TemplateGalleryProps {
   const [selectedTemplate, setSelectedTemplate] = useState<ProjectTemplate | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const {
-    templates,
-    categories,
-    loading,
-    error,
-    stats,
-    hasMore,
-    favoriteTemplate,
-    unfavoriteTemplate,
-    loadMore,
+    templates
+    categories
+    loading
+    error
+    stats
+    hasMore
+    favoriteTemplate
+    unfavoriteTemplate
+    loadMore }
     refreshTemplates
-  } = useTemplates({)
-  workspaceId,
-  searchTerm,
-  category: categoryFilter === 'all' ? undefined : categoryFilter,
-  difficulty: difficultyFilter === 'all' ? undefined : difficultyFilter,
-  sortBy,
-  limit: viewMode === 'grid' ? 12 : 20,
+ = useTemplates({ )
+  workspaceId
+  searchTerm
+  category: categoryFilter === 'all' ? undefined : categoryFilter
+  difficulty: difficultyFilter === 'all' ? undefined : difficultyFilter
+  sortBy
+  limit: viewMode === 'grid' ? 12 : 20 }
 });
-  const handleTemplateSelect = useCallback((template: ProjectTemplate) => {
-    if (onSelectTemplate) {
-      onSelectTemplate(template);
-    } else {
-      setSelectedTemplate(template);
-  }, [onSelectTemplate]);
-  const handleCreateFromTemplate = useCallback((template: ProjectTemplate, customization: Record<string, any>) => {
-    if (onCreateFromTemplate) {
+  const handleTemplateSelect = useCallback((template: ProjectTemplate) => { if (onSelectTemplate) {
+      onSelectTemplate(template) } else { setSelectedTemplate(template) }, [onSelectTemplate]);
+  const handleCreateFromTemplate = useCallback((template: ProjectTemplate, customization: Record<string, any>) => { if (onCreateFromTemplate) {
       onCreateFromTemplate(template, customization);
-    setSelectedTemplate(null);
-  }, [onCreateFromTemplate]);
-  const handleToggleFavorite = useCallback(async (templateId: string, isFavorited: boolean) => {
-    try {
+    setSelectedTemplate(null) }, [onCreateFromTemplate]);
+  const handleToggleFavorite = useCallback(async (templateId: string, isFavorited: boolean) => { try {
       if (isFavorited) {
-        await unfavoriteTemplate(templateId);
-      } else {
-        await favoriteTemplate(templateId);
-    } catch (err) {
-  console.error('Failed to toggle favorite:', err);
-}, [favoriteTemplate, unfavoriteTemplate]);
+        await unfavoriteTemplate(templateId) } else { await favoriteTemplate(templateId) } catch (err) { console.error('Failed to toggle favorite:', err) }, [favoriteTemplate, unfavoriteTemplate]);
   const renderTemplateGrid = () => (;);
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {templates.map(template => ()
@@ -347,10 +334,9 @@ interface TemplateGalleryProps {
         <TemplateCreationDialog
           workspaceId={workspaceId}
           onClose={() => setShowCreateDialog(false)}
-          onSuccess={(template) => {
+          onSuccess={ (template) => {
             setShowCreateDialog(false);
-            refreshTemplates();
-          }}
+            refreshTemplates() }}
         />
       )}
     </div>

@@ -45,7 +45,8 @@ export const TrustIndicator = ({
                         case 'professional': return 'Professional';
                         case 'verified': return 'Verified';
                         case 'basic': return 'Basic';
-                        default: return 'Unverified';
+                        default: return 'Unverified',
+                        ;
                     }
                     ;
                     const indicator = ();

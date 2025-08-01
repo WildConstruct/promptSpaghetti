@@ -27,7 +27,7 @@ class ReferralDetectionService {
     this.events = [];
     
     this.initializeDefaultData();
-  }
+
 
   async trackReferral(referralCode: string, referrerId: string, options: unknown = {}) {
     const referralId = crypto.randomUUID();
@@ -79,7 +79,7 @@ class ReferralDetectionService {
 
     this.referrals.set(referralId, referral);
     return referral;
-  }
+
 
   async calculateFraudRisk(options: unknown) {
     let riskScore = 0;
@@ -95,10 +95,10 @@ class ReferralDetectionService {
       if (recentFromIp > 10) {
         riskScore += 30;
         indicators.ipVelocity = recentFromIp;
-      } else if (recentFromIp > 5) {
+ else if (recentFromIp > 5) {
         riskScore += 15;
-      }
-    }
+
+
 
     // Device fingerprint check
     if (options.deviceFingerprint) {
@@ -110,39 +110,39 @@ class ReferralDetectionService {
       if (recentFromDevice > 5) {
         riskScore += 25;
         indicators.deviceReuse = recentFromDevice;
-      } else if (recentFromDevice > 2) {
+ else if (recentFromDevice > 2) {
         riskScore += 10;
-      }
-    }
+
+
 
     // Geographic anomaly check
     if (options.country && !['US', 'CA', 'GB', 'DE', 'FR'].includes(options.country)) {
       riskScore += 5;
       indicators.geographicAnomaly = options.country;
-    }
+
 
     // Time pattern analysis
     const hour = new Date().getHours();
     if (hour < 6 || hour > 22) {
       riskScore += 5;
       indicators.unusualTime = hour;
-    }
+
 
     let riskLevel = 'low';
     if (riskScore >= 70) {
       riskLevel = 'critical';
-    } else if (riskScore >= 40) {
+ else if (riskScore >= 40) {
       riskLevel = 'high';
-    } else if (riskScore >= 20) {
+ else if (riskScore >= 20) {
       riskLevel = 'medium';
-    }
+
 
     return {
       riskScore: Math.min(100, riskScore),
       riskLevel,
       indicators
     };
-  }
+
 
   async createCampaign(campaignData: unknown) {
     const campaignId = crypto.randomUUID();
@@ -173,18 +173,18 @@ class ReferralDetectionService {
 
     this.campaigns.set(campaignId, campaign);
     return campaign;
-  }
+
 
   async calculateReward(referralId: string) {
     const referral = this.referrals.get(referralId);
     if (!referral || referral.status !== 'verified' || !referral.conversionValue) {
       return null;
-    }
+
 
     const campaign = this.campaigns.get(referral.campaignId);
     if (!campaign || campaign.status !== 'active') {
       return null;
-    }
+
 
     let rewardAmount = 0;
     const rewardId = crypto.randomUUID();
@@ -199,15 +199,15 @@ class ReferralDetectionService {
     case 'tiered':
       if (referral.conversionValue >= 100) {
         rewardAmount = 50;
-      } else if (referral.conversionValue >= 50) {
+ else if (referral.conversionValue >= 50) {
         rewardAmount = 25;
-      } else {
+ else {
         rewardAmount = 10;
-      }
+
       break;
     default:
       rewardAmount = 0;
-    }
+
 
     const attributionWeight = await this.calculateAttributionWeight(referralId, referral.attributionModel);
     rewardAmount *= attributionWeight;
@@ -218,7 +218,7 @@ class ReferralDetectionService {
         .reduce((sum: number, r: unknown) => sum + r.finalAmount, 0);
       
       rewardAmount = Math.min(rewardAmount, campaign.maxRewardPerReferrer - existingRewards);
-    }
+
 
     const reward = {
       id: rewardId,
@@ -237,7 +237,7 @@ class ReferralDetectionService {
         rewardRate: campaign.rewardValue,
         attributionWeight,
         maxRewardCap: campaign.maxRewardPerReferrer
-  }
+
       earnedAt: new Date(),
       expiresAt: new Date(Date.now() + (90 * 24 * 60 * 60 * 1000)),
       createdAt: new Date(),
@@ -246,7 +246,7 @@ class ReferralDetectionService {
 
     this.rewards.set(rewardId, reward);
     return reward;
-  }
+
 
   async calculateAttributionWeight(referralId: string, model: string) {
     switch (model) {
@@ -261,8 +261,8 @@ class ReferralDetectionService {
       return 1.0;
     default:
       return 1.0;
-    }
-  }
+
+
 
   initializeDefaultData() {
     this.createCampaign({
@@ -273,8 +273,8 @@ class ReferralDetectionService {
       rewardValue: 10.0,
       status: 'active'
     });
-  }
-}
+
+
 
 // Test suite
 describe('Epic 16 Referral Detection System', () => {
@@ -391,7 +391,7 @@ describe('Epic 16 Referral Detection System', () => {
       // Create multiple referrals from same IP
       for (let i = 0; i < 12; i++) {
         await service.trackReferral(`IP-TEST-${i}`, crypto.randomUUID(), { ipAddress });
-      }
+
 
       const fraudAnalysis = await service.calculateFraudRisk({ ipAddress });
 
@@ -406,7 +406,7 @@ describe('Epic 16 Referral Detection System', () => {
       // Create multiple referrals from same device
       for (let i = 0; i < 6; i++) {
         await service.trackReferral(`DEVICE-TEST-${i}`, crypto.randomUUID(), { deviceFingerprint });
-      }
+
 
       const fraudAnalysis = await service.calculateFraudRisk({ deviceFingerprint });
 
@@ -861,7 +861,7 @@ describe('Epic 16 Referral Detection System', () => {
             conversionValue: Math.random() * 1000
   }
         );
-      }
+
 
       const referrals = await Promise.all(referralPromises);
       const endTime = Date.now();
@@ -884,7 +884,7 @@ describe('Epic 16 Referral Detection System', () => {
           ipAddress,
           deviceFingerprint
         });
-      }
+
 
       const startTime = Date.now();
       
@@ -916,7 +916,7 @@ describe('Epic 16 Referral Detection System', () => {
           conversionValue: 100.0
         });
         referrals.push(referral);
-      }
+
 
       const startTime = Date.now();
       
@@ -934,7 +934,7 @@ describe('Epic 16 Referral Detection System', () => {
         if (reward) {
           expect(reward.finalAmount).toBe(5.0); // 5% of 100
           expect(reward.status).toBe('pending');
-        }
+
       });
     });
   });

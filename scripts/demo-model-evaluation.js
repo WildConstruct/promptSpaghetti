@@ -44,7 +44,7 @@ async function demoModelEvaluationTriggering(): Promise<void> {
         domain: 'customer_service', 
         language: 'en',
         deployment_target: 'production' 
-      }
+
     };
 
     console.log(`Model: ${modelData.name}`);
@@ -94,8 +94,7 @@ async function demoModelEvaluationTriggering(): Promise<void> {
       console.log(`Started: ${statusResponse.data.data.triggeredAt}`);
       console.log(`Suite: ${statusResponse.data.data.evaluationSuite}`);
       console.log();
-
-    } catch (apiError) {
+ catch (apiError) {
       if (apiError.code === 'ECONNREFUSED') {
         console.log('⚠️  API server not running - showing simulated response');
         console.log('✅ Evaluation triggered successfully (simulated)');
@@ -104,10 +103,10 @@ async function demoModelEvaluationTriggering(): Promise<void> {
         console.log('Priority: high');
         console.log('GitHub Run URL: https://github.com/your-org/your-repo/actions/runs/12345');
         console.log();
-      } else {
+ else {
         throw apiError;
-      }
-    }
+
+
 
     // Step 4: Show evaluation workflow details
     console.log('📝 Step 4: GitHub Actions Workflow Details');
@@ -166,18 +165,17 @@ async function demoModelEvaluationTriggering(): Promise<void> {
     console.log('  POST /api/model-evaluation/evaluation-job/:id/cancel - Cancel evaluation');
     console.log('  POST /api/model-evaluation/webhook/evaluation-status - CI webhook');
     console.log('  GET  /api/model-evaluation/health - Service health check');
-
-  } catch (error) {
+ catch (error) {
     console.error('❌ Demo failed:', error.message);
     
     if (error.response) {
       console.error('Response status:', error.response.status);
       console.error('Response data:', error.response.data);
-    }
+
     
     process.exit(1);
-  }
-}
+
+
 
 // Example of how the GitHub Actions workflow is triggered
 function showWorkflowTriggerExample(): void {
@@ -198,7 +196,7 @@ function showWorkflowTriggerExample(): void {
   
   console.log(command);
   console.log();
-}
+
 
 // Run the demo
 if (require.main === module) {
@@ -211,6 +209,6 @@ if (require.main === module) {
       console.error('Demo failed:', error);
       process.exit(1);
     });
-}
+
 
 module.exports = { demoModelEvaluationTriggering };

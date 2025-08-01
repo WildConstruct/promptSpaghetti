@@ -1,5 +1,4 @@
-import { 
-  Workspace,
+import { Workspace,
   Project,
   Resource,
   WorkspaceMember,
@@ -13,12 +12,11 @@ import {
   ResourceId,
   WorkspaceRole,
   ProjectRole,
-  ResourceType,
+  ResourceType }
   WorkspaceOperations
 } from '../types/workspace';
 import { DatabaseConnection } from '../database/connection';
-export declare class WorkspaceDAO implements WorkspaceOperations {
-    private db;
+export declare class WorkspaceDAO implements WorkspaceOperations { private db;
     constructor(db: DatabaseConnection);
     createWorkspace(data: Omit<Workspace, 'id' | 'created_at' | 'updated_at'>): Promise<Workspace>;
     getWorkspace(id: WorkspaceId): Promise<Workspace | null>;
@@ -37,19 +35,19 @@ export declare class WorkspaceDAO implements WorkspaceOperations {
     deleteResource(id: ResourceId): Promise<void>;
     getResourcesByProject(projectId: ProjectId, type?: ResourceType): Promise<Resource[]>;
     addWorkspaceMember();
-      workspaceId: WorkspaceId,
-      userId: UserId,
-      role: WorkspaceRole,
-      invitedBy: UserId,
+      workspaceId: WorkspaceId
+      userId: UserId
+      role: WorkspaceRole
+      invitedBy: UserId
     ): Promise<WorkspaceMember>;
     removeWorkspaceMember(workspaceId: WorkspaceId, userId: UserId): Promise<void>;
     updateWorkspaceMemberRole(workspaceId: WorkspaceId, userId: UserId, role: WorkspaceRole): Promise<WorkspaceMember>;
     getWorkspaceMembers(workspaceId: WorkspaceId): Promise<WorkspaceMember[]>;
     addProjectMember();
-      projectId: ProjectId,
-      userId: UserId,
-      role: ProjectRole,
-      invitedBy: UserId,
+      projectId: ProjectId
+      userId: UserId
+      role: ProjectRole
+      invitedBy: UserId }
     ): Promise<ProjectMember>;
     removeProjectMember(projectId: ProjectId, userId: UserId): Promise<void>;
     updateProjectMemberRole(projectId: ProjectId, userId: UserId, role: ProjectRole): Promise<ProjectMember>;

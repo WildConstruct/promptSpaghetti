@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 
 }
-export interface StorageExtension extends BaseExtension {
-    readonly extensionType: 'storage';
+}
+export interface StorageExtension extends BaseExtension { readonly extensionType: 'storage';
     getStorageProviders(): StorageProviderDefinition[];
     createStorageProvider(providerId: string, config: any): StorageProvider;
     validateStorageConfig(providerId: string, config: any): ExtensionValidationResult;
@@ -17,11 +17,9 @@ export interface StorageExtension extends BaseExtension {
     onStorageDisconnected?(provider: StorageProvider): void;
     onStorageError?(provider: StorageProvider, error: Error): void;
     supportsMigration(): boolean;
-    createMigration?(from: StorageProvider, to: StorageProvider): StorageMigration;
-
+    createMigration?(from: StorageProvider, to: StorageProvider): StorageMigration }
 }
-export interface StorageProvider {
-    readonly id: string;
+export interface StorageProvider { readonly id: string;
     readonly name: string;
     readonly type: StorageType;
     readonly version: string;
@@ -37,7 +35,7 @@ export interface StorageProvider {
     setMany<T>(entries: Array<{)
         key: string;
         value: T;
-        options?: StorageSetOptions;
+        options?: StorageSetOptions }
 }
     }>): Promise<void>;
     deleteMany(keys: string[]): Promise<void>;
@@ -57,10 +55,8 @@ export interface StorageProvider {
     supportsQueries(): boolean;
     query?<T>(query: StorageQuery): Promise<T[]>;
     supportsStreaming(): boolean;
-    stream?<T>(pattern?: string): AsyncIterableIterator<{
-        key: string;
-        value: T;
-    }>;
+    stream?<T>(pattern?: string): AsyncIterableIterator<{ key: string;
+        value: T }>;
     backup?(destination: string): Promise<void>;
     restore?(source: string): Promise<void>;
     getStats(): Promise<StorageStats>;
@@ -71,29 +67,27 @@ export interface StorageProvider {
     initialize(context: ExtensionContext): Promise<void>;
     dispose(): Promise<void>;
 
-export declare enum StorageType {
-    MEMORY = "memory",
-    FILE = "file",
-    DATABASE = "database",
-    CACHE = "cache",
-    OBJECT_STORE = "object_store",
-    KEY_VALUE = "key_value",
-    DOCUMENT = "document",
-    GRAPH = "graph",
-    TIME_SERIES = "time_series",
-    SEARCH = "search",
+export declare enum StorageType { MEMORY = "memory"
+    FILE = "file"
+    DATABASE = "database"
+    CACHE = "cache"
+    OBJECT_STORE = "object_store"
+    KEY_VALUE = "key_value"
+    DOCUMENT = "document"
+    GRAPH = "graph"
+    TIME_SERIES = "time_series"
+    SEARCH = "search" }
     CUSTOM = "custom"
 
 }
-export interface StorageSetOptions {
-    ttl?: number;
+}
+export interface StorageSetOptions { ttl?: number;
     compress?: boolean;
     encrypt?: boolean;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface StorageProviderDefinition {
-    id: string;
+}
+export interface StorageProviderDefinition { id: string;
     name: string;
     description: string;
     version: string;
@@ -103,44 +97,40 @@ export interface StorageProviderDefinition {
     ui: StorageUIConfiguration;
     runtime: StorageRuntimeConfiguration;
     capabilities: StorageCapabilities;
-    metadata: StorageProviderMetadata;
-
+    metadata: StorageProviderMetadata }
 }
-export interface StorageUIConfiguration {
-    icon?: string;
+}
+export interface StorageUIConfiguration { icon?: string;
     color?: string;
     category?: string;
     editor?: StorageEditorConfiguration;
     wizard?: StorageWizardConfiguration;
-    dashboard?: StorageDashboardConfiguration;
-
+    dashboard?: StorageDashboardConfiguration }
 }
-export interface StorageEditorConfiguration {
-    component?: React.ComponentType<StorageEditorProps>;
+}
+export interface StorageEditorConfiguration { component?: React.ComponentType<StorageEditorProps>;
     autoGenerateForm?: boolean;
     formLayout?: 'vertical' | 'horizontal' | 'grid';
     fields?: Record<string, StorageFieldConfiguration>;
     validation?: StorageEditorValidation;
-    testConnection?: boolean;
-
+    testConnection?: boolean }
 }
-export interface StorageEditorProps {
-    provider: StorageProvider;
+}
+export interface StorageEditorProps { provider: StorageProvider;
     config: any;
     onChange: (config: any) => void;
     onTest?: (config: any) => Promise<boolean>;
-    context: ExtensionContext;
-
+    context: ExtensionContext }
 }
-export interface StorageFieldConfiguration {
-    type: 'text' | 'password' | 'number' | 'boolean' | 'select' | 'url' | 'file' | 'custom';
+}
+export interface StorageFieldConfiguration { type: 'text' | 'password' | 'number' | 'boolean' | 'select' | 'url' | 'file' | 'custom';
     label?: string;
     placeholder?: string;
     helpText?: string;
     validation?: z.ZodSchema<any>;
     options?: Array<{
         value: any;
-        label: string;
+        label: string }
 }
     }>;
     component?: React.ComponentType<any>;
@@ -151,59 +141,53 @@ export interface StorageFieldConfiguration {
     urlProtocols?: string[];
 
 }
-export interface StorageEditorValidation {
-    validateOnChange?: boolean;
+}
+export interface StorageEditorValidation { validateOnChange?: boolean;
     validateOnBlur?: boolean;
     showErrors?: boolean;
-    customValidation?: (config: any) => ExtensionValidationResult;
-
+    customValidation?: (config: any) => ExtensionValidationResult }
 }
-export interface StorageWizardConfiguration {
-    enabled?: boolean;
+}
+export interface StorageWizardConfiguration { enabled?: boolean;
     steps?: StorageWizardStep[];
-    skipCondition?: (config: any) => boolean;
-
+    skipCondition?: (config: any) => boolean }
 }
-export interface StorageWizardStep {
-    id: string;
+}
+export interface StorageWizardStep { id: string;
     title: string;
     description?: string;
     component?: React.ComponentType<any>;
     fields?: string[];
     validation?: (config: any) => ExtensionValidationResult;
-    canSkip?: boolean;
-
+    canSkip?: boolean }
 }
-export interface StorageDashboardConfiguration {
-    enabled?: boolean;
+}
+export interface StorageDashboardConfiguration { enabled?: boolean;
     refreshInterval?: number;
     metrics?: string[];
-    charts?: StorageDashboardChart[];
-
+    charts?: StorageDashboardChart[] }
 }
-export interface StorageDashboardChart {
-    id: string;
+}
+export interface StorageDashboardChart { id: string;
     title: string;
     type: 'line' | 'bar' | 'pie' | 'gauge' | 'counter';
     metric: string;
-    options?: any;
-
+    options?: any }
 }
-export interface StorageRuntimeConfiguration {
-    connection?: StorageConnectionConfiguration;
+}
+export interface StorageRuntimeConfiguration { connection?: StorageConnectionConfiguration;
     performance?: StoragePerformanceConfiguration;
     security?: StorageSecurityConfiguration;
     backup?: StorageBackupConfiguration;
-    monitoring?: StorageMonitoringConfiguration;
-
+    monitoring?: StorageMonitoringConfiguration }
 }
-export interface StorageConnectionConfiguration {
-    pooling?: {
+}
+export interface StorageConnectionConfiguration { pooling?: {
         enabled?: boolean;
         minConnections?: number;
         maxConnections?: number;
         acquireTimeout?: number;
-        idleTimeout?: number;
+        idleTimeout?: number }
 }
     };
     retry?: {
@@ -212,19 +196,16 @@ export interface StorageConnectionConfiguration {
         retryDelay?: number;
         backoffStrategy?: 'fixed' | 'exponential' | 'linear'
   };
-    timeout?: {
-        connection?: number;
+    timeout?: { connection?: number;
         query?: number;
-        idle?: number;
-    };
-    ssl?: {
-        enabled?: boolean;
+        idle?: number };
+    ssl?: { enabled?: boolean;
         certificatePath?: string;
         keyPath?: string;
         caPath?: string;
-        rejectUnauthorized?: boolean;
-    };
+        rejectUnauthorized?: boolean };
 
+}
 }
 export interface StoragePerformanceConfiguration {
     cache?: {
@@ -233,99 +214,82 @@ export interface StoragePerformanceConfiguration {
         ttl?: number;
         strategy?: 'lru' | 'lfu' | 'fifo'
 }
+}
   };
-    compression?: {
-        enabled?: boolean;
+    compression?: { enabled?: boolean;
         algorithm?: 'gzip' | 'deflate' | 'brotli';
-        level?: number;
-    };
-    batching?: {
-        enabled?: boolean;
+        level?: number };
+    batching?: { enabled?: boolean;
         size?: number;
-        timeout?: number;
-    };
-    optimization?: {
-        indexing?: boolean;
+        timeout?: number };
+    optimization?: { indexing?: boolean;
         prefetching?: boolean;
-        lazy?: boolean;
-    };
+        lazy?: boolean };
 
 }
-export interface StorageSecurityConfiguration {
-    encryption?: {
+}
+export interface StorageSecurityConfiguration { encryption?: {
         enabled?: boolean;
         algorithm?: string;
         keyRotation?: boolean;
-        keyRotationInterval?: number;
+        keyRotationInterval?: number }
 }
     };
-    accessControl?: {
-        enabled?: boolean;
+    accessControl?: { enabled?: boolean;
         users?: StorageUser[];
-        roles?: StorageRole[];
-    };
-    audit?: {
-        enabled?: boolean;
+        roles?: StorageRole[] };
+    audit?: { enabled?: boolean;
         events?: string[];
-        destination?: string;
-    };
-    masking?: {
-        enabled?: boolean;
+        destination?: string };
+    masking?: { enabled?: boolean;
         patterns?: string[];
-        maskingChar?: string;
-    };
+        maskingChar?: string };
 
 }
-export interface StorageUser {
-    id: string;
+}
+export interface StorageUser { id: string;
     name: string;
     roles: string[];
-    permissions: string[];
-
+    permissions: string[] }
 }
-export interface StorageRole {
-    id: string;
+}
+export interface StorageRole { id: string;
     name: string;
-    permissions: string[];
-
+    permissions: string[] }
 }
-export interface StorageBackupConfiguration {
-    enabled?: boolean;
+}
+export interface StorageBackupConfiguration { enabled?: boolean;
     schedule?: string;
     destination?: string;
     compression?: boolean;
     encryption?: boolean;
     retention?: number;
-    incremental?: boolean;
-
+    incremental?: boolean }
 }
-export interface StorageMonitoringConfiguration {
-    enabled?: boolean;
+}
+export interface StorageMonitoringConfiguration { enabled?: boolean;
     metrics?: string[];
     alerts?: StorageAlert[];
-    healthChecks?: StorageHealthCheck[];
-
+    healthChecks?: StorageHealthCheck[] }
 }
-export interface StorageAlert {
-    id: string;
+}
+export interface StorageAlert { id: string;
     name: string;
     metric: string;
     threshold: number;
     condition: 'gt' | 'lt' | 'eq' | 'ne';
     action: 'log' | 'email' | 'webhook' | 'custom';
-    actionConfig?: any;
-
+    actionConfig?: any }
 }
-export interface StorageHealthCheck {
-    id: string;
+}
+export interface StorageHealthCheck { id: string;
     name: string;
     interval: number;
     timeout: number;
-    check: (provider: StorageProvider) => Promise<boolean>;
-
+    check: (provider: StorageProvider) => Promise<boolean> }
 }
-export interface StorageCapabilities {
-    get: boolean;
+}
+export interface StorageCapabilities { get: boolean;
     set: boolean;
     delete: boolean;
     exists: boolean;
@@ -346,8 +310,8 @@ export interface StorageCapabilities {
     streaming: boolean;
     backup: boolean;
     restore: boolean;
-    custom?: Record<string, boolean>;
-
+    custom?: Record<string, boolean> }
+}
 }
 export interface StorageProviderMetadata {
     author: string;
@@ -360,34 +324,31 @@ export interface StorageProviderMetadata {
         latency: 'low' | 'medium' | 'high';
         scalability: 'single' | 'cluster' | 'distributed'
 }
+}
   };
-    compatibility?: {
-        minVersion: string;
+    compatibility?: { minVersion: string;
         maxVersion?: string;
         platforms?: string[];
-        dependencies?: string[];
-    };
+        dependencies?: string[] };
     categories?: string[];
     tags?: string[];
     keywords?: string[];
 
 }
-export interface StorageExample {
-    name: string;
+}
+export interface StorageExample { name: string;
     description: string;
     config: any;
-    operations: StorageOperation[];
-
+    operations: StorageOperation[] }
 }
-export interface StorageOperation {
-    operation: string;
+}
+export interface StorageOperation { operation: string;
     parameters: any;
     expectedResult?: any;
-    description?: string;
-
+    description?: string }
 }
-export interface StorageCollection {
-    readonly name: string;
+}
+export interface StorageCollection { readonly name: string;
     readonly schema?: any;
     insert<T>(document: T): Promise<string>;
     update<T>(id: string, document: Partial<T>): Promise<void>;
@@ -403,11 +364,10 @@ export interface StorageCollection {
     deleteIndex(name: string): Promise<void>;
     listIndexes(): Promise<string[]>;
     aggregate<T>(pipeline: any[]): Promise<T[]>;
-    stream<T>(query?: any): AsyncIterableIterator<T>;
-
+    stream<T>(query?: any): AsyncIterableIterator<T> }
 }
-export interface StorageTransaction {
-    readonly id: string;
+}
+export interface StorageTransaction { readonly id: string;
     get<T>(key: string): Promise<T | undefined>;
     set<T>(key: string, value: T, options?: StorageSetOptions): Promise<void>;
     delete(key: string): Promise<void>;
@@ -415,8 +375,8 @@ export interface StorageTransaction {
     rollback(): Promise<void>;
     isActive(): boolean;
     isCommitted(): boolean;
-    isRolledBack(): boolean;
-
+    isRolledBack(): boolean }
+}
 }
 export interface StorageQuery {
     type: 'select' | 'insert' | 'update' | 'delete' | 'aggregate';
@@ -427,6 +387,7 @@ export interface StorageQuery {
         field: string;
         direction: 'asc' | 'desc'
 }
+}
   }>;
     select?: string[];
     groupBy?: string[];
@@ -434,74 +395,65 @@ export interface StorageQuery {
     joins?: StorageQueryJoin[];
 
 }
-export interface StorageQueryCondition {
-    field: string;
+}
+export interface StorageQueryCondition { field: string;
     operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'like' | 'regex';
     value: any;
     and?: StorageQueryCondition[];
     or?: StorageQueryCondition[];
-    not?: StorageQueryCondition;
-
+    not?: StorageQueryCondition }
 }
-export interface StorageQueryJoin {
-    collection: string;
+}
+export interface StorageQueryJoin { collection: string;
     on: {
         left: string;
-        right: string;
+        right: string }
 }
     };
     type: 'inner' | 'left' | 'right' | 'full';
 
 }
-export interface StorageStats {
-    connections: {
+}
+export interface StorageStats { connections: {
         total: number;
         active: number;
-        idle: number;
+        idle: number }
 }
     };
-    operations: {
-        total: number;
+    operations: { total: number;
         reads: number;
         writes: number;
         deletes: number;
-        errors: number;
-    };
-    performance: {
-        averageLatency: number;
+        errors: number };
+    performance: { averageLatency: number;
         throughput: number;
         errorRate: number;
-        cacheHitRate?: number;
-    };
-    storage: {
-        totalSize: number;
+        cacheHitRate?: number };
+    storage: { totalSize: number;
         usedSize: number;
         availableSize: number;
         keyCount: number;
-        collectionCount?: number;
-    };
-    memory: {
-        used: number;
+        collectionCount?: number };
+    memory: { used: number;
         available: number;
-        cached: number;
-    };
+        cached: number };
 
 }
-export interface StorageHealthStatus {
-    status: 'healthy' | 'warning' | 'error' | 'unknown';
+}
+export interface StorageHealthStatus { status: 'healthy' | 'warning' | 'error' | 'unknown';
     message?: string;
     details?: {
         connection: boolean;
         performance: boolean;
         storage: boolean;
-        memory: boolean;
+        memory: boolean }
 }
     };
     lastChecked: Date;
 
 }
-export interface StorageMigration {
-    readonly id: string;
+}
+export interface StorageMigration { readonly id: string;
     readonly from: StorageProvider;
     readonly to: StorageProvider;
     migrate(options?: StorageMigrationOptions): Promise<StorageMigrationResult>;
@@ -509,11 +461,10 @@ export interface StorageMigration {
     getProgress(): StorageMigrationProgress;
     pause(): Promise<void>;
     resume(): Promise<void>;
-    cancel(): Promise<void>;
-
+    cancel(): Promise<void> }
 }
-export interface StorageMigrationOptions {
-    batchSize?: number;
+}
+export interface StorageMigrationOptions { batchSize?: number;
     parallelism?: number;
     validation?: boolean;
     backup?: boolean;
@@ -521,19 +472,19 @@ export interface StorageMigrationOptions {
     filter?: (key: string, value: any) => boolean;
     transform?: (key: string, value: any) => {
         key: string;
-        value: any;
+        value: any }
 }
     };
 
 }
-export interface StorageMigrationResult {
-    success: boolean;
+}
+export interface StorageMigrationResult { success: boolean;
     totalKeys: number;
     migratedKeys: number;
     failedKeys: number;
     duration: number;
-    errors: Error[];
-
+    errors: Error[] }
+}
 }
 export interface StorageMigrationProgress {
     status: 'pending' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
@@ -547,4 +498,5 @@ export declare namespace StorageExtensionHelpers {
     function createStorageProvider(config: Partial<StorageProviderDefinition>): StorageProviderDefinition;
 
 //# sourceMappingURL=StorageExtension.d.ts.map
+}
 }

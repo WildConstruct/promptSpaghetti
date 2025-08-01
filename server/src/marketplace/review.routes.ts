@@ -11,7 +11,7 @@ import {
   CreatorResponseSchema,
   ModerationActionSchema,
   ReviewAnalyticsSchema
-} from './review.types.js';
+ from './review.types.js';
 
 export async function reviewRoutes(fastify: FastifyInstance) {
   const reviewService = new ReviewService(fastify);
@@ -28,23 +28,23 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         201: z.object({
           review: z.any() // ReviewWithDetails type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const review = await reviewService.createReview(request.user.id, request.body);
       reply.code(201).send({ review });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Create review error:', error);
       
       if (error.message.includes('must purchase') || 
           error.message.includes('already reviewed')) {
         reply.code(400).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to create review' });
-      }
-    }
+
+
   });
 
   // Update a review
@@ -58,25 +58,25 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           review: z.any() // ReviewWithDetails type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { reviewId } = request.params;
       const review = await reviewService.updateReview(reviewId, request.user.id, request.body);
       reply.send({ review });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Update review error:', error);
       
       if (error.message.includes('not found') || 
           error.message.includes('not owned') ||
           error.message.includes('no longer be edited')) {
         reply.code(400).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to update review' });
-      }
-    }
+
+
   });
 
   // Delete a review
@@ -89,23 +89,23 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { reviewId } = request.params;
       await reviewService.deleteReview(reviewId, request.user.id);
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Delete review error:', error);
       
       if (error.message.includes('not found') || error.message.includes('not owned')) {
         reply.code(400).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to delete review' });
-      }
-    }
+
+
   });
 
   // Get a specific review
@@ -117,9 +117,9 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           review: z.any() // ReviewWithDetails type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { reviewId } = request.params;
@@ -128,13 +128,13 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       if (!review) {
         reply.code(404).send({ error: 'Review not found' });
         return;
-      }
+
       
       reply.send({ review });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get review error:', error);
       reply.code(500).send({ error: 'Failed to get review' });
-    }
+
   });
 
   // =============================================
@@ -156,9 +156,9 @@ export async function reviewRoutes(fastify: FastifyInstance) {
           limit: z.number(),
           hasMore: z.boolean(),
           metrics: z.any() // ReviewMetrics type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { templateId } = request.params;
@@ -171,10 +171,10 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       );
       
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get template reviews error:', error);
       reply.code(500).send({ error: 'Failed to get template reviews' });
-    }
+
   });
 
   // Get template review metrics
@@ -186,18 +186,18 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           metrics: z.any() // ReviewMetrics type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { templateId } = request.params;
       const metrics = await reviewService.getTemplateMetrics(templateId);
       reply.send({ metrics });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get template metrics error:', error);
       reply.code(500).send({ error: 'Failed to get template metrics' });
-    }
+
   });
 
   // =============================================
@@ -212,18 +212,18 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { review_id, vote } = request.body;
       await reviewService.voteHelpfulness(review_id, request.user.id, vote);
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Vote helpfulness error:', error);
       reply.code(500).send({ error: 'Failed to vote on review helpfulness' });
-    }
+
   });
 
   // Flag a review
@@ -234,23 +234,23 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { review_id, flag_type, reason } = request.body;
       await reviewService.flagReview(review_id, request.user.id, flag_type, reason);
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Flag review error:', error);
       
       if (error.message.includes('already flagged')) {
         reply.code(400).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to flag review' });
-      }
-    }
+
+
   });
 
   // =============================================
@@ -265,9 +265,9 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         201: z.object({
           response: z.any() // CreatorResponse type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { review_id, response } = request.body;
@@ -277,17 +277,17 @@ export async function reviewRoutes(fastify: FastifyInstance) {
         response
       );
       reply.code(201).send({ response: creatorResponse });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Create creator response error:', error);
       
       if (error.message.includes('not found') || 
           error.message.includes('own templates') ||
           error.message.includes('already responded')) {
         reply.code(400).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to create creator response' });
-      }
-    }
+
+
   });
 
   // Update creator response
@@ -303,9 +303,9 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           response: z.any() // CreatorResponse type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { responseId } = request.params;
@@ -320,7 +320,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       if (existingResponse.length === 0) {
         reply.code(404).send({ error: 'Response not found or not owned by user' });
         return;
-      }
+
       
       await fastify.db.query(
         'UPDATE creator_responses SET response = ?, updated_at = datetime("now") WHERE id = ?',
@@ -333,10 +333,10 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       );
       
       reply.send({ response: updatedResponse[0] });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Update creator response error:', error);
       reply.code(500).send({ error: 'Failed to update creator response' });
-    }
+
   });
 
   // Delete creator response
@@ -349,9 +349,9 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { responseId } = request.params;
@@ -365,7 +365,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       if (existingResponse.length === 0) {
         reply.code(404).send({ error: 'Response not found or not owned by user' });
         return;
-      }
+
       
       await fastify.db.query(
         'DELETE FROM creator_responses WHERE id = ?',
@@ -373,10 +373,10 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       );
       
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Delete creator response error:', error);
       reply.code(500).send({ error: 'Failed to delete creator response' });
-    }
+
   });
 
   // =============================================
@@ -390,17 +390,17 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           moderation_queue: z.any() // ReviewModerationQueue type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const moderationQueue = await reviewService.getModerationQueue();
       reply.send({ moderation_queue: moderationQueue });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get moderation queue error:', error);
       reply.code(500).send({ error: 'Failed to get moderation queue' });
-    }
+
   });
 
   // Take moderation action
@@ -411,9 +411,9 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { review_id, action, reason } = request.body;
@@ -434,7 +434,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       default:
         reply.code(400).send({ error: 'Invalid moderation action' });
         return;
-      }
+
       
       // Update moderation queue
       await fastify.db.query(
@@ -443,10 +443,10 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       );
       
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Moderation action error:', error);
       reply.code(500).send({ error: 'Failed to perform moderation action' });
-    }
+
   });
 
   // =============================================
@@ -461,9 +461,9 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           analytics: z.any() // ReviewAnalytics type
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { template_id, period, include_trends, include_keywords, include_sentiment } = request.query;
@@ -486,7 +486,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       if (template_id) {
         whereClause += ' AND template_id = ?';
         params.push(template_id);
-      }
+
       
       // Check if user has permission to view analytics
       if (template_id && !request.user.roles?.includes('admin')) {
@@ -498,8 +498,8 @@ export async function reviewRoutes(fastify: FastifyInstance) {
         if (templateCheck.length === 0 || templateCheck[0].owner_id !== request.user.id) {
           reply.code(403).send({ error: 'Access denied' });
           return;
-        }
-      }
+
+
       
       // Get basic metrics
       const metricsResult = await fastify.db.query(
@@ -532,10 +532,10 @@ export async function reviewRoutes(fastify: FastifyInstance) {
             three_star: metrics.three_star || 0,
             two_star: metrics.two_star || 0,
             one_star: metrics.one_star || 0
-  }
+
           verified_percentage: metrics.total_reviews > 0 ? 
             (metrics.verified_count / metrics.total_reviews) * 100 : 0
-  }
+
         trends: {},
         top_keywords: [],
         common_use_cases: [],
@@ -568,7 +568,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
           })),
           sentiment_trends: [] // Would implement with sentiment analysis
         };
-      }
+
       
       // Add keyword analysis if requested
       if (include_keywords) {
@@ -591,13 +591,13 @@ export async function reviewRoutes(fastify: FastifyInstance) {
           count: row.count,
           sentiment: row.sentiment
         }));
-      }
+
       
       reply.send({ analytics });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get review analytics error:', error);
       reply.code(500).send({ error: 'Failed to get review analytics' });
-    }
+
   });
 
   // =============================================
@@ -622,9 +622,9 @@ export async function reviewRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           hasMore: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { userId } = request.params;
@@ -634,7 +634,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       if (userId !== request.user.id && !request.user.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Access denied' });
         return;
-      }
+
       
       const offset = (page - 1) * limit;
       
@@ -668,7 +668,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
             created_at: new Date(review.created_at),
             updated_at: new Date(review.updated_at)
           };
-  }
+
       );
       
       reply.send({
@@ -678,9 +678,8 @@ export async function reviewRoutes(fastify: FastifyInstance) {
         limit,
         hasMore
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get user reviews error:', error);
       reply.code(500).send({ error: 'Failed to get user reviews' });
-    }
+
   });
-}

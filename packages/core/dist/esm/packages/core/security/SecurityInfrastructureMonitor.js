@@ -74,7 +74,8 @@ weight: number; // Impact on overall health score (0-1)
 thresholds: {
     warning_threshold ?  : number;
     critical_threshold ?  : number;
-    comparison_operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
+    comparison_operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte',
+    ;
 }
 ;
 unit: string;
@@ -190,7 +191,12 @@ resolution: {
 escalation: {
     escalated: boolean;
     escalation_level: number;
-    escalation_history: Array;
+    escalation_history: Array < {
+        level: number,
+        escalated_at: number,
+        escalated_to: string,
+        actions_taken: string
+    } > ;
 }
 ;
 // Notification tracking
@@ -252,13 +258,21 @@ alert_summary: {
 }
 ;
 // Top issues
-top_issues: Array;
+top_issues: Array < {
+    component_id: string,
+    component_name: string,
+    issue_type: string,
+    occurrence_count: number,
+    impact_score: number,
+    recommended_action: string
+} > ;
 // Trend analysis
 trends: {
     performance_trend: 'improving' | 'stable' | 'degrading';
     availability_trend: 'improving' | 'stable' | 'degrading';
     alert_volume_trend: 'increasing' | 'stable' | 'decreasing';
-    resource_utilization_trend: 'increasing' | 'stable' | 'decreasing';
+    resource_utilization_trend: 'increasing' | 'stable' | 'decreasing',
+    ;
 }
 ;
 // Recommendations
@@ -867,8 +881,9 @@ context: {
 }
 ;
 async;
-checkCustomMetricThresholds(componentId, string);
-config: CustomMetricConfig,
+checkCustomMetricThresholds(componentId, string),
+    config;
+CustomMetricConfig,
     value;
 number;
 Promise < void  > {
@@ -1669,23 +1684,22 @@ number | undefined;
                                                                                                                                             immediate_actions: topIssues.slice(),
                                                                                                                                             0: ,
                                                                                                                                             3: ,
-                                                                                                                                            : .map(issue => `Address ${issue.issue_type} issues on ${issue.component_name}`)
-                                                                                                                                        }
+                                                                                                                                            : .map(issue => `Address ${issue.issue_type} issues on ${issue.component_name}`) }
                                                                                                                                     },
                                                                                                                                         preventive_measures;
-                                                                                                                                    [,
+                                                                                                                                    [
                                                                                                                                         'Implement predictive monitoring for resource utilization',
                                                                                                                                         'Review and optimize alert thresholds to reduce false positives',
                                                                                                                                         'Establish automated remediation for common issues'
                                                                                                                                     ],
                                                                                                                                         capacity_planning;
-                                                                                                                                    [,
+                                                                                                                                    [
                                                                                                                                         'Monitor CPU and memory trends for capacity planning',
                                                                                                                                         'Consider load balancing improvements for high-traffic components',
                                                                                                                                         'Plan for storage capacity increases based on usage trends'
                                                                                                                                     ],
                                                                                                                                         optimization_opportunities;
-                                                                                                                                    [,
+                                                                                                                                    [
                                                                                                                                         'Optimize components with consistently high resource usage',
                                                                                                                                         'Review and consolidate redundant monitoring checks',
                                                                                                                                         'Implement automated scaling policies for variable workloads'

@@ -15,94 +15,85 @@
  * - Implementation complexity assessment
  */
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { 
-  ConversionFunnelDefinition,
+import { ConversionFunnelDefinition,
   ConversionStep,
-  UserSegment,
+  UserSegment }
   ConversionCohort
-} from '../../analytics/ConversionDataModel';
-import { 
-  ConversionAnalyticsInfrastructure,
-  ConversionMetricQuery,
+ from '../../analytics/ConversionDataModel';
+import { ConversionAnalyticsInfrastructure,
+  ConversionMetricQuery }
   ConversionMetricResult
-} from '../../analytics/ConversionAnalyticsInfrastructure';
+ from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Optimization engine interfaces
 
-}
-export interface FunnelOptimizationEngineProps {
-  funnelDefinition: ConversionFunnelDefinition;
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-}
+
+export interface FunnelOptimizationEngineProps { funnelDefinition: ConversionFunnelDefinition;
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure }
+},
   timeRange: { start: number; end: number };
   currentPerformance: FunnelPerformanceSnapshot;
   optimizationGoals?: OptimizationGoal;
   constraints?: OptimizationConstraint;
   onRecommendationGenerated?: (recommendations: OptimizationRecommendation) => void;
   onExperimentPlan?: (experiments: ExperimentPlan) => void;
-}
-}
-export interface FunnelPerformanceSnapshot {
-  overallConversionRate: number;
+
+
+export interface FunnelPerformanceSnapshot { overallConversionRate: number;
   stepPerformance: StepPerformanceSnapshot;
   revenueMetrics: RevenueMetricsSnapshot;
   userExperienceMetrics: UXMetricsSnapshot;
   technicalMetrics: TechnicalMetricsSnapshot;
-  timestamp: number;
-}
-}
-}
-export interface StepPerformanceSnapshot {
-  stepId: string;
+  timestamp: number }
+
+
+
+export interface StepPerformanceSnapshot { stepId: string;
   stepName: string;
   conversionRate: number;
   dropOffRate: number;
   averageTimeSpent: number;
   errorRate: number;
   userSatisfactionScore: number;
-  completionQuality: number;
-}
-}
-}
-export interface RevenueMetricsSnapshot {
-  revenuePerVisitor: number;
+  completionQuality: number }
+
+
+
+export interface RevenueMetricsSnapshot { revenuePerVisitor: number;
   revenuePerConversion: number;
   lifetimeValue: number;
   paybackPeriod: number;
-  marginPerConversion: number;
-}
-}
-}
-export interface UXMetricsSnapshot {
-  overallSatisfactionScore: number;
+  marginPerConversion: number }
+
+
+
+export interface UXMetricsSnapshot { overallSatisfactionScore: number;
   easeOfUseScore: number;
   clarityScore: number;
   trustScore: number;
   mobileExperienceScore: number;
-  accessibilityScore: number;
-}
-}
-}
-export interface TechnicalMetricsSnapshot {
-  averageLoadTime: number;
+  accessibilityScore: number }
+
+
+
+export interface TechnicalMetricsSnapshot { averageLoadTime: number;
   errorRate: number;
   availabilityScore: number;
   performanceScore: number;
   securityScore: number;
-  compatibilityScore: number;
-}
-}
-}
-export interface OptimizationGoal {
-  id: string;
+  compatibilityScore: number }
+
+
+
+export interface OptimizationGoal { id: string;
   type: OptimizationGoalType;
   target: number;
   priority: 'critical' | 'high' | 'medium' | 'low';
-  timeframe: number; // Days to achieve,
+  timeframe: number; // Days to achieve }
   constraints: string;
   successMetrics: string;
-}
-}
+
+
 export type OptimizationGoalType = 
   | 'increase_conversion_rate'
   | 'reduce_drop_off'
@@ -113,15 +104,14 @@ export type OptimizationGoalType =
   | 'reduce_technical_issues'
   | 'improve_accessibility';
 
-}
-export interface OptimizationConstraint {
-  id: string;
+
+export interface OptimizationConstraint { id: string;
   type: ConstraintType;
   value: number | string;
   description: string;
-  flexibility: 'strict' | 'moderate' | 'flexible'
-}
-  }
+  flexibility: 'strict' | 'moderate' | 'flexible' }
+
+
 export type ConstraintType = 
   | 'budget_limit'
   | 'time_limit'
@@ -130,40 +120,38 @@ export type ConstraintType =
   | 'business_rule'
   | 'compliance_requirement';
 
-}
-export interface OptimizationAnalysisData {
-  recommendations: OptimizationRecommendation;
+
+export interface OptimizationAnalysisData { recommendations: OptimizationRecommendation;
   experimentPlans: ExperimentPlan;
   impactPredictions: ImpactPrediction;
   resourceAllocation: ResourceAllocation;
   optimizationRoadmap: OptimizationRoadmap;
   riskAssessment: RiskAssessment;
   competitiveAnalysis: CompetitiveAnalysis;
-  trends: OptimizationTrend;
-}
-}
-}
-export interface OptimizationRecommendation {
-  id: string;
+  trends: OptimizationTrend }
+
+
+
+export interface OptimizationRecommendation { id: string;
   title: string;
   description: string;
   category: RecommendationCategory;
   priority: RecommendationPriority;
-  impactScore: number; // 0-100,
-  confidenceScore: number; // 0-1,
-  effortScore: number; // 0-100,
-  riskScore: number; // 0-100,
+  impactScore: number; // 0-100;
+  confidenceScore: number; // 0-1;
+  effortScore: number; // 0-100;
+  riskScore: number; // 0-100;
   roiEstimate: number;
-  timeToImplement: number; // Days,
-  timeToImpact: number; // Days,
+  timeToImplement: number; // Days;
+  timeToImpact: number; // Days }
   affectedSteps: string;
   targetedGoals: string;
   implementation: ImplementationPlan;
   validation: ValidationPlan;
   dependencies: string;
   alternatives: AlternativeRecommendation;
-}
-}
+
+
 export type RecommendationCategory = 
   | 'user_experience'
   | 'technical_performance'
@@ -181,106 +169,100 @@ export type RecommendationPriority =
   | 'low'
   | 'nice_to_have';
 
-}
-export interface ImplementationPlan {
-  phases: ImplementationPhase;
+
+export interface ImplementationPlan { phases: ImplementationPhase;
   resources: ResourceRequirement;
   timeline: TimelineItem;
   risksAndMitigations: RiskMitigation;
-  successCriteria: SuccessCriterion;
-}
-}
-}
-export interface ImplementationPhase {
-  phase: string;
+  successCriteria: SuccessCriterion }
+
+
+
+export interface ImplementationPhase { phase: string;
   description: string;
-  duration: number; // Days,
+  duration: number; // Days }
   deliverables: string;
   dependencies: string;
   resources: string;
   milestones: Milestone;
-}
-}
-}
-export interface ResourceRequirement {
-  type: 'development' | 'design' | 'content' | 'qa' | 'marketing' | 'analytics';
+
+
+
+
+export interface ResourceRequirement { type: 'development' | 'design' | 'content' | 'qa' | 'marketing' | 'analytics';
   hours: number;
   skills: string;
-  urgency: 'immediate' | 'soon' | 'later'
-}
-  }
-}
-export interface TimelineItem {
-  date: number;
+  urgency: 'immediate' | 'soon' | 'later' }
+
+
+
+
+export interface TimelineItem { date: number;
   activity: string;
   responsible: string;
   dependencies: string;
-  deliverable?: string;
-}
-}
-}
-export interface RiskMitigation {
-  risk: string;
-  probability: number; // 0-1,
-  impact: number; // 0-100,
+  deliverable?: string }
+
+
+
+export interface RiskMitigation { risk: string;
+  probability: number; // 0-1;
+  impact: number; // 0-100 }
   mitigation: string;
   contingency: string;
-}
-}
-}
-export interface SuccessCriterion {
-  metric: string;
+
+
+
+
+export interface SuccessCriterion { metric: string;
   target: number;
   measurement: string;
-  timeframe: number; // Days,
-}
-}
-}
-export interface Milestone {
-  name: string;
+  timeframe: number; // Days }
+
+
+
+
+export interface Milestone { name: string;
   date: number;
   criteria: string;
-  dependencies: string;
-}
-}
-}
-export interface ValidationPlan {
-  hypothesis: string;
+  dependencies: string }
+
+
+
+export interface ValidationPlan { hypothesis: string;
   testMethod: 'ab_test' | 'multivariate' | 'holdout' | 'gradual_rollout';
   sampleSize: number;
-  duration: number; // Days,
+  duration: number; // Days }
   successMetrics: ValidationMetric;
   stopConditions: StopCondition;
-}
-}
-}
-export interface ValidationMetric {
-  metric: string;
+
+
+
+
+export interface ValidationMetric { metric: string;
   target: number;
   tolerance: number;
-  significance: number;
-}
-}
-}
-export interface StopCondition {
-  condition: string;
+  significance: number }
+
+
+
+export interface StopCondition { condition: string;
   threshold: number;
-  action: 'stop' | 'modify' | 'continue'
-}
-  }
-}
-export interface AlternativeRecommendation {
-  title: string;
+  action: 'stop' | 'modify' | 'continue' }
+
+
+
+
+export interface AlternativeRecommendation { title: string;
   description: string;
   impactScore: number;
   effortScore: number;
   riskScore: number;
-  tradeoffs: string;
-}
-}
-}
-export interface ExperimentPlan {
-  id: string;
+  tradeoffs: string }
+
+
+
+export interface ExperimentPlan { id: string;
   name: string;
   objective: string;
   hypothesis: string;
@@ -288,14 +270,14 @@ export interface ExperimentPlan {
   targetSteps: string;
   variants: ExperimentVariant;
   trafficAllocation: TrafficAllocation;
-  duration: number; // Days,
+  duration: number; // Days }
   sampleSize: SampleSizeCalculation;
   successMetrics: ExperimentMetric;
   guardrailMetrics: GuardrailMetric;
   analysisFramework: AnalysisFramework;
   riskAssessment: ExperimentRiskAssessment;
-}
-}
+
+
 export type ExperimentType = 
   | 'ab_test'
   | 'multivariate'
@@ -304,466 +286,424 @@ export type ExperimentType =
   | 'personalization'
   | 'sequential';
 
-}
-export interface ExperimentVariant {
-  id: string;
+
+export interface ExperimentVariant { id: string;
   name: string;
   description: string;
   changes: VariantChange;
   trafficPercentage: number;
   expectedImpact: number;
-  riskLevel: 'low' | 'medium' | 'high'
-}
-  }
-}
-export interface VariantChange {
-  type: 'ui' | 'content' | 'flow' | 'logic' | 'design';
+  riskLevel: 'low' | 'medium' | 'high' }
+
+
+
+
+export interface VariantChange { type: 'ui' | 'content' | 'flow' | 'logic' | 'design' }
   element: string;
   change: string;
   rationale: string;
-}
-}
-}
-export interface TrafficAllocation {
-  strategy: 'equal' | 'weighted' | 'adaptive' | 'sequential';
+
+
+
+
+export interface TrafficAllocation { strategy: 'equal' | 'weighted' | 'adaptive' | 'sequential';
   rampUpPlan?: RampUpPlan;
   exclusionCriteria: string;
-  inclusionCriteria: string;
-}
-}
-}
-export interface RampUpPlan {
-  initialPercentage: number;
+  inclusionCriteria: string }
+
+
+
+export interface RampUpPlan { initialPercentage: number;
   finalPercentage: number;
-  rampUpDuration: number; // Days,
+  rampUpDuration: number; // Days }
   milestones: RampUpMilestone;
-}
-}
-}
-export interface RampUpMilestone {
-  percentage: number;
+
+
+
+
+export interface RampUpMilestone { percentage: number;
   date: number;
-  criteria: string;
-}
-}
-}
-export interface SampleSizeCalculation {
-  minimumDetectableEffect: number;
+  criteria: string }
+
+
+
+export interface SampleSizeCalculation { minimumDetectableEffect: number;
   baselineConversionRate: number;
   power: number;
   significance: number;
   calculatedSampleSize: number;
-  recommendedDuration: number; // Days,
+  recommendedDuration: number; // Days }
   confidenceInterval: [number, number];
-}
-}
-}
-export interface ExperimentMetric {
-  name: string;
+
+
+
+
+export interface ExperimentMetric { name: string;
   type: 'primary' | 'secondary';
   calculation: string;
   target: number;
-  minimumDetectableEffect: number;
-}
-}
-}
-export interface GuardrailMetric {
-  name: string;
+  minimumDetectableEffect: number }
+
+
+
+export interface GuardrailMetric { name: string;
   threshold: number;
   direction: 'increase' | 'decrease';
-  action: 'stop' | 'alert' | 'adjust'
-}
-  }
-}
-export interface AnalysisFramework {
-  method: 'frequentist' | 'bayesian' | 'sequential';
+  action: 'stop' | 'alert' | 'adjust' }
+
+
+
+
+export interface AnalysisFramework { method: 'frequentist' | 'bayesian' | 'sequential' }
   interimAnalyses: InterimAnalysis;
   finalAnalysis: FinalAnalysis;
   reportingSchedule: ReportingSchedule;
-}
-}
-}
-export interface InterimAnalysis {
-  day: number;
+
+
+
+
+export interface InterimAnalysis { day: number;
   purpose: string;
   metrics: string;
-  decisionCriteria: string;
-}
-}
-}
-export interface FinalAnalysis {
-  methods: string;
+  decisionCriteria: string }
+
+
+
+export interface FinalAnalysis { methods: string;
   visualizations: string;
   segmentAnalysis: string;
-  statisticalTests: string;
-}
-}
-}
-export interface ReportingSchedule {
-  frequency: 'daily' | 'weekly' | 'milestone';
+  statisticalTests: string }
+
+
+
+export interface ReportingSchedule { frequency: 'daily' | 'weekly' | 'milestone' }
   audience: string;
   content: string;
-}
-}
-}
-export interface ExperimentRiskAssessment {
-  businessRisks: BusinessRisk;
+
+
+
+
+export interface ExperimentRiskAssessment { businessRisks: BusinessRisk;
   technicalRisks: TechnicalRisk;
   userExperienceRisks: UXRisk;
-  mitigationPlans: RiskMitigationPlan;
-}
-}
-}
-export interface BusinessRisk {
-  risk: string;
+  mitigationPlans: RiskMitigationPlan }
+
+
+
+export interface BusinessRisk { risk: string;
   probability: number;
   impact: number;
-  mitigation: string;
-}
-}
-}
-export interface TechnicalRisk {
-  risk: string;
+  mitigation: string }
+
+
+
+export interface TechnicalRisk { risk: string;
   probability: number;
   impact: number;
-  mitigation: string;
-}
-}
-}
-export interface UXRisk {
-  risk: string;
+  mitigation: string }
+
+
+
+export interface UXRisk { risk: string;
   probability: number;
   impact: number;
-  mitigation: string;
-}
-}
-}
-export interface RiskMitigationPlan {
-  risk: string;
+  mitigation: string }
+
+
+
+export interface RiskMitigationPlan { risk: string;
   plan: string;
   responsible: string;
-  timeline: number;
-}
-}
-}
-export interface ImpactPrediction {
-  recommendationId: string;
+  timeline: number }
+
+
+
+export interface ImpactPrediction { recommendationId: string;
   predictedImpact: PredictedMetricImpact;
   confidenceInterval: [number, number];
   timeToRealization: number;
   factorsConsidered: string;
   assumptions: string;
-  sensitivityAnalysis: SensitivityAnalysis;
-}
-}
-}
-export interface PredictedMetricImpact {
-  metric: string;
+  sensitivityAnalysis: SensitivityAnalysis }
+
+
+
+export interface PredictedMetricImpact { metric: string;
   currentValue: number;
   predictedValue: number;
   changeAbsolute: number;
   changeRelative: number;
-  confidence: number;
-}
-}
-}
-export interface SensitivityAnalysis {
-  factors: SensitivityFactor;
-  scenarios: ImpactScenario;
-}
-}
-}
-export interface SensitivityFactor {
-  factor: string;
+  confidence: number }
+
+
+
+export interface SensitivityAnalysis { factors: SensitivityFactor;
+  scenarios: ImpactScenario }
+
+
+
+export interface SensitivityFactor { factor: string;
   impact: number;
-  uncertainty: number;
-}
-}
-}
-export interface ImpactScenario {
-  scenario: string;
+  uncertainty: number }
+
+
+
+export interface ImpactScenario { scenario: string;
   probability: number;
-  impact: PredictedMetricImpact;
-}
-}
-}
-export interface ResourceAllocation {
-  totalBudget: number;
+  impact: PredictedMetricImpact }
+
+
+
+export interface ResourceAllocation { totalBudget: number;
   allocations: AllocationItem;
   priorities: PriorityMatrix;
   timeline: AllocationTimeline;
-  optimization: AllocationOptimization;
-}
-}
-}
-export interface AllocationItem {
-  recommendationId: string;
+  optimization: AllocationOptimization }
+
+
+
+export interface AllocationItem { recommendationId: string;
   allocatedBudget: number;
   allocatedTime: number;
   allocatedResources: AllocatedResource;
   expectedROI: number;
-  priority: number;
-}
-}
-}
-export interface AllocatedResource {
-  type: string;
+  priority: number }
+
+
+
+export interface AllocatedResource { type: string;
   amount: number;
   duration: number;
-  utilization: number;
-}
-}
-}
-export interface PriorityMatrix {
-  highImpactLowEffort: string;
+  utilization: number }
+
+
+
+export interface PriorityMatrix { highImpactLowEffort: string;
   highImpactHighEffort: string;
   lowImpactLowEffort: string;
-  lowImpactHighEffort: string;
-}
-}
-}
-export interface AllocationTimeline {
-  period: string;
+  lowImpactHighEffort: string }
+
+
+
+export interface AllocationTimeline { period: string;
   allocations: AllocationItem;
-  capacity: CapacityInfo;
-}
-}
-}
-export interface CapacityInfo {
-  available: number;
+  capacity: CapacityInfo }
+
+
+
+export interface CapacityInfo { available: number;
   allocated: number;
   utilization: number;
-  bottlenecks: string;
-}
-}
-}
-export interface AllocationOptimization {
-  method: 'linear_programming' | 'genetic_algorithm' | 'monte_carlo';
+  bottlenecks: string }
+
+
+
+export interface AllocationOptimization { method: 'linear_programming' | 'genetic_algorithm' | 'monte_carlo' }
   objective: 'maximize_roi' | 'minimize_risk' | 'balanced';
   constraints: OptimizationConstraint;
   solution: OptimizationSolution;
-}
-}
-}
-export interface OptimizationSolution {
-  optimalAllocations: AllocationItem;
+
+
+
+
+export interface OptimizationSolution { optimalAllocations: AllocationItem;
   expectedOutcome: number;
   confidence: number;
-  alternatives: AlternativeSolution;
-}
-}
-}
-export interface AlternativeSolution {
-  description: string;
+  alternatives: AlternativeSolution }
+
+
+
+export interface AlternativeSolution { description: string;
   allocations: AllocationItem;
   expectedOutcome: number;
-  tradeoffs: string;
-}
-}
-}
-export interface OptimizationRoadmap {
-  phases: RoadmapPhase;
+  tradeoffs: string }
+
+
+
+export interface OptimizationRoadmap { phases: RoadmapPhase;
   milestones: RoadmapMilestone;
   dependencies: RoadmapDependency;
   riskMitigations: RoadmapRiskMitigation;
-  success: RoadmapSuccess;
-}
-}
-}
-export interface RoadmapPhase {
-  phase: string;
+  success: RoadmapSuccess }
+
+
+
+export interface RoadmapPhase { phase: string;
   duration: number;
   objectives: string;
   deliverables: string;
   resources: ResourceRequirement;
   risks: string;
-  successCriteria: string;
-}
-}
-}
-export interface RoadmapMilestone {
-  name: string;
+  successCriteria: string }
+
+
+
+export interface RoadmapMilestone { name: string;
   date: number;
   description: string;
   dependencies: string;
   successCriteria: string;
-  impact: number;
-}
-}
-}
-export interface RoadmapDependency {
-  from: string;
+  impact: number }
+
+
+
+export interface RoadmapDependency { from: string;
   to: string;
   type: 'blocking' | 'enabling' | 'informing';
   description: string;
-  criticality: 'critical' | 'important' | 'nice_to_have'
-}
-  }
-}
-export interface RoadmapRiskMitigation {
-  risk: string;
+  criticality: 'critical' | 'important' | 'nice_to_have' }
+
+
+
+
+export interface RoadmapRiskMitigation { risk: string;
   phase: string;
   mitigation: string;
   contingency: string;
-  monitoring: string;
-}
-}
-}
-export interface RoadmapSuccess {
-  definition: string;
+  monitoring: string }
+
+
+
+export interface RoadmapSuccess { definition: string;
   metrics: SuccessMetric;
   timeline: number;
-  dependencies: string;
-}
-}
-}
-export interface SuccessMetric {
-  metric: string;
+  dependencies: string }
+
+
+
+export interface SuccessMetric { metric: string;
   target: number;
   measurement: string;
-  frequency: string;
-}
-}
-}
-export interface RiskAssessment {
-  overallRiskScore: number;
+  frequency: string }
+
+
+
+export interface RiskAssessment { overallRiskScore: number;
   riskCategories: RiskCategory;
   mitigationStrategies: MitigationStrategy;
   contingencyPlans: ContingencyPlan;
-  monitoring: RiskMonitoring;
-}
-}
-}
-export interface RiskCategory {
-  category: string;
+  monitoring: RiskMonitoring }
+
+
+
+export interface RiskCategory { category: string;
   risks: Risk;
   overallScore: number;
-  trend: 'increasing' | 'stable' | 'decreasing'
-}
-  }
-}
-export interface Risk {
-  id: string;
+  trend: 'increasing' | 'stable' | 'decreasing' }
+
+
+
+
+export interface Risk { id: string;
   description: string;
   probability: number;
   impact: number;
   score: number;
   category: string;
   triggers: string;
-  indicators: string;
-}
-}
-}
-export interface MitigationStrategy {
-  riskId: string;
+  indicators: string }
+
+
+
+export interface MitigationStrategy { riskId: string;
   strategy: string;
   effectiveness: number;
   cost: number;
   timeframe: number;
-  responsible: string;
-}
-}
-}
-export interface ContingencyPlan {
-  scenario: string;
+  responsible: string }
+
+
+
+export interface ContingencyPlan { scenario: string;
   probability: number;
   impact: number;
   response: string;
   resources: string;
-  timeline: number;
-}
-}
-}
-export interface RiskMonitoring {
-  indicators: RiskIndicator;
+  timeline: number }
+
+
+
+export interface RiskMonitoring { indicators: RiskIndicator;
   alertThresholds: AlertThreshold;
   reportingFrequency: string;
-  responsible: string;
-}
-}
-}
-export interface RiskIndicator {
-  indicator: string;
+  responsible: string }
+
+
+
+export interface RiskIndicator { indicator: string;
   measurement: string;
   threshold: number;
-  frequency: string;
-}
-}
-}
-export interface AlertThreshold {
-  metric: string;
+  frequency: string }
+
+
+
+export interface AlertThreshold { metric: string;
   threshold: number;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical' }
   action: string;
-}
-}
-}
-export interface CompetitiveAnalysis {
-  competitors: Competitor;
+
+
+
+
+export interface CompetitiveAnalysis { competitors: Competitor;
   benchmarks: CompetitiveBenchmark;
   opportunities: CompetitiveOpportunity;
   threats: CompetitiveThreat;
-  positioning: PositioningAnalysis;
-}
-}
-}
-export interface Competitor {
-  name: string;
+  positioning: PositioningAnalysis }
+
+
+
+export interface Competitor { name: string;
   strengths: string;
   weaknesses: string;
   marketPosition: string;
   conversionStrategies: string;
-  differentiators: string;
-}
-}
-}
-export interface CompetitiveBenchmark {
-  metric: string;
+  differentiators: string }
+
+
+
+export interface CompetitiveBenchmark { metric: string;
   ourValue: number;
   competitorValues: CompetitorValue;
   marketLeader: number;
   marketAverage: number;
-  ourRanking: number;
-}
-}
-}
-export interface CompetitorValue {
-  competitor: string;
+  ourRanking: number }
+
+
+
+export interface CompetitorValue { competitor: string;
   value: number;
-  confidence: number;
-}
-}
-}
-export interface CompetitiveOpportunity {
-  opportunity: string;
+  confidence: number }
+
+
+
+export interface CompetitiveOpportunity { opportunity: string;
   description: string;
   impact: number;
   difficulty: number;
   timeframe: number;
-  requirements: string;
-}
-}
-}
-export interface CompetitiveThreat {
-  threat: string;
+  requirements: string }
+
+
+
+export interface CompetitiveThreat { threat: string;
   description: string;
   probability: number;
   impact: number;
   timeframe: number;
-  mitigations: string;
-}
-}
-}
-export interface PositioningAnalysis {
-  currentPosition: string;
+  mitigations: string }
+
+
+
+export interface PositioningAnalysis { currentPosition: string;
   targetPosition: string;
   differentiators: string;
   weaknesses: string;
   opportunities: string;
-  strategies: string;
-}
-}
-}
+  strategies: string }
+
+
+
 export interface OptimizationTrend {
   trend: string;
   description: string;
@@ -776,19 +716,18 @@ export interface OptimizationTrend {
   /**
   * Main Funnel Optimization Engine Component
   */
-}
-}
-export const FunnelOptimizationEngine: React.FC<FunnelOptimizationEngineProps> = ({)
-  funnelDefinition,
-  analyticsInfrastructure,
-  timeRange,
-  currentPerformance,
-  optimizationGoals = [],
-  constraints = [],
-  onRecommendationGenerated,
+
+
+export const FunnelOptimizationEngine: React.FC<FunnelOptimizationEngineProps> = ({ )
+  funnelDefinition
+  analyticsInfrastructure
+  timeRange
+  currentPerformance
+  optimizationGoals = []
+  constraints = []
+  onRecommendationGenerated }
   onExperimentPlan
-}) => {
-  const [analysisData, setAnalysisData] = useState<OptimizationAnalysisData | null>(null);
+}) => { const [analysisData, setAnalysisData] = useState<OptimizationAnalysisData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<'recommendations' | 'experiments' | 'roadmap' | 'allocation'>('recommendations');
@@ -799,58 +738,48 @@ export const FunnelOptimizationEngine: React.FC<FunnelOptimizationEngineProps> =
       setLoading(true);
       setError(null);
       // Analyze current performance and generate recommendations
-      const query: ConversionMetricQuery = {,
-  funnelId: funnelDefinition.id,
-        startDate: timeRange.start,
-        endDate: timeRange.end,
-        metrics: [,
-          'conversion_optimization_opportunities',
-          'user_experience_metrics',
-          'technical_performance',
-          'competitive_benchmarks',
+      const query: ConversionMetricQuery = {
+  funnelId: funnelDefinition.id
+        startDate: timeRange.start
+        endDate: timeRange.end
+        metrics: [
+          'conversion_optimization_opportunities'
+          'user_experience_metrics'
+          'technical_performance'
+          'competitive_benchmarks'
           'industry_trends'
-        ],
-        groupBy: ['funnel_step', 'user_segment', 'device_type'],
-        filters: [],
+        ]
+        groupBy: ['funnel_step', 'user_segment', 'device_type']
+        filters: [] }
         aggregation: { interval: 'day' }
       };
       const results = await analyticsInfrastructure.queryMetrics(query);
       const optimizationData = await processOptimizationAnalysis(;);
-        funnelDefinition,
-        currentPerformance,
-        optimizationGoals,
-        constraints,
+        funnelDefinition
+        currentPerformance
+        optimizationGoals
+        constraints
         results
       );
       setAnalysisData(optimizationData);
       // Notify about high-priority recommendations
       const highPriorityRecs = optimizationData.recommendations;
         .filter(rec => rec.priority === 'critical' || rec.priority === 'high');
-      if (highPriorityRecs.length > 0) {
-        onRecommendationGenerated?.(highPriorityRecs);
+      if (highPriorityRecs.length > 0) { onRecommendationGenerated?.(highPriorityRecs);
       // Notify about experiment plans
       if (optimizationData.experimentPlans.length > 0) {
-        onExperimentPlan?.(optimizationData.experimentPlans);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to generate optimizations');
-} finally {
-      setLoading(false);
-  }, [
-    funnelDefinition,
-    analyticsInfrastructure,
-    timeRange,
-    currentPerformance,
-    optimizationGoals,
-    constraints,
-    onRecommendationGenerated,
+        onExperimentPlan?.(optimizationData.experimentPlans) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to generate optimizations') } finally { setLoading(false) }, [
+    funnelDefinition
+    analyticsInfrastructure
+    timeRange
+    currentPerformance
+    optimizationGoals
+    constraints
+    onRecommendationGenerated
     onExperimentPlan
   ]);
-  useEffect(() => {
-    generateOptimizations();
-  }, [generateOptimizations]);
-  const handleRecommendationSelect = useCallback((recommendationId: string) => {
-  setSelectedRecommendation(recommendationId === selectedRecommendation ? null : recommendationId);
-}, [selectedRecommendation]);
+  useEffect(() => { generateOptimizations() }, [generateOptimizations]);
+  const handleRecommendationSelect = useCallback((recommendationId: string) => { setSelectedRecommendation(recommendationId === selectedRecommendation ? null : recommendationId) }, [selectedRecommendation]);
   if (loading) {
     return <OptimizationEngineLoadingState />;
   if (error || !analysisData) {
@@ -910,22 +839,23 @@ export const FunnelOptimizationEngine: React.FC<FunnelOptimizationEngineProps> =
 /**
  * Optimization Engine Header Component
  */
-}
-interface OptimizationEngineHeaderProps {
-  funnelDefinition: ConversionFunnelDefinition;
+
+
+interface OptimizationEngineHeaderProps { funnelDefinition: ConversionFunnelDefinition;
   currentPerformance: FunnelPerformanceSnapshot;
   analysisData: OptimizationAnalysisData;
   activeView: string;
   onViewChange: (view: 'recommendations' | 'experiments' | 'roadmap' | 'allocation') => void;
-  const OptimizationEngineHeader: React.FC<OptimizationEngineHeaderProps> = ({,)
-  funnelDefinition,
-  currentPerformance,
-  analysisData,
-  activeView,
+  const OptimizationEngineHeader: React.FC<OptimizationEngineHeaderProps> = ({);
+  funnelDefinition;
+  currentPerformance;
+  analysisData;
+  activeView }
   onViewChange
-}
+
+
 }) => {
-  const views = [;
+  const views = [
     { key: 'recommendations', label: 'Recommendations' },
     { key: 'experiments', label: 'Experiments' },
     { key: 'roadmap', label: 'Roadmap' },
@@ -975,26 +905,25 @@ interface OptimizationEngineHeaderProps {
 /**
  * Recommendations View Component
  */
-}
-interface RecommendationsViewProps {
-  recommendations: OptimizationRecommendation;
+
+
+interface RecommendationsViewProps { recommendations: OptimizationRecommendation;
   impactPredictions: ImpactPrediction;
   selectedRecommendation: string | null;
   onRecommendationSelect: (id: string) => void;
-  const RecommendationsView: React.FC<RecommendationsViewProps> = ({,)
-  recommendations,
-  impactPredictions,
-  selectedRecommendation,
+  const RecommendationsView: React.FC<RecommendationsViewProps> = ({);
+  recommendations;
+  impactPredictions;
+  selectedRecommendation }
   onRecommendationSelect
-}
+
+
 }) => {
   const prioritizedRecommendations = useMemo(() => {
     return [...recommendations].sort((a, b) => {
       const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1, nice_to_have: 0 };
-      if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
-        return priorityOrder[b.priority] - priorityOrder[a.priority];
-      return b.impactScore - a.impactScore;
-    });
+      if (priorityOrder[a.priority] !== priorityOrder[b.priority]) { return priorityOrder[b.priority] - priorityOrder[a.priority];
+      return b.impactScore - a.impactScore });
   }, [recommendations]);
   return;
     <div className="recommendations-view">
@@ -1036,18 +965,19 @@ interface RecommendationsViewProps {
 /**
  * Recommendation Card Component
  */
-}
-interface RecommendationCardProps {
-  recommendation: OptimizationRecommendation;
+
+
+interface RecommendationCardProps { recommendation: OptimizationRecommendation;
   impactPrediction?: ImpactPrediction;
   isSelected: boolean;
   onSelect: () => void;
-  const RecommendationCard: React.FC<RecommendationCardProps> = ({,)
-  recommendation,
-  impactPrediction,
-  isSelected,
+  const RecommendationCard: React.FC<RecommendationCardProps> = ({);
+  recommendation;
+  impactPrediction;
+  isSelected }
   onSelect
-}
+
+
 }) => {
   return;
     <div 
@@ -1148,11 +1078,11 @@ interface RecommendationCardProps {
 /**
  * Experiments View Component
  */
-}
-interface ExperimentsViewProps {
-  experimentPlans: ExperimentPlan;
-  recommendations: OptimizationRecommendation;
-}
+
+
+interface ExperimentsViewProps { experimentPlans: ExperimentPlan;
+  recommendations: OptimizationRecommendation }
+
 const ExperimentsView: React.FC<ExperimentsViewProps> = ({ experimentPlans, recommendations }) => {
   return;
     <div className="experiments-view">
@@ -1168,10 +1098,10 @@ const ExperimentsView: React.FC<ExperimentsViewProps> = ({ experimentPlans, reco
 /**
  * Experiment Card Component
  */
-}
-interface ExperimentCardProps {
-  experiment: ExperimentPlan;
-}
+
+
+interface ExperimentCardProps { experiment: ExperimentPlan }
+
 const ExperimentCard: React.FC<ExperimentCardProps> = ({ experiment }) => {
   return;
     <div className="experiment-card">
@@ -1222,12 +1152,12 @@ const ExperimentCard: React.FC<ExperimentCardProps> = ({ experiment }) => {
 /**
  * Roadmap View Component
  */
-}
-interface RoadmapViewProps {
-  roadmap: OptimizationRoadmap;
+
+
+interface RoadmapViewProps { roadmap: OptimizationRoadmap;
   recommendations: OptimizationRecommendation;
-  riskAssessment: RiskAssessment;
-}
+  riskAssessment: RiskAssessment }
+
 const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap, recommendations, riskAssessment }) => {
   return;
     <div className="roadmap-view">
@@ -1253,10 +1183,10 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap, recommendations, ris
 /**
  * Roadmap Phase Card Component
  */
-}
-interface RoadmapPhaseCardProps {
-  phase: RoadmapPhase;
-}
+
+
+interface RoadmapPhaseCardProps { phase: RoadmapPhase }
+
 const RoadmapPhaseCard: React.FC<RoadmapPhaseCardProps> = ({ phase }) => {
   return;
     <div className="roadmap-phase-card">
@@ -1294,11 +1224,11 @@ const RoadmapPhaseCard: React.FC<RoadmapPhaseCardProps> = ({ phase }) => {
 /**
  * Resource Allocation View Component
  */
-}
-interface ResourceAllocationViewProps {
-  allocation: ResourceAllocation;
-  recommendations: OptimizationRecommendation;
-}
+
+
+interface ResourceAllocationViewProps { allocation: ResourceAllocation;
+  recommendations: OptimizationRecommendation }
+
 const ResourceAllocationView: React.FC<ResourceAllocationViewProps> = ({ allocation, recommendations }) => {
   return;
     <div className="resource-allocation-view">
@@ -1370,11 +1300,11 @@ const ResourceAllocationView: React.FC<ResourceAllocationViewProps> = ({ allocat
 /**
  * Competitive Insights Panel Component
  */
-}
-interface CompetitiveInsightsPanelProps {
-  analysis: CompetitiveAnalysis;
-  trends: OptimizationTrend;
-}
+
+
+interface CompetitiveInsightsPanelProps { analysis: CompetitiveAnalysis;
+  trends: OptimizationTrend }
+
 const CompetitiveInsightsPanel: React.FC<CompetitiveInsightsPanelProps> = ({ analysis, trends }) => {
   return;
     <div className="competitive-insights-panel">
@@ -1427,11 +1357,11 @@ const OptimizationEngineLoadingState: React.FC = () => ()
     <p>Analyzing optimization opportunities...</p>
   </div>
 );
-}
-interface OptimizationEngineErrorStateProps {
-  error: string;
-  onRetry: () => void;
-}
+
+
+interface OptimizationEngineErrorStateProps { error: string;
+  onRetry: () => void }
+
 const OptimizationEngineErrorState: React.FC<OptimizationEngineErrorStateProps> = ({ error, onRetry }) => ()
   <div className="optimization-engine-error">
     <div className="error-message">
@@ -1445,382 +1375,369 @@ const OptimizationEngineErrorState: React.FC<OptimizationEngineErrorStateProps> 
 );
 
 // Utility Functions
-async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDefinition)
+async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDefinition),
   currentPerformance: FunnelPerformanceSnapshot,
   goals: OptimizationGoal,
   constraints: OptimizationConstraint,
-  metricResults: ConversionMetricResult): Promise<OptimizationAnalysisData> {,
+  metricResults: ConversionMetricResult): Promise<OptimizationAnalysisData> { 
   // Simplified implementation - in production would use AI/ML algorithms
   const recommendations: OptimizationRecommendation = [
   {
-  id: 'rec-001',
-  title: 'Optimize Template Browse Step UX',
-  description: 'Improve template browsing experience with better filtering, search, and visual organization to reduce 35% drop-off rate',
-  category: 'user_experience',
-  priority: 'critical',
-  impactScore: 85,
-  confidenceScore: 0.9,
-  effortScore: 60,
-  riskScore: 25,
-  roiEstimate: 4.2,
-  timeToImplement: 14,
-  timeToImpact: 7,
-  affectedSteps: ['step-2'],
-  targetedGoals: ['increase_conversion_rate', 'reduce_drop_off'],
+  id: 'rec-001'
+  title: 'Optimize Template Browse Step UX'
+  description: 'Improve template browsing experience with better filtering, search, and visual organization to reduce 35% drop-off rate'
+  category: 'user_experience'
+  priority: 'critical'
+  impactScore: 85
+  confidenceScore: 0.9
+  effortScore: 60
+  riskScore: 25
+  roiEstimate: 4.2
+  timeToImplement: 14
+  timeToImpact: 7
+  affectedSteps: ['step-2']
+  targetedGoals: ['increase_conversion_rate', 'reduce_drop_off']
   implementation: {
-  phases: [,
+  phases: [
   {
-  phase: 'Research & Design',
-  description: 'User research and UX design improvements',
-  duration: 7,
-  deliverables: ['User journey analysis', 'New UX designs', 'Prototype'],
-  dependencies: [],
-  resources: ['UX Designer', 'User Researcher'],
-  milestones: [,
+  phase: 'Research & Design'
+  description: 'User research and UX design improvements'
+  duration: 7
+  deliverables: ['User journey analysis', 'New UX designs', 'Prototype']
+  dependencies: []
+  resources: ['UX Designer', 'User Researcher']
+  milestones: [
   {
-  name: 'Research Complete',
-  date: Date.now() + 3 * 86400000,
-  criteria: ['User interviews completed', 'Pain points identified'],
+  name: 'Research Complete'
+  date: Date.now() + 3 * 86400000
+  criteria: ['User interviews completed', 'Pain points identified'] }
   dependencies: []];
-  }
-          {
-  phase: 'Development',
-  description: 'Implement UX improvements',
-  duration: 7,
-  deliverables: ['Updated UI components', 'Improved filtering', 'Enhanced search'],
-  dependencies: ['Research & Design'],
-  resources: ['Frontend Developer', 'Backend Developer'],
-  milestones: [,
+
+          { phase: 'Development'
+  description: 'Implement UX improvements'
+  duration: 7
+  deliverables: ['Updated UI components', 'Improved filtering', 'Enhanced search']
+  dependencies: ['Research & Design']
+  resources: ['Frontend Developer', 'Backend Developer']
+  milestones: [
   {
-  name: 'Development Complete',
-  date: Date.now() + 10 * 86400000,
-  criteria: ['Features implemented', 'Testing complete'],
-  dependencies: ['Research Complete']],
-  ],
-  resources: [,
+  name: 'Development Complete'
+  date: Date.now() + 10 * 86400000
+  criteria: ['Features implemented', 'Testing complete']
+  dependencies: ['Research Complete']]]
+  resources: [
   {
-  type: 'design',
-  hours: 40,
-  skills: ['UX Design', 'User Research'],
-  urgency: 'immediate',
-}
-          {
-  type: 'development',
-  hours: 80,
-  skills: ['React', 'TypeScript', 'API Integration'],
-  urgency: 'soon'],
-  timeline: [],
-  risksAndMitigations: [,
+  type: 'design'
+  hours: 40
+  skills: ['UX Design', 'User Research']
+  urgency: 'immediate' }
+
+          { type: 'development'
+  hours: 80
+  skills: ['React', 'TypeScript', 'API Integration']
+  urgency: 'soon']
+  timeline: []
+  risksAndMitigations: [
   {
-  risk: 'User adoption of new interface',
-  probability: 0.3,
-  impact: 40,
-  mitigation: 'Gradual rollout with user feedback',
-  contingency: 'Rollback capability with feature flags'],
-  successCriteria: [,
+  risk: 'User adoption of new interface'
+  probability: 0.3
+  impact: 40
+  mitigation: 'Gradual rollout with user feedback'
+  contingency: 'Rollback capability with feature flags']
+  successCriteria: [
   {
-  metric: 'Step 2 conversion rate',
-  target: 80,
-  measurement: 'Percentage of users completing template browse',
-  timeframe: 30,
-}
-          {
-  metric: 'Time spent on step',
-  target: 120,
-  measurement: 'Average seconds spent browsing templates',
-  timeframe: 30];
-  },
-  validation: {
-  hypothesis: 'Improved template browsing UX will increase step conversion rate by 15%',
-  testMethod: 'ab_test',
-  sampleSize: 10000,
-  duration: 14,
-  successMetrics: [,
+  metric: 'Step 2 conversion rate'
+  target: 80
+  measurement: 'Percentage of users completing template browse'
+  timeframe: 30 }
+
+          { metric: 'Time spent on step'
+  target: 120
+  measurement: 'Average seconds spent browsing templates' }
+  timeframe: 30]
+
+  validation: { 
+  hypothesis: 'Improved template browsing UX will increase step conversion rate by 15%'
+  testMethod: 'ab_test'
+  sampleSize: 10000
+  duration: 14
+  successMetrics: [
   {
-  metric: 'conversion_rate',
-  target: 15,
-  tolerance: 5,
-  significance: 0.05],
-  stopConditions: [,
+  metric: 'conversion_rate'
+  target: 15
+  tolerance: 5
+  significance: 0.05]
+  stopConditions: [
   {
-  condition: 'conversion_rate_decrease',
-  threshold: -5,
-  action: 'stop'];
-  },
-  dependencies: [],
-      alternatives: [,
-        {
-  title: 'Simplified Quick Browse Mode',
-  description: 'Add a simplified browse mode for quick decisions',
-  impactScore: 65,
-  effortScore: 30,
-  riskScore: 15,
-  tradeoffs: ['Lower long-term engagement', 'Simpler to implement']]
-}
-    {
-  id: 'rec-002',
-  title: 'Add Progressive Template Previews',
-  description: 'Implement progressive template loading and preview system to reduce bounce rate and improve engagement',
-  category: 'technical_performance',
-  priority: 'high',
-  impactScore: 70,
-  confidenceScore: 0.8,
-  effortScore: 45,
-  riskScore: 30,
-  roiEstimate: 3.1,
-  timeToImplement: 10,
-  timeToImpact: 5,
-  affectedSteps: ['step-2', 'step-3'],
-  targetedGoals: ['improve_user_experience', 'reduce_time_to_convert'],
+  condition: 'conversion_rate_decrease'
+  threshold: -5 }
+  action: 'stop']
+
+  dependencies: []
+      alternatives: [
+        { title: 'Simplified Quick Browse Mode'
+  description: 'Add a simplified browse mode for quick decisions'
+  impactScore: 65
+  effortScore: 30
+  riskScore: 15
+  tradeoffs: ['Lower long-term engagement', 'Simpler to implement']] }
+
+    { id: 'rec-002'
+  title: 'Add Progressive Template Previews'
+  description: 'Implement progressive template loading and preview system to reduce bounce rate and improve engagement'
+  category: 'technical_performance'
+  priority: 'high'
+  impactScore: 70
+  confidenceScore: 0.8
+  effortScore: 45
+  riskScore: 30
+  roiEstimate: 3.1
+  timeToImplement: 10
+  timeToImpact: 5
+  affectedSteps: ['step-2', 'step-3']
+  targetedGoals: ['improve_user_experience', 'reduce_time_to_convert']
   implementation: {
-  phases: [,
+  phases: [
   {
-  phase: 'Technical Architecture',
-  description: 'Design progressive loading system',
-  duration: 3,
-  deliverables: ['Technical specification', 'Architecture design'],
-  dependencies: [],
-  resources: ['Technical Lead', 'Senior Developer'],
-  milestones: [],
-}
-          {
-  phase: 'Implementation',
-  description: 'Build progressive preview system',
-  duration: 7,
-  deliverables: ['Preview system', 'Lazy loading', 'Performance optimization'],
-  dependencies: ['Technical Architecture'],
-  resources: ['Frontend Developer', 'Backend Developer'],
-  milestones: []],
-  resources: [,
+  phase: 'Technical Architecture'
+  description: 'Design progressive loading system'
+  duration: 3
+  deliverables: ['Technical specification', 'Architecture design']
+  dependencies: []
+  resources: ['Technical Lead', 'Senior Developer']
+  milestones: [] }
+
+          { phase: 'Implementation'
+  description: 'Build progressive preview system'
+  duration: 7
+  deliverables: ['Preview system', 'Lazy loading', 'Performance optimization']
+  dependencies: ['Technical Architecture']
+  resources: ['Frontend Developer', 'Backend Developer']
+  milestones: []]
+  resources: [
   {
-  type: 'development',
-  hours: 60,
-  skills: ['React', 'Performance Optimization', 'CDN'],
-  urgency: 'soon'],
-  timeline: [],
-  risksAndMitigations: [],
-  successCriteria: [,
+  type: 'development'
+  hours: 60
+  skills: ['React', 'Performance Optimization', 'CDN']
+  urgency: 'soon']
+  timeline: []
+  risksAndMitigations: []
+  successCriteria: [
   {
-  metric: 'Page load time',
-  target: 2000,
-  measurement: 'Milliseconds to interactive',
-  timeframe: 14];
-  },
-  validation: {
-  hypothesis: 'Progressive previews will reduce bounce rate by 20%',
-  testMethod: 'ab_test',
-  sampleSize: 8000,
-  duration: 10,
-  successMetrics: [,
+  metric: 'Page load time'
+  target: 2000
+  measurement: 'Milliseconds to interactive' }
+  timeframe: 14]
+
+  validation: { 
+  hypothesis: 'Progressive previews will reduce bounce rate by 20%'
+  testMethod: 'ab_test'
+  sampleSize: 8000
+  duration: 10
+  successMetrics: [
   {
-  metric: 'bounce_rate',
-  target: -20,
-  tolerance: 5,
-  significance: 0.05],
-  stopConditions: [],
-},
-  dependencies: [],
+  metric: 'bounce_rate'
+  target: -20
+  tolerance: 5
+  significance: 0.05]
+  stopConditions: [] }
+
+  dependencies: []
       alternatives: []];
   const experimentPlans: ExperimentPlan = [
-    {
-  id: 'exp-001',
-  name: 'Template Browse UX Optimization',
-  objective: 'Increase template browse step conversion rate',
-  hypothesis: 'Improved filtering and search will increase step conversion by 15%',
-  experimentType: 'ab_test',
-  targetSteps: ['step-2'],
-  variants: [,
+    { id: 'exp-001'
+  name: 'Template Browse UX Optimization'
+  objective: 'Increase template browse step conversion rate'
+  hypothesis: 'Improved filtering and search will increase step conversion by 15%'
+  experimentType: 'ab_test'
+  targetSteps: ['step-2']
+  variants: [
   {
-  id: 'control',
-  name: 'Current Experience',
-  description: 'Existing template browse interface',
-  changes: [],
-  trafficPercentage: 50,
-  expectedImpact: 0,
-  riskLevel: 'low',
-}
-        {
-  id: 'treatment',
-  name: 'Enhanced Browse UX',
-  description: 'Improved filtering, search, and layout',
-  changes: [,
+  id: 'control'
+  name: 'Current Experience'
+  description: 'Existing template browse interface'
+  changes: []
+  trafficPercentage: 50
+  expectedImpact: 0
+  riskLevel: 'low' }
+
+        { id: 'treatment'
+  name: 'Enhanced Browse UX'
+  description: 'Improved filtering, search, and layout'
+  changes: [
   {
-  type: 'ui',
-  element: 'Template Grid',
-  change: 'Add advanced filtering sidebar',
-  rationale: 'Users need better ways to narrow down template options',
-}
-            {
-  type: 'ui',
-  element: 'Search Bar',
-  change: 'Enhanced search with autocomplete and suggestions',
-  rationale: 'Faster template discovery reduces frustration'],
-  trafficPercentage: 50,
-  expectedImpact: 15,
-  riskLevel: 'medium'],
+  type: 'ui'
+  element: 'Template Grid'
+  change: 'Add advanced filtering sidebar'
+  rationale: 'Users need better ways to narrow down template options' }
+
+            { type: 'ui'
+  element: 'Search Bar'
+  change: 'Enhanced search with autocomplete and suggestions'
+  rationale: 'Faster template discovery reduces frustration']
+  trafficPercentage: 50
+  expectedImpact: 15
+  riskLevel: 'medium']
   trafficAllocation: {
-  strategy: 'equal',
-  exclusionCriteria: ['Mobile users under 5 sessions'],
-  inclusionCriteria: ['Active template browsers'],
-},
-  duration: 14,
-      sampleSize: {
-  minimumDetectableEffect: 15,
-  baselineConversionRate: 65,
-  power: 0.8,
-  significance: 0.05,
-  calculatedSampleSize: 10000,
-  recommendedDuration: 14,
-  confidenceInterval: [0.8, 1.2],
-},
-  successMetrics: [,
-        {
-  name: 'Step Conversion Rate',
-  type: 'primary',
-  calculation: 'Users completing step / Users entering step',
-  target: 15,
-  minimumDetectableEffect: 10],
-  guardrailMetrics: [,
+  strategy: 'equal'
+  exclusionCriteria: ['Mobile users under 5 sessions']
+  inclusionCriteria: ['Active template browsers'] }
+
+  duration: 14
+      sampleSize: { 
+  minimumDetectableEffect: 15
+  baselineConversionRate: 65
+  power: 0.8
+  significance: 0.05
+  calculatedSampleSize: 10000
+  recommendedDuration: 14
+  confidenceInterval: [0.8, 1.2] }
+
+  successMetrics: [
+        { name: 'Step Conversion Rate'
+  type: 'primary'
+  calculation: 'Users completing step / Users entering step'
+  target: 15
+  minimumDetectableEffect: 10]
+  guardrailMetrics: [
   {
-  name: 'Overall Funnel Conversion',
-  threshold: -5,
-  direction: 'decrease',
-  action: 'stop'],
+  name: 'Overall Funnel Conversion'
+  threshold: -5
+  direction: 'decrease'
+  action: 'stop']
   analysisFramework: {
-  method: 'frequentist',
-  interimAnalyses: [,
+  method: 'frequentist'
+  interimAnalyses: [
   {
-  day: 7,
-  purpose: 'Early signal detection',
-  metrics: ['conversion_rate', 'engagement'],
-  decisionCriteria: ['Statistical significance', 'Guardrail violations']],
+  day: 7
+  purpose: 'Early signal detection'
+  metrics: ['conversion_rate', 'engagement']
+  decisionCriteria: ['Statistical significance', 'Guardrail violations']]
   finalAnalysis: {
-  methods: ['T-test', 'Chi-square'],
-  visualizations: ['Conversion funnel', 'Time series'],
-  segmentAnalysis: ['Device type', 'User segment'],
-  statisticalTests: ['Welch t-test', 'Mann-Whitney U'],
-},
-  reportingSchedule: [,
-          {
-  frequency: 'daily',
-  audience: ['Product Team', 'Engineering'],
-  content: ['Key metrics', 'Guardrails', 'User feedback']]
-},
-  riskAssessment: {
-  businessRisks: [,
+  methods: ['T-test', 'Chi-square']
+  visualizations: ['Conversion funnel', 'Time series']
+  segmentAnalysis: ['Device type', 'User segment']
+  statisticalTests: ['Welch t-test', 'Mann-Whitney U'] }
+
+  reportingSchedule: [
+          { frequency: 'daily'
+  audience: ['Product Team', 'Engineering']
+  content: ['Key metrics', 'Guardrails', 'User feedback']] }
+
+  riskAssessment: { 
+  businessRisks: [
   {
-  risk: 'Decreased conversion rate',
-  probability: 0.2,
-  impact: 50,
-  mitigation: 'Real-time monitoring with automatic stop conditions'],
-  technicalRisks: [,
+  risk: 'Decreased conversion rate'
+  probability: 0.2
+  impact: 50
+  mitigation: 'Real-time monitoring with automatic stop conditions']
+  technicalRisks: [
   {
-  risk: 'Performance degradation',
-  probability: 0.3,
-  impact: 30,
-  mitigation: 'Load testing and performance monitoring'],
-  userExperienceRisks: [,
+  risk: 'Performance degradation'
+  probability: 0.3
+  impact: 30
+  mitigation: 'Load testing and performance monitoring']
+  userExperienceRisks: [
   {
-  risk: 'User confusion with new interface',
-  probability: 0.4,
-  impact: 25,
-  mitigation: 'User feedback collection and support documentation'],
+  risk: 'User confusion with new interface'
+  probability: 0.4
+  impact: 25
+  mitigation: 'User feedback collection and support documentation']
   mitigationPlans: []];
   return {
-  recommendations,
-  experimentPlans,
+  recommendations
+  experimentPlans
   impactPredictions: recommendations.map(rec => ({)
-  recommendationId: rec.id,
-  predictedImpact: [,
+  recommendationId: rec.id
+  predictedImpact: [
   {
-  metric: 'conversion_rate',
-  currentValue: currentPerformance.overallConversionRate,
-  predictedValue: currentPerformance.overallConversionRate * (1 + rec.impactScore / 100 * 0.3),
-  changeAbsolute: currentPerformance.overallConversionRate * rec.impactScore / 100 * 0.3,
-  changeRelative: rec.impactScore * 0.3,
-  confidence: rec.confidenceScore],
-  confidenceInterval: [rec.impactScore * 0.2, rec.impactScore * 0.4],
-  timeToRealization: rec.timeToImpact,
-  factorsConsidered: ['Historical performance', 'Industry benchmarks', 'User behavior patterns'],
-  assumptions: ['Consistent traffic patterns', 'No external market changes'],
+  metric: 'conversion_rate'
+  currentValue: currentPerformance.overallConversionRate
+  predictedValue: currentPerformance.overallConversionRate * (1 + rec.impactScore / 100 * 0.3)
+  changeAbsolute: currentPerformance.overallConversionRate * rec.impactScore / 100 * 0.3
+  changeRelative: rec.impactScore * 0.3
+  confidence: rec.confidenceScore]
+  confidenceInterval: [rec.impactScore * 0.2, rec.impactScore * 0.4]
+  timeToRealization: rec.timeToImpact
+  factorsConsidered: ['Historical performance', 'Industry benchmarks', 'User behavior patterns']
+  assumptions: ['Consistent traffic patterns', 'No external market changes']
   sensitivityAnalysis: {
-  factors: [,
+  factors: [
   {
-  factor: 'Implementation quality',
-  impact: 0.3,
-  uncertainty: 0.2],
-  scenarios: [],
-})),
-    resourceAllocation: {
-  totalBudget: 100000,
-  allocations: recommendations.map((rec, index) => ({,)
-  recommendationId: rec.id,
-  allocatedBudget: rec.effortScore * 500,
-  allocatedTime: rec.timeToImplement,
+  factor: 'Implementation quality'
+  impact: 0.3
+  uncertainty: 0.2]
+  scenarios: [] }
+}))
+    resourceAllocation: { 
+  totalBudget: 100000
+  allocations: recommendations.map((rec, index) => ({)
+  recommendationId: rec.id
+  allocatedBudget: rec.effortScore * 500
+  allocatedTime: rec.timeToImplement
   allocatedResources: rec.implementation.resources.map(res => ({)
-  type: res.type,
-  amount: res.hours,
-  duration: rec.timeToImplement,
-  utilization: 0.8,
-})),
-        expectedROI: rec.roiEstimate,
+  type: res.type
+  amount: res.hours
+  duration: rec.timeToImplement
+  utilization: 0.8 }
+}))
+        expectedROI: rec.roiEstimate
         priority: index + 1;
-  })),
-      priorities: {
+  }))
+      priorities: { 
   highImpactLowEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore < 40).map(r => r.id),
   highImpactHighEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore >= 40).map(r => r.id),
   lowImpactLowEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore < 40).map(r => r.id),
-  lowImpactHighEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore >= 40).map(r => r.id),
+  lowImpactHighEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore >= 40).map(r => r.id) }
 },
   timeline: Array.from({ length: 6 }, (_, i) => ({)
   period: `Month ${i + 1}`}
 },
-  allocations: recommendations.filter((_, index) => index % 6 === i).map((rec, allocIndex) => ({)
+  allocations: recommendations.filter((_, index) => index % 6 === i).map((rec, allocIndex) => ({ )
   recommendationId: rec.id,
   allocatedBudget: rec.effortScore * 500,
   allocatedTime: rec.timeToImplement,
   allocatedResources: [],
   expectedROI: rec.roiEstimate,
-  priority: allocIndex + 1,
+  priority: allocIndex + 1 }
 })),
-        capacity: {
+        capacity: { ,
   available: 100,
   allocated: 80,
   utilization: 0.8,
-  bottlenecks: ['Development capacity', 'Design resources'],
+  bottlenecks: ['Development capacity', 'Design resources'] }
 })),
-      optimization: {
+      optimization: { ,
   method: 'linear_programming',
   objective: 'maximize_roi',
   constraints: [],
-  solution: {
+  solution: {,
   optimalAllocations: [],
   expectedOutcome: 3.5,
   confidence: 0.85,
-  alternatives: [],
+  alternatives: [] }
 },
-  optimizationRoadmap: {
-  phases: [,
+  optimizationRoadmap: { ,
+  phases: [
   {
   phase: 'Quick Wins (Month 1)',
   duration: 30,
   objectives: ['Implement low-effort, high-impact improvements'],
   deliverables: ['Performance optimizations', 'Copy improvements', 'Minor UX fixes'],
-  resources: [,
+  resources: [
   {
   type: 'development',
   hours: 80,
   skills: ['Frontend optimization'],
   urgency: 'immediate'],
   risks: ['Resource conflicts'],
-  successCriteria: ['5% conversion rate improvement'],
-}
-        {
-  phase: 'Major Improvements (Months 2-3)',
+  successCriteria: ['5% conversion rate improvement'] }
+
+        { phase: 'Major Improvements (Months 2-3)',
   duration: 60,
   objectives: ['Deploy significant UX and technical improvements'],
   deliverables: ['New template browse UX', 'Progressive loading', 'Mobile optimization'],
-  resources: [,
+  resources: [
   {
   type: 'development',
   hours: 200,
@@ -1828,7 +1745,7 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   urgency: 'soon'],
   risks: ['Integration complexity', 'User adoption'],
   successCriteria: ['15% conversion rate improvement']],
-  milestones: [,
+  milestones: [
   {
   name: 'Quick Wins Deployed',
   date: Date.now() + 30 * 86400000,
@@ -1838,23 +1755,23 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   impact: 5],
   dependencies: [],
   riskMitigations: [],
-  success: {
+  success: {,
   definition: 'Overall funnel conversion rate increased by 20%',
-  metrics: [,
+  metrics: [
   {
   metric: 'Conversion Rate',
   target: 20,
   measurement: 'Percentage improvement from baseline',
   frequency: 'Weekly'],
   timeline: 90,
-  dependencies: [],
+  dependencies: [] }
 },
-  riskAssessment: {
+  riskAssessment: { ,
   overallRiskScore: 35,
-  riskCategories: [,
+  riskCategories: [
   {
   category: 'Implementation',
-  risks: [,
+  risks: [
   {
   id: 'impl-001',
   description: 'Development delays due to complexity',
@@ -1868,14 +1785,14 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
   trend: 'stable'],
   mitigationStrategies: [],
   contingencyPlans: [],
-  monitoring: {
+  monitoring: {,
   indicators: [],
   alertThresholds: [],
   reportingFrequency: 'weekly',
-  responsible: ['Product Manager', 'Engineering Lead'],
+  responsible: ['Product Manager', 'Engineering Lead'] }
 },
-  competitiveAnalysis: {
-  competitors: [,
+  competitiveAnalysis: { ,
+  competitors: [
         {
           name: 'Competitor A',
           strengths: ['Fast loading', 'Intuitive navigation'],
@@ -1884,43 +1801,41 @@ async function processOptimizationAnalysis(funnelDefinition: ConversionFunnelDef
           conversionStrategies: ['Freemium model', 'Social proof'],
           differentiators: ['Speed', 'Simplicity']
       ],
-      benchmarks: [,
+      benchmarks: [
         {
           metric: 'Conversion Rate',
-          ourValue: currentPerformance.overallConversionRate,
-          competitorValues: [,
+          ourValue: currentPerformance.overallConversionRate }
+          competitorValues: [
             { competitor: 'Competitor A', value: 22, confidence: 0.8 }
           ],
           marketLeader: 25,
           marketAverage: 18,
           ourRanking: 3],
-      opportunities: [,
-        {
-  opportunity: 'Template Preview Innovation',
+      opportunities: [
+        { opportunity: 'Template Preview Innovation',
   description: 'Implement interactive template previews',
   impact: 15,
   difficulty: 60,
   timeframe: 3,
   requirements: ['3D preview technology', 'Advanced rendering']],
   threats: [],
-  positioning: {
+  positioning: {,
   currentPosition: 'Strong challenger with growth potential',
   targetPosition: 'Market leader in conversion optimization',
   differentiators: ['Advanced analytics', 'AI-powered recommendations'],
   weaknesses: ['Template browsing UX', 'Mobile experience'],
   opportunities: ['Template preview innovation', 'Personalization'],
-  strategies: ['Focus on UX improvements', 'Leverage data advantages'],
+  strategies: ['Focus on UX improvements', 'Leverage data advantages'] }
 },
-  trends: [,
-      {
-  trend: 'AI-Powered Personalization',
+  trends: [
+      { trend: 'AI-Powered Personalization',
   description: 'Using AI to personalize user experiences',
   relevance: 85,
   adoptionRate: 35,
   impact: 25,
   timeframe: 12,
   implementation: ['ML model development', 'User behavior analysis'],
-  examples: ['Netflix recommendations', 'Amazon product suggestions']]
+  examples: ['Netflix recommendations', 'Amazon product suggestions']] }
 };
 
 export default FunnelOptimizationEngine;

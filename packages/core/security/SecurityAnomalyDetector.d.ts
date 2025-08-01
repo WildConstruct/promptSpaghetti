@@ -10,8 +10,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface AnomalyDetectionConfig {
-    enableRealTimeDetection: boolean;
+}
+export interface AnomalyDetectionConfig { enableRealTimeDetection: boolean;
     detectionSensitivity: number;
     alertThreshold: number;
     enableAdaptiveThresholds: boolean;
@@ -19,12 +19,10 @@ export interface AnomalyDetectionConfig {
     anomalyRetentionDays: number;
     enableCorrelationAnalysis: boolean;
     autoResponseEnabled: boolean;
-    escalationRules: EscalationRule[];
-
-
+    escalationRules: EscalationRule[] }
 }
-export interface SecurityAnomaly {
-    id: string;
+}
+export interface SecurityAnomaly { id: string;
     timestamp: Date;
     anomalyType: AnomalyType;
     severity: AnomalySeverity;
@@ -45,29 +43,30 @@ export interface SecurityAnomaly {
     resolutionNotes?: string;
 
 export declare enum AnomalyType {
-    METRIC_THRESHOLD_BREACH = "metric_threshold_breach",
-    STATISTICAL_OUTLIER = "statistical_outlier",
-    PATTERN_DEVIATION = "pattern_deviation",
-    CORRELATION_ANOMALY = "correlation_anomaly",
-    TREND_ANOMALY = "trend_anomaly",
-    SEASONALITY_DEVIATION = "seasonality_deviation",
-    VOLUME_SPIKE = "volume_spike",
-    FREQUENCY_ANOMALY = "frequency_anomaly",
-    LATENCY_ANOMALY = "latency_anomaly",
-    ERROR_RATE_SPIKE = "error_rate_spike",
-    CAPACITY_ANOMALY = "capacity_anomaly",
+    METRIC_THRESHOLD_BREACH = "metric_threshold_breach";
+    STATISTICAL_OUTLIER = "statistical_outlier";
+    PATTERN_DEVIATION = "pattern_deviation";
+    CORRELATION_ANOMALY = "correlation_anomaly";
+    TREND_ANOMALY = "trend_anomaly";
+    SEASONALITY_DEVIATION = "seasonality_deviation";
+    VOLUME_SPIKE = "volume_spike";
+    FREQUENCY_ANOMALY = "frequency_anomaly";
+    LATENCY_ANOMALY = "latency_anomaly";
+    ERROR_RATE_SPIKE = "error_rate_spike";
+    CAPACITY_ANOMALY = "capacity_anomaly";
     BEHAVIORAL_DRIFT = "behavioral_drift"
 
 export declare enum AnomalySeverity {
-    INFO = "info",
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
+    INFO = "info";
+    LOW = "low";
+    MEDIUM = "medium";
+    HIGH = "high" }
     CRITICAL = "critical"
 
 }
-export interface AnomalyRiskAssessment {
-    businessImpact: number;
+}
+}
+export interface AnomalyRiskAssessment { businessImpact: number;
     securityImpact: number;
     operationalImpact: number;
     complianceRisk: number;
@@ -75,12 +74,10 @@ export interface AnomalyRiskAssessment {
     mitigationUrgency: 'immediate' | 'high' | 'medium' | 'low';
     estimatedDowntime: number;
     affectedUserCount: number;
-    dataExposureRisk: number;
-
-
+    dataExposureRisk: number }
 }
-export interface SecurityAlert {
-    id: string;
+}
+export interface SecurityAlert { id: string;
     timestamp: Date;
     alertType: AlertType;
     severity: AnomalySeverity;
@@ -99,56 +96,49 @@ export interface SecurityAlert {
     metadata: Record<string, unknown>;
 
 export declare enum AlertType {
-    THRESHOLD_BREACH = "threshold_breach",
-    ANOMALY_DETECTED = "anomaly_detected",
-    SYSTEM_FAILURE = "system_failure",
-    SECURITY_INCIDENT = "security_incident",
-    PERFORMANCE_DEGRADATION = "performance_degradation",
-    COMPLIANCE_VIOLATION = "compliance_violation",
-    CAPACITY_WARNING = "capacity_warning",
-    ERROR_SPIKE = "error_spike",
-    AVAILABILITY_ALERT = "availability_alert",
+    THRESHOLD_BREACH = "threshold_breach";
+    ANOMALY_DETECTED = "anomaly_detected";
+    SYSTEM_FAILURE = "system_failure";
+    SECURITY_INCIDENT = "security_incident";
+    PERFORMANCE_DEGRADATION = "performance_degradation";
+    COMPLIANCE_VIOLATION = "compliance_violation";
+    CAPACITY_WARNING = "capacity_warning";
+    ERROR_SPIKE = "error_spike";
+    AVAILABILITY_ALERT = "availability_alert" }
     CORRELATION_ALERT = "correlation_alert"
 
 }
-export interface NotificationChannel {
-    channelType: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty';
+}
+}
+export interface NotificationChannel { channelType: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty';
     target: string;
     enabled: boolean;
     severity: AnomalySeverity[];
     rateLimiting: RateLimitConfig;
-    template?: string;
-
-
+    template?: string }
 }
-export interface RateLimitConfig {
-    maxAlertsPerHour: number;
+}
+export interface RateLimitConfig { maxAlertsPerHour: number;
     maxAlertsPerDay: number;
     burstLimit: number;
-    cooldownPeriod: number;
-
-
+    cooldownPeriod: number }
 }
-export interface EscalationRule {
-    id: string;
+}
+export interface EscalationRule { id: string;
     name: string;
     conditions: EscalationCondition[];
     timeoutMinutes: number;
     targetChannels: NotificationChannel[];
     autoEscalate: boolean;
-    maxEscalationLevel: number;
-
-
+    maxEscalationLevel: number }
 }
-export interface EscalationCondition {
-    field: 'severity' | 'anomalyType' | 'businessImpact' | 'affectedSystems';
+}
+export interface EscalationCondition { field: 'severity' | 'anomalyType' | 'businessImpact' | 'affectedSystems';
     operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in';
-    value: unknown;
-
-
+    value: unknown }
 }
-export interface MetricBaseline {
-    metricName: string;
+}
+export interface MetricBaseline { metricName: string;
     systemName: string;
     mean: number;
     standardDeviation: number;
@@ -160,20 +150,16 @@ export interface MetricBaseline {
     dataPoints: number;
     lastUpdated: Date;
     seasonalPatterns: SeasonalPattern[];
-    trendCoefficient: number;
-
-
+    trendCoefficient: number }
 }
-export interface SeasonalPattern {
-    period: 'hourly' | 'daily' | 'weekly' | 'monthly';
+}
+export interface SeasonalPattern { period: 'hourly' | 'daily' | 'weekly' | 'monthly';
     pattern: number[];
     strength: number;
-    phase: number;
-
-
+    phase: number }
 }
-export interface AnomalyDetectionModel {
-    modelId: string;
+}
+export interface AnomalyDetectionModel { modelId: string;
     modelType: DetectionModelType;
     name: string;
     description: string;
@@ -187,15 +173,17 @@ export interface AnomalyDetectionModel {
     parameters: Record<string, unknown>;
 
 export declare enum DetectionModelType {
-    STATISTICAL_THRESHOLD = "statistical_threshold",
-    Z_SCORE = "z_score",
-    ISOLATION_FOREST = "isolation_forest",
-    LOCAL_OUTLIER_FACTOR = "local_outlier_factor",
-    ONE_CLASS_SVM = "one_class_svm",
-    AUTOENCODER = "autoencoder",
-    LSTM_AUTOENCODER = "lstm_autoencoder",
+    STATISTICAL_THRESHOLD = "statistical_threshold";
+    Z_SCORE = "z_score";
+    ISOLATION_FOREST = "isolation_forest";
+    LOCAL_OUTLIER_FACTOR = "local_outlier_factor";
+    ONE_CLASS_SVM = "one_class_svm";
+    AUTOENCODER = "autoencoder";
+    LSTM_AUTOENCODER = "lstm_autoencoder" }
     CHANGEPOINT_DETECTION = "changepoint_detection"
 
+}
+}
 }
 export interface SecurityMetric {
     id: string;
@@ -283,4 +271,5 @@ export declare class SecurityAnomalyDetector extends EventEmitter {
 
 export default SecurityAnomalyDetector;
 //# sourceMappingURL=SecurityAnomalyDetector.d.ts.map
+}
 }

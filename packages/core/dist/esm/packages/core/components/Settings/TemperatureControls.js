@@ -195,7 +195,7 @@ style = {};
                     }
                         ? getTemperatureColor(preset.value) + '20'
                         : uiColors.ui.hover,
-                        border), ": Math.abs(settings.value - preset.value) ", _jsx(, {}), " 0.01, ? `1px solid $", getTemperatureColor(preset.value), "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', minWidth: '80px' }} title=", preset.description, "onMouseEnter=", (e) => {
+                        border), ": Math.abs(settings.value - preset.value) ", _jsx(, {}), " 0.01, ? `1px solid $", getTemperatureColor(preset.value), "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', minWidth: '80px'; }} title=", preset.description, "onMouseEnter=", (e) => {
                         if (Math.abs(settings.value - preset.value) >= 0.01) {
                             e.currentTarget.style.backgroundColor = uiColors.ui.selected;
                         }

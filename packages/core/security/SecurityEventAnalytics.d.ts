@@ -16,8 +16,7 @@
  */
 import { EventEmitter } from 'events';
 import { SecurityLogger, SecurityEventType, ComplianceFramework } from './SecurityLogger';
-export declare enum RiskLevel {
-    LOW = "low",
+export declare enum RiskLevel { LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
@@ -30,12 +29,12 @@ export declare enum ThreatCategory {
     DATA_EXFILTRATION = "data_exfiltration",
     INSIDER_THREAT = "insider_threat",
     EXTERNAL_ATTACK = "external_attack",
-    SYSTEM_COMPROMISE = "system_compromise",
+    SYSTEM_COMPROMISE = "system_compromise" }
     COMPLIANCE_VIOLATION = "compliance_violation"
 
 }
-export interface SecurityPattern {
-    id: string;
+}
+export interface SecurityPattern { id: string;
     name: string;
     category: ThreatCategory;
     description: string;
@@ -46,40 +45,31 @@ export interface SecurityPattern {
     lastSeen: Date;
     occurrences: number;
     relatedEvents: string[];
-    mitigationStrategies: string[];
-
+    mitigationStrategies: string[] }
 }
-export interface BehavioralBaseline {
-    userId: string;
+}
+export interface BehavioralBaseline { userId: string;
     normalPatterns: {
         loginTimes: {
             hour: number;
-            frequency: number;
+            frequency: number }
 }
         }[];
-        ipAddresses: {
-            ip: string;
-            frequency: number;
-        }[];
-        devices: {
-            deviceId: string;
-            frequency: number;
-        }[];
-        actions: {
-            action: string;
-            frequency: number;
-        }[];
+        ipAddresses: { ip: string;
+            frequency: number }[];
+        devices: { deviceId: string;
+            frequency: number }[];
+        actions: { action: string;
+            frequency: number }[];
     };
-    riskProfile: {
-        baselineRisk: number;
+    riskProfile: { baselineRisk: number;
         recentDeviations: number;
-        trustedScore: number;
-    };
+        trustedScore: number };
     lastUpdated: Date;
 
 }
-export interface SecurityInsight {
-    id: string;
+}
+export interface SecurityInsight { id: string;
     type: 'trend' | 'anomaly' | 'prediction' | 'recommendation';
     category: ThreatCategory;
     title: string;
@@ -89,77 +79,61 @@ export interface SecurityInsight {
     impact: 'low' | 'medium' | 'high' | 'critical';
     timeframe: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
-    evidence: {
-        eventIds: string[];
+    evidence: { eventIds: string[];
         patterns: string[];
-        metrics: Record<string, number>;
-    };
-    recommendations: {
-        immediate: string[];
+        metrics: Record<string, number> };
+    recommendations: { immediate: string[];
         shortTerm: string[];
-        longTerm: string[];
-    };
+        longTerm: string[] };
     generatedAt: Date;
 
 }
-export interface SecurityMetricsSummary {
-    period: {
+}
+export interface SecurityMetricsSummary { period: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
-    overallRisk: {
-        level: RiskLevel;
+    overallRisk: { level: RiskLevel;
         score: number;
         trend: 'increasing' | 'decreasing' | 'stable';
         contributors: Array<{
             factor: string;
-            impact: number;
-        }>;
+            impact: number }>;
     };
-    eventVolume: {
-        total: number;
+    eventVolume: { total: number;
         byType: Record<SecurityEventType, number>;
         bySeverity: Record<string, number>;
         hourlyDistribution: number[];
         trends: {
             weekOverWeek: number;
-            monthOverMonth: number;
-        };
+            monthOverMonth: number };
     };
-    threatLandscape: {
-        activeThreats: number;
+    threatLandscape: { activeThreats: number;
         newPatterns: number;
         topCategories: Array<{
             category: ThreatCategory;
-            count: number;
-        }>;
-        geographicHotspots: Array<{
-            location: string;
-            riskScore: number;
-        }>;
+            count: number }>;
+        geographicHotspots: Array<{ location: string;
+            riskScore: number }>;
     };
-    userBehavior: {
-        anomalousUsers: number;
+    userBehavior: { anomalousUsers: number;
         highRiskUsers: Array<{
             userId: string;
-            riskScore: number;
-        }>;
+            riskScore: number }>;
         behavioralDeviations: number;
     };
-    systemHealth: {
-        securityPosture: number;
+    systemHealth: { securityPosture: number;
         vulnerabilityExposure: number;
         complianceScore: number;
-        incidentResponseTime: number;
-    };
+        incidentResponseTime: number };
 
 }
-export interface AlertConfiguration {
-    id: string;
+}
+export interface AlertConfiguration { id: string;
     name: string;
     description: string;
     conditions: {
@@ -167,20 +141,17 @@ export interface AlertConfiguration {
         thresholds?: Record<string, number>;
         timeWindow?: number;
         userScope?: string[];
-        riskLevel?: RiskLevel;
+        riskLevel?: RiskLevel }
 }
     };
-    actions: {
-        notify: string[];
+    actions: { notify: string[];
         escalate: boolean;
-        autoResponse: string[];
-    };
+        autoResponse: string[] };
     enabled: boolean;
 /**
  * Advanced security analytics engine
  */
-export declare class SecurityEventAnalytics extends EventEmitter {
-    private securityLogger;
+export declare class SecurityEventAnalytics extends EventEmitter { private securityLogger;
     private patterns;
     private baselines;
     private insights;
@@ -192,8 +163,7 @@ export declare class SecurityEventAnalytics extends EventEmitter {
      */
     analyzeSecurityEvents(timeframe?: {)
         start: Date;
-        end: Date;
-    }): Promise<SecurityMetricsSummary>;
+        end: Date }): Promise<SecurityMetricsSummary>;
     /**
      * Get real-time security insights
      */
@@ -205,40 +175,31 @@ export declare class SecurityEventAnalytics extends EventEmitter {
     /**
      * Get user behavioral analysis
      */
-    getUserBehaviorAnalysis(userId: string): {
-        baseline: BehavioralBaseline | null;
+    getUserBehaviorAnalysis(userId: string): { baseline: BehavioralBaseline | null;
         currentRisk: number;
         recentAnomalies: Array<{
             type: string;
             severity: RiskLevel;
-            timestamp: Date;
-        }>;
+            timestamp: Date }>;
         recommendations: string[];
     };
     /**
      * Generate executive security report
      */
-    generateExecutiveReport(period: {)
+    generateExecutiveReport(period: { )
         start: Date;
-        end: Date;
-    }): {
-        executiveSummary: string;
+        end: Date }): { executiveSummary: string;
         keyMetrics: Record<string, string | number>;
         topThreats: Array<{
             threat: string;
             impact: string;
-            status: string;
-        }>;
-        recommendations: Array<{
-            priority: string;
+            status: string }>;
+        recommendations: Array<{ priority: string;
             action: string;
-            timeline: string;
-        }>;
+            timeline: string }>;
         complianceStatus: Record<ComplianceFramework, string>;
-        riskTrend: Array<{
-            date: Date;
-            riskScore: number;
-        }>;
+        riskTrend: Array<{ date: Date;
+            riskScore: number }>;
     };
     /**
      * Configure security alerts

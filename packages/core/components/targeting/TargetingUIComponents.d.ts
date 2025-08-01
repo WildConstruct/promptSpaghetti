@@ -19,19 +19,18 @@
 import React from 'react';
 
 }
-export interface TargetingCondition {
-    id: string;
+}
+export interface TargetingCondition { id: string;
     type: 'attribute' | 'behavior' | 'segment' | 'geography' | 'device' | 'time';
     field: string;
     operator: string;
     value: Error;
     logicalOperator?: 'AND' | 'OR' | 'NOT';
     weight?: number;
-    isEnabled: boolean;
-
+    isEnabled: boolean }
 }
-export interface UserSegment {
-    id: string;
+}
+export interface UserSegment { id: string;
     name: string;
     description?: string;
     conditions: TargetingCondition[];
@@ -40,39 +39,35 @@ export interface UserSegment {
     createdAt: Date;
     lastUpdated: Date;
     tags: string[];
-    color: string;
-
+    color: string }
 }
-export interface TargetingAudience {
-    id: string;
+}
+export interface TargetingAudience { id: string;
     name: string;
     segments: UserSegment[];
     conditions: TargetingCondition[];
     estimatedReach: number;
     conversionRate: number;
     isActive: boolean;
-    rolloutPercentage: number;
-
+    rolloutPercentage: number }
 }
-export interface TargetingPreview {
-    totalUsers: number;
+}
+export interface TargetingPreview { totalUsers: number;
     matchedUsers: number;
     matchPercentage: number;
     sampleUsers: Array<{
         id: string;
         email: string;
         attributes: Record<string, any>;
-        matchReasons: string[];
+        matchReasons: string[] }
 }
     }>;
-    demographics: {
-        age: Record<string, number>;
+    demographics: { age: Record<string, number>;
         location: Record<string, number>;
-        userType: Record<string, number>;
-    };
+        userType: Record<string, number> };
 }
-interface AudienceSelectorProps {
-    audiences: TargetingAudience[];
+}
+interface AudienceSelectorProps { audiences: TargetingAudience[];
     selectedAudience?: TargetingAudience;
     onSelect: (audience: TargetingAudience) => void;
     onCreate?: () => void;
@@ -86,7 +81,7 @@ export declare     availableFields: Array<{
         label: string;
         type: string;
         category: string;
-        options?: unknown[];
+        options?: unknown[] }
 }
     }>;
     onPreview?: (conditions: TargetingCondition[]) => Promise<TargetingPreview>;

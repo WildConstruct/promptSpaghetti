@@ -17,7 +17,7 @@ deviceInfo ?  : {
 networkInfo ?  : {
     vpnDetected: boolean,
     proxyDetected: boolean,
-    networkQuality: 'HIGH' | 'MEDIUM' | 'LOW'
+    networkQuality: 'HIGH' | 'MEDIUM' | 'LOW',
 };
 organizationInfo ?  : {
     organizationId: string,
@@ -28,7 +28,11 @@ organizationInfo ?  : {
 ;
 actionBreakdown: Record;
 classificationBreakdown: Record;
-complianceBreakdown: Record;
+complianceBreakdown: Record < string, {
+    compliant: number,
+    nonCompliant: number,
+    needsReview: number
+} > ;
 riskAnalysis: {
     averageRiskScore: number;
     highRiskEntries: number;
@@ -38,7 +42,8 @@ riskAnalysis: {
 trendsAnalysis: {
     activityTrend: 'INCREASING' | 'DECREASING' | 'STABLE';
     riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-    complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
+    complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE',
+    ;
 }
 ;
 export class ClassificationAuditLoggingService {
@@ -221,8 +226,9 @@ string;
     };
     return requirements[framework]?.[action] || `${framework} general compliance`;
 }
-calculateRiskScore(action, AuditAction);
-classification: DataClassificationLevel,
+calculateRiskScore(action, AuditAction),
+    classification;
+DataClassificationLevel,
     success;
 boolean;
 number;
@@ -345,8 +351,9 @@ number;
                                                                          * Generate audit report
                                                                          */
                                                                         async;
-                                                                        generateAuditReport(name, string);
-                                                                        description: string,
+                                                                        generateAuditReport(name, string),
+                                                                            description;
+                                                                        string,
                                                                             query;
                                                                         AuditQuery,
                                                                             format;
@@ -442,10 +449,10 @@ number;
                                                                             case 'JSON':
                                                                                 return JSON.stringify(report, null, 2);
                                                                             case 'CSV':
-                                                                                const headers = [];
-                                                                                'timestamp', 'userId', 'action', 'classification', 'dataId',
-                                                                                    'resourceType', 'success', 'riskScore', 'violationsDetected';
-                                                                                ;
+                                                                                const headers = [
+                                                                                    'timestamp', 'userId', 'action', 'classification', 'dataId',
+                                                                                    'resourceType', 'success', 'riskScore', 'violationsDetected'
+                                                                                ];
                                                                                 const rows = report.entries.map(entry => []);
                                                                                 entry.timestamp.toISOString(),
                                                                                     entry.userId,

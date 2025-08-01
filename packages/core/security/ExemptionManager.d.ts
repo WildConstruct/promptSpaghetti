@@ -15,8 +15,7 @@
  */
 import { EventEmitter } from 'events';
 import { AdminRole } from './AccountLockoutService';
-export declare enum ExemptionType {
-    RATE_LIMITING = "rate_limiting",
+export declare enum ExemptionType { RATE_LIMITING = "rate_limiting",
     ACCOUNT_LOCKOUT = "account_lockout",
     MFA_REQUIREMENT = "mfa_requirement",
     PASSWORD_POLICY = "password_policy",
@@ -61,12 +60,12 @@ export declare enum ExemptionReason {
     LEGACY_SYSTEM = "legacy_system",
     COMPLIANCE_REQUIRED = "compliance_required",
     ACCESSIBILITY = "accessibility",
-    PERFORMANCE = "performance",
+    PERFORMANCE = "performance" }
     USER_EXPERIENCE = "user_experience"
 
 }
-export interface SecurityExemption {
-    id: string;
+}
+export interface SecurityExemption { id: string;
     type: ExemptionType;
     scope: ExemptionScope;
     target: string;
@@ -78,76 +77,61 @@ export interface SecurityExemption {
         userId: string;
         userEmail: string;
         role: AdminRole;
-        timestamp: Date;
+        timestamp: Date }
 }
     };
-    approvedBy?: {
-        userId: string;
+    approvedBy?: { userId: string;
         userEmail: string;
         role: AdminRole;
         timestamp: Date;
-        comments?: string;
-    };
-    revokedBy?: {
-        userId: string;
+        comments?: string };
+    revokedBy?: { userId: string;
         userEmail: string;
         role: AdminRole;
         timestamp: Date;
-        reason?: string;
-    };
+        reason?: string };
     effectiveFrom: Date;
     expiresAt?: Date;
     autoRenew: boolean;
-    renewalCriteria?: {
-        reviewRequired: boolean;
+    renewalCriteria?: { reviewRequired: boolean;
         maxRenewals: number;
         renewalPeriodDays: number;
-        currentRenewals: number;
-    };
-    conditions: {
-        ipWhitelist?: string[];
+        currentRenewals: number };
+    conditions: { ipWhitelist?: string[];
         timeRestrictions?: {
             allowedHours: {
                 start: string;
-                end: string;
-            }[];
+                end: string }[];
             allowedDays: string[];
             timezone: string;
         };
-        usageQuota?: {
-            maxUsesPerDay?: number;
+        usageQuota?: { maxUsesPerDay?: number;
             maxUsesPerHour?: number;
             currentUsage: number;
-            resetTime: Date;
-        };
-        securityContext?: {
-            minimumTrustLevel?: string;
+            resetTime: Date };
+        securityContext?: { minimumTrustLevel?: string;
             requireMFA?: boolean;
-            requireApproval?: boolean;
-        };
+            requireApproval?: boolean };
     };
-    metadata: {
-        businessJustification: string;
+    metadata: { businessJustification: string;
         riskAssessment: {
             level: 'low' | 'medium' | 'high' | 'critical';
             mitigations: string[];
-            reviewDate: Date;
-        };
+            reviewDate: Date };
         complianceNotes?: string;
         relatedTickets?: string[];
         tags: string[];
     };
     auditTrail: ExemptionAuditEntry[];
-    usage: {
-        timesUsed: number;
+    usage: { timesUsed: number;
         lastUsed?: Date;
         usageHistory: Array<{
             timestamp: Date;
             context: Record<string, any>;
-            source: string;
-        }>;
+            source: string }>;
     };
 
+}
 }
 export interface ExemptionAuditEntry {
     id: string;
@@ -159,14 +143,15 @@ export interface ExemptionAuditEntry {
         role?: AdminRole;
         type: 'user' | 'admin' | 'system'
 }
+}
   };
     details: Record<string, any>;
     ipAddress?: string;
     userAgent?: string;
 
 }
-export interface ExemptionRequest {
-    type: ExemptionType;
+}
+export interface ExemptionRequest { type: ExemptionType;
     scope: ExemptionScope;
     target: string;
     reason: ExemptionReason;
@@ -178,21 +163,19 @@ export interface ExemptionRequest {
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     mitigations: string[];
     autoRenew?: boolean;
-    emergencyOverride?: boolean;
-
+    emergencyOverride?: boolean }
 }
-export interface ExemptionUsageContext {
-    endpoint?: string;
+}
+export interface ExemptionUsageContext { endpoint?: string;
     ipAddress?: string;
     userAgent?: string;
     operation?: string;
     requestId?: string;
     sessionId?: string;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface ExemptionQuery {
-    types?: ExemptionType[];
+}
+export interface ExemptionQuery { types?: ExemptionType[];
     scopes?: ExemptionScope[];
     statuses?: ExemptionStatus[];
     priorities?: ExemptionPriority[];
@@ -205,11 +188,10 @@ export interface ExemptionQuery {
     endDate?: Date;
     tags?: string[];
     limit?: number;
-    offset?: number;
-
+    offset?: number }
 }
-export interface ExemptionPolicy {
-    type: ExemptionType;
+}
+export interface ExemptionPolicy { type: ExemptionType;
     scope: ExemptionScope;
     allowedRoles: AdminRole[];
     requiresApproval: boolean;
@@ -231,74 +213,70 @@ export declare class ExemptionManager extends EventEmitter {
      * Request a new security exemption
      */
     requestExemption();
-      request: ExemptionRequest,
-      requestorId: string,
-      requestorEmail: string,
-      requestorRole: AdminRole,
+      request: ExemptionRequest;
+      requestorId: string;
+      requestorEmail: string;
+      requestorRole: AdminRole;
     ): Promise<string>;
     /**
      * Approve a pending exemption request
      */
     approveExemption();
-      exemptionId: string,
-      approverId: string,
-      approverEmail: string,
-      approverRole: AdminRole,
+      exemptionId: string;
+      approverId: string;
+      approverEmail: string;
+      approverRole: AdminRole;
       comments?: string
     ): Promise<boolean>;
     /**
      * Deny a pending exemption request
      */
     denyExemption();
-      exemptionId: string,
-      approverId: string,
-      approverEmail: string,
-      approverRole: AdminRole,
-      reason: string,
+      exemptionId: string;
+      approverId: string;
+      approverEmail: string;
+      approverRole: AdminRole;
+      reason: string }
     ): Promise<boolean>;
     /**
      * Check if an exemption exists and is active
      */
-    checkExemption(type: ExemptionType, scope: ExemptionScope, target: string, context?: ExemptionUsageContext): {
-        granted: boolean;
+    checkExemption(type: ExemptionType, scope: ExemptionScope, target: string, context?: ExemptionUsageContext): { granted: boolean;
         exemption?: SecurityExemption;
-        reason?: string;
+        reason?: string }
 }
     };
     /**
      * Revoke an active exemption
      */
     revokeExemption();
-      exemptionId: string,
-      revokerId: string,
-      revokerEmail: string,
-      revokerRole: AdminRole,
-      reason: string,
+      exemptionId: string
+      revokerId: string
+      revokerEmail: string
+      revokerRole: AdminRole
+      reason: string
     ): boolean;
     /**
      * Create emergency exemption with bypass approval
      */
     createEmergencyExemption();
-      request: ExemptionRequest,
-      requestorId: string,
-      requestorEmail: string,
-      requestorRole: AdminRole,
-      emergencyCode: string,
-      justification: string,
+      request: ExemptionRequest
+      requestorId: string
+      requestorEmail: string
+      requestorRole: AdminRole
+      emergencyCode: string
+      justification: string
     ): Promise<string>;
     /**
      * Query exemptions
      */
-    queryExemptions(query: ExemptionQuery): {
-        exemptions: SecurityExemption[];
+    queryExemptions(query: ExemptionQuery): { exemptions: SecurityExemption[];
         total: number;
-        hasMore: boolean;
-    };
+        hasMore: boolean };
     /**
      * Get exemption statistics
      */
-    getExemptionStatistics(): {
-        total: number;
+    getExemptionStatistics(): { total: number;
         active: number;
         pending: number;
         expired: number;
@@ -313,8 +291,7 @@ export declare class ExemptionManager extends EventEmitter {
             averageUsagePerExemption: number;
             mostUsedExemptions: Array<{
                 id: string;
-                usage: number;
-            }>;
+                usage: number }>;
         };
     };
     private getPolicy;

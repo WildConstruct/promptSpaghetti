@@ -8,36 +8,31 @@
 import React, { useState, useEffect } from 'react';
 import { CaseStudy, CaseStudyMedia } from '../../models/CaseStudyDataModel';
 
-}
-export interface CaseStudyModalProps {
-  caseStudy: CaseStudy;
+
+export interface CaseStudyModalProps { caseStudy: CaseStudy;
   isOpen: boolean;
   onClose: () => void;
   onTemplateClick?: (templateId: string) => void;
   onAuthorClick?: (authorId: string) => void;
   onShare?: (caseStudy: CaseStudy) => void;
-  className?: string;
-}
-}
-export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
-  caseStudy,
-  isOpen,
-  onClose,
-  onTemplateClick,
-  onAuthorClick,
-  onShare,
+  className?: string }
+
+export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ )
+  caseStudy
+  isOpen
+  onClose
+  onTemplateClick
+  onAuthorClick
+  onShare }
   className = ''
-}) => {
-  const [activeSection, setActiveSection] = useState<'overview' | 'implementation' | 'results' | 'media'>('overview');
+}) => { const [activeSection, setActiveSection] = useState<'overview' | 'implementation' | 'results' | 'media'>('overview');
   const [selectedMedia, setSelectedMedia] = useState<CaseStudyMedia | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   // Close modal on escape key
   useEffect(() => {
-  const handleEscape = (e: KeyboardEvent) => {,
-  if (e.key === 'Escape') {
-  onClose();
-};
+  const handleEscape = (e: KeyboardEvent) => { }
+  if (e.key === 'Escape') { onClose() };
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
@@ -47,10 +42,8 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
   };
   }, [isOpen, onClose]);
   // Handle backdrop click
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-  };
+  const handleBackdropClick = (e: React.MouseEvent) => { if (e.target === e.currentTarget) {
+      onClose() };
   // Get ROI display value
   const getROIDisplay = () => {
     if (!caseStudy.roiMetrics.costSavings.amount) return null;
@@ -58,9 +51,9 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
     const currency = caseStudy.roiMetrics.costSavings.currency;
     if (amount >= 1000000) {
       return `${currency}${(amount / 1000000).toFixed(1)}M`;}
-    } else if (amount >= 1000) {
+ else if (amount >= 1000) {
       return `${currency}${(amount / 1000).toFixed(1)}K`;}
-    } else {
+ else {
       return `${currency}${amount.toFixed(0)}`;}
   };
   if (!isOpen) return null;
@@ -465,7 +458,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           </div>
         )}
       </div>
-      <style>{`
+      <style>{ `
         .case-study-modal-overlay {
           position: fixed;
   top: 0;
@@ -488,7 +481,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           display: flex;
           flex-direction: column;
         .modal-header {
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid #e5e7eb
   padding: 24px;
         .header-content {
           display: flex;
@@ -508,7 +501,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           display: flex;
   gap: 8px;
         .action-btn {
-          background: #f9fafb;
+          background: #f9fafb
   border: 1px solid #e5e7eb;
           border-radius: 6px;
   width: 40px;
@@ -519,14 +512,14 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
   cursor: pointer;
           transition: all 0.2s ease;
           font-size: 16px;
-        .action-btn:hover {,
+        .action-btn:hover {
   background: #f3f4f6;
         .action-btn.active {
           background: #3b82f6;
-          border-color: #3b82f6;
+          border-color: #3b82f6
   color: #ffffff;
         .close-btn {
-          background: #f9fafb;
+          background: #f9fafb
   border: 1px solid #e5e7eb;
           border-radius: 6px;
   width: 40px;
@@ -538,9 +531,9 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           font-size: 20px;
   color: #6b7280;
           transition: all 0.2s ease;
-        .close-btn:hover {,
-  background: #f3f4f6;
-          color: #1f2937;
+        .close-btn:hover {
+  background: #f3f4f6
+  color: #1f2937;
         .modal-nav {
           display: flex;
   gap: 4px;
@@ -554,11 +547,11 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           font-weight: 500;
   color: #6b7280;
           transition: all 0.2s ease;
-        .nav-btn:hover {,
-  background: #f9fafb;
-          color: #1f2937;
+        .nav-btn:hover {
+  background: #f9fafb
+  color: #1f2937;
         .nav-btn.active {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
         .modal-content {
           flex: 1;
@@ -566,14 +559,14 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
   padding: 24px;
         .overview-section {
           display: grid;
-          grid-template-columns: 1fr 300px;
+          grid-template-columns: 1fr 300px
   gap: 32px;
         .featured-image {
           margin-bottom: 24px;
           border-radius: 8px;
   overflow: hidden;
         .featured-image img {
-          width: 100%;
+          width: 100%
   height: auto;
           display: block;
         .description, .solution {
@@ -585,7 +578,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
   color: #1f2937;
         .description p, .solution p {
           margin: 0;
-          line-height: 1.6;
+          line-height: 1.6
   color: #4b5563;
         .key-metrics h2 {
           margin: 0 0 16px 0;
@@ -597,7 +590,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 16px;
         .metric-card {
-          background: #f8fafc;
+          background: #f8fafc
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 20px;
@@ -637,7 +630,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
   gap: 12px;
           cursor: pointer;
   transition: opacity 0.2s ease;
-        .author-card:hover {,
+        .author-card:hover {
   opacity: 0.8;
         .author-avatar {
           width: 48px;
@@ -647,7 +640,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
         .author-avatar-placeholder {
           width: 48px;
   height: 48px;
-          border-radius: 50%;
+          border-radius: 50%
   background: #e5e7eb;
           display: flex;
           align-items: center;
@@ -675,14 +668,14 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           flex-wrap: wrap;
   gap: 6px;
         .tag {
-          background: #e5e7eb;
+          background: #e5e7eb
   color: #4b5563;
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 11px;
           font-weight: 500;
         .industry-badge {
-          background: #dbeafe;
+          background: #dbeafe
   color: #1e40af;
           padding: 6px 12px;
           border-radius: 6px;
@@ -697,16 +690,16 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           text-transform: uppercase;
           letter-spacing: 0.5px;
         .difficulty-beginner {
-          background: #dcfce7;
+          background: #dcfce7
   color: #166534;
         .difficulty-intermediate {
-          background: #fef3c7;
+          background: #fef3c7
   color: #92400e;
         .difficulty-advanced {
-          background: #fecaca;
+          background: #fecaca
   color: #991b1b;
         .difficulty-expert {
-          background: #e0e7ff;
+          background: #e0e7ff
   color: #3730a3;
         .implementation-section, .results-section {
           max-width: 800px;
@@ -722,7 +715,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           gap: 16px;
         .template-card {
-          background: #f8fafc;
+          background: #f8fafc
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 16px;
@@ -745,7 +738,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
   color: #4b5563;
           margin-bottom: 8px;
         .template-customizations ul {
-          margin: 4px 0 0 16px;
+          margin: 4px 0 0 16px
   padding: 0;
         .metrics-table {
           border: 1px solid #e5e7eb;
@@ -753,7 +746,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
   overflow: hidden;
         .metric-row {
           display: flex;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 12px 16px;
           border-bottom: 1px solid #e5e7eb;
         .metric-row:last-child {
@@ -769,7 +762,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 16px;
         .quality-card {
-          background: #f8fafc;
+          background: #f8fafc
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 16px;
@@ -795,7 +788,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           text-align: center;
           margin-top: 8px;
         .improvement-value {
-          background: #dcfce7;
+          background: #dcfce7
   color: #166534;
           padding: 4px 8px;
           border-radius: 4px;
@@ -824,13 +817,13 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           border-color: #3b82f6;
           box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
         .media-thumbnail {
-          width: 100%;
+          width: 100%
   height: 120px;
           object-fit: cover;
         .video-thumbnail, .document-thumbnail {
-          width: 100%;
+          width: 100%
   height: 120px;
-          background: #f3f4f6;
+          background: #f3f4f6
   display: flex;
           align-items: center;
           justify-content: center;
@@ -840,7 +833,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           z-index: 2;
   background: rgba(0, 0, 0, 0.7);
           color: #ffffff;
-          border-radius: 50%;
+          border-radius: 50%
   width: 40px;
           height: 40px;
   display: flex;
@@ -848,7 +841,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           justify-content: center;
           font-size: 14px;
         .video-thumbnail img {
-          width: 100%;
+          width: 100%
   height: 100%;
           object-fit: cover;
         .doc-icon {
@@ -898,7 +891,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
           right: 16px;
           z-index: 3;
   background: rgba(0, 0, 0, 0.7);
-          color: #ffffff;
+          color: #ffffff }
   border: none;
           border-radius: 4px;
   width: 32px;

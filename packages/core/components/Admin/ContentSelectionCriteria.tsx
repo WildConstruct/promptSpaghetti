@@ -9,8 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { 
-  Settings,
+import { Settings,
   Filter,
   Users,
   Calendar,
@@ -31,15 +30,14 @@ import {
   BarChart3,
   Zap,
   Clock,
-  CheckCircle,
+  CheckCircle }
   AlertTriangle
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Types based on existing PromotionSchedulingService
 
-}
-export interface ContentCriteria {
-  // Quality filters
+
+export interface ContentCriteria { // Quality filters
   min_rating?: number;
   min_download_count?: number;
   quality_score_threshold?: number;
@@ -65,19 +63,17 @@ export interface ContentCriteria {
   exclude_current_promotions?: boolean;
   // Limits
   max_content_count?: number;
-  diversification_rules?: DiversificationRule;
-}
-}
-}
-export interface DiversificationRule {
-  attribute: string;
+  diversification_rules?: DiversificationRule }
+
+
+
+export interface DiversificationRule { attribute: string;
   max_percentage: number;
-  enforce_uniqueness: boolean;
-}
-}
-}
-export interface SelectionCriteriaTemplate {
-  id: string;
+  enforce_uniqueness: boolean }
+
+
+
+export interface SelectionCriteriaTemplate { id: string;
   name: string;
   description: string;
   category: 'quality' | 'performance' | 'diversity' | 'trending' | 'seasonal' | 'custom';
@@ -86,13 +82,12 @@ export interface SelectionCriteriaTemplate {
   usage_count: number;
   created_by: string;
   created_at: Date;
-  last_used?: Date;
-}
-}
-}
-export interface ContentSelectionPreview {
-  total_matches: number;
-  sample_content: Array<{
+  last_used?: Date }
+
+
+
+export interface ContentSelectionPreview { total_matches: number;
+  sample_content: Array<{ }
   id: string;
   title: string;
   creator: string;
@@ -100,125 +95,117 @@ export interface ContentSelectionPreview {
   downloads: number;
   category: string;
   match_reasons: string;
-}
-}>;
+
+
+>;
   category_distribution: Record<string, number>;
   creator_distribution: Record<string, number>;
-  quality_stats: {
+  quality_stats: { 
   avg_rating: number;
   avg_downloads: number;
-  avg_engagement: number;
-};
-  performance_prediction: {
+  avg_engagement: number };
+  performance_prediction: { 
   expected_ctr: number;
   expected_conversion_rate: number;
-  confidence_level: number;
-};
-}
-}
-export interface ContentSelectionCriteriaProps {
-  className?: string;
-}
-}
+  confidence_level: number };
+
+
+export interface ContentSelectionCriteriaProps { className?: string }
+
 export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> = ({)
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState('builder');
   const [currentCriteria, setCurrentCriteria] = useState<ContentCriteria>({});
   const [templates] = useState<SelectionCriteriaTemplate>([)
-    {
-  id: 'template-trending',
-  name: 'Trending Content',
-  description: 'High-performing content with recent engagement',
-  category: 'trending',
+    { id: 'template-trending'
+  name: 'Trending Content'
+  description: 'High-performing content with recent engagement'
+  category: 'trending'
   criteria: {
-  min_rating: 4.0,
-  min_download_count: 100,
-  published_after: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-  min_engagement_score: 75,
-  exclude_recently_promoted: true,
-  max_content_count: 20,
-},
-  is_system_template: true,
-      usage_count: 45,
-      created_by: 'system',
-      created_at: new Date('2024-01-15'),
+  min_rating: 4.0
+  min_download_count: 100
+  published_after: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  min_engagement_score: 75
+  exclude_recently_promoted: true
+  max_content_count: 20 }
+
+  is_system_template: true
+      usage_count: 45
+      created_by: 'system'
+      created_at: new Date('2024-01-15')
       last_used: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
-  }
-    {
-      id: 'template-quality',
-      name: 'Premium Quality',
-      description: 'Highest quality content from top creators',
-      category: 'quality',
+
+    { id: 'template-quality'
+      name: 'Premium Quality'
+      description: 'Highest quality content from top creators'
+      category: 'quality'
       criteria: {
-  min_rating: 4.5,
-        quality_score_threshold: 90,
-        creator_tiers: ['premium', 'verified'],
-        min_download_count: 500,
-        exclude_current_promotions: true,
-        diversification_rules: [,
-          { attribute: 'creator', max_percentage: 30, enforce_uniqueness: true },
+  min_rating: 4.5
+        quality_score_threshold: 90
+        creator_tiers: ['premium', 'verified']
+        min_download_count: 500
+        exclude_current_promotions: true }
+        diversification_rules: [
+          { attribute: 'creator', max_percentage: 30, enforce_uniqueness: true }
           { attribute: 'category', max_percentage: 40, enforce_uniqueness: false }
         ]
-  },
-  is_system_template: true,
-      usage_count: 78,
-      created_by: 'system',
-      created_at: new Date('2024-01-10'),
+
+  is_system_template: true
+      usage_count: 78
+      created_by: 'system'
+      created_at: new Date('2024-01-10')
       last_used: new Date(Date.now() - 24 * 60 * 60 * 1000)]);
-  const [previewData] = useState<ContentSelectionPreview>({)
-  total_matches: 187,
-  sample_content: [,
+  const [previewData] = useState<ContentSelectionPreview>({ )
+  total_matches: 187
+  sample_content: [
   {
-  id: 'content-1',
-  title: 'Professional Business Card Template',
-  creator: 'DesignPro',
-  rating: 4.8,
-  downloads: 2450,
-  category: 'Business',
-  match_reasons: ['High rating', 'Popular downloads', 'Premium creator'],
-}
-      {
-  id: 'content-2',
-  title: 'Modern Wedding Invitation Suite',
-  creator: 'EventDesigns',
-  rating: 4.7,
-  downloads: 1890,
-  category: 'Events',
-  match_reasons: ['Quality score', 'Recent engagement', 'Trending']],
+  id: 'content-1'
+  title: 'Professional Business Card Template'
+  creator: 'DesignPro'
+  rating: 4.8
+  downloads: 2450
+  category: 'Business'
+  match_reasons: ['High rating', 'Popular downloads', 'Premium creator'] }
+
+      { id: 'content-2'
+  title: 'Modern Wedding Invitation Suite'
+  creator: 'EventDesigns'
+  rating: 4.7
+  downloads: 1890
+  category: 'Events'
+  match_reasons: ['Quality score', 'Recent engagement', 'Trending']]
   category_distribution: {
-  'Business': 45,
-  'Events': 32,
-  'Marketing': 28,
-  'Creative': 25,
-  'Educational': 18,
-},
-  creator_distribution: {
-  'Premium': 67,
-  'Verified': 89,
-  'Community': 31,
-},
-  quality_stats: {
-  avg_rating: 4.6,
-  avg_downloads: 1845,
-  avg_engagement: 82.5,
-},
-  performance_prediction: {
-  expected_ctr: 3.8,
-  expected_conversion_rate: 12.4,
-  confidence_level: 0.85,
+  'Business': 45
+  'Events': 32
+  'Marketing': 28
+  'Creative': 25
+  'Educational': 18 }
+
+  creator_distribution: { 'Premium': 67
+  'Verified': 89
+  'Community': 31 }
+
+  quality_stats: { 
+  avg_rating: 4.6
+  avg_downloads: 1845
+  avg_engagement: 82.5 }
+
+  performance_prediction: { 
+  expected_ctr: 3.8
+  expected_conversion_rate: 12.4
+  confidence_level: 0.85 }
 });
   const categories = ['Business', 'Events', 'Marketing', 'Creative', 'Educational', 'Technology'];
   const contentTypes = ['Template', 'Asset Pack', 'Component', 'Theme', 'Tool'];
     const creatorTiers = ['premium', 'verified', 'community'];
-  const getCategoryColor = (category: string) => {
-  const colors: Record<string, string> = {,
-  'trending': 'text-orange-600 bg-orange-100',
-  'quality': 'text-purple-600 bg-purple-100',
-  'performance': 'text-green-600 bg-green-100',
-  'diversity': 'text-blue-600 bg-blue-100',
-  'seasonal': 'text-pink-600 bg-pink-100',
-  'custom': 'text-gray-600 bg-gray-100',
+  const getCategoryColor = (category: string) => { const colors: Record<string, string> = {
+  'trending': 'text-orange-600 bg-orange-100'
+  'quality': 'text-purple-600 bg-purple-100'
+  'performance': 'text-green-600 bg-green-100'
+  'diversity': 'text-blue-600 bg-blue-100'
+  'seasonal': 'text-pink-600 bg-pink-100'
+  'custom': 'text-gray-600 bg-gray-100' }
 };
     return colors[category] || 'text-gray-600 bg-gray-100';
   };
@@ -244,9 +231,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     max="5"
                     step="0.1"
                     value={currentCriteria.min_rating || ''}
-                    onChange={(e) => setCurrentCriteria({)
-  ...currentCriteria,
-  min_rating: parseFloat(e.target.value) || undefined,
+                    onChange={ (e) => setCurrentCriteria({)
+  ...currentCriteria
+  min_rating: parseFloat(e.target.value) || undefined }
 })}
                     className="criteria-input"
                     placeholder="4.0"
@@ -261,9 +248,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     type="number"
                     min="0"
                     value={currentCriteria.min_download_count || ''}
-                    onChange={(e) => setCurrentCriteria({)
-  ...currentCriteria,
-  min_download_count: parseInt(e.target.value) || undefined,
+                    onChange={ (e) => setCurrentCriteria({)
+  ...currentCriteria
+  min_download_count: parseInt(e.target.value) || undefined }
 })}
                     className="criteria-input"
                     placeholder="100"
@@ -279,9 +266,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     min="0"
                     max="100"
                     value={currentCriteria.quality_score_threshold || ''}
-                    onChange={(e) => setCurrentCriteria({)
-  ...currentCriteria,
-  quality_score_threshold: parseInt(e.target.value) || undefined,
+                    onChange={ (e) => setCurrentCriteria({)
+  ...currentCriteria
+  quality_score_threshold: parseInt(e.target.value) || undefined }
 })}
                     className="criteria-input"
                     placeholder="80"
@@ -310,19 +297,18 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                       <input
                         type="checkbox"
                         checked={currentCriteria.categories?.includes(category) || false}
-                        onChange={(e) => {
+                        onChange={ (e) => {
   const categories = currentCriteria.categories || [];
   if (e.target.checked) {
   setCurrentCriteria({)
-  ...currentCriteria,
-  categories: [...categories, category],
+  ...currentCriteria
+  categories: [...categories, category] }
 });
-                          } else {
-  setCurrentCriteria({)
-  ...currentCriteria,
-  categories: categories.filter(c => c !== category),
+ else { setCurrentCriteria({)
+  ...currentCriteria
+  categories: categories.filter(c => c !== category) }
 });
-                        }}
+
                       />
                       <span>{category}</span>
                     </label>
@@ -337,19 +323,18 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                       <input
                         type="checkbox"
                         checked={currentCriteria.content_types?.includes(type) || false}
-                        onChange={(e) => {
+                        onChange={ (e) => {
   const types = currentCriteria.content_types || [];
   if (e.target.checked) {
   setCurrentCriteria({)
-  ...currentCriteria,
-  content_types: [...types, type],
+  ...currentCriteria
+  content_types: [...types, type] }
 });
-                          } else {
-  setCurrentCriteria({)
-  ...currentCriteria,
-  content_types: types.filter(t => t !== type),
+ else { setCurrentCriteria({)
+  ...currentCriteria
+  content_types: types.filter(t => t !== type) }
 });
-                        }}
+
                       />
                       <span>{type}</span>
                     </label>
@@ -378,9 +363,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     max="100"
                     step="0.1"
                     value={currentCriteria.min_conversion_rate || ''}
-                    onChange={(e) => setCurrentCriteria({)
-  ...currentCriteria,
-  min_conversion_rate: parseFloat(e.target.value) || undefined,
+                    onChange={ (e) => setCurrentCriteria({)
+  ...currentCriteria
+  min_conversion_rate: parseFloat(e.target.value) || undefined }
 })}
                     className="criteria-input"
                     placeholder="5.0"
@@ -396,9 +381,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     min="0"
                     max="100"
                     value={currentCriteria.min_engagement_score || ''}
-                    onChange={(e) => setCurrentCriteria({)
-  ...currentCriteria,
-  min_engagement_score: parseInt(e.target.value) || undefined,
+                    onChange={ (e) => setCurrentCriteria({)
+  ...currentCriteria
+  min_engagement_score: parseInt(e.target.value) || undefined }
 })}
                     className="criteria-input"
                     placeholder="70"
@@ -427,19 +412,18 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                       <input
                         type="checkbox"
                         checked={currentCriteria.creator_tiers?.includes(tier) || false}
-                        onChange={(e) => {
+                        onChange={ (e) => {
   const tiers = currentCriteria.creator_tiers || [];
   if (e.target.checked) {
   setCurrentCriteria({)
-  ...currentCriteria,
-  creator_tiers: [...tiers, tier],
+  ...currentCriteria
+  creator_tiers: [...tiers, tier] }
 });
-                          } else {
-  setCurrentCriteria({)
-  ...currentCriteria,
-  creator_tiers: tiers.filter(t => t !== tier),
+ else { setCurrentCriteria({)
+  ...currentCriteria
+  creator_tiers: tiers.filter(t => t !== tier) }
 });
-                        }}
+
                       />
                       <span className="capitalize">{tier}</span>
                     </label>
@@ -452,9 +436,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   type="date"
                   value={currentCriteria.published_after ? 
                     currentCriteria.published_after.toISOString().split('T')[0] : ''}
-                  onChange={(e) => setCurrentCriteria({)
-  ...currentCriteria,
-  published_after: e.target.value ? new Date(e.target.value) : undefined,
+                  onChange={ (e) => setCurrentCriteria({)
+  ...currentCriteria
+  published_after: e.target.value ? new Date(e.target.value) : undefined }
 })}
                   className="criteria-input"
                 />
@@ -478,9 +462,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   type="number"
                   min="1"
                   value={currentCriteria.max_content_count || ''}
-                  onChange={(e) => setCurrentCriteria({)
-  ...currentCriteria,
-  max_content_count: parseInt(e.target.value) || undefined,
+                  onChange={ (e) => setCurrentCriteria({)
+  ...currentCriteria
+  max_content_count: parseInt(e.target.value) || undefined }
 })}
                   className="criteria-input"
                   placeholder="50"
@@ -492,9 +476,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     <input
                       type="checkbox"
                       checked={currentCriteria.exclude_recently_promoted || false}
-                      onChange={(e) => setCurrentCriteria({)
-  ...currentCriteria,
-  exclude_recently_promoted: e.target.checked,
+                      onChange={ (e) => setCurrentCriteria({)
+  ...currentCriteria
+  exclude_recently_promoted: e.target.checked }
 })}
                     />
                     <span>Exclude recently promoted content</span>
@@ -503,9 +487,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     <input
                       type="checkbox"
                       checked={currentCriteria.exclude_current_promotions || false}
-                      onChange={(e) => setCurrentCriteria({)
-  ...currentCriteria,
-  exclude_current_promotions: e.target.checked,
+                      onChange={ (e) => setCurrentCriteria({)
+  ...currentCriteria
+  exclude_current_promotions: e.target.checked }
 })}
                     />
                     <span>Exclude currently promoted content</span>
@@ -779,11 +763,11 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           {renderPreview()}
         </TabsContent>
       </Tabs>
-      <style>{`
+      <style>{ `
         .content-selection-criteria {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
@@ -826,11 +810,11 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           font-weight: 500;
   color: #374151;
         .criteria-input {
-          padding: 0.5rem 0.75rem;
+          padding: 0.5rem 0.75rem
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        .criteria-input:focus {,
+        .criteria-input:focus {
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
@@ -841,7 +825,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
         .input-with-unit .criteria-input {
           flex: 1;
         .input-unit {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           font-weight: 500;
         .multi-select {
@@ -852,7 +836,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           display: flex;
           align-items: center;
   gap: 0.375rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #374151;
           cursor: pointer;
         .checkbox-label input[type="checkbox"] {
@@ -889,7 +873,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
         .template-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .template-info h4 {
           font-weight: 600;
@@ -897,7 +881,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           margin: 0 0 0.5rem 0;
         .template-info p {
           color: #6b7280;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   margin: 0;
         .template-stats {
           display: flex;
@@ -911,11 +895,11 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           flex-direction: column;
   gap: 0.25rem;
         .stat-label {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
           font-weight: 500;
         .stat-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #1f2937;
           font-weight: 600;
         .template-preview h5 {
@@ -928,9 +912,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
   gap: 0.375rem;
           margin-bottom: 1rem;
         .criteria-tag {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   padding: 0.25rem 0.5rem;
-          background: #f3f4f6;
+          background: #f3f4f6
   color: #374151;
           display: flex;
           align-items: center;
@@ -966,12 +950,12 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
   color: #1f2937;
           line-height: 1;
         .metric-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin-top: 0.5rem;
         .preview-content {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1rem;
         .sample-content-list {
           display: flex;
@@ -991,15 +975,15 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
   gap: 0.5rem;
           margin-bottom: 0.5rem;
         .content-meta span {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .category-badge {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   padding: 0.125rem 0.375rem;
         .content-stats {
           display: flex;
   gap: 1rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #374151;
           margin-bottom: 0.5rem;
         .match-reasons {
@@ -1007,9 +991,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           flex-wrap: wrap;
   gap: 0.25rem;
         .reason-badge {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   padding: 0.125rem 0.375rem;
-          background: #eff6ff;
+          background: #eff6ff
   color: #1e40af;
         .distribution-charts {
           display: flex;
@@ -1028,7 +1012,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           align-items: center;
   gap: 0.75rem;
         .bar-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #374151;
           min-width: 80px;
         .bar-container {
@@ -1038,11 +1022,11 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           border-radius: 10px;
   overflow: hidden;
         .bar-fill {
-          height: 100%;
+          height: 100%
   background: #3b82f6;
           transition: width 0.3s ease;
         .bar-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #374151;
           font-weight: 600;
           min-width: 30px;
@@ -1053,15 +1037,15 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
   gap: 0.75rem;
         .prediction-item {
           display: flex;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
         .prediction-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .prediction-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem }
   color: #1f2937;
           font-weight: 600;
         @media (max-width: 1200px) {

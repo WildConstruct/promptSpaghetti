@@ -79,7 +79,7 @@ describe('Expiration Management System', () => {
       INSERT IGNORE INTO permissions (id, name, resource, action, scope, description, category, is_active)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `, ['perm_manage_expiration', 'Manage Expiration', 'expiration', 'manage', 'organization', 'Test permission', 'Test', 1]);
-  }
+
 
   async function cleanupTestData() {
     await db.query('DELETE FROM expiration_events WHERE rule_id LIKE ?', ['test_%']);
@@ -87,7 +87,7 @@ describe('Expiration Management System', () => {
     await db.query('DELETE FROM expiration_policies WHERE id LIKE ?', ['test_%']);
     await db.query('DELETE FROM users WHERE id LIKE ?', ['test-%']);
     await db.query('DELETE FROM permissions WHERE id LIKE ?', ['perm_%']);
-  }
+
 
   describe('ExpirationManagementService', () => {
     test('should create expiration policy successfully', async () => {
@@ -328,7 +328,7 @@ describe('Expiration Management System', () => {
         expect(testWarning.resourceType).toBe('jwt_token');
         expect(testWarning.timeRemaining).toBeLessThan(1800);
         expect(testWarning.warningLevel).toMatch(/info|warning|critical/);
-      }
+
     });
 
     test('should cleanup expired resources', async () => {
@@ -364,7 +364,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/policies',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-  }
+
         payload: mockPolicy
       });
 
@@ -384,13 +384,13 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/rules',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-  }
+
         payload: {
           resourceId: 'api-test-resource',
           resourceType: 'jwt_token',
           policyId: policy.id,
           metadata: { source: 'api-test' }
-        }
+
       });
 
       expect(response.statusCode).toBe(201);
@@ -415,7 +415,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/status/jwt_token/status-test-resource',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -446,11 +446,11 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/renew/jwt_token/renew-test-resource',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-  }
+
         payload: {
           requestedTtl: 7200,
           reason: 'API test renewal'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -475,10 +475,10 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/revoke/jwt_token/revoke-test-resource',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-  }
+
         payload: {
           reason: 'API test revocation'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -492,7 +492,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/stats',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -510,7 +510,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/warnings?limit=10',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -525,7 +525,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/cleanup',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -572,7 +572,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/policies',
         headers: {
           'Authorization': `Bearer ${generateTestToken(unauthorizedUser)}`
-  }
+
         payload: mockPolicy
       });
 
@@ -585,7 +585,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/policies',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-  }
+
         payload: {
           name: '', // Invalid empty name
           resourceType: 'invalid_type', // Invalid resource type
@@ -593,7 +593,7 @@ describe('Expiration Management System', () => {
           warningThreshold: 0, // Invalid zero threshold
           autoRenewal: 'not-boolean', // Invalid boolean
           renewalWindow: 0 // Invalid zero window
-        }
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -686,7 +686,7 @@ describe('Expiration Management System', () => {
     // This would normally use the same JWT signing as the main app
     // For testing, we'll use a simple mock token
     return Buffer.from(JSON.stringify(user)).toString('base64');
-  }
+
 });
 
 export { };

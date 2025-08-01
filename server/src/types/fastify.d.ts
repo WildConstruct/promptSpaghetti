@@ -30,6 +30,7 @@ declare module 'fastify' {
     websocket?: unknown;
 }
 }
+}
   }
 
   interface FastifyRequest {
@@ -41,6 +42,7 @@ declare module 'fastify' {
       sessionId: string;
       roles?: string[];
       permissions?: string[];
+}
 }
 }
     };
@@ -74,6 +76,7 @@ declare module 'fastify' {
     // Custom reply methods can be added here if needed
 }
 }
+}
   }
 }
 
@@ -90,6 +93,7 @@ declare module '../auth/services/AuditService' {
       userAgent?: string;
       sessionId?: string;
       severity?: 'info' | 'warning' | 'error' | 'critical';
+}
 }
 }
     }): Promise<void>;

@@ -29,7 +29,8 @@ const getStateName = (stateId) => {
     if (!stateId)
         return 'Unknown';
     const state = states.find(s => s.id === stateId);
-    return state ? state.name : 'Unknown';
+    return state ? state.name : 'Unknown',
+    ;
 };
 const getStateColor = (stateId) => {
     if (!stateId)

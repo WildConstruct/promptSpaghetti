@@ -11,7 +11,7 @@ import {
   ChallengeType, 
   ChallengeDifficulty,
   ChallengeConfig
-} from '../../types';
+ from '../../types';
 
 // Mock the ChallengeService
 jest.mock('../../services/ChallengeService');
@@ -54,17 +54,17 @@ describe('ChallengeMiddleware', () => {
           method: 'POST',
           challengeType: ChallengeType.MATH_PUZZLE,
           riskThreshold: 0.3
-  }
+
         {
           path: '/api/protected',
           challengeType: ChallengeType.RECAPTCHA_V2,
           skipAuth: true
-        }
+
       ],
       defaultChallenge: {
         type: ChallengeType.TEXT_CAPTCHA,
         difficulty: ChallengeDifficulty.MEDIUM
-  }
+
       bypassTokens: ['test-bypass-token'],
       trustProxy: true
     });
@@ -76,12 +76,12 @@ describe('ChallengeMiddleware', () => {
       headers: {
         'user-agent': 'test-agent',
         'x-forwarded-for': '192.168.1.1'
-  }
+
       ip: '127.0.0.1',
       body: {},
       log: {
         error: jest.fn()
-      }
+
     };
 
     // Create mock reply
@@ -148,7 +148,7 @@ describe('ChallengeMiddleware', () => {
           challenge: expect.objectContaining({
             id: 'test-challenge-id',
             type: ChallengeType.TEXT_CAPTCHA
-  }
+
   }
       );
     });
@@ -169,7 +169,7 @@ describe('ChallengeMiddleware', () => {
           userAgent: 'test-agent',
           ipAddress: '192.168.1.1',
           fingerprint: undefined
-        }
+
       });
 
       expect(mockRequest.challenge).toEqual({
@@ -242,7 +242,7 @@ describe('ChallengeMiddleware', () => {
               userAgent: 'test-agent',
               ipAddress: '192.168.1.1',
               fingerprint: undefined
-            }
+
   }
         );
 
@@ -251,7 +251,7 @@ describe('ChallengeMiddleware', () => {
           challenge: expect.objectContaining({
             id: 'test-challenge-id',
             type: ChallengeType.TEXT_CAPTCHA
-  }
+
         });
       });
 
@@ -300,7 +300,7 @@ describe('ChallengeMiddleware', () => {
             userAgent: 'test-agent',
             ipAddress: '192.168.1.1',
             fingerprint: undefined
-          }
+
         });
 
         expect(mockReply.send).toHaveBeenCalledWith({
@@ -397,7 +397,7 @@ describe('ChallengeMiddleware', () => {
       if (mockChallengeService.generateChallenge.mock.calls.length > 0) {
         const challengeCall = mockChallengeService.generateChallenge.mock.calls[0][0];
         expect(challengeCall.clientInfo.ipAddress).toBe('192.168.1.100');
-      }
+
     });
 
     test('should use request.ip when trust proxy is disabled', async () => {
@@ -409,7 +409,7 @@ describe('ChallengeMiddleware', () => {
           method: 'POST',
           challengeType: ChallengeType.MATH_PUZZLE,
           riskThreshold: 0.1
-        }],
+],
         trustProxy: false
       });
 
@@ -419,7 +419,7 @@ describe('ChallengeMiddleware', () => {
       if (mockChallengeService.generateChallenge.mock.calls.length > 0) {
         const challengeCall = mockChallengeService.generateChallenge.mock.calls[0][0];
         expect(challengeCall.clientInfo.ipAddress).toBe('127.0.0.1');
-      }
+
     });
   });
 
@@ -443,7 +443,7 @@ describe('ChallengeMiddleware', () => {
           path: /^\/api\/.*/,
           challengeType: ChallengeType.TEXT_CAPTCHA,
           riskThreshold: 0.1
-        }]
+]
       });
 
       mockRequest.url = '/api/users/123';

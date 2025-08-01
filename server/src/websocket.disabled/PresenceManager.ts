@@ -2,8 +2,9 @@ import { EventEmitter } from 'events';
 import { v4 as uuidv4 } from 'uuid';
 
 // Enhanced presence data models
-}
-}
+
+
+
 export interface UserPresenceData {
   userId: string;
   userName?: string;
@@ -21,8 +22,9 @@ export interface UserPresenceData {
       width: number;
       height: number;
       zoom: number;
-}
-}
+
+
+
     };
   };
   selection?: {
@@ -52,10 +54,10 @@ export interface UserPresenceData {
   joinedAt: number;
   userAgent?: string;
   platform?: string;
-}
 
-}
-}
+
+
+
 export interface DocumentPresence {
   documentId: string;
   users: Map<string, UserPresenceData>;
@@ -63,12 +65,13 @@ export interface DocumentPresence {
   maxConcurrentUsers: number;
   lastActivity: number;
   createdAt: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PresenceStats {
   totalUsers: number;
   activeUsers: number;
@@ -78,12 +81,13 @@ export interface PresenceStats {
   averageSessionDuration: number;
   peakConcurrentUsers: number;
   lastUpdated: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PresenceConfig {
   idleTimeout: number; // Time before marking user as idle (ms)
   awayTimeout: number; // Time before marking user as away (ms)
@@ -94,9 +98,10 @@ export interface PresenceConfig {
   enableActivityTracking: boolean;
   retainPresenceHistory: boolean;
   historyRetentionPeriod: number; // How long to keep presence history (ms)
-}
-}
-}
+
+
+
+
 
 export class PresenceManager extends EventEmitter {
   private documentPresence: Map<string, DocumentPresence> = new Map();
@@ -120,7 +125,7 @@ export class PresenceManager extends EventEmitter {
     };
 
     this.startCleanup();
-  }
+
 
   /**
    * Add user presence when they join a document
@@ -163,7 +168,7 @@ export class PresenceManager extends EventEmitter {
         createdAt: now
       };
       this.documentPresence.set(documentId, docPresence);
-    }
+
 
     docPresence.users.set(userId, presence);
     docPresence.activeUsers = docPresence.users.size;
@@ -174,7 +179,7 @@ export class PresenceManager extends EventEmitter {
     this.emit('user_joined', documentId, presence);
 
     return presence;
-  }
+
 
   /**
    * Remove user presence when they leave
@@ -183,7 +188,7 @@ export class PresenceManager extends EventEmitter {
     const presence = this.userSessions.get(connectionId);
     if (!presence) {
       return null;
-    }
+
 
     this.userSessions.delete(connectionId);
 
@@ -195,16 +200,16 @@ export class PresenceManager extends EventEmitter {
       // Clean up empty document presence
       if (docPresence.users.size === 0) {
         this.documentPresence.delete(presence.documentId);
-      } else {
+ else {
         docPresence.lastActivity = Date.now();
-      }
-    }
+
+
 
     this.updateStats();
     this.emit('user_left', presence.documentId, presence);
 
     return presence;
-  }
+
 
   /**
    * Update user presence data
@@ -216,7 +221,7 @@ export class PresenceManager extends EventEmitter {
     const presence = this.userSessions.get(connectionId);
     if (!presence) {
       return null;
-    }
+
 
     const now = Date.now();
     
@@ -231,20 +236,20 @@ export class PresenceManager extends EventEmitter {
     if (docPresence) {
       docPresence.users.set(presence.userId, presence);
       docPresence.lastActivity = now;
-    }
+
 
     // Check for status changes
     const newStatus = this.calculateUserStatus(presence);
     if (newStatus !== presence.status) {
       presence.status = newStatus;
       this.emit('user_status_changed', presence.documentId, presence, presence.status);
-    }
+
 
     this.updateStats();
     this.emit('user_updated', presence.documentId, presence);
 
     return presence;
-  }
+
 
   /**
    * Update user cursor position
@@ -254,7 +259,7 @@ export class PresenceManager extends EventEmitter {
     cursor: UserPresenceData['cursor']
   ): UserPresenceData | null {
     return this.updateUserPresence(connectionId, { cursor });
-  }
+
 
   /**
    * Update user selection
@@ -264,7 +269,7 @@ export class PresenceManager extends EventEmitter {
     selection: UserPresenceData['selection']
   ): UserPresenceData | null {
     return this.updateUserPresence(connectionId, { selection });
-  }
+
 
   /**
    * Update user activity status
@@ -275,17 +280,17 @@ export class PresenceManager extends EventEmitter {
       currentTool?: string;
       isTyping?: boolean;
       focusedNodeId?: string;
-    }
+
   ): UserPresenceData | null {
     return this.updateUserPresence(connectionId, activity);
-  }
+
 
   /**
    * Get presence data for a specific user
    */
   getUserPresence(connectionId: string): UserPresenceData | null {
     return this.userSessions.get(connectionId) || null;
-  }
+
 
   /**
    * Get all users in a document
@@ -293,14 +298,14 @@ export class PresenceManager extends EventEmitter {
   getDocumentUsers(documentId: string): UserPresenceData[] {
     const docPresence = this.documentPresence.get(documentId);
     return docPresence ? Array.from(docPresence.users.values()) : [];
-  }
+
 
   /**
    * Get document presence info
    */
   getDocumentPresence(documentId: string): DocumentPresence | null {
     return this.documentPresence.get(documentId) || null;
-  }
+
 
   /**
    * Get users near a specific location
@@ -315,7 +320,7 @@ export class PresenceManager extends EventEmitter {
     return users.filter(user => {
       if (!user.cursor || !user.shareLocation) {
         return false;
-      }
+
       
       const distance = Math.sqrt(
         Math.pow(user.cursor.x - location.x, 2) + 
@@ -324,7 +329,7 @@ export class PresenceManager extends EventEmitter {
       
       return distance <= radius;
     });
-  }
+
 
   /**
    * Get users with overlapping selections
@@ -338,25 +343,25 @@ export class PresenceManager extends EventEmitter {
     return users.filter(user => {
       if (!user.selection || !user.shareSelection) {
         return false;
-      }
+
       
       return user.selection.nodeIds.some(nodeId => nodeIds.includes(nodeId));
     });
-  }
+
 
   /**
    * Get presence statistics
    */
   getPresenceStats(): PresenceStats {
     return { ...this.stats };
-  }
+
 
   /**
    * Get active users across all documents
    */
   getAllActiveUsers(): UserPresenceData[] {
     return Array.from(this.userSessions.values()).filter(user => user.status === 'active');
-  }
+
 
   /**
    * Check if document has reached user limit
@@ -364,7 +369,7 @@ export class PresenceManager extends EventEmitter {
   isDocumentAtCapacity(documentId: string): boolean {
     const docPresence = this.documentPresence.get(documentId);
     return docPresence ? docPresence.activeUsers >= this.config.maxUsersPerDocument : false;
-  }
+
 
   /**
    * Clean up stale presence data
@@ -372,7 +377,7 @@ export class PresenceManager extends EventEmitter {
   cleanup(): void {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
-    }
+
 
     // Clear all data
     this.documentPresence.clear();
@@ -380,7 +385,7 @@ export class PresenceManager extends EventEmitter {
     
     // Update stats to reflect the cleared state
     this.updateStats();
-  }
+
 
   /**
    * Calculate user status based on activity
@@ -392,14 +397,14 @@ export class PresenceManager extends EventEmitter {
 
     if (timeSinceLastSeen > this.config.offlineTimeout) {
       return 'offline';
-    } else if (timeSinceLastActivity > this.config.awayTimeout) {
+ else if (timeSinceLastActivity > this.config.awayTimeout) {
       return 'away';
-    } else if (timeSinceLastActivity > this.config.idleTimeout) {
+ else if (timeSinceLastActivity > this.config.idleTimeout) {
       return 'idle';
-    } else {
+ else {
       return 'active';
-    }
-  }
+
+
 
   /**
    * Start periodic cleanup of stale presence data
@@ -408,7 +413,7 @@ export class PresenceManager extends EventEmitter {
     this.cleanupInterval = setInterval(() => {
       this.performCleanup();
     }, this.config.cleanupInterval);
-  }
+
 
   /**
    * Perform cleanup of stale presence data
@@ -423,23 +428,23 @@ export class PresenceManager extends EventEmitter {
       
       if (timeSinceLastSeen > this.config.offlineTimeout) {
         toRemove.push(connectionId);
-      } else {
+ else {
         // Update status based on activity
         const newStatus = this.calculateUserStatus(presence);
         if (newStatus !== presence.status) {
           presence.status = newStatus;
           this.emit('user_status_changed', presence.documentId, presence, newStatus);
-        }
-      }
-    }
+
+
+
 
     // Remove stale sessions
     for (const connectionId of toRemove) {
       this.removeUserPresence(connectionId);
-    }
+
 
     this.updateStats();
-  }
+
 
   /**
    * Update presence statistics
@@ -458,7 +463,7 @@ export class PresenceManager extends EventEmitter {
       peakConcurrentUsers: Math.max(this.stats.peakConcurrentUsers, allUsers.length),
       lastUpdated: now
     };
-  }
+
 
   /**
    * Calculate average session duration
@@ -466,12 +471,11 @@ export class PresenceManager extends EventEmitter {
   private calculateAverageSessionDuration(users: UserPresenceData[], now: number): number {
     if (users.length === 0) {
       return 0;
-    }
+
 
     const totalDuration = users.reduce((sum, user) => {
       return sum + (now - user.joinedAt);
     }, 0);
 
     return totalDuration / users.length;
-  }
-}
+

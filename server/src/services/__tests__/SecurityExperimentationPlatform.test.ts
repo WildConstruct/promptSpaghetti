@@ -9,7 +9,7 @@ import {
   SecurityExperiment,
   ExperimentResults,
   ExperimentPortfolio 
-} from '../SecurityExperimentationPlatform';
+ from '../SecurityExperimentationPlatform';
 import { SecurityAPIIntegrationPlatform } from '../SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../SecurityPolicyAnalysisEngine';
 import { SecurityOptimizationEngine } from '../SecurityOptimizationEngine';
@@ -37,30 +37,30 @@ describe('SecurityExperimentationPlatform', () => {
       getPlatformMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         api_calls: { total_requests: 15000, successful_requests: 14500 },
         security_analytics: { threats_detected: 35, detection_accuracy_percent: 97 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPolicyEngine = {
       on: jest.fn<unknown[], unknown>(),
       analyzePolicyImpact: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_analysis: { overall_risk_score: 30 },
         validation_results: { validation_passed: true }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockOptimizationEngine = {
       on: jest.fn<unknown[], unknown>(),
       performComprehensiveAnalysis: jest.fn<unknown[], unknown>().mockResolvedValue({
         recommendations: []
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockABTestingFramework = {
       on: jest.fn<unknown[], unknown>(),
       getTestingAnalytics: jest.fn<unknown[], unknown>().mockReturnValue({
         summary: { total_tests: 5, active_tests: 2 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     // Setup configuration
     config = {
@@ -71,7 +71,7 @@ describe('SecurityExperimentationPlatform', () => {
         experiment_orchestration_enabled: true,
         automated_rollback_enabled: true,
         compliance_validation_required: true
-  }
+
       experiment_types: {
         security_research_experiments: true,
         vulnerability_simulation_experiments: true,
@@ -80,14 +80,14 @@ describe('SecurityExperimentationPlatform', () => {
         incident_response_experiments: true,
         penetration_testing_experiments: true,
         social_engineering_experiments: false
-  }
+
       environments: {
         production_experiments_allowed: false,
         staging_environment_required: true,
         isolated_sandbox_available: true,
         development_environment_enabled: true,
         canary_environment_enabled: true
-  }
+
       safety_controls: {
         experiment_approval_required: true,
         ethical_review_required: true,
@@ -95,7 +95,7 @@ describe('SecurityExperimentationPlatform', () => {
         automatic_termination_enabled: true,
         real_time_monitoring_required: true,
         data_anonymization_required: true
-  }
+
       research_capabilities: {
         hypothesis_generation_enabled: true,
         statistical_analysis_enabled: true,
@@ -103,14 +103,14 @@ describe('SecurityExperimentationPlatform', () => {
         behavioral_analysis_enabled: true,
         longitudinal_studies_supported: true,
         cross_experiment_correlation: true
-  }
+
       collaboration: {
         multi_team_experiments: true,
         external_researcher_access: false,
         peer_review_process: true,
         knowledge_sharing_enabled: true,
         publication_support: true
-      }
+
     };
 
     // Setup sample experiment configuration
@@ -136,13 +136,13 @@ describe('SecurityExperimentationPlatform', () => {
             population_definition: 'Production network traffic patterns',
             inclusion_criteria: ['Active network connections', 'Representative traffic mix'],
             exclusion_criteria: ['Test traffic', 'Administrative connections']
-  }
+
           control_mechanisms: [
             {
               control_type: 'randomization',
               description: 'Random assignment of traffic samples',
               implementation_details: 'Hash-based random assignment'
-            }
+
           ],
           variables: [
             {
@@ -151,16 +151,16 @@ describe('SecurityExperimentationPlatform', () => {
               measurement_method: 'system_configuration',
               data_type: 'categorical',
               expected_values: ['ml_based', 'rule_based']
-  }
+
             {
               variable_name: 'detection_accuracy',
               variable_type: 'dependent',
               measurement_method: 'threat_detection_rate',
               data_type: 'continuous',
               expected_values: ['0.80', '1.00']
-            }
+
           ]
-  }
+
         expected_outcomes: [
           'Improved threat detection accuracy',
           'Reduced false positive rate',
@@ -176,7 +176,7 @@ describe('SecurityExperimentationPlatform', () => {
               target_value: 95,
               acceptable_range: { min: 90, max: 100 },
               measurement_frequency: 'real_time'
-            }
+
           ],
           secondary_outcomes: [
             {
@@ -186,13 +186,13 @@ describe('SecurityExperimentationPlatform', () => {
               target_value: 2,
               acceptable_range: { min: 0, max: 5 },
               measurement_frequency: 'real_time'
-            }
+
           ],
           statistical_significance_threshold: 0.05,
           practical_significance_threshold: 15.0,
           minimum_effect_size: 0.3
-        }
-  }
+
+
       experimental_setup: {
         target_systems: [
           {
@@ -203,7 +203,7 @@ describe('SecurityExperimentationPlatform', () => {
             criticality_level: 'high',
             access_requirements: ['network_monitoring', 'security_admin'],
             isolation_level: 'network'
-          }
+
         ],
         environments: [
           {
@@ -214,11 +214,11 @@ describe('SecurityExperimentationPlatform', () => {
               isolation_level: 'network',
               monitoring_enabled: true,
               data_retention_days: 90
-  }
+
             isolation_measures: ['network_segmentation', 'traffic_isolation'],
             monitoring_setup: ['real_time_metrics', 'security_alerts'],
             rollback_procedures: ['configuration_restore', 'traffic_redirect']
-          }
+
         ],
         participants: [
           {
@@ -228,7 +228,7 @@ describe('SecurityExperimentationPlatform', () => {
             access_level: 'automated',
             consent_required: false,
             anonymization_level: 'aggregated'
-          }
+
         ],
         duration: {
           planned_duration_days: 21,
@@ -241,7 +241,7 @@ describe('SecurityExperimentationPlatform', () => {
               deliverables: ['baseline_metrics', 'system_configuration'],
               success_criteria: ['stable_baseline_achieved'],
               review_required: true
-            }
+
           ],
           review_schedule: [
             {
@@ -249,9 +249,9 @@ describe('SecurityExperimentationPlatform', () => {
               review_date: Date.now() + 86400000 * 7,
               reviewers: ['security_team', 'research_lead'],
               review_criteria: ['safety_metrics_within_bounds', 'no_security_incidents']
-            }
+
           ]
-  }
+
         resources_required: [
           {
             resource_type: 'infrastructure',
@@ -260,9 +260,9 @@ describe('SecurityExperimentationPlatform', () => {
             duration_needed: 21,
             cost_estimate: 5000,
             availability_constraints: ['business_hours_preferred']
-          }
+
         ]
-      }
+
     };
 
     platform = new SecurityExperimentationPlatform(
@@ -277,7 +277,7 @@ describe('SecurityExperimentationPlatform', () => {
   afterEach(async () => {
     if (platform) {
       await platform.shutdown();
-    }
+
   });
 
   describe('Initialization', () => {
@@ -350,7 +350,7 @@ describe('SecurityExperimentationPlatform', () => {
           methodology: sampleExperimentConfig.research_design!.methodology!,
           expected_outcomes: ['Test outcome'],
           success_criteria: sampleExperimentConfig.research_design!.success_criteria!
-        }
+
       };
 
       await expect(platform.createExperiment(invalidConfig)).rejects.toThrow();
@@ -366,7 +366,7 @@ describe('SecurityExperimentationPlatform', () => {
           hypothesis: 'System will perform within acceptable parameters',
           objectives: ['Test basic functionality'],
           expected_outcomes: ['System validation']
-  }
+
         experimental_setup: {
           target_systems: [
             {
@@ -377,7 +377,7 @@ describe('SecurityExperimentationPlatform', () => {
               criticality_level: 'low' as const,
               access_requirements: [],
               isolation_level: 'container' as const
-            }
+
           ],
           environments: [
             {
@@ -388,7 +388,7 @@ describe('SecurityExperimentationPlatform', () => {
               isolation_measures: [],
               monitoring_setup: [],
               rollback_procedures: []
-            }
+
           ],
           participants: [],
           duration: {
@@ -397,9 +397,9 @@ describe('SecurityExperimentationPlatform', () => {
             maximum_duration_days: 7,
             milestone_dates: [],
             review_schedule: []
-  }
+
           resources_required: []
-        }
+
       };
 
       const createdExperiment = await platform.createExperiment(minimalConfig);
@@ -568,7 +568,7 @@ describe('SecurityExperimentationPlatform', () => {
           ...sampleExperimentConfig,
           experiment_name: 'Policy Effectiveness Research',
           experiment_type: 'policy_effectiveness'
-  }
+
       ]);
       
       experimentIds = experiments.map(exp => exp.experiment_id);
@@ -589,7 +589,7 @@ describe('SecurityExperimentationPlatform', () => {
             research_questions: ['How can ML improve detection?', 'What are the performance trade-offs?'],
             contributing_experiments: experimentIds.slice(0, 2),
             expected_synergies: ['Shared data collection', 'Cross-validation of results']
-          }
+
         ],
         coordination_requirements: [
           {
@@ -597,7 +597,7 @@ describe('SecurityExperimentationPlatform', () => {
             description: 'Share threat intelligence data between experiments',
             affected_experiments: experimentIds,
             coordination_mechanisms: ['shared_data_pipeline']
-          }
+
         ]
       };
 
@@ -643,7 +643,7 @@ describe('SecurityExperimentationPlatform', () => {
               allocation: Math.floor(100 / experimentIds.length)
             })),
             allocation_strategy: 'priority_based'
-          }
+
         ]
       };
 
@@ -666,10 +666,10 @@ describe('SecurityExperimentationPlatform', () => {
               dependency_experiment: experimentIds[0],
               dependency_type: 'start_after',
               buffer_time_days: 7
-            }
+
           ],
           resource_conflict_resolutions: []
-        }
+
       };
 
       const createdPortfolio = await platform.createExperimentPortfolio(portfolioConfig);
@@ -756,7 +756,7 @@ describe('SecurityExperimentationPlatform', () => {
       if (alertHandler) {
         await alertHandler({ severity: 'high', type: 'experiment_anomaly' });
         // Should not throw
-      }
+
     });
 
     it('should handle policy engine events', async () => {
@@ -766,7 +766,7 @@ describe('SecurityExperimentationPlatform', () => {
       if (policyHandler) {
         await policyHandler({ policyId: 'test_policy', result: { validation_passed: true } });
         // Should not throw
-      }
+
     });
 
     it('should handle A/B testing framework events', async () => {
@@ -776,7 +776,7 @@ describe('SecurityExperimentationPlatform', () => {
       if (abTestHandler) {
         await abTestHandler({ testId: 'test_001', result: { success: true } });
         // Should not throw
-      }
+
     });
   });
 
@@ -842,7 +842,7 @@ describe('SecurityExperimentationPlatform', () => {
           experiment_approval_required: true,
           ethical_review_required: true,
           blast_radius_limitation: true
-        }
+
       };
 
       const strictPlatform = new SecurityExperimentationPlatform(
@@ -869,7 +869,7 @@ describe('SecurityExperimentationPlatform', () => {
           ...config.experiment_types,
           social_engineering_experiments: false,
           penetration_testing_experiments: false
-        }
+
       };
 
       const limitedPlatform = new SecurityExperimentationPlatform(
@@ -898,7 +898,7 @@ describe('SecurityExperimentationPlatform', () => {
           ...config.environments,
           production_experiments_allowed: false,
           staging_environment_required: true
-        }
+
       };
 
       const restrictedPlatform = new SecurityExperimentationPlatform(

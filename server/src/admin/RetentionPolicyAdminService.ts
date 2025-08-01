@@ -16,19 +16,19 @@ import {
   RetentionPolicy,
   RetentionRecord,
   RetentionJob
-} from '../services/DataRetentionFrameworkService';
+ from '../services/DataRetentionFrameworkService';
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
-}
-}
+
+
 export interface AdminRetentionPolicy extends RetentionPolicy {
   adminSettings: AdminPolicySettings;
   statistics: PolicyStatistics;
   compliance: ComplianceStatus;
-}
 
-}
-}
+
+
+
 export interface AdminPolicySettings {
   autoEnforcement: boolean;
   requireApproval: boolean;
@@ -39,9 +39,10 @@ export interface AdminPolicySettings {
   auditRequired: boolean;
   riskAssessment: RiskLevel;
   businessJustification?: string;
-}
-}
-}
+
+
+
+
 
 export enum EscalationLevel {
   NONE = 'none',
@@ -49,7 +50,7 @@ export enum EscalationLevel {
   DPO = 'dpo',
   LEGAL = 'legal',
   EXECUTIVE = 'executive'
-}
+
 
 export enum ReviewFrequency {
   MONTHLY = 'monthly',
@@ -57,17 +58,17 @@ export enum ReviewFrequency {
   SEMI_ANNUAL = 'semi_annual',
   ANNUAL = 'annual',
   AD_HOC = 'ad_hoc'
-}
+
 
 export enum RiskLevel {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
 
-}
-}
+
+
+
 export interface PolicyStatistics {
   recordsManaged: number;
   recordsDeleted: number;
@@ -79,12 +80,13 @@ export interface PolicyStatistics {
   exemptionCount: number;
   lastEnforcement?: Date;
   nextScheduledReview: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceStatus {
   isCompliant: boolean;
   complianceScore: number; // 0-100
@@ -93,12 +95,13 @@ export interface ComplianceStatus {
   nextAudit: Date;
   certificationStatus: CertificationStatus;
   riskAssessment: RiskAssessment;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceIssue {
   issueId: string;
   type: IssueType;
@@ -109,9 +112,10 @@ export interface ComplianceIssue {
   resolvedAt?: Date;
   resolution?: string;
   assignedTo?: string;
-}
-}
-}
+
+
+
+
 
 export enum IssueType {
   POLICY_VIOLATION = 'policy_violation',
@@ -121,14 +125,14 @@ export enum IssueType {
   ACCESS_VIOLATION = 'access_violation',
   AUDIT_FAILURE = 'audit_failure',
   LEGAL_HOLD_VIOLATION = 'legal_hold_violation'
-}
+
 
 export enum IssueSeverity {
   INFO = 'info',
   WARNING = 'warning',
   CRITICAL = 'critical',
   EMERGENCY = 'emergency'
-}
+
 
 export enum CertificationStatus {
   CERTIFIED = 'certified',
@@ -136,10 +140,10 @@ export enum CertificationStatus {
   EXPIRED = 'expired',
   REVOKED = 'revoked',
   NOT_APPLICABLE = 'not_applicable'
-}
 
-}
-}
+
+
+
 export interface RiskAssessment {
   overallRisk: RiskLevel;
   dataVolume: number;
@@ -148,9 +152,10 @@ export interface RiskAssessment {
   businessImpact: BusinessImpact;
   recommendedActions: string[];
   lastAssessment: Date;
-}
-}
-}
+
+
+
+
 
 export enum SensitivityLevel {
   PUBLIC = 'public',
@@ -158,7 +163,7 @@ export enum SensitivityLevel {
   CONFIDENTIAL = 'confidential',
   RESTRICTED = 'restricted',
   TOP_SECRET = 'top_secret'
-}
+
 
 export enum BusinessImpact {
   MINIMAL = 'minimal',
@@ -166,10 +171,10 @@ export enum BusinessImpact {
   MODERATE = 'moderate',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
 
-}
-}
+
+
+
 export interface PolicyTemplate {
   templateId: string;
   name: string;
@@ -184,9 +189,10 @@ export interface PolicyTemplate {
   createdAt: Date;
   usageCount: number;
   averageCompliance: number;
-}
-}
-}
+
+
+
+
 
 export enum PolicyCategory {
   PERSONAL_DATA = 'personal_data',
@@ -196,10 +202,10 @@ export enum PolicyCategory {
   OPERATIONAL = 'operational',
   SECURITY = 'security',
   LEGAL = 'legal'
-}
 
-}
-}
+
+
+
 export interface RetentionException {
   exceptionId: string;
   policyId: string;
@@ -216,9 +222,10 @@ export interface RetentionException {
   riskAssessment: string;
   conditions: string[];
   reviewRequired: boolean;
-}
-}
-}
+
+
+
+
 
 export enum ExceptionType {
   LEGAL_HOLD = 'legal_hold',
@@ -227,7 +234,7 @@ export enum ExceptionType {
   AUDIT_REQUIREMENT = 'audit_requirement',
   TECHNICAL_ISSUE = 'technical_issue',
   CONSENT_PENDING = 'consent_pending'
-}
+
 
 export enum ExceptionStatus {
   REQUESTED = 'requested',
@@ -235,10 +242,10 @@ export enum ExceptionStatus {
   DENIED = 'denied',
   EXPIRED = 'expired',
   REVOKED = 'revoked'
-}
 
-}
-}
+
+
+
 export interface RetentionReport {
   reportId: string;
   reportType: RetentionReportType;
@@ -252,9 +259,10 @@ export interface RetentionReport {
   compliance: ComplianceMetrics;
   exportFormats: ExportFormat[];
   distributionList: string[];
-}
-}
-}
+
+
+
+
 
 export enum RetentionReportType {
   COMPLIANCE_AUDIT = 'compliance_audit',
@@ -263,10 +271,10 @@ export enum RetentionReportType {
   RISK_ASSESSMENT = 'risk_assessment',
   COST_ANALYSIS = 'cost_analysis',
   EXCEPTION_REVIEW = 'exception_review'
-}
 
-}
-}
+
+
+
 export interface ReportScope {
   policies: string[];
   dataCategories: DataCategory[];
@@ -274,22 +282,24 @@ export interface ReportScope {
   departments: string[];
   includeExceptions: boolean;
   includeArchived: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportPeriod {
   startDate: Date;
   endDate: Date;
   granularity: 'day' | 'week' | 'month' | 'quarter' | 'year';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetentionReportSummary {
   totalRecords: number;
   totalPolicies: number;
@@ -300,12 +310,13 @@ export interface RetentionReportSummary {
   riskScore: number;
   costSavings: number;
   recommendations: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportFinding {
   findingId: string;
   type: FindingType;
@@ -317,9 +328,10 @@ export interface ReportFinding {
   recommendedAction: string;
   timeline: string;
   assignedTo?: string;
-}
-}
-}
+
+
+
+
 
 export enum FindingType {
   NON_COMPLIANCE = 'non_compliance',
@@ -327,10 +339,10 @@ export enum FindingType {
   RISK = 'risk',
   OPPORTUNITY = 'opportunity',
   ANOMALY = 'anomaly'
-}
 
-}
-}
+
+
+
 export interface ComplianceMetrics {
   overallScore: number; // 0-100
   policyCompliance: number;
@@ -340,21 +352,23 @@ export interface ComplianceMetrics {
   dataGovernance: number;
   certificationStatus: CertificationStatus[];
   keyIndicators: KeyIndicator[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyIndicator {
   name: string;
   value: number;
   target: number;
   trend: 'improving' | 'stable' | 'declining';
   importance: 'low' | 'medium' | 'high';
-}
-}
-}
+
+
+
+
 
 export enum ExportFormat {
   PDF = 'pdf',
@@ -362,10 +376,10 @@ export enum ExportFormat {
   EXCEL = 'excel',
   JSON = 'json',
   XML = 'xml'
-}
 
-}
-}
+
+
+
 export interface BulkPolicyOperation {
   operationId: string;
   type: BulkOperationType;
@@ -377,9 +391,10 @@ export interface BulkPolicyOperation {
   completedAt?: Date;
   results: BulkOperationResults;
   initiatedBy: string;
-}
-}
-}
+
+
+
+
 
 export enum BulkOperationType {
   APPLY_POLICY = 'apply_policy',
@@ -389,22 +404,23 @@ export enum BulkOperationType {
   GRANT_EXCEPTION = 'grant_exception',
   REVOKE_EXCEPTION = 'revoke_exception',
   COMPLIANCE_CHECK = 'compliance_check'
-}
 
-}
-}
+
+
+
 export interface BulkOperationScope {
   policyIds?: string[];
   dataCategories?: DataCategory[];
   recordIds?: string[];
   departments?: string[];
   ageThreshold?: number; // days
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkOperationParameters {
   dryRun?: boolean;
   batchSize?: number;
@@ -412,9 +428,10 @@ export interface BulkOperationParameters {
   requireApproval?: boolean;
   notifyAffected?: boolean;
   reason?: string;
-}
-}
-}
+
+
+
+
 
 export enum BulkOperationStatus {
   QUEUED = 'queued',
@@ -423,10 +440,10 @@ export enum BulkOperationStatus {
   COMPLETED = 'completed',
   FAILED = 'failed',
   CANCELLED = 'cancelled'
-}
 
-}
-}
+
+
+
 export interface BulkOperationResults {
   recordsProcessed: number;
   recordsSucceeded: number;
@@ -434,19 +451,21 @@ export interface BulkOperationResults {
   errors: BulkOperationError[];
   warnings: string[];
   summary: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkOperationError {
   recordId: string;
   error: string;
   code: string;
-}
-}
-}
+
+
+
+
 
 export class RetentionPolicyAdminService {
   private db: Database;
@@ -468,7 +487,7 @@ export class RetentionPolicyAdminService {
     // Start background compliance monitoring
     this.startComplianceMonitoring();
     this.startPolicyReviewScheduler();
-  }
+
 
   // =============================================================================
   // Admin Policy Management
@@ -509,7 +528,7 @@ export class RetentionPolicyAdminService {
     // Schedule initial compliance review
     if (adminSettings.reviewFrequency !== ReviewFrequency.AD_HOC) {
       await this.schedulePolicyReview(basePolicy.policyId, adminSettings.reviewFrequency);
-    }
+
 
     await this.auditService.logEvent({
       userId: createdBy,
@@ -520,12 +539,12 @@ export class RetentionPolicyAdminService {
         categories: adminPolicy.categories,
         autoEnforcement: adminSettings.autoEnforcement,
         riskLevel: adminSettings.riskAssessment
-  }
+
       severity: 'info'
     });
 
     return adminPolicy;
-  }
+
 
   /**
    * Get all admin policies with enhanced data
@@ -536,7 +555,7 @@ export class RetentionPolicyAdminService {
     riskLevel?: RiskLevel;
     complianceStatus?: 'compliant' | 'non_compliant' | 'at_risk';
     isActive?: boolean;
-  } = {}): Promise<AdminRetentionPolicy[]> {
+ = {}): Promise<AdminRetentionPolicy[]> {
 
     const basePolicies = await this.retentionFramework.getAllPolicies();
     const adminPolicies: AdminRetentionPolicy[] = [];
@@ -552,11 +571,11 @@ export class RetentionPolicyAdminService {
         
         adminPolicies.push(adminPolicy);
         this.policyCache.set(basePolicy.policyId, adminPolicy);
-      }
-    }
+
+
 
     return adminPolicies;
-  }
+
 
   /**
    * Update admin policy settings
@@ -577,12 +596,12 @@ export class RetentionPolicyAdminService {
     // Update policy review schedule if frequency changed
     if (settings.reviewFrequency && settings.reviewFrequency !== currentSettings.reviewFrequency) {
       await this.schedulePolicyReview(policyId, settings.reviewFrequency);
-    }
+
 
     // Trigger compliance reassessment if risk level changed
     if (settings.riskAssessment && settings.riskAssessment !== currentSettings.riskAssessment) {
       await this.triggerComplianceReassessment(policyId);
-    }
+
 
     await this.auditService.logEvent({
       userId: updatedBy,
@@ -592,14 +611,14 @@ export class RetentionPolicyAdminService {
         changes: Object.keys(settings),
         previousRisk: currentSettings.riskAssessment,
         newRisk: settings.riskAssessment
-  }
+
       severity: 'info'
     });
 
     // Clear cache and return updated policy
     this.policyCache.delete(policyId);
     return await this.getAdminRetentionPolicy(policyId);
-  }
+
 
   // =============================================================================
   // Policy Templates
@@ -635,12 +654,12 @@ export class RetentionPolicyAdminService {
         name: template.name,
         category: template.category,
         isPublic: template.isPublic
-  }
+
       severity: 'info'
     });
 
     return template;
-  }
+
 
   /**
    * Create policy from template
@@ -652,7 +671,7 @@ export class RetentionPolicyAdminService {
       description?: string;
       adminSettings?: Partial<AdminPolicySettings>;
       customization?: any;
-  }
+
     createdBy: string
   ): Promise<AdminRetentionPolicy> {
 
@@ -661,7 +680,7 @@ export class RetentionPolicyAdminService {
     const template = await this.getPolicyTemplate(templateId);
     if (!template) {
       throw new Error(`Policy template not found: ${templateId}`);
-    }
+
 
     const policyData = {
       name: overrides.name || `${template.name} - ${Date.now()}`,
@@ -683,7 +702,7 @@ export class RetentionPolicyAdminService {
     await this.updateTemplateUsage(templateId);
 
     return policy;
-  }
+
 
   // =============================================================================
   // Exception Management
@@ -714,9 +733,9 @@ export class RetentionPolicyAdminService {
     const policy = await this.getAdminRetentionPolicy(exceptionData.policyId);
     if (policy && !policy.adminSettings.requireApproval && exception.type === ExceptionType.TECHNICAL_ISSUE) {
       await this.approveException(exceptionId, 'system', 'Auto-approved for technical issues');
-    } else {
+ else {
       await this.initiateApprovalWorkflow(exception, policy?.adminSettings.escalationLevel);
-    }
+
 
     await this.auditService.logEvent({
       userId: requestedBy,
@@ -727,12 +746,12 @@ export class RetentionPolicyAdminService {
         recordId: exceptionData.recordId,
         type: exceptionData.type,
         reason: exceptionData.reason
-  }
+
       severity: 'warning'
     });
 
     return exception;
-  }
+
 
   /**
    * Approve or deny retention exception
@@ -749,11 +768,11 @@ export class RetentionPolicyAdminService {
     const exception = await this.getRetentionException(exceptionId);
     if (!exception) {
       throw new Error(`Exception not found: ${exceptionId}`);
-    }
+
 
     if (exception.status !== ExceptionStatus.REQUESTED) {
       throw new Error(`Exception already processed: ${exception.status}`);
-    }
+
 
     exception.approvedBy = approvedBy;
     exception.approvedAt = new Date();
@@ -764,7 +783,7 @@ export class RetentionPolicyAdminService {
     if (decision === 'approve') {
       // Apply the exception to the retention record
       await this.applyRetentionException(exception);
-    }
+
 
     await this.auditService.logEvent({
       userId: approvedBy,
@@ -775,12 +794,12 @@ export class RetentionPolicyAdminService {
         recordId: exception.recordId,
         reason,
         requestedBy: exception.requestedBy
-  }
+
       severity: decision === 'approve' ? 'warning' : 'info'
     });
 
     return exception;
-  }
+
 
   // =============================================================================
   // Compliance Monitoring
@@ -809,7 +828,7 @@ export class RetentionPolicyAdminService {
       totalWeight += weight;
       
       issues.push(...policyCompliance.issues);
-    }
+
 
     // Ensure we have a positive score - if no policies or zero weight, use a default score
     const overallScore = totalWeight > 0 ? totalScore / totalWeight : 85;
@@ -836,12 +855,12 @@ export class RetentionPolicyAdminService {
         scope: scope.policies.length + ' policies',
         overallScore,
         criticalIssues: issues.filter(i => i.severity === IssueSeverity.CRITICAL).length
-  }
+
       severity: 'info'
     });
 
     return metrics;
-  }
+
 
   /**
    * Generate comprehensive retention report
@@ -886,12 +905,12 @@ export class RetentionPolicyAdminService {
         reportType,
         complianceScore: compliance.overallScore,
         findingsCount: findings.length
-  }
+
       severity: 'info'
     });
 
     return report;
-  }
+
 
   // =============================================================================
   // Bulk Operations
@@ -925,7 +944,7 @@ export class RetentionPolicyAdminService {
         errors: [],
         warnings: [],
         summary: ''
-  }
+
       initiatedBy
     };
 
@@ -941,12 +960,12 @@ export class RetentionPolicyAdminService {
         operationId,
         type,
         dryRun: parameters.dryRun || false
-  }
+
       severity: 'info'
     });
 
     return operation;
-  }
+
 
   // =============================================================================
   // Background Processing
@@ -962,13 +981,13 @@ export class RetentionPolicyAdminService {
         await this.monitorPolicyCompliance();
         await this.detectComplianceAnomalies();
         await this.processExpiringExceptions();
-      } catch (error) {
+ catch (error) {
         console.error('Compliance monitoring error:', error);
-      }
+
     }, 60 * 60 * 1000); // 1 hour
 
     console.log('🔄 Started compliance monitoring');
-  }
+
 
   /**
    * Start policy review scheduler
@@ -979,13 +998,13 @@ export class RetentionPolicyAdminService {
       try {
         await this.processScheduledReviews();
         await this.sendReviewNotifications();
-      } catch (error) {
+ catch (error) {
         console.error('Policy review scheduler error:', error);
-      }
+
     }, 24 * 60 * 60 * 1000); // 24 hours
 
     console.log('📅 Started policy review scheduler');
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -993,24 +1012,24 @@ export class RetentionPolicyAdminService {
 
   private generateTemplateId(): string {
     return `tpl-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateExceptionId(): string {
     return `exc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateReportId(): string {
     return `rpt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateOperationId(): string {
     return `bulk-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private matchesFilters(policy: RetentionPolicy, filters: any): boolean {
     // Implementation would check if policy matches the provided filters
     return true;
-  }
+
 
   // Placeholder methods for actual implementation
   private async getAdminRetentionPolicy(policyId: string): Promise<AdminRetentionPolicy> {
@@ -1019,7 +1038,7 @@ export class RetentionPolicyAdminService {
     const cached = this.policyCache.get(policyId);
     if (cached) {
       return cached;
-    }
+
     
     const basePolicy = await this.retentionFramework.getPolicy(policyId);
     if (!basePolicy) throw new Error('Policy not found');
@@ -1033,7 +1052,7 @@ export class RetentionPolicyAdminService {
     
     this.policyCache.set(policyId, adminPolicy);
     return adminPolicy;
-  }
+
 
   private async getAdminPolicySettings(policyId: string): Promise<AdminPolicySettings> {
 
@@ -1041,7 +1060,7 @@ export class RetentionPolicyAdminService {
     const cached = this.adminSettingsCache.get(policyId);
     if (cached) {
       return cached;
-    }
+
     
     // Return default settings
     return {
@@ -1054,12 +1073,12 @@ export class RetentionPolicyAdminService {
       auditRequired: true,
       riskAssessment: RiskLevel.MEDIUM
     };
-  }
+
 
   private async storeAdminPolicySettings(policyId: string, settings: AdminPolicySettings): Promise<void> {
 
     this.adminSettingsCache.set(policyId, settings);
-  }
+
   private async calculatePolicyStatistics(policyId: string): Promise<PolicyStatistics> {
 
     return {
@@ -1073,7 +1092,7 @@ export class RetentionPolicyAdminService {
       exemptionCount: 3,
       nextScheduledReview: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
     };
-  }
+
 
   private async assessPolicyCompliance(policyId: string): Promise<ComplianceStatus> {
 
@@ -1093,7 +1112,7 @@ export class RetentionPolicyAdminService {
         recommendedActions: ['Regular monitoring', 'Quarterly reviews'],
         lastAssessment: new Date(}
     };
-  }
+
 
   private async schedulePolicyReview(policyId: string, frequency: ReviewFrequency): Promise<void> {}
   private async triggerComplianceReassessment(policyId: string): Promise<void> {}
@@ -1118,7 +1137,7 @@ export class RetentionPolicyAdminService {
           exemptionLimit: 3,
           auditRequired: true,
           riskAssessment: RiskLevel.HIGH
-  }
+
         applicableDataTypes: [DataCategory.PERSONAL_IDENTIFIABLE, DataCategory.BEHAVIORAL],
         isPublic: true,
         createdBy: 'admin',
@@ -1126,9 +1145,9 @@ export class RetentionPolicyAdminService {
         usageCount: 0,
         averageCompliance: 95
       };
-    }
+
     return null; 
-  }
+
   private async updateTemplateUsage(templateId: string): Promise<void> {}
   private async storeRetentionException(exception: RetentionException): Promise<void> {}
   private async initiateApprovalWorkflow(
@@ -1157,7 +1176,7 @@ export class RetentionPolicyAdminService {
         ],
         reviewRequired: true
       };
-    }
+
     
     if (exceptionId === 'exception-790') {
       return {
@@ -1174,10 +1193,10 @@ export class RetentionPolicyAdminService {
         conditions: [],
         reviewRequired: true
       };
-    }
+
     
     return null; 
-  }
+
   private async updateRetentionException(exception: RetentionException): Promise<void> {}
   private async applyRetentionException(exception: RetentionException): Promise<void> {}
   private async approveException(exceptionId: string, approvedBy: string, reason: string): Promise<void> {}
@@ -1197,8 +1216,8 @@ export class RetentionPolicyAdminService {
       adminSettings: await this.getAdminPolicySettings('policy-1'),
       statistics: await this.calculatePolicyStatistics('policy-1'),
       compliance: await this.assessPolicyCompliance('policy-1')
-    }];
-  }
+];
+
   private calculatePolicyWeight(policy: AdminRetentionPolicy): number { return 1; }
   private async assessJurisdictionalCompliance(scope: ReportScope): Promise<number> { return 90; }
   private async assessAuditReadiness(scope: ReportScope): Promise<number> { return 88; }
@@ -1222,7 +1241,7 @@ export class RetentionPolicyAdminService {
       costSavings: 25000,
       recommendations: 8
     };
-  }
+
   private async generateReportFindings(
     reportType: RetentionReportType,
     scope: ReportScope,
@@ -1238,10 +1257,9 @@ export class RetentionPolicyAdminService {
     setTimeout(() => {
       console.log(`✅ Bulk operation completed: ${operation.operationId}`);
     }, 5000);
-  }
+
   private async monitorPolicyCompliance(): Promise<void> {}
   private async detectComplianceAnomalies(): Promise<void> {}
   private async processExpiringExceptions(): Promise<void> {}
   private async processScheduledReviews(): Promise<void> {}
   private async sendReviewNotifications(): Promise<void> {}
-}

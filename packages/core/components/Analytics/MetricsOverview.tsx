@@ -6,75 +6,72 @@ import { TrendingUp, TrendingDown, Activity, Users, DollarSign, Clock, CheckCirc
 /**
  * Metric card props
  */
-}
-interface MetricCardProps {
-  title: string;
+
+
+interface MetricCardProps { title: string;
   value: string | number;
   subtitle?: string;
-  trend?: {
-  direction: 'up' | 'down' | 'stable';
+  trend?: {;
+  direction: 'up' | 'down' | 'stable' }
   value: number;
   label: string;
-}
+
+
 };
-  progress?: {
-  value: number;
+  progress?: { value: number;
   max: number;
-  color?: 'green' | 'yellow' | 'red'
-  };
+  color?: 'green' | 'yellow' | 'red' }
+};
   icon?: React.ReactNode;
   className?: string;
 /**
  * Metric card component
  */
-const MetricCard: React.FC<MetricCardProps> = ({)
-  title,
-  value,
-  subtitle,
-  trend,
-  progress,
-  icon,
+const MetricCard: React.FC<MetricCardProps> = ({ )
+  title
+  value
+  subtitle
+  trend
+  progress
+  icon }
   className = ''
 }) => {
   const formatValue = (val: string | number) => {
     if (typeof val === 'number') {
       if (val >= 1000000) {
         return `${(val / 1000000).toFixed(1)}M`;}
-      } else if (val >= 1000) {
+ else if (val >= 1000) {
         return `${(val / 1000).toFixed(1)}K`;}
       return val.toLocaleString();
     return val;
   };
-  const getTrendIcon = () => {
-  if (!trend) return null;
+  const getTrendIcon = () => { if (!trend) return null;
   switch (trend.direction) {
-  case 'up':,
+  case 'up':
   return <TrendingUp className="w-4 h-4 text-green-500" />;
-  case 'down':,
+  case 'down':
   return <TrendingDown className="w-4 h-4 text-red-500" />;
-  default:,
+  default: }
   return <Activity className="w-4 h-4 text-gray-500" />;
 };
-  const getTrendColor = () => {
-  if (!trend) return 'text-gray-500';
+  const getTrendColor = () => { if (!trend) return 'text-gray-500';
   switch (trend.direction) {
-  case 'up':,
+  case 'up':
   return 'text-green-500';
-  case 'down':,
+  case 'down':
   return 'text-red-500';
-  default:,
+  default: }
   return 'text-gray-500';
 };
-  const getProgressColor = () => {
-  if (!progress) return 'bg-blue-500';
+  const getProgressColor = () => { if (!progress) return 'bg-blue-500';
   switch (progress.color) {
-  case 'green':,
+  case 'green':
   return 'bg-green-500';
-  case 'yellow':,
+  case 'yellow':
   return 'bg-yellow-500';
-  case 'red':,
+  case 'red':
   return 'bg-red-500';
-  default:,
+  default: }
   return 'bg-blue-500';
 };
   return;
@@ -130,7 +127,7 @@ const MetricCard: React.FC<MetricCardProps> = ({)
  * Metrics overview props
  */
 
-}
+
 export interface MetricsOverviewProps {
   summary: unknown;
   dashboardData: unknown;
@@ -140,13 +137,13 @@ export interface MetricsOverviewProps {
   /**
   * Metrics overview component
   */
-}
-}
-export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
-  summary,
-  dashboardData,
-  conversionData,
-  performanceData,
+
+
+export const MetricsOverview: React.FC<MetricsOverviewProps> = ({ )
+  summary
+  dashboardData
+  conversionData
+  performanceData }
   loading
 }) => {
   if (loading) {
@@ -180,11 +177,10 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
     if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;}
     return `${(ms / 60000).toFixed(1)}m`;}
   };
-  const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('en-US', {)
+  const formatCurrency = (amount: number) => { return new Intl.NumberFormat('en-US', {)
   style: 'currency',
   currency: 'USD',
-  minimumFractionDigits: 2,
+  minimumFractionDigits: 2 }
 }).format(amount);
   };
   const analytics = dashboardData.analytics || {};
@@ -203,16 +199,16 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           title="Total Executions"
           value={executions.total || 0}
           subtitle={`${executions.successful || 0} successful`}
-          trend={{
-  direction: executions.total > 0 ? 'up' : 'stable',
-  value: 12.5,
-  label: 'vs last period',
-}}
-          progress={{
-  value: executions.successful || 0,
-  max: executions.total || 1,
-  color: executions.total > 0 && (executions.successful / executions.total) > 0.9 ? 'green' : 'yellow',
-}}
+          trend={ {
+  direction: executions.total > 0 ? 'up' : 'stable'
+  value: 12.5
+  label: 'vs last period' }
+
+          progress={ {
+  value: executions.successful || 0
+  max: executions.total || 1
+  color: executions.total > 0 && (executions.successful / executions.total) > 0.9 ? 'green' : 'yellow' }
+
           icon={<CheckCircle className="w-5 h-5" />}
         />
         {/* Success Rate */}
@@ -220,11 +216,11 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           title="Success Rate"
           value={`${summary.successRate ? summary.successRate.toFixed(1) : 0}%`}
           subtitle={`${executions.failed || 0} failed`}
-          trend={{
+          trend={ {
   direction: summary.successRate > 90 ? 'up' : summary.successRate < 80 ? 'down' : 'stable',
   value: 2.3,
-  label: 'vs last period',
-}}
+  label: 'vs last period' }
+}
           icon={summary.successRate > 90 ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
         />
         {/* Active Users */}
@@ -232,11 +228,11 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           title="Active Users"
           value={realTimeMetrics.activeUsers || usage.totalUsers || 0}
           subtitle={`${usage.activeSessions || 0} active sessions`}
-          trend={{
-  direction: 'up',
-  value: 8.2,
-  label: 'vs last period',
-}}
+          trend={ {
+  direction: 'up'
+  value: 8.2
+  label: 'vs last period' }
+
           icon={<Users className="w-5 h-5" />}
         />
         {/* Conversion Rate */}
@@ -244,11 +240,11 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           title="Conversions (24h)"
           value={realTimeMetrics.conversionsLast24h || 0}
           subtitle="Key user actions"
-          trend={{
-  direction: realTimeMetrics.conversionsLast24h > 5 ? 'up' : 'stable',
-  value: 15.7,
-  label: 'vs yesterday',
-}}
+          trend={ {
+  direction: realTimeMetrics.conversionsLast24h > 5 ? 'up' : 'stable'
+  value: 15.7
+  label: 'vs yesterday' }
+
           icon={<CheckCircle className="w-5 h-5" />}
         />
         {/* Performance Health */}
@@ -256,12 +252,12 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           title="System Health"
           value={`${performanceMetrics.overview?.healthScore || 100}%`}
           subtitle={`${performanceMetrics.overview?.activeAlerts || 0} active alerts`}
-          progress={{
-  value: performanceMetrics.overview?.healthScore || 100,
-  max: 100,
-  color: (performanceMetrics.overview?.healthScore || 100) > 90 ? 'green' : ,
-  (performanceMetrics.overview?.healthScore || 100) > 70 ? 'yellow' : 'red',
-}}
+          progress={ {
+  value: performanceMetrics.overview?.healthScore || 100
+  max: 100
+  color: (performanceMetrics.overview?.healthScore || 100) > 90 ? 'green' : 
+  (performanceMetrics.overview?.healthScore || 100) > 70 ? 'yellow' : 'red' }
+
           icon={<Activity className="w-5 h-5" />}
         />
         {/* Average Execution Time */}
@@ -269,11 +265,11 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           title="Avg Execution Time"
           value={formatDuration(executions.averageTime || 0)}
           subtitle="Per execution"
-          trend={{
-  direction: 'down',
-  value: -5.1,
-  label: 'vs last period',
-}}
+          trend={ {
+  direction: 'down'
+  value: -5.1
+  label: 'vs last period' }
+}
           icon={<Clock className="w-5 h-5" />}
         />
         {/* Total Cost */}
@@ -281,11 +277,11 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           title="Total Cost"
           value={formatCurrency(costs.totalSpent || 0)}
           subtitle={`${formatCurrency(costs.dailyAverage || 0)}/day avg`}
-          trend={{
-  direction: 'up',
-  value: 15.3,
-  label: 'vs last period',
-}}
+          trend={ {
+  direction: 'up'
+  value: 15.3
+  label: 'vs last period' }
+}
           icon={<DollarSign className="w-5 h-5" />}
         />
         {/* Token Usage */}
@@ -293,11 +289,11 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           title="Token Usage"
           value={summary.totalTokenUsage || 0}
           subtitle="Total tokens consumed"
-          trend={{
-  direction: 'up',
-  value: 22.1,
-  label: 'vs last period',
-}}
+          trend={ {
+  direction: 'up'
+  value: 22.1
+  label: 'vs last period' }
+}
           icon={<Activity className="w-5 h-5" />}
         />
         {/* Top Provider */}
@@ -361,13 +357,13 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
                     <div className="w-20 bg-gray-200 rounded-full h-2">
                       <div 
                         className="bg-blue-500 h-2 rounded-full" 
-                        style={{
-  width: `${Math.min(),}
-}
-                            100,
+                        style={ {
+  width: `${Math.min() }
+
+                            100
                             (node.count / Math.max(...usage.popularNodes.map((n: unknown)
                             ) => n.count))) * 100)}%` 
-                        }}
+
                       />
                     </div>
                   </div>
@@ -384,8 +380,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
  * Metrics overview styles
  */
 const styles = `;
-  .metrics-overview {
-    width: 100%;
+  .metrics-overview { width: 100%;
   .metric-card {
     transition: all 0.2s ease-in-out;
   .metric-card:hover {,
@@ -413,7 +408,7 @@ const styles = `;
     font-weight: 600;
   color: #1f2937;
   .average-value {
-    font-size: 0.875rem;
+    font-size: 0.875rem }
   color: #9ca3af;
   .metric-card .progress {
     transition: all 0.3s ease-in-out;

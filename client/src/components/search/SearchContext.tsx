@@ -14,57 +14,64 @@ export type FilterOperator = 'equals' | 'contains' | 'startsWith' | 'endsWith' |
 
 export type SortDirection = 'asc' | 'desc';
 
-}
+
 export interface FilterCondition {
   field: string;,
-  operator: FilterOperator;
+  operator: FilterOperator;,
   value: unknown;
   values?: unknown; // For 'in' and 'between' operators,
-}
-}
-}
+
+
+
+
+
 export interface SortCondition {
   field: string;,
   direction: SortDirection;
-}
-}
-}
+
+
+
+
+
 export interface SearchQuery {
   text: string;,
-  filters: FilterCondition;
+  filters: FilterCondition;,
   sorts: SortCondition;
   facets?: string;
-}
-}
-}
+
+
+
+
+
 export interface SearchResult<T = unknown> {
   items: T;,
   totalCount: number;
   facets?: Record<string, Array<{ value: string; count: number }>>;
   executionTime?: number;
 
-}
+
 export interface SavedSearch {
   id: string;,
-  name: string;
+  name: string;,
   query: SearchQuery;,
-  createdAt: string;
+  createdAt: string;,
   lastUsedAt: string;
+  // Search State
 
-// Search State
-}
+
+
 interface SearchState {
   currentQuery: SearchQuery;,
-  results: SearchResult | null;
+  results: SearchResult | null;,
   isLoading: boolean;,
-  error: string | null;
+  error: string | null;,
   searchHistory: SearchQuery;,
-  savedSearches: SavedSearch;
+  savedSearches: SavedSearch;,
   quickFilters: Record<string, FilterCondition>;
+  // Search Actions
+  type SearchAction =
 
-// Search Actions
-type SearchAction =
-}
+
   | { type: 'SET_QUERY'; payload: Partial<SearchQuery> }
   | { type: 'SET_TEXT'; payload: string }
   | { type: 'ADD_FILTER'; payload: FilterCondition }
@@ -85,7 +92,7 @@ type SearchAction =
 
 // Initial state
 const initialState: SearchState = {,
-  currentQuery: {
+  currentQuery: {,
   text: '',
   filters: [],
   sorts: [],
@@ -115,21 +122,21 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
   case 'ADD_FILTER':
     return {
   ...state,
-  currentQuery: {
+  currentQuery: {,
   ...state.currentQuery,
   filters: [...state.currentQuery.filters, action.payload],
 };
   case 'REMOVE_FILTER':
     return {
   ...state,
-  currentQuery: {
+  currentQuery: {,
   ...state.currentQuery,
   filters: state.currentQuery.filters.filter((_, index) => index !== action.payload),
 };
   case 'UPDATE_FILTER':
     return {
   ...state,
-  currentQuery: {
+  currentQuery: {,
   ...state.currentQuery,
   filters: state.currentQuery.filters.map((filter, index) =>,
   index === action.payload.index ? action.payload.filter : filter,
@@ -144,14 +151,14 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
   const existingSorts = state.currentQuery.sorts.filter(s => s.field !== action.payload.field);
   return {
   ...state,
-  currentQuery: {
+  currentQuery: {,
   ...state.currentQuery,
   sorts: [...existingSorts, action.payload],
 };
   case 'REMOVE_SORT':
     return {
   ...state,
-  currentQuery: {
+  currentQuery: {,
   ...state.currentQuery,
   sorts: state.currentQuery.sorts.filter((_, index) => index !== action.payload),
 };
@@ -214,13 +221,14 @@ const searchReducer = (state: SearchState, action: SearchAction): SearchState =>
 };
 
 // Context
-}
+
+
 interface SearchContextValue {
   // State
   query: SearchQuery;,
-  results: SearchResult | null;
+  results: SearchResult | null;,
   isLoading: boolean;,
-  error: string | null;
+  error: string | null;,
   searchHistory: SearchQuery;,
   savedSearches: SavedSearch;
   // Actions
@@ -240,19 +248,20 @@ interface SearchContextValue {
   saveSearch: (name: string) => void;,
   removeSavedSearch: (id: string) => void;,
   loadSavedSearch: (search: SavedSearch) => void;,
-  clearResults: () => void;
+  clearResults: () => void;,
   resetQuery: () => void;
   // Computed values
   hasActiveFilters: boolean;,
-  hasActiveSorts: boolean;
+  hasActiveSorts: boolean;,
   isQueryEmpty: boolean;
   const SearchContext = createContext<SearchContextValue | undefined>(undefined);
   // Provider Props
   interface SearchProviderProps {
   children: React.ReactNode;
   // Provider Component
-}
-}
+
+
+
 export const SearchProvider = ({ children }: SearchProviderProps) => {
   const [state, dispatch] = useReducer(searchReducer, initialState);
   // Actions
@@ -298,7 +307,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
   const saveSearch = useCallback((name: string) => {
     const savedSearch: SavedSearch = {,
   id: `search_${Date.now()}`}
-}
+
       name,
       query: state.currentQuery,
       createdAt: new Date().toISOString(),

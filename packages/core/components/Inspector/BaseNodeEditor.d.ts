@@ -2,15 +2,14 @@ import React from 'react';
 import { ZodSchema, ZodTypeAny } from 'zod';
 
 }
-export interface BaseNodeEditorProps {
-    nodeId: string;
+}
+export interface BaseNodeEditorProps { nodeId: string;
     nodeData: Record<string, unknown>;
     schema: ZodSchema<unknown>;
     onChange: (partial: Record<string, unknown>) => void;
     className?: string;
-    children?: React.ReactNode;
-
-
+    children?: React.ReactNode }
+}
 }
 export interface EditorFieldProps {
     label: string;
@@ -25,4 +24,5 @@ export interface EditorFieldProps {
 export declare const BaseNodeEditor: React.FC<BaseNodeEditorProps>;
 export default BaseNodeEditor;
 //# sourceMappingURL=BaseNodeEditor.d.ts.map
+}
 }

@@ -2,21 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './TemplateSubmissionForm.css';
-}
+
+
 interface SubmissionData {
   title: string;,
-  description: string;
+  description: string;,
   tags: string;,
-  categories: string;
+  categories: string;,
   price_cents: number;,
-  is_ai_generated: boolean;
+  is_ai_generated: boolean;,
   claude_compat: string;,
-  claude_model: string;
+  claude_model: string;,
   graph_json: Record<string, unknown>;
   prompt_yaml?: string;
   changelog_md?: string;
   token_per_run_estimate: number;,
-  intended_use_cases: string;
+  intended_use_cases: string;,
   technical_requirements: string;,
   example_outputs: string;
   documentation_md?: string;
@@ -25,34 +26,38 @@ interface SubmissionData {
   previous_version_id?: string;
   interface ValidationResult {
   id: string;,
-  rule_id: string;
+  rule_id: string;,
   severity: 'error' | 'warning' | 'info';,
   message: string;
   details?: Record<string, unknown>;
   suggested_fix?: string;
   auto_fixable: boolean;
-  location?: {
+  location?: {,
   field?: string;
-}
+
+
 };
-}
+
+
 interface Category {
   id: string;,
   name: string;
   description?: string;
   icon?: string;
-}
+
+
+
 interface TemplateSubmissionFormProps {
   templateId?: string;
   onSubmit?: (submissionId: string) => void;
   onCancel?: () => void;
-const CLAUDE_MODELS = [;
+  const CLAUDE_MODELS = [
   'claude-3-sonnet',
   'claude-3-haiku',
   'claude-3-opus',
   'claude-3.5-sonnet'
-];
-const DEFAULT_SUBMISSION_DATA: SubmissionData = {,
+  ];
+  const DEFAULT_SUBMISSION_DATA: SubmissionData = {,
   title: '',
   description: '',
   tags: [],
@@ -61,7 +66,8 @@ const DEFAULT_SUBMISSION_DATA: SubmissionData = {,
   is_ai_generated: false,
   claude_compat: ['claude-3-sonnet'],
   claude_model: 'claude-3-sonnet',
-}
+
+},
   graph_json: {},
   token_per_run_estimate: 0,
   intended_use_cases: [''],
@@ -102,7 +108,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
       if (response.ok) {
         const data = await response.json();
         setCategories(data);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to fetch categories:', error);
 };
   const fetchSubmission = async (submissionId: string) => {
@@ -120,9 +126,9 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
         setIsDraft(submission.status === 'draft');
         setSubmissionId(submission.id);
         setGraphJsonString(JSON.stringify(submission.submission_data.graph_json, null, 2));
-    } catch (error) {
+ catch (error) {
   console.error('Failed to fetch submission:', error);
-} finally {
+ finally {
       setIsLoading(false);
   };
   const handleInputChange = (field: keyof SubmissionData, value: Error) => {
@@ -170,7 +176,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
     try {
       const parsed = JSON.parse(value);
       handleInputChange('graph_json', parsed);
-    } catch (error) {
+ catch (error) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.debug('Invalid JSON input:', error);
   // Invalid JSON, don't update the submission data
@@ -230,10 +236,10 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
         setValidationResults(result.validation_results || []);
         return true;
       return false;
-    } catch (error) {
+ catch (error) {
   console.error('Failed to save draft:', error);
   return false;
-} finally {
+ finally {
       setIsLoading(false);
   };
   const handleSubmitForReview = async () => {
@@ -252,11 +258,11 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
         setIsDraft(false);
         if (onSubmit) {
           onSubmit(submissionId);
-        } else {
+ else {
           navigate('/marketplace/submissions');
-    } catch (error) {
+ catch (error) {
   console.error('Failed to submit for review:', error);
-} finally {
+ finally {
       setIsLoading(false);
   };
   const renderValidationResults = () => {
@@ -359,9 +365,9 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
                 onChange={(e) => {
                   if (e.target.checked) {
                     handleInputChange('categories', [...submissionData.categories, category.id]);
-                  } else {
+ else {
                     handleInputChange('categories', submissionData.categories.filter(c => c !== category.id));
-                }}
+}
               />
               <span className="category-name">{category.name}</span>
               {category.description && ()
@@ -422,9 +428,9 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({)
                 onChange={(e) => {
                   if (e.target.checked) {
                     handleInputChange('claude_compat', [...submissionData.claude_compat, model]);
-                  } else {
+ else {
                     handleInputChange('claude_compat', submissionData.claude_compat.filter(m => m !== model));
-                }}
+}
               />
               {model}
             </label>

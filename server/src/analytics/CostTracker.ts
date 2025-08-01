@@ -5,32 +5,36 @@ import { AnalyticsDAO, TokenUsage } from '../database/analytics-dao';
 /**
  * Provider pricing configuration
  */
-}
-}
+
+
+
 export interface ProviderPricing {
   provider: string;
   models: Map<string, ModelPricing>;
   lastUpdated: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelPricing {
   inputTokenPrice: number;    // Price per 1000 input tokens
   outputTokenPrice: number;   // Price per 1000 output tokens
   currency: 'USD' | 'EUR' | 'GBP';
   lastUpdated: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Cost calculation result
  */
-}
-}
+
+
+
 export interface CostCalculation {
   provider: string;
   model: string;
@@ -42,15 +46,17 @@ export interface CostCalculation {
   totalCost: number;
   currency: string;
   timestamp: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Budget configuration
  */
-}
-}
+
+
+
 export interface BudgetConfig {
   id: string;
   name: string;
@@ -66,15 +72,17 @@ export interface BudgetConfig {
   alertThresholds: number[]; // Percentage thresholds (e.g., [50, 75, 90])
   createdAt: number;
   updatedAt: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Budget usage tracking
  */
-}
-}
+
+
+
 export interface BudgetUsage {
   budgetId: string;
   period: string; // ISO date string for the period
@@ -83,15 +91,17 @@ export interface BudgetUsage {
   percentageUsed: number;
   transactionCount: number;
   lastUpdated: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Cost alert
  */
-}
-}
+
+
+
 export interface CostAlert {
   id: string;
   budgetId: string;
@@ -103,9 +113,10 @@ export interface CostAlert {
   severity: 'info' | 'warning' | 'critical';
   timestamp: number;
   acknowledged: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Comprehensive cost tracking and budget management system
@@ -123,7 +134,7 @@ export class CostTracker extends EventEmitter {
     this.analyticsCollector = analyticsCollector;
     this.analyticsDAO = analyticsDAO;
     this.initializeDefaultPricing();
-  }
+
 
   /**
    * Initialize default pricing for common providers
@@ -184,7 +195,7 @@ export class CostTracker extends EventEmitter {
     });
 
     console.log('Default provider pricing initialized');
-  }
+
 
   /**
    * Calculate cost for token usage
@@ -199,13 +210,13 @@ export class CostTracker extends EventEmitter {
     
     if (!providerPricing) {
       throw new Error(`Unknown provider: ${provider}`);
-    }
+
 
     const modelPricing = providerPricing.models.get(model.toLowerCase());
     
     if (!modelPricing) {
       throw new Error(`Unknown model ${model} for provider ${provider}`);
-    }
+
 
     const inputCost = (inputTokens / 1000) * modelPricing.inputTokenPrice;
     const outputCost = (outputTokens / 1000) * modelPricing.outputTokenPrice;
@@ -222,7 +233,7 @@ export class CostTracker extends EventEmitter {
       totalCost,
       currency: modelPricing.currency,
       timestamp: Date.now(};
-  }
+
 
   /**
    * Track token usage and calculate cost
@@ -275,7 +286,7 @@ export class CostTracker extends EventEmitter {
     this.emit('cost_calculated', costCalc);
 
     return costCalc;
-  }
+
 
   /**
    * Create a new budget
@@ -295,7 +306,7 @@ export class CostTracker extends EventEmitter {
     console.log(`Budget created: ${budget.name} - $${budget.amount} ${budget.currency}`);
 
     return budget;
-  }
+
 
   /**
    * Update existing budget
@@ -305,7 +316,7 @@ export class CostTracker extends EventEmitter {
     
     if (!existingBudget) {
       throw new Error(`Budget not found: ${budgetId}`);
-    }
+
 
     const updatedBudget: BudgetConfig = {
       ...existingBudget,
@@ -318,14 +329,14 @@ export class CostTracker extends EventEmitter {
     this.emit('budget_updated', updatedBudget);
 
     return updatedBudget;
-  }
+
 
   /**
    * Get budget by ID
    */
   getBudget(budgetId: string): BudgetConfig | null {
     return this.budgets.get(budgetId) || null;
-  }
+
 
   /**
    * Get all budgets for a user or organization
@@ -337,14 +348,14 @@ export class CostTracker extends EventEmitter {
       if (!userId && !organizationId && !budget.userId && !budget.organizationId) return true;
       return false;
     });
-  }
+
 
   /**
    * Get budget usage for a specific period
    */
   getBudgetUsage(budgetId: string): BudgetUsage | null {
     return this.budgetUsage.get(budgetId) || null;
-  }
+
 
   /**
    * Initialize budget usage tracking
@@ -363,7 +374,7 @@ export class CostTracker extends EventEmitter {
     };
 
     this.budgetUsage.set(budget.id, usage);
-  }
+
 
   /**
    * Update budget usage with new cost
@@ -387,7 +398,7 @@ export class CostTracker extends EventEmitter {
           transactionCount: 0,
           lastUpdated: Date.now()
         };
-      }
+
 
       // Update usage
       usage.amountUsed += cost;
@@ -403,7 +414,7 @@ export class CostTracker extends EventEmitter {
 
       this.emit('budget_usage_updated', { budget, usage });
     });
-  }
+
 
   /**
    * Check budget thresholds and create alerts
@@ -433,7 +444,7 @@ export class CostTracker extends EventEmitter {
         this.emit('budget_alert', alert);
         
         console.warn(`Budget alert: ${alert.message}`);
-      }
+
     });
 
     // Check for budget exceeded
@@ -457,9 +468,9 @@ export class CostTracker extends EventEmitter {
         this.emit('budget_exceeded', alert);
         
         console.error(`Budget exceeded: ${alert.message}`);
-      }
-    }
-  }
+
+
+
 
   /**
    * Get current period string for budget tracking
@@ -479,8 +490,8 @@ export class CostTracker extends EventEmitter {
       return String(now.getFullYear());
     default:
       return now.toISOString().split('T')[0];
-    }
-  }
+
+
 
   /**
    * Get week number for a date
@@ -489,7 +500,7 @@ export class CostTracker extends EventEmitter {
     const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
     const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / 86400000;
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-  }
+
 
   /**
    * Get cost summary for a time period
@@ -507,7 +518,7 @@ export class CostTracker extends EventEmitter {
     costByProvider: Map<string, number>;
     costByModel: Map<string, number>;
     topModels: Array<{ model: string; cost: number; tokens: number }>;
-  } {
+ {
     // This would typically query the database
     // For now, returning a mock structure
     const mockSummary = {
@@ -524,7 +535,7 @@ export class CostTracker extends EventEmitter {
     console.log(`Getting cost summary for period ${startTime} - ${endTime}`);
     
     return mockSummary;
-  }
+
 
   /**
    * Forecast costs based on usage patterns
@@ -538,7 +549,7 @@ export class CostTracker extends EventEmitter {
     forecastedTotalCost: number;
     confidenceInterval: { lower: number; upper: number };
     basedOnDays: number;
-  } {
+ {
     // Simplified forecasting - would use more sophisticated algorithms in production
     const historicalData = this.getCostSummary(
       Date.now() - (30 * 24 * 60 * 60 * 1000), // Last 30 days
@@ -559,10 +570,10 @@ export class CostTracker extends EventEmitter {
       confidenceInterval: {
         lower: forecastedTotalCost - margin,
         upper: forecastedTotalCost + margin
-  }
+
       basedOnDays: 30
     };
-  }
+
 
   /**
    * Get active alerts
@@ -573,10 +584,10 @@ export class CostTracker extends EventEmitter {
     
     if (budgetId) {
       return alerts.filter(alert => alert.budgetId === budgetId);
-    }
+
     
     return alerts;
-  }
+
 
   /**
    * Acknowledge an alert
@@ -589,10 +600,10 @@ export class CostTracker extends EventEmitter {
       this.alerts.set(alertId, alert);
       this.emit('alert_acknowledged', alert);
       return true;
-    }
+
     
     return false;
-  }
+
 
   /**
    * Update provider pricing
@@ -607,14 +618,14 @@ export class CostTracker extends EventEmitter {
         lastUpdated: Date.now()
       };
       this.providerPricing.set(provider.toLowerCase(), providerPricing);
-    }
+
 
     providerPricing.models.set(model.toLowerCase(), pricing);
     providerPricing.lastUpdated = Date.now();
 
     this.emit('pricing_updated', { provider, model, pricing });
     console.log(`Updated pricing for ${provider}/${model}`);
-  }
+
 
   /**
    * Get efficiency recommendations
@@ -629,7 +640,7 @@ export class CostTracker extends EventEmitter {
     description: string;
     estimatedSavings: number;
     actionItems: string[];
-  }> {
+> {
     // Mock recommendations - would analyze actual usage patterns
     return [
       {
@@ -643,7 +654,7 @@ export class CostTracker extends EventEmitter {
           'Test GPT-3.5-turbo on a sample of current GPT-4 tasks',
           'Implement automatic model selection based on complexity'
         ]
-  }
+
       {
         type: 'usage_optimization',
         priority: 'medium',
@@ -655,9 +666,9 @@ export class CostTracker extends EventEmitter {
           'Use prompt templates for common patterns',
           'Implement dynamic context trimming'
         ]
-      }
+
     ];
-  }
+
 
   /**
    * Export cost data
@@ -685,7 +696,7 @@ export class CostTracker extends EventEmitter {
 
     if (format === 'json') {
       return JSON.stringify(exportData, null, 2);
-    }
+
 
     // CSV format (simplified)
     const lines = [
@@ -699,5 +710,4 @@ export class CostTracker extends EventEmitter {
     ];
 
     return lines.join('\n');
-  }
-}
+

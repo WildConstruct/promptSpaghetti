@@ -31,13 +31,17 @@ periodicComparison: {
     currentPeriod: number;
     previousPeriod: number;
     change: number;
-    changeType: 'improvement' | 'degradation' | 'stable';
+    changeType: 'improvement' | 'degradation' | 'stable',
+    ;
 }
 ;
+;
+riskLevel: 'low' | 'medium' | 'high';
 [];
 forecastAccuracy: number; // 0-100,
 assumptions: string;
 riskFactors: {
+    ;
     factor: string;
     impact: 'high' | 'medium' | 'low';
     likelihood: number; // 0-100,
@@ -52,7 +56,8 @@ findings: {
     severity: 'low' | 'medium' | 'high' | 'critical';
     remediation ?  : string;
     dueDate ?  : Date;
-    status: 'open' | 'in_progress' | 'completed' | 'deferred';
+    status: 'open' | 'in_progress' | 'completed' | 'deferred',
+    ;
 }
 [];
 overallRating: 'excellent' | 'satisfactory' | 'needs_improvement' | 'non_compliant';
@@ -274,13 +279,13 @@ for (const [key, dataPoints] of this.historicalData.entries()) {
         forecastHorizon,
         predictedValues,
         forecastAccuracy,
-        assumptions: [,
+        assumptions: [
             'Historical trends continue',
             'No major system changes',
             'Seasonal patterns remain consistent',
             'External factors remain stable'
         ],
-        riskFactors: [,
+        riskFactors: [
             { factor: 'Regulatory changes', impact: 'high', likelihood: 20 },
             { factor: 'System updates', impact: 'medium', likelihood: 40 },
             { factor: 'Staff changes', impact: 'medium', likelihood: 30 },

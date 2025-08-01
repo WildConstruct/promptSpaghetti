@@ -38,7 +38,7 @@ describe('Security Analytics Performance API Routes', () => {
         monitoring_active: true,
         metrics_buffer_size: 5,
         alerts_buffer_size: 2
-      } as unknown as unknown as unknown),
+ as unknown as unknown as unknown),
       getCurrentPerformanceMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         timestamp: Date.now( as unknown as unknown),
         performance_score: 85,
@@ -57,16 +57,16 @@ describe('Security Analytics Performance API Routes', () => {
           epic1_analytics: true,
           epic17_admin: true,
           real_time_monitoring: true
-  }
+
         system_health: {
           buffer_sizes: { metrics: 5, alerts: 2 },
           monitoring_active: true
-        }
+
       }),
       shutdown: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown),
       on: jest.fn<unknown[], unknown>(),
       emit: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     // Mock the service initialization
     (SecurityAnalyticsIntegrationService as jest.Mock).mockImplementation(() => mockService);
@@ -79,7 +79,7 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/status',
         headers: {
           authorization: 'Bearer valid-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -92,12 +92,12 @@ describe('Security Analytics Performance API Routes', () => {
             epic1_integration: true,
             epic17_integration: true,
             monitoring_active: true
-  }
+
           current_metrics: {
             performance_score: 85,
             system_availability_percent: 99.5
-          }
-  }
+
+
         timestamp: expect.any(Number)
       });
     });
@@ -119,7 +119,7 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/status',
         headers: {
           authorization: 'Bearer valid-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -140,7 +140,7 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/metrics',
         headers: {
           authorization: 'Bearer valid-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -153,11 +153,11 @@ describe('Security Analytics Performance API Routes', () => {
             performance_score: 85,
             throughput_events_per_second: 100,
             active_threats_detected: 2
-  }
+
           integration_status: {
             monitoring_active: true
-          }
-  }
+
+
         timestamp: expect.any(Number)
       });
 
@@ -171,7 +171,7 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/metrics?includeDiagnostics=true',
         headers: {
           authorization: 'Bearer valid-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -189,7 +189,7 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/metrics?timeRange=last_day',
         headers: {
           authorization: 'Bearer valid-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -204,7 +204,7 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/metrics?timeRange=invalid_range',
         headers: {
           authorization: 'Bearer valid-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -224,7 +224,7 @@ describe('Security Analytics Performance API Routes', () => {
         headers: {
           authorization: 'Bearer valid-token',
           'content-type': 'application/json'
-  }
+
         payload: JSON.stringify(alertData)
       });
 
@@ -237,7 +237,7 @@ describe('Security Analytics Performance API Routes', () => {
           alert_id: 'alert-123',
           acknowledged_by: 'admin-user',
           acknowledged_at: expect.any(Number)
-  }
+
         timestamp: expect.any(Number)
       });
     });
@@ -249,7 +249,7 @@ describe('Security Analytics Performance API Routes', () => {
         headers: {
           authorization: 'Bearer valid-token',
           'content-type': 'application/json'
-  }
+
         payload: JSON.stringify({})
       });
 
@@ -262,11 +262,11 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/alerts/acknowledge',
         headers: {
           'content-type': 'application/json'
-  }
+
         payload: JSON.stringify({
           alertId: 'alert-123',
           acknowledgedBy: 'admin-user'
-  }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -291,7 +291,7 @@ describe('Security Analytics Performance API Routes', () => {
           system_availability: 99.5,
           active_threats: 2,
           last_check: expect.any(Number)
-  }
+
         timestamp: expect.any(Number)
       });
     });
@@ -348,7 +348,7 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/optimize',
         headers: {
           authorization: 'Bearer valid-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -359,7 +359,7 @@ describe('Security Analytics Performance API Routes', () => {
         data: {
           optimization_started: true,
           started_at: expect.any(Number)
-  }
+
         timestamp: expect.any(Number)
       });
     });
@@ -381,7 +381,7 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/diagnostics',
         headers: {
           authorization: 'Bearer valid-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -395,15 +395,15 @@ describe('Security Analytics Performance API Routes', () => {
             epic1_analytics: true,
             epic17_admin: true,
             real_time_monitoring: true
-  }
+
           system_health: {
             buffer_sizes: {
               metrics: 5,
               alerts: 2
-  }
+
             monitoring_active: true
-          }
-  }
+
+
         timestamp: expect.any(Number)
       });
 
@@ -427,7 +427,7 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/diagnostics',
         headers: {
           authorization: 'Bearer valid-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -495,17 +495,17 @@ describe('Security Analytics Performance API Routes', () => {
       if (securityAlertHandler) {
         securityAlertHandler({ id: 'test-alert', severity: 'high' });
         expect(logSpy).toHaveBeenCalledWith('Security Analytics Alert:', expect.any(Object));
-      }
+
 
       if (performanceDegradationHandler) {
         performanceDegradationHandler({ performance_score: 45 });
         expect(logSpy).toHaveBeenCalledWith('Security Analytics Performance Degradation:', expect.any(Object));
-      }
+
 
       if (errorHandler) {
         errorHandler({ error: new Error('Test error'), context: 'test' });
         expect(errorLogSpy).toHaveBeenCalledWith('Security Analytics Service Error:', expect.any(Object));
-      }
+
 
       logSpy.mockRestore();
       errorLogSpy.mockRestore();
@@ -527,7 +527,7 @@ describe('Security Analytics Performance API Routes', () => {
           url: endpoint.url,
           headers: endpoint.url.includes('health') ? {} : {
             authorization: 'Bearer valid-token'
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -539,10 +539,10 @@ describe('Security Analytics Performance API Routes', () => {
         
         if (data.success) {
           expect(data).toHaveProperty('data');
-        } else {
+ else {
           expect(data).toHaveProperty('error');
-        }
-      }
+
+
     });
   });
 });

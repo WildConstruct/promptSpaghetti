@@ -13,8 +13,8 @@ import React from 'react';
 import { StickyNote as StickyNoteType } from '../../types/StickyNotes';
 
 }
-interface StickyNoteProps {
-    note: StickyNoteType;
+}
+interface StickyNoteProps { note: StickyNoteType;
     selected: boolean;
     editing: boolean;
     ghostMode: boolean;
@@ -23,13 +23,14 @@ interface StickyNoteProps {
     onStartEdit: () => void;
     onStopEdit: () => void;
     onDelete: () => void;
-    onMove: (position: {),
+    onMove: (position: {) }
         x: number;
         y: number;
 
 }
+}
     }) => void;
-    onResize: (size: {),
+    onResize: (size: { ) }
         width: number;
         height: number;
     }) => void;

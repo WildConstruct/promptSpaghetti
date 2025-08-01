@@ -14,8 +14,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { 
-  Calendar,
+import { Calendar,
   Clock,
   PlayCircle,
   PauseCircle,
@@ -42,25 +41,26 @@ import {
   BarChart3,
   Globe,
   Target,
-  Share2,
+  Share2 }
   Bell
-} from 'lucide-react';
-import {
-  contentSchedulingService,
+ from 'lucide-react';
+import { contentSchedulingService,
   ContentItem,
   ContentType,
   ContentStatus,
   ContentFilter,
-  SchedulingStats,
+  SchedulingStats }
   ScheduleBatch
-} from '../../services/ContentSchedulingService';
-}
+ from '../../services/ContentSchedulingService';
+
+
 interface ContentSchedulingDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-const CONTENT_TYPE_CONFIG = {
-}
+  const CONTENT_TYPE_CONFIG = {
+
+},
   article: { color: 'text-blue-600 bg-blue-100', icon: FileText },
   blog_post: { color: 'text-green-600 bg-green-100', icon: Edit },
   page: { color: 'text-purple-600 bg-purple-100', icon: Globe },
@@ -85,9 +85,9 @@ const STATUS_CONFIG = {
   error: { color: 'text-red-600 bg-red-100', icon: XCircle }
 };
 
-export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProps> = ({)
-  className = '',
-  userId,
+export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProps> = ({ )
+  className = ''
+  userId }
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -103,19 +103,16 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
   const [statusFilter, setStatusFilter] = useState<ContentStatus | 'all'>('all');
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'month' | 'all'>('week');
   // Load data
-  useEffect(() => {
-    loadData();
+  useEffect(() => { loadData();
     const interval = setInterval(loadData, 30000); // Refresh every 30 seconds;
-    return () => clearInterval(interval);
-  }, []);
-  const loadData = async () => {
-  try {
+    return () => clearInterval(interval) }, []);
+  const loadData = async () => { try {
   setIsLoading(true);
   // Build filter
   const contentFilter: ContentFilter = {,
   searchQuery: searchQuery || undefined,
   types: typeFilter !== 'all' ? [typeFilter] : undefined,
-  statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
+  statuses: statusFilter !== 'all' ? [statusFilter] : undefined }
 };
       // Add date range filter
       if (dateRange !== 'all') {
@@ -145,37 +142,21 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       // Load batches
       const batchList = contentSchedulingService.getBatches();
       setBatches(batchList);
-    } catch (error) {
-  console.error('Failed to load scheduling data:', error);
-} finally {
-      setIsLoading(false);
-  };
-  const handlePublishContent = async (contentId: string) => {
-    try {
+ catch (error) { console.error('Failed to load scheduling data:', error) } finally { setIsLoading(false) };
+  const handlePublishContent = async (contentId: string) => { try {
       await contentSchedulingService.publishContent(contentId, userId || 'admin');
-      loadData();
-    } catch (error) {
-  console.error('Failed to publish content:', error);
-};
-  const handleUnpublishContent = async (contentId: string) => {
-    try {
+      loadData() } catch (error) { console.error('Failed to publish content:', error) };
+  const handleUnpublishContent = async (contentId: string) => { try {
       await contentSchedulingService.unpublishContent(contentId, userId || 'admin');
-      loadData();
-    } catch (error) {
-  console.error('Failed to unpublish content:', error);
-};
-  const handleScheduleContent = async (contentId: string, publishAt: Date) => {
-  try {
+      loadData() } catch (error) { console.error('Failed to unpublish content:', error) };
+  const handleScheduleContent = async (contentId: string, publishAt: Date) => { try {
   await contentSchedulingService.scheduleContent(contentId, {)
   publishAt,
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }
 }, userId || 'admin');
       loadData();
-    } catch (error) {
-  console.error('Failed to schedule content:', error);
-};
-  const filteredContent = useMemo(() => {
-    return content.filter(item => {)
+ catch (error) { console.error('Failed to schedule content:', error) };
+  const filteredContent = useMemo(() => { return content.filter(item => {)
   if (searchQuery) {
         const query = searchQuery.toLowerCase();
         if (!item.title.toLowerCase().includes(query) &&
@@ -186,8 +167,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
         return false;
       if (statusFilter !== 'all' && item.status !== statusFilter) {
         return false;
-      return true;
-    });
+      return true });
   }, [content, searchQuery, typeFilter, statusFilter]);
   const renderOverview = () => {
     if (!stats) return <div>Loading overview...</div>;
@@ -303,13 +283,13 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
                     <div className="item-chart">
                       <div 
                         className="performance-bar"
-                        style={{
-  width: `${Math.min(),}
-}
-                            100,
+                        style={ {
+  width: `${Math.min() }
+
+                            100
                             (item.views / Math.max(...stats.performanceMetrics.topPerformingContent.map(c => c.views)
                           ))) * 100)}%` 
-                        }}
+
                       />
                     </div>
                   </div>
@@ -527,18 +507,18 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           userRole={userRole}
         />
       )}
-      <style>{`
+      <style>{ `
         .content-scheduling-dashboard {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
@@ -558,12 +538,12 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           gap: 1rem;
         .metric-item {
           display: flex;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 0.75rem;
         .metric-info {
           flex: 1;
         .metric-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
           margin-bottom: 0.25rem;
         .metric-value {
@@ -572,7 +552,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
   color: #1f2937;
           margin-bottom: 0.25rem;
         .metric-change {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .metric-change.positive {
           color: #059669;
@@ -586,7 +566,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           display: flex;
           align-items: center;
   gap: 1rem;
-          padding: 0.75rem;
+          padding: 0.75rem
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .schedule-date {
@@ -609,7 +589,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
         .item-title {
           color: #1f2937;
         .preview-more {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
           margin-top: 0.25rem;
         .performance-section {
@@ -622,7 +602,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           display: flex;
           align-items: center;
   gap: 1rem;
-          padding: 0.75rem;
+          padding: 0.75rem
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .item-info {
@@ -634,7 +614,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
         .item-stats {
           display: flex;
   gap: 1rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .item-chart {
           width: 100px;
@@ -643,7 +623,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           border-radius: 2px;
   overflow: hidden;
         .performance-bar {
-          height: 100%;
+          height: 100% }
   background: #3b82f6;
           transition: width 0.3s ease;
         .content-controls {
@@ -774,22 +754,23 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
 };
 
 // Content Card Component
-}
-interface ContentCardProps {
-  content: ContentItem;
-  onSelect: (content: ContentItem) => void;
-  onPublish: (contentId: string) => void;
-  onUnpublish: (contentId: string) => void;
+
+
+interface ContentCardProps { content: ContentItem;
+  onSelect: (content: ContentItem) => void
+  onPublish: (contentId: string) => void
+  onUnpublish: (contentId: string) => void
   onSchedule: (contentId: string, publishAt: Date) => void;
   userRole?: string;
-  const ContentCard: React.FC<ContentCardProps> = ({ ),
-  content,
-  onSelect,
-  onPublish,
-  onUnpublish,
-  onSchedule,
+  const ContentCard: React.FC<ContentCardProps> = ({ );
+  content;
+  onSelect;
+  onPublish;
+  onUnpublish;
+  onSchedule }
   userRole
-}
+
+
 }) => {
   const typeConfig = CONTENT_TYPE_CONFIG[content.type];
   const statusConfig = STATUS_CONFIG[content.status];
@@ -871,13 +852,12 @@ interface ContentCardProps {
               Unpublish
             </Button>
           )}
-          {canPublish && (content.status === 'draft' || content.status === 'scheduled') && ()
+          { canPublish && (content.status === 'draft' || content.status === 'scheduled') && ()
             <Button 
               onClick={() => {
                 const tomorrow = new Date();
                 tomorrow.setDate(tomorrow.getDate() + 1);
-                onSchedule(content.id, tomorrow);
-              }}
+                onSchedule(content.id, tomorrow) }}
               size="sm"
               variant="outline"
             >
@@ -887,7 +867,7 @@ interface ContentCardProps {
           )}
         </div>
       </CardContent>
-      <style>{`
+      <style>{ `
         .content-card {
           transition: box-shadow 0.2s ease;
         .content-card:hover {
@@ -903,7 +883,7 @@ interface ContentCardProps {
           margin-bottom: 0.25rem;
           line-height: 1.4;
         .content-description {
-          font-size: 0.875rem;
+          font-size: 0.875rem }
   color: #6b7280;
           line-height: 1.4;
         .content-badges {
@@ -939,22 +919,20 @@ interface ContentCardProps {
 };
 
 // Batch Card Component
-}
-interface BatchCardProps {
-  batch: ScheduleBatch;
-  onExecute: (batchId: string) => void;
+
+
+interface BatchCardProps { batch: ScheduleBatch;
+  onExecute: (batchId: string) => void }
   onCancel: (batchId: string) => void;
-}
-const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => {
-  const getStatusColor = (status: string) => {,
-  switch (status) {
-  case 'pending': return 'text-yellow-600 bg-yellow-100';
+
+
+const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => { const getStatusColor = (status: string) => { }
+  switch (status) { case 'pending': return 'text-yellow-600 bg-yellow-100';
   case 'processing': return 'text-blue-600 bg-blue-100';
   case 'completed': return 'text-green-600 bg-green-100';
   case 'failed': return 'text-red-600 bg-red-100';
   case 'cancelled': return 'text-gray-600 bg-gray-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
+  default: return 'text-gray-600 bg-gray-100' };
   const progressPercentage = batch.progress.total > 0 ;
     ? (batch.progress.completed / batch.progress.total) * 100 
     : 0;
@@ -1000,7 +978,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
           </Button>
         </div>
       </CardContent>
-      <style>{`
+      <style>{ `
         .batch-card {
           transition: box-shadow 0.2s ease;
         .batch-header {
@@ -1013,7 +991,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
   color: #1f2937;
           margin-bottom: 0.25rem;
         .batch-operation {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #6b7280;
         .batch-progress {
           margin-bottom: 1rem;
@@ -1024,11 +1002,11 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
   overflow: hidden;
           margin-bottom: 0.5rem;
         .progress-fill {
-          height: 100%;
+          height: 100%
   background: #3b82f6;
           transition: width 0.3s ease;
         .progress-text {
-          font-size: 0.875rem;
+          font-size: 0.875rem }
   color: #6b7280;
         .batch-actions {
           display: flex;
@@ -1039,18 +1017,19 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
 };
 
 // Content Detail Modal Component (simplified)
-}
-interface ContentDetailModalProps {
-  content: ContentItem;
+
+
+interface ContentDetailModalProps { content: ContentItem;
   onClose: () => void;
   onUpdate: () => void;
   userRole?: string;
-  const ContentDetailModal: React.FC<ContentDetailModalProps> = ({,)
-  content,
-  onClose,
-  onUpdate,
+  const ContentDetailModal: React.FC<ContentDetailModalProps> = ({);
+  content;
+  onClose;
+  onUpdate }
   userRole
-}
+
+
 }) => {
   return;
     <div className="modal-overlay">
@@ -1138,12 +1117,12 @@ interface ContentDetailModalProps {
           <Button onClick={onClose} variant="outline">
             Close
           </Button>
-          <Button onClick={() => { onUpdate(); onClose(); }}>
+          <Button onClick={ () => { onUpdate(); onClose() }}>
             Edit Content
           </Button>
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .modal-overlay {
           position: fixed;
   inset: 0;
@@ -1184,7 +1163,7 @@ interface ContentDetailModalProps {
           padding-bottom: 0.5rem;
         .detail-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr
   gap: 1rem;
         .detail-item {
           display: flex;
@@ -1199,7 +1178,7 @@ interface ContentDetailModalProps {
           font-size: 0.875rem;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
+          justify-content: flex-end }
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;

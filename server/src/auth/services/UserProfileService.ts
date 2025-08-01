@@ -18,8 +18,8 @@ import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { ActivityHistoryService, ActivityType } from './ActivityHistoryService';
 
-}
-}
+
+
 export interface UserProfile {
   id: string;
   userId: string;
@@ -70,12 +70,13 @@ export interface UserProfile {
   followingCount: number;
   isFollowing?: boolean;
   mutualConnectionsCount?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PrivacySettings {
   profileVisibility: 'public' | 'connections' | 'private';
   emailVisibility: 'public' | 'connections' | 'private';
@@ -93,12 +94,13 @@ export interface PrivacySettings {
   allowMentions: boolean;
   emailNotifications: boolean;
   marketingEmails: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserPreferences {
   id: string;
   userId: string;
@@ -106,12 +108,13 @@ export interface UserPreferences {
   settings: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProfileCompletionStatus {
   overall: number;
   sections: {
@@ -120,25 +123,26 @@ export interface ProfileCompletionStatus {
     contact: number;
     social: number;
     preferences: number;
-}
-}
+
+
+
   };
   nextSteps: string[];
   completedSteps: string[];
-}
+
 
 export enum ExperienceLevel {
   BEGINNER = 'beginner',
   INTERMEDIATE = 'intermediate',
   ADVANCED = 'advanced',
   EXPERT = 'expert'
-}
+
 
 export enum ProfileVisibility {
   PUBLIC = 'public',
   CONNECTIONS = 'connections',
   PRIVATE = 'private'
-}
+
 
 export enum PreferenceCategory {
   NOTIFICATIONS = 'notifications',
@@ -148,10 +152,10 @@ export enum PreferenceCategory {
   ANALYTICS = 'analytics',
   INTEGRATIONS = 'integrations',
   ACCESSIBILITY = 'accessibility'
-}
 
-}
-}
+
+
+
 export interface UserConnection {
   id: string;
   followerId: string;
@@ -160,12 +164,13 @@ export interface UserConnection {
   connectionType: 'follow' | 'collaborate' | 'teammate';
   createdAt: Date;
   acceptedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProfileSearchQuery {
   query?: string;
   skills?: string[];
@@ -181,28 +186,30 @@ export interface ProfileSearchQuery {
   offset?: number;
   sortBy?: 'relevance' | 'name' | 'recent' | 'activity' | 'connections';
   sortOrder?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProfileSearchResult {
   profiles: UserProfile[];
   totalCount: number;
   facets: {
-}
-}
+
+
+
     skills: Array<{ skill: string; count: number }>;
     locations: Array<{ location: string; count: number }>;
     companies: Array<{ company: string; count: number }>;
     industries: Array<{ industry: string; count: number }>;
     experienceLevels: Array<{ level: ExperienceLevel; count: number }>;
   };
-}
 
-}
-}
+
+
+
 export interface ProfileAnalytics {
   userId: string;
   profileViews: {
@@ -211,8 +218,9 @@ export interface ProfileAnalytics {
     today: number;
     thisWeek: number;
     thisMonth: number;
-}
-}
+
+
+
   };
   viewerDemographics: {
     byLocation: Record<string, number>;
@@ -223,22 +231,22 @@ export interface ProfileAnalytics {
     date: string;
     followers: number;
     following: number;
-  }>;
+>;
   skillPopularity: Array<{
     skill: string;
     mentions: number;
     growth: number;
-  }>;
+>;
   engagementMetrics: {
     profileCompleteness: number;
     lastUpdated: Date;
     updateFrequency: number;
     socialEngagement: number;
   };
-}
 
-}
-}
+
+
+
 export interface ProfileUpdate {
   displayName?: string;
   firstName?: string;
@@ -263,9 +271,10 @@ export interface ProfileUpdate {
   experience?: ExperienceLevel;
   industry?: string;
   privacySettings?: Partial<PrivacySettings>;
-}
-}
-}
+
+
+
+
 
 export class UserProfileService {
   private db: Database;
@@ -280,7 +289,7 @@ export class UserProfileService {
     this.db = db;
     this.auditService = auditService;
     this.activityService = activityService;
-  }
+
 
   /**
    * Get a user's complete profile
@@ -324,29 +333,29 @@ export class UserProfileService {
     
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     
     // Check if viewer has permission to see this profile
     if (!includePrivate && !this.canViewProfile(row, viewerId, userId)) {
       return null;
-    }
+
 
     const profile = this.mapProfileRow(row);
     
     // Record profile view if viewer is different from profile owner
     if (viewerId && viewerId !== userId) {
       await this.recordProfileView(userId, viewerId);
-    }
+
 
     // Apply privacy filtering
     if (!includePrivate && viewerId !== userId) {
       this.applyPrivacyFilters(profile, viewerId);
-    }
+
 
     return profile;
-  }
+
 
   /**
    * Create or update a user profile
@@ -365,7 +374,7 @@ export class UserProfileService {
     
     if (!existingProfile) {
       existingProfile = await this.createDefaultProfile(userId);
-    }
+
 
     // Build update query
     const updateFields = [];
@@ -377,7 +386,7 @@ export class UserProfileService {
         const columnName = this.camelToSnakeCase(key);
         updateFields.push(`${columnName} = $${paramIndex++}`);
         values.push(value);
-      }
+
     });
 
     if (updateFields.length > 0) {
@@ -392,12 +401,12 @@ export class UserProfileService {
       `;
 
       await this.db.query(query, values);
-    }
+
 
     // Handle privacy settings separately
     if (updates.privacySettings) {
       await this.updatePrivacySettings(userId, updates.privacySettings);
-    }
+
 
     // Record activity
     await this.activityService.recordActivity(
@@ -409,7 +418,7 @@ export class UserProfileService {
         previousValue: existingProfile,
         newValue: updates,
         success: true
-  }
+
       { correlationId: userId }
     );
 
@@ -423,7 +432,7 @@ export class UserProfileService {
     // Return updated profile
     const updatedProfile = await this.getUserProfile(userId, userId, true);
     return updatedProfile!;
-  }
+
 
   /**
    * Search user profiles
@@ -460,51 +469,51 @@ export class UserProfileService {
       )`);
       values.push(`%${query.query}%`);
       paramIndex++;
-    }
+
 
     // Skills filter
     if (query.skills && query.skills.length > 0) {
       conditions.push(`p.skill_tags && $${paramIndex++}`);
       values.push(query.skills);
-    }
+
 
     // Location filter
     if (query.location) {
       conditions.push(`p.location ILIKE $${paramIndex++}`);
       values.push(`%${query.location}%`);
-    }
+
 
     // Company filter
     if (query.company) {
       conditions.push(`p.company ILIKE $${paramIndex++}`);
       values.push(`%${query.company}%`);
-    }
+
 
     // Industry filter
     if (query.industry) {
       conditions.push(`p.industry = $${paramIndex++}`);
       values.push(query.industry);
-    }
+
 
     // Experience level filter
     if (query.experienceLevel) {
       conditions.push(`p.experience = $${paramIndex++}`);
       values.push(query.experienceLevel);
-    }
+
 
     // Avatar filter
     if (query.hasAvatar !== undefined) {
       if (query.hasAvatar) {
         conditions.push('p.avatar_url IS NOT NULL');
-      } else {
+ else {
         conditions.push('p.avatar_url IS NULL');
-      }
-    }
+
+
 
     // Active users filter
     if (query.isActive) {
       conditions.push('u.last_login_at > NOW() - INTERVAL \'30 days\'');
-    }
+
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     
@@ -548,7 +557,7 @@ export class UserProfileService {
           p.completion_score / 100.0
         ) ${sortOrder}`;
       break;
-    }
+
 
     const dataQuery = `
       SELECT 
@@ -593,7 +602,7 @@ export class UserProfileService {
       totalCount,
       facets
     };
-  }
+
 
   /**
    * Get user preferences by category
@@ -606,7 +615,7 @@ export class UserProfileService {
     if (category) {
       query += ' AND category = $2';
       values.push(category);
-    }
+
 
     query += ' ORDER BY category';
 
@@ -619,7 +628,7 @@ export class UserProfileService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     }));
-  }
+
 
   /**
    * Update user preferences
@@ -649,7 +658,7 @@ export class UserProfileService {
         changeType: 'update',
         newValue: settings,
         success: true
-  }
+
       { correlationId: userId }
     );
 
@@ -661,7 +670,7 @@ export class UserProfileService {
       createdAt: result.rows[0].created_at,
       updatedAt: result.rows[0].updated_at
     };
-  }
+
 
   /**
    * Follow or unfollow a user
@@ -675,7 +684,7 @@ export class UserProfileService {
 
     if (followerId === followingId) {
       throw new Error('Cannot follow yourself');
-    }
+
 
     if (action === 'unfollow') {
       await this.db.query(
@@ -695,7 +704,7 @@ export class UserProfileService {
       );
 
       return null;
-    }
+
 
     const status = action === 'block' ? 'blocked' : 'accepted';
     
@@ -729,7 +738,7 @@ export class UserProfileService {
       createdAt: result.rows[0].created_at,
       acceptedAt: result.rows[0].accepted_at
     };
-  }
+
 
   /**
    * Get profile analytics
@@ -747,12 +756,12 @@ export class UserProfileService {
         today: 0,
         thisWeek: 0,
         thisMonth: 0
-  }
+
       viewerDemographics: {
         byLocation: {},
         byCompany: {},
         byIndustry: {}
-  }
+
       connectionGrowth: [],
       skillPopularity: [],
       engagementMetrics: {
@@ -760,11 +769,11 @@ export class UserProfileService {
         lastUpdated: new Date(),
         updateFrequency: 0,
         socialEngagement: 0
-      }
+
     };
 
     return analytics;
-  }
+
 
   /**
    * Helper methods
@@ -780,7 +789,7 @@ export class UserProfileService {
     
     if (userResult.rows.length === 0) {
       throw new Error('User not found');
-    }
+
 
     const user = userResult.rows[0];
     
@@ -806,7 +815,7 @@ export class UserProfileService {
       following_count: 0,
       is_following: false
     });
-  }
+
 
   private validateProfileUpdate(updates: ProfileUpdate): void {
     // Validate URLs
@@ -815,19 +824,19 @@ export class UserProfileService {
       const value = updates[field as keyof ProfileUpdate] as string;
       if (value && !this.isValidUrl(value)) {
         throw new Error(`Invalid URL for field: ${field}`);
-      }
+
     });
 
     // Validate skill tags
     if (updates.skillTags && updates.skillTags.length > 20) {
       throw new Error('Maximum 20 skill tags allowed');
-    }
+
 
     // Validate bio length
     if (updates.bio && updates.bio.length > 500) {
       throw new Error('Bio must be 500 characters or less');
-    }
-  }
+
+
 
   private async calculateCompletionScore(userId: string): Promise<number> {
 
@@ -855,33 +864,33 @@ export class UserProfileService {
     if (profile.avatarUrl) score += 10;
 
     return Math.min(score, 100);
-  }
+
 
   private canViewProfile(profileRow: any, viewerId?: string, profileUserId?: string): boolean {
     if (!viewerId) {
       return profileRow.visibility === 'public';
-    }
+
 
     if (viewerId === profileUserId) {
       return true; // Own profile
-    }
+
 
     if (profileRow.visibility === 'public') {
       return true;
-    }
+
 
     if (profileRow.visibility === 'connections') {
       // Would need to check if they're connected
       return false; // Simplified for now
-    }
+
 
     return false; // Private profile
-  }
+
 
   private applyPrivacyFilters(profile: UserProfile, viewerId?: string): void {
     if (!viewerId || viewerId === profile.userId) {
       return; // No filtering for own profile
-    }
+
 
     // Apply privacy settings - simplified version
     const settings = profile.privacySettings;
@@ -889,25 +898,25 @@ export class UserProfileService {
     if (!settings.contactInfoVisible) {
       profile.website = undefined;
       profile.location = undefined;
-    }
+
 
     if (!settings.socialLinksVisible) {
       profile.linkedinUrl = undefined;
       profile.twitterUrl = undefined;
       profile.githubUrl = undefined;
-    }
+
 
     if (!settings.skillsVisible) {
       profile.skillTags = [];
-    }
+
 
     if (!settings.experienceVisible) {
       profile.title = undefined;
       profile.company = undefined;
       profile.department = undefined;
       profile.industry = undefined;
-    }
-  }
+
+
 
   private async recordProfileView(profileUserId: string, viewerId: string): Promise<void> {
 
@@ -928,7 +937,7 @@ export class UserProfileService {
         success: true
       }
     );
-  }
+
 
   private async updatePrivacySettings(userId: string, settings: Partial<PrivacySettings>): Promise<void> {
 
@@ -945,7 +954,7 @@ export class UserProfileService {
       mergedSettings,
       userId
     );
-  }
+
 
   private async generateSearchFacets(whereClause: string, values: any[]): Promise<any> {
 
@@ -958,7 +967,7 @@ export class UserProfileService {
       industries: [],
       experienceLevels: []
     };
-  }
+
 
   private mapProfileRow(row: any): UserProfile {
     return {
@@ -1002,7 +1011,7 @@ export class UserProfileService {
       isFollowing: row.is_following || false,
       mutualConnectionsCount: 0
     };
-  }
+
 
   private calculateCompletionStatus(row: any): ProfileCompletionStatus {
     // Calculate completion status based on filled fields
@@ -1014,11 +1023,11 @@ export class UserProfileService {
         contact: 0,
         social: 0,
         preferences: 0
-  }
+
       nextSteps: [],
       completedSteps: []
     };
-  }
+
 
   private calculateMissingFields(row: any): string[] {
     const missing: string[] = [];
@@ -1030,7 +1039,7 @@ export class UserProfileService {
     if (!row.skill_tags?.length) missing.push('skills');
 
     return missing;
-  }
+
 
   private getDefaultPrivacySettings(): PrivacySettings {
     return {
@@ -1051,20 +1060,20 @@ export class UserProfileService {
       emailNotifications: true,
       marketingEmails: false
     };
-  }
+
 
   private camelToSnakeCase(str: string): string {
     return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-  }
+
 
   private isValidUrl(url: string): boolean {
     try {
       new URL(url);
       return true;
-    } catch {
+ catch {
       return false;
-    }
-  }
-}
+
+
+
 
 export default UserProfileService;

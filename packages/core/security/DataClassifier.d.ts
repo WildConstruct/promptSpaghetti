@@ -4,8 +4,7 @@
  * Automated classification system for sensitive data identification
  * and security level assignment based on content, context, and compliance requirements.
  */
-declare class BrowserEventEmitter {
-    private events;
+declare class BrowserEventEmitter { private events;
     on(event: string, listener: Function): void;
     emit(event: string, ...args: any[]): void;
 
@@ -25,12 +24,12 @@ export declare enum DataCategory {
 export declare enum ComplianceFramework {
     GDPR = "gdpr",
     NIST = "nist",
-    HIPAA = "hipaa",
+    HIPAA = "hipaa" }
     PCI_DSS = "pci_dss"
 
 }
-export interface ClassificationRule {
-    id: string;
+}
+export interface ClassificationRule { id: string;
     name: string;
     description: string;
     category: DataCategory;
@@ -40,17 +39,15 @@ export interface ClassificationRule {
     contextRules?: ContextRule[];
     complianceRequirements: ComplianceFramework[];
     priority: number;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface ContextRule {
-    field: string;
+}
+export interface ContextRule { field: string;
     condition: 'equals' | 'contains' | 'matches' | 'exists';
-    value?: string | RegExp;
-
+    value?: string | RegExp }
 }
-export interface ClassificationResult {
-    level: ClassificationLevel;
+}
+export interface ClassificationResult { level: ClassificationLevel;
     category: DataCategory;
     confidence: number;
     matchedRules: string[];
@@ -58,21 +55,19 @@ export interface ClassificationResult {
     encryptionRequired: boolean;
     retentionPeriod: string;
     accessControls: string[];
-    reasoning: string[];
-
+    reasoning: string[] }
 }
-export interface DataElement {
-    id: string;
+}
+export interface DataElement { id: string;
     fieldName: string;
     value: any;
     dataType: string;
     context: Record<string, any>;
     source: string;
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface ClassificationMetadata {
-    classifiedAt: Date;
+}
+export interface ClassificationMetadata { classifiedAt: Date;
     classifiedBy: string;
     version: string;
     reviewDate: Date;
@@ -117,17 +112,15 @@ export declare class DataClassifier extends BrowserEventEmitter {
         inTransit: boolean;
         algorithm: string;
         keyRotation: string;
-        keyStorage: string;
+        keyStorage: string }
 }
     };
     /**
      * Get retention requirements for classification level
      */
-    getRetentionRequirements(level: ClassificationLevel, category: DataCategory): {
-        period: string;
+    getRetentionRequirements(level: ClassificationLevel, category: DataCategory): { period: string;
         disposal: string;
-        archival: boolean;
-    };
+        archival: boolean };
     private initializeDefaultRules;
     private evaluateRule;
     private determineClassification;
@@ -136,16 +129,13 @@ export declare class DataClassifier extends BrowserEventEmitter {
 /**
  * Classification policy manager
  */
-export declare class ClassificationPolicyManager {
-    private policies;
+export declare class ClassificationPolicyManager { private policies;
     addPolicy(policy: ClassificationPolicy): void;
     getPolicy(id: string): ClassificationPolicy | undefined;
     getAllPolicies(): ClassificationPolicy[];
-    validateCompliance(classification: ClassificationResult, policyId: string): ComplianceValidationResult;
-
+    validateCompliance(classification: ClassificationResult, policyId: string): ComplianceValidationResult }
 }
-export interface ClassificationPolicy {
-    id: string;
+export interface ClassificationPolicy { id: string;
     name: string;
     description: string;
     applicableFrameworks: ComplianceFramework[];
@@ -154,14 +144,13 @@ export interface ClassificationPolicy {
     retentionRequirements: {
         minimumPeriod: string;
         maximumPeriod: string;
-        disposalMethod: string;
+        disposalMethod: string }
 }
     };
-    auditRequirements: {
-        frequency: string;
-        scope: string[];
-    };
+    auditRequirements: { frequency: string;
+        scope: string[] };
 
+}
 }
 export interface ComplianceValidationResult {
     compliant: boolean;
@@ -171,4 +160,5 @@ export interface ComplianceValidationResult {
 
 export default DataClassifier;
 //# sourceMappingURL=DataClassifier.d.ts.map
+}
 }

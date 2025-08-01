@@ -9,8 +9,8 @@
  */
 
 }
-export interface Dispute {
-    disputeId: string;
+}
+export interface Dispute { disputeId: string;
     transactionId: string;
     buyerId: string;
     sellerId: string;
@@ -51,83 +51,84 @@ export interface Dispute {
     appeal?: DisputeAppeal;
 
 export declare enum DisputeType {
-    CHARGEBACK = "chargeback",
-    RETRIEVAL_REQUEST = "retrieval_request",
-    PRE_ARBITRATION = "pre_arbitration",
-    ARBITRATION = "arbitration",
-    MERCHANT_DISPUTE = "merchant_dispute",
-    QUALITY_DISPUTE = "quality_dispute",
-    FRAUD_DISPUTE = "fraud_dispute",
+    CHARGEBACK = "chargeback";
+    RETRIEVAL_REQUEST = "retrieval_request";
+    PRE_ARBITRATION = "pre_arbitration";
+    ARBITRATION = "arbitration";
+    MERCHANT_DISPUTE = "merchant_dispute";
+    QUALITY_DISPUTE = "quality_dispute";
+    FRAUD_DISPUTE = "fraud_dispute";
     AUTHORIZATION_DISPUTE = "authorization_dispute"
 
 export declare enum DisputeCategory {
-    FRAUD = "fraud",
-    AUTHORIZATION = "authorization",
-    PROCESSING_ERROR = "processing_error",
-    CONSUMER_DISPUTE = "consumer_dispute",
-    QUALITY_ISSUE = "quality_issue",
-    NON_DELIVERY = "non_delivery",
-    DUPLICATE_PROCESSING = "duplicate_processing",
-    CREDIT_NOT_PROCESSED = "credit_not_processed",
-    CANCELLED_RECURRING = "cancelled_recurring",
+    FRAUD = "fraud";
+    AUTHORIZATION = "authorization";
+    PROCESSING_ERROR = "processing_error";
+    CONSUMER_DISPUTE = "consumer_dispute";
+    QUALITY_ISSUE = "quality_issue";
+    NON_DELIVERY = "non_delivery";
+    DUPLICATE_PROCESSING = "duplicate_processing";
+    CREDIT_NOT_PROCESSED = "credit_not_processed";
+    CANCELLED_RECURRING = "cancelled_recurring";
     PRODUCT_NOT_RECEIVED = "product_not_received"
 
 export declare enum DisputeReason {
-    UNAUTHORIZED_TRANSACTION = "unauthorized_transaction",
-    FRAUDULENT_TRANSACTION = "fraudulent_transaction",
-    CARD_NOT_PRESENT = "card_not_present",
-    INVALID_AUTHORIZATION = "invalid_authorization",
-    EXPIRED_AUTHORIZATION = "expired_authorization",
-    DECLINED_AUTHORIZATION = "declined_authorization",
-    DUPLICATE_TRANSACTION = "duplicate_transaction",
-    INCORRECT_AMOUNT = "incorrect_amount",
-    PROCESSING_ERROR = "processing_error",
-    PRODUCT_NOT_RECEIVED = "product_not_received",
-    PRODUCT_UNACCEPTABLE = "product_unacceptable",
-    SUBSCRIPTION_CANCELLED = "subscription_cancelled",
-    REFUND_NOT_PROCESSED = "refund_not_processed",
-    TEMPLATE_DEFECTIVE = "template_defective",
-    DESCRIPTION_MISMATCH = "description_mismatch",
-    FUNCTIONALITY_ISSUES = "functionality_issues",
-    SECURITY_VULNERABILITIES = "security_vulnerabilities",
-    GENERAL_DISPUTE = "general_dispute",
+    UNAUTHORIZED_TRANSACTION = "unauthorized_transaction";
+    FRAUDULENT_TRANSACTION = "fraudulent_transaction";
+    CARD_NOT_PRESENT = "card_not_present";
+    INVALID_AUTHORIZATION = "invalid_authorization";
+    EXPIRED_AUTHORIZATION = "expired_authorization";
+    DECLINED_AUTHORIZATION = "declined_authorization";
+    DUPLICATE_TRANSACTION = "duplicate_transaction";
+    INCORRECT_AMOUNT = "incorrect_amount";
+    PROCESSING_ERROR = "processing_error";
+    PRODUCT_NOT_RECEIVED = "product_not_received";
+    PRODUCT_UNACCEPTABLE = "product_unacceptable";
+    SUBSCRIPTION_CANCELLED = "subscription_cancelled";
+    REFUND_NOT_PROCESSED = "refund_not_processed";
+    TEMPLATE_DEFECTIVE = "template_defective";
+    DESCRIPTION_MISMATCH = "description_mismatch";
+    FUNCTIONALITY_ISSUES = "functionality_issues";
+    SECURITY_VULNERABILITIES = "security_vulnerabilities";
+    GENERAL_DISPUTE = "general_dispute";
     OTHER = "other"
 
 export declare enum DisputeStatus {
-    RECEIVED = "received",
-    INVESTIGATING = "investigating",
-    AWAITING_RESPONSE = "awaiting_response",
-    RESPONSE_SUBMITTED = "response_submitted",
-    UNDER_REVIEW = "under_review",
-    ACCEPTED = "accepted",
-    REJECTED = "rejected",
-    EXPIRED = "expired",
-    WITHDRAWN = "withdrawn",
-    ESCALATED = "escalated",
+    RECEIVED = "received";
+    INVESTIGATING = "investigating";
+    AWAITING_RESPONSE = "awaiting_response";
+    RESPONSE_SUBMITTED = "response_submitted";
+    UNDER_REVIEW = "under_review";
+    ACCEPTED = "accepted";
+    REJECTED = "rejected";
+    EXPIRED = "expired";
+    WITHDRAWN = "withdrawn";
+    ESCALATED = "escalated";
     CLOSED = "closed"
 
 export declare enum DisputeStage {
-    INITIAL_DISPUTE = "initial_dispute",
-    EVIDENCE_COLLECTION = "evidence_collection",
-    INVESTIGATION = "investigation",
-    RESPONSE_PREPARATION = "response_preparation",
-    RESPONSE_SUBMISSION = "response_submission",
-    REVIEW_PROCESS = "review_process",
-    RESOLUTION = "resolution",
-    APPEAL_PERIOD = "appeal_period",
-    APPEAL_PROCESS = "appeal_process",
+    INITIAL_DISPUTE = "initial_dispute";
+    EVIDENCE_COLLECTION = "evidence_collection";
+    INVESTIGATION = "investigation";
+    RESPONSE_PREPARATION = "response_preparation";
+    RESPONSE_SUBMISSION = "response_submission";
+    REVIEW_PROCESS = "review_process";
+    RESOLUTION = "resolution";
+    APPEAL_PERIOD = "appeal_period";
+    APPEAL_PROCESS = "appeal_process";
     FINAL_RESOLUTION = "final_resolution"
 
 export declare enum DisputeSource {
-    PAYMENT_PROVIDER = "payment_provider",
-    CUSTOMER_REPORT = "customer_report",
-    MERCHANT_REPORT = "merchant_report",
-    SYSTEM_DETECTION = "system_detection",
+    PAYMENT_PROVIDER = "payment_provider";
+    CUSTOMER_REPORT = "customer_report";
+    MERCHANT_REPORT = "merchant_report";
+    SYSTEM_DETECTION = "system_detection" }
     ADMIN_INITIATED = "admin_initiated"
 
 }
-export interface DisputeEvidence {
-    evidenceId: string;
+}
+}
+export interface DisputeEvidence { evidenceId: string;
     type: DisputeEvidenceType;
     title: string;
     description: string;
@@ -140,33 +141,33 @@ export interface DisputeEvidence {
     category: 'transaction' | 'communication' | 'delivery' | 'quality' | 'authorization' | 'other';
 
 export declare enum DisputeEvidenceType {
-    TRANSACTION_RECEIPT = "transaction_receipt",
-    AUTHORIZATION_PROOF = "authorization_proof",
-    DELIVERY_CONFIRMATION = "delivery_confirmation",
-    COMMUNICATION_LOG = "communication_log",
-    REFUND_PROOF = "refund_proof",
-    PRODUCT_DESCRIPTION = "product_description",
-    CUSTOMER_COMMUNICATION = "customer_communication",
-    TECHNICAL_ANALYSIS = "technical_analysis",
-    USAGE_LOGS = "usage_logs",
-    QUALITY_ASSESSMENT = "quality_assessment",
-    POLICY_DOCUMENTATION = "policy_documentation",
+    TRANSACTION_RECEIPT = "transaction_receipt";
+    AUTHORIZATION_PROOF = "authorization_proof";
+    DELIVERY_CONFIRMATION = "delivery_confirmation";
+    COMMUNICATION_LOG = "communication_log";
+    REFUND_PROOF = "refund_proof";
+    PRODUCT_DESCRIPTION = "product_description";
+    CUSTOMER_COMMUNICATION = "customer_communication";
+    TECHNICAL_ANALYSIS = "technical_analysis";
+    USAGE_LOGS = "usage_logs";
+    QUALITY_ASSESSMENT = "quality_assessment";
+    POLICY_DOCUMENTATION = "policy_documentation" }
     OTHER = "other"
 
 }
-export interface DisputeAttachment {
-    attachmentId: string;
+}
+}
+export interface DisputeAttachment { attachmentId: string;
     filename: string;
     fileType: string;
     fileSize: number;
     url: string;
     uploadedBy: string;
     uploadedAt: Date;
-    category: 'evidence' | 'communication' | 'documentation' | 'screenshot';
-
+    category: 'evidence' | 'communication' | 'documentation' | 'screenshot' }
 }
-export interface DisputeCommunication {
-    communicationId: string;
+}
+export interface DisputeCommunication { communicationId: string;
     type: 'internal_note' | 'customer_message' | 'merchant_message' | 'provider_message' | 'system_notification';
     sender: string;
     recipient?: string;
@@ -177,16 +178,17 @@ export interface DisputeCommunication {
     isPublic: boolean;
 
 export declare enum DisputeOutcome {
-    WON = "won",
-    LOST = "lost",
-    PARTIALLY_WON = "partially_won",
-    SETTLED = "settled",
-    WITHDRAWN = "withdrawn",
+    WON = "won";
+    LOST = "lost";
+    PARTIALLY_WON = "partially_won";
+    SETTLED = "settled";
+    WITHDRAWN = "withdrawn" }
     EXPIRED = "expired"
 
 }
-export interface DisputeResolution {
-    outcome: DisputeOutcome;
+}
+}
+export interface DisputeResolution { outcome: DisputeOutcome;
     finalAmount: number;
     adjustedAmount?: number;
     reason: string;
@@ -196,25 +198,22 @@ export interface DisputeResolution {
     feesAwarded: number;
     notes?: string;
     appealable: boolean;
-    appealDeadline?: Date;
-
+    appealDeadline?: Date }
 }
-export interface DisputeTrustImpact {
-    buyerImpact: TrustScoreImpact;
+}
+export interface DisputeTrustImpact { buyerImpact: TrustScoreImpact;
     sellerImpact: TrustScoreImpact;
-    templateImpact?: TrustScoreImpact;
-
+    templateImpact?: TrustScoreImpact }
 }
-export interface TrustScoreImpact {
-    scoreDelta: number;
+}
+export interface TrustScoreImpact { scoreDelta: number;
     factors: string[];
     severity: 'minor' | 'moderate' | 'significant' | 'severe';
     duration: number;
-    reversible: boolean;
-
+    reversible: boolean }
 }
-export interface DisputeAppeal {
-    appealId: string;
+}
+export interface DisputeAppeal { appealId: string;
     appealedBy: string;
     appealedAt: Date;
     reason: string;
@@ -223,59 +222,53 @@ export interface DisputeAppeal {
     reviewedBy?: string;
     reviewedAt?: Date;
     outcome?: string;
-    notes?: string;
-
+    notes?: string }
 }
-export interface DisputeWorkflow {
-    workflowId: string;
+}
+export interface DisputeWorkflow { workflowId: string;
     disputeId: string;
     currentStage: DisputeStage;
     stages: DisputeWorkflowStage[];
     deadlines: DisputeDeadline[];
     automatedActions: DisputeAutomation[];
     manualReviewRequired: boolean;
-    escalationRules: DisputeEscalation[];
-
+    escalationRules: DisputeEscalation[] }
 }
-export interface DisputeWorkflowStage {
-    stage: DisputeStage;
+}
+export interface DisputeWorkflowStage { stage: DisputeStage;
     status: 'pending' | 'active' | 'completed' | 'skipped';
     startedAt?: Date;
     completedAt?: Date;
     assignedTo?: string;
     requirements: string[];
     actions: string[];
-    dependencies: string[];
-
+    dependencies: string[] }
 }
-export interface DisputeDeadline {
-    type: 'response' | 'evidence' | 'review' | 'appeal';
+}
+export interface DisputeDeadline { type: 'response' | 'evidence' | 'review' | 'appeal';
     dueDate: Date;
     description: string;
     criticality: 'low' | 'medium' | 'high' | 'critical';
     automated: boolean;
-    notificationSent: boolean;
-
+    notificationSent: boolean }
 }
-export interface DisputeAutomation {
-    actionType: 'evidence_collection' | 'response_generation' | 'status_update' | 'notification' | 'escalation';
+}
+export interface DisputeAutomation { actionType: 'evidence_collection' | 'response_generation' | 'status_update' | 'notification' | 'escalation';
     trigger: string;
     conditions: Record<string, any>;
     executed: boolean;
     executedAt?: Date;
-    result?: string;
-
+    result?: string }
 }
-export interface DisputeEscalation {
-    condition: string;
+}
+export interface DisputeEscalation { condition: string;
     escalateTo: string;
     triggered: boolean;
     triggeredAt?: Date;
-    reason?: string;
-
+    reason?: string }
 }
-export interface DisputeMetrics {
-    totalDisputes: number;
+}
+export interface DisputeMetrics { totalDisputes: number;
     activeDisputes: number;
     winRate: number;
     averageResolutionTime: number;
@@ -283,21 +276,19 @@ export interface DisputeMetrics {
     disputesByType: Record<DisputeType, number>;
     disputesByCategory: Record<DisputeCategory, number>;
     disputesByStatus: Record<DisputeStatus, number>;
-    monthlyTrends: DisputeMonthlyTrend[];
-
+    monthlyTrends: DisputeMonthlyTrend[] }
 }
-export interface DisputeMonthlyTrend {
-    month: string;
+}
+export interface DisputeMonthlyTrend { month: string;
     totalDisputes: number;
     winRate: number;
     totalLiability: number;
-    averageResolutionTime: number;
-
+    averageResolutionTime: number }
 }
-export interface DisputeAnalytics {
-    period: {
+}
+export interface DisputeAnalytics { period: {
         startDate: Date;
-        endDate: Date;
+        endDate: Date }
 }
     };
     metrics: DisputeMetrics;
@@ -306,8 +297,8 @@ export interface DisputeAnalytics {
     generatedAt: Date;
 
 }
-export interface DisputeInsight {
-    insightId: string;
+}
+export interface DisputeInsight { insightId: string;
     type: 'trend' | 'anomaly' | 'opportunity' | 'risk';
     title: string;
     description: string;
@@ -315,11 +306,10 @@ export interface DisputeInsight {
     confidence: number;
     actionable: boolean;
     relatedMetrics: string[];
-    generatedAt: Date;
-
+    generatedAt: Date }
 }
-export interface DisputeRecommendation {
-    recommendationId: string;
+}
+export interface DisputeRecommendation { recommendationId: string;
     category: 'process_improvement' | 'evidence_strategy' | 'response_quality' | 'automation';
     priority: 'low' | 'medium' | 'high' | 'critical';
     title: string;
@@ -328,41 +318,37 @@ export interface DisputeRecommendation {
     implementation: {
         effort: 'low' | 'medium' | 'high';
         timeline: string;
-        resources: string[];
+        resources: string[] }
 }
     };
     successMetrics: string[];
     generatedAt: Date;
 
 }
-export interface DisputeFilter {
-    status?: DisputeStatus[];
+}
+export interface DisputeFilter { status?: DisputeStatus[];
     type?: DisputeType[];
     category?: DisputeCategory[];
     severity?: string[];
     dateRange?: {
         from: Date;
-        to: Date;
+        to: Date }
 }
     };
-    amountRange?: {
-        min: number;
-        max: number;
-    };
+    amountRange?: { min: number;
+        max: number };
     assignedTo?: string;
     source?: DisputeSource[];
 
 }
-export interface DisputeSearchCriteria extends DisputeFilter {
-    query?: string;
+}
+export interface DisputeSearchCriteria extends DisputeFilter { query?: string;
     sortBy?: 'createdAt' | 'amount' | 'dueDate' | 'priority';
     sortOrder?: 'asc' | 'desc';
     limit?: number;
-    offset?: number;
-
+    offset?: number }
 }
-export interface DisputeResponse {
-    responseId: string;
+export interface DisputeResponse { responseId: string;
     disputeId: string;
     responseType: 'accept' | 'contest' | 'partial_accept';
     argument: string;
@@ -374,8 +360,8 @@ export interface DisputeResponse {
     submittedAt?: Date;
     status: 'draft' | 'review' | 'approved' | 'submitted';
     outcome?: DisputeOutcome;
-    notes?: string;
-
+    notes?: string }
+}
 }
 export interface DisputeNotification {
     notificationId: string;
@@ -391,4 +377,5 @@ export interface DisputeNotification {
     actionUrl?: string;
 
 //# sourceMappingURL=DisputeTypes.d.ts.map
+}
 }

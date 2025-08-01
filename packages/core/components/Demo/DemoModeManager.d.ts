@@ -7,15 +7,14 @@
 import React from 'react';
 
 }
-export interface DemoModeConfig {
-    screenshotMode: boolean;
+}
+export interface DemoModeConfig { screenshotMode: boolean;
     presentationFocus: boolean;
     performanceMode: boolean;
     accessibilityMode: boolean;
     brandingVisible: boolean;
-    debugElementsHidden: boolean;
-
-
+    debugElementsHidden: boolean }
+}
 }
 export interface DemoModeManagerProps {
     children: React.ReactNode;
@@ -25,4 +24,5 @@ export interface DemoModeManagerProps {
 export declare const DemoModeManager: React.FC<DemoModeManagerProps>;
 export default DemoModeManager;
 //# sourceMappingURL=DemoModeManager.d.ts.map
+}
 }

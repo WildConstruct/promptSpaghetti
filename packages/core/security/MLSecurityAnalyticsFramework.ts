@@ -15,54 +15,49 @@ import { UserBehaviorAnalytics, UserBehaviorEvent, BehaviorAnomaly } from './Use
 // FRAMEWORK TYPES
 // ==========================================
 
-}
-export interface SecurityAnalyticsConfig {
-  enablePredictiveAnalytics: boolean;
+
+export interface SecurityAnalyticsConfig { enablePredictiveAnalytics: boolean;
   enableBehaviorAnalytics: boolean;
   enableCrossCorrelation: boolean;
   alertThreshold: number;
   autoResponseEnabled: boolean;
   epic1Integration: Epic1IntegrationConfig;
   epic17Integration: Epic17IntegrationConfig;
-  mlModelConfig: MLModelConfig;
-}
-}
-}
-export interface Epic1IntegrationConfig {
-  enabled: boolean;
+  mlModelConfig: MLModelConfig }
+
+
+
+export interface Epic1IntegrationConfig { enabled: boolean;
   analyticsEndpoint: string;
   metricsCollectionInterval: number;
   enableDataStreaming: boolean;
-  dataRetentionDays: number;
-}
-}
-}
-export interface Epic17IntegrationConfig {
-  enabled: boolean;
+  dataRetentionDays: number }
+
+
+
+export interface Epic17IntegrationConfig { enabled: boolean;
   securityApiEndpoint: string;
   enableRealTimeAlerts: boolean;
   autoExecuteResponses: boolean;
-  auditLoggingEnabled: boolean;
-}
-}
-}
-export interface MLModelConfig {
-  modelUpdateFrequency: number;
+  auditLoggingEnabled: boolean }
+
+
+
+export interface MLModelConfig { modelUpdateFrequency: number;
   enableOnlineLearning: boolean;
   featureEngineeringEnabled: boolean;
   enableEnsembleModels: boolean;
-  crossValidationEnabled: boolean;
-}
-}
-}
-export interface SecurityIntelligence {
-  id: string;
+  crossValidationEnabled: boolean }
+
+
+
+export interface SecurityIntelligence { id: string;
   timestamp: Date;
   type: SecurityIntelligenceType;
   severity: SecuritySeverity;
   confidence: number;
   sources: SecurityIntelligenceSource;
-  correlatedEvents: (SecurityEvent | UserBehaviorEvent)[];
+  correlatedEvents: (SecurityEvent | UserBehaviorEvent)[] }
   predictions: ThreatPrediction;
   anomalies: BehaviorAnomaly;
   riskScore: number;
@@ -70,10 +65,9 @@ export interface SecurityIntelligence {
   recommendedActions: SecurityAction;
   autoResolved: boolean;
   resolutionTime?: Date;
-}
-}
-export enum SecurityIntelligenceType {
-  CORRELATED_THREAT = 'correlated_threat',
+
+
+export enum SecurityIntelligenceType { CORRELATED_THREAT = 'correlated_threat',
   BEHAVIORAL_ANOMALY = 'behavioral_anomaly',
   PREDICTIVE_ALERT = 'predictive_alert',
   COMPOUND_RISK = 'compound_risk',
@@ -85,15 +79,15 @@ export enum SecurityIntelligenceType {
   HIGH = 'high',
   CRITICAL = 'critical'
   export interface SecurityIntelligenceSource {
-  sourceType: 'predictive' | 'behavioral' | 'external';
+  sourceType: 'predictive' | 'behavioral' | 'external' }
   sourceId: string;
   weight: number;
   confidence: number;
-}
-}
-}
-export interface SecurityAction {
-  actionId: string;
+
+
+
+
+export interface SecurityAction { actionId: string;
   actionType: SecurityActionType;
   target: string;
   parameters: Record<string, unknown>;
@@ -101,32 +95,29 @@ export interface SecurityAction {
   estimatedEffectiveness: number;
   requiresApproval: boolean;
   executedAt?: Date;
-  executionResult?: string;
-}
-}
-export enum SecurityActionType {
-  ALERT_SECURITY_TEAM = 'alert_security_team',
-  INCREASE_MONITORING = 'increase_monitoring',
-  RATE_LIMIT_USER = 'rate_limit_user',
-  REQUIRE_AUTHENTICATION = 'require_authentication',
-  TEMPORARY_ACCOUNT_LOCK = 'temporary_account_lock',
-  REVOKE_SESSION = 'revoke_session',
-  ESCALATE_TO_ADMIN = 'escalate_to_admin',
-  QUARANTINE_RESOURCE = 'quarantine_resource',
-  UPDATE_SECURITY_POLICY = 'update_security_policy',
+  executionResult?: string }
+
+export enum SecurityActionType { ALERT_SECURITY_TEAM = 'alert_security_team'
+  INCREASE_MONITORING = 'increase_monitoring'
+  RATE_LIMIT_USER = 'rate_limit_user'
+  REQUIRE_AUTHENTICATION = 'require_authentication'
+  TEMPORARY_ACCOUNT_LOCK = 'temporary_account_lock'
+  REVOKE_SESSION = 'revoke_session'
+  ESCALATE_TO_ADMIN = 'escalate_to_admin'
+  QUARANTINE_RESOURCE = 'quarantine_resource'
+  UPDATE_SECURITY_POLICY = 'update_security_policy' }
   TRIGGER_INCIDENT_RESPONSE = 'trigger_incident_response'
-  export interface SecurityMetrics {
-  totalEvents: number;
+  export interface SecurityMetrics { totalEvents: number;
   threatsDetected: number;
   anomaliesDetected: number;
   accuracyRate: number;
   falsePositiveRate: number;
   responseTime: number;
   systemHealth: number;
-  modelPerformance: ModelPerformanceMetrics;
-}
-}
-}
+  modelPerformance: ModelPerformanceMetrics }
+
+
+
 export interface ModelPerformanceMetrics {
   predictiveAccuracy: number;
   behavioralAccuracy: number;
@@ -136,8 +127,8 @@ export interface ModelPerformanceMetrics {
   // ==========================================
   // MAIN FRAMEWORK CLASS
   // ==========================================
-}
-}
+
+
 export class MLSecurityAnalyticsFramework extends EventEmitter {
   private predictiveAnalytics: PredictiveSecurityAnalytics;
   private behaviorAnalytics: UserBehaviorAnalytics;
@@ -148,35 +139,34 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
   private epic17Connector: Epic17Connector;
   private processingQueue: SecurityIntelligence = [];
   private isProcessing = false;
-  constructor(config: Partial<SecurityAnalyticsConfig> = {}) {
-  super();
+  constructor(config: Partial<SecurityAnalyticsConfig> = {}) { super();
   this.config = {
-  enablePredictiveAnalytics: true,
-  enableBehaviorAnalytics: true,
-  enableCrossCorrelation: true,
-  alertThreshold: 0.7,
-  autoResponseEnabled: false,
+  enablePredictiveAnalytics: true
+  enableBehaviorAnalytics: true
+  enableCrossCorrelation: true
+  alertThreshold: 0.7
+  autoResponseEnabled: false
   epic1Integration: {
-  enabled: true,
-  analyticsEndpoint: '/api/analytics',
-  metricsCollectionInterval: 60000,
-  enableDataStreaming: true,
-  dataRetentionDays: 90,
-},
-  epic17Integration: {
-  enabled: true,
-  securityApiEndpoint: '/api/security',
-  enableRealTimeAlerts: true,
-  autoExecuteResponses: false,
-  auditLoggingEnabled: true,
-},
-  mlModelConfig: {
-  modelUpdateFrequency: 86400000, // 24 hours,
-  enableOnlineLearning: true,
-  featureEngineeringEnabled: true,
-  enableEnsembleModels: true,
-  crossValidationEnabled: true,
-}
+  enabled: true
+  analyticsEndpoint: '/api/analytics'
+  metricsCollectionInterval: 60000
+  enableDataStreaming: true
+  dataRetentionDays: 90 }
+
+  epic17Integration: { 
+  enabled: true
+  securityApiEndpoint: '/api/security'
+  enableRealTimeAlerts: true
+  autoExecuteResponses: false
+  auditLoggingEnabled: true }
+
+  mlModelConfig: { 
+  modelUpdateFrequency: 86400000, // 24 hours
+  enableOnlineLearning: true
+  featureEngineeringEnabled: true
+  enableEnsembleModels: true
+  crossValidationEnabled: true }
+
       ...config
     };
     this.initializeComponents();
@@ -185,45 +175,39 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
   // ==========================================
   // INITIALIZATION
   // ==========================================
-  private initializeComponents(): void {
-  // Initialize analytics engines
+  private initializeComponents(): void { // Initialize analytics engines
   if (this.config.enablePredictiveAnalytics) {
   this.predictiveAnalytics = new PredictiveSecurityAnalytics({)
-  enableRealTimeAnalysis: true,
-  alertingEnabled: false, // We'll handle alerting at framework level,
-  autoResponseEnabled: false,
+  enableRealTimeAnalysis: true
+  alertingEnabled: false, // We'll handle alerting at framework level
+  autoResponseEnabled: false }
 });
-    if (this.config.enableBehaviorAnalytics) {
-  this.behaviorAnalytics = new UserBehaviorAnalytics({)
-  enableRealTimeDetection: true,
-  anomalyDetectionSensitivity: 0.6,
+    if (this.config.enableBehaviorAnalytics) { this.behaviorAnalytics = new UserBehaviorAnalytics({)
+  enableRealTimeDetection: true
+  anomalyDetectionSensitivity: 0.6 }
 });
     // Initialize correlation engine
     this.correlationEngine = new CorrelationEngine();
     // Initialize Epic connectors
     this.epic1Connector = new Epic1Connector(this.config.epic1Integration);
     this.epic17Connector = new Epic17Connector(this.config.epic17Integration);
-  private setupEventHandlers(): void {
-  // Handle predictive analytics events
+  private setupEventHandlers(): void { // Handle predictive analytics events
   if (this.predictiveAnalytics) {
-  this.predictiveAnalytics.on('threatPredicted', (prediction: ThreatPrediction) => {,
+  this.predictiveAnalytics.on('threatPredicted', (prediction: ThreatPrediction) => { }
   this.handleThreatPrediction(prediction);
 });
-      this.predictiveAnalytics.on('eventProcessed', (event: SecurityEvent) => {
-  this.epic1Connector.sendMetrics('security_event', { )
-  type: event.eventType,
-  severity: event.severity,
+      this.predictiveAnalytics.on('eventProcessed', (event: SecurityEvent) => { this.epic1Connector.sendMetrics('security_event', { )
+  type: event.eventType
+  severity: event.severity }
 });
       });
     // Handle behavior analytics events
-    if (this.behaviorAnalytics) {
-  this.behaviorAnalytics.on('anomalyDetected', (anomaly: BehaviorAnomaly) => {,
+    if (this.behaviorAnalytics) { this.behaviorAnalytics.on('anomalyDetected', (anomaly: BehaviorAnomaly) => { }
   this.handleBehaviorAnomaly(anomaly);
 });
-      this.behaviorAnalytics.on('profileUpdated', (data) => {
-  this.epic1Connector.sendMetrics('user_profile_update', {)
-  userId: data.userId,
-  events: data.profile.totalEvents,
+      this.behaviorAnalytics.on('profileUpdated', (data) => { this.epic1Connector.sendMetrics('user_profile_update', {)
+  userId: data.userId
+  events: data.profile.totalEvents }
 });
       });
   // ==========================================
@@ -232,9 +216,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
   /**
    * Process security event through both analytics engines
    */
-  public async processSecurityEvent(event: SecurityEvent): Promise<void> {
-
-    try {
+  public async processSecurityEvent(event: SecurityEvent): Promise<void> { try {
       // Send to Epic 1 analytics
       await this.epic1Connector.recordEvent('security_event', event);
       // Process through predictive analytics
@@ -244,16 +226,13 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       const behaviorEvent = this.convertToBehaviorEvent(event);
       if (behaviorEvent && this.config.enableBehaviorAnalytics && this.behaviorAnalytics) {
         await this.behaviorAnalytics.processUserEvent(behaviorEvent);
-      this.emit('eventProcessed', event);
-    } catch (error) {
+      this.emit('eventProcessed', event) } catch (error) {
       console.error('Error processing security event:', error);
       this.emit('processingError', { error, event });
   /**
    * Process user behavior event
    */
-  public async processUserBehaviorEvent(event: UserBehaviorEvent): Promise<void> {
-
-    try {
+  public async processUserBehaviorEvent(event: UserBehaviorEvent): Promise<void> { try {
       // Send to Epic 1 analytics
       await this.epic1Connector.recordEvent('user_behavior', event);
       // Process through behavior analytics
@@ -263,74 +242,67 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       const securityEvent = this.convertToSecurityEvent(event);
       if (securityEvent && this.config.enablePredictiveAnalytics && this.predictiveAnalytics) {
         await this.predictiveAnalytics.processSecurityEvent(securityEvent);
-      this.emit('behaviorEventProcessed', event);
-    } catch (error) {
+      this.emit('behaviorEventProcessed', event) } catch (error) {
       console.error('Error processing behavior event:', error);
       this.emit('processingError', { error, event });
   // ==========================================
   // INTELLIGENCE GENERATION
   // ==========================================
-  private async handleThreatPrediction(prediction: ThreatPrediction): Promise<void> {
-
-  const intelligence = await this.createThreatIntelligence(prediction);
+  private async handleThreatPrediction(prediction: ThreatPrediction): Promise<void> { const intelligence = await this.createThreatIntelligence(prediction);
   await this.processIntelligence(intelligence);
-  private async handleBehaviorAnomaly(anomaly: BehaviorAnomaly): Promise<void> {,
+  private async handleBehaviorAnomaly(anomaly: BehaviorAnomaly): Promise<void> {
   const intelligence = await this.createAnomalyIntelligence(anomaly);
   await this.processIntelligence(intelligence);
-  private async createThreatIntelligence(prediction: ThreatPrediction): Promise<SecurityIntelligence> {,
+  private async createThreatIntelligence(prediction: ThreatPrediction): Promise<SecurityIntelligence> {
   return {
-  id: this.generateIntelligenceId(),
-  timestamp: new Date(),
-  type: SecurityIntelligenceType.PREDICTIVE_ALERT,
-  severity: this.mapConfidenceToSeverity(prediction.confidence),
-  confidence: prediction.confidence,
-  sources: [{,
-  sourceType: 'predictive',
-  sourceId: prediction.predictionId,
-  weight: 1.0,
-  confidence: prediction.confidence,
-}],
-      correlatedEvents: [],
-      predictions: [prediction],
-      anomalies: [],
-      riskScore: prediction.riskScore,
-      businessImpact: prediction.riskScore * 0.8,
-      recommendedActions: await this.convertPreventiveActions(prediction.recommendedActions),
+  id: this.generateIntelligenceId()
+  timestamp: new Date()
+  type: SecurityIntelligenceType.PREDICTIVE_ALERT
+  severity: this.mapConfidenceToSeverity(prediction.confidence)
+  confidence: prediction.confidence
+  sources: [{
+  sourceType: 'predictive'
+  sourceId: prediction.predictionId
+  weight: 1.0
+  confidence: prediction.confidence }
+]
+      correlatedEvents: []
+      predictions: [prediction]
+      anomalies: []
+      riskScore: prediction.riskScore
+      businessImpact: prediction.riskScore * 0.8
+      recommendedActions: await this.convertPreventiveActions(prediction.recommendedActions)
       autoResolved: false;
   };
-  private async createAnomalyIntelligence(anomaly: BehaviorAnomaly): Promise<SecurityIntelligence> {
-
-  return {
-  id: this.generateIntelligenceId(),
-  timestamp: new Date(),
-  type: SecurityIntelligenceType.BEHAVIORAL_ANOMALY,
-  severity: this.mapAnomalySeverityToSecuritySeverity(anomaly.severity),
-  confidence: anomaly.confidence,
-  sources: [{,
-  sourceType: 'behavioral',
-  sourceId: anomaly.id,
-  weight: 1.0,
-  confidence: anomaly.confidence,
-}],
-      correlatedEvents: anomaly.triggeringEvents,
-      predictions: [],
-      anomalies: [anomaly],
-      riskScore: anomaly.riskAssessment.overallRisk,
-      businessImpact: anomaly.riskAssessment.businessImpact,
-      recommendedActions: await this.convertStringActions(anomaly.recommendedActions),
+  private async createAnomalyIntelligence(anomaly: BehaviorAnomaly): Promise<SecurityIntelligence> { return {
+  id: this.generateIntelligenceId()
+  timestamp: new Date()
+  type: SecurityIntelligenceType.BEHAVIORAL_ANOMALY
+  severity: this.mapAnomalySeverityToSecuritySeverity(anomaly.severity)
+  confidence: anomaly.confidence
+  sources: [{
+  sourceType: 'behavioral'
+  sourceId: anomaly.id
+  weight: 1.0
+  confidence: anomaly.confidence }
+]
+      correlatedEvents: anomaly.triggeringEvents
+      predictions: []
+      anomalies: [anomaly]
+      riskScore: anomaly.riskAssessment.overallRisk
+      businessImpact: anomaly.riskAssessment.businessImpact
+      recommendedActions: await this.convertStringActions(anomaly.recommendedActions)
       autoResolved: false;
   };
   // ==========================================
   // CORRELATION ENGINE
   // ==========================================
-  private async processIntelligence(intelligence: SecurityIntelligence): Promise<void> {
-
-  // Store intelligence
+  private async processIntelligence(intelligence: SecurityIntelligence): Promise<void> { // Store intelligence
   this.intelligenceStore.set(intelligence.id, intelligence);
   // Cross-correlate with existing intelligence
   if (this.config.enableCrossCorrelation) {
   const correlatedIntelligence = await this.correlationEngine.correlate(;);
-  intelligence,
+  intelligence
   Array.from(this.intelligenceStore.values())
   );
   if (correlatedIntelligence) {
@@ -347,21 +319,13 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
   // ==========================================
   // AUTOMATED RESPONSE
   // ==========================================
-  private startProcessingLoop(): void {,
-  setInterval(async () => {
-  if (!this.isProcessing && this.processingQueue.length > 0) {
+  private startProcessingLoop(): void { }
+  setInterval(async () => { if (!this.isProcessing && this.processingQueue.length > 0) {
   this.isProcessing = true;
   try {
   const intelligence = this.processingQueue.shift()!;
-  await this.processSecurityIntelligence(intelligence);
-} catch (error) {
-  console.error('Intelligence processing error:', error);
-} finally {
-          this.isProcessing = false;
-    }, 5000); // Process every 5 seconds
-  private async processSecurityIntelligence(intelligence: SecurityIntelligence): Promise<void> {
-
-  // Check if intelligence meets alert threshold
+  await this.processSecurityIntelligence(intelligence) } catch (error) { console.error('Intelligence processing error:', error) } finally { this.isProcessing = false }, 5000); // Process every 5 seconds
+  private async processSecurityIntelligence(intelligence: SecurityIntelligence): Promise<void> { // Check if intelligence meets alert threshold
   if (intelligence.confidence >= this.config.alertThreshold) {
   await this.triggerAlert(intelligence);
   // Execute automated responses if enabled
@@ -369,112 +333,103 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
   await this.executeAutomatedResponses(intelligence);
   // Update metrics
   this.updateMetrics(intelligence);
-  private async triggerAlert(intelligence: SecurityIntelligence): Promise<void> {,
+  private async triggerAlert(intelligence: SecurityIntelligence): Promise<void> {
   const alert = {
-  id: this.generateAlertId(),
-  timestamp: new Date(),
-  intelligence,
-  alertLevel: intelligence.severity,
-  message: this.generateAlertMessage(intelligence),
-  recipients: await this.getAlertRecipients(intelligence.severity),
+  id: this.generateAlertId()
+  timestamp: new Date()
+  intelligence
+  alertLevel: intelligence.severity
+  message: this.generateAlertMessage(intelligence)
+  recipients: await this.getAlertRecipients(intelligence.severity) }
 };
     // Send to Epic 17 alerting system
-    if (this.config.epic17Integration.enableRealTimeAlerts) {
-  await this.epic17Connector.sendAlert(alert);
+    if (this.config.epic17Integration.enableRealTimeAlerts) { await this.epic17Connector.sendAlert(alert);
   this.emit('alertTriggered', alert);
-  private async executeAutomatedResponses(intelligence: SecurityIntelligence): Promise<void> {,
+  private async executeAutomatedResponses(intelligence: SecurityIntelligence): Promise<void> { }
   for (const action of intelligence.recommendedActions) {
   if (!action.requiresApproval && action.priority > 7) {
   try {
   await this.executeSecurityAction(action);
   action.executedAt = new Date();
   action.executionResult = 'success'
-  } catch (error) {
+ catch (error) {
           action.executionResult = `failed: ${error.message}`;}
           console.error('Action execution failed:', error);
   // ==========================================
   // HELPER METHODS
   // ==========================================
-  private convertToBehaviorEvent(securityEvent: SecurityEvent): UserBehaviorEvent | null {
-  if (!securityEvent.userId) return null;
+  private convertToBehaviorEvent(securityEvent: SecurityEvent): UserBehaviorEvent | null { if (!securityEvent.userId) return null;
   return {
-  id: securityEvent.id,
-  userId: securityEvent.userId,
-  sessionId: securityEvent.sessionId || '',
-  timestamp: securityEvent.timestamp,
-  actionType: this.mapSecurityEventToUserAction(securityEvent.eventType),
-  resource: securityEvent.metadata.resource as string || 'unknown',
-  metadata: securityEvent.metadata,
-  sourceIP: securityEvent.sourceIP,
-  userAgent: securityEvent.userAgent || '',
-  geolocation: securityEvent.geolocation,
-  success: securityEvent.severity !== SecuritySeverity.CRITICAL,
-  duration: securityEvent.metadata.duration as number,
-  dataVolumeBytes: securityEvent.metadata.dataVolumeBytes as number,
+  id: securityEvent.id
+  userId: securityEvent.userId
+  sessionId: securityEvent.sessionId || ''
+  timestamp: securityEvent.timestamp
+  actionType: this.mapSecurityEventToUserAction(securityEvent.eventType)
+  resource: securityEvent.metadata.resource as string || 'unknown'
+  metadata: securityEvent.metadata
+  sourceIP: securityEvent.sourceIP
+  userAgent: securityEvent.userAgent || ''
+  geolocation: securityEvent.geolocation
+  success: securityEvent.severity !== SecuritySeverity.CRITICAL
+  duration: securityEvent.metadata.duration as number
+  dataVolumeBytes: securityEvent.metadata.dataVolumeBytes as number }
 };
-  private convertToSecurityEvent(behaviorEvent: UserBehaviorEvent): SecurityEvent | null {
-  return {
-  id: behaviorEvent.id,
-  timestamp: behaviorEvent.timestamp,
-  userId: behaviorEvent.userId,
-  sessionId: behaviorEvent.sessionId,
-  sourceIP: behaviorEvent.sourceIP,
-  userAgent: behaviorEvent.userAgent,
-  eventType: this.mapUserActionToSecurityEvent(behaviorEvent.actionType),
-  severity: behaviorEvent.success ? SecuritySeverity.INFO : SecuritySeverity.LOW,
-  metadata: behaviorEvent.metadata,
-  riskScore: 0, // Would be calculated,
-  geolocation: behaviorEvent.geolocation,
+  private convertToSecurityEvent(behaviorEvent: UserBehaviorEvent): SecurityEvent | null { return {
+  id: behaviorEvent.id
+  timestamp: behaviorEvent.timestamp
+  userId: behaviorEvent.userId
+  sessionId: behaviorEvent.sessionId
+  sourceIP: behaviorEvent.sourceIP
+  userAgent: behaviorEvent.userAgent
+  eventType: this.mapUserActionToSecurityEvent(behaviorEvent.actionType)
+  severity: behaviorEvent.success ? SecuritySeverity.INFO : SecuritySeverity.LOW
+  metadata: behaviorEvent.metadata
+  riskScore: 0, // Would be calculated
+  geolocation: behaviorEvent.geolocation }
 };
-  private mapSecurityEventToUserAction(eventType: any): any {
-  // Mapping logic between event types
+  private mapSecurityEventToUserAction(eventType: any): any { // Mapping logic between event types
   return 'navigation'; // Simplified
-  private mapUserActionToSecurityEvent(actionType: any): any {,
+  private mapUserActionToSecurityEvent(actionType: any): any {
   // Mapping logic between action types
   return 'api_access'; // Simplified
-  private mapConfidenceToSeverity(confidence: number): SecuritySeverity {,
+  private mapConfidenceToSeverity(confidence: number): SecuritySeverity {
   if (confidence >= 0.9) return SecuritySeverity.CRITICAL;
   if (confidence >= 0.8) return SecuritySeverity.HIGH;
   if (confidence >= 0.6) return SecuritySeverity.MEDIUM;
   if (confidence >= 0.4) return SecuritySeverity.LOW;
   return SecuritySeverity.INFO;
-  private mapAnomalySeverityToSecuritySeverity(severity: any): SecuritySeverity {,
-  const mapping: Record<string, SecuritySeverity> = {,
-  'critical': SecuritySeverity.CRITICAL,
-  'high': SecuritySeverity.HIGH,
-  'medium': SecuritySeverity.MEDIUM,
-  'low': SecuritySeverity.LOW,
+  private mapAnomalySeverityToSecuritySeverity(severity: any): SecuritySeverity {
+  const mapping: Record<string, SecuritySeverity> = {
+  'critical': SecuritySeverity.CRITICAL
+  'high': SecuritySeverity.HIGH
+  'medium': SecuritySeverity.MEDIUM
+  'low': SecuritySeverity.LOW }
 };
     return mapping[severity] || SecuritySeverity.INFO;
-  private escalateSeverity(severity: SecuritySeverity): SecuritySeverity {
-  const escalation: Record<SecuritySeverity, SecuritySeverity> = {,
-  [SecuritySeverity.INFO]: SecuritySeverity.LOW,
-  [SecuritySeverity.LOW]: SecuritySeverity.MEDIUM,
-  [SecuritySeverity.MEDIUM]: SecuritySeverity.HIGH,
-  [SecuritySeverity.HIGH]: SecuritySeverity.CRITICAL,
-  [SecuritySeverity.CRITICAL]: SecuritySeverity.CRITICAL,
+  private escalateSeverity(severity: SecuritySeverity): SecuritySeverity { const escalation: Record<SecuritySeverity, SecuritySeverity> = {
+  [SecuritySeverity.INFO]: SecuritySeverity.LOW
+  [SecuritySeverity.LOW]: SecuritySeverity.MEDIUM
+  [SecuritySeverity.MEDIUM]: SecuritySeverity.HIGH
+  [SecuritySeverity.HIGH]: SecuritySeverity.CRITICAL
+  [SecuritySeverity.CRITICAL]: SecuritySeverity.CRITICAL }
 };
     return escalation[severity];
-  private async convertPreventiveActions(actions: any): Promise<SecurityAction> {
-
-  return actions.map(action => ({)
-  actionId: this.generateActionId(),
-  actionType: SecurityActionType.ALERT_SECURITY_TEAM, // Simplified mapping,
-  target: action.target,
-  parameters: action.parameters,
-  priority: action.urgency === 'immediate' ? 10 : 5,
-  estimatedEffectiveness: action.estimatedEffectiveness,
-  requiresApproval: action.urgency !== 'immediate',
+  private async convertPreventiveActions(actions: any): Promise<SecurityAction> { return actions.map(action => ({)
+  actionId: this.generateActionId()
+  actionType: SecurityActionType.ALERT_SECURITY_TEAM, // Simplified mapping
+  target: action.target
+  parameters: action.parameters
+  priority: action.urgency === 'immediate' ? 10 : 5
+  estimatedEffectiveness: action.estimatedEffectiveness
+  requiresApproval: action.urgency !== 'immediate' }
 }));
-  private async convertStringActions(actions: string): Promise<SecurityAction> {
-
-    return actions.map(action => ({)
-  actionId: this.generateActionId(),
-      actionType: SecurityActionType.ALERT_SECURITY_TEAM,
-      target: 'security_team',
-      parameters: { description: action },
-      priority: 5,
-      estimatedEffectiveness: 0.7,
+  private async convertStringActions(actions: string): Promise<SecurityAction> { return actions.map(action => ({)
+  actionId: this.generateActionId()
+      actionType: SecurityActionType.ALERT_SECURITY_TEAM
+      target: 'security_team' }
+      parameters: { description: action }
+      priority: 5
+      estimatedEffectiveness: 0.7
       requiresApproval: true;
   }));
   private generateIntelligenceId(): string {
@@ -493,57 +448,52 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
 
     // Integration point with Epic 17 security systems
     console.log(`🚨 EXECUTING SECURITY ACTION: ${action.actionType} on ${action.target}`);}
-  private updateMetrics(intelligence: SecurityIntelligence): void {
-  // Update security metrics for Epic 1 analytics
+  private updateMetrics(intelligence: SecurityIntelligence): void { // Update security metrics for Epic 1 analytics
   this.epic1Connector.sendMetrics('security_intelligence', {)
-  type: intelligence.type,
-  severity: intelligence.severity,
-  confidence: intelligence.confidence,
-  riskScore: intelligence.riskScore,
+  type: intelligence.type
+  severity: intelligence.severity
+  confidence: intelligence.confidence
+  riskScore: intelligence.riskScore }
 });
   // ==========================================
   // PUBLIC API
   // ==========================================
-  public getSecurityIntelligence(): SecurityIntelligence {
-  return Array.from(this.intelligenceStore.values());
-  public getActiveThreats(): SecurityIntelligence {,
+  public getSecurityIntelligence(): SecurityIntelligence { return Array.from(this.intelligenceStore.values());
+  public getActiveThreats(): SecurityIntelligence {
   return Array.from(this.intelligenceStore.values())
   .filter(intel => !intel.autoResolved && intel.severity !== SecuritySeverity.INFO);
-  public async getSecurityMetrics(): Promise<SecurityMetrics> {,
+  public async getSecurityMetrics(): Promise<SecurityMetrics> {
   const intelligence = Array.from(this.intelligenceStore.values());
   return {
-  totalEvents: intelligence.length,
-  threatsDetected: intelligence.filter(i => i.type === SecurityIntelligenceType.PREDICTIVE_ALERT).length,
-  anomaliesDetected: intelligence.filter(i => i.type === SecurityIntelligenceType.BEHAVIORAL_ANOMALY).length,
-  accuracyRate: 0.85, // Would be calculated from actual data,
-  falsePositiveRate: 0.15,
-  responseTime: 30, // seconds,
-  systemHealth: 95,
+  totalEvents: intelligence.length
+  threatsDetected: intelligence.filter(i => i.type === SecurityIntelligenceType.PREDICTIVE_ALERT).length
+  anomaliesDetected: intelligence.filter(i => i.type === SecurityIntelligenceType.BEHAVIORAL_ANOMALY).length
+  accuracyRate: 0.85, // Would be calculated from actual data
+  falsePositiveRate: 0.15
+  responseTime: 30, // seconds
+  systemHealth: 95
   modelPerformance: {
-  predictiveAccuracy: 0.87,
-  behavioralAccuracy: 0.82,
-  crossCorrelationEffectiveness: 0.78,
-  trainingDataQuality: 0.91,
+  predictiveAccuracy: 0.87
+  behavioralAccuracy: 0.82
+  crossCorrelationEffectiveness: 0.78
+  trainingDataQuality: 0.91
   featureImportance: {
-  'temporal_patterns': 0.25,
-  'geographic_patterns': 0.20,
-  'access_patterns': 0.30,
-  'volume_patterns': 0.15,
-  'device_patterns': 0.10,
+  'temporal_patterns': 0.25
+  'geographic_patterns': 0.20
+  'access_patterns': 0.30
+  'volume_patterns': 0.15
+  'device_patterns': 0.10 }
 };
   public updateConfiguration(newConfig: Partial<SecurityAnalyticsConfig>): void {
     this.config = { ...this.config, ...newConfig };
     // Update component configurations
-    if (this.predictiveAnalytics && newConfig.enablePredictiveAnalytics !== undefined) {
-  this.predictiveAnalytics.updateConfiguration({)
-  enableRealTimeAnalysis: newConfig.enablePredictiveAnalytics,
+    if (this.predictiveAnalytics && newConfig.enablePredictiveAnalytics !== undefined) { this.predictiveAnalytics.updateConfiguration({)
+  enableRealTimeAnalysis: newConfig.enablePredictiveAnalytics }
 });
-    if (this.behaviorAnalytics && newConfig.enableBehaviorAnalytics !== undefined) {
-  this.behaviorAnalytics.updateConfig({)
-  enableRealTimeDetection: newConfig.enableBehaviorAnalytics,
+    if (this.behaviorAnalytics && newConfig.enableBehaviorAnalytics !== undefined) { this.behaviorAnalytics.updateConfig({)
+  enableRealTimeDetection: newConfig.enableBehaviorAnalytics }
 });
-  public destroy(): void {
-    if (this.predictiveAnalytics) {
+  public destroy(): void { if (this.predictiveAnalytics) {
       this.predictiveAnalytics.destroy();
     if (this.behaviorAnalytics) {
       this.behaviorAnalytics.destroy();
@@ -556,7 +506,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
 // ==========================================
 class CorrelationEngine {
   async correlate(((
-    intelligence: SecurityIntelligence,
+    intelligence: SecurityIntelligence }
     existingIntelligence: SecurityIntelligence
   ): Promise<SecurityIntelligence | null> {
 
@@ -594,32 +544,31 @@ class Epic17Connector {
 // EPIC 31 CONVENIENCE FACTORY
 // ==========================================
 
-export class Epic31SecurityAnalytics {
-  private static instance: MLSecurityAnalyticsFramework;
+export class Epic31SecurityAnalytics { private static instance: MLSecurityAnalyticsFramework;
   /**
   * Get singleton instance configured for Epic 1 and Epic 17 integration
   */
-  public static getInstance(): MLSecurityAnalyticsFramework {,
+  public static getInstance(): MLSecurityAnalyticsFramework {
   if (!this.instance) {
   this.instance = new MLSecurityAnalyticsFramework({)
-  enablePredictiveAnalytics: true,
-  enableBehaviorAnalytics: true,
-  enableCrossCorrelation: true,
-  alertThreshold: 0.7,
-  autoResponseEnabled: false, // Start with manual approval,
+  enablePredictiveAnalytics: true
+  enableBehaviorAnalytics: true
+  enableCrossCorrelation: true
+  alertThreshold: 0.7
+  autoResponseEnabled: false, // Start with manual approval
   epic1Integration: {
-  enabled: true,
-  analyticsEndpoint: '/api/analytics',
-  metricsCollectionInterval: 60000,
-  enableDataStreaming: true,
-  dataRetentionDays: 90,
-},
-  epic17Integration: {
-  enabled: true,
-  securityApiEndpoint: '/api/security',
-  enableRealTimeAlerts: true,
-  autoExecuteResponses: false,
-  auditLoggingEnabled: true,
+  enabled: true
+  analyticsEndpoint: '/api/analytics'
+  metricsCollectionInterval: 60000
+  enableDataStreaming: true
+  dataRetentionDays: 90 }
+
+  epic17Integration: { 
+  enabled: true
+  securityApiEndpoint: '/api/security'
+  enableRealTimeAlerts: true
+  autoExecuteResponses: false
+  auditLoggingEnabled: true }
 });
     return this.instance;
   /**

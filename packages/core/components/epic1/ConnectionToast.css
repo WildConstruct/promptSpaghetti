@@ -1,0 +1,84 @@
+/* Connection Toast Styles */
+
+.epic1-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  max-width: 500px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.epic1-toast.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Toast types */
+.epic1-toast-error {
+  border-left: 4px solid #ef4444;
+}
+
+.epic1-toast-warning {
+  border-left: 4px solid #f59e0b;
+}
+
+.epic1-toast-success {
+  border-left: 4px solid #10b981;
+}
+
+/* Toast content */
+.epic1-toast-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.epic1-toast-message {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.epic1-toast-close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.epic1-toast-close:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* Multiple toasts stacking */
+.epic1-toast:nth-child(2) {
+  top: 90px;
+}
+
+.epic1-toast:nth-child(3) {
+  top: 160px;
+}
+
+.epic1-toast:nth-child(4) {
+  top: 230px;
+}

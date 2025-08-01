@@ -351,14 +351,23 @@ export class DatabaseEventRepository {
     `;
                         const stmt = this.db.prepare(sql);
                         const results = stmt.all(...params);
-                        return results.map((row) => ({}), groupBy, row[groupBy], aggregates, {
+                        return results.map((row) => ({}));
+                        groupBy: row[groupBy],
+                            aggregates;
+                        {
                             count: row.count,
-                            firstSeen: row.firstSeen,
-                            lastSeen: row.lastSeen,
-                            uniqueSources: row.uniqueSources,
-                            uniqueUsers: row.uniqueUsers,
-                            uniqueSessions: row.uniqueSessions,
-                        });
+                                firstSeen;
+                            row.firstSeen,
+                                lastSeen;
+                            row.lastSeen,
+                                uniqueSources;
+                            row.uniqueSources,
+                                uniqueUsers;
+                            row.uniqueUsers,
+                                uniqueSessions;
+                            row.uniqueSessions,
+                            ;
+                        }
                         ;
                         /**
                          * Get time series data
@@ -396,7 +405,9 @@ export class DatabaseEventRepository {
     `,
                             const: stmt = this.db.prepare(sql),
                             const: results = stmt.all(...params),
-                            return: results.map((row) => ({}), timestamp, parseInt(row.timestamp), value, row.value)
+                            return: results.map((row) => ({})),
+                            timestamp: parseInt(row.timestamp),
+                            value: row.value,
                         };
                         ;
                         /**
@@ -726,8 +737,9 @@ export class DatabaseEventRepository {
                                                                                                 });
                                                                                                 ;
                                                                                                 async;
-                                                                                                getTimeSeriesData(metric, string);
-                                                                                                granularity: string,
+                                                                                                getTimeSeriesData(metric, string),
+                                                                                                    granularity;
+                                                                                                string,
                                                                                                     filter ?  : EventFilter;
                                                                                                 Promise < Array < { timestamp: number, value: number } >> {
                                                                                                     // Simplified implementation for in-memory repository

@@ -8,6 +8,7 @@ import React from 'react';
 import { HelpRequestConfig } from '../../services/Epic16HelpRequestService';
 
 }
+}
 interface Epic16HelpRequestSystemProps {
     userId: string;
     userRole: 'user' | 'agent' | 'admin';
@@ -19,4 +20,5 @@ interface Epic16HelpRequestSystemProps {
 export declare const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps>;
 export default Epic16HelpRequestSystem;
 //# sourceMappingURL=Epic16HelpRequestSystem.d.ts.map
+}
 }

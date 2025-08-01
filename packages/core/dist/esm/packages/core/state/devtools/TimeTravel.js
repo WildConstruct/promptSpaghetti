@@ -58,8 +58,7 @@ string;
         domain,
         snapshot: compressed,
         metadata: {
-            description: options.description || `Snapshot for ${domain}`
-        }
+            description: options.description || `Snapshot for ${domain}` }
     }, tags;
      || [],
         branchId;
@@ -103,8 +102,7 @@ string;
         domain,
         change,
         metadata: {
-            description: options.description || `${change.type} in ${domain}`
-        }
+            description: options.description || `${change.type} in ${domain}` }
     }, tags;
      || [],
         branchId;
@@ -186,8 +184,8 @@ boolean;
                                     {
                                         return this.goToPosition(this.timelineOrder.length - 1);
                                         // Branching
-                                        createBranch(name, string, options, {});
-                                        description ?  : string;
+                                        createBranch(name, string, options, {}),
+                                            description ?  : string;
                                         fromEntryId ?  : string;
                                         author ?  : string;
                                         tags ?  : string;
@@ -269,8 +267,7 @@ boolean;
                                                 type: 'merge',
                                                 domain: 'system',
                                                 metadata: {
-                                                    description: message || `Merge ${sourceBranch.name} into ${targetBranch.name}`
-                                                }
+                                                    description: message || `Merge ${sourceBranch.name} into ${targetBranch.name}` }
                                             }, tags, branchId, parentId, childIds, size, compressed;
                                         }
                                         ;
@@ -419,8 +416,8 @@ boolean;
                                                                 TimelineEntry;
                                                                 {
                                                                     return this.getFilteredTimeline(query);
-                                                                    searchTimeline(searchTerm, string, options, {});
-                                                                    fields ?  : string;
+                                                                    searchTimeline(searchTerm, string, options, {}),
+                                                                        fields ?  : string;
                                                                     caseSensitive ?  : boolean;
                                                                     regex ?  : boolean;
                                                                 }

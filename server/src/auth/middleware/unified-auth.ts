@@ -12,8 +12,8 @@ import { AuthenticationService } from '../services/AuthenticationService';
 import { ApiKeyManagementService } from '../services/ApiKeyManagementService';
 import { WebhookAuthenticationService } from '../services/WebhookAuthenticationService';
 
-}
-}
+
+
 export interface AuthContext {
   authenticated: boolean;
   method: 'jwt' | 'api_key' | 'oauth' | 'webhook' | 'none';
@@ -22,8 +22,9 @@ export interface AuthContext {
     keyId: string;
     scopes: string[];
     rateLimitStatus: any;
-}
-}
+
+
+
   };
   webhook?: {
     providerId: string;
@@ -41,10 +42,10 @@ export interface AuthContext {
     timestamp: Date;
     source: string;
   };
-}
 
-}
-}
+
+
+
 export interface AuthOptions {
   required?: boolean;
   allowMethods?: Array<'jwt' | 'api_key' | 'oauth' | 'webhook'>;
@@ -52,9 +53,10 @@ export interface AuthOptions {
   requiredPermissions?: string[];
   allowWebhookProviders?: string[];
   bypassForPaths?: string[];
-}
-}
-}
+
+
+
+
 
 export class UnifiedAuthenticationMiddleware {
   constructor(
@@ -74,7 +76,7 @@ export class UnifiedAuthenticationMiddleware {
       requiredPermissions = [],
       allowWebhookProviders = [],
       bypassForPaths = []
-    } = options;
+ = options;
 
     return async (request: FastifyRequest, reply: FastifyReply) => {
       try {
@@ -82,7 +84,7 @@ export class UnifiedAuthenticationMiddleware {
         if (bypassForPaths.some(path => request.routeOptions?.url?.includes(path))) {
           (request as any).authContext = this.createUnauthenticatedContext(request);
           return;
-        }
+
 
         const authContext = await this.authenticateRequest(request, {
           allowMethods,
@@ -97,7 +99,7 @@ export class UnifiedAuthenticationMiddleware {
             timestamp: new Date().toISOString()
           });
           return;
-        }
+
 
         // Check required scopes (for API keys)
         if (requiredScopes.length > 0 && authContext.apiKey) {
@@ -113,8 +115,8 @@ export class UnifiedAuthenticationMiddleware {
               timestamp: new Date().toISOString()
             });
             return;
-          }
-        }
+
+
 
         // Check required permissions (for user-based auth)
         if (requiredPermissions.length > 0) {
@@ -130,24 +132,23 @@ export class UnifiedAuthenticationMiddleware {
               timestamp: new Date().toISOString()
             });
             return;
-          }
-        }
+
+
 
         // Attach auth context to request
         (request as any).authContext = authContext;
 
         // Continue to next handler
         return;
-
-      } catch (error) {
+ catch (error) {
         reply.code(500).send({
           error: 'Authentication middleware error',
           message: error.message,
           timestamp: new Date().toISOString()
         });
-      }
+
     };
-  }
+
 
   /**
    * Authenticate request using multiple methods
@@ -164,36 +165,36 @@ export class UnifiedAuthenticationMiddleware {
       const jwtContext = await this.tryJWTAuthentication(request);
       if (jwtContext.authenticated) {
         return jwtContext;
-      }
-    }
+
+
 
     // Try API key authentication
     if (allowMethods.includes('api_key')) {
       const apiKeyContext = await this.tryApiKeyAuthentication(request);
       if (apiKeyContext.authenticated) {
         return apiKeyContext;
-      }
-    }
+
+
 
     // Try OAuth authentication (if OAuth token in headers)
     if (allowMethods.includes('oauth')) {
       const oauthContext = await this.tryOAuthAuthentication(request);
       if (oauthContext.authenticated) {
         return oauthContext;
-      }
-    }
+
+
 
     // Try webhook authentication
     if (allowMethods.includes('webhook') && allowWebhookProviders.length > 0) {
       const webhookContext = await this.tryWebhookAuthentication(request, allowWebhookProviders);
       if (webhookContext.authenticated) {
         return webhookContext;
-      }
-    }
+
+
 
     // Return unauthenticated context
     return this.createUnauthenticatedContext(request);
-  }
+
 
   /**
    * Try JWT authentication
@@ -204,7 +205,7 @@ export class UnifiedAuthenticationMiddleware {
       const authHeader = request.headers.authorization;
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return this.createUnauthenticatedContext(request);
-      }
+
 
       const token = authHeader.substring(7);
       const user = await this.authService.validateToken(token);
@@ -217,13 +218,13 @@ export class UnifiedAuthenticationMiddleware {
           permissions: user.permissions || this.extractPermissionsFromRoles(user.roles || []),
           metadata: this.createMetadata(request, 'jwt')
         };
-      }
-    } catch (error) {
+
+ catch (error) {
       // JWT validation failed, continue with other methods
-    }
+
 
     return this.createUnauthenticatedContext(request);
-  }
+
 
   /**
    * Try API key authentication
@@ -238,7 +239,7 @@ export class UnifiedAuthenticationMiddleware {
 
       if (!apiKey) {
         return this.createUnauthenticatedContext(request);
-      }
+
 
       const validation = await this.apiKeyService.validateApiKey(
         apiKey,
@@ -255,17 +256,17 @@ export class UnifiedAuthenticationMiddleware {
             keyId: validation.keyId,
             scopes: validation.scopes || [],
             rateLimitStatus: validation.rateLimitStatus
-  }
+
           permissions: validation.scopes || [],
           metadata: this.createMetadata(request, 'api_key')
         };
-      }
-    } catch (error) {
+
+ catch (error) {
       // API key validation failed, continue with other methods
-    }
+
 
     return this.createUnauthenticatedContext(request);
-  }
+
 
   /**
    * Try OAuth authentication
@@ -279,7 +280,7 @@ export class UnifiedAuthenticationMiddleware {
 
       if (!oauthToken) {
         return this.createUnauthenticatedContext(request);
-      }
+
 
       // In a full implementation, this would validate the OAuth token
       // For now, create a basic context structure
@@ -289,16 +290,16 @@ export class UnifiedAuthenticationMiddleware {
         oauth: {
           provider: 'unknown', // Would be determined from token
           token: oauthToken
-  }
+
         permissions: ['oauth:authenticated'],
         metadata: this.createMetadata(request, 'oauth')
       };
-    } catch (error) {
+ catch (error) {
       // OAuth validation failed, continue with other methods
-    }
+
 
     return this.createUnauthenticatedContext(request);
-  }
+
 
   /**
    * Try webhook authentication
@@ -314,7 +315,7 @@ export class UnifiedAuthenticationMiddleware {
       
       if (!providerId) {
         return this.createUnauthenticatedContext(request);
-      }
+
 
       const validation = await this.webhookAuthService.validateWebhookFromRequest(
         request,
@@ -329,17 +330,17 @@ export class UnifiedAuthenticationMiddleware {
             providerId,
             eventType: validation.eventType,
             validation
-  }
+
           permissions: [`webhook:${providerId}`],
           metadata: this.createMetadata(request, 'webhook')
         };
-      }
-    } catch (error) {
+
+ catch (error) {
       // Webhook validation failed, continue with other methods
-    }
+
 
     return this.createUnauthenticatedContext(request);
-  }
+
 
   /**
    * Create unauthenticated context
@@ -351,7 +352,7 @@ export class UnifiedAuthenticationMiddleware {
       permissions: [],
       metadata: this.createMetadata(request, 'none')
     };
-  }
+
 
   /**
    * Create metadata from request
@@ -363,7 +364,7 @@ export class UnifiedAuthenticationMiddleware {
       timestamp: new Date(),
       source
     };
-  }
+
 
   /**
    * Extract permissions from user roles
@@ -385,7 +386,7 @@ export class UnifiedAuthenticationMiddleware {
     });
 
     return [...new Set(permissions)]; // Remove duplicates
-  }
+
 
   /**
    * Extract webhook provider from request
@@ -398,25 +399,25 @@ export class UnifiedAuthenticationMiddleware {
     const params = request.params as any;
     if (params?.providerId && allowWebhookProviders.includes(params.providerId)) {
       return params.providerId;
-    }
+
 
     // Try to extract from headers
     const providerHeader = request.headers['x-webhook-provider'] as string;
     if (providerHeader && allowWebhookProviders.includes(providerHeader)) {
       return providerHeader;
-    }
+
 
     // Try to extract from path
     const path = request.routeOptions?.url || request.url;
     for (const provider of allowWebhookProviders) {
       if (path.includes(`/webhooks/${provider}`) || path.includes(`webhook-${provider}`)) {
         return provider;
-      }
-    }
+
+
 
     return null;
-  }
-}
+
+
 
 /**
  * Factory function to create unified auth middleware for Fastify
@@ -468,7 +469,7 @@ export function createUnifiedAuthPlugin(
 
     fastify.decorate('unifiedAuth', middleware);
   };
-}
+
 
 // TypeScript declaration merging for Fastify decorators
 declare module 'fastify' {
@@ -482,13 +483,14 @@ declare module 'fastify' {
     requireWebhook: (providers: string[]) => (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     requireJWT: (permissions?: string[]) => (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     unifiedAuth: UnifiedAuthenticationMiddleware;
-}
-}
-  }
+
+
+
+
 
   interface FastifyRequest {
     authContext?: AuthContext;
-}
-}
-  }
-}
+
+
+
+

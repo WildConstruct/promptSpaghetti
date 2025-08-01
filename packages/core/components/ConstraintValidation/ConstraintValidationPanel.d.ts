@@ -10,6 +10,7 @@ import { Node } from '../../graphSchema';
 import './ConstraintValidationPanel.css';
 
 }
+}
 interface ConstraintValidationPanelProps {
     nodes: Node[];
     utdgNodes?: UTDGNode[];
@@ -22,4 +23,5 @@ interface ConstraintValidationPanelProps {
 export declare const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>;
 export default ConstraintValidationPanel;
 //# sourceMappingURL=ConstraintValidationPanel.d.ts.map
+}
 }

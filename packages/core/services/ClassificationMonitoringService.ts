@@ -6,17 +6,15 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  DataClassificationLevel, 
-  OperationContext,
+import { DataClassificationLevel, 
+  OperationContext }
   ValidationResult
-} from '../types/DataClassification';
+ from '../types/DataClassification';
 
-}
-export interface MonitoringEvent {
-  id: string;
+
+export interface MonitoringEvent { id: string;
   timestamp: Date;
-  eventType: 'CLASSIFICATION' | 'ACCESS' | 'VALIDATION' | 'POLICY_CHANGE' | 'VIOLATION' | 'COMPLIANCE_CHECK';
+  eventType: 'CLASSIFICATION' | 'ACCESS' | 'VALIDATION' | 'POLICY_CHANGE' | 'VIOLATION' | 'COMPLIANCE_CHECK' }
   classification: DataClassificationLevel;
   userId: string;
   dataId: string;
@@ -25,20 +23,19 @@ export interface MonitoringEvent {
   details: Record<string, any>;
   context: OperationContext;
   metrics?: MonitoringMetrics;
-}
-}
-}
-export interface MonitoringMetrics {
-  processingTimeMs: number;
+
+
+
+
+export interface MonitoringMetrics { processingTimeMs: number;
   dataSize?: number;
   violationCount?: number;
   complianceScore?: number;
-  riskScore?: number;
-}
-}
-}
-export interface ClassificationStats {
-  classification: DataClassificationLevel;
+  riskScore?: number }
+
+
+
+export interface ClassificationStats { classification: DataClassificationLevel;
   totalEvents: number;
   successCount: number;
   failureCount: number;
@@ -46,36 +43,34 @@ export interface ClassificationStats {
   averageProcessingTime: number;
   violationRate: number;
   complianceRate: number;
-  lastUpdated: Date;
-}
-}
-}
-export interface UserActivity {
-  userId: string;
+  lastUpdated: Date }
+
+
+
+export interface UserActivity { userId: string;
   totalEvents: number;
   classificationCounts: Record<DataClassificationLevel, number>;
   violationCount: number;
   lastActivity: Date;
   riskScore: number;
-  suspiciousActivities: string;
-}
-}
-}
-export interface MonitoringAlert {
-  id: string;
+  suspiciousActivities: string }
+
+
+
+export interface MonitoringAlert { id: string;
   timestamp: Date;
-  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' }
   type: 'THRESHOLD_EXCEEDED' | 'UNUSUAL_PATTERN' | 'COMPLIANCE_VIOLATION' | 'SECURITY_RISK';
   message: string;
   details: Record<string, any>;
   resolved: boolean;
   resolvedAt?: Date;
   resolvedBy?: string;
-}
-}
-}
-export interface MonitoringThreshold {
-  name: string;
+
+
+
+
+export interface MonitoringThreshold { name: string;
   description: string;
   metric: string;
   operator: '>' | '<' | '>=' | '<=' | '==' | '!=';
@@ -83,32 +78,30 @@ export interface MonitoringThreshold {
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   enabled: boolean;
   cooldownMinutes: number;
-  lastTriggered?: Date;
-}
-}
-}
-export interface MonitoringDashboard {
-  overallStats: {
+  lastTriggered?: Date }
+
+
+
+export interface MonitoringDashboard { overallStats: { }
   totalEvents: number;
   successRate: number;
   averageProcessingTime: number;
   activeUsers: number;
   violationCount: number;
   complianceScore: number;
-}
+
+
 };
   classificationBreakdown: ClassificationStats;
   topUsers: UserActivity;
   recentAlerts: MonitoringAlert;
-  trendData: {;
+  trendData: { ;
   timestamp: Date;
   eventCount: number;
   violationCount: number;
-  complianceScore: number;
-}[];
-}
-export class ClassificationMonitoringService {
-  private events: MonitoringEvent = [];
+  complianceScore: number }[];
+
+export class ClassificationMonitoringService { private events: MonitoringEvent = [];
   private alerts: MonitoringAlert = [];
   private thresholds: Map<string, MonitoringThreshold> = new Map();
   private userActivities: Map<string, UserActivity> = new Map();
@@ -121,65 +114,59 @@ export class ClassificationMonitoringService {
   /**
   * Initialize default monitoring thresholds
   */
-  private initializeDefaultThresholds(): void {,
+  private initializeDefaultThresholds(): void {
   const defaultThresholds: MonitoringThreshold = [
   {
-  name: 'high-violation-rate',
-  description: 'High rate of access violations',
-  metric: 'violationRate',
-  operator: '>',
-  value: 0.1, // 10% violation rate,
-  severity: 'HIGH',
-  enabled: true,
-  cooldownMinutes: 30,
-}
-      {
-  name: 'low-compliance-score',
-  description: 'Compliance score below threshold',
-  metric: 'complianceScore',
+  name: 'high-violation-rate'
+  description: 'High rate of access violations'
+  metric: 'violationRate'
+  operator: '>'
+  value: 0.1, // 10% violation rate
+  severity: 'HIGH'
+  enabled: true
+  cooldownMinutes: 30 }
+
+      { name: 'low-compliance-score'
+  description: 'Compliance score below threshold'
+  metric: 'complianceScore'
   operator: '<',
   value: 80,
   severity: 'MEDIUM',
   enabled: true,
-  cooldownMinutes: 60,
-}
-      {
-  name: 'restricted-data-surge',
+  cooldownMinutes: 60 }
+
+      { name: 'restricted-data-surge',
   description: 'Unusual spike in restricted data access',
   metric: 'restrictedAccessRate',
   operator: '>',
   value: 50, // 50 accesses per hour,
   severity: 'CRITICAL',
   enabled: true,
-  cooldownMinutes: 15,
-}
-      {
-  name: 'processing-time-exceeded',
+  cooldownMinutes: 15 }
+
+      { name: 'processing-time-exceeded',
   description: 'Average processing time too high',
   metric: 'averageProcessingTime',
   operator: '>',
   value: 1000, // 1 second,
   severity: 'LOW',
   enabled: true,
-  cooldownMinutes: 120,
-}
-      {
-  name: 'user-violation-threshold',
+  cooldownMinutes: 120 }
+
+      { name: 'user-violation-threshold',
   description: 'User exceeded violation threshold',
   metric: 'userViolationCount',
   operator: '>',
   value: 5,
   severity: 'HIGH',
-  enabled: true,
+  enabled: true }
   cooldownMinutes: 60];
-  defaultThresholds.forEach(threshold => {)
-  this.thresholds.set(threshold.name, threshold);
-});
+  defaultThresholds.forEach(threshold => { )
+  this.thresholds.set(threshold.name, threshold) });
   /**
    * Initialize classification statistics
    */
-  private initializeClassificationStats(): void {
-  const classifications: DataClassificationLevel = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
+  private initializeClassificationStats(): void { const classifications: DataClassificationLevel = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
   classifications.forEach(classification => {)
   this.classificationStats.set(classification, {)
   classification,
@@ -190,17 +177,15 @@ export class ClassificationMonitoringService {
   averageProcessingTime: 0,
   violationRate: 0,
   complianceRate: 100,
-  lastUpdated: new Date(),
+  lastUpdated: new Date() }
 });
     });
   /**
    * Record a monitoring event
    */
-  async recordEvent(event: Omit<MonitoringEvent, 'id'>): Promise<void> {
-
-    const monitoringEvent: MonitoringEvent = {,
+  async recordEvent(event: Omit<MonitoringEvent, 'id'>): Promise<void> { const monitoringEvent: MonitoringEvent = { }
   id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-}
+
       ...event
     };
     // Store event
@@ -214,23 +199,22 @@ export class ClassificationMonitoringService {
     // Notify real-time handlers
     this.notifyRealTimeHandlers(monitoringEvent);
     // Cleanup old events (keep last 10000)
-    if (this.events.length > 10000) {
-  this.events = this.events.slice(-10000);
+    if (this.events.length > 10000) { this.events = this.events.slice(-10000);
   /**
   * Update classification statistics
   */
-  private updateStatistics(event: MonitoringEvent): void {,
+  private updateStatistics(event: MonitoringEvent): void {
   const stats = this.classificationStats.get(event.classification);
   if (!stats) return;
   stats.totalEvents++;
   switch (event.result) {
-  case 'SUCCESS':,
+  case 'SUCCESS':
   stats.successCount++;
   break;
-  case 'FAILURE':,
+  case 'FAILURE':
   stats.failureCount++;
   break;
-  case 'WARNING':,
+  case 'WARNING':
   stats.warningCount++;
   break;
   // Update processing time (moving average)
@@ -250,29 +234,28 @@ export class ClassificationMonitoringService {
   /**
   * Update user activity tracking
   */
-  private updateUserActivity(event: MonitoringEvent): void {,
+  private updateUserActivity(event: MonitoringEvent): void {
   let activity = this.userActivities.get(event.userId);
   if (!activity) {
   activity = {
-  userId: event.userId,
-  totalEvents: 0,
+  userId: event.userId
+  totalEvents: 0
   classificationCounts: {
-  PUBLIC: 0,
-  INTERNAL: 0,
-  CONFIDENTIAL: 0,
-  RESTRICTED: 0,
-},
-  violationCount: 0,
-        lastActivity: new Date(),
-        riskScore: 0,
+  PUBLIC: 0
+  INTERNAL: 0
+  CONFIDENTIAL: 0
+  RESTRICTED: 0 }
+
+  violationCount: 0
+        lastActivity: new Date()
+        riskScore: 0
         suspiciousActivities: [];
   };
       this.userActivities.set(event.userId, activity);
     activity.totalEvents++;
     activity.classificationCounts[event.classification]++;
     activity.lastActivity = new Date();
-    if (event.result === 'FAILURE' && event.eventType === 'VIOLATION') {
-  activity.violationCount++;
+    if (event.result === 'FAILURE' && event.eventType === 'VIOLATION') { activity.violationCount++;
   // Check for suspicious patterns on all events
   this.detectSuspiciousActivity(activity, event);
   // Update risk score
@@ -280,7 +263,7 @@ export class ClassificationMonitoringService {
   /**
   * Detect suspicious activity patterns
   */
-  private detectSuspiciousActivity(activity: UserActivity, event: MonitoringEvent): void {,
+  private detectSuspiciousActivity(activity: UserActivity, event: MonitoringEvent): void {
   // Rapid access to restricted data
   const recentRestrictedAccess = this.events.filter(e => ;);
   e.userId === event.userId &&
@@ -306,7 +289,7 @@ export class ClassificationMonitoringService {
   /**
   * Calculate user risk score
   */
-  private calculateUserRiskScore(activity: UserActivity): number {,
+  private calculateUserRiskScore(activity: UserActivity): number { }
   let riskScore = 0;
   // Violation rate contribution (0-30 points)
   const violationRate = activity.violationCount / activity.totalEvents;
@@ -320,8 +303,7 @@ export class ClassificationMonitoringService {
   const minutesSinceLastActivity = (Date.now() - activity.lastActivity.getTime()) / 60000;
   if (minutesSinceLastActivity < 5) {
   riskScore += 20; // Very recent activity
-} else if (minutesSinceLastActivity < 60) {
-      riskScore += 10; // Recent activity
+ else if (minutesSinceLastActivity < 60) { riskScore += 10; // Recent activity
     return Math.min(Math.round(riskScore), 100);
   /**
    * Check monitoring thresholds
@@ -339,22 +321,21 @@ export class ClassificationMonitoringService {
       if (this.evaluateThreshold(metricValue, threshold.operator, threshold.value)) {
         await this.createAlert({)
   severity: threshold.severity,
-          type: 'THRESHOLD_EXCEEDED',
+          type: 'THRESHOLD_EXCEEDED' }
           message: `${threshold.description}: ${threshold.metric} ${threshold.operator} ${threshold.value}`}
 },
-  details: {
+  details: { ,
   threshold: name,
   metric: threshold.metric,
   actualValue: metricValue,
   expectedValue: threshold.value,
-  event: event,
+  event: event }
 });
         threshold.lastTriggered = new Date();
   /**
    * Get metric value for threshold checking
    */
-  private getMetricValue(metric: string, event: MonitoringEvent): number | null {
-    switch (metric) {
+  private getMetricValue(metric: string, event: MonitoringEvent): number | null { switch (metric) {
     case 'violationRate':
       const stats = this.classificationStats.get(event.classification);
       return stats ? stats.violationRate : null;
@@ -371,7 +352,7 @@ export class ClassificationMonitoringService {
       return classStats ? classStats.averageProcessingTime : null;
     case 'userViolationCount':
       const userActivity = this.userActivities.get(event.userId);
-      return userActivity ? userActivity.violationCount : null;,
+      return userActivity ? userActivity.violationCount  : null
   default:
       return null;
   /**
@@ -391,53 +372,44 @@ export class ClassificationMonitoringService {
    */
   private async createAlert(alert: Omit<MonitoringAlert, 'id' | 'timestamp' | 'resolved'>): Promise<void> {
 
-    const monitoringAlert: MonitoringAlert = {,
+    const monitoringAlert: MonitoringAlert = { }
   id: `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-},
-  timestamp: new Date(),
-      resolved: false,
+
+  timestamp: new Date()
+      resolved: false
       ...alert
     };
     this.alerts.push(monitoringAlert);
     // Notify alert handlers
     this.notifyAlertHandlers(monitoringAlert);
     // Cleanup old alerts (keep last 1000)
-    if (this.alerts.length > 1000) {
-  this.alerts = this.alerts.slice(-1000);
+    if (this.alerts.length > 1000) { this.alerts = this.alerts.slice(-1000);
   /**
   * Notify real-time handlers
   */
-  private notifyRealTimeHandlers(event: MonitoringEvent): void {,
-  this.realTimeHandlers.forEach(handler => {)
+  private notifyRealTimeHandlers(event: MonitoringEvent): void { }
+  this.realTimeHandlers.forEach(handler => { )
   try {
-  handler(event);
-} catch (error) {
-  console.error('Error in real-time handler:', error);
-});
+  handler(event) } catch (error) { console.error('Error in real-time handler:', error) });
   /**
    * Notify alert handlers
    */
-  private notifyAlertHandlers(alert: MonitoringAlert): void {
-    this.alertHandlers.forEach(handler => {)
+  private notifyAlertHandlers(alert: MonitoringAlert): void { this.alertHandlers.forEach(handler => {)
   try {
-        handler(alert);
-      } catch (error) {
-  console.error('Error in alert handler:', error);
-});
+        handler(alert) } catch (error) { console.error('Error in alert handler:', error) });
   /**
    * Register real-time event handler
    */
-  onEvent(handler: (event: MonitoringEvent) => void): void {
-  this.realTimeHandlers.push(handler);
+  onEvent(handler: (event: MonitoringEvent) => void): void { this.realTimeHandlers.push(handler);
   /**
   * Register alert handler
   */
-  onAlert(handler: (alert: MonitoringAlert) => void): void {,
+  onAlert(handler: (alert: MonitoringAlert) => void): void {
   this.alertHandlers.push(handler);
   /**
   * Get monitoring dashboard data
   */
-  getDashboard(): MonitoringDashboard {,
+  getDashboard(): MonitoringDashboard {
   const now = Date.now();
   const oneHourAgo = now - 3600000;
   // Calculate overall stats
@@ -480,16 +452,15 @@ export class ClassificationMonitoringService {
   violationCount: hourViolations,
   complianceScore: hourComplianceScores.length > 0,
   ? hourComplianceScores.reduce((a, b) => a + b, 0) / hourComplianceScores.length
-  : 100,
+  : 100 }
 });
-    return {
-  overallStats: {
+    return { overallStats: {,
   totalEvents: recentEvents.length,
   successRate: recentEvents.length > 0 ? (successEvents.length / recentEvents.length) * 100 : 100,
   averageProcessingTime: this.calculateAverageProcessingTime(recentEvents),
   activeUsers,
   violationCount,
-  complianceScore: avgComplianceScore,
+  complianceScore: avgComplianceScore }
 },
   classificationBreakdown: Array.from(this.classificationStats.values()),
       topUsers,
@@ -499,8 +470,7 @@ export class ClassificationMonitoringService {
   /**
    * Calculate average processing time
    */
-  private calculateAverageProcessingTime(events: MonitoringEvent): number {
-  const times = events;
+  private calculateAverageProcessingTime(events: MonitoringEvent): number { const times = events;
   .filter(e => e.metrics?.processingTimeMs !== undefined)
   .map(e => e.metrics!.processingTimeMs!);
   return times.length > 0
@@ -509,15 +479,14 @@ export class ClassificationMonitoringService {
   /**
   * Get events by criteria
   */
-  getEvents(criteria?: {)
+  getEvents(criteria?: {),
   classification?: DataClassificationLevel;
   userId?: string;
   eventType?: string;
   startDate?: Date;
   endDate?: Date;
-  result?: 'SUCCESS' | 'FAILURE' | 'WARNING'
-  }): MonitoringEvent {
-  let filteredEvents = this.events;
+  result?: 'SUCCESS' | 'FAILURE' | 'WARNING' }
+}): MonitoringEvent { let filteredEvents = this.events;
   if (criteria) {
   if (criteria.classification) {
   filteredEvents = filteredEvents.filter(e => e.classification === criteria.classification);
@@ -553,19 +522,19 @@ export class ClassificationMonitoringService {
   */
   getThreshold(name: string): MonitoringThreshold | undefined {,
   return this.thresholds.get(name);
-  updateThreshold(name: string, updates: Partial<MonitoringThreshold>): void {,
+  updateThreshold(name: string, updates: Partial<MonitoringThreshold>): void {
   const threshold = this.thresholds.get(name);
   if (threshold) {
   Object.assign(threshold, updates);
   /**
   * Get user activity
   */
-  getUserActivity(userId: string): UserActivity | undefined {,
+  getUserActivity(userId: string): UserActivity | undefined {
   return this.userActivities.get(userId);
   /**
   * Get classification statistics
   */
-  getClassificationStats(classification?: DataClassificationLevel): ClassificationStats {,
+  getClassificationStats(classification?: DataClassificationLevel): ClassificationStats {
   if (classification) {
   const stats = this.classificationStats.get(classification);
   return stats ? [stats] : [];
@@ -573,25 +542,22 @@ export class ClassificationMonitoringService {
   /**
   * Export monitoring data
   */
-  exportData(format: 'json' | 'csv'): string {,
+  exportData(format: 'json' | 'csv'): string {
   const data = {
-  events: this.events,
-  alerts: this.alerts,
-  statistics: Array.from(this.classificationStats.values()),
-  userActivities: Array.from(this.userActivities.values()),
-  exportDate: new Date(),
+  events: this.events
+  alerts: this.alerts
+  statistics: Array.from(this.classificationStats.values())
+  userActivities: Array.from(this.userActivities.values())
+  exportDate: new Date() }
 };
-    if (format === 'json') {
-      return JSON.stringify(data, null, 2);
-    } else {
-      // Simple CSV export of events
+    if (format === 'json') { return JSON.stringify(data, null, 2) } else { // Simple CSV export of events
       const headers = ['timestamp', 'eventType', 'classification', 'userId', 'result', 'operation'];
       const rows = this.events.map(e => [);
-        e.timestamp.toISOString(),
-        e.eventType,
-        e.classification,
-        e.userId,
-        e.result,
+        e.timestamp.toISOString()
+        e.eventType
+        e.classification
+        e.userId
+        e.result }
         e.operation
       ]);
       return [headers, ...rows].map(row => row.join(',')).join('\n');

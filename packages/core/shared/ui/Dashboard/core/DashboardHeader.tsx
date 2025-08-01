@@ -8,11 +8,10 @@ import React, { useState } from 'react';
 import { RefreshCw, Download, ChevronDown, Calendar } from 'lucide-react';
 import type { TimeRangeOption } from './DashboardShell';
 
-}
-export interface DashboardHeaderProps {
-  title: string;
-  description?: string;
-}
+
+export interface DashboardHeaderProps { title: string;
+  description?: string }
+
   icon?: React.ComponentType<{ size?: number }>;
   // Actions
   actions?: React.ReactNode;
@@ -26,36 +25,30 @@ export interface DashboardHeaderProps {
   onTimeRangeChange?: (timeRange: string) => void;
   showTimeRange?: boolean;
   className?: string;
-}
-export const DashboardHeader: React.FC<DashboardHeaderProps> = ({)
-  title,
-  description,
-  icon: Icon,
-  actions,
-  showRefresh = true,
-  showExport = true,
-  onRefresh,
-  onExport,
-  timeRange = '7d',
-  timeRangeOptions = [],
-  onTimeRangeChange,
-  showTimeRange = true,
+
+export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ )
+  title
+  description
+  icon: Icon
+  actions
+  showRefresh = true
+  showExport = true
+  onRefresh
+  onExport
+  timeRange = '7d'
+  timeRangeOptions = []
+  onTimeRangeChange
+  showTimeRange = true }
   className = ''
-}) => {
-  const [showExportMenu, setShowExportMenu] = useState(false);
+}) => { const [showExportMenu, setShowExportMenu] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const handleRefresh = async () => {
     if (refreshing || !onRefresh) return;
     setRefreshing(true);
     try {
-      await onRefresh();
-    } finally {
-      setRefreshing(false);
-  };
-  const handleExport = (format: 'csv' | 'pdf' | 'excel') => {
-    onExport?.(format);
-    setShowExportMenu(false);
-  };
+      await onRefresh() } finally { setRefreshing(false) };
+  const handleExport = (format: 'csv' | 'pdf' | 'excel') => { onExport?.(format);
+    setShowExportMenu(false) };
   const currentTimeRangeOption = timeRangeOptions.find(option => option.value === timeRange);
   return;
     <div className={`dashboard-header ${className}`}>}

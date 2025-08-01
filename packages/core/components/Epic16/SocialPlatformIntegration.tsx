@@ -6,8 +6,7 @@
  * interface with analytics tracking.
  */
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
-  ShareIcon,
+import { ShareIcon,
   LinkIcon,
   ClipboardDocumentIcon,
   CheckIcon,
@@ -28,29 +27,27 @@ import {
   Cog6ToothIcon,
   BoltIcon,
   FireIcon,
-  SparklesIcon,
+  SparklesIcon }
   RocketLaunchIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { Template } from './TemplatePreviewModal';
 // ShareTrackingManager import removed
 
 // Social Platform Interfaces
 
-}
-export interface SocialPlatformIntegrationProps {
-  template: Template;
+
+export interface SocialPlatformIntegrationProps { template: Template;
   platforms?: SocialPlatform;
   trackingEnabled?: boolean;
   onShareComplete?: (share: ShareRecord) => void;
   onAnalyticsUpdate?: (analytics: ShareAnalytics) => void;
   className?: string;
   showAnalytics?: boolean;
-  customizations?: SocialCustomizations;
-}
-}
-}
-export interface SocialPlatform {
-  id: string;
+  customizations?: SocialCustomizations }
+
+
+
+export interface SocialPlatform { id: string;
   name: string;
   displayName: string;
   icon: React.ComponentType<unknown>;
@@ -61,31 +58,28 @@ export interface SocialPlatform {
   config: PlatformConfig;
   features: PlatformFeatures;
   limits: PlatformLimits;
-  analytics: PlatformAnalytics;
-}
-}
-}
-export interface PlatformConfig {
-  apiEndpoint?: string;
+  analytics: PlatformAnalytics }
+
+
+
+export interface PlatformConfig { apiEndpoint?: string;
   clientId?: string;
   redirectUri?: string;
   scopes: string;
   customFields: Record<string, any>;
   webhookUrl?: string;
-  rateLimit: RateLimitConfig;
-}
-}
-}
-export interface RateLimitConfig {
-  requestsPerMinute: number;
+  rateLimit: RateLimitConfig }
+
+
+
+export interface RateLimitConfig { requestsPerMinute: number;
   requestsPerHour: number;
   burstLimit: number;
-  retryAfter: number;
-}
-}
-}
-export interface PlatformFeatures {
-  directPosting: boolean;
+  retryAfter: number }
+
+
+
+export interface PlatformFeatures { directPosting: boolean;
   scheduledPosting: boolean;
   mediaUpload: boolean;
   hashtags: boolean;
@@ -93,33 +87,30 @@ export interface PlatformFeatures {
   geotagging: boolean;
   crossPosting: boolean;
   analytics: boolean;
-  engagement: boolean;
-}
-}
-}
-export interface PlatformLimits {
-  maxTextLength: number;
+  engagement: boolean }
+
+
+
+export interface PlatformLimits { maxTextLength: number;
   maxImages: number;
   maxVideos: number;
   maxHashtags: number;
   maxMentions: number;
   fileSize: number;
-  videoLength: number;
-}
-}
-}
-export interface PlatformAnalytics {
-  impressions: number;
+  videoLength: number }
+
+
+
+export interface PlatformAnalytics { impressions: number;
   engagements: number;
   clicks: number;
   shares: number;
   reach: number;
-  lastUpdated: Date;
-}
-}
-}
-export interface ShareRecord {
-  id: string;
+  lastUpdated: Date }
+
+
+
+export interface ShareRecord { id: string;
   templateId: string;
   platform: string;
   shareType: ShareType;
@@ -128,79 +119,72 @@ export interface ShareRecord {
   userId: string;
   success: boolean;
   analytics: ShareAnalytics;
-  metadata: ShareMetadata;
-}
-}
+  metadata: ShareMetadata }
+
 export type ShareType = 'direct' | 'link' | 'embed' | 'download' | 'preview';
 
-}
-export interface ShareContent {
-  title: string;
+
+export interface ShareContent { title: string;
   description: string;
   url: string;
   imageUrl?: string;
   videoUrl?: string;
   hashtags: string;
   mentions: string;
-  customText?: string;
-}
-}
-}
-export interface ShareAnalytics {
-  views: number;
+  customText?: string }
+
+
+
+export interface ShareAnalytics { views: number;
   clicks: number;
   engagements: number;
   conversions: number;
   revenue: number;
   demographics: DemographicData;
-  performance: PerformanceMetrics;
-}
-}
-}
-export interface DemographicData {
-  ageGroups: Record<string, number>;
+  performance: PerformanceMetrics }
+
+
+
+export interface DemographicData { ageGroups: Record<string, number>;
   geoLocations: Record<string, number>;
   interests: Record<string, number>;
-  devices: Record<string, number>;
-}
-}
-}
-export interface PerformanceMetrics {
-  clickThroughRate: number;
+  devices: Record<string, number> }
+
+
+
+export interface PerformanceMetrics { clickThroughRate: number;
   conversionRate: number;
   engagementRate: number;
   viralCoefficient: number;
-  timeToConversion: number;
-}
-}
-}
-export interface ShareMetadata {
-  userAgent?: string;
+  timeToConversion: number }
+
+
+
+export interface ShareMetadata { userAgent?: string;
   referrer?: string;
   location?: string;
   deviceType?: string;
   campaignId?: string;
   source?: string;
-  medium?: string;
-}
-}
-}
-export interface SocialCustomizations {
-  autoHashtags: boolean;
+  medium?: string }
+
+
+
+export interface SocialCustomizations { autoHashtags: boolean;
   customBranding: boolean;
   trackingParameters: boolean;
   crossPlatformSync: boolean;
   schedulingEnabled: boolean;
   analyticsIntegration: boolean;
-
-// Predefined social platforms
-const SOCIAL_PLATFORMS: SocialPlatform = [
+  // Predefined social platforms
+  const SOCIAL_PLATFORMS: SocialPlatform = [
   {
-    id: 'twitter',
-    name: 'twitter',
-    displayName: 'Twitter',
-}
-    icon: ({ className }) => ()
+  id: 'twitter';
+  name: 'twitter';
+  displayName: 'Twitter' }
+
+},
+  icon: ({ className }) => ()
       <svg className={className} fill="currentColor" viewBox="0 0 24 24">
         <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
       </svg>
@@ -209,12 +193,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share on Twitter with trending hashtags',
     enabled: true,
     requiresAuth: true,
-    config: {
-  scopes: ['tweet.read', 'tweet.write', 'users.read'],
+    config: { ,
+  scopes: ['tweet.read', 'tweet.write', 'users.read'] }
       customFields: { includeThread: false },
       rateLimit: { requestsPerMinute: 300, requestsPerHour: 1500, burstLimit: 100, retryAfter: 900 }
   },
-  features: {
+  features: { ,
   directPosting: true,
   scheduledPosting: true,
   mediaUpload: true,
@@ -223,29 +207,28 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   geotagging: true,
   crossPosting: false,
   analytics: true,
-  engagement: true,
+  engagement: true }
 },
-  limits: {
+  limits: { ,
   maxTextLength: 280,
   maxImages: 4,
   maxVideos: 1,
   maxHashtags: 10,
   maxMentions: 10,
   fileSize: 5242880, // 5MB,
-  videoLength: 140,
+  videoLength: 140 }
 },
-  analytics: {
+  analytics: { ,
   impressions: 0,
   engagements: 0,
   clicks: 0,
   shares: 0,
   reach: 0,
-  lastUpdated: new Date(),
-}
-  {
-    id: 'linkedin',
+  lastUpdated: new Date() }
+
+  { id: 'linkedin',
     name: 'linkedin',
-    displayName: 'LinkedIn',
+    displayName: 'LinkedIn' }
     icon: ({ className }) => ()
       <svg className={className} fill="currentColor" viewBox="0 0 24 24">
         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -255,12 +238,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share professionally on LinkedIn',
     enabled: true,
     requiresAuth: true,
-    config: {
-  scopes: ['r_liteprofile', 'w_member_social'],
+    config: { ,
+  scopes: ['r_liteprofile', 'w_member_social'] }
       customFields: { targetAudience: 'professional' },
       rateLimit: { requestsPerMinute: 100, requestsPerHour: 500, burstLimit: 50, retryAfter: 3600 }
   },
-  features: {
+  features: { ,
   directPosting: true,
   scheduledPosting: true,
   mediaUpload: true,
@@ -269,29 +252,28 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   geotagging: false,
   crossPosting: true,
   analytics: true,
-  engagement: true,
+  engagement: true }
 },
-  limits: {
+  limits: { ,
   maxTextLength: 3000,
   maxImages: 9,
   maxVideos: 1,
   maxHashtags: 5,
   maxMentions: 5,
   fileSize: 104857600, // 100MB,
-  videoLength: 600,
+  videoLength: 600 }
 },
-  analytics: {
+  analytics: { ,
   impressions: 0,
   engagements: 0,
   clicks: 0,
   shares: 0,
   reach: 0,
-  lastUpdated: new Date(),
-}
-  {
-    id: 'facebook',
+  lastUpdated: new Date() }
+
+  { id: 'facebook',
     name: 'facebook',
-    displayName: 'Facebook',
+    displayName: 'Facebook' }
     icon: ({ className }) => ()
       <svg className={className} fill="currentColor" viewBox="0 0 24 24">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -301,12 +283,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share with Facebook communities',
     enabled: true,
     requiresAuth: true,
-    config: {
-  scopes: ['pages_manage_posts', 'pages_read_engagement'],
+    config: { ,
+  scopes: ['pages_manage_posts', 'pages_read_engagement'] }
       customFields: { pageId: '', autoSchedule: false },
       rateLimit: { requestsPerMinute: 200, requestsPerHour: 4800, burstLimit: 600, retryAfter: 300 }
   },
-  features: {
+  features: { ,
   directPosting: true,
   scheduledPosting: true,
   mediaUpload: true,
@@ -315,29 +297,28 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   geotagging: true,
   crossPosting: true,
   analytics: true,
-  engagement: true,
+  engagement: true }
 },
-  limits: {
+  limits: { ,
   maxTextLength: 63206,
   maxImages: 10,
   maxVideos: 1,
   maxHashtags: 0,
   maxMentions: 50,
   fileSize: 104857600, // 100MB,
-  videoLength: 240,
+  videoLength: 240 }
 },
-  analytics: {
+  analytics: { ,
   impressions: 0,
   engagements: 0,
   clicks: 0,
   shares: 0,
   reach: 0,
-  lastUpdated: new Date(),
-}
-  {
-    id: 'reddit',
+  lastUpdated: new Date() }
+
+  { id: 'reddit',
     name: 'reddit',
-    displayName: 'Reddit',
+    displayName: 'Reddit' }
     icon: ({ className }) => ()
       <svg className={className} fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
@@ -347,12 +328,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share in relevant Reddit communities',
     enabled: true,
     requiresAuth: true,
-    config: {
-  scopes: ['identity', 'submit', 'read'],
+    config: { ,
+  scopes: ['identity', 'submit', 'read'] }
       customFields: { subreddit: 'promptengineering', flairId: '' },
       rateLimit: { requestsPerMinute: 60, requestsPerHour: 600, burstLimit: 10, retryAfter: 600 }
   },
-  features: {
+  features: { ,
   directPosting: true,
   scheduledPosting: false,
   mediaUpload: true,
@@ -361,29 +342,28 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   geotagging: false,
   crossPosting: false,
   analytics: true,
-  engagement: true,
+  engagement: true }
 },
-  limits: {
+  limits: { ,
   maxTextLength: 40000,
   maxImages: 1,
   maxVideos: 1,
   maxHashtags: 0,
   maxMentions: 0,
   fileSize: 20971520, // 20MB,
-  videoLength: 900,
+  videoLength: 900 }
 },
-  analytics: {
+  analytics: { ,
   impressions: 0,
   engagements: 0,
   clicks: 0,
   shares: 0,
   reach: 0,
-  lastUpdated: new Date(),
-}
-  {
-    id: 'discord',
+  lastUpdated: new Date() }
+
+  { id: 'discord',
     name: 'discord',
-    displayName: 'Discord',
+    displayName: 'Discord' }
     icon: ({ className }) => ()
       <svg className={className} fill="currentColor" viewBox="0 0 24 24">
         <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0189 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1568 2.4189Z" />
@@ -393,12 +373,12 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
     description: 'Share in Discord servers and communities',
     enabled: true,
     requiresAuth: true,
-    config: {
-  scopes: ['bot', 'messages.read'],
+    config: { ,
+  scopes: ['bot', 'messages.read'] }
       customFields: { webhookUrl: '', channelId: '', guildId: '' },
       rateLimit: { requestsPerMinute: 50, requestsPerHour: 1000, burstLimit: 5, retryAfter: 1000 }
   },
-  features: {
+  features: { ,
   directPosting: true,
   scheduledPosting: false,
   mediaUpload: true,
@@ -407,29 +387,29 @@ const SOCIAL_PLATFORMS: SocialPlatform = [
   geotagging: false,
   crossPosting: false,
   analytics: false,
-  engagement: true,
+  engagement: true }
 },
-  limits: {
+  limits: { ,
   maxTextLength: 2000,
   maxImages: 10,
   maxVideos: 1,
   maxHashtags: 0,
   maxMentions: 100,
   fileSize: 8388608, // 8MB,
-  videoLength: 600,
+  videoLength: 600 }
 },
-  analytics: {
+  analytics: { ,
   impressions: 0,
   engagements: 0,
   clicks: 0,
   shares: 0,
-  reach: 0,
+  reach: 0 }
   lastUpdated: new Date()];
   // Share content generator
-}
+
 export const ShareContentGenerator = {
   generateTitle: (template: Template, platform: string): string => {
-    const baseTitle = template.title;
+    const baseTitle = template.title,
     const platformSpecific = {
       twitter: `🚀 ${baseTitle}`}
 },
@@ -441,8 +421,8 @@ export const ShareContentGenerator = {
 },
   discord: `**${baseTitle}** - New Template Alert!`}
     };
-    return platformSpecific[platform as keyof typeof platformSpecific] || baseTitle;
-  },
+    return platformSpecific[platform as keyof typeof platformSpecific] || baseTitle
+
   generateDescription: (template: Template, platform: string): string => {
     const baseDesc = template.description;
     const platformSpecific = {
@@ -456,87 +436,83 @@ export const ShareContentGenerator = {
 },
   discord: `${baseDesc}\n\nAnyone tried something like this before? Would love to hear your thoughts! 💭`}
     };
-    return platformSpecific[platform as keyof typeof platformSpecific] || baseDesc;
-  },
-  generateHashtags: (template: Template, platform: string): string => {
-  const baseTags = template.tags || [];
+    return platformSpecific[platform as keyof typeof platformSpecific] || baseDesc
+
+  generateHashtags: (template: Template, platform: string): string => { const baseTags = template.tags || [];
   const platformSpecific = {
   twitter: [...baseTags, 'AI', 'Productivity', 'Templates', 'PromptEngineering'].slice(0, 10),
   linkedin: [...baseTags, 'ArtificialIntelligence', 'Productivity', 'Innovation'].slice(0, 5),
   facebook: [], // Facebook doesn't use hashtags effectively,
   reddit: [], // Reddit uses subreddits instead,
-  discord: [] // Discord doesn't use hashtags,
+  discord: [] // Discord doesn't use hashtags }
 };
     return platformSpecific[platform as keyof typeof platformSpecific] || [];
 };
 
 // Main component
-export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps> = ({)
-  template,
-  platforms = SOCIAL_PLATFORMS,
-  trackingEnabled = true,
-  onShareComplete,
-  onAnalyticsUpdate,
-  className = '',
-  showAnalytics = true,
+export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps> = ({ )
+  template
+  platforms = SOCIAL_PLATFORMS
+  trackingEnabled = true
+  onShareComplete
+  onAnalyticsUpdate
+  className = ''
+  showAnalytics = true
   customizations = {
-  autoHashtags: true,
-  customBranding: true,
-  trackingParameters: true,
-  crossPlatformSync: false,
-  schedulingEnabled: true,
-  analyticsIntegration: true,
+  autoHashtags: true
+  customBranding: true
+  trackingParameters: true
+  crossPlatformSync: false
+  schedulingEnabled: true
+  analyticsIntegration: true }
 }) => {
   const [selectedPlatforms, setSelectedPlatforms] = useState<string>([]);
   const [shareContent, setShareContent] = useState<Record<string, ShareContent>>({});
   const [isSharing, setIsSharing] = useState<Record<string, boolean>>({});
   const [shareResults, setShareResults] = useState<Record<string, ShareRecord>>({});
   const [showCustomization, setShowCustomization] = useState(false);
-  const [analytics, setAnalytics] = useState<ShareAnalytics>({)
-  views: 0,
-    clicks: 0,
-    engagements: 0,
-    conversions: 0,
-    revenue: 0,
-    demographics: {
-  ageGroups: {},
-      geoLocations: {},
-      interests: {},
+  const [analytics, setAnalytics] = useState<ShareAnalytics>({ )
+  views: 0
+    clicks: 0
+    engagements: 0
+    conversions: 0
+    revenue: 0
+    demographics: { }
+  ageGroups: {}
+      geoLocations: {}
+      interests: {}
       devices: {}
-  },
-  performance: {
-  clickThroughRate: 0,
-  conversionRate: 0,
-  engagementRate: 0,
-  viralCoefficient: 0,
-  timeToConversion: 0,
+
+  performance: { 
+  clickThroughRate: 0
+  conversionRate: 0
+  engagementRate: 0
+  viralCoefficient: 0
+  timeToConversion: 0 }
 });
   // Initialize share content for all platforms
   useEffect(() => {
     const initialContent: Record<string, ShareContent> = {};
-    platforms.forEach(platform => {)
+    platforms.forEach(platform => { )
   initialContent[platform.id] = {
-        title: ShareContentGenerator.generateTitle(template, platform.id),
-        description: ShareContentGenerator.generateDescription(template, platform.id),
+        title: ShareContentGenerator.generateTitle(template, platform.id)
+        description: ShareContentGenerator.generateDescription(template, platform.id) }
         url: `${window.location.origin}/templates/${template.id}`}
-},
-  imageUrl: template.thumbnailUrl,
-        hashtags: ShareContentGenerator.generateHashtags(template, platform.id),
-        mentions: [],
+
+  imageUrl: template.thumbnailUrl
+        hashtags: ShareContentGenerator.generateHashtags(template, platform.id)
+        mentions: []
         customText: '';
   };
     });
     setShareContent(initialContent);
   }, [template, platforms]);
-  const handlePlatformToggle = useCallback((platformId: string) => {
-  setSelectedPlatforms(prev => )
+  const handlePlatformToggle = useCallback((platformId: string) => { setSelectedPlatforms(prev => )
   prev.includes(platformId)
   ? prev.filter(id => id !== platformId)
-  : [...prev, platformId]);
-}, []);
-  const handleContentChange = useCallback((platformId: string, updates: Partial<ShareContent>) => {
-    setShareContent(prev => ({)
-  ...prev,
+  : [...prev, platformId]) }, []);
+  const handleContentChange = useCallback((platformId: string, updates: Partial<ShareContent>) => { setShareContent(prev => ({)
+  ...prev }
       [platformId]: { ...prev[platformId], ...updates }
     }));
   }, []);
@@ -548,51 +524,49 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
     // Simulate API call to social platform
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
     // Generate tracking parameters
-    const trackingParams = trackingEnabled ? {
-      utm_source: platformId,
-      utm_medium: 'social',
+    const trackingParams = trackingEnabled ? { utm_source: platformId
+      utm_medium: 'social' }
       utm_campaign: `template_${template.id}`}
-},
-  utm_content: 'share_button'
-  } : {};
-    const shareRecord: ShareRecord = {,
+
+  utm_content: 'share_button';
+ : {};
+    const shareRecord: ShareRecord = {
   id: `share_${Date.now()}_${platformId}`}
-},
-  templateId: template.id,
-      platform: platformId,
-      shareType: 'direct',
-      content: {
-  ...content,
-  url: content.url + (trackingEnabled ? '?' + new URLSearchParams(trackingParams).toString() : ''),
-},
-  timestamp: new Date(),
+
+  templateId: template.id
+      platform: platformId
+      shareType: 'direct'
+      content: { ...content
+  url: content.url + (trackingEnabled ? '?' + new URLSearchParams(trackingParams).toString() : '') }
+
+  timestamp: new Date()
       userId: 'current_user', // Would come from auth context
       success: Math.random() > 0.1, // 90% success rate simulation
-      analytics: {
-  views: Math.floor(Math.random() * 1000),
-        clicks: Math.floor(Math.random() * 100),
-        engagements: Math.floor(Math.random() * 50),
-        conversions: Math.floor(Math.random() * 10),
-        revenue: Math.floor(Math.random() * 1000) / 100,
-        demographics: {
-  ageGroups: { '18-24': 30, '25-34': 45, '35-44': 25 },
-          geoLocations: { 'US': 60, 'EU': 25, 'Other': 15 },
-          interests: { 'AI': 80, 'Tech': 70, 'Productivity': 60 },
+      analytics: { 
+  views: Math.floor(Math.random() * 1000)
+        clicks: Math.floor(Math.random() * 100)
+        engagements: Math.floor(Math.random() * 50)
+        conversions: Math.floor(Math.random() * 10)
+        revenue: Math.floor(Math.random() * 1000) / 100
+        demographics: { }
+  ageGroups: { '18-24': 30, '25-34': 45, '35-44': 25 }
+          geoLocations: { 'US': 60, 'EU': 25, 'Other': 15 }
+          interests: { 'AI': 80, 'Tech': 70, 'Productivity': 60 }
           devices: { 'Desktop': 60, 'Mobile': 35, 'Tablet': 5 }
-  },
-  performance: {
-  clickThroughRate: Math.random() * 10,
-  conversionRate: Math.random() * 5,
-  engagementRate: Math.random() * 15,
-  viralCoefficient: Math.random() * 2,
-  timeToConversion: Math.random() * 3600,
-},
-  metadata: {
-  userAgent: navigator.userAgent,
-  referrer: document.referrer,
-  deviceType: /Mobile/.test(navigator.userAgent) ? 'mobile' : 'desktop',
-  source: 'template_page',
-  medium: 'social_share',
+
+  performance: { 
+  clickThroughRate: Math.random() * 10
+  conversionRate: Math.random() * 5
+  engagementRate: Math.random() * 15
+  viralCoefficient: Math.random() * 2
+  timeToConversion: Math.random() * 3600 }
+
+  metadata: { 
+  userAgent: navigator.userAgent
+  referrer: document.referrer
+  deviceType: /Mobile/.test(navigator.userAgent) ? 'mobile' : 'desktop'
+  source: 'template_page'
+  medium: 'social_share' }
 };
     return shareRecord;
   }, [platforms, shareContent, template.id, trackingEnabled]);
@@ -603,20 +577,19 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
       setShareResults(prev => ({ ...prev, [platformId]: shareRecord }));
       onShareComplete?.(shareRecord);
       // Update analytics
-      if (customizations.analyticsIntegration) {
-  const updatedAnalytics = {
-  ...analytics,
-  views: analytics.views + shareRecord.analytics.views,
-  clicks: analytics.clicks + shareRecord.analytics.clicks,
-  engagements: analytics.engagements + shareRecord.analytics.engagements,
-  conversions: analytics.conversions + shareRecord.analytics.conversions,
-  revenue: analytics.revenue + shareRecord.analytics.revenue,
+      if (customizations.analyticsIntegration) { const updatedAnalytics = {
+  ...analytics
+  views: analytics.views + shareRecord.analytics.views
+  clicks: analytics.clicks + shareRecord.analytics.clicks
+  engagements: analytics.engagements + shareRecord.analytics.engagements
+  conversions: analytics.conversions + shareRecord.analytics.conversions
+  revenue: analytics.revenue + shareRecord.analytics.revenue }
 };
         setAnalytics(updatedAnalytics);
         onAnalyticsUpdate?.(updatedAnalytics);
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to share on ${platformId}:`, error);}
-    } finally {
+ finally {
       setIsSharing(prev => ({ ...prev, [platformId]: false }));
   }, [performShare, onShareComplete, analytics, onAnalyticsUpdate, customizations.analyticsIntegration]);
   const handleBulkShare = useCallback(async () => {
@@ -628,23 +601,21 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
   const copyShareLink = useCallback(async () => {
     const shareUrl = `${window.location.origin}/templates/${template.id}${}
       trackingEnabled ? '?utm_source=direct&utm_medium=link&utm_campaign=template_share' : ''
-    }`;
+`;
     try {
       await navigator.clipboard.writeText(shareUrl);
       // Show success feedback
-    } catch (err) {
-  console.error('Failed to copy link:', err);
-}, [template.id, trackingEnabled]);
+ catch (err) { console.error('Failed to copy link:', err) }, [template.id, trackingEnabled]);
   const enabledPlatforms = useMemo(() => ;
-    platforms.filter(platform => platform.enabled), 
+    platforms.filter(platform => platform.enabled)
   [platforms]
   );
-  const totalAnalytics = useMemo(() => ({)
-  totalShares: Object.keys(shareResults).length,
-  successfulShares: Object.values(shareResults).filter(r => r.success).length,
-  totalReach: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.views, 0),
-  totalEngagements: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.engagements, 0),
-  averageCTR: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.performance.clickThroughRate, 0) / Math.max(Object.keys(shareResults).length, 1),
+  const totalAnalytics = useMemo(() => ({ )
+  totalShares: Object.keys(shareResults).length
+  successfulShares: Object.values(shareResults).filter(r => r.success).length
+  totalReach: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.views, 0)
+  totalEngagements: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.engagements, 0)
+  averageCTR: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.performance.clickThroughRate, 0) / Math.max(Object.keys(shareResults).length, 1) }
 }), [shareResults]);
   return;
     <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>}
@@ -731,11 +702,11 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
             return;
               <div
                 key={platform.id}
-                className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                className={ `border rounded-lg p-4 cursor-pointer transition-all ${
   isSelected
   ? 'border-blue-500 bg-blue-50'
-  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
-}`}
+  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50' }
+`}
                 onClick={() => handlePlatformToggle(platform.id)}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -780,13 +751,12 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
                     )}
                   </div>
                 )}
-                {isSelected && ()
+                { isSelected && ()
                   <div className="space-y-2">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleSingleShare(platform.id);
-                      }}
+                        handleSingleShare(platform.id) }}
                       disabled={isSharing}
                       className="w-full flex items-center justify-center gap-2 px-3 py-1 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded text-sm disabled:opacity-50"
                     >

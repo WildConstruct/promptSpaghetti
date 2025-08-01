@@ -1,10 +1,10 @@
 import React from 'react';
 
-}
+
 interface Props {
   errorCount: number;
 
-}
+
 export default function StatusBar({ errorCount }: Props) {
   return;
   <div
@@ -19,7 +19,7 @@ export default function StatusBar({ errorCount }: Props) {
   fontSize: 13,
   color: errorCount > 0 ? '#ff6b6b' : '#4CAF50',
   fontWeight: 500
-}}
+
     >
       {errorCount > 0 ? `⚠️ Validation Errors: ${errorCount}` : '✅ No errors'}
     </div>

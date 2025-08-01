@@ -11,8 +11,7 @@ import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Slider } from '../ui/Slider';
 import { Switch } from '../ui/Switch';
-import { 
-  Pen,
+import { Pen,
   Circle,
   Square,
   ArrowRight,
@@ -33,17 +32,16 @@ import {
   RotateCw,
   ZoomIn,
   ZoomOut,
-  Grid,
+  Grid }
   Layers
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Drawing annotation types
 
-}
-export interface DrawingAnnotation {
-  id: string;
-  type: 'freehand' | 'arrow' | 'circle' | 'rectangle' | 'line' | 'text';
-}
+
+export interface DrawingAnnotation { id: string;
+  type: 'freehand' | 'arrow' | 'circle' | 'rectangle' | 'line' | 'text' }
+},
   points: Array<{ x: number; y: number }>;
   style: DrawingStyle;
   layer: number;
@@ -56,10 +54,9 @@ export interface DrawingAnnotation {
     rotation: number;
   scale: { x: number; y: number };
   };
-}
-}
-export interface DrawingStyle {
-  color: string;
+
+
+export interface DrawingStyle { color: string;
   thickness: number;
   opacity: number;
   fillColor?: string;
@@ -67,20 +64,21 @@ export interface DrawingStyle {
   dashPattern?: number;
   lineCap: 'round' | 'square' | 'butt';
   lineJoin: 'round' | 'miter' | 'bevel';
-  fontSize?: number; // For text,
+  fontSize?: number; // For text;
   fontFamily?: string;
-  fontWeight?: 'normal' | 'bold'
-}
-  }
-}
-export interface VFXUser {
-  id: string;
+  fontWeight?: 'normal' | 'bold' }
+
+
+
+
+export interface VFXUser { id: string;
   name: string;
   role: string;
-  color: string; // User's drawing color,
-}
-}
-}
+  color: string; // User's drawing color }
+
+
+
+
 export interface DrawingCanvasProps {
   width: number;
   height: number;
@@ -93,21 +91,21 @@ export interface DrawingCanvasProps {
   showGrid?: boolean;
   gridSize?: number;
   className?: string;
+  // Drawing tool configurations
+  const DRAWING_TOOLS = {
 
-// Drawing tool configurations
-const DRAWING_TOOLS = {
-}
-  freehand: { icon: <Pen className="w-4 h-4" />, label: 'Pen', cursor: 'crosshair' },
-  arrow: { icon: <ArrowRight className="w-4 h-4" />, label: 'Arrow', cursor: 'crosshair' },
-  circle: { icon: <Circle className="w-4 h-4" />, label: 'Circle', cursor: 'crosshair' },
-  rectangle: { icon: <Square className="w-4 h-4" />, label: 'Rectangle', cursor: 'crosshair' },
-  line: { icon: <Minus className="w-4 h-4" />, label: 'Line', cursor: 'crosshair' },
-  text: { icon: <Type className="w-4 h-4" />, label: 'Text', cursor: 'text' },
+},
+  freehand: { icon: <Pen className="w-4 h-4" />, label: 'Pen', cursor: 'crosshair' }
+  arrow: { icon: <ArrowRight className="w-4 h-4" />, label: 'Arrow', cursor: 'crosshair' }
+  circle: { icon: <Circle className="w-4 h-4" />, label: 'Circle', cursor: 'crosshair' }
+  rectangle: { icon: <Square className="w-4 h-4" />, label: 'Rectangle', cursor: 'crosshair' }
+  line: { icon: <Minus className="w-4 h-4" />, label: 'Line', cursor: 'crosshair' }
+  text: { icon: <Type className="w-4 h-4" />, label: 'Text', cursor: 'text' }
   eraser: { icon: <Eraser className="w-4 h-4" />, label: 'Eraser', cursor: 'crosshair' }
 };
 
 // Predefined colors for VFX workflow
-const DRAWING_COLORS = [;
+const DRAWING_COLORS = [
   '#ff0000', // Red - Critical/Revision
   '#ff7c00', // Orange - Cinema4D orange
   '#ffff00', // Yellow - Caution/Notes
@@ -121,26 +119,26 @@ const DRAWING_COLORS = [;
 ];
 
 // Layer configurations for VFX pipeline
-const DRAWING_LAYERS = [;
-  { id: 0, name: 'Background', color: '#6b7280', defaultVisible: true },
-  { id: 1, name: 'Technical', color: '#3b82f6', defaultVisible: true },
-  { id: 2, name: 'Creative', color: '#8b5cf6', defaultVisible: true },
-  { id: 3, name: 'Director Notes', color: '#ef4444', defaultVisible: true },
-  { id: 4, name: 'Review', color: '#10b981', defaultVisible: true },
+const DRAWING_LAYERS = [
+  { id: 0, name: 'Background', color: '#6b7280', defaultVisible: true }
+  { id: 1, name: 'Technical', color: '#3b82f6', defaultVisible: true }
+  { id: 2, name: 'Creative', color: '#8b5cf6', defaultVisible: true }
+  { id: 3, name: 'Director Notes', color: '#ef4444', defaultVisible: true }
+  { id: 4, name: 'Review', color: '#10b981', defaultVisible: true }
   { id: 5, name: 'Markup', color: '#f59e0b', defaultVisible: true }
 ];
-}
-export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
-  width,
-  height,
-  annotations,
-  currentUser,
-  backgroundImageUrl,
-  onAnnotationsChange,
-  onSave,
-  readonly = false,
-  showGrid = false,
-  gridSize = 20,
+
+export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({ )
+  width
+  height
+  annotations
+  currentUser
+  backgroundImageUrl
+  onAnnotationsChange
+  onSave
+  readonly = false
+  showGrid = false
+  gridSize = 20 }
   className = ''
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -155,15 +153,15 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
     DRAWING_LAYERS.reduce((acc, layer) => ({ ...acc, [layer.id]: layer.defaultVisible }), {})
   );
   // Drawing style state
-  const [drawingStyle, setDrawingStyle] = useState<DrawingStyle>({)
-  color: currentUser.color || '#ff7c00',
-  thickness: 3,
-  opacity: 1,
-  lineCap: 'round',
-  lineJoin: 'round',
-  fontSize: 16,
-  fontFamily: 'Arial',
-  fontWeight: 'normal',
+  const [drawingStyle, setDrawingStyle] = useState<DrawingStyle>({ )
+  color: currentUser.color || '#ff7c00'
+  thickness: 3
+  opacity: 1
+  lineCap: 'round'
+  lineJoin: 'round'
+  fontSize: 16
+  fontFamily: 'Arial'
+  fontWeight: 'normal' }
 });
   // UI state
   const [_____selectedAnnotation, _____setSelectedAnnotation] = useState<string | null>(null);
@@ -171,14 +169,12 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
   const [showStyles, setShowStyles] = useState(false);
   const [zoom, _____setZoom] = useState(1);
   const [pan, _____setPan] = useState({ x: 0, y: 0 });
-  const [history, setHistory] = useState<DrawingAnnotation[]>([annotations]);
+  const [history, setHistory] = useState<DrawingAnnotation>([annotations]);
   const [historyIndex, setHistoryIndex] = useState(0);
   // Get canvas context
-  const getContext = useCallback((canvasRef: React.RefObject<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
+  const getContext = useCallback((canvasRef: React.RefObject<HTMLCanvasElement>) => { const canvas = canvasRef.current;
     if (!canvas) return null;
-    return canvas.getContext('2d');
-  }, []);
+    return canvas.getContext('2d') }, []);
   // Convert screen coordinates to canvas coordinates
   const getCanvasCoordinates = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = overlayCanvasRef.current;
@@ -186,14 +182,12 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    return {
-  x: (event.clientX - rect.left) * scaleX / zoom - pan.x,
-  y: (event.clientY - rect.top) * scaleY / zoom - pan.y,
+    return { x: (event.clientX - rect.left) * scaleX / zoom - pan.x
+  y: (event.clientY - rect.top) * scaleY / zoom - pan.y }
 };
   }, [zoom, pan]);
   // Draw background grid
-  const drawGrid = useCallback((ctx: CanvasRenderingContext2D) => {
-    if (!showGrid) return;
+  const drawGrid = useCallback((ctx: CanvasRenderingContext2D) => { if (!showGrid) return;
     ctx.save();
     ctx.strokeStyle = '#e5e7eb';
     ctx.lineWidth = 0.5;
@@ -210,11 +204,9 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
       ctx.moveTo(0, y);
       ctx.lineTo(width, y);
       ctx.stroke();
-    ctx.restore();
-  }, [showGrid, width, height, gridSize]);
+    ctx.restore() }, [showGrid, width, height, gridSize]);
   // Draw single annotation
-  const drawAnnotation = useCallback((ctx: CanvasRenderingContext2D, annotation: DrawingAnnotation) => {
-    if (!annotation.visible || !layerVisibility[annotation.layer]) return;
+  const drawAnnotation = useCallback((ctx: CanvasRenderingContext2D, annotation: DrawingAnnotation) => { if (!annotation.visible || !layerVisibility[annotation.layer]) return;
     ctx.save();
     // Apply style
     ctx.globalAlpha = annotation.style.opacity;
@@ -270,7 +262,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
         );
         ctx.moveTo(end.x, end.y);
         ctx.lineTo()
-          end.x - arrowLength * Math.cos(angle + arrowAngle),
+          end.x - arrowLength * Math.cos(angle + arrowAngle) }
           end.y - arrowLength * Math.sin(angle + arrowAngle)
         );
         ctx.stroke();
@@ -314,8 +306,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
     ctx.restore();
   }, [layerVisibility]);
   // Render all annotations
-  const renderAnnotations = useCallback(() => {
-  const ctx = getContext(canvasRef);
+  const renderAnnotations = useCallback(() => { const ctx = getContext(canvasRef);
   if (!ctx) return;
   ctx.clearRect(0, 0, width, height);
   // Draw grid
@@ -358,9 +349,8 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
   ctx.rect(startX, startY, rectWidth, rectHeight);
   ctx.stroke();
   break;
-  case 'circle':,
-  if (currentPoints.length === 2) {
-  const centerX = currentPoints[0].x;
+  case 'circle': }
+  if (currentPoints.length === 2) { const centerX = currentPoints[0].x;
   const centerY = currentPoints[0].y;
   const radius = Math.sqrt(;);
   Math.pow(currentPoints[1].x - centerX, 2) +
@@ -370,11 +360,9 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
   ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
   ctx.stroke();
   break;
-  ctx.restore();
-}, [annotations, drawingStyle, currentTool, currentPoints, isDrawing, width, height, drawGrid, drawAnnotation, getContext]);
+  ctx.restore() }, [annotations, drawingStyle, currentTool, currentPoints, isDrawing, width, height, drawGrid, drawAnnotation, getContext]);
   // Handle mouse down
-  const handleMouseDown = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (readonly) return;
+  const handleMouseDown = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => { if (readonly) return;
     const point = getCanvasCoordinates(event);
     if (currentTool === 'eraser') {
       // Find annotation to erase
@@ -382,39 +370,31 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
   // Simple hit detection - could be improved
         return annotation.points.some(p => )
           Math.abs(p.x - point.x) < 10 && Math.abs(p.y - point.y) < 10
-        );
-      });
-      if (annotationToErase) {
-        const updatedAnnotations = annotations.filter(a => a.id !== annotationToErase.id);
+        ) });
+      if (annotationToErase) { const updatedAnnotations = annotations.filter(a => a.id !== annotationToErase.id);
         onAnnotationsChange(updatedAnnotations);
         addToHistory(updatedAnnotations);
       return;
     setIsDrawing(true);
-    setCurrentPoints([point]);
-  }, [readonly, currentTool, annotations, onAnnotationsChange, getCanvasCoordinates]);
+    setCurrentPoints([point]) }, [readonly, currentTool, annotations, onAnnotationsChange, getCanvasCoordinates]);
   // Handle mouse move
-  const handleMouseMove = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing || readonly) return;
+  const handleMouseMove = useCallback((event: React.MouseEvent<HTMLCanvasElement>) => { if (!isDrawing || readonly) return;
     const point = getCanvasCoordinates(event);
     if (currentTool === 'freehand') {
-      setCurrentPoints(prev => [...prev, point]);
-    } else {
-      setCurrentPoints(prev => [prev[0], point]);
-  }, [isDrawing, readonly, currentTool, getCanvasCoordinates]);
+      setCurrentPoints(prev => [...prev, point]) } else { setCurrentPoints(prev => [prev[0], point]) }, [isDrawing, readonly, currentTool, getCanvasCoordinates]);
   // Handle mouse up
-  const handleMouseUp = useCallback(() => {
-    if (!isDrawing || readonly) return;
+  const handleMouseUp = useCallback(() => { if (!isDrawing || readonly) return;
     if (currentPoints.length > 0) {
-      const newAnnotation: DrawingAnnotation = {,
+      const newAnnotation: DrawingAnnotation = { }
   id: `drawing-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-},
-  type: currentTool === 'eraser' ? 'freehand' : currentTool,
-        points: [...currentPoints],
-        style: { ...drawingStyle },
-        layer: currentLayer,
-        author: currentUser,
-        timestamp: new Date().toISOString(),
-        visible: true,
+
+  type: currentTool === 'eraser' ? 'freehand' : currentTool
+        points: [...currentPoints]
+        style: { ...drawingStyle }
+        layer: currentLayer
+        author: currentUser
+        timestamp: new Date().toISOString()
+        visible: true
         locked: false;
   };
       const updatedAnnotations = [...annotations, newAnnotation];
@@ -424,30 +404,22 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
     setCurrentPoints([]);
   }, [isDrawing, readonly, currentPoints, currentTool, drawingStyle, currentLayer, currentUser, annotations, onAnnotationsChange]);
   // History management
-  const addToHistory = useCallback((newAnnotations: DrawingAnnotation) => {
-    const newHistory = history.slice(0, historyIndex + 1);
+  const addToHistory = useCallback((newAnnotations: DrawingAnnotation) => { const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push([...newAnnotations]);
     setHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
-  }, [history, historyIndex]);
+    setHistoryIndex(newHistory.length - 1) }, [history, historyIndex]);
   // Undo/Redo
-  const undo = useCallback(() => {
-    if (historyIndex > 0) {
+  const undo = useCallback(() => { if (historyIndex > 0) {
       const newIndex = historyIndex - 1;
       setHistoryIndex(newIndex);
-      onAnnotationsChange([...history[newIndex]]);
-  }, [historyIndex, history, onAnnotationsChange]);
-  const redo = useCallback(() => {
-    if (historyIndex < history.length - 1) {
+      onAnnotationsChange([...history[newIndex]]) }, [historyIndex, history, onAnnotationsChange]);
+  const redo = useCallback(() => { if (historyIndex < history.length - 1) {
       const newIndex = historyIndex + 1;
       setHistoryIndex(newIndex);
-      onAnnotationsChange([...history[newIndex]]);
-  }, [historyIndex, history, onAnnotationsChange]);
+      onAnnotationsChange([...history[newIndex]]) }, [historyIndex, history, onAnnotationsChange]);
   // Clear all annotations
-  const clearAll = useCallback(() => {
-    onAnnotationsChange([]);
-    addToHistory([]);
-  }, [onAnnotationsChange, addToHistory]);
+  const clearAll = useCallback(() => { onAnnotationsChange([]);
+    addToHistory([]) }, [onAnnotationsChange, addToHistory]);
   // Export annotations as image
   const exportAsImage = useCallback(() => {
     const canvas = canvasRef.current;
@@ -458,15 +430,12 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
     link.click();
   }, []);
   // Re-render when annotations change
-  useEffect(() => {
-    renderAnnotations();
-  }, [renderAnnotations]);
+  useEffect(() => { renderAnnotations() }, [renderAnnotations]);
   // Layer visibility statistics
-  const layerStats = useMemo(() => {
-  return DRAWING_LAYERS.map(layer => ({)
+  const layerStats = useMemo(() => { return DRAWING_LAYERS.map(layer => ({)
   ...layer,
   count: annotations.filter(a => a.layer === layer.id).length,
-  visible: layerVisibility[layer.id],
+  visible: layerVisibility[layer.id] }
 }));
   }, [annotations, layerVisibility]);
   return;
@@ -609,9 +578,9 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
                         {DRAWING_COLORS.map(color => ()
                           <button
                             key={color}
-                            className={`w-6 h-6 rounded border-2 ${
-  drawingStyle.color === color ? 'border-gray-800' : 'border-gray-300',
-}`}
+                            className={ `w-6 h-6 rounded border-2 ${
+  drawingStyle.color === color ? 'border-gray-800' : 'border-gray-300' }
+`}
                             style={{ backgroundColor: color }}
                             onClick={() => setDrawingStyle(prev => ({ ...prev, color }))}
                           />
@@ -644,8 +613,8 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
                       <label className="block text-xs font-medium mb-2">Line Style</label>
                       <Select
                         value={drawingStyle.dashPattern ? 'dashed' : 'solid'}
-                        onValueChange={(value) => setDrawingStyle(prev => ({ )
-                          ...prev, 
+                        onValueChange={ (value) => setDrawingStyle(prev => ({ )
+                          ...prev }
                           dashPattern: value === 'dashed' ? [5, 5] : undefined 
                         }))}
                       >
@@ -707,10 +676,10 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
                   className="absolute inset-0"
                   style={{
                     backgroundImage: `url(${backgroundImageUrl})`}
-},
-  backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-  }}
+
+  backgroundSize: 'cover'
+                    backgroundPosition: 'center';
+}
                 />
               )}
               {/* Main drawing canvas */}
@@ -729,14 +698,13 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
-                onMouseLeave={() => {
+                onMouseLeave={ () => {
                   setIsDrawing(false);
-                  setCurrentPoints([]);
-                }}
-                style={{
-  cursor: DRAWING_TOOLS[currentTool]?.cursor || 'crosshair',
-  pointerEvents: readonly ? 'none' : 'all',
-}}
+                  setCurrentPoints([]) }}
+                style={ {
+  cursor: DRAWING_TOOLS[currentTool]?.cursor || 'crosshair'
+  pointerEvents: readonly ? 'none' : 'all' }
+
               />
               {/* Readonly overlay */}
               {readonly && ()

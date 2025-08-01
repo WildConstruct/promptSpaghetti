@@ -15,5 +15,4 @@ console.log('\nTest code around the failing test:');
 for (let i = handleTestStartLine; i < handleTestStartLine + 15; i++) {
   if (lines[i]) {
     console.log(`${i + 1}: ${lines[i]}`);
-  }
-}
+

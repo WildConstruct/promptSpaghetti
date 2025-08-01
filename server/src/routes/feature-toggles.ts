@@ -10,7 +10,7 @@ import {
   ToggleEvaluationContext,
   ToggleType,
   ClaudeImpact
-} from '../database/feature-toggle-models';
+ from '../database/feature-toggle-models';
 
 // Request/Response schemas for validation
 const createToggleSchema = {
@@ -26,7 +26,7 @@ const createToggleSchema = {
     claudeCompat: { type: 'array', items: { type: 'string' } },
     claudeImpact: { type: 'string', enum: Object.values(ClaudeImpact) },
     enabled: { type: 'boolean' }
-  }
+
 };
 
 const updateToggleSchema = {
@@ -39,7 +39,7 @@ const updateToggleSchema = {
     claudeImpact: { type: 'string', enum: Object.values(ClaudeImpact) },
     enabled: { type: 'boolean' },
     reason: { type: 'string', maxLength: 200 }
-  }
+
 };
 
 const evaluateToggleSchema = {
@@ -50,7 +50,7 @@ const evaluateToggleSchema = {
       items: { type: 'string' },
       minItems: 1,
       maxItems: 50
-  }
+
     context: {
       type: 'object',
       properties: {
@@ -61,9 +61,9 @@ const evaluateToggleSchema = {
         ipAddress: { type: 'string' },
         userAgent: { type: 'string' },
         experimentId: { type: 'string' }
-      }
-    }
-  }
+
+
+
 };
 
 const emergencyOverrideSchema = {
@@ -73,7 +73,7 @@ const emergencyOverrideSchema = {
     action: { type: 'string', enum: ['enable', 'disable'] },
     reason: { type: 'string', minLength: 10, maxLength: 500 },
     ttlMinutes: { type: 'number', minimum: 1, maximum: 1440 } // Max 24 hours
-  }
+
 };
 
 export async function featureToggleRoutes(fastify: FastifyInstance) {
@@ -86,7 +86,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
     const user = (request as any).user;
     if (!user || !user.permissions?.includes('toggle.manage')) {
       return reply.code(403).send({ error: 'Admin permissions required' });
-    }
+
   };
 
   // GET /toggles - List feature toggles
@@ -103,9 +103,9 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
           search: { type: 'string' },
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'number', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const query = request.query as any;
@@ -125,10 +125,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         limit: query.limit,
         offset: query.offset
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error listing toggles:', error);
       return reply.code(500).send({ error: 'Internal server error' });
-    }
+
   });
 
   // POST /toggles - Create feature toggle
@@ -143,15 +143,15 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       const toggle = await service.createToggle(body, user.id);
       
       return reply.code(201).send(toggle);
-    } catch (error) {
+ catch (error) {
       request.log.error('Error creating toggle:', error);
       
       if (error.code === '23505') { // Unique violation
         return reply.code(409).send({ error: 'Toggle key already exists' });
-      }
+
       
       return reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // GET /toggles/:id - Get specific toggle
@@ -162,8 +162,8 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -171,7 +171,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       
       if (!toggle) {
         return reply.code(404).send({ error: 'Toggle not found' });
-      }
+
       
       // Get additional data
       const [scopes, audit, dependencies] = await Promise.all([
@@ -186,10 +186,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         recentAudit: audit,
         dependencies
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error getting toggle:', error);
       return reply.code(500).send({ error: 'Internal server error' });
-    }
+
   });
 
   // PUT /toggles/:id - Update toggle
@@ -200,9 +200,9 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-  }
+
       body: updateToggleSchema
-    }
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -213,10 +213,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       const toggle = await service.updateToggle(updateRequest, user.id);
       
       return reply.send(toggle);
-    } catch (error) {
+ catch (error) {
       request.log.error('Error updating toggle:', error);
       return reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // POST /toggles/:id/activate - Activate toggle (with dry-run option)
@@ -227,20 +227,20 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-  }
+
       querystring: {
         type: 'object',
         properties: {
           dryRun: { type: 'boolean', default: false }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', maxLength: 200 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -253,7 +253,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         const toggle = await dao.getToggleById(id);
         if (!toggle) {
           return reply.code(404).send({ error: 'Toggle not found' });
-        }
+
         
         const dependencies = await dao.getDependencyAnalysis(id);
         
@@ -264,10 +264,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
             dependents: dependencies.dependents,
             estimatedUserImpact: 'TBD', // TODO: Integrate with Epic 13 analytics
             claudeImpact: toggle.claudeImpact
-  }
+
           wouldActivate: true
         });
-      }
+
       
       const toggle = await service.updateToggle({
         id,
@@ -276,10 +276,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       }, user.id);
       
       return reply.send(toggle);
-    } catch (error) {
+ catch (error) {
       request.log.error('Error activating toggle:', error);
       return reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // POST /toggles/:id/deactivate - Deactivate toggle (with dry-run option)
@@ -290,20 +290,20 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-  }
+
       querystring: {
         type: 'object',
         properties: {
           dryRun: { type: 'boolean', default: false }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', maxLength: 200 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -316,7 +316,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         const toggle = await dao.getToggleById(id);
         if (!toggle) {
           return reply.code(404).send({ error: 'Toggle not found' });
-        }
+
         
         const dependencies = await dao.getDependencyAnalysis(id);
         
@@ -328,10 +328,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
             estimatedUserImpact: 'TBD', // TODO: Integrate with Epic 13 analytics
             claudeImpact: toggle.claudeImpact,
             deactivationRisk: toggle.enabled ? 'MEDIUM' : 'LOW'
-  }
+
           wouldDeactivate: true
         });
-      }
+
       
       const toggle = await service.updateToggle({
         id,
@@ -340,10 +340,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       }, user.id);
       
       return reply.send(toggle);
-    } catch (error) {
+ catch (error) {
       request.log.error('Error deactivating toggle:', error);
       return reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // POST /toggles/:id/rollback - Rollback toggle to previous version
@@ -354,16 +354,16 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-  }
+
       body: {
         type: 'object',
         required: ['reason'],
         properties: {
           reason: { type: 'string', minLength: 10, maxLength: 500 },
           version: { type: 'number', minimum: 1 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -377,7 +377,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       const toggle = await dao.getToggleById(id);
       if (!toggle) {
         return reply.code(404).send({ error: 'Toggle not found' });
-      }
+
       
       // For now, just disable the toggle (full rollback would need version history)
       const rolledBackToggle = await service.updateToggle({
@@ -398,10 +398,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       });
       
       return reply.send(rolledBackToggle);
-    } catch (error) {
+ catch (error) {
       request.log.error('Error rolling back toggle:', error);
       return reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // GET /toggles/:id/audit - Get audit history
@@ -412,14 +412,14 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-  }
+
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -428,10 +428,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       const audit = await dao.getToggleAuditHistory(id, limit);
       
       return reply.send({ audit });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error getting audit history:', error);
       return reply.code(500).send({ error: 'Internal server error' });
-    }
+
   });
 
   // POST /toggles/:id/override - Emergency override
@@ -442,9 +442,9 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-  }
+
       body: emergencyOverrideSchema
-    }
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -467,10 +467,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
           ? new Date(Date.now() + body.ttlMinutes * 60000).toISOString()
           : null
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error applying emergency override:', error);
       return reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // DELETE /toggles/:id - Archive toggle
@@ -481,8 +481,8 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -491,10 +491,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       await dao.archiveToggle(id, user.id);
       
       return reply.code(204).send();
-    } catch (error) {
+ catch (error) {
       request.log.error('Error archiving toggle:', error);
       return reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // POST /evaluate - Evaluate toggles for a context
@@ -522,10 +522,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       const results = await service.evaluateToggles(toggles, evaluationContext);
       
       return reply.send({ results });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error evaluating toggles:', error);
       return reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // GET /snapshot - Get toggle configuration snapshot
@@ -536,9 +536,9 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           orgId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { orgId } = request.query as { orgId?: string };
@@ -554,10 +554,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       reply.header('ETag', `"${snapshot.checksum}"`);
       
       return reply.send(snapshot);
-    } catch (error) {
+ catch (error) {
       request.log.error('Error generating snapshot:', error);
       return reply.code(500).send({ error: 'Internal server error' });
-    }
+
   });
 
   // Health check endpoint
@@ -572,11 +572,10 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
       };
       
       return reply.send(healthCheck);
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({ 
         status: 'unhealthy', 
         error: error.message 
       });
-    }
+
   });
-}

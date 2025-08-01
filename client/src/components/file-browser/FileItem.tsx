@@ -23,11 +23,11 @@ const formatDate = (date: Date): string => {
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   if (diffDays === 0) {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  } else if (diffDays === 1) {
+ else if (diffDays === 1) {
     return 'Yesterday';
-  } else if (diffDays < 7) {
+ else if (diffDays < 7) {
     return `${diffDays} days ago`;}
-  } else {
+ else {
     return date.toLocaleDateString();
 };
 const getFileIcon = (item: unknown) => {
@@ -114,7 +114,7 @@ export const FileItem: React.FC<FileItemProps> = ({)
   if (dragDataStr) {
   const dragData: DragDropData = JSON.parse(dragDataStr);
   onDrop?.(item, dragData);
-} catch (error) {
+ catch (error) {
   console.error('Failed to parse drag data:', error);
 };
   const paddingLeft = level * 20 + 8;
@@ -132,7 +132,7 @@ export const FileItem: React.FC<FileItemProps> = ({)
         margin: '1px 4px',
         minHeight: '24px',
         opacity: isDragging ? 0.5 : 1;
-  }}
+
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
@@ -158,7 +158,7 @@ export const FileItem: React.FC<FileItemProps> = ({)
   fontWeight: 'bold',
   color: '#666',
   userSelect: 'none',
-}}
+
         >
           {isExpanded ? '▼' : '▶'}
         </div>
@@ -172,7 +172,7 @@ export const FileItem: React.FC<FileItemProps> = ({)
   fontSize: '16px',
   marginRight: '6px',
   userSelect: 'none',
-}}
+
       >
         {getFileIcon(item)}
       </div>
@@ -183,7 +183,7 @@ export const FileItem: React.FC<FileItemProps> = ({)
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
-}}>
+}>
         {item.name}
       </div>
       {/* Metadata */}
@@ -193,7 +193,7 @@ export const FileItem: React.FC<FileItemProps> = ({)
   fontSize: '12px',
   color: '#666',
   marginLeft: '8px',
-}}>
+}>
         {/* Node count for .psg files */}
         {item.type === 'file' && item.metadata?.nodeCount && ()
           <div style={{ minWidth: '40px', textAlign: 'right' }}>
@@ -224,7 +224,7 @@ export const FileItem: React.FC<FileItemProps> = ({)
   fontSize: '10px',
   color: '#007bff',
   opacity: 0.7,
-}}>
+}>
           {item.tags.length}🏷️
         </div>
       )}
@@ -234,7 +234,7 @@ export const FileItem: React.FC<FileItemProps> = ({)
   marginLeft: '4px',
   fontSize: '12px',
   color: '#28a745',
-}}>
+}>
           👥
         </div>
       )}

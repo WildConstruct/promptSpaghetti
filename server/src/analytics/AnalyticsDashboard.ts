@@ -8,8 +8,9 @@ import { CostTracker, BudgetConfig, CostAlert } from './CostTracker';
 /**
  * Analytics dashboard configuration
  */
-}
-}
+
+
+
 export interface AnalyticsDashboardConfig {
   refreshInterval: number;
   historyWindow: number;
@@ -17,15 +18,17 @@ export interface AnalyticsDashboardConfig {
   costTrackingEnabled: boolean;
   heatMapEnabled: boolean;
   exportFormats: string[];
-}
-}
-}
+
+
+
+
 
 /**
  * Analytics dashboard data structure
  */
-}
-}
+
+
+
 export interface AnalyticsDashboardData extends DashboardData {
   analytics: {
     summary: AnalyticsSummary;
@@ -53,35 +56,39 @@ export interface AnalyticsDashboardData extends DashboardData {
       errorHotspots: Array<{ type: string; count: number }>;
     };
   };
-}
+
 
 /**
  * Heat map data point
  */
-}
-}
+
+
+
 export interface HeatMapPoint {
   x: number;
   y: number;
   intensity: number;
   interactions: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Usage pattern data
  */
-}
-}
+
+
+
 export interface UsagePattern {
   type: 'hourly' | 'daily' | 'weekly';
-}
-}
+
+
+
   data: Array<{ period: string; value: number }>;
   trend: 'increasing' | 'decreasing' | 'stable';
   changePercent: number;
-}
+
 
 /**
  * Enhanced analytics dashboard extending the performance dashboard
@@ -121,7 +128,7 @@ export class AnalyticsDashboard extends EventEmitter {
     };
 
     this.setupEventListeners();
-  }
+
 
   /**
    * Start the analytics dashboard
@@ -139,10 +146,10 @@ export class AnalyticsDashboard extends EventEmitter {
       this.refreshTimer = setInterval(() => {
         this.broadcastAnalyticsUpdate();
       }, this.config.refreshInterval);
-    }
+
 
     this.emit('dashboard_started');
-  }
+
 
   /**
    * Stop the analytics dashboard
@@ -158,10 +165,10 @@ export class AnalyticsDashboard extends EventEmitter {
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer);
       this.refreshTimer = null;
-    }
+
 
     this.emit('dashboard_stopped');
-  }
+
 
   /**
    * Add a dashboard client
@@ -174,7 +181,7 @@ export class AnalyticsDashboard extends EventEmitter {
     this.sendToClient(client, analyticsData);
     
     this.emit('analytics_client_connected', { clientCount: this.dashboardClients.size });
-  }
+
 
   /**
    * Remove a dashboard client
@@ -182,14 +189,14 @@ export class AnalyticsDashboard extends EventEmitter {
   removeClient(client: any): void {
     this.dashboardClients.delete(client);
     this.emit('analytics_client_disconnected', { clientCount: this.dashboardClients.size });
-  }
+
 
   /**
    * Get current analytics dashboard data
    */
   getAnalyticsDashboardData(): AnalyticsDashboardData {
     return this.generateAnalyticsDashboardData();
-  }
+
 
   /**
    * Get analytics summary for a time period
@@ -206,7 +213,7 @@ export class AnalyticsDashboard extends EventEmitter {
     };
     
     return this.analyticsDAO.getAnalyticsSummary(analyticsFilters);
-  }
+
 
   /**
    * Get heat map data for canvas interactions
@@ -218,7 +225,7 @@ export class AnalyticsDashboard extends EventEmitter {
   ): HeatMapPoint[] {
     if (!this.config.heatMapEnabled) {
       return [];
-    }
+
 
     const filters: AnalyticsFilters = { startTime, endTime };
     const rawData = this.analyticsDAO.getHeatMapData(filters);
@@ -229,7 +236,7 @@ export class AnalyticsDashboard extends EventEmitter {
       intensity: point.intensity,
       interactions: point.intensity
     }));
-  }
+
 
   /**
    * Get usage patterns for different time periods
@@ -252,7 +259,7 @@ export class AnalyticsDashboard extends EventEmitter {
       startTime = endTime - (12 * 7 * 24 * 60 * 60 * 1000); // Last 12 weeks
       granularity = 'day';
       break;
-    }
+
 
     const timeSeriesData = this.analyticsDAO.getTimeSeriesData(
       'executions',
@@ -279,7 +286,7 @@ export class AnalyticsDashboard extends EventEmitter {
       trend,
       changePercent: Math.abs(changePercent)
     };
-  }
+
 
   /**
    * Get cost analysis data
@@ -292,7 +299,7 @@ export class AnalyticsDashboard extends EventEmitter {
   ): any {
     if (!this.config.costTrackingEnabled) {
       return null;
-    }
+
 
     const summary = this.costTracker.getCostSummary(startTime, endTime, userId, organizationId);
     const forecast = this.costTracker.forecastCosts(30, userId, organizationId);
@@ -311,10 +318,10 @@ export class AnalyticsDashboard extends EventEmitter {
         hourly: this.analyticsDAO.getTimeSeriesData('cost', 'hour', { 
           startTime: endTime - (24 * 60 * 60 * 1000), 
           endTime 
-  }
-      }
+
+
     };
-  }
+
 
   /**
    * Generate comprehensive analytics report
@@ -345,7 +352,7 @@ export class AnalyticsDashboard extends EventEmitter {
         version: '1.0',
         totalEvents: summary.totalEvents,
         uniqueUsers: summary.uniqueUsers
-      }
+
     };
 
     switch (format) {
@@ -361,8 +368,8 @@ export class AnalyticsDashboard extends EventEmitter {
       
     default:
       return JSON.stringify(reportData, null, 2);
-    }
-  }
+
+
 
   /**
    * Generate HTML analytics dashboard
@@ -378,7 +385,7 @@ export class AnalyticsDashboard extends EventEmitter {
       '<div class="recommendations">',
       `${analyticsSection}<div class="recommendations">`
     );
-  }
+
 
   /**
    * Setup event listeners for real-time updates
@@ -388,7 +395,7 @@ export class AnalyticsDashboard extends EventEmitter {
     this.analyticsCollector.on('event_recorded', (event) => {
       if (this.config.realTimeEnabled && this.dashboardClients.size > 0) {
         this.emit('analytics_event', event);
-      }
+
     });
 
     // Listen to cost tracking events
@@ -399,16 +406,16 @@ export class AnalyticsDashboard extends EventEmitter {
     this.costTracker.on('cost_calculated', (costCalc) => {
       if (this.config.realTimeEnabled) {
         this.emit('cost_update', costCalc);
-      }
+
     });
 
     // Listen to performance dashboard events
     this.performanceDashboard.on('dashboard_updated', () => {
       if (this.isActive) {
         this.broadcastAnalyticsUpdate();
-      }
+
     });
-  }
+
 
   /**
    * Generate comprehensive analytics dashboard data
@@ -431,19 +438,19 @@ export class AnalyticsDashboard extends EventEmitter {
           successful: Math.round(summary.totalGraphExecutions * summary.successRate / 100),
           failed: Math.round(summary.totalGraphExecutions * (100 - summary.successRate) / 100),
           averageTime: summary.averageExecutionTime
-  }
+
         usage: {
           totalUsers: summary.uniqueUsers,
           activeSessions: summary.uniqueSessions,
           popularNodes: summary.topNodeTypes.slice(0, 5),
           topGraphs: [] // Would need to track graph IDs
-  }
+
         costs: {
           totalSpent: costAnalysis?.summary?.totalCost || 0,
           dailyAverage: (costAnalysis?.summary?.totalCost || 0) / 30,
           topProviders: costAnalysis?.summary?.providerUsage || [],
           budgetAlerts: costAnalysis?.alerts || []
-  }
+
         patterns: {
           hourlyUsage: patterns.data.map(d => ({
             hour: new Date(d.period).getHours(),
@@ -451,10 +458,10 @@ export class AnalyticsDashboard extends EventEmitter {
           })),
           userJourneys: [], // Would implement journey tracking
           errorHotspots: summary.errorBreakdown.slice(0, 5)
-        }
-      }
+
+
     };
-  }
+
 
   /**
    * Generate HTML section for analytics
@@ -520,72 +527,72 @@ export class AnalyticsDashboard extends EventEmitter {
           border-radius: 8px;
           padding: 20px;
           border: 1px solid #333;
-        }
+
         
         .analytics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 15px;
           margin-bottom: 20px;
-        }
+
         
         .analytics-card {
           background: #1a1a1a;
           border-radius: 6px;
           padding: 15px;
           border: 1px solid #444;
-        }
+
         
         .analytics-title {
           font-size: 14px;
           color: #888;
           margin-bottom: 5px;
-        }
+
         
         .analytics-value {
           font-size: 24px;
           font-weight: bold;
           color: #22c55e;
           margin-bottom: 5px;
-        }
+
         
         .analytics-subtitle {
           font-size: 12px;
           color: #666;
-        }
+
         
         .popular-nodes {
           margin-bottom: 20px;
-        }
+
         
         .node-stat {
           display: flex;
           justify-content: space-between;
           padding: 8px 0;
           border-bottom: 1px solid #333;
-        }
+
         
         .node-type {
           color: #fff;
-        }
+
         
         .node-count {
           color: #888;
-        }
+
         
         .budget-alerts .alert-item {
           margin-bottom: 10px;
           padding: 10px;
           border-radius: 4px;
           border-left: 4px solid #f59e0b;
-        }
+
         
         .budget-alerts .alert-item.critical {
           border-left-color: #ef4444;
-        }
+
       </style>
     `;
-  }
+
 
   /**
    * Generate HTML report
@@ -635,7 +642,7 @@ export class AnalyticsDashboard extends EventEmitter {
       </body>
       </html>
     `;
-  }
+
 
   /**
    * Broadcast analytics update to all clients
@@ -648,7 +655,7 @@ export class AnalyticsDashboard extends EventEmitter {
     this.dashboardClients.forEach(client => {
       this.sendToClient(client, analyticsData);
     });
-  }
+
 
   /**
    * Broadcast alert to all clients
@@ -657,7 +664,7 @@ export class AnalyticsDashboard extends EventEmitter {
     this.dashboardClients.forEach(client => {
       this.sendToClient(client, { type, alert: data });
     });
-  }
+
 
   /**
    * Send data to a specific client
@@ -666,12 +673,11 @@ export class AnalyticsDashboard extends EventEmitter {
     try {
       if (client.send && typeof client.send === 'function') {
         client.send(JSON.stringify(data));
-      } else if (client.write && typeof client.write === 'function') {
+ else if (client.write && typeof client.write === 'function') {
         client.write(JSON.stringify(data));
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to send analytics data to client:', error);
       this.dashboardClients.delete(client);
-    }
-  }
-}
+
+

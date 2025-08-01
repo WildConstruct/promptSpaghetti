@@ -15,7 +15,7 @@ import {
   ParseUUIDPipe,
   ParseIntPipe,
   DefaultValuePipe
-} from '@nestjs/common';
+ from '@nestjs/common';
 import { 
   ApiTags, 
   ApiOperation, 
@@ -24,7 +24,7 @@ import {
   ApiQuery,
   ApiBearerAuth,
   ApiBody
-} from '@nestjs/swagger';
+ from '@nestjs/swagger';
 import { MarketplaceService } from './marketplace.service';
 import { JwtAuthGuard } from '../auth/middleware/jwt-auth.guard';
 import { RolesGuard } from '../auth/middleware/roles.guard';
@@ -37,7 +37,7 @@ import {
   CreateReviewSchema,
   CreatePurchaseSchema,
   PreviewRequest
-} from './types';
+ from './types';
 
 @ApiTags('marketplace')
 @Controller('marketplace')
@@ -55,7 +55,7 @@ export class MarketplaceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createTemplate(@Request() req: any, @Body() templateData: any) {
     return this.marketplaceService.createTemplate(req.user.id, templateData);
-  }
+
 
   @Get('templates/search')
   @ApiOperation({ summary: 'Search templates in the marketplace' })
@@ -101,7 +101,7 @@ export class MarketplaceController {
 
     const userId = req?.user?.id;
     return this.marketplaceService.searchTemplates(filters, userId);
-  }
+
 
   @Get('templates/:id')
   @ApiOperation({ summary: 'Get template details' })
@@ -115,7 +115,7 @@ export class MarketplaceController {
   ) {
     const userId = req?.user?.id;
     return this.marketplaceService.getTemplate(id, userId);
-  }
+
 
   @Put('templates/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -132,7 +132,7 @@ export class MarketplaceController {
     @Request() req: any
   ) {
     return this.marketplaceService.updateTemplate(id, req.user.id, updates);
-  }
+
 
   @Delete('templates/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -149,7 +149,7 @@ export class MarketplaceController {
     @Request() req: any
   ) {
     await this.marketplaceService.deleteTemplate(id, req.user.id);
-  }
+
 
   // Version endpoints
   @Post('templates/:id/versions')
@@ -167,7 +167,7 @@ export class MarketplaceController {
     @Request() req: any
   ) {
     return this.marketplaceService.createVersion(templateId, req.user.id, versionData);
-  }
+
 
   @Get('templates/:id/versions')
   @UseGuards(JwtAuthGuard)
@@ -182,7 +182,7 @@ export class MarketplaceController {
     @Request() req: any
   ) {
     return this.marketplaceService.getTemplateVersions(templateId, req.user.id);
-  }
+
 
   @Get('versions/:id')
   @ApiOperation({ summary: 'Get specific version details' })
@@ -191,7 +191,7 @@ export class MarketplaceController {
   @ApiResponse({ status: 404, description: 'Version not found' })
   async getVersion(@Param('id', ParseUUIDPipe) id: string) {
     return this.marketplaceService.getVersion(id);
-  }
+
 
   // Purchase endpoints
   @Post('purchases')
@@ -206,7 +206,7 @@ export class MarketplaceController {
     @Request() req: any
   ) {
     return this.marketplaceService.createPurchase(req.user.id, purchaseData);
-  }
+
 
   @Get('purchases/my')
   @UseGuards(JwtAuthGuard)
@@ -215,7 +215,7 @@ export class MarketplaceController {
   @ApiResponse({ status: 200, description: 'User purchases returned successfully' })
   async getUserPurchases(@Request() req: any) {
     return this.marketplaceService.getUserPurchases(req.user.id);
-  }
+
 
   // Review endpoints
   @Post('reviews')
@@ -230,7 +230,7 @@ export class MarketplaceController {
     @Request() req: any
   ) {
     return this.marketplaceService.createReview(req.user.id, reviewData);
-  }
+
 
   @Get('templates/:id/reviews')
   @ApiOperation({ summary: 'Get reviews for a template' })
@@ -238,7 +238,7 @@ export class MarketplaceController {
   @ApiResponse({ status: 200, description: 'Template reviews returned successfully' })
   async getTemplateReviews(@Param('id', ParseUUIDPipe) templateId: string) {
     return this.marketplaceService.getTemplateReviews(templateId);
-  }
+
 
   // Preview endpoints
   @Post('templates/:id/preview')
@@ -253,9 +253,9 @@ export class MarketplaceController {
         version_id: { type: 'string', format: 'uuid', description: 'Specific version to preview (optional)' },
         user_input: { type: 'object', description: 'Input parameters for the template' },
         claude_model_override: { type: 'string', description: 'Override Claude model for preview' }
-      }
-    }
-  }
+
+
+
   @ApiResponse({ status: 200, description: 'Preview generated successfully' })
   @ApiResponse({ status: 404, description: 'Template not found' })
   @ApiResponse({ status: 400, description: 'Template preview not available' })
@@ -272,7 +272,7 @@ export class MarketplaceController {
     };
 
     return this.marketplaceService.previewTemplate(req.user.id, request);
-  }
+
 
   // Categories
   @Get('categories')
@@ -280,7 +280,7 @@ export class MarketplaceController {
   @ApiResponse({ status: 200, description: 'Categories returned successfully' })
   async getCategories() {
     return this.marketplaceService.getCategories();
-  }
+
 
   // Analytics endpoints (for creators)
   @Get('templates/:id/analytics')
@@ -297,7 +297,7 @@ export class MarketplaceController {
     @Request() req: any
   ) {
     return this.marketplaceService.getTemplateAnalytics(templateId, req.user.id);
-  }
+
 
   // Admin endpoints
   @Post('search/refresh')
@@ -309,5 +309,4 @@ export class MarketplaceController {
   @ApiResponse({ status: 204, description: 'Search index refreshed successfully' })
   async refreshSearchIndex() {
     await this.marketplaceService.refreshSearchIndex();
-  }
-}
+

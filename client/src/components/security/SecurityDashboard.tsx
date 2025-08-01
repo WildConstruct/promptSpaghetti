@@ -14,32 +14,34 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle
-} from 'lucide-react';
+ from 'lucide-react';
 // SecurityMetric type was removed as unused
 import { formatDistanceToNow } from 'date-fns';
 import './SecurityDashboard.css';
-}
+
+
 interface SecurityDashboardProps {
   onIncidentClick?: (incidentId: string) => void;
   onThreatClick?: (threatId: string) => void;
   interface SecurityAlert {
   id: string;,
-  type: 'critical' | 'high' | 'medium' | 'low';
+  type: 'critical' | 'high' | 'medium' | 'low';,
   title: string;,
-  description: string;
+  description: string;,
   timestamp: Date;,
-  source: string;
+  source: string;,
   status: 'open' | 'investigating' | 'resolved';
   interface ThreatMetrics {
   totalThreats: number;,
-  blockedThreats: number;
+  blockedThreats: number;,
   activeIncidents: number;,
-  riskScore: number;
+  riskScore: number;,
   lastScan: Date;
-  export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({,)
+  export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({),
   onIncidentClick,
   // onThreatClick // Commented out unused prop
-}
+
+
 }) => {
   const [metrics, setMetrics] = useState<ThreatMetrics>({)
   totalThreats: 0,
@@ -72,7 +74,7 @@ interface SecurityDashboardProps {
   timestamp: new Date(Date.now() - 2 * 60 * 1000),
   source: 'Authentication System',
   status: 'investigating',
-}
+
           {
   id: 'alert-2',
   type: 'high',
@@ -81,7 +83,7 @@ interface SecurityDashboardProps {
   timestamp: new Date(Date.now() - 10 * 60 * 1000),
   source: 'API Gateway',
   status: 'open',
-}
+
           {
   id: 'alert-3',
   type: 'medium',

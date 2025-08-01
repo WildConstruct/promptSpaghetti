@@ -9,13 +9,12 @@
 import React from 'react';
 
 }
-interface SentimentDashboardProps {
-    resourceId: string;
+}
+interface SentimentDashboardProps { resourceId: string;
     resourceType: string;
     timeRange?: {
         start: Date;
-        end: Date;
-
+        end: Date }
 }
     };
     refreshInterval?: number;

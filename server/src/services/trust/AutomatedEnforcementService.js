@@ -18,7 +18,7 @@ export class AutomatedEnforcementService {
     this.trustScoreService = trustScoreService;
     this.auditService = auditService;
     this.config = config || this.getDefaultConfig();
-  }
+
   // =============================================================================
   // Core Enforcement Methods
   // =============================================================================
@@ -28,7 +28,7 @@ export class AutomatedEnforcementService {
   async enforceUserTrustPolicies(userTrustScore, triggeredBy = 'trust_score_update') {
     if (!this.config.enabled) {
       return [];
-    }
+
     console.log(`🛡️ Evaluating enforcement policies for user: ${userTrustScore.userId}`);
     const actions = [];
     for (const policy of this.config.policies) {
@@ -37,7 +37,7 @@ export class AutomatedEnforcementService {
       if (await this.isUserExempt(userTrustScore.userId, policy)) {
         console.log(`⚪ User ${userTrustScore.userId} is exempt from policy: ${policy.name}`);
         continue;
-      }
+
       // Evaluate trust score thresholds
       const trustActions = this.evaluateTrustScoreThresholds(userTrustScore, policy, 'user', triggeredBy);
       actions.push(...trustActions);
@@ -51,21 +51,21 @@ export class AutomatedEnforcementService {
           triggeredBy
         );
         actions.push(...riskActions);
-      }
-    }
+
+
     // Apply approved actions
     const appliedActions = await this.applyEnforcementActions(actions);
     // Log enforcement decisions
     await this.logEnforcementDecision('user', userTrustScore.userId, appliedActions);
     return appliedActions;
-  }
+
   /**
    * Evaluate and enforce policies for a template trust score
    */
   async enforceTemplateTrustPolicies(templateTrustScore, triggeredBy = 'template_analysis') {
     if (!this.config.enabled) {
       return [];
-    }
+
     console.log(`🛡️ Evaluating enforcement policies for template: ${templateTrustScore.templateId}`);
     const actions = [];
     for (const policy of this.config.policies) {
@@ -82,21 +82,21 @@ export class AutomatedEnforcementService {
           triggeredBy
         );
         actions.push(...warningActions);
-      }
-    }
+
+
     // Apply approved actions
     const appliedActions = await this.applyEnforcementActions(actions);
     // Log enforcement decisions
     await this.logEnforcementDecision('template', templateTrustScore.templateId, appliedActions);
     return appliedActions;
-  }
+
   /**
    * Evaluate and enforce policies for a transaction
    */
   async enforceTransactionPolicies(transactionTrustScore, triggeredBy = 'transaction_analysis') {
     if (!this.config.enabled) {
       return [];
-    }
+
     console.log(`🛡️ Evaluating enforcement policies for transaction: ${transactionTrustScore.transactionId}`);
     const actions = [];
     for (const policy of this.config.policies) {
@@ -114,7 +114,7 @@ export class AutomatedEnforcementService {
           triggeredBy
         );
         actions.push(...fraudActions);
-      }
+
       // Evaluate risk assessment
       if (transactionTrustScore.riskAssessment?.riskLevel === 'critical') {
         actions.push(
@@ -129,14 +129,14 @@ export class AutomatedEnforcementService {
             policy.actions.autoSuspension
           )
         );
-      }
-    }
+
+
     // Apply approved actions
     const appliedActions = await this.applyEnforcementActions(actions);
     // Log enforcement decisions
     await this.logEnforcementDecision('transaction', transactionTrustScore.transactionId, appliedActions);
     return appliedActions;
-  }
+
   /**
    * Process suspicious activity report and take automated actions
    */
@@ -157,7 +157,7 @@ export class AutomatedEnforcementService {
           report.severity === 'critical' || report.severity === 'high'
         )
       );
-    }
+
     if (report.templateId) {
       actions.push(
         this.createEnforcementAction(
@@ -171,7 +171,7 @@ export class AutomatedEnforcementService {
           report.severity === 'critical'
         )
       );
-    }
+
     if (report.transactionId) {
       actions.push(
         this.createEnforcementAction(
@@ -185,15 +185,15 @@ export class AutomatedEnforcementService {
           report.severity === 'critical' || report.severity === 'high'
         )
       );
-    }
+
     // Apply actions
     const appliedActions = await this.applyEnforcementActions(actions);
     // Send alerts for high severity reports
     if (report.severity === 'high' || report.severity === 'critical') {
       await this.sendEnforcementAlert('suspicious_activity', report, appliedActions);
-    }
+
     return appliedActions;
-  }
+
   // =============================================================================
   // Evaluation Methods
   // =============================================================================
@@ -201,7 +201,7 @@ export class AutomatedEnforcementService {
     const actions = [];
     if (!policy.triggers.trustScoreThresholds) {
       return actions;
-    }
+
     const thresholds = policy.triggers.trustScoreThresholds;
     const score = trustScore.score;
     const entityId = this.getEntityId(trustScore, entityType);
@@ -219,7 +219,7 @@ export class AutomatedEnforcementService {
           true
         )
       );
-    }
+
     // Restriction threshold
     else if (score <= thresholds.restrict && policy.actions.autoRestriction) {
       actions.push(
@@ -234,7 +234,7 @@ export class AutomatedEnforcementService {
           true
         )
       );
-    }
+
     // Flagging threshold
     else if (score <= thresholds.flag && policy.actions.autoFlagging) {
       actions.push(
@@ -249,14 +249,14 @@ export class AutomatedEnforcementService {
           true
         )
       );
-    }
+
     return actions;
-  }
+
   evaluateRiskFactors(entityId, riskFactors, policy, entityType, triggeredBy) {
     const actions = [];
     if (!policy.triggers.riskFactorRules) {
       return actions;
-    }
+
     const rules = policy.triggers.riskFactorRules;
     const criticalRisks = riskFactors.filter(r => r.severity === 'critical');
     const highRisks = riskFactors.filter(r => r.severity === 'high');
@@ -274,7 +274,7 @@ export class AutomatedEnforcementService {
           true
         )
       );
-    }
+
     // High risk count threshold
     else if (highRisks.length >= rules.highRiskCount) {
       actions.push(
@@ -289,9 +289,9 @@ export class AutomatedEnforcementService {
           policy.actions.autoRestriction
         )
       );
-    }
+
     return actions;
-  }
+
   evaluateTemplateWarnings(templateId, warnings, policy, triggeredBy) {
     const actions = [];
     const criticalWarnings = warnings.filter(w => w.severity === 'critical');
@@ -310,7 +310,7 @@ export class AutomatedEnforcementService {
           policy.actions.autoSuspension
         )
       );
-    }
+
     // Security warnings require flagging
     else if (securityWarnings.length > 0) {
       actions.push(
@@ -325,14 +325,14 @@ export class AutomatedEnforcementService {
           policy.actions.autoFlagging
         )
       );
-    }
+
     return actions;
-  }
+
   evaluateFraudIndicators(transactionId, fraudIndicators, fraudScore, policy, _____triggeredBy) {
     const actions = [];
     if (!policy.triggers.fraudDetectionRules) {
       return actions;
-    }
+
     const rules = policy.triggers.fraudDetectionRules;
     // Fraud score threshold
     if (fraudScore >= rules.fraudScoreThreshold) {
@@ -348,7 +348,7 @@ export class AutomatedEnforcementService {
           true
         )
       );
-    }
+
     // Suspicious indicator threshold
     else if (fraudIndicators.length >= rules.suspiciousIndicatorThreshold) {
       actions.push(
@@ -363,9 +363,9 @@ export class AutomatedEnforcementService {
           policy.actions.autoRestriction
         )
       );
-    }
+
     return actions;
-  }
+
   // =============================================================================
   // Action Management
   // =============================================================================
@@ -384,7 +384,7 @@ export class AutomatedEnforcementService {
       reviewRequired: !autoApply || severity === 'critical',
       expiresAt: this.calculateExpirationDate(actionType, severity),
     };
-  }
+
   async applyEnforcementActions(actions) {
     const appliedActions = [];
     for (const action of actions) {
@@ -394,15 +394,15 @@ export class AutomatedEnforcementService {
           action.actionTaken = true;
           action.actionTimestamp = new Date();
           console.log(`✅ Applied enforcement action: ${action.actionType} on ${action.entityType} ${action.entityId}`);
-        } else {
+ else {
           console.log(
             `⏳ Enforcement action queued for review: ${action.actionType} on ${action.entityType} ${action.entityId}`
           );
-        }
+
         // Store action record
         await this.storeEnforcementAction(action);
         appliedActions.push(action);
-      } catch (error) {
+ catch (error) {
         console.error('❌ Failed to apply enforcement action:', error);
         // Log the error but continue with other actions
         await this.auditService.logEvent({
@@ -414,10 +414,10 @@ export class AutomatedEnforcementService {
           },
           severity: 'error',
         });
-      }
-    }
+
+
     return appliedActions;
-  }
+
   async executeEnforcementAction(action) {
     const client = await this.db.getClient();
     try {
@@ -443,15 +443,15 @@ export class AutomatedEnforcementService {
           break;
         default:
           throw new Error(`Unknown action type: ${action.actionType}`);
-      }
+
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
   // =============================================================================
   // Action Implementation Methods
   // =============================================================================
@@ -481,7 +481,7 @@ export class AutomatedEnforcementService {
       `,
         [action.entityId]
       );
-    } else if (action.entityType === 'template') {
+ else if (action.entityType === 'template') {
       // Suspend template availability
       await client.query(
         `
@@ -494,8 +494,8 @@ export class AutomatedEnforcementService {
       `,
         [action.reason, action.entityId]
       );
-    }
-  }
+
+
   async applyRestriction(client, action) {
     if (action.entityType === 'user') {
       // Apply user restrictions
@@ -508,7 +508,7 @@ export class AutomatedEnforcementService {
       `,
         [action.entityId, action.reason, action.expiresAt]
       );
-    } else if (action.entityType === 'template') {
+ else if (action.entityType === 'template') {
       // Restrict template visibility
       await client.query(
         `
@@ -520,8 +520,8 @@ export class AutomatedEnforcementService {
       `,
         [action.reason, action.entityId]
       );
-    }
-  }
+
+
   async applyFlagging(client, action) {
     // Add flag to entity
     await client.query(
@@ -531,7 +531,7 @@ export class AutomatedEnforcementService {
     `,
       [action.entityType, action.entityId, action.reason, action.expiresAt]
     );
-  }
+
   async applyVerificationRequirement(client, action) {
     if (action.entityType === 'user') {
       // Require additional verification
@@ -545,8 +545,8 @@ export class AutomatedEnforcementService {
       `,
         [action.reason, action.entityId]
       );
-    }
-  }
+
+
   async applyTransactionBlock(client, action) {
     // Block/cancel transaction
     await client.query(
@@ -560,7 +560,7 @@ export class AutomatedEnforcementService {
     `,
       [action.reason, action.entityId]
     );
-  }
+
   async applyTemplateQuarantine(client, action) {
     // Quarantine template
     await client.query(
@@ -574,34 +574,34 @@ export class AutomatedEnforcementService {
     `,
       [action.reason, action.entityId]
     );
-  }
+
   // =============================================================================
   // Utility Methods
   // =============================================================================
   async isUserExempt(userId, policy) {
     if (!policy.exemptions) {
       return false;
-    }
+
     // Check whitelist
     if (policy.exemptions.whitelistedEntities?.includes(userId)) {
       return true;
-    }
+
     // Check high trust user exemption
     if (policy.exemptions.highTrustUsers) {
       const userTrust = await this.trustScoreService.calculateUserTrustScore(userId);
       if (userTrust.score >= 90) {
         return true;
-      }
-    }
+
+
     // Check verified user exemption
     if (policy.exemptions.verifiedUsers) {
       const verificationStatus = await this.trustScoreService.getUserVerificationStatus(userId);
       if (verificationStatus?.isVerified) {
         return true;
-      }
-    }
+
+
     return false;
-  }
+
   getEntityId(trustScore, entityType) {
     switch (entityType) {
       case 'user':
@@ -612,18 +612,18 @@ export class AutomatedEnforcementService {
         return trustScore.transactionId;
       default:
         throw new Error(`Unknown entity type: ${entityType}`);
-    }
-  }
+
+
   getSuspiciousActivityAction(type, severity) {
     if (severity === 'critical') return 'suspend';
     if (severity === 'high' && (type === 'fraud' || type === 'security')) return 'suspend';
     if (severity === 'high') return 'restrict';
     if (severity === 'medium') return 'flag';
     return 'flag';
-  }
+
   generateActionId() {
     return `ENF-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   calculateExpirationDate(actionType, severity) {
     const now = new Date();
     switch (actionType) {
@@ -637,8 +637,8 @@ export class AutomatedEnforcementService {
         return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
       default:
         return undefined;
-    }
-  }
+
+
   async storeEnforcementAction(action) {
     await this.db.query(
       `
@@ -664,7 +664,7 @@ export class AutomatedEnforcementService {
         action.reviewRequired,
       ]
     );
-  }
+
   async logEnforcementDecision(entityType, entityId, actions) {
     await this.auditService.logEvent({
       userId: 'automated_enforcement',
@@ -682,17 +682,17 @@ export class AutomatedEnforcementService {
       },
       severity: actions.some(a => a.severity === 'critical') ? 'error' : 'warning',
     });
-  }
+
   async sendEnforcementAlert(alertType, context, actions) {
     if (this.config.notificationSettings.adminAlerts) {
       console.log(`🚨 ADMIN ALERT: ${alertType}`, { context, actions });
       // TODO: Implement actual alert mechanism (email, Slack, etc.)
-    }
+
     if (this.config.notificationSettings.webhookUrl) {
       // TODO: Implement webhook notification
       console.log(`📡 Webhook notification for ${alertType}`);
-    }
-  }
+
+
   getDefaultConfig() {
     return {
       enabled: true,
@@ -742,7 +742,7 @@ export class AutomatedEnforcementService {
         adminOverrideRequired: true,
       },
     };
-  }
+
   // =============================================================================
   // Public API Methods
   // =============================================================================
@@ -758,7 +758,7 @@ export class AutomatedEnforcementService {
     const params = [entityType, entityId];
     if (!includeExpired) {
       query += ' AND (expires_at IS NULL OR expires_at > NOW())';
-    }
+
     query += ` ORDER BY created_at DESC LIMIT $${params.length + 1}`;
     params.push(limit);
     const result = await this.db.query(query, params);
@@ -778,7 +778,7 @@ export class AutomatedEnforcementService {
       reviewRequired: row.review_required,
       adminNotes: row.admin_notes,
     }));
-  }
+
   /**
    * Manually trigger enforcement evaluation
    */
@@ -793,6 +793,6 @@ export class AutomatedEnforcementService {
         return await this.enforceTemplateTrustPolicies(templateTrust, 'manual_evaluation');
       default:
         throw new Error(`Manual evaluation not supported for entity type: ${entityType}`);
-    }
-  }
-}
+
+
+

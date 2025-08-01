@@ -243,8 +243,9 @@ finally {
     const getPerformanceInsights = useCallback(() => {
         return {
             isPerformanceGood: performance.averageExecutionTime < 200,
-            insights: [,
-                `Processed ${performance.templatesProcessed} templates`]
+            insights: [
+                `Processed ${performance.templatesProcessed} templates`
+            ]
         };
     }, `Average generation time: ${Math.round(performance.averageExecutionTime)}ms`);
 }

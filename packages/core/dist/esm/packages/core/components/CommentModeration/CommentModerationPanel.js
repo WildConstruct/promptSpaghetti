@@ -165,65 +165,45 @@ const selectedCount = selectedComments.length;
 const allSelected = selectedCount > 0 && selectedCount === comments.length;
 const someSelected = selectedCount > 0 && selectedCount < comments.length;
 // Quick action buttons data
-const quickActions = useMemo(() => []);
-{
-    type: 'approve',
-        label;
-    '✅ Approve',
-        color;
-    '#059669',
-        permission;
-    'moderation:approve',
-        show;
-    selectedCount > 0,
-    ;
-}
-{
-    type: 'reject',
-        label;
-    '❌ Reject',
-        color;
-    '#dc2626',
-        permission;
-    'moderation:reject',
-        show;
-    selectedCount > 0,
-    ;
-}
-{
-    type: 'flag',
-        label;
-    '🚩 Flag',
-        color;
-    '#d97706',
-        permission;
-    'moderation:flag',
-        show;
-    selectedCount > 0,
-    ;
-}
-{
-    type: 'hide',
-        label;
-    '👁️ Hide',
-        color;
-    '#6b7280',
-        permission;
-    'moderation:hide',
-        show;
-    selectedCount > 0;
-    filter(action => action.show && hasPermission(action.permission)), [selectedCount, hasPermission];
-    ;
-    return;
-    _jsx("div", { className: `comment-moderation-panel ${className}`, style: ({}, ), "backgroundColor:": true });
-    '#ffffff',
-        border;
-    '1px solid #e5e7eb',
-        borderRadius;
-    '8px',
-        overflow;
-    'hidden';
-}
+const quickActions = useMemo(() => [
+    {
+        type: 'approve',
+        label: '✅ Approve',
+        color: '#059669',
+        permission: 'moderation:approve',
+        show: selectedCount > 0,
+    },
+    {
+        type: 'reject',
+        label: '❌ Reject',
+        color: '#dc2626',
+        permission: 'moderation:reject',
+        show: selectedCount > 0,
+    },
+    {
+        type: 'flag',
+        label: '🚩 Flag',
+        color: '#d97706',
+        permission: 'moderation:flag',
+        show: selectedCount > 0,
+    },
+    {
+        type: 'hide',
+        label: '👁️ Hide',
+        color: '#6b7280',
+        permission: 'moderation:hide',
+        show: selectedCount > 0
+    }
+].filter(action => action.show && hasPermission(action.permission)), [selectedCount, hasPermission]);
+return;
+_jsx("div", { className: `comment-moderation-panel ${className}`, style: ({}, ), "backgroundColor:": true });
+'#ffffff',
+    border;
+'1px solid #e5e7eb',
+    borderRadius;
+'8px',
+    overflow;
+'hidden';
  >
     { /* Header */}
     < div;
@@ -764,16 +744,16 @@ Math.floor(Math.random() * 5),
 ;
 return comments;
 function generateMockCommentContent() {
-    const contents = [];
-    'This template is really helpful, thanks for sharing!',
+    const contents = [
+        'This template is really helpful, thanks for sharing!',
         'I found a bug in this implementation, can you fix it?',
         'Great work! This solved my problem perfectly.',
         'This is spam content that should be moderated',
         'The documentation could be better explained',
         'Excellent template, very well designed!',
         'Not sure this is working correctly for me',
-        'This is inappropriate content that violates guidelines';
-    ;
+        'This is inappropriate content that violates guidelines'
+    ];
     return contents[Math.floor(Math.random() * contents.length)];
     function generateMockScore() {
         return {

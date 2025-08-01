@@ -46,8 +46,9 @@ export class ModerationWorkflowService {
             * Workflow Management
             */
             async;
-            createWorkflow(workflowData, (Omit));
-            createdBy: string;
+            createWorkflow(workflowData, (Omit)),
+                createdBy;
+            string;
             Promise < ModerationWorkflow > {
                 const: workflow, ModerationWorkflow = {
                     ...workflowData,
@@ -91,8 +92,9 @@ export class ModerationWorkflowService {
                          * Workflow Execution
                          */
                         async;
-                        executeWorkflow(workflowId, string);
-                        itemId: string,
+                        executeWorkflow(workflowId, string),
+                            itemId;
+                        string,
                             triggeredBy;
                         string,
                             context ?  : Record;

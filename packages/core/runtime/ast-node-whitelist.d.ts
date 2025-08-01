@@ -2,15 +2,15 @@ import * as acorn from 'acorn';
 /**
  * Safety levels for AST nodes
  */
-export declare enum NodeSafetyLevel {
-    SAFE = "SAFE",
-    RESTRICTED = "RESTRICTED",
+export declare enum NodeSafetyLevel { SAFE = "SAFE",
+    RESTRICTED = "RESTRICTED" }
     DANGEROUS = "DANGEROUS"
 
 /**
  * Interface for blocked node information
  */
 
+}
 }
 export interface BlockedNodeInfo {
     nodeType: string;
@@ -24,6 +24,8 @@ export interface BlockedNodeInfo {
  */
 
 }
+}
+}
 export interface FilterResult {
     allowed: boolean;
     blockedNodes: BlockedNodeInfo[];
@@ -33,6 +35,8 @@ export interface FilterResult {
  * AST node whitelist filter configuration
  */
 
+}
+}
 }
 export interface ASTNodeWhitelistConfig {
     allowedNodeTypes: Set<string>;
@@ -92,4 +96,5 @@ export declare function createConditionalNodeFilter(): ASTNodeWhitelistFilter;
  */
 export declare function createGeneralExpressionFilter(): ASTNodeWhitelistFilter;
 //# sourceMappingURL=ast-node-whitelist.d.ts.map
+}
 }

@@ -93,7 +93,7 @@ describe('WeightDistributionChart', () => {
   });
   it('calculates correct percentages', () => {
     const options: WeightControlOption = [
-      { id: '1', text: 'Option A', weight: 2 },
+      { id: '1', text: 'Option A', weight: 2 }
       { id: '2', text: 'Option B', weight: 2 }
     ];
     render(<WeightDistributionChart options={options} showPercentages={true} />);
@@ -103,7 +103,7 @@ describe('WeightDistributionChart', () => {
   });
   it('handles zero weights gracefully', () => {
     const options: WeightControlOption = [
-      { id: '1', text: 'Option A', weight: 0 },
+      { id: '1', text: 'Option A', weight: 0 }
       { id: '2', text: 'Option B', weight: 1 }
     ];
     render(<WeightDistributionChart options={options} />);

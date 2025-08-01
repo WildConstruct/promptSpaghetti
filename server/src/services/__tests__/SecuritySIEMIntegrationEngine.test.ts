@@ -11,7 +11,7 @@ import {
   ThreatIntelligenceExport,
   FieldMapping,
   FilterCriteria 
-} from '../SecuritySIEMIntegrationEngine';
+ from '../SecuritySIEMIntegrationEngine';
 import { SecurityAPIIntegrationPlatform } from '../SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../SecurityPolicyAnalysisEngine';
 import { SecurityIntelligenceAutomationEngine } from '../SecurityIntelligenceAutomationEngine';
@@ -35,28 +35,28 @@ describe('SecuritySIEMIntegrationEngine', () => {
       getPlatformMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         api_calls: { total_requests: 25000, successful_requests: 24750 },
         security_analytics: { threats_detected: 85, detection_accuracy_percent: 97 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPolicyEngine = {
       on: jest.fn<unknown[], unknown>(),
       analyzePolicyImpact: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_analysis: { overall_risk_score: 35 },
         validation_results: { validation_passed: true }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockIntelligenceEngine = {
       on: jest.fn<unknown[], unknown>(),
       generateInsights: jest.fn<unknown[], unknown>().mockResolvedValue({
         generation_id: 'gen_456',
         insights_generated: []
-      } as unknown),
+ as unknown),
       collectIntelligence: jest.fn<unknown[], unknown>().mockResolvedValue({
         collection_id: 'col_456',
         intelligence_collected: 150
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     // Setup configuration
     config = {
@@ -69,7 +69,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         incident_synchronization: true,
         threat_feed_integration: true,
         alert_forwarding: true
-  }
+
       supported_platforms: {
         splunk: true,
         qradar: true,
@@ -83,7 +83,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         phantom: true,
         demisto: true,
         custom_apis: true
-  }
+
       data_formats: {
         cef: true,
         leef: true,
@@ -94,7 +94,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         stix_taxii: true,
         misp: true,
         custom_formats: true
-  }
+
       export_capabilities: {
         intelligence_data: true,
         threat_indicators: true,
@@ -104,7 +104,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         compliance_reports: true,
         correlation_results: true,
         workflow_logs: true
-  }
+
       streaming_options: {
         real_time_events: true,
         batch_processing: true,
@@ -114,7 +114,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         compression_enabled: true,
         encryption_enabled: true,
         authentication_required: true
-  }
+
       quality_controls: {
         data_validation: true,
         format_verification: true,
@@ -124,7 +124,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         retry_mechanisms: true,
         delivery_confirmation: true,
         audit_logging: true
-      }
+
     };
 
     engine = new SecuritySIEMIntegrationEngine(
@@ -222,7 +222,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           client_id: 'test_client',
           client_secret: 'test_secret',
           tenant_id: 'test_tenant'
-  }
+
         protocol: 'https',
         ssl_enabled: true,
         data_format: 'json'
@@ -242,7 +242,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         authentication_config: { 
           username: 'elastic_user',
           password: 'elastic_pass'
-  }
+
         protocol: 'https',
         ssl_enabled: true,
         data_format: 'json',
@@ -263,7 +263,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         authentication_config: { 
           cert_file: '/path/to/cert.pem',
           key_file: '/path/to/key.pem'
-  }
+
         protocol: 'https',
         ssl_enabled: true,
         data_format: 'stix_taxii'
@@ -378,7 +378,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         time_range: {
           start: Date.now() - 86400000, // 24 hours ago
           end: Date.now()
-        }
+
       };
 
       const exportResult = await engine.exportThreatIntelligence(connection.connection_id, exportConfig);
@@ -397,7 +397,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           exclude_filters: [],
           severity_threshold: 'high',
           confidence_threshold: 0.8
-        }
+
       };
 
       const exportResult = await engine.exportThreatIntelligence(connection.connection_id, exportConfig);
@@ -488,7 +488,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           exclude_filters: [],
           severity_threshold: 'medium',
           confidence_threshold: 0.75
-  }
+
         batch_size: 1000,
         flush_interval: 30
       };
@@ -630,19 +630,19 @@ describe('SecuritySIEMIntegrationEngine', () => {
           target_field: '_time',
           data_type: 'date',
           required: true
-  }
+
         {
           source_field: 'severity',
           target_field: 'severity',
           data_type: 'string',
           required: true
-  }
+
         {
           source_field: 'source_ip',
           target_field: 'src_ip',
           data_type: 'string',
           required: false
-        }
+
       ];
 
       const mappingConfig = {
@@ -668,7 +668,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           enrichment_data: { service: 'geoip_service' },
           priority: 1,
           enabled: true
-        }
+
       ];
 
       const mappingConfig = {
@@ -687,14 +687,14 @@ describe('SecuritySIEMIntegrationEngine', () => {
             field: 'severity',
             operator: 'in',
             value: ['high', 'critical']
-          }
+
         ],
         exclude_filters: [
           {
             field: 'source',
             operator: 'equals',
             value: 'test_source'
-          }
+
         ],
         severity_threshold: 'medium',
         confidence_threshold: 0.8
@@ -716,7 +716,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           target_field: '', // Invalid - empty target field
           data_type: 'string',
           required: true
-        }
+
       ];
 
       const mappingConfig = {
@@ -752,7 +752,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
             target_field: 'mapped_field',
             data_type: 'string' as const,
             required: false
-          }
+
         ]
       };
 
@@ -813,7 +813,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         expect(platform).toHaveProperty('last_successful_export');
         expect(platform).toHaveProperty('performance_metrics');
         expect(platform).toHaveProperty('error_count');
-      }
+
     });
 
     it('should include export performance metrics', () => {
@@ -924,9 +924,9 @@ describe('SecuritySIEMIntegrationEngine', () => {
           ssl_enabled: true,
           data_format: 'invalid_format' as any
         });
-      } catch (error) {
+ catch (error) {
         // Expected to fail
-      }
+
     });
 
     it('should handle large export volumes efficiently', async () => {
@@ -948,7 +948,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         time_range: {
           start: Date.now() - 2592000000, // 30 days ago
           end: Date.now()
-        }
+
       });
 
       const processingTime = Date.now() - startTime;
@@ -1036,7 +1036,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           protocol: 'https',
           ssl_enabled: true,
           data_format: 'json'
-  }
+
       ];
 
       const connections = await Promise.all(connectionPromises);
@@ -1071,7 +1071,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         engine.exportThreatIntelligence(connection.connection_id, {
           data_types: ['threat_actors'],
           export_format: 'leef'
-  }
+
       ];
 
       const exports = await Promise.all(exportPromises);
@@ -1104,7 +1104,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           ssl_enabled: true,
           data_format: 'json',
           streaming_enabled: true
-  }
+
       ]);
 
       const streamingPromises = connections.map(connection =>
@@ -1137,7 +1137,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           incident_synchronization: false,
           threat_feed_integration: true,
           alert_forwarding: false
-  }
+
         supported_platforms: {
           splunk: true,
           qradar: false,
@@ -1151,7 +1151,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           phantom: true,
           demisto: false,
           custom_apis: true
-  }
+
         data_formats: {
           cef: true,
           leef: false,
@@ -1162,7 +1162,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           stix_taxii: true,
           misp: false,
           custom_formats: true
-  }
+
         export_capabilities: {
           intelligence_data: true,
           threat_indicators: true,
@@ -1172,7 +1172,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           compliance_reports: true,
           correlation_results: false,
           workflow_logs: true
-  }
+
         streaming_options: {
           real_time_events: false,
           batch_processing: true,
@@ -1182,7 +1182,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           compression_enabled: true,
           encryption_enabled: false,
           authentication_required: true
-  }
+
         quality_controls: {
           data_validation: true,
           format_verification: false,
@@ -1192,7 +1192,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           retry_mechanisms: false,
           delivery_confirmation: true,
           audit_logging: false
-        }
+
       };
 
       const customEngine = new SecuritySIEMIntegrationEngine(

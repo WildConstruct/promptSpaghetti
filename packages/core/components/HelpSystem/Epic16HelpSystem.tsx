@@ -16,9 +16,8 @@ import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 import { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay';
 import { MarketplaceContextualHelp } from './MarketplaceContextualHelp';
 
-}
-export interface Epic16HelpSystemProps {
-  // Core editor context (Epic 8.4)
+
+export interface Epic16HelpSystemProps { // Core editor context (Epic 8.4)
   nodes?: unknown;
   edges?: unknown;
   selectedNodeId?: string;
@@ -27,21 +26,20 @@ export interface Epic16HelpSystemProps {
   userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
   userLevel?: 'beginner' | 'intermediate' | 'advanced' | 'professional';
   // Page-specific context
-  pageContext?: {
-  template?: {
+  pageContext?: {;
+  template?: { }
   id: string;
   category: string;
   type: string;
   isPremium: boolean;
-}
+
+
 };
     cartItems?: number;
     purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
-    forumContext?: {
-  category: string;
+    forumContext?: { category: string;
   hasPosted: boolean;
-  reputation: number;
-};
+  reputation: number };
   };
   // User preferences
   helpEnabled?: boolean;
@@ -50,19 +48,19 @@ export interface Epic16HelpSystemProps {
   helpComplexity?: 'beginner' | 'advanced';
   // Analytics and callbacks
   onHelpAnalytics?: (event: string, data: Record<string, any>) => void;
-}
-export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
-  nodes = [],
-  edges = [],
-  selectedNodeId,
-  currentPage = '',
-  userRole = 'new-user',
-  userLevel = 'beginner',
-  pageContext = {},
-  helpEnabled = true,
-  autoContextualHelp = true,
-  showGuidedTours = true,
-  helpComplexity = 'beginner',
+
+export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({ )
+  nodes = []
+  edges = []
+  selectedNodeId
+  currentPage = ''
+  userRole = 'new-user'
+  userLevel = 'beginner' }
+  pageContext = {}
+  helpEnabled = true
+  autoContextualHelp = true
+  showGuidedTours = true
+  helpComplexity = 'beginner'
   onHelpAnalytics
 }) => {
   // State management
@@ -81,9 +79,9 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
                             nodes.length > 0;
     if (isMarketplacePage && !isCoreEditorPage) {
       return 'marketplace'
-  } else if (isCoreEditorPage && !isMarketplacePage) {
+ else if (isCoreEditorPage && !isMarketplacePage) {
       return 'core'
-  } else {
+ else {
       return 'hybrid'
   }, [currentPage, nodes.length]);
   // Update help mode based on context
@@ -92,64 +90,59 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
     setUserJourney(prev => [...prev, `${helpContext}:${currentPage}`].slice(-10)); // Keep last 10 pages}
   }, [helpContext, currentPage]);
   // Track help effectiveness
-  const trackHelpEffectiveness = useCallback((helpId: string, wasEffective: boolean) => {
-  setHelpEffectiveness(prev => ({)
-  ...prev,
+  const trackHelpEffectiveness = useCallback((helpId: string, wasEffective: boolean) => { setHelpEffectiveness(prev => ({)
+  ...prev
   [helpId]: {
-  views: (prev[helpId]?.views || 0) + 1,
-  helpful: (prev[helpId]?.helpful || 0) + (wasEffective ? 1 : 0),
+  views: (prev[helpId]?.views || 0) + 1
+  helpful: (prev[helpId]?.helpful || 0) + (wasEffective ? 1 : 0) }
 }));
-    onHelpAnalytics?.('help_effectiveness', {)
-  helpId,
-  wasEffective,
-  context: helpContext,
-  userRole,
+    onHelpAnalytics?.('help_effectiveness', { )
+  helpId
+  wasEffective
+  context: helpContext
+  userRole }
   userLevel
 });
   }, [helpContext, userRole, userLevel, onHelpAnalytics]);
   // Handle help interactions
-  const handleHelpInteraction = useCallback((action: string, data: Record<string, any>) => {
-  onHelpAnalytics?.('help_interaction', {)
-  action,
-  data,
-  context: helpContext,
-  currentPage,
-  userRole,
-  timestamp: Date.now(),
+  const handleHelpInteraction = useCallback((action: string, data: Record<string, any>) => { onHelpAnalytics?.('help_interaction', {)
+  action
+  data
+  context: helpContext
+  currentPage
+  userRole
+  timestamp: Date.now() }
 });
   }, [helpContext, currentPage, userRole, onHelpAnalytics]);
   // Handle contextual help triggers
-  const handleContextualHelpTriggered = useCallback((rule: Error, context: unknown) => {
-  onHelpAnalytics?.('contextual_help_triggered', {)
-  ruleId: rule.id,
-  ruleName: rule.name,
-  triggerType: rule.triggerType,
-  priority: rule.priority,
-  context,
-  userJourney: userJourney.slice(-5), // Last 5 pages,
-  timestamp: Date.now(),
+  const handleContextualHelpTriggered = useCallback((rule: Error, context: unknown) => { onHelpAnalytics?.('contextual_help_triggered', {)
+  ruleId: rule.id
+  ruleName: rule.name
+  triggerType: rule.triggerType
+  priority: rule.priority
+  context
+  userJourney: userJourney.slice(-5), // Last 5 pages
+  timestamp: Date.now() }
 });
   }, [userJourney, onHelpAnalytics]);
   // Handle user struggle detection
-  const handleUserStruggleDetected = useCallback((struggleType: string, severity: number) => {
-  onHelpAnalytics?.('user_struggle_detected', {)
-  struggleType,
-  severity,
-  context: helpContext,
-  currentPage,
-  userRole,
-  userJourney: userJourney.slice(-5),
-  timestamp: Date.now(),
+  const handleUserStruggleDetected = useCallback((struggleType: string, severity: number) => { onHelpAnalytics?.('user_struggle_detected', {)
+  struggleType
+  severity
+  context: helpContext
+  currentPage
+  userRole
+  userJourney: userJourney.slice(-5)
+  timestamp: Date.now() }
 });
   }, [helpContext, currentPage, userRole, userJourney, onHelpAnalytics]);
   // Handle tour completion
-  const handleTourCompleted = useCallback((tourId: string) => {
-  onHelpAnalytics?.('tour_completed', {)
-  tourId,
-  context: helpContext,
-  userRole,
-  userLevel,
-  timestamp: Date.now(),
+  const handleTourCompleted = useCallback((tourId: string) => { onHelpAnalytics?.('tour_completed', {)
+  tourId
+  context: helpContext
+  userRole
+  userLevel
+  timestamp: Date.now() }
 });
   }, [helpContext, userRole, userLevel, onHelpAnalytics]);
   if (!helpEnabled) return null;
@@ -166,13 +159,13 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
           autoTrigger={autoContextualHelp}
           showProgressiveHints={showGuidedTours}
           onHelpContentViewed={(contentId) => trackHelpEffectiveness(contentId, true)}
-          onUserLevelChange={(level) => {
+          onUserLevelChange={ (level) => {
   onHelpAnalytics?.('user_level_changed', { )
-  from: userLevel,
-  to: level,
-  context: helpContext,
+  from: userLevel
+  to: level
+  context: helpContext }
 });
-          }}
+
         />
       )}
       {/* Marketplace Help Overlay - Show when in marketplace context */}
@@ -190,13 +183,13 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
           coreHelpManager={helpContentManager}
           onHelpInteraction={handleHelpInteraction}
           onTourCompleted={handleTourCompleted}
-          onFeedbackSubmitted={(feedback) => {
+          onFeedbackSubmitted={ (feedback) => {
   onHelpAnalytics?.('feedback_submitted', {)
-  ...feedback,
-  context: helpContext,
+  ...feedback
+  context: helpContext }
   userRole
 });
-          }}
+
         />
       )}
       {/* Contextual Help Intelligence - Always active for behavior tracking */}
@@ -232,7 +225,7 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
           </div>
         )}
       </div>
-      <style>{`
+      <style>{ `
         .epic16-help-system {
           position: relative;
         .help-system-status {
@@ -245,12 +238,12 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
           pointer-events: auto;
         .mode-badge {
           background: rgba(0, 0, 0, 0.7);
-          color: #fff;
+          color: #fff
   padding: 4px 8px;
           border-radius: 12px;
           font-size: 11px;
           font-weight: 600;
-          backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px)
   border: 1px solid rgba(255, 255, 255, 0.2);
         .mode-badge.core {
           background: linear-gradient(135deg, rgba(255, 215, 0, 0.8) 0%, rgba(255, 193, 7, 0.6) 100%);
@@ -267,7 +260,7 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
         .help-debug-info {
           margin-top: 8px;
   background: rgba(0, 0, 0, 0.8);
-          color: #fff;
+          color: #fff }
   padding: 8px;
           border-radius: 6px;
           font-size: 10px;

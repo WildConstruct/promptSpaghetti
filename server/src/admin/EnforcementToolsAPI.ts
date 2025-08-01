@@ -17,10 +17,10 @@ import {
   AutomatedEnforcementService,
   EnforcementAction,
   EnforcementPolicy
-} from '../services/trust/AutomatedEnforcementService';
+ from '../services/trust/AutomatedEnforcementService';
 
-}
-}
+
+
 export interface ViolationReport {
   reportId: string;
   type: 'fraud' | 'abuse' | 'violation' | 'security' | 'quality';
@@ -40,13 +40,14 @@ export interface ViolationReport {
     reason: string;
     resolvedBy: string;
     resolvedAt: Date;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface EnforcementStats {
   totalActions: number;
   pendingReviews: number;
@@ -60,8 +61,9 @@ export interface EnforcementStats {
     flags: number;
     blocks: number;
     quarantines: number;
-}
-}
+
+
+
   };
   severityBreakdown: {
     low: number;
@@ -75,7 +77,7 @@ export interface EnforcementStats {
     reversalRate: number;
     avgResolutionTime: number;
   };
-}
+
 
 /**
  * Enforcement Tools API Service
@@ -97,7 +99,7 @@ export class EnforcementToolsAPI {
     this.databaseService = dependencies.databaseService;
     this.auditService = dependencies.auditService;
     this.enforcementService = dependencies.enforcementService;
-  }
+
 
   /**
    * Register enforcement tools API routes
@@ -143,7 +145,7 @@ export class EnforcementToolsAPI {
     server.get('/api/admin/enforcement/export', this.exportEnforcementData.bind(this));
     
     console.log('⚖️ Enforcement Tools API routes registered');
-  }
+
 
   /**
    * Get enforcement statistics
@@ -197,32 +199,32 @@ export class EnforcementToolsAPI {
           flags: actionBreakdown.find(a => a.action_type === 'flag')?.count || 0,
           blocks: actionBreakdown.find(a => a.action_type === 'block_transaction')?.count || 0,
           quarantines: actionBreakdown.find(a => a.action_type === 'quarantine_template')?.count || 0
-  }
+
         severityBreakdown: {
           low: severityBreakdown.find(s => s.severity === 'low')?.count || 0,
           medium: severityBreakdown.find(s => s.severity === 'medium')?.count || 0,
           high: severityBreakdown.find(s => s.severity === 'high')?.count || 0,
           critical: severityBreakdown.find(s => s.severity === 'critical')?.count || 0
-  }
+
         effectivenessMetrics: {
           successRate: totalActions.count > 0 ? Math.round(((totalActions.count - totalReversals.count) / totalActions.count) * 100) : 100,
           appealRate: totalActions.count > 0 ? Math.round((totalAppealsEver.count / totalActions.count) * 100) : 0,
           reversalRate: totalActions.count > 0 ? Math.round((totalReversals.count / totalActions.count) * 100) : 0,
           avgResolutionTime: 24 // Mock - would calculate from actual data
-        }
+
       };
 
       return reply.code(200).send({
         success: true,
         data: stats
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get enforcement actions with filtering
@@ -238,7 +240,7 @@ export class EnforcementToolsAPI {
         entityType, 
         reviewRequired,
         search 
-      } = request.query;
+ = request.query;
       
       const db = await this.databaseService.getDatabase();
       
@@ -248,27 +250,27 @@ export class EnforcementToolsAPI {
       if (severity) {
         query += ' AND severity = ?';
         params.push(severity);
-      }
+
       
       if (actionType) {
         query += ' AND action_type = ?';
         params.push(actionType);
-      }
+
       
       if (entityType) {
         query += ' AND entity_type = ?';
         params.push(entityType);
-      }
+
       
       if (reviewRequired !== undefined) {
         query += ' AND review_required = ?';
         params.push(reviewRequired === 'true' ? 1 : 0);
-      }
+
       
       if (search) {
         query += ' AND entity_id LIKE ?';
         params.push(`%${search}%`);
-      }
+
       
       query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
       params.push(parseInt(limit), parseInt(offset));
@@ -297,15 +299,15 @@ export class EnforcementToolsAPI {
           limit: parseInt(limit),
           offset: parseInt(offset),
           hasMore: (parseInt(offset) + parseInt(limit)) < totalCount.count
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Create manual enforcement action
@@ -321,7 +323,7 @@ export class EnforcementToolsAPI {
           success: false,
           error: 'Missing required fields: entityType, entityId, actionType, severity, reason'
         });
-      }
+
       
       // Create enforcement action object
       const action: EnforcementAction = {
@@ -367,7 +369,7 @@ export class EnforcementToolsAPI {
           SET action_taken = 1, action_timestamp = ?
           WHERE action_id = ?
         `, [action.actionTimestamp.toISOString(), action.actionId]);
-      }
+
       
       // Log audit event
       await this.auditService.logEvent({
@@ -380,7 +382,7 @@ export class EnforcementToolsAPI {
           actionType: action.actionType,
           severity: action.severity,
           applied: action.actionTaken
-        }
+
       });
 
       return reply.code(201).send({
@@ -388,13 +390,13 @@ export class EnforcementToolsAPI {
         data: action,
         message: action.actionTaken ? 'Action created and applied' : 'Action created and queued for review'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Approve enforcement action
@@ -414,14 +416,14 @@ export class EnforcementToolsAPI {
           success: false,
           error: 'Enforcement action not found'
         });
-      }
+
       
       if (actionRow.action_taken) {
         return reply.code(400).send({
           success: false,
           error: 'Action has already been applied'
         });
-      }
+
       
       const action = this.formatEnforcementAction(actionRow);
       
@@ -448,13 +450,13 @@ export class EnforcementToolsAPI {
         success: true,
         message: 'Enforcement action approved and applied'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Reverse enforcement action
@@ -471,7 +473,7 @@ export class EnforcementToolsAPI {
           success: false,
           error: 'Reversal reason is required'
         });
-      }
+
       
       const db = await this.databaseService.getDatabase();
       
@@ -482,7 +484,7 @@ export class EnforcementToolsAPI {
           success: false,
           error: 'Enforcement action not found'
         });
-      }
+
       
       // Reverse the enforcement action effects
       await this.reverseEnforcementEffects(actionRow);
@@ -505,13 +507,13 @@ export class EnforcementToolsAPI {
         success: true,
         message: 'Enforcement action reversed successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get violation reports
@@ -529,17 +531,17 @@ export class EnforcementToolsAPI {
       if (status) {
         query += ' AND status = ?';
         params.push(status);
-      }
+
       
       if (type) {
         query += ' AND type = ?';
         params.push(type);
-      }
+
       
       if (severity) {
         query += ' AND severity = ?';
         params.push(severity);
-      }
+
       
       query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
       params.push(parseInt(limit), parseInt(offset));
@@ -567,13 +569,13 @@ export class EnforcementToolsAPI {
         success: true,
         data: formattedReports
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Create violation report
@@ -604,13 +606,13 @@ export class EnforcementToolsAPI {
         data: { reportId },
         message: 'Violation report created successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get enforcement policies
@@ -636,13 +638,13 @@ export class EnforcementToolsAPI {
         success: true,
         data: formattedPolicies
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Update enforcement policy
@@ -679,13 +681,13 @@ export class EnforcementToolsAPI {
         success: true,
         message: 'Enforcement policy updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get enforcement dashboard data
@@ -722,15 +724,15 @@ export class EnforcementToolsAPI {
           pendingReviews,
           activeReports,
           lastUpdated: new Date()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   // Helper methods
 
@@ -754,17 +756,17 @@ export class EnforcementToolsAPI {
         reversedAt: new Date(row.reversed_at),
         reversedBy: row.reversed_by,
         reason: row.reversal_reason
-      } : undefined
+ : undefined
     };
-  }
+
 
   private generateActionId(): string {
     return `ENF-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateReportId(): string {
     return `RPT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async reverseEnforcementEffects(actionRow: any): Promise<void> {
 
@@ -782,7 +784,7 @@ export class EnforcementToolsAPI {
                   suspended_at = NULL, suspension_expires_at = NULL
               WHERE user_id = ?
             `, [actionRow.entity_id]);
-        }
+
         break;
           
       case 'restrict':
@@ -791,7 +793,7 @@ export class EnforcementToolsAPI {
               DELETE FROM user_restrictions 
               WHERE user_id = ? AND restriction_type = 'limited_access'
             `, [actionRow.entity_id]);
-        }
+
         break;
           
       case 'flag':
@@ -816,13 +818,11 @@ export class EnforcementToolsAPI {
             WHERE id = ?
           `, [actionRow.entity_id]);
         break;
-      }
+
       
       await db.run('COMMIT');
-      
-    } catch (error) {
+ catch (error) {
       await db.run('ROLLBACK');
       throw error;
-    }
-  }
-}
+
+

@@ -1,24 +1,22 @@
 // packages/core/runtime/nodes/Markov.ts
 // Advanced Markov node with state transition matrices
-import { 
-  AdvancedRuntimeNode, 
+import { AdvancedRuntimeNode, 
   AdvancedExecutionContext, 
   AdvancedNodeConfig,
   AdvancedNodeData,
-  ValidationResult,
+  ValidationResult }
   ValidationHelpers 
-} from '../advanced';
-import { 
-  AdvancedIOHandler,
-  IOSpecBuilder,
+ from '../advanced';
+import { AdvancedIOHandler,
+  IOSpecBuilder }
   TypedInputs 
-} from '../io-system';
+ from '../io-system';
 import seedrandom from 'seedrandom';
 /**
  * State tracking for Markov chain processing
  */
 
-}
+
 export interface MarkovState {
   /** Current state in the chain */
   currentState: string;
@@ -31,13 +29,13 @@ export interface MarkovState {
   /**
   * Transition matrix interface for Markov chains
   */
-}
-}
-}
-export interface TransitionMatrix {
-  /** Available states in the chain */
-  states: string;
-}
+
+
+
+
+export interface TransitionMatrix { /** Available states in the chain */
+  states: string }
+
   /** Transition probabilities: state -> {nextState: probability} */
   transitions: Record<string, Record<string, number>>;
   /** Get the initial state for new chains */
@@ -49,8 +47,8 @@ export interface TransitionMatrix {
 /**
  * Configuration for Markov chain behavior
  */
-}
-}
+
+
 export interface MarkovConfig {
   /** Maximum number of transitions before forcing termination */
   maxTransitions?: number;
@@ -65,15 +63,14 @@ export interface MarkovConfig {
   /**
   * Standard transition matrix implementation
   */
-}
-}
-export class StandardTransitionMatrix implements TransitionMatrix {
-  states: string;
+
+
+export class StandardTransitionMatrix implements TransitionMatrix { states: string;
   transitions: Record<string, Record<string, number>>;
   private initialState?: string;
   constructor();
-    states: string,
-    transitions: Record<string, Record<string, number>>,
+    states: string
+    transitions: Record<string, Record<string, number>> }
     initialState?: string
     this.states = [...states]; // Clone to avoid mutations
     this.transitions = JSON.parse(JSON.stringify(transitions)); // Deep clone
@@ -133,80 +130,76 @@ export class StandardTransitionMatrix implements TransitionMatrix {
       const totalProbability = Object.values(stateTransitions).reduce((sum, prob) => sum + prob, 0);
       if (totalProbability === 0) {
         warnings.push(`State '${state}' has no valid transitions (total probability = 0)`);}
-      } else if (Math.abs(totalProbability - 1.0) > 0.001) {
+ else if (Math.abs(totalProbability - 1.0) > 0.001) {
         warnings.push(`State '${state}' transition probabilities sum to ${totalProbability.toFixed(3)}, not 1.0`);}
     // Validate initial state
     if (this.initialState && !this.states.includes(this.initialState)) {
       errors.push(`Initial state '${this.initialState}' is not in states list`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0,
+  errors }
   warnings
 };
 /**
  * Advanced Markov node with state transition matrices
  * Supports probabilistic state transitions with full determinism
  */
-export class MarkovNode extends AdvancedRuntimeNode<string> {
-  private ioHandler: AdvancedIOHandler;
+export class MarkovNode extends AdvancedRuntimeNode<string> { private ioHandler: AdvancedIOHandler;
   private transitionMatrix: TransitionMatrix;
   private markovConfig: MarkovConfig;
   constructor();
-    id: string, 
-    transitionMatrix: TransitionMatrix,
+    id: string
+    transitionMatrix: TransitionMatrix }
     config: MarkovConfig = {}
     // Configure as deterministic, non-cacheable (stateful), stateful
-    const nodeConfig: AdvancedNodeConfig = {,
-  deterministic: true,
-  cacheable: false, // Don't cache since output depends on state,
-  stateful: true,   // Maintains state between executions,
+    const nodeConfig: AdvancedNodeConfig = { 
+  deterministic: true
+  cacheable: false, // Don't cache since output depends on state
+  stateful: true,   // Maintains state between executions
   performanceHints: {
-  expectedExecutionTime: 'fast',
-  memoryUsage: 'low',
+  expectedExecutionTime: 'fast'
+  memoryUsage: 'low' }
 };
     super(id, nodeConfig);
     this.transitionMatrix = transitionMatrix;
-    this.markovConfig = {
-  maxTransitions: 1000,
-  normalizeProbabilities: false,
-  terminationStates: [],
-  detectLoops: false,
+    this.markovConfig = { maxTransitions: 1000
+  normalizeProbabilities: false
+  terminationStates: []
+  detectLoops: false }
   ...config
 };
     // Set up I/O specification
     const ioSpec = new IOSpecBuilder();
-      .addInput({)
-  id: 'states',
-  label: 'States',
-  dataType: 'stringArray',
-  required: false,
-  defaultValue: [],
-  description: 'Array of possible states',
-}
-      .addInput({)
-  id: 'transitions',
-        label: 'Transition Matrix',
-        dataType: 'object',
-        required: false,
-        defaultValue: {},
+      .addInput({ )
+  id: 'states'
+  label: 'States'
+  dataType: 'stringArray'
+  required: false
+  defaultValue: []
+  description: 'Array of possible states' }
+
+      .addInput({ )
+  id: 'transitions'
+        label: 'Transition Matrix'
+        dataType: 'object'
+        required: false }
+        defaultValue: {}
         description: 'Transition probabilities between states';
-  }
-      .addInput({)
-  id: 'initialState',
-  label: 'Initial State',
-  dataType: 'string',
-  required: false,
-  defaultValue: '',
-  description: 'Starting state for the Markov chain',
-}
+
+      .addInput({ )
+  id: 'initialState'
+  label: 'Initial State'
+  dataType: 'string'
+  required: false
+  defaultValue: ''
+  description: 'Starting state for the Markov chain' }
+
       .addTextOutput('result', 'Current State')
       .build();
     this.ioHandler = new AdvancedIOHandler(ioSpec);
   /**
    * Execute Markov chain transition
    */
-  run(ctx: AdvancedExecutionContext): string {
-    // Record this node's execution
+  run(ctx: AdvancedExecutionContext): string { // Record this node's execution
     ctx.executionMeta.nodeExecutionOrder.push(this.id);
     // Use performance tracking for Markov processing
     return this.measureExecution(ctx, 'markov-transition', () => {
@@ -216,9 +209,9 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
         // Initialize new Markov chain
         const initialState = this.transitionMatrix.getInitialState();
         currentState = {
-          currentState: initialState,
-          history: [],
-          transitionCount: 0,
+          currentState: initialState
+          history: []
+          transitionCount: 0 }
           metadata: {}
         };
         this.setState(ctx, currentState);
@@ -232,11 +225,11 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
       // Perform transition
       const nextState = this.transitionMatrix.transition(currentState.currentState, rng);
       // Update state
-      const newState: MarkovState = {,
-  currentState: nextState,
-  history: [...currentState.history, currentState.currentState],
-  transitionCount: currentState.transitionCount + 1,
-  metadata: currentState.metadata,
+      const newState: MarkovState = { 
+  currentState: nextState
+  history: [...currentState.history, currentState.currentState]
+  transitionCount: currentState.transitionCount + 1
+  metadata: currentState.metadata }
 };
       this.setState(ctx, newState);
       return nextState;
@@ -258,34 +251,31 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
       for (const state of this.markovConfig.terminationStates) {
         if (!this.transitionMatrix.states.includes(state)) {
           errors.push(`Termination state '${state}' is not in states list`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0,
+  errors }
   warnings
 };
   /**
    * Serialize node data for persistence
    */
-  serialize(): AdvancedNodeData {
-  return {
+  serialize(): AdvancedNodeData { return {
   id: this.id,
   type: 'Markov',
   config: this.getConfig(),
-  data: {
+  data: {,
   states: this.transitionMatrix.states,
   transitions: this.transitionMatrix.transitions,
   initialState: this.transitionMatrix.getInitialState(),
-  markovConfig: this.markovConfig,
+  markovConfig: this.markovConfig }
 },
-  metadata: {
+  metadata: { ,
   version: '1.0.0',
-  created: new Date().toISOString(),
+  created: new Date().toISOString() }
 };
   /**
    * Get current Markov state for debugging/inspection
    */
-  getCurrentMarkovState(ctx: AdvancedExecutionContext): MarkovState | null {
-    return this.getState(ctx) as MarkovState || null;
+  getCurrentMarkovState(ctx: AdvancedExecutionContext): MarkovState | null { return this.getState(ctx) as MarkovState || null;
   /**
    * Reset Markov chain state (for testing or manual control)
    */
@@ -294,14 +284,13 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
     this.setState(ctx, {)
   currentState: initialState,
       history: [],
-      transitionCount: 0,
+      transitionCount: 0 }
       metadata: {}
     });
   /**
    * Get transition history
    */
-  getTransitionHistory(ctx: AdvancedExecutionContext): string {
-    const state = this.getState(ctx) as MarkovState;
+  getTransitionHistory(ctx: AdvancedExecutionContext): string { const state = this.getState(ctx) as MarkovState;
     return state ? [...state.history, state.currentState] : [];
   /**
    * Check if chain should terminate
@@ -329,23 +318,21 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating Markov nodes
  */
-export function createMarkovNode(id: string)
+export function createMarkovNode(id: string),
   states: string,
-  transitions: Record<string, Record<string, number>>,
-  initialState?: string,
+  transitions: Record<string, Record<string, number>>
+  initialState?: string }
   config: MarkovConfig = {}
-): MarkovNode {
-  const matrix = new StandardTransitionMatrix(states, transitions, initialState);
+): MarkovNode { const matrix = new StandardTransitionMatrix(states, transitions, initialState);
   return new MarkovNode(id, matrix, config);
   /**
   * Helper function to create transition matrix from simple configuration
   */
-  export function createTransitionMatrix(config: {)
+  export function createTransitionMatrix(config: {) }
   states: string;
   transitions: Record<string, Record<string, number>>;
   initialState?: string;
-}): TransitionMatrix {
-  return new StandardTransitionMatrix()
+}): TransitionMatrix { return new StandardTransitionMatrix()
     config.states,
     config.transitions,
     config.initialState
@@ -355,8 +342,8 @@ export function createMarkovNode(id: string)
  */
 export const MarkovPresets = {
   /** Simple two-state toggle */
-  toggle: (state1: string, state2: string) => createTransitionMatrix({,)
-  states: [state1, state2],
+  toggle: (state1: string, state2: string) => createTransitionMatrix({),
+  states: [state1, state2] }
     transitions: {
       [state1]: { [state2]: 1.0 },
       [state2]: { [state1]: 1.0 }
@@ -370,7 +357,7 @@ export const MarkovPresets = {
       for (const targetState of states) {
         transitions[state][targetState] = prob;
     return createTransitionMatrix({ states, transitions });
-  }
+
   /** Linear progression through states */
   linear: (states: string, cyclic: boolean = false) => {
     const transitions: Record<string, Record<string, number>> = {};
@@ -380,14 +367,14 @@ export const MarkovPresets = {
       if (nextIndex < states.length) {
         // Move to next state
         transitions[currentState] = { [states[nextIndex]]: 1.0 };
-      } else if (cyclic) {
+ else if (cyclic) {
         // Cycle back to first state
         transitions[currentState] = { [states[0]]: 1.0 };
-      } else {
+ else {
         // Stay in final state
         transitions[currentState] = { [currentState]: 1.0 };
     return createTransitionMatrix({ states, transitions });
-  }
+
   /** Absorbing states (traps that never transition out) */
   absorbing: (states: string, absorbingStates: string) => {
     const transitions: Record<string, Record<string, number>> = {};
@@ -402,4 +389,4 @@ export const MarkovPresets = {
       for (const targetState of states) {
         transitions[state][targetState] = prob;
     return createTransitionMatrix({ states, transitions });
-} as const;
+ as const;

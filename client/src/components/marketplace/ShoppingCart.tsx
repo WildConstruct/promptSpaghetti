@@ -6,29 +6,31 @@ import {
   PlusIcon, 
   MinusIcon,
   XMarkIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { CartItem, LicenseType } from '../../types/marketplace';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import { PriceDisplay } from './PriceDisplay';
 import { Badge } from './Badge';
 import './ShoppingCart.css';
-}
+
+
 interface ShoppingCartProps {
   isOpen: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   onCheckout: () => void;
-  export const ShoppingCart: React.FC<ShoppingCartProps> = ({,)
+  export const ShoppingCart: React.FC<ShoppingCartProps> = ({),
   isOpen,
   onClose,
   onCheckout
-}
+
+
 }) => {
   const { cart, updateCartItem, removeFromCart, clearCart, loading } = useMarketplace();
   const [isClearing, setIsClearing] = useState(false);
   const handleQuantityChange = async (itemId: string, newQuantity: number) => {
     if (newQuantity === 0) {
       await removeFromCart(itemId);
-    } else {
+ else {
       await updateCartItem(itemId, { quantity: newQuantity });
   };
   const handleLicenseChange = async (itemId: string, licenseType: LicenseType) => {
@@ -38,7 +40,7 @@ interface ShoppingCartProps {
     setIsClearing(true);
     try {
       await clearCart();
-    } finally {
+ finally {
       setIsClearing(false);
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -138,20 +140,22 @@ interface ShoppingCartProps {
     </div>
   );
 };
-}
+
+
 interface CartItemComponentProps {
   item: CartItem;,
   onQuantityChange: (itemId: string, quantity: number) => void;,
   onLicenseChange: (itemId: string, licenseType: LicenseType) => void;,
-  onRemove: () => void;
+  onRemove: () => void;,
   disabled: boolean;
-  const CartItemComponent: React.FC<CartItemComponentProps> = ({,)
+  const CartItemComponent: React.FC<CartItemComponentProps> = ({),
   item,
   onQuantityChange,
   onLicenseChange,
   onRemove,
   disabled
-}
+
+
 }) => {
   const [template, setTemplate] = useState<unknown>(null);
   useEffect(() => {
@@ -177,22 +181,22 @@ interface CartItemComponentProps {
   value: LicenseType.PERSONAL,
   label: 'Personal',
   description: 'For personal use only',
-}
+
     {
   value: LicenseType.COMMERCIAL,
   label: 'Commercial',
   description: 'For commercial projects',
-}
+
     {
   value: LicenseType.ENTERPRISE,
   label: 'Enterprise',
   description: 'For large organizations',
-}
+
     {
   value: LicenseType.EDUCATIONAL,
   label: 'Educational',
   description: 'For educational institutions',
-}
+
     { 
       value: LicenseType.UNLIMITED, 
       label: 'Unlimited', 

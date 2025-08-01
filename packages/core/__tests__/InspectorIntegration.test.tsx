@@ -17,35 +17,35 @@ import { WeightedChoiceEditor } from '../components/Inspector/editors/WeightedCh
 import { HelpProvider } from '../components/Help/HelpContentManager';
 
 // Mock the UI settings store
-jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({,)
+jest.mock('../stores/uiSettingsStore', () => ({ )
+  useUISettingsStore: () => ({);
   complexityLevel: 'basic',
   debugMode: false,
-  shouldShowTechnicalFields: () => false,
-}
+  shouldShowTechnicalFields: () => false }
+
 }));
 
 // Also need to mock this for all files that use it
-jest.mock('../../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({,)
+jest.mock('../../stores/uiSettingsStore', () => ({ )
+  useUISettingsStore: () => ({);
   complexityLevel: 'basic',
   debugMode: false,
-  shouldShowTechnicalFields: () => false,
-}
+  shouldShowTechnicalFields: () => false }
+
 }));
 
 // Mock the graph store
-jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({,)
+jest.mock('../graphStore', () => ({ )
+  useGraphStore: () => ({);
   nodes: [],
-  edges: [],
-}
+  edges: [] }
+
 }));
 
 // Common test props for all editors
-const createMockNodeData = (type: string) => ({,)
+const createMockNodeData = (type: string) => ({ );
   id: 'test-node-id',
-  type,
+  type }
   name: `Test ${type}`}
 },
   label: `Test ${type}`}
@@ -61,10 +61,8 @@ const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     {children}
   </HelpProvider>
 );
-describe('Inspector Integration - Progressive Disclosure Pattern', () => {
-  beforeEach(() => {
-    mockOnChange.mockClear();
-  });
+describe('Inspector Integration - Progressive Disclosure Pattern', () => { beforeEach(() => {
+    mockOnChange.mockClear() });
   describe('ConcatEditor Integration', () => {
     it('renders with progressive disclosure sections', () => {
       render();
@@ -92,9 +90,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       );
       const nameInput = screen.getByPlaceholderText('Enter a name for this concatenation...');
       fireEvent.focus(nameInput);
-      await waitFor(() => {
-        expect(screen.getByText('Concatenation Name')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Concatenation Name')).toBeInTheDocument() });
     });
     it('integrates help system with template editor', async () => {
       render();
@@ -107,11 +103,9 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
         </TestWrapper>
       );
       const templateSection = screen.getByText('Output Template (Optional)').parentElement;
-      if (templateSection) {
-        fireEvent.mouseEnter(templateSection);
+      if (templateSection) { fireEvent.mouseEnter(templateSection);
         await waitFor(() => {
-          expect(screen.getByText('Output Template')).toBeInTheDocument();
-        });
+          expect(screen.getByText('Output Template')).toBeInTheDocument() });
     });
   });
   describe('OutputEditor Integration', () => {
@@ -141,9 +135,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       );
       const nameInput = screen.getByPlaceholderText('Enter a name for this output...');
       fireEvent.focus(nameInput);
-      await waitFor(() => {
-        expect(screen.getByText('Output Name')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Output Name')).toBeInTheDocument() });
     });
   });
   describe('ConditionalEditor Integration', () => {
@@ -175,9 +167,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       );
       const nameInput = screen.getByPlaceholderText('e.g., Character Response, Plot Branch, Scene Choice');
       fireEvent.focus(nameInput);
-      await waitFor(() => {
-        expect(screen.getByText('Decision Name')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Decision Name')).toBeInTheDocument() });
     });
   });
   describe('SequentialEditor Integration', () => {
@@ -207,9 +197,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       );
       const nameInput = screen.getByPlaceholderText('e.g., Dialogue Styles, Scene Transitions, Character Arcs');
       fireEvent.focus(nameInput);
-      await waitFor(() => {
-        expect(screen.getByText('Sequence Name')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Sequence Name')).toBeInTheDocument() });
     });
   });
   describe('VariableEditor Integration', () => {
@@ -254,9 +242,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       );
       const nameInput = screen.getByPlaceholderText('Name for this stored value...');
       fireEvent.focus(nameInput);
-      await waitFor(() => {
-        expect(screen.getByText('Store As')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Store As')).toBeInTheDocument() });
     });
   });
   describe('WeightedChoiceEditor Integration', () => {
@@ -275,13 +261,11 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       // Test existing help integration
       const nameInput = screen.getByPlaceholderText('Enter a name for this weighted choice node...');
       fireEvent.focus(nameInput);
-      await waitFor(() => {
-        expect(screen.getByText('Node Name')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Node Name')).toBeInTheDocument() });
     });
   });
   describe('Cross-Editor Consistency', () => {
-    const editors = [;
+    const editors = [
       { name: 'ConcatEditor', component: ConcatEditor, props: {} },
       { name: 'OutputEditor', component: OutputEditor, props: {} },
       { name: 'ConditionalEditor', component: ConditionalEditor, props: { nodeId: 'test' } },
@@ -322,14 +306,12 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
         );
         // Look for any input field and try to trigger help
         const inputs = screen.getAllByRole('textbox');
-        if (inputs.length > 0) {
-          fireEvent.focus(inputs[0]);
+        if (inputs.length > 0) { fireEvent.focus(inputs[0]);
           // Give a moment for help to appear
           await new Promise(resolve => setImmediate(resolve));
           // At least one editor should show help content
           // (We don't require all because some might have different trigger types)
-        unmount();
-    });
+        unmount() });
   });
   describe('Help System Integration', () => {
     it('respects help system enabled/disabled state', () => {

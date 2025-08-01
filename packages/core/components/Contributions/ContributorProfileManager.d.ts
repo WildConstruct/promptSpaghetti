@@ -9,6 +9,7 @@ import React from 'react';
 import { ContributorProfile } from '../../types/contributions';
 
 }
+}
 export interface ContributorProfileManagerProps {
     profile: ContributorProfile;
     onProfileUpdate: (profile: ContributorProfile) => void;
@@ -18,4 +19,5 @@ export interface ContributorProfileManagerProps {
 export declare const ContributorProfileManager: React.FC<ContributorProfileManagerProps>;
 export default ContributorProfileManager;
 //# sourceMappingURL=ContributorProfileManager.d.ts.map
+}
 }

@@ -18,10 +18,10 @@ import {
   TransactionTrustScore,
   RiskFactor,
   FraudIndicator
-} from '../../../packages/core/types/TrustTypes';
+ from '../../../packages/core/types/TrustTypes';
 
-}
-}
+
+
 export interface ViolationRule {
   ruleId: string;
   name: string;
@@ -33,8 +33,9 @@ export interface ViolationRule {
     trustScore?: {
       operator: 'lt' | 'lte' | 'gt' | 'gte' | 'eq';
       value: number;
-}
-}
+
+
+
     };
     riskFactors?: {
       minimumCount: number;
@@ -61,10 +62,10 @@ export interface ViolationRule {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
 
-}
-}
+
+
+
 export interface ScanOptions {
   entityTypes?: ('user' | 'template' | 'transaction')[];
   entityIds?: string[];
@@ -74,14 +75,15 @@ export interface ScanOptions {
   timeRange?: {
     from: Date;
     to: Date;
-}
-}
+
+
+
   };
   maxResults?: number;
-}
 
-}
-}
+
+
+
 export interface ScanResult {
   totalScanned: number;
   violationsFound: number;
@@ -90,9 +92,10 @@ export interface ScanResult {
   violations: PolicyViolation[];
   scanDuration: number;
   timestamp: Date;
-}
-}
-}
+
+
+
+
 
 export class ViolationDetectionEngine {
   private db: Database;
@@ -108,7 +111,7 @@ export class ViolationDetectionEngine {
     this.db = database;
     this.trustScoreService = trustScoreService;
     this.contentQualityService = contentQualityService;
-  }
+
 
   // =============================================================================
   // Core Detection Methods
@@ -122,7 +125,7 @@ export class ViolationDetectionEngine {
     console.log('🔍 Initializing Violation Detection Engine');
     await this.loadActiveRules();
     console.log(`✅ Loaded ${this.activeRules.size} active violation rules`);
-  }
+
 
   /**
    * Perform comprehensive violation scan
@@ -138,7 +141,7 @@ export class ViolationDetectionEngine {
     // Refresh rules if needed
     if (this.activeRules.size === 0) {
       await this.loadActiveRules();
-    }
+
 
     // Filter rules based on options
     const applicableRules = this.getApplicableRules(options);
@@ -149,19 +152,19 @@ export class ViolationDetectionEngine {
       const userViolations = await this.scanUserViolations(applicableRules, options);
       violations.push(...userViolations);
       totalScanned += userViolations.length;
-    }
+
 
     if (!options.entityTypes || options.entityTypes.includes('template')) {
       const templateViolations = await this.scanTemplateViolations(applicableRules, options);
       violations.push(...templateViolations);
       totalScanned += templateViolations.length;
-    }
+
 
     if (!options.entityTypes || options.entityTypes.includes('transaction')) {
       const transactionViolations = await this.scanTransactionViolations(applicableRules, options);
       violations.push(...transactionViolations);
       totalScanned += transactionViolations.length;
-    }
+
 
     // Aggregate results
     const scanDuration = Date.now() - startTime;
@@ -177,7 +180,7 @@ export class ViolationDetectionEngine {
 
     console.log(`✅ Scan completed: ${result.violationsFound} violations found in ${scanDuration}ms`);
     return result;
-  }
+
 
   /**
    * Scan specific entity for violations
@@ -205,8 +208,8 @@ export class ViolationDetectionEngine {
       return await this.scanTransactionViolations(applicableRules, { entityIds: [entityId] });
     default:
       throw new Error(`Unknown entity type: ${entityType}`);
-    }
-  }
+
+
 
   // =============================================================================
   // Entity-Specific Scanning Methods
@@ -235,15 +238,15 @@ export class ViolationDetectionEngine {
           const violation = await this.evaluateUserRule(rule, userTrustScore, userId);
           if (violation) {
             violations.push(violation);
-          }
-        }
-      } catch (error) {
+
+
+ catch (error) {
         console.error(`❌ Error scanning user ${userId}:`, error);
-      }
-    }
+
+
 
     return violations;
-  }
+
 
   /**
    * Scan templates for policy violations
@@ -268,15 +271,15 @@ export class ViolationDetectionEngine {
           const violation = await this.evaluateTemplateRule(rule, templateTrustScore, templateId);
           if (violation) {
             violations.push(violation);
-          }
-        }
-      } catch (error) {
+
+
+ catch (error) {
         console.error(`❌ Error scanning template ${templateId}:`, error);
-      }
-    }
+
+
 
     return violations;
-  }
+
 
   /**
    * Scan transactions for policy violations
@@ -301,15 +304,15 @@ export class ViolationDetectionEngine {
           const violation = await this.evaluateTransactionRule(rule, transactionTrustScore, transactionId);
           if (violation) {
             violations.push(violation);
-          }
-        }
-      } catch (error) {
+
+
+ catch (error) {
         console.error(`❌ Error scanning transaction ${transactionId}:`, error);
-      }
-    }
+
+
 
     return violations;
-  }
+
 
   // =============================================================================
   // Rule Evaluation Methods
@@ -331,7 +334,7 @@ export class ViolationDetectionEngine {
     if (conditions.trustScore) {
       if (!this.evaluateTrustScoreCondition(userTrustScore.score, conditions.trustScore)) {
         return null;
-      }
+
       
       violation = {
         violationId: this.generateViolationId(),
@@ -344,11 +347,11 @@ export class ViolationDetectionEngine {
           trustScore: userTrustScore.score,
           threshold: conditions.trustScore.value,
           operator: conditions.trustScore.operator
-  }
+
         detectedAt: new Date(),
         status: 'pending'
       };
-    }
+
 
     // Check risk factor conditions
     if (conditions.riskFactors && userTrustScore.riskFactors) {
@@ -368,12 +371,12 @@ export class ViolationDetectionEngine {
             riskFactorCount: matchingRisks.length,
             threshold: conditions.riskFactors.minimumCount,
             riskFactors: matchingRisks
-  }
+
           detectedAt: new Date(),
           status: 'pending'
         };
-      }
-    }
+
+
 
     // Check user behavior conditions
     if (conditions.userBehavior) {
@@ -390,11 +393,11 @@ export class ViolationDetectionEngine {
           detectedAt: new Date(),
           status: 'pending'
         };
-      }
-    }
+
+
 
     return violation;
-  }
+
 
   /**
    * Evaluate template against violation rule
@@ -412,7 +415,7 @@ export class ViolationDetectionEngine {
     if (conditions.trustScore) {
       if (!this.evaluateTrustScoreCondition(templateTrustScore.score, conditions.trustScore)) {
         return null;
-      }
+
       
       violation = {
         violationId: this.generateViolationId(),
@@ -425,11 +428,11 @@ export class ViolationDetectionEngine {
           trustScore: templateTrustScore.score,
           threshold: conditions.trustScore.value,
           operator: conditions.trustScore.operator
-  }
+
         detectedAt: new Date(),
         status: 'pending'
       };
-    }
+
 
     // Check content quality conditions
     if (conditions.contentQuality) {
@@ -446,11 +449,11 @@ export class ViolationDetectionEngine {
           detectedAt: new Date(),
           status: 'pending'
         };
-      }
-    }
+
+
 
     return violation;
-  }
+
 
   /**
    * Evaluate transaction against violation rule
@@ -480,12 +483,12 @@ export class ViolationDetectionEngine {
             fraudScore: transactionTrustScore.fraudScore,
             fraudIndicators: transactionTrustScore.fraudIndicators,
             thresholds: conditions.fraudIndicators
-  }
+
           detectedAt: new Date(),
           status: 'pending'
         };
-      }
-    }
+
+
 
     // Check transaction-specific conditions
     if (conditions.transaction) {
@@ -502,11 +505,11 @@ export class ViolationDetectionEngine {
           detectedAt: new Date(),
           status: 'pending'
         };
-      }
-    }
+
+
 
     return violation;
-  }
+
 
   // =============================================================================
   // Condition Evaluation Helpers
@@ -520,29 +523,29 @@ export class ViolationDetectionEngine {
     case 'gte': return score >= condition.value;
     case 'eq': return score === condition.value;
     default: return false;
-    }
-  }
+
+
 
   private async evaluateUserBehaviorCondition(userId: string, condition: any): Promise<any | null> {
 
     // Placeholder for user behavior analysis
     // Would analyze recent user activity patterns, velocity, etc.
     return null;
-  }
+
 
   private async evaluateContentQualityCondition(templateId: string, condition: any): Promise<any | null> {
 
     // Placeholder for content quality analysis
     // Would integrate with ContentQualityMetricsService
     return null;
-  }
+
 
   private async evaluateTransactionCondition(transactionId: string, condition: any): Promise<any | null> {
 
     // Placeholder for transaction analysis
     // Would analyze transaction patterns, amounts, velocity, etc.
     return null;
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -572,36 +575,36 @@ export class ViolationDetectionEngine {
         updatedAt: row.updated_at
       };
       this.activeRules.set(rule.ruleId, rule);
-    }
-  }
+
+
 
   private getApplicableRules(options: ScanOptions): ViolationRule[] {
     let rules = Array.from(this.activeRules.values());
 
     if (options.ruleIds) {
       rules = rules.filter(r => options.ruleIds!.includes(r.ruleId));
-    }
+
 
     if (options.categories) {
       rules = rules.filter(r => options.categories!.includes(r.category));
-    }
+
 
     if (options.severities) {
       rules = rules.filter(r => options.severities!.includes(r.severity));
-    }
+
 
     if (options.entityTypes) {
       rules = rules.filter(r => r.entityTypes.some(et => options.entityTypes!.includes(et)));
-    }
+
 
     return rules;
-  }
+
 
   private async getUserIdsToScan(options: ScanOptions): Promise<string[]> {
 
     if (options.entityIds) {
       return options.entityIds;
-    }
+
 
     // Default: scan recent users or all users up to a limit
     const result = await this.db.query(`
@@ -611,13 +614,13 @@ export class ViolationDetectionEngine {
     `);
 
     return result.rows.map(row => row.id);
-  }
+
 
   private async getTemplateIdsToScan(options: ScanOptions): Promise<string[]> {
 
     if (options.entityIds) {
       return options.entityIds;
-    }
+
 
     // Default: scan recent templates
     const result = await this.db.query(`
@@ -627,13 +630,13 @@ export class ViolationDetectionEngine {
     `);
 
     return result.rows.map(row => row.id);
-  }
+
 
   private async getTransactionIdsToScan(options: ScanOptions): Promise<string[]> {
 
     if (options.entityIds) {
       return options.entityIds;
-    }
+
 
     // Default: scan recent transactions
     const result = await this.db.query(`
@@ -643,26 +646,25 @@ export class ViolationDetectionEngine {
     `);
 
     return result.rows.map(row => row.id);
-  }
+
 
   private aggregateViolationsByCategory(violations: PolicyViolation[]): Record<string, number> {
     const categoryMap: Record<string, number> = {};
     for (const violation of violations) {
       const category = violation.violationType.split('_')[0] || 'unknown';
       categoryMap[category] = (categoryMap[category] || 0) + 1;
-    }
+
     return categoryMap;
-  }
+
 
   private aggregateViolationsBySeverity(violations: PolicyViolation[]): Record<string, number> {
     const severityMap: Record<string, number> = {};
     for (const violation of violations) {
       severityMap[violation.severity] = (severityMap[violation.severity] || 0) + 1;
-    }
+
     return severityMap;
-  }
+
 
   private generateViolationId(): string {
     return `VIO-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
-}
+

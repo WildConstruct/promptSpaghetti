@@ -1,54 +1,40 @@
 import { Token, LexerPosition } from '../lexer/graph-lexer';
 
 }
-export interface ASTNode {
-    type: string;
-    position: LexerPosition;
-    children?: ASTNode[];
-
-
 }
-export interface GraphAST extends ASTNode {
-    type: 'Graph';
+export interface ASTNode { type: string;
+    position: LexerPosition;
+    children?: ASTNode[] }
+}
+}
+export interface GraphAST extends ASTNode { type: 'Graph';
     version?: string;
     checksum?: string;
     metadata?: MetadataNode;
     nodes: NodeDefinitionAST[];
-    edges: EdgeDefinitionAST[];
-
+    edges: EdgeDefinitionAST[] }
 }
-export interface MetadataNode extends ASTNode {
-    type: 'Metadata';
-    properties: Record<string, any>;
-
+export interface MetadataNode extends ASTNode { type: 'Metadata';
+    properties: Record<string, any> }
 }
-export interface NodeDefinitionAST extends ASTNode {
-    type: 'NodeDefinition';
+export interface NodeDefinitionAST extends ASTNode { type: 'NodeDefinition';
     id: string;
     nodeType: string;
     properties?: Record<string, any>;
-    inputs?: string[];
-
+    inputs?: string[] }
 }
-export interface EdgeDefinitionAST extends ASTNode {
-    type: 'EdgeDefinition';
+export interface EdgeDefinitionAST extends ASTNode { type: 'EdgeDefinition';
     source: string;
-    target: string;
-
+    target: string }
 }
-export interface PropertyNode extends ASTNode {
-    type: 'Property';
+export interface PropertyNode extends ASTNode { type: 'Property';
     key: string;
-    value: any;
-
+    value: any }
 }
-export interface ArrayNode extends ASTNode {
-    type: 'Array';
-    elements: any[];
-
+export interface ArrayNode extends ASTNode { type: 'Array';
+    elements: any[] }
 }
-export interface ParseError {
-    message: string;
+export interface ParseError { message: string;
     position: LexerPosition;
     severity: 'error' | 'warning';
     suggestion?: string;
@@ -63,7 +49,7 @@ export declare class ASTBuilder {
      */
     build(): {
         ast: GraphAST | null;
-        errors: ParseError[];
+        errors: ParseError[] }
 }
     };
     /**

@@ -6,7 +6,7 @@
 import { 
   SecurityAnalyticsMonitoringIntegration,
   MonitoringIntegrationConfig
-} from '../SecurityAnalyticsMonitoringIntegration';
+ from '../SecurityAnalyticsMonitoringIntegration';
 import { SecurityAnalyticsReliabilityEngineer, ReliabilityConfig } from '../SecurityAnalyticsReliabilityEngineer';
 import { SecurityAnalyticsIntegrationService } from '../SecurityAnalyticsIntegrationService';
 import { SecurityAnalyticsOptimizer } from '../SecurityAnalyticsOptimizer';
@@ -76,15 +76,15 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
           response_time_ms: 50,
           error_rate: 0.01,
           availability_percent: 99.9
-  }
+
         optimization_service: {
           status: 'healthy',
           last_check: Date.now(),
           response_time_ms: 30,
           error_rate: 0.005,
           availability_percent: 99.95
-        }
-  }
+
+
       system_metrics: {
         uptime_ms: 3600000,
         total_requests: 10000,
@@ -93,7 +93,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         memory_usage_percent: 60,
         cpu_usage_percent: 45,
         disk_usage_percent: 30
-      }
+
     });
 
     mockReliabilityEngineer.getReliabilityMetrics = jest.fn<unknown[], unknown>().mockReturnValue({
@@ -107,7 +107,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
       backup_success_rate: 95,
       disaster_recovery_readiness: 90,
       incident_count_last_24h: 1
-    } as unknown as unknown as unknown);
+ as unknown as unknown as unknown);
 
     mockReliabilityEngineer.getCircuitBreakerStatus = jest.fn<unknown[], unknown>().mockReturnValue(new Map([
       ['security_analytics_service', {
@@ -118,7 +118,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         success_count: 100,
         total_requests: 100,
         last_state_change: Date.now( as unknown as unknown) - 3600000
-      }],
+],
       ['optimization_service', {
         state: 'closed',
         failure_count: 0,
@@ -127,7 +127,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         success_count: 50,
         total_requests: 50,
         last_state_change: Date.now() - 1800000
-      }]
+]
     ]));
 
     mockReliabilityEngineer.getActiveIncidents = jest.fn<unknown[], unknown>().mockReturnValue([] as unknown as unknown as unknown);
@@ -138,7 +138,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         priority: 'critical',
         success_rate: 95,
         last_tested: Date.now( as unknown as unknown) - 86400000 // 1 day ago
-      }
+
     ]);
 
     mockReliabilityEngineer.on = jest.fn<unknown[], unknown>();
@@ -159,7 +159,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
     mockHealthCheckFramework.executeHealthCheck = jest.fn<unknown[], unknown>().mockResolvedValue({
       healthy: true,
       details: { status: 'healthy' }
-    } as unknown as unknown as unknown);
+ as unknown as unknown as unknown);
     mockHealthCheckFramework.on = jest.fn<unknown[], unknown>();
 
     // Mock diagnostic service
@@ -177,7 +177,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         event_forwarding_enabled: true,
         metrics_aggregation_interval_ms: 60000,
         reliability_event_types: ['circuit_breaker_opened', 'auto_healing_successful', 'disaster_recovery_triggered']
-  }
+
       epic17_integration: {
         health_check_registration_enabled: true,
         diagnostic_service_enabled: true,
@@ -185,7 +185,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         threshold_management_enabled: true,
         alert_escalation_enabled: true,
         compliance_monitoring_enabled: true
-  }
+
       unified_monitoring: {
         cross_epic_correlation_enabled: true,
         unified_dashboard_enabled: true,
@@ -193,14 +193,14 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         historical_data_correlation: true,
         predictive_analytics_enabled: true,
         anomaly_detection_enabled: true
-  }
+
       integration_resilience: {
         circuit_breaker_enabled: true,
         fallback_monitoring_enabled: true,
         integration_health_monitoring: true,
         auto_recovery_enabled: true,
         degraded_mode_enabled: true
-      }
+
     };
 
     monitoringIntegration = new SecurityAnalyticsMonitoringIntegration(
@@ -218,7 +218,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
   afterEach(async () => {
     if (monitoringIntegration && typeof monitoringIntegration.shutdown === 'function') {
       await monitoringIntegration.shutdown();
-    }
+
     jest.clearAllMocks();
   });
 
@@ -317,7 +317,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
           failure_count: 5,
           timestamp: Date.now()
         });
-      }
+
 
       // Verify analytics tracking (this would be called in real implementation)
       expect(mockReliabilityEngineer.on).toHaveBeenCalledWith('circuit_breaker_opened', expect.any(Function));
@@ -358,7 +358,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         expect(result.details).toHaveProperty('health_score');
         expect(result.details).toHaveProperty('availability');
         expect(result.details).toHaveProperty('reliability_score');
-      }
+
     });
 
     test('should execute registered diagnostics', async () => {
@@ -379,7 +379,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         expect(result).toHaveProperty('incident_management');
         expect(result).toHaveProperty('disaster_recovery');
         expect(result).toHaveProperty('epic_integration_status');
-      }
+
     });
 
     test('should integrate with Epic 17 performance monitoring', async () => {
@@ -563,7 +563,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         epic1_integration: {
           ...testConfig.epic1_integration,
           analytics_collector_enabled: false
-        }
+
       };
       
       const customIntegration = new SecurityAnalyticsMonitoringIntegration(
@@ -591,7 +591,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         epic17_integration: {
           ...testConfig.epic17_integration,
           health_check_registration_enabled: false
-        }
+
       };
       
       const customIntegration = new SecurityAnalyticsMonitoringIntegration(
@@ -620,7 +620,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
           ...testConfig.unified_monitoring,
           cross_epic_correlation_enabled: false,
           real_time_synchronization_enabled: false
-        }
+
       };
       
       const customIntegration = new SecurityAnalyticsMonitoringIntegration(
@@ -740,7 +740,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
       for (let i = 0; i < 10; i++) {
         promises.push(Promise.resolve(monitoringIntegration.getUnifiedSystemHealth()));
         promises.push(Promise.resolve(monitoringIntegration.getIntegratedMonitoringMetrics()));
-      }
+
       
       const results = await Promise.all(promises);
       expect(results.length).toBe(20);

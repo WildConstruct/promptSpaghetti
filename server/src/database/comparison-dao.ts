@@ -12,19 +12,20 @@ import {
   CreateDiffSessionRequest,
   UpdateDiffSessionRequest,
   DetailedComparison
-} from './comparison-models.js';
+ from './comparison-models.js';
 
-}
-}
+
+
 export interface PaginationOptions {
   page?: number;
   limit?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComparisonFilter {
   graph_id?: string;
   source_version_id?: string;
@@ -35,19 +36,20 @@ export interface ComparisonFilter {
   created_after?: Date;
   created_before?: Date;
   created_by?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PaginatedResult<T> {
   data: T[];
   total: number;
   page: number;
   limit: number;
   total_pages: number;
-}
+
 
 export class ComparisonDAO {
   constructor(private db: Database) {}
@@ -81,7 +83,7 @@ export class ComparisonDAO {
     );
 
     return { ...snapshot, id, created_at: now };
-  }
+
 
   async getSnapshot(versionId: string): Promise<GraphComparisonSnapshot | null> {
 
@@ -100,7 +102,7 @@ export class ComparisonDAO {
       properties_index: JSON.parse(row.properties_index),
       created_at: new Date(row.created_at)
     };
-  }
+
 
   async deleteSnapshotsForGraph(graphId: string): Promise<number> {
 
@@ -111,7 +113,7 @@ export class ComparisonDAO {
     
     const result = stmt.run(graphId);
     return result.changes;
-  }
+
 
   // Comparison Management
   async createComparison(comparison: Omit<GraphComparison, 'id' | 'created_at'>): Promise<GraphComparison> {
@@ -149,7 +151,7 @@ export class ComparisonDAO {
     );
 
     return { ...comparison, id, created_at: now };
-  }
+
 
   async getComparison(id: string): Promise<GraphComparison | null> {
 
@@ -162,7 +164,7 @@ export class ComparisonDAO {
     if (!row) return null;
 
     return this.parseComparisonRow(row);
-  }
+
 
   async getComparisonByVersions(
     sourceVersionId: string,
@@ -179,7 +181,7 @@ export class ComparisonDAO {
     if (comparisonType) {
       query += ' AND comparison_type = ?';
       params.push(comparisonType);
-    }
+
 
     query += ' ORDER BY created_at DESC LIMIT 1';
 
@@ -188,7 +190,7 @@ export class ComparisonDAO {
 
     if (!row) return null;
     return this.parseComparisonRow(row);
-  }
+
 
   async getComparisons(
     filter: ComparisonFilter = {},
@@ -203,42 +205,42 @@ export class ComparisonDAO {
     if (filter.source_version_id) {
       whereConditions.push('source_version_id = ?');
       params.push(filter.source_version_id);
-    }
+
 
     if (filter.target_version_id) {
       whereConditions.push('target_version_id = ?');
       params.push(filter.target_version_id);
-    }
+
 
     if (filter.comparison_type) {
       whereConditions.push('comparison_type = ?');
       params.push(filter.comparison_type);
-    }
+
 
     if (filter.min_similarity !== undefined) {
       whereConditions.push('similarity_score >= ?');
       params.push(filter.min_similarity);
-    }
+
 
     if (filter.max_similarity !== undefined) {
       whereConditions.push('similarity_score <= ?');
       params.push(filter.max_similarity);
-    }
+
 
     if (filter.created_after) {
       whereConditions.push('created_at >= ?');
       params.push(filter.created_after.toISOString());
-    }
+
 
     if (filter.created_before) {
       whereConditions.push('created_at <= ?');
       params.push(filter.created_before.toISOString());
-    }
+
 
     if (filter.created_by) {
       whereConditions.push('created_by = ?');
       params.push(filter.created_by);
-    }
+
 
     const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
 
@@ -265,14 +267,14 @@ export class ComparisonDAO {
       limit,
       total_pages: Math.ceil(total / limit)
     };
-  }
+
 
   async deleteComparison(id: string): Promise<boolean> {
 
     const stmt = this.db.prepare('DELETE FROM graph_comparisons WHERE id = ?');
     const result = stmt.run(id);
     return result.changes > 0;
-  }
+
 
   // Node Match Results
   async createNodeMatchResults(comparisonId: string, matches: Omit<NodeMatchResult, 'id' | 'comparison_id' | 'created_at'>[]): Promise<NodeMatchResult[]> {
@@ -303,10 +305,10 @@ export class ComparisonDAO {
       );
 
       results.push({ ...match, id, comparison_id: comparisonId, created_at: now });
-    }
+
 
     return results;
-  }
+
 
   async getNodeMatchResults(comparisonId: string): Promise<NodeMatchResult[]> {
 
@@ -324,7 +326,7 @@ export class ComparisonDAO {
       visual_changes: JSON.parse(row.visual_changes),
       created_at: new Date(row.created_at)
     }));
-  }
+
 
   // Edge Match Results
   async createEdgeMatchResults(comparisonId: string, matches: Omit<EdgeMatchResult, 'id' | 'comparison_id' | 'created_at'>[]): Promise<EdgeMatchResult[]> {
@@ -357,10 +359,10 @@ export class ComparisonDAO {
       );
 
       results.push({ ...match, id, comparison_id: comparisonId, created_at: now });
-    }
+
 
     return results;
-  }
+
 
   async getEdgeMatchResults(comparisonId: string): Promise<EdgeMatchResult[]> {
 
@@ -376,7 +378,7 @@ export class ComparisonDAO {
       property_changes: JSON.parse(row.property_changes),
       created_at: new Date(row.created_at)
     }));
-  }
+
 
   // Visual Diff Sessions
   async createDiffSession(session: Omit<VisualDiffSession, 'id' | 'created_at' | 'last_accessed'>): Promise<VisualDiffSession> {
@@ -407,7 +409,7 @@ export class ComparisonDAO {
     );
 
     return { ...session, id, created_at: now, last_accessed: now };
-  }
+
 
   async getDiffSession(id: string): Promise<VisualDiffSession | null> {
 
@@ -427,7 +429,7 @@ export class ComparisonDAO {
       expires_at: new Date(row.expires_at),
       created_at: new Date(row.created_at)
     };
-  }
+
 
   async updateDiffSession(id: string, updates: Partial<VisualDiffSession>): Promise<boolean> {
 
@@ -437,37 +439,37 @@ export class ComparisonDAO {
     if (updates.view_mode) {
       setClause.push('view_mode = ?');
       params.push(updates.view_mode);
-    }
+
 
     if (updates.highlight_mode) {
       setClause.push('highlight_mode = ?');
       params.push(updates.highlight_mode);
-    }
+
 
     if (updates.zoom_level !== undefined) {
       setClause.push('zoom_level = ?');
       params.push(updates.zoom_level);
-    }
+
 
     if (updates.viewport_state) {
       setClause.push('viewport_state = ?');
       params.push(JSON.stringify(updates.viewport_state));
-    }
+
 
     if (updates.show_unchanged !== undefined) {
       setClause.push('show_unchanged = ?');
       params.push(updates.show_unchanged);
-    }
+
 
     if (updates.show_metadata !== undefined) {
       setClause.push('show_metadata = ?');
       params.push(updates.show_metadata);
-    }
+
 
     if (updates.filter_options) {
       setClause.push('filter_options = ?');
       params.push(JSON.stringify(updates.filter_options));
-    }
+
 
     // Always update last_accessed
     setClause.push('last_accessed = datetime("now")');
@@ -483,14 +485,14 @@ export class ComparisonDAO {
     params.push(id);
     const result = stmt.run(...params);
     return result.changes > 0;
-  }
+
 
   async deleteDiffSession(id: string): Promise<boolean> {
 
     const stmt = this.db.prepare('DELETE FROM visual_diff_sessions WHERE id = ?');
     const result = stmt.run(id);
     return result.changes > 0;
-  }
+
 
   async getUserDiffSessions(userId: string): Promise<VisualDiffSession[]> {
 
@@ -509,7 +511,7 @@ export class ComparisonDAO {
       expires_at: new Date(row.expires_at),
       created_at: new Date(row.created_at)
     }));
-  }
+
 
   // Cleanup Methods
   async cleanupExpiredSessions(): Promise<number> {
@@ -521,14 +523,14 @@ export class ComparisonDAO {
     
     const result = stmt.run();
     return result.changes;
-  }
+
 
   async getComparisonStatistics(graphId?: string): Promise<{
     total_comparisons: number;
     avg_similarity: number;
     comparison_types: Record<string, number>;
     recent_comparisons: number;
-  }> {
+> {
     let whereClause = '';
     const params: unknown[] = [];
 
@@ -539,7 +541,7 @@ export class ComparisonDAO {
 
       `;
       params.push(graphId);
-    }
+
 
     const totalStmt = this.db.prepare(`
       SELECT COUNT(*) as total FROM graph_comparisons ${whereClause}
@@ -575,7 +577,7 @@ export class ComparisonDAO {
       comparison_types,
       recent_comparisons: recent || 0
     };
-  }
+
 
   // Utility method to parse comparison row
   private parseComparisonRow(row: unknown): GraphComparison {
@@ -593,5 +595,4 @@ export class ComparisonDAO {
       property_diffs: JSON.parse(row.property_diffs),
       created_at: new Date(row.created_at)
     };
-  }
-}
+

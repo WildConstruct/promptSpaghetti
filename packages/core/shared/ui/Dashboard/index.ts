@@ -28,13 +28,12 @@ export { default as DashboardShell, useDashboard } from './core/DashboardShell';
 // Type exports
 export type { DashboardShellProps, TabConfig, TimeRangeOption, DashboardContextValue } from './core';
 
-export type {
-  MetricsGridProps,
+export type { MetricsGridProps,
   MetricCardProps,
   MetricValue,
   MetricTrend,
-  TrendIndicatorProps,
-} from './metrics/MetricCard';
+  TrendIndicatorProps }
+ from './metrics/MetricCard';
 
 export type { ChartProps, ChartType, ChartDataPoint, ChartSeries } from './charts/Chart';
 

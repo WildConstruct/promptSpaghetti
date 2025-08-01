@@ -11,26 +11,24 @@ type ComplexityLevelType = z.infer<typeof ComplexityLevel>;
 type LLMProviderType = z.infer<typeof LLMProvider>;
 
 // Parameter System
-export {
-  RandomizerParameters,
-  ParameterPreset,
-  ValidationResult,
-  ComplexityLevel,
-  StylePreference,
-  LLMProvider,
-  NodeTypePreference,
-  RandomizerParametersSchema,
-  ParameterPresetSchema,
-  ValidationResultSchema,
-  ParameterValidator,
+export { RandomizerParameters
+  ParameterPreset
+  ValidationResult
+  ComplexityLevel
+  StylePreference
+  LLMProvider
+  NodeTypePreference
+  RandomizerParametersSchema
+  ParameterPresetSchema
+  ValidationResultSchema
+  ParameterValidator }
   defaultPresets
-} from './parameters/parameter-schema';
+ from './parameters/parameter-schema';
 
-export {
-  ParameterManager,
-  ParameterHistory,
+export { ParameterManager
+  ParameterHistory }
   ParameterManagerOptions
-} from './parameters/parameter-manager';
+ from './parameters/parameter-manager';
 
 // UI Components - Temporarily disabled for server build
 // export {
@@ -43,41 +41,39 @@ export {
 // } from './preview/GraphPreview';
 
 // Workflow System
-export {
-  RandomizerWorkflow,
-  WorkflowOptions,
-  WorkflowResult,
-  WorkflowError,
+export { RandomizerWorkflow
+  WorkflowOptions
+  WorkflowResult
+  WorkflowError }
   WorkflowWarning
-} from './workflow/randomizer-workflow';
+ from './workflow/randomizer-workflow';
 /**
  * Complete randomizer system factory
  */
 export class RandomizerSystem {
   private parameterManager: ParameterManager;
   private workflow: RandomizerWorkflow;
-  constructor(options: Partial<ParameterManagerOptions> = {}) {
-  this.parameterManager = new ParameterManager(options);
+  constructor(options: Partial<ParameterManagerOptions> = {}) { this.parameterManager = new ParameterManager(options);
   this.workflow = new RandomizerWorkflow();
   /**
   * Get parameter manager
   */
-  getParameterManager(): ParameterManager {,
+  getParameterManager(): ParameterManager {
   return this.parameterManager;
   /**
   * Get workflow
   */
-  getWorkflow(): RandomizerWorkflow {,
+  getWorkflow(): RandomizerWorkflow {
   return this.workflow;
   /**
   * Quick generation with minimal setup
   */
   async quickGenerate(purpose: string)
-  complexity: ComplexityLevelType = 'moderate',
-  provider: LLMProviderType = 'openai'): Promise<WorkflowResult> {,
+  complexity: ComplexityLevelType = 'moderate'
+  provider: LLMProviderType = 'openai'): Promise<WorkflowResult> {
   const parameters = this.parameterManager.createCompleteParameters({)
-  purpose,
-  complexity,
+  purpose
+  complexity }
   provider
 });
     return this.workflow.generateGraph(parameters);
@@ -85,15 +81,14 @@ export class RandomizerSystem {
    * Generate with preset
    */
   async generateWithPreset(((
-    presetId: string,
+    presetId: string
     overrides: Partial<RandomizerParameters> = {}
   ): Promise<WorkflowResult> {
 
     const preset = this.parameterManager.getPreset(presetId);
     if (!preset) {
       throw new Error(`Preset not found: ${presetId}`);}
-    const parameters = {
-      ...preset.parameters,
+    const parameters = { ...preset.parameters }
       ...overrides
     };
     return this.workflow.generateGraph(parameters);
@@ -101,18 +96,16 @@ export class RandomizerSystem {
    * Generate multiple variations
    */
   async generateVariations(((
-    parameters: RandomizerParameters,
+    parameters: RandomizerParameters
     count: number = 3
-  ): Promise<WorkflowResult> {
-
-  return this.workflow.generateVariations(parameters, count);
+  ): Promise<WorkflowResult> { return this.workflow.generateVariations(parameters, count);
   /**
   * Get generation history with statistics
   */
   getHistory() {
   return {
-  entries: this.parameterManager.getHistory(),
-  stats: this.parameterManager.getHistoryStats(),
+  entries: this.parameterManager.getHistory()
+  stats: this.parameterManager.getHistoryStats() }
 };
   /**
    * Export all data

@@ -19,7 +19,7 @@ export const MetricType = {
   USAGE_TIME: 'usage_time' as const,
   ERROR_RATE: 'error_rate' as const,
   CONVERSION: 'conversion' as const,
-} as const;
+ as const;
 
 export type TimeRange = 
   | 'last_24h'
@@ -39,7 +39,7 @@ export const TimeRange = {
   LAST_YEAR: 'last_year' as const,
   ALL_TIME: 'all_time' as const,
   CUSTOM: 'custom' as const,
-} as const;
+ as const;
 
 export type AggregationType = 
   | 'sum'
@@ -59,7 +59,7 @@ export const AggregationType = {
   MAX: 'max' as const,
   MIN: 'min' as const,
   MEDIAN: 'median' as const,
-} as const;
+ as const;
 
 export type DashboardLayout = 
   | 'grid'
@@ -73,120 +73,126 @@ export const DashboardLayout = {
   LIST: 'list' as const,
   CHARTS: 'charts' as const,
   MIXED: 'mixed' as const,
-} as const;
+ as const;
 
-}
+
 export interface AnalyticsEvent {
   id: string;,
   template_id: string;
   user_id?: string;
   event_type: MetricType;,
   event_data: Record<string, unknown>;
-  metadata: {
+  metadata: {,
   user_agent?: string;
   ip_address?: string;
   referrer?: string;
   session_id?: string;
   device_type?: string;
-  location?: {
+  location?: {,
   country?: string;
   region?: string;
   city?: string;
-}
+
+
 };
   };
   timestamp: Date;,
   created_at: Date;
-}
-}
+
+
+
 export interface TemplateMetrics {
   template_id: string;,
-  period_start: Date;
+  period_start: Date;,
   period_end: Date;,
-  metrics: {
+  metrics: {,
   views: number;,
-  unique_views: number;
+  unique_views: number;,
   downloads: number;,
-  likes: number;
+  likes: number;,
   average_rating: number;,
-  total_ratings: number;
+  total_ratings: number;,
   revenue: number;,
-  usage_minutes: number;
+  usage_minutes: number;,
   error_count: number;,
-  success_rate: number;
+  success_rate: number;,
   conversion_rate: number;
-}
+
+
 };
-  demographics: {
+  demographics: {,
   top_countries: Array<{ country: string; count: number; percentage: number }>;
     device_breakdown: Array<{ device: string; count: number; percentage: number }>;
     user_segments: Array<{ segment: string; count: number; percentage: number }>;
   };
-  trends: {
-  daily_metrics: Array<{
+  trends: {,
+  daily_metrics: Array<{,
   date: Date;,
-  views: number;
+  views: number;,
   downloads: number;,
   revenue: number;
-}>;
-    growth_rates: {
+>;
+    growth_rates: {,
   views_growth: number;
   downloads_growth: number;,
   revenue_growth: number;
 };
   };
-}
-}
+
+
+
 export interface CreatorDashboard {
   creator_id: string;,
-  period: TimeRange;
+  period: TimeRange;,
   period_start: Date;,
-  period_end: Date;
-  overview: {
+  period_end: Date;,
+  overview: {,
   total_templates: number;,
-  active_templates: number;
+  active_templates: number;,
   total_views: number;,
-  total_downloads: number;
+  total_downloads: number;,
   total_revenue: number;,
-  average_rating: number;
-  top_performing_template: {
+  average_rating: number;,
+  top_performing_template: {,
   id: string;,
-  title: string;
+  title: string;,
   views: number;,
-  downloads: number;
+  downloads: number;,
   revenue: number;
-}
+
+
 };
   };
-  performance_summary: {
+  performance_summary: {,
   views_trend: number;
   downloads_trend: number;,
-  revenue_trend: number;
+  revenue_trend: number;,
   rating_trend: number;,
-  market_share: number;
+  market_share: number;,
   ranking_position: number;
 };
-  traffic_metrics: {
+  traffic_metrics: {,
   unique_visitors: number;
     returning_visitors: number;,
-  bounce_rate: number;
-    average_session_duration: number;,
+  bounce_rate: number;,
+  average_session_duration: number;,
   top_referrers: Array<{ source: string; visits: number; percentage: number }>;
   };
-  financial_metrics: {
+  financial_metrics: {,
   gross_revenue: number;
   net_revenue: number;,
-  platform_fee: number;
+  platform_fee: number;,
   payout_amount: number;,
-  revenue_by_template: Array<{
+  revenue_by_template: Array<{,
   template_id: string;,
-  title: string;
+  title: string;,
   revenue: number;,
   percentage: number;
-}>;
+>;
   };
-}
-}
+
+
+
 export interface AnalyticsQuery {
   creator_id?: string;
   template_ids?: string;
@@ -196,13 +202,14 @@ export interface AnalyticsQuery {
   end_date?: Date;
   aggregation: AggregationType;
   group_by?: string;
-  filters?: {
+  filters?: {,
   countries?: string;
   device_types?: string;
   user_segments?: string;
   min_value?: number;
   max_value?: number;
-}
+
+
 };
   sort?: {
   field: string;,
@@ -210,74 +217,83 @@ export interface AnalyticsQuery {
 };
   limit?: number;
   offset?: number;
-}
-}
+
+
+
 export interface CustomReport {
   id: string;,
-  creator_id: string;
+  creator_id: string;,
   name: string;
   description?: string;
-  configuration: {
+  configuration: {,
   query: AnalyticsQuery;,
-  visualization: {
+  visualization: {,
   chart_type: 'line' | 'bar' | 'pie' | 'area' | 'table' | 'metric';,
-  layout: DashboardLayout;
+  layout: DashboardLayout;,
   show_legend: boolean;,
-  show_grid: boolean;
+  show_grid: boolean;,
   color_scheme: string;
-}
+
+
 };
     refresh_interval?: number;
   };
   is_scheduled: boolean;
   schedule?: {
   frequency: 'daily' | 'weekly' | 'monthly';,
-  time: string;
+  time: string;,
   recipients: string;
 };
   created_at: Date;,
   updated_at: Date;
-}
-}
+
+
+
 export interface AnalyticsInsight {
   id: string;,
-  type: 'trend' | 'anomaly' | 'opportunity' | 'warning';
+  type: 'trend' | 'anomaly' | 'opportunity' | 'warning';,
   title: string;,
-  description: string;
-  data: {
+  description: string;,
+  data: {,
   metric: MetricType;,
-  current_value: number;
+  current_value: number;,
   previous_value: number;,
-  change_percentage: number;
+  change_percentage: number;,
   confidence_score: number;
-}
+
+
 };
   recommendations?: string;
   created_at: Date;
 
 // Chart data interfaces
-}
-}
+
+
+
 export interface ChartDataPoint {
   date: string;
   [key: string]: string | number;
-}
-}
-}
+
+
+
+
+
 export interface TrendData {
   labels: string;,
-  datasets: Array<{
+  datasets: Array<{,
   label: string;,
-  data: number;
+  data: number;,
   borderColor: string;,
   backgroundColor: string;
   fill?: boolean;
-}
-}>;
+
+
+>;
 
 // UI Component Props
-}
-}
+
+
+
 export interface MetricCardProps {
   title: string;,
   value: string | number;
@@ -286,18 +302,22 @@ export interface MetricCardProps {
   icon: string;,
   color: string;
   subtitle?: string;
-}
-}
-}
+
+
+
+
+
 export interface TimeRangeSelectorProps {
   value: TimeRange;
   startDate?: Date;
   endDate?: Date;
   onChange: (timeRange: TimeRange, startDate?: Date, endDate?: Date) => void;
   // Service interfaces
-}
-}
-}
+
+
+
+
+
 export interface AnalyticsService {
   trackEvent(event: Partial<AnalyticsEvent>): Promise<void>;
   getCreatorDashboard();
@@ -315,5 +335,5 @@ export interface AnalyticsService {
   getCustomReports(creatorId: string): Promise<CustomReport>;
   generateReport(reportId: string): Promise<unknown>;
   generateInsights(creatorId: string, templateIds?: string): Promise<AnalyticsInsight>;
-}
-}
+
+

@@ -33,23 +33,11 @@ const NOTIFICATION_TYPES = [
         description: 'System maintenance and important updates'
     }
 ];
-const DELIVERY_METHODS = [];
-{
-    key: 'in_app', label;
-    'In-App', description;
-    'Show in notification center';
-}
-{
-    key: 'email', label;
-    'Email', description;
-    'Send email notifications';
-}
-{
-    key: 'push', label;
-    'Push', description;
-    'Browser push notifications';
-}
-;
+const DELIVERY_METHODS = [
+    { key: 'in_app', label: 'In-App', description: 'Show in notification center' },
+    { key: 'email', label: 'Email', description: 'Send email notifications' },
+    { key: 'push', label: 'Push', description: 'Browser push notifications' }
+];
 export const NotificationPreferences = ({
     userId,
     workspaceId,
@@ -142,8 +130,7 @@ const loadPreferences = async () => {
                 [type]: {
                     ...prev.type_preferences[type],
                     [delivery]: enabled,
-                }
-            });
+                } });
             ;
         };
         const updateGlobalDelivery = (delivery, enabled) => {

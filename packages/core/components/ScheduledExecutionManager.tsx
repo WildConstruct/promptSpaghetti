@@ -1,8 +1,7 @@
 // Epic 9.4.6 - Scheduled Execution Manager Component
 // UI component for managing scheduled workflow executions
 import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  ClockIcon,
+import { ClockIcon,
   PlayIcon,
   PauseIcon,
   StopIcon,
@@ -14,13 +13,13 @@ import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
   XCircleIcon,
-  ChevronDownIcon,
+  ChevronDownIcon }
   ChevronRightIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
-}
-interface ScheduledExecution {
-  id: string;
+
+
+interface ScheduledExecution { id: string;
   workspace_id: string;
   resource_id: string;
   schedule_name: string;
@@ -55,13 +54,13 @@ interface ScheduledExecution {
   resourceId?: string;
   onClose?: () => void;
   type TabType = 'schedules' | 'executions' | 'logs';
-  export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps> = ({,)
-  workspaceId,
-  resourceId,
+  export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps> = ({);
+  workspaceId;
+  resourceId }
   onClose
-}
-}) => {
-  const [activeTab, setActiveTab] = useState<TabType>('schedules');
+
+
+}) => { const [activeTab, setActiveTab] = useState<TabType>('schedules');
   const [schedules, setSchedules] = useState<ScheduledExecution>([]);
   const [executionLogs, setExecutionLogs] = useState<ExecutionLog>([]);
   const [loading, setLoading] = useState(false);
@@ -73,167 +72,147 @@ interface ScheduledExecution {
   // Load schedules and execution logs
   useEffect(() => {
     loadSchedules();
-    loadExecutionLogs();
-  }, [workspaceId]);
-  const loadSchedules = async () => {
-  setLoading(true);
+    loadExecutionLogs() }, [workspaceId]);
+  const loadSchedules = async () => { setLoading(true);
   try {
   // Mock API call - replace with actual API
   const mockSchedules: ScheduledExecution = [
   {
-  id: '1',
-  workspace_id: workspaceId,
-  resource_id: resourceId || 'resource-1',
-  schedule_name: 'Daily Status Check',
-  schedule_type: 'cron',
-  schedule_expression: '0 9 * * *', // 9 AM daily,
-  action_type: 'state_transition',
+  id: '1'
+  workspace_id: workspaceId
+  resource_id: resourceId || 'resource-1'
+  schedule_name: 'Daily Status Check'
+  schedule_type: 'cron'
+  schedule_expression: '0 9 * * *', // 9 AM daily
+  action_type: 'state_transition'
   action_config: {
-  to_state_id: 'review-state',
-  comment: 'Automated daily review trigger',
-},
-  enabled: true,
+  to_state_id: 'review-state'
+  comment: 'Automated daily review trigger' }
+
+  enabled: true
           next_run_at: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow 9 AM
           last_run_at: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday 9 AM
-          run_count: 15,
-          max_runs: undefined,
-          retry_count: 0,
-          max_retries: 3,
-          created_by: 'user1',
-          created_at: new Date('2024-01-01'),
+          run_count: 15
+          max_runs: undefined
+          retry_count: 0
+          max_retries: 3
+          created_by: 'user1'
+          created_at: new Date('2024-01-01')
           updated_at: new Date('2024-01-20');
-  }
-        {
-  id: '2',
-  workspace_id: workspaceId,
-  resource_id: resourceId || 'resource-2',
-  schedule_name: 'Weekly Report Generation',
-  schedule_type: 'cron',
-  schedule_expression: '0 0 * * 0', // Sunday midnight,
-  action_type: 'custom',
+
+        { id: '2'
+  workspace_id: workspaceId
+  resource_id: resourceId || 'resource-2'
+  schedule_name: 'Weekly Report Generation'
+  schedule_type: 'cron'
+  schedule_expression: '0 0 * * 0', // Sunday midnight
+  action_type: 'custom'
   action_config: {
-  action: 'generate_report',
-  report_type: 'weekly_summary',
-  email_recipients: ['admin@example.com'],
-},
-  enabled: true,
+  action: 'generate_report'
+  report_type: 'weekly_summary'
+  email_recipients: ['admin@example.com'] }
+
+  enabled: true
           next_run_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Next Sunday
           last_run_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last Sunday
-          run_count: 8,
-          max_runs: undefined,
-          retry_count: 1,
-          max_retries: 3,
-          created_by: 'user2',
-          created_at: new Date('2024-01-01'),
+          run_count: 8
+          max_runs: undefined
+          retry_count: 1
+          max_retries: 3
+          created_by: 'user2'
+          created_at: new Date('2024-01-01')
           updated_at: new Date('2024-01-15');
-  }
-        {
-  id: '3',
-  workspace_id: workspaceId,
-  resource_id: resourceId || 'resource-3',
-  schedule_name: 'One-time Migration',
-  schedule_type: 'once',
-  schedule_expression: '2024-01-25T15:00:00Z',
-  action_type: 'custom',
+
+        { id: '3'
+  workspace_id: workspaceId
+  resource_id: resourceId || 'resource-3'
+  schedule_name: 'One-time Migration'
+  schedule_type: 'once'
+  schedule_expression: '2024-01-25T15:00:00Z'
+  action_type: 'custom'
   action_config: {
-  action: 'migrate_data',
-  source: 'old_system',
-  target: 'new_system',
-},
-  enabled: false,
-          next_run_at: new Date('2024-01-25T15:00:00Z'),
-          last_run_at: undefined,
-          run_count: 0,
-          max_runs: 1,
-          retry_count: 0,
-          max_retries: 3,
-          created_by: 'user3',
-          created_at: new Date('2024-01-20'),
+  action: 'migrate_data'
+  source: 'old_system'
+  target: 'new_system' }
+
+  enabled: false
+          next_run_at: new Date('2024-01-25T15:00:00Z')
+          last_run_at: undefined
+          run_count: 0
+          max_runs: 1
+          retry_count: 0
+          max_retries: 3
+          created_by: 'user3'
+          created_at: new Date('2024-01-20')
           updated_at: new Date('2024-01-20')];
       setSchedules(mockSchedules);
-    } catch (error) {
-      setError('Failed to load schedules');
-    } finally {
-      setLoading(false);
-  };
-  const loadExecutionLogs = async () => {
-  try {
+ catch (error) { setError('Failed to load schedules') } finally { setLoading(false) };
+  const loadExecutionLogs = async () => { try {
   // Mock API call - replace with actual API
   const mockLogs: ExecutionLog = [
   {
-  id: '1',
-  schedule_id: '1',
-  execution_id: 'exec-1',
-  status: 'completed',
-  started_at: new Date(Date.now() - 24 * 60 * 60 * 1000),
-  completed_at: new Date(Date.now() - 24 * 60 * 60 * 1000 + 5000),
+  id: '1'
+  schedule_id: '1'
+  execution_id: 'exec-1'
+  status: 'completed'
+  started_at: new Date(Date.now() - 24 * 60 * 60 * 1000)
+  completed_at: new Date(Date.now() - 24 * 60 * 60 * 1000 + 5000)
   result_data: {
-  state_changed: true,
-  new_state: 'review',
-  affected_resources: 1,
-},
-  execution_time_ms: 5000,
+  state_changed: true
+  new_state: 'review'
+  affected_resources: 1 }
+
+  execution_time_ms: 5000
           retry_attempt: 0;
-  }
-        {
-          id: '2',
-          schedule_id: '2',
-          execution_id: 'exec-2',
-          status: 'failed',
-          started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          completed_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 30000),
-          result_data: {},
-          error_message: 'Failed to generate report: Database connection timeout',
-          execution_time_ms: 30000,
-          retry_attempt: 1,
+
+        { id: '2'
+          schedule_id: '2'
+          execution_id: 'exec-2'
+          status: 'failed'
+          started_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+          completed_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 30000) }
+          result_data: {}
+          error_message: 'Failed to generate report: Database connection timeout'
+          execution_time_ms: 30000
+          retry_attempt: 1
           next_retry_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 5 * 60 * 1000);
-  }
-        {
-          id: '3',
-          schedule_id: '1',
-          execution_id: 'exec-3',
-          status: 'running',
-          started_at: new Date(Date.now() - 2 * 60 * 1000),
-          result_data: {},
+
+        { id: '3'
+          schedule_id: '1'
+          execution_id: 'exec-3'
+          status: 'running'
+          started_at: new Date(Date.now() - 2 * 60 * 1000) }
+          result_data: {}
           retry_attempt: 0];
       setExecutionLogs(mockLogs);
-    } catch (error) {
-      setError('Failed to load execution logs');
-  };
-  const handleCreateSchedule = async (scheduleData: Partial<ScheduledExecution>) => {
-    try {
+ catch (error) { setError('Failed to load execution logs') };
+  const handleCreateSchedule = async (scheduleData: Partial<ScheduledExecution>) => { try {
       // Mock API call - replace with actual API
-      const newSchedule: ScheduledExecution = {,
-  id: Date.now().toString(),
-        workspace_id: workspaceId,
-        resource_id: resourceId || 'default',
-        schedule_name: scheduleData.schedule_name || 'New Schedule',
-        schedule_type: scheduleData.schedule_type || 'cron',
-        schedule_expression: scheduleData.schedule_expression || '0 0 * * *',
-        action_type: scheduleData.action_type || 'state_transition',
-        action_config: scheduleData.action_config || {},
-        enabled: scheduleData.enabled !== false,
-        run_count: 0,
-        max_runs: scheduleData.max_runs,
-        retry_count: 0,
-        max_retries: scheduleData.max_retries || 3,
-        created_by: 'current_user',
-        created_at: new Date(),
+      const newSchedule: ScheduledExecution = {
+  id: Date.now().toString()
+        workspace_id: workspaceId
+        resource_id: resourceId || 'default'
+        schedule_name: scheduleData.schedule_name || 'New Schedule'
+        schedule_type: scheduleData.schedule_type || 'cron'
+        schedule_expression: scheduleData.schedule_expression || '0 0 * * *'
+        action_type: scheduleData.action_type || 'state_transition' }
+        action_config: scheduleData.action_config || {}
+        enabled: scheduleData.enabled !== false
+        run_count: 0
+        max_runs: scheduleData.max_runs
+        retry_count: 0
+        max_retries: scheduleData.max_retries || 3
+        created_by: 'current_user'
+        created_at: new Date()
         updated_at: new Date();
   };
       setSchedules(prev => [...prev, newSchedule]);
       setShowCreateSchedule(false);
-    } catch (error) {
-      setError('Failed to create schedule');
-  };
-  const handleDeleteSchedule = async (scheduleId: string) => {
-    try {
+ catch (error) { setError('Failed to create schedule') };
+  const handleDeleteSchedule = async (scheduleId: string) => { try {
       // Mock API call - replace with actual API
       setSchedules(prev => prev.filter(schedule => schedule.id !== scheduleId));
-      setShowDeleteConfirm(null);
-    } catch (error) {
-      setError('Failed to delete schedule');
-  };
+      setShowDeleteConfirm(null) } catch (error) { setError('Failed to delete schedule') };
   const handleToggleSchedule = async (scheduleId: string) => {
     try {
       // Mock API call - replace with actual API
@@ -242,41 +221,34 @@ interface ScheduledExecution {
           ? { ...schedule, enabled: !schedule.enabled }
           : schedule
       ));
-    } catch (error) {
-      setError('Failed to toggle schedule');
-  };
-  const handleRunNow = async (scheduleId: string) => {
-    try {
+ catch (error) { setError('Failed to toggle schedule') };
+  const handleRunNow = async (scheduleId: string) => { try {
       // Mock API call - replace with actual API
-      const newLog: ExecutionLog = {,
-  id: Date.now().toString(),
-        schedule_id: scheduleId,
+      const newLog: ExecutionLog = {
+  id: Date.now().toString()
+        schedule_id: scheduleId }
         execution_id: `exec-${Date.now()}`}
-},
-  status: 'running',
-        started_at: new Date(),
-        result_data: {},
+
+  status: 'running'
+        started_at: new Date()
+        result_data: {}
         retry_attempt: 0;
   };
       setExecutionLogs(prev => [newLog, ...prev]);
       // Simulate completion after 3 seconds
-      setTimeout(() => {
-        setExecutionLogs(prev => prev.map(log => )
+      setTimeout(() => { setExecutionLogs(prev => prev.map(log => )
           log.id === newLog.id 
             ? { 
-              ...log, 
-              status: 'completed', 
-              completed_at: new Date(),
-              execution_time_ms: 3000,
+              ...log
+              status: 'completed'
+              completed_at: new Date()
+              execution_time_ms: 3000 }
               result_data: { manual_execution: true }
             : log
         ));
       }, 3000);
-    } catch (error) {
-      setError('Failed to run schedule');
-  };
-  const formatCronExpression = (expression: string) => {
-  // Basic cron expression formatting
+ catch (error) { setError('Failed to run schedule') };
+  const formatCronExpression = (expression: string) => { // Basic cron expression formatting
   const parts = expression.split(' ');
   if (parts.length === 5) {
   const [minute, hour, day, month, dayOfWeek] = parts;
@@ -286,8 +258,7 @@ interface ScheduledExecution {
   return 'Daily at 9:00 AM';
   if (minute === '0' && hour === '0' && day === '*' && month === '*' && dayOfWeek === '0') {
   return 'Weekly on Sunday at midnight';
-  return expression;
-};
+  return expression };
   const formatScheduleExpression = (schedule: ScheduledExecution) => {
     switch (schedule.schedule_type) {
     case 'cron':
@@ -299,31 +270,23 @@ interface ScheduledExecution {
   default:
       return schedule.schedule_expression;
   };
-  const getStatusColor = (status: string) => {
-  switch (status) {
+  const getStatusColor = (status: string) => { switch (status) {
   case 'running': return 'bg-blue-100 text-blue-800';
   case 'completed': return 'bg-green-100 text-green-800';
   case 'failed': return 'bg-red-100 text-red-800';
   case 'cancelled': return 'bg-gray-100 text-gray-800';
-  default: return 'bg-gray-100 text-gray-800';
-};
-  const ___getStatusIcon = (status: string) => {
-  switch (status) {
+  default: return 'bg-gray-100 text-gray-800' };
+  const ___getStatusIcon = (status: string) => { switch (status) {
   case 'running': return <PlayIcon className="h-4 w-4 text-blue-600" />;
   case 'completed': return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
   case 'failed': return <XCircleIcon className="h-4 w-4 text-red-600" />;
   case 'cancelled': return <StopIcon className="h-4 w-4 text-gray-600" />;
-  default: return <ClockIcon className="h-4 w-4 text-gray-600" />;
-};
-  const toggleLogExpansion = (logId: string) => {
-    setExpandedLogs(prev => {)
+  default: return <ClockIcon className="h-4 w-4 text-gray-600" /> };
+  const toggleLogExpansion = (logId: string) => { setExpandedLogs(prev => {)
   const newSet = new Set(prev);
       if (newSet.has(logId)) {
-        newSet.delete(logId);
-      } else {
-        newSet.add(logId);
-      return newSet;
-    });
+        newSet.delete(logId) } else { newSet.add(logId);
+      return newSet });
   };
   const renderSchedulesTab = () => (;);
     <div className="space-y-4">
@@ -344,11 +307,11 @@ interface ScheduledExecution {
               <div className="flex-1">
                 <div className="flex items-center space-x-3">
                   <h4 className="font-medium text-gray-900">{schedule.schedule_name}</h4>
-                  <span className={`px-2 py-1 text-xs rounded-full ${
+                  <span className={ `px-2 py-1 text-xs rounded-full ${
   schedule.enabled
   ? 'bg-green-100 text-green-800'
-  : 'bg-gray-100 text-gray-800',
-}`}>
+  : 'bg-gray-100 text-gray-800' }
+`}>
                     {schedule.enabled ? 'Enabled' : 'Disabled'}
                   </span>
                   <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-800">
@@ -381,11 +344,11 @@ interface ScheduledExecution {
                 </button>
                 <button
                   onClick={() => handleToggleSchedule(schedule.id)}
-                  className={`p-2 rounded-md transition-colors ${
+                  className={ `p-2 rounded-md transition-colors ${
   schedule.enabled
-  ? 'text-orange-600 hover:text-orange-800 hover:bg-orange-50',
-  : 'text-green-600 hover:text-green-800 hover:bg-green-50',
-}`}
+  ? 'text-orange-600 hover:text-orange-800 hover:bg-orange-50'
+  : 'text-green-600 hover:text-green-800 hover:bg-green-50' }
+`}
                   title={schedule.enabled ? 'Disable' : 'Enable'}
                 >
                   {schedule.enabled ? <PauseIcon className="h-4 w-4" /> : <PlayIcon className="h-4 w-4" />}
@@ -460,20 +423,20 @@ interface ScheduledExecution {
                 </button>
               </div>
             </div>
-            {expandedLogs.has(log.id) && ()
+            { expandedLogs.has(log.id) && ()
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <h5 className="font-medium text-sm mb-2">Execution Details</h5>
                 <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
                   {JSON.stringify({)
-  execution_id: log.execution_id,
-  schedule_id: log.schedule_id,
-  status: log.status,
-  started_at: log.started_at,
-  completed_at: log.completed_at,
-  execution_time_ms: log.execution_time_ms,
-  retry_attempt: log.retry_attempt,
-  result_data: log.result_data,
-  error_message: log.error_message,
+  execution_id: log.execution_id
+  schedule_id: log.schedule_id
+  status: log.status
+  started_at: log.started_at
+  completed_at: log.completed_at
+  execution_time_ms: log.execution_time_ms
+  retry_attempt: log.retry_attempt
+  result_data: log.result_data
+  error_message: log.error_message }
 }, null, 2)}
                 </pre>
               </div>
@@ -556,11 +519,11 @@ interface ScheduledExecution {
               <div key={schedule.id} className="flex items-center justify-between py-2 border-b border-gray-100">
                 <div className="flex items-center space-x-3">
                   <span className="font-medium">{schedule.schedule_name}</span>
-                  <span className={`px-2 py-1 text-xs rounded-full ${
+                  <span className={ `px-2 py-1 text-xs rounded-full ${
   schedule.enabled
   ? 'bg-green-100 text-green-800'
-  : 'bg-gray-100 text-gray-800',
-}`}>
+  : 'bg-gray-100 text-gray-800' }
+`}>
                     {schedule.enabled ? 'Enabled' : 'Disabled'}
                   </span>
                 </div>
@@ -574,7 +537,7 @@ interface ScheduledExecution {
       </div>
     );
   };
-  const tabs = [;
+  const tabs = [
     { id: 'schedules', label: 'Schedules', icon: ClockIcon },
     { id: 'logs', label: 'Execution Logs', icon: EyeIcon },
     { id: 'statistics', label: 'Statistics', icon: CogIcon }
@@ -610,11 +573,11 @@ interface ScheduledExecution {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabType)}
-              className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm ${
+              className={ `flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm ${
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
             >
               <tab.icon className="h-4 w-4" />
               <span>{tab.label}</span>
@@ -663,24 +626,21 @@ interface ScheduledExecution {
 };
 
 // Sub-components for modals
-const CreateScheduleModal: React.FC<{,
-  onClose: () => void;
+const CreateScheduleModal: React.FC<{ ,
+  onClose: () => void }
   onSubmit: (data: Partial<ScheduledExecution>) => void;
-}> = ({ onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({)
-  schedule_name: '',
-    schedule_type: 'cron' as 'cron' | 'interval' | 'once',
+> = ({ onClose, onSubmit }) => { const [formData, setFormData] = useState({)
+  schedule_name: ''
+    schedule_type: 'cron' as 'cron' | 'interval' | 'once'
     schedule_expression: '0 9 * * *', // 9 AM daily
-    action_type: 'state_transition' as 'state_transition' | 'approval_request' | 'custom',
-    action_config: {},
-    enabled: true,
-    max_runs: undefined as number | undefined,
+    action_type: 'state_transition' as 'state_transition' | 'approval_request' | 'custom' }
+    action_config: {}
+    enabled: true
+    max_runs: undefined as number | undefined
     max_retries: 3;
   });
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
+  const handleSubmit = (e: React.FormEvent) => { e.preventDefault();
+    onSubmit(formData) };
   return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
@@ -804,10 +764,10 @@ const CreateScheduleModal: React.FC<{,
     </div>
   );
 };
-const DeleteScheduleModal: React.FC<{,
-  onClose: () => void;
+const DeleteScheduleModal: React.FC<{ ,
+  onClose: () => void }
   onConfirm: () => void;
-}> = ({ onClose, onConfirm }) => {
+> = ({ onClose, onConfirm }) => {
   return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">

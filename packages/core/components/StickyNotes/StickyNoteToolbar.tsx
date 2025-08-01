@@ -11,16 +11,17 @@
  */
 import React, { useState } from 'react';
 import { StickyNote, StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes';
-}
-interface StickyNoteToolbarProps {
-  selectedNotes: StickyNote;
-  onColorChange: (color: StickyNoteColor) => void;
-  onCategoryChange: (category: StickyNoteCategory) => void;
-  onCreate: (color: StickyNoteColor, category: StickyNoteCategory, content: string) => void;
-  onSettingsChange: (settings: unknown) => void;
+
+
+interface StickyNoteToolbarProps { selectedNotes: StickyNote;
+  onColorChange: (color: StickyNoteColor) => void
+  onCategoryChange: (category: StickyNoteCategory) => void
+  onCreate: (color: StickyNoteColor, category: StickyNoteCategory, content: string) => void
+  onSettingsChange: (settings: unknown) => void }
   settings: unknown;
   className?: string;
-}
+
+
 const COLORS: { value: StickyNoteColor; label: string; bg: string; border: string }[] = [
   { value: 'yellow', label: 'Yellow', bg: '#FEF3C7', border: '#F59E0B' },
   { value: 'blue', label: 'Blue', bg: '#DBEAFE', border: '#3B82F6' },
@@ -41,7 +42,7 @@ const CATEGORIES: { value: StickyNoteCategory; label: string; icon: string }[] =
   { value: 'action-item', label: 'Action Item', icon: '🎯' },
   { value: 'reference', label: 'Reference', icon: '📚' }
 ];
-const QUICK_TEMPLATES = [;
+const QUICK_TEMPLATES = [
   { color: 'yellow' as StickyNoteColor, category: 'general' as StickyNoteCategory, content: 'General note...', icon: '📝' },
   { color: 'blue' as StickyNoteColor, category: 'technical' as StickyNoteCategory, content: 'Technical note: ', icon: '⚙️' },
   { color: 'green' as StickyNoteColor, category: 'decision' as StickyNoteCategory, content: 'Decision: ', icon: '✅' },
@@ -50,57 +51,56 @@ const QUICK_TEMPLATES = [;
   { color: 'orange' as StickyNoteColor, category: 'question' as StickyNoteCategory, content: 'Question: ', icon: '❓' }
 ];
 
-export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
-  selectedNotes,
-  onColorChange,
-  onCategoryChange,
-  onCreate,
-  onSettingsChange,
-  settings,
+export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({ )
+  selectedNotes
+  onColorChange
+  onCategoryChange
+  onCreate
+  onSettingsChange
+  settings }
   className = ''
-}) => {
-  const [expanded, setExpanded] = useState(false);
+}) => { const [expanded, setExpanded] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const hasSelection = selectedNotes.length > 0;
-  const toolbarStyle: React.CSSProperties = {,
-  position: 'fixed',
-  top: 20,
-  right: 20,
-  background: '#FFFFFF',
-  borderRadius: 12,
-  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.05)',
-  border: '1px solid #E5E7EB',
-  fontFamily: 'system-ui, -apple-system, sans-serif',
-  zIndex: 2000,
-  userSelect: 'none',
-  overflow: 'hidden',
+  const toolbarStyle: React.CSSProperties = {
+  position: 'fixed'
+  top: 20
+  right: 20
+  background: '#FFFFFF'
+  borderRadius: 12
+  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.05)'
+  border: '1px solid #E5E7EB'
+  fontFamily: 'system-ui, -apple-system, sans-serif'
+  zIndex: 2000
+  userSelect: 'none'
+  overflow: 'hidden' }
 };
-  const sectionStyle: React.CSSProperties = {,
-  padding: '8px 12px',
-  borderBottom: '1px solid #F3F4F6',
+  const sectionStyle: React.CSSProperties = { 
+  padding: '8px 12px'
+  borderBottom: '1px solid #F3F4F6' }
 };
-  const buttonStyle: React.CSSProperties = {,
-  background: 'none',
-  border: 'none',
-  borderRadius: 6,
-  padding: '6px 8px',
-  cursor: 'pointer',
-  fontSize: 12,
-  fontWeight: 500,
-  color: '#374151',
-  display: 'flex',
-  alignItems: 'center',
-  gap: 4,
-  transition: 'background-color 0.15s ease',
+  const buttonStyle: React.CSSProperties = { 
+  background: 'none'
+  border: 'none'
+  borderRadius: 6
+  padding: '6px 8px'
+  cursor: 'pointer'
+  fontSize: 12
+  fontWeight: 500
+  color: '#374151'
+  display: 'flex'
+  alignItems: 'center'
+  gap: 4
+  transition: 'background-color 0.15s ease' }
 };
-  const colorButtonStyle: React.CSSProperties = {,
-  width: 24,
-  height: 24,
-  borderRadius: 4,
-  border: '2px solid transparent',
-  cursor: 'pointer',
-  transition: 'border-color 0.15s ease',
+  const colorButtonStyle: React.CSSProperties = { 
+  width: 24
+  height: 24
+  borderRadius: 4
+  border: '2px solid transparent'
+  cursor: 'pointer'
+  transition: 'border-color 0.15s ease' }
 };
   return;
     <div className={`sticky-note-toolbar ${className}`} style={toolbarStyle}>}
@@ -109,10 +109,10 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {/* Toggle button */}
           <button
-            style={{
-  ...buttonStyle,
-  background: expanded ? '#F3F4F6' : 'transparent',
-}}
+            style={ {
+  ...buttonStyle
+  background: expanded ? '#F3F4F6' : 'transparent' }
+}
             onClick={() => setExpanded(!expanded)}
             title="Toggle sticky notes toolbar"
           >
@@ -128,10 +128,10 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
           </button>
           {/* Templates */}
           <button
-            style={{
-  ...buttonStyle,
-  background: showTemplates ? '#F3F4F6' : 'transparent',
-}}
+            style={ {
+  ...buttonStyle
+  background: showTemplates ? '#F3F4F6' : 'transparent' }
+}
             onClick={() => setShowTemplates(!showTemplates)}
             title="Quick templates"
           >
@@ -139,25 +139,25 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
           </button>
           {/* Settings */}
           <button
-            style={{
-  ...buttonStyle,
-  background: showSettings ? '#F3F4F6' : 'transparent',
-}}
+            style={ {
+  ...buttonStyle
+  background: showSettings ? '#F3F4F6' : 'transparent' }
+}
             onClick={() => setShowSettings(!showSettings)}
             title="Settings"
           >
             ⚙️
           </button>
           {/* Selection info */}
-          {hasSelection && ()
+          { hasSelection && ()
             <div style={{
-  fontSize: 11,
-  color: '#6B7280',
-  background: '#F9FAFB',
-  padding: '2px 6px',
-  borderRadius: 4,
-  marginLeft: 4,
-}}>
+  fontSize: 11
+  color: '#6B7280'
+  background: '#F9FAFB'
+  padding: '2px 6px'
+  borderRadius: 4
+  marginLeft: 4 }
+}>
               {selectedNotes.length} selected
             </div>
           )}
@@ -175,19 +175,18 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
               {COLORS.map(color => ()
                 <button
                   key={color.value}
-                  style={{
-  ...colorButtonStyle,
-  backgroundColor: color.bg,
-  borderColor: hasSelection ? color.border : 'transparent',
-}}
+                  style={ {
+  ...colorButtonStyle
+  backgroundColor: color.bg
+  borderColor: hasSelection ? color.border : 'transparent' }
+}
                   onClick={() => onColorChange(color.value)}
                   title={`${color.label} notes`}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = color.border;
-                  }}
-                  onMouseLeave={(e) => {
-  e.currentTarget.style.borderColor = hasSelection ? color.border : 'transparent'
-  }}
+                  onMouseEnter={ (e) => {
+                    e.currentTarget.style.borderColor = color.border }}
+                  onMouseLeave={ (e) => {
+  e.currentTarget.style.borderColor = hasSelection ? color.border : 'transparent' }
+
                 />
               ))}
             </div>
@@ -201,24 +200,23 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
               {CATEGORIES.map(category => ()
                 <button
                   key={category.value}
-                  style={{
-  ...buttonStyle,
-  fontSize: 11,
-  background: hasSelection && selectedNotes.every(n => n.appearance.category === category.value) ,
+                  style={ {
+  ...buttonStyle
+  fontSize: 11
+  background: hasSelection && selectedNotes.every(n => n.appearance.category === category.value) 
   ? '#EBF8FF'
-  : 'transparent',
-}}
+  : 'transparent' }
+
                   onClick={() => onCategoryChange(category.value)}
                   title={category.label}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#F9FAFB';
-                  }}
-                  onMouseLeave={(e) => {
+                  onMouseEnter={ (e) => {
+                    e.currentTarget.style.backgroundColor = '#F9FAFB' }}
+                  onMouseLeave={ (e) => {
   e.currentTarget.style.backgroundColor =
   hasSelection && selectedNotes.every(n => n.appearance.category === category.value)
   ? '#EBF8FF'
-  : 'transparent'
-  }}
+  : 'transparent' }
+}
                 >
                   <span>{category.icon}</span>
                   <span>{category.label}</span>
@@ -238,21 +236,19 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
             {QUICK_TEMPLATES.map((template, index) => ()
               <button
                 key={index}
-                style={{
-  ...buttonStyle,
-  justifyContent: 'flex-start',
-  padding: '8px 12px',
-}}
-                onClick={() => {
+                style={ {
+  ...buttonStyle
+  justifyContent: 'flex-start'
+  padding: '8px 12px' }
+}
+                onClick={ () => {
                   onCreate(template.color, template.category, template.content);
-                  setShowTemplates(false);
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#F9FAFB';
-                }}
+                  setShowTemplates(false) }}
+                onMouseEnter={ (e) => {
+                  e.currentTarget.style.backgroundColor = '#F9FAFB' }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent'
-  }}
+}
               >
                 <span>{template.icon}</span>
                 <span>{template.content}</span>
@@ -318,14 +314,14 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
         </div>
       )}
       {/* Footer with shortcuts */}
-      {expanded && ()
+      { expanded && ()
         <div style={{
-  padding: '6px 12px',
-  backgroundColor: '#F9FAFB',
-  fontSize: 10,
-  color: '#6B7280',
-  borderTop: '1px solid #F3F4F6',
-}}>
+  padding: '6px 12px'
+  backgroundColor: '#F9FAFB'
+  fontSize: 10
+  color: '#6B7280'
+  borderTop: '1px solid #F3F4F6' }
+}>
           <div>⌘N New • ⌘D Duplicate • Del Delete • Esc Deselect</div>
         </div>
       )}

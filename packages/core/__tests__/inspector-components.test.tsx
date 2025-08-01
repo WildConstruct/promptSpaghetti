@@ -17,36 +17,35 @@ import { z } from 'zod';
 // Mock dependencies
 const mockUpdateNodeData = jest.fn<unknown, unknown>();
 const mockDeleteNode = jest.fn<unknown, unknown>();
-jest.mock('../hooks/useNodeUtils', () => ({)
-  useNodeUtils: () => ({,)
-  updateNodeData: mockUpdateNodeData,
-  deleteNode: mockDeleteNode,
-}
+jest.mock('../hooks/useNodeUtils', () => ({ )
+  useNodeUtils: () => ({);
+  updateNodeData: mockUpdateNodeData
+  deleteNode: mockDeleteNode }
+
 }));
-jest.mock('reactflow', () => ({)
-  useReactFlow: () => ({,)
-  getNodes: jest.fn(() => []),
-  getEdges: jest.fn(() => []),
-  setNodes: jest.fn<unknown, unknown>(),
-  setEdges: jest.fn<unknown, unknown>(),
-}
+jest.mock('reactflow', () => ({ )
+  useReactFlow: () => ({);
+  getNodes: jest.fn(() => [])
+  getEdges: jest.fn(() => [])
+  setNodes: jest.fn<unknown, unknown>()
+  setEdges: jest.fn<unknown, unknown>() }
+
 }));
-const mockGraphStore = {
-  selectedNodeId: 'test-node-id',
-  nodes: [,
+const mockGraphStore = { selectedNodeId: 'test-node-id'
+  nodes: [
     {
-      id: 'test-node-id',
-      type: 'WeightedChoice',
-      data: {
-  choices: [,
-          { weight: 0.5, value: 'Option A' },
+      id: 'test-node-id'
+      type: 'WeightedChoice'
+      data: { }
+  choices: [
+          { weight: 0.5, value: 'Option A' }
           { weight: 0.5, value: 'Option B' }
         ]
-  ],
+  ]
   updateNode: jest.fn<unknown, unknown>()
 };
-jest.mock('../graphStore', () => ({)
-  useGraphStore: jest.fn(() => mockGraphStore),
+jest.mock('../graphStore', () => ({ )
+  useGraphStore: jest.fn(() => mockGraphStore) }
 }));
 
 // Error boundary for testing error handling
@@ -65,27 +64,21 @@ class TestErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return <div data-testid="error-boundary">Something went wrong: {this.state.error?.message}</div>;
     return this.props.children;
-describe('Inspector Components - Comprehensive Coverage with Error Handling', () => {
-  beforeEach(() => {
+describe('Inspector Components - Comprehensive Coverage with Error Handling', () => { beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
-  });
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-  describe('InspectorPanel - Error Handling & Edge Cases', () => {
-  const mockSchema = z.object({)
+    jest.useFakeTimers() });
+  afterEach(() => { jest.useRealTimers() });
+  describe('InspectorPanel - Error Handling & Edge Cases', () => { const mockSchema = z.object({)
   label: z.string().default('Test Node'),
   value: z.string().default(''),
-  variations: z.array(z.string()).default([]),
+  variations: z.array(z.string()).default([]) }
 });
-    const mockNode = {
-  id: 'test-node',
+    const mockNode = { id: 'test-node',
   type: 'TestNode',
-  data: {
+  data: {,
   label: 'Test Node',
   value: 'test value',
-  variations: ['var1', 'var2'],
+  variations: ['var1', 'var2'] }
 };
     it('should handle null node gracefully', () => {
       render();
@@ -118,15 +111,11 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         />
       );
       const closeButton = screen.queryByRole('button', { name: /close/i });
-      if (closeButton) {
-        fireEvent.click(closeButton);
-        expect(onClose).toHaveBeenCalledTimes(1);
-    });
-    it('should handle onChange errors gracefully', async () => {
-      const onError = jest.fn<unknown, unknown>();
+      if (closeButton) { fireEvent.click(closeButton);
+        expect(onClose).toHaveBeenCalledTimes(1) });
+    it('should handle onChange errors gracefully', async () => { const onError = jest.fn<unknown, unknown>();
       const errorOnChange = jest.fn(() => {
-        throw new Error('onChange error');
-      });
+        throw new Error('onChange error') });
       render();
         <TestErrorBoundary onError={onError}>
           <InspectorPanel
@@ -138,16 +127,12 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       );
       // Trigger onChange through user interaction if possible
       const input = screen.queryByRole('textbox');
-      if (input) {
-        await userEvent.type(input, 'test');
+      if (input) { await userEvent.type(input, 'test');
         // Should handle error gracefully
-        expect(onError).toHaveBeenCalled();
-    });
-    it('should handle store access errors gracefully', () => {
-      const mockUseGraphStore = require('../graphStore').useGraphStore;
+        expect(onError).toHaveBeenCalled() });
+    it('should handle store access errors gracefully', () => { const mockUseGraphStore = require('../graphStore').useGraphStore;
       mockUseGraphStore.mockImplementation(() => {
-        throw new Error('Store access error');
-      });
+        throw new Error('Store access error') });
       const onError = jest.fn<unknown, unknown>();
       render();
         <TestErrorBoundary onError={onError}>
@@ -159,9 +144,9 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         </TestErrorBoundary>
       );
       expect(onError).toHaveBeenCalledWith()
-        expect.objectContaining({)
-  message: 'Store access error',
-}
+        expect.objectContaining({ )
+  message: 'Store access error' }
+
       );
       // Restore mock
       mockUseGraphStore.mockImplementation(() => mockGraphStore);
@@ -176,21 +161,17 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         />
       );
       // Simulate multiple resize operations
-      for (let i = 0; i < 100; i++) {
-        window.dispatchEvent(new Event('resize'));
+      for (let i = 0; i < 100; i++) { window.dispatchEvent(new Event('resize'));
       const endTime = performance.now();
       // Should handle resizes efficiently (< 100ms for 100 operations)
-      expect(endTime - startTime).toBeLessThan(100);
-    });
+      expect(endTime - startTime).toBeLessThan(100) });
   });
-  describe('BaseNodeEditor - Error Handling', () => {
-  const mockSchema = z.object({)
+  describe('BaseNodeEditor - Error Handling', () => { const mockSchema = z.object({)
   label: z.string(),
-  value: z.number(),
+  value: z.number() }
 });
-    const mockNodeData = {
-  label: 'Test Node',
-  value: 123,
+    const mockNodeData = { label: 'Test Node',
+  value: 123 }
 };
     it('should handle malformed nodeData gracefully', () => {
       expect(() => {
@@ -220,11 +201,9 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         );
       }).not.toThrow();
     });
-    it('should handle onChange errors gracefully', () => {
-      const onError = jest.fn<unknown, unknown>();
+    it('should handle onChange errors gracefully', () => { const onError = jest.fn<unknown, unknown>();
       const errorOnChange = jest.fn(() => {
-        throw new Error('onChange error');
-      });
+        throw new Error('onChange error') });
       render();
         <TestErrorBoundary onError={onError}>
           <BaseNodeEditor
@@ -241,13 +220,12 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       expect(screen.getByText('Test Content')).toBeInTheDocument();
     });
   });
-  describe('TextFieldEditor - Performance & Error Handling', () => {
-  const mockProps = {
+  describe('TextFieldEditor - Performance & Error Handling', () => { const mockProps = {
   label: 'Test Field',
   value: 'test value',
   fieldKey: 'testField',
   zodType: z.string(),
-  onChange: jest.fn<unknown, unknown>(),
+  onChange: jest.fn<unknown, unknown>() }
 };
     it('should handle null/undefined values gracefully', () => {
       expect(() => {
@@ -289,10 +267,8 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       const input = screen.getByRole('textbox') as HTMLInputElement;
       expect(input.value).toBe(specialValue);
     });
-    it('should handle onChange errors gracefully', async () => {
-      const onChange = jest.fn<unknown, unknown>().mockImplementation(() => {
-        throw new Error('onChange error');
-      });
+    it('should handle onChange errors gracefully', async () => { const onChange = jest.fn<unknown, unknown>().mockImplementation(() => {
+        throw new Error('onChange error') });
       const user = userEvent.setup();
       const onError = jest.fn<unknown, unknown>();
       render();
@@ -319,13 +295,12 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       }).not.toThrow();
     });
   });
-  describe('TextAreaEditor - Performance & Error Handling', () => {
-  const mockProps = {
-  label: 'Test TextArea',
-  value: 'test value',
-  fieldKey: 'testField',
-  zodType: z.string(),
-  onChange: jest.fn<unknown, unknown>(),
+  describe('TextAreaEditor - Performance & Error Handling', () => { const mockProps = {
+  label: 'Test TextArea'
+  value: 'test value'
+  fieldKey: 'testField'
+  zodType: z.string()
+  onChange: jest.fn<unknown, unknown>() }
 };
     it('should handle very large text content', () => {
       const largeText = 'Line 1\\n'.repeat(1000);
@@ -359,15 +334,14 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       }).not.toThrow();
     });
   });
-  describe('SelectEditor - Error Handling', () => {
-    const mockProps = {
-      label: 'Test Select',
-      value: 'option1',
-      fieldKey: 'testField',
-      zodType: z.enum(['option1', 'option2']),
-      onChange: jest.fn<unknown, unknown>(),
-      options: [,
-        { value: 'option1', label: 'Option 1' },
+  describe('SelectEditor - Error Handling', () => { const mockProps = {
+      label: 'Test Select'
+      value: 'option1'
+      fieldKey: 'testField'
+      zodType: z.enum(['option1', 'option2'])
+      onChange: jest.fn<unknown, unknown>() }
+      options: [
+        { value: 'option1', label: 'Option 1' }
         { value: 'option2', label: 'Option 2' }
       ]
     };
@@ -392,10 +366,10 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       }).not.toThrow();
     });
     it('should handle malformed options', () => {
-      const malformedOptions = [;
+      const malformedOptions = [
         { value: 'opt1' }, // missing label
         { label: 'Option 2' }, // missing value
-        null,
+        null
         undefined
       ] as any;
       expect(() => {
@@ -408,7 +382,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       }).not.toThrow();
     });
     it('should handle options with special characters', () => {
-      const specialOptions = [;
+      const specialOptions = [
         { value: '<script>', label: 'Dangerous &<>&"\' content' },
         { value: '🎉', label: '🎉 Unicode 中文' }
       ];
@@ -432,11 +406,9 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       );
       const header = screen.getByText('Test Section');
       // Rapid clicks
-      for (let i = 0; i < 10; i++) {
-        await user.click(header);
+      for (let i = 0; i < 10; i++) { await user.click(header);
       // Should not crash and final state should be stable
-      expect(screen.getByText('Content')).toBeInTheDocument();
-    });
+      expect(screen.getByText('Content')).toBeInTheDocument() });
     it('should handle null children gracefully', () => {
       expect(() => {
         render();
@@ -476,13 +448,12 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       expect(screen.getByRole('button', { name: 'Nested Button' })).toBeInTheDocument();
     });
   });
-  describe('VariationList - Performance & Error Handling', () => {
-  const mockProps = {
+  describe('VariationList - Performance & Error Handling', () => { const mockProps = {
   label: 'Test Variations',
   value: ['var1', 'var2'],
   fieldKey: 'variations',
   zodType: z.array(z.string()),
-  onChange: jest.fn<unknown, unknown>(),
+  onChange: jest.fn<unknown, unknown>() }
 };
     it('should handle large number of variations efficiently', () => {
       const manyVariations = Array.from({ length: 1000 }, (_, i) => `Variation ${i}`);}
@@ -497,10 +468,8 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       // Should render within reasonable time (< 500ms)
       expect(endTime - startTime).toBeLessThan(500);
     });
-    it('should handle onChange errors gracefully', async () => {
-      const onChange = jest.fn<unknown, unknown>().mockImplementation(() => {
-        throw new Error('onChange error');
-      });
+    it('should handle onChange errors gracefully', async () => { const onChange = jest.fn<unknown, unknown>().mockImplementation(() => {
+        throw new Error('onChange error') });
       const user = userEvent.setup();
       const onError = jest.fn<unknown, unknown>();
       render();
@@ -512,10 +481,8 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         </TestErrorBoundary>
       );
       const addButton = screen.queryByText(/Add/i);
-      if (addButton) {
-        await user.click(addButton);
-        expect(onError).toHaveBeenCalled();
-    });
+      if (addButton) { await user.click(addButton);
+        expect(onError).toHaveBeenCalled() });
     it('should handle null/undefined value gracefully', () => {
       expect(() => {
         render();
@@ -535,28 +502,26 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       }).not.toThrow();
     });
   });
-  describe('WeightedChoiceEditor - Advanced Error Handling', () => {
-    const mockNode = {
-      id: 'weighted-node',
-      type: 'WeightedChoice',
-      data: {
-  choices: [,
-          { weight: 0.6, value: 'Choice A' },
+  describe('WeightedChoiceEditor - Advanced Error Handling', () => { const mockNode = {
+      id: 'weighted-node'
+      type: 'WeightedChoice'
+      data: { }
+  choices: [
+          { weight: 0.6, value: 'Choice A' }
           { weight: 0.4, value: 'Choice B' }
         ]
     };
-    it('should handle node with malformed choices', () => {
-      const nodeWithMalformedChoices = {
-        ...mockNode,
+    it('should handle node with malformed choices', () => { const nodeWithMalformedChoices = {
+        ...mockNode
         data: {
-  choices: [,
-            null,
-            undefined,
-            { weight: 'invalid' },
-            { value: 'missing weight' },
+  choices: [
+            null
+            undefined }
+            { weight: 'invalid' }
+            { value: 'missing weight' }
             { weight: 0.5 } // missing value
           ]
-      } as any;
+ as any;
       expect(() => {
         render();
           <WeightedChoiceEditor 
@@ -568,11 +533,9 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         );
       }).not.toThrow();
     });
-    it('should handle add choice with updateNodeData error', async () => {
-      const user = userEvent.setup();
+    it('should handle add choice with updateNodeData error', async () => { const user = userEvent.setup();
       mockUpdateNodeData.mockImplementation(() => {
-        throw new Error('Update failed');
-      });
+        throw new Error('Update failed') });
       const onError = jest.fn<unknown, unknown>();
       render();
         <TestErrorBoundary onError={onError}>
@@ -585,11 +548,9 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         </TestErrorBoundary>
       );
       const addButton = screen.queryByText(/Add/i);
-      if (addButton) {
-        await user.click(addButton);
+      if (addButton) { await user.click(addButton);
         // Should handle error gracefully
-        expect(onError).toHaveBeenCalled();
-    });
+        expect(onError).toHaveBeenCalled() });
     it('should handle missing nodeData gracefully', () => {
       expect(() => {
         render();
@@ -603,13 +564,11 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       }).not.toThrow();
     });
   });
-  describe('Integration Tests - Error Recovery', () => {
-    it('should recover from store updates errors', async () => {
+  describe('Integration Tests - Error Recovery', () => { it('should recover from store updates errors', async () => {
       const user = userEvent.setup();
       // Simulate store error
       mockUpdateNodeData.mockImplementationOnce(() => {
-        throw new Error('Store update failed');
-      });
+        throw new Error('Store update failed') });
       const onError = jest.fn<unknown, unknown>();
       const mockSchema = z.object({ choices: z.array(z.object({ weight: z.number(), value: z.string() })) });
       render();
@@ -640,10 +599,8 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
           />
         );
         const newAddButton = screen.queryByText(/Add/i);
-        if (newAddButton) {
-          await user.click(newAddButton);
-          expect(mockUpdateNodeData).toHaveBeenCalled();
-    });
+        if (newAddButton) { await user.click(newAddButton);
+          expect(mockUpdateNodeData).toHaveBeenCalled() });
   });
   describe('Memory Leak Prevention', () => {
     it('should cleanup event listeners on unmount', () => {
@@ -659,9 +616,8 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       // Should not throw on unmount
       expect(() => unmount()).not.toThrow();
     });
-    it('should cleanup timers on unmount', () => {
-  const mockSchema = z.object({)
-  label: z.string(),
+    it('should cleanup timers on unmount', () => { const mockSchema = z.object({)
+  label: z.string() }
 });
       const { unmount } = render()
         <InspectorPanel
@@ -673,15 +629,12 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       // Should cleanup timers
       expect(() => unmount()).not.toThrow();
       // Advance timers after unmount - should not cause errors
-      act(() => {
-        jest.advanceTimersByTime(500);
-      });
+      act(() => { jest.advanceTimersByTime(500) });
     });
   });
-  describe('Accessibility & Code Quality', () => {
-  it('should provide proper ARIA labels and roles', () => {
+  describe('Accessibility & Code Quality', () => { it('should provide proper ARIA labels and roles', () => {
   const mockSchema = z.object({)
-  label: z.string(),
+  label: z.string() }
 });
       render();
         <InspectorPanel
@@ -692,14 +645,13 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       );
       // Check for basic accessibility attributes
       const buttons = screen.getAllByRole('button');
-      buttons.forEach(button => {)
+      buttons.forEach(button => { )
   // Should have some form of accessible name
         expect();
           button.getAttribute('aria-label') || 
           button.getAttribute('title') || 
           button.textContent
-        ).toBeTruthy();
-      });
+        ).toBeTruthy() });
     });
     it('should support keyboard navigation', async () => {
       const user = userEvent.setup();
@@ -716,13 +668,12 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       await user.tab();
       expect(document.activeElement).toBe(screen.getByRole('textbox'));
     });
-    it('should follow TypeScript strict mode requirements', () => {
-  const mockSchema = z.object({)
-  label: z.string(),
+    it('should follow TypeScript strict mode requirements', () => { const mockSchema = z.object({)
+  label: z.string() }
 });
       const strictProps = {
-        node: { id: 'test', type: 'Test', data: { label: 'test' } } as const,
-        schema: mockSchema,
+        node: { id: 'test', type: 'Test', data: { label: 'test' } } as const
+        schema: mockSchema
         onChange: jest.fn<unknown, unknown>() as (data: unknown) => void;
   };
       expect(() => {

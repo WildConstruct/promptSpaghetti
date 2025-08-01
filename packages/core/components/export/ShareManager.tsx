@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  ExportShare, 
+import { ExportShare }
   ShareAccessLevel
-} from '../../types/export';
-import { 
-  FiShare2, 
+ from '../../types/export';
+import { FiShare2, 
   FiCopy, 
   FiEye, 
   FiEdit, 
@@ -15,24 +13,24 @@ import {
   FiGlobe,
   FiUsers,
   FiRefreshCw,
-  FiAlertCircle,
+  FiAlertCircle }
   FiCheck
-} from 'react-icons/fi';
-}
-interface ShareManagerProps {
-  projectId: string;
+ from 'react-icons/fi';
+
+
+interface ShareManagerProps { projectId: string;
   className?: string;
   interface ShareStats {
   totalShares: number;
   activeShares: number;
   totalDownloads: number;
   totalAccesses: number;
-  export const ShareManager: React.FC<ShareManagerProps> = ({,)
-  projectId,
+  export const ShareManager: React.FC<ShareManagerProps> = ({);
+  projectId }
   className = ''
-}
-}) => {
-  const [shares, setShares] = useState<ExportShare>([]);
+
+
+}) => { const [shares, setShares] = useState<ExportShare>([]);
   const [stats, setStats] = useState<ShareStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,103 +39,74 @@ interface ShareManagerProps {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
   useEffect(() => {
     fetchShares();
-    fetchStats();
-  }, [projectId]);
+    fetchStats() }, [projectId]);
   const fetchShares = async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/export/shares?project_id=${projectId}`);}
-      if (!response.ok) {
-        throw new Error('Failed to fetch shares');
+      if (!response.ok) { throw new Error('Failed to fetch shares');
       const data = await response.json();
-      setShares(data.data || []);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load shares');
-} finally {
-      setLoading(false);
-  };
+      setShares(data.data || []) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to load shares') } finally { setLoading(false) };
   const fetchStats = async () => {
     try {
       const response = await fetch(`/api/export/shares/stats?project_id=${projectId}`);}
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data.data);
-    } catch (err) {
-  console.error('Failed to fetch share stats:', err);
-};
-  const handleCopyLink = async (shareUrl: string) => {
-    try {
+      if (response.ok) { const data = await response.json();
+        setStats(data.data) } catch (err) { console.error('Failed to fetch share stats:', err) };
+  const handleCopyLink = async (shareUrl: string) => { try {
       await navigator.clipboard.writeText(shareUrl);
       setCopyFeedback('Link copied to clipboard!');
-      setTimeout(() => setCopyFeedback(null), 3000);
-    } catch (err) {
-      setCopyFeedback('Failed to copy link');
-      setTimeout(() => setCopyFeedback(null), 3000);
-  };
+      setTimeout(() => setCopyFeedback(null), 3000) } catch (err) { setCopyFeedback('Failed to copy link');
+      setTimeout(() => setCopyFeedback(null), 3000) };
   const handleDeactivateShare = async (shareId: string) => {
     try {
       const response = await fetch(`/api/export/shares/${shareId}`, {)}
-  },
-  method: 'PATCH',
-        headers: {
-  'Content-Type': 'application/json',
-},
+
+  method: 'PATCH'
+        headers: { 'Content-Type': 'application/json' }
+
   body: JSON.stringify({ is_active: false })
       });
-      if (!response.ok) {
-        throw new Error('Failed to deactivate share');
+      if (!response.ok) { throw new Error('Failed to deactivate share');
       await fetchShares();
-      await fetchStats();
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to deactivate share');
-};
+      await fetchStats() } catch (err) { setError(err instanceof Error ? err.message : 'Failed to deactivate share') };
   const handleDeleteShare = async (shareId: string) => {
     try {
       const response = await fetch(`/api/export/shares/${shareId}`, {)}
-  },
-  method: 'DELETE'
+
+  method: 'DELETE';
   });
-      if (!response.ok) {
-        throw new Error('Failed to delete share');
+      if (!response.ok) { throw new Error('Failed to delete share');
       await fetchShares();
       await fetchStats();
-      setShowDeleteConfirm(null);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to delete share');
-};
-  const getAccessLevelIcon = (accessLevel: ShareAccessLevel) => {
-  switch (accessLevel) {
-  case 'public':,
+      setShowDeleteConfirm(null) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to delete share') };
+  const getAccessLevelIcon = (accessLevel: ShareAccessLevel) => { switch (accessLevel) {
+  case 'public':
   return <FiGlobe className="w-4 h-4 text-green-600" />;
-  case 'password_protected':,
+  case 'password_protected':
   return <FiLock className="w-4 h-4 text-orange-600" />;
-  case 'private':,
+  case 'private':
   return <FiEye className="w-4 h-4 text-red-600" />;
-  default:,
+  default: }
   return <FiShare2 className="w-4 h-4 text-gray-600" />;
 };
-  const getAccessLevelColor = (accessLevel: ShareAccessLevel) => {
-  switch (accessLevel) {
-  case 'public':,
+  const getAccessLevelColor = (accessLevel: ShareAccessLevel) => { switch (accessLevel) {
+  case 'public':
   return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
-  case 'password_protected':,
+  case 'password_protected':
   return 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300';
-  case 'private':,
-  return 'bg-red-100 text-red-800 dark: bg-red-900/20 dark:text-red-300';
-  default:,
+  case 'private':
+  return 'bg-red-100 text-red-800 dark: bg-red-900/20 dark:text-red-300'
+  default: }
   return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
 };
-  const isShareExpired = (share: ExportShare) => {
-    if (!share.expires_at) return false;
-    return new Date(share.expires_at) < new Date();
-  };
-  const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {)
+  const isShareExpired = (share: ExportShare) => { if (!share.expires_at) return false;
+    return new Date(share.expires_at) < new Date() };
+  const formatDate = (dateString: string) => { return new Date(dateString).toLocaleDateString('en-US', {)
   year: 'numeric',
   month: 'short',
   day: 'numeric',
   hour: '2-digit',
-  minute: '2-digit',
+  minute: '2-digit' }
 });
   };
   const getShareUrl = (share: ExportShare) => {
@@ -251,11 +220,11 @@ interface ShareManagerProps {
             return;
               <div
                 key={share.id}
-                className={`bg-white dark:bg-gray-800 rounded-lg border shadow-sm p-4 ${
-  expired ? 'opacity-60' : '',
-} ${}
+                className={ `bg-white dark:bg-gray-800 rounded-lg border shadow-sm p-4 ${
+  expired ? 'opacity-60' : '' }
+ ${}
                   !share.is_active ? 'border-red-200 dark:border-red-800' : 'border-gray-200 dark:border-gray-700';
-  }`}
+`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">

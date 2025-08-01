@@ -8,76 +8,77 @@
  */
 import React from 'react';
 }
-interface ConsentPreferenceCenterProps {
-    userId?: string;
+}
+interface ConsentPreferenceCenterProps { userId?: string;
     onConsentUpdate?: (consents: ConsentSettings) => void;
     onDataRequest?: (requestType: DataRequestType) => void;
     showDataRights?: boolean;
     showHistory?: boolean;
-    jurisdiction?: string;
+    jurisdiction?: string }
 }
-interface ConsentSettings {
-    categories: Record<string, CategoryConsent>;
+}
+interface ConsentSettings { categories: Record<string, CategoryConsent>;
     communications: CommunicationPreferences;
     dataProcessing: DataProcessingPreferences;
     retention: RetentionPreferences;
     sharing: SharingPreferences;
-    lastUpdated: Date;
+    lastUpdated: Date }
 }
-interface CategoryConsent {
-    enabled: boolean;
+}
+interface CategoryConsent { enabled: boolean;
     granularChoices: Record<string, boolean>;
     lastModified: Date;
     expiresAt?: Date;
-    source: string;
+    source: string }
 }
-interface CommunicationPreferences {
-    email: ChannelPreference;
+}
+interface CommunicationPreferences { email: ChannelPreference;
     sms: ChannelPreference;
     push: ChannelPreference;
     phone: ChannelPreference;
-    post: ChannelPreference;
+    post: ChannelPreference }
 }
-interface ChannelPreference {
-    enabled: boolean;
+}
+interface ChannelPreference { enabled: boolean;
     frequency: 'IMMEDIATE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'NEVER';
     topics: string[];
     quietHours: {
         enabled: boolean;
         start: string;
         end: string;
-        timezone: string;
+        timezone: string }
 }
     };
 }
-interface DataProcessingPreferences {
-    analytics: ProcessingConsent;
+}
+interface DataProcessingPreferences { analytics: ProcessingConsent;
     personalization: ProcessingConsent;
     marketing: ProcessingConsent;
     research: ProcessingConsent;
-    aiProcessing: ProcessingConsent;
+    aiProcessing: ProcessingConsent }
 }
-interface ProcessingConsent {
-    enabled: boolean;
+}
+interface ProcessingConsent { enabled: boolean;
     allowAutomatedDecisions: boolean;
     allowProfiling: boolean;
     allowSharing: boolean;
     allowInternationalTransfers: boolean;
-    retentionPeriod: number;
+    retentionPeriod: number }
 }
-interface RetentionPreferences {
-    minimumRetention: boolean;
+}
+interface RetentionPreferences { minimumRetention: boolean;
     autoDelete: boolean;
     customRetentionPeriods: Record<string, number>;
     deleteInactiveData: boolean;
-    inactivityThreshold: number;
+    inactivityThreshold: number }
 }
-interface SharingPreferences {
-    internal: SharingConsent;
+}
+interface SharingPreferences { internal: SharingConsent;
     partners: SharingConsent;
     vendors: SharingConsent;
     research: SharingConsent;
-    legal: SharingConsent;
+    legal: SharingConsent }
+}
 }
 interface SharingConsent {
     enabled: boolean;
@@ -89,4 +90,5 @@ type DataRequestType = 'ACCESS' | 'PORTABILITY' | 'RECTIFICATION' | 'ERASURE' | 
 declare const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps>;
 export default ConsentPreferenceCenter;
 //# sourceMappingURL=ConsentPreferenceCenter.d.ts.map
+}
 }

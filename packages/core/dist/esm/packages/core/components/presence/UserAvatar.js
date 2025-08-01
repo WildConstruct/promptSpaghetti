@@ -38,33 +38,32 @@ export const UserAvatar = ({
             .toUpperCase();
     };
     const getBackgroundColor = (id) => {
-        const colors = [];
-        'bg-red-500',
+        const colors = [
+            'bg-red-500',
             'bg-blue-500',
             'bg-green-500',
             'bg-yellow-500',
             'bg-purple-500',
             'bg-pink-500',
             'bg-indigo-500',
-            'bg-teal-500';
+            'bg-teal-500'
+        ];
+        const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        return colors[hash % colors.length];
     };
-    ;
-    const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return colors[hash % colors.length];
+    const handleClick = () => {
+        if (onClick) {
+            onClick(userId);
+        }
+        ;
+        const avatarContent = userAvatar ? () : ;
+        ;
+        _jsx("img", { src: userAvatar, alt: userName || userId, className: `${sizeClasses[size]} rounded-full object-cover` });
+    };
+    ()
+        < div;
+    className = {} `${sizeClasses[size]} rounded-full flex items-center justify-center text-white font-medium ${getBackgroundColor(userId)}`;
 }
-;
-const handleClick = () => {
-    if (onClick) {
-        onClick(userId);
-    }
-    ;
-    const avatarContent = userAvatar ? () : ;
-    ;
-    _jsx("img", { src: userAvatar, alt: userName || userId, className: `${sizeClasses[size]} rounded-full object-cover` });
-};
-()
-    < div;
-className = {} `${sizeClasses[size]} rounded-full flex items-center justify-center text-white font-medium ${getBackgroundColor(userId)}`;
     >
         {};
 div >

@@ -7,19 +7,17 @@
 import React from 'react';
 
 }
-export interface ForumUser {
-    id: string;
+}
+export interface ForumUser { id: string;
     name: string;
     avatar?: string;
     reputation: number;
     badges: string[];
     isVerified: boolean;
-    isModerator: boolean;
-
-
+    isModerator: boolean }
 }
-export interface ForumPost {
-    id: string;
+}
+export interface ForumPost { id: string;
     title: string;
     content: string;
     contentPreview: string;
@@ -46,11 +44,11 @@ export interface ForumPost {
         name: string;
         type: string;
         size: number;
-        url: string;
-
+        url: string }
 }
     }>;
 
+}
 }
 interface CommunityForumCardProps {
     post: ForumPost;
@@ -69,4 +67,5 @@ interface CommunityForumCardProps {
 export declare const CommunityForumCard: React.FC<CommunityForumCardProps>;
 export default CommunityForumCard;
 //# sourceMappingURL=CommunityForumCard.d.ts.map
+}
 }

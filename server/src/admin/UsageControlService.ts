@@ -26,7 +26,7 @@ export enum UsageLimitType {
   CONCURRENT_CONNECTIONS = 'concurrent_connections',
   OPERATION_QUOTA = 'operation_quota',
   RESOURCE_QUOTA = 'resource_quota'
-}
+
 
 export enum UsageControlAction {
   ALLOW = 'allow',
@@ -35,17 +35,17 @@ export enum UsageControlAction {
   WARNING = 'warning',
   ALERT = 'alert',
   ESCALATE = 'escalate'
-}
+
 
 export enum UsageControlStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
   SUSPENDED = 'suspended',
   MONITORING_ONLY = 'monitoring_only'
-}
 
-}
-}
+
+
+
 export interface UsageLimit {
   limitId: string;
   name: string;
@@ -58,12 +58,13 @@ export interface UsageLimit {
   scope: UsageScope;
   configuration: LimitConfiguration;
   metadata: UsageLimitMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageScope {
   global: boolean;
   userIds?: string[];
@@ -73,12 +74,13 @@ export interface UsageScope {
   ipAddresses?: string[];
   apiKeys?: string[];
   customFilters?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LimitConfiguration {
   burstAllowance: number;
   gracePeriod: number; // milliseconds
@@ -88,23 +90,25 @@ export interface LimitConfiguration {
   alertThresholds: AlertThreshold[];
   exemptions: UsageExemption[];
   customRules: CustomUsageRule[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertThreshold {
   percentage: number; // of limit
   action: 'warn' | 'alert' | 'escalate';
   channels: string[];
   cooldown: number; // milliseconds
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageExemption {
   exemptionId: string;
   type: 'user' | 'role' | 'ip' | 'api_key' | 'operation';
@@ -112,12 +116,13 @@ export interface UsageExemption {
   reason: string;
   validUntil?: Date;
   createdBy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CustomUsageRule {
   ruleId: string;
   name: string;
@@ -125,12 +130,13 @@ export interface CustomUsageRule {
   action: UsageControlAction;
   priority: number;
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageLimitMetadata {
   createdBy: string;
   createdAt: Date;
@@ -139,12 +145,13 @@ export interface UsageLimitMetadata {
   tags: string[];
   documentation: string;
   auditTrail: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageRecord {
   recordId: string;
   timestamp: Date;
@@ -161,12 +168,13 @@ export interface UsageRecord {
   userAgent?: string;
   limitChecks: LimitCheck[];
   metadata: UsageRecordMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LimitCheck {
   limitId: string;
   limitName: string;
@@ -176,30 +184,33 @@ export interface LimitCheck {
   action: UsageControlAction;
   applied: boolean;
   reason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageRecordMetadata {
   requestId: string;
   sessionId?: string;
   correlationId?: string;
   context: Record<string, any>;
   labels: Record<string, string>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageAnalytics {
   timeRange: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   totalRequests: number;
   totalBandwidth: number;
@@ -212,10 +223,10 @@ export interface UsageAnalytics {
   limitViolations: LimitViolation[];
   trendAnalysis: UsageTrends;
   quotaUtilization: QuotaUtilization[];
-}
 
-}
-}
+
+
+
 export interface EndpointUsage {
   endpoint: string;
   requestCount: number;
@@ -223,12 +234,13 @@ export interface EndpointUsage {
   averageResponseTime: number;
   errorRate: number;
   uniqueUsers: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserUsage {
   userId: string;
   requestCount: number;
@@ -237,12 +249,13 @@ export interface UserUsage {
   errorRate: number;
   lastActivity: Date;
   quotaUtilization: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LimitViolation {
   violationId: string;
   limitId: string;
@@ -255,24 +268,26 @@ export interface LimitViolation {
   action: UsageControlAction;
   resolved: boolean;
   resolution?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageTrends {
   requestTrend: TrendData;
   bandwidthTrend: TrendData;
   responseTrend: TrendData;
   errorTrend: TrendData;
   userActivityTrend: TrendData;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrendData {
   current: number;
   previous: number;
@@ -280,21 +295,23 @@ export interface TrendData {
   changePercentage: number;
   trend: 'increasing' | 'decreasing' | 'stable';
   dataPoints: DataPoint[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataPoint {
   timestamp: Date;
   value: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QuotaUtilization {
   limitId: string;
   limitName: string;
@@ -303,12 +320,13 @@ export interface QuotaUtilization {
   percentage: number;
   timeRemaining: number; // milliseconds until reset
   status: 'ok' | 'warning' | 'critical';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageControlDecision {
   allowed: boolean;
   action: UsageControlAction;
@@ -318,12 +336,13 @@ export interface UsageControlDecision {
   retryAfter?: Date;
   quotaRemaining: Record<string, number>;
   warnings: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageSnapshot {
   timestamp: Date;
   activeUsers: number;
@@ -334,12 +353,13 @@ export interface UsageSnapshot {
   violationsInLastHour: number;
   topResourceConsumers: ResourceConsumer[];
   systemLoad: SystemLoadMetrics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceConsumer {
   identifier: string;
   type: 'user' | 'api_key' | 'ip';
@@ -347,21 +367,23 @@ export interface ResourceConsumer {
   bandwidth: number;
   connectionCount: number;
   quotaUsage: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemLoadMetrics {
   cpuUsage: number;
   memoryUsage: number;
   networkUtilization: number;
   responseTimeP95: number;
   errorRate: number;
-}
-}
-}
+
+
+
+
 
 // ==========================================
 // USAGE CONTROL SERVICE IMPLEMENTATION
@@ -381,7 +403,7 @@ export class UsageControlService {
     this.auditService = new AuditService(this.databaseService);
     this.initializeDefaultLimits();
     this.startPeriodicCleanup();
-  }
+
 
   // ==========================================
   // USAGE LIMIT MANAGEMENT
@@ -402,7 +424,7 @@ export class UsageControlService {
         tags: limit.scope.global ? ['global'] : ['scoped'],
         documentation: `${limit.name} - ${limit.description}`,
         auditTrail: [`Created: ${new Date().toISOString()}`]
-      }
+
     };
 
     // Validate limit configuration
@@ -423,19 +445,19 @@ export class UsageControlService {
         type: limit.type,
         threshold: limit.threshold,
         scope: limit.scope
-      }
+
     });
 
     console.log(`Usage limit created: ${limitId} (${limit.name})`);
     return limitId;
-  }
+
 
   async updateUsageLimit(limitId: string, updates: Partial<UsageLimit>): Promise<void> {
 
     const existingLimit = this.usageLimits.get(limitId);
     if (!existingLimit) {
       throw new Error(`Usage limit not found: ${limitId}`);
-    }
+
 
     const updatedLimit: UsageLimit = {
       ...existingLimit,
@@ -449,7 +471,7 @@ export class UsageControlService {
           ...existingLimit.metadata.auditTrail,
           `Updated: ${new Date().toISOString()}`
         ]
-      }
+
     };
 
     // Validate updated configuration
@@ -471,16 +493,16 @@ export class UsageControlService {
         limitId,
         changes: updates,
         version: updatedLimit.metadata.version
-      }
+
     });
-  }
+
 
   async deleteUsageLimit(limitId: string): Promise<void> {
 
     const limit = this.usageLimits.get(limitId);
     if (!limit) {
       throw new Error(`Usage limit not found: ${limitId}`);
-    }
+
 
     // Remove from memory
     this.usageLimits.delete(limitId);
@@ -500,11 +522,11 @@ export class UsageControlService {
         limitId,
         name: limit.name,
         deletedAt: new Date()
-      }
+
     });
 
     console.log(`Usage limit deleted: ${limitId}`);
-  }
+
 
   // ==========================================
   // USAGE CONTROL ENFORCEMENT
@@ -556,14 +578,14 @@ export class UsageControlService {
           if (limitCheck.action === UsageControlAction.THROTTLE) {
             waitTime = this.calculateWaitTime(limit, limitCheck.currentUsage, limitCheck.threshold);
             retryAfter = new Date(Date.now() + waitTime);
-          }
-        }
+
+
 
         // Collect warnings
         if (limitCheck.percentage > 80 && limitCheck.action === UsageControlAction.ALLOW) {
           warnings.push(`${limit.name} is at ${Math.round(limitCheck.percentage)}% of limit`);
-        }
-      }
+
+
 
       // Calculate quota remaining
       const quotaRemaining = this.calculateQuotaRemaining(userId, apiKey, applicableLimits);
@@ -599,16 +621,15 @@ export class UsageControlService {
             requestId,
             context: { decision: finalAction },
             labels: { 'usage-control': 'processed' }
-          }
+
         });
-      } else {
+ else {
         // Record violation
         await this.recordLimitViolation(limitChecks, userId, endpoint, requestId);
-      }
+
 
       return decision;
-
-    } catch (error) {
+ catch (error) {
       console.error('Usage control check failed:', error);
       
       // Fail open - allow request but log error
@@ -620,8 +641,8 @@ export class UsageControlService {
         quotaRemaining: {},
         warnings: ['Usage control system experiencing issues']
       };
-    }
-  }
+
+
 
   async recordUsage(record: UsageRecord): Promise<void> {
 
@@ -629,7 +650,7 @@ export class UsageControlService {
     
     if (!this.usageRecords.has(key)) {
       this.usageRecords.set(key, []);
-    }
+
     
     this.usageRecords.get(key)!.push(record);
     
@@ -644,7 +665,7 @@ export class UsageControlService {
     
     // Trigger cleanup if needed
     this.scheduleCleanupIfNeeded(key);
-  }
+
 
   // ==========================================
   // USAGE ANALYTICS & REPORTING
@@ -686,7 +707,7 @@ export class UsageControlService {
             errorRate: 0,
             uniqueUsers: 0
           });
-        }
+
         const usage = endpointMap.get(endpoint)!;
         usage.requestCount++;
         usage.bandwidth += record.requestSize + record.responseSize;
@@ -717,13 +738,13 @@ export class UsageControlService {
             lastActivity: record.timestamp,
             quotaUtilization: 0
           });
-        }
+
         const usage = userMap.get(userId)!;
         usage.requestCount++;
         usage.bandwidth += record.requestSize + record.responseSize;
         if (record.timestamp > usage.lastActivity) {
           usage.lastActivity = record.timestamp;
-        }
+
       });
 
       const topUsers = Array.from(userMap.values())
@@ -770,16 +791,15 @@ export class UsageControlService {
           totalRequests,
           processingTime: performance.now() - startTime,
           filtersApplied: filters || 'none'
-        }
+
       });
 
       return analytics;
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to generate usage analytics:', error);
       throw new Error(`Analytics generation failed: ${error.message}`);
-    }
-  }
+
+
 
   async getCurrentUsageSnapshot(): Promise<UsageSnapshot> {
 
@@ -795,7 +815,7 @@ export class UsageControlService {
       violationsInLastHour: await this.getViolationsInLastHour(),
       topResourceConsumers: await this.getTopResourceConsumers(5),
       systemLoad: await this.getSystemLoadMetrics(};
-  }
+
 
   // ==========================================
   // PRIVATE HELPER METHODS
@@ -811,43 +831,43 @@ export class UsageControlService {
     return Array.from(this.usageLimits.values()).filter(limit => {
       if (limit.status !== UsageControlStatus.ACTIVE) {
         return false;
-      }
+
 
       const scope = limit.scope;
       
       // Global scope applies to all
       if (scope.global) {
         return true;
-      }
+
 
       // Check user-specific scope
       if (scope.userIds && userId && scope.userIds.includes(userId)) {
         return true;
-      }
+
 
       // Check IP-specific scope
       if (scope.ipAddresses && scope.ipAddresses.includes(ipAddress)) {
         return true;
-      }
+
 
       // Check endpoint-specific scope
       if (scope.endpoints && scope.endpoints.some(pattern => endpoint.match(pattern))) {
         return true;
-      }
+
 
       // Check operation-specific scope
       if (scope.operations && scope.operations.includes(operation)) {
         return true;
-      }
+
 
       // Check API key scope
       if (scope.apiKeys && apiKey && scope.apiKeys.includes(apiKey)) {
         return true;
-      }
+
 
       return false;
     });
-  }
+
 
   private async checkIndividualLimit(
     limit: UsageLimit,
@@ -883,16 +903,16 @@ export class UsageControlService {
         
     default:
       currentUsage = 0;
-    }
+
 
     const percentage = (currentUsage / limit.threshold) * 100;
     let action = UsageControlAction.ALLOW;
 
     if (currentUsage >= limit.threshold) {
       action = limit.action;
-    } else if (percentage > 90) {
+ else if (percentage > 90) {
       action = UsageControlAction.WARNING;
-    }
+
 
     return {
       limitId: limit.limitId,
@@ -903,7 +923,7 @@ export class UsageControlService {
       action,
       applied: action !== UsageControlAction.ALLOW
     };
-  }
+
 
   private getActionSeverity(action: UsageControlAction): number {
     const severities = {
@@ -915,7 +935,7 @@ export class UsageControlService {
       [UsageControlAction.ESCALATE]: 5
     };
     return severities[action] || 0;
-  }
+
 
   private calculateWaitTime(limit: UsageLimit, currentUsage: number, threshold: number): number {
     const excessUsage = currentUsage - threshold;
@@ -929,8 +949,8 @@ export class UsageControlService {
     case 'fixed':
     default:
       return baseWaitTime;
-    }
-  }
+
+
 
   private calculateQuotaRemaining(
     userId: string | undefined,
@@ -946,7 +966,7 @@ export class UsageControlService {
     });
 
     return quotaRemaining;
-  }
+
 
   private getCurrentUsage(key: string, limit: UsageLimit): number {
     const now = Date.now();
@@ -964,8 +984,8 @@ export class UsageControlService {
       return this.activeConnections.get(key) || 0;
     default:
       return 0;
-    }
-  }
+
+
 
   private generateDecisionReason(
     action: UsageControlAction,
@@ -974,16 +994,16 @@ export class UsageControlService {
   ): string {
     if (action === UsageControlAction.ALLOW) {
       return 'Request allowed - within all usage limits';
-    }
+
 
     const violatedLimits = limitChecks.filter(check => check.applied);
     if (violatedLimits.length === 0) {
       return 'Request processed';
-    }
+
 
     const limitNames = violatedLimits.map(check => check.limitName).join(', ');
     return `${action.toUpperCase()} - exceeded limits: ${limitNames}`;
-  }
+
 
   private getUsageKey(
     userId: string | undefined,
@@ -998,52 +1018,52 @@ export class UsageControlService {
       limitType || 'general'
     ];
     return parts.join(':');
-  }
+
 
   private getRequestCount(key: string, windowStart: number, windowEnd: number): number {
     // Implementation would query actual usage records
     // For now, return mock data
     return Math.floor(Math.random() * 100);
-  }
+
 
   private getBandwidthUsage(key: string, windowStart: number, windowEnd: number): number {
     // Implementation would query actual bandwidth usage
     // For now, return mock data
     return Math.floor(Math.random() * 1024 * 1024); // Random MB usage
-  }
+
 
   // Additional helper methods would be implemented here...
   private async validateLimitConfiguration(limit: UsageLimit): Promise<void> {
 
     if (limit.threshold <= 0) {
       throw new Error('Threshold must be positive');
-    }
+
     if (limit.period <= 0) {
       throw new Error('Period must be positive');
-    }
-  }
+
+
 
   private incrementVersion(version: string): string {
     const parts = version.split('.');
     const patch = parseInt(parts[2] || '0') + 1;
     return `${parts[0]}.${parts[1]}.${patch}`;
-  }
+
 
   private invalidateRelatedCaches(limitId: string): void {
     // Clear rate limit and quota caches related to this limit
     this.rateLimitCache.clear();
     this.quotaCache.clear();
-  }
+
 
   private initializeDefaultLimits(): void {
     console.log('Usage Control Service initialized with default limits');
-  }
+
 
   private startPeriodicCleanup(): void {
     setInterval(() => {
       this.performCleanup();
     }, 300000); // 5 minutes
-  }
+
 
   private performCleanup(): void {
     const now = Date.now();
@@ -1059,35 +1079,35 @@ export class UsageControlService {
     this.rateLimitCache.forEach((state, key) => {
       if (now - state.lastUpdated > maxAge) {
         this.rateLimitCache.delete(key);
-      }
+
     });
-  }
+
 
   // Placeholder methods for persistence and analysis
   private async persistUsageLimit(limit: UsageLimit): Promise<void> {
 
     console.log(`Persisting usage limit: ${limit.limitId}`);
-  }
+
 
   private async removeUsageLimit(limitId: string): Promise<void> {
 
     console.log(`Removing usage limit: ${limitId}`);
-  }
+
 
   private async persistUsageRecord(record: UsageRecord): Promise<void> {
 
     console.log(`Persisting usage record: ${record.recordId}`);
-  }
+
 
   private async updateRateLimitCache(record: UsageRecord): Promise<void> {
 
     // Update rate limiting cache based on usage record
-  }
+
 
   private async updateQuotaCache(record: UsageRecord): Promise<void> {
 
     // Update quota cache based on usage record
-  }
+
 
   private scheduleCleanupIfNeeded(key: string): void {
     const records = this.usageRecords.get(key);
@@ -1096,8 +1116,8 @@ export class UsageControlService {
       const maxAge = 60 * 60 * 1000; // 1 hour
       const cutoff = Date.now() - maxAge;
       this.usageRecords.set(key, records.filter(r => r.timestamp.getTime() > cutoff));
-    }
-  }
+
+
 
   private async recordLimitViolation(
     limitChecks: LimitCheck[],
@@ -1110,8 +1130,8 @@ export class UsageControlService {
     
     for (const violation of violations) {
       console.log(`Limit violation recorded: ${violation.limitId} for ${userId || 'anonymous'}`);
-    }
-  }
+
+
 
   // Analytics helper methods
   private async queryUsageRecords(
@@ -1121,7 +1141,7 @@ export class UsageControlService {
 
     // Mock data for now - would query database in production
     return [];
-  }
+
 
   private async queryLimitViolations(
     timeRange: { start: Date; end: Date },
@@ -1130,7 +1150,7 @@ export class UsageControlService {
 
     // Mock data for now - would query database in production
     return [];
-  }
+
 
   private async generateTrendAnalysis(
     timeRange: { start: Date; end: Date },
@@ -1146,7 +1166,7 @@ export class UsageControlService {
         changePercentage: 5.26,
         trend: 'increasing',
         dataPoints: []
-  }
+
       bandwidthTrend: {
         current: 5242880, // 5MB
         previous: 4194304, // 4MB
@@ -1154,7 +1174,7 @@ export class UsageControlService {
         changePercentage: 25,
         trend: 'increasing',
         dataPoints: []
-  }
+
       responseTrend: {
         current: 250,
         previous: 275,
@@ -1162,7 +1182,7 @@ export class UsageControlService {
         changePercentage: -9.09,
         trend: 'decreasing',
         dataPoints: []
-  }
+
       errorTrend: {
         current: 2.5,
         previous: 3.2,
@@ -1170,7 +1190,7 @@ export class UsageControlService {
         changePercentage: -21.88,
         trend: 'decreasing',
         dataPoints: []
-  }
+
       userActivityTrend: {
         current: 150,
         previous: 140,
@@ -1178,9 +1198,9 @@ export class UsageControlService {
         changePercentage: 7.14,
         trend: 'increasing',
         dataPoints: []
-      }
+
     };
-  }
+
 
   private async calculateQuotaUtilization(): Promise<QuotaUtilization[]> {
 
@@ -1206,12 +1226,12 @@ export class UsageControlService {
     });
 
     return utilization;
-  }
+
 
   private calculateUserQuotaUtilization(userId: string): number {
     // Mock calculation - would implement actual quota utilization
     return Math.floor(Math.random() * 100);
-  }
+
 
   // System metrics helper methods
   private getActiveUserCount(): number {
@@ -1222,11 +1242,11 @@ export class UsageControlService {
         .map(r => r.userId)
         .filter(Boolean)
     ).size;
-  }
+
 
   private getTotalConnectionCount(): number {
     return Array.from(this.activeConnections.values()).reduce((sum, count) => sum + count, 0);
-  }
+
 
   private async getRequestsPerMinute(): Promise<number> {
 
@@ -1238,7 +1258,7 @@ export class UsageControlService {
     });
 
     return count;
-  }
+
 
   private async getBandwidthPerSecond(): Promise<number> {
 
@@ -1252,13 +1272,13 @@ export class UsageControlService {
     });
 
     return bandwidth;
-  }
+
 
   private async getViolationsInLastHour(): Promise<number> {
 
     // Mock data - would query actual violations
     return Math.floor(Math.random() * 10);
-  }
+
 
   private async getTopResourceConsumers(limit: number): Promise<ResourceConsumer[]> {
 
@@ -1274,10 +1294,10 @@ export class UsageControlService {
         connectionCount: Math.floor(Math.random() * 50),
         quotaUsage: Math.floor(Math.random() * 100)
       });
-    }
+
 
     return consumers.sort((a, b) => b.requestCount - a.requestCount);
-  }
+
 
   private async getSystemLoadMetrics(): Promise<SystemLoadMetrics> {
 
@@ -1290,7 +1310,7 @@ export class UsageControlService {
       responseTimeP95: 250 + Math.random() * 500,
       errorRate: Math.random() * 5
     };
-  }
+
 
   // ==========================================
   // PUBLIC API METHODS
@@ -1302,29 +1322,29 @@ export class UsageControlService {
     
     if (filters?.status) {
       limits = limits.filter(limit => limit.status === filters.status);
-    }
+
     
     if (filters?.type) {
       limits = limits.filter(limit => limit.type === filters.type);
-    }
+
     
     return limits;
-  }
+
 
   async getUsageLimit(limitId: string): Promise<UsageLimit | null> {
 
     return this.usageLimits.get(limitId) || null;
-  }
+
 
   async activateUsageLimit(limitId: string): Promise<void> {
 
     await this.updateUsageLimit(limitId, { status: UsageControlStatus.ACTIVE });
-  }
+
 
   async deactivateUsageLimit(limitId: string): Promise<void> {
 
     await this.updateUsageLimit(limitId, { status: UsageControlStatus.INACTIVE });
-  }
+
 
   async getUsageStats(
     userId?: string,
@@ -1337,30 +1357,31 @@ export class UsageControlService {
       bandwidth: Math.floor(Math.random() * 10 * 1024 * 1024),
       quotaUtilization: Math.floor(Math.random() * 100)
     };
-  }
-}
+
+
 
 // ==========================================
 // RATE LIMITING HELPER INTERFACES
 // ==========================================
 
-}
-}
+
+
 interface RateLimitState {
   requests: number;
   bandwidth: number;
   windowStart: number;
   lastUpdated: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface QuotaState {
   used: number;
   resetTime: number;
   lastUpdated: number;
-}
-}
-}
+
+
+

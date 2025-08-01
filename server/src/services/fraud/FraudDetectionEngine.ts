@@ -37,10 +37,10 @@ import {
   DeviceRiskAssessment,
   PaymentRecommendation,
   AccountRecommendation
-} from '../../../../packages/core/types/FraudMonitoring';
+ from '../../../../packages/core/types/FraudMonitoring';
 
-}
-}
+
+
 export interface FraudDetectionRequest {
   type: 'payment' | 'account' | 'transaction' | 'login' | 'registration';
   userId?: string;
@@ -51,12 +51,13 @@ export interface FraudDetectionRequest {
   locationData?: unknown;
   behaviorData?: unknown;
   context: FraudContext;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FraudContext {
   ipAddress: string;
   userAgent: string;
@@ -64,9 +65,10 @@ export interface FraudContext {
   source: string;
   environment: 'web' | 'mobile' | 'api';
   requestId: string;
-}
-}
-}
+
+
+
+
 
 export class FraudDetectionEngine {
   private db: Database;
@@ -104,12 +106,12 @@ export class FraudDetectionEngine {
         escalationThresholds: [],
         appealEnabled: true,
         appealWindow: 72
-  }
+
       integrations: {
         fraudServices: [],
         identityVerification: [],
         paymentIntelligence: []
-  }
+
       performance: {
         maxProcessingTime: 5000,
         cacheEnabled: true,
@@ -118,16 +120,16 @@ export class FraudDetectionEngine {
         maxBatchSize: 100,
         parallelProcessing: true,
         maxConcurrency: 10
-  }
+
       notifications: {
         realTimeAlerts: true,
         emailNotifications: true,
         webhookEndpoints: [],
         escalationNotifications: true
-  }
+
       ...config
     };
-  }
+
 
   // =============================================================================
   // Main Fraud Detection Methods
@@ -143,7 +145,7 @@ export class FraudDetectionEngine {
 
     if (!this.config.enabled) {
       return this.createDefaultResult(request, 'disabled');
-    }
+
 
     try {
       // Run parallel fraud assessments
@@ -172,7 +174,7 @@ export class FraudDetectionEngine {
       // Execute automatic actions if enabled
       if (this.config.responseConfig.autoActions && recommendation.automated) {
         await this.executeAutomaticAction(request, recommendation);
-      }
+
 
       // Log the detection result
       await this.logFraudDetection(request, aggregatedResult);
@@ -180,7 +182,7 @@ export class FraudDetectionEngine {
       // Send real-time alerts if necessary
       if (this.shouldAlert(aggregatedResult)) {
         await this.sendRealTimeAlert(request, aggregatedResult);
-      }
+
 
       const processingTime = Date.now() - startTime;
       console.log(
@@ -193,16 +195,15 @@ export class FraudDetectionEngine {
         detectionMethod: {
           ...aggregatedResult.detectionMethod,
           processingTime
-        }
-      };
 
-    } catch (error) {
+      };
+ catch (error) {
       console.error('❌ Fraud detection error:', error);
       
       // Return safe default in case of error
       return this.createErrorResult(request, error.message);
-    }
-  }
+
+
 
   /**
    * Specialized payment fraud detection
@@ -259,7 +260,7 @@ export class FraudDetectionEngine {
       recommendation,
       processingTime: Date.now() - startTime,
       timestamp: new Date(};
-  }
+
 
   /**
    * Specialized account fraud detection
@@ -318,7 +319,7 @@ export class FraudDetectionEngine {
       accountTakeoverRisk,
       recommendation,
       timestamp: new Date(};
-  }
+
 
   // =============================================================================
   // Analysis Methods
@@ -327,7 +328,7 @@ export class FraudDetectionEngine {
   private async runRulesEngine(request: FraudDetectionRequest): Promise<Partial<FraudDetectionResult>> {
     if (!this.config.rulesEngineEnabled) {
       return null;
-    }
+
 
     const rules = await this.getActiveRules(request.type);
     const triggeredRules: string[] = [];
@@ -338,8 +339,8 @@ export class FraudDetectionEngine {
       if (triggered) {
         triggeredRules.push(rule.ruleId);
         totalScore += this.calculateRuleScore(rule);
-      }
-    }
+
+
 
     return {
       fraudScore: Math.min(totalScore, 100),
@@ -349,14 +350,14 @@ export class FraudDetectionEngine {
         secondary: [],
         ruleSetVersion: '1.0.0',
         processingTime: 0
-      }
+
     };
-  }
+
 
   private async runBehavioralAnalysis(request: FraudDetectionRequest): Promise<Partial<FraudDetectionResult>> {
     if (!request.userId) {
       return null;
-    }
+
 
     try {
       const analysis = await this.behaviorAnalytics.analyzeUserBehavior(request.userId, {
@@ -374,13 +375,13 @@ export class FraudDetectionEngine {
           primary: 'behavioral_analysis',
           secondary: [],
           processingTime: 0
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       console.error('Behavioral analysis failed:', error);
       return null;
-    }
-  }
+
+
 
   private async runVelocityChecks(request: FraudDetectionRequest): Promise<Partial<FraudDetectionResult>> {
     const velocityChecks = await this.performVelocityChecks(request.paymentData || {}, request.context);
@@ -388,7 +389,7 @@ export class FraudDetectionEngine {
 
     if (violatedChecks.length === 0) {
       return { fraudScore: 0, riskFactors: [] };
-    }
+
 
     const fraudScore = violatedChecks.reduce((score, check) => {
       const severityMultiplier = { low: 10, medium: 20, high: 35, critical: 50 }[check.severity];
@@ -413,14 +414,14 @@ export class FraudDetectionEngine {
         primary: 'velocity_check',
         secondary: [],
         processingTime: 0
-      }
+
     };
-  }
+
 
   private async runDeviceAnalysis(request: FraudDetectionRequest): Promise<Partial<FraudDetectionResult>> {
     if (!request.deviceData) {
       return null;
-    }
+
 
     const deviceRisk = await this.assessDeviceRisk(request.context);
     
@@ -440,9 +441,9 @@ export class FraudDetectionEngine {
         primary: 'device_fingerprint',
         secondary: [],
         processingTime: 0
-      }
+
     };
-  }
+
 
   private async runGeolocationAnalysis(request: FraudDetectionRequest): Promise<Partial<FraudDetectionResult>> {
     const geoRisk = await this.analyzeGeolocationRisk(request.context);
@@ -463,14 +464,14 @@ export class FraudDetectionEngine {
         primary: 'geo_analysis',
         secondary: [],
         processingTime: 0
-      }
+
     };
-  }
+
 
   private async runTrustScoreAnalysis(request: FraudDetectionRequest): Promise<Partial<FraudDetectionResult>> {
     if (!request.userId) {
       return null;
-    }
+
 
     try {
       const userTrustScore = await this.trustScoreService.calculateUserTrustScore(request.userId);
@@ -501,13 +502,13 @@ export class FraudDetectionEngine {
           primary: 'pattern_matching',
           secondary: [],
           processingTime: 0
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       console.error('Trust score analysis failed:', error);
       return null;
-    }
-  }
+
+
 
   private async runNetworkAnalysis(request: FraudDetectionRequest): Promise<Partial<FraudDetectionResult>> {
     // For now, return basic network analysis
@@ -516,7 +517,7 @@ export class FraudDetectionEngine {
     
     if (!suspiciousIP) {
       return { fraudScore: 0, riskFactors: [] };
-    }
+
 
     return {
       fraudScore: 25,
@@ -529,14 +530,14 @@ export class FraudDetectionEngine {
         description: 'IP address associated with suspicious activity',
         evidence: ['IP reputation check'],
         mitigationActions: ['ip_verification', 'enhanced_monitoring']
-      }],
+],
       detectionMethod: {
         primary: 'network_analysis',
         secondary: [],
         processingTime: 0
-      }
+
     };
-  }
+
 
   // =============================================================================
   // Velocity and Pattern Analysis
@@ -560,7 +561,7 @@ export class FraudDetectionEngine {
         exceeded: count > threshold,
         severity: this.calculateVelocitySeverity('transaction_count', count, threshold)
       });
-    }
+
 
     // Transaction value velocity (if payment data available)
     if (paymentData.amount) {
@@ -576,8 +577,8 @@ export class FraudDetectionEngine {
           exceeded: value > threshold,
           severity: this.calculateVelocitySeverity('transaction_value', value, threshold)
         });
-      }
-    }
+
+
 
     // Failed attempts velocity
     for (const window of [5, 15, 60]) {
@@ -592,10 +593,10 @@ export class FraudDetectionEngine {
         exceeded: failures > threshold,
         severity: this.calculateVelocitySeverity('failed_attempts', failures, threshold)
       });
-    }
+
 
     return checks;
-  }
+
 
   private async analyzeCardTesting(paymentData: unknown, context: FraudContext): Promise<CardTestingAnalysis> {
 
@@ -610,7 +611,7 @@ export class FraudDetectionEngine {
         evidence: sequentialAttempts.evidence,
         severity: 'high'
       });
-    }
+
 
     // Check for multiple cards
     const multipleCards = await this.checkMultipleCards(context);
@@ -621,7 +622,7 @@ export class FraudDetectionEngine {
         evidence: multipleCards.evidence,
         severity: 'high'
       });
-    }
+
 
     // Check for small amounts
     const smallAmounts = this.checkSmallAmounts(paymentData);
@@ -632,7 +633,7 @@ export class FraudDetectionEngine {
         evidence: smallAmounts.evidence,
         severity: 'medium'
       });
-    }
+
 
     const isCardTesting = patterns.length >= 2;
     const confidence = isCardTesting ? Math.min(85 + patterns.length * 5, 95) : 20;
@@ -648,7 +649,7 @@ export class FraudDetectionEngine {
         'Review recent transactions'
       ] : []
     };
-  }
+
 
   // =============================================================================
   // Result Aggregation and Decision Making
@@ -659,7 +660,7 @@ export class FraudDetectionEngine {
     
     if (validResults.length === 0) {
       return this.createDefaultResult(request, 'no_results');
-    }
+
 
     // Calculate weighted average fraud score
     const totalWeight = validResults.reduce((sum, r) => sum + (r.weight || 1), 0);
@@ -688,13 +689,13 @@ export class FraudDetectionEngine {
         primary: primaryMethod,
         secondary: detectionMethods.slice(1),
         processingTime: 0
-  }
+
       timestamp: new Date(),
       sessionId: request.sessionId,
       requiresReview: this.shouldRequireReview(weightedScore, allRiskFactors),
       autoBlocked: false // Set by recommendation logic
     };
-  }
+
 
   private determineRecommendation(result: FraudDetectionResult): FraudRecommendation {
     const { fraudScore, riskLevel, riskFactors } = result;
@@ -709,20 +710,20 @@ export class FraudDetectionEngine {
       action = 'block';
       priority = 'immediate';
       automated = true;
-    } else if (fraudScore >= this.config.thresholds.autoReview) {
+ else if (fraudScore >= this.config.thresholds.autoReview) {
       action = 'review';
       priority = 'high';
       automated = false;
       requiresHuman = true;
-    } else if (fraudScore >= this.config.thresholds.autoChallenge) {
+ else if (fraudScore >= this.config.thresholds.autoChallenge) {
       action = 'challenge';
       priority = 'medium';
       automated = true;
-    } else if (fraudScore >= this.config.thresholds.autoApprove) {
+ else if (fraudScore >= this.config.thresholds.autoApprove) {
       action = 'flag';
       priority = 'low';
       automated = true;
-    }
+
 
     // Adjust based on critical risk factors
     const criticalFactors = riskFactors.filter(rf => rf.severity === 'critical');
@@ -730,7 +731,7 @@ export class FraudDetectionEngine {
       action = 'block';
       priority = 'immediate';
       requiresHuman = true;
-    }
+
 
     const recommendation: FraudRecommendation = {
       action,
@@ -745,7 +746,7 @@ export class FraudDetectionEngine {
     result.autoBlocked = action === 'block' && automated;
 
     return recommendation;
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -763,7 +764,7 @@ export class FraudDetectionEngine {
       autoReview: 75,
       autoBlock: 90
     };
-  }
+
 
   private calculateRiskLevel(fraudScore: number): FraudRiskLevel {
     const thresholds = this.config.thresholds;
@@ -774,7 +775,7 @@ export class FraudDetectionEngine {
     if (fraudScore >= thresholds.mediumRisk) return 'medium';
     if (fraudScore >= thresholds.lowRisk) return 'low';
     return 'very_low';
-  }
+
 
   private calculateConfidence(results: unknown[]): number {
     if (results.length === 0) return 0;
@@ -786,13 +787,13 @@ export class FraudDetectionEngine {
     const methodBonus = Math.min(results.length * 5, 20);
     
     return Math.min(avgConfidence + methodBonus, 100);
-  }
+
 
   private shouldRequireReview(fraudScore: number, riskFactors: FraudRiskFactor[]): boolean {
     return fraudScore >= this.config.thresholds.autoReview ||
            riskFactors.some(rf => rf.severity === 'critical') ||
            riskFactors.filter(rf => rf.severity === 'high').length >= 3;
-  }
+
 
   private generateRecommendationReason(
     fraudScore: number, 
@@ -806,10 +807,10 @@ export class FraudDetectionEngine {
 
     if (primaryFactors.length > 0) {
       return `Fraud score ${fraudScore} (${riskLevel} risk) with factors: ${primaryFactors.join(', ')}`;
-    }
+
 
     return `Fraud score ${fraudScore} indicates ${riskLevel} risk level`;
-  }
+
 
   private calculateImpactScore(fraudScore: number, action: FraudAction): number {
     const baseImpact = fraudScore;
@@ -826,7 +827,7 @@ export class FraudDetectionEngine {
     };
 
     return Math.round(baseImpact * (actionMultiplier[action] || 0.5));
-  }
+
 
   private createDefaultResult(request: FraudDetectionRequest, reason: string): FraudDetectionResult {
     return {
@@ -842,18 +843,18 @@ export class FraudDetectionEngine {
         automated: true,
         requiresHuman: false,
         estimatedImpact: 0
-      }],
+],
       detectionMethod: {
         primary: 'rule_engine',
         secondary: [],
         processingTime: 0
-  }
+
       timestamp: new Date(),
       sessionId: request.sessionId,
       requiresReview: false,
       autoBlocked: false
     };
-  }
+
 
   private createErrorResult(request: FraudDetectionRequest, error: string): FraudDetectionResult {
     return {
@@ -870,7 +871,7 @@ export class FraudDetectionEngine {
         description: `Fraud detection error: ${error}`,
         evidence: [error],
         mitigationActions: ['manual_review', 'system_check']
-      }],
+],
       recommendations: [{
         action: 'review',
         priority: 'high',
@@ -878,18 +879,18 @@ export class FraudDetectionEngine {
         automated: false,
         requiresHuman: true,
         estimatedImpact: 75
-      }],
+],
       detectionMethod: {
         primary: 'rule_engine',
         secondary: [],
         processingTime: 0
-  }
+
       timestamp: new Date(),
       sessionId: request.sessionId,
       requiresReview: true,
       autoBlocked: false
     };
-  }
+
 
   // =============================================================================
   // Placeholder Methods (would be implemented with actual logic)
@@ -899,18 +900,18 @@ export class FraudDetectionEngine {
 
     // Implementation would load active fraud rules from database
     return [];
-  }
+
 
   private async evaluateRule(_____rule: FraudRule, _____request: FraudDetectionRequest): Promise<boolean> {
 
     // Implementation would evaluate rule conditions against request data
     return false;
-  }
+
 
   private calculateRuleScore(_____rule: FraudRule): number {
     // Implementation would calculate score contribution from triggered rule
     return 10;
-  }
+
 
   private createRiskFactorFromRule(ruleId: string): FraudRiskFactor {
     return {
@@ -923,12 +924,12 @@ export class FraudDetectionEngine {
       evidence: [`Rule ${ruleId} conditions met`],
       mitigationActions: ['review_account', 'apply_restrictions']
     };
-  }
+
 
   private mapBehaviorRiskToFraudScore(riskScore: number): number {
     // Convert 0-100 risk score to fraud score
     return Math.round(riskScore * 0.8); // Slightly lower weight for behavioral analysis
-  }
+
 
   private createBehavioralRiskFactors(analysis: unknown): FraudRiskFactor[] {
     const factors: FraudRiskFactor[] = [];
@@ -944,10 +945,10 @@ export class FraudDetectionEngine {
         evidence: ['Unusual activity patterns detected'],
         mitigationActions: ['behavioral_monitoring', 'user_verification']
       });
-    }
+
 
     return factors;
-  }
+
 
   // Database query methods (simplified implementations)
   private async getTransactionCount(ipAddress: string, timeWindowMinutes: number): Promise<number> {
@@ -960,7 +961,7 @@ export class FraudDetectionEngine {
       AND t.created_at > NOW() - INTERVAL '${timeWindowMinutes} minutes'
     `, [ipAddress]);
     return parseInt(result.rows[0]?.count || '0');
-  }
+
 
   private async getTransactionValue(ipAddress: string, timeWindowMinutes: number): Promise<number> {
 
@@ -972,7 +973,7 @@ export class FraudDetectionEngine {
       AND t.created_at > NOW() - INTERVAL '${timeWindowMinutes} minutes'
     `, [ipAddress]);
     return parseInt(result.rows[0]?.total || '0');
-  }
+
 
   private async getFailedAttempts(ipAddress: string, timeWindowMinutes: number): Promise<number> {
 
@@ -983,7 +984,7 @@ export class FraudDetectionEngine {
       AND attempted_at > NOW() - INTERVAL '${timeWindowMinutes} minutes'
     `, [ipAddress]);
     return parseInt(result.rows[0]?.count || '0');
-  }
+
 
   private getVelocityThreshold(metric: VelocityMetric, timeWindow: number): number {
     // Default thresholds - would be configurable
@@ -994,7 +995,7 @@ export class FraudDetectionEngine {
     };
 
     return thresholds[metric]?.[timeWindow] || 10;
-  }
+
 
   private calculateVelocitySeverity(metric: VelocityMetric, current: number, threshold: number): unknown {
     const ratio = current / threshold;
@@ -1002,36 +1003,36 @@ export class FraudDetectionEngine {
     if (ratio >= 2) return 'high';
     if (ratio >= 1.5) return 'medium';
     return 'low';
-  }
+
 
   // Additional placeholder methods
   private async checkSequentialAttempts(_____context: FraudContext): Promise<{ detected: boolean; evidence: string[] }> {
 
     return { detected: false, evidence: [] };
-  }
+
 
   private async checkMultipleCards(_____context: FraudContext): Promise<{ detected: boolean; evidence: string[] }> {
 
     return { detected: false, evidence: [] };
-  }
+
 
   private checkSmallAmounts(_____paymentData: unknown): { detected: boolean; evidence: string[] } {
     return { detected: false, evidence: [] };
-  }
+
 
   private async checkSuspiciousIP(_____ipAddress: string): Promise<boolean> {
 
     return false;
-  }
+
 
   private shouldAlert(result: FraudDetectionResult): boolean {
     return result.riskLevel === 'critical' || result.fraudScore >= 80;
-  }
+
 
   private async sendRealTimeAlert(request: FraudDetectionRequest, result: FraudDetectionResult): Promise<void> {
 
     console.log(`🚨 Fraud alert: ${result.riskLevel} risk detected for ${request.type} request`);
-  }
+
 
   private async executeAutomaticAction(
     request: FraudDetectionRequest,
@@ -1040,22 +1041,22 @@ export class FraudDetectionEngine {
 
     if (!recommendation.automated) return;
     console.log(`⚡ Executing automatic action: ${recommendation.action} for ${request.type} request`);
-  }
+
 
   private async logFraudDetection(request: FraudDetectionRequest, result: FraudDetectionResult): Promise<void> {
 
     // Implementation would log to fraud detection audit table
     console.log(`📊 Logging fraud detection: ${result.fraudScore} score, ${result.riskLevel} risk`);
-  }
+
 
   // Default implementations for payment fraud assessment
   private calculatePaymentRiskFactors(_____assessments: unknown, _____paymentData: unknown): unknown[] {
     return [];
-  }
+
 
   private calculatePaymentFraudScore(_____riskFactors: unknown[]): number {
     return 0;
-  }
+
 
   private generatePaymentRecommendation(_____fraudScore: number, _____riskFactors: unknown[]): PaymentRecommendation {
     return {
@@ -1064,7 +1065,7 @@ export class FraudDetectionEngine {
       reasons: [],
       requiredVerifications: []
     };
-  }
+
 
   private getDefaultCardTestingAnalysis(): CardTestingAnalysis {
     return {
@@ -1073,7 +1074,7 @@ export class FraudDetectionEngine {
       patterns: [],
       recommendations: []
     };
-  }
+
 
   private getDefaultChargebackRisk(): ChargebackRiskAssessment {
     return {
@@ -1083,7 +1084,7 @@ export class FraudDetectionEngine {
       historicalChargebackRate: 0,
       merchantCategory: 'unknown'
     };
-  }
+
 
   private getDefaultGeolocationRisk(): GeolocationRisk {
     return {
@@ -1094,7 +1095,7 @@ export class FraudDetectionEngine {
       geoMismatch: false,
       suspiciousLocation: false
     };
-  }
+
 
   private getDefaultDeviceRisk(): DeviceRiskAssessment {
     return {
@@ -1105,7 +1106,7 @@ export class FraudDetectionEngine {
       riskFactors: [],
       fingerprintConfidence: 0
     };
-  }
+
 
   private async assessChargebackRisk(
     _____paymentData: unknown,
@@ -1113,17 +1114,17 @@ export class FraudDetectionEngine {
   ): Promise<ChargebackRiskAssessment> {
 
     return this.getDefaultChargebackRisk();
-  }
+
 
   private async analyzeGeolocationRisk(_____context: FraudContext): Promise<GeolocationRisk> {
 
     return this.getDefaultGeolocationRisk();
-  }
+
 
   private async assessDeviceRisk(_____context: FraudContext): Promise<DeviceRiskAssessment> {
 
     return this.getDefaultDeviceRisk();
-  }
+
 
   // Account fraud assessment helpers
   private buildAccountRiskProfile(
@@ -1139,7 +1140,7 @@ export class FraudDetectionEngine {
       accountAge: 30,
       activityPattern: 'normal'
     };
-  }
+
 
   private async assessSyntheticIdentityRisk(_____userId: string): Promise<unknown> {
 
@@ -1149,7 +1150,7 @@ export class FraudDetectionEngine {
       confidence: 0,
       recommendation: 'allow'
     };
-  }
+
 
   private async assessAccountTakeoverRisk(userId: string, context: FraudContext): Promise<unknown> {
 
@@ -1171,13 +1172,13 @@ export class FraudDetectionEngine {
           isp: 'Unknown',
           vpnDetected: false,
           proxyDetected: false
-  }
+
         userAgent: context.userAgent,
         riskFactors: []
-  }
+
       recommendation: 'allow'
     };
-  }
+
 
   private async getIdentityVerificationStatus(_____userId: string): Promise<unknown> {
 
@@ -1190,7 +1191,7 @@ export class FraudDetectionEngine {
         confidence: 0,
         livenessCheck: false,
         spoofingRisk: 0
-  }
+
       phoneVerification: {
         phoneNumber: '',
         verified: false,
@@ -1199,7 +1200,7 @@ export class FraudDetectionEngine {
         carrier: '',
         country: '',
         riskFlags: []
-  }
+
       emailVerification: {
         email: '',
         verified: false,
@@ -1208,15 +1209,15 @@ export class FraudDetectionEngine {
         disposable: false,
         freeProvider: false,
         riskFlags: []
-  }
+
       overallConfidence: 0,
       riskFlags: []
     };
-  }
+
 
   private calculateAccountFraudScore(_____data: Record<string, unknown>): number {
     return 0;
-  }
+
 
   private generateAccountRecommendation(_____fraudScore: number, _____accountRisk: unknown): AccountRecommendation {
     return {
@@ -1227,7 +1228,7 @@ export class FraudDetectionEngine {
       monitoringLevel: 'standard',
       reviewRequired: false
     };
-  }
+
 
   private mapBehavioralAnalysis(_____analysis: unknown): unknown {
     return {
@@ -1240,9 +1241,8 @@ export class FraudDetectionEngine {
         confidence: 0,
         patterns: [],
         lastUpdated: new Date()
-  }
+
       botProbability: 0,
       humanLikelihood: 1
     };
-  }
-}
+

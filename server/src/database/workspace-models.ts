@@ -40,7 +40,7 @@ export const PERMISSIONS = {
   ACTIVITY_READ: 1 << 18,
   NOTIFICATION_MANAGE: 1 << 19,
   EXPORT_DATA: 1 << 20
-} as const;
+ as const;
 
 // Pre-defined role permissions
 export const ROLE_PERMISSIONS = {
@@ -53,7 +53,7 @@ export const ROLE_PERMISSIONS = {
           PERMISSIONS.COMMENT_READ | PERMISSIONS.ACTIVITY_READ,
   COMMENTER: PERMISSIONS.WORKSPACE_READ | PERMISSIONS.PROJECT_READ | PERMISSIONS.RESOURCE_READ | 
              PERMISSIONS.COMMENT_READ | PERMISSIONS.COMMENT_WRITE | PERMISSIONS.ACTIVITY_READ
-} as const;
+ as const;
 
 // User authentication and profile schemas
 export const UserSchema = z.object({
@@ -372,60 +372,64 @@ export type CreateUserSession = z.infer<typeof CreateUserSessionSchema>;
 export type OAuthState = z.infer<typeof OAuthStateSchema>;
 
 // Helper types
-}
-}
+
+
+
 export interface WorkspaceWithMembership extends Workspace {
   membership?: UserMembership;
   role_permissions?: number;
-}
 
-}
-}
+
+
+
 export interface ProjectWithStats extends Project {
   resource_count?: number;
   comment_count?: number;
   last_activity?: Date;
-}
 
-}
-}
+
+
+
 export interface UserWithRoles {
   user_id: string;
   membership: UserMembership;
-}
-}
-  roles: Array<ACLRole & { scope_type: string; scope_id: string }>;
-}
 
-}
-}
+
+
+  roles: Array<ACLRole & { scope_type: string; scope_id: string }>;
+
+
+
+
 export interface ActivityEventWithActorInfo extends ActivityEvent {
   actor_name?: string;
   actor_avatar?: string;
-}
 
-}
-}
+
+
+
 export interface CommentWithReplies extends Comment {
   replies?: CommentWithReplies[];
   author_name?: string;
   author_avatar?: string;
-}
+
 
 // Pagination types
-}
-}
+
+
+
 export interface PaginationOptions {
   page?: number;
   limit?: number;
   sort_by?: string;
   sort_order?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PaginatedResult<T> {
   data: T[];
   pagination: {
@@ -436,32 +440,35 @@ export interface PaginatedResult<T> {
     has_next: boolean;
     has_prev: boolean;
   };
-}
+
 
 // Filter types
-}
-}
+
+
+
 export interface WorkspaceFilter {
   owner_id?: string;
   archived?: boolean;
   search?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProjectFilter {
   workspace_id?: string;
   status?: Project['status'][];
   created_by?: string;
   search?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActivityEventFilter {
   workspace_id?: string;
   project_id?: string;
@@ -469,17 +476,18 @@ export interface ActivityEventFilter {
   event_types?: string[];
   from_date?: Date;
   to_date?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CommentFilter {
   resource_id?: string;
   author_id?: string;
   status?: Comment['status'][];
   target_type?: Comment['target_type'];
-}
-}
-}
+
+
+

@@ -19,7 +19,7 @@ export enum ReviewType {
   APPEAL_REVIEW = 'appeal_review',
   FEATURED_CONTENT = 'featured_content',
   TRANSACTION_DISPUTE = 'transaction_dispute'
-}
+
 
 export enum AssignmentStrategy {
   ROUND_ROBIN = 'round_robin',
@@ -27,7 +27,7 @@ export enum AssignmentStrategy {
   SKILL_BASED = 'skill_based',
   RANDOM = 'random',
   MANUAL = 'manual'
-}
+
 
 export enum ReviewerRole {
   CONTENT_REVIEWER = 'content_reviewer',
@@ -36,7 +36,7 @@ export enum ReviewerRole {
   TECHNICAL_REVIEWER = 'technical_reviewer',
   COMPLIANCE_REVIEWER = 'compliance_reviewer',
   ESCALATION_REVIEWER = 'escalation_reviewer'
-}
+
 
 export enum AssignmentStatus {
   ACTIVE = 'active',
@@ -44,11 +44,12 @@ export enum AssignmentStatus {
   REASSIGNED = 'reassigned',
   ESCALATED = 'escalated',
   CANCELLED = 'cancelled'
-}
+
 
 // Core interfaces
-}
-}
+
+
+
 export interface ReviewerProfile {
   id: string;
   user_id: string;
@@ -61,12 +62,13 @@ export interface ReviewerProfile {
   performance_metrics: ReviewerMetrics;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewerMetrics {
   total_reviews: number;
   completed_reviews: number;
@@ -76,12 +78,13 @@ export interface ReviewerMetrics {
   escalations_received: number;
   current_streak: number;
   last_review_date: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewAssignment {
   id: string;
   review_item_id: string;
@@ -108,12 +111,13 @@ export interface ReviewAssignment {
   actual_duration_hours?: number;
   
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentRule {
   id: string;
   review_type: ReviewType;
@@ -124,23 +128,25 @@ export interface AssignmentRule {
   required_skills: string[];
   fallback_strategy: AssignmentStrategy;
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in';
   value: Error;
   weight: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkloadDistribution {
   reviewer_id: string;
   current_assignments: number;
@@ -148,12 +154,13 @@ export interface WorkloadDistribution {
   avg_completion_time: number;
   overdue_count: number;
   priority_score: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentRequest {
   review_item_id: string;
   review_type: ReviewType;
@@ -165,9 +172,10 @@ export interface AssignmentRequest {
   estimated_duration_hours?: number;
   assignment_strategy?: AssignmentStrategy;
   metadata?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export class ReviewerAssignmentService {
   private readonly logger = new Logger(ReviewerAssignmentService.name);
@@ -283,13 +291,13 @@ export class ReviewerAssignmentService {
 
       await client.query('COMMIT');
       this.logger.log('Reviewer assignment schema initialized successfully');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Create or update reviewer profile
@@ -322,10 +330,10 @@ export class ReviewerAssignmentService {
       ]);
 
       return this.mapToReviewerProfile(result.rows[0]);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Assign reviewer automatically based on rules and availability
@@ -346,7 +354,7 @@ export class ReviewerAssignmentService {
 
       if (!reviewer) {
         throw new Error(`No available reviewer found for ${request.review_type}`);
-      }
+
 
       // Calculate due date if not provided
       const dueDate = request.due_date || this.calculateDueDate(request);
@@ -391,13 +399,13 @@ export class ReviewerAssignmentService {
       this.logger.log(`Assigned reviewer ${reviewer.id} to ${request.review_type} item ${request.review_item_id}`);
       
       return this.mapToReviewAssignment(result.rows[0]);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Manually assign specific reviewer
@@ -419,15 +427,15 @@ export class ReviewerAssignmentService {
       const reviewer = await this.getReviewerProfile(reviewerId);
       if (!reviewer) {
         throw new Error(`Reviewer ${reviewerId} not found`);
-      }
+
 
       if (reviewer.availability_status === 'unavailable') {
         throw new Error(`Reviewer ${reviewerId} is currently unavailable`);
-      }
+
 
       if (reviewer.current_workload >= reviewer.capacity_limit) {
         this.logger.warn(`Reviewer ${reviewerId} is at capacity but manual assignment proceeding`);
-      }
+
 
       const finalDueDate = dueDate || this.calculateDueDate({ review_type: reviewType, priority: 'medium' });
 
@@ -470,13 +478,13 @@ export class ReviewerAssignmentService {
       this.logger.log(`Manually assigned reviewer ${reviewerId} to ${reviewType} item ${reviewItemId}`);
       
       return this.mapToReviewAssignment(result.rows[0]);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Reassign review to different reviewer
@@ -500,7 +508,7 @@ export class ReviewerAssignmentService {
 
       if (currentResult.rows.length === 0) {
         throw new Error(`Assignment ${assignmentId} not found`);
-      }
+
 
       const currentAssignment = currentResult.rows[0];
       const oldReviewerId = currentAssignment.reviewer_id;
@@ -509,11 +517,11 @@ export class ReviewerAssignmentService {
       const newReviewer = await this.getReviewerProfile(newReviewerId);
       if (!newReviewer) {
         throw new Error(`New reviewer ${newReviewerId} not found`);
-      }
+
 
       if (newReviewer.availability_status === 'unavailable') {
         throw new Error(`New reviewer ${newReviewerId} is currently unavailable`);
-      }
+
 
       // Update assignment
       await client.query(`
@@ -559,13 +567,13 @@ export class ReviewerAssignmentService {
       this.logger.log(`Reassigned review ${assignmentId} from ${oldReviewerId} to ${newReviewerId}`);
       
       return this.mapToReviewAssignment(updatedResult.rows[0]);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Complete review assignment
@@ -584,7 +592,7 @@ export class ReviewerAssignmentService {
 
       if (assignmentResult.rows.length === 0) {
         throw new Error(`Assignment ${assignmentId} not found`);
-      }
+
 
       const assignment = assignmentResult.rows[0];
       const actualDuration = assignment.started_at 
@@ -624,13 +632,13 @@ export class ReviewerAssignmentService {
       await client.query('COMMIT');
 
       this.logger.log(`Completed assignment ${assignmentId} by reviewer ${assignment.reviewer_id}`);
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Get reviewer workload distribution
@@ -670,7 +678,7 @@ export class ReviewerAssignmentService {
       if (reviewType) {
         query += ' WHERE ra.review_type = $1 OR ra.review_type IS NULL';
         params.push(reviewType);
-      }
+
 
       query += `
         GROUP BY rp.id, rp.user_id, rp.role, rp.current_workload, rp.capacity_limit, 
@@ -680,10 +688,10 @@ export class ReviewerAssignmentService {
 
       const result = await client.query(query, params);
       return result.rows;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   /**
    * Get assignments for a reviewer
@@ -702,17 +710,17 @@ export class ReviewerAssignmentService {
       if (status) {
         query += ' AND status = $2';
         params.push(status);
-      }
+
 
       query += ' ORDER BY assigned_at DESC LIMIT $' + (params.length + 1);
       params.push(limit);
 
       const result = await client.query(query, params);
       return result.rows.map(this.mapToReviewAssignment);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -742,13 +750,13 @@ export class ReviewerAssignmentService {
     if (request.required_skills?.length) {
       query += ` AND rp.specializations ?| $${params.length + 1}`;
       params.push(request.required_skills);
-    }
+
 
     // Exclude specific reviewers if requested
     if (request.excluded_reviewers?.length) {
       query += ` AND rp.id NOT IN (${request.excluded_reviewers.map((_, i) => `$${params.length + i + 1}`).join(', ')})`;
       params.push(...request.excluded_reviewers);
-    }
+
 
     // Apply strategy-specific ordering
     switch (strategy) {
@@ -763,9 +771,9 @@ export class ReviewerAssignmentService {
             FROM unnest($${params.length + 1}::text[]) as skill
           ) DESC, current_active_assignments ASC`;
         params.push(request.required_skills);
-      } else {
+ else {
         query += ' ORDER BY current_active_assignments ASC';
-      }
+
       break;
     case AssignmentStrategy.ROUND_ROBIN:
       query += ' ORDER BY (rp.performance_metrics->>\'last_review_date\')::timestamp ASC NULLS FIRST';
@@ -775,13 +783,13 @@ export class ReviewerAssignmentService {
       break;
     default:
       query += ' ORDER BY current_active_assignments ASC';
-    }
+
 
     query += ' LIMIT 1';
 
     const result = await client.query(query, params);
     return result.rows.length > 0 ? this.mapToReviewerProfile(result.rows[0]) : null;
-  }
+
 
   private async getAssignmentRules(reviewType: ReviewType): Promise<AssignmentRule[]> {
 
@@ -798,10 +806,10 @@ export class ReviewerAssignmentService {
         conditions: JSON.parse(row.conditions),
         required_skills: JSON.parse(row.required_skills)
       }));
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   private selectBestRule(rules: AssignmentRule[], request: AssignmentRequest): AssignmentRule | null {
     // Simple rule selection - could be enhanced with condition evaluation
@@ -809,7 +817,7 @@ export class ReviewerAssignmentService {
       !rule.required_skills.length || 
       rule.required_skills.some(skill => request.required_skills?.includes(skill))
     ) || rules[0];
-  }
+
 
   private calculateDueDate(request: Partial<AssignmentRequest>): Date {
     const now = new Date();
@@ -828,7 +836,7 @@ export class ReviewerAssignmentService {
     case 'low':
       hoursToAdd = 72;
       break;
-    }
+
 
     // Adjust based on review type
     switch (request.review_type) {
@@ -838,10 +846,10 @@ export class ReviewerAssignmentService {
     case ReviewType.VERIFICATION_REQUEST:
       hoursToAdd *= 2; // Verification can take longer
       break;
-    }
+
 
     return new Date(now.getTime() + (hoursToAdd * 60 * 60 * 1000));
-  }
+
 
   private estimateDuration(request: AssignmentRequest): number {
     // Estimate review duration based on type and complexity
@@ -864,10 +872,10 @@ export class ReviewerAssignmentService {
     case 'high':
       duration *= 1.1;
       break;
-    }
+
 
     return duration;
-  }
+
 
   private async logAssignmentHistory(
     client: PoolClient,
@@ -889,7 +897,7 @@ export class ReviewerAssignmentService {
       details.performed_by,
       JSON.stringify(details)
     ]);
-  }
+
 
   private async getReviewerProfile(reviewerId: string): Promise<ReviewerProfile | null> {
 
@@ -900,10 +908,10 @@ export class ReviewerAssignmentService {
         [reviewerId]
       );
       return result.rows.length > 0 ? this.mapToReviewerProfile(result.rows[0]) : null;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   private mapToReviewerProfile(row: unknown): ReviewerProfile {
     return {
@@ -919,7 +927,7 @@ export class ReviewerAssignmentService {
       created_at: row.created_at,
       updated_at: row.updated_at
     };
-  }
+
 
   private mapToReviewAssignment(row: unknown): ReviewAssignment {
     return {
@@ -942,5 +950,4 @@ export class ReviewerAssignmentService {
       actual_duration_hours: parseFloat(row.actual_duration_hours) || undefined,
       metadata: JSON.parse(row.metadata || '{}')
     };
-  }
-}
+

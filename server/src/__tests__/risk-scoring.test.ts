@@ -8,7 +8,7 @@ import {
   RiskFactors,
   RiskScore,
   RiskScoringConfig
-} from '../services/RiskScoringService';
+ from '../services/RiskScoringService';
 
 describe('RiskScoringService', () => {
   let riskScoring: RiskScoringService;
@@ -30,7 +30,7 @@ describe('RiskScoringService', () => {
           fingerprint: 'device123', 
           lastSeen: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
           frequency: 90 
-        }
+
       ],
       typicalLoginTimes: [
         { hourOfDay: 9, dayOfWeek: 1, frequency: 50 }, // Monday 9 AM
@@ -50,7 +50,7 @@ describe('RiskScoringService', () => {
         region: 'CA',
         city: 'San Francisco',
         coordinates: { lat: 37.7749, lng: -122.4194 }
-  }
+
       timestamp: new Date('2024-01-15T09:00:00Z'), // Monday 9 AM
       success: true,
       sessionId: 'session123',
@@ -85,7 +85,7 @@ describe('RiskScoringService', () => {
           region: 'Beijing',
           city: 'Beijing',
           coordinates: { lat: 39.9042, lng: 116.4074 }
-        }
+
       };
 
       const result = await riskScoring.calculateRiskScore(
@@ -108,7 +108,7 @@ describe('RiskScoringService', () => {
           success: false,
           timestamp: new Date(Date.now() - (15 - i) * 60 * 1000) // 15 minutes ago to now
         });
-      }
+
 
       const result = await riskScoring.calculateRiskScore(
         baseLoginAttempt,
@@ -131,7 +131,7 @@ describe('RiskScoringService', () => {
           success: false,
           timestamp: new Date(Date.now() - (25 - i) * 30 * 1000) // 12.5 minutes ago to now
         });
-      }
+
 
       const result = await riskScoring.calculateRiskScore(
         baseLoginAttempt,
@@ -152,7 +152,7 @@ describe('RiskScoringService', () => {
           region: 'CA',
           city: 'Los Angeles',
           coordinates: { lat: 34.0522, lng: -118.2437 }
-  }
+
         timestamp: new Date(Date.now() - 30 * 60 * 1000) // 30 minutes ago
       };
 
@@ -164,7 +164,7 @@ describe('RiskScoringService', () => {
           region: 'England',
           city: 'London',
           coordinates: { lat: 51.5074, lng: -0.1278 }
-        }
+
       };
 
       const result = await riskScoring.calculateRiskScore(
@@ -294,7 +294,7 @@ describe('RiskScoringService', () => {
           region: 'TX',
           city: 'Austin',
           coordinates: { lat: 30.2672, lng: -97.7431 }
-        }
+
       };
 
       const sameCountryResult = await riskScoring.calculateRiskScore(
@@ -312,7 +312,7 @@ describe('RiskScoringService', () => {
           region: 'Berlin',
           city: 'Berlin',
           coordinates: { lat: 52.5200, lng: 13.4050 }
-        }
+
       };
 
       const newCountryResult = await riskScoring.calculateRiskScore(
@@ -331,7 +331,7 @@ describe('RiskScoringService', () => {
           ...baseLoginAttempt,
           timestamp: new Date(Date.now() - i * 60 * 60 * 1000) // Every hour for 25 hours
         });
-      }
+
 
       const result = await riskScoring.calculateRiskScore(
         baseLoginAttempt,
@@ -366,13 +366,13 @@ describe('RiskScoringService', () => {
           behavioral: 0.2,
           patterns: 0.2,
           contextual: 0.1
-  }
+
         thresholds: {
           low: 20,
           medium: 50,
           high: 80,
           critical: 95
-        }
+
       };
 
       const customRiskScoring = new RiskScoringService(customConfig);
@@ -397,7 +397,7 @@ describe('RiskScoringService', () => {
           region: 'Beijing',
           city: 'Beijing',
           coordinates: { lat: 39.9042, lng: 116.4074 }
-  }
+
         deviceFingerprint: 'suspicious_device',
         twoFactorUsed: false,
         timestamp: new Date('2024-01-15T03:00:00Z') // 3 AM
@@ -411,7 +411,7 @@ describe('RiskScoringService', () => {
           success: false,
           timestamp: new Date(Date.now() - (20 - i) * 60 * 1000)
         });
-      }
+
 
       const result = await riskScoring.calculateRiskScore(
         highRiskAttempt,
@@ -432,7 +432,7 @@ describe('RiskScoringService', () => {
           region: 'Moscow',
           city: 'Moscow',
           coordinates: { lat: 55.7558, lng: 37.6176 }
-  }
+
         twoFactorUsed: false
       };
 
@@ -479,7 +479,7 @@ describe('RiskScoringService', () => {
           region: '',
           city: '',
           coordinates: undefined
-        }
+
       };
 
       const result = await riskScoring.calculateRiskScore(
@@ -500,7 +500,7 @@ describe('RiskScoringService', () => {
             fingerprint: 'device123',
             lastSeen: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000), // 60 days ago
             frequency: 50
-          }
+
         ]
       };
 
@@ -523,7 +523,7 @@ describe('RiskScoringService', () => {
           ...baseLoginAttempt,
           timestamp: new Date(Date.now() - i * 60 * 1000) // Every minute
         });
-      }
+
 
       const startTime = Date.now();
       const result = await riskScoring.calculateRiskScore(
@@ -546,7 +546,7 @@ describe('RiskScoringService', () => {
           success: false,
           timestamp: new Date(Date.now() - (100 - i) * 60 * 1000)
         });
-      }
+
 
       const result = await riskScoring.calculateRiskScore(
         baseLoginAttempt,
@@ -569,19 +569,18 @@ expect.extend({
         message: () => `expected ${received} not to be one of ${options.join(', ')}`,
         pass: true
       };
-    } else {
+ else {
       return {
         message: () => `expected ${received} to be one of ${options.join(', ')}`,
         pass: false
       };
-    }
-  }
+
+
 });
 
 declare global {
   namespace jest {
     interface Matchers<R> {
       toBeOneOf(options: any[]): R;
-    }
-  }
-}
+
+

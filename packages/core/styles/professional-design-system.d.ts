@@ -7,109 +7,89 @@
  */
 
 }
-export interface ProfessionalColorPalette {
-    background: {
+}
+export interface ProfessionalColorPalette { background: {
         primary: string;
         secondary: string;
         tertiary: string;
         elevated: string;
-        inverse: string;
+        inverse: string }
 }
     };
-    text: {
-        primary: string;
+    text: { primary: string;
         secondary: string;
         tertiary: string;
         inverse: string;
-        accent: string;
-    };
-    accent: {
-        orange: string;
+        accent: string };
+    accent: { orange: string;
         blue: string;
         cyan: string;
         purple: string;
         green: string;
         red: string;
-        yellow: string;
-    };
-    nodes: {
-        text: string;
+        yellow: string };
+    nodes: { text: string;
         logic: string;
         output: string;
         variable: string;
         advanced: string;
-        transform: string;
-    };
-    ui: {
-        border: string;
+        transform: string };
+    ui: { border: string;
         borderHover: string;
         borderActive: string;
         focus: string;
         selection: string;
-        hover: string;
-    };
+        hover: string };
 
 }
-export interface ProfessionalTypography {
-    fontFamilies: {
+}
+export interface ProfessionalTypography { fontFamilies: {
         primary: string;
         mono: string;
-        heading: string;
+        heading: string }
 }
     };
-    fontSizes: {
-        xs: string;
+    fontSizes: { xs: string;
         sm: string;
         base: string;
         lg: string;
         xl: string;
         '2xl': string;
-        '3xl': string;
-    };
-    fontWeights: {
-        normal: number;
+        '3xl': string };
+    fontWeights: { normal: number;
         medium: number;
         semibold: number;
-        bold: number;
-    };
-    lineHeights: {
-        tight: number;
+        bold: number };
+    lineHeights: { tight: number;
         normal: number;
-        relaxed: number;
-    };
-    letterSpacing: {
-        tight: string;
+        relaxed: number };
+    letterSpacing: { tight: string;
         normal: string;
-        wide: string;
-    };
+        wide: string };
 
 }
-export interface ProfessionalShadows {
-    elevation: {
+}
+export interface ProfessionalShadows { elevation: {
         none: string;
         sm: string;
         md: string;
         lg: string;
         xl: string;
-        '2xl': string;
+        '2xl': string }
 }
     };
-    node: {
-        default: string;
+    node: { default: string;
         hover: string;
         selected: string;
-        focus: string;
-    };
-    glow: {
-        subtle: string;
+        focus: string };
+    glow: { subtle: string;
         medium: string;
         strong: string;
-        accent: string;
-    };
+        accent: string };
 
 }
-export interface ProfessionalSpacing {
-    px: string;
+}
+export interface ProfessionalSpacing { px: string;
     0.5: string;
     1: string;
     2: string;
@@ -123,11 +103,10 @@ export interface ProfessionalSpacing {
     16: string;
     20: string;
     24: string;
-    32: string;
-
+    32: string }
 }
-export interface ProfessionalBorderRadius {
-    none: string;
+}
+export interface ProfessionalBorderRadius { none: string;
     sm: string;
     md: string;
     lg: string;
@@ -139,11 +118,10 @@ export declare const professionalColors: ProfessionalColorPalette;
 export declare const professionalTypography: ProfessionalTypography;
 export declare const professionalShadows: ProfessionalShadows;
 export declare const professionalSpacing: ProfessionalSpacing;
-export declare const professionalBorderRadius: ProfessionalBorderRadius;
-
+export declare const professionalBorderRadius: ProfessionalBorderRadius }
 }
-export interface ProfessionalDesignSystem {
-    colors: ProfessionalColorPalette;
+}
+export interface ProfessionalDesignSystem { colors: ProfessionalColorPalette;
     typography: ProfessionalTypography;
     shadows: ProfessionalShadows;
     spacing: ProfessionalSpacing;
@@ -186,7 +164,7 @@ export declare const generateCSSCustomProperties: (colors?: ProfessionalColorPal
     '--space-8': string;
     '--radius-sm': string;
     '--radius-md': string;
-    '--radius-lg': string;
+    '--radius-lg': string }
 }
 };
 //# sourceMappingURL=professional-design-system.d.ts.map

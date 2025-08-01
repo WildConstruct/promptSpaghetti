@@ -5,8 +5,8 @@ import { ReconnectionState, ReconnectionConfig } from './ReconnectionHandler';
 import { SyncDelta, RecoveryConfig } from './SynchronizationRecovery';
 
 }
-export interface NetworkResilienceConfig {
-    enabled: boolean;
+}
+export interface NetworkResilienceConfig { enabled: boolean;
     offlineQueue: Partial<OfflineQueueConfig>;
     connectionState: Partial<ConnectionStateConfig>;
     reconnection: Partial<ReconnectionConfig>;
@@ -16,23 +16,19 @@ export interface NetworkResilienceConfig {
         showOfflineIndicator: boolean;
         showConnectionQuality: boolean;
         notifyOnReconnect: boolean;
-        notifyOnSyncComplete: boolean;
+        notifyOnSyncComplete: boolean }
 }
     };
-    persistence: {
-        enabled: boolean;
+    persistence: { enabled: boolean;
         storageKey: string;
-        maxStorageSize: number;
-    };
-    performance: {
-        enableMetrics: boolean;
+        maxStorageSize: number };
+    performance: { enableMetrics: boolean;
         metricsInterval: number;
-        enableProfiling: boolean;
-    };
+        enableProfiling: boolean };
 
 }
-export interface ResilienceMetrics {
-    uptime: number;
+}
+export interface ResilienceMetrics { uptime: number;
     totalDowntime: number;
     connectionAttempts: number;
     successfulReconnections: number;
@@ -41,8 +37,8 @@ export interface ResilienceMetrics {
     pendingOperations: number;
     averageReconnectTime: number;
     dataLoss: number;
-    conflicts: number;
-
+    conflicts: number }
+}
 }
 export interface NetworkStatus {
     isOnline: boolean;
@@ -189,4 +185,5 @@ export declare class NetworkResilienceManager extends EventEmitter {
     private loadPersistedState;
 
 //# sourceMappingURL=NetworkResilienceManager.d.ts.map
+}
 }

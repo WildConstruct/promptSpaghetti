@@ -313,7 +313,7 @@ borderRadius: '6px',
                                 fontSize: '10px',
                                 padding: '2px 6px',
                                 background: `${getStatusColor(requirement.status)}20`
-                            } }), ", color: getStatusColor(requirement.status), borderRadius: '4px', fontWeight: 600, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>", requirement.status.replace('_', ' ')] }), requirement.riskLevel === 'critical' && ()
+                            } }), ", color: getStatusColor(requirement.status), borderRadius: '4px', fontWeight: 600, textTransform: 'uppercase', whiteSpace: 'nowrap'; }}>", requirement.status.replace('_', ' ')] }), requirement.riskLevel === 'critical' && ()
                     < span, " style=", {
                     fontSize: '10px',
                     padding: '2px 6px',
@@ -384,7 +384,7 @@ div >
     _jsxs("div", { style: { padding: '24px', maxWidth: '1400px', margin: '0 auto' }, children: [_jsx("div", { style: {
                     background: themeStyles.surface,
                     border: `1px solid ${themeStyles.border}`
-                } }), ", borderRadius: '8px', padding: '24px', marginBottom: '24px', textAlign: 'center' }}>", _jsx("h2", { style: {
+                } }), ", borderRadius: '8px', padding: '24px', marginBottom: '24px', textAlign: 'center'; }}>", _jsx("h2", { style: {
                     margin: '0 0 16px 0',
                     fontSize: '18px',
                     fontWeight: 600,
@@ -415,7 +415,7 @@ _jsxs("div", { style: {
     }, children: [_jsx("div", { style: {
                 background: themeStyles.surface,
                 border: `1px solid ${themeStyles.border}`
-            } }), ", borderRadius: '8px', padding: '16px' }}>", _jsx("h4", { style: {
+            } }), ", borderRadius: '8px', padding: '16px'; }}>", _jsx("h4", { style: {
                 margin: '0 0 8px 0',
                 fontSize: '12px',
                 color: themeStyles.textSecondary,
@@ -512,7 +512,7 @@ style = {};
                 }, children: "Framework:" }), _jsx("select", { value: selectedFramework, onChange: (e) => setSelectedFramework(e.target.value), style: {
                     background: themeStyles.surface,
                     border: `1px solid ${themeStyles.border}`
-                } }), ", borderRadius: '4px', padding: '6px 8px', color: themeStyles.text, fontSize: '12px' }} >", _jsx("option", { value: "all", children: "All Frameworks" }), frameworks.map(framework => ()
+                } }), ", borderRadius: '4px', padding: '6px 8px', color: themeStyles.text, fontSize: '12px'; }} >", _jsx("option", { value: "all", children: "All Frameworks" }), frameworks.map(framework => ()
                 < option, key = { framework }, value = { framework } >
                 {})] });
 select >
@@ -525,7 +525,7 @@ div >
                 }, children: "Status:" }), _jsx("select", { value: selectedStatus, onChange: (e) => setSelectedStatus(e.target.value), style: {
                     background: themeStyles.surface,
                     border: `1px solid ${themeStyles.border}`
-                } }), ", borderRadius: '4px', padding: '6px 8px', color: themeStyles.text, fontSize: '12px' }} >", _jsx("option", { value: "all", children: "All Statuses" }), Object.values(ComplianceStatus).map(status => ()
+                } }), ", borderRadius: '4px', padding: '6px 8px', color: themeStyles.text, fontSize: '12px'; }} >", _jsx("option", { value: "all", children: "All Statuses" }), Object.values(ComplianceStatus).map(status => ()
                 < option, key = { status }, value = { status } >
                 { status, : .replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) })] });
 select >

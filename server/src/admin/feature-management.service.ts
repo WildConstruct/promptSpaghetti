@@ -6,8 +6,8 @@ import { EventEmitter } from 'events';
 import { FeatureToggleService } from '../services/feature-toggle-service';
 import { EnhancedToggleEvaluationService } from '../services/EnhancedToggleEvaluationService';
 
-}
-}
+
+
 export interface FeatureToggleAdmin {
   id: string;
   key: string;
@@ -27,8 +27,9 @@ export interface FeatureToggleAdmin {
     user_ids: string[];
     percentage: number;
     rules: TargetingRule[];
-}
-}
+
+
+
   };
   
   scheduling?: {
@@ -55,49 +56,52 @@ export interface FeatureToggleAdmin {
   audit_log?: AuditLogEntry[];
   usage_stats?: FeatureUsageStats;
   health_status?: FeatureHealthStatus;
-}
 
-}
-}
+
+
+
 export interface TargetingRule {
   field: string;
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'contains' | 'regex' | 'greater_than' | 'less_than';
   value: any;
   condition?: 'and' | 'or';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackCondition {
   metric: string;
   threshold: number;
   operator: 'greater_than' | 'less_than' | 'equals';
   window_minutes: number;
   action: 'disable' | 'rollback' | 'alert';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AuditLogEntry {
   id: string;
   user_id: string;
   user_name: string;
   action: 'created' | 'updated' | 'enabled' | 'disabled' | 'deleted' | 'emergency_override';
-}
-}
+
+
+
   changes: Record<string, { old: any; new: any }>;
   reason?: string;
   timestamp: string;
   ip_address?: string;
   user_agent?: string;
-}
 
-}
-}
+
+
+
 export interface FeatureUsageStats {
   total_evaluations: number;
   evaluations_last_24h: number;
@@ -105,24 +109,26 @@ export interface FeatureUsageStats {
   avg_response_time_ms: number;
   error_rate_percentage: number;
   last_evaluation: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FeatureHealthStatus {
   status: 'healthy' | 'warning' | 'critical' | 'disabled';
   issues: string[];
   last_check: string;
   performance_score: number;
   availability_percentage: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FeatureDashboardStats {
   total_features: number;
   enabled_features: number;
@@ -134,12 +140,13 @@ export interface FeatureDashboardStats {
   unique_users_24h: number;
   avg_response_time: number;
   recent_changes: AuditLogEntry[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CreateFeatureRequest {
   key: string;
   name: string;
@@ -152,8 +159,9 @@ export interface CreateFeatureRequest {
     user_ids?: string[];
     percentage?: number;
     rules?: TargetingRule[];
-}
-}
+
+
+
   };
   scheduling?: {
     enable_at?: string;
@@ -172,10 +180,10 @@ export interface CreateFeatureRequest {
     health_check_enabled?: boolean;
     rollback_conditions?: RollbackCondition[];
   };
-}
 
-}
-}
+
+
+
 export interface UpdateFeatureRequest {
   name?: string;
   description?: string;
@@ -186,8 +194,9 @@ export interface UpdateFeatureRequest {
     user_ids?: string[];
     percentage?: number;
     rules?: TargetingRule[];
-}
-}
+
+
+
   };
   scheduling?: {
     enable_at?: string;
@@ -207,7 +216,7 @@ export interface UpdateFeatureRequest {
     rollback_conditions?: RollbackCondition[];
   };
   reason?: string;
-}
+
 
 export class FeatureManagementService extends EventEmitter {
   constructor(
@@ -218,7 +227,7 @@ export class FeatureManagementService extends EventEmitter {
     super();
     this.setupScheduledTasks();
     this.setupHealthMonitoring();
-  }
+
 
   // Feature CRUD operations
   async createFeature(adminUserId: string, featureData: CreateFeatureRequest): Promise<FeatureToggleAdmin> {
@@ -235,12 +244,12 @@ export class FeatureManagementService extends EventEmitter {
 
       if (existingFeature.rows.length > 0) {
         throw new Error(`Feature key '${featureData.key}' already exists`);
-      }
+
 
       // Validate dependencies
       if (featureData.dependencies) {
         await this.validateDependencies(featureData.dependencies);
-      }
+
 
       // Insert feature
       const featureResult = await client.query(`
@@ -290,13 +299,13 @@ export class FeatureManagementService extends EventEmitter {
       this.emit('featureCreated', feature);
 
       return feature;
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async updateFeature(
     featureId: string,
@@ -312,12 +321,12 @@ export class FeatureManagementService extends EventEmitter {
       const currentFeature = await this.getFeatureById(featureId);
       if (!currentFeature) {
         throw new Error('Feature not found');
-      }
+
 
       // Validate dependencies if updated
       if (updates.dependencies) {
         await this.validateDependencies(updates.dependencies);
-      }
+
 
       // Build update query dynamically
       const updateFields: string[] = [];
@@ -327,35 +336,35 @@ export class FeatureManagementService extends EventEmitter {
       if (updates.name !== undefined) {
         updateFields.push(`name = $${paramCount++}`);
         updateValues.push(updates.name);
-      }
+
       if (updates.description !== undefined) {
         updateFields.push(`description = $${paramCount++}`);
         updateValues.push(updates.description);
-      }
+
       if (updates.value !== undefined) {
         updateFields.push(`value = $${paramCount++}`);
         updateValues.push(JSON.stringify(updates.value));
-      }
+
       if (updates.enabled !== undefined) {
         updateFields.push(`enabled = $${paramCount++}`);
         updateValues.push(updates.enabled);
-      }
+
       if (updates.user_targeting !== undefined) {
         updateFields.push(`user_targeting = $${paramCount++}`);
         updateValues.push(JSON.stringify(updates.user_targeting));
-      }
+
       if (updates.scheduling !== undefined) {
         updateFields.push(`scheduling = $${paramCount++}`);  
         updateValues.push(JSON.stringify(updates.scheduling));
-      }
+
       if (updates.dependencies !== undefined) {
         updateFields.push(`dependencies = $${paramCount++}`);
         updateValues.push(JSON.stringify(updates.dependencies));
-      }
+
       if (updates.monitoring !== undefined) {
         updateFields.push(`monitoring = $${paramCount++}`);
         updateValues.push(JSON.stringify(updates.monitoring));
-      }
+
 
       updateFields.push(`last_updated_by = $${paramCount++}`);
       updateValues.push(adminUserId);
@@ -380,7 +389,7 @@ export class FeatureManagementService extends EventEmitter {
             old: (currentFeature as any)[key],
             new: updates[key as keyof UpdateFeatureRequest]
           };
-        }
+
       });
 
       await this.logAuditEntry(client, featureId, adminUserId, 'updated', changes, updates.reason);
@@ -393,13 +402,13 @@ export class FeatureManagementService extends EventEmitter {
       this.emit('featureUpdated', updatedFeature);
 
       return updatedFeature;
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async toggleFeature(featureId: string, adminUserId: string, enabled: boolean, reason?: string): Promise<void> {
 
@@ -410,7 +419,7 @@ export class FeatureManagementService extends EventEmitter {
       const currentFeature = await this.getFeatureById(featureId);
       if (!currentFeature) {
         throw new Error('Feature not found');
-      }
+
 
       await client.query(
         'UPDATE admin_feature_toggles SET enabled = $1, last_updated_by = $2, updated_at = NOW() WHERE id = $3',
@@ -425,13 +434,13 @@ export class FeatureManagementService extends EventEmitter {
 
       // Emit event for real-time updates
       this.emit('featureToggled', { featureId, enabled, adminUserId });
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async deleteFeature(featureId: string, adminUserId: string, reason?: string): Promise<void> {
 
@@ -442,7 +451,7 @@ export class FeatureManagementService extends EventEmitter {
       const currentFeature = await this.getFeatureById(featureId);
       if (!currentFeature) {
         throw new Error('Feature not found');
-      }
+
 
       // Check for dependencies
       const dependentFeatures = await client.query(
@@ -455,7 +464,7 @@ export class FeatureManagementService extends EventEmitter {
       if (dependentFeatures.rows.length > 0) {
         const dependentKeys = dependentFeatures.rows.map(f => f.name).join(', ');
         throw new Error(`Cannot delete feature: required by ${dependentKeys}`);
-      }
+
 
       // Log audit entry before deletion
       await this.logAuditEntry(client, featureId, adminUserId, 'deleted', {
@@ -469,13 +478,13 @@ export class FeatureManagementService extends EventEmitter {
 
       // Emit event for real-time updates
       this.emit('featureDeleted', { featureId, adminUserId });
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Feature retrieval and dashboard
   async getAllFeatures(filters?: {
@@ -504,31 +513,31 @@ export class FeatureManagementService extends EventEmitter {
     if (filters?.enabled !== undefined) {
       query += ` AND f.enabled = $${params.length + 1}`;
       params.push(filters.enabled);
-    }
+
 
     if (filters?.type) {
       query += ` AND f.type = $${params.length + 1}`;
       params.push(filters.type);
-    }
+
 
     if (filters?.has_targeting) {
       query += ` AND f.user_targeting IS NOT NULL`;
-    }
+
 
     if (filters?.has_scheduling) {
       query += ` AND f.scheduling IS NOT NULL`;
-    }
+
 
     if (filters?.search) {
       query += ` AND (f.name ILIKE $${params.length + 1} OR f.key ILIKE $${params.length + 1} OR f.description ILIKE $${params.length + 1})`;
       params.push(`%${filters.search}%`);
-    }
+
 
     query += ` ORDER BY f.created_at DESC`;
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapRowToFeature);
-  }
+
 
   async getFeatureById(featureId: string): Promise<FeatureToggleAdmin | null> {
 
@@ -546,7 +555,7 @@ export class FeatureManagementService extends EventEmitter {
     `, [featureId]);
 
     return result.rows.length > 0 ? this.mapRowToFeature(result.rows[0]) : null;
-  }
+
 
   async getFeatureAuditLog(featureId: string, limit = 50): Promise<AuditLogEntry[]> {
 
@@ -572,7 +581,7 @@ export class FeatureManagementService extends EventEmitter {
       ip_address: row.ip_address,
       user_agent: row.user_agent
     }));
-  }
+
 
   async getDashboardStats(): Promise<FeatureDashboardStats> {
 
@@ -637,7 +646,7 @@ export class FeatureManagementService extends EventEmitter {
         user_agent: row.user_agent
       }))
     };
-  }
+
 
   // Emergency controls
   async emergencyDisableFeature(featureId: string, adminUserId: string, reason: string): Promise<void> {
@@ -659,13 +668,13 @@ export class FeatureManagementService extends EventEmitter {
 
       // Emit high-priority event
       this.emit('emergencyDisable', { featureId, adminUserId, reason });
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Private helper methods
   private async validateDependencies(dependencies: { requires?: string[]; conflicts_with?: string[] }): Promise<void> {
@@ -681,8 +690,8 @@ export class FeatureManagementService extends EventEmitter {
       
       if (missingKeys.length > 0) {
         throw new Error(`Required features not found: ${missingKeys.join(', ')}`);
-      }
-    }
+
+
 
     if (dependencies.conflicts_with) {
       const conflictingFeatures = await this.db.query(
@@ -693,9 +702,9 @@ export class FeatureManagementService extends EventEmitter {
       if (conflictingFeatures.rows.length > 0) {
         const conflictingKeys = conflictingFeatures.rows.map(f => f.key);
         throw new Error(`Conflicting features are enabled: ${conflictingKeys.join(', ')}`);
-      }
-    }
-  }
+
+
+
 
   private async logAuditEntry(
     client: PoolClient,
@@ -710,7 +719,7 @@ export class FeatureManagementService extends EventEmitter {
       INSERT INTO feature_audit_log (feature_id, user_id, action, changes, reason)
       VALUES ($1, $2, $3, $4, $5)
     `, [featureId, userId, action, JSON.stringify(changes), reason]);
-  }
+
 
   private mapRowToFeature(row: any): FeatureToggleAdmin {
     return {
@@ -736,47 +745,47 @@ export class FeatureManagementService extends EventEmitter {
         avg_response_time_ms: row.avg_response_time_ms || 0,
         error_rate_percentage: row.error_rate_percentage || 0,
         last_evaluation: row.last_evaluation
-  }
+
       health_status: {
         status: row.health_status_status || 'healthy',
         issues: row.issues ? JSON.parse(row.issues) : [],
         last_check: row.health_last_check,
         performance_score: row.performance_score || 100,
         availability_percentage: row.availability_percentage || 100
-      }
+
     };
-  }
+
 
   private setupScheduledTasks(): void {
     // Process scheduled feature toggles every minute
     setInterval(async () => {
       try {
         await this.processScheduledToggles();
-      } catch (error) {
+ catch (error) {
         console.error('Error processing scheduled toggles:', error);
-      }
+
     }, 60000);
 
     // Update usage statistics every 5 minutes
     setInterval(async () => {
       try {
         await this.updateUsageStatistics();
-      } catch (error) {
+ catch (error) {
         console.error('Error updating usage statistics:', error);
-      }
+
     }, 300000);
-  }
+
 
   private setupHealthMonitoring(): void {
     // Health check every 2 minutes
     setInterval(async () => {
       try {
         await this.performHealthChecks();
-      } catch (error) {
+ catch (error) {
         console.error('Error performing health checks:', error);
-      }
+
     }, 120000);
-  }
+
 
   private async processScheduledToggles(): Promise<void> {
 
@@ -796,13 +805,13 @@ export class FeatureManagementService extends EventEmitter {
       
       if (scheduling.enable_at && new Date(scheduling.enable_at) <= new Date(now)) {
         await this.toggleFeature(feature.id, 'system', true, `Scheduled enable at ${scheduling.enable_at}`);
-      }
+
       
       if (scheduling.disable_at && new Date(scheduling.disable_at) <= new Date(now)) {
         await this.toggleFeature(feature.id, 'system', false, `Scheduled disable at ${scheduling.disable_at}`);
-      }
-    }
-  }
+
+
+
 
   private async updateUsageStatistics(): Promise<void> {
 
@@ -813,7 +822,7 @@ export class FeatureManagementService extends EventEmitter {
       SET last_updated = NOW()
       WHERE last_updated < NOW() - INTERVAL '5 minutes'
     `);
-  }
+
 
   private async performHealthChecks(): Promise<void> {
 
@@ -831,7 +840,7 @@ export class FeatureManagementService extends EventEmitter {
 
         if (healthScore < 70) {
           issues.push('Performance degradation detected');
-        }
+
 
         const status = issues.length === 0 ? 'healthy' : 
                       issues.length <= 2 ? 'warning' : 'critical';
@@ -841,16 +850,15 @@ export class FeatureManagementService extends EventEmitter {
           SET status = $1, issues = $2, last_check = NOW(), performance_score = $3
           WHERE feature_id = $4
         `, [status, JSON.stringify(issues), healthScore, feature.id]);
-
-      } catch (error) {
+ catch (error) {
         await this.db.query(`
           UPDATE feature_health_status
           SET status = 'critical', issues = $1, last_check = NOW()
           WHERE feature_id = $2
         `, [JSON.stringify([`Health check failed: ${error.message}`]), feature.id]);
-      }
-    }
-  }
+
+
+
 
   private async calculateHealthScore(featureId: string): Promise<number> {
 
@@ -875,5 +883,4 @@ export class FeatureManagementService extends EventEmitter {
     if (errorRate > 1) score -= Math.min(40, errorRate * 10);
 
     return Math.max(0, Math.round(score));
-  }
-}
+

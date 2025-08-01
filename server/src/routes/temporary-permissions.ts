@@ -67,13 +67,13 @@ export async function temporaryPermissionsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof TemporaryRoleRequestSchema>
-  }>('/roles', {
+>('/roles', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'manage_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -98,8 +98,7 @@ export async function temporaryPermissionsRoutes(
         data: assignment,
         message: 'Temporary role assignment granted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error granting temporary role:', error);
       
       if (error instanceof z.ZodError) {
@@ -108,14 +107,14 @@ export async function temporaryPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to grant temporary role',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -124,13 +123,13 @@ export async function temporaryPermissionsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof DirectPermissionRequestSchema>
-  }>('/direct', {
+>('/direct', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'manage_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -155,8 +154,7 @@ export async function temporaryPermissionsRoutes(
         data: grants,
         message: 'Direct permissions granted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error granting direct permissions:', error);
       
       if (error instanceof z.ZodError) {
@@ -165,14 +163,14 @@ export async function temporaryPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to grant direct permissions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -181,13 +179,13 @@ export async function temporaryPermissionsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof EmergencyAccessRequestSchema>
-  }>('/emergency', {
+>('/emergency', {
     preHandler: fastify.requirePermission([
       {
         resource: 'system',
         action: 'emergency_access',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -210,7 +208,7 @@ export async function temporaryPermissionsRoutes(
           severity: body.severity,
           incidentId: body.incidentId,
           reviewRequired: body.reviewRequired
-  }
+
         context
       );
 
@@ -219,8 +217,7 @@ export async function temporaryPermissionsRoutes(
         data: grant,
         message: 'Emergency access granted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error granting emergency access:', error);
       
       if (error instanceof z.ZodError) {
@@ -229,14 +226,14 @@ export async function temporaryPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to grant emergency access',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -246,13 +243,13 @@ export async function temporaryPermissionsRoutes(
   fastify.post<{
     Params: { grantId: string };
     Body: z.infer<typeof RevokePermissionSchema>
-  }>('/:grantId/revoke', {
+>('/:grantId/revoke', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'manage_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -266,7 +263,7 @@ export async function temporaryPermissionsRoutes(
           success: false,
           error: 'Invalid grant ID format'
         });
-      }
+
 
       const context = {
         ipAddress: request.ip,
@@ -285,8 +282,7 @@ export async function temporaryPermissionsRoutes(
         success: true,
         message: 'Temporary permissions revoked successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error revoking temporary permissions:', error);
       
       if (error instanceof z.ZodError) {
@@ -295,14 +291,14 @@ export async function temporaryPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to revoke temporary permissions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -311,13 +307,13 @@ export async function temporaryPermissionsRoutes(
    */
   fastify.get<{
     Params: z.infer<typeof GetUserPermissionsParamsSchema>
-  }>('/users/:userId', {
+>('/users/:userId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'read_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -340,10 +336,9 @@ export async function temporaryPermissionsRoutes(
             const hourFromNow = new Date(Date.now() + 60 * 60 * 1000);
             return new Date(grant.expiresAt) <= hourFromNow;
           }).length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting user temporary permissions:', error);
       
       if (error instanceof z.ZodError) {
@@ -352,14 +347,14 @@ export async function temporaryPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to get user temporary permissions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -372,7 +367,7 @@ export async function temporaryPermissionsRoutes(
         resource: 'system',
         action: 'admin',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -395,7 +390,7 @@ export async function temporaryPermissionsRoutes(
           totalPages: 0,
           hasNextPage: false,
           hasPreviousPage: false
-        }
+
       };
 
       return reply.send({
@@ -404,10 +399,9 @@ export async function temporaryPermissionsRoutes(
         metadata: {
           timestamp: new Date().toISOString(),
           systemHealth: 'operational' // Could integrate with monitoring
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting active temporary permissions:', error);
       
       return reply.code(500).send({
@@ -415,7 +409,7 @@ export async function temporaryPermissionsRoutes(
         error: 'Failed to get active temporary permissions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -428,7 +422,7 @@ export async function temporaryPermissionsRoutes(
         resource: 'system',
         action: 'view_analytics',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -442,25 +436,25 @@ export async function temporaryPermissionsRoutes(
           roleAssignments: 0,
           directGrants: 0,
           emergencyAccess: 0
-  }
+
         expired: {
           total: 0,
           autoRevoked: 0,
           manuallyRevoked: 0
-  }
+
         trends: {
           timeframe,
           grantsPerDay: [],
           revocationsPerDay: [],
           emergencyAccessUsage: []
-  }
+
         topGranters: [],
         averageDuration: 0,
         complianceMetrics: {
           emergencyAccessReviewRate: 100,
           averageReviewTime: 24,
           unauthorizedAccessAttempts: 0
-        }
+
       };
 
       return reply.send({
@@ -469,10 +463,9 @@ export async function temporaryPermissionsRoutes(
         metadata: {
           generatedAt: new Date().toISOString(),
           timeframe
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting temporary permissions statistics:', error);
       
       return reply.code(500).send({
@@ -480,7 +473,7 @@ export async function temporaryPermissionsRoutes(
         error: 'Failed to get temporary permissions statistics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -499,7 +492,7 @@ export async function temporaryPermissionsRoutes(
           emergencyAccess: 'available',
           automaticCleanup: 'running',
           auditLogging: 'operational'
-  }
+
         uptime: process.uptime(),
         environment: process.env.NODE_ENV || 'development'
       };
@@ -508,13 +501,11 @@ export async function temporaryPermissionsRoutes(
         success: true,
         data: healthStatus
       });
-
-    } catch (error) {
+ catch (error) {
       return reply.code(503).send({
         success: false,
         error: 'Service unhealthy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}

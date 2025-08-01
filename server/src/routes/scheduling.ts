@@ -9,34 +9,37 @@ import {
   ScheduleType,
   ScheduleAction,
   ScheduleStatus
-} from '../database/scheduling-models';
+ from '../database/scheduling-models';
 
 // Request type definitions
-}
-}
+
+
+
 interface CreateScheduleRequestBody {
   Body: CreateScheduleRequest;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UpdateScheduleRequestBody {
   Body: UpdateScheduleRequest;
-}
-}
-  Params: { id: string };
-}
 
-}
-}
+
+
+  Params: { id: string };
+
+
+
+
 interface GetScheduleRequest {
   Params: { id: string };
-}
 
-}
-}
+
+
+
 interface QuerySchedulesRequest {
   Querystring: {
     toggleId?: string;
@@ -50,42 +53,44 @@ interface QuerySchedulesRequest {
     limit?: number;
     sortBy?: 'startTime' | 'createdAt' | 'priority' | 'status';
     sortOrder?: 'asc' | 'desc';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface DeleteScheduleRequest {
   Params: { id: string };
-}
 
-}
-}
+
+
+
 interface GetExecutionsRequest {
   Params: { scheduleId: string };
   Querystring: { limit?: number };
-}
 
-}
-}
+
+
+
 interface BulkActionRequest {
   Body: {
     scheduleIds: string[];
     action: 'cancel' | 'pause' | 'resume' | 'delete';
     reason?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ManualExecuteRequest {
   Params: { id: string };
   Body: { reason?: string };
-}
+
 
 export async function schedulingRoutes(fastify: FastifyInstance) {
   const schedulingService: SchedulingService = fastify.schedulingService;
@@ -118,8 +123,8 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
               cronExpression: { type: 'string' },
               maxOccurrences: { type: 'number', minimum: 1 },
               endDate: { type: 'string', format: 'date-time' }
-            }
-  }
+
+
           actionConfig: {
             type: 'object',
             properties: {
@@ -132,24 +137,24 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
                   startPercentage: { type: 'number', minimum: 0, maximum: 100 },
                   endPercentage: { type: 'number', minimum: 0, maximum: 100 },
                   incrementMinutes: { type: 'number', minimum: 1 }
-                }
-              }
-            }
-  }
+
+
+
+
           priority: { type: 'number', default: 0 },
           conflictResolution: { type: 'string', enum: ['skip', 'override', 'merge'], default: 'skip' }
-        }
-  }
+
+
       response: {
         201: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<CreateScheduleRequestBody>, reply: FastifyReply) => {
     try {
       const userId = request.user?.id || 'anonymous';
@@ -159,12 +164,12 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         success: true,
         data: schedule
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Get a specific schedule
@@ -176,8 +181,8 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: { id: { type: 'string' } },
         required: ['id']
-      }
-    }
+
+
   }, async (request: FastifyRequest<GetScheduleRequest>, reply: FastifyReply) => {
     try {
       const schedule = await schedulingService.getSchedule(request.params.id);
@@ -187,18 +192,18 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Schedule not found'
         });
-      }
+
 
       reply.send({
         success: true,
         data: schedule
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Query schedules
@@ -220,9 +225,9 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           sortBy: { type: 'string', enum: ['startTime', 'createdAt', 'priority', 'status'], default: 'startTime' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'asc' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<QuerySchedulesRequest>, reply: FastifyReply) => {
     try {
       const result = await schedulingService.querySchedules(request.query);
@@ -235,14 +240,14 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           limit: request.query.limit || 50,
           total: result.total,
           totalPages: Math.ceil(result.total / (request.query.limit || 50))
-        }
+
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Update a schedule
@@ -254,7 +259,7 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: { id: { type: 'string' } },
         required: ['id']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -269,9 +274,9 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           conflictResolution: { type: 'string', enum: ['skip', 'override', 'merge'] },
           enabled: { type: 'boolean' },
           reason: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<UpdateScheduleRequestBody>, reply: FastifyReply) => {
     try {
       const userId = request.user?.id || 'anonymous';
@@ -283,18 +288,18 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Schedule not found'
         });
-      }
+
 
       reply.send({
         success: true,
         data: schedule
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Delete a schedule
@@ -306,8 +311,8 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: { id: { type: 'string' } },
         required: ['id']
-      }
-    }
+
+
   }, async (request: FastifyRequest<DeleteScheduleRequest>, reply: FastifyReply) => {
     try {
       const deleted = await schedulingService.deleteSchedule(request.params.id);
@@ -317,18 +322,18 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Schedule not found'
         });
-      }
+
 
       reply.send({
         success: true,
         message: 'Schedule deleted successfully'
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Get schedule executions
@@ -340,14 +345,14 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: { scheduleId: { type: 'string' } },
         required: ['scheduleId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'number', minimum: 1, maximum: 1000, default: 100 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<GetExecutionsRequest>, reply: FastifyReply) => {
     try {
       const executions = await schedulingService.getExecutionsBySchedule(
@@ -359,12 +364,12 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         success: true,
         data: executions
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Manual execution
@@ -376,14 +381,14 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: { id: { type: 'string' } },
         required: ['id']
-  }
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<ManualExecuteRequest>, reply: FastifyReply) => {
     try {
       const schedule = await schedulingService.getSchedule(request.params.id);
@@ -392,7 +397,7 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Schedule not found'
         });
-      }
+
 
       // This would trigger immediate execution
       // For now, we'll update the next execution time to now
@@ -402,7 +407,7 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           id: request.params.id, 
           nextExecution: new Date(),
           reason: request.body.reason || 'Manual execution'
-  }
+
         userId
       );
 
@@ -410,12 +415,12 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Schedule execution triggered'
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Bulk operations
@@ -430,9 +435,9 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           scheduleIds: { type: 'array', items: { type: 'string' } },
           action: { type: 'string', enum: ['cancel', 'pause', 'resume', 'delete'] },
           reason: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<BulkActionRequest>, reply: FastifyReply) => {
     try {
       const { scheduleIds, action, reason } = request.body;
@@ -465,32 +470,32 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
             const deleted = await schedulingService.deleteSchedule(scheduleId);
             result = deleted ? { id: scheduleId, deleted: true } : null;
             break;
-          }
+
 
           results.push({
             scheduleId,
             success: !!result,
             data: result
           });
-        } catch (error: any) {
+ catch (error: any) {
           results.push({
             scheduleId,
             success: false,
             error: error.message
           });
-        }
-      }
+
+
 
       reply.send({
         success: true,
         data: results
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Get conflicts
@@ -498,7 +503,7 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
     schema: {
       description: 'Get unresolved schedule conflicts',
       tags: ['Scheduling']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const conflicts = await schedulingService.getUnresolvedConflicts();
@@ -507,12 +512,12 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         success: true,
         data: conflicts
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Get analytics
@@ -525,9 +530,9 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         properties: {
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { startDate?: string; endDate?: string } }>, reply: FastifyReply) => {
     try {
       const startDate = request.query.startDate ? new Date(request.query.startDate) : undefined;
@@ -539,12 +544,12 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         success: true,
         data: analytics
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
 
   // Get schedules by toggle
@@ -556,8 +561,8 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: { toggleId: { type: 'string' } },
         required: ['toggleId']
-      }
-    }
+
+
   }, async (request: FastifyRequest<{ Params: { toggleId: string } }>, reply: FastifyReply) => {
     try {
       const schedules = await schedulingService.getSchedulesByToggle(request.params.toggleId);
@@ -566,11 +571,10 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         success: true,
         data: schedules
       });
-    } catch (error: any) {
+ catch (error: any) {
       reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
+
   });
-}

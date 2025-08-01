@@ -59,7 +59,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         error: 'Access denied. Admin role required.' 
       });
       return;
-    }
+
   };
 
   // =============================================
@@ -78,9 +78,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           hasMore: z.boolean()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const filters = {
@@ -91,10 +91,10 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
 
       const result = await transactionMonitoringService.searchTransactions(filters);
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Transaction search error:', error);
       reply.code(500).send({ error: 'Failed to search transactions' });
-    }
+
   });
 
   // Get detailed transaction information
@@ -111,9 +111,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
           flags: z.array(z.any()),
           anomalies: z.array(z.any()),
           riskAnalysis: z.any()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { transactionId } = request.params;
@@ -129,7 +129,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       if (!transaction) {
         reply.code(404).send({ error: 'Transaction not found' });
         return;
-      }
+
 
       reply.send({
         transaction,
@@ -138,10 +138,10 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         anomalies,
         riskAnalysis
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Transaction details error:', error);
       reply.code(500).send({ error: 'Failed to get transaction details' });
-    }
+
   });
 
   // =============================================
@@ -160,9 +160,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { transactionId } = request.params;
@@ -179,15 +179,15 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         success: true,
         message: `Transaction status updated to ${status}`
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Transaction status update error:', error);
       
       if (error.message.includes('not found')) {
         reply.code(404).send({ error: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to update transaction status' });
-      }
-    }
+
+
   });
 
   // Add transaction note
@@ -202,9 +202,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { transactionId } = request.params;
@@ -220,10 +220,10 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Note added successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Add transaction note error:', error);
       reply.code(500).send({ error: 'Failed to add transaction note' });
-    }
+
   });
 
   // Flag transaction for review
@@ -238,9 +238,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { transactionId } = request.params;
@@ -257,10 +257,10 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Transaction flagged for review'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Flag transaction error:', error);
       reply.code(500).send({ error: 'Failed to flag transaction' });
-    }
+
   });
 
   // =============================================
@@ -280,9 +280,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           summary: z.any()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { startDate, endDate, userId, provider } = request.query;
@@ -294,10 +294,10 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       );
 
       reply.send({ summary });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Transaction analytics error:', error);
       reply.code(500).send({ error: 'Failed to get transaction analytics' });
-    }
+
   });
 
   // Generate transaction reports
@@ -309,9 +309,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           report: z.any(),
           downloadUrl: z.string().optional()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { startDate, endDate, reportType, format } = request.body;
@@ -327,7 +327,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
           {
             startDate: new Date(startDate),
             endDate: new Date(endDate)
-  }
+
           'csv'
         );
 
@@ -335,13 +335,13 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         reply.header('Content-Type', 'text/csv');
         reply.header('Content-Disposition', `attachment; filename="transactions_${reportType}_${Date.now()}.csv"`);
         reply.send(csvData);
-      } else {
+ else {
         reply.send({ report });
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Report generation error:', error);
       reply.code(500).send({ error: 'Failed to generate report' });
-    }
+
   });
 
   // Export transactions
@@ -351,8 +351,8 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       querystring: z.object({
         ...TransactionSearchSchema.shape,
         format: z.enum(['csv', 'json']).default('csv')
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { format, ...filters } = request.query;
@@ -373,16 +373,16 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
 
       if (format === 'csv') {
         reply.header('Content-Type', 'text/csv');
-      } else {
+ else {
         reply.header('Content-Type', 'application/json');
-      }
+
 
       reply.header('Content-Disposition', `attachment; filename="${filename}"`);
       reply.send(exportData);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Transaction export error:', error);
       reply.code(500).send({ error: 'Failed to export transactions' });
-    }
+
   });
 
   // =============================================
@@ -401,17 +401,17 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           anomalies: z.array(z.any())
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const anomalies = await anomalyDetectionService.getActiveAnomalies(request.query.limit);
       reply.send({ anomalies });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get anomalies error:', error);
       reply.code(500).send({ error: 'Failed to get anomalies' });
-    }
+
   });
 
   // Update anomaly status
@@ -429,9 +429,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { anomalyId } = request.params;
@@ -448,10 +448,10 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         success: true,
         message: `Anomaly status updated to ${status}`
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Update anomaly status error:', error);
       reply.code(500).send({ error: 'Failed to update anomaly status' });
-    }
+
   });
 
   // Detect fraud rings
@@ -461,17 +461,17 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           fraudRings: z.array(z.any())
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const fraudRings = await anomalyDetectionService.detectFraudRings();
       reply.send({ fraudRings });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Fraud ring detection error:', error);
       reply.code(500).send({ error: 'Failed to detect fraud rings' });
-    }
+
   });
 
   // Trigger anomaly detection for specific transaction
@@ -485,9 +485,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           anomalies: z.array(z.any()),
           riskAnalysis: z.any()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { transactionId } = request.params;
@@ -498,10 +498,10 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       ]);
 
       reply.send({ anomalies, riskAnalysis });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Anomaly analysis error:', error);
       reply.code(500).send({ error: 'Failed to analyze transaction anomalies' });
-    }
+
   });
 
   // =============================================
@@ -518,9 +518,9 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           dashboard: z.any()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { period } = request.query;
@@ -551,9 +551,8 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       };
 
       reply.send({ dashboard });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Dashboard data error:', error);
       reply.code(500).send({ error: 'Failed to get dashboard data' });
-    }
+
   });
-}

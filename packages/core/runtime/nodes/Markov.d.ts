@@ -4,6 +4,7 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeData, Valida
  */
 
 }
+}
 export interface MarkovState {
     /** Current state in the chain */
     currentState: string;
@@ -18,9 +19,10 @@ export interface MarkovState {
  */
 
 }
-export interface TransitionMatrix {
-    /** Available states in the chain */
-    states: string[];
+}
+}
+export interface TransitionMatrix { /** Available states in the chain */
+    states: string[] }
 }
     /** Transition probabilities: state -> {nextState: probability} */
     transitions: Record<string, Record<string, number>>;
@@ -35,8 +37,8 @@ export interface TransitionMatrix {
  */
 
 }
-export interface MarkovConfig {
-    /** Maximum number of transitions before forcing termination */
+}
+export interface MarkovConfig { /** Maximum number of transitions before forcing termination */
     maxTransitions?: number;
     /** Whether to normalize probabilities automatically */
     normalizeProbabilities?: boolean;
@@ -102,20 +104,20 @@ export declare class MarkovNode extends AdvancedRuntimeNode<string> {
  * Factory function for creating Markov nodes
  */
 export declare function createMarkovNode(id: string)
-  states: string[],
-  transitions: Record<string,
-  Record<string,
-  number>>,
-  initialState?: string,
+  states: string[];
+  transitions: Record<string;
+  Record<string;
+  number>>;
+  initialState?: string }
   config?: MarkovConfig
 ): MarkovNode;
 /**
  * Helper function to create transition matrix from simple configuration
  */
-export declare function createTransitionMatrix(config: {)
+export declare function createTransitionMatrix(config: { )
     states: string[];
     transitions: Record<string, Record<string, number>>;
-    initialState?: string;
+    initialState?: string }
 }
 }): TransitionMatrix;
 /**

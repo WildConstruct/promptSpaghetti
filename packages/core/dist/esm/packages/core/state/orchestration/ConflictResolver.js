@@ -12,8 +12,9 @@ export class ConflictResolver {
         this.setupDefaultRules();
         // Main conflict detection and resolution
         async;
-        detectAndResolveConflicts(localChanges, StateChange < T > []);
-        remoteChanges: StateChange < T > [],
+        detectAndResolveConflicts(localChanges, StateChange < T > []),
+            remoteChanges;
+        StateChange < T > [],
             currentState;
         T,
             domain;

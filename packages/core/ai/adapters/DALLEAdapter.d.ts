@@ -7,44 +7,41 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface DALLEConfig {
-    apiKey: string;
+}
+export interface DALLEConfig { apiKey: string;
     baseURL?: string;
     organization?: string;
     timeout?: number;
-    maxRetries?: number;
-
+    maxRetries?: number }
 }
-export interface DALLERequestOptions {
-    model?: 'dall-e-2' | 'dall-e-3';
+}
+export interface DALLERequestOptions { model?: 'dall-e-2' | 'dall-e-3';
     size?: '256x256' | '512x512' | '1024x1024' | '1792x1024' | '1024x1792';
     quality?: 'standard' | 'hd';
     style?: 'vivid' | 'natural';
     n?: number;
     response_format?: 'url' | 'b64_json';
-    user?: string;
-
+    user?: string }
 }
-export interface ImagePromptOptimization {
-    originalPrompt: string;
+}
+export interface ImagePromptOptimization { originalPrompt: string;
     optimizedPrompt: string;
     optimizations: string[];
     styleEnhancements: string[];
-    qualityImprovements: string[];
-
+    qualityImprovements: string[] }
 }
-export interface DALLEResponse {
-    created: number;
+}
+export interface DALLEResponse { created: number;
     data: Array<{
         url?: string;
         b64_json?: string;
-        revised_prompt?: string;
+        revised_prompt?: string }
 }
     }>;
 
 }
-export interface ImageGenerationResult {
-    images: Array<{
+}
+export interface ImageGenerationResult { images: Array<{
         url?: string;
         base64?: string;
         revisedPrompt?: string;
@@ -52,20 +49,17 @@ export interface ImageGenerationResult {
             size: string;
             quality: string;
             style?: string;
-            model: string;
+            model: string }
 }
         };
     }>;
     originalPrompt: string;
     optimizedPrompt?: string;
-    usage: {
-        promptTokens: number;
-        totalCost: number;
-    };
+    usage: { promptTokens: number;
+        totalCost: number };
     generationTime: number;
 
-export declare class DALLEAdapter extends BaseAIModel {
-    private config;
+export declare class DALLEAdapter extends BaseAIModel { private config;
     private apiEndpoint;
     private promptOptimizer;
     constructor(id: string, config: DALLEConfig, modelName?: string);
@@ -75,9 +69,9 @@ export declare class DALLEAdapter extends BaseAIModel {
     estimate(input: unknown, options?: DALLERequestOptions): Promise<CostEstimate>;
     generateVariations(imageUrl: string, options?: Partial<DALLERequestOptions>): Promise<ImageGenerationResult>;
     editImage();
-      imageUrl: string,
-      maskUrl: string,
-      prompt: string,
+      imageUrl: string
+      maskUrl: string
+      prompt: string }
       options?: Partial<DALLERequestOptions>
     ): Promise<ImageGenerationResult>;
     static getModelCostPerRequest(modelName: string): number;

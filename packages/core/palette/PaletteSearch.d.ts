@@ -4,6 +4,7 @@ import { NodeMeta } from '../Palette';
  */
 
 }
+}
 export interface SearchResult {
     node: NodeMeta;
     relevance: number;
@@ -15,6 +16,8 @@ export interface SearchResult {
  * Search options configuration
  */
 
+}
+}
 }
 export interface SearchOptions {
     fuzzyThreshold?: number;
@@ -81,4 +84,5 @@ export declare function highlightSearchTerms(text: string, searchTerms: string[]
  */
 export declare function createPaletteSearch(nodes: NodeMeta[]): PaletteSearch;
 //# sourceMappingURL=PaletteSearch.d.ts.map
+}
 }

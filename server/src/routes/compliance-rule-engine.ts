@@ -18,7 +18,7 @@ import {
   RuleCategory,
   RulePriority,
   RuleStatus
-} from '../services/ComplianceRuleEngine';
+ from '../services/ComplianceRuleEngine';
 
 // Request/Response Schemas
 const RegisterRuleRequestSchema = z.object({
@@ -390,7 +390,7 @@ const RegisterRuleRequestSchema = z.object({
     reporting: z.record(z.any()).default({}),
     evidence: z.array(z.any()).default([]),
     attestations: z.array(z.any()).default([])
-  }
+
 });
 
 const EvaluateRulesRequestSchema = z.object({
@@ -497,7 +497,7 @@ const UpdateRuleRequestSchema = z.object({
     actions: z.array(z.any()).optional(),
     scope: z.any().optional(),
     metadata: z.any().optional()
-  }
+
 });
 
 const TestRuleRequestSchema = z.object({
@@ -518,7 +518,7 @@ const TestRuleRequestSchema = z.object({
         result: z.enum(['PASS', 'FAIL', 'CONDITIONAL', 'UNKNOWN', 'ERROR']),
         verdict: z.enum(['COMPLIANT', 'NON_COMPLIANT', 'REQUIRES_REVIEW', 'REQUIRES_ACTION', 'INCOMPLETE']),
         actions: z.array(z.any()).optional()
-  }
+
     }))
   }),
   options: z.object({
@@ -541,7 +541,7 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof RegisterRuleRequestSchema>;
-  }>('/rules', {
+>('/rules', {
     schema: {
       description: 'Register a new compliance rule in the rule engine',
       tags: ['Compliance Rule Engine'],
@@ -560,20 +560,20 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
                 conflicts: { type: 'array' },
                 validationResults: { type: 'object' },
                 nextSteps: { type: 'array', items: { type: 'string' } }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('rule:create')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const ruleData = request.body;
@@ -591,8 +591,8 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
             changelog: [],
             documentation: ruleData.metadata.documentation || {},
             references: ruleData.metadata.references || []
-          }
-        } as ComplianceRule;
+
+ as ComplianceRule;
 
         const result = await ruleEngine.registerRule(rule);
 
@@ -602,12 +602,12 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
           nextSteps.push('Create test suite for rule validation');
           if (result.conflicts.length > 0) {
             nextSteps.push('Review and resolve rule conflicts');
-          }
+
           nextSteps.push('Submit rule for approval workflow');
-        } else {
+ else {
           nextSteps.push('Resolve blocking conflicts before registration');
           nextSteps.push('Review rule dependencies and priorities');
-        }
+
 
         reply.send({
           success: true,
@@ -619,19 +619,18 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
               schemaValid: true,
               conflictsDetected: result.conflicts.length,
               blockingConflicts: result.conflicts.filter(c => c.severity === 'BLOCKING').length
-  }
-            nextSteps
-          }
-        });
 
-      } catch (error) {
+            nextSteps
+
+        });
+ catch (error) {
         fastify.log.error('Error registering compliance rule:', error);
         reply.code(500).send({
           error: 'Failed to register compliance rule',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -640,7 +639,7 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof EvaluateRulesRequestSchema>;
-  }>('/evaluate', {
+>('/evaluate', {
     schema: {
       description: 'Evaluate compliance rules against provided context',
       tags: ['Compliance Rule Engine'],
@@ -659,20 +658,20 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
                 summary: { type: 'object' },
                 performance: { type: 'object' },
                 recommendations: { type: 'array', items: { type: 'string' } }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('rule:evaluate')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const { context, frameworks, categories, options } = request.body;
@@ -715,16 +714,16 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
         const recommendations = [];
         if (summary.nonCompliantRules > 0) {
           recommendations.push(`Address ${summary.nonCompliantRules} non-compliant rule(s)`);
-        }
+
         if (summary.criticalIssues > 0) {
           recommendations.push(`Immediately resolve ${summary.criticalIssues} critical issue(s)`);
-        }
+
         if (summary.conditionalRules > 0) {
           recommendations.push(`Review ${summary.conditionalRules} conditional compliance(s)`);
-        }
+
         if (summary.averageConfidence < 0.8) {
           recommendations.push('Consider improving data quality for better confidence scores');
-        }
+
 
         reply.send({
           success: true,
@@ -744,19 +743,18 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
               rulesEvaluated: results.length,
               averageRuleTime: duration / results.length || 0,
               memoryUsage: process.memoryUsage().heapUsed
-  }
-            recommendations
-          }
-        });
 
-      } catch (error) {
+            recommendations
+
+        });
+ catch (error) {
         fastify.log.error('Error evaluating compliance rules:', error);
         reply.code(500).send({
           error: 'Failed to evaluate compliance rules',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -766,7 +764,7 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
   fastify.get<{
     Params: { ruleId: string };
     Querystring: { includeTests?: boolean; includeHistory?: boolean };
-  }>('/rules/:ruleId', {
+>('/rules/:ruleId', {
     schema: {
       description: 'Get compliance rule details by ID',
       tags: ['Compliance Rule Engine'],
@@ -775,29 +773,29 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           ruleId: { type: 'string' }
-  }
+
         required: ['ruleId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           includeTests: { type: 'boolean', default: false },
           includeHistory: { type: 'boolean', default: false }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { ruleId } = request.params;
@@ -811,7 +809,7 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
             message: `Rule ${ruleId} does not exist`
           });
           return;
-        }
+
 
         // Optionally include additional data
         const responseData: any = { ...rule };
@@ -823,25 +821,24 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
             coverage: 95,
             tests: rule.testing.testSuites.length
           };
-        }
+
         
         if (includeHistory) {
           responseData.history = rule.metadata.changelog || [];
-        }
+
 
         reply.send({
           success: true,
           data: responseData
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error getting compliance rule:', error);
         reply.code(500).send({
           error: 'Failed to get compliance rule',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -851,7 +848,7 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
   fastify.put<{
     Params: { ruleId: string };
     Body: z.infer<typeof UpdateRuleRequestSchema>;
-  }>('/rules/:ruleId', {
+>('/rules/:ruleId', {
     schema: {
       description: 'Update compliance rule',
       tags: ['Compliance Rule Engine'],
@@ -860,9 +857,9 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           ruleId: { type: 'string' }
-  }
+
         required: ['ruleId']
-  }
+
       body: UpdateRuleRequestSchema,
       response: {
         200: {
@@ -875,20 +872,20 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
                 updated: { type: 'boolean' },
                 conflicts: { type: 'array' },
                 newVersion: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('rule:update')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const { ruleId } = request.params;
@@ -902,17 +899,16 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
             updated: result.updated,
             conflicts: result.conflicts,
             newVersion: updates.version || 'auto-incremented'
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error updating compliance rule:', error);
         reply.code(500).send({
           error: 'Failed to update compliance rule',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -922,7 +918,7 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
   fastify.post<{
     Params: { ruleId: string };
     Body: z.infer<typeof TestRuleRequestSchema>;
-  }>('/rules/:ruleId/test', {
+>('/rules/:ruleId/test', {
     schema: {
       description: 'Run test suite for compliance rule',
       tags: ['Compliance Rule Engine'],
@@ -931,9 +927,9 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           ruleId: { type: 'string' }
-  }
+
         required: ['ruleId']
-  }
+
       body: TestRuleRequestSchema,
       response: {
         200: {
@@ -948,20 +944,20 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
                 summary: { type: 'object' },
                 coverage: { type: 'object' },
                 reportUrl: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('rule:test')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const { ruleId } = request.params;
@@ -974,7 +970,7 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
             message: `Rule ${ruleId} does not exist`
           });
           return;
-        }
+
 
         // Run tests (mock implementation)
         const testRunId = `TEST-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
@@ -1008,10 +1004,10 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
                 result: ruleResult.outcome.result,
                 verdict: ruleResult.outcome.verdict,
                 actions: ruleResult.actions
-              } : null,
+ : null,
               error: !ruleResult ? 'Rule evaluation failed' : (!passed ? 'Output mismatch' : null)
             });
-          } catch (error) {
+ catch (error) {
             testResults.push({
               testId: test.testId,
               name: test.name,
@@ -1021,8 +1017,8 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
               actual: null,
               error: error instanceof Error ? error.message : 'Test execution failed'
             });
-          }
-        }
+
+
 
         const duration = Date.now() - startTime;
         const passed = testResults.filter(t => t.status === 'PASSED').length;
@@ -1052,17 +1048,16 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
             summary,
             coverage,
             reportUrl: options?.generateReport ? `/api/compliance-rule-engine/test-reports/${testRunId}` : undefined
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error testing compliance rule:', error);
         reply.code(500).send({
           error: 'Failed to test compliance rule',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -1080,7 +1075,7 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
       sortBy?: string;
       sortOrder?: string;
     };
-  }>('/rules', {
+>('/rules', {
     schema: {
       description: 'List compliance rules with filtering and pagination',
       tags: ['Compliance Rule Engine'],
@@ -1096,8 +1091,8 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
           limit: { type: 'number', minimum: 1, maximum: 100, default: 20 },
           sortBy: { type: 'string', enum: ['name', 'priority', 'createdAt', 'lastModified'], default: 'lastModified' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -1110,15 +1105,15 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
                 pagination: { type: 'object' },
                 filters: { type: 'object' },
                 statistics: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { framework, category, status, priority, page = 1, limit = 20, sortBy, sortOrder } = request.query;
@@ -1128,20 +1123,20 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
         
         if (framework) {
           rules = await ruleEngine.getRulesByFramework(framework as ComplianceFramework);
-        } else if (category) {
+ else if (category) {
           rules = await ruleEngine.getRulesByCategory(category as RuleCategory);
-        } else {
+ else {
           // Get all rules (mock implementation)
           rules = [];
-        }
+
 
         // Apply filters
         if (status) {
           rules = rules.filter(rule => rule.status === status);
-        }
+
         if (priority) {
           rules = rules.filter(rule => rule.priority === priority);
-        }
+
 
         // Sort rules
         rules.sort((a, b) => {
@@ -1165,13 +1160,13 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
             aValue = a.metadata.lastModified.getTime();
             bValue = b.metadata.lastModified.getTime();
             break;
-          }
+
           
           if (sortOrder === 'desc') {
             return bValue > aValue ? 1 : -1;
-          } else {
+ else {
             return aValue > bValue ? 1 : -1;
-          }
+
         });
 
         // Paginate
@@ -1217,7 +1212,7 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
               limit,
               total,
               pages: Math.ceil(total / limit)
-  }
+
             filters: {
               applied: { framework, category, status, priority },
               available: {
@@ -1225,20 +1220,19 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
                 categories: ['DATA_PROTECTION', 'PRIVACY', 'SECURITY', 'GOVERNANCE'],
                 statuses: ['DRAFT', 'REVIEW', 'APPROVED', 'ACTIVE', 'INACTIVE'],
                 priorities: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']
-              }
-  }
-            statistics
-          }
-        });
 
-      } catch (error) {
+
+            statistics
+
+        });
+ catch (error) {
         fastify.log.error('Error listing compliance rules:', error);
         reply.code(500).send({
           error: 'Failed to list compliance rules',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -1256,13 +1250,13 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const status = await ruleEngine.getEngineStatus();
@@ -1271,14 +1265,12 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
           success: true,
           data: status
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error getting engine status:', error);
         reply.code(500).send({
           error: 'Failed to get engine status',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
-}

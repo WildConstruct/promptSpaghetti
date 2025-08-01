@@ -11,8 +11,8 @@ export type ActivitySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type ActivityStatus = 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
 
 }
-export interface BaseActivity {
-    id: string;
+}
+export interface BaseActivity { id: string;
     timestamp: string;
     type: ActivityType;
     severity: ActivitySeverity;
@@ -39,7 +39,7 @@ export interface BaseActivity {
         country?: string;
         region?: string;
         city?: string;
-        coordinates?: [number, number];
+        coordinates?: [number, number] }
 }
     };
     duration?: number;
@@ -48,50 +48,44 @@ export interface BaseActivity {
     metadata: Record<string, any>;
     tags: string[];
     changes?: ActivityChange[];
-    error?: {
-        code?: string;
+    error?: { code?: string;
         message?: string;
         stack?: string;
-        details?: Record<string, any>;
-    };
+        details?: Record<string, any> };
     createdAt: string;
     updatedAt?: string;
     version: number;
 
 }
-export interface ActivityChange {
-    field: string;
+}
+export interface ActivityChange { field: string;
     oldValue: any;
     newValue: any;
-    changeType: 'create' | 'update' | 'delete' | 'restore';
-
+    changeType: 'create' | 'update' | 'delete' | 'restore' }
 }
-export interface UserActivity extends BaseActivity {
-    type: 'user_action';
+}
+export interface UserActivity extends BaseActivity { type: 'user_action';
     page?: string;
     component?: string;
     elementId?: string;
     previousAction?: string;
     userJourneyId?: string;
     renderTime?: number;
-    interactionDelay?: number;
-
+    interactionDelay?: number }
 }
-export interface SystemActivity extends BaseActivity {
-    type: 'system_event';
+export interface SystemActivity extends BaseActivity { type: 'system_event';
     systemMetrics?: {
         cpuUsage?: number;
         memoryUsage?: number;
         diskUsage?: number;
-        networkLatency?: number;
-}
+        networkLatency?: number }
     };
     healthStatus?: 'healthy' | 'warning' | 'critical' | 'unknown';
     componentStatus?: Record<string, string>;
 
 }
-export interface AdminActivity extends BaseActivity {
-    type: 'admin_action';
+}
+export interface AdminActivity extends BaseActivity { type: 'admin_action';
     adminLevel: 'super_admin' | 'admin' | 'moderator' | 'support';
     targetUserId?: string;
     targetUserEmail?: string;
@@ -100,11 +94,9 @@ export interface AdminActivity extends BaseActivity {
     requiresApproval?: boolean;
     approvalStatus?: 'pending' | 'approved' | 'rejected';
     approverId?: string;
-    approvalReason?: string;
-
+    approvalReason?: string }
 }
-export interface SecurityActivity extends BaseActivity {
-    type: 'security_event';
+export interface SecurityActivity extends BaseActivity { type: 'security_event';
     threatType?: string;
     threatLevel: 'low' | 'medium' | 'high' | 'critical';
     threatSource?: string;
@@ -118,12 +110,11 @@ export interface SecurityActivity extends BaseActivity {
         requestHeaders?: Record<string, string>;
         requestBody?: any;
         responseStatus?: number;
-        fingerprint?: string;
-    };
+        fingerprint?: string };
 
 }
-export interface ApiActivity extends BaseActivity {
-    type: 'api_call';
+}
+export interface ApiActivity extends BaseActivity { type: 'api_call';
     method: string;
     endpoint: string;
     statusCode: number;
@@ -133,22 +124,18 @@ export interface ApiActivity extends BaseActivity {
     rateLimitRemaining?: number;
     processingTime?: number;
     databaseTime?: number;
-    externalApiTime?: number;
-
+    externalApiTime?: number }
 }
-export interface DataActivity extends BaseActivity {
-    type: 'data_change';
+export interface DataActivity extends BaseActivity { type: 'data_change';
     database?: string;
     table?: string;
     primaryKey?: string | number;
     operationType: 'insert' | 'update' | 'delete' | 'bulk_update' | 'bulk_delete';
     affectedRows?: number;
     validationErrors?: string[];
-    businessRules?: string[];
-
+    businessRules?: string[] }
 }
-export interface PerformanceActivity extends BaseActivity {
-    type: 'performance_event';
+export interface PerformanceActivity extends BaseActivity { type: 'performance_event';
     metrics: {
         responseTime?: number;
         throughput?: number;
@@ -156,16 +143,15 @@ export interface PerformanceActivity extends BaseActivity {
         cpuUsage?: number;
         memoryUsage?: number;
         diskIo?: number;
-        networkIo?: number;
-    };
+        networkIo?: number };
     thresholds?: Record<string, number>;
     thresholdViolations?: string[];
     loadLevel?: 'low' | 'medium' | 'high' | 'peak';
     concurrentUsers?: number;
 
 }
-export interface AuthenticationActivity extends BaseActivity {
-    type: 'authentication';
+}
+export interface AuthenticationActivity extends BaseActivity { type: 'authentication';
     authMethod: 'password' | 'oauth' | 'saml' | 'mfa' | 'api_key' | 'jwt';
     mfaUsed?: boolean;
     mfaMethod?: string;
@@ -175,11 +161,9 @@ export interface AuthenticationActivity extends BaseActivity {
     loginAttempts?: number;
     lastSuccessfulLogin?: string;
     riskScore?: number;
-    riskFactors?: string[];
-
+    riskFactors?: string[] }
 }
-export interface FileActivity extends BaseActivity {
-    type: 'file_operation';
+export interface FileActivity extends BaseActivity { type: 'file_operation';
     fileName: string;
     filePath: string;
     fileSize?: number;
@@ -189,11 +173,9 @@ export interface FileActivity extends BaseActivity {
     filePermissions?: string;
     accessLevel?: string;
     version?: string;
-    previousVersion?: string;
-
+    previousVersion?: string }
 }
-export interface WorkflowActivity extends BaseActivity {
-    type: 'workflow_event';
+export interface WorkflowActivity extends BaseActivity { type: 'workflow_event';
     workflowId: string;
     workflowName: string;
     workflowVersion: string;
@@ -207,11 +189,9 @@ export interface WorkflowActivity extends BaseActivity {
     stepDuration?: number;
     totalDuration?: number;
 
-export type Activity = UserActivity | SystemActivity | AdminActivity | SecurityActivity | ApiActivity | DataActivity | PerformanceActivity | AuthenticationActivity | FileActivity | WorkflowActivity;
-
+export type Activity = UserActivity | SystemActivity | AdminActivity | SecurityActivity | ApiActivity | DataActivity | PerformanceActivity | AuthenticationActivity | FileActivity | WorkflowActivity }
 }
-export interface ActivityQuery {
-    startTime?: string;
+export interface ActivityQuery { startTime?: string;
     endTime?: string;
     types?: ActivityType[];
     severities?: ActivitySeverity[];
@@ -231,30 +211,28 @@ export interface ActivityQuery {
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
     aggregateBy?: string[];
-    include?: string[];
-
+    include?: string[] }
 }
-export interface ActivityAggregation {
-    field: string;
+}
+export interface ActivityAggregation { field: string;
     value: any;
     count: number;
-    percentage: number;
-
+    percentage: number }
 }
-export interface ActivityQueryResult {
-    activities: Activity[];
+}
+export interface ActivityQueryResult { activities: Activity[];
     totalCount: number;
     aggregations?: Record<string, ActivityAggregation[]>;
     facets?: Record<string, Array<{
         value: string;
-        count: number;
+        count: number }
 }
     }>>;
     executionTime: number;
 
 }
-export interface ActivityIndex {
-    id: string;
+}
+export interface ActivityIndex { id: string;
     timestamp: string;
     type: ActivityType;
     userId?: string;
@@ -264,61 +242,50 @@ export interface ActivityIndex {
     resourceId?: string;
     severity: ActivitySeverity;
     status: ActivityStatus;
-    tags: string[];
-
+    tags: string[] }
 }
-export interface ActivityStream {
-    subscriptionId: string;
+}
+export interface ActivityStream { subscriptionId: string;
     filters: ActivityQuery;
     isActive: boolean;
     createdAt: string;
-    lastActivity?: string;
-
+    lastActivity?: string }
 }
-export interface ActivityStreamEvent {
-    streamId: string;
+}
+export interface ActivityStreamEvent { streamId: string;
     activity: Activity;
-    timestamp: string;
-
+    timestamp: string }
 }
-export interface ActivityMetrics {
-    totalActivities: number;
+}
+export interface ActivityMetrics { totalActivities: number;
     activitiesByType: Record<ActivityType, number>;
     activitiesBySeverity: Record<ActivitySeverity, number>;
     activitiesByStatus: Record<ActivityStatus, number>;
     activitiesOverTime: Array<{
         timestamp: string;
         count: number;
-        types: Record<ActivityType, number>;
+        types: Record<ActivityType, number> }
 }
     }>;
-    topSources: Array<{
-        source: string;
+    topSources: Array<{ source: string;
         count: number;
-        percentage: number;
-    }>;
-    topActions: Array<{
-        action: string;
+        percentage: number }>;
+    topActions: Array<{ action: string;
         count: number;
-        percentage: number;
-    }>;
-    topUsers: Array<{
-        userId: string;
+        percentage: number }>;
+    topUsers: Array<{ userId: string;
         userEmail?: string;
         count: number;
-        percentage: number;
-    }>;
+        percentage: number }>;
     errorRate: number;
     averageDuration: number;
-    performanceMetrics: {
-        p50: number;
+    performanceMetrics: { p50: number;
         p95: number;
-        p99: number;
-    };
+        p99: number };
 
 }
-export interface ActivityRetentionPolicy {
-    id: string;
+}
+export interface ActivityRetentionPolicy { id: string;
     name: string;
     description: string;
     retentionPeriod: number;
@@ -333,8 +300,7 @@ export interface ActivityRetentionPolicy {
     legalHoldEnabled?: boolean;
     createdAt: string;
     updatedAt: string;
-    isActive: boolean;
-
+    isActive: boolean }
 }
 export type { Activity as MonitoringActivity, ActivityQuery as MonitoringActivityQuery, ActivityQueryResult as MonitoringActivityQueryResult, ActivityMetrics as MonitoringActivityMetrics };
 export declare const DEFAULT_ACTIVITY_RETENTION_DAYS = 90;

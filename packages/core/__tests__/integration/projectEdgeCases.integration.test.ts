@@ -10,89 +10,67 @@ import { serializeProject, deserializeProject } from '../../utils/projectSeriali
 import { createDefaultMetadata, createDefaultSettings } from '../../schemas/psgSchema';
 
 // Mock console methods to suppress expected error logs
-const mockConsoleWarn = jest.spyOn(console, 'warn').mockImplementation(() => {});
-const mockConsoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-// Mock localStorage
-const mockLocalStorage = {
-  getItem: jest.fn<unknown, unknown>(),
-  setItem: jest.fn<unknown, unknown>(),
-  removeItem: jest.fn<unknown, unknown>(),
-  hasOwnProperty: jest.fn<unknown, unknown>(),
-};
-Object.defineProperty(window, 'localStorage', {)
-  value: mockLocalStorage,
-});
+const mockConsoleWarn = () => { return null; });
 
 // Mock DOM and Blob
-const mockCreateElement = jest.fn(() => ({)
-  href: '',
-  download: '',
-  click: jest.fn<unknown, unknown>(),
+const mockCreateElement = jest.fn(() => ({ )
+  href: ''
+  download: ''
+  click: jest.fn<unknown, unknown>() }
   style: { display: '' }
 }));
-global.document = {
-  createElement: mockCreateElement,
+global.document = { createElement: mockCreateElement
   body: {
-  appendChild: jest.fn<unknown, unknown>(),
-  removeChild: jest.fn<unknown, unknown>(),
-} as any;
-global.URL = {
-  createObjectURL: jest.fn(() => 'mock-url'),
-  revokeObjectURL: jest.fn<unknown, unknown>(),
-} as any;
+  appendChild: jest.fn<unknown, unknown>()
+  removeChild: jest.fn<unknown, unknown>() }
+ as any;
+global.URL = { createObjectURL: jest.fn(() => 'mock-url')
+  revokeObjectURL: jest.fn<unknown, unknown>() }
+ as any;
 global.Blob = jest.fn(() => ({ size: 1024 })) as any;
-describe('Project Edge Cases Integration Tests', () => {
-  beforeEach(() => {
+describe('Project Edge Cases Integration Tests', () => { beforeEach(() => {
     jest.clearAllMocks();
     mockLocalStorage.getItem.mockReturnValue(null as unknown);
     mockConsoleWarn.mockClear();
-    mockConsoleError.mockClear();
-  });
-  afterAll(() => {
-    mockConsoleWarn.mockRestore();
-    mockConsoleError.mockRestore();
-  });
+    mockConsoleError.mockClear() });
+  afterAll(() => { mockConsoleWarn.mockRestore();
+    mockConsoleError.mockRestore() });
   describe('Large Graph Handling', () => {
     test('handles extremely large graphs (1000+ nodes)', async () => {
       // Create a massive graph
       const largeGraph = {
         nodes: Array.from({ length: 1000 }, (_, i) => ({)
   id: `node-${i}`}
-},
-  type: 'default' as const,
-          position: { x: (i % 50) * 50, y: Math.floor(i / 50) * 50 },
-          data: {
-  nodeType: 'weighted-choice',
+
+  type: 'default' as const
+          position: { x: (i % 50) * 50, y: Math.floor(i / 50) * 50 }
+          data: { 
+  nodeType: 'weighted-choice' }
             label: `Node ${i}`}
-},
+
   variations: Array.from({ length: 50 }, (_, j) => 
               `This is a very long variation text for node ${i}, variation ${j} with lots of content to test serialization performance and memory usage`}
-        })),
+        }))
         edges: Array.from({ length: 999 }, (_, i) => ({)
   id: `edge-${i}`}
-},
+
   source: `node-${i}`}
-},
+
   target: `node-${i + 1}`}
-},
-  sourceHandle: 'output',
-          targetHandle: 'input'
+
+  sourceHandle: 'output'
+          targetHandle: 'input';
   }))
       };
       const metadata = createDefaultMetadata('Massive Test Project', 'Test User');
       const settings = createDefaultSettings();
       // Test serialization with timeout
-      const serializePromise = new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => reject(new Error('Serialization timeout')), 5000);
+      const serializePromise = new Promise((resolve, reject) => { const timeout = setTimeout(() => reject(new Error('Serialization timeout')), 5000);
         try {
           const result = serializeProject(largeGraph, metadata, settings);
           clearTimeout(timeout);
-          resolve(result);
-        } catch (error) {
-          clearTimeout(timeout);
-          reject(error);
-      });
+          resolve(result) } catch (error) { clearTimeout(timeout);
+          reject(error) });
       const serializeResult = await serializePromise as any;
       expect(serializeResult.success).toBe(true);
       expect(serializeResult.data).toBeDefined();
@@ -101,20 +79,18 @@ describe('Project Edge Cases Integration Tests', () => {
       expect(deserializeResult.success).toBe(true);
       expect(deserializeResult.data!.graph.nodes).toHaveLength(1000);
     });
-    test('handles graphs with circular references in data', () => {
-  // Create nodes with potential circular references
-  const nodeData: Record<string, unknown> = {,
-  nodeType: 'custom',
-  label: 'Circular Test',
+    test('handles graphs with circular references in data', () => { // Create nodes with potential circular references
+  const nodeData: Record<string, unknown> = {
+  nodeType: 'custom'
+  label: 'Circular Test' }
 };
       (nodeData as Record<string, unknown>).self = nodeData; // Circular reference
-      const graphWithCircular = {
-        nodes: [{,
-  id: 'circular-node',
-          type: 'default' as const,
-          position: { x: 0, y: 0 },
+      const graphWithCircular = { nodes: [{
+  id: 'circular-node'
+          type: 'default' as const }
+          position: { x: 0, y: 0 }
           data: nodeData;
-  }],
+]
         edges: [];
   };
       const metadata = createDefaultMetadata('Circular Test', 'Test User');
@@ -130,13 +106,12 @@ describe('Project Edge Cases Integration Tests', () => {
       for (let i = 0; i < 100; i++) {
         current.nested = { level: i };
         current = current.nested;
-      const deepGraph = {
-        nodes: [{,
+      const deepGraph = { nodes: [{,
   id: 'deep-node',
-          type: 'default' as const,
+          type: 'default' as const }
           position: { x: 0, y: 0 },
           data: deepData;
-  }],
+],
         edges: [];
   };
       const metadata = createDefaultMetadata('Deep Test', 'Test User');
@@ -155,9 +130,9 @@ describe('Project Edge Cases Integration Tests', () => {
 },
   type: 'default' as const,
           position: { x: i * 10, y: i * 10 },
-          data: {
+          data: { ,
   nodeType: 'text',
-            content: largeTextContent,
+            content: largeTextContent }
             variations: Array.from({ length: 10 }, () => largeTextContent)
         })),
         edges: [];
@@ -165,10 +140,8 @@ describe('Project Edge Cases Integration Tests', () => {
       const metadata = createDefaultMetadata('Memory Test', 'Test User');
       const settings = createDefaultSettings();
       // Should not crash due to memory issues
-      expect(() => {
-        const result = serializeProject(memoryTestGraph, metadata, settings);
-        expect(result.success).toBe(true);
-      }).not.toThrow();
+      expect(() => { const result = serializeProject(memoryTestGraph, metadata, settings);
+        expect(result.success).toBe(true) }).not.toThrow();
     });
     test('handles concurrent operations on recent projects', () => {
       // Simulate multiple concurrent operations
@@ -181,23 +154,20 @@ describe('Project Edge Cases Integration Tests', () => {
         fileSize: 1024 * i;
   }));
       // Add all projects concurrently
-      expect(() => {
-        operations.forEach(op => {)
-  RecentProjectsManager.addRecentProject(op);
-        });
+      expect(() => { operations.forEach(op => {)
+  RecentProjectsManager.addRecentProject(op) });
       }).not.toThrow();
       // Should only keep the 5 most recent
       const recentProjects = RecentProjectsManager.getRecentProjects();
       expect(recentProjects.length).toBeLessThanOrEqual(5);
     });
   });
-  describe('Corrupted Data Handling', () => {
-    test('handles partially corrupted PSG files', () => {
+  describe('Corrupted Data Handling', () => { test('handles partially corrupted PSG files', () => {
       const validProject = {
         fileType: 'psg',
         formatVersion: '1.0.0',
         metadata: createDefaultMetadata('Test', 'User'),
-        settings: createDefaultSettings(),
+        settings: createDefaultSettings() }
         graph: { nodes: [], edges: [] },
         exportedAt: new Date().toISOString();
   };
@@ -208,30 +178,27 @@ describe('Project Edge Cases Integration Tests', () => {
       expect(result1.success).toBe(false);
       expect(result1.error).toBeDefined();
       // Test with invalid metadata
-      const corruptedProject2 = {
-  ...validProject,
-  metadata: null,
+      const corruptedProject2 = { ...validProject,
+  metadata: null }
 };
       const result2 = deserializeProject(JSON.stringify(corruptedProject2));
       expect(result2.success).toBe(false);
       expect(result2.error).toBeDefined();
       // Test with malformed nodes array
-      const corruptedProject3 = {
-  ...validProject,
-  graph: {
+      const corruptedProject3 = { ...validProject,
+  graph: {,
   nodes: 'not an array',
-  edges: [],
+  edges: [] }
 };
       const result3 = deserializeProject(JSON.stringify(corruptedProject3));
       expect(result3.success).toBe(false);
       expect(result3.error).toBeDefined();
     });
-    test('handles truncated JSON files', () => {
-      const validProject = {
+    test('handles truncated JSON files', () => { const validProject = {
         fileType: 'psg',
         formatVersion: '1.0.0',
         metadata: createDefaultMetadata('Test', 'User'),
-        settings: createDefaultSettings(),
+        settings: createDefaultSettings() }
         graph: { nodes: [], edges: [] },
         exportedAt: new Date().toISOString();
   };
@@ -250,32 +217,25 @@ describe('Project Edge Cases Integration Tests', () => {
       expect(typeof result.success).toBe('boolean');
     });
   });
-  describe('Network and Storage Errors', () => {
-    test('handles localStorage quota exceeded', () => {
+  describe('Network and Storage Errors', () => { test('handles localStorage quota exceeded', () => {
       // Mock localStorage quota exceeded error
       mockLocalStorage.setItem.mockImplementation(() => {
-        throw new DOMException('Quota exceeded', 'QuotaExceededError');
-      });
-      const entry = {
-  name: 'Test Project',
+        throw new DOMException('Quota exceeded', 'QuotaExceededError') });
+      const entry = { name: 'Test Project',
   metadata: createDefaultMetadata('Test', 'User'),
   thumbnail: 'data:image/svg+xml;base64,test',
-  fileSize: 1024,
+  fileSize: 1024 }
 };
       // Should not crash when quota is exceeded
-      expect(() => {
-        RecentProjectsManager.addRecentProject(entry);
-      }).not.toThrow();
+      expect(() => { RecentProjectsManager.addRecentProject(entry) }).not.toThrow();
       expect(mockConsoleWarn).toHaveBeenCalledWith()
         'Failed to add recent project:',
         expect.any(DOMException)
       );
     });
-    test('handles localStorage access denied', () => {
-      // Mock localStorage access denied
+    test('handles localStorage access denied', () => { // Mock localStorage access denied
       mockLocalStorage.getItem.mockImplementation(() => {
-        throw new DOMException('Access denied', 'SecurityError');
-      });
+        throw new DOMException('Access denied', 'SecurityError') });
       const projects = RecentProjectsManager.getRecentProjects();
       expect(projects).toEqual([]);
       expect(mockConsoleWarn).toHaveBeenCalledWith()
@@ -283,21 +243,18 @@ describe('Project Edge Cases Integration Tests', () => {
         expect.any(DOMException)
       );
     });
-    test('handles file system errors during save', async () => {
-      // Mock file system errors
+    test('handles file system errors during save', async () => { // Mock file system errors
       global.URL.createObjectURL = jest.fn(() => {
-        throw new Error('File system error');
-      });
+        throw new Error('File system error') });
       const graph = { nodes: [], edges: [] };
       const metadata = createDefaultMetadata('Test', 'User');
       const settings = createDefaultSettings();
       const result = await ProjectManager.saveProjectToDevice(;);
         graph,
-        {
-  name: 'Test Project',
+        { name: 'Test Project',
   fileName: 'test.psg',
-  author: 'User',
-}
+  author: 'User' }
+
         settings
       );
       expect(result.success).toBe(false);
@@ -314,11 +271,10 @@ describe('Project Edge Cases Integration Tests', () => {
       const settings = createDefaultSettings();
       const result = await ProjectManager.saveProjectToDevice(;);
         graph,
-        {
-  name: 'Test Project',
+        { name: 'Test Project',
   fileName: 'test.psg',
-  author: 'User',
-}
+  author: 'User' }
+
         settings
       );
       expect(result.success).toBe(false);
@@ -335,11 +291,10 @@ describe('Project Edge Cases Integration Tests', () => {
       const settings = createDefaultSettings();
       const result = await ProjectManager.saveProjectToDevice(;);
         graph,
-        {
-  name: 'Test Project',
+        { name: 'Test Project',
   fileName: 'test.psg',
-  author: 'User',
-}
+  author: 'User' }
+
         settings
       );
       expect(result.success).toBe(false);
@@ -348,19 +303,18 @@ describe('Project Edge Cases Integration Tests', () => {
       global.URL.createObjectURL = originalCreateObjectURL;
     });
   });
-  describe('Special Character and Internationalization', () => {
-    test('handles Unicode characters in project names and content', () => {
+  describe('Special Character and Internationalization', () => { test('handles Unicode characters in project names and content', () => {
       const unicodeGraph = {
         nodes: [{,
   id: 'unicode-node',
-          type: 'default' as const,
+          type: 'default' as const }
           position: { x: 0, y: 0 },
-          data: {
+          data: { ,
   nodeType: 'text',
   label: '测试节点 🌟 العقدة الاختبار',
   content: 'Content with emoji 🚀 and unicode ñáéíóú',
-  variations: ['变体 1', 'Variação 2', 'вариант 3'],
-}],
+  variations: ['变体 1', 'Variação 2', 'вариант 3'] }
+],
         edges: [];
   };
       const metadata = createDefaultMetadata(;);
@@ -381,12 +335,11 @@ describe('Project Edge Cases Integration Tests', () => {
       const veryLongName = 'A'.repeat(300); // Very long name;
       const result = await ProjectManager.saveProjectToDevice(;);
         { nodes: [], edges: [] },
-        {
-          name: veryLongName,
+        { name: veryLongName }
           fileName: `${veryLongName}.psg`}
 },
-  author: 'User'
-  }
+  author: 'User';
+
         createDefaultSettings();
       );
       expect(result.success).toBe(true);
@@ -408,8 +361,8 @@ describe('Project Edge Cases Integration Tests', () => {
 },
   fileName: `rapid-${i}.psg`}
 },
-  author: 'User'
-  }
+  author: 'User';
+
           settings
       );
       const results = await Promise.allSettled(savePromises);
@@ -417,15 +370,14 @@ describe('Project Edge Cases Integration Tests', () => {
       const successful = results.filter(r => r.status === 'fulfilled' && (r.value as any).success);
       expect(successful.length).toBeGreaterThan(10); // At least half should succeed
     });
-    test('handles mixed read/write operations on recent projects', () => {
-  // Simulate mixed operations
-  const operations = [;
+    test('handles mixed read/write operations on recent projects', () => { // Simulate mixed operations
+  const operations = [
   () => RecentProjectsManager.getRecentProjects(),
   () => RecentProjectsManager.addRecentProject({)
   name: 'Mixed Op 1',
   metadata: createDefaultMetadata('Test 1', 'User'),
   thumbnail: 'data:image/svg+xml;base64,test1',
-  fileSize: 1024,
+  fileSize: 1024 }
 }),
         () => RecentProjectsManager.getRecentProjects(),
         () => RecentProjectsManager.updateLastAccess('Mixed Op 1'),
@@ -434,9 +386,7 @@ describe('Project Edge Cases Integration Tests', () => {
         () => RecentProjectsManager.getRecentProjects()
       ];
       // Should not crash with mixed operations
-      expect(() => {
-        operations.forEach(op => op());
-      }).not.toThrow();
+      expect(() => { operations.forEach(op => op()) }).not.toThrow();
     });
   });
 });

@@ -8,8 +8,8 @@ export * from './generator';
  */
 
 }
-export interface LLMRandomizerWorkflow {
-    generateWithLLM: (request: any, provider?: string) => Promise<any>;
+}
+export interface LLMRandomizerWorkflow { generateWithLLM: (request: any, provider?: string) => Promise<any>;
     parseFromLLM: (llmOutput: string) => Promise<any>;
     validateAndSerialize: (graph: any) => Promise<string>;
     fullWorkflow: (request: any, provider?: string) => Promise<{
@@ -19,8 +19,7 @@ export interface LLMRandomizerWorkflow {
         parsedGraph: any;
         serializedGraph: string;
         errors: any[];
-        warnings: any[];
-
+        warnings: any[] }
 }
     }>;
 

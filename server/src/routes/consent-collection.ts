@@ -18,7 +18,7 @@ import {
   LegalBasis,
   ConsentCategory,
   ComplianceFramework
-} from '../services/ConsentCollectionService';
+ from '../services/ConsentCollectionService';
 
 // Request/Response Schemas
 const InitializeConsentCollectionRequestSchema = z.object({
@@ -295,7 +295,7 @@ const UpdateConsentPreferencesRequestSchema = z.object({
         extendedRetention: z.boolean(),
         customPeriod: z.number().optional(),
         automaticDeletion: z.boolean()
-  }
+
     })).optional(),
     notificationPreferences: z.array(z.object({
       notificationType: z.enum(['POLICY_UPDATE', 'CONSENT_EXPIRY', 'DATA_BREACH', 'RIGHTS_REQUEST', 'COMPLIANCE']),
@@ -308,7 +308,7 @@ const UpdateConsentPreferencesRequestSchema = z.object({
         endTime: z.string(),
         timezone: z.string(),
         exceptions: z.array(z.string())
-  }
+
     })).optional(),
     accessibilityPreferences: z.array(z.object({
       highContrast: z.boolean(),
@@ -319,7 +319,7 @@ const UpdateConsentPreferencesRequestSchema = z.object({
       audioDescription: z.boolean(),
       simplifiedInterface: z.boolean()
     })).optional()
-  }
+
 });
 
 const GenerateJustInTimePromptRequestSchema = z.object({
@@ -363,7 +363,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof InitializeConsentCollectionRequestSchema>;
-  }>('/initialize', {
+>('/initialize', {
     schema: {
       description: 'Initialize consent collection for a new user session',
       tags: ['Consent Collection'],
@@ -382,12 +382,12 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
                 jurisdiction: { type: 'string' },
                 applicableFrameworks: { type: 'array', items: { type: 'string' } },
                 sessionContext: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     handler: async (request, reply) => {
       try {
         const { sessionId, context, userPreferences } = request.body;
@@ -408,7 +408,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             stepsTaken: context.consentFlow.stepsTaken,
             completionRate: 0,
             totalTimeSpent: 0
-  }
+
           displayMethod: context.displayMethod,
           interactionHistory: []
         });
@@ -417,7 +417,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
         const applicableFrameworks = [];
         if (context.geolocation?.country === 'US') {
           applicableFrameworks.push('CCPA');
-        }
+
         if (
           ['US',
             'GB',
@@ -436,7 +436,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             'LU'].includes(context.geolocation?.country || ''
           )) {
           applicableFrameworks.push('GDPR');
-        }
+
 
         reply.send({
           success: true,
@@ -451,18 +451,17 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
               language: userPreferences?.language || 'en',
               timezone: userPreferences?.timezone || 'UTC',
               accessibility: userPreferences?.accessibility || {}
-            }
-          }
-        });
 
-      } catch (error) {
+
+        });
+ catch (error) {
         fastify.log.error('Error initializing consent collection:', error);
         reply.code(500).send({
           error: 'Failed to initialize consent collection',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -471,7 +470,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof CollectConsentRequestSchema>;
-  }>('/collect', {
+>('/collect', {
     schema: {
       description: 'Collect user consent with comprehensive audit trail',
       tags: ['Consent Collection'],
@@ -492,15 +491,15 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
                 complianceStatus: { type: 'string' },
                 auditReference: { type: 'string' },
                 nextActions: { type: 'array', items: { type: 'string' } }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -513,13 +512,13 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
         if (consentData.purpose.category === 'MARKETING') {
           nextActions.push('Set up preference center access');
           nextActions.push('Configure communication frequency');
-        }
+
         if (consentData.thirdPartySharing.length > 0) {
           nextActions.push('Review third-party data sharing agreements');
-        }
+
         if (consentData.processingActivities.some(activity => activity.automatedProcessing)) {
           nextActions.push('Configure automated decision-making preferences');
-        }
+
 
         reply.send({
           success: true,
@@ -531,17 +530,16 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             complianceStatus: 'COMPLIANT',
             auditReference: `AUD-${Date.now()}`,
             nextActions
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error collecting consent:', error);
         reply.code(500).send({
           error: 'Failed to collect consent',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -550,7 +548,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
    */
   fastify.put<{
     Body: z.infer<typeof UpdateConsentPreferencesRequestSchema>;
-  }>('/preferences', {
+>('/preferences', {
     schema: {
       description: 'Update user consent preferences and settings',
       tags: ['Consent Collection'],
@@ -568,15 +566,15 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
                 effectiveDate: { type: 'string' },
                 affectedSystems: { type: 'array', items: { type: 'string' } },
                 propagationStatus: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -588,13 +586,13 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
         const affectedSystems = [];
         if (preferences.marketingPreferences) {
           affectedSystems.push('marketing_automation');
-        }
+
         if (preferences.cookiePreferences) {
           affectedSystems.push('web_analytics', 'advertising_platform');
-        }
+
         if (preferences.dataProcessingPreferences) {
           affectedSystems.push('data_warehouse', 'analytics_engine');
-        }
+
 
         reply.send({
           success: true,
@@ -603,17 +601,16 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             effectiveDate: result.effectiveDate.toISOString(),
             affectedSystems,
             propagationStatus: 'IN_PROGRESS'
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error updating consent preferences:', error);
         reply.code(500).send({
           error: 'Failed to update consent preferences',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -640,15 +637,15 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
                 lastUpdated: { type: 'string' },
                 jurisdiction: { type: 'string' },
                 applicableFrameworks: { type: 'array', items: { type: 'string' } }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -685,17 +682,16 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             lastUpdated: new Date().toISOString(),
             jurisdiction: 'US', // Would be determined from user profile
             applicableFrameworks: ['CCPA', 'GDPR']
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error getting user consents:', error);
         reply.code(500).send({
           error: 'Failed to get user consents',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -704,7 +700,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof GenerateJustInTimePromptRequestSchema>;
-  }>('/just-in-time-prompt', {
+>('/just-in-time-prompt', {
     schema: {
       description: 'Generate contextual just-in-time consent prompt for specific features',
       tags: ['Consent Collection'],
@@ -723,15 +719,15 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
                 required: { type: 'boolean' },
                 displayConditions: { type: 'object' },
                 fallbackOptions: { type: 'array', items: { type: 'string' } }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -754,17 +750,16 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             required: result.required,
             displayConditions,
             fallbackOptions: alternatives.length > 0 ? alternatives : [`Continue without ${feature}`, 'Learn more']
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error generating just-in-time prompt:', error);
         reply.code(500).send({
           error: 'Failed to generate just-in-time prompt',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -773,7 +768,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof ValidateComplianceRequestSchema>;
-  }>('/validate-compliance', {
+>('/validate-compliance', {
     schema: {
       description: 'Validate user consent compliance against regulatory frameworks',
       tags: ['Consent Collection'],
@@ -793,20 +788,20 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
                 complianceScore: { type: 'number' },
                 lastValidated: { type: 'string' },
                 nextReview: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('consent:validate:compliance')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -821,11 +816,11 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
         const nextReview = new Date();
         if (framework === 'GDPR') {
           nextReview.setMonth(nextReview.getMonth() + 12); // Annual review
-        } else if (framework === 'CCPA') {
+ else if (framework === 'CCPA') {
           nextReview.setMonth(nextReview.getMonth() + 6); // Semi-annual review
-        } else {
+ else {
           nextReview.setMonth(nextReview.getMonth() + 12); // Default annual
-        }
+
 
         reply.send({
           success: true,
@@ -836,17 +831,16 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             complianceScore,
             lastValidated: new Date().toISOString(),
             nextReview: nextReview.toISOString()
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error validating consent compliance:', error);
         reply.code(500).send({
           error: 'Failed to validate consent compliance',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -860,7 +854,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
       theme?: string;
       mobile?: boolean;
     };
-  }>('/banner-config', {
+>('/banner-config', {
     schema: {
       description: 'Get localized consent banner configuration',
       tags: ['Consent Collection'],
@@ -871,8 +865,8 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
           language: { type: 'string', default: 'en' },
           theme: { type: 'string', enum: ['light', 'dark', 'auto'], default: 'light' },
           mobile: { type: 'boolean', default: false }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -885,12 +879,12 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
                 applicableFrameworks: { type: 'array', items: { type: 'string' } },
                 legalRequirements: { type: 'object' },
                 translations: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     handler: async (request, reply) => {
       try {
         const { country = 'US', language = 'en', theme = 'light', mobile = false } = request.query;
@@ -913,13 +907,13 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             reject: { text: 'Reject All', style: 'secondary' },
             customize: { text: 'Manage Preferences', style: 'outline' },
             close: { text: '×', style: 'minimal' }
-  }
+
           content: {
             title: 'We value your privacy',
             description: 'We and our partners use technologies like cookies to store and access device information.',
             privacyPolicyUrl: '/privacy-policy',
             cookiePolicyUrl: '/cookie-policy'
-          }
+
         };
 
         const applicableFrameworks = [];
@@ -947,18 +941,16 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
                 customize: 'Customize',
                 privacyPolicy: 'Privacy Policy',
                 cookiePolicy: 'Cookie Policy'
-              }
-            }
-          }
-        });
 
-      } catch (error) {
+
+
+        });
+ catch (error) {
         fastify.log.error('Error getting banner configuration:', error);
         reply.code(500).send({
           error: 'Failed to get banner configuration',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
-}

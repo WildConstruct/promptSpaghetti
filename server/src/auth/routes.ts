@@ -64,7 +64,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       ipAddress: request.ip,
       userAgent: request.headers['user-agent']
     };
-  }
+
 
   // Helper function to extract user ID from JWT
   async function getUserFromToken(request: FastifyRequest): Promise<string> {
@@ -72,12 +72,12 @@ export async function authRoutes(fastify: FastifyInstance) {
     const authHeader = request.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new Error('Missing or invalid authorization header');
-    }
+
     
     const token = authHeader.substring(7);
     const user = await authService.validateToken(token);
     return user.id;
-  }
+
 
   // User Registration
   fastify.post('/register', {
@@ -89,23 +89,23 @@ export async function authRoutes(fastify: FastifyInstance) {
           properties: {
             user: { type: 'object' },
             emailVerificationRequired: { type: 'boolean' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof RegisterSchema> }>, reply: FastifyReply) => {
     try {
       const result = await authService.register(request.body, getRequestContext(request));
       reply.code(201).send(result);
-    } catch (error) {
+ catch (error) {
       reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // User Login
@@ -120,23 +120,23 @@ export async function authRoutes(fastify: FastifyInstance) {
             refreshToken: { type: 'string' },
             user: { type: 'object' },
             expiresAt: { type: 'string', format: 'date-time' }
-          }
-  }
+
+
         401: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof LoginSchema> }>, reply: FastifyReply) => {
     try {
       const result = await authService.login(request.body, getRequestContext(request));
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ error: error.message });
-    }
+
   });
 
   // User Logout
@@ -144,15 +144,15 @@ export async function authRoutes(fastify: FastifyInstance) {
     preHandler: async (request) => {
       // Validate JWT token
       await getUserFromToken(request);
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = await getUserFromToken(request);
       await authService.logout(userId, undefined, getRequestContext(request));
       reply.send({ message: 'Logged out successfully' });
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ error: error.message });
-    }
+
   });
 
   // Token Refresh
@@ -165,23 +165,23 @@ export async function authRoutes(fastify: FastifyInstance) {
           properties: {
             accessToken: { type: 'string' },
             refreshToken: { type: 'string' }
-          }
-  }
+
+
         401: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof RefreshTokenSchema> }>, reply: FastifyReply) => {
     try {
       const result = await authService.refreshToken(request.body, getRequestContext(request));
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ error: error.message });
-    }
+
   });
 
   // Password Reset Request
@@ -193,24 +193,24 @@ export async function authRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             message: { type: 'string' }
-          }
-  }
+
+
         429: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof PasswordResetRequestSchema> }>, reply: FastifyReply) => {
     try {
       await authService.requestPasswordReset(request.body, getRequestContext(request));
       reply.send({ message: 'If the email exists, a password reset link has been sent.' });
-    } catch (error) {
+ catch (error) {
       const statusCode = error.message.includes('Rate limit') ? 429 : 400;
       reply.code(statusCode).send({ error: error.message });
-    }
+
   });
 
   // Password Reset Confirmation
@@ -222,23 +222,23 @@ export async function authRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             message: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof PasswordResetConfirmSchema> }>, reply: FastifyReply) => {
     try {
       await authService.resetPassword(request.body, getRequestContext(request));
       reply.send({ message: 'Password reset successfully.' });
-    } catch (error) {
+ catch (error) {
       reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // Email Verification
@@ -250,23 +250,23 @@ export async function authRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             message: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof EmailVerificationSchema> }>, reply: FastifyReply) => {
     try {
       await authService.verifyEmail(request.body, getRequestContext(request));
       reply.send({ message: 'Email verified successfully.' });
-    } catch (error) {
+ catch (error) {
       reply.code(400).send({ error: error.message });
-    }
+
   });
 
   // Change Password
@@ -274,7 +274,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     preHandler: async (request) => {
       // Validate JWT token
       await getUserFromToken(request);
-  }
+
     schema: {
       body: ChangePasswordSchema,
       response: {
@@ -282,25 +282,25 @@ export async function authRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             message: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof ChangePasswordSchema> }>, reply: FastifyReply) => {
     try {
       const userId = await getUserFromToken(request);
       await authService.changePassword(userId, request.body, getRequestContext(request));
       reply.send({ message: 'Password changed successfully.' });
-    } catch (error) {
+ catch (error) {
       const statusCode = error.message.includes('Rate limit') ? 429 : 400;
       reply.code(statusCode).send({ error: error.message });
-    }
+
   });
 
   // Get Current User Profile
@@ -308,32 +308,32 @@ export async function authRoutes(fastify: FastifyInstance) {
     preHandler: async (request) => {
       // Validate JWT token
       await getUserFromToken(request);
-  }
+
     schema: {
       response: {
         200: {
           type: 'object',
           properties: {
             user: { type: 'object' }
-          }
-  }
+
+
         401: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const authHeader = request.headers.authorization;
       const token = authHeader!.substring(7);
       const user = await authService.validateToken(token);
       reply.send({ user });
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ error: error.message });
-    }
+
   });
 
   // Health Check
@@ -342,12 +342,12 @@ export async function authRoutes(fastify: FastifyInstance) {
       const health = await authService.healthCheck();
       const statusCode = health.status === 'healthy' ? 200 : 503;
       reply.code(statusCode).send(health);
-    } catch (error) {
+ catch (error) {
       reply.code(503).send({
         status: 'unhealthy',
         error: error.message
       });
-    }
+
   });
 
   // Token Validation (for internal use)
@@ -357,33 +357,33 @@ export async function authRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           token: { type: 'string' }
-  }
+
         required: ['token']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             valid: { type: 'boolean' },
             user: { type: 'object' }
-          }
-  }
+
+
         401: {
           type: 'object',
           properties: {
             valid: { type: 'boolean' },
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: { token: string } }>, reply: FastifyReply) => {
     try {
       const user = await authService.validateToken(request.body.token);
       reply.send({ valid: true, user });
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ valid: false, error: error.message });
-    }
+
   });
 
   // Rate Limit Status (for debugging)
@@ -393,19 +393,19 @@ export async function authRoutes(fastify: FastifyInstance) {
       if (process.env.NODE_ENV === 'production') {
         reply.code(404).send({ error: 'Not found' });
         return;
-      }
+
 
       // Get rate limit status without incrementing
       // This would require exposing the rate limit service
       reply.send({ message: 'Rate limit status endpoint - implement based on requirements' });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: error.message });
-    }
+
   });
 
   // Store auth service reference for middleware
   fastify.decorate('authService', authService);
-}
+
 
 // JWT Authentication Middleware
 export async function jwtAuthMiddleware(fastify: FastifyInstance) {
@@ -429,14 +429,14 @@ export async function jwtAuthMiddleware(fastify: FastifyInstance) {
 
     if (isPublicRoute || !request.routeOptions?.url?.startsWith('/')) {
       return;
-    }
+
 
     // Extract JWT token
     const authHeader = request.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       reply.code(401).send({ error: 'Missing or invalid authorization header' });
       return;
-    }
+
 
     try {
       const token = authHeader.substring(7);
@@ -445,9 +445,8 @@ export async function jwtAuthMiddleware(fastify: FastifyInstance) {
       
       // Attach user to request
       (request as any).user = user;
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ error: 'Invalid or expired token' });
       return;
-    }
+
   });
-}

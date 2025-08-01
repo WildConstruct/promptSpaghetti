@@ -16,8 +16,7 @@
 import { EventEmitter } from 'events';
 import { SecurityDashboardPolicies } from '../../../server/src/services/security/SecurityDashboardPolicies';
 import { AutomatedEnforcementService } from '../../../server/src/services/trust/AutomatedEnforcementService';
-export declare enum PolicyDomain {
-    SECURITY = "SECURITY",
+export declare enum PolicyDomain { SECURITY = "SECURITY",
     CONTENT = "CONTENT",
     QUALITY = "QUALITY",
     COMPLIANCE = "COMPLIANCE",
@@ -51,12 +50,12 @@ export declare enum ComplianceFramework {
     SOX = "SOX",
     HIPAA = "HIPAA",
     ISO_27001 = "ISO_27001",
-    PCI_DSS = "PCI_DSS",
+    PCI_DSS = "PCI_DSS" }
     ENTERTAINMENT_INDUSTRY = "ENTERTAINMENT_INDUSTRY"
 
 }
-export interface UnifiedPolicy {
-    id: string;
+}
+export interface UnifiedPolicy { id: string;
     name: string;
     description: string;
     domain: PolicyDomain;
@@ -66,54 +65,42 @@ export interface UnifiedPolicy {
         rules: PolicyRule[];
         conditions: PolicyCondition[];
         actions: PolicyAction[];
-        exceptions: PolicyException[];
+        exceptions: PolicyException[] }
 }
     };
-    scope: {
-        workspaceIds?: string[];
+    scope: { workspaceIds?: string[];
         projectIds?: string[];
         userRoles?: string[];
         contentTypes?: string[];
-        vfxPipelines?: string[];
-    };
-    enforcement: {
-        mode: 'ENFORCE' | 'WARN' | 'MONITOR' | 'DISABLED';
+        vfxPipelines?: string[] };
+    enforcement: { mode: 'ENFORCE' | 'WARN' | 'MONITOR' | 'DISABLED';
         severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
         automated: boolean;
-        reviewRequired: boolean;
-    };
-    compliance: {
-        frameworks: ComplianceFramework[];
+        reviewRequired: boolean };
+    compliance: { frameworks: ComplianceFramework[];
         requirements: string[];
         auditRequired: boolean;
-        reportingRequired: boolean;
-    };
-    historicalAccuracy?: {
-        timePeriods: string[];
+        reportingRequired: boolean };
+    historicalAccuracy?: { timePeriods: string[];
         regions: string[];
         cultures: string[];
         accuracyLevel: 'STRICT' | 'MODERATE' | 'FLEXIBLE';
-        expertValidationRequired: boolean;
-    };
-    metadata: {
-        version: number;
+        expertValidationRequired: boolean };
+    metadata: { version: number;
         createdBy: string;
         createdAt: Date;
         updatedAt: Date;
         lastEvaluated?: Date;
         evaluationCount: number;
         violationCount: number;
-        tags: string[];
-    };
-    dependencies?: {
-        requiredPolicies: string[];
+        tags: string[] };
+    dependencies?: { requiredPolicies: string[];
         conflictingPolicies: string[];
-        supersededBy?: string;
-    };
+        supersededBy?: string };
 
 }
-export interface PolicyRule {
-    id: string;
+}
+export interface PolicyRule { id: string;
     name: string;
     description: string;
     ruleType: 'VALIDATION' | 'RESTRICTION' | 'REQUIREMENT' | 'THRESHOLD' | 'PATTERN';
@@ -121,18 +108,17 @@ export interface PolicyRule {
         field: string;
         operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN' | 'REGEX' | 'CUSTOM';
         value: any;
-        customFunction?: string;
+        customFunction?: string }
 }
     };
-    context?: {
-        timeBasedRules?: TimeBasedRule[];
+    context?: { timeBasedRules?: TimeBasedRule[];
         locationBasedRules?: LocationBasedRule[];
         roleBasedRules?: RoleBasedRule[];
-        contentBasedRules?: ContentBasedRule[];
-    };
+        contentBasedRules?: ContentBasedRule[] };
     weight: number;
     enabled: boolean;
 
+}
 }
 export interface PolicyCondition {
     id: string;
@@ -143,88 +129,77 @@ export interface PolicyCondition {
         parameters: Record<string, any>;
         evaluationMode: 'AND' | 'OR' | 'NOT'
 }
+}
   };
-    evaluationContext: {
-        requiredData: string[];
+    evaluationContext: { requiredData: string[];
         externalServices?: string[];
-        cacheDuration?: number;
-    };
+        cacheDuration?: number };
     weight: number;
     critical: boolean;
 
 }
-export interface PolicyAction {
-    id: string;
+}
+export interface PolicyAction { id: string;
     name: string;
     actionType: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE' | 'NOTIFY' | 'LOG' | 'TRANSFORM';
     configuration: {
         parameters: Record<string, any>;
         targetEntities: string[];
         executionMode: 'IMMEDIATE' | 'DEFERRED' | 'SCHEDULED';
-        rollbackEnabled: boolean;
+        rollbackEnabled: boolean }
 }
     };
-    integrations?: {
-        services: string[];
+    integrations?: { services: string[];
         webhooks: string[];
-        notifications: string[];
-    };
+        notifications: string[] };
     priority: number;
     enabled: boolean;
 
 }
-export interface PolicyException {
-    id: string;
+}
+export interface PolicyException { id: string;
     name: string;
     description: string;
     criteria: {
         userIds?: string[];
         roleIds?: string[];
         entityIds?: string[];
-        contextConditions?: Record<string, any>;
+        contextConditions?: Record<string, any> }
 }
     };
-    scope: {
-        rules?: string[];
+    scope: { rules?: string[];
         actions?: string[];
-        fullPolicy?: boolean;
-    };
-    governance: {
-        approvalRequired: boolean;
+        fullPolicy?: boolean };
+    governance: { approvalRequired: boolean;
         approvedBy?: string;
         approvalDate?: Date;
         expiresAt?: Date;
-        reviewRequired: boolean;
-    };
+        reviewRequired: boolean };
     active: boolean;
 
 }
-export interface TimeBasedRule {
-    timePeriods: string[];
+}
+export interface TimeBasedRule { timePeriods: string[];
     seasonality: boolean;
-    historicalContext: boolean;
-
+    historicalContext: boolean }
 }
-export interface LocationBasedRule {
-    regions: string[];
+}
+export interface LocationBasedRule { regions: string[];
     geopoliticalContext: boolean;
-    culturalConsiderations: string[];
-
+    culturalConsiderations: string[] }
 }
-export interface RoleBasedRule {
-    roles: string[];
+}
+export interface RoleBasedRule { roles: string[];
     permissions: string[];
-    clearanceLevel: string;
-
+    clearanceLevel: string }
 }
-export interface ContentBasedRule {
-    contentTypes: string[];
+}
+export interface ContentBasedRule { contentTypes: string[];
     qualityMetrics: Record<string, number>;
-    historicalAccuracy: boolean;
-
+    historicalAccuracy: boolean }
 }
-export interface PolicyEvaluationContext {
-    requestId: string;
+}
+export interface PolicyEvaluationContext { requestId: string;
     timestamp: Date;
     userId?: string;
     entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
@@ -233,7 +208,7 @@ export interface PolicyEvaluationContext {
         ipAddress: string;
         userAgent: string;
         geolocation?: string;
-        authenticationMethod: string;
+        authenticationMethod: string }
 }
     };
     operation: {
@@ -241,17 +216,15 @@ export interface PolicyEvaluationContext {
         parameters: Record<string, any>;
         riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
   };
-    contentContext?: {
-        historicalPeriod?: string;
+    contentContext?: { historicalPeriod?: string;
         culturalContext?: string;
         accuracyLevel?: string;
-        expertReviewed?: boolean;
-    };
+        expertReviewed?: boolean };
     additionalContext: Record<string, any>;
 
 }
-export interface PolicyEvaluationResult {
-    requestId: string;
+}
+export interface PolicyEvaluationResult { requestId: string;
     evaluationId: string;
     timestamp: Date;
     policyId: string;
@@ -263,91 +236,72 @@ export interface PolicyEvaluationResult {
         ruleName: string;
         result: 'PASS' | 'FAIL' | 'WARN';
         score: number;
-        details: any;
+        details: any }
 }
     }>;
-    conditionResults: Array<{
-        conditionId: string;
+    conditionResults: Array<{ conditionId: string;
         conditionName: string;
         result: 'MET' | 'NOT_MET' | 'ERROR';
-        details: any;
-    }>;
-    triggeredActions: Array<{
-        actionId: string;
+        details: any }>;
+    triggeredActions: Array<{ actionId: string;
         actionType: string;
         executed: boolean;
         result?: any;
-        error?: string;
-    }>;
-    appliedExceptions: Array<{
-        exceptionId: string;
+        error?: string }>;
+    appliedExceptions: Array<{ exceptionId: string;
         exceptionName: string;
-        scope: string[];
-    }>;
-    complianceStatus: {
-        frameworks: Array<{
+        scope: string[] }>;
+    complianceStatus: { frameworks: Array<{
             framework: ComplianceFramework;
             compliant: boolean;
-            violations: string[];
-        }>;
+            violations: string[] }>;
     };
-    performance: {
-        evaluationTimeMs: number;
+    performance: { evaluationTimeMs: number;
         cacheHit: boolean;
-        externalServiceCalls: number;
-    };
-    metadata: {
-        evaluatedBy: string;
+        externalServiceCalls: number };
+    metadata: { evaluatedBy: string;
         reviewRequired: boolean;
         escalationRequired: boolean;
-        auditRequired: boolean;
-    };
+        auditRequired: boolean };
 
 }
-export interface PolicyViolation {
-    id: string;
+}
+export interface PolicyViolation { id: string;
     policyId: string;
     policyName: string;
     violation: {
         type: 'RULE_VIOLATION' | 'CONDITION_FAILURE' | 'THRESHOLD_EXCEEDED' | 'PATTERN_DETECTED';
         severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
         description: string;
-        details: any;
+        details: any }
 }
     };
     context: PolicyEvaluationContext;
-    impact: {
-        affectedEntities: string[];
+    impact: { affectedEntities: string[];
         riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
         businessImpact: string;
-        complianceImpact: string[];
-    };
-    response: {
-        actionsTaken: string[];
+        complianceImpact: string[] };
+    response: { actionsTaken: string[];
         escalated: boolean;
         resolved: boolean;
         resolvedAt?: Date;
-        resolvedBy?: string;
-    };
-    metadata: {
-        detectedAt: Date;
+        resolvedBy?: string };
+    metadata: { detectedAt: Date;
         detectedBy: string;
         reportedAt?: Date;
         acknowledgedAt?: Date;
-        tags: string[];
-    };
+        tags: string[] };
 /**
  * Unified Policy Management System
  */
-export declare class PolicyManagement extends EventEmitter {
-    private policies;
+export declare class PolicyManagement extends EventEmitter { private policies;
     private evaluationCache;
     private violations;
     private performanceMetrics;
     private securityDashboardPolicies;
     private automatedEnforcementService;
     constructor();
-      securityDashboardPolicies?: SecurityDashboardPolicies,
+      securityDashboardPolicies?: SecurityDashboardPolicies }
       automatedEnforcementService?: AutomatedEnforcementService
     );
     /**
@@ -387,12 +341,11 @@ export declare class PolicyManagement extends EventEmitter {
     /**
      * Get all policies
      */
-    getPolicies(filters?: {)
+    getPolicies(filters?: { )
         domain?: PolicyDomain;
         type?: PolicyType;
         status?: PolicyStatus;
-        enabled?: boolean;
-    }): UnifiedPolicy[];
+        enabled?: boolean }): UnifiedPolicy[];
     /**
      * Get policy by ID
      */

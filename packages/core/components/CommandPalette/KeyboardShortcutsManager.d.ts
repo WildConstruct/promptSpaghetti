@@ -7,17 +7,16 @@
 import React from 'react';
 
 }
-export interface KeyboardShortcut {
-    id: string;
+}
+export interface KeyboardShortcut { id: string;
     key: string;
     modifiers: ('ctrl' | 'meta' | 'shift' | 'alt')[];
     action: () => void | Promise<void>;
     description: string;
     category: 'editing' | 'navigation' | 'selection' | 'view' | 'file' | 'generation';
     enabled: boolean;
-    global?: boolean;
-
-
+    global?: boolean }
+}
 }
 export interface KeyboardShortcutsManagerProps {
     onCommandPalette: () => void;
@@ -41,4 +40,5 @@ export interface KeyboardShortcutsManagerProps {
 export declare const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps>;
 export default KeyboardShortcutsManager;
 //# sourceMappingURL=KeyboardShortcutsManager.d.ts.map
+}
 }

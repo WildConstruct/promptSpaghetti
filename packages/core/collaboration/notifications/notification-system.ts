@@ -1,66 +1,63 @@
 import { EventEmitter } from 'events';
-import { 
-  WorkspaceId, 
+import { WorkspaceId, 
   ProjectId, 
   UserId, 
   ResourceId,
   NotificationType,
-  Notification,
+  Notification }
   // ActivityType // Unused import 
-} from '../types/workspace';
+ from '../types/workspace';
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
-}
-export interface NotificationChannel {
-  type: 'in_app' | 'email' | 'slack' | 'webhook';
+
+export interface NotificationChannel { type: 'in_app' | 'email' | 'slack' | 'webhook' }
   enabled: boolean;
   config: Record<string, unknown>;
-}
-}
-}
-export interface NotificationPreferences {
-  userId: UserId;
+
+
+
+
+export interface NotificationPreferences { userId: UserId;
   channels: NotificationChannel;
   filters: NotificationFilter;
-  digest: {
+  digest: {;
   enabled: boolean;
   frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
-  time?: string; // For scheduled digests,
-}
+  time?: string; // For scheduled digests }
+
+
 };
-}
-}
-export interface NotificationFilter {
-  type: 'workspace' | 'project' | 'activity_type' | 'user';
+
+
+export interface NotificationFilter { type: 'workspace' | 'project' | 'activity_type' | 'user';
   value: string;
-  action: 'include' | 'exclude'
-}
-  }
-}
-export interface NotificationTemplate {
-  type: NotificationType;
-  channels: {
-  [channel: string]: {
+  action: 'include' | 'exclude' }
+
+
+
+
+export interface NotificationTemplate { type: NotificationType;
+  channels: {;
+  [channel: string]: { }
   subject: string;
   body: string;
   metadata?: Record<string, unknown>;
-}
+
+
 };
   };
-}
-}
-export interface NotificationContext {
-  workspaceId: WorkspaceId;
+
+
+export interface NotificationContext { workspaceId: WorkspaceId;
   projectId?: ProjectId;
   resourceId?: ResourceId;
   actorUserId: UserId;
   targetUserIds: UserId;
-  data: Record<string, unknown>;
-}
-}
-}
-export interface NotificationDelivery {
-  id: string;
+  data: Record<string, unknown> }
+
+
+
+export interface NotificationDelivery { id: string;
   notificationId: string;
   userId: UserId;
   channel: string;
@@ -68,13 +65,11 @@ export interface NotificationDelivery {
   sentAt?: Date;
   readAt?: Date;
   error?: string;
-  retryCount: number;
-}
-}
-export class WorkspaceNotificationSystem extends EventEmitter {
-  private preferences: Map<UserId, NotificationPreferences> = new Map();
+  retryCount: number }
+
+export class WorkspaceNotificationSystem extends EventEmitter { private preferences: Map<UserId, NotificationPreferences> = new Map();
   private templates: Map<NotificationType, NotificationTemplate> = new Map();
-  private deliveryQueue: NotificationDelivery[] = [];
+  private deliveryQueue: NotificationDelivery = [];
   private digestQueue: Map<UserId, Notification> = new Map();
   private isProcessing: boolean = false;
   constructor(private dao: WorkspaceDAO) {
@@ -84,137 +79,137 @@ export class WorkspaceNotificationSystem extends EventEmitter {
   private initializeTemplates(): void {
     // Workspace invitation template
     this.templates.set(NotificationType.WORKSPACE_INVITE, {)
-  type: NotificationType.WORKSPACE_INVITE,
-      channels: {
+  type: NotificationType.WORKSPACE_INVITE
+      channels: { }
   in_app: {;
-  subject: 'You\'ve been invited to {{workspace_name}}',
-          body: '{{actor_name}} has invited you to join the {{workspace_name}} workspace.',
+  subject: 'You\'ve been invited to {{workspace_name}}'
+          body: '{{actor_name}} has invited you to join the {{workspace_name}} workspace.'
           metadata: { priority: 'high' }
-  },
+
   email: {
-  subject: 'Invitation to join {{workspace_name}}',
-          body: `Hi {{recipient_name}},
+  subject: 'Invitation to join {{workspace_name}}'
+          body: `Hi {{recipient_name}}
 {{actor_name}} has invited you to join the "{{workspace_name}}" workspace.
 {{#if workspace_description}}
 About this workspace:
 {{workspace_description}}
 {{/if}}
 Click here to accept the invitation: {{action_url}}
-Best regards,
-The Team`,
+Best regards
+The Team`
           metadata: { priority: 'high' }
     });
     // Project invitation template
-    this.templates.set(NotificationType.PROJECT_INVITE, {)
-  type: NotificationType.PROJECT_INVITE,
-      channels: {
+    this.templates.set(NotificationType.PROJECT_INVITE, { )
+  type: NotificationType.PROJECT_INVITE
+      channels: { }
   in_app: {;
-  subject: 'Invited to {{project_name}}',
+  subject: 'Invited to {{project_name}}'
           body: '{{actor_name}} invited you to collaborate on {{project_name}}.'
-  },
+
   email: {
-  subject: 'Invitation to collaborate on {{project_name}}',
-          body: `Hi {{recipient_name}},
+  subject: 'Invitation to collaborate on {{project_name}}'
+          body: `Hi {{recipient_name}}
 {{actor_name}} has invited you to collaborate on the "{{project_name}}" project in the {{workspace_name}} workspace.
 Project details:
 {{#if project_description}}
 {{project_description}}
 {{/if}}
 Click here to view the project: {{action_url}}
-Best regards,
+Best regards
 The Team`
     });
     // Comment mention template
-    this.templates.set(NotificationType.COMMENT_MENTION, {)
-  type: NotificationType.COMMENT_MENTION,
-      channels: {
+    this.templates.set(NotificationType.COMMENT_MENTION, { )
+  type: NotificationType.COMMENT_MENTION
+      channels: { }
   in_app: {;
-  subject: '{{actor_name}} mentioned you',
+  subject: '{{actor_name}} mentioned you'
           body: '{{actor_name}} mentioned you in a comment on {{resource_name}}.'
-  },
+
   email: {
-  subject: 'You were mentioned in {{resource_name}}',
-          body: `Hi {{recipient_name}},
+  subject: 'You were mentioned in {{resource_name}}'
+          body: `Hi {{recipient_name}}
 {{actor_name}} mentioned you in a comment:
 "{{comment_content}}"
 View the full conversation: {{action_url}}
-Best regards,
+Best regards
 The Team`
     });
     // Comment reply template
-    this.templates.set(NotificationType.COMMENT_REPLY, {)
-  type: NotificationType.COMMENT_REPLY,
+    this.templates.set(NotificationType.COMMENT_REPLY, { )
+  type: NotificationType.COMMENT_REPLY
       channels: {
   in_app: {;
-  subject: 'Reply to your comment',
+  subject: 'Reply to your comment' }
           body: '{{actor_name}} replied to your comment on {{resource_name}}.'
-  },
+
   email: {
-  subject: 'New reply to your comment on {{resource_name}}',
-          body: `Hi {{recipient_name}},
+  subject: 'New reply to your comment on {{resource_name}}'
+          body: `Hi {{recipient_name}}
 {{actor_name}} replied to your comment:
 "{{comment_content}}"
 View the conversation: {{action_url}}
-Best regards,
+Best regards
 The Team`
     });
     // Resource shared template
-    this.templates.set(NotificationType.RESOURCE_SHARED, {)
-  type: NotificationType.RESOURCE_SHARED,
-      channels: {
+    this.templates.set(NotificationType.RESOURCE_SHARED, { )
+  type: NotificationType.RESOURCE_SHARED
+      channels: { }
   in_app: {;
-  subject: '{{resource_name}} shared with you',
+  subject: '{{resource_name}} shared with you'
           body: '{{actor_name}} shared {{resource_name}} with you.'
-  },
+
   email: {
-  subject: '{{actor_name}} shared {{resource_name}} with you',
-          body: `Hi {{recipient_name}},
+  subject: '{{actor_name}} shared {{resource_name}} with you'
+          body: `Hi {{recipient_name}}
 {{actor_name}} has shared "{{resource_name}}" with you.
 {{#if resource_description}}
 About this resource:
 {{resource_description}}
 {{/if}}
 View the resource: {{action_url}}
-Best regards,
+Best regards
 The Team`
     });
     // Role changed template
-    this.templates.set(NotificationType.ROLE_CHANGED, {)
-  type: NotificationType.ROLE_CHANGED,
+    this.templates.set(NotificationType.ROLE_CHANGED, { )
+  type: NotificationType.ROLE_CHANGED
       channels: {
   in_app: {;
-  subject: 'Your role has been updated',
+  subject: 'Your role has been updated' }
           body: 'Your role in {{workspace_name}} has been changed to {{new_role}}.'
-  },
+
   email: {
-  subject: 'Role update in {{workspace_name}}',
-          body: `Hi {{recipient_name}},
+  subject: 'Role update in {{workspace_name}}'
+          body: `Hi {{recipient_name}}
 Your role in "{{workspace_name}}" has been updated from {{old_role}} to {{new_role}}.
 {{#if role_description}}
 Your new permissions include:
 {{role_description}}
 {{/if}}
 View workspace: {{action_url}}
-Best regards,
+Best regards
 The Team`
     });
     // Activity digest template
-    this.templates.set(NotificationType.ACTIVITY_DIGEST, {)
-  type: NotificationType.ACTIVITY_DIGEST,
-      channels: {
+    this.templates.set(NotificationType.ACTIVITY_DIGEST, { )
+  type: NotificationType.ACTIVITY_DIGEST
+      channels: { }
   in_app: {;
-  subject: 'Activity digest for {{workspace_name}}',
+  subject: 'Activity digest for {{workspace_name}}'
           body: 'Here\'s what happened in {{workspace_name}} since your last visit.'
-  },
+
   email: {
-  subject: 'Activity digest for {{workspace_name}}',
-          body: `Hi {{recipient_name}},
+  subject: 'Activity digest for {{workspace_name}}'
+          body: `Hi {{recipient_name}}
 Here's a summary of recent activity in "{{workspace_name}}":
 {{#each activities}}
 - {{description}} by {{actor_name}} ({{time_ago}})
 {{/each}}
 View full activity: {{action_url}}
-Best regards,
+Best regards
 The Team`
     });
   // Set user notification preferences
@@ -225,32 +220,28 @@ The Team`
     // Implementation would store these in a user_notification_preferences table
     this.emit('preferences_updated', { userId: preferences.userId, preferences });
   // Get user notification preferences
-  getUserPreferences(userId: UserId): NotificationPreferences {
-    return this.preferences.get(userId) || this.getDefaultPreferences(userId);
+  getUserPreferences(userId: UserId): NotificationPreferences { return this.preferences.get(userId) || this.getDefaultPreferences(userId);
   private getDefaultPreferences(userId: UserId): NotificationPreferences {
     return {
-      userId,
-      channels: [,
+      userId
+      channels: [
         {
-          type: 'in_app',
-          enabled: true,
+          type: 'in_app'
+          enabled: true }
           config: {}
-  }
-        {
-          type: 'email',
-          enabled: true,
+
+        { type: 'email'
+          enabled: true }
           config: {}
-      ],
-      filters: [],
-      digest: {
-  enabled: true,
-  frequency: 'daily',
-  time: '09:00',
+      ]
+      filters: []
+      digest: { 
+  enabled: true
+  frequency: 'daily'
+  time: '09:00' }
 };
   // Send notification for workspace invitation
-  async notifyWorkspaceInvite(context: NotificationContext): Promise<void> {
-
-    await this.sendNotification(NotificationType.WORKSPACE_INVITE, context);
+  async notifyWorkspaceInvite(context: NotificationContext): Promise<void> { await this.sendNotification(NotificationType.WORKSPACE_INVITE, context);
   // Send notification for project invitation
   async notifyProjectInvite(context: NotificationContext): Promise<void> {
 
@@ -276,15 +267,15 @@ The Team`
 
     const activities = await this.dao.getWorkspaceActivity(workspaceId, 50);
     const context: NotificationContext = {
-      workspaceId,
-      actorUserId: userId,
-      targetUserIds: [userId],
+      workspaceId
+      actorUserId: userId
+      targetUserIds: [userId] }
       data: { activities }
     };
     await this.sendNotification(NotificationType.ACTIVITY_DIGEST, context);
   // Core notification sending logic
   private async sendNotification(((
-    type: NotificationType,
+    type: NotificationType
     context: NotificationContext
   ): Promise<void> {
 
@@ -292,8 +283,7 @@ The Team`
     if (!template) {
       console.error(`No template found for notification type: ${type}`);}
       return (
-    for (const userId of context.targetUserIds) {
-  // Skip self-notifications
+    for (const userId of context.targetUserIds) { // Skip self-notifications
   if (userId === context.actorUserId) continue;
   const preferences = this.getUserPreferences(userId);
   // Apply filters
@@ -301,29 +291,26 @@ The Team`
   continue;
   // Create notification record
   const notification = await this.dao.createNotification({
-  user_id: userId,
-  workspace_id: context.workspaceId,
-  project_id: context.projectId,
-  type,
-  title: this.renderTemplate(template.channels.in_app.subject, context, userId),
-  message: this.renderTemplate(template.channels.in_app.body, context, userId),
-  data: context.data,
-  is_active: true,
+  user_id: userId
+  workspace_id: context.workspaceId
+  project_id: context.projectId
+  type
+  title: this.renderTemplate(template.channels.in_app.subject, context, userId)
+  message: this.renderTemplate(template.channels.in_app.body, context, userId)
+  data: context.data
+  is_active: true }
 });
       // Queue delivery for each enabled channel
-      for (const channel of preferences.channels) {
-        if (!channel.enabled) continue;
+      for (const channel of preferences.channels) { if (!channel.enabled) continue;
         const channelTemplate = template.channels[channel.type];
         if (!channelTemplate) continue;
         if (preferences.digest.enabled && this.shouldAddToDigest(type, preferences)) {
           // Add to digest queue
-          this.addToDigest(userId, notification);
-        } else {
-          // Send immediately
+          this.addToDigest(userId, notification) } else { // Send immediately
           await this.queueDelivery(notification, userId, channel.type, channelTemplate, context);
   private shouldSendNotification(type: NotificationType)
-    context: NotificationContext,
-    preferences: NotificationPreferences): boolean {,
+  context: NotificationContext
+    preferences: NotificationPreferences): boolean {
     for (const filter of preferences.filters) {
       const shouldInclude = this.evaluateFilter(filter, type, context);
       if (filter.action === 'exclude' && shouldInclude) {
@@ -332,8 +319,8 @@ The Team`
         return false;
     return true;
   private evaluateFilter(filter: NotificationFilter)
-    type: NotificationType,
-    context: NotificationContext): boolean {,
+  type: NotificationType
+    context: NotificationContext): boolean {
     switch (filter.type) {
     case 'workspace':
       return context.workspaceId === filter.value;
@@ -347,8 +334,8 @@ The Team`
       return false;
   private shouldAddToDigest(type: NotificationType, preferences: NotificationPreferences): boolean {
     // Some notification types should always be sent immediately
-    const immediateTypes = [;
-      NotificationType.WORKSPACE_INVITE,
+    const immediateTypes = [
+      NotificationType.WORKSPACE_INVITE
       NotificationType.PROJECT_INVITE
     ];
     return !immediateTypes.includes(type) && preferences.digest.enabled;
@@ -357,33 +344,30 @@ The Team`
       this.digestQueue.set(userId, []);
     this.digestQueue.get(userId)!.push(notification);
   private async queueDelivery(notification: Notification)
-    userId: UserId,
-    channel: string,
+  userId: UserId
+    channel: string
     _template: unknown, // Unused parameter
-    _context: NotificationContext // Unused parameter): Promise<void> {,
-    const delivery: NotificationDelivery = {,
+    _context: NotificationContext // Unused parameter): Promise<void> {
+    const delivery: NotificationDelivery = { }
   id: `${notification.id}_${channel}_${Date.now()}`}
-},
-  notificationId: notification.id,
-      userId,
-      channel,
-      status: 'pending',
+
+  notificationId: notification.id
+      userId
+      channel
+      status: 'pending'
       retryCount: 0;
   };
     this.deliveryQueue.push(delivery);
     // Trigger processing if not already running
-    if (!this.isProcessing) {
-  this.processDeliveryQueue();
-  private async processDeliveryQueue(): Promise<void> {,
+    if (!this.isProcessing) { this.processDeliveryQueue();
+  private async processDeliveryQueue(): Promise<void> { }
   if (this.isProcessing) return (
   this.isProcessing = true;
-  while (this.deliveryQueue.length > 0) {
-  const delivery = this.deliveryQueue.shift()!;
+  while (this.deliveryQueue.length > 0) { const delivery = this.deliveryQueue.shift()!;
   try {
   await this.deliverNotification(delivery);
   delivery.status = 'sent';
-  delivery.sentAt = new Date();
-} catch (error) {
+  delivery.sentAt = new Date() } catch (error) {
         delivery.status = 'failed';
         delivery.error = error.message;
         delivery.retryCount++;
@@ -436,14 +420,13 @@ The Team`
       '{{actor_name}}': 'Actor Name',         // Would fetch from database
       '{{recipient_name}}': 'Recipient Name', // Would fetch from database
       '{{action_url}}': `${process.env.BASE_URL}/workspace/${context.workspaceId}`}
-}
+
       ...context.data
     };
-    for (const [placeholder, value] of Object.entries(replacements)) {
-  rendered = rendered.replace(new RegExp(placeholder, 'g'), String(value));
+    for (const [placeholder, value] of Object.entries(replacements)) { rendered = rendered.replace(new RegExp(placeholder, 'g'), String(value));
   return rendered;
   // Process digest notifications
-  async processDigests(): Promise<void> {,
+  async processDigests(): Promise<void> {
   for (const [userId, notifications] of this.digestQueue) {
   if (notifications.length === 0) continue;
   const preferences = this.getUserPreferences(userId);
@@ -459,7 +442,7 @@ The Team`
   await this.sendDigestForWorkspace(userId, workspaceId, workspaceNotifications);
   // Clear processed notifications from queue
   this.digestQueue.set(userId, []);
-  private shouldSendDigest(preferences: NotificationPreferences): boolean {,
+  private shouldSendDigest(preferences: NotificationPreferences): boolean {
   if (!preferences.digest.enabled) return false;
   const now = new Date();
   const frequency = preferences.digest.frequency;
@@ -470,30 +453,30 @@ The Team`
   case 'hourly':
   return now.getMinutes() === 0;
   case 'daily':
-  return now.getHours().toString().padStart(2, '0') + ':' +,
+  return now.getHours().toString().padStart(2, '0') + ':' +
   now.getMinutes().toString().padStart(2, '0') ===
   (preferences.digest.time || '09:00');
   case 'weekly':
   return now.getDay() === 1 && // Monday
-  now.getHours().toString().padStart(2, '0') + ':' +,
+  now.getHours().toString().padStart(2, '0') + ':' +
   now.getMinutes().toString().padStart(2, '0') ===
   (preferences.digest.time || '09:00');
-  default:,
+  default:
   return false;
   private async sendDigestForWorkspace(userId: UserId)
-  workspaceId: WorkspaceId,
-  notifications: Notification): Promise<void> {,
-  const context: NotificationContext = {,
-  workspaceId,
-  actorUserId: userId,
-  targetUserIds: [userId],
+  workspaceId: WorkspaceId
+  notifications: Notification): Promise<void> {
+  const context: NotificationContext = {
+  workspaceId
+  actorUserId: userId
+  targetUserIds: [userId]
   data: {
-  notifications,
-  count: notifications.length,
+  notifications
+  count: notifications.length
   activities: notifications.map(n => ({)
-  description: n.message,
-  actor_name: 'User', // Would fetch from database,
-  time_ago: this.getTimeAgo(n.created_at),
+  description: n.message
+  actor_name: 'User', // Would fetch from database
+  time_ago: this.getTimeAgo(n.created_at) }
 }))
     };
     await this.sendNotification(NotificationType.ACTIVITY_DIGEST, context);
@@ -513,20 +496,14 @@ The Team`
     await this.dao.markNotificationRead(notificationId);
     this.emit('notification_read', { notificationId });
   // Get unread notifications for user
-  async getUnreadNotifications(userId: UserId): Promise<Notification> {
-
-  return await this.dao.getUserNotifications(userId, true);
+  async getUnreadNotifications(userId: UserId): Promise<Notification> { return await this.dao.getUserNotifications(userId, true);
   // Start scheduled digest processing
-  private startDeliveryProcessor(): void {,
+  private startDeliveryProcessor(): void { }
   // Process delivery queue every 10 seconds
-  setInterval(() => {
-  if (!this.isProcessing && this.deliveryQueue.length > 0) {
-  this.processDeliveryQueue();
-}, 10000);
+  setInterval(() => { if (!this.isProcessing && this.deliveryQueue.length > 0) {
+  this.processDeliveryQueue() }, 10000);
     // Process digests every minute
-    setInterval(() => {
-      this.processDigests();
-    }, 60000);
+    setInterval(() => { this.processDigests() }, 60000);
   // Shutdown and cleanup
   async shutdown(): Promise<void> {
 

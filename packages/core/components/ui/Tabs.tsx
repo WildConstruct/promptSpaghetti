@@ -13,9 +13,9 @@ export const TabsList: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ child
 );
 
 export const TabsTrigger: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { value: string }> = ({ )
-  children, 
-  className, 
-  value,
+  children
+  className
+  value }
   ...props 
 }) => ()
   <button className={`tabs-trigger ${className || ''}`} data-value={value} {...props}>}
@@ -24,9 +24,9 @@ export const TabsTrigger: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>
 );
 
 export const TabsContent: React.FC<React.HTMLAttributes<HTMLDivElement> & { value: string }> = ({ )
-  children, 
-  className, 
-  value,
+  children
+  className
+  value }
   ...props 
 }) => ()
   <div className={`tabs-content ${className || ''}`} data-value={value} {...props}>}

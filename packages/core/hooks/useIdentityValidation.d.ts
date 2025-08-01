@@ -4,24 +4,22 @@
  * Provides easy-to-use React integration for the identity validation system.
  * Handles validation requests, status tracking, and trust score management.
  */
-import { 
-  IdentityValidationType,
+import { IdentityValidationType,
   IdentityValidationData,
   ValidationStatus,
   TrustScore,
-  ValidationResult,
+  ValidationResult }
   IdentityValidationRequest
 } from '../auth/IdentityValidation';
 
 }
-export interface IdentityValidationHookConfig {
-    userId?: string;
-    autoLoadUserData?: boolean;
-    enableRealTimeUpdates?: boolean;
-
 }
-export interface ValidationSubmissionResult {
-    success: boolean;
+export interface IdentityValidationHookConfig { userId?: string;
+    autoLoadUserData?: boolean;
+    enableRealTimeUpdates?: boolean }
+}
+}
+export interface ValidationSubmissionResult { success: boolean;
     requestId?: string;
     error?: string;
     status?: ValidationStatus;
@@ -41,12 +39,13 @@ export declare const useIdentityValidation: (config?: IdentityValidationHookConf
     checkValidationStatus: (requestId: string) => IdentityValidationRequest | null;
     getValidationResult: (requestId: string) => ValidationResult | null;
     getVerificationCompletionPercentage: () => number;
-    getRecommendedVerificationSteps: () => {,
+    getRecommendedVerificationSteps: () => { }
         type: IdentityValidationType;
         title: string;
         description: string;
         priority: "high" | "medium" | "low";
         requiredFor: string;
+}
 }
     }[];
     hasVerification: (type: IdentityValidationType) => boolean;

@@ -8,6 +8,7 @@ export type IODataType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 
  */
 
 }
+}
 export interface IOPortDefinition {
     /** Unique identifier for this port */
     id: string;
@@ -32,6 +33,8 @@ export interface IOPortDefinition {
  */
 
 }
+}
+}
 export interface IOConstraints {
     /** Minimum value (for numbers) */
     min?: number;
@@ -54,6 +57,8 @@ export interface IOConstraints {
  */
 
 }
+}
+}
 export interface IOSpec {
     /** Input port definitions */
     inputs: IOPortDefinition[];
@@ -65,6 +70,8 @@ export interface IOSpec {
  * Resolved input values for node execution
  */
 
+}
+}
 }
 export interface ResolvedInputs {
     /** Direct input values by port ID */
@@ -78,16 +85,16 @@ export interface ResolvedInputs {
  */
 
 }
-export interface IOResolutionMetadata {
-    /** Whether the value came from a connection or default */
+}
+}
+export interface IOResolutionMetadata { /** Whether the value came from a connection or default */
     source: 'connection' | 'default' | 'computed';
     /** Original connected node ID (if from connection) */
     sourceNodeId?: string;
     /** Type coercion performed */
     typeCoercion?: {
         from: IODataType;
-        to: IODataType;
-
+        to: IODataType }
 }
     };
     /** Validation warnings */
@@ -96,8 +103,7 @@ export interface IOResolutionMetadata {
 /**
  * Advanced Input/Output handler for Epic 7 nodes
  */
-export declare class AdvancedIOHandler {
-    private spec;
+export declare class AdvancedIOHandler { private spec;
     constructor(spec: IOSpec);
     /**
      * Validate that all required inputs are available and valid
@@ -154,14 +160,12 @@ export declare class IOSpecBuilder {
      * Add an input port
      */
     addInput(definition: Omit<IOPortDefinition, 'id'> & {)
-        id: string;
-    }): IOSpecBuilder;
+        id: string }): IOSpecBuilder;
     /**
      * Add an output port
      */
-    addOutput(definition: Omit<IOPortDefinition, 'id'> & {)
-        id: string;
-    }): IOSpecBuilder;
+    addOutput(definition: Omit<IOPortDefinition, 'id'> & { )
+        id: string }): IOSpecBuilder;
     /**
      * Add a standard text input
      */

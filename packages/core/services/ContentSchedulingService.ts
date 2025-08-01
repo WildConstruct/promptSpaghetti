@@ -8,9 +8,8 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
-}
-export interface ContentItem {
-  id: string;
+
+export interface ContentItem { id: string;
   title: string;
   type: ContentType;
   status: ContentStatus;
@@ -22,12 +21,11 @@ export interface ContentItem {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-  lastModifiedBy?: string;
-}
-}
-}
-export interface ContentData {
-  // Core content
+  lastModifiedBy?: string }
+
+
+
+export interface ContentData { // Core content
   body?: string;
   description?: string;
   excerpt?: string;
@@ -37,25 +35,23 @@ export interface ContentData {
   documents?: MediaAsset;
   // Structured data
   fields?: Record<string, any>;
-  customData?: Record<string, any>;
-}
-}
-}
-export interface MediaAsset {
-  id: string;
+  customData?: Record<string, any> }
+
+
+
+export interface MediaAsset { id: string;
   filename: string;
   url: string;
   type: 'image' | 'video' | 'document' | 'audio';
-  size: number;
-}
+  size: number }
+
   dimensions?: { width: number; height: number };
   duration?: number; // for video/audio
   alt?: string;
   caption?: string;
-}
-}
-export interface ContentMetadata {
-  // SEO
+
+
+export interface ContentMetadata { // SEO
   seoTitle?: string;
   seoDescription?: string;
   keywords?: string;
@@ -66,13 +62,13 @@ export interface ContentMetadata {
   collections?: string;
   // Localization
   language: string;
-  localizations?: Record<string, string>; // locale -> contentId,
+  localizations?: Record<string, string>; // locale -> contentId;
   // Relationships
   relatedContent?: string;
   parentContent?: string;
   childContent?: string;
   // Professional workflow
-  workflow?: {
+  workflow?: { }
   stage: 'draft' | 'review' | 'approved' | 'rejected' | 'final';
   assignee?: string;
   reviewer?: string;
@@ -80,21 +76,20 @@ export interface ContentMetadata {
   deadline?: Date;
   priority: 'low' | 'medium' | 'high' | 'urgent';
   notes?: WorkflowNote;
-}
+
+
 };
-}
-}
-export interface WorkflowNote {
-  id: string;
+
+
+export interface WorkflowNote { id: string;
   author: string;
   message: string;
   type: 'comment' | 'review' | 'approval' | 'rejection';
-  timestamp: Date;
-}
-}
-}
-export interface ContentScheduling {
-  // Publication scheduling
+  timestamp: Date }
+
+
+
+export interface ContentScheduling { // Publication scheduling
   publishAt?: Date;
   unpublishAt?: Date;
   timezone: string;
@@ -108,48 +103,48 @@ export interface ContentScheduling {
   // Conditional scheduling
   conditions?: ScheduleCondition;
   // Dependencies
-  prerequisites?: string; // content IDs that must be published first,
-  blocks?: string; // content IDs that this blocks from publishing,
-}
-}
-}
-export interface RecurrencePattern {
-  type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
-  interval: number; // Every N days/weeks/months,
-  daysOfWeek?: number; // 0=Sunday, 1=Monday, etc.,
-  daysOfMonth?: number; // 1-31,
-  monthsOfYear?: number; // 1-12,
+  prerequisites?: string; // content IDs that must be published first;
+  blocks?: string; // content IDs that this blocks from publishing }
+
+
+
+
+export interface RecurrencePattern { type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
+  interval: number; // Every N days/weeks/months;
+  daysOfWeek?: number; // 0=Sunday, 1=Monday, etc.;
+  daysOfMonth?: number; // 1-31;
+  monthsOfYear?: number; // 1-12;
   endDate?: Date;
-  occurrences?: number; // Max number of occurrences,
-  customPattern?: string; // Cron-like expression,
-}
-}
-}
-export interface PromotionSchedule {
-  id: string;
+  occurrences?: number; // Max number of occurrences;
+  customPattern?: string; // Cron-like expression }
+
+
+
+
+export interface PromotionSchedule { id: string;
   type: 'homepage' | 'category' | 'search' | 'social' | 'email';
   location: string;
   startDate: Date;
   endDate: Date;
   priority: number;
-  targeting?: {
+  targeting?: { }
   audience?: string;
   demographics?: Record<string, any>;
   behavioral?: Record<string, any>;
   geographic?: string;
-}
+
+
 };
-}
-}
-export interface ScheduleCondition {
-  type: 'content_published' | 'date_range' | 'performance_threshold' | 'approval_received' | 'custom';
+
+
+export interface ScheduleCondition { type: 'content_published' | 'date_range' | 'performance_threshold' | 'approval_received' | 'custom' }
   parameters: Record<string, any>;
   description: string;
-}
-}
-}
-export interface ContentPerformance {
-  views: number;
+
+
+
+
+export interface ContentPerformance { views: number;
   engagement: number;
   shares: number;
   likes: number;
@@ -157,21 +152,21 @@ export interface ContentPerformance {
   conversionRate?: number;
   revenue?: number;
   // Time-based metrics
-  metrics?: Array<{
+  metrics?: Array<{ }
   timestamp: Date;
   views: number;
   engagement: number;
   shares: number;
-}
-}>;
+
+
+>;
   // A/B testing results
-  variants?: Array<{
-  id: string;
+  variants?: Array<{ id: string;
   name: string;
-  traffic: number; // percentage,
+  traffic: number; // percentage }
   performance: ContentPerformance;
-}>;
-}
+>;
+
 export type ContentType = 
   | 'article'
   | 'blog_post'
@@ -196,238 +191,197 @@ export type ContentStatus =
   | 'deleted'
   | 'error';
 
-}
-export interface ContentFilter {
-  types?: ContentType;
+
+export interface ContentFilter { types?: ContentType;
   statuses?: ContentStatus;
   categories?: string;
   tags?: string;
   collections?: string;
-  authors?: string;
-}
+  authors?: string }
+
   dateRange?: { start?: Date; end?: Date };
   searchQuery?: string;
   hasSchedule?: boolean;
   scheduledBetween?: { start: Date; end: Date };
   language?: string;
   workflowStage?: string;
-}
-}
-export interface ScheduleBatch {
-  id: string;
+
+
+export interface ScheduleBatch { id: string;
   name: string;
   description?: string;
   contentIds: string;
   operation: BatchOperation;
   schedule: BatchSchedule;
   status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
-  progress: {
+  progress: { }
   total: number;
   completed: number;
   failed: number;
   errors: BatchError;
-}
+
+
 };
   createdAt: Date;
   createdBy: string;
   executedAt?: Date;
   completedAt?: Date;
-}
-}
-export interface BatchOperation {
-  type: 'publish' | 'unpublish' | 'schedule' | 'promote' | 'archive' | 'delete' | 'update_metadata';
-  parameters?: Record<string, any>;
-}
-}
-}
-export interface BatchSchedule {
-  executeAt?: Date;
+
+
+export interface BatchOperation { type: 'publish' | 'unpublish' | 'schedule' | 'promote' | 'archive' | 'delete' | 'update_metadata';
+  parameters?: Record<string, any> }
+
+
+
+export interface BatchSchedule { executeAt?: Date;
   timezone: string;
-  staggering?: {
+  staggering?: {;
   enabled: boolean;
-  interval: number; // minutes between each item,
-  randomization?: boolean; // add random delay,
-}
+  interval: number; // minutes between each item;
+  randomization?: boolean; // add random delay }
+
+
 };
-}
-}
-export interface BatchError {
-  contentId: string;
+
+
+export interface BatchError { contentId: string;
   error: string;
-  timestamp: Date;
-}
-}
-}
-export interface SchedulingStats {
-  totalContent: number;
+  timestamp: Date }
+
+
+
+export interface SchedulingStats { totalContent: number;
   scheduledContent: number;
   publishedToday: number;
   unpublishedToday: number;
-  upcomingSchedules: Array<{
+  upcomingSchedules: Array<{;
   date: Date;
   count: number;
-  items: Array<{
+  items: Array<{ }
   id: string;
   title: string;
   type: ContentType;
   operation: string;
-}
-}>;
-  }>;
-  performanceMetrics: {
+
+
+>;
+>;
+  performanceMetrics: { ,
   averageViewsPerPost: number;
-  topPerformingContent: Array<{
+  topPerformingContent: Array<{ }
   id: string;
   title: string;
   views: number;
   engagement: number;
-}>;
-    contentTypePerformance: Record<ContentType, {
-  count: number;
+>;
+    contentTypePerformance: Record<ContentType, { count: number;
   averageViews: number;
-  averageEngagement: number;
-}>;
+  averageEngagement: number }>;
   };
 /**
  * Content Scheduling Service
  */
-}
-export class ContentSchedulingService {
-  private static instance: ContentSchedulingService;
-  private content: Map<string, ContentItem> = new Map();
-  private batches: Map<string, ScheduleBatch> = new Map();
-  private listeners: Map<string, (event: SchedulingEvent) => void> = new Map();
-  private scheduler: NodeJS.Timeout | null = null;
-  private constructor() {
-  this.startScheduler();
-  static getInstance(): ContentSchedulingService {,
-  if (!ContentSchedulingService.instance) {
-  ContentSchedulingService.instance = new ContentSchedulingService();
-  return ContentSchedulingService.instance;
-  /**
-  * Content Management
-  */
-  async createContent(contentData: Omit<ContentItem, 'id' | 'createdAt' | 'updatedAt' | 'performance'>)
-  createdBy: string): Promise<ContentItem> {,
-  const content: ContentItem = {,
-  ...contentData,
-  id: this.generateContentId(),
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  createdBy,
-  performance: {
-  views: 0,
-  engagement: 0,
-  shares: 0,
-  likes: 0,
-  comments: 0,
-};
+
+export class ContentSchedulingService {};
     this.content.set(content.id, content);
     this.notifyListeners('content_created', content);
     return content;
   async updateContent(contentId: string)
-    updates: Partial<ContentItem>,
-    updatedBy: string): Promise<ContentItem | null> {,
+  updates: Partial<ContentItem>
+    updatedBy: string): Promise<ContentItem | null> { 
   const content = this.content.get(contentId);
   if (!content) return null;
-  const updatedContent: ContentItem = {,
-  ...content,
-  ...updates,
-  id: contentId, // Ensure ID cannot be changed,
-  updatedAt: new Date(),
-  lastModifiedBy: updatedBy,
+  const updatedContent: ContentItem = {
+  ...content
+  ...updates
+  id: contentId, // Ensure ID cannot be changed
+  updatedAt: new Date()
+  lastModifiedBy: updatedBy }
 };
     this.content.set(contentId, updatedContent);
     this.notifyListeners('content_updated', updatedContent);
     return updatedContent;
-  async deleteContent(contentId: string, deletedBy: string): Promise<boolean> {
-
-  const content = this.content.get(contentId);
+  async deleteContent(contentId: string, deletedBy: string): Promise<boolean> { const content = this.content.get(contentId);
   if (!content) return false;
   // Mark as deleted instead of hard delete
   const deletedContent = await this.updateContent(contentId, {)
-  status: 'deleted',
+  status: 'deleted'
   scheduling: {
-  ...content.scheduling,
-  deleteAt: new Date(),
+  ...content.scheduling
+  deleteAt: new Date() }
 }, deletedBy);
-    if (deletedContent) {
-  this.notifyListeners('content_deleted', deletedContent);
+    if (deletedContent) { this.notifyListeners('content_deleted', deletedContent);
   return true;
   return false;
   /**
   * Scheduling Operations
   */
   async scheduleContent(contentId: string)
-  scheduling: ContentScheduling,
-  scheduledBy: string): Promise<boolean> {,
+  scheduling: ContentScheduling
+  scheduledBy: string): Promise<boolean> {
   const content = this.content.get(contentId);
   if (!content) return false;
   const updatedContent = await this.updateContent(contentId, {)
-  scheduling,
-  status: 'scheduled',
+  scheduling
+  status: 'scheduled' }
 }, scheduledBy);
-    if (updatedContent) {
-  this.notifyListeners('content_scheduled', updatedContent);
+    if (updatedContent) { this.notifyListeners('content_scheduled', updatedContent);
   return true;
   return false;
-  async publishContent(contentId: string, publishedBy: string): Promise<boolean> {,
+  async publishContent(contentId: string, publishedBy: string): Promise<boolean> {
   const content = this.content.get(contentId);
   if (!content) return false;
   const updatedContent = await this.updateContent(contentId, {)
-  status: 'published',
+  status: 'published'
   scheduling: {
-  ...content.scheduling,
-  publishAt: new Date(),
+  ...content.scheduling
+  publishAt: new Date() }
 }, publishedBy);
-    if (updatedContent) {
-  this.notifyListeners('content_published', updatedContent);
+    if (updatedContent) { this.notifyListeners('content_published', updatedContent);
   return true;
   return false;
-  async unpublishContent(contentId: string, unpublishedBy: string): Promise<boolean> {,
+  async unpublishContent(contentId: string, unpublishedBy: string): Promise<boolean> {
   const content = this.content.get(contentId);
   if (!content) return false;
   const updatedContent = await this.updateContent(contentId, {)
-  status: 'unpublished',
+  status: 'unpublished'
   scheduling: {
-  ...content.scheduling,
-  unpublishAt: new Date(),
+  ...content.scheduling
+  unpublishAt: new Date() }
 }, unpublishedBy);
-    if (updatedContent) {
-  this.notifyListeners('content_unpublished', updatedContent);
+    if (updatedContent) { this.notifyListeners('content_unpublished', updatedContent);
   return true;
   return false;
   /**
   * Batch Operations
   */
   async createBatch(name: string)
-  contentIds: string,
-  operation: BatchOperation,
-  schedule: BatchSchedule,
-  createdBy: string): Promise<ScheduleBatch> {,
-  const batch: ScheduleBatch = {,
-  id: this.generateBatchId(),
-  name,
-  contentIds,
-  operation,
-  schedule,
-  status: 'pending',
+  contentIds: string
+  operation: BatchOperation
+  schedule: BatchSchedule
+  createdBy: string): Promise<ScheduleBatch> {
+  const batch: ScheduleBatch = {
+  id: this.generateBatchId()
+  name
+  contentIds
+  operation
+  schedule
+  status: 'pending'
   progress: {
-  total: contentIds.length,
-  completed: 0,
-  failed: 0,
-  errors: [],
-},
-  createdAt: new Date(),
+  total: contentIds.length
+  completed: 0
+  failed: 0
+  errors: [] }
+
+  createdAt: new Date()
       createdBy
     };
     this.batches.set(batch.id, batch);
     this.notifyListeners('batch_created', batch);
     // Schedule batch execution if needed
-    if (batch.schedule.executeAt) {
-  this.scheduleBatchExecution(batch);
+    if (batch.schedule.executeAt) { this.scheduleBatchExecution(batch);
   return batch;
-  async executeBatch(batchId: string): Promise<boolean> {,
+  async executeBatch(batchId: string): Promise<boolean> {
   const batch = this.batches.get(batchId);
   if (!batch || batch.status !== 'pending') return false;
   batch.status = 'processing';
@@ -440,13 +394,12 @@ export class ContentSchedulingService {
   if (!content) {
   batch.progress.failed++;
   batch.progress.errors.push({)
-  contentId,
-  error: 'Content not found',
-  timestamp: new Date(),
+  contentId
+  error: 'Content not found'
+  timestamp: new Date() }
 });
           continue;
-        try {
-  await this.executeBatchOperation(contentId, batch.operation, batch.createdBy);
+        try { await this.executeBatchOperation(contentId, batch.operation, batch.createdBy);
   batch.progress.completed++;
   // Apply staggering if configured
   if (batch.schedule.staggering?.enabled) {
@@ -454,13 +407,11 @@ export class ContentSchedulingService {
   const randomDelay = batch.schedule.staggering.randomization ;
   ? Math.random() * delay * 0.5
   : 0;
-  await this.sleep(delay + randomDelay);
-} catch (error) {
-  batch.progress.failed++;
+  await this.sleep(delay + randomDelay) } catch (error) { batch.progress.failed++;
   batch.progress.errors.push({)
-  contentId,
-  error: error instanceof Error ? error.message : 'Unknown error',
-  timestamp: new Date(),
+  contentId
+  error: error instanceof Error ? error.message : 'Unknown error'
+  timestamp: new Date() }
 });
         this.batches.set(batchId, batch);
       batch.status = 'completed';
@@ -468,19 +419,17 @@ export class ContentSchedulingService {
       this.batches.set(batchId, batch);
       this.notifyListeners('batch_completed', batch);
       return true;
-    } catch (error) {
-  batch.status = 'failed';
+ catch (error) { batch.status = 'failed';
   this.batches.set(batchId, batch);
   this.notifyListeners('batch_failed', batch);
   return false;
   /**
   * Data Retrieval
   */
-  getContent(filter?: ContentFilter): ContentItem {,
+  getContent(filter?: ContentFilter): ContentItem { }
   let content = Array.from(this.content.values());
   if (!filter) return content;
-  if (filter.types?.length) {
-  content = content.filter(c => filter.types!.includes(c.type));
+  if (filter.types?.length) { content = content.filter(c => filter.types!.includes(c.type));
   if (filter.statuses?.length) {
   content = content.filter(c => filter.statuses!.includes(c.status));
   if (filter.categories?.length) {
@@ -497,10 +446,8 @@ export class ContentSchedulingService {
   content = content.filter(c => {)
   const date = c.createdAt;
   return (!filter.dateRange!.start || date >= filter.dateRange!.start) &&
-  (!filter.dateRange!.end || date <= filter.dateRange!.end);
-});
-    if (filter.searchQuery) {
-  const query = filter.searchQuery.toLowerCase();
+  (!filter.dateRange!.end || date <= filter.dateRange!.end) });
+    if (filter.searchQuery) { const query = filter.searchQuery.toLowerCase();
   content = content.filter(c => )
   c.title.toLowerCase().includes(query) ||
   c.content.description?.toLowerCase().includes(query) ||
@@ -516,8 +463,7 @@ export class ContentSchedulingService {
   const publishAt = c.scheduling.publishAt;
   return publishAt &&
   publishAt >= filter.scheduledBetween!.start &&
-  publishAt <= filter.scheduledBetween!.end;
-});
+  publishAt <= filter.scheduledBetween!.end });
     return content.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
   getSchedulingStats(): SchedulingStats {
     const content = Array.from(this.content.values());
@@ -540,22 +486,22 @@ export class ContentSchedulingService {
     );
     // Group upcoming schedules by date
     const upcomingSchedules: Map<string, Array<{ id: string; title: string; type: ContentType; operation: string }>> = new Map();
-    scheduledContent.forEach(item => {)
+    scheduledContent.forEach(item => { )
   if (item.scheduling.publishAt && item.scheduling.publishAt > now) {
   const dateKey = item.scheduling.publishAt.toDateString();
   if (!upcomingSchedules.has(dateKey)) {
   upcomingSchedules.set(dateKey, []);
   upcomingSchedules.get(dateKey)!.push({)
-  id: item.id,
-  title: item.title,
-  type: item.type,
-  operation: 'publish',
+  id: item.id
+  title: item.title
+  type: item.type
+  operation: 'publish' }
 });
     });
     const upcomingArray = Array.from(upcomingSchedules.entries());
-      .map(([dateStr, items]) => ({)
-  date: new Date(dateStr),
-  count: items.length,
+      .map(([dateStr, items]) => ({ )
+  date: new Date(dateStr)
+  count: items.length }
   items
 }))
       .sort((a, b) => a.date.getTime() - b.date.getTime())
@@ -567,11 +513,11 @@ export class ContentSchedulingService {
     const topPerformingContent = publishedContent;
       .sort((a, b) => b.performance.views - a.performance.views)
       .slice(0, 5)
-      .map(c => ({)
-  id: c.id,
-  title: c.title,
-  views: c.performance.views,
-  engagement: c.performance.engagement,
+      .map(c => ({ )
+  id: c.id
+  title: c.title
+  views: c.performance.views
+  engagement: c.performance.engagement }
 }));
     // Content type performance
     const contentTypePerformance: Record<ContentType, { count: number; averageViews: number; averageEngagement: number }> = {} as any;
@@ -582,40 +528,35 @@ export class ContentSchedulingService {
       contentTypePerformance[c.type].averageViews += c.performance.views;
       contentTypePerformance[c.type].averageEngagement += c.performance.engagement;
     });
-    Object.values(contentTypePerformance).forEach(stats => {)
+    Object.values(contentTypePerformance).forEach(stats => { )
   if (stats.count > 0) {
         stats.averageViews /= stats.count;
-        stats.averageEngagement /= stats.count;
-    });
-    return {
-  totalContent: content.length,
-  scheduledContent: scheduledContent.length,
-  publishedToday: publishedToday.length,
-  unpublishedToday: unpublishedToday.length,
-  upcomingSchedules: upcomingArray,
+        stats.averageEngagement /= stats.count });
+    return { totalContent: content.length
+  scheduledContent: scheduledContent.length
+  publishedToday: publishedToday.length
+  unpublishedToday: unpublishedToday.length
+  upcomingSchedules: upcomingArray
   performanceMetrics: {
-  averageViewsPerPost,
-  topPerformingContent,
+  averageViewsPerPost
+  topPerformingContent }
   contentTypePerformance
 };
-  getBatches(status?: ScheduleBatch['status']): ScheduleBatch {
-  let batches = Array.from(this.batches.values());
+  getBatches(status?: ScheduleBatch['status']): ScheduleBatch { let batches = Array.from(this.batches.values());
   if (status) {
   batches = batches.filter(b => b.status === status);
   return batches.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   /**
   * Event Handling
   */
-  subscribe(listenerId: string, callback: (event: SchedulingEvent) => void): void {,
+  subscribe(listenerId: string, callback: (event: SchedulingEvent) => void): void {
   this.listeners.set(listenerId, callback);
-  unsubscribe(listenerId: string): void {,
+  unsubscribe(listenerId: string): void {
   this.listeners.delete(listenerId);
   // Private methods
-  private startScheduler(): void {,
+  private startScheduler(): void { }
   // Check for scheduled items every minute
-  this.scheduler = setInterval(() => {
-  this.processScheduledItems();
-}, 60 * 1000);
+  this.scheduler = setInterval(() => { this.processScheduledItems() }, 60 * 1000);
   private processScheduledItems(): void {
     const now = new Date();
     const scheduledContent = this.getContent({ statuses: ['scheduled'] });
@@ -633,12 +574,10 @@ export class ContentSchedulingService {
     });
     // Process scheduled batches
     const pendingBatches = this.getBatches('pending');
-    pendingBatches.forEach(batch => {)
+    pendingBatches.forEach(batch => { )
   if (batch.schedule.executeAt && batch.schedule.executeAt <= now) {
-        this.executeBatch(batch.id);
-    });
-  private checkScheduleConditions(content: ContentItem): boolean {
-  if (!content.scheduling.conditions?.length) return true;
+        this.executeBatch(batch.id) });
+  private checkScheduleConditions(content: ContentItem): boolean { if (!content.scheduling.conditions?.length) return true;
   return content.scheduling.conditions.every(condition => {)
   switch (condition.type) {
   case 'content_published':,
@@ -656,12 +595,12 @@ export class ContentSchedulingService {
   return content.performance[metric as keyof ContentPerformance] >= threshold;
   case 'approval_received':,
   return content.metadata.workflow?.stage === 'approved';
-  default:,
+  default: }
   return true;
 });
-  private async executeBatchOperation(contentId: string, )
-    operation: BatchOperation, 
-    operatorId: string): Promise<void> {,
+  private async executeBatchOperation(contentId: string);
+  operation: BatchOperation, 
+    operatorId: string): Promise<void> {
     switch (operation.type) {
     case 'publish':
       await this.publishContent(contentId, operatorId);
@@ -685,33 +624,28 @@ export class ContentSchedulingService {
       break;
     default:
       throw new Error(`Unknown batch operation: ${operation.type}`);}
-  private scheduleBatchExecution(batch: ScheduleBatch): void {
-    const delay = batch.schedule.executeAt!.getTime() - Date.now();
+  private scheduleBatchExecution(batch: ScheduleBatch): void { const delay = batch.schedule.executeAt!.getTime() - Date.now();
     if (delay > 0) {
       setTimeout(() => {
-        this.executeBatch(batch.id);
-      }, delay);
+        this.executeBatch(batch.id) }, delay);
   private notifyListeners(eventType: string, data: any): void {
     this.listeners.forEach(callback => {)
   try {
         callback({ type: eventType, data, timestamp: new Date() });
-      } catch (error) {
-  console.error('Error in scheduling listener:', error);
-});
+ catch (error) { console.error('Error in scheduling listener:', error) });
   private generateContentId(): string {
     return `content_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   private generateBatchId(): string {
     return `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   private sleep(ms: number): Promise<void> {
-
   return new Promise(resolve => setTimeout(resolve, ms));
   export interface SchedulingEvent {
   type: string;
   data: any;
   timestamp: Date;
   // Export singleton instance
-}
-}
+
+
 export const contentSchedulingService = ContentSchedulingService.getInstance();
 
 // Convenience functions

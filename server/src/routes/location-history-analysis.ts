@@ -4,44 +4,48 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { LocationHistoryAnalysisService } from '../services/LocationHistoryAnalysisService';
 
-}
-}
+
+
 interface AnalyzeLocationHistoryRequest {
   forceRefresh?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface LocationRiskAssessmentRequest {
   ipAddress: string;
   userAgent?: string;
   deviceFingerprint?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface DetectAnomaliesFilters {
   severity?: 'low' | 'medium' | 'high' | 'critical';
   anomalyType?: string;
   resolved?: boolean;
   limit?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ResolveAnomalyRequest {
   resolution: string;
   falsePositive?: boolean;
   preventFutureAlerts?: boolean;
-}
-}
-}
+
+
+
+
 
 export async function locationHistoryAnalysisRoutes(
   fastify: FastifyInstance,
@@ -50,17 +54,17 @@ export async function locationHistoryAnalysisRoutes(
   // Analyze user's location history and generate profile
   fastify.post<{
     Body: AnalyzeLocationHistoryRequest;
-  }>('/location/analysis/profile', {
+>('/location/analysis/profile', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: AnalyzeLocationHistoryRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { forceRefresh = false } = request.body;
       
@@ -74,16 +78,16 @@ export async function locationHistoryAnalysisRoutes(
           overallRiskScore: profile.riskMetrics.riskScore,
           mobilityScore: profile.riskMetrics.mobilityScore,
           predictabilityScore: profile.riskMetrics.predictabilityScore
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Location history analysis error:', error);
       reply.code(500).send({
         error: 'Failed to analyze location history',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get user's location profile (cached version)
@@ -95,7 +99,7 @@ export async function locationHistoryAnalysisRoutes(
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const profile = await analysisService.analyzeUserLocationHistory(userId, false);
 
@@ -105,32 +109,32 @@ export async function locationHistoryAnalysisRoutes(
           lastAnalyzed: profile.lastAnalyzed,
           profileVersion: profile.profileVersion,
           dataFreshness: Math.round((Date.now() - profile.lastAnalyzed.getTime()) / (1000 * 60)) // minutes
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Location profile retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve location profile',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Assess risk for current location
   fastify.post<{
     Body: LocationRiskAssessmentRequest;
-  }>('/location/analysis/risk-assessment', {
+>('/location/analysis/risk-assessment', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: LocationRiskAssessmentRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { ipAddress } = request.body;
 
@@ -152,29 +156,29 @@ export async function locationHistoryAnalysisRoutes(
         actionRequired: riskAssessment.actionRequired,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Location risk assessment error:', error);
       reply.code(500).send({
         error: 'Failed to assess location risk',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Detect location anomalies for user
   fastify.get<{
     Querystring: DetectAnomaliesFilters;
-  }>('/location/analysis/anomalies', {
+>('/location/analysis/anomalies', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Querystring: DetectAnomaliesFilters;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const anomalies = await analysisService.detectLocationAnomalies(userId);
       const { severity, anomalyType, resolved, limit = 50 } = request.query;
@@ -184,20 +188,20 @@ export async function locationHistoryAnalysisRoutes(
 
       if (severity) {
         filteredAnomalies = filteredAnomalies.filter(a => a.severity === severity);
-      }
+
 
       if (anomalyType) {
         filteredAnomalies = filteredAnomalies.filter(a => a.anomalyType === anomalyType);
-      }
+
 
       if (resolved !== undefined) {
         filteredAnomalies = filteredAnomalies.filter(a => a.resolved === resolved);
-      }
+
 
       // Apply limit
       if (limit) {
         filteredAnomalies = filteredAnomalies.slice(0, limit);
-      }
+
 
       // Calculate summary statistics
       const stats = {
@@ -208,7 +212,7 @@ export async function locationHistoryAnalysisRoutes(
           high: anomalies.filter(a => a.severity === 'high').length,
           medium: anomalies.filter(a => a.severity === 'medium').length,
           low: anomalies.filter(a => a.severity === 'low').length
-  }
+
         byType: anomalies.reduce((acc, a) => {
           acc[a.anomalyType] = (acc[a.anomalyType] || 0) + 1;
           return acc;
@@ -222,31 +226,31 @@ export async function locationHistoryAnalysisRoutes(
         filters: { severity, anomalyType, resolved, limit },
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Location anomaly detection error:', error);
       reply.code(500).send({
         error: 'Failed to detect location anomalies',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Resolve a location anomaly
   fastify.post<{
     Params: { anomalyId: string };
     Body: ResolveAnomalyRequest;
-  }>('/location/analysis/anomalies/:anomalyId/resolve', {
+>('/location/analysis/anomalies/:anomalyId/resolve', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { anomalyId: string };
     Body: ResolveAnomalyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { anomalyId } = request.params;
       const { resolution, falsePositive = false, preventFutureAlerts = false } = request.body;
@@ -264,16 +268,16 @@ export async function locationHistoryAnalysisRoutes(
           resolution,
           falsePositive,
           preventFutureAlerts
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Anomaly resolution error:', error);
       reply.code(500).send({
         error: 'Failed to resolve anomaly',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get location clusters for user
@@ -285,7 +289,7 @@ export async function locationHistoryAnalysisRoutes(
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const profile = await analysisService.analyzeUserLocationHistory(userId, false);
 
@@ -300,7 +304,7 @@ export async function locationHistoryAnalysisRoutes(
             (Date.now(
             ) - cluster.firstSeen.getTime()) / (1000 * 60 * 60 * 24 * 7)),
           riskLevel: cluster.riskScore > 70 ? 'high' : cluster.riskScore > 40 ? 'medium' : 'low'
-        }
+
       }));
 
       const summary = {
@@ -321,13 +325,13 @@ export async function locationHistoryAnalysisRoutes(
         insights: profile.insights,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Location clusters retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve location clusters',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get travel patterns for user
@@ -339,7 +343,7 @@ export async function locationHistoryAnalysisRoutes(
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const profile = await analysisService.analyzeUserLocationHistory(userId, false);
 
@@ -361,7 +365,7 @@ export async function locationHistoryAnalysisRoutes(
           ) / pattern.averageTravelTime) * 60), // km/h
           riskLevel: pattern.riskScore > 70 ? 'high' : pattern.riskScore > 40 ? 'medium' : 'low',
           hasAnomalies: Object.values(pattern.anomalies).some(anomaly => anomaly)
-        }
+
       }));
 
       const summary = {
@@ -384,29 +388,29 @@ export async function locationHistoryAnalysisRoutes(
         riskMetrics: profile.riskMetrics,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Travel patterns retrieval error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve travel patterns',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin endpoints for location analysis statistics
   fastify.get<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>('/location/analysis/admin/statistics', {
+>('/location/analysis/admin/statistics', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'analyst'].includes(role))) {
         reply.code(403).send({ error: 'Admin, security, or analyst role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { timeframe = 'week' } = request.query;
       const statistics = await analysisService.getLocationStatistics(timeframe);
@@ -417,13 +421,13 @@ export async function locationHistoryAnalysisRoutes(
         description: 'Location history analysis system statistics',
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Location analysis statistics error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve location analysis statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Batch analyze multiple users (admin only)
@@ -432,32 +436,32 @@ export async function locationHistoryAnalysisRoutes(
       userIds: string[];
       forceRefresh?: boolean;
     };
-  }>('/location/analysis/admin/batch-analyze', {
+>('/location/analysis/admin/batch-analyze', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Admin role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: {
       userIds: string[];
       forceRefresh?: boolean;
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { userIds, forceRefresh = false } = request.body;
 
       if (!userIds || userIds.length === 0) {
         reply.code(400).send({ error: 'User IDs are required' });
         return;
-      }
+
 
       if (userIds.length > 100) {
         reply.code(400).send({ error: 'Maximum 100 users can be processed in a single batch' });
         return;
-      }
+
 
       const results = [];
       const errors = [];
@@ -473,16 +477,16 @@ export async function locationHistoryAnalysisRoutes(
               travelPatterns: profile.travelPatterns.length,
               riskScore: profile.riskMetrics.riskScore,
               lastAnalyzed: profile.lastAnalyzed
-            }
+
           });
-        } catch (error) {
+ catch (error) {
           errors.push({
             userId,
             status: 'error',
             error: error instanceof Error ? error.message : 'Unknown error'
           });
-        }
-      }
+
+
 
       return {
         batchAnalysis: {
@@ -491,17 +495,17 @@ export async function locationHistoryAnalysisRoutes(
           failed: errors.length,
           results,
           errors
-  }
+
         executedBy: (request.user as any)?.id,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Batch analysis error:', error);
       reply.code(500).send({
         error: 'Failed to perform batch analysis',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Health check for location history analysis service
@@ -517,12 +521,12 @@ export async function locationHistoryAnalysisRoutes(
           database: 'ok',
           statistics: 'ok',
           caching: 'ok'
-  }
+
         statistics: {
           profilesAnalyzedToday: stats.profiles || 0,
           clustersCreatedToday: stats.clusters || 0,
           anomaliesDetectedToday: stats.anomalies || 0
-  }
+
         features: [
           'Location clustering',
           'Travel pattern analysis',
@@ -532,7 +536,7 @@ export async function locationHistoryAnalysisRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Location analysis health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
@@ -540,7 +544,7 @@ export async function locationHistoryAnalysisRoutes(
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -572,50 +576,50 @@ export async function locationHistoryAnalysisRoutes(
           methods: ['GET', 'POST'],
           description: 'Analyze and retrieve user location profile',
           auth: 'required'
-  }
+
         {
           path: '/location/analysis/risk-assessment',
           method: 'POST',
           description: 'Assess risk for current location based on history',
           auth: 'required'
-  }
+
         {
           path: '/location/analysis/anomalies',
           method: 'GET',
           description: 'Detect and retrieve location anomalies',
           auth: 'required'
-  }
+
         {
           path: '/location/analysis/clusters',
           method: 'GET',
           description: 'Get user location clusters and insights',
           auth: 'required'
-  }
+
         {
           path: '/location/analysis/travel-patterns',
           method: 'GET',
           description: 'Get user travel patterns and analysis',
           auth: 'required'
-  }
+
         {
           path: '/location/analysis/admin/statistics',
           method: 'GET',
           description: 'Get system-wide analysis statistics',
           auth: 'admin/security role required'
-  }
+
         {
           path: '/location/analysis/admin/batch-analyze',
           method: 'POST',
           description: 'Batch analyze multiple users',
           auth: 'admin required'
-        }
+
       ],
       algorithmicFeatures: {
         clustering: 'DBSCAN-inspired algorithm with confidence scoring',
         riskScoring: 'Multi-factor weighted risk assessment',
         anomalyDetection: 'Statistical and pattern-based anomaly detection',
         travelAnalysis: 'Physics-based travel time and speed validation'
-  }
+
       securityFeatures: [
         'Privacy-preserving location analysis',
         'Configurable sensitivity levels',
@@ -625,4 +629,3 @@ export async function locationHistoryAnalysisRoutes(
       ]
     };
   });
-}

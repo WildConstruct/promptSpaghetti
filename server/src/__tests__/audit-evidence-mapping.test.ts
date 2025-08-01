@@ -12,7 +12,7 @@ import AuditEvidenceMapper, {
   AuditRequirement,
   EvidenceMapping,
   EvidenceGap
-} from '../services/AuditEvidenceMapper';
+ from '../services/AuditEvidenceMapper';
 
 describe('AuditEvidenceMapper', () => {
   let evidenceMapper: AuditEvidenceMapper;
@@ -161,7 +161,7 @@ describe('AuditEvidenceMapper', () => {
       // GDPR consent tracking is critical, so any gaps should be critical
       if (criticalGaps.length > 0) {
         expect(criticalGaps[0].audit_requirement_id).toContain('gdpr');
-      }
+
     });
 
     it('should generate remediation suggestions', () => {
@@ -345,7 +345,7 @@ describe('AuditEvidenceMapper', () => {
           `signature-${i}`
         );
         trails.push(trailId);
-      }
+
       
       expect(trails).toHaveLength(5);
       const uniqueTrails = new Set(trails);
@@ -388,7 +388,7 @@ describe('AuditEvidenceMapper', () => {
 
 
         );
-      }
+
       
       return Promise.all(promises).then(trailIds => {
         expect(trailIds).toHaveLength(10);

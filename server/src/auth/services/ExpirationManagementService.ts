@@ -14,8 +14,8 @@ import { AuditService } from './AuditService';
 import { RedisService } from '../database/RedisService';
 import cron from 'node-cron';
 
-}
-}
+
+
 export interface ExpirationPolicy {
   id: string;
   name: string;
@@ -31,12 +31,13 @@ export interface ExpirationPolicy {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExpirationRule {
   id: string;
   policyId: string;
@@ -52,12 +53,13 @@ export interface ExpirationRule {
   createdBy?: string;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExpirationEvent {
   id: string;
   ruleId: string;
@@ -68,12 +70,13 @@ export interface ExpirationEvent {
   metadata?: Record<string, unknown>;
   processedAt?: Date;
   notificationSent: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExpirationWarning {
   resourceId: string;
   resourceType: string;
@@ -84,12 +87,13 @@ export interface ExpirationWarning {
   renewalUrl?: string;
   userId?: string;
   organizationId?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExpirationStats {
   total: number;
   active: number;
@@ -103,13 +107,14 @@ export interface ExpirationStats {
     next24Hours: number;
     next7Days: number;
     next30Days: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface RenewalRequest {
   resourceId: string;
   resourceType: string;
@@ -117,12 +122,13 @@ export interface RenewalRequest {
   reason?: string;
   requestedBy: string;
   organizationId?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RenewalResult {
   success: boolean;
   newExpiresAt?: Date;
@@ -130,9 +136,10 @@ export interface RenewalResult {
   error?: string;
   warningMessage?: string;
   renewalCount?: number;
-}
-}
-}
+
+
+
+
 
 export class ExpirationManagementService {
   private static instance: ExpirationManagementService;
@@ -153,9 +160,9 @@ export class ExpirationManagementService {
   ): ExpirationManagementService {
     if (!ExpirationManagementService.instance) {
       ExpirationManagementService.instance = new ExpirationManagementService(db, auditService, redisService);
-    }
+
     return ExpirationManagementService.instance;
-  }
+
 
   /**
    * Initialize the expiration management system
@@ -164,7 +171,7 @@ export class ExpirationManagementService {
 
     if (this.isInitialized) {
       return;
-    }
+
 
     try {
       // Load default expiration policies
@@ -176,15 +183,15 @@ export class ExpirationManagementService {
       // Set up Redis key expiration listeners if Redis is available
       if (this.redisService) {
         await this.setupRedisExpirationListeners();
-      }
+
 
       this.isInitialized = true;
       console.log('ExpirationManagementService initialized successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize ExpirationManagementService:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Create an expiration policy
@@ -222,7 +229,7 @@ export class ExpirationManagementService {
     });
 
     return newPolicy;
-  }
+
 
   /**
    * Create an expiration rule for a resource
@@ -239,17 +246,17 @@ export class ExpirationManagementService {
     const policy = await this.getPolicy(policyId);
     if (!policy) {
       throw new Error(`Expiration policy ${policyId} not found`);
-    }
+
 
     const ttl = customTtl || policy.defaultTtl;
     
     // Validate TTL against policy limits
     if (policy.maxTtl && ttl > policy.maxTtl) {
       throw new Error(`TTL ${ttl} exceeds maximum allowed TTL ${policy.maxTtl}`);
-    }
+
     if (policy.minTtl && ttl < policy.minTtl) {
       throw new Error(`TTL ${ttl} is below minimum allowed TTL ${policy.minTtl}`);
-    }
+
 
     const ruleId = `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
@@ -292,7 +299,7 @@ export class ExpirationManagementService {
         ttl,
         JSON.stringify(rule)
       );
-    }
+
 
     // Create initial event
     await this.createExpirationEvent(ruleId, resourceId, resourceType, 'created', {
@@ -310,7 +317,7 @@ export class ExpirationManagementService {
     });
 
     return rule;
-  }
+
 
   /**
    * Check if a resource is expired
@@ -323,24 +330,24 @@ export class ExpirationManagementService {
       const exists = await redisClient.exists(`expiration:${resourceType}:${resourceId}`);
       if (exists === 0) {
         return true; // Redis key expired = resource expired
-      }
-    }
+
+
 
     // Fallback to database
     const rule = await this.getExpirationRule(resourceId, resourceType);
     if (!rule) {
       return true; // No rule = expired
-    }
+
 
     const now = new Date();
     
     // Check if in grace period
     if (rule.gracePeriodEnds && now <= rule.gracePeriodEnds) {
       return false;
-    }
+
 
     return now > rule.expiresAt;
-  }
+
 
   /**
    * Get expiration info for a resource
@@ -351,7 +358,7 @@ export class ExpirationManagementService {
     timeRemaining: number;
     status: string;
     canRenew: boolean;
-  }> {
+> {
 
     const rule = await this.getExpirationRule(resourceId, resourceType);
     
@@ -363,7 +370,7 @@ export class ExpirationManagementService {
         status: 'not_found',
         canRenew: false
       };
-    }
+
 
     const now = new Date();
     const timeRemaining = Math.max(0, rule.expiresAt.getTime() - now.getTime()) / 1000;
@@ -381,7 +388,7 @@ export class ExpirationManagementService {
       status: rule.status,
       canRenew
     };
-  }
+
 
   /**
    * Renew a resource's expiration
@@ -395,7 +402,7 @@ export class ExpirationManagementService {
         success: false,
         error: 'Expiration rule not found'
       };
-    }
+
 
     const policy = await this.getPolicy(rule.policyId);
     if (!policy) {
@@ -403,7 +410,7 @@ export class ExpirationManagementService {
         success: false,
         error: 'Expiration policy not found'
       };
-    }
+
 
     // Check if renewal is allowed
     const now = new Date();
@@ -415,7 +422,7 @@ export class ExpirationManagementService {
         error: 'Resource not within renewal window',
         warningMessage: `Renewal only allowed within ${policy.renewalWindow} seconds of expiration`
       };
-    }
+
 
     // Check maximum renewals
     if (rule.maxRenewals && rule.renewalCount >= rule.maxRenewals) {
@@ -423,7 +430,7 @@ export class ExpirationManagementService {
         success: false,
         error: 'Maximum renewal limit reached'
       };
-    }
+
 
     // Determine new TTL
     const requestedTtl = request.requestedTtl || policy.defaultTtl;
@@ -432,10 +439,10 @@ export class ExpirationManagementService {
     // Validate against policy limits
     if (policy.maxTtl && newTtl > policy.maxTtl) {
       newTtl = policy.maxTtl;
-    }
+
     if (policy.minTtl && newTtl < policy.minTtl) {
       newTtl = policy.minTtl;
-    }
+
 
     const newExpiresAt = new Date(now.getTime() + (newTtl * 1000));
     const newGracePeriodEnds = policy.gracePeriod 
@@ -459,7 +466,7 @@ export class ExpirationManagementService {
         newTtl,
         JSON.stringify(updatedRule)
       );
-    }
+
 
     // Create renewal event
     await this.createExpirationEvent(rule.id, request.resourceId, request.resourceType, 'renewed', {
@@ -484,7 +491,7 @@ export class ExpirationManagementService {
       newTtl,
       renewalCount: rule.renewalCount + 1
     };
-  }
+
 
   /**
    * Revoke a resource (mark as expired immediately)
@@ -500,7 +507,7 @@ export class ExpirationManagementService {
     
     if (!rule) {
       return false;
-    }
+
 
     const now = new Date();
 
@@ -515,7 +522,7 @@ export class ExpirationManagementService {
     if (this.redisService) {
       const redisClient = await this.redisService.getClient();
       await redisClient.del(`expiration:${resourceType}:${resourceId}`);
-    }
+
 
     // Create revocation event
     await this.createExpirationEvent(rule.id, resourceId, resourceType, 'revoked', {
@@ -533,7 +540,7 @@ export class ExpirationManagementService {
     });
 
     return true;
-  }
+
 
   /**
    * Get expiration statistics
@@ -598,9 +605,9 @@ export class ExpirationManagementService {
         next24Hours: upcomingStats[0]?.next24Hours || 0,
         next7Days: upcomingStats[0]?.next7Days || 0,
         next30Days: upcomingStats[0]?.next30Days || 0
-      }
+
     };
-  }
+
 
   /**
    * Get upcoming expiration warnings
@@ -639,9 +646,9 @@ export class ExpirationManagementService {
       
       if (timeRemaining <= 3600) { // 1 hour
         warningLevel = 'critical';
-      } else if (timeRemaining <= 86400) { // 1 day
+ else if (timeRemaining <= 86400) { // 1 day
         warningLevel = 'warning';
-      }
+
 
       return {
         resourceId: w.resource_id,
@@ -655,7 +662,7 @@ export class ExpirationManagementService {
         organizationId: w.organization_id
       };
     });
-  }
+
 
   /**
    * Clean up expired resources
@@ -691,7 +698,7 @@ export class ExpirationManagementService {
           if (this.redisService) {
             const redisClient = await this.redisService.getClient();
             await redisClient.del(`expiration:${rule.resource_type}:${rule.resource_id}`);
-          }
+
 
           // Create expiration event
           await this.createExpirationEvent(
@@ -703,20 +710,20 @@ export class ExpirationManagementService {
           );
 
           cleaned++;
-        } catch (error) {
+ catch (error) {
           console.error(`Failed to cleanup expired rule ${rule.id}:`, error);
           errors++;
-        }
-      }
+
+
 
       console.log(`Cleanup completed: ${cleaned} resources cleaned, ${errors} errors`);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to cleanup expired resources:', error);
       errors++;
-    }
+
 
     return { cleaned, errors };
-  }
+
 
   /**
    * Private helper methods
@@ -731,7 +738,7 @@ export class ExpirationManagementService {
     
     if (results.length === 0) {
       return null;
-    }
+
     
     const row = results[0];
     return {
@@ -750,7 +757,7 @@ export class ExpirationManagementService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
+
 
   private async getExpirationRule(resourceId: string, resourceType: string): Promise<ExpirationRule | null> {
 
@@ -763,7 +770,7 @@ export class ExpirationManagementService {
     
     if (results.length === 0) {
       return null;
-    }
+
     
     const row = results[0];
     return {
@@ -782,7 +789,7 @@ export class ExpirationManagementService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
+
 
   private async createExpirationEvent(
     ruleId: string, 
@@ -800,7 +807,7 @@ export class ExpirationManagementService {
         id, rule_id, resource_id, resource_type, event_type, timestamp, metadata, notification_sent
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `, [eventId, ruleId, resourceId, resourceType, eventType, now, JSON.stringify(metadata || {}), false]);
-  }
+
 
   private async ensureDefaultPolicies(): Promise<void> {
 
@@ -816,7 +823,7 @@ export class ExpirationManagementService {
         autoRenewal: true,
         renewalWindow: 1800, // 30 minutes
         isActive: true
-  }
+
       {
         name: 'Default API Key Policy',
         resourceType: 'api_key' as const,
@@ -827,7 +834,7 @@ export class ExpirationManagementService {
         autoRenewal: false,
         renewalWindow: 1209600, // 14 days
         isActive: true
-  }
+
       {
         name: 'Default Session Policy',
         resourceType: 'session' as const,
@@ -839,7 +846,7 @@ export class ExpirationManagementService {
         autoRenewal: true,
         renewalWindow: 3600, // 1 hour
         isActive: true
-      }
+
     ];
 
     for (const policy of defaultPolicies) {
@@ -850,9 +857,9 @@ export class ExpirationManagementService {
       
       if (existing.length === 0) {
         await this.createPolicy(policy);
-      }
-    }
-  }
+
+
+
 
   private startBackgroundProcesses(): void {
     // Cleanup expired resources every hour
@@ -870,7 +877,7 @@ export class ExpirationManagementService {
       await this.cleanupExpiredResources();
       await this.cleanupOldEvents();
     });
-  }
+
 
   private async processExpirationWarnings(): Promise<void> {
 
@@ -899,12 +906,12 @@ export class ExpirationManagementService {
             'UPDATE expiration_rules SET last_warning_at = NOW() WHERE id = ?',
             [rule.id]
           );
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       console.error('Failed to process expiration warnings:', error);
-    }
-  }
+
+
 
   private async cleanupOldEvents(): Promise<void> {
 
@@ -916,10 +923,10 @@ export class ExpirationManagementService {
       `);
       
       console.log(`Cleaned up ${result.affectedRows} old expiration events`);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to cleanup old events:', error);
-    }
-  }
+
+
 
   private async setupRedisExpirationListeners(): Promise<void> {
 
@@ -953,13 +960,13 @@ export class ExpirationManagementService {
               rule.id, resourceId, resourceType, 'expired',
               { source: 'redis_expiration' }
             );
-          }
-        }
+
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to setup Redis expiration listeners:', error);
-    }
-  }
+
+
 
   /**
    * Shutdown the service
@@ -968,14 +975,14 @@ export class ExpirationManagementService {
 
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
-    }
+
     if (this.warningInterval) {
       clearInterval(this.warningInterval);
-    }
+
     
     this.isInitialized = false;
     console.log('ExpirationManagementService shut down');
-  }
-}
+
+
 
 export default ExpirationManagementService;

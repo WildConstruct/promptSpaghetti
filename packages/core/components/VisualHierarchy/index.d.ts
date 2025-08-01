@@ -4,8 +4,7 @@
  * Complete visual hierarchy design system for progressive disclosure architecture
  * providing consistent visual cues, typography, spacing, and accessibility.
  */
-export {
-  TypographyScale,
+export { TypographyScale,
   HierarchyColors,
   SpacingScale,
   ComponentSizes,
@@ -18,15 +17,13 @@ export {
   AccessibilityUtils,
   type HierarchyHeaderProps,
   type HierarchyFieldProps,
-  type ComplexityIndicatorProps,
+  type ComplexityIndicatorProps }
 } from './HierarchyDesignSystem';
-export {
-  ProgressiveDisclosureSection,
-  type ProgressiveDisclosureSectionProps,
+export { ProgressiveDisclosureSection,
+  type ProgressiveDisclosureSectionProps }
 } from '../Inspector/ProgressiveDisclosureSection';
 export { VisualHierarchyDemoEditor } from '../Inspector/editors/VisualHierarchyDemoEditor';
-declare const _default: {
-  TypographyScale: any;
+declare const _default: { TypographyScale: any;
   HierarchyColors: any;
   SpacingScale: any;
   ComponentSizes: any;
@@ -37,7 +34,6 @@ declare const _default: {
   ComplexityIndicator: any;
   AccessibilityUtils: any;
   ProgressiveDisclosureSection: any;
-  VisualHierarchyDemoEditor: any;
-};
+  VisualHierarchyDemoEditor: any };
 export default _default;
 //# sourceMappingURL=index.d.ts.map

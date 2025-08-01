@@ -20,8 +20,8 @@ import React from 'react';
 import { GraphComparison, ViewMode, HighlightMode, ComparisonType, MatchType } from '../../types/comparison';
 
 }
-export interface ComparisonItem {
-    id: string;
+}
+export interface ComparisonItem { id: string;
     name: string;
     type: 'graph' | 'content' | 'config' | 'schema' | 'permission';
     version: string;
@@ -29,11 +29,10 @@ export interface ComparisonItem {
     author: string;
     size: number;
     checksum: string;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface ComparisonSession {
-    id: string;
+}
+export interface ComparisonSession { id: string;
     name: string;
     sourceItem: ComparisonItem;
     targetItem: ComparisonItem;
@@ -44,11 +43,10 @@ export interface ComparisonSession {
     annotations: ComparisonAnnotation[];
     createdAt: Date;
     lastAccessed: Date;
-    isBookmarked: boolean;
-
+    isBookmarked: boolean }
 }
-export interface ComparisonFilters {
-    showUnchanged: boolean;
+}
+export interface ComparisonFilters { showUnchanged: boolean;
     showMetadata: boolean;
     nodeTypes: string[];
     changeTypes: MatchType[];
@@ -56,15 +54,15 @@ export interface ComparisonFilters {
     severityLevels: ('low' | 'medium' | 'high' | 'critical')[];
     dateRange?: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     author?: string;
     searchQuery?: string;
 
 }
-export interface ComparisonAnnotation {
-    id: string;
+}
+export interface ComparisonAnnotation { id: string;
     type: 'comment' | 'highlight' | 'bookmark' | 'issue';
     targetId: string;
     title: string;
@@ -75,13 +73,13 @@ export interface ComparisonAnnotation {
     resolved: boolean;
     position?: {
         x: number;
-        y: number;
+        y: number }
 }
     };
 
 }
-export interface ComparisonMetrics {
-    structuralSimilarity: number;
+}
+export interface ComparisonMetrics { structuralSimilarity: number;
     semanticSimilarity: number;
     visualSimilarity: number;
     overallSimilarity: number;
@@ -92,7 +90,7 @@ export interface ComparisonMetrics {
         estimated: boolean;
         cpuDelta: number;
         memoryDelta: number;
-        networkDelta: number;
+        networkDelta: number }
 }
     };
     breakingChanges: number;
@@ -100,8 +98,8 @@ export interface ComparisonMetrics {
     newFeatures: number;
 
 }
-export interface ComparisonReport {
-    session: ComparisonSession;
+}
+export interface ComparisonReport { session: ComparisonSession;
     comparison: GraphComparison;
     metrics: ComparisonMetrics;
     summary: {
@@ -109,20 +107,18 @@ export interface ComparisonReport {
         description: string;
         recommendations: string[];
         warnings: string[];
-        errors: string[];
+        errors: string[] }
 }
     };
-    timeline: Array<{
-        timestamp: Date;
+    timeline: Array<{ timestamp: Date;
         event: string;
         impact: 'low' | 'medium' | 'high';
-        description: string;
-    }>;
+        description: string }>;
     exportFormats: ('pdf' | 'html' | 'json' | 'csv')[];
 
 }
-export interface ComparisonToolsProps {
-    sessions: ComparisonSession[];
+}
+export interface ComparisonToolsProps { sessions: ComparisonSession[];
     activeSessionId?: string;
     onSessionSelect: (sessionId: string) => void;
     onSessionCreate: (source: ComparisonItem, target: ComparisonItem) => void;
@@ -131,35 +127,34 @@ export interface ComparisonToolsProps {
     onExportReport: (sessionId: string, format: string) => void;
     className?: string;
 
-export declare const ComparisonTools: React.FC<ComparisonToolsProps>;
+export declare const ComparisonTools: React.FC<ComparisonToolsProps> }
 }
-interface ComparisonSessionCardProps {
-    session: ComparisonSession;
+}
+interface ComparisonSessionCardProps { session: ComparisonSession;
     isActive: boolean;
     isSelected: boolean;
     onSelect: () => void;
     onToggleSelection: (selected: boolean) => void;
     onUpdate: (updates: Partial<ComparisonSession>) => void;
     onDelete: () => void;
-    onExport: (format: string) => void;
+    onExport: (format: string) => void }
 }
-interface ComparisonSessionRowProps {
-    session: ComparisonSession;
+}
+interface ComparisonSessionRowProps { session: ComparisonSession;
     isActive: boolean;
     isSelected: boolean;
     onSelect: () => void;
     onToggleSelection: (selected: boolean) => void;
     onUpdate: (updates: Partial<ComparisonSession>) => void;
-    onDelete: () => void;
+    onDelete: () => void }
 }
-interface ComparisonTimelineProps {
-    sessions: ComparisonSession[];
+}
+interface ComparisonTimelineProps { sessions: ComparisonSession[];
     activeSessionId?: string;
-    onSessionSelect: (sessionId: string) => void;
-
+    onSessionSelect: (sessionId: string) => void }
 }
-export interface AdvancedDiffViewerProps {
-    comparison: GraphComparison;
+}
+export interface AdvancedDiffViewerProps { comparison: GraphComparison;
     session: ComparisonSession;
     onSessionUpdate: (updates: Partial<ComparisonSession>) => void;
     onAnnotationAdd: (annotation: Omit<ComparisonAnnotation, 'id' | 'createdAt'>) => void;
@@ -173,7 +168,7 @@ declare const _default: {
     AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps>;
     ComparisonSessionCard: React.FC<ComparisonSessionCardProps>;
     ComparisonSessionRow: React.FC<ComparisonSessionRowProps>;
-    ComparisonTimeline: React.FC<ComparisonTimelineProps>;
+    ComparisonTimeline: React.FC<ComparisonTimelineProps> }
 }
 };
 export default _default;

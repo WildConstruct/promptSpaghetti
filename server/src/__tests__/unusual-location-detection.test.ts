@@ -9,7 +9,7 @@ import {
   LocationRiskAssessment,
   UnusualLocationEvent,
   UserLocationProfile
-} from '../auth/services/UnusualLocationDetectionService';
+ from '../auth/services/UnusualLocationDetectionService';
 import { GeolocationService, GeolocationData } from '../auth/services/GeolocationService';
 import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../auth/database/DatabaseService';
@@ -33,25 +33,25 @@ describe('UnusualLocationDetectionService', () => {
     mockDb = {
       query: jest.fn<unknown[], unknown>(),
       close: jest.fn<unknown[], unknown>()
-    } as jest.Mocked<DatabaseService>;
+ as jest.Mocked<DatabaseService>;
     
     mockRedis = {
       get: jest.fn<unknown[], unknown>(),
       setex: jest.fn<unknown[], unknown>(),
       del: jest.fn<unknown[], unknown>(),
       close: jest.fn<unknown[], unknown>()
-    } as jest.Mocked<RedisService>;
+ as jest.Mocked<RedisService>;
 
     mockAuditService = {
       logSecurityEvent: jest.fn<unknown[], unknown>(),
       logEvent: jest.fn<unknown[], unknown>()
-    } as jest.Mocked<AuditService>;
+ as jest.Mocked<AuditService>;
 
     mockGeolocationService = {
       getGeolocationData: jest.fn<unknown[], unknown>(),
       getUserLocationHistory: jest.fn<unknown[], unknown>(),
       trackLoginLocation: jest.fn<unknown[], unknown>()
-    } as jest.Mocked<GeolocationService>;
+ as jest.Mocked<GeolocationService>;
 
     const config: Partial<UnusualLocationConfig> = {
       newLocationSuspicionThreshold: 200,
@@ -101,7 +101,7 @@ describe('UnusualLocationDetectionService', () => {
           lastSeen: new Date(),
           frequency: 100,
           isTypical: true
-        }],
+],
         travelPatterns: {
           isFrequentTraveller: false,
           averageDistanceBetweenLogins: 50,
@@ -109,13 +109,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           weekendTravelFrequency: 0.1
-  }
+
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-  }
+
         lastAnalysis: new Date()
       };
 
@@ -163,13 +163,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           weekendTravelFrequency: 0.1
-  }
+
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-  }
+
         lastAnalysis: new Date()
       };
 
@@ -223,7 +223,7 @@ describe('UnusualLocationDetectionService', () => {
         lastSeen: new Date(Date.now() - 30 * 60 * 1000),
         frequency: 1,
         isTypical: false
-      }];
+];
 
       const userProfile: UserLocationProfile = {
         userId: 'user123',
@@ -238,13 +238,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           weekendTravelFrequency: 0.1
-  }
+
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-  }
+
         lastAnalysis: new Date()
       };
 
@@ -294,13 +294,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           weekendTravelFrequency: 0.1
-  }
+
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-  }
+
         lastAnalysis: new Date()
       };
 
@@ -327,10 +327,10 @@ describe('UnusualLocationDetectionService', () => {
       if (result.isUnusual) {
         expect(result.riskAssessment.riskLevel).toBeOneOf(['medium', 'high', 'critical']);
         expect(result.action).toBeOneOf(['challenge', 'block']);
-      } else {
+ else {
         expect(result.riskAssessment.riskLevel).toBeOneOf(['low', 'medium']);
         expect(result.action).toBe('allow');
-      }
+
       expect(result.event).toBeDefined();
       expect(mockAuditService.logSecurityEvent).toHaveBeenCalled();
     });
@@ -364,13 +364,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 15,
           typicalLoginHours: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
           weekendTravelFrequency: 0.8
-  }
+
         riskProfile: {
           baselineRisk: 30,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.02
-  }
+
         lastAnalysis: new Date()
       };
 
@@ -424,13 +424,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [],
           weekendTravelFrequency: 0.1
-  }
+
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-  }
+
         lastAnalysis: new Date()
       };
 
@@ -492,7 +492,7 @@ describe('UnusualLocationDetectionService', () => {
           coordinates: { latitude: 37.7749, longitude: -122.4194 },
           confidence: 0.9,
           source: 'ipapi'
-        } as GeolocationData,
+ as GeolocationData,
         firstSeen: new Date(),
         lastSeen: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
         frequency: 1,
@@ -519,12 +519,12 @@ describe('UnusualLocationDetectionService', () => {
             region: 'California',
             city: 'San Francisco',
             coordinates: { latitude: 37.7749, longitude: -122.4194 }
-          } as GeolocationData,
+ as GeolocationData,
           firstSeen: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           lastSeen: new Date(),
           frequency: 50,
           isTypical: true
-  }
+
         {
           userId: 'user123',
           location: {
@@ -533,12 +533,12 @@ describe('UnusualLocationDetectionService', () => {
             region: 'California',
             city: 'Los Angeles',
             coordinates: { latitude: 34.0522, longitude: -118.2437 }
-          } as GeolocationData,
+ as GeolocationData,
           firstSeen: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
           lastSeen: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
           frequency: 10,
           isTypical: true
-        }
+
       ];
 
       mockGeolocationService.getUserLocationHistory.mockResolvedValue(locationHistory as unknown as unknown);
@@ -565,12 +565,12 @@ describe('UnusualLocationDetectionService', () => {
             countryCode: 'US',
             region: 'California',
             city: 'San Francisco'
-          } as GeolocationData,
+ as GeolocationData,
           firstSeen: new Date(),
           lastSeen: new Date(),
           frequency: 20,
           isTypical: true
-  }
+
         {
           userId: 'user123',
           location: {
@@ -578,12 +578,12 @@ describe('UnusualLocationDetectionService', () => {
             countryCode: 'GB',
             region: 'England',
             city: 'London'
-          } as GeolocationData,
+ as GeolocationData,
           firstSeen: new Date(),
           lastSeen: new Date(),
           frequency: 15,
           isTypical: true
-  }
+
         {
           userId: 'user123',
           location: {
@@ -591,12 +591,12 @@ describe('UnusualLocationDetectionService', () => {
             countryCode: 'DE',
             region: 'Berlin',
             city: 'Berlin'
-          } as GeolocationData,
+ as GeolocationData,
           firstSeen: new Date(),
           lastSeen: new Date(),
           frequency: 10,
           isTypical: true
-  }
+
         {
           userId: 'user123',
           location: {
@@ -604,12 +604,12 @@ describe('UnusualLocationDetectionService', () => {
             countryCode: 'FR',
             region: 'Île-de-France',
             city: 'Paris'
-          } as GeolocationData,
+ as GeolocationData,
           firstSeen: new Date(),
           lastSeen: new Date(),
           frequency: 8,
           isTypical: true
-  }
+
         {
           userId: 'user123',
           location: {
@@ -617,12 +617,12 @@ describe('UnusualLocationDetectionService', () => {
             countryCode: 'JP',
             region: 'Tokyo',
             city: 'Tokyo'
-          } as GeolocationData,
+ as GeolocationData,
           firstSeen: new Date(),
           lastSeen: new Date(),
           frequency: 5,
           isTypical: true
-  }
+
         {
           userId: 'user123',
           location: {
@@ -630,12 +630,12 @@ describe('UnusualLocationDetectionService', () => {
             countryCode: 'AU',
             region: 'New South Wales',
             city: 'Sydney'
-          } as GeolocationData,
+ as GeolocationData,
           firstSeen: new Date(),
           lastSeen: new Date(),
           frequency: 3,
           isTypical: true
-        }
+
       ];
 
       mockGeolocationService.getUserLocationHistory.mockResolvedValue(locationHistory as unknown as unknown);
@@ -718,7 +718,7 @@ describe('UnusualLocationDetectionService', () => {
         timezone: 'America/Los_Angeles',
         confidence: 0.9,
         source: 'ipapi'
-      } as GeolocationData as unknown as unknown);
+ as GeolocationData as unknown as unknown);
 
       mockRedis.get.mockRejectedValue(new Error('Redis error'));
       mockDb.query.mockRejectedValue(new Error('Database error'));
@@ -778,13 +778,12 @@ expect.extend({
       message: () => `expected ${received} to be one of ${expected.join(', ')}`,
       pass
     };
-  }
+
 });
 
 declare global {
   namespace jest {
     interface Matchers<R> {
       toBeOneOf(expected: any[]): R;
-    }
-  }
-}
+
+

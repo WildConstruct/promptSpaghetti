@@ -3,58 +3,48 @@
  * Modal for inviting users to workspaces
  */
 import React, { useState } from 'react';
-}
-interface InviteUserModalProps {
-  workspaceId: string;
-  workspaceName: string;
-}
+
+
+interface InviteUserModalProps { workspaceId: string;
+  workspaceName: string }
+},
   onSubmit: (data: { userId: string; role: string }) => void;
   onCancel: () => void;
-const ROLES = [;
+const ROLES = [
   { value: 'admin', label: 'Admin', description: 'Full workspace access and management' },
   { value: 'editor', label: 'Editor', description: 'Can create and edit projects and resources' },
   { value: 'commenter', label: 'Commenter', description: 'Can view content and add comments' },
   { value: 'viewer', label: 'Viewer', description: 'Read-only access to content' }
 ];
 
-export const InviteUserModal: React.FC<InviteUserModalProps> = ({)
-  workspaceId,
-  workspaceName,
-  onSubmit,
+export const InviteUserModal: React.FC<InviteUserModalProps> = ({ )
+  workspaceId
+  workspaceName
+  onSubmit }
   onCancel
-}) => {
-  const [formData, setFormData] = useState({)
-  userId: '',
-  role: 'editor',
+}) => { const [formData, setFormData] = useState({)
+  userId: ''
+  role: 'editor' }
 });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.userId.trim()) {
-      newErrors.userId = 'User ID or email is required';
-    } else if (formData.userId.length < 3) {
-      newErrors.userId = 'User ID must be at least 3 characters';
+    if (!formData.userId.trim()) { newErrors.userId = 'User ID or email is required' } else if (formData.userId.length < 3) { newErrors.userId = 'User ID must be at least 3 characters';
     if (!formData.role) {
       newErrors.role = 'Role selection is required';
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    return Object.keys(newErrors).length === 0 };
+  const handleSubmit = async (e: React.FormEvent) => { e.preventDefault();
   if (!validateForm()) {
   return;
   setIsSubmitting(true);
   try {
   await onSubmit({)
   userId: formData.userId.trim(),
-  role: formData.role,
+  role: formData.role }
 });
-    } catch (error) {
-  console.error('Failed to invite user:', error);
-} finally {
-      setIsSubmitting(false);
-  };
+ catch (error) { console.error('Failed to invite user:', error) } finally { setIsSubmitting(false) };
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing

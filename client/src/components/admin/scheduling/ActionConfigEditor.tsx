@@ -18,37 +18,40 @@ import {
   Paper,
   Divider,
   Chip
-} from '@mui/material';
+ from '@mui/material';
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
   Settings as SettingsIcon,
   TrendingUp as TrendingUpIcon
-} from '@mui/icons-material';
+ from '@mui/icons-material';
 
-}
+
 export interface ActionConfig {
   targetValue?: unknown;
   rolloutPercentage?: number;
-  conditions?: Array<{
+  conditions?: Array<{,
   attribute: string;,
-  operator: string;
+  operator: string;,
   value: Error;
-}
-}>;
+
+
+>;
   gradualRollout?: {
   startPercentage: number;,
-  endPercentage: number;
+  endPercentage: number;,
   incrementMinutes: number;
 };
-}
+
+
 interface ActionConfigEditorProps {
   action: string;,
-  value: ActionConfig;
+  value: ActionConfig;,
   onChange: (config: ActionConfig) => void;
   error?: string;
-const CONDITION_OPERATORS = [;
-}
+  const CONDITION_OPERATORS = [
+
+
   { value: 'equals', label: 'Equals', symbol: '=' },
   { value: 'not_equals', label: 'Not Equals', symbol: '≠' },
   { value: 'greater_than', label: 'Greater Than', symbol: '>' },
@@ -62,7 +65,7 @@ const CONDITION_OPERATORS = [;
   { value: 'starts_with', label: 'Starts With', symbol: '⌜' },
   { value: 'ends_with', label: 'Ends With', symbol: '⌝' }
 ];
-const COMMON_ATTRIBUTES = [;
+const COMMON_ATTRIBUTES = [
   { value: 'user.id', label: 'User ID', type: 'string' },
   { value: 'user.email', label: 'User Email', type: 'string' },
   { value: 'user.role', label: 'User Role', type: 'string' },
@@ -81,7 +84,7 @@ const COMMON_ATTRIBUTES = [;
   { value: 'feature.usageCount', label: 'Feature Usage Count', type: 'number' },
   { value: 'custom.attribute', label: 'Custom Attribute', type: 'string' }
 ];
-}
+
 export const [showAdvanced, setShowAdvanced] = useState(false);
   useEffect(() => {
     setConfig(value);
@@ -163,7 +166,7 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
             onChange={(e) => {
               const values = e.target.value.split(',').map(v => v.trim()).filter(v => v);
               handleConditionChange(index, 'value', values);
-            }}
+}
             placeholder="value1, value2, value3"
             size="small"
             fullWidth
@@ -216,9 +219,9 @@ export const [showAdvanced, setShowAdvanced] = useState(false);
                 try {
                   const parsed = JSON.parse(e.target.value);
                   handleConfigChange({ targetValue: parsed });
-                } catch {
+ catch {
                   handleConfigChange({ targetValue: e.target.value });
-              }}
+}
               placeholder='{"enabled": true} or "simple string value"'
               helperText="Enter JSON object or simple value"
               multiline

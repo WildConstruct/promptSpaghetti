@@ -11,7 +11,7 @@ export const VARIABLE_NAME_PATTERN = /^[a-zA-Z0-9_-]+$/;
 export const VARIABLE_NAME_MAX_LENGTH = 64;
 
 // Dangerous patterns that should be blocked
-const DANGEROUS_PATTERNS = [;
+const DANGEROUS_PATTERNS = [
   // JavaScript injection patterns
   /eval\s*\(/gi)
   /Function\s*\(/gi)
@@ -33,7 +33,7 @@ const DANGEROUS_PATTERNS = [;
   /\$\{.*\}/gi,
   /`/gi,
   /new\s+Function/gi,
-  /=>.*\{/gi,
+  /=>.*\{ /gi,
   /\bwith\s*\(/gi)
   /\bBuffer\b/gi,
   // DOM manipulation (for browser safety)
@@ -59,7 +59,7 @@ const DANGEROUS_PATTERNS = [;
 ];
 
 // Safe expression patterns for conditionals
-const SAFE_EXPRESSION_PATTERNS = [;
+const SAFE_EXPRESSION_PATTERNS = [
   // Basic operators
   /^[a-zA-Z_$][a-zA-Z0-9_$]*$/,  // Simple variable names
   /^[a-zA-Z0-9_$\s\.\[\]]+$/,    // Property access
@@ -67,7 +67,7 @@ const SAFE_EXPRESSION_PATTERNS = [;
 ];
 
 // Allowed operators and keywords in expressions
-const ALLOWED_OPERATORS = [;
+const ALLOWED_OPERATORS = [
   '===', '!==', '==', '!=', '<', '>', '<=', '>=',
   '+', '-', '*', '/', '%',
   '&&', '||', '!',
@@ -76,7 +76,7 @@ const ALLOWED_OPERATORS = [;
 ];
 
 // Allowed functions in expressions
-const ALLOWED_FUNCTIONS = [;
+const ALLOWED_FUNCTIONS = [
   'startsWith', 'endsWith', 'includes', 'indexOf', 'lastIndexOf',
   'toLowerCase', 'toUpperCase', 'trim', 'replace',
   'substring', 'substr', 'slice', 'split', 'join',
@@ -111,7 +111,7 @@ export class SecurityValidation {
     if (!SecurityValidation.validateSafeString(expression)) {
       return false;
     // Additional expression-specific validation
-    const dangerousExpressionPatterns = [;
+    const dangerousExpressionPatterns = [
       /function\s*\(/gi)
       /=\s*>/gi,
       /\bthis\b/gi,
@@ -162,7 +162,7 @@ export class SecurityValidation {
     if (key.length === 0) return false;
     if (key.length > VARIABLE_NAME_MAX_LENGTH) return false; // Limit to 64 chars as per security requirements
     // Dangerous property names
-    const dangerousProperties = [;
+    const dangerousProperties = [
       '__proto__',
       'constructor',
       'prototype',
@@ -247,7 +247,7 @@ export const SecureValidation = {
   /**
    * Safe string validation with pattern checking
    */
-  safeString: (maxLength: number = 10000) => ,
+  safeString: (maxLength: number = 10000) =>  }
     z.string()
       .max(maxLength, `String must be no longer than ${maxLength} characters`)}
       .refine()
@@ -306,12 +306,10 @@ export const SecureValidation = {
         { message: 'Array contains dangerous values' }
       ),
       z.record(z.string().max(1000)).refine()
-        (val) => {
-          const keys = Object.keys(val);
+        (val) => { const keys = Object.keys(val);
           if (keys.length > 100) return false;
           return keys.every(key => SecurityValidation.validateSafePropertyKey(key)) &&
-                 Object.values(val).every(value => SecurityValidation.validateSafeString(value));
-  }
+                 Object.values(val).every(value => SecurityValidation.validateSafeString(value)) }
         { message: 'Object contains dangerous keys or values' }
       ),
       z.null(),
@@ -323,7 +321,6 @@ export const SecureValidation = {
   safeArray: <T>(itemSchema: z.ZodSchema<T>, maxLength: number = 1000) =>
     z.array(itemSchema)
       .max(maxLength, `Array must contain no more than ${maxLength} items`)}
-}
   /**
    * Safe object validation
    */
@@ -339,8 +336,7 @@ export const SecureValidation = {
 /**
  * Security testing utilities
  */
-export class SecurityTesting {
-  /**
+export class SecurityTesting { /**
    * Common injection attack patterns for testing
    */
   static readonly INJECTION_PATTERNS = [
@@ -349,10 +345,10 @@ export class SecurityTesting {
     '__proto__.polluted = true',
     'prototype.polluted = true',
     'this.constructor.constructor("alert(1)")()',
-    'Function("alert(1)")()',
-    '(() => { alert(1); })()',
+    'Function("alert(1)")()' }
+    '(() => { alert(1) })()',
     '`${alert(1)}`'}
-}
+
     'document.cookie',
     'window.location',
     'require("fs")',
@@ -367,15 +363,13 @@ export class SecurityTesting {
   static testInjectionProtection(((
     validator: (input: string) => boolean,
     testName: string = 'Unknown'
-  ): { passed: number; failed: number; failedPatterns: string } {
-  let passed = 0;
+  ): { passed: number; failed: number; failedPatterns: string } { let passed = 0;
   let failed = 0;
   const failedPatterns: string = [];
   for (const pattern of this.INJECTION_PATTERNS) {
   const isBlocked = !validator(pattern);
   if (isBlocked) {
-  passed++;
-} else {
+  passed++ } else {
         failed++;
         failedPatterns.push(pattern);
     console.log(`Security Test [${testName}]: ${passed} passed, ${failed} failed`);}
@@ -385,8 +379,7 @@ export class SecurityTesting {
   /**
    * Run comprehensive security tests
    */
-  static runSecurityTests(): boolean {
-    console.log('🔐 Running Security Validation Tests...');
+  static runSecurityTests(): boolean { console.log('🔐 Running Security Validation Tests...');
     const stringTest = this.testInjectionProtection(;);
       SecurityValidation.validateSafeString,
       'Safe String Validation'
@@ -396,7 +389,7 @@ export class SecurityTesting {
       'Safe Expression Validation'
     );
     const keyTest = this.testInjectionProtection(;);
-      SecurityValidation.validateSafePropertyKey,
+      SecurityValidation.validateSafePropertyKey }
       'Safe Property Key Validation'
     );
     const totalPassed = stringTest.passed + expressionTest.passed + keyTest.passed;

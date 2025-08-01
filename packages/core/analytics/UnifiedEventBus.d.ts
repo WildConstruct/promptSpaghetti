@@ -6,8 +6,7 @@
  */
 import { EventEmitter } from 'events';
 import { z } from 'zod';
-export declare enum AnalyticsEventType {
-    GRAPH_EXECUTION = "graph_execution",
+export declare enum AnalyticsEventType { GRAPH_EXECUTION = "graph_execution",
     GRAPH_CREATED = "graph_created",
     NODE_EXECUTION = "node_execution",
     TOKEN_USAGE = "token_usage",
@@ -44,11 +43,10 @@ export declare enum EventCategory {
     PERFORMANCE = "performance",
     SECURITY = "security",
     BUSINESS = "business",
-    SYSTEM = "system",
+    SYSTEM = "system" }
     INTEGRATION = "integration"
 
-export declare const BaseEventSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const BaseEventSchema: z.ZodObject<{ id: z.ZodString;
     type: z.ZodNativeEnum<typeof AnalyticsEventType>;
     category: z.ZodNativeEnum<typeof EventCategory>;
     severity: z.ZodNativeEnum<typeof EventSeverity>;
@@ -64,9 +62,7 @@ export declare const BaseEventSchema: z.ZodObject<{
     metadata: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     environment: z.ZodDefault<z.ZodString>;
-    region: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    region: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { id: string;
     data: Record<string, unknown>;
     type: AnalyticsEventType;
     category: EventCategory;
@@ -82,9 +78,7 @@ export declare const BaseEventSchema: z.ZodObject<{
     sessionId?: string | undefined;
     requestId?: string | undefined;
     organizationId?: string | undefined;
-    traceId?: string | undefined;
-}, {
-    id: string;
+    traceId?: string | undefined }, { id: string;
     data: Record<string, unknown>;
     type: AnalyticsEventType;
     category: EventCategory;
@@ -100,11 +94,9 @@ export declare const BaseEventSchema: z.ZodObject<{
     sessionId?: string | undefined;
     requestId?: string | undefined;
     organizationId?: string | undefined;
-    traceId?: string | undefined;
-}>;
+    traceId?: string | undefined }>;
 export type UnifiedAnalyticsEvent = z.infer<typeof BaseEventSchema>;
-export declare const EventFilterSchema: z.ZodObject<{
-    types: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof AnalyticsEventType>, "many">>;
+export declare const EventFilterSchema: z.ZodObject<{ types: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof AnalyticsEventType>, "many">>;
     categories: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof EventCategory>, "many">>;
     severities: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof EventSeverity>, "many">>;
     sources: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -114,9 +106,7 @@ export declare const EventFilterSchema: z.ZodObject<{
     startTime: z.ZodOptional<z.ZodNumber>;
     endTime: z.ZodOptional<z.ZodNumber>;
     tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    environment: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    tags?: string[] | undefined;
+    environment: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { tags?: string[] | undefined;
     userId?: string | undefined;
     environment?: string | undefined;
     categories?: EventCategory[] | undefined;
@@ -126,9 +116,7 @@ export declare const EventFilterSchema: z.ZodObject<{
     organizationId?: string | undefined;
     types?: AnalyticsEventType[] | undefined;
     severities?: EventSeverity[] | undefined;
-    sources?: string[] | undefined;
-}, {
-    tags?: string[] | undefined;
+    sources?: string[] | undefined }, { tags?: string[] | undefined;
     userId?: string | undefined;
     environment?: string | undefined;
     categories?: EventCategory[] | undefined;
@@ -138,13 +126,12 @@ export declare const EventFilterSchema: z.ZodObject<{
     organizationId?: string | undefined;
     types?: AnalyticsEventType[] | undefined;
     severities?: EventSeverity[] | undefined;
-    sources?: string[] | undefined;
-}>;
+    sources?: string[] | undefined }>;
 export type EventFilter = z.infer<typeof EventFilterSchema>;
 
 }
-export interface EventSubscriber {
-    id: string;
+}
+export interface EventSubscriber { id: string;
     name: string;
     filter: EventFilter;
     handler: (event: UnifiedAnalyticsEvent) => Promise<void> | void;
@@ -152,24 +139,21 @@ export interface EventSubscriber {
     enabled: boolean;
     retryConfig?: {
         maxRetries: number;
-        backoffMs: number;
-
+        backoffMs: number }
 }
     };
 
 }
-export interface EventBusConfig {
-    maxEventHistory: number;
+}
+export interface EventBusConfig { maxEventHistory: number;
     enablePersistence: boolean;
     batchSize: number;
     flushIntervalMs: number;
     deadLetterQueue: boolean;
-    metricsEnabled: boolean;
-
-
+    metricsEnabled: boolean }
 }
-export interface EventBusMetrics {
-    eventsPublished: number;
+}
+export interface EventBusMetrics { eventsPublished: number;
     eventsProcessed: number;
     eventsFailed: number;
     subscribersActive: number;
@@ -223,21 +207,19 @@ export declare class UnifiedEventBus extends EventEmitter {
     getHealthStatus(): {
         status: 'healthy' | 'degraded' | 'unhealthy';
         metrics: EventBusMetrics;
-        issues: string[];
+        issues: string[] }
 }
     };
     /**
      * Migrate analytics data from existing systems
      */
     migrateFromLegacySystem();
-      systemName: string,
-      events: unknown[],
-      transformer: (legacyEvent: unknown),
-    ) => Partial<UnifiedAnalyticsEvent>): Promise<{
-        migrated: number;
+      systemName: string
+      events: unknown[]
+      transformer: (legacyEvent: unknown)
+    ) => Partial<UnifiedAnalyticsEvent>): Promise<{ migrated: number;
         failed: number;
-        errors: string[];
-    }>;
+        errors: string[] }>;
     /**
      * Process event queue in batches
      */

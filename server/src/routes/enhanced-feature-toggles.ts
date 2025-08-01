@@ -111,7 +111,7 @@ const ToggleOperationRequestSchema = z.object({
       )),
       urgencyThreshold: z.enum(['low', 'normal', 'high', 'emergency'])
     })).optional()
-  }
+
 });
 
 const ImpactPreviewRequestSchema = z.object({
@@ -130,7 +130,7 @@ export async function enhancedFeatureToggleRoutes(
     dependencyIntegrationService: ToggleDependencyIntegrationService;
     dependencyService: FeatureToggleDependencyService;
     auditService: AuditService;
-  }
+
 ) {
   const {
     toggleService,
@@ -138,7 +138,7 @@ export async function enhancedFeatureToggleRoutes(
     dependencyIntegrationService,
     dependencyService,
     auditService
-  } = options;
+ = options;
 
   // Enhanced evaluation endpoint
   fastify.post('/enhanced-evaluation', {
@@ -184,8 +184,8 @@ export async function enhancedFeatureToggleRoutes(
         }),
         400: z.object({ error: z.string() }),
         500: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { toggleKey, context } = EnhancedEvaluationRequestSchema.parse(request.body);
@@ -206,8 +206,8 @@ export async function enhancedFeatureToggleRoutes(
             enabled: result.enabled,
             reason: result.reason,
             riskScore: result.riskAssessment?.riskScore
-          }
-  }
+
+
         severity: 'info'
       });
 
@@ -216,7 +216,7 @@ export async function enhancedFeatureToggleRoutes(
         result,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Enhanced evaluation error:', error);
       
       await auditService.logAction({
@@ -226,14 +226,14 @@ export async function enhancedFeatureToggleRoutes(
         details: {
           error: error.message,
           stack: error.stack
-  }
+
         severity: 'error'
       });
 
       return reply.status(500).send({
         error: 'Enhanced evaluation failed'
       });
-    }
+
   });
 
   // Bulk enhanced evaluation endpoint
@@ -250,8 +250,8 @@ export async function enhancedFeatureToggleRoutes(
         }),
         400: z.object({ error: z.string() }),
         500: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { toggleKeys, context } = BulkEvaluationRequestSchema.parse(request.body);
@@ -260,7 +260,7 @@ export async function enhancedFeatureToggleRoutes(
         return reply.status(400).send({
           error: 'Maximum 100 toggles can be evaluated in bulk'
         });
-      }
+
 
       const startTime = Date.now();
       const results = await enhancedEvaluationService.evaluateToggles(toggleKeys, context || {});
@@ -275,7 +275,7 @@ export async function enhancedFeatureToggleRoutes(
           totalTime,
           averageTime: totalTime / toggleKeys.length,
           cacheHitRate: Object.values(results).filter(r => r.cacheHit).length / toggleKeys.length
-  }
+
         severity: 'info'
       });
 
@@ -286,12 +286,12 @@ export async function enhancedFeatureToggleRoutes(
         totalTime,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Bulk evaluation error:', error);
       return reply.status(500).send({
         error: 'Bulk evaluation failed'
       });
-    }
+
   });
 
   // Dependency enforcement endpoint
@@ -316,8 +316,8 @@ export async function enhancedFeatureToggleRoutes(
         400: z.object({ error: z.string() }),
         403: z.object({ error: z.string(), enforcement: z.any() }),
         500: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { operation, context } = ToggleOperationRequestSchema.parse(request.body);
@@ -328,7 +328,7 @@ export async function enhancedFeatureToggleRoutes(
         return reply.status(403).send({
           error: 'Insufficient permissions for this operation'
         });
-      }
+
 
       const enforcement = await dependencyIntegrationService.enforceOperation(
         operation,
@@ -343,13 +343,12 @@ export async function enhancedFeatureToggleRoutes(
         enforcement,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Operation enforcement error:', error);
       return reply.status(500).send({
         error: 'Operation enforcement failed'
       });
-    }
+
   });
 
   // Execute operation endpoint
@@ -367,7 +366,7 @@ export async function enhancedFeatureToggleRoutes(
           riskScore: z.number(),
           recommendation: z.any(),
           rollbackPlan: z.any().optional()
-  }
+
       }),
       response: {
         200: z.object({
@@ -378,8 +377,8 @@ export async function enhancedFeatureToggleRoutes(
         400: z.object({ error: z.string() }),
         403: z.object({ error: z.string() }),
         500: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { operation, context, enforcement } = request.body as any;
@@ -389,7 +388,7 @@ export async function enhancedFeatureToggleRoutes(
         return reply.status(403).send({
           error: 'Operation not allowed by dependency enforcement'
         });
-      }
+
 
       const execution = await dependencyIntegrationService.executeOperation(
         operation,
@@ -403,13 +402,12 @@ export async function enhancedFeatureToggleRoutes(
         execution,
         timestamp: new Date().toISOString()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Operation execution error:', error);
       return reply.status(500).send({
         error: 'Operation execution failed'
       });
-    }
+
   });
 
   // Impact preview endpoint for admin UI
@@ -435,8 +433,8 @@ export async function enhancedFeatureToggleRoutes(
         }),
         400: z.object({ error: z.string() }),
         500: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { operation, context } = ImpactPreviewRequestSchema.parse(request.body);
@@ -454,12 +452,12 @@ export async function enhancedFeatureToggleRoutes(
         preview,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Impact preview error:', error);
       return reply.status(500).send({
         error: 'Impact preview failed'
       });
-    }
+
   });
 
   // Dependency graph endpoint for visualization
@@ -487,8 +485,8 @@ export async function enhancedFeatureToggleRoutes(
           timestamp: z.string()
         }),
         500: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { toggleId } = request.params as any;
@@ -497,9 +495,9 @@ export async function enhancedFeatureToggleRoutes(
       let toggleIds: string[] | undefined;
       if (toggleId) {
         toggleIds = [toggleId];
-      } else if (includeToggles) {
+ else if (includeToggles) {
         toggleIds = includeToggles.split(',');
-      }
+
 
       const graph = await dependencyService.generateDependencyGraph(toggleIds);
 
@@ -510,24 +508,24 @@ export async function enhancedFeatureToggleRoutes(
           edge => graph.nodes.some(n => n.id === edge.source) && 
                   graph.nodes.some(n => n.id === edge.target)
         );
-      }
+
 
       if (!includeMetadata) {
         graph.nodes.forEach(node => delete node.metadata);
         graph.edges.forEach(edge => delete edge.metadata);
-      }
+
 
       return {
         success: true,
         graph,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Dependency graph error:', error);
       return reply.status(500).send({
         error: 'Failed to generate dependency graph'
       });
-    }
+
   });
 
   // Enhanced toggle metrics endpoint
@@ -560,8 +558,8 @@ export async function enhancedFeatureToggleRoutes(
         }),
         404: z.object({ error: z.string() }),
         500: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { toggleId } = request.params as any;
@@ -577,19 +575,19 @@ export async function enhancedFeatureToggleRoutes(
         return reply.status(404).send({
           error: 'Toggle not found or no metrics available'
         });
-      }
+
 
       return {
         success: true,
         metrics,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Toggle metrics error:', error);
       return reply.status(500).send({
         error: 'Failed to retrieve toggle metrics'
       });
-    }
+
   });
 
   // Health check endpoint for the enhanced systems
@@ -617,12 +615,12 @@ export async function enhancedFeatureToggleRoutes(
               activeOperations: z.number(),
               rollbackPlansActive: z.number(),
               cacheSize: z.number()
-  }
+
           }),
           timestamp: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // This would collect health status from all enhanced services
@@ -634,7 +632,7 @@ export async function enhancedFeatureToggleRoutes(
         services: health.services,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Health check error:', error);
       return {
         success: false,
@@ -643,19 +641,19 @@ export async function enhancedFeatureToggleRoutes(
           evaluationService: { status: 'unhealthy' as const, activeEvaluations: 0, cacheStatus: 'error', averageResponseTime: 0 },
           dependencyService: { status: 'unhealthy' as const, activeDependencies: 0, conflictCount: 0, healthScore: 0 },
           integrationService: { status: 'unhealthy' as const, activeOperations: 0, rollbackPlansActive: 0, cacheSize: 0 }
-  }
+
         timestamp: new Date().toISOString()
       };
-    }
+
   });
-}
+
 
 // Helper functions (would be implemented with actual business logic)
 async function hasToggleManagementPermission(user: any, operationType: string): Promise<boolean> {
 
   // Implementation would check user roles and permissions
   return user.roles?.includes('admin') || user.roles?.includes('toggle_manager');
-}
+
 
 async function getToggleMetrics(toggleId: string, timeRange: string, options: any): Promise<any> {
 
@@ -672,7 +670,7 @@ async function getToggleMetrics(toggleId: string, timeRange: string, options: an
     performanceMetrics: options.includePerformance ? [] : undefined,
     dependencyMetrics: options.includeDependencies ? {} : undefined
   };
-}
+
 
 async function collectSystemHealth(): Promise<any> {
 
@@ -685,21 +683,21 @@ async function collectSystemHealth(): Promise<any> {
         activeEvaluations: 15,
         cacheStatus: 'optimal',
         averageResponseTime: 42
-  }
+
       dependencyService: {
         status: 'healthy' as const,
         activeDependencies: 127,
         conflictCount: 2,
         healthScore: 92
-  }
+
       integrationService: {
         status: 'healthy' as const,
         activeOperations: 8,
         rollbackPlansActive: 1,
         cacheSize: 2340
-      }
-    }
+
+
   };
-}
+
 
 export default enhancedFeatureToggleRoutes;

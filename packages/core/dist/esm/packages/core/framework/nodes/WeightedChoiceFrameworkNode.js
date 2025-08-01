@@ -33,7 +33,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                             memoryUsage: 'low',
                         },
                         ports: {
-                            inputs: [,
+                            inputs: [
                                 {
                                     id: 'choices',
                                     label: 'Choices',
@@ -48,8 +48,9 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                     required: false,
                                     description: 'Relative weights for each choice',
                                     defaultValue: []
-                                }],
-                            outputs: [,
+                                }
+                            ],
+                            outputs: [
                                 {
                                     id: 'result',
                                     label: 'Selected Choice',
@@ -63,7 +64,8 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                     dataType: 'number',
                                     required: false,
                                     description: 'Index of the selected choice'
-                                }]
+                                }
+                            ]
                         },
                         metadata: {
                             author: 'Framework Team',
@@ -137,7 +139,12 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                     totalChoices: number;
                                     totalWeight: number;
                                     averageWeight: number;
-                                    choiceDistribution: Array;
+                                    choiceDistribution: Array < {
+                                        choice: string,
+                                        weight: number,
+                                        normalizedWeight: number,
+                                        percentage: number
+                                    } > ;
                                     const choiceDistribution = this.data.choices.map((choice, index) => {
                                         const weight = this.data.weights[index] || 1;
                                         const normalizedWeight = this.normalizedWeights[index];
@@ -162,7 +169,12 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                     {
                                         results: Record;
                                         percentages: Record;
-                                        expectedVsActual: Array;
+                                        expectedVsActual: Array < {
+                                            choice: string,
+                                            expected: number,
+                                            actual: number,
+                                            deviation: number
+                                        } > ;
                                         const results = {};
                                         const random = seed ? this.createSeededRandom(seed) : Math.random;
                                         // Initialize result counts
@@ -277,8 +289,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                             const overhead = 1024; // Object overhead;
                             return choicesMemory + weightsMemory + overhead;
                             export default WeightedChoiceFrameworkNode;
-                        }
-                    }
+                        } }
                 } };
         }
     }

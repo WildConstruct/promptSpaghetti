@@ -14,8 +14,7 @@
  * - Session timeout analytics and reporting
  */
 import { EventEmitter } from 'events';
-export declare enum TimeoutPolicy {
-    STRICT = "strict",
+export declare enum TimeoutPolicy { STRICT = "strict",
     FLEXIBLE = "flexible",
     ADAPTIVE = "adaptive",
     PROGRESSIVE = "progressive"
@@ -32,12 +31,12 @@ export declare enum ActivityLevel {
     NONE = "none",
     LOW = "low",
     MEDIUM = "medium",
-    HIGH = "high",
+    HIGH = "high" }
     CRITICAL = "critical"
 
 }
-export interface TimeoutConfiguration {
-    sessionId: string;
+}
+export interface TimeoutConfiguration { sessionId: string;
     policy: TimeoutPolicy;
     idleTimeout: number;
     absoluteTimeout: number;
@@ -53,20 +52,18 @@ export interface TimeoutConfiguration {
     maxAbsoluteTime: number;
     securityLevelOverride?: number;
     deviceTrustFactor: number;
-    locationTrustFactor: number;
-
+    locationTrustFactor: number }
 }
-export interface ActivityData {
-    timestamp: Date;
+}
+export interface ActivityData { timestamp: Date;
     type: 'mouse' | 'keyboard' | 'touch' | 'api' | 'navigation' | 'interaction';
     intensity: ActivityLevel;
     endpoint?: string;
     duration?: number;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface SessionTimeoutState {
-    sessionId: string;
+}
+export interface SessionTimeoutState { sessionId: string;
     configuration: TimeoutConfiguration;
     isActive: boolean;
     lastActivity: Date;
@@ -84,15 +81,15 @@ export interface SessionTimeoutState {
     activityPattern: {
         peakHours: number[];
         averageSessionLength: number;
-        typicalActivityLevel: ActivityLevel;
+        typicalActivityLevel: ActivityLevel }
 }
     };
     status: 'active' | 'warning' | 'grace' | 'expired' | 'extended';
     timeoutReason?: TimeoutReason;
 
 }
-export interface TimeoutEvent {
-    sessionId: string;
+}
+export interface TimeoutEvent { sessionId: string;
     eventType: 'warning' | 'timeout' | 'extension' | 'renewal';
     timestamp: Date;
     remainingTime: number;
@@ -156,7 +153,7 @@ export declare class SessionTimeoutController extends EventEmitter {
         averageSessionLength: number;
         extensionUsage: number;
         timeoutReasons: Record<TimeoutReason, number>;
-        policyDistribution: Record<TimeoutPolicy, number>;
+        policyDistribution: Record<TimeoutPolicy, number> }
 }
     };
     private shouldExtendSession;

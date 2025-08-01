@@ -10,13 +10,13 @@ import ConsentFeatureToggleService, {
   ConsentStatus, 
   ConsentAwareContext,
   FeatureConsentMapping 
-} from '../ConsentFeatureToggleService';
+ from '../ConsentFeatureToggleService';
 import { FeatureToggleDAO } from '../../database/feature-toggle-dao';
 import { 
   FeatureToggle, 
   ToggleType, 
   BooleanToggleValue 
-} from '../../database/feature-toggle-models';
+ from '../../database/feature-toggle-models';
 
 // Mock the FeatureToggleDAO
 jest.mock('../../database/feature-toggle-dao');
@@ -101,7 +101,7 @@ describe('ConsentFeatureToggleService', () => {
           [ConsentType.SOCIAL_MEDIA]: ConsentStatus.DENIED,
           [ConsentType.FUNCTIONAL]: ConsentStatus.DENIED,
           [ConsentType.PERFORMANCE]: ConsentStatus.DENIED
-        }
+
       };
 
       const result = await service.evaluateToggle('analytics_feature', context);
@@ -125,7 +125,7 @@ describe('ConsentFeatureToggleService', () => {
           [ConsentType.SOCIAL_MEDIA]: ConsentStatus.DENIED,
           [ConsentType.FUNCTIONAL]: ConsentStatus.DENIED,
           [ConsentType.PERFORMANCE]: ConsentStatus.DENIED
-        }
+
       };
 
       const result = await service.evaluateToggle('analytics_feature', context);
@@ -150,7 +150,7 @@ describe('ConsentFeatureToggleService', () => {
           [ConsentType.SOCIAL_MEDIA]: ConsentStatus.DENIED,
           [ConsentType.FUNCTIONAL]: ConsentStatus.DENIED,
           [ConsentType.PERFORMANCE]: ConsentStatus.DENIED
-        }
+
       };
 
       const result = await service.evaluateToggle('analytics_feature', context);
@@ -171,7 +171,7 @@ describe('ConsentFeatureToggleService', () => {
           [ConsentType.SOCIAL_MEDIA]: ConsentStatus.DENIED,
           [ConsentType.FUNCTIONAL]: ConsentStatus.DENIED,
           [ConsentType.PERFORMANCE]: ConsentStatus.DENIED
-        }
+
       };
 
       const result = await service.evaluateToggle('analytics_feature', context);
@@ -204,7 +204,7 @@ describe('ConsentFeatureToggleService', () => {
           [ConsentType.SOCIAL_MEDIA]: ConsentStatus.DENIED,
           [ConsentType.FUNCTIONAL]: ConsentStatus.DENIED,
           [ConsentType.PERFORMANCE]: ConsentStatus.DENIED
-        }
+
       };
 
       const result = await service.evaluateToggle('personalized_feature', context);
@@ -225,7 +225,7 @@ describe('ConsentFeatureToggleService', () => {
           [ConsentType.SOCIAL_MEDIA]: ConsentStatus.DENIED,
           [ConsentType.FUNCTIONAL]: ConsentStatus.DENIED,
           [ConsentType.PERFORMANCE]: ConsentStatus.DENIED
-        }
+
       };
 
       const result = await service.evaluateToggle('personalized_feature', context);
@@ -258,7 +258,7 @@ describe('ConsentFeatureToggleService', () => {
           [ConsentType.ADVERTISING]: ConsentStatus.DENIED,
           [ConsentType.SOCIAL_MEDIA]: ConsentStatus.DENIED,
           [ConsentType.FUNCTIONAL]: ConsentStatus.DENIED
-        }
+
       };
 
       const result = await service.evaluateToggle('flexible_feature', context);
@@ -279,7 +279,7 @@ describe('ConsentFeatureToggleService', () => {
           [ConsentType.ADVERTISING]: ConsentStatus.DENIED,
           [ConsentType.SOCIAL_MEDIA]: ConsentStatus.DENIED,
           [ConsentType.FUNCTIONAL]: ConsentStatus.DENIED
-        }
+
       };
 
       const result = await service.evaluateToggle('flexible_feature', context);
@@ -361,13 +361,13 @@ describe('ConsentFeatureToggleService', () => {
           requiredConsents: [ConsentType.ANALYTICS],
           requiredConsentLogic: 'AND',
           fallbackBehavior: 'disable'
-  }
+
         {
           featureKey: 'marketing_feature',
           requiredConsents: [ConsentType.MARKETING],
           requiredConsentLogic: 'AND',
           fallbackBehavior: 'disable'
-        }
+
       ];
       service.registerConsentMappings(mappings);
     });
@@ -384,7 +384,7 @@ describe('ConsentFeatureToggleService', () => {
           [ConsentType.SOCIAL_MEDIA]: ConsentStatus.DENIED,
           [ConsentType.FUNCTIONAL]: ConsentStatus.DENIED,
           [ConsentType.PERFORMANCE]: ConsentStatus.DENIED
-        }
+
       };
 
       const results = await service.evaluateToggles(
@@ -465,7 +465,7 @@ describe('ConsentFeatureToggleService', () => {
         getConsents: jest.fn().mockResolvedValue({
           [ConsentType.ANALYTICS]: ConsentStatus.GRANTED,
           [ConsentType.MARKETING]: ConsentStatus.DENIED
-  }
+
       };
 
       service.setConsentService(mockConsentService);

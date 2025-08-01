@@ -4,29 +4,23 @@
  * Tests comprehensive password security guidance, compromise assessment,
  * and user security recommendations for 2025 security standards.
  */
-import {
-  PasswordGuidanceService,
+import { PasswordGuidanceService,
   RiskLevel,
   CompromiseType,
   ActionPriority,
   GuidanceCategory,
   CompromiseIndicator,
-  SecurityRecommendation,
+  SecurityRecommendation }
   GuidanceSession
-} from '../PasswordGuidanceService';
-describe('PasswordGuidanceService', () => {
-  let service: PasswordGuidanceService;
+ from '../PasswordGuidanceService';
+describe('PasswordGuidanceService', () => { let service: PasswordGuidanceService;
   let mockDate: Date;
   beforeEach(() => {
   mockDate = new Date('2025-01-15T10:00:00Z');
   jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
-  service = new PasswordGuidanceService();
-});
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  describe('Risk Assessment and Classification', () => {
-  test('should classify data breach as high risk', () => {
+  service = new PasswordGuidanceService() });
+  afterEach(() => { jest.restoreAllMocks() });
+  describe('Risk Assessment and Classification', () => { test('should classify data breach as high risk', () => {
   const indicators: CompromiseIndicator = [{,
   type: CompromiseType.DATA_BREACH,
   description: 'User data exposed in major breach',
@@ -34,26 +28,24 @@ describe('PasswordGuidanceService', () => {
   source: 'HaveIBeenPwned',
   detectedAt: new Date(),
   evidence: ['Password hash found in breach database'],
-  affectedAccounts: ['user@example.com'],
-}];
+  affectedAccounts: ['user@example.com'] }
+];
       const riskLevel = (service as any).calculateRiskLevel(indicators);
       expect(riskLevel).toBe(RiskLevel.CRITICAL);
     });
-    test('should classify weak password as medium risk', () => {
-  const indicators: CompromiseIndicator = [{,
+    test('should classify weak password as medium risk', () => { const indicators: CompromiseIndicator = [{,
   type: CompromiseType.WEAK_PASSWORD,
   description: 'Password does not meet strength requirements',
   confidence: 100,
   source: 'password_analyzer',
   detectedAt: new Date(),
   evidence: ['Dictionary word detected', 'No special characters'],
-  affectedAccounts: ['user@example.com'],
-}];
+  affectedAccounts: ['user@example.com'] }
+];
       const riskLevel = (service as any).calculateRiskLevel(indicators);
       expect([RiskLevel.MEDIUM, RiskLevel.LOW]).toContain(riskLevel);
     });
-    test('should classify multiple indicators as critical risk', () => {
-  const indicators: CompromiseIndicator = [
+    test('should classify multiple indicators as critical risk', () => { const indicators: CompromiseIndicator = [
   {
   type: CompromiseType.DATA_BREACH,
   description: 'Found in major data breach',
@@ -61,22 +53,20 @@ describe('PasswordGuidanceService', () => {
   source: 'breach_database',
   detectedAt: new Date(),
   evidence: ['Password hash exposed'],
-  affectedAccounts: ['user@example.com'],
-}
-        {
-  type: CompromiseType.CREDENTIAL_STUFFING,
+  affectedAccounts: ['user@example.com'] }
+
+        { type: CompromiseType.CREDENTIAL_STUFFING,
   description: 'Login attempts from multiple IPs',
   confidence: 85,
   source: 'security_monitor',
   detectedAt: new Date(),
-  evidence: ['Failed login from 5 different countries'],
+  evidence: ['Failed login from 5 different countries'] }
   affectedAccounts: ['user@example.com']];
   const riskLevel = (service as any).calculateRiskLevel(indicators);
   expect(riskLevel).toBe(RiskLevel.CRITICAL);
 });
   });
-  describe('Immediate Actions Generation', () => {
-    test('should generate password change action for data breach', () => {
+  describe('Immediate Actions Generation', () => { test('should generate password change action for data breach', () => {
       const actions = service.getImmediateActions(CompromiseType.DATA_BREACH);
       const passwordChangeAction = actions.find(a => a.id === 'change-password-immediate');
       expect(passwordChangeAction).toBeDefined();
@@ -85,30 +75,22 @@ describe('PasswordGuidanceService', () => {
       // Verify step structure
       expect(passwordChangeAction!.steps[0].title).toBe('Access Account Settings');
       expect(passwordChangeAction!.steps[1].title).toBe('Create Strong Password');
-      expect(passwordChangeAction!.steps[2].title).toBe('Confirm Password Change');
-    });
-    test('should generate account activity review action', () => {
-      const actions = service.getImmediateActions(CompromiseType.PHISHING);
+      expect(passwordChangeAction!.steps[2].title).toBe('Confirm Password Change') });
+    test('should generate account activity review action', () => { const actions = service.getImmediateActions(CompromiseType.PHISHING);
       const activityAction = actions.find(a => a.id === 'check-account-activity');
       expect(activityAction).toBeDefined();
       expect(activityAction!.category).toBe(GuidanceCategory.IMMEDIATE_ACTIONS);
-      expect(activityAction!.steps).toHaveLength(3);
-    });
-    test('should include secure other accounts action for credential stuffing', () => {
-      const actions = service.getImmediateActions(CompromiseType.CREDENTIAL_STUFFING);
+      expect(activityAction!.steps).toHaveLength(3) });
+    test('should include secure other accounts action for credential stuffing', () => { const actions = service.getImmediateActions(CompromiseType.CREDENTIAL_STUFFING);
       const secureAccountsAction = actions.find(a => a.id === 'secure-other-accounts');
       expect(secureAccountsAction).toBeDefined();
       expect(secureAccountsAction!.priority).toBe(ActionPriority.URGENT);
-      expect(secureAccountsAction!.estimatedTime).toBe('30-60 minutes');
-    });
-    test('should not include secure other accounts for weak password', () => {
-      const actions = service.getImmediateActions(CompromiseType.WEAK_PASSWORD);
+      expect(secureAccountsAction!.estimatedTime).toBe('30-60 minutes') });
+    test('should not include secure other accounts for weak password', () => { const actions = service.getImmediateActions(CompromiseType.WEAK_PASSWORD);
       const secureAccountsAction = actions.find(a => a.id === 'secure-other-accounts');
-      expect(secureAccountsAction).toBeUndefined();
-    });
+      expect(secureAccountsAction).toBeUndefined() });
   });
-  describe('Guidance Session Management', () => {
-  test('should create guidance session with proper structure', async () => {
+  describe('Guidance Session Management', () => { test('should create guidance session with proper structure', async () => {
   const userId = 'test-user-123';
   const indicators: CompromiseIndicator = [{,
   type: CompromiseType.DATA_BREACH,
@@ -117,8 +99,8 @@ describe('PasswordGuidanceService', () => {
   source: 'security_scan',
   detectedAt: new Date(),
   evidence: ['Hash found in database'],
-  affectedAccounts: [userId],
-}];
+  affectedAccounts: [userId] }
+];
       const session = await service.assessPasswordCompromise(userId, indicators);
       expect(session.id).toMatch(/^PWD-\d+-[A-F0-9]+$/);
       expect(session.userId).toBe(userId);
@@ -127,8 +109,7 @@ describe('PasswordGuidanceService', () => {
       expect(session.status).toBe('active');
       expect(session.expiresAt).toBeInstanceOf(Date);
     });
-    test('should emit guidanceSessionCreated event', async () => {
-  const userId = 'test-user-456';
+    test('should emit guidanceSessionCreated event', async () => { const userId = 'test-user-456';
   const indicators: CompromiseIndicator = [{,
   type: CompromiseType.PHISHING,
   description: 'Credentials entered on phishing site',
@@ -136,17 +117,14 @@ describe('PasswordGuidanceService', () => {
   source: 'user_report',
   detectedAt: new Date(),
   evidence: ['Suspicious URL reported'],
-  affectedAccounts: [userId],
-}];
-      const eventPromise = new Promise((resolve) => {
-        service.once('guidanceSessionCreated', resolve);
-      });
+  affectedAccounts: [userId] }
+];
+      const eventPromise = new Promise((resolve) => { service.once('guidanceSessionCreated', resolve) });
       await service.assessPasswordCompromise(userId, indicators);
       const emittedSession = await eventPromise;
       expect(emittedSession).toBeDefined();
     });
-    test('should prioritize recommendations correctly', async () => {
-  const userId = 'test-user-789';
+    test('should prioritize recommendations correctly', async () => { const userId = 'test-user-789';
   const indicators: CompromiseIndicator = [{,
   type: CompromiseType.MALWARE,
   description: 'Malware detected on device',
@@ -154,8 +132,8 @@ describe('PasswordGuidanceService', () => {
   source: 'antivirus',
   detectedAt: new Date(),
   evidence: ['Keylogger detected'],
-  affectedAccounts: [userId],
-}];
+  affectedAccounts: [userId] }
+];
       const session = await service.assessPasswordCompromise(userId, indicators);
       // Verify recommendations are sorted by priority
       const priorities = session.recommendations.map(r => r.priority);
@@ -167,8 +145,7 @@ describe('PasswordGuidanceService', () => {
       expect(session.recommendations[0].priority).toBe(ActionPriority.IMMEDIATE);
     });
   });
-  describe('MFA Recommendations', () => {
-    test('should generate comprehensive MFA recommendation', () => {
+  describe('MFA Recommendations', () => { test('should generate comprehensive MFA recommendation', () => {
       const mfaRec = (service as any).getMFARecommendation();
       expect(mfaRec.id).toBe('enable-mfa');
       expect(mfaRec.category).toBe(GuidanceCategory.MFA_SETUP);
@@ -180,11 +157,9 @@ describe('PasswordGuidanceService', () => {
       expect(mfaRec.steps[2].title).toBe('Complete MFA Setup');
       // Verify benefits and risks are documented
       expect(mfaRec.benefits.length).toBeGreaterThan(0);
-      expect(mfaRec.risks.length).toBeGreaterThan(0);
-    });
+      expect(mfaRec.risks.length).toBeGreaterThan(0) });
   });
-  describe('Password Manager Recommendations', () => {
-    test('should generate password manager setup recommendation', () => {
+  describe('Password Manager Recommendations', () => { test('should generate password manager setup recommendation', () => {
       const pwdMgrRec = (service as any).getPasswordManagerRecommendation();
       expect(pwdMgrRec.id).toBe('use-password-manager');
       expect(pwdMgrRec.category).toBe(GuidanceCategory.PASSWORD_MANAGEMENT);
@@ -199,11 +174,9 @@ describe('PasswordGuidanceService', () => {
       // Other steps should be required
       expect(pwdMgrRec.steps[0].required).toBe(true);
       expect(pwdMgrRec.steps[1].required).toBe(true);
-      expect(pwdMgrRec.steps[3].required).toBe(true);
-    });
+      expect(pwdMgrRec.steps[3].required).toBe(true) });
   });
-  describe('Progress Tracking', () => {
-  test('should track action completion', async () => {
+  describe('Progress Tracking', () => { test('should track action completion', async () => {
   const userId = 'progress-test-user';
   const indicators: CompromiseIndicator = [{,
   type: CompromiseType.REUSED_PASSWORD,
@@ -212,8 +185,8 @@ describe('PasswordGuidanceService', () => {
   source: 'password_audit',
   detectedAt: new Date(),
   evidence: ['Password reuse detected'],
-  affectedAccounts: [userId],
-}];
+  affectedAccounts: [userId] }
+];
       const session = await service.assessPasswordCompromise(userId, indicators);
       const actionId = session.recommendations[0].id;
       const result = service.markActionCompleted(session.id, actionId);
@@ -223,8 +196,7 @@ describe('PasswordGuidanceService', () => {
       expect(progress!.completed).toBe(1);
       expect(progress!.percentage).toBeGreaterThan(0);
     });
-    test('should emit actionCompleted event', async () => {
-  const userId = 'event-test-user';
+    test('should emit actionCompleted event', async () => { const userId = 'event-test-user';
   const indicators: CompromiseIndicator = [{,
   type: CompromiseType.WEAK_PASSWORD,
   description: 'Password too simple',
@@ -232,21 +204,18 @@ describe('PasswordGuidanceService', () => {
   source: 'strength_checker',
   detectedAt: new Date(),
   evidence: ['Only 6 characters', 'No numbers'],
-  affectedAccounts: [userId],
-}];
+  affectedAccounts: [userId] }
+];
       const session = await service.assessPasswordCompromise(userId, indicators);
       const actionId = session.recommendations[0].id;
-      const eventPromise = new Promise((resolve) => {
-        service.once('actionCompleted', resolve);
-      });
+      const eventPromise = new Promise((resolve) => { service.once('actionCompleted', resolve) });
       service.markActionCompleted(session.id, actionId);
       const emittedData = await eventPromise;
       expect(emittedData).toHaveProperty('sessionId', session.id);
       expect(emittedData).toHaveProperty('actionId', actionId);
       expect(emittedData).toHaveProperty('progress');
     });
-    test('should calculate progress correctly', async () => {
-  const userId = 'calculation-test-user';
+    test('should calculate progress correctly', async () => { const userId = 'calculation-test-user';
   const indicators: CompromiseIndicator = [{,
   type: CompromiseType.SOCIAL_ENGINEERING,
   description: 'Credentials revealed through social engineering',
@@ -254,22 +223,19 @@ describe('PasswordGuidanceService', () => {
   source: 'incident_report',
   detectedAt: new Date(),
   evidence: ['Employee reported fake IT call'],
-  affectedAccounts: [userId],
-}];
+  affectedAccounts: [userId] }
+];
       const session = await service.assessPasswordCompromise(userId, indicators);
       const totalActions = session.recommendations.length;
       // Complete half the actions
       const actionsToComplete = Math.floor(totalActions / 2);
-      for (let i = 0; i < actionsToComplete; i++) {
-        service.markActionCompleted(session.id, session.recommendations[i].id);
+      for (let i = 0; i < actionsToComplete; i++) { service.markActionCompleted(session.id, session.recommendations[i].id);
       const progress = service.getSessionProgress(session.id);
       expect(progress!.completed).toBe(actionsToComplete);
       expect(progress!.total).toBe(totalActions);
-      expect(progress!.percentage).toBe(Math.round((actionsToComplete / totalActions) * 100));
-    });
+      expect(progress!.percentage).toBe(Math.round((actionsToComplete / totalActions) * 100)) });
   });
-  describe('User Security Dashboard', () => {
-    test('should generate security dashboard for user', () => {
+  describe('User Security Dashboard', () => { test('should generate security dashboard for user', () => {
       const userId = 'dashboard-test-user';
       const dashboard = service.getUserSecurityDashboard(userId);
       expect(dashboard).toHaveProperty('profile');
@@ -278,39 +244,34 @@ describe('PasswordGuidanceService', () => {
       expect(dashboard).toHaveProperty('securityTips');
       expect(Array.isArray(dashboard.activeSessions)).toBe(true);
       expect(Array.isArray(dashboard.recommendedActions)).toBe(true);
-      expect(Array.isArray(dashboard.securityTips)).toBe(true);
-    });
-    test('should provide personalized security tips based on risk score', () => {
-  const lowRiskTips = (service as any).getSecurityTips(30);
+      expect(Array.isArray(dashboard.securityTips)).toBe(true) });
+    test('should provide personalized security tips based on risk score', () => { const lowRiskTips = (service as any).getSecurityTips(30);
   const highRiskTips = (service as any).getSecurityTips(80);
   expect(lowRiskTips.length).toBeGreaterThan(0);
   expect(highRiskTips.length).toBeGreaterThan(lowRiskTips.length);
   // High risk should include additional urgent tips
-  expect(highRiskTips.some((tip: string) => tip.includes('elevated'))).toBe(true);
-});
-    test('should include MFA recommendation for users without MFA', () => {
-  const userProfile = {
+  expect(highRiskTips.some((tip: string) => tip.includes('elevated'))).toBe(true) });
+    test('should include MFA recommendation for users without MFA', () => { const userProfile = {
   userId: 'no-mfa-user',
   riskScore: 40,
   mfaEnabled: false,
   passwordLastChanged: new Date(),
   recentBreaches: [],
   securityScore: 60,
-  recommendations: [],
+  recommendations: [] }
 };
       const recommendations = (service as any).getPersonalizedRecommendations(userProfile);
       const mfaRec = recommendations.find((r: SecurityRecommendation) => r.id === 'enable-mfa');
       expect(mfaRec).toBeDefined();
     });
   });
-  describe('Risk Score Calculation', () => {
-  test('should calculate user risk score based on profile factors', () => {
+  describe('Risk Score Calculation', () => { test('should calculate user risk score based on profile factors', () => {
   const highRiskProfile = {
   userId: 'high-risk-user',
   riskScore: 0,
   mfaEnabled: false,
   passwordLastChanged: new Date(Date.now() - 400 * 24 * 60 * 60 * 1000), // 400 days ago,
-  recentBreaches: [,
+  recentBreaches: [
   {
   type: CompromiseType.DATA_BREACH,
   description: 'Recent breach',
@@ -320,78 +281,64 @@ describe('PasswordGuidanceService', () => {
   evidence: [],
   affectedAccounts: ['high-risk-user']],
   securityScore: 30,
-  recommendations: [],
+  recommendations: [] }
 };
       const riskScore = (service as any).calculateUserRiskScore(highRiskProfile);
       expect(riskScore).toBeGreaterThan(50); // Should be high risk
       expect(riskScore).toBeLessThanOrEqual(100);
     });
-    test('should calculate lower risk for secure profile', () => {
-  const lowRiskProfile = {
+    test('should calculate lower risk for secure profile', () => { const lowRiskProfile = {
   userId: 'low-risk-user',
   riskScore: 0,
   mfaEnabled: true,
   passwordLastChanged: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago,
   recentBreaches: [],
   securityScore: 90,
-  recommendations: [],
+  recommendations: [] }
 };
       const riskScore = (service as any).calculateUserRiskScore(lowRiskProfile);
       expect(riskScore).toBeLessThan(25); // Should be low risk
     });
   });
-  describe('Monitoring Recommendations', () => {
-  test('should generate basic monitoring for all risk levels', () => {
+  describe('Monitoring Recommendations', () => { test('should generate basic monitoring for all risk levels', () => {
   const basicMonitoring = (service as any).getMonitoringRecommendations(RiskLevel.LOW);
   expect(basicMonitoring.length).toBeGreaterThan(0);
   const alertsRec = basicMonitoring.find((r: SecurityRecommendation) => ;
   r.id === 'enable-security-alerts'
   );
-  expect(alertsRec).toBeDefined();
-});
-    test('should generate enhanced monitoring for high risk', () => {
-  const highRiskMonitoring = (service as any).getMonitoringRecommendations(RiskLevel.HIGH);
+  expect(alertsRec).toBeDefined() });
+    test('should generate enhanced monitoring for high risk', () => { const highRiskMonitoring = (service as any).getMonitoringRecommendations(RiskLevel.HIGH);
   const lowRiskMonitoring = (service as any).getMonitoringRecommendations(RiskLevel.LOW);
   expect(highRiskMonitoring.length).toBeGreaterThan(lowRiskMonitoring.length);
   const creditMonitoring = highRiskMonitoring.find((r: SecurityRecommendation) => ;
   r.id === 'credit-monitoring'
   );
-  expect(creditMonitoring).toBeDefined();
-});
+  expect(creditMonitoring).toBeDefined() });
   });
-  describe('Prevention Recommendations', () => {
-  test('should generate security awareness training', () => {
+  describe('Prevention Recommendations', () => { test('should generate security awareness training', () => {
   const preventionRecs = (service as any).getPreventionRecommendations();
   const trainingRec = preventionRecs.find((r: SecurityRecommendation) => ;
   r.id === 'security-awareness-training'
   );
   expect(trainingRec).toBeDefined();
   expect(trainingRec.category).toBe(GuidanceCategory.PREVENTION);
-  expect(trainingRec.steps.length).toBeGreaterThan(0);
-});
-    test('should generate regular security checkup recommendation', () => {
-  const preventionRecs = (service as any).getPreventionRecommendations();
+  expect(trainingRec.steps.length).toBeGreaterThan(0) });
+    test('should generate regular security checkup recommendation', () => { const preventionRecs = (service as any).getPreventionRecommendations();
   const checkupRec = preventionRecs.find((r: SecurityRecommendation) => ;
   r.id === 'regular-security-checkups'
   );
   expect(checkupRec).toBeDefined();
   expect(checkupRec.priority).toBe(ActionPriority.LOW);
-  expect(checkupRec.estimatedTime).toBe('15 minutes monthly');
-});
+  expect(checkupRec.estimatedTime).toBe('15 minutes monthly') });
   });
-  describe('Error Handling and Edge Cases', () => {
-    test('should handle empty indicators gracefully', () => {
+  describe('Error Handling and Edge Cases', () => { test('should handle empty indicators gracefully', () => {
       const riskLevel = (service as any).calculateRiskLevel([]);
-      expect(riskLevel).toBe(RiskLevel.LOW);
-    });
-    test('should handle invalid session ID', () => {
-      const result = service.markActionCompleted('invalid-session', 'some-action');
+      expect(riskLevel).toBe(RiskLevel.LOW) });
+    test('should handle invalid session ID', () => { const result = service.markActionCompleted('invalid-session', 'some-action');
       expect(result).toBe(false);
       const progress = service.getSessionProgress('invalid-session');
-      expect(progress).toBeNull();
-    });
-    test('should handle duplicate action completion', async () => {
-  const userId = 'duplicate-test-user';
+      expect(progress).toBeNull() });
+    test('should handle duplicate action completion', async () => { const userId = 'duplicate-test-user';
   const indicators: CompromiseIndicator = [{,
   type: CompromiseType.WEAK_PASSWORD,
   description: 'Test weak password',
@@ -399,8 +346,8 @@ describe('PasswordGuidanceService', () => {
   source: 'test',
   detectedAt: new Date(),
   evidence: [],
-  affectedAccounts: [userId],
-}];
+  affectedAccounts: [userId] }
+];
       const session = await service.assessPasswordCompromise(userId, indicators);
       const actionId = session.recommendations[0].id;
       // Complete action twice
@@ -412,17 +359,14 @@ describe('PasswordGuidanceService', () => {
       expect(progress!.completed).toBe(1); // Should only count once
     });
   });
-  describe('Session ID Generation', () => {
-    test('should generate unique session IDs', () => {
+  describe('Session ID Generation', () => { test('should generate unique session IDs', () => {
       const id1 = (service as any).generateSessionId();
       const id2 = (service as any).generateSessionId();
       expect(id1).toMatch(/^PWD-\d+-[A-F0-9]+$/);
       expect(id2).toMatch(/^PWD-\d+-[A-F0-9]+$/);
-      expect(id1).not.toBe(id2);
-    });
+      expect(id1).not.toBe(id2) });
   });
-  describe('Recommendation Prioritization', () => {
-  test('should prioritize immediate actions first', () => {
+  describe('Recommendation Prioritization', () => { test('should prioritize immediate actions first', () => {
   const recommendations: SecurityRecommendation = [
   {
   id: 'low-priority',
@@ -434,10 +378,9 @@ describe('PasswordGuidanceService', () => {
   difficulty: 'easy',
   steps: [],
   benefits: [],
-  risks: [],
-}
-        {
-  id: 'immediate-action',
+  risks: [] }
+
+        { id: 'immediate-action',
   title: 'Immediate Action',
   description: 'Test',
   category: GuidanceCategory.IMMEDIATE_ACTIONS,
@@ -448,7 +391,7 @@ describe('PasswordGuidanceService', () => {
   benefits: [],
   risks: []];
   const prioritized = (service as any).prioritizeRecommendations(;);
-  recommendations,
+  recommendations }
   RiskLevel.HIGH
   );
   expect(prioritized[0].id).toBe('immediate-action');

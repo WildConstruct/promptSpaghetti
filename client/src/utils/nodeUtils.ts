@@ -5,7 +5,7 @@
 import { NodeTemplate, OptionConfig } from '../data/nodeTemplates/types';
 
 // Position utilities
-export const calculateNodePosition = (index: number, )
+export const calculateNodePosition = (index: number);
   gridWidth: number = 3, 
   spacing: { x: number; y: number } = { x: 300, y: 200 }
 ): { x: number; y: number } => {
@@ -71,7 +71,7 @@ export const validateNodeData = (node: NodeTemplate): string => {
   errors.push('Node data must include label and description');
   if (!Array.isArray(node.data.options)) {
   errors.push('Node data must include options array');
-} else {
+ else {
     node.data.options.forEach((option, index) => {
       if (!option.label || !option.value) {
         errors.push(`Option ${index} must have label and value`);}
@@ -91,7 +91,7 @@ export const duplicateNode = (node: NodeTemplate, offset: { x: number; y: number
     ...node,
     id: `${node.id}-copy-${Date.now()}`}
 },
-  position: {
+  position: {,
   x: node.position.x + offset.x,
   y: node.position.y + offset.y,
 },
@@ -111,7 +111,7 @@ export const moveNode = (node: NodeTemplate, newPosition: { x: number; y: number
 export const updateNodeOptions = (node: NodeTemplate, newOptions: OptionConfig): NodeTemplate => {
   return {
   ...node,
-  data: {
+  data: {,
   ...node.data,
   options: [...newOptions],
 };

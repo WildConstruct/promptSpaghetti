@@ -131,8 +131,7 @@ createBackup(type, BackupType, options, {
     description: string,
     specificKeys: string,
     tags: (Record),
-    emergency: boolean
-} = {});
+    emergency: boolean } = {});
 Promise < BackupMetadata > {
     const: startTime = Date.now(),
     try: {

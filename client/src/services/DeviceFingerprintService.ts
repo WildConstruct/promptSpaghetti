@@ -2,41 +2,43 @@
 // Comprehensive client-side device identification with multiple techniques
 import * as crypto from 'crypto-js';
 
-}
+
 export interface DeviceFingerprintData {
   fingerprint: string;,
-  components: FingerprintComponents;
+  components: FingerprintComponents;,
   metadata: FingerprintMetadata;,
-  timestamp: Date;
+  timestamp: Date;,
   confidence: number;
-}
-}
-}
+
+
+
+
+
 export interface FingerprintComponents {
   // Basic browser info
   userAgent: string;,
-  language: string;
+  language: string;,
   languages: string;,
-  platform: string;
+  platform: string;,
   cookieEnabled: boolean;,
-  doNotTrack: string | null;
+  doNotTrack: string | null;,
   timezone: string;,
   timezoneOffset: number;
   // Screen and display
   screenResolution: string;,
-  screenColorDepth: number;
+  screenColorDepth: number;,
   screenPixelRatio: number;,
   availableScreenResolution: string;
   // Hardware
   hardwareConcurrency: number;,
-  deviceMemory: number | null;
+  deviceMemory: number | null;,
   maxTouchPoints: number;
   // Canvas fingerprint
   canvasFingerprint: string;,
   canvasSupported: boolean;
   // WebGL fingerprint
   webglFingerprint: string;,
-  webglVendor: string;
+  webglVendor: string;,
   webglRenderer: string;,
   webglSupported: boolean;
   // Audio fingerprint
@@ -55,51 +57,62 @@ export interface FingerprintComponents {
   charging: boolean | null;
   // Permissions
   permissions: PermissionStatus;
-}
-}
-}
+
+
+
+
+
 export interface FingerprintMetadata {
   collectionTime: number; // milliseconds,
   errors: string;,
-  browser: BrowserInfo;
+  browser: BrowserInfo;,
   device: DeviceInfo;,
   riskFactors: RiskFactors;
-}
-}
-}
+
+
+
+
+
 export interface BrowserInfo {
   name: string;,
-  version: string;
+  version: string;,
   majorVersion: number;,
   engine: string;
-}
-}
-}
+
+
+
+
+
 export interface DeviceInfo {
   type: 'desktop' | 'mobile' | 'tablet' | 'unknown';,
-  os: string;
+  os: string;,
   osVersion: string;,
   vendor: string;
-}
-}
-}
+
+
+
+
+
 export interface RiskFactors {
   isIncognito: boolean;,
-  isBot: boolean;
+  isBot: boolean;,
   hasAdBlocker: boolean;,
-  hasTouchScreen: boolean;
+  hasTouchScreen: boolean;,
   isVirtualMachine: boolean;,
   spoofingDetected: boolean;
-}
-}
-}
+
+
+
+
+
 export interface PermissionStatus {
   camera: PermissionState | null;,
-  microphone: PermissionState | null;
+  microphone: PermissionState | null;,
   geolocation: PermissionState | null;,
   notifications: PermissionState | null;
-}
-}
+
+
+
 export class DeviceFingerprintService {
   private static instance: DeviceFingerprintService;
   private cachedFingerprint: DeviceFingerprintData | null = null;
@@ -112,11 +125,10 @@ export class DeviceFingerprintService {
   /**
   * Collect comprehensive device fingerprint
   */
-  async collectFingerprint(options: {)
+  async collectFingerprint(options: {),
   useCache?: boolean;
   components?: string;
-} = {}): Promise<DeviceFingerprintData> {
-
+ = {}): Promise<DeviceFingerprintData> {
   const startTime = Date.now();
   // Check cache if enabled
   if (options.useCache && this.cachedFingerprint) {
@@ -144,7 +156,6 @@ export class DeviceFingerprintService {
    * Collect all fingerprint components
    */
   private async collectAllComponents(errors: string): Promise<FingerprintComponents> {
-
   const [
   basicInfo,
   screenInfo,
@@ -264,7 +275,7 @@ export class DeviceFingerprintService {
   canvasFingerprint: fingerprint,
   canvasSupported: true,
 };
-    } catch (error) {
+ catch (error) {
       errors.push(`Canvas fingerprint error: ${error.message}`);}
       return { canvasFingerprint: '', canvasSupported: false };
   /**
@@ -340,7 +351,7 @@ export class DeviceFingerprintService {
   webglRenderer: renderer,
   webglSupported: true,
 };
-    } catch (error) {
+ catch (error) {
       errors.push(`WebGL fingerprint error: ${error.message}`);}
       return {
   webglFingerprint: '',
@@ -394,7 +405,7 @@ export class DeviceFingerprintService {
 });
         }, 100);
       });
-    } catch (error) {
+ catch (error) {
       errors.push(`Audio fingerprint error: ${error.message}`);}
       return { audioFingerprint: '', audioSupported: false };
   /**
@@ -419,7 +430,7 @@ export class DeviceFingerprintService {
         defaultWidth[baseFont] = s.offsetWidth;
         defaultHeight[baseFont] = s.offsetHeight;
         h.removeChild(s);
-      const fontList = [;
+      const fontList = [
         'Andale Mono', 'Arial', 'Arial Black', 'Arial Hebrew', 'Arial MT', 'Arial Narrow',
         'Arial Rounded MT Bold', 'Arial Unicode MS', 'Bitstream Vera Sans Mono', 'Book Antiqua',
         'Bookman Old Style', 'Calibri', 'Cambria', 'Cambria Math', 'Century', 'Century Gothic',
@@ -447,7 +458,7 @@ export class DeviceFingerprintService {
         if (detected) {
           detectedFonts.push(font);
       return detectedFonts;
-    } catch (error) {
+ catch (error) {
       errors.push(`Font detection error: ${error.message}`);}
       return [];
   /**
@@ -477,7 +488,7 @@ export class DeviceFingerprintService {
 },
   groupId: device.groupId;
   }));
-    } catch (error) {
+ catch (error) {
       errors.push(`Media devices error: ${error.message}`);}
       return [];
   /**
@@ -495,7 +506,7 @@ export class DeviceFingerprintService {
       return {
   connectionType: connection?.effectiveType || null,
 };
-    } catch (error) {
+ catch (error) {
       errors.push(`Network info error: ${error.message}`);}
       return { connectionType: null };
   /**
@@ -510,14 +521,13 @@ export class DeviceFingerprintService {
   charging: battery.charging,
 };
       return { batteryLevel: null, charging: null };
-    } catch (error) {
+ catch (error) {
       errors.push(`Battery info error: ${error.message}`);}
       return { batteryLevel: null, charging: null };
   /**
    * Collect permission status
    */
   private async collectPermissions(errors: string): Promise<PermissionStatus> {
-
   const permissions: PermissionStatus = {,
   camera: null,
   microphone: null,
@@ -536,16 +546,16 @@ export class DeviceFingerprintService {
           try {
             const result = await navigator.permissions.query({ name });
             permissions[key] = result.state;
-          } catch {
+ catch {
             // Permission not available
-    } catch (error) {
+ catch (error) {
       errors.push(`Permissions error: ${error.message}`);}
     return permissions;
   /**
    * Collect metadata about the fingerprinting process
    */
-  private async collectMetadata(components: FingerprintComponents,)
-    errors: string,
+  private async collectMetadata(components: FingerprintComponents);
+  errors: string,
     startTime: number): Promise<FingerprintMetadata> {,
   const browser = this.detectBrowser();
   const device = this.detectDevice(components);
@@ -569,19 +579,19 @@ export class DeviceFingerprintService {
       name = 'Firefox';
       version = ua.match(/Firefox\/(\d+\.?\d*)/)?.[1] || '0';
       engine = 'Gecko';
-    } else if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) {
+ else if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) {
   name = 'Opera';
   version = ua.match(/(?:Opera|OPR)\/(\d+\.?\d*)/)?.[1] || '0';
   engine = 'Blink';
-} else if (ua.indexOf('Chrome') > -1) {
+ else if (ua.indexOf('Chrome') > -1) {
       name = 'Chrome';
       version = ua.match(/Chrome\/(\d+\.?\d*)/)?.[1] || '0';
       engine = 'Blink';
-    } else if (ua.indexOf('Safari') > -1) {
+ else if (ua.indexOf('Safari') > -1) {
       name = 'Safari';
       version = ua.match(/Version\/(\d+\.?\d*)/)?.[1] || '0';
       engine = 'WebKit';
-    } else if (ua.indexOf('Edge') > -1) {
+ else if (ua.indexOf('Edge') > -1) {
   name = 'Edge';
   version = ua.match(/Edge\/(\d+\.?\d*)/)?.[1] || '0';
   engine = 'EdgeHTML';
@@ -605,11 +615,11 @@ export class DeviceFingerprintService {
   if (components.maxTouchPoints > 0 || 'ontouchstart' in window) {
   if (ua.match(/tablet|ipad/i) || (ua.match(/android/i) && !ua.match(/mobile/i))) {
   type = 'tablet';
-} else if (ua.match(/mobile|iphone|ipod|android|blackberry|opera|mini|windows\sce|palm|smartphone|iemobile/i)) {
+ else if (ua.match(/mobile|iphone|ipod|android|blackberry|opera|mini|windows\sce|palm|smartphone|iemobile/i)) {
         type = 'mobile';
-      } else {
+ else {
         type = 'desktop';
-    } else {
+ else {
   type = 'desktop';
   // Detect OS
   if (ua.indexOf('Windows NT') > -1) {
@@ -625,22 +635,22 @@ export class DeviceFingerprintService {
   '5.1': 'XP',
 };
         osVersion = versions[match[1]] || match[1];
-    } else if (ua.indexOf('Mac OS X') > -1) {
+ else if (ua.indexOf('Mac OS X') > -1) {
       os = 'macOS';
       const match = ua.match(/Mac OS X (\d+[._]\d+)/);
       if (match) {
         osVersion = match[1].replace('_', '.');
-    } else if (ua.indexOf('Android') > -1) {
+ else if (ua.indexOf('Android') > -1) {
       os = 'Android';
       const match = ua.match(/Android (\d+\.?\d*)/);
       if (match) {
         osVersion = match[1];
-    } else if (ua.match(/iPhone|iPad|iPod/)) {
+ else if (ua.match(/iPhone|iPad|iPod/)) {
       os = 'iOS';
       const match = ua.match(/OS (\d+[._]\d+)/);
       if (match) {
         osVersion = match[1].replace('_', '.');
-    } else if (ua.indexOf('Linux') > -1) {
+ else if (ua.indexOf('Linux') > -1) {
       os = 'Linux';
     // Detect vendor
     if (navigator.vendor) {
@@ -650,7 +660,6 @@ export class DeviceFingerprintService {
    * Detect risk factors and potential spoofing
    */
   private async detectRiskFactors(components: FingerprintComponents): Promise<RiskFactors> {
-
   return {
   isIncognito: await this.detectIncognito(),
   isBot: this.detectBot(components),
@@ -669,14 +678,14 @@ export class DeviceFingerprintService {
         navigator.storage.estimate().then(estimate => {)
   resolve(estimate.quota !== undefined && estimate.quota < 120000000);
         }).catch(() => resolve(false));
-      } else {
+ else {
         resolve(false);
     });
   /**
    * Detect bot/automation
    */
   private detectBot(components: FingerprintComponents): boolean {
-  const botIndicators = [;
+  const botIndicators = [
   navigator.webdriver,
   window.document.documentElement.getAttribute('webdriver') !== null,
   'callPhantom' in window,
@@ -715,7 +724,7 @@ export class DeviceFingerprintService {
    * Detect virtual machine
    */
   private detectVirtualMachine(components: FingerprintComponents): boolean {
-    const vmIndicators = [;
+    const vmIndicators = [
       components.webglRenderer.toLowerCase().includes('swiftshader'),
       components.webglVendor.toLowerCase().includes('mesa'),
       components.hardwareConcurrency === 1,
@@ -726,7 +735,7 @@ export class DeviceFingerprintService {
    * Detect fingerprint spoofing
    */
   private detectSpoofing(components: FingerprintComponents): boolean {
-    const suspiciousPatterns = [;
+    const suspiciousPatterns = [
       // Check for impossible combinations
       components.platform === 'MacIntel' && components.maxTouchPoints > 0,
       components.userAgent.includes('Windows') && components.platform === 'MacIntel',
@@ -739,7 +748,7 @@ export class DeviceFingerprintService {
    * Generate fingerprint hash from components
    */
   private generateFingerprint(components: FingerprintComponents): string {
-    const significantComponents = [;
+    const significantComponents = [
       components.userAgent,
       components.language,
       components.screenResolution,
@@ -775,7 +784,7 @@ export class DeviceFingerprintService {
   /**
    * Compare two fingerprints
    */
-  compareFingerprints(fp1: DeviceFingerprintData, fp2: DeviceFingerprintData): {
+  compareFingerprints(fp1: DeviceFingerprintData, fp2: DeviceFingerprintData): {,
   match: boolean;
     similarity: number;,
   changedComponents: string;
@@ -792,7 +801,7 @@ export class DeviceFingerprintService {
       const val2 = fp2.components[key];
       if (JSON.stringify(val1) === JSON.stringify(val2)) {
         matchingComponents++;
-      } else {
+ else {
   changedComponents.push(key);
   const similarity = (matchingComponents / totalComponents) * 100;
   return {

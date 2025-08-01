@@ -13,8 +13,7 @@
  * - Integration with existing security managers
  */
 import React from 'react';
-export declare enum PasswordStrength {
-    WEAK = "weak",
+export declare enum PasswordStrength { WEAK = "weak",
     FAIR = "fair",
     GOOD = "good",
     STRONG = "strong"
@@ -22,30 +21,27 @@ export declare enum PasswordStrength {
 export declare enum ResetStep {
     REQUEST = "request",
     VERIFY = "verify",
-    RESET = "reset",
+    RESET = "reset" }
     SUCCESS = "success"
 
 }
-export interface PasswordResetRequest {
-    email: string;
+}
+export interface PasswordResetRequest { email: string;
     ipAddress?: string;
     userAgent?: string;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface TokenVerification {
-    token: string;
-    email: string;
-
 }
-export interface PasswordResetData {
-    token: string;
+export interface TokenVerification { token: string;
+    email: string }
+}
+}
+export interface PasswordResetData { token: string;
     newPassword: string;
-    confirmPassword: string;
-
+    confirmPassword: string }
 }
-export interface PasswordValidation {
-    isValid: boolean;
+}
+export interface PasswordValidation { isValid: boolean;
     strength: PasswordStrength;
     score: number;
     feedback: string[];
@@ -54,13 +50,13 @@ export interface PasswordValidation {
         uppercase: boolean;
         lowercase: boolean;
         numbers: boolean;
-        symbols: boolean;
+        symbols: boolean }
 }
     };
 
 }
-export interface PasswordResetFlowProps {
-    onResetComplete?: (success: boolean, email: string) => void;
+}
+export interface PasswordResetFlowProps { onResetComplete?: (success: boolean, email: string) => void;
     onStepChange?: (step: ResetStep) => void;
     onSecurityEvent?: (event: string, details: any) => void;
     className?: string;
@@ -70,14 +66,15 @@ export interface PasswordResetFlowProps {
 
 export declare const PasswordResetFlow: React.FC<PasswordResetFlowProps>;
 export declare enum SecurityEvent {
-    RESET_REQUESTED = "password_reset_requested",
-    RESET_REQUEST_FAILED = "password_reset_request_failed",
-    TOKEN_VERIFIED = "reset_token_verified",
-    TOKEN_VERIFICATION_FAILED = "reset_token_verification_failed",
-    PASSWORD_RESET_COMPLETED = "password_reset_completed",
-    PASSWORD_RESET_FAILED = "password_reset_failed",
+    RESET_REQUESTED = "password_reset_requested";
+    RESET_REQUEST_FAILED = "password_reset_request_failed";
+    TOKEN_VERIFIED = "reset_token_verified";
+    TOKEN_VERIFICATION_FAILED = "reset_token_verification_failed";
+    PASSWORD_RESET_COMPLETED = "password_reset_completed";
+    PASSWORD_RESET_FAILED = "password_reset_failed" }
     RESET_CODE_RESENT = "reset_code_resent"
 
 export default PasswordResetFlow;
 //# sourceMappingURL=PasswordResetFlow.d.ts.map
+}
 }

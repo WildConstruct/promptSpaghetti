@@ -52,16 +52,15 @@ export var BackupStatus;
         FAILED = 'failed',
         VALIDATING = 'validating',
         VALIDATED = 'validated';
-    ;
-    config: BackupConfig;
-    filePath: string;
-    checksum ?  : string;
-    version: string;
-    format: string;
-    compressed: boolean;
-    encrypted: boolean;
-    // Recovery Metadata
 }
+;
+config: BackupConfig;
+filePath: string;
+checksum ?  : string;
+version: string;
+format: string;
+compressed: boolean;
+encrypted: boolean;
 ;
 ;
 currentOperation: string;
@@ -163,7 +162,7 @@ if (events.length === 0) {
         })
     }
         .catch(error => { });
-    console.error(`Backup ${backupId},)}
+    console.error(`Backup ${backupId})},
   failed:`, error);
 }
 this.updateBackupStatus(backupId, BackupStatus.FAILED);
@@ -180,8 +179,9 @@ if (metadata) {
     metadata.status = BackupStatus.FAILED;
     throw error;
     async;
-    performBackup(backupId, string);
-    events: UnifiedAnalyticsEvent,
+    performBackup(backupId, string),
+        events;
+    UnifiedAnalyticsEvent,
         filePath;
     string,
         config;
@@ -278,7 +278,7 @@ if (metadata) {
                                     throw new Error(`Backup verification failed: ${verificationResult.errors.join(', ')}`);
                                 }
                                 this.activeBackups.delete(backupId);
-                                console.log(`Backup ${backupId},)}
+                                console.log(`Backup ${backupId})},
   completed:`, {}, eventCount, events.length, size, `${(bytesWritten / 1024 / 1024).toFixed(2)} MB`);
                             }
                         }
@@ -338,7 +338,7 @@ if (metadata) {
         try { }
         catch (error) { }
         {
-            console.error(`Recovery ${recoveryId},)}
+            console.error(`Recovery ${recoveryId})},
   failed:`, error);
         }
         this.updateRecoveryStatus(recoveryId, RecoveryStatus.FAILED);
@@ -356,8 +356,9 @@ if (recovery) {
     recovery.status = RecoveryStatus.FAILED;
     throw error;
     async;
-    performRecovery(recoveryId, string);
-    backup: BackupMetadata,
+    performRecovery(recoveryId, string),
+        backup;
+    BackupMetadata,
         targetFilter ?  : EventFilter,
         validateBeforeRestore;
     boolean = true;
@@ -420,7 +421,7 @@ if (recoveredCount > 0) {
     recovery.validationResults = validationResults;
     recovery.status = validationResults.passed ? RecoveryStatus.VALIDATED : RecoveryStatus.FAILED;
     this.activeRecoveries.delete(recoveryId);
-    console.log(`Recovery ${recoveryId},)}
+    console.log(`Recovery ${recoveryId})},
   completed:`, {}, recoveredEvents, recoveredCount, failedEvents, failedCount, successRate, `${((recoveredCount / filteredEvents.length) * 100).toFixed(2)}%`);
 }
 ;
@@ -574,11 +575,11 @@ catch (error) {
                                                                  * Generate CSV headers
                                                                  */
                                                                 generateCSVHeaders(event) {
-                                                                    const headers = [];
-                                                                    'id', 'type', 'category', 'severity', 'timestamp', 'source', 'version',
+                                                                    const headers = [
+                                                                        'id', 'type', 'category', 'severity', 'timestamp', 'source', 'version',
                                                                         'sessionId', 'userId', 'organizationId', 'requestId', 'traceId',
-                                                                        'data', 'metadata', 'tags', 'environment', 'region';
-                                                                    ;
+                                                                        'data', 'metadata', 'tags', 'environment', 'region'
+                                                                    ];
                                                                     return headers.join(',');
                                                                     /**
                                                                      * Convert event to CSV row
@@ -592,8 +593,8 @@ catch (error) {
                                                                  * Convert event to CSV row
                                                                  */
                                                                 eventToCSV(event) {
-                                                                    const values = [];
-                                                                    event.id,
+                                                                    const values = [
+                                                                        event.id,
                                                                         event.type,
                                                                         event.category,
                                                                         event.severity,
@@ -609,8 +610,8 @@ catch (error) {
                                                                         JSON.stringify(event.metadata),
                                                                         JSON.stringify(event.tags),
                                                                         event.environment,
-                                                                        event.region || '';
-                                                                    ;
+                                                                        event.region || ''
+                                                                    ];
                                                                     return values.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
                                                                 }
                                                                 /**

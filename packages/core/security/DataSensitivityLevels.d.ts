@@ -16,8 +16,7 @@
  * These levels represent the degree of protection required for different types of data,
  * based on the potential impact of unauthorized disclosure, modification, or destruction.
  */
-export declare enum DataSensitivityLevel {
-    /**
+export declare enum DataSensitivityLevel { /**
      * PUBLIC: Information intended for public disclosure
      * - Can be shared freely without restriction
      * - No confidentiality protection required
@@ -37,7 +36,7 @@ export declare enum DataSensitivityLevel {
      * - Unauthorized disclosure could harm the organization
      * - Example: Financial data, strategic plans, customer data
      */
-    CONFIDENTIAL = "confidential",
+    CONFIDENTIAL = "confidential" }
     /**
      * RESTRICTED: Highly sensitive information requiring maximum protection
      * - Access limited to specific individuals with explicit authorization
@@ -50,6 +49,7 @@ export declare enum DataSensitivityLevel {
  */
 
 }
+}
 export interface DataHandlingRequirements {
     /** Minimum access control requirements */
     accessControl: {
@@ -57,48 +57,38 @@ export interface DataHandlingRequirements {
         authorization: 'none' | 'role-based' | 'attribute-based' | 'need-to-know';
         monitoring: 'none' | 'basic' | 'enhanced' | 'continuous'
 }
+}
   };
     /** Encryption requirements */
-    encryption: {
-        atRest: boolean;
+    encryption: { atRest: boolean;
         inTransit: boolean;
         algorithm: string;
         keyManagement: 'none' | 'basic' | 'advanced' | 'hsm';
-        keyRotation: string;
-    };
+        keyRotation: string };
     /** Data retention and disposal */
-    retention: {
-        maximumPeriod: string;
+    retention: { maximumPeriod: string;
         archivalRequired: boolean;
         disposalMethod: 'standard' | 'secure' | 'cryptographic-erasure' | 'physical-destruction';
-        verificationRequired: boolean;
-    };
+        verificationRequired: boolean };
     /** Audit and compliance requirements */
-    audit: {
-        logAccess: boolean;
+    audit: { logAccess: boolean;
         logModification: boolean;
         reviewFrequency: string;
-        complianceFrameworks: string[];
-    };
+        complianceFrameworks: string[] };
     /** Transfer and sharing restrictions */
-    transfer: {
-        allowedChannels: string[];
+    transfer: { allowedChannels: string[];
         approvalRequired: boolean;
         encryptionRequired: boolean;
-        geographicRestrictions: string[];
-    };
+        geographicRestrictions: string[] };
     /** Backup and recovery */
-    backup: {
-        encryptionRequired: boolean;
+    backup: { encryptionRequired: boolean;
         offlineStorage: boolean;
         crossBorderRestrictions: boolean;
-        retentionAlignment: boolean;
-    };
+        retentionAlignment: boolean };
 /**
  * Comprehensive data sensitivity level definitions with handling requirements
  */
-declare const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
-    level: DataSensitivityLevel;
+declare const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, { level: DataSensitivityLevel;
     name: string;
     description: string;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -109,8 +99,7 @@ declare const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
         required: boolean;
         label: string;
         color: string;
-        displayFormat: string;
-    };
+        displayFormat: string };
 }>;
 /**
  * Data sensitivity level validation schema
@@ -120,8 +109,8 @@ declare const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
  */
 
 }
-export interface DataElementClassification {
-    /** Unique identifier for the data element */
+}
+export interface DataElementClassification { /** Unique identifier for the data element */
     elementId: string;
     /** Name or description of the data element */
     elementName: string;
@@ -143,14 +132,13 @@ export interface DataElementClassification {
         sourceSystem: string;
         businessOwner: string;
         technicalOwner: string;
-        complianceRequirements: string[];
+        complianceRequirements: string[] }
 }
     };
 /**
  * Data Sensitivity Level Utilities
  */
-declare class DataSensitivityUtils {
-    /**
+declare class DataSensitivityUtils { /**
      * Get handling requirements for a sensitivity level
      */
     static getHandlingRequirements(level: DataSensitivityLevel): DataHandlingRequirements;
@@ -178,14 +166,12 @@ declare class DataSensitivityUtils {
      * Validate if a sensitivity level assignment is appropriate for the data type
      */
     static validateSensitivityAssignment(dataType: string)
-      proposedLevel: DataSensitivityLevel,
-      context?: Record<string,
+      proposedLevel: DataSensitivityLevel
+      context?: Record<string }
       any>
-    ): {
-        valid: boolean;
+    ): { valid: boolean;
         recommendedLevel?: DataSensitivityLevel;
-        reasons: string[];
-    };
+        reasons: string[] };
     /**
      * Compare sensitivity levels (higher level = more sensitive)
      */
@@ -197,45 +183,35 @@ declare class DataSensitivityUtils {
     /**
      * Generate security markings for data based on sensitivity level
      */
-    static generateSecurityMarkings(level: DataSensitivityLevel): {
-        label: string;
+    static generateSecurityMarkings(level: DataSensitivityLevel): { label: string;
         color: string;
         displayFormat: string;
         htmlBadge: string;
-        textMarking: string;
-    };
+        textMarking: string };
     /**
      * Validate data element classification
      */
-    static validateClassification(classification: DataElementClassification): {
-        valid: boolean;
+    static validateClassification(classification: DataElementClassification): { valid: boolean;
         errors: string[];
-        warnings: string[];
-    };
+        warnings: string[] };
 /**
  * Data sensitivity level assignment recommendations
  */
-declare const DATA_SENSITIVITY_GUIDELINES: {
-    decisionTree: {
+declare const DATA_SENSITIVITY_GUIDELINES: { decisionTree: {
         questions: {
             id: string;
             question: string;
             yesAction: string;
-            noAction: string;
-        }[];
-        actions: {
-            assign_public: DataSensitivityLevel;
+            noAction: string }[];
+        actions: { assign_public: DataSensitivityLevel;
             assign_internal: DataSensitivityLevel;
             assign_confidential: DataSensitivityLevel;
-            assign_restricted: DataSensitivityLevel;
-        };
+            assign_restricted: DataSensitivityLevel };
     };
-    automatedClassificationRules: {
-        pattern: RegExp;
+    automatedClassificationRules: { pattern: RegExp;
         dataType: string;
         recommendedLevel: DataSensitivityLevel;
-        confidence: number;
-    }[];
+        confidence: number }[];
 };
 export { DataSensitivityUtils, DATA_SENSITIVITY_DEFINITIONS, DATA_SENSITIVITY_GUIDELINES, type DataHandlingRequirements, type DataElementClassification };
 export default DataSensitivityUtils;

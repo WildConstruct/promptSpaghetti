@@ -30,34 +30,34 @@ export const RATE_LIMIT_RULES: Record<string, RateLimitRule> = {
     window: 60, // 1 minute
     max: 5, // 5 attempts per minute
     skipSuccessfulRequests: true
-  }
+
   register: {
     window: 60, // 1 minute
     max: 3 // 3 registrations per minute
-  }
+
   passwordReset: {
     window: 300, // 5 minutes
     max: 3 // 3 password reset requests per 5 minutes
-  }
+
   emailVerification: {
     window: 300, // 5 minutes
     max: 5 // 5 email verification attempts per 5 minutes
-  }
+
   // API endpoints
   apiGeneral: {
     window: 60, // 1 minute
     max: 100 // 100 requests per minute
-  }
+
   // Sensitive operations
   passwordChange: {
     window: 300, // 5 minutes
     max: 3 // 3 password changes per 5 minutes
-  }
+
   // OAuth endpoints
   oauth: {
     window: 60, // 1 minute
     max: 10 // 10 OAuth attempts per minute
-  }
+
 };
 
 // OAuth provider configurations
@@ -67,19 +67,19 @@ export const OAUTH_PROVIDERS: Record<string, Partial<OAuthProviderConfig>> = {
     tokenUrl: 'https://oauth2.googleapis.com/token',
     userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
     scopes: ['openid', 'email', 'profile']
-  }
+
   github: {
     authorizationUrl: 'https://github.com/login/oauth/authorize',
     tokenUrl: 'https://github.com/login/oauth/access_token',
     userInfoUrl: 'https://api.github.com/user',
     scopes: ['user:email']
-  }
+
   microsoft: {
     authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
     tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
     userInfoUrl: 'https://graph.microsoft.com/v1.0/me',
     scopes: ['openid', 'email', 'profile']
-  }
+
 };
 
 // Environment-based configuration builder
@@ -87,7 +87,7 @@ export function buildAuthConfig(): AuthConfig {
   const jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) {
     throw new Error('JWT_SECRET environment variable is required');
-  }
+
 
   return {
     jwtSecret,
@@ -102,14 +102,14 @@ export function buildAuthConfig(): AuthConfig {
       password: process.env.DB_PASSWORD || '',
       ssl: process.env.DB_SSL === 'true',
       poolSize: parseInt(process.env.DB_POOL_SIZE || '10')
-  }
+
     redis: {
       host: process.env.REDIS_HOST || 'localhost',
       port: parseInt(process.env.REDIS_PORT || '6379'),
       password: process.env.REDIS_PASSWORD,
       db: parseInt(process.env.REDIS_DB || '0'),
       keyPrefix: process.env.REDIS_KEY_PREFIX || 'auth:'
-  }
+
     security: {
       ...DEFAULT_SECURITY_CONFIG,
       // Allow environment overrides
@@ -118,16 +118,16 @@ export function buildAuthConfig(): AuthConfig {
       accountLockoutDuration: parseInt(process.env.ACCOUNT_LOCKOUT_DURATION || '30'),
       sessionTokenExpiry: parseInt(process.env.SESSION_TOKEN_EXPIRY || '15'),
       refreshTokenExpiry: parseInt(process.env.REFRESH_TOKEN_EXPIRY || '7')
-  }
+
     oauth: buildOAuthProviders(),
     
     emailService: process.env.EMAIL_API_KEY ? {
       apiKey: process.env.EMAIL_API_KEY,
       fromEmail: process.env.EMAIL_FROM || 'noreply@promptscape.com',
       fromName: process.env.EMAIL_FROM_NAME || 'PromptScape'
-    } : undefined
+ : undefined
   };
-}
+
 
 function buildOAuthProviders(): AuthConfig['oauth'] {
   return {
@@ -136,21 +136,21 @@ function buildOAuthProviders(): AuthConfig['oauth'] {
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
       redirectUri: process.env.GOOGLE_REDIRECT_URI || 'http://localhost:8000/auth/oauth/google/callback'
-    } as OAuthProviderConfig,
+ as OAuthProviderConfig,
     github: {
       ...OAUTH_PROVIDERS.github,
       clientId: process.env.GITHUB_CLIENT_ID || '',
       clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
       redirectUri: process.env.GITHUB_REDIRECT_URI || 'http://localhost:8000/auth/oauth/github/callback'
-    } as OAuthProviderConfig,
+ as OAuthProviderConfig,
     microsoft: {
       ...OAUTH_PROVIDERS.microsoft,
       clientId: process.env.MICROSOFT_CLIENT_ID || '',
       clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
       redirectUri: process.env.MICROSOFT_REDIRECT_URI || 'http://localhost:8000/auth/oauth/microsoft/callback'
-    } as OAuthProviderConfig
+ as OAuthProviderConfig
   };
-}
+
 
 // Security headers configuration
 export const SECURITY_HEADERS = {
@@ -191,23 +191,23 @@ export const EMAIL_TEMPLATES = {
   emailVerification: {
     subject: 'Verify your email address',
     template: 'email-verification'
-  }
+
   passwordReset: {
     subject: 'Reset your password',
     template: 'password-reset'
-  }
+
   passwordChanged: {
     subject: 'Your password has been changed',
     template: 'password-changed'
-  }
+
   loginAlert: {
     subject: 'New login to your account',
     template: 'login-alert'
-  }
+
   accountLocked: {
     subject: 'Your account has been locked',
     template: 'account-locked'
-  }
+
 };
 
 // Audit event types
@@ -267,7 +267,7 @@ export const SESSION_CONFIG = {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict' as const,
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  }
+
 };
 
 // Database migration configuration

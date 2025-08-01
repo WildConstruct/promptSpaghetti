@@ -20,12 +20,12 @@ import { UserSegment, ConversionCohort } from '../../analytics/ConversionDataMod
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 }
-export interface FunnelSegmentationProps {
-    analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
+export interface FunnelSegmentationProps { analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     funnelId: string;
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     availableSegments?: UserSegment[];
@@ -35,8 +35,8 @@ export interface FunnelSegmentationProps {
     onSegmentAnalysis?: (analysis: SegmentAnalysisResult) => void;
 
 }
-export interface SegmentFilter {
-    id: string;
+}
+export interface SegmentFilter { id: string;
     name: string;
     type: SegmentFilterType;
     conditions: SegmentCondition[];
@@ -45,22 +45,20 @@ export interface SegmentFilter {
     createdAt: number;
     lastModified: number;
 
-export type SegmentFilterType = 'demographic' | 'behavioral' | 'geographic' | 'device' | 'acquisition' | 'engagement' | 'value' | 'custom';
-
+export type SegmentFilterType = 'demographic' | 'behavioral' | 'geographic' | 'device' | 'acquisition' | 'engagement' | 'value' | 'custom' }
 }
-export interface SegmentCondition {
-    id: string;
+}
+export interface SegmentCondition { id: string;
     field: string;
     operator: SegmentOperator;
     value: Error;
     displayName: string;
     dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
 
-export type SegmentOperator = 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in' | 'exists' | 'not_exists' | 'regex_match';
-
+export type SegmentOperator = 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in' | 'exists' | 'not_exists' | 'regex_match' }
 }
-export interface SegmentAnalysisResult {
-    segmentId: string;
+}
+export interface SegmentAnalysisResult { segmentId: string;
     segmentName: string;
     totalUsers: number;
     funnelPerformance: SegmentFunnelPerformance;
@@ -68,230 +66,199 @@ export interface SegmentAnalysisResult {
     demographics: DemographicBreakdown;
     valueMetrics: SegmentValueMetrics;
     comparisons: SegmentComparison[];
-    insights: SegmentInsight[];
-
+    insights: SegmentInsight[] }
 }
-export interface SegmentFunnelPerformance {
-    conversionRate: number;
+}
+export interface SegmentFunnelPerformance { conversionRate: number;
     averageTimeToConvert: number;
     dropOffPoints: DropOffAnalysis[];
     pathAnalysis: PathAnalysis[];
-    stepPerformance: StepSegmentPerformance[];
-
+    stepPerformance: StepSegmentPerformance[] }
 }
-export interface StepSegmentPerformance {
-    stepId: string;
+}
+export interface StepSegmentPerformance { stepId: string;
     stepName: string;
     entries: number;
     conversions: number;
     conversionRate: number;
     averageTimeSpent: number;
-    exitReasons: ExitReason[];
-
+    exitReasons: ExitReason[] }
 }
-export interface DropOffAnalysis {
-    stepId: string;
+}
+export interface DropOffAnalysis { stepId: string;
     stepName: string;
     dropOffRate: number;
     dropOffCount: number;
     primaryReasons: DropOffReason[];
-    recoveryOpportunities: string[];
-
+    recoveryOpportunities: string[] }
 }
-export interface DropOffReason {
-    reason: string;
+}
+export interface DropOffReason { reason: string;
     percentage: number;
     count: number;
     category: 'technical' | 'user_experience' | 'content' | 'external';
-    severity: 'high' | 'medium' | 'low';
-
+    severity: 'high' | 'medium' | 'low' }
 }
-export interface PathAnalysis {
-    pathId: string;
+}
+export interface PathAnalysis { pathId: string;
     pathName: string;
     steps: string[];
     userCount: number;
     conversionRate: number;
     averageTimeToComplete: number;
-    isOptimal: boolean;
-
+    isOptimal: boolean }
 }
-export interface BehavioralPattern {
-    id: string;
+}
+export interface BehavioralPattern { id: string;
     name: string;
     description: string;
     pattern: string[];
     frequency: number;
     conversionImpact: number;
     timePattern: TimePattern;
-    strength: 'strong' | 'moderate' | 'weak';
-
+    strength: 'strong' | 'moderate' | 'weak' }
 }
-export interface TimePattern {
-    preferredDays: number[];
+}
+export interface TimePattern { preferredDays: number[];
     preferredHours: number[];
     sessionDuration: number;
     visitFrequency: number;
-    seasonality?: SeasonalityData;
-
+    seasonality?: SeasonalityData }
 }
-export interface SeasonalityData {
-    pattern: 'weekly' | 'monthly' | 'quarterly';
+}
+export interface SeasonalityData { pattern: 'weekly' | 'monthly' | 'quarterly';
     peaks: Array<{
         period: string;
-        multiplier: number;
+        multiplier: number }
 }
     }>;
     confidence: number;
 
 }
-export interface DemographicBreakdown {
-    geography: GeographicDistribution;
+}
+export interface DemographicBreakdown { geography: GeographicDistribution;
     devices: DeviceDistribution;
     acquisition: AcquisitionChannelDistribution;
-    userLifecycle: UserLifecycleDistribution;
-
+    userLifecycle: UserLifecycleDistribution }
 }
-export interface GeographicDistribution {
-    countries: Array<{
+}
+export interface GeographicDistribution { countries: Array<{
         country: string;
         percentage: number;
-        conversionRate: number;
+        conversionRate: number }
 }
     }>;
-    regions: Array<{
-        region: string;
+    regions: Array<{ region: string;
         percentage: number;
-        conversionRate: number;
-    }>;
-    cities: Array<{
-        city: string;
+        conversionRate: number }>;
+    cities: Array<{ city: string;
         percentage: number;
-        conversionRate: number;
-    }>;
+        conversionRate: number }>;
 
 }
-export interface DeviceDistribution {
-    types: Array<{
+}
+export interface DeviceDistribution { types: Array<{
         type: string;
         percentage: number;
-        conversionRate: number;
+        conversionRate: number }
 }
     }>;
-    browsers: Array<{
-        browser: string;
+    browsers: Array<{ browser: string;
         percentage: number;
-        conversionRate: number;
-    }>;
-    operatingSystems: Array<{
-        os: string;
+        conversionRate: number }>;
+    operatingSystems: Array<{ os: string;
         percentage: number;
-        conversionRate: number;
-    }>;
+        conversionRate: number }>;
 
 }
-export interface AcquisitionChannelDistribution {
-    channels: Array<{
+}
+export interface AcquisitionChannelDistribution { channels: Array<{
         channel: string;
         percentage: number;
         conversionRate: number;
-        cost: number;
+        cost: number }
 }
     }>;
-    sources: Array<{
-        source: string;
+    sources: Array<{ source: string;
+        percentage: number;
+        conversionRate: number }>;
+    campaigns: Array<{ campaign: string;
         percentage: number;
         conversionRate: number;
-    }>;
-    campaigns: Array<{
-        campaign: string;
-        percentage: number;
-        conversionRate: number;
-        roi: number;
-    }>;
+        roi: number }>;
 
 }
-export interface UserLifecycleDistribution {
-    stages: Array<{
+}
+export interface UserLifecycleDistribution { stages: Array<{
         stage: string;
         percentage: number;
-        conversionRate: number;
+        conversionRate: number }
 }
     }>;
-    tenure: Array<{
-        range: string;
+    tenure: Array<{ range: string;
         percentage: number;
-        conversionRate: number;
-    }>;
-    engagementLevel: Array<{
-        level: string;
+        conversionRate: number }>;
+    engagementLevel: Array<{ level: string;
         percentage: number;
-        conversionRate: number;
-    }>;
+        conversionRate: number }>;
 
 }
-export interface SegmentValueMetrics {
-    averageLifetimeValue: number;
+}
+export interface SegmentValueMetrics { averageLifetimeValue: number;
     averageOrderValue: number;
     totalRevenue: number;
     costPerAcquisition: number;
     returnOnInvestment: number;
-    churnRate: number;
-
+    churnRate: number }
 }
-export interface SegmentComparison {
-    comparedToSegment: string;
+}
+export interface SegmentComparison { comparedToSegment: string;
     conversionRateDelta: number;
     lifetimeValueDelta: number;
     engagementDelta: number;
-    significance: number;
-
+    significance: number }
 }
-export interface SegmentInsight {
-    type: 'opportunity' | 'risk' | 'trend' | 'anomaly';
+}
+export interface SegmentInsight { type: 'opportunity' | 'risk' | 'trend' | 'anomaly';
     severity: 'high' | 'medium' | 'low';
     title: string;
     description: string;
     impact: number;
     confidence: number;
     recommendations: string[];
-    evidence: Record<string, any>;
-
+    evidence: Record<string, any> }
 }
-export interface SegmentRuleBuilder {
-    fieldDefinitions: FieldDefinition[];
+}
+export interface SegmentRuleBuilder { fieldDefinitions: FieldDefinition[];
     operators: OperatorDefinition[];
-    templates: SegmentTemplate[];
-
+    templates: SegmentTemplate[] }
 }
-export interface FieldDefinition {
-    path: string;
+}
+export interface FieldDefinition { path: string;
     displayName: string;
     dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
     category: string;
     description: string;
     possibleValues?: unknown[];
-    validation?: FieldValidation;
-
+    validation?: FieldValidation }
 }
-export interface OperatorDefinition {
-    operator: SegmentOperator;
+}
+export interface OperatorDefinition { operator: SegmentOperator;
     displayName: string;
     supportedTypes: string[];
     description: string;
     requiresValue: boolean;
-    multiValue: boolean;
-
+    multiValue: boolean }
 }
-export interface SegmentTemplate {
-    id: string;
+}
+export interface SegmentTemplate { id: string;
     name: string;
     description: string;
     category: SegmentFilterType;
     conditions: SegmentCondition[];
     operator: 'AND' | 'OR';
-    tags: string[];
-
+    tags: string[] }
+}
 }
 export interface FieldValidation {
     required?: boolean;
@@ -305,4 +272,5 @@ export interface FieldValidation {
 export declare const FunnelSegmentation: React.FC<FunnelSegmentationProps>;
 export default FunnelSegmentation;
 //# sourceMappingURL=FunnelSegmentation.d.ts.map
+}
 }

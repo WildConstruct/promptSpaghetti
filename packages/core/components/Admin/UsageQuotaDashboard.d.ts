@@ -12,6 +12,7 @@ import React from 'react';
 import { UsageQuota } from '../../types/UsageQuotaTypes';
 
 }
+}
 interface UsageQuotaDashboardProps {
     onQuotaCreate?: (quota: Omit<UsageQuota, 'quotaId' | 'createdAt' | 'updatedAt'>) => Promise<void>;
     onQuotaUpdate?: (quotaId: string, updates: Partial<UsageQuota>) => Promise<void>;
@@ -23,4 +24,5 @@ interface UsageQuotaDashboardProps {
 export declare const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps>;
 export default UsageQuotaDashboard;
 //# sourceMappingURL=UsageQuotaDashboard.d.ts.map
+}
 }

@@ -17,7 +17,7 @@ import {
   DiagnosticCategory, 
   DiagnosticStatus, 
   DiagnosticSeverity 
-} from './DiagnosticService';
+ from './DiagnosticService';
 import {
   HealthCheckDefinition,
   HealthCheckResult,
@@ -31,14 +31,14 @@ import {
   ExecutionMetadata,
   ResultDetails,
   Finding
-} from '../../../../packages/core/admin/HealthCheckDefinitionModel';
+ from '../../../../packages/core/admin/HealthCheckDefinitionModel';
 
 // ==========================================
 // SERVICE INTERFACES
 // ==========================================
 
-}
-}
+
+
 export interface HealthCheckExecutionContext {
   executionId: string;
   checkDefinition: HealthCheckDefinition;
@@ -46,23 +46,25 @@ export interface HealthCheckExecutionContext {
   metadata: ExecutionMetadata;
   startTime: Date;
   timeout: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthCheckRegistry {
   definitions: Map<string, HealthCheckDefinition>;
   executionHistory: Map<string, HealthCheckResult[]>;
   activeExecutions: Map<string, HealthCheckExecutionContext>;
   schedules: Map<string, NodeJS.Timeout>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkExecutionResult {
   executionId: string;
   totalChecks: number;
@@ -71,12 +73,13 @@ export interface BulkExecutionResult {
   results: HealthCheckResult[];
   duration: number;
   overallStatus: HealthStatus;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthCheckFilter {
   category?: HealthCheckCategory;
   priority?: HealthCheckPriority;
@@ -85,9 +88,10 @@ export interface HealthCheckFilter {
   isActive?: boolean;
   createdAfter?: Date;
   createdBefore?: Date;
-}
-}
-}
+
+
+
+
 
 // ==========================================
 // MAIN SERVICE IMPLEMENTATION
@@ -113,7 +117,7 @@ export class HealthCheckDefinitionService {
       executionHistory: new Map(),
       activeExecutions: new Map(),
       schedules: new Map(};
-  }
+
 
   // ==========================================
   // LIFECYCLE MANAGEMENT
@@ -136,7 +140,7 @@ export class HealthCheckDefinitionService {
 
     this.isInitialized = true;
     console.log('✅ Health Check Definition Service initialized');
-  }
+
 
   async shutdown(): Promise<void> {
 
@@ -154,7 +158,7 @@ export class HealthCheckDefinitionService {
 
     this.isInitialized = false;
     console.log('✅ Health Check Definition Service shut down');
-  }
+
 
   // ==========================================
   // DEFINITION MANAGEMENT
@@ -171,12 +175,12 @@ export class HealthCheckDefinitionService {
     const validation = HealthCheckDefinitionValidator.validate(definition);
     if (!validation.isValid) {
       throw new Error(`Health check validation failed: ${validation.errors.join(', ')}`);
-    }
+
 
     // Check for duplicate IDs
     if (this.registry.definitions.has(definition.id)) {
       throw new Error(`Health check with ID '${definition.id}' already exists`);
-    }
+
 
     // Enhance definition with metadata
     const enhancedDefinition: HealthCheckDefinition = {
@@ -199,7 +203,7 @@ export class HealthCheckDefinitionService {
     // Schedule if configured
     if (enhancedDefinition.execution?.schedule?.enabled) {
       await this.scheduleHealthCheck(enhancedDefinition);
-    }
+
 
     // Audit log
     await this.auditService.logAction({
@@ -212,11 +216,11 @@ export class HealthCheckDefinitionService {
         category: definition.category,
         priority: definition.priority,
         validation: validation
-      }
+
     });
 
     return enhancedDefinition;
-  }
+
 
   async updateDefinition(
     checkId: string,
@@ -229,7 +233,7 @@ export class HealthCheckDefinitionService {
     const existingDefinition = this.registry.definitions.get(checkId);
     if (!existingDefinition) {
       throw new Error(`Health check definition not found: ${checkId}`);
-    }
+
 
     // Merge updates
     const updatedDefinition: HealthCheckDefinition = {
@@ -242,7 +246,7 @@ export class HealthCheckDefinitionService {
     const validation = HealthCheckDefinitionValidator.validate(updatedDefinition);
     if (!validation.isValid) {
       throw new Error(`Updated health check validation failed: ${validation.errors.join(', ')}`);
-    }
+
 
     // Update in database
     await this.updateDefinitionInDatabase(updatedDefinition);
@@ -262,11 +266,11 @@ export class HealthCheckDefinitionService {
         checkId,
         changes: Object.keys(updates),
         validation
-      }
+
     });
 
     return updatedDefinition;
-  }
+
 
   async deleteDefinition(checkId: string, deletedBy: string): Promise<void> {
 
@@ -275,20 +279,20 @@ export class HealthCheckDefinitionService {
     const definition = this.registry.definitions.get(checkId);
     if (!definition) {
       throw new Error(`Health check definition not found: ${checkId}`);
-    }
+
 
     // Cancel active executions
     const activeExecution = this.registry.activeExecutions.get(checkId);
     if (activeExecution) {
       await this.cancelExecution(activeExecution.executionId);
-    }
+
 
     // Remove schedule
     const schedule = this.registry.schedules.get(checkId);
     if (schedule) {
       clearInterval(schedule);
       this.registry.schedules.delete(checkId);
-    }
+
 
     // Remove from database
     await this.deleteDefinitionFromDatabase(checkId);
@@ -306,14 +310,14 @@ export class HealthCheckDefinitionService {
         checkId,
         name: definition.name,
         category: definition.category
-      }
+
     });
-  }
+
 
   async getDefinition(checkId: string): Promise<HealthCheckDefinition | null> {
 
     return this.registry.definitions.get(checkId) || null;
-  }
+
 
   async listDefinitions(filter?: HealthCheckFilter): Promise<HealthCheckDefinition[]> {
 
@@ -329,10 +333,10 @@ export class HealthCheckDefinitionService {
         if (filter.createdBefore && def.createdAt > filter.createdBefore) return false;
         return true;
       });
-    }
+
 
     return definitions;
-  }
+
 
   // ==========================================
   // EXECUTION METHODS
@@ -349,11 +353,11 @@ export class HealthCheckDefinitionService {
     const definition = this.registry.definitions.get(checkId);
     if (!definition) {
       throw new Error(`Health check definition not found: ${checkId}`);
-    }
+
 
     if (!definition.isActive) {
       throw new Error(`Health check is inactive: ${checkId}`);
-    }
+
 
     const executionId = this.generateExecutionId();
     const startTime = new Date();
@@ -369,7 +373,7 @@ export class HealthCheckDefinitionService {
         userId: initiatedBy,
         correlationId: this.generateCorrelationId(),
         retryAttempt: 0
-  }
+
       startTime,
       timeout: definition.config.timeout
     };
@@ -391,13 +395,13 @@ export class HealthCheckDefinitionService {
       // Keep only last 100 results
       if (history.length > 100) {
         history.shift();
-      }
+
       this.registry.executionHistory.set(checkId, history);
 
       // Process alerting if configured
       if (definition.alerting?.enabled) {
         await this.processAlerting(definition, result);
-      }
+
 
       // Audit log
       await this.auditService.logAction({
@@ -410,12 +414,11 @@ export class HealthCheckDefinitionService {
           status: result.status,
           duration: result.duration,
           score: result.score
-        }
+
       });
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       // Create error result
       const errorResult = this.createErrorResult(context, error);
       await this.storeExecutionResult(errorResult);
@@ -429,16 +432,15 @@ export class HealthCheckDefinitionService {
           executionId,
           checkId,
           error: error.message
-        }
+
       });
 
       throw error;
-
-    } finally {
+ finally {
       // Remove from active executions
       this.registry.activeExecutions.delete(executionId);
-    }
-  }
+
+
 
   async executeBulkHealthChecks(
     checkIds: string[],
@@ -462,17 +464,17 @@ export class HealthCheckDefinitionService {
       
       const parallelResults = await Promise.all(promises);
       results.push(...parallelResults);
-    } else {
+ else {
       // Execute sequentially
       for (const checkId of checkIds) {
         try {
           const result = await this.executeHealthCheck(checkId, initiatedBy);
           results.push(result);
-        } catch (error) {
+ catch (error) {
           results.push(this.createErrorResultForBulk(checkId, error, executionId));
-        }
-      }
-    }
+
+
+
 
     const duration = Date.now() - startTime;
     const completedChecks = results.filter(r => r.status !== HealthStatus.ERROR).length;
@@ -502,11 +504,11 @@ export class HealthCheckDefinitionService {
         overallStatus,
         duration,
         parallel
-      }
+
     });
 
     return bulkResult;
-  }
+
 
   // ==========================================
   // EXECUTION BY TYPE
@@ -531,8 +533,8 @@ export class HealthCheckDefinitionService {
         
     default:
       throw new Error(`Unsupported health check type: ${checkDefinition.config.type}`);
-    }
-  }
+
+
 
   private async executeHttpEndpointCheck(context: HealthCheckExecutionContext): Promise<HealthCheckResult> {
 
@@ -572,7 +574,7 @@ export class HealthCheckDefinitionService {
           description: `Unexpected status code: ${response.status}`,
           impact: 'Service may be unavailable or experiencing issues'
         });
-      }
+
 
       if (duration > (config.timeout || 30000) * 0.8) {
         details.findings.push({
@@ -581,7 +583,7 @@ export class HealthCheckDefinitionService {
           description: `Slow response time: ${duration.toFixed(1)}ms`,
           impact: 'Users may experience slow service'
         });
-      }
+
 
       return {
         checkId: checkDefinition.id,
@@ -597,16 +599,15 @@ export class HealthCheckDefinitionService {
           custom: {
             statusCode: response.status,
             contentLength: response.contentLength || 0
-          }
-  }
+
+
         metadata: context.metadata
       };
-
-    } catch (error) {
+ catch (error) {
       const duration = performance.now() - startExecution;
       return this.createErrorResult(context, error, duration);
-    }
-  }
+
+
 
   private async executeDatabaseQueryCheck(context: HealthCheckExecutionContext): Promise<HealthCheckResult> {
 
@@ -645,28 +646,27 @@ export class HealthCheckDefinitionService {
           custom: {
             rowCount: result.rowCount,
             queryComplexity: result.complexity || 1
-          }
-  }
+
+
         metadata: context.metadata
       };
-
-    } catch (error) {
+ catch (error) {
       const duration = performance.now() - startExecution;
       return this.createErrorResult(context, error, duration);
-    }
-  }
+
+
 
   private async executeSystemCommandCheck(context: HealthCheckExecutionContext): Promise<HealthCheckResult> {
 
     // Implementation for system command execution
     throw new Error('System command health checks not yet implemented');
-  }
+
 
   private async executeCompositeCheck(context: HealthCheckExecutionContext): Promise<HealthCheckResult> {
 
     // Implementation for composite health checks
     throw new Error('Composite health checks not yet implemented');
-  }
+
 
   // ==========================================
   // UTILITY METHODS
@@ -691,18 +691,18 @@ export class HealthCheckDefinitionService {
       break;
     default:
       baseScore = 0;
-    }
+
 
     // Adjust based on performance
     const performanceRatio = duration / timeout;
     if (performanceRatio > 0.8) {
       baseScore *= 0.8; // 20% penalty for slow performance
-    } else if (performanceRatio > 0.5) {
+ else if (performanceRatio > 0.5) {
       baseScore *= 0.9; // 10% penalty for moderate slowness
-    }
+
 
     return Math.round(Math.max(0, Math.min(100, baseScore)));
-  }
+
 
   private calculateOverallStatus(results: HealthCheckResult[]): HealthStatus {
     const statusCounts = {
@@ -727,7 +727,7 @@ export class HealthCheckDefinitionService {
     if (statusCounts[HealthStatus.TIMEOUT] > 0) return HealthStatus.TIMEOUT;
     
     return HealthStatus.HEALTHY;
-  }
+
 
   private createErrorResult(
     context: HealthCheckExecutionContext, 
@@ -750,7 +750,7 @@ export class HealthCheckDefinitionService {
           description: error.message,
           impact: 'Health check cannot determine system status',
           evidence: { stack: error.stack }
-        }],
+],
         recommendations: [
           'Check health check configuration',
           'Verify system dependencies',
@@ -758,11 +758,11 @@ export class HealthCheckDefinitionService {
         ],
         affectedComponents: ['health_check_system'],
         relatedChecks: []
-  }
+
       metrics: { custom: {} },
       metadata: context.metadata
     };
-  }
+
 
   private createErrorResultForBulk(checkId: string, error: any, bulkExecutionId: string): HealthCheckResult {
     return {
@@ -779,16 +779,16 @@ export class HealthCheckDefinitionService {
         recommendations: [],
         affectedComponents: [],
         relatedChecks: []
-  }
+
       metrics: { custom: {} },
       metadata: {
         hostname: require('os').hostname(),
         environment: process.env.NODE_ENV || 'development',
         version: '1.0.0',
         retryAttempt: 0
-      }
+
     };
-  }
+
 
   // ==========================================
   // HELPER METHODS (Simplified for Demo)
@@ -796,11 +796,11 @@ export class HealthCheckDefinitionService {
 
   private generateExecutionId(): string {
     return `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateCorrelationId(): string {
     return `corr_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-  }
+
 
   private async makeHttpRequest(config: any): Promise<any> {
 
@@ -810,7 +810,7 @@ export class HealthCheckDefinitionService {
       status: Math.random() > 0.1 ? 200 : 500,
       contentLength: Math.floor(Math.random() * 1000)
     };
-  }
+
 
   private async executeDatabaseQuery(config: any): Promise<any> {
 
@@ -820,63 +820,62 @@ export class HealthCheckDefinitionService {
       rowCount: Math.floor(Math.random() * 10),
       complexity: 1
     };
-  }
+
 
   // Database operations (simplified)
   private async loadDefinitionsFromDatabase(): Promise<void> {
 
     // In production, would load from actual database
     console.log('Loading health check definitions from database...');
-  }
+
 
   private async storeDefinitionInDatabase(definition: HealthCheckDefinition): Promise<void> {
 
     console.log(`Storing definition ${definition.id} in database`);
-  }
+
 
   private async updateDefinitionInDatabase(definition: HealthCheckDefinition): Promise<void> {
 
     console.log(`Updating definition ${definition.id} in database`);
-  }
+
 
   private async deleteDefinitionFromDatabase(checkId: string): Promise<void> {
 
     console.log(`Deleting definition ${checkId} from database`);
-  }
+
 
   private async storeExecutionResult(result: HealthCheckResult): Promise<void> {
 
     console.log(`Storing execution result ${result.executionId}`);
-  }
+
 
   // Scheduling methods (simplified)
   private async startScheduledChecks(): Promise<void> {
 
     console.log('Starting scheduled health checks...');
-  }
+
 
   private async scheduleHealthCheck(definition: HealthCheckDefinition): Promise<void> {
 
     console.log(`Scheduling health check: ${definition.id}`);
-  }
+
 
   private async updateScheduleIfNeeded(old: HealthCheckDefinition, updated: HealthCheckDefinition): Promise<void> {
 
     console.log(`Updating schedule for ${updated.id} if needed`);
-  }
+
 
   private async registerWithDiagnosticService(): Promise<void> {
 
     console.log('Registering with diagnostic service...');
-  }
+
 
   private async cancelExecution(executionId: string): Promise<void> {
 
     console.log(`Cancelling execution: ${executionId}`);
-  }
+
 
   private async processAlerting(definition: HealthCheckDefinition, result: HealthCheckResult): Promise<void> {
 
     console.log(`Processing alerts for ${definition.id}: ${result.status}`);
-  }
-}
+

@@ -25,7 +25,7 @@ import {
   ComplianceStandard,
   AuditEventQuery,
   AuditEventResponse
-} from '../database/audit-models';
+ from '../database/audit-models';
 
 // Performance and reliability constants
 const SEARCH_TIMEOUT_MS = 30000; // 30 seconds
@@ -34,8 +34,8 @@ const MAX_BATCH_SIZE = 1000;
 const CIRCUIT_BREAKER_THRESHOLD = 5;
 const CIRCUIT_BREAKER_TIMEOUT = 60000; // 1 minute
 
-}
-}
+
+
 export interface AdvancedSearchFilter {
   // Basic filters
   timeRange?: TimeRangeFilter;
@@ -52,12 +52,13 @@ export interface AdvancedSearchFilter {
   compliance?: ComplianceFilter;
   advanced?: AdvancedFilter;
   output?: OutputOptions;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeRangeFilter {
   startDate?: Date;
   endDate?: Date;
@@ -66,14 +67,15 @@ export interface TimeRangeFilter {
   last?: {
     value: number;
     unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
-}
-}
+
+
+
   };
   timePattern?: TimePatternFilter;
-}
 
-}
-}
+
+
+
 export interface ActorFilter {
   userIds?: string[];
   userEmails?: string[];
@@ -83,12 +85,13 @@ export interface ActorFilter {
   newUsers?: boolean;
   suspiciousUsers?: boolean;
   searchTerm?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceFilter {
   resourceTypes?: string[];
   resourceIds?: string[];
@@ -96,24 +99,26 @@ export interface ResourceFilter {
   resourcePattern?: string;
   includeRelated?: boolean;
   searchTerm?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ContextFilter {
   sessionIds?: string[];
   ipAddresses?: string[];
   userAgents?: string[];
   geoLocations?: string[];
   deviceTypes?: ('desktop' | 'mobile' | 'tablet' | 'api' | 'system')[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SearchFilter {
   query: string;
   fields?: string[];
@@ -121,12 +126,13 @@ export interface SearchFilter {
   caseSensitive?: boolean;
   regex?: boolean;
   highlight?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceFilter {
   standards?: ComplianceStandard[];
   requiresReview?: boolean;
@@ -135,23 +141,25 @@ export interface ComplianceFilter {
   complianceScore?: {
     min?: number;
     max?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface AdvancedFilter {
   customSql?: string;
   aggregations?: AggregationConfig[];
   correlations?: CorrelationConfig[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OutputOptions {
   fields?: string[];
   format?: 'json' | 'csv' | 'excel';
@@ -161,29 +169,32 @@ export interface OutputOptions {
   offset?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CachedResult {
   result: AuditEventResponse;
   timestamp: Date;
   expiresAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CircuitBreakerState {
   failures: number;
   lastFailure?: Date;
   state: 'closed' | 'open' | 'half-open';
-}
-}
-}
+
+
+
+
 
 /**
  * Optimized Audit Filtering Service with performance enhancements
@@ -198,7 +209,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     super();
     this.auditDAO = auditDAO;
     this.initializeCacheCleanup();
-  }
+
 
   /**
    * Execute advanced search with performance optimizations and error handling
@@ -223,7 +234,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       const cachedResult = this.getCachedResult(cacheKey);
       if (cachedResult) {
         return cachedResult;
-      }
+
 
       // Create abort controller for timeout management
       const abortController = new AbortController();
@@ -258,17 +269,15 @@ export class OptimizedAuditFilteringService extends EventEmitter {
         this.recordSuccessMetrics(Date.now() - startTime, filter);
         
         return enhancedResponse;
-        
-      } finally {
+ finally {
         clearTimeout(timeoutId);
         this.activeRequests.delete(operationId);
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       this.handleSearchError(error, Date.now() - startTime, filter);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get intelligent search suggestions with performance optimization
@@ -281,7 +290,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     completions: string[];
     filters: SuggestedFilter[];
     patterns: string[];
-  }> {
+> {
 
     try {
       const suggestions = {
@@ -299,7 +308,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
             .then(completions => { suggestions.completions = completions; })
             .catch(() => { suggestions.completions = []; }) // Graceful fallback
         );
-      }
+
 
       suggestionPromises.push(
         this.suggestFiltersOptimized(partialFilter, signal)
@@ -317,8 +326,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       await Promise.allSettled(suggestionPromises);
 
       return suggestions;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting search suggestions:', error);
       // Return empty suggestions rather than throwing
       return {
@@ -326,8 +334,8 @@ export class OptimizedAuditFilteringService extends EventEmitter {
         filters: [],
         patterns: []
       };
-    }
-  }
+
+
 
   /**
    * Save a filter with validation and error handling
@@ -340,17 +348,17 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       description?: string;
       isPublic?: boolean;
       tags?: string[];
-    } = {}
+ = {}
   ): Promise<SavedFilter> {
 
     try {
       // Validate inputs
       if (!name || name.trim().length === 0) {
         throw new Error('Filter name is required');
-      }
+
       if (!createdBy || createdBy.trim().length === 0) {
         throw new Error('Creator ID is required');
-      }
+
       
       // Validate filter structure
       this.validateSearchFilter(filter);
@@ -379,12 +387,11 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       this.emit('filterSaved', savedFilter);
       
       return savedFilter;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error saving filter:', error);
       throw new Error(`Failed to save filter: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Enhanced method to get saved filters with error handling
@@ -397,17 +404,17 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       searchTerm?: string;
       limit?: number;
       offset?: number;
-    } = {}
+ = {}
   ): Promise<{
     filters: SavedFilter[];
     total: number;
     hasMore: boolean;
-  }> {
+> {
 
     try {
       if (!userId || userId.trim().length === 0) {
         throw new Error('User ID is required');
-      }
+
 
       // Get filters from persistent storage
       const allFilters = await this.loadSavedFiltersForUser(
@@ -422,7 +429,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
         filteredResults = filteredResults.filter(filter => 
           options.tags!.some(tag => filter.tags.includes(tag))
         );
-      }
+
 
       // Apply search term filtering
       if (options.searchTerm) {
@@ -431,13 +438,13 @@ export class OptimizedAuditFilteringService extends EventEmitter {
           filter.name.toLowerCase().includes(searchTerm) ||
           (filter.description && filter.description.toLowerCase().includes(searchTerm))
         );
-      }
+
 
       // Sort by usage count and creation date
       filteredResults.sort((a, b) => {
         if (b.usageCount !== a.usageCount) {
           return b.usageCount - a.usageCount;
-        }
+
         return b.createdAt.getTime() - a.createdAt.getTime();
       });
 
@@ -451,71 +458,70 @@ export class OptimizedAuditFilteringService extends EventEmitter {
         total: filteredResults.length,
         hasMore: offset + limit < filteredResults.length
       };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting saved filters:', error);
       throw new Error(`Failed to retrieve saved filters: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   // Private helper methods with consistent naming
 
   private generateRequestId(): string {
     return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateCacheKey(filter: AdvancedSearchFilter): string {
     return `cache_${Buffer.from(JSON.stringify(filter)).toString('base64').substr(0, 32)}`;
-  }
+
 
   private generateSecureFilterId(): string {
     return `filter_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private validateSearchFilter(filter: AdvancedSearchFilter): void {
     if (!filter) {
       throw new Error('Search filter is required');
-    }
+
     
     // Validate time range
     if (filter.timeRange?.startDate && filter.timeRange?.endDate) {
       if (filter.timeRange.startDate >= filter.timeRange.endDate) {
         throw new Error('Start date must be before end date');
-      }
-    }
+
+
     
     // Validate output limits
     if (filter.output?.limit && filter.output.limit > MAX_BATCH_SIZE) {
       throw new Error(`Limit cannot exceed ${MAX_BATCH_SIZE}`);
-    }
+
     
     // Validate search query
     if (filter.search?.query && filter.search.query.length > 1000) {
       throw new Error('Search query too long (max 1000 characters)');
-    }
-  }
+
+
 
   private checkCircuitBreaker(): void {
     if (this.circuitBreaker.state === 'open') {
       const timeSinceLastFailure = Date.now() - (this.circuitBreaker.lastFailure?.getTime() || 0);
       if (timeSinceLastFailure < CIRCUIT_BREAKER_TIMEOUT) {
         throw new Error('Service temporarily unavailable (circuit breaker open)');
-      } else {
+ else {
         this.circuitBreaker.state = 'half-open';
-      }
-    }
-  }
+
+
+
 
   private getCachedResult(cacheKey: string): AuditEventResponse | null {
     const cached = this.queryCache.get(cacheKey);
     if (cached && cached.expiresAt > new Date()) {
       return cached.result;
-    }
+
     if (cached) {
       this.queryCache.delete(cacheKey);
-    }
+
     return null;
-  }
+
 
   private setCachedResult(cacheKey: string, result: AuditEventResponse): void {
     const expiresAt = new Date(Date.now() + CACHE_TTL_MS);
@@ -524,7 +530,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       timestamp: new Date(),
       expiresAt
     });
-  }
+
 
   private async buildOptimizedQuery(filter: AdvancedSearchFilter): Promise<AuditEventQuery> {
 
@@ -539,7 +545,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     };
     
     return query;
-  }
+
 
   private async executeQueryWithTimeout(
     query: AuditEventQuery,
@@ -550,7 +556,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       if (signal.aborted) {
         reject(new Error('Query cancelled'));
         return;
-      }
+
 
       const abortHandler = () => {
         reject(new Error('Query timeout'));
@@ -562,13 +568,13 @@ export class OptimizedAuditFilteringService extends EventEmitter {
         .then(result => {
           signal.removeEventListener('abort', abortHandler);
           resolve(result);
-  }
+
         .catch(error => {
           signal.removeEventListener('abort', abortHandler);
           reject(error);
         });
     });
-  }
+
 
   private async enhanceResponseEfficiently(
     response: AuditEventResponse,
@@ -578,7 +584,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
 
     if (signal.aborted) {
       throw new Error('Enhancement cancelled');
-    }
+
 
     // Apply any necessary post-processing efficiently
     return {
@@ -587,7 +593,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
         ...response.metadata,
         processingTime: Date.now(}
     };
-  }
+
 
   private async getQueryCompletionsOptimized(
     query: string,
@@ -596,11 +602,11 @@ export class OptimizedAuditFilteringService extends EventEmitter {
 
     if (signal?.aborted) {
       throw new Error('Query completions cancelled');
-    }
+
     
     // Implement efficient query completion logic
     return [];
-  }
+
 
   private async suggestFiltersOptimized(
     partialFilter: Partial<AdvancedSearchFilter>,
@@ -609,11 +615,11 @@ export class OptimizedAuditFilteringService extends EventEmitter {
 
     if (signal?.aborted) {
       throw new Error('Filter suggestions cancelled');
-    }
+
     
     // Implement efficient filter suggestion logic
     return [];
-  }
+
 
   private getCommonPatternsOptimized(
     _____partialFilter: Partial<AdvancedSearchFilter>
@@ -625,7 +631,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       'severity:high',
       'time:last-24h'
     ];
-  }
+
 
   private handleSearchError(
     error: Error,
@@ -640,40 +646,40 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     
     if (this.circuitBreaker.failures >= CIRCUIT_BREAKER_THRESHOLD) {
       this.circuitBreaker.state = 'open';
-    }
+
     
     // Emit error event for monitoring
     this.emit('searchError', { error, executionTime, filter });
-  }
+
 
   private recordSuccessMetrics(executionTime: number, filter: AdvancedSearchFilter): void {
     // Reset circuit breaker on success
     if (this.circuitBreaker.state === 'half-open') {
       this.circuitBreaker.state = 'closed';
       this.circuitBreaker.failures = 0;
-    }
+
     
     // Emit success metrics
     this.emit('searchSuccess', { executionTime, filter });
-  }
+
 
   private sanitizeString(input: string): string {
     return input.replace(/[<>'"&]/g, '').trim();
-  }
+
 
   private deepCloneFilter(filter: AdvancedSearchFilter): AdvancedSearchFilter {
     return JSON.parse(JSON.stringify(filter));
-  }
+
 
   private deepCloneResult(result: AuditEventResponse): AuditEventResponse {
     return JSON.parse(JSON.stringify(result));
-  }
+
 
   private async persistSavedFilter(filter: SavedFilter): Promise<void> {
 
     // Implementation would save to database
     console.log('Persisting filter:', filter.id);
-  }
+
 
   private async loadSavedFiltersForUser(
     _____userId: string,
@@ -682,7 +688,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
 
     // Implementation would load from database
     return [];
-  }
+
 
   private initializeCacheCleanup(): void {
     // Clean up expired cache entries every 5 minutes
@@ -691,10 +697,10 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       for (const [key, value] of this.queryCache.entries()) {
         if (value.expiresAt <= now) {
           this.queryCache.delete(key);
-        }
-      }
+
+
     }, 5 * 60 * 1000);
-  }
+
 
   /**
    * Cancel all active requests (useful for cleanup)
@@ -703,8 +709,8 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     for (const [requestId, controller] of this.activeRequests.entries()) {
       controller.abort();
       this.activeRequests.delete(requestId);
-    }
-  }
+
+
 
   /**
    * Get service health status
@@ -713,18 +719,19 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     circuitBreakerState: string;
     activeRequests: number;
     cacheSize: number;
-    } {
+ {
     return {
       circuitBreakerState: this.circuitBreaker.state,
       activeRequests: this.activeRequests.size,
       cacheSize: this.queryCache.size
     };
-  }
-}
+
+
 
 // Supporting interfaces
-}
-}
+
+
+
 export interface SavedFilter {
   id: string;
   name: string;
@@ -736,51 +743,57 @@ export interface SavedFilter {
   isPublic: boolean;
   tags: string[];
   usageCount: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SuggestedFilter {
   field: string;
   operator: string;
   value: string;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimePreset {
   // Define time preset interface
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimePatternFilter {
   // Define time pattern interface
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AggregationConfig {
   // Define aggregation interface
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CorrelationConfig {
   // Define correlation interface
-}
-}
-}
+
+
+
+
 
 export default OptimizedAuditFilteringService;

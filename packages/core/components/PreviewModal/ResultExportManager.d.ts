@@ -8,20 +8,18 @@ import React from 'react';
 import { EnhancedPreviewResult } from './EnhancedPreviewModal';
 
 }
-export interface ExportFormat {
-    id: string;
+}
+export interface ExportFormat { id: string;
     name: string;
     description: string;
     extension: string;
     category: 'script' | 'vfx' | 'data' | 'report';
     vfxCompatible?: boolean;
     controlNetReady?: boolean;
-    icon: string;
-
-
+    icon: string }
 }
-export interface ExportOptions {
-    format: ExportFormat;
+}
+export interface ExportOptions { format: ExportFormat;
     includeMetadata?: boolean;
     includeExecutionPath?: boolean;
     includeVarianceAnalysis?: boolean;
@@ -31,18 +29,16 @@ export interface ExportOptions {
         includeControlNet?: boolean;
         includeSceneData?: boolean;
         frameRate?: number;
-        resolution?: [number, number];
-
+        resolution?: [number, number] }
 }
     };
-    filmOptions?: {
-        scriptFormat?: 'fountain' | 'final-draft' | 'writerpro';
+    filmOptions?: { scriptFormat?: 'fountain' | 'final-draft' | 'writerpro';
         includeCharacterNotes?: boolean;
         includeDirectorNotes?: boolean;
         includeSceneBreakdowns?: boolean;
-        watermark?: string;
-    };
+        watermark?: string };
 
+}
 }
 export interface ResultExportManagerProps {
     results: EnhancedPreviewResult[];
@@ -53,4 +49,5 @@ export interface ResultExportManagerProps {
 
 export declare const ResultExportManager: React.FC<ResultExportManagerProps>;
 //# sourceMappingURL=ResultExportManager.d.ts.map
+}
 }

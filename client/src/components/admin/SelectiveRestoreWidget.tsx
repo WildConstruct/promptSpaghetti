@@ -17,7 +17,7 @@ import {
   PlayCircleOutlined,
   StopOutlined,
   ReloadOutlined
-} from '@ant-design/icons';
+ from '@ant-design/icons';
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -25,7 +25,8 @@ const { Option } = Select;
 // =============================================================================
 // Type Definitions
 // =============================================================================
-}
+
+
 interface RecoveryPoint {
   id: string;,
   backup_type: 'scheduled' | 'transaction' | 'manual' | 'compliance' | 'incident',
@@ -36,18 +37,19 @@ interface RecoveryPoint {
   recovery_context: {
   description: string;,
   triggered_by: string;
-  retention_}
 
-class: string;
-}
+  retention_},
+  class: string;
+
 };
   validation_status: 'not_validated' | 'valid' | 'corrupted' | 'partially_valid';,
-  storage_info: {,
+  storage_info: {
   storage_provider: string;,
   location: string,
   encryption_status: string;
 };
-}
+
+
 interface RestoreRequest {
   recovery_point_id: string;,
   operation_type: 'selective_restore',
@@ -59,15 +61,17 @@ interface RestoreRequest {
   exclude_tables: string,
   where_conditions: Record<string, string>;
   limit_records?: number;
-}
+
+
 };
   validation_level: 'none' | 'basic' | 'full' | 'business_rules' | 'compliance';,
-  notification_config: {,
+  notification_config: {
   on_completion: boolean;,
   on_error: boolean,
   notification_channels: string;
 };
-}
+
+
 interface RestoreProgress {
   request_id: string;,
   status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled',
@@ -79,16 +83,19 @@ interface RestoreProgress {
   conflicts_resolved: number,
   started_at: string;
   estimated_completion?: string,
-  errors: Array<{
+  errors: Array<{,
   table: string;,
   error_type: string,
   message: string;,
   severity: 'error' | 'warning';
-}
-}>;
-}
+
+
+>;
+
+
 interface SelectiveRestoreWidgetProps {
   onRestoreComplete?: (requestId: string) => void;
+
   onError?: (error: string) => void;}
 
 
@@ -98,7 +105,7 @@ interface SelectiveRestoreWidgetProps {
   export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
   onRestoreComplete,
   onError
-}
+
 }) => {
   // State Management
   const [form] = Form.useForm();
@@ -115,11 +122,11 @@ interface SelectiveRestoreWidgetProps {
       const data = await response.json();
       if (data.success) {
         setRecoveryPoints(data.data);
-      } else {
+ else {
         onError?.(data.error || 'Failed to load recovery points');
-    } catch {
+ catch {
       onError?.('Failed to load recovery points');
-    } finally {
+ finally {
       setLoading(false);
   }, [onError]);
   const loadAvailableTables = useCallback(async (recoveryPointId: string) => {
@@ -128,7 +135,7 @@ interface SelectiveRestoreWidgetProps {
       const data = await response.json();
       if (data.success) {
         setAvailableTables(data.tables);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load available tables:', error);
 }, []);
   const loadActiveRestores = useCallback(async () => {
@@ -137,7 +144,7 @@ interface SelectiveRestoreWidgetProps {
       const data = await response.json();
       if (data.success) {
         setActiveRestores(data.data);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load active restores:', error);
 }, []);
   // Load initial data
@@ -169,17 +176,17 @@ interface SelectiveRestoreWidgetProps {
   recovery_point_id: values.recovery_point_id,
           table_filters: values.table_filters || {},
           restore_scope: values.restore_scope;
-  }
+
       });
       const data = await response.json();
       if (data.success) {
         setPreviewData(data.preview);
         setActiveTab('preview');
-      } else {
+ else {
         onError?.(data.error || 'Failed to generate preview');
-    } catch {
+ catch {
       onError?.('Failed to generate preview');
-    } finally {
+ finally {
       setLoading(false);
   };
   const executeSelectiveRestore = async () => {
@@ -215,11 +222,11 @@ interface SelectiveRestoreWidgetProps {
         loadActiveRestores();
         form.resetFields();
         onRestoreComplete?.(data.request_id);
-      } else {
+ else {
         onError?.(data.error || 'Failed to start restore');
-    } catch {
+ catch {
       onError?.('Failed to start restore operation');
-    } finally {
+ finally {
       setLoading(false);
   };
   // =============================================================================
@@ -229,7 +236,7 @@ interface SelectiveRestoreWidgetProps {
     try {
       await fetch(`/api/admin/backup/restore/${requestId}/cancel`, { method: 'POST' });}
       loadActiveRestores();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to cancel restore:', error);
 };
   const getRestoreStatusColor = (status: string) => {

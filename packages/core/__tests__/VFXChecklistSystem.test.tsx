@@ -17,12 +17,11 @@ import VFXChecklistTemplates from '../components/Checklists/VFXChecklistTemplate
 import VFXChecklistDemo from '../components/Checklists/VFXChecklistDemo';
 
 // Import types
-import type { 
-  VFXChecklist,
+import type { VFXChecklist,
   VFXChecklistItem,
-  VFXTeamMember,
+  VFXTeamMember }
   VFXChecklistComment
-} from '../components/Checklists/VFXChecklistSystem';
+ from '../components/Checklists/VFXChecklistSystem';
 
 // Mock UI components
 jest.mock('../components/ui/Card', () => ({)
@@ -100,143 +99,138 @@ jest.mock('../components/ui/Slider', () => ({)
 }));
 
 // Sample test data
-const sampleVFXUser: VFXTeamMember = {,
-  id: 'user-001',
-  name: 'John Director',
-  role: 'director',
-  email: 'john@wildconstruct.com',
-  color: '#ff7c00',
-  avatar: 'https://example.com/avatar.jpg',
-  isOnline: true,
+const sampleVFXUser: VFXTeamMember = { 
+  id: 'user-001'
+  name: 'John Director'
+  role: 'director'
+  email: 'john@wildconstruct.com'
+  color: '#ff7c00'
+  avatar: 'https://example.com/avatar.jpg'
+  isOnline: true
   permissions: {
-  canCreate: true,
-  canEdit: true,
-  canDelete: true,
-  canApprove: true,
-  canAssign: true,
-  canViewReports: true,
+  canCreate: true
+  canEdit: true
+  canDelete: true
+  canApprove: true
+  canAssign: true
+  canViewReports: true }
 };
 const sampleTeam: VFXTeamMember = [
-  sampleVFXUser,
-  {
-  id: 'user-002',
-  name: 'Jane VFX Supervisor',
-  role: 'vfx_supervisor',
-  email: 'jane@wildconstruct.com',
-  color: '#3b82f6',
-  isOnline: false,
+  sampleVFXUser
+  { id: 'user-002'
+  name: 'Jane VFX Supervisor'
+  role: 'vfx_supervisor'
+  email: 'jane@wildconstruct.com'
+  color: '#3b82f6'
+  isOnline: false
   permissions: {
-  canCreate: true,
-  canEdit: true,
-  canDelete: false,
-  canApprove: true,
-  canAssign: true,
-  canViewReports: true,
-}
-  {
-  id: 'user-003',
-  name: 'Alex Artist',
-  role: 'artist',
-  email: 'alex@wildconstruct.com',
-  color: '#10b981',
-  isOnline: true,
+  canCreate: true
+  canEdit: true
+  canDelete: false
+  canApprove: true
+  canAssign: true
+  canViewReports: true }
+
+  { id: 'user-003'
+  name: 'Alex Artist'
+  role: 'artist'
+  email: 'alex@wildconstruct.com'
+  color: '#10b981'
+  isOnline: true
   permissions: {
-  canCreate: true,
-  canEdit: true,
-  canDelete: false,
-  canApprove: false,
-  canAssign: false,
+  canCreate: true
+  canEdit: true
+  canDelete: false
+  canApprove: false
+  canAssign: false
   canViewReports: true];
-  const sampleChecklistItem: VFXChecklistItem = {,
-  id: 'item-001',
-  title: 'Camera Tracking Setup',
-  description: 'Set up camera tracking for the hero shot',
-  status: 'pending',
-  priority: 'high',
-  completion: 25,
-  assignee: sampleTeam[2], // Artist,
-  author: sampleVFXUser,
-  createdAt: '2025-07-22T09:00:00Z',
-  updatedAt: '2025-07-22T09:00:00Z',
-  dueDate: '2025-07-25T17:00:00Z',
-  estimatedHours: 8,
-  dependencies: [],
-  subtasks: [,
+  const sampleChecklistItem: VFXChecklistItem = {
+  id: 'item-001'
+  title: 'Camera Tracking Setup'
+  description: 'Set up camera tracking for the hero shot'
+  status: 'pending'
+  priority: 'high'
+  completion: 25
+  assignee: sampleTeam[2], // Artist
+  author: sampleVFXUser
+  createdAt: '2025-07-22T09:00:00Z'
+  updatedAt: '2025-07-22T09:00:00Z'
+  dueDate: '2025-07-25T17:00:00Z'
+  estimatedHours: 8
+  dependencies: []
+  subtasks: [
   {
-  id: 'sub-001',
-  title: 'Feature point tracking',
-  completed: true,
-  assignee: sampleTeam[2],
-}
-    {
-  id: 'sub-002',
-  title: '3D solve validation',
-  completed: false,
-  assignee: sampleTeam[2]],
-  attachments: [],
-  assets: [,
+  id: 'sub-001'
+  title: 'Feature point tracking'
+  completed: true
+  assignee: sampleTeam[2] }
+
+    { id: 'sub-002'
+  title: '3D solve validation'
+  completed: false
+  assignee: sampleTeam[2]]
+  attachments: []
+  assets: [
   {
-  id: 'asset-001',
-  name: 'Camera_Track_v01.ma',
-  type: 'animation',
-  status: 'draft',
-  version: 'v01',
-  accuracy: 92,
-  complexity: 78,
-  dependencies: []],
-  tags: ['tracking', 'camera', '3d-solve'],
-  category: 'pre_production',
-  vfxPhase: 'previs',
-  qualityGates: [,
+  id: 'asset-001'
+  name: 'Camera_Track_v01.ma'
+  type: 'animation'
+  status: 'draft'
+  version: 'v01'
+  accuracy: 92
+  complexity: 78
+  dependencies: []]
+  tags: ['tracking', 'camera', '3d-solve']
+  category: 'pre_production'
+  vfxPhase: 'previs'
+  qualityGates: [
   {
-  id: 'qg-001',
-  name: 'Tracking Stability',
-  type: 'technical',
-  status: 'pending',
-  criteria: 'Sub-pixel accuracy maintained',
-  required: true],
-  comments: [],
-  history: [],
+  id: 'qg-001'
+  name: 'Tracking Stability'
+  type: 'technical'
+  status: 'pending'
+  criteria: 'Sub-pixel accuracy maintained'
+  required: true]
+  comments: []
+  history: [] }
 };
-const sampleChecklist: VFXChecklist = {,
-  id: 'checklist-001',
-  name: 'Medieval Castle Scene',
-  description: 'Complete VFX workflow for medieval castle establishing shot',
-  project: 'Kingdom Chronicles',
-  scene: 'Castle Courtyard',
-  shot: 'Shot_042',
-  sequence: 'SEQ_01',
-  owner: sampleVFXUser,
-  team: sampleTeam,
-  status: 'active',
-  createdAt: '2025-07-15T09:00:00Z',
-  updatedAt: '2025-07-22T14:30:00Z',
-  dueDate: '2025-07-30T17:00:00Z',
-  tags: ['medieval', 'castle', 'establishing'],
+const sampleChecklist: VFXChecklist = { 
+  id: 'checklist-001'
+  name: 'Medieval Castle Scene'
+  description: 'Complete VFX workflow for medieval castle establishing shot'
+  project: 'Kingdom Chronicles'
+  scene: 'Castle Courtyard'
+  shot: 'Shot_042'
+  sequence: 'SEQ_01'
+  owner: sampleVFXUser
+  team: sampleTeam
+  status: 'active'
+  createdAt: '2025-07-15T09:00:00Z'
+  updatedAt: '2025-07-22T14:30:00Z'
+  dueDate: '2025-07-30T17:00:00Z'
+  tags: ['medieval', 'castle', 'establishing']
   metadata: {
-  totalItems: 1,
-  completedItems: 0,
-  overallProgress: 25,
-  estimatedTotalHours: 8,
-  actualTotalHours: 2,
-  criticalIssues: 0,
-  blockedItems: 0,
-  averageAccuracy: 92,
-  lastActivity: '2025-07-22T14:30:00Z',
-  collaborators: 3,
-},
+  totalItems: 1
+  completedItems: 0
+  overallProgress: 25
+  estimatedTotalHours: 8
+  actualTotalHours: 2
+  criticalIssues: 0
+  blockedItems: 0
+  averageAccuracy: 92
+  lastActivity: '2025-07-22T14:30:00Z'
+  collaborators: 3 }
+
   items: [sampleChecklistItem];
   };
-describe('VFX Checklist System Components', () => {
-  describe('VFXChecklistSystem', () => {
+describe('VFX Checklist System Components', () => { describe('VFXChecklistSystem', () => {
     const mockOnChecklistUpdate = jest.fn<unknown, unknown>();
     const mockOnItemCreate = jest.fn<unknown, unknown>();
     const mockOnItemUpdate = jest.fn<unknown, unknown>();
     const mockOnItemDelete = jest.fn<unknown, unknown>();
     const mockOnCommentCreate = jest.fn<unknown, unknown>();
     beforeEach(() => {
-      jest.clearAllMocks();
-    });
+      jest.clearAllMocks() });
     it('should render checklist system with basic information', () => {
       render();
         <VFXChecklistSystem
@@ -328,13 +322,13 @@ describe('VFX Checklist System Components', () => {
       await user.type(titleInput, 'New Test Item');
       await user.click(screen.getByText('Create Item'));
       expect(mockOnItemCreate).toHaveBeenCalledWith()
-        expect.objectContaining({)
-  title: 'New Test Item',
-  status: 'pending',
-  priority: 'medium',
-  category: 'asset_creation',
-  author: sampleVFXUser,
-}
+        expect.objectContaining({ )
+  title: 'New Test Item'
+  status: 'pending'
+  priority: 'medium'
+  category: 'asset_creation'
+  author: sampleVFXUser }
+
       );
     });
     it('should handle status changes', async () => {
@@ -354,11 +348,11 @@ describe('VFX Checklist System Components', () => {
       const checkbox = screen.getByRole('button');
       await user.click(checkbox);
       expect(mockOnItemUpdate).toHaveBeenCalledWith()
-        'item-001',
-        expect.objectContaining({)
-  status: 'approved',
-  completion: 100,
-}
+        'item-001'
+        expect.objectContaining({ )
+  status: 'approved'
+  completion: 100 }
+
       );
     });
     it('should show comments section', async () => {
@@ -397,12 +391,12 @@ describe('VFX Checklist System Components', () => {
       await user.type(commentInput, 'This is a test comment');
       await user.click(screen.getByText('Comment'));
       expect(mockOnCommentCreate).toHaveBeenCalledWith()
-        'item-001',
-        expect.objectContaining({)
-  content: 'This is a test comment',
-  author: sampleVFXUser,
-  type: 'comment',
-}
+        'item-001'
+        expect.objectContaining({ )
+  content: 'This is a test comment'
+  author: sampleVFXUser
+  type: 'comment' }
+
       );
     });
     it('should handle filters and search', async () => {
@@ -487,15 +481,13 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Add First Item')).toBeInTheDocument();
     });
   });
-  describe('VFXChecklistTemplates', () => {
-    const mockOnTemplateSelect = jest.fn<unknown, unknown>();
+  describe('VFXChecklistTemplates', () => { const mockOnTemplateSelect = jest.fn<unknown, unknown>();
     const mockOnTemplateCreate = jest.fn<unknown, unknown>();
     const mockOnTemplateUpdate = jest.fn<unknown, unknown>();
     const mockOnTemplateDelete = jest.fn<unknown, unknown>();
     const mockOnTemplateClone = jest.fn<unknown, unknown>();
     beforeEach(() => {
-      jest.clearAllMocks();
-    });
+      jest.clearAllMocks() });
     it('should render templates system', () => {
       render();
         <VFXChecklistTemplates
@@ -547,11 +539,9 @@ describe('VFX Checklist System Components', () => {
       // Click on a template to expand it
       const templateCard = screen.getByText('Asset Creation Pipeline').closest('.template-card');
       const eyeButton = templateCard?.querySelector('button');
-      if (eyeButton) {
-        await user.click(eyeButton);
+      if (eyeButton) { await user.click(eyeButton);
         // Should show template details
-        expect(screen.getByText('Use Template')).toBeInTheDocument();
-    });
+        expect(screen.getByText('Use Template')).toBeInTheDocument() });
     it('should handle readonly mode', () => {
       render();
         <VFXChecklistTemplates
@@ -585,57 +575,41 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Asset Creation Pipeline')).toBeInTheDocument();
     });
   });
-  describe('VFXChecklistDemo', () => {
-    it('should render demo with default settings', () => {
+  describe('VFXChecklistDemo', () => { it('should render demo with default settings', () => {
       render(<VFXChecklistDemo />);
       expect(screen.getByText('Wild Construct VFX Checklist System')).toBeInTheDocument();
       expect(screen.getByText('Professional VFX Workflow Management')).toBeInTheDocument();
-      expect(screen.getByText('Wild Construct v2.0')).toBeInTheDocument();
-    });
-    it('should render with custom title', () => {
-      render(<VFXChecklistDemo title="Custom VFX Demo" />);
-      expect(screen.getByText('Custom VFX Demo')).toBeInTheDocument();
-    });
-    it('should show statistics dashboard', () => {
-      render(<VFXChecklistDemo />);
+      expect(screen.getByText('Wild Construct v2.0')).toBeInTheDocument() });
+    it('should render with custom title', () => { render(<VFXChecklistDemo title="Custom VFX Demo" />);
+      expect(screen.getByText('Custom VFX Demo')).toBeInTheDocument() });
+    it('should show statistics dashboard', () => { render(<VFXChecklistDemo />);
       expect(screen.getByText('Total Items')).toBeInTheDocument();
       expect(screen.getByText('Completed')).toBeInTheDocument();
       expect(screen.getByText('In Progress')).toBeInTheDocument();
-      expect(screen.getByText('Critical')).toBeInTheDocument();
-    });
-    it('should display sample checklist data', () => {
-  render(<VFXChecklistDemo />);
+      expect(screen.getByText('Critical')).toBeInTheDocument() });
+    it('should display sample checklist data', () => { render(<VFXChecklistDemo />);
   // Sample data should be visible
   expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
-  expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument();
-});
-    it('should show tab navigation', () => {
-      render(<VFXChecklistDemo />);
+  expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument() });
+    it('should show tab navigation', () => { render(<VFXChecklistDemo />);
       expect(screen.getByText('Checklist')).toBeInTheDocument();
       expect(screen.getByText('Templates')).toBeInTheDocument();
       expect(screen.getByText('Analytics')).toBeInTheDocument();
-      expect(screen.getByText('Team')).toBeInTheDocument();
-    });
-    it('should handle user switching', () => {
-      render(<VFXChecklistDemo />);
+      expect(screen.getByText('Team')).toBeInTheDocument() });
+    it('should handle user switching', () => { render(<VFXChecklistDemo />);
       // User switcher should be present
-      expect(screen.getByText('Sarah Director')).toBeInTheDocument();
-    });
-    it('should show control panel with switches', () => {
-      render(<VFXChecklistDemo />);
+      expect(screen.getByText('Sarah Director')).toBeInTheDocument() });
+    it('should show control panel with switches', () => { render(<VFXChecklistDemo />);
       expect(screen.getByLabelText('Auto-refresh')).toBeInTheDocument();
       expect(screen.getByLabelText('Compact View')).toBeInTheDocument();
-      expect(screen.getByLabelText('Show Statistics')).toBeInTheDocument();
-    });
-    it('should handle template selection from demo', async () => {
-      const user = userEvent.setup();
+      expect(screen.getByLabelText('Show Statistics')).toBeInTheDocument() });
+    it('should handle template selection from demo', async () => { const user = userEvent.setup();
       render(<VFXChecklistDemo />);
       // Switch to templates tab
       const templatesTab = screen.getByText('Templates');
       await user.click(templatesTab);
       // Should show templates
-      expect(screen.getByText('Asset Creation Pipeline')).toBeInTheDocument();
-    });
+      expect(screen.getByText('Asset Creation Pipeline')).toBeInTheDocument() });
     it('should show analytics when enabled', async () => {
       const user = userEvent.setup();
       render(<VFXChecklistDemo showAnalytics={true} />);
@@ -667,8 +641,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.queryByText('Team')).not.toBeInTheDocument();
     });
   });
-  describe('Integration Tests', () => {
-    it('should handle complete workflow from template to checklist', async () => {
+  describe('Integration Tests', () => { it('should handle complete workflow from template to checklist', async () => {
       const user = userEvent.setup();
       render(<VFXChecklistDemo />);
       // Start with templates
@@ -677,29 +650,23 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Asset Creation Pipeline')).toBeInTheDocument();
       // Back to checklist should show sample data
       await user.click(screen.getByText('Checklist'));
-      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
-    });
-    it('should maintain VFX-specific workflow patterns', () => {
-  render(<VFXChecklistDemo />);
+      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument() });
+    it('should maintain VFX-specific workflow patterns', () => { render(<VFXChecklistDemo />);
   // VFX-specific elements should be present
   expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument();
-  expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
-});
-    it('should support collaborative features', () => {
-      render(<VFXChecklistDemo />);
+  expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument() });
+    it('should support collaborative features', () => { render(<VFXChecklistDemo />);
       // Team collaboration elements
       expect(screen.getByText('Sarah Director')).toBeInTheDocument();
       // User can be switched for different permissions
-      expect(screen.getByText('director')).toBeInTheDocument();
-    });
+      expect(screen.getByText('director')).toBeInTheDocument() });
     it('should handle different user permissions correctly', () => {
       const artistUser = sampleTeam.find(u => u.role === 'artist');
       render(<VFXChecklistDemo initialUser={artistUser} />);
       // Should show the artist user
       expect(screen.getByText('Alex Artist')).toBeInTheDocument();
     });
-    it('should maintain data consistency across tabs', async () => {
-      const user = userEvent.setup();
+    it('should maintain data consistency across tabs', async () => { const user = userEvent.setup();
       render(<VFXChecklistDemo />);
       // Check data in checklist tab
       expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
@@ -710,30 +677,21 @@ describe('VFX Checklist System Components', () => {
       // Switch to team
       await user.click(screen.getByText('Team'));
       // Team data should be consistent
-      expect(screen.getByText('Sarah Director')).toBeInTheDocument();
-    });
+      expect(screen.getByText('Sarah Director')).toBeInTheDocument() });
   });
-  describe('VFX Workflow Validation', () => {
-    it('should support VFX production phases', () => {
+  describe('VFX Workflow Validation', () => { it('should support VFX production phases', () => {
       render(<VFXChecklistDemo />);
       // Sample data includes VFX phases
-      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
-    });
-    it('should handle historical accuracy validation', () => {
-  render(<VFXChecklistDemo />);
+      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument() });
+    it('should handle historical accuracy validation', () => { render(<VFXChecklistDemo />);
   // Historical accuracy is part of the VFX workflow
-  expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument();
-});
-    it('should support quality gates and approvals', () => {
-      render(<VFXChecklistDemo />);
+  expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument() });
+    it('should support quality gates and approvals', () => { render(<VFXChecklistDemo />);
       // Quality gates are integrated into the workflow
-      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
-    });
-    it('should handle asset dependencies', () => {
-      render(<VFXChecklistDemo />);
+      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument() });
+    it('should handle asset dependencies', () => { render(<VFXChecklistDemo />);
       // Asset management is part of the workflow
-      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
-    });
+      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument() });
   });
   describe('Error Handling', () => {
     it('should handle missing props gracefully', () => {
@@ -751,10 +709,9 @@ describe('VFX Checklist System Components', () => {
         );
       }).not.toThrow();
     });
-    it('should handle empty data gracefully', () => {
-      const emptyChecklist = {
-        ...sampleChecklist,
-        items: [],
+    it('should handle empty data gracefully', () => { const emptyChecklist = {
+        ...sampleChecklist
+        items: [] }
         metadata: { ...sampleChecklist.metadata, totalItems: 0 }
       };
       expect(() => {
@@ -771,16 +728,15 @@ describe('VFX Checklist System Components', () => {
         );
       }).not.toThrow();
     });
-    it('should handle invalid user permissions', () => {
-  const limitedUser = {
-  ...sampleVFXUser,
+    it('should handle invalid user permissions', () => { const limitedUser = {
+  ...sampleVFXUser
   permissions: {
-  canCreate: false,
-  canEdit: false,
-  canDelete: false,
-  canApprove: false,
-  canAssign: false,
-  canViewReports: true,
+  canCreate: false
+  canEdit: false
+  canDelete: false
+  canApprove: false
+  canAssign: false
+  canViewReports: true }
 };
       render();
         <VFXChecklistDemo initialUser={limitedUser} />

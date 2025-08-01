@@ -1,11 +1,11 @@
 import { RuntimeNode, ExecutionContext } from './types';
 
 }
-export interface ValidationResult {
-    valid: boolean;
+}
+export interface ValidationResult { valid: boolean;
     errors: string[];
-    warnings: string[];
-
+    warnings: string[] }
+}
 }
 export interface AdvancedNodeConfig {
     /** Whether this node uses deterministic (seeded) random behavior */
@@ -19,18 +19,19 @@ export interface AdvancedNodeConfig {
         expectedExecutionTime?: 'fast' | 'medium' | 'slow';
         memoryUsage?: 'low' | 'medium' | 'high'
 }
+}
   };
 
 }
-export interface AdvancedNodeData {
-    id: string;
+}
+export interface AdvancedNodeData { id: string;
     type: string;
     config: AdvancedNodeConfig;
     data: Record<string, unknown>;
     metadata?: {
         version: string;
         created: string;
-        lastModified?: string;
+        lastModified?: string }
 }
     };
 /**
@@ -38,8 +39,8 @@ export interface AdvancedNodeData {
  */
 
 }
-export interface AdvancedExecutionContext extends ExecutionContext {
-    /** State storage for stateful nodes (nodeId -> state) */
+}
+export interface AdvancedExecutionContext extends ExecutionContext { /** State storage for stateful nodes (nodeId -> state) */
     nodeStates: Map<string, unknown>;
     /** Current evaluation depth (for cycle detection) */
     evaluationDepth: number;
@@ -52,8 +53,7 @@ export interface AdvancedExecutionContext extends ExecutionContext {
         startTime: number;
         executionId: string;
         nodeExecutionOrder: string[];
-        performanceMetrics: Map<string, number>;
-    };
+        performanceMetrics: Map<string, number> };
     /** Optional inputs for nodes */
     inputs?: Record<string, unknown>;
     /** Optional outputs storage */
@@ -62,8 +62,7 @@ export interface AdvancedExecutionContext extends ExecutionContext {
  * Abstract base class for all advanced rule nodes in Epic 7
  * Extends the proven RuntimeNode architecture with enhanced capabilities
  */
-export declare abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode<TOutput> {
-    protected config: AdvancedNodeConfig;
+export declare abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode<TOutput> { protected config: AdvancedNodeConfig;
     constructor(id: string, config: AdvancedNodeConfig);
     /**
      * Enhanced run method with advanced execution context
@@ -128,16 +127,14 @@ export declare class AdvancedExecutionContextImpl implements AdvancedExecutionCo
         startTime: number;
         executionId: string;
         nodeExecutionOrder: string[];
-        performanceMetrics: Map<string, number>;
-    };
+        performanceMetrics: Map<string, number> };
     inputs?: Record<string, unknown>;
     outputs?: Record<string, unknown>;
     constructor(seed: string | number, variables?: Record<string, unknown>);
 /**
  * Utility functions for working with advanced execution contexts
  */
-export declare class AdvancedExecutionUtils {
-    /**
+export declare class AdvancedExecutionUtils { /**
      * Create an enhanced execution context from a basic one
      */
     static enhanceContext(basicCtx: ExecutionContext): AdvancedExecutionContext;
@@ -156,13 +153,11 @@ export declare class AdvancedExecutionUtils {
         totalDuration: number;
         nodesExecuted: number;
         cacheHits: number;
-        statefulness: number;
-    };
+        statefulness: number };
 /**
  * Standard validation helpers for advanced nodes
  */
-export declare class ValidationHelpers {
-    static createValidResult(): ValidationResult;
+export declare class ValidationHelpers { static createValidResult(): ValidationResult;
     static createInvalidResult(errors: string[], warnings?: string[]): ValidationResult;
     static validateRequired(value: unknown, fieldName: string): string[];
     static validateArray(value: unknown, fieldName: string, minLength?: number): string[];
@@ -186,9 +181,9 @@ export declare abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> exten
  */
 export declare class SerializationHelpers {
     static createAdvancedNodeData(id: string)
-      type: string,
-      config: AdvancedNodeConfig,
-      data: Record<string,
+      type: string
+      config: AdvancedNodeConfig
+      data: Record<string }
       unknown>
     ): AdvancedNodeData;
     static validateSerializedData(data: AdvancedNodeData): ValidationResult;

@@ -15,7 +15,7 @@ import {
   PolicyType,
   PolicyEvaluationContext,
   PolicyEvaluationResult
-} from '../PolicyDataModel';
+ from '../PolicyDataModel';
 import { Database } from '../../../database';
 
 // Mock dependencies
@@ -36,7 +36,7 @@ describe('PolicyDataModel', () => {
     mockDatabase = {
       getClient: jest.fn<unknown[], unknown>().mockResolvedValue(mockClient as unknown as unknown as unknown as unknown as unknown),
       query: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     // Create service instance
     policyService = new PolicyDataService(mockDatabase);
@@ -63,11 +63,11 @@ describe('PolicyDataModel', () => {
           updated_by: 'test-user',
           effective_date: new Date(),
           tags: ['test', 'enforcement']
-  }
+
         scope: {
           scope_type: 'global',
           scope_criteria: {}
-  }
+
         rules: [{
           id: 'rule-001',
           name: 'Trust Score Rule',
@@ -82,7 +82,7 @@ describe('PolicyDataModel', () => {
             value: 60,
             data_type: 'number',
             required: true
-          }],
+],
           actions: [{
             id: 'restrict-action',
             type: 'restrict',
@@ -90,43 +90,43 @@ describe('PolicyDataModel', () => {
             severity: 'medium',
             auto_execute: true,
             parameters: { duration: 86400 }
-          }],
+],
           condition_logic: 'ALL',
           audit_settings: {
             log_evaluations: true,
             log_actions: true,
             include_context: true
-          }
-        }],
+
+],
         configuration: {
           global_settings: {
             default_severity: 'medium',
             auto_execution_enabled: true,
             audit_enabled: true,
             notification_enabled: true
-  }
+
           thresholds: {
             trust_score: {
               warning: 70,
               critical: 40,
               severe: 25
-            }
-  }
+
+
           timeouts: {
             evaluation_timeout: 5000,
             action_timeout: 10000,
             retry_timeout: 30000
-  }
+
           rate_limits: {
             evaluations_per_second: 100,
             actions_per_minute: 50,
             notifications_per_hour: 20
-  }
+
           feature_flags: {
             advanced_evaluation: true,
             real_time_monitoring: true
-          }
-        }
+
+
       };
 
       mockClient.query
@@ -218,27 +218,27 @@ describe('PolicyDataModel', () => {
         metadata: {
           name: 'Updated Policy Name',
           description: 'Updated description'
-  }
+
         configuration: {
           global_settings: {
             default_severity: 'high',
             auto_execution_enabled: false,
             audit_enabled: true,
             notification_enabled: true
-  }
+
           thresholds: {},
           timeouts: {
             evaluation_timeout: 10000,
             action_timeout: 20000,
             retry_timeout: 60000
-  }
+
           rate_limits: {
             evaluations_per_second: 50,
             actions_per_minute: 25,
             notifications_per_hour: 10
-  }
+
           feature_flags: {}
-        }
+
       };
       const updatedBy = 'admin-user';
 
@@ -248,7 +248,7 @@ describe('PolicyDataModel', () => {
         scope: { scope_type: 'global', scope_criteria: {} },
         rules: [],
         configuration: { global_settings: { default_severity: 'medium' } }
-      } as Policy;
+ as Policy;
 
       jest.spyOn(
         policyService,
@@ -311,7 +311,7 @@ describe('PolicyDataModel', () => {
           dependencies: '{}',
           compliance: '{}',
           testing: '{}'
-  }
+
         {
           id: 'policy-002',
           name: 'Policy 2',
@@ -324,7 +324,7 @@ describe('PolicyDataModel', () => {
           dependencies: '{}',
           compliance: '{}',
           testing: '{}'
-        }
+
       ];
 
       mockDatabase.query.mockResolvedValue({ rows: mockRows } as unknown as unknown as unknown as unknown as unknown);
@@ -357,7 +357,7 @@ describe('PolicyDataModel', () => {
           region: 'us-east-1',
           platform: 'web',
           version: '1.0.0'
-  }
+
         context_data: {}
       };
 
@@ -375,11 +375,11 @@ describe('PolicyDataModel', () => {
           updated_by: 'test-user',
           effective_date: new Date(),
           tags: []
-  }
+
         scope: {
           scope_type: 'global',
           scope_criteria: {}
-  }
+
         rules: [{
           id: 'rule-001',
           name: 'Trust Score Rule',
@@ -394,7 +394,7 @@ describe('PolicyDataModel', () => {
             value: 50,
             data_type: 'number',
             required: true
-          }],
+],
           actions: [{
             id: 'restrict-action',
             type: 'restrict',
@@ -402,34 +402,34 @@ describe('PolicyDataModel', () => {
             severity: 'medium',
             auto_execute: true,
             parameters: {}
-          }],
+],
           condition_logic: 'ALL',
           audit_settings: {
             log_evaluations: true,
             log_actions: true,
             include_context: true
-          }
-        }],
+
+],
         configuration: {
           global_settings: {
             default_severity: 'medium',
             auto_execution_enabled: true,
             audit_enabled: true,
             notification_enabled: true
-  }
+
           thresholds: {},
           timeouts: {
             evaluation_timeout: 5000,
             action_timeout: 10000,
             retry_timeout: 30000
-  }
+
           rate_limits: {
             evaluations_per_second: 100,
             actions_per_minute: 50,
             notifications_per_hour: 20
-  }
+
           feature_flags: {}
-        }
+
       };
 
       jest.spyOn(policyService, 'getPolicy').mockResolvedValue(mockPolicy as unknown as unknown as unknown as unknown as unknown);
@@ -467,7 +467,7 @@ describe('PolicyDataModel', () => {
           region: 'us-east-1',
           platform: 'web',
           version: '1.0.0'
-  }
+
         context_data: {}
       };
 
@@ -495,13 +495,13 @@ describe('PolicyDataModel', () => {
           updated_at: new Date(),
           effective_date: new Date(),
           tags: ['builder', 'test']
-  }
+
         .setScope({
           scope_type: 'user_type',
           scope_criteria: {
             user_types: ['creator', 'buyer']
-          }
-  }
+
+
         .addRule({
           id: 'builder-rule-001',
           name: 'Builder Rule',
@@ -516,7 +516,7 @@ describe('PolicyDataModel', () => {
             value: 'test_value',
             data_type: 'string',
             required: true
-          }],
+],
           actions: [{
             id: 'builder-action',
             type: 'flag',
@@ -524,34 +524,34 @@ describe('PolicyDataModel', () => {
             severity: 'low',
             auto_execute: false,
             parameters: {}
-          }],
+],
           condition_logic: 'ALL',
           audit_settings: {
             log_evaluations: true,
             log_actions: true,
             include_context: true
-          }
-  }
+
+
         .setConfiguration({
           global_settings: {
             default_severity: 'low',
             auto_execution_enabled: false,
             audit_enabled: true,
             notification_enabled: false
-  }
+
           thresholds: {},
           timeouts: {
             evaluation_timeout: 3000,
             action_timeout: 5000,
             retry_timeout: 15000
-  }
+
           rate_limits: {
             evaluations_per_second: 50,
             actions_per_minute: 10,
             notifications_per_hour: 5
-  }
+
           feature_flags: {}
-  }
+
         .build();
 
       // Assert
@@ -639,8 +639,8 @@ describe('PolicyDataModel', () => {
           failed_evaluations: '0',
           avg_execution_time: null,
           max_execution_time: null
-        }]
-      } as unknown as unknown as unknown as unknown as unknown);
+]
+ as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const result = await policyService.getPolicyMetrics(policyId, timeRange);
@@ -819,9 +819,9 @@ describe('PolicyDataModel', () => {
           profile: {
             settings: {
               notification: true
-            }
-          }
-  }
+
+
+
         trigger_event: 'test',
         environment: { region: 'us-east-1', platform: 'web', version: '1.0.0' },
         context_data: {}

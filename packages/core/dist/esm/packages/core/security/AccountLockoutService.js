@@ -84,11 +84,11 @@ export var LockoutStatus;
                 threatLevel: string;
             }
         }
-        ;
-        adminActions: AdminAction;
-        notifications: LockoutNotification;
-        auditTrail: AuditEntry;
     }
+    ;
+    adminActions: AdminAction;
+    notifications: LockoutNotification;
+    auditTrail: AuditEntry;
 }
 export class AccountLockoutService extends EventEmitter {
     lockouts = new Map();
@@ -395,7 +395,7 @@ AccountLockout | null;
                                     const adminAction = {
                                         id: crypto.randomUUID(),
                                         adminId: unlockRequest.adminId,
-                                        adminEmail: `admin-${unlockRequest.adminId}@company.com`, // Would be retrieved from admin service},}
+                                        adminEmail: `admin-${unlockRequest.adminId}@company.com`, // Would be retrieved from admin service},},
                                         adminRole: AdminRole.SECURITY_ADMIN, // Would be retrieved from admin service
                                         action: 'unlock',
                                         reason: unlockRequest.reason,
@@ -654,8 +654,9 @@ AccountLockout | null;
                     ;
             }
             ;
-            logSecurityEvent(lockout, AccountLockout | null);
-            event: string,
+            logSecurityEvent(lockout, AccountLockout | null),
+                event;
+            string,
                 details;
             (Record) = {};
             void {

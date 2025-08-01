@@ -8,8 +8,8 @@ import { PerformanceBaseline } from './PerformanceBaseline';
 import { PerformanceTargetConfig } from './PerformanceTargets';
 
 }
-export interface DashboardWidget {
-    id: string;
+}
+export interface DashboardWidget { id: string;
     type: 'chart' | 'metric' | 'alert' | 'trend' | 'gauge' | 'table';
     title: string;
     description: string;
@@ -17,21 +17,19 @@ export interface DashboardWidget {
     config: Record<string, any>;
     data: any;
     refreshRate: number;
-    lastUpdated: number;
-
+    lastUpdated: number }
 }
-export interface DashboardLayout {
-    id: string;
+}
+export interface DashboardLayout { id: string;
     name: string;
     description: string;
     widgets: DashboardWidget[];
     columns: number;
     autoRefresh: boolean;
-    refreshInterval: number;
-
+    refreshInterval: number }
 }
-export interface DashboardMetrics {
-    overview: {
+}
+export interface DashboardMetrics { overview: {
         totalKPIs: number;
         monitoredKPIs: number;
         healthyKPIs: number;
@@ -40,72 +38,57 @@ export interface DashboardMetrics {
         averageScore: number;
         trendsImproving: number;
         trendsStable: number;
-        trendsDegrading: number;
+        trendsDegrading: number }
 }
     };
-    categories: Record<string, {
-        total: number;
+    categories: Record<string, { total: number;
         healthy: number;
         warning: number;
         critical: number;
-        averageScore: number;
-    }>;
-    alerts: {
-        total: number;
+        averageScore: number }>;
+    alerts: { total: number;
         critical: number;
         high: number;
         medium: number;
         low: number;
-        acknowledged: number;
-    };
-    trends: {
-        improving: KPITrendAnalysis[];
+        acknowledged: number };
+    trends: { improving: KPITrendAnalysis[];
         degrading: KPITrendAnalysis[];
-        stable: KPITrendAnalysis[];
-    };
+        stable: KPITrendAnalysis[] };
 
 }
-export interface DashboardReport {
-    id: string;
+}
+export interface DashboardReport { id: string;
     timestamp: number;
     type: 'summary' | 'detailed' | 'trend' | 'alert';
     period: {
         start: number;
         end: number;
-        duration: string;
+        duration: string }
 }
     };
     metrics: DashboardMetrics;
-    insights: {
-        keyFindings: string[];
+    insights: { keyFindings: string[];
         recommendations: string[];
         riskAreas: string[];
-        improvements: string[];
-    };
-    charts: {
-        performanceScore: Array<{
+        improvements: string[] };
+    charts: { performanceScore: Array<{
             timestamp: number;
-            score: number;
-        }>;
+            score: number }>;
         categoryBreakdown: Record<string, number>;
-        alertsOverTime: Array<{
-            timestamp: number;
+        alertsOverTime: Array<{ timestamp: number;
             count: number;
-            severity: string;
-        }>;
-        topKPIs: Array<{
-            kpiId: string;
+            severity: string }>;
+        topKPIs: Array<{ kpiId: string;
             name: string;
             score: number;
-            trend: string;
-        }>;
+            trend: string }>;
     };
 /**
  * KPI Dashboard Service
  * Provides comprehensive dashboard functionality for performance monitoring
  */
-export declare class KPIDashboard extends EventEmitter {
-    private monitoringService;
+export declare class KPIDashboard extends EventEmitter { private monitoringService;
     private baseline;
     private layouts;
     private reports;
@@ -113,7 +96,7 @@ export declare class KPIDashboard extends EventEmitter {
     private refreshIntervals;
     constructor();
       monitoringService: KPIMonitoringService,
-      baseline: PerformanceBaseline,
+      baseline: PerformanceBaseline }
       config?: PerformanceTargetConfig
     );
     /**

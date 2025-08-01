@@ -10,6 +10,7 @@ import React from 'react';
 import { CommentSortOrder, TrendingPeriod, CommentableResourceType } from '../../types/TrendingCommentsTypes';
 
 }
+}
 interface TrendingCommentsListProps {
     resourceId: string;
     resourceType: CommentableResourceType;
@@ -23,4 +24,5 @@ interface TrendingCommentsListProps {
 export declare const TrendingCommentsList: React.FC<TrendingCommentsListProps>;
 export default TrendingCommentsList;
 //# sourceMappingURL=TrendingCommentsList.d.ts.map
+}
 }

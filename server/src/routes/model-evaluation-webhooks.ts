@@ -21,7 +21,7 @@ interface EvaluationStatusUpdateRequest extends FastifyRequest {
     error?: string;
     metadata?: Record<string, any>;
   };
-}
+
 
 interface ManualEvaluationTriggerRequest extends FastifyRequest {
   body: {
@@ -29,7 +29,7 @@ interface ManualEvaluationTriggerRequest extends FastifyRequest {
     evaluationSuite?: 'standard' | 'comprehensive' | 'security' | 'performance';
     priority?: 'low' | 'medium' | 'high' | 'critical';
   };
-}
+
 
 export default async function modelEvaluationWebhooks(fastify: FastifyInstance) {
   const evaluationService = fastify.modelEvaluationService as ModelEvaluationTriggerService;
@@ -37,7 +37,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
 
   if (!evaluationService) {
     fastify.log.warn('Model evaluation service not available - webhook endpoints will return 503');
-  }
+
 
   /**
    * Webhook endpoint for CI evaluation status updates
@@ -50,7 +50,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'service_unavailable',
           message: 'Model evaluation service not available'
         });
-      }
+
 
       const { jobId, status, githubRunId, githubRunUrl, results, error, metadata } = request.body;
 
@@ -60,7 +60,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'invalid_request',
           message: 'jobId and status are required'
         });
-      }
+
 
       // Get the evaluation job to verify it exists
       const existingJob = await evaluationService.getEvaluationJob(jobId);
@@ -69,7 +69,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'job_not_found',
           message: `Evaluation job ${jobId} not found`
         });
-      }
+
 
       // Update the evaluation job status
       await evaluationService.updateEvaluationStatus(jobId, status, results, error);
@@ -86,13 +86,13 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           hasResults: !!results,
           hasError: !!error,
           metadata
-  }
+
         riskLevel: status === 'failed' ? 'MEDIUM' : 'LOW',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
           requirements: ['evaluation_tracking'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return reply.status(200).send({
@@ -103,10 +103,9 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           previousStatus: existingJob.status,
           newStatus: status,
           updatedAt: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Model evaluation webhook error:', error);
 
       await auditService.logEvent({
@@ -115,20 +114,20 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: error.message,
           jobId: request.body?.jobId,
           status: request.body?.status
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
           requirements: ['error_handling'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return reply.status(500).send({
         error: 'internal_server_error',
         message: 'Failed to update evaluation status'
       });
-    }
+
   });
 
   /**
@@ -142,7 +141,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'service_unavailable',
           message: 'Model evaluation service not available'
         });
-      }
+
 
       const { modelId, evaluationSuite, priority } = request.body;
 
@@ -151,7 +150,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'invalid_request',
           message: 'modelId is required'
         });
-      }
+
 
       // Get model information (this would typically come from model registry)
       // For now, we'll create a minimal request
@@ -177,13 +176,13 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           evaluationSuite: job.evaluationSuite,
           priority: job.priority,
           triggeredBy: 'api_endpoint'
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
           requirements: ['evaluation_triggering'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return reply.status(201).send({
@@ -196,10 +195,9 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           priority: job.priority,
           status: job.status,
           githubRunUrl: job.githubRunUrl
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Manual evaluation trigger error:', error);
 
       await auditService.logEvent({
@@ -207,20 +205,20 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
         details: {
           error: error.message,
           modelId: request.body?.modelId
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
           requirements: ['error_handling'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return reply.status(500).send({
         error: 'internal_server_error',
         message: 'Failed to trigger model evaluation'
       });
-    }
+
   });
 
   /**
@@ -234,7 +232,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'service_unavailable',
           message: 'Model evaluation service not available'
         });
-      }
+
 
       const { jobId } = request.params;
       const job = await evaluationService.getEvaluationJob(jobId);
@@ -244,20 +242,19 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'job_not_found',
           message: `Evaluation job ${jobId} not found`
         });
-      }
+
 
       return reply.status(200).send({
         success: true,
         data: job
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get evaluation job error:', error);
       return reply.status(500).send({
         error: 'internal_server_error',
         message: 'Failed to retrieve evaluation job'
       });
-    }
+
   });
 
   /**
@@ -271,7 +268,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'service_unavailable',
           message: 'Model evaluation service not available'
         });
-      }
+
 
       const { modelId } = request.params;
       const jobs = await evaluationService.getModelEvaluationJobs(modelId);
@@ -282,16 +279,15 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           modelId,
           jobs,
           total: jobs.length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('List model evaluation jobs error:', error);
       return reply.status(500).send({
         error: 'internal_server_error',
         message: 'Failed to retrieve evaluation jobs'
       });
-    }
+
   });
 
   /**
@@ -305,7 +301,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'service_unavailable',
           message: 'Model evaluation service not available'
         });
-      }
+
 
       const { jobId } = request.params;
       await evaluationService.cancelEvaluation(jobId);
@@ -315,27 +311,26 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
         details: {
           jobId,
           cancelledBy: 'api_endpoint'
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
           requirements: ['evaluation_control'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return reply.status(200).send({
         success: true,
         message: `Evaluation job ${jobId} cancelled successfully`
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Cancel evaluation job error:', error);
       return reply.status(500).send({
         error: 'internal_server_error',
         message: error.message
       });
-    }
+
   });
 
   /**
@@ -349,7 +344,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: 'service_unavailable',
           message: 'Model evaluation service not available'
         });
-      }
+
 
       const statistics = await evaluationService.getEvaluationStatistics();
 
@@ -357,14 +352,13 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
         success: true,
         data: statistics
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get evaluation statistics error:', error);
       return reply.status(500).send({
         error: 'internal_server_error',
         message: 'Failed to retrieve evaluation statistics'
       });
-    }
+
   });
 
   /**
@@ -379,7 +373,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           message: 'Model evaluation service not available',
           timestamp: new Date().toISOString()
         });
-      }
+
 
       const health = await evaluationService.getHealthStatus();
 
@@ -388,8 +382,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
         ...health,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Evaluation service health check error:', error);
       return reply.status(503).send({
         status: 'unhealthy',
@@ -397,6 +390,5 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
         error: error.message,
         timestamp: new Date().toISOString()
       });
-    }
+
   });
-}

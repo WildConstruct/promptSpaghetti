@@ -4,8 +4,8 @@
  */
 
 }
-export interface ComplianceCheck {
-    id: string;
+}
+export interface ComplianceCheck { id: string;
     name: string;
     description: string;
     category: 'security' | 'privacy' | 'regulatory' | 'operational';
@@ -13,73 +13,65 @@ export interface ComplianceCheck {
     severity: 'low' | 'medium' | 'high' | 'critical';
     autoFix: boolean;
     frequency: 'realtime' | 'hourly' | 'daily' | 'weekly' | 'monthly';
-    check: (context: ComplianceContext) => Promise<ComplianceResult>;
-
+    check: (context: ComplianceContext) => Promise<ComplianceResult> }
 }
-export interface ComplianceContext {
-    timestamp: Date;
+}
+export interface ComplianceContext { timestamp: Date;
     userId?: string;
     systemComponent: string;
     environment: 'development' | 'staging' | 'production';
-    data?: Record<string, unknown>;
-
+    data?: Record<string, unknown> }
 }
-export interface ComplianceResult {
-    checkId: string;
+}
+export interface ComplianceResult { checkId: string;
     status: 'compliant' | 'non_compliant' | 'warning' | 'error';
     score: number;
     message: string;
     details?: string;
     evidence?: ComplianceEvidence[];
     remediation?: RemediationAction[];
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface ComplianceEvidence {
-    type: 'log' | 'configuration' | 'data' | 'certificate' | 'audit_trail';
+}
+export interface ComplianceEvidence { type: 'log' | 'configuration' | 'data' | 'certificate' | 'audit_trail';
     source: string;
     content: string;
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface RemediationAction {
-    id: string;
+}
+export interface RemediationAction { id: string;
     description: string;
     automated: boolean;
     priority: 'low' | 'medium' | 'high' | 'critical';
     estimatedTime: string;
-    execute?: () => Promise<void>;
-
+    execute?: () => Promise<void> }
 }
-export interface ComplianceDashboard {
-    overallScore: number;
+}
+export interface ComplianceDashboard { overallScore: number;
     frameworkScores: Record<string, number>;
     recentViolations: ComplianceViolation[];
     trendData: ComplianceTrend[];
-    upcomingAudits: UpcomingAudit[];
-
+    upcomingAudits: UpcomingAudit[] }
 }
-export interface ComplianceViolation {
-    id: string;
+}
+export interface ComplianceViolation { id: string;
     checkId: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     detectedAt: Date;
     status: 'open' | 'investigating' | 'resolved' | 'accepted';
     assignedTo?: string;
-    dueDate?: Date;
-
+    dueDate?: Date }
 }
-export interface ComplianceTrend {
-    framework: string;
+}
+export interface ComplianceTrend { framework: string;
     period: string;
     score: number;
     previousScore: number;
-    trend: 'improving' | 'stable' | 'declining';
-
+    trend: 'improving' | 'stable' | 'declining' }
 }
-export interface UpcomingAudit {
-    framework: string;
+}
+export interface UpcomingAudit { framework: string;
     type: 'internal' | 'external';
     scheduledDate: Date;
     preparationStatus: 'not_started' | 'in_progress' | 'ready';
@@ -187,8 +179,8 @@ export declare class ComplianceMonitor {
     /**
      * Check rate limiting (Internal)
      */
-    private checkRateLimiting;
-
+    private checkRateLimiting }
+}
 }
 export interface EnhancedComplianceDashboard extends ComplianceDashboard {
     baselineTracking: {
@@ -216,20 +208,17 @@ export interface EnhancedComplianceDashboard extends ComplianceDashboard {
             risk: 'low' | 'medium' | 'high'
   }[];
     };
-    auditReadiness: {
-        overallReadiness: number;
+    auditReadiness: { overallReadiness: number;
         frameworkReadiness: Record<string, {
             score: number;
             status: 'ready' | 'needs_preparation' | 'not_ready';
             missingEvidence: string[];
-            nextAuditDue?: Date;
-        }>;
+            nextAuditDue?: Date }>;
     };
 /**
  * Enhanced Compliance Monitor with Baseline Tracking Integration
  */
-export declare class EnhancedComplianceMonitor extends ComplianceMonitor {
-    private baselineTracker;
+export declare class EnhancedComplianceMonitor extends ComplianceMonitor { private baselineTracker;
     private historicalAnalyzer;
     constructor();
     private initializeIntegration;
@@ -241,10 +230,10 @@ export declare class EnhancedComplianceMonitor extends ComplianceMonitor {
      * Record compliance measurement and update baselines
      */
     recordComplianceMeasurement();
-      framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL',
-      metricName: string,
-      actualValue: number,
-      context?: Record<string,
+      framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL'
+      metricName: string
+      actualValue: number
+      context?: Record<string }
       any>
     ): Promise<void>;
     /**

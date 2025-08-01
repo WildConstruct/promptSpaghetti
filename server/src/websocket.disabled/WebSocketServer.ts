@@ -119,6 +119,7 @@ export class WebSocketServer extends EventEmitter {
    * Start the WebSocket server
    */
   start(server?: any): Promise<void> {
+
     return new Promise((resolve, reject) => {
       try {
         const wsOptions: WebSocket.ServerOptions = {
@@ -151,6 +152,7 @@ export class WebSocketServer extends EventEmitter {
    * Stop the WebSocket server
    */
   stop(): Promise<void> {
+
     return new Promise(resolve => {
       if (this.wss) {
         this.wss.close(() => {

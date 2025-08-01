@@ -1,8 +1,7 @@
 // Epic 9.4.4 - Audit Trail Viewer Component
 // UI component for viewing and filtering audit trail records
 import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  ClipboardDocumentListIcon,
+import { ClipboardDocumentListIcon,
   FunnelIcon,
   CalendarDaysIcon,
   UserIcon,
@@ -14,13 +13,13 @@ import {
   ClockIcon,
   CheckCircleIcon,
   XCircleIcon,
-  LockClosedIcon,
+  LockClosedIcon }
   LockOpenIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
-}
-interface AuditTrailViewerProps {
-  workspaceId: string;
+
+
+interface AuditTrailViewerProps { workspaceId: string;
   resourceId?: string;
   onClose?: () => void;
   interface AuditFilters {
@@ -30,32 +29,29 @@ interface AuditTrailViewerProps {
   start_date?: Date;
   end_date?: Date;
   search_term?: string;
-  export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({,)
-  workspaceId,
-  resourceId,
+  export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({);
+  workspaceId;
+  resourceId }
   onClose
-}
-}) => {
-  const {
+
+
+}) => { const {
     auditHistory,
     loading,
     error,
-    fetchAuditHistory,
+    fetchAuditHistory }
     exportAuditHistory
-  } = useWorkflowStore();
-  const [filters, setFilters] = useState<AuditFilters>({)
-  resource_id: resourceId,
+ = useWorkflowStore();
+  const [filters, setFilters] = useState<AuditFilters>({ )
+  resource_id: resourceId }
 });
   const [showFilters, setShowFilters] = useState(false);
   const [_____selectedEntries, _____setSelectedEntries] = useState<Set<string>>(new Set());
   const [showExportDialog, setShowExportDialog] = useState(false);
   // Load audit history
-  useEffect(() => {
-    fetchAuditHistory(workspaceId, filters);
-  }, [workspaceId, filters, fetchAuditHistory]);
+  useEffect(() => { fetchAuditHistory(workspaceId, filters) }, [workspaceId, filters, fetchAuditHistory]);
   // Filter audit entries
-  const filteredEntries = useMemo(() => {
-    let entries = auditHistory;
+  const filteredEntries = useMemo(() => { let entries = auditHistory;
     if (filters.action_type) {
       entries = entries.filter(entry => entry.action_type === filters.action_type);
     if (filters.actor_id) {
@@ -80,8 +76,7 @@ interface AuditTrailViewerProps {
       );
     return entries.sort((a, b) => 
       new Date(b.action_timestamp).getTime() - new Date(a.action_timestamp).getTime()
-    );
-  }, [auditHistory, filters]);
+    ) }, [auditHistory, filters]);
   // Get unique action types and actors for filter options
   const actionTypes = useMemo(() => ;
     Array.from(new Set(auditHistory.map(entry => entry.action_type))).sort()
@@ -89,49 +84,39 @@ interface AuditTrailViewerProps {
   const actors = useMemo(() => ;
     Array.from(new Set(auditHistory.map(entry => entry.actor_id))).sort()
   , [auditHistory]);
-  const handleFilterChange = (key: keyof AuditFilters, value: Error) => {
-  setFilters(prev => ({)
+  const handleFilterChange = (key: keyof AuditFilters, value: Error) => { setFilters(prev => ({)
   ...prev,
-  [key]: value,
+  [key]: value }
 }));
   };
-  const handleExport = async (format: 'csv' | 'json' | 'pdf') => {
-    try {
+  const handleExport = async (format: 'csv' | 'json' | 'pdf') => { try {
       await exportAuditHistory(workspaceId, filters, format);
-      setShowExportDialog(false);
-    } catch (error) {
-  console.error('Failed to export audit history:', error);
-};
-  const formatTimestamp = (timestamp: Date) => {
-    return new Date(timestamp).toLocaleString();
-  };
-  const getActionTypeIcon = (actionType: string) => {
-  switch (actionType) {
+      setShowExportDialog(false) } catch (error) { console.error('Failed to export audit history:', error) };
+  const formatTimestamp = (timestamp: Date) => { return new Date(timestamp).toLocaleString() };
+  const getActionTypeIcon = (actionType: string) => { switch (actionType) {
   case 'state_change':,
   return <CogIcon className="h-4 w-4 text-blue-600" />;
-  case 'approval_requested':,
+  case 'approval_requested':
   return <ClockIcon className="h-4 w-4 text-yellow-600" />;
-  case 'approved':,
+  case 'approved':
   return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
-  case 'rejected':,
+  case 'rejected':
   return <XCircleIcon className="h-4 w-4 text-red-600" />;
-  case 'locked':,
+  case 'locked':
   return <LockClosedIcon className="h-4 w-4 text-orange-600" />;
-  case 'unlocked':,
+  case 'unlocked':
   return <LockOpenIcon className="h-4 w-4 text-gray-600" />;
-  default:,
+  default: }
   return <ClipboardDocumentListIcon className="h-4 w-4 text-gray-600" />;
 };
-  const getActionTypeColor = (actionType: string) => {
-  switch (actionType) {
+  const getActionTypeColor = (actionType: string) => { switch (actionType) {
   case 'state_change': return 'bg-blue-50 text-blue-800';
   case 'approval_requested': return 'bg-yellow-50 text-yellow-800';
   case 'approved': return 'bg-green-50 text-green-800';
   case 'rejected': return 'bg-red-50 text-red-800';
   case 'locked': return 'bg-orange-50 text-orange-800';
   case 'unlocked': return 'bg-gray-50 text-gray-800';
-  default: return 'bg-gray-50 text-gray-800';
-};
+  default: return 'bg-gray-50 text-gray-800' };
   if (loading) {
     return;
       <div className="flex items-center justify-center h-64">

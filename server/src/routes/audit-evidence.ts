@@ -10,15 +10,17 @@ import AuditEvidenceMapper from '../services/AuditEvidenceMapper.js';
 import { getMergedConfig } from '../config/evidence-mapping-config.js';
 
 // Request/Response schemas
-}
-}
+
+
+
 interface EvidenceMappingRequest {
   Params: {
     frameworkId?: string;
     requirementId?: string;
     evidenceTypeId?: string;
-}
-}
+
+
+
   };
   Querystring: {
     framework?: string;
@@ -34,10 +36,10 @@ interface EvidenceMappingRequest {
     collection_priority?: number;
     validation_rules?: string[];
   };
-}
 
-}
-}
+
+
+
 interface EvidenceCollectionRequest {
   Body: {
     evidence_type_id: string;
@@ -45,10 +47,11 @@ interface EvidenceCollectionRequest {
     evidence_location: string;
     integrity_hash: string;
     signature: string;
-}
-}
+
+
+
   };
-}
+
 
 export async function auditEvidenceRoutes(fastify: FastifyInstance) {
   // Initialize the audit evidence mapper
@@ -71,22 +74,22 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           error: 'Framework not found',
           framework_id: frameworkId
         });
-      }
+
 
       return reply.send({
         success: true,
         data: {
           frameworks: report.frameworks,
           config: getMergedConfig(frameworkId)
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -96,7 +99,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
   fastify.get('/evidence-types', async (
     request: FastifyRequest<{
       Querystring: { category?: string; sensitivity?: string; }
-    }>,
+>,
     reply: FastifyReply
   ) => {
     try {
@@ -107,11 +110,11 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
       
       if (category) {
         evidenceTypes = evidenceTypes.filter(type => type.category === category);
-      }
+
       
       if (sensitivity) {
         evidenceTypes = evidenceTypes.filter(type => type.sensitivity === sensitivity);
-      }
+
 
       return reply.send({
         success: true,
@@ -119,15 +122,15 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           evidence_types: evidenceTypes,
           total: evidenceTypes.length,
           filters: { category, sensitivity }
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -147,7 +150,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           error: 'Framework not found or has no requirements',
           framework_id: frameworkId
         });
-      }
+
 
       // Enrich requirements with evidence type details
       const enrichedRequirements = requirements.map(requirement => ({
@@ -162,15 +165,15 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           framework_id: frameworkId,
           requirements: enrichedRequirements,
           total: enrichedRequirements.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -193,15 +196,15 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           mappings: mappings,
           evidence_types: evidenceTypes,
           total_mappings: mappings.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -220,7 +223,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
       
       if (severity) {
         gaps = gaps.filter(gap => gap.risk_level === severity);
-      }
+
 
       // Sort by risk level (critical first)
       const riskOrder = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
@@ -237,16 +240,16 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
             high: gaps.filter(g => g.risk_level === 'high').length,
             medium: gaps.filter(g => g.risk_level === 'medium').length,
             low: gaps.filter(g => g.risk_level === 'low').length
-          }
-        }
+
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -270,7 +273,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           : report.frameworks.flatMap(f => evidenceMapper.identifyEvidenceGaps(f.id));
         
         (report as any).evidence_gaps = gaps;
-      }
+
 
       // Format response based on requested format
       if (format === 'json') {
@@ -280,7 +283,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           generated_at: new Date().toISOString(),
           framework_filter: frameworkId || 'all'
         });
-      } else {
+ else {
         // For other formats, return a structured response indicating format support
         return reply.send({
           success: true,
@@ -288,16 +291,16 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           data: {
             download_url: `/api/evidence-mapping/download/${format}/${frameworkId || 'all'}`,
             expires_at: new Date(Date.now() + 3600000).toISOString() // 1 hour
-          }
+
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -324,15 +327,15 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
               'Validate evidence types are properly configured',
               'Ensure all audit requirements have adequate evidence coverage'
             ]
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -350,7 +353,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
         evidence_location,
         integrity_hash,
         signature
-      } = request.body;
+ = request.body;
 
       // Validate required fields
       if (!evidence_type_id || !collector_id || !evidence_location || !integrity_hash) {
@@ -358,7 +361,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           error: 'Missing required fields',
           required: ['evidence_type_id', 'collector_id', 'evidence_location', 'integrity_hash']
         });
-      }
+
 
       const trailId = evidenceMapper.recordEvidenceCollection(
         evidence_type_id,
@@ -375,15 +378,15 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           evidence_type_id: evidence_type_id,
           collection_timestamp: new Date().toISOString(),
           status: 'recorded'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -401,7 +404,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
         frameworks: {
           total: report.frameworks.length,
           enabled: report.frameworks.length // All loaded frameworks are considered enabled
-  }
+
         evidence_types: {
           total: report.evidence_types.length,
           by_category: report.evidence_types.reduce((acc, type) => {
@@ -412,7 +415,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
             acc[type.sensitivity] = (acc[type.sensitivity] || 0) + 1;
             return acc;
           }, {} as Record<string, number>)
-  }
+
         audit_requirements: {
           total: report.audit_requirements.length,
           by_framework: report.audit_requirements.reduce((acc, req) => {
@@ -423,7 +426,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
             acc[req.criticality] = (acc[req.criticality] || 0) + 1;
             return acc;
           }, {} as Record<string, number>)
-  }
+
         evidence_mappings: {
           total: report.evidence_mappings.length,
           by_type: report.evidence_mappings.reduce((acc, mapping) => {
@@ -434,7 +437,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
             acc[mapping.coverage_level] = (acc[mapping.coverage_level] || 0) + 1;
             return acc;
           }, {} as Record<string, number>)
-  }
+
         coverage_summary: report.coverage_analysis
       };
 
@@ -443,13 +446,13 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
         data: stats,
         generated_at: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -478,13 +481,13 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           audit_requirements_loaded: report.audit_requirements.length,
           evidence_mappings_loaded: report.evidence_mappings.length,
           total_evidence_gaps: totalGaps
-  }
+
         checks: {
           frameworks_available: report.frameworks.length > 0,
           evidence_types_available: report.evidence_types.length > 0,
           mappings_available: report.evidence_mappings.length > 0,
           validation_passing: totalGaps === 0
-        }
+
       };
 
       const overallHealth = Object.values(health.checks).every(check => check);
@@ -493,7 +496,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
         success: overallHealth,
         data: health
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(503).send({
         success: false,
@@ -501,8 +504,8 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
-}
+
 
 export default auditEvidenceRoutes;

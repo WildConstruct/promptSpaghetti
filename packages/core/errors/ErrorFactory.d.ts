@@ -4,8 +4,7 @@
  * Centralized error creation with consistent patterns, context injection,
  * and recovery suggestions. Replaces scattered throw new Error() calls.
  */
-import { 
-  BaseError,
+import { BaseError,
   ErrorContext,
   GraphValidationError,
   GraphExecutionError,
@@ -17,13 +16,13 @@ import {
   ProjectLockedError,
   WorkflowStateError,
   APIError,
-  ValidationError,
+  ValidationError }
   ConfigurationError
 } from './index';
 
 }
-export interface ErrorFactoryOptions {
-    userId?: string;
+}
+export interface ErrorFactoryOptions { userId?: string;
     sessionId?: string;
     requestId?: string;
     operation?: string;
@@ -47,7 +46,7 @@ export declare class ErrorFactory {
     static createGraphValidationError(validationErrors: Array<{)
         field: string;
         value: any;
-        expected: string;
+        expected: string }
 }
     }>, options?: ErrorFactoryOptions): GraphValidationError;
     /**

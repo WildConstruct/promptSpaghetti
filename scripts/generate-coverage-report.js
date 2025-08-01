@@ -27,7 +27,7 @@ class CoverageReportGenerator {
       uncoveredFiles: [],
       criticalGaps: []
     };
-  }
+
 
   /**
    * Scan directory for source and test files
@@ -42,11 +42,11 @@ class CoverageReportGenerator {
       // Skip excluded paths
       if (excludePaths.some(exclude => relativePath.includes(exclude))) {
         continue;
-      }
+
 
       if (fs.statSync(fullPath).isDirectory()) {
         this.scanFiles(fullPath, excludePaths);
-      } else if (this.isSourceFile(item)) {
+ else if (this.isSourceFile(item)) {
         this.sourceFiles.set(relativePath, {
           path: relativePath,
           size: fs.statSync(fullPath).size,
@@ -54,15 +54,15 @@ class CoverageReportGenerator {
           hasTest: false,
           testFiles: []
         });
-      } else if (this.isTestFile(item)) {
+ else if (this.isTestFile(item)) {
         this.testFiles.set(relativePath, {
           path: relativePath,
           size: fs.statSync(fullPath).size,
           lastModified: fs.statSync(fullPath).mtime
         });
-      }
-    }
-  }
+
+
+
 
   /**
    * Check if file is a source file
@@ -71,14 +71,14 @@ class CoverageReportGenerator {
     return /\.(ts|tsx|js|jsx)$/.test(filename) && 
            !/\.test\.(ts|tsx|js|jsx)$/.test(filename) &&
            !/\.spec\.(ts|tsx|js|jsx)$/.test(filename);
-  }
+
 
   /**
    * Check if file is a test file
    */
   isTestFile(filename: string): boolean {
     return /\.(test|spec)\.(ts|tsx|js|jsx)$/.test(filename);
-  }
+
 
   /**
    * Match source files with their corresponding tests
@@ -93,10 +93,10 @@ class CoverageReportGenerator {
           const sourceFile = this.sourceFiles.get(sourcePath);
           sourceFile.hasTest = true;
           sourceFile.testFiles.push(testPath);
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Get possible source file paths for a test file
@@ -115,7 +115,7 @@ class CoverageReportGenerator {
     if (testPath.includes('__tests__')) {
       basePath = testPath.replace('/__tests__/', '/').replace(/\.(test|spec)\.(ts|tsx|js|jsx)$/, '.$2');
       possibilities.push(basePath);
-    }
+
     
     // Try same directory
     const dir = path.dirname(testPath);
@@ -123,7 +123,7 @@ class CoverageReportGenerator {
     possibilities.push(path.join(dir, filename));
     
     return possibilities;
-  }
+
 
   /**
    * Generate coverage statistics by directory
@@ -142,25 +142,25 @@ class CoverageReportGenerator {
           criticalFiles: [],
           uncoveredFiles: []
         };
-      }
+
       
       dirStats[dir].totalFiles++;
       if (sourceInfo.hasTest) {
         dirStats[dir].testedFiles++;
-      } else {
+ else {
         dirStats[dir].uncoveredFiles.push(sourcePath);
         
         // Mark as critical if it's in important directories
         if (this.isCriticalPath(sourcePath)) {
           dirStats[dir].criticalFiles.push(sourcePath);
-        }
-      }
+
+
       
       dirStats[dir].coverage = (dirStats[dir].testedFiles / dirStats[dir].totalFiles) * 100;
-    }
+
     
     this.coverageData.byDirectory = dirStats;
-  }
+
 
   /**
    * Check if a file path is in a critical directory
@@ -178,7 +178,7 @@ class CoverageReportGenerator {
     ];
     
     return criticalPaths.some(critical => filePath.includes(critical));
-  }
+
 
   /**
    * Generate overall summary statistics
@@ -199,7 +199,7 @@ class CoverageReportGenerator {
     // Collect critical gaps
     this.coverageData.criticalGaps = this.coverageData.uncoveredFiles
       .filter(path => this.isCriticalPath(path));
-  }
+
 
   /**
    * Generate detailed HTML report
@@ -292,14 +292,14 @@ class CoverageReportGenerator {
 </html>`;
     
     return html;
-  }
+
 
   /**
    * Generate JSON report
    */
   generateJSONReport() {
     return JSON.stringify(this.coverageData, null, 2);
-  }
+
 
   /**
    * Generate markdown summary
@@ -338,7 +338,7 @@ ${this.generateRecommendations()}
 `;
     
     return md;
-  }
+
 
   /**
    * Generate recommendations based on coverage data
@@ -349,7 +349,7 @@ ${this.generateRecommendations()}
     // Critical files without tests
     if (this.coverageData.criticalGaps.length > 0) {
       recommendations.push('1. **IMMEDIATE:** Add tests for critical security and authentication files');
-    }
+
     
     // Directories with low coverage
     const lowCoverageDirs = Object.entries(this.coverageData.byDirectory)
@@ -358,15 +358,15 @@ ${this.generateRecommendations()}
     
     if (lowCoverageDirs.length > 0) {
       recommendations.push(`2. **HIGH PRIORITY:** Improve coverage for directories: ${lowCoverageDirs.slice(0, 3).map(([dir]) => `\`${dir}\``).join(', ')}`);
-    }
+
     
     // Overall coverage improvement
     if (this.coverageData.summary.coveragePercentage < 70) {
       recommendations.push('3. **MEDIUM PRIORITY:** Target 70%+ overall coverage by focusing on core business logic');
-    }
+
     
     return recommendations.join('\n');
-  }
+
 
   /**
    * Run the complete coverage analysis
@@ -388,7 +388,7 @@ ${this.generateRecommendations()}
     const reportsDir = path.join(this.baseDir, 'coverage-reports');
     if (!fs.existsSync(reportsDir)) {
       fs.mkdirSync(reportsDir, { recursive: true });
-    }
+
     
     // Write reports
     fs.writeFileSync(
@@ -423,13 +423,13 @@ Uncovered Files: ${this.coverageData.uncoveredFiles.length} files
 `);
 
     return this.coverageData;
-  }
-}
+
+
 
 // Run if called directly
 if (require.main === module) {
   const generator = new CoverageReportGenerator();
   generator.run().catch(console.error);
-}
+
 
 module.exports = CoverageReportGenerator;

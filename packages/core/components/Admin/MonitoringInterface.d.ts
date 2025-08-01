@@ -9,45 +9,39 @@
 import React from 'react';
 
 }
-export interface MonitoringMetrics {
-    system: {
+}
+export interface MonitoringMetrics { system: {
         cpu: number;
         memory: number;
         disk: number;
         network: {
             inbound: number;
-            outbound: number;
+            outbound: number }
 }
         };
         uptime: number;
         lastUpdated: string;
     };
-    api: {
-        requestsPerSecond: number;
+    api: { requestsPerSecond: number;
         averageLatency: number;
         errorRate: number;
         activeConnections: number;
         totalRequests: number;
-        failedRequests: number;
-    };
-    security: {
-        activeThreats: number;
+        failedRequests: number };
+    security: { activeThreats: number;
         blockedAttempts: number;
         suspiciousActivity: number;
         lastIncident: string | null;
-        complianceScore: number;
-    };
-    performance: {
-        responseTime: number;
+        complianceScore: number };
+    performance: { responseTime: number;
         throughput: number;
         availability: number;
         errorCount: number;
-        operationsPerSecond: number;
-    };
+        operationsPerSecond: number };
 
 }
-export interface AlertData {
-    id: string;
+}
+export interface AlertData { id: string;
     severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
     title: string;
     description: string;
@@ -55,14 +49,14 @@ export interface AlertData {
     timestamp: string;
     acknowledged: boolean;
     resolved: boolean;
-    assignee?: string;
-
+    assignee?: string }
 }
-export interface MonitoringViewConfig {
-    layout: 'executive' | 'operational' | 'analytics' | 'compliance';
+}
+export interface MonitoringViewConfig { layout: 'executive' | 'operational' | 'analytics' | 'compliance';
     refreshInterval: number;
     widgets: string[];
-    rolePermissions: string[];
+    rolePermissions: string[] }
+}
 }
 interface MonitoringInterfaceProps {
     userRole: string;
@@ -74,4 +68,5 @@ interface MonitoringInterfaceProps {
 export declare const MonitoringInterface: React.FC<MonitoringInterfaceProps>;
 export default MonitoringInterface;
 //# sourceMappingURL=MonitoringInterface.d.ts.map
+}
 }

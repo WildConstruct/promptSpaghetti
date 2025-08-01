@@ -9,8 +9,8 @@ import { RedisService } from '../database/RedisService';
 import { EnhancedSessionService, Session } from './EnhancedSessionService';
 import { RemoteSessionTerminationService } from './RemoteSessionTerminationService';
 
-}
-}
+
+
 export interface ConcurrentSessionPolicy {
   id: string;
   name: string;
@@ -26,8 +26,9 @@ export interface ConcurrentSessionPolicy {
     sessionTypes?: string[];
     deviceTypes?: string[];
     environments?: string[];
-}
-}
+
+
+
   };
   
   limits: {
@@ -57,7 +58,7 @@ export interface ConcurrentSessionPolicy {
       reason: string;
       expiresAt: Date;
       grantedBy: string;
-    }>;
+>;
   };
   
   detection: {
@@ -83,10 +84,10 @@ export interface ConcurrentSessionPolicy {
     tags: string[];
     businessJustification?: string;
   };
-}
 
-}
-}
+
+
+
 export interface SessionConflict {
   id: string;
   userId: string;
@@ -99,8 +100,9 @@ export interface SessionConflict {
     description: string;
     currentSessionCount: number;
     allowedSessionCount: number;
-}
-}
+
+
+
   };
   
   sessions: Array<{
@@ -112,7 +114,7 @@ export interface SessionConflict {
     lastActivity: Date;
     riskScore: number;
     trustLevel: string;
-  }>;
+>;
   
   resolution: {
     status: 'pending' | 'resolved' | 'escalated' | 'ignored';
@@ -133,10 +135,10 @@ export interface SessionConflict {
     triggeringEvent: string;
     automaticResolution: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface SessionPolicyViolation {
   id: string;
   userId: string;
@@ -150,8 +152,9 @@ export interface SessionPolicyViolation {
     policyConstraints: any;
     actionTaken: string;
     success: boolean;
-}
-}
+
+
+
   };
   
   impact: {
@@ -166,14 +169,15 @@ export interface SessionPolicyViolation {
     userEducationNeeded: boolean;
     policyReviewSuggested: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface PolicyStatistics {
   policyId: string;
-}
-}
+
+
+
   timeRange: { start: Date; end: Date };
   
   enforcement: {
@@ -203,8 +207,8 @@ export interface PolicyStatistics {
     description: string;
     impact: string;
     confidence: number;
-  }>;
-}
+>;
+
 
 export class ConcurrentSessionPolicyService extends EventEmitter {
   private db: DatabaseService;
@@ -251,7 +255,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     this.initializeDefaultPolicies();
     this.startPeriodicChecking();
     this.setupSessionEventListeners();
-  }
+
 
   /**
    * Create a new concurrent session policy
@@ -263,7 +267,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     success: boolean;
     policy?: ConcurrentSessionPolicy;
     errors?: string[];
-  }> {
+> {
 
     try {
       // Validate policy configuration
@@ -273,7 +277,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
           success: false,
           errors: validation.errors
         };
-      }
+
 
       // Create policy
       const policy: ConcurrentSessionPolicy = {
@@ -284,7 +288,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
           createdBy,
           createdAt: new Date(),
           tags: policyData.metadata?.tags || []
-        }
+
       };
 
       // Store policy
@@ -308,15 +312,14 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         success: true,
         policy
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating concurrent session policy:', error);
       return {
         success: false,
         errors: ['Failed to create policy']
       };
-    }
-  }
+
+
 
   /**
    * Check session limits before allowing new session
@@ -337,7 +340,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     suggestedActions?: string[];
     requiresUserChoice?: boolean;
     gracePeriod?: number;
-  }> {
+> {
 
     try {
       // Get applicable policies for this user/context
@@ -345,7 +348,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       
       if (applicablePolicies.length === 0) {
         return { allowed: true };
-      }
+
 
       // Get current user sessions
       const currentSessions = await this.getUserActiveSessions(userId);
@@ -374,17 +377,16 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
             requiresUserChoice: resolution.requiresUserChoice,
             gracePeriod: policy.enforcement.gracePeriod || this.config.gracePeriodDefault
           };
-        }
-      }
+
+
 
       return { allowed: true };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error checking session limits:', error);
       // Fail safe: allow session but log error
       return { allowed: true };
-    }
-  }
+
+
 
   /**
    * Enforce policy violation resolution
@@ -400,7 +402,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     success: boolean;
     actionsPerformed: string[];
     errors?: string[];
-  }> {
+> {
 
     const conflict = this.activeConflicts.get(conflictId);
     if (!conflict) {
@@ -409,7 +411,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         errors: ['Conflict not found'],
         actionsPerformed: []
       };
-    }
+
 
     const policy = this.policies.get(conflict.policyId);
     if (!policy) {
@@ -418,7 +420,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         errors: ['Policy not found'],
         actionsPerformed: []
       };
-    }
+
 
     const actionsPerformed: string[] = [];
     const errors: string[] = [];
@@ -434,7 +436,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
           if (userChoice.selectedSessions) {
             sessionsToTerminate = userChoice.selectedSessions;
             resolutionAction = 'terminate_oldest'; // Use as base action
-          }
+
           break;
         case 'terminate_oldest':
           resolutionAction = 'terminate_oldest';
@@ -442,8 +444,8 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         case 'block_new':
           resolutionAction = 'block_new';
           break;
-        }
-      }
+
+
 
       // Execute enforcement action
       switch (resolutionAction) {
@@ -452,7 +454,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
           // Find oldest sessions to terminate
           const sessionsNeeded = conflict.conflict.currentSessionCount - conflict.conflict.allowedSessionCount + 1;
           sessionsToTerminate = this.selectOldestSessions(conflict.sessions, sessionsNeeded);
-        }
+
           
         for (const sessionId of sessionsToTerminate) {
           try {
@@ -463,7 +465,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
                 type: 'policy_violation',
                 description: `Concurrent session limit exceeded for policy: ${policy.name}`,
                 severity: conflict.conflict.severity
-  }
+
               {
                 ipAddress: '127.0.0.1', // System IP
                 userAgent: 'ConcurrentSessionPolicyService'
@@ -472,13 +474,13 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
               
             if (result.success) {
               actionsPerformed.push(`Terminated session ${sessionId}`);
-            } else {
+ else {
               errors.push(`Failed to terminate session ${sessionId}: ${result.message}`);
-            }
-          } catch (error) {
+
+ catch (error) {
             errors.push(`Error terminating session ${sessionId}: ${error.message}`);
-          }
-        }
+
+
         break;
 
       case 'terminate_all':
@@ -491,7 +493,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
                 type: 'policy_violation',
                 description: `All sessions terminated due to policy violation: ${policy.name}`,
                 severity: 'high'
-  }
+
               {
                 ipAddress: '127.0.0.1',
                 userAgent: 'ConcurrentSessionPolicyService'
@@ -500,13 +502,13 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
               
             if (result.success) {
               actionsPerformed.push(`Terminated session ${session.sessionId}`);
-            } else {
+ else {
               errors.push(`Failed to terminate session ${session.sessionId}: ${result.message}`);
-            }
-          } catch (error) {
+
+ catch (error) {
             errors.push(`Error terminating session ${session.sessionId}: ${error.message}`);
-          }
-        }
+
+
         break;
 
       case 'degrade_oldest':
@@ -514,7 +516,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         if (oldestSession) {
           await this.degradeSession(oldestSession, policy);
           actionsPerformed.push(`Degraded session ${oldestSession}`);
-        }
+
         break;
 
       case 'block_new':
@@ -526,7 +528,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         await this.escalateForApproval(conflict, policy);
         actionsPerformed.push('Escalated for manual approval');
         break;
-      }
+
 
       // Update conflict resolution
       conflict.resolution.status = 'resolved';
@@ -541,7 +543,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       // Notify user if configured
       if (policy.enforcement.notifyUser) {
         await this.notifyUserOfPolicyEnforcement(conflict, policy, actionsPerformed);
-      }
+
 
       // Update cache
       await this.invalidateUserSessionCache(conflict.userId);
@@ -559,16 +561,15 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         actionsPerformed,
         errors: errors.length > 0 ? errors : undefined
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error enforcing concurrent session policy:', error);
       return {
         success: false,
         errors: ['Policy enforcement failed'],
         actionsPerformed
       };
-    }
-  }
+
+
 
   /**
    * Get policy statistics and analytics
@@ -582,7 +583,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       const policy = this.policies.get(policyId);
       if (!policy) {
         throw new Error('Policy not found');
-      }
+
 
       // Filter violations by time range
       const policyViolations = this.violations.filter(v => 
@@ -629,12 +630,11 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         effectiveness,
         recommendations
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error generating policy statistics:', error);
       throw new Error('Failed to generate policy statistics');
-    }
-  }
+
+
 
   /**
    * Grant temporary exemption from policy
@@ -653,7 +653,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     exemptionId?: string;
     expiresAt?: Date;
     message: string;
-  }> {
+> {
 
     try {
       const policy = this.policies.get(policyId);
@@ -662,14 +662,14 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
           success: false,
           message: 'Policy not found'
         };
-      }
+
 
       const expiresAt = new Date(Date.now() + exemptionDetails.durationHours * 60 * 60 * 1000);
       
       // Add exemption to policy
       if (!policy.exceptions.temporaryExemptions) {
         policy.exceptions.temporaryExemptions = [];
-      }
+
 
       const exemption = {
         userId,
@@ -704,15 +704,14 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         expiresAt,
         message: `Temporary exemption granted until ${expiresAt.toISOString()}`
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error granting temporary exemption:', error);
       return {
         success: false,
         message: 'Failed to grant exemption'
       };
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -728,12 +727,12 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
 
       if (await this.isPolicyApplicable(policy, userId, context)) {
         applicablePolicies.push(policy);
-      }
-    }
+
+
 
     // Sort by priority (higher priority first)
     return applicablePolicies.sort((a, b) => b.priority - a.priority);
-  }
+
 
   private async isPolicyApplicable(
     policy: ConcurrentSessionPolicy,
@@ -744,7 +743,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     // Check global scope
     if (policy.scope.global) {
       return true;
-    }
+
 
     // Check user roles
     if (policy.scope.userRoles && context.userRoles) {
@@ -752,22 +751,22 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         context.userRoles.includes(role)
       );
       if (hasRole) return true;
-    }
+
 
     // Check session type
     if (policy.scope.sessionTypes && 
         policy.scope.sessionTypes.includes(context.sessionType)) {
       return true;
-    }
+
 
     // Check device type
     if (policy.scope.deviceTypes && 
         policy.scope.deviceTypes.includes(context.deviceType)) {
       return true;
-    }
+
 
     return false;
-  }
+
 
   private async getUserActiveSessions(userId: string): Promise<any[]> {
 
@@ -780,10 +779,10 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         const session = await this.sessionService.getSessionDetails(sessionId);
         if (session && session.status === 'active') {
           sessions.push(session);
-        }
-      }
+
+
       return sessions;
-    }
+
 
     // Get from session service
     const sessions = await this.sessionService.getUserSessions(userId, {
@@ -801,7 +800,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     }, this.config.cacheExpirySeconds * 1000);
 
     return sessions;
-  }
+
 
   private async checkPolicyViolation(
     policy: ConcurrentSessionPolicy,
@@ -812,7 +811,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     // Check max concurrent sessions
     if (currentSessions.length >= policy.limits.maxConcurrentSessions) {
       return `Maximum concurrent sessions exceeded: ${currentSessions.length}/${policy.limits.maxConcurrentSessions}`;
-    }
+
 
     // Check device-specific limits
     if (policy.limits.maxSessionsPerDevice) {
@@ -821,8 +820,8 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       );
       if (deviceSessions.length >= policy.limits.maxSessionsPerDevice) {
         return `Maximum sessions per device exceeded: ${deviceSessions.length}/${policy.limits.maxSessionsPerDevice}`;
-      }
-    }
+
+
 
     // Check IP-specific limits
     if (policy.limits.maxSessionsPerIP) {
@@ -831,8 +830,8 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       );
       if (ipSessions.length >= policy.limits.maxSessionsPerIP) {
         return `Maximum sessions per IP exceeded: ${ipSessions.length}/${policy.limits.maxSessionsPerIP}`;
-      }
-    }
+
+
 
     // Check location-specific limits
     if (policy.limits.maxSessionsPerLocation && newSessionContext.location) {
@@ -841,11 +840,11 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       );
       if (locationSessions.length >= policy.limits.maxSessionsPerLocation) {
         return `Maximum sessions per location exceeded: ${locationSessions.length}/${policy.limits.maxSessionsPerLocation}`;
-      }
-    }
+
+
 
     return null;
-  }
+
 
   private async createSessionConflict(
     userId: string,
@@ -866,7 +865,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         description: violationReason,
         currentSessionCount: currentSessions.length,
         allowedSessionCount: policy.limits.maxConcurrentSessions
-  }
+
       sessions: currentSessions.map(s => ({
         sessionId: s.id,
         deviceId: s.deviceId,
@@ -880,17 +879,17 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       resolution: {
         status: 'pending',
         userNotified: false
-  }
+
       context: {
         newSessionAttempt: newSessionContext,
         triggeringEvent: 'session_creation',
         automaticResolution: policy.enforcement.action !== 'require_approval'
-      }
+
     };
 
     this.activeConflicts.set(conflict.id, conflict);
     return conflict;
-  }
+
 
   private async determineConflictResolution(
     conflict: SessionConflict,
@@ -899,7 +898,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     allowSession: boolean;
     requiresUserChoice: boolean;
     suggestedActions: string[];
-  }> {
+> {
 
     switch (policy.enforcement.action) {
     case 'block_new':
@@ -943,27 +942,27 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         requiresUserChoice: false,
         suggestedActions: ['Unknown enforcement action']
       };
-    }
-  }
+
+
 
   private selectOldestSessions(sessions: any[], count: number): string[] {
     return sessions
       .sort((a, b) => a.lastActivity.getTime() - b.lastActivity.getTime())
       .slice(0, count)
       .map(s => s.sessionId);
-  }
+
 
   private async degradeSession(sessionId: string, policy: ConcurrentSessionPolicy): Promise<void> {
 
     // Implementation would reduce session privileges/capabilities
     console.log(`Degrading session ${sessionId} due to policy ${policy.name}`);
-  }
+
 
   private async escalateForApproval(conflict: SessionConflict, policy: ConcurrentSessionPolicy): Promise<void> {
 
     // Implementation would send notification to administrators
     console.log(`Escalating conflict ${conflict.id} for manual approval`);
-  }
+
 
   private isSameLocation(loc1: any, loc2: any, radiusKm: number): boolean {
     if (!loc1 || !loc2) return false;
@@ -971,38 +970,38 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     // Simplified distance calculation
     const distance = Math.abs(loc1.lat - loc2.lat) + Math.abs(loc1.lon - loc2.lon);
     return distance * 111 < radiusKm; // Rough km conversion
-  }
+
 
   private async invalidateUserSessionCache(userId: string): Promise<void> {
 
     this.userSessionCache.delete(userId);
     await this.redis.del(`user_sessions:${userId}`);
-  }
+
 
   private validatePolicyConfiguration(policy: any): { valid: boolean; errors: string[] } {
     const errors: string[] = [];
 
     if (!policy.name || policy.name.trim().length === 0) {
       errors.push('Policy name is required');
-    }
+
 
     if (!policy.limits.maxConcurrentSessions || policy.limits.maxConcurrentSessions < 1) {
       errors.push('Maximum concurrent sessions must be at least 1');
-    }
+
 
     if (policy.limits.maxSessionsPerDevice && policy.limits.maxSessionsPerDevice < 1) {
       errors.push('Maximum sessions per device must be at least 1');
-    }
+
 
     if (!['block_new', 'terminate_oldest', 'terminate_all', 'require_approval', 'degrade_oldest'].includes(policy.enforcement.action)) {
       errors.push('Invalid enforcement action');
-    }
+
 
     return {
       valid: errors.length === 0,
       errors
     };
-  }
+
 
   private initializeDefaultPolicies(): void {
     const defaultPolicies: Array<Omit<ConcurrentSessionPolicy, 'id' | 'version' | 'metadata'>> = [
@@ -1014,40 +1013,40 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         scope: {
           global: true,
           sessionTypes: ['web', 'mobile']
-  }
+
         limits: {
           maxConcurrentSessions: 3,
           maxSessionsPerDevice: 2,
           excludeServiceAccounts: true
-  }
+
         enforcement: {
           action: 'terminate_oldest',
           gracePeriod: 30,
           notifyUser: true,
           allowUserChoice: true,
           preserveActiveSession: true
-  }
+
         exceptions: {
           adminOverride: true,
           emergencyAccess: true
-  }
+
         detection: {
           realTimeChecking: true,
           checkInterval: 60,
           locationRadius: 100
-  }
+
         monitoring: {
           auditEvents: true,
           alertOnViolations: true,
           metricsCollection: true,
           reportingEnabled: true
-  }
+
         metadata: {
           createdBy: 'system',
           createdAt: new Date(),
           tags: ['default', 'standard']
-        }
-  }
+
+
       {
         name: 'High Security Sessions',
         description: 'Strict policy for administrative and privileged sessions',
@@ -1057,40 +1056,40 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
           global: false,
           userRoles: ['admin', 'security'],
           sessionTypes: ['admin', 'api']
-  }
+
         limits: {
           maxConcurrentSessions: 2,
           maxSessionsPerDevice: 1,
           maxSessionsPerIP: 2
-  }
+
         enforcement: {
           action: 'block_new',
           gracePeriod: 15,
           notifyUser: true,
           allowUserChoice: false,
           preserveActiveSession: true
-  }
+
         exceptions: {
           adminOverride: false,
           emergencyAccess: true
-  }
+
         detection: {
           realTimeChecking: true,
           checkInterval: 30,
           locationRadius: 50
-  }
+
         monitoring: {
           auditEvents: true,
           alertOnViolations: true,
           metricsCollection: true,
           reportingEnabled: true
-  }
+
         metadata: {
           createdBy: 'system',
           createdAt: new Date(),
           tags: ['security', 'admin']
-        }
-      }
+
+
     ];
 
     defaultPolicies.forEach(policyData => {
@@ -1098,21 +1097,21 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       const policy: ConcurrentSessionPolicy = { ...policyData, id, version: 1 };
       this.policies.set(id, policy);
     });
-  }
+
 
   private startPeriodicChecking(): void {
     if (this.config.enableRealTimeChecking) {
       this.monitoringInterval = setInterval(async () => {
         await this.performPeriodicCheck();
       }, this.config.defaultCheckInterval * 1000);
-    }
-  }
+
+
 
   private async performPeriodicCheck(): Promise<void> {
 
     // Check all active sessions against policies
     console.log('Performing periodic concurrent session policy check');
-  }
+
 
   private setupSessionEventListeners(): void {
     this.sessionService.on('sessionCreated', (event) => {
@@ -1122,30 +1121,30 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     this.sessionService.on('sessionTerminated', (event) => {
       this.handleSessionTerminated(event);
     });
-  }
+
 
   private async handleSessionCreated(event: any): Promise<void> {
 
     // Invalidate cache for the user
     await this.invalidateUserSessionCache(event.userId);
-  }
+
 
   private async handleSessionTerminated(event: any): Promise<void> {
 
     // Invalidate cache for the user
     await this.invalidateUserSessionCache(event.userId);
-  }
+
 
   private async savePolicyToDatabase(policy: ConcurrentSessionPolicy): Promise<void> {
 
     // Implementation would save to database
     console.log(`Saving policy ${policy.id} to database`);
-  }
+
 
   private async logPolicyEvent(action: string, policyId: string, userId: string, details: any): Promise<void> {
 
     console.log(`Policy Event: ${action} - ${policyId} by ${userId}`, details);
-  }
+
 
   private async logPolicyViolation(
     conflict: SessionConflict,
@@ -1165,18 +1164,18 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         policyConstraints: policy.limits,
         actionTaken: actionsPerformed.join(', '),
         success: conflict.resolution.status === 'resolved'
-  }
+
       impact: {
         sessionsAffected: conflict.sessions.length,
         userImpact: conflict.conflict.severity === 'high' ? 'severe' : 'moderate',
         businessImpact: 'Session management policy enforcement'
-  }
+
       followUp: {
         escalationRequired: conflict.conflict.severity === 'critical',
         adminNotified: policy.monitoring.alertOnViolations,
         userEducationNeeded: true,
         policyReviewSuggested: false
-      }
+
     };
 
     this.violations.push(violation);
@@ -1184,8 +1183,8 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     // Keep only recent violations
     if (this.violations.length > this.config.maxViolationHistory) {
       this.violations.shift();
-    }
-  }
+
+
 
   private async notifyUserOfPolicyEnforcement(
     conflict: SessionConflict,
@@ -1198,7 +1197,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       policy: policy.name,
       actions: actionsPerformed
     });
-  }
+
 
   private calculatePeakViolationHours(violations: SessionPolicyViolation[]): Array<{ hour: number; count: number }> {
     const hourCounts: Record<number, number> = {};
@@ -1211,7 +1210,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     return Object.entries(hourCounts)
       .map(([hour, count]) => ({ hour: parseInt(hour), count }))
       .sort((a, b) => b.count - a.count);
-  }
+
 
   private getTopViolatingUsers(violations: SessionPolicyViolation[]): Array<{ userId: string; violations: number }> {
     const userCounts: Record<string, number> = {};
@@ -1224,7 +1223,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       .map(([userId, violations]) => ({ userId, violations }))
       .sort((a, b) => b.violations - a.violations)
       .slice(0, 10);
-  }
+
 
   private getCommonViolationTypes(violations: SessionPolicyViolation[]): Array<{ type: string; count: number }> {
     const typeCounts: Record<string, number> = {};
@@ -1236,7 +1235,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     return Object.entries(typeCounts)
       .map(([type, count]) => ({ type, count }))
       .sort((a, b) => b.count - a.count);
-  }
+
 
   private getDeviceTypeBreakdown(violations: SessionPolicyViolation[]): Record<string, number> {
     // Implementation would extract device types from violation details
@@ -1245,21 +1244,21 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       'mobile': violations.filter(v => v.details.sessionDetails.some?.((s: any) => s.deviceType === 'mobile')).length,
       'api': violations.filter(v => v.details.sessionDetails.some?.((s: any) => s.deviceType === 'api')).length
     };
-  }
+
 
   private calculateAverageResolutionTime(violations: SessionPolicyViolation[]): number {
     // Implementation would calculate average time from violation to resolution
     return 300; // 5 minutes default
-  }
+
 
   private calculateUserComplianceRate(violations: SessionPolicyViolation[]): number {
     const compliantViolations = violations.filter(v => v.details.success).length;
     return violations.length > 0 ? Math.round((compliantViolations / violations.length) * 100) : 100;
-  }
+
 
   private countPolicyBypassAttempts(violations: SessionPolicyViolation[]): number {
     return violations.filter(v => v.details.actionTaken === 'bypass_attempted').length;
-  }
+
 
   private async generatePolicyRecommendations(
     policy: ConcurrentSessionPolicy,
@@ -1269,7 +1268,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     description: string;
     impact: string;
     confidence: number;
-  }>> {
+>> {
     const recommendations = [];
 
     // High violation rate suggests limits might be too restrictive
@@ -1280,7 +1279,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         impact: 'Reduced user friction, potentially increased security risk',
         confidence: 75
       });
-    }
+
 
     // Many failed resolutions suggest enforcement action needs adjustment
     const failedResolutions = violations.filter(v => !v.details.success).length;
@@ -1291,30 +1290,29 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         impact: 'Improved policy compliance',
         confidence: 85
       });
-    }
+
 
     return recommendations;
-  }
+
 
   private generatePolicyId(): string {
     return `CSP-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-  }
+
 
   private generateConflictId(): string {
     return `CSC-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-  }
+
 
   private generateViolationId(): string {
     return `CSV-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-  }
+
 
   destroy(): void {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
-    }
+
     this.policies.clear();
     this.activeConflicts.clear();
     this.violations = [];
     this.userSessionCache.clear();
-  }
-}
+

@@ -1,20 +1,18 @@
 import { EventEmitter } from 'events';
 import { v4 as uuidv4 } from 'uuid';
 
-}
-export interface DocumentState {
-  version: number;
+
+export interface DocumentState { version: number;
   checksum: string;
   lastModified: number;
   operations: DocumentOperation;
-  metadata: Record<string, any>;
-}
-}
-}
-export interface DocumentOperation {
-  id: string;
+  metadata: Record<string, any> }
+
+
+
+export interface DocumentOperation { id: string;
   type: 'create' | 'update' | 'delete' | 'move';
-  target: 'node' | 'edge' | 'property';
+  target: 'node' | 'edge' | 'property' }
   targetId: string;
   data: any;
   oldData?: any;
@@ -22,44 +20,44 @@ export interface DocumentOperation {
   userId: string;
   version: number;
   dependencies?: string;
-}
-}
-}
-export interface SyncDelta {
-  operations: DocumentOperation;
+
+
+
+
+export interface SyncDelta { operations: DocumentOperation;
   fromVersion: number;
   toVersion: number;
   conflicts: ConflictInfo;
-  metadata: {
+  metadata: { }
   operationCount: number;
   estimatedSize: number;
   compression?: string;
-}
+
+
 };
-}
-}
-export interface ConflictInfo {
-  id: string;
+
+
+export interface ConflictInfo { id: string;
   type: 'concurrent_edit' | 'version_mismatch' | 'dependency_missing' | 'data_corruption';
   operation1: DocumentOperation;
   operation2?: DocumentOperation;
   description: string;
   resolutionOptions: ConflictResolution;
   autoResolvable: boolean;
-  severity: 'low' | 'medium' | 'high' | 'critical'
-}
-  }
-}
-export interface ConflictResolution {
-  strategy: 'mine' | 'theirs' | 'merge' | 'manual';
+  severity: 'low' | 'medium' | 'high' | 'critical' }
+
+
+
+
+export interface ConflictResolution { strategy: 'mine' | 'theirs' | 'merge' | 'manual' }
   description: string;
   result?: any;
   confidence: number;
-}
-}
-}
-export interface SyncProgress {
-  phase: 'detecting' | 'downloading' | 'applying' | 'validating' | 'completed' | 'failed';
+
+
+
+
+export interface SyncProgress { phase: 'detecting' | 'downloading' | 'applying' | 'validating' | 'completed' | 'failed' }
   totalOperations: number;
   processedOperations: number;
   currentOperation?: DocumentOperation;
@@ -67,11 +65,11 @@ export interface SyncProgress {
   bytesTransferred?: number;
   bytesTotal?: number;
   errors: Error;
-}
-}
-}
-export interface RecoveryConfig {
-  maxDeltaSize: number;
+
+
+
+
+export interface RecoveryConfig { maxDeltaSize: number;
   maxOperationsPerBatch: number;
   checksumValidation: boolean;
   conflictDetection: boolean;
@@ -81,21 +79,19 @@ export interface RecoveryConfig {
   maxRecoveryTime: number;
   enableDependencyTracking: boolean;
   validateIntegrity: boolean;
-  backupBeforeRecovery: boolean;
-}
-}
-}
-export interface RecoveryStats {
-  totalRecoveries: number;
+  backupBeforeRecovery: boolean }
+
+
+
+export interface RecoveryStats { totalRecoveries: number;
   successfulRecoveries: number;
   failedRecoveries: number;
   averageRecoveryTime: number;
   operationsRecovered: number;
   conflictsResolved: number;
   dataCorruptions: number;
-  lastRecoveryTime: number | null;
-}
-}
+  lastRecoveryTime: number | null }
+
 export class SynchronizationRecovery extends EventEmitter {
   private config: RecoveryConfig;
   private stats: RecoveryStats;
@@ -103,49 +99,46 @@ export class SynchronizationRecovery extends EventEmitter {
   private documentStates: Map<string, DocumentState> = new Map();
   private pendingConflicts: Map<string, ConflictInfo> = new Map();
   private recoveryTimer: NodeJS.Timeout | null = null;
-  constructor(config: Partial<RecoveryConfig> = {}) {
-  super();
+  constructor(config: Partial<RecoveryConfig> = {}) { super();
   this.config = {
-  maxDeltaSize: 10 * 1024 * 1024, // 10MB,
-  maxOperationsPerBatch: 100,
-  checksumValidation: true,
-  conflictDetection: true,
-  autoResolveConflicts: true,
-  compressionEnabled: true,
-  progressReporting: true,
-  maxRecoveryTime: 300000, // 5 minutes,
-  enableDependencyTracking: true,
-  validateIntegrity: true,
-  backupBeforeRecovery: true,
+  maxDeltaSize: 10 * 1024 * 1024, // 10MB
+  maxOperationsPerBatch: 100
+  checksumValidation: true
+  conflictDetection: true
+  autoResolveConflicts: true
+  compressionEnabled: true
+  progressReporting: true
+  maxRecoveryTime: 300000, // 5 minutes
+  enableDependencyTracking: true
+  validateIntegrity: true
+  backupBeforeRecovery: true }
   ...config
 };
-    this.stats = {
-  totalRecoveries: 0,
-  successfulRecoveries: 0,
-  failedRecoveries: 0,
-  averageRecoveryTime: 0,
-  operationsRecovered: 0,
-  conflictsResolved: 0,
-  dataCorruptions: 0,
-  lastRecoveryTime: null,
+    this.stats = { totalRecoveries: 0
+  successfulRecoveries: 0
+  failedRecoveries: 0
+  averageRecoveryTime: 0
+  operationsRecovered: 0
+  conflictsResolved: 0
+  dataCorruptions: 0
+  lastRecoveryTime: null }
 };
   /**
    * Start synchronization recovery for a document
    */
   async startRecovery()
-    documentId: string, 
-    localState: DocumentState, 
-    serverStateProvider: () => Promise<DocumentState>): Promise<SyncDelta> {,
+    documentId: string
+    localState: DocumentState
+    serverStateProvider: () => Promise<DocumentState>): Promise<SyncDelta> {
     console.log(`Starting synchronization recovery for document ${documentId}`);}
-    if (this.currentRecovery) {
-  throw new Error('Recovery already in progress');
+    if (this.currentRecovery) { throw new Error('Recovery already in progress');
   const startTime = Date.now();
   this.stats.totalRecoveries++;
   this.currentRecovery = {
-  phase: 'detecting',
-  totalOperations: 0,
-  processedOperations: 0,
-  errors: [],
+  phase: 'detecting'
+  totalOperations: 0
+  processedOperations: 0
+  errors: [] }
 };
     // Start recovery timeout
     this.startRecoveryTimer();
@@ -158,10 +151,9 @@ export class SynchronizationRecovery extends EventEmitter {
       const serverState = await serverStateProvider();
       const delta = await this.calculateDelta(localState, serverState);
       // Download missing operations if needed
-      if (delta.operations.length > 0) {
-  this.updateProgress({ )
-  phase: 'downloading',
-  totalOperations: delta.operations.length,
+      if (delta.operations.length > 0) { this.updateProgress({ )
+  phase: 'downloading'
+  totalOperations: delta.operations.length }
 });
         await this.validateOperations(delta.operations);
       // Apply operations
@@ -178,16 +170,15 @@ export class SynchronizationRecovery extends EventEmitter {
       this.currentRecovery = null;
       console.log(`Recovery completed successfully in ${duration}ms`);}
       return appliedDelta;
-    } catch (error) {
-  const duration = Date.now() - startTime;
+ catch (error) { const duration = Date.now() - startTime;
   this.handleRecoveryFailure(error as Error, duration);
   this.updateProgress({ )
-  phase: 'failed',
-  errors: [...(this.currentRecovery?.errors || []), error as Error],
+  phase: 'failed'
+  errors: [...(this.currentRecovery?.errors || []), error as Error] }
 });
       this.currentRecovery = null;
       throw error;
-    } finally {
+ finally {
       this.clearRecoveryTimer();
   /**
    * Calculate differential sync between local and server state
@@ -195,18 +186,17 @@ export class SynchronizationRecovery extends EventEmitter {
   async calculateDelta(localState: DocumentState, serverState: DocumentState): Promise<SyncDelta> {
 
     console.log(`Calculating delta: local v${localState.version} -> server v${serverState.version}`);}
-    const delta: SyncDelta = {,
-  operations: [],
-  fromVersion: localState.version,
-  toVersion: serverState.version,
-  conflicts: [],
+    const delta: SyncDelta = { 
+  operations: []
+  fromVersion: localState.version
+  toVersion: serverState.version
+  conflicts: []
   metadata: {
-  operationCount: 0,
-  estimatedSize: 0,
+  operationCount: 0
+  estimatedSize: 0 }
 };
     // If versions match, no sync needed
-    if (localState.version === serverState.version) {
-  if (this.config.checksumValidation && localState.checksum !== serverState.checksum) {
+    if (localState.version === serverState.version) { if (this.config.checksumValidation && localState.checksum !== serverState.checksum) {
   // Version match but checksum mismatch indicates corruption
   throw new Error('Data corruption detected: version match but checksum mismatch');
   return delta;
@@ -218,8 +208,7 @@ export class SynchronizationRecovery extends EventEmitter {
   missingOperations.sort((a, b) => {
   if (a.version !== b.version) {
   return a.version - b.version;
-  return a.timestamp - b.timestamp;
-});
+  return a.timestamp - b.timestamp });
     delta.operations = missingOperations;
     delta.metadata.operationCount = missingOperations.length;
     delta.metadata.estimatedSize = JSON.stringify(missingOperations).length;
@@ -227,11 +216,11 @@ export class SynchronizationRecovery extends EventEmitter {
     if (this.config.conflictDetection) {
       delta.conflicts = await this.detectConflicts(localState, missingOperations);
     console.log(`Delta calculated: ${delta.operations.length} operations, ${delta.conflicts.length} conflicts`);}
-    this.emit('delta_calculated', {)
+    this.emit('delta_calculated', { )
   documentId: 'current',
   delta,
   localVersion: localState.version,
-  serverVersion: serverState.version,
+  serverVersion: serverState.version }
 });
     return delta;
   /**
@@ -240,10 +229,9 @@ export class SynchronizationRecovery extends EventEmitter {
   async applyDelta(documentId: string, localState: DocumentState, delta: SyncDelta): Promise<SyncDelta> {
 
     console.log(`Applying delta: ${delta.operations.length} operations`);}
-    const appliedDelta: SyncDelta = {
-  ...delta,
-  operations: [],
-  conflicts: [],
+    const appliedDelta: SyncDelta = { ...delta
+  operations: []
+  conflicts: [] }
 };
     // Process operations in batches
     const batchSize = this.config.maxOperationsPerBatch;
@@ -251,8 +239,7 @@ export class SynchronizationRecovery extends EventEmitter {
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i];
       console.log(`Processing batch ${i + 1}/${batches.length} (${batch.length} operations)`);}
-      for (const operation of batch) {
-  try {
+      for (const operation of batch) { try {
   // Check dependencies if enabled
   if (this.config.enableDependencyTracking) {
   await this.validateDependencies(operation, appliedDelta.operations);
@@ -263,50 +250,48 @@ export class SynchronizationRecovery extends EventEmitter {
   localState.version = Math.max(localState.version, operation.version);
   this.updateProgress({)
   processedOperations: appliedDelta.operations.length,
-  currentOperation: operation,
+  currentOperation: operation }
 });
-          } else if (result.conflict) {
-            appliedDelta.conflicts.push(result.conflict);
+ else if (result.conflict) { appliedDelta.conflicts.push(result.conflict);
             // Try auto-resolution if enabled
             if (this.config.autoResolveConflicts) {
               const resolution = await this.autoResolveConflict(result.conflict);
               if (resolution) {
                 appliedDelta.operations.push(operation);
-                this.stats.conflictsResolved++;
-        } catch (error) {
+                this.stats.conflictsResolved++ } catch (error) {
           console.error(`Failed to apply operation ${operation.id}:`, error);}
           this.currentRecovery?.errors.push(error as Error);
           // Create conflict for failed operation
-          const conflict: ConflictInfo = {,
+          const conflict: ConflictInfo = { ,
   id: uuidv4(),
             type: 'data_corruption',
-            operation1: operation,
+            operation1: operation }
             description: `Failed to apply operation: ${(error as Error).message}`}
 },
-  resolutionOptions: [,
+  resolutionOptions: [
               { strategy: 'manual', description: 'Manual resolution required', confidence: 0 }
             ],
             autoResolvable: false,
-            severity: 'high'
+            severity: 'high';
   };
           appliedDelta.conflicts.push(conflict);
       // Emit batch progress
-      this.emit('batch_processed', {)
+      this.emit('batch_processed', { )
   batchNumber: i + 1,
   totalBatches: batches.length,
   operationsProcessed: appliedDelta.operations.length,
-  conflictsFound: appliedDelta.conflicts.length,
+  conflictsFound: appliedDelta.conflicts.length }
 });
     // Update final state
     localState.lastModified = Date.now();
     localState.checksum = this.calculateChecksum(localState);
     this.documentStates.set(documentId, localState);
     console.log(`Delta applied: ${appliedDelta.operations.length} operations, ${appliedDelta.conflicts.length} conflicts`);}
-    this.emit('delta_applied', {)
+    this.emit('delta_applied', { )
   documentId,
   appliedOperations: appliedDelta.operations.length,
   conflicts: appliedDelta.conflicts.length,
-  newVersion: localState.version,
+  newVersion: localState.version }
 });
     return appliedDelta;
   /**
@@ -318,27 +303,26 @@ export class SynchronizationRecovery extends EventEmitter {
     if (!conflict) {
       throw new Error(`Conflict ${conflictId} not found`);}
     console.log(`Resolving conflict ${conflictId} with strategy: ${resolution.strategy}`);}
-    try {
-  let resolvedOperation: DocumentOperation;
+    try { let resolvedOperation: DocumentOperation;
   switch (resolution.strategy) {
-  case 'mine':,
+  case 'mine':
   resolvedOperation = conflict.operation1;
   break;
-  case 'theirs':,
+  case 'theirs':
   if (!conflict.operation2) {
   throw new Error('Cannot use "theirs" strategy without second operation');
   resolvedOperation = conflict.operation2;
   break;
-  case 'merge':,
+  case 'merge':
   resolvedOperation = await this.mergeOperations(conflict.operation1, conflict.operation2);
   break;
-  case 'manual':,
+  case 'manual':
   if (!resolution.result) {
   throw new Error('Manual resolution requires result data');
   resolvedOperation = {
-  ...conflict.operation1,
-  data: resolution.result,
-  id: uuidv4() // New ID for resolved operation,
+  ...conflict.operation1
+  data: resolution.result
+  id: uuidv4() // New ID for resolved operation }
 };
         break;
       default:
@@ -346,21 +330,20 @@ export class SynchronizationRecovery extends EventEmitter {
       // Apply resolved operation
       const documentId = 'current'; // Would need to track this properly;
       const localState = this.documentStates.get(documentId);
-      if (localState) {
-  await this.applyOperation(documentId, localState, resolvedOperation);
+      if (localState) { await this.applyOperation(documentId, localState, resolvedOperation);
   this.pendingConflicts.delete(conflictId);
   this.stats.conflictsResolved++;
   this.emit('conflict_resolved', {)
-  conflictId,
-  strategy: resolution.strategy,
+  conflictId
+  strategy: resolution.strategy }
   resolvedOperation
 });
       return true;
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to resolve conflict ${conflictId}:`, error);}
-      this.emit('conflict_resolution_failed', {)
-  conflictId,
-  error: error as Error,
+      this.emit('conflict_resolution_failed', { )
+  conflictId
+  error: error as Error }
 });
       return false;
   /**
@@ -376,12 +359,11 @@ export class SynchronizationRecovery extends EventEmitter {
   /**
    * Get pending conflicts
    */
-  getPendingConflicts(): ConflictInfo {
-  return Array.from(this.pendingConflicts.values());
+  getPendingConflicts(): ConflictInfo { return Array.from(this.pendingConflicts.values());
   /**
   * Cancel current recovery
   */
-  cancelRecovery(): void {,
+  cancelRecovery(): void {
   if (this.currentRecovery) {
   console.log('Canceling current recovery');
   this.currentRecovery = null;
@@ -390,16 +372,16 @@ export class SynchronizationRecovery extends EventEmitter {
   /**
   * Reset recovery statistics
   */
-  resetStats(): void {,
+  resetStats(): void {
   this.stats = {
-  totalRecoveries: 0,
-  successfulRecoveries: 0,
-  failedRecoveries: 0,
-  averageRecoveryTime: 0,
-  operationsRecovered: 0,
-  conflictsResolved: 0,
-  dataCorruptions: 0,
-  lastRecoveryTime: null,
+  totalRecoveries: 0
+  successfulRecoveries: 0
+  failedRecoveries: 0
+  averageRecoveryTime: 0
+  operationsRecovered: 0
+  conflictsResolved: 0
+  dataCorruptions: 0
+  lastRecoveryTime: null }
 };
     this.emit('stats_reset');
   /**
@@ -420,8 +402,7 @@ export class SynchronizationRecovery extends EventEmitter {
     const targetMap = new Map<string, DocumentOperation>();
     for (const operation of operations) {
       const key = `${operation.target}:${operation.targetId}`;}
-      if (!targetMap.has(key)) {
-        targetMap.set(key, []);
+      if (!targetMap.has(key)) { targetMap.set(key, []);
       targetMap.get(key)!.push(operation);
     // Find conflicts
     for (const [target, ops] of targetMap.entries()) {
@@ -432,25 +413,23 @@ export class SynchronizationRecovery extends EventEmitter {
   id: uuidv4(),
             type: 'concurrent_edit',
             operation1: ops[i],
-            operation2: ops[i + 1],
+            operation2: ops[i + 1] }
             description: `Concurrent modifications to ${target}`}
 },
-  resolutionOptions: [,
+  resolutionOptions: [
               { strategy: 'mine', description: 'Keep first operation', confidence: 0.5 },
               { strategy: 'theirs', description: 'Keep second operation', confidence: 0.5 },
               { strategy: 'merge', description: 'Attempt to merge operations', confidence: 0.3 }
             ],
             autoResolvable: true,
-            severity: 'medium'
+            severity: 'medium';
   };
           conflicts.push(conflict);
     return conflicts;
   /**
    * Auto-resolve conflict if possible
    */
-  private async autoResolveConflict(conflict: ConflictInfo): Promise<boolean> {
-
-  if (!conflict.autoResolvable) {
+  private async autoResolveConflict(conflict: ConflictInfo): Promise<boolean> { if (!conflict.autoResolvable) {
   return false;
   // Find best resolution option
   const bestOption = conflict.resolutionOptions.reduce((best, current) => ;
@@ -459,18 +438,14 @@ export class SynchronizationRecovery extends EventEmitter {
   // Not confident enough for auto-resolution
   return false;
   try {
-  return await this.resolveConflict(conflict.id, bestOption);
-} catch (error) {
-      console.error('Auto-resolution failed:', error);
+  return await this.resolveConflict(conflict.id, bestOption) } catch (error) { console.error('Auto-resolution failed:', error);
       return false;
   /**
    * Apply single operation to document state
    */
-  private async applyOperation(documentId: string, )
-    state: DocumentState, 
-    operation: DocumentOperation): Promise<{ success: boolean; conflict?: ConflictInfo }> {
-
-    // This would integrate with the actual document/graph system
+  private async applyOperation(documentId: string);
+  state: DocumentState }
+    operation: DocumentOperation): Promise<{ success: boolean; conflict?: ConflictInfo }> { // This would integrate with the actual document/graph system
     // For now, just simulate the application
     try {
       // Validate operation
@@ -487,20 +462,20 @@ export class SynchronizationRecovery extends EventEmitter {
   id: uuidv4(),
           type: 'concurrent_edit',
           operation1: existingOp,
-          operation2: operation,
+          operation2: operation }
           description: `Concurrent edit detected on ${operation.target} ${operation.targetId}`}
 },
-  resolutionOptions: [,
+  resolutionOptions: [
             { strategy: 'theirs', description: 'Use incoming operation', confidence: 0.6 }
           ],
           autoResolvable: true,
-          severity: 'medium'
+          severity: 'medium';
   };
         return { success: false, conflict };
       // Apply operation (would integrate with actual graph operations)
       state.operations.push(operation);
       return { success: true };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to apply operation:', error);
       throw error;
   /**
@@ -549,47 +524,43 @@ export class SynchronizationRecovery extends EventEmitter {
   /**
    * Backup document state before recovery
    */
-  private async backupDocumentState(documentId: string, state: DocumentState): Promise<void> {
-
-  try {
+  private async backupDocumentState(documentId: string, state: DocumentState): Promise<void> { try {
   const backup = {
-  ...state,
-  backupTimestamp: Date.now(),
+  ...state
+  backupTimestamp: Date.now() }
   documentId
 };
       // Store in localStorage as fallback
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem(`backup_${documentId}_${Date.now()}`, JSON.stringify(backup));}
       this.emit('state_backed_up', { documentId, backupSize: JSON.stringify(backup).length });
-    } catch (error) {
-  console.error('Failed to backup state:', error);
+ catch (error) { console.error('Failed to backup state:', error);
   // Don't fail recovery for backup failure
   /**
   * Merge two conflicting operations
   */
-  private async mergeOperations(op1: DocumentOperation, op2: DocumentOperation): Promise<DocumentOperation> {,
+  private async mergeOperations(op1: DocumentOperation, op2: DocumentOperation): Promise<DocumentOperation> {
   // Simplified merge logic - would need domain-specific implementation
   return {
   ...op2, // Use newer operation as base
   data: {
-  ...op1.data,
+  ...op1.data }
   ...op2.data // Shallow merge
-},
-  id: uuidv4(),
+
+  id: uuidv4()
       timestamp: Math.max(op1.timestamp, op2.timestamp)
     };
   /**
    * Calculate checksum for state
    */
-  private calculateChecksum(state: DocumentState): string {
-  // Simple hash for demo - would use crypto.subtle in production
+  private calculateChecksum(state: DocumentState): string { // Simple hash for demo - would use crypto.subtle in production
   const str = JSON.stringify({)
-  version: state.version,
-  operations: state.operations.map(op => ({ ),
-  id: op.id,
-  type: op.type,
-  targetId: op.targetId,
-  version: op.version,
+  version: state.version
+  operations: state.operations.map(op => ({ )
+  id: op.id
+  type: op.type
+  targetId: op.targetId
+  version: op.version }
 }))
     });
     let hash = 0;
@@ -614,31 +585,27 @@ export class SynchronizationRecovery extends EventEmitter {
   /**
    * Handle successful recovery
    */
-  private handleRecoverySuccess(duration: number, delta: SyncDelta): void {
-    this.stats.successfulRecoveries++;
+  private handleRecoverySuccess(duration: number, delta: SyncDelta): void { this.stats.successfulRecoveries++;
     this.stats.operationsRecovered += delta.operations.length;
     this.stats.lastRecoveryTime = Date.now();
     // Update average recovery time
     if (this.stats.averageRecoveryTime === 0) {
-      this.stats.averageRecoveryTime = duration;
-    } else {
-  this.stats.averageRecoveryTime = (this.stats.averageRecoveryTime * 0.8) + (duration * 0.2);
+      this.stats.averageRecoveryTime = duration } else { this.stats.averageRecoveryTime = (this.stats.averageRecoveryTime * 0.8) + (duration * 0.2);
   this.emit('recovery_success', {)
-  duration,
-  operationsRecovered: delta.operations.length,
-  conflictsFound: delta.conflicts.length,
-  stats: this.getStats(),
+  duration
+  operationsRecovered: delta.operations.length
+  conflictsFound: delta.conflicts.length
+  stats: this.getStats() }
 });
   /**
    * Handle recovery failure
    */
-  private handleRecoveryFailure(error: Error, duration: number): void {
-  this.stats.failedRecoveries++;
+  private handleRecoveryFailure(error: Error, duration: number): void { this.stats.failedRecoveries++;
   this.stats.lastRecoveryTime = Date.now();
   this.emit('recovery_failed', {)
-  error,
-  duration,
-  stats: this.getStats(),
+  error
+  duration
+  stats: this.getStats() }
 });
   /**
    * Start recovery timeout timer
@@ -660,7 +627,7 @@ export class SynchronizationRecovery extends EventEmitter {
   /**
    * Utility function to chunk array
    */
-  private chunkArray<T>(array: T, chunkSize: number): T[] {
+  private chunkArray<T>(array: T, chunkSize: number): T {
     const chunks: T = [];
     for (let i = 0; i < array.length; i += chunkSize) {
       chunks.push(array.slice(i, i + chunkSize));

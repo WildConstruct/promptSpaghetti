@@ -24,7 +24,8 @@ filtering_config: {
     strictness_level: 'permissive' | 'standard' | 'strict' | 'enterprise';
     auto_fix_enabled: boolean;
     learning_mode: boolean; // For training/feedback,
-    priority: 'low' | 'medium' | 'high' | 'urgent';
+    priority: 'low' | 'medium' | 'high' | 'urgent',
+    ;
 }
 ;
 ;
@@ -316,7 +317,7 @@ catch (error) {
                     ;
                 }
                 filtering_config: {
-                    categories_to_check: [,
+                    categories_to_check: [
                         'content_quality',
                         'community_guidelines',
                         'safety_compliance',
@@ -384,7 +385,7 @@ catch (error) {
                             ;
                         }
                         filtering_config: {
-                            categories_to_check: [,
+                            categories_to_check: [
                                 'content_quality',
                                 'marketplace_standards',
                                 'business_policy',
@@ -451,7 +452,7 @@ catch (error) {
                                     ;
                                 }
                                 filtering_config: {
-                                    categories_to_check: [,
+                                    categories_to_check: [
                                         'content_quality',
                                         'learning_effectiveness',
                                         'accessibility_standards',
@@ -511,7 +512,7 @@ catch (error) {
                                             ;
                                         }
                                         filtering_config: {
-                                            categories_to_check: [,
+                                            categories_to_check: [
                                                 'content_quality',
                                                 'community_guidelines',
                                                 'safety_compliance'
@@ -631,10 +632,11 @@ catch (error) {
                                                                         score: mockScore,
                                                                         confidence: mockConfidence,
                                                                         severity: mockScore >= 80 ? 'info' : mockScore >= 70 ? 'warning' : 'error',
-                                                                        specific_checks: [,
+                                                                        specific_checks: [
                                                                             {
                                                                                 check_name: `${category}_basic_check`
-                                                                            }]
+                                                                            }
+                                                                        ]
                                                                     },
                                                                         check_type;
                                                                     'automated',

@@ -5,8 +5,8 @@
 import { WorkspaceWithMembership, CreateWorkspace, UpdateWorkspace } from '../types/workspace';
 
 }
-interface UseWorkspacesOptions {
-    autoRefresh?: boolean;
+}
+interface UseWorkspacesOptions { autoRefresh?: boolean;
     refreshInterval?: number;
 
 export declare function useWorkspaces(userId: string, options?: UseWorkspacesOptions): {
@@ -17,7 +17,7 @@ export declare function useWorkspaces(userId: string, options?: UseWorkspacesOpt
     updateWorkspace: (workspaceId: string, data: UpdateWorkspace) => Promise<WorkspaceWithMembership>;
     archiveWorkspace: (workspaceId: string) => Promise<void>;
     inviteUser: (workspaceId: string, userIdToInvite: string, role: string) => Promise<void>;
-    refreshWorkspaces: () => void;
+    refreshWorkspaces: () => void }
 }
 };
 export {};

@@ -6,6 +6,7 @@ import { HistoricalQuery, HistoricalItem, Era, ValidationResult } from '../types
 import { VFXPipelineMetadata } from '../types/VFXExport';
 
 }
+}
 export interface CrowdGenerationRequest {
     scene: {
         era: Era;
@@ -14,141 +15,116 @@ export interface CrowdGenerationRequest {
         timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
         season: 'spring' | 'summer' | 'autumn' | 'winter'
 }
+}
   };
-    crowd: {
-        size: number;
+    crowd: { size: number;
         density: 'sparse' | 'moderate' | 'dense';
         demographics: CrowdDemographics;
-        activity: CrowdActivity;
-    };
-    constraints: {
-        historicalAccuracy: 'strict' | 'moderate' | 'creative';
+        activity: CrowdActivity };
+    constraints: { historicalAccuracy: 'strict' | 'moderate' | 'creative';
         socialMixing: boolean;
         genderMixing: boolean;
-        culturalSensitivity: boolean;
-    };
-    output: {
-        format: 'json' | 'xml' | 'csv';
+        culturalSensitivity: boolean };
+    output: { format: 'json' | 'xml' | 'csv';
         includeMetadata: boolean;
-        vfxPipeline: VFXPipelineMetadata;
-    };
+        vfxPipeline: VFXPipelineMetadata };
 
 }
-export interface CrowdDemographics {
-    socialClasses: {
+}
+export interface CrowdDemographics { socialClasses: {
         peasant: number;
         artisan: number;
         merchant: number;
         noble: number;
         clergy: number;
-        royal: number;
+        royal: number }
 }
     };
-    ageDistribution: {
-        children: number;
+    ageDistribution: { children: number;
         youth: number;
         adults: number;
-        elderly: number;
-    };
-    genderRatio: {
-        male: number;
+        elderly: number };
+    genderRatio: { male: number;
         female: number;
-        nonBinary?: number;
-    };
+        nonBinary?: number };
 
 }
-export interface CrowdActivity {
-    primary: string;
+}
+export interface CrowdActivity { primary: string;
     secondary: string[];
     mood: 'festive' | 'solemn' | 'busy' | 'tense' | 'peaceful';
-    interactions: InteractionType[];
-
+    interactions: InteractionType[] }
 }
-export interface InteractionType {
-    type: 'trading' | 'conversation' | 'ceremony' | 'performance' | 'labor';
+}
+export interface InteractionType { type: 'trading' | 'conversation' | 'ceremony' | 'performance' | 'labor';
     participants: string[];
-    frequency: 'rare' | 'occasional' | 'common';
-
+    frequency: 'rare' | 'occasional' | 'common' }
 }
-export interface CrowdGenerationResult {
-    individuals: CrowdIndividual[];
+}
+export interface CrowdGenerationResult { individuals: CrowdIndividual[];
     groups: CrowdGroup[];
     interactions: CrowdInteraction[];
     validation: ValidationResult;
-    metadata: CrowdMetadata;
-
+    metadata: CrowdMetadata }
 }
-export interface CrowdIndividual {
-    id: string;
+}
+export interface CrowdIndividual { id: string;
     demographics: {
         age: number;
         gender: 'male' | 'female';
         socialClass: string;
-        occupation: string;
+        occupation: string }
 }
     };
-    appearance: {
-        clothing: HistoricalItem[];
+    appearance: { clothing: HistoricalItem[];
         accessories: HistoricalItem[];
-        physicalTraits: string[];
-    };
-    behavior: {
-        activity: string;
+        physicalTraits: string[] };
+    behavior: { activity: string;
         posture: string;
         movement: string;
-        interactions: string[];
-    };
-    position: {
-        x: number;
+        interactions: string[] };
+    position: { x: number;
         y: number;
         z: number;
-        facing: number;
-    };
+        facing: number };
     historicalAccuracy: number;
 
 }
-export interface CrowdGroup {
-    id: string;
+}
+export interface CrowdGroup { id: string;
     type: 'family' | 'guild' | 'religious' | 'merchant' | 'nobility';
     members: string[];
     activity: string;
     formation: 'circle' | 'line' | 'cluster' | 'processional';
-    relationship: string;
-
+    relationship: string }
 }
-export interface CrowdInteraction {
-    id: string;
+}
+export interface CrowdInteraction { id: string;
     type: InteractionType['type'];
     participants: string[];
     duration: number;
     intensity: 'subtle' | 'moderate' | 'prominent';
-    historicalContext: string;
-
+    historicalContext: string }
 }
-export interface CrowdMetadata {
-    generation: {
+}
+export interface CrowdMetadata { generation: {
         timestamp: string;
         processingTime: number;
         algorithm: string;
-        version: string;
+        version: string }
 }
     };
-    validation: {
-        overallAccuracy: number;
+    validation: { overallAccuracy: number;
         constraintViolations: number;
-        historicalConsistency: number;
-    };
-    vfx: {
-        renderComplexity: 'low' | 'medium' | 'high';
+        historicalConsistency: number };
+    vfx: { renderComplexity: 'low' | 'medium' | 'high';
         memoryEstimate: number;
         polyCount: number;
-        textureSize: number;
-    };
+        textureSize: number };
 /**
  * Main pipeline class for crowd generation
  */
-export declare class CrowdGenerationPipeline {
-    private historicalDataService;
+export declare class CrowdGenerationPipeline { private historicalDataService;
     private constraintValidator;
     private clothingGenerator;
     private behaviorEngine;
@@ -158,7 +134,7 @@ export declare class CrowdGenerationPipeline {
       constraintValidator: ConstraintValidator,
       clothingGenerator: HistoricalClothingGenerator,
       behaviorEngine: CrowdBehaviorEngine,
-      vfxExporter: VFXExporter,
+      vfxExporter: VFXExporter }
     );
     /**
      * Generate a historically accurate crowd

@@ -1,43 +1,41 @@
 import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { 
-  MessageCircle, 
+import { MessageCircle, 
   AtSign, 
   CheckCircle, 
   GitBranch, 
   Users, 
   AlertCircle,
   Trash2,
-  Check,
+  Check }
   ExternalLink
-} from 'lucide-react';
+ from 'lucide-react';
 import { Notification, NotificationType } from '../../types/NotificationTypes';
 
-}
-interface NotificationItemProps {
-  notification: Notification;
-  onMarkAsRead: (id: string) => void;
+
+interface NotificationItemProps { notification: Notification;
+  onMarkAsRead: (id: string) => void
   onDelete: (id: string) => void;
-  const getNotificationIcon = (type: NotificationType) => {,
+  const getNotificationIcon = (type: NotificationType) => {;
   switch (type) {
-  case 'comment':,
+  case 'comment':;
   return MessageCircle;
-  case 'mention':,
+  case 'mention':;
   return AtSign;
-  case 'approval':,
+  case 'approval':;
   return CheckCircle;
-  case 'workflow':,
+  case 'workflow':;
   return GitBranch;
-  case 'collaboration':,
+  case 'collaboration':;
   return Users;
-  case 'system':,
+  case 'system':;
   return AlertCircle;
-  default:,
+  default: }
   return AlertCircle;
-}
+
+
 };
-const getNotificationColor = (type: NotificationType) => {
-  switch (type) {
+const getNotificationColor = (type: NotificationType) => { switch (type) {
   case 'comment':,
   return 'text-blue-500';
   case 'mention':,
@@ -50,52 +48,43 @@ const getNotificationColor = (type: NotificationType) => {
   return 'text-indigo-500';
   case 'system':,
   return 'text-red-500';
-  default:,
+  default: }
   return 'text-gray-500';
 };
-const getPriorityBadge = (priority: string) => {
-  switch (priority) {
+const getPriorityBadge = (priority: string) => { switch (priority) {
   case 'high':,
   return 'bg-red-100 text-red-800';
   case 'medium':,
   return 'bg-yellow-100 text-yellow-800';
   case 'low':,
   return 'bg-gray-100 text-gray-800';
-  default:,
+  default: }
   return 'bg-gray-100 text-gray-800';
 };
 
 export const NotificationItem: React.FC<NotificationItemProps> = ({ )
-  notification, 
-  onMarkAsRead, 
+  notification
+  onMarkAsRead }
   onDelete 
-}) => {
-  const IconComponent = getNotificationIcon(notification.type);
+}) => { const IconComponent = getNotificationIcon(notification.type);
   const iconColor = getNotificationColor(notification.type);
   const isUnread = !notification.read_at;
-  const handleMarkAsRead = (e: React.MouseEvent) => {,
+  const handleMarkAsRead = (e: React.MouseEvent) => { }
   e.stopPropagation();
-  if (isUnread) {
-  onMarkAsRead(notification.id);
-};
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onDelete(notification.id);
-  };
-  const handleClick = () => {
-    if (isUnread) {
+  if (isUnread) { onMarkAsRead(notification.id) };
+  const handleDelete = (e: React.MouseEvent) => { e.stopPropagation();
+    onDelete(notification.id) };
+  const handleClick = () => { if (isUnread) {
       onMarkAsRead(notification.id);
 
     // Navigate to the notification target if available
     if (notification.action_url) {
-      window.open(notification.action_url, '_blank');
-
-  };
+      window.open(notification.action_url, '_blank') };
   return;
     <div
-      className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
-  isUnread ? 'bg-blue-50 border-l-4 border-l-blue-500' : '',
-}`}
+      className={ `p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
+  isUnread ? 'bg-blue-50 border-l-4 border-l-blue-500' : '' }
+`}
       onClick={handleClick}
     >
       <div className="flex items-start space-x-3">
@@ -148,12 +137,11 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ )
           {/* Actions */}
           <div className="flex items-center justify-between mt-3">
             <div className="flex items-center space-x-2">
-              {notification.action_url && ()
+              { notification.action_url && ()
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    window.open(notification.action_url, '_blank');
-                  }}
+                    window.open(notification.action_url, '_blank') }}
                   className="inline-flex items-center space-x-1 text-xs text-blue-600 hover:text-blue-800 transition-colors"
                 >
                   <ExternalLink className="w-3 h-3" />

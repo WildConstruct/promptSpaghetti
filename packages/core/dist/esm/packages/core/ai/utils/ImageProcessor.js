@@ -100,8 +100,9 @@ export class ImageProcessor {
             }
             // Image compression and optimization
             async;
-            compress(imageData, string);
-            quality: number = 80,
+            compress(imageData, string),
+                quality;
+            number = 80,
                 format;
             'jpeg' | 'webp';
             'jpeg';
@@ -123,8 +124,9 @@ export class ImageProcessor {
             };
             // Image resizing with aspect ratio preservation
             async;
-            resize(imageData, string);
-            width: number,
+            resize(imageData, string),
+                width;
+            number,
                 height ?  : number,
                 maintainAspectRatio;
             boolean = true;

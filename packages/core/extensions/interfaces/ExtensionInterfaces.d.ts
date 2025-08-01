@@ -5,8 +5,8 @@
 import { z } from 'zod';
 
 }
-export interface BaseExtension {
-    readonly id: string;
+}
+export interface BaseExtension { readonly id: string;
     readonly name: string;
     readonly version: string;
     readonly description: string;
@@ -21,100 +21,89 @@ export interface BaseExtension {
     getConfiguration(): Record<string, any>;
     setConfiguration(config: Record<string, any>): void;
     isHealthy(): boolean;
-    getHealthStatus(): ExtensionHealthStatus;
-
+    getHealthStatus(): ExtensionHealthStatus }
 }
-export interface ExtensionHealthStatus {
-    status: 'healthy' | 'warning' | 'error';
+}
+export interface ExtensionHealthStatus { status: 'healthy' | 'warning' | 'error';
     message?: string;
     lastChecked: Date;
-    details?: Record<string, any>;
-
+    details?: Record<string, any> }
 }
-export interface ExtensionContext {
-    readonly extensionId: string;
+}
+export interface ExtensionContext { readonly extensionId: string;
     readonly systemVersion: string;
     readonly logger: ExtensionLogger;
     readonly storage: ExtensionStorage;
     readonly events: ExtensionEventEmitter;
     readonly runtime: ExtensionRuntime;
     readonly ui: ExtensionUIContext;
-    readonly api: ExtensionAPIContext;
-
+    readonly api: ExtensionAPIContext }
 }
-export interface ExtensionLogger {
-    debug(message: string, ...args: any[]): void;
+}
+export interface ExtensionLogger { debug(message: string, ...args: any[]): void;
     info(message: string, ...args: any[]): void;
     warn(message: string, ...args: any[]): void;
     error(message: string, ...args: any[]): void;
-    trace(message: string, ...args: any[]): void;
-
+    trace(message: string, ...args: any[]): void }
 }
-export interface ExtensionStorage {
-    get<T>(key: string): Promise<T | undefined>;
+}
+export interface ExtensionStorage { get<T>(key: string): Promise<T | undefined>;
     set<T>(key: string, value: T): Promise<void>;
     delete(key: string): Promise<void>;
     clear(): Promise<void>;
     keys(): Promise<string[]>;
-    getScoped(scope: string): ExtensionStorage;
-
+    getScoped(scope: string): ExtensionStorage }
 }
-export interface ExtensionEventEmitter {
-    on(event: string, listener: (...args: any[]) => void): void;
+}
+export interface ExtensionEventEmitter { on(event: string, listener: (...args: any[]) => void): void;
     off(event: string, listener: (...args: any[]) => void): void;
     emit(event: string, ...args: any[]): void;
     once(event: string, listener: (...args: any[]) => void): void;
-    removeAllListeners(event?: string): void;
-
+    removeAllListeners(event?: string): void }
 }
-export interface ExtensionRuntime {
-    readonly version: string;
+}
+export interface ExtensionRuntime { readonly version: string;
     readonly environment: 'development' | 'production' | 'test';
     getSystemInfo(): SystemInfo;
     getPerformanceMetrics(): PerformanceMetrics;
     registerNode(nodeDefinition: NodeDefinition): void;
     unregisterNode(nodeId: string): void;
-    getRegisteredNodes(): NodeDefinition[];
-
+    getRegisteredNodes(): NodeDefinition[] }
 }
-export interface ExtensionUIContext {
-    registerComponent(componentId: string, component: React.ComponentType<any>): void;
+}
+export interface ExtensionUIContext { registerComponent(componentId: string, component: React.ComponentType<any>): void;
     unregisterComponent(componentId: string): void;
     registerInspectorEditor(nodeType: string, editor: React.ComponentType<any>): void;
     unregisterInspectorEditor(nodeType: string): void;
     registerMenuItem(menuId: string, item: MenuItem): void;
     unregisterMenuItem(menuId: string, itemId: string): void;
     showNotification(notification: Notification): void;
-    showModal(modal: ModalDefinition): void;
-
+    showModal(modal: ModalDefinition): void }
 }
-export interface ExtensionAPIContext {
-    createHttpClient(): HttpClient;
+}
+export interface ExtensionAPIContext { createHttpClient(): HttpClient;
     registerEndpoint(path: string, handler: APIHandler): void;
     unregisterEndpoint(path: string): void;
     registerMiddleware(middleware: APIMiddleware): void;
-    unregisterMiddleware(middlewareId: string): void;
-
+    unregisterMiddleware(middlewareId: string): void }
 }
-export interface SystemInfo {
-    version: string;
+}
+export interface SystemInfo { version: string;
     platform: string;
     architecture: string;
     nodeVersion: string;
     memoryUsage: NodeJS.MemoryUsage;
-    uptime: number;
-
+    uptime: number }
 }
-export interface PerformanceMetrics {
-    executionTime: number;
+}
+export interface PerformanceMetrics { executionTime: number;
     memoryUsage: number;
     cpuUsage: number;
     activeNodes: number;
-    totalExecutions: number;
-
+    totalExecutions: number }
 }
-export interface NodeDefinition {
-    id: string;
+}
+export interface NodeDefinition { id: string;
     name: string;
     category: string;
     description: string;
@@ -128,117 +117,106 @@ export interface NodeDefinition {
         author: string;
         license: string;
         repository?: string;
-        documentation?: string;
+        documentation?: string }
 }
     };
 
 }
-export interface MenuItem {
-    id: string;
+}
+export interface MenuItem { id: string;
     label: string;
     icon?: string;
     shortcut?: string;
     action: () => void;
     disabled?: boolean;
-    submenu?: MenuItem[];
-
+    submenu?: MenuItem[] }
 }
-export interface Notification {
-    id?: string;
+}
+export interface Notification { id?: string;
     type: 'info' | 'success' | 'warning' | 'error';
     title: string;
     message: string;
     duration?: number;
-    actions?: NotificationAction[];
-
+    actions?: NotificationAction[] }
 }
-export interface NotificationAction {
-    label: string;
+}
+export interface NotificationAction { label: string;
     action: () => void;
-    primary?: boolean;
-
+    primary?: boolean }
 }
-export interface ModalDefinition {
-    id: string;
+}
+export interface ModalDefinition { id: string;
     title: string;
     content: React.ComponentType<any>;
     size?: 'small' | 'medium' | 'large' | 'fullscreen';
     closable?: boolean;
-    onClose?: () => void;
-
+    onClose?: () => void }
 }
-export interface HttpClient {
-    get<T>(url: string, options?: RequestOptions): Promise<T>;
+}
+export interface HttpClient { get<T>(url: string, options?: RequestOptions): Promise<T>;
     post<T>(url: string, data?: any, options?: RequestOptions): Promise<T>;
     put<T>(url: string, data?: any, options?: RequestOptions): Promise<T>;
     patch<T>(url: string, data?: any, options?: RequestOptions): Promise<T>;
-    delete<T>(url: string, options?: RequestOptions): Promise<T>;
-
+    delete<T>(url: string, options?: RequestOptions): Promise<T> }
 }
-export interface RequestOptions {
-    headers?: Record<string, string>;
+}
+export interface RequestOptions { headers?: Record<string, string>;
     timeout?: number;
     retries?: number;
-    validateStatus?: (status: number) => boolean;
-
+    validateStatus?: (status: number) => boolean }
 }
-export interface APIHandler {
-    (request: APIRequest, response: APIResponse): Promise<void> | void;
-
 }
-export interface APIRequest {
-    method: string;
+export interface APIHandler { (request: APIRequest, response: APIResponse): Promise<void> | void }
+}
+}
+export interface APIRequest { method: string;
     url: string;
     path: string;
     query: Record<string, any>;
     params: Record<string, any>;
     headers: Record<string, string>;
     body: any;
-    user?: any;
-
+    user?: any }
 }
-export interface APIResponse {
-    status(code: number): APIResponse;
+}
+export interface APIResponse { status(code: number): APIResponse;
     json(data: any): APIResponse;
     send(data: any): APIResponse;
     header(name: string, value: string): APIResponse;
-    redirect(url: string): APIResponse;
-
+    redirect(url: string): APIResponse }
 }
-export interface APIMiddleware {
-    id: string;
+}
+export interface APIMiddleware { id: string;
     priority: number;
     handler: (request: APIRequest, response: APIResponse, next: () => void) => Promise<void> | void;
 
 export declare enum ExtensionLifecycleState {
-    UNINITIALIZED = "uninitialized",
-    INITIALIZING = "initializing",
-    INITIALIZED = "initialized",
-    ACTIVATING = "activating",
-    ACTIVE = "active",
-    DEACTIVATING = "deactivating",
-    DEACTIVATED = "deactivated",
-    ERROR = "error",
+    UNINITIALIZED = "uninitialized";
+    INITIALIZING = "initializing";
+    INITIALIZED = "initialized";
+    ACTIVATING = "activating";
+    ACTIVE = "active";
+    DEACTIVATING = "deactivating";
+    DEACTIVATED = "deactivated";
+    ERROR = "error";
     DISPOSED = "disposed"
 
 export declare enum ExtensionErrorType {
-    INITIALIZATION_ERROR = "initialization_error",
-    ACTIVATION_ERROR = "activation_error",
-    RUNTIME_ERROR = "runtime_error",
-    CONFIGURATION_ERROR = "configuration_error",
-    DEPENDENCY_ERROR = "dependency_error",
-    PERMISSION_ERROR = "permission_error",
+    INITIALIZATION_ERROR = "initialization_error";
+    ACTIVATION_ERROR = "activation_error";
+    RUNTIME_ERROR = "runtime_error";
+    CONFIGURATION_ERROR = "configuration_error";
+    DEPENDENCY_ERROR = "dependency_error";
+    PERMISSION_ERROR = "permission_error" }
     VALIDATION_ERROR = "validation_error"
 
-export declare class ExtensionError extends Error {
-    readonly type: ExtensionErrorType;
+export declare class ExtensionError extends Error { readonly type: ExtensionErrorType;
     readonly extensionId: string;
     readonly cause?: Error | undefined;
-    constructor(type: ExtensionErrorType, extensionId: string, message: string, cause?: Error | undefined);
-
+    constructor(type: ExtensionErrorType, extensionId: string, message: string, cause?: Error | undefined) }
 }
-export interface ExtensionValidationResult {
-    valid: boolean;
+}
+export interface ExtensionValidationResult { valid: boolean;
     errors: string[];
     warnings: string[];
 
@@ -249,57 +227,43 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     description: z.ZodString;
     author: z.ZodString;
     license: z.ZodString;
-    engines: z.ZodObject<{,
+    engines: z.ZodObject<{ }
         promptSpaghetti: z.ZodString;
         node: z.ZodOptional<z.ZodString>;
 }
-    }, "strip", z.ZodTypeAny, {
-        promptSpaghetti: string;
-        node?: string | undefined;
-    }, {
-        promptSpaghetti: string;
-        node?: string | undefined;
-    }>;
+}
+    }, "strip", z.ZodTypeAny, { promptSpaghetti: string;
+        node?: string | undefined }, { promptSpaghetti: string;
+        node?: string | undefined }>;
     dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     optionalDependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     permissions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     main: z.ZodOptional<z.ZodString>;
     browser: z.ZodOptional<z.ZodString>;
-    contributes: z.ZodOptional<z.ZodObject<{,
+    contributes: z.ZodOptional<z.ZodObject<{ 
         nodes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         commands: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         menus: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         themes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        languages: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        nodes?: string[] | undefined;
+        languages: z.ZodOptional<z.ZodArray<z.ZodString, "many">> }, "strip", z.ZodTypeAny, { nodes?: string[] | undefined;
         commands?: string[] | undefined;
         menus?: string[] | undefined;
         themes?: string[] | undefined;
-        languages?: string[] | undefined;
-    }, {
-        nodes?: string[] | undefined;
+        languages?: string[] | undefined }, { nodes?: string[] | undefined;
         commands?: string[] | undefined;
         menus?: string[] | undefined;
         themes?: string[] | undefined;
-        languages?: string[] | undefined;
-    }>>;
+        languages?: string[] | undefined }>>;
     repository: z.ZodOptional<z.ZodString>;
     homepage: z.ZodOptional<z.ZodString>;
     bugs: z.ZodOptional<z.ZodString>;
     keywords: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    configuration: z.ZodOptional<z.ZodObject<{,
+    configuration: z.ZodOptional<z.ZodObject<{ 
         type: z.ZodLiteral<"object">;
-        properties: z.ZodRecord<z.ZodString, z.ZodAny>;
-    }, "strip", z.ZodTypeAny, {
-        type: "object";
-        properties: Record<string, any>;
-    }, {
-        type: "object";
-        properties: Record<string, any>;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+        properties: z.ZodRecord<z.ZodString, z.ZodAny> }, "strip", z.ZodTypeAny, { type: "object";
+        properties: Record<string, any> }, { type: "object";
+        properties: Record<string, any> }>>;
+}, "strip", z.ZodTypeAny, { id: string;
     name: string;
     description: string;
     version: string;
@@ -307,30 +271,24 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     license: string;
     engines: {
         promptSpaghetti: string;
-        node?: string | undefined;
-    };
+        node?: string | undefined };
     main?: string | undefined;
-    configuration?: {
-        type: "object";
-        properties: Record<string, any>;
-    } | undefined;
+    configuration?: { type: "object";
+        properties: Record<string, any> } | undefined;
     keywords?: string[] | undefined;
     permissions?: string[] | undefined;
     dependencies?: string[] | undefined;
     optionalDependencies?: string[] | undefined;
     browser?: string | undefined;
-    contributes?: {
-        nodes?: string[] | undefined;
+    contributes?: { nodes?: string[] | undefined;
         commands?: string[] | undefined;
         menus?: string[] | undefined;
         themes?: string[] | undefined;
-        languages?: string[] | undefined;
-    } | undefined;
+        languages?: string[] | undefined } | undefined;
     repository?: string | undefined;
     homepage?: string | undefined;
     bugs?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     name: string;
     description: string;
     version: string;
@@ -338,25 +296,20 @@ export declare const ExtensionManifestSchema: z.ZodObject<{
     license: string;
     engines: {
         promptSpaghetti: string;
-        node?: string | undefined;
-    };
+        node?: string | undefined };
     main?: string | undefined;
-    configuration?: {
-        type: "object";
-        properties: Record<string, any>;
-    } | undefined;
+    configuration?: { type: "object";
+        properties: Record<string, any> } | undefined;
     keywords?: string[] | undefined;
     permissions?: string[] | undefined;
     dependencies?: string[] | undefined;
     optionalDependencies?: string[] | undefined;
     browser?: string | undefined;
-    contributes?: {
-        nodes?: string[] | undefined;
+    contributes?: { nodes?: string[] | undefined;
         commands?: string[] | undefined;
         menus?: string[] | undefined;
         themes?: string[] | undefined;
-        languages?: string[] | undefined;
-    } | undefined;
+        languages?: string[] | undefined } | undefined;
     repository?: string | undefined;
     homepage?: string | undefined;
     bugs?: string | undefined;

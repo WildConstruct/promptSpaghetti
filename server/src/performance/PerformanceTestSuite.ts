@@ -6,8 +6,9 @@ import { performance } from 'perf_hooks';
 /**
  * Performance metrics collected during testing
  */
-}
-}
+
+
+
 export interface PerformanceMetrics {
   // WebSocket performance
   connectionTime: number;
@@ -34,15 +35,17 @@ export interface PerformanceMetrics {
   timestamp: number;
   testScenario: string;
   userCount: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Test scenario configuration
  */
-}
-}
+
+
+
 export interface TestScenario {
   name: string;
   description: string;
@@ -52,9 +55,10 @@ export interface TestScenario {
   operationTypes: OperationType[];
   documentComplexity: DocumentComplexity;
   networkConditions?: NetworkConditions;
-}
-}
-}
+
+
+
+
 
 /**
  * Types of operations to simulate
@@ -70,7 +74,7 @@ export enum OperationType {
   UPDATE_SELECTION = 'update_selection',
   TYPING_ACTIVITY = 'typing_activity',
   TOOL_CHANGE = 'tool_change'
-}
+
 
 /**
  * Document complexity levels
@@ -80,21 +84,23 @@ export enum DocumentComplexity {
   MEDIUM = 'medium',     // 50-100 nodes, 60-120 edges
   COMPLEX = 'complex',   // 200-500 nodes, 300-800 edges
   ENTERPRISE = 'enterprise' // 1000+ nodes, 1500+ edges
-}
+
 
 /**
  * Network conditions simulation
  */
-}
-}
+
+
+
 export interface NetworkConditions {
   latency: number; // in milliseconds
   bandwidth: number; // in kbps
   packetLoss: number; // percentage (0-100)
   jitter: number; // in milliseconds
-}
-}
-}
+
+
+
+
 
 /**
  * Simulated user for performance testing
@@ -115,7 +121,7 @@ export class SimulatedUser extends EventEmitter {
     this.userId = userId;
     this.documentId = documentId;
     this.scenario = scenario;
-  }
+
 
   /**
    * Connect to WebSocket server
@@ -171,10 +177,10 @@ export class SimulatedUser extends EventEmitter {
       setTimeout(() => {
         if (!this.isConnected) {
           reject(new Error('Connection timeout'));
-        }
+
       }, 10000);
     });
-  }
+
 
   /**
    * Start performing operations according to scenario
@@ -187,11 +193,11 @@ export class SimulatedUser extends EventEmitter {
       if (!this.isConnected || (performance.now() - this.startTime) > this.scenario.duration) {
         clearInterval(operationTimer);
         return;
-      }
+
       
       this.performRandomOperation();
     }, interval);
-  }
+
 
   /**
    * Perform a random operation based on scenario configuration
@@ -236,17 +242,16 @@ export class SimulatedUser extends EventEmitter {
       case OperationType.TOOL_CHANGE:
         await this.changeTool();
         break;
-      }
+
       
       const operationTime = performance.now() - operationStartTime;
       this.recordOperationMetric(operationType, operationTime, true);
-      
-    } catch (error) {
+ catch (error) {
       const operationTime = performance.now() - operationStartTime;
       this.recordOperationMetric(operationType, operationTime, false);
       this.emit('operation_error', { operationType, error });
-    }
-  }
+
+
 
   /**
    * Record performance metrics for operations
@@ -270,7 +275,7 @@ export class SimulatedUser extends EventEmitter {
       testScenario: `${this.scenario.name}_${operationType}`,
       userCount: this.scenario.userCount
     });
-  }
+
 
   /**
    * Create a new node
@@ -284,10 +289,10 @@ export class SimulatedUser extends EventEmitter {
       position: {
         x: Math.random() * 800,
         y: Math.random() * 600
-  }
+
       data: {
         text: `Test node ${Date.now()}`
-      }
+
     };
 
     await this.sendMessage('graph_update', {
@@ -297,9 +302,9 @@ export class SimulatedUser extends EventEmitter {
         nodeId,
         data: nodeData,
         timestamp: Date.now()
-      }]
+]
     });
-  }
+
 
   /**
    * Delete a random node
@@ -314,9 +319,9 @@ export class SimulatedUser extends EventEmitter {
         type: 'node_remove',
         nodeId,
         timestamp: Date.now()
-      }]
+]
     });
-  }
+
 
   /**
    * Update node properties
@@ -332,11 +337,11 @@ export class SimulatedUser extends EventEmitter {
         nodeId,
         data: {
           text: `Updated text ${Date.now()}`
-  }
+
         timestamp: Date.now()
-      }]
+]
     });
-  }
+
 
   /**
    * Move a node to a new position
@@ -354,12 +359,12 @@ export class SimulatedUser extends EventEmitter {
           position: {
             x: Math.random() * 800,
             y: Math.random() * 600
-          }
-  }
+
+
         timestamp: Date.now()
-      }]
+]
     });
-  }
+
 
   /**
    * Create a new edge
@@ -379,11 +384,11 @@ export class SimulatedUser extends EventEmitter {
           id: edgeId,
           source: sourceNodeId,
           target: targetNodeId
-  }
+
         timestamp: Date.now()
-      }]
+]
     });
-  }
+
 
   /**
    * Delete a random edge
@@ -398,9 +403,9 @@ export class SimulatedUser extends EventEmitter {
         type: 'edge_remove',
         edgeId,
         timestamp: Date.now()
-      }]
+]
     });
-  }
+
 
   /**
    * Update cursor position
@@ -416,9 +421,9 @@ export class SimulatedUser extends EventEmitter {
         y: 0,
         width: 800,
         height: 600
-      }
+
     });
-  }
+
 
   /**
    * Update selection
@@ -438,9 +443,9 @@ export class SimulatedUser extends EventEmitter {
         y: Math.random() * 600,
         width: Math.random() * 200,
         height: Math.random() * 200
-      }
+
     });
-  }
+
 
   /**
    * Simulate typing activity
@@ -461,7 +466,7 @@ export class SimulatedUser extends EventEmitter {
         focusedNodeId: null
       });
     }, Math.random() * 2000 + 500);
-  }
+
 
   /**
    * Change current tool
@@ -476,7 +481,7 @@ export class SimulatedUser extends EventEmitter {
       isTyping: false,
       focusedNodeId: null
     });
-  }
+
 
   /**
    * Send a message to the WebSocket server
@@ -485,7 +490,7 @@ export class SimulatedUser extends EventEmitter {
 
     if (!this.ws || !this.isConnected) {
       throw new Error('Not connected to server');
-    }
+
     
     const messageStartTime = performance.now();
     
@@ -524,7 +529,7 @@ export class SimulatedUser extends EventEmitter {
         resolve();
       }, 10);
     });
-  }
+
 
   /**
    * Handle incoming WebSocket messages
@@ -547,12 +552,11 @@ export class SimulatedUser extends EventEmitter {
       case 'sync_response':
         this.handleSyncResponse(message);
         break;
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       this.emit('message_error', error);
-    }
-  }
+
+
 
   /**
    * Handle conflict detection and resolution
@@ -582,7 +586,7 @@ export class SimulatedUser extends EventEmitter {
         userCount: this.scenario.userCount
       });
     }, Math.random() * 100 + 50);
-  }
+
 
   /**
    * Handle graph updates
@@ -608,7 +612,7 @@ export class SimulatedUser extends EventEmitter {
       testScenario: `${this.scenario.name}_state_update`,
       userCount: this.scenario.userCount
     });
-  }
+
 
   /**
    * Handle presence updates
@@ -616,7 +620,7 @@ export class SimulatedUser extends EventEmitter {
   private handlePresenceUpdate(message: any): void {
     // Track presence update frequency and latency
     this.emit('presence_update_received', message);
-  }
+
 
   /**
    * Handle synchronization responses
@@ -642,7 +646,7 @@ export class SimulatedUser extends EventEmitter {
       testScenario: `${this.scenario.name}_synchronization`,
       userCount: this.scenario.userCount
     });
-  }
+
 
   /**
    * Record a performance metric
@@ -650,14 +654,14 @@ export class SimulatedUser extends EventEmitter {
   private recordMetric(metric: PerformanceMetrics): void {
     this.metrics.push(metric);
     this.emit('metric_recorded', metric);
-  }
+
 
   /**
    * Get collected metrics
    */
   getMetrics(): PerformanceMetrics[] {
     return [...this.metrics];
-  }
+
 
   /**
    * Disconnect from server
@@ -665,9 +669,9 @@ export class SimulatedUser extends EventEmitter {
   disconnect(): void {
     if (this.ws) {
       this.ws.close();
-    }
-  }
-}
+
+
+
 
 /**
  * Main performance test suite
@@ -705,7 +709,7 @@ export class PerformanceTestSuite extends EventEmitter {
       });
       
       this.users.push(user);
-    }
+
 
     // Connect all users
     const connectionPromises = this.users.map(user => user.connect(serverUrl));
@@ -726,7 +730,7 @@ export class PerformanceTestSuite extends EventEmitter {
     this.isRunning = false;
 
     return this.aggregatedMetrics;
-  }
+
 
   /**
    * Run multiple scenarios in sequence
@@ -738,17 +742,17 @@ export class PerformanceTestSuite extends EventEmitter {
     for (const scenario of scenarios) {
       if (!this.isRunning) {
         break;
-      }
+
       
       const metrics = await this.runScenario(scenario, serverUrl);
       results[scenario.name] = metrics;
       
       // Wait between scenarios
       await new Promise(resolve => setTimeout(resolve, 5000));
-    }
+
     
     return results;
-  }
+
 
   /**
    * Generate performance report
@@ -756,7 +760,7 @@ export class PerformanceTestSuite extends EventEmitter {
   generateReport(metrics: PerformanceMetrics[]): any {
     if (metrics.length === 0) {
       return null;
-    }
+
 
     // Calculate aggregated statistics
     const stats = {
@@ -778,7 +782,7 @@ export class PerformanceTestSuite extends EventEmitter {
       statistics: stats,
       rawMetrics: metrics
     };
-  }
+
 
   /**
    * Calculate statistical measures for a dataset
@@ -786,7 +790,7 @@ export class PerformanceTestSuite extends EventEmitter {
   private calculateStats(values: number[]): any {
     if (values.length === 0) {
       return { min: 0, max: 0, mean: 0, median: 0, p95: 0, p99: 0 };
-    }
+
 
     const sorted = values.sort((a, b) => a - b);
     const sum = values.reduce((a, b) => a + b, 0);
@@ -799,7 +803,7 @@ export class PerformanceTestSuite extends EventEmitter {
       p95: sorted[Math.floor(sorted.length * 0.95)],
       p99: sorted[Math.floor(sorted.length * 0.99)]
     };
-  }
+
 
   /**
    * Stop running tests
@@ -807,8 +811,8 @@ export class PerformanceTestSuite extends EventEmitter {
   stop(): void {
     this.isRunning = false;
     this.users.forEach(user => user.disconnect());
-  }
-}
+
+
 
 /**
  * Predefined test scenarios
@@ -827,7 +831,7 @@ export const TEST_SCENARIOS: TestScenario[] = [
       OperationType.TYPING_ACTIVITY
     ],
     documentComplexity: DocumentComplexity.SIMPLE
-  }
+
   {
     name: 'medium_collaboration',
     description: 'Medium intensity collaboration',
@@ -843,7 +847,7 @@ export const TEST_SCENARIOS: TestScenario[] = [
       OperationType.UPDATE_SELECTION
     ],
     documentComplexity: DocumentComplexity.MEDIUM
-  }
+
   {
     name: 'heavy_editing',
     description: 'Heavy collaborative editing with many operations',
@@ -852,7 +856,7 @@ export const TEST_SCENARIOS: TestScenario[] = [
     operationRate: 2, // 2 operations per second per user
     operationTypes: Object.values(OperationType),
     documentComplexity: DocumentComplexity.COMPLEX
-  }
+
   {
     name: 'stress_test',
     description: 'Stress test with maximum users and operations',
@@ -861,7 +865,7 @@ export const TEST_SCENARIOS: TestScenario[] = [
     operationRate: 3, // 3 operations per second per user
     operationTypes: Object.values(OperationType),
     documentComplexity: DocumentComplexity.ENTERPRISE
-  }
+
   {
     name: 'conflict_heavy',
     description: 'Test with high conflict rate',
@@ -875,5 +879,5 @@ export const TEST_SCENARIOS: TestScenario[] = [
       OperationType.CREATE_NODE
     ],
     documentComplexity: DocumentComplexity.MEDIUM
-  }
+
 ];

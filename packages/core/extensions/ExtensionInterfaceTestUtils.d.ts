@@ -3,8 +3,7 @@
  * Testing utilities for extension interface validation and compliance
  */
 import { BaseExtension } from './interfaces/ExtensionInterfaces';
-export declare class ExtensionInterfaceTestSuite {
-    private static instance;
+export declare class ExtensionInterfaceTestSuite { private static instance;
     private testResults;
     private constructor();
     static getInstance(): ExtensionInterfaceTestSuite;
@@ -76,27 +75,21 @@ export declare class ExtensionInterfaceTestSuite {
      * Generate test report
      */
     generateTestReport(extensionId: string): string;
-    private isAsyncFunction;
-
+    private isAsyncFunction }
 }
-interface TestSuiteResult {
-    extensionId: string;
+interface TestSuiteResult { extensionId: string;
     extensionName: string;
     version: string;
     timestamp: Date;
     overallPassed: boolean;
-    tests: TestCategoryResult[];
-
-
+    tests: TestCategoryResult[] }
 }
-interface TestCategoryResult {
-    category: string;
-    results: TestResult[];
-
-
 }
-interface TestResult {
-    name: string;
+interface TestCategoryResult { category: string;
+    results: TestResult[] }
+}
+}
+interface TestResult { name: string;
     passed: boolean;
     error?: string;
     duration: number;
@@ -111,7 +104,7 @@ export declare class ExtensionInterfaceMockFactory {
      */
     static createInvalidExtension(missingFields?: string[]): any;
 
-export declare const extensionInterfaceTestSuite: ExtensionInterfaceTestSuite;
+export declare const extensionInterfaceTestSuite: ExtensionInterfaceTestSuite }
 }
 export {};
 //# sourceMappingURL=ExtensionInterfaceTestUtils.d.ts.map

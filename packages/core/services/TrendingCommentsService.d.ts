@@ -7,8 +7,7 @@
  * Task: E16-1753114247017-86B04D - Implement trending comments
  */
 import { TrendingComment, CommentScore, CommentEngagement, CommentAnalytics, TrendingAlgorithmConfig, GetTrendingCommentsRequest, TrendingCommentsResponse, CommentEngagementType } from '../types/TrendingCommentsTypes';
-export declare class TrendingCommentsService {
-    private baseUrl;
+export declare class TrendingCommentsService { private baseUrl;
     private algorithms;
     private defaultAlgorithm;
     private cacheEnabled;
@@ -19,8 +18,7 @@ export declare class TrendingCommentsService {
         algorithms?: TrendingAlgorithmConfig[];
         defaultAlgorithm?: string;
         cacheEnabled?: boolean;
-        cacheTTL?: number;
-    });
+        cacheTTL?: number });
     /**
      * Get trending comments for a resource
      */
@@ -36,10 +34,9 @@ export declare class TrendingCommentsService {
     /**
      * Get comment analytics for a resource
      */
-    getCommentAnalytics(resourceId: string, timeRange: {)
+    getCommentAnalytics(resourceId: string, timeRange: { )
         start: Date;
-        end: Date;
-    }): Promise<CommentAnalytics>;
+        end: Date }): Promise<CommentAnalytics>;
     /**
      * Infer resource type from resource ID context
      */

@@ -34,7 +34,7 @@ export enum ReferralSource {
   PARTNERSHIP = 'partnership',
   CONTENT_MARKETING = 'content_marketing',
   UNKNOWN = 'unknown'
-}
+
 
 export enum ReferralStatus {
   PENDING = 'pending',
@@ -43,14 +43,14 @@ export enum ReferralStatus {
   REJECTED = 'rejected',
   FRAUDULENT = 'fraudulent',
   EXPIRED = 'expired'
-}
+
 
 export enum FraudRiskLevel {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
+
 
 export enum AttributionModel {
   FIRST_TOUCH = 'first_touch',
@@ -59,7 +59,7 @@ export enum AttributionModel {
   TIME_DECAY = 'time_decay',
   POSITION_BASED = 'position_based',
   DATA_DRIVEN = 'data_driven'
-}
+
 
 const ReferralTrackingDataSchema = z.object({
   id: z.string().uuid(),
@@ -192,8 +192,8 @@ export type ReferralCampaign = z.infer<typeof ReferralCampaignSchema>;
 // Fraud Detection Configuration
 // =============================================================================
 
-}
-}
+
+
 export interface FraudDetectionConfig {
   enableRealTimeDetection: boolean;
   maxClicksPerIp: number;
@@ -205,16 +205,17 @@ export interface FraudDetectionConfig {
   mlFraudDetectionEnabled: boolean;
   quarantinePeriod: number; // hours
   autoRejectThreshold: number; // risk score 0-1
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Main Referral Detection Service
 // =============================================================================
 
-}
-}
+
+
 export interface ReferralDetectionConfig {
   enableTracking: boolean;
   cookieDomain: string;
@@ -235,9 +236,10 @@ export interface ReferralDetectionConfig {
   rewardService: string;
   fraudDetectionService: string;
   notificationService: string;
-}
-}
-}
+
+
+
+
 
 export class ReferralDetectionService extends EventEmitter {
   private config: ReferralDetectionConfig;
@@ -259,7 +261,7 @@ export class ReferralDetectionService extends EventEmitter {
     this.config = config;
     this.initializeFraudDetection();
     this.startPeriodicProcessing();
-  }
+
 
   // =========================================================================
   // Core Referral Tracking Methods
@@ -295,7 +297,7 @@ export class ReferralDetectionService extends EventEmitter {
       const referrer = await this.lookupReferrer(referralCode);
       if (!referrer) {
         throw new Error(`Invalid referral code: ${referralCode}`);
-      }
+
 
       // Create referral tracking record
       const referralData: ReferralTrackingData = {
@@ -334,7 +336,7 @@ export class ReferralDetectionService extends EventEmitter {
           source,
           timestamp: new Date(),
           weight: 1.0
-        }],
+],
         
         rewardEligible: false,
         
@@ -352,7 +354,7 @@ export class ReferralDetectionService extends EventEmitter {
       // Run fraud detection
       if (this.config.enableFraudDetection) {
         await this.runFraudDetection(validatedData);
-      }
+
 
       // Store referral data
       await this.storeReferralData(validatedData);
@@ -373,8 +375,7 @@ export class ReferralDetectionService extends EventEmitter {
       this.updatePerformanceMetrics('tracked', Date.now() - startTime);
 
       return validatedData;
-
-    } catch (error) {
+ catch (error) {
       this.emit('trackingError', {
         referralCode,
         error: error.message,
@@ -382,8 +383,8 @@ export class ReferralDetectionService extends EventEmitter {
       });
       
       throw new Error(`Referral tracking failed: ${error.message}`);
-    }
-  }
+
+
 
   async recordConversion(
     referralId: string,
@@ -400,7 +401,7 @@ export class ReferralDetectionService extends EventEmitter {
       const referralData = await this.getReferralData(referralId);
       if (!referralData) {
         throw new Error(`Referral ${referralId} not found`);
-      }
+
 
       // Update referral with conversion data
       const updatedData = {
@@ -424,7 +425,7 @@ export class ReferralDetectionService extends EventEmitter {
         updatedData.rewardAmount = reward.amount;
         updatedData.rewardType = reward.type;
         updatedData.rewardCurrency = reward.currency;
-      }
+
 
       // Update stored data
       await this.updateReferralData(referralId, updatedData);
@@ -445,20 +446,19 @@ export class ReferralDetectionService extends EventEmitter {
       // Process reward if eligible
       if (eligibleForReward && updatedData.rewardAmount && updatedData.rewardAmount > 0) {
         await this.processReward(updatedData);
-      }
+
 
       // Update performance metrics
       this.updatePerformanceMetrics('converted');
-
-    } catch (error) {
+ catch (error) {
       this.emit('conversionError', {
         referralId,
         error: error.message
       });
       
       throw new Error(`Conversion recording failed: ${error.message}`);
-    }
-  }
+
+
 
   // =========================================================================
   // Fraud Detection Methods
@@ -471,13 +471,13 @@ export class ReferralDetectionService extends EventEmitter {
     // Update fraud risk level based on score
     if (fraudScore >= 0.8) {
       referralData.fraudRiskLevel = FraudRiskLevel.CRITICAL;
-    } else if (fraudScore >= 0.6) {
+ else if (fraudScore >= 0.6) {
       referralData.fraudRiskLevel = FraudRiskLevel.HIGH;
-    } else if (fraudScore >= 0.3) {
+ else if (fraudScore >= 0.3) {
       referralData.fraudRiskLevel = FraudRiskLevel.MEDIUM;
-    } else {
+ else {
       referralData.fraudRiskLevel = FraudRiskLevel.LOW;
-    }
+
 
     referralData.verificationScore = 1 - fraudScore;
 
@@ -490,8 +490,8 @@ export class ReferralDetectionService extends EventEmitter {
         fraudScore,
         reasons: referralData.fraudReasons
       });
-    }
-  }
+
+
 
   private async calculateFraudScore(referralData: ReferralTrackingData): Promise<number> {
 
@@ -507,14 +507,14 @@ export class ReferralDetectionService extends EventEmitter {
 
         if (score > 0.5) {
           referralData.fraudReasons.push(`High risk detected by rule: ${ruleName}`);
-        }
-      } catch (error) {
+
+ catch (error) {
         console.warn(`Fraud detection rule ${ruleName} failed:`, error.message);
-      }
-    }
+
+
 
     return ruleCount > 0 ? totalScore / ruleCount : 0;
-  }
+
 
   private initializeFraudDetection(): void {
     // IP velocity check
@@ -537,7 +537,7 @@ export class ReferralDetectionService extends EventEmitter {
       
       if (data.country && !referrer.typicalCountries.includes(data.country)) {
         return 0.3; // Moderate risk for unusual geography
-      }
+
       return 0;
     });
 
@@ -553,7 +553,7 @@ export class ReferralDetectionService extends EventEmitter {
       
       if (botPatterns.some(pattern => pattern.test(data.userAgent))) {
         return 0.9; // Very high risk for bot traffic
-      }
+
       
       return 0;
     });
@@ -568,12 +568,12 @@ export class ReferralDetectionService extends EventEmitter {
         const referrerDomain = this.extractDomain(data.sourceUrl);
         if (!expectedDomains.includes(referrerDomain)) {
           return 0.4; // Moderate risk for unexpected referrer
-        }
-      }
+
+
       
       return 0;
     });
-  }
+
 
   // =========================================================================
   // Attribution and Analytics Methods
@@ -599,8 +599,8 @@ export class ReferralDetectionService extends EventEmitter {
       
       // Update stored data
       await this.updateReferralData(referral.id, referral);
-    }
-  }
+
+
 
   private async recalculateAttribution(referral: ReferralTrackingData): Promise<void> {
 
@@ -644,20 +644,20 @@ export class ReferralDetectionService extends EventEmitter {
       // 40% first, 40% last, 20% middle
       if (touchpoints.length === 1) {
         touchpoints[0].weight = 1.0;
-      } else if (touchpoints.length === 2) {
+ else if (touchpoints.length === 2) {
         touchpoints[0].weight = 0.5;
         touchpoints[1].weight = 0.5;
-      } else {
+ else {
         touchpoints[0].weight = 0.4;
         touchpoints[touchpoints.length - 1].weight = 0.4;
         const middleWeight = 0.2 / (touchpoints.length - 2);
         for (let i = 1; i < touchpoints.length - 1; i++) {
           touchpoints[i].weight = middleWeight;
-        }
-      }
+
+
       break;
-    }
-  }
+
+
 
   // =========================================================================
   // Campaign Management Methods
@@ -675,7 +675,7 @@ export class ReferralDetectionService extends EventEmitter {
         conversionRate: 0,
         avgOrderValue: 0,
         roi: 0
-  }
+
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -692,21 +692,21 @@ export class ReferralDetectionService extends EventEmitter {
     });
 
     return validatedCampaign;
-  }
+
 
   async updateCampaignStats(campaignId: string, stats: Partial<ReferralCampaign['stats']>): Promise<void> {
 
     const campaign = await this.getCampaignData(campaignId);
     if (!campaign) {
       throw new Error(`Campaign ${campaignId} not found`);
-    }
+
 
     campaign.stats = { ...campaign.stats, ...stats };
     campaign.updatedAt = new Date();
 
     await this.updateCampaignData(campaignId, campaign);
     this.campaignCache.set(campaignId, campaign);
-  }
+
 
   // =========================================================================
   // Analytics and Reporting Methods
@@ -731,7 +731,7 @@ export class ReferralDetectionService extends EventEmitter {
       topSources: Array<{ source: ReferralSource; count: number; conversionRate: number }>;
     };
     details: ReferralTrackingData[];
-  }> {
+> {
     const referrals = await this.searchReferrals(criteria);
     
     const totalReferrals = referrals.length;
@@ -750,7 +750,7 @@ export class ReferralDetectionService extends EventEmitter {
       existing.count++;
       if (r.status === ReferralStatus.VERIFIED) {
         existing.conversions++;
-      }
+
       sourceStats.set(r.source, existing);
     });
 
@@ -772,14 +772,14 @@ export class ReferralDetectionService extends EventEmitter {
         totalRewardsPaid,
         roi,
         topSources
-  }
+
       details: referrals
     };
-  }
+
 
   getPerformanceMetrics(): typeof this.performanceMetrics {
     return { ...this.performanceMetrics };
-  }
+
 
   // =========================================================================
   // Private Helper Methods
@@ -794,18 +794,18 @@ export class ReferralDetectionService extends EventEmitter {
     utmParams.forEach(param => {
       if (request.query[param]) {
         params[param] = request.query[param];
-      }
+
     });
 
     // Custom tracking parameters
     Object.entries(request.query).forEach(([key, value]) => {
       if (key.startsWith('ref_') || key.startsWith('track_')) {
         params[key] = value;
-      }
+
     });
 
     return params;
-  }
+
 
   private async detectReferralSource(
     trackingData: Record<string, string>,
@@ -819,20 +819,20 @@ export class ReferralDetectionService extends EventEmitter {
       if (source.includes('facebook') || source.includes('twitter') || source.includes('instagram') || 
           source.includes('linkedin') || source.includes('tiktok') || source.includes('youtube')) {
         return ReferralSource.SOCIAL_MEDIA;
-      }
+
       
       if (source.includes('google') || source.includes('bing') || source.includes('yahoo')) {
         return ReferralSource.SEARCH_ENGINE;
-      }
+
       
       if (source.includes('email') || source.includes('newsletter')) {
         return ReferralSource.EMAIL_CAMPAIGN;
-      }
+
       
       if (source.includes('affiliate') || source.includes('partner')) {
         return ReferralSource.AFFILIATE_NETWORK;
-      }
-    }
+
+
 
     // Check referrer header
     const referrer = request.headers.referer;
@@ -842,18 +842,18 @@ export class ReferralDetectionService extends EventEmitter {
       const socialDomains = ['facebook.com', 'twitter.com', 'instagram.com', 'linkedin.com', 'tiktok.com', 'youtube.com'];
       if (socialDomains.some(d => domain.includes(d))) {
         return ReferralSource.SOCIAL_MEDIA;
-      }
+
       
       const searchDomains = ['google.com', 'bing.com', 'yahoo.com', 'duckduckgo.com'];
       if (searchDomains.some(d => domain.includes(d))) {
         return ReferralSource.SEARCH_ENGINE;
-      }
+
       
       return ReferralSource.DIRECT_LINK;
-    }
+
 
     return ReferralSource.UNKNOWN;
-  }
+
 
   private async generateDeviceFingerprint(request: { headers: Record<string, string> }): Promise<string> {
 
@@ -865,14 +865,14 @@ export class ReferralDetectionService extends EventEmitter {
     ];
     
     return crypto.createHash('sha256').update(components.join('|')).digest('hex').substring(0, 32);
-  }
+
 
   private async getGeolocationData(ipAddress: string): Promise<{
     country?: string;
     region?: string;
     city?: string;
     timezone?: string;
-  }> {
+> {
 
     // In a real implementation, this would call a geolocation service
     // For now, return mock data
@@ -882,14 +882,14 @@ export class ReferralDetectionService extends EventEmitter {
       city: 'San Francisco',
       timezone: 'America/Los_Angeles'
     };
-  }
+
 
   private async lookupReferrer(referralCode: string): Promise<{ id: string } | null> {
 
     // In a real implementation, this would query the database
     // For now, return mock data
     return { id: crypto.randomUUID() };
-  }
+
 
   private extractCustomParameters(query: Record<string, string>): Record<string, string> {
     const custom: Record<string, string> = {};
@@ -897,37 +897,37 @@ export class ReferralDetectionService extends EventEmitter {
     Object.entries(query).forEach(([key, value]) => {
       if (!key.startsWith('utm_') && key !== 'ref') {
         custom[key] = value;
-      }
+
     });
     
     return custom;
-  }
+
 
   private generateTrackingTags(source: ReferralSource, trackingData: Record<string, string>): string[] {
     const tags = [source];
     
     if (trackingData.utm_campaign) {
       tags.push(`campaign:${trackingData.utm_campaign}`);
-    }
+
     
     if (trackingData.utm_medium) {
       tags.push(`medium:${trackingData.utm_medium}`);
-    }
+
     
     return tags;
-  }
+
 
   private calculateExpirationDate(): Date {
     return new Date(Date.now() + this.config.defaultAttributionWindow * 1000);
-  }
+
 
   private extractDomain(url: string): string {
     try {
       return new URL(url).hostname.toLowerCase();
-    } catch {
+ catch {
       return '';
-    }
-  }
+
+
 
   private calculateTouchpointWeight(source: ReferralSource, timestamp: Date, firstSeen: Date): number {
     // Simple time-based weight calculation
@@ -936,84 +936,84 @@ export class ReferralDetectionService extends EventEmitter {
     
     // Decay weight over time (half-life of 7 days)
     return Math.pow(0.5, ageDays / 7);
-  }
+
 
   // Mock database methods (would be replaced with actual database calls)
   private async storeReferralData(_data: ReferralTrackingData): Promise<void> {
 
     // Implementation would store in database
-  }
+
 
   private async getReferralData(_id: string): Promise<ReferralTrackingData | null> {
 
     // Implementation would query database
     return null;
-  }
+
 
   private async updateReferralData(_id: string, _data: ReferralTrackingData): Promise<void> {
 
     // Implementation would update database
-  }
+
 
   private async storeCampaignData(_data: ReferralCampaign): Promise<void> {
 
     // Implementation would store in database
-  }
+
 
   private async getCampaignData(_id: string): Promise<ReferralCampaign | null> {
 
     // Implementation would query database
     return null;
-  }
+
 
   private async updateCampaignData(_id: string, _data: ReferralCampaign): Promise<void> {
 
     // Implementation would update database
-  }
+
 
   private async searchReferrals(_criteria: Record<string, unknown>): Promise<ReferralTrackingData[]> {
 
     // Implementation would search database
     return [];
-  }
+
 
   private async getReferralsBySession(_sessionId: string): Promise<ReferralTrackingData[]> {
 
     // Implementation would query database
     return [];
-  }
+
 
   private getRecentReferralsByIP(_ip: string, _windowSeconds: number): number {
     // Implementation would count recent referrals by IP
     return 0;
-  }
+
 
   private getRecentReferralsByDevice(_fingerprint: string, _windowSeconds: number): number {
     // Implementation would count recent referrals by device
     return 0;
-  }
+
 
   private getReferrerInfo(_referrerId: string): { typicalCountries?: string[] } | null {
     // Implementation would get referrer profile
     return null;
-  }
+
 
   private getExpectedDomainsForSource(_source: ReferralSource): string[] {
     // Implementation would return expected domains for source type
     return [];
-  }
+
 
   private async validateRewardEligibility(_data: ReferralTrackingData): Promise<boolean> {
 
     // Implementation would validate reward eligibility
     return true;
-  }
+
 
   private async calculateReward(_data: ReferralTrackingData): Promise<{
     amount: number;
     type: 'cash' | 'credit' | 'discount' | 'free_template';
     currency: string;
-  }> {
+> {
 
     // Implementation would calculate reward based on campaign rules
     return {
@@ -1021,7 +1021,7 @@ export class ReferralDetectionService extends EventEmitter {
       type: 'credit',
       currency: 'USD'
     };
-  }
+
 
   private async processReward(_data: ReferralTrackingData): Promise<void> {
 
@@ -1032,7 +1032,7 @@ export class ReferralDetectionService extends EventEmitter {
       amount: _data.rewardAmount,
       type: _data.rewardType
     });
-  }
+
 
   private updatePerformanceMetrics(operation: string, processingTime?: number): void {
     switch (operation) {
@@ -1051,22 +1051,22 @@ export class ReferralDetectionService extends EventEmitter {
           this.performanceMetrics.totalReferrals > 0 ? 
             (this.performanceMetrics.totalFraudDetected / this.performanceMetrics.totalReferrals) * 100 : 0;
       break;
-    }
+
 
     if (processingTime) {
       // Update average processing time using exponential moving average
       this.performanceMetrics.averageProcessingTime = 
         (this.performanceMetrics.averageProcessingTime * 0.9) + (processingTime * 0.1);
-    }
-  }
+
+
 
   private startPeriodicProcessing(): void {
     setInterval(() => {
       if (this.processingQueue.length > 0) {
         this.processBatch();
-      }
+
     }, this.config.processingInterval);
-  }
+
 
   private async processBatch(): Promise<void> {
 
@@ -1078,12 +1078,12 @@ export class ReferralDetectionService extends EventEmitter {
         // Process any pending operations for the referral
         if (this.config.enableRealtimeAnalytics) {
           await this.updateTouchpoint(referral.sessionId, referral.source);
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error('Error processing referral batch:', error);
-      }
+
     }));
-  }
-}
+
+
 
 export default ReferralDetectionService;

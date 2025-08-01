@@ -14,17 +14,17 @@ import {
   CardDescription,
   CardHeader,
   CardTitle
-} from '@/components/ui/card';
+ from '@/components/ui/card';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger
-} from '@/components/ui/tabs';
+ from '@/components/ui/tabs';
 import {
   Alert,
   AlertDescription
-} from '@/components/ui/alert';
+ from '@/components/ui/alert';
 import {
   Badge,
   Button,
@@ -40,7 +40,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/components/ui';
+ from '@/components/ui';
 import {
   Eye,
   RotateCcw,
@@ -56,56 +56,57 @@ import {
   Shield,
   Activity,
   GitBranch
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface PolicyPreview {
   previewId: string;,
-  policyId: string;
+  policyId: string;,
   title: string;,
-  description: string;
+  description: string;,
   status: PreviewStatus;,
-  createdAt: string;
+  createdAt: string;,
   expiresAt: string;,
-  changes: number;
+  changes: number;,
   stagingDeployments: number;,
   validationResults: number;
   interface StagingDeployment {
   deploymentId: string;,
-  previewId: string;
+  previewId: string;,
   environmentId: string;,
-  status: StagingDeploymentStatus;
+  status: StagingDeploymentStatus;,
   deployedAt: string;,
-  metrics: StagingMetrics;
+  metrics: StagingMetrics;,
   issues: StagingIssue;
   interface StagingMetrics {
   userInteractions: number;,
-  consentRates: number;
+  consentRates: number;,
   errorRates: number;,
-  userSatisfactionScore: number;
+  userSatisfactionScore: number;,
   complianceScore: number;,
-  accessibilityScore: number;
+  accessibilityScore: number;,
   securityScore: number;
   interface StagingIssue {
   issueId: string;,
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   category: string;,
-  description: string;
+  description: string;,
   detectedAt: string;,
   status: string;
   interface ValidationResult {
   validationId: string;,
-  validationType: string;
+  validationType: string;,
   status: 'PASS' | 'FAIL' | 'WARNING' | 'SKIP';,
-  score: number;
+  score: number;,
   findings: number;,
-  blockers: number;
+  blockers: number;,
   warnings: number;,
   validatedAt: string;
   interface UserFeedback {
   feedbackId: string;,
-  userId: string;
+  userId: string;,
   rating: number;,
-  comments: string;
+  comments: string;,
   submittedAt: string;,
   actionRequired: boolean;
   enum PreviewStatus {
@@ -140,10 +141,11 @@ interface PolicyPreview {
   const response = await fetch('/api/policy-preview/previews');
   const data = await response.json();
   setPreviews(data.previews || []);
-}
-} catch (error) {
+
+
+ catch (error) {
   console.error('Failed to fetch previews:', error);
-} finally {
+ finally {
       setLoading(false);
   }, []);
   const fetchDeployments = useCallback(async () => {
@@ -151,7 +153,7 @@ interface PolicyPreview {
       const response = await fetch('/api/policy-preview/deployments');
       const data = await response.json();
       setDeployments(data.deployments || []);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to fetch deployments:', error);
 }, []);
   useEffect(() => {
@@ -200,7 +202,7 @@ interface PolicyPreview {
       if (response.ok) {
         fetchDeployments();
         fetchPreviews();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to deploy to staging:', error);
 };
   const handleRollback = async (deploymentId: string, reason: string) => {
@@ -213,7 +215,7 @@ interface PolicyPreview {
       });
       if (response.ok) {
         fetchDeployments();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to rollback deployment:', error);
 };
   const handlePromoteToProduction = async (previewId: string) => {
@@ -225,7 +227,7 @@ interface PolicyPreview {
       });
       if (response.ok) {
         fetchPreviews();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to promote to production:', error);
 };
   if (loading) {

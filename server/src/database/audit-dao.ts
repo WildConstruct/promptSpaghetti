@@ -18,7 +18,7 @@ import {
   AuditSeverity,
   ComplianceStandard,
   AuditContext
-} from './audit-models';
+ from './audit-models';
 
 export class AuditDAO {
   constructor(private db: Database) {}
@@ -173,7 +173,7 @@ export class AuditDAO {
           else resolve();
         });
       });
-    }
+
 
     // Create indexes
     for (const index of indexes) {
@@ -183,8 +183,8 @@ export class AuditDAO {
           else resolve();
         });
       });
-    }
-  }
+
+
 
   // Create audit event
   async createAuditEvent(request: CreateAuditEventRequest, context: AuditContext): Promise<AuditEvent> {
@@ -286,10 +286,10 @@ export class AuditDAO {
     // Update session statistics
     if (event.sessionId) {
       await this.updateSessionStatistics(event);
-    }
+
 
     return event;
-  }
+
 
   // Query audit events
   async queryAuditEvents(query: AuditEventQuery): Promise<AuditEventResponse> {
@@ -303,55 +303,55 @@ export class AuditDAO {
       sql += ' AND timestamp >= ?';
       countSql += ' AND timestamp >= ?';
       params.push(query.startDate);
-    }
+
 
     if (query.endDate) {
       sql += ' AND timestamp <= ?';
       countSql += ' AND timestamp <= ?';
       params.push(query.endDate);
-    }
+
 
     if (query.eventTypes && query.eventTypes.length > 0) {
       const placeholders = query.eventTypes.map(() => '?').join(',');
       sql += ` AND event_type IN (${placeholders})`;
       countSql += ` AND event_type IN (${placeholders})`;
       params.push(...query.eventTypes);
-    }
+
 
     if (query.categories && query.categories.length > 0) {
       const placeholders = query.categories.map(() => '?').join(',');
       sql += ` AND category IN (${placeholders})`;
       countSql += ` AND category IN (${placeholders})`;
       params.push(...query.categories);
-    }
+
 
     if (query.severities && query.severities.length > 0) {
       const placeholders = query.severities.map(() => '?').join(',');
       sql += ` AND severity IN (${placeholders})`;
       countSql += ` AND severity IN (${placeholders})`;
       params.push(...query.severities);
-    }
+
 
     if (query.actorIds && query.actorIds.length > 0) {
       const placeholders = query.actorIds.map(() => '?').join(',');
       sql += ` AND actor_id IN (${placeholders})`;
       countSql += ` AND actor_id IN (${placeholders})`;
       params.push(...query.actorIds);
-    }
+
 
     if (query.resourceTypes && query.resourceTypes.length > 0) {
       const placeholders = query.resourceTypes.map(() => '?').join(',');
       sql += ` AND resource_type IN (${placeholders})`;
       countSql += ` AND resource_type IN (${placeholders})`;
       params.push(...query.resourceTypes);
-    }
+
 
     if (query.searchTerm) {
       sql += ' AND (description LIKE ? OR action LIKE ? OR actor_email LIKE ?)';
       countSql += ' AND (description LIKE ? OR action LIKE ? OR actor_email LIKE ?)';
       const searchPattern = `%${query.searchTerm}%`;
       params.push(searchPattern, searchPattern, searchPattern);
-    }
+
 
     // Add ORDER BY
     const sortBy = query.sortBy || 'timestamp';
@@ -376,7 +376,7 @@ export class AuditDAO {
           if (err) reject(err);
           else resolve((row as { total: number }).total);
         });
-  }
+
     ]);
 
     // Generate summary
@@ -389,10 +389,10 @@ export class AuditDAO {
         limit,
         total,
         totalPages: Math.ceil(total / limit)
-  }
+
       summary
     };
-  }
+
 
   // Get audit statistics
   async getAuditStatistics(startDate?: Date, endDate?: Date): Promise<AuditStatistics> {
@@ -403,11 +403,11 @@ export class AuditDAO {
     if (startDate) {
       timeFilter += ' AND timestamp >= ?';
       params.push(startDate.toISOString());
-    }
+
     if (endDate) {
       timeFilter += ' AND timestamp <= ?';
       params.push(endDate.toISOString());
-    }
+
 
     const queries = [
       `SELECT COUNT(*) as total_events FROM audit_events WHERE 1=1${timeFilter}`,
@@ -438,13 +438,11 @@ export class AuditDAO {
               if (err) reject(err);
               else resolve(rows);
             });
-          } else {
+ else {
             this.db.get(query, params, (err, row) => {
               if (err) reject(err);
               else resolve(row);
             });
-          }
-  }
 
     );
 
@@ -485,12 +483,12 @@ export class AuditDAO {
         p50: 0,
         p95: 0,
         p99: 0
-  }
+
       generatedAt: now
     };
 
     return statistics;
-  }
+
 
   // Create compliance report
   async createComplianceReport(request: CreateComplianceReportRequest, generatedBy: string): Promise<ComplianceReport> {
@@ -508,10 +506,10 @@ export class AuditDAO {
 
     if (request.scope?.eventTypes) {
       query.eventTypes = request.scope.eventTypes;
-    }
+
     if (request.scope?.resourceTypes) {
       query.resourceTypes = request.scope.resourceTypes;
-    }
+
 
     const eventResponse = await this.queryAuditEvents(query);
     const events = eventResponse.events;
@@ -575,7 +573,7 @@ export class AuditDAO {
     });
 
     return report;
-  }
+
 
   // Helper methods
   private calculateChangedFields(
@@ -592,21 +590,21 @@ export class AuditDAO {
     for (const key of allKeys) {
       if (JSON.stringify(beforeValue[key]) !== JSON.stringify(afterValue[key])) {
         changed.push(key);
-      }
-    }
+
+
     
     return changed;
-  }
+
 
   private calculateChecksum(event: AuditEvent): string {
     const data = `${event.eventType}:${event.timestamp.toISOString()}:${event.actorId}:${event.resourceType}:${event.resourceId}:${event.action}`;
     return crypto.createHash('sha256').update(data).digest('hex');
-  }
+
 
   private calculateReportChecksum(report: ComplianceReport): string {
     const data = `${report.reportType}:${report.standard}:${report.startDate.toISOString()}:${report.endDate.toISOString()}:${report.events.length}`;
     return crypto.createHash('sha256').update(data).digest('hex');
-  }
+
 
   private async calculateRetentionPeriod(event: AuditEvent): Promise<number> {
 
@@ -615,21 +613,21 @@ export class AuditDAO {
     
     if (config?.retentionByCategory && config.retentionByCategory[event.category]) {
       return config.retentionByCategory[event.category];
-    }
+
     
     return config?.defaultRetentionDays || 2555; // Default 7 years
-  }
+
 
   private async enrichLocationData(ipAddress?: string): Promise<AuditEvent['location']> {
 
     if (!ipAddress || ipAddress === '127.0.0.1' || ipAddress === '::1') {
       return undefined;
-    }
+
     
     // TODO: Implement IP geolocation lookup
     // For now, return undefined - in production, integrate with a geolocation service
     return undefined;
-  }
+
 
   private async updateAuditTrail(event: AuditEvent): Promise<void> {
 
@@ -659,7 +657,7 @@ export class AuditDAO {
         }
       );
     });
-  }
+
 
   private async updateSessionStatistics(event: AuditEvent): Promise<void> {
 
@@ -674,13 +672,13 @@ export class AuditDAO {
 
     if (event.outcome === 'success') {
       updateFields.push('successful_actions = successful_actions + 1');
-    } else {
+ else {
       updateFields.push('failed_actions = failed_actions + 1');
-    }
+
 
     if (event.category === AuditCategory.SECURITY) {
       updateFields.push('security_events = security_events + 1');
-    }
+
 
     params.push(event.sessionId);
 
@@ -694,7 +692,7 @@ export class AuditDAO {
         }
       );
     });
-  }
+
 
   private async getAuditConfiguration(): Promise<AuditConfiguration | null> {
 
@@ -705,7 +703,7 @@ export class AuditDAO {
         else resolve(this.mapRowToConfiguration(row as Record<string, unknown>));
       });
     });
-  }
+
 
   private async getEventCount(startDate: Date): Promise<number> {
 
@@ -719,7 +717,7 @@ export class AuditDAO {
         }
       );
     });
-  }
+
 
   private arrayToRecord(array: unknown[], keyField: string): Record<string, number> {
     const record: Record<string, number> = {};
@@ -727,7 +725,7 @@ export class AuditDAO {
       record[item[keyField] as string] = item.count as number;
     });
     return record;
-  }
+
 
   private async generateQuerySummary(
     events: AuditEvent[],
@@ -753,7 +751,7 @@ export class AuditDAO {
         start: query.startDate ? new Date(query.startDate) : new Date(0),
         end: query.endDate ? new Date(query.endDate) : new Date(}
     };
-  }
+
 
   private detectComplianceViolations(
     _events: AuditEvent[],
@@ -765,7 +763,7 @@ export class AuditDAO {
     // This would include rules specific to each compliance standard
 
     return violations;
-  }
+
 
   private mapRowToAuditEvent(row: unknown): AuditEvent {
     const auditRow = row as Record<string, unknown>;
@@ -804,7 +802,7 @@ export class AuditDAO {
       duration: auditRow.duration as number,
       error: auditRow.error ? JSON.parse(auditRow.error as string) : undefined
     };
-  }
+
 
   private mapRowToConfiguration(row: Record<string, unknown>): AuditConfiguration {
     return {
@@ -832,5 +830,4 @@ export class AuditDAO {
       createdAt: new Date(row.created_at as string),
       updatedAt: new Date(row.updated_at as string)
     };
-  }
-}
+

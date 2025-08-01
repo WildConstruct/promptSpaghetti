@@ -6,7 +6,7 @@
  *
  * Task: E16-1753114247016-0B348A - Create sentiment analysis
  */
-import { validateAnalyzeSentimentRequest, validateSentimentAnalysis } from '../types/SentimentAnalysisTypes';
+import { validateAnalyzeSentimentRequest, validateSentimentAnalysis, validateSentimentAnalytics } from '../types/SentimentAnalysisTypes';
 import { v4 as uuidv4 } from 'uuid';
 export class SentimentAnalysisService {
     baseUrl;
@@ -85,11 +85,17 @@ export class SentimentAnalysisService {
                         apiVersion: '1.0.0',
                     },
                     return: response
-                }(resourceType, string, timeRange, { start: Date, end: Date }), Promise;
-                ({
+                }();
+                resourceType: string,
+                    timeRange;
+                {
+                    start: Date;
+                    end: Date;
+                }
+                Promise < SentimentAnalytics > {
                     // Check cache first
                     const: cacheKey = `analytics:${resourceId}:${timeRange.start.getTime()}:${timeRange.end.getTime()}`
-                });
+                };
                 const cachedAnalytics = this.getCachedAnalytics(cacheKey);
                 if (cachedAnalytics) {
                     return cachedAnalytics;
@@ -104,8 +110,9 @@ export class SentimentAnalysisService {
                      * Analyze single text for real-time processing
                      */
                     async;
-                    analyzeText(textId, string);
-                    content: string,
+                    analyzeText(textId, string),
+                        content;
+                    string,
                         sourceType;
                     FeedbackSourceType,
                         options ?  : {
@@ -539,8 +546,9 @@ export class SentimentAnalysisService {
                                                                 ;
                                                                 const maxCount = Math.max(...Object.values(sentimentCounts));
                                                                 return Object.entries(sentimentCounts).find(([_, count]) => count === maxCount)?.[0];
-                                                                calculateSentimentAnalytics(resourceId, string);
-                                                                resourceType: string,
+                                                                calculateSentimentAnalytics(resourceId, string),
+                                                                    resourceType;
+                                                                string,
                                                                     timeRange;
                                                                 {
                                                                     start: Date;
@@ -562,8 +570,7 @@ export class SentimentAnalysisService {
                                                                     positive: {
                                                                         count: sentimentCounts.positive,
                                                                         percentage: total > 0 ? (sentimentCounts.positive / total) * 100 : 0,
-                                                                        averageScore: sentimentScores.positive.length > 0,
-                                                                    }
+                                                                        averageScore: sentimentScores.positive.length > 0, }
                                                                         ? sentimentScores.positive.reduce((a, b) => a + b, 0) / sentimentScores.positive.length : ,
                                                                 };
                                                                 0,
@@ -625,381 +632,347 @@ export class SentimentAnalysisService {
                                                                 Object, : .entries(emotionCounts).map(([emotion, count]) => [
                                                                     emotion,
                                                                     total > 0 ? (count / total) * 100 : 0
-                                                                ])
+                                                                ]), as, any,
+                                                                averageScores: Object.fromEntries(),
+                                                                Object, : .entries(emotionScores).map(([emotion, scores]) => [
+                                                                    emotion,
+                                                                    scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0
+                                                                ]), as, any,
+                                                                mixedEmotionRate: analyses.filter(a => a.emotions.mixed).length / total * 100,
+                                                            },
+                                                            toxicityAnalytics: {
+                                                                overallLevel: this.calculateOverallToxicityLevel(toxicityCounts),
+                                                                distribution: Object.fromEntries(),
+                                                                Object, : .entries(toxicityCounts).map(([level, count]) => [
+                                                                    level,
+                                                                    total > 0 ? (count / total) * 100 : 0
+                                                                ]), as, any,
+                                                                categories: {
+                                                                    harassment: 5, // Mock values,
+                                                                    hate_speech: 2,
+                                                                    profanity: 8,
+                                                                    threats: 1,
+                                                                    spam: 3,
+                                                                    inappropriate: 4,
+                                                                },
+                                                                actionRequired: (toxicityCounts.high + toxicityCounts.severe) / total * 100
+                                                            },
+                                                            trends: {
+                                                                sentimentTrend: 'stable',
+                                                                sentimentOverTime: [],
+                                                                emotionTrends: [],
+                                                                toxicityTrend: 'stable',
+                                                                qualityTrend: 'stable',
+                                                            },
+                                                            insights: {
+                                                                topPositiveKeywords: ['great', 'excellent', 'amazing', 'helpful'],
+                                                                topNegativeKeywords: ['slow', 'confusing', 'broken', 'disappointed'],
+                                                                emergingTopics: [
+                                                                    { topic: 'mobile_experience', sentiment: 'negative', growth: 15 },
+                                                                    { topic: 'new_features', sentiment: 'positive', growth: 25 }
+                                                                ],
+                                                                qualityMetrics: {
+                                                                    averageReadability: 75,
+                                                                    averageConstructiveness: 68,
+                                                                    averageHelpfulness: 72,
+                                                                },
+                                                                recommendations: [
+                                                                    {
+                                                                        type: 'address_concerns',
+                                                                        priority: 'high',
+                                                                        description: 'Address mobile experience issues mentioned in negative feedback',
+                                                                        expectedImpact: 'high',
+                                                                    },
+                                                                    {
+                                                                        type: 'boost_engagement',
+                                                                        priority: 'medium',
+                                                                        description: 'Promote new features that are receiving positive feedback',
+                                                                        expectedImpact: 'medium'
+                                                                    }
+                                                                ]
+                                                            },
+                                                            return: validateSentimentAnalytics(analytics),
+                                                            calculateOverallToxicityLevel(counts) {
+                                                                const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+                                                                if (total === 0)
+                                                                    return 'none';
+                                                                const severeRate = counts.severe / total;
+                                                                const highRate = counts.high / total;
+                                                                if (severeRate > 0.1)
+                                                                    return 'severe';
+                                                                if (highRate > 0.2)
+                                                                    return 'high';
+                                                                if ((counts.medium + counts.high + counts.severe) / total > 0.3)
+                                                                    return 'medium';
+                                                                if (counts.low / total > 0.1)
+                                                                    return 'low';
+                                                                return 'none';
+                                                                // Cache management methods
+                                                            }
+                                                            // Cache management methods
+                                                            ,
+                                                            // Cache management methods
+                                                            generateCacheKey(content, options) {
+                                                                const hash = this.simpleHash(content + JSON.stringify(options));
+                                                                return `analysis:${hash}`;
+                                                            },
+                                                            simpleHash(str) {
+                                                                let hash = 0;
+                                                                for (let i = 0; i < str.length; i++) {
+                                                                    const char = str.charCodeAt(i);
+                                                                    hash = ((hash << 5) - hash) + char;
+                                                                    hash = hash & hash; // Convert to 32-bit integer
+                                                                    return Math.abs(hash).toString(36);
+                                                                }
+                                                            },
+                                                            getCachedAnalysis(cacheKey) {
+                                                                const cached = this.analysisCache.get(cacheKey);
+                                                                if (!cached)
+                                                                    return null;
+                                                                // Check if cache is stale (10 minutes TTL)
+                                                                const isStale = Date.now() - cached.timestamp > 10 * 60 * 1000;
+                                                                if (isStale) {
+                                                                    this.analysisCache.delete(cacheKey);
+                                                                    return null;
+                                                                    return cached.analysis;
+                                                                }
+                                                            },
+                                                            cacheAnalysis(cacheKey, analysis) {
+                                                                this.analysisCache.set(cacheKey, {});
+                                                                analysis,
+                                                                    timestamp;
+                                                                Date.now(),
+                                                                ;
                                                             }
                                                         };
-                                                        as;
-                                                        any,
-                                                            averageScores;
-                                                        Object.fromEntries(),
-                                                            Object.entries(emotionScores).map(([emotion, scores]) => [
-                                                                emotion,
-                                                                scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0
-                                                            ]);
-                                                        as;
-                                                        any,
-                                                            mixedEmotionRate;
-                                                        analyses.filter(a => a.emotions.mixed).length / total * 100,
-                                                        ;
-                                                    }
-                                                    toxicityAnalytics: {
-                                                        overallLevel: this.calculateOverallToxicityLevel(toxicityCounts),
-                                                            distribution;
-                                                        Object.fromEntries(),
-                                                            Object.entries(toxicityCounts).map(([level, count]) => [
-                                                                level,
-                                                                total > 0 ? (count / total) * 100 : 0
-                                                            ]);
-                                                        as;
-                                                        any,
-                                                            categories;
+                                                        getCachedAnalytics(cacheKey, string);
+                                                        SentimentAnalytics | null;
                                                         {
-                                                            harassment: 5, // Mock values,
-                                                                hate_speech;
-                                                            2,
-                                                                profanity;
-                                                            8,
-                                                                threats;
-                                                            1,
-                                                                spam;
-                                                            3,
-                                                                inappropriate;
-                                                            4,
-                                                            ;
-                                                        }
-                                                        actionRequired: (toxicityCounts.high + toxicityCounts.severe) / total * 100;
-                                                    }
-                                                    trends: {
-                                                        sentimentTrend: 'stable',
-                                                            sentimentOverTime;
-                                                        [],
-                                                            emotionTrends;
-                                                        [],
-                                                            toxicityTrend;
-                                                        'stable',
-                                                            qualityTrend;
-                                                        'stable',
-                                                        ;
-                                                    }
-                                                    insights: {
-                                                        topPositiveKeywords: ['great', 'excellent', 'amazing', 'helpful'],
-                                                            topNegativeKeywords;
-                                                        ['slow', 'confusing', 'broken', 'disappointed'],
-                                                            emergingTopics;
-                                                        [,
-                                                            { topic: 'mobile_experience', sentiment: 'negative', growth: 15 },
-                                                            { topic: 'new_features', sentiment: 'positive', growth: 25 }
-                                                        ],
-                                                            qualityMetrics;
-                                                        {
-                                                            averageReadability: 75,
-                                                                averageConstructiveness;
-                                                            68,
-                                                                averageHelpfulness;
-                                                            72,
-                                                            ;
-                                                        }
-                                                        recommendations: [,
-                                                            {
-                                                                type: 'address_concerns',
-                                                                priority: 'high',
-                                                                description: 'Address mobile experience issues mentioned in negative feedback',
-                                                                expectedImpact: 'high',
-                                                            },
-                                                            {
-                                                                type: 'boost_engagement',
-                                                                priority: 'medium',
-                                                                description: 'Promote new features that are receiving positive feedback',
-                                                                expectedImpact: 'medium'
-                                                            }];
-                                                    }
-                                                    ;
-                                                    return validateSentimentAnalytics(analytics);
-                                                    calculateOverallToxicityLevel(counts, (Record));
-                                                    ToxicityLevel;
-                                                    {
-                                                        const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
-                                                        if (total === 0)
-                                                            return 'none';
-                                                        const severeRate = counts.severe / total;
-                                                        const highRate = counts.high / total;
-                                                        if (severeRate > 0.1)
-                                                            return 'severe';
-                                                        if (highRate > 0.2)
-                                                            return 'high';
-                                                        if ((counts.medium + counts.high + counts.severe) / total > 0.3)
-                                                            return 'medium';
-                                                        if (counts.low / total > 0.1)
-                                                            return 'low';
-                                                        return 'none';
-                                                        generateCacheKey(content, string, options, any);
-                                                        string;
-                                                        {
-                                                            const hash = this.simpleHash(content + JSON.stringify(options));
-                                                            return `analysis:${hash}`;
-                                                        }
-                                                        simpleHash(str, string);
-                                                        string;
-                                                        {
-                                                            let hash = 0;
-                                                            for (let i = 0; i < str.length; i++) {
-                                                                const char = str.charCodeAt(i);
-                                                                hash = ((hash << 5) - hash) + char;
-                                                                hash = hash & hash; // Convert to 32-bit integer
-                                                                return Math.abs(hash).toString(36);
-                                                                getCachedAnalysis(cacheKey, string);
-                                                                SentimentAnalysis | null;
-                                                                {
-                                                                    const cached = this.analysisCache.get(cacheKey);
-                                                                    if (!cached)
-                                                                        return null;
-                                                                    // Check if cache is stale (10 minutes TTL)
-                                                                    const isStale = Date.now() - cached.timestamp > 10 * 60 * 1000;
-                                                                    if (isStale) {
-                                                                        this.analysisCache.delete(cacheKey);
-                                                                        return null;
-                                                                        return cached.analysis;
-                                                                        cacheAnalysis(cacheKey, string, analysis, SentimentAnalysis);
-                                                                        void {
-                                                                            this: .analysisCache.set(cacheKey, {}),
-                                                                            analysis,
-                                                                            timestamp: Date.now(),
-                                                                        };
-                                                                        ;
-                                                                        getCachedAnalytics(cacheKey, string);
-                                                                        SentimentAnalytics | null;
+                                                            const cached = this.analyticsCache.get(cacheKey);
+                                                            if (!cached)
+                                                                return null;
+                                                            // Check if cache is stale (30 minutes TTL)
+                                                            const isStale = Date.now() - cached.timestamp > 30 * 60 * 1000;
+                                                            if (isStale) {
+                                                                this.analyticsCache.delete(cacheKey);
+                                                                return null;
+                                                                return cached.analytics;
+                                                                cacheAnalytics(cacheKey, string, analytics, SentimentAnalytics);
+                                                                void {
+                                                                    this: .analyticsCache.set(cacheKey, {}),
+                                                                    analytics,
+                                                                    timestamp: Date.now(),
+                                                                };
+                                                                ;
+                                                                clearAllCaches();
+                                                                void {
+                                                                    this: .analysisCache.clear(),
+                                                                    this: .analyticsCache.clear(),
+                                                                    this: .modelCache.clear(),
+                                                                    // Mock data generators
+                                                                    generateMockAnalyses(resourceId, timeRange) {
+                                                                        const analyses = [];
+                                                                        const count = Math.floor(Math.random() * 50) + 20;
+                                                                        for (let i = 0; i < count; i++) {
+                                                                            const mockText = this.generateMockFeedback();
+                                                                            const mockAnalysis = {
+                                                                                analysisId: uuidv4(),
+                                                                                textId: `text-${i}`
+                                                                            };
+                                                                        }
+                                                                        sourceType: 'comment',
+                                                                            originalText;
+                                                                        mockText,
+                                                                            processedText;
+                                                                        mockText.toLowerCase(),
+                                                                            language;
+                                                                        'en',
+                                                                            analyzedAt;
+                                                                        new Date(timeRange.start.getTime() + Math.random() * (timeRange.end.getTime() - timeRange.start.getTime())),
+                                                                            modelUsed;
+                                                                        'transformer',
+                                                                            modelVersion;
+                                                                        '1.0.0',
+                                                                            confidence;
+                                                                        0.7 + Math.random() * 0.3,
+                                                                            sentiment;
+                                                                        this.generateMockSentiment(),
+                                                                            emotions;
+                                                                        this.generateMockEmotions(),
+                                                                            toxicity;
+                                                                        this.generateMockToxicity(),
+                                                                            topics;
+                                                                        [],
+                                                                            keywords;
+                                                                        [],
+                                                                            metadata;
                                                                         {
-                                                                            const cached = this.analyticsCache.get(cacheKey);
-                                                                            if (!cached)
-                                                                                return null;
-                                                                            // Check if cache is stale (30 minutes TTL)
-                                                                            const isStale = Date.now() - cached.timestamp > 30 * 60 * 1000;
-                                                                            if (isStale) {
-                                                                                this.analyticsCache.delete(cacheKey);
-                                                                                return null;
-                                                                                return cached.analytics;
-                                                                                cacheAnalytics(cacheKey, string, analytics, SentimentAnalytics);
-                                                                                void {
-                                                                                    this: .analyticsCache.set(cacheKey, {}),
-                                                                                    analytics,
-                                                                                    timestamp: Date.now(),
-                                                                                };
+                                                                            processingTimeMs: Math.floor(Math.random() * 1000) + 100,
+                                                                                textLength;
+                                                                            mockText.length,
+                                                                                wordCount;
+                                                                            mockText.split(/\s+/).length,
+                                                                                sentenceCount;
+                                                                            1,
+                                                                                preprocessingSteps;
+                                                                            [],
+                                                                                features;
+                                                                            { }
+                                                                        }
+                                                                        ;
+                                                                        analyses.push(mockAnalysis);
+                                                                        return analyses;
+                                                                    },
+                                                                    generateMockFeedback() {
+                                                                        const feedbacks = [
+                                                                            'This is an amazing template! Really helpful for my project.',
+                                                                            'The interface could be more intuitive, but overall it\'s good.',
+                                                                            'I\'m having trouble with the loading times. It\'s quite slow.',
+                                                                            'Excellent work! This solved exactly what I needed.',
+                                                                            'The documentation needs improvement, but the functionality is solid.',
+                                                                            'Not what I expected. The design feels outdated.',
+                                                                            'Perfect! Easy to use and well-designed.',
+                                                                            'Some bugs here and there, but generally works well.'
+                                                                        ];
+                                                                        return feedbacks[Math.floor(Math.random() * feedbacks.length)];
+                                                                    },
+                                                                    generateMockSentiment() {
+                                                                        const sentiments = ['positive', 'neutral', 'negative'];
+                                                                        const weights = [0.5, 0.3, 0.2]; // More positive feedback;
+                                                                        const random = Math.random();
+                                                                        let cumulative = 0;
+                                                                        for (let i = 0; i < weights.length; i++) {
+                                                                            cumulative += weights[i];
+                                                                            if (random <= cumulative) {
+                                                                                const sentiment = sentiments[i];
+                                                                                return {
+                                                                                    type: sentiment,
+                                                                                    score: sentiment === 'positive' ? 0.3 + Math.random() * 0.7 : ,
+                                                                                    sentiment
+                                                                                } === 'negative' ? -0.7 - Math.random() * 0.3 : ,
+                                                                                    -0.2 + Math.random() * 0.4,
+                                                                                    confidence;
+                                                                                0.6 + Math.random() * 0.4,
+                                                                                    magnitude;
+                                                                                0.3 + Math.random() * 0.7,
+                                                                                    subjectivity;
+                                                                                0.4 + Math.random() * 0.5,
                                                                                 ;
-                                                                                clearAllCaches();
-                                                                                void {
-                                                                                    this: .analysisCache.clear(),
-                                                                                    this: .analyticsCache.clear(),
-                                                                                    this: .modelCache.clear(),
-                                                                                    // Mock data generators
-                                                                                    generateMockAnalyses(resourceId, timeRange) {
-                                                                                        const analyses = [];
-                                                                                        const count = Math.floor(Math.random() * 50) + 20;
-                                                                                        for (let i = 0; i < count; i++) {
-                                                                                            const mockText = this.generateMockFeedback();
-                                                                                            const mockAnalysis = {
-                                                                                                analysisId: uuidv4(),
-                                                                                                textId: `text-${i}`
-                                                                                            };
-                                                                                        }
-                                                                                        sourceType: 'comment',
-                                                                                            originalText;
-                                                                                        mockText,
-                                                                                            processedText;
-                                                                                        mockText.toLowerCase(),
-                                                                                            language;
-                                                                                        'en',
-                                                                                            analyzedAt;
-                                                                                        new Date(timeRange.start.getTime() + Math.random() * (timeRange.end.getTime() - timeRange.start.getTime())),
-                                                                                            modelUsed;
-                                                                                        'transformer',
-                                                                                            modelVersion;
-                                                                                        '1.0.0',
-                                                                                            confidence;
-                                                                                        0.7 + Math.random() * 0.3,
-                                                                                            sentiment;
-                                                                                        this.generateMockSentiment(),
-                                                                                            emotions;
-                                                                                        this.generateMockEmotions(),
-                                                                                            toxicity;
-                                                                                        this.generateMockToxicity(),
-                                                                                            topics;
-                                                                                        [],
-                                                                                            keywords;
-                                                                                        [],
-                                                                                            metadata;
-                                                                                        {
-                                                                                            processingTimeMs: Math.floor(Math.random() * 1000) + 100,
-                                                                                                textLength;
-                                                                                            mockText.length,
-                                                                                                wordCount;
-                                                                                            mockText.split(/\s+/).length,
-                                                                                                sentenceCount;
-                                                                                            1,
-                                                                                                preprocessingSteps;
-                                                                                            [],
-                                                                                                features;
-                                                                                            { }
-                                                                                        }
-                                                                                        ;
-                                                                                        analyses.push(mockAnalysis);
-                                                                                        return analyses;
+                                                                            }
+                                                                            ;
+                                                                            return {
+                                                                                type: 'neutral',
+                                                                                score: 0,
+                                                                                confidence: 0.7,
+                                                                                magnitude: 0.3,
+                                                                                subjectivity: 0.5,
+                                                                            };
+                                                                        }
+                                                                    },
+                                                                    generateMockEmotions() {
+                                                                        const emotions = ['joy', 'sadness', 'anger', 'fear', 'surprise', 'disgust', 'trust', 'anticipation'];
+                                                                        const scores = {};
+                                                                        emotions.forEach(emotion => { });
+                                                                        scores[emotion] = Math.random() * 0.3; // Generally low emotion scores
+                                                                    },
+                                                                    // Pick one emotion to be dominant
+                                                                    const: dominantEmotion = emotions[Math.floor(Math.random() * emotions.length)],
+                                                                    scores, [dominantEmotion]:  = 0.4 + Math.random() * 0.6,
+                                                                    return: {
+                                                                        primary: dominantEmotion,
+                                                                        scores,
+                                                                        confidence: 0.6 + Math.random() * 0.3,
+                                                                        mixed: Math.random() > 0.8,
+                                                                    },
+                                                                    generateMockToxicity() {
+                                                                        const levels = ['none', 'low', 'medium', 'high', 'severe'];
+                                                                        const weights = [0.7, 0.2, 0.07, 0.02, 0.01]; // Most content is not toxic;
+                                                                        const random = Math.random();
+                                                                        let cumulative = 0;
+                                                                        for (let i = 0; i < weights.length; i++) {
+                                                                            cumulative += weights[i];
+                                                                            if (random <= cumulative) {
+                                                                                const level = levels[i];
+                                                                                return {
+                                                                                    level,
+                                                                                    score: i * 0.2 + Math.random() * 0.2,
+                                                                                    confidence: 0.7 + Math.random() * 0.3,
+                                                                                    categories: {
+                                                                                        harassment: Math.random() * 0.1,
+                                                                                        hate_speech: Math.random() * 0.05,
+                                                                                        profanity: Math.random() * 0.15,
+                                                                                        threats: Math.random() * 0.02,
+                                                                                        spam: Math.random() * 0.08,
+                                                                                        inappropriate: Math.random() * 0.1,
                                                                                     },
-                                                                                    generateMockFeedback() {
-                                                                                        const feedbacks = [];
-                                                                                        'This is an amazing template! Really helpful for my project.',
-                                                                                            'The interface could be more intuitive, but overall it\'s good.',
-                                                                                            'I\'m having trouble with the loading times. It\'s quite slow.',
-                                                                                            'Excellent work! This solved exactly what I needed.',
-                                                                                            'The documentation needs improvement, but the functionality is solid.',
-                                                                                            'Not what I expected. The design feels outdated.',
-                                                                                            'Perfect! Easy to use and well-designed.',
-                                                                                            'Some bugs here and there, but generally works well.';
-                                                                                        ;
-                                                                                        return feedbacks[Math.floor(Math.random() * feedbacks.length)];
+                                                                                    flags: level !== 'none' && Math.random() > 0.5 ? ['detected_toxicity'] : []
+                                                                                };
+                                                                                return {
+                                                                                    level: 'none',
+                                                                                    score: 0,
+                                                                                    confidence: 0.9,
+                                                                                    categories: {
+                                                                                        harassment: 0, hate_speech: 0, profanity: 0,
+                                                                                        threats: 0, spam: 0, inappropriate: 0,
                                                                                     },
-                                                                                    generateMockSentiment() {
-                                                                                        const sentiments = ['positive', 'neutral', 'negative'];
-                                                                                        const weights = [0.5, 0.3, 0.2]; // More positive feedback;
-                                                                                        const random = Math.random();
-                                                                                        let cumulative = 0;
-                                                                                        for (let i = 0; i < weights.length; i++) {
-                                                                                            cumulative += weights[i];
-                                                                                            if (random <= cumulative) {
-                                                                                                const sentiment = sentiments[i];
-                                                                                                return {
-                                                                                                    type: sentiment,
-                                                                                                    score: sentiment === 'positive' ? 0.3 + Math.random() * 0.7 : ,
-                                                                                                    sentiment
-                                                                                                } === 'negative' ? -0.7 - Math.random() * 0.3 : ,
-                                                                                                    -0.2 + Math.random() * 0.4,
-                                                                                                    confidence;
-                                                                                                0.6 + Math.random() * 0.4,
-                                                                                                    magnitude;
-                                                                                                0.3 + Math.random() * 0.7,
-                                                                                                    subjectivity;
-                                                                                                0.4 + Math.random() * 0.5,
-                                                                                                ;
-                                                                                            }
-                                                                                            ;
-                                                                                            return {
-                                                                                                type: 'neutral',
-                                                                                                score: 0,
-                                                                                                confidence: 0.7,
-                                                                                                magnitude: 0.3,
-                                                                                                subjectivity: 0.5,
-                                                                                            };
-                                                                                        }
-                                                                                    },
-                                                                                    generateMockEmotions() {
-                                                                                        const emotions = ['joy', 'sadness', 'anger', 'fear', 'surprise', 'disgust', 'trust', 'anticipation'];
-                                                                                        const scores = {};
-                                                                                        emotions.forEach(emotion => { });
-                                                                                        scores[emotion] = Math.random() * 0.3; // Generally low emotion scores
-                                                                                    },
-                                                                                    // Pick one emotion to be dominant
-                                                                                    const: dominantEmotion = emotions[Math.floor(Math.random() * emotions.length)],
-                                                                                    scores, [dominantEmotion]:  = 0.4 + Math.random() * 0.6,
-                                                                                    return: {
-                                                                                        primary: dominantEmotion,
-                                                                                        scores,
-                                                                                        confidence: 0.6 + Math.random() * 0.3,
-                                                                                        mixed: Math.random() > 0.8,
-                                                                                    },
-                                                                                    generateMockToxicity() {
-                                                                                        const levels = ['none', 'low', 'medium', 'high', 'severe'];
-                                                                                        const weights = [0.7, 0.2, 0.07, 0.02, 0.01]; // Most content is not toxic;
-                                                                                        const random = Math.random();
-                                                                                        let cumulative = 0;
-                                                                                        for (let i = 0; i < weights.length; i++) {
-                                                                                            cumulative += weights[i];
-                                                                                            if (random <= cumulative) {
-                                                                                                const level = levels[i];
-                                                                                                return {
-                                                                                                    level,
-                                                                                                    score: i * 0.2 + Math.random() * 0.2,
-                                                                                                    confidence: 0.7 + Math.random() * 0.3,
-                                                                                                    categories: {
-                                                                                                        harassment: Math.random() * 0.1,
-                                                                                                        hate_speech: Math.random() * 0.05,
-                                                                                                        profanity: Math.random() * 0.15,
-                                                                                                        threats: Math.random() * 0.02,
-                                                                                                        spam: Math.random() * 0.08,
-                                                                                                        inappropriate: Math.random() * 0.1,
-                                                                                                    },
-                                                                                                    flags: level !== 'none' && Math.random() > 0.5 ? ['detected_toxicity'] : []
-                                                                                                };
-                                                                                                return {
-                                                                                                    level: 'none',
-                                                                                                    score: 0,
-                                                                                                    confidence: 0.9,
-                                                                                                    categories: {
-                                                                                                        harassment: 0, hate_speech: 0, profanity: 0,
-                                                                                                        threats: 0, spam: 0, inappropriate: 0,
-                                                                                                    },
-                                                                                                    flags: []
-                                                                                                };
-                                                                                            }
-                                                                                        }
-                                                                                    },
-                                                                                    getDefaultConfig() {
-                                                                                        return {
-                                                                                            configId: uuidv4(),
-                                                                                            name: 'Default Sentiment Analysis',
-                                                                                            description: 'Default configuration for sentiment analysis',
-                                                                                            enabled: true,
-                                                                                            models: {
-                                                                                                primary: 'transformer',
-                                                                                                fallback: 'lexicon_based',
-                                                                                            },
-                                                                                            analysis: {
-                                                                                                enableEmotionDetection: true,
-                                                                                                enableToxicityDetection: true,
-                                                                                                enableTopicExtraction: true,
-                                                                                                enableIntentDetection: true,
-                                                                                                enableQualityScoring: true,
-                                                                                                minTextLength: 10,
-                                                                                                maxTextLength: 5000,
-                                                                                                supportedLanguages: ['en', 'es', 'fr', 'de'],
-                                                                                            },
-                                                                                            processing: {
-                                                                                                enablePreprocessing: true,
-                                                                                                removePersonalInfo: true,
-                                                                                                normalizeText: true,
-                                                                                                filterSpam: true,
-                                                                                                batchSize: 50,
-                                                                                                timeoutMs: 10000,
-                                                                                            },
-                                                                                            thresholds: {
-                                                                                                toxicity: {
-                                                                                                    low: 0.3,
-                                                                                                    medium: 0.5,
-                                                                                                    high: 0.7,
-                                                                                                    severe: 0.9,
-                                                                                                },
-                                                                                                confidence: {
-                                                                                                    minimum: 0.6,
-                                                                                                    high: 0.8,
-                                                                                                },
-                                                                                                quality: {
-                                                                                                    minimum: 40,
-                                                                                                    good: 70,
-                                                                                                },
-                                                                                                realTime: {
-                                                                                                    enabled: false,
-                                                                                                    alertThresholds: {
-                                                                                                        severeToxicity: true,
-                                                                                                        criticalIntent: true,
-                                                                                                        negativeSpike: false,
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        };
-                                                                                    }
+                                                                                    flags: []
                                                                                 };
                                                                             }
                                                                         }
+                                                                    },
+                                                                    getDefaultConfig() {
+                                                                        return {
+                                                                            configId: uuidv4(),
+                                                                            name: 'Default Sentiment Analysis',
+                                                                            description: 'Default configuration for sentiment analysis',
+                                                                            enabled: true,
+                                                                            models: {
+                                                                                primary: 'transformer',
+                                                                                fallback: 'lexicon_based',
+                                                                            },
+                                                                            analysis: {
+                                                                                enableEmotionDetection: true,
+                                                                                enableToxicityDetection: true,
+                                                                                enableTopicExtraction: true,
+                                                                                enableIntentDetection: true,
+                                                                                enableQualityScoring: true,
+                                                                                minTextLength: 10,
+                                                                                maxTextLength: 5000,
+                                                                                supportedLanguages: ['en', 'es', 'fr', 'de'],
+                                                                            },
+                                                                            processing: {
+                                                                                enablePreprocessing: true,
+                                                                                removePersonalInfo: true,
+                                                                                normalizeText: true,
+                                                                                filterSpam: true,
+                                                                                batchSize: 50,
+                                                                                timeoutMs: 10000,
+                                                                            },
+                                                                            thresholds: {
+                                                                                toxicity: {
+                                                                                    low: 0.3,
+                                                                                    medium: 0.5,
+                                                                                    high: 0.7,
+                                                                                    severe: 0.9,
+                                                                                },
+                                                                                confidence: {
+                                                                                    minimum: 0.6,
+                                                                                    high: 0.8,
+                                                                                },
+                                                                                quality: {
+                                                                                    minimum: 40,
+                                                                                    good: 70,
+                                                                                },
+                                                                                realTime: {
+                                                                                    enabled: false,
+                                                                                    alertThresholds: {
+                                                                                        severeToxicity: true,
+                                                                                        criticalIntent: true,
+                                                                                        negativeSpike: false,
+                                                                                    } } }
+                                                                        };
                                                                     }
-                                                                }
+                                                                };
                                                             }
                                                         }
                                                     }

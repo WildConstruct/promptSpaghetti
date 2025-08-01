@@ -1,18 +1,18 @@
 import { Node, Edge } from 'reactflow';
-import { 
-  Template,
+import { Template,
   TemplateFilter,
   TemplateCategory,
   TemplateInstantiationOptions,
   Review,
   GraphData,
-  TemplateValidation,
+  TemplateValidation }
   TemplateSaveData
 } from '../types/TemplateTypes';
 /**
  * Template storage interface - can be implemented for local/server storage
  */
 
+}
 }
 export interface TemplateStorage {
     save(template: Template): Promise<Template>;
@@ -90,4 +90,5 @@ export declare class TemplateService {
 
 export declare const templateService: TemplateService;
 //# sourceMappingURL=TemplateService.d.ts.map
+}
 }

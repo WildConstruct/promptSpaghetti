@@ -6,18 +6,16 @@
  * with filtering, sorting, and search capabilities.
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  CaseStudy,
+import { CaseStudy,
   CaseStudyFilter,
   CaseStudySort,
-  IndustryCategory,
+  IndustryCategory }
   CaseStudyType
-} from '../../models/CaseStudyDataModel';
+ from '../../models/CaseStudyDataModel';
 import { CaseStudyCard } from './CaseStudyCard';
 
-}
-export interface CaseStudyGalleryProps {
-  initialFilter?: CaseStudyFilter;
+
+export interface CaseStudyGalleryProps { initialFilter?: CaseStudyFilter;
   initialSort?: CaseStudySort;
   layout?: 'grid' | 'list';
   showFilters?: boolean;
@@ -27,20 +25,19 @@ export interface CaseStudyGalleryProps {
   onCaseStudyClick?: (caseStudy: CaseStudy) => void;
   onTemplateClick?: (templateId: string) => void;
   onAuthorClick?: (authorId: string) => void;
-  className?: string;
-}
-}
+  className?: string }
+
 export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
-  initialFilter = {},
-  initialSort = { field: 'publishedAt', direction: 'desc' },
-  layout = 'grid',
-  showFilters = true,
-  showSearch = true,
-  showSort = true,
-  maxItems,
-  onCaseStudyClick,
-  onTemplateClick,
-  onAuthorClick,
+  initialFilter = {}
+  initialSort = { field: 'publishedAt', direction: 'desc' }
+  layout = 'grid'
+  showFilters = true
+  showSearch = true
+  showSort = true
+  maxItems
+  onCaseStudyClick
+  onTemplateClick
+  onAuthorClick
   className = ''
 }) => {
   const [caseStudies, setCaseStudies] = useState<CaseStudy>([]);
@@ -92,34 +89,22 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
       setCaseStudies(data.caseStudies || []);
       setTotalCount(data.pagination?.total || 0);
       setHasMore(data.pagination?.hasMore || false);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load case studies');
-  setCaseStudies([]);
-} finally {
-      setLoading(false);
-  }, [filter, sort, searchQuery, currentPage, maxItems]);
-  useEffect(() => {
-    loadCaseStudies();
-  }, [loadCaseStudies]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load case studies');
+  setCaseStudies([]) } finally { setLoading(false) }, [filter, sort, searchQuery, currentPage, maxItems]);
+  useEffect(() => { loadCaseStudies() }, [loadCaseStudies]);
   // Handle filter changes
   const handleFilterChange = (newFilter: Partial<CaseStudyFilter>) => {
     setFilter(prev => ({ ...prev, ...newFilter }));
     setCurrentPage(1);
   };
   // Handle sort change
-  const handleSortChange = (newSort: CaseStudySort) => {
-    setSort(newSort);
-    setCurrentPage(1);
-  };
+  const handleSortChange = (newSort: CaseStudySort) => { setSort(newSort);
+    setCurrentPage(1) };
   // Handle search
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    setCurrentPage(1);
-  };
+  const handleSearch = (query: string) => { setSearchQuery(query);
+    setCurrentPage(1) };
   // Handle pagination
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page: number) => { setCurrentPage(page) };
   // Clear all filters
   const clearFilters = () => {
     setFilter({});
@@ -205,9 +190,8 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
               {/* Type Filter */}
               <select
                 value={Array.isArray(filter.type) ? '' : (filter.type || '')}
-                onChange={(e) => handleFilterChange({ )
-                  type: e.target.value ? e.target.value as CaseStudyType : undefined ;
-  })}
+                onChange={ (e) => handleFilterChange({ )
+                  type: e.target.value ? e.target.value as CaseStudyType : undefined  })}
                 className="filter-select"
               >
                 <option value="">All Types</option>
@@ -222,9 +206,8 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
               {/* Industry Filter */}
               <select
                 value={Array.isArray(filter.industry) ? '' : (filter.industry || '')}
-                onChange={(e) => handleFilterChange({ )
-                  industry: e.target.value ? e.target.value as IndustryCategory : undefined ;
-  })}
+                onChange={ (e) => handleFilterChange({ )
+                  industry: e.target.value ? e.target.value as IndustryCategory : undefined  })}
                 className="filter-select"
               >
                 <option value="">All Industries</option>
@@ -245,9 +228,8 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
               {/* Difficulty Filter */}
               <select
                 value={filter.difficulty?.[0] || ''}
-                onChange={(e) => handleFilterChange({ )
-                  difficulty: e.target.value ? [e.target.value as any] : undefined ;
-  })}
+                onChange={ (e) => handleFilterChange({ )
+                  difficulty: e.target.value ? [e.target.value as any] : undefined  })}
                 className="filter-select"
               >
                 <option value="">All Levels</option>
@@ -276,13 +258,13 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
             <div className="sort-section">
               <select
                 value={`${sort.field}-${sort.direction}`}
-                onChange={(e) => {
+                onChange={ (e) => {
   const [field, direction] = e.target.value.split('-');
   handleSortChange({ )
-  field: field as any,
-  direction: direction as 'asc' | 'desc',
+  field: field as any
+  direction: direction as 'asc' | 'desc' }
 });
-                }}
+
                 className="sort-select"
               >
                 <option value="publishedAt-desc">Latest first</option>
@@ -372,7 +354,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
           </button>
         </div>
       )}
-      <style>{`
+      <style>{ `
         .case-study-gallery {
           padding: 20px 0;
         .gallery-header {
@@ -399,23 +381,23 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
           border-radius: 6px;
   overflow: hidden;
         .layout-btn {
-          background: #ffffff;
+          background: #ffffff
   border: none;
           padding: 8px;
   cursor: pointer;
-          color: #6b7280;
+          color: #6b7280
   transition: all 0.2s ease;
-        .layout-btn:hover {,
+        .layout-btn:hover {
   background: #f9fafb;
         .layout-btn.active {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
         .results-count {
           font-size: 14px;
   color: #6b7280;
           font-weight: 500;
         .gallery-controls {
-          background: #f8fafc;
+          background: #f8fafc
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 16px;
@@ -433,11 +415,11 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
         .search-icon {
           position: absolute;
   left: 12px;
-          top: 50%;
+          top: 50%
   transform: translateY(-50%);
           color: #9ca3af;
         .search-input input {
-          width: 100%;
+          width: 100%
   padding: 10px 12px 10px 36px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -445,7 +427,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
         .search-clear {
           position: absolute;
   right: 12px;
-          top: 50%;
+          top: 50%
   transform: translateY(-50%);
           background: none;
   border: none;
@@ -464,7 +446,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
   gap: 12px;
           align-items: center;
         .filter-select, .sort-select {
-          padding: 8px 12px;
+          padding: 8px 12px
   border: 1px solid #d1d5db;
           border-radius: 6px;
   background: #ffffff;
@@ -478,14 +460,14 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
   color: #4b5563;
           cursor: pointer;
         .clear-filters, .clear-filters-button {
-          background: #f3f4f6;
+          background: #f3f4f6
   border: 1px solid #d1d5db;
           padding: 8px 16px;
           border-radius: 6px;
           font-size: 14px;
   cursor: pointer;
           transition: all 0.2s ease;
-        .clear-filters:hover, .clear-filters-button:hover {,
+        .clear-filters:hover, .clear-filters-button:hover {
   background: #e5e7eb;
         .sort-section {
           display: flex;
@@ -514,27 +496,25 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
   height: 40px;
           border: 3px solid #e5e7eb;
           border-top: 3px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: spin 1s linear infinite;
           margin-bottom: 16px;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        .error-state h3, .empty-state h3 {
-          margin: 0 0 8px 0;
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
+        .error-state h3, .empty-state h3 { margin: 0 0 8px 0
   color: #1f2937;
         .error-state p, .empty-state p {
-          margin: 0 0 16px 0;
+          margin: 0 0 16px 0
   color: #6b7280;
         .retry-button {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
           border: none;
   padding: 10px 20px;
           border-radius: 6px;
   cursor: pointer;
           transition: background 0.2s ease;
-        .retry-button:hover {,
+        .retry-button:hover {
   background: #2563eb;
         .gallery-pagination {
           display: flex;
@@ -543,30 +523,30 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
   gap: 8px;
           margin-top: 32px;
         .page-btn {
-          background: #ffffff;
+          background: #ffffff
   border: 1px solid #d1d5db;
           padding: 8px 16px;
           border-radius: 6px;
   cursor: pointer;
           font-size: 14px;
   transition: all 0.2s ease;
-        .page-btn:hover:not(:disabled) {,
+        .page-btn:hover:not(:disabled) {
   background: #f9fafb;
           border-color: #9ca3af;
         .page-btn.active {
           background: #3b82f6;
-          border-color: #3b82f6;
+          border-color: #3b82f6
   color: #ffffff;
-        .page-btn:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+        .page-btn:disabled {
+  opacity: 0.5
+  cursor: not-allowed;
         .page-numbers {
           display: flex;
   gap: 4px;
         @media (max-width: 768px) {
           .gallery-header {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: flex-start }
   gap: 16px;
           .header-controls {
             width: 100%;

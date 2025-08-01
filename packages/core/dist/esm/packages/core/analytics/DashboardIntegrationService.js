@@ -9,10 +9,10 @@ import { AnalyticsAuthorizationService } from './AnalyticsAuthorization';
 import { WebSocketStreamingServer } from './WebSocketStreaming';
 import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 /**
- * Dashboard Integration Service
- *
- * Manages the integration between the unified dashboard and existing analytics systems
- */
+* Dashboard Integration Service
+*
+* Manages the integration between the unified dashboard and existing analytics systems
+*/
 export class DashboardIntegrationService {
     eventBus;
     eventRepository;
@@ -102,8 +102,9 @@ setInterval(() => {
  * Get consolidated dashboard data from all integrated systems
  */
 async;
-getConsolidatedDashboardData(filter, EventFilter);
-authContext: AuthContext,
+getConsolidatedDashboardData(filter, EventFilter),
+    authContext;
+AuthContext,
     cacheKey ?  : string;
 Promise < {
     metrics: unknown,
@@ -173,8 +174,9 @@ catch (error) {
     this.updateWidgetPerformance('dashboard', 'consolidated', loadTime, true);
     throw error;
     async;
-    calculateConsolidatedMetrics(events, UnifiedAnalyticsEvent);
-    statistics: EventStatistics,
+    calculateConsolidatedMetrics(events, UnifiedAnalyticsEvent),
+        statistics;
+    EventStatistics,
         filter;
     EventFilter;
     Promise < any > {
@@ -294,8 +296,9 @@ catch (error) {
          * Get widget-specific performance data
          */
         async;
-        getWidgetPerformanceData(widgetId, string);
-        widgetType: string,
+        getWidgetPerformanceData(widgetId, string),
+            widgetType;
+        string,
             filter;
         EventFilter,
             authContext;
@@ -451,8 +454,9 @@ catch (error) {
                                 criticalAlerts: securityEvents.filter(e => e.severity === 'critical').length,
                             };
                             async;
-                            getStandardWidgetData(widgetType, string);
-                            filter: EventFilter,
+                            getStandardWidgetData(widgetType, string),
+                                filter;
+                            EventFilter,
                                 authContext;
                             AuthContext;
                             Promise < any > {

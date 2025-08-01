@@ -14,12 +14,11 @@ import {
   EvidenceAccessAuditService,
   EvidenceAccessAction,
   EvidenceAccessOutcome
-} from '../services/security/EvidenceAccessAuditService';
+ from '../services/security/EvidenceAccessAuditService';
 import { AccessControlFramework, AccessControlContext } from '../services/security/AccessControlFramework';
 import { performance } from 'perf_hooks';
 import crypto from 'crypto';
 
-}
 interface AuditableRequest extends Request {
   evidenceId?: string;
   evidenceAction?: EvidenceAccessAction;
@@ -31,9 +30,8 @@ interface AuditableRequest extends Request {
   };
   correlationId?: string;
   startTime?: number;
-}
 
-}
+
 interface FastifyAuditableRequest extends FastifyRequest {
   evidenceId?: string;
   evidenceAction?: EvidenceAccessAction;
@@ -45,7 +43,7 @@ interface FastifyAuditableRequest extends FastifyRequest {
   };
   correlationId?: string;
   startTime?: number;
-}
+
 
 export class EvidenceAccessAuditMiddleware {
   private auditService: EvidenceAccessAuditService;
@@ -57,7 +55,7 @@ export class EvidenceAccessAuditMiddleware {
   ) {
     this.auditService = auditService;
     this.accessControlFramework = accessControlFramework;
-  }
+
 
   /**
    * Express middleware for evidence access auditing
@@ -67,7 +65,7 @@ export class EvidenceAccessAuditMiddleware {
       // Skip non-evidence requests
       if (!this.isEvidenceRequest(req)) {
         return next();
-      }
+
 
       // Initialize audit context
       req.correlationId = crypto.randomUUID();
@@ -104,11 +102,11 @@ export class EvidenceAccessAuditMiddleware {
                 correlationId: req.correlationId,
                 requestPath: req.path,
                 requestMethod: req.method
-              }
+
             );
-          } catch (auditError) {
+ catch (auditError) {
             console.error('Audit logging failed:', auditError);
-          }
+
         });
         
         return originalSend.call(this, body);
@@ -118,7 +116,7 @@ export class EvidenceAccessAuditMiddleware {
       
       next();
     };
-  }
+
 
   /**
    * Fastify middleware for evidence access auditing
@@ -128,7 +126,7 @@ export class EvidenceAccessAuditMiddleware {
       // Skip non-evidence requests
       if (!this.isEvidenceRequestFastify(request)) {
         return;
-      }
+
 
       // Initialize audit context
       request.correlationId = crypto.randomUUID();
@@ -162,16 +160,16 @@ export class EvidenceAccessAuditMiddleware {
               correlationId: request.correlationId,
               requestPath: request.url,
               requestMethod: request.method
-            }
+
           );
-        } catch (auditError) {
+ catch (auditError) {
           console.error('Audit logging failed:', auditError);
-        }
+
         
         return payload;
       });
     };
-  }
+
 
   /**
    * Manual audit logging for programmatic evidence access
@@ -192,25 +190,25 @@ export class EvidenceAccessAuditMiddleware {
         roles: metadata.roles || [],
         permissions: metadata.permissions || [],
         ...context.subject
-  }
+
       resource: {
         id: evidenceId,
         type: 'evidence',
         attributes: metadata.resourceAttributes || {},
         ...context.resource
-  }
+
       action: {
         operation: action,
         intent: metadata.intent || 'programmatic',
         ...context.action
-  }
+
       environment: {
         timestamp: new Date(),
         sourceIP: metadata.sourceIP || 'internal',
         userAgent: metadata.userAgent || 'system',
         applicationContext: metadata.applicationContext || 'backend',
         ...context.environment
-      }
+
     };
 
     await this.auditService.recordEvidenceAccess(
@@ -220,7 +218,7 @@ export class EvidenceAccessAuditMiddleware {
       EvidenceAccessOutcome.SUCCESS,
       metadata
     );
-  }
+
 
   /**
    * Batch audit logging for multiple evidence accesses
@@ -232,7 +230,7 @@ export class EvidenceAccessAuditMiddleware {
       action: EvidenceAccessAction;
       outcome: EvidenceAccessOutcome;
       metadata?: Record<string, any>;
-    }>,
+>,
     sharedContext: Partial<AccessControlContext> = {}
   ): Promise<void> {
 
@@ -245,22 +243,22 @@ export class EvidenceAccessAuditMiddleware {
             id: userId,
             type: 'user',
             ...sharedContext.subject
-  }
+
           resource: {
             id: access.evidenceId,
             type: 'evidence',
             ...sharedContext.resource
-  }
+
           action: {
             operation: access.action,
             intent: 'batch_operation',
             ...sharedContext.action
-  }
+
           environment: {
             timestamp: new Date(),
             applicationContext: 'batch_processor',
             ...sharedContext.environment
-          }
+
         };
 
         await this.auditService.recordEvidenceAccess(
@@ -275,9 +273,9 @@ export class EvidenceAccessAuditMiddleware {
             batchSize: evidenceAccesses.length
           }
         );
-  }
+
     );
-  }
+
 
   // Private helper methods
 
@@ -294,7 +292,7 @@ export class EvidenceAccessAuditMiddleware {
            req.query.evidenceId !== undefined ||
            req.body?.evidenceId !== undefined ||
            req.params?.evidenceId !== undefined;
-  }
+
 
   private isEvidenceRequestFastify(req: FastifyRequest): boolean {
     const evidencePaths = [
@@ -308,12 +306,12 @@ export class EvidenceAccessAuditMiddleware {
            (req.query as any)?.evidenceId !== undefined ||
            (req.body as any)?.evidenceId !== undefined ||
            (req.params as any)?.evidenceId !== undefined;
-  }
+
 
   private extractEvidenceContext(req: AuditableRequest): {
     evidenceId: string;
     action: EvidenceAccessAction;
-  } {
+ {
     // Extract evidence ID from various sources
     const evidenceId = req.params?.evidenceId || 
                       req.query?.evidenceId || 
@@ -324,12 +322,12 @@ export class EvidenceAccessAuditMiddleware {
     const action = this.determineActionFromRequest(req.method, req.path);
     
     return { evidenceId: evidenceId as string, action };
-  }
+
 
   private extractEvidenceContextFastify(req: FastifyAuditableRequest): {
     evidenceId: string;
     action: EvidenceAccessAction;
-  } {
+ {
     const params = req.params as any;
     const query = req.query as any;
     const body = req.body as any;
@@ -342,7 +340,7 @@ export class EvidenceAccessAuditMiddleware {
     const action = this.determineActionFromRequest(req.method, req.url);
     
     return { evidenceId: evidenceId as string, action };
-  }
+
 
   private extractEvidenceIdFromPath(path: string): string | undefined {
     // Extract evidence ID from URL path patterns like /evidence/:id
@@ -351,10 +349,10 @@ export class EvidenceAccessAuditMiddleware {
     
     if (evidenceIndex !== -1 && evidenceIndex + 1 < pathSegments.length) {
       return pathSegments[evidenceIndex + 1];
-    }
+
     
     return undefined;
-  }
+
 
   private determineActionFromRequest(method: string, path: string): EvidenceAccessAction {
     const upperMethod = method.toUpperCase();
@@ -381,8 +379,8 @@ export class EvidenceAccessAuditMiddleware {
       return EvidenceAccessAction.DELETE;
     default:
       return EvidenceAccessAction.READ;
-    }
-  }
+
+
 
   private async createAccessControlContext(req: AuditableRequest): Promise<AccessControlContext> {
 
@@ -393,16 +391,16 @@ export class EvidenceAccessAuditMiddleware {
         sessionId: req.user?.sessionId,
         roles: req.user?.roles || [],
         permissions: req.user?.permissions || []
-  }
+
       resource: {
         id: req.evidenceId || 'unknown',
         type: 'evidence',
         attributes: {}
-  }
+
       action: {
         operation: req.evidenceAction || EvidenceAccessAction.READ,
         intent: 'user_request'
-  }
+
       environment: {
         timestamp: new Date(),
         sourceIP: this.getClientIP(req),
@@ -411,9 +409,9 @@ export class EvidenceAccessAuditMiddleware {
         networkZone: this.determineNetworkZone(this.getClientIP(req)),
         deviceType: this.detectDeviceType(req.get('User-Agent') || ''),
         securityLevel: 'standard'
-      }
+
     };
-  }
+
 
   private async createAccessControlContextFastify(req: FastifyAuditableRequest): Promise<AccessControlContext> {
 
@@ -424,16 +422,16 @@ export class EvidenceAccessAuditMiddleware {
         sessionId: req.user?.sessionId,
         roles: req.user?.roles || [],
         permissions: req.user?.permissions || []
-  }
+
       resource: {
         id: req.evidenceId || 'unknown',
         type: 'evidence',
         attributes: {}
-  }
+
       action: {
         operation: req.evidenceAction || EvidenceAccessAction.READ,
         intent: 'user_request'
-  }
+
       environment: {
         timestamp: new Date(),
         sourceIP: this.getClientIPFastify(req),
@@ -442,9 +440,9 @@ export class EvidenceAccessAuditMiddleware {
         networkZone: this.determineNetworkZone(this.getClientIPFastify(req)),
         deviceType: this.detectDeviceType(req.headers['user-agent'] || ''),
         securityLevel: 'standard'
-      }
+
     };
-  }
+
 
   private getClientIP(req: Request): string {
     return req.ip || 
@@ -452,7 +450,7 @@ export class EvidenceAccessAuditMiddleware {
            req.socket?.remoteAddress ||
            (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
            'unknown';
-  }
+
 
   private getClientIPFastify(req: FastifyRequest): string {
     return req.ip || 
@@ -460,34 +458,34 @@ export class EvidenceAccessAuditMiddleware {
            req.socket?.remoteAddress ||
            (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
            'unknown';
-  }
+
 
   private determineNetworkZone(ip: string): string {
     if (ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.16.')) {
       return 'internal';
-    }
+
     if (ip === '127.0.0.1' || ip === '::1') {
       return 'localhost';
-    }
+
     return 'external';
-  }
+
 
   private detectDeviceType(userAgent: string): string {
     const ua = userAgent.toLowerCase();
     
     if (ua.includes('mobile') || ua.includes('android') || ua.includes('iphone')) {
       return 'mobile';
-    }
+
     if (ua.includes('tablet') || ua.includes('ipad')) {
       return 'tablet';
-    }
+
     if (ua.includes('bot') || ua.includes('crawler') || ua.includes('spider')) {
       return 'bot';
-    }
+
     
     return 'desktop';
-  }
-}
+
+
 
 // Utility functions for easy integration
 
@@ -500,7 +498,7 @@ export function createExpressAuditMiddleware(
 ) {
   const middleware = new EvidenceAccessAuditMiddleware(auditService, accessControlFramework);
   return middleware.expressMiddleware();
-}
+
 
 /**
  * Creates pre-configured Fastify middleware instance
@@ -511,7 +509,7 @@ export function createFastifyAuditMiddleware(
 ) {
   const middleware = new EvidenceAccessAuditMiddleware(auditService, accessControlFramework);
   return middleware.fastifyMiddleware();
-}
+
 
 /**
  * Decorator for automatic audit logging of service methods
@@ -551,7 +549,7 @@ export function AuditEvidenceAccess(
           );
           
           return result;
-        } catch (error) {
+ catch (error) {
           // Log failed access
           await auditService.auditEvidenceAccess(
             userId,
@@ -563,16 +561,15 @@ export function AuditEvidenceAccess(
               className: target.constructor.name,
               error: error instanceof Error ? error.message : 'Unknown error',
               outcome: EvidenceAccessOutcome.ERROR
-            }
+
           );
           
           throw error;
-        }
-      }
+
+
       
       return originalMethod.apply(this, args);
     };
     
     return descriptor;
   };
-}

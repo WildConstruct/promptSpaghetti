@@ -6,9 +6,8 @@
  */
 import { useEffect, useCallback, useRef } from 'react';
 
-}
-export interface KeyboardShortcut {
-  key: string;
+
+export interface KeyboardShortcut { key: string;
   ctrl?: boolean;
   cmd?: boolean;
   alt?: boolean;
@@ -17,10 +16,11 @@ export interface KeyboardShortcut {
   action: () => void;
   preventDefault?: boolean;
   enabled?: boolean;
-  global?: boolean; // Works even when inputs are focused,
-}
-}
-}
+  global?: boolean; // Works even when inputs are focused }
+
+
+
+
 export interface UseKeyboardShortcutsOptions {
   shortcuts: KeyboardShortcut;
   enabled?: boolean;
@@ -28,20 +28,17 @@ export interface UseKeyboardShortcutsOptions {
   /**
   * Hook for managing keyboard shortcuts in the graph editor
   */
-}
-}
-export const useKeyboardShortcuts = ({)
+
+
+export const useKeyboardShortcuts = ({ )
   shortcuts,
-  enabled = true,
+  enabled = true }
   preventDefault = true
-}: UseKeyboardShortcutsOptions) => {
-  const shortcutsRef = useRef<KeyboardShortcut>(shortcuts);
+: UseKeyboardShortcutsOptions) => { const shortcutsRef = useRef<KeyboardShortcut>(shortcuts);
   // Update shortcuts ref when shortcuts change
   useEffect(() => {
-    shortcutsRef.current = shortcuts;
-  }, [shortcuts]);
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-  if (!enabled) return;
+    shortcutsRef.current = shortcuts }, [shortcuts]);
+  const handleKeyDown = useCallback((event: KeyboardEvent) => { if (!enabled) return;
   const target = event.target as HTMLElement;
   const isInputFocused = target.tagName === 'INPUT' || ;
   target.tagName === 'TEXTAREA' ||
@@ -69,8 +66,7 @@ export const useKeyboardShortcuts = ({)
   event.preventDefault();
   event.stopPropagation();
   try {
-  shortcut.action();
-} catch (error) {
+  shortcut.action() } catch (error) {
   console.error('Keyboard shortcut error:', error);
   break; // Only execute the first matching shortcut
 }, [enabled, preventDefault]);
@@ -79,8 +75,7 @@ export const useKeyboardShortcuts = ({)
     document.addEventListener('keydown', handleKeyDown, { capture: true });
     return () => document.removeEventListener('keydown', handleKeyDown, { capture: true });
   }, [handleKeyDown, enabled]);
-  return {
-  shortcuts: shortcutsRef.current,
+  return { shortcuts: shortcutsRef.current }
 };
 };
 /**
@@ -92,7 +87,7 @@ export const useCommandPaletteShortcuts = (shortcuts: KeyboardShortcut) => {
 /**
  * Default keyboard shortcuts for the graph editor
  */
-export const createDefaultShortcuts = (actions: {)
+export const createDefaultShortcuts = (actions: { )
   onUndo?: () => void;
   onRedo?: () => void;
   onSave?: () => void;
@@ -105,138 +100,119 @@ export const createDefaultShortcuts = (actions: {)
   onZoomIn?: () => void;
   onZoomOut?: () => void;
   onNewNode?: (type: string) => void;
-  onExport?: () => void;
-}): KeyboardShortcut => {
-  return [
+  onExport?: () => void }): KeyboardShortcut => { return [
   // Basic editing
   {
-  key: 'z',
-  cmd: true,
-  description: 'Undo last action',
-  action: () => actions.onUndo?.(),
-  enabled: !!actions.onUndo,
-}
-    {
-  key: 'z',
-  cmd: true,
-  shift: true,
-  description: 'Redo last action',
-  action: () => actions.onRedo?.(),
-  enabled: !!actions.onRedo,
-}
-    {
-  key: 's',
-  cmd: true,
-  description: 'Save graph',
-  action: () => actions.onSave?.(),
-  enabled: !!actions.onSave,
-}
-    {
-  key: 'c',
-  cmd: true,
-  description: 'Copy selected nodes',
-  action: () => actions.onCopy?.(),
-  enabled: !!actions.onCopy,
-}
-    {
-  key: 'v',
-  cmd: true,
-  description: 'Paste nodes',
-  action: () => actions.onPaste?.(),
-  enabled: !!actions.onPaste,
-}
-    {
-  key: 'Delete',
-  description: 'Delete selected nodes',
-  action: () => actions.onDelete?.(),
-  enabled: !!actions.onDelete,
-}
-    {
-  key: 'Backspace',
-  description: 'Delete selected nodes',
-  action: () => actions.onDelete?.(),
-  enabled: !!actions.onDelete,
-}
-    {
-  key: 'a',
-  cmd: true,
-  description: 'Select all nodes',
-  action: () => actions.onSelectAll?.(),
-  enabled: !!actions.onSelectAll,
-}
-    {
-  key: 'd',
-  cmd: true,
-  description: 'Duplicate selected nodes',
-  action: () => actions.onDuplicate?.(),
-  enabled: !!actions.onDuplicate,
-}
+  key: 'z'
+  cmd: true
+  description: 'Undo last action'
+  action: () => actions.onUndo?.()
+  enabled: !!actions.onUndo }
+
+    { key: 'z'
+  cmd: true
+  shift: true
+  description: 'Redo last action'
+  action: () => actions.onRedo?.()
+  enabled: !!actions.onRedo }
+
+    { key: 's'
+  cmd: true
+  description: 'Save graph'
+  action: () => actions.onSave?.()
+  enabled: !!actions.onSave }
+
+    { key: 'c'
+  cmd: true
+  description: 'Copy selected nodes'
+  action: () => actions.onCopy?.()
+  enabled: !!actions.onCopy }
+
+    { key: 'v'
+  cmd: true
+  description: 'Paste nodes'
+  action: () => actions.onPaste?.()
+  enabled: !!actions.onPaste }
+
+    { key: 'Delete'
+  description: 'Delete selected nodes'
+  action: () => actions.onDelete?.()
+  enabled: !!actions.onDelete }
+
+    { key: 'Backspace'
+  description: 'Delete selected nodes'
+  action: () => actions.onDelete?.()
+  enabled: !!actions.onDelete }
+
+    { key: 'a'
+  cmd: true
+  description: 'Select all nodes'
+  action: () => actions.onSelectAll?.()
+  enabled: !!actions.onSelectAll }
+
+    { key: 'd'
+  cmd: true
+  description: 'Duplicate selected nodes'
+  action: () => actions.onDuplicate?.()
+  enabled: !!actions.onDuplicate }
+
     // Navigation
-    {
-  key: '0',
-  cmd: true,
-  description: 'Fit view to all nodes',
-  action: () => actions.onFitView?.(),
-  enabled: !!actions.onFitView,
-}
-    {
-  key: '=',
-  cmd: true,
-  description: 'Zoom in',
-  action: () => actions.onZoomIn?.(),
-  enabled: !!actions.onZoomIn,
-}
-    {
-  key: '-',
-  cmd: true,
-  description: 'Zoom out',
-  action: () => actions.onZoomOut?.(),
-  enabled: !!actions.onZoomOut,
-}
+    { key: '0'
+  cmd: true
+  description: 'Fit view to all nodes'
+  action: () => actions.onFitView?.()
+  enabled: !!actions.onFitView }
+
+    { key: '='
+  cmd: true
+  description: 'Zoom in'
+  action: () => actions.onZoomIn?.()
+  enabled: !!actions.onZoomIn }
+
+    { key: '-'
+  cmd: true
+  description: 'Zoom out'
+  action: () => actions.onZoomOut?.()
+  enabled: !!actions.onZoomOut }
+
     // Node creation shortcuts
-    {
-  key: 'n',
-  cmd: true,
-  description: 'Create new weighted choice node',
-  action: () => actions.onNewNode?.('WeightedChoice'),
-  enabled: !!actions.onNewNode,
-}
-    {
-  key: 'o',
-  cmd: true,
-  description: 'Create new output node',
-  action: () => actions.onNewNode?.('Output'),
-  enabled: !!actions.onNewNode,
-}
-    {
-  key: 'l',
-  cmd: true,
-  description: 'Create new concat node',
-  action: () => actions.onNewNode?.('Concat'),
-  enabled: !!actions.onNewNode,
-}
+    { key: 'n'
+  cmd: true
+  description: 'Create new weighted choice node'
+  action: () => actions.onNewNode?.('WeightedChoice')
+  enabled: !!actions.onNewNode }
+
+    { key: 'o'
+  cmd: true
+  description: 'Create new output node'
+  action: () => actions.onNewNode?.('Output')
+  enabled: !!actions.onNewNode }
+
+    { key: 'l'
+  cmd: true
+  description: 'Create new concat node'
+  action: () => actions.onNewNode?.('Concat')
+  enabled: !!actions.onNewNode }
+
     // Export
-    {
-  key: 'e',
-  cmd: true,
-  description: 'Export graph',
-  action: () => actions.onExport?.(),
-  enabled: !!actions.onExport,
-}
+    { key: 'e'
+  cmd: true
+  description: 'Export graph'
+  action: () => actions.onExport?.()
+  enabled: !!actions.onExport }
+
     // Film industry specific shortcuts
-    {
-  key: 'g',
-  cmd: true,
-  description: 'Generate character development',
-  action: () => actions.onNewNode?.('character-development'),
-  enabled: !!actions.onNewNode,
-}
-    {
-  key: 'h',
-  cmd: true,
-  shift: true,
-  description: 'Show keyboard shortcuts help',
-  action: () => {,
+    { key: 'g'
+  cmd: true
+  description: 'Generate character development'
+  action: () => actions.onNewNode?.('character-development')
+  enabled: !!actions.onNewNode }
+
+    { key: 'h'
+  cmd: true
+  shift: true
+  description: 'Show keyboard shortcuts help'
+  action: () => { }
   // This could open a help modal
   console.log('Keyboard shortcuts help');
   ];
@@ -244,8 +220,7 @@ export const createDefaultShortcuts = (actions: {)
 /**
  * Format keyboard shortcut for display
  */
-export const formatKeyCombo = (shortcut: KeyboardShortcut): string => {
-  const parts: string = [];
+export const formatKeyCombo = (shortcut: KeyboardShortcut): string => { const parts: string = [];
   const isMac = navigator.platform.includes('Mac');
   if (shortcut.ctrl && !shortcut.cmd) {
   parts.push(isMac ? '⌃' : 'Ctrl');
@@ -257,29 +232,25 @@ export const formatKeyCombo = (shortcut: KeyboardShortcut): string => {
   parts.push(isMac ? '⇧' : 'Shift');
   // Format the key
   let key = shortcut.key;
-  const keyMappings: Record<string, string> = {,
-  'ArrowUp': '↑',
-  'ArrowDown': '↓',
-  'ArrowLeft': '←',
-  'ArrowRight': '→',
-  'Enter': '⏎',
-  'Escape': 'Esc',
-  'Backspace': '⌫',
-  'Delete': '⌦',
-  ' ': 'Space',
+  const keyMappings: Record<string, string> = {
+  'ArrowUp': '↑'
+  'ArrowDown': '↓'
+  'ArrowLeft': '←'
+  'ArrowRight': '→'
+  'Enter': '⏎'
+  'Escape': 'Esc'
+  'Backspace': '⌫'
+  'Delete': '⌦'
+  ' ': 'Space' }
 };
-  if (keyMappings[key]) {
-    key = keyMappings[key];
-  } else {
-  key = key.charAt(0).toUpperCase() + key.slice(1);
+  if (keyMappings[key]) { key = keyMappings[key] } else { key = key.charAt(0).toUpperCase() + key.slice(1);
   parts.push(key);
-  return parts.join(isMac ? '' : '+');
-};
+  return parts.join(isMac ? '' : '+') };
 /**
  * Check if a keyboard shortcut conflicts with browser shortcuts
  */
 export const checkBrowserConflicts = (shortcut: KeyboardShortcut): boolean => {
-  const browserShortcuts = [;
+  const browserShortcuts = [
     { key: 'r', cmd: true }, // Refresh
     { key: 't', cmd: true }, // New tab
     { key: 'w', cmd: true }, // Close tab

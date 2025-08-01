@@ -6,16 +6,14 @@
  * fields, validation, and preview capabilities.
  */
 import React, { useState } from 'react';
-import { 
-  CreateContributionRequest, 
+import { CreateContributionRequest, 
   ContributionType,
-  validateCreateContributionRequest,
+  validateCreateContributionRequest }
   CONTRIBUTION_TYPE_DESCRIPTIONS 
-} from '../../types/contributions';
+ from '../../types/contributions';
 
-}
-export interface ContributionSubmissionFormProps {
-  onSubmit: (data: CreateContributionRequest) => void;
+
+export interface ContributionSubmissionFormProps { onSubmit: (data: CreateContributionRequest) => void
   onCancel: () => void;
   initialData?: Partial<CreateContributionRequest>;
   className?: string;
@@ -25,57 +23,53 @@ export interface ContributionSubmissionFormProps {
   description: string;
   const FORM_STEPS: FormStep = [
   {
-  id: 'type',
-  title: 'Choose Type',
-  description: 'Select the type of contribution you want to create',
-}
-}
-  {
-  id: 'basic',
+  id: 'type';
+  title: 'Choose Type';
+  description: 'Select the type of contribution you want to create' }
+
+
+
+  { id: 'basic',
   title: 'Basic Information',
-  description: 'Provide title, description, and categorization',
-}
-  {
-  id: 'content',
+  description: 'Provide title, description, and categorization' }
+
+  { id: 'content',
   title: 'Content Details',
-  description: 'Add specific content based on contribution type',
-}
-  {
-  id: 'review',
-  title: 'Review & Submit',
+  description: 'Add specific content based on contribution type' }
+
+  { id: 'review',
+  title: 'Review & Submit' }
   description: 'Review your submission before publishing'];
-}
-export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProps> = ({)
-  onSubmit,
-  onCancel,
-  initialData = {},
+
+export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProps> = ({ )
+  onSubmit
+  onCancel }
+  initialData = {}
   className = ''
-}) => {
-  const [currentStep, setCurrentStep] = useState(0);
+}) => { const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Partial<CreateContributionRequest>>({)
-  type: 'template',
-    title: '',
-    description: '',
-    category: '',
-    tags: [],
-    content: {},
-    assets: [],
-    saveAsDraft: false,
+  type: 'template'
+    title: ''
+    description: ''
+    category: ''
+    tags: [] }
+    content: {}
+    assets: []
+    saveAsDraft: false
     ...initialData
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   // Available categories by type
-  const getCategoriesByType = (type: ContributionType): string => {
-  const categories = {
-  template: ['Prompt Engineering', 'Character Creation', 'Story Generation', 'Data Analysis', 'Creative Writing', 'Business', 'Education'],
-  knowledge_article: ['Getting Started', 'Best Practices', 'Advanced Techniques', 'Troubleshooting', 'API Reference'],
-  tutorial: ['Beginner', 'Intermediate', 'Advanced', 'Project-Based', 'Quick Start'],
-  case_study: ['Success Stories', 'ROI Analysis', 'Implementation', 'Before/After', 'Industry Specific'],
-  pattern_library: ['Prompt Patterns', 'Graph Patterns', 'Workflow Patterns', 'Integration Patterns'],
-  community_post: ['General Discussion', 'Questions', 'Announcements', 'Showcase', 'Feedback'],
-  documentation: ['User Guides', 'API Documentation', 'Technical Specs', 'FAQs'],
-  review: ['Template Reviews', 'Service Reviews', 'Tool Reviews', 'Case Study Reviews'],
+  const getCategoriesByType = (type: ContributionType): string => { const categories = {
+  template: ['Prompt Engineering', 'Character Creation', 'Story Generation', 'Data Analysis', 'Creative Writing', 'Business', 'Education']
+  knowledge_article: ['Getting Started', 'Best Practices', 'Advanced Techniques', 'Troubleshooting', 'API Reference']
+  tutorial: ['Beginner', 'Intermediate', 'Advanced', 'Project-Based', 'Quick Start']
+  case_study: ['Success Stories', 'ROI Analysis', 'Implementation', 'Before/After', 'Industry Specific']
+  pattern_library: ['Prompt Patterns', 'Graph Patterns', 'Workflow Patterns', 'Integration Patterns']
+  community_post: ['General Discussion', 'Questions', 'Announcements', 'Showcase', 'Feedback']
+  documentation: ['User Guides', 'API Documentation', 'Technical Specs', 'FAQs']
+  review: ['Template Reviews', 'Service Reviews', 'Tool Reviews', 'Case Study Reviews'] }
 };
     return categories[type] || [];
   };
@@ -91,77 +85,55 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
     });
   };
   // Add tag
-  const addTag = (tag: string) => {
-  if (tag.trim() && !formData.tags?.includes(tag.trim())) {
+  const addTag = (tag: string) => { if (tag.trim() && !formData.tags?.includes(tag.trim())) {
   updateFormData({ )
-  tags: [...(formData.tags || []), tag.trim()],
+  tags: [...(formData.tags || []), tag.trim()] }
 });
   };
   // Remove tag
-  const removeTag = (index: number) => {
-  updateFormData({)
-  tags: formData.tags?.filter((_, i) => i !== index) || [],
+  const removeTag = (index: number) => { updateFormData({)
+  tags: formData.tags?.filter((_, i) => i !== index) || [] }
 });
   };
   // Validate current step
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, string> = {};
-    switch (step) {
-  case 0: // Type selection,
+    switch (step) { case 0: // Type selection
   if (!formData.type) {
   newErrors.type = 'Please select a contribution type';
   break;
-  case 1: // Basic information,
-  if (!formData.title?.trim()) {
-  newErrors.title = 'Title is required';
-} else if (formData.title.length < 5) {
-        newErrors.title = 'Title must be at least 5 characters';
-      } else if (formData.title.length > 200) {
-        newErrors.title = 'Title must be less than 200 characters';
+  case 1: // Basic information }
+  if (!formData.title?.trim()) { newErrors.title = 'Title is required' } else if (formData.title.length < 5) { newErrors.title = 'Title must be at least 5 characters' } else if (formData.title.length > 200) { newErrors.title = 'Title must be less than 200 characters';
       if (!formData.description?.trim()) {
-        newErrors.description = 'Description is required';
-      } else if (formData.description.length < 20) {
-        newErrors.description = 'Description must be at least 20 characters';
-      } else if (formData.description.length > 2000) {
-  newErrors.description = 'Description must be less than 2000 characters';
+        newErrors.description = 'Description is required' } else if (formData.description.length < 20) { newErrors.description = 'Description must be at least 20 characters' } else if (formData.description.length > 2000) { newErrors.description = 'Description must be less than 2000 characters';
   if (!formData.category?.trim()) {
   newErrors.category = 'Category is required';
   break;
-  case 2: // Content details,
-  if (!formData.content || Object.keys(formData.content).length === 0) {
-  newErrors.content = 'Content details are required';
+  case 2: // Content details }
+  if (!formData.content || Object.keys(formData.content).length === 0) { newErrors.content = 'Content details are required';
   break;
   setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
+  return Object.keys(newErrors).length === 0 };
   // Handle next step
-  const handleNext = () => {
-    if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, FORM_STEPS.length - 1));
-  };
+  const handleNext = () => { if (validateStep(currentStep)) {
+      setCurrentStep(prev => Math.min(prev + 1, FORM_STEPS.length - 1)) };
   // Handle previous step
-  const handlePrevious = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 0));
-  };
+  const handlePrevious = () => { setCurrentStep(prev => Math.max(prev - 1, 0)) };
   // Handle form submission
-  const handleSubmit = async (saveAsDraft: boolean = false) => {
-    if (!validateStep(currentStep)) return;
+  const handleSubmit = async (saveAsDraft: boolean = false) => { if (!validateStep(currentStep)) return;
     setIsSubmitting(true);
     try {
       const submissionData = {
-        ...formData,
+        ...formData }
         saveAsDraft
-      } as CreateContributionRequest;
+ as CreateContributionRequest;
       // Validate with Zod
       validateCreateContributionRequest(submissionData);
       await onSubmit(submissionData);
-    } catch (err) {
-  setErrors({ )
-  submit: err instanceof Error ? err.message : 'Failed to submit contribution',
+ catch (err) { setErrors({ )
+  submit: err instanceof Error ? err.message : 'Failed to submit contribution' }
 });
-    } finally {
-      setIsSubmitting(false);
-  };
+ finally { setIsSubmitting(false) };
   // Render step content
   const renderStepContent = () => {
     switch (currentStep) {
@@ -240,12 +212,11 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
               <input
                 type="text"
                 placeholder="Add tags..."
-                onKeyPress={(e) => {
+                onKeyPress={ (e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                     addTag(e.currentTarget.value);
-                    e.currentTarget.value = '';
-                }}
+                    e.currentTarget.value = '' }}
               />
               <div className="tags-list">
                 {formData.tags?.map((tag, index) => ()
@@ -309,8 +280,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       return null;
   };
   // Get detailed type description
-  const getTypeDescription = (type: ContributionType): string => {
-  const descriptions = {
+  const getTypeDescription = (type: ContributionType): string => { const descriptions = {
   template: 'Create reusable prompt templates that others can use and customize for their projects.',
   knowledge_article: 'Share educational content, guides, and best practices with the community.',
   tutorial: 'Create step-by-step learning content to help others master new skills.',
@@ -318,7 +288,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
   pattern_library: 'Contribute reusable design patterns and architectural solutions.',
   community_post: 'Start discussions, ask questions, or share announcements with the community.',
   documentation: 'Help improve technical documentation and user guides.',
-  review: 'Share your experience and feedback about templates, tools, or services.',
+  review: 'Share your experience and feedback about templates, tools, or services.' }
 };
     return descriptions[type] || '';
   };
@@ -338,12 +308,12 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                   updateFormData({ )
                     content: { ...formData.content, graphJson } 
                   });
-                } catch (err) {
+ catch (err) {
                   // Invalid JSON, but still update to show error
                   updateFormData({ )
                     content: { ...formData.content, graphJson: e.target.value } 
                   });
-              }}
+
               placeholder="Paste your graph JSON here..."
               rows={8}
             />
@@ -366,12 +336,12 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
             <div className="pricing-group">
               <select
                 value={formData.content?.pricing?.type || 'free'}
-                onChange={(e) => updateFormData({ )
+                onChange={ (e) => updateFormData({ )
                   content: {
-  ...formData.content,
+  ...formData.content
   pricing: {
-  ...formData.content?.pricing,
-  type: e.target.value as 'free' | 'paid',
+  ...formData.content?.pricing
+  type: e.target.value as 'free' | 'paid' }
 })}
               >
                 <option value="free">Free</option>
@@ -382,12 +352,12 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                   type="number"
                   placeholder="Price in cents"
                   value={formData.content?.pricing?.priceInCents || ''}
-                  onChange={(e) => updateFormData({ )
+                  onChange={ (e) => updateFormData({ )
                     content: {
-  ...formData.content,
+  ...formData.content
   pricing: {
-  ...formData.content?.pricing,
-  priceInCents: parseInt(e.target.value) || 0,
+  ...formData.content?.pricing
+  priceInCents: parseInt(e.target.value) || 0 }
 })}
                 />
               )}
@@ -515,7 +485,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           )}
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .contribution-submission-form {
           padding: 24px;
           max-height: 80vh;
@@ -529,7 +499,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           display: flex;
           align-items: center;
   gap: 12px;
-          padding: 0 20px 0 0;
+          padding: 0 20px 0 0
   opacity: 0.5;
           transition: opacity 0.2s ease;
           min-width: 200px;
@@ -540,9 +510,9 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         .step-number {
           width: 32px;
   height: 32px;
-          border-radius: 50%;
+          border-radius: 50%
   background: #e5e7eb;
-          color: #6b7280;
+          color: #6b7280
   display: flex;
           align-items: center;
           justify-content: center;
@@ -550,7 +520,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           font-size: 14px;
           flex-shrink: 0;
         .progress-step.active .step-number {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
         .step-info {
           flex: 1;
@@ -582,7 +552,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         .type-option:hover {
           border-color: #3b82f6;
         .type-option.selected {
-          border-color: #3b82f6;
+          border-color: #3b82f6
   background: #eff6ff;
         .type-header h4 {
           margin: 0 0 8px 0;
@@ -601,23 +571,23 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           margin-bottom: 6px;
           font-weight: 500;
   color: #374151;
-        .form-group input,
-        .form-group textarea,
+        .form-group input
+        .form-group textarea
         .form-group select {
-          width: 100%;
+          width: 100%
   padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
   transition: border-color 0.2s ease;
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {,
+        .form-group input:focus
+        .form-group textarea:focus
+        .form-group select:focus {
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        .form-group input.error,
-        .form-group textarea.error,
+        .form-group input.error
+        .form-group textarea.error
         .form-group select.error {
           border-color: #ef4444;
         .char-count {
@@ -632,7 +602,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           flex-wrap: wrap;
   gap: 6px;
         .tag {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
           padding: 4px 8px;
           border-radius: 4px;
@@ -644,18 +614,18 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         .tag-remove {
           background: none;
   border: none;
-          color: #ffffff;
+          color: #ffffff
   cursor: pointer;
           font-size: 14px;
   padding: 0;
           margin: 0;
   width: 16px;
           height: 16px;
-          border-radius: 50%;
+          border-radius: 50%
   display: flex;
           align-items: center;
           justify-content: center;
-        .tag-remove:hover {,
+        .tag-remove:hover {
   background: rgba(255, 255, 255, 0.2);
         .pricing-group {
           display: flex;
@@ -666,7 +636,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         .pricing-group input {
           flex: 1;
         .review-section {
-          background: #f8fafc;
+          background: #f8fafc
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 20px;
@@ -679,7 +649,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           margin-bottom: 4px;
   color: #374151;
         .description-preview {
-          background: #ffffff;
+          background: #ffffff
   border: 1px solid #e5e7eb;
           border-radius: 4px;
   padding: 12px;
@@ -691,7 +661,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           flex-wrap: wrap;
   gap: 6px;
         .tags-preview .tag {
-          background: #e5e7eb;
+          background: #e5e7eb
   color: #4b5563;
         .error-message {
           color: #ef4444;
@@ -711,28 +681,28 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           border-radius: 6px;
           font-weight: 500;
   cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.2s ease
   border: 1px solid transparent;
         .btn-primary {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
-        .btn-primary:hover:not(:disabled) {,
+        .btn-primary:hover:not(:disabled) {
   background: #2563eb;
         .btn-secondary {
-          background: #f3f4f6;
+          background: #f3f4f6
   color: #374151;
           border-color: #d1d5db;
-        .btn-secondary:hover {,
+        .btn-secondary:hover {
   background: #e5e7eb;
         .btn-outline {
-          background: #ffffff;
+          background: #ffffff
   color: #374151;
           border-color: #d1d5db;
-        .btn-outline:hover {,
+        .btn-outline:hover {
   background: #f9fafb;
-        .btn-primary:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+        .btn-primary:disabled {
+  opacity: 0.5 }
+  cursor: not-allowed;
         @media (max-width: 768px) {
           .contribution-submission-form {
             padding: 16px;

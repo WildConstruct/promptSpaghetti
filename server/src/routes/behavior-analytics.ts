@@ -7,43 +7,46 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { BehaviorAnalyticsService, SessionBehaviorData } from '../auth/services/BehaviorAnalyticsService';
 import { requireAuth } from '../middleware/auth';
 
-}
-}
+
+
 interface AnalyzeBehaviorRequest {
   Body: {
     sessionData: SessionBehaviorData;
     userId?: string; // Optional, defaults to authenticated user
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetProfileRequest {
   Params: {
     userId: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface UpdateProfileRequest {
   Params: {
     userId: string;
-}
-}
+
+
+
   };
   Body: {
     updateType: 'reset' | 'recalibrate' | 'suspend';
     reason?: string;
   };
-}
 
-}
-}
+
+
+
 interface GetAnomaliesRequest {
   Querystring: {
     userId?: string;
@@ -54,48 +57,52 @@ interface GetAnomaliesRequest {
     resolved?: boolean;
     limit?: number;
     offset?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ResolveAnomalyRequest {
   Params: {
     anomalyId: string;
-}
-}
+
+
+
   };
   Body: {
     resolution: 'false_positive' | 'confirmed' | 'mitigated';
     notes?: string;
   };
-}
 
-}
-}
+
+
+
 interface GetRiskScoreRequest {
   Params: {
     userId: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetPatternsRequest {
   Params: {
     userId: string;
-}
-}
+
+
+
   };
   Querystring: {
     type?: string;
     limit?: number;
   };
-}
+
 
 export async function behaviorAnalyticsRoutes(
   fastify: FastifyInstance,
@@ -131,9 +138,9 @@ export async function behaviorAnalyticsRoutes(
                     metadata: { type: 'object' },
                     duration: { type: 'number' },
                     success: { type: 'boolean' }
-                  }
-                }
-  }
+
+
+
               resources: {
                 type: 'array',
                 items: {
@@ -145,9 +152,9 @@ export async function behaviorAnalyticsRoutes(
                     resourceId: { type: 'string' },
                     action: { type: 'string', enum: ['view', 'edit', 'delete', 'create'] },
                     duration: { type: 'number' }
-                  }
-                }
-  }
+
+
+
               interactions: {
                 type: 'array',
                 items: {
@@ -158,9 +165,9 @@ export async function behaviorAnalyticsRoutes(
                     type: { type: 'string', enum: ['click', 'scroll', 'keypress', 'focus', 'blur'] },
                     target: { type: 'string' },
                     metadata: { type: 'object' }
-                  }
-                }
-  }
+
+
+
               errors: {
                 type: 'array',
                 items: {
@@ -172,14 +179,14 @@ export async function behaviorAnalyticsRoutes(
                     errorMessage: { type: 'string' },
                     context: { type: 'string' },
                     resolved: { type: 'boolean' }
-                  }
-                }
-              }
-            }
-  }
+
+
+
+
+
           userId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -201,16 +208,16 @@ export async function behaviorAnalyticsRoutes(
                   deviationScore: { type: 'number' },
                   affectedMetrics: { type: 'array', items: { type: 'string' } },
                   resolved: { type: 'boolean' }
-                }
-              }
-  }
+
+
+
             recommendation: { type: 'string', enum: ['allow', 'monitor', 'challenge', 'block'] },
             confidence: { type: 'number' },
             reasoning: { type: 'array', items: { type: 'string' } }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<AnalyzeBehaviorRequest>, reply: FastifyReply) => {
     try {
       const { sessionData, userId } = request.body;
@@ -242,13 +249,13 @@ export async function behaviorAnalyticsRoutes(
       const result = await behaviorAnalyticsService.analyzeBehavior(targetUserId, processedSessionData);
 
       return reply.status(200).send(result);
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({ 
         error: 'Failed to analyze behavior',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -262,8 +269,8 @@ export async function behaviorAnalyticsRoutes(
         required: ['userId'],
         properties: {
           userId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -283,8 +290,8 @@ export async function behaviorAnalyticsRoutes(
                 weekdayVsWeekendRatio: { type: 'number' },
                 typicalActionsPerSession: { type: 'object' },
                 errorRate: { type: 'number' }
-              }
-  }
+
+
             patterns: {
               type: 'array',
               items: {
@@ -296,9 +303,9 @@ export async function behaviorAnalyticsRoutes(
                   frequency: { type: 'number' },
                   lastOccurrence: { type: 'string', format: 'date-time' },
                   confidence: { type: 'number' }
-                }
-              }
-  }
+
+
+
             recentAnomalies: {
               type: 'array',
               items: {
@@ -309,13 +316,13 @@ export async function behaviorAnalyticsRoutes(
                   type: { type: 'string' },
                   severity: { type: 'string' },
                   resolved: { type: 'boolean' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: FastifyRequest<GetProfileRequest>, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
@@ -324,7 +331,7 @@ export async function behaviorAnalyticsRoutes(
       // Check permissions - users can only view their own profile unless admin
       if (userId !== user.id && !user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden' });
-      }
+
 
       const profile = await (behaviorAnalyticsService as unknown as { getUserBehaviorProfile: (userId: string) => Promise<unknown> }).getUserBehaviorProfile(userId);
 
@@ -343,7 +350,7 @@ export async function behaviorAnalyticsRoutes(
           weekdayVsWeekendRatio: profile.baseline.weekdayVsWeekendRatio,
           typicalActionsPerSession: profile.baseline.typicalActionsPerSession,
           errorRate: profile.baseline.errorRate
-  }
+
         patterns: profile.patterns.map((p: Record<string, unknown>) => ({
           id: p.id,
           type: p.type,
@@ -362,13 +369,13 @@ export async function behaviorAnalyticsRoutes(
       };
 
       return reply.status(200).send(sanitizedProfile);
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({ 
         error: 'Failed to get behavior profile',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -382,17 +389,17 @@ export async function behaviorAnalyticsRoutes(
         required: ['userId'],
         properties: {
           userId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['updateType'],
         properties: {
           updateType: { type: 'string', enum: ['reset', 'recalibrate', 'suspend'] },
           reason: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<UpdateProfileRequest>, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
@@ -402,7 +409,7 @@ export async function behaviorAnalyticsRoutes(
       // Admin only
       if (!user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden - Admin access required' });
-      }
+
 
       // Handle different update types
       switch (updateType) {
@@ -427,19 +434,19 @@ export async function behaviorAnalyticsRoutes(
           reason?: string
         ) => Promise<void> }).suspendUserProfile(userId, reason);
         break;
-      }
+
 
       return reply.status(200).send({ 
         success: true,
         message: `Profile ${updateType} completed for user ${userId}`
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({ 
         error: 'Failed to update profile',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -459,9 +466,9 @@ export async function behaviorAnalyticsRoutes(
           resolved: { type: 'boolean' },
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'number', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<GetAnomaliesRequest>, reply: FastifyReply) => {
     try {
       const user = request.user as Record<string, unknown> & { id: string; roles?: string[] };
@@ -470,7 +477,7 @@ export async function behaviorAnalyticsRoutes(
       // Users can only view their own anomalies unless admin
       if (userId && userId !== user.id && !user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden' });
-      }
+
 
       const targetUserId = userId || (user.roles?.includes('admin') ? undefined : user.id);
 
@@ -486,13 +493,13 @@ export async function behaviorAnalyticsRoutes(
       });
 
       return reply.status(200).send(anomalies);
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({ 
         error: 'Failed to get anomalies',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -506,17 +513,17 @@ export async function behaviorAnalyticsRoutes(
         required: ['anomalyId'],
         properties: {
           anomalyId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['resolution'],
         properties: {
           resolution: { type: 'string', enum: ['false_positive', 'confirmed', 'mitigated'] },
           notes: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<ResolveAnomalyRequest>, reply: FastifyReply) => {
     try {
       const { anomalyId } = request.params;
@@ -526,7 +533,7 @@ export async function behaviorAnalyticsRoutes(
       // Admin only
       if (!user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden - Admin access required' });
-      }
+
 
       await (
         behaviorAnalyticsService as unknown as { resolveAnomaly: (anomalyId: string,
@@ -539,13 +546,13 @@ export async function behaviorAnalyticsRoutes(
         success: true,
         message: `Anomaly ${anomalyId} resolved as ${resolution}`
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({ 
         error: 'Failed to resolve anomaly',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -559,9 +566,9 @@ export async function behaviorAnalyticsRoutes(
         required: ['userId'],
         properties: {
           userId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<GetRiskScoreRequest>, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
@@ -570,7 +577,7 @@ export async function behaviorAnalyticsRoutes(
       // Check permissions
       if (userId !== user.id && !user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden' });
-      }
+
 
       const profile = await (behaviorAnalyticsService as unknown as { getUserBehaviorProfile: (userId: string) => Promise<unknown> }).getUserBehaviorProfile(userId);
 
@@ -583,13 +590,13 @@ export async function behaviorAnalyticsRoutes(
         profileStatus: profile.status,
         lastUpdated: profile.lastUpdated
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({ 
         error: 'Failed to get risk score',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -603,16 +610,16 @@ export async function behaviorAnalyticsRoutes(
         required: ['userId'],
         properties: {
           userId: { type: 'string' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           type: { type: 'string' },
           limit: { type: 'number', minimum: 1, maximum: 50, default: 10 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<GetPatternsRequest>, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
@@ -622,14 +629,14 @@ export async function behaviorAnalyticsRoutes(
       // Check permissions
       if (userId !== user.id && !user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden' });
-      }
+
 
       const profile = await (behaviorAnalyticsService as unknown as { getUserBehaviorProfile: (userId: string) => Promise<unknown> }).getUserBehaviorProfile(userId);
       
       let patterns = profile.patterns;
       if (type) {
         patterns = patterns.filter((p: unknown) => (p as { type: string }).type === type);
-      }
+
       
       patterns = patterns.slice(0, limit);
 
@@ -639,13 +646,13 @@ export async function behaviorAnalyticsRoutes(
         totalPatterns: profile.patterns.length,
         profileConfidence: profile.profileConfidence
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({ 
         error: 'Failed to get patterns',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -659,13 +666,13 @@ export async function behaviorAnalyticsRoutes(
         service: 'behavior-analytics',
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       return reply.status(503).send({
         status: 'unhealthy',
         service: 'behavior-analytics',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -686,8 +693,8 @@ export async function behaviorAnalyticsRoutes(
                 established: { type: 'number' },
                 suspicious: { type: 'number' },
                 blocked: { type: 'number' }
-              }
-  }
+
+
             totalAnomalies: { type: 'number' },
             unresolvedAnomalies: { type: 'number' },
             anomaliesBySeverity: {
@@ -697,14 +704,14 @@ export async function behaviorAnalyticsRoutes(
                 medium: { type: 'number' },
                 high: { type: 'number' },
                 critical: { type: 'number' }
-              }
-  }
+
+
             averageRiskScore: { type: 'number' },
             highRiskUsers: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const user = request.user as Record<string, unknown> & { id: string; roles?: string[] };
@@ -712,17 +719,16 @@ export async function behaviorAnalyticsRoutes(
       // Admin only
       if (!user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Forbidden - Admin access required' });
-      }
+
 
       const stats = await (behaviorAnalyticsService as unknown as { getStatistics: () => Promise<unknown> }).getStatistics();
 
       return reply.status(200).send(stats);
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({ 
         error: 'Failed to get statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
-}

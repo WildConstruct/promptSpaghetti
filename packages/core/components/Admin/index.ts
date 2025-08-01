@@ -16,11 +16,10 @@
 
 // Main verification dashboard for overview and queue management
 export { default as VerificationDashboard } from './VerificationDashboard';
-export type {
-  VerificationDashboardProps,
+export type { VerificationDashboardProps,
   AdminVerificationMetrics,
-  VerificationQueueItem,
-} from './VerificationDashboard';
+  VerificationQueueItem }
+ from './VerificationDashboard';
 
 // Detailed verification queue interface for admin review workflow
 export { default as VerificationQueue } from './VerificationQueue';
@@ -52,12 +51,11 @@ export type { MarketplacePolicyConfigProps, MarketplacePolicyTemplate, PolicyRul
 
 // Policy enforcement workflow management and monitoring
 export { default as PolicyEnforcementWorkflow } from './PolicyEnforcementWorkflow';
-export type {
-  PolicyEnforcementWorkflowProps,
+export type { PolicyEnforcementWorkflowProps,
   EnforcementWorkflow,
   EnforcementAction,
-  WorkflowExecution,
-} from './PolicyEnforcementWorkflow';
+  WorkflowExecution }
+ from './PolicyEnforcementWorkflow';
 
 // Policy analytics and performance monitoring
 export { default as PolicyAnalyticsDashboard } from './PolicyAnalyticsDashboard';

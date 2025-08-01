@@ -24,7 +24,8 @@ export const nodeSchemas = {
     }),
     WeightedChoice: baseNodeSchema.extend({
         type: z.literal('WeightedChoice').default('WeightedChoice'),
-        choices: z
+        choices: z,
+        : 
             .array(z.object({
             text: z.string(),
             weight: z.number().min(0).default(1),
@@ -57,7 +58,8 @@ export const nodeSchemas = {
     // Epic 7 Advanced Node Types
     WeightedAdvanced: baseNodeSchema.extend({
         type: z.literal('WeightedAdvanced').default('WeightedAdvanced'),
-        choices: z
+        choices: z,
+        : 
             .array(z.object({
             text: z.string(),
             weight: z.number().min(0).default(1),

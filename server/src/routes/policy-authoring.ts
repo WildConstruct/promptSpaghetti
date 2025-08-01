@@ -17,7 +17,7 @@ import {
   PolicyAuthoringRequest,
   PolicyUpdateRequest,
   PolicyDeploymentRequest
-} from '../services/PolicyAuthoringService';
+ from '../services/PolicyAuthoringService';
 
 // Request/Response Schemas
 const CreatePolicyRequestSchema = z.object({
@@ -94,8 +94,8 @@ const DeployPolicyRequestSchema = z.object({
         channel: z.string(),
         template: z.string()
       })).optional()
-  }
-  }
+
+
 });
 
 const GenerateFromComplianceRequestSchema = z.object({
@@ -153,7 +153,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof CreatePolicyRequestSchema>;
-  }>('/create', {
+>('/create', {
     schema: {
       description: 'Create new policy document',
       tags: ['Policy Authoring'],
@@ -170,20 +170,20 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 policyId: { type: 'string' },
                 version: { type: 'string' },
                 status: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('policy:create')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const authorId = request.user.userId;
@@ -195,17 +195,16 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             policyId: result.policyId,
             version: '1.0.0',
             status: 'DRAFT'
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error creating policy:', error);
         reply.code(500).send({
           error: 'Failed to create policy',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -214,7 +213,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.put<{
     Body: z.infer<typeof UpdatePolicyRequestSchema>;
-  }>('/update', {
+>('/update', {
     schema: {
       description: 'Update existing policy document',
       tags: ['Policy Authoring'],
@@ -231,20 +230,20 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 versionId: { type: 'string' },
                 newVersion: { type: 'string' },
                 requiresApproval: { type: 'boolean' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('policy:update')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const authorId = request.user.userId;
@@ -256,17 +255,16 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             versionId: result.versionId,
             newVersion: 'auto-incremented',
             requiresApproval: request.body.requiresApproval
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error updating policy:', error);
         reply.code(500).send({
           error: 'Failed to update policy',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -275,7 +273,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof DeployPolicyRequestSchema>;
-  }>('/deploy', {
+>('/deploy', {
     schema: {
       description: 'Deploy policy to specified environment',
       tags: ['Policy Authoring'],
@@ -292,12 +290,12 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 deploymentId: { type: 'string' },
                 status: { type: 'string' },
                 estimatedCompletion: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -308,8 +306,8 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
       if (!request.user.permissions.includes(requiredPermission)) {
         reply.code(403).send({ error: 'Insufficient permissions for deployment' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const deployerId = request.user.userId;
@@ -327,17 +325,16 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             deploymentId: result.deploymentId,
             status: 'IN_PROGRESS',
             estimatedCompletion: estimatedCompletion.toISOString()
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error deploying policy:', error);
         reply.code(500).send({
           error: 'Failed to deploy policy',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -346,7 +343,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof GenerateFromComplianceRequestSchema>;
-  }>('/generate-compliance', {
+>('/generate-compliance', {
     schema: {
       description: 'Generate policy from compliance framework template',
       tags: ['Policy Authoring'],
@@ -363,20 +360,20 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 policyId: { type: 'string' },
                 suggestions: { type: 'array', items: { type: 'string' } },
                 complianceScore: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
       if (!request.user.permissions.includes('policy:generate')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const { framework, jurisdiction, customizations } = request.body;
@@ -395,17 +392,16 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             policyId: result.policyId,
             suggestions: result.suggestions,
             complianceScore: 95 // Initial score for generated policies
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error generating compliance policy:', error);
         reply.code(500).send({
           error: 'Failed to generate compliance policy',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -414,7 +410,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof ValidateComplianceRequestSchema>;
-  }>('/validate-compliance', {
+>('/validate-compliance', {
     schema: {
       description: 'Validate policy against compliance frameworks',
       tags: ['Policy Authoring'],
@@ -431,15 +427,15 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 overallCompliance: { type: 'number' },
                 frameworkResults: { type: 'array' },
                 recommendations: { type: 'array' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { policyId, frameworks } = request.body;
@@ -450,15 +446,14 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           success: true,
           data: result
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error validating policy compliance:', error);
         reply.code(500).send({
           error: 'Failed to validate policy compliance',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -467,7 +462,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof CompareVersionsRequestSchema>;
-  }>('/compare-versions', {
+>('/compare-versions', {
     schema: {
       description: 'Compare two policy versions',
       tags: ['Policy Authoring'],
@@ -487,15 +482,15 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 removedSections: { type: 'array' },
                 modifiedSections: { type: 'array' },
                 impact: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { policyId, version1, version2 } = request.body;
@@ -506,15 +501,14 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           success: true,
           data: comparison
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error comparing policy versions:', error);
         reply.code(500).send({
           error: 'Failed to compare policy versions',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -523,7 +517,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof ExportPolicyRequestSchema>;
-  }>('/export', {
+>('/export', {
     schema: {
       description: 'Export policy in specified format',
       tags: ['Policy Authoring'],
@@ -541,15 +535,15 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 size: { type: 'number' },
                 format: { type: 'string' },
                 generatedAt: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { policyId, version, format, options } = request.body;
@@ -563,17 +557,16 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             size: result.size,
             format,
             generatedAt: new Date().toISOString()
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error exporting policy:', error);
         reply.code(500).send({
           error: 'Failed to export policy',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -582,7 +575,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: z.infer<typeof ListPoliciesQuerySchema>;
-  }>('/policies', {
+>('/policies', {
     schema: {
       description: 'List policies with filtering and pagination',
       tags: ['Policy Authoring'],
@@ -604,18 +597,18 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                     limit: { type: 'number' },
                     total: { type: 'number' },
                     pages: { type: 'number' }
-                  }
-  }
+
+
                 filters: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const filters = request.query;
@@ -632,7 +625,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             createdBy: 'john.doe',
             jurisdiction: ['US', 'EU'],
             complianceFrameworks: ['GDPR', 'CCPA']
-  }
+
           {
             policyId: 'POL-002',
             title: 'Cookie Policy',
@@ -643,7 +636,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             createdBy: 'jane.smith',
             jurisdiction: ['US'],
             complianceFrameworks: ['CCPA']
-          }
+
         ];
 
         const total = policies.length;
@@ -658,24 +651,23 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
               limit: filters.limit,
               total,
               pages
-  }
+
             filters: {
               applied: Object.keys(filters).filter(key => 
                 !['page', 'limit', 'sortBy', 'sortOrder'].includes(key) && filters[key]
               ),
               available: ['policyType', 'status', 'jurisdiction', 'framework', 'author']
-            }
-          }
-        });
 
-      } catch (error) {
+
+        });
+ catch (error) {
         fastify.log.error('Error listing policies:', error);
         reply.code(500).send({
           error: 'Failed to list policies',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -685,7 +677,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
   fastify.get<{
     Params: { policyId: string };
     Querystring: { version?: string; includeContent?: boolean };
-  }>('/policy/:policyId', {
+>('/policy/:policyId', {
     schema: {
       description: 'Get detailed policy information',
       tags: ['Policy Authoring'],
@@ -694,29 +686,29 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           policyId: { type: 'string' }
-  }
+
         required: ['policyId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           version: { type: 'string' },
           includeContent: { type: 'boolean', default: false }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -742,7 +734,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             riskLevel: 'HIGH',
             reviewCycle: 365,
             nextReview: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-          }
+
         };
 
         if (includeContent) {
@@ -755,26 +747,25 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 content: 'This privacy policy describes how we collect, use, and protect your personal information.',
                 mandatory: true,
                 editable: true
-              }
+
             ],
             variables: [],
             attachments: []
           };
-        }
+
 
         reply.send({
           success: true,
           data: policy
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error getting policy details:', error);
         reply.code(500).send({
           error: 'Failed to get policy details',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -783,7 +774,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Params: { policyId: string };
-  }>('/policy/:policyId/versions', {
+>('/policy/:policyId/versions', {
     schema: {
       description: 'Get all versions of a policy',
       tags: ['Policy Authoring'],
@@ -792,9 +783,9 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           policyId: { type: 'string' }
-  }
+
         required: ['policyId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -806,15 +797,15 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 versions: { type: 'array' },
                 currentVersion: { type: 'string' },
                 totalVersions: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -832,8 +823,8 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
               environment: 'PRODUCTION',
               deployedAt: new Date().toISOString(),
               status: 'COMPLETED'
-            }
-  }
+
+
           {
             versionId: 'VER-002',
             version: '2.0.0',
@@ -845,8 +836,8 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
               environment: 'PRODUCTION',
               deployedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
               status: 'COMPLETED'
-            }
-          }
+
+
         ];
 
         reply.send({
@@ -855,17 +846,16 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             versions,
             currentVersion: '2.1.0',
             totalVersions: versions.length
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error getting policy versions:', error);
         reply.code(500).send({
           error: 'Failed to get policy versions',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -874,7 +864,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: { framework?: string; policyType?: string };
-  }>('/templates', {
+>('/templates', {
     schema: {
       description: 'Get available policy templates',
       tags: ['Policy Authoring'],
@@ -884,8 +874,8 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
         properties: {
           framework: { type: 'string' },
           policyType: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -897,15 +887,15 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                 templates: { type: 'array' },
                 frameworks: { type: 'array' },
                 policyTypes: { type: 'array' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { framework, policyType } = request.query;
@@ -926,7 +916,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
               { name: 'contact_email', type: 'EMAIL', required: true },
               { name: 'data_retention_period', type: 'NUMBER', required: true }
             ]
-  }
+
           {
             templateId: 'TPL-CCPA-001',
             name: 'CCPA Privacy Policy Template',
@@ -940,7 +930,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
               { name: 'business_name', type: 'TEXT', required: true },
               { name: 'contact_method', type: 'TEXT', required: true }
             ]
-          }
+
         ];
 
         const filteredTemplates = templates.filter(template => {
@@ -955,16 +945,14 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             templates: filteredTemplates,
             frameworks: ['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI-DSS'],
             policyTypes: ['PRIVACY_POLICY', 'COOKIE_POLICY', 'TERMS_OF_SERVICE', 'DATA_PROCESSING_AGREEMENT']
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error getting templates:', error);
         reply.code(500).send({
           error: 'Failed to get templates',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
-}

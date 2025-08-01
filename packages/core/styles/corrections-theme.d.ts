@@ -1,5 +1,4 @@
-export interface CorrectionsTheme {
-    colors: {
+export interface CorrectionsTheme { colors: {
         primary: string;
         secondary: string;
         success: string;
@@ -11,87 +10,64 @@ export interface CorrectionsTheme {
             secondary: string;
             tertiary: string;
             elevated: string;
-            overlay: string;
+            overlay: string }
 }
         };
-        text: {
-            primary: string;
+        text: { primary: string;
             secondary: string;
             disabled: string;
-            inverse: string;
-        };
-        border: {
-            primary: string;
+            inverse: string };
+        border: { primary: string;
             secondary: string;
-            active: string;
-        };
-        status: {
-            active: string;
+            active: string };
+        status: { active: string;
             inactive: string;
             regex: string;
-            priority: string;
-        };
+            priority: string };
     };
-    spacing: {
-        xs: string;
+    spacing: { xs: string;
         sm: string;
         md: string;
         lg: string;
         xl: string;
-        xxl: string;
-    };
-    typography: {
-        fontFamily: string;
+        xxl: string };
+    typography: { fontFamily: string;
         fontSize: {
             xs: string;
             sm: string;
             md: string;
             lg: string;
             xl: string;
-            xxl: string;
-        };
-        fontWeight: {
-            normal: number;
+            xxl: string };
+        fontWeight: { normal: number;
             medium: number;
             semibold: number;
-            bold: number;
-        };
-        lineHeight: {
-            tight: number;
+            bold: number };
+        lineHeight: { tight: number;
             normal: number;
-            loose: number;
-        };
+            loose: number };
     };
-    shadows: {
-        sm: string;
+    shadows: { sm: string;
         md: string;
         lg: string;
-        xl: string;
-    };
-    radius: {
-        none: string;
+        xl: string };
+    radius: { none: string;
         xs: string;
         sm: string;
         md: string;
         lg: string;
         xl: string;
-        full: string;
-    };
-    transitions: {
-        fast: string;
+        full: string };
+    transitions: { fast: string;
         normal: string;
-        slow: string;
-    };
-    breakpoints: {
-        mobile: string;
+        slow: string };
+    breakpoints: { mobile: string;
         tablet: string;
-        desktop: string;
-    };
+        desktop: string };
 
 export declare }
 }
-interface CorrectionsThemeProviderProps {
-    children: ReactNode;
+interface CorrectionsThemeProviderProps { children: ReactNode;
     initialTheme?: 'light' | 'dark';
 
 export declare export declare             color: string;
@@ -101,11 +77,10 @@ export declare export declare             color: string;
             fontSize: string;
             fontWeight: number;
             cursor: string;
-            transition: string;
+            transition: string }
 }
         };
-        secondary: {
-            backgroundColor: string;
+        secondary: { backgroundColor: string;
             color: string;
             border: string;
             padding: string;
@@ -113,10 +88,8 @@ export declare export declare             color: string;
             fontSize: string;
             fontWeight: number;
             cursor: string;
-            transition: string;
-        };
-        danger: {
-            backgroundColor: string;
+            transition: string };
+        danger: { backgroundColor: string;
             color: string;
             border: string;
             padding: string;
@@ -124,11 +97,9 @@ export declare export declare             color: string;
             fontSize: string;
             fontWeight: number;
             cursor: string;
-            transition: string;
-        };
+            transition: string };
     };
-    input: {
-        base: {
+    input: { base: {
             backgroundColor: string;
             color: string;
             border: string;
@@ -138,11 +109,9 @@ export declare export declare             color: string;
             transition: string;
             '&:focus': {
                 borderColor: string;
-                outline: string;
-            };
+                outline: string };
         };
-        search: {
-            backgroundColor: string;
+        search: { backgroundColor: string;
             color: string;
             border: string;
             padding: string;
@@ -152,30 +121,24 @@ export declare export declare             color: string;
             transition: string;
             '&:focus': {
                 borderColor: string;
-                outline: string;
-            };
+                outline: string };
         };
     };
-    card: {
-        base: {
+    card: { base: {
             backgroundColor: string;
             border: string;
             borderRadius: string;
             padding: string;
             boxShadow: string;
-            transition: string;
-        };
-        elevated: {
-            backgroundColor: string;
+            transition: string };
+        elevated: { backgroundColor: string;
             border: string;
             borderRadius: string;
             padding: string;
             boxShadow: string;
-            transition: string;
-        };
+            transition: string };
     };
-    panel: {
-        base: {
+    panel: { base: {
             backgroundColor: string;
             color: string;
             borderLeft: string;
@@ -183,8 +146,7 @@ export declare export declare             color: string;
             overflow: string;
             display: string;
             flexDirection: "column";
-            transition: string;
-        };
+            transition: string };
         mobile: {
             backgroundColor: string;
             color: string;
@@ -195,80 +157,52 @@ export declare export declare             color: string;
             flexDirection: "column"
   };
     };
-    status: {
-        active: {
-            color: string;
-        };
-        inactive: {
-            color: string;
-        };
-        regex: {
-            backgroundColor: string;
+    status: { active: {
+            color: string };
+        inactive: { color: string };
+        regex: { backgroundColor: string;
             color: string;
             padding: string;
             borderRadius: string;
             fontSize: string;
-            fontWeight: number;
-        };
+            fontWeight: number };
     };
-    text: {
-        heading: {
+    text: { heading: {
             fontSize: string;
             fontWeight: number;
             color: string;
-            lineHeight: number;
-        };
-        subheading: {
-            fontSize: string;
+            lineHeight: number };
+        subheading: { fontSize: string;
             fontWeight: number;
             color: string;
-            lineHeight: number;
-        };
-        body: {
-            fontSize: string;
+            lineHeight: number };
+        body: { fontSize: string;
             fontWeight: number;
             color: string;
-            lineHeight: number;
-        };
-        caption: {
-            fontSize: string;
+            lineHeight: number };
+        caption: { fontSize: string;
             fontWeight: number;
             color: string;
-            lineHeight: number;
-        };
+            lineHeight: number };
     };
 };
-export declare const mediaQueries: {
-    mobile: string;
+export declare const mediaQueries: { mobile: string;
     tablet: string;
-    desktop: string;
-};
-export declare const animations: {
-    fadeIn: {
+    desktop: string };
+export declare const animations: { fadeIn: {
         from: {
-            opacity: number;
-        };
-        to: {
-            opacity: number;
-        };
+            opacity: number };
+        to: { opacity: number };
     };
-    slideIn: {
-        from: {
-            transform: string;
-        };
-        to: {
-            transform: string;
-        };
+    slideIn: { from: {
+            transform: string };
+        to: { transform: string };
     };
-    scaleIn: {
-        from: {
+    scaleIn: { from: {
             transform: string;
-            opacity: number;
-        };
-        to: {
-            transform: string;
-            opacity: number;
-        };
+            opacity: number };
+        to: { transform: string;
+            opacity: number };
     };
 };
 export {};

@@ -8,8 +8,8 @@ import { EnhancedSessionService, Session } from './EnhancedSessionService';
 import { AuditService } from './AuditService';
 import { EmailService } from './EmailService';
 
-}
-}
+
+
 export interface TerminationRequest {
   id: string;
   sessionId: string;
@@ -23,8 +23,9 @@ export interface TerminationRequest {
           'account_compromise' | 'policy_violation' | 'maintenance';
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
-}
-}
+
+
+
   };
   
   context: {
@@ -57,10 +58,10 @@ export interface TerminationRequest {
     notificationMethod?: string;
     notificationTime?: Date;
   };
-}
 
-}
-}
+
+
+
 export interface BulkTerminationRequest {
   id: string;
   criteria: {
@@ -72,8 +73,9 @@ export interface BulkTerminationRequest {
     inactivityThreshold?: number; // seconds
     riskScoreThreshold?: number;
     excludeCurrentSession?: boolean;
-}
-}
+
+
+
   };
   
   metadata: {
@@ -94,10 +96,10 @@ export interface BulkTerminationRequest {
     failureCount: number;
     errors: Array<{ sessionId: string; error: string }>;
   };
-}
 
-}
-}
+
+
+
 export interface TerminationPolicy {
   id: string;
   name: string;
@@ -111,8 +113,9 @@ export interface TerminationPolicy {
     riskScoreThreshold?: number;
     maxConcurrentSessions?: number;
     timeConditions?: {
-}
-}
+
+
+
       afterHours?: { start: string; end: string };
       weekends?: boolean;
       holidays?: boolean;
@@ -138,10 +141,10 @@ export interface TerminationPolicy {
     deviceWhitelist?: string[];
     locations?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface TerminationEvent {
   id: string;
   timestamp: Date;
@@ -155,8 +158,9 @@ export interface TerminationEvent {
     method: string;
     success: boolean;
     errorMessage?: string;
-}
-}
+
+
+
   };
   
   sessionDetails: {
@@ -172,7 +176,7 @@ export interface TerminationEvent {
     auditLogged: boolean;
     followUpRequired: boolean;
   };
-}
+
 
 export class RemoteSessionTerminationService extends EventEmitter {
   private sessionService: EnhancedSessionService;
@@ -211,7 +215,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
       ...config
     };
     this.initializeDefaultPolicies();
-  }
+
 
   /**
    * Request termination of a specific session
@@ -231,7 +235,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
     requiresAuthorization?: boolean;
     message: string;
     estimatedTime?: number;
-  }> {
+> {
 
     try {
       // Validate session exists
@@ -245,7 +249,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
           success: false,
           message: 'Session not found or already expired'
         };
-      }
+
 
       const targetSession = sessionValidation.session;
       const isSelfTermination = targetSession.id === context.currentSessionId;
@@ -256,7 +260,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
           success: false,
           message: 'Self-termination is not allowed'
         };
-      }
+
 
       // Create termination request
       const request: TerminationRequest = {
@@ -273,21 +277,21 @@ export class RemoteSessionTerminationService extends EventEmitter {
             deviceId: targetSession.deviceId,
             metadata: targetSession.metadata,
             security: targetSession.security
-          }
-  }
+
+
         authorization: {
           authorized: false,
           authorizationMethod: isSelfTermination ? 'self' : 'admin',
           requiresElevation: reason.severity === 'critical' && this.config.requireElevationForCritical
-  }
+
         execution: {
           status: 'pending',
           attempts: 0
-  }
+
         notification: {
           notifyUser: !isSelfTermination && reason.type !== 'maintenance',
           notificationSent: false
-        }
+
       };
 
       // Check if authorization is required
@@ -299,7 +303,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
         request.authorization.authorizedBy = requestedBy;
         request.authorization.authorizedAt = new Date();
         request.execution.status = 'authorized';
-      }
+
 
       // Store request
       this.terminationRequests.set(request.id, request);
@@ -312,11 +316,11 @@ export class RemoteSessionTerminationService extends EventEmitter {
         if (reason.severity === 'critical' || reason.type === 'security_breach') {
           // Execute immediately for critical cases
           setTimeout(() => this.executeTermination(request.id), 0);
-        } else {
+ else {
           // Execute after notification delay
           setTimeout(() => this.executeTermination(request.id), this.config.notificationDelay * 1000);
-        }
-      }
+
+
 
       return {
         success: true,
@@ -327,15 +331,14 @@ export class RemoteSessionTerminationService extends EventEmitter {
           : `Session will be terminated in ${this.config.notificationDelay} seconds`,
         estimatedTime: requiresAuth ? undefined : this.config.notificationDelay
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error requesting session termination:', error);
       return {
         success: false,
         message: 'Failed to create termination request'
       };
-    }
-  }
+
+
 
   /**
    * Authorize a pending termination request
@@ -351,7 +354,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
     success: boolean;
     message: string;
     executed?: boolean;
-  }> {
+> {
 
     const request = this.terminationRequests.get(requestId);
     if (!request) {
@@ -359,21 +362,21 @@ export class RemoteSessionTerminationService extends EventEmitter {
         success: false,
         message: 'Termination request not found'
       };
-    }
+
 
     if (request.authorization.authorized) {
       return {
         success: false,
         message: 'Request already authorized'
       };
-    }
+
 
     if (request.execution.status !== 'pending') {
       return {
         success: false,
         message: `Request is in ${request.execution.status} state`
       };
-    }
+
 
     // Verify elevated credentials if required
     if (request.authorization.requiresElevation && elevatedCredentials) {
@@ -383,8 +386,8 @@ export class RemoteSessionTerminationService extends EventEmitter {
           success: false,
           message: 'Invalid elevated credentials'
         };
-      }
-    }
+
+
 
     // Update authorization
     request.authorization.authorized = true;
@@ -401,7 +404,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
         targetSessionId: request.sessionId,
         targetUserId: request.targetUserId,
         reason: request.reason
-  }
+
       severity: 'info'
     });
 
@@ -413,7 +416,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
       message: 'Termination authorized',
       executed
     };
-  }
+
 
   /**
    * Execute a bulk termination of sessions
@@ -428,7 +431,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
     estimatedSessions?: number;
     requiresApproval?: boolean;
     message: string;
-  }> {
+> {
 
     try {
       // Estimate affected sessions
@@ -439,7 +442,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
           success: false,
           message: 'No sessions match the specified criteria'
         };
-      }
+
 
       if (estimatedSessions > this.config.maxBulkTerminations) {
         return {
@@ -447,7 +450,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
           message: `Too many sessions (${estimatedSessions}). Maximum allowed: ${this.config.maxBulkTerminations}`,
           estimatedSessions
         };
-      }
+
 
       // Create bulk request
       const bulkRequest: BulkTerminationRequest = {
@@ -458,13 +461,13 @@ export class RemoteSessionTerminationService extends EventEmitter {
           requestedAt: new Date(),
           reason,
           estimatedSessions
-  }
+
         execution: {
           status: 'pending',
           successCount: 0,
           failureCount: 0,
           errors: []
-        }
+
       };
 
       // Check if approval is required
@@ -475,7 +478,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
         bulkRequest.execution.status = 'approved';
         bulkRequest.execution.approvedBy = requestedBy;
         bulkRequest.execution.approvedAt = new Date();
-      }
+
 
       // Store request
       this.bulkRequests.set(bulkRequest.id, bulkRequest);
@@ -486,7 +489,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
       // Execute if approved
       if (bulkRequest.execution.status === 'approved') {
         setTimeout(() => this.executeBulkTermination(bulkRequest.id), 0);
-      }
+
 
       return {
         success: true,
@@ -497,15 +500,14 @@ export class RemoteSessionTerminationService extends EventEmitter {
           ? `Bulk termination of ${estimatedSessions} sessions requires approval`
           : `Bulk termination of ${estimatedSessions} sessions initiated`
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating bulk termination request:', error);
       return {
         success: false,
         message: 'Failed to create bulk termination request'
       };
-    }
-  }
+
+
 
   /**
    * Terminate sessions by policy
@@ -515,12 +517,12 @@ export class RemoteSessionTerminationService extends EventEmitter {
     context: {
       triggeredBy: string;
       triggerReason: string;
-    }
+
   ): Promise<{
     success: boolean;
     sessionsTerminated: number;
     errors: string[];
-  }> {
+> {
 
     const policy = this.policies.get(policyId);
     if (!policy || !policy.enabled) {
@@ -529,7 +531,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
         sessionsTerminated: 0,
         errors: ['Policy not found or disabled']
       };
-    }
+
 
     const errors: string[] = [];
     let terminatedCount = 0;
@@ -549,7 +551,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
               reason: context.triggerReason
             });
             terminatedCount++;
-          } else if (policy.actions.graceMinutes) {
+ else if (policy.actions.graceMinutes) {
             // Schedule graceful termination
             await this.scheduleGracefulTermination(
               session.id,
@@ -562,21 +564,20 @@ export class RemoteSessionTerminationService extends EventEmitter {
               }
             );
             terminatedCount++;
-          }
+
 
           // Additional policy actions
           if (policy.actions.requireReauth) {
             await this.flagSessionForReauth(session.id);
-          }
+
 
           if (policy.actions.lockAccount) {
             await this.requestAccountLock(session.userId, policy.name);
-          }
 
-        } catch (error) {
+ catch (error) {
           errors.push(`Failed to terminate session ${session.id}: ${error.message}`);
-        }
-      }
+
+
 
       // Log policy execution
       await this.logPolicyExecution(policy, terminatedCount, errors, context);
@@ -586,16 +587,15 @@ export class RemoteSessionTerminationService extends EventEmitter {
         sessionsTerminated: terminatedCount,
         errors
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error applying termination policy:', error);
       return {
         success: false,
         sessionsTerminated: 0,
         errors: ['Failed to apply termination policy']
       };
-    }
-  }
+
+
 
   /**
    * Get termination history and analytics
@@ -606,7 +606,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
       dateRange?: { start: Date; end: Date };
       reasonType?: TerminationRequest['reason']['type'];
       initiatedBy?: string;
-    } = {}
+ = {}
   ): Promise<{
     totalTerminations: number;
     byReason: Array<{ type: string; count: number }>;
@@ -616,33 +616,33 @@ export class RemoteSessionTerminationService extends EventEmitter {
     failureRate: number;
     timeline: Array<{ date: Date; count: number }>;
     topPolicies: Array<{ policyName: string; executions: number }>;
-  }> {
+> {
     try {
       // Filter termination history
       let filteredHistory = [...this.terminationHistory];
       
       if (filters.userId) {
         filteredHistory = filteredHistory.filter(event => event.userId === filters.userId);
-      }
+
       
       if (filters.dateRange) {
         filteredHistory = filteredHistory.filter(event => 
           event.timestamp >= filters.dateRange!.start &&
           event.timestamp <= filters.dateRange!.end
         );
-      }
+
       
       if (filters.reasonType) {
         filteredHistory = filteredHistory.filter(event => 
           event.details.reason.includes(filters.reasonType!)
         );
-      }
+
       
       if (filters.initiatedBy) {
         filteredHistory = filteredHistory.filter(event => 
           event.details.initiatedBy === filters.initiatedBy
         );
-      }
+
 
       // Calculate analytics
       const analytics = {
@@ -663,12 +663,11 @@ export class RemoteSessionTerminationService extends EventEmitter {
       };
 
       return analytics;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error generating termination analytics:', error);
       throw new Error('Failed to generate termination analytics');
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -677,7 +676,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
     const request = this.terminationRequests.get(requestId);
     if (!request || request.execution.status === 'completed') {
       return false;
-    }
+
 
     request.execution.status = 'executing';
     request.execution.attempts++;
@@ -687,12 +686,12 @@ export class RemoteSessionTerminationService extends EventEmitter {
       // Send notification if required
       if (request.notification.notifyUser && !request.notification.notificationSent) {
         await this.sendTerminationNotification(request);
-      }
+
 
       // Preserve session data if configured
       if (this.config.preserveSessionData) {
         await this.preserveSessionData(request.sessionId);
-      }
+
 
       // Execute termination
       const result = await this.sessionService.revokeSession(
@@ -717,11 +716,10 @@ export class RemoteSessionTerminationService extends EventEmitter {
         });
 
         return true;
-      } else {
+ else {
         throw new Error(result.message);
-      }
 
-    } catch (error) {
+ catch (error) {
       request.execution.status = 'failed';
       request.execution.error = error.message;
 
@@ -731,15 +729,15 @@ export class RemoteSessionTerminationService extends EventEmitter {
 
       console.error('Failed to execute termination:', error);
       return false;
-    }
-  }
+
+
 
   private async executeBulkTermination(requestId: string): Promise<void> {
 
     const bulkRequest = this.bulkRequests.get(requestId);
     if (!bulkRequest || bulkRequest.execution.status !== 'approved') {
       return;
-    }
+
 
     bulkRequest.execution.status = 'executing';
     bulkRequest.execution.startedAt = new Date();
@@ -760,21 +758,21 @@ export class RemoteSessionTerminationService extends EventEmitter {
 
           if (result.success) {
             bulkRequest.execution.successCount++;
-          } else {
+ else {
             bulkRequest.execution.failureCount++;
             bulkRequest.execution.errors.push({
               sessionId: session.sessionId,
               error: result.message
             });
-          }
-        } catch (error) {
+
+ catch (error) {
           bulkRequest.execution.failureCount++;
           bulkRequest.execution.errors.push({
             sessionId: session.sessionId,
             error: error.message
           });
-        }
-      }
+
+
 
       bulkRequest.execution.status = 'completed';
       bulkRequest.execution.completedAt = new Date();
@@ -788,16 +786,15 @@ export class RemoteSessionTerminationService extends EventEmitter {
         successCount: bulkRequest.execution.successCount,
         failureCount: bulkRequest.execution.failureCount
       });
-
-    } catch (error) {
+ catch (error) {
       bulkRequest.execution.status = 'failed';
       bulkRequest.execution.errors.push({
         sessionId: 'N/A',
         error: `Bulk execution failed: ${error.message}`
       });
       console.error('Bulk termination failed:', error);
-    }
-  }
+
+
 
   private async immediateTermination(
     sessionId: string,
@@ -815,10 +812,10 @@ export class RemoteSessionTerminationService extends EventEmitter {
         sessionId,
         reason,
         metadata
-  }
+
       severity: 'warning'
     });
-  }
+
 
   private async scheduleGracefulTermination(
     sessionId: string,
@@ -833,23 +830,23 @@ export class RemoteSessionTerminationService extends EventEmitter {
 
     // Notify user about upcoming termination
     await this.sendGracefulTerminationNotice(sessionId, graceMinutes, reason);
-  }
+
 
   private async requiresAuthorization(request: TerminationRequest): boolean {
     // Self-termination doesn't require authorization
     if (request.context.sessionInfo?.id === request.sessionId) {
       return false;
-    }
+
 
     // Critical severity requires authorization
     if (request.reason.severity === 'critical') {
       return true;
-    }
+
 
     // Check if requester has admin privileges
     // This would integrate with your role/permission system
     return false; // Simplified for now
-  }
+
 
   private async verifyElevatedCredentials(
     userId: string,
@@ -858,33 +855,33 @@ export class RemoteSessionTerminationService extends EventEmitter {
 
     // Implementation would verify password and/or MFA
     return true; // Simplified for now
-  }
+
 
   private async estimateAffectedSessions(criteria: BulkTerminationRequest['criteria']): Promise<number> {
 
     // Implementation would query session service/database
     // to count matching sessions
     return 5; // Mock value
-  }
+
 
   private async getSessionsMatchingCriteria(
     criteria: BulkTerminationRequest['criteria']
   ): Promise<Array<{ sessionId: string; userId: string }>> {
     // Implementation would query session service
     return []; // Mock empty array
-  }
+
 
   private async findSessionsMatchingPolicy(policy: TerminationPolicy): Promise<Session[]> {
 
     // Implementation would find sessions matching policy conditions
     return [];
-  }
+
 
   private async preserveSessionData(sessionId: string): Promise<void> {
 
     // Implementation would backup session data before termination
     console.log(`Preserving data for session ${sessionId}`);
-  }
+
 
   private async sendTerminationNotification(request: TerminationRequest): Promise<void> {
 
@@ -900,8 +897,8 @@ export class RemoteSessionTerminationService extends EventEmitter {
       );
       request.notification.notificationSent = true;
       request.notification.notificationTime = new Date();
-    }
-  }
+
+
 
   private async sendGracefulTerminationNotice(
     sessionId: string,
@@ -911,19 +908,19 @@ export class RemoteSessionTerminationService extends EventEmitter {
 
     // Implementation would send notification about upcoming termination
     console.log(`Session ${sessionId} will be terminated in ${graceMinutes} minutes`);
-  }
+
 
   private async flagSessionForReauth(sessionId: string): Promise<void> {
 
     // Implementation would flag session for reauthentication
     console.log(`Session ${sessionId} flagged for reauthentication`);
-  }
+
 
   private async requestAccountLock(userId: string, reason: string): Promise<void> {
 
     // Implementation would request account lockout
     console.log(`Account lock requested for user ${userId}: ${reason}`);
-  }
+
 
   private async createTerminationEvent(
     request: TerminationRequest,
@@ -943,21 +940,21 @@ export class RemoteSessionTerminationService extends EventEmitter {
         method: request.authorization.authorizationMethod,
         success,
         errorMessage
-  }
+
       sessionDetails: {
         duration: 0, // Would calculate from session data
         lastActivity: new Date(), // Would get from session
         deviceInfo: {},
         location: {}
-  }
+
       aftermath: {
         userNotified: request.notification.notificationSent,
         dataPreserved: this.config.preserveSessionData,
         auditLogged: true,
         followUpRequired: !success || request.reason.severity === 'critical'
-      }
+
     };
-  }
+
 
   private groupByProperty<T>(
     items: T[],
@@ -972,19 +969,19 @@ export class RemoteSessionTerminationService extends EventEmitter {
     return Object.entries(groups)
       .map(([type, count]) => ({ type, count }))
       .sort((a, b) => b.count - a.count);
-  }
+
 
   private calculateAverageSessionDuration(events: TerminationEvent[]): number {
     if (events.length === 0) return 0;
     const total = events.reduce((sum, event) => sum + event.sessionDetails.duration, 0);
     return Math.round(total / events.length);
-  }
+
 
   private calculateFailureRate(events: TerminationEvent[]): number {
     if (events.length === 0) return 0;
     const failures = events.filter(event => !event.details.success).length;
     return Math.round((failures / events.length) * 100);
-  }
+
 
   private generateTimeline(events: TerminationEvent[]): Array<{ date: Date; count: number }> {
     // Group events by day
@@ -998,7 +995,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
     return Object.entries(timeline)
       .map(([date, count]) => ({ date: new Date(date), count }))
       .sort((a, b) => a.date.getTime() - b.date.getTime());
-  }
+
 
   private getTopPolicies(events: TerminationEvent[]): Array<{ policyName: string; executions: number }> {
     // Filter for policy-based terminations
@@ -1011,7 +1008,7 @@ export class RemoteSessionTerminationService extends EventEmitter {
       .map(([policyName, executions]) => ({ policyName, executions }))
       .sort((a, b) => b.executions - a.executions)
       .slice(0, 5);
-  }
+
 
   private initializeDefaultPolicies(): void {
     const defaultPolicies: Array<Omit<TerminationPolicy, 'id'>> = [
@@ -1022,17 +1019,17 @@ export class RemoteSessionTerminationService extends EventEmitter {
         conditions: {
           triggerOn: ['concurrent_limit'],
           maxConcurrentSessions: 3
-  }
+
         actions: {
           terminateImmediately: false,
           graceMinutes: 5,
           notifyUser: true,
           requireReauth: false
-  }
+
         exceptions: {
           userRoles: ['admin', 'service']
-        }
-  }
+
+
       {
         name: 'High Risk Location Change',
         description: 'Terminate session on suspicious location change',
@@ -1041,17 +1038,17 @@ export class RemoteSessionTerminationService extends EventEmitter {
           triggerOn: ['location_change'],
           locationRadius: 1000, // 1000km
           riskScoreThreshold: 80
-  }
+
         actions: {
           terminateImmediately: true,
           notifyUser: true,
           requireReauth: true,
           lockAccount: false
-  }
+
         exceptions: {
           userRoles: ['admin']
-        }
-  }
+
+
       {
         name: 'After Hours Access',
         description: 'Terminate non-admin sessions after business hours',
@@ -1061,25 +1058,25 @@ export class RemoteSessionTerminationService extends EventEmitter {
           timeConditions: {
             afterHours: { start: '18:00', end: '08:00' },
             weekends: true
-          }
-  }
+
+
         actions: {
           terminateImmediately: false,
           graceMinutes: 15,
           notifyUser: true,
           requireReauth: false
-  }
+
         exceptions: {
           userRoles: ['admin', 'security', 'oncall']
-        }
-      }
+
+
     ];
 
     defaultPolicies.forEach(policy => {
       const id = this.generatePolicyId();
       this.policies.set(id, { ...policy, id });
     });
-  }
+
 
   private async logTerminationRequest(request: TerminationRequest): Promise<void> {
 
@@ -1092,10 +1089,10 @@ export class RemoteSessionTerminationService extends EventEmitter {
         targetUserId: request.targetUserId,
         reason: request.reason,
         requiresAuthorization: request.authorization.requiresElevation
-  }
+
       severity: request.reason.severity === 'critical' ? 'warning' : 'info'
     });
-  }
+
 
   private async logBulkTerminationRequest(request: BulkTerminationRequest): Promise<void> {
 
@@ -1107,10 +1104,10 @@ export class RemoteSessionTerminationService extends EventEmitter {
         criteria: request.criteria,
         estimatedSessions: request.metadata.estimatedSessions,
         reason: request.metadata.reason
-  }
+
       severity: 'warning'
     });
-  }
+
 
   private async logBulkTerminationCompletion(request: BulkTerminationRequest): Promise<void> {
 
@@ -1123,10 +1120,10 @@ export class RemoteSessionTerminationService extends EventEmitter {
         successCount: request.execution.successCount,
         failureCount: request.execution.failureCount,
         duration: request.execution.completedAt!.getTime() - request.execution.startedAt!.getTime()
-  }
+
       severity: 'info'
     });
-  }
+
 
   private async logPolicyExecution(
     policy: TerminationPolicy,
@@ -1144,26 +1141,26 @@ export class RemoteSessionTerminationService extends EventEmitter {
         terminatedCount,
         errorCount: errors.length,
         triggerReason: context.triggerReason
-  }
+
       severity: 'info'
     });
-  }
+
 
   private generateRequestId(): string {
     return `TERM-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateBulkRequestId(): string {
     return `BULK-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateEventId(): string {
     return `EVT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generatePolicyId(): string {
     return `POL-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   destroy(): void {
     // Clean up resources
@@ -1171,5 +1168,4 @@ export class RemoteSessionTerminationService extends EventEmitter {
     this.bulkRequests.clear();
     this.policies.clear();
     this.terminationHistory = [];
-  }
-}
+

@@ -102,7 +102,7 @@ function checkMigrationSafety(filePath: string): any[] {
         severity: 'medium',
         message: 'Migration file should follow naming convention: NNN_descriptive_name.sql'
       });
-    }
+
     
     if (!MIGRATION_PATTERNS.descriptiveNaming.test(fileName)) {
       violations.push({
@@ -111,7 +111,7 @@ function checkMigrationSafety(filePath: string): any[] {
         severity: 'low',
         message: 'Migration file name should be more descriptive (at least 10 characters)'
       });
-    }
+
     
     // Check for dangerous patterns
     Object.entries(DANGEROUS_PATTERNS).forEach(([category, patterns]) => {
@@ -128,7 +128,7 @@ function checkMigrationSafety(filePath: string): any[] {
             statement: match[0].trim(),
             message: getDangerousOperationMessage(category, match[0])
           });
-        }
+
       });
     });
     
@@ -143,7 +143,7 @@ function checkMigrationSafety(filePath: string): any[] {
           severity: 'high',
           message: 'Migration with dangerous operations should include rollback strategy (-- ROLLBACK: comment)'
         });
-      }
+
       
       // Check for transaction wrapper
       const hasTransaction = SAFETY_REQUIREMENTS.transactionWrapper.every(pattern => pattern.test(content));
@@ -154,8 +154,8 @@ function checkMigrationSafety(filePath: string): any[] {
           severity: 'medium',
           message: 'Migration should be wrapped in transaction (BEGIN; ... COMMIT;)'
         });
-      }
-    }
+
+
     
     // Check for data modification safety
     if (hasDataModifications(content)) {
@@ -167,8 +167,8 @@ function checkMigrationSafety(filePath: string): any[] {
           severity: 'medium',
           message: 'Data modification should include backup strategy (-- BACKUP: comment or backup table)'
         });
-      }
-    }
+
+
     
     // Check for performance considerations
     const performanceIssues = checkPerformanceConsiderations(content);
@@ -179,17 +179,17 @@ function checkMigrationSafety(filePath: string): any[] {
     violations.push(...epic17Issues);
     
     return violations;
-  } catch (error) {
+ catch (error) {
     console.error(`Error checking ${filePath}:`, error.message);
     return [];
-  }
-}
+
+
 
 function hasDangerousOperations(content: string): boolean {
   return Object.values(DANGEROUS_PATTERNS).some(patterns =>
     patterns.some(pattern => pattern.test(content))
   );
-}
+
 
 function hasDataModifications(content: string): boolean {
   const dataModPatterns = [
@@ -199,7 +199,7 @@ function hasDataModifications(content: string): boolean {
     /TRUNCATE\s+/i
   ];
   return dataModPatterns.some(pattern => pattern.test(content));
-}
+
 
 function getSeverity(category: string): string {
   const severityMap = {
@@ -210,7 +210,7 @@ function getSeverity(category: string): string {
     unsafeDataOps: 'high'
   };
   return severityMap[category] || 'medium';
-}
+
 
 function getDangerousOperationMessage(category: string, statement: string): string {
   const messages = {
@@ -221,7 +221,7 @@ function getDangerousOperationMessage(category: string, statement: string): stri
     unsafeDataOps: 'Unsafe data operation - missing WHERE clause or other safety measures'
   };
   return messages[category] || 'Potentially dangerous database operation';
-}
+
 
 function checkPerformanceConsiderations(content: string): any[] {
   const issues = [];
@@ -236,7 +236,7 @@ function checkPerformanceConsiderations(content: string): any[] {
       severity: 'medium',
       message: 'Consider using online DDL or scheduling during maintenance window for table alterations'
     });
-  }
+
   
   // Check for missing indexes on foreign keys
   const fkPattern = /ADD\s+CONSTRAINT\s+.*FOREIGN\s+KEY\s*\(\s*([^)]+)\s*\)/gi;
@@ -252,11 +252,11 @@ function checkPerformanceConsiderations(content: string): any[] {
         severity: 'medium',
         message: `Consider adding index on foreign key column '${columnName}' for performance`
       });
-    }
-  }
+
+
   
   return issues;
-}
+
 
 function checkEpic17Requirements(content: string, fileName: string): any[] {
   const issues = [];
@@ -273,7 +273,7 @@ function checkEpic17Requirements(content: string, fileName: string): any[] {
         severity: 'medium',
         message: 'Epic 17 migration should reference task ID (E17-XXXXXXXXXXXXX-XXXXXX)'
       });
-    }
+
     
     // Check for security considerations in admin features
     if (content.includes('admin') || content.includes('Admin')) {
@@ -285,8 +285,8 @@ function checkEpic17Requirements(content: string, fileName: string): any[] {
           severity: 'high',
           message: 'Admin-related migration should include security considerations comment'
         });
-      }
-    }
+
+
     
     // Check for feature flag integration
     if (content.includes('feature') && !content.includes('feature_flag')) {
@@ -296,15 +296,15 @@ function checkEpic17Requirements(content: string, fileName: string): any[] {
         severity: 'low',
         message: 'Consider integrating with Epic 17 feature flag system'
       });
-    }
-  }
+
+
   
   return issues;
-}
+
 
 function getLineNumber(content: string, index: number): number {
   return content.substring(0, index).split('\n').length;
-}
+
 
 function main(): void {
   const filePaths = process.argv.slice(2);
@@ -315,7 +315,7 @@ function main(): void {
   if (filePaths.length === 0) {
     console.log('✅ Epic 17 Migration Safety: No files to check');
     process.exit(0);
-  }
+
 
   console.log(`🗃️ Epic 17 Migration Safety: Checking ${filePaths.length} migration files...`);
 
@@ -333,27 +333,27 @@ function main(): void {
           high: '🔥',
           medium: '⚠️',
           low: '💡'
-        }[violation.severity] || '⚠️';
+[violation.severity] || '⚠️';
 
         if (violation.severity === 'critical') {
           criticalCount++;
-        }
+
         
         console.log(`   Line ${violation.line}: ${severityIcon} ${violation.message}`);
         if (violation.statement) {
           console.log(`      Statement: ${violation.statement}`);
-        }
+
         console.log(`      Severity: ${violation.severity.toUpperCase()}`);
       });
-    }
-  }
+
+
 
   if (hasErrors) {
     console.log(`\n💥 Epic 17 Migration Safety: Found ${totalViolations} safety issues`);
     
     if (criticalCount > 0) {
       console.log(`💀 CRITICAL: ${criticalCount} critical safety violations must be addressed!`);
-    }
+
     
     console.log('\n🔧 Migration safety guidelines:');
     console.log('   • Always wrap destructive operations in transactions');
@@ -366,14 +366,14 @@ function main(): void {
     console.log('   • Document security considerations for admin features');
     
     process.exit(1);
-  } else {
+ else {
     console.log(`✅ Epic 17 Migration Safety: All ${filePaths.length} migrations follow safety guidelines`);
     process.exit(0);
-  }
-}
+
+
 
 if (require.main === module) {
   main();
-}
+
 
 module.exports = { checkMigrationSafety, DANGEROUS_PATTERNS, SAFETY_REQUIREMENTS };

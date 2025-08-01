@@ -5,89 +5,84 @@
  * Implements inheritance rules for data classification, allowing child elements
  * to inherit classifications from parent elements based on configurable rules
  */
-import {
-  DataClassification,
+import { DataClassification,
   DataClassificationLevel,
   ClassificationContext,
-  ValidationResult,
+  ValidationResult }
   CLASSIFICATION_LEVELS
-} from '../types/DataClassification';
+ from '../types/DataClassification';
 
-}
-export interface InheritanceRule {
-  id: string;
+
+export interface InheritanceRule { id: string;
   name: string;
   description: string;
   priority: number;
   enabled: boolean;
   conditions: InheritanceCondition;
   action: InheritanceAction;
-  overridePolicy: OverridePolicy;
-}
-}
-}
-export interface InheritanceCondition {
-  type: 'PARENT_TYPE' | 'PARENT_CLASSIFICATION' | 'CHILD_TYPE' | 'RELATIONSHIP_TYPE' | 'CONTEXT_MATCH';
+  overridePolicy: OverridePolicy }
+
+
+
+export interface InheritanceCondition { type: 'PARENT_TYPE' | 'PARENT_CLASSIFICATION' | 'CHILD_TYPE' | 'RELATIONSHIP_TYPE' | 'CONTEXT_MATCH';
   field: string;
-  operator: 'EQUALS' | 'CONTAINS' | 'MATCHES' | 'IN' | 'NOT_IN';
+  operator: 'EQUALS' | 'CONTAINS' | 'MATCHES' | 'IN' | 'NOT_IN' }
   value: string | string;
   required: boolean;
-}
-}
-}
-export interface InheritanceAction {
-  type: 'INHERIT_EXACT' | 'INHERIT_ELEVATED' | 'INHERIT_REDUCED' | 'APPLY_MINIMUM' | 'APPLY_CUSTOM';
+
+
+
+
+export interface InheritanceAction { type: 'INHERIT_EXACT' | 'INHERIT_ELEVATED' | 'INHERIT_REDUCED' | 'APPLY_MINIMUM' | 'APPLY_CUSTOM';
   customClassification?: DataClassificationLevel;
-  elevationLevel?: number; // 1 = one level up, -1 = one level down,
+  elevationLevel?: number; // 1 = one level up, -1 = one level down }
   rationale: string;
-}
-}
-}
-export interface OverridePolicy {
-  allowManualOverride: boolean;
+
+
+
+
+export interface OverridePolicy { allowManualOverride: boolean;
   requireApprovalForOverride: boolean;
   maxOverrideLevel?: DataClassificationLevel;
-  overrideReasons: string;
-}
-}
-}
-export interface DataRelationship {
-  parentId: string;
+  overrideReasons: string }
+
+
+
+export interface DataRelationship { parentId: string;
   childId: string;
-  relationshipType: 'CONTAINS' | 'DERIVES_FROM' | 'PROCESSES' | 'REFERENCES' | 'AGGREGATES';
+  relationshipType: 'CONTAINS' | 'DERIVES_FROM' | 'PROCESSES' | 'REFERENCES' | 'AGGREGATES' }
   strength: 'WEAK' | 'MODERATE' | 'STRONG' | 'ABSOLUTE';
   metadata?: Record<string, any>;
-}
-}
-}
-export interface InheritanceContext {
-  parentElement: {
+
+
+
+
+export interface InheritanceContext { parentElement: { }
   id: string;
   type: string;
   classification?: DataClassification;
   metadata?: Record<string, any>;
-}
+
+
 };
-  childElement: {
+  childElement: { 
   id: string;
   type: string;
   existingClassification?: DataClassification;
-  metadata?: Record<string, any>;
-};
+  metadata?: Record<string, any> };
   relationship: DataRelationship;
   businessContext?: ClassificationContext;
-}
-}
-export interface InheritanceResult {
-  elementId: string;
+
+
+export interface InheritanceResult { elementId: string;
   inheritedClassification: DataClassification;
   appliedRules: AppliedRule;
   confidence: number;
   requiresReview: boolean;
-  validationResult: ValidationResult;
-}
-}
-}
+  validationResult: ValidationResult }
+
+
+
 export interface AppliedRule {
   ruleId: string;
   ruleName: string;
@@ -97,187 +92,179 @@ export interface AppliedRule {
   /**
   * Service for managing classification inheritance rules and applying them
   */
-}
-}
-export class ClassificationInheritanceService {
-  private rules: Map<string, InheritanceRule> = new Map();
-  private relationships: Map<string, DataRelationship> = new Map(); // childId -> relationships,
+
+
+export class ClassificationInheritanceService { private rules: Map<string, InheritanceRule> = new Map();
+  private relationships: Map<string, DataRelationship> = new Map(); // childId -> relationships
   constructor() {
   this.initializeDefaultRules();
   /**
   * Initialize default inheritance rules
   */
-  private initializeDefaultRules(): void {,
+  private initializeDefaultRules(): void {
   const defaultRules: InheritanceRule = [
   {
-  id: 'direct-containment-rule',
-  name: 'Direct Containment Inheritance',
-  description: 'Child elements inherit classification from direct parent containers',
-  priority: 100,
-  enabled: true,
-  conditions: [,
+  id: 'direct-containment-rule'
+  name: 'Direct Containment Inheritance'
+  description: 'Child elements inherit classification from direct parent containers'
+  priority: 100
+  enabled: true
+  conditions: [
   {
-  type: 'RELATIONSHIP_TYPE',
-  field: 'relationshipType',
-  operator: 'EQUALS',
-  value: 'CONTAINS',
-  required: true,
-}
-          {
-  type: 'RELATIONSHIP_TYPE',
-  field: 'strength',
-  operator: 'IN',
-  value: ['STRONG', 'ABSOLUTE'],
-  required: true],
+  type: 'RELATIONSHIP_TYPE'
+  field: 'relationshipType'
+  operator: 'EQUALS'
+  value: 'CONTAINS'
+  required: true }
+
+          { type: 'RELATIONSHIP_TYPE'
+  field: 'strength'
+  operator: 'IN'
+  value: ['STRONG', 'ABSOLUTE']
+  required: true]
   action: {
-  type: 'INHERIT_EXACT',
-  rationale: 'Direct containment requires same classification level',
-},
-  overridePolicy: {
-  allowManualOverride: true,
-  requireApprovalForOverride: false,
-  overrideReasons: ['Business justification', 'Technical limitation', 'Regulatory exception'],
-}
-      {
-  id: 'derived-data-elevation-rule',
-  name: 'Derived Data Elevation',
-  description: 'Derived data inherits parent classification or higher',
-  priority: 90,
-  enabled: true,
-  conditions: [,
+  type: 'INHERIT_EXACT'
+  rationale: 'Direct containment requires same classification level' }
+
+  overridePolicy: { 
+  allowManualOverride: true
+  requireApprovalForOverride: false
+  overrideReasons: ['Business justification', 'Technical limitation', 'Regulatory exception'] }
+
+      { id: 'derived-data-elevation-rule'
+  name: 'Derived Data Elevation'
+  description: 'Derived data inherits parent classification or higher'
+  priority: 90
+  enabled: true
+  conditions: [
   {
-  type: 'RELATIONSHIP_TYPE',
-  field: 'relationshipType',
-  operator: 'EQUALS',
-  value: 'DERIVES_FROM',
-  required: true],
+  type: 'RELATIONSHIP_TYPE'
+  field: 'relationshipType'
+  operator: 'EQUALS'
+  value: 'DERIVES_FROM'
+  required: true]
   action: {
-  type: 'APPLY_MINIMUM',
-  rationale: 'Derived data should be at least as protected as source data',
-},
-  overridePolicy: {
-  allowManualOverride: true,
-  requireApprovalForOverride: true,
-  maxOverrideLevel: 'INTERNAL',
-  overrideReasons: ['Data transformation reduces sensitivity', 'Aggregation removes personal identifiers'],
-}
-      {
-  id: 'aggregated-data-reduction-rule',
-  name: 'Aggregated Data Classification',
-  description: 'Aggregated data may have reduced classification if anonymized',
-  priority: 80,
-  enabled: true,
-  conditions: [,
+  type: 'APPLY_MINIMUM'
+  rationale: 'Derived data should be at least as protected as source data' }
+
+  overridePolicy: { 
+  allowManualOverride: true
+  requireApprovalForOverride: true
+  maxOverrideLevel: 'INTERNAL'
+  overrideReasons: ['Data transformation reduces sensitivity', 'Aggregation removes personal identifiers'] }
+
+      { id: 'aggregated-data-reduction-rule'
+  name: 'Aggregated Data Classification'
+  description: 'Aggregated data may have reduced classification if anonymized'
+  priority: 80
+  enabled: true
+  conditions: [
   {
-  type: 'RELATIONSHIP_TYPE',
-  field: 'relationshipType',
-  operator: 'EQUALS',
-  value: 'AGGREGATES',
-  required: true,
-}
-          {
-  type: 'CHILD_TYPE',
-  field: 'type',
-  operator: 'CONTAINS',
-  value: 'aggregated',
-  required: false],
+  type: 'RELATIONSHIP_TYPE'
+  field: 'relationshipType'
+  operator: 'EQUALS'
+  value: 'AGGREGATES'
+  required: true }
+
+          { type: 'CHILD_TYPE'
+  field: 'type'
+  operator: 'CONTAINS'
+  value: 'aggregated'
+  required: false]
   action: {
-  type: 'INHERIT_REDUCED',
-  elevationLevel: -1,
-  rationale: 'Aggregation may reduce individual data sensitivity',
-},
-  overridePolicy: {
-  allowManualOverride: true,
-  requireApprovalForOverride: true,
-  overrideReasons: ['Aggregation maintains individual identifiability', 'Small sample size'],
-}
-      {
-  id: 'processing-context-rule',
-  name: 'Processing Context Inheritance',
-  description: 'Data processed in secure contexts inherits elevated classification',
-  priority: 70,
-  enabled: true,
-  conditions: [,
+  type: 'INHERIT_REDUCED'
+  elevationLevel: -1
+  rationale: 'Aggregation may reduce individual data sensitivity' }
+
+  overridePolicy: { 
+  allowManualOverride: true
+  requireApprovalForOverride: true
+  overrideReasons: ['Aggregation maintains individual identifiability', 'Small sample size'] }
+
+      { id: 'processing-context-rule'
+  name: 'Processing Context Inheritance'
+  description: 'Data processed in secure contexts inherits elevated classification'
+  priority: 70
+  enabled: true
+  conditions: [
   {
-  type: 'RELATIONSHIP_TYPE',
-  field: 'relationshipType',
-  operator: 'EQUALS',
-  value: 'PROCESSES',
-  required: true,
-}
-          {
-  type: 'CONTEXT_MATCH',
-  field: 'environment',
-  operator: 'IN',
-  value: ['production', 'secure'],
-  required: false],
+  type: 'RELATIONSHIP_TYPE'
+  field: 'relationshipType'
+  operator: 'EQUALS'
+  value: 'PROCESSES'
+  required: true }
+
+          { type: 'CONTEXT_MATCH'
+  field: 'environment'
+  operator: 'IN'
+  value: ['production', 'secure']
+  required: false]
   action: {
-  type: 'INHERIT_ELEVATED',
-  elevationLevel: 1,
-  rationale: 'Processing in production requires elevated protection',
-},
-  overridePolicy: {
-  allowManualOverride: false,
-  requireApprovalForOverride: true,
-  overrideReasons: ['Approved security exception'],
-}
-      {
-  id: 'reference-minimum-rule',
-  name: 'Reference Data Minimum Classification',
-  description: 'Referenced data should be at least INTERNAL classification',
-  priority: 60,
-  enabled: true,
-  conditions: [,
+  type: 'INHERIT_ELEVATED'
+  elevationLevel: 1
+  rationale: 'Processing in production requires elevated protection' }
+
+  overridePolicy: { 
+  allowManualOverride: false
+  requireApprovalForOverride: true
+  overrideReasons: ['Approved security exception'] }
+
+      { id: 'reference-minimum-rule'
+  name: 'Reference Data Minimum Classification'
+  description: 'Referenced data should be at least INTERNAL classification'
+  priority: 60
+  enabled: true
+  conditions: [
   {
-  type: 'RELATIONSHIP_TYPE',
-  field: 'relationshipType',
-  operator: 'EQUALS',
-  value: 'REFERENCES',
-  required: true],
+  type: 'RELATIONSHIP_TYPE'
+  field: 'relationshipType'
+  operator: 'EQUALS'
+  value: 'REFERENCES'
+  required: true]
   action: {
-  type: 'APPLY_MINIMUM',
-  customClassification: 'INTERNAL',
-  rationale: 'Referenced data requires minimum INTERNAL classification',
-},
-  overridePolicy: {
-  allowManualOverride: true,
-  requireApprovalForOverride: false,
-  maxOverrideLevel: 'PUBLIC',
+  type: 'APPLY_MINIMUM'
+  customClassification: 'INTERNAL'
+  rationale: 'Referenced data requires minimum INTERNAL classification' }
+
+  overridePolicy: { 
+  allowManualOverride: true
+  requireApprovalForOverride: false
+  maxOverrideLevel: 'PUBLIC'
   overrideReasons: ['Public reference data', 'Open source documentation']];
   defaultRules.forEach(rule => this.rules.set(rule.id, rule));
   /**
   * Add or update an inheritance rule
   */
-  addRule(rule: InheritanceRule): void {,
+  addRule(rule: InheritanceRule): void {
   this.rules.set(rule.id, rule);
   /**
   * Get all inheritance rules
   */
-  getRules(): InheritanceRule {,
+  getRules(): InheritanceRule {
   return Array.from(this.rules.values()).sort((a, b) => b.priority - a.priority);
   /**
   * Enable or disable a rule
   */
-  setRuleEnabled(ruleId: string, enabled: boolean): void {,
+  setRuleEnabled(ruleId: string, enabled: boolean): void {
   const rule = this.rules.get(ruleId);
   if (rule) {
   rule.enabled = enabled;
   /**
   * Register a data relationship
   */
-  addRelationship(relationship: DataRelationship): void {,
+  addRelationship(relationship: DataRelationship): void {
   const childRelationships = this.relationships.get(relationship.childId) || [];
   childRelationships.push(relationship);
   this.relationships.set(relationship.childId, childRelationships);
   /**
   * Get relationships for a child element
   */
-  getRelationships(childId: string): DataRelationship {,
+  getRelationships(childId: string): DataRelationship {
   return this.relationships.get(childId) || [];
   /**
   * Apply inheritance rules to determine classification for a child element
   */
-  async applyInheritanceRules(context: InheritanceContext): Promise<InheritanceResult> {,
+  async applyInheritanceRules(context: InheritanceContext): Promise<InheritanceResult> {
   const applicableRules = this.findApplicableRules(context);
   const appliedRules: AppliedRule = [];
   let finalClassification: DataClassificationLevel | null = null;
@@ -296,17 +283,16 @@ export class ClassificationInheritanceService {
   ruleName: rule.name,
   priority: rule.priority,
   rationale: ruleResult.rationale,
-  confidence: ruleResult.confidence,
+  confidence: ruleResult.confidence }
 });
         totalConfidence = Math.max(totalConfidence, ruleResult.confidence);
-        if (ruleResult.requiresReview) {
-          requiresReview = true;
+        if (ruleResult.requiresReview) { requiresReview = true;
     // Use existing classification if no rules applied
     if (!finalClassification) {
       finalClassification = context.childElement.existingClassification?.classification || 'INTERNAL';
       totalConfidence = context.childElement.existingClassification ? 100 : 50;
     // Create inherited classification
-    const inheritedClassification: DataClassification = {,
+    const inheritedClassification: DataClassification = { }
   id: `inherited-${context.childElement.id}-${Date.now()}`}
 },
   dataElement: context.childElement.id,
@@ -317,28 +303,26 @@ export class ClassificationInheritanceService {
       classificationDate: new Date(),
       reviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       approvals: [],
-      metadata: {
+      metadata: { ,
   businessJustification: 'Classification inherited from parent element',
   riskAssessment: 'Risk assessment inherited and may require review',
   regulatoryRequirements: context.businessContext?.regulatoryScope || [],
   dataLineage: [context.parentElement.id],
-  relatedClassifications: context.parentElement.classification ? [context.parentElement.classification.id] : [],
+  relatedClassifications: context.parentElement.classification ? [context.parentElement.classification.id] : [] }
 };
     // Validate the result
     const validationResult = this.validateInheritedClassification(inheritedClassification, context);
-    return {
-  elementId: context.childElement.id,
+    return { elementId: context.childElement.id,
   inheritedClassification,
   appliedRules,
   confidence: totalConfidence,
-  requiresReview: requiresReview || validationResult.warnings.length > 0,
+  requiresReview: requiresReview || validationResult.warnings.length > 0 }
   validationResult
 };
   /**
    * Find rules that apply to the given context
    */
-  private findApplicableRules(context: InheritanceContext): InheritanceRule {
-    return Array.from(this.rules.values())
+  private findApplicableRules(context: InheritanceContext): InheritanceRule { return Array.from(this.rules.values())
       .filter(rule => rule.enabled && this.ruleMatches(rule, context))
       .sort((a, b) => b.priority - a.priority);
   /**
@@ -387,7 +371,7 @@ export class ClassificationInheritanceService {
   /**
    * Apply a specific rule to determine classification
    */
-  private applyRule(rule: InheritanceRule, context: InheritanceContext): {
+  private applyRule(rule: InheritanceRule, context: InheritanceContext): { }
   classification: DataClassificationLevel | null;
     rationale: string;
   confidence: number;
@@ -398,8 +382,7 @@ export class ClassificationInheritanceService {
     const parentIndex = CLASSIFICATION_LEVELS.indexOf(parentClassification);
     let targetIndex = parentIndex;
     let requiresReview = false;
-    switch (rule.action.type) {
-  case 'INHERIT_EXACT':,
+    switch (rule.action.type) { case 'INHERIT_EXACT':,
   // Keep same classification
   break;
   case 'INHERIT_ELEVATED':,
@@ -425,7 +408,7 @@ export class ClassificationInheritanceService {
   return {
   classification,
   rationale: rule.action.rationale,
-  confidence,
+  confidence }
   requiresReview
 };
   /**
@@ -474,8 +457,7 @@ export class ClassificationInheritanceService {
   private validateInheritedClassification(((
     classification: DataClassification,
     context: InheritanceContext
-  ): ValidationResult {
-  const errors: string = [];
+  ): ValidationResult { const errors: string = [];
   const warnings: string = [];
   const recommendations: string = [];
   // Check for classification elevation without proper justification
@@ -498,28 +480,25 @@ export class ClassificationInheritanceService {
   return {
   valid: errors.length === 0,
   errors,
-  warnings,
+  warnings }
   recommendations
 };
   /**
    * Get inheritance rules that would apply to a specific context
    */
-  getApplicableRules(context: InheritanceContext): InheritanceRule {
-  return this.findApplicableRules(context);
+  getApplicableRules(context: InheritanceContext): InheritanceRule { return this.findApplicableRules(context);
   /**
   * Preview inheritance result without applying
   */
-  async previewInheritance(context: InheritanceContext): Promise<InheritanceResult> {,
+  async previewInheritance(context: InheritanceContext): Promise<InheritanceResult> {
   return this.applyInheritanceRules(context);
   /**
   * Batch apply inheritance to multiple child elements
   */
-  async batchApplyInheritance(contexts: InheritanceContext): Promise<Map<string, InheritanceResult>> {,
+  async batchApplyInheritance(contexts: InheritanceContext): Promise<Map<string, InheritanceResult>> { }
   const results = new Map<string, InheritanceResult>();
-  for (const context of contexts) {
-  try {
+  for (const context of contexts) { try {
   const result = await this.applyInheritanceRules(context);
-  results.set(context.childElement.id, result);
-} catch (error) {
+  results.set(context.childElement.id, result) } catch (error) {
         console.error(`Error applying inheritance for ${context.childElement.id}:`, error);}
     return results;

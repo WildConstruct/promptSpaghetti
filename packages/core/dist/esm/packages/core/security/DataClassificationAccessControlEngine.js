@@ -473,13 +473,13 @@ Promise < AccessDecision > {
                                                                             confidence: applicable ? 0.9 : 0,
                                                                             conditions: [],
                                                                         }
-                                                                    }((policy, request) => {
-                                                                        // Find applicable access rule
-                                                                        const applicableRule = policy.accessRules.find(rule => );
-                                                                    });
-                                                                    rule.operation === request.action.operation || rule.operation === '*';
-                                                                    ;
-                                                                    if (!applicableRule) {
+                                                                    }((policy, request) => , AccessCondition);
+                                                                }
+                                                                 > {
+                                                                    // Find applicable access rule
+                                                                    const: applicableRule = policy.accessRules.find(rule => ),
+                                                                    rule, : .operation === request.action.operation || rule.operation === '*',
+                                                                    if(, applicableRule) {
                                                                         return { permitted: false, conditions: [] };
                                                                         // Check subject criteria
                                                                         const subjectMatches = this.checkSubjectCriteria(applicableRule.subjects, request.subject);
@@ -491,64 +491,60 @@ Promise < AccessDecision > {
                                                                                 permitted: applicableRule.effect === 'ALLOW' && conditionsMet,
                                                                                 conditions: applicableRule.conditions,
                                                                             };
-                                                                            checkSubjectCriteria(criteria, any, subject, SubjectAttributes);
-                                                                            boolean;
-                                                                            {
-                                                                                // Check clearance level
-                                                                                const levels = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
-                                                                                const subjectLevel = levels.indexOf(subject.clearanceLevel);
-                                                                                const requiredLevel = levels.indexOf(criteria.clearanceLevel);
-                                                                                return subjectLevel >= requiredLevel;
-                                                                                async;
-                                                                                evaluateAccessConditions(conditions, AccessCondition, request, AccessRequest);
-                                                                                Promise < boolean > {
-                                                                                    for(, condition, of, conditions) {
-                                                                                        if (condition.required && !await this.evaluateAccessCondition(condition, request)) {
-                                                                                            return false;
-                                                                                            return true;
-                                                                                        }
-                                                                                    },
-                                                                                    async evaluateAccessCondition(condition, request) {
-                                                                                        // Simplified condition evaluation
-                                                                                        return true;
-                                                                                    },
-                                                                                    calculateRiskLevel(rbac, abac) {
-                                                                                        let riskScore = 0;
-                                                                                        // Low confidence increases risk
-                                                                                        if (abac.confidence < 0.7) {
-                                                                                            riskScore += 20;
-                                                                                            // Multiple matched policies might indicate complexity
-                                                                                            if (abac.matchedPolicies.length > 3) {
-                                                                                                riskScore += 10;
-                                                                                                // Multiple obligations increase risk
-                                                                                                if (abac.obligations.length > 2) {
-                                                                                                    riskScore += 15;
-                                                                                                    if (riskScore >= 40)
-                                                                                                        return 'CRITICAL';
-                                                                                                    if (riskScore >= 25)
-                                                                                                        return 'HIGH';
-                                                                                                    if (riskScore >= 15)
-                                                                                                        return 'MEDIUM';
-                                                                                                    return 'LOW';
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    },
-                                                                                    generateCacheKey(request) {
-                                                                                        const key = `${request.subject.userId}-${request.object.dataId}-${request.action.operation}-${request.object.classification}`;
-                                                                                    },
-                                                                                    return: Buffer.from(key).toString('base64'),
-                                                                                    isCacheValid(decision) {
-                                                                                        // Cache for 5 minutes for low-risk decisions, 1 minute for high-risk
-                                                                                        const maxAge = decision.riskLevel === 'LOW' ? 5 * 60 * 1000 : 60 * 1000;
-                                                                                        return Date.now() - decision.metadata.evaluationTime < maxAge;
-                                                                                        export default DataClassificationAccessControlEngine;
-                                                                                    }
-                                                                                };
+                                                                        }
+                                                                    },
+                                                                    checkSubjectCriteria(criteria, subject) {
+                                                                        // Check clearance level
+                                                                        const levels = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
+                                                                        const subjectLevel = levels.indexOf(subject.clearanceLevel);
+                                                                        const requiredLevel = levels.indexOf(criteria.clearanceLevel);
+                                                                        return subjectLevel >= requiredLevel;
+                                                                    },
+                                                                    async evaluateAccessConditions(conditions, request) {
+                                                                        for (const condition of conditions) {
+                                                                            if (condition.required && !await this.evaluateAccessCondition(condition, request)) {
+                                                                                return false;
+                                                                                return true;
                                                                             }
                                                                         }
+                                                                    },
+                                                                    async evaluateAccessCondition(condition, request) {
+                                                                        // Simplified condition evaluation
+                                                                        return true;
+                                                                    },
+                                                                    calculateRiskLevel(rbac, abac) {
+                                                                        let riskScore = 0;
+                                                                        // Low confidence increases risk
+                                                                        if (abac.confidence < 0.7) {
+                                                                            riskScore += 20;
+                                                                            // Multiple matched policies might indicate complexity
+                                                                            if (abac.matchedPolicies.length > 3) {
+                                                                                riskScore += 10;
+                                                                                // Multiple obligations increase risk
+                                                                                if (abac.obligations.length > 2) {
+                                                                                    riskScore += 15;
+                                                                                    if (riskScore >= 40)
+                                                                                        return 'CRITICAL';
+                                                                                    if (riskScore >= 25)
+                                                                                        return 'HIGH';
+                                                                                    if (riskScore >= 15)
+                                                                                        return 'MEDIUM';
+                                                                                    return 'LOW';
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    generateCacheKey(request) {
+                                                                        const key = `${request.subject.userId}-${request.object.dataId}-${request.action.operation}-${request.object.classification}`;
+                                                                    },
+                                                                    return: Buffer.from(key).toString('base64'),
+                                                                    isCacheValid(decision) {
+                                                                        // Cache for 5 minutes for low-risk decisions, 1 minute for high-risk
+                                                                        const maxAge = decision.riskLevel === 'LOW' ? 5 * 60 * 1000 : 60 * 1000;
+                                                                        return Date.now() - decision.metadata.evaluationTime < maxAge;
+                                                                        export default DataClassificationAccessControlEngine;
                                                                     }
-                                                                }
+                                                                };
                                                             }
                                                         }
                                                     }

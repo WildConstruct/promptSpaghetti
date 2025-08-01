@@ -7,8 +7,8 @@ import crypto from 'crypto';
 import { promisify } from 'util';
 import base32 from 'base32';
 
-}
-}
+
+
 export interface EncryptedSecret {
   id: string;
   userId: string;
@@ -24,36 +24,39 @@ export interface EncryptedSecret {
     associatedConfigId?: string;
     entropy: number;
     hashFingerprint: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface SecretGenerationOptions {
   length?: number; // In bytes
   purpose: 'totp' | 'backup' | 'recovery';
   associatedConfigId?: string;
   customEntropy?: Buffer;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyRotationResult {
   success: boolean;
   rotatedSecrets: number;
   failedSecrets: string[];
   newKeyVersion: number;
   message: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecretAuditEntry {
   id: string;
   secretId: string;
@@ -65,9 +68,10 @@ export interface SecretAuditEntry {
   success: boolean;
   metadata: Record<string, any>;
   riskLevel: 'low' | 'medium' | 'high';
-}
-}
-}
+
+
+
+
 
 export class TOTPSecretManager {
   private readonly encryptionAlgorithm = 'aes-256-gcm';
@@ -82,7 +86,7 @@ export class TOTPSecretManager {
 
   constructor(private masterKey: string) {
     this.initializeEncryptionKeys();
-  }
+
 
   /**
    * Initialize encryption keys for secret storage
@@ -92,7 +96,7 @@ export class TOTPSecretManager {
     const derivedKey = this.deriveKey(this.masterKey, 'totp-secrets-v1');
     this.encryptionKeys.set(1, derivedKey);
     this.currentKeyVersion = 1;
-  }
+
 
   /**
    * Generate a cryptographically secure TOTP secret
@@ -114,10 +118,10 @@ export class TOTPSecretManager {
     if (options.customEntropy) {
       // Use custom entropy if provided (for testing/special cases)
       secretBytes = crypto.scryptSync(options.customEntropy, 'totp-salt', length);
-    } else {
+ else {
       // Generate cryptographically secure random bytes
       secretBytes = await this.generateSecureRandomBytes(length);
-    }
+
 
     // Encode secret as base32 for authenticator compatibility  
     const base32Secret = base32.encode(secretBytes).replace(/=/g, ''); // Remove padding
@@ -141,7 +145,7 @@ export class TOTPSecretManager {
         length,
         entropy: this.calculateEntropy(secretBytes),
         associatedConfigId: options.associatedConfigId
-  }
+
       riskLevel: 'low'
     });
 
@@ -150,7 +154,7 @@ export class TOTPSecretManager {
       secret: hexSecret,
       base32Secret
     };
-  }
+
 
   /**
    * Securely retrieve and decrypt a TOTP secret
@@ -176,7 +180,7 @@ export class TOTPSecretManager {
         riskLevel: 'medium'
       });
       return null;
-    }
+
 
     // Verify ownership
     if (encryptedSecret.userId !== userId) {
@@ -191,7 +195,7 @@ export class TOTPSecretManager {
         riskLevel: 'high'
       });
       throw new Error('Unauthorized access to secret');
-    }
+
 
     try {
       // Decrypt secret
@@ -212,7 +216,7 @@ export class TOTPSecretManager {
       });
 
       return { secret: hexSecret, base32Secret };
-    } catch (error) {
+ catch (error) {
       // Audit failed decryption
       await this.logSecretAccess({
         secretId,
@@ -225,8 +229,8 @@ export class TOTPSecretManager {
         riskLevel: 'high'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Rotate encryption keys and re-encrypt all secrets
@@ -254,7 +258,7 @@ export class TOTPSecretManager {
           {
             purpose: secret.metadata.purpose as any,
             associatedConfigId: secret.metadata.associatedConfigId
-  }
+
           newKeyVersion
         );
 
@@ -264,11 +268,11 @@ export class TOTPSecretManager {
         await this.updateEncryptedSecret(newEncryptedSecret);
         
         rotatedSecrets.push(secret.id);
-      } catch (error) {
+ catch (error) {
         failedSecrets.push(secret.id);
         console.error(`Failed to rotate secret ${secret.id}:`, error.message);
-      }
-    }
+
+
 
     // Update current key version
     this.currentKeyVersion = newKeyVersion;
@@ -276,7 +280,7 @@ export class TOTPSecretManager {
     // Clean up old keys (keep last 2 versions for graceful transition)
     if (newKeyVersion > 2) {
       this.encryptionKeys.delete(newKeyVersion - 2);
-    }
+
 
     // Log rotation event
     console.log(`Key rotation completed: ${rotatedSecrets.length} rotated, ${failedSecrets.length} failed`);
@@ -288,7 +292,7 @@ export class TOTPSecretManager {
       newKeyVersion,
       message: `Rotated ${rotatedSecrets.length} secrets to key version ${newKeyVersion}`
     };
-  }
+
 
   /**
    * Securely delete a TOTP secret
@@ -304,7 +308,7 @@ export class TOTPSecretManager {
     
     if (!encryptedSecret) {
       return false;
-    }
+
 
     // Verify ownership
     if (encryptedSecret.userId !== userId) {
@@ -318,7 +322,7 @@ export class TOTPSecretManager {
         riskLevel: 'high'
       });
       throw new Error('Unauthorized deletion attempt');
-    }
+
 
     // Securely overwrite the encrypted data before deletion
     await this.secureOverwrite(encryptedSecret);
@@ -338,7 +342,7 @@ export class TOTPSecretManager {
     });
 
     return true;
-  }
+
 
   /**
    * Generate cryptographically secure random bytes
@@ -356,7 +360,7 @@ export class TOTPSecretManager {
     const combinedEntropy = Buffer.concat([systemRandom, timeEntropy, processEntropy]);
     
     return crypto.hkdfSync('sha256', combinedEntropy, '', 'totp-secret-generation', length);
-  }
+
 
   /**
    * Encrypt secret using AES-256-GCM
@@ -373,7 +377,7 @@ export class TOTPSecretManager {
     
     if (!encryptionKey) {
       throw new Error(`Encryption key version ${useKeyVersion} not found`);
-    }
+
 
     // Generate random IV for each encryption
     const iv = crypto.randomBytes(12); // 96-bit IV for GCM
@@ -411,9 +415,9 @@ export class TOTPSecretManager {
         associatedConfigId: options.associatedConfigId,
         entropy: this.calculateEntropy(secretBytes),
         hashFingerprint
-      }
+
     };
-  }
+
 
   /**
    * Decrypt secret using stored encryption parameters
@@ -424,7 +428,7 @@ export class TOTPSecretManager {
     
     if (!encryptionKey) {
       throw new Error(`Encryption key version ${encryptedSecret.keyVersion} not available`);
-    }
+
 
     // Parse stored encryption parameters
     const encrypted = Buffer.from(encryptedSecret.encryptedSecret, 'base64');
@@ -452,13 +456,13 @@ export class TOTPSecretManager {
 
       if (calculatedFingerprint !== encryptedSecret.metadata.hashFingerprint) {
         throw new Error('Secret integrity verification failed');
-      }
+
 
       return decrypted;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to decrypt secret: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Derive encryption key from master key
@@ -471,7 +475,7 @@ export class TOTPSecretManager {
       32, // 256-bit key
       'sha256'
     );
-  }
+
 
   /**
    * Calculate entropy of a buffer
@@ -482,7 +486,7 @@ export class TOTPSecretManager {
     // Count byte frequencies
     for (const byte of data) {
       frequency.set(byte, (frequency.get(byte) || 0) + 1);
-    }
+
 
     // Calculate Shannon entropy
     let entropy = 0;
@@ -491,10 +495,10 @@ export class TOTPSecretManager {
     for (const count of frequency.values()) {
       const probability = count / length;
       entropy -= probability * Math.log2(probability);
-    }
+
 
     return Math.round(entropy * 100) / 100; // Round to 2 decimal places
-  }
+
 
   /**
    * Securely overwrite encrypted data
@@ -509,43 +513,43 @@ export class TOTPSecretManager {
       
       encryptedSecret.iv = crypto.randomBytes(12).toString('base64');
       encryptedSecret.tag = crypto.randomBytes(16).toString('base64');
-    }
-  }
+
+
 
   private generateSecretId(): string {
     return `TS-${Date.now()}-${crypto.randomBytes(8).toString('hex')}`;
-  }
+
 
   private generateAuditId(): string {
     return `SA-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   // Storage methods (would be implemented with actual database)
 
   private async storeEncryptedSecret(secret: EncryptedSecret): Promise<void> {
 
     this.secretStore.set(secret.id, secret);
-  }
+
 
   private async getEncryptedSecret(secretId: string): Promise<EncryptedSecret | null> {
 
     return this.secretStore.get(secretId) || null;
-  }
+
 
   private async updateEncryptedSecret(secret: EncryptedSecret): Promise<void> {
 
     this.secretStore.set(secret.id, secret);
-  }
+
 
   private async removeEncryptedSecret(secretId: string): Promise<void> {
 
     this.secretStore.delete(secretId);
-  }
+
 
   private async getAllEncryptedSecrets(): Promise<EncryptedSecret[]> {
 
     return Array.from(this.secretStore.values());
-  }
+
 
   private async logSecretAccess(entry: Omit<SecretAuditEntry, 'id' | 'timestamp'>): Promise<void> {
 
@@ -560,13 +564,13 @@ export class TOTPSecretManager {
     // Keep only recent audit entries (last 10000)
     if (this.auditLog.length > 10000) {
       this.auditLog.splice(0, this.auditLog.length - 10000);
-    }
+
 
     // Log high-risk events immediately
     if (entry.riskLevel === 'high') {
       console.warn(`🚨 HIGH RISK SECRET ACCESS: ${entry.action} by ${entry.userId} from ${entry.sourceIP}`);
-    }
-  }
+
+
 
   // Public utility methods
 
@@ -583,7 +587,7 @@ export class TOTPSecretManager {
     return this.auditLog.filter(entry => 
       entry.userId === userId && entry.timestamp >= cutoff
     );
-  }
+
 
   /**
    * Get secret statistics
@@ -594,7 +598,7 @@ export class TOTPSecretManager {
     averageEntropy: number;
     keyVersionDistribution: Record<number, number>;
     recentAuditEvents: number;
-  }> {
+> {
     const allSecrets = await this.getAllEncryptedSecrets();
     
     const secretsByPurpose: Record<string, number> = {};
@@ -609,7 +613,7 @@ export class TOTPSecretManager {
         (keyVersionDistribution[secret.keyVersion] || 0) + 1;
       
       totalEntropy += secret.metadata.entropy;
-    }
+
 
     const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentAuditEvents = this.auditLog.filter(e => e.timestamp >= last24Hours).length;
@@ -621,7 +625,7 @@ export class TOTPSecretManager {
       keyVersionDistribution,
       recentAuditEvents
     };
-  }
+
 
   /**
    * Validate secret format and security
@@ -630,23 +634,22 @@ export class TOTPSecretManager {
     valid: boolean; 
     entropy: number; 
     recommendations: string[] 
-  } {
+ {
     const secretBytes = Buffer.from(secret, 'hex');
     const entropy = this.calculateEntropy(secretBytes);
     const recommendations: string[] = [];
 
     if (secretBytes.length < this.secretMinLength) {
       recommendations.push(`Secret should be at least ${this.secretMinLength} bytes`);
-    }
+
 
     if (entropy < 7.0) {
       recommendations.push('Secret has low entropy, consider regenerating');
-    }
+
 
     return {
       valid: secretBytes.length >= this.secretMinLength && entropy >= 6.0,
       entropy,
       recommendations
     };
-  }
-}
+

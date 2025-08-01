@@ -5,8 +5,7 @@
  * Extends existing EmbeddableContent system with advanced customization capabilities.
  */
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { 
-  PaintBrushIcon,
+import { PaintBrushIcon,
   AdjustmentsHorizontalIcon,
   EyeIcon,
   CodeBracketIcon,
@@ -44,68 +43,67 @@ import {
   ChatBubbleLeftIcon,
   UserIcon,
   CalendarIcon,
-  TagIcon,
+  TagIcon }
   FlagIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { Template } from './TemplatePreviewModal';
 import { EmbedCustomization, EmbedBranding, PREVIEW_SIZES, PreviewSize } from './EmbeddedTemplatePreview';
 
 // Advanced customization types
 
-}
-export interface EmbedCustomizationInterfaceProps {
-  template: Template;
+
+export interface EmbedCustomizationInterfaceProps { template: Template;
   initialCustomization?: EmbedCustomization;
-  onCustomizationChange: (customization: EmbedCustomization) => void;
-  onSave: (customization: EmbedCustomization) => Promise<void>;
+  onCustomizationChange: (customization: EmbedCustomization) => void
+  onSave: (customization: EmbedCustomization) => Promise<void>
   onCancel: () => void;
-  onPreview: (customization: EmbedCustomization) => void;
+  onPreview: (customization: EmbedCustomization) => void }
   onExport: (customization: EmbedCustomization, format: 'iframe' | 'javascript' | 'react') => string;
   className?: string;
   presets?: EmbedPreset;
-}
-}
-}
-export interface EmbedPreset {
-  id: string;
+
+
+
+
+export interface EmbedPreset { id: string;
   name: string;
   description: string;
   thumbnail: string;
-  category: 'social' | 'blog' | 'portfolio' | 'ecommerce' | 'documentation' | 'custom';
+  category: 'social' | 'blog' | 'portfolio' | 'ecommerce' | 'documentation' | 'custom' }
   customization: EmbedCustomization;
   popular: boolean;
-}
-}
-}
-export interface EmbedWidget {
-  id: string;
+
+
+
+
+export interface EmbedWidget { id: string;
   type: 'header' | 'preview' | 'metadata' | 'actions' | 'stats' | 'comments' | 'author' | 'footer';
   name: string;
   description: string;
-  icon: React.ComponentType<unknown>;
+  icon: React.ComponentType<unknown> }
   configurable: boolean;
   required: boolean;
-}
+
+
   position: { x: number; y: number };
   size: { width: number; height: number };
   visible: boolean;
   config: Record<string, any>;
-}
-}
-export interface CustomFont {
-  family: string;
+
+
+export interface CustomFont { family: string;
   category: 'serif' | 'sans-serif' | 'monospace' | 'display' | 'handwriting';
   weights: number;
   url?: string;
-  provider: 'google' | 'adobe' | 'custom'
-}
-  }
-}
-export interface CustomTheme {
-  id: string;
+  provider: 'google' | 'adobe' | 'custom' }
+
+
+
+
+export interface CustomTheme { id: string;
   name: string;
-  colors: {
+  colors: { }
   primary: string;
   secondary: string;
   accent: string;
@@ -118,252 +116,236 @@ export interface CustomTheme {
   warning: string;
   error: string;
   info: string;
-}
+
+
 };
-  fonts: {
+  fonts: { 
   heading: CustomFont;
   body: CustomFont;
-  ui: CustomFont;
-};
-  spacing: {
+  ui: CustomFont };
+  spacing: { 
   unit: number;
-  scale: number;
-};
-  borderRadius: {
+  scale: number };
+  borderRadius: { 
   small: number;
   medium: number;
-  large: number;
-};
-  shadows: {
+  large: number };
+  shadows: { 
   small: string;
   medium: string;
-  large: string;
-};
+  large: string };
 
 // Predefined embed presets
 const DEFAULT_PRESETS: EmbedPreset = [
-  {
-    id: 'social-card',
-    name: 'Social Media Card',
-    description: 'Perfect for Twitter, LinkedIn, and Facebook posts',
-    thumbnail: '/presets/social-card.png',
-    category: 'social',
-    popular: true,
-    customization: {
-  size: { width: 600, height: 315, responsive: true },
-      theme: { name: 'light', colors: {}, fonts: {} },
-      features: {
-  showPreview: true,
-  showMetadata: true,
-  showActions: true,
-  showComments: false,
-  enableInteraction: true,
-  enableSharing: true,
-  enablePurchase: false,
-  showRating: true,
-},
-  layout: {
-  orientation: 'horizontal',
-  showHeader: true,
-  showFooter: false,
-  showSidebar: false,
-  contentAlignment: 'left',
-  spacing: 'tight',
-  borderRadius: 12,
-  shadow: 'md',
-},
-  branding: {
-  showLogo: false,
-  showTitle: true,
-  showAuthor: true,
-  showPoweredBy: false,
-},
-  social: {
-  showLikes: true,
-  showShares: true,
-  showComments: false,
-  showRating: true,
-  showDownloads: false,
-  enableInteraction: true,
-  showAuthorInfo: true,
-  showStats: true,
-}
-  {
-    id: 'blog-embed',
-    name: 'Blog Embed',
-    description: 'Great for embedding in blog posts and articles',
-    thumbnail: '/presets/blog-embed.png',
-    category: 'blog',
-    popular: true,
-    customization: {
-  size: { width: 800, height: 400, responsive: true },
-      theme: { name: 'light', colors: {}, fonts: {} },
-      features: {
-  showPreview: true,
-  showMetadata: true,
-  showActions: true,
-  showComments: true,
-  enableInteraction: true,
-  enableSharing: true,
-  enablePurchase: true,
-  showRating: true,
-},
-  layout: {
-  orientation: 'vertical',
-  showHeader: true,
-  showFooter: true,
-  showSidebar: false,
-  contentAlignment: 'center',
-  spacing: 'normal',
-  borderRadius: 8,
-  shadow: 'lg',
-},
-  branding: {
-  showLogo: true,
-  showTitle: true,
-  showAuthor: true,
-  showPoweredBy: true,
-},
-  social: {
-  showLikes: true,
-  showShares: true,
-  showComments: true,
-  showRating: true,
-  showDownloads: true,
-  enableInteraction: true,
-  showAuthorInfo: true,
-  showStats: true,
-}
-  {
-    id: 'sidebar-widget',
-    name: 'Sidebar Widget',
-    description: 'Compact widget for website sidebars',
-    thumbnail: '/presets/sidebar-widget.png',
-    category: 'blog',
-    popular: false,
-    customization: {
-  size: { width: 300, height: 400, responsive: true },
-      theme: { name: 'light', colors: {}, fonts: {} },
-      features: {
-  showPreview: true,
-  showMetadata: false,
-  showActions: true,
-  showComments: false,
-  enableInteraction: true,
-  enableSharing: false,
-  enablePurchase: true,
-  showRating: false,
-},
-  layout: {
-  orientation: 'vertical',
-  showHeader: true,
-  showFooter: false,
-  showSidebar: false,
-  contentAlignment: 'center',
-  spacing: 'tight',
-  borderRadius: 6,
-  shadow: 'sm',
-},
-  branding: {
-  showLogo: false,
-  showTitle: true,
-  showAuthor: false,
-  showPoweredBy: false,
-},
-  social: {
-  showLikes: false,
-  showShares: false,
-  showComments: false,
-  showRating: false,
-  showDownloads: true,
-  enableInteraction: true,
-  showAuthorInfo: false,
+  { id: 'social-card'
+    name: 'Social Media Card'
+    description: 'Perfect for Twitter, LinkedIn, and Facebook posts'
+    thumbnail: '/presets/social-card.png'
+    category: 'social'
+    popular: true
+    customization: { }
+  size: { width: 600, height: 315, responsive: true }
+      theme: { name: 'light', colors: {}, fonts: {} }
+      features: { 
+  showPreview: true
+  showMetadata: true
+  showActions: true
+  showComments: false
+  enableInteraction: true
+  enableSharing: true
+  enablePurchase: false
+  showRating: true }
+
+  layout: { 
+  orientation: 'horizontal'
+  showHeader: true
+  showFooter: false
+  showSidebar: false
+  contentAlignment: 'left'
+  spacing: 'tight'
+  borderRadius: 12
+  shadow: 'md' }
+
+  branding: { 
+  showLogo: false
+  showTitle: true
+  showAuthor: true
+  showPoweredBy: false }
+
+  social: { 
+  showLikes: true
+  showShares: true
+  showComments: false
+  showRating: true
+  showDownloads: false
+  enableInteraction: true
+  showAuthorInfo: true
+  showStats: true }
+
+  { id: 'blog-embed'
+    name: 'Blog Embed'
+    description: 'Great for embedding in blog posts and articles'
+    thumbnail: '/presets/blog-embed.png'
+    category: 'blog'
+    popular: true
+    customization: { }
+  size: { width: 800, height: 400, responsive: true }
+      theme: { name: 'light', colors: {}, fonts: {} }
+      features: { 
+  showPreview: true
+  showMetadata: true
+  showActions: true
+  showComments: true
+  enableInteraction: true
+  enableSharing: true
+  enablePurchase: true
+  showRating: true }
+
+  layout: { 
+  orientation: 'vertical'
+  showHeader: true
+  showFooter: true
+  showSidebar: false
+  contentAlignment: 'center'
+  spacing: 'normal'
+  borderRadius: 8
+  shadow: 'lg' }
+
+  branding: { 
+  showLogo: true
+  showTitle: true
+  showAuthor: true
+  showPoweredBy: true }
+
+  social: { 
+  showLikes: true
+  showShares: true
+  showComments: true
+  showRating: true
+  showDownloads: true
+  enableInteraction: true
+  showAuthorInfo: true
+  showStats: true }
+
+  { id: 'sidebar-widget'
+    name: 'Sidebar Widget'
+    description: 'Compact widget for website sidebars'
+    thumbnail: '/presets/sidebar-widget.png'
+    category: 'blog'
+    popular: false
+    customization: { }
+  size: { width: 300, height: 400, responsive: true }
+      theme: { name: 'light', colors: {}, fonts: {} }
+      features: { 
+  showPreview: true
+  showMetadata: false
+  showActions: true
+  showComments: false
+  enableInteraction: true
+  enableSharing: false
+  enablePurchase: true
+  showRating: false }
+
+  layout: { 
+  orientation: 'vertical'
+  showHeader: true
+  showFooter: false
+  showSidebar: false
+  contentAlignment: 'center'
+  spacing: 'tight'
+  borderRadius: 6
+  shadow: 'sm' }
+
+  branding: { 
+  showLogo: false
+  showTitle: true
+  showAuthor: false
+  showPoweredBy: false }
+
+  social: { 
+  showLikes: false
+  showShares: false
+  showComments: false
+  showRating: false
+  showDownloads: true
+  enableInteraction: true
+  showAuthorInfo: false
   showStats: false];
   // Widget library for drag and drop
   const WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'config'>[] = [
   {
-  id: 'header',
-  type: 'header',
-  name: 'Header',
-  description: 'Template title and branding',
-  icon: TagIcon,
-  configurable: true,
-  required: false,
-}
-  {
-  id: 'preview',
-  type: 'preview',
-  name: 'Preview',
-  description: 'Template preview content',
-  icon: PhotoIcon,
-  configurable: true,
-  required: true,
-}
-  {
-  id: 'metadata',
-  type: 'metadata',
-  name: 'Metadata',
-  description: 'Template description and details',
-  icon: ListBulletIcon,
-  configurable: true,
-  required: false,
-}
-  {
-  id: 'actions',
-  type: 'actions',
-  name: 'Action Buttons',
-  description: 'Like, share, purchase buttons',
-  icon: BoltIcon,
-  configurable: true,
-  required: false,
-}
-  {
-  id: 'stats',
-  type: 'stats',
-  name: 'Statistics',
-  description: 'Downloads, likes, ratings',
-  icon: BarChart3,
-  configurable: true,
-  required: false,
-}
-  {
-  id: 'author',
-  type: 'author',
-  name: 'Author Info',
-  description: 'Template creator information',
-  icon: UserIcon,
-  configurable: true,
-  required: false,
-}
-  {
-  id: 'footer',
-  type: 'footer',
-  name: 'Footer',
-  description: 'Powered by and additional links',
-  icon: FlagIcon,
-  configurable: true,
+  id: 'header'
+  type: 'header'
+  name: 'Header'
+  description: 'Template title and branding'
+  icon: TagIcon
+  configurable: true
+  required: false }
+
+  { id: 'preview'
+  type: 'preview'
+  name: 'Preview'
+  description: 'Template preview content'
+  icon: PhotoIcon
+  configurable: true
+  required: true }
+
+  { id: 'metadata'
+  type: 'metadata'
+  name: 'Metadata'
+  description: 'Template description and details'
+  icon: ListBulletIcon
+  configurable: true
+  required: false }
+
+  { id: 'actions'
+  type: 'actions'
+  name: 'Action Buttons'
+  description: 'Like, share, purchase buttons'
+  icon: BoltIcon
+  configurable: true
+  required: false }
+
+  { id: 'stats'
+  type: 'stats'
+  name: 'Statistics'
+  description: 'Downloads, likes, ratings'
+  icon: BarChart3
+  configurable: true
+  required: false }
+
+  { id: 'author'
+  type: 'author'
+  name: 'Author Info'
+  description: 'Template creator information'
+  icon: UserIcon
+  configurable: true
+  required: false }
+
+  { id: 'footer'
+  type: 'footer'
+  name: 'Footer'
+  description: 'Powered by and additional links'
+  icon: FlagIcon
+  configurable: true }
   required: false];
   // Preset selector component
-}
-export const PresetSelector: React.FC<{,
+
+export const PresetSelector: React.FC<{ ,
   presets: EmbedPreset;
   selectedPreset?: string;
-  onPresetSelect: (preset: EmbedPreset) => void;
-}> = ({ presets, selectedPreset, onPresetSelect }) => {
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  onPresetSelect: (preset: EmbedPreset) => void }> = ({ presets, selectedPreset, onPresetSelect }) => { const [activeCategory, setActiveCategory] = useState<string>('all');
   const categories = useMemo(() => {
   const cats = ['all', ...new Set(presets.map(p => p.category))];
   return cats.map(cat => ({)
-  id: cat,
-  label: cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1),
-  count: cat === 'all' ? presets.length : presets.filter(p => p.category === cat).length,
+  id: cat
+  label: cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)
+  count: cat === 'all' ? presets.length : presets.filter(p => p.category === cat).length }
 }));
   }, [presets]);
-  const filteredPresets = useMemo(() => {
-  return activeCategory === 'all'
+  const filteredPresets = useMemo(() => { return activeCategory === 'all'
   ? presets
-  : presets.filter(preset => preset.category === activeCategory);
-}, [presets, activeCategory]);
+  : presets.filter(preset => preset.category === activeCategory) }, [presets, activeCategory]);
   return;
     <div className="bg-white border border-gray-200 rounded-lg p-4">
       <h3 className="font-semibold text-gray-900 mb-4">Choose a Preset</h3>
@@ -373,11 +355,11 @@ export const PresetSelector: React.FC<{,
           <button
             key={category.id}
             onClick={() => setActiveCategory(category.id)}
-            className={`px-3 py-2 text-sm font-medium border-b-2 ${
+            className={ `px-3 py-2 text-sm font-medium border-b-2 ${
   activeCategory === category.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
           >
             {category.label} ({category.count})
           </button>
@@ -389,9 +371,9 @@ export const PresetSelector: React.FC<{,
           <button
             key={preset.id}
             onClick={() => onPresetSelect(preset)}
-            className={`text-left p-4 border rounded-lg hover:shadow-md transition-shadow ${
-  selectedPreset === preset.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300',
-}`}
+            className={ `text-left p-4 border rounded-lg hover:shadow-md transition-shadow ${
+  selectedPreset === preset.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300' }
+`}
           >
             <div className="aspect-video bg-gray-100 rounded mb-3 flex items-center justify-center">
               <PhotoIcon className="h-8 w-8 text-gray-400" />
@@ -418,12 +400,11 @@ export const PresetSelector: React.FC<{,
 };
 
 // Visual layout builder component
-export const VisualLayoutBuilder: React.FC<{,
+export const VisualLayoutBuilder: React.FC<{ ,
   widgets: EmbedWidget;
-  onWidgetsChange: (widgets: EmbedWidget) => void;
+  onWidgetsChange: (widgets: EmbedWidget) => void }
   previewSize: PreviewSize;
-}> = ({ widgets, onWidgetsChange, previewSize }) => {
-  const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
+> = ({ widgets, onWidgetsChange, previewSize }) => { const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
   const _____canvasRef = useRef<HTMLDivElement>(null);
   const handleDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) return;
@@ -433,32 +414,28 @@ export const VisualLayoutBuilder: React.FC<{,
       // Add widget from library to canvas
       const widgetTemplate = WIDGET_LIBRARY[sourceIndex];
       const newWidget: EmbedWidget = {
-        ...widgetTemplate,
+        ...widgetTemplate }
         id: `${widgetTemplate.type}-${Date.now()}`}
-},
-  position: { x: 20, y: destIndex * 60 + 20 },
-        size: { width: 200, height: 50 },
-        visible: true,
+
+  position: { x: 20, y: destIndex * 60 + 20 }
+        size: { width: 200, height: 50 }
+        visible: true
         config: {}
       };
       onWidgetsChange([...widgets, newWidget]);
-    } else if (result.source.droppableId === result.destination.droppableId) {
-      // Reorder widgets
+ else if (result.source.droppableId === result.destination.droppableId) { // Reorder widgets
       const items = Array.from(widgets);
       const [reorderedItem] = items.splice(sourceIndex, 1);
       items.splice(destIndex, 0, reorderedItem);
-      onWidgetsChange(items);
-  }, [widgets, onWidgetsChange]);
+      onWidgetsChange(items) }, [widgets, onWidgetsChange]);
   const updateWidget = useCallback((widgetId: string, updates: Partial<EmbedWidget>) => {
     onWidgetsChange(widgets.map(widget => )
       widget.id === widgetId ? { ...widget, ...updates } : widget
     ));
   }, [widgets, onWidgetsChange]);
-  const removeWidget = useCallback((widgetId: string) => {
-    onWidgetsChange(widgets.filter(widget => widget.id !== widgetId));
+  const removeWidget = useCallback((widgetId: string) => { onWidgetsChange(widgets.filter(widget => widget.id !== widgetId));
     if (selectedWidget === widgetId) {
-      setSelectedWidget(null);
-  }, [widgets, onWidgetsChange, selectedWidget]);
+      setSelectedWidget(null) }, [widgets, onWidgetsChange, selectedWidget]);
   return;
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200 p-4">
@@ -486,9 +463,9 @@ export const VisualLayoutBuilder: React.FC<{,
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className={`p-3 border border-gray-200 rounded-lg cursor-move hover:shadow-md transition-shadow ${
-  snapshot.isDragging ? 'opacity-50' : '',
-}`}
+                            className={ `p-3 border border-gray-200 rounded-lg cursor-move hover:shadow-md transition-shadow ${
+  snapshot.isDragging ? 'opacity-50' : '' }
+`}
                           >
                             <div className="flex items-center gap-2 mb-1">
                               <Icon className="h-4 w-4 text-gray-600" />
@@ -519,11 +496,11 @@ export const VisualLayoutBuilder: React.FC<{,
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   className="relative bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg overflow-hidden"
-                  style={{
-  width: Math.min(previewSize.width * 0.5, 400),
-  height: Math.min(previewSize.height * 0.5, 300),
-  minHeight: '200px',
-}}
+                  style={ {
+  width: Math.min(previewSize.width * 0.5, 400)
+  height: Math.min(previewSize.height * 0.5, 300)
+  minHeight: '200px' }
+}
                 >
                   {widgets.map((widget, index) => {
                     const Icon = widget.icon;
@@ -534,17 +511,17 @@ export const VisualLayoutBuilder: React.FC<{,
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className={`absolute bg-white border border-gray-300 rounded p-2 cursor-move ${
-  selectedWidget === widget.id ? 'border-blue-500 shadow-md' : 'hover:border-gray-400',
-} ${snapshot.isDragging ? 'opacity-50' : ''}`}
-                            style={{
-  left: widget.position.x * 0.5,
-  top: widget.position.y * 0.5,
-  width: widget.size.width * 0.5,
-  height: widget.size.height * 0.5,
-  minWidth: '80px',
-  minHeight: '30px',
-}}
+                            className={ `absolute bg-white border border-gray-300 rounded p-2 cursor-move ${
+  selectedWidget === widget.id ? 'border-blue-500 shadow-md' : 'hover:border-gray-400' }
+ ${snapshot.isDragging ? 'opacity-50' : ''}`}
+                            style={ {
+  left: widget.position.x * 0.5
+  top: widget.position.y * 0.5
+  width: widget.size.width * 0.5
+  height: widget.size.height * 0.5
+  minWidth: '80px'
+  minHeight: '30px' }
+}
                             onClick={() => setSelectedWidget(widget.id)}
                           >
                             <div className="flex items-center gap-1">
@@ -553,10 +530,9 @@ export const VisualLayoutBuilder: React.FC<{,
                                 {widget.name}
                               </span>
                               <button
-                                onClick={(e) => {
+                                onClick={ (e) => {
                                   e.stopPropagation();
-                                  removeWidget(widget.id);
-                                }}
+                                  removeWidget(widget.id) }}
                                 className="ml-auto p-0.5 text-gray-400 hover:text-red-600 rounded"
                               >
                                 <XMarkIcon className="h-3 w-3" />
@@ -682,18 +658,17 @@ export const VisualLayoutBuilder: React.FC<{,
 };
 
 // Main embed customization interface
-export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfaceProps> = ({)
-  template,
-  initialCustomization,
-  onCustomizationChange,
-  onSave,
-  onCancel,
-  onPreview,
-  onExport,
-  className = '',
+export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfaceProps> = ({ )
+  template
+  initialCustomization
+  onCustomizationChange
+  onSave
+  onCancel
+  onPreview
+  onExport
+  className = '' }
   presets = DEFAULT_PRESETS
-}) => {
-  const [activeTab, setActiveTab] = useState<'presets' | 'layout' | 'design' | 'features' | 'export'>('presets');
+}) => { const [activeTab, setActiveTab] = useState<'presets' | 'layout' | 'design' | 'features' | 'export'>('presets');
   const [customization, setCustomization] = useState<EmbedCustomization>()
     initialCustomization || presets[0].customization
   );
@@ -703,25 +678,16 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
   const [isSaving, setIsSaving] = useState(false);
   // Update customization when it changes
   useEffect(() => {
-    onCustomizationChange(customization);
-  }, [customization, onCustomizationChange]);
-  const handlePresetSelect = useCallback((preset: EmbedPreset) => {
-    setSelectedPreset(preset.id);
-    setCustomization(preset.customization);
-  }, []);
+    onCustomizationChange(customization) }, [customization, onCustomizationChange]);
+  const handlePresetSelect = useCallback((preset: EmbedPreset) => { setSelectedPreset(preset.id);
+    setCustomization(preset.customization) }, []);
   const updateCustomization = useCallback((updates: Partial<EmbedCustomization>) => {
     setCustomization(prev => ({ ...prev, ...updates }));
   }, []);
-  const handleSave = useCallback(async () => {
-    setIsSaving(true);
+  const handleSave = useCallback(async () => { setIsSaving(true);
     try {
-      await onSave(customization);
-    } finally {
-      setIsSaving(false);
-  }, [customization, onSave]);
-  const handleExport = useCallback((format: 'iframe' | 'javascript' | 'react') => {
-    return onExport(customization, format);
-  }, [customization, onExport]);
+      await onSave(customization) } finally { setIsSaving(false) }, [customization, onSave]);
+  const handleExport = useCallback((format: 'iframe' | 'javascript' | 'react') => { return onExport(customization, format) }, [customization, onExport]);
   return;
     <div className={`bg-gray-50 min-h-screen ${className}`}>}
       <div className="max-w-7xl mx-auto px-4 py-6">
@@ -768,10 +734,10 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
         <div className="border-b border-gray-200 mb-6">
           <nav className="-mb-px flex space-x-8">
             {[
-              { id: 'presets', label: 'Presets', icon: SwatchIcon },
-              { id: 'layout', label: 'Layout', icon: Squares2X2Icon },
-              { id: 'design', label: 'Design', icon: PaintBrushIcon },
-              { id: 'features', label: 'Features', icon: Cog6ToothIcon },
+              { id: 'presets', label: 'Presets', icon: SwatchIcon }
+              { id: 'layout', label: 'Layout', icon: Squares2X2Icon }
+              { id: 'design', label: 'Design', icon: PaintBrushIcon }
+              { id: 'features', label: 'Features', icon: Cog6ToothIcon }
               { id: 'export', label: 'Export', icon: CodeBracketIcon }
             ].map((tab) => {
               const Icon = tab.icon;
@@ -779,11 +745,11 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm ${
+                  className={ `flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm ${
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
                 >
                   <Icon className="h-5 w-5" />
                   {tab.label}
@@ -818,8 +784,8 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                     <label className="block text-sm font-medium text-gray-700 mb-2">Theme</label>
                     <div className="flex gap-2">
                       {[
-                        { value: 'light', label: 'Light', icon: SunIcon },
-                        { value: 'dark', label: 'Dark', icon: MoonIcon },
+                        { value: 'light', label: 'Light', icon: SunIcon }
+                        { value: 'dark', label: 'Dark', icon: MoonIcon }
                         { value: 'auto', label: 'Auto', icon: AutoIcon }
                       ].map((theme) => {
                         const Icon = theme.icon;
@@ -829,11 +795,11 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                             onClick={() => updateCustomization({)
   theme: { ...customization.theme, name: theme.value as any }
                             })}
-                            className={`flex items-center gap-2 px-4 py-2 border rounded-md ${
+                            className={ `flex items-center gap-2 px-4 py-2 border rounded-md ${
   customization.theme.name === theme.value
   ? 'border-blue-500 bg-blue-50 text-blue-700'
-  : 'border-gray-300 hover:bg-gray-50',
-}`}
+  : 'border-gray-300 hover:bg-gray-50' }
+`}
                           >
                             <Icon className="h-4 w-4" />
                             {theme.label}
@@ -851,24 +817,24 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                           <input
                             type="color"
                             value={value}
-                            onChange={(e) => updateCustomization({)
+                            onChange={ (e) => updateCustomization({)
   branding: {
-  ...customization.branding,
+  ...customization.branding
   customColors: {
-  ...customization.branding.customColors,
-  [key]: e.target.value,
+  ...customization.branding.customColors
+  [key]: e.target.value }
 })}
                             className="w-12 h-8 border border-gray-300 rounded cursor-pointer"
                           />
                           <input
                             type="text"
                             value={value}
-                            onChange={(e) => updateCustomization({)
+                            onChange={ (e) => updateCustomization({)
   branding: {
-  ...customization.branding,
+  ...customization.branding
   customColors: {
-  ...customization.branding.customColors,
-  [key]: e.target.value,
+  ...customization.branding.customColors
+  [key]: e.target.value }
 })}
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
                           />
@@ -891,11 +857,11 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                           onClick={() => updateCustomization({)
   layout: { ...customization.layout, spacing: spacing as any }
                           })}
-                          className={`px-4 py-2 border rounded-md capitalize ${
+                          className={ `px-4 py-2 border rounded-md capitalize ${
   customization.layout.spacing === spacing
   ? 'border-blue-500 bg-blue-50 text-blue-700'
-  : 'border-gray-300 hover:bg-gray-50',
-}`}
+  : 'border-gray-300 hover:bg-gray-50' }
+`}
                         >
                           {spacing}
                         </button>
@@ -929,11 +895,11 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                           onClick={() => updateCustomization({)
   layout: { ...customization.layout, shadow: shadow as any }
                           })}
-                          className={`px-3 py-2 border rounded-md text-sm ${
+                          className={ `px-3 py-2 border rounded-md text-sm ${
   customization.layout.shadow === shadow
   ? 'border-blue-500 bg-blue-50 text-blue-700'
-  : 'border-gray-300 hover:bg-gray-50',
-}`}
+  : 'border-gray-300 hover:bg-gray-50' }
+`}
                         >
                           {shadow}
                         </button>
@@ -1019,18 +985,17 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                 <h3 className="font-semibold text-gray-900 mb-4">Export Your Embed</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {[
-                    { format: 'iframe', title: 'HTML Embed', description: 'Standard iframe embed code', icon: CodeBracketIcon },
-                    { format: 'javascript', title: 'JavaScript', description: 'Dynamic loading script', icon: BoltIcon },
+                    { format: 'iframe', title: 'HTML Embed', description: 'Standard iframe embed code', icon: CodeBracketIcon }
+                    { format: 'javascript', title: 'JavaScript', description: 'Dynamic loading script', icon: BoltIcon }
                     { format: 'react', title: 'React Component', description: 'React component usage', icon: SparklesIcon }
                   ].map((option) => {
                     const Icon = option.icon;
                     return;
                       <button
                         key={option.format}
-                        onClick={() => {
+                        onClick={ () => {
                           const code = handleExport(option.format as any);
-                          navigator.clipboard.writeText(code);
-                        }}
+                          navigator.clipboard.writeText(code) }}
                         className="flex flex-col items-center gap-3 p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
                       >
                         <Icon className="h-8 w-8 text-blue-500" />
@@ -1051,9 +1016,9 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                 <h3 className="font-semibold text-gray-900 mb-4">Share Your Embed</h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {[
-                    { platform: 'twitter', name: 'Twitter', color: 'bg-blue-400' },
-                    { platform: 'linkedin', name: 'LinkedIn', color: 'bg-blue-600' },
-                    { platform: 'facebook', name: 'Facebook', color: 'bg-blue-700' },
+                    { platform: 'twitter', name: 'Twitter', color: 'bg-blue-400' }
+                    { platform: 'linkedin', name: 'LinkedIn', color: 'bg-blue-600' }
+                    { platform: 'facebook', name: 'Facebook', color: 'bg-blue-700' }
                     { platform: 'reddit', name: 'Reddit', color: 'bg-orange-500' }
                   ].map((social) => ()
                     <button

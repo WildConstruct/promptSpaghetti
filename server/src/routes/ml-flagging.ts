@@ -14,8 +14,8 @@ import { DatabaseConnection } from '../database/connection';
 import { AuditService } from '../auth/services/AuditService';
 import { requirePermission } from '../middleware/auth';
 
-}
-}
+
+
 interface FlagContentBody {
   content: string;
   contentType: 'text' | 'json' | 'graph' | 'prompt' | 'code';
@@ -26,47 +26,52 @@ interface FlagContentBody {
     sessionId?: string;
     requestId?: string;
     metadata?: Record<string, unknown>;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface FlaggingStatsQuery {
   organizationId?: string;
   startDate?: string;
   endDate?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RecentEventsQuery {
   limit?: string;
   organizationId?: string;
   flaggedOnly?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UpdateReviewBody {
   status: 'approved' | 'rejected' | 'escalated';
   notes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UpdateReviewParams {
   eventId: string;
-}
-}
-}
+
+
+
+
 
 export async function mlFlaggingRoutes(fastify: FastifyInstance) {
   const db = fastify.db as DatabaseConnection;
@@ -83,7 +88,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
       securityThreat: process.env.SECURITY_THREAT_API_URL,
       compliance: process.env.COMPLIANCE_API_URL,
       promptInjection: process.env.PROMPT_INJECTION_API_URL
-    }
+
   });
 
   // Initialize the service
@@ -97,7 +102,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: FlagContentBody;
-  }>('/flag', {
+>('/flag', {
     preHandler: requirePermission('perm_use_ml_flagging'),
     schema: {
       body: {
@@ -108,7 +113,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           contentType: { 
             type: 'string', 
             enum: ['text', 'json', 'graph', 'prompt', 'code'] 
-  }
+
           categories: {
             type: 'array',
             items: {
@@ -117,9 +122,9 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                 'content_moderation', 'security_threat', 'compliance_violation',
                 'anomaly_detection', 'prompt_injection', 'data_leak', 'malware', 'phishing'
               ]
-  }
+
             minItems: 1
-  }
+
           context: {
             type: 'object',
             properties: {
@@ -128,10 +133,10 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
               sessionId: { type: 'string' },
               requestId: { type: 'string' },
               metadata: { type: 'object' }
-            }
-          }
-        }
-  }
+
+
+
+
       response: {
         200: {
           type: 'object',
@@ -145,11 +150,11 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                 riskLevel: { 
                   type: 'string', 
                   enum: ['low', 'medium', 'high', 'critical'] 
-  }
+
                 recommendedAction: { 
                   type: 'string', 
                   enum: ['allow', 'warn', 'block', 'review', 'quarantine'] 
-  }
+
                 explanation: { type: 'string' },
                 categories: {
                   type: 'array',
@@ -160,23 +165,23 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                       confidence: { type: 'number' },
                       details: { type: 'string' },
                       severity: { type: 'string' }
-                    }
-                  }
-  }
+
+
+
                 processingTime: { type: 'number' },
                 fallbackUsed: { type: 'boolean' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest<{ Body: FlagContentBody }>, reply: FastifyReply) => {
     try {
       const user = request.user;
       if (!user) {
         return reply.code(401).send({ success: false, error: 'User not authenticated' });
-      }
+
 
       const flaggingRequest: FlaggingRequest = {
         content: request.body.content,
@@ -188,7 +193,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip,
           timestamp: new Date()
-  }
+
         categories: request.body.categories
       };
 
@@ -198,13 +203,13 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
         success: true,
         result
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Content flagging failed');
       return reply.code(500).send({
         success: false,
         error: 'Content flagging failed'
       });
-    }
+
   });
 
   /**
@@ -213,7 +218,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: FlaggingStatsQuery;
-  }>('/stats', {
+>('/stats', {
     preHandler: requirePermission('perm_view_ml_flagging'),
     schema: {
       querystring: {
@@ -222,8 +227,8 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           organizationId: { type: 'string' },
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -241,12 +246,12 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                 averageConfidence: { type: 'number' },
                 averageProcessingTime: { type: 'number' },
                 modelAccuracy: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest<{ Querystring: FlaggingStatsQuery }>, reply: FastifyReply) => {
     try {
       const { organizationId, startDate, endDate } = request.query;
@@ -261,13 +266,13 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
         success: true,
         stats
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get flagging statistics');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get flagging statistics'
       });
-    }
+
   });
 
   /**
@@ -276,7 +281,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: RecentEventsQuery;
-  }>('/events', {
+>('/events', {
     preHandler: requirePermission('perm_view_ml_flagging'),
     schema: {
       querystring: {
@@ -285,8 +290,8 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           limit: { type: 'string', pattern: '^[0-9]+$' },
           organizationId: { type: 'string' },
           flaggedOnly: { type: 'string', enum: ['true', 'false'] }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -307,13 +312,13 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                   timestamp: { type: 'string' },
                   processed: { type: 'boolean' },
                   reviewStatus: { type: 'string' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: FastifyRequest<{ Querystring: RecentEventsQuery }>, reply: FastifyReply) => {
     try {
       const limit = request.query.limit ? parseInt(request.query.limit, 10) : 100;
@@ -335,13 +340,13 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
             : event.content
         }))
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get flagging events');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get flagging events'
       });
-    }
+
   });
 
   /**
@@ -351,7 +356,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
   fastify.put<{
     Params: UpdateReviewParams;
     Body: UpdateReviewBody;
-  }>('/events/:eventId/review', {
+>('/events/:eventId/review', {
     preHandler: requirePermission('perm_review_ml_flagging'),
     schema: {
       params: {
@@ -359,8 +364,8 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
         required: ['eventId'],
         properties: {
           eventId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['status'],
@@ -368,29 +373,29 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           status: { 
             type: 'string', 
             enum: ['approved', 'rejected', 'escalated'] 
-  }
+
           notes: { type: 'string', maxLength: 1000 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ 
     Params: UpdateReviewParams; 
     Body: UpdateReviewBody; 
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const user = request.user;
       if (!user) {
         return reply.code(401).send({ success: false, error: 'User not authenticated' });
-      }
+
 
       const { eventId } = request.params;
       const { status, notes } = request.body;
@@ -407,19 +412,19 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           success: true,
           message: 'Review status updated successfully'
         });
-      } else {
+ else {
         return reply.code(404).send({
           success: false,
           error: 'Flagging event not found'
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       request.log.error({ error }, 'Failed to update review status');
       return reply.code(500).send({
         success: false,
         error: 'Failed to update review status'
       });
-    }
+
   });
 
   /**
@@ -446,13 +451,13 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                   isActive: { type: 'boolean' },
                   accuracy: { type: 'number' },
                   lastUpdated: { type: 'string' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const models = await db.query(`
@@ -473,13 +478,13 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           lastUpdated: model.last_updated?.toISOString()
         }))
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get ML models');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get ML models'
       });
-    }
+
   });
 
   /**
@@ -497,13 +502,13 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
             categories: {
               type: 'array',
               items: { type: 'string' }
-            }
-          }
-        }
-      }
+
+
+
+
     }, async (request: FastifyRequest<{
       Body: { content: string; categories?: string[] };
-    }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
       try {
         const flaggingRequest: FlaggingRequest = {
           content: request.body.content,
@@ -519,17 +524,17 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           debug: {
             environment: 'development',
             timestamp: new Date().toISOString()
-          }
+
         });
-      } catch (error) {
+ catch (error) {
         request.log.error({ error }, 'Test flagging failed');
         return reply.code(500).send({
           success: false,
           error: 'Test flagging failed'
         });
-      }
+
     });
-  }
+
 
   /**
    * GET /api/ml-flagging/health
@@ -551,17 +556,17 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           flaggedRate: stats.flaggedRate,
           averageProcessingTime: stats.averageProcessingTime,
           recentEvents: recentEvents.length
-  }
+
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'ML flagging health check failed');
       return reply.code(503).send({
         success: false,
         healthy: false,
         error: 'Health check failed'
       });
-    }
+
   });
 
   /**
@@ -587,14 +592,14 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                 categories: {
                   type: 'array',
                   items: { type: 'string' }
-                }
-              }
-  }
+
+
+
             maxItems: 100
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{
     Body: { 
       requests: Array<{
@@ -602,14 +607,14 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
         content: string;
         contentType: string;
         categories: string[];
-      }>; 
+>; 
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const user = request.user;
       if (!user) {
         return reply.code(401).send({ success: false, error: 'User not authenticated' });
-      }
+
 
       const results = await Promise.all(
         request.body.requests.map(async (req) => {
@@ -624,14 +629,13 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
 
             const result = await mlFlaggingService.flagContent(flaggingRequest);
             return { id: req.id, success: true, result };
-          } catch (error) {
+ catch (error) {
             return { 
               id: req.id, 
               success: false, 
               error: error instanceof Error ? error.message : 'Unknown error' 
             };
-          }
-  }
+
       );
 
       const successCount = results.filter(r => r.success).length;
@@ -644,16 +648,16 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           total: results.length,
           successful: successCount,
           failed: errorCount
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Bulk flagging failed');
       return reply.code(500).send({
         success: false,
         error: 'Bulk flagging failed'
       });
-    }
+
   });
-}
+
 
 export default mlFlaggingRoutes;

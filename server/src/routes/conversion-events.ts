@@ -16,8 +16,8 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { ConversionEvent } from '../../packages/core/analytics/ConversionTracker';
 import { EnhancedConversionEvent } from '../../packages/core/analytics/ConversionFunnelArchitecture';
 
-}
-}
+
+
 export interface ConversionEventBatch {
   events: EnhancedConversionEvent[];
   metadata: {
@@ -26,13 +26,14 @@ export interface ConversionEventBatch {
     source: string;
     version?: string;
     clientId?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ConversionEventQuery {
   startTime?: number;
   endTime?: number;
@@ -42,23 +43,25 @@ export interface ConversionEventQuery {
   funnelId?: string;
   limit?: number;
   offset?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConversionEventValidationResult {
   isValid: boolean;
   errors: string[];
   warnings: string[];
   processedEvent?: EnhancedConversionEvent;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConversionEventResponse {
   success: boolean;
   message?: string;
@@ -69,10 +72,11 @@ export interface ConversionEventResponse {
     duplicates: number;
     invalid: number;
     batchId: string;
-}
-}
+
+
+
   };
-}
+
 
 /**
  * Conversion Events Service
@@ -101,7 +105,7 @@ class ConversionEventsService {
         message: `Batch size exceeds maximum of ${this.MAX_EVENTS_PER_BATCH} events`,
         errors: ['BATCH_TOO_LARGE']
       };
-    }
+
 
     let processed = 0;
     let duplicates = 0;
@@ -117,12 +121,12 @@ class ConversionEventsService {
           invalid++;
           errors.push(`Event ${event.id}: ${validationResult.errors.join(', ')}`);
           continue;
-        }
+
 
         if (this.isDuplicateEvent(event)) {
           duplicates++;
           continue;
-        }
+
 
         // Process and store event
         const processedEvent = this.processEvent(event, metadata);
@@ -132,12 +136,11 @@ class ConversionEventsService {
 
         // Stream to real-time subscribers
         this.streamEventToSubscribers(processedEvent);
-
-      } catch (error) {
+ catch (error) {
         invalid++;
         errors.push(`Event ${event.id}: Processing error - ${error}`);
-      }
-    }
+
+
 
     return {
       success: true,
@@ -149,9 +152,9 @@ class ConversionEventsService {
         duplicates,
         invalid,
         batchId: metadata.batchId
-      }
+
     };
-  }
+
 
   /**
    * Validate conversion event
@@ -172,46 +175,46 @@ class ConversionEventsService {
     
     if (eventAge < 0) {
       errors.push('Event timestamp cannot be in the future');
-    } else if (eventAge > this.MAX_EVENT_AGE) {
+ else if (eventAge > this.MAX_EVENT_AGE) {
       errors.push('Event is too old to process');
-    } else if (eventAge > 24 * 60 * 60 * 1000) {
+ else if (eventAge > 24 * 60 * 60 * 1000) {
       warnings.push('Event is more than 24 hours old');
-    }
+
 
     // Value validation
     if (event.value !== undefined && event.value < 0) {
       errors.push('Event value cannot be negative');
-    }
+
 
     // Privacy consent validation
     if (!event.privacyConsent) {
       errors.push('Privacy consent information is required');
-    } else {
+ else {
       if (!event.privacyConsent.analytics) {
         errors.push('Analytics consent is required for event processing');
-      }
-    }
+
+
 
     // Attribution data validation
     if (event.attributionData) {
       if (!Array.isArray(event.attributionData.touchpoints)) {
         errors.push('Touchpoints must be an array');
-      }
+
       
       if (!event.attributionData.primaryAttribution) {
         warnings.push('Primary attribution is missing');
-      }
-    }
+
+
 
     // Real-time processing validation
     if (event.realTimeProcessing) {
       if (!event.realTimeProcessing.streamId) {
         warnings.push('Stream ID is missing');
-      }
+
       if (!event.realTimeProcessing.batchId) {
         warnings.push('Batch ID is missing');
-      }
-    }
+
+
 
     return {
       isValid: errors.length === 0,
@@ -219,7 +222,7 @@ class ConversionEventsService {
       warnings,
       processedEvent: errors.length === 0 ? event : undefined
     };
-  }
+
 
   /**
    * Check for duplicate events
@@ -231,17 +234,17 @@ class ConversionEventsService {
     const lastSeen = this.recentEventHashes.get(eventHash);
     if (lastSeen && (now - lastSeen) < this.DEDUPLICATION_WINDOW) {
       return true;
-    }
+
     
     this.recentEventHashes.set(eventHash, now);
     
     // Clean up old hashes periodically
     if (Math.random() < 0.01) { // 1% chance
       this.cleanupOldHashes();
-    }
+
     
     return false;
-  }
+
 
   private generateEventHash(event: EnhancedConversionEvent): string {
     const hashData = {
@@ -253,16 +256,16 @@ class ConversionEventsService {
     };
     
     return Buffer.from(JSON.stringify(hashData)).toString('base64').substring(0, 16);
-  }
+
 
   private cleanupOldHashes(): void {
     const now = Date.now();
     for (const [hash, timestamp] of this.recentEventHashes.entries()) {
       if ((now - timestamp) > this.DEDUPLICATION_WINDOW) {
         this.recentEventHashes.delete(hash);
-      }
-    }
-  }
+
+
+
 
   /**
    * Process individual event
@@ -286,11 +289,11 @@ class ConversionEventsService {
         serverProcessed: true,
         batchSource: metadata.source,
         apiVersion: metadata.version || '1.0'
-      }
+
     };
 
     return processedEvent;
-  }
+
 
   /**
    * Store event
@@ -303,8 +306,8 @@ class ConversionEventsService {
     if (this.eventStore.size > 10000) {
       const oldestKey = this.eventStore.keys().next().value;
       this.eventStore.delete(oldestKey);
-    }
-  }
+
+
 
   /**
    * Stream event to WebSocket subscribers
@@ -320,15 +323,15 @@ class ConversionEventsService {
       try {
         if (socket.readyState === 1) { // WebSocket.OPEN
           socket.send(JSON.stringify(streamingPayload));
-        } else {
+ else {
           this.streamingClients.delete(clientId);
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error(`Failed to stream to client ${clientId}:`, error);
         this.streamingClients.delete(clientId);
-      }
-    }
-  }
+
+
+
 
   /**
    * Query events
@@ -339,23 +342,23 @@ class ConversionEventsService {
     // Apply filters
     if (query.startTime) {
       events = events.filter(e => e.timestamp >= query.startTime!);
-    }
+
     
     if (query.endTime) {
       events = events.filter(e => e.timestamp <= query.endTime!);
-    }
+
     
     if (query.userId) {
       events = events.filter(e => e.userId === query.userId);
-    }
+
     
     if (query.sessionId) {
       events = events.filter(e => e.sessionId === query.sessionId);
-    }
+
     
     if (query.eventType) {
       events = events.filter(e => e.type === query.eventType);
-    }
+
 
     // Sort by timestamp (newest first)
     events.sort((a, b) => b.timestamp - a.timestamp);
@@ -365,21 +368,21 @@ class ConversionEventsService {
     const limit = query.limit || 100;
     
     return events.slice(offset, offset + limit);
-  }
+
 
   /**
    * Add streaming client
    */
   public addStreamingClient(clientId: string, socket: any): void {
     this.streamingClients.set(clientId, socket);
-  }
+
 
   /**
    * Remove streaming client
    */
   public removeStreamingClient(clientId: string): void {
     this.streamingClients.delete(clientId);
-  }
+
 
   /**
    * Get processing metrics
@@ -389,7 +392,7 @@ class ConversionEventsService {
     recentEvents: number;
     activeStreams: number;
     hashTableSize: number;
-  } {
+ {
     const now = Date.now();
     const recentEvents = Array.from(this.eventStore.values())
       .filter(e => (now - e.timestamp) < 60000).length; // Last minute
@@ -400,12 +403,12 @@ class ConversionEventsService {
       activeStreams: this.streamingClients.size,
       hashTableSize: this.recentEventHashes.size
     };
-  }
+
 
   private generateServerId(): string {
     return `srv_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-  }
-}
+
+
 
 // Global service instance
 const conversionEventsService = new ConversionEventsService();
@@ -435,7 +438,7 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
             type: 'array',
             items: { type: 'object' },
             maxItems: 1000
-  }
+
           metadata: {
             type: 'object',
             required: ['batchId', 'timestamp', 'source'],
@@ -445,10 +448,10 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
               source: { type: 'string' },
               version: { type: 'string' },
               clientId: { type: 'string' }
-            }
-          }
-        }
-  }
+
+
+
+
       response: {
         200: {
           type: 'object',
@@ -464,29 +467,29 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
                 duplicates: { type: 'number' },
                 invalid: { type: 'number' },
                 batchId: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest<{ Body: ConversionEventBatch }>, reply: FastifyReply) => {
     try {
       const result = await conversionEventsService.processBatch(request.body);
       
       if (result.success) {
         reply.code(200).send(result);
-      } else {
+ else {
         reply.code(400).send(result);
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Error processing conversion events batch:', error);
       reply.code(500).send({
         success: false,
         message: 'Internal server error processing events',
         errors: ['INTERNAL_ERROR']
       });
-    }
+
   });
 
   /**
@@ -507,8 +510,8 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
           funnelId: { type: 'string' },
           limit: { type: 'number', minimum: 1, maximum: 1000 },
           offset: { type: 'number', minimum: 0 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -518,10 +521,10 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
             total: { type: 'number' },
             limit: { type: 'number' },
             offset: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Querystring: ConversionEventQuery }>, reply: FastifyReply) => {
     try {
       const events = conversionEventsService.queryEvents(request.query);
@@ -533,13 +536,13 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
         limit: request.query.limit || 100,
         offset: request.query.offset || 0
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error querying conversion events:', error);
       reply.code(500).send({
         success: false,
         message: 'Internal server error querying events'
       });
-    }
+
   });
 
   /**
@@ -557,13 +560,13 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
         data: metrics,
         timestamp: Date.now()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting conversion metrics:', error);
       reply.code(500).send({
         success: false,
         message: 'Internal server error getting metrics'
       });
-    }
+
   });
 
   /**
@@ -578,9 +581,9 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
         required: ['event'],
         properties: {
           event: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: { event: EnhancedConversionEvent } }>, reply: FastifyReply) => {
     try {
       const validationResult = (conversionEventsService as any).validateEvent(request.body.event);
@@ -589,13 +592,13 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
         success: true,
         data: validationResult
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error validating conversion event:', error);
       reply.code(500).send({
         success: false,
         message: 'Internal server error validating event'
       });
-    }
+
   });
 
   /**
@@ -626,10 +629,10 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
               type: 'pong',
               timestamp: Date.now()
             }));
-          }
-        } catch (error) {
+
+ catch (error) {
           fastify.log.error('Error handling WebSocket message:', error);
-        }
+
       });
 
       // Handle disconnect
@@ -643,6 +646,6 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
   });
 
   fastify.log.info('Conversion events routes registered');
-}
+
 
 export default registerConversionEventRoutes;

@@ -16,8 +16,8 @@
  */
 
 }
-export interface SystemUser {
-    id: string;
+}
+export interface SystemUser { id: string;
     username: string;
     email: string;
     displayName: string;
@@ -40,11 +40,10 @@ export interface SystemUser {
     lastModifiedBy?: string;
     termsAccepted?: Date;
     privacyPolicyAccepted?: Date;
-    dataRetentionConsent?: boolean;
-
+    dataRetentionConsent?: boolean }
 }
-export interface UserProfile {
-    firstName?: string;
+}
+export interface UserProfile { firstName?: string;
     lastName?: string;
     department?: string;
     jobTitle?: string;
@@ -53,11 +52,10 @@ export interface UserProfile {
     language: string;
     phoneNumber?: string;
     organization?: string;
-    manager?: string;
-
+    manager?: string }
 }
-export interface UserRole {
-    id: string;
+}
+export interface UserRole { id: string;
     roleId: string;
     roleName: string;
     roleDescription?: string;
@@ -65,11 +63,10 @@ export interface UserRole {
     assignedBy: string;
     expiresAt?: Date;
     scope: RoleScope;
-    context?: Record<string, any>;
-
+    context?: Record<string, any> }
 }
-export interface DirectPermission {
-    id: string;
+}
+export interface DirectPermission { id: string;
     permission: string;
     resource?: string;
     resourceId?: string;
@@ -78,17 +75,15 @@ export interface DirectPermission {
     grantedAt: Date;
     grantedBy: string;
     expiresAt?: Date;
-    conditions?: PermissionCondition[];
-
+    conditions?: PermissionCondition[] }
 }
-export interface PermissionCondition {
-    type: 'time' | 'location' | 'device' | 'mfa' | 'approval';
+}
+export interface PermissionCondition { type: 'time' | 'location' | 'device' | 'mfa' | 'approval';
     constraint: Record<string, any>;
-    description: string;
-
+    description: string }
 }
-export interface SystemRole {
-    id: string;
+}
+export interface SystemRole { id: string;
     name: string;
     displayName: string;
     description: string;
@@ -103,19 +98,17 @@ export interface SystemRole {
     isSystem: boolean;
     createdAt: Date;
     updatedAt: Date;
-    createdBy: string;
-
+    createdBy: string }
 }
-export interface RolePermission {
-    permission: string;
+}
+export interface RolePermission { permission: string;
     resource: string;
     actions: string[];
     scope: PermissionScope;
-    conditions?: PermissionCondition[];
-
+    conditions?: PermissionCondition[] }
 }
-export interface AccessRequest {
-    id: string;
+}
+export interface AccessRequest { id: string;
     requesterId: string;
     requesterName: string;
     type: AccessRequestType;
@@ -135,51 +128,46 @@ export interface AccessRequest {
     requestedAt: Date;
     respondedAt?: Date;
     expiresAt?: Date;
-    auditTrail: AccessAuditEntry[];
-
+    auditTrail: AccessAuditEntry[] }
 }
-export interface AccessApprover {
-    userId: string;
+}
+export interface AccessApprover { userId: string;
     displayName: string;
     order: number;
     required: boolean;
     status: ApprovalStatus;
     respondedAt?: Date;
-    comments?: string;
-
+    comments?: string }
 }
-export interface AccessAuditEntry {
-    id: string;
+}
+export interface AccessAuditEntry { id: string;
     timestamp: Date;
     action: string;
     performedBy: string;
     details: Record<string, any>;
     ipAddress?: string;
-    userAgent?: string;
-
+    userAgent?: string }
 }
-export interface AccessRestriction {
-    type: RestrictionType;
+}
+export interface AccessRestriction { type: RestrictionType;
     description: string;
     startDate?: Date;
     endDate?: Date;
     conditions: Record<string, any>;
     appliedBy: string;
-    appliedAt: Date;
-
+    appliedAt: Date }
 }
-export interface SystemAccess {
-    id: string;
+}
+export interface SystemAccess { id: string;
     userId: string;
     level: SystemAccessLevel;
     grantedAt: Date;
     grantedBy: string;
     lastUsed?: Date;
-    restrictions: SystemRestriction[];
-
+    restrictions: SystemRestriction[] }
 }
-export interface SystemRestriction {
-    type: 'ip_whitelist' | 'time_window' | 'mfa_required' | 'approval_required' | 'read_only';
+}
+export interface SystemRestriction { type: 'ip_whitelist' | 'time_window' | 'mfa_required' | 'approval_required' | 'read_only';
     configuration: Record<string, any>;
     description: string;
 
@@ -193,11 +181,10 @@ export type AccessRequestType = 'role_assignment' | 'permission_grant' | 'access
 export type AccessUrgency = 'low' | 'medium' | 'high' | 'critical';
 export type AccessRequestStatus = 'pending' | 'approved' | 'rejected' | 'expired' | 'withdrawn';
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'delegated';
-export type RestrictionType = 'time' | 'location' | 'device' | 'resource' | 'action' | 'network';
-
+export type RestrictionType = 'time' | 'location' | 'device' | 'resource' | 'action' | 'network' }
 }
-export interface AccessFilter {
-    userIds?: string[];
+}
+export interface AccessFilter { userIds?: string[];
     roles?: string[];
     statuses?: UserStatus[];
     accessLevels?: SystemAccessLevel[];
@@ -207,11 +194,10 @@ export interface AccessFilter {
     lastActivityAfter?: Date;
     searchQuery?: string;
     includeInactive?: boolean;
-    securityClearance?: SecurityClearance[];
-
+    securityClearance?: SecurityClearance[] }
 }
-export interface AccessStats {
-    totalUsers: number;
+}
+export interface AccessStats { totalUsers: number;
     activeUsers: number;
     pendingRequests: number;
     expiredAccesses: number;
@@ -223,20 +209,17 @@ export interface AccessStats {
         accessGranted: number;
         accessRevoked: number;
         loginAttempts: number;
-        failedLogins: number;
+        failedLogins: number }
 }
     };
-    compliance: {
-        mfaEnabled: number;
+    compliance: { mfaEnabled: number;
         termsAccepted: number;
         overdueCertifications: number;
-        pendingReviews: number;
-    };
+        pendingReviews: number };
 /**
  * System Access Management Service
  */
-export declare class SystemAccessManager {
-    private static instance;
+export declare class SystemAccessManager { private static instance;
     private users;
     private roles;
     private accessRequests;
@@ -255,17 +238,15 @@ export declare class SystemAccessManager {
     assignRole(userId: string, roleId: string, assignedBy: string, options?: {)
         expiresAt?: Date;
         scope?: RoleScope;
-        context?: Record<string, any>;
-    }): Promise<boolean>;
+        context?: Record<string, any> }): Promise<boolean>;
     revokeRole(userId: string, roleId: string, revokedBy: string): Promise<boolean>;
     /**
      * Permission Management
      */
-    grantPermission(userId: string, permission: string, resource: string, action: string, grantedBy: string, options?: {)
+    grantPermission(userId: string, permission: string, resource: string, action: string, grantedBy: string, options?: { )
         resourceId?: string;
         expiresAt?: Date;
-        conditions?: PermissionCondition[];
-    }): Promise<boolean>;
+        conditions?: PermissionCondition[] }): Promise<boolean>;
     revokePermission(userId: string, permissionId: string, revokedBy: string): Promise<boolean>;
     /**
      * Access Request Management

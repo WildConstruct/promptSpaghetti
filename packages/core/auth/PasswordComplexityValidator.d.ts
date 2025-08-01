@@ -5,8 +5,8 @@
  */
 
 }
-export interface PasswordComplexityRule {
-    id: string;
+}
+export interface PasswordComplexityRule { id: string;
     name: string;
     description: string;
     enabled: boolean;
@@ -14,12 +14,10 @@ export interface PasswordComplexityRule {
     weight: number;
     category: 'length' | 'character' | 'pattern' | 'dictionary' | 'entropy' | 'history';
     severity: 'error' | 'warning' | 'info';
-    validate: (password: string, context?: PasswordValidationContext) => PasswordRuleResult;
-
-
+    validate: (password: string, context?: PasswordValidationContext) => PasswordRuleResult }
 }
-export interface PasswordValidationContext {
-    username?: string;
+}
+export interface PasswordValidationContext { username?: string;
     email?: string;
     firstName?: string;
     lastName?: string;
@@ -28,51 +26,43 @@ export interface PasswordValidationContext {
     personalInfo?: string[];
     organizationName?: string;
     userRole?: string;
-    locale?: string;
-
-
+    locale?: string }
 }
-export interface PasswordRuleResult {
-    passed: boolean;
+}
+export interface PasswordRuleResult { passed: boolean;
     score: number;
     message: string;
     suggestion?: string;
     details?: {
         expected?: unknown;
         actual?: unknown;
-        examples?: string[];
-
+        examples?: string[] }
 }
     };
 
 }
-export interface PasswordComplexityConfig {
-    enabled: boolean;
+}
+export interface PasswordComplexityConfig { enabled: boolean;
     mode: 'strict' | 'balanced' | 'lenient' | 'custom';
     minimumScore: number;
     rules: PasswordComplexityRule[];
     allowOverrides?: {
         enabled: boolean;
         roles: string[];
-        requireJustification: boolean;
-
+        requireJustification: boolean }
 }
     };
-    breachChecking?: {
-        enabled: boolean;
+    breachChecking?: { enabled: boolean;
         sources: ('hibp' | 'internal' | 'custom')[];
         cacheResults: boolean;
-        timeoutMs: number;
-    };
-    customDictionaries?: {
-        enabled: boolean;
+        timeoutMs: number };
+    customDictionaries?: { enabled: boolean;
         sources: string[];
-        categories: string[];
-    };
+        categories: string[] };
 
 }
-export interface PasswordValidationResult {
-    valid: boolean;
+}
+export interface PasswordValidationResult { valid: boolean;
     score: number;
     strength: 'very-weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very-strong';
     ruleResults: PasswordRuleResult[];
@@ -82,16 +72,14 @@ export interface PasswordValidationResult {
     estimatedCrackTime?: {
         offline: string;
         online: string;
-        unit: string;
-
+        unit: string }
 }
     };
     entropy?: number;
     passedRules: number;
     totalRules: number;
 
-export declare class PasswordRules {
-    /**
+export declare class PasswordRules { /**
      * Minimum length rule
      */
     static minLength(minLength: number): PasswordComplexityRule;
@@ -210,8 +198,7 @@ export declare class PasswordComplexityValidator {
     validateConfig(): {
         valid: boolean;
         errors: string[];
-        warnings: string[];
-    };
+        warnings: string[] };
 
 export default PasswordComplexityValidator;
 //# sourceMappingURL=PasswordComplexityValidator.d.ts.map

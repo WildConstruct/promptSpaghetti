@@ -11,6 +11,7 @@ import { BaseEvent, EventCategory, EventPriority } from '../EventSystem';
  */
 
 }
+}
 export interface EventableStore {
     _eventAdapter?: ZustandEventAdapter;
 /**
@@ -18,24 +19,24 @@ export interface EventableStore {
  */
 
 }
-export interface StateChangeEvent extends BaseEvent {
-    type: 'state_changed' | 'store_initialized' | 'store_reset';
+}
+}
+export interface StateChangeEvent extends BaseEvent { type: 'state_changed' | 'store_initialized' | 'store_reset';
     metadata: {
         storeName: string;
         path: string;
         previousValue: unknown;
         currentValue: unknown;
         category: EventCategory;
-        priority: EventPriority;
-}
+        priority: EventPriority }
     };
 /**
  * Configuration for Zustand event integration
  */
 
 }
-export interface ZustandEventConfig {
-    storeName: string;
+}
+export interface ZustandEventConfig { storeName: string;
     enabledPaths?: string[];
     ignoredPaths?: string[];
     debounceMs?: number;
@@ -100,7 +101,7 @@ export declare class ZustandEventAdapter {
         storeName: string;
         subscriptions: number;
         activeDebounces: number;
-        config: ZustandEventConfig;
+        config: ZustandEventConfig }
 }
     };
 /**
@@ -114,8 +115,7 @@ export declare const createEventEnabledStore: <T>(stateCreator: StateCreator<T>)
 /**
  * Utility functions for Zustand-Event integration
  */
-export declare const ZustandEventUtils: {
-    /**
+export declare const ZustandEventUtils: { /**
      * Extract event adapter from a Zustand store
      */
     getEventAdapter: (store: any) => ZustandEventAdapter | null;
@@ -126,7 +126,7 @@ export declare const ZustandEventUtils: {
     /**
      * Create event-driven state updater
      */
-    createEventUpdater: <T>(store: {),
+    createEventUpdater: <T>(store: {) }
         getState: () => T;
         setState: (partial: Partial<T>) => void;
     }, eventTypes: string[]) => string;

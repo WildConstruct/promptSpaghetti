@@ -6,8 +6,8 @@ import React from 'react';
 import { VersionHistoryManager } from '../../version-history/VersionHistoryManager';
 
 }
-interface VersionHistoryPanelProps {
-    versionManager: VersionHistoryManager;
+}
+interface VersionHistoryPanelProps { versionManager: VersionHistoryManager;
     currentGraphData: unknown;
     onRestoreVersion: (snapshotId: string) => void;
     onCompareVersions: (fromId: string, toId: string) => void;
@@ -15,7 +15,7 @@ interface VersionHistoryPanelProps {
     onClose: () => void;
     className?: string;
 
-export declare const VersionHistoryPanel: React.FC<VersionHistoryPanelProps>;
+export declare const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> }
 }
 export {};
 //# sourceMappingURL=VersionHistoryPanel.d.ts.map

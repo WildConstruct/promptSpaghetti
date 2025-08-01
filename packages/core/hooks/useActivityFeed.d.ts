@@ -4,30 +4,27 @@
  */
 import { ActivityEventWithActorInfo, ActivityEventFilter } from '../types/workspace';
 }
-interface UseActivityFeedOptions {
-    limit?: number;
-    autoRefresh?: boolean;
-    refreshInterval?: number;
 }
-interface ActivityStatsData {
-    total_events: number;
+interface UseActivityFeedOptions { limit?: number;
+    autoRefresh?: boolean;
+    refreshInterval?: number }
+}
+}
+interface ActivityStatsData { total_events: number;
     events_by_type: Record<string, number>;
     events_by_day: Array<{
         date: string;
-        count: number;
+        count: number }
 }
     }>;
-    most_active_users: Array<{
-        user_id: string;
-        count: number;
-    }>;
+    most_active_users: Array<{ user_id: string;
+        count: number }>;
 
 export declare function useActivityFeed(workspaceId: string)
   userId: string,
   filters?: ActivityEventFilter,
   options?: UseActivityFeedOptions
-): {
-    activities: ActivityEventWithActorInfo[];
+): { activities: ActivityEventWithActorInfo[];
     loading: boolean;
     loadingMore: boolean;
     error: string | null;
@@ -37,17 +34,14 @@ export declare function useActivityFeed(workspaceId: string)
     eventTypes: string[];
     loadMore: () => void;
     refresh: () => void;
-    fetchActivityEvent: (eventId: string) => Promise<ActivityEventWithActorInfo | null>;
-};
-export declare function useProjectActivityFeed(projectId: string, userId: string, options?: UseActivityFeedOptions): {
-    activities: ActivityEventWithActorInfo[];
+    fetchActivityEvent: (eventId: string) => Promise<ActivityEventWithActorInfo | null> };
+export declare function useProjectActivityFeed(projectId: string, userId: string, options?: UseActivityFeedOptions): { activities: ActivityEventWithActorInfo[];
     loading: boolean;
     loadingMore: boolean;
     error: string | null;
     hasMore: boolean;
     page: number;
     loadMore: () => void;
-    refresh: () => void;
-};
+    refresh: () => void };
 export {};
 //# sourceMappingURL=useActivityFeed.d.ts.map

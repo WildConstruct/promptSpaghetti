@@ -53,13 +53,14 @@ export enum FileBrowserEventType {
   SESSION_STARTED = 'file_browser_session_started',
   SESSION_ENDED = 'file_browser_session_ended',
   FEATURE_USED = 'file_browser_feature_used'
-}
+
 
 /**
  * File operation event data
  */
-}
-}
+
+
+
 export interface FileOperationEvent extends AnalyticsEvent {
   type: FileBrowserEventType;
   metadata: {
@@ -75,13 +76,14 @@ export interface FileOperationEvent extends AnalyticsEvent {
     userAgent?: string;
     clientType?: 'web' | 'mobile' | 'api';
   };
-}
+
 
 /**
  * Download statistics aggregation
  */
-}
-}
+
+
+
 export interface DownloadStats {
   fileId: string;
   fileName: string;
@@ -96,26 +98,29 @@ export interface DownloadStats {
     daily: Map<string, number>;
     weekly: Map<string, number>;
     monthly: Map<string, number>;
-}
-}
+
+
+
   };
   downloadsByUserAgent: Map<string, number>;
   downloadsByLocation: Map<string, number>;
   peakDownloadHour: number;
   downloadVelocity: number; // downloads per hour trend
-}
+
 
 /**
  * Usage analytics aggregation
  */
-}
-}
+
+
+
 export interface UsageAnalytics {
   timeframe: {
     startDate: Date;
     endDate: Date;
-}
-}
+
+
+
   };
   overview: {
     totalOperations: number;
@@ -145,21 +150,23 @@ export interface UsageAnalytics {
     commonUserFlows: Array<{ flow: string[]; frequency: number }>;
     peakUsageHours: number[];
   };
-}
+
 
 /**
  * Developer insights for file browser optimization
  */
-}
-}
+
+
+
 export interface DeveloperInsights {
   systemHealth: {
     overallScore: number; // 0-100
     reliability: number;
     performance: number;
     usability: number;
-}
-}
+
+
+
   };
   recommendations: Array<{
     category: 'performance' | 'usability' | 'features' | 'security';
@@ -169,7 +176,7 @@ export interface DeveloperInsights {
     impact: string;
     effort: 'low' | 'medium' | 'high';
     metrics: Record<string, number>;
-  }>;
+>;
   alerts: Array<{
     severity: 'critical' | 'warning' | 'info';
     category: string;
@@ -177,20 +184,21 @@ export interface DeveloperInsights {
     timestamp: Date;
     affectedUsers: number;
     suggestedAction: string;
-  }>;
+>;
   trends: {
     usageGrowth: number; // percentage change
     errorRateChange: number;
     performanceChange: number;
     userSatisfactionTrend: number;
   };
-}
+
 
 /**
  * Configuration for file browser analytics
  */
-}
-}
+
+
+
 export interface FileBrowserAnalyticsConfig {
   enabled: boolean;
   trackDownloads: boolean;
@@ -201,9 +209,10 @@ export interface FileBrowserAnalyticsConfig {
   anonymizeUserData: boolean;
   generateInsights: boolean;
   insightGenerationInterval: number; // milliseconds
-}
-}
-}
+
+
+
+
 
 /**
  * File Browser Analytics Service
@@ -238,8 +247,8 @@ export class FileBrowserAnalytics extends EventEmitter {
 
     if (this.config.enabled) {
       this.startAnalytics();
-    }
-  }
+
+
 
   /**
    * Start file browser analytics collection
@@ -252,17 +261,17 @@ export class FileBrowserAnalytics extends EventEmitter {
       this.aggregationTimer = setInterval(() => {
         this.aggregateStats();
       }, this.config.aggregationInterval);
-    }
+
 
     // Start insights generation timer
     if (this.config.generateInsights && this.config.insightGenerationInterval > 0) {
       this.insightTimer = setInterval(() => {
         this.generateInsights();
       }, this.config.insightGenerationInterval);
-    }
+
 
     this.emit('analytics_started');
-  }
+
 
   /**
    * Stop analytics collection
@@ -273,15 +282,15 @@ export class FileBrowserAnalytics extends EventEmitter {
     if (this.aggregationTimer) {
       clearInterval(this.aggregationTimer);
       this.aggregationTimer = null;
-    }
+
 
     if (this.insightTimer) {
       clearInterval(this.insightTimer);
       this.insightTimer = null;
-    }
+
 
     this.emit('analytics_stopped');
-  }
+
 
   /**
    * Track file operation
@@ -312,7 +321,7 @@ export class FileBrowserAnalytics extends EventEmitter {
         duration: metadata.duration,
         userAgent: metadata.userAgent,
         clientType: metadata.clientType || 'web'
-      }
+
     };
 
     // Record with main analytics collector
@@ -321,10 +330,10 @@ export class FileBrowserAnalytics extends EventEmitter {
     // Update download stats if this is a download operation
     if (operationType === 'download' && this.config.trackDownloads) {
       this.updateDownloadStats(fileName, filePath, metadata);
-    }
+
 
     this.emit('operation_tracked', event);
-  }
+
 
   /**
    * Track search operation
@@ -355,12 +364,12 @@ export class FileBrowserAnalytics extends EventEmitter {
         duration: metadata.duration,
         userAgent: metadata.userAgent,
         clientType: metadata.clientType || 'web'
-      }
+
     };
 
     this.analyticsCollector.recordEvent(searchEvent);
     this.emit('search_tracked', searchEvent);
-  }
+
 
   /**
    * Track performance metric
@@ -388,19 +397,19 @@ export class FileBrowserAnalytics extends EventEmitter {
         duration,
         userAgent: metadata.userAgent,
         clientType: metadata.clientType || 'web'
-      }
+
     };
 
     this.analyticsCollector.recordEvent(performanceEvent);
     this.emit('performance_tracked', performanceEvent);
-  }
+
 
   /**
    * Get download statistics for a specific file
    */
   getFileDownloadStats(filePath: string): DownloadStats | null {
     return this.downloadStats.get(filePath) || null;
-  }
+
 
   /**
    * Get aggregated usage analytics for a time period
@@ -445,7 +454,7 @@ export class FileBrowserAnalytics extends EventEmitter {
       // File type popularity
       if (event.metadata.fileType && event.metadata.fileType !== 'search' && event.metadata.fileType !== 'performance') {
         fileTypeCounts.set(event.metadata.fileType, (fileTypeCounts.get(event.metadata.fileType) || 0) + 1);
-      }
+
 
       // Count specific operations
       if (operation === 'download') totalDownloads++;
@@ -457,16 +466,16 @@ export class FileBrowserAnalytics extends EventEmitter {
         searchData.totalSearches++;
         if (event.metadata.searchTerm) {
           searchData.searchTerms.add(event.metadata.searchTerm);
-        }
+
         if (event.metadata.clickedResults) {
           searchData.totalClicked += event.metadata.clickedResults;
-        }
-      }
+
+
 
       // Performance data
       if (event.metadata.duration && event.metadata.duration > 0) {
         performanceData.push(event.metadata.duration);
-      }
+
     });
 
     const averageLoadTime = performanceData.length > 0 
@@ -484,7 +493,7 @@ export class FileBrowserAnalytics extends EventEmitter {
         totalUploads,
         averageSessionDuration: 0, // TODO: Calculate from session data
         errorRate: fileBrowserEvents.length > 0 ? (errorCount / fileBrowserEvents.length) * 100 : 0
-  }
+
       operationBreakdown: operationCounts,
       fileTypePopularity: fileTypeCounts,
       searchMetrics: {
@@ -492,19 +501,19 @@ export class FileBrowserAnalytics extends EventEmitter {
         uniqueSearchTerms: searchData.searchTerms.size,
         averageResultsClicked: searchData.totalSearches > 0 ? searchData.totalClicked / searchData.totalSearches : 0,
         topSearchTerms: [] // TODO: Implement top search terms aggregation
-  }
+
       performanceMetrics: {
         averageLoadTime,
         averageOperationTime: averageLoadTime,
         slowestOperations: [] // TODO: Implement slowest operations tracking
-  }
+
       userBehaviorPatterns: {
         mostUsedFeatures: Array.from(operationCounts.entries()).map(([feature, count]) => ({ feature, usageCount: count })),
         commonUserFlows: [], // TODO: Implement user flow analysis
         peakUsageHours: [] // TODO: Implement peak usage hour analysis
-      }
+
     };
-  }
+
 
   /**
    * Generate developer insights
@@ -521,7 +530,7 @@ export class FileBrowserAnalytics extends EventEmitter {
         reliability: Math.max(0, 100 - analytics.overview.errorRate),
         performance: this.calculatePerformanceScore(analytics),
         usability: this.calculateUsabilityScore(analytics)
-  }
+
       recommendations: this.generateRecommendations(analytics),
       alerts: this.generateAlerts(analytics),
       trends: {
@@ -529,12 +538,12 @@ export class FileBrowserAnalytics extends EventEmitter {
         errorRateChange: 0, // TODO: Calculate error rate change
         performanceChange: 0, // TODO: Calculate performance change
         userSatisfactionTrend: 0 // TODO: Calculate user satisfaction trend
-      }
+
     };
 
     this.emit('insights_generated', insights);
     return insights;
-  }
+
 
   /**
    * Private helper methods
@@ -557,12 +566,12 @@ export class FileBrowserAnalytics extends EventEmitter {
     };
 
     return mapping[operationType] || FileBrowserEventType.FILE_OPENED;
-  }
+
 
   private extractFileType(fileName: string): string {
     const extension = fileName.split('.').pop()?.toLowerCase();
     return extension || 'unknown';
-  }
+
 
   private updateDownloadStats(fileName: string, filePath: string, metadata: any): void {
     let stats = this.downloadStats.get(filePath);
@@ -582,13 +591,13 @@ export class FileBrowserAnalytics extends EventEmitter {
           daily: new Map(),
           weekly: new Map(),
           monthly: new Map()
-  }
+
         downloadsByUserAgent: new Map(),
         downloadsByLocation: new Map(),
         peakDownloadHour: 0,
         downloadVelocity: 0
       };
-    }
+
 
     stats.totalDownloads++;
     stats.lastDownloaded = new Date();
@@ -608,10 +617,10 @@ export class FileBrowserAnalytics extends EventEmitter {
     // Update user agent stats
     if (metadata.userAgent) {
       stats.downloadsByUserAgent.set(metadata.userAgent, (stats.downloadsByUserAgent.get(metadata.userAgent) || 0) + 1);
-    }
+
 
     this.downloadStats.set(filePath, stats);
-  }
+
 
   private hashUserId(userId: string | undefined): string | undefined {
     if (!userId) return undefined;
@@ -621,14 +630,14 @@ export class FileBrowserAnalytics extends EventEmitter {
       const char = userId.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash;
-    }
+
     return Math.abs(hash).toString(16);
-  }
+
 
   private hashSearchTerm(searchTerm: string): string {
     // Replace with generic terms to protect privacy
     return searchTerm.length > 0 ? `search_term_${searchTerm.length}_chars` : 'empty_search';
-  }
+
 
   private calculateOverallScore(analytics: UsageAnalytics): number {
     const reliability = Math.max(0, 100 - analytics.overview.errorRate);
@@ -636,7 +645,7 @@ export class FileBrowserAnalytics extends EventEmitter {
     const usability = this.calculateUsabilityScore(analytics);
     
     return Math.round((reliability + performance + usability) / 3);
-  }
+
 
   private calculatePerformanceScore(analytics: UsageAnalytics): number {
     const avgTime = analytics.performanceMetrics.averageLoadTime;
@@ -644,7 +653,7 @@ export class FileBrowserAnalytics extends EventEmitter {
     
     // Score based on load time: <500ms = 100, >5000ms = 0
     return Math.max(0, Math.min(100, 100 - (avgTime - 500) / 45));
-  }
+
 
   private calculateUsabilityScore(analytics: UsageAnalytics): number {
     const searchSuccessRate = analytics.searchMetrics.totalSearches > 0 
@@ -652,7 +661,7 @@ export class FileBrowserAnalytics extends EventEmitter {
       : 50;
     
     return Math.min(100, searchSuccessRate + 50);
-  }
+
 
   private generateRecommendations(analytics: UsageAnalytics): DeveloperInsights['recommendations'] {
     const recommendations: DeveloperInsights['recommendations'] = [];
@@ -668,7 +677,7 @@ export class FileBrowserAnalytics extends EventEmitter {
         effort: 'medium',
         metrics: { averageLoadTime: analytics.performanceMetrics.averageLoadTime }
       });
-    }
+
 
     // Error rate recommendations
     if (analytics.overview.errorRate > 5) {
@@ -681,7 +690,7 @@ export class FileBrowserAnalytics extends EventEmitter {
         effort: 'high',
         metrics: { errorRate: analytics.overview.errorRate }
       });
-    }
+
 
     // Usage pattern recommendations
     if (analytics.searchMetrics.totalSearches < analytics.overview.totalOperations * 0.1) {
@@ -694,10 +703,10 @@ export class FileBrowserAnalytics extends EventEmitter {
         effort: 'low',
         metrics: { searchUsageRatio: (analytics.searchMetrics.totalSearches / analytics.overview.totalOperations) * 100 }
       });
-    }
+
 
     return recommendations;
-  }
+
 
   private generateAlerts(analytics: UsageAnalytics): DeveloperInsights['alerts'] {
     const alerts: DeveloperInsights['alerts'] = [];
@@ -712,7 +721,7 @@ export class FileBrowserAnalytics extends EventEmitter {
         affectedUsers: analytics.overview.uniqueUsers,
         suggestedAction: 'Review error logs and implement immediate fixes for most common failure patterns'
       });
-    }
+
 
     // Performance degradation alert
     if (analytics.performanceMetrics.averageLoadTime > 5000) {
@@ -724,10 +733,10 @@ export class FileBrowserAnalytics extends EventEmitter {
         affectedUsers: analytics.overview.uniqueUsers,
         suggestedAction: 'Implement caching, optimize database queries, or reduce payload sizes'
       });
-    }
+
 
     return alerts;
-  }
+
 
   private aggregateStats(): void {
     // Periodic aggregation of statistics
@@ -736,7 +745,7 @@ export class FileBrowserAnalytics extends EventEmitter {
       downloadStatsCount: this.downloadStats.size,
       sessionCount: this.sessionData.size
     });
-  }
+
 
   /**
    * Export analytics data
@@ -751,9 +760,8 @@ export class FileBrowserAnalytics extends EventEmitter {
 
     if (format === 'json') {
       return JSON.stringify(data, null, 2);
-    }
+
 
     // CSV export implementation would go here
     return 'CSV export not yet implemented';
-  }
-}
+

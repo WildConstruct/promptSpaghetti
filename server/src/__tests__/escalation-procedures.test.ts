@@ -71,7 +71,7 @@ describe('Escalation Procedures System', () => {
         created_at: new Date().toISOString(),
         last_modified: new Date().toISOString(),
         version: 1
-      }];
+];
       
       mockDatabase.query
         .mockResolvedValueOnce([]) // Schema creation
@@ -109,7 +109,7 @@ describe('Escalation Procedures System', () => {
             field: 'fraudScore',
             operator: 'gt' as const,
             value: 0.8
-          }
+
         ],
         escalationPath: [
           {
@@ -125,11 +125,11 @@ describe('Escalation Procedures System', () => {
                 address: 'fraud-team@company.com',
                 priority: EscalationPriority.HIGH,
                 immediateDelivery: true
-              }
+
             ],
             responseTimeLimit: 30,
             resolutionTimeLimit: 120
-          }
+
         ]
       };
       
@@ -159,7 +159,7 @@ describe('Escalation Procedures System', () => {
             ruleId: rule.ruleId,
             name: 'Fraud Alert Rule',
             category: EscalationCategory.FRAUD_DETECTION
-  }
+
   }
       );
     });
@@ -196,7 +196,7 @@ describe('Escalation Procedures System', () => {
             notificationMethods: [],
             responseTimeLimit: 60,
             resolutionTimeLimit: 120
-          }
+
         ]
       };
       
@@ -224,7 +224,7 @@ describe('Escalation Procedures System', () => {
             ruleId: rule.ruleId,
             changes: updates,
             version: 2
-  }
+
   }
       );
     });
@@ -255,7 +255,7 @@ describe('Escalation Procedures System', () => {
             notificationMethods: [],
             responseTimeLimit: 60,
             resolutionTimeLimit: 240
-  }
+
           {
             levelId: 'level2',
             level: 1,
@@ -266,7 +266,7 @@ describe('Escalation Procedures System', () => {
             notificationMethods: [],
             responseTimeLimit: 30,
             resolutionTimeLimit: 120
-          }
+
         ]
       }, 'test-user');
     });
@@ -317,7 +317,7 @@ describe('Escalation Procedures System', () => {
             sourceType: 'fraud_detection',
             sourceId: 'fraud_123',
             ruleId: testRule.ruleId
-  }
+
   }
       );
     });
@@ -353,7 +353,7 @@ describe('Escalation Procedures System', () => {
             fromLevel: 0,
             toLevel: 1,
             reason: 'Automatic escalation due to timeout'
-  }
+
   }
       );
     });
@@ -398,7 +398,7 @@ describe('Escalation Procedures System', () => {
             caseId: escalationCase.caseId,
             resolutionType: 'resolved',
             level: 1
-  }
+
   }
       );
     });
@@ -634,7 +634,7 @@ describe('Escalation Procedures System', () => {
             notificationMethods: [],
             responseTimeLimit: 60,
             resolutionTimeLimit: 240
-          }
+
         ]
       }, 'test-user');
       

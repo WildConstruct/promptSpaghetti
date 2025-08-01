@@ -9,6 +9,7 @@ import React from 'react';
 import { CaseStudy, CaseStudyFilter, CaseStudySort } from '../../models/CaseStudyDataModel';
 
 }
+}
 export interface CaseStudyGalleryProps {
     initialFilter?: CaseStudyFilter;
     initialSort?: CaseStudySort;
@@ -25,4 +26,5 @@ export interface CaseStudyGalleryProps {
 export declare const CaseStudyGallery: React.FC<CaseStudyGalleryProps>;
 export default CaseStudyGallery;
 //# sourceMappingURL=CaseStudyGallery.d.ts.map
+}
 }

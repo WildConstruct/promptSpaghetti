@@ -23,50 +23,53 @@ import {
   validateCreateAttributionClaimRequest,
   validateUpdateRevenueAttributionRequest,
   MARKETPLACE_ATTRIBUTION_DEFAULTS
-} from '../../../packages/core/types/marketplaceAttribution';
+ from '../../../packages/core/types/marketplaceAttribution';
 
 // =============================================================================
 // Service Types
 // =============================================================================
 
-}
-}
+
+
 export interface AttributionServiceConfig {
   database: Database;
   enableRealTimeUpdates?: boolean;
   enableAnalytics?: boolean;
   autoVerificationThreshold?: number;
   revenueHoldDays?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateAttributionCreateResult {
   success: boolean;
   attributionId?: string;
   attribution?: TemplateAttribution;
   warnings?: string[];
   errors?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AttributionClaimResult {
   success: boolean;
   claimId?: string;
   estimatedResolutionDate?: Date;
   requiresEvidence?: boolean;
   errors?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RevenueDistributionResult {
   success: boolean;
   distributionId?: string;
@@ -75,9 +78,10 @@ export interface RevenueDistributionResult {
   holdAmount: number;
   immediateRelease: number;
   errors?: string[];
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Marketplace Attribution Service
@@ -102,8 +106,8 @@ export class MarketplaceAttributionService extends EventEmitter {
     // Set up analytics flushing if enabled
     if (this.config.enableAnalytics) {
       setInterval(() => this.flushAnalytics(), 30000);
-    }
-  }
+
+
 
   // =============================================================================
   // Template Attribution Management
@@ -122,7 +126,7 @@ export class MarketplaceAttributionService extends EventEmitter {
           success: false,
           errors: ['Template attribution already exists']
         };
-      }
+
 
       // Validate collaborator percentages sum
       const totalCollaboratorPercentage = validatedRequest.collaborators
@@ -133,7 +137,7 @@ export class MarketplaceAttributionService extends EventEmitter {
           success: false,
           errors: ['Total collaborator contribution percentages exceed 100%']
         };
-      }
+
 
       // Calculate revenue sharing
       const derivationPercentage = validatedRequest.derivedFrom?.attributionPercentage || 0;
@@ -145,7 +149,7 @@ export class MarketplaceAttributionService extends EventEmitter {
           success: false,
           errors: ['Revenue attribution percentages exceed 100%']
         };
-      }
+
 
       // Begin transaction
       await this.database.query('BEGIN');
@@ -157,12 +161,12 @@ export class MarketplaceAttributionService extends EventEmitter {
         // Add collaborators
         if (validatedRequest.collaborators.length > 0) {
           await this.addCollaborators(attributionId, validatedRequest.collaborators);
-        }
+
 
         // Add derivation record if applicable
         if (validatedRequest.derivedFrom) {
           await this.createDerivationRecord(validatedRequest.templateId, validatedRequest.derivedFrom);
-        }
+
 
         // Create or update creator profile
         await this.updateCreatorProfile(validatedRequest.primaryCreatorId);
@@ -184,7 +188,7 @@ export class MarketplaceAttributionService extends EventEmitter {
             templateId: validatedRequest.templateId,
             creatorId: validatedRequest.primaryCreatorId
           });
-        }
+
 
         const attribution = await this.getTemplateAttribution(validatedRequest.templateId);
         
@@ -194,18 +198,18 @@ export class MarketplaceAttributionService extends EventEmitter {
           attribution: attribution || undefined,
           warnings: primaryCreatorShare < 50 ? ['Primary creator share is less than 50%'] : []
         };
-      } catch (error) {
+ catch (error) {
         await this.database.query('ROLLBACK');
         throw error;
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to create template attribution:', error);
       return {
         success: false,
         errors: [error instanceof Error ? error.message : 'Unknown error occurred']
       };
-    }
-  }
+
+
 
   async getTemplateAttribution(templateId: string): Promise<TemplateAttribution | null> {
 
@@ -246,7 +250,7 @@ export class MarketplaceAttributionService extends EventEmitter {
       
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       const row = result.rows[0];
       
@@ -271,11 +275,11 @@ export class MarketplaceAttributionService extends EventEmitter {
         createdAt: new Date(row.created_at),
         updatedAt: new Date(row.updated_at)
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get template attribution:', error);
       return null;
-    }
-  }
+
+
 
   async getTemplateAttributionResponse(templateId: string): Promise<TemplateAttributionResponse | null> {
 
@@ -283,7 +287,7 @@ export class MarketplaceAttributionService extends EventEmitter {
       const attribution = await this.getTemplateAttribution(templateId);
       if (!attribution) {
         return null;
-      }
+
 
       // Get related templates
       const relatedTemplates = await this.getRelatedTemplates(templateId);
@@ -296,11 +300,11 @@ export class MarketplaceAttributionService extends EventEmitter {
         relatedTemplates,
         revenueStatistics: revenueStats
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get template attribution response:', error);
       return null;
-    }
-  }
+
+
 
   // =============================================================================
   // Revenue Attribution Management
@@ -324,7 +328,7 @@ export class MarketplaceAttributionService extends EventEmitter {
           success: false,
           errors: ['Revenue attribution already exists for this purchase']
         };
-      }
+
 
       // Create revenue attribution record - the trigger will handle distribution
       const insertQuery = `
@@ -374,7 +378,7 @@ export class MarketplaceAttributionService extends EventEmitter {
           purchaseId,
           amount: totalRevenueCents
         });
-      }
+
 
       return {
         success: true,
@@ -384,7 +388,7 @@ export class MarketplaceAttributionService extends EventEmitter {
         holdAmount: parseInt(summary.hold_amount),
         immediateRelease: parseInt(summary.immediate_release)
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to create revenue attribution:', error);
       return {
         success: false,
@@ -394,8 +398,8 @@ export class MarketplaceAttributionService extends EventEmitter {
         immediateRelease: 0,
         errors: [error instanceof Error ? error.message : 'Unknown error occurred']
       };
-    }
-  }
+
+
 
   // =============================================================================
   // Attribution Claims Management
@@ -417,7 +421,7 @@ export class MarketplaceAttributionService extends EventEmitter {
           success: false,
           errors: ['Template attribution not found']
         };
-      }
+
 
       // Check for duplicate claims
       const duplicateQuery = `
@@ -433,7 +437,7 @@ export class MarketplaceAttributionService extends EventEmitter {
           success: false,
           errors: ['Similar claim already pending for this template']
         };
-      }
+
 
       // Create claim record
       const insertQuery = `
@@ -473,7 +477,7 @@ export class MarketplaceAttributionService extends EventEmitter {
           claimantId,
           claimType: validatedRequest.claimType
         });
-      }
+
 
       return {
         success: true,
@@ -481,14 +485,14 @@ export class MarketplaceAttributionService extends EventEmitter {
         estimatedResolutionDate,
         requiresEvidence: validatedRequest.evidenceUrls.length === 0
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to create attribution claim:', error);
       return {
         success: false,
         errors: [error instanceof Error ? error.message : 'Unknown error occurred']
       };
-    }
-  }
+
+
 
   // =============================================================================
   // Creator Profile Management
@@ -501,7 +505,7 @@ export class MarketplaceAttributionService extends EventEmitter {
       const profile = await this.getCreatorProfile(userId);
       if (!profile) {
         return null;
-      }
+
 
       // Get creator's templates with attribution and performance data
       const templatesQuery = `
@@ -538,13 +542,13 @@ export class MarketplaceAttributionService extends EventEmitter {
           total: parseInt(row.total_revenue) || 0,
           pending: parseInt(row.pending_revenue) || 0,
           released: parseInt(row.released_revenue) || 0
-  }
+
         performance: {
           views: parseInt(row.total_views) || 0,
           purchases: parseInt(row.total_purchases) || 0,
           rating: parseFloat(row.avg_rating) || 0,
           derivatives: parseInt(row.derivative_count) || 0
-        }
+
       }));
 
       // Get collaborations
@@ -586,11 +590,11 @@ export class MarketplaceAttributionService extends EventEmitter {
         collaborations,
         analytics: undefined // Would load analytics if requested
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get creator dashboard:', error);
       return null;
-    }
-  }
+
+
 
   async getCreatorProfile(userId: string): Promise<CreatorAttributionProfile | null> {
 
@@ -600,7 +604,7 @@ export class MarketplaceAttributionService extends EventEmitter {
 
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       const row = result.rows[0];
       
@@ -624,11 +628,11 @@ export class MarketplaceAttributionService extends EventEmitter {
         createdAt: new Date(row.created_at),
         updatedAt: new Date(row.updated_at)
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get creator profile:', error);
       return null;
-    }
-  }
+
+
 
   // =============================================================================
   // Private Helper Methods
@@ -671,7 +675,7 @@ export class MarketplaceAttributionService extends EventEmitter {
     ]);
 
     return result.rows[0].id;
-  }
+
 
   private async addCollaborators(attributionId: string, collaborators: unknown[]): Promise<void> {
 
@@ -694,8 +698,8 @@ export class MarketplaceAttributionService extends EventEmitter {
         collaborator.contributionPercentage,
         collaborator.contributionDescription
       ]);
-    }
-  }
+
+
 
   private async createDerivationRecord(templateId: string, derivedFrom: unknown): Promise<void> {
 
@@ -718,7 +722,7 @@ export class MarketplaceAttributionService extends EventEmitter {
       derivedFrom.derivationType,
       derivedFrom.attributionPercentage
     ]);
-  }
+
 
   private async updateCreatorProfile(userId: string): Promise<void> {
 
@@ -734,7 +738,7 @@ export class MarketplaceAttributionService extends EventEmitter {
     `;
 
     await this.database.query(upsertQuery, [userId, user.name]);
-  }
+
 
   private async getUserInfo(userId: string): Promise<{ name: string; email: string }> {
 
@@ -743,19 +747,19 @@ export class MarketplaceAttributionService extends EventEmitter {
     
     if (result.rows.length === 0) {
       throw new Error(`User not found: ${userId}`);
-    }
+
 
     return {
       name: result.rows[0].name,
       email: result.rows[0].email
     };
-  }
+
 
   private async getRelatedTemplates(_____templateId: string): Promise<any[]> {
 
     // Implementation would return related templates (derivatives, similar, etc.)
     return [];
-  }
+
 
   private async getTemplateRevenueStatistics(templateId: string): Promise<unknown> {
 
@@ -777,7 +781,7 @@ export class MarketplaceAttributionService extends EventEmitter {
       averageRevenuePerSale: parseFloat(row.avg_revenue_per_sale) / 100 || 0,
       totalSales: parseInt(row.total_sales)
     };
-  }
+
 
   private trackAttributionEvent(eventType: string, data: Record<string, unknown>): void {
     if (this.config.enableAnalytics) {
@@ -788,8 +792,8 @@ export class MarketplaceAttributionService extends EventEmitter {
         event_data: data,
         created_at: new Date()
       });
-    }
-  }
+
+
 
   private async flushAnalytics(): Promise<void> {
 
@@ -804,11 +808,11 @@ export class MarketplaceAttributionService extends EventEmitter {
            VALUES ($1, $2, $3, $4, $5)`,
           [event.event_type, event.entity_type, event.entity_id, JSON.stringify(event.event_data), event.created_at]
         );
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to flush attribution analytics:', error);
-    }
-  }
-}
+
+
+
 
 export default MarketplaceAttributionService;

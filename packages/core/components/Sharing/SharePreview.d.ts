@@ -10,6 +10,7 @@ import React from 'react';
 import { ShareConfig, ShareLink, SocialPlatform } from '../../types/sharingTypes';
 
 }
+}
 interface SharePreviewProps {
     shareConfig: ShareConfig;
     shareLink: ShareLink;
@@ -18,4 +19,5 @@ interface SharePreviewProps {
 export declare const SharePreview: React.FC<SharePreviewProps>;
 export default SharePreview;
 //# sourceMappingURL=SharePreview.d.ts.map
+}
 }

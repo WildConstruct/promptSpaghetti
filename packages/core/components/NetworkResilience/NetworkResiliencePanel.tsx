@@ -4,26 +4,27 @@ import { QueuedOperation } from '../../network-resilience/OfflineOperationQueue'
 import { ConnectionStatusIndicator } from './ConnectionStatusIndicator';
 import { ReconnectionState } from '../../network-resilience/ReconnectionHandler';
 import { ConnectionState, ConnectionQuality } from '../../network-resilience/ConnectionStateManager';
-}
-interface NetworkResiliencePanelProps {
-  status: NetworkStatus;
+
+
+interface NetworkResiliencePanelProps { status: NetworkStatus;
   queuedOperations: QueuedOperation;
   onRetryConnection?: () => void;
   onForceSync?: () => void;
   onClearQueue?: () => void;
-  onRetryOperation?: (operationId: string) => void;
+  onRetryOperation?: (operationId: string) => void
   isOpen: boolean;
   onClose: () => void;
-  export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({,)
-  status,
-  queuedOperations,
-  onRetryConnection,
-  onForceSync,
-  onClearQueue,
-  onRetryOperation,
-  isOpen,
+  export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({);
+  status;
+  queuedOperations;
+  onRetryConnection;
+  onForceSync;
+  onClearQueue;
+  onRetryOperation;
+  isOpen }
   onClose
-}
+
+
 }) => {
   const [activeTab, setActiveTab] = useState<'status' | 'queue' | 'metrics'>('status');
   const formatDuration = (ms: number) => {
@@ -32,18 +33,13 @@ interface NetworkResiliencePanelProps {
     if (ms < 3600000) return `${(ms / 60000).toFixed(1)}m`;}
     return `${(ms / 3600000).toFixed(1)}h`;}
   };
-  const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp).toLocaleTimeString();
-  };
-  const getOperationPriorityColor = (priority: 'high' | 'medium' | 'low') => {
-  switch (priority) {
+  const formatTimestamp = (timestamp: number) => { return new Date(timestamp).toLocaleTimeString() };
+  const getOperationPriorityColor = (priority: 'high' | 'medium' | 'low') => { switch (priority) {
   case 'high': return '#dc2626';
   case 'medium': return '#d97706';
   case 'low': return '#059669';
-  default: return '#6b7280';
-};
-  const getConnectionQualityDescription = (quality: ConnectionQuality) => {
-  switch (quality) {
+  default: return '#6b7280' };
+  const getConnectionQualityDescription = (quality: ConnectionQuality) => { switch (quality) {
   case ConnectionQuality.EXCELLENT:,
   return 'Excellent connection quality. Low latency, no packet loss.';
   case ConnectionQuality.GOOD:,
@@ -52,7 +48,7 @@ interface NetworkResiliencePanelProps {
   return 'Fair connection quality. Some latency or packet loss detected.';
   case ConnectionQuality.POOR:,
   return 'Poor connection quality. High latency or significant packet loss.';
-  default:,
+  default: }
   return 'Connection quality unknown. Gathering metrics...';
 };
   if (!isOpen) return null;
@@ -94,18 +90,18 @@ interface NetworkResiliencePanelProps {
         <div className="border-b border-gray-200">
           <nav className="flex">
             {[
-              { id: 'status', label: 'Status', count: undefined },
-              { id: 'queue', label: 'Queue', count: status.queueSize },
+              { id: 'status', label: 'Status', count: undefined }
+              { id: 'queue', label: 'Queue', count: status.queueSize }
               { id: 'metrics', label: 'Metrics', count: undefined }
             ].map((tab) => ()
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                className={ `px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
               >
                 {tab.label}
                 {tab.count !== undefined && tab.count > 0 && ()
@@ -230,9 +226,9 @@ interface NetworkResiliencePanelProps {
                               className="px-2 py-0.5 rounded text-xs font-medium"
                               style={{ 
                                 backgroundColor: `${getOperationPriorityColor(operation.priority)}20`}
-},
+
   color: getOperationPriorityColor(operation.priority);
-  }}
+}
                             >
                               {operation.priority}
                             </span>

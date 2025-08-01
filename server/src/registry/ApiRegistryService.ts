@@ -25,7 +25,7 @@ import {
   EndpointMetrics,
   ServiceMetrics,
   HealthStatus
-} from './ApiRegistryModel';
+ from './ApiRegistryModel';
 
 export class ApiRegistryService extends EventEmitter {
   private endpoints: Map<string, ApiEndpoint> = new Map();
@@ -40,7 +40,7 @@ export class ApiRegistryService extends EventEmitter {
   ) {
     super();
     this.initializeRegistry();
-  }
+
 
   // =============================================================================
   // Initialization and Discovery
@@ -53,7 +53,7 @@ export class ApiRegistryService extends EventEmitter {
       
       if (this.config.discovery.autoDiscovery) {
         await this.performAutoDiscovery();
-      }
+
       
       this.startBackgroundTasks();
       this.indexingComplete = true;
@@ -65,11 +65,11 @@ export class ApiRegistryService extends EventEmitter {
       });
       
       console.log(`API Registry initialized: ${this.endpoints.size} endpoints, ${this.services.size} services`);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize API registry:', error);
       this.emit('registryError', { error, timestamp: new Date() });
-    }
-  }
+
+
 
   private async loadFromDatabase(): Promise<void> {
 
@@ -89,7 +89,7 @@ export class ApiRegistryService extends EventEmitter {
       for (const row of servicesResult.rows) {
         const service = this.mapRowToService(row);
         this.services.set(service.serviceId, service);
-      }
+
 
       // Load endpoints
       const endpointsQuery = `
@@ -109,11 +109,11 @@ export class ApiRegistryService extends EventEmitter {
       for (const row of endpointsResult.rows) {
         const endpoint = this.mapRowToEndpoint(row);
         this.endpoints.set(endpoint.endpointId, endpoint);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to load registry from database:', error);
-    }
-  }
+
+
 
   private async performAutoDiscovery(): Promise<void> {
 
@@ -129,8 +129,8 @@ export class ApiRegistryService extends EventEmitter {
     
     for (const endpoint of discoveredEndpoints) {
       await this.registerEndpoint(endpoint, 'system');
-    }
-  }
+
+
 
   private async discoverFastifyRoutes(): Promise<Partial<ApiEndpoint>[]> {
     // This would integrate with Fastify to discover routes
@@ -151,7 +151,7 @@ export class ApiRegistryService extends EventEmitter {
         tags: ['core', 'graph', 'execution'],
         categories: ['graph-operations'],
         owner: 'core-team'
-  }
+
       {
         name: 'Export Graph',
         description: 'Export graph to GeneratorBundle format',
@@ -167,9 +167,9 @@ export class ApiRegistryService extends EventEmitter {
         tags: ['core', 'export'],
         categories: ['graph-operations'],
         owner: 'core-team'
-      }
+
     ];
-  }
+
 
   // =============================================================================
   // Registration and Management
@@ -228,7 +228,7 @@ export class ApiRegistryService extends EventEmitter {
     this.emit('serviceRegistered', { service: fullService, registeredBy });
     
     return fullService;
-  }
+
 
   async registerEndpoint(endpoint: Partial<ApiEndpoint>, registeredBy: string): Promise<ApiEndpoint> {
 
@@ -275,7 +275,7 @@ export class ApiRegistryService extends EventEmitter {
         breakingChanges: [],
         deprecatedFeatures: [],
         migrationRequired: false 
-  }
+
       dependencies: endpoint.dependencies || [],
       consumers: endpoint.consumers || [],
       relatedEndpoints: endpoint.relatedEndpoints || []
@@ -288,7 +288,7 @@ export class ApiRegistryService extends EventEmitter {
     if (service && !service.endpoints.includes(endpointId)) {
       service.endpoints.push(endpointId);
       await this.storeService(service);
-    }
+
     
     // Store in database
     await this.storeEndpoint(fullEndpoint);
@@ -305,21 +305,21 @@ export class ApiRegistryService extends EventEmitter {
         endpointName: fullEndpoint.name,
         path: fullEndpoint.path,
         method: fullEndpoint.method
-      }
+
     };
     
     await this.logEvent(event);
     this.emit('endpointRegistered', { endpoint: fullEndpoint, registeredBy });
     
     return fullEndpoint;
-  }
+
 
   async updateEndpoint(endpointId: string, updates: Partial<ApiEndpoint>, updatedBy: string): Promise<ApiEndpoint | null> {
 
     const endpoint = this.endpoints.get(endpointId);
     if (!endpoint) {
       return null;
-    }
+
 
     const oldEndpoint = { ...endpoint };
     const updatedEndpoint = { ...endpoint, ...updates, updatedAt: new Date() };
@@ -343,14 +343,14 @@ export class ApiRegistryService extends EventEmitter {
     this.emit('endpointUpdated', { endpoint: updatedEndpoint, updatedBy, changes: event.changes });
     
     return updatedEndpoint;
-  }
+
 
   async deprecateEndpoint(endpointId: string, deprecatedBy: string, reason?: string): Promise<boolean> {
 
     const endpoint = this.endpoints.get(endpointId);
     if (!endpoint) {
       return false;
-    }
+
 
     endpoint.status = ApiStatus.DEPRECATED;
     endpoint.deprecatedAt = new Date();
@@ -359,7 +359,7 @@ export class ApiRegistryService extends EventEmitter {
     // Calculate sunset date based on configuration
     if (!endpoint.sunsetAt) {
       endpoint.sunsetAt = new Date(Date.now() + this.config.lifecycle.sunsetNotificationPeriod * 24 * 60 * 60 * 1000);
-    }
+
     
     this.endpoints.set(endpointId, endpoint);
     await this.storeEndpoint(endpoint);
@@ -376,14 +376,14 @@ export class ApiRegistryService extends EventEmitter {
         endpointName: endpoint.name,
         reason: reason || 'No reason provided',
         sunsetDate: endpoint.sunsetAt?.toISOString()
-      }
+
     };
     
     await this.logEvent(event);
     this.emit('endpointDeprecated', { endpoint, deprecatedBy, reason });
     
     return true;
-  }
+
 
   // =============================================================================
   // Search and Discovery
@@ -398,41 +398,41 @@ export class ApiRegistryService extends EventEmitter {
     if (filters.serviceIds?.length) {
       endpoints = endpoints.filter(e => filters.serviceIds!.includes(e.serviceId));
       services = services.filter(s => filters.serviceIds!.includes(s.serviceId));
-    }
+
     
     if (filters.statuses?.length) {
       endpoints = endpoints.filter(e => filters.statuses!.includes(e.status));
       services = services.filter(s => filters.statuses!.includes(s.status));
-    }
+
     
     if (filters.visibilities?.length) {
       endpoints = endpoints.filter(e => filters.visibilities!.includes(e.visibility));
       services = services.filter(s => filters.visibilities!.includes(s.visibility));
-    }
+
     
     if (filters.methods?.length) {
       endpoints = endpoints.filter(e => filters.methods!.includes(e.method));
-    }
+
     
     if (filters.tags?.length) {
       endpoints = endpoints.filter(e => filters.tags!.some(tag => e.tags.includes(tag)));
       services = services.filter(s => filters.tags!.some(tag => s.tags.includes(tag)));
-    }
+
     
     if (filters.categories?.length) {
       endpoints = endpoints.filter(e => filters.categories!.some(cat => e.categories.includes(cat)));
       services = services.filter(s => filters.categories!.some(cat => s.categories.includes(cat)));
-    }
+
     
     if (filters.owners?.length) {
       endpoints = endpoints.filter(e => filters.owners!.includes(e.owner));
       services = services.filter(s => filters.owners!.includes(s.owner));
-    }
+
     
     if (filters.createdAfter) {
       endpoints = endpoints.filter(e => e.createdAt > filters.createdAfter!);
       services = services.filter(s => s.createdAt > filters.createdAfter!);
-    }
+
     
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
@@ -445,12 +445,12 @@ export class ApiRegistryService extends EventEmitter {
         s.name.toLowerCase().includes(searchTerm) ||
         s.description.toLowerCase().includes(searchTerm)
       );
-    }
+
     
     // Sort results
     if (filters.sortBy && filters.sortOrder) {
       endpoints = this.sortEndpoints(endpoints, filters.sortBy, filters.sortOrder);
-    }
+
     
     const total = endpoints.length + services.length;
     
@@ -468,19 +468,19 @@ export class ApiRegistryService extends EventEmitter {
       hasMore: offset + limit < total,
       filters
     };
-  }
+
 
   async discoverApi(endpointId: string): Promise<ApiDiscoveryResult | null> {
 
     const endpoint = this.endpoints.get(endpointId);
     if (!endpoint) {
       return null;
-    }
+
     
     const service = this.services.get(endpoint.serviceId);
     if (!service) {
       return null;
-    }
+
     
     // Find related APIs
     const relatedApis = this.findRelatedApis(endpoint);
@@ -499,7 +499,7 @@ export class ApiRegistryService extends EventEmitter {
       documentation,
       examples: endpoint.examples
     };
-  }
+
 
   // =============================================================================
   // Analytics and Reporting
@@ -574,7 +574,7 @@ export class ApiRegistryService extends EventEmitter {
         topServices,
         usageByCategory: this.calculateUsageByCategory(endpoints),
         usageByVisibility: this.calculateUsageByVisibility(endpoints)
-  }
+
       health: {
         healthyEndpoints,
         degradedEndpoints,
@@ -583,23 +583,23 @@ export class ApiRegistryService extends EventEmitter {
         averageResponseTime,
         errorRate,
         topErrors: this.calculateTopErrors(endpoints)
-  }
+
       growth: {
         newEndpoints,
         deprecatedEndpoints,
         updatedEndpoints,
         growthRate: (newEndpoints - deprecatedEndpoints) / Math.max(endpoints.length - newEndpoints, 1) * 100,
         adoptionRate: newEndpoints / Math.max(endpoints.length, 1) * 100
-  }
+
       compliance: {
         documentedEndpoints,
         authenticatedEndpoints,
         versionedEndpoints,
         complianceScore,
         violations: [] // Would be calculated based on compliance rules
-      }
+
     };
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -610,13 +610,13 @@ export class ApiRegistryService extends EventEmitter {
       setInterval(() => {
         this.performHealthChecks();
       }, this.config.monitoring.healthCheckInterval);
-    }
+
     
     // Clean up old events
     setInterval(() => {
       this.cleanupOldEvents();
     }, 24 * 60 * 60 * 1000); // Daily cleanup
-  }
+
 
   private async performHealthChecks(): Promise<void> {
 
@@ -632,7 +632,7 @@ export class ApiRegistryService extends EventEmitter {
         endpoint.health.lastCheck = new Date();
         
         await this.storeEndpoint(endpoint);
-      } catch (error) {
+ catch (error) {
         endpoint.health.status = 'unhealthy';
         endpoint.health.lastCheck = new Date();
         endpoint.health.issues.push({
@@ -645,9 +645,9 @@ export class ApiRegistryService extends EventEmitter {
         });
         
         await this.storeEndpoint(endpoint);
-      }
-    }
-  }
+
+
+
 
   private createDefaultHealthStatus(): HealthStatus {
     return {
@@ -657,7 +657,7 @@ export class ApiRegistryService extends EventEmitter {
       issues: [],
       dependencies: []
     };
-  }
+
 
   private createDefaultEndpointMetrics(): EndpointMetrics {
     return {
@@ -671,7 +671,7 @@ export class ApiRegistryService extends EventEmitter {
       errorRate: 0,
       uptimePercentage: 100
     };
-  }
+
 
   private createDefaultServiceMetrics(): ServiceMetrics {
     return {
@@ -681,7 +681,7 @@ export class ApiRegistryService extends EventEmitter {
       totalErrors: 0,
       averageResponseTime: 0
     };
-  }
+
 
   private createDefaultDeploymentInfo(): any {
     return {
@@ -689,31 +689,31 @@ export class ApiRegistryService extends EventEmitter {
       lastDeployment: new Date(),
       deploymentStrategy: 'rolling'
     };
-  }
+
 
   private generateServiceId(name: string): string {
     return `service_${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${Date.now()}`;
-  }
+
 
   private generateEndpointId(path: string, method: string): string {
     return `endpoint_${method.toLowerCase()}_${path.replace(/[^a-z0-9]/g, '_')}_${Date.now()}`;
-  }
+
 
   private generateEventId(): string {
     return `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async storeService(service: ApiService): Promise<void> {
 
     // Database storage implementation
     console.log(`Storing service: ${service.serviceId}`);
-  }
+
 
   private async storeEndpoint(endpoint: ApiEndpoint): Promise<void> {
 
     // Database storage implementation  
     console.log(`Storing endpoint: ${endpoint.endpointId}`);
-  }
+
 
   private async logEvent(event: RegistryEvent): Promise<void> {
 
@@ -728,25 +728,25 @@ export class ApiRegistryService extends EventEmitter {
         entityId: event.entityId,
         changes: event.changes,
         metadata: event.metadata
-  }
+
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['api_governance'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
-  }
+
 
   private mapRowToService(row: any): ApiService {
     // Database row mapping implementation
     return {} as ApiService;
-  }
+
 
   private mapRowToEndpoint(row: any): ApiEndpoint {
     // Database row mapping implementation
     return {} as ApiEndpoint;
-  }
+
 
   private calculateChanges(oldObj: any, newObj: any): Record<string, { old: any; new: any }> {
     const changes: Record<string, { old: any; new: any }> = {};
@@ -754,11 +754,11 @@ export class ApiRegistryService extends EventEmitter {
     for (const key in newObj) {
       if (oldObj[key] !== newObj[key]) {
         changes[key] = { old: oldObj[key], new: newObj[key] };
-      }
-    }
+
+
     
     return changes;
-  }
+
 
   private sortEndpoints(endpoints: ApiEndpoint[], sortBy: string, order: 'asc' | 'desc'): ApiEndpoint[] {
     return endpoints.sort((a, b) => {
@@ -788,15 +788,15 @@ export class ApiRegistryService extends EventEmitter {
       default:
         aVal = a.name;
         bVal = b.name;
-      }
+
       
       if (order === 'desc') {
         return aVal < bVal ? 1 : -1;
-      } else {
+ else {
         return aVal > bVal ? 1 : -1;
-      }
+
     });
-  }
+
 
   private findRelatedApis(endpoint: ApiEndpoint): ApiEndpoint[] {
     return Array.from(this.endpoints.values())
@@ -808,18 +808,18 @@ export class ApiRegistryService extends EventEmitter {
 
 
       .slice(0, 5);
-  }
+
 
   private async generateRecommendations(endpoint: ApiEndpoint): Promise<any[]> {
 
     // Recommendation engine implementation
     return [];
-  }
+
 
   private gatherDocumentation(endpoint: ApiEndpoint, service: ApiService): any[] {
     // Documentation gathering implementation
     return [];
-  }
+
 
   private calculateUsageByCategory(endpoints: ApiEndpoint[]): Record<string, number> {
     const usage: Record<string, number> = {};
@@ -827,33 +827,33 @@ export class ApiRegistryService extends EventEmitter {
     for (const endpoint of endpoints) {
       for (const category of endpoint.categories) {
         usage[category] = (usage[category] || 0) + endpoint.metrics.requestCount;
-      }
-    }
+
+
     
     return usage;
-  }
+
 
   private calculateUsageByVisibility(endpoints: ApiEndpoint[]): Record<string, number> {
     const usage: Record<string, number> = {};
     
     for (const endpoint of endpoints) {
       usage[endpoint.visibility] = (usage[endpoint.visibility] || 0) + endpoint.metrics.requestCount;
-    }
+
     
     return usage;
-  }
+
 
   private calculateTopErrors(endpoints: ApiEndpoint[]): Array<{ endpoint: string; errorCount: number }> {
     return endpoints
       .sort((a, b) => b.metrics.errorCount - a.metrics.errorCount)
       .slice(0, 10)
       .map(e => ({ endpoint: e.name, errorCount: e.metrics.errorCount }));
-  }
+
 
   private cleanupOldEvents(): void {
     const cutoffDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000); // 30 days
     this.eventHistory = this.eventHistory.filter(event => event.timestamp > cutoffDate);
-  }
+
 
   // =============================================================================
   // Public API Methods
@@ -865,27 +865,27 @@ export class ApiRegistryService extends EventEmitter {
       endpointCount: this.endpoints.size,
       serviceCount: this.services.size
     };
-  }
+
 
   async getEndpoint(endpointId: string): Promise<ApiEndpoint | null> {
 
     return this.endpoints.get(endpointId) || null;
-  }
+
 
   async getService(serviceId: string): Promise<ApiService | null> {
 
     return this.services.get(serviceId) || null;
-  }
+
 
   async getAllServices(): Promise<ApiService[]> {
 
     return Array.from(this.services.values());
-  }
+
 
   async getAllEndpoints(): Promise<ApiEndpoint[]> {
 
     return Array.from(this.endpoints.values());
-  }
-}
+
+
 
 export default ApiRegistryService;

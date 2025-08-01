@@ -4,6 +4,7 @@ import { NotificationType,
  } from '../types/workspace';
 ;
 ;
+;
 export class WorkspaceNotificationSystem extends EventEmitter {
     dao;
     preferences = new Map();
@@ -209,7 +210,7 @@ The Team`;
                                         getDefaultPreferences(userId) {
                                             return {
                                                 userId,
-                                                channels: [,
+                                                channels: [
                                                     {
                                                         type: 'in_app',
                                                         enabled: true,
@@ -342,10 +343,10 @@ The Team`;
                                                         },
                                                         shouldAddToDigest(type, preferences) {
                                                             // Some notification types should always be sent immediately
-                                                            const immediateTypes = [];
-                                                            NotificationType.WORKSPACE_INVITE,
-                                                                NotificationType.PROJECT_INVITE;
-                                                            ;
+                                                            const immediateTypes = [
+                                                                NotificationType.WORKSPACE_INVITE,
+                                                                NotificationType.PROJECT_INVITE
+                                                            ];
                                                             return !immediateTypes.includes(type) && preferences.digest.enabled;
                                                         },
                                                         addToDigest(userId, notification) {

@@ -4,19 +4,17 @@
 import React, { useState } from 'react';
 import { useGraphStore } from '../../graphStore';
 import { Node, Edge } from 'reactflow';
-}
-interface ExportBundleDialogProps {
-  isOpen: boolean;
+
+
+interface ExportBundleDialogProps { isOpen: boolean;
   onClose: () => void;
   nodes: Node;
-  edges: Edge;
-}
-  onExport?: (result: { success: boolean; error?: string }) => void;
-}
+  edges: Edge }
 
-}
-interface ExportOptions {
-  name: string;
+  onExport?: (result: { success: boolean; error?: string }) => void;
+
+
+interface ExportOptions { name: string;
   version: string;
   author: string;
   description?: string;
@@ -26,67 +24,67 @@ interface ExportOptions {
   imageFormat?: 'png' | 'svg' | 'pdf';
   includePreview: boolean;
   exportQuality: 'draft' | 'standard' | 'high';
-  export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({,)
-  isOpen,
-  onClose,
-  nodes,
-  edges,
+  export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({);
+  isOpen;
+  onClose;
+  nodes;
+  edges }
   onExport
-}
+
+
 }) => {
   const { currentProject } = useGraphStore();
-  const [formData, setFormData] = useState<ExportOptions>({)
-  name: currentProject?.name || 'Untitled_Graph',
-  version: '1.0.0',
-  author: currentProject?.author || 'PromptScape User',
-  description: currentProject?.description || '',
-  includeMetadata: true,
-  minifyOutput: false,
-  format: 'json',
-  imageFormat: 'png',
-  includePreview: false,
-  exportQuality: 'standard',
+  const [formData, setFormData] = useState<ExportOptions>({ )
+  name: currentProject?.name || 'Untitled_Graph'
+  version: '1.0.0'
+  author: currentProject?.author || 'PromptScape User'
+  description: currentProject?.description || ''
+  includeMetadata: true
+  minifyOutput: false
+  format: 'json'
+  imageFormat: 'png'
+  includePreview: false
+  exportQuality: 'standard' }
 });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewData, setPreviewData] = useState<unknown>(null);
-  const getFormatInfo = (format: string) => {
-  const formatInfo = {
+  const getFormatInfo = (format: string) => { const formatInfo = {
   json: {
-  name: 'GeneratorBundle JSON',
-  description: 'Standard JSON format compatible with randomizer engine',
-  extension: '.bundle.json',
-  mimeType: 'application/json',
-},
-  compressed: {
-  name: 'Compressed JSON',
-  description: 'Minified JSON for smaller file size',
-  extension: '.bundle.min.json',
-  mimeType: 'application/json',
-},
-  yaml: {
-  name: 'YAML Format',
-  description: 'Human-readable YAML format',
-  extension: '.bundle.yaml',
-  mimeType: 'application/yaml',
-},
-  xml: {
-  name: 'XML Format',
-  description: 'Structured XML representation',
-  extension: '.bundle.xml',
-  mimeType: 'application/xml',
-},
-  graph: {
-  name: 'Graph Format',
-  description: 'Native graph structure for re-importing',
-  extension: '.psg',
-  mimeType: 'application/json',
-},
-  csv: {
-  name: 'CSV Export',
-  description: 'Node and edge data in tabular format',
-  extension: '.csv',
-  mimeType: 'text/csv',
+  name: 'GeneratorBundle JSON'
+  description: 'Standard JSON format compatible with randomizer engine'
+  extension: '.bundle.json'
+  mimeType: 'application/json' }
+
+  compressed: { 
+  name: 'Compressed JSON'
+  description: 'Minified JSON for smaller file size'
+  extension: '.bundle.min.json'
+  mimeType: 'application/json' }
+
+  yaml: { 
+  name: 'YAML Format'
+  description: 'Human-readable YAML format'
+  extension: '.bundle.yaml'
+  mimeType: 'application/yaml' }
+
+  xml: { 
+  name: 'XML Format'
+  description: 'Structured XML representation'
+  extension: '.bundle.xml'
+  mimeType: 'application/xml' }
+
+  graph: { 
+  name: 'Graph Format'
+  description: 'Native graph structure for re-importing'
+  extension: '.psg'
+  mimeType: 'application/json' }
+
+  csv: { 
+  name: 'CSV Export'
+  description: 'Node and edge data in tabular format'
+  extension: '.csv'
+  mimeType: 'text/csv' }
 };
     return formatInfo[format as keyof typeof formatInfo] || formatInfo.json;
   };
@@ -115,17 +113,17 @@ interface ExportOptions {
     for (const [key, value] of Object.entries(obj)) {
       if (value === null || value === undefined) {
         yaml += `${spaces}${key}: null\n`;}
-      } else if (typeof value === 'object' && !Array.isArray(value)) {
+ else if (typeof value === 'object' && !Array.isArray(value)) {
         yaml += `${spaces}${key}:\n${convertToYAML(value, indent + 1)}`;}
-      } else if (Array.isArray(value)) {
+ else if (Array.isArray(value)) {
         yaml += `${spaces}${key}:\n`;}
         value.forEach(item => {)
   if (typeof item === 'object') {
             yaml += `${spaces}  -\n${convertToYAML(item, indent + 2)}`;}
-          } else {
+ else {
             yaml += `${spaces}  - ${item}\n`;}
         });
-      } else {
+ else {
         yaml += `${spaces}${key}: ${typeof value === 'string' ? `"${value}"` : value}\n`;}
     return yaml;
   };
@@ -150,13 +148,12 @@ interface ExportOptions {
     };
     return `<?xml version="1.0" encoding="UTF-8"?>\n${objToXML(obj, rootName)}`;}
   };
-  const convertToCSV = (nodes: Node, edges: Edge): string => {
-    const nodeCSV = [;
-      'ID,Type,Label,Data',
+  const convertToCSV = (nodes: Node, edges: Edge): string => { const nodeCSV = [
+      'ID,Type,Label,Data' }
       ...nodes.map(node => )
         `"${node.id}","${node.type}","${node.data?.label || ''}","${JSON.stringify(node.data || {}).replace(/"/g, '""')}"`}
     ].join('\n');
-    const edgeCSV = [;
+    const edgeCSV = [
       '\n\nEDGES:',
       'ID,Source,Target,Type',
       ...edges.map(edge => )
@@ -165,40 +162,38 @@ interface ExportOptions {
     return `NODES:\n${nodeCSV}${edgeCSV}`;}
   };
   const handleInputChange = (field: keyof ExportOptions) => (;);,;
-  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {,
+  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const value = e.target.type === 'checkbox' ;
       ? (e.target as HTMLInputElement).checked 
       : e.target.value;
     setFormData(prev => ({ ...prev, [field]: value }));
     if (error) setError(null);
   };
-  const generatePreview = async () => {
-  try {
+  const generatePreview = async () => { try {
   setError(null);
   const response = await fetch('/export', {)
-  method: 'POST',
+  method: 'POST'
   headers: {
-  'Content-Type': 'application/json',
-},
-  body: JSON.stringify({,)
-  graph: { nodes, edges },
-          options: {
-  name: formData.name,
-  version: formData.version,
-  author: formData.author,
-}
+  'Content-Type': 'application/json' }
+
+  body: JSON.stringify({);
+  graph: { nodes, edges }
+          options: { 
+  name: formData.name
+  version: formData.version
+  author: formData.author }
+
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || `HTTP ${response.status}`);}
       const { bundle } = await response.json();
       setPreviewData(bundle);
-    } catch (err) {
+ catch (err) {
       setError(`Preview failed: ${err instanceof Error ? err.message : String(err)}`);}
       setPreviewData(null);
   };
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => { e.preventDefault();
   if (!formData.name.trim()) {
   setError('Bundle name is required');
   return;
@@ -206,17 +201,17 @@ interface ExportOptions {
   setError(null);
   try {
   const response = await fetch('/export', {)
-  method: 'POST',
+  method: 'POST'
   headers: {
-  'Content-Type': 'application/json',
-},
-  body: JSON.stringify({,)
-  graph: { nodes, edges },
-          options: {
-  name: formData.name.trim(),
-  version: formData.version.trim(),
-  author: formData.author.trim(),
-}
+  'Content-Type': 'application/json' }
+
+  body: JSON.stringify({);
+  graph: { nodes, edges }
+          options: { 
+  name: formData.name.trim()
+  version: formData.version.trim()
+  author: formData.author.trim() }
+
       });
       if (!response.ok) {
         const errorData = await response.json();
@@ -228,13 +223,12 @@ interface ExportOptions {
       const exportFilename = filename.replace('.bundle.json', formatInfo.extension);
       const mimeType = formatInfo.mimeType;
       // Add quality metadata for non-JSON formats
-      if (formData.format !== 'json' && formData.format !== 'compressed') {
-  const metadata = {
-  exportedBy: 'PromptScape GraphEditor',
-  exportDate: new Date().toISOString(),
-  quality: formData.exportQuality,
-  includesPreview: formData.includePreview,
-  originalFormat: 'GeneratorBundle',
+      if (formData.format !== 'json' && formData.format !== 'compressed') { const metadata = {
+  exportedBy: 'PromptScape GraphEditor'
+  exportDate: new Date().toISOString()
+  quality: formData.exportQuality
+  includesPreview: formData.includePreview
+  originalFormat: 'GeneratorBundle' }
 };
         if (formData.format === 'graph') {
           const graphData = JSON.parse(exportContent);
@@ -248,73 +242,69 @@ interface ExportOptions {
       a.download = exportFilename;
       document.body.appendChild(a);
       a.click();
-      setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 0);
+      setTimeout(() => { document.body.removeChild(a);
+        URL.revokeObjectURL(url) }, 0);
       onExport?.({ success: true });
       onClose();
-    } catch (err) {
+ catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       setError(errorMessage);
       onExport?.({ success: false, error: errorMessage });
-    } finally {
-      setIsLoading(false);
-  };
+ finally { setIsLoading(false) };
   if (!isOpen) return null;
   return;
-    <div style={{
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 1000,
-}}>
-      <div style={{
-  backgroundColor: 'white',
-  borderRadius: '8px',
-  padding: '24px',
-  width: '90%',
-  maxWidth: '600px',
-  maxHeight: '90vh',
-  overflowY: 'auto',
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-}}>
+    <div style={ {
+  position: 'fixed'
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  zIndex: 1000 }
+}>
+      <div style={ {
+  backgroundColor: 'white'
+  borderRadius: '8px'
+  padding: '24px'
+  width: '90%'
+  maxWidth: '600px'
+  maxHeight: '90vh'
+  overflowY: 'auto'
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)' }
+}>
         {/* Header */}
-        <div style={{
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: '24px',
-}}>
-          <h2 style={{
-  margin: 0,
-  fontSize: '20px',
-  fontWeight: '600',
-  color: '#333',
-}}>
+        <div style={ {
+  display: 'flex'
+  justifyContent: 'space-between'
+  alignItems: 'center'
+  marginBottom: '24px' }
+}>
+          <h2 style={ {
+  margin: 0
+  fontSize: '20px'
+  fontWeight: '600'
+  color: '#333' }
+}>
             📦 Export GeneratorBundle
           </h2>
           <button
             onClick={onClose}
-            style={{
-  background: 'none',
-  border: 'none',
-  fontSize: '24px',
-  cursor: 'pointer',
-  color: '#666',
-  padding: '0',
-  width: '32px',
-  height: '32px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}}
+            style={ {
+  background: 'none'
+  border: 'none'
+  fontSize: '24px'
+  cursor: 'pointer'
+  color: '#666'
+  padding: '0'
+  width: '32px'
+  height: '32px'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center' }
+
             disabled={isLoading}
           >
             ×
@@ -323,13 +313,13 @@ interface ExportOptions {
         <form onSubmit={handleSubmit}>
           {/* Bundle Name */}
           <div style={{ marginBottom: '16px' }}>
-            <label style={{
-  display: 'block',
-  marginBottom: '6px',
-  fontSize: '14px',
-  fontWeight: '500',
-  color: '#333',
-}}>
+            <label style={ {
+  display: 'block'
+  marginBottom: '6px'
+  fontSize: '14px'
+  fontWeight: '500'
+  color: '#333' }
+}>
               Bundle Name *
             </label>
             <input
@@ -339,26 +329,26 @@ interface ExportOptions {
               placeholder="Enter bundle name..."
               required
               disabled={isLoading}
-              style={{
-  width: '100%',
-  padding: '10px',
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-  fontSize: '14px',
-  boxSizing: 'border-box',
-}}
+              style={ {
+  width: '100%'
+  padding: '10px'
+  border: '1px solid #ddd'
+  borderRadius: '4px'
+  fontSize: '14px'
+  boxSizing: 'border-box' }
+}
             />
           </div>
           {/* Version and Author */}
           <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
             <div style={{ flex: 1 }}>
-              <label style={{
-  display: 'block',
-  marginBottom: '6px',
-  fontSize: '14px',
-  fontWeight: '500',
-  color: '#333',
-}}>
+              <label style={ {
+  display: 'block'
+  marginBottom: '6px'
+  fontSize: '14px'
+  fontWeight: '500'
+  color: '#333' }
+}>
                 Version
               </label>
               <input
@@ -367,24 +357,24 @@ interface ExportOptions {
                 onChange={handleInputChange('version')}
                 placeholder="1.0.0"
                 disabled={isLoading}
-                style={{
-  width: '100%',
-  padding: '10px',
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-  fontSize: '14px',
-  boxSizing: 'border-box',
-}}
+                style={ {
+  width: '100%'
+  padding: '10px'
+  border: '1px solid #ddd'
+  borderRadius: '4px'
+  fontSize: '14px'
+  boxSizing: 'border-box' }
+}
               />
             </div>
             <div style={{ flex: 1 }}>
-              <label style={{
-  display: 'block',
-  marginBottom: '6px',
-  fontSize: '14px',
-  fontWeight: '500',
-  color: '#333',
-}}>
+              <label style={ {
+  display: 'block'
+  marginBottom: '6px'
+  fontSize: '14px'
+  fontWeight: '500'
+  color: '#333' }
+}>
                 Author
               </label>
               <input
@@ -393,26 +383,26 @@ interface ExportOptions {
                 onChange={handleInputChange('author')}
                 placeholder="Your name..."
                 disabled={isLoading}
-                style={{
-  width: '100%',
-  padding: '10px',
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-  fontSize: '14px',
-  boxSizing: 'border-box',
-}}
+                style={ {
+  width: '100%'
+  padding: '10px'
+  border: '1px solid #ddd'
+  borderRadius: '4px'
+  fontSize: '14px'
+  boxSizing: 'border-box' }
+}
               />
             </div>
           </div>
           {/* Description */}
           <div style={{ marginBottom: '16px' }}>
-            <label style={{
-  display: 'block',
-  marginBottom: '6px',
-  fontSize: '14px',
-  fontWeight: '500',
-  color: '#333',
-}}>
+            <label style={ {
+  display: 'block'
+  marginBottom: '6px'
+  fontSize: '14px'
+  fontWeight: '500'
+  color: '#333' }
+}>
               Description
             </label>
             <textarea
@@ -421,41 +411,41 @@ interface ExportOptions {
               placeholder="Optional bundle description..."
               disabled={isLoading}
               rows={2}
-              style={{
-  width: '100%',
-  padding: '10px',
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-  fontSize: '14px',
-  resize: 'vertical',
-  boxSizing: 'border-box',
-}}
+              style={ {
+  width: '100%'
+  padding: '10px'
+  border: '1px solid #ddd'
+  borderRadius: '4px'
+  fontSize: '14px'
+  resize: 'vertical'
+  boxSizing: 'border-box' }
+
             />
           </div>
           {/* Export Format */}
           <div style={{ marginBottom: '16px' }}>
-            <label style={{
-  display: 'block',
-  marginBottom: '6px',
-  fontSize: '14px',
-  fontWeight: '500',
-  color: '#333',
-}}>
+            <label style={ {
+  display: 'block'
+  marginBottom: '6px'
+  fontSize: '14px'
+  fontWeight: '500'
+  color: '#333' }
+}>
               Export Format
             </label>
             <select
               value={formData.format}
               onChange={handleInputChange('format')}
               disabled={isLoading}
-              style={{
-  width: '100%',
-  padding: '10px',
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-  fontSize: '14px',
-  marginBottom: '8px',
-  boxSizing: 'border-box',
-}}
+              style={ {
+  width: '100%'
+  padding: '10px'
+  border: '1px solid #ddd'
+  borderRadius: '4px'
+  fontSize: '14px'
+  marginBottom: '8px'
+  boxSizing: 'border-box' }
+}
             >
               <option value="json">📦 GeneratorBundle JSON - Standard format</option>
               <option value="compressed">🗜️ Compressed JSON - Smaller file size</option>
@@ -464,25 +454,25 @@ interface ExportOptions {
               <option value="graph">🌐 Graph Format - Native .psg format</option>
               <option value="csv">📊 CSV Export - Tabular data</option>
             </select>
-            <div style={{
-  fontSize: '12px',
-  color: '#666',
-  padding: '6px',
-  background: '#f9f9f9',
-  borderRadius: '4px',
-}}>
+            <div style={ {
+  fontSize: '12px'
+  color: '#666'
+  padding: '6px'
+  background: '#f9f9f9'
+  borderRadius: '4px' }
+}>
               {getFormatInfo(formData.format).description}
             </div>
           </div>
           {/* Export Options */}
           <div style={{ marginBottom: '16px' }}>
-            <label style={{
-  display: 'block',
-  marginBottom: '6px',
-  fontSize: '14px',
-  fontWeight: '500',
-  color: '#333',
-}}>
+            <label style={ {
+  display: 'block'
+  marginBottom: '6px'
+  fontSize: '14px'
+  fontWeight: '500'
+  color: '#333' }
+}>
               Export Options
             </label>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '12px' }}>
@@ -527,12 +517,12 @@ interface ExportOptions {
                 value={formData.exportQuality}
                 onChange={handleInputChange('exportQuality')}
                 disabled={isLoading}
-                style={{
-  padding: '4px 8px',
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-  fontSize: '13px',
-}}
+                style={ {
+  padding: '4px 8px'
+  border: '1px solid #ddd'
+  borderRadius: '4px'
+  fontSize: '13px' }
+}
               >
                 <option value="draft">📝 Draft - Basic export</option>
                 <option value="standard">⭐ Standard - Full metadata</option>
@@ -546,30 +536,30 @@ interface ExportOptions {
               type="button"
               onClick={generatePreview}
               disabled={isLoading}
-              style={{
-  padding: '8px 16px',
-  border: '1px solid #ddd',
-  backgroundColor: '#f8f9fa',
-  color: '#495057',
-  borderRadius: '4px',
-  cursor: isLoading ? 'not-allowed' : 'pointer',
-  fontSize: '13px',
-  marginBottom: '8px',
-}}
+              style={ {
+  padding: '8px 16px'
+  border: '1px solid #ddd'
+  backgroundColor: '#f8f9fa'
+  color: '#495057'
+  borderRadius: '4px'
+  cursor: isLoading ? 'not-allowed' : 'pointer'
+  fontSize: '13px'
+  marginBottom: '8px' }
+
             >
               {isLoading ? 'Loading...' : '🔍 Preview Bundle'}
             </button>
-            {previewData && ()
+            { previewData && ()
               <div style={{
-  background: '#f8f9fa',
-  border: '1px solid #e9ecef',
-  borderRadius: '4px',
-  padding: '12px',
-  fontSize: '12px',
-  fontFamily: 'monospace',
-  maxHeight: '200px',
-  overflowY: 'auto',
-}}>
+  background: '#f8f9fa'
+  border: '1px solid #e9ecef'
+  borderRadius: '4px'
+  padding: '12px'
+  fontSize: '12px'
+  fontFamily: 'monospace'
+  maxHeight: '200px'
+  overflowY: 'auto' }
+}>
                 <strong>Bundle Preview:</strong>
                 <pre style={{ margin: '8px 0 0 0', whiteSpace: 'pre-wrap' }}>
                   {JSON.stringify(previewData, null, 2).substring(0, 500)}
@@ -579,23 +569,23 @@ interface ExportOptions {
             )}
           </div>
           {/* Export Information */}
-          <div style={{
-  backgroundColor: '#e7f3ff',
-  border: '1px solid #b3d9ff',
-  padding: '12px',
-  borderRadius: '4px',
-  marginBottom: '16px',
-}}>
+          <div style={ {
+  backgroundColor: '#e7f3ff'
+  border: '1px solid #b3d9ff'
+  padding: '12px'
+  borderRadius: '4px'
+  marginBottom: '16px' }
+}>
             <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#0066cc' }}>
               📋 Export Information
             </h4>
-            <ul style={{
-  margin: '0',
-  paddingLeft: '16px',
-  fontSize: '13px',
-  color: '#0066cc',
-  lineHeight: 1.4,
-}}>
+            <ul style={ {
+  margin: '0'
+  paddingLeft: '16px'
+  fontSize: '13px'
+  color: '#0066cc'
+  lineHeight: 1.4 }
+}>
               <li>Contains {nodes.length} nodes and {edges.length} connections</li>
               <li>Format: {getFormatInfo(formData.format).name}</li>
               <li>Extension: {getFormatInfo(formData.format).extension}</li>
@@ -615,53 +605,53 @@ interface ExportOptions {
             </ul>
           </div>
           {/* Error Message */}
-          {error && ()
+          { error && ()
             <div style={{
-  backgroundColor: '#fee',
-  border: '1px solid #fcc',
-  color: '#c33',
-  padding: '12px',
-  borderRadius: '4px',
-  marginBottom: '16px',
-  fontSize: '14px',
-}}>
+  backgroundColor: '#fee'
+  border: '1px solid #fcc'
+  color: '#c33'
+  padding: '12px'
+  borderRadius: '4px'
+  marginBottom: '16px'
+  fontSize: '14px' }
+}>
               <strong>Error:</strong> {error}
             </div>
           )}
           {/* Action Buttons */}
-          <div style={{
-  display: 'flex',
-  gap: '12px',
-  justifyContent: 'flex-end',
-}}>
+          <div style={ {
+  display: 'flex'
+  gap: '12px'
+  justifyContent: 'flex-end' }
+}>
             <button
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              style={{
-  padding: '10px 20px',
-  border: '1px solid #ddd',
-  backgroundColor: 'white',
-  color: '#666',
-  borderRadius: '4px',
-  cursor: isLoading ? 'not-allowed' : 'pointer',
-  fontSize: '14px',
-}}
+              style={ {
+  padding: '10px 20px'
+  border: '1px solid #ddd'
+  backgroundColor: 'white'
+  color: '#666'
+  borderRadius: '4px'
+  cursor: isLoading ? 'not-allowed' : 'pointer'
+  fontSize: '14px' }
+}
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading || !formData.name.trim()}
-              style={{
-  padding: '10px 20px',
-  border: 'none',
-  backgroundColor: isLoading ? '#ccc' : '#4CAF50',
-  color: 'white',
-  borderRadius: '4px',
-  cursor: isLoading || !formData.name.trim() ? 'not-allowed' : 'pointer',
-  fontSize: '14px',
-}}
+              style={ {
+  padding: '10px 20px'
+  border: 'none'
+  backgroundColor: isLoading ? '#ccc' : '#4CAF50'
+  color: 'white'
+  borderRadius: '4px'
+  cursor: isLoading || !formData.name.trim() ? 'not-allowed' : 'pointer'
+  fontSize: '14px' }
+
             >
               {isLoading ? 'Exporting...' : '📦 Export Bundle'}
             </button>

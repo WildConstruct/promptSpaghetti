@@ -214,12 +214,9 @@ export const connectionAnnotationPresets = {
                         data: 'Data',
                     },
                     // Helper to create preset connections
-                    const: createPresetConnection = (baseEdge) => preset, keyof, typeof: connectionAnnotationPresets,
-                    label: string, AnnotatedEdge
-                }
-            }
-        }
-    }
+                    const: createPresetConnection = (baseEdge) => ,
+                    preset: keyof, typeof: connectionAnnotationPresets,
+                    label: string, AnnotatedEdge } } } }
 };
 {
     return createAnnotatedEdge();

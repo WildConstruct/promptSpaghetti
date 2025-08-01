@@ -10,21 +10,23 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ConsentType,
   ActivePrompt
-} from '../../types/consent';
+ from '../../types/consent';
 import { useConsent } from '../../hooks/useConsent';
 import './JustInTimeConsentPrompt.css';
-}
+
+
 interface JustInTimeConsentPromptProps {
   prompt: ActivePrompt;,
   onRespond: (promptId: string, granted: boolean) => Promise<void>;,
   onDismiss: (promptId: string) => void;
   onClose?: () => void;
-  export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = ({,)
+  export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = ({),
   prompt,
   onRespond,
   onDismiss,
   onClose
-}
+
+
 }) => {
   const { hasConsent, grantConsent, withdrawConsent } = useConsent();
   const [isLoading, setIsLoading] = useState(false);
@@ -72,10 +74,10 @@ interface JustInTimeConsentPromptProps {
       await grantConsent(consentType, 'just_in_time');
       await onRespond(prompt.id, true);
       handleClose();
-    } catch (err) {
+ catch (err) {
   console.error('Failed to grant consent:', err);
   setError('Failed to save consent preference');
-} finally {
+ finally {
       setIsLoading(false);
   };
   const handleDeny = async () => {
@@ -87,10 +89,10 @@ interface JustInTimeConsentPromptProps {
         await withdrawConsent(consentType, 'just_in_time');
       await onRespond(prompt.id, false);
       handleClose();
-    } catch (err) {
+ catch (err) {
   console.error('Failed to deny consent:', err);
   setError('Failed to save consent preference');
-} finally {
+ finally {
       setIsLoading(false);
   };
   const handleDismiss = useCallback(() => {
@@ -134,12 +136,12 @@ interface JustInTimeConsentPromptProps {
   };
   const getPromptClasses = () => {
     const baseClass = 'jit-prompt';
-    const classes = [;
+    const classes = [
       baseClass,
       `${baseClass}--${appearance.style}`}
-}
+
       `${baseClass}--${appearance.theme}`}
-}
+
       `${baseClass}--${appearance.size}`}
     ];
     if (appearance.position) {

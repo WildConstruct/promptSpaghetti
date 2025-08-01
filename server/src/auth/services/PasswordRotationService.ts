@@ -7,8 +7,8 @@ import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import { EventEmitter } from 'events';
 
-}
-}
+
+
 export interface PasswordRotationPolicy {
   id: string;
   name: string;
@@ -21,8 +21,9 @@ export interface PasswordRotationPolicy {
     enforceRotation: boolean; // Force rotation at expiry
     preventReuse: number; // Number of previous passwords to remember
     requireReason?: boolean; // Require reason for manual rotation
-}
-}
+
+
+
   };
   applicableRoles: string[];
   applicableUsers?: string[];
@@ -36,7 +37,7 @@ export interface PasswordRotationPolicy {
       notifyUser: boolean;
       notifyAdmin: boolean;
       notifyManager?: boolean;
-    }>;
+>;
   };
   automationSettings: {
     autoGenerate: boolean;
@@ -53,10 +54,10 @@ export interface PasswordRotationPolicy {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-}
 
-}
-}
+
+
+
 export interface PasswordRotationRecord {
   id: string;
   userId: string;
@@ -75,13 +76,14 @@ export interface PasswordRotationRecord {
     wasExpired: boolean;
     warningsIssued: number;
     complianceFlags: string[];
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface UserPasswordStatus {
   userId: string;
   currentPasswordHash: string;
@@ -98,14 +100,15 @@ export interface UserPasswordStatus {
     hash: string;
     setAt: Date;
     strength: number;
-}
-}
-  }>;
-  complianceFlags: string[];
-}
 
-}
-}
+
+
+>;
+  complianceFlags: string[];
+
+
+
+
 export interface RotationNotification {
   id: string;
   userId: string;
@@ -116,9 +119,10 @@ export interface RotationNotification {
   escalationLevel: number;
   policyId: string;
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export class PasswordRotationService extends EventEmitter {
   private policies: Map<string, PasswordRotationPolicy> = new Map();
@@ -130,7 +134,7 @@ export class PasswordRotationService extends EventEmitter {
     super();
     this.initializeDefaultPolicies();
     this.startRotationTasks();
-  }
+
 
   /**
    * Create a new password rotation policy
@@ -164,7 +168,7 @@ export class PasswordRotationService extends EventEmitter {
 
     this.emit('policyCreated', policy);
     return policy;
-  }
+
 
   /**
    * Update an existing password rotation policy
@@ -178,7 +182,7 @@ export class PasswordRotationService extends EventEmitter {
     const existingPolicy = this.policies.get(policyId);
     if (!existingPolicy) {
       throw new Error('Policy not found');
-    }
+
 
     const updatedPolicy: PasswordRotationPolicy = {
       ...existingPolicy,
@@ -193,7 +197,7 @@ export class PasswordRotationService extends EventEmitter {
     // Re-apply policy to users if applicable roles/users changed
     if (updates.applicableRoles || updates.applicableUsers || updates.exemptUsers) {
       await this.applyPolicyToUsers(updatedPolicy);
-    }
+
 
     await this.logPolicyEvent('policy_updated', policyId, updatedBy, {
       changes: Object.keys(updates),
@@ -203,7 +207,7 @@ export class PasswordRotationService extends EventEmitter {
 
     this.emit('policyUpdated', updatedPolicy);
     return updatedPolicy;
-  }
+
 
   /**
    * Check and enforce password rotation for a user
@@ -218,7 +222,7 @@ export class PasswordRotationService extends EventEmitter {
     message?: string;
     actionRequired: boolean;
     allowedGraceLogins?: number;
-  }> {
+> {
 
     const userStatus = await this.getUserPasswordStatus(userId);
     const applicablePolicies = await this.getApplicablePolicies(userId, userRoles);
@@ -229,7 +233,7 @@ export class PasswordRotationService extends EventEmitter {
         actionRequired: false,
         message: 'No rotation policies apply to this user'
       };
-    }
+
 
     // Find the most restrictive policy
     const activePolicy = this.getMostRestrictivePolicy(applicablePolicies);
@@ -252,20 +256,20 @@ export class PasswordRotationService extends EventEmitter {
         actionRequired = true;
         message = `Password expired ${passwordAge - activePolicy.rules.maxAge} days ago. ${
           activePolicy.rules.graceLoginCount - userStatus.graceLoginsUsed
-        } grace logins remaining.`;
+ grace logins remaining.`;
         
         // Increment grace login count
         userStatus.graceLoginsUsed++;
-      } else if (activePolicy.rules.enforceRotation) {
+ else if (activePolicy.rules.enforceRotation) {
         status = 'locked';
         actionRequired = true;
         message = 'Password has expired and must be changed before access is allowed.';
-      } else {
+ else {
         status = 'expired';
         actionRequired = true;
         message = 'Password has expired and should be changed.';
-      }
-    } else if (daysUntilExpiry <= activePolicy.rules.warningPeriod) {
+
+ else if (daysUntilExpiry <= activePolicy.rules.warningPeriod) {
       // Password is expiring soon
       status = 'warning';
       actionRequired = false;
@@ -273,7 +277,7 @@ export class PasswordRotationService extends EventEmitter {
 
       // Send warning notifications if needed
       await this.sendExpiryWarning(userId, activePolicy, daysUntilExpiry);
-    }
+
 
     // Update user status
     userStatus.status = status;
@@ -296,7 +300,7 @@ export class PasswordRotationService extends EventEmitter {
       allowedGraceLogins: activePolicy.rules.graceLoginCount ? 
         activePolicy.rules.graceLoginCount - userStatus.graceLoginsUsed : undefined
     };
-  }
+
 
   /**
    * Rotate user password (manual or automatic)
@@ -314,7 +318,7 @@ export class PasswordRotationService extends EventEmitter {
     message: string;
     temporaryPassword?: string;
     expiresAt?: Date;
-  }> {
+> {
 
     const userStatus = await this.getUserPasswordStatus(userId);
     const userRoles = await this.getUserRoles(userId);
@@ -325,7 +329,7 @@ export class PasswordRotationService extends EventEmitter {
         success: false,
         message: 'No password rotation policies apply to this user'
       };
-    }
+
 
     const activePolicy = this.getMostRestrictivePolicy(applicablePolicies);
 
@@ -341,7 +345,7 @@ export class PasswordRotationService extends EventEmitter {
         success: false,
         message: `Password validation failed: ${validationResult.errors.join(', ')}`
       };
-    }
+
 
     try {
       // Hash new password
@@ -367,7 +371,7 @@ export class PasswordRotationService extends EventEmitter {
           wasExpired: userStatus.status === 'expired' || userStatus.status === 'grace',
           warningsIssued: userStatus.warningsIssued,
           complianceFlags: this.checkComplianceFlags(userStatus, activePolicy)
-        }
+
       };
 
       // Update user status
@@ -391,7 +395,7 @@ export class PasswordRotationService extends EventEmitter {
       // Keep only required number of previous passwords
       if (userStatus.passwordHistory.length > activePolicy.rules.preventReuse) {
         userStatus.passwordHistory = userStatus.passwordHistory.slice(-activePolicy.rules.preventReuse);
-      }
+
 
       // Store records
       this.rotationHistory.push(rotationRecord);
@@ -416,7 +420,7 @@ export class PasswordRotationService extends EventEmitter {
         message: 'Password rotated successfully',
         expiresAt: userStatus.expiresAt
       };
-    } catch (error) {
+ catch (error) {
       await this.logRotationEvent('rotation_failed', userId, rotatedBy, {
         error: error.message,
         rotationType,
@@ -428,8 +432,8 @@ export class PasswordRotationService extends EventEmitter {
         success: false,
         message: `Password rotation failed: ${error.message}`
       };
-    }
-  }
+
+
 
   /**
    * Generate automatic password for user
@@ -451,7 +455,7 @@ export class PasswordRotationService extends EventEmitter {
     let password = '';
     for (let i = 0; i < settings.length; i++) {
       password += charset[crypto.randomInt(0, charset.length)];
-    }
+
 
     // Ensure password meets complexity requirements
     password = this.enforceComplexity(password, settings);
@@ -460,7 +464,7 @@ export class PasswordRotationService extends EventEmitter {
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
     return { password, strength, expiresAt };
-  }
+
 
   private initializeDefaultPolicies(): void {
     // Create a default standard policy
@@ -476,7 +480,7 @@ export class PasswordRotationService extends EventEmitter {
         enforceRotation: true,
         preventReuse: 5,
         requireReason: false
-  }
+
       applicableRoles: ['user', 'editor'],
       notificationSettings: {
         warningNotifications: true,
@@ -488,26 +492,26 @@ export class PasswordRotationService extends EventEmitter {
           { daysBeforeExpiry: 3, notifyUser: true, notifyAdmin: true },
           { daysBeforeExpiry: 0, notifyUser: true, notifyAdmin: true }
         ]
-  }
+
       automationSettings: {
         autoGenerate: false,
         autoGenerateLength: 16,
         autoGenerateComplexity: 'standard',
         requireUserActivation: true,
         temporaryPasswordExpiry: 24
-  }
+
       complianceSettings: {
         auditRequired: true,
         retentionPeriod: 365,
         reportingEnabled: true
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
     };
 
     this.policies.set(defaultPolicy.id, defaultPolicy);
-  }
+
 
   private startRotationTasks(): void {
     // Check for password expirations every hour
@@ -524,7 +528,7 @@ export class PasswordRotationService extends EventEmitter {
     setInterval(() => {
       this.cleanupOldRecords();
     }, 30 * 24 * 60 * 60 * 1000);
-  }
+
 
   private async checkExpiredPasswords(): Promise<void> {
 
@@ -532,9 +536,9 @@ export class PasswordRotationService extends EventEmitter {
       if (status.expiresAt && status.expiresAt <= new Date()) {
         const userRoles = await this.getUserRoles(userId);
         await this.checkUserPasswordRotation(userId, userRoles);
-      }
-    }
-  }
+
+
+
 
   private async sendDailyWarnings(): Promise<void> {
 
@@ -552,17 +556,17 @@ export class PasswordRotationService extends EventEmitter {
         if (applicablePolicies.length > 0) {
           const activePolicy = this.getMostRestrictivePolicy(applicablePolicies);
           await this.sendExpiryWarning(userId, activePolicy, daysUntilExpiry);
-        }
-      }
-    }
-  }
+
+
+
+
 
   private buildCharset(settings: { includeSpecial: boolean; includeNumbers: boolean }): string {
     let charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     if (settings.includeNumbers) charset += '0123456789';
     if (settings.includeSpecial) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
     return charset;
-  }
+
 
   private enforceComplexity(password: string, settings: any): string {
     // Ensure at least one of each required character type
@@ -570,41 +574,41 @@ export class PasswordRotationService extends EventEmitter {
     
     if (settings.includeNumbers && !/\d/.test(result)) {
       result = result.slice(0, -1) + '7';
-    }
+
     
     if (settings.includeSpecial && !/[^A-Za-z0-9]/.test(result)) {
       result = result.slice(0, -1) + '!';
-    }
+
     
     return result;
-  }
+
 
   // Helper methods and data access would continue here...
   // Due to length constraints, I'm showing the core implementation structure
 
   private generatePolicyId(): string {
     return `PRP-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  }
+
 
   private generateRecordId(): string {
     return `PRR-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private async validatePolicy(policy: PasswordRotationPolicy): Promise<void> {
 
     if (policy.rules.maxAge < 1 || policy.rules.maxAge > 365) {
       throw new Error('Password max age must be between 1 and 365 days');
-    }
+
     
     if (policy.rules.warningPeriod >= policy.rules.maxAge) {
       throw new Error('Warning period must be less than max age');
-    }
-  }
+
+
 
   private async getUserPasswordStatus(userId: string): Promise<UserPasswordStatus> {
 
     return this.userStatuses.get(userId) || this.createDefaultUserStatus(userId);
-  }
+
 
   private createDefaultUserStatus(userId: string): UserPasswordStatus {
     const status: UserPasswordStatus = {
@@ -622,18 +626,18 @@ export class PasswordRotationService extends EventEmitter {
     
     this.userStatuses.set(userId, status);
     return status;
-  }
+
 
   private async updateUserStatus(status: UserPasswordStatus): Promise<void> {
 
     this.userStatuses.set(status.userId, status);
-  }
+
 
   private async getUserRoles(userId: string): Promise<string[]> {
 
     // Mock implementation - would integrate with actual user service
     return ['user'];
-  }
+
 
   private async getApplicablePolicies(userId: string, userRoles: string[]): Promise<PasswordRotationPolicy[]> {
 
@@ -647,17 +651,17 @@ export class PasswordRotationService extends EventEmitter {
       if (policy.applicableUsers?.includes(userId) || 
           policy.applicableRoles.some(role => userRoles.includes(role))) {
         policies.push(policy);
-      }
-    }
+
+
     
     return policies;
-  }
+
 
   private getMostRestrictivePolicy(policies: PasswordRotationPolicy[]): PasswordRotationPolicy {
     return policies.reduce((most, current) => 
       current.rules.maxAge < most.rules.maxAge ? current : most
     );
-  }
+
 
   private async validateNewPassword(
     password: string,
@@ -672,35 +676,35 @@ export class PasswordRotationService extends EventEmitter {
       if (await bcrypt.compare(password, previousPassword.hash)) {
         errors.push(`Password cannot be the same as any of the last ${policy.rules.preventReuse} passwords`);
         break;
-      }
-    }
+
+
     
     return {
       isValid: errors.length === 0,
       errors,
       strength: await this.calculatePasswordStrength(password)
     };
-  }
+
 
   private async calculatePasswordStrength(password: string): Promise<number> {
 
     // Mock implementation - would use actual password strength calculation
     return Math.min(100, password.length * 5);
-  }
+
 
   private checkComplianceFlags(status: UserPasswordStatus, policy: PasswordRotationPolicy): string[] {
     const flags: string[] = [];
     
     if (status.warningsIssued > 5) {
       flags.push('excessive_warnings');
-    }
+
     
     if (status.graceLoginsUsed > 0) {
       flags.push('grace_period_used');
-    }
+
     
     return flags;
-  }
+
 
   private async sendExpiryWarning(
     userId: string,
@@ -710,7 +714,7 @@ export class PasswordRotationService extends EventEmitter {
 
     // Implementation would send actual notifications
     console.log(`Sending password expiry warning to user ${userId}: ${daysUntilExpiry} days remaining`);
-  }
+
 
   private async sendRotationNotification(
     userId: string,
@@ -720,23 +724,23 @@ export class PasswordRotationService extends EventEmitter {
 
     // Implementation would send actual notifications
     console.log(`Sending password rotation notification to user ${userId}`);
-  }
+
 
   private async applyPolicyToUsers(policy: PasswordRotationPolicy): Promise<void> {
 
     // Implementation would apply policy to matching users
     console.log(`Applying policy ${policy.name} to applicable users`);
-  }
+
 
   private async logPolicyEvent(action: string, policyId: string, userId: string, metadata: any): Promise<void> {
 
     console.log(`Policy Event: ${action} for policy ${policyId} by ${userId}`, metadata);
-  }
+
 
   private async logRotationEvent(action: string, userId: string, rotatedBy: string, metadata: any): Promise<void> {
 
     console.log(`Rotation Event: ${action} for user ${userId} by ${rotatedBy}`, metadata);
-  }
+
 
   private cleanupOldRecords(): void {
     // Remove old rotation records based on retention policies
@@ -744,5 +748,4 @@ export class PasswordRotationService extends EventEmitter {
     cutoff.setDate(cutoff.getDate() - 365); // Default 1 year retention
     
     this.rotationHistory = this.rotationHistory.filter(record => record.rotatedAt >= cutoff);
-  }
-}
+

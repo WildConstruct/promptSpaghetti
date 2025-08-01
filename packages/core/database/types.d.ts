@@ -6,16 +6,15 @@
  */
 
 }
-export interface PaginationOptions {
-    page?: number;
+}
+export interface PaginationOptions { page?: number;
     limit?: number;
     offset?: number;
     sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
-
+    sortOrder?: 'asc' | 'desc' }
 }
-export interface PaginatedResult<T> {
-    data: T[];
+}
+export interface PaginatedResult<T> { data: T[];
     pagination: {
         page: number;
         limit: number;
@@ -24,64 +23,55 @@ export interface PaginatedResult<T> {
         hasNextPage: boolean;
         hasPreviousPage: boolean;
         nextPage?: number;
-        previousPage?: number;
-}
+        previousPage?: number }
     };
-    metadata?: {
-        executionTime?: number;
+    metadata?: { executionTime?: number;
         cacheHit?: boolean;
         query?: string;
-        [key: string]: any;
-    };
+        [key: string]: any };
 
 }
-export interface Role {
-    id: string;
+}
+export interface Role { id: string;
     name: string;
     description?: string;
     scope: 'global' | 'organization' | 'team';
     organizationId?: string;
     createdAt: Date;
-    updatedAt: Date;
-
+    updatedAt: Date }
 }
-export interface Permission {
-    id: string;
+}
+export interface Permission { id: string;
     roleId: string;
     resource: string;
     action: string;
     scope: 'global' | 'organization' | 'team' | 'own';
     conditions?: Record<string, any>;
-    createdAt: Date;
-
+    createdAt: Date }
 }
-export interface UserRole {
-    id: string;
+}
+export interface UserRole { id: string;
     userId: string;
     roleId: string;
     grantedBy?: string;
     grantedAt: Date;
     expiresAt?: Date;
-    scopeContext?: Record<string, any>;
-
+    scopeContext?: Record<string, any> }
 }
-export interface QueryOptions {
-    select?: string[];
+}
+export interface QueryOptions { select?: string[];
     where?: Record<string, any>;
     orderBy?: Record<string, 'asc' | 'desc'>;
     include?: string[];
-    distinct?: boolean;
-
+    distinct?: boolean }
 }
-export interface QueryResult<T> {
-    rows: T[];
+}
+export interface QueryResult<T> { rows: T[];
     count: number;
     affectedRows?: number;
-    insertId?: number;
-
+    insertId?: number }
 }
-export interface DatabaseConfig {
-    host: string;
+export interface DatabaseConfig { host: string;
     port: number;
     database: string;
     username: string;
@@ -89,93 +79,80 @@ export interface DatabaseConfig {
     ssl?: boolean;
     poolSize?: number;
     connectionTimeout?: number;
-    commandTimeout?: number;
-
+    commandTimeout?: number }
 }
-export interface TransactionContext {
-    id: string;
+}
+export interface TransactionContext { id: string;
     startedAt: Date;
-    isolationLevel?: 'READ_UNCOMMITTED' | 'READ_COMMITTED' | 'REPEATABLE_READ' | 'SERIALIZABLE';
-
+    isolationLevel?: 'READ_UNCOMMITTED' | 'READ_COMMITTED' | 'REPEATABLE_READ' | 'SERIALIZABLE' }
 }
-export interface AuditableEntity {
-    createdAt: Date;
+}
+export interface AuditableEntity { createdAt: Date;
     updatedAt: Date;
     createdBy?: string;
     updatedBy?: string;
-    version?: number;
-
+    version?: number }
 }
-export interface SoftDeletableEntity {
-    deletedAt?: Date;
+}
+export interface SoftDeletableEntity { deletedAt?: Date;
     deletedBy?: string;
-    isDeleted: boolean;
-
+    isDeleted: boolean }
 }
-export interface BaseEntity extends AuditableEntity {
-    id: string;
-
+}
+export interface BaseEntity extends AuditableEntity { id: string }
 }
 export interface FullEntity extends BaseEntity, SoftDeletableEntity {
 
 }
-export interface SearchOptions {
-    query?: string;
+}
+export interface SearchOptions { query?: string;
     fields?: string[];
     filters?: Record<string, any>;
     fuzzy?: boolean;
-    caseSensitive?: boolean;
-
+    caseSensitive?: boolean }
 }
-export interface FilterOptions {
-    field: string;
+}
+export interface FilterOptions { field: string;
     operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'like' | 'ilike' | 'between';
     value: any;
-    values?: any[];
-
+    values?: any[] }
 }
-export interface OperationResult<T = any> {
-    success: boolean;
+}
+export interface OperationResult<T = any> { success: boolean;
     data?: T;
     error?: string;
     errorCode?: string;
     timestamp: Date;
-    executionTime?: number;
-
+    executionTime?: number }
 }
-export interface BulkOperationResult<T = any> {
-    success: boolean;
+export interface BulkOperationResult<T = any> { success: boolean;
     successCount: number;
     errorCount: number;
     data?: T[];
     errors?: Array<{
         index: number;
         error: string;
-        item?: any;
-}
+        item?: any }
     }>;
     timestamp: Date;
     executionTime?: number;
 
 }
-export interface CacheOptions {
-    ttl?: number;
-    tags?: string[];
-    version?: string;
-
 }
-export interface CachedResult<T> {
-    data: T;
+export interface CacheOptions { ttl?: number;
+    tags?: string[];
+    version?: string }
+}
+}
+export interface CachedResult<T> { data: T;
     cached: boolean;
     cacheKey: string;
     expiresAt?: Date;
     version?: string;
 
-export type DatabaseOperation = 'create' | 'read' | 'update' | 'delete' | 'bulk_create' | 'bulk_update' | 'bulk_delete';
-
+export type DatabaseOperation = 'create' | 'read' | 'update' | 'delete' | 'bulk_create' | 'bulk_update' | 'bulk_delete' }
 }
-export interface OperationContext {
-    operation: DatabaseOperation;
+export interface OperationContext { operation: DatabaseOperation;
     entityType: string;
     userId?: string;
     timestamp: Date;
@@ -187,14 +164,15 @@ export type WhereCondition = Record<string, DatabaseValue>;
 export type UpdateData<T> = Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>;
 export type CreateData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
 export declare function createPaginatedResult<T>(data: T[](
-    totalCount: number,
+    totalCount: number;
     options: PaginationOptions
   ): PaginatedResult<T>;
 export declare function createOperationResult<T>(success: boolean)
-  data?: T,
-  error?: string,
-  errorCode?: string,
+  data?: T;
+  error?: string;
+  errorCode?: string }
   executionTime?: number
 ): OperationResult<T>;
 //# sourceMappingURL=types.d.ts.map
+}
 }

@@ -17,13 +17,12 @@ export { TerminologyValidator } from './TerminologyValidator';
 export * from './types';
 
 // Re-export commonly used types for convenience
-export type {
-  LegalDocument,
+export type { LegalDocument,
   ContractAnalysis,
   ContractClause,
   ComplianceCheck,
   Citation,
   LegalTerminology,
   TermValidationResult,
-  WorkflowTemplate,
-} from './types';
+  WorkflowTemplate }
+ from './types';

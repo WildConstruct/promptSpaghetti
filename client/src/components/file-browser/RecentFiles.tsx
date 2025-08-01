@@ -16,25 +16,28 @@ import { useAuthStore } from '../../stores/authStore';
 const isFileEntry = (entry: RecentFileEntry): entry is FileNode => {
   return entry.type === 'file';
 };
-}
+
+
 interface RecentFilesProps {
   maxItems?: number;
   onFileSelect?: (file: FileNode) => void;
   onFileDoubleClick?: (file: FileNode) => void;
   showFavorites?: boolean;
   className?: string;
-}
+
+
+
 interface RecentFileEntry extends FileItem {
   lastAccessed: Date;,
   accessCount: number;
-const formatTimeAgo = (date: Date): string => {
+  const formatTimeAgo = (date: Date): string => {,
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMinutes = Math.floor(diffMs / (1000 * 60));
   const diffHours = Math.floor(diffMinutes / 60);
   const diffDays = Math.floor(diffHours / 24);
   if (diffMinutes < 1) return 'Just now';
-}
+
   if (diffMinutes < 60) return `${diffMinutes}m ago`;}
   if (diffHours < 24) return `${diffHours}h ago`;}
   if (diffDays < 7) return `${diffDays}d ago`;}
@@ -70,7 +73,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   // Load from localStorage first for immediate display
   const localRecent = localStorage.getItem('fileBrowserRecent');
   if (localRecent) {
-  const parsed = JSON.parse(localRecent).map((item: unknown) => ({,)
+  const parsed = JSON.parse(localRecent).map((item: unknown) => ({),
   ...item,
   lastAccessed: new Date(item.lastAccessed),
   lastModified: new Date(item.lastModified),
@@ -95,12 +98,12 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   tags: ['customer-service', 'workflow'],
   extension: 'psg',
   mimeType: 'application/psg',
-  metadata: {
+  metadata: {,
   nodeCount: 18,
   edgeCount: 22,
   description: 'Automated customer support workflow with escalation paths',
   author: 'John Doe',
-}
+
         {
   id: 'recent2',
   name: 'Content Generation Pipeline.psg',
@@ -114,12 +117,12 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   tags: ['content', 'generation', 'template'],
   extension: 'psg',
   mimeType: 'application/psg',
-  metadata: {
+  metadata: {,
   nodeCount: 14,
   edgeCount: 16,
   description: 'Multi-stage content generation with quality checks',
   author: 'Jane Smith',
-}
+
         {
   id: 'recent3',
   name: 'Data Analysis Chain.psg',
@@ -133,7 +136,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   tags: ['analytics', 'data', 'reporting'],
   extension: 'psg',
   mimeType: 'application/psg',
-  metadata: {
+  metadata: {,
   nodeCount: 10,
   edgeCount: 12,
   description: 'Automated data analysis and reporting pipeline',
@@ -145,9 +148,9 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   setRecentFiles(mergedFiles.slice(0, maxItems));
   // Update localStorage
   localStorage.setItem('fileBrowserRecent', JSON.stringify(mergedFiles));
-} catch (error) {
+ catch (error) {
   console.error('Failed to load recent files:', error);
-} finally {
+ finally {
       setIsLoading(false);
   }, [isAuthenticated, maxItems]);
   // Load favorite files
@@ -161,7 +164,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
       // For now, filter from recent files that are marked as favorites
       const favorites = recentFiles.filter(file => favoriteIds.includes(file.id));
       setFavoriteFiles(favorites);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load favorites:', error);
 }, [isAuthenticated, showFavorites, recentFiles]);
   // Add file to recent files
@@ -225,38 +228,38 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
 }, [recentFiles, favoriteFiles, filter, searchTerm]);
   if (!isAuthenticated) {
     return;
-      <div className={`recent-files-empty ${className}`} style={{},}
+      <div className={`recent-files-empty ${className}`} style={{},},
   padding: '20px',
         textAlign: 'center',
         color: '#6c757d';
-  }}>
+}>
         Please log in to see your recent files.
       </div>
     );
   return;
-    <div className={`recent-files ${className}`} style={{},}
+    <div className={`recent-files ${className}`} style={{},},
   display: 'flex',
       flexDirection: 'column',
       height: '100%';
-  }}>
+}>
       {/* Header */}
       <div style={{
   padding: '16px 20px',
   borderBottom: '1px solid #eee',
   backgroundColor: '#f8f9fa',
-}}>
+}>
         <div style={{
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
   marginBottom: '12px',
-}}>
+}>
           <h3 style={{
   margin: 0,
   fontSize: '16px',
   fontWeight: 600,
   color: '#212529',
-}}>
+}>
             Quick Access
           </h3>
           <div style={{ fontSize: '12px', color: '#6c757d' }}>
@@ -276,7 +279,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   borderRadius: '4px',
   fontSize: '13px',
   marginBottom: '12px',
-}}
+}
         />
         {/* Filter Tabs */}
         <div style={{ display: 'flex', gap: '8px' }}>
@@ -290,7 +293,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}}
+
           >
             All
           </button>
@@ -304,7 +307,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}}
+
           >
             Recent
           </button>
@@ -319,7 +322,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer',
-}}
+
             >
               ⭐ Favorites
             </button>
@@ -333,7 +336,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   padding: '40px 20px',
   textAlign: 'center',
   color: '#6c757d',
-}}>
+}>
             Loading recent files...
           </div>
         ) : filteredFiles.length === 0 ? ()
@@ -341,7 +344,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   padding: '40px 20px',
   textAlign: 'center',
   color: '#6c757d',
-}}>
+}>
             {searchTerm ? ()
               <>
                 <div style={{ fontSize: '24px', marginBottom: '8px' }}>🔍</div>
@@ -380,13 +383,13 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   display: 'flex',
   alignItems: 'center',
   gap: '12px',
-}}
+
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#f8f9fa';
-                }}
+}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                }}
+}
               >
                 {/* File Icon */}
                 <div style={{ fontSize: '20px', flexShrink: 0 }}>
@@ -400,7 +403,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   color: '#212529',
   marginBottom: '2px',
   wordBreak: 'break-word',
-}}>
+}>
                     {file.name}
                   </div>
                   <div style={{
@@ -409,7 +412,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   display: 'flex',
   alignItems: 'center',
   gap: '8px',
-}}>
+}>
                     <span>{formatTimeAgo(file.lastAccessed)}</span>
                     {file.metadata?.nodeCount && ()
                       <span>• {file.metadata.nodeCount} nodes</span>
@@ -424,7 +427,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   display: 'flex',
   flexWrap: 'wrap',
   gap: '4px',
-}}>
+}>
                       {file.tags.slice(0, 3).map((tag, tagIndex) => ()
                         <span
                           key={tagIndex}
@@ -434,7 +437,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   borderRadius: '2px',
   fontSize: '10px',
   color: '#495057',
-}}
+}
                         >
                           {tag}
                         </span>
@@ -443,7 +446,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
                         <span style={{
   fontSize: '10px',
   color: '#6c757d',
-}}>
+}>
                           +{file.tags.length - 3}
                         </span>
                       )}
@@ -466,7 +469,7 @@ export const recentFiles = existing ? JSON.parse(existing) : [];
     // Add to beginning and limit
     const updated = [recentEntry, ...filtered].slice(0, 20);
     localStorage.setItem('fileBrowserRecent', JSON.stringify(updated));
-  } catch (error) {
+ catch (error) {
   console.error('Failed to add file to recent:', error);
 };
 

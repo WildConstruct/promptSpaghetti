@@ -7,10 +7,10 @@
 import React from 'react';
 
 }
-interface AdvancedPromptingCollaborationDemoProps {
-    className?: string;
+}
+interface AdvancedPromptingCollaborationDemoProps { className?: string;
 
-export declare const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingCollaborationDemoProps>;
+export declare const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingCollaborationDemoProps> }
 }
 export {};
 //# sourceMappingURL=AdvancedPromptingCollaborationDemo.d.ts.map

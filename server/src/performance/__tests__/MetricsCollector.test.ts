@@ -18,7 +18,7 @@ import {
   PerformanceThresholds,
   PerformanceAlert,
   MetricsWindow
-} from '../MetricsCollector';
+ from '../MetricsCollector';
 
 // Mock Node.js modules
 jest.mock('os');
@@ -49,17 +49,17 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
         used: 1024 * 1024 * 512, // 512MB
         total: 1024 * 1024 * 1024 * 8, // 8GB
         percentage: 6.25
-  }
+
       networkStats: {
         bytesReceived: 1024 * 100,
         bytesSent: 1024 * 150,
         packetsReceived: 50,
         packetsSent: 75
-  }
+
       diskUsage: {
         reads: 100,
         writes: 50
-  }
+
       processMetrics: {
         pid: 1234,
         uptime: 3600000, // 1 hour
@@ -67,7 +67,7 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
         heapTotal: 1024 * 1024 * 200,
         external: 1024 * 50,
         arrayBuffers: 1024 * 10
-      }
+
     };
 
     mockWebSocketMetrics = {
@@ -298,7 +298,7 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
         memoryUsage: {
           ...mockSystemMetrics.memoryUsage,
           percentage: 90 // Above threshold of 85
-        }
+
       };
 
       metricsCollector.recordSystemMetrics(criticalMetrics);
@@ -371,7 +371,7 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
           timestamp: Date.now() + i * 1000
         };
         metricsCollector.recordSystemMetrics(metrics);
-      }
+
 
       const alertAnalysis = metricsCollector.analyzeAlertPatterns();
       expect(alertAnalysis.totalAlerts).toBeGreaterThan(0);
@@ -393,7 +393,7 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
           timestamp: now + i * 10000 // 10 second intervals
         };
         metricsCollector.recordSystemMetrics(metrics);
-      }
+
 
       const window: MetricsWindow = {
         windowStart: now,
@@ -429,7 +429,7 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
           timestamp: Date.now() + i * 1000
         };
         metricsCollector.recordWebSocketMetrics(metrics);
-      }
+
 
       const percentiles = metricsCollector.calculatePercentiles('messageLatency');
       expect(percentiles.p50).toBeCloseTo(50, 5); // Median
@@ -449,7 +449,7 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
           timestamp: Date.now() + i * 1000
         };
         metricsCollector.recordSystemMetrics(metrics);
-      }
+
 
       const allMetrics = metricsCollector.getSystemMetrics();
       expect(allMetrics.length).toBeLessThanOrEqual(maxWindowSize);
@@ -530,7 +530,7 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
         memoryUsage: {
           ...mockSystemMetrics.memoryUsage,
           percentage: 150 // Invalid >100% value
-        }
+
       };
 
       expect(() => {
@@ -556,9 +556,9 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
               cpuUsage: Math.random() * 100,
               timestamp: Date.now() + Math.random() * 1000
             });
-  }
+
         );
-      }
+
 
       await Promise.all(promises);
 
@@ -583,7 +583,7 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
           ...mockSystemMetrics,
           timestamp: Date.now() + i
         });
-      }
+
 
       const metrics = metricsCollector.getSystemMetrics();
       expect(metrics.length).toBeLessThanOrEqual(originalMaxSize);

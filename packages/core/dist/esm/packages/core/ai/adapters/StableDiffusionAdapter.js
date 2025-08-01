@@ -6,7 +6,13 @@
  */
 import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
  > ;
-controlnet ?  : Array;
+controlnet ?  : Array < {
+    model: string,
+    image: string,
+    strength: number,
+    guidance_start: number,
+    guidance_end: number
+} > ;
 // Quality and post-processing
 restore_faces ?  : boolean;
 tiling ?  : boolean;
@@ -16,6 +22,7 @@ hr_upscaler ?  : string;
 hr_second_pass_steps ?  : number;
 hr_resize_x ?  : number;
 hr_resize_y ?  : number;
+;
  > ;
 originalPrompt: string;
 negativePrompt ?  : string;
@@ -190,8 +197,9 @@ Promise < StableDiffusionGenerationResult > {
         };
         return this.process(prompt, inpaintOptions);
         async;
-        upscale(image, string);
-        upscaler: string = 'ESRGAN_4x',
+        upscale(image, string),
+            upscaler;
+        string = 'ESRGAN_4x',
             scale;
         number = 2;
         Promise < StableDiffusionGenerationResult > {
@@ -219,29 +227,27 @@ Promise < StableDiffusionGenerationResult > {
                 images: [{},
                     base64, response.image,
                     seed, 0,
-                    metadata, {
-                        model: upscaler,
-                        sampler: 'upscale',
-                        steps: 0,
-                        cfg_scale: 0,
-                        size: `${scale}x upscaled`
-                    }]
+                    metadata, {},
+                    model, upscaler,
+                    sampler, 'upscale',
+                    steps, 0,
+                    cfg_scale, 0,
+                    size, `${scale}x upscaled`]
             };
-            originalPrompt: 'Upscale',
-                parameters;
-            payload,
-                generationTime;
-            0,
-                usage;
-            {
-                computeUnits: scale * 10,
-                    estimatedCost;
-                0.01 * scale,
-                ;
-            }
-            ;
-            // Static helper methods
         }
+        originalPrompt: 'Upscale',
+            parameters;
+        payload,
+            generationTime;
+        0,
+            usage;
+        {
+            computeUnits: scale * 10,
+                estimatedCost;
+            0.01 * scale,
+            ;
+        }
+        ;
         // Static helper methods
     }
     // Static helper methods
@@ -475,7 +481,7 @@ if (method === 'POST' && payload) {
                                                         any;
                                                         {
                                                             return {
-                                                                text_prompts: [,
+                                                                text_prompts: [
                                                                     {
                                                                         text: options.prompt,
                                                                         weight: 1,
@@ -505,8 +511,9 @@ if (method === 'POST' && payload) {
                                                                     seed: options.seed,
                                                                     batch_size: options.batch_size,
                                                                 };
-                                                                _processGenerationResponse(response, StableDiffusionResponse);
-                                                                prompt: string,
+                                                                _processGenerationResponse(response, StableDiffusionResponse),
+                                                                    prompt;
+                                                                string,
                                                                     options;
                                                                 StableDiffusionRequestOptions,
                                                                     generationTime;
@@ -518,8 +525,7 @@ if (method === 'POST' && payload) {
                                                                         sampler: options.sampler_name || 'Unknown',
                                                                         steps: options.steps || 20,
                                                                         cfg_scale: options.cfg_scale || 7,
-                                                                        size: `${options.width}x${options.height}`
-                                                                    });
+                                                                        size: `${options.width}x${options.height}` });
                                                                 }
                                                                 ;
                                                                 const computeUnits = (options.steps || 20) * (options.batch_size || 1) * (options.n_iter || 1);

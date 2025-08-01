@@ -12,12 +12,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { User, ChevronDown, Settings, Shield, Users } from 'lucide-react';
 
-}
+
 interface UserNavigationProps {
   className?: string;
+  export const navigate = useNavigate();
 
-export const navigate = useNavigate();
-}
+
   const { isAuthenticated, user } = useAuthStore();
   if (!isAuthenticated || !user) {
     return null;
@@ -71,15 +71,15 @@ export const navigate = useNavigate();
   color: '#374151',
   transition: 'all 0.2s ease',
   boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
-}}
+
         onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
           e.currentTarget.style.backgroundColor = '#f8f9fa';
           e.currentTarget.style.borderColor = '#d1d5db';
-        }}
+}
         onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
           e.currentTarget.style.backgroundColor = '#ffffff';
           e.currentTarget.style.borderColor = '#e1e5e9';
-        }}
+}
       >
         {/* User Avatar */}
         <div
@@ -94,7 +94,7 @@ export const navigate = useNavigate();
   justifyContent: 'center',
   fontSize: '12px',
   fontWeight: '600',
-}}
+
         >
           {userInitials.toUpperCase()}
         </div>
@@ -112,7 +112,7 @@ export const navigate = useNavigate();
   borderRadius: '4px',
   fontSize: '11px',
   fontWeight: '600',
-}}
+}
           >
             Admin
           </span>
@@ -123,7 +123,7 @@ export const navigate = useNavigate();
           style={{
   transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
   transition: 'transform 0.2s ease',
-}} 
+} 
         />
       </button>
       {/* Dropdown Menu */}
@@ -135,7 +135,7 @@ export const navigate = useNavigate();
   position: 'fixed',
   inset: 0,
   zIndex: 10,
-}}
+}
             onClick={() => setDropdownOpen(false)}
           />
           {/* Menu */}
@@ -152,7 +152,7 @@ export const navigate = useNavigate();
   boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
   zIndex: 20,
   overflow: 'hidden',
-}}
+
           >
             {/* User Info Header */}
             <div style={{ padding: '12px 16px', borderBottom: '1px solid #f3f4f6' }}>
@@ -174,7 +174,7 @@ export const navigate = useNavigate();
   borderRadius: '4px',
   fontSize: '10px',
   fontWeight: '500',
-}}
+}
                     >
                       {role}
                     </span>
@@ -199,13 +199,13 @@ export const navigate = useNavigate();
   alignItems: 'center',
   gap: '8px',
   transition: 'background-color 0.2s ease',
-}}
+
                 onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = '#f9fafb';
-                }}
+}
                 onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                }}
+}
               >
                 <User size={16} />
                 My Profile
@@ -225,13 +225,13 @@ export const navigate = useNavigate();
   alignItems: 'center',
   gap: '8px',
   transition: 'background-color 0.2s ease',
-}}
+
                 onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = '#f9fafb';
-                }}
+}
                 onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                }}
+}
               >
                 <Settings size={16} />
                 Settings
@@ -243,7 +243,7 @@ export const navigate = useNavigate();
                     style={{
   margin: '8px 0',
   borderTop: '1px solid #f3f4f6',
-}}
+}
                   />
                   <button
                     onClick={() => handleOptionClick('user-management')}
@@ -260,13 +260,13 @@ export const navigate = useNavigate();
   alignItems: 'center',
   gap: '8px',
   transition: 'background-color 0.2s ease',
-}}
+
                     onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = '#fef3c7';
-                    }}
+}
                     onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
+}
                   >
                     <Users size={16} />
                     User Management
@@ -286,13 +286,13 @@ export const navigate = useNavigate();
   alignItems: 'center',
   gap: '8px',
   transition: 'background-color 0.2s ease',
-}}
+
                     onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = '#fef3c7';
-                    }}
+}
                     onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
+}
                   >
                     <Shield size={16} />
                     Admin Panel

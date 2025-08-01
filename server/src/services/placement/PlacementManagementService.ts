@@ -26,10 +26,10 @@ import {
   PlacementSlotMetrics,
   ContentPlacementMetrics,
   PlacementTemplate
-} from '../../../../packages/core/types/PlacementTypes';
+ from '../../../../packages/core/types/PlacementTypes';
 
-}
-}
+
+
 export interface CreateSlotRequest {
   name: string;
   displayName: string;
@@ -44,12 +44,13 @@ export interface CreateSlotRequest {
   displayRules?: unknown;
   priority?: number;
   tags?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UpdateSlotRequest {
   displayName?: string;
   description?: string;
@@ -62,12 +63,13 @@ export interface UpdateSlotRequest {
   priority?: number;
   isActive?: boolean;
   tags?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CreatePlacementRequest {
   slotId: string;
   contentId: string;
@@ -83,12 +85,13 @@ export interface CreatePlacementRequest {
   variantId?: string;
   notes?: string;
   tags?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UpdatePlacementRequest {
   priority?: number;
   weight?: number;
@@ -100,9 +103,10 @@ export interface UpdatePlacementRequest {
   customData?: unknown;
   notes?: string;
   tags?: string[];
-}
-}
-}
+
+
+
+
 
 export class PlacementManagementService {
   private db: Database;
@@ -111,7 +115,7 @@ export class PlacementManagementService {
   constructor(database: Database, auditService: AuditService) {
     this.db = database;
     this.auditService = auditService;
-  }
+
 
   // =============================================================================
   // Placement Slot Management
@@ -158,12 +162,12 @@ export class PlacementManagementService {
         name: slot.name,
         placementArea: slot.placementArea,
         position: slot.position
-  }
+
       severity: 'info'
     });
 
     return slot;
-  }
+
 
   /**
    * Get placement slot by ID
@@ -177,7 +181,7 @@ export class PlacementManagementService {
     if (result.rows.length === 0) return null;
 
     return this.hydratePlacementSlot(result.rows[0]);
-  }
+
 
   /**
    * Get all placement slots with filtering
@@ -188,7 +192,7 @@ export class PlacementManagementService {
     tags?: string[];
     limit?: number;
     offset?: number;
-  } = {}): Promise<{ slots: PlacementSlot[]; total: number }> {
+ = {}): Promise<{ slots: PlacementSlot[]; total: number }> {
 
     let query = `
       SELECT ps.*, COUNT(cp.placement_id) as active_placements
@@ -204,19 +208,19 @@ export class PlacementManagementService {
       query += ` AND ps.placement_area = $${paramIndex}`;
       params.push(criteria.placementArea);
       paramIndex++;
-    }
+
 
     if (criteria.isActive !== undefined) {
       query += ` AND ps.is_active = $${paramIndex}`;
       params.push(criteria.isActive);
       paramIndex++;
-    }
+
 
     if (criteria.tags && criteria.tags.length > 0) {
       query += ` AND ps.tags && $${paramIndex}`;
       params.push(criteria.tags);
       paramIndex++;
-    }
+
 
     query += ' GROUP BY ps.slot_id ORDER BY ps.priority DESC, ps.created_at DESC';
 
@@ -237,7 +241,7 @@ export class PlacementManagementService {
     );
 
     return { slots, total };
-  }
+
 
   /**
    * Update placement slot
@@ -249,7 +253,7 @@ export class PlacementManagementService {
     const currentSlot = await this.getPlacementSlot(slotId);
     if (!currentSlot) {
       throw new Error(`Placement slot not found: ${slotId}`);
-    }
+
 
     const updateData: unknown = {
       updated_at: new Date(),
@@ -290,12 +294,12 @@ export class PlacementManagementService {
         updates: Object.keys(updateData),
         previousActive: currentSlot.isActive,
         newActive: updates.isActive
-  }
+
       severity: 'info'
     });
 
     return await this.getPlacementSlot(slotId) as PlacementSlot;
-  }
+
 
   /**
    * Delete placement slot
@@ -313,7 +317,7 @@ export class PlacementManagementService {
     const activePlacements = parseInt(activePlacementsResult.rows[0].count);
     if (activePlacements > 0) {
       throw new Error(`Cannot delete slot with ${activePlacements} active placements`);
-    }
+
 
     await this.db.query('DELETE FROM placement_slots WHERE slot_id = $1', [slotId]);
 
@@ -323,7 +327,7 @@ export class PlacementManagementService {
       details: { slotId },
       severity: 'warning'
     });
-  }
+
 
   // =============================================================================
   // Content Placement Management
@@ -340,12 +344,12 @@ export class PlacementManagementService {
     const slot = await this.getPlacementSlot(request.slotId);
     if (!slot) {
       throw new Error(`Placement slot not found: ${request.slotId}`);
-    }
+
 
     const activePlacementsCount = await this.getActivePlacementsCount(request.slotId);
     if (activePlacementsCount >= slot.maxItems) {
       throw new Error(`Slot ${request.slotId} is at capacity (${slot.maxItems} items)`);
-    }
+
 
     // Validate content exists
     await this.validateContentExists(request.contentId, request.contentType);
@@ -389,12 +393,12 @@ export class PlacementManagementService {
         contentId: request.contentId,
         contentType: request.contentType,
         priority: placement.priority
-  }
+
       severity: 'info'
     });
 
     return placement;
-  }
+
 
   /**
    * Get content placement by ID
@@ -411,7 +415,7 @@ export class PlacementManagementService {
     if (result.rows.length === 0) return null;
 
     return this.hydrateContentPlacement(result.rows[0]);
-  }
+
 
   /**
    * Search content placements
@@ -442,43 +446,43 @@ export class PlacementManagementService {
       query += ` AND cp.slot_id = ANY($${paramIndex})`;
       params.push(criteria.slotIds);
       paramIndex++;
-    }
+
 
     if (criteria.contentTypes && criteria.contentTypes.length > 0) {
       query += ` AND cp.content_type = ANY($${paramIndex})`;
       params.push(criteria.contentTypes);
       paramIndex++;
-    }
+
 
     if (criteria.placementAreas && criteria.placementAreas.length > 0) {
       query += ` AND ps.placement_area = ANY($${paramIndex})`;
       params.push(criteria.placementAreas);
       paramIndex++;
-    }
+
 
     if (criteria.status && criteria.status.length > 0) {
       query += ` AND cp.status = ANY($${paramIndex})`;
       params.push(criteria.status);
       paramIndex++;
-    }
+
 
     if (criteria.dateRange) {
       query += ` AND cp.created_at BETWEEN $${paramIndex} AND $${paramIndex + 1}`;
       params.push(criteria.dateRange.start, criteria.dateRange.end);
       paramIndex += 2;
-    }
+
 
     if (criteria.createdBy) {
       query += ` AND cp.created_by = $${paramIndex}`;
       params.push(criteria.createdBy);
       paramIndex++;
-    }
+
 
     if (criteria.query) {
       query += ` AND (ps.name ILIKE $${paramIndex} OR ps.display_name ILIKE $${paramIndex} OR cp.notes ILIKE $${paramIndex})`;
       params.push(`%${criteria.query}%`);
       paramIndex++;
-    }
+
 
     // Get total count
     const countQuery = query.replace(/SELECT .* FROM/, 'SELECT COUNT(*) FROM');
@@ -502,7 +506,7 @@ export class PlacementManagementService {
     );
 
     return { placements, total };
-  }
+
 
   /**
    * Update content placement
@@ -518,7 +522,7 @@ export class PlacementManagementService {
     const currentPlacement = await this.getContentPlacement(placementId);
     if (!currentPlacement) {
       throw new Error(`Content placement not found: ${placementId}`);
-    }
+
 
     const updateData: unknown = {
       updated_at: new Date(),
@@ -553,7 +557,7 @@ export class PlacementManagementService {
     // Rebalance priorities if priority changed
     if (updates.priority !== undefined) {
       await this.rebalanceSlotPriorities(currentPlacement.slotId);
-    }
+
 
     await this.auditService.logEvent({
       userId: updatedBy,
@@ -563,12 +567,12 @@ export class PlacementManagementService {
         updates: Object.keys(updateData),
         previousStatus: currentPlacement.status,
         newStatus: updates.status
-  }
+
       severity: 'info'
     });
 
     return await this.getContentPlacement(placementId) as ContentPlacement;
-  }
+
 
   /**
    * Delete content placement
@@ -580,7 +584,7 @@ export class PlacementManagementService {
     const placement = await this.getContentPlacement(placementId);
     if (!placement) {
       throw new Error(`Content placement not found: ${placementId}`);
-    }
+
 
     await this.db.query('DELETE FROM content_placements WHERE placement_id = $1', [placementId]);
 
@@ -594,10 +598,10 @@ export class PlacementManagementService {
         placementId,
         slotId: placement.slotId,
         contentId: placement.contentId
-  }
+
       severity: 'warning'
     });
-  }
+
 
   // =============================================================================
   // Placement Preview and Testing
@@ -617,7 +621,7 @@ export class PlacementManagementService {
     const slot = await this.getPlacementSlot(slotId);
     if (!slot) {
       throw new Error(`Placement slot not found: ${slotId}`);
-    }
+
 
     // Get active or staged placements
     const placements = await this.getPlacementsForSlot(slotId, previewMode);
@@ -650,7 +654,7 @@ export class PlacementManagementService {
     };
 
     return preview;
-  }
+
 
   // =============================================================================
   // Analytics and Performance Tracking
@@ -698,7 +702,7 @@ export class PlacementManagementService {
       errorRate: 1.2, // Placeholder
       performanceIndex: 85 // Placeholder
     };
-  }
+
 
   /**
    * Get placement analytics
@@ -735,7 +739,7 @@ export class PlacementManagementService {
       insights: [], // Would be populated with generated insights
       recommendations: [] // Would be populated with recommendations
     };
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -764,7 +768,7 @@ export class PlacementManagementService {
       createdBy: row.created_by,
       lastModifiedBy: row.last_modified_by
     };
-  }
+
 
   private hydrateContentPlacement(row: unknown): ContentPlacement {
     return {
@@ -791,19 +795,19 @@ export class PlacementManagementService {
       notes: row.notes,
       tags: JSON.parse(row.tags || '[]')
     };
-  }
+
 
   private generateSlotId(): string {
     return `slot-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generatePlacementId(): string {
     return `place-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generatePreviewId(): string {
     return `prev-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private getDefaultStyling(): unknown {
     return {
@@ -813,7 +817,7 @@ export class PlacementManagementService {
       margin: 0,
       shadow: false
     };
-  }
+
 
   private async storePlacementSlot(slot: PlacementSlot): Promise<void> {
 
@@ -829,7 +833,7 @@ export class PlacementManagementService {
       JSON.stringify(slot.layout), JSON.stringify(slot.targetingRules), JSON.stringify(slot.displayRules),
       slot.isActive, slot.priority, JSON.stringify(slot.tags), slot.createdBy
     ]);
-  }
+
 
   private async storeContentPlacement(placement: ContentPlacement): Promise<void> {
 
@@ -847,7 +851,7 @@ export class PlacementManagementService {
       placement.experimentId, placement.variantId, placement.createdBy, placement.notes,
       JSON.stringify(placement.tags || [])
     ]);
-  }
+
 
   private async getActivePlacementsCount(slotId: string): Promise<number> {
 
@@ -856,7 +860,7 @@ export class PlacementManagementService {
       WHERE slot_id = $1 AND status = 'active'
     `, [slotId]);
     return parseInt(result.rows[0].count);
-  }
+
 
   private async validateContentExists(contentId: string, contentType: ContentType): Promise<void> {
 
@@ -874,7 +878,7 @@ export class PlacementManagementService {
       break;
     default:
       return; // Skip validation for other types
-    }
+
 
     const result = await this.db.query(`
       SELECT 1 FROM ${tableName} WHERE ${idColumn} = $1
@@ -882,40 +886,40 @@ export class PlacementManagementService {
 
     if (result.rows.length === 0) {
       throw new Error(`Content not found: ${contentType} ${contentId}`);
-    }
-  }
+
+
 
   private calculateDefaultPriority(_____slotId: string): number {
     return 50; // Default middle priority
-  }
+
 
   private determineInitialStatus(startTime?: Date, endTime?: Date): PlacementStatus {
     const now = new Date();
     
     if (startTime && startTime > now) {
       return PlacementStatus.SCHEDULED;
-    }
+
     
     if (endTime && endTime < now) {
       return PlacementStatus.EXPIRED;
-    }
+
     
     return PlacementStatus.ACTIVE;
-  }
+
 
   private determineApprovalRequirement(slot: PlacementSlot, _____request: CreatePlacementRequest): unknown {
     // Auto-approve for most placements, require review for high-visibility slots
     if (slot.placementArea === PlacementArea.HOMEPAGE || slot.position === PlacementPosition.HERO_BANNER) {
       return 'pending';
-    }
+
     return 'approved';
-  }
+
 
   private async rebalanceSlotPriorities(slotId: string): Promise<void> {
 
     // Rebalance priorities to ensure proper ordering
     console.log(`⚖️ Rebalancing priorities for slot: ${slotId}`);
-  }
+
 
   private mapSortField(field: string): string {
     const mapping: Record<string, string> = {
@@ -924,7 +928,7 @@ export class PlacementManagementService {
       name: 'ps.name'
     };
     return mapping[field] || 'cp.created_at';
-  }
+
 
   // Placeholder methods for advanced functionality
   private async getPlacementsForSlot(_____slotId: string, _____mode: string): Promise<ContentPlacement[]> { return []; }
@@ -962,5 +966,4 @@ export class PlacementManagementService {
       totalConversions: 125,
       totalRevenue: 12500
     };
-  }
-}
+

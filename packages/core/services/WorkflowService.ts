@@ -1,5 +1,4 @@
-import { 
-  WorkflowConfig,
+import { WorkflowConfig,
   WorkflowInstance,
   WorkflowState,
   WorkflowAction,
@@ -12,9 +11,9 @@ import {
   AuditLogEntry,
   AuditFilter,
   WorkflowWebhook,
-  ScheduledExecution,
+  ScheduledExecution }
   ExecutionResult
-} from '../types/WorkflowTypes';
+ from '../types/WorkflowTypes';
 class WorkflowService {
   private baseUrl: string;
   constructor(baseUrl = '/api') {
@@ -37,9 +36,9 @@ class WorkflowService {
   ): Promise<WorkflowConfig> {
 
     const response = await fetch(`${this.baseUrl}/workflows/configs`, {)}
-  },
-  method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'POST'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(config);
   });
     if (!response.ok) throw new Error(`Failed to create workflow config: ${response.statusText}`);}
@@ -47,9 +46,9 @@ class WorkflowService {
   async updateWorkflowConfig(configId: string, updates: Partial<WorkflowConfig>): Promise<WorkflowConfig> {
 
     const response = await fetch(`${this.baseUrl}/workflows/configs/${configId}`, {)}
-  },
-  method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'PUT'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(updates);
   });
     if (!response.ok) throw new Error(`Failed to update workflow config: ${response.statusText}`);}
@@ -57,15 +56,13 @@ class WorkflowService {
   async deleteWorkflowConfig(configId: string): Promise<void> {
 
     const response = await fetch(`${this.baseUrl}/workflows/configs/${configId}`, {)}
-  },
-  method: 'DELETE'
+
+  method: 'DELETE';
   });
     if (!response.ok) throw new Error(`Failed to delete workflow config: ${response.statusText}`);}
   // Workflow Instances
-  async getWorkflowInstance(resourceId: string, resourceType: string): Promise<WorkflowInstance | null> {
-
-    const params = new URLSearchParams({)
-  resourceId,
+  async getWorkflowInstance(resourceId: string, resourceType: string): Promise<WorkflowInstance | null> { const params = new URLSearchParams({)
+  resourceId }
       resourceType
     });
     const response = await fetch(`${this.baseUrl}/workflows/instances?${params}`);}
@@ -73,33 +70,33 @@ class WorkflowService {
     if (!response.ok) throw new Error(`Failed to fetch workflow instance: ${response.statusText}`);}
     return response.json();
   async createWorkflowInstance(resourceId: string)
-    resourceType: string,
-    configId: string,
+  resourceType: string
+    configId: string
     metadata?: Record<string, any>
   ): Promise<WorkflowInstance> {
 
     const response = await fetch(`${this.baseUrl}/workflows/instances`, {)}
-  },
-  method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({,)
-  resource_id: resourceId,
-  resource_type: resourceType,
-  workflow_config_id: configId,
+
+  method: 'POST'
+      headers: { 'Content-Type': 'application/json' }
+      body: JSON.stringify({ );
+  resource_id: resourceId
+  resource_type: resourceType
+  workflow_config_id: configId }
   metadata
-}
+
     });
     if (!response.ok) throw new Error(`Failed to create workflow instance: ${response.statusText}`);}
     return response.json();
   async transitionWorkflow(((
-    instanceId: string,
+    instanceId: string
     request: WorkflowTransitionRequest
   ): Promise<WorkflowInstance> {
 
     const response = await fetch(`${this.baseUrl}/workflows/instances/${instanceId}/transition`, {)}
-  },
-  method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'POST'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(request);
   });
     if (!response.ok) throw new Error(`Failed to transition workflow: ${response.statusText}`);}
@@ -129,9 +126,9 @@ class WorkflowService {
   async respondToApproval(requestId: string, response: ApprovalResponse): Promise<ApprovalRequest> {
 
     const resp = await fetch(`${this.baseUrl}/workflows/approvals/${requestId}/respond`, {)}
-  },
-  method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'POST'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(response);
   });
     if (!resp.ok) throw new Error(`Failed to respond to approval: ${resp.statusText}`);}
@@ -149,9 +146,9 @@ class WorkflowService {
   async acquireLock(request: LockRequest): Promise<ResourceLock> {
 
     const response = await fetch(`${this.baseUrl}/workflows/locks`, {)}
-  },
-  method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'POST'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(request);
   });
     if (!response.ok) throw new Error(`Failed to acquire lock: ${response.statusText}`);}
@@ -159,39 +156,34 @@ class WorkflowService {
   async releaseLock(lockId: string): Promise<void> {
 
     const response = await fetch(`${this.baseUrl}/workflows/locks/${lockId}`, {)}
-  },
-  method: 'DELETE'
+
+  method: 'DELETE';
   });
     if (!response.ok) throw new Error(`Failed to release lock: ${response.statusText}`);}
   async breakLock(lockId: string, reason?: string): Promise<void> {
 
     const response = await fetch(`${this.baseUrl}/workflows/locks/${lockId}/break`, {)}
-  },
-  method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'POST'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify({ reason })
     });
     if (!response.ok) throw new Error(`Failed to break lock: ${response.statusText}`);}
   // Audit Trail
-  async getAuditLogs(filter: AuditFilter = {}): Promise<{ entries: AuditLogEntry; total: number; has_more: boolean }> {
-
-    const params = new URLSearchParams();
+  async getAuditLogs(filter: AuditFilter = {}): Promise<{ entries: AuditLogEntry; total: number; has_more: boolean }> { const params = new URLSearchParams();
     Object.entries(filter).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         if (Array.isArray(value)) {
-          params.append(key, value.join(','));
-        } else {
-          params.append(key, value.toString());
-    });
+          params.append(key, value.join(',')) } else { params.append(key, value.toString()) });
     const response = await fetch(`${this.baseUrl}/workflows/audit?${params}`);}
     if (!response.ok) throw new Error(`Failed to fetch audit logs: ${response.statusText}`);}
     return response.json();
   async createAuditEntry(entry: Omit<AuditLogEntry, 'id' | 'created_at'>): Promise<AuditLogEntry> {
 
     const response = await fetch(`${this.baseUrl}/workflows/audit`, {)}
-  },
-  method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'POST'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(entry);
   });
     if (!response.ok) throw new Error(`Failed to create audit entry: ${response.statusText}`);}
@@ -207,9 +199,9 @@ class WorkflowService {
   async createWebhook(webhook: Omit<WorkflowWebhook, 'id' | 'created_at' | 'updated_at'>): Promise<WorkflowWebhook> {
 
     const response = await fetch(`${this.baseUrl}/workflows/webhooks`, {)}
-  },
-  method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'POST'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(webhook);
   });
     if (!response.ok) throw new Error(`Failed to create webhook: ${response.statusText}`);}
@@ -217,9 +209,9 @@ class WorkflowService {
   async updateWebhook(webhookId: string, updates: Partial<WorkflowWebhook>): Promise<WorkflowWebhook> {
 
     const response = await fetch(`${this.baseUrl}/workflows/webhooks/${webhookId}`, {)}
-  },
-  method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'PUT'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(updates);
   });
     if (!response.ok) throw new Error(`Failed to update webhook: ${response.statusText}`);}
@@ -227,8 +219,8 @@ class WorkflowService {
   async deleteWebhook(webhookId: string): Promise<void> {
 
     const response = await fetch(`${this.baseUrl}/workflows/webhooks/${webhookId}`, {)}
-  },
-  method: 'DELETE'
+
+  method: 'DELETE';
   });
     if (!response.ok) throw new Error(`Failed to delete webhook: ${response.statusText}`);}
   // Scheduled Execution
@@ -244,22 +236,22 @@ class WorkflowService {
   ): Promise<ScheduledExecution> {
 
     const response = await fetch(`${this.baseUrl}/workflows/scheduled`, {)}
-  },
-  method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'POST'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(execution);
   });
     if (!response.ok) throw new Error(`Failed to create scheduled execution: ${response.statusText}`);}
     return response.json();
   async updateScheduledExecution(((
-    executionId: string,
+    executionId: string
     updates: Partial<ScheduledExecution>
   ): Promise<ScheduledExecution> {
 
     const response = await fetch(`${this.baseUrl}/workflows/scheduled/${executionId}`, {)}
-  },
-  method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+
+  method: 'PUT'
+      headers: { 'Content-Type': 'application/json' }
       body: JSON.stringify(updates);
   });
     if (!response.ok) throw new Error(`Failed to update scheduled execution: ${response.statusText}`);}
@@ -267,8 +259,8 @@ class WorkflowService {
   async deleteScheduledExecution(executionId: string): Promise<void> {
 
     const response = await fetch(`${this.baseUrl}/workflows/scheduled/${executionId}`, {)}
-  },
-  method: 'DELETE'
+
+  method: 'DELETE';
   });
     if (!response.ok) throw new Error(`Failed to delete scheduled execution: ${response.statusText}`);}
   async getExecutionResults(executionId: string): Promise<ExecutionResult> {

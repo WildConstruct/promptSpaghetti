@@ -6,6 +6,7 @@ import React from 'react';
 import { WorkspaceWithMembership } from '../../types/workspace';
 
 }
+}
 interface WorkspaceListProps {
     workspaces: WorkspaceWithMembership[];
     selectedWorkspace: WorkspaceWithMembership | null;
@@ -15,4 +16,5 @@ interface WorkspaceListProps {
 export declare const WorkspaceList: React.FC<WorkspaceListProps>;
 export default WorkspaceList;
 //# sourceMappingURL=WorkspaceList.d.ts.map
+}
 }

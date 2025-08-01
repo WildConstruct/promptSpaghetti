@@ -5,19 +5,18 @@
  * Supports real-time search, autocomplete, and intelligent result ranking.
  */
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import {
-  Epic16KnowledgeBaseService,
+import { Epic16KnowledgeBaseService,
   KnowledgeBaseSearch as SearchResult,
   SearchFilters,
   KnowledgeCategory,
   ArticleType,
   ReadingLevel,
-  SearchSuggestion,
+  SearchSuggestion }
   SuggestionType
-} from '../../services/Epic16KnowledgeBaseService';
-}
-interface KnowledgeBaseSearchProps {
-  knowledgeService: Epic16KnowledgeBaseService;
+ from '../../services/Epic16KnowledgeBaseService';
+
+
+interface KnowledgeBaseSearchProps { knowledgeService: Epic16KnowledgeBaseService;
   userId: string;
   onArticleSelect?: (articleId: string) => void;
   onSearchPerformed?: (query: string, resultCount: number) => void;
@@ -31,33 +30,33 @@ interface KnowledgeBaseSearchProps {
   error: string | null;
   showFilters: boolean;
   showSuggestions: boolean;
-  export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({,)
-  knowledgeService,
-  userId,
-  onArticleSelect,
-  onSearchPerformed,
+  export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({);
+  knowledgeService;
+  userId;
+  onArticleSelect;
+  onSearchPerformed }
   className = ''
-}
-}) => {
-  // State management
+
+
+}) => { // State management
   const [searchState, setSearchState] = useState<SearchState>({)
-  query: '',
+  query: ''
     filters: {
-  categories: [],
-      types: [],
-      tags: [],
-      readingLevel: [],
-      language: [],
-      lastUpdated: {},
-      minRating: 0,
-      hasVideo: false,
-      hasCode: false;
-  },
-  results: null,
-    suggestions: [],
-    loading: false,
-    error: null,
-    showFilters: false,
+  categories: []
+      types: []
+      tags: []
+      readingLevel: []
+      language: [] }
+      lastUpdated: {}
+      minRating: 0
+      hasVideo: false
+      hasCode: false
+
+  results: null
+    suggestions: []
+    loading: false
+    error: null
+    showFilters: false
     showSuggestions: false;
   });
   // Refs
@@ -65,15 +64,15 @@ interface KnowledgeBaseSearchProps {
   const searchTimeoutRef = useRef<NodeJS.Timeout>();
   const suggestionsRef = useRef<HTMLDivElement>(null);
   // Popular searches for suggestions
-  const popularSearches = useMemo(() => [;
-    'getting started',
-    'marketplace guide',
-    'template creation',
-    'selling templates',
-    'community guidelines',
-    'api documentation',
-    'troubleshooting',
-    'billing help',
+  const popularSearches = useMemo(() => [
+    'getting started'
+    'marketplace guide'
+    'template creation'
+    'selling templates'
+    'community guidelines'
+    'api documentation'
+    'troubleshooting'
+    'billing help'
     'account security'
   ], []);
   // Debounced search
@@ -82,68 +81,58 @@ interface KnowledgeBaseSearchProps {
       setSearchState(prev => ({ ...prev, results: null, loading: false }));
       return;
     setSearchState(prev => ({ ...prev, loading: true, error: null }));
-    try {
-  const searchResults = await knowledgeService.searchArticles(query, filters, userId);
+    try { const searchResults = await knowledgeService.searchArticles(query, filters, userId);
   setSearchState(prev => ({)
-  ...prev,
-  results: searchResults,
-  suggestions: searchResults.suggestions,
-  loading: false,
+  ...prev
+  results: searchResults
+  suggestions: searchResults.suggestions
+  loading: false }
 }));
       onSearchPerformed?.(query, searchResults.totalResults);
-    } catch (error) {
-  setSearchState(prev => ({)
-  ...prev,
-  error: error instanceof Error ? error.message : 'Search failed',
-  loading: false,
+ catch (error) { setSearchState(prev => ({)
+  ...prev
+  error: error instanceof Error ? error.message : 'Search failed'
+  loading: false }
 }));
   }, [knowledgeService, userId, onSearchPerformed]);
   // Handle search input changes
   const handleSearchInput = useCallback((value: string) => {
     setSearchState(prev => ({ ...prev, query: value, showSuggestions: value.length > 0 }));
     // Clear existing timeout
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
+    if (searchTimeoutRef.current) { clearTimeout(searchTimeoutRef.current);
     // Debounce search
     if (value.trim()) {
       searchTimeoutRef.current = setTimeout(() => {
-        performSearch(value, searchState.filters);
-      }, 300);
-    } else {
+        performSearch(value, searchState.filters) }, 300);
+ else {
       setSearchState(prev => ({ ...prev, results: null, suggestions: [] }));
   }, [performSearch, searchState.filters]);
   // Handle filter changes
   const handleFilterChange = useCallback((newFilters: Partial<SearchFilters>) => {
     const updatedFilters = { ...searchState.filters, ...newFilters };
     setSearchState(prev => ({ ...prev, filters: updatedFilters }));
-    if (searchState.query.trim()) {
-      performSearch(searchState.query, updatedFilters);
-  }, [searchState.filters, searchState.query, performSearch]);
+    if (searchState.query.trim()) { performSearch(searchState.query, updatedFilters) }, [searchState.filters, searchState.query, performSearch]);
   // Handle suggestion selection
-  const handleSuggestionSelect = useCallback((suggestion: SearchSuggestion) => {
-  setSearchState(prev => ({)
-  ...prev,
-  query: suggestion.text,
-  showSuggestions: false,
+  const handleSuggestionSelect = useCallback((suggestion: SearchSuggestion) => { setSearchState(prev => ({)
+  ...prev
+  query: suggestion.text
+  showSuggestions: false }
 }));
     performSearch(suggestion.text, searchState.filters);
     searchInputRef.current?.focus();
   }, [performSearch, searchState.filters]);
   // Handle article selection
-  const handleArticleSelect = useCallback((articleId: string) => {
-    onArticleSelect?.(articleId);
-  }, [onArticleSelect]);
+  const handleArticleSelect = useCallback((articleId: string) => { onArticleSelect?.(articleId) }, [onArticleSelect]);
   // Clear filters
-  const clearFilters = useCallback(() => {
-    const clearedFilters: SearchFilters = {,
-  categories: [],
-      types: [],
-      tags: [],
-      readingLevel: [],
-      language: [],
-      lastUpdated: {},
-      minRating: 0,
-      hasVideo: false,
+  const clearFilters = useCallback(() => { const clearedFilters: SearchFilters = {
+  categories: []
+      types: []
+      tags: []
+      readingLevel: []
+      language: [] }
+      lastUpdated: {}
+      minRating: 0
+      hasVideo: false
       hasCode: false;
   };
     handleFilterChange(clearedFilters);
@@ -158,21 +147,20 @@ interface KnowledgeBaseSearchProps {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   // Generate search suggestions
-  const searchSuggestions = useMemo(() => {
-  if (!searchState.query || searchState.query.length < 2) {
+  const searchSuggestions = useMemo(() => { if (!searchState.query || searchState.query.length < 2) {
   return popularSearches.slice(0, 5).map(search => ({)
   text: search,
   type: SuggestionType.POPULAR_SEARCH,
-  score: 0.8,
+  score: 0.8 }
 }));
     const filtered = popularSearches.filter(search =>;);
       search.toLowerCase().includes(searchState.query.toLowerCase())
     );
     return [
-      ...filtered.map(search => ({)
+      ...filtered.map(search => ({ )
   text: search,
   type: SuggestionType.QUERY_COMPLETION,
-  score: 0.9,
+  score: 0.9 }
 })),
       ...searchState.suggestions
     ].slice(0, 8);
@@ -184,9 +172,7 @@ interface KnowledgeBaseSearchProps {
     return text.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
   }, []);
   // Format category name
-  const formatCategoryName = useCallback((category: string) => {
-    return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-  }, []);
+  const formatCategoryName = useCallback((category: string) => { return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) }, []);
   return;
     <div className={`knowledge-base-search ${className}`}>}
       {/* Search Header */}
@@ -244,9 +230,9 @@ interface KnowledgeBaseSearchProps {
                     <div className="flex-1">
                       <div
                         className="text-gray-900"
-                        dangerouslySetInnerHTML={{
-  __html: highlightQuery(suggestion.text, searchState.query),
-}}
+                        dangerouslySetInnerHTML={ {
+  __html: highlightQuery(suggestion.text, searchState.query) }
+}
                       />
                       <div className="text-xs text-gray-500">
                         {suggestion.type === SuggestionType.POPULAR_SEARCH ? 'Popular search' : 'Search suggestion'}
@@ -299,7 +285,7 @@ interface KnowledgeBaseSearchProps {
                             ? [...searchState.filters.categories, category]
                             : searchState.filters.categories.filter(c => c !== category);
                           handleFilterChange({ categories: newCategories });
-                        }}
+
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-600">
@@ -323,7 +309,7 @@ interface KnowledgeBaseSearchProps {
                             ? [...searchState.filters.types, type]
                             : searchState.filters.types.filter(t => t !== type);
                           handleFilterChange({ types: newTypes });
-                        }}
+
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-600">
@@ -347,7 +333,7 @@ interface KnowledgeBaseSearchProps {
                             ? [...searchState.filters.readingLevel, level]
                             : searchState.filters.readingLevel.filter(l => l !== level);
                           handleFilterChange({ readingLevel: newLevels });
-                        }}
+
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-600 capitalize">
@@ -478,11 +464,11 @@ interface KnowledgeBaseSearchProps {
                         {[...Array(5)].map((_, i) => ()
                           <svg
                             key={i}
-                            className={`w-4 h-4 ${
+                            className={ `w-4 h-4 ${
   i < Math.round(result.article.ratings.reduce((sum, r) => sum + r.rating, 0) / result.article.ratings.length || 0)
   ? 'text-yellow-400'
-  : 'text-gray-300',
-}`}
+  : 'text-gray-300' }
+`}
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -495,9 +481,9 @@ interface KnowledgeBaseSearchProps {
                   </div>
                   <div
                     className="text-gray-600 mb-3"
-                    dangerouslySetInnerHTML={{
-  __html: result.highlightedContent,
-}}
+                    dangerouslySetInnerHTML={ {
+  __html: result.highlightedContent }
+}
                   />
                   {result.relevanceReason.length > 0 && ()
                     <div className="text-xs text-gray-500">
@@ -513,9 +499,9 @@ interface KnowledgeBaseSearchProps {
                             <span className="font-medium text-gray-800">{section.title}</span>
                             <div
                               className="text-gray-600 text-xs mt-1"
-                              dangerouslySetInnerHTML={{
-  __html: section.highlightedText,
-}}
+                              dangerouslySetInnerHTML={ {
+  __html: section.highlightedText }
+}
                             />
                           </div>
                         ))}

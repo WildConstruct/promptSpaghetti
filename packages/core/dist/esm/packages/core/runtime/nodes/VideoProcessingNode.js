@@ -160,7 +160,7 @@ await adapter.initialize();
 this.adapters.set(config.provider, adapter);
 try { }
 catch (error) {
-    console.warn(`Failed to initialize ${config.provider},)}
+    console.warn(`Failed to initialize ${config.provider})},
   adapter:`, error);
 }
 _getConfiguredProvider();

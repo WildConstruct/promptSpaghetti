@@ -14,8 +14,8 @@ export type UserStatus = 'active' | 'inactive' | 'suspended' | 'locked' | 'pendi
 export type ProcessStatus = 'running' | 'idle' | 'busy' | 'error' | 'stopped';
 
 }
-export interface SystemService {
-    id: string;
+}
+export interface SystemService { id: string;
     name: string;
     displayName: string;
     description: string;
@@ -28,32 +28,26 @@ export interface SystemService {
     port?: number;
     url?: string;
     logs: ServiceLog[];
-    metrics: ServiceMetrics;
-
-
+    metrics: ServiceMetrics }
 }
-export interface ServiceLog {
-    id: string;
+}
+export interface ServiceLog { id: string;
     timestamp: Date;
     level: 'info' | 'warn' | 'error' | 'debug';
     message: string;
     service: string;
-    details?: Record<string, any>;
-
-
+    details?: Record<string, any> }
 }
-export interface ServiceMetrics {
-    cpuUsage: number;
+}
+export interface ServiceMetrics { cpuUsage: number;
     memoryUsage: number;
     requestCount: number;
     errorRate: number;
     responseTime: number;
-    throughput: number;
-
-
+    throughput: number }
 }
-export interface SystemOverview {
-    overallStatus: SystemStatus;
+}
+export interface SystemOverview { overallStatus: SystemStatus;
     totalServices: number;
     runningServices: number;
     erroredServices: number;
@@ -63,9 +57,8 @@ export interface SystemOverview {
     networkLatency: number;
     uptime: number;
     activeUsers: number;
-    backgroundJobs: number;
-
-
+    backgroundJobs: number }
+}
 }
 export interface StatusControlsProps {
     className?: string;
@@ -76,4 +69,5 @@ export interface StatusControlsProps {
 export declare const StatusControls: React.FC<StatusControlsProps>;
 export default StatusControls;
 //# sourceMappingURL=StatusControls.d.ts.map
+}
 }

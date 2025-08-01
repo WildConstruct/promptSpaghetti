@@ -47,7 +47,7 @@ class DailyTicketTracker {
     
     this.initialized = false;
     this.resetTimer = null;
-  }
+
 
   /**
    * Initialize the tracker
@@ -71,12 +71,11 @@ class DailyTicketTracker {
       
       // Log initialization
       await this.logEvent('system', 'Tracker initialized');
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize Daily Ticket Tracker:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Track a ticket approval
@@ -103,15 +102,14 @@ class DailyTicketTracker {
       
       if (this.config.detailedLogging) {
         console.log(`📋 Ticket approved: ${ticketId} by ${agentId}`);
-      }
+
       
       // Check for milestones
       await this.checkMilestones();
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error tracking approval:', error);
-    }
-  }
+
+
 
   /**
    * Track a ticket push/commit
@@ -141,15 +139,14 @@ class DailyTicketTracker {
       
       if (this.config.detailedLogging) {
         console.log(`🚀 ${count} ticket(s) pushed by ${agentId}: ${commitHash}`);
-      }
+
       
       // Check for milestones
       await this.checkMilestones();
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error tracking push:', error);
-    }
-  }
+
+
 
   /**
    * Get current day statistics
@@ -163,7 +160,7 @@ class DailyTicketTracker {
         total: (stats.approved || 0) + (stats.pushed || 0),
         lastActivity: stats.lastActivity
       };
-    }
+
     
     const sessionDuration = Date.now() - this.currentDay.startTime.getTime();
     const hoursActive = sessionDuration / (1000 * 60 * 60);
@@ -186,7 +183,7 @@ class DailyTicketTracker {
       },
       lastUpdate: this.currentDay.lastUpdate
     };
-  }
+
 
   /**
    * Get historical statistics
@@ -205,7 +202,7 @@ class DailyTicketTracker {
           trend: 'stable',
           dailyBreakdown: []
         };
-      }
+
       
       const totalApproved = recentDays.reduce((sum, day) => sum + (day.approved || 0), 0);
       const totalPushed = recentDays.reduce((sum, day) => sum + (day.pushed || 0), 0);
@@ -237,11 +234,11 @@ class DailyTicketTracker {
           agents: day.agentCount || 0
         }))
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting historical stats:', error);
       return null;
-    }
-  }
+
+
 
   /**
    * Generate daily report
@@ -268,10 +265,10 @@ class DailyTicketTracker {
     
     if (includeTimeline) {
       report.timeline = currentStats.timeline;
-    }
+
     
     return report;
-  }
+
 
   /**
    * Reset daily counters (called at midnight CT)
@@ -304,11 +301,10 @@ class DailyTicketTracker {
       
       // Log reset event
       await this.logEvent('system', 'Daily reset completed');
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error during daily reset:', error);
-    }
-  }
+
+
 
   /**
    * Manual reset (for testing or admin use)
@@ -316,31 +312,31 @@ class DailyTicketTracker {
   async manualReset() {
     console.log('⚡ Manual reset triggered...');
     await this.resetDaily();
-  }
+
 
   // Private helper methods
 
   private async ensureDataDirectory() {
     try {
       await fs.access(this.dataDir);
-    } catch {
+ catch {
       await fs.mkdir(this.dataDir, { recursive: true });
-    }
-  }
+
+
 
   private async loadConfig() {
     try {
       const configData = await fs.readFile(this.configFile, 'utf8');
       this.config = { ...this.config, ...JSON.parse(configData) };
-    } catch {
+ catch {
       // Use defaults, save initial config
       await this.saveConfig();
-    }
-  }
+
+
 
   private async saveConfig() {
     await fs.writeFile(this.configFile, JSON.stringify(this.config, null, 2));
-  }
+
 
   private async loadCurrentDay() {
     try {
@@ -355,16 +351,16 @@ class DailyTicketTracker {
           startTime: new Date(parsed.startTime),
           lastUpdate: new Date(parsed.lastUpdate)
         };
-      } else {
+ else {
         // Different day, archive old data and start fresh
         if (parsed.date) {
           await this.archiveDay(parsed);
-        }
-      }
-    } catch {
+
+
+ catch {
       // File doesn't exist or is corrupted, start fresh
-    }
-  }
+
+
 
   private async saveCurrentDay() {
     const data = {
@@ -372,28 +368,28 @@ class DailyTicketTracker {
       agents: Object.fromEntries(this.currentDay.agents)
     };
     await fs.writeFile(this.dailyLogFile, JSON.stringify(data, null, 2));
-  }
+
 
   private async loadHistory() {
     try {
       const data = await fs.readFile(this.historyFile, 'utf8');
       return JSON.parse(data);
-    } catch {
+ catch {
       return [];
-    }
-  }
+
+
 
   private async saveHistory(history) {
     await fs.writeFile(this.historyFile, JSON.stringify(history, null, 2));
-  }
+
 
   private async archiveCurrentDay() {
     if (this.currentDay.approved === 0 && this.currentDay.pushed === 0) {
       return; // Don't archive empty days
-    }
+
     
     await this.archiveDay(this.currentDay);
-  }
+
 
   private async archiveDay(dayData) {
     const history = await this.loadHistory();
@@ -419,7 +415,7 @@ class DailyTicketTracker {
     filteredHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
     
     await this.saveHistory(filteredHistory);
-  }
+
 
   private async cleanupHistory() {
     if (this.config.retentionDays <= 0) return;
@@ -435,8 +431,8 @@ class DailyTicketTracker {
     if (filteredHistory.length !== history.length) {
       await this.saveHistory(filteredHistory);
       console.log(`🧹 Cleaned up ${history.length - filteredHistory.length} old history entries`);
-    }
-  }
+
+
 
   private updateAgentStats(agentId, type, count = 1) {
     if (!this.currentDay.agents.has(agentId)) {
@@ -445,12 +441,12 @@ class DailyTicketTracker {
         pushed: 0,
         lastActivity: new Date()
       });
-    }
+
     
     const stats = this.currentDay.agents.get(agentId);
     stats[type] += count;
     stats.lastActivity = new Date();
-  }
+
 
   private getCurrentDateCT() {
     return new Date().toLocaleDateString('en-US', {
@@ -459,7 +455,7 @@ class DailyTicketTracker {
       month: '2-digit',
       day: '2-digit'
     });
-  }
+
 
   private getNextMidnightCT() {
     const now = new Date();
@@ -476,7 +472,7 @@ class DailyTicketTracker {
     const localMidnight = new Date(nextMidnight.getTime() + centralOffset - utcOffset);
     
     return localMidnight;
-  }
+
 
   private getCentralTimeOffset() {
     // Central Standard Time is UTC-6, Central Daylight Time is UTC-5
@@ -491,13 +487,13 @@ class DailyTicketTracker {
     
     const isDST = now.getTimezoneOffset() < stdTimezoneOffset;
     return isDST ? -5 * 3600000 : -6 * 3600000; // Convert hours to milliseconds
-  }
+
 
   private setupMidnightReset() {
     // Clear existing timer
     if (this.resetTimer) {
       clearTimeout(this.resetTimer);
-    }
+
     
     const nextMidnight = this.getNextMidnightCT();
     const msUntilMidnight = nextMidnight.getTime() - Date.now();
@@ -509,7 +505,7 @@ class DailyTicketTracker {
       // Schedule next reset
       this.setupMidnightReset();
     }, msUntilMidnight);
-  }
+
 
   private async checkMilestones() {
     const total = this.currentDay.approved + this.currentDay.pushed;
@@ -519,9 +515,9 @@ class DailyTicketTracker {
       if (total === milestone && this.config.enableNotifications) {
         console.log(`🎉 Milestone reached: ${milestone} tickets completed today!`);
         await this.logEvent('milestone', `${milestone} tickets completed`);
-      }
-    }
-  }
+
+
+
 
   private checkDailyMilestones(stats) {
     const milestones = [];
@@ -537,14 +533,14 @@ class DailyTicketTracker {
     if (stats.session.avgTicketsPerHour >= 10) milestones.push('Speed Demon (10+ per hour)');
     
     return milestones;
-  }
+
 
   private async logEvent(type, message) {
     if (!this.config.detailedLogging) return;
     
     const timestamp = new Date().toISOString();
     console.log(`[${timestamp}] [${type.toUpperCase()}] ${message}`);
-  }
+
 
   /**
    * Cleanup and shutdown
@@ -552,11 +548,11 @@ class DailyTicketTracker {
   async shutdown() {
     if (this.resetTimer) {
       clearTimeout(this.resetTimer);
-    }
+
     
     await this.saveCurrentDay();
     console.log('📊 Daily Ticket Tracker shutdown complete');
-  }
-}
+
+
 
 module.exports = DailyTicketTracker;

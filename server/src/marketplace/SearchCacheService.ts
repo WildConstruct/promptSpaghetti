@@ -24,20 +24,21 @@ import { promisify } from 'util';
 const gzip = promisify(zlib.gzip);
 const gunzip = promisify(zlib.gunzip);
 
-}
-}
+
+
 interface CacheConfig {
   defaultTTL: number;
   maxMemoryItems: number;
   compressionThreshold: number;
   warmupQueries: string[];
   prefetchThreshold: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CacheEntry {
   data: any;
   timestamp: number;
@@ -45,12 +46,13 @@ interface CacheEntry {
   hitCount: number;
   compressed: boolean;
   size: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CacheMetrics {
   hits: number;
   misses: number;
@@ -63,22 +65,24 @@ interface CacheMetrics {
     query: string;
     hits: number;
     lastAccessed: Date;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 interface SearchCacheOptions {
   ttl?: number;
   tags?: string[];
   compress?: boolean;
   priority?: 'low' | 'normal' | 'high';
   refreshAhead?: boolean;
-}
-}
-}
+
+
+
+
 
 @Injectable()
 export class SearchCacheService {
@@ -127,7 +131,7 @@ export class SearchCacheService {
 
     this.startCleanupTask();
     this.warmupCache();
-  }
+
 
   /**
    * Get cached search results
@@ -143,7 +147,7 @@ export class SearchCacheService {
       if (memoryResult) {
         this.recordHit(key, Date.now() - startTime);
         return memoryResult;
-      }
+
 
       // Check Redis cache (L2)
       const redisResult = await this.getFromRedis(key);
@@ -152,16 +156,16 @@ export class SearchCacheService {
         this.setInMemory(key, redisResult, this.config.defaultTTL);
         this.recordHit(key, Date.now() - startTime);
         return redisResult;
-      }
+
 
       this.recordMiss(key, Date.now() - startTime);
       return null;
-    } catch (error) {
+ catch (error) {
       console.error('Cache get error:', error);
       this.recordMiss(key, Date.now() - startTime);
       return null;
-    }
-  }
+
+
 
   /**
    * Set search results in cache
@@ -179,7 +183,7 @@ export class SearchCacheService {
         compress = false,
         priority = 'normal',
         refreshAhead = true
-      } = options;
+ = options;
 
       const serializedData = JSON.stringify(data);
       const shouldCompress = compress || serializedData.length > this.config.compressionThreshold;
@@ -187,7 +191,7 @@ export class SearchCacheService {
       let finalData: string | Buffer = serializedData;
       if (shouldCompress) {
         finalData = await gzip(Buffer.from(serializedData));
-      }
+
 
       // Store in both caches
       await Promise.all([
@@ -197,15 +201,15 @@ export class SearchCacheService {
           tags, 
           priority,
           refreshAhead 
-  }
+
       ]);
 
       // Track for analytics
       await this.trackCacheSet(key, serializedData.length, tags);
-    } catch (error) {
+ catch (error) {
       console.error('Cache set error:', error);
-    }
-  }
+
+
 
   /**
    * Generate cache key for search query
@@ -223,7 +227,7 @@ export class SearchCacheService {
 
     const keyString = JSON.stringify(keyData);
     return crypto.createHash('sha256').update(keyString).digest('hex');
-  }
+
 
   /**
    * Invalidate cache entries by pattern or tags
@@ -238,16 +242,16 @@ export class SearchCacheService {
         const keys = await this.redis.keys(pattern);
         if (keys.length > 0) {
           deletedCount += await this.redis.del(...keys);
-        }
+
 
         // Clear matching memory cache entries
         for (const [key] of this.memoryCache) {
           if (key.includes(pattern.replace('*', ''))) {
             this.memoryCache.delete(key);
             deletedCount++;
-          }
-        }
-      }
+
+
+
 
       if (tags && tags.length > 0) {
         // Invalidate by tags
@@ -256,7 +260,7 @@ export class SearchCacheService {
           if (taggedKeys.length > 0) {
             deletedCount += await this.redis.del(...taggedKeys);
             await this.redis.del(`tags:${tag}`);
-          }
+
 
           // Clear tagged memory cache entries
           for (const [key, entry] of this.memoryCache) {
@@ -264,18 +268,18 @@ export class SearchCacheService {
             if (keyTags.includes(tag)) {
               this.memoryCache.delete(key);
               deletedCount++;
-            }
-          }
-        }
-      }
+
+
+
+
 
       console.log(`Cache invalidation completed: ${deletedCount} entries removed`);
       return deletedCount;
-    } catch (error) {
+ catch (error) {
       console.error('Cache invalidation error:', error);
       return 0;
-    }
-  }
+
+
 
   /**
    * Warm up cache with popular queries
@@ -295,14 +299,14 @@ export class SearchCacheService {
           // This would call the actual search service
           console.log(`Warming up cache for query: ${query}`);
           // await this.searchService.search(query); // Would be implemented
-        }
-      }
+
+
 
       console.log('Cache warmup completed');
-    } catch (error) {
+ catch (error) {
       console.error('Cache warmup error:', error);
-    }
-  }
+
+
 
   /**
    * Get cache performance metrics
@@ -327,11 +331,11 @@ export class SearchCacheService {
       this.cacheMetrics.redisConnections = clientsMatch ? parseInt(clientsMatch[1]) : 0;
 
       return { ...this.cacheMetrics };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get cache metrics:', error);
       return this.cacheMetrics;
-    }
-  }
+
+
 
   /**
    * Clear all cache entries
@@ -349,10 +353,10 @@ export class SearchCacheService {
       this.cacheMetrics.totalQueries = 0;
       
       console.log('Cache cleared successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Cache clear error:', error);
-    }
-  }
+
+
 
   /**
    * Preload cache for anticipated queries
@@ -374,12 +378,12 @@ export class SearchCacheService {
           // This would execute the actual search
           // await this.searchService.search(query, filters);
           console.log(`Preloaded: ${query}`);
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       console.error('Cache preload error:', error);
-    }
-  }
+
+
 
   /**
    * Get cache health status
@@ -387,7 +391,7 @@ export class SearchCacheService {
   async getHealthStatus(): Promise<{
     status: 'healthy' | 'degraded' | 'unhealthy';
     details: any;
-  }> {
+> {
 
     try {
       const [redisPing, memoryUsage] = await Promise.all([
@@ -403,9 +407,9 @@ export class SearchCacheService {
       
       if (!isRedisHealthy) {
         status = 'unhealthy';
-      } else if (!isMemoryHealthy || !isHitRateHealthy) {
+ else if (!isMemoryHealthy || !isHitRateHealthy) {
         status = 'degraded';
-      }
+
 
       return {
         status,
@@ -415,17 +419,17 @@ export class SearchCacheService {
           hit_rate: memoryUsage.hitRate,
           total_queries: memoryUsage.totalQueries,
           cache_entries: this.memoryCache.size
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         details: {
           error: error instanceof Error ? error.message : 'Unknown error'
-        }
+
       };
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -437,11 +441,11 @@ export class SearchCacheService {
     if (Date.now() > entry.timestamp + (entry.ttl * 1000)) {
       this.memoryCache.delete(key);
       return null;
-    }
+
 
     entry.hitCount++;
     return entry.data;
-  }
+
 
   private async getFromRedis(key: string): Promise<any | null> {
 
@@ -457,16 +461,16 @@ export class SearchCacheService {
       if (isCompressed) {
         const decompressed = await gunzip(Buffer.from(result, 'base64'));
         data = decompressed.toString();
-      } else {
+ else {
         data = result;
-      }
+
 
       return JSON.parse(data);
-    } catch (error) {
+ catch (error) {
       console.error('Redis get error:', error);
       return null;
-    }
-  }
+
+
 
   private setInMemory(key: string, data: any, ttl: number, compressed = false): void {
     // Enforce memory limit
@@ -475,8 +479,8 @@ export class SearchCacheService {
       const oldestKey = this.findLRUKey();
       if (oldestKey) {
         this.memoryCache.delete(oldestKey);
-      }
-    }
+
+
 
     const entry: CacheEntry = {
       data,
@@ -488,7 +492,7 @@ export class SearchCacheService {
     };
 
     this.memoryCache.set(key, entry);
-  }
+
 
   private async setInRedis(
     key: string, 
@@ -503,9 +507,9 @@ export class SearchCacheService {
       // Set the data
       if (Buffer.isBuffer(data)) {
         pipeline.set(key, data.toString('base64'), 'EX', ttl);
-      } else {
+ else {
         pipeline.set(key, data, 'EX', ttl);
-      }
+
 
       // Set metadata
       pipeline.hmset(`meta:${key}`, metadata);
@@ -516,42 +520,42 @@ export class SearchCacheService {
         for (const tag of metadata.tags) {
           pipeline.sadd(`tags:${tag}`, key);
           pipeline.expire(`tags:${tag}`, ttl);
-        }
-      }
+
+
 
       await pipeline.exec();
-    } catch (error) {
+ catch (error) {
       console.error('Redis set error:', error);
-    }
-  }
+
+
 
   private recordHit(key: string, responseTime: number): void {
     this.cacheMetrics.hits++;
     this.updateAverageResponseTime(responseTime);
     this.updatePopularQueries(key);
-  }
+
 
   private recordMiss(key: string, responseTime: number): void {
     this.cacheMetrics.misses++;
     this.updateAverageResponseTime(responseTime);
-  }
+
 
   private updateAverageResponseTime(responseTime: number): void {
     const totalQueries = this.cacheMetrics.totalQueries;
     const currentAvg = this.cacheMetrics.averageResponseTime;
     this.cacheMetrics.averageResponseTime = 
       (currentAvg * (totalQueries - 1) + responseTime) / totalQueries;
-  }
+
 
   private updatePopularQueries(key: string): void {
     const existing = this.popularQueries.get(key);
     if (existing) {
       existing.hits++;
       existing.lastAccessed = new Date();
-    } else {
+ else {
       this.popularQueries.set(key, { hits: 1, lastAccessed: new Date() });
-    }
-  }
+
+
 
   private findLRUKey(): string | null {
     let oldestKey: string | null = null;
@@ -561,19 +565,19 @@ export class SearchCacheService {
       if (entry.timestamp < oldestTime) {
         oldestTime = entry.timestamp;
         oldestKey = key;
-      }
-    }
+
+
 
     return oldestKey;
-  }
+
 
   private calculateMemoryUsage(): number {
     let totalSize = 0;
     for (const [, entry] of this.memoryCache) {
       totalSize += entry.size;
-    }
+
     return totalSize;
-  }
+
 
   private sortObject(obj: any): any {
     if (obj === null || typeof obj !== 'object') return obj;
@@ -584,7 +588,7 @@ export class SearchCacheService {
       sorted[key] = this.sortObject(obj[key]);
     });
     return sorted;
-  }
+
 
   private async trackCacheSet(key: string, size: number, tags: string[]): Promise<void> {
 
@@ -600,17 +604,17 @@ export class SearchCacheService {
       `;
       
       await this.pool.query(query, [key, key]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track cache set:', error);
-    }
-  }
+
+
 
   private startCleanupTask(): void {
     // Run cleanup every 10 minutes
     this.cleanupInterval = setInterval(async () => {
       await this.performCleanup();
     }, 600000);
-  }
+
 
   private async performCleanup(): Promise<void> {
 
@@ -619,22 +623,22 @@ export class SearchCacheService {
       for (const [key, entry] of this.memoryCache) {
         if (Date.now() > entry.timestamp + (entry.ttl * 1000)) {
           this.memoryCache.delete(key);
-        }
-      }
+
+
 
       // Clean old popular queries (older than 24 hours)
       const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
       for (const [query, data] of this.popularQueries) {
         if (data.lastAccessed < oneDayAgo) {
           this.popularQueries.delete(query);
-        }
-      }
+
+
 
       console.log('Cache cleanup completed');
-    } catch (error) {
+ catch (error) {
       console.error('Cache cleanup error:', error);
-    }
-  }
+
+
 
   /**
    * Destroy service and clean up resources
@@ -644,15 +648,14 @@ export class SearchCacheService {
     try {
       if (this.cleanupInterval) {
         clearInterval(this.cleanupInterval);
-      }
+
       
       await this.redis.quit();
       this.memoryCache.clear();
       this.popularQueries.clear();
       
       console.log('SearchCacheService destroyed successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Error during SearchCacheService destruction:', error);
-    }
-  }
-}
+
+

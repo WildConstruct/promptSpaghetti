@@ -13,7 +13,7 @@ import {
   ApiPermissionScope,
   ApiPermission,
   ApiRole
-} from '../auth/services/ApiPermissionAssignmentService';
+ from '../auth/services/ApiPermissionAssignmentService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { RBACService } from '../auth/services/RBACService';
@@ -119,8 +119,7 @@ describe('API Permission Assignment System', () => {
             permissionId: permission.permissionId,
             type: ApiPermissionType.ENDPOINT_ACCESS,
             action: ApiPermissionAction.READ
-  }
-  }
+
       );
     });
 
@@ -218,7 +217,7 @@ describe('API Permission Assignment System', () => {
             assignmentId: assignment.assignmentId,
             userId,
             permissionId: testPermission.permissionId
-  }
+
   }
       );
     });
@@ -327,7 +326,7 @@ describe('API Permission Assignment System', () => {
           details: expect.objectContaining({
             assignmentId: assignment.assignmentId,
             reason: revokeReason
-  }
+
   }
       );
     });
@@ -438,7 +437,7 @@ describe('API Permission Assignment System', () => {
         context: {
           organizationId: 'org-123',
           metadata: { source: 'unit-test' }
-        }
+
       });
 
       expect(checkResult.allowed).toBe(true);
@@ -481,7 +480,7 @@ describe('API Permission Assignment System', () => {
         );
         
         testAssignments.push(assignment);
-      }
+
     });
 
     test('should get all user permissions', async () => {
@@ -592,7 +591,7 @@ describe('API Permission Assignment System', () => {
             roleId: role.roleId,
             name: 'Test API Role',
             category: 'custom'
-  }
+
   }
       );
     });
@@ -675,7 +674,7 @@ describe('API Permission Assignment System', () => {
             roleId: role.roleId,
             roleName: role.name,
             assignedPermissions: 2
-  }
+
   }
       );
     });
@@ -869,9 +868,9 @@ describe('API Permission Assignment System', () => {
       // If invalid date, expiresAt should be undefined
       if (invalidDate.getTime() > 0) {
         expect(assignment.expiresAt).toBeDefined();
-      } else {
+ else {
         expect(assignment.expiresAt).toBeUndefined();
-      }
+
     });
 
     test('should validate permission conditions properly', async () => {
@@ -886,7 +885,7 @@ describe('API Permission Assignment System', () => {
             field: 'organizationId',
             operator: 'eq' as const,
             value: 'org-123'
-          }
+
         ]
       };
 
@@ -914,7 +913,7 @@ describe('API Permission Assignment System', () => {
             resource: 'api_keys'
   }
         );
-      }
+
       
       await Promise.all(checks);
       

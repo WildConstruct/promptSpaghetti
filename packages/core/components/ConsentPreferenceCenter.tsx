@@ -7,14 +7,13 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Settings, Shield, Eye, Target, MessageSquare, Cookie, Download, 
-  Trash2, Edit, History, AlertCircle, CheckCircle, Clock, 
+import { Settings, Shield, Eye, Target, MessageSquare, Cookie, Download, 
+  Trash2, Edit, History, AlertCircle, CheckCircle, Clock }
   FileText, ExternalLink, RefreshCw, User, Globe, Calendar 
-} from 'lucide-react';
-}
-interface ConsentPreferenceCenterProps {
-  userId?: string;
+ from 'lucide-react';
+
+
+interface ConsentPreferenceCenterProps { userId?: string;
   onConsentUpdate?: (consents: ConsentSettings) => void;
   onDataRequest?: (requestType: DataRequestType) => void;
   showDataRights?: boolean;
@@ -43,16 +42,17 @@ interface ConsentPreferenceCenterProps {
   enabled: boolean;
   frequency: 'IMMEDIATE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'NEVER';
   topics: string;
-  quietHours: {
+  quietHours: { }
   enabled: boolean;
   start: string;
   end: string;
   timezone: string;
-}
+
+
 };
-}
-interface DataProcessingPreferences {
-  analytics: ProcessingConsent;
+
+
+interface DataProcessingPreferences { analytics: ProcessingConsent;
   personalization: ProcessingConsent;
   marketing: ProcessingConsent;
   research: ProcessingConsent;
@@ -63,13 +63,13 @@ interface DataProcessingPreferences {
   allowProfiling: boolean;
   allowSharing: boolean;
   allowInternationalTransfers: boolean;
-  retentionPeriod: number; // days,
+  retentionPeriod: number; // days;
   interface RetentionPreferences {
   minimumRetention: boolean;
   autoDelete: boolean;
   customRetentionPeriods: Record<string, number>;
   deleteInactiveData: boolean;
-  inactivityThreshold: number; // days,
+  inactivityThreshold: number; // days;
   interface SharingPreferences {
   internal: SharingConsent;
   partners: SharingConsent;
@@ -99,206 +99,204 @@ interface DataProcessingPreferences {
   completedAt?: Date;
   description: string;
   type DataRequestType = 'ACCESS' | 'PORTABILITY' | 'RECTIFICATION' | 'ERASURE' | 'RESTRICTION' | 'OBJECTION';
-  const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({,)
-  userId,
-  onConsentUpdate,
-  onDataRequest,
-  showDataRights = true,
-  showHistory = true,
+  const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({);
+  userId;
+  onConsentUpdate;
+  onDataRequest;
+  showDataRights = true;
+  showHistory = true }
   jurisdiction = 'US'
-}
-}) => {
-  const [activeSection, setActiveSection] = useState('overview');
+
+
+}) => { const [activeSection, setActiveSection] = useState('overview');
   const [settings, setSettings] = useState<ConsentSettings>({)
   categories: {
   essential: {;
-  enabled: true,
-        granularChoices: {},
-        lastModified: new Date(),
+  enabled: true }
+        granularChoices: {}
+        lastModified: new Date()
         source: 'SYSTEM'
-  },
-  functional: {
-  enabled: false,
-        granularChoices: {},
-        lastModified: new Date(),
+
+  functional: { 
+  enabled: false }
+        granularChoices: {}
+        lastModified: new Date()
         source: 'USER'
-  },
-  analytics: {
-  enabled: false,
-        granularChoices: {},
-        lastModified: new Date(),
+
+  analytics: { 
+  enabled: false }
+        granularChoices: {}
+        lastModified: new Date()
         source: 'USER'
-  },
-  marketing: {
-  enabled: false,
-        granularChoices: {},
-        lastModified: new Date(),
+
+  marketing: { 
+  enabled: false }
+        granularChoices: {}
+        lastModified: new Date()
         source: 'USER'
-  },
-  communications: {
+
+  communications: { 
   email: {
-  enabled: true,
-  frequency: 'WEEKLY',
-  topics: ['product_updates'],
+  enabled: true
+  frequency: 'WEEKLY'
+  topics: ['product_updates']
   quietHours: {
-  enabled: true,
-  start: '22:00',
-  end: '08:00',
-  timezone: 'UTC',
-},
-  sms: {
-  enabled: false,
-  frequency: 'NEVER',
-  topics: [],
+  enabled: true
+  start: '22:00'
+  end: '08:00'
+  timezone: 'UTC' }
+
+  sms: { 
+  enabled: false
+  frequency: 'NEVER'
+  topics: []
   quietHours: {
-  enabled: true,
-  start: '21:00',
-  end: '09:00',
-  timezone: 'UTC',
-},
-  push: {
-  enabled: true,
-  frequency: 'IMMEDIATE',
-  topics: ['security_alerts'],
+  enabled: true
+  start: '21:00'
+  end: '09:00'
+  timezone: 'UTC' }
+
+  push: { 
+  enabled: true
+  frequency: 'IMMEDIATE'
+  topics: ['security_alerts']
   quietHours: {
-  enabled: false,
-  start: '22:00',
-  end: '08:00',
-  timezone: 'UTC',
-},
-  phone: {
-  enabled: false,
-  frequency: 'NEVER',
-  topics: [],
+  enabled: false
+  start: '22:00'
+  end: '08:00'
+  timezone: 'UTC' }
+
+  phone: { 
+  enabled: false
+  frequency: 'NEVER'
+  topics: []
   quietHours: {
-  enabled: true,
-  start: '20:00',
-  end: '09:00',
-  timezone: 'UTC',
-},
-  post: {
-  enabled: false,
-  frequency: 'NEVER',
-  topics: [],
+  enabled: true
+  start: '20:00'
+  end: '09:00'
+  timezone: 'UTC' }
+
+  post: { 
+  enabled: false
+  frequency: 'NEVER'
+  topics: []
   quietHours: {
-  enabled: false,
-  start: '00:00',
-  end: '00:00',
-  timezone: 'UTC',
-},
-  dataProcessing: {
+  enabled: false
+  start: '00:00'
+  end: '00:00'
+  timezone: 'UTC' }
+
+  dataProcessing: { 
   analytics: {
-  enabled: false,
-  allowAutomatedDecisions: false,
-  allowProfiling: false,
-  allowSharing: false,
-  allowInternationalTransfers: false,
-  retentionPeriod: 365,
-},
-  personalization: {
-  enabled: false,
-  allowAutomatedDecisions: true,
-  allowProfiling: true,
-  allowSharing: false,
-  allowInternationalTransfers: false,
-  retentionPeriod: 730,
-},
-  marketing: {
-  enabled: false,
-  allowAutomatedDecisions: false,
-  allowProfiling: false,
-  allowSharing: false,
-  allowInternationalTransfers: false,
-  retentionPeriod: 365,
-},
-  research: {
-  enabled: false,
-  allowAutomatedDecisions: false,
-  allowProfiling: false,
-  allowSharing: true,
-  allowInternationalTransfers: false,
-  retentionPeriod: 1825,
-},
-  aiProcessing: {
-  enabled: false,
-  allowAutomatedDecisions: false,
-  allowProfiling: false,
-  allowSharing: false,
-  allowInternationalTransfers: false,
-  retentionPeriod: 365,
-},
-  retention: {
-  minimumRetention: true,
-      autoDelete: true,
-      customRetentionPeriods: {},
-      deleteInactiveData: true,
-      inactivityThreshold: 1095 // 3 years;
-  },
-  sharing: {
+  enabled: false
+  allowAutomatedDecisions: false
+  allowProfiling: false
+  allowSharing: false
+  allowInternationalTransfers: false
+  retentionPeriod: 365 }
+
+  personalization: { 
+  enabled: false
+  allowAutomatedDecisions: true
+  allowProfiling: true
+  allowSharing: false
+  allowInternationalTransfers: false
+  retentionPeriod: 730 }
+
+  marketing: { 
+  enabled: false
+  allowAutomatedDecisions: false
+  allowProfiling: false
+  allowSharing: false
+  allowInternationalTransfers: false
+  retentionPeriod: 365 }
+
+  research: { 
+  enabled: false
+  allowAutomatedDecisions: false
+  allowProfiling: false
+  allowSharing: true
+  allowInternationalTransfers: false
+  retentionPeriod: 1825 }
+
+  aiProcessing: { 
+  enabled: false
+  allowAutomatedDecisions: false
+  allowProfiling: false
+  allowSharing: false
+  allowInternationalTransfers: false
+  retentionPeriod: 365 }
+
+  retention: { 
+  minimumRetention: true
+      autoDelete: true }
+      customRetentionPeriods: {}
+      deleteInactiveData: true
+      inactivityThreshold: 1095 // 3 years
+
+  sharing: { 
   internal: {
-  enabled: true,
-  purposes: ['service_provision'],
-  recipientTypes: ['subsidiaries'],
-  geographicRestrictions: [],
-  requiresNotification: false,
-},
-  partners: {
-  enabled: false,
-  purposes: [],
-  recipientTypes: [],
-  geographicRestrictions: ['EU', 'US'],
-  requiresNotification: true,
-},
-  vendors: {
-  enabled: false,
-  purposes: [],
-  recipientTypes: [],
-  geographicRestrictions: ['EU', 'US'],
-  requiresNotification: true,
-},
-  research: {
-  enabled: false,
-  purposes: [],
-  recipientTypes: [],
-  geographicRestrictions: [],
-  requiresNotification: true,
-},
-  legal: {
-  enabled: true,
-  purposes: ['legal_compliance'],
-  recipientTypes: ['authorities'],
-  geographicRestrictions: [],
-  requiresNotification: false,
-},
+  enabled: true
+  purposes: ['service_provision']
+  recipientTypes: ['subsidiaries']
+  geographicRestrictions: []
+  requiresNotification: false }
+
+  partners: { 
+  enabled: false
+  purposes: []
+  recipientTypes: []
+  geographicRestrictions: ['EU', 'US']
+  requiresNotification: true }
+
+  vendors: { 
+  enabled: false
+  purposes: []
+  recipientTypes: []
+  geographicRestrictions: ['EU', 'US']
+  requiresNotification: true }
+
+  research: { 
+  enabled: false
+  purposes: []
+  recipientTypes: []
+  geographicRestrictions: []
+  requiresNotification: true }
+
+  legal: { 
+  enabled: true
+  purposes: ['legal_compliance']
+  recipientTypes: ['authorities']
+  geographicRestrictions: []
+  requiresNotification: false }
+
   lastUpdated: new Date();
   });
   const [consentHistory, setConsentHistory] = useState<ConsentHistoryEntry>([)
-    {
-  id: 'HIST-001',
-  timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-  action: 'GRANTED',
-  category: 'Essential',
-  details: 'Initial consent granted for essential cookies',
-  method: 'Banner',
-  ipAddress: '192.168.1.1',
-  userAgent: 'Mozilla/5.0...',
-}
-    {
-  id: 'HIST-002',
-  timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-  action: 'MODIFIED',
-  category: 'Analytics',
-  details: 'Enabled analytics cookies for better user experience',
-  method: 'Preference Center',
-  ipAddress: '192.168.1.1',
+    { id: 'HIST-001'
+  timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  action: 'GRANTED'
+  category: 'Essential'
+  details: 'Initial consent granted for essential cookies'
+  method: 'Banner'
+  ipAddress: '192.168.1.1'
+  userAgent: 'Mozilla/5.0...' }
+
+    { id: 'HIST-002'
+  timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+  action: 'MODIFIED'
+  category: 'Analytics'
+  details: 'Enabled analytics cookies for better user experience'
+  method: 'Preference Center'
+  ipAddress: '192.168.1.1'
   userAgent: 'Mozilla/5.0...']);
   const [dataRequests, setDataRequests] = useState<DataRightRequest>([)
   {
-  id: 'REQ-001',
-  type: 'ACCESS',
-  status: 'COMPLETED',
-  submittedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-  completedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+  id: 'REQ-001'
+  type: 'ACCESS'
+  status: 'COMPLETED'
+  submittedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+  completedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
   description: 'Request for copy of personal data']);
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -310,78 +308,69 @@ interface DataProcessingPreferences {
   // Simulate API call
   await new Promise(resolve => setTimeout(resolve, 1000));
   const updatedSettings = {
-  ...settings,
-  lastUpdated: new Date(),
+  ...settings
+  lastUpdated: new Date() }
 };
       setSettings(updatedSettings);
       setLastSaved(new Date());
       onConsentUpdate?.(updatedSettings);
       // Add to history
-      const historyEntry: ConsentHistoryEntry = {,
+      const historyEntry: ConsentHistoryEntry = {
   id: `HIST-${Date.now()}`}
-},
-  timestamp: new Date(),
-        action: 'MODIFIED',
-        category: 'Multiple',
-        details: 'Updated consent preferences via Preference Center',
-        method: 'Preference Center',
-        ipAddress: '192.168.1.1',
+
+  timestamp: new Date()
+        action: 'MODIFIED'
+        category: 'Multiple'
+        details: 'Updated consent preferences via Preference Center'
+        method: 'Preference Center'
+        ipAddress: '192.168.1.1'
         userAgent: navigator.userAgent;
   };
       setConsentHistory(prev => [historyEntry, ...prev]);
-    } catch (error) {
-  console.error('Failed to save settings:', error);
-} finally {
-      setSaving(false);
-  }, [settings, onConsentUpdate]);
-  const handleDataRightRequest = useCallback(async (requestType: DataRequestType) => {
-    const request: DataRightRequest = {,
+ catch (error) { console.error('Failed to save settings:', error) } finally { setSaving(false) }, [settings, onConsentUpdate]);
+  const handleDataRightRequest = useCallback(async (requestType: DataRequestType) => { const request: DataRightRequest = { }
   id: `REQ-${Date.now()}`}
-},
-  type: requestType,
-      status: 'SUBMITTED',
-      submittedAt: new Date(),
+
+  type: requestType
+      status: 'SUBMITTED'
+      submittedAt: new Date()
       description: getRequestDescription(requestType);
   };
     setDataRequests(prev => [request, ...prev]);
     onDataRequest?.(requestType);
   }, [onDataRequest]);
-  const getRequestDescription = (type: DataRequestType): string => {
-  switch (type) {
+  const getRequestDescription = (type: DataRequestType): string => { switch (type) {
   case 'ACCESS': return 'Request for access to personal data';
   case 'PORTABILITY': return 'Request for data portability';
   case 'RECTIFICATION': return 'Request to correct personal data';
   case 'ERASURE': return 'Request to delete personal data';
   case 'RESTRICTION': return 'Request to restrict processing';
   case 'OBJECTION': return 'Objection to data processing';
-  default: return 'Data subject rights request';
-};
-  const updateCategoryConsent = (category: string, enabled: boolean) => {
-  if (category === 'essential' && !enabled) return; // Cannot disable essential
+  default: return 'Data subject rights request' };
+  const updateCategoryConsent = (category: string, enabled: boolean) => { if (category === 'essential' && !enabled) return; // Cannot disable essential
   setSettings(prev => ({)
-  ...prev,
+  ...prev
   categories: {
-  ...prev.categories,
+  ...prev.categories
   [category]: {
-  ...prev.categories[category],
-  enabled,
-  lastModified: new Date(),
+  ...prev.categories[category]
+  enabled
+  lastModified: new Date() }
 }));
   };
   const updateCommunicationPreference = (;);
-    channel: keyof CommunicationPreferences,
-    updates: Partial<ChannelPreference>) => {,
+    channel: keyof CommunicationPreferences
+    updates: Partial<ChannelPreference>) => { 
   setSettings(prev => ({)
-  ...prev,
+  ...prev
   communications: {
-  ...prev.communications,
+  ...prev.communications
   [channel]: {
-  ...prev.communications[channel],
+  ...prev.communications[channel] }
   ...updates
 }));
   };
-  const getSectionIcon = (section: string) => {
-  switch (section) {
+  const getSectionIcon = (section: string) => { switch (section) {
   case 'overview': return <Settings className="w-5 h-5" />;
   case 'categories': return <Cookie className="w-5 h-5" />;
   case 'communications': return <MessageSquare className="w-5 h-5" />;
@@ -390,16 +379,13 @@ interface DataProcessingPreferences {
   case 'sharing': return <Globe className="w-5 h-5" />;
   case 'rights': return <Shield className="w-5 h-5" />;
   case 'history': return <History className="w-5 h-5" />;
-  default: return <Settings className="w-5 h-5" />;
-};
-  const getStatusIcon = (status: string) => {
-  switch (status) {
+  default: return <Settings className="w-5 h-5" /> };
+  const getStatusIcon = (status: string) => { switch (status) {
   case 'COMPLETED': return <CheckCircle className="w-4 h-4 text-green-600" />;
   case 'IN_PROGRESS': return <RefreshCw className="w-4 h-4 text-blue-600 animate-spin" />;
   case 'SUBMITTED': return <Clock className="w-4 h-4 text-yellow-600" />;
   case 'REJECTED': return <AlertCircle className="w-4 h-4 text-red-600" />;
-  default: return <Clock className="w-4 h-4 text-gray-600" />;
-};
+  default: return <Clock className="w-4 h-4 text-gray-600" /> };
   return;
     <div className="max-w-6xl mx-auto p-6 bg-white">
       {/* Header */}
@@ -421,23 +407,23 @@ interface DataProcessingPreferences {
         {/* Sidebar Navigation */}
         <div className="lg:w-64 space-y-2">
           {[
-            { id: 'overview', label: 'Overview' },
-            { id: 'categories', label: 'Cookie Categories' },
-            { id: 'communications', label: 'Communications' },
-            { id: 'processing', label: 'Data Processing' },
-            { id: 'retention', label: 'Data Retention' },
-            { id: 'sharing', label: 'Data Sharing' },
-            ...(showDataRights ? [{ id: 'rights', label: 'Your Rights' }] : []),
+            { id: 'overview', label: 'Overview' }
+            { id: 'categories', label: 'Cookie Categories' }
+            { id: 'communications', label: 'Communications' }
+            { id: 'processing', label: 'Data Processing' }
+            { id: 'retention', label: 'Data Retention' }
+            { id: 'sharing', label: 'Data Sharing' }
+            ...(showDataRights ? [{ id: 'rights', label: 'Your Rights' }] : [])
             ...(showHistory ? [{ id: 'history', label: 'Consent History' }] : [])
           ].map((section) => ()
             <button
               key={section.id}
               onClick={() => setActiveSection(section.id)}
-              className={`w-full flex items-center px-3 py-2 text-left rounded-md transition-colors ${
+              className={ `w-full flex items-center px-3 py-2 text-left rounded-md transition-colors ${
   activeSection === section.id
   ? 'bg-blue-100 text-blue-700'
-  : 'text-gray-700 hover:bg-gray-100',
-}`}
+  : 'text-gray-700 hover:bg-gray-100' }
+`}
             >
               {getSectionIcon(section.id)}
               <span className="ml-2">{section.label}</span>
@@ -625,23 +611,23 @@ interface DataProcessingPreferences {
                 ))}
               </div>
             )}
-            {activeSection === 'rights' && showDataRights && ()
+            { activeSection === 'rights' && showDataRights && ()
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold mb-4">Your Data Rights</h2>
                 {isGDPRApplicable && ()
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-6">
                     <h3 className="font-medium text-blue-900 mb-2">GDPR Rights</h3>
                     <p className="text-sm text-blue-800">
-                      Under GDPR, you have comprehensive rights including access, rectification, erasure, 
+                      Under GDPR, you have comprehensive rights including access, rectification, erasure }
                       restriction, portability, and objection to processing.
                     </p>
                   </div>
                 )}
-                {isCCPAApplicable && ()
+                { isCCPAApplicable && ()
                   <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-6">
                     <h3 className="font-medium text-yellow-900 mb-2">CCPA Rights</h3>
                     <p className="text-sm text-yellow-800">
-                      California residents have the right to know, delete, opt-out of sale, 
+                      California residents have the right to know, delete, opt-out of sale }
                       and non-discrimination for exercising privacy rights.
                     </p>
                   </div>
@@ -713,12 +699,12 @@ interface DataProcessingPreferences {
                               </div>
                             </div>
                           </div>
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${
-  request.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :,
-  request.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' :,
-  request.status === 'SUBMITTED' ? 'bg-yellow-100 text-yellow-800' :,
+                          <span className={ `px-2 py-1 rounded text-xs font-medium ${
+  request.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+  request.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' :
+  request.status === 'SUBMITTED' ? 'bg-yellow-100 text-yellow-800' : }
   'bg-red-100 text-red-800'
-}`}>
+`}>
                             {request.status}
                           </span>
                         </div>
@@ -763,11 +749,11 @@ interface DataProcessingPreferences {
         <button
           onClick={handleSaveSettings}
           disabled={saving}
-          className={`px-6 py-3 rounded-lg shadow-lg font-medium transition-all ${
+          className={ `px-6 py-3 rounded-lg shadow-lg font-medium transition-all ${
   saving
   ? 'bg-gray-400 text-white cursor-not-allowed'
-  : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl',
-}`}
+  : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl' }
+`}
         >
           {saving ? ()
             <div className="flex items-center">

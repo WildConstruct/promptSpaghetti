@@ -9,113 +9,101 @@
 import { ExtensionManifest, ExtensionVersionManager } from './ExtensionLifecycleManager';
 import * as semver from 'semver';
 
-}
-export interface DependencyNode {
-  id: string;
+
+export interface DependencyNode { id: string;
   version: string;
   dependencies: string;
   dependents: string;
   resolved: boolean;
-  optional: boolean;
-}
-}
-}
-export interface DependencyGraph {
-  nodes: Map<string, DependencyNode>;
-}
+  optional: boolean }
+
+
+
+export interface DependencyGraph { nodes: Map<string, DependencyNode> }
+
   edges: Array<{ from: string; to: string; optional: boolean }>;
   resolved: boolean;
   conflicts: DependencyConflict;
   circularDependencies: CircularDependency;
-}
-}
-export interface DependencyConflict {
-  packageId: string;
-  requiredVersions: Array<{
+
+
+export interface DependencyConflict { packageId: string;
+  requiredVersions: Array<{ }
   requiredBy: string;
   versionRange: string;
-}
-}>;
-  resolution?: {
-  selectedVersion: string;
-  strategy: 'latest' | 'maxSatisfying' | 'manual'
-  };
-}
-}
-export interface CircularDependency {
-  cycle: string;
+
+
+>;
+  resolution?: { selectedVersion: string;
+  strategy: 'latest' | 'maxSatisfying' | 'manual' }
+};
+
+
+export interface CircularDependency { cycle: string;
   breakable: boolean;
-  suggestions: string;
-}
-}
+  suggestions: string }
+
 export type LoadOrder = string;
 
-}
-export interface DependencyResolutionOptions {
-  allowOptionalDependencies: boolean;
+
+export interface DependencyResolutionOptions { allowOptionalDependencies: boolean;
   strictVersionMatching: boolean;
   allowPrerelease: boolean;
   maxDepth: number;
-  resolutionStrategy: 'latest' | 'maxSatisfying' | 'conservative';
+  resolutionStrategy: 'latest' | 'maxSatisfying' | 'conservative' }
   allowCircularDependencies: boolean;
-}
-}
-export class DependencyResolver {
-  private versionManager: ExtensionVersionManager;
+
+
+export class DependencyResolver { private versionManager: ExtensionVersionManager;
   private options: DependencyResolutionOptions;
   private lastDependencyGraph?: DependencyGraph;
   private lastLoadOrder?: LoadOrder;
   constructor();
-    versionManager: ExtensionVersionManager,
+    versionManager: ExtensionVersionManager }
     options: Partial<DependencyResolutionOptions> = {}
     this.versionManager = versionManager;
-    this.options = {
-  allowOptionalDependencies: true,
-  strictVersionMatching: false,
-  allowPrerelease: false,
-  maxDepth: 10,
-  resolutionStrategy: 'maxSatisfying',
-  allowCircularDependencies: false,
+    this.options = { allowOptionalDependencies: true
+  strictVersionMatching: false
+  allowPrerelease: false
+  maxDepth: 10
+  resolutionStrategy: 'maxSatisfying'
+  allowCircularDependencies: false }
   ...options
 };
   /**
    * Build dependency graph from plugin manifests
    */
-  buildDependencyGraph(manifests: ExtensionManifest): DependencyGraph {
-  const graph: DependencyGraph = {,
-  nodes: new Map(),
-  edges: [],
-  resolved: false,
-  conflicts: [],
-  circularDependencies: [],
+  buildDependencyGraph(manifests: ExtensionManifest): DependencyGraph { const graph: DependencyGraph = {
+  nodes: new Map()
+  edges: []
+  resolved: false
+  conflicts: []
+  circularDependencies: [] }
 };
     // Create nodes for all plugins
-    for (const manifest of manifests) {
-  const node: DependencyNode = {,
-  id: manifest.id,
-  version: manifest.version,
-  dependencies: [],
-  dependents: [],
-  resolved: false,
-  optional: false,
+    for (const manifest of manifests) { const node: DependencyNode = {
+  id: manifest.id
+  version: manifest.version
+  dependencies: []
+  dependents: []
+  resolved: false
+  optional: false }
 };
       // Add dependencies
-      if (manifest.dependencies) {
-  for (const [depId, versionRange] of Object.entries(manifest.dependencies)) {
+      if (manifest.dependencies) { for (const [depId, versionRange] of Object.entries(manifest.dependencies)) {
   node.dependencies.push(depId);
   graph.edges.push({)
-  from: manifest.id,
-  to: depId,
-  optional: false,
+  from: manifest.id
+  to: depId
+  optional: false }
 });
       // Add optional dependencies
-      if (manifest.optionalDependencies && this.options.allowOptionalDependencies) {
-  for (const [depId, versionRange] of Object.entries(manifest.optionalDependencies)) {
+      if (manifest.optionalDependencies && this.options.allowOptionalDependencies) { for (const [depId, versionRange] of Object.entries(manifest.optionalDependencies)) {
   node.dependencies.push(depId);
   graph.edges.push({)
-  from: manifest.id,
-  to: depId,
-  optional: true,
+  from: manifest.id
+  to: depId
+  optional: true }
 });
       graph.nodes.set(manifest.id, node);
     // Build dependents list
@@ -153,26 +141,22 @@ export class DependencyResolver {
         return;
       visiting.add(nodeId);
       const node = graph.nodes.get(nodeId);
-      if (node) {
-        // Visit dependencies first
+      if (node) { // Visit dependencies first
         for (const depId of node.dependencies) {
           const depNode = graph.nodes.get(depId);
           if (depNode) {
-            visit(depId);
-          } else if (!this.isOptionalEdge(graph, nodeId, depId)) {
+            visit(depId) } else if (!this.isOptionalEdge(graph, nodeId, depId)) {
             throw new Error(`Missing dependency: ${depId} required by ${nodeId}`);}
         visiting.delete(nodeId);
         visited.add(nodeId);
         loadOrder.push(nodeId);
     };
     // Start with nodes that have no dependents (leaf nodes in reverse dependency tree)
-    const startNodes = Array.from(graph.nodes.keys()).filter(id => {)
+    const startNodes = Array.from(graph.nodes.keys()).filter(id => { )
   const node = graph.nodes.get(id)!;
-      return node.dependencies.length === 0;
-    });
+      return node.dependencies.length === 0 });
     // If no leaf nodes, start with any unvisited node
-    if (startNodes.length === 0) {
-  startNodes.push(...graph.nodes.keys());
+    if (startNodes.length === 0) { startNodes.push(...graph.nodes.keys());
   for (const nodeId of startNodes) {
   visit(nodeId);
   // Visit any remaining unvisited nodes
@@ -184,12 +168,12 @@ export class DependencyResolver {
   /**
   * Detect circular dependencies in the graph
   */
-  detectCircularDependencies(graph: DependencyGraph): CircularDependency {,
+  detectCircularDependencies(graph: DependencyGraph): CircularDependency {
   const circularDependencies: CircularDependency = [];
   const visited = new Set<string>();
   const recursionStack = new Set<string>();
   const path: string = [];
-  const dfs = (nodeId: string): boolean => {,
+  const dfs = (nodeId: string): boolean => {
   if (recursionStack.has(nodeId)) {
   // Found a cycle
   const cycleStart = path.indexOf(nodeId);
@@ -197,13 +181,12 @@ export class DependencyResolver {
   // Check if cycle is breakable (has optional dependencies)
   const breakable = this.isCycleBreakable(graph, cycle);
   circularDependencies.push({)
-  cycle,
-  breakable,
-  suggestions: this.generateCircularDependencySuggestions(cycle),
+  cycle
+  breakable
+  suggestions: this.generateCircularDependencySuggestions(cycle) }
 });
         return true;
-      if (visited.has(nodeId)) {
-        return false;
+      if (visited.has(nodeId)) { return false;
       visited.add(nodeId);
       recursionStack.add(nodeId);
       path.push(nodeId);
@@ -215,87 +198,75 @@ export class DependencyResolver {
               return true; // Propagate cycle detection
       recursionStack.delete(nodeId);
       path.pop();
-      return false;
-    };
-    for (const nodeId of graph.nodes.keys()) {
-  if (!visited.has(nodeId)) {
+      return false };
+    for (const nodeId of graph.nodes.keys()) { if (!visited.has(nodeId)) {
   dfs(nodeId);
   return circularDependencies;
   /**
   * Detect version conflicts between dependencies
   */
-  detectVersionConflicts(manifests: ExtensionManifest): DependencyConflict {,
+  detectVersionConflicts(manifests: ExtensionManifest): DependencyConflict { }
   const conflicts: DependencyConflict = [];
-  const dependencyVersions = new Map<string, Array<{
-  requiredBy: string;
-  versionRange: string;
-}>>();
+  const dependencyVersions = new Map<string, Array<{ requiredBy: string;
+  versionRange: string }>>();
     // Collect all version requirements
-    for (const manifest of manifests) {
-  if (manifest.dependencies) {
+    for (const manifest of manifests) { if (manifest.dependencies) {
   for (const [depId, versionRange] of Object.entries(manifest.dependencies)) {
   if (!dependencyVersions.has(depId)) {
   dependencyVersions.set(depId, []);
   dependencyVersions.get(depId)!.push({)
-  requiredBy: manifest.id,
+  requiredBy: manifest.id }
   versionRange
 });
     // Check for conflicts
-    for (const [depId, requirements] of dependencyVersions) {
-  if (requirements.length > 1) {
+    for (const [depId, requirements] of dependencyVersions) { if (requirements.length > 1) {
   // Check if all version ranges are compatible
   const ranges = requirements.map(r => r.versionRange);
   if (!this.areVersionRangesCompatible(ranges)) {
   conflicts.push({)
-  packageId: depId,
-  requiredVersions: requirements,
+  packageId: depId
+  requiredVersions: requirements }
 });
     return conflicts;
   /**
    * Resolve version conflicts using specified strategy
    */
-  resolveConflicts(graph: DependencyGraph, manifests: ExtensionManifest): void {
-  for (const conflict of graph.conflicts) {
+  resolveConflicts(graph: DependencyGraph, manifests: ExtensionManifest): void { for (const conflict of graph.conflicts) {
   const resolution = this.resolveVersionConflict(conflict, manifests);
   if (resolution) {
   conflict.resolution = resolution;
   /**
   * Get the last resolved dependency graph
   */
-  getLastDependencyGraph(): DependencyGraph {,
+  getLastDependencyGraph(): DependencyGraph {
   return this.lastDependencyGraph || {
-  nodes: new Map(),
-  edges: [],
-  resolved: false,
-  conflicts: [],
-  circularDependencies: [],
+  nodes: new Map()
+  edges: []
+  resolved: false
+  conflicts: []
+  circularDependencies: [] }
 };
   /**
    * Get the last resolved load order
    */
-  getLastLoadOrder(): LoadOrder {
-  return this.lastLoadOrder || [];
+  getLastLoadOrder(): LoadOrder { return this.lastLoadOrder || [];
   /**
   * Check if two version ranges are compatible
   */
-  private areVersionRangesCompatible(ranges: string): boolean {,
+  private areVersionRangesCompatible(ranges: string): boolean { }
   if (ranges.length <= 1) return true;
-  try {
-  // Find intersection of all ranges
+  try { // Find intersection of all ranges
   let intersection = ranges[0];
   for (let i = 1; i < ranges.length; i++) {
   intersection = this.intersectVersionRanges(intersection, ranges[i]);
   if (!intersection) {
   return false;
-  return true;
-} catch {
-  return false;
+  return true } catch { return false;
   /**
   * Find intersection of two version ranges
   */
-  private intersectVersionRanges(range1: string, range2: string): string | null {,
-  try {
-  // This is a simplified implementation
+  private intersectVersionRanges(range1: string, range2: string): string | null { }
+  try { // This is a simplified implementation
   // A full implementation would use a proper semver range intersection library
   const r1 = new semver.Range(range1);
   const r2 = new semver.Range(range2);
@@ -305,9 +276,7 @@ export class DependencyResolver {
   if (commonVersions.length > 0) {
   // Return the more restrictive range (simple heuristic)
   return range1.length > range2.length ? range1 : range2;
-  return null;
-} catch {
-  return null;
+  return null } catch { return null;
   /**
   * Resolve a specific version conflict
   */
@@ -339,7 +308,7 @@ export class DependencyResolver {
   if (selectedVersion) {
   return {
   selectedVersion,
-  strategy: this.options.resolutionStrategy,
+  strategy: this.options.resolutionStrategy }
 };
     return null;
   /**

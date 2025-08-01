@@ -9,52 +9,51 @@ import React, { useState } from 'react';
 import { Calculator, PiggyBank, TrendingUp, BarChart3, Download } from 'lucide-react';
 import { ROICalculator } from './ROICalculator';
 import { SavingsEstimation } from './SavingsEstimation';
-}
-interface BusinessValueDemoProps {
-  className?: string;
-  templateExample?: {
+
+
+interface BusinessValueDemoProps { className?: string;
+  templateExample?: { }
   name: string;
   price: number;
   description: string;
   category: string;
-}
+
+
 };
 
-export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
-  className = '',
+export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({ )
+  className = ''
   templateExample = {
-  name: 'Professional Email Templates',
-  price: 999, // $9.99 in cents,
-  description: 'Comprehensive set of business email templates for various scenarios',
-  category: 'Business Communication',
-}) => {
-  const [activeTab, setActiveTab] = useState<'roi' | 'savings' | 'summary'>('roi');
+  name: 'Professional Email Templates'
+  price: 999, // $9.99 in cents
+  description: 'Comprehensive set of business email templates for various scenarios'
+  category: 'Business Communication' }
+}) => { const [activeTab, setActiveTab] = useState<'roi' | 'savings' | 'summary'>('roi');
   const [roiResults, setROIResults] = useState<unknown>(null);
   const [savingsResults, setSavingsResults] = useState<unknown>(null);
   const [industryPreset, setIndustryPreset] = useState<string>('startup');
-  const formatCurrency = (amount: number) => {,
+  const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat('en-US', {)
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
+  style: 'currency'
+  currency: 'USD'
+  minimumFractionDigits: 2
+  maximumFractionDigits: 2 }
 }).format(amount);
   };
   const formatPercentage = (value: number) => {
     return `${value.toFixed(1)}%`;}
   };
-  const generateReport = () => {
-  if (!roiResults || !savingsResults) return;
+  const generateReport = () => { if (!roiResults || !savingsResults) return;
   const report = {
-  template: templateExample,
-  roi: roiResults,
-  savings: savingsResults,
+  template: templateExample
+  roi: roiResults
+  savings: savingsResults
   summary: {
-  totalValue: roiResults.netSavings + savingsResults.totalSavings.totalProjectSavings,
-  paybackTime: roiResults.timeToValue,
-  efficiency: savingsResults.productivity.productivityGain,
-  recommendation: roiResults.roi > 100 ? 'Strongly Recommended' : roiResults.roi > 50 ? 'Recommended' : 'Consider Alternatives',
-},
+  totalValue: roiResults.netSavings + savingsResults.totalSavings.totalProjectSavings
+  paybackTime: roiResults.timeToValue
+  efficiency: savingsResults.productivity.productivityGain
+  recommendation: roiResults.roi > 100 ? 'Strongly Recommended' : roiResults.roi > 50 ? 'Recommended' : 'Consider Alternatives' }
+
   generatedAt: new Date().toISOString();
   };
     const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
@@ -92,11 +91,11 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
             <button
               onClick={generateReport}
               disabled={!roiResults || !savingsResults}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium ${
+              className={ `flex items-center space-x-2 px-4 py-2 rounded-lg font-medium ${
   roiResults && savingsResults
-  ? 'bg-blue-600 text-white hover:bg-blue-700',
-  : 'bg-gray-300 text-gray-500 cursor-not-allowed',
-}`}
+  ? 'bg-blue-600 text-white hover:bg-blue-700'
+  : 'bg-gray-300 text-gray-500 cursor-not-allowed' }
+`}
             >
               <Download className="w-4 h-4" />
               <span>Export Report</span>
@@ -114,11 +113,11 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
             <button
               key={preset}
               onClick={() => setIndustryPreset(preset)}
-              className={`p-3 rounded-lg border text-sm font-medium transition-colors ${
+              className={ `p-3 rounded-lg border text-sm font-medium transition-colors ${
   industryPreset === preset
   ? 'border-blue-500 bg-blue-50 text-blue-700'
-  : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50',
-}`}
+  : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50' }
+`}
             >
               {preset.charAt(0).toUpperCase() + preset.slice(1)}
             </button>
@@ -130,11 +129,11 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
         <nav className="flex border-b border-gray-200">
           <button
             onClick={() => setActiveTab('roi')}
-            className={`flex-1 py-4 px-6 text-center font-medium ${
+            className={ `flex-1 py-4 px-6 text-center font-medium ${
   activeTab === 'roi'
   ? 'bg-blue-50 text-blue-700 border-b-2 border-blue-500'
-  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-}`}
+  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50' }
+`}
           >
             <div className="flex items-center justify-center space-x-2">
               <Calculator className="w-4 h-4" />
@@ -143,11 +142,11 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
           </button>
           <button
             onClick={() => setActiveTab('savings')}
-            className={`flex-1 py-4 px-6 text-center font-medium ${
+            className={ `flex-1 py-4 px-6 text-center font-medium ${
   activeTab === 'savings'
   ? 'bg-green-50 text-green-700 border-b-2 border-green-500'
-  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-}`}
+  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50' }
+`}
           >
             <div className="flex items-center justify-center space-x-2">
               <PiggyBank className="w-4 h-4" />
@@ -156,11 +155,11 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
           </button>
           <button
             onClick={() => setActiveTab('summary')}
-            className={`flex-1 py-4 px-6 text-center font-medium ${
+            className={ `flex-1 py-4 px-6 text-center font-medium ${
   activeTab === 'summary'
   ? 'bg-purple-50 text-purple-700 border-b-2 border-purple-500'
-  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-}`}
+  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50' }
+`}
           >
             <div className="flex items-center justify-center space-x-2">
               <BarChart3 className="w-4 h-4" />
@@ -283,29 +282,29 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
                     </div>
                   </div>
                   {/* Recommendation */}
-                  <div className={`rounded-lg p-6 border ${
+                  <div className={ `rounded-lg p-6 border ${
   roiResults.roi > 100
   ? 'bg-green-50 border-green-200'
-  : roiResults.roi > 50,
+  : roiResults.roi > 50
   ? 'bg-yellow-50 border-yellow-200'
-  : 'bg-red-50 border-red-200',
-}`}>
-                    <h4 className={`font-semibold mb-3 ${
+  : 'bg-red-50 border-red-200' }
+`}>
+                    <h4 className={ `font-semibold mb-3 ${
   roiResults.roi > 100
   ? 'text-green-900'
-  : roiResults.roi > 50,
+  : roiResults.roi > 50
   ? 'text-yellow-900'
-  : 'text-red-900',
-}`}>
+  : 'text-red-900' }
+`}>
                       Recommendation
                     </h4>
-                    <div className={`text-sm ${
+                    <div className={ `text-sm ${
   roiResults.roi > 100
   ? 'text-green-800'
-  : roiResults.roi > 50,
+  : roiResults.roi > 50
   ? 'text-yellow-800'
-  : 'text-red-800',
-}`}>
+  : 'text-red-800' }
+`}>
                       {roiResults.roi > 100 ? ()
                         <p>
                           <strong>Strongly Recommended:</strong> This template shows excellent ROI with {formatPercentage(roiResults.roi)} return 

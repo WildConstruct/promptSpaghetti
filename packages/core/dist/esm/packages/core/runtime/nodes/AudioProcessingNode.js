@@ -8,7 +8,11 @@ import { AdvancedRuntimeNode, NodeExecutionResult } from '../advanced';
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, OpenAITTSAdapter, ElevenLabsAdapter } from '../../ai';
  > ;
-words ?  : Array;
+words ?  : Array < {
+    word: string,
+    start: number,
+    end: number
+} > ;
 metadata: AudioMetadata;
 export class TextToSpeechNode extends AdvancedRuntimeNode {
     modelFactory;
@@ -140,7 +144,7 @@ await adapter.initialize();
 this.adapters.set(config.provider, adapter);
 try { }
 catch (error) {
-    console.warn(`Failed to initialize ${config.provider},)}
+    console.warn(`Failed to initialize ${config.provider})},
   adapter:`, error);
 }
 _getConfiguredProvider();
@@ -307,7 +311,7 @@ string;
         }
         try { }
         catch (error) {
-            console.warn(`Failed to initialize ${config.provider},)}
+            console.warn(`Failed to initialize ${config.provider})},
   adapter:`, error);
         }
         _getConfiguredProvider();

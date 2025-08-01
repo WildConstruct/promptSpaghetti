@@ -84,13 +84,13 @@ CrossModelTestResult['comparison'];
                 number;
                 {
                     // Count common patterns
-                    const patterns = [];
-                    /type:\s*(\w+)/g,
+                    const patterns = [
+                        /type:\s*(\w+)/g,
                         /---NODES---/,
                         /---EDGES---/,
                         /---END---/,
-                        /version:\s*[\d.]+/;
-                    ;
+                        /version:\s*[\d.]+/
+                    ];
                     let matches = 0;
                     let total = 0;
                     patterns.forEach(pattern => { });
@@ -113,14 +113,13 @@ CrossModelTestResult['comparison'];
                         complexity: 'simple',
                         nodeCount: 5,
                         nodeTypes: ['WeightedChoice', 'GetVariable', 'Concat', 'Output'],
-                        specificRequirements: [,
+                        specificRequirements: [
                             'Include user\'s name from variable',
                             'Multiple greeting options',
                             'Friendly and welcoming tone'
                         ],
                         style: 'creative',
-                        domain: 'social interaction',
-                    }
+                        domain: 'social interaction', }
                     /**
                      * Moderate complexity test case
                      */
@@ -133,15 +132,14 @@ CrossModelTestResult['comparison'];
                         complexity: 'moderate',
                         nodeCount: 15,
                         nodeTypes: ['WeightedChoice', 'Conditional', 'Sequential', 'Concat', 'Output'],
-                        specificRequirements: [,
+                        specificRequirements: [
                             'Adapt to user\'s experience level',
                             'Include conditional branching',
                             'Support multiple content types'
                         ],
                         focusAreas: ['personalization', 'content quality', 'user experience'],
                         style: 'balanced',
-                        domain: 'educational content',
-                    }
+                        domain: 'educational content', }
                     /**
                      * Complex test case with advanced features
                      */
@@ -154,7 +152,7 @@ CrossModelTestResult['comparison'];
                         complexity: 'complex',
                         nodeCount: 30,
                         nodeTypes: ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov', 'PythonTransform', 'Output'],
-                        specificRequirements: [,
+                        specificRequirements: [
                             'Track student progress dynamically',
                             'Provide personalized feedback',
                             'Adapt difficulty based on performance',
@@ -163,12 +161,11 @@ CrossModelTestResult['comparison'];
                         focusAreas: ['adaptive learning', 'feedback loops', 'performance tracking'],
                         style: 'logical',
                         domain: 'education technology',
-                        constraints: [,
+                        constraints: [
                             'No inappropriate content',
                             'Educational focus required',
                             'Clear learning objectives'
-                        ]
-                    }
+                        ] }
                     /**
                      * Creative writing assistant
                      */
@@ -181,7 +178,7 @@ CrossModelTestResult['comparison'];
                         complexity: 'moderate',
                         nodeCount: 20,
                         nodeTypes: ['WeightedChoice', 'Conditional', 'Sequential', 'Markov', 'Output'],
-                        specificRequirements: [,
+                        specificRequirements: [
                             'Multiple story paths',
                             'Character development options',
                             'Genre-appropriate content'
@@ -189,12 +186,11 @@ CrossModelTestResult['comparison'];
                         focusAreas: ['narrative structure', 'character development', 'plot progression'],
                         style: 'creative',
                         domain: 'creative writing',
-                        examples: [,
+                        examples: [
                             'Choose-your-own-adventure style',
                             'Character-driven narratives',
                             'Multiple endings possible'
-                        ]
-                    }
+                        ] }
                     /**
                      * Data processing pipeline
                      */
@@ -207,7 +203,7 @@ CrossModelTestResult['comparison'];
                         complexity: 'complex',
                         nodeCount: 25,
                         nodeTypes: ['PythonTransform', 'Conditional', 'Sequential', 'WeightedChoice', 'Output'],
-                        specificRequirements: [,
+                        specificRequirements: [
                             'Input validation and cleaning',
                             'Multiple analysis methods',
                             'Conditional processing based on data characteristics',
@@ -215,8 +211,7 @@ CrossModelTestResult['comparison'];
                         ],
                         focusAreas: ['data quality', 'analysis accuracy', 'performance optimization'],
                         style: 'logical',
-                        domain: 'data science',
-                    },
+                        domain: 'data science', },
                     /**
                      * Run comprehensive cross-model tests
                      */
@@ -259,7 +254,7 @@ CrossModelTestResult['comparison'];
                     testResults[testName] = await tester.testAllModels(testCase);
                 }
                 catch (error) {
-                    console.error(`Test ${testName},)}
+                    console.error(`Test ${testName})},
   failed:`, error);
                 }
                 testResults[testName] = {

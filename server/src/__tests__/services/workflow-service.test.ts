@@ -22,7 +22,7 @@ import {
   WorkflowEvent,
   WorkflowConfiguration,
   StateTransitionResult
-} from '../../database/workflow-models';
+ from '../../database/workflow-models';
 
 // Mock the WorkflowDAO
 jest.mock('../../database/workflow-dao');
@@ -136,7 +136,7 @@ describe('WorkflowService', () => {
           approval_completed: true,
           lock_acquired: true,
           schedule_failed: true
-        }
+
       });
     });
 
@@ -197,7 +197,7 @@ describe('WorkflowService', () => {
           actor_id: 'system',
           data: expect.objectContaining({
             action: 'state_created'
-  }
+
   }
       );
     });
@@ -287,7 +287,7 @@ describe('WorkflowService', () => {
               action: 'state_created',
               state_id: createdState.id,
               state_name: createdState.name
-  }
+
   }
         );
       });
@@ -390,7 +390,7 @@ describe('WorkflowService', () => {
             data: expect.objectContaining({
               approval_id: 'approval-1',
               to_state_id: 'state-2'
-  }
+
   }
         );
         // Should not auto-release locks when approval is required
@@ -417,7 +417,7 @@ describe('WorkflowService', () => {
             actor_id: 'user-1',
             data: expect.objectContaining({
               new_state_id: 'state-2'
-  }
+
   }
         );
       });
@@ -484,7 +484,7 @@ describe('WorkflowService', () => {
             data: expect.objectContaining({
               approval_id: createdApproval.id,
               transition_id: approvalData.transition_id
-  }
+
   }
         );
       });
@@ -536,7 +536,7 @@ describe('WorkflowService', () => {
               approval_id: 'approval-1',
               status: 'approved',
               comment: 'Looks good!'
-  }
+
   }
         );
       });
@@ -576,7 +576,7 @@ describe('WorkflowService', () => {
               approval_id: 'approval-1',
               status: 'rejected',
               reason: 'Needs more work'
-  }
+
   }
         );
       });

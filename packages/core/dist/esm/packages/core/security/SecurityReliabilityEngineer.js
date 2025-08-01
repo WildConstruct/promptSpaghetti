@@ -106,7 +106,13 @@ capacity: {
 }
 ;
 // Dependency health
-dependencies: Array;
+dependencies: Array < {
+    service: string,
+    availability: number,
+    avg_response_time: number,
+    error_rate: number,
+    health_score: number
+} > ;
 collected_at: number;
 collection_method: 'automated' | 'manual';
  > ;
@@ -128,7 +134,14 @@ summary: {
 ;
 // Detailed metrics
 metrics: {
-    slo_performance: Array;
+    slo_performance: Array < {
+        slo_id: string,
+        slo_name: string,
+        target: number,
+        actual: number,
+        status: 'met' | 'missed' | 'at_risk',
+        error_budget_remaining: number
+    } > ;
     incident_statistics: {
         total_incidents: number;
         by_severity: Record;
@@ -137,11 +150,24 @@ metrics: {
         avg_mttd: number;
     }
     ;
-    service_health: Array;
+    service_health: Array < {
+        service: string,
+        availability: number,
+        performance_score: number,
+        capacity_utilization: number,
+        trend: 'improving' | 'stable' | 'degrading',
+    } > ;
 }
 ;
 // Recommendations and actions
-recommendations: Array;
+recommendations: Array < {
+    priority: 'low' | 'medium' | 'high' | 'critical',
+    category: 'monitoring' | 'capacity' | 'automation' | 'process',
+    title: string,
+    description: string,
+    estimated_impact: string,
+    estimated_effort: string
+} > ;
 generated_by: string;
 generated_at: number;
 reviewed_by ?  : string;
@@ -205,8 +231,9 @@ export class SecurityReliabilityEngineer extends EventEmitter {
 }
 return id;
 async;
-updateSLOPerformance(sloId, string, measurement, {});
-actual_performance: number;
+updateSLOPerformance(sloId, string, measurement, {}),
+    actual_performance;
+number;
 measurement_window_start: number;
 measurement_window_end: number;
 incidents ?  : string;
@@ -284,7 +311,7 @@ data: {
         record.error_budget_consumed,
         ;
     }
-    recommended_actions: [,
+    recommended_actions: [
         'Investigate root cause of performance degradation',
         'Check system capacity and scaling policies',
         'Review recent deployments and configuration changes'
@@ -338,7 +365,7 @@ data: {
             ? 'Error budget may be exhausted within hours'
             : 'Monitor for continued high burn rate',
         recommended_actions;
-    [,
+    [
         'Investigate cause of increased error rate',
         'Consider implementing temporary mitigations',
         'Prepare incident response if needed'
@@ -378,7 +405,7 @@ data: {
         slo.alerting.budget_exhaustion_threshold,
         ;
     }
-    recommended_actions: [,
+    recommended_actions: [
         'Implement immediate reliability improvements',
         'Consider feature freeze until budget recovers',
         'Review and update SLO targets if needed'
@@ -534,7 +561,7 @@ Promise < void  > {
                 Math.floor(Math.random() * 100),
                 ;
             }
-            dependencies: [,
+            dependencies: [
                 {
                     service: 'auth-service',
                     availability: 99.9 + (Math.random() - 0.5) * 0.2,
@@ -548,7 +575,8 @@ Promise < void  > {
                     avg_response_time: 10 + Math.random() * 20,
                     error_rate: Math.random() * 0.5,
                     health_score: 90 + Math.random() * 10
-                }],
+                }
+            ],
                 collected_at;
             Date.now(),
                 collection_method;
@@ -630,7 +658,7 @@ Promise < void  > {
                         {
                             overall_reliability_score: overallReliabilityScore,
                                 key_achievements;
-                            [,
+                            [
                                 'Maintained 99.9% availability across core services',
                                 'Reduced MTTR by 15% through automation improvements',
                                 'Completed postmortems for all major incidents'
@@ -640,7 +668,7 @@ Promise < void  > {
                                 error_budget_status;
                             overallReliabilityScore > 95 ? 'healthy' : overallReliabilityScore > 85 ? 'at_risk' : 'exhausted',
                                 top_reliability_risks;
-                            [,
+                            [
                                 'Database connection pool exhaustion under high load',
                                 'Third-party API dependency failures',
                                 'Insufficient monitoring coverage for new services'
@@ -687,7 +715,7 @@ Promise < void  > {
                             };
                         }
                     }
-                    recommendations: [,
+                    recommendations: [
                         {
                             priority: 'high',
                             category: 'monitoring',
@@ -703,7 +731,8 @@ Promise < void  > {
                             description: 'Implement runbook automation for common incident scenarios',
                             estimated_impact: 'Reduce MTTR by 30%',
                             estimated_effort: '4 weeks'
-                        }],
+                        }
+                    ],
                         generated_by;
                     'sre_system',
                         generated_at;
@@ -745,7 +774,11 @@ Promise < void  > {
                         slo_compliance: number;
                         active_incidents: number;
                         error_budget_status: 'healthy' | 'at_risk' | 'exhausted';
-                        services: Array;
+                        services: Array < {
+                            name: string,
+                            status: 'healthy' | 'degraded' | 'unhealthy',
+                            health_score: number
+                        } > ;
                         const activeSLOs = Array.from(this.slos.values()).filter(slo => slo.enabled);
                         const metSLOs = activeSLOs.filter(slo => slo.error_budget.remaining_budget > 20);
                         const sloCompliance = activeSLOs.length > 0 ? (metSLOs.length / activeSLOs.length) * 100 : 100;
@@ -784,61 +817,70 @@ Promise < void  > {
                                 name: 'Security Alert Processing Availability',
                                 description: 'Availability of security alert processing system',
                                 service: 'security-alerts',
-                                definition: {
-                                    metric_type: 'availability',
-                                    target_value: 99.9,
-                                    measurement_window: 3600000, // 1 hour,
-                                    evaluation_period: 'monthly',
-                                },
-                                alerting: {
-                                    burn_rate_alerts: [,
-                                        {
-                                            id: 'fast_burn',
-                                            name: 'Fast Burn Rate',
-                                            short_window: 300000, // 5 minutes,
-                                            long_window: 3600000, // 1 hour,
-                                            burn_rate_threshold: 14.4,
-                                            severity: 'critical',
-                                            notification_channels: ['#security-alerts', 'security-oncall@company.com']
-                                        }],
-                                    budget_exhaustion_threshold: 10,
-                                    multi_window_alerting: true,
-                                    escalation_policy: ['security-team@company.com', 'incident-commander@company.com'],
-                                },
-                                created_by: 'system',
-                                enabled: true
-                            }],
-                        defaultSLOs, : .forEach(async (slo) => {
-                            await this.createSLO(slo);
-                        }),
-                        startMetricsCollection() {
-                            // Collect metrics every 5 minutes
-                            setInterval(async () => {
-                                const services = ['security-alerts', 'threat-detection', 'incident-response', 'data-integrity'];
-                                for (const service of services) {
-                                    try {
-                                        await this.collectServiceMetrics(service);
-                                    }
-                                    catch (error) {
-                                        console.error(`Failed to collect metrics for ${service}:`, error);
-                                    }
+                                definition: {},
+                                metric_type: 'availability',
+                                target_value: 99.9,
+                                measurement_window: 3600000, // 1 hour,
+                                evaluation_period: 'monthly',
+                            },
+                            alerting, {},
+                            burn_rate_alerts, [
+                                {
+                                    id: 'fast_burn',
+                                    name: 'Fast Burn Rate',
+                                    short_window: 300000, // 5 minutes,
+                                    long_window: 3600000, // 1 hour,
+                                    burn_rate_threshold: 14.4,
+                                    severity: 'critical',
+                                    notification_channels: ['#security-alerts', 'security-oncall@company.com']
                                 }
-                                300000;
-                            });
-                        },
-                        startErrorBudgetMonitoring() {
+                            ],
+                            budget_exhaustion_threshold, 10,
+                            multi_window_alerting, true,
+                            escalation_policy, ['security-team@company.com', 'incident-commander@company.com'],
+                        ]
+                    },
+                        created_by;
+                    'system',
+                        enabled;
+                    true;
+                    ;
+                    defaultSLOs.forEach(async (slo) => {
+                        await this.createSLO(slo);
+                    });
+                    startMetricsCollection();
+                    void {
+                        // Collect metrics every 5 minutes
+                        setInterval(async) { }
+                    }();
+                    {
+                        const services = ['security-alerts', 'threat-detection', 'incident-response', 'data-integrity'];
+                        for (const service of services) {
+                            try {
+                                await this.collectServiceMetrics(service);
+                            }
+                            catch (error) {
+                                console.error(`Failed to collect metrics for ${service}:`, error);
+                            }
+                        }
+                        300000;
+                        ;
+                        startErrorBudgetMonitoring();
+                        void {
                             // Check error budgets every minute
-                            setInterval(async () => {
-                                for (const [sloId] of this.slos) {
-                                    try {
-                                        await this.checkErrorBudgetAlerts(sloId);
-                                    }
-                                    catch (error) {
-                                        console.error(`Failed to check error budget for ${sloId}:`, error);
-                                    }
+                            setInterval(async) { }
+                        }();
+                        {
+                            for (const [sloId] of this.slos) {
+                                try {
+                                    await this.checkErrorBudgetAlerts(sloId);
                                 }
-                                60000;
-                            });
+                                catch (error) {
+                                    console.error(`Failed to check error budget for ${sloId}:`, error);
+                                }
+                            }
+                            60000;
+                            ;
                             // Public API methods
                             getSLOs();
                             ServiceLevelObjective;
@@ -902,7 +944,7 @@ Promise < void  > {
                                 }
                             }
                         }
-                    };
+                    }
                 }
             }
         }

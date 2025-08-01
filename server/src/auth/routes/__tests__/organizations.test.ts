@@ -70,12 +70,12 @@ describe('Organization Routes', () => {
       updateTeamMemberRole: jest.fn(),
       getTeamMembers: jest.fn(),
       getUserTeams: jest.fn()
-    } as any;
+ as any;
 
     // Mock RBAC service
     mockRbacService = {
       checkPermission: jest.fn()
-    } as any;
+ as any;
 
     // Add services to fastify instance
     app.decorate('organizationService', mockOrgService);
@@ -85,7 +85,7 @@ describe('Organization Routes', () => {
     app.addHook('preHandler', async (request: OrganizationRequest) => {
       if (request.url.includes('/organizations') || request.url.includes('/teams') || request.url.includes('/users')) {
         request.user = mockUser;
-      }
+
     });
 
     // Register routes
@@ -109,7 +109,7 @@ describe('Organization Routes', () => {
             name: 'Test Organization',
             description: 'Test description',
             plan: 'free'
-          }
+
         });
 
         expect(response.statusCode).toBe(201);
@@ -121,7 +121,7 @@ describe('Organization Routes', () => {
             name: 'Test Organization',
             description: 'Test description',
             plan: 'free'
-  }
+
           'user-123',
           {
             ipAddress: '127.0.0.1',
@@ -138,7 +138,7 @@ describe('Organization Routes', () => {
           url: '/organizations',
           payload: {
             name: 'Test Organization'
-          }
+
         });
 
         expect(response.statusCode).toBe(400);
@@ -153,7 +153,7 @@ describe('Organization Routes', () => {
           url: '/organizations',
           payload: {
             description: 'Missing name'
-          }
+
         });
 
         expect(response.statusCode).toBe(400);
@@ -266,7 +266,7 @@ describe('Organization Routes', () => {
           url: '/organizations/org-123',
           payload: {
             name: 'Updated Organization'
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -295,7 +295,7 @@ describe('Organization Routes', () => {
           url: '/organizations/org-123',
           payload: {
             name: 'Updated Organization'
-          }
+
         });
 
         expect(response.statusCode).toBe(403);
@@ -396,7 +396,7 @@ describe('Organization Routes', () => {
           payload: {
             name: 'Development Team',
             description: 'Main development team'
-          }
+
         });
 
         expect(response.statusCode).toBe(201);
@@ -408,7 +408,7 @@ describe('Organization Routes', () => {
             organizationId: 'org-123',
             name: 'Development Team',
             description: 'Main development team'
-  }
+
           'user-123',
           {
             ipAddress: '127.0.0.1',
@@ -428,7 +428,7 @@ describe('Organization Routes', () => {
           url: '/organizations/org-123/teams',
           payload: {
             name: 'Development Team'
-          }
+
         });
 
         expect(response.statusCode).toBe(403);
@@ -536,7 +536,7 @@ describe('Organization Routes', () => {
           url: '/teams/team-123',
           payload: {
             name: 'Updated Team'
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -610,7 +610,7 @@ describe('Organization Routes', () => {
           payload: {
             userId: 'user-456',
             role: 'member'
-          }
+
         });
 
         expect(response.statusCode).toBe(201);
@@ -623,7 +623,7 @@ describe('Organization Routes', () => {
             userId: 'user-456',
             role: 'member',
             invitedBy: 'user-123'
-  }
+
           {
             ipAddress: '127.0.0.1',
             userAgent: undefined
@@ -648,8 +648,8 @@ describe('Organization Routes', () => {
               firstName: 'Member',
               lastName: 'User',
               avatarUrl: null
-            }
-          }
+
+
         ];
 
         mockOrgService.getTeamById.mockResolvedValue(mockTeam);
@@ -686,7 +686,7 @@ describe('Organization Routes', () => {
           url: '/teams/team-123/members/user-456',
           payload: {
             role: 'admin'
-          }
+
         });
 
         expect(response.statusCode).toBe(200);

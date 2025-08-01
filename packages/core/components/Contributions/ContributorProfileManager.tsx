@@ -6,24 +6,21 @@
  * and notification preferences.
  */
 import React, { useState, useEffect } from 'react';
-import { 
-  ContributorProfile, 
-  ContributorLevel,
+import { ContributorProfile, 
+  ContributorLevel }
   validateContributorProfile 
-} from '../../types/contributions';
+ from '../../types/contributions';
 
-}
-export interface ContributorProfileManagerProps {
-  profile: ContributorProfile;
+
+export interface ContributorProfileManagerProps { profile: ContributorProfile;
   onProfileUpdate: (profile: ContributorProfile) => void;
   readOnly?: boolean;
-  className?: string;
-}
-}
-export const ContributorProfileManager: React.FC<ContributorProfileManagerProps> = ({)
-  profile,
-  onProfileUpdate,
-  readOnly = false,
+  className?: string }
+
+export const ContributorProfileManager: React.FC<ContributorProfileManagerProps> = ({ )
+  profile
+  onProfileUpdate
+  readOnly = false }
   className = ''
 }) => {
   const [editMode, setEditMode] = useState(false);
@@ -31,9 +28,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'profile' | 'achievements' | 'preferences'>('profile');
-  useEffect(() => {
-    setFormData(profile);
-  }, [profile]);
+  useEffect(() => { setFormData(profile) }, [profile]);
   // Update form data
   const updateFormData = (updates: Partial<ContributorProfile>) => {
     setFormData(prev => ({ ...prev, ...updates }));
@@ -48,23 +43,17 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
   // Validate form
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-    if (!formData.displayName?.trim()) {
-      newErrors.displayName = 'Display name is required';
+    if (!formData.displayName?.trim()) { newErrors.displayName = 'Display name is required';
     if (formData.bio && formData.bio.length > 500) {
       newErrors.bio = 'Bio must be less than 500 characters';
     if (formData.website && !isValidUrl(formData.website)) {
       newErrors.website = 'Please enter a valid URL';
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    return Object.keys(newErrors).length === 0 };
   // Check if URL is valid
-  const isValidUrl = (url: string): boolean => {
-    try {
+  const isValidUrl = (url: string): boolean => { try {
       new URL(url);
-      return true;
-    } catch {
-      return false;
-  };
+      return true } catch { return false };
   // Handle save
   const handleSave = async () => {
     if (!validateForm()) return;
@@ -73,26 +62,20 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
       // Validate with Zod
       // API call would go here
       const response = await fetch(`/api/marketplace/contributors/${profile.id}`, {)}
-  },
-  method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+
+  method: 'PUT'
+        headers: { 'Content-Type': 'application/json' }
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-  },
+
   body: JSON.stringify(formData);
   });
-      if (!response.ok) {
-        throw new Error('Failed to update profile');
+      if (!response.ok) { throw new Error('Failed to update profile');
       const updatedProfile = await response.json();
       onProfileUpdate(updatedProfile);
-      setEditMode(false);
-    } catch (err) {
-  setErrors({ )
-  save: err instanceof Error ? err.message : 'Failed to save profile',
+      setEditMode(false) } catch (err) { setErrors({ )
+  save: err instanceof Error ? err.message : 'Failed to save profile' }
 });
-    } finally {
-      setSaving(false);
-  };
+ finally { setSaving(false) };
   // Handle cancel
   const handleCancel = () => {
     setFormData(profile);
@@ -100,39 +83,35 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
     setEditMode(false);
   };
   // Add skill
-  const addSkill = (skill: string) => {
-  if (skill.trim() && !formData.skills?.includes(skill.trim())) {
+  const addSkill = (skill: string) => { if (skill.trim() && !formData.skills?.includes(skill.trim())) {
   updateFormData({ )
-  skills: [...(formData.skills || []), skill.trim()],
+  skills: [...(formData.skills || []), skill.trim()] }
 });
   };
   // Remove skill
-  const removeSkill = (index: number) => {
-  updateFormData({)
-  skills: formData.skills?.filter((_, i) => i !== index) || [],
+  const removeSkill = (index: number) => { updateFormData({)
+  skills: formData.skills?.filter((_, i) => i !== index) || [] }
 });
   };
   // Add expertise
-  const addExpertise = (expertise: string) => {
-  if (expertise.trim() && !formData.expertise?.includes(expertise.trim())) {
+  const addExpertise = (expertise: string) => { if (expertise.trim() && !formData.expertise?.includes(expertise.trim())) {
   updateFormData({ )
-  expertise: [...(formData.expertise || []), expertise.trim()],
+  expertise: [...(formData.expertise || []), expertise.trim()] }
 });
   };
   // Remove expertise
-  const removeExpertise = (index: number) => {
-  updateFormData({)
-  expertise: formData.expertise?.filter((_, i) => i !== index) || [],
+  const removeExpertise = (index: number) => { updateFormData({)
+  expertise: formData.expertise?.filter((_, i) => i !== index) || [] }
 });
   };
   // Get level badge styling
   const getLevelBadgeStyle = (level: ContributorLevel) => {
     const styles = {
-      newcomer: { bg: '#f3f4f6', color: '#4b5563', icon: '🌱' },
-      contributor: { bg: '#dbeafe', color: '#1d4ed8', icon: '📝' },
-      regular: { bg: '#d1fae5', color: '#065f46', icon: '⭐' },
-      trusted: { bg: '#fef3c7', color: '#92400e', icon: '🏆' },
-      expert: { bg: '#e0e7ff', color: '#3730a3', icon: '👑' },
+      newcomer: { bg: '#f3f4f6', color: '#4b5563', icon: '🌱' }
+      contributor: { bg: '#dbeafe', color: '#1d4ed8', icon: '📝' }
+      regular: { bg: '#d1fae5', color: '#065f46', icon: '⭐' }
+      trusted: { bg: '#fef3c7', color: '#92400e', icon: '🏆' }
+      expert: { bg: '#e0e7ff', color: '#3730a3', icon: '👑' }
       moderator: { bg: '#fce7f3', color: '#be185d', icon: '🛡️' }
     };
     return styles[level] || styles.newcomer;
@@ -147,10 +126,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
             <div className="avatar">
               {profile.displayName.charAt(0).toUpperCase()}
             </div>
-            <div className="level-badge" style={{
-  backgroundColor: levelStyle.bg,
-  color: levelStyle.color,
-}}>
+            <div className="level-badge" style={ {
+  backgroundColor: levelStyle.bg
+  color: levelStyle.color }
+}>
               <span className="level-icon">{levelStyle.icon}</span>
               <span className="level-text">{profile.level}</span>
             </div>
@@ -334,12 +313,11 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     <input
                       type="text"
                       placeholder="Add expertise area..."
-                      onKeyPress={(e) => {
+                      onKeyPress={ (e) => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
                           addExpertise(e.currentTarget.value);
-                          e.currentTarget.value = '';
-                      }}
+                          e.currentTarget.value = '' }}
                     />
                     <div className="tags-list">
                       {formData.expertise?.map((area, index) => ()
@@ -363,12 +341,11 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     <input
                       type="text"
                       placeholder="Add skill..."
-                      onKeyPress={(e) => {
+                      onKeyPress={ (e) => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
                           addSkill(e.currentTarget.value);
-                          e.currentTarget.value = '';
-                      }}
+                          e.currentTarget.value = '' }}
                     />
                     <div className="tags-list">
                       {formData.skills?.map((skill, index) => ()
@@ -507,10 +484,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   <input
                     type="checkbox"
                     checked={formData.notificationPreferences?.emailOnComment ?? true}
-                    onChange={(e) => updateFormData({)
+                    onChange={ (e) => updateFormData({)
   notificationPreferences: {
-  ...formData.notificationPreferences,
-  emailOnComment: e.target.checked,
+  ...formData.notificationPreferences
+  emailOnComment: e.target.checked }
 })}
                     disabled={!editMode && !readOnly}
                   />
@@ -522,10 +499,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   <input
                     type="checkbox"
                     checked={formData.notificationPreferences?.emailOnLike ?? false}
-                    onChange={(e) => updateFormData({)
+                    onChange={ (e) => updateFormData({)
   notificationPreferences: {
-  ...formData.notificationPreferences,
-  emailOnLike: e.target.checked,
+  ...formData.notificationPreferences
+  emailOnLike: e.target.checked }
 })}
                     disabled={!editMode && !readOnly}
                   />
@@ -537,10 +514,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   <input
                     type="checkbox"
                     checked={formData.notificationPreferences?.emailOnFeature ?? true}
-                    onChange={(e) => updateFormData({)
+                    onChange={ (e) => updateFormData({)
   notificationPreferences: {
-  ...formData.notificationPreferences,
-  emailOnFeature: e.target.checked,
+  ...formData.notificationPreferences
+  emailOnFeature: e.target.checked }
 })}
                     disabled={!editMode && !readOnly}
                   />
@@ -552,10 +529,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                   <input
                     type="checkbox"
                     checked={formData.notificationPreferences?.weeklyDigest ?? true}
-                    onChange={(e) => updateFormData({)
+                    onChange={ (e) => updateFormData({)
   notificationPreferences: {
-  ...formData.notificationPreferences,
-  weeklyDigest: e.target.checked,
+  ...formData.notificationPreferences
+  weeklyDigest: e.target.checked }
 })}
                     disabled={!editMode && !readOnly}
                   />
@@ -566,18 +543,18 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           </div>
         )}
       </div>
-      <style>{`
+      <style>{ `
         .contributor-profile-manager {
-          background: #ffffff;
+          background: #ffffff
   border: 1px solid #e5e7eb;
           border-radius: 12px;
   overflow: hidden;
         .profile-header {
           padding: 24px;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid #e5e7eb
   display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 20px;
         .header-main {
           display: flex;
@@ -591,9 +568,9 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
         .avatar {
           width: 80px;
   height: 80px;
-          border-radius: 50%;
+          border-radius: 50%
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-          color: #ffffff;
+          color: #ffffff
   display: flex;
           align-items: center;
           justify-content: center;
@@ -616,7 +593,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           font-weight: 700;
   color: #1f2937;
         .bio {
-          margin: 0 0 12px 0;
+          margin: 0 0 12px 0
   color: #6b7280;
           line-height: 1.5;
         .location {
@@ -634,7 +611,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           gap: 1px;
   background: #e5e7eb;
         .stat-item {
-          background: #ffffff;
+          background: #ffffff
   padding: 16px;
           text-align: center;
         .stat-value {
@@ -648,23 +625,23 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           font-weight: 500;
         .profile-tabs {
           display: flex;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid #e5e7eb
   background: #f8fafc;
         .tab-btn {
           background: none;
   border: none;
-          padding: 16px 24px;
+          padding: 16px 24px
   cursor: pointer;
           font-weight: 500;
   color: #6b7280;
-          border-bottom: 3px solid transparent;
+          border-bottom: 3px solid transparent
   transition: all 0.2s ease;
-        .tab-btn:hover {,
-  color: #3b82f6;
-          background: #f1f5f9;
+        .tab-btn:hover {
+  color: #3b82f6
+  background: #f1f5f9;
         .tab-btn.active {
           color: #3b82f6;
-          border-bottom-color: #3b82f6;
+          border-bottom-color: #3b82f6
   background: #ffffff;
         .tab-content {
           padding: 24px;
@@ -675,21 +652,21 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           margin-bottom: 6px;
           font-weight: 500;
   color: #374151;
-        .form-group input,
-        .form-group textarea,
+        .form-group input
+        .form-group textarea
         .form-group select {
-          width: 100%;
+          width: 100%
   padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
   transition: border-color 0.2s ease;
-        .form-group input:focus,
-        .form-group textarea:focus {,
+        .form-group input:focus
+        .form-group textarea:focus {
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        .form-group input.error,
+        .form-group input.error
         .form-group textarea.error {
           border-color: #ef4444;
         .char-count {
@@ -703,13 +680,13 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
   gap: 8px;
         .tags-input input {
           margin-bottom: 8px;
-        .tags-list,
+        .tags-list
         .tags-display {
           display: flex;
           flex-wrap: wrap;
   gap: 6px;
         .tag {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
           padding: 4px 8px;
           border-radius: 4px;
@@ -719,23 +696,23 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           align-items: center;
   gap: 4px;
         .tags-display .tag {
-          background: #e5e7eb;
+          background: #e5e7eb
   color: #4b5563;
         .tag-remove {
           background: none;
   border: none;
-          color: #ffffff;
+          color: #ffffff
   cursor: pointer;
           font-size: 14px;
   padding: 0;
           margin: 0;
   width: 16px;
           height: 16px;
-          border-radius: 50%;
+          border-radius: 50%
   display: flex;
           align-items: center;
           justify-content: center;
-        .tag-remove:hover {,
+        .tag-remove:hover {
   background: rgba(255, 255, 255, 0.2);
         .detail-section {
           margin-bottom: 24px;
@@ -820,7 +797,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           border-radius: 4px;
   overflow: hidden;
         .progress-fill {
-          height: 100%;
+          height: 100%
   background: #3b82f6;
           transition: width 0.3s ease;
         .progress-text {
@@ -845,35 +822,35 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
           color: #ef4444;
           font-size: 12px;
           margin-top: 4px;
-        .btn-primary,
-        .btn-secondary,
+        .btn-primary
+        .btn-secondary
         .btn-outline {
           padding: 10px 20px;
           border-radius: 6px;
           font-weight: 500;
   cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.2s ease
   border: 1px solid transparent;
         .btn-primary {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
-        .btn-primary:hover:not(:disabled) {,
+        .btn-primary:hover:not(:disabled) {
   background: #2563eb;
         .btn-secondary {
-          background: #f3f4f6;
+          background: #f3f4f6
   color: #374151;
           border-color: #d1d5db;
-        .btn-secondary:hover {,
+        .btn-secondary:hover {
   background: #e5e7eb;
         .btn-outline {
-          background: #ffffff;
+          background: #ffffff
   color: #374151;
           border-color: #d1d5db;
-        .btn-outline:hover {,
+        .btn-outline:hover {
   background: #f9fafb;
-        .btn-primary:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+        .btn-primary:disabled {
+  opacity: 0.5 }
+  cursor: not-allowed;
         @media (max-width: 768px) {
           .profile-header {
             flex-direction: column;

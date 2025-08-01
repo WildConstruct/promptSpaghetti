@@ -15,15 +15,15 @@ describe('Markov Node Engine Integration', () => {
           transitions: {
             on: { off: 1.0 },
             off: { on: 1.0 }
-  }
+
           initialState: 'on',
           inputs: []
-  }
+
         {
           id: 'output1',
           type: 'Output',
           inputs: ['markov1']
-        }
+
       ],
       seed: 12345
     };
@@ -43,19 +43,19 @@ describe('Markov Node Engine Integration', () => {
             A: { B: 0.6, C: 0.4 },
             B: { A: 0.3, C: 0.7 },
             C: { A: 0.5, B: 0.5 }
-  }
+
           initialState: 'A',
           markovConfig: {
             maxTransitions: 10,
             detectLoops: false
-  }
+
           inputs: []
-  }
+
         {
           id: 'output1',
           type: 'Output',
           inputs: ['markov1']
-        }
+
       ],
       seed: 12345
     };
@@ -75,19 +75,19 @@ describe('Markov Node Engine Integration', () => {
           transitions: {
             running: { running: 0.8, stopped: 0.2 },
             stopped: { stopped: 1.0 }
-  }
+
           initialState: 'running',
           markovConfig: {
             terminationStates: ['stopped'],
             maxTransitions: 5
-  }
+
           inputs: []
-  }
+
         {
           id: 'output1',
           type: 'Output',
           inputs: ['markov1']
-        }
+
       ],
       seed: 12345
     };
@@ -103,12 +103,12 @@ describe('Markov Node Engine Integration', () => {
           id: 'markov1',
           type: 'Markov',
           inputs: []
-  }
+
         {
           id: 'output1',
           type: 'Output',
           inputs: ['markov1']
-        }
+
       ],
       seed: 12345
     };
@@ -127,10 +127,10 @@ describe('Markov Node Engine Integration', () => {
           transitions: {
             first1: { first2: 1.0 },
             first2: { first1: 1.0 }
-  }
+
           initialState: 'first1',
           inputs: []
-  }
+
         {
           id: 'markov2',
           type: 'Markov',
@@ -138,20 +138,20 @@ describe('Markov Node Engine Integration', () => {
           transitions: {
             second1: { second2: 1.0 },
             second2: { second1: 1.0 }
-  }
+
           initialState: 'second1',
           inputs: []
-  }
+
         {
           id: 'output1',
           type: 'Output',
           inputs: ['markov1']
-  }
+
         {
           id: 'output2',
           type: 'Output',
           inputs: ['markov2']
-        }
+
       ],
       seed: 12345
     };
@@ -172,19 +172,19 @@ describe('Markov Node Engine Integration', () => {
             process: { success: 0.7, failure: 0.2, process: 0.1 },
             success: { success: 1.0 }, // Absorbing
             failure: { failure: 1.0 }  // Absorbing
-  }
+
           initialState: 'start',
           markovConfig: {
             terminationStates: ['success', 'failure'],
             maxTransitions: 20
-  }
+
           inputs: []
-  }
+
         {
           id: 'output1',
           type: 'Output',
           inputs: ['markov1']
-        }
+
       ],
       seed: 12345
     };
@@ -204,15 +204,15 @@ describe('Markov Node Engine Integration', () => {
             random1: { random2: 0.4, random3: 0.6 },
             random2: { random1: 0.3, random3: 0.7 },
             random3: { random1: 0.8, random2: 0.2 }
-  }
+
           initialState: 'random1',
           inputs: []
-  }
+
         {
           id: 'output1',
           type: 'Output',
           inputs: ['markov1']
-        }
+
       ],
       seed: 98765
     });
@@ -234,7 +234,7 @@ describe('Markov Node Engine Integration', () => {
             { value: 'path2', weight: 1 }
           ],
           inputs: []
-  }
+
         {
           id: 'markov1',
           type: 'Markov',
@@ -243,20 +243,20 @@ describe('Markov Node Engine Integration', () => {
             step1: { step2: 0.8, final: 0.2 },
             step2: { final: 1.0 },
             final: { final: 1.0 }
-  }
+
           initialState: 'step1',
           inputs: []
-  }
+
         {
           id: 'concat1',
           type: 'Concat',
           inputs: ['choice1', 'markov1']
-  }
+
         {
           id: 'output1',
           type: 'Output',
           inputs: ['concat1']
-        }
+
       ],
       seed: 12345
     };

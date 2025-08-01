@@ -14,7 +14,7 @@ import {
   ErrorEvent,
   BehaviorAnomaly,
   BehaviorAnalysisResult
-} from '../auth/services/BehaviorAnalyticsService';
+ from '../auth/services/BehaviorAnalyticsService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
@@ -35,19 +35,19 @@ describe('BehaviorAnalyticsService', () => {
     mockDb = {
       query: jest.fn<unknown[], unknown>(),
       close: jest.fn<unknown[], unknown>()
-    } as jest.Mocked<DatabaseService>;
+ as jest.Mocked<DatabaseService>;
     
     mockRedis = {
       get: jest.fn<unknown[], unknown>(),
       setex: jest.fn<unknown[], unknown>(),
       del: jest.fn<unknown[], unknown>(),
       close: jest.fn<unknown[], unknown>()
-    } as jest.Mocked<RedisService>;
+ as jest.Mocked<RedisService>;
 
     mockAuditService = {
       logEvent: jest.fn<unknown[], unknown>(),
       logSecurityEvent: jest.fn<unknown[], unknown>()
-    } as jest.Mocked<AuditService>;
+ as jest.Mocked<AuditService>;
 
     const config: Partial<BehaviorAnalyticsConfig> = {
       baselineWindowDays: 30,
@@ -63,7 +63,7 @@ describe('BehaviorAnalyticsService', () => {
         volumeAnomaly: 0.15,
         velocityAnomaly: 0.2,
         patternDeviation: 0.2
-  }
+
       autoBlockThreshold: 90,
       alertThreshold: 70,
       requireManualReview: true
@@ -526,7 +526,7 @@ describe('BehaviorAnalyticsService', () => {
           lastOccurrence: new Date(),
           confidence: 0.9,
           metadata: {}
-        }]
+]
       };
       
       const sessionData = createSessionDataWithUnusualPattern();
@@ -781,7 +781,7 @@ function createNormalSessionData(): SessionBehaviorData {
     ],
     errors: []
   };
-}
+
 
 function createSessionDataWithUnusualTime(): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -790,7 +790,7 @@ function createSessionDataWithUnusualTime(): SessionBehaviorData {
   unusualTime.setHours(3, 0, 0, 0);
   data.startTime = unusualTime;
   return data;
-}
+
 
 function createSessionDataWithSuspiciousSequence(): SessionBehaviorData {
   const now = new Date();
@@ -802,7 +802,7 @@ function createSessionDataWithSuspiciousSequence(): SessionBehaviorData {
       { timestamp: new Date(now.getTime() - 3 * 60 * 1000), action: 'logout', category: 'auth', success: true }
     ]
   };
-}
+
 
 function createSessionDataWithHighVolume(): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -817,7 +817,7 @@ function createSessionDataWithHighVolume(): SessionBehaviorData {
   }));
   
   return data;
-}
+
 
 function createSessionDataWithRapidActions(): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -833,7 +833,7 @@ function createSessionDataWithRapidActions(): SessionBehaviorData {
   
   data.actions = [...data.actions, ...rapidActions];
   return data;
-}
+
 
 function createBotLikeSessionData(): SessionBehaviorData {
   const now = new Date();
@@ -858,7 +858,7 @@ function createBotLikeSessionData(): SessionBehaviorData {
     })),
     errors: []
   };
-}
+
 
 function createSessionDataWithMultipleAnomalies(): SessionBehaviorData {
   const data = createSessionDataWithUnusualTime();
@@ -879,7 +879,7 @@ function createSessionDataWithMultipleAnomalies(): SessionBehaviorData {
   }));
   
   return data;
-}
+
 
 function createSessionDataWithMinorAnomalies(): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -894,7 +894,7 @@ function createSessionDataWithMinorAnomalies(): SessionBehaviorData {
   
   data.actions = [...data.actions, ...extraActions];
   return data;
-}
+
 
 function createSessionDataWithSignificantAnomalies(): SessionBehaviorData {
   const data = createSessionDataWithHighVolume();
@@ -911,13 +911,13 @@ function createSessionDataWithSignificantAnomalies(): SessionBehaviorData {
   );
   
   return data;
-}
+
 
 function createSessionDataAtHour(hour: number): SessionBehaviorData {
   const data = createNormalSessionData();
   data.startTime.setHours(hour, 0, 0, 0);
   return data;
-}
+
 
 function createSessionDataWithActionSequence(sequence: string[]): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -931,7 +931,7 @@ function createSessionDataWithActionSequence(sequence: string[]): SessionBehavio
   }));
   
   return data;
-}
+
 
 function createSessionDataWithExcessiveResourceAccess(): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -947,7 +947,7 @@ function createSessionDataWithExcessiveResourceAccess(): SessionBehaviorData {
   }));
   
   return data;
-}
+
 
 function createSessionDataWithUnusualPattern(): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -961,7 +961,7 @@ function createSessionDataWithUnusualPattern(): SessionBehaviorData {
   ];
   
   return data;
-}
+
 
 function createSessionDataWithMechanicalClicks(): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -975,7 +975,7 @@ function createSessionDataWithMechanicalClicks(): SessionBehaviorData {
   }));
   
   return data;
-}
+
 
 function createSessionDataWithoutHumanInteractions(): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -988,7 +988,7 @@ function createSessionDataWithoutHumanInteractions(): SessionBehaviorData {
   }));
   
   return data;
-}
+
 
 function createSessionDataWithImpossibleSpeeds(): SessionBehaviorData {
   const data = createNormalSessionData();
@@ -1003,7 +1003,7 @@ function createSessionDataWithImpossibleSpeeds(): SessionBehaviorData {
   }));
   
   return data;
-}
+
 
 function createSessionDataWithHighRisk(): SessionBehaviorData {
   const data = createSessionDataWithSuspiciousSequence();
@@ -1021,7 +1021,7 @@ function createSessionDataWithHighRisk(): SessionBehaviorData {
   
   data.actions = [...data.actions, ...extraActions];
   return data;
-}
+
 
 function createEstablishedProfile(): UserBehaviorProfile {
   return {
@@ -1052,7 +1052,7 @@ function createEstablishedProfile(): UserBehaviorProfile {
       navigationPaths: [],
       errorRate: 0.05,
       retryPatterns: []
-  }
+
     patterns: [],
     anomalies: [],
     riskScore: 10,
@@ -1061,7 +1061,7 @@ function createEstablishedProfile(): UserBehaviorProfile {
     dataPoints: 50,
     status: 'established'
   };
-}
+
 
 // Custom Jest matcher
 expect.extend({
@@ -1071,12 +1071,11 @@ expect.extend({
       message: () => `expected ${received} to be one of ${expected.join(', ')}`,
       pass
     };
-  }
+
 });
 
 // Module augmentation for Jest custom matchers
 declare module '@jest/expect' {
   interface Matchers<R> {
     toBeOneOf(expected: unknown[]): R;
-  }
-}
+

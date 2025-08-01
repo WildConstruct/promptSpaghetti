@@ -203,8 +203,9 @@ ExtensionManifest | undefined;
                             missingDependencies,
                             circularDependencies
                         };
-                        checkCompatibility(manifest, ExtensionManifest);
-                        systemVersion: string,
+                        checkCompatibility(manifest, ExtensionManifest),
+                            systemVersion;
+                        string,
                             platform;
                         string;
                         ExtensionValidationResult;
@@ -471,8 +472,8 @@ ExtensionManifest | undefined;
                                                                             {
                                                                                 this.manifest.main = main;
                                                                                 return this;
-                                                                                setDependencies(dependencies, {});
-                                                                                system ?  : string;
+                                                                                setDependencies(dependencies, {}),
+                                                                                    system ?  : string;
                                                                                 extensions ?  : Record;
                                                                                 npm ?  : Record;
                                                                             }
@@ -485,8 +486,8 @@ ExtensionManifest | undefined;
                                                                                 {
                                                                                     this.manifest.permissions = permissions;
                                                                                     return this;
-                                                                                    setCapabilities(capabilities, {});
-                                                                                    provides ?  : string;
+                                                                                    setCapabilities(capabilities, {}),
+                                                                                        provides ?  : string;
                                                                                     requires ?  : string;
                                                                                     optional ?  : string;
                                                                                 }
@@ -494,8 +495,8 @@ ExtensionManifest | undefined;
                                                                                 {
                                                                                     this.manifest.capabilities = capabilities;
                                                                                     return this;
-                                                                                    setUI(ui, {});
-                                                                                    icon ?  : string;
+                                                                                    setUI(ui, {}),
+                                                                                        icon ?  : string;
                                                                                     category ?  : string;
                                                                                     themes ?  : string;
                                                                                     css ?  : string;
@@ -505,8 +506,8 @@ ExtensionManifest | undefined;
                                                                                 {
                                                                                     this.manifest.ui = ui;
                                                                                     return this;
-                                                                                    setRuntime(runtime, {});
-                                                                                    node_types ?  : string;
+                                                                                    setRuntime(runtime, {}),
+                                                                                        node_types ?  : string;
                                                                                     transforms ?  : string;
                                                                                     storage_providers ?  : string;
                                                                                     background_tasks ?  : string;
@@ -515,8 +516,8 @@ ExtensionManifest | undefined;
                                                                                 {
                                                                                     this.manifest.runtime = runtime;
                                                                                     return this;
-                                                                                    setMetadata(metadata, {});
-                                                                                    license ?  : string;
+                                                                                    setMetadata(metadata, {}),
+                                                                                        license ?  : string;
                                                                                     repository ?  : string;
                                                                                     homepage ?  : string;
                                                                                     bugs ?  : string;
@@ -527,8 +528,8 @@ ExtensionManifest | undefined;
                                                                                 {
                                                                                     this.manifest.metadata = metadata;
                                                                                     return this;
-                                                                                    setCompatibility(compatibility, {});
-                                                                                    min_system_version ?  : string;
+                                                                                    setCompatibility(compatibility, {}),
+                                                                                        min_system_version ?  : string;
                                                                                     max_system_version ?  : string;
                                                                                     platforms ?  : string;
                                                                                 }
@@ -536,8 +537,8 @@ ExtensionManifest | undefined;
                                                                                 {
                                                                                     this.manifest.compatibility = compatibility;
                                                                                     return this;
-                                                                                    setSecurity(security, {});
-                                                                                    content_security_policy ?  : string;
+                                                                                    setSecurity(security, {}),
+                                                                                        content_security_policy ?  : string;
                                                                                     sandbox ?  : {
                                                                                         enabled: boolean,
                                                                                         permissions: string
@@ -562,18 +563,18 @@ ExtensionManifest | undefined;
                                                                                             string;
                                                                                             {
                                                                                                 return JSON.stringify(this.build(), null, 2);
-                                                                                                 > ;
                                                                                             }
-                                                                                            // Export singletons
-                                                                                            export const extensionManifestManager = ExtensionManifestManager.getInstance();
-                                                                                            export const extensionManifestBuilder = new ExtensionManifestBuilder();
                                                                                         }
+                                                                                         > ;
                                                                                     }
                                                                                 }
                                                                             }
                                                                         }
                                                                     }
                                                                 }
+                                                                // Export singletons
+                                                                export const extensionManifestManager = ExtensionManifestManager.getInstance();
+                                                                export const extensionManifestBuilder = new ExtensionManifestBuilder();
                                                             }
                                                         }
                                                     }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { VFXExportPreview } from './VFXExportPreview';
-import { 
-  ExportTemplate, 
+import { ExportTemplate, 
   ExportFormat, 
   ExportType, 
   CreateExportJob,
@@ -15,35 +14,35 @@ import {
   PdfExportOptions,
   HtmlExportOptions,
   ZipExportOptions,
-  VFXExportOptions,
+  VFXExportOptions }
   validateExportOptions
-} from '../../types/export';
+ from '../../types/export';
 import { useExport } from '../../hooks/useExport';
-import { 
-  FiChevronLeft, 
+import { FiChevronLeft, 
   FiChevronRight, 
   FiX, 
   FiFile, 
   FiSettings, 
   FiFilter, 
   FiCheck,
-  FiDownload,
+  FiDownload }
   FiInfo
-} from 'react-icons/fi';
-}
-interface ExportWizardProps {
-  projectId: string;
+ from 'react-icons/fi';
+
+
+interface ExportWizardProps { projectId: string;
   template?: ExportTemplate | null;
-  onComplete: (exportData: CreateExportJob) => void;
+  onComplete: (exportData: CreateExportJob) => void
   onCancel: () => void;
   type WizardStep = 'format' | 'options' | 'filters' | 'review';
-  const EXPORT_FORMATS: Array<{
+  const EXPORT_FORMATS: Array<{ }
   value: ExportFormat;
   label: string;
   description: string;
   icon: string;
-}
-}> = [
+
+
+> = [
   { value: 'vfx', label: 'VFX Pipeline', description: 'Wild Construct VFX export for film production', icon: '🎬' },
   { value: 'json', label: 'JSON', description: 'JavaScript Object Notation - structured data', icon: '{}' },
   { value: 'yaml', label: 'YAML', description: 'Human-readable data serialization', icon: '📄' },
@@ -54,72 +53,60 @@ interface ExportWizardProps {
   { value: 'html', label: 'HTML', description: 'Web page format', icon: '🌐' },
   { value: 'zip', label: 'ZIP', description: 'Compressed archive', icon: '📦' }
 ];
-const EXPORT_TYPES: Array<{
+const EXPORT_TYPES: Array<{ ,
   value: ExportType;
   label: string;
-  description: string;
-}> = [
+  description: string }> = [
   { value: 'version', label: 'Version Snapshot', description: 'Export a specific version of the project' },
   { value: 'branch', label: 'Branch Data', description: 'Export data from a specific branch' },
   { value: 'comparison', label: 'Version Comparison', description: 'Export differences between versions' },
   { value: 'full_project', label: 'Full Project', description: 'Export entire project with all data' }
 ];
 
-export const ExportWizard: React.FC<ExportWizardProps> = ({)
-  projectId,
-  template,
-  onComplete,
+export const ExportWizard: React.FC<ExportWizardProps> = ({ )
+  projectId
+  template
+  onComplete }
   onCancel
-}) => {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('format');
+}) => { const [currentStep, setCurrentStep] = useState<WizardStep>('format');
   const [exportData, setExportData] = useState<Partial<CreateExportJob>>({)
-  export_format: template?.export_format || 'json',
-    export_type: 'full_project',
-    export_scope: {},
-    export_options: {},
+  export_format: template?.export_format || 'json'
+    export_type: 'full_project' }
+    export_scope: {}
+    export_options: {}
     custom_filters: {}
   });
   const [formatDefinitions, setFormatDefinitions] = useState<ExportFormatDefinition>([]);
   const [validationErrors, setValidationErrors] = useState<string>([]);
   const { createExportJob, loading } = useExport(projectId);
-  useEffect(() => {
-    // Load format definitions
+  useEffect(() => { // Load format definitions
     const loadFormats = async () => {
       try {
         const response = await fetch('/api/export/formats');
         const data = await response.json();
         if (data.success) {
-          setFormatDefinitions(data.data);
-      } catch (error) {
-  console.error('Failed to load format definitions:', error);
-};
+          setFormatDefinitions(data.data) } catch (error) { console.error('Failed to load format definitions:', error) };
     loadFormats();
   }, []);
-  useEffect(() => {
-    if (template) {
+  useEffect(() => { if (template) {
       setExportData({)
-  export_format: template.export_format,
-        export_type: 'full_project',
-        export_scope: {},
-        export_options: template.format_options || {},
+  export_format: template.export_format
+        export_type: 'full_project' }
+        export_scope: {}
+        export_options: template.format_options || {}
         custom_filters: template.filter_options || {}
       });
   }, [template]);
-  const handleNext = () => {
-  if (validateCurrentStep()) {
+  const handleNext = () => { if (validateCurrentStep()) {
   const steps: WizardStep = ['format', 'options', 'filters', 'review'];
   const currentIndex = steps.indexOf(currentStep);
   if (currentIndex < steps.length - 1) {
-  setCurrentStep(steps[currentIndex + 1]);
-};
-  const handlePrevious = () => {
-  const steps: WizardStep = ['format', 'options', 'filters', 'review'];
+  setCurrentStep(steps[currentIndex + 1]) };
+  const handlePrevious = () => { const steps: WizardStep = ['format', 'options', 'filters', 'review'];
   const currentIndex = steps.indexOf(currentStep);
   if (currentIndex > 0) {
-  setCurrentStep(steps[currentIndex - 1]);
-};
-  const validateCurrentStep = (): boolean => {
-  const errors: string = [];
+  setCurrentStep(steps[currentIndex - 1]) };
+  const validateCurrentStep = (): boolean => { const errors: string = [];
   switch (currentStep) {
   case 'format':,
   if (!exportData.export_format) {
@@ -127,27 +114,22 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
   if (!exportData.export_type) {
   errors.push('Please select an export type');
   break;
-  case 'options':,
-  if (exportData.export_format && exportData.export_options) {
-  const validation = validateExportOptions(exportData.export_format, exportData.export_options);
+  case 'options': }
+  if (exportData.export_format && exportData.export_options) { const validation = validateExportOptions(exportData.export_format, exportData.export_options);
   if (!validation.success) {
   errors.push(...validation.error.errors.map(e => e.message));
   break;
   setValidationErrors(errors);
-  return errors.length === 0;
-};
-  const handleComplete = async () => {
-  if (!validateCurrentStep()) return;
+  return errors.length === 0 };
+  const handleComplete = async () => { if (!validateCurrentStep()) return;
   try {
   const completeExportData = {
   ...exportData,
-  template_id: template?.id,
-} as CreateExportJob;
+  template_id: template?.id }
+ as CreateExportJob;
       await createExportJob(completeExportData);
       onComplete(completeExportData);
-    } catch (error) {
-  console.error('Failed to create export job:', error);
-};
+ catch (error) { console.error('Failed to create export job:', error) };
   const renderFormatStep = () => (;);
     <div className="space-y-6">
       <div>
@@ -159,11 +141,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
             <button
               key={format.value}
               onClick={() => setExportData(prev => ({ ...prev, export_format: format.value }))}
-              className={`p-4 rounded-lg border-2 text-left transition-colors ${
+              className={ `p-4 rounded-lg border-2 text-left transition-colors ${
   exportData.export_format === format.value
-  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20',
-  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600',
-}`}
+  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600' }
+`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -190,11 +172,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
             <button
               key={type.value}
               onClick={() => setExportData(prev => ({ ...prev, export_type: type.value }))}
-              className={`w-full p-4 rounded-lg border-2 text-left transition-colors ${
+              className={ `w-full p-4 rounded-lg border-2 text-left transition-colors ${
   exportData.export_type === type.value
-  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20',
-  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600',
-}`}
+  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600' }
+`}
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -244,11 +226,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                 <input
                   type="checkbox"
                   checked={exportData.export_options?.[option.key] || false}
-                  onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                  onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  [option.key]: e.target.checked,
+  ...prev.export_options
+  [option.key]: e.target.checked }
 }))}
                   className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
@@ -268,11 +250,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                   <input
                     type="checkbox"
                     checked={exportData.export_options?.pretty || false}
-                    onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                    onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  pretty: e.target.checked,
+  ...prev.export_options
+  pretty: e.target.checked }
 }))}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
@@ -282,11 +264,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                   <input
                     type="checkbox"
                     checked={exportData.export_options?.include_schema || false}
-                    onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                    onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  include_schema: e.target.checked,
+  ...prev.export_options
+  include_schema: e.target.checked }
 }))}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
@@ -302,11 +284,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                   </label>
                   <select
                     value={exportData.export_options?.delimiter || ','}
-                    onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                    onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  delimiter: e.target.value,
+  ...prev.export_options
+  delimiter: e.target.value }
 }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   >
@@ -320,11 +302,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                   <input
                     type="checkbox"
                     checked={exportData.export_options?.include_headers || false}
-                    onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                    onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  include_headers: e.target.checked,
+  ...prev.export_options
+  include_headers: e.target.checked }
 }))}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
@@ -340,11 +322,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                   </label>
                   <select
                     value={exportData.export_options?.page_size || 'A4'}
-                    onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                    onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  page_size: e.target.value,
+  ...prev.export_options
+  page_size: e.target.value }
 }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   >
@@ -358,11 +340,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                   <input
                     type="checkbox"
                     checked={exportData.export_options?.include_images || false}
-                    onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                    onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  include_images: e.target.checked,
+  ...prev.export_options
+  include_images: e.target.checked }
 }))}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
@@ -378,11 +360,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                   </label>
                   <select
                     value={exportData.export_options?.quality || 'production'}
-                    onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                    onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  quality: e.target.value,
+  ...prev.export_options
+  quality: e.target.value }
 }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   >
@@ -404,11 +386,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                       <input
                         type="checkbox"
                         checked={exportData.export_options?.[option.key] ?? true}
-                        onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                        onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  [option.key]: e.target.checked,
+  ...prev.export_options
+  [option.key]: e.target.checked }
 }))}
                         className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
@@ -430,11 +412,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                       <input
                         type="checkbox"
                         checked={exportData.export_options?.[option.key] ?? true}
-                        onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                        onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  [option.key]: e.target.checked,
+  ...prev.export_options
+  [option.key]: e.target.checked }
 }))}
                         className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
@@ -457,11 +439,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                       <input
                         type="checkbox"
                         checked={exportData.export_options?.[option.key] ?? true}
-                        onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                        onChange={ (e) => setExportData(prev => ({)
+  ...prev
   export_options: {
-  ...prev.export_options,
-  [option.key]: e.target.checked,
+  ...prev.export_options
+  [option.key]: e.target.checked }
 }))}
                         className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
@@ -500,13 +482,13 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
               <input
                 type="date"
                 value={exportData.custom_filters?.date_range?.start || ''}
-                onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                onChange={ (e) => setExportData(prev => ({)
+  ...prev
   custom_filters: {
-  ...prev.custom_filters,
+  ...prev.custom_filters
   date_range: {
-  ...prev.custom_filters?.date_range,
-  start: e.target.value,
+  ...prev.custom_filters?.date_range
+  start: e.target.value }
 }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               />
@@ -518,13 +500,13 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
               <input
                 type="date"
                 value={exportData.custom_filters?.date_range?.end || ''}
-                onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                onChange={ (e) => setExportData(prev => ({)
+  ...prev
   custom_filters: {
-  ...prev.custom_filters,
+  ...prev.custom_filters
   date_range: {
-  ...prev.custom_filters?.date_range,
-  end: e.target.value,
+  ...prev.custom_filters?.date_range
+  end: e.target.value }
 }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               />
@@ -538,11 +520,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
               <input
                 type="checkbox"
                 checked={exportData.custom_filters?.compress_output || false}
-                onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                onChange={ (e) => setExportData(prev => ({)
+  ...prev
   custom_filters: {
-  ...prev.custom_filters,
-  compress_output: e.target.checked,
+  ...prev.custom_filters
+  compress_output: e.target.checked }
 }))}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
@@ -552,11 +534,11 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
               <input
                 type="checkbox"
                 checked={exportData.custom_filters?.encrypt_output || false}
-                onChange={(e) => setExportData(prev => ({)
-  ...prev,
+                onChange={ (e) => setExportData(prev => ({)
+  ...prev
   custom_filters: {
-  ...prev.custom_filters,
-  encrypt_output: e.target.checked,
+  ...prev.custom_filters
+  encrypt_output: e.target.checked }
 }))}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
@@ -581,13 +563,10 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
           </div>
           <VFXExportPreview 
             exportData={exportData as CreateExportJob}
-            onValidationComplete={(isValid, results) => {
+            onValidationComplete={ (isValid, results) => {
               // Update validation errors based on VFX validation
               if (!isValid && results) {
-                setValidationErrors(results.errors);
-              } else {
-                setValidationErrors([]);
-            }}
+                setValidationErrors(results.errors) } else { setValidationErrors([]) }}
           />
         </div>
       );
@@ -642,8 +621,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
       </div>
     );
   };
-  const renderStepContent = () => {
-  switch (currentStep) {
+  const renderStepContent = () => { switch (currentStep) {
   case 'format':,
   return renderFormatStep();
   case 'options':,
@@ -652,11 +630,10 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
   return renderFiltersStep();
   case 'review':,
   return renderReviewStep();
-  default:,
+  default: }
   return null;
 };
-  const getStepIcon = (step: WizardStep) => {
-  switch (step) {
+  const getStepIcon = (step: WizardStep) => { switch (step) {
   case 'format':,
   return FiFile;
   case 'options':,
@@ -665,10 +642,10 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
   return FiFilter;
   case 'review':,
   return FiCheck;
-  default:,
+  default: }
   return FiFile;
 };
-  const steps = [;
+  const steps = [
     { id: 'format', label: 'Format' },
     { id: 'options', label: 'Options' },
     { id: 'filters', label: 'Filters' },
@@ -708,32 +685,32 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                 key={step.id}
                 className={`flex items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}
               >
-                <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                <div className={ `flex items-center justify-center w-8 h-8 rounded-full ${
   isActive
   ? 'bg-blue-600 text-white'
-  : isCompleted,
+  : isCompleted
   ? 'bg-green-600 text-white'
-  : 'bg-gray-300 text-gray-600',
-}`}>
+  : 'bg-gray-300 text-gray-600' }
+`}>
                   {isCompleted ? ()
                     <FiCheck className="w-4 h-4" />
                   ) : ()
                     <Icon className="w-4 h-4" />
                   )}
                 </div>
-                <span className={`ml-2 text-sm ${
+                <span className={ `ml-2 text-sm ${
   isActive
   ? 'text-blue-600 font-medium'
-  : isCompleted,
+  : isCompleted
   ? 'text-green-600'
-  : 'text-gray-500',
-}`}>
+  : 'text-gray-500' }
+`}>
                   {step.label}
                 </span>
-                {index < steps.length - 1 && ()
+                { index < steps.length - 1 && ()
                   <div className={`flex-1 h-0.5 mx-4 ${
-  isCompleted ? 'bg-green-600' : 'bg-gray-300',
-}`} />
+  isCompleted ? 'bg-green-600' : 'bg-gray-300' }
+`} />
                 )}
               </div>
             );

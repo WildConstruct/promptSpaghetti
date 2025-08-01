@@ -37,7 +37,8 @@ current_state: {
     accuracy_score: number;
     availability_score: number;
     last_updated: number;
-    trend_direction: 'improving' | 'stable' | 'degrading';
+    trend_direction: 'improving' | 'stable' | 'degrading',
+    ;
 }
 ;
 created_by: string;
@@ -963,14 +964,14 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
                                     calculateBaselineStatistics(baseline) {
                                         const stats = {};
                                         // Calculate averages, min, max, and standard deviations for key metrics
-                                        const metrics = [];
-                                        'system_resources.cpu_usage_percent',
+                                        const metrics = [
+                                            'system_resources.cpu_usage_percent',
                                             'system_resources.memory_usage_percent',
                                             'throughput.requests_per_second',
                                             'latency.avg_response_time_ms',
                                             'accuracy.detection_accuracy_percent',
-                                            'availability.uptime_percentage';
-                                        ;
+                                            'availability.uptime_percentage'
+                                        ];
                                         for (const metricPath of metrics) {
                                             const values = baseline.map(b => this.getNestedValue(b, metricPath)).filter(v => v !== undefined);
                                             if (values.length > 0) {
@@ -1572,7 +1573,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
                         this: .emit('global_optimization_needed', {}),
                         timestamp: Date.now(),
                         reason: 'Low global performance score detected',
-                        recommended_actions: [,
+                        recommended_actions: [
                             'Review all performance profiles for optimization opportunities',
                             'Consider infrastructure scaling',
                             'Implement performance monitoring best practices',
@@ -1804,7 +1805,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
                                                                                         p99_latency_ms: Math.round(avgP99),
                                                                                         latency_trend: trend,
                                                                                         latency_spikes_count: spikes,
-                                                                                        worst_performing_operations: [,
+                                                                                        worst_performing_operations: [
                                                                                             { operation: 'threat_detection', avg_latency_ms: Math.round(avgLatency * 1.2) },
                                                                                             { operation: 'data_correlation', avg_latency_ms: Math.round(avgLatency * 1.1) }
                                                                                         ]
@@ -1897,7 +1898,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
                                                                                         false_positive_rate_percent: Math.round(avgFpRate * 100) / 100,
                                                                                         false_negative_rate_percent: Math.round(avgFnRate * 100) / 100,
                                                                                         accuracy_issues_identified: issues,
-                                                                                        model_performance_comparison: [,
+                                                                                        model_performance_comparison: [
                                                                                             { model: 'primary_model', accuracy: Math.round(avgAccuracy * 100) / 100 },
                                                                                             { model: 'baseline_model', accuracy: Math.round((avgAccuracy - 5) * 100) / 100 }
                                                                                         ]

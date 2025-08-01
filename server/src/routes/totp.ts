@@ -4,36 +4,39 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { TOTPService } from '../auth/services/TOTPService';
 
-}
-}
+
+
 interface TOTPEnrollmentRequest {
   accountName?: string;
   options?: {
     algorithm?: 'SHA1' | 'SHA256' | 'SHA512';
     digits?: number;
     period?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface TOTPVerificationRequest {
   configurationId: string;
   code: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface TOTPAuthenticationRequest {
   code: string;
   isBackupCode?: boolean;
-}
-}
-}
+
+
+
+
 
 export async function totpRoutes(
   fastify: FastifyInstance,
@@ -42,17 +45,17 @@ export async function totpRoutes(
   // Start TOTP enrollment
   fastify.post<{
     Body: TOTPEnrollmentRequest;
-  }>('/totp/enroll', {
+>('/totp/enroll', {
     preHandler: [fastify.jwtAuth] // Require authentication
   }, async (request: FastifyRequest<{
     Body: TOTPEnrollmentRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { accountName = (request.user as any)?.email, options = {} } = request.body;
 
@@ -69,7 +72,7 @@ export async function totpRoutes(
           resetTime: rateLimit.resetTime?.toISOString()
         });
         return;
-      }
+
 
       // Generate TOTP configuration
       const enrollment = await totpService.generateTOTPConfiguration(
@@ -91,31 +94,31 @@ export async function totpRoutes(
           step2: 'Or manually enter the key if you cannot scan the QR code',
           step3: 'Enter the 6-digit code from your app to complete setup',
           step4: 'Save your backup codes in a secure location'
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('TOTP enrollment error:', error);
       reply.code(500).send({
         error: 'Failed to start TOTP enrollment',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Verify TOTP enrollment
   fastify.post<{
     Body: TOTPVerificationRequest;
-  }>('/totp/verify-enrollment', {
+>('/totp/verify-enrollment', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: TOTPVerificationRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { configurationId, code } = request.body;
 
@@ -124,7 +127,7 @@ export async function totpRoutes(
           error: 'Configuration ID and code are required'
         });
         return;
-      }
+
 
       // Check rate limiting
       const rateLimit = await totpService.checkRateLimit(
@@ -139,7 +142,7 @@ export async function totpRoutes(
           resetTime: rateLimit.resetTime?.toISOString()
         });
         return;
-      }
+
 
       // Verify enrollment
       const result = await totpService.verifyEnrollment(
@@ -155,42 +158,42 @@ export async function totpRoutes(
           enabled: true,
           backupCodesRemaining: result.configuration?.backupCodes.length
         };
-      } else {
+ else {
         reply.code(400).send({
           success: false,
           error: result.message
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       request.log.error('TOTP verification error:', error);
       reply.code(500).send({
         error: 'Failed to verify TOTP enrollment',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Authenticate with TOTP
   fastify.post<{
     Body: TOTPAuthenticationRequest;
-  }>('/totp/authenticate', {
+>('/totp/authenticate', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: TOTPAuthenticationRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { code, isBackupCode = false } = request.body;
 
       if (!code) {
         reply.code(400).send({ error: 'Code is required' });
         return;
-      }
+
 
       // Check rate limiting
       const rateLimit = await totpService.checkRateLimit(
@@ -206,7 +209,7 @@ export async function totpRoutes(
           remainingAttempts: rateLimit.remainingAttempts
         });
         return;
-      }
+
 
       // Authenticate with TOTP or backup code
       let result;
@@ -216,13 +219,13 @@ export async function totpRoutes(
           code,
           request.ip
         );
-      } else {
+ else {
         result = await totpService.authenticateUser(
           userId,
           code,
           request.ip
         );
-      }
+
 
       if (result.success) {
         return {
@@ -231,20 +234,20 @@ export async function totpRoutes(
           remainingBackupCodes: result.remainingCodes,
           usedBackupCode: isBackupCode
         };
-      } else {
+ else {
         reply.code(401).send({
           success: false,
           error: result.message,
           remainingAttempts: result.remainingAttempts
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       request.log.error('TOTP authentication error:', error);
       reply.code(500).send({
         error: 'Failed to authenticate TOTP',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get TOTP status
@@ -256,7 +259,7 @@ export async function totpRoutes(
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const configurations = await (totpService as any).getUserConfigurations(userId);
       const activeConfig = configurations.find((c: any) => c.enabled);
@@ -266,7 +269,7 @@ export async function totpRoutes(
           enabled: false,
           message: 'TOTP not configured'
         };
-      }
+
 
       // Get backup codes info without exposing actual codes
       const backupCodes = JSON.parse(activeConfig.backupCodes || '[]');
@@ -282,13 +285,13 @@ export async function totpRoutes(
         backupCodesRemaining: backupCodes.length - usedBackupCodes.length,
         totalBackupCodes: backupCodes.length
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('TOTP status error:', error);
       reply.code(500).send({
         error: 'Failed to get TOTP status',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Regenerate backup codes
@@ -300,7 +303,7 @@ export async function totpRoutes(
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const backupCodes = await totpService.regenerateBackupCodes(userId);
 
@@ -310,29 +313,29 @@ export async function totpRoutes(
         message: 'New backup codes generated. Please save them securely.',
         warning: 'Previous backup codes are no longer valid.'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('TOTP backup codes regeneration error:', error);
       reply.code(500).send({
         error: 'Failed to regenerate backup codes',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Disable TOTP
   fastify.post<{
     Body: { reason?: string; confirmationCode: string };
-  }>('/totp/disable', {
+>('/totp/disable', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: { reason?: string; confirmationCode: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { reason = 'User request', confirmationCode } = request.body;
 
@@ -341,7 +344,7 @@ export async function totpRoutes(
           error: 'Confirmation code required to disable TOTP'
         });
         return;
-      }
+
 
       // Verify the current TOTP code before disabling
       const authResult = await totpService.authenticateUser(
@@ -356,7 +359,7 @@ export async function totpRoutes(
           message: 'Please provide a valid TOTP code to disable 2FA'
         });
         return;
-      }
+
 
       await totpService.disableConfiguration(userId, reason);
 
@@ -365,13 +368,13 @@ export async function totpRoutes(
         message: 'TOTP has been disabled successfully',
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('TOTP disable error:', error);
       reply.code(500).send({
         error: 'Failed to disable TOTP',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Get TOTP statistics
@@ -382,8 +385,8 @@ export async function totpRoutes(
       if (!user?.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Admin access required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const statistics = await totpService.getTOTPStatistics();
@@ -393,13 +396,13 @@ export async function totpRoutes(
         timestamp: new Date().toISOString(),
         description: 'TOTP system usage statistics'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('TOTP statistics error:', error);
       reply.code(500).send({
         error: 'Failed to get TOTP statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Health check for TOTP system
@@ -417,24 +420,24 @@ export async function totpRoutes(
           codeValidation: isValid.valid ? 'ok' : 'failed',
           database: 'connected', // Assume connected if we got this far
           timeSync: isValid.drift === 0 ? 'ok' : 'drift_detected'
-  }
+
         timeRemaining: isValid.timeRemaining,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('TOTP health check error:', error);
       reply.code(503).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Get current TOTP code (for testing/debugging - admin only)
   fastify.get<{
     Querystring: { secret: string };
-  }>('/totp/debug/current-code', {
+>('/totp/debug/current-code', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       // Only allow in development or for admin users
       if (process.env.NODE_ENV === 'production') {
@@ -442,19 +445,19 @@ export async function totpRoutes(
         if (!user?.roles?.includes('admin')) {
           reply.code(403).send({ error: 'Admin access required' });
           return;
-        }
-      }
-    }]
+
+
+]
   }, async (request: FastifyRequest<{
     Querystring: { secret: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { secret } = request.query;
 
       if (!secret) {
         reply.code(400).send({ error: 'Secret parameter required' });
         return;
-      }
+
 
       const currentCode = await totpService.getCurrentCode(secret);
       const timeRemaining = totpService.getTimeRemaining();
@@ -465,13 +468,13 @@ export async function totpRoutes(
         warning: 'This endpoint should only be used for testing and debugging',
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('TOTP debug code error:', error);
       reply.code(500).send({
         error: 'Failed to get current code',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -503,37 +506,37 @@ export async function totpRoutes(
           method: 'POST',
           description: 'Start TOTP enrollment process',
           auth: 'required'
-  }
+
         {
           path: '/totp/verify-enrollment',
           method: 'POST',
           description: 'Complete TOTP enrollment with verification',
           auth: 'required'
-  }
+
         {
           path: '/totp/authenticate',
           method: 'POST',
           description: 'Authenticate with TOTP code or backup code',
           auth: 'required'
-  }
+
         {
           path: '/totp/status',
           method: 'GET',
           description: 'Get current TOTP configuration status',
           auth: 'required'
-  }
+
         {
           path: '/totp/regenerate-backup-codes',
           method: 'POST',
           description: 'Generate new backup codes',
           auth: 'required'
-  }
+
         {
           path: '/totp/disable',
           method: 'POST',
           description: 'Disable TOTP (requires confirmation code)',
           auth: 'required'
-        }
+
       ],
       securityFeatures: {
         rateLimiting: 'Protects against brute force attacks',
@@ -541,7 +544,6 @@ export async function totpRoutes(
         auditLogging: 'Complete audit trail of all TOTP events',
         backupCodes: 'Single-use recovery codes for account access',
         timeSkew: 'Tolerance for clock drift between client and server'
-      }
+
     };
   });
-}

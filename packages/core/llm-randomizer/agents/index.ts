@@ -11,43 +11,39 @@ import { generateGraphWithClaude } from './scripts/anthropic-agent';
 import { generateGraphWithGemini } from './scripts/gemini-agent';
 
 // OpenAI Agent
-export {
-  OpenAIGraphAgent,
+export { OpenAIGraphAgent,
   OpenAIAgentConfig,
   GraphGenerationRequest,
   GenerationResult,
-  defaultOpenAIConfig,
+  defaultOpenAIConfig }
   generateGraphWithOpenAI
-} from './scripts/openai-agent';
+ from './scripts/openai-agent';
 
 // Anthropic Agent
-export {
-  AnthropicGraphAgent,
+export { AnthropicGraphAgent,
   AnthropicAgentConfig,
   ClaudeGenerationRequest,
   ClaudeGenerationResult,
-  defaultAnthropicConfig,
+  defaultAnthropicConfig }
   generateGraphWithClaude
-} from './scripts/anthropic-agent';
+ from './scripts/anthropic-agent';
 
 // Gemini Agent
-export {
-  GeminiGraphAgent,
+export { GeminiGraphAgent,
   GeminiAgentConfig,
   GeminiGenerationRequest,
   GeminiGenerationResult,
-  defaultGeminiConfig,
+  defaultGeminiConfig }
   generateGraphWithGemini
-} from './scripts/gemini-agent';
+ from './scripts/gemini-agent';
 
 // Cross-Model Testing
-export {
-  CrossModelTester,
+export { CrossModelTester,
   CrossModelTestResult,
   testCases,
-  runCrossModelTests,
+  runCrossModelTests }
   generateTestReport
-} from './examples/cross-model-examples';
+ from './examples/cross-model-examples';
 
 // Agent Types for Union Types
 export type AnyAgentConfig = OpenAIAgentConfig | AnthropicAgentConfig | GeminiAgentConfig;
@@ -57,9 +53,8 @@ export type AnyGenerationResult = GenerationResult | ClaudeGenerationResult | Ge
  * Universal agent interface for consistent usage across models
  */
 
-}
-export interface UniversalAgentRequest {
-  purpose: string;
+
+export interface UniversalAgentRequest { purpose: string;
   complexity: 'simple' | 'moderate' | 'complex';
   nodeCount: number;
   nodeTypes?: string;
@@ -68,16 +63,16 @@ export interface UniversalAgentRequest {
   style?: 'creative' | 'logical' | 'balanced';
   domain?: string;
   // Model-specific extensions
-  userContext?: string; // For Claude,
-  constraints?: string; // For Gemini,
-  examples?: string; // For Gemini,
+  userContext?: string; // For Claude;
+  constraints?: string; // For Gemini;
+  examples?: string; // For Gemini }
   /**
   * Universal generation function that routes to appropriate agent
   */
-}
-}
-export async function generateGraph(request: UniversalAgentRequest(
-    provider: 'openai' | 'claude' | 'gemini' = 'openai',
+
+
+export async function generateGraph(request: UniversalAgentRequest(;
+  provider: 'openai' | 'claude' | 'gemini' = 'openai',
     config: Partial<AnyAgentConfig> = {}
   ): Promise<AnyGenerationResult> {
 

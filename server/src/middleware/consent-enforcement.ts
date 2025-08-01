@@ -8,8 +8,8 @@ import { ConsentBasedDataFilterService } from '../services/ConsentBasedDataFilte
 import { ConsentCollectionService } from '../services/ConsentCollectionService';
 import { logger } from '../utils/logger';
 
-}
-}
+
+
 export interface ConsentContext {
   userId: string;
   sessionId: string;
@@ -19,12 +19,13 @@ export interface ConsentContext {
   dataCategories: string[]; // Types of data being processed
   processingPurpose: string; // Purpose of data processing
   thirdPartySharing?: boolean; // Whether data will be shared with third parties
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConsentEnforcementRule {
   id: string;
   name: string;
@@ -36,12 +37,13 @@ export interface ConsentEnforcementRule {
   enforcementLevel: 'strict' | 'permissive' | 'audit_only';
   exemptions: string[]; // User roles or conditions exempt from this rule
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConsentViolation {
   id: string;
   timestamp: Date;
@@ -53,9 +55,10 @@ export interface ConsentViolation {
   missingConsents: string[];
   action: 'blocked' | 'allowed_with_warning' | 'audit_logged';
   reason: string;
-}
-}
-}
+
+
+
+
 
 export class ConsentEnforcementMiddleware {
   private consentService: ConsentBasedDataFilterService;
@@ -77,7 +80,7 @@ export class ConsentEnforcementMiddleware {
     this.consentService = consentService;
     this.collectionService = collectionService;
     this.initializeDefaultRules();
-  }
+
 
   /**
    * Main middleware function for Fastify
@@ -88,7 +91,7 @@ export class ConsentEnforcementMiddleware {
         // Skip enforcement for exempt paths
         if (this.isExemptPath(request.url)) {
           return done();
-        }
+
 
         // Extract user context
         const context = await this.extractConsentContext(request);
@@ -96,7 +99,7 @@ export class ConsentEnforcementMiddleware {
           // No user context available, allow request but log
           logger.log(`Consent enforcement skipped - no user context for ${request.url}`);
           return done();
-        }
+
 
         // Find applicable enforcement rules
         const applicableRules = this.findApplicableRules(request.url, request.method);
@@ -104,7 +107,7 @@ export class ConsentEnforcementMiddleware {
         if (applicableRules.length === 0) {
           // No specific rules, use default consent checking
           return done();
-        }
+
 
         // Check consent for each applicable rule
         for (const rule of applicableRules) {
@@ -116,21 +119,21 @@ export class ConsentEnforcementMiddleware {
             if (violation.action === 'blocked') {
               // Request blocked - don't call done()
               return;
-            }
-          }
-        }
+
+
+
 
         // Add consent context to request for downstream handlers
         (request as any).consentContext = context;
         
         done();
-      } catch (error) {
+ catch (error) {
         logger.log(`Consent enforcement error: ${error}`);
         // On error, allow request but log the issue
         done();
-      }
+
     };
-  }
+
 
   /**
    * Extract consent context from request
@@ -143,7 +146,7 @@ export class ConsentEnforcementMiddleware {
     
     if (!userId) {
       return null;
-    }
+
 
     return {
       userId,
@@ -154,7 +157,7 @@ export class ConsentEnforcementMiddleware {
       dataCategories: [],
       processingPurpose: this.inferProcessingPurpose(request)
     };
-  }
+
 
   /**
    * Find enforcement rules that apply to the current request
@@ -170,7 +173,7 @@ export class ConsentEnforcementMiddleware {
         if (rulePath.includes('*')) {
           const regex = new RegExp(rulePath.replace(/\*/g, '.*'));
           return regex.test(path);
-        }
+
         return path.startsWith(rulePath);
       });
       
@@ -179,11 +182,11 @@ export class ConsentEnforcementMiddleware {
       
       if (pathMatches && methodMatches) {
         applicableRules.push(rule);
-      }
-    }
+
+
     
     return applicableRules;
-  }
+
 
   /**
    * Check if user has required consents for the rule
@@ -201,7 +204,7 @@ export class ConsentEnforcementMiddleware {
       if (!userConsents) {
         // No consent record found - treat as no consents granted
         return this.createViolation(context, rule, rule.requiredConsents, request);
-      }
+
 
       // Check each required consent
       const missingConsents = [];
@@ -209,15 +212,15 @@ export class ConsentEnforcementMiddleware {
       for (const requiredConsent of rule.requiredConsents) {
         if (!this.hasValidConsent(userConsents, requiredConsent)) {
           missingConsents.push(requiredConsent);
-        }
-      }
+
+
 
       if (missingConsents.length > 0) {
         return this.createViolation(context, rule, missingConsents, request);
-      }
+
 
       return null; // No violation
-    } catch (error) {
+ catch (error) {
       logger.log(`Consent compliance check failed: ${error}`);
       // On error, create a violation for safety
       return this.createViolation(
@@ -227,8 +230,8 @@ export class ConsentEnforcementMiddleware {
         request,
         `Consent check failed: ${error}`
       );
-    }
-  }
+
+
 
   /**
    * Check if user has valid consent for a specific type
@@ -238,25 +241,25 @@ export class ConsentEnforcementMiddleware {
     
     if (!consent || !consent.granted) {
       return false;
-    }
+
 
     // Check if consent has expired
     if (consent.expiresAt && new Date(consent.expiresAt) < new Date()) {
       return false;
-    }
+
 
     // Check if consent has been withdrawn
     if (consent.withdrawn) {
       return false;
-    }
+
 
     // Validate consent version compatibility
     if (consent.version && this.isConsentVersionOutdated(consent.version, consentType)) {
       return false;
-    }
+
 
     return true;
-  }
+
 
   /**
    * Check if consent version is outdated
@@ -265,7 +268,7 @@ export class ConsentEnforcementMiddleware {
     // This would check against current policy versions
     // For now, simplified implementation
     return false;
-  }
+
 
   /**
    * Validate consent at database level before processing
@@ -279,7 +282,7 @@ export class ConsentEnforcementMiddleware {
       if (!dbConsents) {
         logger.log(`No database consent record found for user ${userId}`);
         return false;
-      }
+
 
       // Validate each data category has proper consent
       for (const category of dataCategories) {
@@ -288,18 +291,17 @@ export class ConsentEnforcementMiddleware {
         if (!this.hasValidDatabaseConsent(dbConsents, requiredConsentType)) {
           logger.log(`User ${userId} lacks database consent for ${category} (${requiredConsentType})`);
           return false;
-        }
-      }
+
+
 
       // Log successful validation
       logger.log(`Database consent validated for user ${userId} on operation ${operation}`);
       return true;
-      
-    } catch (error) {
+ catch (error) {
       logger.log(`Database consent validation error: ${error}`);
       return false; // Fail closed for security
-    }
-  }
+
+
 
   /**
    * Get database consent record for user
@@ -322,12 +324,11 @@ export class ConsentEnforcementMiddleware {
       
       // For now, return null to indicate no database integration yet
       return null;
-      
-    } catch (error) {
+ catch (error) {
       logger.log(`Database consent query failed: ${error}`);
       return null;
-    }
-  }
+
+
 
   /**
    * Check if user has valid database-level consent
@@ -335,26 +336,26 @@ export class ConsentEnforcementMiddleware {
   private hasValidDatabaseConsent(dbConsents: Record<string, unknown>, consentType: string): boolean {
     if (!dbConsents || !Array.isArray(dbConsents)) {
       return false;
-    }
+
 
     const consent = dbConsents.find(c => c.consent_type === consentType);
     
     if (!consent || !consent.granted) {
       return false;
-    }
+
 
     // Check expiration
     if (consent.expires_at && new Date(consent.expires_at) < new Date()) {
       return false;
-    }
+
 
     // Check withdrawal
     if (consent.withdrawn) {
       return false;
-    }
+
 
     return true;
-  }
+
 
   /**
    * Map data category to required consent type
@@ -374,7 +375,7 @@ export class ConsentEnforcementMiddleware {
     };
 
     return mappings[dataCategory] || 'FUNCTIONAL';
-  }
+
 
   /**
    * Create a consent violation record
@@ -405,10 +406,10 @@ export class ConsentEnforcementMiddleware {
     // Keep only recent violations in memory
     if (this.violations.length > 1000) {
       this.violations = this.violations.slice(-500);
-    }
+
 
     return violation;
-  }
+
 
   /**
    * Handle consent violations based on rule configuration
@@ -438,8 +439,8 @@ export class ConsentEnforcementMiddleware {
       // Just log - request continues normally
       await this.auditLog(violation);
       break;
-    }
-  }
+
+
 
   /**
    * Block request due to consent violation
@@ -453,7 +454,7 @@ export class ConsentEnforcementMiddleware {
       violation_id: violation.id,
       consent_url: '/api/consent/preferences'
     });
-  }
+
 
   /**
    * Allow request but add warning headers
@@ -465,7 +466,7 @@ export class ConsentEnforcementMiddleware {
     reply.header('X-Violation-Id', violation.id);
     
     await this.auditLog(violation);
-  }
+
 
   /**
    * Log violation for audit purposes
@@ -474,7 +475,7 @@ export class ConsentEnforcementMiddleware {
 
     // Here you would typically log to your audit system
     logger.log(`AUDIT: Consent violation logged - ${violation.id}`);
-  }
+
 
   /**
    * Add or update enforcement rule
@@ -482,7 +483,7 @@ export class ConsentEnforcementMiddleware {
   public addEnforcementRule(rule: ConsentEnforcementRule): void {
     this.enforcementRules.set(rule.id, rule);
     logger.log(`Consent enforcement rule added: ${rule.name}`);
-  }
+
 
   /**
    * Remove enforcement rule
@@ -490,7 +491,7 @@ export class ConsentEnforcementMiddleware {
   public removeEnforcementRule(ruleId: string): void {
     this.enforcementRules.delete(ruleId);
     logger.log(`Consent enforcement rule removed: ${ruleId}`);
-  }
+
 
   /**
    * Get enforcement statistics
@@ -508,7 +509,7 @@ export class ConsentEnforcementMiddleware {
       violationsByRule: this.groupBy(recentViolations, 'rule.name'),
       topViolatingUsers: this.getTopViolatingUsers(recentViolations)
     };
-  }
+
 
   /**
    * Helper methods
@@ -518,7 +519,7 @@ export class ConsentEnforcementMiddleware {
            (request.headers['x-real-ip'] as string) || 
            request.ip || 
            'unknown';
-  }
+
 
   private inferProcessingPurpose(request: FastifyRequest): string {
     const path = request.url.toLowerCase();
@@ -530,11 +531,11 @@ export class ConsentEnforcementMiddleware {
     if (path.includes('/ads') || path.includes('/advertising')) return 'advertising';
     
     return 'functional';
-  }
+
 
   private isExemptPath(path: string): boolean {
     return this.exemptPaths.has(path) || path.startsWith('/api/consent');
-  }
+
 
   private determineViolationAction(rule: ConsentEnforcementRule): ConsentViolation['action'] {
     switch (rule.enforcementLevel) {
@@ -546,12 +547,12 @@ export class ConsentEnforcementMiddleware {
       return 'audit_logged';
     default:
       return 'blocked';
-    }
-  }
+
+
 
   private generateViolationId(): string {
     return `viol_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private groupBy(array: Array<Record<string, unknown>>, key: string): Record<string, number> {
     return array.reduce((result, item) => {
@@ -559,7 +560,7 @@ export class ConsentEnforcementMiddleware {
       result[value] = (result[value] || 0) + 1;
       return result;
     }, {});
-  }
+
 
   private getTopViolatingUsers(violations: ConsentViolation[]): Array<{userId: string; count: number}> {
     const userCounts = this.groupBy(violations, 'userId');
@@ -567,7 +568,7 @@ export class ConsentEnforcementMiddleware {
       .map(([userId, count]) => ({ userId, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
-  }
+
 
   /**
    * Cross-service consent propagation
@@ -587,12 +588,11 @@ export class ConsentEnforcementMiddleware {
       await this.updateEnforcementRulesForConsent(userId, consentType, granted);
       
       logger.log(`Consent propagation completed for user ${userId}`);
-      
-    } catch (error) {
+ catch (error) {
       logger.log(`Consent propagation failed: ${error}`);
       throw error;
-    }
-  }
+
+
 
   /**
    * Update consent cache
@@ -602,7 +602,7 @@ export class ConsentEnforcementMiddleware {
     // Implementation would update Redis cache or similar
     // For now, log the action
     logger.log(`Cache update: User ${userId}, ${consentType} = ${granted}`);
-  }
+
 
   /**
    * Notify other services of consent changes
@@ -614,12 +614,12 @@ export class ConsentEnforcementMiddleware {
     for (const service of services) {
       try {
         await this.sendConsentNotification(service, userId, consentType, granted);
-      } catch (error) {
+ catch (error) {
         logger.log(`Failed to notify service ${service}: ${error}`);
         // Continue with other services despite individual failures
-      }
-    }
-  }
+
+
+
 
   /**
    * Get services that need to be notified of consent changes
@@ -633,7 +633,7 @@ export class ConsentEnforcementMiddleware {
     };
 
     return serviceMap[consentType] || [];
-  }
+
 
   /**
    * Send consent notification to service
@@ -647,7 +647,7 @@ export class ConsentEnforcementMiddleware {
 
     // Implementation would send HTTP request, message queue, or similar
     logger.log(`Notifying ${service}: User ${userId}, ${consentType} = ${granted}`);
-  }
+
 
   /**
    * Update enforcement rules for specific consent
@@ -660,7 +660,7 @@ export class ConsentEnforcementMiddleware {
 
     // Implementation would update user-specific rules if needed
     logger.log(`Updated enforcement rules for user ${userId}, ${consentType} = ${granted}`);
-  }
+
 
   /**
    * Cookie and tracking enforcement
@@ -678,7 +678,7 @@ export class ConsentEnforcementMiddleware {
     
     // Block tracking scripts if no consent
     this.blockTrackingScripts(request, reply, userId);
-  }
+
 
   /**
    * Validate tracking cookies against consent
@@ -693,9 +693,9 @@ export class ConsentEnforcementMiddleware {
         // Remove unauthorized tracking cookie
         reply.clearCookie(cookieName);
         logger.log(`Removed unauthorized tracking cookie: ${cookieName} for user ${userId}`);
-      }
-    }
-  }
+
+
+
 
   /**
    * Identify tracking cookies from request
@@ -707,11 +707,11 @@ export class ConsentEnforcementMiddleware {
     for (const [name, value] of Object.entries(cookies)) {
       if (trackingPrefixes.some(prefix => name.startsWith(prefix))) {
         trackingCookies[name] = value;
-      }
-    }
+
+
 
     return trackingCookies;
-  }
+
 
   /**
    * Get required consent type for specific cookie
@@ -719,16 +719,16 @@ export class ConsentEnforcementMiddleware {
   private getRequiredConsentForCookie(cookieName: string): string | null {
     if (cookieName.startsWith('_ga') || cookieName.startsWith('_gid')) {
       return 'ANALYTICS';
-    }
+
     if (cookieName.startsWith('_fbp') || cookieName.startsWith('pixel_')) {
       return 'MARKETING';
-    }
+
     if (cookieName.startsWith('utm_')) {
       return 'MARKETING';
-    }
+
     
     return null; // No specific consent required
-  }
+
 
   /**
    * Set consent-based cookie headers
@@ -737,14 +737,14 @@ export class ConsentEnforcementMiddleware {
     // Set SameSite and Secure attributes based on consent
     if (this.hasUserConsent(userId, 'FUNCTIONAL')) {
       reply.header('Set-Cookie-SameSite', 'Lax');
-    } else {
+ else {
       reply.header('Set-Cookie-SameSite', 'Strict');
-    }
+
     
     // Always set Secure in production
     reply.header('Set-Cookie-Secure', 'true');
     reply.header('Set-Cookie-HttpOnly', 'true');
-  }
+
 
   /**
    * Block tracking scripts if no consent
@@ -756,13 +756,13 @@ export class ConsentEnforcementMiddleware {
     if (path.includes('analytics') && !this.hasUserConsent(userId, 'ANALYTICS')) {
       reply.header('X-Robots-Tag', 'noindex, nofollow');
       reply.header('X-Content-Security-Policy', 'script-src \'none\'');
-    }
+
     
     // Block marketing pixels
     if (path.includes('pixel') && !this.hasUserConsent(userId, 'MARKETING')) {
       reply.header('X-Block-Marketing', 'true');
-    }
-  }
+
+
 
   /**
    * Check if user has specific consent (simplified)
@@ -771,7 +771,7 @@ export class ConsentEnforcementMiddleware {
     // This would check against actual consent records
     // For now, return false to be conservative
     return false;
-  }
+
 
   /**
    * Initialize default enforcement rules
@@ -846,5 +846,5 @@ export class ConsentEnforcementMiddleware {
       exemptions: ['admin'],
       enabled: true
     });
-  }
-}
+
+

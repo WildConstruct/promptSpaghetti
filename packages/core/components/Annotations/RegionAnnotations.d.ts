@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface RegionAnnotation {
-    id: string;
+}
+export interface RegionAnnotation { id: string;
     name: string;
     type: 'selection' | 'highlight' | 'problem_area' | 'optimization_zone' | 'mars_zone' | 'performance_area';
     shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
@@ -25,59 +25,51 @@ export interface RegionAnnotation {
     marsZone?: MARSZoneType;
     nodeIds: string[];
     tags: string[];
-    metadata: RegionMetadata;
-
+    metadata: RegionMetadata }
 }
-export interface RegionArea {
-    shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
+}
+export interface RegionArea { shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
     bounds: {
         x: number;
         y: number;
         width: number;
-        height: number;
+        height: number }
 }
     };
-    points: Array<{
-        x: number;
-        y: number;
-    }>;
-    center?: {
-        x: number;
-        y: number;
-    };
+    points: Array<{ x: number;
+        y: number }>;
+    center?: { x: number;
+        y: number };
     radius?: number;
 
 }
-export interface RegionStyle {
-    borderColor: string;
+}
+export interface RegionStyle { borderColor: string;
     borderWidth: number;
     borderStyle: 'solid' | 'dashed' | 'dotted';
     fillColor: string;
     fillOpacity: number;
     shadowColor?: string;
     shadowBlur?: number;
-    animation?: 'none' | 'pulse' | 'glow' | 'march';
-
+    animation?: 'none' | 'pulse' | 'glow' | 'march' }
 }
-export interface RegionMetadata {
-    nodeCount: number;
+}
+export interface RegionMetadata { nodeCount: number;
     totalComplexity?: number;
     estimatedRenderTime?: number;
     performanceImpact?: 'low' | 'medium' | 'high';
     lastAnalysis?: string;
 
-export type MARSZoneType = 'motion_source' | 'action_trigger' | 'reaction_output' | 'subject_focus' | 'camera_influence' | 'lighting_zone' | 'effects_region' | 'audio_sync' | 'timing_critical' | 'creative_decision';
-
+export type MARSZoneType = 'motion_source' | 'action_trigger' | 'reaction_output' | 'subject_focus' | 'camera_influence' | 'lighting_zone' | 'effects_region' | 'audio_sync' | 'timing_critical' | 'creative_decision' }
 }
-export interface VFXUser {
-    id: string;
+}
+export interface VFXUser { id: string;
     name: string;
     role: string;
-    color: string;
-
+    color: string }
 }
-export interface RegionAnnotationSystemProps {
-    width: number;
+}
+export interface RegionAnnotationSystemProps { width: number;
     height: number;
     regions: RegionAnnotation[];
     nodes?: Array<{
@@ -86,7 +78,7 @@ export interface RegionAnnotationSystemProps {
         y: number;
         width: number;
         height: number;
-        type: string;
+        type: string }
 }
     }>;
     currentUser: VFXUser;

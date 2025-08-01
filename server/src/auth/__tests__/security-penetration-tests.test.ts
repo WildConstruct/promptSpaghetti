@@ -19,7 +19,7 @@ jest.mock('../config', () => ({
   buildAuthConfig: () => ({
     jwt: { secret: 'test-secret', expiresIn: '1h' },
     security: { maxLoginAttempts: 5, sessionTimeout: 30 * 60 * 1000 }
-  }
+
 }));
 
 describe('Epic 19.5 - Security Penetration Testing Suite', () => {
@@ -78,16 +78,16 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
           failedAttempts++;
           if (failedAttempts >= maxAttempts) {
             throw new Error('Account locked due to too many failed attempts');
-          }
+
           return false;
-        }
+
         return true;
       };
 
       // Test multiple failed attempts
       for (let i = 0; i < 4; i++) {
         expect(attemptLogin('user@test.com', 'wrong-password')).toBe(false);
-      }
+
 
       // Fifth attempt should throw error (account locked)
       expect(() => attemptLogin('user@test.com', 'wrong-password')).toThrow('Account locked');
@@ -106,7 +106,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
         const elapsedTime = Date.now() - startTime;
         if (elapsedTime < minProcessingTime) {
           await new Promise(resolve => setTimeout(resolve, minProcessingTime - elapsedTime));
-        }
+
         
         return isValid;
       };
@@ -119,7 +119,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
           const start = Date.now();
           await validatePassword('wrong-password', 'hash');
           times.push(Date.now() - start);
-        }
+
         
         // Timing should be relatively consistent (within 50ms)
         const maxDiff = Math.max(...times) - Math.min(...times);
@@ -135,9 +135,10 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
         email: string;
         mfaEnabled: boolean;
         mfaSecret?: string;
-}
-}
-      }
+
+
+
+
 
       const users: User[] = [
         { id: 1, email: 'admin@test.com', mfaEnabled: true, mfaSecret: 'secret123' },
@@ -155,19 +156,19 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
         // Simulate password check
         if (password !== 'correct-password') {
           return { success: false, error: 'Invalid credentials' };
-        }
+
 
         // Check MFA requirement
         if (user.mfaEnabled) {
           if (!mfaCode) {
             return { success: false, requiresMFA: true, error: 'MFA code required' };
-          }
+
           
           // Simulate TOTP validation
           if (mfaCode !== '123456') {
             return { success: false, error: 'Invalid MFA code' };
-          }
-        }
+
+
 
         return { success: true };
       };
@@ -196,23 +197,26 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
     interface Permission {
       resource: string;
       action: string;
-}
-}
-    }
+
+
+
+
 
     interface Role {
       name: string;
       permissions: Permission[];
-}
-}
-    }
+
+
+
+
 
     interface User {
       id: number;
       roles: string[];
-}
-}
-    }
+
+
+
+
 
     const roles: Role[] = [
       { name: 'admin', permissions: [{ resource: '*', action: '*' }] },
@@ -273,7 +277,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
         const canModifyRoles = hasPermission(userId, 'roles', 'write');
         if (!canModifyRoles) {
           return false; // Role escalation prevented
-        }
+
 
         // Only admin can modify roles
         return true;
@@ -294,7 +298,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
         const parts = token.split('.');
         if (parts.length !== 3) {
           return { valid: false };
-        }
+
 
         const [header, payload, signature] = parts;
         
@@ -304,14 +308,14 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
         
         if (signature !== expectedSignature || payload !== originalPayload) {
           return { valid: false };
-        }
+
 
         try {
           const decodedPayload = JSON.parse(Buffer.from(payload, 'base64').toString());
           return { valid: true, payload: decodedPayload };
-        } catch {
+ catch {
           return { valid: false };
-        }
+
       };
 
       // Valid token
@@ -357,7 +361,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
       const validateTokenReplay = (tokenId: string): boolean => {
         if (usedTokens.has(tokenId)) {
           return false; // Replay attack detected
-        }
+
         
         usedTokens.add(tokenId);
         return true;
@@ -494,9 +498,10 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
       createdAt: Date;
       lastActivity: Date;
       ipAddress: string;
-}
-}
-    }
+
+
+
+
 
     const sessions = new Map<string, Session>();
 
@@ -574,7 +579,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
           lastActivity: new Date(),
           ipAddress: '192.168.1.1'
         });
-      }
+
 
       expect(checkConcurrentSessions(1)).toBe(false); // 4 sessions > limit
       
@@ -602,7 +607,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
         if (now - current.lastReset >= WINDOW_MS) {
           current.count = 0;
           current.lastReset = now;
-        }
+
 
         current.count++;
         rateLimiter.set(identifier, current);
@@ -615,7 +620,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
       // Should allow first 10 requests
       for (let i = 0; i < 10; i++) {
         expect(checkRateLimit(ip)).toBe(true);
-      }
+
 
       // 11th request should be blocked
       expect(checkRateLimit(ip)).toBe(false);
@@ -627,23 +632,23 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
 
         if (password.length < 8) {
           errors.push('Password must be at least 8 characters long');
-        }
+
 
         if (!/[A-Z]/.test(password)) {
           errors.push('Password must contain at least one uppercase letter');
-        }
+
 
         if (!/[a-z]/.test(password)) {
           errors.push('Password must contain at least one lowercase letter');
-        }
+
 
         if (!/[0-9]/.test(password)) {
           errors.push('Password must contain at least one number');
-        }
+
 
         if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
           errors.push('Password must contain at least one special character');
-        }
+
 
         return { valid: errors.length === 0, errors };
       };

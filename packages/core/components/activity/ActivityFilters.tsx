@@ -4,23 +4,23 @@
  */
 import React, { useState } from 'react';
 import { ActivityEventFilter } from '../../types/workspace';
-}
-interface ActivityFiltersProps {
-  filters: ActivityEventFilter;
+
+
+interface ActivityFiltersProps { filters: ActivityEventFilter;
   eventTypes: string;
   onFilterChange: (filters: Partial<ActivityEventFilter>) => void;
   className?: string;
-  export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
-  filters,
-  eventTypes,
-  onFilterChange,
+  export const ActivityFilters: React.FC<ActivityFiltersProps> = ({;
+  filters;
+  eventTypes;
+  onFilterChange }
   className = ''
-}
-}) => {
-  const [showAdvanced, setShowAdvanced] = useState(false);
+
+
+}) => { const [showAdvanced, setShowAdvanced] = useState(false);
   const [dateRange, setDateRange] = useState({)
   from: filters.from_date ? filters.from_date.toISOString().split('T')[0] : '',
-  to: filters.to_date ? filters.to_date.toISOString().split('T')[0] : '',
+  to: filters.to_date ? filters.to_date.toISOString().split('T')[0] : '' }
 });
   const handleEventTypeChange = (eventType: string, checked: boolean) => {
     const currentTypes = filters.event_types || [];
@@ -32,18 +32,18 @@ interface ActivityFiltersProps {
   const handleDateRangeChange = (field: 'from' | 'to', value: string) => {
     const newDateRange = { ...dateRange, [field]: value };
     setDateRange(newDateRange);
-    onFilterChange({)
+    onFilterChange({ )
   from_date: newDateRange.from ? new Date(newDateRange.from) : undefined,
-  to_date: newDateRange.to ? new Date(newDateRange.to) : undefined,
+  to_date: newDateRange.to ? new Date(newDateRange.to) : undefined }
 });
   };
   const clearFilters = () => {
     setDateRange({ from: '', to: '' });
-    onFilterChange({)
+    onFilterChange({ )
   actor_id: undefined,
   event_types: undefined,
   from_date: undefined,
-  to_date: undefined,
+  to_date: undefined }
 });
   };
   const hasActiveFilters = !!(;);
@@ -52,13 +52,12 @@ interface ActivityFiltersProps {
     filters.from_date ||
     filters.to_date
   );
-  const eventTypeGroups = {
-  workspace: eventTypes.filter(t => t.startsWith('workspace.')),
+  const eventTypeGroups = { workspace: eventTypes.filter(t => t.startsWith('workspace.')),
   project: eventTypes.filter(t => t.startsWith('project.')),
   resource: eventTypes.filter(t => t.startsWith('resource.')),
   comment: eventTypes.filter(t => t.startsWith('comment.')),
   user: eventTypes.filter(t => t.startsWith('user.')),
-  other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix))),
+  other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix))) }
 };
   return;
     <div className={`activity-filters ${className}`}>}
@@ -100,17 +99,15 @@ interface ActivityFiltersProps {
             </button>
             <button
               className={`quick-filter ${filters.event_types?.some(t => t.includes('created')) ? 'quick-filter--active' : ''}`}
-              onClick={() => onFilterChange({ )
-                event_types: eventTypes.filter(t => t.includes('created'));
-  })}
+              onClick={ () => onFilterChange({ )
+                event_types: eventTypes.filter(t => t.includes('created')) })}
             >
               Created Items
             </button>
             <button
               className={`quick-filter ${filters.event_types?.some(t => t.startsWith('user.')) ? 'quick-filter--active' : ''}`}
-              onClick={() => onFilterChange({ )
-                event_types: eventTypes.filter(t => t.startsWith('user.'));
-  })}
+              onClick={ () => onFilterChange({ )
+                event_types: eventTypes.filter(t => t.startsWith('user.')) })}
             >
               User Activity
             </button>

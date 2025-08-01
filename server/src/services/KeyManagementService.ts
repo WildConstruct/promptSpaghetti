@@ -9,8 +9,8 @@ import { AccessControlManager, AccessContext, KeyOperation, AccessDecision } fro
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
-}
-}
+
+
 export interface KeyManagementConfig {
   // Key encryption
   keyEncryptionAlgorithm: 'aes-256-gcm' | 'chacha20-poly1305';
@@ -40,12 +40,13 @@ export interface KeyManagementConfig {
   enableComplianceTracking: boolean;
   auditAllOperations: boolean;
   dataClassificationRequired: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MasterKey {
   keyId: string;
   purpose: KeyPurpose;
@@ -69,26 +70,28 @@ export interface MasterKey {
   // Security
   securityLevel: string;
   accessControlList?: AccessControlEntry[];
-}
-}
-  complianceTags?: { [key: string]: unknown };
-}
 
-}
-}
+
+
+  complianceTags?: { [key: string]: unknown };
+
+
+
+
 export interface AccessControlEntry {
   userId?: string;
   serviceId?: string;
   role?: string;
   operations: string[];
-}
-}
+
+
+
   conditions?: { [key: string]: unknown };
   expiresAt?: Date;
-}
 
-}
-}
+
+
+
 export interface KeyRotationPolicy {
   policyName: string;
   keyPurpose: KeyPurpose;
@@ -107,9 +110,10 @@ export interface KeyRotationPolicy {
   // Approval
   requiresApproval: boolean;
   approvalRoles?: string[];
-}
-}
-}
+
+
+
+
 
 export type KeyPurpose = 
   | 'data_encryption'
@@ -120,8 +124,8 @@ export type KeyPurpose =
   | 'backup_encryption'
   | 'audit_signing';
 
-}
-}
+
+
 export interface KeyGenerationRequest {
   purpose: KeyPurpose;
   algorithm?: string;
@@ -130,14 +134,15 @@ export interface KeyGenerationRequest {
   expiresAt?: Date;
   maxUsageCount?: number;
   accessControlList?: AccessControlEntry[];
-}
-}
+
+
+
   complianceTags?: { [key: string]: unknown };
   makePrimary?: boolean;
-}
 
-}
-}
+
+
+
 export interface KeyOperationContext {
   userId?: string;
   serviceId?: string;
@@ -146,13 +151,14 @@ export interface KeyOperationContext {
   userAgent?: string;
   operationType: 'encrypt' | 'decrypt' | 'sign' | 'verify' | 'derive' | 'export' | 'import' | 'rotate' | 'destroy';
   dataClassification?: string;
-}
-}
-  additionalContext?: { [key: string]: unknown };
-}
 
-}
-}
+
+
+  additionalContext?: { [key: string]: unknown };
+
+
+
+
 export interface KeyBackup {
   backupId: string;
   keyId: string;
@@ -161,9 +167,10 @@ export interface KeyBackup {
   expiresAt?: Date;
   storageLocation?: string;
   verified: boolean;
-}
-}
-}
+
+
+
+
 
 export class KeyManagementService extends EventEmitter {
   private db: DatabaseService;
@@ -192,7 +199,7 @@ export class KeyManagementService extends EventEmitter {
     
     // Start background processes
     this.startBackgroundProcesses();
-  }
+
 
   async generateMasterKey(request: KeyGenerationRequest): Promise<MasterKey> {
 
@@ -216,7 +223,7 @@ export class KeyManagementService extends EventEmitter {
       // Handle primary key logic
       if (request.makePrimary) {
         await this.deactivateOtherPrimaryKeys(request.purpose);
-      }
+
       
       // Insert into database
       await this.db.query(`
@@ -250,7 +257,7 @@ export class KeyManagementService extends EventEmitter {
       // Create backup if enabled
       if (this.config.backupEnabled) {
         await this.createKeyBackup(keyId, 'full');
-      }
+
       
       // Log key generation
       await this.logKeyOperation(keyId, 'generate', {
@@ -280,11 +287,11 @@ export class KeyManagementService extends EventEmitter {
       this.emit('key_generated', masterKey);
       
       return masterKey;
-    } catch (error) {
+ catch (error) {
       console.error('Error generating master key:', error);
       throw new Error('Failed to generate master key');
-    }
-  }
+
+
 
   async getMasterKey(keyId: string, context?: KeyOperationContext): Promise<MasterKey | null> {
 
@@ -296,10 +303,10 @@ export class KeyManagementService extends EventEmitter {
           const key = JSON.parse(cached);
           if (context) {
             await this.logKeyAccess(keyId, 'view_metadata', context, 'success');
-          }
+
           return key;
-        }
-      }
+
+
       
       // Get from database
       const result = await this.db.query(`
@@ -315,9 +322,9 @@ export class KeyManagementService extends EventEmitter {
       if (result.rows.length === 0) {
         if (context) {
           await this.logKeyAccess(keyId, 'view_metadata', context, 'failure');
-        }
+
         return null;
-      }
+
       
       const row = result.rows[0];
       const masterKey: MasterKey = {
@@ -343,21 +350,21 @@ export class KeyManagementService extends EventEmitter {
       // Cache for future use
       if (this.config.cacheEnabled) {
         await this.redis.setex(`master_key:${keyId}`, this.config.cacheTtlSeconds, JSON.stringify(masterKey));
-      }
+
       
       if (context) {
         await this.logKeyAccess(keyId, 'view_metadata', context, 'success');
-      }
+
       
       return masterKey;
-    } catch (error) {
+ catch (error) {
       console.error('Error getting master key:', error);
       if (context) {
         await this.logKeyAccess(keyId, 'view_metadata', context, 'failure');
-      }
+
       return null;
-    }
-  }
+
+
 
   async getKeyMaterial(keyId: string, context: KeyOperationContext): Promise<Buffer | null> {
 
@@ -381,16 +388,16 @@ export class KeyManagementService extends EventEmitter {
       if (!accessDecision.allowed) {
         await this.logKeyAccess(keyId, context.operationType, context, 'unauthorized');
         throw new Error(`Access denied: ${accessDecision.reason}`);
-      }
+
       
       // Check for conditional access requirements
       if (accessDecision.conditionalAccess && accessDecision.conditionalAccess.length > 0) {
         for (const requirement of accessDecision.conditionalAccess) {
           if (requirement.type === 'mfa' && !accessContext.mfaVerified) {
             throw new Error('Multi-factor authentication required for this operation');
-          }
-        }
-      }
+
+
+
       
       // Check for required approvals
       if (accessDecision.requiredApprovals && accessDecision.requiredApprovals.length > 0) {
@@ -403,8 +410,8 @@ export class KeyManagementService extends EventEmitter {
         
         if (!hasApproval) {
           throw new Error(`Approval required: ${accessDecision.requiredApprovals.join(', ')}`);
-        }
-      }
+
+
       
       // Get encrypted key material
       const result = await this.db.query(`
@@ -418,7 +425,7 @@ export class KeyManagementService extends EventEmitter {
       if (result.rows.length === 0) {
         await this.logKeyAccess(keyId, context.operationType, context, 'failure');
         return null;
-      }
+
       
       const row = result.rows[0];
       
@@ -426,13 +433,13 @@ export class KeyManagementService extends EventEmitter {
       if (!row.is_active) {
         await this.logKeyAccess(keyId, context.operationType, context, 'expired');
         throw new Error('Key is not active');
-      }
+
       
       // Check if key is expired
       if (row.expires_at && new Date(row.expires_at) < new Date()) {
         await this.logKeyAccess(keyId, context.operationType, context, 'expired');
         throw new Error('Key has expired');
-      }
+
       
       // Decrypt key material
       const keyMaterial = this.decryptKeyMaterial({
@@ -448,12 +455,12 @@ export class KeyManagementService extends EventEmitter {
       });
       
       return keyMaterial;
-    } catch (error) {
+ catch (error) {
       console.error('Error getting key material:', error);
       await this.logKeyAccess(keyId, context.operationType, context, 'failure');
       throw error;
-    }
-  }
+
+
 
   async rotateKey(keyId: string, context: KeyOperationContext): Promise<MasterKey> {
 
@@ -462,12 +469,12 @@ export class KeyManagementService extends EventEmitter {
       const currentKey = await this.getMasterKey(keyId);
       if (!currentKey) {
         throw new Error('Key not found');
-      }
+
       
       // Validate access
       if (!await this.validateKeyAccess(keyId, context)) {
         throw new Error('Access denied for key rotation');
-      }
+
       
       // Generate new key with same properties
       const newKeyRequest: KeyGenerationRequest = {
@@ -500,7 +507,7 @@ export class KeyManagementService extends EventEmitter {
             WHERE key_id = $1
           `, [keyId]);
         }, this.config.rotationOverlapHours * 60 * 60 * 1000);
-      }
+
       
       // Log rotation
       await this.logKeyOperation(keyId, 'rotate', {
@@ -513,11 +520,11 @@ export class KeyManagementService extends EventEmitter {
       this.emit('key_rotated', { oldKey: currentKey, newKey });
       
       return newKey;
-    } catch (error) {
+ catch (error) {
       console.error('Error rotating key:', error);
       throw new Error('Failed to rotate key');
-    }
-  }
+
+
 
   async destroyKey(keyId: string, context: KeyOperationContext, reason: string): Promise<boolean> {
 
@@ -525,12 +532,12 @@ export class KeyManagementService extends EventEmitter {
       // Validate access (requires elevated permissions)
       if (!await this.validateKeyAccess(keyId, { ...context, operationType: 'destroy' })) {
         throw new Error('Access denied for key destruction');
-      }
+
       
       // Create final backup before destruction
       if (this.config.backupEnabled) {
         await this.createKeyBackup(keyId, 'full');
-      }
+
       
       // Mark key as destroyed (don't actually delete for audit purposes)
       await this.db.query(`
@@ -542,7 +549,7 @@ export class KeyManagementService extends EventEmitter {
       // Clear from cache
       if (this.config.cacheEnabled) {
         await this.redis.del(`master_key:${keyId}`);
-      }
+
       
       // Log destruction
       await this.logKeyOperation(keyId, 'destroy', {
@@ -554,11 +561,11 @@ export class KeyManagementService extends EventEmitter {
       this.emit('key_destroyed', { keyId, reason });
       
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error destroying key:', error);
       throw new Error('Failed to destroy key');
-    }
-  }
+
+
 
   async createKeyBackup(keyId: string, backupType: 'full' | 'metadata_only' | 'differential'): Promise<KeyBackup> {
 
@@ -575,10 +582,10 @@ export class KeyManagementService extends EventEmitter {
         
         if (result.rows.length === 0) {
           throw new Error('Key not found');
-        }
+
         
         backupData = result.rows[0];
-      } else if (backupType === 'metadata_only') {
+ else if (backupType === 'metadata_only') {
         // Include only metadata, no key material
         const result = await this.db.query(`
           SELECT 
@@ -588,7 +595,7 @@ export class KeyManagementService extends EventEmitter {
         `, [keyId]);
         
         backupData = result.rows[0];
-      }
+
       
       // Encrypt backup data
       const encryptedBackup = this.encryptBackupData(JSON.stringify(backupData));
@@ -627,11 +634,11 @@ export class KeyManagementService extends EventEmitter {
       await this.logKeyOperation(keyId, 'backup', { backupId, backupType });
       
       return backup;
-    } catch (error) {
+ catch (error) {
       console.error('Error creating key backup:', error);
       throw new Error('Failed to create key backup');
-    }
-  }
+
+
 
   async checkRotationRequirements(): Promise<Array<{ keyId: string; reason: string }>> {
     try {
@@ -643,11 +650,11 @@ export class KeyManagementService extends EventEmitter {
         keyId: row.key_id,
         reason: row.reason
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error checking rotation requirements:', error);
       return [];
-    }
-  }
+
+
 
   async listKeys(options: {
     purpose?: KeyPurpose;
@@ -655,7 +662,7 @@ export class KeyManagementService extends EventEmitter {
     securityLevel?: string;
     limit?: number;
     offset?: number;
-  } = {}): Promise<MasterKey[]> {
+ = {}): Promise<MasterKey[]> {
 
     try {
       let query = `
@@ -674,19 +681,19 @@ export class KeyManagementService extends EventEmitter {
         query += ` AND purpose = $${paramIndex}`;
         params.push(options.purpose);
         paramIndex++;
-      }
+
       
       if (options.isActive !== undefined) {
         query += ` AND is_active = $${paramIndex}`;
         params.push(options.isActive);
         paramIndex++;
-      }
+
       
       if (options.securityLevel) {
         query += ` AND security_level = $${paramIndex}`;
         params.push(options.securityLevel);
         paramIndex++;
-      }
+
       
       query += ' ORDER BY created_at DESC';
       
@@ -694,12 +701,12 @@ export class KeyManagementService extends EventEmitter {
         query += ` LIMIT $${paramIndex}`;
         params.push(options.limit);
         paramIndex++;
-      }
+
       
       if (options.offset) {
         query += ` OFFSET $${paramIndex}`;
         params.push(options.offset);
-      }
+
       
       const result = await this.db.query(query, params);
       
@@ -716,11 +723,11 @@ export class KeyManagementService extends EventEmitter {
         usageCount: parseInt(row.usage_count),
         securityLevel: row.security_level
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error listing keys:', error);
       return [];
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -728,12 +735,12 @@ export class KeyManagementService extends EventEmitter {
     // In production, this would come from a secure source like HSM
     // For now, derive from a stable source
     this.keyEncryptionKey = crypto.scryptSync('key-management-kek', 'salt', 32);
-  }
+
 
   private validateKeyGenerationRequest(request: KeyGenerationRequest): void {
     if (!request.purpose) {
       throw new Error('Key purpose is required');
-    }
+
     
     const validPurposes: KeyPurpose[] = [
       'data_encryption', 'key_encryption', 'token_signing',
@@ -742,24 +749,24 @@ export class KeyManagementService extends EventEmitter {
     
     if (!validPurposes.includes(request.purpose)) {
       throw new Error(`Invalid key purpose: ${request.purpose}`);
-    }
+
     
     if (request.keyLength && ![128, 192, 256, 512].includes(request.keyLength)) {
       throw new Error(`Invalid key length: ${request.keyLength}`);
-    }
-  }
+
+
 
   private generateKeyId(purpose: KeyPurpose): string {
     const timestamp = Date.now();
     const random = crypto.randomBytes(8).toString('hex');
     return `${purpose}_${timestamp}_${random}`;
-  }
+
 
   private generateBackupId(keyId: string): string {
     const timestamp = Date.now();
     const random = crypto.randomBytes(6).toString('hex');
     return `backup_${keyId.substring(0, 12)}_${timestamp}_${random}`;
-  }
+
 
   private getDefaultAlgorithm(purpose: KeyPurpose): string {
     switch (purpose) {
@@ -775,8 +782,8 @@ export class KeyManagementService extends EventEmitter {
       return 'hmac-sha256';
     default:
       return 'aes-256-gcm';
-    }
-  }
+
+
 
   private getDefaultKeyLength(algorithm: string): number {
     switch (algorithm) {
@@ -791,14 +798,14 @@ export class KeyManagementService extends EventEmitter {
       return 256;
     default:
       return 256;
-    }
-  }
+
+
 
   private encryptKeyMaterial(keyMaterial: Buffer, keyId: string): {
     encryptedData: Buffer;
     iv: Buffer;
     authTag: Buffer;
-  } {
+ {
     const iv = crypto.randomBytes(12); // 96-bit IV for GCM
     const cipher = crypto.createCipher('aes-256-gcm', this.keyEncryptionKey);
     cipher.setAAD(Buffer.from(keyId)); // Use keyId as additional authenticated data
@@ -812,7 +819,7 @@ export class KeyManagementService extends EventEmitter {
       iv,
       authTag
     };
-  }
+
 
   private decryptKeyMaterial(
     encryptedKey: { encryptedData: Buffer; iv: Buffer; authTag: Buffer },
@@ -826,7 +833,7 @@ export class KeyManagementService extends EventEmitter {
     decipher.final();
     
     return decrypted;
-  }
+
 
   private encryptBackupData(data: string): { encryptedData: Buffer; iv: Buffer } {
     const iv = crypto.randomBytes(16);
@@ -839,7 +846,7 @@ export class KeyManagementService extends EventEmitter {
       encryptedData: encrypted,
       iv
     };
-  }
+
 
   private async deactivateOtherPrimaryKeys(purpose: KeyPurpose): Promise<void> {
 
@@ -848,13 +855,13 @@ export class KeyManagementService extends EventEmitter {
       SET is_primary = false 
       WHERE purpose = $1 AND is_primary = true
     `, [purpose]);
-  }
+
 
   private async validateKeyAccess(keyId: string, context: KeyOperationContext): Promise<boolean> {
 
     if (!this.config.enableAccessControl) {
       return true;
-    }
+
     
     try {
       const result = await this.db.query(`
@@ -867,11 +874,11 @@ export class KeyManagementService extends EventEmitter {
       ]);
       
       return result.rows[0]?.access_allowed || false;
-    } catch (error) {
+ catch (error) {
       console.error('Error validating key access:', error);
       return false;
-    }
-  }
+
+
 
   private async checkAccessApproval(
     keyId: string,
@@ -890,11 +897,11 @@ export class KeyManagementService extends EventEmitter {
       `, [userId, keyId, operation]);
       
       return parseInt(result.rows[0].count) > 0;
-    } catch (error) {
+ catch (error) {
       console.error('Error checking access approval:', error);
       return false;
-    }
-  }
+
+
 
   private async logKeyAccess(
     keyId: string,
@@ -922,10 +929,10 @@ export class KeyManagementService extends EventEmitter {
         context.sessionId,
         JSON.stringify(additionalInfo || {})
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Error logging key access:', error);
-    }
-  }
+
+
 
   private async logKeyOperation(
     keyId: string,
@@ -944,24 +951,24 @@ export class KeyManagementService extends EventEmitter {
           keyId,
           operation,
           ...details
-  }
+
         severity: ['destroy', 'export'].includes(operation) ? 'warning' : 'info',
         ipAddress: context?.ipAddress,
         userAgent: context?.userAgent
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error logging key operation:', error);
-    }
-  }
+
+
 
   private startBackgroundProcesses(): void {
     // Cleanup expired cached keys every 5 minutes
     setInterval(async () => {
       try {
         await this.db.query('SELECT cleanup_expired_cached_keys()');
-      } catch (error) {
+ catch (error) {
         console.error('Error in cache cleanup:', error);
-      }
+
     }, 5 * 60 * 1000);
     
     // Check rotation requirements every hour
@@ -971,11 +978,10 @@ export class KeyManagementService extends EventEmitter {
           const rotationNeeded = await this.checkRotationRequirements();
           for (const { keyId, reason } of rotationNeeded) {
             this.emit('rotation_required', { keyId, reason });
-          }
-        } catch (error) {
+
+ catch (error) {
           console.error('Error checking rotation requirements:', error);
-        }
+
       }, 60 * 60 * 1000);
-    }
-  }
-}
+
+

@@ -14,8 +14,7 @@ import { Citation } from '../types';
 
 // Mock data
 const mockCitations: Citation = [
-  {
-  id: '1',
+  { id: '1',
   type: 'bluebook',
   shortForm: 'Brown v. Board',
   longForm: 'Brown v. Board of Education, 347 U.S. 483 (1954)',
@@ -23,23 +22,20 @@ const mockCitations: Citation = [
   date: '1954',
   volume: '347',
   reporter: 'U.S.',
-  page: '483',
-}
-  {
-  id: '2',
+  page: '483' }
+
+  { id: '2',
   type: 'alwd',
   shortForm: 'Miranda Rights',
   longForm: 'Miranda v. Arizona, 384 U.S. 436 (1966)',
   court: 'U.S. Supreme Court',
-  date: '1966',
+  date: '1966' }
   url: 'https://example.com/miranda'];
-  describe('CitationManager Component', () => {
-  const mockOnCitationAdd = jest.fn<unknown, unknown>();
+  describe('CitationManager Component', () => { const mockOnCitationAdd = jest.fn<unknown, unknown>();
   const mockOnCitationEdit = jest.fn<unknown, unknown>();
   const mockOnCitationDelete = jest.fn<unknown, unknown>();
   beforeEach(() => {
-  jest.clearAllMocks();
-});
+  jest.clearAllMocks() });
   describe('Initial Rendering', () => {
     it('renders citation manager interface', () => {
       render();
@@ -178,13 +174,13 @@ const mockCitations: Citation = [
       const saveButton = screen.getByText(/Save Citation/i);
       await user.click(saveButton);
       expect(mockOnCitationAdd).toHaveBeenCalledWith()
-        expect.objectContaining({)
-  type: 'bluebook',
-  shortForm: 'Roe v. Wade',
-  longForm: 'Roe v. Wade, 410 U.S. 113 (1973)',
-  court: 'U.S. Supreme Court',
-  date: '1973',
-}
+        expect.objectContaining({ )
+  type: 'bluebook'
+  shortForm: 'Roe v. Wade'
+  longForm: 'Roe v. Wade, 410 U.S. 113 (1973)'
+  court: 'U.S. Supreme Court'
+  date: '1973' }
+
       );
     });
     it('validates required fields before submission', async () => {
@@ -262,8 +258,8 @@ const mockCitations: Citation = [
       await user.type(shortFormInput, 'Brown v. Board (Updated)');
       const saveButton = screen.getByText(/Save Citation/i);
       await user.click(saveButton);
-      expect(mockOnCitationEdit).toHaveBeenCalledWith('1', expect.objectContaining({)
-  shortForm: 'Brown v. Board (Updated)',
+      expect(mockOnCitationEdit).toHaveBeenCalledWith('1', expect.objectContaining({ )
+  shortForm: 'Brown v. Board (Updated)' }
 }));
     });
     it('cancels edit without saving changes', async () => {
@@ -357,11 +353,10 @@ const mockCitations: Citation = [
       // Bluebook style should show specific formatting
       expect(screen.getByText('Brown v. Board of Education, 347 U.S. 483 (1954)')).toBeInTheDocument();
     });
-    it('displays pinpoint citations when available', () => {
-  const citationWithPinpoint: Citation = [{,
-  ...mockCitations[0],
-  pinpoint: 'at 495',
-}];
+    it('displays pinpoint citations when available', () => { const citationWithPinpoint: Citation = [{
+  ...mockCitations[0]
+  pinpoint: 'at 495' }
+];
       render();
         <CitationManager
           citations={citationWithPinpoint}
@@ -530,14 +525,13 @@ const mockCitations: Citation = [
       expect(screen.getByRole('dialog', { name: /Add New Citation/i })).toBeInTheDocument();
     });
   });
-  describe('Error Handling', () => {
-  it('handles invalid citation data gracefully', () => {
-  const invalidCitation: Citation = {,
-  id: 'invalid',
-  type: 'bluebook',
-  shortForm: '',
-  longForm: '',
-} as Citation;
+  describe('Error Handling', () => { it('handles invalid citation data gracefully', () => {
+  const invalidCitation: Citation = {
+  id: 'invalid'
+  type: 'bluebook'
+  shortForm: ''
+  longForm: '' }
+ as Citation;
       render();
         <CitationManager
           citations={[invalidCitation]}
@@ -549,10 +543,8 @@ const mockCitations: Citation = [
       );
       expect(screen.getByText(/Invalid citation data/i)).toBeInTheDocument();
     });
-    it('handles callback errors gracefully', async () => {
-      const errorCallback = jest.fn(() => {
-        throw new Error('Callback error');
-      });
+    it('handles callback errors gracefully', async () => { const errorCallback = jest.fn(() => {
+        throw new Error('Callback error') });
       const user = userEvent.setup();
       render();
         <CitationManager

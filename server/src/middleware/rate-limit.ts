@@ -15,23 +15,23 @@ import {
   RateLimitPresets,
   RateLimitKeyGenerator,
   RateLimitUtils
-} from '../../../packages/core/security/RateLimiter';
+ from '../../../packages/core/security/RateLimiter';
 import { 
   RedisRateLimitStore, 
   RedisClient 
-} from '../../../packages/core/security/RedisRateLimitStore';
+ from '../../../packages/core/security/RedisRateLimitStore';
 import { 
   RateLimitConfigurationManager,
   DynamicRateLimitRule
-} from '../../../packages/core/security/RateLimitConfigurationManager';
+ from '../../../packages/core/security/RateLimitConfigurationManager';
 import { RedisService } from '../auth/database/RedisService';
 
 // ========================================
 // Types and Interfaces
 // ========================================
 
-}
-}
+
+
 export interface RateLimitMiddlewareConfig {
   redis?: RedisService;
   configManager?: RateLimitConfigurationManager;
@@ -43,19 +43,21 @@ export interface RateLimitMiddlewareConfig {
   keyExtractor?: (request: FastifyRequest) => RateLimitContext;
   onLimitReached?: (request: FastifyRequest, reply: FastifyReply, result: RateLimitResult) => void;
   errorHandler?: (error: Error, request: FastifyRequest, reply: FastifyReply) => void;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EndpointRateLimitConfig {
   path: string;
   method?: string | string[];
   config: Partial<RateLimitConfig>;
-}
-}
-}
+
+
+
+
 
 // Augment Fastify request to include rate limit info
 declare module 'fastify' {
@@ -65,14 +67,15 @@ declare module 'fastify' {
       remaining: number;
       resetTime: Date;
       exceeded: boolean;
-}
-}
+
+
+
     };
     userId?: string | number;
     sessionId?: string;
     organizationId?: string;
-  }
-}
+
+
 
 // ========================================
 // Redis Client Adapter
@@ -84,65 +87,65 @@ class RedisClientAdapter implements RedisClient {
   async get(key: string): Promise<string | null> {
 
     return this.redisService.get(key);
-  }
+
 
   async set(key: string, value: string, options?: { EX?: number; PX?: number }): Promise<string | null> {
 
     if (options?.EX) {
       await this.redisService.setex(key, options.EX, value);
-    } else if (options?.PX) {
+ else if (options?.PX) {
       await this.redisService.setex(key, Math.ceil(options.PX / 1000), value);
-    } else {
+ else {
       await this.redisService.set(key, value);
-    }
+
     return 'OK';
-  }
+
 
   async incr(key: string): Promise<number> {
 
     return this.redisService.incr(key);
-  }
+
 
   async expire(key: string, seconds: number): Promise<number> {
 
     await this.redisService.expire(key, seconds);
     return 1;
-  }
+
 
   async pexpire(key: string, milliseconds: number): Promise<number> {
 
     await this.redisService.expire(key, Math.ceil(milliseconds / 1000));
     return 1;
-  }
+
 
   async ttl(key: string): Promise<number> {
 
     return this.redisService.ttl(key);
-  }
+
 
   async del(key: string): Promise<number> {
 
     await this.redisService.del(key);
     return 1;
-  }
+
 
   async eval(script: string, keys: string[], args: string[]): Promise<unknown> {
 
     const client = this.redisService.getClient();
     return client.eval(script, keys.length, ...keys, ...args);
-  }
+
 
   async ping(): Promise<string> {
 
     const healthy = await this.redisService.healthCheck();
     return healthy ? 'PONG' : '';
-  }
+
 
   async quit(): Promise<string> {
 
     await this.redisService.close();
     return 'OK';
-  }
+
 
   async *scanStream(options?: { match?: string; count?: number }): AsyncIterable<string[]> {
     const client = this.redisService.getClient();
@@ -150,9 +153,9 @@ class RedisClientAdapter implements RedisClient {
     
     for await (const keys of stream) {
       yield keys;
-    }
-  }
-}
+
+
+
 
 // ========================================
 // Rate Limit Middleware Factory
@@ -174,7 +177,7 @@ export class RateLimitMiddleware {
         enableScripting: true,
         fallbackToMemory: true
       });
-    }
+
 
     // Use provided config manager or create a default one
     this.configManager = config.configManager || new RateLimitConfigurationManager({
@@ -185,7 +188,7 @@ export class RateLimitMiddleware {
 
     // Setup default key extractor
     this.defaultKeyExtractor = config.keyExtractor || this.createDefaultKeyExtractor();
-  }
+
 
   /**
    * Create default key extractor that extracts context from request
@@ -217,7 +220,7 @@ export class RateLimitMiddleware {
         headers: request.headers as Record<string, string>,
         timestamp: Date.now(};
     };
-  }
+
 
   /**
    * Extract IP address from request, respecting proxy headers
@@ -227,11 +230,11 @@ export class RateLimitMiddleware {
       // Try to extract from proxy headers
       const proxyIP = RateLimitUtils.extractIP(request.headers as Record<string, string>);
       if (proxyIP) return proxyIP;
-    }
+
 
     // Fallback to request IP
     return request.ip || 'unknown';
-  }
+
 
   /**
    * Get or create rate limiter for specific configuration
@@ -243,7 +246,7 @@ export class RateLimitMiddleware {
       // Add Redis store if available
       if (this.redisStore) {
         config.store = this.redisStore;
-      }
+
 
       // Merge with default config
       const finalConfig = {
@@ -253,10 +256,10 @@ export class RateLimitMiddleware {
 
       limiter = new RateLimiter(finalConfig);
       this.limiters.set(configKey, limiter);
-    }
+
 
     return limiter;
-  }
+
 
   /**
    * Create middleware for a specific endpoint
@@ -279,24 +282,24 @@ export class RateLimitMiddleware {
             const rule = matchingRules[0];
             const dynamicConfig = this.configManager.createRateLimitConfig(rule);
             return this.applyRateLimit(request, reply, dynamicConfig, `dynamic:${rule.id}`);
-          }
-        }
+
+
 
         // Apply static configuration
         return this.applyRateLimit(request, reply, config, 'static:endpoint');
-      } catch (error) {
+ catch (error) {
         console.error('Rate limit middleware error:', error);
         
         // Call error handler if provided
         if (this.config.errorHandler) {
           return this.config.errorHandler(error as Error, request, reply);
-        }
+
 
         // Default: fail open (allow request)
         return;
-      }
+
     };
-  }
+
 
   /**
    * Apply rate limiting logic
@@ -338,7 +341,7 @@ export class RateLimitMiddleware {
       // Call custom handler if provided
       if (this.config.onLimitReached) {
         return this.config.onLimitReached(request, reply, result);
-      }
+
 
       // Default response
       reply.code(config.statusCode || 429).send({
@@ -349,8 +352,8 @@ export class RateLimitMiddleware {
         remaining: result.info.remainingRequests,
         resetTime: result.info.resetTime
       });
-    }
-  }
+
+
 
   /**
    * Create global rate limit middleware
@@ -362,11 +365,11 @@ export class RateLimitMiddleware {
       // Skip health checks and metrics endpoints
       if (request.url === '/health' || request.url === '/metrics') {
         return;
-      }
+
 
       return this.createEndpointMiddleware(finalConfig)(request, reply);
     };
-  }
+
 
   /**
    * Register multiple endpoint-specific rate limits
@@ -384,19 +387,19 @@ export class RateLimitMiddleware {
             if (request.method === method.toUpperCase() && 
                 (request.routeOptions?.url === endpoint.path || request.url.startsWith(endpoint.path))) {
               await middleware(request, reply);
-            }
+
           });
         });
-      } else {
+ else {
         // Register for all methods
         fastify.addHook('preHandler', async (request, reply) => {
           if (request.routeOptions?.url === endpoint.path || request.url.startsWith(endpoint.path)) {
             await middleware(request, reply);
-          }
+
         });
-      }
+
     });
-  }
+
 
   /**
    * Get statistics about rate limiting
@@ -408,16 +411,16 @@ export class RateLimitMiddleware {
         available: false,
         totalKeys: 0,
         fallbackKeys: 0
-      }
+
     };
 
     if (this.redisStore) {
       const redisStats = await this.redisStore.getStats();
       stats.redis = redisStats;
-    }
+
 
     return stats;
-  }
+
 
   /**
    * Cleanup resources
@@ -426,15 +429,15 @@ export class RateLimitMiddleware {
     if (this.redisStore) {
       await this.redisStore.cleanup();
       await this.redisStore.close();
-    }
+
 
     for (const limiter of this.limiters.values()) {
       await limiter.cleanup();
-    }
+
 
     this.limiters.clear();
-  }
-}
+
+
 
 // ========================================
 // Fastify Plugin
@@ -458,9 +461,9 @@ export function createRateLimitPlugin(config: RateLimitMiddlewareConfig = {}) {
     // Register global middleware if default config is provided
     if (config.defaultConfig) {
       fastify.addHook('preHandler', middleware.createGlobalMiddleware());
-    }
+
   };
-}
+
 
 // ========================================
 // Preset Configurations
@@ -472,9 +475,10 @@ declare module 'fastify' {
   interface FastifyInstance {
     rateLimit: RateLimitMiddleware;
     rateLimitEndpoint: (config: Partial<RateLimitConfig>) => ReturnType<RateLimitMiddleware['createEndpointMiddleware']>;
-}
-}
-  }
-}
+
+
+
+
+
 
 export default RateLimitMiddleware;

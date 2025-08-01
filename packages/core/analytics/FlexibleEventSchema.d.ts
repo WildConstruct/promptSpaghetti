@@ -11,18 +11,17 @@
  * - Property relationships and dependencies
  * - Performance-optimized validation pipeline
  */
-import { 
-  FlexibleConversionEvent,
+import { FlexibleConversionEvent,
   PropertySchema,
   PropertyType,
   ValidationError,
-  ValidationWarning,
+  ValidationWarning }
   ConditionLogic
 } from './ConversionDataModel';
 
 }
-export interface EventSchemaDefinition {
-    id: string;
+}
+export interface EventSchemaDefinition { id: string;
     name: string;
     version: string;
     description: string;
@@ -32,39 +31,31 @@ export interface EventSchemaDefinition {
         createdBy: string;
         tags: string[];
         isActive: boolean;
-        deprecated?: boolean;
+        deprecated?: boolean }
 }
     };
-    baseRequirements: {
-        requiredFields: string[];
+    baseRequirements: { requiredFields: string[];
         optionalFields: string[];
-        forbiddenFields: string[];
-    };
+        forbiddenFields: string[] };
     properties: Map<string, PropertySchemaDefinition>;
     globalConstraints: GlobalConstraint[];
     transformations: SchemaTransformation[];
-    validation: {
-        strictMode: boolean;
+    validation: { strictMode: boolean;
         allowUnknownProperties: boolean;
         validatePropertyTypes: boolean;
         enforceConstraints: boolean;
-        customValidators: CustomValidator[];
-    };
-    inheritance?: {
-        parentSchema: string;
+        customValidators: CustomValidator[] };
+    inheritance?: { parentSchema: string;
         overrides: PropertyOverride[];
-        extensions: PropertyExtension[];
-    };
-    performance: {
-        cacheValidationResults: boolean;
+        extensions: PropertyExtension[] };
+    performance: { cacheValidationResults: boolean;
         enableLazyValidation: boolean;
         batchValidation: boolean;
-        maxValidationTime: number;
-    };
+        maxValidationTime: number };
 
 }
-export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relationships'> {
-    id: string;
+}
+export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relationships'> { id: string;
     name: string;
     description: string;
     typeInfo: {
@@ -72,8 +63,7 @@ export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relation
         subType?: string;
         format?: string;
         encoding?: string;
-        precision?: number;
-    };
+        precision?: number };
     validation: {
         enabled: boolean;
         level: 'strict' | 'lenient' | 'permissive';
@@ -85,14 +75,13 @@ export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relation
     };
     transformationPipeline: PropertyTransformationStep[];
     relationships: PropertyRelationshipDefinition[];
-    metadata: {
-        businessContext: string;
+    metadata: { businessContext: string;
         dataSource: string;
         updateFrequency: string;
         qualityMetrics?: PropertyQualityMetrics;
-        examples: PropertyExample[];
-    };
+        examples: PropertyExample[] };
 
+}
 }
 export interface PropertyTransformationStep {
     id: string;
@@ -106,149 +95,132 @@ export interface PropertyTransformationStep {
         conditions?: ConditionLogic;
         errorHandling: 'skip' | 'warn' | 'fail' | 'default'
 }
+}
   };
-    performance: {
-        timeout: number;
+    performance: { timeout: number;
         retries: number;
-        cacheable: boolean;
-    };
+        cacheable: boolean };
 
 }
-export interface ValidationRule {
-    id: string;
+}
+export interface ValidationRule { id: string;
     name: string;
     description: string;
     rule: {
         type: 'format' | 'range' | 'pattern' | 'custom' | 'cross_field' | 'temporal';
         condition: ConditionLogic;
         errorMessage: string;
-        warningMessage?: string;
+        warningMessage?: string }
 }
     };
-    execution: {
-        priority: number;
+    execution: { priority: number;
         dependencies: string[];
         asyncValidation: boolean;
-        cacheResults: boolean;
-    };
-    errorHandling: {
-        severity: 'critical' | 'major' | 'minor';
+        cacheResults: boolean };
+    errorHandling: { severity: 'critical' | 'major' | 'minor';
         action: 'block' | 'warn' | 'log';
-        suggestedFix?: string;
-    };
+        suggestedFix?: string };
 
 }
-export interface PropertyRelationshipDefinition {
-    id: string;
+}
+export interface PropertyRelationshipDefinition { id: string;
     type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against';
     targetProperty: string;
     relationship: RelationshipSpec;
     strength: number;
-    bidirectional: boolean;
-
+    bidirectional: boolean }
 }
-export interface RelationshipSpec {
-    condition: ConditionLogic;
+}
+export interface RelationshipSpec { condition: ConditionLogic;
     transformation?: string;
     validation?: string;
     metadata: {
         description: string;
         businessReason: string;
-        examples: string[];
+        examples: string[] }
 }
     };
 
 }
-export interface GlobalConstraint {
-    id: string;
+}
+export interface GlobalConstraint { id: string;
     name: string;
     description: string;
     constraint: ConditionLogic;
     severity: 'error' | 'warning';
-    applicableEvents: string[];
-
+    applicableEvents: string[] }
 }
-export interface SchemaTransformation {
-    id: string;
+}
+export interface SchemaTransformation { id: string;
     name: string;
     description: string;
     stage: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval';
     transformation: TransformationDefinition;
-    conditions?: ConditionLogic;
-
+    conditions?: ConditionLogic }
 }
-export interface TransformationDefinition {
-    type: 'property_mapping' | 'data_enrichment' | 'format_conversion' | 'aggregation' | 'custom';
+}
+export interface TransformationDefinition { type: 'property_mapping' | 'data_enrichment' | 'format_conversion' | 'aggregation' | 'custom';
     config: Record<string, unknown>;
     inputFields: string[];
     outputFields: string[];
-    preserveOriginal: boolean;
-
+    preserveOriginal: boolean }
 }
-export interface CustomValidator {
-    id: string;
+}
+export interface CustomValidator { id: string;
     name: string;
     description: string;
     validator: {
         functionBody: string;
         parameters: ValidatorParameter[];
-        returnType: 'boolean' | 'ValidationResult' | 'Promise<ValidationResult>';
+        returnType: 'boolean' | 'ValidationResult' | 'Promise<ValidationResult>' }
 }
     };
-    execution: {
-        timeout: number;
+    execution: { timeout: number;
         sandboxed: boolean;
         allowedAPIs: string[];
-        memoryLimit: number;
-    };
+        memoryLimit: number };
     tests: ValidatorTest[];
 
 }
-export interface ValidatorParameter {
-    name: string;
+}
+export interface ValidatorParameter { name: string;
     type: string;
     description: string;
     required: boolean;
-    defaultValue?: unknown;
-
+    defaultValue?: unknown }
 }
-export interface ValidatorTest {
-    name: string;
+}
+export interface ValidatorTest { name: string;
     input: unknown;
     expectedOutput: unknown;
-    description: string;
-
+    description: string }
 }
-export interface PropertyOverride {
-    propertyId: string;
+}
+export interface PropertyOverride { propertyId: string;
     changes: Partial<PropertySchemaDefinition>;
-    reason: string;
-
+    reason: string }
 }
-export interface PropertyExtension {
-    propertyId: string;
+}
+export interface PropertyExtension { propertyId: string;
     newProperty: PropertySchemaDefinition;
-    reason: string;
-
+    reason: string }
 }
-export interface PropertyQualityMetrics {
-    completeness: number;
+}
+export interface PropertyQualityMetrics { completeness: number;
     accuracy: number;
     consistency: number;
     timeliness: number;
     validity: number;
-    lastAssessed: number;
-
+    lastAssessed: number }
 }
-export interface PropertyExample {
-    description: string;
+}
+export interface PropertyExample { description: string;
     validExample: unknown;
     invalidExample?: unknown;
-    explanation: string;
-
+    explanation: string }
 }
-export interface SchemaValidationResult {
-    isValid: boolean;
+}
+export interface SchemaValidationResult { isValid: boolean;
     overallScore: number;
     fieldResults: Map<string, FieldValidationResult>;
     globalConstraintResults: GlobalConstraintResult[];
@@ -257,21 +229,19 @@ export interface SchemaValidationResult {
         totalTime: number;
         validationTime: number;
         transformationTime: number;
-        cacheHitRate: number;
+        cacheHitRate: number }
 }
     };
     errors: ValidationError[];
     warnings: ValidationWarning[];
-    metadata: {
-        schemaVersion: string;
+    metadata: { schemaVersion: string;
         validationTimestamp: number;
         validatorVersion: string;
-        processingPipeline: string[];
-    };
+        processingPipeline: string[] };
 
 }
-export interface FieldValidationResult {
-    fieldName: string;
+}
+export interface FieldValidationResult { fieldName: string;
     isValid: boolean;
     score: number;
     ruleResults: RuleValidationResult[];
@@ -282,39 +252,35 @@ export interface FieldValidationResult {
     validationTime: number;
     cacheUsed: boolean;
     errors: ValidationError[];
-    warnings: ValidationWarning[];
-
+    warnings: ValidationWarning[] }
 }
-export interface RuleValidationResult {
-    ruleId: string;
+}
+export interface RuleValidationResult { ruleId: string;
     ruleName: string;
     passed: boolean;
     score: number;
     executionTime: number;
     message?: string;
-    details?: Record<string, unknown>;
-
+    details?: Record<string, unknown> }
 }
-export interface RelationshipValidationResult {
-    relationshipId: string;
+}
+export interface RelationshipValidationResult { relationshipId: string;
     relatedField: string;
     relationshipType: string;
     isValid: boolean;
     confidence: number;
-    message?: string;
-
+    message?: string }
 }
-export interface GlobalConstraintResult {
-    constraintId: string;
+}
+export interface GlobalConstraintResult { constraintId: string;
     constraintName: string;
     satisfied: boolean;
     score: number;
     affectedFields: string[];
-    message?: string;
-
+    message?: string }
 }
-export interface TransformationResult {
-    transformationId: string;
+}
+export interface TransformationResult { transformationId: string;
     transformationName: string;
     executed: boolean;
     success: boolean;
@@ -322,7 +288,7 @@ export interface TransformationResult {
     outputFields: string[];
     performance: {
         executionTime: number;
-        memoryUsed: number;
+        memoryUsed: number }
 }
     };
     error?: string;
@@ -330,8 +296,7 @@ export interface TransformationResult {
  * Flexible Event Schema Manager
  * Manages schema definitions, validation, and transformations
  */
-export declare class FlexibleEventSchemaManager {
-    private schemas;
+export declare class FlexibleEventSchemaManager { private schemas;
     private validationCache;
     private transformationCache;
     private readonly CACHE_TTL;
@@ -346,16 +311,16 @@ export declare class FlexibleEventSchemaManager {
      * Validate event against schema
      */
     validateEvent();
-      event: FlexibleConversionEvent,
-      schemaId: string,
+      event: FlexibleConversionEvent
+      schemaId: string
       options?: ValidationOptions
     ): Promise<SchemaValidationResult>;
     /**
      * Transform event according to schema
      */
     transformEvent();
-      event: FlexibleConversionEvent,
-      schemaId: string,
+      event: FlexibleConversionEvent
+      schemaId: string
       stage?: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval'
     ): Promise<FlexibleConversionEvent>;
     /**
@@ -374,8 +339,8 @@ export declare class FlexibleEventSchemaManager {
      * Create schema from template
      */
     createSchemaFromTemplate();
-      templateName: string,
-      schemaId: string,
+      templateName: string
+      schemaId: string }
       customizations?: Partial<EventSchemaDefinition>
     ): EventSchemaDefinition;
     private performValidation;
@@ -415,6 +380,7 @@ export declare class FlexibleEventSchemaManager {
     private createUserBehaviorSchema;
 
 }
+}
 export interface ValidationOptions {
     useCache?: boolean;
     strictMode?: boolean;
@@ -426,4 +392,5 @@ export interface ValidationOptions {
  */
 export declare export default FlexibleEventSchemaManager;
 //# sourceMappingURL=FlexibleEventSchema.d.ts.map
+}
 }

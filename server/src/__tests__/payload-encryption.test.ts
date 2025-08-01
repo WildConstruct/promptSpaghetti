@@ -96,7 +96,7 @@ describe('PayloadEncryptionService', () => {
           classification: 'internal',
           gdpr: true,
           encryption: true
-        }
+
       });
     });
 
@@ -120,7 +120,7 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123',
         purpose: 'payload_encryption'
-      }] as unknown as unknown);
+] as unknown as unknown);
       
       // Mock key material
       const keyMaterial = crypto.randomBytes(32);
@@ -149,7 +149,7 @@ describe('PayloadEncryptionService', () => {
           operationType: 'encrypt',
           additionalContext: expect.objectContaining({
             endpoint: '/auth/login'
-  }
+
   }
       );
     });
@@ -231,7 +231,7 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123',
         purpose: 'payload_encryption'
-      }] as unknown as unknown);
+] as unknown as unknown);
       
       // Mock key material
       const keyMaterial = crypto.randomBytes(32);
@@ -255,7 +255,7 @@ describe('PayloadEncryptionService', () => {
           additionalContext: expect.objectContaining({
             algorithm: encryptedPayload.algorithm,
             timestamp: encryptedPayload.timestamp
-  }
+
   }
       );
     });
@@ -275,7 +275,7 @@ describe('PayloadEncryptionService', () => {
       const invalidPayload = {
         data: 'encrypted-data'
         // Missing required fields
-      } as EncryptedPayload;
+ as EncryptedPayload;
 
       await expect(
         payloadEncryptionService.decryptPayload(invalidPayload)
@@ -355,7 +355,7 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'current-key-123',
         purpose: 'payload_encryption'
-      }] as unknown as unknown);
+] as unknown as unknown);
       
       await payloadEncryptionService.initialize();
     });
@@ -421,7 +421,7 @@ describe('PayloadEncryptionService', () => {
         mockKeyManagementService.listKeys.mockResolvedValue([{
           keyId: 'test-key-123',
           purpose: 'payload_encryption'
-        }] as unknown as unknown);
+] as unknown as unknown);
         
         const keyMaterial = crypto.randomBytes(32);
         mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
@@ -442,7 +442,7 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123',
         purpose: 'payload_encryption'
-      }] as unknown as unknown);
+] as unknown as unknown);
       
       const keyMaterial = crypto.randomBytes(32);
       mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
@@ -503,7 +503,7 @@ describe('PayloadEncryptionService', () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123',
         purpose: 'payload_encryption'
-      }] as unknown as unknown);
+] as unknown as unknown);
       
       const keyMaterial = crypto.randomBytes(32);
       mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
@@ -566,7 +566,7 @@ describe('PayloadEncryptionService', () => {
     it('should handle null/undefined data', async () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123'
-      }] as unknown as unknown);
+] as unknown as unknown);
       
       await payloadEncryptionService.initialize();
 
@@ -582,7 +582,7 @@ describe('PayloadEncryptionService', () => {
     it('should handle empty objects and arrays', async () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123'
-      }] as unknown as unknown);
+] as unknown as unknown);
       
       const keyMaterial = crypto.randomBytes(32);
       mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
@@ -603,7 +603,7 @@ describe('PayloadEncryptionService', () => {
     it('should handle complex nested objects', async () => {
       mockKeyManagementService.listKeys.mockResolvedValue([{
         keyId: 'test-key-123'
-      }] as unknown as unknown);
+] as unknown as unknown);
       
       const keyMaterial = crypto.randomBytes(32);
       mockKeyManagementService.getKeyMaterial.mockResolvedValue(keyMaterial as unknown as unknown);
@@ -618,9 +618,9 @@ describe('PayloadEncryptionService', () => {
               boolean: true,
               null: null,
               number: 42.5
-            }
-          }
-        }
+
+
+
       };
 
       const encrypted = await payloadEncryptionService.encryptPayload(complexData, '/auth/login');

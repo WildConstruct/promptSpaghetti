@@ -16,8 +16,7 @@
 import { EventEmitter } from 'events';
 
 // Timeout Types
-export enum TimeoutPolicy {
-  STRICT = 'strict',
+export enum TimeoutPolicy { STRICT = 'strict',
   FLEXIBLE = 'flexible',
   ADAPTIVE = 'adaptive',
   PROGRESSIVE = 'progressive'
@@ -39,29 +38,30 @@ export enum TimeoutPolicy {
   sessionId: string;
   policy: TimeoutPolicy;
   // Base timeout settings
-  idleTimeout: number; // milliseconds of inactivity before timeout,
-  absoluteTimeout: number; // maximum session duration,
-  warningThresholds: number; // warning times before timeout (in milliseconds),
+  idleTimeout: number; // milliseconds of inactivity before timeout;
+  absoluteTimeout: number; // maximum session duration;
+  warningThresholds: number; // warning times before timeout (in milliseconds);
   // Grace periods
-  gracePeriod: number; // additional time after timeout warning,
-  criticalOperationGrace: number; // extra time during critical operations,
+  gracePeriod: number; // additional time after timeout warning;
+  criticalOperationGrace: number; // extra time during critical operations;
   // Extension settings
-  maxExtensions: number; // maximum number of extensions allowed,
-  extensionDuration: number; // how long each extension lasts,
-  automaticExtension: boolean; // extend automatically on activity,
+  maxExtensions: number; // maximum number of extensions allowed;
+  extensionDuration: number; // how long each extension lasts;
+  automaticExtension: boolean; // extend automatically on activity;
   // Adaptive settings
   adaptiveEnabled: boolean;
-  activityThreshold: number; // activity level required to extend session,
-  learningEnabled: boolean; // learn user patterns to adjust timeouts,
+  activityThreshold: number; // activity level required to extend session;
+  learningEnabled: boolean; // learn user patterns to adjust timeouts;
   // Security constraints
-  maxAbsoluteTime: number; // hard limit regardless of activity,
-  securityLevelOverride?: number; // override based on security level,
-  deviceTrustFactor: number; // 0-1, affects timeout duration,
-  locationTrustFactor: number; // 0-1, affects timeout duration,
+  maxAbsoluteTime: number; // hard limit regardless of activity;
+  securityLevelOverride?: number; // override based on security level;
+  deviceTrustFactor: number; // 0-1, affects timeout duration;
+  locationTrustFactor: number; // 0-1, affects timeout duration }
   // Activity Tracking
-}
-}
-}
+
+
+
+
 export interface ActivityData {
   timestamp: Date;
   type: 'mouse' | 'keyboard' | 'touch' | 'api' | 'navigation' | 'interaction';
@@ -70,11 +70,11 @@ export interface ActivityData {
   duration?: number;
   metadata?: Record<string, any>;
   // Session Timeout State
-}
-}
-}
-export interface SessionTimeoutState {
-  sessionId: string;
+
+
+
+
+export interface SessionTimeoutState { sessionId: string;
   configuration: TimeoutConfiguration;
   // Current state
   isActive: boolean;
@@ -92,19 +92,20 @@ export interface SessionTimeoutState {
   // Activity tracking
   recentActivities: ActivityData;
   activityScore: number;
-  activityPattern: {
+  activityPattern: { }
   peakHours: number;
   averageSessionLength: number;
   typicalActivityLevel: ActivityLevel;
-}
+
+
 };
   // Status
   status: 'active' | 'warning' | 'grace' | 'expired' | 'extended';
   timeoutReason?: TimeoutReason;
 
 // Timeout Event
-}
-}
+
+
 export interface TimeoutEvent {
   sessionId: string;
   eventType: 'warning' | 'timeout' | 'extension' | 'renewal';
@@ -117,62 +118,30 @@ export interface TimeoutEvent {
   /**
   * Comprehensive session timeout management service
   */
-}
-}
-export class SessionTimeoutController extends EventEmitter {
-  private sessionStates: Map<string, SessionTimeoutState> = new Map();
-  private timeoutTimers: Map<string, NodeJS.Timeout> = new Map();
-  private warningTimers: Map<string, NodeJS.Timeout> = new Map();
-  private activityBuffer: Map<string, ActivityData> = new Map();
-  private cleanupTimer?: NodeJS.Timeout;
-  constructor() {
-  super();
-  this.startCleanupTimer();
-  /**
-  * Initialize timeout control for a session
-  */
-  public initializeSession((sessionId: string,
-  configuration: Partial<TimeoutConfiguration>): SessionTimeoutState {,
-  const defaultConfig: TimeoutConfiguration = {,
-  sessionId,
-  policy: TimeoutPolicy.FLEXIBLE,
-  idleTimeout: 30 * 60 * 1000, // 30 minutes,
-  absoluteTimeout: 8 * 60 * 60 * 1000, // 8 hours,
-  warningThresholds: [5 * 60 * 1000, 60 * 1000], // 5 min, 1 min,
-  gracePeriod: 2 * 60 * 1000, // 2 minutes,
-  criticalOperationGrace: 5 * 60 * 1000, // 5 minutes,
-  maxExtensions: 3,
-  extensionDuration: 15 * 60 * 1000, // 15 minutes,
-  automaticExtension: true,
-  adaptiveEnabled: true,
-  activityThreshold: 0.3,
-  learningEnabled: true,
-  maxAbsoluteTime: 24 * 60 * 60 * 1000, // 24 hours,
-  deviceTrustFactor: 1.0,
-  locationTrustFactor: 1.0,
-};
+
+
+export class SessionTimeoutController {};
     const finalConfig = { ...defaultConfig, ...configuration };
     const now = new Date();
-    const state: SessionTimeoutState = {
-  sessionId,
-  configuration: finalConfig,
-  isActive: true,
-  lastActivity: now,
-  sessionStart: now,
-  currentTimeout: new Date(now.getTime() + finalConfig.idleTimeout),
-  warningsIssued: [],
-  extensionsUsed: 0,
-  gracePeriodActive: false,
-  criticalOperationActive: false,
-  remainingTime: finalConfig.idleTimeout,
-  recentActivities: [],
-  activityScore: 0,
+    const state: SessionTimeoutState = { sessionId
+  configuration: finalConfig
+  isActive: true
+  lastActivity: now
+  sessionStart: now
+  currentTimeout: new Date(now.getTime() + finalConfig.idleTimeout)
+  warningsIssued: []
+  extensionsUsed: 0
+  gracePeriodActive: false
+  criticalOperationActive: false
+  remainingTime: finalConfig.idleTimeout
+  recentActivities: []
+  activityScore: 0
   activityPattern: {
-  peakHours: [],
-  averageSessionLength: 0,
-  typicalActivityLevel: ActivityLevel.MEDIUM,
-},
-  status: 'active'
+  peakHours: []
+  averageSessionLength: 0
+  typicalActivityLevel: ActivityLevel.MEDIUM }
+
+  status: 'active';
   };
     this.sessionStates.set(sessionId, state);
     this.scheduleTimeoutWarnings(sessionId);
@@ -183,13 +152,12 @@ export class SessionTimeoutController extends EventEmitter {
    * Record user activity
    */
   public recordActivity(sessionId: string)
-    activity: Omit<ActivityData, 'timestamp'>
-  ): void {
-  const state = this.sessionStates.get(sessionId);
+  activity: Omit<ActivityData, 'timestamp'>
+  ): void { const state = this.sessionStates.get(sessionId);
   if (!state || !state.isActive) {
   return;
-  const activityData: ActivityData = {,
-  timestamp: new Date(),
+  const activityData: ActivityData = {
+  timestamp: new Date() }
   ...activity
 };
     // Update session state
@@ -201,9 +169,7 @@ export class SessionTimeoutController extends EventEmitter {
     // Calculate activity score
     state.activityScore = this.calculateActivityScore(state.recentActivities);
     // Handle automatic extension
-    if (state.configuration.automaticExtension && this.shouldExtendSession(state)) {
-      this.extendSession(sessionId, 'activity');
-    } else {
+    if (state.configuration.automaticExtension && this.shouldExtendSession(state)) { this.extendSession(sessionId, 'activity') } else {
       // Reset timeout based on new activity
       this.resetTimeout(sessionId);
     this.emit('activityRecorded', { sessionId, activity: activityData, state });
@@ -211,7 +177,7 @@ export class SessionTimeoutController extends EventEmitter {
    * Extend session timeout
    */
   public extendSession(((
-    sessionId: string,
+    sessionId: string
     reason: 'manual' | 'activity' | 'critical' | 'grace' = 'manual'
   ): boolean {
     const state = this.sessionStates.get(sessionId);
@@ -228,11 +194,8 @@ export class SessionTimeoutController extends EventEmitter {
       return false;
     // Apply trust factors for extension duration
     let extensionDuration = state.configuration.extensionDuration;
-    if (reason === 'activity') {
-      extensionDuration *= state.configuration.deviceTrustFactor;
-      extensionDuration *= state.configuration.locationTrustFactor;
-    } else if (reason === 'critical') {
-      extensionDuration = state.configuration.criticalOperationGrace;
+    if (reason === 'activity') { extensionDuration *= state.configuration.deviceTrustFactor;
+      extensionDuration *= state.configuration.locationTrustFactor } else if (reason === 'critical') { extensionDuration = state.configuration.criticalOperationGrace;
     // Extend the timeout
     const now = new Date();
     state.currentTimeout = new Date(now.getTime() + extensionDuration);
@@ -246,13 +209,13 @@ export class SessionTimeoutController extends EventEmitter {
     this.scheduleTimeoutWarnings(sessionId);
     this.scheduleTimeout(sessionId);
     const event: TimeoutEvent = {
-      sessionId,
-      eventType: 'extension',
-      timestamp: now,
-      remainingTime: extensionDuration,
-      reason: reason === 'manual' ? TimeoutReason.MANUAL : TimeoutReason.IDLE,
-      userNotified: true,
-      actionRequired: false,
+      sessionId
+      eventType: 'extension'
+      timestamp: now
+      remainingTime: extensionDuration
+      reason: reason === 'manual' ? TimeoutReason.MANUAL : TimeoutReason.IDLE
+      userNotified: true
+      actionRequired: false }
       metadata: { reason, extensionNumber: state.extensionsUsed }
     };
     this.emit('sessionExtended', event);
@@ -324,8 +287,7 @@ export class SessionTimeoutController extends EventEmitter {
   /**
    * Get timeout statistics
    */
-  public getTimeoutStatistics(): {
-  totalSessions: number;
+  public getTimeoutStatistics(): { totalSessions: number;
   activeSessions: number;
   timeoutEvents: number;
   averageSessionLength: number;
@@ -334,43 +296,37 @@ export class SessionTimeoutController extends EventEmitter {
   policyDistribution: Record<TimeoutPolicy, number>;
   const states = Array.from(this.sessionStates.values());
   const activeStates = states.filter(s => s.isActive);
-  const timeoutReasons: Record<TimeoutReason, number> = {,
-  [TimeoutReason.IDLE]: 0,
-  [TimeoutReason.ABSOLUTE]: 0,
-  [TimeoutReason.SECURITY]: 0,
-  [TimeoutReason.MANUAL]: 0,
-  [TimeoutReason.POLICY]: 0,
-  [TimeoutReason.EMERGENCY]: 0,
+  const timeoutReasons: Record<TimeoutReason, number> = {
+  [TimeoutReason.IDLE]: 0
+  [TimeoutReason.ABSOLUTE]: 0
+  [TimeoutReason.SECURITY]: 0
+  [TimeoutReason.MANUAL]: 0
+  [TimeoutReason.POLICY]: 0
+  [TimeoutReason.EMERGENCY]: 0 }
 };
-    const policyDistribution: Record<TimeoutPolicy, number> = {
-  [TimeoutPolicy.STRICT]: 0,
-  [TimeoutPolicy.FLEXIBLE]: 0,
-  [TimeoutPolicy.ADAPTIVE]: 0,
-  [TimeoutPolicy.PROGRESSIVE]: 0,
+    const policyDistribution: Record<TimeoutPolicy, number> = { [TimeoutPolicy.STRICT]: 0
+  [TimeoutPolicy.FLEXIBLE]: 0
+  [TimeoutPolicy.ADAPTIVE]: 0
+  [TimeoutPolicy.PROGRESSIVE]: 0 }
 };
-    states.forEach(state => {)
+    states.forEach(state => { )
   if (state.timeoutReason) {
         timeoutReasons[state.timeoutReason]++;
-      policyDistribution[state.configuration.policy]++;
-    });
+      policyDistribution[state.configuration.policy]++ });
     const totalExtensions = states.reduce((sum, state) => sum + state.extensionsUsed, 0);
-    const totalSessionTime = states.reduce((sum, state) => {
-  const duration = (state.isActive ? Date.now() : state.currentTimeout.getTime()) - state.sessionStart.getTime();
-  return sum + duration;
-}, 0);
+    const totalSessionTime = states.reduce((sum, state) => { const duration = (state.isActive ? Date.now() : state.currentTimeout.getTime()) - state.sessionStart.getTime();
+  return sum + duration }, 0);
     const averageSessionLength = states.length > 0 ? totalSessionTime / states.length : 0;
-    return {
-  totalSessions: states.length,
-  activeSessions: activeStates.length,
-  timeoutEvents: states.filter(s => s.timeoutReason).length,
-  averageSessionLength,
-  extensionUsage: totalExtensions,
-  timeoutReasons,
+    return { totalSessions: states.length
+  activeSessions: activeStates.length
+  timeoutEvents: states.filter(s => s.timeoutReason).length
+  averageSessionLength
+  extensionUsage: totalExtensions
+  timeoutReasons }
   policyDistribution
 };
   // Private helper methods
-  private shouldExtendSession(state: SessionTimeoutState): boolean {
-  if (!state.configuration.automaticExtension) {
+  private shouldExtendSession(state: SessionTimeoutState): boolean { if (!state.configuration.automaticExtension) {
   return false;
   // Check if activity level is sufficient
   if (state.activityScore < state.configuration.activityThreshold) {
@@ -381,11 +337,9 @@ export class SessionTimeoutController extends EventEmitter {
   // Check time until timeout
   const timeUntilTimeout = state.currentTimeout.getTime() - Date.now();
   const extensionThreshold = state.configuration.extensionDuration / 4; // Extend when 1/4 extension time remains
-  return timeUntilTimeout <= extensionThreshold;
-}
+  return timeUntilTimeout <= extensionThreshold }
 
-private calculateActivityScore(activities: ActivityData): number {
-  if (activities.length === 0) return 0;
+private calculateActivityScore(activities: ActivityData): number { if (activities.length === 0) return 0;
   const now = Date.now();
   let score = 0;
   activities.forEach(activity => {
@@ -398,11 +352,9 @@ private calculateActivityScore(activities: ActivityData): number {
   case ActivityLevel.MEDIUM: intensityScore = 0.5; break;
   case ActivityLevel.LOW: intensityScore = 0.2; break;
   case ActivityLevel.NONE: intensityScore = 0; break;
-  score += intensityScore * ageMultiplier;
-});
+  score += intensityScore * ageMultiplier });
     return Math.min(1.0, score / activities.length);
-  private scheduleTimeout(sessionId: string): void {
-    const state = this.sessionStates.get(sessionId);
+  private scheduleTimeout(sessionId: string): void { const state = this.sessionStates.get(sessionId);
     if (!state || !state.isActive) {
       return;
     const timeUntilTimeout = state.currentTimeout.getTime() - Date.now();
@@ -411,11 +363,9 @@ private calculateActivityScore(activities: ActivityData): number {
       this.handleSessionTimeout(sessionId, TimeoutReason.IDLE);
       return;
     const timer = setTimeout(() => {
-      this.handleSessionTimeout(sessionId, TimeoutReason.IDLE);
-    }, timeUntilTimeout);
+      this.handleSessionTimeout(sessionId, TimeoutReason.IDLE) }, timeUntilTimeout);
     this.timeoutTimers.set(sessionId, timer);
-  private scheduleTimeoutWarnings(sessionId: string): void {
-  const state = this.sessionStates.get(sessionId);
+  private scheduleTimeoutWarnings(sessionId: string): void { const state = this.sessionStates.get(sessionId);
   if (!state || !state.isActive) {
   return;
   const now = Date.now();
@@ -426,13 +376,11 @@ private calculateActivityScore(activities: ActivityData): number {
   const timeUntilWarning = warningTime - now;
   if (timeUntilWarning > 0 && !state.warningsIssued.includes(index)) {
   const timer = setTimeout(() => {
-  this.issueTimeoutWarning(sessionId, threshold, index);
-}, timeUntilWarning);
+  this.issueTimeoutWarning(sessionId, threshold, index) }, timeUntilWarning);
         timers.push(timer);
     });
     this.warningTimers.set(sessionId, timers);
-  private issueTimeoutWarning(sessionId: string, threshold: number, warningIndex: number): void {
-    const state = this.sessionStates.get(sessionId);
+  private issueTimeoutWarning(sessionId: string, threshold: number, warningIndex: number): void { const state = this.sessionStates.get(sessionId);
     if (!state || !state.isActive || state.warningsIssued.includes(warningIndex)) {
       return;
     state.warningsIssued.push(warningIndex);
@@ -444,12 +392,11 @@ private calculateActivityScore(activities: ActivityData): number {
       remainingTime: threshold,
       reason: TimeoutReason.IDLE,
       userNotified: true,
-      actionRequired: true,
+      actionRequired: true }
       metadata: { warningIndex, threshold }
     };
     this.emit('timeoutWarning', event);
-  private handleSessionTimeout(sessionId: string, reason: TimeoutReason): void {
-    const state = this.sessionStates.get(sessionId);
+  private handleSessionTimeout(sessionId: string, reason: TimeoutReason): void { const state = this.sessionStates.get(sessionId);
     if (!state) {
       return;
     // Check if grace period should be activated
@@ -469,12 +416,11 @@ private calculateActivityScore(activities: ActivityData): number {
       remainingTime: 0,
       reason,
       userNotified: true,
-      actionRequired: true,
+      actionRequired: true }
       metadata: { finalTimeout: true }
     };
     this.emit('sessionTimeout', event);
-  private activateGracePeriod(sessionId: string): void {
-    const state = this.sessionStates.get(sessionId);
+  private activateGracePeriod(sessionId: string): void { const state = this.sessionStates.get(sessionId);
     if (!state) {
       return;
     state.gracePeriodActive = true;
@@ -484,12 +430,10 @@ private calculateActivityScore(activities: ActivityData): number {
     // Schedule final timeout
     this.clearTimers(sessionId);
     const timer = setTimeout(() => {
-      this.handleSessionTimeout(sessionId, TimeoutReason.IDLE);
-    }, state.configuration.gracePeriod);
+      this.handleSessionTimeout(sessionId, TimeoutReason.IDLE) }, state.configuration.gracePeriod);
     this.timeoutTimers.set(sessionId, timer);
     this.emit('gracePeriodActivated', { sessionId, duration: state.configuration.gracePeriod, state });
-  private resetTimeout(sessionId: string): void {
-  const state = this.sessionStates.get(sessionId);
+  private resetTimeout(sessionId: string): void { const state = this.sessionStates.get(sessionId);
   if (!state || !state.isActive) {
   return;
   // Calculate new timeout based on policy
@@ -529,14 +473,13 @@ private calculateActivityScore(activities: ActivityData): number {
   this.clearTimers(sessionId);
   this.scheduleTimeoutWarnings(sessionId);
   this.scheduleTimeout(sessionId);
-  private calculateAdaptiveTimeout(state: SessionTimeoutState): number {,
+  private calculateAdaptiveTimeout(state: SessionTimeoutState): number { }
   let baseTimeout = state.configuration.idleTimeout;
   // Adjust based on activity patterns
   const recentActivityLevel = state.activityScore;
   if (recentActivityLevel > 0.7) {
   baseTimeout *= 1.5; // Extend for highly active users
-} else if (recentActivityLevel < 0.3) {
-  baseTimeout *= 0.8; // Reduce for less active users
+ else if (recentActivityLevel < 0.3) { baseTimeout *= 0.8; // Reduce for less active users
   // Consider time of day patterns (if learning is enabled)
   if (state.configuration.learningEnabled) {
   const currentHour = new Date().getHours();
@@ -554,12 +497,9 @@ private calculateActivityScore(activities: ActivityData): number {
   if (warningTimers) {
   warningTimers.forEach(timer => clearTimeout(timer));
   this.warningTimers.delete(sessionId);
-  private startCleanupTimer(): void {,
-  this.cleanupTimer = setInterval(() => {
-  this.cleanupExpiredSessions();
-}, 60 * 60 * 1000); // Run every hour
-  private cleanupExpiredSessions(): void {
-  const expiredThreshold = Date.now() - (24 * 60 * 60 * 1000); // 24 hours ago;
+  private startCleanupTimer(): void { }
+  this.cleanupTimer = setInterval(() => { this.cleanupExpiredSessions() }, 60 * 60 * 1000); // Run every hour
+  private cleanupExpiredSessions(): void { const expiredThreshold = Date.now() - (24 * 60 * 60 * 1000); // 24 hours ago;
   const expiredSessions: string = [];
   for (const [sessionId, state] of this.sessionStates) {
   if (!state.isActive && state.currentTimeout.getTime() < expiredThreshold) {
@@ -567,8 +507,7 @@ private calculateActivityScore(activities: ActivityData): number {
   expiredSessions.forEach(sessionId => {)
   this.clearTimers(sessionId);
   this.sessionStates.delete(sessionId);
-  this.activityBuffer.delete(sessionId);
-});
+  this.activityBuffer.delete(sessionId) });
     if (expiredSessions.length > 0) {
       this.emit('cleanupCompleted', { removedSessions: expiredSessions.length });
   /**

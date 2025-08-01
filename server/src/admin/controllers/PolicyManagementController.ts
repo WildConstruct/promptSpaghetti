@@ -21,14 +21,14 @@ import {
   HttpStatus,
   Logger,
   BadRequestException
-} from '@nestjs/common';
+ from '@nestjs/common';
 import { 
   ApiBearerAuth, 
   ApiTags, 
   ApiOperation, 
   ApiResponse,
   ApiQuery
-} from '@nestjs/swagger';
+ from '@nestjs/swagger';
 import { AdminAuthGuard } from '../guards/AdminAuthGuard';
 import { RequirePermissions } from '../decorators/RequirePermissions';
 import { MarketplacePolicyPublishingService } from '../../services/MarketplacePolicyPublishingService';
@@ -36,8 +36,9 @@ import { MarketplacePolicyEnforcementService } from '../../services/MarketplaceP
 import { AuditService } from '../../auth/services/AuditService';
 
 // Request/Response DTOs
-}
-}
+
+
+
 export interface CreatePolicyRequest {
   policy_type: string;
   title: string;
@@ -47,12 +48,13 @@ export interface CreatePolicyRequest {
   target_audience: string[];
   effective_date?: Date;
   notification_channels?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UpdatePolicyRequest {
   title?: string;
   description?: string;
@@ -60,29 +62,31 @@ export interface UpdatePolicyRequest {
   compliance_frameworks?: string[];
   target_audience?: string[];
   effective_date?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PublishPolicyRequest {
   publication_channels: string[];
   rollout_strategy: {
     type: 'immediate' | 'phased' | 'canary' | 'scheduled';
     parameters?: any;
-}
-}
+
+
+
   };
   notification_settings: {
     notify_users: boolean;
     channels: string[];
     message?: string;
   };
-}
 
-}
-}
+
+
+
 export interface CreateEnforcementRuleRequest {
   policy_id: string;
   violation_type: string;
@@ -92,23 +96,25 @@ export interface CreateEnforcementRuleRequest {
   severity: string;
   automated_actions: any[];
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationReviewRequest {
   action: 'uphold' | 'dismiss' | 'escalate';
   enforcement_actions?: string[];
   resolution_notes?: string;
   follow_up_required?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyManagementDashboard {
   statistics: {
     total_policies: number;
@@ -117,14 +123,15 @@ export interface PolicyManagementDashboard {
     total_violations: number;
     open_violations: number;
     appeal_rate: number;
-}
-}
+
+
+
   };
   recent_activities: any[];
   policy_compliance_scores: Record<string, number>;
   enforcement_metrics: any;
   trending_violations: any[];
-}
+
 
 @ApiTags('admin/policy-management')
 @ApiBearerAuth()
@@ -167,13 +174,13 @@ export class PolicyManagementController {
         total_violations: violations.total,
         open_violations: violations.open,
         appeal_rate: violations.appeal_rate || 0
-  }
+
       recent_activities: await this.getRecentActivities(),
       policy_compliance_scores: await this.calculateComplianceScores(),
       enforcement_metrics,
       trending_violations: violations.trending || []
     };
-  }
+
 
   @Get('policies')
   @ApiOperation({ summary: 'Get all marketplace policies with filtering' })
@@ -194,7 +201,7 @@ export class PolicyManagementController {
       page: Number(page),
       limit: Number(limit)
     });
-  }
+
 
   @Get('policies/:id')
   @ApiOperation({ summary: 'Get specific policy with version history' })
@@ -212,7 +219,7 @@ export class PolicyManagementController {
       enforcement_rules,
       compliance_status: await this.publishingService.getPolicyComplianceStatus(policyId)
     };
-  }
+
 
   @Post('policies')
   @ApiOperation({ summary: 'Create new marketplace policy' })
@@ -224,7 +231,7 @@ export class PolicyManagementController {
     // Validate policy data
     if (!request.title || !request.policy_type || !request.content) {
       throw new BadRequestException('Missing required fields: title, policy_type, content');
-    }
+
 
     const policy = await this.publishingService.createPolicy({
       ...request,
@@ -238,12 +245,12 @@ export class PolicyManagementController {
       metadata: { 
         policy_type: request.policy_type,
         title: request.title 
-      }
+
     });
 
     this.logger.log(`Policy created: ${policy.id} by ${userId}`);
     return policy;
-  }
+
 
   @Put('policies/:id')
   @ApiOperation({ summary: 'Update policy content and create new version' })
@@ -266,7 +273,7 @@ export class PolicyManagementController {
     });
 
     return updatedPolicy;
-  }
+
 
   @Post('policies/:id/versions/:version/publish')
   @ApiOperation({ summary: 'Publish specific policy version' })
@@ -295,7 +302,7 @@ export class PolicyManagementController {
 
     this.logger.log(`Policy published: ${policyId}:${version} by ${userId}`);
     return publishResult;
-  }
+
 
   @Post('policies/:id/versions/:version/rollback')
   @ApiOperation({ summary: 'Rollback policy to previous version' })
@@ -321,7 +328,7 @@ export class PolicyManagementController {
 
     this.logger.warn(`Policy rolled back: ${policyId} to ${version} by ${userId}`);
     return rollbackResult;
-  }
+
 
   // Enforcement Management Endpoints
 
@@ -345,7 +352,7 @@ export class PolicyManagementController {
       page: Number(page),
       limit: Number(limit)
     });
-  }
+
 
   @Get('violations/:id')
   @ApiOperation({ summary: 'Get specific violation with full details' })
@@ -358,7 +365,7 @@ export class PolicyManagementController {
     ]);
 
     return { violation, actions, appeals };
-  }
+
 
   @Post('violations/:id/review')
   @ApiOperation({ summary: 'Review and resolve policy violation' })
@@ -384,7 +391,7 @@ export class PolicyManagementController {
     });
 
     return reviewResult;
-  }
+
 
   @Post('enforcement-rules')
   @ApiOperation({ summary: 'Create new enforcement rule' })
@@ -406,14 +413,14 @@ export class PolicyManagementController {
     });
 
     return rule;
-  }
+
 
   @Get('enforcement-rules')
   @ApiOperation({ summary: 'Get all enforcement rules' })
   @RequirePermissions(['admin:enforcement:read'])
   async getEnforcementRules() {
     return this.enforcementService.getAllEnforcementRules();
-  }
+
 
   @Put('enforcement-rules/:id/toggle')
   @ApiOperation({ summary: 'Enable/disable enforcement rule' })
@@ -433,7 +440,7 @@ export class PolicyManagementController {
     });
 
     return result;
-  }
+
 
   // Analytics and Reporting
 
@@ -444,7 +451,7 @@ export class PolicyManagementController {
     @Query('period') period: string = '30d'
   ) {
     return this.publishingService.getComplianceAnalytics(period);
-  }
+
 
   @Get('analytics/enforcement-metrics')
   @ApiOperation({ summary: 'Get enforcement effectiveness metrics' })
@@ -457,7 +464,7 @@ export class PolicyManagementController {
     const to = toDate ? new Date(toDate) : new Date();
 
     return this.enforcementService.getDetailedMetrics(from, to);
-  }
+
 
   @Get('analytics/violation-trends')
   @ApiOperation({ summary: 'Get violation trend analysis' })
@@ -466,7 +473,7 @@ export class PolicyManagementController {
     @Query('period') period: string = '90d'
   ) {
     return this.enforcementService.getViolationTrends(period);
-  }
+
 
   // Bulk Operations
 
@@ -491,7 +498,7 @@ export class PolicyManagementController {
     });
 
     return results;
-  }
+
 
   @Post('bulk/violations/resolve')
   @ApiOperation({ summary: 'Bulk resolve violations' })
@@ -519,20 +526,19 @@ export class PolicyManagementController {
         violation_ids: violationIds, 
         resolution_type: resolutionType,
         count: violationIds.length
-      }
+
     });
 
     return results;
-  }
+
 
   // Helper methods
   private async getRecentActivities() {
     // Implementation would fetch recent policy and enforcement activities
     return [];
-  }
+
 
   private async calculateComplianceScores() {
     // Implementation would calculate compliance scores by framework
     return {};
-  }
-}
+

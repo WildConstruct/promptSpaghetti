@@ -5,23 +5,24 @@ import { MarketplaceDAO } from './dao';
 import { PreviewRequest, PreviewResponse } from './types';
 import * as crypto from 'crypto';
 
-}
-}
+
+
 interface ClaudeAPIResponse {
   content: Array<{
     type: string;
     text: string;
-}
-}
-  }>;
+
+
+
+>;
   usage: {
     input_tokens: number;
     output_tokens: number;
   };
-}
 
-}
-}
+
+
+
 interface CachedPreview {
   output: string;
   cost_estimate: number;
@@ -29,11 +30,12 @@ interface CachedPreview {
   token_usage: {
     input_tokens: number;
     output_tokens: number;
-}
-}
+
+
+
   };
   cached_at: Date;
-}
+
 
 @Injectable()
 export class ClaudePreviewService {
@@ -45,7 +47,7 @@ export class ClaudePreviewService {
   constructor(private pool: Pool) {
     this.dao = new MarketplaceDAO(pool);
     this.initializeRedis();
-  }
+
 
   /**
    * Generate a protected preview of a template
@@ -59,12 +61,12 @@ export class ClaudePreviewService {
     const template = await this.dao.getTemplate(request.template_id);
     if (!template) {
       throw new Error('Template not found');
-    }
+
 
     const version = await this.dao.getVersion(request.version_id || template.current_version_id);
     if (!version) {
       throw new Error('Template version not found');
-    }
+
 
     // Check cache first
     const cacheKey = this.generateCacheKey(request);
@@ -75,7 +77,7 @@ export class ClaudePreviewService {
         ...cached,
         cached: true
       };
-    }
+
 
     // Check if user owns the template
     const userOwnsTemplate = await this.checkTemplateOwnership(userId, request.template_id);
@@ -102,7 +104,7 @@ export class ClaudePreviewService {
       ...previewResponse,
       cached: false
     };
-  }
+
 
   /**
    * Get template preview metadata without generating
@@ -112,12 +114,12 @@ export class ClaudePreviewService {
     const template = await this.dao.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
-    }
+
 
     const version = await this.dao.getVersion(versionId || template.current_version_id);
     if (!version) {
       throw new Error('Template version not found');
-    }
+
 
     return {
       template_id: template.id,
@@ -129,7 +131,7 @@ export class ClaudePreviewService {
       can_preview: template.status === 'listed',
       preview_limitations: this.getPreviewLimitations(template.price_cents > 0)
     };
-  }
+
 
   /**
    * Create a protected prompt that masks sensitive IP
@@ -148,18 +150,18 @@ export class ClaudePreviewService {
       if (userOwnsTemplate) {
         // User owns template, show full prompt
         prompt = this.buildFullPrompt(graph, userInput);
-      } else {
+ else {
         // User doesn't own template, create protected version
         prompt = this.buildProtectedPrompt(graph, userInput);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Error building prompt:', error);
       // Fallback to simple protected prompt
       prompt = this.buildSimpleProtectedPrompt(userInput);
-    }
+
 
     return prompt;
-  }
+
 
   /**
    * Build full prompt for template owners
@@ -173,7 +175,7 @@ export class ClaudePreviewService {
     
     if (outputNodes.length === 0) {
       return 'This template generates creative content based on your input.';
-    }
+
 
     // Extract the main prompt from output nodes
     const mainPrompt = outputNodes[0]?.data?.text || 'Generate creative content';
@@ -185,10 +187,10 @@ export class ClaudePreviewService {
         finalPrompt = finalPrompt.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
       });
       return finalPrompt;
-    }
+
     
     return mainPrompt;
-  }
+
 
   /**
    * Build protected prompt that masks proprietary content
@@ -199,7 +201,7 @@ export class ClaudePreviewService {
     
     if (outputNodes.length === 0) {
       return this.buildSimpleProtectedPrompt(userInput);
-    }
+
 
     // Create a simplified version of the prompt
     const originalPrompt = outputNodes[0]?.data?.text || '';
@@ -217,7 +219,7 @@ export class ClaudePreviewService {
     // Limit length to prevent full prompt exposure
     if (protectedPrompt.length > 200) {
       protectedPrompt = protectedPrompt.substring(0, 200) + '... [CONTENT_PROTECTED]';
-    }
+
 
     // Add preview disclaimer
     const disclaimer = '\n\n[PREVIEW MODE: This is a limited preview. Purchase the template to access the full prompt and capabilities.]';
@@ -227,10 +229,10 @@ export class ClaudePreviewService {
       Object.entries(userInput).forEach(([key, value]) => {
         protectedPrompt = protectedPrompt.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
       });
-    }
+
     
     return protectedPrompt + disclaimer;
-  }
+
 
   /**
    * Build simple protected prompt as fallback
@@ -242,12 +244,12 @@ export class ClaudePreviewService {
       const inputKeys = Object.keys(userInput);
       if (inputKeys.length > 0) {
         prompt += `Based on your input: ${inputKeys.map(key => `${key}: ${userInput[key]}`).join(', ')}. `;
-      }
-    }
+
+
     
     prompt += 'Purchase this template to access the full prompt and generate complete outputs.';
     return prompt;
-  }
+
 
   /**
    * Call Claude API with the prepared prompt
@@ -257,7 +259,7 @@ export class ClaudePreviewService {
     const apiKey = process.env.CLAUDE_API_KEY;
     if (!apiKey) {
       throw new Error('Claude API key not configured');
-    }
+
 
     try {
       const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -266,7 +268,7 @@ export class ClaudePreviewService {
           'Content-Type': 'application/json',
           'x-api-key': apiKey,
           'anthropic-version': '2023-06-01'
-  }
+
         body: JSON.stringify({
           model: model,
           max_tokens: 1000, // Limit tokens for previews
@@ -274,17 +276,17 @@ export class ClaudePreviewService {
             {
               role: 'user',
               content: prompt
-            }
+
           ]
-  }
+
       });
 
       if (!response.ok) {
         throw new Error(`Claude API error: ${response.status} ${response.statusText}`);
-      }
+
 
       return await response.json();
-    } catch (error) {
+ catch (error) {
       console.error('Claude API call failed:', error);
       
       // Return mock response for development/fallback
@@ -293,15 +295,15 @@ export class ClaudePreviewService {
           {
             type: 'text',
             text: 'This is a preview of the template output. The actual output would be generated by Claude AI based on the full template prompt. Purchase the template to see the complete AI-generated response.'
-          }
+
         ],
         usage: {
           input_tokens: prompt.length / 4, // Rough estimation
           output_tokens: 50
-        }
+
       };
-    }
-  }
+
+
 
   /**
    * Process Claude API response into preview format
@@ -327,7 +329,7 @@ export class ClaudePreviewService {
     if (!userOwnsTemplate) {
       processedOutput += '\n\n---\n🔒 This is a preview. Purchase the template for the complete output and access to the full prompt.';
       redactedSections.push('full_prompt_access', 'complete_output');
-    }
+
 
     return {
       output: processedOutput,
@@ -336,7 +338,7 @@ export class ClaudePreviewService {
       token_usage: tokenUsage,
       redacted_sections: redactedSections
     };
-  }
+
 
   /**
    * Calculate cost based on token usage
@@ -350,14 +352,14 @@ export class ClaudePreviewService {
     const outputCost = (outputTokens / 1000) * OUTPUT_COST_PER_1K;
     
     return inputCost + outputCost;
-  }
+
 
   /**
    * Calculate estimated cost for token count
    */
   private calculateEstimatedCost(estimatedTokens: number): number {
     return this.calculateCost(estimatedTokens * 0.7, estimatedTokens * 0.3);
-  }
+
 
   /**
    * Calculate quality score based on output and safety
@@ -372,7 +374,7 @@ export class ClaudePreviewService {
     
     // Normalize to 0-5 scale
     return Math.min(5, Math.max(0, score));
-  }
+
 
   /**
    * Check if user owns the template
@@ -387,7 +389,7 @@ export class ClaudePreviewService {
     
     const result = await this.pool.query(query, [userId, templateId]);
     return result.rows.length > 0;
-  }
+
 
   /**
    * Generate cache key for preview
@@ -398,7 +400,7 @@ export class ClaudePreviewService {
       : 'no-input';
     
     return `preview:${request.template_id}:${request.version_id}:${inputHash}`;
-  }
+
 
   /**
    * Rate limiting check
@@ -412,11 +414,11 @@ export class ClaudePreviewService {
     
     if (current && parseInt(current) >= this.PREVIEW_RATE_LIMIT) {
       throw new Error('Rate limit exceeded. Please wait before requesting another preview.');
-    }
+
     
     await this.redis.incr(key);
     await this.redis.expire(key, 60); // 1 minute window
-  }
+
 
   /**
    * Cache preview result
@@ -431,7 +433,7 @@ export class ClaudePreviewService {
     };
 
     await this.redis.setex(key, this.CACHE_TTL, JSON.stringify(cached));
-  }
+
 
   /**
    * Get cached preview
@@ -445,11 +447,11 @@ export class ClaudePreviewService {
 
     try {
       return JSON.parse(cached);
-    } catch (error) {
+ catch (error) {
       console.error('Error parsing cached preview:', error);
       return null;
-    }
-  }
+
+
 
   /**
    * Record preview event for analytics
@@ -468,7 +470,7 @@ export class ClaudePreviewService {
       version_id: versionId,
       metadata: { cached }
     });
-  }
+
 
   /**
    * Get preview limitations for UI display
@@ -482,10 +484,10 @@ export class ClaudePreviewService {
 
     if (isPaid) {
       limitations.push('Full prompt protected until purchase');
-    }
+
 
     return limitations;
-  }
+
 
   /**
    * Initialize Redis connection
@@ -496,9 +498,8 @@ export class ClaudePreviewService {
       // For now, we'll mock it
       this.redis = null;
       console.log('Redis not configured, preview caching disabled');
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize Redis:', error);
       this.redis = null;
-    }
-  }
-}
+
+

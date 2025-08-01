@@ -1,22 +1,18 @@
-import {
-  WeightedChoiceNode, 
+import { WeightedChoiceNode, 
   ConcatNode, 
   OutputNode, 
   IncludeNode, 
   SetVariableNode, 
-  GetVariableNode,
+  GetVariableNode }
   ExecutionContext
-} from '../index';
+ from '../index';
 
 // Mock seedrandom module
-jest.mock('seedrandom', () => {
-  return jest.fn(() => jest.fn());
-});
-describe('Runtime Node Implementation Tests', () => {
-  // Create a proper ExecutionContext matching the interface
-  const mockCtx: ExecutionContext = { ,
+jest.mock('seedrandom', () => { return jest.fn(() => jest.fn()) });
+describe('Runtime Node Implementation Tests', () => { // Create a proper ExecutionContext matching the interface
+  const mockCtx: ExecutionContext = {  }
   variables: {}, 
-    seed: '42'
+    seed: '42';
   };
   describe('WeightedChoiceNode', () => {
     it('should return the first choice when random value is less than weight', () => {
@@ -60,19 +56,15 @@ describe('Runtime Node Implementation Tests', () => {
       expect(node.run(mockCtx)).toBe('third');
     });
   });
-  describe('ConcatNode', () => {
-    it('should concatenate all inputs', () => {
+  describe('ConcatNode', () => { it('should concatenate all inputs', () => {
       const node = new ConcatNode('concat1', ['hello', ' ', 'world']);
       // ConcatNode.run() doesn't take any arguments
-      expect(node.run()).toBe('hello world');
-    });
+      expect(node.run()).toBe('hello world') });
   });
-  describe('OutputNode', () => {
-    it('should return the input value', () => {
+  describe('OutputNode', () => { it('should return the input value', () => {
       const node = new OutputNode('output1', 'test');
       // OutputNode.run() doesn't take any arguments
-      expect(node.run()).toBe('test');
-    });
+      expect(node.run()).toBe('test') });
   });
   describe('IncludeNode', () => {
     it('should return the template value if found', () => {
@@ -86,25 +78,19 @@ describe('Runtime Node Implementation Tests', () => {
       expect(node.run()).toBeUndefined();
     });
   });
-  describe('SetVariableNode', () => {
-    it('should set a variable in the context', () => {
+  describe('SetVariableNode', () => { it('should set a variable in the context', () => {
       const node = new SetVariableNode('set1', 'testKey', 'testValue');
       // SetVariable returns undefined but sets the variable
       expect(node.run(mockCtx)).toBeUndefined();
-      expect(mockCtx.variables['testKey']).toBe('testValue');
-    });
+      expect(mockCtx.variables['testKey']).toBe('testValue') });
   });
-  describe('GetVariableNode', () => {
-    it('should get a variable from the context', () => {
+  describe('GetVariableNode', () => { it('should get a variable from the context', () => {
       // First set the variable
       mockCtx.variables['anotherKey'] = 'anotherValue';
       const node = new GetVariableNode('get1', 'anotherKey');
-      expect(node.run(mockCtx)).toBe('anotherValue');
-    });
-    it('should return undefined for non-existent variables', () => {
-      const node = new GetVariableNode('get2', 'nonExistentKey');
-      expect(node.run(mockCtx)).toBeUndefined();
-    });
+      expect(node.run(mockCtx)).toBe('anotherValue') });
+    it('should return undefined for non-existent variables', () => { const node = new GetVariableNode('get2', 'nonExistentKey');
+      expect(node.run(mockCtx)).toBeUndefined() });
   });
   describe('seededRandom utility', () => {
     // We can test the seededRandom function by creating a class that uses it
@@ -142,11 +128,10 @@ describe('Runtime Node Implementation Tests', () => {
       // Note: there is a very small chance this could fail randomly if both seeds produce the same random value
       expect(thirdResult).toBeDefined();
     });
-    it('should produce deterministic results with string seeds', () => {
-      // First run with string seed
-      const stringSeedCtx: ExecutionContext = {,
+    it('should produce deterministic results with string seeds', () => { // First run with string seed
+      const stringSeedCtx: ExecutionContext = { }
   variables: {},
-        seed: 'hello'
+        seed: 'hello';
   };
       const node = new WeightedChoiceNode('weighted2', [);
         { weight: 0.5, value: 'A' },
@@ -156,7 +141,7 @@ describe('Runtime Node Implementation Tests', () => {
       // Run again with same seed
       const stringSeedCtx2: ExecutionContext = {,
   variables: {},
-        seed: 'hello'
+        seed: 'hello';
   };
       const secondResult = node.run(stringSeedCtx2);
       // Should be deterministic

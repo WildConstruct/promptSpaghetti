@@ -8,7 +8,8 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { usePerformanceProfiler } from '../hooks/usePerformanceProfiler';
-}
+
+
 interface ServerMetrics {
   cpu: number;,
   memory: number,
@@ -27,7 +28,8 @@ interface ServerMetrics {
   showServerMetrics?: boolean;
   showClientMetrics?: boolean;
   refreshInterval?: number;
-  }
+
+
 
 className?: string;
   export const PerformanceDashboard: React.FC<PerformanceDashboardProps> = ({
@@ -35,7 +37,7 @@ className?: string;
   showClientMetrics = true,
   refreshInterval = 1000,
   className = ''
-}
+
 }) => {
   const [serverMetrics, setServerMetrics] = useState<ServerMetrics | null>(null);
   const [clientMetrics, setClientMetrics] = useState<ClientMetrics | null>(null);
@@ -47,7 +49,7 @@ className?: string;
   startProfiling,
   stopProfiling,
   getCurrentStats
-} = usePerformanceProfiler({
+ = usePerformanceProfiler({
   componentName: 'PerformanceDashboard',
   autoStart: showClientMetrics
 });
@@ -64,9 +66,9 @@ className?: string;
   timestamp: Date.now()
 });
         setIsServerOnline(true);
-      } else {
+ else {
         setIsServerOnline(false);
-    } catch (error) {
+ catch (error) {
   setIsServerOnline(false);
   console.warn('Failed to fetch server metrics:', error);
 }, [showServerMetrics]);
@@ -96,7 +98,7 @@ className?: string;
   const toggleClientProfiling = useCallback(() => {
     if (isClientProfilingRunning) {
       stopProfiling();
-    } else {
+ else {
       startProfiling();
   }, [isClientProfilingRunning, startProfiling, stopProfiling]);
   // Server profiling controls
@@ -106,9 +108,9 @@ className?: string;
       const data = await response.json();
       if (data.success) {
         console.log('Server profiling started');
-      } else {
+ else {
   setError('Failed to start server profiling: ' + data.error);
-} catch (error) {
+ catch (error) {
   setError('Failed to start server profiling: ' + error.message);
 }, []);
   const stopServerProfiling = useCallback(async () => {
@@ -117,9 +119,9 @@ className?: string;
       const data = await response.json();
       if (data.success) {
         console.log('Server profiling stopped');
-      } else {
+ else {
   setError('Failed to stop server profiling: ' + data.error);
-} catch (error) {
+ catch (error) {
   setError('Failed to stop server profiling: ' + error.message);
 }, []);
   const getStatusColor = (value: number, goodThreshold: number, warningThreshold: number): string => {
@@ -134,12 +136,12 @@ className?: string;
       </div>
     );
   return;
-    <div className={`performance-dashboard ${className}`} style={{}}
+    <div className={`performance-dashboard ${className}`} style={{}},
   padding: '20px',
       backgroundColor: '#f8f9fa',
       borderRadius: '8px',
       fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
+}>
       {/* Header */}
       <div style={{
   display: 'flex',
@@ -148,7 +150,7 @@ className?: string;
   marginBottom: '20px',
   borderBottom: '2px solid #e1e5e9',
   paddingBottom: '15px'
-}}>
+}>
         <h2 style={{ margin: 0, color: '#1f2937' }}>⚡ Performance Dashboard</h2>
         <div style={{ display: 'flex', gap: '10px' }}>
           {showClientMetrics && ()
@@ -162,7 +164,7 @@ className?: string;
   borderRadius: '4px',
   cursor: 'pointer',
   fontSize: '14px'
-}}
+}
             >
               {isClientProfilingRunning ? 'Stop Client' : 'Start Client'}
             </button>
@@ -179,7 +181,7 @@ className?: string;
   borderRadius: '4px',
   cursor: 'pointer',
   fontSize: '14px'
-}}
+}
               >
                 Start Server
               </button>
@@ -193,7 +195,7 @@ className?: string;
   borderRadius: '4px',
   cursor: 'pointer',
   fontSize: '14px'
-}}
+}
               >
                 Stop Server
               </button>
@@ -208,7 +210,7 @@ className?: string;
   padding: '10px',
   borderRadius: '4px',
   marginBottom: '20px'
-}}>
+}>
           {error}
         </div>
       )}
@@ -224,7 +226,7 @@ className?: string;
   borderRadius: '12px',
   backgroundColor: isServerOnline ? '#dcfce7' : '#fee2e2',
   color: isServerOnline ? '#166534' : '#dc2626'
-}}>
+}>
               {isServerOnline ? 'ONLINE' : 'OFFLINE'}
             </span>
           </h3>
@@ -233,21 +235,21 @@ className?: string;
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
   gap: '15px'
-}}>
+}>
               <div style={{
                 backgroundColor: 'white',
                 padding: '20px',
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 borderLeft: `4px solid ${getStatusColor(serverMetrics.cpu, 50, 80)}`}
-              }}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>CPU Usage</h4>
                 <p style={{
   margin: 0,
   fontSize: '24px',
   fontWeight: '700',
   color: getStatusColor(serverMetrics.cpu, 50, 80)
-}}>
+}>
                   {serverMetrics.cpu.toFixed(1)}%
                 </p>
               </div>
@@ -257,14 +259,14 @@ className?: string;
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 borderLeft: `4px solid ${getStatusColor(serverMetrics.memory, 70, 85)}`}
-              }}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>Memory Usage</h4>
                 <p style={{
   margin: 0,
   fontSize: '24px',
   fontWeight: '700',
   color: getStatusColor(serverMetrics.memory, 70, 85)
-}}>
+}>
                   {serverMetrics.memory.toFixed(1)}%
                 </p>
               </div>
@@ -274,14 +276,14 @@ className?: string;
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 borderLeft: `4px solid ${getStatusColor(serverMetrics.responseTime, 200, 1000)}`}
-              }}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>Response Time</h4>
                 <p style={{
   margin: 0,
   fontSize: '24px',
   fontWeight: '700',
   color: getStatusColor(serverMetrics.responseTime, 200, 1000)
-}}>
+}>
                   {serverMetrics.responseTime.toFixed(0)}ms
                 </p>
               </div>
@@ -291,14 +293,14 @@ className?: string;
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 borderLeft: `4px solid ${getStatusColor(serverMetrics.errorRate, 1, 5)}`}
-              }}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>Error Rate</h4>
                 <p style={{
   margin: 0,
   fontSize: '24px',
   fontWeight: '700',
   color: getStatusColor(serverMetrics.errorRate, 1, 5)
-}}>
+}>
                   {serverMetrics.errorRate.toFixed(1)}%
                 </p>
               </div>
@@ -308,7 +310,7 @@ className?: string;
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
   borderLeft: '4px solid #3b82f6'
-}}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>Requests/sec</h4>
                 <p style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#3b82f6' }}>
                   {serverMetrics.requestsPerSecond.toFixed(1)}
@@ -322,7 +324,7 @@ className?: string;
   borderRadius: '8px',
   textAlign: 'center',
   color: '#dc2626'
-}}>
+}>
               Server metrics unavailable. Make sure the server is running and accessible.
             </div>
           ) : null}
@@ -340,7 +342,7 @@ className?: string;
   borderRadius: '12px',
   backgroundColor: isClientProfilingRunning ? '#dcfce7' : '#fee2e2',
   color: isClientProfilingRunning ? '#166534' : '#dc2626'
-}}>
+}>
               {isClientProfilingRunning ? 'PROFILING' : 'STOPPED'}
             </span>
           </h3>
@@ -349,21 +351,21 @@ className?: string;
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
   gap: '15px'
-}}>
+}>
               <div style={{
                 backgroundColor: 'white',
                 padding: '20px',
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 borderLeft: `4px solid ${getStatusColor(clientMetrics.renderTime, 16.67, 33.33)}`}
-              }}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>Render Time</h4>
                 <p style={{
   margin: 0,
   fontSize: '24px',
   fontWeight: '700',
   color: getStatusColor(clientMetrics.renderTime, 16.67, 33.33)
-}}>
+}>
                   {clientMetrics.renderTime.toFixed(1)}ms
                 </p>
               </div>
@@ -373,14 +375,14 @@ className?: string;
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 borderLeft: `4px solid ${getStatusColor(clientMetrics.memoryUsage, 70, 85)}`}
-              }}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>Memory Usage</h4>
                 <p style={{
   margin: 0,
   fontSize: '24px',
   fontWeight: '700',
   color: getStatusColor(clientMetrics.memoryUsage, 70, 85)
-}}>
+}>
                   {clientMetrics.memoryUsage.toFixed(1)}%
                 </p>
               </div>
@@ -390,14 +392,14 @@ className?: string;
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 borderLeft: `4px solid ${getStatusColor(clientMetrics.responseTime, 500, 2000)}`}
-              }}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>Network Time</h4>
                 <p style={{
   margin: 0,
   fontSize: '24px',
   fontWeight: '700',
   color: getStatusColor(clientMetrics.responseTime, 500, 2000)
-}}>
+}>
                   {clientMetrics.responseTime.toFixed(0)}ms
                 </p>
               </div>
@@ -407,14 +409,14 @@ className?: string;
                 borderRadius: '8px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                 borderLeft: `4px solid ${getStatusColor(clientMetrics.layoutShift * 1000, 100, 250)}`}
-              }}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>Layout Shift</h4>
                 <p style={{
   margin: 0,
   fontSize: '24px',
   fontWeight: '700',
   color: getStatusColor(clientMetrics.layoutShift * 1000, 100, 250)
-}}>
+}>
                   {clientMetrics.layoutShift.toFixed(3)}
                 </p>
               </div>
@@ -424,7 +426,7 @@ className?: string;
   borderRadius: '8px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
   borderLeft: '4px solid #10b981'
-}}>
+}>
                 <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#6b7280' }}>Interactions</h4>
                 <p style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#10b981' }}>
                   {clientMetrics.interactionCount}
@@ -438,7 +440,7 @@ className?: string;
   borderRadius: '8px',
   textAlign: 'center',
   color: '#6b7280'
-}}>
+}>
               {isClientProfilingRunning 
                 ? 'Collecting client metrics...' 
                 : 'Start client profiling to view metrics'
@@ -454,7 +456,7 @@ className?: string;
   fontSize: '12px',
   color: '#6b7280',
   textAlign: 'center'
-}}>
+}>
         Last updated: {new Date().toLocaleTimeString()} | 
         Refresh interval: {refreshInterval / 1000}s |
         {serverMetrics && ` Server: ${new Date(serverMetrics.timestamp).toLocaleTimeString()}`}

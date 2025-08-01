@@ -51,7 +51,10 @@ limits: {
 }
 ;
 ;
-utilizationHistory: Array;
+utilizationHistory: Array < {
+    timestamp: number,
+    usage: ResourceUsage
+} > ;
 optimizationApplied: string;
 efficiency: {
     ;

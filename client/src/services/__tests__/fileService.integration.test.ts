@@ -70,7 +70,7 @@ class MockLogger implements Logger {
   });
   describe('Authentication Integration', () => {
     it('should include auth token in requests', async () => {
-      const mockFiles = [;
+      const mockFiles = [
         { id: '1', name: 'test.txt', type: 'file', path: '/test.txt', lastModified: new Date(), createdAt: new Date(), tags: [] }
       ];
       mockHttpClient.setResponse('https://api.example.com/api/files/list?path=%2F', mockFiles);
@@ -83,7 +83,7 @@ class MockLogger implements Logger {
     });
     it('should handle missing auth token gracefully', async () => {
       mockAuthProvider.setToken(null);
-      const mockFiles = [;
+      const mockFiles = [
         { id: '1', name: 'test.txt', type: 'file', path: '/test.txt', lastModified: new Date(), createdAt: new Date(), tags: [] }
       ];
       mockHttpClient.setResponse('https://api.example.com/api/files/list?path=%2F', mockFiles);
@@ -254,7 +254,7 @@ class MockLogger implements Logger {
       paths.forEach(path => {)
   mockHttpClient.setResponse()
           `https://api.example.com/api/files/list?path=${encodeURIComponent(path)}`}
-}
+
           [{ id: path, name: path, type: 'folder', path, lastModified: new Date(), createdAt: new Date(), tags: [] }]
         );
       });
@@ -275,7 +275,7 @@ class MockLogger implements Logger {
       paths.forEach((path, index) => {
         mockHttpClient.setResponse()
           `https://api.example.com/api/files/list?path=${encodeURIComponent(path)}`}
-}
+
           new Promise(resolve => )
             setTimeout(() => resolve([{ )
               id: path, 
@@ -285,7 +285,7 @@ class MockLogger implements Logger {
               lastModified: new Date(), 
               createdAt: new Date(), 
               tags: [] ;
-  }]), delays[index])
+]), delays[index])
         );
       });
       const startTime = Date.now();

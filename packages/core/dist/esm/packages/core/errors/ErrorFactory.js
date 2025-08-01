@@ -4,7 +4,7 @@
  * Centralized error creation with consistent patterns, context injection,
  * and recovery suggestions. Replaces scattered throw new Error() calls.
  */
-import { BaseError, GraphValidationError, GraphExecutionError, NodeExecutionError, DatabaseConnectionError, ConnectionFactoryError, AuthenticationError, MFAError, ProjectLockedError, WorkflowStateError, APIError, ValidationError, ConfigurationError } from './index';
+import { BaseError, ErrorContext, GraphValidationError, GraphExecutionError, NodeExecutionError, DatabaseConnectionError, ConnectionFactoryError, AuthenticationError, MFAError, ProjectLockedError, WorkflowStateError, APIError, ValidationError, ConfigurationError } from './index';
 export class ErrorFactory {
     static defaultContext = {};
     /**
@@ -17,23 +17,28 @@ export class ErrorFactory {
          */
     }
 }
-(options = {}, additional = {}) => {
-    return {
+();
+options: ErrorFactoryOptions = {},
+    additional;
+(Partial) = {};
+Partial < ErrorContext > {
+    return: {
         ...ErrorFactory.defaultContext,
         operation,
         userId: options.userId,
         sessionId: options.sessionId,
         requestId: options.requestId,
         ...additional
-    };
-    createGraphValidationError(((validationErrors, options = {}) => {
-        const context = ErrorFactory.createContext('graph_validation', options);
-        return new GraphValidationError() `Graph validation failed: ${validationErrors.length} errors found`;
-    }));
-};
-validationErrors,
-    context;
-;
+    },
+    // Graph Execution Errors
+    /**
+     * Create a graph validation error with detailed validation context
+     */
+    static createGraphValidationError() { }
+}((validationErrors, options = {}) => {
+    const context = ErrorFactory.createContext('graph_validation', options);
+    return new GraphValidationError() `Graph validation failed: ${validationErrors.length} errors found`;
+}, validationErrors, context);
 createGraphExecutionError(message, string);
 cause ?  : Error,
     options;
@@ -46,8 +51,9 @@ GraphExecutionError;
 }
 ;
 return new GraphExecutionError(message, context, cause);
-createNodeExecutionError(nodeId, string);
-operation: string,
+createNodeExecutionError(nodeId, string),
+    operation;
+string,
     message;
 string,
     cause ?  : Error,
@@ -110,64 +116,81 @@ DatabaseConnectionError;
     /**
      * Create MFA-specific errors with recovery guidance
      */
-    static, createMFAError(message, string(mfaType, string, options, ErrorFactoryOptions = {}), MFAError, {
-        const: context = ErrorFactory.createContext('mfa_validation', options),
-        return: new MFAError(message, mfaType, context),
-        details: string,
-        options: ErrorFactoryOptions = {}
-    }), MFAError, {
-        const: messages = {
-            already_configured: 'Email MFA already configured for this user',
-            invalid_email: 'Invalid email address',
-            unsuitable_email: 'Email address not suitable for MFA',
-            invalid_config: 'Invalid MFA configuration',
-        },
-        const: message = details ? `${messages[type]}: ${details}` : messages[type]
-    }));
-    return ErrorFactory.createMFAError(message, 'email', options);
-    createMFAVerificationError(((type, options = {}) => {
-        const messages = {
-            expired: 'Verification expired',
-            invalid_code: 'Invalid verification code',
-            too_many_attempts: 'Too many failed attempts',
-            method_not_active: 'Method not active',
-            rate_limit: 'Rate limit exceeded. Too many emails sent.',
-        };
-        return ErrorFactory.createMFAError(messages[type], 'email', options);
+    static, createMFAError(message, string())));
+    mfaType: string,
+        options;
+    ErrorFactoryOptions = {};
+    MFAError;
+    {
+        const context = ErrorFactory.createContext('mfa_validation', options);
+        return new MFAError(message, mfaType, context);
+        createMFAConfigurationError(type, 'already_configured' | 'invalid_email' | 'unsuitable_email' | 'invalid_config');
+        details ?  : string,
+            options;
+        ErrorFactoryOptions = {};
+        MFAError;
+        {
+            const messages = {
+                already_configured: 'Email MFA already configured for this user',
+                invalid_email: 'Invalid email address',
+                unsuitable_email: 'Email address not suitable for MFA',
+                invalid_config: 'Invalid MFA configuration',
+            };
+            const message = details ? `${messages[type]}: ${details}` : messages[type];
+        }
+        return ErrorFactory.createMFAError(message, 'email', options);
+        createMFAVerificationError(((type, options = {}) => {
+            const messages = {
+                expired: 'Verification expired',
+                invalid_code: 'Invalid verification code',
+                too_many_attempts: 'Too many failed attempts',
+                method_not_active: 'Method not active',
+                rate_limit: 'Rate limit exceeded. Too many emails sent.',
+            };
+            return ErrorFactory.createMFAError(messages[type], 'email', options);
+            // File and Resource Errors
+            /**
+             * Create project locked error with lock context
+             */
+        }
         // File and Resource Errors
         /**
          * Create project locked error with lock context
          */
-    }
-    // File and Resource Errors
-    /**
-     * Create project locked error with lock context
-     */
-    )
-    // File and Resource Errors
-    /**
-     * Create project locked error with lock context
-     */
-    , 
-    // File and Resource Errors
-    /**
-     * Create project locked error with lock context
-     */
-    static, createProjectLockedError(projectId ?  : string), lockedBy ?  : string, options, ErrorFactoryOptions = {});
-    ProjectLockedError;
-    {
-        const context = ErrorFactory.createContext('project_access', options, {});
-        metadata: {
-            projectId, lockedBy;
+        )
+        // File and Resource Errors
+        /**
+         * Create project locked error with lock context
+         */
+        , 
+        // File and Resource Errors
+        /**
+         * Create project locked error with lock context
+         */
+        static, createProjectLockedError(projectId ?  : string), lockedBy ?  : string, options, ErrorFactoryOptions = {});
+        ProjectLockedError;
+        {
+            const context = ErrorFactory.createContext('project_access', options, {});
+            metadata: {
+                projectId, lockedBy;
+            }
         }
+        ;
+        return new ProjectLockedError(projectId, context);
+        createPermissionDeniedError(resource, string());
+        action: string,
+            options;
+        ErrorFactoryOptions = {};
+        AuthenticationError;
+        {
+            const context = ErrorFactory.createContext('permission_check', options, {});
+            metadata: {
+                resource, action;
+            }
+        }
+        ;
+        return new AuthenticationError() `Insufficient permissions to ${action} ${resource}`;
     }
-    ;
-    return new ProjectLockedError(projectId, context);
-    createPermissionDeniedError(resource, string(action, string, options, ErrorFactoryOptions = {}), AuthenticationError, {
-        const: context = ErrorFactory.createContext('permission_check', options, {}),
-        metadata: { resource, action }
-    });
-    return new AuthenticationError() `Insufficient permissions to ${action} ${resource}`;
 }
 context;
 ;
@@ -185,8 +208,9 @@ WorkflowStateError;
 }
 ;
 return new WorkflowStateError(message, context);
-createAPIError(statusCode, number);
-message: string,
+createAPIError(statusCode, number),
+    message;
+string,
     endpoint ?  : string,
     responseBody ?  : any,
     options;
@@ -213,8 +237,9 @@ APIError;
 }
 ;
 return new APIError(0, `Network error: ${message}`, endpoint, context);
-createValidationError(field, string);
-value: any,
+createValidationError(field, string),
+    value;
+any,
     expected;
 string,
     options;
@@ -241,19 +266,23 @@ ConfigurationError;
 {
     const context = ErrorFactory.createContext('configuration', options);
     return new ConfigurationError(message, configKey, context);
-    wrapUnknownError(error, unknown(operation, string, options, ErrorFactoryOptions = {}), BaseError, {
-        if(error) { }, instanceof: BaseError
-    });
-    {
-        return error;
-        if (error instanceof Error) {
-            return ErrorFactory.createGraphExecutionError() `Unexpected error during ${operation}: ${error.message}`;
-        }
-    }
-    error,
+    wrapUnknownError(error, unknown());
+    operation: string,
         options;
-    ;
-    return ErrorFactory.createGraphExecutionError() `Unknown error during ${operation}: ${String(error)}`;
+    ErrorFactoryOptions = {};
+    BaseError;
+    {
+        if (error instanceof BaseError) {
+            return error;
+            if (error instanceof Error) {
+                return ErrorFactory.createGraphExecutionError() `Unexpected error during ${operation}: ${error.message}`;
+            }
+        }
+        error,
+            options;
+        ;
+        return ErrorFactory.createGraphExecutionError() `Unknown error during ${operation}: ${String(error)}`;
+    }
 }
 undefined,
     options;

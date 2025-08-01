@@ -5,49 +5,39 @@
 import { EventEmitter } from 'events';
 
 }
-export interface PerformanceBudgetConfig {
-    bundles: {
+}
+export interface PerformanceBudgetConfig { bundles: {
         main: number;
         vendor: number;
         chunks: number;
-        total: number;
+        total: number }
 }
     };
-    runtime: {
-        firstContentfulPaint: number;
+    runtime: { firstContentfulPaint: number;
         largestContentfulPaint: number;
         firstInputDelay: number;
         cumulativeLayoutShift: number;
-        timeToInteractive: number;
-    };
-    api: {
-        graphExecution: number;
+        timeToInteractive: number };
+    api: { graphExecution: number;
         preview: number;
         validation: number;
-        authentication: number;
-    };
-    memory: {
-        initialHeap: number;
+        authentication: number };
+    memory: { initialHeap: number;
         peakHeap: number;
         steadyState: number;
-        leakThreshold: number;
-    };
-    network: {
-        totalRequests: number;
+        leakThreshold: number };
+    network: { totalRequests: number;
         totalTransferSize: number;
         thirdPartyRequests: number;
-        criticalResourceCount: number;
-    };
-    build: {
-        buildTime: number;
+        criticalResourceCount: number };
+    build: { buildTime: number;
         typeCheckTime: number;
         lintTime: number;
-        testTime: number;
-    };
+        testTime: number };
 
 }
-export interface BudgetViolation {
-    category: string;
+}
+export interface BudgetViolation { category: string;
     metric: string;
     budget: number;
     actual: number;
@@ -55,11 +45,10 @@ export interface BudgetViolation {
     severity: 'low' | 'medium' | 'high' | 'critical';
     impact: string;
     suggestions: string[];
-    timestamp: number;
-
+    timestamp: number }
 }
-export interface BudgetCheckResult {
-    passed: boolean;
+}
+export interface BudgetCheckResult { passed: boolean;
     score: number;
     violations: BudgetViolation[];
     summary: {
@@ -67,53 +56,44 @@ export interface BudgetCheckResult {
         critical: number;
         high: number;
         medium: number;
-        low: number;
+        low: number }
 }
     };
     recommendations: string[];
     timestamp: number;
 
 }
-export interface PerformanceSnapshot {
-    timestamp: number;
+}
+export interface PerformanceSnapshot { timestamp: number;
     bundles: {
         main: number;
         vendor: number;
         chunks: number[];
-        total: number;
+        total: number }
 }
     };
-    runtime: {
-        fcp?: number;
+    runtime: { fcp?: number;
         lcp?: number;
         fid?: number;
         cls?: number;
-        tti?: number;
-    };
+        tti?: number };
     api: Record<string, number>;
-    memory: {
-        used: number;
+    memory: { used: number;
         total: number;
         peak: number;
-        gc: number;
-    };
-    network: {
-        requestCount: number;
+        gc: number };
+    network: { requestCount: number;
         transferSize: number;
-        thirdParty: number;
-    };
-    build?: {
-        buildTime: number;
+        thirdParty: number };
+    build?: { buildTime: number;
         typeCheckTime: number;
         lintTime: number;
-        testTime: number;
-    };
+        testTime: number };
 /**
  * Performance Budget Manager
  * Enforces performance budgets and tracks violations
  */
-export declare class PerformanceBudgetManager extends EventEmitter {
-    private config;
+export declare class PerformanceBudgetManager extends EventEmitter { private config;
     private violations;
     private snapshots;
     private maxSnapshotHistory;
@@ -140,8 +120,7 @@ export declare class PerformanceBudgetManager extends EventEmitter {
         bundleSize: number[];
         memoryUsage: number[];
         apiLatency: number[];
-        violations: number[];
-    };
+        violations: number[] };
     /**
      * Update budget configuration
      */

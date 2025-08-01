@@ -11,8 +11,8 @@
 import React from 'react';
 
 }
-export interface NavigationItem {
-    id: string;
+}
+export interface NavigationItem { id: string;
     label: string;
     description?: string;
     icon: React.ComponentType<unknown>;
@@ -20,68 +20,62 @@ export interface NavigationItem {
     children?: NavigationItem[];
     requiredPermissions?: {
         resource: string;
-        actions: string[];
+        actions: string[] }
 }
     }[];
     badge?: NavigationBadge;
-    metadata: {
-        category: string;
+    metadata: { category: string;
         priority: number;
         riskLevel: 'low' | 'medium' | 'high' | 'critical';
         epic?: string;
         story?: string;
-        tags: string[];
-    };
+        tags: string[] };
 
 }
-export interface NavigationBadge {
-    type: 'count' | 'status' | 'alert' | 'info';
+}
+export interface NavigationBadge { type: 'count' | 'status' | 'alert' | 'info';
     value: string | number;
     color: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'gray';
-    pulse?: boolean;
-
+    pulse?: boolean }
 }
-export interface NavigationContext {
-    currentPath: string;
+}
+export interface NavigationContext { currentPath: string;
     currentSection: string;
     parentSections: string[];
     breadcrumbs: BreadcrumbItem[];
-    availableActions: QuickAction[];
-
+    availableActions: QuickAction[] }
 }
-export interface BreadcrumbItem {
-    label: string;
+}
+export interface BreadcrumbItem { label: string;
     path: string;
     icon?: React.ComponentType<unknown>;
-    active: boolean;
-
+    active: boolean }
 }
-export interface QuickAction {
-    id: string;
+}
+export interface QuickAction { id: string;
     label: string;
     description: string;
     icon: React.ComponentType<unknown>;
     action: () => void;
     shortcut?: string;
     category: 'primary' | 'secondary' | 'tertiary';
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface NavigationState {
-    expandedSections: Set<string>;
+}
+export interface NavigationState { expandedSections: Set<string>;
     pinnedItems: Set<string>;
     recentItems: RecentItem[];
     favoriteItems: Set<string>;
     searchQuery: string;
-    mobileMenuOpen: boolean;
-
+    mobileMenuOpen: boolean }
 }
-export interface RecentItem {
-    id: string;
+}
+export interface RecentItem { id: string;
     label: string;
     path: string;
     timestamp: Date;
-    icon: React.ComponentType<unknown>;
+    icon: React.ComponentType<unknown> }
+}
 }
 interface Epic17NavigationSystemProps {
     currentSection?: string;
@@ -94,4 +88,5 @@ interface Epic17NavigationSystemProps {
 export declare const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps>;
 export default Epic17NavigationSystem;
 //# sourceMappingURL=Epic17NavigationSystem.d.ts.map
+}
 }

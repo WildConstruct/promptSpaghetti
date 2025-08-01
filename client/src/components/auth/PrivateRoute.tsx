@@ -9,7 +9,7 @@ import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
-}
+
 interface PrivateRouteProps {
   children: React.ReactNode;
   redirectTo?: string;
@@ -20,7 +20,8 @@ interface PrivateRouteProps {
   redirectTo = '/login',
   requiredRoles = [],
   unauthorizedRedirect = '/unauthorized'
-}
+
+
 }) => {
   const { isAuthenticated, isLoading, checkAuthStatus, setReturnUrl, user } = useAuthStore();
   const location = useLocation();
@@ -45,7 +46,7 @@ interface PrivateRouteProps {
   alignItems: 'center',
   height: '100vh',
   flexDirection: 'column',
-}}>
+}>
         <div style={{ fontSize: '18px', marginBottom: '10px' }}>Loading...</div>
         <div>Checking authentication status...</div>
       </div>
@@ -65,7 +66,7 @@ interface PrivateRouteProps {
   from: location,
   requiredRoles,
   userRoles: user.roles || [],
-}} replace />;
+} replace />;
 
 
   // User is authenticated and authorized, render protected content

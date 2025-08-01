@@ -18,7 +18,7 @@ import {
   PolicyRequirement,
   ValidationRule,
   EnforcementMechanism 
-} from '../services/OAuthPolicyService';
+ from '../services/OAuthPolicyService';
 
 // OAuth Policy Template Categories
 
@@ -60,7 +60,7 @@ import {
                 required: true,
                 defaultValue: 'CONFIDENTIAL',
                 options: ['CONFIDENTIAL']
-  }
+
               {
                 name: 'redirectUris',
                 type: 'LIST',
@@ -69,15 +69,15 @@ import {
                 validation: {
                   pattern: '^https://.*',
                   minLength: 1
-                }
-  }
+
+
               {
                 name: 'scopes',
                 type: 'MULTI_SELECT',
                 description: 'Requested OAuth scopes',
                 required: true,
                 options: ['openid', 'profile', 'email', 'read:user', 'write:user']
-              }
+
             ],
             validations: [
               {
@@ -85,15 +85,15 @@ import {
                 expression: 'redirectUris.every(uri => uri.startsWith("https://"))',
                 errorMessage: 'All redirect URIs must use HTTPS',
                 severity: 'ERROR'
-  }
+
               {
                 ruleId: 'CLIENT-SECRET-REQUIRED',
                 expression: 'clientType === "CONFIDENTIAL"',
                 errorMessage: 'Web applications must use confidential client type',
                 severity: 'ERROR'
-              }
+
             ]
-  }
+
           {
             sectionId: 'security-requirements',
             title: 'Security Requirements',
@@ -106,17 +106,17 @@ import {
                 description: 'Enable certificate pinning for OAuth provider connections',
                 required: false,
                 defaultValue: false
-  }
+
               {
                 name: 'tokenBinding',
                 type: 'BOOLEAN',
                 description: 'Enable token binding for high-security scenarios',
                 required: false,
                 defaultValue: false
-              }
+
             ],
             validations: []
-          }
+
         ],
         requirements: [
           {
@@ -126,7 +126,7 @@ import {
             mandatory: true,
             complianceFrameworks: ['OAuth2.1'],
             enforcementAction: 'BLOCK'
-  }
+
           {
             requirementId: 'WEB-CLIENT-002',
             title: 'HTTPS Redirect URIs Required',
@@ -134,7 +134,7 @@ import {
             mandatory: true,
             complianceFrameworks: ['OAuth2.1'],
             enforcementAction: 'BLOCK'
-  }
+
           {
             requirementId: 'WEB-CLIENT-003',
             title: 'Client Authentication Required',
@@ -142,7 +142,7 @@ import {
             mandatory: true,
             complianceFrameworks: ['OAuth2.1'],
             enforcementAction: 'BLOCK'
-          }
+
         ],
         exceptions: [
           {
@@ -154,19 +154,19 @@ import {
                 field: 'environment',
                 operator: 'EQUALS',
                 value: 'DEVELOPMENT'
-  }
+
               {
                 field: 'redirectUri',
                 operator: 'CONTAINS',
                 value: 'localhost'
-              }
+
             ],
             approvalRequired: false
-          }
+
         ],
         reviewSchedule: 'QUARTERLY',
         approvalRequired: false
-  }
+
       validationRules: [
         {
           ruleId: 'WEB-VALIDATION-001',
@@ -176,7 +176,7 @@ import {
           action: 'DENY',
           priority: 100,
           enabled: true
-        }
+
       ],
       enforcementMechanisms: [
         {
@@ -186,11 +186,11 @@ import {
           action: 'validateWebClientConfiguration',
           escalation: 'BLOCK',
           automated: true
-        }
+
       ],
       createdAt: new Date(),
       updatedAt: new Date()
-  }
+
     SINGLE_PAGE_APPLICATION: {
       templateId: 'OAUTH-CLIENT-SPA-001',
       policyType: 'OAUTH_CLIENT_REGISTRATION',
@@ -216,14 +216,14 @@ import {
                 required: true,
                 defaultValue: 'PUBLIC',
                 options: ['PUBLIC']
-  }
+
               {
                 name: 'pkceRequired',
                 type: 'BOOLEAN',
                 description: 'PKCE requirement (mandatory for SPAs)',
                 required: true,
                 defaultValue: true
-  }
+
               {
                 name: 'allowedOrigins',
                 type: 'LIST',
@@ -231,8 +231,8 @@ import {
                 required: true,
                 validation: {
                   minLength: 1
-                }
-              }
+
+
             ],
             validations: [
               {
@@ -240,15 +240,15 @@ import {
                 expression: 'pkceRequired === true',
                 errorMessage: 'PKCE is mandatory for single page applications',
                 severity: 'ERROR'
-  }
+
               {
                 ruleId: 'SPA-NO-SECRET',
                 expression: 'clientType === "PUBLIC"',
                 errorMessage: 'SPAs must be registered as public clients',
                 severity: 'ERROR'
-              }
+
             ]
-          }
+
         ],
         requirements: [
           {
@@ -258,7 +258,7 @@ import {
             mandatory: true,
             complianceFrameworks: ['OAuth2.1'],
             enforcementAction: 'BLOCK'
-  }
+
           {
             requirementId: 'SPA-CLIENT-002',
             title: 'Public Client Type Required',
@@ -266,12 +266,12 @@ import {
             mandatory: true,
             complianceFrameworks: ['OAuth2.1'],
             enforcementAction: 'BLOCK'
-          }
+
         ],
         exceptions: [],
         reviewSchedule: 'QUARTERLY',
         approvalRequired: false
-  }
+
       validationRules: [
         {
           ruleId: 'SPA-PKCE-VALIDATION',
@@ -281,7 +281,7 @@ import {
           action: 'DENY',
           priority: 100,
           enabled: true
-        }
+
       ],
       enforcementMechanisms: [
         {
@@ -291,11 +291,11 @@ import {
           action: 'validateSPAClientConfiguration',
           escalation: 'BLOCK',
           automated: true
-        }
+
       ],
       createdAt: new Date(),
       updatedAt: new Date()
-  }
+
     MOBILE_APPLICATION: {
       templateId: 'OAUTH-CLIENT-MOBILE-001',
       policyType: 'OAUTH_CLIENT_REGISTRATION',
@@ -321,20 +321,20 @@ import {
                 required: true,
                 defaultValue: 'PUBLIC',
                 options: ['PUBLIC']
-  }
+
               {
                 name: 'appAttestationEnabled',
                 type: 'BOOLEAN',
                 description: 'Enable app attestation for mobile security',
                 required: true,
                 defaultValue: true
-  }
+
               {
                 name: 'customUriSchemes',
                 type: 'LIST',
                 description: 'Custom URI schemes for mobile app redirects',
                 required: true
-              }
+
             ],
             validations: [
               {
@@ -342,9 +342,9 @@ import {
                 expression: 'appAttestationEnabled === true',
                 errorMessage: 'App attestation is required for mobile applications',
                 severity: 'ERROR'
-              }
+
             ]
-          }
+
         ],
         requirements: [
           {
@@ -354,17 +354,17 @@ import {
             mandatory: true,
             complianceFrameworks: ['OAuth2.1'],
             enforcementAction: 'REQUIRE_APPROVAL'
-          }
+
         ],
         exceptions: [],
         reviewSchedule: 'QUARTERLY',
         approvalRequired: true
-  }
+
       validationRules: [],
       enforcementMechanisms: [],
       createdAt: new Date(),
       updatedAt: new Date()
-    }
+
   };
 
 /**
@@ -398,8 +398,8 @@ export const TOKEN_LIFECYCLE_TEMPLATES: Record<string, OAuthPolicyTemplate> = {
               defaultValue: 900,
               validation: {
                 max: 900
-              }
-  }
+
+
             {
               name: 'refreshTokenTTL',
               type: 'NUMBER',
@@ -408,15 +408,15 @@ export const TOKEN_LIFECYCLE_TEMPLATES: Record<string, OAuthPolicyTemplate> = {
               defaultValue: 3600,
               validation: {
                 max: 3600
-              }
-  }
+
+
             {
               name: 'tokenBindingRequired',
               type: 'BOOLEAN',
               description: 'Require token binding to client/device',
               required: true,
               defaultValue: true
-            }
+
           ],
           validations: [
             {
@@ -424,9 +424,9 @@ export const TOKEN_LIFECYCLE_TEMPLATES: Record<string, OAuthPolicyTemplate> = {
               expression: 'accessTokenTTL <= 900 && refreshTokenTTL <= 3600',
               errorMessage: 'Token lifetimes exceed high security limits',
               severity: 'ERROR'
-            }
+
           ]
-        }
+
       ],
       requirements: [
         {
@@ -436,17 +436,17 @@ export const TOKEN_LIFECYCLE_TEMPLATES: Record<string, OAuthPolicyTemplate> = {
           mandatory: true,
           complianceFrameworks: ['PCI_DSS'],
           enforcementAction: 'BLOCK'
-        }
+
       ],
       exceptions: [],
       reviewSchedule: 'MONTHLY',
       approvalRequired: true
-  }
+
     validationRules: [],
     enforcementMechanisms: [],
     createdAt: new Date(),
     updatedAt: new Date()
-  }
+
 };
 
 /**
@@ -478,17 +478,17 @@ export const PROVIDER_MANAGEMENT_TEMPLATES: Record<string, OAuthPolicyTemplate> 
               description: 'Require security assessment before approval',
               required: true,
               defaultValue: true
-  }
+
             {
               name: 'businessJustificationRequired',
               type: 'BOOLEAN',
               description: 'Require business justification for provider',
               required: true,
               defaultValue: true
-            }
+
           ],
           validations: []
-        }
+
       ],
       requirements: [
         {
@@ -498,17 +498,17 @@ export const PROVIDER_MANAGEMENT_TEMPLATES: Record<string, OAuthPolicyTemplate> 
           mandatory: true,
           complianceFrameworks: ['SOX', 'ISO27001'],
           enforcementAction: 'REQUIRE_APPROVAL'
-        }
+
       ],
       exceptions: [],
       reviewSchedule: 'QUARTERLY',
       approvalRequired: true
-  }
+
     validationRules: [],
     enforcementMechanisms: [],
     createdAt: new Date(),
     updatedAt: new Date()
-  }
+
 };
 
 /**
@@ -540,21 +540,21 @@ export const CONSENT_MANAGEMENT_TEMPLATES: Record<string, OAuthPolicyTemplate> =
               description: 'Require explicit consent for each scope',
               required: true,
               defaultValue: true
-  }
+
             {
               name: 'granularScopeConsent',
               type: 'BOOLEAN',
               description: 'Allow individual scope consent selection',
               required: true,
               defaultValue: true
-  }
+
             {
               name: 'consentWithdrawalEnabled',
               type: 'BOOLEAN',
               description: 'Enable consent withdrawal mechanism',
               required: true,
               defaultValue: true
-            }
+
           ],
           validations: [
             {
@@ -562,9 +562,9 @@ export const CONSENT_MANAGEMENT_TEMPLATES: Record<string, OAuthPolicyTemplate> =
               expression: 'explicitConsentRequired === true && granularScopeConsent === true',
               errorMessage: 'GDPR requires explicit and granular consent',
               severity: 'ERROR'
-            }
+
           ]
-        }
+
       ],
       requirements: [
         {
@@ -574,7 +574,7 @@ export const CONSENT_MANAGEMENT_TEMPLATES: Record<string, OAuthPolicyTemplate> =
           mandatory: true,
           complianceFrameworks: ['GDPR'],
           enforcementAction: 'BLOCK'
-  }
+
         {
           requirementId: 'GDPR-CONSENT-002',
           title: 'Consent Withdrawal Support',
@@ -582,17 +582,17 @@ export const CONSENT_MANAGEMENT_TEMPLATES: Record<string, OAuthPolicyTemplate> =
           mandatory: true,
           complianceFrameworks: ['GDPR'],
           enforcementAction: 'REQUIRE_APPROVAL'
-        }
+
       ],
       exceptions: [],
       reviewSchedule: 'QUARTERLY',
       approvalRequired: false
-  }
+
     validationRules: [],
     enforcementMechanisms: [],
     createdAt: new Date(),
     updatedAt: new Date()
-  }
+
 };
 
 /**
@@ -603,7 +603,7 @@ export const OAUTH_POLICY_TEMPLATES_LIBRARY = {
   TOKEN_LIFECYCLE: TOKEN_LIFECYCLE_TEMPLATES,
   PROVIDER_MANAGEMENT: PROVIDER_MANAGEMENT_TEMPLATES,
   CONSENT_MANAGEMENT: CONSENT_MANAGEMENT_TEMPLATES
-} as const;
+ as const;
 
 /**
  * Helper function to get policy template by ID
@@ -613,11 +613,11 @@ export function getOAuthPolicyTemplate(templateId: string): OAuthPolicyTemplate 
     for (const template of Object.values(category)) {
       if (template.templateId === templateId) {
         return template;
-      }
-    }
-  }
+
+
+
   return null;
-}
+
 
 /**
  * Helper function to get templates by policy type
@@ -629,12 +629,12 @@ export function getTemplatesByType(policyType: string): OAuthPolicyTemplate[] {
     for (const template of Object.values(category)) {
       if (template.policyType === policyType) {
         templates.push(template);
-      }
-    }
-  }
+
+
+
   
   return templates;
-}
+
 
 /**
  * Helper function to get templates by compliance framework
@@ -646,12 +646,12 @@ export function getTemplatesByFramework(framework: ComplianceFramework): OAuthPo
     for (const template of Object.values(category)) {
       if (template.frameworks.includes(framework)) {
         templates.push(template);
-      }
-    }
-  }
+
+
+
   
   return templates;
-}
+
 
 /**
  * Helper function to get templates by target environment
@@ -663,9 +663,8 @@ export function getTemplatesByEnvironment(environment: EnvironmentType): OAuthPo
     for (const template of Object.values(category)) {
       if (template.targetEnvironments.includes(environment)) {
         templates.push(template);
-      }
-    }
-  }
+
+
+
   
   return templates;
-}

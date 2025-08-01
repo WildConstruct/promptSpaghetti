@@ -6,41 +6,39 @@
  */
 
 }
-export interface PerformanceMetric {
-    name: string;
+}
+export interface PerformanceMetric { name: string;
     value: number;
     timestamp: number;
     context?: Record<string, any>;
     threshold?: {
         warning: number;
-        critical: number;
+        critical: number }
 }
     };
 
 }
-export interface PerformanceReport {
-    period: {
+}
+export interface PerformanceReport { period: {
         start: number;
         end: number;
-        duration: number;
+        duration: number }
 }
     };
-    metrics: {
-        [key: string]: {
+    metrics: { [key: string]: {
             count: number;
             average: number;
             min: number;
             max: number;
             p95: number;
             p99: number;
-            values: number[];
-        };
+            values: number[] };
     };
     alerts: PerformanceAlert[];
 
 }
-export interface PerformanceAlert {
-    metric: string;
+}
+export interface PerformanceAlert { metric: string;
     level: 'warning' | 'critical';
     value: number;
     threshold: number;
@@ -82,7 +80,7 @@ export declare class PerformanceMonitor {
         max: number;
         p95: number;
         p99: number;
-        recent: number[];
+        recent: number[] }
 }
     } | null;
     /**
@@ -119,12 +117,10 @@ export declare class PerformanceMonitor {
     /**
      * Get current performance dashboard data
      */
-    getDashboardData(): {
-        overview: {
+    getDashboardData(): { overview: {
             totalMetrics: number;
             activeAlerts: number;
-            healthScore: number;
-        };
+            healthScore: number };
         keyMetrics: {
             name: string;
             current: number;

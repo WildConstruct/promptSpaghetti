@@ -14,8 +14,8 @@ import crypto from 'crypto';
 // Types and Interfaces
 // ========================================
 
-}
-}
+
+
 export interface TLSConfig {
   enabled: boolean;
   port: number;
@@ -24,8 +24,9 @@ export interface TLSConfig {
     key: string;
     ca?: string;
     passphrase?: string;
-}
-}
+
+
+
   };
   options: {
     secureProtocol?: string;
@@ -50,10 +51,10 @@ export interface TLSConfig {
     required: boolean;
     ca: string;
   };
-}
 
-}
-}
+
+
+
 export interface CertificateInfo {
   subject: any;
   issuer: any;
@@ -65,21 +66,23 @@ export interface CertificateInfo {
   expiryDays: number;
   isValid: boolean;
   warnings: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TLSValidationResult {
   valid: boolean;
   errors: string[];
   warnings: string[];
   certificateInfo?: CertificateInfo;
   recommendations: string[];
-}
-}
-}
+
+
+
+
 
 // ========================================
 // TLS Configuration Defaults
@@ -93,7 +96,7 @@ const DEFAULT_TLS_CONFIG: TLSConfig = {
     key: process.env.TLS_KEY_PATH || '/etc/ssl/private/server.key',
     ca: process.env.TLS_CA_PATH,
     passphrase: process.env.TLS_PASSPHRASE
-  }
+
   options: {
     // Use TLS 1.2 and 1.3 only
     minVersion: 'TLSv1.2',
@@ -112,17 +115,17 @@ const DEFAULT_TLS_CONFIG: TLSConfig = {
     ].join(':'),
     honorCipherOrder: true,
     secureProtocol: 'TLSv1_2_method'
-  }
+
   hsts: {
     enabled: true,
     maxAge: 31536000, // 1 year
     includeSubDomains: true,
     preload: true
-  }
+
   ocsp: {
     enabled: true,
     stapling: true
-  }
+
 };
 
 // ========================================
@@ -140,11 +143,11 @@ export class CertificateManager {
     try {
       if (!fs.existsSync(config.certificates.cert)) {
         throw new Error(`Certificate file not found: ${config.certificates.cert}`);
-      }
+
 
       if (!fs.existsSync(config.certificates.key)) {
         throw new Error(`Private key file not found: ${config.certificates.key}`);
-      }
+
 
       const cert = fs.readFileSync(config.certificates.cert);
       const key = fs.readFileSync(config.certificates.key);
@@ -152,16 +155,16 @@ export class CertificateManager {
 
       if (config.certificates.ca && fs.existsSync(config.certificates.ca)) {
         ca = fs.readFileSync(config.certificates.ca);
-      }
+
 
       // Validate certificate and key match
       this.validateCertificateKeyPair(cert, key, config.certificates.passphrase);
 
       return { cert, key, ca };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to load certificates: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Validate certificate and private key pair
@@ -189,11 +192,11 @@ export class CertificateManager {
       
       if (!isValid) {
         throw new Error('Certificate and private key do not match');
-      }
-    } catch (error) {
+
+ catch (error) {
       throw new Error(`Certificate validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get detailed certificate information
@@ -210,9 +213,9 @@ export class CertificateManager {
       const warnings: string[] = [];
       if (expiryDays <= this.CERT_CRITICAL_DAYS) {
         warnings.push(`Certificate expires in ${expiryDays} days - CRITICAL`);
-      } else if (expiryDays <= this.CERT_WARNING_DAYS) {
+ else if (expiryDays <= this.CERT_WARNING_DAYS) {
         warnings.push(`Certificate expires in ${expiryDays} days - WARNING`);
-      }
+
 
       return {
         subject: cert.subject,
@@ -226,10 +229,10 @@ export class CertificateManager {
         isValid: now >= new Date(cert.validFrom) && now <= validTo,
         warnings
       };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to read certificate info: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Generate self-signed certificate for development
@@ -242,8 +245,8 @@ export class CertificateManager {
     // This is a placeholder implementation
     // In a real scenario, this would integrate with OpenSSL or use a proper certificate library
     throw new Error('Self-signed certificate generation requires OpenSSL integration. Use the generate-dev-certs.sh script instead.');
-  }
-}
+
+
 
 // ========================================
 // TLS Configuration Manager
@@ -255,21 +258,21 @@ export class TLSConfigManager {
 
   constructor(customConfig?: Partial<TLSConfig>) {
     this.config = { ...DEFAULT_TLS_CONFIG, ...customConfig };
-  }
+
 
   /**
    * Get the current TLS configuration
    */
   getConfig(): TLSConfig {
     return { ...this.config };
-  }
+
 
   /**
    * Update TLS configuration
    */
   updateConfig(updates: Partial<TLSConfig>): void {
     this.config = { ...this.config, ...updates };
-  }
+
 
   /**
    * Validate the current TLS configuration
@@ -283,57 +286,56 @@ export class TLSConfigManager {
     // Check if TLS is enabled in production
     if (process.env.NODE_ENV === 'production' && !this.config.enabled) {
       errors.push('TLS should be enabled in production environment');
-    }
+
 
     // Validate certificate files exist
     if (this.config.enabled) {
       try {
         if (!fs.existsSync(this.config.certificates.cert)) {
           errors.push(`Certificate file not found: ${this.config.certificates.cert}`);
-        } else {
+ else {
           certificateInfo = CertificateManager.getCertificateInfo(this.config.certificates.cert);
           warnings.push(...certificateInfo.warnings);
-        }
+
 
         if (!fs.existsSync(this.config.certificates.key)) {
           errors.push(`Private key file not found: ${this.config.certificates.key}`);
-        }
+
 
         // Validate certificate permissions
         this.validateFilePermissions(this.config.certificates.cert, '644');
         this.validateFilePermissions(this.config.certificates.key, '600');
-
-      } catch (error) {
+ catch (error) {
         errors.push(`Certificate validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      }
-    }
+
+
 
     // Validate TLS version configuration
     if (this.config.options.minVersion === 'TLSv1' || this.config.options.minVersion === 'TLSv1.1') {
       warnings.push('TLS versions below 1.2 are deprecated and insecure');
       recommendations.push('Set minimum TLS version to 1.2 or higher');
-    }
+
 
     // Validate cipher configuration
     if (!this.config.options.ciphers || this.config.options.ciphers.includes('RC4')) {
       warnings.push('Weak cipher suites detected');
       recommendations.push('Use only modern, secure cipher suites');
-    }
+
 
     // Check HSTS configuration
     if (!this.config.hsts.enabled) {
       warnings.push('HSTS is disabled');
       recommendations.push('Enable HSTS for better security');
-    } else if (this.config.hsts.maxAge < 31536000) {
+ else if (this.config.hsts.maxAge < 31536000) {
       warnings.push('HSTS max-age is less than recommended 1 year');
       recommendations.push('Set HSTS max-age to at least 31536000 seconds (1 year)');
-    }
+
 
     // Check port configuration
     if (this.config.port === 80 || this.config.port === 8080) {
       warnings.push('Using non-standard HTTPS port');
       recommendations.push('Consider using standard HTTPS port 443');
-    }
+
 
     return {
       valid: errors.length === 0,
@@ -342,7 +344,7 @@ export class TLSConfigManager {
       certificateInfo,
       recommendations
     };
-  }
+
 
   /**
    * Validate file permissions
@@ -354,11 +356,11 @@ export class TLSConfigManager {
       
       if (mode !== expectedMode) {
         throw new Error(`File ${filePath} has permissions ${mode}, expected ${expectedMode}`);
-      }
-    } catch (error) {
+
+ catch (error) {
       throw new Error(`Permission validation failed for ${filePath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Create HTTPS server options
@@ -366,7 +368,7 @@ export class TLSConfigManager {
   createHTTPSOptions(): https.ServerOptions {
     if (!this.config.enabled) {
       throw new Error('TLS is not enabled');
-    }
+
 
     const certificates = CertificateManager.loadCertificates(this.config);
     
@@ -384,11 +386,11 @@ export class TLSConfigManager {
 
     if (certificates.ca) {
       options.ca = certificates.ca;
-    }
+
 
     if (this.config.certificates.passphrase) {
       options.passphrase = this.config.certificates.passphrase;
-    }
+
 
     // Client certificate authentication
     if (this.config.clientAuth?.enabled) {
@@ -396,11 +398,11 @@ export class TLSConfigManager {
       options.rejectUnauthorized = this.config.clientAuth.required;
       if (this.config.clientAuth.ca) {
         options.ca = fs.readFileSync(this.config.clientAuth.ca);
-      }
-    }
+
+
 
     return options;
-  }
+
 
   /**
    * Get security headers with HSTS
@@ -418,15 +420,15 @@ export class TLSConfigManager {
       let hstsValue = `max-age=${this.config.hsts.maxAge}`;
       if (this.config.hsts.includeSubDomains) {
         hstsValue += '; includeSubDomains';
-      }
+
       if (this.config.hsts.preload) {
         hstsValue += '; preload';
-      }
+
       headers['Strict-Transport-Security'] = hstsValue;
-    }
+
 
     return headers;
-  }
+
 
   /**
    * Watch certificate files for changes
@@ -434,15 +436,15 @@ export class TLSConfigManager {
   watchCertificates(callback: (event: string, filename: string | null) => void): void {
     if (this.certificateWatcher) {
       this.certificateWatcher.close();
-    }
+
 
     if (this.config.enabled) {
       const certDir = path.dirname(this.config.certificates.cert);
       this.certificateWatcher = fs.watch(certDir, (eventType, filename) => {
         callback(eventType, filename);
       });
-    }
-  }
+
+
 
   /**
    * Stop watching certificate files
@@ -451,8 +453,8 @@ export class TLSConfigManager {
     if (this.certificateWatcher) {
       this.certificateWatcher.close();
       this.certificateWatcher = undefined;
-    }
-  }
+
+
 
   /**
    * Test TLS connection
@@ -463,7 +465,7 @@ export class TLSConfigManager {
     cipher?: string;
     certificate?: any;
     error?: string;
-  }> {
+> {
 
     return new Promise((resolve) => {
       const socket = tls.connect(port, hostname, {
@@ -496,8 +498,8 @@ export class TLSConfigManager {
         });
       });
     });
-  }
-}
+
+
 
 // ========================================
 // Utility Functions
@@ -514,15 +516,15 @@ export function createDevelopmentTLSConfig(): TLSConfig {
     certificates: {
       cert: path.join(__dirname, '../../../certs/localhost.crt'),
       key: path.join(__dirname, '../../../certs/localhost.key')
-  }
+
     hsts: {
       enabled: false, // Disabled for development
       maxAge: 0,
       includeSubDomains: false,
       preload: false
-    }
+
   };
-}
+
 
 /**
  * Create production TLS configuration
@@ -537,13 +539,13 @@ export function createProductionTLSConfig(): TLSConfig {
       maxAge: 63072000, // 2 years
       includeSubDomains: true,
       preload: true
-  }
+
     ocsp: {
       enabled: true,
       stapling: true
-    }
+
   };
-}
+
 
 /**
  * Load TLS configuration from environment
@@ -554,45 +556,45 @@ export function loadTLSConfigFromEnv(): TLSConfig {
   // Override with environment variables
   if (process.env.TLS_ENABLED) {
     config.enabled = process.env.TLS_ENABLED === 'true';
-  }
+
 
   if (process.env.HTTPS_PORT) {
     config.port = parseInt(process.env.HTTPS_PORT);
-  }
+
 
   if (process.env.TLS_CERT_PATH) {
     config.certificates.cert = process.env.TLS_CERT_PATH;
-  }
+
 
   if (process.env.TLS_KEY_PATH) {
     config.certificates.key = process.env.TLS_KEY_PATH;
-  }
+
 
   if (process.env.TLS_CA_PATH) {
     config.certificates.ca = process.env.TLS_CA_PATH;
-  }
+
 
   if (process.env.TLS_MIN_VERSION) {
     config.options.minVersion = process.env.TLS_MIN_VERSION;
-  }
+
 
   if (process.env.TLS_MAX_VERSION) {
     config.options.maxVersion = process.env.TLS_MAX_VERSION;
-  }
+
 
   if (process.env.HSTS_MAX_AGE) {
     config.hsts.maxAge = parseInt(process.env.HSTS_MAX_AGE);
-  }
+
 
   return config;
-}
+
 
 // ========================================
 // Certificate Pinning System
 // ========================================
 
-}
-}
+
+
 export interface CertificatePinConfig {
   enabled: boolean;
   pins: Record<string, CertificatePin[]>;
@@ -601,27 +603,29 @@ export interface CertificatePinConfig {
     enforceBackupPins: boolean;
     pinFailureAction: 'block' | 'warn' | 'log';
     pinUpdateCheckInterval: number; // hours
-}
-}
+
+
+
   };
   allowedDomains: string[];
   pinnedDomains: string[];
-}
 
-}
-}
+
+
+
 export interface CertificatePin {
   type: 'sha256' | 'sha1' | 'subject' | 'spki';
   value: string;
   description?: string;
   createdAt: Date;
   expiresAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PinValidationResult {
   valid: boolean;
   matchedPin?: CertificatePin;
@@ -629,9 +633,10 @@ export interface PinValidationResult {
   certificate: any;
   errors: string[];
   warnings: string[];
-}
-}
-}
+
+
+
+
 
 // Default pinned certificates for major OAuth providers
 const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
@@ -642,14 +647,14 @@ const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
       description: 'Google OAuth2 Primary Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-  }
+
     {
       type: 'sha256', 
       value: 'FEzVOUp4dF3gI0ZVPRJhFbsd5E9tpuQdnee2qMBn/bU=',
       description: 'Google OAuth2 Backup Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-    }
+
   ],
   'www.googleapis.com': [
     {
@@ -658,7 +663,7 @@ const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
       description: 'Google APIs Primary Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-    }
+
   ],
   'github.com': [
     {
@@ -667,14 +672,14 @@ const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
       description: 'GitHub Primary Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-  }
+
     {
       type: 'sha256',
       value: 'k1Hdw5sdSn5kiqNcS7bFgKUEM1GSdWR6EaYCte7qK7Ig=',
       description: 'GitHub Backup Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-    }
+
   ],
   'api.github.com': [
     {
@@ -683,7 +688,7 @@ const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
       description: 'GitHub API Primary Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-    }
+
   ],
   'login.microsoftonline.com': [
     {
@@ -692,14 +697,14 @@ const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
       description: 'Microsoft Login Primary Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-  }
+
     {
       type: 'sha256',
       value: 'Q4tiSEP1jqPOBdGl88Iuys8cdfyOd5VT5pJhpGtf2YY=',
       description: 'Microsoft Login Backup Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-    }
+
   ],
   'graph.microsoft.com': [
     {
@@ -708,7 +713,7 @@ const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
       description: 'Microsoft Graph Primary Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-    }
+
   ]
 };
 
@@ -720,7 +725,7 @@ const DEFAULT_PIN_CONFIG: CertificatePinConfig = {
     enforceBackupPins: true,
     pinFailureAction: 'block',
     pinUpdateCheckInterval: 24 // Check every 24 hours
-  }
+
   allowedDomains: ['*'], // Allow all domains by default
   pinnedDomains: Object.keys(DEFAULT_CERTIFICATE_PINS)
 };
@@ -732,21 +737,21 @@ export class CertificatePinningManager {
 
   constructor(customConfig?: Partial<CertificatePinConfig>) {
     this.config = { ...DEFAULT_PIN_CONFIG, ...customConfig };
-  }
+
 
   /**
    * Get current certificate pinning configuration
    */
   getConfig(): CertificatePinConfig {
     return { ...this.config };
-  }
+
 
   /**
    * Update certificate pinning configuration
    */
   updateConfig(updates: Partial<CertificatePinConfig>): void {
     this.config = { ...this.config, ...updates };
-  }
+
 
   /**
    * Add a new certificate pin for a domain
@@ -754,12 +759,12 @@ export class CertificatePinningManager {
   addPin(hostname: string, pin: CertificatePin): void {
     if (!this.config.pins[hostname]) {
       this.config.pins[hostname] = [];
-    }
+
     this.config.pins[hostname].push(pin);
     
     // Clear cache for this hostname
     this.clearCacheForHostname(hostname);
-  }
+
 
   /**
    * Remove a certificate pin for a domain
@@ -767,7 +772,7 @@ export class CertificatePinningManager {
   removePin(hostname: string, pinValue: string): boolean {
     if (!this.config.pins[hostname]) {
       return false;
-    }
+
 
     const initialLength = this.config.pins[hostname].length;
     this.config.pins[hostname] = this.config.pins[hostname].filter(
@@ -777,10 +782,10 @@ export class CertificatePinningManager {
     const removed = this.config.pins[hostname].length < initialLength;
     if (removed) {
       this.clearCacheForHostname(hostname);
-    }
+
 
     return removed;
-  }
+
 
   /**
    * Validate certificate against pinned certificates
@@ -798,8 +803,8 @@ export class CertificatePinningManager {
       // Cache for 1 hour
       if (Date.now() - cached.certificate?.checkedAt < 3600000) {
         return cached;
-      }
-    }
+
+
 
     const result = await this.performPinValidation(hostname, certificate);
     
@@ -808,7 +813,7 @@ export class CertificatePinningManager {
     this.pinCache.set(cacheKey, result);
     
     return result;
-  }
+
 
   /**
    * Perform actual pin validation
@@ -831,7 +836,7 @@ export class CertificatePinningManager {
         errors,
         warnings: ['Certificate pinning is disabled']
       };
-    }
+
 
     // Check if this domain should be pinned
     const pins = this.config.pins[hostname];
@@ -840,7 +845,7 @@ export class CertificatePinningManager {
       // but warn if it's in the pinned domains list
       if (this.config.pinnedDomains.includes(hostname)) {
         warnings.push(`No pins configured for pinned domain: ${hostname}`);
-      }
+
       
       return {
         valid: true,
@@ -849,7 +854,7 @@ export class CertificatePinningManager {
         errors,
         warnings
       };
-    }
+
 
     // Validate against each pin
     for (const pin of pins) {
@@ -857,30 +862,30 @@ export class CertificatePinningManager {
       if (pin.expiresAt && new Date() > pin.expiresAt) {
         warnings.push(`Pin expired for ${hostname}: ${pin.description || pin.value}`);
         continue;
-      }
+
 
       const isMatch = await this.checkPinMatch(certificate, pin);
       if (isMatch) {
         matchedPin = pin;
         break;
-      }
-    }
+
+
 
     // If no pin matched, check backup pins
     if (!matchedPin && this.config.backupPins[hostname]) {
       for (const backupPin of this.config.backupPins[hostname]) {
         if (backupPin.expiresAt && new Date() > backupPin.expiresAt) {
           continue;
-        }
+
 
         const isMatch = await this.checkPinMatch(certificate, backupPin);
         if (isMatch) {
           matchedPin = backupPin;
           warnings.push(`Certificate matched backup pin for ${hostname}`);
           break;
-        }
-      }
-    }
+
+
+
 
     // Determine if validation passed
     const valid = matchedPin !== undefined;
@@ -889,7 +894,7 @@ export class CertificatePinningManager {
       errors.push(`Certificate pinning failed for ${hostname}: No matching pins found`);
       errors.push(`Certificate fingerprint: ${certificate.fingerprint}`);
       errors.push(`Certificate subject: ${certificate.subject}`);
-    }
+
 
     return {
       valid,
@@ -899,7 +904,7 @@ export class CertificatePinningManager {
       errors,
       warnings
     };
-  }
+
 
   /**
    * Check if certificate matches a specific pin
@@ -935,12 +940,12 @@ export class CertificatePinningManager {
 
       default:
         return false;
-      }
-    } catch (error) {
+
+ catch (error) {
       // If there's an error checking the pin, consider it a non-match
       return false;
-    }
-  }
+
+
 
   /**
    * Create a custom HTTPS agent with certificate pinning
@@ -952,7 +957,7 @@ export class CertificatePinningManager {
         const hostnameError = tls.checkServerIdentity(hostname, cert);
         if (hostnameError) {
           return hostnameError;
-        }
+
 
         // Then perform certificate pinning validation
         try {
@@ -965,28 +970,28 @@ export class CertificatePinningManager {
               
               if (action === 'block') {
                 throw new Error(`Certificate pinning failed: ${result.errors.join(', ')}`);
-              } else if (action === 'warn') {
+ else if (action === 'warn') {
                 console.warn(`Certificate pinning warning for ${hostname}:`, result.errors);
-              } else if (action === 'log') {
+ else if (action === 'log') {
                 console.log(`Certificate pinning info for ${hostname}:`, result.errors);
-              }
-            }
+
+
           }).catch(error => {
             if (this.config.pinValidation.pinFailureAction === 'block') {
               throw error;
-            }
+
           });
 
           return undefined; // No error
-        } catch (error) {
+ catch (error) {
           if (this.config.pinValidation.pinFailureAction === 'block') {
             return error as Error;
-          }
+
           return undefined;
-        }
-      }
+
+
     });
-  }
+
 
   /**
    * Create a pinned fetch function
@@ -1005,11 +1010,11 @@ export class CertificatePinningManager {
           agent: agent
         };
         return fetch(input, modifiedInit);
-      }
+
       
       return fetch(input, init);
     };
-  }
+
 
   /**
    * Validate all configured pins
@@ -1026,18 +1031,18 @@ export class CertificatePinningManager {
         
         if (!testResult.valid) {
           allValid = false;
-        }
-      } catch (error) {
+
+ catch (error) {
         results[hostname] = {
           valid: false,
           error: error instanceof Error ? error.message : 'Unknown error'
         };
         allValid = false;
-      }
-    }
+
+
 
     return { valid: allValid, results };
-  }
+
 
   /**
    * Test a pinned connection to a hostname
@@ -1053,15 +1058,15 @@ export class CertificatePinningManager {
               resolve(result);
             });
             return undefined;
-          } catch (error) {
+ catch (error) {
             resolve({
               valid: false,
               hostname,
               errors: [error instanceof Error ? error.message : 'Unknown error']
             });
             return error as Error;
-          }
-        }
+
+
       });
 
       socket.on('error', (error) => {
@@ -1081,7 +1086,7 @@ export class CertificatePinningManager {
         });
       });
     });
-  }
+
 
   /**
    * Clear cache for a specific hostname
@@ -1090,16 +1095,16 @@ export class CertificatePinningManager {
     for (const [key] of this.pinCache) {
       if (key.startsWith(`${hostname}:`)) {
         this.pinCache.delete(key);
-      }
-    }
-  }
+
+
+
 
   /**
    * Clear all cached pin validation results
    */
   clearCache(): void {
     this.pinCache.clear();
-  }
+
 
   /**
    * Get statistics about pin validation
@@ -1109,7 +1114,7 @@ export class CertificatePinningManager {
     pinnedDomains: number;
     cacheSize: number;
     lastChecks: Record<string, Date>;
-    } {
+ {
     const totalPins = Object.values(this.config.pins)
       .reduce((sum, pins) => sum + pins.length, 0);
 
@@ -1119,8 +1124,8 @@ export class CertificatePinningManager {
       cacheSize: this.pinCache.size,
       lastChecks: Object.fromEntries(this.lastPinCheck)
     };
-  }
-}
+
+
 
 /**
  * Create development certificate pinning configuration
@@ -1133,9 +1138,9 @@ export function createDevelopmentPinConfig(): CertificatePinConfig {
       enforceBackupPins: false,
       pinFailureAction: 'warn',
       pinUpdateCheckInterval: 1 // Check every hour in dev
-    }
+
   };
-}
+
 
 /**
  * Create production certificate pinning configuration
@@ -1148,9 +1153,9 @@ export function createProductionPinConfig(): CertificatePinConfig {
       enforceBackupPins: true,
       pinFailureAction: 'block',
       pinUpdateCheckInterval: 24 // Check every 24 hours
-    }
+
   };
-}
+
 
 /**
  * Load certificate pinning configuration from environment
@@ -1160,17 +1165,17 @@ export function loadPinConfigFromEnv(): CertificatePinConfig {
 
   if (process.env.CERT_PINNING_ENABLED) {
     config.enabled = process.env.CERT_PINNING_ENABLED === 'true';
-  }
+
 
   if (process.env.CERT_PIN_FAILURE_ACTION) {
     config.pinValidation.pinFailureAction = process.env.CERT_PIN_FAILURE_ACTION as any;
-  }
+
 
   if (process.env.CERT_PIN_CHECK_INTERVAL) {
     config.pinValidation.pinUpdateCheckInterval = parseInt(process.env.CERT_PIN_CHECK_INTERVAL);
-  }
+
 
   return config;
-}
+
 
 export default TLSConfigManager;

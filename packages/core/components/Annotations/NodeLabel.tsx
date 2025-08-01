@@ -6,18 +6,17 @@
  * positioning options, and professional styling.
  */
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { 
-  NodeLabelConfig, 
+import { NodeLabelConfig, 
   NodeLabelAction,
   NodeLabelDisplayMode,
-  NodeLabelPosition,
+  NodeLabelPosition }
   NODE_LABEL_STYLES
-} from '../../types/CollaborationTypes';
-}
-interface NodeLabelProps {
-  config: NodeLabelConfig;
+ from '../../types/CollaborationTypes';
+
+
+interface NodeLabelProps { config: NodeLabelConfig;
   nodeId: string;
-  currentNodeLabel?: string; // The node's built-in label,
+  currentNodeLabel?: string; // The node's built-in label;
   onAction: (action: NodeLabelAction) => void;
   displayMode?: NodeLabelDisplayMode;
   isNodeSelected?: boolean;
@@ -25,20 +24,20 @@ interface NodeLabelProps {
   isNodeFocused?: boolean;
   canEdit?: boolean;
   showTooltip?: boolean;
-  export const NodeLabel: React.FC<NodeLabelProps> = ({,)
-  config,
-  nodeId,
-  currentNodeLabel = '',
-  onAction,
-  displayMode,
-  isNodeSelected = false,
-  isNodeHovered = false,
-  isNodeFocused = false,
-  canEdit = true,
+  export const NodeLabel: React.FC<NodeLabelProps> = ({);
+  config;
+  nodeId;
+  currentNodeLabel = '';
+  onAction;
+  displayMode;
+  isNodeSelected = false;
+  isNodeHovered = false;
+  isNodeFocused = false;
+  canEdit = true }
   showTooltip = true
-}
-}) => {
-  const [isEditing, setIsEditing] = useState(config.isEditing || false);
+
+
+}) => { const [isEditing, setIsEditing] = useState(config.isEditing || false);
   const [editValue, setEditValue] = useState(config.customLabel);
   const inputRef = useRef<HTMLInputElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
@@ -46,157 +45,137 @@ interface NodeLabelProps {
   const shouldShowLabel = useCallback(() => {
   const mode = displayMode || config.displayMode;
   switch (mode) {
-  case 'always':,
+  case 'always':
   return true;
-  case 'hover':,
+  case 'hover':
   return isNodeHovered;
-  case 'focus':,
+  case 'focus':
   return isNodeFocused;
-  case 'selected':,
+  case 'selected':
   return isNodeSelected;
-  case 'never':,
+  case 'never':
   return false;
-  default:,
+  default: }
   return true;
 }, [displayMode, config.displayMode, isNodeHovered, isNodeFocused, isNodeSelected]);
   // Get effective label to display
-  const getEffectiveLabel = useCallback(() => {
-    const customLabel = config.customLabel?.trim();
-    return customLabel || currentNodeLabel || nodeId;
-  }, [config.customLabel, currentNodeLabel, nodeId]);
+  const getEffectiveLabel = useCallback(() => { const customLabel = config.customLabel?.trim();
+    return customLabel || currentNodeLabel || nodeId }, [config.customLabel, currentNodeLabel, nodeId]);
   // Handle double-click to start editing
-  const handleDoubleClick = useCallback((e: React.MouseEvent) => {
-  if (!canEdit) return;
+  const handleDoubleClick = useCallback((e: React.MouseEvent) => { if (!canEdit) return;
   e.stopPropagation();
   e.preventDefault();
   setIsEditing(true);
   setEditValue(config.customLabel);
   onAction({)
-  type: 'startEdit',
-  nodeId,
-  labelId: config.id,
+  type: 'startEdit'
+  nodeId
+  labelId: config.id }
 });
   }, [canEdit, config.customLabel, config.id, nodeId, onAction]);
   // Handle input changes
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => { const value = e.target.value;
     const maxLength = config.truncateLength || 50;
     if (value.length <= maxLength) {
-      setEditValue(value);
-  }, [config.truncateLength]);
+      setEditValue(value) }, [config.truncateLength]);
   // Save label changes
-  const saveLabel = useCallback(() => {
-  const newLabel = editValue.trim();
+  const saveLabel = useCallback(() => { const newLabel = editValue.trim();
   setIsEditing(false);
   onAction({)
   type: 'update',
   nodeId,
   labelId: config.id,
   customLabel: newLabel,
-  config: {
+  config: {,
   customLabel: newLabel,
-  isEditing: false,
+  isEditing: false }
 });
-    onAction({)
+    onAction({ )
   type: 'stopEdit',
   nodeId,
-  labelId: config.id,
+  labelId: config.id }
 });
   }, [editValue, nodeId, config.id, onAction]);
   // Cancel editing
-  const cancelEdit = useCallback(() => {
-  setIsEditing(false);
+  const cancelEdit = useCallback(() => { setIsEditing(false);
   setEditValue(config.customLabel);
   onAction({)
   type: 'stopEdit',
   nodeId,
-  labelId: config.id,
+  labelId: config.id }
 });
   }, [config.customLabel, config.id, nodeId, onAction]);
   // Handle key events
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-  switch (e.key) {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => { switch (e.key) {
   case 'Enter':,
   e.preventDefault();
   saveLabel();
   break;
-  case 'Escape':,
+  case 'Escape': }
   e.preventDefault();
   cancelEdit();
   break;
 }, [saveLabel, cancelEdit]);
   // Handle blur
-  const handleBlur = useCallback(() => {
-    saveLabel();
-  }, [saveLabel]);
+  const handleBlur = useCallback(() => { saveLabel() }, [saveLabel]);
   // Focus input when editing starts
-  useEffect(() => {
-    if (isEditing && inputRef.current) {
+  useEffect(() => { if (isEditing && inputRef.current) {
       inputRef.current.focus();
-      inputRef.current.select();
-  }, [isEditing]);
+      inputRef.current.select() }, [isEditing]);
   // Get label position styles
-  const getPositionStyles = useCallback((): React.CSSProperties => {
-  const position = config.position;
+  const getPositionStyles = useCallback((): React.CSSProperties => { const position = config.position;
   const baseStyles: React.CSSProperties = {,
   position: 'absolute',
   zIndex: 2000,
-  pointerEvents: 'all',
+  pointerEvents: 'all' }
 };
-    switch (position) {
-  case 'top':,
+    switch (position) { case 'top':,
   return {
   ...baseStyles,
   bottom: '100%',
   left: '50%',
   transform: 'translateX(-50%)',
-  marginBottom: '8px',
+  marginBottom: '8px' }
 };
       case 'bottom':
-        return {
-  ...baseStyles,
+        return { ...baseStyles,
   top: '100%',
   left: '50%',
   transform: 'translateX(-50%)',
-  marginTop: '8px',
+  marginTop: '8px' }
 };
       case 'left':
-        return {
-  ...baseStyles,
+        return { ...baseStyles,
   right: '100%',
   top: '50%',
   transform: 'translateY(-50%)',
-  marginRight: '8px',
+  marginRight: '8px' }
 };
       case 'right':
-        return {
-  ...baseStyles,
+        return { ...baseStyles,
   left: '100%',
   top: '50%',
   transform: 'translateY(-50%)',
-  marginLeft: '8px',
+  marginLeft: '8px' }
 };
       case 'center':
-        return {
-  ...baseStyles,
+        return { ...baseStyles,
   top: '50%',
   left: '50%',
-  transform: 'translate(-50%, -50%)',
+  transform: 'translate(-50%, -50%)' }
 };
       default:
-        return {
-  ...baseStyles,
+        return { ...baseStyles,
   top: '100%',
   left: '50%',
   transform: 'translateX(-50%)',
-  marginTop: '8px',
+  marginTop: '8px' }
 };
   }, [config.position]);
   // Get label styles
-  const getLabelStyles = useCallback((): React.CSSProperties => {
-    const baseStyle = NODE_LABEL_STYLES[config.style] || NODE_LABEL_STYLES.default;
+  const getLabelStyles = useCallback((): React.CSSProperties => { const baseStyle = NODE_LABEL_STYLES[config.style] || NODE_LABEL_STYLES.default;
     return {
-      ...baseStyle,
+      ...baseStyle }
       ...(config.color && { color: config.color }),
       ...(config.backgroundColor && { background: config.backgroundColor }),
       ...(config.fontSize && { fontSize: config.fontSize }),
@@ -233,14 +212,14 @@ interface NodeLabelProps {
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
-          style={{
-  ...labelStyles,
-  outline: 'none',
-  border: '2px solid #3b82f6',
-  cursor: 'text',
-  minWidth: '100px',
-  maxWidth: '200px',
-}}
+          style={ {
+  ...labelStyles
+  outline: 'none'
+  border: '2px solid #3b82f6'
+  cursor: 'text'
+  minWidth: '100px'
+  maxWidth: '200px' }
+}
           placeholder="Enter label..."
           maxLength={config.truncateLength || 50}
         />
@@ -248,26 +227,25 @@ interface NodeLabelProps {
         <div
           style={labelStyles}
           onDoubleClick={handleDoubleClick}
-          onMouseEnter={(e) => {
+          onMouseEnter={ (e) => {
             if (canEdit) {
-              e.currentTarget.style.opacity = '0.8';
-          }}
+              e.currentTarget.style.opacity = '0.8' }}
           onMouseLeave={(e) => {
             e.currentTarget.style.opacity = '1'
-  }}
+}
         >
           {config.showIcon && ()
             <span style={{ marginRight: '4px' }}>🏷️</span>
           )}
           {effectiveLabel}
-          {canEdit && ()
+          { canEdit && ()
             <span 
               style={{
-  marginLeft: '6px',
-  fontSize: '10px',
-  opacity: 0.6,
-  fontStyle: 'italic',
-}}
+  marginLeft: '6px'
+  fontSize: '10px'
+  opacity: 0.6
+  fontStyle: 'italic' }
+
             >
               ✏️
             </span>
@@ -275,40 +253,39 @@ interface NodeLabelProps {
         </div>
       )}
       {/* Delete button for custom labels */}
-      {config.customLabel && canEdit && !isEditing && ()
+      { config.customLabel && canEdit && !isEditing && ()
         <button
           style={{
-  position: 'absolute',
-  top: '-6px',
-  right: '-6px',
-  width: '16px',
-  height: '16px',
-  borderRadius: '50%',
-  background: '#ef4444',
-  color: 'white',
-  border: 'none',
-  fontSize: '10px',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  opacity: 0.8,
-  transition: 'opacity 0.2s ease',
-}}
-          onClick={(e) => {
+  position: 'absolute'
+  top: '-6px'
+  right: '-6px'
+  width: '16px'
+  height: '16px'
+  borderRadius: '50%'
+  background: '#ef4444'
+  color: 'white'
+  border: 'none'
+  fontSize: '10px'
+  cursor: 'pointer'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  opacity: 0.8
+  transition: 'opacity 0.2s ease' }
+
+          onClick={ (e) => {
   e.stopPropagation();
   onAction({)
-  type: 'delete',
-  nodeId,
-  labelId: config.id,
+  type: 'delete'
+  nodeId
+  labelId: config.id }
 });
-          }}
+
           onMouseEnter={(e) => {
             e.currentTarget.style.opacity = '1'
-  }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = '0.8';
-          }}
+}
+          onMouseLeave={ (e) => {
+            e.currentTarget.style.opacity = '0.8' }}
           title="Remove custom label"
         >
           ×

@@ -48,7 +48,8 @@ limits: {
 permissions: {
     who_can_invite: 'owners' | 'admins' | 'members';
     who_can_create_projects: 'owners' | 'admins' | 'members';
-    default_project_visibility: 'private' | 'workspace' | 'public';
+    default_project_visibility: 'private' | 'workspace' | 'public',
+    ;
 }
 ;
 ;

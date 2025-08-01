@@ -35,7 +35,7 @@ import {
   CategoryPermission,
   CategoryMapping,
   CategoryImportExport
-} from './CategoryDataModel';
+ from './CategoryDataModel';
 
 export class CategoryManagementService {
   private dbService: DatabaseService;
@@ -44,7 +44,7 @@ export class CategoryManagementService {
   constructor(dbService: DatabaseService, auditService: AuditService) {
     this.dbService = dbService;
     this.auditService = auditService;
-  }
+
 
   /**
    * Create a new category
@@ -60,7 +60,7 @@ export class CategoryManagementService {
       const validationResult = await this.validateCategory(categoryData);
       if (!validationResult.valid) {
         throw new Error(`Category validation failed: ${validationResult.errors.map(e => e.message).join(', ')}`);
-      }
+
 
       const categoryId = require('crypto').randomUUID();
       
@@ -110,15 +110,14 @@ export class CategoryManagementService {
           code: category.code,
           name: category.name,
           level: category.level
-  }
+
         severity: 'info'
       });
 
       await this.logCategoryAudit('create', categoryId, adminId, null, category, true, context);
 
       return category;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'category_creation_failed',
         userId: adminId,
@@ -126,12 +125,12 @@ export class CategoryManagementService {
         details: {
           error: error instanceof Error ? error.message : String(error),
           categoryData: { domain: categoryData.domain, code: categoryData.code }
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Update an existing category
@@ -148,14 +147,14 @@ export class CategoryManagementService {
       const currentCategory = await this.getCategoryById(categoryId);
       if (!currentCategory) {
         throw new Error('Category not found');
-      }
+
 
       // Validate updates
       const updatedData = { ...currentCategory, ...updates };
       const validationResult = await this.validateCategory(updatedData);
       if (!validationResult.valid) {
         throw new Error(`Category validation failed: ${validationResult.errors.map(e => e.message).join(', ')}`);
-      }
+
 
       // Handle hierarchy changes
       let hierarchyInfo = {
@@ -169,7 +168,7 @@ export class CategoryManagementService {
           updates.parentId ?? currentCategory.parentId,
           updates.code ?? currentCategory.code
         );
-      }
+
 
       // Build update query
       const updateFields: string[] = [];
@@ -198,16 +197,16 @@ export class CategoryManagementService {
           let value = (updates as any)[field];
           if (['metadata', 'properties', 'configuration', 'requiredPermissions'].includes(field)) {
             value = JSON.stringify(value);
-          }
+
           updateValues.push(value);
-        }
+
       });
 
       // Add hierarchy fields if changed
       if (updates.parentId !== undefined || updates.code !== undefined) {
         updateFields.push(`parent_id = $${paramIndex++}`, `level = $${paramIndex++}`, `path = $${paramIndex++}`, `ancestors = $${paramIndex++}`);
         updateValues.push(updates.parentId ?? currentCategory.parentId, hierarchyInfo.level, hierarchyInfo.path, hierarchyInfo.ancestors);
-      }
+
 
       // Add updated_by and updated_at
       updateFields.push(`updated_by = $${paramIndex++}`, 'updated_at = NOW()');
@@ -236,15 +235,14 @@ export class CategoryManagementService {
           changedFields: Object.keys(updates),
           domain: updatedCategory.domain,
           code: updatedCategory.code
-  }
+
         severity: 'info'
       });
 
       await this.logCategoryAudit('update', categoryId, adminId, currentCategory, updatedCategory, true, context);
 
       return updatedCategory;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'category_update_failed',
         userId: adminId,
@@ -252,12 +250,12 @@ export class CategoryManagementService {
         resourceId: categoryId,
         details: {
           error: error instanceof Error ? error.message : String(error)
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Delete a category
@@ -273,19 +271,19 @@ export class CategoryManagementService {
       const category = await this.getCategoryById(categoryId);
       if (!category) {
         throw new Error('Category not found');
-      }
+
 
       // Check for children
       const children = await this.getCategoryChildren(categoryId);
       
       if (children.length > 0 && !options.cascadeDelete && !options.transferChildrenTo) {
         throw new Error('Cannot delete category with children. Use cascadeDelete or transferChildrenTo options.');
-      }
+
 
       // Handle children
       if (options.transferChildrenTo) {
         await this.transferChildren(categoryId, options.transferChildrenTo, adminId);
-      }
+
 
       // Delete the category
       await this.dbService.query('DELETE FROM categories WHERE id = $1', [categoryId]);
@@ -302,13 +300,12 @@ export class CategoryManagementService {
           name: category.name,
           cascadeDelete: options.cascadeDelete,
           transferChildrenTo: options.transferChildrenTo
-  }
+
         severity: 'info'
       });
 
       await this.logCategoryAudit('delete', categoryId, adminId, category, null, true, context);
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'category_deletion_failed',
         userId: adminId,
@@ -316,12 +313,12 @@ export class CategoryManagementService {
         resourceId: categoryId,
         details: {
           error: error instanceof Error ? error.message : String(error)
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Get category by ID
@@ -332,7 +329,7 @@ export class CategoryManagementService {
     
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const category = this.mapCategoryRow(result.rows[0]);
 
@@ -346,10 +343,10 @@ export class CategoryManagementService {
       `, [categoryId]);
 
       (category as any).relationships = relationshipsResult.rows;
-    }
+
 
     return category;
-  }
+
 
   /**
    * Query categories with filtering and pagination
@@ -358,7 +355,7 @@ export class CategoryManagementService {
     categories: Category[];
     totalCount: number;
     hasMore: boolean;
-  }> {
+> {
 
     const conditions = [];
     const values = [];
@@ -369,58 +366,58 @@ export class CategoryManagementService {
       if (query.filter.domains && query.filter.domains.length > 0) {
         conditions.push(`domain = ANY($${paramIndex++})`);
         values.push(query.filter.domains);
-      }
+
 
       if (query.filter.status && query.filter.status.length > 0) {
         conditions.push(`status = ANY($${paramIndex++})`);
         values.push(query.filter.status);
-      }
+
 
       if (query.filter.parentId !== undefined) {
         if (query.filter.parentId === null) {
           conditions.push('parent_id IS NULL');
-        } else {
+ else {
           conditions.push(`parent_id = $${paramIndex++}`);
           values.push(query.filter.parentId);
-        }
-      }
+
+
 
       if (query.filter.level !== undefined) {
         conditions.push(`level = $${paramIndex++}`);
         values.push(query.filter.level);
-      }
+
 
       if (query.filter.maxLevel !== undefined) {
         conditions.push(`level <= $${paramIndex++}`);
         values.push(query.filter.maxLevel);
-      }
+
 
       if (query.filter.searchQuery) {
         conditions.push(`(name ILIKE $${paramIndex} OR description ILIKE $${paramIndex} OR code ILIKE $${paramIndex})`);
         values.push(`%${query.filter.searchQuery}%`);
         paramIndex++;
-      }
+
 
       if (query.filter.tags && query.filter.tags.length > 0) {
         conditions.push(`metadata->'tags' ?| $${paramIndex++}`);
         values.push(query.filter.tags);
-      }
+
 
       if (query.filter.isSystemManaged !== undefined) {
         conditions.push(`is_system_managed = $${paramIndex++}`);
         values.push(query.filter.isSystemManaged);
-      }
+
 
       if (query.filter.createdAfter) {
         conditions.push(`created_at >= $${paramIndex++}`);
         values.push(query.filter.createdAfter);
-      }
+
 
       if (query.filter.createdBefore) {
         conditions.push(`created_at <= $${paramIndex++}`);
         values.push(query.filter.createdBefore);
-      }
-    }
+
+
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
@@ -434,7 +431,7 @@ export class CategoryManagementService {
     if (query.sort && query.sort.length > 0) {
       const sortClauses = query.sort.map(s => `${s.field} ${s.direction}`);
       orderBy = `ORDER BY ${sortClauses.join(', ')}`;
-    }
+
 
     // Build pagination
     const limit = query.pagination?.limit || 50;
@@ -458,7 +455,7 @@ export class CategoryManagementService {
       totalCount,
       hasMore: offset + categories.length < totalCount
     };
-  }
+
 
   /**
    * Get category tree structure
@@ -476,15 +473,15 @@ export class CategoryManagementService {
     if (domain) {
       conditions.push(`domain = $${paramIndex++}`);
       values.push(domain);
-    }
+
 
     if (rootCategoryId) {
       conditions.push(`(id = $${paramIndex} OR $${paramIndex} = ANY(ancestors))`);
       values.push(rootCategoryId);
       paramIndex++;
-    } else {
+ else {
       conditions.push('parent_id IS NULL');
-    }
+
 
     const query = `
       SELECT * FROM categories 
@@ -496,7 +493,7 @@ export class CategoryManagementService {
     const categories = result.rows.map(row => this.mapCategoryRow(row));
 
     return this.buildCategoryTree(categories, rootCategoryId, maxDepth);
-  }
+
 
   /**
    * Create category relationship
@@ -547,14 +544,13 @@ export class CategoryManagementService {
           relationshipType, relationship.strength, true,
           JSON.stringify(relationship.metadata), adminId
         ]);
-      }
+
 
       return relationship;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to create category relationship: ${error}`);
-    }
-  }
+
+
 
   /**
    * Get category usage statistics
@@ -577,10 +573,10 @@ export class CategoryManagementService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapUsageStatisticsRow(result.rows[0]);
-  }
+
 
   /**
    * Generate category analytics
@@ -601,18 +597,18 @@ export class CategoryManagementService {
         assignmentAccuracy: 92,
         searchRelevance: 88,
         userSatisfaction: 4.2
-  }
+
       usagePatterns: {
         peakHours: [9, 10, 14, 15],
         seasonalTrends: { Q1: 100, Q2: 120, Q3: 110, Q4: 95 },
         userBehaviors: ['frequent_searches', 'quick_assignments']
-  }
+
       healthIndicators: {
         contentQuality: 90,
         organizationStructure: 85,
         userAdoption: 78,
         maintenanceNeeds: ['update_descriptions', 'review_unused_categories']
-  }
+
       recommendations: [
         {
           type: 'optimization',
@@ -627,15 +623,15 @@ export class CategoryManagementService {
             'Add comprehensive descriptions',
             'Test user comprehension'
           ]
-        }
+
       ],
       benchmarks: {
         similarCategories: [],
         performanceComparison: {},
         bestPractices: ['Use consistent naming conventions', 'Maintain shallow hierarchies']
-      }
+
     };
-  }
+
 
   /**
    * Perform bulk category operations
@@ -648,7 +644,7 @@ export class CategoryManagementService {
     success: number;
     failed: number;
     results: Array<{ operationIndex: number; success: boolean; error?: string; result?: any }>;
-  }> {
+> {
     const results: Array<{ operationIndex: number; success: boolean; error?: string; result?: any }> = [];
     let successCount = 0;
     let failedCount = 0;
@@ -662,18 +658,18 @@ export class CategoryManagementService {
             const result = await this.executeSingleOperation(operation, adminId, context);
             results.push({ operationIndex: index, success: true, result });
             successCount++;
-          } catch (error) {
+ catch (error) {
             results.push({ 
               operationIndex: index, 
               success: false, 
               error: error instanceof Error ? error.message : String(error) 
             });
             failedCount++;
-          }
+
         });
 
         await Promise.all(promises);
-      } else {
+ else {
         // Sequential execution
         for (let i = 0; i < bulkOperation.operations.length; i++) {
           const operation = bulkOperation.operations[i];
@@ -682,7 +678,7 @@ export class CategoryManagementService {
             const result = await this.executeSingleOperation(operation, adminId, context);
             results.push({ operationIndex: i, success: true, result });
             successCount++;
-          } catch (error) {
+ catch (error) {
             results.push({ 
               operationIndex: i, 
               success: false, 
@@ -693,10 +689,10 @@ export class CategoryManagementService {
             // Stop on error if rollback is enabled
             if (bulkOperation.rollbackOnError) {
               break;
-            }
-          }
-        }
-      }
+
+
+
+
 
       // Log bulk operation
       await this.auditService.logAction({
@@ -708,13 +704,12 @@ export class CategoryManagementService {
           successCount,
           failedCount,
           reason: bulkOperation.reason
-  }
+
         severity: successCount > failedCount ? 'info' : 'warning'
       });
 
       return { success: successCount, failed: failedCount, results };
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'category_bulk_operation_failed',
         userId: adminId,
@@ -722,12 +717,12 @@ export class CategoryManagementService {
         details: {
           error: error instanceof Error ? error.message : String(error),
           reason: bulkOperation.reason
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -739,15 +734,15 @@ export class CategoryManagementService {
     // Required field validation
     if (!categoryData.domain) {
       errors.push({ field: 'domain', code: 'required', message: 'Domain is required', severity: 'error' });
-    }
+
 
     if (!categoryData.code) {
       errors.push({ field: 'code', code: 'required', message: 'Code is required', severity: 'error' });
-    }
+
 
     if (!categoryData.name) {
       errors.push({ field: 'name', code: 'required', message: 'Name is required', severity: 'error' });
-    }
+
 
     // Uniqueness validation
     if (categoryData.domain && categoryData.code) {
@@ -763,8 +758,8 @@ export class CategoryManagementService {
           message: 'Code must be unique within domain', 
           severity: 'error' 
         });
-      }
-    }
+
+
 
     // Hierarchy validation
     if (categoryData.parentId && categoryData.id) {
@@ -783,16 +778,16 @@ export class CategoryManagementService {
             message: 'Circular reference detected', 
             severity: 'error' 
           });
-        }
-      }
-    }
+
+
+
 
     return {
       valid: errors.length === 0,
       errors,
       warnings
     };
-  }
+
 
   private async calculateHierarchyInfo(
     parentId?: string, 
@@ -805,7 +800,7 @@ export class CategoryManagementService {
         path: `/${code}`,
         ancestors: []
       };
-    }
+
 
     const parentResult = await this.dbService.query(
       'SELECT level, path, ancestors FROM categories WHERE id = $1',
@@ -814,7 +809,7 @@ export class CategoryManagementService {
 
     if (parentResult.rows.length === 0) {
       throw new Error('Parent category not found');
-    }
+
 
     const parent = parentResult.rows[0];
     
@@ -823,7 +818,7 @@ export class CategoryManagementService {
       path: `${parent.path}/${code}`,
       ancestors: [...(parent.ancestors || []), parentId]
     };
-  }
+
 
   private async getCategoryChildren(categoryId: string): Promise<Category[]> {
 
@@ -833,7 +828,7 @@ export class CategoryManagementService {
     );
 
     return result.rows.map(row => this.mapCategoryRow(row));
-  }
+
 
   private async transferChildren(
     fromCategoryId: string, 
@@ -845,7 +840,7 @@ export class CategoryManagementService {
       'UPDATE categories SET parent_id = $1, updated_by = $2, updated_at = NOW() WHERE parent_id = $3',
       [toCategoryId, adminId, fromCategoryId]
     );
-  }
+
 
   private buildCategoryTree(
     categories: Category[], 
@@ -861,7 +856,7 @@ export class CategoryManagementService {
       
       if (!category.parentId || category.parentId === rootId) {
         rootCategories.push(category);
-      }
+
     });
 
     // Build tree recursively
@@ -880,7 +875,7 @@ export class CategoryManagementService {
     };
 
     return rootCategories.map(category => buildNode(category));
-  }
+
 
   private async executeSingleOperation(
     operation: CategoryOperation,
@@ -900,8 +895,8 @@ export class CategoryManagementService {
       
     default:
       throw new Error(`Unsupported operation: ${operation.operation}`);
-    }
-  }
+
+
 
   private async logCategoryAudit(
     operation: string,
@@ -934,7 +929,7 @@ export class CategoryManagementService {
       context.ipAddress,
       context.userAgent
     ]);
-  }
+
 
   private calculateChanges(before: Category | null, after: Category | null): any[] {
     if (!before || !after) return [];
@@ -953,11 +948,11 @@ export class CategoryManagementService {
           newValue,
           changeType: 'updated'
         });
-      }
+
     });
 
     return changes;
-  }
+
 
   private mapCategoryRow(row: any): Category {
     return {
@@ -996,7 +991,7 @@ export class CategoryManagementService {
       localizedNames: JSON.parse(row.localized_names || '{}'),
       localizedDescriptions: JSON.parse(row.localized_descriptions || '{}')
     };
-  }
+
 
   private mapUsageStatisticsRow(row: any): CategoryUsageStatistics {
     return {
@@ -1004,7 +999,7 @@ export class CategoryManagementService {
       period: {
         start: row.period_start,
         end: row.period_end
-  }
+
       totalUsageCount: row.total_usage_count,
       uniqueUsers: row.unique_users,
       averageUsagePerUser: row.average_usage_per_user,
@@ -1021,5 +1016,4 @@ export class CategoryManagementService {
       reassignmentRate: row.reassignment_rate,
       userSatisfactionScore: row.user_satisfaction_score
     };
-  }
-}
+

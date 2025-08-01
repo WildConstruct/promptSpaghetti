@@ -20,7 +20,7 @@ import {
   FeedbackType,
   FeedbackCategory,
   PreviewChange
-} from '../../../packages/core/security/PolicyPreviewStagingService';
+ from '../../../packages/core/security/PolicyPreviewStagingService';
 
 // Request schemas
 const CreatePreviewSchema = z.object({
@@ -83,48 +83,48 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 interface CreatePreviewRequest extends AuthenticatedRequest {
   Body: z.infer<typeof CreatePreviewSchema>;
-}
+
 
 interface DeployToStagingRequest extends AuthenticatedRequest {
   Body: z.infer<typeof DeployToStagingSchema>;
   Params: { previewId: string };
-}
+
 
 interface ValidationRequest extends AuthenticatedRequest {
   Body: z.infer<typeof ValidationRequestSchema>;
   Params: { previewId: string };
-}
+
 
 interface UserFeedbackRequest extends AuthenticatedRequest {
   Body: z.infer<typeof UserFeedbackSchema>;
   Params: { previewId: string };
-}
+
 
 interface ComparisonRequest extends AuthenticatedRequest {
   Body: z.infer<typeof ComparisonRequestSchema>;
-}
+
 
 interface PromoteRequest extends AuthenticatedRequest {
   Body: z.infer<typeof PromoteToProductionSchema>;
   Params: { previewId: string };
-}
+
 
 interface RollbackRequest extends AuthenticatedRequest {
   Body: z.infer<typeof RollbackRequestSchema>;
   Params: { deploymentId: string };
-}
+
 
 interface PreviewParamsRequest extends AuthenticatedRequest {
   Params: { previewId: string };
-}
+
 
 interface DeploymentParamsRequest extends AuthenticatedRequest {
   Params: { deploymentId: string };
-}
+
 
 export async function policyPreviewRoutes(fastify: FastifyInstance) {
   // Initialize policy preview service
@@ -150,7 +150,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           { feature: 'real-time-monitoring', enabled: true, configuration: {} },
           { feature: 'user-feedback', enabled: true, configuration: {} }
         ]
-  }
+
       {
         environmentId: 'canary-1',
         name: 'Canary Environment',
@@ -164,7 +164,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         features: [
           { feature: 'auto-rollback', enabled: true, configuration: { threshold: 0.05 } }
         ]
-      }
+
     ],
     defaultValidations: [ValidationType.SYNTAX, ValidationType.LEGAL, ValidationType.COMPLIANCE]
   };
@@ -180,7 +180,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Valid authentication token required'
         });
-      }
+
 
       const token = authHeader.slice(7);
       const user = await fastify.jwt.verify(token) as any;
@@ -190,15 +190,15 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Invalid authentication token'
         });
-      }
+
 
       request.user = user;
-    } catch (error) {
+ catch (error) {
       return reply.code(401).send({
         error: 'Unauthorized',
         message: 'Authentication failed'
       });
-    }
+
   };
 
   // Middleware to check admin permissions
@@ -208,7 +208,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         error: 'Forbidden',
         message: 'Administrative privileges required'
       });
-    }
+
   };
 
   /**
@@ -240,13 +240,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
                 impactLevel: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
                 userVisible: { type: 'boolean' },
                 requiresConsent: { type: 'boolean' }
-  }
+
               required: ['section', 'type', 'reasoning', 'impactLevel', 'userVisible', 'requiresConsent']
-            }
-          }
-  }
+
+
+
         required: ['policyId', 'baseVersion', 'title', 'description', 'changes']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -255,10 +255,10 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             expiresAt: { type: 'string', format: 'date-time' },
             validationResults: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: CreatePreviewRequest, reply: FastifyReply) => {
     try {
       const requestData = CreatePreviewSchema.parse(request.body);
@@ -287,7 +287,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           expirationDays: requestData.expirationDays,
           enableSimulation: requestData.enableSimulation,
           targetEnvironments: requestData.targetEnvironments
-        }
+
       );
 
       reply.send({
@@ -303,7 +303,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           warnings: vr.warnings.length
         }))
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error creating policy preview:', error);
       if (error instanceof z.ZodError) {
         reply.code(400).send({
@@ -311,13 +311,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to create policy preview'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -332,9 +332,9 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-  }
+
         required: ['previewId']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -342,9 +342,9 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           targetUserGroups: { type: 'array', items: { type: 'string' } },
           autoRollbackEnabled: { type: 'boolean' },
           monitoringDuration: { type: 'number', minimum: 1, maximum: 168 }
-  }
+
         required: ['environmentId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -353,10 +353,10 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             environmentId: { type: 'string' },
             deployedAt: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: DeployToStagingRequest, reply: FastifyReply) => {
     try {
       const { previewId } = request.params;
@@ -378,13 +378,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         environmentId: deployment.environmentId,
         deployedAt: deployment.deployedAt.toISOString()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error deploying to staging:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: error.message || 'Failed to deploy to staging'
       });
-    }
+
   });
 
   /**
@@ -399,9 +399,9 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-  }
+
         required: ['previewId']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -409,11 +409,11 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
             type: 'array',
             minItems: 1,
             items: { type: 'string', enum: ['SYNTAX', 'LEGAL', 'COMPLIANCE', 'ACCESSIBILITY', 'INTEGRATION'] }
-          }
-  }
+
+
         required: ['validationTypes']
-      }
-    }
+
+
   }, async (request: ValidationRequest, reply: FastifyReply) => {
     try {
       const { previewId } = request.params;
@@ -426,7 +426,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'Policy preview not found'
         });
-      }
+
 
       const results = await previewService.runValidations(preview, validationTypes);
 
@@ -444,13 +444,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           validatedAt: result.validatedAt.toISOString()
         }))
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error running validation:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to run validation'
       });
-    }
+
   });
 
   /**
@@ -465,9 +465,9 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-  }
+
         required: ['previewId']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -477,11 +477,11 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           categories: {
             type: 'array',
             items: { type: 'string', enum: ['POSITIVE', 'NEGATIVE', 'NEUTRAL', 'SUGGESTION', 'BUG_REPORT', 'QUESTION'] }
-          }
-  }
+
+
         required: ['feedbackType', 'rating', 'comments', 'categories']
-      }
-    }
+
+
   }, async (request: UserFeedbackRequest, reply: FastifyReply) => {
     try {
       const { previewId } = request.params;
@@ -496,7 +496,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           rating: feedbackData.rating,
           comments: feedbackData.comments,
           categories: feedbackData.categories as FeedbackCategory[]
-        }
+
       );
 
       reply.send({
@@ -504,13 +504,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         submitted: true,
         actionRequired: feedback.actionRequired
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error submitting feedback:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: error.message || 'Failed to submit feedback'
       });
-    }
+
   });
 
   /**
@@ -527,10 +527,10 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           baseVersion: { type: 'string', minLength: 1 },
           compareVersion: { type: 'string', minLength: 1 },
           policyId: { type: 'string', minLength: 1 }
-  }
+
         required: ['baseVersion', 'compareVersion', 'policyId']
-      }
-    }
+
+
   }, async (request: ComparisonRequest, reply: FastifyReply) => {
     try {
       const { baseVersion, compareVersion, policyId } = ComparisonRequestSchema.parse(request.body);
@@ -550,13 +550,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         generatedAt: report.generatedAt.toISOString(),
         downloadUrl: `/api/policy-preview/reports/${report.comparisonId}`
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error generating comparison:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to generate comparison report'
       });
-    }
+
   });
 
   /**
@@ -571,10 +571,10 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-  }
+
         required: ['previewId']
-      }
-    }
+
+
   }, async (request: PreviewParamsRequest, reply: FastifyReply) => {
     try {
       const { previewId } = request.params;
@@ -582,13 +582,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
       const analytics = await previewService.getPreviewAnalytics(previewId);
 
       reply.send(analytics);
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching analytics:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: error.message || 'Failed to fetch analytics'
       });
-    }
+
   });
 
   /**
@@ -603,18 +603,18 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-  }
+
         required: ['previewId']
-  }
+
       body: {
         type: 'object',
         properties: {
           effectiveDate: { type: 'string', format: 'date-time' },
           rolloutStrategy: { type: 'string' }
-  }
+
         required: ['effectiveDate']
-      }
-    }
+
+
   }, async (request: PromoteRequest, reply: FastifyReply) => {
     try {
       const { previewId } = request.params;
@@ -635,13 +635,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         productionVersion: result.productionVersion,
         effectiveDate: promoteData.effectiveDate
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error promoting preview:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: error.message || 'Failed to promote preview'
       });
-    }
+
   });
 
   /**
@@ -656,17 +656,17 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           deploymentId: { type: 'string' }
-  }
+
         required: ['deploymentId']
-  }
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', minLength: 10, maxLength: 500 }
-  }
+
         required: ['reason']
-      }
-    }
+
+
   }, async (request: RollbackRequest, reply: FastifyReply) => {
     try {
       const { deploymentId } = request.params;
@@ -685,13 +685,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         reason,
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error rolling back deployment:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: error.message || 'Failed to rollback deployment'
       });
-    }
+
   });
 
   /**
@@ -706,10 +706,10 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           deploymentId: { type: 'string' }
-  }
+
         required: ['deploymentId']
-      }
-    }
+
+
   }, async (request: DeploymentParamsRequest, reply: FastifyReply) => {
     try {
       const { deploymentId } = request.params;
@@ -720,7 +720,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'Deployment not found'
         });
-      }
+
 
       reply.send({
         deploymentId: deployment.deploymentId,
@@ -737,13 +737,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           status: issue.status
         }))
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error fetching deployment status:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch deployment status'
       });
-    }
+
   });
 
   /**
@@ -760,9 +760,9 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           status: { type: 'string', enum: ['DRAFT', 'VALIDATING', 'STAGED', 'TESTING', 'APPROVED', 'REJECTED', 'EXPIRED'] },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const { status, limit = 20, offset = 0 } = request.query as any;
@@ -774,7 +774,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
       let filteredPreviews = allPreviews;
       if (status) {
         filteredPreviews = allPreviews.filter(p => p.status === status);
-      }
+
 
       // Apply pagination
       const paginatedPreviews = filteredPreviews.slice(offset, offset + limit);
@@ -796,19 +796,18 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           offset,
           total: filteredPreviews.length,
           hasMore: offset + limit < filteredPreviews.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error listing previews:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to list previews'
       });
-    }
+
   });
-}
+
 
 // Register the plugin
 export default async function (fastify: FastifyInstance) {
   await fastify.register(policyPreviewRoutes, { prefix: '/api/policy-preview' });
-}

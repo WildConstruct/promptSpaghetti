@@ -3,9 +3,9 @@
 // Real-time graph preview with visualization
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Graph, Node } from '../../../graphSchema';
-}
-interface GraphPreviewProps {
-  graph?: Graph;
+
+
+interface GraphPreviewProps { graph?: Graph;
   isGenerating?: boolean;
   onNodeSelect?: (nodeId: string) => void;
   onEdgeSelect?: (sourceId: string, targetId: string) => void;
@@ -38,15 +38,16 @@ interface GraphPreviewProps {
   /**
   * Graph preview component with interactive visualization
   */
-  export const GraphPreview: React.FC<GraphPreviewProps> = ({,)
-  graph,
-  isGenerating = false,
-  onNodeSelect,
-  onEdgeSelect,
-  className = '',
-  showStats = true,
+  export const GraphPreview: React.FC<GraphPreviewProps> = ({);
+  graph;
+  isGenerating = false;
+  onNodeSelect;
+  onEdgeSelect;
+  className = '';
+  showStats = true }
   interactive = true
-}
+
+
 }) => {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<{ source: string; target: string } | null>(null);
@@ -64,7 +65,7 @@ interface GraphPreviewProps {
     let hasAdvancedNodes = false;
     // Build edge map and count edges
     const edgeMap = new Map<string, Set<string>>();
-    graph.nodes.forEach(node => {)
+    graph.nodes.forEach(node => { )
   // Count node types
       nodeTypes[node.type] = (nodeTypes[node.type] || 0) + 1;
       // Check for special node types
@@ -77,8 +78,7 @@ interface GraphPreviewProps {
   if (!edgeMap.has(inputId)) {
             edgeMap.set(inputId, new Set());
           edgeMap.get(inputId)!.add(node.id);
-          edgeCount++;
-        });
+          edgeCount++ });
     });
     // Calculate complexity
     let complexity: 'simple' | 'moderate' | 'complex';
@@ -91,14 +91,13 @@ interface GraphPreviewProps {
     const averageConnections = nodeCount > 0 ? totalConnections / nodeCount : 0;
     // Calculate max depth using BFS
     const maxDepth = calculateMaxDepth(graph.nodes, edgeMap);
-    return {
-      nodeCount,
+    return { nodeCount,
       edgeCount,
       nodeTypes,
       complexity,
       hasOutput,
       hasAdvancedNodes,
-      averageConnections,
+      averageConnections }
       maxDepth
     };
   }, [graph]);
@@ -109,12 +108,10 @@ interface GraphPreviewProps {
     return generateLayout(graph, selectedNodeId, selectedEdge);
   }, [graph, selectedNodeId, selectedEdge]);
   // Handle node click
-  const handleNodeClick = useCallback((nodeId: string) => {
-  if (!interactive) return;
+  const handleNodeClick = useCallback((nodeId: string) => { if (!interactive) return;
   setSelectedNodeId(prev => prev === nodeId ? null : nodeId);
   setSelectedEdge(null);
-  onNodeSelect?.(nodeId);
-}, [interactive, onNodeSelect]);
+  onNodeSelect?.(nodeId) }, [interactive, onNodeSelect]);
   // Handle edge click
   const handleEdgeClick = useCallback((source: string, target: string) => {
     if (!interactive) return;
@@ -127,12 +124,10 @@ interface GraphPreviewProps {
     onEdgeSelect?.(source, target);
   }, [interactive, onEdgeSelect]);
   // Handle zoom
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-  if (!interactive) return;
+  const handleWheel = useCallback((e: React.WheelEvent) => { if (!interactive) return;
   e.preventDefault();
   const delta = e.deltaY > 0 ? 0.9 : 1.1;
-  setScale(prev => Math.max(0.2, Math.min(3, prev * delta)));
-}, [interactive]);
+  setScale(prev => Math.max(0.2, Math.min(3, prev * delta))) }, [interactive]);
   // Handle pan start
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!interactive) return;
@@ -140,17 +135,14 @@ interface GraphPreviewProps {
     setDragStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
   }, [interactive, offset]);
   // Handle pan move
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-  if (!isDragging || !interactive) return;
+  const handleMouseMove = useCallback((e: React.MouseEvent) => { if (!isDragging || !interactive) return;
   setOffset({)
   x: e.clientX - dragStart.x,
-  y: e.clientY - dragStart.y,
+  y: e.clientY - dragStart.y }
 });
   }, [isDragging, interactive, dragStart]);
   // Handle pan end
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-  }, []);
+  const handleMouseUp = useCallback(() => { setIsDragging(false) }, []);
   // Reset view
   const resetView = useCallback(() => {
     setScale(1);
@@ -240,7 +232,7 @@ interface GraphPreviewProps {
           height="100%"
           style={{
             transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`}
-          }}
+
         >
           <defs>
             {/* Arrow marker for edges */}
@@ -336,13 +328,11 @@ interface GraphPreviewProps {
 /**
  * Calculate maximum depth of the graph
  */
-function calculateMaxDepth(nodes: Node, edgeMap: Map<string, Set<string>>): number {
-  // Find root nodes (no incoming edges)
+function calculateMaxDepth(nodes: Node, edgeMap: Map<string, Set<string>>): number { // Find root nodes (no incoming edges)
   const nodeIds = new Set(nodes.map(n => n.id));
   const hasIncoming = new Set<string>();
   edgeMap.forEach(targets => {)
-  targets.forEach(target => hasIncoming.add(target));
-  });
+  targets.forEach(target => hasIncoming.add(target)) });
   const roots = Array.from(nodeIds).filter(id => !hasIncoming.has(id));
   if (roots.length === 0) return 0;
   // BFS to find maximum depth
@@ -365,10 +355,9 @@ function calculateMaxDepth(nodes: Node, edgeMap: Map<string, Set<string>>): numb
  * Generate layout for visual nodes and edges
  */
 function generateLayout(graph: Graph, (
-    selectedNodeId: string | null,
+    selectedNodeId: string | null
     selectedEdge: { source: string; target: string } | null
-  ): { visualNodes: VisualNode; visualEdges: VisualEdge } {
-  const nodes = graph.nodes;
+  ): { visualNodes: VisualNode; visualEdges: VisualEdge } { const nodes = graph.nodes;
   const visualNodes: VisualNode = [];
   const visualEdges: VisualEdge = [];
   // Build edge map
@@ -382,15 +371,13 @@ function generateLayout(graph: Graph, (
   edgeMap.get(inputId)!.add(node.id);
   if (!incomingMap.has(node.id)) {
   incomingMap.set(node.id, new Set());
-  incomingMap.get(node.id)!.add(inputId);
-});
+  incomingMap.get(node.id)!.add(inputId) });
   });
   // Calculate levels using topological sort
   const levels = new Map<string, number>();
   const queue = nodes.filter(node => !incomingMap.has(node.id)).map(n => n.id);
   let currentLevel = 0;
-  while (queue.length > 0) {
-    const levelNodes = [...queue];
+  while (queue.length > 0) { const levelNodes = [...queue];
     queue.length = 0;
     levelNodes.forEach(nodeId => {)
   levels.set(nodeId, currentLevel);
@@ -401,39 +388,34 @@ function generateLayout(graph: Graph, (
           if (incoming) {
             incoming.delete(nodeId);
             if (incoming.size === 0) {
-              queue.push(target);
-        });
+              queue.push(target) });
     });
     currentLevel++;
   // Handle remaining nodes (cycles)
-  nodes.forEach(node => {)
+  nodes.forEach(node => { )
   if (!levels.has(node.id)) {
-      levels.set(node.id, currentLevel);
-  });
+      levels.set(node.id, currentLevel) });
   // Generate positions
   const levelGroups = new Map<number, string>();
-  levels.forEach((level, nodeId) => {
-    if (!levelGroups.has(level)) {
+  levels.forEach((level, nodeId) => { if (!levelGroups.has(level)) {
       levelGroups.set(level, []);
-    levelGroups.get(level)!.push(nodeId);
-  });
+    levelGroups.get(level)!.push(nodeId) });
   const width = 800;
   const height = 600;
   const levelHeight = height / Math.max(1, levelGroups.size);
-  levelGroups.forEach((nodeIds, level) => {
-  const levelWidth = width / Math.max(1, nodeIds.length);
+  levelGroups.forEach((nodeIds, level) => { const levelWidth = width / Math.max(1, nodeIds.length);
   nodeIds.forEach((nodeId, index) => {
   const node = nodes.find(n => n.id === nodeId)!;
   const connections = (edgeMap.get(nodeId)?.size || 0) + (incomingMap.get(nodeId)?.size || 0);
   visualNodes.push({)
-  id: nodeId,
-  type: node.type,
-  label: nodeId.length > 10 ? nodeId.substring(0, 10) + '...' : nodeId,
-  x: (index + 0.5) * levelWidth,
-  y: (level + 0.5) * levelHeight,
-  level,
-  connections,
-  isSelected: nodeId === selectedNodeId,
+  id: nodeId
+  type: node.type
+  label: nodeId.length > 10 ? nodeId.substring(0, 10) + '...' : nodeId
+  x: (index + 0.5) * levelWidth
+  y: (level + 0.5) * levelHeight
+  level
+  connections
+  isSelected: nodeId === selectedNodeId }
 });
     });
   });
@@ -442,9 +424,9 @@ function generateLayout(graph: Graph, (
     targets.forEach(target => {)
   visualEdges.push({)
   id: `${source}-${target}`}
-}
-        source,
-        target,
+
+        source
+        target
         isSelected: selectedEdge?.source === source && selectedEdge?.target === target;
   });
     });
@@ -453,18 +435,17 @@ function generateLayout(graph: Graph, (
 /**
  * Get color for node type
  */
-function getNodeColor(nodeType: string): string {
-  const colors: Record<string, string> = {,
-  'WeightedChoice': '#ff6b6b',
-  'WeightedAdvanced': '#ee5a52',
-  'Conditional': '#4ecdc4',
-  'Sequential': '#45b7d1',
-  'Markov': '#96ceb4',
-  'Concat': '#feca57',
-  'Output': '#ff9ff3',
-  'SetVariable': '#54a0ff',
-  'GetVariable': '#5f27cd',
-  'Include': '#00d2d3',
-  'PythonTransform': '#ff6348',
+function getNodeColor(nodeType: string): string { const colors: Record<string, string> = {
+  'WeightedChoice': '#ff6b6b'
+  'WeightedAdvanced': '#ee5a52'
+  'Conditional': '#4ecdc4'
+  'Sequential': '#45b7d1'
+  'Markov': '#96ceb4'
+  'Concat': '#feca57'
+  'Output': '#ff9ff3'
+  'SetVariable': '#54a0ff'
+  'GetVariable': '#5f27cd'
+  'Include': '#00d2d3'
+  'PythonTransform': '#ff6348' }
 };
   return colors[nodeType] || '#ddd';

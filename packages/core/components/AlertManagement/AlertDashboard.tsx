@@ -11,8 +11,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { 
-  AlertTriangle, 
+import { AlertTriangle, 
   Shield, 
   Clock, 
   CheckCircle, 
@@ -23,85 +22,80 @@ import {
   Settings,
   TrendingUp,
   AlertOctagon,
-  Info,
+  Info }
   Zap
-} from 'lucide-react';
-import { 
-  alertSystem,
+ from 'lucide-react';
+import { alertSystem,
   Alert as AlertType,
   AlertFilter,
   AlertStats,
   AlertSeverity,
   AlertStatus,
-  AlertType as AlertTypeEnum,
+  AlertType as AlertTypeEnum }
   AlertCategory
-} from '../../services/AlertSystem';
-}
-interface AlertDashboardProps {
-  className?: string;
+ from '../../services/AlertSystem';
+
+
+interface AlertDashboardProps { className?: string;
   /**
   * Severity configurations for UI styling
   */
   const SEVERITY_CONFIG = {
-  critical: {
-  color: 'text-red-700 bg-red-50 border-red-200',
-  badgeColor: 'bg-red-100 text-red-800',
-  icon: AlertOctagon,
-  priority: 5,
-}
+  critical: {;
+  color: 'text-red-700 bg-red-50 border-red-200';
+  badgeColor: 'bg-red-100 text-red-800';
+  icon: AlertOctagon;
+  priority: 5 }
+
+
 },
-  high: {
+  high: { ,
   color: 'text-orange-700 bg-orange-50 border-orange-200',
   badgeColor: 'bg-orange-100 text-orange-800',
   icon: AlertTriangle,
-  priority: 4,
+  priority: 4 }
 },
-  medium: {
+  medium: { ,
   color: 'text-yellow-700 bg-yellow-50 border-yellow-200',
   badgeColor: 'bg-yellow-100 text-yellow-800',
   icon: Shield,
-  priority: 3,
+  priority: 3 }
 },
-  low: {
+  low: { ,
   color: 'text-blue-700 bg-blue-50 border-blue-200',
   badgeColor: 'bg-blue-100 text-blue-800',
   icon: Info,
-  priority: 2,
+  priority: 2 }
 },
-  info: {
+  info: { ,
   color: 'text-gray-700 bg-gray-50 border-gray-200',
   badgeColor: 'bg-gray-100 text-gray-800',
   icon: Info,
-  priority: 1,
+  priority: 1 }
 };
 /**
  * Status configurations for UI styling
  */
-const STATUS_CONFIG = {
-  active: {
-  color: 'text-red-600 bg-red-50',
-  badgeColor: 'bg-red-100 text-red-800',
-  icon: Bell,
-},
-  acknowledged: {
+const STATUS_CONFIG = {},
+  acknowledged: { ,
   color: 'text-yellow-600 bg-yellow-50',
   badgeColor: 'bg-yellow-100 text-yellow-800',
-  icon: CheckCircle,
+  icon: CheckCircle }
 },
-  resolved: {
+  resolved: { ,
   color: 'text-green-600 bg-green-50',
   badgeColor: 'bg-green-100 text-green-800',
-  icon: CheckCircle,
+  icon: CheckCircle }
 },
-  suppressed: {
+  suppressed: { ,
   color: 'text-purple-600 bg-purple-50',
   badgeColor: 'bg-purple-100 text-purple-800',
-  icon: XCircle,
+  icon: XCircle }
 },
-  expired: {
+  expired: { ,
   color: 'text-gray-600 bg-gray-50',
   badgeColor: 'bg-gray-100 text-gray-800',
-  icon: Clock,
+  icon: Clock }
 };
 
 export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => {
@@ -112,56 +106,42 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(null);
   // Load alerts and stats
-  useEffect(() => {
-    const loadData = () => {
+  useEffect(() => { const loadData = () => {
       setAlerts(alertSystem.getAlerts(filter));
-      setStats(alertSystem.getAlertStats());
-    };
+      setStats(alertSystem.getAlertStats()) };
     loadData();
     // Subscribe to real-time updates
     alertSystem.subscribe('alert-dashboard', (alert) => {
       loadData(); // Refresh data when alerts change
     });
-    return () => {
-      alertSystem.unsubscribe('alert-dashboard');
-    };
+    return () => { alertSystem.unsubscribe('alert-dashboard') };
   }, [filter]);
   // Filter alerts based on search query
-  const filteredAlerts = useMemo(() => {
-    if (!searchQuery) return alerts;
+  const filteredAlerts = useMemo(() => { if (!searchQuery) return alerts;
     const query = searchQuery.toLowerCase();
     return alerts.filter(alert =>)
       alert.title.toLowerCase().includes(query) ||
       alert.message.toLowerCase().includes(query) ||
       alert.source.toLowerCase().includes(query) ||
       alert.tags.some(tag => tag.toLowerCase().includes(query))
-    );
-  }, [alerts, searchQuery]);
+    ) }, [alerts, searchQuery]);
   // Group alerts by severity for overview
-  const alertsBySeverity = useMemo(() => {
-  const grouped: Record<AlertSeverity, AlertType> = {,
-  critical: [],
-  high: [],
-  medium: [],
-  low: [],
-  info: [],
+  const alertsBySeverity = useMemo(() => { const grouped: Record<AlertSeverity, AlertType> = {
+  critical: []
+  high: []
+  medium: []
+  low: []
+  info: [] }
 };
-    filteredAlerts.forEach(alert => {)
+    filteredAlerts.forEach(alert => { )
   if (alert.status === 'active' || alert.status === 'acknowledged') {
-        grouped[alert.severity].push(alert);
-    });
+        grouped[alert.severity].push(alert) });
     return grouped;
   }, [filteredAlerts]);
   // Handle alert actions
-  const handleAcknowledgeAlert = (alertId: string) => {
-    alertSystem.acknowledgeAlert(alertId, 'user', 'Acknowledged via dashboard');
-  };
-  const handleResolveAlert = (alertId: string) => {
-    alertSystem.resolveAlert(alertId, 'user', 'Resolved via dashboard');
-  };
-  const handleSuppressAlert = (alertId: string) => {
-    alertSystem.suppressAlert(alertId, 'user', 60, 'Suppressed for 1 hour via dashboard');
-  };
+  const handleAcknowledgeAlert = (alertId: string) => { alertSystem.acknowledgeAlert(alertId, 'user', 'Acknowledged via dashboard') };
+  const handleResolveAlert = (alertId: string) => { alertSystem.resolveAlert(alertId, 'user', 'Resolved via dashboard') };
+  const handleSuppressAlert = (alertId: string) => { alertSystem.suppressAlert(alertId, 'user', 60, 'Suppressed for 1 hour via dashboard') };
   // Update filter
   const updateFilter = (updates: Partial<AlertFilter>) => {
     setFilter(prev => ({ ...prev, ...updates }));
@@ -277,10 +257,9 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
               </div>
               <Select
                 value={filter.severities?.[0] || 'all'}
-                onValueChange={(value) => 
+                onValueChange={ (value) => 
                   updateFilter({ )
-                    severities: value === 'all' ? undefined : [value as AlertSeverity] ;
-  }
+                    severities: value === 'all' ? undefined : [value as AlertSeverity]  }
               >
                 <option value="all">All Severities</option>
                 <option value="critical">Critical</option>
@@ -291,10 +270,9 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
               </Select>
               <Select
                 value={filter.statuses?.[0] || 'all'}
-                onValueChange={(value) => 
+                onValueChange={ (value) => 
                   updateFilter({ )
-                    statuses: value === 'all' ? undefined : [value as AlertStatus] ;
-  }
+                    statuses: value === 'all' ? undefined : [value as AlertStatus]  }
               >
                 <option value="all">All Statuses</option>
                 <option value="active">Active</option>
@@ -382,20 +360,21 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
 /**
  * Alert Card Component
  */
-}
-interface AlertCardProps {
-  alert: AlertType;
-  onAcknowledge: (id: string) => void;
-  onResolve: (id: string) => void;
-  onSuppress: (id: string) => void;
+
+
+interface AlertCardProps { alert: AlertType;
+  onAcknowledge: (id: string) => void
+  onResolve: (id: string) => void
+  onSuppress: (id: string) => void
   onClick: (alert: AlertType) => void;
-  const AlertCard: React.FC<AlertCardProps> = ({,)
-  alert,
-  onAcknowledge,
-  onResolve,
-  onSuppress,
+  const AlertCard: React.FC<AlertCardProps> = ({);
+  alert;
+  onAcknowledge;
+  onResolve;
+  onSuppress }
   onClick
-}
+
+
 }) => {
   const severityConfig = SEVERITY_CONFIG[alert.severity];
   const statusConfig = STATUS_CONFIG[alert.status];
@@ -429,19 +408,19 @@ interface AlertCardProps {
             </div>
           </div>
         </div>
-        {alert.status === 'active' && ()
+        { alert.status === 'active' && ()
           <div className="flex space-x-1 ml-4">
             <Button 
               size="sm" 
               variant="outline"
-              onClick={(e) => { e.stopPropagation(); onAcknowledge(alert.id); }}
+              onClick={(e) => { e.stopPropagation(); onAcknowledge(alert.id) }}
             >
               Ack
             </Button>
             <Button 
               size="sm" 
               variant="outline"
-              onClick={(e) => { e.stopPropagation(); onResolve(alert.id); }}
+              onClick={ (e) => { e.stopPropagation(); onResolve(alert.id) }}
             >
               Resolve
             </Button>
@@ -454,20 +433,21 @@ interface AlertCardProps {
 /**
  * Alert List Component
  */
-}
-interface AlertListProps {
-  alerts: AlertType;
-  onAcknowledge: (id: string) => void;
-  onResolve: (id: string) => void;
-  onSuppress: (id: string) => void;
+
+
+interface AlertListProps { alerts: AlertType;
+  onAcknowledge: (id: string) => void
+  onResolve: (id: string) => void
+  onSuppress: (id: string) => void
   onSelectAlert: (alert: AlertType) => void;
-  const AlertList: React.FC<AlertListProps> = ({,)
-  alerts,
-  onAcknowledge,
-  onResolve,
-  onSuppress,
+  const AlertList: React.FC<AlertListProps> = ({);
+  alerts;
+  onAcknowledge;
+  onResolve;
+  onSuppress }
   onSelectAlert
-}
+
+
 }) => {
   if (alerts.length === 0) {
     return;
@@ -495,20 +475,21 @@ interface AlertListProps {
 /**
  * Alert Detail Modal Component
  */
-}
-interface AlertDetailModalProps {
-  alert: AlertType;
+
+
+interface AlertDetailModalProps { alert: AlertType;
   onClose: () => void;
-  onAcknowledge: (id: string) => void;
-  onResolve: (id: string) => void;
+  onAcknowledge: (id: string) => void
+  onResolve: (id: string) => void
   onSuppress: (id: string) => void;
-  const AlertDetailModal: React.FC<AlertDetailModalProps> = ({,)
-  alert,
-  onClose,
-  onAcknowledge,
-  onResolve,
+  const AlertDetailModal: React.FC<AlertDetailModalProps> = ({);
+  alert;
+  onClose;
+  onAcknowledge;
+  onResolve }
   onSuppress
-}
+
+
 }) => {
   const severityConfig = SEVERITY_CONFIG[alert.severity];
   const SeverityIcon = severityConfig.icon;
@@ -591,22 +572,22 @@ interface AlertDetailModalProps {
               </div>
             )}
           </div>
-          {alert.status === 'active' && ()
+          { alert.status === 'active' && ()
             <div className="flex justify-end space-x-2 mt-6 pt-6 border-t">
               <Button 
                 variant="outline" 
-                onClick={() => { onSuppress(alert.id); onClose(); }}
+                onClick={() => { onSuppress(alert.id); onClose() }}
               >
                 Suppress
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => { onAcknowledge(alert.id); onClose(); }}
+                onClick={ () => { onAcknowledge(alert.id); onClose() }}
               >
                 Acknowledge
               </Button>
               <Button 
-                onClick={() => { onResolve(alert.id); onClose(); }}
+                onClick={ () => { onResolve(alert.id); onClose() }}
               >
                 Resolve
               </Button>

@@ -350,10 +350,10 @@ div >
 _jsx("style", { children: `
         @keyframes scale-in {
           0% {
-            transform: scale(0.8);
+            transform: scale(0.8);,
   opacity: 0;
           100% {
-            transform: scale(1);
+            transform: scale(1);,
   opacity: 1;
         .animate-scale-in {
           animation: scale-in 0.3s ease-out;

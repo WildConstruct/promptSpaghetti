@@ -24,7 +24,7 @@ detectedThemes: string;
 toneVariation: number;
 // Creative metrics for film industry
 creativityScore: number; // 0-100 scale,
-professionalSuitability: number; // 0-100 scale
+professionalSuitability: number; // 0-100 scale,
 genreConsistency: number; // 0-100 scale
 export const useEnhancedPreviewResultManagement = () => {
     const abortRef = useRef(null);
@@ -357,8 +357,7 @@ const rateResult = useCallback((resultId, rating) => {
             ...r,
             metadata: {
                 ...r.metadata,
-                rating: rating,
-            }
+                rating: rating, }
         }
         : r);
 });
@@ -370,8 +369,7 @@ const addNoteToResult = useCallback((resultId, note) => {
             ...r,
             metadata: {
                 ...r.metadata,
-                notes: note,
-            }
+                notes: note, }
         }
         : r);
 });

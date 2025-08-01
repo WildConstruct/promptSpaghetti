@@ -169,7 +169,7 @@ canUndo = false, canRedo = false, hasSelection = false, nodes = [], edges = [], 
                 { label: 'Export as JSON', onClick: () => onExport?.('json') },
                 { label: 'Export as PNG', onClick: () => onExport?.('png') },
                 { label: 'Export as SVG', onClick: () => onExport?.('svg') },
-                { label: 'Export as PDF', onClick: () => onExport?.('pdf') },
+                { label: 'Export as PDF', onClick: () => onExport?.('pdf') }
             ],
         },
         ...(recentFiles.length > 0
@@ -187,110 +187,119 @@ canUndo = false, canRedo = false, hasSelection = false, nodes = [], edges = [], 
                                 { divider: true },
                                 {
                                     label: 'Clear Recent Files',
-                                    onClick: () => {
-                                        // TODO: Implement clear recent files
-                                        console.log('Clear recent files');
-                                    },
+                                    onClick: () => { },
+                                    // TODO: Implement clear recent files,
+                                    console, : .log('Clear recent files')
                                 },
                             ]
-                            : []),
-                    ],
-                },
+                            :
+                        )
+                    ]
+                }
             ]
-            : []),
-        { divider: true },
-        { label: 'Quit', shortcut: '⌘Q', onClick: onQuit },
+            : [])
     ];
-    // Edit menu items
-    const editMenuItems = [
-        { label: 'Undo', shortcut: '⌘Z', onClick: onUndo, disabled: !canUndo },
-        { label: 'Redo', shortcut: '⌘⇧Z', onClick: onRedo, disabled: !canRedo },
-        { divider: true },
-        { label: 'Cut', shortcut: '⌘X', onClick: onCut, disabled: !hasSelection },
-        { label: 'Copy', shortcut: '⌘C', onClick: onCopy, disabled: !hasSelection },
-        { label: 'Paste', shortcut: '⌘V', onClick: onPaste },
-        { divider: true },
-        { label: 'Select All', shortcut: '⌘A', onClick: onSelectAll },
-        { label: 'Find', shortcut: '⌘F', onClick: onFind },
-        { divider: true },
-        { label: 'Preferences...', shortcut: '⌘,', onClick: onPreferences },
-    ];
-    // View menu items
-    const viewMenuItems = [
-        { label: 'Zoom In', shortcut: '⌘+', onClick: onZoomIn },
-        { label: 'Zoom Out', shortcut: '⌘-', onClick: onZoomOut },
-        { label: 'Fit View', shortcut: '⌘0', onClick: onFitView },
-        { divider: true },
-        {
-            label: `${gridVisible ? 'Hide' : 'Show'} Grid`,
-            shortcut: '⌘G',
-            onClick: onToggleGrid,
-        },
-        {
-            label: `${minimapVisible ? 'Hide' : 'Show'} Minimap`,
-            shortcut: '⌘M',
-            onClick: onToggleMinimap,
-        },
-        {
-            label: `${inspectorVisible ? 'Hide' : 'Show'} Inspector`,
-            shortcut: '⌘⇧I',
-            onClick: onToggleInspector,
-        },
-        { divider: true },
-        {
-            label: isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen',
-            shortcut: 'Alt+F',
-            onClick: onToggleFullscreen,
-        },
-        {
-            label: 'Theme',
-            submenu: [
-                { label: '🌙 Dark', onClick: () => onToggleTheme?.('dark') },
-                { label: '☀️ Light', onClick: () => onToggleTheme?.('light') },
-                { label: '🎬 Cinema 4D', onClick: () => onToggleTheme?.('cinema') },
-            ],
-        },
-    ];
-    // Debug menu items
-    const debugMenuItems = [
-        { label: 'Open DevTools', shortcut: 'F12', onClick: onDevTools },
-        { label: 'Validate Graph', shortcut: '⌘⇧V', onClick: onValidateGraph },
-        { label: 'Performance Monitor', onClick: onPerformanceMonitor },
-        { label: 'Toggle Console', shortcut: '⌘⇧C', onClick: onConsoleToggle },
-    ];
-    // Help menu items
-    const helpMenuItems = [
-        { label: 'Documentation', shortcut: 'F1', onClick: onDocumentation },
-        { label: 'Keyboard Shortcuts', shortcut: '?', onClick: onKeyboardShortcuts },
-        { divider: true },
-        { label: 'Support', onClick: onSupport },
-        { label: 'Report Bug', onClick: onReportBug },
-        { divider: true },
-        { label: 'About', onClick: onAbout },
-    ];
-    return (_jsxs("div", { style: {
-            display: 'flex',
-            alignItems: 'center',
-            height: '32px',
-            backgroundColor: professionalColors.background.secondary,
-            borderBottom: `1px solid ${professionalColors.ui.border}`,
-            padding: '0 8px',
-            position: 'relative',
-            zIndex: 1000,
-            userSelect: 'none',
-        }, children: [_jsx("div", { style: {
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    color: professionalColors.text.primary,
-                    marginRight: '24px',
-                    padding: '0 8px',
-                }, children: "Prompt Spaghetti" }), _jsxs("div", { style: { display: 'flex', alignItems: 'center' }, children: [_jsx(Menu, { label: "File", items: fileMenuItems, isOpen: openMenu === 'file', onToggle: () => handleMenuToggle('file'), onClose: handleMenuClose }), _jsx(Menu, { label: "Edit", items: editMenuItems, isOpen: openMenu === 'edit', onToggle: () => handleMenuToggle('edit'), onClose: handleMenuClose }), _jsx(Menu, { label: "View", items: viewMenuItems, isOpen: openMenu === 'view', onToggle: () => handleMenuToggle('view'), onClose: handleMenuClose }), _jsx(Menu, { label: "Debug", items: debugMenuItems, isOpen: openMenu === 'debug', onToggle: () => handleMenuToggle('debug'), onClose: handleMenuClose }), _jsx(Menu, { label: "Help", items: helpMenuItems, isOpen: openMenu === 'help', onToggle: () => handleMenuToggle('help'), onClose: handleMenuClose })] }), _jsxs("div", { style: {
-                    marginLeft: 'auto',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px',
-                    fontSize: '11px',
-                    color: professionalColors.text.secondary,
-                }, children: [_jsxs("span", { children: [nodes.length, " nodes, ", edges.length, " edges"] }), _jsx("span", { children: "\uD83C\uDFAC Cinema 4D" })] })] }));
 };
+[];
+{
+    divider: true;
+}
+{
+    label: 'Quit', shortcut;
+    '⌘Q', onClick;
+    onQuit;
+}
+;
+// Edit menu items
+const editMenuItems = [
+    { label: 'Undo', shortcut: '⌘Z', onClick: onUndo, disabled: !canUndo },
+    { label: 'Redo', shortcut: '⌘⇧Z', onClick: onRedo, disabled: !canRedo },
+    { divider: true },
+    { label: 'Cut', shortcut: '⌘X', onClick: onCut, disabled: !hasSelection },
+    { label: 'Copy', shortcut: '⌘C', onClick: onCopy, disabled: !hasSelection },
+    { label: 'Paste', shortcut: '⌘V', onClick: onPaste },
+    { divider: true },
+    { label: 'Select All', shortcut: '⌘A', onClick: onSelectAll },
+    { label: 'Find', shortcut: '⌘F', onClick: onFind },
+    { divider: true },
+    { label: 'Preferences...', shortcut: '⌘,', onClick: onPreferences }
+];
+// View menu items
+const viewMenuItems = [
+    { label: 'Zoom In', shortcut: '⌘+', onClick: onZoomIn },
+    { label: 'Zoom Out', shortcut: '⌘-', onClick: onZoomOut },
+    { label: 'Fit View', shortcut: '⌘0', onClick: onFitView },
+    { divider: true },
+    {
+        label: `${gridVisible ? 'Hide' : 'Show'} Grid`,
+        shortcut: '⌘G',
+        onClick: onToggleGrid,
+    },
+    {
+        label: `${minimapVisible ? 'Hide' : 'Show'} Minimap`,
+        shortcut: '⌘M',
+        onClick: onToggleMinimap,
+    },
+    {
+        label: `${inspectorVisible ? 'Hide' : 'Show'} Inspector`,
+        shortcut: '⌘⇧I',
+        onClick: onToggleInspector,
+    },
+    { divider: true },
+    {
+        label: isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen',
+        shortcut: 'Alt+F',
+        onClick: onToggleFullscreen,
+    },
+    {
+        label: 'Theme',
+        submenu: [
+            { label: '🌙 Dark', onClick: () => onToggleTheme?.('dark') },
+            { label: '☀️ Light', onClick: () => onToggleTheme?.('light') },
+            { label: '🎬 Cinema 4D', onClick: () => onToggleTheme?.('cinema') }
+        ],
+    }
+];
+// Debug menu items
+const debugMenuItems = [
+    { label: 'Open DevTools', shortcut: 'F12', onClick: onDevTools },
+    { label: 'Validate Graph', shortcut: '⌘⇧V', onClick: onValidateGraph },
+    { label: 'Performance Monitor', onClick: onPerformanceMonitor },
+    { label: 'Toggle Console', shortcut: '⌘⇧C', onClick: onConsoleToggle }
+];
+// Help menu items
+const helpMenuItems = [
+    { label: 'Documentation', shortcut: 'F1', onClick: onDocumentation },
+    { label: 'Keyboard Shortcuts', shortcut: '?', onClick: onKeyboardShortcuts },
+    { divider: true },
+    { label: 'Support', onClick: onSupport },
+    { label: 'Report Bug', onClick: onReportBug },
+    { divider: true },
+    { label: 'About', onClick: onAbout }
+];
+return (_jsxs("div", { style: {
+        display: 'flex',
+        alignItems: 'center',
+        height: '32px',
+        backgroundColor: professionalColors.background.secondary,
+        borderBottom: `1px solid ${professionalColors.ui.border}`,
+        padding: '0 8px',
+        position: 'relative',
+        zIndex: 1000,
+        userSelect: 'none',
+    }, children: [_jsx("div", { style: {
+                fontSize: '13px',
+                fontWeight: 600,
+                color: professionalColors.text.primary,
+                marginRight: '24px',
+                padding: '0 8px',
+            }, children: "Prompt Spaghetti" }), _jsxs("div", { style: { display: 'flex', alignItems: 'center' }, children: [_jsx(Menu, { label: "File", items: fileMenuItems, isOpen: openMenu === 'file', onToggle: () => handleMenuToggle('file'), onClose: handleMenuClose }), _jsx(Menu, { label: "Edit", items: editMenuItems, isOpen: openMenu === 'edit', onToggle: () => handleMenuToggle('edit'), onClose: handleMenuClose }), _jsx(Menu, { label: "View", items: viewMenuItems, isOpen: openMenu === 'view', onToggle: () => handleMenuToggle('view'), onClose: handleMenuClose }), _jsx(Menu, { label: "Debug", items: debugMenuItems, isOpen: openMenu === 'debug', onToggle: () => handleMenuToggle('debug'), onClose: handleMenuClose }), _jsx(Menu, { label: "Help", items: helpMenuItems, isOpen: openMenu === 'help', onToggle: () => handleMenuToggle('help'), onClose: handleMenuClose })] }), _jsxs("div", { style: {
+                marginLeft: 'auto',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                fontSize: '11px',
+                color: professionalColors.text.secondary,
+            }, children: [_jsxs("span", { children: [nodes.length, " nodes, ", edges.length, " edges"] }), _jsx("span", { children: "\uD83C\uDFAC Cinema 4D" })] })] }));
+;
 export default ProfessionalMenuBar;

@@ -14,7 +14,7 @@ import {
   ChangePasswordRequest,
   PublicUser,
   User
-} from './types';
+ from './types';
 
 import { UserService } from './services/UserService';
 import { TokenService } from './services/TokenService';
@@ -57,7 +57,7 @@ export class AuthenticationService {
       this.auditService,
       this.rateLimitService
     );
-  }
+
 
   async initialize(): Promise<void> {
 
@@ -69,11 +69,11 @@ export class AuthenticationService {
       await this.dbService.initializeSchema();
       
       console.log('Authentication service initialized successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize authentication service:', error);
       throw error;
-    }
-  }
+
+
 
   async register(
     request: RegisterRequest,
@@ -94,14 +94,14 @@ export class AuthenticationService {
           endpoint: 'register',
           ipAddress: context.ipAddress,
           rateLimitExceeded: true
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
       
       throw new Error('Rate limit exceeded. Please try again later.');
-    }
+
 
     try {
       // Create user
@@ -116,7 +116,7 @@ export class AuthenticationService {
         details: { 
           email: user.email,
           registrationMethod: 'email'
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -126,22 +126,22 @@ export class AuthenticationService {
         user: await this.toPublicUser(user),
         emailVerificationRequired: !user.emailVerified
       };
-    } catch (error) {
+ catch (error) {
       // Log failed registration
       await this.auditService.logEvent({
         action: 'registration_failed',
         details: { 
           email: request.email,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
       
       throw error;
-    }
-  }
+
+
 
   async login(
     request: LoginRequest,
@@ -162,14 +162,14 @@ export class AuthenticationService {
           endpoint: 'login',
           ipAddress: context.ipAddress,
           rateLimitExceeded: true
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
       
       throw new Error('Rate limit exceeded. Please try again later.');
-    }
+
 
     let user: User | null = null;
     
@@ -179,7 +179,7 @@ export class AuthenticationService {
       
       if (!user) {
         throw new Error('Invalid email or password');
-      }
+
 
       // Check if account is locked
       if (user.accountLocked && user.lockedUntil && user.lockedUntil > new Date()) {
@@ -189,14 +189,14 @@ export class AuthenticationService {
           details: { 
             reason: 'account_locked',
             lockedUntil: user.lockedUntil
-  }
+
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           severity: 'warning'
         });
         
         throw new Error('Account is locked. Please try again later or reset your password.');
-      }
+
 
       // Verify password
       const isPasswordValid = await this.userService.verifyPassword(user, request.password);
@@ -208,14 +208,14 @@ export class AuthenticationService {
           details: { 
             reason: 'invalid_password',
             failedAttempts: user.failedLoginAttempts + 1
-  }
+
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           severity: 'warning'
         });
         
         throw new Error('Invalid email or password');
-      }
+
 
       // Check if user is active
       if (user.status !== 'active') {
@@ -225,14 +225,14 @@ export class AuthenticationService {
           details: { 
             reason: 'inactive_account',
             status: user.status
-  }
+
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           severity: 'warning'
         });
         
         throw new Error('Account is not active. Please contact support.');
-      }
+
 
       // Generate tokens
       const accessToken = await this.tokenService.generateAccessToken(user);
@@ -257,7 +257,7 @@ export class AuthenticationService {
         details: { 
           loginMethod: 'password',
           sessionId
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId,
@@ -273,7 +273,7 @@ export class AuthenticationService {
         user: await this.toPublicUser(user),
         expiresAt
       };
-    } catch (error) {
+ catch (error) {
       // Log failed login attempt
       await this.auditService.logEvent({
         userId: user?.id,
@@ -281,15 +281,15 @@ export class AuthenticationService {
         details: { 
           email: request.email,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
       
       throw error;
-    }
-  }
+
+
 
   async logout(
     userId: string,
@@ -311,11 +311,11 @@ export class AuthenticationService {
         sessionId,
         severity: 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Logout error:', error);
       // Don't throw - logout should always succeed
-    }
-  }
+
+
 
   async refreshToken(
     request: RefreshTokenRequest,
@@ -336,7 +336,7 @@ export class AuthenticationService {
       });
 
       return tokens;
-    } catch (error) {
+ catch (error) {
       // Log failed token refresh
       await this.auditService.logEvent({
         action: 'token_refresh_failed',
@@ -347,8 +347,8 @@ export class AuthenticationService {
       });
       
       throw error;
-    }
-  }
+
+
 
   async requestPasswordReset(
     request: PasswordResetRequest,
@@ -364,7 +364,7 @@ export class AuthenticationService {
 
     if (!rateLimitResult.allowed) {
       throw new Error('Rate limit exceeded. Please try again later.');
-    }
+
 
     try {
       const resetToken = await this.userService.requestPasswordReset(request.email);
@@ -380,22 +380,22 @@ export class AuthenticationService {
         userAgent: context.userAgent,
         severity: 'info'
       });
-    } catch (error) {
+ catch (error) {
       // Log failed password reset request
       await this.auditService.logEvent({
         action: 'password_reset_request_failed',
         details: { 
           hashedEmail: this.hashEmail(request.email),
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
       
       // Don't throw - don't reveal if email exists
-    }
-  }
+
+
 
   async resetPassword(
     request: PasswordResetConfirmRequest,
@@ -418,22 +418,22 @@ export class AuthenticationService {
       });
       
       // TODO: Send password changed notification email
-    } catch (error) {
+ catch (error) {
       // Log failed password reset
       await this.auditService.logEvent({
         action: 'password_reset_failed',
         details: { 
           token: request.token,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
       
       throw error;
-    }
-  }
+
+
 
   async verifyEmail(
     request: EmailVerificationRequest,
@@ -451,22 +451,22 @@ export class AuthenticationService {
         userAgent: context.userAgent,
         severity: 'info'
       });
-    } catch (error) {
+ catch (error) {
       // Log failed email verification
       await this.auditService.logEvent({
         action: 'email_verification_failed',
         details: { 
           token: request.token,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
       
       throw error;
-    }
-  }
+
+
 
   async changePassword(
     userId: string,
@@ -483,7 +483,7 @@ export class AuthenticationService {
 
     if (!rateLimitResult.allowed) {
       throw new Error('Rate limit exceeded. Please try again later.');
-    }
+
 
     try {
       await this.userService.changePassword(
@@ -505,7 +505,7 @@ export class AuthenticationService {
       });
       
       // TODO: Send password changed notification email
-    } catch (error) {
+ catch (error) {
       // Log failed password change
       await this.auditService.logEvent({
         userId,
@@ -517,8 +517,8 @@ export class AuthenticationService {
       });
       
       throw error;
-    }
-  }
+
+
 
   async validateToken(token: string): Promise<PublicUser> {
 
@@ -527,10 +527,10 @@ export class AuthenticationService {
     
     if (!user) {
       throw new Error('User not found');
-    }
+
     
     return this.toPublicUser(user);
-  }
+
 
   async healthCheck(): Promise<{ status: string; checks: Record<string, boolean> }> {
     const checks = {
@@ -544,7 +544,7 @@ export class AuthenticationService {
       status: allHealthy ? 'healthy' : 'unhealthy',
       checks
     };
-  }
+
 
   private async createSession(
     userId: string,
@@ -552,7 +552,7 @@ export class AuthenticationService {
       ipAddress?: string;
       userAgent?: string;
       deviceInfo?: unknown;
-    }
+
   ): Promise<string> {
 
     const sessionId = require('crypto').randomUUID();
@@ -571,7 +571,7 @@ export class AuthenticationService {
     ]);
     
     return sessionId;
-  }
+
 
   private async toPublicUser(user: User): Promise<PublicUser> {
 
@@ -592,7 +592,7 @@ export class AuthenticationService {
       locale: profileResult.rows[0].locale,
       createdAt: profileResult.rows[0].created_at,
       updatedAt: profileResult.rows[0].updated_at
-    } : undefined;
+ : undefined;
 
     // Get user roles and permissions
     const roles = await this.getUserRoles(user.id);
@@ -608,7 +608,7 @@ export class AuthenticationService {
       roles,
       permissions
     };
-  }
+
 
   private async getUserRoles(userId: string) {
     const result = await this.dbService.query(`
@@ -626,7 +626,7 @@ export class AuthenticationService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     }));
-  }
+
 
   private async getUserPermissions(userId: string) {
     const result = await this.dbService.query(`
@@ -645,12 +645,12 @@ export class AuthenticationService {
       conditions: row.conditions ? JSON.parse(row.conditions) : undefined,
       createdAt: row.created_at
     }));
-  }
+
 
   private hashEmail(email: string): string {
     const crypto = require('crypto');
     return crypto.createHash('sha256').update(email.toLowerCase()).digest('hex');
-  }
+
 
   // Service registry for accessing individual services
   getService(serviceName: string): unknown {
@@ -673,8 +673,8 @@ export class AuthenticationService {
       return this.redisService;
     default:
       throw new Error(`Unknown service: ${serviceName}`);
-    }
-  }
+
+
 
   async getHealthStatus(): Promise<{ database: string; redis: string; authentication: string }> {
 
@@ -691,18 +691,17 @@ export class AuthenticationService {
         redis: redisHealth,
         authentication: 'healthy'
       };
-    } catch (error) {
+ catch (error) {
       return {
         database: 'unhealthy',
         redis: 'unhealthy',
         authentication: 'unhealthy'
       };
-    }
-  }
+
+
 
   async shutdown(): Promise<void> {
 
     await this.redisService.close();
     await this.dbService.close();
-  }
-}
+

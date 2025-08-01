@@ -16,13 +16,13 @@ import {
   PolicyStatus,
   PolicyEvaluationContext,
   PolicyBuilder
-} from '../services/trust/PolicyDataModel';
+ from '../services/trust/PolicyDataModel';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { requireAuth, requireAdmin } from '../middleware/auth';
 
-}
-}
+
+
 interface PolicyRoutes {
   '/policies': {
     GET: {
@@ -33,8 +33,9 @@ interface PolicyRoutes {
         tags?: string;
         limit?: number;
         offset?: number;
-}
-}
+
+
+
       };
     };
     POST: {
@@ -126,7 +127,7 @@ interface PolicyRoutes {
       };
     };
   };
-}
+
 
 export default async function policyManagementRoutes(fastify: FastifyInstance) {
   // Initialize services
@@ -142,8 +143,8 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
       // Write operations require admin access
       if (['POST', 'PUT', 'DELETE'].includes(request.method)) {
         await requireAdmin(request, reply);
-      }
-    }
+
+
   });
 
   /**
@@ -162,17 +163,17 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             type: { 
               type: 'string', 
               enum: ['enforcement', 'content_moderation', 'compliance', 'security', 'operational', 'community', 'commerce', 'verification', 'privacy', 'accessibility']
-  }
+
             status: { 
               type: 'string', 
               enum: ['draft', 'active', 'inactive', 'deprecated', 'archived'] 
-  }
+
             category: { type: 'string' },
             tags: { type: 'string', description: 'Comma-separated tags' },
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
             offset: { type: 'integer', minimum: 0, default: 0 }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -181,11 +182,11 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
               total: { type: 'integer' },
               limit: { type: 'integer' },
               offset: { type: 'integer' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request, reply) => {
       try {
         const filters = {
@@ -205,12 +206,10 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           limit: filters.limit,
           offset: filters.offset
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching policies:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -237,24 +236,24 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
                 type: { type: 'string' },
                 created_by: { type: 'string' },
                 effective_date: { type: 'string', format: 'date-time' }
-              }
-  }
+
+
             scope: { type: 'object' },
             rules: { type: 'array' },
             configuration: { type: 'object' }
-          }
-  }
+
+
         response: {
           201: {
             type: 'object',
             properties: {
               message: { type: 'string' },
               policy_id: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request, reply) => {
       try {
         const policy = request.body;
@@ -276,7 +275,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             policy_id: policyId,
             policy_name: policy.metadata.name,
             policy_type: policy.metadata.type
-  }
+
           severity: 'info'
         });
 
@@ -284,15 +283,14 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           message: 'Policy created successfully',
           policy_id: policyId
         });
-
-      } catch (error) {
+ catch (error) {
         if (error.code === '23505') { // Unique violation
           reply.status(409).send({ error: 'Policy ID already exists' });
-        } else {
+ else {
           fastify.log.error('Error creating policy:', error);
           reply.status(500).send({ error: 'Internal server error' });
-        }
-      }
+
+
     }
   );
 
@@ -311,10 +309,10 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           required: ['policyId'],
           properties: {
             policyId: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -323,14 +321,13 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
         if (!policy) {
           reply.status(404).send({ error: 'Policy not found' });
           return;
-        }
+
 
         reply.send({ policy });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching policy:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
+
     }
   );
 
@@ -349,8 +346,8 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           required: ['policyId'],
           properties: {
             policyId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           properties: {
@@ -361,10 +358,10 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             dependencies: { type: 'object' },
             compliance: { type: 'object' },
             testing: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -376,7 +373,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
         if (!existingPolicy) {
           reply.status(404).send({ error: 'Policy not found' });
           return;
-        }
+
 
         await policyService.updatePolicy(policyId, updates, userId);
 
@@ -387,16 +384,15 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           details: {
             policy_id: policyId,
             updated_fields: Object.keys(updates)
-  }
+
           severity: 'info'
         });
 
         reply.send({ message: 'Policy updated successfully' });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error updating policy:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
+
     }
   );
 
@@ -415,10 +411,10 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           required: ['policyId'],
           properties: {
             policyId: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -429,7 +425,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
         if (!existingPolicy) {
           reply.status(404).send({ error: 'Policy not found' });
           return;
-        }
+
 
         await policyService.deletePolicy(policyId);
 
@@ -440,16 +436,15 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           details: {
             policy_id: policyId,
             policy_name: existingPolicy.metadata.name
-  }
+
           severity: 'warning'
         });
 
         reply.send({ message: 'Policy deleted successfully' });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error deleting policy:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
+
     }
   );
 
@@ -468,8 +463,8 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           required: ['policyId'],
           properties: {
             policyId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['entity_type', 'entity_id', 'entity_data'],
@@ -477,14 +472,14 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             entity_type: { 
               type: 'string', 
               enum: ['user', 'template', 'transaction', 'system'] 
-  }
+
             entity_id: { type: 'string' },
             entity_data: { type: 'object' },
             context_data: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -501,12 +496,12 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             user_id: userId,
             ip_address: request.ip,
             user_agent: request.headers['user-agent']
-  }
+
           environment: {
             region: 'us-east-1', // Default
             platform: 'web',
             version: '1.0.0'
-  }
+
           context_data: context_data || {}
         };
 
@@ -522,19 +517,17 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             entity_id,
             result: result.overall_result,
             execution_time: result.execution_time
-  }
+
           severity: result.overall_result === 'error' ? 'error' : 'info'
         });
 
         reply.send({
           evaluation_result: result
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error evaluating policy:', error);
         reply.status(500).send({ error: error.message || 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -552,8 +545,8 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           required: ['policyId'],
           properties: {
             policyId: { type: 'string' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           required: ['start_date', 'end_date'],
@@ -564,11 +557,11 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
               type: 'string', 
               enum: ['hour', 'day', 'week', 'month'],
               default: 'day'
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -585,12 +578,10 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           metrics,
           granularity
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching policy metrics:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -611,10 +602,10 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             is_public: { type: 'boolean' },
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
             offset: { type: 'integer', minimum: 0, default: 0 }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { category, type, is_public, limit = 20, offset = 0 } = request.query;
@@ -626,21 +617,21 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
         if (category) {
           conditions.push(`category = $${params.length + 1}`);
           params.push(category);
-        }
+
 
         if (type) {
           conditions.push(`type = $${params.length + 1}`);
           params.push(type);
-        }
+
 
         if (is_public !== undefined) {
           conditions.push(`is_public = $${params.length + 1}`);
           params.push(is_public);
-        }
+
 
         if (conditions.length > 0) {
           whereClause = `WHERE ${conditions.join(' AND ')}`;
-        }
+
 
         const result = await db.query(`
           SELECT *, COUNT(*) OVER() AS total_count
@@ -674,12 +665,10 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           limit,
           offset
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching policy templates:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -697,18 +686,18 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           required: ['templateId'],
           properties: {
             templateId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['policy_name', 'parameters'],
           properties: {
             policy_name: { type: 'string' },
             parameters: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { templateId } = request.params;
@@ -724,7 +713,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
         if (templateResult.rows.length === 0) {
           reply.status(404).send({ error: 'Template not found' });
           return;
-        }
+
 
         const template = templateResult.rows[0];
 
@@ -757,15 +746,15 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
         
         if (instantiatedTemplate.scope) {
           policyBuilder.setScope(instantiatedTemplate.scope);
-        }
+
         
         if (instantiatedTemplate.rules) {
           instantiatedTemplate.rules.forEach(rule => policyBuilder.addRule(rule));
-        }
+
         
         if (instantiatedTemplate.configuration) {
           policyBuilder.setConfiguration(instantiatedTemplate.configuration);
-        }
+
 
         const policy = policyBuilder.build();
         const policyId = await policyService.createPolicy(policy);
@@ -785,7 +774,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             template_id: templateId,
             policy_name,
             parameters
-  }
+
           severity: 'info'
         });
 
@@ -793,11 +782,8 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           message: 'Policy created from template successfully',
           policy_id: policyId
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error instantiating policy from template:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
-}

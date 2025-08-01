@@ -17,12 +17,13 @@ import {
   RecoveryStrategy,
   RecoveryUrgency,
   RecoveryAutomationStatus
-} from '../admin/RecoveryAutomationService';
+ from '../admin/RecoveryAutomationService';
 import { Database } from '../database/connection';
 
 // Request type definitions
-}
-}
+
+
+
 interface CreateRecoveryRuleRequest {
   Body: {
     name: string;
@@ -39,35 +40,38 @@ interface CreateRecoveryRuleRequest {
       escalate_after_minutes: number;
       escalation_recipients: string[];
       escalation_actions: string[];
-}
-}
+
+
+
     };
   };
-}
 
-}
-}
+
+
+
 interface UpdateRecoveryRuleRequest {
   Params: {
     ruleId: string;
-}
-}
+
+
+
   };
   Body: Partial<CreateRecoveryRuleRequest['Body']>;
-}
 
-}
-}
+
+
+
 interface GetRecoveryRuleRequest {
   Params: {
     ruleId: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ListRecoveryRulesRequest {
   Querystring: {
     enabled?: boolean;
@@ -75,13 +79,14 @@ interface ListRecoveryRulesRequest {
     urgency?: RecoveryUrgency;
     page?: number;
     pageSize?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface TriggerRecoveryRequest {
   Body: {
     trigger_type: RecoveryTriggerType;
@@ -92,24 +97,26 @@ interface TriggerRecoveryRequest {
       affected_components: string[];
       metrics?: Record<string, any>;
       error_details?: string;
-}
-}
+
+
+
     };
   };
-}
 
-}
-}
+
+
+
 interface GetRecoveryExecutionRequest {
   Params: {
     executionId: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ListRecoveryExecutionsRequest {
   Querystring: {
     status?: RecoveryAutomationStatus;
@@ -120,21 +127,23 @@ interface ListRecoveryExecutionsRequest {
     end_date?: string;
     page?: number;
     pageSize?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetRecoveryAnalyticsRequest {
   Querystring: {
     start_date: string;
     end_date: string;
-}
-}
+
+
+
   };
-}
+
 
 export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
   // Initialize Recovery Automation Service
@@ -167,24 +176,24 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
               'security_incident', 'compliance_violation', 'scheduled_maintenance', 
               'manual_trigger', 'cascade_failure']
-  }
+
           trigger_conditions: { type: 'object' },
           recovery_strategy: { 
             type: 'string', 
             enum: ['immediate_rollback', 'selective_recovery', 'phased_recovery',
               'full_system_recovery', 'failover_recovery', 'hybrid_recovery']
-  }
+
           urgency: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'maintenance']
-  }
+
           auto_execute: { type: 'boolean', default: false },
           max_attempts: { type: 'integer', minimum: 1, maximum: 10, default: 3 },
           cooldown_period: { type: 'integer', minimum: 0, default: 300 },
           notification_recipients: { 
             type: 'array', 
             items: { type: 'string', format: 'email' }
-  }
+
           escalation_policy: {
             type: 'object',
             required: ['escalate_after_minutes', 'escalation_recipients', 'escalation_actions'],
@@ -193,15 +202,15 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
               escalation_recipients: { 
                 type: 'array', 
                 items: { type: 'string', format: 'email' }
-  }
+
               escalation_actions: { 
                 type: 'array', 
                 items: { type: 'string' }
-              }
-            }
-          }
-        }
-  }
+
+
+
+
+
       response: {
         201: {
           type: 'object',
@@ -209,10 +218,10 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             rule: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const user = request.user;
@@ -223,12 +232,12 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         rule,
         message: 'Recovery rule created successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create recovery rule'
       });
-    }
+
   });
 
   // Update Recovery Rule
@@ -241,8 +250,8 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           ruleId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -250,10 +259,10 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             rule: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const user = request.user;
@@ -265,13 +274,13 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         rule,
         message: 'Recovery rule updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       const statusCode = error.message.includes('not found') ? 404 : 500;
       reply.code(statusCode).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to update recovery rule'
       });
-    }
+
   });
 
   // Get Recovery Rule
@@ -284,18 +293,18 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           ruleId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             rule: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { ruleId } = request.params;
@@ -307,18 +316,18 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
           error: 'Recovery rule not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
         rule
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get recovery rule'
       });
-    }
+
   });
 
   // List Recovery Rules
@@ -336,15 +345,15 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
               'security_incident', 'compliance_violation', 'scheduled_maintenance', 
               'manual_trigger', 'cascade_failure']
-  }
+
           urgency: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'maintenance']
-  }
+
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -358,12 +367,12 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
                 pageSize: { type: 'integer' },
                 total: { type: 'integer' },
                 totalPages: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { enabled, trigger_type, urgency, page = 1, pageSize = 20 } = request.query;
@@ -387,14 +396,14 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
           pageSize,
           total: rules.length,
           totalPages: Math.ceil(rules.length / pageSize)
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to list recovery rules'
       });
-    }
+
   });
 
   // ==========================================
@@ -416,7 +425,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
               'security_incident', 'compliance_violation', 'scheduled_maintenance', 
               'manual_trigger', 'cascade_failure']
-  }
+
           trigger_details: {
             type: 'object',
             required: ['detected_at', 'trigger_source', 'severity', 'affected_components'],
@@ -427,13 +436,13 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
               affected_components: { 
                 type: 'array', 
                 items: { type: 'string' }
-  }
+
               metrics: { type: 'object' },
               error_details: { type: 'string' }
-            }
-          }
-        }
-  }
+
+
+
+
       response: {
         200: {
           type: 'object',
@@ -441,10 +450,10 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             execution_id: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const user = request.user;
@@ -467,12 +476,12 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         execution_id,
         message: 'Recovery process triggered successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to trigger recovery'
       });
-    }
+
   });
 
   // Get Recovery Execution
@@ -485,18 +494,18 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             execution: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { executionId } = request.params;
@@ -508,18 +517,18 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
           error: 'Recovery execution not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
         execution
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get recovery execution'
       });
-    }
+
   });
 
   // List Recovery Executions
@@ -535,24 +544,24 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             type: 'string', 
             enum: ['monitoring', 'analyzing', 'preparing', 'executing', 'validating',
               'completed', 'failed', 'requires_intervention', 'cancelled']
-  }
+
           trigger_type: { 
             type: 'string', 
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
               'security_incident', 'compliance_violation', 'scheduled_maintenance', 
               'manual_trigger', 'cascade_failure']
-  }
+
           urgency: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'maintenance']
-  }
+
           rule_id: { type: 'string' },
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' },
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -566,18 +575,18 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
                 pageSize: { type: 'integer' },
                 total: { type: 'integer' },
                 totalPages: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { 
         status, trigger_type, urgency, rule_id, start_date, end_date, 
         page = 1, pageSize = 20 
-      } = request.query;
+ = request.query;
 
       const executions = await recoveryService.listRecoveryExecutions({
         status,
@@ -601,14 +610,14 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
           pageSize,
           total: executions.length,
           totalPages: Math.ceil(executions.length / pageSize)
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to list recovery executions'
       });
-    }
+
   });
 
   // ==========================================
@@ -625,18 +634,18 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { executionId } = request.params;
@@ -648,13 +657,13 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Recovery execution cancelled successfully'
       });
-    } catch (error) {
+ catch (error) {
       const statusCode = error.message.includes('not found') ? 404 : 500;
       reply.code(statusCode).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to cancel recovery execution'
       });
-    }
+
   });
 
   // Retry Recovery
@@ -667,8 +676,8 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -676,10 +685,10 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             execution_id: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { executionId } = request.params;
@@ -692,13 +701,13 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         execution_id: new_execution_id,
         message: 'Recovery execution retried successfully'
       });
-    } catch (error) {
+ catch (error) {
       const statusCode = error.message.includes('not found') ? 404 : 500;
       reply.code(statusCode).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to retry recovery execution'
       });
-    }
+
   });
 
   // ==========================================
@@ -717,8 +726,8 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         properties: {
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -730,12 +739,12 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
               properties: {
                 start: { type: 'string', format: 'date' },
                 end: { type: 'string', format: 'date' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { start_date, end_date } = request.query;
@@ -750,14 +759,14 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         period: {
           start: start_date,
           end: end_date
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get recovery analytics'
       });
-    }
+
   });
 
   // Get System Health
@@ -779,12 +788,12 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
                 system_status: { type: 'string' },
                 last_check: { type: 'string', format: 'date-time' },
                 alerts: { type: 'array', items: { type: 'object' } }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const health = await recoveryService.getSystemHealth();
@@ -793,12 +802,12 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         success: true,
         health
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get system health'
       });
-    }
+
   });
 
   // Start/Stop Monitoring
@@ -811,18 +820,18 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           action: { type: 'string', enum: ['start', 'stop'] }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { action } = request.params;
@@ -830,9 +839,9 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
 
       if (action === 'start') {
         await recoveryService.startMonitoring();
-      } else {
+ else {
         await recoveryService.stopMonitoring();
-      }
+
 
       await fastify.auditService.logActivity(`recovery_monitoring_${action}`, user.id, {
         action
@@ -842,13 +851,13 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         success: true,
         message: `Recovery automation monitoring ${action}ed successfully`
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : `Failed to ${request.params.action} monitoring`
       });
-    }
+
   });
-}
+
 
 export default recoveryAutomationRoutes;

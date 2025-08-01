@@ -8,8 +8,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as csv from 'csv-writer';
 
-}
-}
+
+
 export interface ExportRequest {
   requestId?: string;
   userId: string;
@@ -22,28 +22,30 @@ export interface ExportRequest {
   timeRange?: {
     startDate: Date;
     endDate: Date;
-}
-}
+
+
+
   };
   includeMetadata?: boolean;
   anonymize?: boolean;
   encryptOutput?: boolean;
-}
 
-}
-}
+
+
+
 export interface ExportFilters {
   classification?: string[];
   resourceIds?: string[];
   operations?: string[];
   userIds?: string[];
   customFilters?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExportJob {
   jobId: string;
   requestId: string;
@@ -57,12 +59,13 @@ export interface ExportJob {
   recordCount?: number;
   errorMessage?: string;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExportManifest {
   exportId: string;
   timestamp: Date;
@@ -76,9 +79,10 @@ export interface ExportManifest {
   retentionPolicy: string;
   anonymized: boolean;
   encrypted: boolean;
-}
-}
-}
+
+
+
+
 
 export enum ExportType {
   USER_DATA = 'USER_DATA',
@@ -88,7 +92,7 @@ export enum ExportType {
   COMPLIANCE_REPORT = 'COMPLIANCE_REPORT',
   SECURITY_EVENTS = 'SECURITY_EVENTS',
   CUSTOM_QUERY = 'CUSTOM_QUERY'
-}
+
 
 export enum ExportFormat {
   JSON = 'JSON',
@@ -96,7 +100,7 @@ export enum ExportFormat {
   XML = 'XML',
   PDF = 'PDF',
   XLSX = 'XLSX'
-}
+
 
 export enum ExportJobStatus {
   QUEUED = 'QUEUED',
@@ -104,7 +108,7 @@ export enum ExportJobStatus {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
   CANCELLED = 'CANCELLED'
-}
+
 
 export class DataExportService {
   private db: DatabaseService;
@@ -123,7 +127,7 @@ export class DataExportService {
     this.accessControl = accessControl;
     this.exportDir = exportDir;
     this.ensureExportDirectory();
-  }
+
 
   /**
    * Request data export
@@ -159,7 +163,7 @@ export class DataExportService {
           dataCategories: request.dataCategories,
           format: request.format,
           purpose: request.purpose
-        }
+
       });
 
       const estimatedTime = await this.calculateEstimatedTime(request);
@@ -168,8 +172,7 @@ export class DataExportService {
         jobId,
         estimatedTime
       };
-
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'DATA_EXPORT_REQUEST_ERROR',
         userId: request.userId,
@@ -179,12 +182,12 @@ export class DataExportService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Process export job
@@ -195,7 +198,7 @@ export class DataExportService {
       const job = await this.getExportJob(jobId);
       if (!job) {
         throw new Error('Export job not found');
-      }
+
 
       await this.updateJobStatus(jobId, ExportJobStatus.PROCESSING, 0);
 
@@ -203,7 +206,7 @@ export class DataExportService {
       const request = await this.getExportRequest(job.requestId);
       if (!request) {
         throw new Error('Export request not found');
-      }
+
 
       // Extract data based on export type
       const data = await this.extractData(request, jobId);
@@ -234,10 +237,9 @@ export class DataExportService {
           jobId,
           recordCount: processedData.length,
           outputPath
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       await this.updateJobStatus(jobId, ExportJobStatus.FAILED, 0, error.message);
 
       await this.audit.logSecurityEvent({
@@ -249,12 +251,12 @@ export class DataExportService {
         success: false,
         metadata: {
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Get export job status
@@ -268,10 +270,10 @@ export class DataExportService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapToExportJob(result.rows[0]);
-  }
+
 
   /**
    * Get user's export history
@@ -286,7 +288,7 @@ export class DataExportService {
     `, [userId, limit, offset]);
 
     return result.rows.map(this.mapToExportJob);
-  }
+
 
   /**
    * Download export file
@@ -295,20 +297,20 @@ export class DataExportService {
     filePath: string;
     fileName: string;
     contentType: string;
-  }> {
+> {
 
     const job = await this.getExportJobStatus(jobId, userId);
     if (!job) {
       throw new Error('Export job not found');
-    }
+
 
     if (job.status !== ExportJobStatus.COMPLETED) {
       throw new Error('Export job not completed');
-    }
+
 
     if (!job.outputPath || !fs.existsSync(job.outputPath)) {
       throw new Error('Export file not found');
-    }
+
 
     // Log download
     await this.audit.logSecurityEvent({
@@ -320,7 +322,7 @@ export class DataExportService {
       success: true,
       metadata: {
         filePath: job.outputPath
-      }
+
     });
 
     const fileName = path.basename(job.outputPath);
@@ -331,7 +333,7 @@ export class DataExportService {
       fileName,
       contentType
     };
-  }
+
 
   /**
    * Cancel export job
@@ -341,11 +343,11 @@ export class DataExportService {
     const job = await this.getExportJobStatus(jobId, userId);
     if (!job) {
       throw new Error('Export job not found');
-    }
+
 
     if (job.status !== ExportJobStatus.QUEUED && job.status !== ExportJobStatus.PROCESSING) {
       throw new Error('Cannot cancel completed job');
-    }
+
 
     await this.updateJobStatus(jobId, ExportJobStatus.CANCELLED, job.progress);
 
@@ -358,7 +360,7 @@ export class DataExportService {
       success: true,
       metadata: { jobId }
     });
-  }
+
 
   /**
    * Clean up old export files
@@ -383,7 +385,7 @@ export class DataExportService {
           freedSpace += job.file_size || 0;
           fs.unlinkSync(job.output_path);
           deletedFiles++;
-        }
+
 
         // Update job record to remove file path
         await this.db.query(`
@@ -391,11 +393,10 @@ export class DataExportService {
           SET output_path = NULL, file_size = NULL 
           WHERE job_id = $1
         `, [job.job_id]);
-
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to delete export file ${job.output_path}:`, error);
-      }
-    }
+
+
 
     await this.audit.logSecurityEvent({
       type: 'EXPORT_CLEANUP_COMPLETED',
@@ -408,11 +409,11 @@ export class DataExportService {
         deletedFiles,
         freedSpace,
         retentionDays
-      }
+
     });
 
     return { deletedFiles, freedSpace };
-  }
+
 
   // Private helper methods
 
@@ -420,27 +421,27 @@ export class DataExportService {
 
     if (!request.userId) {
       throw new Error('User ID is required');
-    }
+
 
     if (!request.dataCategories || request.dataCategories.length === 0) {
       throw new Error('At least one data category must be specified');
-    }
+
 
     if (!request.purpose || request.purpose.length < 10) {
       throw new Error('Purpose must be specified (minimum 10 characters)');
-    }
+
 
     if (request.timeRange) {
       if (request.timeRange.startDate >= request.timeRange.endDate) {
         throw new Error('Start date must be before end date');
-      }
+
 
       const maxRange = 365 * 24 * 60 * 60 * 1000; // 1 year
       if (request.timeRange.endDate.getTime() - request.timeRange.startDate.getTime() > maxRange) {
         throw new Error('Time range cannot exceed 1 year');
-      }
-    }
-  }
+
+
+
 
   private async validateExportPermissions(request: ExportRequest): Promise<void> {
 
@@ -455,9 +456,9 @@ export class DataExportService {
 
       if (!accessCheck.allowed) {
         throw new Error(`Insufficient permissions to export ${category}: ${accessCheck.reason}`);
-      }
-    }
-  }
+
+
+
 
   private async extractData(request: ExportRequest, jobId: string): Promise<any[]> {
 
@@ -486,11 +487,11 @@ export class DataExportService {
       break;
     default:
       throw new Error(`Unsupported export type: ${request.exportType}`);
-    }
+
 
     await this.updateJobStatus(jobId, ExportJobStatus.PROCESSING, 60);
     return data;
-  }
+
 
   private async processData(data: Record<string, unknown>[], request: ExportRequest, jobId: string): Promise<any[]> {
 
@@ -499,14 +500,14 @@ export class DataExportService {
     // Apply filters
     if (request.filters) {
       processedData = await this.applyFilters(processedData, request.filters);
-    }
+
 
     await this.updateJobStatus(jobId, ExportJobStatus.PROCESSING, 80);
 
     // Anonymize if requested
     if (request.anonymize) {
       processedData = await this.anonymizeData(processedData, request.dataCategories);
-    }
+
 
     // Remove sensitive fields based on classification
     processedData = await this.sanitizeData(processedData);
@@ -514,7 +515,7 @@ export class DataExportService {
     await this.updateJobStatus(jobId, ExportJobStatus.PROCESSING, 90);
 
     return processedData;
-  }
+
 
   private async generateOutputFile(
     data: Record<string,
@@ -538,16 +539,16 @@ export class DataExportService {
       break;
     default:
       throw new Error(`Unsupported format: ${request.format}`);
-    }
+
 
     if (request.encryptOutput) {
       const encryptedPath = await this.encryptFile(filePath);
       fs.unlinkSync(filePath); // Remove unencrypted file
       return encryptedPath;
-    }
+
 
     return filePath;
-  }
+
 
   private async createExportManifest(
     data: Record<string,
@@ -573,24 +574,24 @@ export class DataExportService {
       anonymized: request.anonymize || false,
       encrypted: request.encryptOutput || false
     };
-  }
+
 
   // Additional helper methods would be implemented here...
   private ensureExportDirectory(): void {
     if (!fs.existsSync(this.exportDir)) {
       fs.mkdirSync(this.exportDir, { recursive: true });
-    }
-  }
+
+
 
   private async generateRequestId(): Promise<string> {
 
     return `REQ-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async generateJobId(): Promise<string> {
 
     return `JOB-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private mapToExportJob(row: unknown): ExportJob {
     return {
@@ -607,7 +608,7 @@ export class DataExportService {
       errorMessage: row.error_message,
       metadata: JSON.parse(row.metadata || '{}')
     };
-  }
+
 
   private getContentType(fileName: string): string {
     const ext = path.extname(fileName).toLowerCase();
@@ -618,8 +619,8 @@ export class DataExportService {
     case '.pdf': return 'application/pdf';
     case '.xlsx': return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     default: return 'application/octet-stream';
-    }
-  }
+
+
 
   // Placeholder methods for data extraction - would be implemented based on specific requirements
   private async extractUserData(__request: ExportRequest): Promise<any[]> { return []; }
@@ -659,4 +660,3 @@ export class DataExportService {
     __manifest: ExportManifest
   ): Promise<void> { }
   private async notifyExportCompletion(__userId: string, __jobId: string, __outputPath: string): Promise<void> { }
-}

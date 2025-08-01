@@ -9,12 +9,11 @@
 import React from 'react';
 
 }
-interface ShareAnalyticsDashboardProps {
-    shareLinkId: string;
+}
+interface ShareAnalyticsDashboardProps { shareLinkId: string;
     timeRange?: {
         start: Date;
-        end: Date;
-
+        end: Date }
 }
     };
 

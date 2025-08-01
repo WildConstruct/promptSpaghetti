@@ -4,34 +4,38 @@ import { z } from 'zod';
 /**
  * Minimal Graph type definition to avoid corrupted imports
  */
-}
+
+
 export interface Graph {
   id?: string;
   nodes?: Node[];
   edges?: Edge[];
   seed?: number;
   metadata?: Record<string, any>;
-}
-}
 
-}
+
+
+
+
 export interface Node {
   id: string;
   type: string;
   inputs?: string[];
   [key: string]: any;
-}
-}
 
-}
+
+
+
+
 export interface Edge {
   id: string;
   source: string;
   target: string;
   sourceHandle?: string;
   targetHandle?: string;
-}
-}
+
+
+
 
 /**
  * GeneratorBundle format for external compatibility
@@ -107,10 +111,10 @@ export function graphToBundle(
             sourceHandle: 'output',
             targetHandle: `input-${i}`
           });
-        }
-      }
-    }
-  }
+
+
+
+
 
   return {
     format: 'PromptScape-v1.0',
@@ -140,9 +144,9 @@ export function graphToBundle(
       engineVersion: 'basic',
       nodeTypes,
       requiredFeatures
-    }
+
   };
-}
+
 
 /**
  * Convert a GeneratorBundle back to Graph format
@@ -156,10 +160,10 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
       const targetId = edge.target;
       if (!nodeInputs.has(targetId)) {
         nodeInputs.set(targetId, []);
-      }
+
       nodeInputs.get(targetId)!.push(edge.source);
-    }
-  }
+
+
 
   // Rebuild nodes with inputs
   const nodes = bundle.graph.nodes.map(node => ({
@@ -177,9 +181,9 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
       description: bundle.metadata.description,
       imported: true,
       originalFormat: bundle.format
-    }
+
   };
-}
+
 
 /**
  * Export formats supported
@@ -204,7 +208,7 @@ export function exportGraph(
         filename: `graph-bundle-${timestamp}.json`,
         mimeType: 'application/json'
       };
-    }
+
     
     case 'json': {
       return {
@@ -212,7 +216,7 @@ export function exportGraph(
         filename: `graph-${timestamp}.json`,
         mimeType: 'application/json'
       };
-    }
+
     
     case 'yaml': {
       // Simple YAML-like format
@@ -231,21 +235,21 @@ export function exportGraph(
           yamlData.push(`      type: "${node.type}"`);
           if (node.inputs && node.inputs.length > 0) {
             yamlData.push(`      inputs: [${node.inputs.map(id => `"${id}"`).join(', ')}]`);
-          }
+
           yamlData.push('');
-        }
-      }
+
+
       
       if (graph.seed !== undefined) {
         yamlData.push(`  seed: ${graph.seed}`);
-      }
+
       
       return {
         data: yamlData.join('\n'),
         filename: `graph-${timestamp}.yaml`,
         mimeType: 'text/yaml'
       };
-    }
+
     
     case 'text': {
       const textData = [
@@ -264,22 +268,22 @@ export function exportGraph(
           textData.push(`${node.id} (${node.type})`);
           if (node.inputs && node.inputs.length > 0) {
             textData.push(`  ← inputs: ${node.inputs.join(', ')}`);
-          }
+
           textData.push('');
-        }
-      }
+
+
       
       return {
         data: textData.join('\n'),
         filename: `graph-${timestamp}.txt`,
         mimeType: 'text/plain'
       };
-    }
+
     
     default:
       throw new Error(`Unsupported export format: ${format}`);
-  }
-}
+
+
 
 /**
  * Validate that a bundle is compatible with current engine
@@ -288,14 +292,14 @@ export function validateBundleCompatibility(bundle: GeneratorBundle): {
   compatible: boolean;
   issues: string[];
   warnings: string[];
-} {
+ {
   const issues: string[] = [];
   const warnings: string[] = [];
   
   // Check engine compatibility
   if (bundle.compatibility.engineVersion !== 'basic') {
     warnings.push(`Bundle created for engine "${bundle.compatibility.engineVersion}", current engine is "basic"`);
-  }
+
   
   // Check node type support
   const supportedNodeTypes = ['WeightedChoice', 'Output', 'Concat', 'SetVariable', 'GetVariable', 'Include'];
@@ -303,7 +307,7 @@ export function validateBundleCompatibility(bundle: GeneratorBundle): {
   
   if (unsupportedTypes.length > 0) {
     issues.push(`Unsupported node types: ${unsupportedTypes.join(', ')}`);
-  }
+
   
   // Check required features
   const supportedFeatures = ['variable-context', 'weighted-selection', 'deterministic-seeding'];
@@ -313,19 +317,19 @@ export function validateBundleCompatibility(bundle: GeneratorBundle): {
   
   if (unsupportedFeatures.length > 0) {
     issues.push(`Unsupported features: ${unsupportedFeatures.join(', ')}`);
-  }
+
   
   // Check graph structure
   if (!bundle.graph.nodes || bundle.graph.nodes.length === 0) {
     issues.push('Bundle contains no nodes');
-  }
+
   
   return {
     compatible: issues.length === 0,
     issues,
     warnings
   };
-}
+
 
 /**
  * Get export statistics
@@ -337,15 +341,15 @@ export function getExportStats(graph: Graph): {
   hasWeightedChoice: boolean;
   complexity: 'simple' | 'moderate' | 'complex';
   estimatedOutputs: number;
-} {
+ {
   const nodeCount = graph.nodes?.length || 0;
   const nodeTypes: Record<string, number> = {};
   
   if (graph.nodes) {
     for (const node of graph.nodes) {
       nodeTypes[node.type] = (nodeTypes[node.type] || 0) + 1;
-    }
-  }
+
+
   
   const hasVariables = (nodeTypes['SetVariable'] || 0) > 0 || (nodeTypes['GetVariable'] || 0) > 0;
   const hasWeightedChoice = (nodeTypes['WeightedChoice'] || 0) > 0;
@@ -363,4 +367,3 @@ export function getExportStats(graph: Graph): {
     complexity,
     estimatedOutputs: Math.max(1, outputCount)
   };
-}

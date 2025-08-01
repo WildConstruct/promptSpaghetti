@@ -36,7 +36,7 @@ function generateSampleData() {
       bounceRate: faker.number.float({ min: 0.2, max: 0.6, fractionDigits: 2 }),
       conversionRate: faker.number.float({ min: 0.05, max: 0.25, fractionDigits: 3 })
     });
-  }
+
 
   // Generate user activity data
   for (let userId = 1; userId <= 100; userId++) {
@@ -54,12 +54,12 @@ function generateSampleData() {
           ip: faker.internet.ip(),
           referrer: faker.internet.url(),
           duration: faker.number.int({ min: 10, max: 600 })
-        }
+
       });
-    }
+
     
     mockAnalytics.userActivity.set(userId, activities);
-  }
+
 
   // Generate template metrics
   for (let templateId = 1; templateId <= 500; templateId++) {
@@ -77,7 +77,7 @@ function generateSampleData() {
       popularityScore: faker.number.float({ min: 0, max: 100, fractionDigits: 1 }),
       lastViewed: faker.date.recent({ days: 7 })
     });
-  }
+
 
   // Generate system metrics
   const systemMetricTypes = ['cpu', 'memory', 'disk', 'network', 'database', 'api'];
@@ -93,7 +93,7 @@ function generateSampleData() {
         threshold: 80,
         status: faker.helpers.arrayElement(['healthy', 'warning', 'critical'])
       });
-    }
+
     
     mockAnalytics.systemMetrics.set(metricType, {
       type: metricType,
@@ -104,7 +104,7 @@ function generateSampleData() {
       min24h: faker.number.float({ min: 0, max: 30, fractionDigits: 2 })
     });
   });
-}
+
 
 // Initialize sample data
 generateSampleData();
@@ -117,7 +117,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
     case '7d': days = 7; break;
     case '30d': days = 30; break;
     default: days = 7;
-    }
+
 
     // Calculate totals from daily stats
     const recentStats = Array.from(mockAnalytics.dailyStats.values())
@@ -234,7 +234,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
     if (categoryId) {
       // Mock filter - in real app would join with template data
       templates = templates.filter(() => Math.random() > 0.5);
-    }
+
 
     // Sort templates
     templates.sort((a, b) => {
@@ -244,7 +244,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
       case 'rating': return b.rating - a.rating;
       case 'popularity': return b.popularityScore - a.popularityScore;
       default: return b.views - a.views;
-      }
+
     });
 
     templates = templates.slice(0, limit);
@@ -286,13 +286,13 @@ export     const timeRange = url.searchParams.get('range') || '7d';
             message: 'Metric not found'
           })
         );
-      }
+
 
       return res(
         ctx.status(200),
         ctx.json({ metric: metricData })
       );
-    }
+
 
     // Return all metrics
     const allMetrics = {};
@@ -352,7 +352,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
           searchVolume: faker.helpers.arrayElement(['increasing', 'decreasing', 'stable']),
           clickThroughRate: faker.helpers.arrayElement(['improving', 'declining', 'stable']),
           resultRelevance: faker.helpers.arrayElement(['high', 'medium', 'low'])
-        }
+
       })
     );
   }),
@@ -372,7 +372,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
         basic: faker.number.int({ min: 200, max: 600 }),
         pro: faker.number.int({ min: 50, max: 200 }),
         enterprise: faker.number.int({ min: 10, max: 50 })
-      }
+
     };
 
     // Daily revenue trend
@@ -388,7 +388,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
         subscriptions: faker.number.int({ min: 5, max: 50 }),
         cancellations: faker.number.int({ min: 0, max: 10 })
       });
-    }
+
 
     return res(
       ctx.status(200),
@@ -413,7 +413,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
             message: 'Event name and userId are required'
           })
         );
-      }
+
 
       // Store event (in real app would persist to database/analytics service)
       const event = {
@@ -434,8 +434,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
           message: 'Event tracked successfully'
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -443,7 +442,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
           message: 'Event tracking failed'
         })
       );
-    }
+
   }),
 
   // GET /api/analytics/reports/:reportId - Get specific report
@@ -461,7 +460,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
           sessionDuration: faker.number.int({ min: 300, max: 1200 }),
           pagesPerSession: faker.number.float({ min: 2.5, max: 8.5, fractionDigits: 1 }),
           engagementRate: faker.number.float({ min: 0.45, max: 0.85, fractionDigits: 3 })
-        }
+
       },
       'content-performance': {
         name: 'Content Performance Report',
@@ -475,9 +474,9 @@ export     const timeRange = url.searchParams.get('range') || '7d';
             development: { views: faker.number.int({ min: 4000, max: 12000 }), engagement: 0.72 },
             marketing: { views: faker.number.int({ min: 3500, max: 10000 }), engagement: 0.58 },
             education: { views: faker.number.int({ min: 2000, max: 8000 }), engagement: 0.45 }
-          }
-        }
-      }
+
+
+
     };
 
     const report = reportTypes[reportId];
@@ -490,7 +489,7 @@ export     const timeRange = url.searchParams.get('range') || '7d';
           message: 'Report not found'
         })
       );
-    }
+
 
     return res(
       ctx.status(200),
@@ -512,4 +511,3 @@ export function resetAnalyticsData() {
   mockAnalytics.systemMetrics.clear();
   
   generateSampleData();
-}

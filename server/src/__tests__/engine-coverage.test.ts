@@ -19,12 +19,12 @@ describe('Engine Coverage Tests', () => {
             type: 'Include',
             name: 'TestTemplate',
             inputs: []
-  }
+
           {
             id: 'output1',
             type: 'Output',
             inputs: ['include1']
-          }
+
         ],
         seed: 42
       };
@@ -45,17 +45,17 @@ describe('Engine Coverage Tests', () => {
             type: 'SetVariable',
             key: 'testVar',
             value: 'Hello deterministic world!'
-  }
+
           {
             id: 'get1',
             type: 'GetVariable',
             key: 'testVar'
-  }
+
           {
             id: 'output1',
             type: 'Output',
             inputs: ['get1']
-          }
+
         ],
         seed: 42
       };
@@ -82,18 +82,18 @@ describe('Engine Coverage Tests', () => {
             id: 'invalid1',
             // @ts-expect-error - Intentionally using an invalid type
             type: 'UnsupportedNodeType'
-  }
+
           {
             id: 'text1',
             type: 'SetVariable',
             key: 'text',
             value: 'This should not be reached'
-  }
+
           {
             id: 'output1',
             type: 'Output',
             inputs: ['invalid1', 'text1']
-          }
+
         ],
         seed: 42
       };
@@ -114,12 +114,12 @@ describe('Engine Coverage Tests', () => {
             type: 'SetVariable',
             key: 'prefix',
             value: 'Deterministic'
-  }
+
           {
             id: 'var2',
             type: 'GetVariable',
             key: 'prefix'
-  }
+
           // WeightedChoice for randomized selection
           {
             id: 'choice1',
@@ -129,25 +129,25 @@ describe('Engine Coverage Tests', () => {
               { value: 'result B', weight: 0.8 },
               { value: 'result C', weight: 0.5 }
             ]
-  }
+
           // Space as a fixed choice
           {
             id: 'space',
             type: 'WeightedChoice',
             choices: [{ value: ' ', weight: 1 }]
-  }
+
           // Concat everything
           {
             id: 'concat1',
             type: 'Concat',
             inputs: ['var2', 'space', 'choice1']
-  }
+
           // Output node
           {
             id: 'output1',
             type: 'Output',
             inputs: ['concat1']
-          }
+
         ],
         seed: 123 // Fixed seed for determinism
       };

@@ -4,8 +4,7 @@
  */
 import { ExtensionManifest } from './ExtensionManifest';
 import { ExtensionValidationResult } from './interfaces/ExtensionInterfaces';
-export declare class ExtensionManifestManager {
-    private static instance;
+export declare class ExtensionManifestManager { private static instance;
     private manifests;
     private manifestCache;
     private watchedFiles;
@@ -24,9 +23,9 @@ export declare class ExtensionManifestManager {
      * Validate manifest with context
      */
     validateManifest();
-      manifest: ExtensionManifest,
-      systemVersion?: string,
-      platform?: string,
+      manifest: ExtensionManifest
+      systemVersion?: string
+      platform?: string }
       grantedPermissions?: string[]
     ): ExtensionValidationResult;
     /**
@@ -92,105 +91,90 @@ export declare class ExtensionManifestManager {
     private findCircularDependencies;
     private compareVersions;
 
-export declare class ExtensionManifestBuilder {
-    private manifest;
+export declare class ExtensionManifestBuilder { private manifest;
     constructor();
     setBasicInfo(info: {)
         id: string;
         name: string;
         version: string;
-        description: string;
-    }): ExtensionManifestBuilder;
-    setAuthor(author: {)
+        description: string }): ExtensionManifestBuilder;
+    setAuthor(author: { )
         name: string;
         email?: string;
-        url?: string;
-    }): ExtensionManifestBuilder;
+        url?: string }): ExtensionManifestBuilder;
     setExtensionType(type: 'node' | 'ui' | 'transform' | 'storage'): ExtensionManifestBuilder;
     setMain(main: string): ExtensionManifestBuilder;
-    setDependencies(dependencies: {)
+    setDependencies(dependencies: { )
         system?: string;
         extensions?: Record<string, string>;
-        npm?: Record<string, string>;
-    }): ExtensionManifestBuilder;
+        npm?: Record<string, string> }): ExtensionManifestBuilder;
     setPermissions(permissions: string[]): ExtensionManifestBuilder;
-    setCapabilities(capabilities: {)
+    setCapabilities(capabilities: { )
         provides?: string[];
         requires?: string[];
-        optional?: string[];
-    }): ExtensionManifestBuilder;
-    setUI(ui: {)
+        optional?: string[] }): ExtensionManifestBuilder;
+    setUI(ui: { )
         icon?: string;
         category?: string;
         themes?: string[];
         css?: string[];
-        components?: Record<string, string>;
-    }): ExtensionManifestBuilder;
-    setRuntime(runtime: {)
+        components?: Record<string, string> }): ExtensionManifestBuilder;
+    setRuntime(runtime: { )
         node_types?: string[];
         transforms?: string[];
         storage_providers?: string[];
-        background_tasks?: string[];
-    }): ExtensionManifestBuilder;
-    setMetadata(metadata: {)
+        background_tasks?: string[] }): ExtensionManifestBuilder;
+    setMetadata(metadata: { )
         license?: string;
         repository?: string;
         homepage?: string;
         bugs?: string;
         keywords?: string[];
-        categories?: string[];
-    }): ExtensionManifestBuilder;
-    setCompatibility(compatibility: {)
+        categories?: string[] }): ExtensionManifestBuilder;
+    setCompatibility(compatibility: { )
         min_system_version?: string;
         max_system_version?: string;
-        platforms?: string[];
-    }): ExtensionManifestBuilder;
-    setSecurity(security: {)
+        platforms?: string[] }): ExtensionManifestBuilder;
+    setSecurity(security: { )
         content_security_policy?: string;
         sandbox?: {
             enabled?: boolean;
-            permissions?: string[];
-        };
+            permissions?: string[] };
         trusted_domains?: string[];
     }): ExtensionManifestBuilder;
     build(): ExtensionManifest;
     buildJSON(): string;
 
 }
-interface ManifestLoadResult {
-    success: boolean;
+}
+interface ManifestLoadResult { success: boolean;
     manifest?: ExtensionManifest;
     source?: 'cache' | 'file';
     error?: string;
     details?: Array<{
         path: string;
         message: string;
-        code: string;
-
+        code: string }
 }
     }>;
 
 }
-interface ManifestBatchLoadResult {
-    success: boolean;
+}
+interface ManifestBatchLoadResult { success: boolean;
     results: ManifestLoadResult[];
     errors: string[];
     totalFound: number;
-    totalLoaded: number;
-
-
+    totalLoaded: number }
 }
-interface ManifestDependencyInfo {
-    manifest?: ExtensionManifest;
+}
+interface ManifestDependencyInfo { manifest?: ExtensionManifest;
     dependencies: ExtensionManifest[];
     dependents: ExtensionManifest[];
     missingDependencies: string[];
-    circularDependencies: string[];
-
-
+    circularDependencies: string[] }
 }
-interface ManifestStatistics {
-    total: number;
+}
+interface ManifestStatistics { total: number;
     byType: Record<string, number>;
     byVersion: Record<string, number>;
     byAuthor: Record<string, number>;
@@ -202,7 +186,7 @@ interface ManifestStatistics {
     cached: number;
 
 export declare const extensionManifestManager: ExtensionManifestManager;
-export declare const extensionManifestBuilder: ExtensionManifestBuilder;
+export declare const extensionManifestBuilder: ExtensionManifestBuilder }
 }
 export {};
 //# sourceMappingURL=ExtensionManifestManager.d.ts.map

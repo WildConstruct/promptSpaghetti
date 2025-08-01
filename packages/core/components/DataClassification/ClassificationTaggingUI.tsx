@@ -6,18 +6,17 @@
  * to data elements with validation, approval workflow, and audit trail
  */
 import React, { useState, useEffect } from 'react';
-import { 
-  DataClassification, 
+import { DataClassification, 
   DataClassificationLevel, 
   ClassificationContext,
   ClassificationMetadata,
   ValidationResult,
-  CLASSIFICATION_LEVELS,
+  CLASSIFICATION_LEVELS }
   DEFAULT_HANDLING_REQUIREMENTS
-} from '../../types/DataClassification';
-}
-interface ClassificationTaggingUIProps {
-  dataElement: unknown;
+ from '../../types/DataClassification';
+
+
+interface ClassificationTaggingUIProps { dataElement: unknown;
   dataId: string;
   existingClassification?: DataClassification;
   context?: ClassificationContext;
@@ -33,45 +32,42 @@ interface ClassificationTaggingUIProps {
   riskAssessment: string;
   regulatoryRequirements: string;
   dataLineage: string;
-  export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = ({,)
-  dataElement,
-  dataId,
-  existingClassification,
-  context,
-  onClassificationChange,
-  onValidationChange,
-  readonly = false,
+  export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = ({);
+  dataElement;
+  dataId;
+  existingClassification;
+  context;
+  onClassificationChange;
+  onValidationChange;
+  readonly = false }
   showHandlingRequirements = true
-}
-}) => {
-  const [formData, setFormData] = useState<ClassificationFormData>({)
-  classification: existingClassification?.classification || '',
-  rationale: existingClassification?.rationale || '',
-  dataOwner: existingClassification?.dataOwner || context?.dataOwner || '',
-  businessJustification: existingClassification?.metadata.businessJustification || '',
-  riskAssessment: existingClassification?.metadata.riskAssessment || '',
-  regulatoryRequirements: existingClassification?.metadata.regulatoryRequirements || [],
-  dataLineage: existingClassification?.metadata.dataLineage || [],
+
+
+}) => { const [formData, setFormData] = useState<ClassificationFormData>({)
+  classification: existingClassification?.classification || ''
+  rationale: existingClassification?.rationale || ''
+  dataOwner: existingClassification?.dataOwner || context?.dataOwner || ''
+  businessJustification: existingClassification?.metadata.businessJustification || ''
+  riskAssessment: existingClassification?.metadata.riskAssessment || ''
+  regulatoryRequirements: existingClassification?.metadata.regulatoryRequirements || []
+  dataLineage: existingClassification?.metadata.dataLineage || [] }
 });
-  const [validation, setValidation] = useState<ValidationResult>({)
-  valid: true,
-  errors: [],
-  warnings: [],
-  recommendations: [],
+  const [validation, setValidation] = useState<ValidationResult>({ )
+  valid: true
+  errors: []
+  warnings: []
+  recommendations: [] }
 });
   const [showRequirements, setShowRequirements] = useState(false);
   const [currentUser] = useState('current-user'); // TODO: Get from auth context
   // Validate form data
-  useEffect(() => {
-  const errors: string = [];
+  useEffect(() => { const errors: string = [];
   const warnings: string = [];
   const recommendations: string = [];
   if (!formData.classification) {
   errors.push('Classification level is required');
   if (!formData.rationale.trim()) {
-  errors.push('Classification rationale is required');
-} else if (formData.rationale.length < 20) {
-  warnings.push('Rationale should be more detailed (minimum 20 characters)');
+  errors.push('Classification rationale is required') } else if (formData.rationale.length < 20) { warnings.push('Rationale should be more detailed (minimum 20 characters)');
   if (!formData.dataOwner.trim()) {
   errors.push('Data owner must be specified');
   if (!formData.businessJustification.trim() && formData.classification !== 'PUBLIC') {
@@ -87,25 +83,21 @@ interface ClassificationTaggingUIProps {
   const newValidation: ValidationResult = {,
   valid: errors.length === 0,
   errors,
-  warnings,
+  warnings }
   recommendations
 };
     setValidation(newValidation);
     onValidationChange?.(newValidation);
   }, [formData, onValidationChange]);
-  const handleFieldChange = (field: keyof ClassificationFormData, value: Error) => {
-  setFormData(prev => ({)
+  const handleFieldChange = (field: keyof ClassificationFormData, value: Error) => { setFormData(prev => ({)
   ...prev,
-  [field]: value,
+  [field]: value }
 }));
   };
-  const handleArrayFieldChange = (field: 'regulatoryRequirements' | 'dataLineage', value: string) => {
-    const items = value.split(',').map(item => item.trim()).filter(item => item.length > 0);
-    handleFieldChange(field, items);
-  };
-  const handleSubmit = () => {
-    if (!validation.valid || !formData.classification) return;
-    const classification: DataClassification = {,
+  const handleArrayFieldChange = (field: 'regulatoryRequirements' | 'dataLineage', value: string) => { const items = value.split(',').map(item => item.trim()).filter(item => item.length > 0);
+    handleFieldChange(field, items) };
+  const handleSubmit = () => { if (!validation.valid || !formData.classification) return;
+    const classification: DataClassification = { }
   id: existingClassification?.id || `class-${dataId}-${Date.now()}`}
 },
   dataElement: dataId,
@@ -116,28 +108,25 @@ interface ClassificationTaggingUIProps {
       classificationDate: new Date(),
       reviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
       approvals: [], // Will be populated by approval workflow
-      metadata: {
+      metadata: { ,
   businessJustification: formData.businessJustification,
   riskAssessment: formData.riskAssessment,
   regulatoryRequirements: formData.regulatoryRequirements,
   dataLineage: formData.dataLineage,
-  relatedClassifications: [],
+  relatedClassifications: [] }
 };
     onClassificationChange(classification);
   };
-  const getClassificationColor = (level: DataClassificationLevel): string => {
-  const colors = {
+  const getClassificationColor = (level: DataClassificationLevel): string => { const colors = {
   PUBLIC: 'bg-green-100 text-green-800 border-green-300',
   INTERNAL: 'bg-blue-100 text-blue-800 border-blue-300',
   CONFIDENTIAL: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-  RESTRICTED: 'bg-red-100 text-red-800 border-red-300',
+  RESTRICTED: 'bg-red-100 text-red-800 border-red-300' }
 };
     return colors[level];
   };
-  const getHandlingRequirements = () => {
-    if (!formData.classification) return null;
-    return DEFAULT_HANDLING_REQUIREMENTS[formData.classification as DataClassificationLevel];
-  };
+  const getHandlingRequirements = () => { if (!formData.classification) return null;
+    return DEFAULT_HANDLING_REQUIREMENTS[formData.classification as DataClassificationLevel] };
   return;
     <div className="classification-tagging-ui bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
       <div className="mb-6">
@@ -154,12 +143,12 @@ interface ClassificationTaggingUIProps {
           <div className="mt-2 text-sm text-gray-600">
             <p>Type: {context.dataType}</p>
             <p>Business Context: {context.businessContext}</p>
-            <p>Risk Level: <span className={`px-2 py-1 rounded text-xs font-medium ${
+            <p>Risk Level: <span className={ `px-2 py-1 rounded text-xs font-medium ${
   context.riskLevel === 'CRITICAL' ? 'bg-red-100 text-red-800' :,
   context.riskLevel === 'HIGH' ? 'bg-orange-100 text-orange-800' :,
-  context.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :,
+  context.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' : }
   'bg-green-100 text-green-800'
-}`}>{context.riskLevel}</span></p>
+`}>{context.riskLevel}</span></p>
           </div>
         )}
       </div>
@@ -179,7 +168,7 @@ interface ClassificationTaggingUIProps {
                 formData.classification === level
                   ? `${getClassificationColor(level)} border-opacity-100`}
                   : 'bg-white border-gray-200 hover:border-gray-300';
-  } ${readonly ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
+ ${readonly ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
             >
               <div className="font-medium">{level}</div>
               <div className="text-xs text-gray-600 mt-1">

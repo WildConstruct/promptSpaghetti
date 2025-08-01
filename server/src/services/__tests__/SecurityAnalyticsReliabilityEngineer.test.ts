@@ -49,13 +49,13 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
       monitoring_active: true,
       epic1_integration: true,
       epic17_integration: true
-    } as unknown);
+ as unknown);
 
     mockOptimizer.getOptimizerStatus = jest.fn<unknown[], unknown>().mockReturnValue({
       is_optimizing: false,
       cache_enabled: true,
       auto_optimization_enabled: false
-    } as unknown);
+ as unknown);
 
     mockAnalyticsCollector.track = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
     mockAnalyticsDAO.insertEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
@@ -71,7 +71,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         recovery_timeout_ms: 60000,
         half_open_max_calls: 3,
         monitoring_window_ms: 300000
-  }
+
       fault_tolerance: {
         enabled: true,
         retry_attempts: 3,
@@ -79,7 +79,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         exponential_backoff: true,
         jitter_enabled: true,
         max_retry_delay_ms: 10000
-  }
+
       disaster_recovery: {
         enabled: true,
         backup_interval_ms: 3600000,
@@ -87,7 +87,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         auto_failover: false,
         recovery_verification: true,
         backup_encryption: true
-  }
+
       health_monitoring: {
         enabled: true,
         check_interval_ms: 30000,
@@ -95,7 +95,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         critical_threshold: 60,
         auto_healing: true,
         alert_escalation: true
-  }
+
       system_resilience: {
         enabled: true,
         load_shedding: true,
@@ -103,12 +103,12 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         resource_isolation: true,
         chaos_engineering: false,
         stress_testing_enabled: false
-  }
+
       epic_integration: {
         epic1_reliability_events: true,
         epic17_admin_notifications: true,
         reliability_metrics_tracking: true
-      }
+
     };
 
     reliabilityEngineer = new SecurityAnalyticsReliabilityEngineer(
@@ -125,7 +125,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
   afterEach(async () => {
     if (reliabilityEngineer && typeof reliabilityEngineer.shutdown === 'function') {
       await reliabilityEngineer.shutdown();
-    }
+
     jest.clearAllMocks();
   });
 
@@ -182,10 +182,10 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
             'security_analytics_service',
             failingOperation
           );
-        } catch (error) {
+ catch (error) {
           // Expected to fail
-        }
-      }
+
+
       
       const circuitBreakers = reliabilityEngineer.getCircuitBreakerStatus();
       const serviceCB = circuitBreakers.get('security_analytics_service');
@@ -204,10 +204,10 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
             'security_analytics_service',
             failingOperation
           );
-        } catch (error) {
+ catch (error) {
           // Expected
-        }
-      }
+
+
       
       // Now try another operation - should be rejected immediately
       const newOperation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown);
@@ -234,7 +234,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         attemptCount++;
         if (attemptCount < 3) {
           return Promise.reject(new Error('Temporary failure'));
-        }
+
         return Promise.resolve('success');
       });
       
@@ -271,7 +271,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         attemptCount++;
         if (attemptCount < 2) {
           return Promise.reject(new Error('Retry me'));
-        }
+
         return Promise.resolve('success');
       });
       
@@ -383,7 +383,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
       expect(mockHealthCheckFramework.registerHealthCheck).toHaveBeenCalledWith(
         expect.objectContaining({
           id: 'reliability_circuit_breakers'
-  }
+
       );
     });
 
@@ -405,10 +405,10 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
             'security_analytics_service',
             testOperation
           );
-        }
-      } catch (error) {
+
+ catch (error) {
         // Expected
-      }
+
       
       // Circuit breaker should have opened and triggered analytics event
       // Note: This is simplified since the actual event tracking might be async
@@ -436,10 +436,10 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
             'security_analytics_service',
             failingOperation
           );
-        } catch (error) {
+ catch (error) {
           // Expected
-        }
-      }
+
+
       
       expect(cbEvents.length).toBe(1);
       expect(cbEvents[0].component).toBe('security_analytics_service');
@@ -514,7 +514,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         circuit_breaker: {
           ...testConfig.circuit_breaker,
           failure_threshold: 2 // Lower threshold for testing
-        }
+
       };
       
       const customEngineer = new SecurityAnalyticsReliabilityEngineer(
@@ -538,10 +538,10 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
             'security_analytics_service',
             failingOperation
           );
-        } catch (error) {
+ catch (error) {
           // Expected
-        }
-      }
+
+
       
       const circuitBreakers = customEngineer.getCircuitBreakerStatus();
       const serviceCB = circuitBreakers.get('security_analytics_service');
@@ -557,7 +557,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         fault_tolerance: {
           ...testConfig.fault_tolerance,
           retry_attempts: 1 // Only 1 retry
-        }
+
       };
       
       const customEngineer = new SecurityAnalyticsReliabilityEngineer(

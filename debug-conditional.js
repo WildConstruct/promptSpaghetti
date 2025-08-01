@@ -17,7 +17,5 @@ try {
   
   const result = func(...paramValues);
   console.log('Result:', result);
-  
-} catch (error) {
+ catch (error) {
   console.error('Error:', error);
-}

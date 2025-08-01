@@ -18,8 +18,8 @@ import * as crypto from 'crypto';
 // Assignment Tools Types and Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface AssignmentToolsConfig {
   // Assignment limits
   maxAssignmentsPerUser: number;
@@ -31,8 +31,9 @@ export interface AssignmentToolsConfig {
     enabled: boolean;
     rules: AutoAssignmentRule[];
     evaluationInterval: number; // minutes
-}
-}
+
+
+
   };
   
   // Approval workflows
@@ -76,7 +77,7 @@ export interface AssignmentToolsConfig {
     complianceReporting: boolean;
     retentionDays: number;
   };
-}
+
 
 export enum AssignmentType {
   API_KEY_ASSIGNMENT = 'api_key_assignment',
@@ -85,7 +86,7 @@ export enum AssignmentType {
   TEAM_ASSIGNMENT = 'team_assignment',
   RESOURCE_ASSIGNMENT = 'resource_assignment',
   DELEGATION = 'delegation'
-}
+
 
 export enum AssignmentStatus {
   PENDING = 'pending',
@@ -95,10 +96,10 @@ export enum AssignmentStatus {
   SUSPENDED = 'suspended',
   PENDING_APPROVAL = 'pending_approval',
   REJECTED = 'rejected'
-}
 
-}
-}
+
+
+
 export interface Assignment {
   assignmentId: string;
   assignmentType: AssignmentType;
@@ -152,12 +153,13 @@ export interface Assignment {
   // Compliance and audit
   complianceFlags: string[];
   auditTrail: AssignmentAuditEntry[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentScope {
   organizationId?: string;
   teamIds: string[];
@@ -174,16 +176,17 @@ export interface AssignmentScope {
     start: string; // HH:MM
     end: string;   // HH:MM
     days: number[]; // 0-6, Sunday = 0
-}
-}
+
+
+
   };
   
   // Custom scope attributes
   customScope: Record<string, any>;
-}
 
-}
-}
+
+
+
 export interface AssignmentContext {
   purpose: string;
   businessJustification: string;
@@ -204,24 +207,26 @@ export interface AssignmentContext {
   integratedSystems: string[];
   dependencies: string[];
   downstreamImpact: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentPermission {
   permissionId: string;
   action: string;
   resource: string;
   effect: 'allow' | 'deny';
   conditions?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentCondition {
   conditionId: string;
   type: 'time' | 'location' | 'device' | 'network' | 'usage' | 'custom';
@@ -229,24 +234,26 @@ export interface AssignmentCondition {
   value: any;
   description: string;
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentRestriction {
   restrictionId: string;
   type: 'time_based' | 'usage_based' | 'location_based' | 'device_based' | 'custom';
   parameters: Record<string, any>;
   description: string;
   enforced: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentApprovalRequest {
   requestId: string;
   requestedAt: Date;
@@ -273,12 +280,13 @@ export interface AssignmentApprovalRequest {
   finalDecision?: 'approved' | 'rejected';
   decisionReason?: string;
   conditions?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentApproval {
   approvalId: string;
   approvedBy: string;
@@ -286,12 +294,13 @@ export interface AssignmentApproval {
   decision: 'approve' | 'reject';
   comments?: string;
   conditions?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentUsageTracking {
   totalAccesses: number;
   lastAccessAt?: Date;
@@ -304,9 +313,10 @@ export interface AssignmentUsageTracking {
     action: string;
     count: number;
     lastUsed: Date;
-}
-}
-  }>;
+
+
+
+>;
   
   // Performance metrics
   averageResponseTime: number; // milliseconds
@@ -317,10 +327,10 @@ export interface AssignmentUsageTracking {
   complianceViolations: number;
   lastComplianceCheck: Date;
   complianceScore: number; // 0-100
-}
 
-}
-}
+
+
+
 export interface AssignmentAccessInfo {
   accessId: string;
   accessedAt: Date;
@@ -332,12 +342,13 @@ export interface AssignmentAccessInfo {
   success: boolean;
   responseTime: number; // milliseconds
   details: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentAuditEntry {
   entryId: string;
   timestamp: Date;
@@ -347,12 +358,13 @@ export interface AssignmentAuditEntry {
   newState?: any;
   reason?: string;
   details: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutoAssignmentRule {
   ruleId: string;
   name: string;
@@ -378,44 +390,48 @@ export interface AutoAssignmentRule {
     timesTriggered: number;
     lastTriggered?: Date;
     successRate: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface AutoAssignmentTrigger {
   type: 'user_created' | 'team_joined' | 'role_granted' | 'key_created' | 'project_assigned' | 'custom';
   filters: Record<string, any>;
   conditions: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutoAssignmentCondition {
   field: string;
   operator: string;
   value: any;
   logicalOperator?: 'AND' | 'OR';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutoAssignmentAction {
   type: 'assign_key' | 'assign_permission' | 'assign_role' | 'create_team' | 'send_notification' | 'custom';
   parameters: Record<string, any>;
   conditions?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentTemplate {
   templateId: string;
   name: string;
@@ -438,8 +454,9 @@ export interface AssignmentTemplate {
     timesUsed: number;
     lastUsed?: Date;
     averageRating: number;
-}
-}
+
+
+
   };
   
   // Template settings
@@ -447,10 +464,10 @@ export interface AssignmentTemplate {
   isSystemTemplate: boolean;
   allowedRoles: string[];
   requiredApproval: boolean;
-}
 
-}
-}
+
+
+
 export interface BulkAssignmentOperation {
   operationId: string;
   operationType: 'assign' | 'revoke' | 'update' | 'transfer';
@@ -482,33 +499,36 @@ export interface BulkAssignmentOperation {
   completedAt?: Date;
   estimatedCompletion?: Date;
   reason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkAssignmentResult {
   assignmentId: string;
   success: boolean;
   message: string;
   details?: Record<string, any>;
   processedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkAssignmentError {
   assignmentId: string;
   errorType: string;
   errorMessage: string;
   errorDetails: Record<string, any>;
   retryable: boolean;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Assignment Tools Service Implementation
@@ -542,7 +562,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
         enabled: true,
         rules: [],
         evaluationInterval: 15 // 15 minutes
-  }
+
       // Approval workflows  
       approval: {
         enabled: true,
@@ -550,41 +570,41 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           highValueKeys: true,
           crossOrgAssignments: true,
           adminRoleAssignments: true
-  }
+
         approvalTimeout: 72 // 72 hours
-  }
+
       // Delegation settings
       delegation: {
         enabled: true,
         allowSubDelegation: true,
         maxDelegationDuration: 30, // 30 days
         requireJustification: true
-  }
+
       // Assignment validation
       validation: {
         strictMode: true,
         conflictDetection: true,
         capacityChecking: true,
         dependencyValidation: true
-  }
+
       // Notifications
       notifications: {
         onAssignment: true,
         onRevocation: true,
         onExpiration: true,
         reminderDays: [30, 7, 1]
-  }
+
       // Audit and compliance
       audit: {
         logAllAssignments: true,
         complianceReporting: true,
         retentionDays: 2557 // 7 years
-  }
+
       ...config
     };
 
     this.initializeAssignmentTools();
-  }
+
 
   // =============================================================================
   // Core Assignment Operations
@@ -613,7 +633,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       metadata?: Record<string, any>;
       templateId?: string;
       skipApproval?: boolean;
-    } = {}
+ = {}
   ): Promise<string> {
 
     try {
@@ -625,8 +645,8 @@ export class Epic17AssignmentToolsService extends EventEmitter {
         const template = this.assignmentTemplates.get(options.templateId);
         if (template) {
           templateConfig = this.applyTemplate(template);
-        }
-      }
+
+
       
       // Validate assignment request
       const validation = await this.validateAssignmentRequest(
@@ -640,7 +660,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       
       if (!validation.valid) {
         throw new Error(`Assignment validation failed: ${validation.errors.join(', ')}`);
-      }
+
       
       // Check if approval is required
       const requiresApproval = this.shouldRequireApproval(
@@ -675,7 +695,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           businessHours: options.scope?.businessHours,
           customScope: options.scope?.customScope || {},
           ...templateConfig.scope
-  }
+
         context: {
           purpose: options.context?.purpose || 'Standard assignment',
           businessJustification: options.context?.businessJustification || options.reason || 'No justification provided',
@@ -691,7 +711,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           dependencies: options.context?.dependencies || [],
           downstreamImpact: options.context?.downstreamImpact || [],
           ...templateConfig.context
-  }
+
         permissions: options.permissions || templateConfig.permissions || [],
         
         // Lifecycle
@@ -725,7 +745,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           complianceViolations: 0,
           lastComplianceCheck: new Date(),
           complianceScore: 100
-  }
+
         // Metadata
         reason: options.reason || 'Assignment created',
         tags: options.tags || [],
@@ -742,7 +762,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           newState: { status: requiresApproval ? 'pending_approval' : 'pending' },
           reason: options.reason,
           details: { assignmentType, assigneeId, resourceId }
-        }]
+]
       };
       
       // Store assignment
@@ -755,10 +775,10 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       if (requiresApproval) {
         const approvalRequest = await this.createApprovalRequest(assignment);
         assignment.approvalRequest = approvalRequest;
-      } else {
+ else {
         // Activate assignment immediately
         await this.activateAssignment(assignmentId);
-      }
+
       
       await this.auditService.logAction({
         userId: assignedBy,
@@ -772,18 +792,17 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           resourceType,
           requiresApproval,
           expiresAt: options.expiresAt
-        }
+
       });
       
       this.emit('assignment_created', assignment);
       
       return assignmentId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error creating assignment:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Activate assignment (either approved or direct activation)
@@ -794,21 +813,21 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       const assignment = this.activeAssignments.get(assignmentId);
       if (!assignment) {
         throw new Error('Assignment not found');
-      }
+
       
       if (assignment.status === AssignmentStatus.ACTIVE) {
         return true; // Already active
-      }
+
       
       if (assignment.requiresApproval && !assignment.approvedBy) {
         throw new Error('Assignment requires approval before activation');
-      }
+
       
       // Perform pre-activation checks
       const preChecks = await this.performPreActivationChecks(assignment);
       if (!preChecks.passed) {
         throw new Error(`Pre-activation checks failed: ${preChecks.errors.join(', ')}`);
-      }
+
       
       // Activate the assignment
       assignment.status = AssignmentStatus.ACTIVE;
@@ -835,7 +854,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       // Send activation notification
       if (this.config.notifications.onAssignment) {
         await this.sendAssignmentNotification(assignment, 'activated');
-      }
+
       
       await this.auditService.logAction({
         userId: assignment.approvedBy || 'system',
@@ -845,18 +864,17 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           assignmentId,
           assigneeId: assignment.assigneeId,
           activatedAt: assignment.activatedAt
-        }
+
       });
       
       this.emit('assignment_activated', assignment);
       
       return true;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error activating assignment:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Revoke assignment
@@ -868,18 +886,18 @@ export class Epic17AssignmentToolsService extends EventEmitter {
     options: {
       gracePeriod?: number; // minutes
       notifyAssignee?: boolean;
-    } = {}
+ = {}
   ): Promise<boolean> {
 
     try {
       const assignment = this.activeAssignments.get(assignmentId);
       if (!assignment) {
         throw new Error('Assignment not found');
-      }
+
       
       if (assignment.status === AssignmentStatus.REVOKED) {
         return true; // Already revoked
-      }
+
       
       // Apply grace period if specified
       if (options.gracePeriod && options.gracePeriod > 0) {
@@ -896,20 +914,18 @@ export class Epic17AssignmentToolsService extends EventEmitter {
             gracePeriod: options.gracePeriod,
             reason
           });
-        }
-        
-      } else {
+
+ else {
         // Revoke immediately
         await this.finalizeRevocation(assignment, revokedBy, reason);
-      }
+
       
       return true;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error revoking assignment:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Delegate assignment to another user
@@ -924,33 +940,33 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       restrictions?: AssignmentRestriction[];
       reason?: string;
       canSubDelegate?: boolean;
-    } = {}
+ = {}
   ): Promise<string> {
 
     try {
       const originalAssignment = this.activeAssignments.get(originalAssignmentId);
       if (!originalAssignment) {
         throw new Error('Original assignment not found');
-      }
+
       
       if (!originalAssignment.canDelegate) {
         throw new Error('Assignment cannot be delegated');
-      }
+
       
       if (originalAssignment.status !== AssignmentStatus.ACTIVE) {
         throw new Error('Can only delegate active assignments');
-      }
+
       
       // Check delegation depth
       if (originalAssignment.delegationLevel >= this.config.maxDelegationDepth) {
         throw new Error('Maximum delegation depth exceeded');
-      }
+
       
       // Validate delegate
       const delegateValidation = await this.validateDelegate(delegateToId, originalAssignment);
       if (!delegateValidation.valid) {
         throw new Error(`Delegate validation failed: ${delegateValidation.errors.join(', ')}`);
-      }
+
       
       // Create delegation assignment
       const delegationId = crypto.randomUUID();
@@ -983,7 +999,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           newState: { status: 'active', delegatedFrom: originalAssignmentId },
           reason: options.reason,
           details: { originalAssignmentId, delegateToId, duration: options.duration }
-        }]
+]
       };
       
       // Store delegation
@@ -1009,7 +1025,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       // Send notifications
       if (this.config.notifications.onAssignment) {
         await this.sendAssignmentNotification(delegationAssignment, 'delegated');
-      }
+
       
       await this.auditService.logAction({
         userId: delegatedBy,
@@ -1021,7 +1037,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           delegateToId,
           duration: options.duration,
           reason: options.reason
-        }
+
       });
       
       this.emit('assignment_delegated', {
@@ -1031,12 +1047,11 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       });
       
       return delegationId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error delegating assignment:', error);
       throw error;
-    }
-  }
+
+
 
   // =============================================================================
   // Bulk Assignment Operations
@@ -1052,7 +1067,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       assigneeType: Assignment['assigneeType'];
       resourceId: string;
       resourceType: string;
-    }> | string[], // Either assignment data or existing assignment IDs
+> | string[], // Either assignment data or existing assignment IDs
     parameters: Record<string, any>,
     initiatedBy: string,
     options: {
@@ -1060,7 +1075,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       batchSize?: number;
       reason?: string;
       skipApproval?: boolean;
-    } = {}
+ = {}
   ): Promise<string> {
 
     try {
@@ -1105,18 +1120,17 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           operationType,
           totalCount: assignments.length,
           templateId: options.templateId
-        }
+
       });
       
       this.emit('bulk_assignment_started', bulkOperation);
       
       return operationId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error executing bulk assignment:', error);
       throw error;
-    }
-  }
+
+
 
   // =============================================================================
   // Auto-Assignment System
@@ -1136,7 +1150,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
     options: {
       priority?: number;
       enabled?: boolean;
-    } = {}
+ = {}
   ): Promise<string> {
 
     try {
@@ -1158,7 +1172,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
         usage: {
           timesTriggered: 0,
           successRate: 0
-        }
+
       };
       
       // Store rule
@@ -1174,18 +1188,17 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           name,
           enabled: rule.enabled,
           priority: rule.priority
-        }
+
       });
       
       this.emit('auto_assignment_rule_created', rule);
       
       return ruleId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error creating auto-assignment rule:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Evaluate auto-assignment rules for trigger event
@@ -1229,8 +1242,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
             triggerType,
             eventData
           });
-          
-        } catch (error) {
+ catch (error) {
           console.error(`Error executing auto-assignment rule ${rule.ruleId}:`, error);
           
           // Update failure statistics
@@ -1240,16 +1252,15 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           rule.usage.timesTriggered++;
           
           await this.updateAutoAssignmentRuleUsage(rule.ruleId, rule.usage);
-        }
-      }
+
+
       
       return triggeredRules;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error evaluating auto-assignment rules:', error);
       return [];
-    }
-  }
+
+
 
   // =============================================================================
   // Assignment Templates Management
@@ -1269,13 +1280,13 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       defaultPermissions?: AssignmentPermission[];
       defaultConditions?: AssignmentCondition[];
       defaultRestrictions?: AssignmentRestriction[];
-  }
+
     createdBy: string,
     options: {
       isSystemTemplate?: boolean;
       allowedRoles?: string[];
       requireApproval?: boolean;
-    } = {}
+ = {}
   ): Promise<string> {
 
     try {
@@ -1298,7 +1309,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
         usage: {
           timesUsed: 0,
           averageRating: 0
-  }
+
         isActive: true,
         isSystemTemplate: options.isSystemTemplate || false,
         allowedRoles: options.allowedRoles || [],
@@ -1318,18 +1329,17 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           name,
           category,
           assignmentType
-        }
+
       });
       
       this.emit('assignment_template_created', template);
       
       return templateId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error creating assignment template:', error);
       throw error;
-    }
-  }
+
+
 
   // =============================================================================
   // Helper Methods and Utilities
@@ -1350,18 +1360,17 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       // Start auto-assignment evaluation if enabled
       if (this.config.autoAssignment.enabled) {
         this.startAutoAssignmentEvaluation();
-      }
+
       
       // Start expiration monitoring
       this.startExpirationMonitoring();
       
       console.log('✅ Epic 17 Assignment Tools Service initialized');
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error initializing assignment tools service:', error);
       throw error;
-    }
-  }
+
+
 
   private async validateAssignmentRequest(
     assignmentType: AssignmentType,
@@ -1378,39 +1387,39 @@ export class Epic17AssignmentToolsService extends EventEmitter {
     const currentAssignments = await this.getUserAssignmentCount(assigneeId);
     if (currentAssignments >= this.config.maxAssignmentsPerUser) {
       errors.push(`User has reached maximum assignments limit (${this.config.maxAssignmentsPerUser})`);
-    }
+
     
     // Check resource assignment limits
     const resourceAssignments = await this.getResourceAssignmentCount(resourceId);
     if (resourceAssignments >= this.config.maxAssignmentsPerKey) {
       errors.push(`Resource has reached maximum assignments limit (${this.config.maxAssignmentsPerKey})`);
-    }
+
     
     // Check for conflicts if conflict detection is enabled
     if (this.config.validation.conflictDetection) {
       const conflicts = await this.detectAssignmentConflicts(assigneeId, resourceId, assignmentType);
       if (conflicts.length > 0) {
         errors.push(`Assignment conflicts detected: ${conflicts.join(', ')}`);
-      }
-    }
+
+
     
     // Validate assignee exists and is active
     const assigneeValid = await this.validateAssignee(assigneeId, assigneeType);
     if (!assigneeValid.valid) {
       errors.push(`Invalid assignee: ${assigneeValid.reason}`);
-    }
+
     
     // Validate resource exists and is assignable
     const resourceValid = await this.validateResource(resourceId, resourceType);
     if (!resourceValid.valid) {
       errors.push(`Invalid resource: ${resourceValid.reason}`);
-    }
+
     
     return {
       valid: errors.length === 0,
       errors
     };
-  }
+
 
   private shouldRequireApproval(
     assignmentType: AssignmentType,
@@ -1421,26 +1430,26 @@ export class Epic17AssignmentToolsService extends EventEmitter {
   ): boolean {
     if (skipApproval || !this.config.approval.enabled) {
       return false;
-    }
+
     
     // Check high-value keys
     if (this.config.approval.requireApproval.highValueKeys) {
       // Implementation would check if resource is high-value
       return true; // Simplified - assume approval needed
-    }
+
     
     // Check cross-org assignments
     if (this.config.approval.requireApproval.crossOrgAssignments && scope?.organizationId) {
       // Implementation would check if cross-org
-    }
+
     
     // Check admin role assignments
     if (this.config.approval.requireApproval.adminRoleAssignments && assignmentType === AssignmentType.ROLE_ASSIGNMENT) {
       // Implementation would check if admin role
-    }
+
     
     return false;
-  }
+
 
   // Database and storage operations
   private async storeAssignment(assignment: Assignment): Promise<void> {
@@ -1463,7 +1472,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       JSON.stringify(assignment.tags), JSON.stringify(assignment.metadata),
       JSON.stringify(assignment.complianceFlags)
     ]);
-  }
+
 
   // Additional helper methods...
   private getDefaultAllowedActions(assignmentType: AssignmentType, resourceType: string): string[] {
@@ -1477,13 +1486,13 @@ export class Epic17AssignmentToolsService extends EventEmitter {
     };
     
     return defaultActions[assignmentType] || ['read'];
-  }
+
 
   private async assessComplianceFlags(assignmentType: AssignmentType, assigneeId: string, resourceId: string): Promise<string[]> {
 
     // Implementation would assess compliance requirements
     return [];
-  }
+
 
   // Placeholder implementations for various operations...
   private async loadActiveAssignments(): Promise<void> { }
@@ -1504,7 +1513,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
   private async createApprovalRequest(assignment: Assignment): Promise<AssignmentApprovalRequest> {
 
     return {} as AssignmentApprovalRequest; 
-  }
+
   private async processBulkAssignment(operationId: string, assignments: any): Promise<void> { }
   private async storeBulkOperation(operation: BulkAssignmentOperation): Promise<void> { }
   private async storeAutoAssignmentRule(rule: AutoAssignmentRule): Promise<void> { }
@@ -1519,36 +1528,36 @@ export class Epic17AssignmentToolsService extends EventEmitter {
     this.autoAssignmentInterval = setInterval(() => {
       // Evaluate pending auto-assignment triggers
     }, this.config.autoAssignment.evaluationInterval * 60 * 1000);
-  }
+
   
   private startExpirationMonitoring(): void {
     setInterval(() => {
       // Check for expiring assignments
     }, 60 * 60 * 1000); // Every hour
-  }
+
 
   // Public API methods
   getActiveAssignments(): Assignment[] {
     return Array.from(this.activeAssignments.values());
-  }
+
 
   async getAssignment(assignmentId: string): Promise<Assignment | null> {
 
     return this.activeAssignments.get(assignmentId) || null;
-  }
+
 
   getAutoAssignmentRules(): AutoAssignmentRule[] {
     return Array.from(this.autoAssignmentRules.values());
-  }
+
 
   getAssignmentTemplates(): AssignmentTemplate[] {
     return Array.from(this.assignmentTemplates.values());
-  }
+
 
   async getBulkOperationStatus(operationId: string): Promise<BulkAssignmentOperation | null> {
 
     return this.bulkOperations.get(operationId) || null;
-  }
-}
+
+
 
 export default Epic17AssignmentToolsService;

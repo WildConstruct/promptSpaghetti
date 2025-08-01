@@ -38,16 +38,16 @@ export const FolderTree: React.FC<FolderTreeProps> = ({)
             if (item.type === 'folder') {
               if (expandedFolders.has(item.id)) {
                 onCollapse(item.id);
-              } else {
+ else {
                 onExpand(item.id);
-          }}
+}
           onContextMenu={onContextMenu}
           onToggleExpand={(folderId) => {
             if (expandedFolders.has(folderId)) {
               onCollapse(folderId);
-            } else {
+ else {
               onExpand(folderId);
-          }}
+}
           onDragStart={(item) => {
   // Store drag data
   const dragData: DragDropData = {,
@@ -60,14 +60,14 @@ export const FolderTree: React.FC<FolderTreeProps> = ({)
             if (dragEvent?.dataTransfer) {
               dragEvent.dataTransfer.setData('application/json', JSON.stringify(dragData));
               dragEvent.dataTransfer.effectAllowed = 'move';
-          }}
+}
           onDragOver={(item, e) => {
             e.preventDefault();
             e.stopPropagation();
             if (item.type === 'folder') {
               setDragOverItem(item.id);
               e.dataTransfer.dropEffect = 'move';
-          }}
+}
           onDrop={(targetItem, dragData) => {
   setDragOverItem(null);
   if (targetItem.type === 'folder') {
@@ -76,7 +76,7 @@ export const FolderTree: React.FC<FolderTreeProps> = ({)
   targetPath: targetItem.path,
 };
               onDrop(updatedDragData);
-          }}
+}
           className={dragOverItem === node.id ? 'drag-over' : ''}
         />
         {/* Render children if folder is expanded */}
@@ -100,7 +100,7 @@ export const FolderTree: React.FC<FolderTreeProps> = ({)
   ...dragData,
   targetPath: '/',
 });
-    } catch (error) {
+ catch (error) {
   console.error('Failed to parse drag data:', error);
 };
   const handleContainerDragOver = (e: React.DragEvent) => {
@@ -115,7 +115,7 @@ export const FolderTree: React.FC<FolderTreeProps> = ({)
   height: '100%',
   overflow: 'auto',
   userSelect: 'none',
-}}
+}
       onDrop={handleContainerDrop}
       onDragOver={handleContainerDragOver}
       onDragLeave={() => setDragOverItem(null)}
@@ -134,14 +134,14 @@ export const FolderTree: React.FC<FolderTreeProps> = ({)
   border: 2px dashed #4caf50;
           .file-item-icon {
             width: 16px;,
-  height: 16px;
-            display: inline-block;
+  height: 16px;,
+  display: inline-block;
             text-align: center;
             margin-right: 6px;
           .expand-toggle {
             width: 16px;,
-  height: 16px;
-            display: inline-flex;
+  height: 16px;,
+  display: inline-flex;
             align-items: center;
             justify-content: center;,
   cursor: pointer;
@@ -161,8 +161,8 @@ export const FolderTree: React.FC<FolderTreeProps> = ({)
             font-size: 12px;,
   color: #666;
             margin-left: auto;,
-  display: flex;
-            gap: 8px;
+  display: flex;,
+  gap: 8px;
             align-items: center;
           .file-size {
             min-width: 60px;
@@ -188,7 +188,7 @@ export const FolderTree: React.FC<FolderTreeProps> = ({)
   color: '#666',
   padding: '40px 20px',
   fontStyle: 'italic',
-}}>
+}>
           No files found
         </div>
       ) : ()

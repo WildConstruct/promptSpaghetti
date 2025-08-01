@@ -11,7 +11,7 @@ import {
   UpdateStatus,
   DeploymentType,
   RolloutType
-} from '../services/PolicyUpdateWorkflowService';
+ from '../services/PolicyUpdateWorkflowService';
 import { z } from 'zod';
 
 // Request schemas
@@ -81,7 +81,7 @@ const SubmitUpdateRequestSchema = z.object({
       mitigationMeasures: z.array(z.string()).default([]),
       residualRisk: z.enum(['VERY_LOW', 'LOW', 'MEDIUM', 'HIGH', 'VERY_HIGH'] as const),
       acceptanceCriteria: z.array(z.string()).default([])
-  }
+
   }),
   priority: z.enum(['LOW', 'NORMAL', 'HIGH', 'CRITICAL', 'EMERGENCY'] as const).default('NORMAL'),
   effectiveDate: z.string().datetime().transform(val => new Date(val)),
@@ -165,25 +165,25 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 interface SubmitUpdateRequest extends AuthenticatedRequest {
   Body: z.infer<typeof SubmitUpdateRequestSchema>;
-}
+
 
 interface ProcessApprovalRequest extends AuthenticatedRequest {
   Params: { requestId: string };
   Body: z.infer<typeof ProcessApprovalSchema>;
-}
+
 
 interface DeployRequest extends AuthenticatedRequest {
   Params: { requestId: string };
   Body: z.infer<typeof DeployRequestSchema>;
-}
+
 
 interface RequestDetailParams extends AuthenticatedRequest {
   Params: { requestId: string };
-}
+
 
 export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
   // Get the policy update workflow service from the DI container
@@ -198,7 +198,7 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Valid authentication token required'
         });
-      }
+
 
       const token = authHeader.slice(7);
       const user = await fastify.jwt.verify(token) as any;
@@ -208,15 +208,15 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Invalid authentication token'
         });
-      }
+
 
       request.user = user;
-    } catch (error) {
+ catch (error) {
       return reply.code(401).send({
         error: 'Unauthorized',
         message: 'Authentication failed'
       });
-    }
+
   };
 
   // Rate limiting configuration
@@ -240,7 +240,7 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
           policyType: { 
             type: 'string',
             enum: ['PRIVACY_POLICY', 'TERMS_OF_SERVICE', 'DATA_PROCESSING', 'COOKIE_POLICY', 'SECURITY_POLICY', 'RETENTION_POLICY', 'ACCESS_POLICY', 'COMPLIANCE_POLICY']
-  }
+
           currentVersion: { type: 'string', minLength: 1 },
           proposedVersion: { type: 'string', minLength: 1 },
           title: { type: 'string', minLength: 5 },
@@ -260,27 +260,27 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
                 legalBasis: { type: 'string' },
                 affectedUsers: { type: 'array', items: { type: 'string' }, default: [] },
                 breakingChange: { type: 'boolean', default: false }
-  }
+
               required: ['changeId', 'changeType', 'section', 'oldContent', 'newContent', 'rationale']
-            }
-  }
+
+
           justification: { type: 'string', minLength: 50 },
           priority: { type: 'string', enum: ['LOW', 'NORMAL', 'HIGH', 'CRITICAL', 'EMERGENCY'], default: 'NORMAL' },
           effectiveDate: { type: 'string', format: 'date-time' },
           metadata: { type: 'object', default: {} }
-  }
+
         required: ['policyId', 'policyType', 'currentVersion', 'proposedVersion', 'title', 'description', 'changes', 'justification', 'effectiveDate']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             requestId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: SubmitUpdateRequest, reply: FastifyReply) => {
     try {
       const validatedBody = SubmitUpdateRequestSchema.parse(request.body);
@@ -297,22 +297,21 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         requestId: result.requestId,
         message: 'Policy update request submitted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error submitting policy update request:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to submit policy update request'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -327,17 +326,17 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-  }
+
         required: ['requestId']
-  }
+
       body: {
         type: 'object',
         properties: {
           decision: { type: 'string', enum: ['APPROVED', 'REJECTED', 'APPROVED_WITH_CONDITIONS'] },
           comments: { type: 'string' }
-  }
+
         required: ['decision']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -345,10 +344,10 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
             workflowComplete: { type: 'boolean' },
             approved: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: ProcessApprovalRequest, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
@@ -370,22 +369,21 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         approved: result.approved,
         message
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error processing approval decision:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to process approval decision'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -400,9 +398,9 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-  }
+
         required: ['requestId']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -415,9 +413,9 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
               strategyType: { type: 'string', enum: ['IMMEDIATE', 'CANARY', 'BLUE_GREEN', 'FEATURE_FLAG', 'PHASED'] },
               parameters: { type: 'object', default: {} },
               canaryPercentage: { type: 'number', minimum: 1, maximum: 100 }
-  }
+
             required: ['strategyType']
-  }
+
           schedule: {
             type: 'object',
             properties: {
@@ -432,16 +430,16 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
                     duration: { type: 'number', minimum: 1 },
                     successThreshold: { type: 'number', minimum: 0, maximum: 100, default: 95 },
                     rollbackThreshold: { type: 'number', minimum: 0, maximum: 100, default: 5 }
-  }
+
                   required: ['phaseId', 'phaseName', 'targetPercentage', 'duration']
-  }
+
                 default: []
-  }
+
               rollbackTriggers: { type: 'array', items: { type: 'string' }, default: [] },
               successCriteria: { type: 'array', items: { type: 'string' }, default: [] },
               monitoringPeriod: { type: 'number', minimum: 1, default: 24 }
-            }
-  }
+
+
           validationResults: {
             type: 'array',
             items: {
@@ -453,24 +451,24 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
                 recommendations: { type: 'array', items: { type: 'string' }, default: [] },
                 validatedAt: { type: 'string', format: 'date-time' },
                 validatorId: { type: 'string' }
-  }
+
               required: ['validationType', 'status', 'validatedAt', 'validatorId']
-  }
+
             default: []
-          }
-  }
+
+
         required: ['policyVersionId', 'deploymentType', 'targetEnvironments', 'rolloutStrategy', 'schedule']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             deploymentId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: DeployRequest, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
@@ -482,22 +480,21 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         deploymentId: result.deploymentId,
         message: 'Policy deployment initiated successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error deploying policy update:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to deploy policy update'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -525,13 +522,13 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
                   submittedAt: { type: 'string', format: 'date-time' },
                   effectiveDate: { type: 'string', format: 'date-time' },
                   changesCount: { type: 'number' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const requests = await policyUpdateService.getPendingApprovals(request.user!.id);
@@ -548,14 +545,13 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
           changesCount: req.changes.length
         }))
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting pending approvals:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get pending approvals'
       });
-    }
+
   });
 
   /**
@@ -570,9 +566,9 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           policyId: { type: 'string' }
-  }
+
         required: ['policyId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -591,13 +587,13 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
                   submittedAt: { type: 'string', format: 'date-time' },
                   effectiveDate: { type: 'string', format: 'date-time' },
                   requestorRole: { type: 'string' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: RequestDetailParams, reply: FastifyReply) => {
     try {
       const { policyId } = request.params;
@@ -617,14 +613,13 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
           requestorRole: req.requestorRole
         }))
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting policy update history:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get policy update history'
       });
-    }
+
   });
 
   /**
@@ -639,9 +634,9 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-  }
+
         required: ['requestId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -664,12 +659,12 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
                 submittedAt: { type: 'string', format: 'date-time' },
                 effectiveDate: { type: 'string', format: 'date-time' },
                 approvalWorkflow: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: RequestDetailParams, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
@@ -692,16 +687,15 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
           submittedAt: new Date().toISOString(),
           effectiveDate: new Date().toISOString(),
           approvalWorkflow: {}
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Error getting request details:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get request details'
       });
-    }
+
   });
 
   /**
@@ -718,10 +712,10 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' },
             version: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     reply.send({
       status: 'healthy',
@@ -729,9 +723,8 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
       version: '1.0.0'
     });
   });
-}
+
 
 // Register the plugin
 export default async function (fastify: FastifyInstance) {
   await fastify.register(policyUpdateWorkflowRoutes, { prefix: '/api/policy-update-workflow' });
-}

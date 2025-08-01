@@ -3,8 +3,9 @@ import { UserId } from '../../types';
 /**
  * Repository interface for user session handling with Redis integration
  */
-}
-}
+
+
+
 export interface SessionRepository {
   /**
    * Create a new session
@@ -50,15 +51,17 @@ export interface SessionRepository {
    * Clean up expired sessions
    */
   cleanupExpired(): Promise<number>;
-}
-}
-}
+
+
+
+
 
 /**
  * Session data structure
  */
-}
-}
+
+
+
 export interface Session {
   id: string;
   userId: UserId;
@@ -69,21 +72,23 @@ export interface Session {
   expiresAt: Date;
   isActive: boolean;
   metadata?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Request for creating a new session
  */
-}
-}
+
+
+
 export interface CreateSessionRequest {
   userId: UserId;
   userAgent?: string;
   ipAddress?: string;
   ttlSeconds?: number;
   metadata?: Record<string, any>;
-}
-}
-}
+
+
+

@@ -526,32 +526,32 @@ div >
 div >
     _jsx("style", { children: `
         .contributor-profile-manager {
-          background: #ffffff;
+          background: #ffffff;,
   border: 1px solid #e5e7eb;
-          border-radius: 12px;
+          border-radius: 12px;,
   overflow: hidden;
         .profile-header {
           padding: 24px;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid #e5e7eb;,
   display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start;,
   gap: 20px;
         .header-main {
-          display: flex;
+          display: flex;,
   gap: 20px;
           flex: 1;
         .avatar-section {
           display: flex;
           flex-direction: column;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
         .avatar {
-          width: 80px;
+          width: 80px;,
   height: 80px;
-          border-radius: 50%;
+          border-radius: 50%;,
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-          color: #ffffff;
+          color: #ffffff;,
   display: flex;
           align-items: center;
           justify-content: center;
@@ -561,9 +561,9 @@ div >
           padding: 4px 8px;
           border-radius: 12px;
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 600;,
   display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 4px;
           text-transform: capitalize;
         .profile-info {
@@ -571,58 +571,58 @@ div >
         .profile-info h2 {
           margin: 0 0 8px 0;
           font-size: 28px;
-          font-weight: 700;
+          font-weight: 700;,
   color: #1f2937;
         .bio {
-          margin: 0 0 12px 0;
+          margin: 0 0 12px 0;,
   color: #6b7280;
           line-height: 1.5;
         .location {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 6px;
           color: #6b7280;
           font-size: 14px;
         .edit-actions {
-          display: flex;
+          display: flex;,
   gap: 12px;
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-          gap: 1px;
+          gap: 1px;,
   background: #e5e7eb;
         .stat-item {
-          background: #ffffff;
+          background: #ffffff;,
   padding: 16px;
           text-align: center;
         .stat-value {
           font-size: 24px;
-          font-weight: 700;
+          font-weight: 700;,
   color: #1f2937;
           margin-bottom: 4px;
         .stat-label {
-          font-size: 12px;
+          font-size: 12px;,
   color: #6b7280;
           font-weight: 500;
         .profile-tabs {
           display: flex;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid #e5e7eb;,
   background: #f8fafc;
         .tab-btn {
-          background: none;
+          background: none;,
   border: none;
-          padding: 16px 24px;
+          padding: 16px 24px;,
   cursor: pointer;
-          font-weight: 500;
+          font-weight: 500;,
   color: #6b7280;
-          border-bottom: 3px solid transparent;
+          border-bottom: 3px solid transparent;,
   transition: all 0.2s ease;
         .tab-btn:hover {,
-  color: #3b82f6;
-          background: #f1f5f9;
+  color: #3b82f6;,
+  background: #f1f5f9;
         .tab-btn.active {
           color: #3b82f6;
-          border-bottom-color: #3b82f6;
+          border-bottom-color: #3b82f6;,
   background: #ffffff;
         .tab-content {
           padding: 24px;
@@ -631,16 +631,16 @@ div >
         .form-group label {
           display: block;
           margin-bottom: 6px;
-          font-weight: 500;
+          font-weight: 500;,
   color: #374151;
         .form-group input,
         .form-group textarea,
         .form-group select {
-          width: 100%;
+          width: 100%;,
   padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 14px;
+          font-size: 14px;,
   transition: border-color 0.2s ease;
         .form-group input:focus,
         .form-group textarea:focus {,
@@ -652,44 +652,44 @@ div >
           border-color: #ef4444;
         .char-count {
           text-align: right;
-          font-size: 12px;
+          font-size: 12px;,
   color: #9ca3af;
           margin-top: 4px;
         .social-inputs {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 8px;
         .tags-input input {
           margin-bottom: 8px;
         .tags-list,
         .tags-display {
           display: flex;
-          flex-wrap: wrap;
+          flex-wrap: wrap;,
   gap: 6px;
         .tag {
-          background: #3b82f6;
+          background: #3b82f6;,
   color: #ffffff;
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 12px;
-          font-weight: 500;
+          font-weight: 500;,
   display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 4px;
         .tags-display .tag {
-          background: #e5e7eb;
+          background: #e5e7eb;,
   color: #4b5563;
         .tag-remove {
-          background: none;
+          background: none;,
   border: none;
-          color: #ffffff;
+          color: #ffffff;,
   cursor: pointer;
-          font-size: 14px;
+          font-size: 14px;,
   padding: 0;
-          margin: 0;
+          margin: 0;,
   width: 16px;
           height: 16px;
-          border-radius: 50%;
+          border-radius: 50%;,
   display: flex;
           align-items: center;
           justify-content: center;
@@ -700,22 +700,22 @@ div >
         .detail-section h4 {
           margin: 0 0 12px 0;
           font-size: 16px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .detail-section p {
-          margin: 0;
+          margin: 0;,
   color: #6b7280;
           line-height: 1.5;
         .links-list {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 8px;
         .link-item {
           color: #3b82f6;
           text-decoration: none;
-          font-size: 14px;
+          font-size: 14px;,
   display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
         .link-item:hover {
           text-decoration: underline;
@@ -725,64 +725,64 @@ div >
           gap: 16px;
         .badge-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;
+          border-radius: 8px;,
   padding: 16px;
-          display: flex;
+          display: flex;,
   gap: 12px;
         .badge-icon {
-          width: 48px;
+          width: 48px;,
   height: 48px;
           border-radius: 8px;
         .badge-info h5 {
           margin: 0 0 4px 0;
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .badge-info p {
           margin: 0 0 4px 0;
-          font-size: 12px;
+          font-size: 12px;,
   color: #6b7280;
         .earned-date {
-          font-size: 11px;
+          font-size: 11px;,
   color: #9ca3af;
         .achievements-list {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 16px;
         .achievement-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;
+          border-radius: 8px;,
   padding: 16px;
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: center;,
   gap: 16px;
         .achievement-info h5 {
           margin: 0 0 4px 0;
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .achievement-info p {
           margin: 0;
-          font-size: 12px;
+          font-size: 12px;,
   color: #6b7280;
         .achievement-progress {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
           min-width: 120px;
         .progress-bar {
-          flex: 1;
+          flex: 1;,
   height: 8px;
           background: #e5e7eb;
-          border-radius: 4px;
+          border-radius: 4px;,
   overflow: hidden;
         .progress-fill {
-          height: 100%;
+          height: 100%;,
   background: #3b82f6;
           transition: width 0.3s ease;
         .progress-text {
-          font-size: 12px;
+          font-size: 12px;,
   color: #6b7280;
           font-weight: 500;
           min-width: 32px;
@@ -790,14 +790,14 @@ div >
           margin-bottom: 16px;
         .preference-label {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 8px;
           cursor: pointer;
-          font-size: 14px;
+          font-size: 14px;,
   color: #374151;
         .empty-text {
           color: #9ca3af;
-          font-style: italic;
+          font-style: italic;,
   margin: 0;
         .error-message {
           color: #ef4444;
@@ -808,30 +808,30 @@ div >
         .btn-outline {
           padding: 10px 20px;
           border-radius: 6px;
-          font-weight: 500;
+          font-weight: 500;,
   cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.2s ease;,
   border: 1px solid transparent;
         .btn-primary {
-          background: #3b82f6;
+          background: #3b82f6;,
   color: #ffffff;
         .btn-primary:hover:not(:disabled) {,
   background: #2563eb;
         .btn-secondary {
-          background: #f3f4f6;
+          background: #f3f4f6;,
   color: #374151;
           border-color: #d1d5db;
         .btn-secondary:hover {,
   background: #e5e7eb;
         .btn-outline {
-          background: #ffffff;
+          background: #ffffff;,
   color: #374151;
           border-color: #d1d5db;
         .btn-outline:hover {,
   background: #f9fafb;
         .btn-primary:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+  opacity: 0.5;,
+  cursor: not-allowed;
         @media (max-width: 768px) {
           .profile-header {
             flex-direction: column;

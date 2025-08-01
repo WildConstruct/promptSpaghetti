@@ -24,7 +24,7 @@ import {
   CreatePaymentIntentSchema,
   ProcessPaymentSchema,
   CreateRefundRequestSchema
-} from './transaction.types.js';
+ from './transaction.types.js';
 import { MarketplaceTemplate, TemplateVersion } from './types.js';
 import { DatabaseService } from '../database/database.service.js';
 
@@ -39,12 +39,12 @@ export class TransactionService {
     
     if (!process.env.STRIPE_SECRET_KEY) {
       throw new Error('STRIPE_SECRET_KEY environment variable is required');
-    }
+
     
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: '2023-10-16'
     });
-  }
+
 
   // =============================================
   // Shopping Cart Management
@@ -75,7 +75,7 @@ export class TransactionService {
     );
 
     return cart;
-  }
+
 
   async getCart(cartId: string, userId: string): Promise<ShoppingCart | null> {
 
@@ -99,7 +99,7 @@ export class TransactionService {
       updated_at: new Date(row.updated_at),
       expires_at: new Date(row.expires_at)
     };
-  }
+
 
   async addToCart(userId: string, cartData: any): Promise<ShoppingCart> {
 
@@ -109,21 +109,21 @@ export class TransactionService {
     let cart = await this.getActiveCart(userId);
     if (!cart) {
       cart = await this.createCart(userId);
-    }
+
 
     // Validate templates exist and are purchasable
     for (const item of validated.items) {
       const template = await this.getTemplate(item.template_id);
       if (!template || template.status !== 'listed') {
         throw new Error(`Template ${item.template_id} is not available for purchase`);
-      }
+
 
       // Check if user already owns this template
       const existingPurchase = await this.checkExistingPurchase(userId, item.template_id);
       if (existingPurchase) {
         throw new Error(`You already own template: ${template.title}`);
-      }
-    }
+
+
 
     // Add items to cart
     for (const itemData of validated.items) {
@@ -141,10 +141,10 @@ export class TransactionService {
       };
 
       cart.items.push(cartItem);
-    }
+
 
     return await this.updateCartTotals(cart);
-  }
+
 
   async updateCartItem(userId: string, cartId: string, updateData: any): Promise<ShoppingCart> {
 
@@ -153,17 +153,17 @@ export class TransactionService {
     
     if (!cart) {
       throw new Error('Cart not found or expired');
-    }
+
 
     if (validated.quantity === 0) {
       // Remove item
       cart.items = cart.items.filter(item => item.id !== validated.item_id);
-    } else {
+ else {
       // Update item
       const itemIndex = cart.items.findIndex(item => item.id === validated.item_id);
       if (itemIndex === -1) {
         throw new Error('Cart item not found');
-      }
+
 
       cart.items[itemIndex].quantity = validated.quantity;
       if (validated.license_type) {
@@ -173,11 +173,11 @@ export class TransactionService {
           template!.price_cents, 
           validated.license_type
         );
-      }
-    }
+
+
 
     return await this.updateCartTotals(cart);
-  }
+
 
   async clearCart(userId: string, cartId: string): Promise<void> {
 
@@ -185,7 +185,7 @@ export class TransactionService {
       'DELETE FROM shopping_carts WHERE id = ? AND user_id = ?',
       [cartId, userId]
     );
-  }
+
 
   // =============================================
   // Payment Processing
@@ -198,7 +198,7 @@ export class TransactionService {
     
     if (!cart || cart.items.length === 0) {
       throw new Error('Cart is empty or not found');
-    }
+
 
     // Calculate final totals with tax
     await this.calculateTax(cart, validated.billing_address);
@@ -209,7 +209,7 @@ export class TransactionService {
     
     if (riskAssessment.recommendation === 'decline') {
       throw new Error('Payment declined due to risk factors');
-    }
+
 
     // Create Stripe payment intent
     const stripeIntent = await this.stripe.paymentIntents.create({
@@ -223,7 +223,7 @@ export class TransactionService {
         cart_id: finalCart.id,
         user_id: userId,
         risk_score: riskAssessment.risk_score.toString()
-      }
+
     });
 
     const paymentIntent: PaymentIntent = {
@@ -240,7 +240,7 @@ export class TransactionService {
       metadata: {
         risk_assessment_id: riskAssessment.id,
         billing_address: validated.billing_address
-  }
+
       created_at: new Date(),
       updated_at: new Date()
     };
@@ -259,7 +259,7 @@ export class TransactionService {
     );
 
     return paymentIntent;
-  }
+
 
   async processPayment(userId: string, paymentData: any): Promise<Order> {
 
@@ -268,7 +268,7 @@ export class TransactionService {
     
     if (!paymentIntent) {
       throw new Error('Payment intent not found');
-    }
+
 
     // Confirm payment with Stripe
     const stripeIntent = await this.stripe.paymentIntents.confirm(
@@ -294,12 +294,12 @@ export class TransactionService {
       await this.clearCart(userId, paymentIntent.cart_id);
       
       return order;
-    } else if (stripeIntent.status === 'requires_action') {
+ else if (stripeIntent.status === 'requires_action') {
       throw new Error('Payment requires additional authentication');
-    } else {
+ else {
       throw new Error('Payment failed');
-    }
-  }
+
+
 
   // =============================================
   // Order Management
@@ -349,7 +349,7 @@ export class TransactionService {
         metadata: {}
       };
       order.items.push(orderItem);
-    }
+
 
     // Save order
     await this.db.query(
@@ -376,10 +376,10 @@ export class TransactionService {
           JSON.stringify(item.metadata)
         ]
       );
-    }
+
 
     return order;
-  }
+
 
   async fulfillOrder(order: Order): Promise<void> {
 
@@ -393,7 +393,7 @@ export class TransactionService {
           'UPDATE order_items SET license_id = ?, fulfillment_status = \'fulfilled\' WHERE id = ?',
           [license.id, item.id]
         );
-      }
+
 
       // Update order status
       await this.db.query(
@@ -406,8 +406,7 @@ export class TransactionService {
 
       // Send confirmation email (placeholder)
       this.fastify.log.info(`Order ${order.order_number} fulfilled successfully`);
-
-    } catch (error) {
+ catch (error) {
       this.fastify.log.error('Order fulfillment failed:', error);
       
       // Update order status to failed
@@ -417,8 +416,8 @@ export class TransactionService {
       );
       
       throw error;
-    }
-  }
+
+
 
   // =============================================
   // License Management
@@ -465,7 +464,7 @@ export class TransactionService {
     );
 
     return license;
-  }
+
 
   async validateLicense(licenseKey: string, templateId: string, userId: string): Promise<boolean> {
 
@@ -481,12 +480,12 @@ export class TransactionService {
     // Check expiration
     if (license.valid_until && new Date() > new Date(license.valid_until)) {
       return false;
-    }
+
 
     // Check usage limits
     if (license.usage_limit && license.usage_count >= license.usage_limit) {
       return false;
-    }
+
 
     // Update usage count
     await this.db.query(
@@ -495,7 +494,7 @@ export class TransactionService {
     );
 
     return true;
-  }
+
 
   // =============================================
   // Refund Processing
@@ -509,12 +508,12 @@ export class TransactionService {
     const purchase = await this.getUserPurchase(userId, validated.purchase_id);
     if (!purchase) {
       throw new Error('Purchase not found or not owned by user');
-    }
+
 
     // Check refund eligibility
     if (!this.isRefundEligible(purchase)) {
       throw new Error('Purchase is not eligible for refund');
-    }
+
 
     const refundRequestId = crypto.randomUUID();
     const refundAmount = validated.amount_cents || purchase.total_cents;
@@ -538,7 +537,7 @@ export class TransactionService {
     );
 
     return refundRequest;
-  }
+
 
   // =============================================
   // Helper Methods
@@ -566,7 +565,7 @@ export class TransactionService {
       updated_at: new Date(row.updated_at),
       expires_at: new Date(row.expires_at)
     };
-  }
+
 
   private async updateCartTotals(cart: ShoppingCart): Promise<ShoppingCart> {
 
@@ -580,7 +579,7 @@ export class TransactionService {
     );
 
     return cart;
-  }
+
 
   private calculateLicensePrice(basePrice: number, licenseType: LicenseType): number {
     const multipliers = {
@@ -591,7 +590,7 @@ export class TransactionService {
       [LicenseType.UNLIMITED]: 10.0
     };
     return Math.round(basePrice * (multipliers[licenseType] || 1.0));
-  }
+
 
   private async calculateTax(cart: ShoppingCart, billingAddress: BillingAddress): Promise<void> {
 
@@ -599,7 +598,7 @@ export class TransactionService {
     const taxRate = billingAddress.country === 'US' ? 0.08 : 0.0;
     const subtotal = cart.items.reduce((sum, item) => sum + (item.unit_price_cents * item.quantity), 0);
     cart.tax_cents = Math.round(subtotal * taxRate);
-  }
+
 
   private async assessRisk(userId: string, cart: ShoppingCart, billingAddress: BillingAddress): Promise<RiskAssessment> {
 
@@ -611,21 +610,21 @@ export class TransactionService {
     if (cart.total_cents > 10000) { // $100+
       riskScore += 30;
       riskFactors.push('high_value_transaction');
-    }
+
 
     // New user
     const userAge = await this.getUserAge(userId);
     if (userAge < 7) { // Less than a week
       riskScore += 20;
       riskFactors.push('new_user');
-    }
+
 
     // Velocity check
     const recentTransactions = await this.getRecentTransactionCount(userId);
     if (recentTransactions > 5) {
       riskScore += 25;
       riskFactors.push('high_velocity');
-    }
+
 
     const recommendation = riskScore > 70 ? 'decline' : riskScore > 40 ? 'review' : 'approve';
 
@@ -644,21 +643,21 @@ export class TransactionService {
       created_at: new Date(};
 
     return assessment;
-  }
+
 
   private generateOrderNumber(): string {
     const timestamp = Date.now().toString(36);
     const random = Math.random().toString(36).substring(2, 8);
     return `ORD-${timestamp}-${random}`.toUpperCase();
-  }
+
 
   private generateLicenseKey(): string {
     const segments = [];
     for (let i = 0; i < 4; i++) {
       segments.push(Math.random().toString(36).substring(2, 8).toUpperCase());
-    }
+
     return segments.join('-');
-  }
+
 
   private getLicenseUsageLimit(licenseType: LicenseType): number | undefined {
     const limits = {
@@ -669,7 +668,7 @@ export class TransactionService {
       [LicenseType.UNLIMITED]: undefined
     };
     return limits[licenseType];
-  }
+
 
   private getLicenseExpiration(licenseType: LicenseType): Date | undefined {
     if (licenseType === LicenseType.UNLIMITED) return undefined;
@@ -678,7 +677,7 @@ export class TransactionService {
     const expiration = new Date(now);
     expiration.setFullYear(now.getFullYear() + 1); // 1 year
     return expiration;
-  }
+
 
   private getMaxTransfers(licenseType: LicenseType): number {
     const transfers = {
@@ -689,7 +688,7 @@ export class TransactionService {
       [LicenseType.UNLIMITED]: 5
     };
     return transfers[licenseType] || 1;
-  }
+
 
   private getLicenseRestrictions(licenseType: LicenseType): Record<string, any> {
     const restrictions = {
@@ -697,54 +696,54 @@ export class TransactionService {
         commercial_use: false,
         redistribution: false,
         modification: true
-  }
+
       [LicenseType.COMMERCIAL]: {
         commercial_use: true,
         redistribution: false,
         modification: true
-  }
+
       [LicenseType.ENTERPRISE]: {
         commercial_use: true,
         redistribution: true,
         modification: true,
         white_label: true
-  }
+
       [LicenseType.EDUCATIONAL]: {
         commercial_use: false,
         redistribution: false,
         modification: true,
         educational_only: true
-  }
+
       [LicenseType.UNLIMITED]: {
         commercial_use: true,
         redistribution: true,
         modification: true,
         white_label: true
-      }
+
     };
     return restrictions[licenseType] || {};
-  }
+
 
   // Placeholder methods for database operations
   private async getTemplate(templateId: string): Promise<MarketplaceTemplate | null> {
 
     const result = await this.db.query('SELECT * FROM marketplace_templates WHERE id = ?', [templateId]);
     return result[0] || null;
-  }
+
 
   private async getTemplateVersion(templateId: string, versionId?: string): Promise<TemplateVersion | null> {
 
     if (versionId) {
       const result = await this.db.query('SELECT * FROM template_versions WHERE id = ? AND template_id = ?', [versionId, templateId]);
       return result[0] || null;
-    }
+
     
     const result = await this.db.query(
       'SELECT * FROM template_versions WHERE template_id = ? ORDER BY version_number DESC LIMIT 1',
       [templateId]
     );
     return result[0] || null;
-  }
+
 
   private async checkExistingPurchase(userId: string, templateId: string): Promise<boolean> {
 
@@ -753,7 +752,7 @@ export class TransactionService {
       [userId, templateId, 'succeeded']
     );
     return result.length > 0;
-  }
+
 
   private async getPaymentIntent(intentId: string, userId: string): Promise<PaymentIntent | null> {
 
@@ -781,7 +780,7 @@ export class TransactionService {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at)
     };
-  }
+
 
   private async updatePaymentIntentStatus(intentId: string, status: string): Promise<void> {
 
@@ -789,7 +788,7 @@ export class TransactionService {
       'UPDATE payment_intents SET status = ?, updated_at = datetime("now") WHERE id = ?',
       [status, intentId]
     );
-  }
+
 
   private async createTransaction(paymentIntent: PaymentIntent, type: TransactionType): Promise<Transaction> {
 
@@ -832,13 +831,13 @@ export class TransactionService {
     );
 
     return transaction;
-  }
+
 
   private async generateInvoice(order: Order): Promise<void> {
 
     // Placeholder for invoice generation
     this.fastify.log.info(`Generating invoice for order ${order.order_number}`);
-  }
+
 
   private async getUserAge(userId: string): Promise<number> {
 
@@ -849,7 +848,7 @@ export class TransactionService {
     const createdAt = new Date(result[0].created_at);
     const now = new Date();
     return Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
-  }
+
 
   private async getRecentTransactionCount(userId: string): Promise<number> {
 
@@ -858,7 +857,7 @@ export class TransactionService {
       [userId]
     );
     return result[0]?.count || 0;
-  }
+
 
   private async getUserPurchase(userId: string, purchaseId: string): Promise<any> {
 
@@ -867,7 +866,7 @@ export class TransactionService {
       [purchaseId, userId]
     );
     return result[0] || null;
-  }
+
 
   private isRefundEligible(purchase: any): boolean {
     // Check if purchase is within refund window (e.g., 30 days)
@@ -876,5 +875,4 @@ export class TransactionService {
     const daysDiff = Math.floor((now.getTime() - purchaseDate.getTime()) / (1000 * 60 * 60 * 24));
     
     return daysDiff <= 30 && purchase.status === 'completed';
-  }
-}
+

@@ -5,8 +5,7 @@
  */
 import { SecurityLogger } from './SecurityLogger';
 import { AuditLogger } from './AuditLogger';
-export declare enum DataProtectionEventType {
-    DATA_RETENTION_APPLIED = "data_retention_applied",
+export declare enum DataProtectionEventType { DATA_RETENTION_APPLIED = "data_retention_applied",
     DATA_AGING_DETECTED = "data_aging_detected",
     DATA_DELETION_SCHEDULED = "data_deletion_scheduled",
     DATA_DELETION_EXECUTED = "data_deletion_executed",
@@ -37,12 +36,12 @@ export declare enum ComplianceFramework {
     GDPR = "gdpr",
     CCPA = "ccpa",
     SOX = "sox",
-    HIPAA = "hipaa",
+    HIPAA = "hipaa" }
     CUSTOM = "custom"
 
 }
-export interface DataProtectionEvent {
-    eventType: DataProtectionEventType;
+}
+export interface DataProtectionEvent { eventType: DataProtectionEventType;
     timestamp: Date;
     correlationId: string;
     userId: string;
@@ -56,11 +55,10 @@ export interface DataProtectionEvent {
     retentionPolicy?: string;
     automatedDecision: boolean;
     complianceFrameworks: ComplianceFramework[];
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface DataDeletionEvent extends DataProtectionEvent {
-    deletionJobId: string;
+}
+export interface DataDeletionEvent extends DataProtectionEvent { deletionJobId: string;
     scheduledTime: Date;
     executionTime?: Date;
     deletionRule: string;
@@ -68,25 +66,22 @@ export interface DataDeletionEvent extends DataProtectionEvent {
         expected: number;
         processed: number;
         successful: number;
-        failed: number;
-}
+        failed: number }
     };
     failureReasons?: string[];
     exemptionReasons?: string[];
 
 }
-export interface PrivacyRequestEvent extends DataProtectionEvent {
-    requestType: 'access' | 'rectification' | 'erasure' | 'portability' | 'restriction' | 'objection';
+}
+export interface PrivacyRequestEvent extends DataProtectionEvent { requestType: 'access' | 'rectification' | 'erasure' | 'portability' | 'restriction' | 'objection';
     requestId: string;
     requestDate: Date;
     responseDeadline: Date;
     status: 'received' | 'processing' | 'completed' | 'rejected' | 'overdue';
     dataCategories: string[];
-    processingPurposes: string[];
-
+    processingPurposes: string[] }
 }
-export interface PolicyViolationEvent extends DataProtectionEvent {
-    violationType: string;
+export interface PolicyViolationEvent extends DataProtectionEvent { violationType: string;
     policyId: string;
     policyVersion: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -105,8 +100,7 @@ export declare class DataProtectionEventLogger {
     private retentionPolicies;
     constructor(securityLogger?: SecurityLogger, auditLogger?: AuditLogger, options?: {)
         complianceMode?: boolean;
-        retentionPolicies?: Map<ComplianceFramework, number>;
-    });
+        retentionPolicies?: Map<ComplianceFramework, number> });
     /**
      * Log a data protection event
      */
@@ -142,11 +136,11 @@ export declare class DataProtectionEventLogger {
     private calculateRetentionCompliance;
 
 }
-export interface ComplianceReport {
-    framework: ComplianceFramework;
+}
+export interface ComplianceReport { framework: ComplianceFramework;
     reportPeriod: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     eventCount: number;
@@ -158,6 +152,7 @@ export interface ComplianceReport {
     generatedAt: Date;
 
 }
+}
 export interface ComplianceMetrics {
     totalEvents: number;
     pastRetentionEvents: number;
@@ -165,4 +160,5 @@ export interface ComplianceMetrics {
     compliancePercentage: number;
 
 //# sourceMappingURL=DataProtectionEventLogger.d.ts.map
+}
 }

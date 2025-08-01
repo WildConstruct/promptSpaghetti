@@ -4,7 +4,7 @@ export enum ScheduleType {
   ONE_TIME = 'one_time',
   RECURRING = 'recurring',
   CONDITIONAL = 'conditional'
-}
+
 
 export enum RecurrenceType {
   DAILY = 'daily',
@@ -12,7 +12,7 @@ export enum RecurrenceType {
   MONTHLY = 'monthly',
   YEARLY = 'yearly',
   CUSTOM = 'custom'
-}
+
 
 export enum ScheduleAction {
   ENABLE = 'enable',
@@ -20,7 +20,7 @@ export enum ScheduleAction {
   UPDATE_VALUE = 'update_value',
   ACTIVATE_ROLLOUT = 'activate_rollout',
   MODIFY_PERCENTAGE = 'modify_percentage'
-}
+
 
 export enum ScheduleStatus {
   PENDING = 'pending',
@@ -29,7 +29,7 @@ export enum ScheduleStatus {
   CANCELLED = 'cancelled',
   FAILED = 'failed',
   PAUSED = 'paused'
-}
+
 
 export enum ExecutionStatus {
   SCHEDULED = 'scheduled',
@@ -38,11 +38,12 @@ export enum ExecutionStatus {
   FAILED = 'failed',
   SKIPPED = 'skipped',
   RETRYING = 'retrying'
-}
+
 
 // Core schedule model
-}
-}
+
+
+
 export interface FeatureToggleSchedule {
   id: string;
   toggleId: string;
@@ -66,8 +67,9 @@ export interface FeatureToggleSchedule {
     cronExpression?: string; // For custom recurrence
     maxOccurrences?: number;
     endDate?: Date;
-}
-}
+
+
+
   };
   
   // Action configuration
@@ -78,7 +80,7 @@ export interface FeatureToggleSchedule {
       attribute: string;
       operator: string;
       value: Error;
-    }>;
+>;
     gradualRollout?: {
       startPercentage: number;
       endPercentage: number;
@@ -103,11 +105,12 @@ export interface FeatureToggleSchedule {
   // Conflict detection
   priority: number;
   conflictResolution: 'skip' | 'override' | 'merge';
-}
+
 
 // Schedule execution log
-}
-}
+
+
+
 export interface ScheduleExecution {
   id: string;
   scheduleId: string;
@@ -122,8 +125,9 @@ export interface ScheduleExecution {
     originalTime: Date;
     actualTime: Date;
     delay?: number; // in milliseconds
-}
-}
+
+
+
   };
   
   // Results
@@ -144,11 +148,12 @@ export interface ScheduleExecution {
   metadata: Record<string, any>;
   
   createdAt: Date;
-}
+
 
 // Schedule conflict detection
-}
-}
+
+
+
 export interface ScheduleConflict {
   id: string;
   toggleId: string;
@@ -166,14 +171,16 @@ export interface ScheduleConflict {
   suggestedResolution?: {
     action: 'reschedule' | 'modify_priority' | 'cancel_one' | 'merge';
     details: Record<string, any>;
-}
-}
+
+
+
   };
-}
+
 
 // Schedule notification configuration
-}
-}
+
+
+
 export interface ScheduleNotification {
   id: string;
   scheduleId: string;
@@ -190,8 +197,9 @@ export interface ScheduleNotification {
     onRetry?: boolean;
     afterFailureCount?: number;
     beforeExecution?: number; // minutes before
-}
-}
+
+
+
   };
   
   // Message template
@@ -204,11 +212,12 @@ export interface ScheduleNotification {
   enabled: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
+
 
 // Timezone management
-}
-}
+
+
+
 export interface TimezoneSettings {
   id: string;
   orgId?: string;
@@ -225,13 +234,15 @@ export interface TimezoneSettings {
   
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
+
+
+
+
 
 // Schedule template for common patterns
-}
-}
+
+
+
 export interface ScheduleTemplate {
   id: string;
   name: string;
@@ -245,8 +256,9 @@ export interface ScheduleTemplate {
     recurrence?: Partial<FeatureToggleSchedule['recurrence']>;
     actionConfig: Partial<FeatureToggleSchedule['actionConfig']>;
     defaultDuration?: number; // in minutes
-}
-}
+
+
+
   };
   
   // Usage tracking
@@ -260,11 +272,12 @@ export interface ScheduleTemplate {
   
   createdAt: Date;
   updatedAt: Date;
-}
+
 
 // Bulk schedule operations
-}
-}
+
+
+
 export interface BulkScheduleOperation {
   id: string;
   operationType: 'create' | 'update' | 'cancel' | 'reschedule';
@@ -285,18 +298,20 @@ export interface BulkScheduleOperation {
     scheduleId: string;
     success: boolean;
     error?: string;
-}
-}
-  }>;
+
+
+
+>;
   
   createdBy: string;
   createdAt: Date;
   completedAt?: Date;
-}
+
 
 // Request/response types for API
-}
-}
+
+
+
 export interface CreateScheduleRequest {
   toggleId: string;
   name: string;
@@ -315,20 +330,21 @@ export interface CreateScheduleRequest {
     recipients: string[];
     channels: string[];
     conditions: Record<string, any>;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 export interface UpdateScheduleRequest extends Partial<CreateScheduleRequest> {
   id: string;
   reason?: string;
-}
 
-}
-}
+
+
+
 export interface ScheduleQuery {
   toggleId?: string;
   status?: ScheduleStatus;
@@ -341,13 +357,15 @@ export interface ScheduleQuery {
   limit?: number;
   sortBy?: 'startTime' | 'createdAt' | 'priority' | 'status';
   sortOrder?: 'asc' | 'desc';
-}
-}
-}
+
+
+
+
 
 // Schedule analytics
-}
-}
+
+
+
 export interface ScheduleAnalytics {
   totalSchedules: number;
   activeSchedules: number;
@@ -374,20 +392,21 @@ export interface ScheduleAnalytics {
   mostUsedActions: Array<{
     action: ScheduleAction;
     count: number;
-}
-}
-  }>;
+
+
+
+>;
   
   timeDistribution: Array<{
     hour: number;
     count: number;
-  }>;
+>;
   
   timezoneDistribution: Array<{
     timezone: string;
     count: number;
-  }>;
-}
+>;
+
 
 export default {
   ScheduleType,

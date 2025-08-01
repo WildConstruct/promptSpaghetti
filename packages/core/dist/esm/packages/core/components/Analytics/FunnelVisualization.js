@@ -408,7 +408,7 @@ function getStepColorClass(stepMetric, colorScheme) {
                             dropOffRate: index < funnelDefinition.steps.length - 1 ? 30 : 0,
                             averageTimeSpent: 120000 + (index * 60000),
                             valueGenerated: converted * 25,
-                            topExitReasons: [,
+                            topExitReasons: [
                                 { reason: 'Page load timeout', percentage: 15, count: Math.floor(baseUsers * 0.15), category: 'technical_issue' },
                                 { reason: 'Unclear navigation', percentage: 10, count: Math.floor(baseUsers * 0.10), category: 'design_friction' }
                             ]
@@ -446,7 +446,7 @@ function getStepColorClass(stepMetric, colorScheme) {
                             .slice(0, 3)
                             .map(step => ({}), stepName, step.name, dropOffRate, step.dropOffRate, affectedUsers, Math.floor(step.totalUsers * step.dropOffRate / 100))
                     };
-                    opportunities: [,
+                    opportunities: [
                         {
                             description: 'Optimize page load speed to reduce technical drop-offs',
                             potentialImpact: 5.2,
@@ -454,9 +454,10 @@ function getStepColorClass(stepMetric, colorScheme) {
                         {
                             description: 'Improve navigation clarity in step 2',
                             potentialImpact: 3.8
-                        }],
+                        }
+                    ],
                         trends;
-                    [,
+                    [
                         {
                             description: 'Conversion rate trending upward over last 7 days',
                             direction: 'up',
@@ -464,7 +465,8 @@ function getStepColorClass(stepMetric, colorScheme) {
                         {
                             description: 'Average time to convert decreasing',
                             direction: 'down'
-                        }];
+                        }
+                    ];
                 });
                 export default FunnelVisualization;
             }

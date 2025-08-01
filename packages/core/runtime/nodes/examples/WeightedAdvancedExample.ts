@@ -1,11 +1,10 @@
 // packages/core/runtime/nodes/examples/WeightedAdvancedExample.ts
 // Example usage of the WeightedAdvanced node
-import {
-  WeightedAdvancedNode,
+import { WeightedAdvancedNode,
   WeightedChoice,
-  DistributionPresets,
+  DistributionPresets }
   createWeightedAdvancedNode
-} from '../WeightedAdvanced';
+ from '../WeightedAdvanced';
 import { AdvancedExecutionUtils } from '../../advanced';
 /**
  * Example demonstrating WeightedAdvanced node capabilities
@@ -36,8 +35,8 @@ export function demonstrateWeightedAdvanced() {
   console.log(gaussianResults);
   // Example 4: Custom distribution configuration
   console.log('\n4. Custom Configuration (exponential factor=3, min weight=0.5):');
-  const customNode = createWeightedAdvancedNode('loot-custom', choices, {)
-  type: 'exponential',
+  const customNode = createWeightedAdvancedNode('loot-custom', choices, { )
+  type: 'exponential' }
     parameters: { factor: 3 },
     normalize: true,
     minWeight: 0.5;
@@ -62,24 +61,21 @@ function generateResults(node: WeightedAdvancedNode, distributionName: string, s
   const endTime = performance.now();
   const executionTime = endTime - startTime;
   // Count occurrences
-  const counts = results.reduce((acc, result) => {
-    acc[result] = (acc[result] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const counts = results.reduce((acc, result) => { acc[result] = (acc[result] || 0) + 1;
+    return acc }, {} as Record<string, number>);
   // Calculate percentages
   const percentages = Object.entries(counts);
-    .map(([item, count]) => ({)
-  item,
-  count,
-  percentage: ((count / samples) * 100).toFixed(1),
+    .map(([item, count]) => ({ )
+  item
+  count
+  percentage: ((count / samples) * 100).toFixed(1) }
 }))
     .sort((a, b) => b.count - a.count);
-  return {
-    distribution: distributionName,
-    samples,
+  return { distribution: distributionName
+    samples }
     executionTime: `${executionTime.toFixed(2)}ms`}
-},
-  results: percentages,
+
+  results: percentages
     validation: node.validate();
   };
 /**
@@ -87,8 +83,8 @@ function generateResults(node: WeightedAdvancedNode, distributionName: string, s
  */
 function demonstratePerformanceAndDeterminism() {
   const choices: WeightedChoice = [
-    { value: 'Fast', weight: 3 },
-    { value: 'Medium', weight: 2 },
+    { value: 'Fast', weight: 3 }
+    { value: 'Medium', weight: 2 }
     { value: 'Slow', weight: 1 }
   ];
   const node = createWeightedAdvancedNode('perf-test', choices);

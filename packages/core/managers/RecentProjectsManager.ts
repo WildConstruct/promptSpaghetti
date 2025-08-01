@@ -4,54 +4,32 @@
  */
 import type { ProjectMetadata } from '../schemas/psgSchema';
 
-}
-export interface RecentProjectEntry {
-  id: string;
+
+export interface RecentProjectEntry { id: string;
   name: string;
   filePath?: string;
   lastAccessDate: string;
   thumbnail?: string;
   metadata: ProjectMetadata;
-  fileSize?: number;
-}
-}
-}
-export interface RecentProjectsData {
-  projects: RecentProjectEntry;
-  version: string;
-}
-}
-export class RecentProjectsManager {
-  private static readonly STORAGE_KEY = 'promptspaghetti_recent_projects';
-  private static readonly MAX_RECENT_PROJECTS = 5;
-  private static readonly STORAGE_VERSION = '1.0.0';
-  /**
-  * Add a project to the recent projects list
-  */
-  static addRecentProject(entry: Omit<RecentProjectEntry, 'id' | 'lastAccessDate'>): void {,
-  try {
-  const recentProjects = this.getRecentProjects();
-  // Remove existing entry with same name if it exists
-  const filteredProjects = recentProjects.filter(p => p.name !== entry.name);
-  // Create new entry
-  const newEntry: RecentProjectEntry = {,
-  ...entry,
-  id: this.generateProjectId(entry.name),
-  lastAccessDate: new Date().toISOString(),
-};
+  fileSize?: number }
+
+
+
+export interface RecentProjectsData { projects: RecentProjectEntry;
+  version: string }
+
+export class RecentProjectsManager {};
       // Add to beginning of list
       const updatedProjects = [newEntry, ...filteredProjects];
       // Keep only the most recent MAX_RECENT_PROJECTS
       const trimmedProjects = updatedProjects.slice(0, this.MAX_RECENT_PROJECTS);
       this.saveRecentProjects(trimmedProjects);
-    } catch (error) {
-  console.warn('Failed to add recent project:', error);
+ catch (error) { console.warn('Failed to add recent project:', error);
   /**
   * Get all recent projects, sorted by last access date (most recent first)
   */
-  static getRecentProjects(): RecentProjectEntry {,
-  try {
-  const stored = localStorage.getItem(this.STORAGE_KEY);
+  static getRecentProjects(): RecentProjectEntry { }
+  try { const stored = localStorage.getItem(this.STORAGE_KEY);
   if (!stored) {
   return [];
   const data: RecentProjectsData = JSON.parse(stored);
@@ -63,44 +41,33 @@ export class RecentProjectsManager {
   // Sort by last access date (most recent first)
   return data.projects.sort((a, b) =>
   new Date(b.lastAccessDate).getTime() - new Date(a.lastAccessDate).getTime()
-  );
-} catch (error) {
-  console.warn('Failed to load recent projects:', error);
+  ) } catch (error) { console.warn('Failed to load recent projects:', error);
   return [];
   /**
   * Update the last access date for a project
   */
-  static updateLastAccess(projectName: string): void {,
-  try {
-  const recentProjects = this.getRecentProjects();
+  static updateLastAccess(projectName: string): void { }
+  try { const recentProjects = this.getRecentProjects();
   const projectIndex = recentProjects.findIndex(p => p.name === projectName);
   if (projectIndex >= 0) {
   recentProjects[projectIndex].lastAccessDate = new Date().toISOString();
-  this.saveRecentProjects(recentProjects);
-} catch (error) {
-  console.warn('Failed to update last access date:', error);
+  this.saveRecentProjects(recentProjects) } catch (error) { console.warn('Failed to update last access date:', error);
   /**
   * Remove a specific project from recent projects
   */
-  static removeRecentProject(projectName: string): void {,
-  try {
-  const recentProjects = this.getRecentProjects();
+  static removeRecentProject(projectName: string): void { }
+  try { const recentProjects = this.getRecentProjects();
   const filteredProjects = recentProjects.filter(p => p.name !== projectName);
-  this.saveRecentProjects(filteredProjects);
-} catch (error) {
-  console.warn('Failed to remove recent project:', error);
+  this.saveRecentProjects(filteredProjects) } catch (error) { console.warn('Failed to remove recent project:', error);
   /**
   * Clear all recent projects
   */
-  static clearRecentProjects(): void {,
-  try {
-  localStorage.removeItem(this.STORAGE_KEY);
-} catch (error) {
-  console.warn('Failed to clear recent projects:', error);
+  static clearRecentProjects(): void { }
+  try { localStorage.removeItem(this.STORAGE_KEY) } catch (error) { console.warn('Failed to clear recent projects:', error);
   /**
   * Generate thumbnail for a project based on graph data
   */
-  static generateThumbnail(nodes: any, edges: any): string {,
+  static generateThumbnail(nodes: any, edges: any): string {
   try {
   // Create a simple SVG representation of the graph
   const svgWidth = 120;
@@ -110,8 +77,8 @@ export class RecentProjectsManager {
   // Calculate basic layout positions
   const displayNodes = nodes.slice(0, maxNodes);
   const positions = displayNodes.map((_, index) => ({)
-  x: (index % 5) * 24 + 12,
-  y: Math.floor(index / 5) * 20 + 12,
+  x: (index % 5) * 24 + 12
+  y: Math.floor(index / 5) * 20 + 12 }
 }));
       // Create SVG string
       let svg = `<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;
@@ -135,7 +102,7 @@ export class RecentProjectsManager {
       // Convert SVG to base64 data URL
       const base64 = btoa(unescape(encodeURIComponent(svg)));
       return `data:image/svg+xml;base64,${base64}`;}
-    } catch (error) {
+ catch (error) {
       console.warn('Failed to generate thumbnail:', error);
       return this.getDefaultThumbnail();
   /**
@@ -154,12 +121,12 @@ export class RecentProjectsManager {
         if (localStorage.hasOwnProperty(key)) {
           totalSize += localStorage[key].length + key.length;
       return { available: true, usage: totalSize };
-    } catch (error) {
+ catch (error) {
       return { available: false };
   /**
    * Get project metadata for display
    */
-  static getProjectDisplayInfo(entry: RecentProjectEntry): {
+  static getProjectDisplayInfo(entry: RecentProjectEntry): { ,
   name: string;
   lastAccessed: string;
   size: string;
@@ -170,13 +137,12 @@ export class RecentProjectsManager {
   name: entry.name,
   lastAccessed,
   size,
-  author: entry.metadata.author,
+  author: entry.metadata.author }
 };
   // Private helper methods
-  private static saveRecentProjects(projects: RecentProjectEntry): void {
-  const data: RecentProjectsData = {,
+  private static saveRecentProjects(projects: RecentProjectEntry): void { const data: RecentProjectsData = {,
   projects,
-  version: this.STORAGE_VERSION,
+  version: this.STORAGE_VERSION }
 };
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
   private static generateProjectId(name: string): string {
@@ -184,16 +150,15 @@ export class RecentProjectsManager {
     const random = Math.random().toString(36).substr(2, 5);
     const sanitized = name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
     return `${sanitized}_${timestamp}_${random}`;}
-  private static getNodeColor(nodeType: string): string {
-  const colorMap: Record<string, string> = {,
-  'weighted-choice': '#3b82f6',
-  'concat': '#10b981',
-  'output': '#f59e0b',
-  'include': '#8b5cf6',
-  'set-variable': '#ef4444',
-  'get-variable': '#06b6d4',
-  'subject': '#f97316',
-  'action': '#84cc16',
+  private static getNodeColor(nodeType: string): string { const colorMap: Record<string, string> = {
+  'weighted-choice': '#3b82f6'
+  'concat': '#10b981'
+  'output': '#f59e0b'
+  'include': '#8b5cf6'
+  'set-variable': '#ef4444'
+  'get-variable': '#06b6d4'
+  'subject': '#f97316'
+  'action': '#84cc16' }
 };
     return colorMap[nodeType] || '#6b7280';
   private static getDefaultThumbnail(): string {
@@ -205,18 +170,16 @@ export class RecentProjectsManager {
     </svg>`;
     const base64 = btoa(unescape(encodeURIComponent(svg)));
     return `data:image/svg+xml;base64,${base64}`;}
-  private static formatDate(date: Date): string {
-    const now = new Date();
+  private static formatDate(date: Date): string { const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffHours / 24);
     if (diffHours < 1) {
-      return 'Just now';
-    } else if (diffHours < 24) {
+      return 'Just now' } else if (diffHours < 24) {
       return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;}
-    } else if (diffDays < 7) {
+ else if (diffDays < 7) {
       return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;}
-    } else {
+ else {
       return date.toLocaleDateString();
   private static formatFileSize(bytes: number): string {
     if (bytes === 0) return '0 B';

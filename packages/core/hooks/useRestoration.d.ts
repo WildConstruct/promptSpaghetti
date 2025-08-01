@@ -1,5 +1,4 @@
-import { 
-  CreateRestorationAttemptRequest,
+import { CreateRestorationAttemptRequest,
   RestorationPreviewRequest,
   ConflictResolutionRequest,
   RestorationBookmarkRequest,
@@ -8,13 +7,13 @@ import {
   RestorationProgressResponse,
   RestorationStatsResponse,
   RestorationBookmark,
-  ConflictResolutionResult,
+  ConflictResolutionResult }
   RestorationFilter
 } from '../types/restoration';
 
 }
-interface UseRestorationReturn {
-    loading: boolean;
+}
+interface UseRestorationReturn { loading: boolean;
     error: string | null;
     generatePreview: (request: RestorationPreviewRequest) => Promise<RestorationPreviewResponse>;
     createRestoration: (request: CreateRestorationAttemptRequest) => Promise<RestorationAttempt>;
@@ -29,7 +28,7 @@ interface UseRestorationReturn {
     getRestorationDetails: (restorationAttemptId: string) => Promise<any>;
     clearError: () => void;
 
-export declare const useRestoration: () => UseRestorationReturn;
+export declare const useRestoration: () => UseRestorationReturn }
 }
 export {};
 //# sourceMappingURL=useRestoration.d.ts.map

@@ -112,25 +112,25 @@ export const AdvancedPromptingCollaborationDemo = ({ className }) => {
         setDemoStep(prev => Math.max(prev, 4));
         console.log('VFX export generated in demo:', data);
     };
-    const demoSteps = [];
-    'Select your film industry role to begin',
+    const demoSteps = [
+        'Select your film industry role to begin',
         'Initialize collaboration service and explore features',
         'Create MARS regions for technical VFX structure',
         'Develop Zada patterns for natural language creativity',
-        'Generate VFX pipeline export for production handoff';
+        'Generate VFX pipeline export for production handoff'
+    ];
+    return;
+    _jsx("div", { className: `advanced-prompting-collaboration-demo ${className}`, style: ({}, ), "background:": true });
+    'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+        borderRadius;
+    16,
+        padding;
+    24,
+        color;
+    '#ffffff',
+        minHeight;
+    600;
 };
-;
-return;
-_jsx("div", { className: `advanced-prompting-collaboration-demo ${className}`, style: ({}, ), "background:": true });
-'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-    borderRadius;
-16,
-    padding;
-24,
-    color;
-'#ffffff',
-    minHeight;
-600;
  >
     { /* Header */}
     < div;
@@ -261,7 +261,7 @@ showPanel ? ()
                                 }, children: [user.permissions.slice(0, 2).map(permission => ()
                                         < span, key = { permission }, style = {}, {
                                         background: `${getRoleColor(user.role)}20`
-                                    }), ", color: getRoleColor(user.role), fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 500, textTransform: 'capitalize' }} >", permission.replace('_', ' ')] }))
+                                    }), ", color: getRoleColor(user.role), fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 500, textTransform: 'capitalize'; }} >", permission.replace('_', ' ')] }))
     :
 ;
 {

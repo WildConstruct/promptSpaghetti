@@ -12,52 +12,55 @@ import {
   SecurityPolicyConfig, 
   SecurityPolicy, 
   PolicyImpactAnalysis 
-} from '../services/SecurityPolicyAnalysisEngine';
+ from '../services/SecurityPolicyAnalysisEngine';
 import { SecurityAPIIntegrationPlatform } from '../services/SecurityAPIIntegrationPlatform';
 import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngine';
 
 // Global engine instance
 let policyAnalysisEngine: SecurityPolicyAnalysisEngine | null = null;
 
-}
-}
+
+
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
   message?: string;
   timestamp: number;
-}
 
-}
-}
+
+
+
 interface PolicyAnalysisRequest {
   policy: SecurityPolicy;
   analysis_type?: 'pre_deployment' | 'post_deployment' | 'periodic_review';
   include_simulation?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface PolicyValidationRequest {
   policy: SecurityPolicy;
   validation_level?: 'basic' | 'comprehensive';
   compliance_standards?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface PolicyComparisonRequest {
   current_policy: SecurityPolicy;
   new_policy: SecurityPolicy;
   include_detailed_analysis?: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Initialize security policy analysis engine
@@ -69,7 +72,7 @@ async function initializePolicyAnalysisEngine(
 
   if (policyAnalysisEngine) {
     return policyAnalysisEngine;
-  }
+
 
   const config: SecurityPolicyConfig = {
     analysis_settings: {
@@ -78,7 +81,7 @@ async function initializePolicyAnalysisEngine(
       impact_simulation_enabled: true,
       compliance_checking_enabled: true,
       historical_analysis_enabled: true
-  }
+
     validation_framework: {
       enabled: true,
       automated_validation: true,
@@ -91,7 +94,7 @@ async function initializePolicyAnalysisEngine(
       ],
       compliance_standards: ['SOX', 'PCI_DSS', 'HIPAA', 'GDPR', 'SOC2'],
       risk_assessment_enabled: true
-  }
+
     policy_categories: {
       access_control: true,
       authentication: true,
@@ -100,7 +103,7 @@ async function initializePolicyAnalysisEngine(
       network_security: true,
       compliance: true,
       incident_response: true
-  }
+
     impact_assessment: {
       user_impact_analysis: true,
       system_impact_analysis: true,
@@ -108,21 +111,21 @@ async function initializePolicyAnalysisEngine(
       security_impact_analysis: true,
       compliance_impact_analysis: true,
       cost_impact_analysis: true
-  }
+
     approval_workflow: {
       enabled: true,
       require_approval_for: ['high', 'critical'],
       approval_levels: 2,
       auto_approve_low_risk: true,
       notification_enabled: true
-    }
+
   };
 
   policyAnalysisEngine = new SecurityPolicyAnalysisEngine(config, platform, optimizationEngine);
   await policyAnalysisEngine.initialize();
 
   return policyAnalysisEngine;
-}
+
 
 export default async function securityPolicyAnalysisRoutes(
   fastify: FastifyInstance,
@@ -155,7 +158,7 @@ export default async function securityPolicyAnalysisRoutes(
               category: {
                 type: 'string',
                 enum: ['access_control', 'authentication', 'authorization', 'data_protection', 'network_security', 'compliance', 'incident_response']
-  }
+
               version: { type: 'string' },
               policy_rules: {
                 type: 'array',
@@ -168,9 +171,9 @@ export default async function securityPolicyAnalysisRoutes(
                     conditions: { type: 'array' },
                     actions: { type: 'array' },
                     exceptions: { type: 'array' }
-                  }
-                }
-  }
+
+
+
               metadata: {
                 type: 'object',
                 properties: {
@@ -180,8 +183,8 @@ export default async function securityPolicyAnalysisRoutes(
                   status: { type: 'string', enum: ['draft', 'active', 'deprecated', 'archived'] },
                   compliance_mappings: { type: 'array', items: { type: 'string' } },
                   risk_level: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] }
-                }
-  }
+
+
               enforcement: {
                 type: 'object',
                 properties: {
@@ -189,18 +192,18 @@ export default async function securityPolicyAnalysisRoutes(
                   enforcement_scope: { type: 'array', items: { type: 'string' } },
                   rollback_enabled: { type: 'boolean' },
                   monitoring_enabled: { type: 'boolean' }
-                }
-              }
-            }
-  }
+
+
+
+
           analysis_type: {
             type: 'string',
             enum: ['pre_deployment', 'post_deployment', 'periodic_review']
-  }
+
           include_simulation: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: PolicyAnalysisRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { policy, analysis_type = 'pre_deployment', include_simulation = false } = request.body;
@@ -208,7 +211,7 @@ export default async function securityPolicyAnalysisRoutes(
       // Temporarily set simulation config based on request
       if (include_simulation) {
         (engine as any).config.analysis_settings.impact_simulation_enabled = true;
-      }
+
 
       const analysis = await engine.analyzePolicyImpact(policy, analysis_type);
 
@@ -230,19 +233,19 @@ export default async function securityPolicyAnalysisRoutes(
             compliance_violations: analysis.validation_results.compliance_violations.length,
             estimated_affected_users: analysis.impact_assessment.user_impact.affected_users,
             estimated_cost_impact: analysis.impact_assessment.cost_impact.total_cost_impact
-          }
-  }
+
+
         message: 'Policy analysis completed successfully',
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error analyzing security policy:', error);
       return {
         success: false,
         error: `Failed to analyze security policy: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -262,14 +265,14 @@ export default async function securityPolicyAnalysisRoutes(
           validation_level: {
             type: 'string',
             enum: ['basic', 'comprehensive']
-  }
+
           compliance_standards: {
             type: 'array',
             items: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: PolicyValidationRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { policy, validation_level = 'comprehensive', compliance_standards } = request.body;
@@ -284,13 +287,13 @@ export default async function securityPolicyAnalysisRoutes(
       if (validation_level === 'basic') {
         filteredErrors = filteredErrors.filter(e => e.severity === 'high' || e.severity === 'critical');
         filteredWarnings = filteredWarnings.filter(w => w.warning_type === 'security');
-      }
+
 
       if (compliance_standards && compliance_standards.length > 0) {
         filteredViolations = filteredViolations.filter(v => 
           compliance_standards.includes(v.compliance_framework)
         );
-      }
+
 
       return {
         success: true,
@@ -303,24 +306,24 @@ export default async function securityPolicyAnalysisRoutes(
             high_errors: filteredErrors.filter(e => e.severity === 'high').length,
             total_warnings: filteredWarnings.length,
             compliance_violations: filteredViolations.length
-  }
+
           validation_errors: filteredErrors,
           validation_warnings: filteredWarnings,
           compliance_violations: filteredViolations,
           recommendations: validationResults.recommendations,
           validation_score: Math.max(0, 100 - (filteredErrors.length * 10) - (filteredWarnings.length * 2))
-  }
+
         message: validationResults.validation_passed ? 'Policy validation passed' : 'Policy validation found issues',
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error validating security policy:', error);
       return {
         success: false,
         error: `Failed to validate security policy: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -339,9 +342,9 @@ export default async function securityPolicyAnalysisRoutes(
           current_policy: { type: 'object' },
           new_policy: { type: 'object' },
           include_detailed_analysis: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: PolicyComparisonRequest }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { current_policy, new_policy, include_detailed_analysis = false } = request.body;
@@ -357,7 +360,7 @@ export default async function securityPolicyAnalysisRoutes(
           current_analysis: currentAnalysis,
           new_analysis: newAnalysis
         };
-      }
+
 
       return {
         success: true,
@@ -373,18 +376,18 @@ export default async function securityPolicyAnalysisRoutes(
           recommendations: comparison.recommendations,
           approval_required: this.determineApprovalRequired(comparison),
           ...detailedAnalysis
-  }
+
         message: comparison.changes_detected ? 'Policy changes detected and analyzed' : 'No significant changes detected',
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error comparing security policies:', error);
       return {
         success: false,
         error: `Failed to compare security policies: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -401,9 +404,9 @@ export default async function securityPolicyAnalysisRoutes(
         required: ['policyId'],
         properties: {
           policyId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { policyId: string } }>, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const { policyId } = request.params;
@@ -427,17 +430,17 @@ export default async function securityPolicyAnalysisRoutes(
             estimated_cost_impact: analysis.impact_assessment.cost_impact.total_cost_impact
           })),
           trends: this.calculatePolicyTrends(history)
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting policy analysis history:', error);
       return {
         success: false,
         error: `Failed to get policy analysis history: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -449,7 +452,7 @@ export default async function securityPolicyAnalysisRoutes(
     schema: {
       description: 'Get comprehensive security policy analytics and insights',
       tags: ['Security Policy', 'Analytics']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const analytics = engine.getPolicyAnalytics();
@@ -470,17 +473,17 @@ export default async function securityPolicyAnalysisRoutes(
             validation_passed: analysis.validation_results.validation_passed
           })),
           insights: this.generatePolicyInsights(analytics)
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting policy analytics:', error);
       return {
         success: false,
         error: `Failed to get policy analytics: ${error.message}`,
         timestamp: Date.now()
       };
-    }
+
   });
 
   /**
@@ -491,7 +494,7 @@ export default async function securityPolicyAnalysisRoutes(
     schema: {
       description: 'Get security policy analysis engine health status',
       tags: ['Security Policy', 'Health Check']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply): Promise<APIResponse> => {
     try {
       const analytics = engine.getPolicyAnalytics();
@@ -509,18 +512,18 @@ export default async function securityPolicyAnalysisRoutes(
             validation_pass_rate: analytics.validation_metrics.overall_validation_pass_rate,
             average_security_score: analytics.impact_trends.average_security_impact,
             average_compliance_score: analytics.impact_trends.average_compliance_score
-  }
+
           system_metrics: {
             analysis_engine_initialized: true,
             validation_rules_loaded: true,
             compliance_frameworks_loaded: true,
             recent_analysis_count: analytics.recent_analyses.length
-  }
+
           last_check: Date.now()
-  }
+
         timestamp: Date.now()
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting policy analysis engine health:', error);
       return {
         success: false,
@@ -528,11 +531,11 @@ export default async function securityPolicyAnalysisRoutes(
           healthy: false,
           engine_status: 'error',
           error_message: error.message
-  }
+
         error: 'Failed to get engine health status',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Helper methods
@@ -557,7 +560,7 @@ export default async function securityPolicyAnalysisRoutes(
         security_trend: 'insufficient_data',
         compliance_trend: 'insufficient_data'
       };
-    }
+
 
     const recent = history.slice(-5);
     const riskTrend = this.calculateTrend(recent.map(h => h.risk_analysis.overall_risk_score));
@@ -589,15 +592,15 @@ export default async function securityPolicyAnalysisRoutes(
     
     if (analytics.validation_metrics.overall_validation_pass_rate < 80) {
       insights.push('Policy validation pass rate is below recommended threshold (80%)');
-    }
+
     
     if (analytics.impact_trends.average_security_impact < 70) {
       insights.push('Average security effectiveness score indicates room for improvement');
-    }
+
     
     if (analytics.impact_trends.average_compliance_score < 85) {
       insights.push('Compliance scores suggest need for policy reviews');
-    }
+
     
     const highRiskPolicies = analytics.impact_trends.risk_score_distribution.high + 
                            analytics.impact_trends.risk_score_distribution.critical;
@@ -605,11 +608,11 @@ export default async function securityPolicyAnalysisRoutes(
     
     if (totalPolicies > 0 && (highRiskPolicies / totalPolicies) > 0.2) {
       insights.push('High percentage of policies classified as high or critical risk');
-    }
+
     
     if (insights.length === 0) {
       insights.push('Policy portfolio appears to be in good health');
-    }
+
     
     return insights;
   };
@@ -644,6 +647,5 @@ export default async function securityPolicyAnalysisRoutes(
     if (policyAnalysisEngine) {
       await policyAnalysisEngine.shutdown();
       fastify.log.info('Security Policy Analysis Engine shut down');
-    }
+
   });
-}

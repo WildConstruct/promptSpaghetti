@@ -7,37 +7,36 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { AlertTriangle, CheckCircle, Info, X, Eye, EyeOff, Settings } from 'lucide-react';
 import { ConstraintValidator } from '../../historical/ConstraintValidator';
-import { 
-  UTDGNode, 
+import { UTDGNode, 
   ConstraintValidationResult, 
   ConstraintViolation, 
   ConstraintWarning,
   ConstraintSuggestion,
-  Era,
+  Era }
   HISTORICAL_ERAS 
-} from '../../types/UTDG';
+ from '../../types/UTDG';
 import { Node } from '../../graphSchema';
 import './ConstraintValidationPanel.css';
-}
-interface ConstraintValidationPanelProps {
-  nodes: Node;
+
+
+interface ConstraintValidationPanelProps { nodes: Node;
   utdgNodes?: UTDGNode;
   targetEra?: Era;
   visible?: boolean;
   onToggleVisibility?: () => void;
   onNodeHighlight?: (nodeIds: string) => void;
   onConstraintOverride?: (constraintId: string) => void;
-  export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps> = ({,)
-  nodes,
-  utdgNodes = [],
-  targetEra,
-  visible = true,
-  onToggleVisibility,
-  onNodeHighlight,
+  export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps> = ({);
+  nodes;
+  utdgNodes = [];
+  targetEra;
+  visible = true;
+  onToggleVisibility;
+  onNodeHighlight }
   onConstraintOverride
-}
-}) => {
-  const [validator] = useState(() => new ConstraintValidator());
+
+
+}) => { const [validator] = useState(() => new ConstraintValidator());
   const [validationResult, setValidationResult] = useState<ConstraintValidationResult | null>(null);
   const [selectedEra, setSelectedEra] = useState<Era | undefined>(targetEra);
   const [showSettings, setShowSettings] = useState(false);
@@ -52,18 +51,18 @@ interface ConstraintValidationPanelProps {
   id: node.id,
   type: 'style', // Default type for regular nodes,
   content: getNodeContent(node),
-  metadata: {
+  metadata: {,
   era: selectedEra ? [selectedEra] : [HISTORICAL_ERAS.MODERN_EARLY],
   authenticity: 0.5,
   source: 'graph_editor',
   tags: extractTags(node),
   social_class: extractSocialClass(node),
-  daily_use: true,
+  daily_use: true }
 },
-  relationships: {
+  relationships: { ,
   compatible: node.inputs || [],
   incompatible: [],
-  variations: [],
+  variations: [] }
 },
   constraints: [];
   };
@@ -72,32 +71,24 @@ interface ConstraintValidationPanelProps {
     return converted;
   }, [nodes, utdgNodes, selectedEra]);
   // Run validation when nodes or era changes
-  useEffect(() => {
-  if (convertedNodes.length > 0) {
+  useEffect(() => { if (convertedNodes.length > 0) {
   validator.setEnforcement(enforcementLevels);
   const result = selectedEra ;
   ? validator.validateForEra(convertedNodes, selectedEra)
   : validator.validateNodes(convertedNodes);
-  setValidationResult(result);
-}, [convertedNodes, selectedEra, validator, enforcementLevels]);
-  const handleNodeClick = (nodeIds: string) => {
-    onNodeHighlight?.(nodeIds);
-  };
-  const handleConstraintOverride = (constraintId: string) => {
-  onConstraintOverride?.(constraintId);
+  setValidationResult(result) }, [convertedNodes, selectedEra, validator, enforcementLevels]);
+  const handleNodeClick = (nodeIds: string) => { onNodeHighlight?.(nodeIds) };
+  const handleConstraintOverride = (constraintId: string) => { onConstraintOverride?.(constraintId);
   // Re-run validation after override
   if (convertedNodes.length > 0) {
   const result = selectedEra ;
   ? validator.validateForEra(convertedNodes, selectedEra)
   : validator.validateNodes(convertedNodes);
-  setValidationResult(result);
-};
-  const handleEnforcementChange = (level: 'strict' | 'warning' | 'suggestion', enabled: boolean) => {
-  const newLevels = enabled ;
+  setValidationResult(result) };
+  const handleEnforcementChange = (level: 'strict' | 'warning' | 'suggestion', enabled: boolean) => { const newLevels = enabled ;
   ? [...enforcementLevels, level]
   : enforcementLevels.filter(l => l !== level);
-  setEnforcementLevels(newLevels);
-};
+  setEnforcementLevels(newLevels) };
   if (!visible) {
     return;
       <div className="constraint-validation-collapsed">
@@ -137,10 +128,9 @@ interface ConstraintValidationPanelProps {
             <label>Target Era:</label>
             <select 
               value={selectedEra?.name || ''}
-              onChange={(e) => {
+              onChange={ (e) => {
                 const era = Object.values(HISTORICAL_ERAS).find(era => era.name === e.target.value);
-                setSelectedEra(era);
-              }}
+                setSelectedEra(era) }}
             >
               <option value="">All Eras</option>
               {Object.values(HISTORICAL_ERAS).map(era => ()
@@ -176,7 +166,7 @@ interface ConstraintValidationPanelProps {
                 <div className="validation-status invalid">
                   <AlertTriangle size={16} />
                   <span>
-                    {validationResult.violations.length} violation{validationResult.violations.length !== 1 ? 's' : ''}, 
+                    {validationResult.violations.length} violation{validationResult.violations.length !== 1 ? 's' : ''}
                     {validationResult.warnings.length} warning{validationResult.warnings.length !== 1 ? 's' : ''}
                   </span>
                 </div>
@@ -247,18 +237,19 @@ interface ConstraintValidationPanelProps {
     </div>
   );
 };
-}
-interface ConstraintItemProps {
-  type: 'violation' | 'warning' | 'suggestion';
+
+
+interface ConstraintItemProps { type: 'violation' | 'warning' | 'suggestion';
   constraint: ConstraintViolation | ConstraintWarning | ConstraintSuggestion;
   onNodeClick?: (nodeIds: string) => void;
   onOverride?: (constraintId: string) => void;
-  const ConstraintItem: React.FC<ConstraintItemProps> = ({,)
-  type,
-  constraint,
-  onNodeClick,
+  const ConstraintItem: React.FC<ConstraintItemProps> = ({);
+  type;
+  constraint;
+  onNodeClick }
   onOverride
-}
+
+
 }) => {
   const getIcon = () => {
     switch (type) {
@@ -266,11 +257,9 @@ interface ConstraintItemProps {
     case 'warning': return <Info size={14} />;
     case 'suggestion': return <CheckCircle size={14} />;
   };
-  const getSeverityClass = () => {
-    if (type === 'violation') return 'severity-high';
+  const getSeverityClass = () => { if (type === 'violation') return 'severity-high';
     if (type === 'warning') return 'severity-medium';
-    return 'severity-low';
-  };
+    return 'severity-low' };
   return;
     <div className={`constraint-item ${type} ${getSeverityClass()}`}>}
       <div className="constraint-item-header">

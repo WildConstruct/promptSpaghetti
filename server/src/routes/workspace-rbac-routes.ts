@@ -12,27 +12,27 @@ import { PERMISSIONS, ROLE_PERMISSIONS } from '../database/workspace-models';
 // Request type definitions
 interface WorkspaceParamsRequest {
   Params: { workspaceId: string };
-}
+
 
 interface UserPermissionsRequest extends WorkspaceParamsRequest {
   Params: { workspaceId: string; userId: string };
-}
+
 
 interface UpdateUserRoleRequest extends WorkspaceParamsRequest {
   Params: { workspaceId: string; userId: string };
   Body: { roleName: string };
-}
+
 
 interface ResourceQuotaRequest extends WorkspaceParamsRequest {
   Querystring: { 
     resourceType: 'projects' | 'resources' | 'storage';
     requestedAmount?: number;
   };
-}
+
 
 interface WorkspaceContextRequest {
   Params: { workspaceId: string };
-}
+
 
 // Route options for authentication
 const authOptions: RouteShorthandOptions = {
@@ -42,8 +42,8 @@ const authOptions: RouteShorthandOptions = {
     if (!request.headers.authorization) {
       reply.code(401).send({ error: 'Authentication required' });
       return;
-    }
-  }
+
+
 };
 
 export async function registerWorkspaceRBACRoutes(
@@ -62,7 +62,7 @@ export async function registerWorkspaceRBACRoutes(
         
         if (!userId) {
           return reply.code(401).send({ error: 'User not authenticated' });
-        }
+
 
         const members = await workspaceService.getWorkspaceMembers(workspaceId, userId);
         
@@ -74,7 +74,7 @@ export async function registerWorkspaceRBACRoutes(
               status: member.membership.status,
               joinedAt: member.membership.joined_at,
               lastActiveAt: member.membership.last_active_at
-  }
+
             roles: member.roles.map(role => ({
               id: role.id,
               name: role.name,
@@ -85,14 +85,12 @@ export async function registerWorkspaceRBACRoutes(
             permissionNames: getPermissionNames(member.permissions)
           }))
         });
-        
-      } catch (error) {
+ catch (error) {
         return reply.code(403).send({
           success: false,
           error: error instanceof Error ? error.message : 'Failed to get workspace members'
         });
-      }
-    }
+
   );
 
   // Get specific user's permissions in workspace
@@ -106,7 +104,7 @@ export async function registerWorkspaceRBACRoutes(
         
         if (!requestingUserId) {
           return reply.code(401).send({ error: 'User not authenticated' });
-        }
+
 
         const permissions = await workspaceService.getUserPermissions(
           workspaceId,
@@ -119,7 +117,7 @@ export async function registerWorkspaceRBACRoutes(
             success: false,
             error: 'User not found or no permissions in workspace'
           });
-        }
+
 
         return reply.send({
           success: true,
@@ -134,16 +132,14 @@ export async function registerWorkspaceRBACRoutes(
               permissions: role.permissions,
               isSystemRole: role.is_system_role
             }))
-          }
+
         });
-        
-      } catch (error) {
+ catch (error) {
         return reply.code(403).send({
           success: false,
           error: error instanceof Error ? error.message : 'Failed to get user permissions'
         });
-      }
-    }
+
   );
 
   // Update user role in workspace
@@ -158,14 +154,14 @@ export async function registerWorkspaceRBACRoutes(
         
         if (!requestingUserId) {
           return reply.code(401).send({ error: 'User not authenticated' });
-        }
+
 
         if (!roleName || !['admin', 'editor', 'viewer', 'commenter'].includes(roleName)) {
           return reply.code(400).send({
             success: false,
             error: 'Invalid role name. Must be one of: admin, editor, viewer, commenter'
           });
-        }
+
 
         const success = await workspaceService.updateUserRole(
           workspaceId,
@@ -179,7 +175,7 @@ export async function registerWorkspaceRBACRoutes(
             success: false,
             error: 'Failed to update user role'
           });
-        }
+
 
         return reply.send({
           success: true,
@@ -187,16 +183,14 @@ export async function registerWorkspaceRBACRoutes(
           data: {
             userId: targetUserId,
             newRole: roleName
-          }
+
         });
-        
-      } catch (error) {
+ catch (error) {
         return reply.code(403).send({
           success: false,
           error: error instanceof Error ? error.message : 'Failed to update user role'
         });
-      }
-    }
+
   );
 
   // Remove user from workspace
@@ -210,7 +204,7 @@ export async function registerWorkspaceRBACRoutes(
         
         if (!requestingUserId) {
           return reply.code(401).send({ error: 'User not authenticated' });
-        }
+
 
         const success = await workspaceService.removeUserFromWorkspace(
           workspaceId,
@@ -223,7 +217,7 @@ export async function registerWorkspaceRBACRoutes(
             success: false,
             error: 'Failed to remove user from workspace'
           });
-        }
+
 
         return reply.send({
           success: true,
@@ -231,16 +225,14 @@ export async function registerWorkspaceRBACRoutes(
           data: {
             userId: targetUserId,
             workspaceId: workspaceId
-          }
+
         });
-        
-      } catch (error) {
+ catch (error) {
         return reply.code(403).send({
           success: false,
           error: error instanceof Error ? error.message : 'Failed to remove user from workspace'
         });
-      }
-    }
+
   );
 
   // Switch workspace context
@@ -254,7 +246,7 @@ export async function registerWorkspaceRBACRoutes(
         
         if (!userId) {
           return reply.code(401).send({ error: 'User not authenticated' });
-        }
+
 
         const result = await workspaceService.switchWorkspaceContext(userId, workspaceId);
         
@@ -263,7 +255,7 @@ export async function registerWorkspaceRBACRoutes(
             success: false,
             error: 'Cannot switch to workspace: access denied or workspace not found'
           });
-        }
+
 
         return reply.send({
           success: true,
@@ -272,16 +264,14 @@ export async function registerWorkspaceRBACRoutes(
             workspace: result.workspaceInfo,
             userPermissions: result.permissions,
             permissionNames: getPermissionNames(result.permissions || 0)
-          }
+
         });
-        
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error instanceof Error ? error.message : 'Failed to switch workspace context'
         });
-      }
-    }
+
   );
 
   // Check resource quotas
@@ -296,7 +286,7 @@ export async function registerWorkspaceRBACRoutes(
         
         if (!userId) {
           return reply.code(401).send({ error: 'User not authenticated' });
-        }
+
 
         // Verify user has workspace access
         await workspaceService.enforceWorkspaceIsolation(userId, workspaceId, PERMISSIONS.WORKSPACE_READ);
@@ -317,16 +307,14 @@ export async function registerWorkspaceRBACRoutes(
             limit: quotaCheck.limit,
             remaining: quotaCheck.limit - quotaCheck.current,
             reason: quotaCheck.reason
-          }
+
         });
-        
-      } catch (error) {
+ catch (error) {
         return reply.code(403).send({
           success: false,
           error: error instanceof Error ? error.message : 'Failed to check resource quotas'
         });
-      }
-    }
+
   );
 
   // Get available roles and permissions
@@ -340,7 +328,7 @@ export async function registerWorkspaceRBACRoutes(
         
         if (!userId) {
           return reply.code(401).send({ error: 'User not authenticated' });
-        }
+
 
         // Verify user has workspace access
         await workspaceService.enforceWorkspaceIsolation(userId, workspaceId, PERMISSIONS.WORKSPACE_READ);
@@ -351,39 +339,37 @@ export async function registerWorkspaceRBACRoutes(
             description: 'Full workspace access and management',
             permissions: ROLE_PERMISSIONS.ADMIN,
             permissionNames: getPermissionNames(ROLE_PERMISSIONS.ADMIN)
-  }
+
           {
             name: 'editor',
             description: 'Can create and edit content',
             permissions: ROLE_PERMISSIONS.EDITOR,
             permissionNames: getPermissionNames(ROLE_PERMISSIONS.EDITOR)
-  }
+
           {
             name: 'viewer',
             description: 'Read-only access to workspace',
             permissions: ROLE_PERMISSIONS.VIEWER,
             permissionNames: getPermissionNames(ROLE_PERMISSIONS.VIEWER)
-  }
+
           {
             name: 'commenter',
             description: 'Can view content and add comments',
             permissions: ROLE_PERMISSIONS.COMMENTER,
             permissionNames: getPermissionNames(ROLE_PERMISSIONS.COMMENTER)
-          }
+
         ];
         
         return reply.send({
           success: true,
           data: availableRoles
         });
-        
-      } catch (error) {
+ catch (error) {
         return reply.code(403).send({
           success: false,
           error: error instanceof Error ? error.message : 'Failed to get available roles'
         });
-      }
-    }
+
   );
 
   // Enforce multi-tenant isolation (utility endpoint for testing)
@@ -397,7 +383,7 @@ export async function registerWorkspaceRBACRoutes(
         
         if (!userId) {
           return reply.code(401).send({ error: 'User not authenticated' });
-        }
+
 
         await workspaceService.enforceWorkspaceIsolation(userId, workspaceId);
         
@@ -408,18 +394,16 @@ export async function registerWorkspaceRBACRoutes(
             userId,
             workspaceId,
             validated: true
-          }
+
         });
-        
-      } catch (error) {
+ catch (error) {
         return reply.code(403).send({
           success: false,
           error: error instanceof Error ? error.message : 'Access validation failed'
         });
-      }
-    }
+
   );
-}
+
 
 /**
  * Convert permission bitmask to human-readable permission names
@@ -454,8 +438,7 @@ function getPermissionNames(permissions: number): string[] {
   for (const [permissionBit, name] of Object.entries(permissionMap)) {
     if ((permissions & parseInt(permissionBit)) === parseInt(permissionBit)) {
       permissionNames.push(name);
-    }
-  }
+
+
 
   return permissionNames;
-}

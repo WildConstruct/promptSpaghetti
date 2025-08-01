@@ -10,7 +10,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FileItem, FileMetadata } from './types';
 import { useAuthStore } from '../../stores/authStore';
-}
+
+
 interface FilePreviewProps {
   file: FileItem | null;
   onOpen?: (file: FileItem) => void;
@@ -20,12 +21,13 @@ interface FilePreviewProps {
   interface PreviewData {
   thumbnail?: string;
   metadata?: FileMetadata;
-  content?: {
+  content?: {,
   nodeCount: number;,
-  edgeCount: number;
+  edgeCount: number;,
   lastModified: Date;,
   size: number;
-}
+
+
 };
 const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return '0 B';
@@ -40,11 +42,11 @@ const formatDate = (date: Date): string => {
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   if (diffDays === 0) {
     return 'Today ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  } else if (diffDays === 1) {
+ else if (diffDays === 1) {
     return 'Yesterday ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  } else if (diffDays < 7) {
+ else if (diffDays < 7) {
     return `${diffDays} days ago`;}
-  } else {
+ else {
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
@@ -73,7 +75,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       const mockData: PreviewData = {,
   thumbnail: generateMockThumbnail(fileItem),
   metadata: fileItem.metadata,
-  content: {
+  content: {,
   nodeCount: fileItem.metadata?.nodeCount || 0,
   edgeCount: fileItem.metadata?.edgeCount || 0,
   lastModified: fileItem.lastModified,
@@ -82,9 +84,9 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 500));
       setPreviewData(mockData);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load preview');
-} finally {
+ finally {
       setIsLoading(false);
   }, [isAuthenticated]);
   // Generate mock thumbnail for development
@@ -135,7 +137,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   }, [file, onOpen]);
   if (!file) {
     return;
-      <div className={`file-preview-empty ${className}`} style={{},}
+      <div className={`file-preview-empty ${className}`} style={{},},
   padding: '40px 20px',
         textAlign: 'center',
         color: '#6c757d',
@@ -145,7 +147,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f8f9fa';
-  }}>
+}>
         <div>
           <div style={{ fontSize: '48px', marginBottom: '16px' }}>📄</div>
           <div style={{ fontSize: '16px', fontWeight: 500 }}>No file selected</div>
@@ -156,13 +158,13 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       </div>
     );
   return;
-    <div className={`file-preview ${className}`} style={{},}
+    <div className={`file-preview ${className}`} style={{},},
   borderLeft: '1px solid #dee2e6',
       backgroundColor: '#fff',
       display: 'flex',
       flexDirection: 'column',
       minHeight: '400px';
-  }}>
+}>
       {/* Header */}
       <div style={{
   padding: '16px 20px',
@@ -170,7 +172,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-}}>
+}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <h3 style={{
   margin: 0,
@@ -178,14 +180,14 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   fontWeight: 600,
   color: '#212529',
   wordBreak: 'break-word',
-}}>
+}>
             {file.name}
           </h3>
           <div style={{
   fontSize: '12px',
   color: '#6c757d',
   marginTop: '2px',
-}}>
+}>
             Modified {formatDate(file.lastModified)}
           </div>
         </div>
@@ -199,7 +201,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   cursor: 'pointer',
   fontSize: '16px',
   borderRadius: '4px',
-}}
+}
             title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
           >
             {isFavorited ? '⭐' : '☆'}
@@ -214,7 +216,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   cursor: 'pointer',
   fontSize: '16px',
   borderRadius: '4px',
-}}
+}
               title="Close preview"
             >
               ✕
@@ -231,7 +233,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   justifyContent: 'center',
   height: '200px',
   color: '#6c757d',
-}}>
+}>
             <div>Loading preview...</div>
           </div>
         ) : error ? ()
@@ -242,7 +244,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   height: '200px',
   color: '#dc3545',
   textAlign: 'center',
-}}>
+}>
             <div>
               <div style={{ fontSize: '24px', marginBottom: '8px' }}>⚠️</div>
               <div>Failed to load preview</div>
@@ -256,7 +258,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
               <div style={{
   marginBottom: '20px',
   textAlign: 'center',
-}}>
+}>
                 <img
                   src={previewData.thumbnail}
                   alt={`Preview of ${file.name}`}
@@ -266,7 +268,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   border: '1px solid #dee2e6',
   borderRadius: '4px',
   backgroundColor: '#f8f9fa',
-}}
+}
                 />
               </div>
             )}
@@ -277,7 +279,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   fontWeight: 600,
   margin: '0 0 12px 0',
   color: '#495057',
-}}>
+}>
                 File Information
               </h4>
               <div style={{ display: 'grid', gap: '8px' }}>
@@ -314,7 +316,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   borderRadius: '3px',
   fontSize: '11px',
   color: '#495057',
-}}
+}
                         >
                           {tag}
                         </span>
@@ -332,7 +334,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   fontWeight: 600,
   margin: '0 0 12px 0',
   color: '#495057',
-}}>
+}>
                   Details
                 </h4>
                 {previewData.metadata.description && ()
@@ -375,7 +377,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   padding: '16px 20px',
   borderTop: '1px solid #eee',
   backgroundColor: '#f8f9fa',
-}}>
+}>
         <button
           onClick={handleOpen}
           style={{
@@ -388,7 +390,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: 500,
-}}
+}
         >
           Open File
         </button>

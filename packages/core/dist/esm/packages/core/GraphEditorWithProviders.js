@@ -21,6 +21,8 @@ import { useNodeUtils } from './hooks/useNodeUtils';
 import { EditorProviderWrapper } from './components/EditorProviderWrapper';
 // Import existing node type definitions and icons
 import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons';
+autoSave ?  : boolean | { interval: number };
+validation ?  : boolean;
 ;
 // Custom providers
 providers ?  : ProviderHook;

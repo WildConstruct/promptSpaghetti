@@ -1,36 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import './ModerationAnalytics.css';
-}
+
+
 interface ModeratorStats {
   id: string;,
-  name: string;
+  name: string;,
   reviewsToday: number;,
-  averageTime: number;
+  averageTime: number;,
   accuracy: number;,
-  specializations: string;
+  specializations: string;,
   status: 'online' | 'away' | 'offline';,
-  totalReviews: number;
+  totalReviews: number;,
   completionRate: number;
   interface ModerationMetrics {
   totalItems: number;,
-  pendingItems: number;
+  pendingItems: number;,
   completedToday: number;,
-  averageProcessingTime: number;
+  averageProcessingTime: number;,
   accuracyRate: number;,
-  escalationRate: number;
+  escalationRate: number;,
   automationRate: number;,
   userSatisfactionScore: number;
   interface ContentTrends {
   category: string;,
-  volume: number;
+  volume: number;,
   trend: 'up' | 'down' | 'stable';,
-  percentage: number;
+  percentage: number;,
   riskLevel: 'low' | 'medium' | 'high';
   interface ViolationPatterns {
   type: string;,
-  count: number;
+  count: number;,
   severity: 'minor' | 'major' | 'critical';,
-  source: string;
+  source: string;,
   trend: number;
   export const ModerationAnalytics: React.FC = () => {,
   const [timeRange, setTimeRange] = useState<'today' | 'week' | 'month' | 'quarter'>('week');
@@ -44,7 +45,8 @@ interface ModeratorStats {
   escalationRate: 0,
   automationRate: 0,
   userSatisfactionScore: 0,
-}
+
+
 });
   const [moderatorStats, setModeratorStats] = useState<ModeratorStats>([]);
   const [contentTrends, setContentTrends] = useState<ContentTrends>([]);
@@ -80,7 +82,7 @@ interface ModeratorStats {
   status: 'online',
   totalReviews: 1247,
   completionRate: 98.5,
-}
+
         {
   id: '2',
   name: 'Bob Wilson',
@@ -91,7 +93,7 @@ interface ModeratorStats {
   status: 'online',
   totalReviews: 893,
   completionRate: 94.2,
-}
+
         {
           id: '3',
           name: 'Carol Martinez',
@@ -116,9 +118,9 @@ interface ModeratorStats {
         { type: 'Copyright Violation', count: 18, severity: 'major', source: 'automated', trend: 5.4 },
         { type: 'Hate Speech', count: 6, severity: 'critical', source: 'user_report', trend: -12.5 }
       ]);
-    } catch (error: unknown) {
+ catch (error: unknown) {
   console.error('Failed to fetch analytics data:', error);
-} finally {
+ finally {
       setIsLoading(false);
   };
   const formatNumber = (num: number): string => {

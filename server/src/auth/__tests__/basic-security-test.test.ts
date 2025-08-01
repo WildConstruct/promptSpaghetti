@@ -34,26 +34,26 @@ jest.mock('../config', () => ({
       expiresIn: '1h',
       issuer: 'test',
       audience: 'test'
-  }
+
     bcrypt: {
       saltRounds: 12
-  }
+
     redis: {
       host: 'localhost',
       port: 6379,
       password: ''
-  }
+
     rateLimit: {
       windowMs: 15 * 60 * 1000,
       max: 100
-  }
+
     session: {
       secret: 'test-session-secret',
       maxAge: 24 * 60 * 60 * 1000
-  }
+
     email: {
       provider: 'mock'
-    }
+
   }))
 }));
 
@@ -87,16 +87,16 @@ describe('Epic 19.5 - Basic Security Test Framework', () => {
         id: 1,
         email: 'test@example.com',
         roles: ['user']
-  }
+
       token: 'mock-jwt-token',
       refreshToken: 'mock-refresh-token'
-    } as any as unknown);
+ as any as unknown);
   });
 
   afterEach(async () => {
     if (fastify) {
       await fastify.close();
-    }
+
     jest.clearAllMocks();
   });
 
@@ -142,7 +142,7 @@ describe('Epic 19.5 - Basic Security Test Framework', () => {
       const validateAuthHeader = (authHeader?: string) => {
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
           return { valid: false, error: 'Unauthorized' };
-        }
+
         return { valid: true, token: authHeader.replace('Bearer ', '') };
       };
 
@@ -196,11 +196,11 @@ describe('Epic 19.5 - Basic Security Test Framework', () => {
         // Basic validation
         if (!body.email || !body.password) {
           return { valid: false, error: 'Missing required fields' };
-        }
+
         
         if (typeof body.email !== 'string' || typeof body.password !== 'string') {
           return { valid: false, error: 'Invalid field types' };
-        }
+
 
         return { valid: true };
       };

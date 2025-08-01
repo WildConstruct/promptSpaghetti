@@ -35,8 +35,7 @@ initializeConnection(connectionId, string, userId, string, requestInfo, {
     ipAddress: string,
     userAgent: string,
     origin: string,
-    headers: (Record)
-});
+    headers: (Record) });
 Promise < ConnectionSecurityContext > {
     try: {
         // Create fingerprint context
@@ -163,8 +162,7 @@ async;
 authenticateConnection(connectionId, string, credentials, {
     token: string,
     mfaCode: string,
-    deviceVerificationToken: string
-});
+    deviceVerificationToken: string });
 Promise < boolean > {
     const: context = this.connectionContexts.get(connectionId),
     if(, context) {

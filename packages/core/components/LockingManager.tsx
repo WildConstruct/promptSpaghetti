@@ -10,18 +10,18 @@ import { LockStatusOverview } from './LockStatusOverview';
 import { LockQueueVisualization } from './LockQueueVisualization';
 import { LockNotifications } from './LockNotifications';
 import { LockPolicyEditor } from './LockPolicyEditor';
-}
-interface LockingManagerProps {
-  workspaceId: string;
+
+
+interface LockingManagerProps { workspaceId: string;
   userId: string;
   onLockStateChange?: (resourceId: string, isLocked: boolean) => void;
-  export const LockingManager: React.FC<LockingManagerProps> = ({,)
-  workspaceId,
-  userId,
+  export const LockingManager: React.FC<LockingManagerProps> = ({);
+  workspaceId;
+  userId }
   onLockStateChange
-}
-}) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'locks' | 'queue' | 'notifications' | 'policy'>('overview');
+
+
+}) => { const [activeTab, setActiveTab] = useState<'overview' | 'locks' | 'queue' | 'notifications' | 'policy'>('overview');
   const [selectedResource, setSelectedResource] = useState<string | null>(null);
   const [showRequestDialog, setShowRequestDialog] = useState(false);
   const [showBreakingWorkflow, setShowBreakingWorkflow] = useState(false);
@@ -29,83 +29,65 @@ interface LockingManagerProps {
   const [lockTypeFilter, setLockTypeFilter] = useState<string>('all');
   const [showExpiredLocks, setShowExpiredLocks] = useState(false);
   const {
-    locks,
-    conflicts,
-    queue,
-    notifications,
-    statistics,
-    isLoading,
-    error,
-    fetchLocks,
-    fetchConflicts,
-    fetchQueue,
-    fetchNotifications,
-    fetchStatistics,
-    acquireLock,
-    releaseLock,
-    breakLock,
+    locks
+    conflicts
+    queue
+    notifications
+    statistics
+    isLoading
+    error
+    fetchLocks
+    fetchConflicts
+    fetchQueue
+    fetchNotifications
+    fetchStatistics
+    acquireLock
+    releaseLock
+    breakLock }
     clearError
-  } = useLockingStore();
+ = useLockingStore();
   // Load data on component mount
-  useEffect(() => {
-    fetchLocks(workspaceId);
+  useEffect(() => { fetchLocks(workspaceId);
     fetchConflicts(workspaceId);
     fetchQueue(workspaceId);
     fetchNotifications(userId);
-    fetchStatistics(workspaceId);
-  }, [workspaceId, userId]);
+    fetchStatistics(workspaceId) }, [workspaceId, userId]);
   // Auto-refresh data every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
+  useEffect(() => { const interval = setInterval(() => {
       fetchLocks(workspaceId);
       fetchConflicts(workspaceId);
       fetchQueue(workspaceId);
       fetchNotifications(userId);
-      fetchStatistics(workspaceId);
-    }, 30000);
+      fetchStatistics(workspaceId) }, 30000);
     return () => clearInterval(interval);
   }, [workspaceId, userId]);
-  const handleLockRequest = useCallback(async (resourceId: string, lockType: string, reason?: string) => {
-  try {
+  const handleLockRequest = useCallback(async (resourceId: string, lockType: string, reason?: string) => { try {
   const result = await acquireLock({)
-  resource_id: resourceId,
-  user_id: userId,
-  lock_type: lockType,
-  scope: 'resource',
+  resource_id: resourceId
+  user_id: userId
+  lock_type: lockType
+  scope: 'resource' }
   reason
 });
-      if (result.success) {
-        onLockStateChange?.(resourceId, true);
+      if (result.success) { onLockStateChange?.(resourceId, true);
         setShowRequestDialog(false);
-        setSelectedResource(null);
-    } catch (error) {
-  console.error('Failed to acquire lock:', error);
-}, [userId, acquireLock, onLockStateChange]);
-  const handleLockRelease = useCallback(async (lockId: string, resourceId: string) => {
-    try {
+        setSelectedResource(null) } catch (error) { console.error('Failed to acquire lock:', error) }, [userId, acquireLock, onLockStateChange]);
+  const handleLockRelease = useCallback(async (lockId: string, resourceId: string) => { try {
       const result = await releaseLock(lockId, userId);
       if (result.success) {
-        onLockStateChange?.(resourceId, false);
-    } catch (error) {
-  console.error('Failed to release lock:', error);
-}, [userId, releaseLock, onLockStateChange]);
-  const handleLockBreak = useCallback(async (lockId: string, resourceId: string, justification: string) => {
-    try {
+        onLockStateChange?.(resourceId, false) } catch (error) { console.error('Failed to release lock:', error) }, [userId, releaseLock, onLockStateChange]);
+  const handleLockBreak = useCallback(async (lockId: string, resourceId: string, justification: string) => { try {
       const result = await breakLock(lockId, userId, justification);
       if (result.success) {
         onLockStateChange?.(resourceId, false);
-        setShowBreakingWorkflow(false);
-    } catch (error) {
-  console.error('Failed to break lock:', error);
-}, [userId, breakLock, onLockStateChange]);
-  const filteredLocks = locks.filter(lock => {)
+        setShowBreakingWorkflow(false) } catch (error) { console.error('Failed to break lock:', error) }, [userId, breakLock, onLockStateChange]);
+  const filteredLocks = locks.filter(lock => { )
   const matchesSearch = !searchTerm || ;
       lock.resource_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lock.lock_reason?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = lockTypeFilter === 'all' || lock.lock_type === lockTypeFilter;
     const matchesExpired = showExpiredLocks || !lock.expires_at || new Date(lock.expires_at) > new Date();
-    return matchesSearch && matchesType && matchesExpired;
-  });
+    return matchesSearch && matchesType && matchesExpired });
   const unreadNotifications = notifications.filter(n => !n.read_at).length;
   if (isLoading) {
     return;
@@ -142,41 +124,41 @@ interface LockingManagerProps {
         <div className="flex space-x-4 mt-4">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`pb-2 px-1 border-b-2 font-medium text-sm ${
+            className={ `pb-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === 'overview'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
           >
             Overview
           </button>
           <button
             onClick={() => setActiveTab('locks')}
-            className={`pb-2 px-1 border-b-2 font-medium text-sm ${
+            className={ `pb-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === 'locks'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
           >
             Active Locks ({filteredLocks.length})
           </button>
           <button
             onClick={() => setActiveTab('queue')}
-            className={`pb-2 px-1 border-b-2 font-medium text-sm ${
+            className={ `pb-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === 'queue'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
           >
             Queue ({queue.length})
           </button>
           <button
             onClick={() => setActiveTab('notifications')}
-            className={`pb-2 px-1 border-b-2 font-medium text-sm relative ${
+            className={ `pb-2 px-1 border-b-2 font-medium text-sm relative ${
   activeTab === 'notifications'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
           >
             Notifications
             {unreadNotifications > 0 && ()
@@ -187,11 +169,11 @@ interface LockingManagerProps {
           </button>
           <button
             onClick={() => setActiveTab('policy')}
-            className={`pb-2 px-1 border-b-2 font-medium text-sm ${
+            className={ `pb-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === 'policy'
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
           >
             Policy
           </button>
@@ -218,10 +200,9 @@ interface LockingManagerProps {
           <LockStatusOverview
             statistics={statistics}
             conflicts={conflicts}
-            onConflictClick={(conflict) => {
+            onConflictClick={ (conflict) => {
               setSelectedResource(conflict.resource_id);
-              setShowBreakingWorkflow(true);
-            }}
+              setShowBreakingWorkflow(true) }}
           />
         )}
         {activeTab === 'locks' && ()
@@ -303,10 +284,9 @@ interface LockingManagerProps {
                         </button>
                       ) : ()
                         <button
-                          onClick={() => {
+                          onClick={ () => {
                             setSelectedResource(lock.resource_id);
-                            setShowBreakingWorkflow(true);
-                          }}
+                            setShowBreakingWorkflow(true) }}
                           className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs hover:bg-red-200"
                         >
                           <AlertTriangle className="h-3 w-3" />
@@ -328,29 +308,26 @@ interface LockingManagerProps {
         {activeTab === 'queue' && ()
           <LockQueueVisualization
             queue={queue}
-            onRemoveFromQueue={(queueId) => {
+            onRemoveFromQueue={ (queueId) => {
   // Implementation for removing from queue
-  console.log('Remove from queue:', queueId);
-}}
+  console.log('Remove from queue:', queueId) }}
           />
         )}
         {activeTab === 'notifications' && ()
           <LockNotifications
             notifications={notifications}
-            onMarkAsRead={(notificationId) => {
+            onMarkAsRead={ (notificationId) => {
   // Implementation for marking as read
-  console.log('Mark as read:', notificationId);
-}}
+  console.log('Mark as read:', notificationId) }}
           />
         )}
         {activeTab === 'policy' && ()
           <LockPolicyEditor
             workspaceId={workspaceId}
-            onPolicyUpdate={() => {
+            onPolicyUpdate={ () => {
               // Refresh data after policy update
               fetchLocks(workspaceId);
-              fetchStatistics(workspaceId);
-            }}
+              fetchStatistics(workspaceId) }}
           />
         )}
       </div>

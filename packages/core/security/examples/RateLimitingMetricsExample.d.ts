@@ -17,12 +17,11 @@ export declare function AlertManagementExample(): RateLimitingPerformanceMetrics
 export declare function DataExportExample(): RateLimitingPerformanceMetrics;
 declare function simulateTraffic(rateLimitingService: RateLimitingService, highVolume?: boolean): void;
 export declare function runAllExamples(): void;
-export {
-  BasicMetricsExample,
+export { BasicMetricsExample,
   AdvancedVisualizationExample,
   CustomWidgetExample,
   AlertManagementExample,
   DataExportExample,
-  simulateTraffic,
+  simulateTraffic }
 };
 //# sourceMappingURL=RateLimitingMetricsExample.d.ts.map

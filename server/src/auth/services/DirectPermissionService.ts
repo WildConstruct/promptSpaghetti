@@ -17,8 +17,8 @@ import { AuthConfig, Permission } from '../types';
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
-}
-}
+
+
 export interface DirectPermission {
   id: string;
   userId: string;
@@ -35,12 +35,13 @@ export interface DirectPermission {
   revokeReason?: string;
   scopeContext?: Record<string, any>;
   permanent: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DirectPermissionGrant {
   userId: string;
   resource: string;
@@ -51,22 +52,24 @@ export interface DirectPermissionGrant {
   scopeContext?: Record<string, any>;
   permanent?: boolean;
   reason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkPermissionGrant {
   userId: string;
   permissions: Omit<DirectPermissionGrant, 'userId'>[];
   reason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PermissionQuery {
   userId?: string;
   resource?: string;
@@ -76,9 +79,10 @@ export interface PermissionQuery {
   permanent?: boolean;
   grantedBy?: string;
   expiringWithinHours?: number;
-}
-}
-}
+
+
+
+
 
 export class DirectPermissionService {
   private config: AuthConfig;
@@ -89,7 +93,7 @@ export class DirectPermissionService {
     this.config = config;
     this.dbService = dbService;
     this.auditService = auditService;
-  }
+
 
   /**
    * Grant a direct permission to a user immediately
@@ -143,7 +147,7 @@ export class DirectPermissionService {
           reason: grant.reason,
           expiresAt: grant.expiresAt?.toISOString(),
           conditions: grant.conditions
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -151,8 +155,7 @@ export class DirectPermissionService {
       });
 
       return directPermission;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'direct_permission_grant_failed',
         userId: grantedBy,
@@ -162,7 +165,7 @@ export class DirectPermissionService {
           permission: `${grant.resource}:${grant.action}`,
           reason: grant.reason,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -170,8 +173,8 @@ export class DirectPermissionService {
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Grant multiple direct permissions in a single transaction
@@ -214,7 +217,7 @@ export class DirectPermissionService {
         ]);
 
         permissions.push(this.mapDirectPermission(result.rows[0]));
-      }
+
 
       await transaction.commit();
 
@@ -229,7 +232,7 @@ export class DirectPermissionService {
           permissions: bulkGrant.permissions.map(p => `${p.resource}:${p.action}`),
           reason: bulkGrant.reason,
           permanentGrants: bulkGrant.permissions.filter(p => p.permanent !== false).length
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -237,8 +240,7 @@ export class DirectPermissionService {
       });
 
       return permissions;
-
-    } catch (error) {
+ catch (error) {
       await transaction.rollback();
       
       await this.auditService.logAction({
@@ -250,7 +252,7 @@ export class DirectPermissionService {
           permissionCount: bulkGrant.permissions.length,
           reason: bulkGrant.reason,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -258,8 +260,8 @@ export class DirectPermissionService {
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Revoke a direct permission
@@ -283,7 +285,7 @@ export class DirectPermissionService {
 
       if (result.rows.length === 0) {
         throw new Error(`Direct permission ${permissionId} not found or already revoked`);
-      }
+
 
       const { user_id: userId, resource, action, permanent } = result.rows[0];
 
@@ -298,14 +300,13 @@ export class DirectPermissionService {
           reason,
           permanent,
           revokedAt: now.toISOString()
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
         severity: 'warning'
       });
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'direct_permission_revocation_failed',
         userId: revokedBy,
@@ -314,7 +315,7 @@ export class DirectPermissionService {
         details: {
           reason,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -322,8 +323,8 @@ export class DirectPermissionService {
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Get user's direct permissions
@@ -338,13 +339,13 @@ export class DirectPermissionService {
 
     if (activeOnly) {
       query += ' AND status = \'active\' AND (expires_at IS NULL OR expires_at > NOW())';
-    }
+
 
     query += ' ORDER BY granted_at DESC';
 
     const result = await this.dbService.query(query, params);
     return result.rows.map(this.mapDirectPermission);
-  }
+
 
   /**
    * Check if user has a specific direct permission
@@ -368,11 +369,11 @@ export class DirectPermissionService {
     if (scopeContext) {
       query += ' AND (scope_context IS NULL OR scope_context @> $4::jsonb)';
       params.push(JSON.stringify(scopeContext));
-    }
+
 
     const result = await this.dbService.query(query, params);
     return result.rows.length > 0;
-  }
+
 
   /**
    * Search and filter direct permissions
@@ -395,57 +396,57 @@ export class DirectPermissionService {
       conditions.push(`user_id = $${paramIndex}`);
       params.push(query.userId);
       paramIndex++;
-    }
+
 
     if (query.resource) {
       conditions.push(`resource = $${paramIndex}`);
       params.push(query.resource);
       paramIndex++;
-    }
+
 
     if (query.action) {
       conditions.push(`action = $${paramIndex}`);
       params.push(query.action);
       paramIndex++;
-    }
+
 
     if (query.scope) {
       conditions.push(`scope = $${paramIndex}`);
       params.push(query.scope);
       paramIndex++;
-    }
+
 
     if (query.status) {
       conditions.push(`status = $${paramIndex}`);
       params.push(query.status);
       paramIndex++;
-    }
+
 
     if (query.permanent !== undefined) {
       conditions.push(`permanent = $${paramIndex}`);
       params.push(query.permanent);
       paramIndex++;
-    }
+
 
     if (query.grantedBy) {
       conditions.push(`granted_by = $${paramIndex}`);
       params.push(query.grantedBy);
       paramIndex++;
-    }
+
 
     if (query.expiringWithinHours) {
       conditions.push(`expires_at IS NOT NULL AND expires_at <= $${paramIndex}`);
       const expirationThreshold = new Date(Date.now() + (query.expiringWithinHours * 60 * 60 * 1000));
       params.push(expirationThreshold);
       paramIndex++;
-    }
+
 
     // Apply conditions
     if (conditions.length > 0) {
       const whereClause = ' AND ' + conditions.join(' AND ');
       sqlQuery += whereClause;
       countQuery += whereClause;
-    }
+
 
     // Get total count
     const countResult = await this.dbService.query(countQuery, params);
@@ -459,7 +460,7 @@ export class DirectPermissionService {
     const permissions = result.rows.map(this.mapDirectPermission);
 
     return { permissions, totalCount };
-  }
+
 
   /**
    * Get permissions expiring soon
@@ -478,7 +479,7 @@ export class DirectPermissionService {
     `, [expirationThreshold]);
 
     return result.rows.map(this.mapDirectPermission);
-  }
+
 
   /**
    * Clean up expired permissions
@@ -502,13 +503,13 @@ export class DirectPermissionService {
         details: {
           expiredCount,
           cleanupAt: new Date().toISOString()
-  }
+
         severity: 'info'
       });
-    }
+
 
     return expiredCount;
-  }
+
 
   /**
    * Get permission statistics
@@ -520,7 +521,7 @@ export class DirectPermissionService {
     expiringWithin24Hours: number;
     byResource: Record<string, number>;
     byScope: Record<string, number>;
-  }> {
+> {
     const [statsResult, resourceResult, scopeResult] = await Promise.all([
       this.dbService.query(`
         SELECT 
@@ -568,7 +569,7 @@ export class DirectPermissionService {
       byResource,
       byScope
     };
-  }
+
 
   /**
    * Map database row to DirectPermission object
@@ -591,5 +592,4 @@ export class DirectPermissionService {
       scopeContext: row.scope_context ? JSON.parse(row.scope_context) : undefined,
       permanent: row.permanent
     };
-  }
-}
+

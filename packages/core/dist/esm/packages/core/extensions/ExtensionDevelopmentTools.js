@@ -318,7 +318,6 @@ abstract class BaseExtensionImpl implements BaseExtension {
     this.dependencies = dependencies;
     this.permissions = permissions;
   public async initialize(): Promise<void> {
-
   // Override in subclass
   public async activate(): Promise<void> {,
   // Override in subclass
@@ -626,14 +625,14 @@ const Component = extension.createComponentInstance('my-component', {});`;
                                                                 // Type definitions
                                                             }
                                                         }
-                                                        // Export singleton
-                                                        export const extensionDevelopmentKit = ExtensionDevelopmentKit.getInstance();
                                                     }
                                                 };
                                         }
                                     }
                                 }
                         }
+                        // Export singleton
+                        export const extensionDevelopmentKit = ExtensionDevelopmentKit.getInstance();
                     }
                 }
             }

@@ -18,15 +18,16 @@ import {
   ToggleEvaluationResult,
   ToggleMetrics,
   ToggleHealthStatus
-} from '../database/feature-toggle-models';
+ from '../database/feature-toggle-models';
 
 // ====================================
 // Epic 17 Enhanced Toggle Models
 // ====================================
 
 // Enhanced feature toggle with Epic 17 admin dashboard capabilities
-}
-}
+
+
+
 export interface Epic17FeatureToggle extends FeatureToggle {
   // Epic 17 Dashboard Analytics
   analytics: {
@@ -90,11 +91,12 @@ export interface Epic17FeatureToggle extends FeatureToggle {
     rollbackConditions: RollbackCondition[];
     scheduledAt?: Date;
   };
-}
+
 
 // Toggle issue tracking for health monitoring
-}
-}
+
+
+
 export interface ToggleIssue {
   id: string;
   severity: 'info' | 'warning' | 'error' | 'critical';
@@ -105,29 +107,33 @@ export interface ToggleIssue {
   detectedAt: Date;
   resolvedAt?: Date;
   autoResolve: boolean;
-}
-}
-}
+
+
+
+
 
 // Rollback conditions for automated rollout management
-}
-}
+
+
+
 export interface RollbackCondition {
   metric: 'error_rate' | 'latency' | 'user_complaints' | 'dependency_failure';
   threshold: number;
   timeWindow: number; // minutes
   enabled: boolean;
-}
-}
-}
+
+
+
+
 
 // ====================================
 // Epic 17 Dashboard Query Models
 // ====================================
 
 // Enhanced toggle filter for admin dashboard
-}
-}
+
+
+
 export interface Epic17ToggleFilter {
   // Basic filters
   search?: string;
@@ -162,13 +168,15 @@ export interface Epic17ToggleFilter {
   // Rollout filters
   rolloutStrategy?: ('immediate' | 'gradual' | 'canary' | 'blue_green')[];
   rolloutStage?: string[];
-}
-}
-}
+
+
+
+
 
 // Enhanced sorting for admin dashboard
-}
-}
+
+
+
 export interface Epic17ToggleSort {
   field: 'name' | 'key' | 'created_at' | 'updated_at' | 'last_evaluated' |
          'evaluation_count' | 'success_rate' | 'error_rate' | 'health_score' |
@@ -177,14 +185,16 @@ export interface Epic17ToggleSort {
   secondary?: {
     field: Epic17ToggleSort['field'];
     direction: 'asc' | 'desc';
-}
-}
+
+
+
   };
-}
+
 
 // Paginated query for dashboard
-}
-}
+
+
+
 export interface Epic17ToggleQuery {
   filters?: Epic17ToggleFilter;
   sort?: Epic17ToggleSort;
@@ -192,17 +202,19 @@ export interface Epic17ToggleQuery {
     offset: number;
     limit: number;
     cursor?: string; // For cursor-based pagination
-}
-}
+
+
+
   };
   includeAnalytics?: boolean;
   includeHealth?: boolean;
   includeDependencies?: boolean;
-}
+
 
 // Query response with metadata
-}
-}
+
+
+
 export interface Epic17ToggleQueryResponse {
   toggles: Epic17FeatureToggle[];
   pagination: {
@@ -211,8 +223,9 @@ export interface Epic17ToggleQueryResponse {
     limit: number;
     hasMore: boolean;
     nextCursor?: string;
-}
-}
+
+
+
   };
   aggregations: {
     totalToggles: number;
@@ -229,15 +242,16 @@ export interface Epic17ToggleQueryResponse {
     categories: Array<{ category: string; count: number }>;
     owners: Array<{ owner: string; count: number }>;
   };
-}
+
 
 // ====================================
 // Epic 17 Dashboard Summary Models
 // ====================================
 
 // Dashboard summary statistics
-}
-}
+
+
+
 export interface Epic17DashboardSummary {
   overview: {
     totalToggles: number;
@@ -246,8 +260,9 @@ export interface Epic17DashboardSummary {
     unhealthyToggles: number;
     avgHealthScore: number;
     systemHealth: 'healthy' | 'degraded' | 'critical';
-}
-}
+
+
+
   };
 
   usage: {
@@ -258,7 +273,7 @@ export interface Epic17DashboardSummary {
       key: string;
       name: string;
       evaluations: number;
-    }>;
+>;
     avgResponseTime: number;
     cacheHitRate: number;
   };
@@ -295,11 +310,12 @@ export interface Epic17DashboardSummary {
     errorRateTrend: Array<{ date: string; rate: number }>;
     healthScoreTrend: Array<{ date: string; score: number }>;
   };
-}
+
 
 // Real-time dashboard updates
-}
-}
+
+
+
 export interface Epic17DashboardUpdate {
   timestamp: Date;
   updateType: 'toggle_created' | 'toggle_updated' | 'toggle_evaluated' | 'health_changed' | 'alert_triggered';
@@ -308,14 +324,16 @@ export interface Epic17DashboardUpdate {
     summary?: Partial<Epic17DashboardSummary>;
     toggle?: Partial<Epic17FeatureToggle>;
     alert?: ToggleAlert;
-}
-}
+
+
+
   };
-}
+
 
 // Alert system for dashboard notifications
-}
-}
+
+
+
 export interface ToggleAlert {
   id: string;
   toggleId: string;
@@ -328,20 +346,22 @@ export interface ToggleAlert {
   resolvedAt?: Date;
   autoResolve: boolean;
   actions?: AlertAction[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertAction {
   type: 'disable_toggle' | 'rollback' | 'notify_owner' | 'create_ticket';
   label: string;
   url?: string;
   confirm?: boolean;
-}
-}
-}
+
+
+
+
 
 // ====================================
 // Epic 17 Zod Validation Schemas
@@ -588,8 +608,9 @@ export type BatchToggleOperationOutput = z.output<typeof BatchToggleOperationSch
 
 // Utility type for database operations
 export type Epic17ToggleCreateData = Omit<Epic17FeatureToggle, 'id' | 'createdAt' | 'updatedAt' | 'version'>;
-}
-}
+
+
+
 export type Epic17ToggleUpdateData = Partial<Omit<Epic17FeatureToggle, 'id' | 'key' | 'createdAt' | 'createdBy'>> & {
   updatedBy: string;
   reason?: string;

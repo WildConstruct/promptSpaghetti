@@ -16,8 +16,8 @@ import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
-}
-}
+
+
 export interface EventStreamConfig {
   streamId: string;
   port?: number;
@@ -48,12 +48,13 @@ export interface EventStreamConfig {
   bufferEvents: boolean;
   bufferSize: number;
   bufferRetention: number; // hours
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EventSubscription {
   subscriptionId: string;
   userId: string;
@@ -80,12 +81,13 @@ export interface EventSubscription {
   batchInterval?: number; // seconds
   
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SubscriptionChannel {
   type: 'websocket' | 'sse' | 'webhook' | 'redis';
   endpoint?: string;
@@ -98,23 +100,25 @@ export interface SubscriptionChannel {
   messagesDelivered: number;
   deliveryErrors: number;
   lastError?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EventFilter {
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'regex' | 'in' | 'not_in';
   value: Error;
   caseSensitive?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StreamMetrics {
   activeSubscriptions: number;
   totalEventsStreamed: number;
@@ -125,12 +129,13 @@ export interface StreamMetrics {
   filterEvaluations: number;
   rateLimitHits: number;
   timestamp: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeliveryReceipt {
   subscriptionId: string;
   eventId: string;
@@ -139,9 +144,10 @@ export interface DeliveryReceipt {
   deliveryLatency: number;
   success: boolean;
   error?: string;
-}
-}
-}
+
+
+
+
 
 export class RealTimeComplianceEventStream extends EventEmitter {
   private config: EventStreamConfig;
@@ -181,7 +187,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     this.redisService = dependencies.redisService;
     
     this.metrics = this.initializeMetrics();
-  }
+
 
   /**
    * Initialize the event stream service
@@ -190,12 +196,12 @@ export class RealTimeComplianceEventStream extends EventEmitter {
 
     if (this.isRunning) {
       throw new Error('Event stream is already running');
-    }
+
 
     // Initialize WebSocket server if enabled
     if (this.config.enableWebSocket) {
       await this.initializeWebSocketServer();
-    }
+
 
     // Load existing subscriptions from persistence
     await this.loadSubscriptions();
@@ -213,11 +219,11 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         streamId: this.config.streamId,
         websocketEnabled: this.config.enableWebSocket,
         port: this.config.port
-      }
+
     });
 
     this.emit('stream_initialized', { streamId: this.config.streamId });
-  }
+
 
   /**
    * Initialize WebSocket server
@@ -233,9 +239,9 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         if (this.config.allowedOrigins.length > 0) {
           const origin = info.origin;
           return this.config.allowedOrigins.includes(origin);
-        }
+
         return true;
-      }
+
     });
 
     this.wsServer.on('connection', (ws, req) => {
@@ -248,7 +254,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     });
 
     console.log(`WebSocket server started on port ${port}`);
-  }
+
 
   /**
    * Handle new WebSocket connection
@@ -260,9 +266,9 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       try {
         const message = JSON.parse(data.toString());
         await this.handleWebSocketMessage(ws, clientId, message);
-      } catch (error) {
+ catch (error) {
         this.sendWebSocketError(ws, 'Invalid JSON message');
-      }
+
     });
 
     ws.on('close', () => {
@@ -280,7 +286,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       clientId,
       timestamp: new Date()
     }));
-  }
+
 
   /**
    * Handle WebSocket message
@@ -306,8 +312,8 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       break;
     default:
       this.sendWebSocketError(ws, `Unknown message type: ${message.type}`);
-    }
-  }
+
+
 
   /**
    * Handle subscription message
@@ -323,13 +329,13 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       if (!message.userId) {
         this.sendWebSocketError(ws, 'userId required for subscription');
         return;
-      }
+
 
       // Check subscription limits
       if (this.subscriptions.size >= this.config.maxSubscribers) {
         this.sendWebSocketError(ws, 'Maximum subscribers reached');
         return;
-      }
+
 
       // Create subscription
       const subscription: EventSubscription = {
@@ -343,7 +349,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
           messagesDelivered: 0,
           deliveryErrors: 0,
           lastPing: new Date()
-        }],
+],
         filters: message.filters || [],
         personalRateLimit: message.rateLimit,
         rateLimitWindow: message.rateLimitWindow || 1,
@@ -374,7 +380,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       // Send buffered events if applicable
       if (this.config.bufferEvents) {
         await this.sendBufferedEvents(subscription);
-      }
+
 
       await this.auditService.logEvent({
         type: 'EVENT_SUBSCRIPTION_CREATED',
@@ -383,13 +389,12 @@ export class RealTimeComplianceEventStream extends EventEmitter {
           subscriptionId: subscription.subscriptionId,
           clientId,
           filtersCount: subscription.filters.length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       this.sendWebSocketError(ws, `Subscription failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Handle unsubscribe message
@@ -401,8 +406,8 @@ export class RealTimeComplianceEventStream extends EventEmitter {
 
     if (subscription && subscription.clientId === clientId) {
       await this.removeSubscription(subscriptionId);
-    }
-  }
+
+
 
   /**
    * Handle ping message for heartbeat
@@ -415,17 +420,17 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         subscription.channels.forEach(channel => {
           if (channel.type === 'websocket' && channel.connection === ws) {
             channel.lastPing = new Date();
-          }
+
         });
-      }
-    }
+
+
 
     // Send pong response
     ws.send(JSON.stringify({
       type: 'pong',
       timestamp: new Date()
     }));
-  }
+
 
   /**
    * Handle filter update message
@@ -448,9 +453,9 @@ export class RealTimeComplianceEventStream extends EventEmitter {
           filters: subscription.filters,
           timestamp: new Date()
         }));
-      }
-    }
-  }
+
+
+
 
   /**
    * Handle WebSocket disconnection
@@ -462,17 +467,17 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         subscription.channels.forEach(channel => {
           if (channel.type === 'websocket') {
             channel.isConnected = false;
-          }
+
         });
         
         // Remove subscription if no other channels
         const activeChannels = subscription.channels.filter(c => c.isConnected);
         if (activeChannels.length === 0) {
           this.removeSubscription(subscriptionId);
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Stream event to subscribers
@@ -481,12 +486,12 @@ export class RealTimeComplianceEventStream extends EventEmitter {
 
     if (!this.isRunning) {
       return;
-    }
+
 
     // Buffer event if enabled
     if (this.config.bufferEvents) {
       this.bufferEvent(event);
-    }
+
 
     // Process subscriptions
     const deliveryPromises: Promise<DeliveryReceipt>[] = [];
@@ -494,25 +499,25 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     for (const subscription of this.subscriptions.values()) {
       if (!subscription.isActive) {
         continue;
-      }
+
 
       // Apply filters
       if (this.config.enableFiltering && !this.passesFilters(event, subscription.filters)) {
         continue;
-      }
+
 
       // Check rate limits
       if (this.config.rateLimitEnabled && this.isRateLimited(subscription)) {
         continue;
-      }
+
 
       // Deliver event
       for (const channel of subscription.channels) {
         if (channel.isConnected) {
           deliveryPromises.push(this.deliverEvent(event, subscription, channel));
-        }
-      }
-    }
+
+
+
 
     // Wait for deliveries
     const receipts = await Promise.allSettled(deliveryPromises);
@@ -530,7 +535,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       deliveryCount: successfulDeliveries,
       totalSubscriptions: receipts.length
     });
-  }
+
 
   /**
    * Stream violation event to subscribers
@@ -539,12 +544,12 @@ export class RealTimeComplianceEventStream extends EventEmitter {
 
     if (!this.isRunning) {
       return;
-    }
+
 
     // Buffer violation if enabled
     if (this.config.bufferEvents) {
       this.bufferViolation(violation);
-    }
+
 
     // Convert violation to stream event format
     const streamEvent: RealTimeEvent = {
@@ -556,14 +561,14 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       payload: {
         operation: 'compliance_violation',
         violation: violation
-  }
+
       priority: violation.severity === 'critical' ? 'critical' : 'high',
       tags: ['compliance', 'violation', violation.severity],
       metadata: violation.metadata
     };
 
     await this.streamEvent(streamEvent);
-  }
+
 
   /**
    * Check if event passes subscription filters
@@ -572,10 +577,10 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     for (const filter of filters) {
       if (!this.evaluateFilter(event, filter)) {
         return false;
-      }
-    }
+
+
     return true;
-  }
+
 
   /**
    * Evaluate single filter against event
@@ -609,8 +614,8 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       return Array.isArray(filter.value) && !filter.value.includes(fieldValue);
     default:
       return true;
-    }
-  }
+
+
 
   /**
    * Get field value from event
@@ -622,13 +627,13 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     for (const part of parts) {
       if (value && typeof value === 'object') {
         value = value[part];
-      } else {
+ else {
         return undefined;
-      }
-    }
+
+
     
     return value;
-  }
+
 
   /**
    * Check if subscription is rate limited
@@ -647,16 +652,16 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         resetTime: new Date(now.getTime() + windowMs)
       });
       return false;
-    }
+
     
     if (counter.count >= limit) {
       this.metrics.rateLimitHits++;
       return true;
-    }
+
     
     counter.count++;
     return false;
-  }
+
 
   /**
    * Deliver event to specific channel
@@ -684,13 +689,13 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         break;
       default:
         throw new Error(`Unsupported channel type: ${channel.type}`);
-      }
+
       
       if (success) {
         channel.messagesDelivered++;
-      } else {
+ else {
         channel.deliveryErrors++;
-      }
+
       
       const deliveryLatency = Date.now() - startTime;
       this.updateDeliveryMetrics(deliveryLatency);
@@ -703,8 +708,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         deliveryLatency,
         success
       };
-      
-    } catch (error) {
+ catch (error) {
       channel.deliveryErrors++;
       channel.lastError = error.message;
       
@@ -717,8 +721,8 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         success: false,
         error: error.message
       };
-    }
-  }
+
+
 
   /**
    * Deliver event via WebSocket
@@ -731,7 +735,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     if (!channel.connection || channel.connection.readyState !== WebSocket.OPEN) {
       channel.isConnected = false;
       return false;
-    }
+
 
     const message = {
       type: 'event',
@@ -742,11 +746,11 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     try {
       channel.connection.send(JSON.stringify(message));
       return true;
-    } catch (error) {
+ catch (error) {
       channel.isConnected = false;
       return false;
-    }
-  }
+
+
 
   /**
    * Deliver event via webhook
@@ -759,7 +763,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     // Implementation would make HTTP POST to webhook endpoint
     console.log(`Delivering event ${event.eventId} via webhook to ${channel.endpoint}`);
     return true;
-  }
+
 
   /**
    * Deliver event via Redis pub/sub
@@ -772,10 +776,10 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     try {
       await this.redisService.publish(channel.endpoint || 'compliance_events', JSON.stringify(event));
       return true;
-    } catch (error) {
+ catch (error) {
       return false;
-    }
-  }
+
+
 
   /**
    * Update delivery metrics
@@ -783,7 +787,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
   private updateDeliveryMetrics(latency: number): void {
     this.metrics.averageDeliveryLatency = 
       (this.metrics.averageDeliveryLatency * 0.9) + (latency * 0.1);
-  }
+
 
   /**
    * Send WebSocket error
@@ -795,8 +799,8 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         message,
         timestamp: new Date()
       }));
-    }
-  }
+
+
 
   /**
    * Buffer event for new subscribers
@@ -804,9 +808,9 @@ export class RealTimeComplianceEventStream extends EventEmitter {
   private bufferEvent(event: RealTimeEvent): void {
     if (this.eventBuffer.length >= this.config.bufferSize) {
       this.eventBuffer.shift(); // Remove oldest
-    }
+
     this.eventBuffer.push(event);
-  }
+
 
   /**
    * Buffer violation for new subscribers
@@ -814,9 +818,9 @@ export class RealTimeComplianceEventStream extends EventEmitter {
   private bufferViolation(violation: ComplianceViolationEvent): void {
     if (this.violationBuffer.length >= this.config.bufferSize) {
       this.violationBuffer.shift(); // Remove oldest
-    }
+
     this.violationBuffer.push(violation);
-  }
+
 
   /**
    * Send buffered events to new subscription
@@ -829,16 +833,16 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         for (const channel of subscription.channels) {
           if (channel.isConnected) {
             await this.deliverEvent(event, subscription, channel);
-          }
-        }
-      }
-    }
+
+
+
+
 
     // Send buffered violations
     for (const violation of this.violationBuffer) {
       await this.streamViolation(violation);
-    }
-  }
+
+
 
   /**
    * Remove subscription
@@ -848,13 +852,13 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     const subscription = this.subscriptions.get(subscriptionId);
     if (!subscription) {
       return;
-    }
+
 
     // Close WebSocket connections
     subscription.channels.forEach(channel => {
       if (channel.type === 'websocket' && channel.connection) {
         channel.connection.close();
-      }
+
     });
 
     // Remove from memory
@@ -872,7 +876,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       userId: subscription.userId,
       details: { subscriptionId }
     });
-  }
+
 
   /**
    * Persist subscription to database
@@ -894,10 +898,10 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         subscription.createdAt,
         JSON.stringify(subscription.metadata)
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to persist subscription:', error);
-    }
-  }
+
+
 
   /**
    * Load subscriptions from database
@@ -927,11 +931,11 @@ export class RealTimeComplianceEventStream extends EventEmitter {
         };
 
         this.subscriptions.set(subscription.subscriptionId, subscription);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.warn('Failed to load subscriptions:', error);
-    }
-  }
+
+
 
   /**
    * Start metrics collection
@@ -940,7 +944,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     this.metricsInterval = setInterval(async () => {
       await this.collectMetrics();
     }, 60000); // Every minute
-  }
+
 
   /**
    * Collect and report metrics
@@ -965,7 +969,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     );
 
     this.emit('metrics_updated', this.metrics);
-  }
+
 
   /**
    * Start periodic cleanup
@@ -974,7 +978,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     this.cleanupInterval = setInterval(async () => {
       await this.performCleanup();
     }, 300000); // Every 5 minutes
-  }
+
 
   /**
    * Perform periodic cleanup
@@ -988,15 +992,15 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     for (const [subscriptionId, subscription] of this.subscriptions.entries()) {
       if (now.getTime() - subscription.lastActivity.getTime() > timeout) {
         await this.removeSubscription(subscriptionId);
-      }
-    }
+
+
 
     // Clean up rate limit counters
     for (const [key, counter] of this.rateLimitCounters.entries()) {
       if (counter.resetTime <= now) {
         this.rateLimitCounters.delete(key);
-      }
-    }
+
+
 
     // Clean up event buffer
     const bufferRetentionMs = this.config.bufferRetention * 60 * 60 * 1000;
@@ -1007,7 +1011,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     this.violationBuffer = this.violationBuffer.filter(violation => 
       (now.getTime() - violation.detectedAt.getTime()) < bufferRetentionMs
     );
-  }
+
 
   /**
    * Initialize metrics
@@ -1023,7 +1027,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       filterEvaluations: 0,
       rateLimitHits: 0,
       timestamp: new Date(};
-  }
+
 
   /**
    * Get current stream status
@@ -1034,7 +1038,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     metrics: StreamMetrics;
     subscriptions: number;
     bufferSize: number;
-    } {
+ {
     return {
       streamId: this.config.streamId,
       running: this.isRunning,
@@ -1042,7 +1046,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       subscriptions: this.subscriptions.size,
       bufferSize: this.eventBuffer.length + this.violationBuffer.length
     };
-  }
+
 
   /**
    * Stop the event stream
@@ -1051,28 +1055,28 @@ export class RealTimeComplianceEventStream extends EventEmitter {
 
     if (!this.isRunning) {
       return;
-    }
+
 
     this.isRunning = false;
 
     // Close WebSocket server
     if (this.wsServer) {
       this.wsServer.close();
-    }
+
 
     // Clear intervals
     if (this.metricsInterval) {
       clearInterval(this.metricsInterval);
-    }
+
     
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
-    }
+
 
     // Close all subscriptions
     for (const subscriptionId of this.subscriptions.keys()) {
       await this.removeSubscription(subscriptionId);
-    }
+
 
     await this.auditService.logEvent({
       type: 'EVENT_STREAM_STOPPED',
@@ -1080,9 +1084,8 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       details: {
         streamId: this.config.streamId,
         finalMetrics: this.metrics
-      }
+
     });
 
     this.emit('stream_stopped', { streamId: this.config.streamId });
-  }
-}
+

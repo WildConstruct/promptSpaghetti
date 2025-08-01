@@ -21,13 +21,13 @@ import {
   Tooltip,
   // Legend, // Commented out unused import
   ResponsiveContainer
-} from 'recharts';
+ from 'recharts';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle
-} from '../ui/Card';
+ from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
@@ -40,20 +40,21 @@ import {
   Target,
   FileText,
   BarChart3
-} from 'lucide-react';
+ from 'lucide-react';
 import { TestCoverageMetrics } from '../../hooks/useQualityMetrics';
 
 // =============================================================================
 // Test Coverage Chart Component
 // =============================================================================
 
-}
+
 export interface TestCoverageChartProps {
   metrics: TestCoverageMetrics;
   compact?: boolean;
   className?: string;
-}
-}
+
+
+
 export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
   metrics,
   compact = false,
@@ -68,12 +69,12 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
   primary: '#3b82f6',
 };
   // Prepare pie chart data for overall coverage
-  const overallCoverageData = [;
+  const overallCoverageData = [
     {
   name: 'Covered',
   value: metrics.overall.linesCovered,
   color: chartColors.covered,
-}
+
     {
   name: 'Uncovered',
   value: metrics.overall.linesTotal - metrics.overall.linesCovered,
@@ -118,13 +119,14 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
 };
   // Custom tooltip for charts
   interface TooltipEntry {
-    name?: string;
-    value?: number | string;
-    color?: string;
+  name?: string;
+  value?: number | string;
+  color?: string;
   const CustomTooltip = (;);
-    { active,
-    payload,
-}
+  { active,
+  payload,
+
+
     label }: { active?: boolean; payload?: TooltipEntry; label?: string }
   ) => {
     if (active && payload && payload.length) {
@@ -248,7 +250,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
                   )}
                   <span className={`font-medium ${
   metrics.trends.changeFromLastWeek > 0 ? 'text-green-600' : 'text-red-600',
-}`}>
+`}>
                     {Math.abs(metrics.trends.changeFromLastWeek).toFixed(1)}%
                   </span>
                 </div>

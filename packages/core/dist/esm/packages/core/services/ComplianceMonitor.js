@@ -909,7 +909,8 @@ historicalTrends: {
         framework: string;
         predictedIssue: string;
         timeframe: string;
-        risk: 'low' | 'medium' | 'high';
+        risk: 'low' | 'medium' | 'high',
+        ;
     }
     [];
 }

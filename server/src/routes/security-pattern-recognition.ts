@@ -13,7 +13,7 @@ import {
   SecurityPattern,
   ThreatCluster,
   PatternRecognitionResult 
-} from '../services/SecurityPatternRecognitionEngine';
+ from '../services/SecurityPatternRecognitionEngine';
 import { SecurityAPIIntegrationPlatform } from '../services/SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../services/SecurityPolicyAnalysisEngine';
 import { SecurityRiskScoringEngine } from '../services/SecurityRiskScoringEngine';
@@ -21,18 +21,18 @@ import { SecurityRiskScoringEngine } from '../services/SecurityRiskScoringEngine
 // Global pattern recognition engine instance
 let patternRecognitionEngine: SecurityPatternRecognitionEngine | null = null;
 
-}
-}
+
+
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
   message?: string;
   timestamp: number;
-}
 
-}
-}
+
+
+
 interface RecognizePatternsRequest {
   data_sources: {
     security_logs?: any[];
@@ -41,8 +41,9 @@ interface RecognizePatternsRequest {
     application_logs?: any[];
     threat_intelligence?: any[];
     user_behavior_data?: any[];
-}
-}
+
+
+
   };
   analysis_type: 'real_time' | 'batch' | 'historical' | 'targeted';
   analysis_options?: {
@@ -61,10 +62,10 @@ interface RecognizePatternsRequest {
     detailed_analysis?: boolean;
     include_recommendations?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface CreateClusterRequest {
   cluster_name: string;
   cluster_type: 'attack_campaign' | 'threat_actor' | 'malware_family' | 'infrastructure' | 'behavioral' | 'temporal' | 'geographic';
@@ -74,8 +75,9 @@ interface CreateClusterRequest {
     similarity_threshold?: number;
     clustering_algorithm?: string;
     validation_required?: boolean;
-}
-}
+
+
+
   };
   metadata?: {
     geographic_scope?: string[];
@@ -85,10 +87,10 @@ interface CreateClusterRequest {
     };
     industry_targets?: string[];
   };
-}
 
-}
-}
+
+
+
 interface UpdateClusterRequest {
   cluster_updates: {
     cluster_name?: string;
@@ -96,8 +98,9 @@ interface UpdateClusterRequest {
     member_threats_to_add?: string[];
     member_threats_to_remove?: string[];
     metadata_updates?: any;
-}
-}
+
+
+
   };
   reanalysis_required?: boolean;
   notification_preferences?: {
@@ -105,10 +108,10 @@ interface UpdateClusterRequest {
     update_dashboards?: boolean;
     trigger_alerts?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface SearchPatternsRequest {
   search_criteria: {
     pattern_types?: string[];
@@ -117,8 +120,9 @@ interface SearchPatternsRequest {
     date_range?: {
       start: number;
       end: number;
-}
-}
+
+
+
     };
     keywords?: string[];
     threat_associations?: string[];
@@ -132,10 +136,10 @@ interface SearchPatternsRequest {
     include_deprecated?: boolean;
     include_relationships?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface GenerateReportRequest {
   report_type: 'summary' | 'detailed' | 'technical' | 'executive';
   scope: {
@@ -144,8 +148,9 @@ interface GenerateReportRequest {
     time_range?: {
       start: number;
       end: number;
-}
-}
+
+
+
     };
     focus_areas?: string[];
   };
@@ -161,13 +166,13 @@ interface GenerateReportRequest {
     dashboard_publication?: boolean;
     api_webhook?: string;
   };
-}
+
 
 async function initializePatternRecognitionEngine(): Promise<void> {
 
   if (patternRecognitionEngine) {
     return;
-  }
+
 
   const config: SecurityPatternRecognitionConfig = {
     pattern_recognition: {
@@ -179,7 +184,7 @@ async function initializePatternRecognitionEngine(): Promise<void> {
       behavioral_analysis_enabled: true,
       temporal_pattern_analysis: true,
       spatial_pattern_analysis: true
-  }
+
     threat_clustering: {
       enabled: true,
       clustering_algorithms: ['dbscan', 'hierarchical', 'kmeans', 'graph_clustering'],
@@ -187,12 +192,12 @@ async function initializePatternRecognitionEngine(): Promise<void> {
         high_similarity: 0.8,
         medium_similarity: 0.6,
         low_similarity: 0.4
-  }
+
       auto_clustering_enabled: true,
       manual_clustering_allowed: true,
       cluster_validation_enabled: true,
       cross_reference_clustering: true
-  }
+
     pattern_types: {
       attack_patterns: true,
       behavioral_patterns: true,
@@ -202,7 +207,7 @@ async function initializePatternRecognitionEngine(): Promise<void> {
       data_access_patterns: true,
       anomaly_patterns: true,
       compliance_patterns: true
-  }
+
     analysis_algorithms: {
       machine_learning_enabled: true,
       deep_learning_models: true,
@@ -212,7 +217,7 @@ async function initializePatternRecognitionEngine(): Promise<void> {
       network_analysis: true,
       natural_language_processing: true,
       computer_vision_analysis: false
-  }
+
     data_sources: {
       security_logs: true,
       network_traffic: true,
@@ -222,7 +227,7 @@ async function initializePatternRecognitionEngine(): Promise<void> {
       user_behavior_data: true,
       system_performance_metrics: true,
       compliance_audit_data: true
-  }
+
     output_settings: {
       real_time_alerts: true,
       batch_reporting: true,
@@ -232,7 +237,7 @@ async function initializePatternRecognitionEngine(): Promise<void> {
       siem_integration: true,
       incident_response_integration: true,
       threat_hunting_integration: true
-    }
+
   };
 
   // Get required dependencies (mocked for now)
@@ -248,7 +253,7 @@ async function initializePatternRecognitionEngine(): Promise<void> {
   );
 
   await patternRecognitionEngine.initialize();
-}
+
 
 export default async function patternRecognitionRoutes(fastify: FastifyInstance) {
   // Initialize the pattern recognition engine
@@ -273,12 +278,12 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
               application_logs: { type: 'array' },
               threat_intelligence: { type: 'array' },
               user_behavior_data: { type: 'array' }
-            }
-  }
+
+
           analysis_type: {
             type: 'string',
             enum: ['real_time', 'batch', 'historical', 'targeted']
-  }
+
           analysis_options: {
             type: 'object',
             properties: {
@@ -289,12 +294,12 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
                 properties: {
                   start_date: { type: 'number' },
                   end_date: { type: 'number' }
-                }
-              }
-            }
-          }
-        }
-  }
+
+
+
+
+
+
       response: {
         200: {
           type: 'object',
@@ -310,25 +315,25 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
                     patterns_discovered: { type: 'number' },
                     clusters_formed: { type: 'number' },
                     processing_time_ms: { type: 'number' }
-                  }
-  }
+
+
                 pattern_discovery_results: { type: 'object' },
                 clustering_results: { type: 'object' },
                 insights_generated: { type: 'object' }
-              }
-  }
+
+
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { data_sources, analysis_type, analysis_options } = request.body;
 
       if (!patternRecognitionEngine) {
         throw new Error('Pattern recognition engine not initialized');
-      }
+
 
       // Combine all data sources
       const combinedData = {
@@ -353,43 +358,42 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
             patterns_discovered: analysisResult.patterns_discovered.new_patterns.length,
             clusters_formed: analysisResult.clustering_results.new_clusters.length,
             processing_time_ms: processingTime
-  }
+
           pattern_discovery_results: {
             new_patterns: analysisResult.patterns_discovered.new_patterns.length,
             updated_patterns: analysisResult.patterns_discovered.updated_patterns.length,
             confirmed_patterns: analysisResult.patterns_discovered.confirmed_patterns.length,
             pattern_relationships: analysisResult.patterns_discovered.pattern_relationships.length
-  }
+
           clustering_results: {
             new_clusters: analysisResult.clustering_results.new_clusters.length,
             updated_clusters: analysisResult.clustering_results.updated_clusters.length,
             cluster_merges: analysisResult.clustering_results.merged_clusters.length,
             cluster_splits: analysisResult.clustering_results.split_clusters.length
-  }
+
           insights_generated: {
             security_insights: analysisResult.insights_generated.security_insights.length,
             threat_trends: analysisResult.insights_generated.threat_trends.length,
             anomaly_detections: analysisResult.insights_generated.anomaly_detections.length,
             recommendations: analysisResult.insights_generated.recommendations.length
-  }
+
           analysis_metadata: {
             analysis_type: analysisResult.analysis_type,
             analysis_timestamp: analysisResult.analysis_timestamp,
             data_volume_processed: analysisResult.analysis_metrics.data_volume_processed,
             processing_performance: analysisResult.analysis_metrics.processing_performance
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Pattern recognition analysis failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 2: Create Threat Cluster
@@ -406,23 +410,23 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
           cluster_type: {
             type: 'string',
             enum: ['attack_campaign', 'threat_actor', 'malware_family', 'infrastructure', 'behavioral', 'temporal', 'geographic']
-  }
+
           description: { type: 'string', minLength: 1 },
           member_threats: {
             type: 'array',
             items: { type: 'string' },
             minItems: 2
-  }
+
           clustering_criteria: {
             type: 'object',
             properties: {
               similarity_threshold: { type: 'number', minimum: 0, maximum: 1 },
               clustering_algorithm: { type: 'string' },
               validation_required: { type: 'boolean' }
-            }
-          }
-        }
-  }
+
+
+
+
       response: {
         200: {
           type: 'object',
@@ -438,22 +442,22 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
                     cluster_name: { type: 'string' },
                     cluster_type: { type: 'string' },
                     member_count: { type: 'number' }
-                  }
-                }
-              }
-  }
+
+
+
+
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { cluster_name, cluster_type, description, member_threats, clustering_criteria, metadata } = request.body;
 
       if (!patternRecognitionEngine) {
         throw new Error('Pattern recognition engine not initialized');
-      }
+
 
       const clusterConfig = {
         cluster_name,
@@ -472,37 +476,36 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
             cluster_name: createdCluster.cluster_name,
             cluster_type: createdCluster.cluster_type,
             member_count: createdCluster.cluster_metadata.cluster_size
-  }
+
           cluster_details: {
             description: createdCluster.description,
             created_at: createdCluster.cluster_metadata.created_at,
             geographic_scope: createdCluster.cluster_metadata.geographic_scope,
             industry_targets: createdCluster.cluster_metadata.industry_targets,
             threat_level: createdCluster.impact_assessment.collective_threat_level
-  }
+
           composition_analysis: {
             cluster_cohesion_score: createdCluster.cluster_composition.cluster_cohesion_score,
             shared_characteristics_count: createdCluster.cluster_composition.shared_characteristics.length,
             core_patterns_count: createdCluster.cluster_composition.core_patterns.length
-  }
+
           intelligence_summary: {
             collective_indicators_count: createdCluster.threat_intelligence.collective_indicators.length,
             shared_infrastructure_count: createdCluster.threat_intelligence.shared_infrastructure.length,
             common_ttps_count: createdCluster.threat_intelligence.common_ttps.length,
             attribution_confidence: createdCluster.threat_intelligence.attribution_analysis.attribution_confidence
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Threat cluster creation failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 3: Update Threat Cluster
@@ -516,8 +519,8 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
         required: ['clusterId'],
         properties: {
           clusterId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['cluster_updates'],
@@ -530,13 +533,13 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
               member_threats_to_add: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               member_threats_to_remove: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-  }
+
+
+
           reanalysis_required: { type: 'boolean' },
           notification_preferences: {
             type: 'object',
@@ -544,11 +547,11 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
               notify_stakeholders: { type: 'boolean' },
               update_dashboards: { type: 'boolean' },
               trigger_alerts: { type: 'boolean' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { clusterId } = request.params;
@@ -556,7 +559,7 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
 
       if (!patternRecognitionEngine) {
         throw new Error('Pattern recognition engine not initialized');
-      }
+
 
       const updatedCluster = await patternRecognitionEngine.updateCluster(clusterId, cluster_updates);
 
@@ -568,26 +571,25 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
             cluster_name: updatedCluster.cluster_name,
             last_updated: updatedCluster.cluster_metadata.last_updated,
             reanalysis_performed: reanalysis_required || false
-  }
+
           updated_properties: Object.keys(cluster_updates),
           cluster_status: {
             member_count: updatedCluster.cluster_metadata.cluster_size,
             cluster_cohesion_score: updatedCluster.cluster_composition.cluster_cohesion_score,
             threat_level: updatedCluster.impact_assessment.collective_threat_level,
             stability_score: updatedCluster.cluster_analysis.stability_assessment.stability_score
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Threat cluster update failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 4: Search Patterns
@@ -606,36 +608,36 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
               pattern_types: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               confidence_threshold: { type: 'number', minimum: 0, maximum: 1 },
               severity_levels: {
                 type: 'array',
                 items: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] }
-  }
+
               keywords: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-  }
+
+
+
           search_options: {
             type: 'object',
             properties: {
               max_results: { type: 'number', minimum: 1, maximum: 1000 },
               sort_by: { type: 'string' },
               sort_order: { type: 'string', enum: ['asc', 'desc'] }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { search_criteria, search_options } = request.body;
 
       if (!patternRecognitionEngine) {
         throw new Error('Pattern recognition engine not initialized');
-      }
+
 
       const foundPatterns = await patternRecognitionEngine.searchPatterns(search_criteria);
 
@@ -643,7 +645,7 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
       let results = foundPatterns;
       if (search_options?.max_results) {
         results = results.slice(0, search_options.max_results);
-      }
+
 
       const patternSummaries = results.map(pattern => ({
         pattern_id: pattern.pattern_id,
@@ -667,26 +669,25 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
             patterns_returned: results.length,
             search_criteria_applied: Object.keys(search_criteria).length,
             processing_time_ms: 150 // Mock processing time
-  }
+
           pattern_results: patternSummaries,
           aggregated_insights: {
             pattern_type_distribution: this.calculatePatternTypeDistribution(results),
             confidence_distribution: this.calculateConfidenceDistribution(results),
             severity_distribution: this.calculateSeverityDistribution(results),
             temporal_distribution: this.calculateTemporalDistribution(results)
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Pattern search failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 5: Generate Pattern Report
@@ -702,27 +703,27 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
           report_type: {
             type: 'string',
             enum: ['summary', 'detailed', 'technical', 'executive']
-  }
+
           scope: {
             type: 'object',
             properties: {
               pattern_ids: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               cluster_ids: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               time_range: {
                 type: 'object',
                 properties: {
                   start: { type: 'number' },
                   end: { type: 'number' }
-                }
-              }
-            }
-  }
+
+
+
+
           report_options: {
             type: 'object',
             properties: {
@@ -732,19 +733,19 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
               export_format: {
                 type: 'string',
                 enum: ['json', 'pdf', 'csv', 'xlsx']
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { report_type, scope, report_options } = request.body;
 
       if (!patternRecognitionEngine) {
         throw new Error('Pattern recognition engine not initialized');
-      }
+
 
       const report = await patternRecognitionEngine.generatePatternReport({
         report_type,
@@ -764,7 +765,7 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
             generated_at: report.generated_at,
             patterns_analyzed: report.patterns_analyzed,
             clusters_analyzed: report.clusters_analyzed
-  }
+
           report_content: {
             executive_summary: report.executive_summary,
             key_findings: report.key_findings,
@@ -773,39 +774,38 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
               total_patterns: report.patterns_analyzed,
               critical_patterns: report.key_findings?.filter((f: any) => f.severity === 'critical').length || 0,
               emerging_patterns: report.key_findings?.filter((f: any) => f.type === 'emerging').length || 0
-  }
+
             clusters_summary: {
               total_clusters: report.clusters_analyzed,
               active_campaigns: report.key_findings?.filter((f: any) => f.type === 'campaign').length || 0,
               threat_actors_identified: report.key_findings?.filter((f: any) => f.type === 'actor').length || 0
-            }
-  }
+
+
           report_metadata: {
             scope_summary: {
               time_range_days: scope.time_range ? 
                 Math.ceil((scope.time_range.end - scope.time_range.start) / (24 * 60 * 60 * 1000)) : null,
               specific_patterns_requested: scope.pattern_ids?.length || 0,
               specific_clusters_requested: scope.cluster_ids?.length || 0
-  }
+
             generation_info: {
               export_format: report_options?.export_format || 'json',
               includes_predictions: report_options?.include_predictions || false,
               includes_recommendations: report_options?.include_recommendations || false,
               includes_visualizations: report_options?.include_visualizations || false
-            }
-          }
-  }
+
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Pattern report generation failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 6: Get Analytics Dashboard Data
@@ -826,18 +826,18 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
                 pattern_metrics: { type: 'object' },
                 clustering_metrics: { type: 'object' },
                 performance_metrics: { type: 'object' }
-              }
-  }
+
+
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       if (!patternRecognitionEngine) {
         throw new Error('Pattern recognition engine not initialized');
-      }
+
 
       const analytics = patternRecognitionEngine.getPatternRecognitionAnalytics();
 
@@ -851,24 +851,24 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
             active_clusters: analytics.summary.active_clusters,
             overall_accuracy: analytics.summary.pattern_recognition_accuracy,
             clustering_effectiveness: analytics.summary.clustering_effectiveness
-  }
+
           pattern_metrics: {
             distribution_by_type: analytics.pattern_distribution.by_type,
             distribution_by_severity: analytics.pattern_distribution.by_severity,
             distribution_by_confidence: analytics.pattern_distribution.by_confidence,
             detection_accuracy: analytics.detection_accuracy
-  }
+
           clustering_metrics: {
             size_distribution: analytics.clustering_metrics.cluster_size_distribution,
             quality_scores: analytics.clustering_metrics.cluster_quality_scores,
             stability_metrics: analytics.clustering_metrics.cluster_stability_metrics,
             algorithm_performance: analytics.clustering_metrics.clustering_algorithm_performance
-  }
+
           performance_metrics: {
             processing_performance: analytics.processing_performance,
             trend_analysis: analytics.trend_analysis,
             integration_status: analytics.integration_status
-  }
+
           real_time_insights: {
             recent_activities: analytics.recent_activities.slice(0, 10),
             emerging_threats: analytics.trend_analysis.emerging_threat_indicators,
@@ -876,20 +876,19 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
               data_source_health: analytics.integration_status.data_source_health,
               alert_generation: analytics.integration_status.alert_generation_statistics,
               dashboard_status: analytics.integration_status.dashboard_update_frequency
-            }
-          }
-  }
+
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Analytics retrieval failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Helper methods (attached to fastify instance for access within routes)
@@ -944,4 +943,3 @@ export default async function patternRecognitionRoutes(fastify: FastifyInstance)
     
     return distribution;
   };
-}

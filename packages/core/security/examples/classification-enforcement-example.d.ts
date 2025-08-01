@@ -11,15 +11,12 @@ declare function processDataOperation(userId: string)
   dataId: string,
   operation: 'read' | 'write' | 'delete',
   classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED',): Promise<void>;
-declare function batchProcessData(userId: string, dataItems: Array<{)
+declare function batchProcessData(userId: string, dataItems: Array<{ )
     id: string;
     classification: any;
+    value: any }>): Promise<{ id: string;
     value: any;
-}>): Promise<{
-    id: string;
-    value: any;
-    riskScore: number;
-}[]>;
+    riskScore: number }[]>;
 declare function createCustomEnforcer(): ClassificationEnforcer;
 export { app, enforcer, processDataOperation, batchProcessData, createCustomEnforcer };
 //# sourceMappingURL=classification-enforcement-example.d.ts.map

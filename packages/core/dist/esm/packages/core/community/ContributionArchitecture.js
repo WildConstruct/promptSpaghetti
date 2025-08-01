@@ -35,7 +35,7 @@ attribution_requirements: string;
 ;
 // Usage analytics
 completion_rate: number; // For tutorials,
-success_rate: number; // How often people succeed following the content
+success_rate: number; // How often people succeed following the content,
 time_to_complete: number; // Average completion time
 // Feedback collection
 feedback_summary: {
@@ -44,6 +44,7 @@ feedback_summary: {
     error_reports: string;
     update_requests: string;
 }
+;
 ;
 ;
 // Content organization
@@ -135,7 +136,11 @@ notification_types: {
 // Quality metrics
 average_quality_score: number;
 quality_distribution: Record;
-common_quality_issues: Array;
+common_quality_issues: Array < {
+    issue_type: string,
+    frequency: number,
+    impact: string
+} > ;
 // Publication metrics
 publication_rate: number;
 featured_content_rate: number;
@@ -220,9 +225,6 @@ export const CONTRIBUTION_WORKFLOW_TEMPLATES = {
                     automated_thresholds: {
                         editorial_score: 75,
                         technical_accuracy: 80,
-                    }
-                }
-            }
-        }
+                    } } } }
     }
 };

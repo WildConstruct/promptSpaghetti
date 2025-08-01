@@ -13,29 +13,27 @@ import { ComplianceChecker } from '../ComplianceChecker';
 import { LegalDocument, ComplianceCheck } from '../types';
 
 // Mock data
-const mockDocument: LegalDocument = {,
+const mockDocument: LegalDocument = { ,
   id: 'doc-123',
   title: 'Privacy Policy',
   type: 'policy',
   content: 'This privacy policy describes how we collect, use, and protect personal information. We collect personal data including names, email addresses, and usage analytics. Data is stored securely and shared with third parties only as described herein.',
-  metadata: {
+  metadata: {,
   jurisdiction: 'US-CA',
   practiceArea: ['privacy law', 'data protection'],
   parties: ['Tech Company Inc.'],
   references: [],
   tags: ['privacy', 'gdpr', 'ccpa'],
-  confidentialityLevel: 'public',
+  confidentialityLevel: 'public' }
 },
   status: 'under_review',
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-02'),
   version: '1.0';
   };
-describe('ComplianceChecker Component', () => {
-  const mockOnComplianceResults = jest.fn<unknown, unknown>();
+describe('ComplianceChecker Component', () => { const mockOnComplianceResults = jest.fn<unknown, unknown>();
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks() });
   describe('Initial Rendering', () => {
     it('renders compliance checker interface', () => {
       render();
@@ -112,9 +110,7 @@ describe('ComplianceChecker Component', () => {
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
       expect(screen.getByText(/Analyzing GDPR requirements/i)).toBeInTheDocument();
-      await waitFor(() => {
-        expect(screen.getByText(/Analyzing CCPA requirements/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/Analyzing CCPA requirements/i)).toBeInTheDocument() });
     });
     it('calls onComplianceResults when check completes', async () => {
       const user = userEvent.setup();
@@ -127,15 +123,14 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(() => {
-  expect(mockOnComplianceResults).toHaveBeenCalledWith()
+      await waitFor(() => { expect(mockOnComplianceResults).toHaveBeenCalledWith()
   expect.arrayContaining([)
   expect.objectContaining({)
-  regulation: expect.any(String),
-  requirement: expect.any(String),
-  status: expect.oneOf(['compliant', 'non_compliant', 'partial', 'unknown']),
-  severity: expect.oneOf(['info', 'warning', 'error', 'critical']),
-}
+  regulation: expect.any(String)
+  requirement: expect.any(String)
+  status: expect.oneOf(['compliant', 'non_compliant', 'partial', 'unknown'])
+  severity: expect.oneOf(['info', 'warning', 'error', 'critical']) }
+
           ])
         );
       }, { timeout: 5000 });
@@ -149,9 +144,7 @@ describe('ComplianceChecker Component', () => {
           autoCheck={true}
         />
       );
-      await waitFor(() => {
-        expect(mockOnComplianceResults).toHaveBeenCalled();
-      }, { timeout: 3000 });
+      await waitFor(() => { expect(mockOnComplianceResults).toHaveBeenCalled() }, { timeout: 3000 });
     });
   });
   describe('Results Display', () => {
@@ -166,12 +159,10 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(() => {
-        expect(screen.getByText(/Compliance Results/i)).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText(/Compliance Results/i)).toBeInTheDocument();
         expect(screen.getByText(/Data Processing Lawful Basis/i)).toBeInTheDocument();
         expect(screen.getByText(/Right to Deletion/i)).toBeInTheDocument();
-        expect(screen.getByText(/Consumer Rights Notice/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.getByText(/Consumer Rights Notice/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('shows compliance status with appropriate styling', async () => {
       const user = userEvent.setup();
@@ -184,14 +175,12 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(() => {
-        const compliantItem = screen.getByText(/Data Processing Lawful Basis/i).closest('.compliance-item');
+      await waitFor(() => { const compliantItem = screen.getByText(/Data Processing Lawful Basis/i).closest('.compliance-item');
         const nonCompliantItem = screen.getByText(/Right to Deletion/i).closest('.compliance-item');
         const partialItem = screen.getByText(/Consumer Rights Notice/i).closest('.compliance-item');
         expect(compliantItem).toHaveClass('compliant');
         expect(nonCompliantItem).toHaveClass('non-compliant');
-        expect(partialItem).toHaveClass('partial');
-      }, { timeout: 5000 });
+        expect(partialItem).toHaveClass('partial') }, { timeout: 5000 });
     });
     it('displays severity indicators', async () => {
       const user = userEvent.setup();
@@ -204,11 +193,9 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(() => {
-        expect(screen.getByText(/INFO/i)).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText(/INFO/i)).toBeInTheDocument();
         expect(screen.getByText(/ERROR/i)).toBeInTheDocument();
-        expect(screen.getByText(/WARNING/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.getByText(/WARNING/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('shows remediation suggestions for violations', async () => {
       const user = userEvent.setup();
@@ -221,13 +208,11 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(async () => {
-        const violationItem = screen.getByText(/Right to Deletion/i);
+      await waitFor(async () => { const violationItem = screen.getByText(/Right to Deletion/i);
         await user.click(violationItem);
         expect(screen.getByText(/Remediation Steps/i)).toBeInTheDocument();
         expect(screen.getByText(/Add section describing deletion request process/i)).toBeInTheDocument();
-        expect(screen.getByText(/Specify timeline for deletion completion/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.getByText(/Specify timeline for deletion completion/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('highlights affected sections in document', async () => {
       const user = userEvent.setup();
@@ -240,11 +225,9 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(async () => {
-  const violationItem = screen.getByText(/Right to Deletion/i);
+      await waitFor(async () => { const violationItem = screen.getByText(/Right to Deletion/i);
   await user.click(violationItem);
-  expect(screen.getByText(/Affected Sections: 2, 3/i)).toBeInTheDocument();
-}, { timeout: 5000 });
+  expect(screen.getByText(/Affected Sections: 2, 3/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
   });
   describe('Filtering and Sorting', () => {
@@ -259,12 +242,10 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(async () => {
-        const filterSelect = screen.getByLabelText(/Filter by status/i);
+      await waitFor(async () => { const filterSelect = screen.getByLabelText(/Filter by status/i);
         await user.selectOptions(filterSelect, 'non_compliant');
         expect(screen.getByText(/Right to Deletion/i)).toBeInTheDocument();
-        expect(screen.queryByText(/Data Processing Lawful Basis/i)).not.toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.queryByText(/Data Processing Lawful Basis/i)).not.toBeInTheDocument() }, { timeout: 5000 });
     });
     it('filters results by regulation', async () => {
       const user = userEvent.setup();
@@ -277,13 +258,11 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(async () => {
-        const filterSelect = screen.getByLabelText(/Filter by regulation/i);
+      await waitFor(async () => { const filterSelect = screen.getByLabelText(/Filter by regulation/i);
         await user.selectOptions(filterSelect, 'GDPR');
         expect(screen.getByText(/Data Processing Lawful Basis/i)).toBeInTheDocument();
         expect(screen.getByText(/Right to Deletion/i)).toBeInTheDocument();
-        expect(screen.queryByText(/Consumer Rights Notice/i)).not.toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.queryByText(/Consumer Rights Notice/i)).not.toBeInTheDocument() }, { timeout: 5000 });
     });
     it('sorts results by severity', async () => {
       const user = userEvent.setup();
@@ -318,13 +297,11 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(async () => {
-        const exportButton = screen.getByText(/Export Report/i);
+      await waitFor(async () => { const exportButton = screen.getByText(/Export Report/i);
         expect(exportButton).toBeInTheDocument();
         await user.click(exportButton);
         expect(screen.getByText(/Export as PDF/i)).toBeInTheDocument();
-        expect(screen.getByText(/Export as CSV/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.getByText(/Export as CSV/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('generates executive summary', async () => {
       const user = userEvent.setup();
@@ -337,12 +314,10 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(() => {
-        expect(screen.getByText(/Compliance Summary/i)).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText(/Compliance Summary/i)).toBeInTheDocument();
         expect(screen.getByText(/1 Compliant/i)).toBeInTheDocument();
         expect(screen.getByText(/1 Non-Compliant/i)).toBeInTheDocument();
-        expect(screen.getByText(/1 Partial/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+        expect(screen.getByText(/1 Partial/i)).toBeInTheDocument() }, { timeout: 5000 });
     });
     it('shows compliance score', async () => {
       const user = userEvent.setup();
@@ -355,8 +330,7 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(() => {
-  expect(screen.getByText(/Compliance Score: 33%/i)).toBeInTheDocument(); // 1/3 fully compliant,
+      await waitFor(() => { expect(screen.getByText(/Compliance Score: 33%/i)).toBeInTheDocument(); // 1/3 fully compliant }
 }, { timeout: 5000 });
     });
   });
@@ -389,10 +363,8 @@ describe('ComplianceChecker Component', () => {
       );
       const removeButton = screen.getAllByLabelText(/Remove regulation/i)[0];
       await user.click(removeButton);
-      await waitFor(() => {
-        const regulationItems = screen.getAllByTestId(/regulation-item/i);
-        expect(regulationItems).toHaveLength(1);
-      });
+      await waitFor(() => { const regulationItems = screen.getAllByTestId(/regulation-item/i);
+        expect(regulationItems).toHaveLength(1) });
     });
     it('shows regulation details and requirements', async () => {
       const user = userEvent.setup();
@@ -422,10 +394,8 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(() => {
-        expect(screen.getByText(/Error checking compliance/i)).toBeInTheDocument();
-        expect(screen.getByText(/Document content is insufficient/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/Error checking compliance/i)).toBeInTheDocument();
+        expect(screen.getByText(/Document content is insufficient/i)).toBeInTheDocument() });
     });
     it('handles unsupported regulations', () => {
       render();
@@ -449,12 +419,10 @@ describe('ComplianceChecker Component', () => {
       );
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
-      await waitFor(async () => {
-        const retryButton = screen.getByText(/Retry Check/i);
+      await waitFor(async () => { const retryButton = screen.getByText(/Retry Check/i);
         expect(retryButton).toBeInTheDocument();
         await user.click(retryButton);
-        expect(screen.getByText(/Checking compliance/i)).toBeInTheDocument();
-      });
+        expect(screen.getByText(/Checking compliance/i)).toBeInTheDocument() });
     });
   });
   describe('Accessibility', () => {

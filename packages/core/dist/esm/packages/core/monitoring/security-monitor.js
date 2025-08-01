@@ -27,24 +27,23 @@ export var SecurityEventType;
         MEDIUM = 'medium',
         HIGH = 'high',
         CRITICAL = 'critical';
-    ;
-    analysis: {
-        riskScore: number;
-        threatsDetected: string;
-        confidence: number;
-        validationResult: boolean;
-    }
-    ;
-    context: {
-        userAgent ?  : string;
-        ipAddress ?  : string;
-        endpoint ?  : string;
-        component: string;
-    }
-    ;
-    metadata: Record;
-    // Alert configuration
 }
+;
+analysis: {
+    riskScore: number;
+    threatsDetected: string;
+    confidence: number;
+    validationResult: boolean;
+}
+;
+context: {
+    userAgent ?  : string;
+    ipAddress ?  : string;
+    endpoint ?  : string;
+    component: string;
+}
+;
+metadata: Record;
 ;
 channels: AlertChannel;
 topThreats: Array;
@@ -68,12 +67,13 @@ export class SecurityEventMonitor extends EventEmitter {
                 events: 10,
                 timeWindowMs: 60000 // 1 minute,
             },
-            channels: [,
+            channels: [
                 {
                     type: 'console',
                     config: { level: 'warn' },
                     enabled: true
-                }],
+                }
+            ],
             ...alertConfig
         };
         // Start cleanup interval

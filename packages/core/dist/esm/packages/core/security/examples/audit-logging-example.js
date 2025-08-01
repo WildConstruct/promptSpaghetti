@@ -130,20 +130,11 @@ Promise < void  > {
                 }
                 ;
                 // Log sensitive operations
-                const sensitiveOps = [];
-                {
-                    resource: 'patient_records', id;
-                    'patient_12345';
-                }
-                {
-                    resource: 'credit_scores', id;
-                    'credit_67890';
-                }
-                {
-                    resource: 'employee_salaries', id;
-                    'salary_2024';
-                }
-                ;
+                const sensitiveOps = [
+                    { resource: 'patient_records', id: 'patient_12345' },
+                    { resource: 'credit_scores', id: 'credit_67890' },
+                    { resource: 'employee_salaries', id: 'salary_2024' }
+                ];
                 for (const op of sensitiveOps) {
                     await auditLogger.log({});
                     userId: 'analyst789',
@@ -395,33 +386,13 @@ async function workflowAuditExample() {
             console, : .log(`✓ Started workflow audit trail: ${correlationId}`)
         };
     // Log workflow steps
-    const workflowSteps = [];
-    {
-        step: 'data_loading', resource;
-        'customer_dataset', classification;
-        DataClassificationLevel.INTERNAL;
-    }
-    {
-        step: 'data_preprocessing', resource;
-        'cleaned_dataset', classification;
-        DataClassificationLevel.INTERNAL;
-    }
-    {
-        step: 'feature_extraction', resource;
-        'feature_set', classification;
-        DataClassificationLevel.CONFIDENTIAL;
-    }
-    {
-        step: 'model_training', resource;
-        'ml_model_v1', classification;
-        DataClassificationLevel.CONFIDENTIAL;
-    }
-    {
-        step: 'model_evaluation', resource;
-        'evaluation_metrics', classification;
-        DataClassificationLevel.INTERNAL;
-    }
-    ;
+    const workflowSteps = [
+        { step: 'data_loading', resource: 'customer_dataset', classification: DataClassificationLevel.INTERNAL },
+        { step: 'data_preprocessing', resource: 'cleaned_dataset', classification: DataClassificationLevel.INTERNAL },
+        { step: 'feature_extraction', resource: 'feature_set', classification: DataClassificationLevel.CONFIDENTIAL },
+        { step: 'model_training', resource: 'ml_model_v1', classification: DataClassificationLevel.CONFIDENTIAL },
+        { step: 'model_evaluation', resource: 'evaluation_metrics', classification: DataClassificationLevel.INTERNAL }
+    ];
     for (const step of workflowSteps) {
         await auditLogger.log({});
         correlationId,

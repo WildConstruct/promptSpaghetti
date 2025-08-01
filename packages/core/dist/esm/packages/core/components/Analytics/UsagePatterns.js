@@ -90,72 +90,16 @@ const loadUsageData = useCallback(async () => {
 if (!heatMapResponse.success) {
     throw new Error('Failed to load heat map data');
     // Generate mock journey flows data
-    const mockJourneyFlows = [];
-    {
-        sourceStep: 'Landing', targetStep;
-        'Node Creation', userCount;
-        150, percentage;
-        25.5, averageTime;
-        30000, successRate;
-        0.85;
-    }
-    {
-        sourceStep: 'Node Creation', targetStep;
-        'Connection', userCount;
-        120, percentage;
-        20.4, averageTime;
-        45000, successRate;
-        0.92;
-    }
-    {
-        sourceStep: 'Connection', targetStep;
-        'Execution', userCount;
-        110, percentage;
-        18.7, averageTime;
-        60000, successRate;
-        0.88;
-    }
-    {
-        sourceStep: 'Execution', targetStep;
-        'Results', userCount;
-        95, percentage;
-        16.2, averageTime;
-        15000, successRate;
-        0.95;
-    }
-    {
-        sourceStep: 'Results', targetStep;
-        'Export', userCount;
-        40, percentage;
-        6.8, averageTime;
-        20000, successRate;
-        0.98;
-    }
-    {
-        sourceStep: 'Node Creation', targetStep;
-        'Template', userCount;
-        35, percentage;
-        5.9, averageTime;
-        25000, successRate;
-        0.90;
-    }
-    {
-        sourceStep: 'Template', targetStep;
-        'Execution', userCount;
-        30, percentage;
-        5.1, averageTime;
-        35000, successRate;
-        0.87;
-    }
-    {
-        sourceStep: 'Execution', targetStep;
-        'Save', userCount;
-        25, percentage;
-        4.3, averageTime;
-        12000, successRate;
-        0.96;
-    }
-    ;
+    const mockJourneyFlows = [
+        { sourceStep: 'Landing', targetStep: 'Node Creation', userCount: 150, percentage: 25.5, averageTime: 30000, successRate: 0.85 },
+        { sourceStep: 'Node Creation', targetStep: 'Connection', userCount: 120, percentage: 20.4, averageTime: 45000, successRate: 0.92 },
+        { sourceStep: 'Connection', targetStep: 'Execution', userCount: 110, percentage: 18.7, averageTime: 60000, successRate: 0.88 },
+        { sourceStep: 'Execution', targetStep: 'Results', userCount: 95, percentage: 16.2, averageTime: 15000, successRate: 0.95 },
+        { sourceStep: 'Results', targetStep: 'Export', userCount: 40, percentage: 6.8, averageTime: 20000, successRate: 0.98 },
+        { sourceStep: 'Node Creation', targetStep: 'Template', userCount: 35, percentage: 5.9, averageTime: 25000, successRate: 0.90 },
+        { sourceStep: 'Template', targetStep: 'Execution', userCount: 30, percentage: 5.1, averageTime: 35000, successRate: 0.87 },
+        { sourceStep: 'Execution', targetStep: 'Save', userCount: 25, percentage: 4.3, averageTime: 12000, successRate: 0.96 }
+    ];
     setState(prev => ({}), ...prev, loading, false, heatMapData, heatMapResponse.data || [], hourlyPattern, hourlyResponse.success ? hourlyResponse.data : null, dailyPattern, dailyResponse.success ? dailyResponse.data : null, weeklyPattern, weeklyResponse.success ? weeklyResponse.data : null, journeyFlows, mockJourneyFlows);
 }
 ;

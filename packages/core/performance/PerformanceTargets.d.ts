@@ -4,12 +4,12 @@
  */
 
 }
-export interface PerformanceTargetConfig {
-    environment: 'development' | 'staging' | 'production';
+}
+export interface PerformanceTargetConfig { environment: 'development' | 'staging' | 'production';
     userSegment: 'power-users' | 'general' | 'enterprise';
     deviceProfile: 'high-end' | 'mid-range' | 'low-end';
-    networkProfile: 'fast' | 'average' | 'slow';
-
+    networkProfile: 'fast' | 'average' | 'slow' }
+}
 }
 export interface PerformanceTarget {
     kpiId: string;
@@ -22,6 +22,7 @@ export interface PerformanceTarget {
         userExperience: 'high' | 'medium' | 'low';
         businessValue: 'high' | 'medium' | 'low';
         technicalRisk: 'high' | 'medium' | 'low'
+}
 }
   };
 /**
@@ -54,8 +55,8 @@ export declare function getTargetsForUserSegment(segment: PerformanceTargetConfi
  * Validate if current performance meets targets
  */
 export declare function validatePerformanceTargets(currentMetrics: Record<string)
-  number>,
-  config: PerformanceTargetConfig,
+  number>
+  config: PerformanceTargetConfig
 ): {
     passed: boolean;
     score: number;
@@ -70,20 +71,16 @@ export declare function validatePerformanceTargets(currentMetrics: Record<string
 /**
  * Get performance target summary
  */
-export declare function getPerformanceTargetSummary(): {
-    totalTargets: number;
+export declare function getPerformanceTargetSummary(): { totalTargets: number;
     critical: number;
     high: number;
     medium: number;
     low: number;
-    categories: Record<string, number>;
-};
-declare const _default: {
-    performanceTargets: Record<string, PerformanceTarget>;
+    categories: Record<string, number> };
+declare const _default: { performanceTargets: Record<string, PerformanceTarget>;
     getAdjustedTargets: typeof getAdjustedTargets;
     getTargetsForUserSegment: typeof getTargetsForUserSegment;
     validatePerformanceTargets: typeof validatePerformanceTargets;
-    getPerformanceTargetSummary: typeof getPerformanceTargetSummary;
-};
+    getPerformanceTargetSummary: typeof getPerformanceTargetSummary };
 export default _default;
 //# sourceMappingURL=PerformanceTargets.d.ts.map

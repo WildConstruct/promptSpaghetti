@@ -6,8 +6,8 @@
 import { RateLimitConfig, RateLimitScope } from './RateLimiter';
 
 }
-export interface DynamicRateLimitRule {
-    id: string;
+}
+export interface DynamicRateLimitRule { id: string;
     name: string;
     description: string;
     enabled: boolean;
@@ -25,43 +25,38 @@ export interface DynamicRateLimitRule {
     statusCode?: number;
     schedule?: RateLimitSchedule;
     alertThreshold?: number;
-    logViolations?: boolean;
-
+    logViolations?: boolean }
 }
-export interface RateLimitCondition {
-    type: 'ip' | 'user' | 'endpoint' | 'method' | 'header' | 'query' | 'body' | 'time' | 'geo' | 'custom';
+}
+export interface RateLimitCondition { type: 'ip' | 'user' | 'endpoint' | 'method' | 'header' | 'query' | 'body' | 'time' | 'geo' | 'custom';
     operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'regex' | 'in' | 'range' | 'exists';
     field?: string;
     value?: any;
     values?: any[];
     caseSensitive?: boolean;
-    negate?: boolean;
-
+    negate?: boolean }
 }
-export interface RateLimitAction {
-    type: 'block' | 'delay' | 'throttle' | 'captcha' | 'redirect' | 'custom';
+}
+export interface RateLimitAction { type: 'block' | 'delay' | 'throttle' | 'captcha' | 'redirect' | 'custom';
     statusCode?: number;
     delayMs?: number;
     redirectUrl?: string;
     customHandler?: string;
-    parameters?: Record<string, any>;
-
+    parameters?: Record<string, any> }
 }
-export interface RateLimitSchedule {
-    timezone: string;
-    rules: ScheduleRule[];
-
 }
-export interface ScheduleRule {
-    days: number[];
+export interface RateLimitSchedule { timezone: string;
+    rules: ScheduleRule[] }
+}
+}
+export interface ScheduleRule { days: number[];
     startTime: string;
     endTime: string;
     windowMs?: number;
-    maxRequests?: number;
-
+    maxRequests?: number }
 }
-export interface RateLimitProfile {
-    id: string;
+}
+export interface RateLimitProfile { id: string;
     name: string;
     description: string;
     rules: DynamicRateLimitRule[];
@@ -71,10 +66,11 @@ export interface RateLimitProfile {
         createdAt: Date;
         updatedAt: Date;
         author: string;
-        tags: string[];
+        tags: string[] }
 }
     };
 
+}
 }
 export interface ConfigurationContext {
     environment: 'development' | 'staging' | 'production';
@@ -175,4 +171,5 @@ export declare class RateLimitConfigurationPresets {
 
 export default RateLimitConfigurationManager;
 //# sourceMappingURL=RateLimitConfigurationManager.d.ts.map
+}
 }

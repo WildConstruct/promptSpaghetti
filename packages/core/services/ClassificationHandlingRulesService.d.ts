@@ -6,16 +6,15 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  DataClassificationLevel,
+import { DataClassificationLevel,
   HandlingRequirements,
-  OperationContext,
+  OperationContext }
   ValidationResult
 } from '../types/DataClassification';
 
 }
-export interface HandlingRule {
-    id: string;
+}
+export interface HandlingRule { id: string;
     name: string;
     description: string;
     classification: DataClassificationLevel;
@@ -25,12 +24,10 @@ export interface HandlingRule {
     priority: number;
     effectiveDate: Date;
     expirationDate?: Date;
-    complianceFramework: string[];
-
-
+    complianceFramework: string[] }
 }
-export interface HandlingRuleViolation {
-    id: string;
+}
+export interface HandlingRuleViolation { id: string;
     ruleId: string;
     ruleName: string;
     classification: DataClassificationLevel;
@@ -41,12 +38,10 @@ export interface HandlingRuleViolation {
     context: OperationContext;
     evidence: Record<string, any>;
     remediation: string[];
-    status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK';
-
-
+    status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK' }
 }
-export interface ComplianceCheck {
-    ruleId: string;
+}
+export interface ComplianceCheck { ruleId: string;
     dataElement: string;
     classification: DataClassificationLevel;
     checkType: string;
@@ -76,10 +71,10 @@ export declare class ClassificationHandlingRulesService {
      * Validate data handling against requirements
      */
     validateDataHandling();
-      dataId: string,
-      classification: DataClassificationLevel,
-      operation: string,
-      context: OperationContext,
+      dataId: string;
+      classification: DataClassificationLevel;
+      operation: string;
+      context: OperationContext }
     ): Promise<ValidationResult>;
     /**
      * Validate storage requirements
@@ -148,4 +143,5 @@ export declare class ClassificationHandlingRulesService {
 
 export default ClassificationHandlingRulesService;
 //# sourceMappingURL=ClassificationHandlingRulesService.d.ts.map
+}
 }

@@ -39,24 +39,24 @@ class SecurityScanner {
       LOW: 'low',
       INFO: 'info'
     };
-  }
+
 
   log(message: string, color: string = 'reset'): void {
     console.log(`${colors[color]}${message}${colors.reset}`);
-  }
+
 
   logHeader(title: string): void {
     const border = '='.repeat(60);
     this.log(`\n${border}`, 'cyan');
     this.log(`🔒 ${title}`, 'bold');
     this.log(border, 'cyan');
-  }
+
 
   logStep(step: string, status: string = 'info'): void {
     const icons = { info: '📋', success: '✅', warning: '⚠️', error: '❌' };
     const colorMap = { info: 'blue', success: 'green', warning: 'yellow', error: 'red' };
     this.log(`${icons[status]} ${step}`, colorMap[status]);
-  }
+
 
   async runComprehensiveScan(): Promise<any> {
     this.logHeader('Comprehensive Security Scan');
@@ -69,7 +69,7 @@ class SecurityScanner {
     await this.runQualitySecurityTests();
     
     return this.generateSecurityReport();
-  }
+
 
   async scanDependencyVulnerabilities(): Promise<void> {
     this.logStep('Scanning dependency vulnerabilities...', 'info');
@@ -90,14 +90,14 @@ class SecurityScanner {
             recommendation: `Update ${vuln.name} to version ${vuln.fixAvailable?.version || 'latest'}`
           });
         });
-      }
+
       
       this.logStep(`Found ${this.results.dependencyIssues.length} dependency vulnerabilities`, 
                    this.results.dependencyIssues.length > 0 ? 'warning' : 'success');
-    } catch (error) {
+ catch (error) {
       this.logStep('Dependency scan completed with warnings', 'warning');
-    }
-  }
+
+
 
   async scanCodeSecurityIssues(): Promise<void> {
     this.logStep('Scanning code for security issues...', 'info');
@@ -144,7 +144,7 @@ class SecurityScanner {
         severity: this.severity.LOW,
         message: 'Math.random() is not cryptographically secure',
         recommendation: 'Use crypto.getRandomValues() for security-sensitive random values'
-      }
+
     ];
 
     const scanDirectory = (dir) => {
@@ -156,7 +156,7 @@ class SecurityScanner {
         
         if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
           scanDirectory(filePath);
-        } else if (file.match(/\.(ts|tsx|js|jsx)$/)) {
+ else if (file.match(/\.(ts|tsx|js|jsx)$/)) {
           const content = fs.readFileSync(filePath, 'utf8');
           const relativePath = path.relative(process.cwd(), filePath);
           
@@ -171,22 +171,22 @@ class SecurityScanner {
                 recommendation,
                 occurrences: matches.length
               });
-            }
+
           });
-        }
-      }
+
+
     };
 
     // Scan client and server directories
     ['client/src', 'server/src', 'packages'].forEach(dir => {
       if (fs.existsSync(dir)) {
         scanDirectory(dir);
-      }
+
     });
 
     this.logStep(`Found ${this.results.codeSecurityIssues.length} code security issues`, 
                  this.results.codeSecurityIssues.length > 0 ? 'warning' : 'success');
-  }
+
 
   async scanConfigurationSecurity(): Promise<void> {
     this.logStep('Scanning configuration security...', 'info');
@@ -214,11 +214,11 @@ class SecurityScanner {
                 message: 'Potential secret exposed in .env file',
                 recommendation: 'Use environment-specific .env files and never commit secrets'
               });
-            }
+
           });
           
           return issues;
-        }
+
       },
       {
         file: 'package.json',
@@ -236,12 +236,12 @@ class SecurityScanner {
                   message: `Potentially dangerous npm script: ${name}`,
                   recommendation: 'Review and secure npm scripts'
                 });
-              }
+
             });
-          }
+
           
           return issues;
-        }
+
       },
       {
         file: 'tsconfig.json',
@@ -257,11 +257,11 @@ class SecurityScanner {
               message: 'TypeScript strict mode is disabled',
               recommendation: 'Enable strict mode for better type safety'
             });
-          }
+
           
           return issues;
-        }
-      }
+
+
     ];
 
     configChecks.forEach(({ file, check }) => {
@@ -270,15 +270,15 @@ class SecurityScanner {
           const content = fs.readFileSync(file, 'utf8');
           const issues = check(content);
           this.results.configurationIssues.push(...issues);
-        } catch (error) {
+ catch (error) {
           this.logStep(`Failed to scan ${file}: ${error.message}`, 'warning');
-        }
-      }
+
+
     });
 
     this.logStep(`Found ${this.results.configurationIssues.length} configuration issues`, 
                  this.results.configurationIssues.length > 0 ? 'warning' : 'success');
-  }
+
 
   async scanFilePermissions(): Promise<void> {
     this.logStep('Scanning file permissions...', 'info');
@@ -306,13 +306,13 @@ class SecurityScanner {
               message: `Sensitive file ${file} is readable by others`,
               recommendation: `Run: chmod 600 ${file}`
             });
-          }
-        } catch (error) {
+
+ catch (error) {
           // File permission check failed
-        }
-      }
+
+
     });
-  }
+
 
   async scanEnvironmentSecurity(): Promise<void> {
     this.logStep('Scanning environment security...', 'info');
@@ -330,7 +330,7 @@ class SecurityScanner {
         message: 'Debug mode is enabled',
         severity: this.severity.HIGH,
         recommendation: 'Disable debug mode in production'
-      }
+
     ];
 
     productionChecks.forEach(({ check, message, severity, recommendation }) => {
@@ -341,9 +341,9 @@ class SecurityScanner {
           message,
           recommendation
         });
-      }
+
     });
-  }
+
 
   async runQualitySecurityTests(): Promise<void> {
     this.logStep('Running quality infrastructure security tests...', 'info');
@@ -366,7 +366,7 @@ class SecurityScanner {
               const result = validateInput(input);
               return !result.isValid && result.errors.some(e => e.includes('dangerous'));
             });
-          }
+
         },
         {
           name: 'URL Validation',
@@ -377,7 +377,7 @@ class SecurityScanner {
               'vbscript:msgbox(1)'
             ];
             return dangerousUrls.every(url => validateUrl(url) === null);
-          }
+
         },
         {
           name: 'CSRF Token Generation',
@@ -385,8 +385,8 @@ class SecurityScanner {
             const token1 = generateCSRFToken();
             const token2 = generateCSRFToken();
             return token1.length === 64 && token2.length === 64 && token1 !== token2;
-          }
-        }
+
+
       ];
 
       let passedTests = 0;
@@ -395,7 +395,7 @@ class SecurityScanner {
           if (test()) {
             this.logStep(`${name}: PASSED`, 'success');
             passedTests++;
-          } else {
+ else {
             this.logStep(`${name}: FAILED`, 'error');
             this.results.vulnerabilities.push({
               type: 'security_test_failure',
@@ -403,8 +403,8 @@ class SecurityScanner {
               message: `Security test failed: ${name}`,
               recommendation: 'Review and fix security utility implementation'
             });
-          }
-        } catch (error) {
+
+ catch (error) {
           this.logStep(`${name}: ERROR - ${error.message}`, 'error');
           this.results.vulnerabilities.push({
             type: 'security_test_error',
@@ -412,17 +412,16 @@ class SecurityScanner {
             message: `Security test error: ${name}`,
             recommendation: 'Debug security utility implementation'
           });
-        }
+
       });
 
       this.logStep(`Security tests: ${passedTests}/${testCases.length} passed`, 
                    passedTests === testCases.length ? 'success' : 'warning');
-                   
-    } catch (error) {
+ catch (error) {
       this.logStep('Failed to run quality security tests', 'warning');
       this.log(`Error: ${error.message}`, 'yellow');
-    }
-  }
+
+
 
   generateSecurityReport(): any {
     this.logHeader('Security Scan Report');
@@ -469,11 +468,11 @@ class SecurityScanner {
             if (issue.package) this.log(`   Package: ${issue.package}`, 'blue');
             this.log(`   Recommendation: ${issue.recommendation}`, 'cyan');
           });
-        }
+
       });
-    } else {
+ else {
       this.log('\n✅ No security issues found!', 'green');
-    }
+
 
     // Generate recommendations
     this.generateRecommendations();
@@ -497,7 +496,7 @@ class SecurityScanner {
     this.logStep(`Security report saved to ${reportPath}`, 'success');
 
     return report;
-  }
+
 
   generateRecommendations(): void {
     this.log('\n💡 Security Recommendations:', 'cyan');
@@ -518,8 +517,8 @@ class SecurityScanner {
     });
 
     this.results.recommendations = recommendations;
-  }
-}
+
+
 
 // CLI execution
 if (require.main === module) {
@@ -549,7 +548,7 @@ The scanner integrates with our quality infrastructure to provide
 continuous security monitoring and vulnerability detection.
 `);
     process.exit(0);
-  }
+
   
   scanner.runComprehensiveScan().then(report => {
     const criticalOrHigh = report.summary.critical + report.summary.high;
@@ -557,14 +556,14 @@ continuous security monitoring and vulnerability detection.
     if (criticalOrHigh > 0) {
       console.error(`\n❌ Security scan failed: ${criticalOrHigh} critical/high severity issues found`);
       process.exit(1);
-    } else {
+ else {
       console.log('\n✅ Security scan passed: No critical or high severity issues found');
       process.exit(0);
-    }
+
   }).catch(error => {
     console.error('Security scan failed:', error);
     process.exit(1);
   });
-}
+
 
 module.exports = { SecurityScanner };

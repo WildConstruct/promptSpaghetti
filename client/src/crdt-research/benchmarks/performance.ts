@@ -4,12 +4,13 @@
  */
 import { GraphSyncHandler } from '../src/graph-sync';
 import { CRDTNode, CRDTEdge } from '../src/types';
-}
+
+
 interface BenchmarkResult {
   name: string;,
-  operations: number;
+  operations: number;,
   duration: number;,
-  opsPerSecond: number;
+  opsPerSecond: number;,
   memoryUsed: number;
   class CRDTBenchmark {
   private results: BenchmarkResult = [];
@@ -35,7 +36,8 @@ interface BenchmarkResult {
   duration,
   opsPerSecond: (operations / duration) * 1000,
   memoryUsed: memAfter - memBefore,
-}
+
+
 };
     this.results.push(result);
     return result;
@@ -46,7 +48,7 @@ interface BenchmarkResult {
 
     return this.runBenchmark()
       `Create ${nodeCount} nodes (single user)`}
-}
+
       nodeCount,
       () => {
         const sync = new GraphSyncHandler('bench', 'user1');
@@ -57,11 +59,11 @@ interface BenchmarkResult {
 },
   type: 'WeightedChoice',
             position: { x: i * 100, y: i * 100 },
-            data: {
+            data: {,
   choices: ['Option A', 'Option B', 'Option C'],
   weights: [0.33, 0.33, 0.34],
 },
-  metadata: {
+  metadata: {,
   label: `Node ${i}`}
 },
   description: `This is test node number ${i}`}
@@ -82,7 +84,7 @@ interface BenchmarkResult {
     const nodesPerUser = Math.floor(nodeCount / userCount);
     return this.runBenchmark()
       `Create ${nodeCount} nodes (${userCount} concurrent users)`}
-}
+
       nodeCount,
       () => {
         const syncs: GraphSyncHandler = [];
@@ -120,7 +122,7 @@ interface BenchmarkResult {
 
     return this.runBenchmark()
       `Create ${edgeCount} edges in ${nodeCount} node graph`}
-}
+
       edgeCount,
       () => {
         const sync = new GraphSyncHandler('bench', 'user1');
@@ -162,7 +164,7 @@ interface BenchmarkResult {
 
     return this.runBenchmark()
       `Perform ${updateCount} updates on ${nodeCount} nodes`}
-}
+
       updateCount,
       () => {
         const sync = new GraphSyncHandler('bench', 'user1');
@@ -183,7 +185,7 @@ interface BenchmarkResult {
           const nodeIdx = Math.floor(Math.random() * nodeCount);
           const nodeId = `node${nodeIdx}`;}
           graph.updateNode(nodeId, {)
-  position: {
+  position: {,
   x: Math.random() * 1000,
   y: Math.random() * 1000,
 },
@@ -201,7 +203,7 @@ interface BenchmarkResult {
 
     return this.runBenchmark()
       `Sync ${nodeCount} nodes between ${syncCount} users`}
-}
+
       syncCount * (syncCount - 1) / 2, // Number of sync operations
       () => {
         const syncs: GraphSyncHandler = [];
@@ -241,7 +243,7 @@ interface BenchmarkResult {
     let snapshotSize = 0;
     return this.runBenchmark()
       `Create and restore snapshot of ${nodeCount} nodes`}
-}
+
       2, // Create + restore
       () => {
         const sync1 = new GraphSyncHandler('bench', 'user1');
@@ -253,12 +255,12 @@ interface BenchmarkResult {
 },
   type: 'WeightedChoice',
             position: { x: i * 100, y: i * 100 },
-            data: {
+            data: {,
   choices: Array.from({ length: 10 }, (_, j) => `Option ${j}`)}
 },
   weights: Array.from({ length: 10 }, () => Math.random())
   },
-  metadata: {
+  metadata: {,
   label: `Node ${i}`}
 },
   description: `This is a detailed description for node ${i}`}

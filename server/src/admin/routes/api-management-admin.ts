@@ -52,7 +52,7 @@ const alertConfigSchema = z.object({
       afterMinutes: z.number().min(1),
       contacts: z.array(z.string().email())
     }).optional()
-  }
+
 });
 
 const exportRequestSchema = z.object({
@@ -66,15 +66,16 @@ const exportRequestSchema = z.object({
   }).optional()
 });
 
-}
-}
+
+
 interface AdminRouteContext {
   databaseService: DatabaseService;
   auditService: AuditService;
   apiKeyService: ApiKeyManagementService;
-}
-}
-}
+
+
+
+
 
 export async function apiManagementAdminRoutes(
   fastify: FastifyInstance,
@@ -101,7 +102,7 @@ export async function apiManagementAdminRoutes(
         error: 'Forbidden',
         message: 'Administrator privileges required'
       });
-    }
+
   };
 
   /**
@@ -114,8 +115,8 @@ export async function apiManagementAdminRoutes(
         type: 'object',
         properties: {
           timeRange: { type: 'string', enum: ['1h', '6h', '24h', '7d', '30d'], default: '24h' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -123,10 +124,10 @@ export async function apiManagementAdminRoutes(
             metrics: { type: 'object' },
             timestamp: { type: 'string' },
             timeRange: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { timeRange } = request.query as { timeRange: '1h' | '6h' | '24h' | '7d' | '30d' };
@@ -138,14 +139,13 @@ export async function apiManagementAdminRoutes(
         timestamp: new Date().toISOString(),
         timeRange
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Dashboard metrics error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch dashboard metrics'
       });
-    }
+
   });
 
   /**
@@ -160,10 +160,10 @@ export async function apiManagementAdminRoutes(
           properties: {
             health: { type: 'object' },
             timestamp: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const health = await apiManagementService.getSystemHealthMetrics();
@@ -172,14 +172,13 @@ export async function apiManagementAdminRoutes(
         health,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('System health error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch system health metrics'
       });
-    }
+
   });
 
   /**
@@ -187,26 +186,26 @@ export async function apiManagementAdminRoutes(
    */
   fastify.get<{
     Params: { keyId: string };
-  }>('/admin/api-management/analytics/:keyId', {
+>('/admin/api-management/analytics/:keyId', {
     preHandler: [requireAdminAuth],
     schema: {
       params: {
         type: 'object',
         properties: {
           keyId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['keyId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             analytics: { type: 'object' },
             timestamp: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { keyId } = request.params as { keyId: string };
@@ -217,8 +216,7 @@ export async function apiManagementAdminRoutes(
         analytics,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('API key analytics error:', error);
       
       if (error instanceof Error && error.message === 'API key not found') {
@@ -226,13 +224,13 @@ export async function apiManagementAdminRoutes(
           error: 'Not Found',
           message: 'API key not found'
         });
-      }
+
       
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch API key analytics'
       });
-    }
+
   });
 
   /**
@@ -240,7 +238,7 @@ export async function apiManagementAdminRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof reportGenerationSchema>;
-  }>('/admin/api-management/reports', {
+>('/admin/api-management/reports', {
     preHandler: [requireAdminAuth],
     schema: {
       body: reportGenerationSchema,
@@ -251,10 +249,10 @@ export async function apiManagementAdminRoutes(
             report: { type: 'object' },
             downloadUrl: { type: 'string' },
             timestamp: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { keyId, startDate, endDate, format, includeInsights } = request.body as z.infer<typeof reportGenerationSchema>;
@@ -279,7 +277,7 @@ export async function apiManagementAdminRoutes(
           endDate: endDateObj?.toISOString(),
           format,
           recordCount: report.summary.totalCalls
-        }
+
       });
       
       return reply.send({
@@ -287,14 +285,13 @@ export async function apiManagementAdminRoutes(
         downloadUrl: `/admin/api-management/reports/${report.reportId}/download`,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Report generation error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to generate usage report'
       });
-    }
+
   });
 
   /**
@@ -302,7 +299,7 @@ export async function apiManagementAdminRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof alertConfigSchema>;
-  }>('/admin/api-management/alerts', {
+>('/admin/api-management/alerts', {
     preHandler: [requireAdminAuth],
     schema: {
       body: alertConfigSchema,
@@ -313,10 +310,10 @@ export async function apiManagementAdminRoutes(
             success: { type: 'boolean' },
             alertId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const alertConfig = request.body as z.infer<typeof alertConfigSchema>;
@@ -328,21 +325,20 @@ export async function apiManagementAdminRoutes(
           error: 'Configuration Failed',
           message: 'Failed to configure alert'
         });
-      }
+
       
       return reply.send({
         success: true,
         alertId: alertConfig.id,
         message: 'Alert configuration saved successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Alert configuration error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to configure alert'
       });
-    }
+
   });
 
   /**
@@ -350,7 +346,7 @@ export async function apiManagementAdminRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof exportRequestSchema>;
-  }>('/admin/api-management/export', {
+>('/admin/api-management/export', {
     preHandler: [requireAdminAuth],
     schema: {
       body: exportRequestSchema,
@@ -360,10 +356,10 @@ export async function apiManagementAdminRoutes(
           properties: {
             export: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { format, filters } = request.body as z.infer<typeof exportRequestSchema>;
@@ -373,7 +369,7 @@ export async function apiManagementAdminRoutes(
         ...filters,
         startDate: filters.startDate ? new Date(filters.startDate) : undefined,
         endDate: filters.endDate ? new Date(filters.endDate) : undefined
-      } : {};
+ : {};
       
       const exportData = await apiManagementService.exportUsageData(format, processedFilters);
       
@@ -386,21 +382,20 @@ export async function apiManagementAdminRoutes(
           filters: processedFilters,
           recordCount: exportData.recordCount,
           fileSize: exportData.fileSize
-        }
+
       });
       
       return reply.send({
         export: exportData,
         message: 'Export prepared successfully. Download will be available for 24 hours.'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Export request error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to prepare export'
       });
-    }
+
   });
 
   /**
@@ -415,10 +410,10 @@ export async function apiManagementAdminRoutes(
           properties: {
             realtime: { type: 'object' },
             timestamp: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Get real-time statistics (last 5 minutes)
@@ -455,14 +450,13 @@ export async function apiManagementAdminRoutes(
         realtime,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Realtime statistics error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch realtime statistics'
       });
-    }
+
   });
 
   /**
@@ -478,9 +472,9 @@ export async function apiManagementAdminRoutes(
           keyIds: { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 100 },
           parameters: { type: 'object' }, // Operation-specific parameters
           reason: { type: 'string', maxLength: 500 }
-  }
+
         required: ['operation', 'keyIds']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -488,10 +482,10 @@ export async function apiManagementAdminRoutes(
             success: { type: 'boolean' },
             results: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { operation, keyIds, parameters, reason } = request.body as any;
@@ -510,14 +504,13 @@ export async function apiManagementAdminRoutes(
         results,
         message: `Bulk ${operation} operation completed. Processed: ${results.processedCount}, Failed: ${results.failedCount}`
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Bulk operations error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to perform bulk operation'
       });
-    }
+
   });
 
   /**
@@ -532,10 +525,10 @@ export async function apiManagementAdminRoutes(
           properties: {
             config: { type: 'object' },
             timestamp: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Return system configuration for the API management dashboard
@@ -545,25 +538,25 @@ export async function apiManagementAdminRoutes(
             requestsPerMinute: 100,
             requestsPerHour: 3000,
             requestsPerDay: 50000
-  }
+
           maxLimits: {
             requestsPerMinute: 10000,
             requestsPerHour: 500000,
             requestsPerDay: 10000000
-          }
-  }
+
+
         security: {
           keyRotationPolicy: {
             warningDays: 30,
             enforceRotation: true,
             maxKeyAge: 365
-  }
+
           alertThresholds: {
             errorRate: 0.05,
             latency: 1000,
             usageSpike: 5.0
-          }
-  }
+
+
         features: {
           ipWhitelisting: true,
           scopeBasedAccess: true,
@@ -571,26 +564,25 @@ export async function apiManagementAdminRoutes(
           realTimeMonitoring: true,
           bulkOperations: true,
           exportCapabilities: ['json', 'csv', 'excel']
-  }
+
         limits: {
           maxKeysPerUser: 10,
           maxBulkOperations: 100,
           exportRetention: 24 // hours
-        }
+
       };
       
       return reply.send({
         config,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Configuration fetch error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to fetch configuration'
       });
-    }
+
   });
 
   // Health check for the admin API management service
@@ -606,7 +598,7 @@ export async function apiManagementAdminRoutes(
           database: dbHealthy ? 'healthy' : 'unhealthy',
           apiKeyService: 'healthy',
           auditService: 'healthy'
-  }
+
         features: [
           'Comprehensive API key management dashboard',
           'Real-time usage monitoring and analytics',
@@ -618,8 +610,7 @@ export async function apiManagementAdminRoutes(
           'Administrative oversight and control'
         ]
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Admin service health check failed:', error);
       return reply.status(503).send({
         status: 'unhealthy',
@@ -627,6 +618,5 @@ export async function apiManagementAdminRoutes(
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
-}

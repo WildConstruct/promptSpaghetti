@@ -154,6 +154,7 @@ funnelData.steps.forEach((step, index) => {
         field: `steps[${index}].name`;
     }
 }, message, `Step ${index + 1} name is required`, severity, 'error');
+;
 if (!step.eventCriteria?.eventType) {
     errors.push({});
     field: `steps[${index}].eventCriteria`;
@@ -196,16 +197,14 @@ useEffect(() => {
 const handleBasicInfoChange = useCallback((field, value) => {
     setFunnel(prev => ({}), ...prev, [field], value, metadata, {
         ...prev.metadata,
-        updatedAt: Date.now(),
-    });
+        updatedAt: Date.now(), });
 });
 [];
 ;
 const handleConfigurationChange = useCallback((field, value) => {
     setFunnel(prev => ({}), ...prev, configuration, {
         ...prev.configuration,
-        [field]: value,
-    }, metadata, {
+        [field]: value, }, metadata, {
         ...prev.metadata,
         updatedAt: Date.now(),
     });

@@ -10,8 +10,8 @@ import { DatabaseService } from '../../auth/database/DatabaseService';
 import { RBACService } from '../../auth/services/RBACService';
 import { AuditService } from '../../auth/services/AuditService';
 
-}
-}
+
+
 export interface UserBulkOperationParameters {
   // Status operations
   status?: 'active' | 'suspended' | 'deactivated' | 'locked';
@@ -37,9 +37,10 @@ export interface UserBulkOperationParameters {
   permissions?: Array<{
     resource: string;
     actions: string[];
-}
-}
-  }>;
+
+
+
+>;
   
   // Metadata operations
   metadata?: Record<string, any>;
@@ -47,10 +48,10 @@ export interface UserBulkOperationParameters {
   // Bulk import/export
   csvData?: string;
   exportFormat?: 'json' | 'csv' | 'xml';
-}
 
-}
-}
+
+
+
 export interface UserOperationResult {
   userId: string;
   previousStatus?: string;
@@ -59,9 +60,10 @@ export interface UserOperationResult {
   affectedPermissions?: string[];
   sessionTerminationCount?: number;
   notificationSent?: boolean;
-}
-}
-}
+
+
+
+
 
 export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOperationParameters, UserOperationResult> {
   resourceType = 'users';
@@ -108,7 +110,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
 
       if (userResult.rows.length === 0) {
         return { valid: false, error: 'User not found' };
-      }
+
 
       const user = userResult.rows[0];
 
@@ -117,21 +119,21 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
       case 'activate':
         if (user.status === 'active') {
           return { valid: false, error: 'User is already active' };
-        }
+
         break;
 
       case 'deactivate':
       case 'suspend':
         if (user.status === 'deactivated' || user.status === 'suspended') {
           return { valid: false, error: `User is already ${user.status}` };
-        }
+
         break;
 
       case 'grant_role':
       case 'revoke_role':
         if (!parameters.roleId) {
           return { valid: false, error: 'roleId parameter is required' };
-        }
+
           
         // Check if role exists
         const roleResult = await this.dbService.query(
@@ -141,38 +143,37 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
           
         if (roleResult.rows.length === 0) {
           return { valid: false, error: 'Role not found' };
-        }
+
         break;
 
       case 'grant_roles':
       case 'revoke_roles':
         if (!parameters.roleIds || parameters.roleIds.length === 0) {
           return { valid: false, error: 'roleIds parameter is required' };
-        }
+
         break;
 
       case 'send_notification':
         if (!parameters.notificationMessage && !parameters.notificationTemplate) {
           return { valid: false, error: 'notificationMessage or notificationTemplate is required' };
-        }
+
         break;
 
       case 'import_data':
         if (!parameters.csvData) {
           return { valid: false, error: 'csvData parameter is required for import operation' };
-        }
+
         break;
-      }
+
 
       return { valid: true };
-
-    } catch (error) {
+ catch (error) {
       return { 
         valid: false, 
         error: error instanceof Error ? error.message : 'Validation failed' 
       };
-    }
-  }
+
+
 
   async execute(
     targetId: string,
@@ -255,11 +256,10 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
 
       default:
         throw new Error(`Unsupported operation: ${operation}`);
-      }
+
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: `user_bulk_${operation}_failed`,
         userId: context.executedBy,
@@ -268,13 +268,13 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
         details: {
           error: error instanceof Error ? error.message : String(error),
           operationId: context.operationId
-  }
+
         severity: 'error'
       });
 
       throw error;
-    }
-  }
+
+
 
   async rollback(
     targetId: string,
@@ -291,7 +291,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
             'UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2',
             [result.previousStatus, targetId]
           );
-        }
+
         break;
 
       case 'deactivate':
@@ -302,13 +302,13 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
             'UPDATE users SET status = $1, locked_until = NULL, updated_at = NOW() WHERE id = $2',
             [result.previousStatus, targetId]
           );
-        }
+
         break;
 
       case 'grant_role':
         if (parameters.roleId) {
           await this.rbacService.revokeRole(targetId, parameters.roleId, 'system', 'Rollback operation');
-        }
+
         break;
 
       case 'revoke_role':
@@ -318,16 +318,15 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
             roleId: parameters.roleId,
             grantedBy: 'system'
           });
-        }
+
         break;
 
         // Add more rollback operations as needed
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error(`Rollback failed for user ${targetId}, operation ${operation}:`, error);
-    }
-  }
+
+
 
   // Private helper methods for each operation
 
@@ -350,7 +349,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     );
     
     result.newStatus = 'active';
-  }
+
 
   private async deactivateUser(
     userId: string, 
@@ -371,7 +370,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     );
     
     result.newStatus = 'deactivated';
-  }
+
 
   private async suspendUser(
     userId: string,
@@ -397,7 +396,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     );
     
     result.newStatus = 'suspended';
-  }
+
 
   private async lockUser(
     userId: string,
@@ -423,7 +422,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     );
     
     result.newStatus = 'locked';
-  }
+
 
   private async unlockUser(
     userId: string, 
@@ -444,7 +443,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     );
     
     result.newStatus = 'active';
-  }
+
 
   private async grantRole(
     userId: string,
@@ -465,7 +464,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     });
 
     result.affectedRoles = [parameters.roleId];
-  }
+
 
   private async revokeRole(
     userId: string,
@@ -488,7 +487,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     );
 
     result.affectedRoles = [parameters.roleId];
-  }
+
 
   private async grantRoles(
     userId: string,
@@ -508,10 +507,10 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
         ipAddress: context.ipAddress,
         userAgent: context.userAgent
       });
-    }
+
 
     result.affectedRoles = parameters.roleIds;
-  }
+
 
   private async revokeRoles(
     userId: string,
@@ -533,10 +532,10 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
           userAgent: context.userAgent
         }
       );
-    }
+
 
     result.affectedRoles = parameters.roleIds;
-  }
+
 
   private async resetPassword(
     userId: string,
@@ -557,8 +556,8 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     // Send password reset notification if enabled
     if (parameters.notificationMessage || parameters.forcePasswordReset) {
       await this.sendPasswordResetNotification(userId, tempPassword);
-    }
-  }
+
+
 
   private async expirePassword(
     userId: string,
@@ -575,7 +574,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
       'UPDATE users SET password_expires_at = $1, force_password_change = true, updated_at = NOW() WHERE id = $2',
       [expirationDate, userId]
     );
-  }
+
 
   private async terminateSessions(
     userId: string,
@@ -594,7 +593,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
       'UPDATE user_sessions SET expires_at = NOW(), updated_at = NOW() WHERE user_id = $1',
       [userId]
     );
-  }
+
 
   private async sendNotification(
     userId: string,
@@ -614,12 +613,12 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
         message: parameters.notificationMessage,
         template: parameters.notificationTemplate,
         operationId: context.operationId
-  }
+
       severity: 'info'
     });
 
     result.notificationSent = true;
-  }
+
 
   private async grantPermissions(
     userId: string,
@@ -643,11 +642,11 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
         );
         
         affectedPermissions.push(`${permission.resource}:${action}`);
-      }
-    }
+
+
 
     result.affectedPermissions = affectedPermissions;
-  }
+
 
   private async revokePermissions(
     userId: string,
@@ -671,11 +670,11 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
         );
         
         affectedPermissions.push(`${permission.resource}:${action}`);
-      }
-    }
+
+
 
     result.affectedPermissions = affectedPermissions;
-  }
+
 
   private async updateMetadata(
     userId: string,
@@ -690,7 +689,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
       'UPDATE users SET metadata = COALESCE(metadata, \'{}\'::jsonb) || $1, updated_at = NOW() WHERE id = $2',
       [JSON.stringify(parameters.metadata), userId]
     );
-  }
+
 
   private async exportUserData(
     userId: string,
@@ -712,27 +711,26 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     // and format according to the specified format
     
     result.newStatus = `exported_as_${exportFormat}`;
-  }
+
 
   private generateTempPassword(): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
     let password = '';
     for (let i = 0; i < 12; i++) {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+
     return password;
-  }
+
 
   private async hashPassword(password: string): Promise<string> {
 
     // This would use proper password hashing (bcrypt, etc.)
     // For now, return a mock hash
     return `hashed_${password}`;
-  }
+
 
   private async sendPasswordResetNotification(userId: string, tempPassword: string): Promise<void> {
 
     // This would integrate with email service
     console.log(`Password reset notification sent to user ${userId}`);
-  }
-}
+

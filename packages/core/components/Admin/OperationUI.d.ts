@@ -15,6 +15,7 @@ import React from 'react';
 import { OperationType, OperationExecution } from '../../admin/services/OperationTypesService';
 
 }
+}
 export interface OperationUIProps {
     operationType: OperationType;
     initialParameters?: Record<string, any>;
@@ -27,4 +28,5 @@ export interface OperationUIProps {
 export declare const OperationUI: React.FC<OperationUIProps>;
 export default OperationUI;
 //# sourceMappingURL=OperationUI.d.ts.map
+}
 }

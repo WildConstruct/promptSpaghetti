@@ -10,7 +10,7 @@ defaultExpanded: boolean;
 metadata ?  : {
     keywords: string,
     difficulty: 'beginner' | 'intermediate' | 'advanced',
-    usage: 'common' | 'specialized' | 'experimental'
+    usage: 'common' | 'specialized' | 'experimental',
 };
 export const SPECIAL_CATEGORIES = {
     FAVORITES: 'favorites',
@@ -139,14 +139,7 @@ export const NODE_CATEGORIES = {
                                     usage: 'experimental',
                                 }
                                 // Special categories
-                                [SPECIAL_CATEGORIES.FAVORITES]
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+                                [SPECIAL_CATEGORIES.FAVORITES] } } } } } } }
 }, { id: SPECIAL_CATEGORIES, FAVORITES, name: , 'Favorites': , description: , 'Your most frequently used nodes': , icon: FiStar, color: , '#fbbf24': , // Yellow,
 order: , 0: , collapsible: , false: , defaultExpanded: , true: , metadata: { keywords: [], 'favorites': , 'starred': , 'bookmarks': , difficulty: , 'beginner': , usage: , 'common': , }, [SPECIAL_CATEGORIES.SEARCH_RESULTS]: { id: SPECIAL_CATEGORIES, SEARCH_RESULTS, name: , 'Search Results': , description: , 'Nodes matching your search criteria': , icon: FiSearch, color: , '#6b7280': , // Gray,
 order:  } };
@@ -250,12 +243,11 @@ true,
                         if (!searchTerm)
                             return getAllCategories();
                         return getAllCategories().filter(category => { });
-                        const searchFields = [];
-                        category.name,
+                        const searchFields = [
+                            category.name,
                             category.description,
-                        ;
-                        (category.metadata?.keywords || []);
-                        map(field => field.toLowerCase());
+                            ...(category.metadata?.keywords || [])
+                        ].map(field => field.toLowerCase());
                         return searchFields.some(field => field.includes(searchTerm));
                     }
                     ;
@@ -279,23 +271,23 @@ true,
                      */
                 }
             }
-            export function filterCategories(options) {
-                let categories = getAllCategories();
-                if (options.difficulty) {
+        }
+        export function filterCategories(options) {
+            let categories = getAllCategories();
+            if (options.difficulty) {
+                categories = categories.filter(cat => );
+                cat.metadata?.difficulty === options.difficulty ||
+                    cat.metadata?.difficulty === 'beginner';
+                ;
+                if (options.usage) {
                     categories = categories.filter(cat => );
-                    cat.metadata?.difficulty === options.difficulty ||
-                        cat.metadata?.difficulty === 'beginner';
+                    cat.metadata?.usage === options.usage;
                     ;
-                    if (options.usage) {
+                    if (options.expanded !== undefined) {
                         categories = categories.filter(cat => );
-                        cat.metadata?.usage === options.usage;
+                        cat.defaultExpanded === options.expanded;
                         ;
-                        if (options.expanded !== undefined) {
-                            categories = categories.filter(cat => );
-                            cat.defaultExpanded === options.expanded;
-                            ;
-                            return categories;
-                        }
+                        return categories;
                     }
                 }
             }

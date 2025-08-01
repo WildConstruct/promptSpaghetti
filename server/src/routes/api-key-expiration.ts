@@ -12,11 +12,12 @@ import {
   APIKeyType,
   ExpirationPolicy,
   APIKeyStatus
-} from '../auth/services/APIKeyExpirationService';
+ from '../auth/services/APIKeyExpirationService';
 
 // Request/Response Types
-}
-}
+
+
+
 interface RegisterKeyRequest {
   keyId: string;
   userId: string;
@@ -32,12 +33,13 @@ interface RegisterKeyRequest {
   ipWhitelist?: string[];
   tags?: string[];
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RecordUsageRequest {
   endpoint: string;
   method: string;
@@ -47,30 +49,33 @@ interface RecordUsageRequest {
   responseSize: number;
   ipAddress?: string;
   userAgent?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RenewKeyRequest {
   renewalDuration: number;
   reason: string;
   autoApprove?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RevokeKeyRequest {
   reason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ExpirationReportQuery {
   startDate: string;
   endDate: string;
@@ -78,12 +83,13 @@ interface ExpirationReportQuery {
   environments?: string;
   statuses?: string;
   userIds?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface GetKeysQuery {
   status?: APIKeyStatus;
   keyType?: APIKeyType;
@@ -91,9 +97,10 @@ interface GetKeysQuery {
   expiringWithinDays?: number;
   page?: number;
   limit?: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Register API key expiration routes
@@ -103,7 +110,7 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
 
   if (!expirationService) {
     throw new Error('APIKeyExpirationService not registered with Fastify instance');
-  }
+
 
   // =============================================================================
   // API Key Registration and Management Routes
@@ -119,8 +126,8 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         required: ['keyId'],
         properties: {
           keyId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['userId', 'keyType', 'expirationPolicy', 'environment', 'scopes'],
@@ -138,13 +145,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           ipWhitelist: { type: 'array', items: { type: 'string' } },
           tags: { type: 'array', items: { type: 'string' } },
           metadata: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { keyId: string };
     Body: Omit<RegisterKeyRequest, 'keyId'>;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyId } = request.params;
       const userId = request.user?.id || request.body.userId;
@@ -169,13 +176,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         data: expiration,
         message: 'API key registered for expiration management'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to register API key for expiration'
       };
-    }
+
   });
 
   /**
@@ -188,8 +195,8 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         required: ['keyId'],
         properties: {
           keyId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['endpoint', 'method', 'responseTime', 'statusCode', 'requestSize', 'responseSize'],
@@ -202,13 +209,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           responseSize: { type: 'number', minimum: 0 },
           ipAddress: { type: 'string' },
           userAgent: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { keyId: string };
     Body: RecordUsageRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyId } = request.params;
       
@@ -218,10 +225,10 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
       reply.header('X-API-Key-Status', usageResult.status);
       if (usageResult.remainingUsage !== undefined) {
         reply.header('X-Remaining-Usage', usageResult.remainingUsage.toString());
-      }
+
       if (usageResult.timeToExpiry !== undefined) {
         reply.header('X-Time-To-Expiry', Math.floor(usageResult.timeToExpiry / 1000).toString());
-      }
+
 
       const statusCode = usageResult.usageAllowed ? 200 : 429;
       reply.status(statusCode);
@@ -234,16 +241,16 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           remainingUsage: usageResult.remainingUsage,
           timeToExpiry: usageResult.timeToExpiry,
           warnings: usageResult.warnings
-  }
+
         message: usageResult.usageAllowed ? 'Usage recorded successfully' : 'API key usage limit exceeded'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to record API key usage'
       };
-    }
+
   });
 
   /**
@@ -256,12 +263,12 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         required: ['keyId'],
         properties: {
           keyId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { keyId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyId } = request.params;
       
@@ -273,19 +280,19 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           success: false,
           error: `API key ${keyId} not found`
         };
-      }
+
 
       return {
         success: true,
         data: status
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get API key status'
       };
-    }
+
   });
 
   /**
@@ -298,8 +305,8 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         required: ['keyId'],
         properties: {
           keyId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['renewalDuration', 'reason'],
@@ -307,13 +314,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           renewalDuration: { type: 'number', minimum: 1 },
           reason: { type: 'string', minLength: 1, maxLength: 500 },
           autoApprove: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { keyId: string };
     Body: RenewKeyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyId } = request.params;
       const userId = request.user?.id || 'system';
@@ -334,13 +341,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         data: renewal,
         message: renewal.status === 'approved' ? 'API key renewed successfully' : 'Renewal request submitted for approval'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to renew API key'
       };
-    }
+
   });
 
   /**
@@ -353,20 +360,20 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         required: ['keyId'],
         properties: {
           keyId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['reason'],
         properties: {
           reason: { type: 'string', minLength: 1, maxLength: 500 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { keyId: string };
     Body: RevokeKeyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyId } = request.params;
       const userId = request.user?.id || 'system';
@@ -377,13 +384,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'API key revoked successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to revoke API key'
       };
-    }
+
   });
 
   // =============================================================================
@@ -404,9 +411,9 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           environment: { type: 'string' },
           page: { type: 'number', default: 1 },
           limit: { type: 'number', default: 20, maximum: 100 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       startDate?: string;
@@ -415,8 +422,8 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
       environment?: string;
       page?: number;
       limit?: number;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { startDate, endDate, page = 1, limit = 20 } = request.query;
       
@@ -429,10 +436,10 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
       let filteredKeys = expiringKeys;
       if (request.query.keyType) {
         filteredKeys = filteredKeys.filter(key => key.keyType === request.query.keyType);
-      }
+
       if (request.query.environment) {
         filteredKeys = filteredKeys.filter(key => key.environment === request.query.environment);
-      }
+
 
       // Paginate results
       const startIndex = (page - 1) * limit;
@@ -448,16 +455,16 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
             limit,
             total: filteredKeys.length,
             pages: Math.ceil(filteredKeys.length / limit)
-          }
-        }
+
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get expiring keys'
       };
-    }
+
   });
 
   /**
@@ -475,12 +482,12 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           environments: { type: 'string' }, // comma-separated
           statuses: { type: 'string' }, // comma-separated
           userIds: { type: 'string' } // comma-separated
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: ExpirationReportQuery;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { startDate, endDate, keyTypes, environments, statuses, userIds } = request.query;
       
@@ -492,16 +499,16 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
       const filters: Record<string, unknown> = {};
       if (keyTypes) {
         filters.keyTypes = keyTypes.split(',') as APIKeyType[];
-      }
+
       if (environments) {
         filters.environments = environments.split(',');
-      }
+
       if (statuses) {
         filters.statuses = statuses.split(',') as APIKeyStatus[];
-      }
+
       if (userIds) {
         filters.userIds = userIds.split(',');
-      }
+
 
       const report = await expirationService.generateExpirationReport(timeRange, filters);
 
@@ -509,13 +516,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         success: true,
         data: report
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to generate expiration report'
       };
-    }
+
   });
 
   /**
@@ -530,17 +537,17 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           severity: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
           alertType: { type: 'string' },
           resolved: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       keyId?: string;
       severity?: string;
       alertType?: string;
       resolved?: boolean;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { keyId } = request.query;
       
@@ -549,28 +556,28 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
       // Apply additional filters
       if (request.query.severity) {
         alerts = alerts.filter(alert => alert.severity === request.query.severity);
-      }
+
       if (request.query.alertType) {
         alerts = alerts.filter(alert => alert.alertType === request.query.alertType);
-      }
+
       if (request.query.resolved !== undefined) {
         alerts = alerts.filter(alert => alert.resolved === request.query.resolved);
-      }
+
 
       return {
         success: true,
         data: {
           alerts,
           total: alerts.length
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get expiration alerts'
       };
-    }
+
   });
 
   /**
@@ -583,12 +590,12 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         required: ['alertId'],
         properties: {
           alertId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { alertId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { alertId } = request.params;
       const userId = request.user?.id || 'system';
@@ -599,13 +606,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Alert acknowledged successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to acknowledge alert'
       };
-    }
+
   });
 
   /**
@@ -618,12 +625,12 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         required: ['alertId'],
         properties: {
           alertId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { alertId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { alertId } = request.params;
       const userId = request.user?.id || 'system';
@@ -634,13 +641,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Alert resolved successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to resolve alert'
       };
-    }
+
   });
 
   // =============================================================================
@@ -684,14 +691,14 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           keysExpiringIn30Days: expiringIn30Days.length,
           activeAlerts: activeAlerts.filter(a => !a.resolved).length,
           criticalAlerts: activeAlerts.filter(a => a.severity === 'critical' && !a.resolved).length
-  }
+
         recentlyExpiring: expiringIn7Days.slice(0, 5), // Top 5 most urgent
         alerts: activeAlerts.filter(a => !a.resolved).slice(0, 10), // Top 10 unresolved alerts
         trends: {
           weeklyKeyCreation: weeklyReport.summary.totalKeys - weeklyReport.summary.activeKeys,
           weeklyKeyExpiration: weeklyReport.summary.expiredKeys,
           weeklyKeyRevocation: weeklyReport.summary.revokedKeys
-  }
+
         recommendations: weeklyReport.recommendations.slice(0, 3) // Top 3 recommendations
       };
 
@@ -699,13 +706,13 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         success: true,
         data: dashboard
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to generate dashboard'
       };
-    }
+
   });
 
   /**
@@ -725,7 +732,7 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           alertSystem: true,
           timerSystem: true,
           auditLogging: true
-        }
+
       };
 
       const isHealthy = Object.values(checks.checks).every(check => check);
@@ -736,7 +743,7 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         success: isHealthy,
         data: checks
       };
-    } catch (error) {
+ catch (error) {
       reply.status(503);
       return {
         success: false,
@@ -744,12 +751,12 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         data: {
           serviceStatus: 'unhealthy',
           timestamp: new Date().toISOString()
-        }
+
       };
-    }
+
   });
 
   console.log('🔑 API Key Expiration routes registered successfully');
-}
+
 
 export default apiKeyExpirationRoutes;

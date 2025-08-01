@@ -13,14 +13,14 @@ import {
   ComplianceFramework,
   ComplianceReportType,
   ReportingPeriod 
-} from './StandardComplianceReportingService';
+ from './StandardComplianceReportingService';
 import { GDPRComplianceReportModule } from './frameworks/GDPRComplianceReportModule';
 import { SOXComplianceReportModule } from './frameworks/SOXComplianceReportModule';
 import cron from 'node-cron';
 import { EventEmitter } from 'events';
 
-}
-}
+
+
 export interface ReportSchedule {
   id: string;
   name: string;
@@ -37,12 +37,13 @@ export interface ReportSchedule {
   lastExecution?: ScheduleExecution;
   nextExecution?: Date;
   executionHistory: ScheduleExecution[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScheduleConfiguration {
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually' | 'custom';
   cronExpression?: string;
@@ -56,12 +57,13 @@ export interface ScheduleConfiguration {
   fiscalYearEnd?: Date;
   holidays?: HolidayRule[];
   businessDaysOnly?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportRecipient {
   id: string;
   name: string;
@@ -72,15 +74,16 @@ export interface ReportRecipient {
     securityLevel: 'standard' | 'encrypted' | 'secure_portal';
     language: string;
     customizations?: RecipientCustomization[];
-}
-}
+
+
+
   };
   approvalRequired?: boolean;
   backupContacts?: BackupContact[];
-}
 
-}
-}
+
+
+
 export interface DeliveryOptions {
   methods: DeliveryMethod[];
   encryption: EncryptionOptions;
@@ -90,23 +93,25 @@ export interface DeliveryOptions {
   expirationPolicy?: ExpirationPolicy;
   deliveryConfirmation: boolean;
   retryPolicy: RetryPolicy;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeliveryMethod {
   type: 'email' | 'secure_portal' | 'sftp' | 'api' | 'webhook';
   configuration: DeliveryConfiguration;
   priority: number;
   fallbackMethod?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScheduleExecution {
   id: string;
   scheduleId: string;
@@ -118,12 +123,13 @@ export interface ScheduleExecution {
   executionTimeMs: number;
   errors?: ExecutionError[];
   metadata: ExecutionMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GeneratedReport {
   reportId: string;
   format: string;
@@ -132,12 +138,13 @@ export interface GeneratedReport {
   filePath?: string;
   checksum: string;
   encryptionKey?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeliveryResult {
   recipientId: string;
   method: string;
@@ -147,9 +154,10 @@ export interface DeliveryResult {
   attempts: number;
   errorMessage?: string;
   trackingId?: string;
-}
-}
-}
+
+
+
+
 
 export class ComplianceReportScheduler extends EventEmitter {
   private reportingService: StandardComplianceReportingService;
@@ -171,7 +179,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     this.soxModule = soxModule;
     
     this.startExecutionProcessor();
-  }
+
 
   /**
    * Create a new compliance report schedule
@@ -197,14 +205,14 @@ export class ComplianceReportScheduler extends EventEmitter {
     // Create cron job if active
     if (newSchedule.isActive) {
       await this.activateSchedule(scheduleId);
-    }
+
 
     console.log(`📅 Created compliance report schedule: ${scheduleId} (${schedule.framework} ${schedule.reportType})`);
     
     this.emit('scheduleCreated', { scheduleId, schedule: newSchedule });
     
     return scheduleId;
-  }
+
 
   /**
    * Update existing schedule
@@ -214,7 +222,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     const existingSchedule = this.schedules.get(scheduleId);
     if (!existingSchedule) {
       throw new Error(`Schedule ${scheduleId} not found`);
-    }
+
 
     const updatedSchedule: ReportSchedule = {
       ...existingSchedule,
@@ -232,14 +240,14 @@ export class ComplianceReportScheduler extends EventEmitter {
     if (updatedSchedule.isActive) {
       await this.deactivateSchedule(scheduleId);
       await this.activateSchedule(scheduleId);
-    } else {
+ else {
       await this.deactivateSchedule(scheduleId);
-    }
+
 
     console.log(`📝 Updated compliance report schedule: ${scheduleId}`);
     
     this.emit('scheduleUpdated', { scheduleId, schedule: updatedSchedule });
-  }
+
 
   /**
    * Delete schedule
@@ -249,7 +257,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     const schedule = this.schedules.get(scheduleId);
     if (!schedule) {
       throw new Error(`Schedule ${scheduleId} not found`);
-    }
+
 
     // Deactivate cron job
     await this.deactivateSchedule(scheduleId);
@@ -260,7 +268,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     console.log(`🗑️ Deleted compliance report schedule: ${scheduleId}`);
     
     this.emit('scheduleDeleted', { scheduleId });
-  }
+
 
   /**
    * Execute schedule manually
@@ -270,7 +278,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     const schedule = this.schedules.get(scheduleId);
     if (!schedule) {
       throw new Error(`Schedule ${scheduleId} not found`);
-    }
+
 
     const executionId = crypto.randomUUID();
     const reportingPeriod = overridePeriod || this.calculateReportingPeriod(schedule);
@@ -289,7 +297,7 @@ export class ComplianceReportScheduler extends EventEmitter {
         requestedBy: 'system', // Would be actual user in real implementation
         scheduledTime: new Date(),
         priority: 'high'
-      }
+
     };
 
     // Add to execution queue
@@ -300,7 +308,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     this.emit('executionQueued', { executionId, scheduleId });
     
     return executionId;
-  }
+
 
   /**
    * Get schedule status and next execution
@@ -309,7 +317,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     const schedule = this.schedules.get(scheduleId);
     if (!schedule) {
       throw new Error(`Schedule ${scheduleId} not found`);
-    }
+
 
     const lastExecution = schedule.executionHistory[schedule.executionHistory.length - 1];
     
@@ -323,12 +331,12 @@ export class ComplianceReportScheduler extends EventEmitter {
         duration: lastExecution.executionTimeMs,
         reportsGenerated: lastExecution.generatedReports.length,
         deliverySuccessRate: this.calculateDeliverySuccessRate(lastExecution.deliveryResults)
-      } : undefined,
+ : undefined,
       executionCount: schedule.executionHistory.length,
       successRate: this.calculateSuccessRate(schedule.executionHistory),
       averageExecutionTime: this.calculateAverageExecutionTime(schedule.executionHistory)
     };
-  }
+
 
   /**
    * Get all schedules with optional filtering
@@ -339,20 +347,20 @@ export class ComplianceReportScheduler extends EventEmitter {
     if (filter) {
       if (filter.framework) {
         schedules = schedules.filter(s => s.framework === filter.framework);
-      }
+
       if (filter.reportType) {
         schedules = schedules.filter(s => s.reportType === filter.reportType);
-      }
+
       if (filter.isActive !== undefined) {
         schedules = schedules.filter(s => s.isActive === filter.isActive);
-      }
+
       if (filter.createdBy) {
         schedules = schedules.filter(s => s.createdBy === filter.createdBy);
-      }
-    }
+
+
 
     return schedules.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-  }
+
 
   /**
    * Get execution history for a schedule
@@ -361,12 +369,12 @@ export class ComplianceReportScheduler extends EventEmitter {
     const schedule = this.schedules.get(scheduleId);
     if (!schedule) {
       throw new Error(`Schedule ${scheduleId} not found`);
-    }
+
 
     return schedule.executionHistory
       .sort((a, b) => b.executionDate.getTime() - a.executionDate.getTime())
       .slice(0, limit);
-  }
+
 
   /**
    * Cancel pending execution
@@ -376,7 +384,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     const executionIndex = this.executionQueue.findIndex(e => e.id === executionId);
     if (executionIndex === -1) {
       throw new Error(`Execution ${executionId} not found in queue`);
-    }
+
 
     const execution = this.executionQueue[executionIndex];
     execution.status = 'cancelled';
@@ -385,12 +393,12 @@ export class ComplianceReportScheduler extends EventEmitter {
     // Remove from queue if not started
     if (execution.status === 'scheduled') {
       this.executionQueue.splice(executionIndex, 1);
-    }
+
 
     console.log(`❌ Cancelled execution: ${executionId}`);
     
     this.emit('executionCancelled', { executionId });
-  }
+
 
   // Private methods for schedule management
 
@@ -411,7 +419,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     this.cronJobs.set(scheduleId, job);
     
     console.log(`⏰ Activated schedule: ${scheduleId} with cron: ${cronExpression}`);
-  }
+
 
   private async deactivateSchedule(scheduleId: string): Promise<void> {
 
@@ -420,13 +428,13 @@ export class ComplianceReportScheduler extends EventEmitter {
       job.destroy();
       this.cronJobs.delete(scheduleId);
       console.log(`⏸️ Deactivated schedule: ${scheduleId}`);
-    }
-  }
+
+
 
   private buildCronExpression(config: ScheduleConfiguration): string {
     if (config.cronExpression) {
       return config.cronExpression;
-    }
+
 
     const [hour, minute] = config.executionTime.split(':').map(Number);
 
@@ -448,8 +456,8 @@ export class ComplianceReportScheduler extends EventEmitter {
       return `${minute} ${hour} ${yearDay} ${yearMonth} *`;
     default:
       throw new Error(`Unsupported frequency: ${config.frequency}`);
-    }
-  }
+
+
 
   private calculateNextExecution(config: ScheduleConfiguration): Date {
     const now = new Date();
@@ -476,16 +484,16 @@ export class ComplianceReportScheduler extends EventEmitter {
       case 'annually':
         nextExecution.setFullYear(nextExecution.getFullYear() + 1);
         break;
-      }
-    }
+
+
 
     // Skip holidays if business days only
     if (config.businessDaysOnly) {
       nextExecution = this.skipHolidays(nextExecution, config.holidays || []);
-    }
+
 
     return nextExecution;
-  }
+
 
   private calculateReportingPeriod(schedule: ReportSchedule): ReportingPeriod {
     const now = new Date();
@@ -513,7 +521,7 @@ export class ComplianceReportScheduler extends EventEmitter {
       startDate.setDate(startDate.getDate() - 30);
       endDate = new Date(now);
       break;
-    }
+
 
     return {
       startDate,
@@ -522,7 +530,7 @@ export class ComplianceReportScheduler extends EventEmitter {
         schedule.schedule.frequency === 'quarterly' ? 'quarterly' : 
           schedule.schedule.frequency === 'monthly' ? 'monthly' : 'custom'
     };
-  }
+
 
   private async validateSchedule(schedule: ReportSchedule): Promise<void> {
 
@@ -530,31 +538,31 @@ export class ComplianceReportScheduler extends EventEmitter {
     if (schedule.schedule.cronExpression) {
       if (!cron.validate(schedule.schedule.cronExpression)) {
         throw new Error('Invalid cron expression');
-      }
-    }
+
+
 
     // Validate recipients
     if (schedule.recipients.length === 0) {
       throw new Error('At least one recipient is required');
-    }
+
 
     // Validate delivery methods
     if (schedule.deliveryOptions.methods.length === 0) {
       throw new Error('At least one delivery method is required');
-    }
+
 
     // Validate execution time
     const timePattern = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!timePattern.test(schedule.schedule.executionTime)) {
       throw new Error('Invalid execution time format (use HH:MM)');
-    }
-  }
+
+
 
   private startExecutionProcessor(): void {
     setInterval(async () => {
       if (this.isProcessing || this.executionQueue.length === 0) {
         return;
-      }
+
 
       this.isProcessing = true;
 
@@ -562,14 +570,14 @@ export class ComplianceReportScheduler extends EventEmitter {
         const execution = this.executionQueue.shift();
         if (execution) {
           await this.processExecution(execution);
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error('Error processing execution:', error);
-      } finally {
+ finally {
         this.isProcessing = false;
-      }
+
     }, 5000); // Check every 5 seconds
-  }
+
 
   private async processExecution(execution: ScheduleExecution): Promise<void> {
 
@@ -582,7 +590,7 @@ export class ComplianceReportScheduler extends EventEmitter {
       const schedule = this.schedules.get(execution.scheduleId);
       if (!schedule) {
         throw new Error(`Schedule ${execution.scheduleId} not found`);
-      }
+
 
       // Generate report
       const report = await this.generateReport(schedule, execution.reportingPeriod);
@@ -601,8 +609,7 @@ export class ComplianceReportScheduler extends EventEmitter {
       console.log(`✅ Completed execution: ${execution.id} in ${execution.executionTimeMs}ms`);
 
       this.emit('executionCompleted', { execution });
-
-    } catch (error) {
+ catch (error) {
       execution.status = 'failed';
       execution.executionTimeMs = Date.now() - startTime;
       execution.errors = [{
@@ -610,12 +617,12 @@ export class ComplianceReportScheduler extends EventEmitter {
         message: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date(),
         context: { scheduleId: execution.scheduleId }
-      }];
+];
 
       console.error(`❌ Failed execution: ${execution.id}:`, error);
 
       this.emit('executionFailed', { execution, error });
-    }
+
 
     // Update schedule with execution history
     const schedule = this.schedules.get(execution.scheduleId);
@@ -627,9 +634,9 @@ export class ComplianceReportScheduler extends EventEmitter {
       // Keep only last 100 executions
       if (schedule.executionHistory.length > 100) {
         schedule.executionHistory = schedule.executionHistory.slice(-100);
-      }
-    }
-  }
+
+
+
 
   private async generateReport(schedule: ReportSchedule, period: ReportingPeriod): Promise<unknown> {
 
@@ -644,8 +651,8 @@ export class ComplianceReportScheduler extends EventEmitter {
         schedule.reportType,
         period
       );
-    }
-  }
+
+
 
   private async exportReports(report: unknown, schedule: ReportSchedule): Promise<GeneratedReport[]> {
 
@@ -678,10 +685,10 @@ export class ComplianceReportScheduler extends EventEmitter {
         checksum,
         filePath: `/tmp/reports/${report.id}-${format}`
       });
-    }
+
 
     return generatedReports;
-  }
+
 
   private async deliverReports(reports: GeneratedReport[], schedule: ReportSchedule): Promise<DeliveryResult[]> {
 
@@ -691,11 +698,11 @@ export class ComplianceReportScheduler extends EventEmitter {
       for (const method of schedule.deliveryOptions.methods) {
         const result = await this.deliverToRecipient(reports, recipient, method, schedule);
         deliveryResults.push(result);
-      }
-    }
+
+
 
     return deliveryResults;
-  }
+
 
   private async deliverToRecipient(
     reports: GeneratedReport[],
@@ -730,7 +737,7 @@ export class ComplianceReportScheduler extends EventEmitter {
         break;
       default:
         throw new Error(`Unsupported delivery method: ${method.type}`);
-      }
+
 
       return {
         recipientId: recipient.id,
@@ -740,8 +747,7 @@ export class ComplianceReportScheduler extends EventEmitter {
         attempts: 1,
         trackingId: crypto.randomUUID()
       };
-
-    } catch (error) {
+ catch (error) {
       return {
         recipientId: recipient.id,
         method: method.type,
@@ -749,33 +755,33 @@ export class ComplianceReportScheduler extends EventEmitter {
         attempts: 1,
         errorMessage: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
-  }
+
+
 
   // Helper methods for calculations
   private calculateDeliverySuccessRate(results: DeliveryResult[]): number {
     if (results.length === 0) return 0;
     const successful = results.filter(r => r.status === 'delivered').length;
     return (successful / results.length) * 100;
-  }
+
 
   private calculateSuccessRate(executions: ScheduleExecution[]): number {
     if (executions.length === 0) return 0;
     const successful = executions.filter(e => e.status === 'completed').length;
     return (successful / executions.length) * 100;
-  }
+
 
   private calculateAverageExecutionTime(executions: ScheduleExecution[]): number {
     const completed = executions.filter(e => e.status === 'completed');
     if (completed.length === 0) return 0;
     return completed.reduce((sum, e) => sum + e.executionTimeMs, 0) / completed.length;
-  }
+
 
   private getQuarterMonths(fiscalYearEnd?: Date): number[] {
     // Default to calendar year quarters if no fiscal year specified
     if (!fiscalYearEnd) {
       return [1, 4, 7, 10]; // Jan, Apr, Jul, Oct
-    }
+
     
     const endMonth = fiscalYearEnd.getMonth() + 1;
     return [
@@ -784,13 +790,13 @@ export class ComplianceReportScheduler extends EventEmitter {
       ((endMonth + 3) % 12) || 12,  // Q3 start
       endMonth                       // Q4 start (fiscal year end)
     ].sort();
-  }
+
 
   private skipHolidays(date: Date, _____holidays: HolidayRule[]): Date {
     // Implementation would check against holiday rules and skip to next business day
     // For now, just return the date
     return date;
-  }
+
 
   // Delivery method implementations (placeholder)
   private async deliverViaEmail(
@@ -800,7 +806,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   ): Promise<void> {
 
     console.log(`📧 Delivering reports via email to ${recipient.email}`);
-  }
+
 
   private async deliverViaSecurePortal(
     reports: GeneratedReport[],
@@ -809,7 +815,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   ): Promise<void> {
 
     console.log(`🔒 Delivering reports via secure portal to ${recipient.name}`);
-  }
+
 
   private async deliverViaSFTP(
     reports: GeneratedReport[],
@@ -818,7 +824,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   ): Promise<void> {
 
     console.log(`📁 Delivering reports via SFTP to ${recipient.name}`);
-  }
+
 
   private async deliverViaAPI(
     reports: GeneratedReport[],
@@ -827,7 +833,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   ): Promise<void> {
 
     console.log(`🔌 Delivering reports via API to ${recipient.name}`);
-  }
+
 
   private async deliverViaWebhook(
     reports: GeneratedReport[],
@@ -836,135 +842,148 @@ export class ComplianceReportScheduler extends EventEmitter {
   ): Promise<void> {
 
     console.log(`🪝 Delivering reports via webhook to ${recipient.name}`);
-  }
-}
+
+
 
 // Supporting interfaces and types
-}
-}
+
+
+
 interface ScheduleRetentionPolicy {
   keepExecutionHistory: number; // days
   archiveReports: boolean;
   archiveAfterDays: number;
   deleteAfterDays: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface HolidayRule {
   name: string;
   date: Date;
   recurring: boolean;
   skipIfWeekend: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RecipientCustomization {
   section: string;
   include: boolean;
   format?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface BackupContact {
   name: string;
   email: string;
   role: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface EncryptionOptions {
   enabled: boolean;
   algorithm?: string;
   keySize?: number;
   certificatePath?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface WatermarkOptions {
   text: string;
   position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
   opacity: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface AccessRestriction {
   type: 'ip_whitelist' | 'user_authentication' | 'time_limited' | 'download_limit';
   configuration: unknown;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ExpirationPolicy {
   expiresAfterDays: number;
   warningDays: number;
   autoDelete: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RetryPolicy {
   maxAttempts: number;
   retryIntervalMs: number;
   backoffMultiplier: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface DeliveryConfiguration {
   [key: string]: unknown;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ExecutionError {
   type: string;
   message: string;
   timestamp: Date;
   context: unknown;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ExecutionMetadata {
   triggeredBy: 'schedule' | 'manual' | 'api';
   requestedBy: string;
   scheduledTime: Date;
   priority: 'low' | 'medium' | 'high';
   cancelledAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ScheduleStatus {
   scheduleId: string;
   isActive: boolean;
@@ -975,21 +994,22 @@ interface ScheduleStatus {
     duration: number;
     reportsGenerated: number;
     deliverySuccessRate: number;
-}
-}
+
+
+
   };
   executionCount: number;
   successRate: number;
   averageExecutionTime: number;
-}
 
-}
-}
+
+
+
 interface ScheduleFilter {
   framework?: ComplianceFramework;
   reportType?: ComplianceReportType;
   isActive?: boolean;
   createdBy?: string;
-}
-}
-}
+
+
+

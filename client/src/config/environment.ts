@@ -1,17 +1,18 @@
 // Environment configuration for the client application
 
-}
+
 interface EnvironmentConfig {
   API_URL: string;,
-  PYTHON_EXECUTOR_URL: string;
+  PYTHON_EXECUTOR_URL: string;,
   WEBSOCKET_URL: string;,
-  ANALYTICS_ENABLED: boolean;
+  ANALYTICS_ENABLED: boolean;,
   DEBUG_MODE: boolean;,
   FEATURE_FLAGS_ENABLED: boolean;
   // Helper function to get environment variable with fallback
   const getEnvVar = (key: string, fallback: string = ''): string => {,
   return import.meta.env[key] || fallback;
-}
+
+
 };
 
 // Helper function to get boolean environment variable

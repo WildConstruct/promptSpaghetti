@@ -7,19 +7,21 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore, authenticatedFetch } from '../../stores/authStore';
 import { OAuthProviderButtons } from './OAuthProviderButtons';
-}
+
+
 interface LinkedAccount {
   provider: 'google' | 'github' | 'microsoft';,
-  providerId: string;
+  providerId: string;,
   email: string;,
-  displayName: string;
+  displayName: string;,
   linkedAt: string;
   lastUsed?: string;
   interface OAuthAccountManagerProps {
   className?: string;
-  export const OAuthAccountManager: React.FC<OAuthAccountManagerProps> = ({,)
+  export const OAuthAccountManager: React.FC<OAuthAccountManagerProps> = ({),
   className = ''
-}
+
+
 }) => {
   const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,10 +42,10 @@ interface LinkedAccount {
         throw new Error(errorData.message || 'Failed to load linked accounts');
       const data = await response.json();
       setLinkedAccounts(data.linkedAccounts || []);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load linked accounts:', error);
   setError(error instanceof Error ? error.message : 'Failed to load linked accounts');
-} finally {
+ finally {
       setIsLoading(false);
   };
   const handleUnlinkAccount = async (provider: string) => {
@@ -61,10 +63,10 @@ interface LinkedAccount {
         throw new Error(errorData.message || 'Failed to unlink account');
       // Reload linked accounts after successful unlink
       await loadLinkedAccounts();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to unlink account:', error);
   setError(error instanceof Error ? error.message : 'Failed to unlink account');
-} finally {
+ finally {
       setUnlinkingProvider(null);
   };
   const handleLinkSuccess = () => {
@@ -109,18 +111,18 @@ interface LinkedAccount {
       </div>
     );
   return;
-    <div className={`oauth-account-manager ${className}`} style={{},}
+    <div className={`oauth-account-manager ${className}`} style={{},},
   backgroundColor: 'white',
       border: '1px solid #e0e0e0',
       borderRadius: '8px',
       padding: '20px';
-  }}>
+}>
       <h3 style={{
   fontSize: '18px',
   fontWeight: 'bold',
   marginBottom: '16px',
   color: '#333',
-}}>
+}>
         Connected Accounts
       </h3>
       <p style={{
@@ -128,7 +130,7 @@ interface LinkedAccount {
   color: '#666',
   marginBottom: '20px',
   lineHeight: '1.4',
-}}>
+}>
         Link your social accounts to sign in with one click. You can unlink accounts at any time.
       </p>
       {error && ()
@@ -140,7 +142,7 @@ interface LinkedAccount {
   borderRadius: '4px',
   marginBottom: '20px',
   fontSize: '14px',
-}}>
+}>
           {error}
         </div>
       )}
@@ -149,7 +151,7 @@ interface LinkedAccount {
   textAlign: 'center',
   padding: '20px',
   color: '#666',
-}}>
+}>
           Loading connected accounts...
         </div>
       ) : ()
@@ -162,7 +164,7 @@ interface LinkedAccount {
   fontWeight: '600',
   marginBottom: '12px',
   color: '#333',
-}}>
+}>
                 Linked Accounts ({linkedAccounts.length})
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -177,7 +179,7 @@ interface LinkedAccount {
   border: '1px solid #e0e0e0',
   borderRadius: '6px',
   backgroundColor: '#f9f9f9',
-}}
+}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <div style={{
@@ -191,7 +193,7 @@ interface LinkedAccount {
   color: 'white',
   fontSize: '14px',
   fontWeight: 'bold',
-}}>
+}>
                         {getProviderIcon(account.provider)}
                       </div>
                       <div>
@@ -199,19 +201,19 @@ interface LinkedAccount {
   fontSize: '14px',
   fontWeight: '600',
   color: '#333',
-}}>
+}>
                           {getProviderDisplayName(account.provider)}
                         </div>
                         <div style={{
   fontSize: '12px',
   color: '#666',
-}}>
+}>
                           {account.email || account.displayName}
                         </div>
                         <div style={{
   fontSize: '11px',
   color: '#888',
-}}>
+}>
                           Linked {new Date(account.linkedAt).toLocaleDateString()}
                         </div>
                       </div>
@@ -228,7 +230,7 @@ interface LinkedAccount {
   fontSize: '12px',
   cursor: unlinkingProvider === account.provider ? 'not-allowed' : 'pointer',
   opacity: unlinkingProvider === account.provider ? 0.6 : 1,
-}}
+
                     >
                       {unlinkingProvider === account.provider ? 'Unlinking...' : 'Unlink'}
                     </button>
@@ -245,7 +247,7 @@ interface LinkedAccount {
   fontWeight: '600',
   marginBottom: '12px',
   color: '#333',
-}}>
+}>
                 Link Additional Accounts
               </h4>
               <div style={{ maxWidth: '300px' }}>
@@ -262,7 +264,7 @@ interface LinkedAccount {
   textAlign: 'center',
   padding: '40px',
   color: '#666',
-}}>
+}>
               <p>No OAuth providers are available for linking.</p>
             </div>
           )}

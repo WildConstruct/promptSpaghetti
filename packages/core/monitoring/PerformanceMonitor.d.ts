@@ -8,8 +8,8 @@ import { EventEmitter } from 'events';
 import { AdvancedExecutionContext } from '../runtime/advanced';
 
 }
-export interface PerformanceMetrics {
-    nodeId: string;
+}
+export interface PerformanceMetrics { nodeId: string;
     nodeType: string;
     executionId: string;
     startTime: number;
@@ -19,23 +19,21 @@ export interface PerformanceMetrics {
         before: number;
         after: number;
         peak: number;
-        delta: number;
+        delta: number }
 }
     };
-    contextSize: {
-        variableCount: number;
+    contextSize: { variableCount: number;
         stateCount: number;
         cacheSize: number;
-        evaluationDepth: number;
-    };
+        evaluationDepth: number };
     cacheHit: boolean;
     errors: string[];
     warnings: string[];
     customMetrics: Map<string, number | string | boolean>;
 
 }
-export interface AggregatedMetrics {
-    nodeType: string;
+}
+export interface AggregatedMetrics { nodeType: string;
     totalExecutions: number;
     successfulExecutions: number;
     failedExecutions: number;
@@ -51,11 +49,10 @@ export interface AggregatedMetrics {
     cacheHitRate: number;
     performanceTrend: 'improving' | 'stable' | 'degrading';
     lastUpdated: number;
-    optimizationRecommendations: string[];
-
+    optimizationRecommendations: string[] }
 }
-export interface PerformanceAlert {
-    id: string;
+}
+export interface PerformanceAlert { id: string;
     timestamp: number;
     severity: 'low' | 'medium' | 'high' | 'critical';
     type: 'duration' | 'memory' | 'error_rate' | 'context_size' | 'custom';
@@ -63,11 +60,10 @@ export interface PerformanceAlert {
     nodeId?: string;
     message: string;
     details: Record<string, any>;
-    resolved: boolean;
-
+    resolved: boolean }
 }
-export interface PerformanceMonitorConfig {
-    enableMemoryTracking: boolean;
+}
+export interface PerformanceMonitorConfig { enableMemoryTracking: boolean;
     enableContextTracking: boolean;
     enableAggregation: boolean;
     enableAlerting: boolean;
@@ -100,9 +96,9 @@ export declare class PerformanceMonitor extends EventEmitter {
      * End monitoring a node execution
      */
     endExecution();
-      trackingId: string,
-      context: AdvancedExecutionContext,
-      result?: any,
+      trackingId: string;
+      context: AdvancedExecutionContext;
+      result?: any }
       error?: Error
     ): PerformanceMetrics | null;
     /**
@@ -124,8 +120,7 @@ export declare class PerformanceMonitor extends EventEmitter {
     /**
      * Get performance statistics summary
      */
-    getStatisticsSummary(): {
-        totalExecutions: number;
+    getStatisticsSummary(): { totalExecutions: number;
         activeExecutions: number;
         averageExecutionTime: number;
         slowExecutions: number;
@@ -133,7 +128,7 @@ export declare class PerformanceMonitor extends EventEmitter {
         memoryPressure: number;
         activeAlerts: number;
         topPerformingTypes: string[];
-        underperformingTypes: string[];
+        underperformingTypes: string[] }
 }
     };
     /**

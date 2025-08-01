@@ -781,7 +781,7 @@ export class FacetedSearchSystem extends EventEmitter {
                                                             return {
                                                                 value: score,
                                                                 description: 'Document score based on text match and field boosts',
-                                                                details: [,
+                                                                details: [
                                                                     {
                                                                         field: 'text_match',
                                                                         weight: 1.0,
@@ -793,7 +793,8 @@ export class FacetedSearchSystem extends EventEmitter {
                                                                         weight: 1.0,
                                                                         contribution: score * 0.2,
                                                                         explanation: 'Field boost contribution'
-                                                                    }]
+                                                                    }
+                                                                ]
                                                             };
                                                         },
                                                         compareByField(a, b, sort) {
@@ -1169,72 +1170,79 @@ export class FacetedSearchSystem extends EventEmitter {
                                                             ;
                                                             // Search Analytics
                                                             class SearchAnalytics {
-                                                                searches = [];
-                                                                recordSearch(query, result, cached) {
-                                                                    this.searches.push({});
-                                                                    query,
-                                                                        result,
-                                                                        timestamp;
-                                                                    new Date(),
-                                                                        cached;
+                                                                searches;
+                                                                SearchQuery;
+                                                                result;
+                                                                timestamp;
+                                                                cached;
+                                                            }
+                                                             > ;
+                                                            [];
+                                                            recordSearch(query, SearchQuery, result, (SearchResult), cached, boolean);
+                                                            void {
+                                                                this: .searches.push({}),
+                                                                query,
+                                                                result,
+                                                                timestamp: new Date(),
+                                                                cached
+                                                            };
+                                                            ;
+                                                            // Keep only recent searches
+                                                            if (this.searches.length > 10000) {
+                                                                this.searches.shift();
+                                                                getAnalytics(indexName ?  : string);
+                                                                any;
+                                                                {
+                                                                    const relevantSearches = indexName;
+                                                                    this.searches.filter(s => s.query.text.includes(indexName));
+                                                                    this.searches;
+                                                                    if (relevantSearches.length === 0) {
+                                                                        return {
+                                                                            totalSearches: 0,
+                                                                            averageResponseTime: 0,
+                                                                            popularQueries: [],
+                                                                            popularFacets: [],
+                                                                            cacheHitRate: 0,
+                                                                            errorRate: 0,
+                                                                        };
+                                                                        const totalSearches = relevantSearches.length;
+                                                                        const averageResponseTime = relevantSearches.reduce((sum, s) => sum + s.result.metadata.took, 0) / totalSearches;
+                                                                        const cacheHits = relevantSearches.filter(s => s.cached).length;
+                                                                        const cacheHitRate = (cacheHits / totalSearches) * 100;
+                                                                        // Popular queries
+                                                                        const queryCount = new Map();
+                                                                        relevantSearches.forEach(search => { });
+                                                                        const query = search.query.text;
+                                                                        queryCount.set(query, (queryCount.get(query) || 0) + 1);
+                                                                    }
+                                                                    ;
+                                                                    const popularQueries = Array.from(queryCount.entries());
                                                                 }
-                                                                ;
                                                             }
                                                         }
                                                     }
-                                                }, : .searches.length > 10000
-                                            };
-                                            {
-                                                this.searches.shift();
-                                                getAnalytics(indexName ?  : string);
-                                                any;
-                                                {
-                                                    const relevantSearches = indexName;
-                                                    this.searches.filter(s => s.query.text.includes(indexName));
-                                                    this.searches;
-                                                    if (relevantSearches.length === 0) {
-                                                        return {
-                                                            totalSearches: 0,
-                                                            averageResponseTime: 0,
-                                                            popularQueries: [],
-                                                            popularFacets: [],
-                                                            cacheHitRate: 0,
-                                                            errorRate: 0,
-                                                        };
-                                                        const totalSearches = relevantSearches.length;
-                                                        const averageResponseTime = relevantSearches.reduce((sum, s) => sum + s.result.metadata.took, 0) / totalSearches;
-                                                        const cacheHits = relevantSearches.filter(s => s.cached).length;
-                                                        const cacheHitRate = (cacheHits / totalSearches) * 100;
-                                                        // Popular queries
-                                                        const queryCount = new Map();
-                                                        relevantSearches.forEach(search => { });
-                                                        const query = search.query.text;
-                                                        queryCount.set(query, (queryCount.get(query) || 0) + 1);
-                                                    }
-                                                    ;
-                                                    const popularQueries = Array.from(queryCount.entries());
+                                                },
+                                                : 
+                                                    .map(([query, count]) => ({ query, count }))
+                                                    .sort((a, b) => b.count - a.count)
+                                                    .slice(0, 10),
+                                                return: {
+                                                    totalSearches,
+                                                    averageResponseTime,
+                                                    popularQueries,
+                                                    popularFacets: [],
+                                                    cacheHitRate,
+                                                    errorRate: 0,
+                                                },
+                                                export: , default: {
+                                                    FacetedSearchSystem
                                                 }
-                                            }
+                                            };
                                         }
                                     }
                                 }
                             }
                         }
-                    },
-                    : 
-                        .map(([query, count]) => ({ query, count }))
-                        .sort((a, b) => b.count - a.count)
-                        .slice(0, 10),
-                    return: {
-                        totalSearches,
-                        averageResponseTime,
-                        popularQueries,
-                        popularFacets: [],
-                        cacheHitRate,
-                        errorRate: 0,
-                    },
-                    export: , default: {
-                        FacetedSearchSystem
                     }
                 };
             }

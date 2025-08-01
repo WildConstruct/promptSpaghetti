@@ -30,14 +30,14 @@ function createTicketViaScript(title: string, description: string, priority: str
     if (match) {
       console.log(`✓ Created: ${match[1]}`);
       return match[1];
-    }
+
     
     return null;
-  } catch (error) {
+ catch (error) {
     console.error(`✗ Failed to create ticket: ${error.message}`);
     return null;
-  }
-}
+
+
 
 // Authentication Frontend Integration Epic Tasks Summary
 const taskSummary = {
@@ -197,7 +197,7 @@ Epic Context:
 This task contributes to enabling users to register, login, and access personalized features while maintaining full compatibility with the existing graph editor functionality. The epic spans React Router setup, authentication state management, and email verification flow.
 
 Please refer to docs/epics/epic-authentication-frontend-integration.md for detailed implementation requirements.`;
-}
+
 
 console.log('=== Creating Authentication Frontend Integration Epic Tasks ===\n');
 
@@ -217,14 +217,14 @@ for (const [storyName, tasks] of Object.entries(taskSummary)) {
     
     if (ticketId) {
       successCount++;
-    } else {
+ else {
       failureCount++;
-    }
+
     
     // Small delay to avoid overwhelming the system
     execSync('sleep 0.1');
-  }
-}
+
+
 
 console.log('\n=== Task Creation Complete ===');
 console.log(`Total tasks: ${totalTasks}`);
@@ -239,4 +239,3 @@ if (successCount > 0) {
   console.log('- Story 3: SMTP Configuration and Email Verification Flow (30 tasks)');
   console.log('\nAll tasks are now available in the ticket system with UNASSIGNED status.');
   console.log('Developers can grab tasks using the task management system.');
-}

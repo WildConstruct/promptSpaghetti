@@ -10,8 +10,8 @@ import { HelpContent } from '../ContextualHelp/ContextualHelpSystem';
 import './HelpIntegrationWidget.css';
 
 }
-export interface HelpIntegrationProps {
-    currentSystem: 'graph-editor' | 'marketplace';
+}
+export interface HelpIntegrationProps { currentSystem: 'graph-editor' | 'marketplace';
     currentView: string;
     templateId?: string;
     userId: string;
@@ -22,11 +22,10 @@ export interface HelpIntegrationProps {
     theme?: 'light' | 'dark' | 'auto';
     position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'floating';
     minimized?: boolean;
-    hidden?: boolean;
-
+    hidden?: boolean }
 }
-export interface HelpSession {
-    id: string;
+}
+export interface HelpSession { id: string;
     sessionType: string;
     currentStep: number;
     totalSteps: number;
@@ -35,11 +34,12 @@ export interface HelpSession {
     userProgress: {
         completedActions: string[];
         skippedContent: string[];
-        ratings: Record<string, number>;
+        ratings: Record<string, number> }
 }
     };
     escalationLevel: number;
 
+}
 }
 export interface TransitionContext {
     fromSystem: 'graph-editor' | 'marketplace';
@@ -51,4 +51,5 @@ export interface TransitionContext {
 export declare const HelpIntegrationWidget: React.FC<HelpIntegrationProps>;
 export default HelpIntegrationWidget;
 //# sourceMappingURL=HelpIntegrationWidget.d.ts.map
+}
 }

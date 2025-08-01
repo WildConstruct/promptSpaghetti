@@ -15,25 +15,23 @@ import { SecurityAnomaly, AnomalySeverity } from './SecurityAnomalyDetector';
 // TYPES AND INTERFACES
 // ==========================================
 
-}
-export interface ThreatForecast {
-  forecastId: string;
+
+export interface ThreatForecast { forecastId: string;
   timestamp: Date;
   forecastType: ForecastType;
   threatType: ThreatType;
-  timeHorizon: number; // minutes,
+  timeHorizon: number; // minutes;
   confidence: number;
-  predictedIntensity: number; // 0-100,
-  predictedProbability: number; // 0-1,
+  predictedIntensity: number; // 0-100;
+  predictedProbability: number; // 0-1 }
   seasonalFactors: SeasonalFactor;
   trendComponents: TrendComponent;
   riskMetrics: ForecastRiskMetrics;
   recommendations: ForecastRecommendation;
   modelMetadata: ForecastModelMetadata;
-}
-}
-export enum ForecastType {
-  SHORT_TERM = 'short_term', // 0-4 hours
+
+
+export enum ForecastType { SHORT_TERM = 'short_term', // 0-4 hours
   MEDIUM_TERM = 'medium_term', // 4-24 hours
   LONG_TERM = 'long_term', // 1-7 days
   SEASONAL = 'seasonal', // Weekly/monthly patterns
@@ -45,11 +43,9 @@ export enum ForecastType {
   phase: number;
   strength: number;
   nextPeak: Date;
-  historicalPattern: number;
-}
-}
-export enum SeasonalPeriod {
-  HOURLY = 'hourly',
+  historicalPattern: number }
+
+export enum SeasonalPeriod { HOURLY = 'hourly',
   DAILY = 'daily',
   WEEKLY = 'weekly',
   MONTHLY = 'monthly',
@@ -59,13 +55,12 @@ export enum SeasonalPeriod {
   direction: 'increasing' | 'decreasing' | 'stable';
   magnitude: number;
   acceleration: number;
-  durability: number; // How long trend is expected to continue,
+  durability: number; // How long trend is expected to continue }
   confidence: number;
   changePoints: ChangePoint;
-}
-}
-export enum TrendType {
-  LINEAR = 'linear',
+
+
+export enum TrendType { LINEAR = 'linear',
   EXPONENTIAL = 'exponential',
   LOGARITHMIC = 'logarithmic',
   POLYNOMIAL = 'polynomial',
@@ -74,60 +69,54 @@ export enum TrendType {
   export interface ChangePoint {
   timestamp: Date;
   magnitude: number;
-  type: 'level_shift' | 'trend_change' | 'variance_change';
+  type: 'level_shift' | 'trend_change' | 'variance_change' }
   confidence: number;
-}
-}
-}
-export interface ForecastRiskMetrics {
-  expectedValue: number;
-  valueAtRisk: number; // 95th percentile,
-  conditionalValueAtRisk: number; // Expected value beyond VaR,
+
+
+
+
+export interface ForecastRiskMetrics { expectedValue: number;
+  valueAtRisk: number; // 95th percentile;
+  conditionalValueAtRisk: number; // Expected value beyond VaR }
   volatilityIndex: number;
   uncertaintyRange: [number, number];
   scenarioRisks: ScenarioRisk;
-}
-}
-}
-export interface ScenarioRisk {
-  scenario: string;
+
+
+
+
+export interface ScenarioRisk { scenario: string;
   probability: number;
   impact: number;
-  description: string;
-}
-}
-}
-export interface ForecastRecommendation {
-  type: RecommendationType;
+  description: string }
+
+
+
+export interface ForecastRecommendation { type: RecommendationType;
   priority: 'immediate' | 'high' | 'medium' | 'low';
   description: string;
   expectedBenefit: number;
   implementationCost: number;
   timeframe: string;
-  dependencies: string;
-}
-}
-export enum RecommendationType {
-  PROACTIVE_DEFENSE = 'proactive_defense',
+  dependencies: string }
+
+export enum RecommendationType { PROACTIVE_DEFENSE = 'proactive_defense',
   RESOURCE_SCALING = 'resource_scaling',
   ALERT_TUNING = 'alert_tuning',
   POLICY_ADJUSTMENT = 'policy_adjustment',
   MONITORING_ENHANCEMENT = 'monitoring_enhancement',
-  TRAINING_RECOMMENDATION = 'training_recommendation',
+  TRAINING_RECOMMENDATION = 'training_recommendation' }
   INFRASTRUCTURE_CHANGE = 'infrastructure_change'
-  export interface ForecastModelMetadata {
-  modelName: string;
+  export interface ForecastModelMetadata { modelName: string;
   modelVersion: string;
   algorithm: ForecastAlgorithm;
   trainingPeriod: [Date, Date];
   accuracy: ModelAccuracyMetrics;
   features: string;
   hyperparameters: Record<string, unknown>;
-  lastUpdated: Date;
-}
-}
-export enum ForecastAlgorithm {
-  ARIMA = 'arima',
+  lastUpdated: Date }
+
+export enum ForecastAlgorithm { ARIMA = 'arima',
   LSTM = 'lstm',
   PROPHET = 'prophet',
   SEASONAL_NAIVE = 'seasonal_naive',
@@ -136,23 +125,22 @@ export enum ForecastAlgorithm {
   GRADIENT_BOOSTING = 'gradient_boosting',
   ENSEMBLE = 'ensemble'
   export interface ModelAccuracyMetrics {
-  mape: number; // Mean Absolute Percentage Error,
-  rmse: number; // Root Mean Square Error,
-  mae: number; // Mean Absolute Error,
-  r2Score: number; // R-squared,
-  directionalAccuracy: number; // Percentage of correct trend predictions,
-}
-}
-}
-export interface TimeSeriesData {
-  timestamp: Date;
+  mape: number; // Mean Absolute Percentage Error;
+  rmse: number; // Root Mean Square Error;
+  mae: number; // Mean Absolute Error;
+  r2Score: number; // R-squared;
+  directionalAccuracy: number; // Percentage of correct trend predictions }
+
+
+
+
+export interface TimeSeriesData { timestamp: Date;
   value: number;
-  metadata: Record<string, unknown>;
-}
-}
-}
-export interface ForecastingConfig {
-  enableRealTimeForecasting: boolean;
+  metadata: Record<string, unknown> }
+
+
+
+export interface ForecastingConfig { enableRealTimeForecasting: boolean;
   forecastUpdateInterval: number;
   defaultTimeHorizon: number;
   confidenceThreshold: number;
@@ -160,12 +148,11 @@ export interface ForecastingConfig {
   enableTrendAnalysis: boolean;
   enableEnsembleModels: boolean;
   maxHistoryDays: number;
-  minDataPointsForForecast: number;
-}
-}
-}
-export interface ThreatScenario {
-  scenarioId: string;
+  minDataPointsForForecast: number }
+
+
+
+export interface ThreatScenario { scenarioId: string;
   name: string;
   description: string;
   threatTypes: ThreatType;
@@ -173,17 +160,17 @@ export interface ThreatScenario {
   expectedDuration: number;
   expectedIntensity: number;
   likelihood: number;
-  impactAssessment: ScenarioImpact;
-}
-}
-}
-export interface ScenarioTrigger {
-  triggerType: 'metric_threshold' | 'anomaly_count' | 'time_based' | 'external_event';
+  impactAssessment: ScenarioImpact }
+
+
+
+export interface ScenarioTrigger { triggerType: 'metric_threshold' | 'anomaly_count' | 'time_based' | 'external_event' }
   condition: string;
   weight: number;
-}
-}
-}
+
+
+
+
 export interface ScenarioImpact {
   businessImpact: number;
   technicalImpact: number;
@@ -193,8 +180,8 @@ export interface ScenarioImpact {
   // ==========================================
   // MAIN FORECASTING ENGINE
   // ==========================================
-}
-}
+
+
 export class SecurityThreatForecasting extends EventEmitter {
   private config: ForecastingConfig;
   private timeSeriesData: Map<string, TimeSeriesData> = new Map();
@@ -204,71 +191,65 @@ export class SecurityThreatForecasting extends EventEmitter {
   private seasonalDecompositions: Map<string, SeasonalDecomposition> = new Map();
   private isForecasting = false;
   private forecastingInterval?: NodeJS.Timeout;
-  constructor(config: Partial<ForecastingConfig> = {}) {
-  super();
+  constructor(config: Partial<ForecastingConfig> = {}) { super();
   this.config = {
-  enableRealTimeForecasting: true,
-  forecastUpdateInterval: 1800000, // 30 minutes,
-  defaultTimeHorizon: 240, // 4 hours,
-  confidenceThreshold: 0.7,
-  enableSeasonalDecomposition: true,
-  enableTrendAnalysis: true,
-  enableEnsembleModels: true,
-  maxHistoryDays: 90,
-  minDataPointsForForecast: 100,
+  enableRealTimeForecasting: true
+  forecastUpdateInterval: 1800000, // 30 minutes
+  defaultTimeHorizon: 240, // 4 hours
+  confidenceThreshold: 0.7
+  enableSeasonalDecomposition: true
+  enableTrendAnalysis: true
+  enableEnsembleModels: true
+  maxHistoryDays: 90
+  minDataPointsForForecast: 100 }
   ...config
 };
     this.initializeForecastingModels();
     this.initializeThreatScenarios();
-    if (this.config.enableRealTimeForecasting) {
-  this.startRealTimeForecasting();
+    if (this.config.enableRealTimeForecasting) { this.startRealTimeForecasting();
   // ==========================================
   // DATA INGESTION
   // ==========================================
   /**
   * Process security event for time series analysis
   */
-  public async processSecurityEvent(event: SecurityEvent): Promise<void> {,
+  public async processSecurityEvent(event: SecurityEvent): Promise<void> {
   try {
   // Convert event to time series data point
-  const dataPoint: TimeSeriesData = {,
-  timestamp: event.timestamp,
-  value: event.riskScore,
+  const dataPoint: TimeSeriesData = {
+  timestamp: event.timestamp
+  value: event.riskScore
   metadata: {
-  eventType: event.eventType,
-  severity: event.severity,
-  userId: event.userId,
-  sourceIP: event.sourceIP,
+  eventType: event.eventType
+  severity: event.severity
+  userId: event.userId
+  sourceIP: event.sourceIP }
 };
       // Store in appropriate time series
       this.addToTimeSeries(`threat_${event.eventType}`, dataPoint);}
       this.addToTimeSeries('overall_threat_level', dataPoint);
       // Trigger forecast update if conditions met
-      if (this.shouldUpdateForecast(event)) {
-        await this.updateForecasts(event.eventType);
-      this.emit('eventProcessed', event);
-    } catch (error) {
+      if (this.shouldUpdateForecast(event)) { await this.updateForecasts(event.eventType);
+      this.emit('eventProcessed', event) } catch (error) {
       console.error('Error processing security event for forecasting:', error);
       this.emit('error', { error, event });
   /**
    * Process security anomaly for trend analysis
    */
-  public async processSecurityAnomaly(anomaly: SecurityAnomaly): Promise<void> {
-
-  try {
-  const dataPoint: TimeSeriesData = {,
-  timestamp: anomaly.timestamp,
-  value: this.mapSeverityToValue(anomaly.severity),
+  public async processSecurityAnomaly(anomaly: SecurityAnomaly): Promise<void> { try {
+  const dataPoint: TimeSeriesData = {
+  timestamp: anomaly.timestamp
+  value: this.mapSeverityToValue(anomaly.severity)
   metadata: {
-  anomalyType: anomaly.anomalyType,
-  confidence: anomaly.confidence,
-  affectedSystems: anomaly.affectedSystems,
+  anomalyType: anomaly.anomalyType
+  confidence: anomaly.confidence
+  affectedSystems: anomaly.affectedSystems }
 };
       this.addToTimeSeries('anomaly_intensity', dataPoint);
       // Update forecasts for anomaly-related threat types
       await this.updateAnomalyBasedForecasts(anomaly);
       this.emit('anomalyProcessed', anomaly);
-    } catch (error) {
+ catch (error) {
       console.error('Error processing security anomaly for forecasting:', error);
       this.emit('error', { error, anomaly });
   // ==========================================
@@ -278,7 +259,7 @@ export class SecurityThreatForecasting extends EventEmitter {
    * Generate comprehensive threat forecast
    */
   public async generateThreatForecast(((
-    threatType: ThreatType,
+    threatType: ThreatType
     timeHorizon: number = this.config.defaultTimeHorizon
   ): Promise<ThreatForecast> {
 
@@ -288,8 +269,7 @@ export class SecurityThreatForecasting extends EventEmitter {
       throw new Error(`Insufficient data for forecasting ${threatType}: ${timeSeries.length} points`);}
     // Perform seasonal decomposition
     let seasonalFactors: SeasonalFactor = [];
-    if (this.config.enableSeasonalDecomposition) {
-  seasonalFactors = await this.performSeasonalDecomposition(seriesKey);
+    if (this.config.enableSeasonalDecomposition) { seasonalFactors = await this.performSeasonalDecomposition(seriesKey);
   // Perform trend analysis
   let trendComponents: TrendComponent = [];
   if (this.config.enableTrendAnalysis) {
@@ -322,7 +302,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   trendComponents,
   riskMetrics,
   recommendations,
-  modelMetadata: ensembleForecast.modelMetadata,
+  modelMetadata: ensembleForecast.modelMetadata }
 };
     // Store active forecast
     this.activeForecasts.set(forecast.forecastId, forecast);
@@ -331,37 +311,36 @@ export class SecurityThreatForecasting extends EventEmitter {
   /**
    * Generate ensemble forecast using multiple models
    */
-  private async generateEnsembleForecast(timeSeries: TimeSeriesData)
-    timeHorizon: number,
+  private async generateEnsembleForecast(timeSeries: TimeSeriesData),
+  timeHorizon: number,
     seasonalFactors: SeasonalFactor,
-    trendComponents: TrendComponent): Promise<EnsembleForecastResult> {,
+    trendComponents: TrendComponent): Promise<EnsembleForecastResult> { 
   const modelResults: ModelForecastResult = [];
   // Run individual forecasting models
   for (const [modelId, model] of this.forecastingModels) {
   if (!model.isActive) continue;
   try {
   const result = await this.runForecastingModel(;);
-  model,
-  timeSeries,
-  timeHorizon,
-  seasonalFactors,
+  model
+  timeSeries
+  timeHorizon
+  seasonalFactors }
   trendComponents
   );
   modelResults.push(result);
-} catch (error) {
+ catch (error) {
         console.error(`Error running model ${modelId}:`, error);}
-    if (modelResults.length === 0) {
-      throw new Error('No forecasting models available');
+    if (modelResults.length === 0) { throw new Error('No forecasting models available');
     // Combine model results using weighted ensemble
     return this.combineModelResults(modelResults);
   /**
    * Run individual forecasting model
    */
   private async runForecastingModel(model: ForecastingModel)
-    timeSeries: TimeSeriesData,
-    timeHorizon: number,
-    seasonalFactors: SeasonalFactor,
-    trendComponents: TrendComponent): Promise<ModelForecastResult> {,
+  timeSeries: TimeSeriesData
+    timeHorizon: number
+    seasonalFactors: SeasonalFactor
+    trendComponents: TrendComponent): Promise<ModelForecastResult> { }
     switch (model.algorithm) {
       case ForecastAlgorithm.ARIMA:
         return this.runARIMAModel(model, timeSeries, timeHorizon);
@@ -379,8 +358,8 @@ export class SecurityThreatForecasting extends EventEmitter {
   // INDIVIDUAL FORECASTING MODELS
   // ==========================================
   private async runARIMAModel(model: ForecastingModel)
-    timeSeries: TimeSeriesData,
-    timeHorizon: number): Promise<ModelForecastResult> {,
+  timeSeries: TimeSeriesData
+    timeHorizon: number): Promise<ModelForecastResult> { 
   // Simplified ARIMA implementation
   const values = timeSeries.map(d => d.value);
   const recentValues = values.slice(-50); // Use last 50 points;
@@ -390,17 +369,17 @@ export class SecurityThreatForecasting extends EventEmitter {
   const lastValue = recentValues[recentValues.length - 1];
   const predictedValue = lastValue + (trend * (timeHorizon / 60)); // Convert to hours;
   return {
-  modelId: model.modelId,
-  algorithm: ForecastAlgorithm.ARIMA,
-  predictedValue: Math.max(0, Math.min(100, predictedValue)),
-  confidence: 0.75,
-  upperBound: predictedValue + (this.calculateStandardDeviation(recentValues) * 1.96),
-  lowerBound: predictedValue - (this.calculateStandardDeviation(recentValues) * 1.96),
-  weight: model.weight,
+  modelId: model.modelId
+  algorithm: ForecastAlgorithm.ARIMA
+  predictedValue: Math.max(0, Math.min(100, predictedValue))
+  confidence: 0.75
+  upperBound: predictedValue + (this.calculateStandardDeviation(recentValues) * 1.96)
+  lowerBound: predictedValue - (this.calculateStandardDeviation(recentValues) * 1.96)
+  weight: model.weight }
 };
   private async runExponentialSmoothingModel(model: ForecastingModel)
-    timeSeries: TimeSeriesData,
-    timeHorizon: number): Promise<ModelForecastResult> {,
+  timeSeries: TimeSeriesData
+    timeHorizon: number): Promise<ModelForecastResult> { 
   const values = timeSeries.map(d => d.value);
   const alpha = 0.3; // Smoothing parameter;
   // Apply exponential smoothing
@@ -417,12 +396,12 @@ export class SecurityThreatForecasting extends EventEmitter {
   confidence: 0.70,
   upperBound: predictedValue + Math.sqrt(variance) * 1.96,
   lowerBound: predictedValue - Math.sqrt(variance) * 1.96,
-  weight: model.weight,
+  weight: model.weight }
 };
-  private async runSeasonalNaiveModel(model: ForecastingModel)
-    timeSeries: TimeSeriesData,
+  private async runSeasonalNaiveModel(model: ForecastingModel),
+  timeSeries: TimeSeriesData,
     timeHorizon: number,
-    seasonalFactors: SeasonalFactor): Promise<ModelForecastResult> {,
+    seasonalFactors: SeasonalFactor): Promise<ModelForecastResult> { 
   // Use seasonal patterns for prediction
   const values = timeSeries.map(d => d.value);
   const currentHour = new Date().getHours();
@@ -435,19 +414,19 @@ export class SecurityThreatForecasting extends EventEmitter {
   const targetHour = (currentHour + Math.floor(timeHorizon / 60)) % 24;
   predictedValue = hourlyPattern[targetHour] || predictedValue;
   return {
-  modelId: model.modelId,
-  algorithm: ForecastAlgorithm.SEASONAL_NAIVE,
-  predictedValue: Math.max(0, Math.min(100, predictedValue)),
-  confidence: strongestSeasonal ? strongestSeasonal.strength : 0.5,
-  upperBound: predictedValue * 1.3,
-  lowerBound: predictedValue * 0.7,
-  weight: model.weight,
+  modelId: model.modelId
+  algorithm: ForecastAlgorithm.SEASONAL_NAIVE
+  predictedValue: Math.max(0, Math.min(100, predictedValue))
+  confidence: strongestSeasonal ? strongestSeasonal.strength : 0.5
+  upperBound: predictedValue * 1.3
+  lowerBound: predictedValue * 0.7
+  weight: model.weight }
 };
   private async runProphetModel(model: ForecastingModel)
-    timeSeries: TimeSeriesData,
-    timeHorizon: number,
-    seasonalFactors: SeasonalFactor,
-    trendComponents: TrendComponent): Promise<ModelForecastResult> {,
+  timeSeries: TimeSeriesData
+    timeHorizon: number
+    seasonalFactors: SeasonalFactor
+    trendComponents: TrendComponent): Promise<ModelForecastResult> { 
   // Simplified Prophet-like model
   const values = timeSeries.map(d => d.value);
   const baseValue = this.calculateMean(values);
@@ -471,17 +450,17 @@ export class SecurityThreatForecasting extends EventEmitter {
   );
   const predictedValue = baseValue + trendAdjustment + seasonalAdjustment;
   return {
-  modelId: model.modelId,
-  algorithm: ForecastAlgorithm.PROPHET,
-  predictedValue: Math.max(0, Math.min(100, predictedValue)),
-  confidence: 0.80,
-  upperBound: predictedValue + this.calculateStandardDeviation(values),
-  lowerBound: predictedValue - this.calculateStandardDeviation(values),
-  weight: model.weight,
+  modelId: model.modelId
+  algorithm: ForecastAlgorithm.PROPHET
+  predictedValue: Math.max(0, Math.min(100, predictedValue))
+  confidence: 0.80
+  upperBound: predictedValue + this.calculateStandardDeviation(values)
+  lowerBound: predictedValue - this.calculateStandardDeviation(values)
+  weight: model.weight }
 };
   private async runLSTMModel(model: ForecastingModel)
-    timeSeries: TimeSeriesData,
-    timeHorizon: number): Promise<ModelForecastResult> {,
+  timeSeries: TimeSeriesData
+    timeHorizon: number): Promise<ModelForecastResult> { 
   // Simplified LSTM-like prediction (would use actual neural network in production)
   const values = timeSeries.map(d => d.value);
   const sequenceLength = 20;
@@ -501,56 +480,51 @@ export class SecurityThreatForecasting extends EventEmitter {
   confidence: 0.85,
   upperBound: predictedValue + volatility * 2,
   lowerBound: predictedValue - volatility * 2,
-  weight: model.weight,
+  weight: model.weight }
 };
   // ==========================================
   // SEASONAL DECOMPOSITION
   // ==========================================
-  private async performSeasonalDecomposition(seriesKey: string): Promise<SeasonalFactor> {
-
-  const timeSeries = this.timeSeriesData.get(seriesKey) || [];
+  private async performSeasonalDecomposition(seriesKey: string): Promise<SeasonalFactor> { const timeSeries = this.timeSeriesData.get(seriesKey) || [];
   const factors: SeasonalFactor = [];
   // Hourly seasonality
   const hourlyPattern = this.extractHourlyPattern(timeSeries);
   if (hourlyPattern.strength > 0.1) {
   factors.push({)
-  period: SeasonalPeriod.HOURLY,
-  amplitude: hourlyPattern.amplitude,
-  phase: hourlyPattern.phase,
-  strength: hourlyPattern.strength,
-  nextPeak: this.calculateNextPeak(SeasonalPeriod.HOURLY, hourlyPattern.phase),
-  historicalPattern: hourlyPattern.pattern,
+  period: SeasonalPeriod.HOURLY
+  amplitude: hourlyPattern.amplitude
+  phase: hourlyPattern.phase
+  strength: hourlyPattern.strength
+  nextPeak: this.calculateNextPeak(SeasonalPeriod.HOURLY, hourlyPattern.phase)
+  historicalPattern: hourlyPattern.pattern }
 });
     // Daily seasonality
     const dailyPattern = this.extractDailyPattern(timeSeries);
-    if (dailyPattern.strength > 0.1) {
-  factors.push({)
-  period: SeasonalPeriod.DAILY,
-  amplitude: dailyPattern.amplitude,
-  phase: dailyPattern.phase,
-  strength: dailyPattern.strength,
-  nextPeak: this.calculateNextPeak(SeasonalPeriod.DAILY, dailyPattern.phase),
-  historicalPattern: dailyPattern.pattern,
+    if (dailyPattern.strength > 0.1) { factors.push({)
+  period: SeasonalPeriod.DAILY
+  amplitude: dailyPattern.amplitude
+  phase: dailyPattern.phase
+  strength: dailyPattern.strength
+  nextPeak: this.calculateNextPeak(SeasonalPeriod.DAILY, dailyPattern.phase)
+  historicalPattern: dailyPattern.pattern }
 });
     // Weekly seasonality
     const weeklyPattern = this.extractWeeklyPattern(timeSeries);
-    if (weeklyPattern.strength > 0.1) {
-  factors.push({)
-  period: SeasonalPeriod.WEEKLY,
-  amplitude: weeklyPattern.amplitude,
-  phase: weeklyPattern.phase,
-  strength: weeklyPattern.strength,
-  nextPeak: this.calculateNextPeak(SeasonalPeriod.WEEKLY, weeklyPattern.phase),
-  historicalPattern: weeklyPattern.pattern,
+    if (weeklyPattern.strength > 0.1) { factors.push({)
+  period: SeasonalPeriod.WEEKLY
+  amplitude: weeklyPattern.amplitude
+  phase: weeklyPattern.phase
+  strength: weeklyPattern.strength
+  nextPeak: this.calculateNextPeak(SeasonalPeriod.WEEKLY, weeklyPattern.phase)
+  historicalPattern: weeklyPattern.pattern }
 });
     return factors;
   private extractHourlyPattern(timeSeries: TimeSeriesData): SeasonalPattern {
     const hourlyBuckets = new Array(24).fill(0).map(() => ({ sum: 0, count: 0 }));
-    timeSeries.forEach(point => {)
+    timeSeries.forEach(point => { )
   const hour = point.timestamp.getHours();
       hourlyBuckets[hour].sum += point.value;
-      hourlyBuckets[hour].count += 1;
-    });
+      hourlyBuckets[hour].count += 1 });
     const pattern = hourlyBuckets.map(bucket => ;);
       bucket.count > 0 ? bucket.sum / bucket.count : 0
     );
@@ -560,11 +534,10 @@ export class SecurityThreatForecasting extends EventEmitter {
     return { amplitude, phase, strength, pattern };
   private extractDailyPattern(timeSeries: TimeSeriesData): SeasonalPattern {
     const dailyBuckets = new Array(7).fill(0).map(() => ({ sum: 0, count: 0 }));
-    timeSeries.forEach(point => {)
+    timeSeries.forEach(point => { )
   const dayOfWeek = point.timestamp.getDay();
       dailyBuckets[dayOfWeek].sum += point.value;
-      dailyBuckets[dayOfWeek].count += 1;
-    });
+      dailyBuckets[dayOfWeek].count += 1 });
     const pattern = dailyBuckets.map(bucket => ;);
       bucket.count > 0 ? bucket.sum / bucket.count : 0
     );
@@ -575,12 +548,11 @@ export class SecurityThreatForecasting extends EventEmitter {
   private extractWeeklyPattern(timeSeries: TimeSeriesData): SeasonalPattern {
     // Simplified weekly pattern extraction
     const weeklyBuckets = new Array(4).fill(0).map(() => ({ sum: 0, count: 0 }));
-    timeSeries.forEach(point => {)
+    timeSeries.forEach(point => { )
   const weekOfMonth = Math.floor(point.timestamp.getDate() / 7);
       const bucket = Math.min(weekOfMonth, 3);
       weeklyBuckets[bucket].sum += point.value;
-      weeklyBuckets[bucket].count += 1;
-    });
+      weeklyBuckets[bucket].count += 1 });
     const pattern = weeklyBuckets.map(bucket => ;);
       bucket.count > 0 ? bucket.sum / bucket.count : 0
     );
@@ -591,9 +563,7 @@ export class SecurityThreatForecasting extends EventEmitter {
   // ==========================================
   // TREND ANALYSIS
   // ==========================================
-  private async performTrendAnalysis(timeSeries: TimeSeriesData): Promise<TrendComponent> {
-
-  const values = timeSeries.map(d => d.value);
+  private async performTrendAnalysis(timeSeries: TimeSeriesData): Promise<TrendComponent> { const values = timeSeries.map(d => d.value);
   const components: TrendComponent = [];
   // Linear trend analysis
   const linearTrend = this.analyzeLinearTrend(values);
@@ -606,13 +576,13 @@ export class SecurityThreatForecasting extends EventEmitter {
   // Change point detection
   const changePoints = this.detectChangePoints(timeSeries);
   if (changePoints.length > 0) {
-  const changePointTrend: TrendComponent = {,
-  trendType: TrendType.VOLATILE,
-  direction: 'stable',
-  magnitude: 0,
-  acceleration: 0,
-  durability: 30, // minutes,
-  confidence: 0.7,
+  const changePointTrend: TrendComponent = {
+  trendType: TrendType.VOLATILE
+  direction: 'stable'
+  magnitude: 0
+  acceleration: 0
+  durability: 30, // minutes
+  confidence: 0.7 }
   changePoints
 };
       components.push(changePointTrend);
@@ -630,22 +600,18 @@ export class SecurityThreatForecasting extends EventEmitter {
     // Calculate R-squared
     const meanY = sumY / n;
     const totalSumSquares = values.reduce((sum, val) => sum + Math.pow(val - meanY, 2), 0);
-    const residualSumSquares = values.reduce((sum, val, i) => {
-      const predicted = slope * i + intercept;
-      return sum + Math.pow(val - predicted, 2);
-    }, 0);
+    const residualSumSquares = values.reduce((sum, val, i) => { const predicted = slope * i + intercept;
+      return sum + Math.pow(val - predicted, 2) }, 0);
     const rSquared = 1 - (residualSumSquares / totalSumSquares);
-    return {
-  trendType: TrendType.LINEAR,
+    return { trendType: TrendType.LINEAR
   direction: slope > 0.1 ? 'increasing' : slope < -0.1 ? 'decreasing' : 'stable',
   magnitude: Math.abs(slope),
   acceleration: 0,
   durability: 120, // 2 hours,
   confidence: Math.max(0, rSquared),
-  changePoints: [],
+  changePoints: [] }
 };
-  private analyzeExponentialTrend(values: number): TrendComponent {
-  // Simple exponential trend detection
+  private analyzeExponentialTrend(values: number): TrendComponent { // Simple exponential trend detection
   if (values.length < 10) {
   return {
   trendType: TrendType.EXPONENTIAL,
@@ -654,12 +620,11 @@ export class SecurityThreatForecasting extends EventEmitter {
   acceleration: 0,
   durability: 0,
   confidence: 0,
-  changePoints: [],
+  changePoints: [] }
 };
     const recentValues = values.slice(-10);
     const ratios = [];
-    for (let i = 1; i < recentValues.length; i++) {
-  if (recentValues[i - 1] > 0) {
+    for (let i = 1; i < recentValues.length; i++) { if (recentValues[i - 1] > 0) {
   ratios.push(recentValues[i] / recentValues[i - 1]);
   const meanRatio = ratios.reduce((sum, ratio) => sum + ratio, 0) / ratios.length;
   const isExponential = Math.abs(meanRatio - 1) > 0.1;
@@ -670,10 +635,9 @@ export class SecurityThreatForecasting extends EventEmitter {
   acceleration: 0,
   durability: 60, // 1 hour,
   confidence: isExponential ? 0.7 : 0.3,
-  changePoints: [],
+  changePoints: [] }
 };
-  private detectChangePoints(timeSeries: TimeSeriesData): ChangePoint {
-  const changePoints: ChangePoint = [];
+  private detectChangePoints(timeSeries: TimeSeriesData): ChangePoint { const changePoints: ChangePoint = [];
   const values = timeSeries.map(d => d.value);
   const windowSize = 10;
   for (let i = windowSize; i < values.length - windowSize; i++) {
@@ -688,15 +652,15 @@ export class SecurityThreatForecasting extends EventEmitter {
   timestamp: timeSeries[i].timestamp,
   magnitude: changeMagnitude,
   type: 'level_shift',
-  confidence: Math.min(0.9, changeMagnitude / threshold),
+  confidence: Math.min(0.9, changeMagnitude / threshold) }
 });
     return changePoints;
   // ==========================================
   // RISK ASSESSMENT
   // ==========================================
-  private calculateForecastRisk(forecast: EnsembleForecastResult)
-    seasonalFactors: SeasonalFactor,
-    trendComponents: TrendComponent): ForecastRiskMetrics {,
+  private calculateForecastRisk(forecast: EnsembleForecastResult),
+  seasonalFactors: SeasonalFactor,
+    trendComponents: TrendComponent): ForecastRiskMetrics { ,
     const expectedValue = forecast.predictedValue;
     const uncertainty = Math.abs(forecast.upperBound - forecast.lowerBound) / 2;
     // Value at Risk (95th percentile)
@@ -707,30 +671,23 @@ export class SecurityThreatForecasting extends EventEmitter {
     let volatilityIndex = 0;
     trendComponents.forEach(trend => {)
   if (trend.trendType === TrendType.VOLATILE) {
-        volatilityIndex += 30;
-      } else {
-        volatilityIndex += trend.magnitude * 10;
-    });
-    seasonalFactors.forEach(seasonal => {)
-  volatilityIndex += seasonal.amplitude * seasonal.strength * 5;
-    });
+        volatilityIndex += 30 } else { volatilityIndex += trend.magnitude * 10 });
+    seasonalFactors.forEach(seasonal => { )
+  volatilityIndex += seasonal.amplitude * seasonal.strength * 5 });
     volatilityIndex = Math.min(100, volatilityIndex);
     // Scenario risks
     const scenarioRisks: ScenarioRisk = [
-      {
-  scenario: 'Trend Acceleration',
+      { scenario: 'Trend Acceleration',
   probability: trendComponents.length > 0 ? 0.3 : 0.1,
   impact: 80,
-  description: 'Current trend accelerates beyond forecast',
-}
-      {
-  scenario: 'Seasonal Peak',
+  description: 'Current trend accelerates beyond forecast' }
+
+      { scenario: 'Seasonal Peak',
   probability: seasonalFactors.length > 0 ? 0.4 : 0.1,
   impact: 60,
-  description: 'Seasonal patterns intensify',
-}
-      {
-  scenario: 'Black Swan Event',
+  description: 'Seasonal patterns intensify' }
+
+      { scenario: 'Black Swan Event',
   probability: 0.05,
   impact: 100,
   description: 'Unprecedented security event occurs'];
@@ -739,21 +696,21 @@ export class SecurityThreatForecasting extends EventEmitter {
   valueAtRisk,
   conditionalValueAtRisk,
   volatilityIndex,
-  uncertaintyRange: [forecast.lowerBound, forecast.upperBound],
+  uncertaintyRange: [forecast.lowerBound, forecast.upperBound] }
   scenarioRisks
 };
   // ==========================================
   // RECOMMENDATIONS
   // ==========================================
-  private generateForecastRecommendations(forecast: EnsembleForecastResult)
-    riskMetrics: ForecastRiskMetrics,
-    threatType: ThreatType): ForecastRecommendation {,
+  private generateForecastRecommendations(forecast: EnsembleForecastResult),
+  riskMetrics: ForecastRiskMetrics,
+    threatType: ThreatType): ForecastRecommendation { ,
     const recommendations: ForecastRecommendation = [];
     // High risk forecast recommendations
     if (forecast.predictedValue > 70) {
       recommendations.push({)
   type: RecommendationType.PROACTIVE_DEFENSE,
-        priority: 'high',
+        priority: 'high' }
         description: `Implement proactive defenses for ${threatType}`}
 },
   expectedBenefit: 80,
@@ -762,33 +719,30 @@ export class SecurityThreatForecasting extends EventEmitter {
         dependencies: ['security_team_approval'];
   });
     // High volatility recommendations
-    if (riskMetrics.volatilityIndex > 50) {
-  recommendations.push({)
+    if (riskMetrics.volatilityIndex > 50) { recommendations.push({)
   type: RecommendationType.MONITORING_ENHANCEMENT,
   priority: 'medium',
   description: 'Increase monitoring frequency due to high volatility',
   expectedBenefit: 60,
   implementationCost: 30,
   timeframe: '1-2 hours',
-  dependencies: [],
+  dependencies: [] }
 });
     // Resource scaling recommendations
-    if (riskMetrics.valueAtRisk > 80) {
-  recommendations.push({)
+    if (riskMetrics.valueAtRisk > 80) { recommendations.push({)
   type: RecommendationType.RESOURCE_SCALING,
   priority: 'high',
   description: 'Scale security resources to handle predicted load',
   expectedBenefit: 70,
   implementationCost: 80,
   timeframe: '2-4 hours',
-  dependencies: ['budget_approval', 'infrastructure_team'],
+  dependencies: ['budget_approval', 'infrastructure_team'] }
 });
     return recommendations;
   // ==========================================
   // UTILITY METHODS
   // ==========================================
-  private addToTimeSeries(seriesKey: string, dataPoint: TimeSeriesData): void {
-  if (!this.timeSeriesData.has(seriesKey)) {
+  private addToTimeSeries(seriesKey: string, dataPoint: TimeSeriesData): void { if (!this.timeSeriesData.has(seriesKey)) {
   this.timeSeriesData.set(seriesKey, []);
   const series = this.timeSeriesData.get(seriesKey)!;
   series.push(dataPoint);
@@ -800,19 +754,17 @@ export class SecurityThreatForecasting extends EventEmitter {
   // Update forecast for high-severity events or periodically
   return event.severity === 'high' || event.severity === 'critical' ||
   Math.random() < 0.1; // 10% chance for other events
-  private async updateForecasts(eventType: SecurityEventType): Promise<void> {,
+  private async updateForecasts(eventType: SecurityEventType): Promise<void> {
   // Map security event types to threat types
-  const threatTypeMapping: Record<string, ThreatType> = {,
-  'login_failure': ThreatType.BRUTE_FORCE_ATTACK,
-  'brute_force_attempt': ThreatType.BRUTE_FORCE_ATTACK,
-  'suspicious_activity': ThreatType.ACCOUNT_TAKEOVER,
-  'api_access': ThreatType.API_ABUSE,
+  const threatTypeMapping: Record<string, ThreatType> = {
+  'login_failure': ThreatType.BRUTE_FORCE_ATTACK
+  'brute_force_attempt': ThreatType.BRUTE_FORCE_ATTACK
+  'suspicious_activity': ThreatType.ACCOUNT_TAKEOVER
+  'api_access': ThreatType.API_ABUSE }
 };
     const threatType = threatTypeMapping[eventType];
-    if (threatType) {
-      try {
-        await this.generateThreatForecast(threatType);
-      } catch (error) {
+    if (threatType) { try {
+        await this.generateThreatForecast(threatType) } catch (error) {
         console.error(`Error updating forecast for ${threatType}:`, error);}
   private async updateAnomalyBasedForecasts(anomaly: SecurityAnomaly): Promise<void> {
 
@@ -821,10 +773,9 @@ export class SecurityThreatForecasting extends EventEmitter {
     for (const threatType of threatTypes) {
       try {
         await this.generateThreatForecast(threatType, 120); // 2-hour forecast
-      } catch (error) {
+ catch (error) {
         console.error(`Error updating anomaly-based forecast for ${threatType}:`, error);}
-  private combineModelResults(results: ModelForecastResult): EnsembleForecastResult {
-  // Weighted ensemble combination
+  private combineModelResults(results: ModelForecastResult): EnsembleForecastResult { // Weighted ensemble combination
   const totalWeight = results.reduce((sum, result) => sum + result.weight, 0);
   const weightedPrediction = results.reduce((sum, result) => ;
   sum + (result.predictedValue * result.weight), 0
@@ -839,34 +790,33 @@ export class SecurityThreatForecasting extends EventEmitter {
   sum + (result.lowerBound * result.weight), 0
   ) / totalWeight;
   return {
-  predictedValue: weightedPrediction,
-  confidence: weightedConfidence,
-  upperBound: weightedUpperBound,
-  lowerBound: weightedLowerBound,
-  probability: Math.min(0.99, weightedPrediction / 100),
+  predictedValue: weightedPrediction
+  confidence: weightedConfidence
+  upperBound: weightedUpperBound
+  lowerBound: weightedLowerBound
+  probability: Math.min(0.99, weightedPrediction / 100)
   modelMetadata: {
-  modelName: 'Ensemble',
-  modelVersion: '1.0.0',
-  algorithm: ForecastAlgorithm.ENSEMBLE,
-  trainingPeriod: [new Date(Date.now() - 86400000 * 7), new Date()],
+  modelName: 'Ensemble'
+  modelVersion: '1.0.0'
+  algorithm: ForecastAlgorithm.ENSEMBLE
+  trainingPeriod: [new Date(Date.now() - 86400000 * 7), new Date()]
   accuracy: {
-  mape: 15,
-  rmse: 8,
-  mae: 6,
-  r2Score: 0.75,
-  directionalAccuracy: 80,
-},
-  features: ['historical_values', 'seasonal_patterns', 'trend_components'],
-        hyperparameters: { ensemble_weights: results.map(r => r.weight) },
+  mape: 15
+  rmse: 8
+  mae: 6
+  r2Score: 0.75
+  directionalAccuracy: 80 }
+
+  features: ['historical_values', 'seasonal_patterns', 'trend_components']
+        hyperparameters: { ensemble_weights: results.map(r => r.weight) }
         lastUpdated: new Date();
   };
-  private mapSeverityToValue(severity: AnomalySeverity): number {
-  const mapping = {
-  [AnomalySeverity.INFO]: 10,
-  [AnomalySeverity.LOW]: 25,
-  [AnomalySeverity.MEDIUM]: 50,
-  [AnomalySeverity.HIGH]: 75,
-  [AnomalySeverity.CRITICAL]: 95,
+  private mapSeverityToValue(severity: AnomalySeverity): number { const mapping = {
+  [AnomalySeverity.INFO]: 10
+  [AnomalySeverity.LOW]: 25
+  [AnomalySeverity.MEDIUM]: 50
+  [AnomalySeverity.HIGH]: 75
+  [AnomalySeverity.CRITICAL]: 95 }
 };
     return mapping[severity] || 0;
   private determineForecastType(timeHorizon: number): ForecastType {
@@ -896,8 +846,7 @@ export class SecurityThreatForecasting extends EventEmitter {
     const sumXY = x.reduce((sum, val, i) => sum + val * values[i], 0);
     const sumXX = x.reduce((sum, val) => sum + val * val, 0);
     return (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-  private calculateAmplitude(pattern: number): number {
-    const max = Math.max(...pattern);
+  private calculateAmplitude(pattern: number): number { const max = Math.max(...pattern);
     const min = Math.min(...pattern);
     return (max - min) / 2;
   private calculatePhase(pattern: number): number {
@@ -918,12 +867,11 @@ export class SecurityThreatForecasting extends EventEmitter {
       case SeasonalPeriod.DAILY: return 86400;
       case SeasonalPeriod.WEEKLY: return 604800;
       case SeasonalPeriod.MONTHLY: return 2592000;
-      case SeasonalPeriod.QUARTERLY: return 7776000;
+      case SeasonalPeriod.QUARTERLY: return 7776000 }
   default: return 3600;
   private generateForecastId(): string {
     return `forecast_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  private initializeForecastingModels(): void {
-  const models: ForecastingModel = [
+  private initializeForecastingModels(): void { const models: ForecastingModel = [
   {
   modelId: 'arima-v1',
   name: 'ARIMA Forecaster',
@@ -931,37 +879,33 @@ export class SecurityThreatForecasting extends EventEmitter {
   weight: 0.3,
   isActive: true,
   accuracy: 0.75,
-  targetMetrics: ['*'],
-}
-      {
-  modelId: 'exponential-smoothing-v1',
+  targetMetrics: ['*'] }
+
+      { modelId: 'exponential-smoothing-v1',
   name: 'Exponential Smoothing',
   algorithm: ForecastAlgorithm.EXPONENTIAL_SMOOTHING,
   weight: 0.2,
   isActive: true,
   accuracy: 0.70,
-  targetMetrics: ['*'],
-}
-      {
-  modelId: 'seasonal-naive-v1',
+  targetMetrics: ['*'] }
+
+      { modelId: 'seasonal-naive-v1',
   name: 'Seasonal Naive',
   algorithm: ForecastAlgorithm.SEASONAL_NAIVE,
   weight: 0.2,
   isActive: true,
   accuracy: 0.65,
-  targetMetrics: ['*'],
-}
-      {
-  modelId: 'prophet-v1',
+  targetMetrics: ['*'] }
+
+      { modelId: 'prophet-v1',
   name: 'Prophet-like Model',
   algorithm: ForecastAlgorithm.PROPHET,
   weight: 0.2,
   isActive: true,
   accuracy: 0.80,
-  targetMetrics: ['*'],
-}
-      {
-        modelId: 'lstm-v1',
+  targetMetrics: ['*'] }
+
+      { modelId: 'lstm-v1',
         name: 'LSTM Neural Network',
         algorithm: ForecastAlgorithm.LSTM,
         weight: 0.1,
@@ -975,47 +919,37 @@ export class SecurityThreatForecasting extends EventEmitter {
         scenarioId: 'coordinated-attack',
         name: 'Coordinated Multi-Vector Attack',
         description: 'Simultaneous attacks across multiple threat vectors',
-        threatTypes: [ThreatType.BRUTE_FORCE_ATTACK, ThreatType.API_ABUSE, ThreatType.DISTRIBUTED_ATTACK],
-        triggers: [,
+        threatTypes: [ThreatType.BRUTE_FORCE_ATTACK, ThreatType.API_ABUSE, ThreatType.DISTRIBUTED_ATTACK] }
+        triggers: [
           { triggerType: 'anomaly_count', condition: 'anomalies > 10', weight: 0.4 },
           { triggerType: 'metric_threshold', condition: 'threat_level > 80', weight: 0.6 }
         ],
         expectedDuration: 180, // minutes
         expectedIntensity: 85,
         likelihood: 0.15,
-        impactAssessment: {
+        impactAssessment: { ,
   businessImpact: 90,
   technicalImpact: 85,
   reputationalImpact: 80,
   financialImpact: 85,
   complianceImpact: 70];
   scenarios.forEach(scenario => this.threatScenarios.set(scenario.scenarioId, scenario));
-  private startRealTimeForecasting(): void {,
-  if (this.forecastingInterval) {
-  clearInterval(this.forecastingInterval);
+  private startRealTimeForecasting(): void { }
+  if (this.forecastingInterval) { clearInterval(this.forecastingInterval);
   this.forecastingInterval = setInterval(async () => {
   if (!this.isForecasting) {
   this.isForecasting = true;
   try {
-  await this.performScheduledForecasting();
-} catch (error) {
-  console.error('Scheduled forecasting error:', error);
-} finally {
-          this.isForecasting = false;
-    }, this.config.forecastUpdateInterval);
-  private async performScheduledForecasting(): Promise<void> {
-
-    // Generate forecasts for all major threat types
-    const threatTypes = [;
-      ThreatType.BRUTE_FORCE_ATTACK,
-      ThreatType.ACCOUNT_TAKEOVER,
-      ThreatType.CREDENTIAL_STUFFING,
+  await this.performScheduledForecasting() } catch (error) { console.error('Scheduled forecasting error:', error) } finally { this.isForecasting = false }, this.config.forecastUpdateInterval);
+  private async performScheduledForecasting(): Promise<void> { // Generate forecasts for all major threat types
+    const threatTypes = [
+      ThreatType.BRUTE_FORCE_ATTACK
+      ThreatType.ACCOUNT_TAKEOVER
+      ThreatType.CREDENTIAL_STUFFING }
       ThreatType.API_ABUSE
     ];
-    for (const threatType of threatTypes) {
-      try {
-        await this.generateThreatForecast(threatType);
-      } catch (error) {
+    for (const threatType of threatTypes) { try {
+        await this.generateThreatForecast(threatType) } catch (error) {
         console.error(`Error in scheduled forecasting for ${threatType}:`, error);}
   // ==========================================
   // PUBLIC API METHODS
@@ -1032,63 +966,57 @@ export class SecurityThreatForecasting extends EventEmitter {
     return this.timeSeriesData.get(seriesKey) || [];
   public updateConfiguration(newConfig: Partial<ForecastingConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    if (newConfig.enableRealTimeForecasting !== undefined) {
-      if (newConfig.enableRealTimeForecasting) {
-        this.startRealTimeForecasting();
-      } else if (this.forecastingInterval) {
-        clearInterval(this.forecastingInterval);
-        this.forecastingInterval = undefined;
-  public destroy(): void {
-    if (this.forecastingInterval) {
-      clearInterval(this.forecastingInterval);
-    this.removeAllListeners();
-    this.timeSeriesData.clear();
-    this.activeForecasts.clear();
-    this.forecastingModels.clear();
-    this.threatScenarios.clear();
-    this.seasonalDecompositions.clear();
+    if (newConfig.enableRealTimeForecasting !== undefined) { if (newConfig.enableRealTimeForecasting) {
+        this.startRealTimeForecasting() } else if (this.forecastingInterval) { clearInterval(this.forecastingInterval);
+  this.forecastingInterval = undefined;
+  public destroy(): void { }
+  if (this.forecastingInterval) {
+  clearInterval(this.forecastingInterval);
+  this.removeAllListeners();
+  this.timeSeriesData.clear();
+  this.activeForecasts.clear();
+  this.forecastingModels.clear();
+  this.threatScenarios.clear();
+  this.seasonalDecompositions.clear();
+  // ==========================================
+  // SUPPORTING INTERFACES
+  // ==========================================
 
-// ==========================================
-// SUPPORTING INTERFACES
-// ==========================================
-}
-interface ForecastingModel {
-  modelId: string;
+
+interface ForecastingModel { modelId: string;
   name: string;
   algorithm: ForecastAlgorithm;
   weight: number;
   isActive: boolean;
   accuracy: number;
-  targetMetrics: string;
-}
-interface ModelForecastResult {
-  modelId: string;
+  targetMetrics: string }
+
+
+interface ModelForecastResult { modelId: string;
   algorithm: ForecastAlgorithm;
   predictedValue: number;
   confidence: number;
   upperBound: number;
   lowerBound: number;
-  weight: number;
-}
-interface EnsembleForecastResult {
-  predictedValue: number;
+  weight: number }
+
+
+interface EnsembleForecastResult { predictedValue: number;
   confidence: number;
   upperBound: number;
   lowerBound: number;
   probability: number;
-  modelMetadata: ForecastModelMetadata;
-}
-interface SeasonalDecomposition {
-  trend: number;
+  modelMetadata: ForecastModelMetadata }
+
+
+interface SeasonalDecomposition { trend: number;
   seasonal: number;
   residual: number;
-  strength: number;
-}
-interface SeasonalPattern {
-  amplitude: number;
+  strength: number }
+
+
+interface SeasonalPattern { amplitude: number;
   phase: number;
   strength: number;
   pattern: number;
-
-export default SecurityThreatForecasting;
-}
+  export default SecurityThreatForecasting }

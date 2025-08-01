@@ -2,30 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { ConnectionState, ConnectionQuality } from '../../network-resilience/ConnectionStateManager';
 import { ReconnectionState } from '../../network-resilience/ReconnectionHandler';
 import { NetworkStatus } from '../../network-resilience/NetworkResilienceManager';
-}
-interface ConnectionStatusIndicatorProps {
-  status: NetworkStatus;
+
+
+interface ConnectionStatusIndicatorProps { status: NetworkStatus;
   showDetails?: boolean;
   compact?: boolean;
   className?: string;
   onClick?: () => void;
-  export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps> = ({,)
-  status,
-  showDetails = false,
-  compact = false,
-  className = '',
+  export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps> = ({);
+  status;
+  showDetails = false;
+  compact = false;
+  className = '' }
   onClick
-}
-}) => {
-  const [isAnimating, setIsAnimating] = useState(false);
+
+
+}) => { const [isAnimating, setIsAnimating] = useState(false);
   useEffect(() => {
     if (status.reconnectionState === ReconnectionState.ATTEMPTING) {
-      setIsAnimating(true);
-    } else {
-      setIsAnimating(false);
-  }, [status.reconnectionState]);
-  const getConnectionIcon = () => {
-  if (status.reconnectionState === ReconnectionState.ATTEMPTING) {
+      setIsAnimating(true) } else { setIsAnimating(false) }, [status.reconnectionState]);
+  const getConnectionIcon = () => { if (status.reconnectionState === ReconnectionState.ATTEMPTING) {
   return '🔄';
   switch (status.connectionState) {
   case ConnectionState.CONNECTED:,
@@ -40,7 +36,7 @@ interface ConnectionStatusIndicatorProps {
   return '📴';
   case ConnectionState.FAILED:,
   return '❌';
-  default:,
+  default: }
   return '❓';
 };
   const getStatusText = () => {
@@ -55,12 +51,11 @@ interface ConnectionStatusIndicatorProps {
       return 'Disconnected';
     case ConnectionState.OFFLINE:
       return 'Offline';
-    case ConnectionState.FAILED: return 'Connection Failed';
+    case ConnectionState.FAILED: return 'Connection Failed';,
   default:
-      return 'Unknown'
+      return 'Unknown';
   };
-  const getStatusColor = () => {
-  if (status.isOnline) {
+  const getStatusColor = () => { if (status.isOnline) {
   switch (status.connectionQuality) {
   case ConnectionQuality.EXCELLENT:,
   return '#22c55e'; // green-500
@@ -70,11 +65,9 @@ interface ConnectionStatusIndicatorProps {
   return '#f97316'; // orange-500
   case ConnectionQuality.POOR:,
   return '#ef4444'; // red-500
-  default:,
+  default: }
   return '#6b7280'; // gray-500
-} else {
-  return status.reconnectionState === ReconnectionState.ATTEMPTING ? '#3b82f6' : '#ef4444';
-};
+ else { return status.reconnectionState === ReconnectionState.ATTEMPTING ? '#3b82f6' : '#ef4444' };
   const formatLastSync = () => {
     if (!status.lastSync) return 'Never';
     const now = Date.now();
@@ -108,15 +101,15 @@ interface ConnectionStatusIndicatorProps {
     <div 
       className={`connection-status-indicator ${className}`}
       onClick={onClick}
-      style={{
-        padding: '8px 12px',
-        backgroundColor: '#f8fafc',
+      style={ {
+        padding: '8px 12px'
+        backgroundColor: '#f8fafc' }
         border: `2px solid ${getStatusColor()}`}
-},
-  borderRadius: '8px',
-        cursor: onClick ? 'pointer' : 'default',
-        minWidth: '200px'
-  }}
+
+  borderRadius: '8px'
+        cursor: onClick ? 'pointer' : 'default'
+        minWidth: '200px';
+
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">

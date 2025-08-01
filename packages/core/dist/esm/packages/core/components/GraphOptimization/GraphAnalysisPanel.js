@@ -245,7 +245,7 @@ export const GraphAnalysisPanel = ({
                                         < div, key = { index }, style = {}, {
                                         padding: '16px',
                                         border: `1px solid ${getSeverityColor(opportunity.severity)}33`
-                                    }), ", backgroundColor: `$", getSeverityColor(opportunity.severity), "11`} }, borderRadius: '8px' }} >", _jsxs("div", { style: {
+                                    }), ", backgroundColor: `$", getSeverityColor(opportunity.severity), "11`} }, borderRadius: '8px'; }} >", _jsxs("div", { style: {
                                             display: 'flex',
                                             justifyContent: 'space-between',
                                             alignItems: 'flex-start',

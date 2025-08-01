@@ -49,9 +49,6 @@ const browserCrypto = {
     }
 };
 import { DataClassificationLevel } from '../types/DataClassification';
-/**
- * Types of operations that can be audited
- */
 export var AuditOperation;
 (function (AuditOperation) {
     // Data access operations
@@ -76,9 +73,6 @@ export var AuditOperation;
     AuditOperation["ENCRYPTION"] = "ENCRYPTION";
     AuditOperation["DECRYPTION"] = "DECRYPTION";
 })(AuditOperation || (AuditOperation = {}));
-/**
- * Audit log levels
- */
 export var AuditLogLevel;
 (function (AuditLogLevel) {
     AuditLogLevel["MINIMAL"] = "MINIMAL";
@@ -101,7 +95,7 @@ export class AuditLogger extends BrowserEventEmitter {
         this.config = {
             storageBackend: config?.storageBackend || new InMemoryStorageBackend(),
             bufferSize: config?.bufferSize ?? 100,
-            flushInterval: config?.flushInterval ?? 5000, // 5 seconds
+            flushInterval: config?.flushInterval ?? 5000, // 5 seconds,
             logLevel: config?.logLevel ?? AuditLogLevel.STANDARD,
             includedOperations: config?.includedOperations ?? Object.values(AuditOperation),
             excludedOperations: config?.excludedOperations ?? [],
@@ -117,7 +111,7 @@ export class AuditLogger extends BrowserEventEmitter {
                 failedAccessAttempts: 5,
                 sensitiveDataAccess: 10,
                 highRiskOperations: 3,
-                timeWindow: 5
+                timeWindow: 5,
             }
         };
         this.storageBackend = this.config.storageBackend;
@@ -147,7 +141,7 @@ export class AuditLogger extends BrowserEventEmitter {
             metadata: {
                 ...metadata,
                 purpose: context.purpose,
-                requestedAt: context.requestedAt
+                requestedAt: context.requestedAt,
             }
         };
         await this.log(entry);
@@ -257,7 +251,7 @@ export class AuditLogger extends BrowserEventEmitter {
             // This is a placeholder
             transformed.metadata = {
                 ...transformed.metadata,
-                encrypted: true
+                encrypted: true,
             };
         }
         return transformed;
@@ -273,7 +267,7 @@ export class AuditLogger extends BrowserEventEmitter {
             this.emit('anomaly', {
                 type: 'REPEATED_FAILURES',
                 entry,
-                threshold: thresholds.failedAccessAttempts
+                threshold: thresholds.failedAccessAttempts,
             });
         }
         // Check for excessive sensitive data access
@@ -282,7 +276,7 @@ export class AuditLogger extends BrowserEventEmitter {
             this.emit('anomaly', {
                 type: 'EXCESSIVE_SENSITIVE_ACCESS',
                 entry,
-                threshold: thresholds.sensitiveDataAccess
+                threshold: thresholds.sensitiveDataAccess,
             });
         }
     }
@@ -385,9 +379,6 @@ export class AuditLogger extends BrowserEventEmitter {
         this.removeAllListeners();
     }
 }
-/**
- * Simple in-memory storage backend for testing
- */
 export class InMemoryStorageBackend {
     logs = [];
     async write(entry) {

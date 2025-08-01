@@ -8,8 +8,8 @@ import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 import { EnhancedSessionService, Session } from './EnhancedSessionService';
 
-}
-}
+
+
 export interface SessionListingOptions {
   includeExpired?: boolean;
   includeInactive?: boolean;
@@ -25,8 +25,9 @@ export interface SessionListingOptions {
     dateRange?: {
       from?: Date;
       to?: Date;
-}
-}
+
+
+
     };
   };
   pagination?: {
@@ -36,10 +37,10 @@ export interface SessionListingOptions {
   includeMetadata?: boolean;
   includeActivity?: boolean;
   groupBy?: 'user' | 'device' | 'location' | 'none';
-}
 
-}
-}
+
+
+
 export interface SessionSummary {
   sessionId: string;
   userId: string;
@@ -49,8 +50,9 @@ export interface SessionSummary {
     type: string;
     fingerprint?: string;
     trusted: boolean;
-}
-}
+
+
+
   };
   location: {
     ipAddress: string;
@@ -83,10 +85,10 @@ export interface SessionSummary {
     errorRate: number;
     suspiciousCount: number;
   };
-}
 
-}
-}
+
+
+
 export interface SessionListingResult {
   sessions: SessionSummary[];
   pagination: {
@@ -96,8 +98,9 @@ export interface SessionListingResult {
     totalPages: number;
     hasNext: boolean;
     hasPrev: boolean;
-}
-}
+
+
+
   };
   summary: {
     totalActive: number;
@@ -110,10 +113,10 @@ export interface SessionListingResult {
     averageIdleTime: number;
   };
   filters: SessionListingOptions['filterBy'];
-}
 
-}
-}
+
+
+
 export interface UserSessionOverview {
   userId: string;
   totalSessions: number;
@@ -124,15 +127,16 @@ export interface UserSessionOverview {
     sessionCount: number;
     lastSeen: Date;
     trusted: boolean;
-}
-}
-  }>;
+
+
+
+>;
   locations: Array<{
     location: string;
     sessionCount: number;
     lastSeen: Date;
     riskLevel: string;
-  }>;
+>;
   securityMetrics: {
     averageTrustLevel: number;
     mfaEnabledSessions: number;
@@ -145,7 +149,7 @@ export interface UserSessionOverview {
     errorRate: number;
     peakActivityTime?: Date;
   };
-}
+
 
 export class ActiveSessionListingService extends EventEmitter {
   private db: DatabaseService;
@@ -165,7 +169,7 @@ export class ActiveSessionListingService extends EventEmitter {
     this.redis = redis;
     this.sessionService = sessionService;
     this.startCacheRefresh();
-  }
+
 
   /**
    * List active sessions with comprehensive filtering and sorting
@@ -208,11 +212,11 @@ export class ActiveSessionListingService extends EventEmitter {
         summary,
         filters: defaultOptions.filterBy
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error listing sessions:', error);
       throw new Error('Failed to list sessions');
-    }
-  }
+
+
 
   /**
    * Get detailed session overview for a specific user
@@ -245,7 +249,7 @@ export class ActiveSessionListingService extends EventEmitter {
         device.sessionCount++;
         if (session.timing.lastActivity > device.lastSeen) {
           device.lastSeen = session.timing.lastActivity;
-        }
+
         deviceMap.set(session.deviceInfo.id, device);
       });
 
@@ -263,13 +267,13 @@ export class ActiveSessionListingService extends EventEmitter {
         location.sessionCount++;
         if (session.timing.lastActivity > location.lastSeen) {
           location.lastSeen = session.timing.lastActivity;
-        }
+
         // Update risk level based on session security
         if (session.security.riskScore > 70) {
           location.riskLevel = 'high';
-        } else if (session.security.riskScore > 40 && location.riskLevel !== 'high') {
+ else if (session.security.riskScore > 40 && location.riskLevel !== 'high') {
           location.riskLevel = 'medium';
-        }
+
         locationMap.set(locationKey, location);
       });
 
@@ -301,11 +305,11 @@ export class ActiveSessionListingService extends EventEmitter {
         securityMetrics,
         activityMetrics
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting user session overview:', error);
       throw new Error('Failed to get user session overview');
-    }
-  }
+
+
 
   /**
    * Search sessions with advanced query capabilities
@@ -340,7 +344,7 @@ export class ActiveSessionListingService extends EventEmitter {
             return session.deviceInfo.name.toLowerCase().includes(searchLower);
           default:
             return false;
-          }
+
         });
       });
 
@@ -355,11 +359,11 @@ export class ActiveSessionListingService extends EventEmitter {
         summary,
         filters: baseOptions.filterBy
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error searching sessions:', error);
       throw new Error('Failed to search sessions');
-    }
-  }
+
+
 
   /**
    * Get session analytics and statistics
@@ -374,7 +378,7 @@ export class ActiveSessionListingService extends EventEmitter {
       newSessions: number;
       expiredSessions: number;
       averageDuration: number;
-    }>;
+>;
     deviceDistribution: Array<{ type: string; count: number; percentage: number }>;
     locationDistribution: Array<{ location: string; count: number; riskLevel: string }>;
     securityMetrics: {
@@ -383,7 +387,7 @@ export class ActiveSessionListingService extends EventEmitter {
       suspiciousActivityRate: number;
       trustLevelDistribution: Record<string, number>;
     };
-  }> {
+> {
     try {
       // Query session events from database
       const sessionEvents = await this.db.query(`
@@ -418,11 +422,11 @@ export class ActiveSessionListingService extends EventEmitter {
         locationDistribution,
         securityMetrics
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting session analytics:', error);
       throw new Error('Failed to get session analytics');
-    }
-  }
+
+
 
   /**
    * Export session data in various formats
@@ -434,7 +438,7 @@ export class ActiveSessionListingService extends EventEmitter {
     data: string | Buffer;
     filename: string;
     mimeType: string;
-  }> {
+> {
 
     try {
       // Get all sessions without pagination
@@ -466,7 +470,7 @@ export class ActiveSessionListingService extends EventEmitter {
           
       default:
         throw new Error(`Unsupported export format: ${format}`);
-      }
+
 
       // Log export event
       await this.logExportEvent(options, format, result.sessions.length);
@@ -476,11 +480,11 @@ export class ActiveSessionListingService extends EventEmitter {
         filename,
         mimeType
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error exporting sessions:', error);
       throw new Error('Failed to export sessions');
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -489,7 +493,7 @@ export class ActiveSessionListingService extends EventEmitter {
     // Check cache first
     if (this.shouldUseCache()) {
       return this.getSessionsFromCache(options);
-    }
+
 
     // Get sessions from session service
     const allSessions = await this.getAllActiveSessions();
@@ -511,11 +515,11 @@ export class ActiveSessionListingService extends EventEmitter {
       if (filters.dateRange) {
         if (filters.dateRange.from && session.timing.createdAt < filters.dateRange.from) return false;
         if (filters.dateRange.to && session.timing.createdAt > filters.dateRange.to) return false;
-      }
+
       
       return true;
     });
-  }
+
 
   private sortSessions(sessions: SessionSummary[], options: SessionListingOptions): SessionSummary[] {
     const { sortBy = 'lastActivity', sortOrder = 'desc' } = options;
@@ -539,11 +543,11 @@ export class ActiveSessionListingService extends EventEmitter {
       case 'location':
         comparison = (a.location.city || '').localeCompare(b.location.city || '');
         break;
-      }
+
       
       return sortOrder === 'asc' ? comparison : -comparison;
     });
-  }
+
 
   private paginateSessions(
     sessions: SessionSummary[],
@@ -551,7 +555,7 @@ export class ActiveSessionListingService extends EventEmitter {
   ): {
     sessions: SessionSummary[];
     pagination: SessionListingResult['pagination'];
-  } {
+ {
     const { page, limit } = pagination;
     const total = sessions.length;
     const totalPages = Math.ceil(total / limit);
@@ -567,9 +571,9 @@ export class ActiveSessionListingService extends EventEmitter {
         totalPages,
         hasNext: page < totalPages,
         hasPrev: page > 1
-      }
+
     };
-  }
+
 
   private async generateSessionSummary(sessions: SessionSummary[]): Promise<SessionListingResult['summary']> {
 
@@ -620,7 +624,7 @@ export class ActiveSessionListingService extends EventEmitter {
       averageSessionDuration,
       averageIdleTime
     };
-  }
+
 
   private async transformToSummary(
     session: Session | SessionSummary,
@@ -630,7 +634,7 @@ export class ActiveSessionListingService extends EventEmitter {
     // If already a summary, return it
     if ('deviceInfo' in session && 'timing' in session) {
       return session as SessionSummary;
-    }
+
 
     // Transform from Session to SessionSummary
     const fullSession = session as Session;
@@ -644,58 +648,58 @@ export class ActiveSessionListingService extends EventEmitter {
         name: 'Unknown Device', // Would be fetched from device profile
         type: 'unknown',
         trusted: false
-  }
+
       location: {
         ipAddress: fullSession.metadata.ipAddress,
         country: fullSession.metadata.geolocation?.country,
         region: fullSession.metadata.geolocation?.region,
         city: fullSession.metadata.geolocation?.city
-  }
+
       timing: {
         createdAt: fullSession.metadata.createdAt,
         lastActivity: fullSession.metadata.lastActivity,
         expiresAt: fullSession.metadata.expiresAt,
         remainingTime: Math.max(0, (fullSession.metadata.expiresAt.getTime() - now.getTime()) / 1000),
         idleTime: (now.getTime() - fullSession.metadata.lastActivity.getTime()) / 1000
-  }
+
       security: {
         trustLevel: fullSession.security.trustLevel,
         mfaVerified: fullSession.security.mfaVerified,
         riskScore: fullSession.security.riskScore,
         flags: fullSession.security.securityFlags
-  }
+
       status: {
         current: fullSession.status,
         isActive: fullSession.status === 'active',
         isExpired: fullSession.status === 'expired',
         requiresAction: []
-  }
+
       activity: {
         requestCount: fullSession.analytics.requestCount,
         lastEndpoint: fullSession.analytics.lastEndpoint,
         errorRate: fullSession.analytics.errorCount / Math.max(1, fullSession.analytics.requestCount),
         suspiciousCount: fullSession.analytics.suspiciousActivities
-      }
+
     };
-  }
+
 
   private async getAllActiveSessions(): Promise<SessionSummary[]> {
 
     // This would integrate with the session service to get all sessions
     // For now, returning empty array
     return [];
-  }
+
 
   private async getSessionDetails(sessionId: string): Promise<SessionSummary | null> {
 
     try {
       // Would fetch from session service
       return null;
-    } catch (error) {
+ catch (error) {
       console.error(`Error getting session details for ${sessionId}:`, error);
       return null;
-    }
-  }
+
+
 
   private calculateAverageTrustLevel(sessions: SessionSummary[]): number {
     if (sessions.length === 0) return 0;
@@ -712,7 +716,7 @@ export class ActiveSessionListingService extends EventEmitter {
     }, 0);
     
     return Math.round(total / sessions.length);
-  }
+
 
   private calculateErrorRate(sessions: (SessionSummary | null)[]): number {
     const validSessions = sessions.filter(s => s !== null) as SessionSummary[];
@@ -720,17 +724,17 @@ export class ActiveSessionListingService extends EventEmitter {
     
     const totalErrors = validSessions.reduce((sum, s) => sum + (s.activity.errorRate || 0), 0);
     return totalErrors / validSessions.length;
-  }
+
 
   private findPeakActivityTime(sessions: (SessionSummary | null)[]): Date | undefined {
     // Simplified - would analyze activity patterns
     return new Date();
-  }
+
 
   private processTimelineData(events: any[], groupBy: string): any[] {
     // Implementation would process events into timeline buckets
     return [];
-  }
+
 
   private calculateDeviceDistribution(sessions: SessionSummary[]): any[] {
     const distribution: Record<string, number> = {};
@@ -744,7 +748,7 @@ export class ActiveSessionListingService extends EventEmitter {
       count,
       percentage: total > 0 ? (count / total) * 100 : 0
     }));
-  }
+
 
   private async calculateLocationDistribution(sessions: SessionSummary[]): Promise<any[]> {
 
@@ -754,7 +758,7 @@ export class ActiveSessionListingService extends EventEmitter {
       const location = session.location.city || session.location.country || 'Unknown';
       if (!distribution[location]) {
         distribution[location] = { count: 0, riskTotal: 0 };
-      }
+
       distribution[location].count++;
       distribution[location].riskTotal += session.security.riskScore;
     });
@@ -765,7 +769,7 @@ export class ActiveSessionListingService extends EventEmitter {
       riskLevel: data.riskTotal / data.count > 70 ? 'high' : 
         data.riskTotal / data.count > 40 ? 'medium' : 'low'
     }));
-  }
+
 
   private calculateSecurityMetrics(sessions: SessionSummary[]): any {
     if (sessions.length === 0) {
@@ -775,7 +779,7 @@ export class ActiveSessionListingService extends EventEmitter {
         suspiciousActivityRate: 0,
         trustLevelDistribution: {}
       };
-    }
+
     
     const mfaEnabled = sessions.filter(s => s.security.mfaVerified).length;
     const totalRisk = sessions.reduce((sum, s) => sum + s.security.riskScore, 0);
@@ -794,7 +798,7 @@ export class ActiveSessionListingService extends EventEmitter {
       suspiciousActivityRate: totalRequests > 0 ? (totalSuspicious / totalRequests) * 100 : 0,
       trustLevelDistribution: trustDistribution
     };
-  }
+
 
   private convertToCSV(sessions: SessionSummary[]): string {
     const headers = [
@@ -823,35 +827,35 @@ export class ActiveSessionListingService extends EventEmitter {
     ]);
     
     return [headers, ...rows].map(row => row.join(',')).join('\n');
-  }
+
 
   private async convertToExcel(sessions: SessionSummary[]): Promise<Buffer> {
 
     // Would use a library like xlsx to generate Excel file
     // For now, return empty buffer
     return Buffer.from('');
-  }
+
 
   private async logExportEvent(options: SessionListingOptions, format: string, count: number): Promise<void> {
 
     console.log(`Session export: ${count} sessions exported as ${format}`, options);
-  }
+
 
   private shouldUseCache(): boolean {
     const now = new Date();
     return (now.getTime() - this.lastCacheUpdate.getTime()) < this.cacheExpiry;
-  }
+
 
   private getSessionsFromCache(options: SessionListingOptions): SessionSummary[] {
     // Would implement cache logic
     return Array.from(this.sessionCache.values());
-  }
+
 
   private startCacheRefresh(): void {
     setInterval(() => {
       this.refreshCache();
     }, this.cacheExpiry);
-  }
+
 
   private async refreshCache(): Promise<void> {
 
@@ -862,13 +866,12 @@ export class ActiveSessionListingService extends EventEmitter {
         this.sessionCache.set(session.sessionId, session);
       });
       this.lastCacheUpdate = new Date();
-    } catch (error) {
+ catch (error) {
       console.error('Error refreshing session cache:', error);
-    }
-  }
+
+
 
   destroy(): void {
     // Clean up resources
     this.sessionCache.clear();
-  }
-}
+

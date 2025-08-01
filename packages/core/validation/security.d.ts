@@ -8,8 +8,7 @@ import { z } from 'zod';
 export declare /**
  * Security validation utilities
  */
-export declare class SecurityValidation {
-    /**
+export declare class SecurityValidation { /**
      * Validates that a string doesn't contain dangerous patterns
      */
     static validateSafeString(value: string): boolean;
@@ -68,16 +67,15 @@ export declare     /**
     /**
      * Safe object validation
      */
-    safeObject: <T>(),
-      valueSchema: z.ZodSchema<T>,
+    safeObject: <T>()
+      valueSchema: z.ZodSchema<T> }
       maxKeys?: number
     ) => z.ZodEffects<z.ZodEffects<z.ZodRecord<z.ZodString, z.ZodType<T, z.ZodTypeDef, T>>, Record<string, T>, Record<string, T>>, Record<string, T>, Record<string, T>>;
 };
 /**
  * Security testing utilities
  */
-export declare class SecurityTesting {
-    /**
+export declare class SecurityTesting { /**
      * Common injection attack patterns for testing
      */
     static readonly INJECTION_PATTERNS: string[];
@@ -87,8 +85,7 @@ export declare class SecurityTesting {
     static testInjectionProtection(validator: (input: string) => boolean, testName?: string): {
         passed: number;
         failed: number;
-        failedPatterns: string[];
-    };
+        failedPatterns: string[] };
     /**
      * Run comprehensive security tests
      */

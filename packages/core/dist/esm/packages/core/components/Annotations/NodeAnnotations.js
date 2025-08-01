@@ -12,7 +12,7 @@ import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 // import { Switch } from '../ui/Switch';
-import { MessageCircle, CheckCircle, Clock, User, Zap, Settings, FileText, Link, Image as ImageIcon, Pause, X, Eye, EyeOff, Edit3, Save, MoreHorizontal } from 'lucide-react';
+import { MessageCircle, CheckCircle, Clock, User, Camera, Zap, Settings, FileText, Link, Image as ImageIcon, Pause, X, Eye, EyeOff, Edit3, Save, MoreHorizontal } from 'lucide-react';
 reactions: {
     [emoji, string];
     VFXUser;
@@ -25,18 +25,20 @@ const ANNOTATION_TYPES = {
         color: '#f59e0b',
         bgColor: 'bg-amber-50',
         borderColor: 'border-amber-200',
-        label: 'Performance',
-    }
-}, creative;
-/>,;
-color: '#8b5cf6',
-    bgColor;
-'bg-purple-50',
-    borderColor;
-'border-purple-200',
-    label;
-'Creative',
-;
+        label: 'Performance', }
+};
+creative: {
+    icon: _jsx(Camera, { className: "w-4 h-4" }),
+        color;
+    '#8b5cf6',
+        bgColor;
+    'bg-purple-50',
+        borderColor;
+    'border-purple-200',
+        label;
+    'Creative',
+    ;
+}
 technical: {
     icon: _jsx(Settings, { className: "w-4 h-4" }),
         color;

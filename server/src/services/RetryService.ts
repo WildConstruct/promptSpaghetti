@@ -5,8 +5,8 @@
 import { logger } from '../utils/logger';
 import { isRetryableError, TimeoutError, ExternalServiceError, DatabaseError } from '../types/errors';
 
-}
-}
+
+
 export interface RetryOptions {
   maxAttempts: number;
   initialDelayMs: number;
@@ -16,21 +16,22 @@ export interface RetryOptions {
   retryCondition?: (error: unknown, attempt: number) => boolean;
   onRetry?: (error: unknown, attempt: number, nextDelayMs: number) => void;
   name?: string;               // Operation name for logging
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetryResult<T> {
   result: T;
   attempts: number;
   totalTimeMs: number;
   errors: unknown[];
-}
 
-}
-}
+
+
+
 export interface RetryMetrics {
   operationName: string;
   totalExecutions: number;
@@ -45,10 +46,11 @@ export interface RetryMetrics {
     error: string;
     count: number;
     percentage: number;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 class RetryStrategy {
   private readonly options: Required<RetryOptions>;
@@ -83,13 +85,13 @@ class RetryStrategy {
       errors: new Map(),
       lastExecutionTime: 0
     };
-  }
+
 
   private defaultRetryCondition(error: unknown, _____attempt: number): boolean {
     // Retry on network errors, timeouts, and specific HTTP status codes
     if (isRetryableError(error)) {
       return true;
-    }
+
 
     // Retry on specific error types
     if (error instanceof Error) {
@@ -105,10 +107,10 @@ class RetryStrategy {
       ];
 
       return retryableMessages.some(msg => message.includes(msg));
-    }
+
 
     return false;
-  }
+
 
   private calculateDelay(attempt: number): number {
     // Calculate exponential backoff delay
@@ -121,18 +123,18 @@ class RetryStrategy {
     const jitter = cappedDelay * this.options.jitterMax * Math.random();
     
     return Math.floor(cappedDelay + jitter);
-  }
+
 
   private sleep(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   private recordError(error: unknown): void {
     const errorKey = error instanceof Error ? error.constructor.name : 'UnknownError';
     const currentCount = this.metrics.errors.get(errorKey) || 0;
     this.metrics.errors.set(errorKey, currentCount + 1);
-  }
+
 
   public async execute<T>(operation: () => Promise<T>): Promise<RetryResult<T>> {
     const startTime = Date.now();
@@ -167,7 +169,7 @@ class RetryStrategy {
           totalTimeMs,
           errors
         };
-      } catch (error) {
+ catch (error) {
         lastError = error;
         errors.push(error);
         this.recordError(error);
@@ -182,7 +184,7 @@ class RetryStrategy {
         if (attempt === this.options.maxAttempts) {
           // Last attempt, don't retry
           break;
-        }
+
 
         if (!this.options.retryCondition(error, attempt)) {
           logger.info(`Operation '${this.options.name}' will not be retried`, {
@@ -190,7 +192,7 @@ class RetryStrategy {
             error: error instanceof Error ? error.message : String(error)
           });
           break;
-        }
+
 
         // Calculate delay and wait
         const delayMs = this.calculateDelay(attempt);
@@ -203,8 +205,8 @@ class RetryStrategy {
         this.options.onRetry(error, attempt, delayMs);
         
         await this.sleep(delayMs);
-      }
-    }
+
+
 
     // All attempts failed
     const totalTimeMs = Date.now() - startTime;
@@ -217,7 +219,7 @@ class RetryStrategy {
     });
 
     throw lastError;
-  }
+
 
   public getMetrics(): RetryMetrics {
     const totalExecutions = this.metrics.totalExecutions || 1; // Avoid division by zero
@@ -248,7 +250,7 @@ class RetryStrategy {
       lastExecutionTime: this.metrics.lastExecutionTime,
       commonErrors
     };
-  }
+
 
   public resetMetrics(): void {
     this.metrics = {
@@ -260,8 +262,8 @@ class RetryStrategy {
       errors: new Map(),
       lastExecutionTime: 0
     };
-  }
-}
+
+
 
 export class RetryService {
   private strategies: Map<string, RetryStrategy> = new Map();
@@ -270,19 +272,19 @@ export class RetryService {
   static getInstance(): RetryService {
     if (!RetryService.instance) {
       RetryService.instance = new RetryService();
-    }
+
     return RetryService.instance;
-  }
+
 
   public createStrategy(name: string, options: RetryOptions): RetryStrategy {
     const strategy = new RetryStrategy({ ...options, name });
     this.strategies.set(name, strategy);
     return strategy;
-  }
+
 
   public getStrategy(name: string): RetryStrategy | undefined {
     return this.strategies.get(name);
-  }
+
 
   public getAllMetrics(): Record<string, RetryMetrics> {
     const metrics: Record<string, RetryMetrics> = {};
@@ -290,7 +292,7 @@ export class RetryService {
       metrics[name] = strategy.getMetrics();
     });
     return metrics;
-  }
+
 
   // Predefined retry strategies for common operations
   public getDatabaseRetryStrategy(): RetryStrategy {
@@ -307,12 +309,12 @@ export class RetryService {
         retryCondition: (error) => {
           return error instanceof DatabaseError || 
                  (error instanceof Error && error.message.includes('connection'));
-        }
+
       });
-    }
+
 
     return strategy;
-  }
+
 
   public getExternalAPIRetryStrategy(serviceName?: string): RetryStrategy {
     const name = serviceName ? `external-api-${serviceName}` : 'external-api';
@@ -333,12 +335,12 @@ export class RetryService {
                    error.message.includes('timeout') ||
                    error.message.includes('503') ||
                    error.message.includes('502')));
-        }
+
       });
-    }
+
 
     return strategy;
-  }
+
 
   public getFileSystemRetryStrategy(): RetryStrategy {
     const name = 'filesystem';
@@ -357,14 +359,14 @@ export class RetryService {
             return message.includes('ebusy') || 
                    message.includes('eagain') ||
                    message.includes('temporary');
-          }
+
           return false;
-        }
+
       });
-    }
+
 
     return strategy;
-  }
+
 
   public async executeWithRetry<T>(
     operationName: string,
@@ -384,11 +386,11 @@ export class RetryService {
         ...options
       };
       strategy = this.createStrategy(operationName, defaultOptions);
-    }
+
 
     return strategy.execute(operation);
-  }
-}
+
+
 
 // Export singleton instance
 export const retryService = RetryService.getInstance();
@@ -398,20 +400,20 @@ export async function withDatabaseRetry<T>(
   operation: () => Promise<T>
 ): Promise<RetryResult<T>> {
   return retryService.getDatabaseRetryStrategy().execute(operation);
-}
+
 
 export async function withExternalAPIRetry<T>(
   serviceName: string,
   operation: () => Promise<T>
 ): Promise<RetryResult<T>> {
   return retryService.getExternalAPIRetryStrategy(serviceName).execute(operation);
-}
+
 
 export async function withFileSystemRetry<T>(
   operation: () => Promise<T>
 ): Promise<RetryResult<T>> {
   return retryService.getFileSystemRetryStrategy().execute(operation);
-}
+
 
 // Simplified helper that just returns the result (not the retry metadata)
 export async function retryOperation<T>(
@@ -422,7 +424,7 @@ export async function retryOperation<T>(
 
   const result = await retryService.executeWithRetry(operationName, operation, options);
   return result.result;
-}
+
 
 export { RetryStrategy };
 export default RetryService;

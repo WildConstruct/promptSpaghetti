@@ -9,8 +9,7 @@ export { GraphParser, ParserResult, ParserError, ParserOptions, parseGraph, vali
 export { GraphLexer, Token, TokenType, LexerPosition, LexerError } from './lexer/graph-lexer';
 
 // AST
-export {
-  ASTBuilder,
+export { ASTBuilder,
   ASTNode,
   GraphAST,
   NodeDefinitionAST,
@@ -18,13 +17,12 @@ export {
   MetadataNode,
   PropertyNode,
   ArrayNode,
-  ParseError,
-} from './ast/ast-builder';
+  ParseError }
+ from './ast/ast-builder';
 
 // Semantic Analysis
-export {
-  SemanticAnalyzer,
+export { SemanticAnalyzer,
   SemanticError,
   ValidationContext,
-  SemanticAnalysisResult,
-} from './semantic/semantic-analyzer';
+  SemanticAnalysisResult }
+ from './semantic/semantic-analyzer';

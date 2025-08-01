@@ -36,10 +36,10 @@ import {
   ReviewMetadata,
   ReviewNote,
   ReviewEvidence
-} from '../../../../packages/core/types/ReviewTools';
+ from '../../../../packages/core/types/ReviewTools';
 
-}
-}
+
+
 export interface ReviewOrchestrationConfig {
   enabled: boolean;
   maxConcurrentReviews: number;
@@ -49,9 +49,10 @@ export interface ReviewOrchestrationConfig {
   enableEscalation: boolean;
   auditRetentionDays: number;
   performanceTracking: boolean;
-}
-}
-}
+
+
+
+
 
 export class ReviewOrchestrationService {
   private db: Database;
@@ -90,7 +91,7 @@ export class ReviewOrchestrationService {
       performanceTracking: true,
       ...config
     };
-  }
+
 
   // =============================================================================
   // Core Review Management
@@ -112,14 +113,14 @@ export class ReviewOrchestrationService {
       metadata?: Partial<ReviewMetadata>;
       assignToReviewer?: string;
       workflowOverride?: string;
-    }
+
   ): Promise<ReviewItem> {
 
     console.log(`🔄 Creating ${reviewType} review for ${sourceSystem}:${sourceId}`);
 
     if (!this.config.enabled) {
       throw new Error('Review orchestration service is disabled');
-    }
+
 
     // Generate review ID
     const reviewId = this.generateReviewId(reviewType);
@@ -132,7 +133,7 @@ export class ReviewOrchestrationService {
     const workflow = await this.getWorkflow(reviewType);
     if (!workflow) {
       throw new Error(`No workflow configured for review type: ${reviewType}`);
-    }
+
 
     // Build review criteria
     const criteria = await this.buildReviewCriteria(reviewType, data);
@@ -192,20 +193,20 @@ export class ReviewOrchestrationService {
         sourceId,
         priority,
         complexity: metadata.complexity
-  }
+
       severity: 'info'
     });
 
     // Assign reviewer if specified or auto-assignment is enabled
     if (options.assignToReviewer) {
       await this.assignReview(reviewId, options.assignToReviewer, 'manual');
-    } else if (this.config.enableAutoAssignment) {
+ else if (this.config.enableAutoAssignment) {
       await this.autoAssignReview(reviewId);
-    }
+
 
     console.log(`✅ Created review ${reviewId} with ${priority} priority`);
     return reviewItem;
-  }
+
 
   /**
    * Assign a review to a specific reviewer
@@ -220,21 +221,21 @@ export class ReviewOrchestrationService {
     const review = await this.getReview(reviewId);
     if (!review) {
       throw new Error(`Review not found: ${reviewId}`);
-    }
+
 
     const reviewer = await this.getReviewer(reviewerId);
     if (!reviewer) {
       throw new Error(`Reviewer not found: ${reviewerId}`);
-    }
+
 
     // Check reviewer availability and capacity
     if (!reviewer.availability.autoAssignment && assignmentType === 'automatic') {
       throw new Error(`Reviewer ${reviewerId} has auto-assignment disabled`);
-    }
+
 
     if (reviewer.workload.currentAssignments >= reviewer.workload.maxConcurrentReviews) {
       throw new Error(`Reviewer ${reviewerId} is at capacity`);
-    }
+
 
     // Create assignment
     const assignmentId = this.generateAssignmentId();
@@ -275,13 +276,13 @@ export class ReviewOrchestrationService {
         assignmentId,
         assignmentType,
         priority: review.priority
-  }
+
       severity: 'info'
     });
 
     console.log(`👤 Assigned review ${reviewId} to reviewer ${reviewerId}`);
     return assignment;
-  }
+
 
   /**
    * Auto-assign a review based on configured assignment rules
@@ -291,7 +292,7 @@ export class ReviewOrchestrationService {
     const review = await this.getReview(reviewId);
     if (!review) {
       throw new Error(`Review not found: ${reviewId}`);
-    }
+
 
     console.log(`🤖 Auto-assigning review ${reviewId} (${review.reviewType})`);
 
@@ -300,7 +301,7 @@ export class ReviewOrchestrationService {
     if (rules.length === 0) {
       console.log(`⚠️ No assignment rules configured for ${review.reviewType}`);
       return null;
-    }
+
 
     // Find the best reviewer
     const availableReviewers = await this.getAvailableReviewers(review.reviewType);
@@ -308,7 +309,7 @@ export class ReviewOrchestrationService {
       console.log(`⚠️ No available reviewers for ${review.reviewType}`);
       await this.handleNoAvailableReviewers(review);
       return null;
-    }
+
 
     // Score and rank reviewers
     const scoredReviewers = await this.scoreReviewers(review, availableReviewers, rules);
@@ -318,11 +319,11 @@ export class ReviewOrchestrationService {
       console.log(`⚠️ No suitable reviewer found for review ${reviewId}`);
       await this.escalateReview(reviewId, 'no_suitable_reviewer');
       return null;
-    }
+
 
     // Assign to the best reviewer
     return await this.assignReview(reviewId, bestReviewer.reviewerId, 'automatic');
-  }
+
 
   /**
    * Submit a review decision
@@ -339,7 +340,7 @@ export class ReviewOrchestrationService {
         score: number;
         passed: boolean;
         notes?: string;
-      }>;
+>;
       recommendedActions?: string[];
     }
   ): Promise<ReviewDecision> {
@@ -347,17 +348,17 @@ export class ReviewOrchestrationService {
     const review = await this.getReview(reviewId);
     if (!review) {
       throw new Error(`Review not found: ${reviewId}`);
-    }
+
 
     // Validate reviewer assignment
     const assignment = await this.getAssignment(reviewId, reviewerId);
     if (!assignment) {
       throw new Error(`Reviewer ${reviewerId} is not assigned to review ${reviewId}`);
-    }
+
 
     if (assignment.status !== 'accepted' && assignment.status !== 'in_progress') {
       throw new Error(`Cannot submit decision for review in status: ${assignment.status}`);
-    }
+
 
     // Create decision
     const decisionId = this.generateDecisionId();
@@ -387,7 +388,7 @@ export class ReviewOrchestrationService {
         decisionId,
         decision: decision.decision,
         confidence: decision.confidence
-  }
+
       severity: 'info'
     });
 
@@ -396,7 +397,7 @@ export class ReviewOrchestrationService {
 
     console.log(`✅ Decision submitted for review ${reviewId}: ${decision.decision}`);
     return reviewDecision;
-  }
+
 
   /**
    * Add a note to a review
@@ -409,13 +410,13 @@ export class ReviewOrchestrationService {
       content: string;
       visibility: 'reviewers_only' | 'internal' | 'public' | 'submitter_visible';
       replyTo?: string;
-    }
+
   ): Promise<ReviewNote> {
 
     const review = await this.getReview(reviewId);
     if (!review) {
       throw new Error(`Review not found: ${reviewId}`);
-    }
+
 
     const noteId = this.generateNoteId();
     const reviewNote: ReviewNote = {
@@ -437,10 +438,10 @@ export class ReviewOrchestrationService {
     // Send notifications if appropriate
     if (note.noteType === 'question' || note.noteType === 'concern') {
       await this.notifyReviewStakeholders(reviewId, 'note_added', reviewNote);
-    }
+
 
     return reviewNote;
-  }
+
 
   /**
    * Escalate a review to higher level reviewers
@@ -454,7 +455,7 @@ export class ReviewOrchestrationService {
     const review = await this.getReview(reviewId);
     if (!review) {
       throw new Error(`Review not found: ${reviewId}`);
-    }
+
 
     console.log(`⬆️ Escalating review ${reviewId}: ${reason}`);
 
@@ -474,11 +475,11 @@ export class ReviewOrchestrationService {
       // Execute escalation actions
       for (const action of applicableRule.actions) {
         await this.executeEscalationAction(review, action, reason);
-      }
-    } else {
+
+ else {
       // Default escalation: assign to senior reviewer
       await this.assignToSeniorReviewer(review);
-    }
+
 
     // Log escalation
     await this.auditService.logEvent({
@@ -489,10 +490,10 @@ export class ReviewOrchestrationService {
         reason,
         reviewType: review.reviewType,
         priority: review.priority
-  }
+
       severity: 'warning'
     });
-  }
+
 
   // =============================================================================
   // Review Analytics and Reporting
@@ -532,7 +533,7 @@ export class ReviewOrchestrationService {
         startDate: timeRange.startDate,
         endDate: timeRange.endDate,
         timeRange: 'custom'
-  }
+
       generatedAt: new Date(),
       overallMetrics,
       performanceMetrics,
@@ -543,7 +544,7 @@ export class ReviewOrchestrationService {
       insights,
       recommendations
     };
-  }
+
 
   /**
    * Get real-time review dashboard data
@@ -555,7 +556,7 @@ export class ReviewOrchestrationService {
     escalatedReviews: ReviewItem[];
     overdueReviews: ReviewItem[];
     recentDecisions: ReviewDecision[];
-  }> {
+> {
 
     const [
       summary,
@@ -581,7 +582,7 @@ export class ReviewOrchestrationService {
       overdueReviews,
       recentDecisions
     };
-  }
+
 
   // =============================================================================
   // Private Implementation Methods
@@ -605,8 +606,8 @@ export class ReviewOrchestrationService {
       
     default:
       return 'medium';
-    }
-  }
+
+
 
   private async determineComplexity(reviewType: ReviewType, data: Record<string, unknown>): Promise<ReviewComplexity> {
 
@@ -625,7 +626,7 @@ export class ReviewOrchestrationService {
     if (complexityScore >= 3) return 'complex';
     if (complexityScore >= 1) return 'moderate';
     return 'simple';
-  }
+
 
   private async buildReviewCriteria(
     reviewType: ReviewType,
@@ -641,7 +642,7 @@ export class ReviewOrchestrationService {
       ...template,
       criteriaId: this.generateCriteriaId()
     }));
-  }
+
 
   private async scoreReviewers(
     review: ReviewItem,
@@ -658,7 +659,7 @@ export class ReviewOrchestrationService {
       if (reviewer.availability.status === 'available') {
         score += 0.3;
         reasons.push('Available');
-      }
+
 
       // Workload scoring
       const utilizationRate = reviewer.workload.capacityUtilization / 100;
@@ -672,7 +673,7 @@ export class ReviewOrchestrationService {
       if (hasSpecialization) {
         score += 0.3;
         reasons.push('Has relevant specialization');
-      }
+
 
       // Performance scoring
       score += (reviewer.performance.qualityScore / 100) * 0.2;
@@ -683,11 +684,11 @@ export class ReviewOrchestrationService {
         score,
         reasons
       });
-    }
+
 
     // Sort by score descending
     return scoredReviewers.sort((a, b) => b.score - a.score);
-  }
+
 
   private isRelevantSpecialization(area: string, reviewType: ReviewType): boolean {
     const relevanceMap: Record<string, string[]> = {
@@ -699,7 +700,7 @@ export class ReviewOrchestrationService {
     };
 
     return relevanceMap[area]?.includes(reviewType) || false;
-  }
+
 
   private calculateDueDate(priority: ReviewPriority): Date {
     const hours = {
@@ -708,10 +709,10 @@ export class ReviewOrchestrationService {
       high: 24,
       medium: 72,
       low: 168
-    }[priority];
+[priority];
 
     return new Date(Date.now() + hours * 60 * 60 * 1000);
-  }
+
 
   // Database operations
   private async storeReview(review: ReviewItem): Promise<void> {
@@ -731,7 +732,7 @@ export class ReviewOrchestrationService {
       review.dueDate, review.requiresConsensus, review.minReviewers,
       review.autoEscalationEnabled
     ]);
-  }
+
 
   private async getReview(reviewId: string): Promise<ReviewItem | null> {
 
@@ -743,7 +744,7 @@ export class ReviewOrchestrationService {
 
     const row = result.rows[0];
     return this.mapRowToReview(row);
-  }
+
 
   private mapRowToReview(row: unknown): ReviewItem {
     return {
@@ -775,60 +776,60 @@ export class ReviewOrchestrationService {
       minReviewers: row.min_reviewers,
       autoEscalationEnabled: row.auto_escalation_enabled
     };
-  }
+
 
   // Placeholder implementations for complex methods
   private async getWorkflow(_____reviewType: ReviewType): Promise<ReviewWorkflow | null> {
 
     // Would implement workflow retrieval
     return null;
-  }
+
 
   private async getAvailableReviewers(_____reviewType: ReviewType): Promise<ReviewerProfile[]> {
 
     // Would implement available reviewer lookup
     return [];
-  }
+
 
   private async getAssignmentRules(_____reviewType: ReviewType): Promise<AssignmentRule[]> {
 
     // Would implement assignment rules retrieval
     return [];
-  }
+
 
   private async processDecision(review: ReviewItem, decision: ReviewDecision): Promise<void> {
 
     // Would implement decision processing logic
     console.log(`Processing decision ${decision.decision} for review ${review.reviewId}`);
-  }
+
 
   // ID generation methods
   private generateReviewId(reviewType: ReviewType): string {
     const prefix = reviewType.substring(0, 2).toUpperCase();
     return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   private generateAssignmentId(): string {
     return `ASS-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   private generateDecisionId(): string {
     return `DEC-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   private generateNoteId(): string {
     return `NOTE-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   private generateCriteriaId(): string {
     return `CRIT-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
+
 
   // Placeholder notification methods
   private async notifyReviewerAssignment(assignment: ReviewAssignment): Promise<void> {
 
     console.log(`📧 Notifying reviewer assignment: ${assignment.assignmentId}`);
-  }
+
 
   private async notifyReviewStakeholders(
     reviewId: string,
@@ -838,7 +839,7 @@ export class ReviewOrchestrationService {
   ): Promise<void> {
 
     console.log(`📧 Notifying stakeholders of ${event} for review ${reviewId}`);
-  }
+
 
   // Placeholder helper methods - would implement full functionality
   private async extractBusinessContext(
@@ -875,7 +876,7 @@ export class ReviewOrchestrationService {
 
     const timeMap = { simple: 15, moderate: 30, complex: 60, expert_required: 120 };
     return timeMap[complexity]; 
-  }
+
   private async getCriteriaTemplates(_____reviewType: ReviewType): Promise<any[]> { return []; }
   private async getReviewer(_____reviewerId: string): Promise<ReviewerProfile | null> { return null; }
   private async storeAssignment(_____assignment: ReviewAssignment): Promise<void> { }
@@ -912,11 +913,12 @@ export class ReviewOrchestrationService {
   private async getEscalatedReviews(_____limit: number): Promise<ReviewItem[]> { return []; }
   private async getOverdueReviews(_____limit: number): Promise<ReviewItem[]> { return []; }
   private async getRecentDecisions(_____limit: number): Promise<ReviewDecision[]> { return []; }
-}
+
 
 // Supporting interfaces
-}
-}
+
+
+
 interface ReviewDashboardSummary {
   totalActiveReviews: number;
   pendingAssignments: number;
@@ -926,6 +928,6 @@ interface ReviewDashboardSummary {
   reviewerUtilization: number;
   qualityScore: number;
   throughput: number;
-}
-}
-}
+
+
+

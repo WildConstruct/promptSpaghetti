@@ -11,28 +11,25 @@ import { DashboardProvider } from './DashboardProvider';
 import { LoadingState, ErrorState } from '../states';
 import './DashboardShell.css';
 
-}
-export interface TabConfig {
-  id: string;
+
+export interface TabConfig { id: string;
   label: string;
   content: React.ReactNode;
   badge?: string | number;
-  disabled?: boolean;
-}
-}
-}
-export interface TimeRangeOption {
-  label: string;
+  disabled?: boolean }
+
+
+
+export interface TimeRangeOption { label: string;
   value: string;
-  days?: number;
-}
-}
-}
-export interface DashboardShellProps {
-  // Header configuration
+  days?: number }
+
+
+
+export interface DashboardShellProps { // Header configuration
   title: string;
-  description?: string;
-}
+  description?: string }
+
   icon?: React.ComponentType<{ size?: number }>;
   // Actions and controls
   actions?: React.ReactNode;
@@ -67,59 +64,51 @@ const DEFAULT_TIME_RANGE_OPTIONS: TimeRangeOption = [
   { label: 'Last 30 days', value: '30d', days: 30 },
   { label: 'Last 90 days', value: '90d', days: 90 }
 ];
-}
-export const DashboardShell: React.FC<DashboardShellProps> = ({)
-  title,
-  description,
-  icon,
-  actions,
-  showRefresh = true,
-  showExport = true,
-  onRefresh,
-  onExport,
-  timeRange = '7d',
-  timeRangeOptions = DEFAULT_TIME_RANGE_OPTIONS,
-  onTimeRangeChange,
-  showTimeRange = true,
-  tabs,
-  activeTab,
-  onTabChange,
-  children,
-  loading = false,
-  error = null,
-  fullWidth = false,
-  maxWidth,
-  padding = 'medium',
-  className = '',
-  headerClassName = '',
+
+export const DashboardShell: React.FC<DashboardShellProps> = ({ )
+  title
+  description
+  icon
+  actions
+  showRefresh = true
+  showExport = true
+  onRefresh
+  onExport
+  timeRange = '7d'
+  timeRangeOptions = DEFAULT_TIME_RANGE_OPTIONS
+  onTimeRangeChange
+  showTimeRange = true
+  tabs
+  activeTab
+  onTabChange
+  children
+  loading = false
+  error = null
+  fullWidth = false
+  maxWidth
+  padding = 'medium'
+  className = ''
+  headerClassName = '' }
   contentClassName = ''
-}) => {
-  const [internalActiveTab, setInternalActiveTab] = useState()
+}) => { const [internalActiveTab, setInternalActiveTab] = useState()
   activeTab || tabs?.[0]?.id || ''
   );
   const currentActiveTab = activeTab || internalActiveTab;
-  const handleTabChange = (tabId: string) => {,
+  const handleTabChange = (tabId: string) => { }
   setInternalActiveTab(tabId);
   onTabChange?.(tabId);
 };
-  const handleRefresh = () => {
-    onRefresh?.();
-  };
-  const handleExport = (format: 'csv' | 'pdf' | 'excel') => {
-    onExport?.(format);
-  };
-  const handleTimeRangeChange = (newTimeRange: string) => {
-    onTimeRangeChange?.(newTimeRange);
-  };
+  const handleRefresh = () => { onRefresh?.() };
+  const handleExport = (format: 'csv' | 'pdf' | 'excel') => { onExport?.(format) };
+  const handleTimeRangeChange = (newTimeRange: string) => { onTimeRangeChange?.(newTimeRange) };
   // Get current tab content
   const currentTabContent = tabs?.find(tab => tab.id === currentActiveTab)?.content;
   // Determine padding class
-  const paddingClass = {
-  none: 'dashboard-padding-none',
-  small: 'dashboard-padding-small',
-  medium: 'dashboard-padding-medium',
-  large: 'dashboard-padding-large',
-}[padding];
+  const paddingClass = { none: 'dashboard-padding-none'
+  small: 'dashboard-padding-small'
+  medium: 'dashboard-padding-medium'
+  large: 'dashboard-padding-large' }
+[padding];
   return;
     <DashboardProvider
       timeRange={timeRange}

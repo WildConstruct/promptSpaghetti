@@ -6,9 +6,9 @@
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { IdentityValidationType, ValidationStatus, IdentityValidationRequest } from '../../auth/IdentityValidation';
-}
-interface VerificationStatusTrackerProps {
-  userId: string;
+
+
+interface VerificationStatusTrackerProps { userId: string;
   onRefresh?: () => void;
   onRequestVerification?: (type: IdentityValidationType) => void;
   interface VerificationStatusItem {
@@ -24,44 +24,40 @@ interface VerificationStatusTrackerProps {
   priority: 'high' | 'medium' | 'low';
   const VERIFICATION_TYPES: Omit<VerificationStatusItem, 'status' | 'requestId' | 'submittedAt' | 'lastUpdated' | 'nextSteps' | 'estimatedCompletion'>[] = [
   {
-  type: 'email_verification',
-  title: 'Email Verification',
-  description: 'Verify your email address for account security',
-  priority: 'high',
-}
-}
-  {
-  type: 'phone_verification',
+  type: 'email_verification';
+  title: 'Email Verification';
+  description: 'Verify your email address for account security';
+  priority: 'high' }
+
+
+
+  { type: 'phone_verification',
   title: 'Phone Verification',
   description: 'Add phone number for two-factor authentication',
-  priority: 'high',
-}
-  {
-  type: 'government_id',
+  priority: 'high' }
+
+  { type: 'government_id',
   title: 'Government ID',
   description: 'Upload government-issued identification',
-  priority: 'medium',
-}
-  {
-  type: 'professional_credentials',
+  priority: 'medium' }
+
+  { type: 'professional_credentials',
   title: 'Professional Credentials',
   description: 'Verify your film industry experience and credentials',
-  priority: 'medium',
-}
-  {
-  type: 'portfolio_verification',
+  priority: 'medium' }
+
+  { type: 'portfolio_verification',
   title: 'Portfolio Verification',
   description: 'Verify your professional portfolio and work samples',
-  priority: 'medium',
-}
-  {
-  type: 'social_media_verification',
+  priority: 'medium' }
+
+  { type: 'social_media_verification',
   title: 'Social Media Verification',
   description: 'Link your professional social media profiles',
   priority: 'low'];
-  export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps> = ({,)
-  userId,
-  onRefresh,
+  export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps> = ({)
+  userId
+  onRefresh }
   onRequestVerification
 }) => {
   const [verificationItems, setVerificationItems] = useState<VerificationStatusItem>([]);
@@ -74,30 +70,29 @@ interface VerificationStatusTrackerProps {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 500));
       // Mock verification status data
-      const mockStatuses: Partial<Record<IdentityValidationType, { status: ValidationStatus; requestId?: string; submittedAt?: Date }>> = {
-  email_verification: {
-  status: 'approved',
-  requestId: 'req_email_123',
-  submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago,
-},
-  phone_verification: {
-  status: 'pending',
-  requestId: 'req_phone_456',
-  submittedAt: new Date(Date.now() - 1 * 60 * 60 * 1000) // 1 hour ago,
-},
-  government_id: {
-  status: 'in_review',
-  requestId: 'req_id_789',
-  submittedAt: new Date(Date.now() - 6 * 60 * 60 * 1000) // 6 hours ago,
+      const mockStatuses: Partial<Record<IdentityValidationType, { status: ValidationStatus; requestId?: string; submittedAt?: Date }>> = { email_verification: {
+  status: 'approved'
+  requestId: 'req_email_123'
+  submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago }
+
+  phone_verification: { 
+  status: 'pending'
+  requestId: 'req_phone_456'
+  submittedAt: new Date(Date.now() - 1 * 60 * 60 * 1000) // 1 hour ago }
+
+  government_id: { 
+  status: 'in_review'
+  requestId: 'req_id_789'
+  submittedAt: new Date(Date.now() - 6 * 60 * 60 * 1000) // 6 hours ago }
 };
-      const items: VerificationStatusItem = VERIFICATION_TYPES.map(type => {)
+      const items: VerificationStatusItem = VERIFICATION_TYPES.map(type => { )
   const mockStatus = mockStatuses[type.type];
-  const baseItem: VerificationStatusItem = {,
-  ...type,
-  status: mockStatus?.status || 'not_started',
-  requestId: mockStatus?.requestId,
-  submittedAt: mockStatus?.submittedAt,
-  lastUpdated: mockStatus?.submittedAt,
+  const baseItem: VerificationStatusItem = {
+  ...type
+  status: mockStatus?.status || 'not_started'
+  requestId: mockStatus?.requestId
+  submittedAt: mockStatus?.submittedAt
+  lastUpdated: mockStatus?.submittedAt }
 };
         // Add next steps based on status
         baseItem.nextSteps = generateNextSteps(baseItem.status, type.type);
@@ -106,20 +101,11 @@ interface VerificationStatusTrackerProps {
       });
       setVerificationItems(items);
       setLastRefresh(new Date());
-    } catch (error) {
-  console.error('Failed to load verification status:', error);
-} finally {
-      setIsLoading(false);
-  }, [userId]);
-  useEffect(() => {
-    loadVerificationStatus();
-  }, [loadVerificationStatus]);
-  const handleRefresh = useCallback(() => {
-    loadVerificationStatus();
-    onRefresh?.();
-  }, [loadVerificationStatus, onRefresh]);
-  const getStatusIcon = useCallback((status: ValidationStatus | 'not_started'): string => {
-  switch (status) {
+ catch (error) { console.error('Failed to load verification status:', error) } finally { setIsLoading(false) }, [userId]);
+  useEffect(() => { loadVerificationStatus() }, [loadVerificationStatus]);
+  const handleRefresh = useCallback(() => { loadVerificationStatus();
+    onRefresh?.() }, [loadVerificationStatus, onRefresh]);
+  const getStatusIcon = useCallback((status: ValidationStatus | 'not_started'): string => { switch (status) {
   case 'approved': return '✅';
   case 'pending': return '⏳';
   case 'in_review': return '👁️';
@@ -127,10 +113,8 @@ interface VerificationStatusTrackerProps {
   case 'expired': return '⚠️';
   case 'requires_update': return '🔄';
   case 'not_started': return '⚪';
-  default: return '❓';
-}, []);
-  const getStatusColor = useCallback((status: ValidationStatus | 'not_started'): string => {
-  switch (status) {
+  default: return '❓' }, []);
+  const getStatusColor = useCallback((status: ValidationStatus | 'not_started'): string => { switch (status) {
   case 'approved': return '#10b981';
   case 'pending': return '#f59e0b';
   case 'in_review': return '#3b82f6';
@@ -138,10 +122,8 @@ interface VerificationStatusTrackerProps {
   case 'expired': return '#f97316';
   case 'requires_update': return '#8b5cf6';
   case 'not_started': return '#6b7280';
-  default: return '#6b7280';
-}, []);
-  const getStatusText = useCallback((status: ValidationStatus | 'not_started'): string => {
-  switch (status) {
+  default: return '#6b7280' }, []);
+  const getStatusText = useCallback((status: ValidationStatus | 'not_started'): string => { switch (status) {
   case 'approved': return 'Verified';
   case 'pending': return 'Pending Review';
   case 'in_review': return 'Under Review';
@@ -149,15 +131,13 @@ interface VerificationStatusTrackerProps {
   case 'expired': return 'Expired';
   case 'requires_update': return 'Needs Update';
   case 'not_started': return 'Not Started';
-  default: return 'Unknown'
-  }, []);
-  const getPriorityColor = useCallback((priority: 'high' | 'medium' | 'low'): string => {
-  switch (priority) {
+  default: return 'Unknown' }
+}, []);
+  const getPriorityColor = useCallback((priority: 'high' | 'medium' | 'low'): string => { switch (priority) {
   case 'high': return '#ef4444';
   case 'medium': return '#f59e0b';
   case 'low': return '#6b7280';
-  default: return '#6b7280';
-}, []);
+  default: return '#6b7280' }, []);
   const completedCount = verificationItems.filter(item => item.status === 'approved').length;
   const totalCount = verificationItems.length;
   const completionPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
@@ -225,10 +205,10 @@ interface VerificationStatusTrackerProps {
               </div>
               <div 
                 className="status-badge"
-                style={{
-  color: getStatusColor(item.status),
-  borderColor: getStatusColor(item.status),
-}}
+                style={ {
+  color: getStatusColor(item.status)
+  borderColor: getStatusColor(item.status) }
+}
               >
                 {getStatusText(item.status)}
               </div>
@@ -297,7 +277,7 @@ interface VerificationStatusTrackerProps {
           </div>
         ))}
       </div>
-      <style>{`
+      <style>{ `
         .verification-status-tracker {
           max-width: 900px;
   margin: 0 auto;
@@ -319,7 +299,7 @@ interface VerificationStatusTrackerProps {
   color: #1f2937;
           margin: 0;
         .refresh-btn {
-          background: #f3f4f6;
+          background: #f3f4f6
   border: none;
           padding: 8px 12px;
           border-radius: 6px;
@@ -327,19 +307,19 @@ interface VerificationStatusTrackerProps {
           font-size: 14px;
   color: #374151;
           transition: background-color 0.2s;
-        .refresh-btn:hover {,
+        .refresh-btn:hover {
   background: #e5e7eb;
         .progress-summary {
           margin-bottom: 12px;
         .progress-bar {
-          width: 100%;
+          width: 100%
   height: 8px;
           background-color: #e5e7eb;
           border-radius: 4px;
   overflow: hidden;
           margin-bottom: 8px;
         .progress-fill {
-          height: 100%;
+          height: 100%
   background: linear-gradient(90deg, #3b82f6, #10b981);
           transition: width 0.3s ease;
         .progress-text {
@@ -357,9 +337,9 @@ interface VerificationStatusTrackerProps {
           border-radius: 8px;
   padding: 24px;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          border-left: 4px solid #e5e7eb;
+          border-left: 4px solid #e5e7eb
   transition: transform 0.2s, box-shadow 0.2s;
-        .verification-item:hover {,
+        .verification-item:hover {
   transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         .item-header {
@@ -369,7 +349,7 @@ interface VerificationStatusTrackerProps {
           margin-bottom: 12px;
         .item-title {
           display: flex;
-          align-items: flex-start;
+          align-items: flex-start
   gap: 12px;
         .status-icon {
           font-size: 24px;
@@ -387,7 +367,7 @@ interface VerificationStatusTrackerProps {
           font-weight: 500;
           text-transform: uppercase;
         .status-badge {
-          padding: 6px 12px;
+          padding: 6px 12px
   border: 1px solid;
           border-radius: 6px;
           font-size: 12px;
@@ -432,7 +412,7 @@ interface VerificationStatusTrackerProps {
           display: flex;
   gap: 12px;
         .btn {
-          padding: 8px 16px;
+          padding: 8px 16px
   border: none;
           border-radius: 6px;
           font-size: 14px;
@@ -440,24 +420,24 @@ interface VerificationStatusTrackerProps {
   cursor: pointer;
           transition: all 0.2s;
         .btn-primary {
-          background: #3b82f6;
+          background: #3b82f6
   color: white;
-        .btn-primary:hover {,
+        .btn-primary:hover {
   background: #2563eb;
         .btn-warning {
-          background: #f59e0b;
+          background: #f59e0b
   color: white;
-        .btn-warning:hover {,
+        .btn-warning:hover {
   background: #d97706;
         .btn-secondary {
-          background: #6b7280;
+          background: #6b7280
   color: white;
-        .btn-secondary:hover {,
+        .btn-secondary:hover {
   background: #4b5563;
         @media (max-width: 768px) {
           .verification-status-tracker {
             padding: 16px;
-          .tracker-header,
+          .tracker-header }
           .verification-item {
             padding: 16px;
           .item-header {
@@ -493,20 +473,19 @@ function generateNextSteps(status: ValidationStatus | 'not_started', type: Ident
 function getEstimatedCompletion(((
     status: ValidationStatus | 'not_started',
     type: IdentityValidationType
-  ): string | undefined {
-  if (status === 'approved' || status === 'rejected') {
+  ): string | undefined { if (status === 'approved' || status === 'rejected') {
   return undefined;
-  const completionTimes: Record<IdentityValidationType, string> = {,
-  'email_verification': '5 minutes',
-  'phone_verification': '10 minutes',
-  'government_id': '2-3 business days',
-  'professional_credentials': '3-5 business days',
-  'industry_affiliation': '2-4 business days',
-  'portfolio_verification': '1-3 business days',
-  'social_media_verification': '1-2 business days',
-  'address_verification': '2-3 business days',
-  'payment_method_verification': '1-2 business days',
-  'basic_profile': 'Immediate',
+  const completionTimes: Record<IdentityValidationType, string> = {
+  'email_verification': '5 minutes'
+  'phone_verification': '10 minutes'
+  'government_id': '2-3 business days'
+  'professional_credentials': '3-5 business days'
+  'industry_affiliation': '2-4 business days'
+  'portfolio_verification': '1-3 business days'
+  'social_media_verification': '1-2 business days'
+  'address_verification': '2-3 business days'
+  'payment_method_verification': '1-2 business days'
+  'basic_profile': 'Immediate' }
 };
   return completionTimes[type] || '1-3 business days';
 

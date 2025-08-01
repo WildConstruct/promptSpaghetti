@@ -23,7 +23,7 @@ const RandomizerGenerateRequestSchema = z.object({
     includeMetadata: z.boolean().optional(),
     validateOutput: z.boolean().optional(),
     includeExplanation: z.boolean().optional()
-  }
+
 });
 
 const RandomizerValidateRequestSchema = z.object({
@@ -43,15 +43,15 @@ const RandomizerValidateRequestSchema = z.object({
     includeMetadata: z.boolean().optional(),
     validateOutput: z.boolean().optional(),
     includeExplanation: z.boolean().optional()
-  }
+
 });
 
 // Type definitions
 type RandomizerGenerateRequest = z.infer<typeof RandomizerGenerateRequestSchema>;
 type RandomizerValidateRequest = z.infer<typeof RandomizerValidateRequestSchema>;
 
-}
-}
+
+
 interface RandomizerGenerateResponse {
   success: boolean;
   graph?: unknown;
@@ -60,44 +60,46 @@ interface RandomizerGenerateResponse {
     provider: string;
     requestId: string;
     timestamp: string;
-}
-}
+
+
+
   };
   errors?: Array<{
     type: string;
     message: string;
     details?: unknown;
-  }>;
+>;
   warnings?: Array<{
     type: string;
     message: string;
     suggestion?: string;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 interface RandomizerValidateResponse {
   isValid: boolean;
   errors: Array<{
     field: string;
     message: string;
     severity: 'error' | 'warning';
-}
-}
-  }>;
+
+
+
+>;
   warnings: Array<{
     field: string;
     message: string;
     suggestion?: string;
-  }>;
+>;
   suggestions?: {
     nodeCount?: number;
     temperature?: number;
     focusAreas?: string[];
     recommendedProvider?: string;
   };
-}
+
 
 // Global randomizer system instance
 const randomizerSystem = new LLMRandomizerSystem();
@@ -113,7 +115,7 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
   fastify.post<{
     Body: RandomizerGenerateRequest;
     Reply: RandomizerGenerateResponse;
-  }>('/generate', {
+>('/generate', {
     schema: {
       body: {
         type: 'object',
@@ -138,10 +140,10 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
               includeMetadata: { type: 'boolean' },
               validateOutput: { type: 'boolean' },
               includeExplanation: { type: 'boolean' }
-            }
-          }
-        }
-  }
+
+
+
+
       response: {
         200: {
           type: 'object',
@@ -155,8 +157,8 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                 provider: { type: 'string' },
                 requestId: { type: 'string' },
                 timestamp: { type: 'string' }
-              }
-  }
+
+
             errors: {
               type: 'array',
               items: {
@@ -165,9 +167,9 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                   type: { type: 'string' },
                   message: { type: 'string' },
                   details: { type: 'object' }
-                }
-              }
-  }
+
+
+
             warnings: {
               type: 'array',
               items: {
@@ -176,11 +178,11 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                   type: { type: 'string' },
                   message: { type: 'string' },
                   suggestion: { type: 'string' }
-                }
-              }
-            }
-          }
-  }
+
+
+
+
+
         400: {
           type: 'object',
           properties: {
@@ -192,11 +194,11 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                 properties: {
                   type: { type: 'string' },
                   message: { type: 'string' }
-                }
-              }
-            }
-          }
-  }
+
+
+
+
+
         500: {
           type: 'object',
           properties: {
@@ -208,13 +210,13 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                 properties: {
                   type: { type: 'string' },
                   message: { type: 'string' }
-                }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
+
     handler: async (request: FastifyRequest<{ Body: RandomizerGenerateRequest }>, reply: FastifyReply) => {
       try {
         const startTime = Date.now();
@@ -240,25 +242,25 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
               provider: validatedRequest.parameters.provider || 'openai',
               requestId,
               timestamp: new Date().toISOString()
-  }
+
             errors: result.errors || [],
             warnings: result.warnings || []
           };
           
           reply.code(200).send(response);
-        } else {
+ else {
           const response: RandomizerGenerateResponse = {
             success: false,
             errors: result.errors || [{
               type: 'generation_error',
               message: 'Failed to generate graph'
-            }],
+],
             warnings: result.warnings || []
           };
           
           reply.code(400).send(response);
-        }
-      } catch (error) {
+
+ catch (error) {
         request.log.error(error);
         
         if (error instanceof z.ZodError) {
@@ -267,19 +269,19 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
             errors: [{
               type: 'validation_error',
               message: `Invalid request: ${error.message}`
-            }]
+]
           });
-        } else {
+ else {
           reply.code(500).send({
             success: false,
             errors: [{
               type: 'server_error',
               message: error instanceof Error ? error.message : 'Unknown error'
-            }]
+]
           });
-        }
-      }
-    }
+
+
+
   });
 
   /**
@@ -289,7 +291,7 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
   fastify.post<{
     Body: RandomizerValidateRequest;
     Reply: RandomizerValidateResponse;
-  }>('/validate', {
+>('/validate', {
     schema: {
       body: {
         type: 'object',
@@ -313,10 +315,10 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
               includeMetadata: { type: 'boolean' },
               validateOutput: { type: 'boolean' },
               includeExplanation: { type: 'boolean' }
-            }
-          }
-        }
-  }
+
+
+
+
       response: {
         200: {
           type: 'object',
@@ -330,9 +332,9 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                   field: { type: 'string' },
                   message: { type: 'string' },
                   severity: { type: 'string', enum: ['error', 'warning'] }
-                }
-              }
-  }
+
+
+
             warnings: {
               type: 'array',
               items: {
@@ -341,9 +343,9 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                   field: { type: 'string' },
                   message: { type: 'string' },
                   suggestion: { type: 'string' }
-                }
-              }
-  }
+
+
+
             suggestions: {
               type: 'object',
               properties: {
@@ -351,12 +353,12 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                 temperature: { type: 'number' },
                 focusAreas: { type: 'array', items: { type: 'string' } },
                 recommendedProvider: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     handler: async (request: FastifyRequest<{ Body: RandomizerValidateRequest }>, reply: FastifyReply) => {
       try {
         const validatedRequest = RandomizerValidateRequestSchema.parse(request.body);
@@ -388,11 +390,11 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
             temperature: suggestions.temperature,
             focusAreas: suggestions.focusAreas,
             recommendedProvider: suggestions.recommendedProvider
-          }
+
         };
         
         reply.code(200).send(response);
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         
         if (error instanceof z.ZodError) {
@@ -402,22 +404,22 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
               field: 'request',
               message: `Invalid request: ${error.message}`,
               severity: 'error' as const
-            }],
+],
             warnings: []
           });
-        } else {
+ else {
           reply.code(500).send({
             isValid: false,
             errors: [{
               field: 'server',
               message: error instanceof Error ? error.message : 'Unknown error',
               severity: 'error' as const
-            }],
+],
             warnings: []
           });
-        }
-      }
-    }
+
+
+
   });
 
   /**
@@ -441,20 +443,20 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                   category: { type: 'string' },
                   tags: { type: 'array', items: { type: 'string' } },
                   parameters: { type: 'object' }
-                }
-              }
-  }
+
+
+
             categories: {
               type: 'object',
               additionalProperties: {
                 type: 'array',
                 items: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     handler: async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { ParameterManager } = await import('../../../packages/core/llm-randomizer/generator/parameters/parameter-manager');
@@ -467,14 +469,14 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
           presets,
           categories
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         reply.code(500).send({
           presets: [],
           categories: {}
         });
-      }
-    }
+
+
   });
 
   /**
@@ -496,12 +498,12 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
                 llm_agents: { type: 'string' },
                 parser: { type: 'string' },
                 serializer: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     handler: async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         // Test basic functionality
@@ -520,9 +522,9 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
             llm_agents: 'healthy',
             parser: 'healthy',
             serializer: 'healthy'
-          }
+
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         reply.code(500).send({
           status: 'unhealthy',
@@ -532,9 +534,8 @@ export async function randomizerRoutes(fastify: FastifyInstance) {
             llm_agents: 'unknown',
             parser: 'unknown',
             serializer: 'unknown'
-          }
+
         });
-      }
-    }
+
+
   });
-}

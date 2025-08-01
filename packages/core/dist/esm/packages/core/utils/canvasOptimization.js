@@ -393,37 +393,37 @@ Node;
                                                                                  */
                                                                             }
                                                                         }
-                                                                        export const PerformanceMonitor = ({ optimizer, visible = true }) => {
-                                                                            const [metrics, setMetrics] = React.useState(optimizer.getMetrics());
-                                                                            React.useEffect(() => {
-                                                                                if (!visible)
-                                                                                    return;
-                                                                                const interval = setInterval(() => {
-                                                                                    setMetrics(optimizer.getMetrics());
-                                                                                }, 100);
-                                                                                return () => clearInterval(interval);
-                                                                            }, [optimizer, visible]);
-                                                                            if (!visible)
-                                                                                return null;
-                                                                            return;
-                                                                            _jsxs("div", { style: {
-                                                                                    position: 'fixed',
-                                                                                    top: 10,
-                                                                                    left: 10,
-                                                                                    background: 'rgba(0, 0, 0, 0.8)',
-                                                                                    color: 'white',
-                                                                                    padding: 12,
-                                                                                    borderRadius: 6,
-                                                                                    fontFamily: 'monospace',
-                                                                                    fontSize: 12,
-                                                                                    zIndex: 10000,
-                                                                                    backdropFilter: 'blur(4px)',
-                                                                                }, children: [_jsxs("div", { children: ["FPS: ", metrics.fps] }), _jsxs("div", { children: ["Render: ", metrics.renderTime.toFixed(1), "ms"] }), _jsxs("div", { children: ["Visible: ", metrics.visibleNodes, "/", metrics.nodeCount] }), _jsxs("div", { children: ["Memory: ", (metrics.memoryUsage * 100).toFixed(1), "%"] })] });
-                                                                        };
-                                                                        ;
                                                                     }
+                                                                    export const PerformanceMonitor = ({ optimizer, visible = true }) => {
+                                                                        const [metrics, setMetrics] = React.useState(optimizer.getMetrics());
+                                                                        React.useEffect(() => {
+                                                                            if (!visible)
+                                                                                return;
+                                                                            const interval = setInterval(() => {
+                                                                                setMetrics(optimizer.getMetrics());
+                                                                            }, 100);
+                                                                            return () => clearInterval(interval);
+                                                                        }, [optimizer, visible]);
+                                                                        if (!visible)
+                                                                            return null;
+                                                                        return;
+                                                                        _jsxs("div", { style: {
+                                                                                position: 'fixed',
+                                                                                top: 10,
+                                                                                left: 10,
+                                                                                background: 'rgba(0, 0, 0, 0.8)',
+                                                                                color: 'white',
+                                                                                padding: 12,
+                                                                                borderRadius: 6,
+                                                                                fontFamily: 'monospace',
+                                                                                fontSize: 12,
+                                                                                zIndex: 10000,
+                                                                                backdropFilter: 'blur(4px)',
+                                                                            }, children: [_jsxs("div", { children: ["FPS: ", metrics.fps] }), _jsxs("div", { children: ["Render: ", metrics.renderTime.toFixed(1), "ms"] }), _jsxs("div", { children: ["Visible: ", metrics.visibleNodes, "/", metrics.nodeCount] }), _jsxs("div", { children: ["Memory: ", (metrics.memoryUsage * 100).toFixed(1), "%"] })] });
+                                                                    };
                                                                     ;
                                                                 }
+                                                                ;
                                                             }
                                                         }
                                                     }

@@ -149,7 +149,7 @@ const story1Tasks = [
     title: 'AUTH-STORY1-P6-26: Test responsive design across auth pages',
     description: 'Test responsive design across all authentication pages to ensure mobile and desktop compatibility\n\nAcceptance Criteria:\n- All auth pages responsive on mobile and desktop\n- UI elements scale properly\n- No layout issues on different screen sizes\n- Consistent design across devices\n\nStory Context: Story 1 Phase 6 - Testing & Validation',
     priority: 'medium'
-  }
+
 ];
 
 // Story 2: Authentication State Management and Navigation Integration (Steps 1-30)
@@ -314,7 +314,7 @@ const story2Tasks = [
     title: 'AUTH-STORY2-P6-30: Validate auth state persistence across browser refresh',
     description: 'Validate that authentication state properly persists across browser refresh and tab reopening\n\nAcceptance Criteria:\n- Auth state persists across browser refresh\n- Session restoration working correctly\n- No loss of authentication on refresh\n- Consistent auth state across tabs\n\nStory Context: Story 2 Phase 6 - Error Handling & UX',
     priority: 'high'
-  }
+
 ];
 
 // Story 3: SMTP Configuration and Email Verification Flow (Steps 1-30)
@@ -479,7 +479,7 @@ const story3Tasks = [
     title: 'AUTH-STORY3-P6-30: Validate email verification works across different email providers',
     description: 'Validate that email verification works correctly across different email providers and services\n\nAcceptance Criteria:\n- Email verification tested across providers\n- Gmail, Outlook, Yahoo compatibility\n- Spam folder considerations\n- Delivery reliability across providers\n\nStory Context: Story 3 Phase 6 - Error Handling & Monitoring',
     priority: 'medium'
-  }
+
 ];
 
 // Combine all tasks
@@ -510,15 +510,15 @@ async function createTicket(task: any): Promise<any> {
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
-    }
+
 
     const result = await response.json();
     return result;
-  } catch (error) {
+ catch (error) {
     console.error(`Failed to create ticket "${task.title}":`, error.message);
     return null;
-  }
-}
+
+
 
 // Function to create all tickets
 async function createAllTickets(): Promise<void> {
@@ -536,14 +536,14 @@ async function createAllTickets(): Promise<void> {
     if (result && result.id) {
       console.log(`✓ Created ticket: ${result.id}`);
       successCount++;
-    } else {
+ else {
       console.log('✗ Failed to create ticket');
       failureCount++;
-    }
+
     
     // Add small delay to avoid overwhelming the server
     await new Promise(resolve => setTimeout(resolve, 100));
-  }
+
   
   console.log('\n=== Task Creation Summary ===');
   console.log(`Total tasks: ${allTasks.length}`);
@@ -557,8 +557,8 @@ async function createAllTickets(): Promise<void> {
     console.log('- Story 2: Authentication State Management and Navigation Integration (30 tasks)');
     console.log('- Story 3: SMTP Configuration and Email Verification Flow (30 tasks)');
     console.log('\nDevelopers can now grab these tasks using the task management system.');
-  }
-}
+
+
 
 // Check if server is running first
 async function checkServer(): Promise<boolean> {
@@ -566,12 +566,12 @@ async function checkServer(): Promise<boolean> {
     const response = await fetch(`${API_URL}/health`);
     if (response.ok) {
       return true;
-    }
-  } catch (error) {
+
+ catch (error) {
     return false;
-  }
+
   return false;
-}
+
 
 // Main execution
 async function main(): Promise<void> {
@@ -582,10 +582,10 @@ async function main(): Promise<void> {
     console.log('Please start the server first:');
     console.log('  pnpm --filter server dev');
     process.exit(1);
-  }
+
   
   await createAllTickets();
-}
+
 
 // Run the script
 main().catch(console.error);

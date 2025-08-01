@@ -20,7 +20,7 @@ onClick ?  : () => void ;
 helpText ?  : string;
 badge ?  : {
     text: string,
-    variant: 'default' | 'success' | 'warning' | 'error'
+    variant: 'default' | 'success' | 'warning' | 'error',
 };
 className ?  : string;
 const formatValue = ();

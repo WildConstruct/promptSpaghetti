@@ -2,22 +2,20 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { CollapsibleSection } from './CollapsibleSection';
 import { hasVariations } from '../../utils/nodeDataUtils';
 
-}
-export interface PreviewSectionProps {
-  node: Error;
-}
-}
 
-}
-interface PreviewExample {
-  text: string;
-  highlightInfo?: {
-    selectedVariation: string;
-    selectedIndex: number;
-    totalVariations: number;
-}
+export interface PreviewSectionProps { node: Error }
+
+
+
+interface PreviewExample { text: string;
+  highlightInfo?: { }
+  selectedVariation: string;
+  selectedIndex: number;
+  totalVariations: number;
+
+
   };
-}
+
 export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
   const [previewCollapsed, setPreviewCollapsed] = useState(false);
   const [numExamples, setNumExamples] = useState(3);
@@ -31,8 +29,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
     // Check if node has variations and use them
     const nodeHasVariations = hasVariations(data);
     // Generate multiple examples using variations or default logic
-    for (let i = 0; i < numExamples; i++) {
-  const currentSeed = seed + i;
+    for (let i = 0; i < numExamples; i++) { const currentSeed = seed + i;
   let example = '';
   let highlightInfo: PreviewExample['highlightInfo'] = undefined;
   if (nodeHasVariations) {
@@ -43,17 +40,14 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
   highlightInfo = {
   selectedVariation: example,
   selectedIndex: randomIndex,
-  totalVariations: variations.length,
+  totalVariations: variations.length }
 };
-      } else {
-  // Fallback to type-specific generation
+ else { // Fallback to type-specific generation
   switch (type) {
-  case 'WeightedChoice':,
+  case 'WeightedChoice': }
   const options = data.options || [];
-  if (options.length > 0) {
-  const randomIndex = Math.floor((currentSeed % options.length));
-  example = options[randomIndex];
-} else {
+  if (options.length > 0) { const randomIndex = Math.floor((currentSeed % options.length));
+  example = options[randomIndex] } else {
             example = 'No options defined';
 
           break;
@@ -80,34 +74,23 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
           break;
         case 'Subject':
           const subjects = data.subjects || [];
-          if (subjects.length > 0) {
-            const randomIndex = Math.floor((currentSeed % subjects.length));
-            example = subjects[randomIndex];
-          } else {
-  example = 'No subjects defined';
+          if (subjects.length > 0) { const randomIndex = Math.floor((currentSeed % subjects.length));
+            example = subjects[randomIndex] } else { example = 'No subjects defined';
   break;
-  case 'Connector':,
+  case 'Connector': }
   const connectors = data.connectors || [];
-  if (connectors.length > 0) {
-  const randomIndex = Math.floor((currentSeed % connectors.length));
-  example = connectors[randomIndex];
-} else {
-  example = 'No connectors defined';
+  if (connectors.length > 0) { const randomIndex = Math.floor((currentSeed % connectors.length));
+  example = connectors[randomIndex] } else { example = 'No connectors defined';
   break;
-  case 'Attribute':,
+  case 'Attribute': }
   const attributes = data.attributes || [];
-  if (attributes.length > 0) {
-  const randomIndex = Math.floor((currentSeed % attributes.length));
-  example = attributes[randomIndex];
-} else {
-  example = 'No attributes defined';
+  if (attributes.length > 0) { const randomIndex = Math.floor((currentSeed % attributes.length));
+  example = attributes[randomIndex] } else { example = 'No attributes defined';
   break;
-  case 'Action':,
+  case 'Action': }
   const actions = data.actions || [];
-  if (actions.length > 0) {
-  const randomIndex = Math.floor((currentSeed % actions.length));
-  example = actions[randomIndex];
-} else {
+  if (actions.length > 0) { const randomIndex = Math.floor((currentSeed % actions.length));
+  example = actions[randomIndex] } else {
             example = 'No actions defined';
 
           break;
@@ -119,12 +102,8 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
 
     return results;
   }, [node, numExamples, seed]);
-  useEffect(() => {
-    setExamples(generateExamples);
-  }, [generateExamples]);
-  const refreshExamples = () => {
-    setSeed(Math.floor(Math.random() * 100000));
-  };
+  useEffect(() => { setExamples(generateExamples) }, [generateExamples]);
+  const refreshExamples = () => { setSeed(Math.floor(Math.random() * 100000)) };
   return;
     <CollapsibleSection
       title="Preview"
@@ -133,20 +112,20 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
     >
       <div style={{ padding: '16px 20px 8px' }}>
         <div style={{ marginBottom: 16 }}>
-          <div style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 12,
-  marginBottom: 12,
-}}>
+          <div style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 12
+  marginBottom: 12 }
+}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <label 
                 htmlFor="num-examples" 
-                style={{
-  fontSize: 12,
-  fontWeight: 600,
-  color: '#666',
-}}
+                style={ {
+  fontSize: 12
+  fontWeight: 600
+  color: '#666' }
+}
               >
                 Examples:
               </label>
@@ -157,70 +136,70 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
                 max="10"
                 value={numExamples}
                 onChange={(e) => setNumExamples(Number(e.target.value))}
-                style={{
-  width: 60,
-  padding: '4px 8px',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  fontSize: 12,
-  background: '#2d3748',
-  color: '#e2e8f0',
-}}
+                style={ {
+  width: 60
+  padding: '4px 8px'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  fontSize: 12
+  background: '#2d3748'
+  color: '#e2e8f0' }
+
               />
             </div>
             <button
               onClick={refreshExamples}
-              style={{
-  background: '#4a5568',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  padding: '4px 8px',
-  fontSize: 12,
-  color: '#e2e8f0',
-  cursor: 'pointer',
-}}
+              style={ {
+  background: '#4a5568'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  padding: '4px 8px'
+  fontSize: 12
+  color: '#e2e8f0'
+  cursor: 'pointer' }
+}
               title="Refresh examples"
             >
               ↻
             </button>
           </div>
         </div>
-        <div style={{
-  background: '#2d3748',
-  border: '1px solid #4a5568',
-  borderRadius: 6,
-  minHeight: 100,
-}}>
+        <div style={ {
+  background: '#2d3748'
+  border: '1px solid #4a5568'
+  borderRadius: 6
+  minHeight: 100 }
+}>
           {examples.length > 0 ? ()
             <div style={{ padding: 12 }}>
               {examples.map((example, index) => ()
                 <div
                   key={index}
-                  style={{
-  padding: '8px 12px',
-  background: '#374151',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  marginBottom: index < examples.length - 1 ? 8 : 0,
-  fontFamily: 'monospace',
-  fontSize: 13,
-  color: '#e2e8f0',
-}}
+                  style={ {
+  padding: '8px 12px'
+  background: '#374151'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  marginBottom: index < examples.length - 1 ? 8 : 0
+  fontFamily: 'monospace'
+  fontSize: 13
+  color: '#e2e8f0' }
+
                 >
                   <div style={{ marginBottom: example.highlightInfo ? 4 : 0 }}>
                     {example.text}
                   </div>
-                  {example.highlightInfo && ()
+                  { example.highlightInfo && ()
                     <div style={{
-  fontSize: 10,
-  color: '#6b7280',
-  fontStyle: 'italic',
-  background: '#4a5568',
-  padding: '2px 6px',
-  borderRadius: 3,
-  display: 'inline-block',
-  border: '1px solid #f59e0b',
-}}>
+  fontSize: 10
+  color: '#6b7280'
+  fontStyle: 'italic'
+  background: '#4a5568'
+  padding: '2px 6px'
+  borderRadius: 3
+  display: 'inline-block'
+  border: '1px solid #f59e0b' }
+}>
                       Variation {example.highlightInfo.selectedIndex + 1} of {example.highlightInfo.totalVariations}
                     </div>
                   )}
@@ -228,23 +207,23 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
               ))}
             </div>
           ) : ()
-            <div style={{
-  padding: 20,
-  textAlign: 'center',
-  color: '#9ca3af',
-  fontStyle: 'italic',
-  fontSize: 13,
-}}>
+            <div style={ {
+  padding: 20
+  textAlign: 'center'
+  color: '#9ca3af'
+  fontStyle: 'italic'
+  fontSize: 13 }
+}>
               No preview available
             </div>
           )}
         </div>
-        <div style={{
-  marginTop: 12,
-  fontSize: 11,
-  color: '#6b7280',
-  fontStyle: 'italic',
-}}>
+        <div style={ {
+  marginTop: 12
+  fontSize: 11
+  color: '#6b7280'
+  fontStyle: 'italic' }
+}>
           Preview shows example outputs for this node type
         </div>
       </div>

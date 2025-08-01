@@ -35,6 +35,7 @@ export declare enum DashboardLayout {
 }
 }
 }
+}
 export interface AnalyticsEvent {
     id: string;
     template_id: string;
@@ -53,10 +54,12 @@ export interface AnalyticsEvent {
             city?: string;
 }
 }
+}
         };
     };
     timestamp: Date;
     created_at: Date;
+}
 }
 }
 }
@@ -76,6 +79,7 @@ export interface TemplateMetrics {
         error_count: number;
         success_rate: number;
         conversion_rate: number;
+}
 }
 }
     };
@@ -112,6 +116,7 @@ export interface TemplateMetrics {
 }
 }
 }
+}
 export interface CreatorDashboard {
     creator_id: string;
     period: TimeRange;
@@ -130,6 +135,7 @@ export interface CreatorDashboard {
             views: number;
             downloads: number;
             revenue: number;
+}
 }
 }
         };
@@ -168,6 +174,7 @@ export interface CreatorDashboard {
 }
 }
 }
+}
 export interface AnalyticsQuery {
     creator_id?: string;
     template_ids?: string[];
@@ -185,6 +192,7 @@ export interface AnalyticsQuery {
         max_value?: number;
 }
 }
+}
     };
     sort?: {
         field: string;
@@ -192,6 +200,7 @@ export interface AnalyticsQuery {
     };
     limit?: number;
     offset?: number;
+}
 }
 }
 }
@@ -210,6 +219,7 @@ export interface CustomReport {
             color_scheme: string;
 }
 }
+}
         };
         refresh_interval?: number;
     };
@@ -224,6 +234,7 @@ export interface CustomReport {
 }
 }
 }
+}
 export interface AnalyticsInsight {
     id: string;
     type: 'trend' | 'anomaly' | 'opportunity' | 'warning';
@@ -235,6 +246,7 @@ export interface AnalyticsInsight {
         previous_value: number;
         change_percentage: number;
         confidence_score: number;
+}
 }
 }
     };

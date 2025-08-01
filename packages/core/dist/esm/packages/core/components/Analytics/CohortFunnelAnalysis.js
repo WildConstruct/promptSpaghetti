@@ -102,7 +102,7 @@ export const CohortFunnelAnalysis = ({
                 funnelId: funnelDefinition.id,
                 startDate: timeRange.start,
                 endDate: timeRange.end,
-                metrics: [,
+                metrics: [
                     'cohort_conversion_rate',
                     'cohort_retention',
                     'cohort_value',
@@ -200,32 +200,14 @@ if (loading) {
      */
 }
 {
-    const views = [];
-    {
-        key: 'comparative', label;
-        'Comparative';
-    }
-    {
-        key: 'retention', label;
-        'Retention';
-    }
-    {
-        key: 'lifecycle', label;
-        'Lifecycle';
-    }
-    {
-        key: 'behavior', label;
-        'Behavior';
-    }
-    {
-        key: 'value', label;
-        'Value';
-    }
-    {
-        key: 'predictions', label;
-        'Predictions';
-    }
-    ;
+    const views = [
+        { key: 'comparative', label: 'Comparative' },
+        { key: 'retention', label: 'Retention' },
+        { key: 'lifecycle', label: 'Lifecycle' },
+        { key: 'behavior', label: 'Behavior' },
+        { key: 'value', label: 'Value' },
+        { key: 'predictions', label: 'Predictions' }
+    ];
     const averageHealthScore = analysisData.healthScores.length > 0;
     analysisData.healthScores.reduce((sum, h) => sum + h.overallScore, 0) / analysisData.healthScores.length;
     0;
@@ -357,7 +339,6 @@ _jsx("div", { className: "retention-curves-chart", children: _jsx("svg", { width
                     const points = analysis.retentionCurve.slice(0, 50); // Limit points for performance;
                     return;
                     _jsxs("g", { children: [_jsx("path", { d: `M ${points.map(point => { })}
-  }
                     const x = (point.period / maxPeriod) * innerWidth;
                     const y = ((100 - point.retentionRate) / 100) * innerHeight;
                     return `, "$": true, ...x }), ",$", y, "`;} }).join(' L ')}`} fill=\"none\" stroke=", color, "strokeWidth=", 2, "/>", points.filter((_, i) => i % 5 === 0).map(point => { }), "const x = (point.period / maxPeriod) * innerWidth; const y = ((100 - point.retentionRate) / 100) * innerHeight; return;", _jsx("circle", { cx: x, cy: y, r: 3, fill: color }, point.period), "); })}"] }, analysis.cohortId);
@@ -552,10 +533,10 @@ if (minutes > 0)
     return `${minutes}m ${seconds % 60}s`;
 return `${seconds}s`;
 function getCohortColor(index) {
-    const colors = [];
-    '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
-        '#8b5cf6', '#06b6d4', '#f97316', '#84cc16';
-    ;
+    const colors = [
+        '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
+        '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'
+    ];
     return colors[index % colors.length];
     function getHealthScoreClass(score) {
         if (score >= 80)
@@ -594,14 +575,15 @@ function getCohortColor(index) {
                 dropOffRate: 15 - (index * 2),
                 retentionRate: 75 + (index * 5),
                 reactivationRate: 12 + (Math.random() * 8),
-            }, stepPerformance, funnelDefinition.steps.map((step, stepIndex) => ({}), stepId, step.id, stepName, step.name, stepOrder, step.order, entries, 1000 - (stepIndex * 150) + (index * 50), conversions, 850 - (stepIndex * 150) + (index * 40), conversionRate, 85 - (stepIndex * 10) + (index * 2), averageTimeSpent, 60000 + (stepIndex * 30000), dropOffCount, 150 - (index * 20), dropOffRate, 15 - (index * 2), retentionToNextStep, 90 - (stepIndex * 5), stepEfficiency, 0.8 + (Math.random() * 0.15), cohortSpecificBehaviors, [,
+            }, stepPerformance, funnelDefinition.steps.map((step, stepIndex) => ({}), stepId, step.id, stepName, step.name, stepOrder, step.order, entries, 1000 - (stepIndex * 150) + (index * 50), conversions, 850 - (stepIndex * 150) + (index * 40), conversionRate, 85 - (stepIndex * 10) + (index * 2), averageTimeSpent, 60000 + (stepIndex * 30000), dropOffCount, 150 - (index * 20), dropOffRate, 15 - (index * 2), retentionToNextStep, 90 - (stepIndex * 5), stepEfficiency, 0.8 + (Math.random() * 0.15), cohortSpecificBehaviors, [
                 {
                     behavior: 'Extended browsing',
                     frequency: 35 + (Math.random() * 20),
                     impact: 12 + (Math.random() * 8),
                     uniqueness: 0.7 + (Math.random() * 0.2),
                     description: 'Users spend more time evaluating options'
-                }]))
+                }
+            ]))
         };
         temporalPerformance: Array.from({ length: 12 }, (_, period) => ({}), period, period + 1, periodLabel, `Week ${period + 1}`);
     }
@@ -715,12 +697,12 @@ valueMetrics: {
                 businessImpact: 15000,
                 timeframe: 'immediate',
                 actionability: 'high',
-                recommendations: [,
+                recommendations: [
                     'Expand premium user acquisition campaigns',
                     'Analyze premium cohort behavior patterns for replication',
                     'Increase investment in premium user experience features'
                 ],
-                evidence: [,
+                evidence: [
                     'Conversion rate 23% above projection',
                     'Higher engagement across all funnel steps',
                     'Strong retention and reactivation rates'
@@ -733,19 +715,19 @@ valueMetrics: {
             comparativeAnalysis: {
                 crossCohortMetrics: [],
                 performanceRankings: [],
-                significantDifferences: selectedCohorts.length > 1 ? [,
+                significantDifferences: selectedCohorts.length > 1 ? [
                     {
                         metric: 'conversion_rate',
                         cohortA: { id: selectedCohorts[0].id, name: selectedCohorts[0].name, value: 21.5 },
                         cohortB: { id: selectedCohorts[1]?.id || '', name: selectedCohorts[1]?.name || '', value: 18.2 },
                         difference: 3.3,
                         significance: 0.025,
-                        possibleReasons: [,
+                        possibleReasons: [
                             'Different user acquisition channels',
                             'Varying engagement patterns',
                             'Cohort maturity differences'
                         ],
-                        actionableInsights: [,
+                        actionableInsights: [
                             'Apply high-performing cohort strategies to others',
                             'Investigate acquisition channel quality'
                         ]
@@ -785,14 +767,15 @@ retentionMetrics: {
     'stable',
     ;
 }
-retentionFactors: [,
+retentionFactors: [
     {
         factor: 'Early engagement',
         impact: 25,
         correlation: 0.82,
         actionability: 'high',
         description: 'Users who engage within first 24 hours show higher retention'
-    }],
+    }
+],
     churnAnalysis;
 {
     overallChurnRate: 45,
@@ -818,7 +801,7 @@ reactivationAnalysis: {
     3.2,
     ;
 }
-lifecycleAnalysis: selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name, lifecycleStages, [,
+lifecycleAnalysis: selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name, lifecycleStages, [
     {
         stage: 'onboarding',
         userCount: 250,
@@ -872,7 +855,8 @@ lifecycleAnalysis: selectedCohorts.map(cohort => ({}), cohortId, cohort.id, coho
         conversionToNext: 100,
         valueGenerated: 5000,
         stageCharacteristics: ['Referrals', 'Community participation']
-    }], stageTransitions, [], maturityMetrics, {
+    }
+], stageTransitions, [], maturityMetrics, {
     overallMaturity: 75,
     maturityFactors: [],
     maturityTrajectory: 'steady',
@@ -884,7 +868,7 @@ lifecycleAnalysis: selectedCohorts.map(cohort => ({}), cohortId, cohort.id, coho
     riskIndicators: [],
     opportunityAreas: [],
 });
-behaviorPatterns: selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name, patterns, [,
+behaviorPatterns: selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name, patterns, [
     {
         pattern: 'Extended evaluation phase',
         frequency: 35,
@@ -893,7 +877,8 @@ behaviorPatterns: selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohor
         temporalPattern: 'Weekday evenings',
         predictability: 0.75,
         description: 'Users spend additional time comparing options before converting'
-    }], uniqueBehaviors, [,
+    }
+], uniqueBehaviors, [
     {
         behavior: 'Advanced feature exploration',
         uniquenessScore: 0.8,
@@ -901,10 +886,11 @@ behaviorPatterns: selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohor
         competitiveAdvantage: true,
         replicability: 'medium',
         description: 'Early adoption of complex features'
-    }], behaviorEvolution, [], crossCohortComparison, []);
+    }
+], behaviorEvolution, [], crossCohortComparison, []);
 valueAnalysis: [],
     predictiveModels;
-selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name, modelType, 'conversion', predictions, [,
+selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name, modelType, 'conversion', predictions, [
     {
         timeframe: 7,
         timeframeLabel: '7 days',
@@ -920,7 +906,8 @@ selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name
         confidence: 0.78,
         factors: ['Growth trend', 'Optimization initiatives'],
         assumptions: ['Continued improvement efforts', 'Market stability']
-    }], modelAccuracy, 85.2, confidenceInterval, 0.8, keyPredictors, [,
+    }
+], modelAccuracy, 85.2, confidenceInterval, 0.8, keyPredictors, [
     {
         predictor: 'Previous step completion rate',
         importance: 0.35,
@@ -934,10 +921,11 @@ selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name
         direction: 'positive',
         stability: 0.75,
         actionability: 'medium'
-    }], scenarioAnalysis, []);
+    }
+], scenarioAnalysis, []);
 insights,
     healthScores;
-selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name, overallScore, 75 + (Math.random() * 20), scoreComponents, [,
+selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name, overallScore, 75 + (Math.random() * 20), scoreComponents, [
     {
         component: 'Conversion Performance',
         score: 82,
@@ -969,7 +957,8 @@ selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name
         trend: 'stable',
         benchmark: 75,
         contributingFactors: ['Consistent patterns', 'Predictable behavior']
-    }], scoreHistory, [], scoreTrend, 'improving', riskLevel, 'low', interventionRecommendations, [,
+    }
+], scoreHistory, [], scoreTrend, 'improving', riskLevel, 'low', interventionRecommendations, [
     {
         recommendation: 'Optimize step 2 experience for this cohort',
         priority: 'high',
@@ -977,6 +966,7 @@ selectedCohorts.map(cohort => ({}), cohortId, cohort.id, cohortName, cohort.name
         effort: 'medium',
         timeframe: '2-4 weeks',
         successMetrics: ['Step 2 conversion rate', 'Overall funnel performance']
-    }]);
+    }
+]);
 ;
 export default CohortFunnelAnalysis;

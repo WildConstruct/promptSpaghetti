@@ -8,8 +8,7 @@
 export * from './PromotionInterfaces';
 export * from './PromotionServices';
 export * from './PromotionEvents';
-export type {
-  BasePromotion,
+export type { BasePromotion,
   DiscountPromotion,
   ContentPromotion,
   BundlePromotion,
@@ -32,10 +31,9 @@ export type {
   PromotionServiceResponse,
   PromotionEligibilityCheck,
   PromotionApplicationResult,
-  PromotionSearchResult,
+  PromotionSearchResult }
 } from './PromotionInterfaces';
-export type {
-  CreatePromotionRequest,
+export type { CreatePromotionRequest,
   UpdatePromotionRequest,
   EligibilityCheckRequest,
   ApplyPromotionRequest,
@@ -45,10 +43,9 @@ export type {
   UserPromotionHistory,
   PromotionRule,
   PromotionTemplate,
-  PromotionAuditLog,
+  PromotionAuditLog }
 } from './PromotionServices';
-export type {
-  PromotionEventData,
+export type { PromotionEventData,
   PromotionLifecycleEventData,
   PromotionUsageEventData,
   PromotionPerformanceEventData,
@@ -57,10 +54,9 @@ export type {
   EventDeliveryConfig,
   NotificationRecipient,
   NotificationTemplate,
-  NotificationContent,
+  NotificationContent }
 } from './PromotionEvents';
-export {
-  PromotionType,
+export { PromotionType,
   PromotionStatus,
   PromotionTargetType,
   PromotionApplicationType,
@@ -71,6 +67,6 @@ export {
   CreatePromotionSchema,
   UpdatePromotionSchema,
   ApplyPromotionSchema,
-  CheckEligibilitySchema,
+  CheckEligibilitySchema }
 } from './PromotionInterfaces';
 //# sourceMappingURL=PromotionTypes.d.ts.map

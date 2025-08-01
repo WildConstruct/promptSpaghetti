@@ -9,15 +9,16 @@ import { X, AlertCircle, Check, Eye, EyeOff } from 'lucide-react';
 import { FormField } from './FormField';
 import './AdminFormBuilder.css';
 
-}
+
 export interface FormFieldSchema {
   name: string;,
-  label: string;
+  label: string;,
   type: 'text' | 'email' | 'password' | 'number' | 'textarea' | 'select' | 'multiselect' | 'checkbox' | 'radio' | 'date' | 'datetime-local' | 'file';
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;
-}
+
+
   options?: Array<{ value: string; label: string; disabled?: boolean }>;
   validation?: {
   minLength?: number;
@@ -37,8 +38,9 @@ export interface FormFieldSchema {
   multiple?: boolean;
   accept?: string; // for file inputs
   rows?: number; // for textarea
-}
-}
+
+
+
 export interface FormSchema {
   title?: string;
   description?: string;
@@ -53,8 +55,9 @@ export interface FormSchema {
   onCancel?: () => void;
   loading?: boolean;
   className?: string;
-}
-}
+
+
+
 export const AdminFormBuilder: React.FC<AdminFormBuilderProps> = ({)
   schema,
   initialValues = {},
@@ -159,7 +162,7 @@ export const AdminFormBuilder: React.FC<AdminFormBuilderProps> = ({)
       return;
     try {
       await onSubmit(values);
-    } catch (error) {
+ catch (error) {
   console.error('Form submission error:', error);
 }, [validateForm, onSubmit, values, schema.fields]);
   // Toggle password visibility

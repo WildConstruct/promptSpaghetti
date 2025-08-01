@@ -2,41 +2,45 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { TemplateCard } from './TemplateCard';
 import './FeaturedTemplates.css';
-}
+
+
 interface Template {
   id: string;,
   title: string;
   description?: string;
   tags: string;,
-  price_cents: number;
+  price_cents: number;,
   avg_rating: number;,
-  total_reviews: number;
+  total_reviews: number;,
   total_purchases: number;
   categories?: string;
-  owner?: {
+  owner?: {,
   id: string;,
-  name: string;
+  name: string;,
   verified: boolean;
-}
+
+
 };
   featured_at?: string;
   created_at: string;
   is_ai_generated?: boolean;
   claude_compat: string;
-}
+
+
 interface FeaturedTemplatesProps {
   templates: Template;,
   onTemplateClick: (templateId: string) => void;
   autoPlay?: boolean;
   autoPlayInterval?: number;
   className?: string;
-  export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({,)
+  export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({),
   templates,
   onTemplateClick,
   autoPlay = true,
   autoPlayInterval = 5000,
   className = ''
-}
+
+
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
@@ -142,7 +146,7 @@ interface FeaturedTemplatesProps {
           className="carousel-track"
           style={{
   transform: totalSlides <= maxVisibleSlides ? 'translateX(0)' : undefined,
-}}
+}
         >
           {visibleTemplates.map((template, index) => ()
             <div key={`${template.id}-${currentIndex}-${index}`} className="carousel-slide">}

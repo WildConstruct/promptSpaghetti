@@ -1,19 +1,18 @@
 // Epic 9.4 - Workflow Transition Controls Component
 // Component for managing state transitions and approvals
 import React, { useState, useEffect } from 'react';
-import { 
-  ArrowRightIcon,
+import { ArrowRightIcon,
   ClockIcon,
   CheckCircleIcon,
   XCircleIcon,
   LockClosedIcon,
-  ChatBubbleLeftIcon,
+  ChatBubbleLeftIcon }
   ExclamationTriangleIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
-}
-interface WorkflowTransition {
-  id: string;
+
+
+interface WorkflowTransition { id: string;
   from_state_id?: string;
   to_state_id: string;
   name: string;
@@ -35,17 +34,17 @@ interface WorkflowTransition {
   onTransitionComplete?: (newStateId: string) => void;
   onApprovalRequested?: (approvalId: string) => void;
   disabled?: boolean;
-  export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProps> = ({,)
-  resourceId,
-  currentStateId,
-  currentUserId,
-  workspaceId,
-  onTransitionComplete,
-  onApprovalRequested,
+  export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProps> = ({);
+  resourceId;
+  currentStateId;
+  currentUserId;
+  workspaceId;
+  onTransitionComplete;
+  onApprovalRequested }
   disabled = false
-}
-}) => {
-  const {
+
+
+}) => { const {
     states,
     transitions,
     loading,
@@ -54,9 +53,9 @@ interface WorkflowTransition {
     fetchTransitions,
     transitionResourceState,
     validateStateTransition,
-    canUserTransitionState,
+    canUserTransitionState }
     isResourceLocked
-  } = useWorkflowStore();
+ = useWorkflowStore();
   const [selectedTransition, setSelectedTransition] = useState<WorkflowTransition | null>(null);
   const [comment, setComment] = useState('');
   const [showCommentDialog, setShowCommentDialog] = useState(false);
@@ -67,77 +66,52 @@ interface WorkflowTransition {
   // Get available transitions
   const availableTransitions = transitions.filter(t => t.from_state_id === currentStateId);
   // Load data on mount
-  useEffect(() => {
-    fetchStates(workspaceId);
-    fetchTransitions(workspaceId);
-  }, [workspaceId, fetchStates, fetchTransitions]);
+  useEffect(() => { fetchStates(workspaceId);
+    fetchTransitions(workspaceId) }, [workspaceId, fetchStates, fetchTransitions]);
   // Check if resource is locked
-  useEffect(() => {
-    const checkLock = async () => {
+  useEffect(() => { const checkLock = async () => {
       const locked = await isResourceLocked(resourceId, 'state_change');
-      setResourceLocked(locked);
-    };
+      setResourceLocked(locked) };
     checkLock();
   }, [resourceId, isResourceLocked]);
   // Validate transitions
   useEffect(() => {
     const validateTransitions = async () => {
       const results: Record<string, any> = {};
-      for (const transition of availableTransitions) {
-  const validation = await validateStateTransition(resourceId, transition.to_state_id);
+      for (const transition of availableTransitions) { const validation = await validateStateTransition(resourceId, transition.to_state_id);
   const canTransition = await canUserTransitionState(currentUserId, resourceId, transition.to_state_id);
   results[transition.id] = {
-  ...validation,
-  can_transition: canTransition,
+  ...validation
+  can_transition: canTransition }
 };
       setValidationResults(results);
     };
-    if (availableTransitions.length > 0) {
-      validateTransitions();
-  }, [availableTransitions, resourceId, currentUserId, validateStateTransition, canUserTransitionState]);
-  const handleTransitionClick = (transition: WorkflowTransition) => {
-    setSelectedTransition(transition);
+    if (availableTransitions.length > 0) { validateTransitions() }, [availableTransitions, resourceId, currentUserId, validateStateTransition, canUserTransitionState]);
+  const handleTransitionClick = (transition: WorkflowTransition) => { setSelectedTransition(transition);
     // Show comment dialog for approval transitions or if user preference
     if (transition.requires_approval || transition.description) {
-      setShowCommentDialog(true);
-    } else {
-      executeTransition(transition, '');
-  };
-  const executeTransition = async (transition: WorkflowTransition, transitionComment: string) => {
-  if (!transition) return;
+      setShowCommentDialog(true) } else { executeTransition(transition, '') };
+  const executeTransition = async (transition: WorkflowTransition, transitionComment: string) => { if (!transition) return;
   try {
   const result = await transitionResourceState(;);
-  resourceId,
-  transition.to_state_id,
-  currentUserId,
+  resourceId
+  transition.to_state_id
+  currentUserId
   {
-  comment: transitionComment,
+  comment: transitionComment
   metadata: {
-  transition_id: transition.id,
+  transition_id: transition.id }
   transition_name: transition.name);
-  if (result.success) {
-  if (result.approval_required) {
-  onApprovalRequested?.(result.approval_id!);
-} else {
-          onTransitionComplete?.(result.new_state_id!);
-    } catch (error) {
-  console.error('Transition failed:', error);
-} finally {
-      setSelectedTransition(null);
+  if (result.success) { if (result.approval_required) {
+  onApprovalRequested?.(result.approval_id!) } else { onTransitionComplete?.(result.new_state_id!) } catch (error) { console.error('Transition failed:', error) } finally { setSelectedTransition(null);
       setComment('');
-      setShowCommentDialog(false);
-  };
-  const handleCommentSubmit = () => {
-    if (selectedTransition) {
-      executeTransition(selectedTransition, comment);
-  };
-  const getTransitionIcon = (transition: WorkflowTransition) => {
-    if (transition.requires_approval) {
+      setShowCommentDialog(false) };
+  const handleCommentSubmit = () => { if (selectedTransition) {
+      executeTransition(selectedTransition, comment) };
+  const getTransitionIcon = (transition: WorkflowTransition) => { if (transition.requires_approval) {
       return <ClockIcon className="h-4 w-4 text-yellow-500" />;
-    return <ArrowRightIcon className="h-4 w-4 text-blue-500" />;
-  };
-  const getTransitionButton = (transition: WorkflowTransition) => {
-    const validation = validationResults[transition.id];
+    return <ArrowRightIcon className="h-4 w-4 text-blue-500" /> };
+  const getTransitionButton = (transition: WorkflowTransition) => { const validation = validationResults[transition.id];
     const toState = states.find(s => s.id === transition.to_state_id);
     if (!validation || !toState) return null;
     const isDisabled = disabled || ;
@@ -148,10 +122,7 @@ interface WorkflowTransition {
                       (toState.is_locked && !validation.can_transition);
     let buttonClass = 'flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ';
     if (isDisabled) {
-      buttonClass += 'bg-gray-100 text-gray-400 cursor-not-allowed';
-    } else if (transition.requires_approval) {
-  buttonClass += 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
-} else {
+      buttonClass += 'bg-gray-100 text-gray-400 cursor-not-allowed' } else if (transition.requires_approval) { buttonClass += 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' } else {
       buttonClass += 'bg-blue-100 text-blue-800 hover:bg-blue-200';
     return;
       <button
@@ -272,11 +243,10 @@ interface WorkflowTransition {
             </div>
             <div className="flex justify-end space-x-3">
               <button
-                onClick={() => {
+                onClick={ () => {
                   setShowCommentDialog(false);
                   setSelectedTransition(null);
-                  setComment('');
-                }}
+                  setComment('') }}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
               >
                 Cancel

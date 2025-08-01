@@ -17,7 +17,7 @@ import {
   filterNodesByType,
   filterNodesByCategory,
   getNodeStatistics
-} from '../nodeUtils';
+ from '../nodeUtils';
 import { NodeTemplate, OptionConfig } from '../../data/nodeTemplates/types';
 import { panelArchetypeTemplate, aestheticInfluenceTemplate, wearLevelTemplate } from '../../data/nodeTemplates';
 describe('Position Utilities', () => {

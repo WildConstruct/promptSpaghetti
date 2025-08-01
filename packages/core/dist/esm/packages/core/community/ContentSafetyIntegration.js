@@ -32,7 +32,8 @@ business_context: {
     revenue_impact: 'none' | 'low' | 'medium' | 'high';
     brand_sensitivity: 'low' | 'medium' | 'high';
     regulatory_requirements: string;
-    stakeholder_visibility: 'internal' | 'public' | 'regulatory';
+    stakeholder_visibility: 'internal' | 'public' | 'regulatory',
+    ;
 }
 ;
 ;

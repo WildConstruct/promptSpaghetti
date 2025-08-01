@@ -206,7 +206,7 @@ export var UIExtensionHelpers;
             command: partial.command,
             submenu: partial.submenu,
             when: partial.when,
-            menu: partial.menu || MenuTarget.CUSTOM
+            menu: partial.menu || MenuTarget.CUSTOM,
         };
     }
     UIExtensionHelpers.createMenu = createMenu;

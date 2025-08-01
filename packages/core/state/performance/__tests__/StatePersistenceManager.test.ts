@@ -6,24 +6,22 @@
 import { StatePersistenceManager, PersistenceRule, PersistenceTask, globalPersistenceManager } from '../StatePersistenceManager';
 
 // Mock IndexedDB for testing
-const mockIndexedDB = {
-  open: jest.fn(),
-  deleteDatabase: jest.fn(),
-} as any;
+const mockIndexedDB = { open: jest.fn(),
+  deleteDatabase: jest.fn() }
+ as any;
 
 // Mock CompressionStream/DecompressionStream for testing
-const mockCompressionStream = {
-  readable: {
+const mockCompressionStream = { readable: { }
   getReader: jest.fn(() => ({;)
   read: jest.fn(() => Promise.resolve({ value: new Uint8Array([1, 2, 3]), done: false }))
         .mockReturnValueOnce(Promise.resolve({ value: new Uint8Array([1, 2, 3]), done: false }))
         .mockReturnValueOnce(Promise.resolve({ done: true }))
     }))
   },
-  writable: {
-  getWriter: jest.fn(() => ({,)
+  writable: { ,
+  getWriter: jest.fn(() => ({),
   write: jest.fn(() => Promise.resolve()),
-  close: jest.fn(() => Promise.resolve()),
+  close: jest.fn(() => Promise.resolve()) }
 }))
 };
 
@@ -33,65 +31,42 @@ const originalCompressionStream = (global as any).CompressionStream;
 const originalLocalStorage = global.localStorage;
 
 // Mock localStorage
-const mockLocalStorage = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
-  length: 0,
-  key: jest.fn(),
-};
-beforeAll(() => {
-  global.indexedDB = mockIndexedDB;
+const mockLocalStorage = {};
+beforeAll(() => { global.indexedDB = mockIndexedDB;
   (global as any).CompressionStream = jest.fn(() => mockCompressionStream);
   (global as any).DecompressionStream = jest.fn(() => mockCompressionStream);
-  global.localStorage = mockLocalStorage as any;
-});
-afterAll(() => {
-  global.indexedDB = originalIndexedDB;
+  global.localStorage = mockLocalStorage as any });
+afterAll(() => { global.indexedDB = originalIndexedDB;
   (global as any).CompressionStream = originalCompressionStream;
-  global.localStorage = originalLocalStorage;
-});
-describe('StatePersistenceManager', () => {
-  let manager: StatePersistenceManager;
+  global.localStorage = originalLocalStorage });
+describe('StatePersistenceManager', () => { let manager: StatePersistenceManager;
   beforeEach(() => {
   manager = new StatePersistenceManager();
-  jest.clearAllMocks();
-});
-  afterEach(() => {
-    manager.removeAllListeners();
-  });
-  describe('Initialization', () => {
-    it('should initialize with default domain persistence rules', () => {
+  jest.clearAllMocks() });
+  afterEach(() => { manager.removeAllListeners() });
+  describe('Initialization', () => { it('should initialize with default domain persistence rules', () => {
       const rules = manager.getDomainRules();
       expect(rules.has('graph-editor')).toBe(true);
       expect(rules.has('admin-dashboard')).toBe(true);
       expect(rules.has('security')).toBe(true);
       expect(rules.has('runtime')).toBe(true);
-      expect(rules.has('performance')).toBe(true);
-    });
-    it('should configure graph-editor with immediate persistence', () => {
-      const rules = manager.getDomainRules();
+      expect(rules.has('performance')).toBe(true) });
+    it('should configure graph-editor with immediate persistence', () => { const rules = manager.getDomainRules();
       const graphRule = rules.get('graph-editor');
       expect(graphRule?.strategy).toBe('IMMEDIATE');
       expect(graphRule?.storage).toBe('INDEXED_DB');
       expect(graphRule?.compression).toBe(true);
-      expect(graphRule?.auditTrail).toBe(true);
-    });
-    it('should configure admin-dashboard with debounced persistence', () => {
-      const rules = manager.getDomainRules();
+      expect(graphRule?.auditTrail).toBe(true) });
+    it('should configure admin-dashboard with debounced persistence', () => { const rules = manager.getDomainRules();
       const adminRule = rules.get('admin-dashboard');
       expect(adminRule?.strategy).toBe('DEBOUNCED');
       expect(adminRule?.storage).toBe('LOCAL_STORAGE');
-      expect(adminRule?.debounceMs).toBe(1000);
-    });
-    it('should configure security with append-only persistence', () => {
-      const rules = manager.getDomainRules();
+      expect(adminRule?.debounceMs).toBe(1000) });
+    it('should configure security with append-only persistence', () => { const rules = manager.getDomainRules();
       const securityRule = rules.get('security');
       expect(securityRule?.strategy).toBe('APPEND_ONLY');
       expect(securityRule?.storage).toBe('SERVER_SYNC');
-      expect(securityRule?.encryption).toBe(true);
-    });
+      expect(securityRule?.encryption).toBe(true) });
     it('should have storage adapters available', () => {
       const storageStatus = manager.getStorageStatus();
       expect(storageStatus.has('LOCAL_STORAGE')).toBe(true);
@@ -104,22 +79,20 @@ describe('StatePersistenceManager', () => {
     it('should persist data immediately for graph-editor domain', async () => {
       const testData = { nodes: [], edges: [], version: 1 };
       // Mock IndexedDB operations
-      const mockTransaction = {
-  objectStore: jest.fn(() => ({,)
-  put: jest.fn(() => ({,)
+      const mockTransaction = { objectStore: jest.fn(() => ({),
+  put: jest.fn(() => ({),
   onsuccess: null,
-  onerror: null,
+  onerror: null }
 }))
         }))
       };
-      const mockDB = {
-  transaction: jest.fn(() => mockTransaction),
+      const mockDB = { transaction: jest.fn(() => mockTransaction) }
 };
-      mockIndexedDB.open.mockImplementation(() => ({)
+      mockIndexedDB.open.mockImplementation(() => ({ )
   onsuccess: null,
   onerror: null,
   onupgradeneeded: null,
-  result: mockDB,
+  result: mockDB }
 }));
       await manager.persist('graph-editor', testData);
       // Verify IndexedDB was called (async nature makes this tricky to test directly)
@@ -161,15 +134,11 @@ describe('StatePersistenceManager', () => {
       expect(mockLocalStorage.getItem).toHaveBeenCalled();
       expect(result).toEqual(testData);
     });
-    it('should return null for non-existent data', async () => {
-      mockLocalStorage.getItem.mockReturnValue(null);
+    it('should return null for non-existent data', async () => { mockLocalStorage.getItem.mockReturnValue(null);
       const result = await manager.load('admin-dashboard');
-      expect(result).toBeNull();
-    });
-    it('should handle loading errors gracefully', async () => {
-      mockLocalStorage.getItem.mockImplementation(() => {
-        throw new Error('Storage error');
-      });
+      expect(result).toBeNull() });
+    it('should handle loading errors gracefully', async () => { mockLocalStorage.getItem.mockImplementation(() => {
+        throw new Error('Storage error') });
       await expect(manager.load('admin-dashboard')).rejects.toThrow();
     });
     it('should validate loaded data when configured', async () => {
@@ -194,22 +163,17 @@ describe('StatePersistenceManager', () => {
       expect(perfRule?.strategy).toBe('BATCH');
       expect(perfRule?.batchSize).toBe(100);
     });
-    it('should flush all pending batches', async () => {
-      const flushSpy = jest.spyOn(manager, 'flushAll');
+    it('should flush all pending batches', async () => { const flushSpy = jest.spyOn(manager, 'flushAll');
       await manager.flushAll();
-      expect(flushSpy).toHaveBeenCalled();
-    });
-    it('should flush domain-specific batches', async () => {
-      const flushSpy = jest.spyOn(manager, 'flushDomain');
+      expect(flushSpy).toHaveBeenCalled() });
+    it('should flush domain-specific batches', async () => { const flushSpy = jest.spyOn(manager, 'flushDomain');
       await manager.flushDomain('performance');
-      expect(flushSpy).toHaveBeenCalledWith('performance');
-    });
+      expect(flushSpy).toHaveBeenCalledWith('performance') });
   });
-  describe('Configuration Management', () => {
-  it('should allow updating domain rules', () => {
-  const newRule: Partial<PersistenceRule> = {,
-  debounceMs: 2000,
-  compression: false,
+  describe('Configuration Management', () => { it('should allow updating domain rules', () => {
+  const newRule: Partial<PersistenceRule> = {
+  debounceMs: 2000
+  compression: false }
 };
       manager.updateDomainRule('admin-dashboard', newRule);
       const rules = manager.getDomainRules();
@@ -217,11 +181,9 @@ describe('StatePersistenceManager', () => {
       expect(updatedRule?.debounceMs).toBe(2000);
       expect(updatedRule?.compression).toBe(false);
     });
-    it('should allow removing domain rules', () => {
-      manager.removeDomainRule('performance');
+    it('should allow removing domain rules', () => { manager.removeDomainRule('performance');
       const rules = manager.getDomainRules();
-      expect(rules.has('performance')).toBe(false);
-    });
+      expect(rules.has('performance')).toBe(false) });
     it('should clear timers when removing domain rules', () => {
       const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
       manager.removeDomainRule('admin-dashboard');
@@ -229,8 +191,7 @@ describe('StatePersistenceManager', () => {
       // The exact behavior depends on implementation details
     });
   });
-  describe('Metrics and Monitoring', () => {
-    it('should track persistence metrics', () => {
+  describe('Metrics and Monitoring', () => { it('should track persistence metrics', () => {
       const metrics = manager.getMetrics();
       expect(metrics).toHaveProperty('totalWrites');
       expect(metrics).toHaveProperty('totalReads');
@@ -239,8 +200,7 @@ describe('StatePersistenceManager', () => {
       expect(metrics).toHaveProperty('failureCount');
       expect(metrics).toHaveProperty('retryCount');
       expect(metrics).toHaveProperty('compressionRatio');
-      expect(metrics).toHaveProperty('storageUsage');
-    });
+      expect(metrics).toHaveProperty('storageUsage') });
     it('should update metrics on successful operations', async () => {
       const initialMetrics = manager.getMetrics();
       const initialWrites = initialMetrics.totalWrites;
@@ -249,11 +209,9 @@ describe('StatePersistenceManager', () => {
       // Metrics would be updated in the actual implementation
       // This test verifies the structure exists
     });
-    it('should track storage usage', async () => {
-      const usage = await manager.getStorageUsage();
+    it('should track storage usage', async () => { const usage = await manager.getStorageUsage();
       expect(usage).toBeInstanceOf(Map);
-      expect(usage.has('MEMORY')).toBe(true);
-    });
+      expect(usage.has('MEMORY')).toBe(true) });
   });
   describe('Error Handling', () => {
     it('should handle storage adapter unavailable', async () => {
@@ -266,7 +224,7 @@ describe('StatePersistenceManager', () => {
       const testData = { test: true };
       // Mock localStorage to fail initially
       mockLocalStorage.setItem
-        .mockImplementationOnce(() => { throw new Error('Storage full'); })
+        .mockImplementationOnce(() => { throw new Error('Storage full') })
         .mockImplementationOnce(() => {}); // Success on retry
       // The retry logic would be tested in the actual implementation
       // This test verifies the configuration exists
@@ -274,15 +232,13 @@ describe('StatePersistenceManager', () => {
       const adminRule = rules.get('admin-dashboard');
       expect(adminRule?.retryAttempts).toBe(2);
     });
-    it('should emit error events on persistence failure', async () => {
-      const errorSpy = jest.fn();
+    it('should emit error events on persistence failure', async () => { const errorSpy = jest.fn();
       manager.on('persistenceError', errorSpy);
       mockLocalStorage.setItem.mockImplementation(() => {
-        throw new Error('Storage error');
-      });
+        throw new Error('Storage error') });
       try {
         await manager.persist('admin-dashboard', { test: true });
-      } catch (error) {
+ catch (error) {
         // Expected to throw
       // Error event emission would happen in the actual implementation
     });
@@ -297,10 +253,9 @@ describe('StatePersistenceManager', () => {
       expect(graphRule?.backup?.interval).toBe('1h');
       expect(graphRule?.backup?.maxBackups).toBe(24);
     });
-    it('should load from backup on primary failure', async () => {
-      // Mock primary storage failure and backup success
+    it('should load from backup on primary failure', async () => { // Mock primary storage failure and backup success
       mockLocalStorage.getItem
-        .mockImplementationOnce(() => { throw new Error('Primary storage failed'); });
+        .mockImplementationOnce(() => { throw new Error('Primary storage failed') });
       // The backup loading logic would be tested in implementation
       const rules = manager.getDomainRules();
       const graphRule = rules.get('graph-editor');
@@ -326,10 +281,8 @@ describe('StatePersistenceManager', () => {
       // The actual clearing would happen in implementation
     });
   });
-  describe('Global Instance', () => {
-    it('should provide a global persistence manager instance', () => {
-      expect(globalPersistenceManager).toBeInstanceOf(StatePersistenceManager);
-    });
+  describe('Global Instance', () => { it('should provide a global persistence manager instance', () => {
+      expect(globalPersistenceManager).toBeInstanceOf(StatePersistenceManager) });
     it('should use the same global instance across imports', async () => {
       const { globalPersistenceManager: imported } = await import('../StatePersistenceManager');
       expect(imported).toBe(globalPersistenceManager);
@@ -357,16 +310,12 @@ describe('StatePersistenceManager', () => {
       const graphRule = rules.get('graph-editor');
       expect(graphRule?.strategy).toBe('IMMEDIATE');
     });
-    it('should gracefully degrade when storage is full', async () => {
-      mockLocalStorage.setItem.mockImplementation(() => {
-        throw new Error('QuotaExceededError');
-      });
+    it('should gracefully degrade when storage is full', async () => { mockLocalStorage.setItem.mockImplementation(() => {
+        throw new Error('QuotaExceededError') });
       // Should handle storage quota errors gracefully
       try {
         await manager.persist('admin-dashboard', { large: 'data' });
-      } catch (error) {
-        expect(error.message).toContain('admin-dashboard');
-    });
+ catch (error) { expect(error.message).toContain('admin-dashboard') });
   });
 });
 describe('StatePersistenceManager Integration with BaseStateContainer', () => {
@@ -382,8 +331,8 @@ describe('StatePersistenceManager Integration with BaseStateContainer', () => {
     const testData = { state: { value: 42 }, timestamp: Date.now() };
     // Mock localStorage for this test
     mockLocalStorage.setItem.mockImplementation(() => {});
-    await globalPersistenceManager.persist(testDomain, testData, {)
-  key: testDomain,
+    await globalPersistenceManager.persist(testDomain, testData, { )
+  key: testDomain }
       metadata: { historyLength: 5, subscriberCount: 2 }
     });
     // Should not throw errors and should be callable from state containers

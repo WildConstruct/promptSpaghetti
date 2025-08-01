@@ -12,6 +12,7 @@
 import React from 'react';
 
 }
+}
 interface NodeLabelsManagerProps {
     disabled?: boolean;
     readonly?: boolean;
@@ -23,4 +24,5 @@ interface NodeLabelsManagerProps {
 export declare const NodeLabelsManager: React.FC<NodeLabelsManagerProps>;
 export default NodeLabelsManager;
 //# sourceMappingURL=NodeLabelsManager.d.ts.map
+}
 }

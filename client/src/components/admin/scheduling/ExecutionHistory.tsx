@@ -27,7 +27,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Paper
-} from '@mui/material';
+ from '@mui/material';
 import {
   Close as CloseIcon,
   CheckCircle as CheckCircleIcon,
@@ -38,22 +38,23 @@ import {
   ExpandMore as ExpandMoreIcon,
   Timeline as TimelineIcon,
   History as HistoryIcon
-} from '@mui/icons-material';
+ from '@mui/icons-material';
 
-}
+
 interface ExecutionRecord {
   id: string;,
-  scheduleId: string;
+  scheduleId: string;,
   toggleId: string;,
-  executionTime: Date;
+  executionTime: Date;,
   status: 'scheduled' | 'running' | 'success' | 'failed' | 'skipped' | 'retrying';,
-  triggeredBy: 'scheduler' | 'manual' | 'retry';
-  executionContext: {
+  triggeredBy: 'scheduler' | 'manual' | 'retry';,
+  executionContext: {,
   timezone: string;,
-  originalTime: Date;
+  originalTime: Date;,
   actualTime: Date;
   delay?: number;
-}
+
+
 };
   beforeValue?: unknown;
   afterValue?: unknown;
@@ -68,14 +69,14 @@ interface ExecutionRecord {
   metadata?: Record<string, unknown>;
   createdAt: Date;
 
-}
+
 interface ExecutionHistoryProps {
   open: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   scheduleId: string | null;
+  const STATUS_CONFIG = {
 
-const STATUS_CONFIG = {
-}
+},
   scheduled: { color: 'info', icon: PendingIcon, label: 'Scheduled' },
   running: { color: 'warning', icon: PendingIcon, label: 'Running' },
   success: { color: 'success', icon: CheckCircleIcon, label: 'Success' },
@@ -100,7 +101,7 @@ export const [page, setPage] = useState(0);
   executionTime: new Date(Date.now() - 60 * 60 * 1000),
   status: 'success',
   triggeredBy: 'scheduler',
-  executionContext: {
+  executionContext: {,
   timezone: 'America/New_York',
   originalTime: new Date(Date.now() - 60 * 60 * 1000),
   actualTime: new Date(Date.now() - 60 * 60 * 1000 + 500),
@@ -110,12 +111,12 @@ export const [page, setPage] = useState(0);
           afterValue: { enabled: true },
           affectedUsers: 1250,
           duration: 2500,
-          metadata: {
+          metadata: {,
   action: 'enable',
   executor: 'scheduler-v1.2',
 },
   createdAt: new Date(Date.now() - 60 * 60 * 1000);
-  }
+
         {
   id: 'exec_2',
   scheduleId: scheduleId,
@@ -123,25 +124,25 @@ export const [page, setPage] = useState(0);
   executionTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
   status: 'failed',
   triggeredBy: 'scheduler',
-  executionContext: {
+  executionContext: {,
   timezone: 'America/New_York',
   originalTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
   actualTime: new Date(Date.now() - 2 * 60 * 60 * 1000 + 15000),
   delay: 15000,
 },
-  error: {
+  error: {,
   code: 'TOGGLE_NOT_FOUND',
   message: 'Feature toggle not found or has been deleted',
   retryable: false,
 },
   duration: 1200,
-          metadata: {
+          metadata: {,
   action: 'enable',
   executor: 'scheduler-v1.2',
   retryAttempt: 1,
 },
   createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000);
-  }
+
         {
   id: 'exec_3',
   scheduleId: scheduleId,
@@ -149,7 +150,7 @@ export const [page, setPage] = useState(0);
   executionTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
   status: 'success',
   triggeredBy: 'manual',
-  executionContext: {
+  executionContext: {,
   timezone: 'America/New_York',
   originalTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
   actualTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 200),
@@ -159,16 +160,16 @@ export const [page, setPage] = useState(0);
           afterValue: { percentage: 50 },
           affectedUsers: 875,
           duration: 1800,
-          metadata: {
+          metadata: {,
   action: 'modify_percentage',
   executor: 'manual-admin',
   requestedBy: 'admin@example.com',
 },
   createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000)];
       setExecutions(mockExecutions);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load execution history:', error);
-} finally {
+ finally {
       setLoading(false);
 
   }, [scheduleId]);
@@ -521,7 +522,7 @@ export const [page, setPage] = useState(0);
               onRowsPerPageChange={(e) => {
                 setRowsPerPage(parseInt(e.target.value, 10));
                 setPage(0);
-              }}
+}
             />
           </Paper>
         )}

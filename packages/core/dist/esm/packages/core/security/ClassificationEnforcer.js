@@ -2,9 +2,6 @@ import { DataSensitivityUtils } from './DataSensitivityLevels';
 import { CLASSIFICATION_LEVEL_MAPPING } from './DataClassificationHelpers';
 import { createHash } from 'crypto';
 ;
-/**
- * Classification Enforcement Engine
- */
 export class ClassificationEnforcer {
     config;
     auditLog = [];
@@ -78,8 +75,7 @@ export class ClassificationEnforcer {
             environment: context.environment || 'production',
             timestamp: new Date(),
             source: context.source || 'api',
-            requestId: context.requestId || this.generateRequestId()
-        };
+            requestId: context.requestId || this.generateRequestId(), };
         // Get handling requirements
         const requirements = this.getEffectiveRequirements(classification);
         // Check authentication requirements
@@ -88,7 +84,7 @@ export class ClassificationEnforcer {
             return {
                 granted: false,
                 reason: 'Insufficient authentication level',
-                requiredAuthentication: authDecision.required ? [authDecision.required] : []
+                requiredAuthentication: authDecision.required ? [authDecision.required] : [],
             };
         }
         // Check authorization requirements
@@ -97,7 +93,7 @@ export class ClassificationEnforcer {
             return {
                 granted: false,
                 reason: 'Insufficient authorization',
-                requiredAuthorization: authzDecision.required ? [authzDecision.required] : []
+                requiredAuthorization: authzDecision.required ? [authzDecision.required] : [],
             };
         }
         // Check time restrictions
@@ -106,7 +102,7 @@ export class ClassificationEnforcer {
             if (!timeDecision.met) {
                 return {
                     granted: false,
-                    reason: timeDecision.reason || 'Outside allowed time window'
+                    reason: timeDecision.reason || 'Outside allowed time window',
                 };
             }
         }
@@ -116,7 +112,7 @@ export class ClassificationEnforcer {
             if (!purposeDecision.met) {
                 return {
                     granted: false,
-                    reason: 'Purpose not allowed for this classification'
+                    reason: 'Purpose not allowed for this classification',
                 };
             }
         }
@@ -125,7 +121,7 @@ export class ClassificationEnforcer {
             granted: true,
             reason: 'All access requirements met',
             conditions: this.getAccessConditions(classification, fullContext),
-            expiresAt: this.calculateAccessExpiration(classification)
+            expiresAt: this.calculateAccessExpiration(classification),
         };
     }
     /**
@@ -191,7 +187,7 @@ export class ClassificationEnforcer {
         return {
             valid: issues.length === 0,
             issues,
-            controls: requiredControls
+            controls: requiredControls,
         };
     }
     /**
@@ -280,7 +276,7 @@ export class ClassificationEnforcer {
             PUBLIC: 10,
             INTERNAL: 30,
             CONFIDENTIAL: 60,
-            RESTRICTED: 90
+            RESTRICTED: 90,
         };
         score += classificationScores[classification];
         // Add score for violations
@@ -294,7 +290,7 @@ export class ClassificationEnforcer {
             update: 1.0,
             delete: 1.2,
             export: 1.5,
-            share: 1.5
+            share: 1.5,
         };
         score *= operationMultipliers[operation.operation] || 1.0;
         // Ensure score is between 0 and 100
@@ -422,7 +418,7 @@ export class ClassificationEnforcer {
             PUBLIC: ['any'],
             INTERNAL: ['business', 'operations', 'analytics'],
             CONFIDENTIAL: ['authorized-business', 'compliance', 'security'],
-            RESTRICTED: ['critical-operations', 'legal-requirement', 'security-incident']
+            RESTRICTED: ['critical-operations', 'legal-requirement', 'security-incident'],
         };
         const allowed = allowedPurposes[classification];
         if (allowed.includes('any')) {
@@ -455,10 +451,10 @@ export class ClassificationEnforcer {
     calculateAccessExpiration(classification) {
         const now = new Date();
         const expirationHours = {
-            PUBLIC: 24 * 30, // 30 days
-            INTERNAL: 24 * 7, // 7 days
-            CONFIDENTIAL: 24, // 1 day
-            RESTRICTED: 4 // 4 hours
+            PUBLIC: 24 * 30, // 30 days,
+            INTERNAL: 24 * 7, // 7 days,
+            CONFIDENTIAL: 24, // 1 day,
+            RESTRICTED: 4 // 4 hours,
         };
         const hours = expirationHours[classification];
         return new Date(now.getTime() + hours * 60 * 60 * 1000);
@@ -481,7 +477,7 @@ export class ClassificationEnforcer {
                 riskScore,
                 environment: operation.environment,
                 purpose: operation.purpose,
-                sessionId: operation.sessionId
+                sessionId: operation.sessionId,
             }
         };
         this.auditLog.push(event);
@@ -504,7 +500,7 @@ export class ClassificationEnforcer {
                 violations,
                 riskScore
             });
-            // TODO: Send to alerting system
+            // TODO: Send to alerting system;
         }
     }
     /**
@@ -536,21 +532,21 @@ export class ClassificationEnforcer {
             none: 'STANDARD',
             basic: 'STANDARD',
             strong: 'MFA',
-            mfa: 'STRONG_MFA'
+            mfa: 'STRONG_MFA',
         };
         // Map audit levels
         const auditLevelMap = {
             none: 'STANDARD',
             basic: 'STANDARD',
             enhanced: 'ENHANCED',
-            continuous: 'REALTIME'
+            continuous: 'REALTIME',
         };
         // Map monitoring levels
         const monitoringLevelMap = {
             none: 'LOW',
             basic: 'MEDIUM',
             enhanced: 'HIGH',
-            continuous: 'CRITICAL'
+            continuous: 'CRITICAL',
         };
         return {
             storage: {
@@ -561,7 +557,7 @@ export class ClassificationEnforcer {
                 backupEncryption: dataReqs.encryption.atRest,
                 retentionDays: this.getRetentionDaysForClassification(classification),
                 approvedLocations: this.getApprovedLocationsForClassification(classification),
-                redundancyLevel: this.getRedundancyLevelForClassification(classification)
+                redundancyLevel: this.getRedundancyLevelForClassification(classification),
             },
             transmission: {
                 tlsVersion: dataReqs.encryption.inTransit ? 'TLS1.3' : 'TLS1.2',
@@ -569,8 +565,7 @@ export class ClassificationEnforcer {
                 networkRestrictions: this.getNetworkRestrictionsForClassification(classification),
                 loggingLevel: dataReqs.transfer.logging,
                 compressionAllowed: classification === 'PUBLIC' || classification === 'INTERNAL',
-                endToEndEncryption: dataReqs.encryption.inTransit && (classification === 'RESTRICTED' || classification === 'CONFIDENTIAL')
-            },
+                endToEndEncryption: dataReqs.encryption.inTransit && (classification === 'RESTRICTED' || classification === 'CONFIDENTIAL'), },
             processing: {
                 approvedEnvironments: dataReqs.processingEnvironments || ['production'],
                 loggingRequired: dataReqs.accessControl.monitoring !== 'none',
@@ -579,7 +574,7 @@ export class ClassificationEnforcer {
                     encryptionRequired: classification !== 'PUBLIC',
                     maxTtlSeconds: this.getCacheTtlForClassification(classification),
                     purgeOnAccess: classification === 'RESTRICTED',
-                    secureEviction: classification !== 'PUBLIC'
+                    secureEviction: classification !== 'PUBLIC',
                 },
                 thirdPartyProcessing: classification === 'PUBLIC' || classification === 'INTERNAL',
                 isolationRequired: classification === 'RESTRICTED',
@@ -592,7 +587,7 @@ export class ClassificationEnforcer {
                 timeRestrictions: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL',
                 purposeLimitation: classification !== 'PUBLIC',
                 auditLogging: auditLevelMap[dataReqs.accessControl.monitoring] || 'STANDARD',
-                exportRestrictions: dataReqs.transfer.restrictions?.includes('export-control') || classification === 'RESTRICTED'
+                exportRestrictions: dataReqs.transfer.restrictions?.includes('export-control') || classification === 'RESTRICTED',
             },
             monitoring: {
                 alertingEnabled: classification !== 'PUBLIC',
@@ -600,7 +595,7 @@ export class ClassificationEnforcer {
                 alertThreshold: monitoringLevelMap[dataReqs.accessControl.monitoring] || 'LOW',
                 realtimeMonitoring: dataReqs.accessControl.monitoring === 'continuous',
                 complianceChecks: classification !== 'PUBLIC',
-                incidentResponse: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL'
+                incidentResponse: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL',
             }
         };
     }
@@ -612,7 +607,7 @@ export class ClassificationEnforcer {
             PUBLIC: ['read-only'],
             INTERNAL: ['role-based', 'department-access'],
             CONFIDENTIAL: ['role-based', 'need-to-know', 'manager-approval'],
-            RESTRICTED: ['strict-access-list', 'multi-person-control', 'audit-all-access']
+            RESTRICTED: ['strict-access-list', 'multi-person-control', 'audit-all-access'],
         };
         return controls[classification];
     }
@@ -624,7 +619,7 @@ export class ClassificationEnforcer {
             PUBLIC: 365,
             INTERNAL: 730,
             CONFIDENTIAL: 90,
-            RESTRICTED: 30
+            RESTRICTED: 30,
         };
         return retention[classification];
     }
@@ -636,7 +631,7 @@ export class ClassificationEnforcer {
             PUBLIC: ['any'],
             INTERNAL: ['production', 'staging'],
             CONFIDENTIAL: ['production'],
-            RESTRICTED: ['production-secure']
+            RESTRICTED: ['production-secure'],
         };
         return locations[classification];
     }
@@ -648,7 +643,7 @@ export class ClassificationEnforcer {
             PUBLIC: 'STANDARD',
             INTERNAL: 'STANDARD',
             CONFIDENTIAL: 'HIGH',
-            RESTRICTED: 'CRITICAL'
+            RESTRICTED: 'CRITICAL',
         };
         return redundancy[classification];
     }
@@ -660,7 +655,7 @@ export class ClassificationEnforcer {
             PUBLIC: [],
             INTERNAL: ['internal-network'],
             CONFIDENTIAL: ['internal-network', 'vpn-required'],
-            RESTRICTED: ['dedicated-network', 'vpn-required', 'ip-whitelist']
+            RESTRICTED: ['dedicated-network', 'vpn-required', 'ip-whitelist'],
         };
         return restrictions[classification];
     }
@@ -669,10 +664,10 @@ export class ClassificationEnforcer {
      */
     getCacheTtlForClassification(classification) {
         const ttl = {
-            PUBLIC: 3600, // 1 hour
-            INTERNAL: 900, // 15 minutes
-            CONFIDENTIAL: 300, // 5 minutes
-            RESTRICTED: 0 // No caching
+            PUBLIC: 3600, // 1 hour,
+            INTERNAL: 900, // 15 minutes,
+            CONFIDENTIAL: 300, // 5 minutes,
+            RESTRICTED: 0 // No caching,
         };
         return ttl[classification];
     }
@@ -738,19 +733,19 @@ export function createClassificationEnforcer(preset = 'production') {
             strictMode: false,
             blockViolations: false,
             alertingEnabled: false,
-            gracePeriodDays: 90
+            gracePeriodDays: 90,
         },
         staging: {
             strictMode: false,
             blockViolations: true,
             alertingEnabled: true,
-            gracePeriodDays: 30
+            gracePeriodDays: 30,
         },
         production: {
             strictMode: true,
             blockViolations: true,
             alertingEnabled: true,
-            gracePeriodDays: 0
+            gracePeriodDays: 0,
         }
     };
     return new ClassificationEnforcer(configs[preset]);

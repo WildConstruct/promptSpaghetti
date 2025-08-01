@@ -1,18 +1,16 @@
 // packages/core/runtime/nodes/WeightedAdvanced.ts
 // Advanced weighted choice node with complex distribution support
-import { 
-  AdvancedRuntimeNode, 
+import { AdvancedRuntimeNode, 
   AdvancedExecutionContext, 
   AdvancedNodeConfig,
   AdvancedNodeData,
-  ValidationResult,
+  ValidationResult }
   ValidationHelpers 
-} from '../advanced';
-import { 
-  AdvancedIOHandler,
-  IOSpecBuilder,
+ from '../advanced';
+import { AdvancedIOHandler,
+  IOSpecBuilder }
   TypedInputs 
-} from '../io-system';
+ from '../io-system';
 /**
  * Weight distribution types for advanced weighted selection
  */
@@ -21,18 +19,18 @@ export type WeightDistributionType = 'linear' | 'exponential' | 'gaussian' | 'cu
  * A weighted choice with value and weight
  */
 
-}
+
 export interface WeightedChoice {
   value: string;
   weight: number;
   /**
   * Configuration for weight distribution algorithms
   */
-}
-}
-}
-export interface WeightDistributionConfig {
-  type: WeightDistributionType;
+
+
+
+
+export interface WeightDistributionConfig { type: WeightDistributionType;
   /** Parameters for distribution (e.g., exponential factor, gaussian mean/std) */
   parameters?: Record<string, number>;
   /** Normalization settings */
@@ -41,69 +39,65 @@ export interface WeightDistributionConfig {
   minWeight?: number;
   /**
   * Advanced weighted choice node with support for complex weight distributions
-  * Extends basic WeightedChoice with:,
+  * Extends basic WeightedChoice with: }
   * - Multiple distribution algorithms (linear, exponential, gaussian, custom)
   * - Dynamic weight adjustment
   * - Performance optimization with caching
   * - Comprehensive validation
   */
-}
-}
-export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
-  private ioHandler: AdvancedIOHandler;
+
+
+export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> { private ioHandler: AdvancedIOHandler;
   private choices: WeightedChoice;
   private distributionConfig: WeightDistributionConfig;
   constructor();
-    id: string, 
-    choices: WeightedChoice = [],
+    id: string
+    choices: WeightedChoice = [] }
     distributionConfig: WeightDistributionConfig = { type: 'linear', normalize: true }
     // Configure as deterministic, cacheable, stateless
-    const config: AdvancedNodeConfig = {,
-  deterministic: true,
-  cacheable: true,
-  stateful: false,
+    const config: AdvancedNodeConfig = { 
+  deterministic: true
+  cacheable: true
+  stateful: false
   performanceHints: {
-  expectedExecutionTime: 'fast',
-  memoryUsage: 'low',
+  expectedExecutionTime: 'fast'
+  memoryUsage: 'low' }
 };
     super(id, config);
     this.choices = choices;
     this.distributionConfig = distributionConfig;
     // Set up I/O specification
     const ioSpec = new IOSpecBuilder();
-      .addInput({)
-  id: 'values',
-  label: 'Choice Values',
-  dataType: 'stringArray',
-  required: false,
-  defaultValue: [],
-  description: 'Array of string values to choose from',
-}
-      .addInput({)
-  id: 'weights',
-  label: 'Choice Weights',
-  dataType: 'numberArray',
-  required: false,
-  defaultValue: [],
+      .addInput({ )
+  id: 'values'
+  label: 'Choice Values'
+  dataType: 'stringArray'
+  required: false
+  defaultValue: []
+  description: 'Array of string values to choose from' }
+
+      .addInput({ )
+  id: 'weights'
+  label: 'Choice Weights'
+  dataType: 'numberArray'
+  required: false
+  defaultValue: []
   constraints: {
-  min: 0,
-  customValidator: (weights: number) => {,
-  if (weights.some(w => w < 0)) {
-  return ValidationHelpers.createInvalidResult(['Weights cannot be negative']);
+  min: 0
+  customValidator: (weights: number) => { }
+  if (weights.some(w => w < 0)) { return ValidationHelpers.createInvalidResult(['Weights cannot be negative']);
   if (weights.every(w => w === 0)) {
   return ValidationHelpers.createInvalidResult(['At least one weight must be positive']);
-  return ValidationHelpers.createValidResult();
-},
+  return ValidationHelpers.createValidResult() },
   description: 'Array of numeric weights (must be non-negative)';
-  }
+
       .addTextOutput('result', 'Selected Choice')
       .build();
     this.ioHandler = new AdvancedIOHandler(ioSpec);
   /**
    * Execute weighted selection using advanced distribution algorithm
    */
-  run(ctx: AdvancedExecutionContext): string {
-    // Record this node's execution
+  run(ctx: AdvancedExecutionContext): string { // Record this node's execution
     ctx.executionMeta.nodeExecutionOrder.push(this.id);
     return this.measureExecution(ctx, 'weighted-selection', () => {
       // Get effective choices (from constructor or dynamic inputs)
@@ -115,8 +109,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
       // Apply distribution algorithm to weights (don't cache random selection)
       const distributedWeights = this.applyDistribution(effectiveChoices);
       // Perform weighted selection
-      return this.selectFromDistribution(distributedWeights, ctx);
-    });
+      return this.selectFromDistribution(distributedWeights, ctx) });
   /**
    * Comprehensive validation of node configuration
    */
@@ -137,8 +130,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
     if (!['linear', 'exponential', 'gaussian', 'custom'].includes(this.distributionConfig.type)) {
       errors.push(`Invalid distribution type: ${this.distributionConfig.type}`);}
     // Validate distribution parameters
-    if (this.distributionConfig.type === 'exponential' && this.distributionConfig.parameters?.factor && this.distributionConfig.parameters.factor <= 0) {
-  errors.push('Exponential distribution factor must be positive');
+    if (this.distributionConfig.type === 'exponential' && this.distributionConfig.parameters?.factor && this.distributionConfig.parameters.factor <= 0) { errors.push('Exponential distribution factor must be positive');
   if (this.distributionConfig.type === 'gaussian') {
   const params = this.distributionConfig.parameters;
   if (params?.std && params.std <= 0) {
@@ -149,24 +141,23 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   errors.push('All weights are zero - cannot perform weighted selection');
   return {
   valid: errors.length === 0,
-  errors,
+  errors }
   warnings
 };
   /**
    * Serialize node data for persistence
    */
-  serialize(): AdvancedNodeData {
-  return {
+  serialize(): AdvancedNodeData { return {
   id: this.id,
   type: 'WeightedAdvanced',
   config: this.config,
-  data: {
+  data: {,
   choices: this.choices,
-  distributionConfig: this.distributionConfig,
+  distributionConfig: this.distributionConfig }
 },
-  metadata: {
+  metadata: { ,
   version: '1.0.0',
-  created: new Date().toISOString(),
+  created: new Date().toISOString() }
 };
   /**
    * Get effective choices from constructor data or dynamic inputs
@@ -181,8 +172,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   private applyDistribution(choices: WeightedChoice): WeightedChoice {
     const { type, parameters = {}, normalize = true, minWeight = 0 } = this.distributionConfig;
     let distributedChoices: WeightedChoice;
-    switch (type) {
-  case 'linear':,
+    switch (type) { case 'linear':,
   distributedChoices = this.applyLinearDistribution(choices);
   break;
   case 'exponential':,
@@ -200,48 +190,44 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   if (minWeight > 0) {
   distributedChoices = distributedChoices.map(choice => ({)
   ...choice,
-  weight: Math.max(choice.weight, minWeight),
+  weight: Math.max(choice.weight, minWeight) }
 }));
     // Normalize weights if requested
-    if (normalize) {
-  const totalWeight = distributedChoices.reduce((sum, choice) => sum + choice.weight, 0);
+    if (normalize) { const totalWeight = distributedChoices.reduce((sum, choice) => sum + choice.weight, 0);
   if (totalWeight > 0) {
   distributedChoices = distributedChoices.map(choice => ({)
   ...choice,
-  weight: choice.weight / totalWeight,
+  weight: choice.weight / totalWeight }
 }));
     return distributedChoices;
   /**
    * Linear distribution (no transformation - use original weights)
    */
-  private applyLinearDistribution(choices: WeightedChoice): WeightedChoice {
-  return choices;
+  private applyLinearDistribution(choices: WeightedChoice): WeightedChoice { return choices;
   /**
   * Exponential distribution - weights transformed by exponential function
   */
   private applyExponentialDistribution(choices: WeightedChoice, factor: number): WeightedChoice {,
   return choices.map(choice => ({)
   ...choice,
-  weight: Math.pow(choice.weight, factor),
+  weight: Math.pow(choice.weight, factor) }
 }));
   /**
    * Gaussian distribution - weights adjusted based on normal distribution
    */
-  private applyGaussianDistribution(choices: WeightedChoice, mean: number, std: number): WeightedChoice {
-  return choices.map((choice, index) => {
+  private applyGaussianDistribution(choices: WeightedChoice, mean: number, std: number): WeightedChoice { return choices.map((choice, index) => {
   // Map choice position to gaussian curve
   const x = index / (choices.length - 1 || 1); // Normalize to [0, 1];
   const gaussian = Math.exp(-0.5 * Math.pow((x - mean) / std, 2));
   return {
   ...choice,
-  weight: choice.weight * gaussian,
+  weight: choice.weight * gaussian }
 };
     });
   /**
    * Custom distribution - apply user-defined transformation
    */
-  private applyCustomDistribution(choices: WeightedChoice, ______parameters: Record<string, number>): WeightedChoice {
-    // Placeholder for custom distribution logic
+  private applyCustomDistribution(choices: WeightedChoice, ______parameters: Record<string, number>): WeightedChoice { // Placeholder for custom distribution logic
     // In full implementation, would support user-defined functions
     return choices;
   /**
@@ -266,8 +252,8 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
 /**
  * Factory function for creating WeightedAdvanced nodes
  */
-export function createWeightedAdvancedNode(id: string)
-  choices: WeightedChoice,
+export function createWeightedAdvancedNode(id: string),
+  choices: WeightedChoice }
   distributionConfig?: WeightDistributionConfig
 ): WeightedAdvancedNode {
   return new WeightedAdvancedNode(id, choices, distributionConfig);
@@ -279,4 +265,4 @@ export const DistributionPresets = {
   exponential: { type: 'exponential' as const, parameters: { factor: 2 }, normalize: true },
   gaussian: { type: 'gaussian' as const, parameters: { mean: 0.5, std: 0.2 }, normalize: true },
   uniform: { type: 'linear' as const, normalize: true, minWeight: 1 }
-} satisfies Record<string, WeightDistributionConfig>;
+ satisfies Record<string, WeightDistributionConfig>;

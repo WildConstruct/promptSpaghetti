@@ -8,9 +8,8 @@ import React from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import './TrendIndicator.css';
 
-}
-export interface TrendIndicatorProps {
-  value: number;
+
+export interface TrendIndicatorProps { value: number;
   direction: 'up' | 'down' | 'neutral';
   period?: string;
   isGoodTrend?: boolean;
@@ -19,36 +18,33 @@ export interface TrendIndicatorProps {
   showValue?: boolean;
   showPeriod?: boolean;
   format?: 'percentage' | 'number' | 'points';
-  className?: string;
-}
-}
-export const TrendIndicator: React.FC<TrendIndicatorProps> = ({)
-  value,
-  direction,
-  period = 'vs last period',
-  isGoodTrend,
-  size = 'medium',
-  showIcon = true,
-  showValue = true,
-  showPeriod = true,
-  format = 'percentage',
+  className?: string }
+
+export const TrendIndicator: React.FC<TrendIndicatorProps> = ({ )
+  value
+  direction
+  period = 'vs last period'
+  isGoodTrend
+  size = 'medium'
+  showIcon = true
+  showValue = true
+  showPeriod = true
+  format = 'percentage' }
   className = ''
-}) => {
-  // Determine if this trend is positive based on direction and context
+}) => { // Determine if this trend is positive based on direction and context
   const isPositiveTrend = () => {
   if (isGoodTrend !== undefined) {
   return direction === 'up' ? isGoodTrend : !isGoodTrend;
-  // Default: up trends are positive, down trends are negative,
+  // Default: up trends are positive, down trends are negative }
   return direction === 'up'
-  };
-  const getTrendIcon = () => {
-  switch (direction) {
-  case 'up':,
+};
+  const getTrendIcon = () => { switch (direction) {
+  case 'up':
   return TrendingUp;
-  case 'down':,
+  case 'down':
   return TrendingDown;
-  case 'neutral':,
-  default:,
+  case 'neutral':
+  default: }
   return Minus;
 };
   const formatTrendValue = () => {
@@ -63,14 +59,11 @@ export const TrendIndicator: React.FC<TrendIndicatorProps> = ({)
   default:
         return absValue.toString();
   };
-  const getTrendClass = () => {
-  if (direction === 'neutral') return 'trend-neutral';
-  return isPositiveTrend() ? 'trend-positive' : 'trend-negative';
-};
-  const iconSizes = {
-  small: 12,
-  medium: 14,
-  large: 16,
+  const getTrendClass = () => { if (direction === 'neutral') return 'trend-neutral';
+  return isPositiveTrend() ? 'trend-positive' : 'trend-negative' };
+  const iconSizes = { small: 12
+  medium: 14
+  large: 16 }
 };
   const TrendIcon = getTrendIcon();
   return;

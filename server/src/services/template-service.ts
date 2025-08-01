@@ -32,15 +32,14 @@ import {
   canUserAccessTemplate,
   validateCustomizations,
   applyTemplateCustomizations
-} from '../database/template-models';
+ from '../database/template-models';
 
-}
 export interface TemplateServiceOptions {
   getUserInfo?: (userId: string) => Promise<{ name: string; avatar?: string } | null>;
   checkWorkspaceAccess?: (workspaceId: string, userId: string, permission: number) => Promise<boolean>;
   generateThumbnail?: (templateData: Record<string, any>) => Promise<string>;
   sendNotification?: (userId: string, notification: unknown) => Promise<void>;
-}
+
 
 export class TemplateService {
   constructor(
@@ -56,12 +55,12 @@ export class TemplateService {
     // Validate template name
     if (!data.name.trim()) {
       throw new Error('Template name is required');
-    }
+
 
     // Validate template data
     if (!data.template_data || Object.keys(data.template_data).length === 0) {
       throw new Error('Template data is required');
-    }
+
 
     // Check workspace access if workspace_id is provided
     if (data.workspace_id) {
@@ -69,18 +68,18 @@ export class TemplateService {
         const hasAccess = await this.options.checkWorkspaceAccess(data.workspace_id, userId, 1); // WORKSPACE_READ permission
         if (!hasAccess) {
           throw new Error('Access denied to workspace');
-        }
-      }
-    }
+
+
+
 
     // Generate thumbnail if service is available
     if (this.options.generateThumbnail && !data.thumbnail_url) {
       try {
         data.thumbnail_url = await this.options.generateThumbnail(data.template_data);
-      } catch (error) {
+ catch (error) {
         console.warn('Failed to generate thumbnail:', error);
-      }
-    }
+
+
 
     const template = await this.templateDAO.createTemplate(data, userId);
 
@@ -94,12 +93,12 @@ export class TemplateService {
           template_id: template.id,
           template_name: template.name,
           category: template.category
-        }
+
       });
-    }
+
 
     return template;
-  }
+
 
   async getTemplate(id: string, userId: string): Promise<ProjectTemplateWithStats | null> {
 
@@ -110,10 +109,10 @@ export class TemplateService {
     const userWorkspaces = await this.getUserWorkspaceIds(userId);
     if (!canUserAccessTemplate(template, userId, userWorkspaces)) {
       throw new Error('Access denied to template');
-    }
+
 
     return template;
-  }
+
 
   async getTemplates(
     filter: TemplateFilter = {},
@@ -133,12 +132,12 @@ export class TemplateService {
         accessibleFilter.visibility = ['public'];
         if (userWorkspaces.length > 0) {
           accessibleFilter.visibility.push('workspace');
-        }
-      }
-    }
+
+
+
 
     return this.templateDAO.getTemplates(filter, sort, pagination, userId);
-  }
+
 
   async updateTemplate(
     id: string,
@@ -155,20 +154,20 @@ export class TemplateService {
         const hasAccess = await this.options.checkWorkspaceAccess(template.workspace_id, userId, 2); // WORKSPACE_WRITE permission
         if (!hasAccess) {
           throw new Error('Insufficient permissions to update template');
-        }
-      } else {
+
+ else {
         throw new Error('Insufficient permissions to update template');
-      }
-    }
+
+
 
     // Regenerate thumbnail if template data changed
     if (data.template_data && this.options.generateThumbnail && !data.thumbnail_url) {
       try {
         data.thumbnail_url = await this.options.generateThumbnail(data.template_data);
-      } catch (error) {
+ catch (error) {
         console.warn('Failed to generate thumbnail:', error);
-      }
-    }
+
+
 
     const updatedTemplate = await this.templateDAO.updateTemplate(id, data, userId);
 
@@ -182,12 +181,12 @@ export class TemplateService {
           template_id: id,
           template_name: updatedTemplate.name,
           changes: Object.keys(data)
-        }
+
       });
-    }
+
 
     return updatedTemplate;
-  }
+
 
   async archiveTemplate(id: string, userId: string): Promise<boolean> {
 
@@ -200,11 +199,11 @@ export class TemplateService {
         const hasAccess = await this.options.checkWorkspaceAccess(template.workspace_id, userId, 8); // WORKSPACE_DELETE permission
         if (!hasAccess) {
           throw new Error('Insufficient permissions to archive template');
-        }
-      } else {
+
+ else {
         throw new Error('Insufficient permissions to archive template');
-      }
-    }
+
+
 
     const success = await this.templateDAO.archiveTemplate(id);
 
@@ -217,12 +216,12 @@ export class TemplateService {
         event_data: {
           template_id: id,
           template_name: template.name
-        }
+
       });
-    }
+
 
     return success;
-  }
+
 
   async publishTemplate(id: string, userId: string): Promise<boolean> {
 
@@ -232,13 +231,13 @@ export class TemplateService {
     // Check permissions - only creator can publish
     if (template.created_by !== userId) {
       throw new Error('Only the template creator can publish templates');
-    }
+
 
     // Validate template before publishing
     const validationErrors = this.validateTemplateForPublishing(template);
     if (validationErrors.length > 0) {
       throw new Error(`Template validation failed: ${validationErrors.join(', ')}`);
-    }
+
 
     const success = await this.templateDAO.publishTemplate(id);
 
@@ -251,12 +250,12 @@ export class TemplateService {
         event_data: {
           template_id: id,
           template_name: template.name
-        }
+
       });
-    }
+
 
     return success;
-  }
+
 
   // ====== TEMPLATE USAGE OPERATIONS ======
 
@@ -270,19 +269,19 @@ export class TemplateService {
     const template = await this.templateDAO.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
-    }
+
 
     // Check access
     const userWorkspaces = await this.getUserWorkspaceIds(userId);
     if (!canUserAccessTemplate(template, userId, userWorkspaces)) {
       throw new Error('Access denied to template');
-    }
+
 
     // Validate customizations
     const validation = validateCustomizations(customizations, template);
     if (!validation.valid) {
       throw new Error(`Customization validation failed: ${validation.errors.join(', ')}`);
-    }
+
 
     // Apply customizations to template
     const customizedData = applyTemplateCustomizations(
@@ -301,7 +300,7 @@ export class TemplateService {
         template_id: templateId,
         template_version: template.version,
         customizations_applied: customizations
-      }
+
     }, userId);
 
     // Create usage record
@@ -323,11 +322,11 @@ export class TemplateService {
         template_id: templateId,
         template_name: template.name,
         project_name: project.name
-      }
+
     });
 
     return { project, usage };
-  }
+
 
   async completeTemplateUsage(
     usageId: string,
@@ -336,7 +335,7 @@ export class TemplateService {
       time_to_complete_minutes?: number;
       user_rating?: number;
       user_feedback?: string;
-  }
+
     userId: string
   ): Promise<TemplateUsage | null> {
 
@@ -346,7 +345,7 @@ export class TemplateService {
     };
 
     return this.templateDAO.updateTemplateUsage(usageId, data, userId);
-  }
+
 
   // ====== TEMPLATE REVIEWS OPERATIONS ======
 
@@ -355,13 +354,13 @@ export class TemplateService {
     const template = await this.templateDAO.getTemplate(data.template_id);
     if (!template) {
       throw new Error('Template not found');
-    }
+
 
     // Check if user has access to template
     const userWorkspaces = await this.getUserWorkspaceIds(userId);
     if (!canUserAccessTemplate(template, userId, userWorkspaces)) {
       throw new Error('Access denied to template');
-    }
+
 
     // Check if user has used the template (for verified reviews)
     // This could be implemented by checking template_usages table
@@ -377,10 +376,10 @@ export class TemplateService {
         template_id: template.id,
         review_id: review.id
       });
-    }
+
 
     return review;
-  }
+
 
   async getTemplateReviews(
     templateId: string,
@@ -389,7 +388,7 @@ export class TemplateService {
   ): Promise<PaginatedResult<TemplateReviewWithAuthor>> {
     const filterWithTemplate = { ...filter, template_id: templateId };
     return this.templateDAO.getTemplateReviews(filterWithTemplate, pagination);
-  }
+
 
   // ====== TEMPLATE FAVORITES OPERATIONS ======
 
@@ -398,35 +397,35 @@ export class TemplateService {
     const template = await this.templateDAO.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
-    }
+
 
     // Check access
     const userWorkspaces = await this.getUserWorkspaceIds(userId);
     if (!canUserAccessTemplate(template, userId, userWorkspaces)) {
       throw new Error('Access denied to template');
-    }
+
 
     return this.templateDAO.addTemplateFavorite(templateId, userId, template.workspace_id);
-  }
+
 
   async removeTemplateFavorite(templateId: string, userId: string): Promise<boolean> {
 
     return this.templateDAO.removeTemplateFavorite(templateId, userId);
-  }
+
 
   async getUserFavoriteTemplates(
     userId: string,
     pagination: PaginationOptions = {}
   ): Promise<PaginatedResult<ProjectTemplateWithStats>> {
     return this.templateDAO.getUserFavoriteTemplates(userId, pagination);
-  }
+
 
   // ====== TEMPLATE CATEGORIES OPERATIONS ======
 
   async getTemplateCategories(): Promise<TemplateCategory[]> {
 
     return this.templateDAO.getTemplateCategories();
-  }
+
 
   // ====== ANALYTICS AND REPORTING ======
 
@@ -435,7 +434,7 @@ export class TemplateService {
     const template = await this.templateDAO.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
-    }
+
 
     // Check permissions - only creator or workspace admin can view analytics
     if (template.created_by !== userId) {
@@ -443,14 +442,14 @@ export class TemplateService {
         const hasAccess = await this.options.checkWorkspaceAccess(template.workspace_id, userId, 1); // WORKSPACE_READ permission
         if (!hasAccess) {
           throw new Error('Access denied to template analytics');
-        }
-      } else {
+
+ else {
         throw new Error('Access denied to template analytics');
-      }
-    }
+
+
 
     return this.templateDAO.getTemplateAnalytics(templateId, days);
-  }
+
 
   // ====== TEMPLATE EXPORT/IMPORT ======
 
@@ -464,13 +463,13 @@ export class TemplateService {
     const template = await this.templateDAO.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
-    }
+
 
     // Check access
     const userWorkspaces = await this.getUserWorkspaceIds(userId);
     if (!canUserAccessTemplate(template, userId, userWorkspaces)) {
       throw new Error('Access denied to template');
-    }
+
 
     const exportData: TemplateExport = {
       metadata: {
@@ -480,7 +479,7 @@ export class TemplateService {
         exported_at: new Date().toISOString(),
         exported_by: userId,
         export_format: format
-  }
+
       template
     };
 
@@ -488,16 +487,16 @@ export class TemplateService {
     if (includeAnalytics && (template.created_by === userId || template.workspace_id)) {
       try {
         exportData.usage_analytics = await this.templateDAO.getTemplateAnalytics(templateId);
-      } catch (error) {
+ catch (error) {
         console.warn('Failed to include analytics in export:', error);
-      }
-    }
+
+
 
     // Record download for analytics
     await this.recordTemplateDownload(templateId, userId, format);
 
     return exportData;
-  }
+
 
   async importTemplate(
     templateData: TemplateExport,
@@ -521,7 +520,7 @@ export class TemplateService {
     delete (createData as any).rating_count;
 
     return this.createTemplate(createData, userId);
-  }
+
 
   // ====== HELPER METHODS ======
 
@@ -530,11 +529,11 @@ export class TemplateService {
     try {
       const result = await this.workspaceDAO.getWorkspacesForUser(userId);
       return result.data.map(w => w.id);
-    } catch (error) {
+ catch (error) {
       console.warn('Failed to get user workspaces:', error);
       return [];
-    }
-  }
+
+
 
   private async recordTemplateDownload(
     _____templateId: string,
@@ -544,7 +543,7 @@ export class TemplateService {
 
     // This would be implemented to track downloads for analytics
     // For now, we'll skip the implementation
-  }
+
 
   private validateTemplateForPublishing(template: ProjectTemplate): string[] {
     const errors: string[] = [];
@@ -552,35 +551,34 @@ export class TemplateService {
     // Basic validation
     if (!template.name.trim()) {
       errors.push('Template name is required');
-    }
+
 
     if (!template.description || template.description.trim().length < 20) {
       errors.push('Template description must be at least 20 characters');
-    }
+
 
     if (!template.template_data || Object.keys(template.template_data).length === 0) {
       errors.push('Template data is required');
-    }
+
 
     if (template.tags.length === 0) {
       errors.push('At least one tag is required');
-    }
+
 
     if (!template.thumbnail_url) {
       errors.push('Template thumbnail is required for publishing');
-    }
+
 
     // Validate customizable fields
     const customizableFields = template.customizable_fields as Record<string, any>;
     for (const [fieldName, fieldDef] of Object.entries(customizableFields)) {
       if (!fieldDef.type) {
         errors.push(`Customizable field '${fieldName}' is missing type`);
-      }
+
       if (!fieldDef.label) {
         errors.push(`Customizable field '${fieldName}' is missing label`);
-      }
-    }
+
+
 
     return errors;
-  }
-}
+

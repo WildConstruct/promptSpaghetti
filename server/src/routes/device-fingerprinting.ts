@@ -4,8 +4,8 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { DeviceFingerprintingService } from '../services/DeviceFingerprintingService';
 
-}
-}
+
+
 interface FingerprintRequest {
   components: {
     userAgent: string;
@@ -27,8 +27,9 @@ interface FingerprintRequest {
     webRTC?: {
       localIP?: string;
       publicIP?: string;
-}
-}
+
+
+
     };
   };
   metadata?: {
@@ -38,32 +39,35 @@ interface FingerprintRequest {
       city: string;
     };
   };
-}
 
-}
-}
+
+
+
 interface VerifyDeviceRequest {
   fingerprint: string;
   expectedFingerprint?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface TrustDeviceRequest {
   reason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface BlockDeviceRequest {
   reason: string;
-}
-}
-}
+
+
+
+
 
 export async function deviceFingerprintingRoutes(
   fastify: FastifyInstance,
@@ -72,9 +76,9 @@ export async function deviceFingerprintingRoutes(
   // Generate device fingerprint
   fastify.post<{
     Body: FingerprintRequest;
-  }>('/device/fingerprint', async (request: FastifyRequest<{
+>('/device/fingerprint', async (request: FastifyRequest<{
     Body: FingerprintRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { components, metadata } = request.body;
       
@@ -100,32 +104,32 @@ export async function deviceFingerprintingRoutes(
           verificationStatus: trustProfile.verificationStatus,
           requiresVerification: trustProfile.verificationStatus === 'unverified',
           isNewDevice: trustProfile.firstSeen === trustProfile.lastSeen
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Device fingerprinting error:', error);
       reply.code(500).send({
         error: 'Failed to generate device fingerprint',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Verify device fingerprint
   fastify.post<{
     Body: VerifyDeviceRequest;
-  }>('/device/verify', {
+>('/device/verify', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: VerifyDeviceRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { fingerprint, expectedFingerprint } = request.body;
       
@@ -142,31 +146,31 @@ export async function deviceFingerprintingRoutes(
           : [],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Device verification error:', error);
       reply.code(500).send({
         error: 'Failed to verify device',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get device history
   fastify.get<{
     Params: { fingerprint: string };
     Querystring: { limit?: number };
-  }>('/device/:fingerprint/history', {
+>('/device/:fingerprint/history', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { fingerprint: string };
     Querystring: { limit?: number };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { fingerprint } = request.params;
       const { limit = 50 } = request.query;
@@ -180,7 +184,7 @@ export async function deviceFingerprintingRoutes(
       if (!hasAccess) {
         reply.code(403).send({ error: 'Access denied to device history' });
         return;
-      }
+
       
       return {
         device: {
@@ -190,7 +194,7 @@ export async function deviceFingerprintingRoutes(
           seenCount: history.device.seen_count,
           trustScore: history.device.trust_score,
           isBlocked: history.device.is_blocked
-  }
+
         users: history.users.map(u => ({
           userId: u.user_id,
           email: u.email,
@@ -204,31 +208,31 @@ export async function deviceFingerprintingRoutes(
         securityEvents: history.securityEvents,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Device history error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve device history',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Mark device as trusted
   fastify.post<{
     Params: { fingerprint: string };
     Body: TrustDeviceRequest;
-  }>('/device/:fingerprint/trust', {
+>('/device/:fingerprint/trust', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { fingerprint: string };
     Body: TrustDeviceRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { fingerprint } = request.params;
       const { reason } = request.body;
@@ -243,29 +247,29 @@ export async function deviceFingerprintingRoutes(
         reason,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Device trust error:', error);
       reply.code(500).send({
         error: 'Failed to mark device as trusted',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get user's devices
   fastify.get<{
     Querystring: { includeBlocked?: boolean };
-  }>('/device/my-devices', {
+>('/device/my-devices', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Querystring: { includeBlocked?: boolean };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { includeBlocked = false } = request.query;
       
@@ -300,7 +304,7 @@ export async function deviceFingerprintingRoutes(
             userAgent: d.components?.userAgent,
             platform: d.components?.platform,
             screenResolution: d.components?.screenResolution
-  }
+
           firstSeen: d.first_seen,
           lastSeen: d.last_seen,
           accessCount: d.access_count,
@@ -322,31 +326,31 @@ export async function deviceFingerprintingRoutes(
         ).filter((d: Record<string, unknown>) => d.is_blocked).length,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('My devices error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve user devices',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Block device
   fastify.post<{
     Params: { fingerprint: string };
     Body: BlockDeviceRequest;
-  }>('/device/:fingerprint/block', {
+>('/device/:fingerprint/block', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Params: { fingerprint: string };
     Body: BlockDeviceRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { fingerprint } = request.params;
       const { reason } = request.body;
@@ -362,29 +366,29 @@ export async function deviceFingerprintingRoutes(
         reason,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Device block error:', error);
       reply.code(500).send({
         error: 'Failed to block device',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Get device statistics
   fastify.get<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>('/device/admin/statistics', {
+>('/device/admin/statistics', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'ops'].includes(role))) {
         reply.code(403).send({ error: 'Admin, security, or ops role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { timeframe = 'week' } = request.query;
       const statistics = await deviceService.getDeviceStatistics(timeframe);
@@ -398,16 +402,16 @@ export async function deviceFingerprintingRoutes(
           newDeviceGrowth: statistics.devices.new_devices,
           unresolvedSecurityEvents: statistics.securityEvents.unresolved_events,
           averageTrustScore: Math.round(statistics.devices.avg_trust_score || 50)
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Device statistics error:', error);
       reply.code(500).send({
         error: 'Failed to retrieve device statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Search devices
@@ -419,14 +423,14 @@ export async function deviceFingerprintingRoutes(
       verificationStatus?: string;
       limit?: number;
     };
-  }>('/device/admin/search', {
+>('/device/admin/search', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: {
       fingerprint?: string;
@@ -435,7 +439,7 @@ export async function deviceFingerprintingRoutes(
       verificationStatus?: string;
       limit?: number;
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { fingerprint, userId, trustScore, verificationStatus, limit = 100 } = request.query;
       
@@ -460,7 +464,7 @@ export async function deviceFingerprintingRoutes(
         query += ` AND df.fingerprint LIKE $${paramIndex}`;
         params.push(`%${fingerprint}%`);
         paramIndex++;
-      }
+
       
       if (userId) {
         query += ` AND EXISTS (
@@ -469,19 +473,19 @@ export async function deviceFingerprintingRoutes(
         )`;
         params.push(userId);
         paramIndex++;
-      }
+
       
       if (trustScore !== undefined) {
         query += ` AND df.trust_score <= $${paramIndex}`;
         params.push(trustScore);
         paramIndex++;
-      }
+
       
       if (verificationStatus) {
         query += ` AND dtp.verification_status = $${paramIndex}`;
         params.push(verificationStatus);
         paramIndex++;
-      }
+
       
       query += ' GROUP BY df.fingerprint, dtp.verification_status, dtp.behavior_metrics';
       query += ' ORDER BY df.last_seen DESC';
@@ -507,13 +511,13 @@ export async function deviceFingerprintingRoutes(
         resultCount: results.rows.length,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Device search error:', error);
       reply.code(500).send({
         error: 'Failed to search devices',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Health check
@@ -528,7 +532,7 @@ export async function deviceFingerprintingRoutes(
           totalDevices: stats.devices.total_devices,
           newDevicesToday: stats.devices.new_devices,
           averageTrustScore: Math.round(stats.devices.avg_trust_score || 50)
-  }
+
         features: [
           'Device fingerprint generation',
           'Trust scoring',
@@ -538,7 +542,7 @@ export async function deviceFingerprintingRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Device fingerprinting health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
@@ -546,7 +550,7 @@ export async function deviceFingerprintingRoutes(
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -586,49 +590,49 @@ export async function deviceFingerprintingRoutes(
           method: 'POST',
           description: 'Generate device fingerprint and record access',
           auth: 'optional'
-  }
+
         {
           path: '/device/verify',
           method: 'POST',
           description: 'Verify device fingerprint and check trust',
           auth: 'required'
-  }
+
         {
           path: '/device/:fingerprint/history',
           method: 'GET',
           description: 'Get device history and associations',
           auth: 'required'
-  }
+
         {
           path: '/device/:fingerprint/trust',
           method: 'POST',
           description: 'Mark device as trusted',
           auth: 'required'
-  }
+
         {
           path: '/device/my-devices',
           method: 'GET',
           description: 'Get user\'s associated devices',
           auth: 'required'
-  }
+
         {
           path: '/device/:fingerprint/block',
           method: 'POST',
           description: 'Block device (admin only)',
           auth: 'admin required'
-  }
+
         {
           path: '/device/admin/statistics',
           method: 'GET',
           description: 'Get device statistics',
           auth: 'admin/security role required'
-  }
+
         {
           path: '/device/admin/search',
           method: 'GET',
           description: 'Search devices with filters',
           auth: 'admin/security role required'
-        }
+
       ],
       trustScoring: {
         factors: [
@@ -645,8 +649,8 @@ export async function deviceFingerprintingRoutes(
           unverified: '40-60',
           trusted: '60-80',
           verified: '80-100'
-        }
-  }
+
+
       securityEvents: [
         'new_device - First time device seen',
         'fingerprint_change - Significant fingerprint change',
@@ -656,4 +660,3 @@ export async function deviceFingerprintingRoutes(
       ]
     };
   });
-}

@@ -4,8 +4,7 @@
  * 
  * Adapter for OpenAI Whisper models for audio transcription and translation
  */
-import { 
-  BaseAIModel,
+import { BaseAIModel,
   AIModelType,
   AIModelProvider,
   AIModelStatus,
@@ -13,41 +12,39 @@ import {
   ModelCapabilities,
   CostEstimate,
   ModelInitializationError,
-  ModelProcessingError,
+  ModelProcessingError }
   ModelUnavailableError
-} from '../BaseAIModel';
+ from '../BaseAIModel';
 
-}
-export interface WhisperConfig {
-  apiKey: string;
+
+export interface WhisperConfig { apiKey: string;
   baseURL?: string;
   timeout?: number;
   maxRetries?: number;
-  organization?: string;
-}
-}
-}
-export interface WhisperRequestOptions {
-  // Core parameters
+  organization?: string }
+
+
+
+export interface WhisperRequestOptions { // Core parameters
   file: File | Blob | ArrayBuffer;
   model?: 'whisper-1';
   // Transcription parameters
-  language?: string; // ISO-639-1 language code,
-  prompt?: string; // Optional context to guide the model,
+  language?: string; // ISO-639-1 language code;
+  prompt?: string; // Optional context to guide the model;
   response_format?: 'json' | 'text' | 'srt' | 'verbose_json' | 'vtt';
-  temperature?: number; // 0-1,
+  temperature?: number; // 0-1;
   // Advanced options
   timestamp_granularities?: ('word' | 'segment')[];
   // Processing options
-  task?: 'transcribe' | 'translate'; // translate converts to English,
-}
-}
-}
-export interface WhisperTranscriptionResult {
-  text: string;
+  task?: 'transcribe' | 'translate'; // translate converts to English }
+
+
+
+
+export interface WhisperTranscriptionResult { text: string;
   language?: string;
   duration?: number;
-  segments?: Array<{
+  segments?: Array<{;
   id: number;
   seek: number;
   start: number;
@@ -58,67 +55,43 @@ export interface WhisperTranscriptionResult {
   avg_logprob: number;
   compression_ratio: number;
   no_speech_prob: number;
-  words?: Array<{
+  words?: Array<{ }
   word: string;
   start: number;
   end: number;
-}
-}>;
-  }>;
-  words?: Array<{
-  word: string;
+
+
+>;
+>;
+  words?: Array<{ word: string;
   start: number;
-  end: number;
-}>;
-  metadata: {
+  end: number }>;
+  metadata: { ,
   model: string;
   task: string;
   language: string;
   duration: number;
   processing_time: number;
-  confidence_score?: number;
-};
-  usage: {
-  audio_duration: number; // Duration in seconds,
+  confidence_score?: number };
+  usage: { ,
+  audio_duration: number; // Duration in seconds }
   cost: number;
 };
-}
-}
-export interface AudioFileInfo {
-  name: string;
+
+
+export interface AudioFileInfo { name: string;
   size: number;
   type: string;
   duration?: number;
   sample_rate?: number;
   channels?: number;
-  format: string;
-}
-}
-export class WhisperAdapter extends BaseAIModel {
-  private config: WhisperConfig;
-  private supportedFormats = [
-  'audio/flac', 'audio/m4a', 'audio/mp3', 'audio/mp4', 'audio/mpeg',
-  'audio/mpga', 'audio/oga', 'audio/ogg', 'audio/wav', 'audio/webm',
-  'video/mp4', 'video/mpeg', 'video/quicktime', 'video/webm', 'video/x-msvideo'
-  ];
-  constructor(id: string, config: WhisperConfig) {,
-  const metadata: ModelMetadata = {,
-  name: 'whisper-1',
-  version: '1.0',
-  description: 'OpenAI Whisper automatic speech recognition with multilingual support',
-  provider: AIModelProvider.OPENAI,
-  type: AIModelType.AUDIO,
-  costPerRequest: 0.006 / 60, // $0.006 per minute,
-  averageLatency: 5000,
-  maxConcurrency: 10,
-  rateLimit: {
-  requestsPerMinute: 50,
-  tokensPerMinute: 10000,
-},
+  format: string }
+
+export class WhisperAdapter {},
   tags: ['speech-to-text', 'transcription', 'multilingual', 'whisper'],
       lastUpdated: new Date();
   };
-    const capabilities: ModelCapabilities = {,
+    const capabilities: ModelCapabilities = { ,
   inputTypes: ['audio', 'video'],
   outputTypes: ['text', 'json'],
   maxInputSize: 25 * 1024 * 1024, // 25MB file size limit,
@@ -126,42 +99,37 @@ export class WhisperAdapter extends BaseAIModel {
   supportsBatch: false,
   supportsStreaming: false,
   supportsAsync: true,
-  customParameters: {
-  language: {
+  customParameters: {,
+  language: {,
   type: 'string',
-  description: 'ISO-639-1 language code (auto-detected if not specified)',
+  description: 'ISO-639-1 language code (auto-detected if not specified)' }
 },
   temperature: { type: 'number', min: 0, max: 1, default: 0 },
-        response_format: {
+        response_format: { ,
   type: 'string',
   options: ['json', 'text', 'srt', 'verbose_json', 'vtt'],
-  default: 'verbose_json',
+  default: 'verbose_json' }
 },
-  task: {
+  task: { ,
   type: 'string',
   options: ['transcribe', 'translate'],
-  default: 'transcribe',
+  default: 'transcribe' }
 };
     super(id, metadata, capabilities);
     this.config = config;
-  async initialize(): Promise<void> {
-
-    try {
+  async initialize(): Promise<void> { try {
       this._status = AIModelStatus.INITIALIZING;
       if (!this.config.apiKey) {
         throw new Error('OpenAI API key is required for Whisper');
       // Test the API connection
       await this._testConnection();
       this._status = AIModelStatus.READY;
-      this._lastActivity = new Date();
-    } catch (error) {
+      this._lastActivity = new Date() } catch (error) {
       this._status = AIModelStatus.ERROR;
       throw new ModelInitializationError(this._id, error instanceof Error ? error.message : 'Unknown error');
   async process(input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer })
     options?: WhisperRequestOptions
-  ): Promise<WhisperTranscriptionResult> {
-
-  try {
+  ): Promise<WhisperTranscriptionResult> { try {
   if (this._status !== AIModelStatus.READY) {
   throw new ModelUnavailableError(this._id);
   const startTime = Date.now();
@@ -178,27 +146,27 @@ export class WhisperAdapter extends BaseAIModel {
   const processingTime = Date.now() - startTime;
   // Get audio duration for cost calculation
   const audioDuration = await this._getAudioDuration(audioFile);
-  const result: WhisperTranscriptionResult = {,
-  text: transcriptionData.text,
-  language: transcriptionData.language,
-  duration: transcriptionData.duration,
-  segments: transcriptionData.segments,
-  words: transcriptionData.words,
+  const result: WhisperTranscriptionResult = {
+  text: transcriptionData.text
+  language: transcriptionData.language
+  duration: transcriptionData.duration
+  segments: transcriptionData.segments
+  words: transcriptionData.words
   metadata: {
-  model: processedOptions.model!,
-  task: processedOptions.task!,
-  language: transcriptionData.language || 'auto',
-  duration: audioDuration,
-  processing_time: processingTime,
-  confidence_score: this._calculateConfidenceScore(transcriptionData),
-},
-  usage: {
-  audio_duration: audioDuration,
-  cost: this._calculateCost(audioDuration),
+  model: processedOptions.model!
+  task: processedOptions.task!
+  language: transcriptionData.language || 'auto'
+  duration: audioDuration
+  processing_time: processingTime
+  confidence_score: this._calculateConfidenceScore(transcriptionData) }
+
+  usage: { 
+  audio_duration: audioDuration
+  cost: this._calculateCost(audioDuration) }
 };
       this._lastActivity = new Date();
       return result;
-    } catch (error) {
+ catch (error) {
       throw new ModelProcessingError(this._id, error instanceof Error ? error.message : 'Unknown error');
   async cleanup(): Promise<void> {
 
@@ -207,114 +175,96 @@ export class WhisperAdapter extends BaseAIModel {
     this._requestQueue = [];
   async estimate(input: File | Blob | ArrayBuffer | { file?: File | Blob | ArrayBuffer; audio?: File | Blob | ArrayBuffer; data?: File | Blob | ArrayBuffer })
     options?: WhisperRequestOptions
-  ): Promise<CostEstimate> {
-
-    const audioFile = this._extractAudioFile(input);
+  ): Promise<CostEstimate> { const audioFile = this._extractAudioFile(input);
     let audioDuration = 0;
     if (audioFile) {
       try {
-        audioDuration = await this._getAudioDuration(audioFile);
-      } catch (error) {
-  // Fallback estimation based on file size
+        audioDuration = await this._getAudioDuration(audioFile) } catch (error) { // Fallback estimation based on file size
   audioDuration = this._estimateDurationFromSize(audioFile);
   const estimatedCost = this._calculateCost(audioDuration);
   return {
-  estimatedCost,
-  currency: 'USD',
-  confidence: 0.9,
+  estimatedCost
+  currency: 'USD'
+  confidence: 0.9
   breakdown: {
-  inputCost: estimatedCost,
-  outputCost: 0,
-  processingCost: 0,
+  inputCost: estimatedCost
+  outputCost: 0
+  processingCost: 0 }
 };
   // Whisper-specific methods
   async transcribeFile(file: File)
-    language?: string,
+    language?: string
     options?: Partial<WhisperRequestOptions>
-  ): Promise<WhisperTranscriptionResult> {
-
-  const whisperOptions: WhisperRequestOptions = {,
-  file,
-  language,
-  task: 'transcribe',
+  ): Promise<WhisperTranscriptionResult> { const whisperOptions: WhisperRequestOptions = {
+  file
+  language
+  task: 'transcribe' }
   ...options
 };
     return this.process(file, whisperOptions);
   async translateToEnglish(file: File)
     options?: Partial<WhisperRequestOptions>
-  ): Promise<WhisperTranscriptionResult> {
-
-  const whisperOptions: WhisperRequestOptions = {,
-  file,
-  task: 'translate',
+  ): Promise<WhisperTranscriptionResult> { const whisperOptions: WhisperRequestOptions = {
+  file
+  task: 'translate' }
   ...options
 };
     return this.process(file, whisperOptions);
   async transcribeWithTimestamps(file: File)
-    granularity: 'word' | 'segment' | 'both' = 'segment',
+  granularity: 'word' | 'segment' | 'both' = 'segment'
     options?: Partial<WhisperRequestOptions>
-  ): Promise<WhisperTranscriptionResult> {
-
-  const timestamp_granularities: ('word' | 'segment')[] =,
+  ): Promise<WhisperTranscriptionResult> { const timestamp_granularities: ('word' | 'segment')[] =
   granularity === 'both' ? ['word', 'segment'] : [granularity];
-  const whisperOptions: WhisperRequestOptions = {,
-  file,
-  response_format: 'verbose_json',
-  timestamp_granularities,
+  const whisperOptions: WhisperRequestOptions = {
+  file
+  response_format: 'verbose_json'
+  timestamp_granularities }
   ...options
 };
     return this.process(file, whisperOptions);
   async batchTranscribe(files: File)
     options?: WhisperRequestOptions
-  ): Promise<WhisperTranscriptionResult> {
-
-  const results: WhisperTranscriptionResult = [];
+  ): Promise<WhisperTranscriptionResult> { const results: WhisperTranscriptionResult = [];
   for (const file of files) {
   try {
   const result = await this.process(file, options);
   results.push(result);
   // Add small delay to respect rate limits
-  await new Promise(resolve => setTimeout(resolve, 200));
-} catch (error) {
+  await new Promise(resolve => setTimeout(resolve, 200)) } catch (error) {
         console.warn(`Failed to transcribe file: ${file.name}`, error);}
         throw error;
     return results;
-  async getSupportedLanguages(): Promise<string> {
-
-  // Whisper supports 99 languages - this is a subset of the most common ones
+  async getSupportedLanguages(): Promise<string> { // Whisper supports 99 languages - this is a subset of the most common ones
   return [
-  'af', 'ar', 'hy', 'az', 'be', 'bs', 'bg', 'ca', 'zh', 'hr', 'cs', 'da',
-  'nl', 'en', 'et', 'fi', 'fr', 'gl', 'de', 'el', 'he', 'hi', 'hu', 'is',
-  'id', 'it', 'ja', 'kn', 'kk', 'ko', 'lv', 'lt', 'mk', 'ms', 'mr', 'mi',
-  'ne', 'no', 'fa', 'pl', 'pt', 'ro', 'ru', 'sr', 'sk', 'sl', 'es', 'sw',
+  'af', 'ar', 'hy', 'az', 'be', 'bs', 'bg', 'ca', 'zh', 'hr', 'cs', 'da'
+  'nl', 'en', 'et', 'fi', 'fr', 'gl', 'de', 'el', 'he', 'hi', 'hu', 'is'
+  'id', 'it', 'ja', 'kn', 'kk', 'ko', 'lv', 'lt', 'mk', 'ms', 'mr', 'mi'
+  'ne', 'no', 'fa', 'pl', 'pt', 'ro', 'ru', 'sr', 'sk', 'sl', 'es', 'sw'
   'sv', 'tl', 'ta', 'th', 'tr', 'uk', 'ur', 'vi', 'cy'
   ];
-  async getAudioInfo(file: File | Blob): Promise<AudioFileInfo> {,
-  const info: AudioFileInfo = {,
-  name: file instanceof File ? file.name : 'unknown',
-  size: file.size,
-  type: file.type,
-  format: this._getFormatFromMimeType(file.type),
+  async getAudioInfo(file: File | Blob): Promise<AudioFileInfo> {
+  const info: AudioFileInfo = {
+  name: file instanceof File ? file.name : 'unknown'
+  size: file.size
+  type: file.type
+  format: this._getFormatFromMimeType(file.type) }
 };
-    try {
-      info.duration = await this._getAudioDuration(file);
-    } catch (error) {
-  console.warn('Could not determine audio duration:', error);
+    try { info.duration = await this._getAudioDuration(file) } catch (error) { console.warn('Could not determine audio duration:', error);
   return info;
   // Static helper methods
-  static getSupportedFormats(): string {,
+  static getSupportedFormats(): string {
   return [
   'flac', 'm4a', 'mp3', 'mp4', 'mpeg', 'mpga', 'oga', 'ogg', 'wav', 'webm'
   ];
-  static getMaxFileSize(): number {,
+  static getMaxFileSize(): number {
   return 25 * 1024 * 1024; // 25MB
-  static getLanguageName(code: string): string {,
-  const languages: Record<string, string> = {,
-  'en': 'English', 'es': 'Spanish', 'fr': 'French', 'de': 'German',
-  'it': 'Italian', 'pt': 'Portuguese', 'ru': 'Russian', 'ja': 'Japanese',
-  'zh': 'Chinese', 'ko': 'Korean', 'ar': 'Arabic', 'hi': 'Hindi',
-  'nl': 'Dutch', 'sv': 'Swedish', 'da': 'Danish', 'no': 'Norwegian',
-  'fi': 'Finnish', 'pl': 'Polish', 'tr': 'Turkish', 'he': 'Hebrew',
+  static getLanguageName(code: string): string {
+  const languages: Record<string, string> = {
+  'en': 'English', 'es': 'Spanish', 'fr': 'French', 'de': 'German'
+  'it': 'Italian', 'pt': 'Portuguese', 'ru': 'Russian', 'ja': 'Japanese'
+  'zh': 'Chinese', 'ko': 'Korean', 'ar': 'Arabic', 'hi': 'Hindi'
+  'nl': 'Dutch', 'sv': 'Swedish', 'da': 'Danish', 'no': 'Norwegian'
+  'fi': 'Finnish', 'pl': 'Polish', 'tr': 'Turkish', 'he': 'Hebrew' }
 };
     return languages[code] || code.toUpperCase();
   // Private helper methods
@@ -328,13 +278,13 @@ export class WhisperAdapter extends BaseAIModel {
       formData.append('model', 'whisper-1');
       formData.append('response_format', 'json');
       const response = await fetch(`${this.config.baseURL || 'https://api.openai.com'}/v1/audio/transcriptions`, {},}
-  method: 'POST',
+  method: 'POST'
         headers: {
           'Authorization': `Bearer ${this.config.apiKey}`}
-}
+
           ...(this.config.organization && { 'OpenAI-Organization': this.config.organization })
-  },
-  body: formData,
+
+  body: formData
         signal: AbortSignal.timeout(this.config.timeout || 10000);
   });
       if (!response.ok) {
@@ -342,20 +292,17 @@ export class WhisperAdapter extends BaseAIModel {
         throw new Error(`Whisper API test failed: ${response.status} ${response.statusText} - ${errorData?.error?.message || 'Unknown error'}`);}
       // Don't need to process the response, just verify the API works
       await response.json();
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to connect to Whisper API: ${error instanceof Error ? error.message : 'Unknown error'}`);}
-  private _createTestAudioBlob(): Blob {
-  // Create a minimal WAV file with 1 second of silence
+  private _createTestAudioBlob(): Blob { // Create a minimal WAV file with 1 second of silence
   const sampleRate = 16000;
   const duration = 1; // 1 second;
   const samples = sampleRate * duration;
   const buffer = new ArrayBuffer(44 + samples * 2);
   const view = new DataView(buffer);
   // WAV header
-  const writeString = (offset: number, string: string) => {,
-  for (let i = 0; i < string.length; i++) {
-  view.setUint8(offset + i, string.charCodeAt(i));
-};
+  const writeString = (offset: number, string: string) => { }
+  for (let i = 0; i < string.length; i++) { view.setUint8(offset + i, string.charCodeAt(i)) };
     writeString(0, 'RIFF');
     view.setUint32(4, 36 + samples * 2, true);
     writeString(8, 'WAVE');
@@ -395,19 +342,18 @@ export class WhisperAdapter extends BaseAIModel {
         throw new Error()
           `Unsupported audio format: ${file.type}. Supported formats: ${this.supportedFormats.join(', ')}`}
         );
-  private _processOptions(options?: WhisperRequestOptions): Required<Pick<WhisperRequestOptions, 'model' | 'response_format' | 'task' | 'temperature'>> & Omit<WhisperRequestOptions, 'file'> {
-  const defaults = {
-  model: 'whisper-1' as const,
-  response_format: 'verbose_json' as const,
-  task: 'transcribe' as const,
-  temperature: 0,
+  private _processOptions(options?: WhisperRequestOptions): Required<Pick<WhisperRequestOptions, 'model' | 'response_format' | 'task' | 'temperature'>> & Omit<WhisperRequestOptions, 'file'> { const defaults = {
+  model: 'whisper-1' as const
+  response_format: 'verbose_json' as const
+  task: 'transcribe' as const
+  temperature: 0 }
 };
     const processed = { ...defaults, ...options };
     // Validate temperature
     processed.temperature = Math.max(0, Math.min(1, processed.temperature));
     return processed;
   private async _transcribeAudio(file: File | Blob | ArrayBuffer)
-    options: Omit<WhisperRequestOptions,
+  options: Omit<WhisperRequestOptions
     'file'>
   ): Promise<any> {
 
@@ -416,8 +362,7 @@ export class WhisperAdapter extends BaseAIModel {
     let fileToUpload: File | Blob;
     if (file instanceof ArrayBuffer) {
       fileToUpload = new Blob([file], { type: 'audio/wav' });
-    } else {
-  fileToUpload = file;
+ else { fileToUpload = file;
   const fileName = fileToUpload instanceof File ? fileToUpload.name : 'audio.wav';
   formData.append('file', fileToUpload, fileName);
   formData.append('model', options.model!);
@@ -430,15 +375,13 @@ export class WhisperAdapter extends BaseAIModel {
   formData.append('temperature', options.temperature.toString());
   if (options.timestamp_granularities) {
   options.timestamp_granularities.forEach(granularity => {)
-  formData.append('timestamp_granularities', granularity);
-});
+  formData.append('timestamp_granularities', granularity) });
     const endpoint = options.task === 'translate' ? '/v1/audio/translations' : '/v1/audio/transcriptions';
     const url = `${this.config.baseURL || 'https://api.openai.com'}${endpoint}`;}
     const headers: Record<string, string> = {
       'Authorization': `Bearer ${this.config.apiKey}`}
     };
-    if (this.config.organization) {
-  headers['OpenAI-Organization'] = this.config.organization;
+    if (this.config.organization) { headers['OpenAI-Organization'] = this.config.organization;
   let lastError: Error | null = null;
   const maxRetries = this.config.maxRetries ?? 3;
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -447,20 +390,18 @@ export class WhisperAdapter extends BaseAIModel {
   method: 'POST',
   headers,
   body: formData,
-  signal: AbortSignal.timeout(this.config.timeout || 300000) // 5 minutes for large files,
+  signal: AbortSignal.timeout(this.config.timeout || 300000) // 5 minutes for large files }
 });
         if (!response.ok) {
           const errorData = await response.json().catch(() => null);
           throw new Error(`Whisper API request failed: ${response.status} ${response.statusText} - ${errorData?.error?.message || 'Unknown error'}`);}
         return response.json();
-      } catch (error) {
-  lastError = error instanceof Error ? error : new Error('Unknown error');
+ catch (error) { lastError = error instanceof Error ? error : new Error('Unknown error');
   if (attempt < maxRetries) {
   await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
   throw lastError || new Error('All retry attempts failed');
-  private async _getAudioDuration(file: File | Blob | ArrayBuffer): Promise<number> {,
-  return new Promise((resolve, reject) => {
-  if (file instanceof ArrayBuffer) {
+  private async _getAudioDuration(file: File | Blob | ArrayBuffer): Promise<number> { }
+  return new Promise((resolve, reject) => { if (file instanceof ArrayBuffer) {
   // For ArrayBuffer, we'll estimate based on size (very rough)
   resolve(this._estimateDurationFromSize(file));
   return;
@@ -468,31 +409,27 @@ export class WhisperAdapter extends BaseAIModel {
   const url = URL.createObjectURL(file);
   audio.onloadedmetadata = () => {
   URL.revokeObjectURL(url);
-  resolve(audio.duration);
-};
-      audio.onerror = () => {
-        URL.revokeObjectURL(url);
-        reject(new Error('Could not load audio file to determine duration'));
-      };
+  resolve(audio.duration) };
+      audio.onerror = () => { URL.revokeObjectURL(url);
+        reject(new Error('Could not load audio file to determine duration')) };
       audio.src = url;
     });
-  private _estimateDurationFromSize(file: File | Blob | ArrayBuffer): number {
-  const size = file instanceof ArrayBuffer ? file.byteLength : file.size;
-  // Very rough estimation: assuming ~1MB per minute for compressed audio,
+  private _estimateDurationFromSize(file: File | Blob | ArrayBuffer): number { const size = file instanceof ArrayBuffer ? file.byteLength : file.size;
+  // Very rough estimation: assuming ~1MB per minute for compressed audio
   return (size / 1024 / 1024) * 60;
-  private _getFormatFromMimeType(mimeType: string): string {,
-  const formatMap: Record<string, string> = {,
-  'audio/mpeg': 'mp3',
-  'audio/mp3': 'mp3',
-  'audio/wav': 'wav',
-  'audio/wave': 'wav',
-  'audio/flac': 'flac',
-  'audio/ogg': 'ogg',
-  'audio/webm': 'webm',
-  'audio/m4a': 'm4a',
-  'audio/mp4': 'mp4',
-  'video/mp4': 'mp4',
-  'video/webm': 'webm',
+  private _getFormatFromMimeType(mimeType: string): string {
+  const formatMap: Record<string, string> = {
+  'audio/mpeg': 'mp3'
+  'audio/mp3': 'mp3'
+  'audio/wav': 'wav'
+  'audio/wave': 'wav'
+  'audio/flac': 'flac'
+  'audio/ogg': 'ogg'
+  'audio/webm': 'webm'
+  'audio/m4a': 'm4a'
+  'audio/mp4': 'mp4'
+  'video/mp4': 'mp4'
+  'video/webm': 'webm' }
 };
     return formatMap[mimeType] || 'unknown';
   private _calculateConfidenceScore(transcriptionData: any): number {

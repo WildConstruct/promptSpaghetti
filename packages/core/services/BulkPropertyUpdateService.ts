@@ -8,17 +8,15 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
-}
-export interface BulkUpdateTarget {
-  type: TargetType;
+
+export interface BulkUpdateTarget { type: TargetType;
   id: string;
   displayName?: string;
-  currentValues?: Record<string, any>;
-}
-}
-}
-export interface BulkUpdateOperation {
-  id: string;
+  currentValues?: Record<string, any> }
+
+
+
+export interface BulkUpdateOperation { id: string;
   name: string;
   description?: string;
   targets: BulkUpdateTarget;
@@ -35,117 +33,111 @@ export interface BulkUpdateOperation {
   createdBy: string;
   executedAt?: Date;
   completedAt?: Date;
-  rolledBackAt?: Date;
-}
-}
-}
-export interface PropertyUpdate {
-  property: string;
+  rolledBackAt?: Date }
+
+
+
+export interface PropertyUpdate { property: string;
   operation: UpdateOperationType;
   value?: any;
   conditions?: UpdateCondition;
-  transformation?: PropertyTransformation;
-}
-}
-}
-export interface UpdateCondition {
-  type: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'exists' | 'not_exists' | 'matches_regex';
+  transformation?: PropertyTransformation }
+
+
+
+export interface UpdateCondition { type: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'exists' | 'not_exists' | 'matches_regex' }
   field: string;
   value: any;
   description: string;
-}
-}
-}
-export interface PropertyTransformation {
-  type: 'case_convert' | 'trim' | 'replace' | 'append' | 'prepend' | 'calculate' | 'format' | 'extract' | 'custom';
+
+
+
+
+export interface PropertyTransformation { type: 'case_convert' | 'trim' | 'replace' | 'append' | 'prepend' | 'calculate' | 'format' | 'extract' | 'custom' }
   parameters: Record<string, any>;
   description: string;
-}
-}
-}
-export interface ValidationRules {
-  required?: string; // Required fields,
+
+
+
+
+export interface ValidationRules { required?: string; // Required fields;
   constraints?: PropertyConstraint;
   customValidators?: CustomValidator;
-  skipInvalid?: boolean; // Continue with valid items if some are invalid,
-}
-}
-}
-export interface PropertyConstraint {
-  property: string;
+  skipInvalid?: boolean; // Continue with valid items if some are invalid }
+
+
+
+
+export interface PropertyConstraint { property: string;
   type: 'type' | 'length' | 'range' | 'pattern' | 'enum' | 'unique' | 'custom';
   parameters: Record<string, any>;
-  message: string;
-}
-}
-}
-export interface CustomValidator {
-  name: string;
-  function: string; // JavaScript function as string,
+  message: string }
+
+
+
+export interface CustomValidator { name: string;
+  function: string; // JavaScript function as string }
   parameters: Record<string, any>;
   message: string;
-}
-}
-}
-export interface ExecutionSettings {
-  mode: 'sequential' | 'parallel' | 'batched';
+
+
+
+
+export interface ExecutionSettings { mode: 'sequential' | 'parallel' | 'batched';
   batchSize?: number;
-  delayBetweenItems?: number; // milliseconds,
+  delayBetweenItems?: number; // milliseconds;
   maxRetries?: number;
-  retryDelay?: number; // milliseconds,
-  timeout?: number; // milliseconds per item,
-  dryRun?: boolean; // Preview changes without applying,
+  retryDelay?: number; // milliseconds;
+  timeout?: number; // milliseconds per item;
+  dryRun?: boolean; // Preview changes without applying }
   backupBeforeUpdate?: boolean;
-}
-}
-}
-export interface RollbackSettings {
-  enabled: boolean;
+
+
+
+
+export interface RollbackSettings { enabled: boolean;
   autoRollbackOnFailure?: boolean;
   retainBackups?: boolean;
-  backupExpiration?: Date;
-}
-}
-}
-export interface OperationProgress {
-  total: number;
+  backupExpiration?: Date }
+
+
+
+export interface OperationProgress { total: number;
   completed: number;
   failed: number;
   skipped: number;
   currentItem?: string;
   startTime?: Date;
-  estimatedCompletion?: Date;
-}
-}
-}
-export interface OperationResult {
-  targetId: string;
+  estimatedCompletion?: Date }
+
+
+
+export interface OperationResult { targetId: string;
   targetType: TargetType;
   status: 'success' | 'failed' | 'skipped' | 'validation_error';
   changes: PropertyChange;
   errors: OperationError;
   executedAt: Date;
-  duration: number; // milliseconds,
-  backup?: Record<string, any>; // Original values,
-}
-}
-}
-export interface PropertyChange {
-  property: string;
+  duration: number; // milliseconds;
+  backup?: Record<string, any>; // Original values }
+
+
+
+
+export interface PropertyChange { property: string;
   oldValue: any;
   newValue: any;
   operation: UpdateOperationType;
-  applied: boolean;
-}
-}
-}
-export interface OperationError {
-  type: 'validation' | 'execution' | 'timeout' | 'permission' | 'not_found' | 'conflict';
+  applied: boolean }
+
+
+
+export interface OperationError { type: 'validation' | 'execution' | 'timeout' | 'permission' | 'not_found' | 'conflict' }
   message: string;
   property?: string;
   details?: Record<string, any>;
-}
-}
+
+
 export type TargetType = 
   | 'user'
   | 'content'
@@ -184,9 +176,8 @@ export type OperationStatus =
   | 'rolling_back' 
   | 'rolled_back';
 
-}
-export interface BulkUpdateTemplate {
-  id: string;
+
+export interface BulkUpdateTemplate { id: string;
   name: string;
   description: string;
   targetType: TargetType;
@@ -197,112 +188,109 @@ export interface BulkUpdateTemplate {
   usageCount: number;
   lastUsed?: Date;
   createdBy: string;
-  createdAt: Date;
-}
-}
-}
-export interface BulkUpdateFilter {
-  statuses?: OperationStatus;
+  createdAt: Date }
+
+
+
+export interface BulkUpdateFilter { statuses?: OperationStatus;
   targetTypes?: TargetType;
-  createdBy?: string;
-}
+  createdBy?: string }
+
   dateRange?: { start?: Date; end?: Date };
   searchQuery?: string;
   hasErrors?: boolean;
-}
-}
-export interface BulkUpdateStats {
-  totalOperations: number;
+
+
+export interface BulkUpdateStats { totalOperations: number;
   completedOperations: number;
   failedOperations: number;
   totalTargetsProcessed: number;
   averageProcessingTime: number;
   // Success rates by target type
-  successRateByType: Record<TargetType, {,
+  successRateByType: Record<TargetType, { }
   total: number;
   successful: number;
   rate: number;
-}
-}>;
+
+
+>;
   // Most common errors
-  commonErrors: Array<{
+  commonErrors: Array<{ ,
   type: string;
   message: string;
   count: number;
-  affectedTargets: number;
-}>;
+  affectedTargets: number }>;
   // Performance metrics
-  performanceMetrics: {
+  performanceMetrics: { ,
   averageItemsPerSecond: number;
   largestBatchSize: number;
   longestOperation: number; // milliseconds,
-  totalProcessingTime: number; // milliseconds,
+  totalProcessingTime: number; // milliseconds }
 };
 /**
  * Bulk Property Update Service
  */
-}
-export class BulkPropertyUpdateService {
-  private static instance: BulkPropertyUpdateService;
+
+export class BulkPropertyUpdateService { private static instance: BulkPropertyUpdateService;
   private operations: Map<string, BulkUpdateOperation> = new Map();
   private templates: Map<string, BulkUpdateTemplate> = new Map();
   private listeners: Map<string, (event: BulkUpdateEvent) => void> = new Map();
   private entityProviders: Map<TargetType, EntityProvider> = new Map();
   private constructor() {
   this.registerDefaultEntityProviders();
-  static getInstance(): BulkPropertyUpdateService {,
+  static getInstance(): BulkPropertyUpdateService {
   if (!BulkPropertyUpdateService.instance) {
   BulkPropertyUpdateService.instance = new BulkPropertyUpdateService();
   return BulkPropertyUpdateService.instance;
   /**
   * Entity Provider Registration
   */
-  registerEntityProvider(targetType: TargetType, provider: EntityProvider): void {,
+  registerEntityProvider(targetType: TargetType, provider: EntityProvider): void {
   this.entityProviders.set(targetType, provider);
   /**
   * Operation Management
   */
   async createOperation(name: string)
-  targets: BulkUpdateTarget,
-  updates: PropertyUpdate,
-  options: {
+  targets: BulkUpdateTarget
+  updates: PropertyUpdate
+  options: { }
   validation?: Partial<ValidationRules>;
   execution?: Partial<ExecutionSettings>;
   rollback?: Partial<RollbackSettings>;
-} = {},
-    createdBy: string): Promise<BulkUpdateOperation> {,
-  const operation: BulkUpdateOperation = {,
-  id: this.generateOperationId(),
-  name,
-  targets,
-  updates,
+ = {}
+    createdBy: string): Promise<BulkUpdateOperation> { 
+  const operation: BulkUpdateOperation = {
+  id: this.generateOperationId()
+  name
+  targets
+  updates
   validation: {
-  skipInvalid: false,
+  skipInvalid: false }
   ...options.validation
-},
-  execution: {
-  mode: 'sequential',
-  maxRetries: 3,
-  retryDelay: 1000,
-  timeout: 30000,
-  backupBeforeUpdate: true,
+
+  execution: { 
+  mode: 'sequential'
+  maxRetries: 3
+  retryDelay: 1000
+  timeout: 30000
+  backupBeforeUpdate: true }
   ...options.execution
-},
-  rollback: {
-  enabled: true,
-  autoRollbackOnFailure: false,
-  retainBackups: true,
+
+  rollback: { 
+  enabled: true
+  autoRollbackOnFailure: false
+  retainBackups: true }
   ...options.rollback
-},
-  status: 'draft',
-      progress: {
-  total: targets.length,
-  completed: 0,
-  failed: 0,
-  skipped: 0,
-},
-  results: [],
-      createdAt: new Date(),
+
+  status: 'draft'
+      progress: { 
+  total: targets.length
+  completed: 0
+  failed: 0
+  skipped: 0 }
+
+  results: []
+      createdAt: new Date()
       createdBy
     };
     this.operations.set(operation.id, operation);
@@ -316,11 +304,11 @@ export class BulkPropertyUpdateService {
     operation.status = 'validating';
     this.operations.set(operationId, operation);
     this.notifyListeners('operation_status_changed', operation);
-    const validationResult: ValidationResult = {,
-  valid: true,
-  errors: [],
-  warnings: [],
-  targetResults: [],
+    const validationResult: ValidationResult = { 
+  valid: true
+  errors: []
+  warnings: []
+  targetResults: [] }
 };
     try {
       // Validate each target
@@ -335,7 +323,7 @@ export class BulkPropertyUpdateService {
       this.operations.set(operationId, operation);
       this.notifyListeners('operation_validated', { operation, result: validationResult });
       return validationResult;
-    } catch (error) {
+ catch (error) {
       operation.status = 'failed';
       this.operations.set(operationId, operation);
       throw error;
@@ -351,15 +339,14 @@ export class BulkPropertyUpdateService {
     operation.progress.startTime = new Date();
     this.operations.set(operationId, operation);
     this.notifyListeners('operation_started', operation);
-    try {
-  switch (operation.execution.mode) {
-  case 'sequential':,
+    try { switch (operation.execution.mode) {
+  case 'sequential':
   await this.executeSequentially(operation);
   break;
-  case 'parallel':,
+  case 'parallel':
   await this.executeInParallel(operation);
   break;
-  case 'batched':,
+  case 'batched': }
   await this.executeInBatches(operation);
   break;
   operation.status = operation.progress.failed > 0 ? 'failed' : 'completed';
@@ -367,7 +354,7 @@ export class BulkPropertyUpdateService {
   this.operations.set(operationId, operation);
   this.notifyListeners('operation_completed', operation);
   return true;
-} catch (error) {
+ catch (error) {
       operation.status = 'failed';
       this.operations.set(operationId, operation);
       this.notifyListeners('operation_failed', { operation, error });
@@ -385,8 +372,7 @@ export class BulkPropertyUpdateService {
     operation.status = 'rolling_back';
     this.operations.set(operationId, operation);
     this.notifyListeners('operation_rollback_started', operation);
-    try {
-      const successfulResults = operation.results.filter(r => r.status === 'success');
+    try { const successfulResults = operation.results.filter(r => r.status === 'success');
       for (const result of successfulResults) {
         if (result.backup) {
           const provider = this.entityProviders.get(result.targetType);
@@ -396,39 +382,38 @@ export class BulkPropertyUpdateService {
       operation.rolledBackAt = new Date();
       this.operations.set(operationId, operation);
       this.notifyListeners('operation_rolled_back', operation);
-      return true;
-    } catch (error) {
+      return true } catch (error) {
       this.notifyListeners('operation_rollback_failed', { operation, error });
       throw error;
   /**
    * Template Management
    */
   async createTemplate(name: string)
-    targetType: TargetType,
-    updates: PropertyUpdate,
-    validation: ValidationRules,
-    execution: ExecutionSettings,
-    createdBy: string): Promise<BulkUpdateTemplate> {,
-    const template: BulkUpdateTemplate = {,
-  id: this.generateTemplateId(),
-      name,
+  targetType: TargetType
+    updates: PropertyUpdate
+    validation: ValidationRules
+    execution: ExecutionSettings
+    createdBy: string): Promise<BulkUpdateTemplate> { 
+    const template: BulkUpdateTemplate = {
+  id: this.generateTemplateId()
+      name }
       description: `Template for ${targetType} bulk updates`}
-}
-      targetType,
-      updates,
-      validation,
-      execution,
-      usageCount: 0,
-      createdBy,
+
+      targetType
+      updates
+      validation
+      execution
+      usageCount: 0
+      createdBy
       createdAt: new Date();
   };
     this.templates.set(template.id, template);
     this.notifyListeners('template_created', template);
     return template;
   async applyTemplate(templateId: string)
-    targets: BulkUpdateTarget,
-    operationName: string,
-    createdBy: string): Promise<BulkUpdateOperation> {,
+  targets: BulkUpdateTarget
+    operationName: string
+    createdBy: string): Promise<BulkUpdateOperation> {
     const template = this.templates.get(templateId);
     if (!template) {
       throw new Error(`Template ${templateId} not found`);}
@@ -437,13 +422,12 @@ export class BulkPropertyUpdateService {
     template.lastUsed = new Date();
     this.templates.set(templateId, template);
     const operation = await this.createOperation(;);
-      operationName,
-      targets,
-      template.updates,
-      {
-  validation: template.validation,
-  execution: template.execution,
-}
+      operationName
+      targets
+      template.updates
+      { validation: template.validation
+  execution: template.execution }
+
       createdBy
     );
     this.notifyListeners('template_applied', { template, operation });
@@ -451,8 +435,7 @@ export class BulkPropertyUpdateService {
   /**
    * Data Retrieval
    */
-  getOperations(filter?: BulkUpdateFilter): BulkUpdateOperation {
-    let operations = Array.from(this.operations.values());
+  getOperations(filter?: BulkUpdateFilter): BulkUpdateOperation { let operations = Array.from(this.operations.values());
     if (!filter) return operations;
     if (filter.statuses?.length) {
       operations = operations.filter(op => filter.statuses!.includes(op.status));
@@ -466,8 +449,7 @@ export class BulkPropertyUpdateService {
       operations = operations.filter(op => {)
   const date = op.createdAt;
         return (!filter.dateRange!.start || date >= filter.dateRange!.start) &&
-               (!filter.dateRange!.end || date <= filter.dateRange!.end);
-      });
+               (!filter.dateRange!.end || date <= filter.dateRange!.end) });
     if (filter.searchQuery) {
       const query = filter.searchQuery.toLowerCase();
       operations = operations.filter(op => )
@@ -502,13 +484,10 @@ export class BulkPropertyUpdateService {
   if (!successRateByType[result.targetType]) {
           successRateByType[result.targetType] = { total: 0, successful: 0, rate: 0 };
         successRateByType[result.targetType].total++;
-        if (result.status === 'success') {
-          successRateByType[result.targetType].successful++;
-      });
+        if (result.status === 'success') { successRateByType[result.targetType].successful++ });
     });
-    Object.values(successRateByType).forEach(stats => {)
-  stats.rate = stats.total > 0 ? (stats.successful / stats.total) * 100 : 0;
-});
+    Object.values(successRateByType).forEach(stats => { )
+  stats.rate = stats.total > 0 ? (stats.successful / stats.total) * 100 : 0 });
     // Collect common errors
     const errorMap: Map<string, { count: number; affectedTargets: Set<string> }> = new Map();
     operations.forEach(op => {)
@@ -524,15 +503,14 @@ export class BulkPropertyUpdateService {
       });
     });
     const commonErrors = Array.from(errorMap.entries());
-      .map(([key, stats]) => {
-  const [type, message] = key.split(':', 2);
+      .map(([key, stats]) => { const [type, message] = key.split(':', 2);
   return {
-  type,
-  message,
-  count: stats.count,
-  affectedTargets: stats.affectedTargets.size,
+  type
+  message
+  count: stats.count
+  affectedTargets: stats.affectedTargets.size }
 };
-  }
+
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
     // Performance metrics
@@ -547,44 +525,37 @@ export class BulkPropertyUpdateService {
       .filter(op => op.executedAt && op.completedAt)
       .map(op => op.completedAt!.getTime() - op.executedAt!.getTime());
     const longestOperation = operationDurations.length > 0 ? Math.max(...operationDurations) : 0;
-    return {
-  totalOperations: operations.length,
-  completedOperations: completedOps.length,
-  failedOperations: failedOps.length,
-  totalTargetsProcessed: totalTargets,
-  averageProcessingTime,
-  successRateByType,
-  commonErrors,
+    return { totalOperations: operations.length
+  completedOperations: completedOps.length
+  failedOperations: failedOps.length
+  totalTargetsProcessed: totalTargets
+  averageProcessingTime
+  successRateByType
+  commonErrors
   performanceMetrics: {
-  averageItemsPerSecond,
-  largestBatchSize,
-  longestOperation,
+  averageItemsPerSecond
+  largestBatchSize
+  longestOperation }
   totalProcessingTime
 };
   /**
    * Event Handling
    */
-  subscribe(listenerId: string, callback: (event: BulkUpdateEvent) => void): void {
-  this.listeners.set(listenerId, callback);
-  unsubscribe(listenerId: string): void {,
+  subscribe(listenerId: string, callback: (event: BulkUpdateEvent) => void): void { this.listeners.set(listenerId, callback);
+  unsubscribe(listenerId: string): void {
   this.listeners.delete(listenerId);
   // Private methods
-  private async executeSequentially(operation: BulkUpdateOperation): Promise<void> {,
-  for (let i = 0; i < operation.targets.length; i++) {
-  const target = operation.targets[i];
+  private async executeSequentially(operation: BulkUpdateOperation): Promise<void> { }
+  for (let i = 0; i < operation.targets.length; i++) { const target = operation.targets[i];
   operation.progress.currentItem = target.displayName || target.id;
   try {
   const result = await this.executeForTarget(target, operation);
   operation.results.push(result);
   if (result.status === 'success') {
-  operation.progress.completed++;
-} else {
-          operation.progress.failed++;
+  operation.progress.completed++ } else { operation.progress.failed++;
         // Apply delay if configured
         if (operation.execution.delayBetweenItems && i < operation.targets.length - 1) {
-          await this.sleep(operation.execution.delayBetweenItems);
-      } catch (error) {
-  operation.progress.failed++;
+          await this.sleep(operation.execution.delayBetweenItems) } catch (error) { operation.progress.failed++;
   operation.results.push({)
   targetId: target.id,
   targetType: target.type,
@@ -592,36 +563,30 @@ export class BulkPropertyUpdateService {
   changes: [],
   errors: [{,
   type: 'execution',
-  message: error instanceof Error ? error.message : 'Unknown error',
-}],
+  message: error instanceof Error ? error.message : 'Unknown error' }
+],
           executedAt: new Date(),
           duration: 0;
   });
       this.operations.set(operation.id, operation);
       this.notifyListeners('operation_progress', operation);
-  private async executeInParallel(operation: BulkUpdateOperation): Promise<void> {
-
-    const promises = operation.targets.map(async (target) => {
+  private async executeInParallel(operation: BulkUpdateOperation): Promise<void> { const promises = operation.targets.map(async (target) => {
       try {
         const result = await this.executeForTarget(target, operation);
         operation.results.push(result);
         if (result.status === 'success') {
-          operation.progress.completed++;
-        } else {
-          operation.progress.failed++;
-        return result;
-      } catch (error) {
-  operation.progress.failed++;
-  const errorResult: OperationResult = {,
-  targetId: target.id,
-  targetType: target.type,
-  status: 'failed',
-  changes: [],
-  errors: [{,
-  type: 'execution',
-  message: error instanceof Error ? error.message : 'Unknown error',
-}],
-          executedAt: new Date(),
+          operation.progress.completed++ } else { operation.progress.failed++;
+        return result } catch (error) { operation.progress.failed++;
+  const errorResult: OperationResult = {
+  targetId: target.id
+  targetType: target.type
+  status: 'failed'
+  changes: []
+  errors: [{
+  type: 'execution'
+  message: error instanceof Error ? error.message : 'Unknown error' }
+]
+          executedAt: new Date()
           duration: 0;
   };
         operation.results.push(errorResult);
@@ -629,9 +594,7 @@ export class BulkPropertyUpdateService {
     });
     await Promise.allSettled(promises);
     this.operations.set(operation.id, operation);
-  private async executeInBatches(operation: BulkUpdateOperation): Promise<void> {
-
-    const batchSize = operation.execution.batchSize || 10;
+  private async executeInBatches(operation: BulkUpdateOperation): Promise<void> { const batchSize = operation.execution.batchSize || 10;
     const batches = this.chunkArray(operation.targets, batchSize);
     for (const batch of batches) {
       const batchPromises = batch.map(target => this.executeForTarget(target, operation));
@@ -641,40 +604,35 @@ export class BulkPropertyUpdateService {
         if (result.status === 'fulfilled') {
           operation.results.push(result.value);
           if (result.value.status === 'success') {
-            operation.progress.completed++;
-          } else {
-            operation.progress.failed++;
-        } else {
-  operation.progress.failed++;
+            operation.progress.completed++ } else { operation.progress.failed++ } else { operation.progress.failed++;
   operation.results.push({)
-  targetId: target.id,
-  targetType: target.type,
-  status: 'failed',
-  changes: [],
-  errors: [{,
-  type: 'execution',
-  message: result.reason?.message || 'Unknown error',
-}],
-            executedAt: new Date(),
+  targetId: target.id
+  targetType: target.type
+  status: 'failed'
+  changes: []
+  errors: [{
+  type: 'execution'
+  message: result.reason?.message || 'Unknown error' }
+]
+            executedAt: new Date()
             duration: 0;
   });
       });
       this.operations.set(operation.id, operation);
       this.notifyListeners('operation_progress', operation);
       // Add delay between batches if configured
-      if (operation.execution.delayBetweenItems) {
-  await this.sleep(operation.execution.delayBetweenItems);
-  private async executeForTarget((target: BulkUpdateTarget,
-  operation: BulkUpdateOperation): Promise<OperationResult> {,
+      if (operation.execution.delayBetweenItems) { await this.sleep(operation.execution.delayBetweenItems);
+  private async executeForTarget((target: BulkUpdateTarget
+  operation: BulkUpdateOperation): Promise<OperationResult> {
   const startTime = Date.now();
-  const result: OperationResult = {,
-  targetId: target.id,
-  targetType: target.type,
-  status: 'success',
-  changes: [],
-  errors: [],
-  executedAt: new Date(),
-  duration: 0,
+  const result: OperationResult = {
+  targetId: target.id
+  targetType: target.type
+  status: 'success'
+  changes: []
+  errors: []
+  executedAt: new Date()
+  duration: 0 }
 };
     try {
       const provider = this.entityProviders.get(target.type);
@@ -689,31 +647,26 @@ export class BulkPropertyUpdateService {
         result.backup = { ...currentEntity };
       // Apply updates
       const updatedEntity = { ...currentEntity };
-      for (const update of operation.updates) {
-        const change = await this.applyPropertyUpdate(updatedEntity, update, currentEntity);
+      for (const update of operation.updates) { const change = await this.applyPropertyUpdate(updatedEntity, update, currentEntity);
         result.changes.push(change);
       // Update entity if not dry run
       if (!operation.execution.dryRun) {
-        await provider.updateEntity(target.id, updatedEntity);
-    } catch (error) {
-  result.status = 'failed';
+        await provider.updateEntity(target.id, updatedEntity) } catch (error) { result.status = 'failed';
   result.errors.push({)
-  type: 'execution',
-  message: error instanceof Error ? error.message : 'Unknown error',
+  type: 'execution'
+  message: error instanceof Error ? error.message : 'Unknown error' }
 });
     result.duration = Date.now() - startTime;
     return result;
   private async applyPropertyUpdate(entity: Record<string, any>)
-    update: PropertyUpdate,
+    update: PropertyUpdate
     originalEntity: Record<string, any>
-  ): Promise<PropertyChange> {
-
-  const change: PropertyChange = {,
-  property: update.property,
-  oldValue: entity[update.property],
-  newValue: undefined,
-  operation: update.operation,
-  applied: false,
+  ): Promise<PropertyChange> { const change: PropertyChange = {
+  property: update.property
+  oldValue: entity[update.property]
+  newValue: undefined
+  operation: update.operation
+  applied: false }
 };
     try {
       // Check conditions
@@ -766,24 +719,23 @@ export class BulkPropertyUpdateService {
         throw new Error(`Unknown update operation: ${update.operation}`);}
       change.newValue = entity[update.property];
       change.applied = true;
-    } catch (error) {
-  // Update failed, but we don't throw here to allow other updates to continue
+ catch (error) { // Update failed, but we don't throw here to allow other updates to continue
   return change;
-  private evaluateConditions(conditions: UpdateCondition, entity: Record<string, any>): boolean {,
+  private evaluateConditions(conditions: UpdateCondition, entity: Record<string, any>): boolean {
   return conditions.every(condition => {)
   const fieldValue = entity[condition.field];
   switch (condition.type) {
-  case 'equals':,
+  case 'equals':
   return fieldValue === condition.value;
-  case 'not_equals':,
+  case 'not_equals':
   return fieldValue !== condition.value;
-  case 'contains':,
+  case 'contains':
   return String(fieldValue).includes(String(condition.value));
-  case 'not_contains':,
+  case 'not_contains':
   return !String(fieldValue).includes(String(condition.value));
-  case 'greater_than':,
+  case 'greater_than':
   return Number(fieldValue) > Number(condition.value);
-  case 'less_than':,
+  case 'less_than':
   return Number(fieldValue) < Number(condition.value);
   case 'exists':,
   return fieldValue !== undefined && fieldValue !== null;
@@ -791,99 +743,92 @@ export class BulkPropertyUpdateService {
   return fieldValue === undefined || fieldValue === null;
   case 'matches_regex':,
   return new RegExp(condition.value).test(String(fieldValue));
-  default:,
+  default: }
   return true;
 });
-  private applyTransformation(value: any)
-    transformation: PropertyTransformation,
+  private applyTransformation(value: any),
+  transformation: PropertyTransformation,
     entity: Record<string, any>
-  ): any {
-  switch (transformation.type) {
-  case 'case_convert':,
+  ): any { switch (transformation.type) {
+  case 'case_convert':
   const caseType = transformation.parameters.case;
   if (caseType === 'upper') return String(value).toUpperCase();
   if (caseType === 'lower') return String(value).toLowerCase();
   if (caseType === 'title') return String(value).replace(/\w\S*/g, (txt) =>
   txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
   return value;
-  case 'trim':,
+  case 'trim':
   return String(value).trim();
-  case 'replace':,
+  case 'replace':
   return String(value).replace()
-  new RegExp(transformation.parameters.search, transformation.parameters.flags || 'g'),
+  new RegExp(transformation.parameters.search, transformation.parameters.flags || 'g')
   transformation.parameters.replace
   );
-  case 'append':,
+  case 'append':
   return String(value) + String(transformation.parameters.suffix || '');
-  case 'prepend':,
+  case 'prepend':
   return String(transformation.parameters.prefix || '') + String(value);
-  default:,
+  default:
   return value;
   private async validateTarget(target: BulkUpdateTarget)
-  updates: PropertyUpdate,
-  validation: ValidationRules): Promise<TargetValidationResult> {,
-  const result: TargetValidationResult = {,
-  targetId: target.id,
-  valid: true,
-  errors: [],
-  warnings: [],
+  updates: PropertyUpdate
+  validation: ValidationRules): Promise<TargetValidationResult> {
+  const result: TargetValidationResult = {
+  targetId: target.id
+  valid: true
+  errors: []
+  warnings: [] }
 };
-    try {
-      const provider = this.entityProviders.get(target.type);
+    try { const provider = this.entityProviders.get(target.type);
       if (!provider) {
         result.valid = false;
         result.errors.push({)
-  type: 'not_found',
+  type: 'not_found' }
           message: `No entity provider registered for type: ${target.type}`}
         });
         return result;
       const entity = await provider.getEntity(target.id);
-      if (!entity) {
-        result.valid = false;
+      if (!entity) { result.valid = false;
         result.errors.push({)
-  type: 'not_found',
+  type: 'not_found' }
           message: `Entity ${target.id} not found`}
         });
         return result;
       // Validate required fields
-      if (validation.required) {
-        for (const field of validation.required) {
+      if (validation.required) { for (const field of validation.required) {
           if (entity[field] === undefined || entity[field] === null) {
             result.valid = false;
             result.errors.push({)
-  type: 'validation',
+  type: 'validation' }
               message: `Required field '${field}' is missing`}
-},
+
   property: field;
   });
       // Validate property constraints
-      if (validation.constraints) {
-  for (const constraint of validation.constraints) {
+      if (validation.constraints) { for (const constraint of validation.constraints) {
   const constraintResult = this.validatePropertyConstraint(entity, constraint);
   if (!constraintResult.valid) {
   result.valid = false;
   result.errors.push({)
-  type: 'validation',
-  message: constraintResult.message,
-  property: constraint.property,
+  type: 'validation'
+  message: constraintResult.message
+  property: constraint.property }
 });
-    } catch (error) {
-  result.valid = false;
+ catch (error) { result.valid = false;
   result.errors.push({)
-  type: 'execution',
-  message: error instanceof Error ? error.message : 'Validation error',
+  type: 'execution'
+  message: error instanceof Error ? error.message : 'Validation error' }
 });
     return result;
   private validatePropertyConstraint(entity: Record<string, any>)
-    constraint: PropertyConstraint): { valid: boolean; message: string } {
-    const value = entity[constraint.property];
+    constraint: PropertyConstraint): { valid: boolean; message: string } { const value = entity[constraint.property];
     switch (constraint.type) {
     case 'type':
       const expectedType = constraint.parameters.type;
       const actualType = typeof value;
       if (actualType !== expectedType) {
         return {
-          valid: false,
+          valid: false }
           message: `Expected ${expectedType}, got ${actualType}`}
         };
       break;
@@ -891,9 +836,8 @@ export class BulkPropertyUpdateService {
       const length = String(value).length;
       const min = constraint.parameters.min;
       const max = constraint.parameters.max;
-      if ((min !== undefined && length < min) || (max !== undefined && length > max)) {
-        return {
-          valid: false,
+      if ((min !== undefined && length < min) || (max !== undefined && length > max)) { return {
+          valid: false }
           message: `Length must be between ${min || 0} and ${max || 'unlimited'}`}
         };
       break;
@@ -901,25 +845,22 @@ export class BulkPropertyUpdateService {
       const num = Number(value);
       const minVal = constraint.parameters.min;
       const maxVal = constraint.parameters.max;
-      if ((minVal !== undefined && num < minVal) || (maxVal !== undefined && num > maxVal)) {
-        return {
-          valid: false,
+      if ((minVal !== undefined && num < minVal) || (maxVal !== undefined && num > maxVal)) { return {
+          valid: false }
           message: `Value must be between ${minVal || '-∞'} and ${maxVal || '∞'}`}
         };
       break;
     case 'pattern':
       const pattern = new RegExp(constraint.parameters.pattern);
-      if (!pattern.test(String(value))) {
-  return {
+      if (!pattern.test(String(value))) { return {
   valid: false,
-  message: constraint.message || 'Value does not match required pattern',
+  message: constraint.message || 'Value does not match required pattern' }
 };
       break;
     case 'enum':
       const allowedValues = constraint.parameters.values;
-      if (!allowedValues.includes(value)) {
-        return {
-          valid: false,
+      if (!allowedValues.includes(value)) { return {
+          valid: false }
           message: `Value must be one of: ${allowedValues.join(', ')}`}
         };
       break;
@@ -938,19 +879,16 @@ export class BulkPropertyUpdateService {
     this.listeners.forEach(callback => {)
   try {
         callback({ type: eventType, data, timestamp: new Date() });
-      } catch (error) {
-  console.error('Error in bulk update listener:', error);
-});
+ catch (error) { console.error('Error in bulk update listener:', error) });
   private generateOperationId(): string {
     return `bulk_op_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   private generateTemplateId(): string {
     return `bulk_tpl_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  private chunkArray<T>(array: T, size: number): T[] {
-  const chunks: T = [];
+  private chunkArray<T>(array: T, size: number): T { const chunks: T = [];
   for (let i = 0; i < array.length; i += size) {
   chunks.push(array.slice(i, i + size));
   return chunks;
-  private sleep(ms: number): Promise<void> {,
+  private sleep(ms: number): Promise<void> { }
   return new Promise(resolve => setTimeout(resolve, ms));
   // Supporting interfaces
   interface ValidationResult {
@@ -971,16 +909,16 @@ export class BulkPropertyUpdateService {
   data: any;
   timestamp: Date;
   // Export singleton instance
-}
-}
+
+
 export const bulkPropertyUpdateService = BulkPropertyUpdateService.getInstance();
 
 // Convenience functions
 export const createBulkOperation = ()
-  name: string,
-  targets: BulkUpdateTarget,
-  updates: PropertyUpdate,
-  options: any,
+  name: string
+  targets: BulkUpdateTarget
+  updates: PropertyUpdate
+  options: any
   createdBy: string) => bulkPropertyUpdateService.createOperation(name, targets, updates, options, createdBy);
 
 export const executeBulkOperation = (operationId: string) =>

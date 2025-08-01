@@ -18,14 +18,15 @@ const revokeBulkSessionsSchema = z.object({
   reason: z.string().optional()
 });
 
-}
-}
+
+
 interface SessionRouteContext {
   authService: AuthenticationService;
   sessionService: SessionService;
-}
-}
-}
+
+
+
+
 
 export async function sessionRoutes(fastify: FastifyInstance, context: SessionRouteContext) {
   const { authService, sessionService } = context;
@@ -49,9 +50,9 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                   lastAccessedAt: { type: 'string' },
                   createdAt: { type: 'string' },
                   current: { type: 'boolean' }
-                }
-              }
-  }
+
+
+
             stats: {
               type: 'object',
               properties: {
@@ -59,12 +60,12 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                 activeSessions: { type: 'number' },
                 expiredSessions: { type: 'number' },
                 revokedSessions: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -75,7 +76,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       // Get active sessions
       const sessions = await sessionService.getUserActiveSessions(userId);
@@ -93,19 +94,19 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
         sessions: sessionsWithCurrent,
         stats
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get sessions error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve sessions'
       });
-    }
+
   });
 
   // Revoke a specific session
   fastify.post<{
     Body: z.infer<typeof revokeSessionSchema>;
-  }>('/sessions/revoke', {
+>('/sessions/revoke', {
     preHandler: [fastify.authenticate], // JWT authentication middleware
     schema: {
       body: revokeSessionSchema,
@@ -115,10 +116,10 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { sessionId, reason } = request.body as z.infer<typeof revokeSessionSchema>;
@@ -129,7 +130,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       // Verify the session belongs to the user
       const sessions = await sessionService.getUserActiveSessions(userId);
@@ -140,31 +141,31 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           error: 'Session Not Found',
           message: 'Session not found or does not belong to user'
         });
-      }
+
 
       // Find session token to revoke
       const sessionResult = await sessionService.getSession(sessionId);
       if (sessionResult) {
         await sessionService.revokeSession(sessionResult.sessionToken, reason);
-      }
+
 
       return reply.send({
         success: true,
         message: 'Session revoked successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Revoke session error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to revoke session'
       });
-    }
+
   });
 
   // Revoke all sessions except current (bulk revocation)
   fastify.post<{
     Body: z.infer<typeof revokeBulkSessionsSchema>;
-  }>('/sessions/revoke-all', {
+>('/sessions/revoke-all', {
     preHandler: [fastify.authenticate], // JWT authentication middleware
     schema: {
       body: revokeBulkSessionsSchema,
@@ -175,10 +176,10 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
             success: { type: 'boolean' },
             message: { type: 'string' },
             revokedCount: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { exceptCurrent, reason } = request.body as z.infer<typeof revokeBulkSessionsSchema>;
@@ -190,7 +191,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       const exceptSessionId = exceptCurrent ? currentSessionId : undefined;
       const revokedCount = await sessionService.revokeAllUserSessions(userId, exceptSessionId);
@@ -200,13 +201,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
         message: `Successfully revoked ${revokedCount} session(s)`,
         revokedCount
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Revoke all sessions error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to revoke sessions'
       });
-    }
+
   });
 
   // Renew current session
@@ -220,10 +221,10 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
             success: { type: 'boolean' },
             message: { type: 'string' },
             newExpiresAt: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const sessionToken = (request.user as any)?.sessionToken;
@@ -233,7 +234,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           error: 'Unauthorized',
           message: 'Session token required'
         });
-      }
+
 
       const renewedSession = await sessionService.renewSession(sessionToken);
       
@@ -242,20 +243,20 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           error: 'Session Not Found',
           message: 'Session not found or already expired'
         });
-      }
+
 
       return reply.send({
         success: true,
         message: 'Session renewed successfully',
         newExpiresAt: renewedSession.expiresAt.toISOString()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Renew session error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to renew session'
       });
-    }
+
   });
 
   // Get session security insights
@@ -273,16 +274,16 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                 unusualDevices: { type: 'boolean' },
                 suspiciousLocations: { type: 'array', items: { type: 'string' } },
                 newDevices: { type: 'array' }
-              }
-  }
+
+
             recommendations: {
               type: 'array',
               items: { type: 'string' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -292,7 +293,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       const suspiciousActivity = await sessionService.detectSuspiciousActivity(userId);
       
@@ -301,38 +302,38 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       
       if (suspiciousActivity.multipleLocations) {
         recommendations.push('Multiple login locations detected. Consider enabling two-factor authentication.');
-      }
+
       
       if (suspiciousActivity.unusualDevices) {
         recommendations.push('Unusual devices detected. Review your active sessions.');
-      }
+
       
       if (suspiciousActivity.suspiciousLocations.length > 0) {
         recommendations.push('New login locations detected. Revoke sessions from unrecognized locations.');
-      }
+
       
       if (suspiciousActivity.newDevices.length > 0) {
         recommendations.push('New devices detected. Verify these devices are yours.');
-      }
+
 
       // Get session stats for additional insights
       const stats = await sessionService.getSessionStats(userId);
       
       if (stats.activeSessions > 10) {
         recommendations.push('You have many active sessions. Consider revoking old sessions.');
-      }
+
 
       return reply.send({
         suspiciousActivity,
         recommendations
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get security insights error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve security insights'
       });
-    }
+
   });
 
   // Session activity endpoint (for real-time monitoring)
@@ -344,8 +345,8 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
         properties: {
           limit: { type: 'number', default: 50 },
           offset: { type: 'number', default: 0 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -360,13 +361,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                   sessionId: { type: 'string' },
                   deviceInfo: { type: 'object' },
                   location: { type: 'object' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -377,7 +378,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       // Get session-related audit logs
       const auditService = authService.getService('audit');
@@ -402,13 +403,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           location: activity.details?.location || { ipAddress: activity.ipAddress }
         }))
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get session activity error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve session activity'
       });
-    }
+
   });
 
   // Health check for session service
@@ -425,12 +426,12 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                 totalActiveSessions: { type: 'number' },
                 expiredSessionsLastHour: { type: 'number' },
                 averageSessionDuration: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Get system-wide session metrics
@@ -453,14 +454,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           totalActiveSessions: parseInt(metrics.active_sessions) || 0,
           expiredSessionsLastHour: parseInt(metrics.expired_last_hour) || 0,
           averageSessionDuration: parseFloat(metrics.avg_duration) || 0
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Session health check error:', error);
       return reply.status(500).send({
         status: 'unhealthy',
         error: error.message
       });
-    }
+
   });
-}

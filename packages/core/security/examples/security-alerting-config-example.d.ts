@@ -21,6 +21,7 @@
 import React from 'react';
 
 }
+}
 interface SecurityConfigurationPageProps {
     userRole: 'admin' | 'security_admin' | 'security_analyst';
     userId: string;
@@ -42,4 +43,5 @@ export declare const BasicSecurityConfigExample: React.FC;
 export declare const HookBasedExample: React.FC;
 export default SecurityConfigurationPage;
 //# sourceMappingURL=security-alerting-config-example.d.ts.map
+}
 }

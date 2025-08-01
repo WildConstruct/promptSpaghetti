@@ -84,35 +84,35 @@ export var PromotionType;
             previewUrl ?  : string;
         }
     }
-    ;
-    // Promotion Configuration
-    promotionConfig: {
-        priority: number;
-        weight ?  : number;
-        customMessage ?  : string;
-        callToAction ?  : string;
-        promotionalBadges ?  : PromotionalBadge;
-        customStyling ?  : Partial;
-    }
-    ;
-    // Performance Data
-    performanceScore: number;
-    metrics: ContentPromotionMetrics;
-    // Scheduling
-    startTime ?  : Date;
-    endTime ?  : Date;
-    timezone ?  : string;
-    // Targeting Overrides
-    targetingOverrides ?  : Partial;
-    // Status and Lifecycle
-    status: ContentPromotionStatus;
-    addedAt: Date;
-    lastPromoted ?  : Date;
-    promotionCount: number;
-    // A/B Testing
-    experimentVariant ?  : string;
-    controlGroup ?  : boolean;
 }
+;
+// Promotion Configuration
+promotionConfig: {
+    priority: number;
+    weight ?  : number;
+    customMessage ?  : string;
+    callToAction ?  : string;
+    promotionalBadges ?  : PromotionalBadge;
+    customStyling ?  : Partial;
+}
+;
+// Performance Data
+performanceScore: number;
+metrics: ContentPromotionMetrics;
+// Scheduling
+startTime ?  : Date;
+endTime ?  : Date;
+timezone ?  : string;
+// Targeting Overrides
+targetingOverrides ?  : Partial;
+// Status and Lifecycle
+status: ContentPromotionStatus;
+addedAt: Date;
+lastPromoted ?  : Date;
+promotionCount: number;
+// A/B Testing
+experimentVariant ?  : string;
+controlGroup ?  : boolean;
 export var BadgeType;
 (function (BadgeType) {
     BadgeType["NEW"] = "new";
@@ -136,7 +136,8 @@ export var BadgeType;
     fontSize ?  : string;
     fontWeight ?  : string;
     borderRadius ?  : number;
-    animation ?  : 'pulse' | 'glow' | 'bounce' | 'none';
+    animation ?  : 'pulse' | 'glow' | 'bounce' | 'none',
+    ;
 }
 export var BadgePosition;
 (function (BadgePosition) {
@@ -160,7 +161,7 @@ export var BadgePosition;
 performanceThreshold ?  : {
     metric: string,
     value: number,
-    operator: 'gt' | 'lt' | 'eq'
+    operator: 'gt' | 'lt' | 'eq',
 };
 userConditions ?  : {
     segments: string,
@@ -197,8 +198,8 @@ export var ContentPromotionStatus;
             max: number
         };
     }
-    ;
 }
+;
 ;
 // Performance Requirements
 performanceCriteria: {
@@ -347,21 +348,21 @@ export var UserLifeCycleStage;
             max: number
         };
     }
-    ;
-    recentPurchases ?  : {
-        days: number,
-        count: number
-    };
-    categoryPurchases ?  : string;
-    avgOrderValue ?  : {
-        min: number,
-        max: number
-    };
-    purchaseFrequency ?  : {
-        min: number, // purchases per month,
-        max: number
-    };
 }
+;
+recentPurchases ?  : {
+    days: number,
+    count: number
+};
+categoryPurchases ?  : string;
+avgOrderValue ?  : {
+    min: number,
+    max: number
+};
+purchaseFrequency ?  : {
+    min: number, // purchases per month,
+    max: number
+};
 export var UserIntent;
 (function (UserIntent) {
     UserIntent["BROWSING"] = "browsing";
@@ -626,7 +627,7 @@ export var LifecycleStage;
 performance ?  : {
     metric: string,
     threshold: number,
-    operator: 'gt' | 'lt' | 'eq'
+    operator: 'gt' | 'lt' | 'eq',
 };
 tags ?  : string;
 createdBy ?  : string;

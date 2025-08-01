@@ -94,18 +94,18 @@ export class DataSourceManager extends EventEmitter {
                 maxSize;
             50; // 50MB,
         }
-        transforms: [,
+        transforms: [
             {
                 id: 'getty-normalize',
                 name: 'Getty Data Normalizer',
                 type: 'normalize',
-                config: {
-                    dateFormat: 'iso',
-                    textFields: ['preferred_label', 'description'],
-                    imageFields: ['thumbnail', 'image_url'],
-                },
-                enabled: true
-            }],
+                config: {},
+                dateFormat: 'iso',
+                textFields: ['preferred_label', 'description'],
+                imageFields: ['thumbnail', 'image_url'],
+            },
+            enabled, true
+        ],
             rateLimit;
         {
             requests: 100,
@@ -162,23 +162,22 @@ export class DataSourceManager extends EventEmitter {
                 maxSize;
             100; // 100MB,
         }
-        transforms: [,
+        transforms: [
             {
                 id: 'met-mapper',
                 name: 'Met Data Mapper',
                 type: 'map',
-                config: {
-                    mapping: {
-                        'title': 'name',
-                        'artistDisplayName': 'artist',
-                        'objectDate': 'era',
-                        'culture': 'region',
-                        'medium': 'materials',
-                        'primaryImageSmall': 'image',
-                    },
-                    enabled: true
-                }
-            }],
+                config: {},
+                mapping: {},
+                'title': 'name',
+                'artistDisplayName': 'artist',
+                'objectDate': 'era',
+                'culture': 'region',
+                'medium': 'materials',
+                'primaryImageSmall': 'image',
+            },
+            enabled, true
+        ],
             rateLimit;
         {
             requests: 80,
@@ -224,20 +223,20 @@ export class DataSourceManager extends EventEmitter {
                 maxSize;
             10; // 10MB,
         }
-        transforms: [,
+        transforms: [
             {
                 id: 'medieval-classifier',
                 name: 'Medieval Period Classifier',
                 type: 'validate',
-                config: {
-                    eraValidation: {
-                        'early-medieval': { start: 500, end: 1000 },
-                        'high-medieval': { start: 1000, end: 1300 },
-                        'late-medieval': { start: 1300, end: 1500 }
-                    },
-                    enabled: true
-                }
-            }],
+                config: {},
+                eraValidation: {
+                    'early-medieval': { start: 500, end: 1000 },
+                    'high-medieval': { start: 1000, end: 1300 },
+                    'late-medieval': { start: 1300, end: 1500 }
+                },
+                enabled: true
+            }
+        ],
             reliability;
         {
             timeout: 1000,
@@ -274,8 +273,8 @@ export class DataSourceManager extends EventEmitter {
             * Query historical data from configured sources
             */
             async;
-            queryHistoricalData(query, HistoricalQuery);
-            sourceIds ?  : string;
+            queryHistoricalData(query, HistoricalQuery),
+                sourceIds ?  : string;
             Promise < QueryResult > {
                 const: results, QueryResult = [],
                 const: sources = sourceIds,
@@ -467,109 +466,66 @@ export class DataSourceManager extends EventEmitter {
      * Get medieval clothing demo data
      */
     getMedievalClothingData(query) {
-        const medievalData = [];
-        {
-            id: 'medieval-tunic-001',
-                name;
-            'Noble Tunic',
-                category;
-            'clothing',
-                subcategory;
-            'nobility',
-                era;
-            'high-medieval',
-                period;
+        const medievalData = [
             {
-                start: 1100, end;
-                1300;
-            }
-            region: 'england',
-                description;
-            'Fine wool tunic with embroidered trim, worn by nobility',
-                materials;
-            ['wool', 'silk thread', 'gold thread'],
-                colors;
-            ['deep blue', 'crimson', 'forest green'],
-                authenticity;
-            0.9,
-                source;
-            'medieval-fashion-history',
-                tags;
-            ['noble', 'formal', 'embroidered', 'high-status'];
-        }
-        {
-            id: 'medieval-hood-001',
-                name;
-            'Peasant Hood',
-                category;
-            'clothing',
-                subcategory;
-            'peasant',
-                era;
-            'high-medieval',
-                period;
+                id: 'medieval-tunic-001',
+                name: 'Noble Tunic',
+                category: 'clothing',
+                subcategory: 'nobility',
+                era: 'high-medieval',
+                period: { start: 1100, end: 1300 },
+                region: 'england',
+                description: 'Fine wool tunic with embroidered trim, worn by nobility',
+                materials: ['wool', 'silk thread', 'gold thread'],
+                colors: ['deep blue', 'crimson', 'forest green'],
+                authenticity: 0.9,
+                source: 'medieval-fashion-history',
+                tags: ['noble', 'formal', 'embroidered', 'high-status']
+            },
             {
-                start: 1000, end;
-                1400;
-            }
-            region: 'europe',
-                description;
-            'Simple wool hood for protection from weather',
-                materials;
-            ['coarse wool', 'hemp cord'],
-                colors;
-            ['brown', 'grey', 'undyed'],
-                authenticity;
-            0.95,
-                source;
-            'archaeological-findings',
-                tags;
-            ['peasant', 'practical', 'weather-protection', 'common'];
-        }
-        {
-            id: 'medieval-surcoat-001',
-                name;
-            'Knight Surcoat',
-                category;
-            'clothing',
-                subcategory;
-            'military',
-                era;
-            'high-medieval',
-                period;
+                id: 'medieval-hood-001',
+                name: 'Peasant Hood',
+                category: 'clothing',
+                subcategory: 'peasant',
+                era: 'high-medieval',
+                period: { start: 1000, end: 1400 },
+                region: 'europe',
+                description: 'Simple wool hood for protection from weather',
+                materials: ['coarse wool', 'hemp cord'],
+                colors: ['brown', 'grey', 'undyed'],
+                authenticity: 0.95,
+                source: 'archaeological-findings',
+                tags: ['peasant', 'practical', 'weather-protection', 'common']
+            },
             {
-                start: 1150, end;
-                1350;
+                id: 'medieval-surcoat-001',
+                name: 'Knight Surcoat',
+                category: 'clothing',
+                subcategory: 'military',
+                era: 'high-medieval',
+                period: { start: 1150, end: 1350 },
+                region: 'france',
+                description: 'Sleeveless garment worn over armor with heraldic design',
+                materials: ['linen', 'wool', 'silk'],
+                colors: ['royal blue', 'gold', 'silver'],
+                authenticity: 0.88,
+                source: 'military-history',
+                tags: ['knight', 'heraldic', 'armor', 'military', 'ceremonial']
             }
-            region: 'france',
-                description;
-            'Sleeveless garment worn over armor with heraldic design',
-                materials;
-            ['linen', 'wool', 'silk'],
-                colors;
-            ['royal blue', 'gold', 'silver'],
-                authenticity;
-            0.88,
-                source;
-            'military-history',
-                tags;
-            ['knight', 'heraldic', 'armor', 'military', 'ceremonial'];
-            ;
-            // Filter based on query
-            return medievalData.filter(item => { });
-            if (query.era && !query.era.includes(item.era))
-                return false;
-            if (query.region && !query.region.includes(item.region))
-                return false;
-            if (query.category && item.category !== query.category)
-                return false;
-            if (query.subcategory && item.subcategory !== query.subcategory)
-                return false;
-            return true;
-        }
-        ;
-        // Additional helper methods would continue here...
+        ];
+        // Filter based on query
+        return medievalData.filter(item => { });
+        if (query.era && !query.era.includes(item.era))
+            return false;
+        if (query.region && !query.region.includes(item.region))
+            return false;
+        if (query.category && item.category !== query.category)
+            return false;
+        if (query.subcategory && item.subcategory !== query.subcategory)
+            return false;
+        return true;
     }
+    ;
     // Additional helper methods would continue here...
     buildAPIParams(source, query) {
         // Build API-specific parameters
@@ -846,7 +802,8 @@ Promise < any > {
             materials: 'vellum,gold leaf,mineral pigments',
             authenticity: 0.92,
             source: 'trinity-college-library'
-        }],
+        }
+    ],
     // Parse materials field (CSV format)
     const: parsedData = csvData.map(item => ({}), ...item, materials, item.materials ? item.materials.split(',').map(m => m.trim()) : [])
 };
@@ -882,7 +839,8 @@ Promise < any > {
             commission_date: '1180',
             authenticity: 0.94,
             source: 'cathedral-archives-xml'
-        }],
+        }
+    ],
     // Filter and return
     return: xmlData.filter(item => { }),
     if(query) { }, : .category && item.category !== query.category, return: false,

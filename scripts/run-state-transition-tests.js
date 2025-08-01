@@ -34,7 +34,7 @@ class StateTransitionTestRunner {
       testFiles: [],
       coverage: null
     };
-  }
+
 
   log(message: string, level: string = 'info'): void {
     const timestamp = new Date().toISOString();
@@ -47,7 +47,7 @@ class StateTransitionTestRunner {
     };
     
     console.log(`[${timestamp}] ${colors[level] || chalk.white}${message}${chalk.reset('')}`);
-  }
+
 
   async run(options: any = {}): Promise<void> {
     this.log('🧪 Starting State Transition Tests...', 'header');
@@ -68,14 +68,14 @@ class StateTransitionTestRunner {
       // Execute tests
       if (config.parallel) {
         await this.runTestsInParallel(testFiles, config);
-      } else {
+ else {
         await this.runTestsSequentially(testFiles, config);
-      }
+
 
       // Generate coverage report
       if (config.coverage) {
         await this.generateCoverageReport();
-      }
+
 
       // Generate comprehensive report
       await this.generateTestReport();
@@ -85,12 +85,11 @@ class StateTransitionTestRunner {
 
       this.log('✅ State transition tests completed successfully!', 'success');
       return this.results;
-
-    } catch (error) {
+ catch (error) {
       this.log(`❌ Test run failed: ${error.message}`, 'error');
       throw error;
-    }
-  }
+
+
 
   async setupTestEnvironment(): Promise<void> {
     this.log('Setting up test environment...', 'info');
@@ -107,7 +106,7 @@ class StateTransitionTestRunner {
     
     // Verify dependencies
     await this.verifyDependencies();
-  }
+
 
   async discoverTestFiles(): Promise<string[]> {
     const testFiles = [];
@@ -126,14 +125,14 @@ class StateTransitionTestRunner {
             size: stats.size,
             modified: stats.mtime
           });
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       this.log(`Warning: Could not read test directory: ${error.message}`, 'warning');
-    }
+
 
     return testFiles.sort((a, b) => a.name.localeCompare(b.name));
-  }
+
 
   async validateTestEnvironment(): Promise<void> {
     this.log('Validating test environment...', 'info');
@@ -141,9 +140,9 @@ class StateTransitionTestRunner {
     // Check if Jest is available
     try {
       execSync('npx jest --version', { cwd: this.projectRoot, stdio: 'pipe' });
-    } catch (error) {
+ catch (error) {
       throw new Error('Jest is not available. Please install Jest.');
-    }
+
 
     // Check if TypeScript compilation works
     try {
@@ -151,20 +150,20 @@ class StateTransitionTestRunner {
         cwd: this.projectRoot, 
         stdio: 'pipe' 
       });
-    } catch (error) {
+ catch (error) {
       this.log('Warning: TypeScript compilation issues detected', 'warning');
-    }
+
 
     // Verify StateLock utility exists
     const stateLockPath = path.join(this.projectRoot, 'src', 'utils', 'StateLock.js');
     try {
       await fs.access(stateLockPath);
-    } catch (error) {
+ catch (error) {
       throw new Error('StateLock utility not found. Required for state transition tests.');
-    }
+
 
     this.log('✅ Environment validation passed', 'success');
-  }
+
 
   async runTestsInParallel(testFiles: string[], config: any): Promise<void> {
     this.log('Running tests in parallel...', 'info');
@@ -177,8 +176,8 @@ class StateTransitionTestRunner {
       const chunkResults = await Promise.allSettled(promises);
       
       this.processTestResults(chunkResults, chunk);
-    }
-  }
+
+
 
   async runTestsSequentially(testFiles: string[], config: any): Promise<void> {
     this.log('Running tests sequentially...', 'info');
@@ -187,11 +186,11 @@ class StateTransitionTestRunner {
       try {
         const result = await this.runSingleTestFile(testFile, config);
         this.processTestResults([{ status: 'fulfilled', value: result }], [testFile]);
-      } catch (error) {
+ catch (error) {
         this.processTestResults([{ status: 'rejected', reason: error }], [testFile]);
-      }
-    }
-  }
+
+
+
 
   async runSingleTestFile(testFile, config) {
     const startTime = Date.now();
@@ -208,7 +207,7 @@ class StateTransitionTestRunner {
     if (config.coverage) {
       jestArgs.push('--coverage');
       jestArgs.push('--coverageDirectory=' + path.join(this.reportDir, 'coverage'));
-    }
+
 
     try {
       const output = execSync(jestArgs.join(' '), {
@@ -222,8 +221,7 @@ class StateTransitionTestRunner {
       
       this.log(`✅ ${testFile.name} completed in ${duration}ms`, 'success');
       return result;
-
-    } catch (error) {
+ catch (error) {
       const duration = Date.now() - startTime;
       this.log(`❌ ${testFile.name} failed after ${duration}ms`, 'error');
       
@@ -235,8 +233,8 @@ class StateTransitionTestRunner {
         stdout: error.stdout || '',
         stderr: error.stderr || ''
       };
-    }
-  }
+
+
 
   parseJestOutput(output, testFile, duration) {
     const lines = output.split('\\n');
@@ -260,31 +258,31 @@ class StateTransitionTestRunner {
         const match = line.match(/Tests:\\s+(\\d+)\\s+passed/);
         if (match) {
           result.tests.passed = parseInt(match[1]);
-        }
+
         
         const failedMatch = line.match(/(\\d+)\\s+failed/);
         if (failedMatch) {
           result.tests.failed = parseInt(failedMatch[1]);
-        }
+
         
         const skippedMatch = line.match(/(\\d+)\\s+skipped/);
         if (skippedMatch) {
           result.tests.skipped = parseInt(skippedMatch[1]);
-        }
+
         
         const totalMatch = line.match(/(\\d+)\\s+total/);
         if (totalMatch) {
           result.tests.total = parseInt(totalMatch[1]);
-        }
-      }
+
+
       
       if (line.includes('Test Suites:') && line.includes('passed')) {
         result.passed = true;
-      }
-    }
+
+
 
     return result;
-  }
+
 
   processTestResults(results, testFiles) {
     results.forEach((result, index) => {
@@ -296,14 +294,13 @@ class StateTransitionTestRunner {
         
         if (testResult.passed) {
           this.results.passed += testResult.tests.passed || 1;
-        } else {
+ else {
           this.results.failed += testResult.tests.failed || 1;
-        }
+
         
         this.results.total += testResult.tests.total || 1;
         this.results.skipped += testResult.tests.skipped || 0;
-        
-      } else {
+ else {
         this.results.failed++;
         this.results.total++;
         this.results.testFiles.push({
@@ -311,9 +308,9 @@ class StateTransitionTestRunner {
           passed: false,
           error: result.reason.message
         });
-      }
+
     });
-  }
+
 
   async generateCoverageReport() {
     this.log('Generating coverage report...', 'info');
@@ -333,10 +330,10 @@ class StateTransitionTestRunner {
       });
 
       this.log('✅ Coverage report generated', 'success');
-    } catch (error) {
+ catch (error) {
       this.log(`Warning: Coverage generation failed: ${error.message}`, 'warning');
-    }
-  }
+
+
 
   async generateTestReport() {
     this.results.duration = Date.now() - this.startTime;
@@ -357,7 +354,7 @@ class StateTransitionTestRunner {
         platform: process.platform,
         arch: process.arch,
         memory: process.memoryUsage()
-      }
+
     };
 
     // Generate JSON report
@@ -375,7 +372,7 @@ class StateTransitionTestRunner {
 
     // Console summary
     this.printSummary(report.summary);
-  }
+
 
   generateHtmlReport(report) {
     return `
@@ -440,7 +437,7 @@ class StateTransitionTestRunner {
     
 </body>
 </html>`;
-  }
+
 
   printSummary(summary) {
     this.log('\\n📊 Test Summary:', 'header');
@@ -450,7 +447,7 @@ class StateTransitionTestRunner {
     this.log(`Skipped: ${summary.skipped}`, 'warning');
     this.log(`Pass Rate: ${summary.passRate}`, summary.passRate === '100.00%' ? 'success' : 'warning');
     this.log(`Duration: ${summary.duration}`, 'info');
-  }
+
 
   async cleanupPreviousTestData() {
     const testDataDir = path.join(this.projectRoot, 'test-data');
@@ -460,12 +457,12 @@ class StateTransitionTestRunner {
       for (const file of files) {
         if (file.startsWith('test-state-') || file.startsWith('edge-case-state-')) {
           await fs.unlink(path.join(testDataDir, file));
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       // Directory might not exist
-    }
-  }
+
+
 
   async verifyDependencies() {
     const requiredPackages = [
@@ -478,25 +475,25 @@ class StateTransitionTestRunner {
     for (const pkg of requiredPackages) {
       try {
         require.resolve(pkg);
-      } catch (error) {
+ catch (error) {
         this.log(`Warning: ${pkg} not found`, 'warning');
-      }
-    }
-  }
+
+
+
 
   chunkArray(array, chunkSize) {
     const chunks = [];
     for (let i = 0; i < array.length; i += chunkSize) {
       chunks.push(array.slice(i, i + chunkSize));
-    }
+
     return chunks;
-  }
+
 
   async cleanup() {
     this.log('Cleaning up test environment...', 'info');
     await this.cleanupPreviousTestData();
-  }
-}
+
+
 
 // CLI mode
 if (require.main === module) {
@@ -514,13 +511,13 @@ if (require.main === module) {
     try {
       await runner.run(options);
       process.exit(0);
-    } catch (error) {
+ catch (error) {
       console.error('Test run failed:', error.message);
       process.exit(1);
-    }
-  }
+
+
   
   main();
-}
+
 
 module.exports = StateTransitionTestRunner;

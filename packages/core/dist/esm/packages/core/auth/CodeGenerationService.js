@@ -27,11 +27,11 @@ export var CodeType;
         BASE32 = 'base32', // JBSWY3DPEHPK3PXP
         HEX = 'hex', // 1a2b3c4d
         UUID = 'uuid'; // 550e8400-e29b-41d4-a716-446655440000
-    ;
-    customCharset ?  : string;
-    excludeSimilar ?  : boolean; // Exclude 0, O, I, l, 1
-    enforceComplexity ?  : boolean; // For passwords/tokens
 }
+;
+customCharset ?  : string;
+excludeSimilar ?  : boolean; // Exclude 0, O, I, l, 1
+enforceComplexity ?  : boolean; // For passwords/tokens
 ;
 ;
 // ========================================
@@ -153,39 +153,40 @@ class EntropyCalculator {
         // Rate Limiting Service
         // ========================================
     }
-    class RateLimitService {
-        limitStates = new Map();
-        limits = {}[CodeType.EMAIL_VERIFICATION];
-    }
-    {
-        maxAttempts: 5, windowMinutes;
-        15;
-    }
-    [CodeType.SMS_VERIFICATION];
-    {
-        maxAttempts: 3, windowMinutes;
-        15;
-    }
-    [CodeType.TOTP_SECRET];
-    {
-        maxAttempts: 10, windowMinutes;
-        60;
-    }
-    [CodeType.BACKUP_CODE];
-    {
-        maxAttempts: 3, windowMinutes;
-        60;
-    }
-    [CodeType.RECOVERY_TOKEN];
-    {
-        maxAttempts: 3, windowMinutes;
-        60;
-    }
-    [CodeType.API_TOKEN];
-    {
-        maxAttempts: 10, windowMinutes;
-        60;
-    }
+}
+class RateLimitService {
+    limitStates = new Map();
+    limits = {};
+}
+[CodeType.EMAIL_VERIFICATION];
+{
+    maxAttempts: 5, windowMinutes;
+    15;
+}
+[CodeType.SMS_VERIFICATION];
+{
+    maxAttempts: 3, windowMinutes;
+    15;
+}
+[CodeType.TOTP_SECRET];
+{
+    maxAttempts: 10, windowMinutes;
+    60;
+}
+[CodeType.BACKUP_CODE];
+{
+    maxAttempts: 3, windowMinutes;
+    60;
+}
+[CodeType.RECOVERY_TOKEN];
+{
+    maxAttempts: 3, windowMinutes;
+    60;
+}
+[CodeType.API_TOKEN];
+{
+    maxAttempts: 10, windowMinutes;
+    60;
 }
 ;
 checkRateLimit(key, string, codeType, CodeType);
@@ -309,7 +310,10 @@ checkRateLimit(key, string, codeType, CodeType);
                         entropy,
                         algorithm: this.hashingAlgorithm,
                     }
-                }(storedData, GeneratedCode, options, CodeValidationOptions = {});
+                }();
+                storedData: GeneratedCode,
+                    options;
+                CodeValidationOptions = {};
                 Promise < CodeValidationResult > {
                     const: startTime = Date.now(),
                     const: defaultOptions

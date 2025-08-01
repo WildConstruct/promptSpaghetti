@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface VFXChecklistItem {
-    id: string;
+}
+export interface VFXChecklistItem { id: string;
     title: string;
     description?: string;
     status: 'pending' | 'in_progress' | 'review' | 'approved' | 'rejected' | 'blocked';
@@ -31,43 +31,39 @@ export interface VFXChecklistItem {
     vfxPhase: VFXProductionPhase;
     qualityGates: VFXQualityGate[];
     comments: VFXChecklistComment[];
-    history: VFXChecklistHistoryEntry[];
-
+    history: VFXChecklistHistoryEntry[] }
 }
-export interface VFXChecklistSubtask {
-    id: string;
+}
+export interface VFXChecklistSubtask { id: string;
     title: string;
     completed: boolean;
     assignee?: VFXTeamMember;
     dueDate?: string;
     description?: string;
-    estimatedMinutes?: number;
-
+    estimatedMinutes?: number }
 }
-export interface VFXChecklistAttachment {
-    id: string;
+}
+export interface VFXChecklistAttachment { id: string;
     name: string;
     type: 'image' | 'video' | 'document' | 'reference' | 'asset';
     url: string;
     thumbnailUrl?: string;
     size: number;
     uploadedBy: VFXTeamMember;
-    uploadedAt: string;
-
+    uploadedAt: string }
 }
-export interface VFXAssetReference {
-    id: string;
+}
+export interface VFXAssetReference { id: string;
     name: string;
     type: 'model' | 'texture' | 'animation' | 'effect' | 'composite' | 'render';
     status: 'draft' | 'review' | 'approved' | 'final';
     version: string;
     accuracy?: number;
     complexity?: number;
-    dependencies: string[];
-
+    dependencies: string[] }
 }
-export interface VFXQualityGate {
-    id: string;
+}
+export interface VFXQualityGate { id: string;
     name: string;
     type: 'technical' | 'creative' | 'accuracy' | 'performance';
     status: 'pending' | 'passed' | 'failed' | 'waived';
@@ -75,46 +71,43 @@ export interface VFXQualityGate {
     result?: string;
     checkedBy?: VFXTeamMember;
     checkedAt?: string;
-    required: boolean;
-
+    required: boolean }
 }
-export interface VFXChecklistComment {
-    id: string;
+}
+export interface VFXChecklistComment { id: string;
     content: string;
     author: VFXTeamMember;
     timestamp: string;
     type: 'comment' | 'review' | 'approval' | 'rejection';
     mentions: string[];
     reactions: {
-        [emoji: string]: VFXTeamMember[];
+        [emoji: string]: VFXTeamMember[] }
 }
     };
 
 }
-export interface VFXChecklistHistoryEntry {
-    id: string;
+}
+export interface VFXChecklistHistoryEntry { id: string;
     action: string;
     field?: string;
     oldValue?: unknown;
     newValue?: unknown;
     user: VFXTeamMember;
     timestamp: string;
-    description: string;
-
+    description: string }
 }
-export interface VFXTeamMember {
-    id: string;
+}
+export interface VFXTeamMember { id: string;
     name: string;
     role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator' | 'qa_lead';
     avatar?: string;
     email: string;
     color: string;
     isOnline?: boolean;
-    permissions: VFXPermissions;
-
+    permissions: VFXPermissions }
 }
-export interface VFXPermissions {
-    canCreate: boolean;
+}
+export interface VFXPermissions { canCreate: boolean;
     canEdit: boolean;
     canDelete: boolean;
     canApprove: boolean;
@@ -122,11 +115,10 @@ export interface VFXPermissions {
     canViewReports: boolean;
 
 export type VFXChecklistCategory = 'pre_production' | 'asset_creation' | 'animation' | 'fx' | 'lighting' | 'compositing' | 'rendering' | 'post_production' | 'review' | 'delivery';
-export type VFXProductionPhase = 'concept' | 'previs' | 'asset_build' | 'animation' | 'fx' | 'lighting' | 'comp' | 'render' | 'review' | 'final';
-
+export type VFXProductionPhase = 'concept' | 'previs' | 'asset_build' | 'animation' | 'fx' | 'lighting' | 'comp' | 'render' | 'review' | 'final' }
 }
-export interface VFXChecklist {
-    id: string;
+}
+export interface VFXChecklist { id: string;
     name: string;
     description?: string;
     project: string;
@@ -142,11 +134,10 @@ export interface VFXChecklist {
     dueDate?: string;
     status: 'draft' | 'active' | 'review' | 'completed' | 'archived';
     tags: string[];
-    metadata: VFXChecklistMetadata;
-
+    metadata: VFXChecklistMetadata }
 }
-export interface VFXChecklistTemplate {
-    id: string;
+}
+export interface VFXChecklistTemplate { id: string;
     name: string;
     description?: string;
     category: VFXChecklistCategory;
@@ -154,11 +145,10 @@ export interface VFXChecklistTemplate {
     items: Omit<VFXChecklistItem, 'id' | 'author' | 'createdAt' | 'updatedAt' | 'history'>[];
     isPublic: boolean;
     createdBy: VFXTeamMember;
-    usageCount: number;
-
+    usageCount: number }
 }
-export interface VFXChecklistMetadata {
-    totalItems: number;
+}
+export interface VFXChecklistMetadata { totalItems: number;
     completedItems: number;
     overallProgress: number;
     estimatedTotalHours: number;
@@ -167,8 +157,8 @@ export interface VFXChecklistMetadata {
     blockedItems: number;
     averageAccuracy: number;
     lastActivity: string;
-    collaborators: number;
-
+    collaborators: number }
+}
 }
 export interface VFXChecklistSystemProps {
     checklist: VFXChecklist;
@@ -186,4 +176,5 @@ export interface VFXChecklistSystemProps {
 export declare const VFXChecklistSystem: React.FC<VFXChecklistSystemProps>;
 export default VFXChecklistSystem;
 //# sourceMappingURL=VFXChecklistSystem.d.ts.map
+}
 }

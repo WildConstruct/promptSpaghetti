@@ -14,7 +14,7 @@ export enum MarketplacePolicyType {
   COMMUNITY_GUIDELINES = 'community_guidelines',
   SELLER_AGREEMENT = 'seller_agreement',
   BUYER_PROTECTION = 'buyer_protection'
-}
+
 
 export enum PolicyStatus {
   DRAFT = 'draft',
@@ -24,7 +24,7 @@ export enum PolicyStatus {
   ACTIVE = 'active',
   DEPRECATED = 'deprecated',
   ARCHIVED = 'archived'
-}
+
 
 export enum PublishingStatus {
   PENDING = 'pending',
@@ -32,18 +32,19 @@ export enum PublishingStatus {
   PUBLISHED = 'published',
   FAILED = 'failed',
   ROLLED_BACK = 'rolled_back'
-}
+
 
 export enum NotificationChannel {
   EMAIL = 'email',
   IN_APP = 'in_app',
   DASHBOARD = 'dashboard',
   API_WEBHOOK = 'api_webhook'
-}
+
 
 // Core interfaces
-}
-}
+
+
+
 export interface MarketplacePolicy {
   id: string;
   policy_type: MarketplacePolicyType;
@@ -60,24 +61,26 @@ export interface MarketplacePolicy {
   updated_at: Date;
   created_by: string;
   updated_by: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyContent {
   sections: PolicySection[];
   variables: PolicyVariable[];
   templates: TemplateReference[];
   attachments: PolicyAttachment[];
   localization: LocalizationConfig[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicySection {
   id: string;
   title: string;
@@ -87,12 +90,13 @@ export interface PolicySection {
   visible_to: UserRole[];
   conditions: DisplayCondition[];
   subsections: PolicySection[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyVariable {
   name: string;
   type: 'text' | 'number' | 'date' | 'boolean' | 'list';
@@ -101,33 +105,36 @@ export interface PolicyVariable {
   description: string;
   scope: 'global' | 'section' | 'conditional';
   validation_rules: ValidationRule[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationRule {
   type: 'required' | 'min_length' | 'max_length' | 'pattern' | 'range';
   value: Error;
   error_message: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateReference {
   template_id: string;
   name: string;
   version: string;
   variables: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyAttachment {
   id: string;
   name: string;
@@ -136,35 +143,38 @@ export interface PolicyAttachment {
   size?: number;
   mime_type?: string;
   description?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LocalizationConfig {
   locale: string;
   content: Partial<PolicyContent>;
   status: 'draft' | 'translated' | 'reviewed' | 'published';
   translator?: string;
   reviewed_by?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DisplayCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than';
   value: Error;
   logical_operator?: 'and' | 'or';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyMetadata {
   target_audience: UserRole[];
   jurisdictions: string[];
@@ -177,12 +187,13 @@ export interface PolicyMetadata {
   categories: string[];
   priority: 'low' | 'medium' | 'high' | 'critical';
   risk_level: 'low' | 'medium' | 'high' | 'critical';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PublicationInfo {
   publishing_status: PublishingStatus;
   published_at?: Date;
@@ -191,36 +202,39 @@ export interface PublicationInfo {
   rollout_strategy: RolloutStrategy;
   notification_settings: NotificationSettings;
   announcement?: PolicyAnnouncement;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PublicationChannel {
   channel: string;
   status: 'pending' | 'published' | 'failed';
   published_at?: Date;
   error_message?: string;
   audience_filter?: AudienceFilter;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RolloutStrategy {
   type: 'immediate' | 'phased' | 'scheduled' | 'canary';
   start_date: Date;
   phases?: RolloutPhase[];
   canary_percentage?: number;
   rollback_triggers: RollbackTrigger[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RolloutPhase {
   phase_id: string;
   name: string;
@@ -229,33 +243,36 @@ export interface RolloutPhase {
   duration_hours: number;
   audience: UserRole[];
   success_criteria: SuccessCriteria[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackTrigger {
   metric: string;
   threshold: number;
   operator: 'greater_than' | 'less_than';
   action: 'pause' | 'rollback' | 'alert';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SuccessCriteria {
   metric: string;
   target: number;
   required: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationSettings {
   enabled: boolean;
   channels: NotificationChannel[];
@@ -264,58 +281,63 @@ export interface NotificationSettings {
   custom_message?: string;
   send_reminders: boolean;
   reminder_schedule?: ReminderSchedule[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReminderSchedule {
   days_before: number;
   channels: NotificationChannel[];
   template_id: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyAnnouncement {
   title: string;
   summary: string;
   highlights: string[];
   call_to_action?: string;
   banner_config?: BannerConfig;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BannerConfig {
   enabled: boolean;
   style: 'info' | 'warning' | 'success' | 'error';
   position: 'top' | 'bottom' | 'modal';
   dismissible: boolean;
   expiry_date?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AudienceFilter {
   user_roles: UserRole[];
   user_segments: string[];
   geographic_regions: string[];
   account_types: string[];
   exclude_users?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnforcementConfig {
   enabled: boolean;
   automatic_enforcement: boolean;
@@ -323,24 +345,26 @@ export interface EnforcementConfig {
   enforcement_actions: EnforcementAction[];
   grace_period_hours: number;
   escalation_rules: EscalationRule[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationDetectionConfig {
   enabled: boolean;
   detection_rules: DetectionRule[];
   ai_assisted: boolean;
   confidence_threshold: number;
   review_required: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DetectionRule {
   rule_id: string;
   name: string;
@@ -348,23 +372,25 @@ export interface DetectionRule {
   conditions: RuleCondition[];
   severity: 'low' | 'medium' | 'high' | 'critical';
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleCondition {
   field: string;
   operator: string;
   value: Error;
   logical_operator?: 'and' | 'or';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnforcementAction {
   action_id: string;
   name: string;
@@ -373,42 +399,46 @@ export interface EnforcementAction {
   automatic: boolean;
   conditions: ActionCondition[];
   parameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActionCondition {
   violation_count: number;
   severity: string;
   time_window_hours: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRule {
   trigger: EscalationTrigger;
   action: string;
   notify_roles: string[];
   delay_hours: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationTrigger {
   type: 'violation_count' | 'severity' | 'time_elapsed' | 'appeal_filed';
   threshold: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyAnalytics {
   views: number;
   acknowledgments: number;
@@ -417,21 +447,23 @@ export interface PolicyAnalytics {
   user_feedback: UserFeedback[];
   compliance_score: number;
   last_updated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserFeedback {
   user_id: string;
   rating: number;
   comment?: string;
   category: string;
   timestamp: Date;
-}
-}
-}
+
+
+
+
 
 export enum UserRole {
   BUYER = 'buyer',
@@ -441,10 +473,10 @@ export enum UserRole {
   REVIEWER = 'reviewer',
   DEVELOPER = 'developer',
   ALL = 'all'
-}
 
-}
-}
+
+
+
 export interface PolicyPublishingRequest {
   policy_id: string;
   publication_channels: string[];
@@ -452,12 +484,13 @@ export interface PolicyPublishingRequest {
   notification_settings: NotificationSettings;
   announcement?: PolicyAnnouncement;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyVersionRequest {
   policy_id: string;
   version_increment: 'major' | 'minor' | 'patch';
@@ -465,12 +498,13 @@ export interface PolicyVersionRequest {
   changelog: string;
   effective_date: Date;
   requires_acknowledgment: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyChange {
   section: string;
   type: 'addition' | 'modification' | 'deletion';
@@ -478,9 +512,10 @@ export interface PolicyChange {
   old_content?: string;
   new_content?: string;
   impact_level: 'low' | 'medium' | 'high' | 'critical';
-}
-}
-}
+
+
+
+
 
 export class MarketplacePolicyPublishingService {
   constructor(private pool: Pool) {}
@@ -600,13 +635,13 @@ export class MarketplacePolicyPublishingService {
       `);
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Create or update marketplace policy
   async createPolicy(
@@ -654,14 +689,14 @@ export class MarketplacePolicyPublishingService {
           policy_id: result.rows[0].id,
           policy_type: policyData.policy_type,
           title: policyData.title
-        }
+
       });
 
       return this.mapToMarketplacePolicy(result.rows[0]);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Update marketplace policy
   async updatePolicy(
@@ -675,7 +710,7 @@ export class MarketplacePolicyPublishingService {
       const policy = await this.getPolicyById(policyId);
       if (!policy) {
         throw new NotFoundException('Policy not found');
-      }
+
 
       const result = await client.query(
         `UPDATE marketplace_policies 
@@ -708,10 +743,10 @@ export class MarketplacePolicyPublishingService {
       });
 
       return this.mapToMarketplacePolicy(result.rows[0]);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Create new policy version
   async createPolicyVersion(
@@ -739,10 +774,10 @@ export class MarketplacePolicyPublishingService {
       });
 
       return result.rows[0].id;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Publish policy to marketplace
   async publishPolicy(
@@ -757,11 +792,11 @@ export class MarketplacePolicyPublishingService {
       const policy = await this.getPolicyById(publishingRequest.policy_id);
       if (!policy) {
         throw new NotFoundException('Policy not found');
-      }
+
 
       if (policy.status !== PolicyStatus.APPROVED) {
         throw new BadRequestException('Only approved policies can be published');
-      }
+
 
       // Update policy status to publishing
       await client.query(
@@ -785,7 +820,7 @@ export class MarketplacePolicyPublishingService {
           ]
         );
         publicationIds.push(result.rows[0].id);
-      }
+
 
       // Execute publication strategy
       await this.executePublishingStrategy(policy, publishingRequest);
@@ -793,12 +828,12 @@ export class MarketplacePolicyPublishingService {
       // Send notifications if configured
       if (publishingRequest.notification_settings.enabled) {
         await this.sendPolicyNotifications(policy, publishingRequest.notification_settings);
-      }
+
 
       // Create announcement banner if configured
       if (publishingRequest.announcement?.banner_config?.enabled) {
         await this.createAnnouncementBanner(policy, publishingRequest.announcement);
-      }
+
 
       await client.query('COMMIT');
 
@@ -809,20 +844,20 @@ export class MarketplacePolicyPublishingService {
           policy_id: publishingRequest.policy_id,
           channels: publishingRequest.publication_channels,
           publication_ids: publicationIds
-        }
+
       });
 
       return {
         publication_id: publicationIds[0],
         status: 'published'
       };
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get policy by ID
   async getPolicyById(policyId: string): Promise<MarketplacePolicy | null> {
@@ -836,13 +871,13 @@ export class MarketplacePolicyPublishingService {
 
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       return this.mapToMarketplacePolicy(result.rows[0]);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get policies by type
   async getPoliciesByType(
@@ -858,16 +893,16 @@ export class MarketplacePolicyPublishingService {
       if (status) {
         query += ' AND status = $2';
         params.push(status);
-      }
+
 
       query += ' ORDER BY created_at DESC';
 
       const result = await client.query(query, params);
       return result.rows.map(this.mapToMarketplacePolicy);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get active policies for user
   async getActivePoliciesForUser(
@@ -886,10 +921,10 @@ export class MarketplacePolicyPublishingService {
       );
 
       return result.rows.map(this.mapToMarketplacePolicy);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Record user acknowledgment
   async recordPolicyAcknowledgment(
@@ -911,7 +946,7 @@ export class MarketplacePolicyPublishingService {
 
       if (versionResult.rows.length === 0) {
         throw new NotFoundException('Policy version not found');
-      }
+
 
       // Check for existing acknowledgment
       const existingResult = await client.query(
@@ -943,11 +978,11 @@ export class MarketplacePolicyPublishingService {
            WHERE id = $1`,
           [policyId]
         );
-      }
-    } finally {
+
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get policy analytics
   async getPolicyAnalytics(policyId: string): Promise<PolicyAnalytics> {
@@ -962,7 +997,7 @@ export class MarketplacePolicyPublishingService {
 
       if (policyResult.rows.length === 0) {
         throw new NotFoundException('Policy not found');
-      }
+
 
       // Get acknowledgment stats
       const ackResult = await client.query(
@@ -987,10 +1022,10 @@ export class MarketplacePolicyPublishingService {
         compliance_score: this.calculateComplianceScore(baseAnalytics),
         last_updated: new Date()
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Private helper methods
   private async executePublishingStrategy(
@@ -1013,32 +1048,32 @@ export class MarketplacePolicyPublishingService {
     case 'scheduled':
       await this.schedulePublication(policy, strategy.start_date);
       break;
-    }
-  }
+
+
 
   private async publishToAllChannels(policy: MarketplacePolicy, channels: string[]): Promise<void> {
 
     // Implementation would publish to actual channels (email, dashboard, API, etc.)
     console.log(`Publishing policy ${policy.id} to channels: ${channels.join(', ')}`);
-  }
+
 
   private async executePhasedRollout(policy: MarketplacePolicy, ___strategy: RolloutStrategy): Promise<void> {
 
     // Implementation would execute phased rollout based on phases configuration
     console.log(`Starting phased rollout for policy ${policy.id}`);
-  }
+
 
   private async executeCanaryRollout(policy: MarketplacePolicy, strategy: RolloutStrategy): Promise<void> {
 
     // Implementation would execute canary rollout to percentage of users
     console.log(`Starting canary rollout for policy ${policy.id} at ${strategy.canary_percentage}%`);
-  }
+
 
   private async schedulePublication(policy: MarketplacePolicy, startDate: Date): Promise<void> {
 
     // Implementation would schedule publication for future date
     console.log(`Scheduling publication for policy ${policy.id} at ${startDate}`);
-  }
+
 
   private async sendPolicyNotifications(
     policy: MarketplacePolicy,
@@ -1047,7 +1082,7 @@ export class MarketplacePolicyPublishingService {
 
     // Implementation would send notifications via configured channels
     console.log(`Sending notifications for policy ${policy.id} via ${settings.channels.join(', ')}`);
-  }
+
 
   private async createAnnouncementBanner(
     policy: MarketplacePolicy,
@@ -1056,7 +1091,7 @@ export class MarketplacePolicyPublishingService {
 
     // Implementation would create announcement banner in marketplace UI
     console.log(`Creating announcement banner for policy ${policy.id}: ${announcement.title}`);
-  }
+
 
   private calculateComplianceScore(analytics: unknown): number {
     // Simple compliance score calculation
@@ -1067,7 +1102,7 @@ export class MarketplacePolicyPublishingService {
       (acknowledgmentRate * 50) + // 50% weight for acknowledgment rate
       ((1 - violationRate) * 50)   // 50% weight for low violation rate
     ));
-  }
+
 
   private mapToMarketplacePolicy(row: unknown): MarketplacePolicy {
     return {
@@ -1087,7 +1122,7 @@ export class MarketplacePolicyPublishingService {
       created_by: row.created_by,
       updated_by: row.updated_by
     };
-  }
+
 
   private async auditLog(client: PoolClient, entry: { action: string; user_id: string; details: unknown }): Promise<void> {
 
@@ -1096,5 +1131,4 @@ export class MarketplacePolicyPublishingService {
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,
       [entry.action, entry.user_id, JSON.stringify(entry.details), 'system', 'MarketplacePolicyPublishingService']
     );
-  }
-}
+

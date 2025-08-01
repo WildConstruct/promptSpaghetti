@@ -27,17 +27,17 @@ const defaultConfig: TestEnvironmentConfig = {
     maxExecutionTime: 30000,
     maxRuleCount: 1000,
     maxConcurrency: 10
-  }
+
   data: {
     generateSyntheticData: true,
     datasetSize: 'medium',
     includeEdgeCases: true
-  }
+
   reporting: {
     enableRealTimeReporting: true,
     generateDetailedReports: true,
     exportResults: true
-  }
+
 };
 
 let testEnvironment: RuleTestingEnvironment | null = null;
@@ -67,23 +67,23 @@ program
           const customConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
           config = { ...defaultConfig, ...customConfig };
           console.log(`📄 Loaded configuration from: ${configPath}`);
-        } else {
+ else {
           console.warn(`⚠️  Configuration file not found: ${configPath}. Using default configuration.`);
-        }
-      }
+
+
       
       // Override with command line options
       if (options.frameworks) {
         config.frameworks = options.frameworks.split(',').map((f: string) => f.trim()) as ComplianceFramework[];
-      }
+
       
       if (options.dataSize) {
         config.data.datasetSize = options.dataSize as 'small' | 'medium' | 'large';
-      }
+
       
       if (options.maxRules) {
         config.performance.maxRuleCount = parseInt(options.maxRules);
-      }
+
       
       // Initialize environment
       testEnvironment = new RuleTestingEnvironment(config);
@@ -107,11 +107,10 @@ program
       
       console.log('\n🚀 Environment is ready for testing!');
       console.log('Use "rule-test run" to execute test suites.');
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to setup testing environment:', error.message);
       process.exit(1);
-    }
+
   });
 
 program
@@ -127,7 +126,7 @@ program
       if (!testEnvironment) {
         console.error('❌ Environment not setup. Run "rule-test setup" first.');
         process.exit(1);
-      }
+
       
       console.log('🧪 Starting Rule Testing Suite...\n');
       
@@ -137,22 +136,22 @@ program
         console.log(`🎯 Testing specific framework: ${options.framework}`);
         const report = await testEnvironment.testFramework(options.framework as ComplianceFramework);
         reports = [report];
-      } else if (options.integration) {
+ else if (options.integration) {
         console.log('🔗 Running integration tests...');
         const report = await testEnvironment.executeIntegrationTests();
         reports = [report];
-      } else if (options.performance) {
+ else if (options.performance) {
         console.log('⚡ Running performance benchmarks...');
         const report = await testEnvironment.executePerformanceBenchmarks();
         reports = [report];
-      } else if (options.conflicts) {
+ else if (options.conflicts) {
         console.log('⚔️ Running conflict resolution tests...');
         const report = await testEnvironment.testConflictResolution();
         reports = [report];
-      } else {
+ else {
         console.log('🏃 Running comprehensive test suite...');
         reports = await testEnvironment.executeTestSuite();
-      }
+
       
       // Display results summary
       console.log('\n📊 Test Results Summary:');
@@ -189,7 +188,7 @@ program
         const outputDir = path.resolve(options.output);
         if (!fs.existsSync(outputDir)) {
           fs.mkdirSync(outputDir, { recursive: true });
-        }
+
         
         reports.forEach((report, index) => {
           const filename = `test-report-${index + 1}-${Date.now()}.json`;
@@ -197,7 +196,7 @@ program
           fs.writeFileSync(filepath, JSON.stringify(report, null, 2));
           console.log(`📄 Report exported to: ${filepath}`);
         });
-      }
+
       
       // Show metrics
       const metrics = testEnvironment.getMetrics();
@@ -206,11 +205,10 @@ program
       console.log(`   Rules per Second: ${metrics.performance.rulesPerSecond.toFixed(2)}`);
       
       console.log('\n✅ Test execution completed!');
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Test execution failed:', error.message);
       process.exit(1);
-    }
+
   });
 
 program
@@ -225,7 +223,7 @@ program
       if (!testEnvironment) {
         console.error('❌ Environment not setup. Run "rule-test setup" first.');
         process.exit(1);
-      }
+
       
       console.log('⚡ Running Performance Benchmarks...\n');
       console.log('🎯 Configuration:');
@@ -247,7 +245,7 @@ program
           console.log(`   Rules/sec: ${result.metrics.rulesPerSecond?.toFixed(2) || 'N/A'}`);
           console.log(`   Memory: ${result.metrics.memoryUsage || 'N/A'}`);
           console.log(`   CPU: ${result.metrics.cpuUsage || 'N/A'}`);
-        }
+
       });
       
       if (report.recommendations.length > 0) {
@@ -255,14 +253,13 @@ program
         report.recommendations.forEach((rec, index) => {
           console.log(`   ${index + 1}. ${rec}`);
         });
-      }
+
       
       console.log('\n✅ Benchmarks completed!');
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Benchmark execution failed:', error.message);
       process.exit(1);
-    }
+
   });
 
 program
@@ -274,7 +271,7 @@ program
         console.log('❌ Environment not initialized');
         console.log('Run "rule-test setup" to initialize the testing environment.');
         return;
-      }
+
       
       const config = testEnvironment.getConfig();
       const metrics = testEnvironment.getMetrics();
@@ -298,11 +295,10 @@ program
       console.log(`   Avg Execution Time: ${metrics.performance.avgExecutionTime}ms`);
       console.log(`   Max Execution Time: ${metrics.performance.maxExecutionTime}ms`);
       console.log(`   Rules per Second: ${metrics.performance.rulesPerSecond.toFixed(2)}`);
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to get status:', error.message);
       process.exit(1);
-    }
+
   });
 
 program
@@ -314,13 +310,13 @@ program
       if (!testEnvironment) {
         console.log('✅ Environment not initialized - nothing to teardown');
         return;
-      }
+
       
       if (!options.force) {
         console.log('⚠️  This will teardown the testing environment and cleanup all resources.');
         console.log('Use --force to skip this confirmation.');
         return;
-      }
+
       
       console.log('🧹 Tearing down Rule Testing Environment...');
       
@@ -328,11 +324,10 @@ program
       testEnvironment = null;
       
       console.log('✅ Environment teardown completed successfully');
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Teardown failed:', error.message);
       process.exit(1);
-    }
+
   });
 
 program
@@ -356,11 +351,10 @@ program
       console.log(`File: ${configPath}`);
       console.log('\nEdit the configuration file and use it with:');
       console.log(`rule-test setup --config ${options.output}`);
-      
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to generate configuration:', error.message);
       process.exit(1);
-    }
+
   });
 
 // Handle uncaught errors
@@ -379,4 +373,3 @@ program.parse(process.argv);
 // Show help if no commands provided
 if (!process.argv.slice(2).length) {
   program.outputHelp();
-}

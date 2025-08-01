@@ -8,7 +8,7 @@ import {
   PaymentProvider, 
   TransactionType,
   LicenseStatus 
-} from '../transaction.types.js';
+ from '../transaction.types.js';
 
 // Mock Stripe
 jest.mock('stripe', () => {
@@ -22,8 +22,8 @@ jest.mock('stripe', () => {
       confirm: jest.fn().mockResolvedValue({
         id: 'pi_test_123',
         status: 'succeeded'
-  }
-    }
+
+
   }));
 });
 
@@ -55,13 +55,13 @@ describe('Transaction System Integration Tests', () => {
     fastify = {
       db: {
         query: jest.fn()
-  }
+
       log: {
         info: jest.fn(),
         error: jest.fn()
-  }
+
       authenticate: jest.fn()
-    } as any;
+ as any;
 
     transactionService = new TransactionService(fastify);
     licenseService = new LicenseService(fastify);
@@ -75,12 +75,12 @@ describe('Transaction System Integration Tests', () => {
       // Mock user queries
       if (query.includes('SELECT * FROM users')) {
         return Promise.resolve([testUser]);
-      }
+
       
       // Mock template queries
       if (query.includes('SELECT * FROM marketplace_templates')) {
         return Promise.resolve([testTemplate]);
-      }
+
       
       // Mock version queries
       if (query.includes('SELECT * FROM template_versions')) {
@@ -88,30 +88,30 @@ describe('Transaction System Integration Tests', () => {
           id: 'version-123',
           template_id: testTemplate.id,
           version_number: 1
-        }]);
-      }
+]);
+
       
       // Mock existing purchase check
       if (query.includes('SELECT 1 FROM marketplace_purchases')) {
         return Promise.resolve([]); // No existing purchases
-      }
+
       
       // Mock user age
       if (query.includes('SELECT created_at FROM users')) {
         const weekAgo = new Date();
         weekAgo.setDate(weekAgo.getDate() - 7);
         return Promise.resolve([{ created_at: weekAgo.toISOString() }]);
-      }
+
       
       // Mock recent transactions
       if (query.includes('SELECT COUNT(*) as count FROM transactions')) {
         return Promise.resolve([{ count: 0 }]);
-      }
+
       
       // Mock cart operations
       if (query.includes('INSERT INTO shopping_carts')) {
         return Promise.resolve({ changes: 1 });
-      }
+
       
       if (query.includes('SELECT * FROM shopping_carts')) {
         return Promise.resolve([{
@@ -125,8 +125,8 @@ describe('Transaction System Integration Tests', () => {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-        }]);
-      }
+]);
+
       
       // Default success response for other queries
       return Promise.resolve([]);
@@ -161,7 +161,7 @@ describe('Transaction System Integration Tests', () => {
           items: JSON.stringify([]),
           total_cents: 0,
           expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-        }])
+])
       );
 
       const cartData = {
@@ -169,7 +169,7 @@ describe('Transaction System Integration Tests', () => {
           template_id: testTemplate.id,
           license_type: LicenseType.COMMERCIAL,
           quantity: 1
-        }]
+]
       };
 
       const cart = await transactionService.addToCart(testUser.id, cartData);
@@ -194,7 +194,7 @@ describe('Transaction System Integration Tests', () => {
           template_id: testTemplate.id,
           license_type: LicenseType.PERSONAL,
           quantity: 1
-        }]
+]
       };
 
       await expect(transactionService.addToCart(testUser.id, cartData))
@@ -213,7 +213,7 @@ describe('Transaction System Integration Tests', () => {
           license_type: LicenseType.PERSONAL,
           quantity: 1,
           unit_price_cents: 1999
-        }],
+],
         total_cents: 2159, // Including tax
         tax_cents: 160
       };
@@ -223,7 +223,7 @@ describe('Transaction System Integration Tests', () => {
         Promise.resolve([{
           ...mockCart,
           items: JSON.stringify(mockCart.items)
-        }])
+])
       );
 
       const paymentData = {
@@ -237,7 +237,7 @@ describe('Transaction System Integration Tests', () => {
           state: 'TS',
           postal_code: '12345',
           country: 'US'
-        }
+
       };
 
       const paymentIntent = await transactionService.createPaymentIntent(
@@ -275,8 +275,8 @@ describe('Transaction System Integration Tests', () => {
             city: 'Test City',
             postal_code: '12345',
             country: 'US'
-          }
-        }
+
+
       };
 
       const mockCart = {
@@ -289,7 +289,7 @@ describe('Transaction System Integration Tests', () => {
           license_type: LicenseType.PERSONAL,
           quantity: 1,
           unit_price_cents: 1999
-        }],
+],
         total_cents: 2159,
         tax_cents: 160
       };
@@ -299,7 +299,7 @@ describe('Transaction System Integration Tests', () => {
         Promise.resolve([{
           ...mockPaymentIntent,
           metadata: JSON.stringify(mockPaymentIntent.metadata)
-        }])
+])
       );
 
       // Mock cart retrieval
@@ -307,7 +307,7 @@ describe('Transaction System Integration Tests', () => {
         Promise.resolve([{
           ...mockCart,
           items: JSON.stringify(mockCart.items)
-        }])
+])
       );
 
       const paymentData = {
@@ -547,7 +547,7 @@ describe('Transaction System Integration Tests', () => {
           provider_intent_id: 'pi_test_123',
           client_secret: 'pi_test_123_secret',
           user_id: testUser.id
-        }])
+])
       );
 
       await expect(transactionService.processPayment(testUser.id, paymentData))
@@ -575,7 +575,7 @@ describe('Transaction System Integration Tests', () => {
           license_type: LicenseType.ENTERPRISE,
           quantity: 10,
           unit_price_cents: 9995 // $99.95 each
-        }],
+],
         total_cents: 99950 // $999.50 - High value
       };
 
@@ -616,14 +616,14 @@ describe('Transaction System Integration Tests', () => {
           city: 'Test City',
           postal_code: '12345',
           country: 'US'
-        }
+
       };
 
       try {
         await transactionService.createPaymentIntent(testUser.id, paymentData);
-      } catch (error) {
+ catch (error) {
         // Error expected due to mocks
-      }
+
 
       // Verify no sensitive data in logs
       const logCalls = (fastify.log.error as jest.Mock).mock.calls;

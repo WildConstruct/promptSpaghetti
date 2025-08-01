@@ -15,7 +15,7 @@ import {
   UpdateTemplateReviewSchema,
   CreateTemplateUsageSchema,
   UpdateTemplateUsageSchema
-} from '../database/template-models';
+ from '../database/template-models';
 
 // Request schemas
 const GetTemplatesQuerySchema = z.object({
@@ -60,7 +60,7 @@ const UUIDParamSchema = z.object({
 // Mock user authentication - in real implementation, this would extract from JWT
 function getCurrentUser(request: FastifyRequest): string {
   return request.headers['x-user-id'] as string || 'dev-user-123';
-}
+
 
 export async function templateRoutes(fastify: FastifyInstance) {
   // Initialize services
@@ -69,18 +69,18 @@ export async function templateRoutes(fastify: FastifyInstance) {
   const templateService = new TemplateService(templateDAO, workspaceDAO, {
     getUserInfo: async (userId: string) => {
       return { name: `User ${userId}`, avatar: undefined };
-  }
+
     checkWorkspaceAccess: async (workspaceId: string, userId: string, permission: number) => {
       // Simplified permission check - in real app, this would check ACL
       return true;
-  }
+
     generateThumbnail: async (templateData: Record<string, any>) => {
       // Mock thumbnail generation - in real app, this would generate actual thumbnails
       return `https://api.placeholder.com/300x200?text=${encodeURIComponent('Template')}`;
-  }
+
     sendNotification: async (userId: string, notification: any) => {
       fastify.log.info('Notification sent:', notification);
-    }
+
   });
 
   // ====== TEMPLATE ENDPOINTS ======
@@ -88,23 +88,23 @@ export async function templateRoutes(fastify: FastifyInstance) {
   // GET /api/templates - List templates with filtering and sorting
   fastify.get<{
     Querystring: z.infer<typeof GetTemplatesQuerySchema>;
-  }>('/templates', {
+>('/templates', {
     schema: {
       querystring: GetTemplatesQuerySchema,
       response: {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
       const {
         search, category, tags, difficulty_level, visibility, min_rating,
         is_featured, created_by, workspace_id, ...pagination
-      } = request.query;
+ = request.query;
 
       // Parse comma-separated arrays
       const filter: any = {
@@ -118,13 +118,13 @@ export async function templateRoutes(fastify: FastifyInstance) {
 
       if (tags) {
         filter.tags = tags.split(',').map(tag => tag.trim());
-      }
+
       if (difficulty_level) {
         filter.difficulty_level = difficulty_level.split(',').map(level => level.trim());
-      }
+
       if (visibility) {
         filter.visibility = visibility.split(',').map(vis => vis.trim());
-      }
+
 
       const sort = {
         sort_by: request.query.sort_by,
@@ -133,44 +133,44 @@ export async function templateRoutes(fastify: FastifyInstance) {
 
       const result = await templateService.getTemplates(filter, sort, pagination, userId);
       return result;
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: 'Failed to fetch templates', message: error.message });
-    }
+
   });
 
   // POST /api/templates - Create new template
   fastify.post<{
     Body: z.infer<typeof CreateProjectTemplateSchema>;
-  }>('/templates', {
+>('/templates', {
     schema: {
       body: CreateProjectTemplateSchema,
       response: {
         201: z.any()
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
       const template = await templateService.createTemplate(request.body, userId);
       
       reply.code(201).send(template);
-    } catch (error) {
+ catch (error) {
       const statusCode = error.message.includes('Access denied') ? 403 : 400;
       reply.code(statusCode).send({ error: 'Failed to create template', message: error.message });
-    }
+
   });
 
   // GET /api/templates/:id - Get template by ID with stats
   fastify.get<{
     Params: z.infer<typeof UUIDParamSchema>;
-  }>('/templates/:id', {
+>('/templates/:id', {
     schema: {
       params: UUIDParamSchema,
       response: {
         200: z.any(),
         404: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -178,31 +178,31 @@ export async function templateRoutes(fastify: FastifyInstance) {
       
       if (!template) {
         return reply.code(404).send({ error: 'Template not found' });
-      }
+
       
       return template;
-    } catch (error) {
+ catch (error) {
       if (error.message.includes('Access denied')) {
         reply.code(403).send({ error: 'Access denied', message: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to fetch template', message: error.message });
-      }
-    }
+
+
   });
 
   // PUT /api/templates/:id - Update template
   fastify.put<{
     Params: z.infer<typeof UUIDParamSchema>;
     Body: z.infer<typeof UpdateProjectTemplateSchema>;
-  }>('/templates/:id', {
+>('/templates/:id', {
     schema: {
       params: UUIDParamSchema,
       body: UpdateProjectTemplateSchema,
       response: {
         200: z.any(),
         404: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -214,29 +214,29 @@ export async function templateRoutes(fastify: FastifyInstance) {
       
       if (!template) {
         return reply.code(404).send({ error: 'Template not found' });
-      }
+
       
       return template;
-    } catch (error) {
+ catch (error) {
       if (error.message.includes('Insufficient permissions')) {
         reply.code(403).send({ error: 'Access denied', message: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to update template', message: error.message });
-      }
-    }
+
+
   });
 
   // DELETE /api/templates/:id - Archive template
   fastify.delete<{
     Params: z.infer<typeof UUIDParamSchema>;
-  }>('/templates/:id', {
+>('/templates/:id', {
     schema: {
       params: UUIDParamSchema,
       response: {
         204: z.null(),
         404: z.object({ error: z.string() })
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -244,28 +244,28 @@ export async function templateRoutes(fastify: FastifyInstance) {
       
       if (!success) {
         return reply.code(404).send({ error: 'Template not found' });
-      }
+
       
       reply.code(204).send();
-    } catch (error) {
+ catch (error) {
       if (error.message.includes('Insufficient permissions')) {
         reply.code(403).send({ error: 'Access denied', message: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to archive template', message: error.message });
-      }
-    }
+
+
   });
 
   // POST /api/templates/:id/publish - Publish template
   fastify.post<{
     Params: z.infer<typeof UUIDParamSchema>;
-  }>('/templates/:id/publish', {
+>('/templates/:id/publish', {
     schema: {
       params: UUIDParamSchema,
       response: {
         200: z.object({ message: z.string() })
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -273,25 +273,25 @@ export async function templateRoutes(fastify: FastifyInstance) {
       
       if (!success) {
         return reply.code(404).send({ error: 'Template not found' });
-      }
+
       
       return { message: 'Template published successfully' };
-    } catch (error) {
+ catch (error) {
       if (error.message.includes('Only the template creator')) {
         reply.code(403).send({ error: 'Access denied', message: error.message });
-      } else if (error.message.includes('validation failed')) {
+ else if (error.message.includes('validation failed')) {
         reply.code(400).send({ error: 'Validation failed', message: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to publish template', message: error.message });
-      }
-    }
+
+
   });
 
   // POST /api/templates/:id/use - Use template to create project
   fastify.post<{
     Params: z.infer<typeof UUIDParamSchema>;
     Body: z.infer<typeof UseTemplateSchema>;
-  }>('/templates/:id/use', {
+>('/templates/:id/use', {
     schema: {
       params: UUIDParamSchema,
       body: UseTemplateSchema,
@@ -299,9 +299,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
         201: z.object({
           project: z.any(),
           usage: z.any()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -314,34 +314,34 @@ export async function templateRoutes(fastify: FastifyInstance) {
           name: project_name,
           description: project_description,
           workspace_id
-  }
+
         userId
       );
       
       reply.code(201).send(result);
-    } catch (error) {
+ catch (error) {
       if (error.message.includes('Access denied')) {
         reply.code(403).send({ error: 'Access denied', message: error.message });
-      } else if (error.message.includes('validation failed')) {
+ else if (error.message.includes('validation failed')) {
         reply.code(400).send({ error: 'Validation failed', message: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to use template', message: error.message });
-      }
-    }
+
+
   });
 
   // GET /api/templates/:id/export - Export template
   fastify.get<{
     Params: z.infer<typeof UUIDParamSchema>;
     Querystring: z.infer<typeof ExportTemplateQuerySchema>;
-  }>('/templates/:id/export', {
+>('/templates/:id/export', {
     schema: {
       params: UUIDParamSchema,
       querystring: ExportTemplateQuerySchema,
       response: {
         200: z.any()
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -362,24 +362,24 @@ export async function templateRoutes(fastify: FastifyInstance) {
       if (format === 'json') {
         reply.type('application/json');
         return exportData;
-      } else if (format === 'yaml') {
+ else if (format === 'yaml') {
         reply.type('application/x-yaml');
         // In real implementation, convert to YAML format
         return exportData;
-      } else if (format === 'zip') {
+ else if (format === 'zip') {
         reply.type('application/zip');
         // In real implementation, create ZIP archive
         return exportData;
-      }
+
       
       return exportData;
-    } catch (error) {
+ catch (error) {
       if (error.message.includes('Access denied')) {
         reply.code(403).send({ error: 'Access denied', message: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to export template', message: error.message });
-      }
-    }
+
+
   });
 
   // ====== TEMPLATE REVIEWS ENDPOINTS ======
@@ -394,7 +394,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
       max_rating?: number;
       has_text?: boolean;
     };
-  }>('/templates/:id/reviews', {
+>('/templates/:id/reviews', {
     schema: {
       params: UUIDParamSchema,
       querystring: z.object({
@@ -408,9 +408,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { min_rating, max_rating, has_text, ...pagination } = request.query;
@@ -423,23 +423,23 @@ export async function templateRoutes(fastify: FastifyInstance) {
       );
       
       return result;
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: 'Failed to fetch reviews', message: error.message });
-    }
+
   });
 
   // POST /api/templates/:id/reviews - Create template review
   fastify.post<{
     Params: z.infer<typeof UUIDParamSchema>;
     Body: Omit<z.infer<typeof CreateTemplateReviewSchema>, 'template_id'>;
-  }>('/templates/:id/reviews', {
+>('/templates/:id/reviews', {
     schema: {
       params: UUIDParamSchema,
       body: CreateTemplateReviewSchema.omit({ template_id: true }),
       response: {
         201: z.any()
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -451,13 +451,13 @@ export async function templateRoutes(fastify: FastifyInstance) {
       const review = await templateService.createTemplateReview(reviewData, userId);
       
       reply.code(201).send(review);
-    } catch (error) {
+ catch (error) {
       if (error.message.includes('Access denied')) {
         reply.code(403).send({ error: 'Access denied', message: error.message });
-      } else {
+ else {
         reply.code(400).send({ error: 'Failed to create review', message: error.message });
-      }
-    }
+
+
   });
 
   // ====== TEMPLATE FAVORITES ENDPOINTS ======
@@ -465,38 +465,38 @@ export async function templateRoutes(fastify: FastifyInstance) {
   // POST /api/templates/:id/favorite - Add template to favorites
   fastify.post<{
     Params: z.infer<typeof UUIDParamSchema>;
-  }>('/templates/:id/favorite', {
+>('/templates/:id/favorite', {
     schema: {
       params: UUIDParamSchema,
       response: {
         201: z.any()
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
       const favorite = await templateService.addTemplateFavorite(request.params.id, userId);
       
       reply.code(201).send(favorite);
-    } catch (error) {
+ catch (error) {
       if (error.message.includes('Access denied')) {
         reply.code(403).send({ error: 'Access denied', message: error.message });
-      } else {
+ else {
         reply.code(400).send({ error: 'Failed to add favorite', message: error.message });
-      }
-    }
+
+
   });
 
   // DELETE /api/templates/:id/favorite - Remove template from favorites
   fastify.delete<{
     Params: z.infer<typeof UUIDParamSchema>;
-  }>('/templates/:id/favorite', {
+>('/templates/:id/favorite', {
     schema: {
       params: UUIDParamSchema,
       response: {
         204: z.null()
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -504,12 +504,12 @@ export async function templateRoutes(fastify: FastifyInstance) {
       
       if (!success) {
         return reply.code(404).send({ error: 'Favorite not found' });
-      }
+
       
       reply.code(204).send();
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: 'Failed to remove favorite', message: error.message });
-    }
+
   });
 
   // GET /api/user/templates/favorites - Get user's favorite templates
@@ -518,7 +518,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
       page?: number;
       limit?: number;
     };
-  }>('/user/templates/favorites', {
+>('/user/templates/favorites', {
     schema: {
       querystring: z.object({
         page: z.coerce.number().min(1).optional().default(1),
@@ -528,18 +528,18 @@ export async function templateRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-  }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
       const result = await templateService.getUserFavoriteTemplates(userId, request.query);
       
       return result;
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: 'Failed to fetch favorite templates', message: error.message });
-    }
+
   });
 
   // ====== TEMPLATE ANALYTICS ENDPOINTS ======
@@ -550,7 +550,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
     Querystring: {
       days?: number;
     };
-  }>('/templates/:id/analytics', {
+>('/templates/:id/analytics', {
     schema: {
       params: UUIDParamSchema,
       querystring: z.object({
@@ -558,8 +558,8 @@ export async function templateRoutes(fastify: FastifyInstance) {
       }),
       response: {
         200: z.any()
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -570,13 +570,13 @@ export async function templateRoutes(fastify: FastifyInstance) {
       );
       
       return analytics;
-    } catch (error) {
+ catch (error) {
       if (error.message.includes('Access denied')) {
         reply.code(403).send({ error: 'Access denied', message: error.message });
-      } else {
+ else {
         reply.code(500).send({ error: 'Failed to fetch analytics', message: error.message });
-      }
-    }
+
+
   });
 
   // ====== TEMPLATE CATEGORIES ENDPOINTS ======
@@ -586,15 +586,15 @@ export async function templateRoutes(fastify: FastifyInstance) {
     schema: {
       response: {
         200: z.array(z.any())
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const categories = await templateService.getTemplateCategories();
       return categories;
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: 'Failed to fetch categories', message: error.message });
-    }
+
   });
 
   // ====== TEMPLATE USAGE ENDPOINTS ======
@@ -603,14 +603,14 @@ export async function templateRoutes(fastify: FastifyInstance) {
   fastify.put<{
     Params: z.infer<typeof UUIDParamSchema>;
     Body: z.infer<typeof CompleteUsageSchema>;
-  }>('/template-usages/:id/complete', {
+>('/template-usages/:id/complete', {
     schema: {
       params: UUIDParamSchema,
       body: CompleteUsageSchema,
       response: {
         200: z.any()
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -622,11 +622,10 @@ export async function templateRoutes(fastify: FastifyInstance) {
       
       if (!usage) {
         return reply.code(404).send({ error: 'Template usage not found' });
-      }
+
       
       return usage;
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({ error: 'Failed to complete template usage', message: error.message });
-    }
+
   });
-}

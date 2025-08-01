@@ -6,8 +6,9 @@ import { AnalyticsEventType } from './AnalyticsCollector';
 /**
  * Cohort definition
  */
-}
-}
+
+
+
 export interface CohortDefinition {
   id: string;
   name: string;
@@ -16,21 +17,23 @@ export interface CohortDefinition {
   timeframe: {
     startDate: number;
     endDate?: number;
-}
-}
+
+
+
   };
   type: 'acquisition' | 'behavior' | 'retention' | 'custom';
   refreshInterval?: number; // Auto-refresh interval in milliseconds
   isActive: boolean;
   createdAt: number;
   updatedAt: number;
-}
+
 
 /**
  * Cohort criteria for user segmentation
  */
-}
-}
+
+
+
 export interface CohortCriteria {
   // User demographics
   userAttributes?: {
@@ -39,8 +42,9 @@ export interface CohortCriteria {
     registrationPeriod?: {
       startDate: number;
       endDate: number;
-}
-}
+
+
+
     };
   };
   
@@ -76,13 +80,14 @@ export interface CohortCriteria {
       max: number;
     };
   };
-}
+
 
 /**
  * Cohort analysis result
  */
-}
-}
+
+
+
 export interface CohortAnalysis {
   cohortId: string;
   analysisId: string;
@@ -94,15 +99,17 @@ export interface CohortAnalysis {
   trends: CohortTrend[];
   retentionData?: RetentionData;
   comparisonData?: CohortComparison;
-}
-}
-}
+
+
+
+
 
 /**
  * Cohort member
  */
-}
-}
+
+
+
 export interface CohortMember {
   userId: number;
   sessionId: string;
@@ -116,18 +123,20 @@ export interface CohortMember {
     successRate: number;
     tokenUsage: number;
     totalCost: number;
-}
-}
+
+
+
   };
   segments: string[];
   status: 'active' | 'inactive' | 'churned';
-}
+
 
 /**
  * Cohort metrics
  */
-}
-}
+
+
+
 export interface CohortMetrics {
   totalUsers: number;
   activeUsers: number;
@@ -139,15 +148,17 @@ export interface CohortMetrics {
   overallSuccessRate: number;
   retentionRate: number;
   engagementScore: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Cohort segment
  */
-}
-}
+
+
+
 export interface CohortSegment {
   segmentId: string;
   name: string;
@@ -160,17 +171,19 @@ export interface CohortSegment {
     executions: number;
     successRate: number;
     tokenUsage: number;
-}
-}
+
+
+
   };
   characteristics: string[];
-}
+
 
 /**
  * Cohort trend data
  */
-}
-}
+
+
+
 export interface CohortTrend {
   period: string;
   timestamp: number;
@@ -181,15 +194,17 @@ export interface CohortTrend {
   totalExecutions: number;
   averageEngagement: number;
   retentionRate: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Retention analysis data
  */
-}
-}
+
+
+
 export interface RetentionData {
   cohortPeriod: string;
   periods: string[];
@@ -200,16 +215,18 @@ export interface RetentionData {
     period: number;
     rate: number;
     users: number;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 /**
  * Cohort comparison data
  */
-}
-}
+
+
+
 export interface CohortComparison {
   comparisonId: string;
   cohorts: Array<{
@@ -217,9 +234,10 @@ export interface CohortComparison {
     name: string;
     size: number;
     metrics: CohortMetrics;
-}
-}
-  }>;
+
+
+
+>;
   differences: Array<{
     metric: string;
     cohort1Value: number;
@@ -227,9 +245,9 @@ export interface CohortComparison {
     difference: number;
     percentageChange: number;
     significance: 'high' | 'medium' | 'low';
-  }>;
+>;
   insights: string[];
-}
+
 
 /**
  * Cohort analysis system
@@ -244,7 +262,7 @@ export class CohortAnalyzer extends EventEmitter {
     super();
     this.analyticsDAO = analyticsDAO;
     this.setupPeriodicAnalysis();
-  }
+
 
   /**
    * Create a new cohort definition
@@ -262,11 +280,11 @@ export class CohortAnalyzer extends EventEmitter {
     // Setup auto-refresh if specified
     if (cohort.refreshInterval && cohort.isActive) {
       this.setupCohortRefresh(cohort.id, cohort.refreshInterval);
-    }
+
 
     this.emit('cohort_created', cohort);
     return cohort;
-  }
+
 
   /**
    * Update cohort definition
@@ -276,7 +294,7 @@ export class CohortAnalyzer extends EventEmitter {
     
     if (!cohort) {
       return null;
-    }
+
 
     const updatedCohort = {
       ...cohort,
@@ -291,18 +309,18 @@ export class CohortAnalyzer extends EventEmitter {
     if (this.refreshTimers.has(cohortId)) {
       clearInterval(this.refreshTimers.get(cohortId)!);
       this.refreshTimers.delete(cohortId);
-    }
+
     
     if (updatedCohort.refreshInterval && updatedCohort.isActive) {
       this.setupCohortRefresh(cohortId, updatedCohort.refreshInterval);
-    }
+
 
     // Clear cached analysis
     this.analysisCache.delete(cohortId);
 
     this.emit('cohort_updated', updatedCohort);
     return updatedCohort;
-  }
+
 
   /**
    * Delete cohort definition
@@ -312,7 +330,7 @@ export class CohortAnalyzer extends EventEmitter {
     
     if (!cohort) {
       return false;
-    }
+
 
     this.cohortDefinitions.delete(cohortId);
     this.analysisCache.delete(cohortId);
@@ -320,25 +338,25 @@ export class CohortAnalyzer extends EventEmitter {
     if (this.refreshTimers.has(cohortId)) {
       clearInterval(this.refreshTimers.get(cohortId)!);
       this.refreshTimers.delete(cohortId);
-    }
+
 
     this.emit('cohort_deleted', { cohortId, name: cohort.name });
     return true;
-  }
+
 
   /**
    * Get cohort definition
    */
   getCohort(cohortId: string): CohortDefinition | null {
     return this.cohortDefinitions.get(cohortId) || null;
-  }
+
 
   /**
    * Get all cohort definitions
    */
   getAllCohorts(): CohortDefinition[] {
     return Array.from(this.cohortDefinitions.values());
-  }
+
 
   /**
    * Analyze cohort
@@ -348,12 +366,12 @@ export class CohortAnalyzer extends EventEmitter {
     
     if (!cohort) {
       return null;
-    }
+
 
     // Check cache first
     if (useCache && this.analysisCache.has(cohortId)) {
       return this.analysisCache.get(cohortId)!;
-    }
+
 
     const analysis = this.performCohortAnalysis(cohort);
     
@@ -367,7 +385,7 @@ export class CohortAnalyzer extends EventEmitter {
 
     this.emit('cohort_analyzed', { cohortId, analysis });
     return analysis;
-  }
+
 
   /**
    * Perform retention analysis
@@ -381,13 +399,13 @@ export class CohortAnalyzer extends EventEmitter {
     
     if (!cohort) {
       return null;
-    }
+
 
     const members = this.getCohortMembers(cohort);
     const retentionData = this.calculateRetentionRates(members, periodType, periods);
     
     return retentionData;
-  }
+
 
   /**
    * Compare cohorts
@@ -395,7 +413,7 @@ export class CohortAnalyzer extends EventEmitter {
   compareCohorts(cohortIds: string[]): CohortComparison | null {
     if (cohortIds.length < 2) {
       return null;
-    }
+
 
     const cohorts = cohortIds.map(id => {
       const cohort = this.cohortDefinitions.get(id);
@@ -405,10 +423,10 @@ export class CohortAnalyzer extends EventEmitter {
 
     if (cohorts.length < 2) {
       return null;
-    }
+
 
     return this.performCohortComparison(cohorts as any[]);
-  }
+
 
   /**
    * Get cohort insights
@@ -419,12 +437,12 @@ export class CohortAnalyzer extends EventEmitter {
     description: string;
     impact: 'high' | 'medium' | 'low';
     actionItems: string[];
-  }> {
+> {
     const analysis = this.analyzeCohort(cohortId);
     
     if (!analysis) {
       return [];
-    }
+
 
     const insights: Array<any> = [];
 
@@ -446,8 +464,8 @@ export class CohortAnalyzer extends EventEmitter {
             'Analyze drop-off points'
           ]
         });
-      }
-    }
+
+
 
     // Analyze engagement patterns
     if (analysis.metrics.engagementScore < 0.5) {
@@ -463,7 +481,7 @@ export class CohortAnalyzer extends EventEmitter {
           'Add social features'
         ]
       });
-    }
+
 
     // Analyze success rate
     if (analysis.metrics.overallSuccessRate < 0.8) {
@@ -479,7 +497,7 @@ export class CohortAnalyzer extends EventEmitter {
           'Provide more examples and tutorials'
         ]
       });
-    }
+
 
     // Analyze churn
     const churnRate = analysis.metrics.churnedUsers / analysis.metrics.totalUsers;
@@ -496,10 +514,10 @@ export class CohortAnalyzer extends EventEmitter {
           'Add exit surveys'
         ]
       });
-    }
+
 
     return insights;
-  }
+
 
   /**
    * Export cohort data
@@ -509,11 +527,11 @@ export class CohortAnalyzer extends EventEmitter {
     
     if (!analysis) {
       throw new Error('Cohort not found');
-    }
+
 
     if (format === 'json') {
       return JSON.stringify(analysis, null, 2);
-    }
+
 
     // CSV format
     const headers = ['userId', 'joinDate', 'lastActivity', 'totalSessions', 'totalDuration', 'totalExecutions', 'successRate', 'tokenUsage', 'totalCost', 'status'];
@@ -531,7 +549,7 @@ export class CohortAnalyzer extends EventEmitter {
     ]);
 
     return [headers, ...rows].map(row => row.join(',')).join('\n');
-  }
+
 
   /**
    * Perform cohort analysis
@@ -554,7 +572,7 @@ export class CohortAnalyzer extends EventEmitter {
       trends,
       retentionData
     };
-  }
+
 
   /**
    * Get cohort members based on criteria
@@ -568,7 +586,7 @@ export class CohortAnalyzer extends EventEmitter {
     // Apply user attribute filters
     if (cohort.criteria.userAttributes?.organizationId) {
       filters.organizationId = cohort.criteria.userAttributes.organizationId;
-    }
+
 
     const events = this.analyticsDAO.getEvents(filters);
     const userSessions = new Map<number, any>();
@@ -584,13 +602,13 @@ export class CohortAnalyzer extends EventEmitter {
             firstActivity: event.timestamp,
             lastActivity: event.timestamp
           });
-        }
+
         
         const userSession = userSessions.get(event.userId)!;
         userSession.sessions.add(event.sessionId);
         userSession.events.push(event);
         userSession.lastActivity = Math.max(userSession.lastActivity, event.timestamp);
-      }
+
     });
 
     // Filter users based on criteria and create members
@@ -600,11 +618,11 @@ export class CohortAnalyzer extends EventEmitter {
       if (this.userMatchesCriteria(userSession, cohort.criteria)) {
         const member = this.createCohortMember(userSession);
         members.push(member);
-      }
+
     });
 
     return members;
-  }
+
 
   /**
    * Check if user matches cohort criteria
@@ -617,12 +635,12 @@ export class CohortAnalyzer extends EventEmitter {
       
       if (minOccurrences && relevantEvents.length < minOccurrences) {
         return false;
-      }
+
       
       if (maxOccurrences && relevantEvents.length > maxOccurrences) {
         return false;
-      }
-    }
+
+
 
     // Check usage patterns
     if (criteria.usagePatterns) {
@@ -631,23 +649,23 @@ export class CohortAnalyzer extends EventEmitter {
       
       if (criteria.usagePatterns.minSessions && sessionCount < criteria.usagePatterns.minSessions) {
         return false;
-      }
+
       
       if (criteria.usagePatterns.maxSessions && sessionCount > criteria.usagePatterns.maxSessions) {
         return false;
-      }
+
       
       if (criteria.usagePatterns.minDuration && totalDuration < criteria.usagePatterns.minDuration) {
         return false;
-      }
+
       
       if (criteria.usagePatterns.maxDuration && totalDuration > criteria.usagePatterns.maxDuration) {
         return false;
-      }
-    }
+
+
 
     return true;
-  }
+
 
   /**
    * Create cohort member from user session data
@@ -666,9 +684,9 @@ export class CohortAnalyzer extends EventEmitter {
     
     if (daysSinceLastActivity > 30) {
       status = 'churned';
-    } else if (daysSinceLastActivity > 7) {
+ else if (daysSinceLastActivity > 7) {
       status = 'inactive';
-    }
+
 
     return {
       userId: userSession.userId,
@@ -683,11 +701,11 @@ export class CohortAnalyzer extends EventEmitter {
         successRate: executionEvents.length > 0 ? successfulExecutions.length / executionEvents.length : 0,
         tokenUsage: totalTokenUsage,
         totalCost
-  }
+
       segments: [], // Would be populated by segmentation logic
       status
     };
-  }
+
 
   /**
    * Calculate cohort metrics
@@ -706,7 +724,7 @@ export class CohortAnalyzer extends EventEmitter {
         retentionRate: 0,
         engagementScore: 0
       };
-    }
+
 
     const totalUsers = members.length;
     const activeUsers = members.filter(m => m.status === 'active').length;
@@ -745,7 +763,7 @@ export class CohortAnalyzer extends EventEmitter {
       retentionRate,
       engagementScore
     };
-  }
+
 
   /**
    * Segment cohort members
@@ -760,15 +778,15 @@ export class CohortAnalyzer extends EventEmitter {
     
     if (lightUsers.length > 0) {
       segments.push(this.createSegment('light_users', 'Light Users', lightUsers, members.length));
-    }
+
     
     if (mediumUsers.length > 0) {
       segments.push(this.createSegment('medium_users', 'Medium Users', mediumUsers, members.length));
-    }
+
     
     if (heavyUsers.length > 0) {
       segments.push(this.createSegment('heavy_users', 'Heavy Users', heavyUsers, members.length));
-    }
+
 
     // Segment by success rate
     const strugglingUsers = members.filter(m => m.metrics.successRate < 0.5);
@@ -776,14 +794,14 @@ export class CohortAnalyzer extends EventEmitter {
     
     if (strugglingUsers.length > 0) {
       segments.push(this.createSegment('struggling_users', 'Struggling Users', strugglingUsers, members.length));
-    }
+
     
     if (proficientUsers.length > 0) {
       segments.push(this.createSegment('proficient_users', 'Proficient Users', proficientUsers, members.length));
-    }
+
 
     return segments;
-  }
+
 
   /**
    * Create segment from users
@@ -811,7 +829,7 @@ export class CohortAnalyzer extends EventEmitter {
       avgMetrics,
       characteristics: [] // Would be populated with segment characteristics
     };
-  }
+
 
   /**
    * Calculate cohort trends
@@ -820,7 +838,7 @@ export class CohortAnalyzer extends EventEmitter {
     // This would calculate trends over time
     // For now, return empty array
     return [];
-  }
+
 
   /**
    * Calculate retention rates
@@ -848,7 +866,7 @@ export class CohortAnalyzer extends EventEmitter {
         users: Math.floor(rate * members.length)
       })) || []
     };
-  }
+
 
   /**
    * Perform cohort comparison
@@ -893,10 +911,10 @@ export class CohortAnalyzer extends EventEmitter {
           significance
         };
       });
-    }
+
 
     return comparison;
-  }
+
 
   /**
    * Setup cohort refresh timer
@@ -907,7 +925,7 @@ export class CohortAnalyzer extends EventEmitter {
     }, interval);
 
     this.refreshTimers.set(cohortId, timer);
-  }
+
 
   /**
    * Setup periodic analysis for all active cohorts
@@ -918,8 +936,7 @@ export class CohortAnalyzer extends EventEmitter {
         if (cohort.isActive && !cohort.refreshInterval) {
           // Analyze cohorts without custom refresh intervals daily
           this.analyzeCohort(cohort.id, false);
-        }
+
       });
     }, 24 * 60 * 60 * 1000); // Daily
-  }
-}
+

@@ -61,7 +61,7 @@ describe('Authentication Store', () => {
       mockFetch.mockResolvedValueOnce({)
   ok: true,
   json: () => Promise.resolve(mockResponse),
-} as Response);
+ as Response);
       let success: boolean;
       await act(async () => {
         success = await result.current.login('test@example.com', 'password123', true);
@@ -79,7 +79,7 @@ describe('Authentication Store', () => {
       mockFetch.mockResolvedValueOnce({)
   ok: false,
         json: () => Promise.resolve({ message: 'Invalid credentials' })
-      } as Response);
+ as Response);
       let success: boolean;
       await act(async () => {
         success = await result.current.login('test@example.com', 'wrong-password');
@@ -122,7 +122,7 @@ describe('Authentication Store', () => {
       mockFetch.mockResolvedValueOnce({)
   ok: true,
         json: () => Promise.resolve({ message: 'Registration successful' })
-      } as Response);
+ as Response);
       let success: boolean;
       await act(async () => {
   success = await result.current.register({)
@@ -141,7 +141,7 @@ describe('Authentication Store', () => {
       mockFetch.mockResolvedValueOnce({)
   ok: false,
         json: () => Promise.resolve({ message: 'Email already exists' })
-      } as Response);
+ as Response);
       let success: boolean;
       await act(async () => {
   success = await result.current.register({)
@@ -169,11 +169,11 @@ describe('Authentication Store', () => {
       });
       mockFetch.mockResolvedValueOnce({)
   ok: true,
-  json: () => Promise.resolve({,)
+  json: () => Promise.resolve({);
   accessToken: 'new-access-token',
   refreshToken: 'new-refresh-token',
-}
-      } as Response);
+
+ as Response);
       let success: boolean;
       await act(async () => {
         success = await result.current.refreshTokens();
@@ -197,7 +197,7 @@ describe('Authentication Store', () => {
       mockFetch.mockResolvedValueOnce({)
   ok: false,
         json: () => Promise.resolve({ message: 'Invalid refresh token' })
-      } as Response);
+ as Response);
       let success: boolean;
       await act(async () => {
         success = await result.current.refreshTokens();
@@ -239,11 +239,11 @@ describe('Authentication Store', () => {
       // Mock successful refresh
       mockFetch.mockResolvedValueOnce({)
   ok: true,
-  json: () => Promise.resolve({,)
+  json: () => Promise.resolve({);
   accessToken: 'new-access-token',
   refreshToken: 'new-refresh-token',
-}
-      } as Response);
+
+ as Response);
       let status: boolean;
       await act(async () => {
         status = await result.current.checkAuthStatus();
@@ -273,7 +273,7 @@ describe('Authentication Store', () => {
       mockFetch.mockResolvedValueOnce({)
   ok: true,
   json: () => Promise.resolve(mockUser),
-} as Response);
+ as Response);
       let status: boolean;
       await act(async () => {
         status = await result.current.checkAuthStatus();
@@ -301,7 +301,7 @@ describe('Authentication Store', () => {
       // Mock logout endpoint
       mockFetch.mockResolvedValueOnce({)
   ok: true,
-} as Response);
+ as Response);
       act(() => {
         result.current.logout();
       });
@@ -343,7 +343,7 @@ describe('Authentication Store', () => {
       mockFetch.mockResolvedValueOnce({)
   ok: true,
   json: () => Promise.resolve(mockOAuthResponse),
-} as Response);
+ as Response);
       let oauthResult: { url: string; state: string };
       await act(async () => {
         oauthResult = await result.current.oauthLogin('google', '/dashboard');
@@ -363,7 +363,7 @@ describe('Authentication Store', () => {
 };
       const mockCallbackResponse = {
   user: mockUser,
-  tokens: {
+  tokens: {,
   accessToken: 'oauth-access-token',
   refreshToken: 'oauth-refresh-token',
   expiresAt: new Date(Date.now() + 900000).toISOString(),
@@ -371,7 +371,7 @@ describe('Authentication Store', () => {
       mockFetch.mockResolvedValueOnce({)
   ok: true,
   json: () => Promise.resolve(mockCallbackResponse),
-} as Response);
+ as Response);
       let success: boolean;
       await act(async () => {
         success = await result.current.processOAuthCallback('google', 'auth-code', 'state-123');
@@ -439,7 +439,7 @@ describe('Authentication Store', () => {
       mockFetch.mockResolvedValueOnce({)
   ok: false,
   json: () => Promise.reject(new Error('Invalid JSON')),
-} as Response);
+ as Response);
       let success: boolean;
       await act(async () => {
         success = await result.current.login('test@example.com', 'password');

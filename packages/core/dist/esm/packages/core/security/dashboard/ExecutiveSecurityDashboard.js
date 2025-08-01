@@ -42,13 +42,15 @@ financialImpact: {
 trends: {
     securityTrend: 'improving' | 'stable' | 'declining';
     threatTrend: 'increasing' | 'stable' | 'decreasing';
-    complianceTrend: 'improving' | 'stable' | 'declining';
+    complianceTrend: 'improving' | 'stable' | 'declining',
+    ;
 }
 ;
 benchmarks: {
     industryRanking: number; // percentile,
     peerComparison: 'above' | 'average' | 'below';
-    maturityLevel: 'initial' | 'managed' | 'defined' | 'quantitative' | 'optimizing';
+    maturityLevel: 'initial' | 'managed' | 'defined' | 'quantitative' | 'optimizing',
+    ;
 }
 ;
 export const ExecutiveSecurityDashboard = ({
@@ -568,7 +570,7 @@ _jsxs("div", { style: {
                                 padding: '8px 12px',
                                 background: themeStyles.surface,
                                 border: `1px solid ${themeStyles.border}`
-                            } }), ", borderRadius: '6px', color: themeStyles.text, fontSize: '14px' }} >", _jsx("option", { value: "30d", children: "Last 30 Days" }), _jsx("option", { value: "90d", children: "Last 90 Days" }), _jsx("option", { value: "1y", children: "Last Year" })] }), _jsxs("div", { style: {
+                            } }), ", borderRadius: '6px', color: themeStyles.text, fontSize: '14px'; }} >", _jsx("option", { value: "30d", children: "Last 30 Days" }), _jsx("option", { value: "90d", children: "Last 90 Days" }), _jsx("option", { value: "1y", children: "Last Year" })] }), _jsxs("div", { style: {
                         fontSize: '12px',
                         color: themeStyles.textSecondary,
                     }, children: ["Last updated: ", lastUpdate.toLocaleTimeString()] })] })] });

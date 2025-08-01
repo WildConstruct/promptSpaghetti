@@ -40,7 +40,7 @@ export     const query = url.searchParams.get('query') || '';
           totalPages: Math.ceil(results.total / limit)
         })
       );
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -48,7 +48,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Failed to search templates'
         })
       );
-    }
+
   }),
 
   // GET /api/templates/:id - Get specific template
@@ -64,7 +64,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Invalid template ID'
         })
       );
-    }
+
 
     const template = templateDb.getTemplate(templateId);
     
@@ -76,7 +76,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Template not found'
         })
       );
-    }
+
 
     return res(
       ctx.status(200),
@@ -98,7 +98,7 @@ export     const query = url.searchParams.get('query') || '';
             message: 'User ID required'
           })
         );
-      }
+
 
       // Validate template data
       const validation = validateTemplateData(templateData);
@@ -111,7 +111,7 @@ export     const query = url.searchParams.get('query') || '';
             details: validation.errors
           })
         );
-      }
+
 
       const template = templateDb.createTemplate(templateData, parseInt(userId));
       
@@ -119,7 +119,7 @@ export     const query = url.searchParams.get('query') || '';
         ctx.status(201),
         ctx.json(template)
       );
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -127,7 +127,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Failed to create template'
         })
       );
-    }
+
   }),
 
   // PUT /api/templates/:id - Update template
@@ -144,7 +144,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'User ID required'
         })
       );
-    }
+
 
     if (isNaN(templateId)) {
       return res(
@@ -154,7 +154,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Invalid template ID'
         })
       );
-    }
+
 
     try {
       const updates = await req.json();
@@ -169,7 +169,7 @@ export     const query = url.searchParams.get('query') || '';
             details: validation.errors
           })
         );
-      }
+
 
       const template = templateDb.updateTemplate(templateId, updates, parseInt(userId));
       
@@ -181,13 +181,13 @@ export     const query = url.searchParams.get('query') || '';
             message: 'Template not found'
           })
         );
-      }
+
 
       return res(
         ctx.status(200),
         ctx.json(template)
       );
-    } catch {
+ catch {
       if (error.message.includes('Permission denied')) {
         return res(
           ctx.status(403),
@@ -196,7 +196,7 @@ export     const query = url.searchParams.get('query') || '';
             message: 'You do not have permission to update this template'
           })
         );
-      }
+
 
       return res(
         ctx.status(500),
@@ -205,7 +205,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Failed to update template'
         })
       );
-    }
+
   }),
 
   // DELETE /api/templates/:id - Delete template
@@ -222,7 +222,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'User ID required'
         })
       );
-    }
+
 
     if (isNaN(templateId)) {
       return res(
@@ -232,7 +232,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Invalid template ID'
         })
       );
-    }
+
 
     try {
       const deleted = templateDb.deleteTemplate(templateId, parseInt(userId));
@@ -245,10 +245,10 @@ export     const query = url.searchParams.get('query') || '';
             message: 'Template not found'
           })
         );
-      }
+
 
       return res(ctx.status(204));
-    } catch {
+ catch {
       if (error.message.includes('Permission denied')) {
         return res(
           ctx.status(403),
@@ -257,7 +257,7 @@ export     const query = url.searchParams.get('query') || '';
             message: 'You do not have permission to delete this template'
           })
         );
-      }
+
 
       return res(
         ctx.status(500),
@@ -266,7 +266,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Failed to delete template'
         })
       );
-    }
+
   }),
 
   // POST /api/templates/:id/customize - Customize template
@@ -282,7 +282,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Invalid template ID'
         })
       );
-    }
+
 
     try {
       const customizations = await req.json();
@@ -296,13 +296,13 @@ export     const query = url.searchParams.get('query') || '';
             message: 'Template not found'
           })
         );
-      }
+
 
       return res(
         ctx.status(200),
         ctx.json(customizedTemplate)
       );
-    } catch {
+ catch {
       return res(
         ctx.status(400),
         ctx.json({ 
@@ -310,7 +310,7 @@ export     const query = url.searchParams.get('query') || '';
           message: error.message
         })
       );
-    }
+
   }),
 
   // POST /api/templates/:id/usage - Record template usage
@@ -327,7 +327,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'User ID required'
         })
       );
-    }
+
 
     if (isNaN(templateId)) {
       return res(
@@ -337,7 +337,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Invalid template ID'
         })
       );
-    }
+
 
     try {
       const usageData = await req.json();
@@ -353,7 +353,7 @@ export     const query = url.searchParams.get('query') || '';
         ctx.status(201),
         ctx.json(usage)
       );
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -361,7 +361,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Failed to record template usage'
         })
       );
-    }
+
   }),
 
   // GET /api/templates/:id/analytics - Get template analytics
@@ -377,7 +377,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Invalid template ID'
         })
       );
-    }
+
 
     try {
       const analytics = templateDb.getAnalytics(templateId);
@@ -390,13 +390,13 @@ export     const query = url.searchParams.get('query') || '';
             message: 'Template not found'
           })
         );
-      }
+
 
       return res(
         ctx.status(200),
         ctx.json(analytics)
       );
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -404,7 +404,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Failed to retrieve template analytics'
         })
       );
-    }
+
   }),
 
   // GET /api/templates/:id/export - Export template
@@ -421,7 +421,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Invalid template ID'
         })
       );
-    }
+
 
     try {
       const exportData = templateDb.exportTemplate(templateId, format);
@@ -434,7 +434,7 @@ export     const query = url.searchParams.get('query') || '';
             message: 'Template not found'
           })
         );
-      }
+
 
       // Set appropriate headers based on format
       const headers = {
@@ -447,7 +447,7 @@ export     const query = url.searchParams.get('query') || '';
         ctx.set(headers),
         ctx.text(exportData.content)
       );
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -455,7 +455,7 @@ export     const query = url.searchParams.get('query') || '';
           message: error.message
         })
       );
-    }
+
   }),
 
   // POST /api/templates/:id/reviews - Add review
@@ -472,7 +472,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'User ID required'
         })
       );
-    }
+
 
     if (isNaN(templateId)) {
       return res(
@@ -482,7 +482,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Invalid template ID'
         })
       );
-    }
+
 
     try {
       const reviewData = await req.json();
@@ -492,7 +492,7 @@ export     const query = url.searchParams.get('query') || '';
         ctx.status(201),
         ctx.json(review)
       );
-    } catch {
+ catch {
       if (error.message.includes('duplicate')) {
         return res(
           ctx.status(409),
@@ -501,7 +501,7 @@ export     const query = url.searchParams.get('query') || '';
             message: 'User has already reviewed this template'
           })
         );
-      }
+
 
       return res(
         ctx.status(500),
@@ -510,7 +510,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Failed to add review'
         })
       );
-    }
+
   }),
 
   // GET /api/templates/:id/reviews - Get template reviews
@@ -526,7 +526,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Invalid template ID'
         })
       );
-    }
+
 
     try {
       const reviews = templateDb.getReviews(templateId);
@@ -535,7 +535,7 @@ export     const query = url.searchParams.get('query') || '';
         ctx.status(200),
         ctx.json(reviews)
       );
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -543,7 +543,7 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Failed to retrieve reviews'
         })
       );
-    }
+
   }),
 
   // POST /api/templates/validate-name - Validate template name
@@ -559,7 +559,7 @@ export     const query = url.searchParams.get('query') || '';
             message: 'Template name is required'
           })
         );
-      }
+
 
       const isValid = templateDb.validateTemplateName(name);
       
@@ -570,7 +570,7 @@ export     const query = url.searchParams.get('query') || '';
           message: isValid ? 'Template name is available' : 'Template name already exists'
         })
       );
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -578,6 +578,6 @@ export     const query = url.searchParams.get('query') || '';
           message: 'Failed to validate template name'
         })
       );
-    }
+
   })
 ];

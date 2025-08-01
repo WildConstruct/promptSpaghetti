@@ -17,8 +17,8 @@ import { AuditService } from './AuditService';
 import { RateLimitService } from './RateLimitService';
 import { logger } from '../../utils/logger';
 
-}
-}
+
+
 export interface BreachCheckResult {
   isBreached: boolean;
   occurrenceCount: number;
@@ -27,32 +27,35 @@ export interface BreachCheckResult {
   hashPrefix: string;
   cacheHit: boolean;
   responseTime: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BreachCheckOptions {
   skipCache?: boolean;
   includeMetadata?: boolean;
   timeout?: number;
   retryAttempts?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BreachMetadata {
   apiVersion: string;
   responseHeaders: Record<string, string>;
   requestId: string;
   paddingEnabled: boolean;
   anonymityLevel: number;
-}
-}
-}
+
+
+
+
 
 export class PasswordBreachService {
   private auditService: AuditService;
@@ -69,7 +72,7 @@ export class PasswordBreachService {
     this.auditService = auditService;
     this.rateLimitService = rateLimitService;
     this.initializeService();
-  }
+
 
   /**
    * Initialize the breach detection service
@@ -79,7 +82,7 @@ export class PasswordBreachService {
     setInterval(() => this.cleanupExpiredCache(), 60 * 60 * 1000); // Every hour
     
     logger.log('PasswordBreachService initialized with k-anonymity level: ' + this.K_ANONYMITY_LEVEL);
-  }
+
 
   /**
    * Check if a password has been found in known data breaches
@@ -97,7 +100,7 @@ export class PasswordBreachService {
       // Apply rate limiting
       if (userId) {
         await this.checkRateLimit(userId);
-      }
+
 
       // Generate SHA-1 hash for k-anonymity query
       const sha1Hash = this.generateSHA1Hash(password);
@@ -110,8 +113,8 @@ export class PasswordBreachService {
         if (cachedResult) {
           await this.logBreachCheck(userId, cachedResult, requestId);
           return cachedResult;
-        }
-      }
+
+
 
       // Perform privacy-preserving API query
       const apiResult = await this.queryBreachAPI(hashPrefix, options);
@@ -133,17 +136,16 @@ export class PasswordBreachService {
       await this.logBreachCheck(userId, breachResult, requestId);
 
       return breachResult;
-
-    } catch (error) {
+ catch (error) {
       const errorResult = this.createErrorResult(hashPrefix || '', startTime, requestId, error);
       
       if (userId) {
         await this.logBreachCheckError(userId, error, requestId);
-      }
+
       
       return errorResult;
-    }
-  }
+
+
 
   /**
    * Generate SHA-1 hash of password (required by HaveIBeenPwned API)
@@ -154,7 +156,7 @@ export class PasswordBreachService {
       .update(password, 'utf8')
       .digest('hex')
       .toUpperCase();
-  }
+
 
   /**
    * Query HaveIBeenPwned API using k-anonymity hash prefix
@@ -197,11 +199,11 @@ export class PasswordBreachService {
               await this.sleep(retryAfter * 1000);
               attempt++;
               continue;
-            }
-          }
+
+
           
           throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-        }
+
 
         const responseText = await response.text();
         
@@ -217,22 +219,21 @@ export class PasswordBreachService {
           response: responseText,
           metadata
         };
-
-      } catch (error) {
+ catch (error) {
         attempt++;
         
         if (attempt >= maxAttempts) {
           throw error;
-        }
+
 
         // Exponential backoff for retries
         const backoffMs = Math.min(1000 * Math.pow(2, attempt), 10000);
         await this.sleep(backoffMs);
-      }
-    }
+
+
 
     throw new Error('Max retry attempts exceeded');
-  }
+
 
   /**
    * Parse HaveIBeenPwned API response and check for password match
@@ -268,8 +269,8 @@ export class PasswordBreachService {
             cacheHit: false,
             responseTime
           };
-        }
-      }
+
+
 
       // Password not found in breached databases
       return {
@@ -281,11 +282,10 @@ export class PasswordBreachService {
         cacheHit: false,
         responseTime
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to parse API response: ${error}`);
-    }
-  }
+
+
 
   /**
    * Check rate limit for user
@@ -300,8 +300,8 @@ export class PasswordBreachService {
 
     if (!isAllowed) {
       throw new Error('Rate limit exceeded for password breach checking');
-    }
-  }
+
+
 
   /**
    * Cache management
@@ -314,21 +314,21 @@ export class PasswordBreachService {
         ...cached.result,
         cacheHit: true
       };
-    }
+
 
     if (cached) {
       this.cache.delete(hashPrefix);
-    }
+
 
     return null;
-  }
+
 
   private cacheResult(hashPrefix: string, result: BreachCheckResult): void {
     this.cache.set(hashPrefix, {
       result,
       expiresAt: Date.now() + this.CACHE_TTL_MS
     });
-  }
+
 
   private cleanupExpiredCache(): void {
     const now = Date.now();
@@ -338,13 +338,13 @@ export class PasswordBreachService {
       if (cached.expiresAt <= now) {
         this.cache.delete(key);
         cleanedCount++;
-      }
-    }
+
+
 
     if (cleanedCount > 0) {
       logger.log(`Cleaned up ${cleanedCount} expired cache entries`);
-    }
-  }
+
+
 
   /**
    * Audit logging
@@ -369,18 +369,18 @@ export class PasswordBreachService {
           responseTime: result.responseTime,
           cacheHit: result.cacheHit,
           hashPrefix: result.hashPrefix // Safe to log prefix for debugging
-  }
+
         riskLevel: result.isBreached ? 'HIGH' : 'LOW',
         compliance: {
           frameworks: ['GDPR', 'OWASP'],
           requirements: ['password_security', 'breach_detection'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       logger.log(`Failed to log breach check audit: ${error}`);
-    }
-  }
+
+
 
   private async logBreachCheckError(
     userId: string,
@@ -396,25 +396,25 @@ export class PasswordBreachService {
           requestId,
           error: error.message || 'Unknown error',
           errorType: error.name || 'Error'
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['GDPR', 'OWASP'],
           requirements: ['password_security', 'breach_detection'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
-    } catch (auditError) {
+ catch (auditError) {
       logger.log(`Failed to log breach check error audit: ${auditError}`);
-    }
-  }
+
+
 
   /**
    * Utility methods
    */
   private generateRequestId(): string {
     return `BREACH-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
-  }
+
 
   private extractRelevantHeaders(headers: Headers): Record<string, string> {
     const relevantHeaders: Record<string, string> = {};
@@ -431,16 +431,16 @@ export class PasswordBreachService {
       const value = headers.get(key);
       if (value) {
         relevantHeaders[key] = value;
-      }
+
     });
 
     return relevantHeaders;
-  }
+
 
   private sleep(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   private createErrorResult(
     hashPrefix: string,
@@ -457,7 +457,7 @@ export class PasswordBreachService {
       cacheHit: false,
       responseTime: Date.now() - startTime
     };
-  }
+
 
   /**
    * Public utility methods
@@ -471,7 +471,7 @@ export class PasswordBreachService {
     cacheHitRate: number;
     totalChecks: number;
     averageResponseTime: number;
-    } {
+ {
     // This would typically be implemented with persistent metrics
     return {
       cacheSize: this.cache.size,
@@ -479,7 +479,7 @@ export class PasswordBreachService {
       totalChecks: 0,  // Would track in persistent storage
       averageResponseTime: 0 // Would calculate from historical data
     };
-  }
+
 
   /**
    * Clear cache (for testing or maintenance)
@@ -487,7 +487,7 @@ export class PasswordBreachService {
   public clearCache(): void {
     this.cache.clear();
     logger.log('Password breach detection cache cleared');
-  }
+
 
   /**
    * Test API connectivity
@@ -505,22 +505,21 @@ export class PasswordBreachService {
         success: true,
         responseTime: Date.now() - startTime
       };
-      
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         responseTime: Date.now() - startTime,
         error: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
-  }
+
+
 
   /**
    * Validate hash prefix format
    */
   public isValidHashPrefix(prefix: string): boolean {
     return /^[A-F0-9]{5}$/.test(prefix);
-  }
+
 
   /**
    * Generate test data for development
@@ -530,5 +529,4 @@ export class PasswordBreachService {
     return Array.from({ length: 5 }, () => 
       Math.floor(Math.random() * 16).toString(16).toUpperCase()
     ).join('');
-  }
-}
+

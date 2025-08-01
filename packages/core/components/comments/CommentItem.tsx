@@ -5,9 +5,9 @@
 import React, { useState } from 'react';
 import { Comment } from '../../types/workspace';
 import { CommentForm } from './CommentForm';
-}
-interface CommentItemProps {
-  comment: Comment;
+
+
+interface CommentItemProps { comment: Comment;
   userId: string;
   onUpdate: (commentId: string, content: string, metadata?: Record<string, unknown>) => Promise<void>;
   onDelete: (commentId: string) => Promise<void>;
@@ -17,49 +17,37 @@ interface CommentItemProps {
   isReply?: boolean;
   isThreadRoot?: boolean;
   isLast?: boolean;
-  export const CommentItem: React.FC<CommentItemProps> = ({,)
-  comment,
-  userId,
-  onUpdate,
-  onDelete,
-  onResolve,
-  onReply,
-  compact = false,
-  isReply = false,
-  isThreadRoot = false,
+  export const CommentItem: React.FC<CommentItemProps> = ({);
+  comment;
+  userId;
+  onUpdate;
+  onDelete;
+  onResolve;
+  onReply;
+  compact = false;
+  isReply = false;
+  isThreadRoot = false }
   isLast = false
-}
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
+
+
+}) => { const [isEditing, setIsEditing] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const isAuthor = comment.author_id === userId;
   const isResolved = comment.metadata?.resolved;
   const resolvedBy = comment.metadata?.resolved_by;
   const resolvedAt = comment.metadata?.resolved_at;
-  const handleEdit = async (content: string) => {,
-  try {
-  await onUpdate(comment.id, content);
-  setIsEditing(false);
-} catch (error) {
-  console.error('Failed to update comment:', error);
-};
-  const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this comment?')) {
+  const handleEdit = async (content: string) => { }
+  try { await onUpdate(comment.id, content);
+  setIsEditing(false) } catch (error) { console.error('Failed to update comment:', error) };
+  const handleDelete = async () => { if (window.confirm('Are you sure you want to delete this comment?')) {
       setDeleting(true);
       try {
-        await onDelete(comment.id);
-      } catch (error) {
-  console.error('Failed to delete comment:', error);
-  setDeleting(false);
-};
-  const handleResolve = async () => {
-    if (onResolve) {
+        await onDelete(comment.id) } catch (error) { console.error('Failed to delete comment:', error);
+  setDeleting(false) };
+  const handleResolve = async () => { if (onResolve) {
       try {
-        await onResolve(comment.id, !isResolved);
-      } catch (error) {
-  console.error('Failed to resolve comment:', error);
-};
+        await onResolve(comment.id, !isResolved) } catch (error) { console.error('Failed to resolve comment:', error) };
   const formatTime = (date: Date) => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -72,14 +60,12 @@ interface CommentItemProps {
     if (diffDays < 7) return `${diffDays}d ago`;}
     return date.toLocaleDateString();
   };
-  const formatContent = (content: string) => {
-    // Simple markdown-like formatting
+  const formatContent = (content: string) => { // Simple markdown-like formatting
     return content
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
       .replace(/`(.*?)`/g, '<code>$1</code>')
-      .replace(/\n/g, '<br />');
-  };
+      .replace(/\n/g, '<br />') };
   if (deleting) {
     return;
       <div className="comment-item comment-item--deleting">

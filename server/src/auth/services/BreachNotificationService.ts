@@ -10,8 +10,8 @@ import { AuditService } from './AuditService';
 import { EmailService } from './EmailService';
 import { logger } from '../../utils/logger';
 
-}
-}
+
+
 export interface BreachNotification {
   id: string;
   userId: string;
@@ -25,12 +25,13 @@ export interface BreachNotification {
   occurrenceCount: number;
   notificationType: 'EMAIL' | 'IN_APP' | 'SMS' | 'PUSH';
   status: 'PENDING' | 'SENT' | 'DELIVERED' | 'FAILED' | 'ACKNOWLEDGED';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BreachNotificationConfig {
   enableEmailNotifications: boolean;
   enableInAppNotifications: boolean;
@@ -41,12 +42,13 @@ export interface BreachNotificationConfig {
   maxNotificationsPerDay: number;
   includeGuidance: boolean;
   includeSecurityTips: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationTemplate {
   subject: string;
   htmlBody: string;
@@ -54,9 +56,10 @@ export interface NotificationTemplate {
   inAppMessage: string;
   smsMessage: string;
   pushMessage: string;
-}
-}
-}
+
+
+
+
 
 export class BreachNotificationService {
   private auditService: AuditService;
@@ -86,7 +89,7 @@ export class BreachNotificationService {
     };
 
     this.initializeService();
-  }
+
 
   /**
    * Initialize the breach notification service
@@ -96,7 +99,7 @@ export class BreachNotificationService {
     setInterval(() => this.processPendingNotifications(), 5 * 60 * 1000); // Every 5 minutes
     
     logger.log('BreachNotificationService initialized');
-  }
+
 
   /**
    * Create a breach notification for a user
@@ -116,7 +119,7 @@ export class BreachNotificationService {
       if (!skipRateLimit && !await this.checkRateLimit(userId)) {
         logger.log(`Breach notification rate limited for user ${userId}`);
         throw new Error('Notification rate limit exceeded');
-      }
+
 
       const notification: BreachNotification = {
         id: notificationId,
@@ -138,10 +141,10 @@ export class BreachNotificationService {
       
       if (requiresImmediateNotification) {
         await this.sendImmediateNotification(notification);
-      } else {
+ else {
         // Add to batch processing queue
         this.pendingNotifications.add(notificationId);
-      }
+
 
       // Audit log the notification creation
       await this.auditService.logEvent({
@@ -153,18 +156,17 @@ export class BreachNotificationService {
           occurrenceCount,
           severity,
           immediate: requiresImmediateNotification
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['GDPR', 'OWASP'],
           requirements: ['breach_notification', 'user_security'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return notification;
-
-    } catch (error) {
+ catch (error) {
       logger.log(`Failed to create breach notification: ${error.message}`);
       
       await this.auditService.logEvent({
@@ -174,18 +176,18 @@ export class BreachNotificationService {
           error: error.message,
           breachSource,
           occurrenceCount
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['GDPR', 'OWASP'],
           requirements: ['breach_notification'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Send immediate notification for high-severity breaches
@@ -198,25 +200,24 @@ export class BreachNotificationService {
       // Send email notification
       if (this.config.enableEmailNotifications) {
         await this.sendEmailNotification(notification, template);
-      }
+
 
       // Send in-app notification
       if (this.config.enableInAppNotifications) {
         await this.sendInAppNotification(notification, template);
-      }
+
 
       // Update notification status
       notification.status = 'SENT';
       notification.sentAt = new Date();
 
       logger.log(`Immediate breach notification sent for user ${notification.userId}`);
-
-    } catch (error) {
+ catch (error) {
       notification.status = 'FAILED';
       logger.log(`Failed to send immediate breach notification: ${error.message}`);
       throw error;
-    }
-  }
+
+
 
   /**
    * Process pending notifications in batches
@@ -238,17 +239,17 @@ export class BreachNotificationService {
         if (timeSinceCreated >= batchDelayMs) {
           notificationsToProcess.push(notification);
           this.pendingNotifications.delete(notificationId);
-        }
-      }
-    }
+
+
+
 
     // Process notifications in batches by user
     const notificationsByUser = this.groupNotificationsByUser(notificationsToProcess);
     
     for (const [userId, userNotifications] of notificationsByUser) {
       await this.sendBatchNotification(userId, userNotifications);
-    }
-  }
+
+
 
   /**
    * Send batch notification for multiple breaches
@@ -264,7 +265,7 @@ export class BreachNotificationService {
       // Send consolidated email
       if (this.config.enableEmailNotifications) {
         await this.sendBatchEmailNotification(userId, notifications, template);
-      }
+
 
       // Update all notification statuses
       notifications.forEach(notification => {
@@ -273,15 +274,14 @@ export class BreachNotificationService {
       });
 
       logger.log(`Batch breach notification sent for user ${userId} (${notifications.length} breaches)`);
-
-    } catch (error) {
+ catch (error) {
       notifications.forEach(notification => {
         notification.status = 'FAILED';
       });
       
       logger.log(`Failed to send batch breach notification: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Generate notification templates based on breach severity
@@ -302,7 +302,7 @@ export class BreachNotificationService {
     };
 
     return baseTemplate;
-  }
+
 
   /**
    * Generate HTML email body with security guidance
@@ -342,7 +342,7 @@ export class BreachNotificationService {
       </div>
     </div>
     `;
-  }
+
 
   /**
    * Generate plain text email body
@@ -366,7 +366,7 @@ We use privacy-preserving methods to check password security without exposing yo
 
 If you have questions, please contact our security team.
     `.trim();
-  }
+
 
   /**
    * Calculate notification severity based on occurrence count
@@ -376,7 +376,7 @@ If you have questions, please contact our security team.
     if (occurrenceCount >= 100000) return 'HIGH';
     if (occurrenceCount >= 10000) return 'MEDIUM';
     return 'LOW';
-  }
+
 
   /**
    * Determine notification type based on severity
@@ -385,7 +385,7 @@ If you have questions, please contact our security team.
     if (severity === 'CRITICAL') return 'EMAIL';
     if (severity === 'HIGH') return 'EMAIL';
     return 'IN_APP';
-  }
+
 
   /**
    * Check notification rate limit for user
@@ -399,14 +399,14 @@ If you have questions, please contact our security team.
       .filter(n => n.userId === userId && n.detectedAt.toDateString() === today);
     
     return userNotificationsToday.length < this.config.maxNotificationsPerDay;
-  }
+
 
   /**
    * Utility methods
    */
   private generateNotificationId(): string {
     return `BREACH-NOTIF-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
-  }
+
 
   private getSeverityColor(severity: string): string {
     const colors = {
@@ -416,7 +416,7 @@ If you have questions, please contact our security team.
       LOW: '#17a2b8'
     };
     return colors[severity as keyof typeof colors] || colors.LOW;
-  }
+
 
   private groupNotificationsByUser(notifications: BreachNotification[]): Map<string, BreachNotification[]> {
     const grouped = new Map<string, BreachNotification[]>();
@@ -428,7 +428,7 @@ If you have questions, please contact our security team.
     });
     
     return grouped;
-  }
+
 
   private getSecurityGuidanceHTML(): string {
     if (!this.config.includeSecurityTips) return '';
@@ -446,7 +446,7 @@ If you have questions, please contact our security team.
       </ul>
     </div>
     `;
-  }
+
 
   private getSecurityGuidanceText(): string {
     if (!this.config.includeSecurityTips) return '';
@@ -460,19 +460,19 @@ PASSWORD SECURITY TIPS:
 - Enable two-factor authentication when available
 - Never share passwords via email or text
     `.trim();
-  }
+
 
   private generateInAppMessage(notification: BreachNotification): string {
     return 'Security Alert: A password associated with your account was found in a data breach. Please change your password immediately.';
-  }
+
 
   private generateSMSMessage(notification: BreachNotification): string {
     return 'Security Alert: Your password was found in a data breach. Change it immediately at [app]. Reply STOP to opt out.';
-  }
+
 
   private generatePushMessage(notification: BreachNotification): string {
     return 'Security Alert: Password breach detected. Tap to secure your account.';
-  }
+
 
   private getBatchNotificationTemplate(notifications: BreachNotification[]): NotificationTemplate {
     const count = notifications.length;
@@ -485,7 +485,7 @@ PASSWORD SECURITY TIPS:
       smsMessage: `Security Alert: ${count} password breaches detected. Check your account.`,
       pushMessage: `Security Alert: ${count} password breaches detected`
     };
-  }
+
 
   private generateBatchHTMLEmailBody(notifications: BreachNotification[]): string {
     const breachList = notifications.map(n => 
@@ -518,7 +518,7 @@ PASSWORD SECURITY TIPS:
       </div>
     </div>
     `;
-  }
+
 
   private generateBatchTextEmailBody(notifications: BreachNotification[]): string {
     const breachList = notifications.map(n => 
@@ -540,7 +540,7 @@ IMMEDIATE ACTION REQUIRED:
 
 ${this.getSecurityGuidanceText()}
     `.trim();
-  }
+
 
   /**
    * Send specific notification types
@@ -552,7 +552,7 @@ ${this.getSecurityGuidanceText()}
 
     // Implementation would use the EmailService
     logger.log(`Sending breach notification email to user ${notification.userId}`);
-  }
+
 
   private async sendBatchEmailNotification(
     userId: string,
@@ -562,7 +562,7 @@ ${this.getSecurityGuidanceText()}
 
     // Implementation would use the EmailService
     logger.log(`Sending batch breach notification email to user ${userId}`);
-  }
+
 
   private async sendInAppNotification(
     notification: BreachNotification,
@@ -571,7 +571,7 @@ ${this.getSecurityGuidanceText()}
 
     // Implementation would create in-app notification
     logger.log(`Creating in-app breach notification for user ${notification.userId}`);
-  }
+
 
   /**
    * Public API methods
@@ -585,7 +585,7 @@ ${this.getSecurityGuidanceText()}
     pendingNotifications: number;
     sentNotifications: number;
     failedNotifications: number;
-    } {
+ {
     const notifications = Array.from(this.notifications.values());
     
     return {
@@ -594,7 +594,7 @@ ${this.getSecurityGuidanceText()}
       sentNotifications: notifications.filter(n => n.status === 'SENT').length,
       failedNotifications: notifications.filter(n => n.status === 'FAILED').length
     };
-  }
+
 
   /**
    * Mark notification as acknowledged
@@ -605,7 +605,7 @@ ${this.getSecurityGuidanceText()}
     
     if (!notification || notification.userId !== userId) {
       return false;
-    }
+
 
     notification.acknowledged = true;
     notification.acknowledgedAt = new Date();
@@ -619,9 +619,8 @@ ${this.getSecurityGuidanceText()}
         frameworks: ['GDPR'],
         requirements: ['user_communication'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
 
     return true;
-  }
-}
+

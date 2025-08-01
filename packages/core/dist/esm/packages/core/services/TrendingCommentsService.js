@@ -146,8 +146,9 @@ export class TrendingCommentsService {
                      * Track comment engagement event
                      */
                     async;
-                    trackEngagement(commentId, string);
-                    userId: string,
+                    trackEngagement(commentId, string),
+                        userId;
+                    string,
                         engagementType;
                     CommentEngagementType,
                         contextData ?  : Record;
@@ -697,20 +698,19 @@ export class TrendingCommentsService {
                                                 replyCount: Math.floor(Math.random() * 5),
                                                 replyTree: [],
                                                 visibility: 'public',
-                                                language: 'en'
-                                            },
+                                                language: 'en' },
                                             return: comments,
                                             generateMockCommentContent() {
-                                                const contents = [];
-                                                'This template is incredibly useful! I\'ve been looking for something like this for weeks.',
+                                                const contents = [
+                                                    'This template is incredibly useful! I\'ve been looking for something like this for weeks.',
                                                     'Great work on the design. The user experience is smooth and intuitive.',
                                                     'Has anyone tried implementing this with the new API changes?',
                                                     'I found a small bug in the validation logic. Should we open an issue?',
                                                     'Perfect timing! This solves exactly the problem I was working on.',
                                                     'The documentation could be improved, but the core functionality is solid.',
                                                     'This is a game-changer for our workflow. Thank you for sharing!',
-                                                    'I made some modifications for our use case. Happy to share if interested.';
-                                                ;
+                                                    'I made some modifications for our use case. Happy to share if interested.'
+                                                ];
                                                 return contents[Math.floor(Math.random() * contents.length)];
                                             },
                                             generateMockHashtags() {

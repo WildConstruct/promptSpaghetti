@@ -89,10 +89,9 @@ export var TrustStatus;
             verificationIntervalDays: number;
         }
     }
-    ;
-    metadata: Record;
-    // Device verification request
 }
+;
+metadata: Record;
 ;
 ;
 verificationMethods: VerificationMethod;
@@ -422,8 +421,9 @@ TrustedDevice;
     }
     ;
     return device;
-    findMatchingDevice(devices, TrustedDevice);
-    fingerprint: DeviceFingerprint,
+    findMatchingDevice(devices, TrustedDevice),
+        fingerprint;
+    DeviceFingerprint,
         location ?  : LocationData;
     TrustedDevice | null;
     {
@@ -456,8 +456,9 @@ TrustedDevice;
                     }
                 })[0];
                 return matches[0];
-                evaluateTrustFactors(device, TrustedDevice);
-                fingerprint: DeviceFingerprint,
+                evaluateTrustFactors(device, TrustedDevice),
+                    fingerprint;
+                DeviceFingerprint,
                     location ?  : LocationData;
                 TrustDecision['factors'];
                 {

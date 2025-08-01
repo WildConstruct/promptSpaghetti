@@ -9,30 +9,26 @@ import { AdvancedNodeData } from '../runtime/advanced';
 import { EventEmitter } from 'events';
 
 }
-export interface ValidationServiceConfig extends NodeValidationConfig {
-    /** Enable validation result caching */
+}
+export interface ValidationServiceConfig extends NodeValidationConfig { /** Enable validation result caching */
     enableCaching: boolean;
     /** Cache expiration time in milliseconds */
     cacheExpirationMs: number;
     /** Enable validation monitoring */
     enableMonitoring: boolean;
     /** Batch size for bulk validation operations */
-    batchSize: number;
-
+    batchSize: number }
 }
-export interface ValidationServiceMetrics {
-    totalValidations: number;
+export interface ValidationServiceMetrics { totalValidations: number;
     successfulValidations: number;
     failedValidations: number;
     averageValidationTime: number;
     securityThreatsDetected: number;
     performanceIssuesDetected: number;
-    cacheHitRate: number;
-
-
+    cacheHitRate: number }
 }
-export interface ValidationCacheEntry {
-    result: NodeValidationResult;
+}
+export interface ValidationCacheEntry { result: NodeValidationResult;
     timestamp: number;
     nodeHash: string;
 
@@ -61,7 +57,7 @@ export declare class NodeValidationService extends EventEmitter {
     validateNodeStream(nodes: AdvancedNodeData[]): AsyncGenerator<{
         index: number;
         node: AdvancedNodeData;
-        result: NodeValidationResult;
+        result: NodeValidationResult }
 }
     }>;
     /**
@@ -75,12 +71,10 @@ export declare class NodeValidationService extends EventEmitter {
     /**
      * Get cache statistics
      */
-    getCacheStats(): {
-        size: number;
+    getCacheStats(): { size: number;
         hitRate: number;
         oldestEntry: number;
-        newestEntry: number;
-    };
+        newestEntry: number };
     /**
      * Configure validation settings at runtime
      */

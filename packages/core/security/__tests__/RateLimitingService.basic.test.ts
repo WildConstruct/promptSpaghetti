@@ -4,32 +4,24 @@
  * Tests core rate limiting functionality.
  */
 
-import {
-  RateLimitingService,
-  RateLimitResult,
+import { RateLimitingService,
+  RateLimitResult }
   ThreatLevel
-} from '../RateLimitingService';
+ from '../RateLimitingService';
 
-describe('RateLimitingService - Basic Tests', () => {
-  let service: RateLimitingService;
+describe('RateLimitingService - Basic Tests', () => { let service: RateLimitingService;
   beforeEach(() => {
-  service = new RateLimitingService();
-});
+  service = new RateLimitingService() });
 
-  test('should create service instance', () => {
-    expect(service).toBeInstanceOf(RateLimitingService);
-  });
+  test('should create service instance', () => { expect(service).toBeInstanceOf(RateLimitingService) });
 
-  test('should allow first request', async () => {
-    const result = await service.checkRateLimit('user@test.com', '/auth/login');
+  test('should allow first request', async () => { const result = await service.checkRateLimit('user@test.com', '/auth/login');
     
     expect(result.result).toBe(RateLimitResult.ALLOWED);
     expect(result.threatLevel).toBe(ThreatLevel.LOW);
-    expect(result.remainingRequests).toBeGreaterThan(0);
-  });
+    expect(result.remainingRequests).toBeGreaterThan(0) });
 
-  test('should block after exceeding limits', async () => {
-    const identifier = 'blocked-user@test.com';
+  test('should block after exceeding limits', async () => { const identifier = 'blocked-user@test.com';
     const endpoint = '/auth/login';
 
     // Record many failed attempts
@@ -37,11 +29,9 @@ describe('RateLimitingService - Basic Tests', () => {
       service.recordAttempt(identifier, endpoint, false);
 
     const result = await service.checkRateLimit(identifier, endpoint);
-    expect(result.result).toBe(RateLimitResult.BLOCKED);
-  });
+    expect(result.result).toBe(RateLimitResult.BLOCKED) });
 
-  test('should track exemptions correctly', async () => {
-    const identifier = 'exempted@test.com';
+  test('should track exemptions correctly', async () => { const identifier = 'exempted@test.com';
     const endpoint = '/auth/login';
 
     service.addExemption(identifier);
@@ -51,21 +41,17 @@ describe('RateLimitingService - Basic Tests', () => {
       service.recordAttempt(identifier, endpoint, false);
 
     const result = await service.checkRateLimit(identifier, endpoint);
-    expect(result.result).toBe(RateLimitResult.ALLOWED);
-  });
+    expect(result.result).toBe(RateLimitResult.ALLOWED) });
 
-  test('should provide statistics', () => {
-    const stats = service.getStatistics();
+  test('should provide statistics', () => { const stats = service.getStatistics();
     
     expect(stats).toHaveProperty('totalAttempts');
     expect(stats).toHaveProperty('blockedAttempts');
     expect(stats).toHaveProperty('activeBackoffs');
     expect(stats).toHaveProperty('threatLevels');
-    expect(stats).toHaveProperty('topEndpoints');
-  });
+    expect(stats).toHaveProperty('topEndpoints') });
 
-  test('should handle backoff delays', async () => {
-    const identifier = 'backoff@test.com';
+  test('should handle backoff delays', async () => { const identifier = 'backoff@test.com';
     const endpoint = '/auth/login';
 
     // Create failure to trigger backoff
@@ -73,11 +59,9 @@ describe('RateLimitingService - Basic Tests', () => {
     await service.checkRateLimit(identifier, endpoint);
 
     const delay = service.getBackoffDelay(identifier, endpoint);
-    expect(delay).toBeGreaterThanOrEqual(0);
-  });
+    expect(delay).toBeGreaterThanOrEqual(0) });
 
-  test('should reset limits', async () => {
-    const identifier = 'reset@test.com';
+  test('should reset limits', async () => { const identifier = 'reset@test.com';
     const endpoint = '/auth/login';
 
     // Create blocked state
@@ -90,6 +74,5 @@ describe('RateLimitingService - Basic Tests', () => {
     // Reset and verify
     service.resetLimits(identifier, endpoint);
     result = await service.checkRateLimit(identifier, endpoint);
-    expect(result.result).toBe(RateLimitResult.ALLOWED);
-  });
+    expect(result.result).toBe(RateLimitResult.ALLOWED) });
 });

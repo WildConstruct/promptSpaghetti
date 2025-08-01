@@ -6,39 +6,35 @@
  * templates, knowledge articles, tutorials, case studies, and community content.
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Contribution, 
+import { Contribution, 
   ContributionType, 
   ContributionStatus,
   ContributionFilter,
-  CreateContributionRequest,
+  CreateContributionRequest }
   ContributorProfile
-} from '../../types/contributions';
+ from '../../types/contributions';
 import { ContributionCard } from './ContributionCard';
 import { ContributionSubmissionForm } from './ContributionSubmissionForm';
 import { ContributorProfileManager } from './ContributorProfileManager';
 
-}
-export interface ContributionDashboardProps {
-  userId?: string;
+
+export interface ContributionDashboardProps { userId?: string;
   showCreateForm?: boolean;
   initialFilter?: ContributionFilter;
   onContributionClick?: (contribution: Contribution) => void;
   onContributionEdit?: (contributionId: string) => void;
   onContributionDelete?: (contributionId: string) => void;
-  className?: string;
-}
-}
-export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
-  userId,
-  showCreateForm = true,
-  initialFilter = {},
-  onContributionClick,
-  onContributionEdit,
-  onContributionDelete,
+  className?: string }
+
+export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({ )
+  userId
+  showCreateForm = true }
+  initialFilter = {}
+  onContributionClick
+  onContributionEdit
+  onContributionDelete
   className = ''
-}) => {
-  const [contributions, setContributions] = useState<Contribution>([]);
+}) => { const [contributions, setContributions] = useState<Contribution>([]);
   const [contributorProfile, setContributorProfile] = useState<ContributorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,10 +53,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
         params.append('contributorId', userId);
       // Add status filter based on active tab
       if (activeTab === 'drafts') {
-        params.append('status', 'draft');
-      } else if (activeTab === 'published') {
-        params.append('status', 'published');
-      } else if (activeTab === 'under-review') {
+        params.append('status', 'draft') } else if (activeTab === 'published') { params.append('status', 'published') } else if (activeTab === 'under-review') {
         params.append('status', 'under_review');
       // Add other filters
       if (filter.type) {
@@ -80,12 +73,8 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
         throw new Error(`Failed to load contributions: ${response.statusText}`);}
       const data = await response.json();
       setContributions(data.contributions || []);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load contributions');
-  setContributions([]);
-} finally {
-      setLoading(false);
-  }, [userId, activeTab, filter, searchQuery]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load contributions');
+  setContributions([]) } finally { setLoading(false) }, [userId, activeTab, filter, searchQuery]);
   const loadContributorProfile = useCallback(async () => {
     if (!userId) return;
     try {
@@ -94,36 +83,25 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
-      if (response.ok) {
-        const profile = await response.json();
-        setContributorProfile(profile);
-    } catch (err) {
-  console.error('Failed to load contributor profile:', err);
-}, [userId]);
-  useEffect(() => {
-    loadContributions();
-    loadContributorProfile();
-  }, [loadContributions, loadContributorProfile]);
+      if (response.ok) { const profile = await response.json();
+        setContributorProfile(profile) } catch (err) { console.error('Failed to load contributor profile:', err) }, [userId]);
+  useEffect(() => { loadContributions();
+    loadContributorProfile() }, [loadContributions, loadContributorProfile]);
   // Handle contribution submission
-  const handleContributionSubmit = async (data: CreateContributionRequest) => {
-    try {
+  const handleContributionSubmit = async (data: CreateContributionRequest) => { try {
       const response = await fetch('/api/marketplace/contributions', {)
   method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json' }
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
   body: JSON.stringify(data);
   });
-      if (!response.ok) {
-        throw new Error('Failed to create contribution');
+      if (!response.ok) { throw new Error('Failed to create contribution');
       const newContribution = await response.json();
       setContributions([newContribution, ...contributions]);
       setShowSubmissionForm(false);
-      setActiveTab('my-contributions');
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to create contribution');
-};
+      setActiveTab('my-contributions') } catch (err) { setError(err instanceof Error ? err.message : 'Failed to create contribution') };
   // Handle contribution deletion
   const handleDelete = async (contributionId: string) => {
     if (!confirm('Are you sure you want to delete this contribution?')) {
@@ -135,28 +113,22 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
-      if (response.ok) {
-        setContributions(contributions.filter(c => c.id !== contributionId));
-        onContributionDelete?.(contributionId);
-    } catch (err) {
-  console.error('Failed to delete contribution:', err);
-};
+      if (response.ok) { setContributions(contributions.filter(c => c.id !== contributionId));
+        onContributionDelete?.(contributionId) } catch (err) { console.error('Failed to delete contribution:', err) };
   // Filter contributions by tab
-  const getFilteredContributions = () => {
-  switch (activeTab) {
+  const getFilteredContributions = () => { switch (activeTab) {
   case 'drafts':,
   return contributions.filter(c => c.status === 'draft');
   case 'published':,
   return contributions.filter(c => c.status === 'published');
   case 'under-review':,
   return contributions.filter(c => ['submitted', 'under_review', 'revision_requested'].includes(c.status));
-  default:,
+  default: }
   return contributions;
 };
   const filteredContributions = getFilteredContributions();
   // Get stats for dashboard
-  const stats = {
-  total: contributions.length,
+  const stats = { total: contributions.length,
   drafts: contributions.filter(c => c.status === 'draft').length,
   published: contributions.filter(c => c.status === 'published').length,
   underReview: contributions.filter(),
@@ -168,7 +140,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
   totalLikes: contributions.reduce((sum, c) => sum + c.likes, 0),
   avgQualityScore: contributions.length > 0 ,
   ? Math.round(contributions.reduce((sum, c) => sum + c.qualityScore, 0) / contributions.length)
-  : 0,
+  : 0 }
 };
   return;
     <div className={`contribution-dashboard ${className}`}>}
@@ -276,8 +248,8 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
           </div>
           <select
             value={filter.type || ''}
-            onChange={(e) => setFilter(prev => ({ )
-              ...prev, 
+            onChange={ (e) => setFilter(prev => ({ )
+              ...prev }
               type: e.target.value ? e.target.value as ContributionType : undefined ;
   }))}
             className="filter-select"
@@ -292,8 +264,8 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
           </select>
           <select
             value={filter.sortBy || 'created_at'}
-            onChange={(e) => setFilter(prev => ({ )
-              ...prev, 
+            onChange={ (e) => setFilter(prev => ({ )
+              ...prev }
               sortBy: e.target.value as any ;
   }))}
             className="sort-select"
@@ -378,7 +350,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
           </div>
         </div>
       )}
-      <style>{`
+      <style>{ `
         .contribution-dashboard {
           padding: 24px;
           max-width: 1400px;
@@ -398,7 +370,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
           font-size: 16px;
   color: #6b7280;
         .create-btn {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
           border: none;
   padding: 12px 24px;
@@ -406,7 +378,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
           font-weight: 600;
   cursor: pointer;
           transition: background 0.2s ease;
-        .create-btn:hover {,
+        .create-btn:hover {
   background: #2563eb;
         .stats-overview {
           display: grid;
@@ -414,7 +386,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
           gap: 16px;
           margin-bottom: 32px;
         .stat-card {
-          background: #ffffff;
+          background: #ffffff
   border: 1px solid #e5e7eb;
           border-radius: 8px;
   padding: 20px;
@@ -436,14 +408,14 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
         .tab-btn {
           background: none;
   border: none;
-          padding: 12px 24px;
+          padding: 12px 24px
   cursor: pointer;
           font-weight: 500;
   color: #6b7280;
-          border-bottom: 3px solid transparent;
+          border-bottom: 3px solid transparent
   transition: all 0.2s ease;
           white-space: nowrap;
-        .tab-btn:hover {,
+        .tab-btn:hover {
   color: #3b82f6;
         .tab-btn.active {
           color: #3b82f6;
@@ -460,17 +432,17 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
         .search-icon {
           position: absolute;
   left: 12px;
-          top: 50%;
+          top: 50%
   transform: translateY(-50%);
           color: #9ca3af;
         .search-input input {
-          width: 100%;
+          width: 100%
   padding: 10px 12px 10px 36px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
         .filter-select, .sort-select {
-          padding: 10px 12px;
+          padding: 10px 12px
   border: 1px solid #d1d5db;
           border-radius: 6px;
   background: #ffffff;
@@ -495,27 +467,25 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
   height: 40px;
           border: 3px solid #e5e7eb;
           border-top: 3px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: spin 1s linear infinite;
           margin-bottom: 16px;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        .error-state h3, .empty-state h3 {
-          margin: 0 0 8px 0;
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
+        .error-state h3, .empty-state h3 { margin: 0 0 8px 0
   color: #1f2937;
         .error-state p, .empty-state p {
-          margin: 0 0 16px 0;
+          margin: 0 0 16px 0
   color: #6b7280;
         .retry-button {
-          background: #3b82f6;
+          background: #3b82f6
   color: #ffffff;
           border: none;
   padding: 10px 20px;
           border-radius: 6px;
   cursor: pointer;
           transition: background 0.2s ease;
-        .retry-button:hover {,
+        .retry-button:hover {
   background: #2563eb;
         .modal-overlay {
           position: fixed;
@@ -554,10 +524,10 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
   border: none;
           font-size: 24px;
   cursor: pointer;
-          color: #6b7280;
+          color: #6b7280
   padding: 4px;
           margin: -4px;
-        .modal-close:hover {,
+        .modal-close:hover { }
   color: #1f2937;
         @media (max-width: 768px) {
           .contribution-dashboard {

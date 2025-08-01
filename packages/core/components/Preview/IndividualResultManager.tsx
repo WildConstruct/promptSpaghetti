@@ -8,9 +8,9 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { usePreviewStateStore } from '../../stores/previewStateStore';
 import { usePreviewSeeds } from '../../usePreviewSeeds';
-}
-interface IndividualResultManagerProps {
-  visible?: boolean;
+
+
+interface IndividualResultManagerProps { visible?: boolean;
   onClose?: () => void;
   className?: string;
   enableComparison?: boolean;
@@ -33,17 +33,17 @@ interface IndividualResultManagerProps {
   readabilityScore: number;
   sentiment: 'positive' | 'neutral' | 'negative';
   topics: string;
-  similarity: number; // Compared to other results,
-  export const IndividualResultManager: React.FC<IndividualResultManagerProps> = ({,)
-  visible = true,
-  onClose,
-  className = '',
-  enableComparison = true,
-  enableAnalytics = true,
+  similarity: number; // Compared to other results;
+  export const IndividualResultManager: React.FC<IndividualResultManagerProps> = ({);
+  visible = true;
+  onClose;
+  className = '';
+  enableComparison = true;
+  enableAnalytics = true }
   maxDisplayResults = 10
-}
-}) => {
-  // Store hooks
+
+
+}) => { // Store hooks
   const {
     results,
     isLoading,
@@ -51,44 +51,41 @@ interface IndividualResultManagerProps {
     lockedResults,
     regeneratingResults,
     lockResult,
-    unlockResult,
+    unlockResult }
     setRegeneratingResult
-  } = usePreviewStateStore();
+ = usePreviewStateStore();
   // Preview seeds hook for regeneration
   const { regenerateResult } = usePreviewSeeds();
   // Local state
   const [selectedResults, setSelectedResults] = useState<Set<number>>(new Set());
-  const [comparisonMode, setComparisonMode] = useState<ComparisonMode>({)
-  enabled: false,
-  selectedResults: [],
-  viewMode: 'side-by-side',
+  const [comparisonMode, setComparisonMode] = useState<ComparisonMode>({ )
+  enabled: false
+  selectedResults: []
+  viewMode: 'side-by-side' }
 });
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [resultAnalytics, setResultAnalytics] = useState<Map<number, ResultAnalytics>>(new Map());
   const [actionMenuIndex, setActionMenuIndex] = useState<number | null>(null);
-  const [lockDialog, setLockDialog] = useState<{
-  visible: boolean;
+  const [lockDialog, setLockDialog] = useState<{ visible: boolean;
   resultIndex: number;
-  note: string;
-}>({)
+  note: string }>({ )
   visible: false,
   resultIndex: -1,
-  note: '',
+  note: '' }
 });
   const menuRef = useRef<HTMLDivElement>(null);
   // Calculate analytics for a result
-  const calculateAnalytics = useCallback((content: string, index: number): ResultAnalytics => {
-  if (!content || typeof content !== 'string') {
+  const calculateAnalytics = useCallback((content: string, index: number): ResultAnalytics => { if (!content || typeof content !== 'string') {
   return {
-  resultIndex: index,
-  wordCount: 0,
-  sentenceCount: 0,
-  uniqueWords: 0,
-  averageWordLength: 0,
-  readabilityScore: 0,
-  sentiment: 'neutral',
-  topics: [],
-  similarity: 0,
+  resultIndex: index
+  wordCount: 0
+  sentenceCount: 0
+  uniqueWords: 0
+  averageWordLength: 0
+  readabilityScore: 0
+  sentiment: 'neutral'
+  topics: []
+  similarity: 0 }
 };
     const words = content.toLowerCase().match(/\b\w+\b/g) || [];
     const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 0);
@@ -111,10 +108,8 @@ interface IndividualResultManagerProps {
     // Extract potential topics (simple approach)
     const topics = words;
       .filter(word => word.length > 4)
-      .reduce((acc: Record<string, number>, word) => {
-        acc[word] = (acc[word] || 0) + 1;
-        return acc;
-      }, {});
+      .reduce((acc: Record<string, number>, word) => { acc[word] = (acc[word] || 0) + 1;
+        return acc }, {});
     const topTopics = Object.entries(topics);
       .sort(([ a], [ b]) => b - a)
       .slice(0, 3)
@@ -122,78 +117,62 @@ interface IndividualResultManagerProps {
     // Calculate similarity to other results (simple Jaccard similarity)
     const otherResults = results.filter((_, i) => i !== index && !results[i].error);
     const similarity = otherResults.length > 0 ;
-      ? otherResults.reduce((sum, result) => {
-  const otherWords = new Set((result.output || '').toLowerCase().match(/\b\w+\b/g) || []);
+      ? otherResults.reduce((sum, result) => { const otherWords = new Set((result.output || '').toLowerCase().match(/\b\w+\b/g) || []);
   const currentWords = new Set(words);
   const intersection = new Set([...currentWords].filter(x => otherWords.has(x)));
   const union = new Set([...currentWords, ...otherWords]);
-  return sum + (union.size > 0 ? intersection.size / union.size : 0);
-}, 0) / otherResults.length
+  return sum + (union.size > 0 ? intersection.size / union.size : 0) }, 0) / otherResults.length
       : 0;
-    return {
-  resultIndex: index,
-  wordCount: words.length,
-  sentenceCount: sentences.length,
-  uniqueWords,
-  averageWordLength: Math.round(averageWordLength * 100) / 100,
-  readabilityScore: Math.round(readabilityScore),
-  sentiment,
-  topics: topTopics,
-  similarity: Math.round(similarity * 100) / 100,
+    return { resultIndex: index
+  wordCount: words.length
+  sentenceCount: sentences.length
+  uniqueWords
+  averageWordLength: Math.round(averageWordLength * 100) / 100
+  readabilityScore: Math.round(readabilityScore)
+  sentiment
+  topics: topTopics
+  similarity: Math.round(similarity * 100) / 100 }
 };
   }, [results]);
   // Update analytics when results change
-  useEffect(() => {
-    if (enableAnalytics) {
+  useEffect(() => { if (enableAnalytics) {
       const newAnalytics = new Map<number, ResultAnalytics>();
       results.forEach((result, index) => {
         if (result.output && !result.error) {
-          newAnalytics.set(index, calculateAnalytics(result.output, index));
-      });
+          newAnalytics.set(index, calculateAnalytics(result.output, index)) });
       setResultAnalytics(newAnalytics);
   }, [results, enableAnalytics, calculateAnalytics]);
   // Handle result action
   const handleResultAction = useCallback(async (action: ResultAction) => {
     const { type, resultIndex, data } = action;
-    switch (type) {
-  case 'lock':,
+    switch (type) { case 'lock':
   setLockDialog({)
-  visible: true,
-  resultIndex,
-  note: '',
+  visible: true
+  resultIndex
+  note: '' }
 });
         break;
       case 'unlock':
         unlockResult(resultIndex);
         break;
       case 'regenerate':
-        if (results[resultIndex] && !results[resultIndex].locked) {
-          setRegeneratingResult(resultIndex, true);
+        if (results[resultIndex] && !results[resultIndex].locked) { setRegeneratingResult(resultIndex, true);
           try {
-            await regenerateResult(resultIndex);
-          } catch (error) {
-  console.error('Failed to regenerate result:', error);
-} finally {
-  setRegeneratingResult(resultIndex, false);
+            await regenerateResult(resultIndex) } catch (error) { console.error('Failed to regenerate result:', error) } finally { setRegeneratingResult(resultIndex, false);
   break;
-  case 'delete':,
+  case 'delete': }
   // Remove result from selection if selected
-  setSelectedResults(prev => {)
+  setSelectedResults(prev => { )
   const newSet = new Set(prev);
   newSet.delete(resultIndex);
-  return newSet;
-});
+  return newSet });
         break;
       case 'compare':
-        if (enableComparison) {
-          setSelectedResults(prev => {)
+        if (enableComparison) { setSelectedResults(prev => {)
   const newSet = new Set(prev);
             if (newSet.has(resultIndex)) {
-              newSet.delete(resultIndex);
-            } else {
-              newSet.add(resultIndex);
-            return newSet;
-          });
+              newSet.delete(resultIndex) } else { newSet.add(resultIndex);
+            return newSet });
         break;
       case 'export':
         exportResult(resultIndex, data?.format || 'text');
@@ -208,29 +187,28 @@ interface IndividualResultManagerProps {
     let content = '';
     let filename = `result_${result.seed}`;}
     let mimeType = 'text/plain';
-    switch (format) {
-  case 'text':,
+    switch (format) { case 'text':
   content = result.output || result.error || '';
   filename += '.txt';
   break;
-  case 'json':,
+  case 'json':
   content = JSON.stringify({)
-  ...result,
-  analytics: analytics || null,
+  ...result
+  analytics: analytics || null }
 }, null, 2);
         filename += '.json';
         mimeType = 'application/json';
         break;
       case 'csv':
-        const csvData = [;
-          ['Field', 'Value'],
-          ['Seed', result.seed],
-          ['Output', result.output || ''],
-          ['Error', result.error || ''],
-          ['Execution Time', result.executionTimeMs || ''],
-          ['Locked', result.locked ? 'Yes' : 'No'],
-          ['Word Count', analytics?.wordCount || ''],
-          ['Readability Score', analytics?.readabilityScore || ''],
+        const csvData = [
+          ['Field', 'Value']
+          ['Seed', result.seed]
+          ['Output', result.output || '']
+          ['Error', result.error || '']
+          ['Execution Time', result.executionTimeMs || '']
+          ['Locked', result.locked ? 'Yes' : 'No']
+          ['Word Count', analytics?.wordCount || '']
+          ['Readability Score', analytics?.readabilityScore || '']
           ['Sentiment', analytics?.sentiment || '']
         ];
         content = csvData.map(row => row.join(',')).join('\n');
@@ -258,22 +236,16 @@ interface IndividualResultManagerProps {
     if (comparisonMode.enabled) {
       setComparisonMode({ enabled: false, selectedResults: [], viewMode: 'side-by-side' });
       setSelectedResults(new Set());
-    } else {
+ else {
       setComparisonMode(prev => ({ ...prev, enabled: true }));
   }, [comparisonMode.enabled]);
   // Close action menu when clicking outside
-  useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => {,
-  if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-  setActionMenuIndex(null);
-};
-    if (actionMenuIndex !== null) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [actionMenuIndex]);
+  useEffect(() => { const handleClickOutside = (event: MouseEvent) => { }
+  if (menuRef.current && !menuRef.current.contains(event.target as Node)) { setActionMenuIndex(null) };
+    if (actionMenuIndex !== null) { document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside) }, [actionMenuIndex]);
   // Get comparison summary
-  const comparisonSummary = useMemo(() => {
-    if (!comparisonMode.enabled || selectedResults.size < 2) return null;
+  const comparisonSummary = useMemo(() => { if (!comparisonMode.enabled || selectedResults.size < 2) return null;
     const selected = Array.from(selectedResults);
     const analytics = selected.map(i => resultAnalytics.get(i)).filter(Boolean) as ResultAnalytics;
     if (analytics.length < 2) return null;
@@ -282,44 +254,42 @@ interface IndividualResultManagerProps {
     const sentiments = analytics.map(a => a.sentiment);
     const dominantSentiment = sentiments.reduce((acc, sentiment) => {
       acc[sentiment] = (acc[sentiment] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    return {
-  count: selected.length,
-  avgWordCount: Math.round(avgWordCount),
-  avgReadability: Math.round(avgReadability),
-  dominantSentiment: Object.keys(dominantSentiment).reduce((a, b) =>,
-  dominantSentiment[a] > dominantSentiment[b] ? a : b),
-  topics: [...new Set(analytics.flatMap(a => a.topics))],
+      return acc }, {} as Record<string, number>);
+    return { count: selected.length
+  avgWordCount: Math.round(avgWordCount)
+  avgReadability: Math.round(avgReadability)
+  dominantSentiment: Object.keys(dominantSentiment).reduce((a, b) =>
+  dominantSentiment[a] > dominantSentiment[b] ? a : b)
+  topics: [...new Set(analytics.flatMap(a => a.topics))] }
 };
   }, [comparisonMode.enabled, selectedResults, resultAnalytics]);
   if (!visible) return null;
   return;
     <div
       className={`individual-result-manager ${className}`}
-      style={{
-  position: 'fixed',
-  left: '20px',
-  top: '20px',
-  width: '600px',
-  maxHeight: '85vh',
-  background: 'white',
-  border: '1px solid #e2e8f0',
-  borderRadius: '12px',
-  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-  zIndex: 1000,
-  overflow: 'hidden',
-  fontFamily: 'system-ui, -apple-system, sans-serif',
-}}
+      style={ {
+  position: 'fixed'
+  left: '20px'
+  top: '20px'
+  width: '600px'
+  maxHeight: '85vh'
+  background: 'white'
+  border: '1px solid #e2e8f0'
+  borderRadius: '12px'
+  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)'
+  zIndex: 1000
+  overflow: 'hidden'
+  fontFamily: 'system-ui, -apple-system, sans-serif' }
+
     >
       {/* Header */}
       <div
-        style={{
-  padding: '16px 20px',
-  borderBottom: '1px solid #e2e8f0',
-  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  color: 'white',
-}}
+        style={ {
+  padding: '16px 20px'
+  borderBottom: '1px solid #e2e8f0'
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+  color: 'white' }
+}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
@@ -336,18 +306,18 @@ interface IndividualResultManagerProps {
           {onClose && ()
             <button
               onClick={onClose}
-              style={{
-  background: 'rgba(255, 255, 255, 0.2)',
-  border: 'none',
-  borderRadius: '6px',
-  color: 'white',
-  width: '28px',
-  height: '28px',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}}
+              style={ {
+  background: 'rgba(255, 255, 255, 0.2)'
+  border: 'none'
+  borderRadius: '6px'
+  color: 'white'
+  width: '28px'
+  height: '28px'
+  cursor: 'pointer'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center' }
+
             >
               ×
             </button>
@@ -356,25 +326,25 @@ interface IndividualResultManagerProps {
       </div>
       {/* Controls */}
       <div
-        style={{
-  padding: '12px 20px',
-  borderBottom: '1px solid #e2e8f0',
-  background: '#f8fafc',
-}}
+        style={ {
+  padding: '12px 20px'
+  borderBottom: '1px solid #e2e8f0'
+  background: '#f8fafc' }
+
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           {enableComparison && ()
             <button
               onClick={toggleComparisonMode}
-              style={{
-  padding: '6px 12px',
-  background: comparisonMode.enabled ? '#8b5cf6' : '#e2e8f0',
-  color: comparisonMode.enabled ? 'white' : '#374151',
-  border: 'none',
-  borderRadius: '6px',
-  fontSize: '12px',
-  cursor: 'pointer',
-}}
+              style={ {
+  padding: '6px 12px'
+  background: comparisonMode.enabled ? '#8b5cf6' : '#e2e8f0'
+  color: comparisonMode.enabled ? 'white' : '#374151'
+  border: 'none'
+  borderRadius: '6px'
+  fontSize: '12px'
+  cursor: 'pointer' }
+
             >
               🔍 Compare ({selectedResults.size})
             </button>
@@ -382,15 +352,15 @@ interface IndividualResultManagerProps {
           {enableAnalytics && ()
             <button
               onClick={() => setShowAnalytics(!showAnalytics)}
-              style={{
-  padding: '6px 12px',
-  background: showAnalytics ? '#10b981' : '#e2e8f0',
-  color: showAnalytics ? 'white' : '#374151',
-  border: 'none',
-  borderRadius: '6px',
-  fontSize: '12px',
-  cursor: 'pointer',
-}}
+              style={ {
+  padding: '6px 12px'
+  background: showAnalytics ? '#10b981' : '#e2e8f0'
+  color: showAnalytics ? 'white' : '#374151'
+  border: 'none'
+  borderRadius: '6px'
+  fontSize: '12px'
+  cursor: 'pointer' }
+
             >
               📊 Analytics
             </button>
@@ -398,29 +368,29 @@ interface IndividualResultManagerProps {
           <button
             onClick={() => setSelectedResults(new Set())}
             disabled={selectedResults.size === 0}
-            style={{
-  padding: '6px 12px',
-  background: selectedResults.size > 0 ? '#ef4444' : '#e2e8f0',
-  color: selectedResults.size > 0 ? 'white' : '#9ca3af',
-  border: 'none',
-  borderRadius: '6px',
-  fontSize: '12px',
-  cursor: selectedResults.size > 0 ? 'pointer' : 'not-allowed',
-}}
+            style={ {
+  padding: '6px 12px'
+  background: selectedResults.size > 0 ? '#ef4444' : '#e2e8f0'
+  color: selectedResults.size > 0 ? 'white' : '#9ca3af'
+  border: 'none'
+  borderRadius: '6px'
+  fontSize: '12px'
+  cursor: selectedResults.size > 0 ? 'pointer' : 'not-allowed' }
+
           >
             🗑️ Clear Selection
           </button>
         </div>
       </div>
       {/* Comparison Summary */}
-      {comparisonMode.enabled && comparisonSummary && ()
+      { comparisonMode.enabled && comparisonSummary && ()
         <div
           style={{
-  padding: '12px 20px',
-  borderBottom: '1px solid #e2e8f0',
-  background: '#f0f9ff',
-  fontSize: '12px',
-}}
+  padding: '12px 20px'
+  borderBottom: '1px solid #e2e8f0'
+  background: '#f0f9ff'
+  fontSize: '12px' }
+}
         >
           <div style={{ fontWeight: '600', marginBottom: '8px' }}>Comparison Summary</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '8px' }}>
@@ -438,34 +408,34 @@ interface IndividualResultManagerProps {
       )}
       {/* Results List */}
       <div
-        style={{
-  maxHeight: comparisonMode.enabled ? '400px' : '500px',
-  overflowY: 'auto',
-  padding: '12px 0',
-}}
+        style={ {
+  maxHeight: comparisonMode.enabled ? '400px' : '500px'
+  overflowY: 'auto'
+  padding: '12px 0' }
+
       >
-        {error && ()
+        { error && ()
           <div
             style={{
-  margin: '0 20px 12px',
-  padding: '12px',
-  background: '#fee2e2',
-  border: '1px solid #fecaca',
-  borderRadius: '8px',
-  color: '#dc2626',
-  fontSize: '14px',
-}}
+  margin: '0 20px 12px'
+  padding: '12px'
+  background: '#fee2e2'
+  border: '1px solid #fecaca'
+  borderRadius: '8px'
+  color: '#dc2626'
+  fontSize: '14px' }
+}
           >
             <strong>Error:</strong> {error}
           </div>
         )}
-        {results.length === 0 && !isLoading && ()
+        { results.length === 0 && !isLoading && ()
           <div
             style={{
-  padding: '40px 20px',
-  textAlign: 'center',
-  color: '#9ca3af',
-}}
+  padding: '40px 20px'
+  textAlign: 'center'
+  color: '#9ca3af' }
+}
           >
             <div style={{ fontSize: '32px', marginBottom: '12px' }}>📋</div>
             <div>No results to manage</div>
@@ -478,16 +448,16 @@ interface IndividualResultManagerProps {
           return;
             <div
               key={`${result.seed}-${index}`}
-              style={{
-                margin: '0 20px 12px',
-                padding: '16px',
-                background: isSelected ? '#f0f9ff' : 'white',
+              style={ {
+                margin: '0 20px 12px'
+                padding: '16px'
+                background: isSelected ? '#f0f9ff' : 'white' }
                 border: `2px solid ${isSelected ? '#0ea5e9' : result.locked ? '#f59e0b' : '#e2e8f0'}`}
-},
-  borderRadius: '8px',
-                position: 'relative',
+
+  borderRadius: '8px'
+                position: 'relative'
                 transition: 'all 0.2s ease';
-  }}
+
             >
               {/* Result Header */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
@@ -500,14 +470,14 @@ interface IndividualResultManagerProps {
                       style={{ margin: 0 }}
                     />
                   )}
-                  <span style={{
-  background: result.locked ? '#fbbf24' : '#e2e8f0',
-  padding: '3px 8px',
-  borderRadius: '4px',
-  fontSize: '11px',
-  fontWeight: '600',
-  color: result.locked ? '#92400e' : '#374151',
-}}>
+                  <span style={ {
+  background: result.locked ? '#fbbf24' : '#e2e8f0'
+  padding: '3px 8px'
+  borderRadius: '4px'
+  fontSize: '11px'
+  fontWeight: '600'
+  color: result.locked ? '#92400e' : '#374151' }
+}>
                     Seed {result.seed}
                   </span>
                   {result.executionTimeMs && ()
@@ -528,15 +498,15 @@ interface IndividualResultManagerProps {
                 </div>
                 <button
                   onClick={() => setActionMenuIndex(actionMenuIndex === index ? null : index)}
-                  style={{
-  background: 'none',
-  border: 'none',
-  fontSize: '16px',
-  cursor: 'pointer',
-  padding: '4px',
-  borderRadius: '4px',
-  color: '#6b7280',
-}}
+                  style={ {
+  background: 'none'
+  border: 'none'
+  fontSize: '16px'
+  cursor: 'pointer'
+  padding: '4px'
+  borderRadius: '4px'
+  color: '#6b7280' }
+
                 >
                   ⋯
                 </button>
@@ -554,18 +524,18 @@ interface IndividualResultManagerProps {
                 )}
               </div>
               {/* Analytics */}
-              {showAnalytics && analytics && ()
+              { showAnalytics && analytics && ()
                 <div
                   style={{
-  padding: '8px',
-  background: '#f8fafc',
-  borderRadius: '4px',
-  fontSize: '12px',
-  border: '1px solid #e2e8f0',
-}}
+  padding: '8px'
+  background: '#f8fafc'
+  borderRadius: '4px'
+  fontSize: '12px'
+  border: '1px solid #e2e8f0' }
+}
                 >
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat()
-                    auto-fit,
+                  <div style={ { display: 'grid', gridTemplateColumns: 'repeat()
+                    auto-fit }
                     minmax(80px)
                     1fr
                   ))', gap: '8px' }}>
@@ -586,17 +556,17 @@ interface IndividualResultManagerProps {
               {actionMenuIndex === index && ()
                 <div
                   ref={menuRef}
-                  style={{
-  position: 'absolute',
-  top: '50px',
-  right: '10px',
-  background: 'white',
-  border: '1px solid #e2e8f0',
-  borderRadius: '8px',
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-  zIndex: 1001,
-  minWidth: '160px',
-}}
+                  style={ {
+  position: 'absolute'
+  top: '50px'
+  right: '10px'
+  background: 'white'
+  border: '1px solid #e2e8f0'
+  borderRadius: '8px'
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+  zIndex: 1001
+  minWidth: '160px' }
+
                 >
                   {!result.locked ? ()
                     <button
@@ -616,11 +586,11 @@ interface IndividualResultManagerProps {
                   <button
                     onClick={() => handleResultAction({ type: 'regenerate', resultIndex: index })}
                     disabled={result.locked || isRegenerating}
-                    style={{
-  ...menuButtonStyle,
-  color: result.locked || isRegenerating ? '#9ca3af' : '#374151',
-  cursor: result.locked || isRegenerating ? 'not-allowed' : 'pointer',
-}}
+                    style={ {
+  ...menuButtonStyle
+  color: result.locked || isRegenerating ? '#9ca3af' : '#374151'
+  cursor: result.locked || isRegenerating ? 'not-allowed' : 'pointer' }
+
                   >
                     ⟳ Regenerate
                   </button>
@@ -650,40 +620,40 @@ interface IndividualResultManagerProps {
             </div>
           );
         })}
-        {results.length > maxDisplayResults && ()
+        { results.length > maxDisplayResults && ()
           <div
             style={{
-  padding: '12px 20px',
-  textAlign: 'center',
-  color: '#6b7280',
-  fontSize: '14px',
-}}
+  padding: '12px 20px'
+  textAlign: 'center'
+  color: '#6b7280'
+  fontSize: '14px' }
+
           >
             ... and {results.length - maxDisplayResults} more results
           </div>
         )}
       </div>
       {/* Lock Dialog */}
-      {lockDialog.visible && ()
+      { lockDialog.visible && ()
         <div
           style={{
-  position: 'absolute',
-  inset: 0,
-  background: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 1002,
-}}
+  position: 'absolute'
+  inset: 0
+  background: 'rgba(0, 0, 0, 0.5)'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  zIndex: 1002 }
+}
         >
           <div
-            style={{
-  background: 'white',
-  padding: '20px',
-  borderRadius: '12px',
-  width: '300px',
-  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
-}}
+            style={ {
+  background: 'white'
+  padding: '20px'
+  borderRadius: '12px'
+  width: '300px'
+  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)' }
+
           >
             <h4 style={{ margin: '0 0 12px', fontSize: '16px' }}>Lock Result</h4>
             <p style={{ margin: '0 0 12px', fontSize: '14px', color: '#6b7280' }}>
@@ -693,41 +663,41 @@ interface IndividualResultManagerProps {
               value={lockDialog.note}
               onChange={(e) => setLockDialog(prev => ({ ...prev, note: e.target.value }))}
               placeholder="Important for X reason..."
-              style={{
-  width: '100%',
-  height: '80px',
-  padding: '8px',
-  border: '1px solid #e2e8f0',
-  borderRadius: '6px',
-  fontSize: '14px',
-  resize: 'none',
-  marginBottom: '16px',
-}}
+              style={ {
+  width: '100%'
+  height: '80px'
+  padding: '8px'
+  border: '1px solid #e2e8f0'
+  borderRadius: '6px'
+  fontSize: '14px'
+  resize: 'none'
+  marginBottom: '16px' }
+}
             />
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
               <button
                 onClick={() => setLockDialog({ visible: false, resultIndex: -1, note: '' })}
-                style={{
-  padding: '8px 16px',
-  background: '#e2e8f0',
-  color: '#374151',
-  border: 'none',
-  borderRadius: '6px',
-  cursor: 'pointer',
-}}
+                style={ {
+  padding: '8px 16px'
+  background: '#e2e8f0'
+  color: '#374151'
+  border: 'none'
+  borderRadius: '6px'
+  cursor: 'pointer' }
+
               >
                 Cancel
               </button>
               <button
                 onClick={handleLockConfirmation}
-                style={{
-  padding: '8px 16px',
-  background: '#f59e0b',
-  color: 'white',
-  border: 'none',
-  borderRadius: '6px',
-  cursor: 'pointer',
-}}
+                style={ {
+  padding: '8px 16px'
+  background: '#f59e0b'
+  color: 'white'
+  border: 'none'
+  borderRadius: '6px'
+  cursor: 'pointer' }
+}
               >
                 🔒 Lock Result
               </button>
@@ -736,17 +706,17 @@ interface IndividualResultManagerProps {
         </div>
       )}
       {/* CSS Animations */}
-      <style>{`
+      <style>{ `
         @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+          from { transform: rotate(0deg) }
+          to { transform: rotate(360deg) }
       `}</style>
     </div>
   );
 };
 
 // Shared menu button style
-const menuButtonStyle: React.CSSProperties = {,
+const menuButtonStyle: React.CSSProperties = { ,
   width: '100%',
   padding: '8px 12px',
   border: 'none',
@@ -756,7 +726,7 @@ const menuButtonStyle: React.CSSProperties = {,
   fontSize: '14px',
   color: '#374151',
   ':hover': {
-  background: '#f3f4f6',
+  background: '#f3f4f6' }
 };
 
 export default IndividualResultManager;

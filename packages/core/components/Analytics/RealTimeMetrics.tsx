@@ -9,46 +9,41 @@ import { Badge } from '../ui/Badge';
 import { conversionTracker } from '../../analytics/ConversionTracker';
 import { performanceMonitor } from '../../utils/PerformanceMonitor';
 
-}
-export interface RealTimeMetricsProps {
-  metrics: unknown;
-  loading: boolean;
-}
-}
-export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loading }) => {
-  const [liveData, setLiveData] = useState({)
-  activeUsers: 0,
-  conversionsLast24h: 0,
-  averageSessionDuration: 0,
-  healthScore: 100,
-  topConvertingFunnel: '',
-  recentEvents: [],
+
+export interface RealTimeMetricsProps { metrics: unknown;
+  loading: boolean }
+
+export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loading }) => { const [liveData, setLiveData] = useState({)
+  activeUsers: 0
+  conversionsLast24h: 0
+  averageSessionDuration: 0
+  healthScore: 100
+  topConvertingFunnel: ''
+  recentEvents: [] }
 });
   const [_____updateCount, setUpdateCount] = useState(0);
-  useEffect(() => {
-  if (metrics) {
+  useEffect(() => { if (metrics) {
   setLiveData(prev => ({)
-  ...prev,
-  activeUsers: metrics.activeUsers || 0,
-  conversionsLast24h: metrics.conversionsLast24h || 0,
-  averageSessionDuration: metrics.averageSessionDuration || 0,
-  topConvertingFunnel: metrics.topConvertingFunnel || '',
-  healthScore: metrics.performance?.healthScore || 100,
-  recentEvents: metrics.recentEvents || [],
+  ...prev
+  activeUsers: metrics.activeUsers || 0
+  conversionsLast24h: metrics.conversionsLast24h || 0
+  averageSessionDuration: metrics.averageSessionDuration || 0
+  topConvertingFunnel: metrics.topConvertingFunnel || ''
+  healthScore: metrics.performance?.healthScore || 100
+  recentEvents: metrics.recentEvents || [] }
 }));
   }, [metrics]);
-  useEffect(() => {
-  const interval = setInterval(() => {
+  useEffect(() => { const interval = setInterval(() => {
   // Fetch real-time updates
   const dashboardData = conversionTracker.getDashboardData();
   const performanceData = performanceMonitor.getDashboardData();
   setLiveData(prev => ({)
-  ...prev,
-  activeUsers: dashboardData.realTimeMetrics.activeUsers,
-  conversionsLast24h: dashboardData.realTimeMetrics.conversionsLast24h,
-  averageSessionDuration: dashboardData.realTimeMetrics.averageSessionDuration,
-  healthScore: performanceData.overview.healthScore,
-  topConvertingFunnel: dashboardData.realTimeMetrics.topConvertingFunnel,
+  ...prev
+  activeUsers: dashboardData.realTimeMetrics.activeUsers
+  conversionsLast24h: dashboardData.realTimeMetrics.conversionsLast24h
+  averageSessionDuration: dashboardData.realTimeMetrics.averageSessionDuration
+  healthScore: performanceData.overview.healthScore
+  topConvertingFunnel: dashboardData.realTimeMetrics.topConvertingFunnel }
 }));
       setUpdateCount(prev => prev + 1);
     }, 5000); // Update every 5 seconds
@@ -137,7 +132,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
           </CardContent>
         </Card>
       </div>
-      <style>{`
+      <style>{ `
         .real-time-metrics {
           margin-bottom: 2rem;
         .metrics-header {
@@ -157,7 +152,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
         .metric-card {
           position: relative;
   transition: transform 0.2s ease;
-        .metric-card:hover {,
+        .metric-card:hover {
   transform: translateY(-2px);
         .metric-title {
           display: flex;
@@ -170,13 +165,11 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
           width: 8px;
   height: 8px;
           background: #10b981;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: pulse 2s infinite;
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        .metric-value {
-          font-size: 2rem;
+        @keyframes pulse { 0%, 100% { opacity: 1 }
+          50% { opacity: 0.5 }
+        .metric-value { font-size: 2rem;
           font-weight: 700;
   color: #1f2937;
           margin: 0.5rem 0;
@@ -184,7 +177,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
           font-size: 1.1rem;
           font-weight: 600;
         .metric-subtitle {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #9ca3af;
         .loading {
           display: flex;
@@ -197,11 +190,10 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
   height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: spin 1s linear infinite;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
       `}</style>
     </div>
   );

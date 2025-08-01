@@ -14,7 +14,7 @@ import {
   PreviewResultWithPath,
   ExecutionPath,
   NodeHighlightStyle
-} from '../../../../packages/core/types/ExecutionPath.js';
+ from '../../../../packages/core/types/ExecutionPath.js';
 import { initDatabase, healthCheck, getDatabase, runMigrations } from '../database/connection';
 import { correctionsRoutes } from './corrections';
 import { workspaceRoutes } from './workspace';
@@ -87,7 +87,7 @@ export async function generatePreviewOutputs(
       const executionPath = executionResult.executionPath;
       if (executionPath) {
         executionPaths.push(executionPath);
-      }
+
       
       // Generate debugging information
       const debugInfo = executionPath 
@@ -109,11 +109,11 @@ export async function generatePreviewOutputs(
           nodeExecutionOrder: executionPath?.nodeExecutionOrder || [],
           randomChoices: executionPath?.randomizationPoints || [],
           performanceBreakdown: debugInfo.performanceBreakdown
-        }
+
       };
       
       results.push(result);
-    } catch (error: unknown) {
+ catch (error: unknown) {
       console.error(`Error generating preview for seed ${seed}:`, error);
       const errorResult: PreviewResultWithPath = {
         seed,
@@ -126,12 +126,12 @@ export async function generatePreviewOutputs(
           nodeExecutionOrder: [],
           randomChoices: [],
           performanceBreakdown: {}
-        }
+
       };
       
       results.push(errorResult);
-    }
-  }
+
+
   
   // Analyze execution paths for variance and patterns
   if (executionPaths.length > 1) {
@@ -153,12 +153,12 @@ export async function generatePreviewOutputs(
             result.executionPath.steps.length
 
         };
-      }
+
     });
-  }
+
   
   return results;
-}
+
 
 /**
  * Setup all routes on a Fastify server instance
@@ -189,26 +189,26 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
     runMigrations();
     server.decorate('db', db);
     console.log('Database initialized successfully');
-  } catch (error) {
+ catch (error) {
     console.error('Failed to initialize database:', error);
     throw error;
-  }
+
 
   // Initialize analytics
   try {
     initializeAnalytics();
     console.log('Analytics system initialized successfully');
-  } catch (error) {
+ catch (error) {
     console.error('Failed to initialize analytics:', error);
-  }
+
 
   // Initialize extension system
   try {
     await ExtensionLifecycleManager.getInstance().initialize();
     console.log('Extension system initialized successfully');
-  } catch (error) {
+ catch (error) {
     console.error('Failed to initialize extension system:', error);
-  }
+
 
   // CORS configuration
   server.addHook('onRequest', (request, reply, done) => {
@@ -218,10 +218,10 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
     if (Array.isArray(allowedOrigins)) {
       if (allowedOrigins.includes('*') || (origin && allowedOrigins.includes(origin))) {
         reply.header('Access-Control-Allow-Origin', origin || '*');
-      }
-    } else if (allowedOrigins === '*' || allowedOrigins === origin) {
+
+ else if (allowedOrigins === '*' || allowedOrigins === origin) {
       reply.header('Access-Control-Allow-Origin', origin || allowedOrigins);
-    }
+
     
     reply.header('Access-Control-Allow-Methods', CORS_CONFIG.methods.join(', '));
     reply.header('Access-Control-Allow-Headers', CORS_CONFIG.allowedHeaders.join(', '));
@@ -231,7 +231,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
     if (request.method === 'OPTIONS') {
       reply.code(204).send();
       return;
-    }
+
     
     done();
   });
@@ -266,7 +266,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
         connections: wsMetrics.totalConnections,
         activeDocuments: wsMetrics.activeDocuments,
         uptime: wsMetrics.uptime
-  }
+
       timestamp: new Date().toISOString()
     };
   });
@@ -283,7 +283,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
         secure: false
       });
       return;
-    }
+
 
     // Get TLS connection info
     const tlsInfo = {
@@ -348,9 +348,9 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
     );
 
     console.log('Server analytics system fully initialized');
-  } catch (error) {
+ catch (error) {
     console.error('Failed to initialize server analytics system:', error);
-  }
+
 
   // Register all API routes
   server.register(correctionsRoutes, { prefix: '/api/corrections' });
@@ -365,7 +365,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
     server.register(async (fastify) => {
       await analyticsRoutes(fastify, analyticsDashboard, costTracker);
     }, { prefix: '/api' });
-  }
+
 
   try {
     const db = getDatabase();
@@ -373,20 +373,20 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
       await marketplaceRoutes(fastify, db as any);
     }, { prefix: '/api/marketplace' });
     console.log('Marketplace routes registered successfully');
-  } catch (error) {
+ catch (error) {
     console.error('Failed to register marketplace routes:', error);
-  }
+
 
   try {
     server.register(featureToggleRoutes, { prefix: '/api/feature-toggles' });
     console.log('Feature toggle routes registered successfully');
-  } catch (error) {
+ catch (error) {
     console.error('Failed to register feature toggle routes:', error);
-  }
+
 
   if (analyticsWebSocketServer) {
     analyticsWebSocketServer.setupWebSocketServer(server);
-  }
+
 
   // Preview endpoints
   server.get('/preview', async (request, reply) => {
@@ -396,7 +396,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
         nodes: [],
         edges: [],
         preview: 'This is a dummy prompt preview.'
-      }
+
     };
   });
 
@@ -427,27 +427,27 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
         reply.header('Content-Type', exportResult.mimeType);
         reply.header('Content-Disposition', `attachment; filename="${filename}"`);
         return exportResult.data;
-      } else {
+ else {
         // Text/JSON formats
         reply.header('Content-Type', exportResult.mimeType);
         if (exportResult.shouldDownload) {
           reply.header('Content-Disposition', `attachment; filename="${filename}"`);
-        }
+
         return exportResult.data;
-      }
-    } catch (error) {
+
+ catch (error) {
       request.log.error('Export error:', error);
       reply.status(500).send({
         error: 'Export failed',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   server.post<{
     Body: PreviewRequest;
     Headers: { 'x-session-id'?: string; 'x-user-id'?: string };
-  }>('/preview', {
+>('/preview', {
     schema: {
       body: {
         type: 'object',
@@ -456,9 +456,9 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
           graph: { type: 'object' },
           runs: { type: 'integer', minimum: 1, maximum: 50, default: 5 },
           seedStart: { type: 'integer', minimum: 1, default: 1 }
-        }
-      }
-  }
+
+
+
     handler: async (request, reply) => {
       if (!ENABLE_PREVIEW_API) {
         reply.status(503).send({ 
@@ -466,7 +466,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
           error: 'Preview API is currently disabled. Please try again later.'
         });
         return;
-      }
+
       
       try {
         const { graph, runs = 5, seedStart = 1 } = request.body;
@@ -479,7 +479,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
             validationErrors: validationResult.errors
           });
           return;
-        }
+
         
         const sessionId = request.headers['x-session-id'];
         const userId = request.headers['x-user-id'] ? parseInt(request.headers['x-user-id']) : undefined;
@@ -487,7 +487,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
         const results = await generatePreviewOutputs(graph, runs, seedStart, sessionId, userId);
         
         return { results };
-      } catch (error: unknown) {
+ catch (error: unknown) {
         request.log.error(error);
         
         if (error instanceof z.ZodError) {
@@ -495,14 +495,14 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
             results: [],
             error: `Invalid request: ${error.message}`
           });
-        } else {
+ else {
           reply.status(500).send({ 
             results: [],
             error: `Server error: ${error instanceof Error ? error.message : String(error)}`
           });
-        }
-      }
-    }
+
+
+
   });
 
   // WebSocket endpoints
@@ -544,8 +544,6 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
     wsServer.on('error', (error) => {
       console.error('WebSocket server error:', error);
     });
-
-  } catch (wsError) {
+ catch (wsError) {
     console.error('Failed to start WebSocket server:', wsError);
-  }
-}
+

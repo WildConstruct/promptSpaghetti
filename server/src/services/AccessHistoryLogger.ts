@@ -10,7 +10,7 @@ import {
   DataProtectionEventLogger,
   DataProtectionEventType,
   ComplianceFramework
-} from '../../../packages/core/security/DataProtectionEventLogger';
+ from '../../../packages/core/security/DataProtectionEventLogger';
 import { SecurityEventCoordinator } from './SecurityEventCoordinator';
 import { AuditService } from '../auth/services/AuditService';
 import { AccessControlFramework } from './security/AccessControlFramework';
@@ -64,7 +64,7 @@ export enum AccessEventType {
   GDPR_ACCESS = 'gdpr_access',
   AUDIT_ACCESS = 'audit_access',
   COMPLIANCE_EXPORT = 'compliance_export'
-}
+
 
 export enum AccessResult {
   SUCCESS = 'success',
@@ -73,17 +73,17 @@ export enum AccessResult {
   PARTIAL = 'partial',
   TIMEOUT = 'timeout',
   ERROR = 'error'
-}
+
 
 export enum RiskLevel {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
 
-}
-}
+
+
+
 export interface AccessContext {
   // User Context
   userId?: string;
@@ -99,8 +99,9 @@ export interface AccessContext {
     coordinates?: {
       latitude: number;
       longitude: number;
-}
-}
+
+
+
     };
     isp?: string;
     vpn_detected?: boolean;
@@ -137,10 +138,10 @@ export interface AccessContext {
   tenantId?: string;
   departmentId?: string;
   projectId?: string;
-}
 
-}
-}
+
+
+
 export interface AccessHistoryEvent {
   // Core Event Information
   eventId: string;
@@ -179,12 +180,13 @@ export interface AccessHistoryEvent {
   dataSize?: number; // bytes
   errorMessage?: string;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionTracking {
   sessionId: string;
   userId?: string;
@@ -201,12 +203,13 @@ export interface SessionTracking {
   riskScore: number;
   anomalyCount: number;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceAccessSummary {
   resourceType: string;
   resourceId: string;
@@ -217,12 +220,13 @@ export interface ResourceAccessSummary {
   permissions: string[];
   riskScore: number;
   complianceFlags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessPattern {
   patternId: string;
   userId?: string;
@@ -235,18 +239,20 @@ export interface AccessPattern {
   anomalyScore: number;
   associatedEvents: string[];
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessAnalytics {
   timeframe: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   totalEvents: number;
   uniqueUsers: number;
@@ -276,7 +282,7 @@ export interface AccessAnalytics {
   // Temporal Patterns
   hourlyDistribution: number[];
   dailyDistribution: number[];
-}
+
 
 /**
  * Comprehensive Access History Logging Service
@@ -310,7 +316,7 @@ export class AccessHistoryLogger extends EventEmitter {
     this.config = { ...this.getDefaultConfig(), ...config };
     
     this.initializeEventHandlers();
-  }
+
 
   /**
    * Log an access history event with comprehensive validation
@@ -327,7 +333,7 @@ export class AccessHistoryLogger extends EventEmitter {
       this.recentEvents.push(completeEvent);
       if (this.recentEvents.length > this.config.maxRecentEvents) {
         this.recentEvents.shift();
-      }
+
       
       // Update session tracking
       await this.updateSessionTracking(completeEvent);
@@ -355,8 +361,7 @@ export class AccessHistoryLogger extends EventEmitter {
       
       // Emit event for real-time processing
       this.emit('accessEvent', completeEvent);
-      
-    } catch (error) {
+ catch (error) {
       // Security logging: Log the error without exposing sensitive details
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Access logging failed:', { 
@@ -368,8 +373,8 @@ export class AccessHistoryLogger extends EventEmitter {
       
       // Rethrow with sanitized message
       throw new Error(`Access logging failed: ${errorMessage}`);
-    }
-  }
+
+
 
   /**
    * Log authentication events
@@ -396,7 +401,7 @@ export class AccessHistoryLogger extends EventEmitter {
       complianceFrameworks: [ComplianceFramework.GDPR, ComplianceFramework.SOX],
       metadata
     });
-  }
+
 
   /**
    * Log resource access events
@@ -430,7 +435,7 @@ export class AccessHistoryLogger extends EventEmitter {
       regulatoryImpact: this.hasRegulatoryImpact(dataClassification, operation),
       metadata
     });
-  }
+
 
   /**
    * Log API access events
@@ -456,7 +461,7 @@ export class AccessHistoryLogger extends EventEmitter {
         ...context,
         endpoint,
         method
-  }
+
       result,
       duration,
       complianceFrameworks: [ComplianceFramework.GDPR],
@@ -467,9 +472,9 @@ export class AccessHistoryLogger extends EventEmitter {
         ...metadata,
         statusCode,
         responseTime: duration
-      }
+
     });
-  }
+
 
   /**
    * Get session tracking information
@@ -477,7 +482,7 @@ export class AccessHistoryLogger extends EventEmitter {
   async getSessionTracking(sessionId: string): Promise<SessionTracking | null> {
 
     return this.sessionCache.get(sessionId) || null;
-  }
+
 
   /**
    * Get access history for a user
@@ -490,7 +495,7 @@ export class AccessHistoryLogger extends EventEmitter {
       eventTypes?: AccessEventType[];
       resourceTypes?: string[];
       limit?: number;
-    } = {}
+ = {}
   ): Promise<AccessHistoryEvent[]> {
 
     // In a real implementation, this would query the database
@@ -501,7 +506,7 @@ export class AccessHistoryLogger extends EventEmitter {
       (!options.eventTypes || options.eventTypes.includes(event.eventType)) &&
       (!options.resourceTypes || options.resourceTypes.includes(event.resourceType))
     ).slice(0, options.limit || 100);
-  }
+
 
   /**
    * Get resource access summary
@@ -535,7 +540,7 @@ export class AccessHistoryLogger extends EventEmitter {
       riskScore: riskScores.length > 0 ? riskScores.reduce((a, b) => a + b) / riskScores.length : 0,
       complianceFlags
     };
-  }
+
 
   /**
    * Generate access analytics
@@ -557,14 +562,14 @@ export class AccessHistoryLogger extends EventEmitter {
     if (filters) {
       if (filters.userIds) {
         events = events.filter(e => filters.userIds!.includes(e.context.userId || ''));
-      }
+
       if (filters.resourceTypes) {
         events = events.filter(e => filters.resourceTypes!.includes(e.resourceType));
-      }
+
       if (filters.eventTypes) {
         events = events.filter(e => filters.eventTypes!.includes(e.eventType));
-      }
-    }
+
+
 
     const uniqueUsers = new Set(events.map(e => e.context.userId).filter(Boolean)).size;
     const uniqueSessions = new Set(events.map(e => e.context.sessionId)).size;
@@ -597,7 +602,7 @@ export class AccessHistoryLogger extends EventEmitter {
       hourlyDistribution: this.getHourlyDistribution(events),
       dailyDistribution: this.getDailyDistribution(events)
     };
-  }
+
 
   // Private helper methods
 
@@ -626,26 +631,26 @@ export class AccessHistoryLogger extends EventEmitter {
     // Enrich with additional context if available
     if (enriched.context.userId) {
       enriched.context = await this.enrichUserContext(enriched.context);
-    }
+
 
     if (enriched.context.ipAddress) {
       enriched.context = await this.enrichGeolocationContext(enriched.context);
-    }
+
 
     return enriched;
-  }
+
 
   private async enrichUserContext(context: AccessContext): Promise<AccessContext> {
 
     // In a real implementation, this would fetch user details
     return context;
-  }
+
 
   private async enrichGeolocationContext(context: AccessContext): Promise<AccessContext> {
 
     // In a real implementation, this would perform IP geolocation lookup
     return context;
-  }
+
 
   private async updateSessionTracking(event: AccessHistoryEvent): Promise<void> {
 
@@ -669,23 +674,23 @@ export class AccessHistoryLogger extends EventEmitter {
         riskScore: 0,
         anomalyCount: 0
       };
-    }
+
 
     session.lastActivityAt = event.timestamp;
     session.accessCount++;
     session.riskScore = ((session.riskScore * (session.accessCount - 1)) + (event.riskScore || 0)) / session.accessCount;
     if (event.anomalyDetected) {
       session.anomalyCount++;
-    }
+
 
     this.sessionCache.set(sessionId, session);
-  }
+
 
   private async assessRisk(event: AccessHistoryEvent): Promise<{
     riskLevel: RiskLevel;
     riskFactors: string[];
     anomalyDetected: boolean;
-  }> {
+> {
 
     const riskFactors: string[] = [];
     let riskScore = 0;
@@ -695,19 +700,19 @@ export class AccessHistoryLogger extends EventEmitter {
     if (event.context.geolocation?.vpn_detected) {
       riskFactors.push('VPN_DETECTED');
       riskScore += 30;
-    }
+
 
     if (event.context.geolocation?.country && this.config.highRiskCountries.includes(event.context.geolocation.country)) {
       riskFactors.push('HIGH_RISK_COUNTRY');
       riskScore += 40;
-    }
+
 
     // Time-based risk factors
     const hour = event.timestamp.getHours();
     if (hour < 6 || hour > 22) {
       riskFactors.push('OFF_HOURS_ACCESS');
       riskScore += 20;
-    }
+
 
     // Access pattern risk factors
     const recentEvents = this.recentEvents.filter(e => 
@@ -719,19 +724,19 @@ export class AccessHistoryLogger extends EventEmitter {
       riskFactors.push('RAPID_ACCESS_PATTERN');
       riskScore += 25;
       anomalyDetected = true;
-    }
+
 
     // Permission escalation risk
     if (event.eventType === AccessEventType.PERMISSION_ESCALATION) {
       riskFactors.push('PERMISSION_ESCALATION');
       riskScore += 50;
-    }
+
 
     // Failed access attempts
     if (event.result === AccessResult.FAILURE || event.result === AccessResult.DENIED) {
       riskFactors.push('ACCESS_FAILURE');
       riskScore += 35;
-    }
+
 
     // Determine risk level
     let riskLevel: RiskLevel;
@@ -741,13 +746,13 @@ export class AccessHistoryLogger extends EventEmitter {
     else riskLevel = RiskLevel.LOW;
 
     return { riskLevel, riskFactors, anomalyDetected };
-  }
+
 
   private async detectPatterns(_____event: AccessHistoryEvent): Promise<void> {
 
     // Pattern detection logic would be implemented here
     // For now, just a placeholder
-  }
+
 
   private async logToDataProtection(event: AccessHistoryEvent): Promise<void> {
 
@@ -768,9 +773,9 @@ export class AccessHistoryLogger extends EventEmitter {
         permissions: event.permissions,
         duration: event.duration,
         ...event.metadata
-      }
+
     });
-  }
+
 
   private async logToAuditService(event: AccessHistoryEvent): Promise<void> {
 
@@ -788,10 +793,10 @@ export class AccessHistoryLogger extends EventEmitter {
         riskFactors: event.riskFactors,
         context: event.context,
         metadata: event.metadata
-  }
+
       correlationId: event.eventId
     });
-  }
+
 
   private async sendToSecurityCoordinator(event: AccessHistoryEvent): Promise<void> {
 
@@ -805,22 +810,22 @@ export class AccessHistoryLogger extends EventEmitter {
       context: event.context,
       metadata: event.metadata
     });
-  }
+
 
   private async checkAlertConditions(event: AccessHistoryEvent): Promise<void> {
 
     if (event.riskLevel === RiskLevel.CRITICAL || event.riskLevel === RiskLevel.HIGH) {
       this.emit('highRiskAccess', event);
-    }
+
 
     if (event.anomalyDetected) {
       this.emit('accessAnomaly', event);
-    }
+
 
     if (event.regulatoryImpact) {
       this.emit('complianceAlert', event);
-    }
-  }
+
+
 
   private mapOperationToEventType(operation: string): AccessEventType {
     const mapping: Record<string, AccessEventType> = {
@@ -832,7 +837,7 @@ export class AccessHistoryLogger extends EventEmitter {
       'download': AccessEventType.RESOURCE_DOWNLOAD
     };
     return mapping[operation.toLowerCase()] || AccessEventType.RESOURCE_READ;
-  }
+
 
   private mapAccessEventToDataProtectionEvent(eventType: AccessEventType): DataProtectionEventType {
     const mapping: Record<AccessEventType, DataProtectionEventType> = {
@@ -841,13 +846,13 @@ export class AccessHistoryLogger extends EventEmitter {
       [AccessEventType.COMPLIANCE_EXPORT]: DataProtectionEventType.COMPLIANCE_AUDIT_ACCESS
     };
     return mapping[eventType] || DataProtectionEventType.COMPLIANCE_AUDIT_ACCESS;
-  }
+
 
   private async getDataClassification(_____resourceType: string, _____resourceId: string): Promise<string> {
 
     // Implementation would determine data classification based on resource
     return 'internal';
-  }
+
 
   private getComplianceFrameworks(dataClassification: string): ComplianceFramework[] {
     const mapping: Record<string, ComplianceFramework[]> = {
@@ -858,59 +863,59 @@ export class AccessHistoryLogger extends EventEmitter {
       'internal': [ComplianceFramework.GDPR]
     };
     return mapping[dataClassification] || [ComplianceFramework.GDPR];
-  }
+
 
   private isAuditRequired(dataClassification: string, operation: string): boolean {
     return dataClassification === 'pii' || dataClassification === 'confidential' || 
            operation === 'delete' || operation === 'export';
-  }
+
 
   private isSensitiveOperation(dataClassification: string, operation: string): boolean {
     return dataClassification === 'pii' || dataClassification === 'confidential' ||
            ['delete', 'export', 'share'].includes(operation);
-  }
+
 
   private hasRegulatoryImpact(dataClassification: string, operation: string): boolean {
     return dataClassification === 'pii' && ['delete', 'export'].includes(operation);
-  }
+
 
   private async getEndpointPermissions(_____endpoint: string): Promise<string[]> {
 
     // Implementation would determine required permissions for endpoint
     return ['read'];
-  }
+
 
   private isAuditRequiredForAPI(endpoint: string, statusCode: number): boolean {
     return endpoint.includes('/admin') || statusCode >= 400;
-  }
+
 
   private isSensitiveEndpoint(endpoint: string): boolean {
     return endpoint.includes('/admin') || endpoint.includes('/user') || endpoint.includes('/auth');
-  }
+
 
   private generateEventId(): string {
     return `access_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
-  }
+
 
   private initializeEventHandlers(): void {
     // Set up cleanup intervals
     setInterval(() => this.cleanupOldEvents(), this.config.cleanupInterval);
     setInterval(() => this.cleanupExpiredSessions(), this.config.sessionCleanupInterval);
-  }
+
 
   private cleanupOldEvents(): void {
     const cutoff = new Date(Date.now() - this.config.eventRetentionPeriod);
     this.recentEvents = this.recentEvents.filter(event => event.timestamp > cutoff);
-  }
+
 
   private cleanupExpiredSessions(): void {
     const now = new Date();
     for (const [sessionId, session] of this.sessionCache) {
       if (session.expiresAt < now || !session.isActive) {
         this.sessionCache.delete(sessionId);
-      }
-    }
-  }
+
+
+
 
   private getDistribution<T>(
     events: AccessHistoryEvent[],
@@ -921,7 +926,7 @@ export class AccessHistoryLogger extends EventEmitter {
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-  }
+
 
   private getTopEntries(
     events: AccessHistoryEvent[],
@@ -932,7 +937,7 @@ export class AccessHistoryLogger extends EventEmitter {
       .sort(([,a], [,b]) => b - a)
       .slice(0, limit)
       .map(([userId, accessCount]) => ({ userId, accessCount }));
-  }
+
 
   private getHourlyDistribution(events: AccessHistoryEvent[]): number[] {
     const hours = new Array(24).fill(0);
@@ -940,7 +945,7 @@ export class AccessHistoryLogger extends EventEmitter {
       hours[event.timestamp.getHours()]++;
     });
     return hours;
-  }
+
 
   private getDailyDistribution(events: AccessHistoryEvent[]): number[] {
     const days = new Array(7).fill(0);
@@ -948,7 +953,7 @@ export class AccessHistoryLogger extends EventEmitter {
       days[event.timestamp.getDay()]++;
     });
     return days;
-  }
+
 
   /**
    * Security validation for access events - prevents injection and validates required fields
@@ -956,24 +961,24 @@ export class AccessHistoryLogger extends EventEmitter {
   private validateAccessEvent(event: Partial<AccessHistoryEvent>): void {
     if (!event) {
       throw new Error('Access event cannot be null or undefined');
-    }
+
 
     // Validate required fields
     if (!event.eventType) {
       throw new Error('Event type is required');
-    }
+
     if (!event.resourceType) {
       throw new Error('Resource type is required');
-    }
+
     if (!event.resourceId) {
       throw new Error('Resource ID is required');
-    }
+
     if (!event.operation) {
       throw new Error('Operation is required');
-    }
+
     if (!event.context?.sessionId) {
       throw new Error('Session ID in context is required');
-    }
+
 
     // Security validation: Sanitize string inputs
     const sanitizeString = (str: string): string => {
@@ -985,22 +990,22 @@ export class AccessHistoryLogger extends EventEmitter {
     if (typeof event.resourceType === 'string') {
       if (event.resourceType.length > 100 || !/^[a-zA-Z0-9_-]+$/.test(event.resourceType)) {
         throw new Error('Invalid resource type format');
-      }
-    }
+
+
 
     if (typeof event.resourceId === 'string') {
       if (event.resourceId.length > 255) {
         throw new Error('Resource ID too long');
-      }
+
       event.resourceId = sanitizeString(event.resourceId);
-    }
+
 
     // Validate operation
     if (typeof event.operation === 'string') {
       if (event.operation.length > 100 || !/^[a-zA-Z0-9_-]+$/.test(event.operation)) {
         throw new Error('Invalid operation format');
-      }
-    }
+
+
 
     // Validate permissions array
     if (event.permissions && Array.isArray(event.permissions)) {
@@ -1008,26 +1013,26 @@ export class AccessHistoryLogger extends EventEmitter {
         if (typeof permission === 'string') {
           if (permission.length > 100 || !/^[a-zA-Z0-9:_-]+$/.test(permission)) {
             throw new Error('Invalid permission format');
-          }
-        }
+
+
       });
-    }
+
 
     // Validate IP address format if present
     if (event.context?.ipAddress) {
       const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
       if (!ipRegex.test(event.context.ipAddress)) {
         throw new Error('Invalid IP address format');
-      }
-    }
+
+
 
     // Validate session ID format
     if (event.context?.sessionId && typeof event.context.sessionId === 'string') {
       if (event.context.sessionId.length > 255 || !/^[a-zA-Z0-9_-]+$/.test(event.context.sessionId)) {
         throw new Error('Invalid session ID format');
-      }
-    }
-  }
+
+
+
 
   private getDefaultConfig(): AccessHistoryConfig {
     return {
@@ -1039,11 +1044,11 @@ export class AccessHistoryLogger extends EventEmitter {
       rapidAccessThreshold: 10,
       highRiskCountries: ['CN', 'RU', 'KP', 'IR']
     };
-  }
-}
 
-}
-}
+
+
+
+
 export interface AccessHistoryConfig {
   maxRecentEvents: number;
   sessionTimeout: number;
@@ -1052,6 +1057,6 @@ export interface AccessHistoryConfig {
   eventRetentionPeriod: number;
   rapidAccessThreshold: number;
   highRiskCountries: string[];
-}
-}
-}
+
+
+

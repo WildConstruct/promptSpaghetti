@@ -76,46 +76,46 @@ export var BreachSeverity;
                 countries: string;
             }
         }
-        [];
-        affectedSystems: string;
-        rootCause ?  : string;
-        containmentActions: string;
-        mitigationMeasures: string;
-        status: IncidentStatus;
-        assignee ?  : string;
-        dueDate ?  : Date;
-        notifications: NotificationRecord;
-        evidence: EvidenceRecord;
-        timeline: TimelineEvent;
-        riskAssessment: RiskAssessment;
-        complianceRequirements: ComplianceRequirement;
-        metadata: Record;
     }
-    export let IncidentStatus;
-    (function (IncidentStatus) {
-        IncidentStatus["DETECTED"] = "detected";
-        IncidentStatus["INVESTIGATING"] = "investigating";
-        IncidentStatus["CONTAINED"] = "contained";
-        IncidentStatus["ERADICATING"] = "eradicating";
-        IncidentStatus["RECOVERING"] = "recovering";
-        IncidentStatus["LESSONS_LEARNED"] = "lessons_learned";
-        IncidentStatus["CLOSED"] = "closed";
-        IncidentStatus[IncidentStatus["export"] = void 0] = "export";
-        IncidentStatus[IncidentStatus["interface"] = void 0] = "interface";
-        IncidentStatus[IncidentStatus["NotificationRecord"] = void 0] = "NotificationRecord";
-    })(IncidentStatus || (IncidentStatus = {}));
-    {
-        id: string;
-        type: NotificationType;
-        recipient: string;
-        channel: string;
-        sentAt: Date;
-        deliveredAt ?  : Date;
-        acknowledgedAt ?  : Date;
-        content: string;
-        status: 'pending' | 'sent' | 'delivered' | 'failed' | 'acknowledged';
-        metadata: Record;
-    }
+    [];
+    affectedSystems: string;
+    rootCause ?  : string;
+    containmentActions: string;
+    mitigationMeasures: string;
+    status: IncidentStatus;
+    assignee ?  : string;
+    dueDate ?  : Date;
+    notifications: NotificationRecord;
+    evidence: EvidenceRecord;
+    timeline: TimelineEvent;
+    riskAssessment: RiskAssessment;
+    complianceRequirements: ComplianceRequirement;
+    metadata: Record;
+}
+export var IncidentStatus;
+(function (IncidentStatus) {
+    IncidentStatus["DETECTED"] = "detected";
+    IncidentStatus["INVESTIGATING"] = "investigating";
+    IncidentStatus["CONTAINED"] = "contained";
+    IncidentStatus["ERADICATING"] = "eradicating";
+    IncidentStatus["RECOVERING"] = "recovering";
+    IncidentStatus["LESSONS_LEARNED"] = "lessons_learned";
+    IncidentStatus["CLOSED"] = "closed";
+    IncidentStatus[IncidentStatus["export"] = void 0] = "export";
+    IncidentStatus[IncidentStatus["interface"] = void 0] = "interface";
+    IncidentStatus[IncidentStatus["NotificationRecord"] = void 0] = "NotificationRecord";
+})(IncidentStatus || (IncidentStatus = {}));
+{
+    id: string;
+    type: NotificationType;
+    recipient: string;
+    channel: string;
+    sentAt: Date;
+    deliveredAt ?  : Date;
+    acknowledgedAt ?  : Date;
+    content: string;
+    status: 'pending' | 'sent' | 'delivered' | 'failed' | 'acknowledged';
+    metadata: Record;
 }
 ;
 notifications: {
@@ -208,8 +208,7 @@ const DEFAULT_CONFIG = {
                 retentionPeriod: '7 years',
             }
         },
-        class: BreachNotificationService, extends: EventEmitter
-    } }, { private, incidents: Map };
+        class: BreachNotificationService, extends: EventEmitter } }, { private, incidents: Map };
 , BreachIncident > ;
 new Map();
 config: BreachNotificationConfig;
@@ -220,8 +219,9 @@ constructor(config ?  : Partial);
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.startMonitoring();
     async;
-    reportBreach(incidentData, {});
-    title: string;
+    reportBreach(incidentData, {}),
+        title;
+    string;
     description: string;
     severity ?  : BreachSeverity;
     type ?  : BreachType;
@@ -358,10 +358,10 @@ Promise < void  > {
         // Generate notification content
         const content = await this.generateGDPRContent(incident);
         // Determine recipients
-        const recipients = [];
-        this.config.notifications.gdpr.contactEmail,
-            this.config.notifications.internal.dpo;
-        ;
+        const recipients = [
+            this.config.notifications.gdpr.contactEmail,
+            this.config.notifications.internal.dpo
+        ];
         return { content, deadline, recipients };
         checkGDPRCompliance(incidentId, string);
         {
@@ -515,12 +515,12 @@ Promise < void  > {
                                                                                                 likelihood: 'medium',
                                                                                                 impact: 'high',
                                                                                                 overallRisk: 'high',
-                                                                                                factors: [,
+                                                                                                factors: [
                                                                                                     'Personal data involved',
                                                                                                     'Authentication system affected',
                                                                                                     'Potential for identity theft'
                                                                                                 ],
-                                                                                                recommendations: [,
+                                                                                                recommendations: [
                                                                                                     'Notify affected individuals',
                                                                                                     'Enhance monitoring',
                                                                                                     'Review access controls'

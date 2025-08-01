@@ -62,43 +62,57 @@ export var ChallengeType;
             UNKNOWN = 'unknown';
         // Challenge Event
     }
-    ;
-    challengeData: {
-        variant ?  : string; // For A/B testing,
-        parameters: Record;
-        metadata: Record;
-    }
-    ;
-    userBehavior: {
-        mouseMovements ?  : number;
-        keystrokes ?  : number;
-        clickPatterns ?  : Array;
-        focusEvents ?  : number;
-        scrollEvents ?  : number;
-        totalInteractionTime: number;
-        hesitationTime: number; // Time before first interaction
-        typingSpeed ?  : number; // chars per minute
-        mouseVelocity ?  : number;
-    }
-    ;
-    fraudIndicators: {
-        riskScore: number; // 0-100,
-        indicators: string;
-        automationDetected: boolean;
-        anomalousPattern: boolean;
-        vpnDetected ?  : boolean;
-        proxyDetected ?  : boolean;
-    }
-    ;
-    accessibility: {
-        screenReaderDetected: boolean;
-        highContrastMode: boolean;
-        assistiveTechUsed: string;
-        accommodationsApplied: string;
-    }
-    ;
-    // Challenge Statistics
 }
+;
+browserInfo: {
+    name: string;
+    version: string;
+    platform: string;
+    mobile: boolean;
+    touchSupport: boolean;
+    screenResolution: string;
+}
+;
+networkInfo ?  : {
+    connectionType: string,
+    downloadSpeed: number,
+    latency: number
+};
+;
+challengeData: {
+    variant ?  : string; // For A/B testing,
+    parameters: Record;
+    metadata: Record;
+}
+;
+userBehavior: {
+    mouseMovements ?  : number;
+    keystrokes ?  : number;
+    clickPatterns ?  : Array;
+    focusEvents ?  : number;
+    scrollEvents ?  : number;
+    totalInteractionTime: number;
+    hesitationTime: number; // Time before first interaction
+    typingSpeed ?  : number; // chars per minute
+    mouseVelocity ?  : number;
+}
+;
+fraudIndicators: {
+    riskScore: number; // 0-100,
+    indicators: string;
+    automationDetected: boolean;
+    anomalousPattern: boolean;
+    vpnDetected ?  : boolean;
+    proxyDetected ?  : boolean;
+}
+;
+accessibility: {
+    screenReaderDetected: boolean;
+    highContrastMode: boolean;
+    assistiveTechUsed: string;
+    accommodationsApplied: string;
+}
+;
 ;
 metrics: {
     totalAttempts: number;
@@ -109,8 +123,16 @@ metrics: {
     errorRate: number;
 }
 ;
-byDifficulty: Record;
-byUserType: Record;
+byDifficulty: Record < DifficultyLevel, {
+    attempts: number,
+    successRate: number,
+    averageTime: number
+} > ;
+byUserType: Record < UserAgentType, {
+    attempts: number,
+    successRate: number,
+    fraudScore: number
+} > ;
 fraudDetection: {
     botAttempts: number;
     suspiciousActivities: number;
@@ -276,8 +298,9 @@ void {
     }
     ;
     this.recordChallengeEvent(event);
-    getChallengeStatistics(challengeType, ChallengeType);
-    startTime: Date,
+    getChallengeStatistics(challengeType, ChallengeType),
+        startTime;
+    Date,
         endTime;
     Date;
     ChallengeStatistics;
@@ -453,7 +476,16 @@ void {
                                                                                     getABTestResults(testId, string);
                                                                                     {
                                                                                         test: ABTestConfig;
-                                                                                        results: Array;
+                                                                                        results: Array < {
+                                                                                            variantId: string,
+                                                                                            variantName: string,
+                                                                                            sampleSize: number,
+                                                                                            successRate: number,
+                                                                                            averageTime: number,
+                                                                                            conversionRate: number,
+                                                                                            confidenceLevel: number,
+                                                                                            isStatisticallySignificant: boolean
+                                                                                        } > ;
                                                                                         recommendation: string;
                                                                                         const test = this.abTests.get(testId);
                                                                                         if (!test) {
@@ -567,15 +599,16 @@ void {
                                                                                         recentActivity: recentEvents.slice(0, 50),
                                                                                         topChallengeTypes,
                                                                                         fraudAlerts: [], // Would be populated from fraud detection system
-                                                                                        performanceMetrics: [,
+                                                                                        performanceMetrics: [
                                                                                             { metric: 'Success Rate', value: successRate, trend: 'stable' },
                                                                                             { metric: 'Avg Completion Time', value: averageCompletionTime, trend: 'down' },
                                                                                             { metric: 'Fraud Score', value: fraudAttempts, trend: 'up' }
                                                                                         ],
                                                                                         geographicDistribution
                                                                                     };
-                                                                                    calculateStatistics(challengeType, ChallengeType);
-                                                                                    events: ChallengeEvent,
+                                                                                    calculateStatistics(challengeType, ChallengeType),
+                                                                                        events;
+                                                                                    ChallengeEvent,
                                                                                         startTime;
                                                                                     Date,
                                                                                         endTime;
@@ -724,7 +757,7 @@ void {
                                                                                                 description;
                                                                                             'Detects automated behavior patterns',
                                                                                                 conditions;
-                                                                                            [,
+                                                                                            [
                                                                                                 { field: 'timeToComplete', operator: 'less_than', value: 1000 },
                                                                                                 { field: 'userBehavior.mouseMovements', operator: 'equals', value: 0 },
                                                                                                 { field: 'userBehavior.hesitationTime', operator: 'equals', value: 0 }
@@ -732,7 +765,7 @@ void {
                                                                                                 severity;
                                                                                             'high',
                                                                                                 actions;
-                                                                                            [,
+                                                                                            [
                                                                                                 { type: 'challenge', parameters: { increaseDifficulty: true } },
                                                                                                 { type: 'monitor', parameters: { duration: 3600 } }
                                                                                             ],
@@ -748,11 +781,11 @@ void {
                                                                                         id: 'suspicious_ip',
                                                                                         name: 'Suspicious IP Activity',
                                                                                         description: 'Detects high-volume requests from single IP',
-                                                                                        conditions: [,
+                                                                                        conditions: [
                                                                                             { field: 'fraudIndicators.riskScore', operator: 'greater_than', value: 60 }
                                                                                         ],
                                                                                         severity: 'medium',
-                                                                                        actions: [,
+                                                                                        actions: [
                                                                                             { type: 'monitor', parameters: { enhanced: true } }
                                                                                         ],
                                                                                         confidence: 0.70,

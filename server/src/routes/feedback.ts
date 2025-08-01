@@ -18,34 +18,37 @@ import {
   validateUpdateFeedbackRequest,
   validateFeedbackFilter,
   validateModerateFeedbackRequest
-} from '../../../packages/core/types/feedback';
+ from '../../../packages/core/types/feedback';
 
-}
-}
+
+
 interface FeedbackRouteParams {
   feedbackId: string;
   targetId?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface FeedbackVoteParams {
   feedbackId: string;
   voteType: 'helpful' | 'not_helpful';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface FeedbackReplyBody {
   content: string;
   parentReplyId?: string;
-}
-}
-}
+
+
+
+
 
 export async function feedbackRoutes(fastify: FastifyInstance) {
   const feedbackService = new FeedbackService(fastify.pg);
@@ -68,16 +71,16 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           type: { 
             type: 'string', 
             enum: ['rating', 'review', 'comment', 'report', 'suggestion', 'bug_report', 'feature_request'] 
-  }
+
           category: { 
             type: 'string', 
             enum: ['general', 'usability', 'performance', 'documentation', 'pricing', 'support', 'technical', 'content_quality'],
             default: 'general' 
-  }
+
           targetType: { 
             type: 'string', 
             enum: ['contribution', 'template', 'user', 'platform'] 
-  }
+
           targetId: { type: 'string', format: 'uuid' },
           title: { type: 'string', minLength: 1, maxLength: 200 },
           content: { type: 'string', minLength: 1, maxLength: 5000 },
@@ -89,12 +92,12 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             type: 'array', 
             items: { type: 'string', maxLength: 500 },
             maxItems: 10 
-  }
+
           cons: { 
             type: 'array', 
             items: { type: 'string', maxLength: 500 },
             maxItems: 10 
-  }
+
           useCase: { type: 'string', maxLength: 1000 },
           wouldRecommend: { type: 'boolean' },
           
@@ -106,22 +109,22 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
               'offensive_language', 'misleading_information', 'low_quality',
               'duplicate_content', 'terms_violation', 'other'
             ]
-  }
+
           evidence: { 
             type: 'array', 
             items: { type: 'string' },
             maxItems: 5 
-  }
+
           // Bug report fields
           severity: { 
             type: 'string', 
             enum: ['low', 'medium', 'high', 'critical'] 
-  }
+
           stepsToReproduce: { 
             type: 'array', 
             items: { type: 'string' },
             maxItems: 20 
-  }
+
           expectedBehavior: { type: 'string', maxLength: 2000 },
           actualBehavior: { type: 'string', maxLength: 2000 },
           
@@ -129,26 +132,26 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             type: 'array', 
             items: { type: 'string', format: 'uuid' },
             maxItems: 5 
-          }
-        }
-  }
+
+
+
       response: {
         201: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             feedback: { type: 'object' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             details: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: CreateFeedbackRequest }>, reply: FastifyReply) => {
     try {
       const userId = request.user.id;
@@ -158,13 +161,13 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         success: true,
         feedback
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to create feedback:', error);
       reply.code(400).send({
         error: 'Failed to create feedback',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -178,20 +181,20 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         required: ['feedbackId'],
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: FeedbackRouteParams }>, reply: FastifyReply) => {
     try {
       const feedback = await feedbackService.getFeedbackById(request.params.feedbackId);
       reply.send({ success: true, feedback });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get feedback:', error);
       reply.code(404).send({
         error: 'Feedback not found',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -207,19 +210,19 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           targetType: { 
             type: 'string', 
             enum: ['contribution', 'template', 'user', 'platform'] 
-  }
+
           type: { 
             type: 'string', 
             enum: ['rating', 'review', 'comment', 'report', 'suggestion', 'bug_report', 'feature_request'] 
-  }
+
           category: { 
             type: 'string', 
             enum: ['general', 'usability', 'performance', 'documentation', 'pricing', 'support', 'technical', 'content_quality'] 
-  }
+
           status: { 
             type: 'string', 
             enum: ['pending', 'approved', 'rejected', 'flagged', 'archived', 'resolved'] 
-  }
+
           authorId: { type: 'string', format: 'uuid' },
           verifiedOnly: { type: 'boolean' },
           minRating: { type: 'integer', minimum: 1, maximum: 5 },
@@ -230,17 +233,17 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             type: 'string', 
             enum: ['created_at', 'rating', 'helpful_votes', 'updated_at'],
             default: 'created_at' 
-  }
+
           sortOrder: { 
             type: 'string', 
             enum: ['asc', 'desc'],
             default: 'desc' 
-  }
+
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: FeedbackFilter }>, reply: FastifyReply) => {
     try {
       const result = await feedbackService.getFeedback(request.query);
@@ -248,13 +251,13 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         success: true,
         ...result
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get feedback list:', error);
       reply.code(400).send({
         error: 'Failed to get feedback',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -269,8 +272,8 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         required: ['feedbackId'],
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
@@ -281,21 +284,21 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             type: 'array', 
             items: { type: 'string', maxLength: 500 },
             maxItems: 10 
-  }
+
           cons: { 
             type: 'array', 
             items: { type: 'string', maxLength: 500 },
             maxItems: 10 
-  }
+
           useCase: { type: 'string', maxLength: 1000 },
           wouldRecommend: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ 
     Params: FeedbackRouteParams; 
     Body: UpdateFeedbackRequest 
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = request.user.id;
       const feedback = await feedbackService.updateFeedback(
@@ -305,13 +308,13 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
       );
       
       reply.send({ success: true, feedback });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to update feedback:', error);
       reply.code(400).send({
         error: 'Failed to update feedback',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -326,22 +329,22 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         required: ['feedbackId'],
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: FeedbackRouteParams }>, reply: FastifyReply) => {
     try {
       const userId = request.user.id;
       await feedbackService.deleteFeedback(request.params.feedbackId, userId);
       
       reply.send({ success: true, message: 'Feedback deleted successfully' });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to delete feedback:', error);
       reply.code(400).send({
         error: 'Failed to delete feedback',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -360,8 +363,8 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         required: ['feedbackId'],
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['voteType'],
@@ -369,14 +372,14 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           voteType: { 
             type: 'string', 
             enum: ['helpful', 'not_helpful'] 
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ 
     Params: FeedbackRouteParams; 
     Body: { voteType: 'helpful' | 'not_helpful' } 
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = request.user.id;
       await feedbackService.voteFeedback(
@@ -386,13 +389,13 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
       );
       
       reply.send({ success: true, message: 'Vote recorded successfully' });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to vote on feedback:', error);
       reply.code(400).send({
         error: 'Failed to vote on feedback',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -407,21 +410,21 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         required: ['feedbackId'],
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['content'],
         properties: {
           content: { type: 'string', minLength: 1, maxLength: 2000 },
           parentReplyId: { type: 'string', format: 'uuid' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ 
     Params: FeedbackRouteParams; 
     Body: FeedbackReplyBody 
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = request.user.id;
       const feedbackReply = await feedbackService.replyToFeedback(
@@ -432,13 +435,13 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
       );
       
       reply.code(201).send({ success: true, reply: feedbackReply });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to reply to feedback:', error);
       reply.code(400).send({
         error: 'Failed to reply to feedback',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -452,31 +455,31 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         required: ['feedbackId'],
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ 
     Params: FeedbackRouteParams;
     Querystring: { limit?: number; offset?: number }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       // This would be implemented in the service
       const replies = []; // Placeholder
       reply.send({ success: true, replies });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get feedback replies:', error);
       reply.code(400).send({
         error: 'Failed to get feedback replies',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -494,20 +497,20 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         required: ['targetId'],
         properties: {
           targetId: { type: 'string', format: 'uuid' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { targetId: string } }>, reply: FastifyReply) => {
     try {
       const summary = await feedbackService.getFeedbackSummary(request.params.targetId);
       reply.send({ success: true, summary });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get feedback summary:', error);
       reply.code(400).send({
         error: 'Failed to get feedback summary',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -524,17 +527,17 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           targetType: { 
             type: 'string', 
             enum: ['contribution', 'template', 'user', 'platform'] 
-  }
+
           dateFrom: { type: 'string', format: 'date' },
           dateTo: { type: 'string', format: 'date' },
           groupBy: { 
             type: 'string', 
             enum: ['day', 'week', 'month'],
             default: 'day' 
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ 
     Querystring: {
       targetId?: string;
@@ -542,8 +545,8 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
       dateFrom?: string;
       dateTo?: string;
       groupBy?: string;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       // This would be implemented with analytics aggregation
       const analytics = {
@@ -555,13 +558,13 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
       };
       
       reply.send({ success: true, analytics });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get feedback analytics:', error);
       reply.code(400).send({
         error: 'Failed to get feedback analytics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -580,8 +583,8 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         required: ['feedbackId'],
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['action'],
@@ -589,16 +592,16 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           action: { 
             type: 'string', 
             enum: ['approve', 'reject', 'flag', 'archive'] 
-  }
+
           notes: { type: 'string', maxLength: 1000 },
           rejectionReason: { type: 'string', maxLength: 500 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ 
     Params: FeedbackRouteParams; 
     Body: ModerateFeedbackRequest 
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       // Check if user has moderation permissions
       if (!request.user.roles?.includes('moderator') && !request.user.roles?.includes('admin')) {
@@ -606,7 +609,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           error: 'Insufficient permissions',
           details: 'Moderation requires moderator or admin role'
         });
-      }
+
 
       const moderatorId = request.user.id;
       const feedback = await feedbackService.moderateFeedback(
@@ -616,13 +619,13 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
       );
       
       reply.send({ success: true, feedback });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to moderate feedback:', error);
       reply.code(400).send({
         error: 'Failed to moderate feedback',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -640,9 +643,9 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           assignedTo: { type: 'string', format: 'uuid' },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ 
     Querystring: {
       queueType?: string;
@@ -650,8 +653,8 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
       assignedTo?: string;
       limit?: number;
       offset?: number;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       // Check if user has moderation permissions
       if (!request.user.roles?.includes('moderator') && !request.user.roles?.includes('admin')) {
@@ -659,18 +662,18 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           error: 'Insufficient permissions',
           details: 'Viewing moderation queue requires moderator or admin role'
         });
-      }
+
 
       // This would be implemented in the service
       const queue = [];
       reply.send({ success: true, queue });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get moderation queue:', error);
       reply.code(400).send({
         error: 'Failed to get moderation queue',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // =============================================================================
@@ -693,24 +696,24 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             items: { type: 'string', format: 'uuid' },
             minItems: 1,
             maxItems: 50 
-  }
+
           action: { 
             type: 'string', 
             enum: ['approve', 'reject', 'flag', 'archive'] 
-  }
+
           notes: { type: 'string', maxLength: 1000 },
           rejectionReason: { type: 'string', maxLength: 500 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ 
     Body: {
       feedbackIds: string[];
       action: 'approve' | 'reject' | 'flag' | 'archive';
       notes?: string;
       rejectionReason?: string;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       // Check if user has moderation permissions
       if (!request.user.roles?.includes('moderator') && !request.user.roles?.includes('admin')) {
@@ -718,7 +721,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           error: 'Insufficient permissions',
           details: 'Bulk moderation requires moderator or admin role'
         });
-      }
+
 
       const moderatorId = request.user.id;
       const results = [];
@@ -735,22 +738,21 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             }
           );
           results.push({ feedbackId, success: true, feedback });
-        } catch (error) {
+ catch (error) {
           results.push({ 
             feedbackId, 
             success: false, 
             error: error instanceof Error ? error.message : 'Unknown error' 
           });
-        }
-      }
+
+
       
       reply.send({ success: true, results });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to bulk moderate feedback:', error);
       reply.code(400).send({
         error: 'Failed to bulk moderate feedback',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
-}

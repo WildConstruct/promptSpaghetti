@@ -15,15 +15,13 @@
  */
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
-import {
-  AdminRole,
-  LockoutReason,
+import { AdminRole,
+  LockoutReason }
   UnlockMethod
-} from './AccountLockoutService';
+ from './AccountLockoutService';
 
 // Exemption Types
-export enum ExemptionType {
-  RATE_LIMITING = 'rate_limiting',
+export enum ExemptionType { RATE_LIMITING = 'rate_limiting',
   ACCOUNT_LOCKOUT = 'account_lockout',
   MFA_REQUIREMENT = 'mfa_requirement',
   PASSWORD_POLICY = 'password_policy',
@@ -75,41 +73,36 @@ export enum ExemptionType {
   id: string;
   type: ExemptionType;
   scope: ExemptionScope;
-  target: string; // User ID, IP address, endpoint, etc.,
+  target: string; // User ID, IP address, endpoint, etc.;
   status: ExemptionStatus;
   priority: ExemptionPriority;
   reason: ExemptionReason;
   description: string;
-  requestedBy: {
+  requestedBy: { }
   userId: string;
   userEmail: string;
   role: AdminRole;
   timestamp: Date;
-}
+
+
 };
-  approvedBy?: {
-  userId: string;
+  approvedBy?: { userId: string;
   userEmail: string;
   role: AdminRole;
   timestamp: Date;
-  comments?: string;
-};
-  revokedBy?: {
-  userId: string;
+  comments?: string };
+  revokedBy?: { userId: string;
   userEmail: string;
   role: AdminRole;
   timestamp: Date;
-  reason?: string;
-};
+  reason?: string };
   effectiveFrom: Date;
   expiresAt?: Date;
   autoRenew: boolean;
-  renewalCriteria?: {
-  reviewRequired: boolean;
+  renewalCriteria?: { reviewRequired: boolean;
   maxRenewals: number;
   renewalPeriodDays: number;
-  currentRenewals: number;
-};
+  currentRenewals: number };
   conditions: {
     ipWhitelist?: string;
     timeRestrictions?: {
@@ -117,22 +110,18 @@ export enum ExemptionType {
       allowedDays: string;
   timezone: string;
     };
-    usageQuota?: {
-  maxUsesPerDay?: number;
+    usageQuota?: { maxUsesPerDay?: number;
   maxUsesPerHour?: number;
   currentUsage: number;
-  resetTime: Date;
-};
-    securityContext?: {
-  minimumTrustLevel?: string;
+  resetTime: Date };
+    securityContext?: { minimumTrustLevel?: string;
   requireMFA?: boolean;
-  requireApproval?: boolean;
-};
+  requireApproval?: boolean };
   };
-  metadata: {
+  metadata: { ,
   businessJustification: string;
-  riskAssessment: {
-  level: 'low' | 'medium' | 'high' | 'critical';
+  riskAssessment: {,
+  level: 'low' | 'medium' | 'high' | 'critical' }
   mitigations: string;
   reviewDate: Date;
 };
@@ -141,45 +130,44 @@ export enum ExemptionType {
     tags: string;
   };
   auditTrail: ExemptionAuditEntry;
-  usage: {;
+  usage: { ;
   timesUsed: number;
   lastUsed?: Date;
-  usageHistory: Array<{
+  usageHistory: Array<{ }
   timestamp: Date;
   context: Record<string, any>;
   source: string;
-}>;
+>;
   };
 
 // Exemption Audit Entry
-}
-}
-export interface ExemptionAuditEntry {
-  id: string;
+
+
+export interface ExemptionAuditEntry { id: string;
   timestamp: Date;
   action: 'created' | 'approved' | 'denied' | 'revoked' | 'renewed' | 'used' | 'modified' | 'expired';
-  actor: {
+  actor: {;
   userId: string;
   userEmail: string;
   role?: AdminRole;
-  type: 'user' | 'admin' | 'system'
-}
+  type: 'user' | 'admin' | 'system' }
+
+
   };
   details: Record<string, any>;
   ipAddress?: string;
   userAgent?: string;
 
 // Exemption Request
-}
-}
-export interface ExemptionRequest {
-  type: ExemptionType;
+
+
+export interface ExemptionRequest { type: ExemptionType;
   scope: ExemptionScope;
   target: string;
   reason: ExemptionReason;
   description: string;
   priority: ExemptionPriority;
-  requestedDuration?: number; // days,
+  requestedDuration?: number; // days }
   conditions?: Partial<SecurityExemption['conditions']>;
   businessJustification: string;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -187,9 +175,10 @@ export interface ExemptionRequest {
   autoRenew?: boolean;
   emergencyOverride?: boolean;
   // Exemption Usage Context
-}
-}
-}
+
+
+
+
 export interface ExemptionUsageContext {
   endpoint?: string;
   ipAddress?: string;
@@ -199,11 +188,11 @@ export interface ExemptionUsageContext {
   sessionId?: string;
   metadata?: Record<string, any>;
   // Exemption Query
-}
-}
-}
-export interface ExemptionQuery {
-  types?: ExemptionType;
+
+
+
+
+export interface ExemptionQuery { types?: ExemptionType;
   scopes?: ExemptionScope;
   statuses?: ExemptionStatus;
   priorities?: ExemptionPriority;
@@ -211,23 +200,23 @@ export interface ExemptionQuery {
   requestedBy?: string;
   approvedBy?: string;
   activeOnly?: boolean;
-  expiringSoon?: boolean; // Within 7 days,
+  expiringSoon?: boolean; // Within 7 days }
   startDate?: Date;
   endDate?: Date;
   tags?: string;
   limit?: number;
   offset?: number;
   // Exemption Policy
-}
-}
-}
-export interface ExemptionPolicy {
-  type: ExemptionType;
+
+
+
+
+export interface ExemptionPolicy { type: ExemptionType;
   scope: ExemptionScope;
   allowedRoles: AdminRole;
   requiresApproval: boolean;
   approverRoles: AdminRole;
-  maxDuration: number; // days,
+  maxDuration: number; // days }
   autoExpiry: boolean;
   emergencyOverrideAllowed: boolean;
   usageTracking: boolean;
@@ -235,10 +224,9 @@ export interface ExemptionPolicy {
   /**
   * Comprehensive exemption management service
   */
-}
-}
-export class ExemptionManager extends EventEmitter {
-  private exemptions: Map<string, SecurityExemption> = new Map();
+
+
+export class ExemptionManager extends EventEmitter { private exemptions: Map<string, SecurityExemption> = new Map();
   private policies: Map<string, ExemptionPolicy> = new Map();
   private pendingRequests: Map<string, ExemptionRequest> = new Map();
   constructor() {
@@ -249,10 +237,10 @@ export class ExemptionManager extends EventEmitter {
    * Request a new security exemption
    */
   public async requestExemption(
-    request: ExemptionRequest,
-    requestorId: string,
-    requestorEmail: string,
-    requestorRole: AdminRole): Promise<string> {,
+    request: ExemptionRequest
+    requestorId: string
+    requestorEmail: string
+    requestorRole: AdminRole): Promise<string> { }
     // Validate request against policy
     const policy = this.getPolicy(request.type, request.scope);
     if (!policy) {
@@ -264,77 +252,73 @@ export class ExemptionManager extends EventEmitter {
     const requestedDays = request.requestedDuration || 7;
     if (requestedDays > policy.maxDuration) {
       throw new Error(`Requested duration ${requestedDays} days exceeds maximum allowed ${policy.maxDuration} days`);}
-    const exemption: SecurityExemption = {,
-  id: crypto.randomUUID(),
-  type: request.type,
-  scope: request.scope,
-  target: request.target,
-  status: policy.requiresApproval ? ExemptionStatus.PENDING_APPROVAL : ExemptionStatus.ACTIVE,
-  priority: request.priority,
-  reason: request.reason,
-  description: request.description,
+    const exemption: SecurityExemption = { 
+  id: crypto.randomUUID()
+  type: request.type
+  scope: request.scope
+  target: request.target
+  status: policy.requiresApproval ? ExemptionStatus.PENDING_APPROVAL : ExemptionStatus.ACTIVE
+  priority: request.priority
+  reason: request.reason
+  description: request.description
   requestedBy: {
-  userId: requestorId,
-  userEmail: requestorEmail,
-  role: requestorRole,
-  timestamp: new Date(),
-},
-  effectiveFrom: new Date(),
-      expiresAt: request.requestedDuration ,
+  userId: requestorId
+  userEmail: requestorEmail
+  role: requestorRole
+  timestamp: new Date() }
+
+  effectiveFrom: new Date()
+      expiresAt: request.requestedDuration 
         ? new Date(Date.now() + request.requestedDuration * 24 * 60 * 60 * 1000)
-        : undefined,
-      autoRenew: request.autoRenew || false,
-      conditions: {
+        : undefined
+      autoRenew: request.autoRenew || false
+      conditions: { 
   usageQuota: {
-  currentUsage: 0,
-  resetTime: new Date(),
-}
+  currentUsage: 0
+  resetTime: new Date() }
+
         ...request.conditions
-  },
-  metadata: {
-  businessJustification: request.businessJustification,
+
+  metadata: { 
+  businessJustification: request.businessJustification
   riskAssessment: {
-  level: request.riskLevel,
-  mitigations: request.mitigations,
-  reviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days,
-},
-  tags: [];
-  },
-  auditTrail: [{,
-  id: crypto.randomUUID(),
-  timestamp: new Date(),
-  action: 'created',
+  level: request.riskLevel
+  mitigations: request.mitigations
+  reviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days }
+
+  tags: []
+
+  auditTrail: [{ 
+  id: crypto.randomUUID()
+  timestamp: new Date()
+  action: 'created'
   actor: {
-  userId: requestorId,
-  userEmail: requestorEmail,
-  role: requestorRole,
-  type: 'admin',
-},
-  details: {
-  request,
-  policy: policy.type,
-}],
-      usage: {
-  timesUsed: 0,
-  usageHistory: [],
+  userId: requestorId
+  userEmail: requestorEmail
+  role: requestorRole
+  type: 'admin' }
+
+  details: { request
+  policy: policy.type }
+]
+      usage: { 
+  timesUsed: 0
+  usageHistory: [] }
 };
     this.exemptions.set(exemption.id, exemption);
-    if (policy.requiresApproval) {
-      this.pendingRequests.set(exemption.id, request);
+    if (policy.requiresApproval) { this.pendingRequests.set(exemption.id, request);
       await this.notifyApprovers(exemption, policy);
-      this.emit('exemptionRequested', exemption);
-    } else {
-      // Auto-approved
+      this.emit('exemptionRequested', exemption) } else { // Auto-approved
       this.emit('exemptionGranted', exemption);
     return exemption.id;
   /**
    * Approve a pending exemption request
    */
   public async approveExemption(
-    exemptionId: string,
-    approverId: string,
-    approverEmail: string,
-    approverRole: AdminRole,
+    exemptionId: string
+    approverId: string
+    approverEmail: string
+    approverRole: AdminRole }
     comments?: string
   ): Promise<boolean> {
 
@@ -348,24 +332,23 @@ export class ExemptionManager extends EventEmitter {
       throw new Error(`Role ${approverRole} is not authorized to approve this exemption type`);}
     // Update exemption
     exemption.status = ExemptionStatus.ACTIVE;
-    exemption.approvedBy = {
-  userId: approverId,
-  userEmail: approverEmail,
-  role: approverRole,
-  timestamp: new Date(),
+    exemption.approvedBy = { userId: approverId
+  userEmail: approverEmail
+  role: approverRole
+  timestamp: new Date() }
   comments
 };
     // Add audit entry
-    exemption.auditTrail.push({)
-  id: crypto.randomUUID(),
-  timestamp: new Date(),
-  action: 'approved',
+    exemption.auditTrail.push({ )
+  id: crypto.randomUUID()
+  timestamp: new Date()
+  action: 'approved'
   actor: {
-  userId: approverId,
-  userEmail: approverEmail,
-  role: approverRole,
-  type: 'admin',
-},
+  userId: approverId
+  userEmail: approverEmail
+  role: approverRole
+  type: 'admin' }
+
   details: { comments }
     });
     this.pendingRequests.delete(exemptionId);
@@ -375,11 +358,11 @@ export class ExemptionManager extends EventEmitter {
    * Deny a pending exemption request
    */
   public async denyExemption(
-    exemptionId: string,
-    approverId: string,
-    approverEmail: string,
-    approverRole: AdminRole,
-    reason: string): Promise<boolean> {,
+    exemptionId: string
+    approverId: string
+    approverEmail: string
+    approverRole: AdminRole
+    reason: string): Promise<boolean> {
     const exemption = this.exemptions.get(exemptionId);
     if (!exemption) {
       throw new Error(`Exemption not found: ${exemptionId}`);}
@@ -391,16 +374,16 @@ export class ExemptionManager extends EventEmitter {
     // Update exemption
     exemption.status = ExemptionStatus.DENIED;
     // Add audit entry
-    exemption.auditTrail.push({)
-  id: crypto.randomUUID(),
-  timestamp: new Date(),
-  action: 'denied',
+    exemption.auditTrail.push({ )
+  id: crypto.randomUUID()
+  timestamp: new Date()
+  action: 'denied'
   actor: {
-  userId: approverId,
-  userEmail: approverEmail,
-  role: approverRole,
-  type: 'admin',
-},
+  userId: approverId
+  userEmail: approverEmail
+  role: approverRole
+  type: 'admin' }
+
   details: { reason }
     });
     this.pendingRequests.delete(exemptionId);
@@ -410,8 +393,8 @@ export class ExemptionManager extends EventEmitter {
    * Check if an exemption exists and is active
    */
   public checkExemption(type: ExemptionType)
-    scope: ExemptionScope,
-    target: string,
+  scope: ExemptionScope
+    target: string
     context?: ExemptionUsageContext
   ): {
     granted: boolean;
@@ -434,13 +417,12 @@ export class ExemptionManager extends EventEmitter {
     if (activeExemptions.length === 0) {
       return { granted: false, reason: 'All exemptions have expired' };
     // Find the most appropriate exemption (highest priority)
-    const exemption = activeExemptions.sort((a, b) => {
-  const priorityOrder = {
-  [ExemptionPriority.EMERGENCY]: 5,
-  [ExemptionPriority.CRITICAL]: 4,
-  [ExemptionPriority.HIGH]: 3,
-  [ExemptionPriority.MEDIUM]: 2,
-  [ExemptionPriority.LOW]: 1,
+    const exemption = activeExemptions.sort((a, b) => { const priorityOrder = {
+  [ExemptionPriority.EMERGENCY]: 5
+  [ExemptionPriority.CRITICAL]: 4
+  [ExemptionPriority.HIGH]: 3
+  [ExemptionPriority.MEDIUM]: 2
+  [ExemptionPriority.LOW]: 1 }
 };
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     })[0];
@@ -456,10 +438,10 @@ export class ExemptionManager extends EventEmitter {
    * Revoke an active exemption
    */
   public revokeExemption(exemptionId: string)
-    revokerId: string,
-    revokerEmail: string,
-    revokerRole: AdminRole,
-    reason: string): boolean {,
+  revokerId: string
+    revokerEmail: string
+    revokerRole: AdminRole
+    reason: string): boolean {
     const exemption = this.exemptions.get(exemptionId);
     if (!exemption) {
       throw new Error(`Exemption not found: ${exemptionId}`);}
@@ -467,24 +449,23 @@ export class ExemptionManager extends EventEmitter {
       throw new Error(`Cannot revoke exemption with status: ${exemption.status}`);}
     // Update exemption
     exemption.status = ExemptionStatus.REVOKED;
-    exemption.revokedBy = {
-  userId: revokerId,
-  userEmail: revokerEmail,
-  role: revokerRole,
-  timestamp: new Date(),
+    exemption.revokedBy = { userId: revokerId
+  userEmail: revokerEmail
+  role: revokerRole
+  timestamp: new Date() }
   reason
 };
     // Add audit entry
-    exemption.auditTrail.push({)
-  id: crypto.randomUUID(),
-  timestamp: new Date(),
-  action: 'revoked',
+    exemption.auditTrail.push({ )
+  id: crypto.randomUUID()
+  timestamp: new Date()
+  action: 'revoked'
   actor: {
-  userId: revokerId,
-  userEmail: revokerEmail,
-  role: revokerRole,
-  type: 'admin',
-},
+  userId: revokerId
+  userEmail: revokerEmail
+  role: revokerRole
+  type: 'admin' }
+
   details: { reason }
     });
     this.emit('exemptionRevoked', exemption);
@@ -493,75 +474,74 @@ export class ExemptionManager extends EventEmitter {
    * Create emergency exemption with bypass approval
    */
   public async createEmergencyExemption(
-    request: ExemptionRequest,
-    requestorId: string,
-    requestorEmail: string,
-    requestorRole: AdminRole,
-    emergencyCode: string,
-    justification: string): Promise<string> {,
+    request: ExemptionRequest
+    requestorId: string
+    requestorEmail: string
+    requestorRole: AdminRole
+    emergencyCode: string
+    justification: string): Promise<string> {
     const policy = this.getPolicy(request.type, request.scope);
     if (!policy || !policy.emergencyOverrideAllowed) {
       throw new Error(`Emergency exemptions not allowed for type ${request.type}`);}
     // Validate emergency code (in production, this would be more sophisticated)
-    if (!this.validateEmergencyCode(emergencyCode, requestorRole)) {
-      throw new Error('Invalid emergency override code');
-    const exemption: SecurityExemption = {,
-  id: crypto.randomUUID(),
-      type: request.type,
-      scope: request.scope,
-      target: request.target,
-      status: ExemptionStatus.ACTIVE,
-      priority: ExemptionPriority.EMERGENCY,
-      reason: ExemptionReason.EMERGENCY_ACCESS,
+    if (!this.validateEmergencyCode(emergencyCode, requestorRole)) { throw new Error('Invalid emergency override code');
+    const exemption: SecurityExemption = {
+  id: crypto.randomUUID()
+      type: request.type
+      scope: request.scope
+      target: request.target
+      status: ExemptionStatus.ACTIVE
+      priority: ExemptionPriority.EMERGENCY
+      reason: ExemptionReason.EMERGENCY_ACCESS }
       description: `EMERGENCY: ${request.description}`}
-},
-  requestedBy: {
-  userId: requestorId,
-  userEmail: requestorEmail,
-  role: requestorRole,
-  timestamp: new Date(),
-},
-  approvedBy: {
-  userId: 'EMERGENCY_SYSTEM',
-        userEmail: 'emergency@company.com',
-        role: AdminRole.SUPER_ADMIN,
-        timestamp: new Date(),
+
+  requestedBy: { 
+  userId: requestorId
+  userEmail: requestorEmail
+  role: requestorRole
+  timestamp: new Date() }
+
+  approvedBy: { 
+  userId: 'EMERGENCY_SYSTEM'
+        userEmail: 'emergency@company.com'
+        role: AdminRole.SUPER_ADMIN
+        timestamp: new Date() }
         comments: `Emergency override with code: ${emergencyCode.substring(0, 4)}****`}
-  },
-  effectiveFrom: new Date(),
+
+  effectiveFrom: new Date()
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours max
-      autoRenew: false,
-      conditions: {
+      autoRenew: false
+      conditions: { 
   usageQuota: {
-  currentUsage: 0,
-  resetTime: new Date(),
-},
-  metadata: {
-  businessJustification: justification,
+  currentUsage: 0
+  resetTime: new Date() }
+
+  metadata: { 
+  businessJustification: justification
   riskAssessment: {
-  level: 'critical',
-  mitigations: ['Emergency monitoring enabled', 'Auto-expiry in 24 hours'],
-  reviewDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
-},
+  level: 'critical'
+  mitigations: ['Emergency monitoring enabled', 'Auto-expiry in 24 hours']
+  reviewDate: new Date(Date.now() + 24 * 60 * 60 * 1000) }
+
   tags: ['emergency', 'override']
-  },
-  auditTrail: [{,
-  id: crypto.randomUUID(),
-  timestamp: new Date(),
-  action: 'created',
+
+  auditTrail: [{ 
+  id: crypto.randomUUID()
+  timestamp: new Date()
+  action: 'created'
   actor: {
-  userId: requestorId,
-  userEmail: requestorEmail,
-  role: requestorRole,
-  type: 'admin',
-},
-  details: {
-  emergencyCode: emergencyCode.substring(0, 4) + '****',
+  userId: requestorId
+  userEmail: requestorEmail
+  role: requestorRole
+  type: 'admin' }
+
+  details: { 
+  emergencyCode: emergencyCode.substring(0, 4) + '****' }
   justification
-}],
-      usage: {
-  timesUsed: 0,
-  usageHistory: [],
+]
+      usage: { 
+  timesUsed: 0
+  usageHistory: [] }
 };
     this.exemptions.set(exemption.id, exemption);
     this.emit('emergencyExemptionCreated', exemption);
@@ -569,7 +549,7 @@ export class ExemptionManager extends EventEmitter {
   /**
    * Query exemptions
    */
-  public queryExemptions(query: ExemptionQuery): {
+  public queryExemptions(query: ExemptionQuery): { 
   exemptions: SecurityExemption;
   total: number;
   hasMore: boolean;
@@ -611,7 +591,7 @@ export class ExemptionManager extends EventEmitter {
   [ExemptionPriority.CRITICAL]: 4,
   [ExemptionPriority.HIGH]: 3,
   [ExemptionPriority.MEDIUM]: 2,
-  [ExemptionPriority.LOW]: 1,
+  [ExemptionPriority.LOW]: 1 }
 };
       const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
       if (priorityDiff !== 0) return priorityDiff;
@@ -621,16 +601,14 @@ export class ExemptionManager extends EventEmitter {
     const offset = query.offset || 0;
     const limit = query.limit || 50;
     exemptions = exemptions.slice(offset, offset + limit);
-    return {
-  exemptions,
+    return { exemptions,
   total,
-  hasMore: (offset + limit) < total,
+  hasMore: (offset + limit) < total }
 };
   /**
    * Get exemption statistics
    */
-  public getExemptionStatistics(): {
-    total: number;
+  public getExemptionStatistics(): { total: number;
   active: number;
     pending: number;
   expired: number;
@@ -640,7 +618,7 @@ export class ExemptionManager extends EventEmitter {
     byPriority: Record<ExemptionPriority, number>;
     expiringSoon: number;
   emergencyCount: number;
-    usageStats: {
+    usageStats: { }
   totalUsage: number;
       averageUsagePerExemption: number;
   mostUsedExemptions: Array<{ id: string; usage: number }>;
@@ -663,8 +641,7 @@ export class ExemptionManager extends EventEmitter {
     const mostUsedExemptions = usageList;
       .sort((a, b) => b.usage - a.usage)
       .slice(0, 10);
-    return {
-  total: exemptions.length,
+    return { total: exemptions.length,
   active: exemptions.filter(ex => ex.status === ExemptionStatus.ACTIVE).length,
   pending: exemptions.filter(ex => ex.status === ExemptionStatus.PENDING_APPROVAL).length,
   expired: exemptions.filter(ex => ex.status === ExemptionStatus.EXPIRED).length,
@@ -676,9 +653,9 @@ export class ExemptionManager extends EventEmitter {
   ex.expiresAt && ex.expiresAt <= soonThreshold && ex.expiresAt > now
   ).length,
   emergencyCount: exemptions.filter(ex => ex.priority === ExemptionPriority.EMERGENCY).length,
-  usageStats: {
+  usageStats: {,
   totalUsage,
-  averageUsagePerExemption: exemptions.length > 0 ? totalUsage / exemptions.length : 0,
+  averageUsagePerExemption: exemptions.length > 0 ? totalUsage / exemptions.length : 0 }
   mostUsedExemptions
 };
   // Private helper methods
@@ -701,12 +678,10 @@ export class ExemptionManager extends EventEmitter {
       const allowedDays = exemption.conditions.timeRestrictions.allowedDays;
       if (allowedDays && !allowedDays.includes(currentDay)) {
         return { valid: false, reason: 'Current day not allowed' };
-      if (allowedHours) {
-  const isAllowedHour = allowedHours.some(timeRange => {)
+      if (allowedHours) { const isAllowedHour = allowedHours.some(timeRange => {)
   const start = parseInt(timeRange.start.split(':')[0]);
   const end = parseInt(timeRange.end.split(':')[0]);
-  return currentHour >= start && currentHour <= end;
-});
+  return currentHour >= start && currentHour <= end });
         if (!isAllowedHour) {
           return { valid: false, reason: 'Current time not allowed' };
     // Check usage quota
@@ -731,26 +706,24 @@ export class ExemptionManager extends EventEmitter {
   private recordExemptionUsage(((
     exemption: SecurityExemption,
     context: ExemptionUsageContext
-  ): void {
-  exemption.usage.timesUsed++;
+  ): void { exemption.usage.timesUsed++;
   exemption.usage.lastUsed = new Date();
   exemption.usage.usageHistory.push({)
   timestamp: new Date(),
   context,
-  source: 'ExemptionManager',
+  source: 'ExemptionManager' }
 });
     // Increment quota usage
-    if (exemption.conditions.usageQuota) {
-  exemption.conditions.usageQuota.currentUsage++;
+    if (exemption.conditions.usageQuota) { exemption.conditions.usageQuota.currentUsage++;
   // Add audit entry
   exemption.auditTrail.push({)
   id: crypto.randomUUID(),
   timestamp: new Date(),
   action: 'used',
-  actor: {
+  actor: {,
   userId: 'system',
   userEmail: 'system@company.com',
-  type: 'system',
+  type: 'system' }
 },
   details: { context },
       ipAddress: context.ipAddress,
@@ -761,76 +734,74 @@ export class ExemptionManager extends EventEmitter {
     // In production, this would validate against secure emergency codes
     // For now, simple validation based on role
     const emergencyPatterns: Record<AdminRole, RegExp> = {
-      [AdminRole.SUPER_ADMIN]: /^EMERGENCY-SA-[A-Z0-9]{8}$/,
-      [AdminRole.SECURITY_ADMIN]: /^EMERGENCY-SEC-[A-Z0-9]{8}$/,
-      [AdminRole.SYSTEM_ADMIN]: /^EMERGENCY-SYS-[A-Z0-9]{8}$/,
-      [AdminRole.HELP_DESK]: /^EMERGENCY-HD-[A-Z0-9]{8}$/,
+      [AdminRole.SUPER_ADMIN]: /^EMERGENCY-SA-[A-Z0-9]{8}$/
+      [AdminRole.SECURITY_ADMIN]: /^EMERGENCY-SEC-[A-Z0-9]{8}$/
+      [AdminRole.SYSTEM_ADMIN]: /^EMERGENCY-SYS-[A-Z0-9]{8}$/
+      [AdminRole.HELP_DESK]: /^EMERGENCY-HD-[A-Z0-9]{8}$/
       [AdminRole.COMPLIANCE_OFFICER]: /^EMERGENCY-CO-[A-Z0-9]{8}$/
     };
     return emergencyPatterns[role]?.test(code) || false;
   private async notifyApprovers(((
-    exemption: SecurityExemption,
+    exemption: SecurityExemption
     policy: ExemptionPolicy
   ): Promise<void> {
 
     // In production, integrate with notification service
     console.log(`Notification: Exemption ${exemption.id} requires approval from roles:`, policy.approverRoles);}
     this.emit('approvalRequired', { exemption, policy });
-  private initializeDefaultPolicies(): void {
-  // Rate limiting exemptions
+  private initializeDefaultPolicies(): void { // Rate limiting exemptions
   this.policies.set('rate_limiting_user', {)
-  type: ExemptionType.RATE_LIMITING,
-  scope: ExemptionScope.USER,
-  allowedRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN, AdminRole.SYSTEM_ADMIN],
-  requiresApproval: true,
-  approverRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN],
-  maxDuration: 30,
-  autoExpiry: true,
-  emergencyOverrideAllowed: true,
-  usageTracking: true,
-  complianceRequired: true,
+  type: ExemptionType.RATE_LIMITING
+  scope: ExemptionScope.USER
+  allowedRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN, AdminRole.SYSTEM_ADMIN]
+  requiresApproval: true
+  approverRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN]
+  maxDuration: 30
+  autoExpiry: true
+  emergencyOverrideAllowed: true
+  usageTracking: true
+  complianceRequired: true }
 });
     // Account lockout exemptions
-    this.policies.set('account_lockout_user', {)
-  type: ExemptionType.ACCOUNT_LOCKOUT,
-  scope: ExemptionScope.USER,
-  allowedRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN, AdminRole.HELP_DESK],
-  requiresApproval: true,
-  approverRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN],
-  maxDuration: 7,
-  autoExpiry: true,
-  emergencyOverrideAllowed: true,
-  usageTracking: true,
-  complianceRequired: true,
+    this.policies.set('account_lockout_user', { )
+  type: ExemptionType.ACCOUNT_LOCKOUT
+  scope: ExemptionScope.USER
+  allowedRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN, AdminRole.HELP_DESK]
+  requiresApproval: true
+  approverRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN]
+  maxDuration: 7
+  autoExpiry: true
+  emergencyOverrideAllowed: true
+  usageTracking: true
+  complianceRequired: true }
 });
     // MFA requirement exemptions
-    this.policies.set('mfa_requirement_user', {)
-  type: ExemptionType.MFA_REQUIREMENT,
-  scope: ExemptionScope.USER,
-  allowedRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN],
-  requiresApproval: true,
-  approverRoles: [AdminRole.SUPER_ADMIN],
-  maxDuration: 1, // Very short for security,
-  autoExpiry: true,
-  emergencyOverrideAllowed: false,
-  usageTracking: true,
-  complianceRequired: true,
+    this.policies.set('mfa_requirement_user', { )
+  type: ExemptionType.MFA_REQUIREMENT
+  scope: ExemptionScope.USER
+  allowedRoles: [AdminRole.SUPER_ADMIN, AdminRole.SECURITY_ADMIN]
+  requiresApproval: true
+  approverRoles: [AdminRole.SUPER_ADMIN]
+  maxDuration: 1, // Very short for security
+  autoExpiry: true
+  emergencyOverrideAllowed: false
+  usageTracking: true
+  complianceRequired: true }
 });
     // API-specific exemptions
-    this.policies.set('rate_limiting_api_key', {)
-  type: ExemptionType.RATE_LIMITING,
-  scope: ExemptionScope.API_KEY,
-  allowedRoles: [AdminRole.SUPER_ADMIN, AdminRole.SYSTEM_ADMIN],
-  requiresApproval: false, // Auto-approved for API keys,
-  approverRoles: [],
-  maxDuration: 90,
-  autoExpiry: true,
-  emergencyOverrideAllowed: false,
-  usageTracking: true,
-  complianceRequired: false,
+    this.policies.set('rate_limiting_api_key', { )
+  type: ExemptionType.RATE_LIMITING
+  scope: ExemptionScope.API_KEY
+  allowedRoles: [AdminRole.SUPER_ADMIN, AdminRole.SYSTEM_ADMIN]
+  requiresApproval: false, // Auto-approved for API keys
+  approverRoles: []
+  maxDuration: 90
+  autoExpiry: true
+  emergencyOverrideAllowed: false
+  usageTracking: true
+  complianceRequired: false }
 });
-  private startMaintenanceTimer(): void {
-  // Check for expired exemptions every hour
+  private startMaintenanceTimer(): void { // Check for expired exemptions every hour
   setInterval(() => {
   const now = new Date();
   for (const [id, exemption] of this.exemptions) {
@@ -843,29 +814,24 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: now,
   action: 'expired',
-  actor: {
+  actor: {,
   userId: 'system',
   userEmail: 'system@company.com',
-  type: 'system',
+  type: 'system' }
 },
   details: { reason: 'automatic_expiry' }
           });
           this.emit('exemptionExpired', exemption);
           // Check for auto-renewal
-          if (exemption.autoRenew && exemption.renewalCriteria) {
-            this.processAutoRenewal(exemption);
-    }, 60 * 60 * 1000); // Every hour
-  private processAutoRenewal(exemption: SecurityExemption): void {
-    const criteria = exemption.renewalCriteria!;
+          if (exemption.autoRenew && exemption.renewalCriteria) { this.processAutoRenewal(exemption) }, 60 * 60 * 1000); // Every hour
+  private processAutoRenewal(exemption: SecurityExemption): void { const criteria = exemption.renewalCriteria!;
     if (criteria.currentRenewals >= criteria.maxRenewals) {
       this.emit('autoRenewalLimitReached', exemption);
       return;
     if (criteria.reviewRequired) {
       // Mark for manual review
       exemption.status = ExemptionStatus.PENDING_APPROVAL;
-      this.emit('renewalReviewRequired', exemption);
-    } else {
-  // Auto-renew
+      this.emit('renewalReviewRequired', exemption) } else { // Auto-renew
   exemption.status = ExemptionStatus.ACTIVE;
   exemption.expiresAt = new Date(Date.now() + criteria.renewalPeriodDays * 24 * 60 * 60 * 1000);
   criteria.currentRenewals++;
@@ -873,14 +839,14 @@ export class ExemptionManager extends EventEmitter {
   id: crypto.randomUUID(),
   timestamp: new Date(),
   action: 'renewed',
-  actor: {
+  actor: {,
   userId: 'system',
   userEmail: 'system@company.com',
-  type: 'system',
+  type: 'system' }
 },
-  details: {
+  details: { ,
   reason: 'auto_renewal',
-  renewalCount: criteria.currentRenewals,
+  renewalCount: criteria.currentRenewals }
 });
       this.emit('exemptionAutoRenewed', exemption);
 

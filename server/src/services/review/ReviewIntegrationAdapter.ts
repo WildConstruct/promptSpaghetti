@@ -21,19 +21,19 @@ import {
   ReviewPriority,
   ReviewComplexity,
   ReviewMetadata
-} from '../../../../packages/core/types/ReviewTools';
+ from '../../../../packages/core/types/ReviewTools';
 import {
   FraudDetectionResult,
   FraudAlert
-} from '../../../../packages/core/types/FraudMonitoring';
+ from '../../../../packages/core/types/FraudMonitoring';
 import {
   EnforcementAction,
   ViolationReport,
   EnforcementAppeal
-} from '../../../../packages/core/types/EnforcementTypes';
+ from '../../../../packages/core/types/EnforcementTypes';
 
-}
-}
+
+
 export interface IntegrationConfig {
   enabled: boolean;
   autoCreateReviews: boolean;
@@ -41,12 +41,13 @@ export interface IntegrationConfig {
   defaultPriority: ReviewPriority;
   escalationThresholds: Record<string, number>;
   integrationMappings: IntegrationMapping[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface IntegrationMapping {
   sourceSystem: SourceSystem;
   sourceType: string;
@@ -54,9 +55,10 @@ export interface IntegrationMapping {
   priorityMapping: Record<string, ReviewPriority>;
   complexityMapping: Record<string, ReviewComplexity>;
   criteriaMapping: Record<string, string[]>;
-}
-}
-}
+
+
+
+
 
 export class ReviewIntegrationAdapter {
   private db: Database;
@@ -93,13 +95,13 @@ export class ReviewIntegrationAdapter {
         fraud_case: 85,
         security_alert: 90,
         enforcement_appeal: 75
-  }
+
       integrationMappings: this.getDefaultMappings(),
       ...config
     };
 
     this.initializeIntegrations();
-  }
+
 
   // =============================================================================
   // Core Integration Methods
@@ -113,7 +115,7 @@ export class ReviewIntegrationAdapter {
     if (!this.config.enabled) {
       console.log('🔌 Review integrations disabled');
       return;
-    }
+
 
     console.log('🔌 Initializing review system integrations...');
 
@@ -134,11 +136,11 @@ export class ReviewIntegrationAdapter {
       this.startSyncProcessor();
 
       console.log('✅ Review integrations initialized successfully');
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize review integrations:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Create review from external system
@@ -153,13 +155,13 @@ export class ReviewIntegrationAdapter {
       urgentOverride?: boolean;
       assignToReviewer?: string;
       additionalContext?: unknown;
-    } = {}
+ = {}
   ): Promise<ReviewItem | null> {
 
     if (!this.config.enabled || !this.config.autoCreateReviews) {
       console.log(`🚫 Auto-creation disabled for ${sourceSystem}`);
       return null;
-    }
+
 
     try {
       console.log(`🔄 Creating review from ${sourceSystem}:${sourceType} (${sourceId})`);
@@ -169,7 +171,7 @@ export class ReviewIntegrationAdapter {
       if (!mapping) {
         console.log(`⚠️ No mapping found for ${sourceSystem}:${sourceType}`);
         return null;
-      }
+
 
       // Determine priority
       const priority = options.priority || 
@@ -222,8 +224,7 @@ export class ReviewIntegrationAdapter {
 
       console.log(`✅ Created review ${review.reviewId} from ${sourceSystem}:${sourceId}`);
       return review;
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Failed to create review from ${sourceSystem}:${sourceId}:`, error);
       await this.logIntegrationEvent('review_creation_failed', {
         sourceSystem,
@@ -232,8 +233,8 @@ export class ReviewIntegrationAdapter {
         error: error.message
       });
       return null;
-    }
-  }
+
+
 
   /**
    * Sync review status back to external system
@@ -246,7 +247,7 @@ export class ReviewIntegrationAdapter {
 
     if (!this.config.syncBidirectional) {
       return;
-    }
+
 
     try {
       console.log(`🔄 Syncing review ${review.reviewId} status to ${review.sourceSystem}`);
@@ -270,7 +271,7 @@ export class ReviewIntegrationAdapter {
         
       default:
         console.log(`⚠️ No sync handler for ${review.sourceSystem}`);
-      }
+
 
       await this.logIntegrationEvent('status_synced', {
         reviewId: review.reviewId,
@@ -278,8 +279,7 @@ export class ReviewIntegrationAdapter {
         status,
         hasDecision: !!decision
       });
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Failed to sync status for review ${review.reviewId}:`, error);
       await this.logIntegrationEvent('sync_failed', {
         reviewId: review.reviewId,
@@ -287,8 +287,8 @@ export class ReviewIntegrationAdapter {
         status,
         error: error.message
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Fraud Monitoring Integration
@@ -309,7 +309,7 @@ export class ReviewIntegrationAdapter {
     // Set up event listeners for fraud cases that need review
     // This would integrate with the FraudMonitoringService
     console.log('✅ Fraud monitoring integration ready');
-  }
+
 
   /**
    * Handle fraud case review creation
@@ -337,7 +337,7 @@ export class ReviewIntegrationAdapter {
         urgentOverride: fraudCase.fraudScore >= 90
       }
     );
-  }
+
 
   /**
    * Handle fraud alert review creation
@@ -365,7 +365,7 @@ export class ReviewIntegrationAdapter {
         urgentOverride: alert.severity === 'urgent'
       }
     );
-  }
+
 
   private async syncToFraudSystem(review: ReviewItem, status: string, decision?: any): Promise<void> {
 
@@ -374,12 +374,12 @@ export class ReviewIntegrationAdapter {
       // This is a fraud case - update the case status
       console.log(`🔄 Updating fraud case ${review.sourceId} status: ${status}`);
       // Would call FraudMonitoringService to update case
-    } else if (review.sourceId.startsWith('FA-')) {
+ else if (review.sourceId.startsWith('FA-')) {
       // This is a fraud alert - update the alert status
       console.log(`🔄 Updating fraud alert ${review.sourceId} status: ${status}`);
       // Would call FraudMonitoringService to update alert
-    }
-  }
+
+
 
   // =============================================================================
   // Enforcement Actions Integration
@@ -398,7 +398,7 @@ export class ReviewIntegrationAdapter {
     });
 
     console.log('✅ Enforcement actions integration ready');
-  }
+
 
   /**
    * Handle enforcement action review creation
@@ -425,7 +425,7 @@ export class ReviewIntegrationAdapter {
         priority: this.mapEnforcementSeverityToReviewPriority(action.severity)
       }
     );
-  }
+
 
   /**
    * Handle enforcement appeal review creation
@@ -450,14 +450,14 @@ export class ReviewIntegrationAdapter {
         priority: appeal.urgency === 'high' ? 'urgent' : 'high'
       }
     );
-  }
+
 
   private async syncToEnforcementSystem(review: ReviewItem, status: string, decision?: any): Promise<void> {
 
     // Sync review status back to enforcement system
     console.log(`🔄 Updating enforcement item ${review.sourceId} status: ${status}`);
     // Would call EnforcementActionService to update status
-  }
+
 
   // =============================================================================
   // Verification Queue Integration
@@ -476,7 +476,7 @@ export class ReviewIntegrationAdapter {
     });
 
     console.log('✅ Verification queue integration ready');
-  }
+
 
   /**
    * Handle identity verification review creation
@@ -501,14 +501,14 @@ export class ReviewIntegrationAdapter {
         priority: verificationData.confidenceScore < 70 ? 'high' : 'medium'
       }
     );
-  }
+
 
   private async syncToVerificationSystem(review: ReviewItem, status: string, decision?: any): Promise<void> {
 
     // Sync review status back to verification system
     console.log(`🔄 Updating verification ${review.sourceId} status: ${status}`);
     // Would update verification queue status
-  }
+
 
   // =============================================================================
   // Marketplace Integration
@@ -527,7 +527,7 @@ export class ReviewIntegrationAdapter {
     });
 
     console.log('✅ Marketplace integration ready');
-  }
+
 
   /**
    * Handle template submission review creation
@@ -552,14 +552,14 @@ export class ReviewIntegrationAdapter {
         priority: submission.safetyFlags?.length > 0 ? 'high' : 'medium'
       }
     );
-  }
+
 
   private async syncToMarketplaceSystem(review: ReviewItem, status: string, decision?: any): Promise<void> {
 
     // Sync review status back to marketplace system
     console.log(`🔄 Updating marketplace item ${review.sourceId} status: ${status}`);
     // Would update marketplace submission status
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -576,16 +576,16 @@ export class ReviewIntegrationAdapter {
           medium: 'medium',
           high: 'high',
           urgent: 'urgent'
-  }
+
         complexityMapping: {
           simple: 'simple',
           complex: 'complex',
           expert: 'expert_required'
-  }
+
         criteriaMapping: {
           fraud_case: ['fraud_assessment', 'risk_analysis', 'evidence_review']
-        }
-  }
+
+
       {
         sourceSystem: 'enforcement_actions',
         sourceType: 'appeal',
@@ -594,15 +594,15 @@ export class ReviewIntegrationAdapter {
           low: 'medium',
           medium: 'high',
           high: 'urgent'
-  }
+
         complexityMapping: {
           simple: 'moderate',
           complex: 'complex'
-  }
+
         criteriaMapping: {
           appeal: ['appeal_validity', 'evidence_review', 'policy_compliance']
-        }
-  }
+
+
       {
         sourceSystem: 'marketplace',
         sourceType: 'template_submission',
@@ -610,34 +610,34 @@ export class ReviewIntegrationAdapter {
         priorityMapping: {
           standard: 'medium',
           expedited: 'high'
-  }
+
         complexityMapping: {
           simple: 'simple',
           advanced: 'moderate',
           enterprise: 'complex'
-  }
+
         criteriaMapping: {
           template: ['quality_check', 'safety_review', 'compliance_check']
-        }
-      }
+
+
     ];
-  }
+
 
   private getIntegrationMapping(sourceSystem: SourceSystem, sourceType: string): IntegrationMapping | null {
     return this.config.integrationMappings.find(
       mapping => mapping.sourceSystem === sourceSystem && mapping.sourceType === sourceType
     ) || null;
-  }
+
 
   private mapPriority(sourceData: unknown, mapping: IntegrationMapping): ReviewPriority | null {
     const sourcePriority = sourceData.priority || sourceData.severity || 'medium';
     return mapping.priorityMapping[sourcePriority] || null;
-  }
+
 
   private mapComplexity(sourceData: unknown, mapping: IntegrationMapping): ReviewComplexity {
     const sourceComplexity = sourceData.complexity || 'simple';
     return mapping.complexityMapping[sourceComplexity] || 'simple';
-  }
+
 
   private async buildReviewMetadata(
     sourceSystem: SourceSystem,
@@ -659,7 +659,7 @@ export class ReviewIntegrationAdapter {
       complexity,
       ...additionalContext
     };
-  }
+
 
   private generateReviewContent(
     sourceSystem: SourceSystem,
@@ -690,8 +690,8 @@ export class ReviewIntegrationAdapter {
         title: `${sourceSystem} Review: ${sourceData.id}`,
         description: `Review ${sourceType} from ${sourceSystem}`
       };
-    }
-  }
+
+
 
   // Priority mapping helpers
   private mapFraudPriorityToReviewPriority(priority: string): ReviewPriority {
@@ -702,7 +702,7 @@ export class ReviewIntegrationAdapter {
       urgent: 'urgent'
     };
     return mapping[priority] || 'medium';
-  }
+
 
   private mapAlertSeverityToReviewPriority(severity: string): ReviewPriority {
     const mapping: Record<string, ReviewPriority> = {
@@ -712,7 +712,7 @@ export class ReviewIntegrationAdapter {
       urgent: 'urgent'
     };
     return mapping[severity] || 'medium';
-  }
+
 
   private mapEnforcementSeverityToReviewPriority(severity: string): ReviewPriority {
     const mapping: Record<string, ReviewPriority> = {
@@ -722,7 +722,7 @@ export class ReviewIntegrationAdapter {
       critical: 'urgent'
     };
     return mapping[severity] || 'medium';
-  }
+
 
   // Sync queue processing
   private startSyncProcessor(): void {
@@ -730,7 +730,7 @@ export class ReviewIntegrationAdapter {
     
     this.processingQueue = true;
     this.processSyncQueue();
-  }
+
 
   private async processSyncQueue(): Promise<void> {
 
@@ -739,23 +739,23 @@ export class ReviewIntegrationAdapter {
       if (event) {
         try {
           await this.processIntegrationEvent(event);
-        } catch (error) {
+ catch (error) {
           console.error('Failed to process integration event:', error);
-        }
-      }
+
+
       
       // Small delay to prevent overwhelming the system
       await new Promise(resolve => setTimeout(resolve, 100));
-    }
+
     
     this.processingQueue = false;
-  }
+
 
   private async processIntegrationEvent(event: IntegrationEvent): Promise<void> {
 
     // Process integration events from the queue
     console.log(`Processing integration event: ${event.type}`);
-  }
+
 
   private async logIntegrationEvent(type: string, data: Record<string, unknown>): Promise<void> {
 
@@ -765,28 +765,28 @@ export class ReviewIntegrationAdapter {
       details: data,
       severity: 'info'
     });
-  }
+
 
   // Placeholder helper methods
   private extractBusinessContext(sourceSystem: SourceSystem, sourceType: string, _____sourceData: unknown): string {
     return `${sourceSystem} ${sourceType} review`;
-  }
+
 
   private assessRiskLevel(sourceData: unknown): string {
     return sourceData.riskLevel || sourceData.severity || 'medium';
-  }
+
 
   private generateAutomatedRecommendation(sourceSystem: SourceSystem, _____sourceData: unknown): string {
     return `Automated recommendation for ${sourceSystem} review`;
-  }
+
 
   private generateTags(sourceSystem: SourceSystem, sourceType: string, sourceData: unknown): string[] {
     return [sourceSystem, sourceType, ...(sourceData.tags || [])];
-  }
+
 
   private checkForFlags(sourceData: unknown): boolean {
     return sourceData.flagged || (sourceData.riskFlags && sourceData.riskFlags.length > 0) || false;
-  }
+
 
   private estimateReviewTime(complexity: ReviewComplexity, sourceData: unknown): number {
     const baseTime = {
@@ -794,33 +794,35 @@ export class ReviewIntegrationAdapter {
       moderate: 30,
       complex: 60,
       expert_required: 120
-    }[complexity];
+[complexity];
 
     return sourceData.estimatedTime || baseTime;
-  }
-}
+
+
 
 // Supporting interfaces
-}
-}
+
+
+
 interface IntegrationStatus {
   system: SourceSystem;
   status: 'active' | 'inactive' | 'error';
   lastSync: Date;
   errorCount: number;
   totalProcessed: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface IntegrationEvent {
   type: string;
   sourceSystem: SourceSystem;
   data: Record<string, unknown>;
   timestamp: Date;
   processed: boolean;
-}
-}
-}
+
+
+

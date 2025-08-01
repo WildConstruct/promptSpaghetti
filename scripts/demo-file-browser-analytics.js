@@ -155,7 +155,7 @@ function demoFileBrowserAnalytics(): void {
     performanceMetrics: {
       averageLoadTime: 847,
       averageOperationTime: 623
-    }
+
   };
   
   console.log('🔢 Usage Overview (Last 7 Days):');
@@ -231,7 +231,7 @@ function demoFileBrowserAnalytics(): void {
         description: 'Only 8% of operations are searches, consider better search UI placement',
         impact: 'Users may have difficulty finding files, affecting productivity',
         effort: 'low'
-      }
+
     ],
     alerts: [
       {
@@ -241,14 +241,14 @@ function demoFileBrowserAnalytics(): void {
         timestamp: new Date().toISOString(),
         affectedUsers: 127,
         suggestedAction: 'Monitor performance metrics for potential scaling needs'
-      }
+
     ],
     trends: {
       usageGrowth: 23.4,
       errorRateChange: -12.8,
       performanceChange: -5.2,
       userSatisfactionTrend: 8.7
-    }
+
   };
   
   console.log('🏥 System Health Scores:');
@@ -353,9 +353,8 @@ function demoFileBrowserAnalytics(): void {
   console.log();
   
   console.log('🚀 Ready for production file browser analytics!');
-}
+
 
 // Run the demo
 if (require.main === module) {
   demoFileBrowserAnalytics();
-}

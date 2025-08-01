@@ -1,5 +1,9 @@
  > ;
 executionTime: number;
+'size_change' | 'performance_degradation' | 'condition_mismatch';
+severity: 'low' | 'medium' | 'high';
+description: string;
+recommendation ?  : string;
  > ;
 ;
 // Evaluation metrics
@@ -12,10 +16,15 @@ averageUserCount: number;
 userChurnRate: number;
 userGrowthRate: number;
 // Condition performance
-conditionPerformance: Array;
+conditionPerformance: Array < {
+    conditionId: string,
+    evaluationTime: number,
+    matchRate: number,
+    errorRate: number
+} > ;
 // System metrics
 memoryUsage: number; // bytes,
-cpuUsage: number; // percentage
+cpuUsage: number; // percentage,
 cacheUsage: number; // percentage
 // Business metrics
 conversionImpact: number;
@@ -43,10 +52,20 @@ duration ?  : number; // days
 // Metrics and goals
 primaryMetric: string;
 secondaryMetrics: string;
-successCriteria: Array;
+successCriteria: Array < {
+    metric: string,
+    operator: 'greater_than' | 'less_than' | 'between',
+    value: number | [number, number],
+    significance: number
+} > ;
 // Results
 results ?  : {
-    variants: (Array),
+    variants: Array < {
+        variantId: string,
+        userCount: number,
+        metrics: (Record),
+        conversionRate: number,
+        confidence: number } > ,
     winner: string,
     significance: number,
     liftPercentage: number
@@ -66,12 +85,23 @@ lastRun ?  : Date;
 nextRun ?  : Date;
 status: 'idle' | 'running' | 'failed' | 'disabled';
 // Performance
-executionHistory: Array;
+executionHistory: Array < {
+    startTime: Date,
+    endTime: Date,
+    recordsProcessed: number,
+    recordsSuccessful: number,
+    recordsFailed: number,
+    status: 'success' | 'partial' | 'failed',
+    errorMessage: string
+} > ;
  > ;
 // Consent management
 requiresConsent: boolean;
 consentTypes: string;
-consentValidation: Array;
+consentValidation: Array < {
+    condition: string,
+    errorMessage: string
+} > ;
 // Audit requirements
 auditTrail: boolean;
 auditRetention: number; // days
@@ -83,14 +113,27 @@ syncFrequency: 'realtime' | 'batch' | 'scheduled';
 batchSize ?  : number;
 schedule ?  : string; // cron expression
 // Data mapping
-fieldMappings: Array;
+fieldMappings: Array < {
+    sourceField: string,
+    targetField: string,
+    transformation: string,
+    required: boolean
+} > ;
 // Status and monitoring
 isActive: boolean;
 lastSync ?  : Date;
 syncStatus: 'healthy' | 'degraded' | 'failed';
 errorCount: number;
 // Performance
-syncHistory: Array;
+syncHistory: Array < {
+    startTime: Date,
+    endTime: Date,
+    recordsSynced: number,
+    recordsSuccessful: number,
+    recordsFailed: number,
+    status: 'success' | 'partial' | 'failed',
+    errorMessage: string
+} > ;
 deleteSegment(id, string, options ?  : { force: boolean });
 Promise;
 getSegment(id, string, options ?  : { includeAnalytics: boolean });
@@ -114,7 +157,10 @@ Promise;
 getUserSegments(userId, string);
 Promise;
 getSegmentUsers(segmentId, string, options ?  : { limit: number, offset: number });
-Promise;
+Promise < {
+    users: SegmentMembership,
+    totalCount: number
+} > ;
 // Analytics and insights
 getSegmentAnalytics(segmentId, string, timeRange ?  : { start: Date, end: Date });
 Promise;
@@ -151,5 +197,9 @@ Promise < {
     warnings: string
 } > ;
 getSystemHealth();
-Promise;
+Promise < {
+    status: 'healthy' | 'degraded' | 'unhealthy',
+    metrics: (Record),
+    issues: string
+} > ;
 export {};

@@ -7,8 +7,8 @@
 import { MarketplaceEventType, TemplateMetrics, CreatorMetrics } from '../analytics/MarketplaceMetrics';
 
 }
-export interface MarketplaceMetricsConfig {
-    enableAutoTracking?: boolean;
+}
+export interface MarketplaceMetricsConfig { enableAutoTracking?: boolean;
     trackPageViews?: boolean;
     trackUserInteractions?: boolean;
     userId?: string;
@@ -35,26 +35,23 @@ export declare const useMarketplaceMetrics: (config?: MarketplaceMetricsConfig) 
     getTemplateAnalytics: (templateId: string) => TemplateMetrics | null;
     getCreatorAnalytics: (creatorId: string) => CreatorMetrics | null;
     getTopPerformingTemplates: (metric?: "revenue" | "downloads" | "rating", limit?: number) => TemplateMetrics[];
-    getSearchAnalytics: () => {,
-        topQueries: Array<{
-            query: string;
+    getSearchAnalytics: () => { }
+        topQueries: Array<{ query: string;
             count: number;
-            ctr: number;
+            ctr: number }
 }
         }>;
-        zeroResultQueries: Array<{
-            query: string;
-            count: number;
-        }>;
+        zeroResultQueries: Array<{ query: string;
+            count: number }>;
         averageCTR: number;
     };
     refreshData: () => Promise<void>;
-    trackCustomEvent: (),
-      eventType: MarketplaceEventType,
-      properties?: Record<string,
-      any>,
-      entityId?: string,
-      entityType?: "template" | "creator" | "category" | "collection",
+    trackCustomEvent: ()
+      eventType: MarketplaceEventType
+      properties?: Record<string
+      any>
+      entityId?: string
+      entityType?: "template" | "creator" | "category" | "collection"
       value?: number
     ) => void;
     marketplaceMetrics: import("../analytics/MarketplaceMetrics").MarketplaceMetrics;

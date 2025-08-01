@@ -8,9 +8,9 @@ import { TrendingUp, TrendingDown, Activity, AlertTriangle } from 'lucide-react'
 /**
  * Time series chart props
  */
-}
-interface TimeSeriesChartProps {
-  data: Record<string, unknown>[];
+
+
+interface TimeSeriesChartProps { data: Record<string, unknown>[];
   title: string;
   metric: string;
   unit: string;
@@ -20,24 +20,24 @@ interface TimeSeriesChartProps {
   /**
   * Time series chart component
   */
-  const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({,)
-  data,
-  title,
-  metric,
-  unit,
-  color,
-  loading,
+  const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({);
+  data;
+  title;
+  metric;
+  unit;
+  color;
+  loading }
   error
-}
+
+
 }) => {
   const formatValue = (value: number) => {
     if (unit === 'ms') {
       return value < 1000 ? `${value}ms` : `${(value / 1000).toFixed(1)}s`;}
-    if (unit === 'currency') {
-  return new Intl.NumberFormat('en-US', {)
+    if (unit === 'currency') { return new Intl.NumberFormat('en-US', {)
   style: 'currency',
   currency: 'USD',
-  minimumFractionDigits: 2,
+  minimumFractionDigits: 2 }
 }).format(value);
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(1)}M`;}
@@ -113,12 +113,12 @@ interface TimeSeriesChartProps {
               <Tooltip
                 formatter={(value: number) => [formatValue(value), metric]}
                 labelFormatter={(timestamp: number) => formatXAxis(timestamp)}
-                contentStyle={{
-  backgroundColor: '#1F2937',
-  border: 'none',
-  borderRadius: '8px',
-  color: '#F9FAFB',
-}}
+                contentStyle={ {
+  backgroundColor: '#1F2937'
+  border: 'none'
+  borderRadius: '8px'
+  color: '#F9FAFB' }
+}
               />
               <Line
                 type="monotone"
@@ -139,121 +139,113 @@ interface TimeSeriesChartProps {
  * Performance charts props
  */
 
-}
-export interface PerformanceChartsProps {
-  analyticsClient: AnalyticsClient;
-}
+
+export interface PerformanceChartsProps { analyticsClient: AnalyticsClient }
+},
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
 /**
  * Performance charts state
  */
-}
-interface PerformanceChartsState {
-  executionsData: unknown;
+
+
+interface PerformanceChartsState { executionsData: unknown;
   tokensData: unknown;
   costData: unknown;
   errorsData: unknown;
   granularity: 'hour' | 'day';
-  loading: {
+  loading: { }
   executions: boolean;
   tokens: boolean;
   cost: boolean;
   errors: boolean;
-}
+
+
 };
-  errors: {
-  executions?: string;
+  errors: { executions?: string;
   tokens?: string;
   cost?: string;
-  errors?: string;
-};
+  errors?: string };
 /**
  * Performance charts component
  */
-}
-export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
-  analyticsClient,
-  timeRange,
-  userId,
+
+export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({ )
+  analyticsClient
+  timeRange
+  userId }
   organizationId
-}) => {
-  const [state, setState] = useState<PerformanceChartsState>({)
-  executionsData: [],
-  tokensData: [],
-  costData: [],
-  errorsData: [],
-  granularity: 'hour',
+}) => { const [state, setState] = useState<PerformanceChartsState>({)
+  executionsData: []
+  tokensData: []
+  costData: []
+  errorsData: []
+  granularity: 'hour'
   loading: {
-  executions: true,
-  tokens: true,
-  cost: true,
-  errors: true,
-},
+  executions: true
+  tokens: true
+  cost: true
+  errors: true }
+
   errors: {}
   });
   /**
    * Load chart data
    */
-  const loadChartData = useCallback(async () => {
-  const metrics = ['executions', 'tokens', 'cost', 'errors'] as const;
+  const loadChartData = useCallback(async () => { const metrics = ['executions', 'tokens', 'cost', 'errors'] as const;
   setState(prev => ({)
-  ...prev,
+  ...prev
   loading: {
-  executions: true,
-  tokens: true,
-  cost: true,
-  errors: true,
-},
+  executions: true
+  tokens: true
+  cost: true
+  errors: true }
+
   errors: {}
     }));
     // Load all metrics in parallel
     const results = await Promise.allSettled(;);
       metrics.map(metric =>)
-        analyticsClient.getTimeSeries(metric, {)
-  ...timeRange,
-  granularity: state.granularity,
-}
+        analyticsClient.getTimeSeries(metric, { )
+  ...timeRange
+  granularity: state.granularity }
+
     );
-    const newState = {
-  executionsData: [],
-  tokensData: [],
-  costData: [],
-  errorsData: [],
+    const newState = { executionsData: []
+  tokensData: []
+  costData: []
+  errorsData: []
   loading: {
-  executions: false,
-  tokens: false,
-  cost: false,
-  errors: false,
-},
+  executions: false
+  tokens: false
+  cost: false
+  errors: false }
+
   errors: {}
     };
-    results.forEach((result, index) => {
-  const metric = metrics[index];
+    results.forEach((result, index) => { const metric = metrics[index];
   if (result.status === 'fulfilled' && result.value.success) {
   const data = result.value.data.dataPoints || [];
   switch (metric) {
-  case 'executions':,
+  case 'executions':
   newState.executionsData = data;
   break;
-  case 'tokens':,
+  case 'tokens':
   newState.tokensData = data;
   break;
-  case 'cost':,
+  case 'cost':
   newState.costData = data;
   break;
-  case 'errors':,
+  case 'errors': }
   newState.errorsData = data;
   break;
-} else {
-  const error = result.status === 'rejected' ;
+ else { const error = result.status === 'rejected' ;
   ? result.reason.message
   : 'Failed to load data';
-  newState.errors[metric] = error;
-});
-    setState(prev => ({)
-  ...prev,
+  newState.errors[metric] = error });
+    setState(prev => ({ )
+  ...prev }
       ...newState
     }));
   }, [analyticsClient, timeRange, state.granularity]);
@@ -266,8 +258,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
   /**
    * Calculate trend
    */
-  const calculateTrend = useCallback((data: Record<string, unknown>[]) => {
-  if (data.length < 2) return null;
+  const calculateTrend = useCallback((data: Record<string, unknown>[]) => { if (data.length < 2) return null;
   const recent = data.slice(-Math.floor(data.length / 2));
   const earlier = data.slice(0, Math.floor(data.length / 2));
   const recentAvg = recent.reduce((sum, d) => sum + d.value, 0) / recent.length;
@@ -277,21 +268,17 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
   return {
   direction: change > 5 ? 'up' : change < -5 ? 'down' : 'stable',
   value: Math.abs(change),
-  isPositive: change > 0,
+  isPositive: change > 0 }
 };
   }, []);
   /**
    * Refresh data
    */
-  const handleRefresh = useCallback(() => {
-    loadChartData();
-  }, [loadChartData]);
+  const handleRefresh = useCallback(() => { loadChartData() }, [loadChartData]);
   /**
    * Load data on mount and dependency changes
    */
-  useEffect(() => {
-    loadChartData();
-  }, [loadChartData]);
+  useEffect(() => { loadChartData() }, [loadChartData]);
   const executionsTrend = calculateTrend(state.executionsData);
   const tokensTrend = calculateTrend(state.tokensData);
   const costTrend = calculateTrend(state.costData);
@@ -435,8 +422,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
  * Performance charts styles
  */
 const styles = `;
-  .performance-charts {
-    space-y: 1.5rem;
+  .performance-charts { space-y: 1.5rem;
   .charts-header {
     display: flex;
     justify-content: space-between;
@@ -455,7 +441,7 @@ const styles = `;
   border: 1px solid #E5E7EB;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   .trend-label {
-    font-size: 0.875rem;
+    font-size: 0.875rem }
   color: #6B7280;
     margin-bottom: 0.5rem;
   .trend-value {

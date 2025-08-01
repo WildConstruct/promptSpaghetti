@@ -326,7 +326,7 @@ describe('PasswordResetService', () => {
         metadata: expect.objectContaining({
           sessionsInvalidated: true,
           passwordStrengthScore: expect.any(Number)
-  }
+
       });
     });
 
@@ -450,14 +450,14 @@ describe('PasswordResetService', () => {
           user_agent: 'Mozilla/5.0',
           completed: true,
           revoked: false
-  }
+
         {
           created_at: new Date(Date.now() - 60 * 60 * 1000),
           ip_address: '192.168.1.2',
           user_agent: 'Chrome/90.0',
           completed: false,
           revoked: true
-        }
+
       ];
 
       mockDb.query = jest.fn().mockResolvedValue({ rows: mockAttempts });

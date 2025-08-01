@@ -10,19 +10,18 @@ import path from 'path';
 // Template Types & Interfaces
 // ========================================
 
-}
-export interface EmailTemplate {
-  subject: string;
+
+export interface EmailTemplate { subject: string;
   htmlTemplate: string;
   textTemplate: string;
   variables: string;
   description: string;
-  category: 'verification' | 'enrollment' | 'security' | 'notification'
-}
-  }
-}
-export interface TemplateVariables {
-  // Common variables
+  category: 'verification' | 'enrollment' | 'security' | 'notification' }
+
+
+
+
+export interface TemplateVariables { // Common variables
   displayName: string;
   emailAddress: string;
   expiryMinutes: string;
@@ -37,21 +36,21 @@ export interface TemplateVariables {
   supportEmail?: string;
   // Localization variables
   locale?: string;
-  timezone?: string;
-}
-}
-}
+  timezone?: string }
+
+
+
 export interface TemplateRenderOptions {
   minify?: boolean;
   stripComments?: boolean;
   inlineCSS?: boolean;
   validateVariables?: boolean;
+  // ========================================
+  // Template Engine
+  // ========================================
+  class TemplateEngine {
 
-// ========================================
-// Template Engine
-// ========================================
-class TemplateEngine {
-}
+
   private static readonly VARIABLE_PATTERN = /\{\{(\w+)\}\}/g;
   private static readonly CONDITIONAL_PATTERN = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
   private static readonly HELPER_PATTERN = /\{\{(\w+)\s+([\w\s]+)\}\}/g;
@@ -70,16 +69,13 @@ class TemplateEngine {
   /**
    * Process conditional blocks {{#if variable}}...{{/if}}
    */
-  private static processConditionals(template: string, variables: TemplateVariables): string {
-  return template.replace(this.CONDITIONAL_PATTERN, (match, variable, content) => {
+  private static processConditionals(template: string, variables: TemplateVariables): string { return template.replace(this.CONDITIONAL_PATTERN, (match, variable, content) => {
   const value = (variables as any)[variable];
-  return value ? content : '';
-});
+  return value ? content : '' });
   /**
    * Process helper functions (future extensibility)
    */
-  private static processHelpers(template: string, variables: TemplateVariables): string {
-  return template.replace(this.HELPER_PATTERN, (match, helper, args) => {
+  private static processHelpers(template: string, variables: TemplateVariables): string { return template.replace(this.HELPER_PATTERN, (match, helper, args) => {
   switch (helper) {
   case 'capitalize':,
   const text = (variables as any)[args.trim()];
@@ -88,17 +84,15 @@ class TemplateEngine {
   return ((variables as any)[args.trim()] || '').toUpperCase();
   case 'lowercase':,
   return ((variables as any)[args.trim()] || '').toLowerCase();
-  default:,
+  default: }
   return match; // No helper found, leave as is
 });
   /**
    * Process simple variable substitution {{variable}}
    */
-  private static processVariables(template: string, variables: TemplateVariables): string {
-  return template.replace(this.VARIABLE_PATTERN, (match, variable) => {
+  private static processVariables(template: string, variables: TemplateVariables): string { return template.replace(this.VARIABLE_PATTERN, (match, variable) => {
   const value = (variables as any)[variable];
-  return value !== undefined ? String(value) : match;
-});
+  return value !== undefined ? String(value) : match });
   /**
    * Extract all variables from a template
    */
@@ -115,12 +109,10 @@ class TemplateEngine {
       variables.add(match[1]);
     // Extract from helpers
     const helperPattern = /\{\{(\w+)\s+([\w\s]+)\}\}/g;
-    while ((match = helperPattern.exec(template)) !== null) {
-      const args = match[2].trim().split(/\s+/);
+    while ((match = helperPattern.exec(template)) !== null) { const args = match[2].trim().split(/\s+/);
       args.forEach(arg => {)
   if (/^\w+$/.test(arg)) {
-          variables.add(arg);
-      });
+          variables.add(arg) });
     return Array.from(variables);
   /**
    * Validate that all required variables are provided
@@ -136,89 +128,66 @@ class TemplateEngine {
   // ========================================
   // Template Manager
   // ========================================
-}
-export class EmailTemplateManager {
-  private templates: Map<string, EmailTemplate> = new Map();
-  private templateDirectory: string;
-  constructor(templateDirectory?: string) {,
-  this.templateDirectory = templateDirectory || path.join(__dirname, 'email');
-  this.loadTemplates();
-  /**
-  * Load all templates from the template directory
-  */
-  private loadTemplates(): void {,
-  try {
-  // Load MFA verification template
-  const verificationHtml = this.loadTemplateFile('mfa-verification-template.html');
-  const verificationText = this.loadTemplateFile('mfa-verification-template.txt');
-  this.templates.set('mfa-verification', {)
-  subject: 'PromptScape - Your Verification Code',
-  htmlTemplate: verificationHtml,
-  textTemplate: verificationText,
-  variables: ['displayName', 'emailAddress', 'code', 'expiryMinutes', 'securityWarning', 'trackingPixelUrl'],
-  description: 'Email template for MFA verification codes during login',
-  category: 'verification',
-});
+
+export class EmailTemplateManager {});
       // Load MFA enrollment template
       const enrollmentHtml = this.loadTemplateFile('mfa-enrollment-template.html');
       const enrollmentText = this.loadTemplateFile('mfa-enrollment-template.txt');
-      this.templates.set('mfa-enrollment', {)
-  subject: 'PromptScape - Complete Your MFA Setup',
-  htmlTemplate: enrollmentHtml,
-  textTemplate: enrollmentText,
-  variables: ['displayName', 'emailAddress', 'code', 'expiryMinutes', 'setupUrl', 'trackingPixelUrl'],
-  description: 'Email template for MFA enrollment verification',
-  category: 'enrollment',
+      this.templates.set('mfa-enrollment', { )
+  subject: 'PromptScape - Complete Your MFA Setup'
+  htmlTemplate: enrollmentHtml
+  textTemplate: enrollmentText
+  variables: ['displayName', 'emailAddress', 'code', 'expiryMinutes', 'setupUrl', 'trackingPixelUrl']
+  description: 'Email template for MFA enrollment verification'
+  category: 'enrollment' }
 });
       // Load additional templates as needed
       this.loadSecurityTemplates();
       this.loadNotificationTemplates();
-    } catch (error) {
-  console.error('Failed to load email templates:', error);
+ catch (error) { console.error('Failed to load email templates:', error);
   throw new Error('Email template loading failed');
   /**
   * Load security-related templates
   */
-  private loadSecurityTemplates(): void {,
+  private loadSecurityTemplates(): void {
   // Security alert template
   this.templates.set('security-alert', {)
-  subject: 'PromptScape - Security Alert for Your Account',
-  htmlTemplate: this.createSecurityAlertTemplate(),
-  textTemplate: this.createSecurityAlertTextTemplate(),
-  variables: ['displayName', 'alertType', 'alertMessage', 'ipAddress', 'location', 'timestamp'],
-  description: 'Template for security alerts and notifications',
-  category: 'security',
+  subject: 'PromptScape - Security Alert for Your Account'
+  htmlTemplate: this.createSecurityAlertTemplate()
+  textTemplate: this.createSecurityAlertTextTemplate()
+  variables: ['displayName', 'alertType', 'alertMessage', 'ipAddress', 'location', 'timestamp']
+  description: 'Template for security alerts and notifications'
+  category: 'security' }
 });
     // Account locked template
-    this.templates.set('account-locked', {)
-  subject: 'PromptScape - Account Temporarily Locked',
-  htmlTemplate: this.createAccountLockedTemplate(),
-  textTemplate: this.createAccountLockedTextTemplate(),
-  variables: ['displayName', 'lockReason', 'unlockTime', 'supportEmail'],
-  description: 'Template for account lockout notifications',
-  category: 'security',
+    this.templates.set('account-locked', { )
+  subject: 'PromptScape - Account Temporarily Locked'
+  htmlTemplate: this.createAccountLockedTemplate()
+  textTemplate: this.createAccountLockedTextTemplate()
+  variables: ['displayName', 'lockReason', 'unlockTime', 'supportEmail']
+  description: 'Template for account lockout notifications'
+  category: 'security' }
 });
   /**
    * Load notification templates
    */
-  private loadNotificationTemplates(): void {
-  // MFA method added
+  private loadNotificationTemplates(): void { // MFA method added
   this.templates.set('mfa-method-added', {)
-  subject: 'PromptScape - New MFA Method Added',
-  htmlTemplate: this.createMFAMethodAddedTemplate(),
-  textTemplate: this.createMFAMethodAddedTextTemplate(),
-  variables: ['displayName', 'methodType', 'methodName', 'timestamp'],
-  description: 'Notification when a new MFA method is added',
-  category: 'notification',
+  subject: 'PromptScape - New MFA Method Added'
+  htmlTemplate: this.createMFAMethodAddedTemplate()
+  textTemplate: this.createMFAMethodAddedTextTemplate()
+  variables: ['displayName', 'methodType', 'methodName', 'timestamp']
+  description: 'Notification when a new MFA method is added'
+  category: 'notification' }
 });
     // MFA method removed
-    this.templates.set('mfa-method-removed', {)
-  subject: 'PromptScape - MFA Method Removed',
-  htmlTemplate: this.createMFAMethodRemovedTemplate(),
-  textTemplate: this.createMFAMethodRemovedTextTemplate(),
-  variables: ['displayName', 'methodType', 'methodName', 'timestamp'],
-  description: 'Notification when an MFA method is removed',
-  category: 'notification',
+    this.templates.set('mfa-method-removed', { )
+  subject: 'PromptScape - MFA Method Removed'
+  htmlTemplate: this.createMFAMethodRemovedTemplate()
+  textTemplate: this.createMFAMethodRemovedTextTemplate()
+  variables: ['displayName', 'methodType', 'methodName', 'timestamp']
+  description: 'Notification when an MFA method is removed'
+  category: 'notification' }
 });
   /**
    * Load template file content
@@ -231,8 +200,7 @@ export class EmailTemplateManager {
   /**
    * Get a template by name
    */
-  getTemplate(templateName: string): EmailTemplate | null {
-    return this.templates.get(templateName) || null;
+  getTemplate(templateName: string): EmailTemplate | null { return this.templates.get(templateName) || null;
   /**
    * Get all available templates
    */
@@ -247,9 +215,9 @@ export class EmailTemplateManager {
    * Render an email template
    */
   renderTemplate();
-    templateName: string, 
-    variables: TemplateVariables, 
-    format: 'html' | 'text' = 'html',
+    templateName: string
+    variables: TemplateVariables
+    format: 'html' | 'text' = 'html' }
     options: TemplateRenderOptions = {}
   ): { subject: string; content: string } | null {
     const template = this.getTemplate(templateName);
@@ -275,7 +243,7 @@ export class EmailTemplateManager {
   /**
    * Validate a template
    */
-  validateTemplate(templateName: string, variables: TemplateVariables): {
+  validateTemplate(templateName: string, variables: TemplateVariables): {,
   valid: boolean;
     errors: string;
   warnings: string;
@@ -290,17 +258,17 @@ export class EmailTemplateManager {
       const htmlMissing = TemplateEngine.validateVariables(template.htmlTemplate, variables);
       if (htmlMissing.length > 0) {
         errors.push(`HTML template missing variables: ${htmlMissing.join(', ')}`);}
-    } catch (error) {
+ catch (error) {
       errors.push(`HTML template validation error: ${error}`);}
     // Check text template
     try {
       const textMissing = TemplateEngine.validateVariables(template.textTemplate, variables);
       if (textMissing.length > 0) {
         errors.push(`Text template missing variables: ${textMissing.join(', ')}`);}
-    } catch (error) {
+ catch (error) {
       errors.push(`Text template validation error: ${error}`);}
     // Check for unused variables
-    const allRequired = [;
+    const allRequired = [
       ...TemplateEngine.extractVariables(template.htmlTemplate),
       ...TemplateEngine.extractVariables(template.textTemplate)
     ];
@@ -309,23 +277,21 @@ export class EmailTemplateManager {
     const unused = provided.filter(variable => !unique.includes(variable));
     if (unused.length > 0) {
       warnings.push(`Unused variables provided: ${unused.join(', ')}`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0,
+  errors }
   warnings
 };
   /**
    * Preview a template with sample data
    */
-  previewTemplate(templateName: string, format: 'html' | 'text' = 'html'): string | null {
-  const sampleVariables: TemplateVariables = {,
+  previewTemplate(templateName: string, format: 'html' | 'text' = 'html'): string | null { const sampleVariables: TemplateVariables = {,
   displayName: 'John Doe',
   emailAddress: 'john.doe@example.com',
   code: '123456',
   expiryMinutes: '10',
   securityWarning: 'This login attempt appears to be from an unusual location.',
   setupUrl: 'https://promptscape.com/mfa/setup',
-  trackingPixelUrl: 'https://analytics.promptscape.com/pixel.gif',
+  trackingPixelUrl: 'https://analytics.promptscape.com/pixel.gif' }
 };
     const result = this.renderTemplate(templateName, sampleVariables, format);
     return result ? result.content : null;
@@ -435,34 +401,16 @@ If you didn't remove this method, please contact security immediately.
 // Template Testing Utilities
 // ========================================
 
-export class TemplateTestUtils {
-  /**
-  * Generate test data for template previews
-  */
-  static generateTestData(): TemplateVariables {,
-  return {
-  displayName: 'Alex Johnson',
-  emailAddress: 'alex.johnson@example.com',
-  code: Math.floor(100000 + Math.random() * 900000).toString(),
-  expiryMinutes: '10',
-  securityWarning: 'This login attempt appears to be from a new device in San Francisco, CA.',
-  setupUrl: 'https://promptscape.com/mfa/setup?token=abc123',
-  trackingPixelUrl: 'https://analytics.promptscape.com/pixel.gif?id=test',
-  companyName: 'PromptScape',
-  supportEmail: 'security@promptscape.com',
-  locale: 'en-US',
-  timezone: 'America/Los_Angeles',
-};
+export class TemplateTestUtils {};
   /**
    * Test all templates with sample data
    */
-  static testAllTemplates(manager: EmailTemplateManager): {
+  static testAllTemplates(manager: EmailTemplateManager): { ,
   templateName: string;
   valid: boolean;
   errors: string;
-  warnings: string,
-}[] {
-  const testData = this.generateTestData();
+  warnings: string }
+[] { const testData = this.generateTestData();
   const results: any = [];
   for (const [templateName] of manager.getAllTemplates()) {
   const validation = manager.validateTemplate(templateName, testData);
@@ -470,7 +418,7 @@ export class TemplateTestUtils {
   templateName,
   valid: validation.valid,
   errors: validation.errors,
-  warnings: validation.warnings,
+  warnings: validation.warnings }
 });
     return results;
 

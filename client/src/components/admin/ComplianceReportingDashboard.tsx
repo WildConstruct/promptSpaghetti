@@ -31,8 +31,9 @@ import {
   BarChart3,
   Target,
   Plus
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface ComplianceFramework {
   id: string;,
   name: string,
@@ -47,7 +48,9 @@ interface ComplianceFramework {
   requirements: ComplianceRequirement;,
   nextAuditDate: string,
   certificationStatus: 'certified' | 'pending' | 'expired' | 'not_applicable';
-}
+
+
+
 interface ComplianceRequirement {
   id: string;,
   frameworkId: string,
@@ -61,7 +64,9 @@ interface ComplianceRequirement {
   remediationActions: RemediationAction,
   automatedCheck: boolean;,
   checkFrequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
-}
+
+
+
 interface ComplianceViolation {
   id: string;,
   frameworkId: string,
@@ -82,7 +87,9 @@ interface ComplianceViolation {
   remediationPlan?: string,
   evidence: string;,
   notifications: string;
-}
+
+
+
 interface RemediationAction {
   id: string;,
   violationId: string,
@@ -97,10 +104,13 @@ interface RemediationAction {
   completedDate?: string,
   dependencies: string;,
   tasks: string;
-}
+
+
+
 interface ComplianceMetrics {
   overallScore: number;
-}
+
+},
   frameworkScores: { [key: string]: number },
   totalViolations: number;,
   activeViolations: number,
@@ -111,7 +121,8 @@ interface ComplianceMetrics {
   upcomingAudits: number;,
   certificationStatus: string,
   lastReportGenerated: string;
-}
+
+
 interface AuditLog {
   id: string;,
   timestamp: string,
@@ -125,210 +136,10 @@ interface AuditLog {
   ipAddress: string,
   userAgent: string;,
   result: 'success' | 'failure' | 'warning';
-}
 
-const ComplianceReportingDashboard: React.FC = () => {
-  const [frameworks, setFrameworks] = useState<ComplianceFramework[]>([]);
-  const [violations, setViolations] = useState<ComplianceViolation[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_remediationActions, _setRemediationActions] = useState<RemediationAction[]>([]);
-  const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_auditLogs, _setAuditLogs] = useState<AuditLog[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  // View and filter states
-  const [activeView, setActiveView] = useState<'overview' | 'violations' | 'frameworks' | 'audit' | 'reports'>('overview');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [frameworkFilter, setFrameworkFilter] = useState<string>('all');
-  const [severityFilter, setSeverityFilter] = useState<string>('all');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-}
-  const [_dateRange, _setDateRange] = useState<{ start: string, end: string }>({
-  start: '',
-  end: ''
-});
-  // Modal and selection states
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_selectedViolation, _setSelectedViolation] = useState<ComplianceViolation | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_selectedFramework, _setSelectedFramework] = useState<ComplianceFramework | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_expandedRequirements, _setExpandedRequirements] = useState<Set<string>>(new Set());
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_showCreateReport, _setShowCreateReport] = useState(false);
-  const [autoRefresh, setAutoRefresh] = useState(true);
-  // Load compliance data
-  const loadComplianceData = useCallback(async () => {
-  try {
-  setLoading(true);
-  setError(null);
-  // Mock data for demonstration - would be replaced with actual API calls
-  const mockFrameworks: ComplianceFramework = [
-  {
-  id: 'gdpr',
-  name: 'General Data Protection Regulation',
-  acronym: 'GDPR',
-  version: '2018',
-  description: 'European Union data protection regulation',
-  enabled: true,
-  lastAssessment: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-  complianceScore: 87,
-  violations: 3,
-  riskLevel: 'medium',
-  nextAuditDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
-  certificationStatus: 'certified',
-  requirements: [,
-  {
-  id: 'gdpr-art-6',
-  frameworkId: 'gdpr',
-  requirement: 'Article 6 - Lawfulness of processing',
-  description: 'Processing shall be lawful only if and to the extent that at least one legal basis applies',
-  category: 'Legal Basis',
-  priority: 'high',
-  status: 'compliant',
-  lastAssessed: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  evidenceFiles: ['legal_basis_assessment.pdf', 'consent_records.json'],
-  remediationActions: [],
-  automatedCheck: true,
-  checkFrequency: 'daily'];
-  }
-        {
-  id: 'hipaa',
-  name: 'Health Insurance Portability and Accountability Act',
-  acronym: 'HIPAA',
-  version: '1996/2013',
-  description: 'US healthcare data protection regulation',
-  enabled: true,
-  lastAssessment: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
-  complianceScore: 94,
-  violations: 1,
-  riskLevel: 'low',
-  nextAuditDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
-  certificationStatus: 'certified',
-  requirements: []
-}
-        {
-  id: 'sox',
-  name: 'Sarbanes-Oxley Act',
-  acronym: 'SOX',
-  version: '2002',
-  description: 'US financial reporting and corporate governance regulation',
-  enabled: true,
-  lastAssessment: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-  complianceScore: 91,
-  violations: 2,
-  riskLevel: 'low',
-  nextAuditDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000).toISOString(),
-  certificationStatus: 'pending',
-  requirements: []];
-  const mockViolations: ComplianceViolation = [
-  {
-  id: 'violation-001',
-  frameworkId: 'gdpr',
-  requirementId: 'gdpr-art-32',
-  severity: 'high',
-  title: 'Inadequate data encryption for personal data in transit',
-  description: 'Personal data transmitted over network connections lacks proper encryption protocols',
-  detectedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-  affectedSystems: ['api-gateway', 'user-service', 'analytics-service'],
-  affectedRecords: 15430,
-  dataTypes: ['email', 'name', 'phone', 'address'],
-  status: 'investigating',
-  assignedTo: 'security-team-lead',
-  dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-  businessImpact: 'Potential GDPR fines and reputation damage',
-  technicalImpact: 'Data exposure risk during transmission',
-  riskScore: 8.5,
-  evidence: ['network_scan_results.json', 'encryption_audit.pdf'],
-  notifications: ['privacy-officer@company.com', 'security@company.com']
-}
-        {
-  id: 'violation-002',
-  frameworkId: 'gdpr',
-  requirementId: 'gdpr-art-17',
-  severity: 'medium',
-  title: 'Data retention period exceeded for user profiles',
-  description: 'User profile data retained beyond permitted retention period',
-  detectedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  affectedSystems: ['user-database'],
-  affectedRecords: 2847,
-  dataTypes: ['profile_data', 'preferences', 'activity_logs'],
-  status: 'resolving',
-  assignedTo: 'data-management-team',
-  businessImpact: 'Minor compliance violation with automated remediation',
-  technicalImpact: 'Unnecessary data storage and processing overhead',
-  riskScore: 4.2,
-  evidence: ['retention_audit_report.pdf'],
-  notifications: ['data-protection@company.com']];
-  const mockMetrics: ComplianceMetrics = {,
-  overallScore: 89,
-  frameworkScores: {
-  gdpr: 87,
-  hipaa: 94,
-  sox: 91,
-  ccpa: 85
-},
-  totalViolations: 45,
-        activeViolations: 6,
-        resolvedViolations: 39,
-        averageResolutionTime: 4.2, // days
-        violationTrend: 'improving',
-        riskDistribution: {
-  low: 2,
-  medium: 2,
-  high: 1,
-  critical: 1
-},
-  upcomingAudits: 3,
-        certificationStatus: 'All frameworks certified or pending',
-        lastReportGenerated: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  };
-      const mockAuditLogs: AuditLog = [
-        {
-  id: 'audit-001',
-  timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-  userId: 'admin-001',
-  userName: 'John Smith',
-  action: 'violation_status_update',
-  resourceType: 'compliance_violation',
-  resourceId: 'violation-001',
-  frameworkId: 'gdpr',
-  details: 'Updated violation status from open to investigating',
-  ipAddress: '192.168.1.100',
-  userAgent: 'Mozilla/5.0...',
-  result: 'success'];
-  setFrameworks(mockFrameworks);
-  setViolations(mockViolations);
-  setMetrics(mockMetrics);
-  _setAuditLogs(mockAuditLogs);
-  _setRemediationActions([]);
-} catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load compliance data');
-} finally {
-      setLoading(false);
-  }, []);
-  useEffect(() => {
-    loadComplianceData();
-    // Auto-refresh if enabled
-    if (autoRefresh) {
-      const interval = setInterval(loadComplianceData, 60000); // 1 minute;
-      return () => clearInterval(interval);
-  }, [loadComplianceData, autoRefresh]);
-  // Helper functions
-  const formatTimeAgo = (dateString: string): string => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMins / 60);
-    const diffDays = Math.floor(diffHours / 24);
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;}
-    if (diffHours < 24) return `${diffHours}h ago`;}
-    return `${diffDays}d ago`;}
-  };
+
+
+const ComplianceReportingDashboard = () => { return null; };
   const getScoreColor = (score: number): string => {
     if (score >= 95) return 'text-green-600';
     if (score >= 85) return 'text-blue-600';
@@ -423,12 +234,12 @@ const ComplianceReportingDashboard: React.FC = () => {
                 onClick={() => setAutoRefresh(!autoRefresh)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
   autoRefresh ? 'bg-blue-600' : 'bg-gray-200'
-}`}
+`}
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
   autoRefresh ? 'translate-x-6' : 'translate-x-1'
-}`}
+`}
                 />
               </button>
             </div>
@@ -537,7 +348,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   activeView === key
   ? 'border-purple-500 text-purple-600 bg-purple-50'
   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-} whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
+ whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{label}</span>
@@ -584,7 +395,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   framework.complianceScore >= 85 ? 'bg-blue-500' :,
   framework.complianceScore >= 70 ? 'bg-yellow-500' :,
   framework.complianceScore >= 50 ? 'bg-orange-500' : 'bg-red-500'
-}`}
+`}
                             style={{ width: `${framework.complianceScore}%` }}
                           />
                         </div>
@@ -655,7 +466,7 @@ const ComplianceReportingDashboard: React.FC = () => {
   risk === 'high' ? 'bg-orange-100 text-orange-600' :,
   risk === 'medium' ? 'bg-yellow-100 text-yellow-600' :,
   'bg-green-100 text-green-600'
-}`}>
+`}>
                           <span className="text-lg font-bold">{count}</span>
                         </div>
                         <p className="text-sm font-medium text-gray-900 capitalize">{risk}</p>

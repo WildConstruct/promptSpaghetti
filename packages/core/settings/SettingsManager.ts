@@ -1,7 +1,6 @@
 // packages/core/settings/SettingsManager.ts
 // Settings management system for Epic 7.3 Advanced Settings Modal
-import { 
-  AdvancedSettings,
+import { AdvancedSettings,
   AdvancedSettingsSchema,
   SettingsChangeEvent,
   SettingsValidationResult,
@@ -10,9 +9,9 @@ import {
   TemperatureSettings,
   RunCountSettings,
   BatchSettings,
-  PerformanceSettings,
+  PerformanceSettings }
   UISettings
-} from './types';
+ from './types';
 /**
  * Settings change listener function type
  */
@@ -25,46 +24,46 @@ const SETTINGS_VERSION = '1.0.0';
 /**
  * Default settings configuration
  */
-const DEFAULT_SETTINGS: AdvancedSettings = {
-  seed: {
-    enabled: false,
-    history: [],
-    autoGenerate: true
-  },
-  temperature: {
-    enabled: false,
+const DEFAULT_SETTINGS: AdvancedSettings = { ,
+  seed: {,
+  enabled: false,
+  history: [],
+  autoGenerate: true }
+},
+  temperature: { ,
+  enabled: false,
     value: 1.0,
-    showIndicator: true,
+    showIndicator: true }
     presets: [
       { name: 'Conservative', value: 0.3, description: 'More predictable results' },
       { name: 'Balanced', value: 1.0, description: 'Standard randomness' },
       { name: 'Creative', value: 1.7, description: 'More varied results' }
     ]
   },
-  runCount: {
+  runCount: { ,
   value: 5,
   showPerformanceWarning: true,
-  presets: [1, 3, 5, 10, 20],
+  presets: [1, 3, 5, 10, 20] }
 },
-  batch: {
+  batch: { ,
   batchSize: 5,
-    outputFormat: 'individual',
+    outputFormat: 'individual' }
     namingPattern: 'result-{seed}-{timestamp}',
     includeMetadata: true,
-    autoDownload: false;
-  },
-  performance: {
+    autoDownload: false
+
+  performance: { ,
   showExecutionTimes: false,
   enableCaching: true,
   showMemoryUsage: false,
-  logExecutionSteps: false,
+  logExecutionSteps: false }
 },
-  ui: {
+  ui: { ,
   theme: 'auto',
   showTooltips: true,
   enableKeyboardShortcuts: true,
   reduceAnimations: false,
-  highContrast: false,
+  highContrast: false }
 },
   version: SETTINGS_VERSION;
   };
@@ -95,21 +94,19 @@ export class SettingsManager {
   /**
    * Get specific setting value
    */
-  public getSetting<K extends keyof AdvancedSettings>(key: K): AdvancedSettings[K] {
-    return this.settings[key];
+  public getSetting<K extends keyof AdvancedSettings>(key: K): AdvancedSettings[K] { return this.settings[key];
   /**
    * Update settings with validation
    */
   public updateSettings(((
-    newSettings: Partial<AdvancedSettings>,
+    newSettings: Partial<AdvancedSettings> }
     source: 'user' | 'system' | 'import' = 'user'
   ): SettingsValidationResult {
     const previousSettings = { ...this.settings };
     const mergedSettings = { ...this.settings, ...newSettings };
     // Validate merged settings
     const validation = this.validateSettings(mergedSettings);
-    if (!validation.valid) {
-  return validation;
+    if (!validation.valid) { return validation;
   // Update settings
   this.settings = mergedSettings;
   this.settings.lastModified = new Date().toISOString();
@@ -118,10 +115,10 @@ export class SettingsManager {
   const typedKey = key as keyof AdvancedSettings;
   if (newSettings[typedKey] !== previousSettings[typedKey]) {
   this.notifyChange({
-  key,
-  value: newSettings[typedKey],
-  previousValue: previousSettings[typedKey],
-  timestamp: new Date(),
+  key
+  value: newSettings[typedKey]
+  previousValue: previousSettings[typedKey]
+  timestamp: new Date() }
   source
 });
     });
@@ -132,9 +129,9 @@ export class SettingsManager {
   /**
    * Update specific setting
    */
-  public updateSetting<K extends keyof AdvancedSettings>(key: K, )
-    value: AdvancedSettings[K], 
-    source: 'user' | 'system' | 'import' = 'user'): SettingsValidationResult {,
+  public updateSetting<K extends keyof AdvancedSettings>(key: K);
+  value: AdvancedSettings[K]
+    source: 'user' | 'system' | 'import' = 'user'): SettingsValidationResult {
     return this.updateSettings({ [key]: value } as Partial<AdvancedSettings>, source);
   /**
    * Reset settings to defaults
@@ -144,14 +141,14 @@ export class SettingsManager {
     this.settings = { ...DEFAULT_SETTINGS };
     this.settings.lastModified = new Date().toISOString();
     // Notify listeners
-    Object.keys(DEFAULT_SETTINGS).forEach(key => {)
+    Object.keys(DEFAULT_SETTINGS).forEach(key => { )
   const typedKey = key as keyof AdvancedSettings;
   this.notifyChange({
-  key,
-  value: DEFAULT_SETTINGS[typedKey],
-  previousValue: previousSettings[typedKey],
-  timestamp: new Date(),
-  source: 'system',
+  key
+  value: DEFAULT_SETTINGS[typedKey]
+  previousValue: previousSettings[typedKey]
+  timestamp: new Date()
+  source: 'system' }
 });
     });
     this.saveSettings();
@@ -159,27 +156,26 @@ export class SettingsManager {
   /**
    * Add settings change listener
    */
-  public addChangeListener(listener: SettingsChangeListener): () => void {
-  this.listeners.add(listener);
+  public addChangeListener(listener: SettingsChangeListener): () => void { this.listeners.add(listener);
   return () => this.listeners.delete(listener);
   /**
   * Remove all listeners
   */
-  public clearListeners(): void {,
+  public clearListeners(): void {
   this.listeners.clear();
   /**
   * Save settings to localStorage
   */
-  public saveSettings(): boolean {,
+  public saveSettings(): boolean {
   try {
   const settingsData = {
-  settings: this.settings,
-  timestamp: new Date().toISOString(),
-  version: SETTINGS_VERSION,
+  settings: this.settings
+  timestamp: new Date().toISOString()
+  version: SETTINGS_VERSION }
 };
       localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settingsData));
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to save settings:', error);
       return false;
   /**
@@ -199,7 +195,7 @@ export class SettingsManager {
         return { ...DEFAULT_SETTINGS };
       // Merge with defaults to handle missing fields from version upgrades
       return { ...DEFAULT_SETTINGS, ...validation.data };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to load settings:', error);
       return { ...DEFAULT_SETTINGS };
   /**
@@ -216,43 +212,34 @@ export class SettingsManager {
   /**
    * Notify change listeners
    */
-  private notifyChange(event: SettingsChangeEvent): void {
-    this.listeners.forEach(listener => {)
+  private notifyChange(event: SettingsChangeEvent): void { this.listeners.forEach(listener => {)
   try {
-        listener(event);
-      } catch (error) {
-  console.error('Settings change listener error:', error);
-});
+        listener(event) } catch (error) { console.error('Settings change listener error:', error) });
   /**
    * Debounced save to avoid excessive localStorage writes
    */
-  private debouncedSave(): void {
-    if (this.debounceTimer) {
+  private debouncedSave(): void { if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(() => {
       this.saveSettings();
-      this.debounceTimer = null;
-    }, 1000);
+      this.debounceTimer = null }, 1000);
   /**
    * Setup beforeunload handler to save settings
    */
-  private setupBeforeUnloadHandler(): void {
-    if (typeof window !== 'undefined') {
+  private setupBeforeUnloadHandler(): void { if (typeof window !== 'undefined') {
       window.addEventListener('beforeunload', () => {
         if (this.debounceTimer) {
           clearTimeout(this.debounceTimer);
-          this.saveSettings();
-      });
+          this.saveSettings() });
   /**
    * Export settings for backup/sharing
    */
-  public exportSettings(): SettingsExport {
-  return {
-  settings: this.getSettings(),
+  public exportSettings(): SettingsExport { return {
+  settings: this.getSettings()
   metadata: {
-  exportedAt: new Date().toISOString(),
-  version: SETTINGS_VERSION,
-  appVersion: '1.0.0' // TODO: Get from package.json,
+  exportedAt: new Date().toISOString()
+  version: SETTINGS_VERSION
+  appVersion: '1.0.0' // TODO: Get from package.json }
 };
   /**
    * Import settings from export
@@ -263,54 +250,50 @@ export class SettingsManager {
       if (!exportData.settings || !exportData.metadata) {
         return { valid: false, errors: ['Invalid export format'], warnings: [] };
       // Check version compatibility
-      const warnings: string[] = [];
+      const warnings: string = [];
       if (exportData.metadata.version !== SETTINGS_VERSION) {
         warnings.push(`Settings version mismatch: expected ${SETTINGS_VERSION}, got ${exportData.metadata.version}`);}
       // Import settings
       const result = this.updateSettings(exportData.settings, 'import');
       result.warnings.push(...warnings);
       return result;
-    } catch (error) {
-      return { 
-        valid: false, 
+ catch (error) { return { 
+        valid: false }
         errors: [`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`]}
-},
+
   warnings: [] ;
   };
   /**
    * Get settings for executor integration
    */
-  public getExecutorSettings() {
-  return {
-  seed: this.settings.seed.enabled ? this.settings.seed.value : undefined,
-  temperature: this.settings.temperature.enabled ? this.settings.temperature.value : undefined,
-  runCount: this.settings.runCount.value,
-  batchSize: this.settings.batch.batchSize,
-  enableCaching: this.settings.performance.enableCaching,
-  logExecutionSteps: this.settings.performance.logExecutionSteps,
-  showExecutionTimes: this.settings.performance.showExecutionTimes,
-  showMemoryUsage: this.settings.performance.showMemoryUsage,
-  outputFormat: this.settings.batch.outputFormat,
-  includeMetadata: this.settings.batch.includeMetadata,
-  autoDownload: this.settings.batch.autoDownload,
-  namingPattern: this.settings.batch.namingPattern,
+  public getExecutorSettings() { return {
+  seed: this.settings.seed.enabled ? this.settings.seed.value : undefined
+  temperature: this.settings.temperature.enabled ? this.settings.temperature.value : undefined
+  runCount: this.settings.runCount.value
+  batchSize: this.settings.batch.batchSize
+  enableCaching: this.settings.performance.enableCaching
+  logExecutionSteps: this.settings.performance.logExecutionSteps
+  showExecutionTimes: this.settings.performance.showExecutionTimes
+  showMemoryUsage: this.settings.performance.showMemoryUsage
+  outputFormat: this.settings.batch.outputFormat
+  includeMetadata: this.settings.batch.includeMetadata
+  autoDownload: this.settings.batch.autoDownload
+  namingPattern: this.settings.batch.namingPattern }
 };
   /**
    * Get UI-specific settings for interface customization
    */
-  public getUISettings() {
-  return {
-  theme: this.settings.ui.theme,
-  showTooltips: this.settings.ui.showTooltips,
-  enableKeyboardShortcuts: this.settings.ui.enableKeyboardShortcuts,
-  reduceAnimations: this.settings.ui.reduceAnimations,
-  highContrast: this.settings.ui.highContrast,
+  public getUISettings() { return {
+  theme: this.settings.ui.theme
+  showTooltips: this.settings.ui.showTooltips
+  enableKeyboardShortcuts: this.settings.ui.enableKeyboardShortcuts
+  reduceAnimations: this.settings.ui.reduceAnimations
+  highContrast: this.settings.ui.highContrast }
 };
   /**
    * Check if performance monitoring is enabled
    */
-  public isPerformanceMonitoringEnabled(): boolean {
-  return this.settings.performance.showExecutionTimes ||
+  public isPerformanceMonitoringEnabled(): boolean { return this.settings.performance.showExecutionTimes ||
   this.settings.performance.showMemoryUsage ||
   this.settings.performance.logExecutionSteps;
   /**
@@ -318,17 +301,16 @@ export class SettingsManager {
   */
   public getPerformanceConfig() {
   return {
-  monitoring: this.isPerformanceMonitoringEnabled(),
-  executionTimes: this.settings.performance.showExecutionTimes,
-  memoryUsage: this.settings.performance.showMemoryUsage,
-  detailedLogging: this.settings.performance.logExecutionSteps,
-  caching: this.settings.performance.enableCaching,
+  monitoring: this.isPerformanceMonitoringEnabled()
+  executionTimes: this.settings.performance.showExecutionTimes
+  memoryUsage: this.settings.performance.showMemoryUsage
+  detailedLogging: this.settings.performance.logExecutionSteps
+  caching: this.settings.performance.enableCaching }
 };
   /**
    * Add seed to history
    */
-  public addSeedToHistory(seed: number): void {
-  const currentHistory = [...this.settings.seed.history];
+  public addSeedToHistory(seed: number): void { const currentHistory = [...this.settings.seed.history];
   // Remove if already exists
   const existingIndex = currentHistory.indexOf(seed);
   if (existingIndex !== -1) {
@@ -338,8 +320,8 @@ export class SettingsManager {
   // Keep only last 10
   const newHistory = currentHistory.slice(0, 10);
   this.updateSetting('seed', {)
-  ...this.settings.seed,
-  history: newHistory,
+  ...this.settings.seed
+  history: newHistory }
 }, 'system');
   /**
    * Generate random seed

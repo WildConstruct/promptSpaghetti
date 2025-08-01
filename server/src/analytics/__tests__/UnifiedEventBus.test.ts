@@ -14,7 +14,7 @@ import {
   UnifiedAnalyticsEvent,
   EventFilter,
   EventSubscriber
-} from '../UnifiedEventBus';
+ from '../UnifiedEventBus';
 
 describe('UnifiedEventBus', () => {
   let eventBus: UnifiedEventBus;
@@ -414,7 +414,7 @@ describe('UnifiedEventBus', () => {
           source: 'test',
           data: { message: `test-${i}` }
         }));
-      }
+
       
       await Promise.all(promises);
       
@@ -438,11 +438,11 @@ describe('UnifiedEventBus', () => {
         data: {
           action: legacyEvent.action,
           userId: legacyEvent.user
-  }
+
         metadata: {
           legacyId: legacyEvent.id,
           migrated: true
-        }
+
       });
 
       const result = await eventBus.migrateFromLegacySystem(
@@ -471,7 +471,7 @@ describe('UnifiedEventBus', () => {
             severity: EventSeverity.INFO,
             data: { action: legacyEvent.action }
           };
-        }
+
         return {
           type: AnalyticsEventType.USER_INTERACTION,
           category: EventCategory.USER,
@@ -479,7 +479,7 @@ describe('UnifiedEventBus', () => {
           data: {
             action: legacyEvent.action,
             userId: legacyEvent.user
-          }
+
         };
       };
 
@@ -531,7 +531,7 @@ describe('UnifiedEventBus', () => {
         callCount++;
         if (callCount < 3) {
           throw new Error('Temporary error');
-        }
+
         return 'success';
       });
 
@@ -543,7 +543,7 @@ describe('UnifiedEventBus', () => {
         retryConfig: {
           maxRetries: 3,
           backoffMs: 10
-        }
+
       });
 
       await eventBus.publishEvent({

@@ -8,17 +8,16 @@ import React from 'react';
 import { Node, Edge } from 'reactflow';
 
 }
-export interface PerformanceTestResult {
-    nodeCount: number;
+}
+export interface PerformanceTestResult { nodeCount: number;
     edgeCount: number;
     renderTime: number;
     fps: number;
     memoryUsage: number;
     testDuration: number;
     passedThreshold: boolean;
-    recommendations: string[];
-
-
+    recommendations: string[] }
+}
 }
 export interface DemoPerformanceTesterProps {
     onTestComplete?: (result: PerformanceTestResult) => void;
@@ -29,4 +28,5 @@ export interface DemoPerformanceTesterProps {
 export declare const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps>;
 export default DemoPerformanceTester;
 //# sourceMappingURL=DemoPerformanceTester.d.ts.map
+}
 }

@@ -15,7 +15,7 @@ import SMSRateLimitingService, {
   RateLimitScope,
   RateLimitConfig,
   SMSProvider
-} from '../SMSRateLimitingService';
+ from '../SMSRateLimitingService';
 
 // Mock SMS Provider for testing
 class MockSMSProvider implements SMSProvider {
@@ -26,24 +26,24 @@ class MockSMSProvider implements SMSProvider {
   sendSMS(message: SMSMessage): Promise<boolean> {
 
     return Promise.resolve(!this.shouldFail);
-  }
+
 
   isAvailable(): boolean {
     return this.available;
-  }
+
 
   getStatus(): { healthy: boolean; lastError?: string } {
     return { healthy: this.available };
-  }
+
 
   setAvailable(available: boolean): void {
     this.available = available;
-  }
+
 
   setShouldFail(shouldFail: boolean): void {
     this.shouldFail = shouldFail;
-  }
-}
+
+
 
 // Mock storage for testing
 class MockRateLimitStorage {
@@ -57,16 +57,16 @@ class MockRateLimitStorage {
     if (item.expires && item.expires < new Date()) {
       this.store.delete(key);
       return null;
-    }
+
     
     return item.value;
-  }
+
 
   async set(key: string, value: any, ttlMs?: number): Promise<void> {
 
     const expires = ttlMs ? new Date(Date.now() + ttlMs) : undefined;
     this.store.set(key, { value, expires });
-  }
+
 
   async increment(key: string, amount: number = 1): Promise<number> {
 
@@ -74,20 +74,20 @@ class MockRateLimitStorage {
     const newValue = current + amount;
     await this.set(key, newValue);
     return newValue;
-  }
+
 
   async expire(key: string, ttlMs: number): Promise<void> {
 
     const item = this.store.get(key);
     if (item) {
       item.expires = new Date(Date.now() + ttlMs);
-    }
-  }
+
+
 
   async delete(key: string): Promise<boolean> {
 
     return this.store.delete(key);
-  }
+
 
   async cleanup(): Promise<void> {
 
@@ -95,18 +95,18 @@ class MockRateLimitStorage {
     for (const [key, item] of this.store.entries()) {
       if (item.expires && item.expires < now) {
         this.store.delete(key);
-      }
-    }
-  }
+
+
+
 
   clear(): void {
     this.store.clear();
-  }
+
 
   size(): number {
     return this.store.size;
-  }
-}
+
+
 
 describe('SMSRateLimitingService', () => {
   let service: SMSRateLimitingService;
@@ -153,7 +153,7 @@ describe('SMSRateLimitingService', () => {
         // Exhaust all tokens
         for (let i = 0; i < 5; i++) {
           await service.checkRateLimit(message);
-        }
+
 
         const result = await service.checkRateLimit(message);
         expect(result.allowed).toBe(false);
@@ -166,7 +166,7 @@ describe('SMSRateLimitingService', () => {
         // Exhaust tokens
         for (let i = 0; i < 5; i++) {
           await service.checkRateLimit(message);
-        }
+
 
         // Simulate time passing for token refill
         await new Promise(resolve => setTimeout(resolve, 1100));
@@ -195,7 +195,7 @@ describe('SMSRateLimitingService', () => {
           const result = await service.checkRateLimit(message);
           expect(result.allowed).toBe(true);
           expect(result.remainingRequests).toBe(2 - i);
-        }
+
       });
 
       test('should deny requests exceeding limit', async () => {
@@ -204,7 +204,7 @@ describe('SMSRateLimitingService', () => {
         // Use up all requests
         for (let i = 0; i < 3; i++) {
           await service.checkRateLimit(message);
-        }
+
 
         const result = await service.checkRateLimit(message);
         expect(result.allowed).toBe(false);
@@ -217,7 +217,7 @@ describe('SMSRateLimitingService', () => {
         // Use up all requests
         for (let i = 0; i < 3; i++) {
           await service.checkRateLimit(message);
-        }
+
 
         // Wait for window to slide
         await new Promise(resolve => setTimeout(resolve, 5100));
@@ -246,7 +246,7 @@ describe('SMSRateLimitingService', () => {
         for (let i = 0; i < 5; i++) {
           const result = await service.checkRateLimit(message);
           expect(result.allowed).toBe(true);
-        }
+
 
         // Should be denied
         const deniedResult = await service.checkRateLimit(message);
@@ -428,7 +428,7 @@ describe('SMSRateLimitingService', () => {
         const result = await service.checkRateLimit(message);
         expect(result).toHaveProperty('allowed');
         expect(result).toHaveProperty('limit');
-      }
+
     });
   });
 
@@ -685,5 +685,5 @@ describe('SMSRateLimitingService', () => {
       metadata: { test: true },
       ...overrides
     };
-  }
+
 });

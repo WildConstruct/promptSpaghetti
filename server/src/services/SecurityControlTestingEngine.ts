@@ -11,8 +11,8 @@ import { SecurityAPIIntegrationPlatform } from './SecurityAPIIntegrationPlatform
 import { SecurityPolicyAnalysisEngine, SecurityPolicy } from './SecurityPolicyAnalysisEngine';
 import { SecurityOptimizationEngine } from './SecurityOptimizationEngine';
 
-}
-}
+
+
 export interface SecurityControlTestingConfig {
   testing_framework: {
     enabled: boolean;
@@ -21,8 +21,9 @@ export interface SecurityControlTestingConfig {
     regression_testing_enabled: boolean;
     performance_testing_enabled: boolean;
     security_testing_enabled: boolean;
-}
-}
+
+
+
   };
   
   effectiveness_measurement: {
@@ -60,10 +61,10 @@ export interface SecurityControlTestingConfig {
     compliance_reports_enabled: boolean;
     real_time_dashboards_enabled: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface SecurityControl {
   id: string;
   name: string;
@@ -76,8 +77,9 @@ export interface SecurityControl {
     configuration: Record<string, any>;
     dependencies: string[];
     deployment_scope: string[];
-}
-}
+
+
+
   };
   
   testing_parameters: {
@@ -105,10 +107,10 @@ export interface SecurityControl {
     status: 'active' | 'inactive' | 'testing' | 'optimizing' | 'failed';
     version: string;
   };
-}
 
-}
-}
+
+
+
 export interface SecurityControlTest {
   test_id: string;
   control_id: string;
@@ -121,8 +123,9 @@ export interface SecurityControlTest {
     concurrent_tests: number;
     data_volume: number;
     attack_vectors?: string[];
-}
-}
+
+
+
   };
   
   test_execution: {
@@ -148,10 +151,10 @@ export interface SecurityControlTest {
     statistical_significance: number;
     confidence_interval: [number, number];
   };
-}
 
-}
-}
+
+
+
 export interface SecurityControlIssue {
   issue_id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -164,8 +167,9 @@ export interface SecurityControlIssue {
     business_impact: 'low' | 'medium' | 'high' | 'critical';
     security_impact: 'low' | 'medium' | 'high' | 'critical';
     performance_impact_percent: number;
-}
-}
+
+
+
   };
   
   remediation: {
@@ -182,10 +186,10 @@ export interface SecurityControlIssue {
     metrics: Record<string, number>;
     screenshots?: string[];
   };
-}
 
-}
-}
+
+
+
 export interface EffectivenessReport {
   report_id: string;
   report_type: 'individual_control' | 'category_summary' | 'comprehensive' | 'trend_analysis';
@@ -194,8 +198,9 @@ export interface EffectivenessReport {
     start_date: number;
     end_date: number;
     duration_days: number;
-}
-}
+
+
+
   };
   
   executive_summary: {
@@ -226,10 +231,10 @@ export interface EffectivenessReport {
     compliance_gaps: ComplianceGap[];
     certification_readiness: Record<string, number>;
   };
-}
 
-}
-}
+
+
+
 export interface SecurityControlPerformance {
   control_id: string;
   control_name: string;
@@ -241,8 +246,9 @@ export interface SecurityControlPerformance {
     response_effectiveness: number;
     prevention_effectiveness: number;
     recovery_effectiveness: number;
-}
-}
+
+
+
   };
   
   performance_metrics: {
@@ -266,10 +272,10 @@ export interface SecurityControlPerformance {
     last_test_date: number;
     trend_direction: 'improving' | 'stable' | 'declining';
   };
-}
 
-}
-}
+
+
+
 export interface CategoryAnalysis {
   category_name: string;
   total_controls: number;
@@ -279,25 +285,26 @@ export interface CategoryAnalysis {
     best_performing_control: string;
     worst_performing_control: string;
     category_trend: 'improving' | 'stable' | 'declining';
-}
-}
+
+
+
   };
   
   common_issues: {
     issue_type: string;
     occurrence_count: number;
     severity_distribution: Record<string, number>;
-  }[];
+[];
   
   optimization_opportunities: {
     opportunity_description: string;
     potential_impact: number;
     implementation_effort: 'low' | 'medium' | 'high';
-  }[];
-}
+[];
 
-}
-}
+
+
+
 export interface TrendAnalysis {
   analysis_period_days: number;
   data_points: number;
@@ -307,8 +314,9 @@ export interface TrendAnalysis {
     trend_strength: number;
     seasonal_patterns: boolean;
     anomalies_detected: number;
-}
-}
+
+
+
   };
   
   performance_trends: {
@@ -324,10 +332,10 @@ export interface TrendAnalysis {
     risk_indicators: string[];
     recommended_preventive_actions: string[];
   };
-}
 
-}
-}
+
+
+
 export interface RecommendationItem {
   recommendation_id: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -339,8 +347,9 @@ export interface RecommendationItem {
     rationale: string;
     expected_benefits: string[];
     implementation_steps: string[];
-}
-}
+
+
+
   };
   
   impact_assessment: {
@@ -357,10 +366,10 @@ export interface RecommendationItem {
     dependencies: string[];
     can_automate: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface ResourceRequirement {
   resource_type: 'personnel' | 'technology' | 'budget' | 'time';
   description: string;
@@ -368,12 +377,13 @@ export interface ResourceRequirement {
   unit: string;
   timeline: string;
   criticality: 'optional' | 'recommended' | 'required' | 'critical';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceGap {
   framework: string;
   control_id: string;
@@ -381,9 +391,10 @@ export interface ComplianceGap {
   severity: 'low' | 'medium' | 'high' | 'critical';
   remediation_actions: string[];
   estimated_effort: number;
-}
-}
-}
+
+
+
+
 
 export class SecurityControlTestingEngine extends EventEmitter {
   private config: SecurityControlTestingConfig;
@@ -408,7 +419,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     this.platform = platform;
     this.policyEngine = policyEngine;
     this.optimizationEngine = optimizationEngine;
-  }
+
 
   /**
    * Initialize the security control testing engine
@@ -422,23 +433,22 @@ export class SecurityControlTestingEngine extends EventEmitter {
       // Establish effectiveness baselines
       if (this.config.effectiveness_measurement.baseline_establishment) {
         await this.establishEffectivenessBaselines();
-      }
+
       
       // Setup continuous testing if enabled
       if (this.config.testing_framework.continuous_testing_enabled) {
         this.startContinuousTesting();
-      }
+
       
       // Setup event listeners
       this.setupEventListeners();
       
       this.emit('initialized', { timestamp: Date.now() });
-      
-    } catch (error) {
+ catch (error) {
       this.emit('error', { error, context: 'initialization' });
       throw error;
-    }
-  }
+
+
 
   /**
    * Register a new security control for testing
@@ -455,20 +465,19 @@ export class SecurityControlTestingEngine extends EventEmitter {
       // Establish baseline if enabled
       if (this.config.effectiveness_measurement.baseline_establishment) {
         await this.establishControlBaseline(control.id);
-      }
+
       
       // Schedule initial testing
       if (this.config.testing_framework.automated_testing_enabled) {
         await this.scheduleControlTesting(control.id);
-      }
+
       
       this.emit('control_registered', { controlId: control.id, controlName: control.name });
-      
-    } catch (error) {
+ catch (error) {
       this.emit('control_registration_error', { controlId: control.id, error });
       throw error;
-    }
-  }
+
+
 
   /**
    * Execute comprehensive testing for a security control
@@ -482,7 +491,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     const control = this.controls.get(controlId);
     if (!control) {
       throw new Error(`Security control ${controlId} not found`);
-    }
+
 
     const testResults: SecurityControlTest[] = [];
 
@@ -494,7 +503,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
         
         // Store active test
         this.activeTests.set(test.test_id, test);
-      }
+
 
       // Store test history
       const history = this.testHistory.get(controlId) || [];
@@ -508,7 +517,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
       // Analyze results and generate optimization recommendations
       if (this.config.optimization_settings.enabled) {
         await this.analyzeTestResultsForOptimization(controlId, testResults);
-      }
+
 
       this.emit('control_testing_completed', { 
         controlId, 
@@ -517,12 +526,11 @@ export class SecurityControlTestingEngine extends EventEmitter {
       });
 
       return testResults;
-
-    } catch (error) {
+ catch (error) {
       this.emit('control_testing_error', { controlId, error });
       throw error;
-    }
-  }
+
+
 
   /**
    * Generate comprehensive effectiveness report
@@ -564,14 +572,14 @@ export class SecurityControlTestingEngine extends EventEmitter {
           start_date: periodStart,
           end_date: periodEnd,
           duration_days: Math.ceil((periodEnd - periodStart) / (24 * 60 * 60 * 1000))
-  }
+
         executive_summary: this.generateExecutiveSummary(controlPerformance),
         detailed_findings: {
           control_performance: controlPerformance,
           category_analysis: categoryAnalysis,
           trend_analysis: trendAnalysis,
           comparative_benchmarks: await this.generateBenchmarks(controlPerformance)
-  }
+
         recommendations: recommendations,
         compliance_status: complianceStatus
       };
@@ -579,12 +587,11 @@ export class SecurityControlTestingEngine extends EventEmitter {
       this.emit('report_generated', { reportId, reportType, controlCount: controlsToAnalyze.length });
 
       return report;
-
-    } catch (error) {
+ catch (error) {
       this.emit('report_generation_error', { reportId, error });
       throw error;
-    }
-  }
+
+
 
   /**
    * Optimize security control based on test results
@@ -597,11 +604,11 @@ export class SecurityControlTestingEngine extends EventEmitter {
     applied_optimizations: string[];
     expected_improvements: Record<string, number>;
     monitoring_plan: string[];
-  }> {
+> {
     const control = this.controls.get(controlId);
     if (!control) {
       throw new Error(`Security control ${controlId} not found`);
-    }
+
 
     const optimizationId = `opt_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
 
@@ -629,8 +636,8 @@ export class SecurityControlTestingEngine extends EventEmitter {
           Object.entries(strategy.expected_improvements).forEach(([key, value]) => {
             expectedImprovements[key] = (expectedImprovements[key] || 0) + value;
           });
-        }
-      }
+
+
 
       // Create monitoring plan
       const monitoringPlan = this.createOptimizationMonitoringPlan(controlId, appliedOptimizations);
@@ -656,12 +663,11 @@ export class SecurityControlTestingEngine extends EventEmitter {
         expected_improvements: expectedImprovements,
         monitoring_plan: monitoringPlan
       };
-
-    } catch (error) {
+ catch (error) {
       this.emit('control_optimization_error', { controlId, optimizationId, error });
       throw error;
-    }
-  }
+
+
 
   /**
    * Get comprehensive testing analytics
@@ -689,14 +695,14 @@ export class SecurityControlTestingEngine extends EventEmitter {
       control_count: number;
       average_effectiveness: number;
       issue_count: number;
-    }>;
+>;
     recent_activities: Array<{
       activity_type: string;
       control_id: string;
       timestamp: number;
       status: string;
-    }>;
-  } {
+>;
+ {
     const controls = Array.from(this.controls.values());
     const activeTests = Array.from(this.activeTests.values());
     const allTestHistory = Array.from(this.testHistory.values()).flat();
@@ -712,22 +718,22 @@ export class SecurityControlTestingEngine extends EventEmitter {
         completed_tests_24h: recentTests.length,
         average_effectiveness_score: this.calculateAverageEffectiveness(controls),
         controls_by_status: this.groupControlsByStatus(controls)
-  }
+
       performance_metrics: {
         average_test_duration_seconds: this.calculateAverageTestDuration(recentTests),
         test_success_rate_percent: this.calculateTestSuccessRate(recentTests),
         critical_issues_found: this.countCriticalIssues(recentTests),
         optimization_opportunities: this.countOptimizationOpportunities(controls)
-  }
+
       trends: {
         effectiveness_trend_7days: this.calculateEffectivenessTrend(controls, 7),
         performance_trend_7days: this.calculatePerformanceTrend(allTestHistory, 7),
         issue_detection_trend: this.calculateIssueDetectionTrend(allTestHistory, 7)
-  }
+
       category_breakdown: this.generateCategoryBreakdown(controls, allTestHistory),
       recent_activities: this.getRecentActivities(20)
     };
-  }
+
 
   // Private helper methods
 
@@ -738,8 +744,8 @@ export class SecurityControlTestingEngine extends EventEmitter {
     
     for (const control of defaultControls) {
       this.controls.set(control.id, control);
-    }
-  }
+
+
 
   private async createDefaultSecurityControls(): Promise<SecurityControl[]> {
 
@@ -756,10 +762,10 @@ export class SecurityControlTestingEngine extends EventEmitter {
             mfa_required_roles: ['admin', 'security_analyst'],
             timeout_minutes: 15,
             backup_codes_enabled: true
-  }
+
           dependencies: ['identity_provider', 'sms_gateway'],
           deployment_scope: ['admin_panel', 'api_endpoints']
-  }
+
         testing_parameters: {
           test_frequency_hours: 24,
           test_scenarios: ['valid_mfa', 'invalid_mfa', 'timeout_scenario', 'backup_code_usage'],
@@ -767,13 +773,13 @@ export class SecurityControlTestingEngine extends EventEmitter {
             authentication_success_rate: 99.5,
             false_positive_rate: 0.1,
             response_time_ms: 500
-  }
+
           performance_thresholds: {
             max_response_time_ms: 1000,
             min_availability_percent: 99.9
-  }
+
           failure_conditions: ['bypass_detection', 'service_unavailability']
-  }
+
         effectiveness_metrics: {
           detection_rate: 99.8,
           false_positive_rate: 0.05,
@@ -781,7 +787,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
           response_time_ms: 245,
           throughput_capacity: 1000,
           reliability_score: 99.95
-  }
+
         metadata: {
           created_by: 'security_team',
           created_at: Date.now(),
@@ -789,8 +795,8 @@ export class SecurityControlTestingEngine extends EventEmitter {
           last_optimized: 0,
           status: 'active',
           version: '1.0.0'
-        }
-  }
+
+
       {
         id: 'data_encryption_control',
         name: 'Data Encryption at Rest Control',
@@ -803,10 +809,10 @@ export class SecurityControlTestingEngine extends EventEmitter {
             encryption_algorithm: 'AES-256-GCM',
             key_rotation_days: 90,
             compliance_level: 'FIPS_140_2'
-  }
+
           dependencies: ['key_management_service', 'database_engine'],
           deployment_scope: ['user_data', 'transaction_logs', 'configuration_files']
-  }
+
         testing_parameters: {
           test_frequency_hours: 168, // Weekly
           test_scenarios: ['encryption_verification', 'key_rotation_test', 'decryption_performance'],
@@ -814,13 +820,13 @@ export class SecurityControlTestingEngine extends EventEmitter {
             encryption_coverage_percent: 100,
             key_rotation_success_rate: 100,
             performance_impact_percent: 5
-  }
+
           performance_thresholds: {
             max_encryption_overhead_percent: 10,
             min_key_rotation_success_rate: 99
-  }
+
           failure_conditions: ['unencrypted_data_detected', 'key_rotation_failure']
-  }
+
         effectiveness_metrics: {
           detection_rate: 100,
           false_positive_rate: 0,
@@ -828,7 +834,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
           response_time_ms: 10,
           throughput_capacity: 10000,
           reliability_score: 99.99
-  }
+
         metadata: {
           created_by: 'data_protection_team',
           created_at: Date.now(),
@@ -836,17 +842,17 @@ export class SecurityControlTestingEngine extends EventEmitter {
           last_optimized: 0,
           status: 'active',
           version: '1.0.0'
-        }
-      }
+
+
     ];
-  }
+
 
   private async establishEffectivenessBaselines(): Promise<void> {
 
     for (const control of this.controls.values()) {
       await this.establishControlBaseline(control.id);
-    }
-  }
+
+
 
   private async establishControlBaseline(controlId: string): Promise<void> {
 
@@ -866,7 +872,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
 
     this.effectivenessBaselines.set(controlId, baseline);
     this.emit('baseline_established', { controlId, baseline });
-  }
+
 
   private startContinuousTesting(): void {
     if (this.isTestingActive) return;
@@ -877,7 +883,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     this.testingInterval = setInterval(async () => {
       await this.runScheduledTests();
     }, intervalMs);
-  }
+
 
   private async runScheduledTests(): Promise<void> {
 
@@ -890,12 +896,12 @@ export class SecurityControlTestingEngine extends EventEmitter {
       if (timeSinceLastTest >= testIntervalMs) {
         try {
           await this.testSecurityControl(control.id, ['functional']);
-        } catch (error) {
+ catch (error) {
           this.emit('scheduled_test_error', { controlId: control.id, error });
-        }
-      }
-    }
-  }
+
+
+
+
 
   private setupEventListeners(): void {
     // Listen for platform events
@@ -912,21 +918,21 @@ export class SecurityControlTestingEngine extends EventEmitter {
     this.policyEngine.on('policy_analysis_completed', async (data) => {
       await this.handlePolicyChange(data);
     });
-  }
+
 
   private validateControlConfiguration(control: SecurityControl): void {
     if (!control.id || !control.name || !control.category) {
       throw new Error('Security control missing required fields');
-    }
+
 
     if (!control.testing_parameters.test_scenarios.length) {
       throw new Error('Security control must have at least one test scenario');
-    }
+
 
     if (!Object.keys(control.testing_parameters.success_criteria).length) {
       throw new Error('Security control must have defined success criteria');
-    }
-  }
+
+
 
   private async scheduleControlTesting(controlId: string): Promise<void> {
 
@@ -934,11 +940,11 @@ export class SecurityControlTestingEngine extends EventEmitter {
     setTimeout(async () => {
       try {
         await this.testSecurityControl(controlId, ['functional']);
-      } catch (error) {
+ catch (error) {
         this.emit('initial_test_error', { controlId, error });
-      }
+
     }, 5000); // 5 second delay
-  }
+
 
   private async executeControlTest(
     control: SecurityControl,
@@ -960,13 +966,13 @@ export class SecurityControlTestingEngine extends EventEmitter {
         concurrent_tests: 1,
         data_volume: 1000,
         attack_vectors: testType === 'security' ? ['brute_force', 'injection', 'bypass'] : undefined
-  }
+
       test_execution: {
         started_at: startTime,
         status: 'running',
         progress_percent: 0,
         current_phase: 'initialization'
-  }
+
       test_results: {
         overall_result: 'inconclusive',
         success_rate_percent: 0,
@@ -974,13 +980,13 @@ export class SecurityControlTestingEngine extends EventEmitter {
         security_metrics: {},
         detected_issues: [],
         recommendations: []
-  }
+
       comparative_analysis: {
         baseline_comparison: {},
         historical_trend: 'stable',
         statistical_significance: 0,
         confidence_interval: [0, 0]
-      }
+
     };
 
     try {
@@ -996,13 +1002,12 @@ export class SecurityControlTestingEngine extends EventEmitter {
       await this.analyzeTestResults(test, control);
 
       return test;
-
-    } catch (error) {
+ catch (error) {
       test.test_execution.status = 'failed';
       test.test_results.overall_result = 'fail';
       throw error;
-    }
-  }
+
+
 
   private async executeTestPhases(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1017,8 +1022,8 @@ export class SecurityControlTestingEngine extends EventEmitter {
       
       // Simulate phase-specific logic
       await this.executeTestPhase(test, control, phases[i]);
-    }
-  }
+
+
 
   private async executeTestPhase(test: SecurityControlTest, control: SecurityControl, phase: string): Promise<void> {
 
@@ -1040,8 +1045,8 @@ export class SecurityControlTestingEngine extends EventEmitter {
       case 'cleanup':
         // Clean up test environment
         break;
-    }
-  }
+
+
 
   private async performControlTest(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1065,8 +1070,8 @@ export class SecurityControlTestingEngine extends EventEmitter {
       case 'load':
         await this.performLoadTest(test, control);
         break;
-    }
-  }
+
+
 
   private async performFunctionalTest(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1079,7 +1084,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     };
 
     test.test_results.success_rate_percent = 95 + Math.random() * 5;
-  }
+
 
   private async performPerformanceTest(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1093,7 +1098,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     };
 
     test.test_results.success_rate_percent = 90 + Math.random() * 10;
-  }
+
 
   private async performSecurityTest(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1120,21 +1125,21 @@ export class SecurityControlTestingEngine extends EventEmitter {
           business_impact: 'medium',
           security_impact: 'medium',
           performance_impact_percent: 5
-  }
+
         remediation: {
           recommended_actions: ['Review security configuration', 'Update security rules'],
           estimated_effort_hours: 4,
           priority_score: 75,
           can_auto_remediate: false
-  }
+
         evidence: {
           test_data: test.test_results.security_metrics,
           logs: ['Security test execution log'],
           metrics: test.test_results.performance_metrics
-        }
+
       });
-    }
-  }
+
+
 
   private async performRegressionTest(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1146,10 +1151,10 @@ export class SecurityControlTestingEngine extends EventEmitter {
         throughput_change_percent: ((control.effectiveness_metrics.throughput_capacity - baseline.throughput_capacity) / baseline.throughput_capacity) * 100,
         reliability_change_percent: ((control.effectiveness_metrics.reliability_score - baseline.reliability_score) / baseline.reliability_score) * 100
       };
-    }
+
 
     test.test_results.success_rate_percent = 88 + Math.random() * 12;
-  }
+
 
   private async performIntegrationTest(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1161,7 +1166,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     };
 
     test.test_results.success_rate_percent = 93 + Math.random() * 7;
-  }
+
 
   private async performLoadTest(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1175,7 +1180,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     };
 
     test.test_results.success_rate_percent = 85 + Math.random() * 15;
-  }
+
 
   private async validateTestResults(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1190,42 +1195,42 @@ export class SecurityControlTestingEngine extends EventEmitter {
       
       if (actualValue !== null && this.meetsCriteria(actualValue, expectedValue, criteriaKey)) {
         validationsPassed++;
-      }
-    }
+
+
 
     // Determine overall result
     const passRate = validationsPassed / totalValidations;
     if (passRate >= 0.9) {
       test.test_results.overall_result = 'pass';
-    } else if (passRate >= 0.7) {
+ else if (passRate >= 0.7) {
       test.test_results.overall_result = 'warning';
-    } else {
+ else {
       test.test_results.overall_result = 'fail';
-    }
+
 
     test.test_results.success_rate_percent = passRate * 100;
-  }
+
 
   private getActualMetricValue(test: SecurityControlTest, metricKey: string): number | null {
     // Get actual metric value from test results
     if (test.test_results.performance_metrics[metricKey] !== undefined) {
       return test.test_results.performance_metrics[metricKey];
-    }
+
     if (test.test_results.security_metrics[metricKey] !== undefined) {
       return test.test_results.security_metrics[metricKey];
-    }
+
     return null;
-  }
+
 
   private meetsCriteria(actualValue: number, expectedValue: number, metricKey: string): boolean {
     // Determine if metric meets criteria based on type
     if (metricKey.includes('rate') || metricKey.includes('percent') || metricKey.includes('score')) {
       return actualValue >= expectedValue;
-    } else if (metricKey.includes('time') || metricKey.includes('latency')) {
+ else if (metricKey.includes('time') || metricKey.includes('latency')) {
       return actualValue <= expectedValue;
-    }
+
     return actualValue >= expectedValue * 0.9; // Default: within 10% of expected
-  }
+
 
   private async analyzeTestResults(test: SecurityControlTest, control: SecurityControl): Promise<void> {
 
@@ -1236,11 +1241,11 @@ export class SecurityControlTestingEngine extends EventEmitter {
       test.comparative_analysis.historical_trend = this.calculateHistoricalTrend(control.id);
       test.comparative_analysis.statistical_significance = this.calculateStatisticalSignificance(test, baseline);
       test.comparative_analysis.confidence_interval = this.calculateConfidenceInterval(test);
-    }
+
 
     // Generate recommendations
     test.test_results.recommendations = this.generateTestRecommendations(test, control);
-  }
+
 
   private compareWithBaseline(test: SecurityControlTest, baseline: Record<string, number>): Record<string, number> {
     const comparison: Record<string, number> = {};
@@ -1249,11 +1254,11 @@ export class SecurityControlTestingEngine extends EventEmitter {
     Object.entries(test.test_results.performance_metrics).forEach(([key, value]) => {
       if (baseline[key] !== undefined) {
         comparison[`${key}_change_percent`] = ((value - baseline[key]) / baseline[key]) * 100;
-      }
+
     });
 
     return comparison;
-  }
+
 
   private calculateHistoricalTrend(controlId: string): 'improving' | 'stable' | 'declining' {
     const history = this.testHistory.get(controlId) || [];
@@ -1267,42 +1272,42 @@ export class SecurityControlTestingEngine extends EventEmitter {
     if (trend > 5) return 'improving';
     if (trend < -5) return 'declining';
     return 'stable';
-  }
+
 
   private calculateStatisticalSignificance(test: SecurityControlTest, baseline: Record<string, number>): number {
     // Simplified statistical significance calculation
     return Math.random() * 0.1; // p-value simulation
-  }
+
 
   private calculateConfidenceInterval(test: SecurityControlTest): [number, number] {
     const successRate = test.test_results.success_rate_percent;
     const margin = 5; // ±5% confidence interval
     return [Math.max(0, successRate - margin), Math.min(100, successRate + margin)];
-  }
+
 
   private generateTestRecommendations(test: SecurityControlTest, control: SecurityControl): string[] {
     const recommendations: string[] = [];
 
     if (test.test_results.overall_result === 'fail') {
       recommendations.push('Immediate investigation required - control failing validation criteria');
-    }
+
 
     if (test.test_results.success_rate_percent < 90) {
       recommendations.push('Review control configuration and optimization opportunities');
-    }
+
 
     if (test.test_results.detected_issues.length > 0) {
       recommendations.push('Address detected security issues before next deployment');
-    }
+
 
     // Performance-specific recommendations
     const avgResponseTime = test.test_results.performance_metrics.response_time_ms || test.test_results.performance_metrics.average_response_time_ms;
     if (avgResponseTime && avgResponseTime > control.testing_parameters.performance_thresholds.max_response_time_ms) {
       recommendations.push('Optimize response time - exceeding performance thresholds');
-    }
+
 
     return recommendations;
-  }
+
 
   private calculateTestDuration(testType: SecurityControlTest['test_type']): number {
     const durations = {
@@ -1315,7 +1320,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     };
     
     return durations[testType] || 600;
-  }
+
 
   private determineControlStatus(testResults: SecurityControlTest[]): SecurityControl['metadata']['status'] {
     const failedTests = testResults.filter(test => test.test_results.overall_result === 'fail');
@@ -1326,7 +1331,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     if (warningTests.length > 0) return 'testing';
     
     return 'active';
-  }
+
 
   private calculateOverallTestResult(testResults: SecurityControlTest[]): 'pass' | 'fail' | 'warning' {
     const failedTests = testResults.filter(test => test.test_results.overall_result === 'fail');
@@ -1336,11 +1341,11 @@ export class SecurityControlTestingEngine extends EventEmitter {
     if (warningTests.length > 0) return 'warning';
     
     return 'pass';
-  }
+
 
   private limitHistory(history: SecurityControlTest[]): SecurityControlTest[] {
     return history.slice(-50); // Keep last 50 tests
-  }
+
 
   private async analyzeTestResultsForOptimization(
     controlId: string,
@@ -1356,16 +1361,16 @@ export class SecurityControlTestingEngine extends EventEmitter {
     for (const test of testResults) {
       if (test.test_results.overall_result !== 'pass') {
         optimizationOpportunities.push(`Improve ${test.test_type} test performance`);
-      }
-    }
+
+
 
     if (optimizationOpportunities.length > 0) {
       this.emit('optimization_opportunities_identified', { 
         controlId, 
         opportunities: optimizationOpportunities 
       });
-    }
-  }
+
+
 
   private async analyzeControlPerformance(
     controls: SecurityControl[], 
@@ -1389,29 +1394,29 @@ export class SecurityControlTestingEngine extends EventEmitter {
           response_effectiveness: this.calculateResponseEffectiveness(control, periodTests),
           prevention_effectiveness: this.calculatePreventionEffectiveness(control, periodTests),
           recovery_effectiveness: this.calculateRecoveryEffectiveness(control, periodTests)
-  }
+
         performance_metrics: {
           average_response_time_ms: this.calculateAverageResponseTime(periodTests),
           throughput_per_second: control.effectiveness_metrics.throughput_capacity,
           resource_utilization_percent: this.calculateResourceUtilization(periodTests),
           availability_percent: this.calculateAvailability(periodTests),
           error_rate_percent: this.calculateErrorRate(periodTests)
-  }
+
         optimization_potential: {
           optimization_score: this.calculateOptimizationPotential(control, periodTests),
           identified_improvements: this.identifyImprovements(control, periodTests),
           estimated_impact: this.estimateOptimizationImpact(control, periodTests),
           implementation_complexity: this.assessImplementationComplexity(control)
-  }
+
         test_history: {
           total_tests_run: periodTests.length,
           success_rate_percent: this.calculateTestSuccessRate(periodTests),
           last_test_date: Math.max(...periodTests.map(test => test.test_execution.started_at)),
           trend_direction: this.calculateHistoricalTrend(control.id)
-        }
+
       };
     });
-  }
+
 
   private async analyzeCategoryPerformance(
     controls: SecurityControl[], 
@@ -1432,14 +1437,14 @@ export class SecurityControlTestingEngine extends EventEmitter {
           best_performing_control: this.findBestPerformingControl(controlPerformance),
           worst_performing_control: this.findWorstPerformingControl(controlPerformance),
           category_trend: this.calculateCategoryTrend(categoryControls)
-  }
+
         common_issues: this.identifyCommonIssues(categoryControls),
         optimization_opportunities: this.identifyOpportunities(categoryControls)
       };
-    }
+
 
     return categoryAnalysis;
-  }
+
 
   private async analyzeTrends(
     controls: SecurityControl[], 
@@ -1460,21 +1465,21 @@ export class SecurityControlTestingEngine extends EventEmitter {
         trend_strength: this.calculateTrendStrength(allTests),
         seasonal_patterns: this.detectSeasonalPatterns(allTests),
         anomalies_detected: this.detectAnomalies(allTests)
-  }
+
       performance_trends: {
         response_time_trend: this.calculateResponseTimeTrend(allTests),
         throughput_trend: this.calculateThroughputTrend(allTests),
         error_rate_trend: this.calculateErrorRateTrend(allTests),
         availability_trend: this.calculateAvailabilityTrend(allTests)
-  }
+
       predictive_insights: {
         projected_effectiveness_30days: this.projectEffectiveness(allTests, 30),
         projected_performance_change: this.projectPerformanceChange(allTests),
         risk_indicators: this.identifyRiskIndicators(allTests),
         recommended_preventive_actions: this.recommendPreventiveActions(allTests)
-      }
+
     };
-  }
+
 
   private async generateOptimizationRecommendations(controlPerformance: SecurityControlPerformance[]): Promise<EffectivenessReport['recommendations']> {
 
@@ -1501,23 +1506,23 @@ export class SecurityControlTestingEngine extends EventEmitter {
               'Apply immediate fixes',
               'Monitor improvements'
             ]
-  }
+
           impact_assessment: {
             effectiveness_improvement_percent: 30,
             performance_improvement_percent: 25,
             cost_impact: 5000,
             risk_reduction: 40
-  }
+
           implementation: {
             estimated_effort_hours: 16,
             required_resources: ['Security Engineer', 'System Administrator'],
             timeline_weeks: 1,
             dependencies: ['System access', 'Change approval'],
             can_automate: false
-          }
+
         });
-      }
-    }
+
+
 
     return {
       immediate_actions: immediateActions,
@@ -1525,7 +1530,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
       long_term_strategy: longTermStrategy,
       resource_requirements: resourceRequirements
     };
-  }
+
 
   private async assessComplianceStatus(controls: SecurityControl[]): Promise<EffectivenessReport['compliance_status']> {
 
@@ -1547,7 +1552,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
         estimated_effort: 20
       };
       complianceGaps.push(gap);
-    }
+
 
     return {
       frameworks_assessed: frameworks,
@@ -1557,7 +1562,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
         return acc;
       }, {} as Record<string, number>)
     };
-  }
+
 
   private generateExecutiveSummary(controlPerformance: SecurityControlPerformance[]): EffectivenessReport['executive_summary'] {
     const totalControls = controlPerformance.length;
@@ -1579,7 +1584,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
       critical_issues: criticalIssues,
       optimization_opportunities: optimizationOpportunities
     };
-  }
+
 
   // Analytics helper methods implementation...
   
@@ -1589,14 +1594,14 @@ export class SecurityControlTestingEngine extends EventEmitter {
       (sum,
       control
     ) => sum + control.effectiveness_metrics.reliability_score, 0) / controls.length;
-  }
+
 
   private groupControlsByStatus(controls: SecurityControl[]): Record<string, number> {
     return controls.reduce((acc, control) => {
       acc[control.metadata.status] = (acc[control.metadata.status] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-  }
+
 
   private calculateAverageTestDuration(tests: SecurityControlTest[]): number {
     if (tests.length === 0) return 0;
@@ -1609,20 +1614,20 @@ export class SecurityControlTestingEngine extends EventEmitter {
     }, 0);
     
     return Math.round(totalDuration / completedTests.length / 1000); // Convert to seconds
-  }
+
 
   private calculateTestSuccessRate(tests: SecurityControlTest[]): number {
     if (tests.length === 0) return 100;
     
     const passedTests = tests.filter(test => test.test_results.overall_result === 'pass').length;
     return (passedTests / tests.length) * 100;
-  }
+
 
   private countCriticalIssues(tests: SecurityControlTest[]): number {
     return tests.reduce((count, test) => {
       return count + test.test_results.detected_issues.filter(issue => issue.severity === 'critical').length;
     }, 0);
-  }
+
 
   private countOptimizationOpportunities(controls: SecurityControl[]): number {
     // Count controls that could benefit from optimization
@@ -1630,7 +1635,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
       control.effectiveness_metrics.reliability_score < 95 ||
       control.effectiveness_metrics.response_time_ms > 500
     ).length;
-  }
+
 
   private calculateEffectivenessTrend(controls: SecurityControl[], days: number): 'improving' | 'stable' | 'declining' {
     // Simplified trend calculation
@@ -1639,7 +1644,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     if (avgEffectiveness > 95) return 'improving';
     if (avgEffectiveness < 85) return 'declining';
     return 'stable';
-  }
+
 
   private calculatePerformanceTrend(tests: SecurityControlTest[], days: number): 'improving' | 'stable' | 'declining' {
     if (tests.length === 0) return 'stable';
@@ -1649,7 +1654,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     if (avgSuccessRate > 95) return 'improving';
     if (avgSuccessRate < 85) return 'declining';
     return 'stable';
-  }
+
 
   private calculateIssueDetectionTrend(
     tests: SecurityControlTest[],
@@ -1665,7 +1670,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     if (avgIssuesPerTest > 2) return 'increasing';
     if (avgIssuesPerTest < 0.5) return 'decreasing';
     return 'stable';
-  }
+
 
   private generateCategoryBreakdown(controls: SecurityControl[], tests: SecurityControlTest[]): Record<string, any> {
     const categories = this.groupControlsByCategory(controls);
@@ -1681,27 +1686,27 @@ export class SecurityControlTestingEngine extends EventEmitter {
         average_effectiveness: this.calculateAverageEffectiveness(categoryControls),
         issue_count: this.countCriticalIssues(categoryTests)
       };
-    }
+
     
     return breakdown;
-  }
+
 
   private groupControlsByCategory(controls: SecurityControl[]): Record<string, SecurityControl[]> {
     return controls.reduce((acc, control) => {
       if (!acc[control.category]) {
         acc[control.category] = [];
-      }
+
       acc[control.category].push(control);
       return acc;
     }, {} as Record<string, SecurityControl[]>);
-  }
+
 
   private getRecentActivities(limit: number): Array<{
     activity_type: string;
     control_id: string;
     timestamp: number;
     status: string;
-  }> {
+> {
     const activities: Array<unknown> = [];
     
     // Add recent test activities
@@ -1714,14 +1719,14 @@ export class SecurityControlTestingEngine extends EventEmitter {
           timestamp: test.test_execution.started_at,
           status: test.test_results.overall_result
         });
-      }
-    }
+
+
     
     // Sort by timestamp and limit
     return activities
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, limit);
-  }
+
 
   // Additional helper method implementations would continue here...
   
@@ -1734,18 +1739,18 @@ export class SecurityControlTestingEngine extends EventEmitter {
       if (this.isControlRelatedToAlert(control, alert)) {
         try {
           await this.testSecurityControl(control.id, ['security'], 'production');
-        } catch (error) {
+ catch (error) {
           this.emit('emergency_test_error', { controlId: control.id, error });
-        }
-      }
-    }
-  }
+
+
+
+
 
   private isControlRelatedToAlert(control: SecurityControl, alert: unknown): boolean {
     // Simple logic to determine if control is related to alert
     return control.category === alert.category || 
            control.implementation.deployment_scope.some((scope: string) => alert.affected_systems?.includes(scope));
-  }
+
 
   private async handleOptimizationApplied(data: Record<string, unknown>): Promise<void> {
 
@@ -1755,11 +1760,11 @@ export class SecurityControlTestingEngine extends EventEmitter {
     for (const control of this.controls.values()) {
       try {
         await this.testSecurityControl(control.id, ['regression'], 'testing');
-      } catch (error) {
+ catch (error) {
         this.emit('validation_test_error', { controlId: control.id, error });
-      }
-    }
-  }
+
+
+
 
   private async handlePolicyChange(data: Record<string, unknown>): Promise<void> {
 
@@ -1769,14 +1774,14 @@ export class SecurityControlTestingEngine extends EventEmitter {
     for (const control of this.controls.values()) {
       if (this.isControlAffectedByPolicy(control, data)) {
         await this.scheduleControlTesting(control.id);
-      }
-    }
-  }
+
+
+
 
   private isControlAffectedByPolicy(control: SecurityControl, policyData: unknown): boolean {
     // Simple logic to determine if control is affected by policy change
     return true; // For now, assume all controls might be affected
-  }
+
 
   // Placeholder implementations for remaining methods...
   private calculateOverallEffectivenessScore(control: SecurityControl, tests: SecurityControlTest[]): number {
@@ -1784,19 +1789,19 @@ export class SecurityControlTestingEngine extends EventEmitter {
     
     const avgTestScore = tests.reduce((sum, test) => sum + test.test_results.success_rate_percent, 0) / tests.length;
     return (control.effectiveness_metrics.reliability_score + avgTestScore) / 2;
-  }
+
 
   private calculateResponseEffectiveness(control: SecurityControl, tests: SecurityControlTest[]): number {
     return control.effectiveness_metrics.detection_rate;
-  }
+
 
   private calculatePreventionEffectiveness(control: SecurityControl, tests: SecurityControlTest[]): number {
     return 100 - control.effectiveness_metrics.false_negative_rate;
-  }
+
 
   private calculateRecoveryEffectiveness(control: SecurityControl, tests: SecurityControlTest[]): number {
     return control.effectiveness_metrics.reliability_score;
-  }
+
 
   private calculateAverageResponseTime(tests: SecurityControlTest[]): number {
     const responseTimes = tests.map(test => 
@@ -1806,7 +1811,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     
     if (responseTimes.length === 0) return 0;
     return responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length;
-  }
+
 
   private calculateResourceUtilization(tests: SecurityControlTest[]): number {
     const utilizations = tests.map(test => 
@@ -1815,7 +1820,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     
     if (utilizations.length === 0) return 0;
     return utilizations.reduce((sum, util) => sum + util, 0) / utilizations.length;
-  }
+
 
   private calculateAvailability(tests: SecurityControlTest[]): number {
     const availabilities = tests.map(test => 
@@ -1824,7 +1829,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     
     if (availabilities.length === 0) return 99.9;
     return availabilities.reduce((sum, avail) => sum + avail, 0) / availabilities.length;
-  }
+
 
   private calculateErrorRate(tests: SecurityControlTest[]): number {
     const errorRates = tests.map(test => 
@@ -1833,7 +1838,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     
     if (errorRates.length === 0) return 0;
     return errorRates.reduce((sum, rate) => sum + rate, 0) / errorRates.length;
-  }
+
 
   private calculateOptimizationPotential(control: SecurityControl, tests: SecurityControlTest[]): number {
     let potential = 0;
@@ -1844,23 +1849,23 @@ export class SecurityControlTestingEngine extends EventEmitter {
     if (tests.some(test => test.test_results.overall_result !== 'pass')) potential += 25;
     
     return Math.min(100, potential);
-  }
+
 
   private identifyImprovements(control: SecurityControl, tests: SecurityControlTest[]): string[] {
     const improvements: string[] = [];
     
     if (control.effectiveness_metrics.response_time_ms > 500) {
       improvements.push('Optimize response time');
-    }
+
     if (control.effectiveness_metrics.false_positive_rate > 2) {
       improvements.push('Reduce false positive rate');
-    }
+
     if (tests.some(test => test.test_results.detected_issues.length > 0)) {
       improvements.push('Address detected security issues');
-    }
+
     
     return improvements;
-  }
+
 
   private estimateOptimizationImpact(control: SecurityControl, tests: SecurityControlTest[]): Record<string, number> {
     return {
@@ -1868,7 +1873,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
       false_positive_reduction_percent: control.effectiveness_metrics.false_positive_rate > 2 ? 50 : 0,
       overall_effectiveness_improvement: 15
     };
-  }
+
 
   private assessImplementationComplexity(control: SecurityControl): 'low' | 'medium' | 'high' {
     const dependencyCount = control.implementation.dependencies.length;
@@ -1877,27 +1882,27 @@ export class SecurityControlTestingEngine extends EventEmitter {
     if (dependencyCount > 5 || scopeCount > 10) return 'high';
     if (dependencyCount > 2 || scopeCount > 5) return 'medium';
     return 'low';
-  }
+
 
   // Additional trend analysis methods...
   private calculateAverageEffectivenessForCategory(performance: SecurityControlPerformance[]): number {
     if (performance.length === 0) return 0;
     return performance.reduce((sum, p) => sum + p.effectiveness_metrics.overall_score, 0) / performance.length;
-  }
+
 
   private findBestPerformingControl(performance: SecurityControlPerformance[]): string {
     if (performance.length === 0) return 'none';
     return performance.reduce((best, current) => 
       current.effectiveness_metrics.overall_score > best.effectiveness_metrics.overall_score ? current : best
     ).control_name;
-  }
+
 
   private findWorstPerformingControl(performance: SecurityControlPerformance[]): string {
     if (performance.length === 0) return 'none';
     return performance.reduce((worst, current) => 
       current.effectiveness_metrics.overall_score < worst.effectiveness_metrics.overall_score ? current : worst
     ).control_name;
-  }
+
 
   private calculateCategoryTrend(controls: SecurityControl[]): 'improving' | 'stable' | 'declining' {
     // Simplified category trend calculation
@@ -1905,7 +1910,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
     if (avgScore > 95) return 'improving';
     if (avgScore < 85) return 'declining';
     return 'stable';
-  }
+
 
   private identifyCommonIssues(controls: SecurityControl[]): CategoryAnalysis['common_issues'] {
     // Placeholder implementation
@@ -1914,9 +1919,9 @@ export class SecurityControlTestingEngine extends EventEmitter {
         issue_type: 'performance_degradation',
         occurrence_count: Math.floor(Math.random() * 5),
         severity_distribution: { low: 2, medium: 1, high: 0, critical: 0 }
-      }
+
     ];
-  }
+
 
   private identifyOpportunities(controls: SecurityControl[]): CategoryAnalysis['optimization_opportunities'] {
     return [
@@ -1924,65 +1929,65 @@ export class SecurityControlTestingEngine extends EventEmitter {
         opportunity_description: 'Response time optimization across category controls',
         potential_impact: 25,
         implementation_effort: 'medium'
-      }
+
     ];
-  }
+
 
   // Additional trend analysis implementations...
   private calculateOverallEffectivenessTrend(tests: SecurityControlTest[]): 'improving' | 'stable' | 'declining' {
     return 'stable'; // Placeholder
-  }
+
 
   private calculateTrendStrength(tests: SecurityControlTest[]): number {
     return 0.5; // Placeholder
-  }
+
 
   private detectSeasonalPatterns(tests: SecurityControlTest[]): boolean {
     return false; // Placeholder
-  }
+
 
   private detectAnomalies(tests: SecurityControlTest[]): number {
     return 0; // Placeholder
-  }
+
 
   private calculateResponseTimeTrend(tests: SecurityControlTest[]): 'improving' | 'stable' | 'declining' {
     return 'stable'; // Placeholder
-  }
+
 
   private calculateThroughputTrend(tests: SecurityControlTest[]): 'improving' | 'stable' | 'declining' {
     return 'stable'; // Placeholder
-  }
+
 
   private calculateErrorRateTrend(tests: SecurityControlTest[]): 'improving' | 'stable' | 'declining' {
     return 'improving'; // Placeholder
-  }
+
 
   private calculateAvailabilityTrend(tests: SecurityControlTest[]): 'improving' | 'stable' | 'declining' {
     return 'stable'; // Placeholder
-  }
+
 
   private projectEffectiveness(tests: SecurityControlTest[], days: number): number {
     const currentAvg = this.calculateTestSuccessRate(tests);
     return Math.min(100, currentAvg + Math.random() * 5); // Slight improvement projection
-  }
+
 
   private projectPerformanceChange(tests: SecurityControlTest[]): number {
     return Math.random() * 10 - 5; // ±5% change projection
-  }
+
 
   private identifyRiskIndicators(tests: SecurityControlTest[]): string[] {
     const indicators: string[] = [];
     
     if (this.calculateTestSuccessRate(tests) < 90) {
       indicators.push('Declining test success rate');
-    }
+
     
     if (this.countCriticalIssues(tests) > 0) {
       indicators.push('Critical issues detected');
-    }
+
     
     return indicators;
-  }
+
 
   private recommendPreventiveActions(tests: SecurityControlTest[]): string[] {
     return [
@@ -1990,7 +1995,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
       'Implement proactive monitoring',
       'Review and update security baselines'
     ];
-  }
+
 
   private async assessCurrentControlPerformance(controlId: string): Promise<unknown> {
 
@@ -2003,7 +2008,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
       throughput: control.effectiveness_metrics.throughput_capacity,
       false_positive_rate: control.effectiveness_metrics.false_positive_rate
     };
-  }
+
 
   private async generateOptimizationStrategies(
     control: SecurityControl, 
@@ -2020,16 +2025,16 @@ export class SecurityControlTestingEngine extends EventEmitter {
         expected_improvements: { response_time_improvement_percent: 30 },
         implementation_steps: ['Optimize algorithm', 'Add caching', 'Scale resources']
       });
-    }
+
     
     return strategies;
-  }
+
 
   private async applyOptimizationStrategy(controlId: string, strategy: unknown): Promise<void> {
 
     console.log(`Applying optimization strategy: ${strategy.strategy_name} to control: ${controlId}`);
     // Implementation would apply actual optimizations
-  }
+
 
   private createOptimizationMonitoringPlan(controlId: string, optimizations: string[]): string[] {
     return [
@@ -2038,7 +2043,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
       'Alert on performance degradation',
       'Schedule validation testing'
     ];
-  }
+
 
   private async validateOptimization(controlId: string, optimizationId: string): Promise<void> {
 
@@ -2053,14 +2058,13 @@ export class SecurityControlTestingEngine extends EventEmitter {
       
       if (allPassed) {
         this.emit('optimization_validated', { controlId, optimizationId, success: true });
-      } else {
+ else {
         this.emit('optimization_validation_failed', { controlId, optimizationId, tests: validationTests });
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       this.emit('optimization_validation_error', { controlId, optimizationId, error });
-    }
-  }
+
+
 
   private async generateBenchmarks(performance: SecurityControlPerformance[]): Promise<Record<string, number>> {
     return {
@@ -2071,7 +2075,7 @@ export class SecurityControlTestingEngine extends EventEmitter {
       organization_target_response_time: 250,
       organization_target_availability: 99.9
     };
-  }
+
 
   /**
    * Shutdown the testing engine
@@ -2082,15 +2086,14 @@ export class SecurityControlTestingEngine extends EventEmitter {
     
     if (this.testingInterval) {
       clearInterval(this.testingInterval);
-    }
+
     
     // Cancel any active tests
     for (const test of this.activeTests.values()) {
       if (test.test_execution.status === 'running') {
         test.test_execution.status = 'cancelled';
-      }
-    }
+
+
     
     this.emit('shutdown', { timestamp: Date.now() });
-  }
-}
+

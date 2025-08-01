@@ -8,61 +8,56 @@ import { EventEmitter } from 'events';
 import { PerformanceMonitor, PerformanceMetrics, AggregatedMetrics, PerformanceAlert } from './PerformanceMonitor';
 import { SecurityEvent } from '../security/AlertingSystem';
 
-}
-export interface SecurityAnalyticsMetrics {
-  // Security-specific metrics extending performance metrics
-  threatDetectionMetrics: {
+
+export interface SecurityAnalyticsMetrics { // Security-specific metrics extending performance metrics
+  threatDetectionMetrics: { }
   threatsDetected: number;
   falsePositives: number;
   truePositives: number;
   threatLevel: number;
   detectionAccuracy: number;
   timeToDetection: number;
-}
+
+
 };
-  complianceMetrics: {
+  complianceMetrics: { ,
   complianceViolations: number;
   auditTrailEntries: number;
   dataAccessEvents: number;
   policyEnforcements: number;
-  complianceScore: number;
-};
-  accessControlMetrics: {
+  complianceScore: number };
+  accessControlMetrics: { ,
   authenticationAttempts: number;
   failedAuthentications: number;
   privilegeEscalations: number;
   sessionAnomalies: number;
-  accessViolations: number;
-};
-  dataProtectionMetrics: {
+  accessViolations: number };
+  dataProtectionMetrics: { ,
   encryptionOperations: number;
   dataClassificationEvents: number;
   dataLeakageIncidents: number;
   backupIntegrityChecks: number;
-  dataRetentionActions: number;
-};
-  incidentResponseMetrics: {
+  dataRetentionActions: number };
+  incidentResponseMetrics: { ,
   incidentCount: number;
   meanTimeToDetection: number;
   meanTimeToResponse: number;
   meanTimeToResolution: number;
-  escalationRate: number;
-};
-}
-}
-export interface SecuritySystemHealth {
-  systemId: string;
+  escalationRate: number };
+
+
+export interface SecuritySystemHealth { systemId: string;
   systemType: 'firewall' | 'ids' | 'siem' | 'auth' | 'compliance' | 'backup' | 'encryption';
   status: 'healthy' | 'degraded' | 'critical' | 'offline';
   lastHealthCheck: number;
-  healthScore: number; // 0-100,
+  healthScore: number; // 0-100;
   responseTime: number;
   errorRate: number;
   uptime: number;
   // Security-specific health indicators
-  threatDetectionCapability: number; // 0-100,
-  logProcessingRate: number; // logs per second,
-  alertProcessingDelay: number; // milliseconds,
+  threatDetectionCapability: number; // 0-100;
+  logProcessingRate: number; // logs per second;
+  alertProcessingDelay: number; // milliseconds }
   ruleSyncStatus: 'synced' | 'syncing' | 'failed';
   // Performance indicators
   cpuUsage: number;
@@ -73,11 +68,11 @@ export interface SecuritySystemHealth {
   configurationVersion: string;
   lastConfigUpdate: number;
   pendingUpdates: number;
-}
-}
-}
-export interface SecurityAnalyticsAlert extends PerformanceAlert {
-  securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';
+
+
+
+
+export interface SecurityAnalyticsAlert extends PerformanceAlert { securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';,
   affectedSystems: string;
   threatLevel: number;
   complianceImpact: 'none' | 'low' | 'medium' | 'high' | 'critical';
@@ -85,17 +80,18 @@ export interface SecurityAnalyticsAlert extends PerformanceAlert {
   relatedEvents: string;
   export interface SecurityAnalyticsConfig {
   // Base performance monitoring config
-  performanceConfig: {
+  performanceConfig: { }
   enableMemoryTracking: boolean;
   enableContextTracking: boolean;
   enableAggregation: boolean;
   enableAlerting: boolean;
   slowExecutionThreshold: number;
   memoryThreshold: number;
-}
+
+
 };
   // Security-specific configuration
-  securityConfig: {
+  securityConfig: { ,
   enableThreatDetection: boolean;
   enableComplianceMonitoring: boolean;
   enableAccessControlTracking: boolean;
@@ -110,19 +106,18 @@ export interface SecurityAnalyticsAlert extends PerformanceAlert {
   // Health monitoring
   healthCheckInterval: number; // milliseconds,
   systemHealthThreshold: number; // 0-100,
-  alertCorrelationWindow: number; // milliseconds,
+  alertCorrelationWindow: number; // milliseconds }
 };
   // Integration settings
-  integrationConfig: {
+  integrationConfig: { ,
   siemIntegration: boolean;
   complianceIntegration: boolean;
   auditIntegration: boolean;
-  threatIntelIntegration: boolean;
-};
+  threatIntelIntegration: boolean };
 /**
  * Security Analytics Monitor extending Epic 1 Performance Monitor
  */
-}
+
 export class SecurityAnalyticsMonitor extends EventEmitter {
   private performanceMonitor: PerformanceMonitor;
   private config: SecurityAnalyticsConfig;
@@ -135,39 +130,38 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   private healthCheckInterval?: NodeJS.Timeout;
   private metricsAggregationInterval?: NodeJS.Timeout;
   private alertCorrelationInterval?: NodeJS.Timeout;
-  constructor(config: Partial<SecurityAnalyticsConfig> = {}) {
-  super();
+  constructor(config: Partial<SecurityAnalyticsConfig> = {}) { super();
   this.config = {
   performanceConfig: {
-  enableMemoryTracking: true,
-  enableContextTracking: true,
-  enableAggregation: true,
-  enableAlerting: true,
-  slowExecutionThreshold: 1000,
-  memoryThreshold: 50 * 1024 * 1024,
+  enableMemoryTracking: true
+  enableContextTracking: true
+  enableAggregation: true
+  enableAlerting: true
+  slowExecutionThreshold: 1000
+  memoryThreshold: 50 * 1024 * 1024 }
   ...config.performanceConfig
-},
-  securityConfig: {
-  enableThreatDetection: true,
-  enableComplianceMonitoring: true,
-  enableAccessControlTracking: true,
-  enableDataProtectionMonitoring: true,
-  enableIncidentResponseTracking: true,
-  threatLevelThreshold: 7,
-  falsePositiveThreshold: 0.1, // 10%,
-  complianceScoreThreshold: 85,
-  detectionTimeThreshold: 30000, // 30 seconds,
-  responseTimeThreshold: 300000, // 5 minutes,
-  healthCheckInterval: 30000, // 30 seconds,
-  systemHealthThreshold: 80,
-  alertCorrelationWindow: 300000, // 5 minutes,
+
+  securityConfig: { 
+  enableThreatDetection: true
+  enableComplianceMonitoring: true
+  enableAccessControlTracking: true
+  enableDataProtectionMonitoring: true
+  enableIncidentResponseTracking: true
+  threatLevelThreshold: 7
+  falsePositiveThreshold: 0.1, // 10%
+  complianceScoreThreshold: 85
+  detectionTimeThreshold: 30000, // 30 seconds
+  responseTimeThreshold: 300000, // 5 minutes
+  healthCheckInterval: 30000, // 30 seconds
+  systemHealthThreshold: 80
+  alertCorrelationWindow: 300000, // 5 minutes }
   ...config.securityConfig
-},
-  integrationConfig: {
-  siemIntegration: true,
-  complianceIntegration: true,
-  auditIntegration: true,
-  threatIntelIntegration: false,
+
+  integrationConfig: { 
+  siemIntegration: true
+  complianceIntegration: true
+  auditIntegration: true
+  threatIntelIntegration: false }
   ...config.integrationConfig
 };
     // Initialize base performance monitor
@@ -179,31 +173,24 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   /**
    * Initialize security monitoring systems
    */
-  private initialize(): void {
-    // Start health monitoring
+  private initialize(): void { // Start health monitoring
     if (this.config.securityConfig.healthCheckInterval > 0) {
       this.healthCheckInterval = setInterval(() => {
-        this.performHealthChecks();
-      }, this.config.securityConfig.healthCheckInterval);
+        this.performHealthChecks() }, this.config.securityConfig.healthCheckInterval);
     // Start metrics aggregation
-    this.metricsAggregationInterval = setInterval(() => {
-      this.aggregateSecurityMetrics();
-    }, 60000); // Every minute
+    this.metricsAggregationInterval = setInterval(() => { this.aggregateSecurityMetrics() }, 60000); // Every minute
     // Start alert correlation
-    this.alertCorrelationInterval = setInterval(() => {
-      this.correlateSecurityAlerts();
-    }, this.config.securityConfig.alertCorrelationWindow);
+    this.alertCorrelationInterval = setInterval(() => { this.correlateSecurityAlerts() }, this.config.securityConfig.alertCorrelationWindow);
     this.emit('security_monitor_initialized');
   /**
    * Register a security system for monitoring
    */
-  registerSecuritySystem(systemHealth: SecuritySystemHealth): void {
-  this.systemHealthMap.set(systemHealth.systemId, systemHealth);
+  registerSecuritySystem(systemHealth: SecuritySystemHealth): void { this.systemHealthMap.set(systemHealth.systemId, systemHealth);
   // Initialize metrics for this system
   this.securityMetrics.set(systemHealth.systemId, this.createEmptySecurityMetrics());
   this.emit('security_system_registered', {)
-  systemId: systemHealth.systemId,
-  systemType: systemHealth.systemType,
+  systemId: systemHealth.systemId
+  systemType: systemHealth.systemType }
 });
   /**
    * Record security event for analytics
@@ -214,8 +201,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
       console.warn(`Security system ${systemId} not registered`);}
       return;
     // Update threat detection metrics
-    if (this.config.securityConfig.enableThreatDetection) {
-  this.updateThreatDetectionMetrics(metrics, event);
+    if (this.config.securityConfig.enableThreatDetection) { this.updateThreatDetectionMetrics(metrics, event);
   // Update compliance metrics
   if (this.config.securityConfig.enableComplianceMonitoring) {
   this.updateComplianceMetrics(metrics, event);
@@ -235,9 +221,9 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   // Check for alerts
   this.checkSecurityAlerts(systemId, metrics, event);
   this.emit('security_event_recorded', {)
-  systemId,
-  eventType: event.type,
-  severity: event.severity,
+  systemId
+  eventType: event.type
+  severity: event.severity }
 });
   /**
    * Update system health status
@@ -247,41 +233,37 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
     if (!currentHealth) {
       console.warn(`Security system ${systemId} not registered`);}
       return;
-    const updatedHealth = {
-  ...currentHealth,
-  ...healthUpdate,
-  lastHealthCheck: Date.now(),
+    const updatedHealth = { ...currentHealth
+  ...healthUpdate
+  lastHealthCheck: Date.now() }
 };
     this.systemHealthMap.set(systemId, updatedHealth);
     // Check for health-based alerts
     this.checkSystemHealthAlerts(systemId, updatedHealth);
-    this.emit('system_health_updated', {)
-  systemId,
-  healthScore: updatedHealth.healthScore,
-  status: updatedHealth.status,
+    this.emit('system_health_updated', { )
+  systemId
+  healthScore: updatedHealth.healthScore
+  status: updatedHealth.status }
 });
   /**
    * Get security analytics metrics for a system
    */
-  getSecurityMetrics(systemId: string): SecurityAnalyticsMetrics | null {
-  return this.securityMetrics.get(systemId) || null;
+  getSecurityMetrics(systemId: string): SecurityAnalyticsMetrics | null { return this.securityMetrics.get(systemId) || null;
   /**
   * Get system health status
   */
-  getSystemHealth(systemId: string): SecuritySystemHealth | null {,
+  getSystemHealth(systemId: string): SecuritySystemHealth | null {
   return this.systemHealthMap.get(systemId) || null;
   /**
   * Get all security alerts
   */
-  getSecurityAlerts(resolved: boolean = false): SecurityAnalyticsAlert {,
+  getSecurityAlerts(resolved: boolean = false): SecurityAnalyticsAlert { }
   return Array.from(this.securityAlerts.values())
   .filter(alert => alert.resolved === resolved)
-  .sort((a, b) => {
-  // Sort by threat level first, then by timestamp
+  .sort((a, b) => { // Sort by threat level first, then by timestamp
   if (b.threatLevel !== a.threatLevel) {
   return b.threatLevel - a.threatLevel;
-  return b.timestamp - a.timestamp;
-});
+  return b.timestamp - a.timestamp });
   /**
    * Get comprehensive security dashboard data
    */
@@ -291,18 +273,16 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
     systemsStatus: { healthy: number; degraded: number; critical: number; offline: number };
     threatLevel: number;
   complianceScore: number;
-    incidentStats: {
+    incidentStats: { 
   activeIncidents: number;
   meanDetectionTime: number;
-  meanResponseTime: number;
-};
+  meanResponseTime: number };
     topThreats: Array<{ type: string; count: number }>;
-    systemPerformance: Array<{
+    systemPerformance: Array<{ ,
   systemId: string;
   healthScore: number;
   responseTime: number;
-  threatDetectionRate: number;
-}>;
+  threatDetectionRate: number }>;
     const systems = Array.from(this.systemHealthMap.values());
     const alerts = this.getSecurityAlerts(false);
     const metrics = Array.from(this.securityMetrics.values());
@@ -313,10 +293,8 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
     // Count critical alerts
     const criticalAlerts = alerts.filter(alert => alert.severity === 'critical').length;
     // System status counts
-    const systemsStatus = systems.reduce((counts, system) => {
-      counts[system.status]++;
-      return counts;
-    }, { healthy: 0, degraded: 0, critical: 0, offline: 0 });
+    const systemsStatus = systems.reduce((counts, system) => { counts[system.status]++;
+      return counts }, { healthy: 0, degraded: 0, critical: 0, offline: 0 });
     // Calculate average threat level
     const threatLevel = metrics.length > 0;
       ? metrics.reduce((sum, metric) => sum + metric.threatDetectionMetrics.threatLevel, 0) / metrics.length
@@ -326,57 +304,53 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
       ? metrics.reduce((sum, metric) => sum + metric.complianceMetrics.complianceScore, 0) / metrics.length
       : 0;
     // Incident statistics
-    const incidentStats = {
-  activeIncidents: metrics.reduce((sum, metric) => sum + metric.incidentResponseMetrics.incidentCount, 0),
+    const incidentStats = { activeIncidents: metrics.reduce((sum, metric) => sum + metric.incidentResponseMetrics.incidentCount, 0),
   meanDetectionTime: metrics.length > 0,
   ? metrics.reduce((sum, metric) => sum + metric.incidentResponseMetrics.meanTimeToDetection, 0) / metrics.length
   : 0,
   meanResponseTime: metrics.length > 0,
   ? metrics.reduce((sum, metric) => sum + metric.incidentResponseMetrics.meanTimeToResponse, 0) / metrics.length
-  : 0,
+  : 0 }
 };
     // Top threats analysis
     const threatCounts = new Map<string, number>();
-    Array.from(this.threatCorrelation.values()).flat().forEach(event => {)
-  threatCounts.set(event.type, (threatCounts.get(event.type) || 0) + 1);
-    });
+    Array.from(this.threatCorrelation.values()).flat().forEach(event => { )
+  threatCounts.set(event.type, (threatCounts.get(event.type) || 0) + 1) });
     const topThreats = Array.from(threatCounts.entries());
       .map(([type, count]) => ({ type, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
     // System performance
-    const systemPerformance = systems.map(system => ({)
-  systemId: system.systemId,
-  healthScore: system.healthScore,
-  responseTime: system.responseTime,
-  threatDetectionRate: system.threatDetectionCapability,
+    const systemPerformance = systems.map(system => ({ )
+  systemId: system.systemId
+  healthScore: system.healthScore
+  responseTime: system.responseTime
+  threatDetectionRate: system.threatDetectionCapability }
 }));
-    return {
-      overallSecurityHealth,
-      criticalAlerts,
-      systemsStatus,
-      threatLevel,
-      complianceScore,
-      incidentStats,
-      topThreats,
+    return { overallSecurityHealth
+      criticalAlerts
+      systemsStatus
+      threatLevel
+      complianceScore
+      incidentStats
+      topThreats }
       systemPerformance
     };
   /**
    * Generate security analytics report
    */
-  generateSecurityReport(timeRange: { start: number; end: number }): {
-  summary: {
+  generateSecurityReport(timeRange: { start: number; end: number }): { summary: { }
   totalEvents: number;
   threatsDetected: number;
   complianceViolations: number;
   incidentsResolved: number;
   averageResponseTime: number;
 };
-    trends: {
+    trends: { 
   threatTrend: 'increasing' | 'stable' | 'decreasing';
-  complianceTrend: 'improving' | 'stable' | 'degrading';
-  performanceTrend: 'improving' | 'stable' | 'degrading'
-  };
+  complianceTrend: 'improving' | 'stable' | 'degrading'
+  performanceTrend: 'improving' | 'stable' | 'degrading' }
+};
     recommendations: string;
     const metrics = Array.from(this.securityMetrics.values());
     const systems = Array.from(this.systemHealthMap.values());
@@ -408,26 +382,23 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
     const degradedSystems = systems.filter(s => s.status === 'degraded' || s.status === 'critical').length;
     if (degradedSystems > 0) {
       recommendations.push(`${degradedSystems} security systems need attention`);}
-    return {
-  summary: {
+    return { summary: {,
   totalEvents,
   threatsDetected,
   complianceViolations,
-  incidentsResolved,
+  incidentsResolved }
   averageResponseTime
 },
-  trends: {
-        threatTrend,
-        complianceTrend,
+  trends: { threatTrend,
+        complianceTrend }
         performanceTrend
-  }
+
       recommendations
     };
   /**
    * Get base performance monitor (Epic 1 integration)
    */
-  getPerformanceMonitor(): PerformanceMonitor {
-  return this.performanceMonitor;
+  getPerformanceMonitor(): PerformanceMonitor { return this.performanceMonitor;
   /**
   * Shutdown the security analytics monitor
   */
@@ -448,66 +419,56 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   this.threatCorrelation.clear();
   this.emit('security_monitor_shutdown');
   // Private helper methods
-  private setupEventForwarding(): void {,
+  private setupEventForwarding(): void { }
   // Forward performance monitor events
-  this.performanceMonitor.on('execution_started', (data) => {
-  this.emit('performance_execution_started', data);
-});
-    this.performanceMonitor.on('execution_completed', (data) => {
-      this.emit('performance_execution_completed', data);
-    });
-    this.performanceMonitor.on('alert_created', (alert) => {
-      this.emit('performance_alert_created', alert);
-    });
-  private createEmptySecurityMetrics(): SecurityAnalyticsMetrics {
-  return {
-  threatDetectionMetrics: {
+  this.performanceMonitor.on('execution_started', (data) => { this.emit('performance_execution_started', data) });
+    this.performanceMonitor.on('execution_completed', (data) => { this.emit('performance_execution_completed', data) });
+    this.performanceMonitor.on('alert_created', (alert) => { this.emit('performance_alert_created', alert) });
+  private createEmptySecurityMetrics(): SecurityAnalyticsMetrics { return {
+  threatDetectionMetrics: {,
   threatsDetected: 0,
   falsePositives: 0,
   truePositives: 0,
   threatLevel: 0,
   detectionAccuracy: 0,
-  timeToDetection: 0,
+  timeToDetection: 0 }
 },
-  complianceMetrics: {
+  complianceMetrics: { ,
   complianceViolations: 0,
   auditTrailEntries: 0,
   dataAccessEvents: 0,
   policyEnforcements: 0,
-  complianceScore: 100,
+  complianceScore: 100 }
 },
-  accessControlMetrics: {
+  accessControlMetrics: { ,
   authenticationAttempts: 0,
   failedAuthentications: 0,
   privilegeEscalations: 0,
   sessionAnomalies: 0,
-  accessViolations: 0,
+  accessViolations: 0 }
 },
-  dataProtectionMetrics: {
+  dataProtectionMetrics: { ,
   encryptionOperations: 0,
   dataClassificationEvents: 0,
   dataLeakageIncidents: 0,
   backupIntegrityChecks: 0,
-  dataRetentionActions: 0,
+  dataRetentionActions: 0 }
 },
-  incidentResponseMetrics: {
+  incidentResponseMetrics: { ,
   incidentCount: 0,
   meanTimeToDetection: 0,
   meanTimeToResponse: 0,
   meanTimeToResolution: 0,
-  escalationRate: 0,
+  escalationRate: 0 }
 };
-  private updateThreatDetectionMetrics(metrics: SecurityAnalyticsMetrics, event: SecurityEvent): void {
-    const tdm = metrics.threatDetectionMetrics;
+  private updateThreatDetectionMetrics(metrics: SecurityAnalyticsMetrics, event: SecurityEvent): void { const tdm = metrics.threatDetectionMetrics;
     if (event.type === 'security_breach' || event.type === 'suspicious_activity') {
       tdm.threatsDetected++;
       tdm.threatLevel = Math.max(tdm.threatLevel, event.metadata.threat_level);
       tdm.timeToDetection = Date.now() - event.timestamp;
       // Determine if true or false positive based on resolution
       if (event.status === 'resolved' && event.resolution?.notes.includes('false positive')) {
-        tdm.falsePositives++;
-      } else {
-        tdm.truePositives++;
+        tdm.falsePositives++ } else { tdm.truePositives++;
       // Calculate detection accuracy
       const total = tdm.truePositives + tdm.falsePositives;
       tdm.detectionAccuracy = total > 0 ? (tdm.truePositives / total) * 100 : 100;
@@ -575,7 +536,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
         type: 'custom',
         securityCategory: 'threat_detection',
         nodeType: 'security_system',
-        nodeId: systemId,
+        nodeId: systemId }
         message: `High threat level detected: ${metrics.threatDetectionMetrics.threatLevel}`}
 },
   details: { threatLevel: metrics.threatDetectionMetrics.threatLevel, systemId },
@@ -587,15 +548,14 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
         relatedEvents: [event.id];
   });
     // Compliance alert
-    if (metrics.complianceMetrics.complianceScore < this.config.securityConfig.complianceScoreThreshold) {
-      alerts.push({)
+    if (metrics.complianceMetrics.complianceScore < this.config.securityConfig.complianceScoreThreshold) { alerts.push({)
   id: this.generateAlertId(),
         timestamp: Date.now(),
         severity: 'medium',
         type: 'custom',
         securityCategory: 'compliance',
         nodeType: 'compliance_system',
-        nodeId: systemId,
+        nodeId: systemId }
         message: `Compliance score below threshold: ${metrics.complianceMetrics.complianceScore}%`}
 },
   details: { complianceScore: metrics.complianceMetrics.complianceScore, systemId },
@@ -607,12 +567,10 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
         relatedEvents: [event.id];
   });
     // Store alerts
-    alerts.forEach(alert => {)
+    alerts.forEach(alert => { )
   this.securityAlerts.set(alert.id, alert);
-      this.emit('security_alert_created', alert);
-    });
-  private checkSystemHealthAlerts(systemId: string, health: SecuritySystemHealth): void {
-    if (health.healthScore < this.config.securityConfig.systemHealthThreshold) {
+      this.emit('security_alert_created', alert) });
+  private checkSystemHealthAlerts(systemId: string, health: SecuritySystemHealth): void { if (health.healthScore < this.config.securityConfig.systemHealthThreshold) {
       const alert: SecurityAnalyticsAlert = {,
   id: this.generateAlertId(),
         timestamp: Date.now(),
@@ -620,7 +578,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
         type: 'custom',
         securityCategory: 'threat_detection',
         nodeType: 'system_health',
-        nodeId: systemId,
+        nodeId: systemId }
         message: `Security system health degraded: ${health.healthScore}%`}
 },
   details: { healthScore: health.healthScore, systemId, systemType: health.systemType },
@@ -628,7 +586,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
         affectedSystems: [systemId],
         threatLevel: health.status === 'critical' ? 8 : 5,
         complianceImpact: health.status === 'critical' ? 'high' : 'medium',
-        recommendedActions: [,
+        recommendedActions: [
           'Check system resources',
           'Review error logs',
           'Restart if necessary',
@@ -638,31 +596,28 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   };
       this.securityAlerts.set(alert.id, alert);
       this.emit('system_health_alert_created', alert);
-  private async performHealthChecks(): Promise<void> {
-
-  const healthCheckPromises = Array.from(this.systemHealthMap.keys()).map(async (systemId) => {
+  private async performHealthChecks(): Promise<void> { const healthCheckPromises = Array.from(this.systemHealthMap.keys()).map(async (systemId) => {
   try {
   const health = this.systemHealthMap.get(systemId)!;
   // Simulate health check (in real implementation, this would call actual health endpoints)
   const responseTime = Date.now();
   const simulatedHealth = Math.max(0, health.healthScore + (Math.random() - 0.5) * 10);
   this.updateSystemHealth(systemId, {)
-  healthScore: simulatedHealth,
-  responseTime: Date.now() - responseTime,
-  lastHealthCheck: Date.now(),
+  healthScore: simulatedHealth
+  responseTime: Date.now() - responseTime
+  lastHealthCheck: Date.now() }
 });
-      } catch (error) {
+ catch (error) {
         console.error(`Health check failed for system ${systemId}:`, error);}
-        this.updateSystemHealth(systemId, {)
-  status: 'offline',
-  healthScore: 0,
-  lastHealthCheck: Date.now(),
+        this.updateSystemHealth(systemId, { )
+  status: 'offline'
+  healthScore: 0
+  lastHealthCheck: Date.now() }
 });
     });
     await Promise.allSettled(healthCheckPromises);
     this.emit('health_checks_completed');
-  private aggregateSecurityMetrics(): void {
-    // Aggregate metrics across all systems
+  private aggregateSecurityMetrics(): void { // Aggregate metrics across all systems
     const aggregated = Array.from(this.securityMetrics.values()).reduce((agg, metrics) => {
       // Aggregate threat detection metrics
       agg.threatDetectionMetrics.threatsDetected += metrics.threatDetectionMetrics.threatsDetected;
@@ -673,32 +628,28 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
       agg.complianceMetrics.complianceViolations += metrics.complianceMetrics.complianceViolations;
       agg.complianceMetrics.auditTrailEntries += metrics.complianceMetrics.auditTrailEntries;
       // Continue aggregation for other metric categories...
-      return agg;
-    }, this.createEmptySecurityMetrics());
+      return agg }, this.createEmptySecurityMetrics());
     this.emit('security_metrics_aggregated', aggregated);
-  private correlateSecurityAlerts(): void {
-  // Correlate security events across systems to identify patterns
+  private correlateSecurityAlerts(): void { // Correlate security events across systems to identify patterns
   const allEvents = Array.from(this.threatCorrelation.values()).flat();
   const recentEvents = allEvents.filter(event => ;);
   Date.now() - event.timestamp < this.config.securityConfig.alertCorrelationWindow
   );
-  // Simple correlation: group by IP address,
+  // Simple correlation: group by IP address }
   const ipCorrelations = new Map<string, SecurityEvent>();
-  recentEvents.forEach(event => {)
+  recentEvents.forEach(event => { )
   event.details.ip_addresses?.forEach(ip => {)
   if (!ipCorrelations.has(ip)) {
   ipCorrelations.set(ip, []);
-  ipCorrelations.get(ip)!.push(event);
-});
+  ipCorrelations.get(ip)!.push(event) });
     });
     // Identify suspicious patterns
-    ipCorrelations.forEach((events, ip) => {
-  if (events.length >= 3) { // Threshold for suspicious activity
+    ipCorrelations.forEach((events, ip) => { if (events.length >= 3) { // Threshold for suspicious activity
   this.emit('suspicious_pattern_detected', {)
-  type: 'ip_correlation',
-  ip,
-  eventCount: events.length,
-  events: events.map(e => e.id),
+  type: 'ip_correlation'
+  ip
+  eventCount: events.length
+  events: events.map(e => e.id) }
 });
     });
   private generateAlertId(): string {

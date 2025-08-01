@@ -1,8 +1,7 @@
 import React from 'react';
 
-}
-export interface UserCursorProps {
-  userId: string;
+
+export interface UserCursorProps { userId: string;
   userName?: string;
   userAvatar?: string;
   x: number;
@@ -12,20 +11,19 @@ export interface UserCursorProps {
   showLabel?: boolean;
   isFollowing?: boolean;
   nodeId?: string;
-  className?: string;
-}
-}
-export const UserCursor: React.FC<UserCursorProps> = ({)
-  userId,
-  userName,
-  userAvatar,
-  x,
-  y,
-  color,
-  visible = true,
-  showLabel = true,
-  isFollowing = false,
-  nodeId,
+  className?: string }
+
+export const UserCursor: React.FC<UserCursorProps> = ({ )
+  userId
+  userName
+  userAvatar
+  x
+  y
+  color
+  visible = true
+  showLabel = true
+  isFollowing = false
+  nodeId }
   className = ''
 }) => {
   if (!visible) return null;
@@ -34,11 +32,11 @@ export const UserCursor: React.FC<UserCursorProps> = ({)
   return;
     <div
       className={`absolute pointer-events-none z-50 transition-all duration-200 ${className}`}
-      style={{
-  left: x,
-  top: y,
-  transform: 'translate(-2px, -2px)',
-}}
+      style={ {
+  left: x
+  top: y
+  transform: 'translate(-2px, -2px)' }
+}
     >
       {/* Cursor pointer */}
       <svg
@@ -87,9 +85,8 @@ export const UserCursor: React.FC<UserCursorProps> = ({)
   );
 };
 
-}
-export interface UserCursorOverlayProps {
-  cursors: Array<{
+
+export interface UserCursorOverlayProps { cursors: Array<{ }
   userId: string;
   userName?: string;
   userAvatar?: string;
@@ -97,16 +94,17 @@ export interface UserCursorOverlayProps {
   y: number;
   nodeId?: string;
   visible?: boolean;
-}
-}>;
+
+
+>;
   followingUserId?: string;
   showLabels?: boolean;
   className?: string;
-}
-export const UserCursorOverlay: React.FC<UserCursorOverlayProps> = ({)
-  cursors,
-  followingUserId,
-  showLabels = true,
+
+export const UserCursorOverlay: React.FC<UserCursorOverlayProps> = ({ )
+  cursors
+  followingUserId
+  showLabels = true }
   className = ''
 }) => {
   return;
@@ -132,22 +130,20 @@ export const UserCursorOverlay: React.FC<UserCursorOverlayProps> = ({)
 
 // Selection highlight component
 
-}
-export interface UserSelectionProps {
-  userId: string;
+
+export interface UserSelectionProps { userId: string;
   userName?: string;
   nodeIds: string;
   color?: string;
   opacity?: number;
-  showLabel?: boolean;
-}
-}
-export const UserSelection: React.FC<UserSelectionProps> = ({)
-  userId,
-  userName,
-  nodeIds,
-  color,
-  opacity = 0.3,
+  showLabel?: boolean }
+
+export const UserSelection: React.FC<UserSelectionProps> = ({ )
+  userId
+  userName
+  nodeIds
+  color
+  opacity = 0.3 }
   showLabel = false
 }) => {
   const selectionColor = color || getUserColor(userId);
@@ -161,16 +157,16 @@ export const UserSelection: React.FC<UserSelectionProps> = ({)
           <div
             key={`${userId}-${nodeId}`}
             className="absolute pointer-events-none border-2 rounded"
-            style={{
-              left: rect.left,
-              top: rect.top,
-              width: rect.width,
-              height: rect.height,
-              borderColor: selectionColor,
+            style={ {
+              left: rect.left
+              top: rect.top
+              width: rect.width
+              height: rect.height
+              borderColor: selectionColor }
               backgroundColor: `${selectionColor}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`}
-},
+
   zIndex: 10;
-  }}
+
           >
             {showLabel && ()
               <div
@@ -189,18 +185,18 @@ export const UserSelection: React.FC<UserSelectionProps> = ({)
 
 // Typing indicator
 
-}
-export interface TypingIndicatorProps {
-  users: Array<{
+
+export interface TypingIndicatorProps { users: Array<{ }
   userId: string;
   userName?: string;
   nodeId?: string;
-}
-}>;
+
+
+>;
   className?: string;
-}
-export const TypingIndicator: React.FC<TypingIndicatorProps> = ({)
-  users,
+
+export const TypingIndicator: React.FC<TypingIndicatorProps> = ({ )
+  users }
   className = ''
 }) => {
   if (users.length === 0) return null;
@@ -224,7 +220,7 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({)
 
 // Utility function to generate consistent colors for users
 function getUserColor(userId: string): string {
-  const colors = [;
+  const colors = [
     '#ef4444', // red-500
     '#3b82f6', // blue-500
     '#10b981', // emerald-500

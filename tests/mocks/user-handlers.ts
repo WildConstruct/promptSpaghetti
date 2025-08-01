@@ -58,7 +58,7 @@ const sampleUsers = [
     lastLoginAt: new Date(Date.now() - 86400000), // 1 day ago
     loginCount: 67,
     reputation: 890
-  }
+
 ];
 
 // Populate mock database
@@ -77,7 +77,7 @@ sampleUsers.forEach(user => {
       showProfile: true,
       showActivity: false,
       showStats: true
-    }
+
   });
 });
 
@@ -94,7 +94,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
     // Apply filters
     if (role) {
       users = users.filter(user => user.role === role);
-    }
+
 
     if (search) {
       const searchLower = search.toLowerCase();
@@ -104,12 +104,12 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
         user.lastName.toLowerCase().includes(searchLower) ||
         user.email.toLowerCase().includes(searchLower)
       );
-    }
+
 
     if (isActive !== null) {
       const activeFilter = isActive === 'true';
       users = users.filter(user => user.isActive === activeFilter);
-    }
+
 
     // Apply sorting
     users.sort((a, b) => {
@@ -118,9 +118,9 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
       
       if (sortOrder === 'desc') {
         return aVal > bVal ? -1 : aVal < bVal ? 1 : 0;
-      } else {
+ else {
         return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-      }
+
     });
 
     // Apply pagination
@@ -165,7 +165,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User not found'
         })
       );
-    }
+
 
     return res(
       ctx.status(200),
@@ -184,7 +184,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           lastLoginAt: user.lastLoginAt,
           loginCount: user.loginCount,
           reputation: user.reputation
-        }
+
       })
     );
   }),
@@ -203,7 +203,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User not found'
         })
       );
-    }
+
 
     try {
       const updates = await req.json();
@@ -217,7 +217,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
             message: 'Invalid email format'
           })
         );
-      }
+
 
       // Check email uniqueness if changed
       if (updates.email && updates.email !== user.email) {
@@ -232,8 +232,8 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
               message: 'Email already in use'
             })
           );
-        }
-      }
+
+
 
       // Check username uniqueness if changed
       if (updates.username && updates.username !== user.username) {
@@ -248,8 +248,8 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
               message: 'Username already taken'
             })
           );
-        }
-      }
+
+
 
       const updatedUser = {
         ...user,
@@ -273,11 +273,10 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
             role: updatedUser.role,
             isActive: updatedUser.isActive,
             updatedAt: updatedUser.updatedAt
-          }
+
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -285,7 +284,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User update failed'
         })
       );
-    }
+
   }),
 
   // DELETE /api/users/:id - Delete user
@@ -302,7 +301,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User not found'
         })
       );
-    }
+
 
     mockUsers.delete(userId);
     mockPreferences.delete(userId);
@@ -329,7 +328,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User preferences not found'
         })
       );
-    }
+
 
     return res(
       ctx.status(200),
@@ -351,7 +350,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User not found'
         })
       );
-    }
+
 
     try {
       const updates = await req.json();
@@ -370,8 +369,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           preferences: updatedPreferences
         })
       );
-
-    } catch {
+ catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -379,7 +377,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'Preferences update failed'
         })
       );
-    }
+
   }),
 
   // GET /api/users/:id/activity - Get user activity history
@@ -396,7 +394,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User not found'
         })
       );
-    }
+
 
     const url = new URL(req.url);
     const limit = parseInt(url.searchParams.get('limit') || '50');
@@ -440,7 +438,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User not found'
         })
       );
-    }
+
 
     const stats = {
       templatesCreated: faker.number.int({ min: 0, max: 50 }),
@@ -474,7 +472,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User not found'
         })
       );
-    }
+
 
     return res(
       ctx.status(200),
@@ -499,7 +497,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'User not found'
         })
       );
-    }
+
 
     return res(
       ctx.status(200),
@@ -524,7 +522,7 @@ export     const page = parseInt(url.searchParams.get('page') || '1');
           message: 'Search query is required'
         })
       );
-    }
+
 
     const searchLower = query.toLowerCase();
     const users = Array.from(mockUsers.values())
@@ -574,7 +572,6 @@ export function resetUserData() {
         showProfile: true,
         showActivity: false,
         showStats: true
-      }
+
     });
   });
-}

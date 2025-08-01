@@ -41,8 +41,9 @@ catch (error) {
     console.error('Failed to discover personalized tutorials:', error);
     throw error;
     async;
-    startLearningSession(userId, string);
-    contentId: string,
+    startLearningSession(userId, string),
+        contentId;
+    string,
         options;
     LearningSessionOptions;
     Promise < LearningSessionResult > {
@@ -340,15 +341,8 @@ catch (error) {
                                         default:
                                             return 'Custom range';
                                     }
-                                },
-                                interface, LearningCompletionResult };
-                            {
-                                completion_result: any;
-                                skill_profile_updates: any;
-                                completion_insights: any;
-                                marketplace_impact: any;
-                                next_learning_opportunities: any;
-                            }
+                                }
+                            };
                         }
                     });
                 }

@@ -112,13 +112,26 @@ topRequesters: Array < {
     requesterName: string,
     count: number
 } > ;
-topReviewers: Array;
+topReviewers: Array < {
+    reviewerId: string,
+    reviewerName: string,
+    count: number,
+    averageResponseTime: number
+} > ;
  > ;
 ;
 ;
  > ;
-completionTrends: Array;
-contentTypeTrends: Array;
+completionTrends: Array < {
+    date: string,
+    completed: number,
+    averageTime: number
+} > ;
+contentTypeTrends: Array < {
+    contentType: RevisionContentType,
+    trend: 'increasing' | 'decreasing' | 'stable',
+    changePercent: number
+} > ;
 ;
 metrics: string;
 ;
@@ -144,11 +157,11 @@ export const DEFAULT_REVISION_REQUEST_CONFIG = {
         [RevisionRequestPriority.URGENT]: 4, // 4 hours,
         [RevisionRequestPriority.CRITICAL]: 1 // 1 hour,
     },
-    requireApprovalFor: [,
+    requireApprovalFor: [
         RevisionRequestType.SECURITY_UPDATE,
         RevisionRequestType.COMPLIANCE_UPDATE
     ],
-    multipleReviewersFor: [,
+    multipleReviewersFor: [
         RevisionRequestType.SECURITY_UPDATE,
         RevisionRequestType.COMPLIANCE_UPDATE
     ],
@@ -163,7 +176,7 @@ export const DEFAULT_REVISION_REQUEST_CONFIG = {
     },
     maxEvidenceFiles: 10,
     maxFileSizeMB: 25,
-    allowedFileTypes: [,
+    allowedFileTypes: [
         'image/jpeg', 'image/png', 'image/gif',
         'application/pdf',
         'text/plain', 'text/markdown',

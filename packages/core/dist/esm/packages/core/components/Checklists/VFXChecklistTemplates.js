@@ -23,392 +23,433 @@ const BUILTIN_TEMPLATES = [
         phase: 'asset_build',
         isPublic: true,
         usageCount: 247,
-        createdBy: {
-            id: 'system',
-            name: 'Wild Construct',
-            role: 'director',
-            email: 'system@wildconstruct.com',
-            color: '#3b82f6',
-            permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
-        },
-        items: [,
-            {
-                title: 'Concept Art Review',
-                description: 'Review and approve initial concept art and design direction',
-                status: 'pending',
-                priority: 'high',
-                category: 'asset_creation',
-                vfxPhase: 'concept',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Historical accuracy validation', completed: false },
-                    { id: '2', title: 'Art direction alignment', completed: false },
-                    { id: '3', title: 'Technical feasibility check', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Historical Accuracy', type: 'accuracy', status: 'pending', criteria: '90%+ accuracy score', required: true },
-                    { id: '2', name: 'Art Direction', type: 'creative', status: 'pending', criteria: 'Director approval', required: true }
-                ],
-                comments: [],
-                dependencies: [],
-                tags: ['concept', 'art', 'accuracy'],
-                estimatedHours: 4,
-                history: []
-            },
-            {
-                title: '3D Model Creation',
-                description: 'Create base 3D geometry and structure',
-                status: 'pending',
-                priority: 'high',
-                category: 'asset_creation',
-                vfxPhase: 'asset_build',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Base mesh modeling', completed: false },
-                    { id: '2', title: 'Detail sculpting', completed: false },
-                    { id: '3', title: 'Retopology for animation', completed: false },
-                    { id: '4', title: 'UV mapping', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Topology Check', type: 'technical', status: 'pending', criteria: 'Clean quad topology', required: true },
-                    { id: '2', name: 'UV Layout', type: 'technical', status: 'pending', criteria: 'Efficient UV layout', required: true }
-                ],
-                comments: [],
-                dependencies: [],
-                tags: ['modeling', '3d', 'geometry'],
-                estimatedHours: 12,
-                history: []
-            },
-            {
-                title: 'Texturing & Materials',
-                description: 'Create historically accurate textures and material definitions',
-                status: 'pending',
-                priority: 'medium',
-                category: 'asset_creation',
-                vfxPhase: 'asset_build',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Diffuse texture creation', completed: false },
-                    { id: '2', title: 'Normal/bump mapping', completed: false },
-                    { id: '3', title: 'Roughness/metallic maps', completed: false },
-                    { id: '4', title: 'Historical accuracy validation', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Material Accuracy', type: 'accuracy', status: 'pending', criteria: 'Historically appropriate materials', required: true }
-                ],
-                comments: [],
-                dependencies: ['3D Model Creation'],
-                tags: ['texturing', 'materials', 'pbr'],
-                estimatedHours: 8,
-                history: []
-            },
-            {
-                title: 'Rigging & Animation Setup',
-                description: 'Setup character/object rigging for animation',
-                status: 'pending',
-                priority: 'medium',
-                category: 'animation',
-                vfxPhase: 'asset_build',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Bone structure creation', completed: false },
-                    { id: '2', title: 'Weight painting', completed: false },
-                    { id: '3', title: 'Control rig setup', completed: false },
-                    { id: '4', title: 'Animation testing', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Deformation Test', type: 'technical', status: 'pending', criteria: 'Clean deformation in all poses', required: true }
-                ],
-                comments: [],
-                dependencies: ['3D Model Creation'],
-                tags: ['rigging', 'animation', 'bones'],
-                estimatedHours: 10,
-                history: []
-            },
-            {
-                title: 'Final Asset Review',
-                description: 'Complete review and approval of finished asset',
-                status: 'pending',
-                priority: 'critical',
-                category: 'review',
-                vfxPhase: 'review',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Technical quality assurance', completed: false },
-                    { id: '2', title: 'Historical accuracy validation', completed: false },
-                    { id: '3', title: 'Performance optimization check', completed: false },
-                    { id: '4', title: 'Director approval', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Final QA', type: 'technical', status: 'pending', criteria: 'All technical requirements met', required: true },
-                    { id: '2', name: 'Director Sign-off', type: 'creative', status: 'pending', criteria: 'Director final approval', required: true }
-                ],
-                comments: [],
-                dependencies: ['Concept Art Review', '3D Model Creation', 'Texturing & Materials', 'Rigging & Animation Setup'],
-                tags: ['review', 'qa', 'approval'],
-                estimatedHours: 3,
-                history: []
-            }]
+        createdBy: {},
+        id: 'system',
+        name: 'Wild Construct',
+        role: 'director',
+        email: 'system@wildconstruct.com',
+        color: '#3b82f6',
+        permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
     },
-    {
-        id: 'template-shot-finaling',
-        name: 'Shot Finaling Pipeline',
-        description: 'Complete workflow for finalizing VFX shots from compositing to delivery',
-        category: 'compositing',
-        phase: 'final',
-        isPublic: true,
-        usageCount: 189,
-        createdBy: {
-            id: 'system',
-            name: 'Wild Construct',
-            role: 'director',
-            email: 'system@wildconstruct.com',
-            color: '#3b82f6',
-            permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
+    items, [
+        {
+            title: 'Concept Art Review',
+            description: 'Review and approve initial concept art and design direction',
+            status: 'pending',
+            priority: 'high',
+            category: 'asset_creation',
+            vfxPhase: 'concept',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Historical accuracy validation', completed: false },
+                { id: '2', title: 'Art direction alignment', completed: false },
+                { id: '3', title: 'Technical feasibility check', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Historical Accuracy', type: 'accuracy', status: 'pending', criteria: '90%+ accuracy score', required: true },
+                { id: '2', name: 'Art Direction', type: 'creative', status: 'pending', criteria: 'Director approval', required: true }
+            ],
+            comments: [],
+            dependencies: [],
+            tags: ['concept', 'art', 'accuracy'],
+            estimatedHours: 4,
+            history: []
         },
-        items: [,
-            {
-                title: 'Composite Review',
-                description: 'Review composite against reference and brief',
-                status: 'pending',
-                priority: 'high',
-                category: 'compositing',
-                vfxPhase: 'comp',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Color grading review', completed: false },
-                    { id: '2', title: 'Edge integration check', completed: false },
-                    { id: '3', title: 'Tracking validation', completed: false },
-                    { id: '4', title: 'Match references', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Composite Quality', type: 'technical', status: 'pending', criteria: 'Seamless integration', required: true }
-                ],
-                comments: [],
-                dependencies: [],
-                tags: ['composite', 'review', 'integration'],
-                estimatedHours: 2,
-                history: []
-            },
-            {
-                title: 'Color Correction & Grading',
-                description: 'Final color correction and grading to match scene',
-                status: 'pending',
-                priority: 'medium',
-                category: 'post_production',
-                vfxPhase: 'comp',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Primary color correction', completed: false },
-                    { id: '2', title: 'Secondary color work', completed: false },
-                    { id: '3', title: 'LUT application', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Color Match', type: 'creative', status: 'pending', criteria: 'Matches adjacent shots', required: true }
-                ],
-                comments: [],
-                dependencies: ['Composite Review'],
-                tags: ['color', 'grading', 'lut'],
-                estimatedHours: 3,
-                history: []
-            },
-            {
-                title: 'Technical QC',
-                description: 'Technical quality control and standards compliance',
-                status: 'pending',
-                priority: 'critical',
-                category: 'review',
-                vfxPhase: 'review',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Resolution verification', completed: false },
-                    { id: '2', title: 'Frame rate check', completed: false },
-                    { id: '3', title: 'Color space validation', completed: false },
-                    { id: '4', title: 'Artifact detection', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Technical Standards', type: 'technical', status: 'pending', criteria: 'Meets delivery specs', required: true }
-                ],
-                comments: [],
-                dependencies: ['Color Correction & Grading'],
-                tags: ['qc', 'technical', 'standards'],
-                estimatedHours: 1,
-                history: []
-            },
-            {
-                title: 'Client Review & Notes',
-                description: 'Submit for client review and address feedback',
-                status: 'pending',
-                priority: 'high',
-                category: 'review',
-                vfxPhase: 'review',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Prepare review materials', completed: false },
-                    { id: '2', title: 'Submit to client', completed: false },
-                    { id: '3', title: 'Collect feedback', completed: false },
-                    { id: '4', title: 'Address notes', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Client Approval', type: 'creative', status: 'pending', criteria: 'Client sign-off received', required: true }
-                ],
-                comments: [],
-                dependencies: ['Technical QC'],
-                tags: ['client', 'review', 'feedback'],
-                estimatedHours: 4,
-                history: []
-            },
-            {
-                title: 'Final Delivery',
-                description: 'Package and deliver final approved shot',
-                status: 'pending',
-                priority: 'critical',
-                category: 'delivery',
-                vfxPhase: 'final',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Package final files', completed: false },
-                    { id: '2', title: 'Generate deliverables', completed: false },
-                    { id: '3', title: 'Archive project files', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Delivery Package', type: 'technical', status: 'pending', criteria: 'All deliverables included', required: true }
-                ],
-                comments: [],
-                dependencies: ['Client Review & Notes'],
-                tags: ['delivery', 'package', 'final'],
-                estimatedHours: 1,
-                history: []
-            }]
-    },
-    {
-        id: 'template-historical-validation',
-        name: 'Historical Accuracy Validation',
-        description: 'Comprehensive checklist for validating historical accuracy using UTDG methodology',
-        category: 'review',
-        phase: 'review',
-        isPublic: true,
-        usageCount: 156,
-        createdBy: {
-            id: 'system',
-            name: 'Wild Construct',
-            role: 'director',
-            email: 'system@wildconstruct.com',
-            color: '#3b82f6',
-            permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
+        {
+            title: '3D Model Creation',
+            description: 'Create base 3D geometry and structure',
+            status: 'pending',
+            priority: 'high',
+            category: 'asset_creation',
+            vfxPhase: 'asset_build',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Base mesh modeling', completed: false },
+                { id: '2', title: 'Detail sculpting', completed: false },
+                { id: '3', title: 'Retopology for animation', completed: false },
+                { id: '4', title: 'UV mapping', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Topology Check', type: 'technical', status: 'pending', criteria: 'Clean quad topology', required: true },
+                { id: '2', name: 'UV Layout', type: 'technical', status: 'pending', criteria: 'Efficient UV layout', required: true }
+            ],
+            comments: [],
+            dependencies: [],
+            tags: ['modeling', '3d', 'geometry'],
+            estimatedHours: 12,
+            history: []
         },
-        items: [,
-            {
-                title: 'Architecture Accuracy Review',
-                description: 'Validate architectural elements against historical period',
-                status: 'pending',
-                priority: 'critical',
-                category: 'review',
-                vfxPhase: 'review',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Building style verification', completed: false },
-                    { id: '2', title: 'Construction techniques check', completed: false },
-                    { id: '3', title: 'Materials authenticity', completed: false },
-                    { id: '4', title: 'Period-appropriate details', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Expert Review', type: 'accuracy', status: 'pending', criteria: 'Historical expert approval', required: true },
-                    { id: '2', name: 'UTDG Score', type: 'accuracy', status: 'pending', criteria: '90%+ accuracy score', required: true }
-                ],
-                comments: [],
-                dependencies: [],
-                tags: ['architecture', 'accuracy', 'utdg'],
-                estimatedHours: 6,
-                history: []
-            },
-            {
-                title: 'Clothing & Costume Validation',
-                description: 'Ensure clothing and costumes are period-appropriate',
-                status: 'pending',
-                priority: 'high',
-                category: 'review',
-                vfxPhase: 'review',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Fabric types verification', completed: false },
-                    { id: '2', title: 'Cut and style accuracy', completed: false },
-                    { id: '3', title: 'Color availability check', completed: false },
-                    { id: '4', title: 'Social class appropriateness', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Costume Research', type: 'accuracy', status: 'pending', criteria: 'Research documentation complete', required: true }
-                ],
-                comments: [],
-                dependencies: [],
-                tags: ['costume', 'clothing', 'fashion'],
-                estimatedHours: 4,
-                history: []
-            },
-            {
-                title: 'Technology & Tools Assessment',
-                description: 'Verify all technology and tools match the historical period',
-                status: 'pending',
-                priority: 'high',
-                category: 'review',
-                vfxPhase: 'review',
-                completion: 0,
-                author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
-                subtasks: [,
-                    { id: '1', title: 'Weapons and armor check', completed: false },
-                    { id: '2', title: 'Tools and implements', completed: false },
-                    { id: '3', title: 'Transportation methods', completed: false },
-                    { id: '4', title: 'Manufacturing techniques', completed: false }
-                ],
-                attachments: [],
-                assets: [],
-                qualityGates: [,
-                    { id: '1', name: 'Technology Timeline', type: 'accuracy', status: 'pending', criteria: 'All items within period', required: true }
-                ],
-                comments: [],
-                dependencies: [],
-                tags: ['technology', 'tools', 'timeline'],
-                estimatedHours: 3,
-                history: []
-            }],
-    }
+        {
+            title: 'Texturing & Materials',
+            description: 'Create historically accurate textures and material definitions',
+            status: 'pending',
+            priority: 'medium',
+            category: 'asset_creation',
+            vfxPhase: 'asset_build',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Diffuse texture creation', completed: false },
+                { id: '2', title: 'Normal/bump mapping', completed: false },
+                { id: '3', title: 'Roughness/metallic maps', completed: false },
+                { id: '4', title: 'Historical accuracy validation', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Material Accuracy', type: 'accuracy', status: 'pending', criteria: 'Historically appropriate materials', required: true }
+            ],
+            comments: [],
+            dependencies: ['3D Model Creation'],
+            tags: ['texturing', 'materials', 'pbr'],
+            estimatedHours: 8,
+            history: []
+        },
+        {
+            title: 'Rigging & Animation Setup',
+            description: 'Setup character/object rigging for animation',
+            status: 'pending',
+            priority: 'medium',
+            category: 'animation',
+            vfxPhase: 'asset_build',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Bone structure creation', completed: false },
+                { id: '2', title: 'Weight painting', completed: false },
+                { id: '3', title: 'Control rig setup', completed: false },
+                { id: '4', title: 'Animation testing', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Deformation Test', type: 'technical', status: 'pending', criteria: 'Clean deformation in all poses', required: true }
+            ],
+            comments: [],
+            dependencies: ['3D Model Creation'],
+            tags: ['rigging', 'animation', 'bones'],
+            estimatedHours: 10,
+            history: []
+        },
+        {
+            title: 'Final Asset Review',
+            description: 'Complete review and approval of finished asset',
+            status: 'pending',
+            priority: 'critical',
+            category: 'review',
+            vfxPhase: 'review',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Technical quality assurance', completed: false },
+                { id: '2', title: 'Historical accuracy validation', completed: false },
+                { id: '3', title: 'Performance optimization check', completed: false },
+                { id: '4', title: 'Director approval', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Final QA', type: 'technical', status: 'pending', criteria: 'All technical requirements met', required: true },
+                { id: '2', name: 'Director Sign-off', type: 'creative', status: 'pending', criteria: 'Director final approval', required: true }
+            ],
+            comments: [],
+            dependencies: ['Concept Art Review', '3D Model Creation', 'Texturing & Materials', 'Rigging & Animation Setup'],
+            tags: ['review', 'qa', 'approval'],
+            estimatedHours: 3,
+            history: []
+        }
+    ]
 ];
+{
+    id: 'template-shot-finaling',
+        name;
+    'Shot Finaling Pipeline',
+        description;
+    'Complete workflow for finalizing VFX shots from compositing to delivery',
+        category;
+    'compositing',
+        phase;
+    'final',
+        isPublic;
+    true,
+        usageCount;
+    189,
+        createdBy;
+    {
+        id: 'system',
+            name;
+        'Wild Construct',
+            role;
+        'director',
+            email;
+        'system@wildconstruct.com',
+            color;
+        '#3b82f6',
+            permissions;
+        {
+            canCreate: true, canEdit;
+            true, canDelete;
+            true, canApprove;
+            true, canAssign;
+            true, canViewReports;
+            true;
+        }
+    }
+    items: [
+        {
+            title: 'Composite Review',
+            description: 'Review composite against reference and brief',
+            status: 'pending',
+            priority: 'high',
+            category: 'compositing',
+            vfxPhase: 'comp',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Color grading review', completed: false },
+                { id: '2', title: 'Edge integration check', completed: false },
+                { id: '3', title: 'Tracking validation', completed: false },
+                { id: '4', title: 'Match references', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Composite Quality', type: 'technical', status: 'pending', criteria: 'Seamless integration', required: true }
+            ],
+            comments: [],
+            dependencies: [],
+            tags: ['composite', 'review', 'integration'],
+            estimatedHours: 2,
+            history: []
+        },
+        {
+            title: 'Color Correction & Grading',
+            description: 'Final color correction and grading to match scene',
+            status: 'pending',
+            priority: 'medium',
+            category: 'post_production',
+            vfxPhase: 'comp',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Primary color correction', completed: false },
+                { id: '2', title: 'Secondary color work', completed: false },
+                { id: '3', title: 'LUT application', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Color Match', type: 'creative', status: 'pending', criteria: 'Matches adjacent shots', required: true }
+            ],
+            comments: [],
+            dependencies: ['Composite Review'],
+            tags: ['color', 'grading', 'lut'],
+            estimatedHours: 3,
+            history: []
+        },
+        {
+            title: 'Technical QC',
+            description: 'Technical quality control and standards compliance',
+            status: 'pending',
+            priority: 'critical',
+            category: 'review',
+            vfxPhase: 'review',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Resolution verification', completed: false },
+                { id: '2', title: 'Frame rate check', completed: false },
+                { id: '3', title: 'Color space validation', completed: false },
+                { id: '4', title: 'Artifact detection', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Technical Standards', type: 'technical', status: 'pending', criteria: 'Meets delivery specs', required: true }
+            ],
+            comments: [],
+            dependencies: ['Color Correction & Grading'],
+            tags: ['qc', 'technical', 'standards'],
+            estimatedHours: 1,
+            history: []
+        },
+        {
+            title: 'Client Review & Notes',
+            description: 'Submit for client review and address feedback',
+            status: 'pending',
+            priority: 'high',
+            category: 'review',
+            vfxPhase: 'review',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Prepare review materials', completed: false },
+                { id: '2', title: 'Submit to client', completed: false },
+                { id: '3', title: 'Collect feedback', completed: false },
+                { id: '4', title: 'Address notes', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Client Approval', type: 'creative', status: 'pending', criteria: 'Client sign-off received', required: true }
+            ],
+            comments: [],
+            dependencies: ['Technical QC'],
+            tags: ['client', 'review', 'feedback'],
+            estimatedHours: 4,
+            history: []
+        },
+        {
+            title: 'Final Delivery',
+            description: 'Package and deliver final approved shot',
+            status: 'pending',
+            priority: 'critical',
+            category: 'delivery',
+            vfxPhase: 'final',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Package final files', completed: false },
+                { id: '2', title: 'Generate deliverables', completed: false },
+                { id: '3', title: 'Archive project files', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Delivery Package', type: 'technical', status: 'pending', criteria: 'All deliverables included', required: true }
+            ],
+            comments: [],
+            dependencies: ['Client Review & Notes'],
+            tags: ['delivery', 'package', 'final'],
+            estimatedHours: 1,
+            history: []
+        }
+    ];
+}
+{
+    id: 'template-historical-validation',
+        name;
+    'Historical Accuracy Validation',
+        description;
+    'Comprehensive checklist for validating historical accuracy using UTDG methodology',
+        category;
+    'review',
+        phase;
+    'review',
+        isPublic;
+    true,
+        usageCount;
+    156,
+        createdBy;
+    {
+        id: 'system',
+            name;
+        'Wild Construct',
+            role;
+        'director',
+            email;
+        'system@wildconstruct.com',
+            color;
+        '#3b82f6',
+            permissions;
+        {
+            canCreate: true, canEdit;
+            true, canDelete;
+            true, canApprove;
+            true, canAssign;
+            true, canViewReports;
+            true;
+        }
+    }
+    items: [
+        {
+            title: 'Architecture Accuracy Review',
+            description: 'Validate architectural elements against historical period',
+            status: 'pending',
+            priority: 'critical',
+            category: 'review',
+            vfxPhase: 'review',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Building style verification', completed: false },
+                { id: '2', title: 'Construction techniques check', completed: false },
+                { id: '3', title: 'Materials authenticity', completed: false },
+                { id: '4', title: 'Period-appropriate details', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Expert Review', type: 'accuracy', status: 'pending', criteria: 'Historical expert approval', required: true },
+                { id: '2', name: 'UTDG Score', type: 'accuracy', status: 'pending', criteria: '90%+ accuracy score', required: true }
+            ],
+            comments: [],
+            dependencies: [],
+            tags: ['architecture', 'accuracy', 'utdg'],
+            estimatedHours: 6,
+            history: []
+        },
+        {
+            title: 'Clothing & Costume Validation',
+            description: 'Ensure clothing and costumes are period-appropriate',
+            status: 'pending',
+            priority: 'high',
+            category: 'review',
+            vfxPhase: 'review',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Fabric types verification', completed: false },
+                { id: '2', title: 'Cut and style accuracy', completed: false },
+                { id: '3', title: 'Color availability check', completed: false },
+                { id: '4', title: 'Social class appropriateness', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Costume Research', type: 'accuracy', status: 'pending', criteria: 'Research documentation complete', required: true }
+            ],
+            comments: [],
+            dependencies: [],
+            tags: ['costume', 'clothing', 'fashion'],
+            estimatedHours: 4,
+            history: []
+        },
+        {
+            title: 'Technology & Tools Assessment',
+            description: 'Verify all technology and tools match the historical period',
+            status: 'pending',
+            priority: 'high',
+            category: 'review',
+            vfxPhase: 'review',
+            completion: 0,
+            author: { id: 'system', name: 'System', role: 'director', email: 'system@wildconstruct.com', color: '#3b82f6', permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true } },
+            subtasks: [
+                { id: '1', title: 'Weapons and armor check', completed: false },
+                { id: '2', title: 'Tools and implements', completed: false },
+                { id: '3', title: 'Transportation methods', completed: false },
+                { id: '4', title: 'Manufacturing techniques', completed: false }
+            ],
+            attachments: [],
+            assets: [],
+            qualityGates: [
+                { id: '1', name: 'Technology Timeline', type: 'accuracy', status: 'pending', criteria: 'All items within period', required: true }
+            ],
+            comments: [],
+            dependencies: [],
+            tags: ['technology', 'tools', 'timeline'],
+            estimatedHours: 3,
+            history: []
+        }
+    ];
+    ;
+}
 export const VFXChecklistTemplates = ({
     templates = [],
     currentUser,

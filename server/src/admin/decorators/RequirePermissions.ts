@@ -65,7 +65,7 @@ export const AdminPermissions = {
   ALL_POLICY_PERMISSIONS: 'admin:policy:*',
   ALL_ENFORCEMENT_PERMISSIONS: 'admin:enforcement:*',
   ALL_ADMIN_PERMISSIONS: 'admin:*',
-} as const;
+ as const;
 
 /**
  * Permission groups for common role combinations
@@ -106,7 +106,7 @@ export const PermissionGroups = {
   ],
 
   SYSTEM_ADMINISTRATOR: [AdminPermissions.ALL_ADMIN_PERMISSIONS],
-} as const;
+ as const;
 
 /**
  * Helper decorator for common permission combinations
@@ -127,7 +127,7 @@ export type PermissionGroup = (typeof PermissionGroups)[keyof typeof PermissionG
 export function isValidPermission(permission: string): boolean {
   const allPermissions = Object.values(AdminPermissions);
   return allPermissions.includes(permission as AdminPermissionType) || permission.match(/^admin:[a-z]+(\:[a-z\*]+)*$/);
-}
+
 
 /**
  * Utility function to expand wildcard permissions
@@ -139,13 +139,13 @@ export function expandWildcardPermissions(permissions: string[]): string[] {
   for (const permission of permissions) {
     if (permission === AdminPermissions.SUPER_ADMIN || permission === AdminPermissions.ALL_ADMIN_PERMISSIONS) {
       allSpecificPermissions.forEach(p => expanded.add(p));
-    } else if (permission.endsWith(':*')) {
+ else if (permission.endsWith(':*')) {
       const prefix = permission.slice(0, -1);
       allSpecificPermissions.filter(p => p.startsWith(prefix)).forEach(p => expanded.add(p));
-    } else {
+ else {
       expanded.add(permission);
-    }
-  }
+
+
 
   return Array.from(expanded);
-}
+

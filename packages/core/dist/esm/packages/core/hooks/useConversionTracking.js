@@ -90,7 +90,7 @@ sessionEvents.current.size,
 [trackDirectorAction];
 ;
 // Track preview generation events
-const trackPreviewGeneration = useCallback((previewConfig) => nodeCount, number);
+const trackPreviewGeneration = useCallback((previewConfig) => , nodeCount, number);
 edgeCount: number;
 seedCount: number;
 executionTime ?  : number;
@@ -131,7 +131,7 @@ featureContext;
 [trackDirectorAction];
 ;
 // Track project save events
-const trackProjectSave = useCallback((projectData) => nodeCount, number);
+const trackProjectSave = useCallback((projectData) => , nodeCount, number);
 edgeCount: number;
 projectId: string;
 isFirstSave ?  : boolean;
@@ -153,7 +153,7 @@ isFirstSave ?  : boolean;
 [];
 ;
 // Track help system interactions
-const trackHelpInteraction = useCallback((helpContext) => helpContentId, string);
+const trackHelpInteraction = useCallback((helpContext) => , helpContentId, string);
 userLevel: string;
 triggerAction ?  : string;
 {
@@ -175,7 +175,7 @@ helpContext.userLevel,
 [];
 ;
 // Track export generation
-const trackExportGeneration = useCallback((exportData) => format, string);
+const trackExportGeneration = useCallback((exportData) => , format, string);
 projectSize: number;
 exportTime: number;
 {
@@ -213,7 +213,7 @@ number,
 [];
 ;
 // Track template usage
-const trackTemplateUsage = useCallback((templateData) => templateId, string);
+const trackTemplateUsage = useCallback((templateData) => , templateId, string);
 templateCategory: string;
 isFirstTemplate ?  : boolean;
 {

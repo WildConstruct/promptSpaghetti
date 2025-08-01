@@ -7,7 +7,7 @@ import {
   User,
   UserInvitation,
   AuthConfig
-} from '../types';
+ from '../types';
 import { UserService } from './UserService';
 import { EmailService } from './EmailService';
 import { AuditService } from './AuditService';
@@ -15,8 +15,8 @@ import { RateLimitService } from './RateLimitService';
 import { DatabaseService } from '../database/DatabaseService';
 import { AUDIT_EVENTS, RATE_LIMIT_RULES } from '../config';
 
-}
-}
+
+
 export interface RegistrationAnalytics {
   totalRegistrations: number;
   dailyRegistrations: number;
@@ -27,37 +27,39 @@ export interface RegistrationAnalytics {
     emailVerified: number;
     profileCompleted: number;
     firstLogin: number;
-}
-}
+
+
+
   };
   dropOffPoints: Array<{
     step: string;
     count: number;
     percentage: number;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface RegistrationValidation {
   isValid: boolean;
   errors: Array<{
     field: string;
     message: string;
     code: string;
-}
-}
-  }>;
+
+
+
+>;
   warnings: Array<{
     field: string;
     message: string;
     code: string;
-  }>;
+>;
   suggestions: Array<{
     field: string;
     suggestion: string;
-  }>;
-}
+>;
+
 
 export class RegistrationService {
   private userService: UserService;
@@ -81,7 +83,7 @@ export class RegistrationService {
     this.auditService = auditService;
     this.rateLimitService = rateLimitService;
     this.db = db;
-  }
+
 
   async registerUser(
     request: RegisterRequest,
@@ -103,7 +105,7 @@ export class RegistrationService {
     if (!rateLimitResult.allowed) {
       await this.trackRegistrationEvent('rate_limited', request.email, context);
       throw new Error('Registration rate limit exceeded. Please try again later.');
-    }
+
 
     // Track registration attempt
     await this.trackRegistrationEvent('started', request.email, context);
@@ -119,7 +121,7 @@ export class RegistrationService {
         const error = new Error('Registration validation failed') as any;
         error.validation = validation;
         throw error;
-      }
+
 
       // Handle invitation flow if token provided
       let invitation: UserInvitation | null = null;
@@ -127,13 +129,13 @@ export class RegistrationService {
         invitation = await this.validateInvitation(request.invitationToken);
         if (!invitation) {
           throw new Error('Invalid or expired invitation token');
-        }
+
         
         // Ensure email matches invitation
         if (invitation.email.toLowerCase() !== request.email.toLowerCase()) {
           throw new Error('Email does not match invitation');
-        }
-      }
+
+
 
       // Create user account
       const user = await this.userService.createUser(request);
@@ -144,12 +146,12 @@ export class RegistrationService {
         await this.trackRegistrationEvent('invitation_accepted', request.email, context, {
           invitationId: invitation.id
         });
-      }
+
 
       // Send email verification
       if (!user.emailVerified) {
         await this.sendEmailVerification(user, context);
-      }
+
 
       // Track successful registration
       await this.trackRegistrationEvent('completed', request.email, context, {
@@ -168,7 +170,7 @@ export class RegistrationService {
           source: context.source,
           referrer: context.referrer,
           hasInvitation: !!invitation
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -179,15 +181,15 @@ export class RegistrationService {
         emailVerificationRequired: !user.emailVerified,
         nextSteps: this.getNextSteps(user, invitation)
       };
-    } catch (error) {
+ catch (error) {
       // Track failed registration
       await this.trackRegistrationEvent('failed', request.email, context, {
         error: error.message
       });
 
       throw error;
-    }
-  }
+
+
 
   async validateRegistration(request: RegisterRequest): Promise<RegistrationValidation> {
 
@@ -199,36 +201,36 @@ export class RegistrationService {
     const emailValidation = await this.validateEmail(request.email);
     if (!emailValidation.isValid) {
       errors.push(...emailValidation.errors);
-    }
+
     if (emailValidation.warnings.length > 0) {
       warnings.push(...emailValidation.warnings);
-    }
+
     if (emailValidation.suggestions.length > 0) {
       suggestions.push(...emailValidation.suggestions);
-    }
+
 
     // Password validation
     const passwordValidation = this.validatePassword(request.password);
     if (!passwordValidation.isValid) {
       errors.push(...passwordValidation.errors);
-    }
+
     if (passwordValidation.warnings.length > 0) {
       warnings.push(...passwordValidation.warnings);
-    }
+
 
     // Display name validation
     if (request.displayName) {
       const displayNameValidation = this.validateDisplayName(request.displayName);
       if (!displayNameValidation.isValid) {
         errors.push(...displayNameValidation.errors);
-      }
-    }
+
+
 
     // Check for suspicious patterns
     const suspiciousPatterns = this.detectSuspiciousPatterns(request);
     if (suspiciousPatterns.length > 0) {
       warnings.push(...suspiciousPatterns);
-    }
+
 
     return {
       isValid: errors.length === 0,
@@ -236,7 +238,7 @@ export class RegistrationService {
       warnings,
       suggestions
     };
-  }
+
 
   async resendEmailVerification(
     email: string,
@@ -252,17 +254,17 @@ export class RegistrationService {
 
     if (!rateLimitResult.allowed) {
       throw new Error('Email verification rate limit exceeded. Please try again later.');
-    }
+
 
     const user = await this.userService.getUserByEmail(email);
     if (!user) {
       // Don't reveal if email exists
       return;
-    }
+
 
     if (user.emailVerified) {
       throw new Error('Email is already verified');
-    }
+
 
     await this.sendEmailVerification(user, context);
 
@@ -273,7 +275,7 @@ export class RegistrationService {
       userAgent: context.userAgent,
       severity: 'info'
     });
-  }
+
 
   async getRegistrationAnalytics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<RegistrationAnalytics> {
 
@@ -364,25 +366,25 @@ export class RegistrationService {
           emailVerified: parseInt(funnelResult.rows[0]?.email_verified || '0'),
           profileCompleted: parseInt(funnelResult.rows[0]?.profile_completed || '0'),
           firstLogin: parseInt(funnelResult.rows[0]?.first_login || '0')
-  }
+
         dropOffPoints: dropOffResult.rows.map(row => ({
           step: row.step,
           count: parseInt(row.count),
           percentage: started > 0 ? Math.round((parseInt(row.count) / started) * 100) : 0
         }))
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get registration analytics:', error);
       throw error;
-    }
-  }
+
+
 
   private async validateEmail(email: string): Promise<{
     isValid: boolean;
     errors: Array<{ field: string; message: string; code: string }>;
     warnings: Array<{ field: string; message: string; code: string }>;
     suggestions: Array<{ field: string; suggestion: string }>;
-  }> {
+> {
     const errors = [];
     const warnings = [];
     const suggestions = [];
@@ -396,7 +398,7 @@ export class RegistrationService {
         code: 'INVALID_FORMAT'
       });
       return { isValid: false, errors, warnings, suggestions };
-    }
+
 
     // Check if email already exists
     const existingUser = await this.userService.getUserByEmail(email);
@@ -411,7 +413,7 @@ export class RegistrationService {
         field: 'email',
         suggestion: 'Try logging in instead, or use the forgot password feature'
       });
-    }
+
 
     // Check for common typos in domain
     const domain = email.split('@')[1];
@@ -429,7 +431,7 @@ export class RegistrationService {
         field: 'email',
         suggestion: `Did you mean ${email.split('@')[0]}@${typoSuggestions[0]}?`
       });
-    }
+
 
     // Check for disposable email domains
     const disposableDomains = ['tempmail.org', '10minutemail.com', 'guerrillamail.com'];
@@ -439,7 +441,7 @@ export class RegistrationService {
         message: 'Temporary email addresses may cause issues with account recovery',
         code: 'DISPOSABLE_EMAIL'
       });
-    }
+
 
     return {
       isValid: errors.length === 0,
@@ -447,13 +449,13 @@ export class RegistrationService {
       warnings,
       suggestions
     };
-  }
+
 
   private validatePassword(password: string): {
     isValid: boolean;
     errors: Array<{ field: string; message: string; code: string }>;
     warnings: Array<{ field: string; message: string; code: string }>;
-  } {
+ {
     const errors = [];
     const warnings = [];
 
@@ -464,7 +466,7 @@ export class RegistrationService {
         message: `Password must be at least ${this.config.security.passwordMinLength} characters long`,
         code: 'PASSWORD_TOO_SHORT'
       });
-    }
+
 
     // Complexity checks
     if (this.config.security.passwordRequireUppercase && !/[A-Z]/.test(password)) {
@@ -473,7 +475,7 @@ export class RegistrationService {
         message: 'Password must contain at least one uppercase letter',
         code: 'PASSWORD_NO_UPPERCASE'
       });
-    }
+
 
     if (this.config.security.passwordRequireLowercase && !/[a-z]/.test(password)) {
       errors.push({
@@ -481,7 +483,7 @@ export class RegistrationService {
         message: 'Password must contain at least one lowercase letter',
         code: 'PASSWORD_NO_LOWERCASE'
       });
-    }
+
 
     if (this.config.security.passwordRequireNumbers && !/\d/.test(password)) {
       errors.push({
@@ -489,7 +491,7 @@ export class RegistrationService {
         message: 'Password must contain at least one number',
         code: 'PASSWORD_NO_NUMBERS'
       });
-    }
+
 
     if (this.config.security.passwordRequireSymbols && !/[^A-Za-z0-9]/.test(password)) {
       errors.push({
@@ -497,7 +499,7 @@ export class RegistrationService {
         message: 'Password must contain at least one special character',
         code: 'PASSWORD_NO_SYMBOLS'
       });
-    }
+
 
     // Common password check
     const commonPasswords = [
@@ -511,7 +513,7 @@ export class RegistrationService {
         message: 'This password is too common and not secure',
         code: 'PASSWORD_TOO_COMMON'
       });
-    }
+
 
     // Password strength warning
     if (password.length < 16) {
@@ -520,19 +522,19 @@ export class RegistrationService {
         message: 'Consider using a longer password for better security',
         code: 'PASSWORD_COULD_BE_LONGER'
       });
-    }
+
 
     return {
       isValid: errors.length === 0,
       errors,
       warnings
     };
-  }
+
 
   private validateDisplayName(displayName: string): {
     isValid: boolean;
     errors: Array<{ field: string; message: string; code: string }>;
-  } {
+ {
     const errors = [];
 
     if (displayName.length < 2) {
@@ -541,7 +543,7 @@ export class RegistrationService {
         message: 'Display name must be at least 2 characters long',
         code: 'DISPLAY_NAME_TOO_SHORT'
       });
-    }
+
 
     if (displayName.length > 100) {
       errors.push({
@@ -549,7 +551,7 @@ export class RegistrationService {
         message: 'Display name must be less than 100 characters',
         code: 'DISPLAY_NAME_TOO_LONG'
       });
-    }
+
 
     // Check for inappropriate content (basic implementation)
     const inappropriatePatterns = /\b(admin|moderator|support|system|null|undefined)\b/i;
@@ -559,19 +561,19 @@ export class RegistrationService {
         message: 'This display name is not allowed',
         code: 'DISPLAY_NAME_INAPPROPRIATE'
       });
-    }
+
 
     return {
       isValid: errors.length === 0,
       errors
     };
-  }
+
 
   private detectSuspiciousPatterns(request: RegisterRequest): Array<{
     field: string;
     message: string;
     code: string;
-  }> {
+> {
     const warnings = [];
 
     // Check for bot-like patterns
@@ -581,13 +583,13 @@ export class RegistrationService {
         message: 'Registration pattern appears automated',
         code: 'SUSPICIOUS_PATTERN'
       });
-    }
+
 
     // Check for rapid-fire registrations (would need Redis tracking)
     // This would be implemented with actual suspicious pattern detection
 
     return warnings;
-  }
+
 
   private async validateInvitation(token: string): Promise<UserInvitation | null> {
 
@@ -599,7 +601,7 @@ export class RegistrationService {
     `, [token]);
 
     return result.rows.length > 0 ? result.rows[0] : null;
-  }
+
 
   private async acceptInvitation(invitation: UserInvitation, user: User): Promise<void> {
 
@@ -617,7 +619,7 @@ export class RegistrationService {
           INSERT INTO user_roles (user_id, role_id, granted_by)
           VALUES ($1, $2, $3)
         `, [user.id, invitation.roleId, invitation.invitedBy]);
-      }
+
 
       // Add to organization/team if specified
       if (invitation.teamId) {
@@ -625,9 +627,9 @@ export class RegistrationService {
           INSERT INTO team_members (team_id, user_id, invited_by)
           VALUES ($1, $2, $3)
         `, [invitation.teamId, user.id, invitation.invitedBy]);
-      }
+
     });
-  }
+
 
   private async sendEmailVerification(
     user: User,
@@ -636,7 +638,7 @@ export class RegistrationService {
 
     if (!user.emailVerificationToken) {
       throw new Error('No email verification token found');
-    }
+
 
     try {
       await this.emailService.sendEmailVerification(
@@ -650,11 +652,11 @@ export class RegistrationService {
       );
 
       await this.trackRegistrationEvent('email_sent', user.email, context);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to send email verification:', error);
       // Don't throw - registration should still succeed
-    }
-  }
+
+
 
   private async trackRegistrationEvent(
     event: string,
@@ -678,11 +680,11 @@ export class RegistrationService {
         context.referrer,
         JSON.stringify(additionalData || {})
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track registration event:', error);
       // Don't throw - analytics shouldn't break registration
-    }
-  }
+
+
 
   private getSimilarDomains(domain: string, commonDomains: string[]): string[] {
     // Simple Levenshtein distance implementation for typo detection
@@ -700,8 +702,8 @@ export class RegistrationService {
             matrix[j - 1][i] + 1,
             matrix[j - 1][i - 1] + cost
           );
-        }
-      }
+
+
       
       return matrix[b.length][a.length];
     };
@@ -710,31 +712,31 @@ export class RegistrationService {
       .filter(commonDomain => {
         const distance = getSimilarity(domain, commonDomain);
         return distance <= 2 && distance > 0; // Similar but not exact
-  }
+
       .slice(0, 1); // Return top suggestion
-  }
+
 
   private getNextSteps(user: User, invitation: UserInvitation | null): string[] {
     const steps = [];
 
     if (!user.emailVerified) {
       steps.push('Check your email and click the verification link');
-    }
+
 
     if (invitation) {
       if (invitation.organizationId) {
         steps.push('Complete your organization profile');
-      }
+
       if (invitation.teamId) {
         steps.push('Meet your team members');
-      }
-    } else {
+
+ else {
       steps.push('Complete your profile setup');
       steps.push('Explore the platform features');
-    }
+
 
     return steps;
-  }
+
 
   private async toPublicUser(user: User): Promise<any> {
 
@@ -748,10 +750,9 @@ export class RegistrationService {
       roles: ['user'], // Default role
       permissions: ['graphs:create:own', 'graphs:read:own']
     };
-  }
+
 
   private hashEmail(email: string): string {
     const crypto = require('crypto');
     return crypto.createHash('sha256').update(email.toLowerCase()).digest('hex');
-  }
-}
+

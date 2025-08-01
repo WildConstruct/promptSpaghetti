@@ -73,6 +73,12 @@ const NodeSelectionOverlay = ({ nodeId, users, nodePosition, nodeWidth, nodeHeig
     const isMultiple = users.length > 1;
     return (_jsx("div", { style: overlayStyle, children: _jsx("div", { style: labelStyle, children: isMultiple ? `${users.length} users` : userNames }) }));
 };
+position: {
+    x: number;
+    y: number;
+}
+;
+nodeId ?  : string;
  > ;
 remoteSelections: Map;
 className ?  : string;
@@ -89,8 +95,8 @@ export const CollaborativePresence = ({ userCursors, remoteSelections, className
         return {
             x: node.position.x,
             y: node.position.y,
-            width: node.width || 200, // Default width
-            height: node.height || 100 // Default height
+            width: node.width || 200, // Default width,
+            height: node.height || 100 // Default height,
         };
     };
     return (_jsxs("div", { className: className, style: {

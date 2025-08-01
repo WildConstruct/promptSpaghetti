@@ -120,7 +120,7 @@ export const useTrustIndicators = (config = {}) => {
     });
     const getTrustLevelBenefits = useCallback((level) => {
         const benefits = {
-            expert: [,
+            expert: [
                 'Expert verification badge',
                 'Featured creator status',
                 'Priority support',
@@ -128,25 +128,25 @@ export const useTrustIndicators = (config = {}) => {
                 'Early access to features',
                 'Mentorship opportunities'
             ],
-            professional: [,
+            professional: [
                 'Professional badge',
                 'Advanced analytics',
                 'Custom branding',
                 'Direct industry connections',
                 'Template selling privileges'
             ],
-            verified: [,
+            verified: [
                 'Verified creator badge',
                 'Full marketplace access',
                 'Collaboration features',
                 'Template creation tools'
             ],
-            basic: [,
+            basic: [
                 'Basic verification badge',
                 'Limited marketplace features',
                 'Community access'
             ],
-            unverified: [,
+            unverified: [
                 'Read-only access',
                 'Basic template browsing'
             ]

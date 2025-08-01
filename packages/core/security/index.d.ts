@@ -59,14 +59,10 @@ export declare export declare export declare         critical_count: number;
         resolved_count: number;
         avg_response_time: number;
     };
-    top_threats: Array<{
-        type: string;
-        count: number;
-    }>;
-    affected_systems: Array<{
-        system: string;
-        incident_count: number;
-    }>;
+    top_threats: Array<{ type: string;
+        count: number }>;
+    affected_systems: Array<{ system: string;
+        incident_count: number }>;
     recommendations: string[];
 };
 //# sourceMappingURL=index.d.ts.map

@@ -6,7 +6,7 @@ export enum VerificationLevel {
   INTERMEDIATE = 'intermediate', 
   ADVANCED = 'advanced',
   PREMIUM = 'premium'
-}
+
 
 export enum VerificationStatus {
   UNVERIFIED = 'unverified',
@@ -15,7 +15,7 @@ export enum VerificationStatus {
   APPROVED = 'approved',
   REJECTED = 'rejected',
   SUSPENDED = 'suspended'
-}
+
 
 export enum DocumentType {
   IDENTITY = 'identity',
@@ -25,7 +25,7 @@ export enum DocumentType {
   PORTFOLIO = 'portfolio',
   CREDENTIAL = 'credential',
   OTHER = 'other'
-}
+
 
 export enum VerificationRequestStatus {
   DRAFT = 'draft',
@@ -34,11 +34,12 @@ export enum VerificationRequestStatus {
   APPROVED = 'approved',
   REJECTED = 'rejected',
   REQUIRES_ADDITIONAL_INFO = 'requires_additional_info'
-}
+
 
 // Core verification interfaces
-}
-}
+
+
+
 export interface VerificationRequest {
   id: string;
   user_id: string;
@@ -53,12 +54,13 @@ export interface VerificationRequest {
   documents: VerificationDocument[];
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VerificationInformation {
   personal_info: {
     full_name: string;
@@ -71,8 +73,9 @@ export interface VerificationInformation {
     postal_code?: string;
     address_line_1?: string;
     address_line_2?: string;
-}
-}
+
+
+
   };
   professional_info?: {
     job_title?: string;
@@ -99,10 +102,10 @@ export interface VerificationInformation {
   };
   verification_purpose: string;
   additional_notes?: string;
-}
 
-}
-}
+
+
+
 export interface VerificationDocument {
   id: string;
   verification_request_id: string;
@@ -118,12 +121,13 @@ export interface VerificationDocument {
   verified_at?: Date;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserVerificationStatus {
   user_id: string;
   current_level: VerificationLevel;
@@ -133,12 +137,13 @@ export interface UserVerificationStatus {
   trust_score: number; // 0-100
   badges: string[];
   verification_history: VerificationRequest[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrustBadge {
   id: string;
   name: string;
@@ -147,12 +152,13 @@ export interface TrustBadge {
   requirements: {
     min_verification_level: VerificationLevel;
     additional_criteria: Record<string, any>;
-}
-}
+
+
+
   };
   is_active: boolean;
   created_at: Date;
-}
+
 
 // API request/response schemas
 export const VerificationInformationSchema = z.object({
@@ -221,8 +227,9 @@ export const ReviewVerificationRequestSchema = z.object({
 });
 
 // Analytics and reporting interfaces
-}
-}
+
+
+
 export interface VerificationMetrics {
   period_start: Date;
   period_end: Date;
@@ -231,23 +238,25 @@ export interface VerificationMetrics {
   requests_by_status: Record<VerificationRequestStatus, number>;
   avg_review_time_hours: number;
   approval_rate: number;
-}
-}
+
+
+
   trust_score_distribution: Array<{ range: string; count: number }>;
   top_rejection_reasons: Array<{ reason: string; count: number }>;
-}
 
-}
-}
+
+
+
 export interface VerificationQueue {
   pending_reviews: VerificationRequest[];
   avg_wait_time_hours: number;
   queue_depth: number;
   sla_breaches: number;
-}
-}
+
+
+
   reviewer_workload: Array<{ reviewer_id: string; assigned_count: number }>;
-}
+
 
 // Export all types
 export type {

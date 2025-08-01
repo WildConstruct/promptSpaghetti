@@ -5,6 +5,7 @@
  * Task: E19-1753114711826-03C121 - Create schema for consent storage
  */
 ;
+;
 referrer ?  : string;
 page_url ?  : string;
 device_info ?  : {

@@ -1,6 +1,7 @@
 import React from 'react';
 
 }
+}
 interface ApiIntegrationManagerProps {
     workspaceId: string;
     onClose?: () => void;
@@ -8,4 +9,5 @@ interface ApiIntegrationManagerProps {
 export declare const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps>;
 export default ApiIntegrationManager;
 //# sourceMappingURL=ApiIntegrationManager.d.ts.map
+}
 }

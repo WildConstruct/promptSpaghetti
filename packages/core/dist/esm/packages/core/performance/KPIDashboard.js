@@ -5,7 +5,13 @@
 import { EventEmitter } from 'events';
 import { corePerformanceKPIs, getKPIsByCategory } from './PerformanceKPIs';
 ;
-categories: Record;
+categories: Record < string, {
+    total: number,
+    healthy: number,
+    warning: number,
+    critical: number,
+    averageScore: number
+} > ;
 alerts: {
     total: number;
     critical: number;
@@ -69,7 +75,7 @@ export class KPIDashboard extends EventEmitter {
                 columns: 3,
                 autoRefresh: true,
                 refreshInterval: 60000, // 1 minute
-                widgets: [,
+                widgets: [
                     {
                         id: 'performance-score',
                         type: 'gauge',
@@ -124,7 +130,8 @@ export class KPIDashboard extends EventEmitter {
                         data: null,
                         refreshRate: 60000,
                         lastUpdated: 0
-                    }]
+                    }
+                ]
             };
             // Technical Detail Layout
             const technicalLayout = {
@@ -134,7 +141,7 @@ export class KPIDashboard extends EventEmitter {
                 columns: 4,
                 autoRefresh: true,
                 refreshInterval: 30000, // 30 seconds
-                widgets: [,
+                widgets: [
                     {
                         id: 'all-kpis-table',
                         type: 'table',
@@ -178,7 +185,8 @@ export class KPIDashboard extends EventEmitter {
                         data: null,
                         refreshRate: 300000, // 5 minutes
                         lastUpdated: 0
-                    }]
+                    }
+                ]
             };
             // Operations Layout
             const operationsLayout = {
@@ -188,7 +196,7 @@ export class KPIDashboard extends EventEmitter {
                 columns: 3,
                 autoRefresh: true,
                 refreshInterval: 30000,
-                widgets: [,
+                widgets: [
                     {
                         id: 'system-health',
                         type: 'gauge',
@@ -232,7 +240,8 @@ export class KPIDashboard extends EventEmitter {
                         data: null,
                         refreshRate: 30000,
                         lastUpdated: 0
-                    }]
+                    }
+                ]
             };
             this.layouts.set('executive-summary', executiveLayout);
             this.layouts.set('technical-detail', technicalLayout);

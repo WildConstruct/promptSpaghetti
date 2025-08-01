@@ -1,24 +1,23 @@
 import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import { NodeMeta } from '../Palette';
-import { 
-  professionalColors,
+import { professionalColors,
   professionalShadows,
-  professionalSpacing,
+  professionalSpacing }
   professionalBorderRadius
-} from '../styles/professional-design-system';
-}
-interface ProfessionalNodeRendererProps {
-  id: string;
+ from '../styles/professional-design-system';
+
+
+interface ProfessionalNodeRendererProps { id: string;
   data: Record<string, unknown>;
   selected?: boolean;
-  onSelect: (nodeId: string) => void;
-  getNodeMeta: (nodeType: string) => NodeMeta;
+  onSelect: (nodeId: string) => void
+  getNodeMeta: (nodeType: string) => NodeMeta
   getCategoryColor: (category: string) => string;
   /**
   * Professional Node Renderer - Cinema 4D/Substance Designer inspired
   *
-  * Features:,
+  * Features:;
   * - Professional gradients and shadows
   * - Cinema 4D signature orange accents
   * - Clean typography with proper hierarchy
@@ -26,13 +25,14 @@ interface ProfessionalNodeRendererProps {
   * - Industry-standard color coding
   */
   export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
-  id,
-  data,
-  selected = false,
-  onSelect,
-  getNodeMeta,
+  id;
+  data;
+  selected = false;
+  onSelect;
+  getNodeMeta }
   getCategoryColor
-}
+
+
 }) => {
   try {
     const hasVariations = data?.variations && data.variations.length > 0;
@@ -44,15 +44,15 @@ interface ProfessionalNodeRendererProps {
       .filter(([k]) => k !== 'label' && k !== 'variations' && k !== 'type')
       .slice(0, 3);
     // Professional node styling with gradients and shadows
-    const nodeStyle: React.CSSProperties = {,
+    const nodeStyle: React.CSSProperties = { ,
   cursor: 'pointer',
       // Professional gradient background inspired by Cinema 4D panels
       background: `linear-gradient(),
-        135deg,
+        135deg }
         ${professionalColors.background.tertiary} 0%}
-}
+
         ${professionalColors.background.secondary} 50%}
-}
+
         ${professionalColors.background.tertiary} 100%}
       )`,
       border: selected ,
@@ -78,8 +78,7 @@ interface ProfessionalNodeRendererProps {
       WebkitBackfaceVisibility: 'hidden',
       backfaceVisibility: 'hidden',
       // Subtle inner shadow for depth
-      '&::before': {
-  content: '""',
+      '&::before': { content: '""',
   position: 'absolute',
   top: 0,
   left: 0,
@@ -87,7 +86,7 @@ interface ProfessionalNodeRendererProps {
   bottom: 0,
   background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 50%, rgba(0, 0, 0, 0.05) 100%)',
   borderRadius: 'inherit',
-  pointerEvents: 'none',
+  pointerEvents: 'none' }
 };
     const headerStyle: React.CSSProperties = {
       // Cinema 4D inspired header gradient
@@ -102,7 +101,6 @@ interface ProfessionalNodeRendererProps {
       alignItems: 'center',
       gap: professionalSpacing[2],
       borderRadius: `${professionalBorderRadius.md} ${professionalBorderRadius.md} 0 0`}
-}
       // Subtle text shadow for better readability
       textShadow: '0 1px 2px rgba(0,0,0,0.3)',
       // Inner highlight for professional appearance
@@ -115,27 +113,27 @@ interface ProfessionalNodeRendererProps {
       minHeight: '50px',
       background: 'linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%)'
     };
-    const titleStyle: React.CSSProperties = {,
+    const titleStyle: React.CSSProperties = { ,
   fontWeight: 600,
       fontSize: 'var(--font-size-base)',
       marginBottom: properties.length > 0 ? professionalSpacing[2] : 0,
       color: professionalColors.text.primary,
-      lineHeight: 1.3,
+      lineHeight: 1.3 }
       // Subtle glow for selected state
       ...(selected && {)
   textShadow: `0 0 8px ${professionalColors.accent.orange}40`}
-  }
+
     };
-    const propertiesStyle: React.CSSProperties = {,
+    const propertiesStyle: React.CSSProperties = { ,
   fontSize: 'var(--font-size-xs)',
   color: professionalColors.text.secondary,
   lineHeight: 1.4,
-  fontFamily: 'var(--font-mono)' // Use monospace for technical properties,
+  fontFamily: 'var(--font-mono)' // Use monospace for technical properties }
 };
-    const handleBaseStyle: React.CSSProperties = {,
+    const handleBaseStyle: React.CSSProperties = { ,
   width: 14, // Slightly larger for better interaction
       height: 14,
-      borderRadius: '50%',
+      borderRadius: '50%' }
       border: `2px solid ${professionalColors.background.secondary}`}
 },
   cursor: 'crosshair',
@@ -143,24 +141,22 @@ interface ProfessionalNodeRendererProps {
       transition: 'all 0.2s ease',
       boxShadow: professionalShadows.elevation.sm;
   };
-    const inputHandleStyle: React.CSSProperties = {
-  ...handleBaseStyle,
+    const inputHandleStyle: React.CSSProperties = { ...handleBaseStyle,
   background: professionalColors.ui.border,
-  '&:hover': {
+  '&:hover': {,
   background: professionalColors.ui.borderHover,
   transform: 'scale(1.1)',
-  boxShadow: professionalShadows.elevation.md,
+  boxShadow: professionalShadows.elevation.md }
 };
-    const outputHandleStyle: React.CSSProperties = {
-      ...handleBaseStyle,
+    const outputHandleStyle: React.CSSProperties = { ...handleBaseStyle,
       background: categoryColor,
       '&:hover': {
         background: categoryColor,
-        transform: 'scale(1.1)',
+        transform: 'scale(1.1)' }
         boxShadow: `${professionalShadows.elevation.md}, 0 0 12px ${categoryColor}40`}
     };
     // Variation badge style
-    const variationBadgeStyle: React.CSSProperties = {,
+    const variationBadgeStyle: React.CSSProperties = { ,
   marginLeft: 'auto',
   width: 20,
   height: 20,
@@ -172,38 +168,34 @@ interface ProfessionalNodeRendererProps {
   fontSize: 10,
   fontWeight: 'bold',
   boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
-  transition: 'all 0.2s ease',
+  transition: 'all 0.2s ease' }
 };
     return;
       <div
         role="button"
         data-testid={`node-${id}`}
         tabIndex={0}
-        onClick={(e) => {
+        onClick={ (e) => {
           e.stopPropagation();
-          onSelect(id);
-        }}
-        onKeyDown={(e) => {
+          onSelect(id) }}
+        onKeyDown={ (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            onSelect(id);
-        }}
+            onSelect(id) }}
         style={nodeStyle}
-        onMouseEnter={(e) => {
+        onMouseEnter={ (e) => {
           if (!selected) {
             e.currentTarget.style.WebkitTransform = 'translateY(-3px) translateZ(0)';
             e.currentTarget.style.transform = 'translateY(-3px) translateZ(0)';
             e.currentTarget.style.boxShadow = professionalShadows.node.hover;
             // Subtle glow effect on hover
-            e.currentTarget.style.filter = 'brightness(1.05)';
-        }}
-        onMouseLeave={(e) => {
+            e.currentTarget.style.filter = 'brightness(1.05)' }}
+        onMouseLeave={ (e) => {
           if (!selected) {
             e.currentTarget.style.WebkitTransform = 'translateY(0) translateZ(0)';
             e.currentTarget.style.transform = 'translateY(0) translateZ(0)';
             e.currentTarget.style.boxShadow = professionalShadows.node.default;
-            e.currentTarget.style.filter = 'brightness(1)';
-        }}
+            e.currentTarget.style.filter = 'brightness(1)' }}
         aria-label={(() => {
           const label = data?.label ?? nodeMeta.label;
           const summary = properties.map(([k, v]) => `${k}: ${String(v)}`).join(', ');}
@@ -235,14 +227,14 @@ interface ProfessionalNodeRendererProps {
           {properties.length > 0 && ()
             <div style={propertiesStyle}>
               {properties.map(([k, v], idx) => ()
-                <div key={k} style={{
-  marginBottom: idx < properties.length - 1 ? '3px' : 0,
-  opacity: 0.8,
-}}>
-                  <span style={{
+                <div key={k} style={ {
+  marginBottom: idx < properties.length - 1 ? '3px' : 0
+  opacity: 0.8 }
+}>
+                  <span style={ {
   color: professionalColors.text.tertiary,
-  fontWeight: 500,
-}}>{k}:</span>{' '}
+  fontWeight: 500 }
+}>{k}:</span>{' '}
                   <span style={{ color: professionalColors.text.secondary }}>
                     {String(v).length > 22 ? String(v).slice(0, 22) + '…' : String(v)}
                   </span>
@@ -269,40 +261,40 @@ interface ProfessionalNodeRendererProps {
         />
       </div>
     );
-  } catch (error) {
+ catch (error) {
     console.error('ProfessionalNodeRenderer error:', error, 'Props:', { id, data });
     // Professional error state
     return;
       <div
-        style={{
-          cursor: 'pointer',
-          background: `linear-gradient(),
-            135deg,
+        style={ {
+          cursor: 'pointer'
+          background: `linear-gradient()
+            135deg }
             ${professionalColors.background.tertiary} 0%}
-}
+
             ${professionalColors.background.secondary} 100%}
-          )`,
+          )`
           border: `1px solid ${professionalColors.accent.red}`}
-},
-  borderRadius: professionalBorderRadius.md,
-          minWidth: 180,
-          minHeight: 90,
-          padding: professionalSpacing[3],
-          color: professionalColors.text.primary,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: 'var(--font-primary)',
-          boxShadow: professionalShadows.elevation.md,
-          textAlign: 'center'
-  }}
+
+  borderRadius: professionalBorderRadius.md
+          minWidth: 180
+          minHeight: 90
+          padding: professionalSpacing[3]
+          color: professionalColors.text.primary
+          display: 'flex'
+          alignItems: 'center'
+          justifyContent: 'center'
+          fontFamily: 'var(--font-primary)'
+          boxShadow: professionalShadows.elevation.md
+          textAlign: 'center';
+
       >
         <div>
-          <div style={{
-  fontSize: 'var(--font-size-lg)',
-  marginBottom: professionalSpacing[2],
-  color: professionalColors.accent.red,
-}}>
+          <div style={ {
+  fontSize: 'var(--font-size-lg)'
+  marginBottom: professionalSpacing[2]
+  color: professionalColors.accent.red }
+}>
             ⚠️
           </div>
           <div style={{ fontSize: 'var(--font-size-sm)' }}>

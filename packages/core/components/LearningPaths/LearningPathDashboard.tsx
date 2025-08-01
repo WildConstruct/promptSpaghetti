@@ -5,38 +5,36 @@
  * with personalized recommendations, progress tracking, and analytics.
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  LearningPath,
+import { LearningPath,
   LearningCategory,
   DifficultyLevel,
   TargetAudience,
   UserEnrollment,
-  EnrollmentStatus,
+  EnrollmentStatus }
   Epic16LearningPathService
-} from '../../services/Epic16LearningPathService';
-}
-interface LearningPathDashboardProps {
-  learningService: Epic16LearningPathService;
+ from '../../services/Epic16LearningPathService';
+
+
+interface LearningPathDashboardProps { learningService: Epic16LearningPathService;
   userId: string;
   userRole: 'user' | 'creator' | 'admin';
-  onPathSelect?: (path: LearningPath) => void;
-}
-interface PathFilters {
-  category: LearningCategory;
+  onPathSelect?: (path: LearningPath) => void }
+
+
+interface PathFilters { category: LearningCategory;
   difficulty: DifficultyLevel;
-  audience: TargetAudience;
-}
+  audience: TargetAudience }
+},
   duration: { min?: number; max?: number };
-  certification: boolean | null;
+  certification: boolean | null;,
   searchQuery: string;
 
-export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
-  learningService,
-  userId,
-  userRole,
+export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({ )
+  learningService
+  userId
+  userRole }
   onPathSelect
-}) => {
-  // State management
+}) => { // State management
   const [availablePaths, setAvailablePaths] = useState<LearningPath>([]);
   const [userPaths, setUserPaths] = useState<UserEnrollment>([]);
   const [recommendations, setRecommendations] = useState<LearningPath>([]);
@@ -44,27 +42,26 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<PathFilters>({)
-  category: [],
-    difficulty: [],
-    audience: [],
-    duration: {},
-    certification: null,
+  category: []
+    difficulty: []
+    audience: [] }
+    duration: {}
+    certification: null
     searchQuery: '';
   });
   const [view, setView] = useState<'discover' | 'my-learning' | 'recommendations' | 'analytics'>('discover');
   const [analytics, setAnalytics] = useState<unknown>(null);
   // Load data
-  const loadData = useCallback(async () => {
-  setLoading(true);
+  const loadData = useCallback(async () => { setLoading(true);
   setError(null);
   try {
   // Load available paths
   const searchResults = await learningService.searchLearningPaths('', {)
-  category: filters.category.length > 0 ? filters.category : undefined,
-  difficulty: filters.difficulty.length > 0 ? filters.difficulty : undefined,
-  audience: filters.audience.length > 0 ? filters.audience : undefined,
-  duration: Object.keys(filters.duration).length > 0 ? filters.duration : undefined,
-  certification: filters.certification ?? undefined,
+  category: filters.category.length > 0 ? filters.category : undefined
+  difficulty: filters.difficulty.length > 0 ? filters.difficulty : undefined
+  audience: filters.audience.length > 0 ? filters.audience : undefined
+  duration: Object.keys(filters.duration).length > 0 ? filters.duration : undefined
+  certification: filters.certification ?? undefined }
 });
       setAvailablePaths(searchResults);
       // Load user's paths
@@ -74,48 +71,33 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
       const pathRecommendations = await learningService.getRecommendations(userId, 5);
       setRecommendations(pathRecommendations);
       // Load analytics if admin/creator
-      if (userRole !== 'user') {
-        const analyticsData = await learningService.getAnalytics();
-        setAnalytics(analyticsData);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load learning paths');
-} finally {
-      setLoading(false);
-  }, [learningService, userId, userRole, filters]);
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+      if (userRole !== 'user') { const analyticsData = await learningService.getAnalytics();
+        setAnalytics(analyticsData) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to load learning paths') } finally { setLoading(false) }, [learningService, userId, userRole, filters]);
+  useEffect(() => { loadData() }, [loadData]);
   // Filter paths based on search query
-  const filteredPaths = useMemo(() => {
-    if (!filters.searchQuery) return availablePaths;
+  const filteredPaths = useMemo(() => { if (!filters.searchQuery) return availablePaths;
     const query = filters.searchQuery.toLowerCase();
     return availablePaths.filter(path =>)
       path.title.toLowerCase().includes(query) ||
       path.description.toLowerCase().includes(query) ||
       path.tags.some(tag => tag.toLowerCase().includes(query))
-    );
-  }, [availablePaths, filters.searchQuery]);
+    ) }, [availablePaths, filters.searchQuery]);
   // Handle path enrollment
   const handleEnroll = async (pathId: string) => {
     try {
       await learningService.enrollUser(userId, pathId);
       await loadData(); // Refresh data
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to enroll in path');
-};
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to enroll in path') };
   // Handle path selection
-  const handlePathSelect = (path: LearningPath) => {
-    setSelectedPath(path);
-    onPathSelect?.(path);
-  };
+  const handlePathSelect = (path: LearningPath) => { setSelectedPath(path);
+    onPathSelect?.(path) };
   // Reset filters
-  const resetFilters = () => {
-    setFilters({)
-  category: [],
-      difficulty: [],
-      audience: [],
-      duration: {},
-      certification: null,
+  const resetFilters = () => { setFilters({)
+  category: []
+      difficulty: []
+      audience: [] }
+      duration: {}
+      certification: null
       searchQuery: '';
   });
   };
@@ -194,11 +176,11 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                 ></div>
               </div>
               <div className="mt-2 flex items-center justify-between">
-                <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-  status === EnrollmentStatus.COMPLETED ? 'bg-green-100 text-green-800' :,
-  status === EnrollmentStatus.IN_PROGRESS ? 'bg-blue-100 text-blue-800' :,
+                <span className={ `text-xs font-medium px-2 py-1 rounded-full ${
+  status === EnrollmentStatus.COMPLETED ? 'bg-green-100 text-green-800' :
+  status === EnrollmentStatus.IN_PROGRESS ? 'bg-blue-100 text-blue-800' : }
   'bg-gray-100 text-gray-800'
-}`}>
+`}>
                   {status?.replace('_', ' ').toUpperCase()}
                 </span>
                 <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
@@ -220,10 +202,9 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                 </span>
               </div>
               <button
-                onClick={(e) => {
+                onClick={ (e) => {
                   e.stopPropagation();
-                  handleEnroll(path.id);
-                }}
+                  handleEnroll(path.id) }}
                 className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
               >
                 Enroll
@@ -286,19 +267,19 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
         <div className="mt-4">
           <nav className="flex space-x-8">
             {[
-              { key: 'discover', label: 'Discover', icon: '🔍' },
-              { key: 'my-learning', label: 'My Learning', icon: '📚' },
-              { key: 'recommendations', label: 'Recommended', icon: '✨' },
+              { key: 'discover', label: 'Discover', icon: '🔍' }
+              { key: 'my-learning', label: 'My Learning', icon: '📚' }
+              { key: 'recommendations', label: 'Recommended', icon: '✨' }
               ...(userRole !== 'user' ? [{ key: 'analytics', label: 'Analytics', icon: '📊' }] : [])
             ].map((tab) => ()
               <button
                 key={tab.key}
                 onClick={() => setView(tab.key as any)}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                className={ `py-2 px-1 border-b-2 font-medium text-sm ${
   view === tab.key
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700' }
+`}
               >
                 <span className="mr-2">{tab.icon}</span>
                 {tab.label}
@@ -337,7 +318,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                             ? [...filters.category, category]
                             : filters.category.filter(c => c !== category);
                           setFilters({ ...filters, category: newCategories });
-                        }}
+
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-600">
@@ -361,7 +342,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                             ? [...filters.difficulty, difficulty]
                             : filters.difficulty.filter(d => d !== difficulty);
                           setFilters({ ...filters, difficulty: newDifficulties });
-                        }}
+
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-600 capitalize">
@@ -385,7 +366,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                             ? [...filters.audience, audience]
                             : filters.audience.filter(a => a !== audience);
                           setFilters({ ...filters, audience: newAudience });
-                        }}
+
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-600">
@@ -403,8 +384,8 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                     type="number"
                     placeholder="Min"
                     value={filters.duration.min || ''}
-                    onChange={(e) => setFilters({)
-  ...filters,
+                    onChange={ (e) => setFilters({)
+  ...filters }
                       duration: { ...filters.duration, min: e.target.value ? parseInt(e.target.value) * 60 : undefined }
                     })}
                     className="px-3 py-2 border border-gray-300 rounded-md text-sm"
@@ -413,8 +394,8 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                     type="number"
                     placeholder="Max"
                     value={filters.duration.max ? Math.floor(filters.duration.max / 60) : ''}
-                    onChange={(e) => setFilters({)
-  ...filters,
+                    onChange={ (e) => setFilters({)
+  ...filters }
                       duration: { ...filters.duration, max: e.target.value ? parseInt(e.target.value) * 60 : undefined }
                     })}
                     className="px-3 py-2 border border-gray-300 rounded-md text-sm"
@@ -496,10 +477,9 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                 </div>
               ) : ()
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {userPaths.map((enrollment) => {
+                  { userPaths.map((enrollment) => {
   const path = availablePaths.find(p => p.id === enrollment.pathId);
-  return path ? renderPathCard(path, enrollment) : null;
-})}
+  return path ? renderPathCard(path, enrollment) : null })}
                 </div>
               )}
             </div>

@@ -10,14 +10,14 @@
  */
 import { EventEmitter } from 'events';
 import { RateLimitingService, RateLimitStatus, ThreatLevel, BackoffStrategy } from './RateLimitingService';
-import { 
-  AdaptiveThrottlingRulesEngine,
+import { AdaptiveThrottlingRulesEngine,
   ThrottlingContext,
   ThrottlingResult,
-  ThrottlingMode,
+  ThrottlingMode }
   SystemCondition
 } from './AdaptiveThrottlingRules';
 
+}
 }
 export interface IntegrationConfig {
     enableUnifiedProtection: boolean;
@@ -50,39 +50,34 @@ export declare enum FallbackBehavior {
     ESCALATE = "escalate"
 
 }
-export interface UnifiedProtectionContext extends ThrottlingContext {
-    rateLimitingHistory: {
+}
+}
+export interface UnifiedProtectionContext extends ThrottlingContext { rateLimitingHistory: {
         recentAttempts: number;
         backoffLevel: number;
         threatAssessment: ThreatLevel;
-        adaptiveMultiplier: number;
-}
+        adaptiveMultiplier: number }
     };
-    throttlingHistory: {
-        recentThrottling: number;
+    throttlingHistory: { recentThrottling: number;
         systemCondition: SystemCondition;
         activeRules: string[];
-        effectivenessScore: number;
-    };
-    integrationMetadata: {
-        requestId: string;
+        effectivenessScore: number };
+    integrationMetadata: { requestId: string;
         correlationId: string;
         protectionLayers: string[];
-        decisionTrail: ProtectionDecision[];
-    };
+        decisionTrail: ProtectionDecision[] };
 
 }
-export interface ProtectionDecision {
-    system: 'rate_limiting' | 'throttling' | 'integration';
+}
+export interface ProtectionDecision { system: 'rate_limiting' | 'throttling' | 'integration';
     timestamp: Date;
     decision: 'allow' | 'block' | 'throttle' | 'delay';
     confidence: number;
     reasoning: string;
-    parameters: Record<string, unknown>;
-
+    parameters: Record<string, unknown> }
 }
-export interface UnifiedProtectionResult {
-    action: 'allow' | 'block' | 'throttle' | 'delay';
+}
+export interface UnifiedProtectionResult { action: 'allow' | 'block' | 'throttle' | 'delay';
     delay: number;
     rateLimitingResult: RateLimitStatus;
     throttlingResult: ThrottlingResult;
@@ -90,61 +85,48 @@ export interface UnifiedProtectionResult {
         system: string;
         strategy: CoordinationStrategy;
         confidence: number;
-        reasoning: string;
+        reasoning: string }
 }
     };
-    recommendations: {
-        adjustRateLimits: boolean;
+    recommendations: { adjustRateLimits: boolean;
         adjustThrottling: boolean;
         escalateToAdmin: boolean;
-        updateRules: boolean;
-    };
-    metadata: {
-        protectionLayers: string[];
+        updateRules: boolean };
+    metadata: { protectionLayers: string[];
         decisionTime: number;
         systemHealth: {
             rateLimitingHealth: number;
             throttlingHealth: number;
-            integrationHealth: number;
-        };
+            integrationHealth: number };
     };
 
 }
-export interface CrossSystemLearning {
-    rateLimitingInsights: {
+}
+export interface CrossSystemLearning { rateLimitingInsights: {
         effectiveBackoffStrategies: BackoffStrategy[];
         optimalThreatThresholds: Record<ThreatLevel, number>;
         endpointVulnerabilities: Record<string, number>;
-        patternRecognition: string[];
+        patternRecognition: string[] }
 }
     };
-    throttlingInsights: {
-        effectiveRuleCombinations: string[];
+    throttlingInsights: { effectiveRuleCombinations: string[];
         systemLoadCorrelations: Record<SystemCondition, number>;
         adaptationSuccessRates: Record<ThrottlingMode, number>;
-        falsePositivePatterns: string[];
-    };
-    integratedInsights: {
-        complementaryProtections: Array<{
+        falsePositivePatterns: string[] };
+    integratedInsights: { complementaryProtections: Array<{
             rateLimiting: string;
             throttling: string;
-            effectiveness: number;
-        }>;
-        conflictResolution: Array<{
-            scenario: string;
+            effectiveness: number }>;
+        conflictResolution: Array<{ scenario: string;
             resolution: CoordinationStrategy;
-            success: boolean;
-        }>;
-        performanceImpact: {
-            latency: number;
+            success: boolean }>;
+        performanceImpact: { latency: number;
             throughput: number;
-            accuracy: number;
-        };
+            accuracy: number };
         recommendedConfigurations: IntegrationConfig[];
     };
 
-export declare class AdaptiveRateLimitingIntegration extends EventEmitter {
-    private rateLimitingService;
+export declare class AdaptiveRateLimitingIntegration extends EventEmitter { private rateLimitingService;
     private throttlingEngine;
     private config;
     private decisionHistory;
@@ -152,7 +134,7 @@ export declare class AdaptiveRateLimitingIntegration extends EventEmitter {
     private performanceMetrics;
     constructor();
       rateLimitingService: RateLimitingService,
-      throttlingEngine: AdaptiveThrottlingRulesEngine,
+      throttlingEngine: AdaptiveThrottlingRulesEngine }
       config?: Partial<IntegrationConfig>
     );
     /**
@@ -266,16 +248,14 @@ export declare class AdaptiveRateLimitingIntegration extends EventEmitter {
     /**
      * Get integration statistics and performance metrics
      */
-    getIntegrationStatistics(): {
-        config: IntegrationConfig;
+    getIntegrationStatistics(): { config: IntegrationConfig;
         performance: typeof this.performanceMetrics;
         learning: CrossSystemLearning;
         systemHealth: {
             rateLimitingHealth: number;
             throttlingHealth: number;
             integrationHealth: number;
-            overallHealth: number;
-        };
+            overallHealth: number };
     };
     /**
      * Update integration configuration

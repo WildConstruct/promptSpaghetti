@@ -5,19 +5,17 @@
 import type { ProjectMetadata } from '../schemas/psgSchema';
 
 }
-export interface RecentProjectEntry {
-    id: string;
+}
+export interface RecentProjectEntry { id: string;
     name: string;
     filePath?: string;
     lastAccessDate: string;
     thumbnail?: string;
     metadata: ProjectMetadata;
-    fileSize?: number;
-
-
+    fileSize?: number }
 }
-export interface RecentProjectsData {
-    projects: RecentProjectEntry[];
+}
+export interface RecentProjectsData { projects: RecentProjectEntry[];
     version: string;
 
 export declare class RecentProjectsManager {
@@ -53,18 +51,16 @@ export declare class RecentProjectsManager {
      */
     static checkStorageQuota(): {
         available: boolean;
-        usage?: number;
+        usage?: number }
 }
     };
     /**
      * Get project metadata for display
      */
-    static getProjectDisplayInfo(entry: RecentProjectEntry): {
-        name: string;
+    static getProjectDisplayInfo(entry: RecentProjectEntry): { name: string;
         lastAccessed: string;
         size: string;
-        author?: string;
-    };
+        author?: string };
     private static saveRecentProjects;
     private static generateProjectId;
     private static getNodeColor;

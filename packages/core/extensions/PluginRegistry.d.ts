@@ -10,8 +10,8 @@ import { PluginSource, LoadedPlugin } from './PluginLoader';
 import { EventEmitter } from 'events';
 
 }
-export interface RemotePlugin {
-    id: string;
+}
+export interface RemotePlugin { id: string;
     name: string;
     description: string;
     version: string;
@@ -25,43 +25,35 @@ export interface RemotePlugin {
     downloads: number;
     rating: number;
     createdAt: Date;
-    updatedAt: Date;
-
-
+    updatedAt: Date }
 }
-export interface PluginUpdate {
-    pluginId: string;
+}
+export interface PluginUpdate { pluginId: string;
     currentVersion: string;
     availableVersion: string;
     updateType: 'patch' | 'minor' | 'major';
     changelog?: string;
-    breaking: boolean;
-
-
+    breaking: boolean }
 }
-export interface PluginRegistryConfig {
-    cacheDirectory: string;
+}
+export interface PluginRegistryConfig { cacheDirectory: string;
     autoUpdateCheck: boolean;
     allowRemoteSources: boolean;
     remoteRegistries: string[];
     updateCheckInterval: number;
     maxCacheAge: number;
     enableTelemetry: boolean;
-    developmentMode: boolean;
-
-
+    developmentMode: boolean }
 }
-export interface PluginInstallOptions {
-    version?: string;
+}
+export interface PluginInstallOptions { version?: string;
     skipDependencies?: boolean;
     force?: boolean;
     source?: PluginSource;
-    activateAfterInstall?: boolean;
-
-
+    activateAfterInstall?: boolean }
 }
-export interface PluginSearchOptions {
-    query?: string;
+}
+export interface PluginSearchOptions { query?: string;
     category?: string;
     author?: string;
     minRating?: number;
@@ -69,9 +61,8 @@ export interface PluginSearchOptions {
     limit?: number;
     offset?: number;
     sortBy?: 'name' | 'downloads' | 'rating' | 'updated';
-    sortOrder?: 'asc' | 'desc';
-
-
+    sortOrder?: 'asc' | 'desc' }
+}
 }
 export interface PluginRegistryStats {
     totalPlugins: number;
@@ -149,4 +140,5 @@ export declare class PluginRegistry extends EventEmitter {
     private removePluginData;
 
 //# sourceMappingURL=PluginRegistry.d.ts.map
+}
 }

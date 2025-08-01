@@ -10,8 +10,7 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Switch } from '../ui/Switch';
-import { 
-  CheckSquare,
+import { CheckSquare,
   Square,
   Plus,
   Edit3,
@@ -39,20 +38,19 @@ import {
   Target,
   Zap,
   Camera,
-  Film,
+  Film }
   Palette
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Core checklist data structures
 
-}
-export interface VFXChecklistItem {
-  id: string;
+
+export interface VFXChecklistItem { id: string;
   title: string;
   description?: string;
   status: 'pending' | 'in_progress' | 'review' | 'approved' | 'rejected' | 'blocked';
   priority: 'low' | 'medium' | 'high' | 'critical';
-  completion: number; // 0-100 percentage,
+  completion: number; // 0-100 percentage }
   assignee?: VFXTeamMember;
   reviewer?: VFXTeamMember;
   author: VFXTeamMember;
@@ -71,101 +69,97 @@ export interface VFXChecklistItem {
   qualityGates: VFXQualityGate;
   comments: VFXChecklistComment;
   history: VFXChecklistHistoryEntry;
-}
-}
-}
-export interface VFXChecklistSubtask {
-  id: string;
+
+
+
+
+export interface VFXChecklistSubtask { id: string;
   title: string;
   completed: boolean;
   assignee?: VFXTeamMember;
   dueDate?: string;
   description?: string;
-  estimatedMinutes?: number;
-}
-}
-}
-export interface VFXChecklistAttachment {
-  id: string;
+  estimatedMinutes?: number }
+
+
+
+export interface VFXChecklistAttachment { id: string;
   name: string;
-  type: 'image' | 'video' | 'document' | 'reference' | 'asset';
+  type: 'image' | 'video' | 'document' | 'reference' | 'asset' }
   url: string;
   thumbnailUrl?: string;
   size: number;
   uploadedBy: VFXTeamMember;
   uploadedAt: string;
-}
-}
-}
-export interface VFXAssetReference {
-  id: string;
+
+
+
+
+export interface VFXAssetReference { id: string;
   name: string;
   type: 'model' | 'texture' | 'animation' | 'effect' | 'composite' | 'render';
   status: 'draft' | 'review' | 'approved' | 'final';
   version: string;
-  accuracy?: number; // Historical accuracy percentage,
-  complexity?: number; // Rendering complexity score,
+  accuracy?: number; // Historical accuracy percentage;
+  complexity?: number; // Rendering complexity score }
   dependencies: string;
-}
-}
-}
-export interface VFXQualityGate {
-  id: string;
+
+
+
+
+export interface VFXQualityGate { id: string;
   name: string;
-  type: 'technical' | 'creative' | 'accuracy' | 'performance';
+  type: 'technical' | 'creative' | 'accuracy' | 'performance' }
   status: 'pending' | 'passed' | 'failed' | 'waived';
   criteria: string;
   result?: string;
   checkedBy?: VFXTeamMember;
   checkedAt?: string;
   required: boolean;
-}
-}
-}
-export interface VFXChecklistComment {
-  id: string;
+
+
+
+
+export interface VFXChecklistComment { id: string;
   content: string;
   author: VFXTeamMember;
   timestamp: string;
-  type: 'comment' | 'review' | 'approval' | 'rejection';
+  type: 'comment' | 'review' | 'approval' | 'rejection' }
   mentions: string;
-}
+
+},
   reactions: { [emoji: string]: VFXTeamMember };
-}
-}
-export interface VFXChecklistHistoryEntry {
-  id: string;
+
+
+export interface VFXChecklistHistoryEntry { id: string;
   action: string;
   field?: string;
   oldValue?: unknown;
   newValue?: unknown;
   user: VFXTeamMember;
   timestamp: string;
-  description: string;
-}
-}
-}
-export interface VFXTeamMember {
-  id: string;
+  description: string }
+
+
+
+export interface VFXTeamMember { id: string;
   name: string;
   role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator' | 'qa_lead';
   avatar?: string;
   email: string;
   color: string;
   isOnline?: boolean;
-  permissions: VFXPermissions;
-}
-}
-}
-export interface VFXPermissions {
-  canCreate: boolean;
+  permissions: VFXPermissions }
+
+
+
+export interface VFXPermissions { canCreate: boolean;
   canEdit: boolean;
   canDelete: boolean;
   canApprove: boolean;
   canAssign: boolean;
-  canViewReports: boolean;
-}
-}
+  canViewReports: boolean }
+
 export type VFXChecklistCategory = 
   | 'pre_production' | 'asset_creation' | 'animation' | 'fx' | 'lighting' 
   | 'compositing' | 'rendering' | 'post_production' | 'review' | 'delivery';
@@ -174,9 +168,8 @@ export type VFXProductionPhase =
   | 'concept' | 'previs' | 'asset_build' | 'animation' | 'fx' | 'lighting' 
   | 'comp' | 'render' | 'review' | 'final';
 
-}
-export interface VFXChecklist {
-  id: string;
+
+export interface VFXChecklist { id: string;
   name: string;
   description?: string;
   project: string;
@@ -190,14 +183,14 @@ export interface VFXChecklist {
   createdAt: string;
   updatedAt: string;
   dueDate?: string;
-  status: 'draft' | 'active' | 'review' | 'completed' | 'archived';
+  status: 'draft' | 'active' | 'review' | 'completed' | 'archived' }
   tags: string;
   metadata: VFXChecklistMetadata;
-}
-}
-}
-export interface VFXChecklistTemplate {
-  id: string;
+
+
+
+
+export interface VFXChecklistTemplate { id: string;
   name: string;
   description?: string;
   category: VFXChecklistCategory;
@@ -205,12 +198,11 @@ export interface VFXChecklistTemplate {
   items: Omit<VFXChecklistItem, 'id' | 'author' | 'createdAt' | 'updatedAt' | 'history'>[];
   isPublic: boolean;
   createdBy: VFXTeamMember;
-  usageCount: number;
-}
-}
-}
-export interface VFXChecklistMetadata {
-  totalItems: number;
+  usageCount: number }
+
+
+
+export interface VFXChecklistMetadata { totalItems: number;
   completedItems: number;
   overallProgress: number;
   estimatedTotalHours: number;
@@ -219,78 +211,76 @@ export interface VFXChecklistMetadata {
   blockedItems: number;
   averageAccuracy: number;
   lastActivity: string;
-  collaborators: number;
-}
-}
-}
-export interface VFXChecklistSystemProps {
-  checklist: VFXChecklist;
+  collaborators: number }
+
+
+
+export interface VFXChecklistSystemProps { checklist: VFXChecklist;
   currentUser: VFXTeamMember;
-  onChecklistUpdate: (checklist: VFXChecklist) => void;
+  onChecklistUpdate: (checklist: VFXChecklist) => void
   onItemCreate: (item: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>) => void;
-  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;
-  onItemDelete: (itemId: string) => void;
+  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void
+  onItemDelete: (itemId: string) => void }
   onCommentCreate: (itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => void;
   readonly?: boolean;
   showStatistics?: boolean;
   compactView?: boolean;
   className?: string;
+  // Status configurations with VFX-specific colors and labels
+  const STATUS_CONFIG = {
 
-// Status configurations with VFX-specific colors and labels
-const STATUS_CONFIG = {
-}
-  pending: { color: '#6b7280', label: 'Pending', icon: Clock },
-  in_progress: { color: '#f59e0b', label: 'In Progress', icon: Timer },
-  review: { color: '#3b82f6', label: 'In Review', icon: Eye },
-  approved: { color: '#10b981', label: 'Approved', icon: CheckCircle },
-  rejected: { color: '#ef4444', label: 'Rejected', icon: AlertTriangle },
+
+  pending: { color: '#6b7280', label: 'Pending', icon: Clock }
+  in_progress: { color: '#f59e0b', label: 'In Progress', icon: Timer }
+  review: { color: '#3b82f6', label: 'In Review', icon: Eye }
+  approved: { color: '#10b981', label: 'Approved', icon: CheckCircle }
+  rejected: { color: '#ef4444', label: 'Rejected', icon: AlertTriangle }
   blocked: { color: '#8b5cf6', label: 'Blocked', icon: AlertTriangle }
 };
 const PRIORITY_CONFIG = {
-  low: { color: '#10b981', label: 'Low' },
-  medium: { color: '#f59e0b', label: 'Medium' },
-  high: { color: '#ef4444', label: 'High' },
+  low: { color: '#10b981', label: 'Low' }
+  medium: { color: '#f59e0b', label: 'Medium' }
+  high: { color: '#ef4444', label: 'High' }
   critical: { color: '#dc2626', label: 'Critical' }
 };
-const VFX_CATEGORIES = [;
-  { value: 'pre_production', label: 'Pre-Production', icon: FileText },
-  { value: 'asset_creation', label: 'Asset Creation', icon: Palette },
-  { value: 'animation', label: 'Animation', icon: Film },
-  { value: 'fx', label: 'VFX', icon: Zap },
-  { value: 'lighting', label: 'Lighting', icon: Camera },
-  { value: 'compositing', label: 'Compositing', icon: Palette },
-  { value: 'rendering', label: 'Rendering', icon: BarChart3 },
-  { value: 'post_production', label: 'Post-Production', icon: Edit3 },
-  { value: 'review', label: 'Review', icon: Eye },
+const VFX_CATEGORIES = [
+  { value: 'pre_production', label: 'Pre-Production', icon: FileText }
+  { value: 'asset_creation', label: 'Asset Creation', icon: Palette }
+  { value: 'animation', label: 'Animation', icon: Film }
+  { value: 'fx', label: 'VFX', icon: Zap }
+  { value: 'lighting', label: 'Lighting', icon: Camera }
+  { value: 'compositing', label: 'Compositing', icon: Palette }
+  { value: 'rendering', label: 'Rendering', icon: BarChart3 }
+  { value: 'post_production', label: 'Post-Production', icon: Edit3 }
+  { value: 'review', label: 'Review', icon: Eye }
   { value: 'delivery', label: 'Delivery', icon: CheckCircle }
 ];
-const VFX_PRODUCTION_PHASES = [;
-  { value: 'concept', label: 'Concept' },
-  { value: 'previs', label: 'Previz' },
-  { value: 'asset_build', label: 'Asset Build' },
-  { value: 'animation', label: 'Animation' },
-  { value: 'fx', label: 'FX' },
-  { value: 'lighting', label: 'Lighting' },
-  { value: 'comp', label: 'Compositing' },
-  { value: 'render', label: 'Render' },
-  { value: 'review', label: 'Review' },
+const VFX_PRODUCTION_PHASES = [
+  { value: 'concept', label: 'Concept' }
+  { value: 'previs', label: 'Previz' }
+  { value: 'asset_build', label: 'Asset Build' }
+  { value: 'animation', label: 'Animation' }
+  { value: 'fx', label: 'FX' }
+  { value: 'lighting', label: 'Lighting' }
+  { value: 'comp', label: 'Compositing' }
+  { value: 'render', label: 'Render' }
+  { value: 'review', label: 'Review' }
   { value: 'final', label: 'Final' }
 ];
-}
-export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
-  checklist,
-  currentUser,
-  onChecklistUpdate,
-  onItemCreate,
-  onItemUpdate,
-  onItemDelete,
-  onCommentCreate,
-  readonly = false,
-  showStatistics = true,
-  compactView = false,
+
+export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({ )
+  checklist
+  currentUser
+  onChecklistUpdate
+  onItemCreate
+  onItemUpdate
+  onItemDelete
+  onCommentCreate
+  readonly = false
+  showStatistics = true
+  compactView = false }
   className = ''
-}) => {
-  // UI state
+}) => { // UI state
   const [_____selectedTab, _____setSelectedTab] = useState('overview');
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -305,18 +295,17 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
   // Creation state
   const [isCreating, setIsCreating] = useState(false);
   const [newItemTemplate, setNewItemTemplate] = useState<Partial<VFXChecklistItem>>({)
-  title: '',
-  description: '',
-  priority: 'medium',
-  category: 'asset_creation',
-  vfxPhase: 'asset_build',
-  subtasks: [],
-  tags: [],
-  dependencies: [],
+  title: ''
+  description: ''
+  priority: 'medium'
+  category: 'asset_creation'
+  vfxPhase: 'asset_build'
+  subtasks: []
+  tags: []
+  dependencies: [] }
 });
   // Filtered and sorted items
-  const filteredItems = useMemo(() => {
-    const filtered = checklist.items.filter(item => {)
+  const filteredItems = useMemo(() => { const filtered = checklist.items.filter(item => {)
   // Search filter
       if (searchTerm && !item.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
           !item.description?.toLowerCase().includes(searchTerm.toLowerCase())) {
@@ -331,26 +320,24 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
       if (assigneeFilter !== 'all' && item.assignee?.id !== assigneeFilter) return false;
       // Completed items filter
       if (!showCompleted && item.status === 'approved') return false;
-      return true;
-    });
+      return true });
     // Sort items
-    filtered.sort((a, b) => {
-  let comparison = 0;
+    filtered.sort((a, b) => { let comparison = 0;
   switch (sortBy) {
-  case 'priority':,
+  case 'priority':
   const priorityOrder = ['critical', 'high', 'medium', 'low'];
   comparison = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority);
   break;
-  case 'dueDate':,
+  case 'dueDate':
   const aDate = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
   const bDate = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
   comparison = aDate - bDate;
   break;
-  case 'status':,
+  case 'status':
   const statusOrder = ['blocked', 'rejected', 'pending', 'in_progress', 'review', 'approved'];
   comparison = statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
   break;
-  case 'progress':,
+  case 'progress': }
   comparison = a.completion - b.completion;
   break;
   return sortOrder === 'asc' ? comparison : -comparison;
@@ -358,8 +345,7 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
     return filtered;
   }, [checklist.items, searchTerm, statusFilter, priorityFilter, categoryFilter, assigneeFilter, showCompleted, sortBy, sortOrder]);
   // Statistics
-  const statistics = useMemo(() => {
-  const total = checklist.items.length;
+  const statistics = useMemo(() => { const total = checklist.items.length;
   const completed = checklist.items.filter(item => item.status === 'approved').length;
   const inProgress = checklist.items.filter(item => item.status === 'in_progress').length;
   const review = checklist.items.filter(item => item.status === 'review').length;
@@ -382,74 +368,65 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
   totalEstimated,
   totalActual,
   avgProgress,
-  efficiency: totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0,
+  efficiency: totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0 }
 };
   }, [checklist.items]);
   // Handle item status change
-  const handleStatusChange = useCallback((itemId: string, newStatus: VFXChecklistItem['status']) => {
-  const updates: Partial<VFXChecklistItem> = {,
-  status: newStatus,
-  updatedAt: new Date().toISOString(),
+  const handleStatusChange = useCallback((itemId: string, newStatus: VFXChecklistItem['status']) => { const updates: Partial<VFXChecklistItem> = {
+  status: newStatus
+  updatedAt: new Date().toISOString() }
 };
     // Auto-complete when approved
-    if (newStatus === 'approved') {
-      updates.completion = 100;
-    onItemUpdate(itemId, updates);
-  }, [onItemUpdate]);
+    if (newStatus === 'approved') { updates.completion = 100;
+    onItemUpdate(itemId, updates) }, [onItemUpdate]);
   // Handle priority change
-  const handlePriorityChange = useCallback((itemId: string, newPriority: VFXChecklistItem['priority']) => {
-  onItemUpdate(itemId, { )
-  priority: newPriority,
-  updatedAt: new Date().toISOString(),
+  const handlePriorityChange = useCallback((itemId: string, newPriority: VFXChecklistItem['priority']) => { onItemUpdate(itemId, { )
+  priority: newPriority
+  updatedAt: new Date().toISOString() }
 });
   }, [onItemUpdate]);
   // Handle assignee change
-  const handleAssigneeChange = useCallback((itemId: string, assigneeId: string) => {
-  const assignee = checklist.team.find(member => member.id === assigneeId);
+  const handleAssigneeChange = useCallback((itemId: string, assigneeId: string) => { const assignee = checklist.team.find(member => member.id === assigneeId);
   onItemUpdate(itemId, { )
-  assignee,
-  updatedAt: new Date().toISOString(),
+  assignee
+  updatedAt: new Date().toISOString() }
 });
   }, [checklist.team, onItemUpdate]);
   // Handle progress change
-  const handleProgressChange = useCallback((itemId: string, completion: number) => {
-  const updates: Partial<VFXChecklistItem> = {,
-  completion,
-  updatedAt: new Date().toISOString(),
+  const handleProgressChange = useCallback((itemId: string, completion: number) => { const updates: Partial<VFXChecklistItem> = {
+  completion
+  updatedAt: new Date().toISOString() }
 };
     // Auto-approve when 100% complete
-    if (completion === 100 && currentUser.permissions.canApprove) {
-      updates.status = 'approved';
-    onItemUpdate(itemId, updates);
-  }, [currentUser.permissions.canApprove, onItemUpdate]);
+    if (completion === 100 && currentUser.permissions.canApprove) { updates.status = 'approved';
+    onItemUpdate(itemId, updates) }, [currentUser.permissions.canApprove, onItemUpdate]);
   // Create new item
-  const handleCreateItem = useCallback(() => {
-  if (!newItemTemplate.title?.trim()) return;
-  const newItem: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'> = {,
-  ...newItemTemplate,
-  title: newItemTemplate.title.trim(),
-  status: 'pending',
-  completion: 0,
-  author: currentUser,
-  subtasks: [],
-  attachments: [],
-  assets: [],
-  qualityGates: [],
-  comments: [],
-  dependencies: newItemTemplate.dependencies || [],
-  tags: newItemTemplate.tags || [],
-} as Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>;
+  const handleCreateItem = useCallback(() => { if (!newItemTemplate.title?.trim()) return;
+  const newItem: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'> = {
+  ...newItemTemplate
+  title: newItemTemplate.title.trim()
+  status: 'pending'
+  completion: 0
+  author: currentUser
+  subtasks: []
+  attachments: []
+  assets: []
+  qualityGates: []
+  comments: []
+  dependencies: newItemTemplate.dependencies || []
+  tags: newItemTemplate.tags || [] }
+ as Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>;
     onItemCreate(newItem);
     setIsCreating(false);
-    setNewItemTemplate({)
-  title: '',
-  description: '',
-  priority: 'medium',
-  category: 'asset_creation',
-  vfxPhase: 'asset_build',
-  subtasks: [],
-  tags: [],
-  dependencies: [],
+    setNewItemTemplate({ )
+  title: ''
+  description: ''
+  priority: 'medium'
+  category: 'asset_creation'
+  vfxPhase: 'asset_build'
+  subtasks: []
+  tags: []
+  dependencies: [] }
 });
   }, [newItemTemplate, currentUser, onItemCreate]);
   return;
@@ -771,40 +748,40 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
 };
 
 // Individual checklist item card component
-}
-interface VFXChecklistItemCardProps {
-  item: VFXChecklistItem;
+
+
+interface VFXChecklistItemCardProps { item: VFXChecklistItem;
   checklist: VFXChecklist;
   currentUser: VFXTeamMember;
-  onStatusChange: (itemId: string, status: VFXChecklistItem['status']) => void;
-  onPriorityChange: (itemId: string, priority: VFXChecklistItem['priority']) => void;
-  onAssigneeChange: (itemId: string, assigneeId: string) => void;
-  onProgressChange: (itemId: string, progress: number) => void;
+  onStatusChange: (itemId: string, status: VFXChecklistItem['status']) => void
+  onPriorityChange: (itemId: string, priority: VFXChecklistItem['priority']) => void
+  onAssigneeChange: (itemId: string, assigneeId: string) => void
+  onProgressChange: (itemId: string, progress: number) => void
   onCommentCreate: (itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => void;
-  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;
+  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void
   onItemDelete: (itemId: string) => void;
   readonly?: boolean;
   compact?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
-  const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({,)
-  item,
-  checklist,
-  currentUser,
-  onStatusChange,
-  onPriorityChange,
-  onAssigneeChange,
-  onProgressChange,
-  onCommentCreate,
-  onItemUpdate,
-  onItemDelete,
-  readonly = false,
-  compact = false,
-  isSelected = false,
+  const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({);
+  item;
+  checklist;
+  currentUser;
+  onStatusChange;
+  onPriorityChange;
+  onAssigneeChange;
+  onProgressChange;
+  onCommentCreate;
+  onItemUpdate;
+  onItemDelete;
+  readonly = false;
+  compact = false;
+  isSelected = false }
   onSelect
-}
-}) => {
-  const [showComments, setShowComments] = useState(false);
+
+
+}) => { const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState('');
   const statusConfig = STATUS_CONFIG[item.status];
   const priorityConfig = PRIORITY_CONFIG[item.priority];
@@ -818,7 +795,7 @@ interface VFXChecklistItemCardProps {
   content: newComment.trim(),
       author: currentUser,
       type: 'comment',
-      mentions: [],
+      mentions: [] }
       reactions: {}
     });
     setNewComment('');
@@ -832,11 +809,11 @@ interface VFXChecklistItemCardProps {
             <button
               onClick={() => onStatusChange(item.id, item.status === 'approved' ? 'pending' : 'approved')}
               disabled={readonly}
-              className={`w-5 h-5 border-2 rounded flex items-center justify-center ${
+              className={ `w-5 h-5 border-2 rounded flex items-center justify-center ${
   item.status === 'approved'
   ? 'bg-green-500 border-green-500 text-white'
-  : 'border-gray-300 hover:border-gray-400',
-}`}
+  : 'border-gray-300 hover:border-gray-400' }
+`}
             >
               {item.status === 'approved' && <CheckSquare className="w-3 h-3" />}
             </button>
@@ -941,7 +918,7 @@ interface VFXChecklistItemCardProps {
                             st.id === subtask.id ? { ...st, completed: !st.completed } : st
                           );
                           onItemUpdate(item.id, { subtasks: updatedSubtasks });
-                        }}
+
                         disabled={readonly}
                         className="w-3 h-3"
                       />

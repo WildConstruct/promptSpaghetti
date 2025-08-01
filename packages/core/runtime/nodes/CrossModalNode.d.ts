@@ -8,16 +8,15 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } fr
 import { TypedInputs } from '../io-system';
 
 }
-export interface CrossModalConfig {
-    provider: 'openai' | 'anthropic' | 'google' | 'custom';
+}
+export interface CrossModalConfig { provider: 'openai' | 'anthropic' | 'google' | 'custom';
     apiKey: string;
     baseURL?: string;
     model?: string;
-    defaultParameters?: Record<string, any>;
-
+    defaultParameters?: Record<string, any> }
 }
-export interface MultimodalInput {
-    type: 'text' | 'image' | 'audio' | 'video';
+}
+export interface MultimodalInput { type: 'text' | 'image' | 'audio' | 'video';
     content: string | ArrayBuffer | File | Blob;
     metadata?: {
         role?: 'user' | 'assistant' | 'system';
@@ -25,54 +24,42 @@ export interface MultimodalInput {
         duration?: number;
         resolution?: {
             width: number;
-            height: number;
+            height: number }
 }
         };
     };
 
 }
-export interface CrossModalAnalysis {
-    content_understanding: {
+}
+export interface CrossModalAnalysis { content_understanding: {
         overall_summary: string;
         key_themes: string[];
         sentiment: {
             score: number;
-            label: string;
+            label: string }
 }
         };
         complexity_score: number;
     };
-    modality_insights: Array<{
-        modality: string;
+    modality_insights: Array<{ modality: string;
         confidence: number;
         key_elements: string[];
-        dominant_features: string[];
-    }>;
-    cross_modal_connections: Array<{
-        connection_type: 'semantic' | 'temporal' | 'causal' | 'contextual';
+        dominant_features: string[] }>;
+    cross_modal_connections: Array<{ connection_type: 'semantic' | 'temporal' | 'causal' | 'contextual';
         modalities: string[];
         strength: number;
-        description: string;
-    }>;
-    extracted_information: {
-        entities: Array<{
+        description: string }>;
+    extracted_information: { entities: Array<{
             name: string;
             type: string;
-            confidence: number;
-        }>;
-        topics: Array<{
-            topic: string;
-            relevance: number;
-        }>;
-        emotions: Array<{
-            emotion: string;
+            confidence: number }>;
+        topics: Array<{ topic: string;
+            relevance: number }>;
+        emotions: Array<{ emotion: string;
             intensity: number;
-            source: string;
-        }>;
-        actions: Array<{
-            action: string;
-            confidence: number;
-        }>;
+            source: string }>;
+        actions: Array<{ action: string;
+            confidence: number }>;
     };
 
 export declare class MultimodalUnderstandingNode extends AdvancedRuntimeNode {

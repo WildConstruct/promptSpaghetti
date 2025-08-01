@@ -8,8 +8,8 @@
 import React from 'react';
 
 }
-export interface VFXScene {
-    id: string;
+}
+export interface VFXScene { id: string;
     name: string;
     historicalPeriod: string;
     region: string;
@@ -18,11 +18,10 @@ export interface VFXScene {
     characters: VFXCharacter[];
     assets: VFXAsset[];
     composition: SceneComposition;
-    accuracy: HistoricalAccuracyMetrics;
-
+    accuracy: HistoricalAccuracyMetrics }
 }
-export interface VFXCharacter {
-    id: string;
+}
+export interface VFXCharacter { id: string;
     name: string;
     type: 'crowd' | 'hero' | 'background';
     period: string;
@@ -32,34 +31,32 @@ export interface VFXCharacter {
     position: {
         x: number;
         y: number;
-        z: number;
+        z: number }
 }
     };
 
 }
-export interface VFXAsset {
-    id: string;
+}
+export interface VFXAsset { id: string;
     name: string;
     type: 'building' | 'prop' | 'terrain' | 'vegetation' | 'texture';
     period: string;
     region: string;
     accuracy: number;
     materials: MaterialProperty[];
-    lod: number;
-
+    lod: number }
 }
-export interface MaterialProperty {
-    name: string;
+}
+export interface MaterialProperty { name: string;
     type: 'diffuse' | 'roughness' | 'metallic' | 'normal' | 'displacement';
     value: number;
-    historicallyAccurate: boolean;
-
+    historicallyAccurate: boolean }
 }
-export interface SceneComposition {
-    cameraPosition: {
+}
+export interface SceneComposition { cameraPosition: {
         x: number;
         y: number;
-        z: number;
+        z: number }
 }
     };
     focalLength: number;
@@ -67,32 +64,30 @@ export interface SceneComposition {
     layers: SceneLayer[];
 
 }
-export interface SceneLayer {
-    id: string;
+}
+export interface SceneLayer { id: string;
     name: string;
     type: 'foreground' | 'midground' | 'background';
     opacity: number;
-    elements: string[];
-
+    elements: string[] }
 }
-export interface HistoricalAccuracyMetrics {
-    overall: number;
+}
+export interface HistoricalAccuracyMetrics { overall: number;
     architecture: number;
     clothing: number;
     technology: number;
     culture: number;
     timeline: number;
     expertValidated: boolean;
-    violations: AccuracyViolation[];
-
+    violations: AccuracyViolation[] }
 }
-export interface AccuracyViolation {
-    type: 'anachronism' | 'cultural' | 'architectural' | 'technological';
+}
+export interface AccuracyViolation { type: 'anachronism' | 'cultural' | 'architectural' | 'technological';
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     element: string;
-    suggestion: string;
-
+    suggestion: string }
+}
 }
 export interface VFXPipelineVisualizerProps {
     scene?: VFXScene;
@@ -105,4 +100,5 @@ export interface VFXPipelineVisualizerProps {
 export declare const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps>;
 export default VFXPipelineVisualizer;
 //# sourceMappingURL=VFXPipelineVisualizer.d.ts.map
+}
 }

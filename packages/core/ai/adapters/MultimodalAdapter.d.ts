@@ -7,17 +7,16 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface MultimodalConfig {
-    provider: 'openai' | 'anthropic' | 'google' | 'custom';
+}
+export interface MultimodalConfig { provider: 'openai' | 'anthropic' | 'google' | 'custom';
     apiKey: string;
     baseURL?: string;
     model?: string;
     timeout?: number;
-    maxRetries?: number;
-
+    maxRetries?: number }
 }
-export interface MultimodalInput {
-    type: 'text' | 'image' | 'audio' | 'video';
+}
+export interface MultimodalInput { type: 'text' | 'image' | 'audio' | 'video';
     content: string | ArrayBuffer | File | Blob;
     metadata?: {
         role?: 'user' | 'assistant' | 'system';
@@ -25,15 +24,15 @@ export interface MultimodalInput {
         duration?: number;
         resolution?: {
             width: number;
-            height: number;
+            height: number }
 }
         };
         description?: string;
     };
 
 }
-export interface MultimodalRequestOptions {
-    inputs: MultimodalInput[];
+}
+export interface MultimodalRequestOptions { inputs: MultimodalInput[];
     task?: 'understand' | 'describe' | 'analyze' | 'transform' | 'generate' | 'compare' | 'summarize';
     max_tokens?: number;
     temperature?: number;
@@ -49,11 +48,10 @@ export interface MultimodalRequestOptions {
     detect_emotions?: boolean;
     identify_objects?: boolean;
     transcribe_speech?: boolean;
-    analyze_sentiment?: boolean;
-
+    analyze_sentiment?: boolean }
 }
-export interface MultimodalAnalysis {
-    content_type: string;
+}
+export interface MultimodalAnalysis { content_type: string;
     confidence: number;
     detected_elements: Array<{
         type: 'text' | 'object' | 'person' | 'scene' | 'emotion' | 'concept';
@@ -63,25 +61,21 @@ export interface MultimodalAnalysis {
             x: number;
             y: number;
             width: number;
-            height: number;
+            height: number }
 }
         };
-        timestamp?: {
-            start: number;
-            end: number;
-        };
+        timestamp?: { start: number;
+            end: number };
     }>;
-    relationships: Array<{
-        source: string;
+    relationships: Array<{ source: string;
         target: string;
         relationship: string;
-        confidence: number;
-    }>;
+        confidence: number }>;
     metadata: Record<string, unknown>;
 
 }
-export interface MultimodalUnderstandingResult {
-    understanding: {
+}
+export interface MultimodalUnderstandingResult { understanding: {
         summary: string;
         key_insights: string[];
         content_analysis: MultimodalAnalysis[];
@@ -89,50 +83,37 @@ export interface MultimodalUnderstandingResult {
             modalities: string[];
             connection_type: 'temporal' | 'semantic' | 'causal' | 'spatial';
             description: string;
-            confidence: number;
+            confidence: number }
 }
         }>;
     };
-    extracted_data: {
-        text_content?: string[];
+    extracted_data: { text_content?: string[];
         transcriptions?: Array<{
             text: string;
             language: string;
-            confidence: number;
-        }>;
+            confidence: number }>;
         visual_descriptions?: string[];
         audio_descriptions?: string[];
-        entities?: Array<{
-            name: string;
+        entities?: Array<{ name: string;
             type: string;
-            confidence: number;
-        }>;
-        emotions?: Array<{
-            emotion: string;
+            confidence: number }>;
+        emotions?: Array<{ emotion: string;
             intensity: number;
-            source: string;
-        }>;
-        topics?: Array<{
-            topic: string;
-            relevance: number;
-        }>;
+            source: string }>;
+        topics?: Array<{ topic: string;
+            relevance: number }>;
     };
-    metadata: {
-        model: string;
+    metadata: { model: string;
         processing_time: number;
         input_count: number;
         modalities_processed: string[];
-        total_tokens: number;
-    };
-    usage: {
-        input_tokens: number;
+        total_tokens: number };
+    usage: { input_tokens: number;
         output_tokens: number;
         total_cost: number;
-        processing_cost: number;
-    };
+        processing_cost: number };
 
-export declare class MultimodalAdapter extends BaseAIModel {
-    private config;
+export declare class MultimodalAdapter extends BaseAIModel { private config;
     private supportedModalities;
     constructor(id: string, config: MultimodalConfig);
     initialize(): Promise<void>;
@@ -140,32 +121,32 @@ export declare class MultimodalAdapter extends BaseAIModel {
     cleanup(): Promise<void>;
     estimate(input: MultimodalInput[], options?: MultimodalRequestOptions): Promise<CostEstimate>;
     understandContent();
-      inputs: MultimodalInput[],
+      inputs: MultimodalInput[]
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
     compareContent();
-      inputs: MultimodalInput[],
-      comparisonAspects?: string[],
+      inputs: MultimodalInput[]
+      comparisonAspects?: string[]
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
     describeMultimodal();
-      inputs: MultimodalInput[],
-      detailLevel?: 'brief' | 'detailed' | 'comprehensive',
+      inputs: MultimodalInput[]
+      detailLevel?: 'brief' | 'detailed' | 'comprehensive'
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
     analyzeContent();
-      inputs: MultimodalInput[],
-      analysisTypes?: string[],
+      inputs: MultimodalInput[]
+      analysisTypes?: string[]
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
     summarizeMultimodal();
-      inputs: MultimodalInput[],
-      summaryLength?: 'short' | 'medium' | 'long',
+      inputs: MultimodalInput[]
+      summaryLength?: 'short' | 'medium' | 'long'
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
     extractInformation();
-      inputs: MultimodalInput[],
-      extractionTargets?: string[],
+      inputs: MultimodalInput[]
+      extractionTargets?: string[] }
       options?: Partial<MultimodalRequestOptions>
     ): Promise<Record<string, unknown>>;
     static getSupportedModalities(): string[];

@@ -113,8 +113,8 @@ _jsxs("div", { className: `flex items-center space-x-2 text-sm text-gray-600 ${c
 ;
 // Utility function to generate consistent colors for users
 function getUserColor(userId) {
-    const colors = [];
-    '#ef4444', // red-500
+    const colors = [
+        '#ef4444', // red-500
         '#3b82f6', // blue-500
         '#10b981', // emerald-500
         '#f59e0b', // amber-500
@@ -123,8 +123,8 @@ function getUserColor(userId) {
         '#6366f1', // indigo-500
         '#14b8a6', // teal-500
         '#f97316', // orange-500
-        '#84cc16'; // lime-500
-    ;
+        '#84cc16' // lime-500
+    ];
     let hash = 0;
     for (let i = 0; i < userId.length; i++) {
         hash = userId.charCodeAt(i) + ((hash << 5) - hash);

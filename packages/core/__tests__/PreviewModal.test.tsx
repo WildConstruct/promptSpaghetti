@@ -3,12 +3,11 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { PreviewModal } from '../PreviewModal';
-describe('PreviewModal', () => {
-  const baseProps = {
+describe('PreviewModal', () => { const baseProps = {
     open: true,
     loading: false,
-    error: null,
-    results: [,
+    error: null }
+    results: [
       { output: 'Result 1', seed: 1 },
       { output: 'Result 2', seed: 2 },
       { output: 'Result 3', seed: 3 },

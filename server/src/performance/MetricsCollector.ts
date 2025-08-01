@@ -7,8 +7,9 @@ import { join } from 'path';
 /**
  * System resource metrics
  */
-}
-}
+
+
+
 export interface SystemMetrics {
   timestamp: number;
   cpuUsage: number;
@@ -16,8 +17,9 @@ export interface SystemMetrics {
     used: number;
     total: number;
     percentage: number;
-}
-}
+
+
+
   };
   networkStats: {
     bytesReceived: number;
@@ -37,13 +39,14 @@ export interface SystemMetrics {
     external: number;
     arrayBuffers: number;
   };
-}
+
 
 /**
  * WebSocket performance metrics
  */
-}
-}
+
+
+
 export interface WebSocketMetrics {
   timestamp: number;
   connectionCount: number;
@@ -54,15 +57,17 @@ export interface WebSocketMetrics {
   bytesTransferred: number;
   activeDocuments: number;
   averageUsersPerDocument: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Collaboration-specific metrics
  */
-}
-}
+
+
+
 export interface CollaborationMetrics {
   timestamp: number;
   conflictRate: number;
@@ -74,15 +79,17 @@ export interface CollaborationMetrics {
   documentSizeBytes: number;
   operationQueueLength: number;
   conflictQueueLength: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Performance thresholds for alerting
  */
-}
-}
+
+
+
 export interface PerformanceThresholds {
   maxCpuUsage: number;
   maxMemoryUsage: number;
@@ -91,15 +98,17 @@ export interface PerformanceThresholds {
   maxSynchronizationLatency: number;
   minSuccessRate: number;
   maxErrorRate: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Performance alert
  */
-}
-}
+
+
+
 export interface PerformanceAlert {
   id: string;
   timestamp: number;
@@ -109,15 +118,17 @@ export interface PerformanceAlert {
   threshold: number;
   description: string;
   resolved: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Metrics aggregation window
  */
-}
-}
+
+
+
 export interface MetricsWindow {
   windowStart: number;
   windowEnd: number;
@@ -125,9 +136,10 @@ export interface MetricsWindow {
   systemMetrics: SystemMetrics[];
   webSocketMetrics: WebSocketMetrics[];
   collaborationMetrics: CollaborationMetrics[];
-}
-}
-}
+
+
+
+
 
 /**
  * Comprehensive metrics collector for performance monitoring
@@ -160,8 +172,8 @@ export class MetricsCollector extends EventEmitter {
     
     if (thresholds) {
       this.thresholds = { ...this.thresholds, ...thresholds };
-    }
-  }
+
+
 
   /**
    * Start collecting metrics
@@ -169,7 +181,7 @@ export class MetricsCollector extends EventEmitter {
   startCollection(): void {
     if (this.isCollecting) {
       return;
-    }
+
 
     this.isCollecting = true;
     console.log('Starting performance metrics collection');
@@ -186,7 +198,7 @@ export class MetricsCollector extends EventEmitter {
     setInterval(() => {
       this.cleanupOldMetrics();
     }, 60000); // cleanup every minute
-  }
+
 
   /**
    * Stop collecting metrics
@@ -194,7 +206,7 @@ export class MetricsCollector extends EventEmitter {
   stopCollection(): void {
     if (!this.isCollecting) {
       return;
-    }
+
 
     this.isCollecting = false;
     console.log('Stopping performance metrics collection');
@@ -202,8 +214,8 @@ export class MetricsCollector extends EventEmitter {
     if (this.collectionInterval) {
       clearInterval(this.collectionInterval);
       this.collectionInterval = null;
-    }
-  }
+
+
 
   /**
    * Record WebSocket metrics
@@ -224,7 +236,7 @@ export class MetricsCollector extends EventEmitter {
     this.webSocketMetrics.push(fullMetrics);
     this.checkWebSocketThresholds(fullMetrics);
     this.emit('websocket_metrics', fullMetrics);
-  }
+
 
   /**
    * Record collaboration metrics
@@ -246,7 +258,7 @@ export class MetricsCollector extends EventEmitter {
     this.collaborationMetrics.push(fullMetrics);
     this.checkCollaborationThresholds(fullMetrics);
     this.emit('collaboration_metrics', fullMetrics);
-  }
+
 
   /**
    * Get current metrics snapshot
@@ -255,13 +267,13 @@ export class MetricsCollector extends EventEmitter {
     system: SystemMetrics | null;
     webSocket: WebSocketMetrics | null;
     collaboration: CollaborationMetrics | null;
-    } {
+ {
     return {
       system: this.systemMetrics[this.systemMetrics.length - 1] || null,
       webSocket: this.webSocketMetrics[this.webSocketMetrics.length - 1] || null,
       collaboration: this.collaborationMetrics[this.collaborationMetrics.length - 1] || null
     };
-  }
+
 
   /**
    * Get metrics for a time window
@@ -275,7 +287,7 @@ export class MetricsCollector extends EventEmitter {
       webSocketMetrics: this.webSocketMetrics.filter(m => m.timestamp >= startTime && m.timestamp <= endTime),
       collaborationMetrics: this.collaborationMetrics.filter(m => m.timestamp >= startTime && m.timestamp <= endTime)
     };
-  }
+
 
   /**
    * Get aggregated metrics for a time period
@@ -288,13 +300,13 @@ export class MetricsCollector extends EventEmitter {
         start: startTime,
         end: endTime,
         duration: endTime - startTime
-  }
+
       system: this.aggregateSystemMetrics(window.systemMetrics),
       webSocket: this.aggregateWebSocketMetrics(window.webSocketMetrics),
       collaboration: this.aggregateCollaborationMetrics(window.collaborationMetrics),
       alerts: this.alerts.filter(a => a.timestamp >= startTime && a.timestamp <= endTime)
     };
-  }
+
 
   /**
    * Get performance summary
@@ -315,14 +327,14 @@ export class MetricsCollector extends EventEmitter {
       metrics: aggregated,
       recommendations: this.generateRecommendations(aggregated, alerts)
     };
-  }
+
 
   /**
    * Get active alerts
    */
   getActiveAlerts(): PerformanceAlert[] {
     return this.alerts.filter(a => !a.resolved);
-  }
+
 
   /**
    * Resolve an alert
@@ -333,9 +345,9 @@ export class MetricsCollector extends EventEmitter {
       alert.resolved = true;
       this.emit('alert_resolved', alert);
       return true;
-    }
+
     return false;
-  }
+
 
   /**
    * Export metrics to file
@@ -352,11 +364,11 @@ export class MetricsCollector extends EventEmitter {
 
     if (format === 'json') {
       await fs.writeFile(filePath, JSON.stringify(data, null, 2));
-    } else {
+ else {
       const csv = this.convertToCSV(data);
       await fs.writeFile(filePath, csv);
-    }
-  }
+
+
 
   /**
    * Collect all current metrics
@@ -368,10 +380,10 @@ export class MetricsCollector extends EventEmitter {
       this.systemMetrics.push(systemMetrics);
       this.checkSystemThresholds(systemMetrics);
       this.emit('system_metrics', systemMetrics);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to collect system metrics:', error);
-    }
-  }
+
+
 
   /**
    * Collect system metrics
@@ -389,12 +401,12 @@ export class MetricsCollector extends EventEmitter {
         used: memInfo.heapUsed,
         total: memInfo.heapTotal,
         percentage: (memInfo.heapUsed / memInfo.heapTotal) * 100
-  }
+
       networkStats,
       diskUsage: {
         reads: 0, // Would need platform-specific implementation
         writes: 0
-  }
+
       processMetrics: {
         pid: process.pid,
         uptime: process.uptime(),
@@ -402,9 +414,9 @@ export class MetricsCollector extends EventEmitter {
         heapTotal: memInfo.heapTotal,
         external: memInfo.external,
         arrayBuffers: memInfo.arrayBuffers
-      }
+
     };
-  }
+
 
   /**
    * Get CPU usage percentage
@@ -426,7 +438,7 @@ export class MetricsCollector extends EventEmitter {
         resolve(Math.min(cpuPercent, 100));
       }, 100);
     });
-  }
+
 
   /**
    * Get network statistics
@@ -446,15 +458,15 @@ export class MetricsCollector extends EventEmitter {
         packetsReceived: 0,
         packetsSent: 0
       };
-    } catch (error) {
+ catch (error) {
       return {
         bytesReceived: 0,
         bytesSent: 0,
         packetsReceived: 0,
         packetsSent: 0
       };
-    }
-  }
+
+
 
   /**
    * Initialize network baseline for delta calculations
@@ -462,7 +474,7 @@ export class MetricsCollector extends EventEmitter {
   private async initializeNetworkBaseline(): Promise<void> {
 
     this.networkBaseline = await this.getNetworkStats();
-  }
+
 
   /**
    * Check system metric thresholds
@@ -471,13 +483,13 @@ export class MetricsCollector extends EventEmitter {
     if (metrics.cpuUsage > this.thresholds.maxCpuUsage) {
       this.createAlert('cpu_usage', metrics.cpuUsage, this.thresholds.maxCpuUsage, 
         `CPU usage is ${metrics.cpuUsage.toFixed(1)}%`, 'warning');
-    }
+
 
     if (metrics.memoryUsage.percentage > this.thresholds.maxMemoryUsage) {
       this.createAlert('memory_usage', metrics.memoryUsage.percentage, this.thresholds.maxMemoryUsage,
         `Memory usage is ${metrics.memoryUsage.percentage.toFixed(1)}%`, 'critical');
-    }
-  }
+
+
 
   /**
    * Check WebSocket metric thresholds
@@ -486,13 +498,13 @@ export class MetricsCollector extends EventEmitter {
     if (metrics.messageLatency > this.thresholds.maxMessageLatency) {
       this.createAlert('message_latency', metrics.messageLatency, this.thresholds.maxMessageLatency,
         `Message latency is ${metrics.messageLatency}ms`, 'warning');
-    }
+
 
     if (metrics.errorRate > this.thresholds.maxErrorRate) {
       this.createAlert('error_rate', metrics.errorRate, this.thresholds.maxErrorRate,
         `Error rate is ${metrics.errorRate.toFixed(1)}%`, 'critical');
-    }
-  }
+
+
 
   /**
    * Check collaboration metric thresholds
@@ -502,14 +514,14 @@ export class MetricsCollector extends EventEmitter {
       this.createAlert('conflict_resolution_time', metrics.conflictResolutionTime, 
         this.thresholds.maxConflictResolutionTime,
         `Conflict resolution time is ${metrics.conflictResolutionTime}ms`, 'warning');
-    }
+
 
     if (metrics.synchronizationLatency > this.thresholds.maxSynchronizationLatency) {
       this.createAlert('sync_latency', metrics.synchronizationLatency, 
         this.thresholds.maxSynchronizationLatency,
         `Synchronization latency is ${metrics.synchronizationLatency}ms`, 'warning');
-    }
-  }
+
+
 
   /**
    * Create a performance alert
@@ -530,7 +542,7 @@ export class MetricsCollector extends EventEmitter {
 
     this.alerts.push(alert);
     this.emit('alert_created', alert);
-  }
+
 
   /**
    * Aggregate system metrics
@@ -546,7 +558,7 @@ export class MetricsCollector extends EventEmitter {
       memory: this.calculateStatistics(memoryValues),
       sampleCount: metrics.length
     };
-  }
+
 
   /**
    * Aggregate WebSocket metrics
@@ -561,7 +573,7 @@ export class MetricsCollector extends EventEmitter {
       errorRate: this.calculateStatistics(metrics.map(m => m.errorRate)),
       sampleCount: metrics.length
     };
-  }
+
 
   /**
    * Aggregate collaboration metrics
@@ -576,7 +588,7 @@ export class MetricsCollector extends EventEmitter {
       operationRate: this.calculateStatistics(metrics.map(m => m.operationRate)),
       sampleCount: metrics.length
     };
-  }
+
 
   /**
    * Calculate statistical measures
@@ -584,7 +596,7 @@ export class MetricsCollector extends EventEmitter {
   private calculateStatistics(values: number[]): any {
     if (values.length === 0) {
       return { min: 0, max: 0, mean: 0, median: 0, p95: 0, p99: 0 };
-    }
+
 
     const sorted = values.sort((a, b) => a - b);
     const sum = values.reduce((a, b) => a + b, 0);
@@ -597,7 +609,7 @@ export class MetricsCollector extends EventEmitter {
       p95: sorted[Math.floor(sorted.length * 0.95)] || sorted[sorted.length - 1],
       p99: sorted[Math.floor(sorted.length * 0.99)] || sorted[sorted.length - 1]
     };
-  }
+
 
   /**
    * Calculate overall system health score
@@ -614,23 +626,23 @@ export class MetricsCollector extends EventEmitter {
     if (aggregated.system) {
       if (aggregated.system.cpu.mean > this.thresholds.maxCpuUsage) {
         healthScore -= 15;
-      }
+
       if (aggregated.system.memory.mean > this.thresholds.maxMemoryUsage) {
         healthScore -= 20;
-      }
-    }
+
+
 
     if (aggregated.webSocket) {
       if (aggregated.webSocket.errorRate.mean > this.thresholds.maxErrorRate) {
         healthScore -= 25;
-      }
+
       if (aggregated.webSocket.messageLatency.mean > this.thresholds.maxMessageLatency) {
         healthScore -= 10;
-      }
-    }
+
+
 
     return Math.max(0, Math.min(100, healthScore));
-  }
+
 
   /**
    * Generate performance recommendations
@@ -641,33 +653,33 @@ export class MetricsCollector extends EventEmitter {
     // CPU recommendations
     if (aggregated.system?.cpu.mean > this.thresholds.maxCpuUsage) {
       recommendations.push('Consider scaling horizontally or optimizing CPU-intensive operations');
-    }
+
 
     // Memory recommendations
     if (aggregated.system?.memory.mean > this.thresholds.maxMemoryUsage) {
       recommendations.push('Implement garbage collection optimizations or increase available memory');
-    }
+
 
     // WebSocket recommendations
     if (aggregated.webSocket?.messageLatency.mean > this.thresholds.maxMessageLatency) {
       recommendations.push('Optimize message processing or implement message batching');
-    }
+
 
     if (aggregated.webSocket?.errorRate.mean > this.thresholds.maxErrorRate) {
       recommendations.push('Investigate and fix sources of WebSocket errors');
-    }
+
 
     // Collaboration recommendations
     if (aggregated.collaboration?.conflictResolutionTime.mean > this.thresholds.maxConflictResolutionTime) {
       recommendations.push('Optimize conflict resolution algorithms or implement better conflict prevention');
-    }
+
 
     if (recommendations.length === 0) {
       recommendations.push('System performance is within acceptable thresholds');
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Clean up old metrics beyond retention period
@@ -679,7 +691,7 @@ export class MetricsCollector extends EventEmitter {
     this.webSocketMetrics = this.webSocketMetrics.filter(m => m.timestamp > cutoffTime);
     this.collaborationMetrics = this.collaborationMetrics.filter(m => m.timestamp > cutoffTime);
     this.alerts = this.alerts.filter(a => a.timestamp > cutoffTime);
-  }
+
 
   /**
    * Convert metrics to CSV format
@@ -695,5 +707,4 @@ export class MetricsCollector extends EventEmitter {
     });
 
     return lines.join('\n');
-  }
-}
+

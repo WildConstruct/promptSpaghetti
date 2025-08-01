@@ -30,7 +30,7 @@ export function setupMSW() {
   afterAll(() => {
     server.close();
   });
-}
+
 
 // Utility functions for test-specific mocking
 export       })
@@ -145,7 +145,7 @@ export       })
       clearTimeout(timer);
       resolve(true);
     });
-  }
+
 };
 
 // Request logging middleware for debugging
@@ -157,7 +157,7 @@ export function enableRequestLogging() {
       return req.passthrough();
     })
   );
-}
+
 
 // Common test scenarios
 export       })
@@ -212,7 +212,7 @@ export       })
         })
       );
     });
-  }
+
 };
 
 // Export configured server and setup function
@@ -232,4 +232,3 @@ if (process.env.NODE_ENV === 'test') {
   afterAll(() => {
     server.close();
   });
-}

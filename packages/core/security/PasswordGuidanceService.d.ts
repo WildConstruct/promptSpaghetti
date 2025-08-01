@@ -12,8 +12,7 @@
  * - Risk level assessment
  */
 import { EventEmitter } from 'events';
-export declare enum RiskLevel {
-    LOW = "low",
+export declare enum RiskLevel { LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
@@ -41,23 +40,21 @@ export declare enum GuidanceCategory {
     PASSWORD_MANAGEMENT = "password_management",
     MFA_SETUP = "mfa_setup",
     MONITORING = "monitoring",
-    PREVENTION = "prevention",
+    PREVENTION = "prevention" }
     RECOVERY = "recovery"
 
 }
-export interface CompromiseIndicator {
-    type: CompromiseType;
+}
+export interface CompromiseIndicator { type: CompromiseType;
     description: string;
     confidence: number;
     source: string;
     detectedAt: Date;
     evidence: string[];
-    affectedAccounts: string[];
-
-
+    affectedAccounts: string[] }
 }
-export interface SecurityRecommendation {
-    id: string;
+}
+export interface SecurityRecommendation { id: string;
     title: string;
     description: string;
     category: GuidanceCategory;
@@ -67,24 +64,20 @@ export interface SecurityRecommendation {
     steps: ActionStep[];
     benefits: string[];
     risks: string[];
-    dependencies?: string[];
-
-
+    dependencies?: string[] }
 }
-export interface ActionStep {
-    stepNumber: number;
+}
+export interface ActionStep { stepNumber: number;
     title: string;
     description: string;
     action: string;
     verification: string;
     helpResources: string[];
     timeEstimate: string;
-    required: boolean;
-
-
+    required: boolean }
 }
-export interface GuidanceSession {
-    id: string;
+}
+export interface GuidanceSession { id: string;
     userId: string;
     riskLevel: RiskLevel;
     compromiseIndicators: CompromiseIndicator[];
@@ -93,24 +86,20 @@ export interface GuidanceSession {
     createdAt: Date;
     lastUpdated: Date;
     expiresAt: Date;
-    status: 'active' | 'completed' | 'expired';
-
-
+    status: 'active' | 'completed' | 'expired' }
 }
-export interface PasswordSecurityAssessment {
-    strength: 'very_weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very_strong';
+}
+export interface PasswordSecurityAssessment { strength: 'very_weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very_strong';
     score: number;
     weaknesses: string[];
     recommendations: string[];
     isCompromised: boolean;
     breachDatabases: string[];
     reuseDetected: boolean;
-    ageInDays: number;
-
-
+    ageInDays: number }
 }
-export interface UserSecurityProfile {
-    userId: string;
+}
+export interface UserSecurityProfile { userId: string;
     riskScore: number;
     mfaEnabled: boolean;
     passwordLastChanged: Date;
@@ -172,7 +161,7 @@ export declare class PasswordGuidanceService extends EventEmitter {
         total: number;
         completed: number;
         percentage: number;
-        remainingCritical: number;
+        remainingCritical: number }
 }
     } | null;
     /**
@@ -194,12 +183,10 @@ export declare class PasswordGuidanceService extends EventEmitter {
     /**
      * Get user security dashboard
      */
-    getUserSecurityDashboard(userId: string): {
-        profile: UserSecurityProfile | null;
+    getUserSecurityDashboard(userId: string): { profile: UserSecurityProfile | null;
         activeSessions: GuidanceSession[];
         recommendedActions: SecurityRecommendation[];
-        securityTips: string[];
-    };
+        securityTips: string[] };
     /**
      * Get personalized security recommendations
      */

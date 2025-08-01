@@ -25,7 +25,7 @@ import {
   validateAttributionFilter,
   validateAttributionStatsRequest,
   validateUpdatePrivacySettingsRequest
-} from '../../../packages/core/types/attribution';
+ from '../../../packages/core/types/attribution';
 
 export class AttributionService {
   private db: DatabaseClient;
@@ -34,7 +34,7 @@ export class AttributionService {
   constructor(db: DatabaseClient, logger: unknown) {
     this.db = db;
     this.logger = logger;
-  }
+
 
   /**
    * Record a change attribution
@@ -58,7 +58,7 @@ export class AttributionService {
     if (privacySettings && !privacySettings.showInAttribution) {
       // User has opted out of attribution
       return this.recordAnonymousAttribution(validatedRequest, context);
-    }
+
 
     const attribution = await this.db.query(`
       INSERT INTO change_attributions (
@@ -95,7 +95,7 @@ export class AttributionService {
     ]);
 
     return this.mapDatabaseRowToAttribution(attribution.rows[0]);
-  }
+
 
   /**
    * Get attribution statistics
@@ -116,7 +116,7 @@ export class AttributionService {
     
     if (cachedStats) {
       return cachedStats;
-    }
+
 
     // Build date range
     const dateRange = this.buildDateRange(validatedRequest.startDate, validatedRequest.endDate);
@@ -159,7 +159,7 @@ export class AttributionService {
     await this.setCachedStats(validatedRequest.projectId, cacheKey, 'contributor_stats', stats);
     
     return stats;
-  }
+
 
   /**
    * Get attribution timeline
@@ -222,7 +222,7 @@ export class AttributionService {
       })),
       summary
     };
-  }
+
 
   /**
    * Get contributor statistics
@@ -279,7 +279,7 @@ export class AttributionService {
           expertise,
           collaborations
         };
-  }
+
     );
 
     // Get summary statistics
@@ -289,7 +289,7 @@ export class AttributionService {
       contributors: contributorStats,
       summary
     };
-  }
+
 
   /**
    * Update privacy settings
@@ -343,7 +343,7 @@ export class AttributionService {
     ]);
 
     return this.mapDatabaseRowToPrivacySettings(result.rows[0]);
-  }
+
 
   /**
    * Get privacy settings
@@ -356,7 +356,7 @@ export class AttributionService {
     `, [projectId, userId]);
 
     return result.rows.length > 0 ? this.mapDatabaseRowToPrivacySettings(result.rows[0]) : null;
-  }
+
 
   /**
    * Start attribution session
@@ -388,7 +388,7 @@ export class AttributionService {
     ]);
 
     return this.mapDatabaseRowToSession(result.rows[0]);
-  }
+
 
   /**
    * End attribution session
@@ -404,7 +404,7 @@ export class AttributionService {
         duration_seconds = EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - start_time))
       WHERE session_key = $1
     `, [sessionId]);
-  }
+
 
   /**
    * List attributions with filtering
@@ -425,79 +425,79 @@ export class AttributionService {
       query += ` AND project_id = $${paramIndex}`;
       params.push(validatedFilter.projectId);
       paramIndex++;
-    }
+
 
     if (validatedFilter.resourceType) {
       query += ` AND resource_type = $${paramIndex}`;
       params.push(validatedFilter.resourceType);
       paramIndex++;
-    }
+
 
     if (validatedFilter.resourceId) {
       query += ` AND resource_id = $${paramIndex}`;
       params.push(validatedFilter.resourceId);
       paramIndex++;
-    }
+
 
     if (validatedFilter.changeType) {
       query += ` AND change_type = $${paramIndex}`;
       params.push(validatedFilter.changeType);
       paramIndex++;
-    }
+
 
     if (validatedFilter.authorId) {
       query += ` AND author_id = $${paramIndex}`;
       params.push(validatedFilter.authorId);
       paramIndex++;
-    }
+
 
     if (validatedFilter.authorType) {
       query += ` AND author_type = $${paramIndex}`;
       params.push(validatedFilter.authorType);
       paramIndex++;
-    }
+
 
     if (validatedFilter.sessionId) {
       query += ` AND session_id = $${paramIndex}`;
       params.push(validatedFilter.sessionId);
       paramIndex++;
-    }
+
 
     if (validatedFilter.batchId) {
       query += ` AND batch_id = $${paramIndex}`;
       params.push(validatedFilter.batchId);
       paramIndex++;
-    }
+
 
     if (validatedFilter.snapshotId) {
       query += ` AND snapshot_id = $${paramIndex}`;
       params.push(validatedFilter.snapshotId);
       paramIndex++;
-    }
+
 
     if (validatedFilter.dateFrom) {
       query += ` AND created_at >= $${paramIndex}`;
       params.push(validatedFilter.dateFrom);
       paramIndex++;
-    }
+
 
     if (validatedFilter.dateTo) {
       query += ` AND created_at <= $${paramIndex}`;
       params.push(validatedFilter.dateTo);
       paramIndex++;
-    }
+
 
     if (validatedFilter.isCollaborative !== undefined) {
       query += ` AND is_collaborative = $${paramIndex}`;
       params.push(validatedFilter.isCollaborative);
       paramIndex++;
-    }
+
 
     if (validatedFilter.minConfidenceScore !== undefined) {
       query += ` AND confidence_score >= $${paramIndex}`;
       params.push(validatedFilter.minConfidenceScore);
       paramIndex++;
-    }
+
 
     query += ` ORDER BY ${validatedFilter.sortBy} ${validatedFilter.sortOrder}`;
     query += ` LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
@@ -505,7 +505,7 @@ export class AttributionService {
 
     const result = await this.db.query(query, params);
     return result.rows.map(row => this.mapDatabaseRowToAttribution(row));
-  }
+
 
   /**
    * Clean up old attribution data
@@ -544,7 +544,7 @@ export class AttributionService {
           user_agent = NULL
         WHERE project_id = $1 AND author_id = $2 AND created_at < $3
       `, [projectId, settings.user_id, anonymizeDate]);
-    }
+
 
     // Clean up expired cache entries
     await this.db.query(`
@@ -558,7 +558,7 @@ export class AttributionService {
       DELETE FROM attribution_sessions
       WHERE project_id = $1 AND created_at < $2
     `, [projectId, sessionRetentionDate]);
-  }
+
 
   // Private helper methods
 
@@ -596,7 +596,7 @@ export class AttributionService {
     ]);
 
     return this.mapDatabaseRowToAttribution(result.rows[0]);
-  }
+
 
   private async getUserName(userId: string): Promise<string | null> {
 
@@ -604,7 +604,7 @@ export class AttributionService {
       SELECT name FROM users WHERE id = $1
     `, [userId]);
     return result.rows.length > 0 ? result.rows[0].name : null;
-  }
+
 
   private async getUserEmail(userId: string): Promise<string | null> {
 
@@ -612,21 +612,21 @@ export class AttributionService {
       SELECT email FROM users WHERE id = $1
     `, [userId]);
     return result.rows.length > 0 ? result.rows[0].email : null;
-  }
+
 
   private generateSessionKey(): string {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateCacheKey(type: string, request: unknown): string {
     return `${type}_${JSON.stringify(request)}`;
-  }
+
 
   private buildDateRange(startDate?: Date, endDate?: Date): { start: Date; end: Date } {
     const end = endDate || new Date();
     const start = startDate || new Date(end.getTime() - (30 * 24 * 60 * 60 * 1000)); // 30 days ago
     return { start, end };
-  }
+
 
   private parseBrowserInfo(userAgent?: string): unknown {
     // Simple user agent parsing - would use a proper library in production
@@ -634,7 +634,7 @@ export class AttributionService {
       userAgent: userAgent || 'Unknown'
       // Add more browser detection logic here
     };
-  }
+
 
   private parseDeviceInfo(userAgent?: string): unknown {
     // Simple device detection - would use a proper library in production
@@ -642,7 +642,7 @@ export class AttributionService {
       userAgent: userAgent || 'Unknown'
       // Add more device detection logic here
     };
-  }
+
 
   private aggregateActivityPeriods(periods: unknown[]): unknown[] {
     // Aggregate activity periods by day
@@ -656,7 +656,7 @@ export class AttributionService {
       period: new Date(date),
       changes
     }));
-  }
+
 
   // Database row mapping methods
   private mapDatabaseRowToAttribution(row: unknown): ChangeAttribution {
@@ -690,7 +690,7 @@ export class AttributionService {
       createdAt: row.created_at,
       effectiveAt: row.effective_at
     };
-  }
+
 
   private mapDatabaseRowToSession(row: unknown): AttributionSession {
     return {
@@ -712,7 +712,7 @@ export class AttributionService {
       trackingConsent: row.tracking_consent,
       createdAt: row.created_at
     };
-  }
+
 
   private mapDatabaseRowToPrivacySettings(row: unknown): AttributionPrivacySettings {
     return {
@@ -732,7 +732,7 @@ export class AttributionService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
+
 
   // Placeholder methods for complex queries - would be implemented with proper SQL
   private async getOverviewStats(____projectId: string, ____dateRange: { start: Date; end: Date }): Promise<unknown> {
@@ -746,7 +746,7 @@ export class AttributionService {
       collaborativeChanges: 0,
       anonymousChanges: 0
     };
-  }
+
 
   private async getStatsByAuthor(
     ____projectId: string,
@@ -756,7 +756,7 @@ export class AttributionService {
 
     // Implementation would query author statistics
     return [];
-  }
+
 
   private async getStatsByResourceType(
     ____projectId: string,
@@ -764,7 +764,7 @@ export class AttributionService {
   ): Promise<Record<string, number>> {
     // Implementation would query resource type statistics
     return {};
-  }
+
 
   private async getStatsByChangeType(
     ____projectId: string,
@@ -772,7 +772,7 @@ export class AttributionService {
   ): Promise<Record<string, number>> {
     // Implementation would query change type statistics
     return {};
-  }
+
 
   private async getTimelineData(
     ____projectId: string,
@@ -782,7 +782,7 @@ export class AttributionService {
 
     // Implementation would query timeline data
     return [];
-  }
+
 
   private async getHeatmapData(
     ____projectId: string,
@@ -790,7 +790,7 @@ export class AttributionService {
   ): Promise<Record<string, Record<string, number>>> {
     // Implementation would query heatmap data
     return {};
-  }
+
 
   private async getCollaborationMetrics(
     ____projectId: string,
@@ -803,7 +803,7 @@ export class AttributionService {
       averageCollaboratorsPerSession: 0,
       mostActiveCollaborations: []
     };
-  }
+
 
   private async getTimelineSummary(____projectId: string, ____filter: AttributionFilter): Promise<unknown> {
 
@@ -814,19 +814,19 @@ export class AttributionService {
       mostActiveAuthor: null,
       mostActiveResource: null
     };
-  }
+
 
   private async getContributorExpertise(____projectId: string, ____authorId: string): Promise<any[]> {
 
     // Implementation would query contributor expertise
     return [];
-  }
+
 
   private async getContributorCollaborations(____projectId: string, ____authorId: string): Promise<any[]> {
 
     // Implementation would query contributor collaborations
     return [];
-  }
+
 
   private async getContributorSummary(____projectId: string, dateRange?: { start: Date; end: Date }): Promise<unknown> {
 
@@ -839,7 +839,7 @@ export class AttributionService {
       averageContributionsPerUser: 0,
       mostActiveContributor: null
     };
-  }
+
 
   private async getCachedStats(projectId: string, cacheKey: string, cacheType: string): Promise<unknown> {
 
@@ -849,7 +849,7 @@ export class AttributionService {
     `, [projectId, cacheKey, cacheType]);
 
     return result.rows.length > 0 ? result.rows[0].cache_data : null;
-  }
+
 
   private async setCachedStats(
     projectId: string,
@@ -869,5 +869,4 @@ export class AttributionService {
         expires_at = EXCLUDED.expires_at,
         created_at = CURRENT_TIMESTAMP
     `, [projectId, cacheKey, cacheType, JSON.stringify(data), expiresAt]);
-  }
-}
+

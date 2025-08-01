@@ -4,19 +4,16 @@ import { CorrectionsManagerPanel } from './CorrectionsManagerPanel';
 import { MobileCorrectionsPanel } from './components/MobileCorrectionsPanel';
 import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
 
-interface ResponsiveCorrectionsPanelProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+interface ResponsiveCorrectionsPanelProps { isOpen: boolean;
+  onClose: () => void }
 
-export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps> = ({ isOpen, onClose }) => {
-  const isEnabled = useCorrectionsEnabled();
+
+export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps> = ({ isOpen, onClose }) => { const isEnabled = useCorrectionsEnabled();
   const [isMobile, setIsMobile] = useState(false);
   const [showStats, setShowStats] = useState(false);
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+      setIsMobile(window.innerWidth < 768) };
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -36,23 +33,5 @@ export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProp
 };
 
 // Hook for managing corrections panel state
-export const useCorrectionsPanel = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showStats, setShowStats] = useState(false);
-  const openPanel = () => setIsOpen(true);
-  const closePanel = () => setIsOpen(false);
-  const togglePanel = () => setIsOpen(!isOpen);
-  const openStats = () => setShowStats(true);
-  const closeStats = () => setShowStats(false);
-  const toggleStats = () => setShowStats(!showStats);
-  return {
-    isOpen,
-    showStats,
-    openPanel,
-    closePanel,
-    togglePanel,
-    openStats,
-    closeStats,
-    toggleStats,
-  };
+export const useCorrectionsPanel = () => { return null; };
 };

@@ -8,45 +8,43 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { identityValidationService, TrustScore } from '../auth/IdentityValidation';
 import { marketplaceMetrics } from '../analytics/MarketplaceMetrics';
 
-}
-export interface TrustIndicatorConfig {
-  userId?: string;
+
+export interface TrustIndicatorConfig { userId?: string;
   showRealTimeUpdates?: boolean;
-  cacheTimeout?: number; // milliseconds,
-}
-}
-}
-export interface EnhancedTrustData {
-  trustScore: TrustScore | null;
+  cacheTimeout?: number; // milliseconds }
+
+
+
+
+export interface EnhancedTrustData { trustScore: TrustScore | null;
   reputationScore: number;
   templateCount: number;
   downloadCount: number;
   averageRating: number;
   reviewCount: number;
-  verificationStatus: {
+  verificationStatus: { }
   email: boolean;
   phone: boolean;
   identity: boolean;
   professional: boolean;
   portfolio: boolean;
   social: boolean;
-}
+
+
 };
   badges: string;
   communityStanding: 'excellent' | 'good' | 'fair' | 'poor' | 'unrated';
-  trustTrend: 'improving' | 'stable' | 'declining'
-  }
-}
-export interface TrustDisplayOptions {
-  showScore?: boolean;
+  trustTrend: 'improving' | 'stable' | 'declining';
+
+
+export interface TrustDisplayOptions { showScore?: boolean;
   showBadges?: boolean;
   showTrend?: boolean;
   compactMode?: boolean;
   theme?: 'light' | 'dark' | 'auto';
   const TRUST_CACHE_KEY = 'wildConstruct_trustCache';
-  const DEFAULT_CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes;
-}
-}
+  const DEFAULT_CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes }
+
 export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
   const { userId, showRealTimeUpdates = false, cacheTimeout = DEFAULT_CACHE_TIMEOUT } = config;
   const [trustData, setTrustData] = useState<EnhancedTrustData | null>(null);
@@ -54,8 +52,7 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   // Load trust data with caching
-  const loadTrustData = useCallback(async (forceRefresh = false) => {
-  if (!userId) {
+  const loadTrustData = useCallback(async (forceRefresh = false) => { if (!userId) {
   setTrustData(null);
   return;
   setIsLoading(true);
@@ -81,13 +78,13 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
   downloadCount: creatorAnalytics?.metrics.totalDownloads || 0,
   averageRating: creatorAnalytics?.metrics.averageRating || 0,
   reviewCount: 0, // Would come from review system,
-  verificationStatus: {
+  verificationStatus: {,
   email: validationSummary?.completedValidations?.includes('email_verification') || false,
   phone: validationSummary?.completedValidations?.includes('phone_verification') || false,
   identity: validationSummary?.completedValidations?.includes('government_id') || false,
   professional: validationSummary?.completedValidations?.includes('professional_credentials') || false,
   portfolio: validationSummary?.completedValidations?.includes('portfolio_verification') || false,
-  social: validationSummary?.completedValidations?.includes('social_media_verification') || false,
+  social: validationSummary?.completedValidations?.includes('social_media_verification') || false }
 },
   badges: trustScore?.badges || [],
         communityStanding: calculateCommunityStanding(trustScore, creatorAnalytics),
@@ -97,24 +94,16 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
       setLastUpdated(new Date());
       // Cache the result
       cacheTrustData(userId, enhancedData);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load trust data');
-} finally {
-      setIsLoading(false);
-  }, [userId, cacheTimeout]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load trust data') } finally { setIsLoading(false) }, [userId, cacheTimeout]);
   // Auto-refresh for real-time updates
-  useEffect(() => {
-    if (showRealTimeUpdates && userId) {
+  useEffect(() => { if (showRealTimeUpdates && userId) {
       const interval = setInterval(() => {
-        loadTrustData();
-      }, 30000); // Update every 30 seconds
+        loadTrustData() }, 30000); // Update every 30 seconds
       return () => clearInterval(interval);
   }, [showRealTimeUpdates, userId, loadTrustData]);
   // Initial load
-  useEffect(() => {
-    if (userId) {
-      loadTrustData();
-  }, [userId, loadTrustData]);
+  useEffect(() => { if (userId) {
+      loadTrustData() }, [userId, loadTrustData]);
   // Trust level utilities
   const getTrustLevel = useCallback((score?: number): 'unverified' | 'basic' | 'verified' | 'professional' | 'expert' => {
     if (!score) return 'unverified';
@@ -124,44 +113,41 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
     if (score >= 40) return 'basic';
     return 'unverified'
   }, []);
-  const getTrustLevelColor = useCallback((level: string): string => {
-  switch (level) {
+  const getTrustLevelColor = useCallback((level: string): string => { switch (level) {
   case 'expert': return '#7c3aed';
   case 'professional': return '#2563eb';
   case 'verified': return '#059669';
   case 'basic': return '#d97706';
-  default: return '#6b7280';
-}, []);
-  const getTrustLevelBenefits = useCallback((level: string): string => {
-  const benefits: Record<string, string> = {,
-  expert: [,
-  'Expert verification badge',
-  'Featured creator status',
-  'Priority support',
-  'Revenue sharing bonuses',
-  'Early access to features',
+  default: return '#6b7280' }, []);
+  const getTrustLevelBenefits = useCallback((level: string): string => { const benefits: Record<string, string> = {
+  expert: [
+  'Expert verification badge'
+  'Featured creator status'
+  'Priority support'
+  'Revenue sharing bonuses'
+  'Early access to features'
   'Mentorship opportunities'
-  ],
-  professional: [,
-  'Professional badge',
-  'Advanced analytics',
-  'Custom branding',
-  'Direct industry connections',
+  ]
+  professional: [
+  'Professional badge'
+  'Advanced analytics'
+  'Custom branding'
+  'Direct industry connections'
   'Template selling privileges'
-  ],
-  verified: [,
-  'Verified creator badge',
-  'Full marketplace access',
-  'Collaboration features',
+  ]
+  verified: [
+  'Verified creator badge'
+  'Full marketplace access'
+  'Collaboration features'
   'Template creation tools'
-  ],
-  basic: [,
-  'Basic verification badge',
-  'Limited marketplace features',
+  ]
+  basic: [
+  'Basic verification badge'
+  'Limited marketplace features'
   'Community access'
-  ],
-  unverified: [,
-  'Read-only access',
+  ]
+  unverified: [
+  'Read-only access' }
   'Basic template browsing'
   ]
 };
@@ -189,46 +175,33 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
     if (!verificationStatus.identity) return 'government_id';
     return null;
   }, [trustData]);
-  const getTrustScoreColor = useCallback((score?: number): string => {
-    if (!score) return '#6b7280';
+  const getTrustScoreColor = useCallback((score?: number): string => { if (!score) return '#6b7280';
     if (score >= 90) return '#059669';
     if (score >= 80) return '#2563eb';
     if (score >= 65) return '#d97706';
     if (score >= 40) return '#f59e0b';
-    return '#ef4444';
-  }, []);
+    return '#ef4444' }, []);
   // Community standing helpers
-  const getCommunityStandingColor = useCallback((standing: string): string => {
-  switch (standing) {
+  const getCommunityStandingColor = useCallback((standing: string): string => { switch (standing) {
   case 'excellent': return '#059669';
   case 'good': return '#2563eb';
   case 'fair': return '#d97706';
   case 'poor': return '#ef4444';
-  default: return '#6b7280';
-}, []);
+  default: return '#6b7280' }, []);
   // Trust trend helpers
-  const getTrustTrendIcon = useCallback((trend: string): string => {
-  switch (trend) {
+  const getTrustTrendIcon = useCallback((trend: string): string => { switch (trend) {
   case 'improving': return '↗️';
   case 'declining': return '↘️';
-  default: return '→';
-}, []);
-  const getTrustTrendColor = useCallback((trend: string): string => {
-  switch (trend) {
+  default: return '→' }, []);
+  const getTrustTrendColor = useCallback((trend: string): string => { switch (trend) {
   case 'improving': return '#059669';
   case 'declining': return '#ef4444';
-  default: return '#6b7280';
-}, []);
+  default: return '#6b7280' }, []);
   // Trust badge helpers
-  const getDisplayBadges = useCallback((maxBadges: number = 3): string => {
-    return trustData?.badges.slice(0, maxBadges) || [];
-  }, [trustData]);
-  const getRemainingBadgeCount = useCallback((maxBadges: number = 3): number => {
-    const totalBadges = trustData?.badges.length || 0;
-    return Math.max(0, totalBadges - maxBadges);
-  }, [trustData]);
-  return {
-  // Core data
+  const getDisplayBadges = useCallback((maxBadges: number = 3): string => { return trustData?.badges.slice(0, maxBadges) || [] }, [trustData]);
+  const getRemainingBadgeCount = useCallback((maxBadges: number = 3): number => { const totalBadges = trustData?.badges.length || 0;
+    return Math.max(0, totalBadges - maxBadges) }, [trustData]);
+  return { // Core data
   trustData,
   isLoading,
   error,
@@ -248,7 +221,7 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
   // Verification status
   verificationStatus: trustData?.verificationStatus || {,
   email: false, phone: false, identity: false,
-  professional: false, portfolio: false, social: false,
+  professional: false, portfolio: false, social: false }
 },
   verificationCount: Object.values(trustData?.verificationStatus || {}).filter(Boolean).length,
     shouldShowVerificationPrompt,
@@ -285,8 +258,7 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
 };
 
 // Helper functions
-function calculateReputationScore(trustScore: TrustScore | null, creatorAnalytics: any): number {
-  if (!trustScore) return 0;
+function calculateReputationScore(trustScore: TrustScore | null, creatorAnalytics: any): number { if (!trustScore) return 0;
   let score = trustScore.overall * 0.7; // Base from trust score;
   // Add marketplace performance
   if (creatorAnalytics) {
@@ -295,7 +267,7 @@ function calculateReputationScore(trustScore: TrustScore | null, creatorAnalytic
     score += ratingBonus + downloadBonus;
   return Math.min(Math.round(score), 100);
 function calculateCommunityStanding(((
-    trustScore: TrustScore | null,
+    trustScore: TrustScore | null }
     creatorAnalytics: any
   ): EnhancedTrustData['communityStanding'] {
   if (!trustScore) return 'unrated';
@@ -318,16 +290,15 @@ function getCachedTrustData(userId: string): { data: EnhancedTrustData; timestam
   try {
     const cached = localStorage.getItem(`${TRUST_CACHE_KEY}_${userId}`);}
     return cached ? JSON.parse(cached) : null;
-  } catch {
-  return null;
+ catch { return null;
   function cacheTrustData(userId: string, data: EnhancedTrustData): void {,
   try {
   const cacheData = {
   data,
-  timestamp: Date.now(),
+  timestamp: Date.now() }
 };
     localStorage.setItem(`${TRUST_CACHE_KEY}_${userId}`, JSON.stringify(cacheData));}
-  } catch {
+ catch {
     // Ignore caching errors
 
 export default useTrustIndicators;

@@ -6,8 +6,9 @@ import { PDFDocument } from 'pdf-lib';
 import * as fs from 'fs';
 
 // Document validation results
-}
-}
+
+
+
 export interface DocumentValidation {
   document_id: string;
   is_valid: boolean;
@@ -19,8 +20,9 @@ export interface DocumentValidation {
     text_readable: boolean;
     tampering_detected: boolean;
     metadata_consistent: boolean;
-}
-}
+
+
+
   };
   extracted_data?: {
     text_content?: string;
@@ -35,10 +37,10 @@ export interface DocumentValidation {
   issues: string[];
   recommendations: string[];
   processing_notes: string;
-}
 
-}
-}
+
+
+
 export interface DocumentAnalysis {
   document_id: string;
   file_type: string;
@@ -48,23 +50,25 @@ export interface DocumentAnalysis {
   verification_status: 'passed' | 'failed' | 'needs_review';
   flags: string[];
   processing_time_ms: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OCRResult {
   text: string;
   confidence: number;
   regions: Array<{
-}
-}
+
+
+
     bbox: { x: number; y: number; width: number; height: number };
     text: string;
     confidence: number;
-  }>;
-}
+>;
+
 
 export class DocumentVerificationService {
   private readonly MIN_IMAGE_DPI = 150;
@@ -134,13 +138,13 @@ export class DocumentVerificationService {
       `);
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Validate document integrity and quality
   async validateDocument(documentId: string, filePath: string): Promise<DocumentValidation> {
@@ -159,7 +163,7 @@ export class DocumentVerificationService {
           text_readable: false,
           tampering_detected: false,
           metadata_consistent: false
-  }
+
         issues: [],
         recommendations: [],
         processing_notes: ''
@@ -168,7 +172,7 @@ export class DocumentVerificationService {
       // Check if file exists
       if (!fs.existsSync(filePath)) {
         throw new NotFoundException('Document file not found');
-      }
+
 
       const fileBuffer = await fs.promises.readFile(filePath);
       const fileType = await this.detectFileType(fileBuffer);
@@ -176,13 +180,13 @@ export class DocumentVerificationService {
       // Validate based on file type
       if (fileType === 'pdf') {
         await this.validatePDF(fileBuffer, validation);
-      } else if (['jpeg', 'png', 'webp'].includes(fileType)) {
+ else if (['jpeg', 'png', 'webp'].includes(fileType)) {
         await this.validateImage(fileBuffer, validation);
-      } else {
+ else {
         validation.is_valid = false;
         validation.issues.push('Unsupported file format');
         validation.checks.format_valid = false;
-      }
+
 
       // Calculate overall validation score
       validation.validation_score = this.calculateValidationScore(validation.checks);
@@ -193,11 +197,10 @@ export class DocumentVerificationService {
 
       validation.processing_notes = `Processed in ${Date.now() - startTime}ms`;
       return validation;
-
-    } catch (error) {
+ catch (error) {
       throw new BadRequestException(`Document validation failed: ${error.message}`);
-    }
-  }
+
+
 
   // Analyze document for specific verification type
   async analyzeDocument(
@@ -230,7 +233,7 @@ export class DocumentVerificationService {
         break;
       default:
         throw new BadRequestException('Invalid analysis type');
-      }
+
 
       analysis.processing_time_ms = Date.now() - startTime;
       
@@ -238,11 +241,10 @@ export class DocumentVerificationService {
       await this.storeAnalysisResults(analysis);
       
       return analysis;
-
-    } catch (error) {
+ catch (error) {
       throw new BadRequestException(`Document analysis failed: ${error.message}`);
-    }
-  }
+
+
 
   // Perform OCR on document
   async performOCR(documentId: string, filePath: string): Promise<OCRResult> {
@@ -256,9 +258,9 @@ export class DocumentVerificationService {
       if (fileType === 'pdf') {
         // Convert first page of PDF to image
         imageBuffer = await this.convertPDFToImage(fileBuffer);
-      } else {
+ else {
         imageBuffer = fileBuffer;
-      }
+
 
       // Use sharp for image preprocessing
       const processedImage = await sharp(imageBuffer)
@@ -279,16 +281,15 @@ export class DocumentVerificationService {
            VALUES ($1, $2, $3, $4)`,
           [documentId, ocrResult.text, ocrResult.confidence, JSON.stringify(ocrResult.regions)]
         );
-      } finally {
+ finally {
         client.release();
-      }
+
 
       return ocrResult;
-
-    } catch (error) {
+ catch (error) {
       throw new BadRequestException(`OCR processing failed: ${error.message}`);
-    }
-  }
+
+
 
   // Get document validation results
   async getDocumentValidation(documentId: string): Promise<DocumentValidation | null> {
@@ -302,7 +303,7 @@ export class DocumentVerificationService {
       
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       const row = result.rows[0];
       return {
@@ -315,10 +316,10 @@ export class DocumentVerificationService {
         recommendations: row.recommendations || [],
         processing_notes: row.processing_notes || ''
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get document analysis results
   async getDocumentAnalysis(documentId: string): Promise<DocumentAnalysis[]> {
@@ -340,10 +341,10 @@ export class DocumentVerificationService {
         flags: row.flags || [],
         processing_time_ms: row.processing_time_ms
       }));
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Private helper methods
   private async detectFileType(buffer: Buffer): Promise<string> {
@@ -351,22 +352,22 @@ export class DocumentVerificationService {
     // PDF signature
     if (buffer.slice(0, 4).toString() === '%PDF') {
       return 'pdf';
-    }
+
     // JPEG signature
     if (buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF) {
       return 'jpeg';
-    }
+
     // PNG signature
     if (buffer.slice(0, 8).equals(Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]))) {
       return 'png';
-    }
+
     // WebP signature
     if (buffer.slice(0, 4).toString() === 'RIFF' && buffer.slice(8, 12).toString() === 'WEBP') {
       return 'webp';
-    }
+
     
     return 'unknown';
-  }
+
 
   private async validatePDF(buffer: Buffer, validation: DocumentValidation): Promise<void> {
 
@@ -389,16 +390,15 @@ export class DocumentVerificationService {
 
       if (pageCount === 0) {
         validation.issues.push('PDF has no pages');
-      }
+
       if (pageCount > 10) {
         validation.issues.push('PDF has too many pages for verification document');
-      }
 
-    } catch (error) {
+ catch (error) {
       validation.checks.format_valid = false;
       validation.issues.push('Invalid or corrupted PDF file');
-    }
-  }
+
+
 
   private async validateImage(buffer: Buffer, validation: DocumentValidation): Promise<void> {
 
@@ -420,24 +420,23 @@ export class DocumentVerificationService {
           height: metadata.height,
           dpi: metadata.density,
           color_space: metadata.space
-        }
+
       };
 
       if (metadata.width < 800 || metadata.height < 600) {
         validation.issues.push('Image resolution is too low for reliable verification');
         validation.recommendations.push('Please provide an image with at least 800x600 resolution');
-      }
+
 
       if (metadata.density < this.MIN_IMAGE_DPI) {
         validation.issues.push('Image DPI is insufficient for text recognition');
         validation.recommendations.push('Please scan at 150 DPI or higher');
-      }
 
-    } catch (error) {
+ catch (error) {
       validation.checks.format_valid = false;
       validation.issues.push('Invalid or corrupted image file');
-    }
-  }
+
+
 
   private detectImageTampering(stats: unknown): boolean {
     // Simplified tampering detection based on statistical analysis
@@ -453,9 +452,9 @@ export class DocumentVerificationService {
       const maxVariance = Math.max(rVariance, gVariance, bVariance);
       
       return (maxVariance / avgVariance) > 2.5; // Threshold for suspicion
-    }
+
     return false;
-  }
+
 
   private async convertPDFToImage(pdfBuffer: Buffer): Promise<Buffer> {
 
@@ -465,7 +464,7 @@ export class DocumentVerificationService {
       
       if (pages.length === 0) {
         throw new Error('PDF has no pages');
-      }
+
 
       // For this implementation, we'll create a placeholder image
       // In production, use pdf2pic or similar library
@@ -475,16 +474,16 @@ export class DocumentVerificationService {
           height: 600,
           channels: 3,
           background: { r: 255, g: 255, b: 255 }
-        }
-  }
+
+
         .png()
         .toBuffer();
 
       return placeholderImage;
-    } catch (error) {
+ catch (error) {
       throw new Error(`PDF to image conversion failed: ${error.message}`);
-    }
-  }
+
+
 
   private async simulateOCR(__imageBuffer: Buffer): Promise<OCRResult> {
 
@@ -502,7 +501,7 @@ export class DocumentVerificationService {
         { bbox: { x: 10, y: 140, width: 160, height: 20 }, text: 'EXPIRES: 12/31/2025', confidence: 0.87 }
       ]
     };
-  }
+
 
   private async analyzeIdentityDocument(
     documentId: string,
@@ -528,22 +527,22 @@ export class DocumentVerificationService {
       const nameMatch = text.match(/(?:NAME:|FULL NAME:)\s*([A-Z\s]+)/);
       if (nameMatch) {
         analysis.extracted_fields.name = nameMatch[1].trim();
-      }
-    }
+
+
 
     if (text.includes('DOB:') || text.includes('DATE OF BIRTH:')) {
       const dobMatch = text.match(/(?:DOB:|DATE OF BIRTH:)\s*(\d{1,2}\/\d{1,2}\/\d{4})/);
       if (dobMatch) {
         analysis.extracted_fields.date_of_birth = dobMatch[1];
-      }
-    }
+
+
 
     if (text.includes('ID:') || text.includes('LICENSE:')) {
       const idMatch = text.match(/(?:ID:|LICENSE:)\s*([A-Z0-9]+)/);
       if (idMatch) {
         analysis.extracted_fields.document_number = idMatch[1];
-      }
-    }
+
+
 
     // Calculate confidence based on extracted fields
     const fieldCount = Object.keys(analysis.extracted_fields).length;
@@ -551,16 +550,16 @@ export class DocumentVerificationService {
 
     if (analysis.confidence_score >= 0.8) {
       analysis.verification_status = 'passed';
-    } else if (analysis.confidence_score >= 0.5) {
+ else if (analysis.confidence_score >= 0.5) {
       analysis.verification_status = 'needs_review';
       analysis.flags.push('Low confidence in field extraction');
-    } else {
+ else {
       analysis.verification_status = 'failed';
       analysis.flags.push('Unable to extract required identity fields');
-    }
+
 
     return analysis;
-  }
+
 
   private async analyzeBusinessDocument(
     documentId: string,
@@ -584,35 +583,35 @@ export class DocumentVerificationService {
     // Look for business indicators
     if (text.includes('CERTIFICATE') || text.includes('LICENSE') || text.includes('REGISTRATION')) {
       analysis.extracted_fields.document_type = 'business_registration';
-    }
+
 
     // Extract business name
     if (text.includes('BUSINESS NAME:') || text.includes('COMPANY NAME:')) {
       const nameMatch = text.match(/(?:BUSINESS NAME:|COMPANY NAME:)\s*([A-Z\s&,.-]+)/);
       if (nameMatch) {
         analysis.extracted_fields.business_name = nameMatch[1].trim();
-      }
-    }
+
+
 
     // Extract registration number
     if (text.includes('REGISTRATION') || text.includes('LICENSE')) {
       const regMatch = text.match(/(?:REGISTRATION|LICENSE)\s*(?:NO|NUMBER)?:?\s*([A-Z0-9-]+)/);
       if (regMatch) {
         analysis.extracted_fields.registration_number = regMatch[1];
-      }
-    }
+
+
 
     const fieldCount = Object.keys(analysis.extracted_fields).length;
     analysis.confidence_score = Math.min(fieldCount * 0.3, 1.0);
 
     if (analysis.confidence_score >= 0.7) {
       analysis.verification_status = 'passed';
-    } else {
+ else {
       analysis.flags.push('Insufficient business information extracted');
-    }
+
 
     return analysis;
-  }
+
 
   private async analyzeAddressDocument(
     documentId: string,
@@ -631,7 +630,7 @@ export class DocumentVerificationService {
       flags: [],
       processing_time_ms: 0
     };
-  }
+
 
   private async analyzeFinancialDocument(
     documentId: string,
@@ -650,7 +649,7 @@ export class DocumentVerificationService {
       flags: ['Partial financial information extracted'],
       processing_time_ms: 0
     };
-  }
+
 
   private calculateValidationScore(checks: DocumentValidation['checks']): number {
     const weights = {
@@ -666,13 +665,13 @@ export class DocumentVerificationService {
     Object.entries(checks).forEach(([key, value]) => {
       if (key === 'tampering_detected') {
         score += value ? weights[key] : 0; // Subtract if tampering detected
-      } else {
+ else {
         score += value ? weights[key] : 0;
-      }
+
     });
 
     return Math.max(0, Math.min(1, score));
-  }
+
 
   private async storeValidationResults(validation: DocumentValidation): Promise<void> {
 
@@ -693,10 +692,10 @@ export class DocumentVerificationService {
           validation.processing_notes
         ]
       );
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   private async storeAnalysisResults(analysis: DocumentAnalysis): Promise<void> {
 
@@ -724,8 +723,7 @@ export class DocumentVerificationService {
           analysis.processing_time_ms
         ]
       );
-    } finally {
+ finally {
       client.release();
-    }
-  }
-}
+
+

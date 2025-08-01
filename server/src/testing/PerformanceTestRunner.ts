@@ -18,8 +18,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface TestRunnerConfig {
   // Test Execution
   suites: string[]; // Test suite IDs to run
@@ -49,12 +49,13 @@ export interface TestRunnerConfig {
   // Timing
   timeout: number; // Overall timeout in milliseconds
   testTimeout: number; // Individual test timeout
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestExecutionPlan {
   planId: string;
   suites: TestSuiteExecutionPlan[];
@@ -62,12 +63,13 @@ export interface TestExecutionPlan {
   estimatedDuration: number;
   parallelExecution: boolean;
   createdAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestSuiteExecutionPlan {
   suiteId: string;
   suiteName: string;
@@ -75,12 +77,13 @@ export interface TestSuiteExecutionPlan {
   estimatedDuration: number;
   dependencies: string[];
   priority: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestRunResult {
   runId: string;
   startTime: Date;
@@ -104,12 +107,13 @@ export interface TestRunResult {
   
   // Environment
   environment: TestEnvironmentInfo;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OverallTestSummary {
   totalSuites: number;
   passedSuites: number;
@@ -128,12 +132,13 @@ export interface OverallTestSummary {
   
   criticalFailures: number;
   performanceRegressions: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OverallPerformanceAnalysis {
   overallTrend: 'improving' | 'stable' | 'degrading';
   significantChanges: number;
@@ -148,13 +153,14 @@ export interface OverallPerformanceAnalysis {
     averagePerformance: number;
     trend: string;
     issueCount: number;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 export interface RegressionAnalysis {
   hasRegressions: boolean;
   regressionCount: number;
@@ -168,27 +174,29 @@ export interface RegressionAnalysis {
     baselineValue: number;
     regressionPercentage: number;
     severity: 'minor' | 'moderate' | 'major' | 'critical';
-}
-}
-  }>;
+
+
+
+>;
   
   recommendation: string;
-}
 
-}
-}
+
+
+
 export interface GeneratedReport {
   reportId: string;
   format: ReportFormat;
   filePath: string;
   fileSize: number;
   generatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestEnvironmentInfo {
   nodeVersion: string;
   platform: string;
@@ -199,15 +207,16 @@ export interface TestEnvironmentInfo {
     commit: string;
     branch: string;
     buildTime: Date;
-}
-}
+
+
+
   };
   ciInfo?: {
     provider: string;
     buildId: string;
     pullRequestId?: string;
   };
-}
+
 
 export type ReportFormat = 'json' | 'html' | 'markdown' | 'junit' | 'csv';
 
@@ -240,7 +249,7 @@ export class PerformanceTestRunner extends EventEmitter {
     this.databaseService = dependencies.databaseService;
     this.redisService = dependencies.redisService;
     this.auditService = dependencies.auditService;
-  }
+
 
   /**
    * Initialize test runner
@@ -256,7 +265,7 @@ export class PerformanceTestRunner extends EventEmitter {
     await this.initializeTestSuites();
     
     console.log(`✅ Performance Test Runner initialized with ${this.testSuites.size} test suites`);
-  }
+
 
   /**
    * Run performance tests based on configuration
@@ -265,7 +274,7 @@ export class PerformanceTestRunner extends EventEmitter {
 
     if (this.isRunning) {
       throw new Error('Test runner is already running');
-    }
+
     
     console.log('🧪 Starting Performance Test Run...');
     
@@ -300,12 +309,12 @@ export class PerformanceTestRunner extends EventEmitter {
       // Generate baseline comparison if enabled
       if (this.config.compareBaseline) {
         await this.generateRegressionAnalysis();
-      }
+
       
       // Update baseline if enabled
       if (this.config.updateBaseline) {
         await this.updateBaselines();
-      }
+
       
       // Generate reports
       await this.generateReports();
@@ -324,8 +333,7 @@ export class PerformanceTestRunner extends EventEmitter {
       this.emit('run_completed', this.currentRun);
       
       return this.currentRun;
-      
-    } catch (error) {
+ catch (error) {
       this.currentRun.status = 'failed';
       this.currentRun.exitCode = 1;
       this.currentRun.endTime = new Date();
@@ -335,10 +343,10 @@ export class PerformanceTestRunner extends EventEmitter {
       this.emit('run_failed', { runId, error });
       
       throw error;
-    } finally {
+ finally {
       this.isRunning = false;
-    }
-  }
+
+
 
   /**
    * Create execution plan for test suites
@@ -356,7 +364,7 @@ export class PerformanceTestRunner extends EventEmitter {
       if (!testSuite) {
         console.warn(`Test suite not found: ${suiteId}`);
         continue;
-      }
+
       
       const status = testSuite.getStatus();
       const suitePlan: TestSuiteExecutionPlan = {
@@ -371,12 +379,12 @@ export class PerformanceTestRunner extends EventEmitter {
       suites.push(suitePlan);
       totalTests += suitePlan.testCount;
       estimatedDuration += suitePlan.estimatedDuration;
-    }
+
     
     // Adjust for parallel execution
     if (this.config.parallel && suites.length > 1) {
       estimatedDuration = estimatedDuration / Math.min(suites.length, this.config.maxConcurrency);
-    }
+
     
     const plan: TestExecutionPlan = {
       planId: `plan_${Date.now()}`,
@@ -390,7 +398,7 @@ export class PerformanceTestRunner extends EventEmitter {
     console.log(`📊 Execution plan: ${totalTests} tests across ${suites.length} suites (${estimatedDuration}ms estimated)`);
     
     return plan;
-  }
+
 
   /**
    * Execute test suites according to plan
@@ -401,12 +409,12 @@ export class PerformanceTestRunner extends EventEmitter {
     
     if (plan.parallelExecution && plan.suites.length > 1) {
       await this.executeTestSuitesParallel(plan.suites);
-    } else {
+ else {
       await this.executeTestSuitesSequential(plan.suites);
-    }
+
     
     this.updateOverallSummary();
-  }
+
 
   /**
    * Execute test suites in parallel
@@ -429,11 +437,11 @@ export class PerformanceTestRunner extends EventEmitter {
     results.forEach((result, index) => {
       if (result.status === 'fulfilled') {
         this.currentRun!.suiteResults.push(result.value);
-      } else {
+ else {
         console.error(`Suite ${suites[index].suiteId} execution failed:`, result.reason);
-      }
+
     });
-  }
+
 
   /**
    * Execute test suites sequentially
@@ -444,11 +452,11 @@ export class PerformanceTestRunner extends EventEmitter {
       try {
         const result = await this.executeSingleSuite(suite.suiteId);
         this.currentRun!.suiteResults.push(result);
-      } catch (error) {
+ catch (error) {
         console.error(`Suite ${suite.suiteId} execution failed:`, error);
-      }
-    }
-  }
+
+
+
 
   /**
    * Execute a single test suite
@@ -460,7 +468,7 @@ export class PerformanceTestRunner extends EventEmitter {
     const testSuite = this.testSuites.get(suiteId);
     if (!testSuite) {
       throw new Error(`Test suite not found: ${suiteId}`);
-    }
+
     
     const startTime = Date.now();
     
@@ -473,14 +481,14 @@ export class PerformanceTestRunner extends EventEmitter {
       this.emit('suite_completed', { suiteId, result });
       
       return result;
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Suite failed: ${suiteId}`, error);
       
       this.emit('suite_failed', { suiteId, error });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Initialize test suites
@@ -502,20 +510,20 @@ export class PerformanceTestRunner extends EventEmitter {
         resourceLimits: {
           maxMemory: 512,
           maxCpu: 80
-  }
+
         baseline: {
           enabled: true,
           recordBaseline: this.config.updateBaseline,
           compareToBaseline: this.config.compareBaseline,
           baselineThreshold: this.config.performanceRegressionThreshold
-  }
+
         reporting: {
           enabled: true,
           includeDetails: true,
           includeTrends: true,
           generateCharts: false
-        }
-  }
+
+
       {
         testSuiteId: 'system_performance_suite',
         name: 'System Performance Test Suite',
@@ -530,20 +538,20 @@ export class PerformanceTestRunner extends EventEmitter {
         resourceLimits: {
           maxMemory: 1024,
           maxCpu: 90
-  }
+
         baseline: {
           enabled: true,
           recordBaseline: this.config.updateBaseline,
           compareToBaseline: this.config.compareBaseline,
           baselineThreshold: this.config.performanceRegressionThreshold
-  }
+
         reporting: {
           enabled: true,
           includeDetails: true,
           includeTrends: true,
           generateCharts: false
-        }
-      }
+
+
     ];
     
     for (const suiteConfig of defaultSuiteConfigs) {
@@ -556,9 +564,9 @@ export class PerformanceTestRunner extends EventEmitter {
         
         await testSuite.initialize();
         this.testSuites.set(suiteConfig.testSuiteId, testSuite);
-      }
-    }
-  }
+
+
+
 
   /**
    * Initialize overall summary structure
@@ -579,7 +587,7 @@ export class PerformanceTestRunner extends EventEmitter {
       criticalFailures: 0,
       performanceRegressions: 0
     };
-  }
+
 
   /**
    * Initialize performance analysis structure
@@ -593,7 +601,7 @@ export class PerformanceTestRunner extends EventEmitter {
       recommendedActions: [],
       categoryAnalysis: {}
     };
-  }
+
 
   /**
    * Update overall summary based on suite results
@@ -625,7 +633,7 @@ export class PerformanceTestRunner extends EventEmitter {
     summary.criticalFailures = results.reduce((sum, r) => {
       return sum + r.analysis.bottlenecks.filter(b => b.severity === 'critical').length;
     }, 0);
-  }
+
 
   /**
    * Generate overall performance analysis
@@ -659,7 +667,7 @@ export class PerformanceTestRunner extends EventEmitter {
     
     // Determine overall trend
     analysis.overallTrend = this.calculateOverallTrend(results);
-  }
+
 
   /**
    * Generate system-wide recommendations
@@ -673,20 +681,20 @@ export class PerformanceTestRunner extends EventEmitter {
     
     if (failureRate > 10) {
       recommendations.push('High failure rate detected - investigate and fix failing tests');
-    }
+
     
     const averageMemory = results.reduce((sum, r) => sum + r.summary.averageMemory, 0) / results.length;
     if (averageMemory > 200 * 1024 * 1024) {
       recommendations.push('High memory usage detected - implement memory optimization strategies');
-    }
+
     
     const averageDuration = results.reduce((sum, r) => sum + r.summary.averageDuration, 0) / results.length;
     if (averageDuration > 1000) {
       recommendations.push('Slow performance detected - optimize performance-critical operations');
-    }
+
     
     return recommendations;
-  }
+
 
   /**
    * Analyze performance by category
@@ -696,7 +704,7 @@ export class PerformanceTestRunner extends EventEmitter {
       tests: number;
       totalDuration: number;
       issues: number;
-    }> = {};
+> = {};
     
     results.forEach(result => {
       result.tests.forEach(test => {
@@ -708,7 +716,7 @@ export class PerformanceTestRunner extends EventEmitter {
             totalDuration: 0,
             issues: 0
           };
-        }
+
         
         categoryData[category].tests++;
         categoryData[category].totalDuration += test.duration;
@@ -727,7 +735,7 @@ export class PerformanceTestRunner extends EventEmitter {
     });
     
     return analysis;
-  }
+
 
   /**
    * Calculate overall performance trend
@@ -740,7 +748,7 @@ export class PerformanceTestRunner extends EventEmitter {
     if (failureRate > 0.1) return 'degrading';
     if (failureRate === 0) return 'improving';
     return 'stable';
-  }
+
 
   /**
    * Generate regression analysis
@@ -757,7 +765,7 @@ export class PerformanceTestRunner extends EventEmitter {
       regressions: [],
       recommendation: 'No significant performance regressions detected'
     };
-  }
+
 
   /**
    * Update baseline data
@@ -769,8 +777,8 @@ export class PerformanceTestRunner extends EventEmitter {
     // Implementation would store current results as new baseline
     for (const result of this.currentRun!.suiteResults) {
       await this.storeBaseline(result);
-    }
-  }
+
+
 
   /**
    * Store baseline data for a test suite
@@ -789,10 +797,10 @@ export class PerformanceTestRunner extends EventEmitter {
         new Date(),
         this.currentRun!.environment.buildInfo?.version || '1.0.0'
       ]);
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to store baseline for ${result.suiteId}:`, error);
-    }
-  }
+
+
 
   /**
    * Generate test reports
@@ -805,11 +813,11 @@ export class PerformanceTestRunner extends EventEmitter {
       try {
         const report = await this.generateReport(format);
         this.currentRun!.reports.push(report);
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to generate ${format} report:`, error);
-      }
-    }
-  }
+
+
+
 
   /**
    * Generate a specific report format
@@ -847,7 +855,7 @@ export class PerformanceTestRunner extends EventEmitter {
         
     default:
       throw new Error(`Unsupported report format: ${format}`);
-    }
+
     
     await fs.writeFile(filePath, content, 'utf-8');
     const stats = await fs.stat(filePath);
@@ -860,7 +868,7 @@ export class PerformanceTestRunner extends EventEmitter {
       filePath,
       fileSize: stats.size,
       generatedAt: new Date(};
-  }
+
 
   /**
    * Generate HTML report
@@ -918,7 +926,7 @@ export class PerformanceTestRunner extends EventEmitter {
     <p><em>Generated on ${new Date().toISOString()}</em></p>
 </body>
 </html>`;
-  }
+
 
   /**
    * Generate Markdown report
@@ -957,7 +965,7 @@ ${this.currentRun.performanceAnalysis.recommendedActions.map(action => `- ${acti
 
 ---
 *Report generated on ${new Date().toISOString()}*`;
-  }
+
 
   /**
    * Generate JUnit XML report
@@ -980,7 +988,7 @@ ${this.currentRun.suiteResults.map(suite => `
         </testcase>`).join('')}
     </testsuite>`).join('')}
 </testsuites>`;
-  }
+
 
   /**
    * Generate CSV report
@@ -1006,7 +1014,7 @@ ${this.currentRun.suiteResults.map(suite => `
     });
     
     return rows.join('\n');
-  }
+
 
   /**
    * Determine overall test run status
@@ -1019,14 +1027,14 @@ ${this.currentRun.suiteResults.map(suite => `
     if (failureRate > this.config.failureThreshold) {
       this.currentRun.status = 'failed';
       this.currentRun.exitCode = 1;
-    } else if (this.currentRun.regressionAnalysis?.hasRegressions) {
+ else if (this.currentRun.regressionAnalysis?.hasRegressions) {
       this.currentRun.status = 'failed';
       this.currentRun.exitCode = 2; // Performance regression
-    } else {
+ else {
       this.currentRun.status = 'passed';
       this.currentRun.exitCode = 0;
-    }
-  }
+
+
 
   /**
    * Ensure output directory exists
@@ -1035,10 +1043,10 @@ ${this.currentRun.suiteResults.map(suite => `
 
     try {
       await fs.mkdir(this.config.outputDir, { recursive: true });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to create output directory:', error);
-    }
-  }
+
+
 
   /**
    * Capture environment information
@@ -1058,9 +1066,9 @@ ${this.currentRun.suiteResults.map(suite => `
         provider: process.env.CI_PROVIDER || 'unknown',
         buildId: process.env.BUILD_ID || process.env.CI_BUILD_ID || 'unknown',
         pullRequestId: process.env.PULL_REQUEST_ID || process.env.PR_NUMBER
-      } : undefined
+ : undefined
     };
-  }
+
 
   /**
    * Persist test results to storage
@@ -1089,14 +1097,14 @@ ${this.currentRun.suiteResults.map(suite => `
           suiteResults: this.currentRun.suiteResults,
           reports: this.currentRun.reports,
           regressionAnalysis: this.currentRun.regressionAnalysis
-  }
+
       ]);
       
       console.log(`💾 Persisted test run results: ${this.currentRun.runId}`);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to persist test results:', error);
-    }
-  }
+
+
 
   /**
    * Get runner status
@@ -1105,13 +1113,13 @@ ${this.currentRun.suiteResults.map(suite => `
     running: boolean;
     currentRun?: string;
     suitesLoaded: number;
-    } {
+ {
     return {
       running: this.isRunning,
       currentRun: this.currentRun?.runId,
       suitesLoaded: this.testSuites.size
     };
-  }
+
 
   /**
    * Cancel current test run
@@ -1128,10 +1136,10 @@ ${this.currentRun.suiteResults.map(suite => `
       // Stop all running test suites
       for (const testSuite of this.testSuites.values()) {
         await testSuite.stop();
-      }
-    }
-  }
-}
+
+
+
+
 
 /**
  * Factory function to create test runner with default configuration
@@ -1163,4 +1171,3 @@ export function createPerformanceTestRunner(
   
   const config = { ...defaultConfig, ...overrides };
   return new PerformanceTestRunner(config, dependencies);
-}

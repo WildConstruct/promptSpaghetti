@@ -5,8 +5,7 @@
  * Provides advanced audit analytics, compliance management, and automated reporting capabilities.
  */
 import { z } from 'zod';
-export declare enum AuditEventType {
-    USER_ACTION = "user_action",
+export declare enum AuditEventType { USER_ACTION = "user_action",
     SYSTEM_EVENT = "system_event",
     SECURITY_INCIDENT = "security_incident",
     COMPLIANCE_CHECK = "compliance_check",
@@ -52,19 +51,15 @@ export declare const AuditEventSchema: z.ZodObject<{
     session_id: z.ZodOptional<z.ZodString>;
     ip_address: z.ZodOptional<z.ZodString>;
     user_agent: z.ZodOptional<z.ZodString>;
-    geo_location: z.ZodOptional<z.ZodObject<{,
+    geo_location: z.ZodOptional<z.ZodObject<{ }
         country: z.ZodString;
         region: z.ZodString;
         city: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        region: string;
+    }, "strip", z.ZodTypeAny, { region: string;
         country: string;
-        city: string;
-    }, {
-        region: string;
+        city: string }, { region: string;
         country: string;
-        city: string;
-    }>>;
+        city: string }>>;
     system_component: z.ZodString;
     endpoint: z.ZodOptional<z.ZodString>;
     http_method: z.ZodOptional<z.ZodString>;
@@ -86,8 +81,7 @@ export declare const AuditEventSchema: z.ZodObject<{
     alert_triggered: z.ZodBoolean;
     notification_sent: z.ZodBoolean;
     escalation_level: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     description: string;
     status: AuditStatus;
     category: string;
@@ -116,8 +110,7 @@ export declare const AuditEventSchema: z.ZodObject<{
     geo_location?: {
         region: string;
         country: string;
-        city: string;
-    } | undefined;
+        city: string } | undefined;
     http_method?: string | undefined;
     response_code?: number | undefined;
     data_types?: string[] | undefined;
@@ -126,8 +119,7 @@ export declare const AuditEventSchema: z.ZodObject<{
     resolution_notes?: string | undefined;
     resolved_by?: string | undefined;
     resolved_at?: Date | undefined;
-}, {
-    id: string;
+}, { id: string;
     description: string;
     status: AuditStatus;
     category: string;
@@ -156,8 +148,7 @@ export declare const AuditEventSchema: z.ZodObject<{
     geo_location?: {
         region: string;
         country: string;
-        city: string;
-    } | undefined;
+        city: string } | undefined;
     http_method?: string | undefined;
     response_code?: number | undefined;
     data_types?: string[] | undefined;
@@ -168,8 +159,7 @@ export declare const AuditEventSchema: z.ZodObject<{
     resolved_at?: Date | undefined;
 }>;
 export type AuditEvent = z.infer<typeof AuditEventSchema>;
-export declare const AuditQuerySchema: z.ZodObject<{
-    start_date: z.ZodOptional<z.ZodDate>;
+export declare const AuditQuerySchema: z.ZodObject<{ start_date: z.ZodOptional<z.ZodDate>;
     end_date: z.ZodOptional<z.ZodDate>;
     event_types: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof AuditEventType>, "many">>;
     severities: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof AuditSeverity>, "many">>;
@@ -183,9 +173,7 @@ export declare const AuditQuerySchema: z.ZodObject<{
     page: z.ZodDefault<z.ZodNumber>;
     limit: z.ZodDefault<z.ZodNumber>;
     sort_field: z.ZodDefault<z.ZodString>;
-    sort_order: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
-}, "strip", z.ZodTypeAny, {
-    limit: number;
+    sort_order: z.ZodDefault<z.ZodEnum<["asc", "desc"]>> }, "strip", z.ZodTypeAny, { limit: number;
     page: number;
     sort_field: string;
     sort_order: "asc" | "desc";
@@ -199,9 +187,7 @@ export declare const AuditQuerySchema: z.ZodObject<{
     event_types?: AuditEventType[] | undefined;
     search_text?: string | undefined;
     min_risk_score?: number | undefined;
-    max_risk_score?: number | undefined;
-}, {
-    limit?: number | undefined;
+    max_risk_score?: number | undefined }, { limit?: number | undefined;
     page?: number | undefined;
     start_date?: Date | undefined;
     end_date?: Date | undefined;
@@ -215,14 +201,12 @@ export declare const AuditQuerySchema: z.ZodObject<{
     min_risk_score?: number | undefined;
     max_risk_score?: number | undefined;
     sort_field?: string | undefined;
-    sort_order?: "asc" | "desc" | undefined;
-}>;
+    sort_order?: "asc" | "desc" | undefined }>;
 export type AuditQuery = z.infer<typeof AuditQuerySchema>;
-export declare const AuditAnalyticsSchema: z.ZodObject<{
-    timeframe: z.ZodEnum<["hour", "day", "week", "month", "year"]>;
+export declare const AuditAnalyticsSchema: z.ZodObject<{ timeframe: z.ZodEnum<["hour", "day", "week", "month", "year"]>;
     metrics: z.ZodArray<z.ZodEnum<["event_count", "unique_users", "risk_score_average", "severity_distribution", "compliance_violations", "geographic_distribution", "system_component_activity"]>, "many">;
     group_by: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    filters: z.ZodOptional<z.ZodObject<{,
+    filters: z.ZodOptional<z.ZodObject<{ }
         start_date: z.ZodOptional<z.ZodDate>;
         end_date: z.ZodOptional<z.ZodDate>;
         event_types: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof AuditEventType>, "many">>;
@@ -238,8 +222,7 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         limit: z.ZodDefault<z.ZodNumber>;
         sort_field: z.ZodDefault<z.ZodString>;
         sort_order: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
-    }, "strip", z.ZodTypeAny, {
-        limit: number;
+    }, "strip", z.ZodTypeAny, { limit: number;
         page: number;
         sort_field: string;
         sort_order: "asc" | "desc";
@@ -253,9 +236,7 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         event_types?: AuditEventType[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
-        max_risk_score?: number | undefined;
-    }, {
-        limit?: number | undefined;
+        max_risk_score?: number | undefined }, { limit?: number | undefined;
         page?: number | undefined;
         start_date?: Date | undefined;
         end_date?: Date | undefined;
@@ -269,10 +250,8 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
         sort_field?: string | undefined;
-        sort_order?: "asc" | "desc" | undefined;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    metrics: ("event_count" | "unique_users" | "risk_score_average" | "severity_distribution" | "compliance_violations" | "geographic_distribution" | "system_component_activity")[];
+        sort_order?: "asc" | "desc" | undefined }>>;
+}, "strip", z.ZodTypeAny, { metrics: ("event_count" | "unique_users" | "risk_score_average" | "severity_distribution" | "compliance_violations" | "geographic_distribution" | "system_component_activity")[];
     timeframe: "month" | "week" | "year" | "day" | "hour";
     filters?: {
         limit: number;
@@ -289,11 +268,9 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         event_types?: AuditEventType[] | undefined;
         search_text?: string | undefined;
         min_risk_score?: number | undefined;
-        max_risk_score?: number | undefined;
-    } | undefined;
+        max_risk_score?: number | undefined } | undefined;
     group_by?: string[] | undefined;
-}, {
-    metrics: ("event_count" | "unique_users" | "risk_score_average" | "severity_distribution" | "compliance_violations" | "geographic_distribution" | "system_component_activity")[];
+}, { metrics: ("event_count" | "unique_users" | "risk_score_average" | "severity_distribution" | "compliance_violations" | "geographic_distribution" | "system_component_activity")[];
     timeframe: "month" | "week" | "year" | "day" | "hour";
     filters?: {
         limit?: number | undefined;
@@ -310,8 +287,7 @@ export declare const AuditAnalyticsSchema: z.ZodObject<{
         min_risk_score?: number | undefined;
         max_risk_score?: number | undefined;
         sort_field?: string | undefined;
-        sort_order?: "asc" | "desc" | undefined;
-    } | undefined;
+        sort_order?: "asc" | "desc" | undefined } | undefined;
     group_by?: string[] | undefined;
 }>;
 export type AuditAnalytics = z.infer<typeof AuditAnalyticsSchema>;
@@ -320,8 +296,7 @@ export type AuditAnalytics = z.infer<typeof AuditAnalyticsSchema>;
  *
  * Builds upon existing EvidenceAccessAuditService with advanced management capabilities
  */
-export declare class AuditManagementSystem {
-    private events;
+export declare class AuditManagementSystem { private events;
     private indexedData;
     constructor();
     /**
@@ -336,8 +311,7 @@ export declare class AuditManagementSystem {
         totalCount: number;
         page: number;
         totalPages: number;
-        analytics: unknown;
-    }>;
+        analytics: unknown }>;
     /**
      * Generate comprehensive audit analytics and insights
      */
@@ -345,20 +319,18 @@ export declare class AuditManagementSystem {
     /**
      * Compliance-specific audit report generation
      */
-    generateComplianceReport(framework: ComplianceFramework, dateRange: {)
+    generateComplianceReport(framework: ComplianceFramework, dateRange: { )
         start: Date;
-        end: Date;
-    }): any;
+        end: Date }): any;
     /**
      * Real-time audit monitoring and alerting
      */
-    setupRealTimeMonitoring(config: {)
+    setupRealTimeMonitoring(config: { )
         alertThresholds: {
             criticalEventRate: number;
             highRiskEventRate: number;
             failedLoginRate: number;
-            dataExportVolume: number;
-        };
+            dataExportVolume: number };
         notificationChannels: string[];
         escalationPolicies: any[];
     }): void;
@@ -369,11 +341,10 @@ export declare class AuditManagementSystem {
     /**
      * Audit retention and archival management
      */
-    manageAuditRetention(policies: {)
+    manageAuditRetention(policies: { )
         defaultRetentionDays: number;
         complianceRetentionDays: {
-            [framework in ComplianceFramework]?: number;
-        };
+            [framework in ComplianceFramework]?: number };
         archivalStorage: string;
         legalHoldOverride: boolean;
     }): void;
@@ -425,11 +396,9 @@ export declare     description: string;
     user_agent?: string | undefined;
     ip_address?: string | undefined;
     subcategory?: string | undefined;
-    geo_location?: {
-        region: string;
+    geo_location?: { region: string;
         country: string;
-        city: string;
-    } | undefined;
+        city: string } | undefined;
     http_method?: string | undefined;
     response_code?: number | undefined;
     data_types?: string[] | undefined;
@@ -439,13 +408,11 @@ export declare     description: string;
     resolved_by?: string | undefined;
     resolved_at?: Date | undefined;
 };
-export declare const queryAuditEvents: (query: AuditQuery) => Promise<{
-    events: AuditEvent[];
+export declare const queryAuditEvents: (query: AuditQuery) => Promise<{ events: AuditEvent[];
     totalCount: number;
     page: number;
     totalPages: number;
-    analytics: unknown;
-}>;
+    analytics: unknown }>;
 export declare const generateAuditAnalytics: (request: AuditAnalytics) => any;
 export default AuditManagementSystem;
 //# sourceMappingURL=AuditManagementSystem.d.ts.map

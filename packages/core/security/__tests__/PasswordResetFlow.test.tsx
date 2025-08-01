@@ -10,33 +10,28 @@ import userEvent from '@testing-library/user-event';
 import { PasswordResetFlow, ResetStep, PasswordStrength } from '../components/PasswordResetFlow';
 
 // Mock the password reset managers
-jest.mock('../PasswordResetTokenManager', () => ({)
-  passwordResetTokenManager: {
-  generateToken: jest.fn<unknown, unknown>(),
-  validateToken: jest.fn<unknown, unknown>(),
-  useToken: jest.fn<unknown, unknown>(),
+jest.mock('../PasswordResetTokenManager', () => ({ )
+  passwordResetTokenManager: {,
+  generateToken: jest.fn<unknown, unknown>()
+  validateToken: jest.fn<unknown, unknown>()
+  useToken: jest.fn<unknown, unknown>() }
 }));
-jest.mock('../VerificationCodeManager', () => ({)
+jest.mock('../VerificationCodeManager', () => ({ )
   verificationCodeManager: {
-  generateCode: jest.fn<unknown, unknown>(),
-  validateCode: jest.fn<unknown, unknown>(),
-  useCode: jest.fn<unknown, unknown>(),
+  generateCode: jest.fn<unknown, unknown>()
+  validateCode: jest.fn<unknown, unknown>()
+  useCode: jest.fn<unknown, unknown>() }
 }));
-describe('PasswordResetFlow', () => {
-  const defaultProps = {
-  onResetComplete: jest.fn<unknown, unknown>(),
-  onStepChange: jest.fn<unknown, unknown>(),
-  onSecurityEvent: jest.fn<unknown, unknown>(),
-  brandName: 'Test App',
-  supportEmail: 'support@test.com',
+describe('PasswordResetFlow', () => { const defaultProps = {
+  onResetComplete: jest.fn<unknown, unknown>()
+  onStepChange: jest.fn<unknown, unknown>()
+  onSecurityEvent: jest.fn<unknown, unknown>()
+  brandName: 'Test App'
+  supportEmail: 'support@test.com' }
 };
-  beforeEach(() => {
-    jest.clearAllMocks();
-    jest.useFakeTimers();
-  });
-  afterEach(() => {
-    jest.useRealTimers();
-  });
+  beforeEach(() => { jest.clearAllMocks();
+    jest.useFakeTimers() });
+  afterEach(() => { jest.useRealTimers() });
   describe('Step 1: Request Reset', () => {
     test('should render initial request form', () => {
       render(<PasswordResetFlow {...defaultProps} />);
@@ -53,9 +48,7 @@ describe('PasswordResetFlow', () => {
       fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
       expect(submitButton).toBeEnabled();
       fireEvent.click(submitButton);
-      await waitFor(() => {
-        expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument() });
     });
     test('should handle successful reset request', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -65,17 +58,14 @@ describe('PasswordResetFlow', () => {
       await user.type(emailInput, 'test@example.com');
       await user.click(submitButton);
       // Advance timers to resolve the promise
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-  expect(screen.getByText(/reset code sent to test@example.com/i)).toBeInTheDocument();
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByText(/reset code sent to test@example.com/i)).toBeInTheDocument();
   expect(defaultProps.onStepChange).toHaveBeenCalledWith(ResetStep.VERIFY);
   expect(defaultProps.onSecurityEvent).toHaveBeenCalledWith()
-  'password_reset_requested',
+  'password_reset_requested'
   expect.objectContaining({)
-  email: 'test@example.com',
-}
+  email: 'test@example.com' }
+
         );
       });
     });
@@ -86,12 +76,8 @@ describe('PasswordResetFlow', () => {
       const submitButton = screen.getByRole('button', { name: /send reset code/i });
       await user.type(emailInput, 'blocked@example.com');
       await user.click(submitButton);
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        expect(screen.getByText(/too many reset requests/i)).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByText(/too many reset requests/i)).toBeInTheDocument() });
     });
     test('should disable submit button when loading', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -111,9 +97,7 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
       await waitFor(() => {
         expect(screen.getByText(/we sent a 6-digit code to/i)).toBeInTheDocument();
         expect(screen.getByText('test@example.com')).toBeInTheDocument();
@@ -128,13 +112,9 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        const tokenInput = screen.getByLabelText('Reset Code');
-        expect(tokenInput).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { const tokenInput = screen.getByLabelText('Reset Code');
+        expect(tokenInput).toBeInTheDocument() });
       const tokenInput = screen.getByLabelText('Reset Code');
       // Type mixed characters
       await user.type(tokenInput, 'abc123def456');
@@ -148,23 +128,15 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        expect(screen.getByLabelText('Reset Code')).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByLabelText('Reset Code')).toBeInTheDocument() });
       const tokenInput = screen.getByLabelText('Reset Code');
       const verifyButton = screen.getByRole('button', { name: /verify code/i });
       await user.type(tokenInput, '123456');
       await user.click(verifyButton);
-      act(() => {
-        jest.advanceTimersByTime(1500);
-      });
-      await waitFor(() => {
-        expect(screen.getByText(/code verified successfully/i)).toBeInTheDocument();
-        expect(defaultProps.onStepChange).toHaveBeenCalledWith(ResetStep.RESET);
-      });
+      act(() => { jest.advanceTimersByTime(1500) });
+      await waitFor(() => { expect(screen.getByText(/code verified successfully/i)).toBeInTheDocument();
+        expect(defaultProps.onStepChange).toHaveBeenCalledWith(ResetStep.RESET) });
     });
     test('should handle invalid token error', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -173,22 +145,14 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        expect(screen.getByLabelText('Reset Code')).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByLabelText('Reset Code')).toBeInTheDocument() });
       const tokenInput = screen.getByLabelText('Reset Code');
       const verifyButton = screen.getByRole('button', { name: /verify code/i });
       await user.type(tokenInput, '000000');
       await user.click(verifyButton);
-      act(() => {
-        jest.advanceTimersByTime(1500);
-      });
-      await waitFor(() => {
-        expect(screen.getByText(/invalid or expired reset code/i)).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(1500) });
+      await waitFor(() => { expect(screen.getByText(/invalid or expired reset code/i)).toBeInTheDocument() });
     });
     test('should show resend timer and allow resend after cooldown', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -197,21 +161,13 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        expect(screen.getByText(/resend in \d+s/i)).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByText(/resend in \d+s/i)).toBeInTheDocument() });
       // Advance timer to end cooldown
-      act(() => {
-        jest.advanceTimersByTime(60000);
-      });
-      await waitFor(() => {
-        const resendButton = screen.getByText('Resend Code');
+      act(() => { jest.advanceTimersByTime(60000) });
+      await waitFor(() => { const resendButton = screen.getByText('Resend Code');
         expect(resendButton).toBeInTheDocument();
-        expect(resendButton).not.toBeDisabled();
-      });
+        expect(resendButton).not.toBeDisabled() });
     });
     test('should allow going back to email step', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -220,12 +176,8 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        expect(screen.getByText(/back to email/i)).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByText(/back to email/i)).toBeInTheDocument() });
       const backButton = screen.getByText(/back to email/i);
       await user.click(backButton);
       expect(screen.getByText('Enter your email to get started')).toBeInTheDocument();
@@ -237,22 +189,14 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        expect(screen.getByLabelText('Reset Code')).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByLabelText('Reset Code')).toBeInTheDocument() });
       const tokenInput = screen.getByLabelText('Reset Code');
       const verifyButton = screen.getByRole('button', { name: /verify code/i });
       await user.type(tokenInput, '123456');
       await user.click(verifyButton);
-      act(() => {
-        jest.advanceTimersByTime(1500);
-      });
-      await waitFor(() => {
-        expect(screen.getByLabelText('New Password')).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(1500) });
+      await waitFor(() => { expect(screen.getByLabelText('New Password')).toBeInTheDocument() });
     };
     test('should render password reset form', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -268,15 +212,11 @@ describe('PasswordResetFlow', () => {
       await navigateToResetStep(user);
       const passwordInput = screen.getByLabelText('New Password');
       await user.type(passwordInput, 'weak');
-      await waitFor(() => {
-        expect(screen.getByText('Password Strength')).toBeInTheDocument();
-        expect(screen.getByText('WEAK')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Password Strength')).toBeInTheDocument();
+        expect(screen.getByText('WEAK')).toBeInTheDocument() });
       await user.clear(passwordInput);
       await user.type(passwordInput, 'StrongP@ssw0rd123');
-      await waitFor(() => {
-        expect(screen.getByText('STRONG')).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('STRONG')).toBeInTheDocument() });
     });
     test('should show password requirements checklist', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -284,13 +224,11 @@ describe('PasswordResetFlow', () => {
       await navigateToResetStep(user);
       const passwordInput = screen.getByLabelText('New Password');
       await user.type(passwordInput, 'Abc123!');
-      await waitFor(() => {
-        expect(screen.getByText('At least 8 characters')).toBeInTheDocument();
+      await waitFor(() => { expect(screen.getByText('At least 8 characters')).toBeInTheDocument();
         expect(screen.getByText('One uppercase letter')).toBeInTheDocument();
         expect(screen.getByText('One lowercase letter')).toBeInTheDocument();
         expect(screen.getByText('One number')).toBeInTheDocument();
-        expect(screen.getByText('One special character')).toBeInTheDocument();
-      });
+        expect(screen.getByText('One special character')).toBeInTheDocument() });
     });
     test('should validate password confirmation match', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -300,9 +238,7 @@ describe('PasswordResetFlow', () => {
       const confirmInput = screen.getByLabelText('Confirm Password');
       await user.type(passwordInput, 'StrongP@ssw0rd123');
       await user.type(confirmInput, 'DifferentPassword');
-      await waitFor(() => {
-        expect(screen.getByText(/passwords do not match/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/passwords do not match/i)).toBeInTheDocument() });
     });
     test('should toggle password visibility', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -311,12 +247,10 @@ describe('PasswordResetFlow', () => {
       const passwordInput = screen.getByLabelText('New Password');
       const toggleButton = passwordInput.parentElement?.querySelector('button');
       expect(passwordInput).toHaveAttribute('type', 'password');
-      if (toggleButton) {
-        await user.click(toggleButton);
+      if (toggleButton) { await user.click(toggleButton);
         expect(passwordInput).toHaveAttribute('type', 'text');
         await user.click(toggleButton);
-        expect(passwordInput).toHaveAttribute('type', 'password');
-    });
+        expect(passwordInput).toHaveAttribute('type', 'password') });
     test('should handle successful password reset', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
       render(<PasswordResetFlow {...defaultProps} />);
@@ -328,14 +262,10 @@ describe('PasswordResetFlow', () => {
       await user.type(passwordInput, strongPassword);
       await user.type(confirmInput, strongPassword);
       await user.click(resetButton);
-      act(() => {
-        jest.advanceTimersByTime(2500);
-      });
-      await waitFor(() => {
-        expect(screen.getByText(/password reset successful/i)).toBeInTheDocument();
+      act(() => { jest.advanceTimersByTime(2500) });
+      await waitFor(() => { expect(screen.getByText(/password reset successful/i)).toBeInTheDocument();
         expect(defaultProps.onResetComplete).toHaveBeenCalledWith(true, 'test@example.com');
-        expect(defaultProps.onStepChange).toHaveBeenCalledWith(ResetStep.SUCCESS);
-      });
+        expect(defaultProps.onStepChange).toHaveBeenCalledWith(ResetStep.SUCCESS) });
     });
     test('should prevent submission with weak password', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -354,9 +284,7 @@ describe('PasswordResetFlow', () => {
       await navigateToResetStep(user);
       const backButton = screen.getByText(/back to verification/i);
       await user.click(backButton);
-      await waitFor(() => {
-        expect(screen.getByText(/enter the code sent to your email/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/enter the code sent to your email/i)).toBeInTheDocument() });
     });
   });
   describe('Step 4: Success', () => {
@@ -367,30 +295,20 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        expect(screen.getByLabelText('Reset Code')).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByLabelText('Reset Code')).toBeInTheDocument() });
       const tokenInput = screen.getByLabelText('Reset Code');
       await user.type(tokenInput, '123456');
       await user.click(screen.getByRole('button', { name: /verify code/i }));
-      act(() => {
-        jest.advanceTimersByTime(1500);
-      });
-      await waitFor(() => {
-        expect(screen.getByLabelText('New Password')).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(1500) });
+      await waitFor(() => { expect(screen.getByLabelText('New Password')).toBeInTheDocument() });
       const passwordInput = screen.getByLabelText('New Password');
       const confirmInput = screen.getByLabelText('Confirm Password');
       const strongPassword = 'StrongP@ssw0rd123';
       await user.type(passwordInput, strongPassword);
       await user.type(confirmInput, strongPassword);
       await user.click(screen.getByRole('button', { name: /reset password/i }));
-      act(() => {
-        jest.advanceTimersByTime(2500);
-      });
+      act(() => { jest.advanceTimersByTime(2500) });
       await waitFor(() => {
         expect(screen.getByText(/password reset successful/i)).toBeInTheDocument();
         expect(screen.getByText(/you can now sign in with your new password/i)).toBeInTheDocument();
@@ -410,29 +328,24 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        expect(screen.getByText('Request').closest('div')).toHaveClass('text-green-600');
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByText('Request').closest('div')).toHaveClass('text-green-600');
         expect(screen.getByText('Verify').closest('div')).toHaveClass('text-blue-600');
-        expect(screen.getByText('Reset').closest('div')).toHaveClass('text-gray-400');
-      });
+        expect(screen.getByText('Reset').closest('div')).toHaveClass('text-gray-400') });
     });
   });
-  describe('Custom Validation', () => {
-  test('should use custom password validation when provided', async () => {
+  describe('Custom Validation', () => { test('should use custom password validation when provided', async () => {
   const customValidation = jest.fn(() => ({)
-  isValid: false,
-  strength: PasswordStrength.WEAK,
-  score: 0,
-  feedback: ['Custom validation failed'],
+  isValid: false
+  strength: PasswordStrength.WEAK
+  score: 0
+  feedback: ['Custom validation failed']
   requirements: {
-  length: false,
-  uppercase: false,
-  lowercase: false,
-  numbers: false,
-  symbols: false,
+  length: false
+  uppercase: false
+  lowercase: false
+  numbers: false
+  symbols: false }
 }));
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
       render(<PasswordResetFlow {...defaultProps} customValidation={customValidation} />);
@@ -440,21 +353,13 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
-      await waitFor(() => {
-        expect(screen.getByLabelText('Reset Code')).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
+      await waitFor(() => { expect(screen.getByLabelText('Reset Code')).toBeInTheDocument() });
       const tokenInput = screen.getByLabelText('Reset Code');
       await user.type(tokenInput, '123456');
       await user.click(screen.getByRole('button', { name: /verify code/i }));
-      act(() => {
-        jest.advanceTimersByTime(1500);
-      });
-      await waitFor(() => {
-        expect(screen.getByLabelText('New Password')).toBeInTheDocument();
-      });
+      act(() => { jest.advanceTimersByTime(1500) });
+      await waitFor(() => { expect(screen.getByLabelText('New Password')).toBeInTheDocument() });
       const passwordInput = screen.getByLabelText('New Password');
       await user.type(passwordInput, 'testpassword');
       expect(customValidation).toHaveBeenCalledWith('testpassword');
@@ -468,14 +373,12 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'test@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
       expect(defaultProps.onSecurityEvent).toHaveBeenCalledWith()
-        'password_reset_requested',
-        expect.objectContaining({)
-  email: 'test@example.com',
-}
+        'password_reset_requested'
+        expect.objectContaining({ )
+  email: 'test@example.com' }
+
       );
     });
   });
@@ -488,13 +391,9 @@ describe('PasswordResetFlow', () => {
       const emailInput = screen.getByLabelText('Email Address');
       await user.type(emailInput, 'error@example.com');
       await user.click(screen.getByRole('button', { name: /send reset code/i }));
-      act(() => {
-        jest.advanceTimersByTime(2000);
-      });
+      act(() => { jest.advanceTimersByTime(2000) });
       // Should show some kind of error message
-      await waitFor(() => {
-        expect(screen.getByRole('alert') || screen.getByText(/error/i)).toBeInTheDocument();
-      }, { timeout: 3000 });
+      await waitFor(() => { expect(screen.getByRole('alert') || screen.getByText(/error/i)).toBeInTheDocument() }, { timeout: 3000 });
       consoleSpy.mockRestore();
     });
   });

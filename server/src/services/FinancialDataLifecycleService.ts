@@ -11,8 +11,8 @@ import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 import { randomUUID } from 'crypto';
 import { createHash } from 'crypto';
 
-}
-}
+
+
 export interface FinancialDataRecord {
   id: string;
   externalId: string;
@@ -57,9 +57,10 @@ export interface FinancialDataRecord {
   auditMetadata: Record<string, unknown>;
   
   updatedAt: Date;
-}
-}
-}
+
+
+
+
 
 export enum FinancialDataType {
   TRANSACTION = 'transaction',
@@ -70,10 +71,10 @@ export enum FinancialDataType {
   IDENTITY = 'identity',
   CREDIT = 'credit',
   LOAN = 'loan'
-}
 
-}
-}
+
+
+
 export interface DeletionWorkflow {
   id: string;
   workflowName: string;
@@ -93,43 +94,46 @@ export interface DeletionWorkflow {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-}
-}
-}
+
+
+
+
 
 export enum DeletionTriggerType {
   SCHEDULE = 'schedule',
   RETENTION_EXPIRED = 'retention_expired',
   MANUAL = 'manual',
   LEGAL_REQUEST = 'legal_request'
-}
 
-}
-}
+
+
+
 export interface VerificationStep {
   stepId: string;
   name: string;
   type: 'hash_verification' | 'approval_required' | 'safety_check' | 'custom';
   config: Record<string, unknown>;
   required: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SafetyCheck {
   checkId: string;
   name: string;
   type: 'legal_hold_check' | 'active_transaction_check' | 'audit_period_check' | 'custom';
   config: Record<string, unknown>;
   blocking: boolean; // If true, deletion is blocked on failure
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeletionExecution {
   id: string;
   workflowId: string;
@@ -152,9 +156,10 @@ export interface DeletionExecution {
   auditMetadata: Record<string, unknown>;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
+
+
+
+
 
 export enum DeletionExecutionStatus {
   PENDING = 'pending',
@@ -162,10 +167,10 @@ export enum DeletionExecutionStatus {
   EXECUTED = 'executed',
   FAILED = 'failed',
   CANCELLED = 'cancelled'
-}
 
-}
-}
+
+
+
 export interface ComplianceReport {
   id: string;
   reportType: string;
@@ -187,9 +192,10 @@ export interface ComplianceReport {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Financial Data Lifecycle Service
@@ -258,10 +264,10 @@ export class FinancialDataLifecycleService {
           category: record.category,
           ownerId: record.ownerId
         });
-      } catch (error) {
+ catch (error) {
         console.warn('Failed to register with lifecycle automation service:', error);
-      }
-    }
+
+
 
     // Audit log the registration
     await this.auditService.logEvent({
@@ -274,12 +280,12 @@ export class FinancialDataLifecycleService {
         externalId: record.externalId,
         retentionPeriodYears: record.retentionPeriodYears,
         jurisdiction: record.jurisdiction
-  }
+
       severity: 'info'
     });
 
     return record;
-  }
+
 
   /**
    * Create an automated deletion workflow
@@ -327,12 +333,12 @@ export class FinancialDataLifecycleService {
         triggerType: newWorkflow.triggerType,
         batchSize: newWorkflow.batchSize,
         requireApproval: newWorkflow.requireApproval
-  }
+
       severity: 'info'
     });
 
     return newWorkflow;
-  }
+
 
   /**
    * Execute a deletion workflow
@@ -350,13 +356,13 @@ export class FinancialDataLifecycleService {
     recordsDeleted: number;
     recordsFailed: number;
     executions: DeletionExecution[];
-  }> {
+> {
 
     // Get workflow configuration
     const workflow = await this.getDeletionWorkflow(workflowId);
     if (!workflow || !workflow.isActive) {
       throw new Error(`Workflow ${workflowId} not found or inactive`);
-    }
+
 
     const batchId = `batch_${Date.now()}_${randomUUID().slice(0, 8)}`;
     const batchSize = overrides?.batchSize || workflow.batchSize;
@@ -376,14 +382,14 @@ export class FinancialDataLifecycleService {
         
         if (execution.executionStatus === DeletionExecutionStatus.EXECUTED) {
           deletedCount++;
-        } else if (execution.executionStatus === DeletionExecutionStatus.FAILED) {
+ else if (execution.executionStatus === DeletionExecutionStatus.FAILED) {
           failedCount++;
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error(`Failed to process deletion for record ${record.id}:`, error);
         failedCount++;
-      }
-    }
+
+
 
     // Update workflow statistics
     await this.updateWorkflowStatistics(workflowId, deletedCount, failedCount);
@@ -400,7 +406,7 @@ export class FinancialDataLifecycleService {
         recordsDeleted: deletedCount,
         recordsFailed: failedCount,
         workflowName: workflow.workflowName
-  }
+
       severity: 'info'
     });
 
@@ -411,7 +417,7 @@ export class FinancialDataLifecycleService {
       recordsFailed: failedCount,
       executions
     };
-  }
+
 
   /**
    * Get financial data records ready for deletion
@@ -435,27 +441,27 @@ export class FinancialDataLifecycleService {
       if (selectionCriteria.dataType) {
         conditions.push('data_type = ?');
         params.push(selectionCriteria.dataType);
-      }
+
       
       if (selectionCriteria.ownerId) {
         conditions.push('owner_id = ?');
         params.push(selectionCriteria.ownerId);
-      }
+
       
       if (selectionCriteria.maxDaysOverdue) {
         conditions.push('days_overdue <= ?');
         params.push(selectionCriteria.maxDaysOverdue);
-      }
+
       
       if (conditions.length > 0) {
         query += ` WHERE ${conditions.join(' AND ')}`;
-      }
-    }
+
+
     
     if (limit) {
       query += ' LIMIT ?';
       params.push(limit);
-    }
+
 
     const rows = await this.db.query(query, params);
     
@@ -478,7 +484,7 @@ export class FinancialDataLifecycleService {
       auditMetadata: {},
       updatedAt: new Date()
     }));
-  }
+
 
   /**
    * Process a single record deletion with full verification and safety checks
@@ -510,7 +516,7 @@ export class FinancialDataLifecycleService {
         workflowName: workflow.workflowName,
         recordDataType: record.dataType,
         executedBy
-  }
+
       createdAt: now,
       updatedAt: now
     };
@@ -527,7 +533,7 @@ export class FinancialDataLifecycleService {
         execution.errorMessage = `Blocking safety checks failed: ${blockingFailures.map(r => r.name).join(', ')}`;
         await this.saveDeletionExecution(execution);
         return execution;
-      }
+
 
       // Step 2: Run verification steps
       const verificationResults = await this.runVerificationSteps(record, workflow.verificationSteps);
@@ -542,7 +548,7 @@ export class FinancialDataLifecycleService {
         execution.errorMessage = `Required verification steps failed: ${requiredFailures.map(r => r.name).join(', ')}`;
         await this.saveDeletionExecution(execution);
         return execution;
-      }
+
 
       execution.executionStatus = DeletionExecutionStatus.VERIFIED;
 
@@ -554,22 +560,21 @@ export class FinancialDataLifecycleService {
         execution.executionStatus = DeletionExecutionStatus.PENDING;
         await this.saveDeletionExecution(execution);
         return execution;
-      }
+
 
       // Step 4: Execute deletion
       await this.performDeletion(record, execution);
       execution.executionStatus = DeletionExecutionStatus.EXECUTED;
       execution.executedAt = new Date();
       execution.deletionHash = this.generateDeletionHash(record, execution.verificationHash!);
-
-    } catch (error) {
+ catch (error) {
       execution.executionStatus = DeletionExecutionStatus.FAILED;
       execution.errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    }
+
 
     await this.saveDeletionExecution(execution);
     return execution;
-  }
+
 
   /**
    * Generate a verification hash for a record before deletion
@@ -577,7 +582,7 @@ export class FinancialDataLifecycleService {
   private generateVerificationHash(record: FinancialDataRecord): string {
     const data = `${record.id}:${record.externalId}:${record.dataType}:${record.ownerId}:${record.createdAt.toISOString()}`;
     return createHash('sha256').update(data).digest('hex');
-  }
+
 
   /**
    * Generate a deletion confirmation hash
@@ -585,7 +590,7 @@ export class FinancialDataLifecycleService {
   private generateDeletionHash(record: FinancialDataRecord, verificationHash: string): string {
     const data = `${verificationHash}:deleted:${new Date().toISOString()}`;
     return createHash('sha256').update(data).digest('hex');
-  }
+
 
   /**
    * Run safety checks before deletion
@@ -596,7 +601,7 @@ export class FinancialDataLifecycleService {
     passed: boolean;
     blocking: boolean;
     details?: string;
-  }>> {
+>> {
     const results = [];
 
     for (const check of safetyChecks) {
@@ -628,7 +633,7 @@ export class FinancialDataLifecycleService {
       default:
         // Custom safety checks would be implemented here
         passed = true;
-      }
+
 
       results.push({
         checkId: check.checkId,
@@ -637,10 +642,10 @@ export class FinancialDataLifecycleService {
         blocking: check.blocking,
         details
       });
-    }
+
 
     return results;
-  }
+
 
   /**
    * Run verification steps before deletion
@@ -651,7 +656,7 @@ export class FinancialDataLifecycleService {
     passed: boolean;
     required: boolean;
     details?: string;
-  }>> {
+>> {
     const results = [];
 
     for (const step of verificationSteps) {
@@ -673,7 +678,7 @@ export class FinancialDataLifecycleService {
           
       default:
         passed = true;
-      }
+
 
       results.push({
         stepId: step.stepId,
@@ -682,10 +687,10 @@ export class FinancialDataLifecycleService {
         required: step.required,
         details
       });
-    }
+
 
     return results;
-  }
+
 
   /**
    * Perform the actual deletion of a record
@@ -733,10 +738,10 @@ export class FinancialDataLifecycleService {
         deletionWorkflow: execution.workflowId,
         batchId: execution.executionBatchId,
         verificationHash: execution.verificationHash
-  }
+
       severity: 'warn'
     });
-  }
+
 
   /**
    * Save deletion execution record to database
@@ -762,7 +767,7 @@ export class FinancialDataLifecycleService {
       JSON.stringify(execution.verificationStepsCompleted), JSON.stringify(execution.safetyChecksCompleted), JSON.stringify(execution.auditMetadata),
       execution.createdAt, execution.updatedAt
     ]);
-  }
+
 
   /**
    * Get deletion workflow by ID
@@ -796,7 +801,7 @@ export class FinancialDataLifecycleService {
       updatedAt: new Date(row.updated_at),
       createdBy: row.created_by
     };
-  }
+
 
   /**
    * Update workflow statistics after execution
@@ -813,7 +818,7 @@ export class FinancialDataLifecycleService {
         updated_at = ?
       WHERE id = ?
     `, [successfulDeletions, failedDeletions, new Date(), new Date(), workflowId]);
-  }
+
 
   /**
    * Generate compliance report for deletion activities
@@ -880,11 +885,11 @@ export class FinancialDataLifecycleService {
         failedDeletions: stats.failed_deletions || 0,
         workflowsUsed: stats.workflows_used || 0,
         generationTimestamp: now.toISOString()
-  }
+
       summaryStatistics: {
         avgDeletionsPerDay: Math.round((stats.unique_records_deleted || 0) / Math.max(1, Math.ceil((periodEnd.getTime() - periodStart.getTime()) / (24 * 60 * 60 * 1000)))),
         successRate: stats.total_deletions ? Math.round((stats.successful_deletions / stats.total_deletions) * 100) : 0
-  }
+
       generatedAt: now,
       createdAt: now,
       updatedAt: now,
@@ -918,10 +923,9 @@ export class FinancialDataLifecycleService {
         periodEnd: periodEnd.toISOString(),
         totalRecordsDeleted: report.totalRecordsDeleted,
         regulatoryFramework: report.regulatoryFramework
-  }
+
       severity: 'info'
     });
 
     return report;
-  }
-}
+

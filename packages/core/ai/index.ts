@@ -57,43 +57,39 @@ export { default as AIModelFactory } from './AIModelFactory';
 export type { FactoryConfig, ModelRegistration } from './AIModelFactory';
 
 export { default as ModelManager } from './ModelManager';
-export type { 
-  CacheConfig, 
+export type { CacheConfig, 
   LoadBalancingConfig, 
   ModelPool, 
   ModelPerformanceMetrics, 
   WarmupStrategy, 
   ModelCache, 
-  LoadBalancer, 
+  LoadBalancer }
   HealthMonitor 
-} from './ModelManager';
+ from './ModelManager';
 
 export { default as ConfigurationManager } from './ConfigurationManager';
-export type {
-  EnvironmentConfig,
+export type { EnvironmentConfig,
   ConfigurationSchema,
   ValidationRule,
   ValidationResult,
   ConfigurationUpdate,
-  ConfigurationHistory,
+  ConfigurationHistory }
   ConfigurationValidator
-} from './ConfigurationManager';
+ from './ConfigurationManager';
 
 // Image processing utilities
 export { default as ImageProcessor } from './utils/ImageProcessor';
 
 // Import AIModelFactory for local use
 import { AIModelFactory } from './AIModelFactory';
-export type { 
-  ImageMetadata, 
+export type { ImageMetadata, 
   ImageProcessingOptions, 
-  ImageVariationOptions, 
+  ImageVariationOptions }
   ImageBatchProcessingOptions 
-} from './utils/ImageProcessor';
+ from './utils/ImageProcessor';
 
 // Re-export key types for convenience
-export type {
-  AIModelType,
+export type { AIModelType,
   AIModelProvider,
   AIModelStatus,
   ModelCapabilities,
@@ -102,28 +98,29 @@ export type {
   HealthStatus,
   AIRequest,
   AIResponse,
-  ModelConfiguration,
+  ModelConfiguration }
   AIModelFactory as IAIModelFactory
-} from './BaseAIModel';
+ from './BaseAIModel';
 
 // Performance optimization exports
 export * from './performance';
 
 // Utility functions and helpers
-}
-interface HTTPRequestMapping {
-  inputPath: string;
+
+
+interface HTTPRequestMapping { inputPath: string;
   outputPath: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   headers?: Record<string, string>;
-  export function registerAndCreateModel(factory: any, registration: any, id: string, endpoint: string, apiKey: string) {,
+  export function registerAndCreateModel(factory: any, registration: any, id: string, endpoint: string, apiKey: string) {;
   factory.registerModel(registration);
   return factory.createModel({)
-  id,
-  type: 'text' as any,
-  provider: 'custom' as any,
-  endpoint,
+  id;
+  type: 'text' as any;
+  provider: 'custom' as any;
+  endpoint }
   apiKey
-}
+
+
 });
 };

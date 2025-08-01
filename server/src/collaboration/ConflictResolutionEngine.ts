@@ -15,7 +15,7 @@ import {
   CursorPosition,
   SelectionRange,
   CollaborativeResource
-} from '../database/epic23-workspace-models';
+ from '../database/epic23-workspace-models';
 
 // =============================================================================
 // CONFLICT TYPES AND INTERFACES
@@ -27,14 +27,14 @@ export enum ConflictType {
   METADATA = 'metadata',         // Resource metadata conflicts
   CURSOR = 'cursor',             // Cursor position conflicts
   SELECTION = 'selection'        // Selection range conflicts
-}
+
 
 export enum ConflictSeverity {
   LOW = 'low',                   // Auto-resolvable
   MEDIUM = 'medium',             // Requires user input or smart resolution
   HIGH = 'high',                 // Manual resolution required
   CRITICAL = 'critical'          // Potentially destructive, needs admin review
-}
+
 
 export enum ResolutionStrategy {
   LAST_WRITER_WINS = 'last_writer_wins',
@@ -44,10 +44,10 @@ export enum ResolutionStrategy {
   MANUAL_RESOLUTION = 'manual_resolution',
   AUTO_MERGE = 'auto_merge',
   ROLLBACK = 'rollback'
-}
 
-}
-}
+
+
+
 export interface ConflictContext {
   resource_id: string;
   workspace_id: string;
@@ -60,15 +60,16 @@ export interface ConflictContext {
     line_number?: number;
     column?: number;
     offset?: number;
-}
-}
+
+
+
   };
   timestamp: Date;
   priority_levels: Map<string, number>; // User ID -> priority level
-}
 
-}
-}
+
+
+
 export interface ResolutionResult {
   success: boolean;
   resolution_strategy: ResolutionStrategy;
@@ -81,15 +82,16 @@ export interface ResolutionResult {
     resolution_time_ms: number;
     confidence_score: number;     // 0-1 confidence in resolution
     affected_users: string[];
-}
-}
+
+
+
   };
   warnings?: string[];
   errors?: string[];
-}
 
-}
-}
+
+
+
 export interface Operation {
   id: string;
   type: 'insert' | 'delete' | 'replace' | 'move' | 'format';
@@ -99,12 +101,13 @@ export interface Operation {
   user_id: string;
   timestamp: Date;
   session_id: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OperationalTransform {
   operations: Operation[];
   transformed_operations: Operation[];
@@ -114,10 +117,11 @@ export interface OperationalTransform {
     transform_time_ms: number;
     operations_processed: number;
     conflicts_resolved: number;
-}
-}
+
+
+
   };
-}
+
 
 // =============================================================================
 // CONFLICT RESOLUTION ENGINE
@@ -130,7 +134,7 @@ export class ConflictResolutionEngine extends EventEmitter {
   
   constructor() {
     super();
-  }
+
 
   // =============================================================================
   // CONFLICT DETECTION
@@ -149,7 +153,7 @@ export class ConflictResolutionEngine extends EventEmitter {
 
     if (activeSessions.length < 2) {
       return conflicts; // No conflict possible with single editor
-    }
+
 
     // Check for overlapping edits
     for (let i = 0; i < activeSessions.length; i++) {
@@ -164,8 +168,8 @@ export class ConflictResolutionEngine extends EventEmitter {
         );
         
         conflicts.push(...detectedConflicts);
-      }
-    }
+
+
 
     // Store active conflicts
     if (conflicts.length > 0) {
@@ -183,10 +187,10 @@ export class ConflictResolutionEngine extends EventEmitter {
 
       this.activeConflicts.set(resourceId, context);
       this.emit('conflicts_detected', { resourceId, conflicts, context });
-    }
+
 
     return conflicts;
-  }
+
 
   /**
    * Check for conflicts between two edit sessions
@@ -217,8 +221,8 @@ export class ConflictResolutionEngine extends EventEmitter {
           remote_version: sessionB.editing_state.current_cursor_position,
           created_at: new Date()
         });
-      }
-    }
+
+
 
     // Check selection conflicts
     if (sessionA.editing_state.current_selection && 
@@ -238,8 +242,8 @@ export class ConflictResolutionEngine extends EventEmitter {
           remote_version: sessionB.editing_state.current_selection,
           created_at: new Date()
         });
-      }
-    }
+
+
 
     // Check for content conflicts (would require actual content comparison)
     // This would be implemented based on the specific content type
@@ -247,10 +251,10 @@ export class ConflictResolutionEngine extends EventEmitter {
         sessionB.editing_state.has_unsaved_changes) {
       // Placeholder for content conflict detection
       // In practice, this would compare actual content changes
-    }
+
 
     return conflicts;
-  }
+
 
   /**
    * Detect cursor position conflicts
@@ -265,10 +269,10 @@ export class ConflictResolutionEngine extends EventEmitter {
         cursorA.position.column === cursorB.position.column &&
         Math.abs(cursorA.timestamp.getTime() - cursorB.timestamp.getTime()) < 5000) {
       return cursorA; // Return one of the conflicting cursors
-    }
+
     
     return null;
-  }
+
 
   /**
    * Detect selection range conflicts
@@ -281,10 +285,10 @@ export class ConflictResolutionEngine extends EventEmitter {
     // This is a simplified implementation - real overlap detection would be more complex
     if (this.selectionsOverlap(selectionA, selectionB)) {
       return selectionA;
-    }
+
     
     return null;
-  }
+
 
   /**
    * Check if two selections overlap
@@ -293,7 +297,7 @@ export class ConflictResolutionEngine extends EventEmitter {
     // Simplified overlap detection - in practice this would be more sophisticated
     return selectionA.start.node_id === selectionB.start.node_id ||
            selectionA.end.node_id === selectionB.end.node_id;
-  }
+
 
   // =============================================================================
   // CONFLICT RESOLUTION STRATEGIES
@@ -323,10 +327,10 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: 0,
           confidence_score: 0,
           affected_users: []
-  }
+
         errors: ['No active conflicts found for resource']
       };
-    }
+
 
     let result: ResolutionResult;
 
@@ -358,7 +362,7 @@ export class ConflictResolutionEngine extends EventEmitter {
           
       default:
         throw new Error(`Unsupported resolution strategy: ${strategy}`);
-      }
+
 
       // Update timing and metadata
       result.metadata.resolution_time_ms = Date.now() - startTime;
@@ -367,18 +371,17 @@ export class ConflictResolutionEngine extends EventEmitter {
       // Store resolution result
       if (!this.resolutionHistory.has(resourceId)) {
         this.resolutionHistory.set(resourceId, []);
-      }
+
       this.resolutionHistory.get(resourceId)!.push(result);
 
       // Clean up active conflicts if fully resolved
       if (result.success && result.conflicts_remaining.length === 0) {
         this.activeConflicts.delete(resourceId);
-      }
+
 
       this.emit('conflict_resolved', { resourceId, result, strategy });
       return result;
-
-    } catch (error) {
+ catch (error) {
       const errorResult: ResolutionResult = {
         success: false,
         resolution_strategy: strategy,
@@ -390,14 +393,14 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: Date.now() - startTime,
           confidence_score: 0,
           affected_users: context.conflicting_sessions.map(s => s.user_id)
-  }
+
         errors: [error instanceof Error ? error.message : String(error)]
       };
 
       this.emit('conflict_resolution_failed', { resourceId, error: errorResult });
       return errorResult;
-    }
-  }
+
+
 
   /**
    * Last Writer Wins resolution strategy
@@ -423,10 +426,10 @@ export class ConflictResolutionEngine extends EventEmitter {
         resolution_time_ms: 0, // Will be updated by caller
         confidence_score: 0.8,  // High confidence for simple strategy
         affected_users: []       // Will be updated by caller
-  }
+
       warnings: [`Resolved using last writer wins. Winner: ${winningUserId}`]
     };
-  }
+
 
   /**
    * Operational Transform resolution strategy
@@ -448,7 +451,7 @@ export class ConflictResolutionEngine extends EventEmitter {
         timestamp: session.session_info.last_activity_at,
         session_id: session.id
       });
-    }
+
 
     // Apply operational transformation
     const transform = await this.applyOperationalTransform(operations);
@@ -465,9 +468,9 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: transform.transform_metadata.transform_time_ms,
           confidence_score: 0.9, // High confidence for OT
           affected_users: []
-        }
+
       };
-    } else {
+ else {
       return {
         success: false,
         resolution_strategy: ResolutionStrategy.OPERATIONAL_TRANSFORM,
@@ -479,11 +482,11 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: transform.transform_metadata.transform_time_ms,
           confidence_score: 0.3,
           affected_users: []
-  }
+
         errors: ['Operational transform could not resolve all conflicts']
       };
-    }
-  }
+
+
 
   /**
    * Three-way merge resolution strategy
@@ -510,9 +513,9 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: 0,
           confidence_score: mergeResult.confidence_score,
           affected_users: []
-        }
+
       };
-    } else {
+ else {
       return {
         success: false,
         resolution_strategy: ResolutionStrategy.THREE_WAY_MERGE,
@@ -524,11 +527,11 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: 0,
           confidence_score: mergeResult.confidence_score,
           affected_users: []
-  }
+
         warnings: ['Three-way merge completed with unresolved conflicts']
       };
-    }
-  }
+
+
 
   /**
    * Auto merge resolution strategy
@@ -540,16 +543,16 @@ export class ConflictResolutionEngine extends EventEmitter {
     
     if (!result.success) {
       result = await this.resolveWithThreeWayMerge(context);
-    }
+
     
     if (!result.success) {
       // Final fallback to last writer wins
       result = await this.resolveWithLastWriterWins(context);
-    }
+
 
     result.resolution_strategy = ResolutionStrategy.AUTO_MERGE;
     return result;
-  }
+
 
   /**
    * Manual resolution strategy
@@ -571,10 +574,10 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: 0,
           confidence_score: 0,
           affected_users: []
-  }
+
         errors: ['Manual resolution data required']
       };
-    }
+
 
     // Apply manual resolution
     return {
@@ -588,9 +591,9 @@ export class ConflictResolutionEngine extends EventEmitter {
         resolution_time_ms: 0,
         confidence_score: 1.0, // Perfect confidence for manual resolution
         affected_users: []
-      }
+
     };
-  }
+
 
   /**
    * Rollback resolution strategy
@@ -611,10 +614,10 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: 0,
           confidence_score: 0,
           affected_users: []
-  }
+
         errors: ['No rollback points available']
       };
-    }
+
 
     // Use the most recent stable rollback point
     const rollbackContent = rollbackPoints[rollbackPoints.length - 1];
@@ -631,10 +634,10 @@ export class ConflictResolutionEngine extends EventEmitter {
         resolution_time_ms: 0,
         confidence_score: 0.7,
         affected_users: []
-  }
+
       warnings: ['Content rolled back to previous stable version']
     };
-  }
+
 
   // =============================================================================
   // OPERATIONAL TRANSFORMATION IMPLEMENTATION
@@ -673,11 +676,11 @@ export class ConflictResolutionEngine extends EventEmitter {
             remote_version: prevOp,
             created_at: new Date()
           });
-        }
-      }
+
+
 
       transformedOps.push(transformedOp);
-    }
+
 
     return {
       operations: sortedOps,
@@ -688,9 +691,9 @@ export class ConflictResolutionEngine extends EventEmitter {
         transform_time_ms: Date.now() - startTime,
         operations_processed: operations.length,
         conflicts_resolved: transformedOps.length - conflicts.length
-      }
+
     };
-  }
+
 
   /**
    * Transform one operation against another
@@ -703,13 +706,13 @@ export class ConflictResolutionEngine extends EventEmitter {
       // Text-based transformations
       if (againstOp.type === 'insert' && againstOp.position <= op.position) {
         transformedOp.position = op.position + (againstOp.length || 0);
-      } else if (againstOp.type === 'delete' && againstOp.position < op.position) {
+ else if (againstOp.type === 'delete' && againstOp.position < op.position) {
         transformedOp.position = Math.max(againstOp.position, op.position - (againstOp.length || 0));
-      }
-    }
+
+
 
     return transformedOp;
-  }
+
 
   /**
    * Check if two operations conflict
@@ -720,10 +723,10 @@ export class ConflictResolutionEngine extends EventEmitter {
         opA.user_id !== opB.user_id &&
         Math.abs(opA.timestamp.getTime() - opB.timestamp.getTime()) < 1000) {
       return true;
-    }
+
     
     return false;
-  }
+
 
   /**
    * Apply operations to base content
@@ -734,10 +737,10 @@ export class ConflictResolutionEngine extends EventEmitter {
     // Apply operations in order
     for (const op of operations) {
       content = this.applyOperation(content, op);
-    }
+
     
     return content;
-  }
+
 
   /**
    * Apply single operation to content
@@ -761,11 +764,11 @@ export class ConflictResolutionEngine extends EventEmitter {
         return content.slice(0, operation.position) + 
                  operation.content + 
                  content.slice(operation.position + (operation.length || 0));
-      }
-    }
+
+
     
     return content;
-  }
+
 
   // =============================================================================
   // THREE-WAY MERGE IMPLEMENTATION
@@ -790,7 +793,7 @@ export class ConflictResolutionEngine extends EventEmitter {
       if (localVersion === remoteVersion) {
         // Both sides made the same change - no conflict
         mergedContent = localVersion;
-      } else {
+ else {
         // Actual conflict - both sides changed differently
         conflicts.push({
           id: this.generateConflictId(),
@@ -805,14 +808,14 @@ export class ConflictResolutionEngine extends EventEmitter {
         // Use local version as default, mark conflict
         mergedContent = localVersion;
         confidence = 0.5;
-      }
-    } else if (localVersion !== baseVersion) {
+
+ else if (localVersion !== baseVersion) {
       // Only local changed
       mergedContent = localVersion;
-    } else if (remoteVersion !== baseVersion) {
+ else if (remoteVersion !== baseVersion) {
       // Only remote changed
       mergedContent = remoteVersion;
-    }
+
     // If neither changed, keep base version
 
     return {
@@ -820,7 +823,7 @@ export class ConflictResolutionEngine extends EventEmitter {
       conflicts,
       confidence_score: confidence
     };
-  }
+
 
   // =============================================================================
   // ROLLBACK MANAGEMENT
@@ -834,7 +837,7 @@ export class ConflictResolutionEngine extends EventEmitter {
     
     if (!this.rollbackPoints.has(resourceId)) {
       this.rollbackPoints.set(resourceId, []);
-    }
+
     
     const rollbackPoints = this.rollbackPoints.get(resourceId)!;
     rollbackPoints.push({
@@ -847,11 +850,11 @@ export class ConflictResolutionEngine extends EventEmitter {
     // Keep only the last 10 rollback points
     if (rollbackPoints.length > 10) {
       rollbackPoints.shift();
-    }
+
     
     this.emit('rollback_point_created', { resourceId, rollbackId, label });
     return rollbackId;
-  }
+
 
   /**
    * Perform rollback to specific point
@@ -860,30 +863,30 @@ export class ConflictResolutionEngine extends EventEmitter {
     const rollbackPoints = this.rollbackPoints.get(resourceId);
     if (!rollbackPoints || rollbackPoints.length === 0) {
       return null;
-    }
+
     
     let rollbackPoint;
     if (rollbackId) {
       rollbackPoint = rollbackPoints.find(rp => rp.id === rollbackId);
-    } else {
+ else {
       // Use latest rollback point
       rollbackPoint = rollbackPoints[rollbackPoints.length - 1];
-    }
+
     
     if (!rollbackPoint) {
       return null;
-    }
+
     
     this.emit('rollback_performed', { resourceId, rollbackId: rollbackPoint.id });
     return rollbackPoint.content;
-  }
+
 
   /**
    * Get available rollback points
    */
   getRollbackPoints(resourceId: string): unknown[] {
     return this.rollbackPoints.get(resourceId) || [];
-  }
+
 
   // =============================================================================
   // UTILITY METHODS
@@ -901,21 +904,21 @@ export class ConflictResolutionEngine extends EventEmitter {
     });
     
     return priorities;
-  }
+
 
   /**
    * Generate unique conflict ID
    */
   private generateConflictId(): string {
     return `conflict_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   /**
    * Generate unique operation ID
    */
   private generateOperationId(): string {
     return `op_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   /**
    * Get conflict statistics
@@ -926,7 +929,7 @@ export class ConflictResolutionEngine extends EventEmitter {
     resolved_conflicts: number;
     resolution_strategies: Record<ResolutionStrategy, number>;
     average_resolution_time: number;
-  } {
+ {
     let totalConflicts = 0;
     let resolvedConflicts = 0;
     const strategyCount: Record<ResolutionStrategy, number> = {
@@ -949,11 +952,11 @@ export class ConflictResolutionEngine extends EventEmitter {
         totalConflicts++;
         if (result.success) {
           resolvedConflicts++;
-        }
+
         strategyCount[result.resolution_strategy]++;
         totalResolutionTime += result.metadata.resolution_time_ms;
-      }
-    }
+
+
 
     const activeConflicts = resourceId 
       ? (this.activeConflicts.has(resourceId) ? 1 : 0)
@@ -966,7 +969,7 @@ export class ConflictResolutionEngine extends EventEmitter {
       resolution_strategies: strategyCount,
       average_resolution_time: totalConflicts > 0 ? totalResolutionTime / totalConflicts : 0
     };
-  }
+
 
   /**
    * Clear resolution history
@@ -976,13 +979,13 @@ export class ConflictResolutionEngine extends EventEmitter {
       this.resolutionHistory.delete(resourceId);
       this.rollbackPoints.delete(resourceId);
       this.activeConflicts.delete(resourceId);
-    } else {
+ else {
       this.resolutionHistory.clear();
       this.rollbackPoints.clear();
       this.activeConflicts.clear();
-    }
-  }
-}
+
+
+
 
 // =============================================================================
 // SINGLETON INSTANCE

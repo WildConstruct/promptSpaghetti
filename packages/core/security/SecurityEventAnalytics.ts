@@ -18,8 +18,7 @@ import { EventEmitter } from 'events';
 import { SecurityLogger, SecurityLogEntry, SecurityEventType, LogLevel, ComplianceFramework } from './SecurityLogger';
 
 // Risk Assessment Types
-export enum RiskLevel {
-  LOW = 'low',
+export enum RiskLevel { LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
@@ -31,11 +30,10 @@ export enum RiskLevel {
   DATA_EXFILTRATION = 'data_exfiltration',
   INSIDER_THREAT = 'insider_threat',
   EXTERNAL_ATTACK = 'external_attack',
-  SYSTEM_COMPROMISE = 'system_compromise',
+  SYSTEM_COMPROMISE = 'system_compromise' }
   COMPLIANCE_VIOLATION = 'compliance_violation'
   // Analytics Interfaces
-  export interface SecurityPattern {
-  id: string;
+  export interface SecurityPattern { id: string;
   name: string;
   category: ThreatCategory;
   description: string;
@@ -46,51 +44,46 @@ export enum RiskLevel {
   lastSeen: Date;
   occurrences: number;
   relatedEvents: string;
-  mitigationStrategies: string;
-}
-}
-}
-export interface BehavioralBaseline {
-  userId: string;
-  normalPatterns: {;
-}
+  mitigationStrategies: string }
+
+
+
+export interface BehavioralBaseline { userId: string;
+  normalPatterns: { }
+},
   loginTimes: { hour: number; frequency: number }[];
     ipAddresses: { ip: string; frequency: number }[];
     devices: { deviceId: string; frequency: number }[];
     actions: { action: string; frequency: number }[];
   };
-  riskProfile: {
+  riskProfile: { ,
   baselineRisk: number;
   recentDeviations: number;
-  trustedScore: number;
-};
+  trustedScore: number };
   lastUpdated: Date;
-}
-}
-export interface SecurityInsight {
-  id: string;
+
+
+export interface SecurityInsight { id: string;
   type: 'trend' | 'anomaly' | 'prediction' | 'recommendation';
   category: ThreatCategory;
   title: string;
   description: string;
   severity: RiskLevel;
   confidence: number;
-  impact: 'low' | 'medium' | 'high' | 'critical';
-}
+  impact: 'low' | 'medium' | 'high' | 'critical' }
+},
   timeframe: { start: Date; end: Date };
-  evidence: {
+  evidence: { ,
   eventIds: string;
   patterns: string;
-  metrics: Record<string, number>;
-};
-  recommendations: {
+  metrics: Record<string, number> };
+  recommendations: { 
   immediate: string;
   shortTerm: string;
-  longTerm: string;
-};
+  longTerm: string };
   generatedAt: Date;
-}
-}
+
+
 export interface SecurityMetricsSummary {
   period: { start: Date; end: Date };
   overallRisk: {
@@ -99,12 +92,12 @@ export interface SecurityMetricsSummary {
   trend: 'increasing' | 'decreasing' | 'stable';
     contributors: Array<{ factor: string; impact: number }>;
   };
-  eventVolume: {
+  eventVolume: { ,
   total: number;
   byType: Record<SecurityEventType, number>;
   bySeverity: Record<string, number>;
   hourlyDistribution: number;
-  trends: {
+  trends: { }
   weekOverWeek: number;
   monthOverMonth: number;
 };
@@ -115,33 +108,33 @@ export interface SecurityMetricsSummary {
   topCategories: Array<{ category: ThreatCategory; count: number }>;
     geographicHotspots: Array<{ location: string; riskScore: number }>;
   };
-  userBehavior: {
+  userBehavior: {,
   anomalousUsers: number;
     highRiskUsers: Array<{ userId: string; riskScore: number }>;
     behavioralDeviations: number;
   };
-  systemHealth: {
-  securityPosture: number; // 0-100 score,
+  systemHealth: { ,
+  securityPosture: number; // 0-100 score }
   vulnerabilityExposure: number;
   complianceScore: number;
   incidentResponseTime: number;
 };
-}
-}
-export interface AlertConfiguration {
-  id: string;
+
+
+export interface AlertConfiguration { id: string;
   name: string;
   description: string;
-  conditions: {
+  conditions: {;
   eventTypes?: SecurityEventType;
   thresholds?: Record<string, number>;
-  timeWindow?: number; // minutes,
+  timeWindow?: number; // minutes }
   userScope?: string;
   riskLevel?: RiskLevel;
-}
+
+
 };
-  actions: {
-  notify: string; // email addresses,
+  actions: { 
+  notify: string; // email addresses }
   escalate: boolean;
   autoResponse: string;
 };
@@ -149,7 +142,7 @@ export interface AlertConfiguration {
 /**
  * Advanced security analytics engine
  */
-}
+
 export class SecurityEventAnalytics extends EventEmitter {
   private securityLogger: SecurityLogger;
   private patterns: Map<string, SecurityPattern> = new Map();
@@ -176,10 +169,9 @@ export class SecurityEventAnalytics extends EventEmitter {
       const defaultStart = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Last 24 hours;
       const period = timeframe || { start: defaultStart, end: now };
       // Query security logs
-      const logQuery = {
-  startTime: period.start,
-  endTime: period.end,
-  limit: 10000,
+      const logQuery = { startTime: period.start
+  endTime: period.end
+  limit: 10000 }
 };
       const { logs } = this.securityLogger.queryLogs(logQuery);
       // Perform comprehensive analysis
@@ -194,24 +186,22 @@ export class SecurityEventAnalytics extends EventEmitter {
       await this.detectSecurityPatterns(logs);
       // Generate insights
       await this.generateSecurityInsights(logs);
-      const summary: SecurityMetricsSummary = {
-        period,
-        overallRisk,
-        eventVolume,
-        threatLandscape,
-        userBehavior,
+      const summary: SecurityMetricsSummary = { period
+        overallRisk
+        eventVolume
+        threatLandscape
+        userBehavior }
         systemHealth
       };
       this.emit('analysisComplete', summary);
       return summary;
-    } finally {
-      this.isAnalyzing = false;
+ finally { this.isAnalyzing = false;
   /**
    * Get real-time security insights
    */
   public getSecurityInsights(category?: ThreatCategory)
-    severity?: RiskLevel,
-    limit: number = 50): SecurityInsight {,
+    severity?: RiskLevel
+    limit: number = 50): SecurityInsight {
     let insights = this.insights;
     if (category) {
       insights = insights.filter(insight => insight.category === category);
@@ -231,27 +221,25 @@ export class SecurityEventAnalytics extends EventEmitter {
   /**
    * Get user behavioral analysis
    */
-  public getUserBehaviorAnalysis(userId: string): {
+  public getUserBehaviorAnalysis(userId: string): { }
   baseline: BehavioralBaseline | null;
     currentRisk: number;
   recentAnomalies: Array<{ type: string; severity: RiskLevel; timestamp: Date }>;
     recommendations: string;
     const baseline = this.baselines.get(userId);
-    if (!baseline) {
-  return {
+    if (!baseline) { return {
   baseline: null,
   currentRisk: 0,
   recentAnomalies: [],
-  recommendations: ['Insufficient data for behavioral analysis'],
+  recommendations: ['Insufficient data for behavioral analysis'] }
 };
     // Calculate current risk based on recent activity
     const currentRisk = this.calculateUserCurrentRisk(userId);
     const recentAnomalies = this.getUserRecentAnomalies(userId);
     const recommendations = this.generateUserRecommendations(baseline, currentRisk);
-    return {
-      baseline,
+    return { baseline,
       currentRisk,
-      recentAnomalies,
+      recentAnomalies }
       recommendations
     };
   /**
@@ -268,20 +256,19 @@ export class SecurityEventAnalytics extends EventEmitter {
     const summary = this.getLatestSecuritySummary();
     const topPatterns = this.getSecurityPatterns().slice(0, 5);
     const criticalInsights = this.getSecurityInsights(undefined, RiskLevel.CRITICAL);
-    return {
-  executiveSummary: this.generateExecutiveSummary(summary),
-  keyMetrics: {
+    return { executiveSummary: this.generateExecutiveSummary(summary),
+  keyMetrics: {,
   'Overall Risk Level': summary?.overallRisk.level.toUpperCase() || 'UNKNOWN',
   'Security Events (24h)': summary?.eventVolume.total || 0,
   'Active Threats': summary?.threatLandscape.activeThreats || 0,
   'High-Risk Users': summary?.userBehavior.highRiskUsers.length || 0,
   'Security Posture Score': summary?.systemHealth.securityPosture || 0,
-  'Compliance Score': summary?.systemHealth.complianceScore || 0,
+  'Compliance Score': summary?.systemHealth.complianceScore || 0 }
 },
-  topThreats: topPatterns.map(pattern => ({)
+  topThreats: topPatterns.map(pattern => ({ ),
   threat: pattern.name,
   impact: this.formatRiskLevel(pattern.riskScore),
-  status: pattern.occurrences > 5 ? 'Active' : 'Monitoring',
+  status: pattern.occurrences > 5 ? 'Active' : 'Monitoring' }
 })),
       recommendations: this.generateExecutiveRecommendations(summary, criticalInsights),
       complianceStatus: this.getComplianceStatus(),
@@ -325,34 +312,31 @@ export class SecurityEventAnalytics extends EventEmitter {
     // Determine risk level and trend
     const level = this.scoreToRiskLevel(riskScore);
     const trend = this.calculateRiskTrend();
-    return {
-  level,
+    return { level,
   score: Math.min(100, riskScore),
   trend,
-  contributors: contributors.sort((a, b) => b.impact - a.impact),
+  contributors: contributors.sort((a, b) => b.impact - a.impact) }
 };
   private analyzeEventVolume(logs: SecurityLogEntry): SecurityMetricsSummary['eventVolume'] {
     const total = logs.length;
     const byType: Record<SecurityEventType, number> = {} as any;
     const bySeverity: Record<string, number> = {};
     const hourlyDistribution = new Array(24).fill(0);
-    logs.forEach(log => {)
+    logs.forEach(log => { )
   // Count by type
       byType[log.eventType] = (byType[log.eventType] || 0) + 1;
       // Count by severity
       bySeverity[log.severity] = (bySeverity[log.severity] || 0) + 1;
       // Hourly distribution
       const hour = log.timestamp.getHours();
-      hourlyDistribution[hour]++;
-    });
-    return {
-  total,
-  byType,
-  bySeverity,
-  hourlyDistribution,
+      hourlyDistribution[hour]++ });
+    return { total
+  byType
+  bySeverity
+  hourlyDistribution
   trends: {
-  weekOverWeek: this.calculateWeekOverWeekTrend(),
-  monthOverMonth: this.calculateMonthOverMonthTrend(),
+  weekOverWeek: this.calculateWeekOverWeekTrend()
+  monthOverMonth: this.calculateMonthOverMonthTrend() }
 };
   private async analyzeThreatLandscape(logs: SecurityLogEntry): Promise<SecurityMetricsSummary['threatLandscape']> {
 
@@ -362,43 +346,39 @@ export class SecurityEventAnalytics extends EventEmitter {
     ).length;
     // Categorize threats
     const categoryCount: Record<ThreatCategory, number> = {} as any;
-    this.patterns.forEach(pattern => {)
-  categoryCount[pattern.category] = (categoryCount[pattern.category] || 0) + 1;
-    });
+    this.patterns.forEach(pattern => { )
+  categoryCount[pattern.category] = (categoryCount[pattern.category] || 0) + 1 });
     const topCategories = Object.entries(categoryCount);
       .map(([category, count]) => ({ category: category as ThreatCategory, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
     // Geographic analysis
     const geoDistribution: Record<string, number> = {};
-    logs.forEach(log => {)
+    logs.forEach(log => { )
   if (log.context.geolocation?.country) {
         const country = log.context.geolocation.country;
-        geoDistribution[country] = (geoDistribution[country] || 0) + 1;
-    });
+        geoDistribution[country] = (geoDistribution[country] || 0) + 1 });
     const geographicHotspots = Object.entries(geoDistribution);
-      .map(([location, count]) => ({)
-  location,
-  riskScore: this.calculateGeoRisk(location, count),
+      .map(([location, count]) => ({ )
+  location
+  riskScore: this.calculateGeoRisk(location, count) }
 }))
       .sort((a, b) => b.riskScore - a.riskScore)
       .slice(0, 10);
-    return {
-      activeThreats,
-      newPatterns,
-      topCategories,
+    return { activeThreats
+      newPatterns
+      topCategories }
       geographicHotspots
     };
   private async analyzeUserBehavior(logs: SecurityLogEntry): Promise<SecurityMetricsSummary['userBehavior']> {
 
     const userActivity: Record<string, SecurityLogEntry> = {};
     // Group logs by user
-    logs.forEach(log => {)
+    logs.forEach(log => { )
   if (log.context.userId) {
         if (!userActivity[log.context.userId]) {
           userActivity[log.context.userId] = [];
-        userActivity[log.context.userId].push(log);
-    });
+        userActivity[log.context.userId].push(log) });
     const anomalousUsers = 0;
     const highRiskUsers: Array<{ userId: string; riskScore: number }> = [];
     let behavioralDeviations = 0;
@@ -410,14 +390,11 @@ export class SecurityEventAnalytics extends EventEmitter {
         behavioralDeviations += baseline.riskProfile.recentDeviations;
       if (userRisk > 70) {
         highRiskUsers.push({ userId, riskScore: userRisk });
-    return {
-  anomalousUsers,
-  highRiskUsers: highRiskUsers.sort((a, b) => b.riskScore - a.riskScore),
+    return { anomalousUsers,
+  highRiskUsers: highRiskUsers.sort((a, b) => b.riskScore - a.riskScore) }
   behavioralDeviations
 };
-  private async assessSystemHealth(logs: SecurityLogEntry): Promise<SecurityMetricsSummary['systemHealth']> {
-
-  // Security posture score (0-100)
+  private async assessSystemHealth(logs: SecurityLogEntry): Promise<SecurityMetricsSummary['systemHealth']> { // Security posture score (0-100)
   const failureRate = logs.filter(log => log.outcome === 'failure').length / Math.max(1, logs.length);
   const criticalEventRate = logs.filter(log => log.severity === 'critical').length / Math.max(1, logs.length);
   const securityPosture = Math.max(0, 100 - (failureRate * 50) - (criticalEventRate * 30));
@@ -431,14 +408,12 @@ export class SecurityEventAnalytics extends EventEmitter {
   // Incident response time (average time to resolution)
   const incidentResponseTime = this.calculateAverageResponseTime(logs);
   return {
-  securityPosture: Math.round(securityPosture),
-  vulnerabilityExposure: Math.round(vulnerabilityExposure),
-  complianceScore: Math.round(complianceScore),
+  securityPosture: Math.round(securityPosture)
+  vulnerabilityExposure: Math.round(vulnerabilityExposure)
+  complianceScore: Math.round(complianceScore) }
   incidentResponseTime
 };
-  private async detectSecurityPatterns(logs: SecurityLogEntry): Promise<void> {
-
-    // Pattern detection algorithms
+  private async detectSecurityPatterns(logs: SecurityLogEntry): Promise<void> { // Pattern detection algorithms
     await this.detectBruteForcePatterns(logs);
     await this.detectPrivilegeEscalationPatterns(logs);
     await this.detectDataExfiltrationPatterns(logs);
@@ -450,61 +425,59 @@ export class SecurityEventAnalytics extends EventEmitter {
       log.details.reason === 'EXCESSIVE_FAILED_ATTEMPTS'
     );
     if (failedLogins.length > 5) {
-      const pattern: SecurityPattern = {,
+      const pattern: SecurityPattern = { }
   id: `brute-force-${Date.now()}`}
-},
-  name: 'Brute Force Attack Pattern',
-        category: ThreatCategory.AUTHENTICATION,
-        description: 'Multiple failed login attempts detected across accounts',
-        indicators: [,
-          'Multiple account lockouts',
-          'Failed authentication attempts',
+
+  name: 'Brute Force Attack Pattern'
+        category: ThreatCategory.AUTHENTICATION
+        description: 'Multiple failed login attempts detected across accounts'
+        indicators: [
+          'Multiple account lockouts'
+          'Failed authentication attempts'
           'Short time intervals between attempts'
-        ],
-        riskScore: Math.min(100, failedLogins.length * 2),
-        confidence: 0.85,
-        firstSeen: failedLogins[0].timestamp,
-        lastSeen: failedLogins[failedLogins.length - 1].timestamp,
-        occurrences: failedLogins.length,
-        relatedEvents: failedLogins.map(log => log.id),
-        mitigationStrategies: [,
-          'Implement progressive delays',
-          'Enable CAPTCHA verification',
-          'Monitor source IP addresses',
+        ]
+        riskScore: Math.min(100, failedLogins.length * 2)
+        confidence: 0.85
+        firstSeen: failedLogins[0].timestamp
+        lastSeen: failedLogins[failedLogins.length - 1].timestamp
+        occurrences: failedLogins.length
+        relatedEvents: failedLogins.map(log => log.id)
+        mitigationStrategies: [
+          'Implement progressive delays'
+          'Enable CAPTCHA verification'
+          'Monitor source IP addresses'
           'Implement account lockout policies'
         ]
       };
       this.patterns.set(pattern.id, pattern);
-  private async detectPrivilegeEscalationPatterns(logs: SecurityLogEntry): Promise<void> {
-
-    // Look for admin actions by non-admin users or unusual admin activity
+  private async detectPrivilegeEscalationPatterns(logs: SecurityLogEntry): Promise<void> { // Look for admin actions by non-admin users or unusual admin activity
     const adminActions = logs.filter(log => log.actor.type === 'admin');
     const suspiciousActions = adminActions.filter(log => ;);
       log.eventType === SecurityEventType.EMERGENCY_UNLOCK ||
       log.eventType === SecurityEventType.ADMIN_OVERRIDE
     );
     if (suspiciousActions.length > 2) {
-      const pattern: SecurityPattern = {,
+      const pattern: SecurityPattern = { }
   id: `privilege-escalation-${Date.now()}`}
-},
-  name: 'Potential Privilege Escalation',
-        category: ThreatCategory.PRIVILEGE_ESCALATION,
-        description: 'Unusual administrative actions detected',
-        indicators: [,
-          'Emergency unlock usage',
-          'Administrative overrides',
+
+  name: 'Potential Privilege Escalation'
+        category: ThreatCategory.PRIVILEGE_ESCALATION
+        description: 'Unusual administrative actions detected'
+        indicators: [
+          'Emergency unlock usage'
+          'Administrative overrides'
           'Elevated privilege usage'
-        ],
-        riskScore: suspiciousActions.length * 15,
-        confidence: 0.70,
-        firstSeen: suspiciousActions[0].timestamp,
-        lastSeen: suspiciousActions[suspiciousActions.length - 1].timestamp,
-        occurrences: suspiciousActions.length,
-        relatedEvents: suspiciousActions.map(log => log.id),
-        mitigationStrategies: [,
-          'Review admin access controls',
-          'Implement just-in-time admin access',
-          'Enable admin action auditing',
+        ]
+        riskScore: suspiciousActions.length * 15
+        confidence: 0.70
+        firstSeen: suspiciousActions[0].timestamp
+        lastSeen: suspiciousActions[suspiciousActions.length - 1].timestamp
+        occurrences: suspiciousActions.length
+        relatedEvents: suspiciousActions.map(log => log.id)
+        mitigationStrategies: [
+          'Review admin access controls'
+          'Implement just-in-time admin access'
+          'Enable admin action auditing'
           'Require dual authorization for sensitive actions'
         ]
       };
@@ -519,36 +492,34 @@ export class SecurityEventAnalytics extends EventEmitter {
     if (dataAccessEvents.length > 0) {
       // Group by user to identify unusual access patterns
       const userAccess: Record<string, SecurityLogEntry> = {};
-      dataAccessEvents.forEach(log => {)
+      dataAccessEvents.forEach(log => { )
   const userId = log.context.userId || log.actor.id;
         if (!userAccess[userId]) {
           userAccess[userId] = [];
-        userAccess[userId].push(log);
-      });
-      for (const [userId, events] of Object.entries(userAccess)) {
-        if (events.length > 10) { // Threshold for suspicious activity
-          const pattern: SecurityPattern = {,
+        userAccess[userId].push(log) });
+      for (const [userId, events] of Object.entries(userAccess)) { if (events.length > 10) { // Threshold for suspicious activity
+          const pattern: SecurityPattern = { }
   id: `data-exfiltration-${userId}-${Date.now()}`}
-},
+
   name: `Potential Data Exfiltration - User ${userId}`}
-},
-  category: ThreatCategory.DATA_EXFILTRATION,
-            description: 'Unusual data access patterns detected',
-            indicators: [,
-              'High volume data access',
-              'Off-hours access',
+
+  category: ThreatCategory.DATA_EXFILTRATION
+            description: 'Unusual data access patterns detected'
+            indicators: [
+              'High volume data access'
+              'Off-hours access'
               'Unusual data queries'
-            ],
-            riskScore: Math.min(100, events.length * 3),
-            confidence: 0.60,
-            firstSeen: events[0].timestamp,
-            lastSeen: events[events.length - 1].timestamp,
-            occurrences: events.length,
-            relatedEvents: events.map(log => log.id),
-            mitigationStrategies: [,
-              'Implement data loss prevention (DLP)',
-              'Monitor data access patterns',
-              'Restrict bulk data access',
+            ]
+            riskScore: Math.min(100, events.length * 3)
+            confidence: 0.60
+            firstSeen: events[0].timestamp
+            lastSeen: events[events.length - 1].timestamp
+            occurrences: events.length
+            relatedEvents: events.map(log => log.id)
+            mitigationStrategies: [
+              'Implement data loss prevention (DLP)'
+              'Monitor data access patterns'
+              'Restrict bulk data access'
               'Implement user behavior analytics'
             ]
           };
@@ -557,45 +528,41 @@ export class SecurityEventAnalytics extends EventEmitter {
 
     // Analyze user behavior for insider threat indicators
     const userActivities: Record<string, SecurityLogEntry> = {};
-    logs.forEach(log => {)
+    logs.forEach(log => { )
   const userId = log.context.userId;
       if (userId) {
         if (!userActivities[userId]) {
           userActivities[userId] = [];
-        userActivities[userId].push(log);
-    });
-    for (const [userId, activities] of Object.entries(userActivities)) {
-      const baseline = this.baselines.get(userId);
+        userActivities[userId].push(log) });
+    for (const [userId, activities] of Object.entries(userActivities)) { const baseline = this.baselines.get(userId);
       if (baseline && baseline.riskProfile.recentDeviations > 5) {
-        const pattern: SecurityPattern = {,
+        const pattern: SecurityPattern = { }
   id: `insider-threat-${userId}-${Date.now()}`}
-},
+
   name: `Insider Threat Indicators - User ${userId}`}
-},
-  category: ThreatCategory.INSIDER_THREAT,
-          description: 'User behavior significantly deviates from established baseline',
-          indicators: [,
-            'Behavioral deviation',
-            'Unusual access patterns',
+
+  category: ThreatCategory.INSIDER_THREAT
+          description: 'User behavior significantly deviates from established baseline'
+          indicators: [
+            'Behavioral deviation'
+            'Unusual access patterns'
             'Policy violations'
-          ],
-          riskScore: baseline.riskProfile.recentDeviations * 8,
-          confidence: 0.75,
-          firstSeen: activities[0].timestamp,
-          lastSeen: activities[activities.length - 1].timestamp,
-          occurrences: baseline.riskProfile.recentDeviations,
+          ]
+          riskScore: baseline.riskProfile.recentDeviations * 8
+          confidence: 0.75
+          firstSeen: activities[0].timestamp
+          lastSeen: activities[activities.length - 1].timestamp
+          occurrences: baseline.riskProfile.recentDeviations
           relatedEvents: activities.slice(-10).map(log => log.id), // Last 10 events
-          mitigationStrategies: [,
-            'Enhanced user monitoring',
-            'Access privilege review',
-            'Security awareness training',
+          mitigationStrategies: [
+            'Enhanced user monitoring'
+            'Access privilege review'
+            'Security awareness training'
             'Regular behavioral assessment'
           ]
         };
         this.patterns.set(pattern.id, pattern);
-  private async generateSecurityInsights(logs: SecurityLogEntry): Promise<void> {
-
-    // Generate various types of insights
+  private async generateSecurityInsights(logs: SecurityLogEntry): Promise<void> { // Generate various types of insights
     await this.generateTrendInsights(logs);
     await this.generateAnomalyInsights(logs);
     await this.generatePredictiveInsights(logs);
@@ -614,7 +581,7 @@ export class SecurityEventAnalytics extends EventEmitter {
     const olderCount = olderLogs.length;
     const percentChange = olderCount > 0 ? ((recentCount - olderCount) / olderCount) * 100 : 0;
     if (Math.abs(percentChange) > 20) {
-      const insight: SecurityInsight = {,
+      const insight: SecurityInsight = { }
   id: `trend-insight-${Date.now()}`}
 },
   type: 'trend',
@@ -626,159 +593,151 @@ export class SecurityEventAnalytics extends EventEmitter {
   severity: percentChange > 50 ? RiskLevel.HIGH : RiskLevel.MEDIUM,
         confidence: 0.80,
         impact: percentChange > 50 ? 'high' : 'medium',
-        timeframe: {
+        timeframe: { ,
   start: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-  end: new Date(),
+  end: new Date() }
 },
-  evidence: {
+  evidence: { ,
   eventIds: recentLogs.slice(0, 10).map(log => log.id),
   patterns: [],
-  metrics: {
+  metrics: {,
   recentCount,
-  olderCount,
+  olderCount }
   percentChange
 },
-  recommendations: {
+  recommendations: { ,
   immediate: percentChange > 0 ? ,
   ['Review recent security events', 'Check for ongoing attacks'] :,
   ['Validate security monitoring is functioning', 'Review detection coverage'],
   shortTerm: ['Analyze event patterns', 'Update security baselines'],
-  longTerm: ['Implement predictive analytics', 'Enhance threat detection'],
+  longTerm: ['Implement predictive analytics', 'Enhance threat detection'] }
 },
   generatedAt: new Date();
   };
       this.insights.push(insight);
-  private async generateAnomalyInsights(logs: SecurityLogEntry): Promise<void> {
-
-    // Detect anomalies in security events
+  private async generateAnomalyInsights(logs: SecurityLogEntry): Promise<void> { // Detect anomalies in security events
     const hourlyActivity = new Array(24).fill(0);
     logs.forEach(log => {)
   const hour = log.timestamp.getHours();
-      hourlyActivity[hour]++;
-    });
+      hourlyActivity[hour]++ });
     const avgActivity = hourlyActivity.reduce((sum, count) => sum + count, 0) / 24;
     const stdDev = Math.sqrt(;);
       hourlyActivity.reduce((sum, count) => sum + Math.pow(count - avgActivity, 2), 0) / 24
     );
-    hourlyActivity.forEach((count, hour) => {
-      if (count > avgActivity + 2 * stdDev) {
-        const insight: SecurityInsight = {,
+    hourlyActivity.forEach((count, hour) => { if (count > avgActivity + 2 * stdDev) {
+        const insight: SecurityInsight = { }
   id: `anomaly-insight-${hour}-${Date.now()}`}
-},
-  type: 'anomaly',
-          category: ThreatCategory.EXTERNAL_ATTACK,
+
+  type: 'anomaly'
+          category: ThreatCategory.EXTERNAL_ATTACK
           title: `Unusual Activity Spike at ${hour}:00`}
-},
+
   description: `Security events at ${hour}:00 are ${((count / avgActivity - 1) * 100).toFixed(1)}% above normal levels.`}
-},
-  severity: count > avgActivity + 3 * stdDev ? RiskLevel.HIGH : RiskLevel.MEDIUM,
-          confidence: 0.75,
-          impact: 'medium',
-          timeframe: {
-  start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-  end: new Date(),
-},
-  evidence: {
-  eventIds: logs.filter(log => log.timestamp.getHours() === hour).slice(0, 5).map(log => log.id),
-  patterns: [],
+
+  severity: count > avgActivity + 3 * stdDev ? RiskLevel.HIGH : RiskLevel.MEDIUM
+          confidence: 0.75
+          impact: 'medium'
+          timeframe: { 
+  start: new Date(Date.now() - 24 * 60 * 60 * 1000)
+  end: new Date() }
+
+  evidence: { 
+  eventIds: logs.filter(log => log.timestamp.getHours() === hour).slice(0, 5).map(log => log.id)
+  patterns: []
   metrics: {
-  hourlyCount: count,
-  averageCount: avgActivity,
-  deviationLevel: (count - avgActivity) / stdDev,
-},
-  recommendations: {
-  immediate: ['Investigate events during this time period', 'Check for coordinated attacks'],
-  shortTerm: ['Review access patterns', 'Update alerting thresholds'],
-  longTerm: ['Implement behavioral analytics', 'Enhance anomaly detection'],
-},
+  hourlyCount: count
+  averageCount: avgActivity
+  deviationLevel: (count - avgActivity) / stdDev }
+
+  recommendations: { 
+  immediate: ['Investigate events during this time period', 'Check for coordinated attacks']
+  shortTerm: ['Review access patterns', 'Update alerting thresholds']
+  longTerm: ['Implement behavioral analytics', 'Enhance anomaly detection'] }
+
   generatedAt: new Date();
   };
         this.insights.push(insight);
     });
-  private async generatePredictiveInsights(logs: SecurityLogEntry): Promise<void> {
-
-    // Generate predictive insights based on patterns
+  private async generatePredictiveInsights(logs: SecurityLogEntry): Promise<void> { // Generate predictive insights based on patterns
     const patterns = Array.from(this.patterns.values());
     const growingPatterns = patterns.filter(pattern => ;);
       pattern.occurrences > 5 && pattern.riskScore > 50
     );
     growingPatterns.forEach(pattern => {)
-  const insight: SecurityInsight = {,
+  const insight: SecurityInsight = { }
   id: `predictive-insight-${pattern.id}`}
-},
-  type: 'prediction',
-        category: pattern.category,
+
+  type: 'prediction'
+        category: pattern.category
         title: `Escalating Threat: ${pattern.name}`}
-},
+
   description: `The ${pattern.name} pattern is showing signs of escalation with ${pattern.occurrences} occurrences and a risk score of ${pattern.riskScore}.`}
-},
-  severity: pattern.riskScore > 80 ? RiskLevel.CRITICAL : RiskLevel.HIGH,
-        confidence: pattern.confidence,
-        impact: pattern.riskScore > 80 ? 'critical' : 'high',
-        timeframe: {
-  start: pattern.firstSeen,
-  end: new Date(),
-},
-  evidence: {
-  eventIds: pattern.relatedEvents.slice(-5),
-  patterns: [pattern.id],
+
+  severity: pattern.riskScore > 80 ? RiskLevel.CRITICAL : RiskLevel.HIGH
+        confidence: pattern.confidence
+        impact: pattern.riskScore > 80 ? 'critical' : 'high'
+        timeframe: { 
+  start: pattern.firstSeen
+  end: new Date() }
+
+  evidence: { 
+  eventIds: pattern.relatedEvents.slice(-5)
+  patterns: [pattern.id]
   metrics: {
-  occurrences: pattern.occurrences,
-  riskScore: pattern.riskScore,
-  confidence: pattern.confidence,
-},
-  recommendations: {
-  immediate: pattern.mitigationStrategies.slice(0, 2),
-  shortTerm: pattern.mitigationStrategies.slice(2),
-  longTerm: ['Implement advanced threat detection', 'Enhance security monitoring'],
-},
+  occurrences: pattern.occurrences
+  riskScore: pattern.riskScore
+  confidence: pattern.confidence }
+
+  recommendations: { 
+  immediate: pattern.mitigationStrategies.slice(0, 2)
+  shortTerm: pattern.mitigationStrategies.slice(2)
+  longTerm: ['Implement advanced threat detection', 'Enhance security monitoring'] }
+
   generatedAt: new Date();
   };
       this.insights.push(insight);
     });
-  private async generateRecommendationInsights(logs: SecurityLogEntry): Promise<void> {
-
-    // Generate recommendations based on overall security posture
+  private async generateRecommendationInsights(logs: SecurityLogEntry): Promise<void> { // Generate recommendations based on overall security posture
     const criticalEvents = logs.filter(log => log.severity === 'critical').length;
     const failedEvents = logs.filter(log => log.outcome === 'failure').length;
     if (criticalEvents > 5) {
-      const insight: SecurityInsight = {,
+      const insight: SecurityInsight = { }
   id: `recommendation-critical-${Date.now()}`}
-},
-  type: 'recommendation',
-        category: ThreatCategory.SYSTEM_COMPROMISE,
-        title: 'High Number of Critical Security Events',
+
+  type: 'recommendation'
+        category: ThreatCategory.SYSTEM_COMPROMISE
+        title: 'High Number of Critical Security Events'
         description: `${criticalEvents} critical security events detected. Immediate action recommended.`}
-},
-  severity: RiskLevel.CRITICAL,
-        confidence: 0.95,
-        impact: 'critical',
-        timeframe: {
-  start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-  end: new Date(),
-},
-  evidence: {
-  eventIds: logs.filter(log => log.severity === 'critical').map(log => log.id),
-          patterns: [],
+
+  severity: RiskLevel.CRITICAL
+        confidence: 0.95
+        impact: 'critical'
+        timeframe: { 
+  start: new Date(Date.now() - 24 * 60 * 60 * 1000)
+  end: new Date() }
+
+  evidence: { 
+  eventIds: logs.filter(log => log.severity === 'critical').map(log => log.id)
+          patterns: [] }
           metrics: { criticalEvents, failedEvents }
-  },
-  recommendations: {
-  immediate: [,
-  'Initiate incident response procedures',
-  'Review critical security events',
+
+  recommendations: { 
+  immediate: [
+  'Initiate incident response procedures'
+  'Review critical security events'
   'Implement additional monitoring'
-  ],
-  shortTerm: [,
-  'Conduct security assessment',
-  'Update security policies',
+  ]
+  shortTerm: [
+  'Conduct security assessment'
+  'Update security policies'
   'Enhance threat detection'
-  ],
-  longTerm: [,
-  'Implement security orchestration',
-  'Enhance automated response',
+  ]
+  longTerm: [
+  'Implement security orchestration'
+  'Enhance automated response' }
   'Regular security reviews'
   ]
-},
+
   generatedAt: new Date();
   };
       this.insights.push(insight);
@@ -839,43 +798,39 @@ export class SecurityEventAnalytics extends EventEmitter {
     const threatCount = summary.threatLandscape.activeThreats;
     return `Current security posture shows ${riskLevel} risk level with ${eventCount} security events analyzed. ` +}
            `${threatCount} active threat patterns identified. ${summary.userBehavior.highRiskUsers.length} users require elevated monitoring.`;}
-  private formatRiskLevel(score: number): string {
-    if (score >= 80) return 'Critical';
+  private formatRiskLevel(score: number): string { if (score >= 80) return 'Critical';
     if (score >= 60) return 'High';
     if (score >= 40) return 'Medium';
     return 'Low';
   private generateExecutiveRecommendations(((
-    summary: SecurityMetricsSummary | null,
+    summary: SecurityMetricsSummary | null }
     insights: SecurityInsight
-  ): Array<{ priority: string; action: string; timeline: string }> {
-  const recommendations = [];
+  ): Array<{ priority: string; action: string; timeline: string }> { const recommendations = [];
   if (insights.some(insight => insight.severity === RiskLevel.CRITICAL)) {
   recommendations.push({)
   priority: 'Critical',
   action: 'Initiate incident response procedures for critical threats',
-  timeline: 'Immediate',
+  timeline: 'Immediate' }
 });
-    if (summary && summary.systemHealth.securityPosture < 70) {
-  recommendations.push({)
+    if (summary && summary.systemHealth.securityPosture < 70) { recommendations.push({)
   priority: 'High',
   action: 'Improve security posture through enhanced controls',
-  timeline: '30 days',
+  timeline: '30 days' }
 });
-    recommendations.push({)
+    recommendations.push({ )
   priority: 'Medium',
   action: 'Implement continuous security monitoring enhancements',
-  timeline: '90 days',
+  timeline: '90 days' }
 });
     return recommendations;
-  private getComplianceStatus(): Record<ComplianceFramework, string> {
-  return {
-  [ComplianceFramework.SOX]: 'Compliant',
-  [ComplianceFramework.GDPR]: 'Compliant',
-  [ComplianceFramework.HIPAA]: 'Not Applicable',
-  [ComplianceFramework.PCI_DSS]: 'Not Applicable',
-  [ComplianceFramework.ISO_27001]: 'In Progress',
-  [ComplianceFramework.NIST]: 'Compliant',
-  [ComplianceFramework.CCPA]: 'Compliant',
+  private getComplianceStatus(): Record<ComplianceFramework, string> { return {
+  [ComplianceFramework.SOX]: 'Compliant'
+  [ComplianceFramework.GDPR]: 'Compliant'
+  [ComplianceFramework.HIPAA]: 'Not Applicable'
+  [ComplianceFramework.PCI_DSS]: 'Not Applicable'
+  [ComplianceFramework.ISO_27001]: 'In Progress'
+  [ComplianceFramework.NIST]: 'Compliant'
+  [ComplianceFramework.CCPA]: 'Compliant' }
 };
   private getRiskTrend(period: { start: Date; end: Date }): Array<{ date: Date; riskScore: number }> {
     // Simplified implementation - would calculate actual trend data
@@ -893,61 +848,54 @@ export class SecurityEventAnalytics extends EventEmitter {
 
     // Update user behavioral baselines based on new activity
     const userActivity: Record<string, SecurityLogEntry> = {};
-    logs.forEach(log => {)
+    logs.forEach(log => { )
   const userId = log.context.userId;
       if (userId) {
         if (!userActivity[userId]) {
           userActivity[userId] = [];
-        userActivity[userId].push(log);
-    });
-    for (const [userId, activities] of Object.entries(userActivity)) {
-  let baseline = this.baselines.get(userId);
+        userActivity[userId].push(log) });
+    for (const [userId, activities] of Object.entries(userActivity)) { let baseline = this.baselines.get(userId);
   if (!baseline) {
   baseline = {
-  userId,
+  userId
   normalPatterns: {
-  loginTimes: [],
-  ipAddresses: [],
-  devices: [],
-  actions: [],
-},
-  riskProfile: {
-  baselineRisk: 30,
-  recentDeviations: 0,
-  trustedScore: 50,
-},
+  loginTimes: []
+  ipAddresses: []
+  devices: []
+  actions: [] }
+
+  riskProfile: { 
+  baselineRisk: 30
+  recentDeviations: 0
+  trustedScore: 50 }
+
   lastUpdated: new Date();
   };
       // Update patterns based on recent activity
       this.updateUserPatterns(baseline, activities);
       baseline.lastUpdated = new Date();
       this.baselines.set(userId, baseline);
-  private updateUserPatterns(baseline: BehavioralBaseline, activities: SecurityLogEntry): void {
-    // Update login times
+  private updateUserPatterns(baseline: BehavioralBaseline, activities: SecurityLogEntry): void { // Update login times
     activities.forEach(activity => {)
   const hour = activity.timestamp.getHours();
       const existingTime = baseline.normalPatterns.loginTimes.find(t => t.hour === hour);
       if (existingTime) {
-        existingTime.frequency++;
-      } else {
+        existingTime.frequency++ } else {
         baseline.normalPatterns.loginTimes.push({ hour, frequency: 1 });
       // Update IP addresses
-      if (activity.context.ipAddress) {
-        const existingIp = baseline.normalPatterns.ipAddresses.find(;);
+      if (activity.context.ipAddress) { const existingIp = baseline.normalPatterns.ipAddresses.find(;);
           ip => ip.ip === activity.context.ipAddress
         );
         if (existingIp) {
-          existingIp.frequency++;
-        } else {
-  baseline.normalPatterns.ipAddresses.push({)
-  ip: activity.context.ipAddress,
-  frequency: 1,
+          existingIp.frequency++ } else { baseline.normalPatterns.ipAddresses.push({)
+  ip: activity.context.ipAddress
+  frequency: 1 }
 });
     });
     // Calculate deviations
     baseline.riskProfile.recentDeviations = this.calculateBehavioralDeviations(baseline, activities);
   private calculateBehavioralDeviations(((
-    baseline: BehavioralBaseline,
+    baseline: BehavioralBaseline
     activities: SecurityLogEntry
   ): number {
     let deviations = 0;
@@ -964,48 +912,42 @@ export class SecurityEventAnalytics extends EventEmitter {
           deviations++; // Unusual IP
     });
     return deviations;
-  private initializePatternDetection(): void {
-  // Initialize pattern detection algorithms
+  private initializePatternDetection(): void { // Initialize pattern detection algorithms
   this.emit('patternDetectionInitialized');
-  private startContinuousAnalysis(): void {,
+  private startContinuousAnalysis(): void { }
   // Start continuous analysis every 5 minutes
-  setInterval(async () => {
-  if (!this.isAnalyzing) {
+  setInterval(async () => { if (!this.isAnalyzing) {
   try {
-  await this.analyzeSecurityEvents();
-} catch (error) {
-          this.emit('analysisError', error);
-    }, 5 * 60 * 1000);
-  private setupDefaultAlerts(): void {
-    // Setup default alert configurations
+  await this.analyzeSecurityEvents() } catch (error) { this.emit('analysisError', error) }, 5 * 60 * 1000);
+  private setupDefaultAlerts(): void { // Setup default alert configurations
     const criticalAlert: AlertConfiguration = {,
   id: 'critical-events-alert',
       name: 'Critical Security Events',
       description: 'Alert when critical security events are detected',
-      conditions: {
+      conditions: { }
   thresholds: { critical_events: 3 },
-        timeWindow: 60 // 1 hour;
-  },
-  actions: {
+        timeWindow: 60 // 1 hour
+
+  actions: { ,
   notify: ['security-team@company.com'],
   escalate: true,
-  autoResponse: ['initiate-incident-response'],
+  autoResponse: ['initiate-incident-response'] }
 },
   enabled: true;
   };
     this.configureAlert(criticalAlert);
-    const patternAlert: AlertConfiguration = {,
+    const patternAlert: AlertConfiguration = { ,
   id: 'new-threat-pattern',
       name: 'New Threat Pattern Detected',
       description: 'Alert when new threat patterns are identified',
-      conditions: {
+      conditions: { }
   thresholds: { new_patterns: 1 },
-        riskLevel: RiskLevel.HIGH;
-  },
-  actions: {
+        riskLevel: RiskLevel.HIGH
+
+  actions: { ,
   notify: ['security-analysts@company.com'],
   escalate: false,
-  autoResponse: ['enhanced-monitoring'],
+  autoResponse: ['enhanced-monitoring'] }
 },
   enabled: true;
   };

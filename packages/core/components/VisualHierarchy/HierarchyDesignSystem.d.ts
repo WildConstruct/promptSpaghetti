@@ -5,97 +5,70 @@ import React from 'react';
  * Defines consistent visual cues for field importance and information architecture
  * across the progressive disclosure system.
  */
-export declare const TypographyScale: {
-    primary: {
+export declare const TypographyScale: { primary: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
-        letterSpacing: string;
-    };
-    secondary: {
-        fontSize: number;
+        letterSpacing: string };
+    secondary: { fontSize: number;
         fontWeight: number;
         lineHeight: number;
-        letterSpacing: string;
-    };
-    tertiary: {
-        fontSize: number;
+        letterSpacing: string };
+    tertiary: { fontSize: number;
         fontWeight: number;
         lineHeight: number;
-        letterSpacing: string;
-    };
-    caption: {
-        fontSize: number;
+        letterSpacing: string };
+    caption: { fontSize: number;
         fontWeight: number;
         lineHeight: number;
-        letterSpacing: string;
-    };
-    micro: {
-        fontSize: number;
+        letterSpacing: string };
+    micro: { fontSize: number;
         fontWeight: number;
         lineHeight: number;
-        letterSpacing: string;
-    };
+        letterSpacing: string };
 };
-export declare const HierarchyColors: {
-    basic: {
+export declare const HierarchyColors: { basic: {
         primary: string;
         secondary: string;
         background: string;
         border: string;
         text: string;
-        accent: string;
-    };
-    advanced: {
-        primary: string;
+        accent: string };
+    advanced: { primary: string;
         secondary: string;
         background: string;
         border: string;
         text: string;
-        accent: string;
-    };
-    debug: {
-        primary: string;
+        accent: string };
+    debug: { primary: string;
         secondary: string;
         background: string;
         border: string;
         text: string;
-        accent: string;
-    };
-    neutral: {
-        primary: string;
+        accent: string };
+    neutral: { primary: string;
         secondary: string;
         background: string;
         border: string;
         text: string;
-        accent: string;
-    };
+        accent: string };
 };
-export declare const SpacingScale: {
-    xs: number;
+export declare const SpacingScale: { xs: number;
     sm: number;
     md: number;
     lg: number;
     xl: number;
     xxl: number;
-    xxxl: number;
-};
-export declare const ComponentSizes: {
-    field: {
+    xxxl: number };
+export declare const ComponentSizes: { field: {
         height: number;
-        padding: string;
-    };
-    section: {
-        padding: string;
-        marginBottom: number;
-    };
-    header: {
-        height: number;
-        padding: string;
-    };
+        padding: string };
+    section: { padding: string;
+        marginBottom: number };
+    header: { height: number;
+        padding: string };
 };
-export declare const FieldImportanceStyles: {
-    critical: {
+export declare const FieldImportanceStyles: { critical: {
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
@@ -103,9 +76,24 @@ export declare const FieldImportanceStyles: {
         borderLeftWidth: number;
         borderLeftStyle: "solid";
         borderLeftColor: string;
-        backgroundColor: string;
-    };
-    important: {
+        backgroundColor: string };
+    important: { fontSize: number;
+        fontWeight: number;
+        lineHeight: number;
+        letterSpacing: string;
+        borderLeftWidth: number;
+        borderLeftStyle: "solid";
+        borderLeftColor: string;
+        backgroundColor: string };
+    standard: { fontSize: number;
+        fontWeight: number;
+        lineHeight: number;
+        letterSpacing: string;
+        borderLeftWidth: number;
+        borderLeftStyle: "solid";
+        borderLeftColor: string;
+        backgroundColor: string };
+    supplementary: { opacity: number;
         fontSize: number;
         fontWeight: number;
         lineHeight: number;
@@ -113,36 +101,14 @@ export declare const FieldImportanceStyles: {
         borderLeftWidth: number;
         borderLeftStyle: "solid";
         borderLeftColor: string;
-        backgroundColor: string;
-    };
-    standard: {
-        fontSize: number;
-        fontWeight: number;
-        lineHeight: number;
-        letterSpacing: string;
-        borderLeftWidth: number;
-        borderLeftStyle: "solid";
-        borderLeftColor: string;
-        backgroundColor: string;
-    };
-    supplementary: {
-        opacity: number;
-        fontSize: number;
-        fontWeight: number;
-        lineHeight: number;
-        letterSpacing: string;
-        borderLeftWidth: number;
-        borderLeftStyle: "solid";
-        borderLeftColor: string;
-        backgroundColor: string;
-    };
+        backgroundColor: string };
 };
 export type FieldPriority = 'critical' | 'important' | 'standard' | 'supplementary';
 export declare const classifyFieldPriority: (fieldName: string, nodeType?: string) => FieldPriority;
 
 }
-export interface HierarchyHeaderProps {
-    title: string;
+}
+export interface HierarchyHeaderProps { title: string;
     level: 'basic' | 'advanced' | 'debug';
     priority?: FieldPriority;
     description?: string;
@@ -152,11 +118,10 @@ export interface HierarchyHeaderProps {
     onToggle?: () => void;
     children?: React.ReactNode;
 
-export declare const HierarchyHeader: React.FC<HierarchyHeaderProps>;
-
+export declare const HierarchyHeader: React.FC<HierarchyHeaderProps> }
 }
-export interface HierarchyFieldProps {
-    priority: FieldPriority;
+}
+export interface HierarchyFieldProps { priority: FieldPriority;
     level: 'basic' | 'advanced' | 'debug';
     children: React.ReactNode;
     label?: string;
@@ -165,11 +130,10 @@ export interface HierarchyFieldProps {
     error?: string;
     className?: string;
 
-export declare const HierarchyField: React.FC<HierarchyFieldProps>;
-
+export declare const HierarchyField: React.FC<HierarchyFieldProps> }
 }
-export interface ComplexityIndicatorProps {
-    level: 'basic' | 'advanced' | 'debug';
+}
+export interface ComplexityIndicatorProps { level: 'basic' | 'advanced' | 'debug';
     showLabel?: boolean;
     size?: 'small' | 'medium' | 'large';
 
@@ -177,101 +141,74 @@ export declare const ComplexityIndicator: React.FC<ComplexityIndicatorProps>;
 export declare const AccessibilityUtils: {
     getAriaLabel: (level: "basic" | "advanced" | "debug", title: string) => string;
     getAriaDescription: (priority: FieldPriority) => string;
-    getFocusableElements: (container: HTMLElement) => HTMLElement[];
+    getFocusableElements: (container: HTMLElement) => HTMLElement[] }
 }
 };
-declare const _default: {
-    TypographyScale: {
+declare const _default: { TypographyScale: {
         primary: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
-            letterSpacing: string;
-        };
-        secondary: {
-            fontSize: number;
+            letterSpacing: string };
+        secondary: { fontSize: number;
             fontWeight: number;
             lineHeight: number;
-            letterSpacing: string;
-        };
-        tertiary: {
-            fontSize: number;
+            letterSpacing: string };
+        tertiary: { fontSize: number;
             fontWeight: number;
             lineHeight: number;
-            letterSpacing: string;
-        };
-        caption: {
-            fontSize: number;
+            letterSpacing: string };
+        caption: { fontSize: number;
             fontWeight: number;
             lineHeight: number;
-            letterSpacing: string;
-        };
-        micro: {
-            fontSize: number;
+            letterSpacing: string };
+        micro: { fontSize: number;
             fontWeight: number;
             lineHeight: number;
-            letterSpacing: string;
-        };
+            letterSpacing: string };
     };
-    HierarchyColors: {
-        basic: {
+    HierarchyColors: { basic: {
             primary: string;
             secondary: string;
             background: string;
             border: string;
             text: string;
-            accent: string;
-        };
-        advanced: {
-            primary: string;
+            accent: string };
+        advanced: { primary: string;
             secondary: string;
             background: string;
             border: string;
             text: string;
-            accent: string;
-        };
-        debug: {
-            primary: string;
+            accent: string };
+        debug: { primary: string;
             secondary: string;
             background: string;
             border: string;
             text: string;
-            accent: string;
-        };
-        neutral: {
-            primary: string;
+            accent: string };
+        neutral: { primary: string;
             secondary: string;
             background: string;
             border: string;
             text: string;
-            accent: string;
-        };
+            accent: string };
     };
-    SpacingScale: {
-        xs: number;
+    SpacingScale: { xs: number;
         sm: number;
         md: number;
         lg: number;
         xl: number;
         xxl: number;
-        xxxl: number;
-    };
-    ComponentSizes: {
-        field: {
+        xxxl: number };
+    ComponentSizes: { field: {
             height: number;
-            padding: string;
-        };
-        section: {
-            padding: string;
-            marginBottom: number;
-        };
-        header: {
-            height: number;
-            padding: string;
-        };
+            padding: string };
+        section: { padding: string;
+            marginBottom: number };
+        header: { height: number;
+            padding: string };
     };
-    FieldImportanceStyles: {
-        critical: {
+    FieldImportanceStyles: { critical: {
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
@@ -279,9 +216,24 @@ declare const _default: {
             borderLeftWidth: number;
             borderLeftStyle: "solid";
             borderLeftColor: string;
-            backgroundColor: string;
-        };
-        important: {
+            backgroundColor: string };
+        important: { fontSize: number;
+            fontWeight: number;
+            lineHeight: number;
+            letterSpacing: string;
+            borderLeftWidth: number;
+            borderLeftStyle: "solid";
+            borderLeftColor: string;
+            backgroundColor: string };
+        standard: { fontSize: number;
+            fontWeight: number;
+            lineHeight: number;
+            letterSpacing: string;
+            borderLeftWidth: number;
+            borderLeftStyle: "solid";
+            borderLeftColor: string;
+            backgroundColor: string };
+        supplementary: { opacity: number;
             fontSize: number;
             fontWeight: number;
             lineHeight: number;
@@ -289,39 +241,15 @@ declare const _default: {
             borderLeftWidth: number;
             borderLeftStyle: "solid";
             borderLeftColor: string;
-            backgroundColor: string;
-        };
-        standard: {
-            fontSize: number;
-            fontWeight: number;
-            lineHeight: number;
-            letterSpacing: string;
-            borderLeftWidth: number;
-            borderLeftStyle: "solid";
-            borderLeftColor: string;
-            backgroundColor: string;
-        };
-        supplementary: {
-            opacity: number;
-            fontSize: number;
-            fontWeight: number;
-            lineHeight: number;
-            letterSpacing: string;
-            borderLeftWidth: number;
-            borderLeftStyle: "solid";
-            borderLeftColor: string;
-            backgroundColor: string;
-        };
+            backgroundColor: string };
     };
     classifyFieldPriority: (fieldName: string, nodeType?: string) => FieldPriority;
     HierarchyHeader: React.FC<HierarchyHeaderProps>;
     HierarchyField: React.FC<HierarchyFieldProps>;
     ComplexityIndicator: React.FC<ComplexityIndicatorProps>;
-    AccessibilityUtils: {
-        getAriaLabel: (level: "basic" | "advanced" | "debug", title: string) => string;
+    AccessibilityUtils: { getAriaLabel: (level: "basic" | "advanced" | "debug", title: string) => string;
         getAriaDescription: (priority: FieldPriority) => string;
-        getFocusableElements: (container: HTMLElement) => HTMLElement[];
-    };
+        getFocusableElements: (container: HTMLElement) => HTMLElement[] };
 };
 export default _default;
 //# sourceMappingURL=HierarchyDesignSystem.d.ts.map

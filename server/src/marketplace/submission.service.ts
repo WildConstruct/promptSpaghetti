@@ -31,6 +31,7 @@ export class SubmissionService {
 
   // Create new submission
   async createSubmission(userId: string, data: any): Promise<TemplateSubmission> {
+
     const validated = CreateSubmissionSchema.parse(data);
 
     // Validate submission data
@@ -99,6 +100,7 @@ export class SubmissionService {
 
   // Get submission by ID
   async getSubmission(id: string, userId?: string): Promise<TemplateSubmission | null> {
+
     const result = await this.pool.query(
       `
       SELECT s.*, t.owner_id, t.title as template_title
@@ -128,6 +130,7 @@ export class SubmissionService {
 
   // Update submission
   async updateSubmission(id: string, userId: string, updates: any): Promise<TemplateSubmission> {
+
     const validated = UpdateSubmissionSchema.parse(updates);
 
     const submission = await this.getSubmission(id, userId);
@@ -189,6 +192,7 @@ export class SubmissionService {
 
   // Submit for review
   async submitForReview(id: string, userId: string): Promise<TemplateSubmission> {
+
     const submission = await this.getSubmission(id, userId);
     if (!submission) {
       throw new NotFoundException('Submission not found');
@@ -216,6 +220,7 @@ export class SubmissionService {
 
   // Get user's submissions
   async getUserSubmissions(userId: string, limit: number = 50): Promise<TemplateSubmission[]> {
+
     const result = await this.pool.query(
       `
       SELECT s.*, t.title as template_title
@@ -237,6 +242,7 @@ export class SubmissionService {
     status?: SubmissionStatus,
     limit: number = 50
   ): Promise<TemplateSubmission[]> {
+
     if (!(await this.isUserAdmin(userId))) {
       throw new ForbiddenException('Not authorized to view submissions for review');
     }
@@ -273,6 +279,7 @@ export class SubmissionService {
 
   // Create submission review
   async createReview(submissionId: string, reviewerId: string, reviewData: any): Promise<SubmissionReview> {
+
     if (!(await this.isUserAdmin(reviewerId))) {
       throw new ForbiddenException('Not authorized to review submissions');
     }
@@ -338,6 +345,7 @@ export class SubmissionService {
 
   // File upload handling
   async uploadFile(submissionId: string, userId: string, fileData: any): Promise<UploadedFile> {
+
     const submission = await this.getSubmission(submissionId, userId);
     if (!submission) {
       throw new NotFoundException('Submission not found');
@@ -369,6 +377,7 @@ export class SubmissionService {
 
   // Validate submission data
   private async validateSubmissionData(data: SubmissionData): Promise<ValidationResult[]> {
+
     const results: ValidationResult[] = [];
 
     // Validate required fields
@@ -495,6 +504,7 @@ export class SubmissionService {
 
   // Publish approved submission
   private async publishApprovedSubmission(submissionId: string): Promise<void> {
+
     const submission = await this.getSubmission(submissionId);
     if (!submission) return;
 
@@ -534,6 +544,7 @@ export class SubmissionService {
 
   // Helper methods
   private async canUserSubmit(userId: string): Promise<boolean> {
+
     // Check if user exists and is verified
     const result = await this.pool.query(
       `
@@ -546,6 +557,7 @@ export class SubmissionService {
   }
 
   private async isUserAdmin(userId: string): Promise<boolean> {
+
     const result = await this.pool.query(
       `
       SELECT role FROM users WHERE id = $1
@@ -557,6 +569,7 @@ export class SubmissionService {
   }
 
   private async updateTemplateCategories(templateId: string, categoryIds: string[]): Promise<void> {
+
     // Remove existing mappings
     await this.pool.query(
       `

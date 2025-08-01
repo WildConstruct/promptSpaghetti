@@ -15,7 +15,12 @@ caption ?  : string;
 ;
  > ;
 // A/B testing results
-variants ?  : Array;
+variants ?  : Array < {
+    id: string,
+    name: string,
+    traffic: number, // percentage,
+    performance: ContentPerformance
+} > ;
 dateRange ?  : { start: Date, end: Date };
 searchQuery ?  : string;
 hasSchedule ?  : boolean;
@@ -29,10 +34,20 @@ executedAt ?  : Date;
 completedAt ?  : Date;
 ;
  > ;
+ > ;
 performanceMetrics: {
     averageViewsPerPost: number;
-    topPerformingContent: Array;
-    contentTypePerformance: Record;
+    topPerformingContent: Array < {
+        id: string,
+        title: string,
+        views: number,
+        engagement: number
+    } > ;
+    contentTypePerformance: Record < ContentType, {
+        count: number,
+        averageViews: number,
+        averageEngagement: number
+    } > ;
 }
 ;
 export class ContentSchedulingService {
@@ -52,8 +67,9 @@ export class ContentSchedulingService {
             * Content Management
             */
             async;
-            createContent(contentData, (Omit));
-            createdBy: string;
+            createContent(contentData, (Omit)),
+                createdBy;
+            string;
             Promise < ContentItem > {
                 const: content, ContentItem = {
                     ...contentData,
@@ -93,8 +109,7 @@ export class ContentSchedulingService {
                         const deletedContent = await this.updateContent(contentId, {});
                         status: 'deleted',
                             scheduling;
-                        {
-                        }
+                        { }
                     },
                     ...content.scheduling,
                     deleteAt: new Date(), }, deletedBy,
@@ -106,8 +121,9 @@ export class ContentSchedulingService {
                     * Scheduling Operations
                     */
                     async;
-                    scheduleContent(contentId, string);
-                    scheduling: ContentScheduling,
+                    scheduleContent(contentId, string),
+                        scheduling;
+                    ContentScheduling,
                         scheduledBy;
                     string;
                     Promise < boolean > {
@@ -156,8 +172,9 @@ export class ContentSchedulingService {
                                         * Batch Operations
                                         */
                                         async;
-                                        createBatch(name, string);
-                                        contentIds: string,
+                                        createBatch(name, string),
+                                            contentIds;
+                                        string,
                                             operation;
                                         BatchOperation,
                                             schedule;

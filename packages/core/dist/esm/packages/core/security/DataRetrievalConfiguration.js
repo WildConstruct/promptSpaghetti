@@ -28,8 +28,7 @@ export const STANDARD_DATA_RETRIEVAL_LIMITS = {
             timeOfDayMultiplier: 0.8,
             locationMultiplier: 0.7,
             deviceTrustMultiplier: 0.8,
-        }[DataClassificationLevel.INTERNAL]
-    }
+        }[DataClassificationLevel.INTERNAL] }
 }, { classification: DataClassificationLevel, INTERNAL, operation: , 'READ': , limits: { requestsPerMinute: , 100: , requestsPerHour: , 2000: , requestsPerDay: , 20000: , bytesPerMinute: , 20971520: , // 20MB,
 bytesPerHour: , 209715200: , // 200MB,
 recordsPerMinute: , 2000: , recordsPerHour: , 20000: , concurrentRequests: , 5: , }, backoff: { strategy: BackoffStrategy, EXPONENTIAL, baseDelay: , 2: , maxDelay: , 120: , multiplier: , 2: , }, adaptiveFactors: { userRiskMultiplier: , 0.8: , timeOfDayMultiplier: , 0.6: , locationMultiplier: , 0.5: , deviceTrustMultiplier: , 0.7: , }, [DataClassificationLevel.CONFIDENTIAL]: { classification: DataClassificationLevel, CONFIDENTIAL, operation: , 'READ': , limits: { requestsPerMinute: , 30: , requestsPerHour: , 500: , requestsPerDay: , 2000: , bytesPerMinute: , 5242880: , // 5MB,
@@ -172,8 +171,7 @@ export const ENVIRONMENT_CONFIGURATIONS = {
                 throttlePercent: 50,
             },
             relaxedMode: true,
-            debugLogging: true
-        },
+            debugLogging: true },
         STAGING: {
             globalLimits: {
                 maxConcurrentUsers: 500,
@@ -187,8 +185,7 @@ export const ENVIRONMENT_CONFIGURATIONS = {
                     throttlePercent: 30,
                 },
                 relaxedMode: false,
-                debugLogging: true
-            },
+                debugLogging: true },
             PRODUCTION: {
                 globalLimits: {
                     maxConcurrentUsers: 10000,
@@ -202,8 +199,7 @@ export const ENVIRONMENT_CONFIGURATIONS = {
                         throttlePercent: 20,
                     },
                     relaxedMode: false,
-                    debugLogging: false
-                },
+                    debugLogging: false },
                 /**
                  * Standard Alert Thresholds
                  */
@@ -231,59 +227,55 @@ export const ENVIRONMENT_CONFIGURATIONS = {
                         SYSTEM_ADMIN: {
                             exemptionType: 'RATE_LIMIT',
                             reason: 'System administrator emergency access',
-                            conditions: [,
+                            conditions: [
                                 {
                                     type: 'EMERGENCY',
                                     specification: { severity: 'HIGH' },
                                     required: true
-                                }],
-                            auditRequired: true
-                        },
+                                }
+                            ],
+                            auditRequired: true },
                         DATA_OWNER: {
                             exemptionType: 'QUOTA',
                             reason: 'Data owner administrative access',
-                            conditions: [,
+                            conditions: [
                                 {
                                     type: 'BUSINESS_CRITICAL',
                                     specification: { justification_required: true },
                                     required: true
-                                }],
-                            auditRequired: true
-                        },
+                                }
+                            ],
+                            auditRequired: true },
                         SECURITY_OFFICER: {
                             exemptionType: 'CLASSIFICATION',
                             reason: 'Security investigation access',
-                            conditions: [,
+                            conditions: [
                                 {
                                     type: 'TIME_RANGE',
-                                    specification: {
-                                        start: '09:00',
-                                        end: '17:00',
-                                        timezone: 'UTC',
-                                    },
-                                    required: false
-                                }],
-                            auditRequired: true
-                        },
+                                    specification: {},
+                                    start: '09:00',
+                                    end: '17:00',
+                                    timezone: 'UTC',
+                                },
+                                required, false
+                            ],
+                            auditRequired: true },
                         COMPLIANCE_OFFICER: {
                             exemptionType: 'TIME_RESTRICTION',
                             reason: 'Compliance audit access',
-                            conditions: [,
+                            conditions: [
                                 {
                                     type: 'OPERATION',
                                     specification: { operations: ['AUDIT', 'read'] },
                                     required: true
-                                }],
-                            auditRequired: true
-                        },
+                                }
+                            ],
+                            auditRequired: true },
                         /**
                          * Configuration Factory Class
                          */
                         class: DataRetrievalConfigurationFactory
-                    } }
-            }
-        }
-    }
+                    } } } } }
 }, { 
 /**
  * Create configuration for specific environment
@@ -339,8 +331,9 @@ DataRetrievalConfig;
             ;
             operationLimits.operation = operation;
             return operationLimits;
-            createRoleExemption(exemptionId, string);
-            role: keyof;
+            createRoleExemption(exemptionId, string),
+                role;
+            keyof;
             typeof ROLE_EXEMPTION_TEMPLATES,
                 userId ?  : string,
                 approvedBy;

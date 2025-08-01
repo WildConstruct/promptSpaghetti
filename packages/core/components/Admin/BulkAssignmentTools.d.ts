@@ -8,8 +8,7 @@
  */
 import React from 'react';
 import './BulkAssignmentTools.css';
-export declare enum AssignmentType {
-    API_KEY = "api_key",
+export declare enum AssignmentType { API_KEY = "api_key",
     PERMISSION = "permission",
     ROLE = "role",
     TEAM = "team",
@@ -18,23 +17,22 @@ export declare enum AssignmentType {
 export declare enum BulkOperationType {
     ASSIGN = "assign",
     REVOKE = "revoke",
-    UPDATE = "update",
+    UPDATE = "update" }
     TRANSFER = "transfer"
 
 }
-export interface BulkAssignmentTarget {
-    id: string;
+}
+export interface BulkAssignmentTarget { id: string;
     type: 'user' | 'team' | 'service' | 'role';
     name: string;
     email?: string;
     department?: string;
     currentAssignments?: Assignment[];
     conflicts?: AssignmentConflict[];
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface Assignment {
-    id: string;
+}
+export interface Assignment { id: string;
     assignmentType: AssignmentType;
     resourceId: string;
     resourceName: string;
@@ -42,19 +40,17 @@ export interface Assignment {
     expiresAt?: Date;
     status: 'active' | 'expired' | 'suspended';
     assignedBy: string;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface AssignmentConflict {
-    type: 'duplicate' | 'incompatible' | 'quota_exceeded' | 'permission_denied';
+}
+export interface AssignmentConflict { type: 'duplicate' | 'incompatible' | 'quota_exceeded' | 'permission_denied';
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     affectedAssignments: string[];
-    resolution?: 'skip' | 'override' | 'merge' | 'escalate';
-
+    resolution?: 'skip' | 'override' | 'merge' | 'escalate' }
 }
-export interface BulkAssignmentOperation {
-    operationId: string;
+}
+export interface BulkAssignmentOperation { operationId: string;
     operationType: BulkOperationType;
     assignmentType: AssignmentType;
     targets: BulkAssignmentTarget[];
@@ -64,11 +60,10 @@ export interface BulkAssignmentOperation {
     status: 'draft' | 'validating' | 'pending_approval' | 'executing' | 'completed' | 'failed' | 'cancelled';
     progress?: BulkAssignmentProgress;
     conflicts?: AssignmentConflict[];
-    results?: BulkAssignmentResult[];
-
+    results?: BulkAssignmentResult[] }
 }
-export interface AssignmentResource {
-    id: string;
+}
+export interface AssignmentResource { id: string;
     type: AssignmentType;
     name: string;
     description?: string;
@@ -76,11 +71,10 @@ export interface AssignmentResource {
     permissions?: string[];
     restrictions?: string[];
     quotaLimits?: Record<string, number>;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface BulkAssignmentParameters {
-    executionMode: 'immediate' | 'scheduled' | 'staged';
+}
+export interface BulkAssignmentParameters { executionMode: 'immediate' | 'scheduled' | 'staged';
     batchSize: number;
     maxConcurrency: number;
     continueOnError: boolean;
@@ -91,11 +85,10 @@ export interface BulkAssignmentParameters {
     rollbackOnFailure: boolean;
     requireApproval: boolean;
     autoResolveConflicts: boolean;
-    customProperties: Record<string, any>;
-
+    customProperties: Record<string, any> }
 }
-export interface AssignmentTemplate {
-    id: string;
+}
+export interface AssignmentTemplate { id: string;
     name: string;
     description: string;
     assignmentType: AssignmentType;
@@ -106,7 +99,7 @@ export interface AssignmentTemplate {
     usage: {
         timesUsed: number;
         lastUsed?: Date;
-        successRate: number;
+        successRate: number }
 }
     };
     createdBy: string;
@@ -114,15 +107,14 @@ export interface AssignmentTemplate {
     isSystemTemplate: boolean;
 
 }
-export interface TargetFilter {
-    field: string;
+}
+export interface TargetFilter { field: string;
     operator: 'eq' | 'ne' | 'in' | 'not_in' | 'contains' | 'starts_with';
     value: Error;
-    logicalOperator?: 'AND' | 'OR';
-
+    logicalOperator?: 'AND' | 'OR' }
 }
-export interface BulkAssignmentProgress {
-    totalTargets: number;
+}
+export interface BulkAssignmentProgress { totalTargets: number;
     processedTargets: number;
     successfulAssignments: number;
     failedAssignments: number;
@@ -132,11 +124,10 @@ export interface BulkAssignmentProgress {
     totalBatches: number;
     percentComplete: number;
     estimatedTimeRemaining?: number;
-    currentStep: string;
-
+    currentStep: string }
 }
-export interface BulkAssignmentResult {
-    targetId: string;
+}
+export interface BulkAssignmentResult { targetId: string;
     targetName: string;
     status: 'success' | 'failed' | 'skipped' | 'partial';
     assignedResources: string[];
@@ -144,8 +135,8 @@ export interface BulkAssignmentResult {
     warnings?: string[];
     conflictsEncountered?: AssignmentConflict[];
     processingTime: number;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
+}
 }
 export interface BulkAssignmentToolsProps {
     assignmentType: AssignmentType;
@@ -161,4 +152,5 @@ export interface BulkAssignmentToolsProps {
 export declare const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps>;
 export default BulkAssignmentTools;
 //# sourceMappingURL=BulkAssignmentTools.d.ts.map
+}
 }

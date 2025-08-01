@@ -8,25 +8,23 @@ export { NetworkResilienceManager } from './NetworkResilienceManager';
 // Type Exports
 export type { QueuedOperation, QueueMetrics, OfflineQueueConfig } from './OfflineOperationQueue';
 
-export type {
-  ConnectionStateData,
+export type { ConnectionStateData,
   ConnectionMetrics,
   NetworkInfo,
-  ConnectionStateConfig,
-} from './ConnectionStateManager';
+  ConnectionStateConfig }
+ from './ConnectionStateManager';
 
 export type { ReconnectionAttempt, ReconnectionConfig, ReconnectionStats } from './ReconnectionHandler';
 
-export type {
-  DocumentState,
+export type { DocumentState,
   DocumentOperation,
   SyncDelta,
   ConflictInfo,
   ConflictResolution,
   SyncProgress,
   RecoveryConfig,
-  RecoveryStats,
-} from './SynchronizationRecovery';
+  RecoveryStats }
+ from './SynchronizationRecovery';
 
 export type { NetworkResilienceConfig, ResilienceMetrics, NetworkStatus } from './NetworkResilienceManager';
 
@@ -38,8 +36,7 @@ export { ReconnectionState } from './ReconnectionHandler';
 // UI Components
 export { ConnectionStatusIndicator, OfflineIndicator, NetworkResiliencePanel } from '../components/NetworkResilience';
 
-export type {
-  ConnectionStatusIndicatorProps,
+export type { ConnectionStatusIndicatorProps,
   OfflineIndicatorProps,
-  NetworkResiliencePanelProps,
-} from '../components/NetworkResilience';
+  NetworkResiliencePanelProps }
+ from '../components/NetworkResilience';

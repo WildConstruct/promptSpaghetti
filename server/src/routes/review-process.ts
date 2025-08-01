@@ -57,7 +57,7 @@ const StartReviewProcessSchema = z.object({
     minReviewers: z.number().optional(),
     escalationThreshold: z.number().optional(),
     autoEscalationEnabled: z.boolean()
-  }
+
 });
 
 const ProcessReviewDecisionSchema = z.object({
@@ -73,7 +73,7 @@ const ProcessReviewDecisionSchema = z.object({
       escalate: 'escalate',
       defer: 'defer',
       request_more_info: 'request_more_info'
-    } as const),
+ as const),
     confidence: z.number().min(0).max(100),
     reasoning: z.string(),
     criteriaEvaluations: z.array(z.object({
@@ -88,7 +88,7 @@ const ProcessReviewDecisionSchema = z.object({
     overridden: z.boolean().optional(),
     overriddenBy: z.string().optional(),
     overrideReason: z.string().optional()
-  }
+
 });
 
 const EscalateReviewSchema = z.object({
@@ -158,12 +158,12 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         400: z.object({
           success: z.boolean(),
           error: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof StartReviewProcessSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { reviewItem } = request.body;
       
@@ -174,13 +174,13 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         processId,
         message: `Review process started for ${reviewItem.reviewType}`
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to start review process');
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to start review process'
       });
-    }
+
   });
 
   // Process a review decision
@@ -195,12 +195,12 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         400: z.object({
           success: z.boolean(),
           error: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof ProcessReviewDecisionSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { reviewId, decision } = request.body;
       
@@ -210,13 +210,13 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         success: true,
         message: `Review decision processed for ${reviewId}`
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to process review decision');
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to process review decision'
       });
-    }
+
   });
 
   // Escalate a review
@@ -231,12 +231,12 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         400: z.object({
           success: z.boolean(),
           error: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof EscalateReviewSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { reviewId, reason, escalatedBy } = request.body;
       
@@ -246,13 +246,13 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         success: true,
         message: `Review ${reviewId} escalated successfully`
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to escalate review');
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to escalate review'
       });
-    }
+
   });
 
   // Get review process dashboard
@@ -276,19 +276,19 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
               escalated: z.number(),
               completed_today: z.number(),
               overdue: z.number()
-  }
-  }
-  }
-      }
-    }
+
+
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       status?: string;
       reviewType?: ReviewType;
       limit: number;
       offset: number;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { status, reviewType, limit, offset } = request.query;
       
@@ -300,17 +300,17 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
       if (status) {
         conditions.push(`status = $${params.length + 1}`);
         params.push(status);
-      }
+
       
       if (reviewType) {
         // Note: This would need to be added to the view or joined from templates
         conditions.push(`template_id IN (SELECT id FROM review_process_templates WHERE review_type = $${params.length + 1})`);
         params.push(reviewType);
-      }
+
       
       if (conditions.length > 0) {
         query += ' WHERE ' + conditions.join(' AND ');
-      }
+
       
       query += ` ORDER BY started_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
       params.push(limit, offset);
@@ -339,16 +339,16 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
             escalated: 0,
             completed_today: 0,
             overdue: 0
-          }
-        }
+
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get review process dashboard');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get review process dashboard'
       });
-    }
+
   });
 
   // Get process templates
@@ -362,15 +362,15 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           data: z.array(z.any())
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       reviewType?: ReviewType;
       active?: boolean;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { reviewType, active } = request.query;
       
@@ -381,16 +381,16 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
       if (reviewType) {
         conditions.push(`review_type = $${params.length + 1}`);
         params.push(reviewType);
-      }
+
       
       if (active !== undefined) {
         conditions.push(`active = $${params.length + 1}`);
         params.push(active);
-      }
+
       
       if (conditions.length > 0) {
         query += ' WHERE ' + conditions.join(' AND ');
-      }
+
       
       query += ' ORDER BY created_at DESC';
       
@@ -400,13 +400,13 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         success: true,
         data: result.rows
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get process templates');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get process templates'
       });
-    }
+
   });
 
   // Create process template
@@ -422,12 +422,12 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         400: z.object({
           success: z.boolean(),
           error: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof CreateProcessTemplateSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const templateData = request.body;
       
@@ -438,13 +438,13 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         templateId,
         message: `Process template created: ${templateData.name}`
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to create process template');
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create process template'
       });
-    }
+
   });
 
   // Get specific process details
@@ -461,12 +461,12 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         404: z.object({
           success: z.boolean(),
           error: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { processId: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { processId } = request.params;
       
@@ -487,7 +487,7 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
           success: false,
           error: `Process ${processId} not found`
         });
-      }
+
       
       // Get process events
       const eventsResult = await fastify.pg.pool.query(`
@@ -513,13 +513,13 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         success: true,
         data: processData
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get process details');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get process details'
       });
-    }
+
   });
 
   // Get reviewer workload for assignment planning
@@ -532,14 +532,14 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           data: z.array(z.any())
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       reviewType?: ReviewType;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { reviewType } = request.query;
       
@@ -550,13 +550,13 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         success: true,
         data: workload
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get reviewer workload');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get reviewer workload'
       });
-    }
+
   });
 
   // Analytics endpoint for process performance
@@ -574,17 +574,17 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
             summary: z.any(),
             performance: z.any(),
             trends: z.any()
-  }
-  }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       startDate?: string;
       endDate?: string;
       reviewType?: ReviewType;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { startDate, endDate, reviewType } = request.query;
       
@@ -641,19 +641,19 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
             approval_rate: analyticsResult.rows[0].total_processes > 0
               ? (analyticsResult.rows[0].approved_count / analyticsResult.rows[0].total_processes * 100).toFixed(1)
               : 0
-  }
+
           trends: trendsResult.rows
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get process analytics');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get process analytics'
       });
-    }
+
   });
-}
+
 
 // Export for registration
 export default reviewProcessRoutes;

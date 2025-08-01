@@ -34,14 +34,14 @@ export class ScheduledComplianceScannerRegistry {
 
   private constructor() {
     // Private constructor for singleton pattern
-  }
+
 
   public static getInstance(): ScheduledComplianceScannerRegistry {
     if (!ScheduledComplianceScannerRegistry.instance) {
       ScheduledComplianceScannerRegistry.instance = new ScheduledComplianceScannerRegistry();
-    }
+
     return ScheduledComplianceScannerRegistry.instance;
-  }
+
 
   /**
    * Initialize the registry with required service dependencies
@@ -58,7 +58,7 @@ export class ScheduledComplianceScannerRegistry {
 
     if (this.isInitialized) {
       throw new Error('ScheduledComplianceScannerRegistry is already initialized');
-    }
+
 
     // Store service dependencies
     this.reportingService = dependencies.reportingService;
@@ -81,9 +81,9 @@ export class ScheduledComplianceScannerRegistry {
         component: 'ScheduledComplianceScannerRegistry',
         scannerCount: this.scanners.size,
         timestamp: new Date()
-      }
+
     });
-  }
+
 
   /**
    * Create default scheduled scanners with predefined configurations
@@ -95,17 +95,17 @@ export class ScheduledComplianceScannerRegistry {
         scannerId: 'production-compliance-scanner',
         environment: 'production' as const,
         description: 'Production compliance monitoring with comprehensive scanning'
-  }
+
       {
         scannerId: 'staging-compliance-scanner',
         environment: 'staging' as const,
         description: 'Staging environment compliance validation'
-  }
+
       {
         scannerId: 'audit-preparation-scanner',
         environment: 'production' as const,
         description: 'Specialized scanner for audit preparation and evidence collection'
-      }
+
     ];
 
     for (const config of defaultConfigurations) {
@@ -117,13 +117,13 @@ export class ScheduledComplianceScannerRegistry {
           ruleEngine: this.ruleEngine,
           auditService: this.auditService,
           notificationService: this.notificationService
-        }
+
       });
 
       await scanner.initialize();
       this.scanners.set(config.scannerId, scanner);
-    }
-  }
+
+
 
   /**
    * Register a custom scheduled compliance scanner
@@ -135,11 +135,11 @@ export class ScheduledComplianceScannerRegistry {
 
     if (!this.isInitialized) {
       throw new Error('Registry must be initialized before registering scanners');
-    }
+
 
     if (this.scanners.has(scannerId)) {
       throw new Error(`Scanner with ID '${scannerId}' already exists`);
-    }
+
 
     await scanner.initialize();
     this.scanners.set(scannerId, scanner);
@@ -150,23 +150,23 @@ export class ScheduledComplianceScannerRegistry {
       details: {
         scannerId,
         timestamp: new Date()
-      }
+
     });
-  }
+
 
   /**
    * Get a registered scanner by ID
    */
   public getScanner(scannerId: string): ScheduledComplianceScanner | undefined {
     return this.scanners.get(scannerId);
-  }
+
 
   /**
    * Get all registered scanners
    */
   public getAllScanners(): Map<string, ScheduledComplianceScanner> {
     return new Map(this.scanners);
-  }
+
 
   /**
    * Start all registered scanners
@@ -175,19 +175,19 @@ export class ScheduledComplianceScannerRegistry {
 
     if (!this.isInitialized) {
       throw new Error('Registry must be initialized before starting scanners');
-    }
+
 
     const startPromises = Array.from(this.scanners.values()).map(async (scanner) => {
       try {
         await scanner.startScheduledScanning();
         return { success: true, scanner: scanner.getScannerId() };
-      } catch (error) {
+ catch (error) {
         return { 
           success: false, 
           scanner: scanner.getScannerId(), 
           error: error.message 
         };
-      }
+
     });
 
     const results = await Promise.allSettled(startPromises);
@@ -202,7 +202,7 @@ export class ScheduledComplianceScannerRegistry {
         successful: successCount,
         failed: totalCount - successCount,
         timestamp: new Date()
-      }
+
     });
 
     // Track analytics
@@ -211,7 +211,7 @@ export class ScheduledComplianceScannerRegistry {
       successfulStarts: successCount,
       timestamp: new Date().toISOString()
     });
-  }
+
 
   /**
    * Stop all registered scanners
@@ -222,13 +222,13 @@ export class ScheduledComplianceScannerRegistry {
       try {
         await scanner.stopScheduledScanning();
         return { success: true, scanner: scanner.getScannerId() };
-      } catch (error) {
+ catch (error) {
         return { 
           success: false, 
           scanner: scanner.getScannerId(), 
           error: error.message 
         };
-      }
+
     });
 
     const results = await Promise.allSettled(stopPromises);
@@ -241,9 +241,9 @@ export class ScheduledComplianceScannerRegistry {
         total: this.scanners.size,
         successful: successCount,
         timestamp: new Date()
-      }
+
     });
-  }
+
 
   /**
    * Remove a scanner from the registry
@@ -253,13 +253,13 @@ export class ScheduledComplianceScannerRegistry {
     const scanner = this.scanners.get(scannerId);
     if (!scanner) {
       return false;
-    }
+
 
     try {
       await scanner.stopScheduledScanning();
-    } catch (error) {
+ catch (error) {
       console.warn(`Warning: Failed to stop scanner '${scannerId}' during unregistration:`, error);
-    }
+
 
     this.scanners.delete(scannerId);
 
@@ -269,11 +269,11 @@ export class ScheduledComplianceScannerRegistry {
       details: {
         scannerId,
         timestamp: new Date()
-      }
+
     });
 
     return true;
-  }
+
 
   /**
    * Get registry status and health information
@@ -288,8 +288,8 @@ export class ScheduledComplianceScannerRegistry {
       scheduleCount: number;
       lastExecution?: Date;
       nextExecution?: Date;
-    }>;
-  }> {
+>;
+> {
     const scannerDetails = await Promise.all(
       Array.from(this.scanners.entries()).map(async ([id, scanner]) => {
         const status = await scanner.getScannerStatus();
@@ -300,7 +300,7 @@ export class ScheduledComplianceScannerRegistry {
           lastExecution: status.lastExecution,
           nextExecution: status.nextExecution
         };
-  }
+
     );
 
     return {
@@ -309,7 +309,7 @@ export class ScheduledComplianceScannerRegistry {
       activeScanners: scannerDetails.filter(s => s.active).length,
       scannerDetails
     };
-  }
+
 
   /**
    * Health check for all registered scanners
@@ -320,8 +320,8 @@ export class ScheduledComplianceScannerRegistry {
       scannerId: string;
       issue: string;
       severity: 'warning' | 'error';
-    }>;
-  }> {
+>;
+> {
     const issues: Array<{ scannerId: string; issue: string; severity: 'warning' | 'error' }> = [];
 
     for (const [scannerId, scanner] of this.scanners.entries()) {
@@ -333,21 +333,21 @@ export class ScheduledComplianceScannerRegistry {
             issue,
             severity: health.critical ? 'error' as const : 'warning' as const
           })));
-        }
-      } catch (error) {
+
+ catch (error) {
         issues.push({
           scannerId,
           issue: `Health check failed: ${error.message}`,
           severity: 'error'
         });
-      }
-    }
+
+
 
     return {
       healthy: issues.length === 0,
       issues
     };
-  }
+
 
   /**
    * Cleanup registry resources
@@ -363,10 +363,10 @@ export class ScheduledComplianceScannerRegistry {
       userId: 'system',
       details: {
         timestamp: new Date()
-      }
+
     });
-  }
-}
+
+
 
 // Export singleton instance getter for convenience
 export const getScheduledComplianceScannerRegistry = () => ScheduledComplianceScannerRegistry.getInstance();

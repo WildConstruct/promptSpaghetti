@@ -3,47 +3,45 @@
 import { RuntimeNode, ExecutionContext } from './types';
 import seedrandom from 'seedrandom';
 
-}
-export interface ValidationResult {
-  valid: boolean;
+
+export interface ValidationResult { valid: boolean;
   errors: string;
-  warnings: string;
-}
-}
-}
-export interface AdvancedNodeConfig {
-  /** Whether this node uses deterministic (seeded) random behavior */
+  warnings: string }
+
+
+
+export interface AdvancedNodeConfig { /** Whether this node uses deterministic (seeded) random behavior */
   deterministic: boolean;
   /** Whether results can be cached for performance optimization */
   cacheable: boolean;
   /** Whether this node maintains state between executions */
   stateful: boolean;
   /** Optional performance hints */
-  performanceHints?: {
+  performanceHints?: {;
   expectedExecutionTime?: 'fast' | 'medium' | 'slow';
-  memoryUsage?: 'low' | 'medium' | 'high'
-}
+  memoryUsage?: 'low' | 'medium' | 'high' }
+
+
   };
-}
-}
-export interface AdvancedNodeData {
-  id: string;
+
+
+export interface AdvancedNodeData { id: string;
   type: string;
   config: AdvancedNodeConfig;
   data: Record<string, unknown>;
-  metadata?: {
+  metadata?: { }
   version: string;
   created: string;
   lastModified?: string;
-}
+
+
 };
 /**
  * Enhanced execution context for advanced nodes with state management and caching
  */
-}
-}
-export interface AdvancedExecutionContext extends ExecutionContext {
-  /** State storage for stateful nodes (nodeId -> state) */
+
+
+export interface AdvancedExecutionContext extends ExecutionContext { /** State storage for stateful nodes (nodeId -> state) */
   nodeStates: Map<string, unknown>;
   /** Current evaluation depth (for cycle detection) */
   evaluationDepth: number;
@@ -52,7 +50,7 @@ export interface AdvancedExecutionContext extends ExecutionContext {
   /** Pseudorandom number generator function for deterministic execution */
   prng: () => number;
   /** Execution metadata and debugging info */
-  executionMeta: {
+  executionMeta: { }
   startTime: number;
   executionId: string;
   nodeExecutionOrder: string;
@@ -109,9 +107,9 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
    * Check if a result is cached and return it, or cache a new result
    */
   protected withCache<T>()
-    ctx: AdvancedExecutionContext, 
-    key: string, 
-    computation: () => T): T {,
+    ctx: AdvancedExecutionContext
+    key: string
+    computation: () => T): T {
     if (!this.config.cacheable) {
       return computation();
     const cacheKey = `${this.id}-${key}`;}
@@ -130,9 +128,9 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
    * Measure execution time of a function and record it
    */
   protected measureExecution<T>()
-    ctx: AdvancedExecutionContext, 
-    operation: string, 
-    fn: () => T): T {,
+    ctx: AdvancedExecutionContext
+    operation: string
+    fn: () => T): T {
     const start = performance.now();
     const result = fn();
     const duration = performance.now() - start;
@@ -147,19 +145,18 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
    * Check if this node is compatible with basic execution context
    * Advanced nodes should gracefully degrade when possible
    */
-  isCompatibleWithBasicContext(): boolean {
-  return !this.config.stateful;
+  isCompatibleWithBasicContext(): boolean { return !this.config.stateful;
   /**
   * Concrete implementation of AdvancedExecutionContext for tests and direct instantiation
   */
   export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
   variables: Record<string, unknown>;
-  seed: string | number;
+  seed: string | number
   nodeStates: Map<string, unknown>;
   evaluationDepth: number;
   cache: Map<string, unknown>;
-  prng: () => number;
-  executionMeta: {
+  prng: () => number
+  executionMeta: { }
   startTime: number;
   executionId: string;
   nodeExecutionOrder: string;
@@ -174,11 +171,10 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
     this.evaluationDepth = 0;
     this.cache = new Map();
     this.prng = seedrandom(String(seed));
-    this.executionMeta = {
-      startTime: performance.now(),
+    this.executionMeta = { startTime: performance.now() }
       executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-},
-  nodeExecutionOrder: [],
+
+  nodeExecutionOrder: []
       performanceMetrics: new Map();
   };
     this.inputs = {};
@@ -189,29 +185,27 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
 /**
  * Utility functions for working with advanced execution contexts
  */
-export class AdvancedExecutionUtils {
-  /**
+export class AdvancedExecutionUtils { /**
    * Create an enhanced execution context from a basic one
    */
   static enhanceContext(basicCtx: ExecutionContext): AdvancedExecutionContext {
     return {
-      ...basicCtx,
-      nodeStates: new Map(),
-      evaluationDepth: 0,
-      cache: new Map(),
-      prng: seedrandom(String(basicCtx.seed)),
+      ...basicCtx
+      nodeStates: new Map()
+      evaluationDepth: 0
+      cache: new Map()
+      prng: seedrandom(String(basicCtx.seed))
       executionMeta: {
-  startTime: performance.now(),
+  startTime: performance.now() }
         executionId: `exec_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`}
-},
-  nodeExecutionOrder: [],
+
+  nodeExecutionOrder: []
         performanceMetrics: new Map();
   };
   /**
    * Clear stateful data from context (for cleanup between executions)
    */
-  static clearExecutionState(ctx: AdvancedExecutionContext): void {
-  ctx.nodeStates.clear();
+  static clearExecutionState(ctx: AdvancedExecutionContext): void { ctx.nodeStates.clear();
   ctx.cache.clear();
   ctx.evaluationDepth = 0;
   ctx.executionMeta.nodeExecutionOrder.length = 0;
@@ -220,7 +214,7 @@ export class AdvancedExecutionUtils {
   /**
   * Check for potential infinite loops in stateful node execution
   */
-  static detectInfiniteLoop(ctx: AdvancedExecutionContext, nodeId: string): boolean {,
+  static detectInfiniteLoop(ctx: AdvancedExecutionContext, nodeId: string): boolean {
   const MAX_DEPTH = 1000; // Configurable limit;
   return ctx.evaluationDepth > MAX_DEPTH;
   /**
@@ -236,9 +230,9 @@ export class AdvancedExecutionUtils {
   const cacheHits = ctx.cache.size;
   const statefulness = ctx.nodeStates.size;
   return {
-  totalDuration,
-  nodesExecuted,
-  cacheHits,
+  totalDuration
+  nodesExecuted
+  cacheHits }
   statefulness
 };
 /**
@@ -257,18 +251,18 @@ export class ValidationHelpers {
     const errors: string = [];
     if (!Array.isArray(value)) {
       errors.push(`${fieldName} must be an array`);}
-    } else if (value.length < minLength) {
+ else if (value.length < minLength) {
       errors.push(`${fieldName} must have at least ${minLength} items`);}
     return errors;
-  static validateNumericRange(value: unknown, )
-    fieldName: string, 
+  static validateNumericRange(value: unknown);
+  fieldName: string, 
     min?: number, 
     max?: number
   ): string {
     const errors: string = [];
     if (typeof value !== 'number' || isNaN(value)) {
       errors.push(`${fieldName} must be a valid number`);}
-    } else {
+ else {
       if (min !== undefined && value < min) {
         errors.push(`${fieldName} must be at least ${min}`);}
       if (max !== undefined && value > max) {
@@ -283,15 +277,12 @@ export abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> extends Advan
     super(id, config);
     if (ioSpec && typeof ioSpec === 'object' && ioSpec !== null && 'inputs' in ioSpec && 'outputs' in ioSpec) {
       // Dynamic import to avoid circular dependency
-      import('./io-system').then(({ AdvancedIOHandler }) => {
-        // Use type assertion since we already validated the structure
-        this.ioHandler = new AdvancedIOHandler(ioSpec as any);
-      });
+      import('./io-system').then(({ AdvancedIOHandler }) => { // Use type assertion since we already validated the structure
+        this.ioHandler = new AdvancedIOHandler(ioSpec as any) });
   /**
    * Validate node configuration including I/O specification
    */
-  validate(): ValidationResult {
-  const baseValidation = this.validateNodeConfig();
+  validate(): ValidationResult { const baseValidation = this.validateNodeConfig();
   if (!this.ioHandler) {
   return baseValidation;
   // Additional I/O validation would go here
@@ -299,7 +290,7 @@ export abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> extends Advan
   /**
   * Base node configuration validation
   */
-  protected validateNodeConfig(): ValidationResult {,
+  protected validateNodeConfig(): ValidationResult {
   // Override in subclasses for node-specific validation
   return ValidationHelpers.createValidResult();
   /**
@@ -307,17 +298,17 @@ export abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> extends Advan
   */
   export class SerializationHelpers {
   static createAdvancedNodeData(id: string)
-  type: string,
-  config: AdvancedNodeConfig,
-  data: Record<string, unknown>): AdvancedNodeData {,
+  type: string
+  config: AdvancedNodeConfig
+  data: Record<string, unknown>): AdvancedNodeData {
   return {
-  id,
-  type,
-  config,
-  data,
+  id
+  type
+  config
+  data
   metadata: {
-  version: '1.0.0',
-  created: new Date().toISOString(),
+  version: '1.0.0'
+  created: new Date().toISOString() }
 };
   static validateSerializedData(data: AdvancedNodeData): ValidationResult {
     const errors: string = [];

@@ -338,320 +338,301 @@ useEffect(() => {
     };
 });
 // Add progress bars for user onboarding and achievements
-const progressConfigs = [];
-{
-    id: 'marketplace_onboarding',
+const progressConfigs = [
+    {
+        id: 'marketplace_onboarding',
+        name: 'Marketplace Onboarding',
+        description: 'Track your marketplace setup progress',
+        show: pageContext.pageType === 'marketplace' || pageContext.pageType === 'profile',
+        value: sampleProgress.marketplace_onboarding,
+    },
+    {
+        id: 'template_creation',
+        name: 'Template Creation Progress',
+        description: 'Track your template creation journey',
+        show: userRole === 'creator' && (pageContext.pageType === 'marketplace' || pageContext.pageType === 'profile'),
+        value: sampleProgress.template_creation,
+    },
+    {
+        id: 'community_engagement',
+        name: 'Community Engagement',
+        description: 'Track your community participation',
+        show: pageContext.pageType === 'community',
+        value: sampleProgress.community_engagement,
+    },
+    {
+        id: 'learning_path',
+        name: 'Learning Path Progress',
+        description: 'Track your learning achievements',
+        show: pageContext.pageType === 'learning',
+        value: sampleProgress.learning_path
+    }
+];
+progressConfigs.forEach(config => { });
+if (config.show) {
+    elementsToCreate.push({});
+    type: InteractiveElementType.PROGRESS_BAR,
         name;
-    'Marketplace Onboarding',
+    config.name,
         description;
-    'Track your marketplace setup progress',
-        show;
-    pageContext.pageType === 'marketplace' || pageContext.pageType === 'profile',
-        value;
-    sampleProgress.marketplace_onboarding,
-    ;
-}
-{
-    id: 'template_creation',
-        name;
-    'Template Creation Progress',
-        description;
-    'Track your template creation journey',
-        show;
-    userRole === 'creator' && (pageContext.pageType === 'marketplace' || pageContext.pageType === 'profile'),
-        value;
-    sampleProgress.template_creation,
-    ;
-}
-{
-    id: 'community_engagement',
-        name;
-    'Community Engagement',
-        description;
-    'Track your community participation',
-        show;
-    pageContext.pageType === 'community',
-        value;
-    sampleProgress.community_engagement,
-    ;
-}
-{
-    id: 'learning_path',
-        name;
-    'Learning Path Progress',
-        description;
-    'Track your learning achievements',
-        show;
-    pageContext.pageType === 'learning',
-        value;
-    sampleProgress.learning_path;
-    ;
-    progressConfigs.forEach(config => { });
-    if (config.show) {
-        elementsToCreate.push({});
-        type: InteractiveElementType.PROGRESS_BAR,
-            name;
-        config.name,
-            description;
-        config.description,
-            config;
-        {
-            theme: {
-                primary_color: '#10B981',
-                    secondary_color;
-                '#64748B',
-                    accent_color;
-                '#F59E0B',
-                    background_color;
-                '#F3F4F6',
-                    text_color;
-                '#1F2937',
-                    border_color;
-                '#E5E7EB',
-                    border_radius;
-                8,
-                    shadow;
-                '0 1px 3px rgba(0, 0, 0, 0.1)',
-                    font_family;
-                'Inter, sans-serif',
-                    font_size;
-                14,
+    config.description,
+        config;
+    {
+        theme: {
+            primary_color: '#10B981',
+                secondary_color;
+            '#64748B',
+                accent_color;
+            '#F59E0B',
+                background_color;
+            '#F3F4F6',
+                text_color;
+            '#1F2937',
+                border_color;
+            '#E5E7EB',
+                border_radius;
+            8,
+                shadow;
+            '0 1px 3px rgba(0, 0, 0, 0.1)',
+                font_family;
+            'Inter, sans-serif',
+                font_size;
+            14,
+            ;
+        }
+        layout: {
+            position: 'relative',
+                placement;
+            'inline',
+                width;
+            'auto',
+                height;
+            24,
+                z_index;
+            1,
+                responsive;
+            true,
+                breakpoints;
+            [],
+            ;
+        }
+        animations: {
+            entrance: 'fade',
+                exit;
+            'fade',
+                hover;
+            'none',
+                transition_duration;
+            500,
+                easing;
+            'ease-out',
+                stagger_delay;
+            0,
+            ;
+        }
+        behavior: {
+            auto_trigger: true,
+                trigger_delay;
+            0,
+                auto_dismiss;
+            false,
+                dismiss_delay;
+            0,
+                click_outside_dismiss;
+            false,
+                escape_key_dismiss;
+            false,
+                max_interactions;
+            0,
+                cooldown_period;
+            0,
+                frequency_cap;
+            {
+                enabled: false,
+                    max_per_session;
+                0,
+                    max_per_day;
+                0,
+                    max_per_week;
+                0,
+                    reset_on_engagement;
+                false,
                 ;
             }
-            layout: {
-                position: 'relative',
-                    placement;
-                'inline',
-                    width;
-                'auto',
-                    height;
-                24,
-                    z_index;
-                1,
-                    responsive;
+            interactions: {
+                click_tracking: true,
+                    hover_tracking;
                 true,
-                    breakpoints;
+                    scroll_tracking;
+                false,
+                    time_tracking;
+                false,
+                    conversion_tracking;
+                true,
+                    custom_events;
                 [],
                 ;
             }
-            animations: {
-                entrance: 'fade',
-                    exit;
-                'fade',
-                    hover;
-                'none',
-                    transition_duration;
-                500,
-                    easing;
-                'ease-out',
-                    stagger_delay;
-                0,
+            persistence: {
+                state_persistence: true,
+                    user_preferences;
+                false,
+                    interaction_history;
+                false,
+                    local_storage;
+                true,
+                    session_storage;
+                false,
+                    database_sync;
+                true,
                 ;
             }
-            behavior: {
-                auto_trigger: true,
-                    trigger_delay;
+            caching: {
+                enabled: false,
+                    ttl;
                 0,
-                    auto_dismiss;
-                false,
-                    dismiss_delay;
-                0,
-                    click_outside_dismiss;
-                false,
-                    escape_key_dismiss;
-                false,
-                    max_interactions;
-                0,
-                    cooldown_period;
-                0,
-                    frequency_cap;
-                {
-                    enabled: false,
-                        max_per_session;
-                    0,
-                        max_per_day;
-                    0,
-                        max_per_week;
-                    0,
-                        reset_on_engagement;
-                    false,
-                    ;
-                }
-                interactions: {
-                    click_tracking: true,
-                        hover_tracking;
-                    true,
-                        scroll_tracking;
-                    false,
-                        time_tracking;
-                    false,
-                        conversion_tracking;
-                    true,
-                        custom_events;
-                    [],
-                    ;
-                }
-                persistence: {
-                    state_persistence: true,
-                        user_preferences;
-                    false,
-                        interaction_history;
-                    false,
-                        local_storage;
-                    true,
-                        session_storage;
-                    false,
-                        database_sync;
-                    true,
-                    ;
-                }
-                caching: {
-                    enabled: false,
-                        ttl;
-                    0,
-                        strategy;
-                    'memory',
-                        invalidation_keys;
-                    [],
-                    ;
-                }
-                accessibility: {
-                    aria_labels: {
-                        ;
-                        main: `${config.name} Progress Bar`;
-                    }
-                }
-                progress: 'Progress indicator';
+                    strategy;
+                'memory',
+                    invalidation_keys;
+                [],
+                ;
             }
-            keyboard_navigation: false,
-                screen_reader_support;
-            true,
-                high_contrast_mode;
-            true,
-                reduced_motion;
-            true,
-                focus_management;
-            false,
-                semantic_markup;
-            true;
-        }
-        api_endpoints: [],
-            webhooks;
-        [],
-            custom_css;
-        '',
-            custom_js;
-        '',
-            template_overrides;
-        { }
-        progress_config: {
-            min_value: 0,
-                max_value;
-            100,
-                step_size;
-            1,
-                show_percentage;
-            true,
-                show_labels;
-            true,
-                animated;
-            true,
-                color_thresholds;
-            [,
-                { threshold: 25, color: '#EF4444', label: 'Getting Started' },
-                { threshold: 50, color: '#F59E0B', label: 'Making Progress' },
-                { threshold: 75, color: '#3B82F6', label: 'Almost There' },
-                { threshold: 100, color: '#10B981', label: 'Complete' }
-            ],
-                milestones;
-            [,
-                { value: 25, label: 'First Steps', icon: '🎯', reward: 'Welcome Badge' },
-                { value: 50, label: 'Halfway Point', icon: '⭐', reward: 'Progress Badge' },
-                { value: 75, label: 'Nearly There', icon: '🔥', reward: 'Momentum Badge' },
-                { value: 100, label: 'Complete!', icon: '🏆', reward: 'Achievement Badge' }
-            ];
-        }
-        state: {
-            current_state: 'active',
-                properties;
-            {
-                current_value: config.value;
+            accessibility: {
+                aria_labels: {
+                    ;
+                    main: `${config.name} Progress Bar`;
+                }
             }
-            user_data: { }
-            session_data: { }
-            is_visible: true,
-                is_interactive;
-            true,
-                is_loading;
-            false,
-                error_state;
-            null,
-                render_time;
-            0,
-                interaction_count;
-            0,
-                last_interaction;
-            null;
+            progress: 'Progress indicator';
         }
-        interactions: [],
-            analytics;
-        {
-            total_impressions: 0,
-                unique_users;
-            0,
-                total_interactions;
-            0,
-                interaction_rate;
-            0,
-                conversion_rate;
-            0,
-                average_render_time;
-            0,
-                average_interaction_time;
-            0,
-                time_to_first_interaction;
-            0,
-                session_duration;
-            0,
-                bounce_rate;
-            0,
-                return_rate;
-            0,
-                sharing_rate;
-            0,
-                completion_rate;
-            0,
-                error_rate;
-            0,
-                satisfaction_score;
-            0,
-                nps_score;
-            0,
-                accessibility_score;
-            100,
-                daily_stats;
-            [],
-                hourly_distribution;
-            new Array(24).fill(0),
-                geographical_distribution;
-            { }
-            device_distribution: { }
-        }
-        targetContext: [],
-            triggers;
-        [],
-            conditions;
-        [],
-            status;
-        'active',
-            integrations;
-        [],
-            dependencies;
-        [];
+        keyboard_navigation: false,
+            screen_reader_support;
+        true,
+            high_contrast_mode;
+        true,
+            reduced_motion;
+        true,
+            focus_management;
+        false,
+            semantic_markup;
+        true;
     }
-    ;
-    setProgressValues(prev => ({ ...prev, [config.id]: config.value }));
+    api_endpoints: [],
+        webhooks;
+    [],
+        custom_css;
+    '',
+        custom_js;
+    '',
+        template_overrides;
+    { }
+    progress_config: {
+        min_value: 0,
+            max_value;
+        100,
+            step_size;
+        1,
+            show_percentage;
+        true,
+            show_labels;
+        true,
+            animated;
+        true,
+            color_thresholds;
+        [
+            { threshold: 25, color: '#EF4444', label: 'Getting Started' },
+            { threshold: 50, color: '#F59E0B', label: 'Making Progress' },
+            { threshold: 75, color: '#3B82F6', label: 'Almost There' },
+            { threshold: 100, color: '#10B981', label: 'Complete' }
+        ],
+            milestones;
+        [
+            { value: 25, label: 'First Steps', icon: '🎯', reward: 'Welcome Badge' },
+            { value: 50, label: 'Halfway Point', icon: '⭐', reward: 'Progress Badge' },
+            { value: 75, label: 'Nearly There', icon: '🔥', reward: 'Momentum Badge' },
+            { value: 100, label: 'Complete!', icon: '🏆', reward: 'Achievement Badge' }
+        ];
+    }
+    state: {
+        current_state: 'active',
+            properties;
+        {
+            current_value: config.value;
+        }
+        user_data: { }
+        session_data: { }
+        is_visible: true,
+            is_interactive;
+        true,
+            is_loading;
+        false,
+            error_state;
+        null,
+            render_time;
+        0,
+            interaction_count;
+        0,
+            last_interaction;
+        null;
+    }
+    interactions: [],
+        analytics;
+    {
+        total_impressions: 0,
+            unique_users;
+        0,
+            total_interactions;
+        0,
+            interaction_rate;
+        0,
+            conversion_rate;
+        0,
+            average_render_time;
+        0,
+            average_interaction_time;
+        0,
+            time_to_first_interaction;
+        0,
+            session_duration;
+        0,
+            bounce_rate;
+        0,
+            return_rate;
+        0,
+            sharing_rate;
+        0,
+            completion_rate;
+        0,
+            error_rate;
+        0,
+            satisfaction_score;
+        0,
+            nps_score;
+        0,
+            accessibility_score;
+        100,
+            daily_stats;
+        [],
+            hourly_distribution;
+        new Array(24).fill(0),
+            geographical_distribution;
+        { }
+        device_distribution: { }
+    }
+    targetContext: [],
+        triggers;
+    [],
+        conditions;
+    [],
+        status;
+    'active',
+        integrations;
+    [],
+        dependencies;
+    [];
 }
+;
+setProgressValues(prev => ({ ...prev, [config.id]: config.value }));
 ;
 // Create elements
 const createdElements = [];
@@ -754,24 +735,17 @@ if (loading) {
                             } })] }, elementState.id), "); })}", previewData && ()
                     < QuickPreviewWidget, "element=", {
                     type: InteractiveElementType.QUICK_PREVIEW,
-                    config: {
-                        preview_config: {
-                            preview_type: 'modal',
-                            auto_load: true,
-                            lazy_load: false,
-                            max_content_size: 10485760, // 10MB,
-                            supported_formats: ['jpg', 'png', 'gif', 'pdf', 'psd'],
-                            zoom_enabled: true,
-                            download_enabled: true,
-                            sharing_enabled: true,
-                        }
-                    },
-                    interactiveService = { interactiveService },
-                    userId = { userId },
-                    templateId = { previewData, : .templateId },
-                    templateData = { previewData, : .templateData },
-                    onClose = {}()
-                }, " => setPreviewData(null)} onDownload=", (templateId) => {
+                    config: {},
+                    preview_config: {},
+                    preview_type: 'modal',
+                    auto_load: true,
+                    lazy_load: false,
+                    max_content_size: 10485760, // 10MB,
+                    supported_formats: ['jpg', 'png', 'gif', 'pdf', 'psd'],
+                    zoom_enabled: true,
+                    download_enabled: true,
+                    sharing_enabled: true,
+                }, "interactiveService=", interactiveService, "userId=", userId, "templateId=", previewData.templateId, "templateData=", previewData.templateData, "onClose=", () => setPreviewData(null), "onDownload=", (templateId) => {
                     console.log('Download template:', templateId);
                     // Handle download
                 }, "onShare=", (templateId, platform) => {
@@ -820,7 +794,7 @@ if (loading) {
                         previewUrl;
                     '/previews/template-123.jpg',
                         thumbnails;
-                    [,
+                    [
                         '/previews/template-123-1.jpg',
                         '/previews/template-123-2.jpg',
                         '/previews/template-123-3.jpg'

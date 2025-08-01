@@ -6,10 +6,9 @@
  * and other collaboration features.
  */
 
-}
-export interface StickyNote {
-  id: string;
-}
+
+export interface StickyNote { id: string }
+},
   position: { x: number; y: number };
   content: string;
   color: StickyNoteColor;
@@ -18,7 +17,7 @@ export interface StickyNote {
   timestamp: string;
   isEditing?: boolean;
   zIndex?: number;
-}
+
 export type StickyNoteColor = 
   | 'yellow'     // Default/info notes
   | 'blue'       // TODO/task notes  
@@ -27,7 +26,7 @@ export type StickyNoteColor =
   | 'purple'     // Creative/brainstorm notes
   | 'orange';    // Review/feedback notes
 
-}
+
 export interface StickyNoteColorInfo {
   background: string;
   border: string;
@@ -36,23 +35,22 @@ export interface StickyNoteColorInfo {
   category: string;
   description: string;
   // Enhanced Region Grouping System (Epic 8.7 Task 3)
-}
-}
+
+
 export type RegionGroupStyle = 'solid' | 'dashed' | 'dotted' | 'rounded' | 'modern';
 export type RegionGroupVisibility = 'always' | 'hover' | 'selected' | 'editing' | 'collapsed';
 
-}
-export interface RegionGroupBounds {
-  x: number;
+
+export interface RegionGroupBounds { x: number;
   y: number;
   width: number;
   height: number;
-  padding?: number; // Extra padding around contained nodes,
-}
-}
-}
-export interface RegionGroup {
-  id: string;
+  padding?: number; // Extra padding around contained nodes }
+
+
+
+
+export interface RegionGroup { id: string;
   label: string;
   description?: string;
   color: string;
@@ -71,24 +69,21 @@ export interface RegionGroup {
   zIndex?: number;
   author: string;
   timestamp: string;
-  lastModified: string;
-}
-}
-}
-export interface RegionGroupAction {
-  type: 'create' | 'update' | 'delete' | 'addNodes' | 'removeNodes' | 'move' | 'resize' | 'collapse' | 'expand';
+  lastModified: string }
+
+
+
+export interface RegionGroupAction { type: 'create' | 'update' | 'delete' | 'addNodes' | 'removeNodes' | 'move' | 'resize' | 'collapse' | 'expand';
   groupId?: string;
   group?: Partial<RegionGroup>;
   nodeIds?: string;
-  bounds?: RegionGroupBounds;
+  bounds?: RegionGroupBounds }
 
-}
   position?: { x: number; y: number };
   size?: { width: number; height: number };
-}
-}
-export interface RegionGroupPreferences {
-  defaultColor: string;
+
+
+export interface RegionGroupPreferences { defaultColor: string;
   defaultBackgroundColor: string;
   defaultOpacity: number;
   defaultStyle: RegionGroupStyle;
@@ -97,24 +92,22 @@ export interface RegionGroupPreferences {
   showLabels: boolean;
   showNodeCounts: boolean;
   enableAutoGrouping: boolean;
-  autoGroupThreshold: number; // Minimum nodes to suggest grouping,
+  autoGroupThreshold: number; // Minimum nodes to suggest grouping }
   snapToGrid: boolean;
   gridSize: number;
   // Enhanced Connection Annotation System (Epic 8.7 Task 4)
-}
-}
+
+
 export type ConnectionLabelPosition = 'start' | 'middle' | 'end' | 'custom';
 export type ConnectionLabelStyle = 'default' | 'badge' | 'arrow' | 'highlight' | 'minimal';
 export type ConnectionVisualStyle = 'solid' | 'dashed' | 'dotted' | 'animated' | 'gradient';
 
-}
-export interface ConnectionLabel {
-  id: string;
+
+export interface ConnectionLabel { id: string;
   connectionId: string;
   content: string;
-  description?: string;
+  description?: string }
 
-}
   position: { x: number; y: number };
   positionType: ConnectionLabelPosition;
   positionOffset: number; // 0-1 along the path for non-custom positions
@@ -130,10 +123,9 @@ export interface ConnectionLabel {
   author: string;
   timestamp: string;
   lastModified: string;
-}
-}
-export interface ConnectionAnnotation {
-  id: string;
+
+
+export interface ConnectionAnnotation { id: string;
   connectionId: string;
   labels: ConnectionLabel;
   visualStyle: ConnectionVisualStyle;
@@ -148,30 +140,27 @@ export interface ConnectionAnnotation {
   metadata?: Record<string, any>;
   author: string;
   timestamp: string;
-  lastModified: string;
-}
-}
-}
-export interface ConnectionLabelAction {
-  type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit' | 'move';
+  lastModified: string }
+
+
+
+export interface ConnectionLabelAction { type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit' | 'move';
   labelId?: string;
   connectionId: string;
   label?: Partial<ConnectionLabel>;
-  content?: string;
+  content?: string }
 
-}
   position?: { x: number; y: number };
   positionOffset?: number;
-}
-}
-export interface ConnectionAnnotationAction {
-  type: 'create' | 'update' | 'delete' | 'highlight' | 'unhighlight';
+
+
+export interface ConnectionAnnotationAction { type: 'create' | 'update' | 'delete' | 'highlight' | 'unhighlight';
   annotationId?: string;
   connectionId: string;
-  annotation?: Partial<ConnectionAnnotation>;
-}
-}
-}
+  annotation?: Partial<ConnectionAnnotation> }
+
+
+
 export interface ConnectionAnnotationPreferences {
   defaultLabelStyle: ConnectionLabelStyle;
   defaultVisualStyle: ConnectionVisualStyle;
@@ -185,15 +174,14 @@ export interface ConnectionAnnotationPreferences {
   maxLabelLength: number;
   highlightOnHover: boolean;
   // Enhanced Node Label System (Epic 8.7 Task 2)
-}
-}
+
+
 export type NodeLabelDisplayMode = 'always' | 'hover' | 'focus' | 'selected' | 'never';
 export type NodeLabelPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
 export type NodeLabelStyle = 'default' | 'minimal' | 'professional' | 'colorful' | 'outline';
 
-}
-export interface NodeLabelConfig {
-  id: string;
+
+export interface NodeLabelConfig { id: string;
   nodeId: string;
   customLabel: string;
   displayMode: NodeLabelDisplayMode;
@@ -207,62 +195,59 @@ export interface NodeLabelConfig {
   showIcon?: boolean;
   truncateLength?: number;
   author: string;
-  timestamp: string;
-}
-}
-}
-export interface NodeLabelAction {
-  type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit';
+  timestamp: string }
+
+
+
+export interface NodeLabelAction { type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit' }
   nodeId: string;
   labelId?: string;
   config?: Partial<NodeLabelConfig>;
   customLabel?: string;
-}
-}
-}
-export interface NodeLabelPreferences {
-  defaultDisplayMode: NodeLabelDisplayMode;
+
+
+
+
+export interface NodeLabelPreferences { defaultDisplayMode: NodeLabelDisplayMode;
   defaultPosition: NodeLabelPosition;
   defaultStyle: NodeLabelStyle;
   enableInlineEditing: boolean;
   enableAutoSave: boolean;
   enableLabelHistory: boolean;
   maxLabelLength: number;
-  showLabelTooltips: boolean;
-}
-}
-}
-export interface GraphAnnotations {
-  stickyNotes: StickyNote;
-  nodeLabels: Record<string, string>; // Keep for backward compatibility,
-  nodeLabelConfigs: Record<string, NodeLabelConfig>; // Enhanced node labels,
+  showLabelTooltips: boolean }
+
+
+
+export interface GraphAnnotations { stickyNotes: StickyNote;
+  nodeLabels: Record<string, string>; // Keep for backward compatibility;
+  nodeLabelConfigs: Record<string, NodeLabelConfig>; // Enhanced node labels;
   regionGroups: RegionGroup;
-  connectionLabels: ConnectionLabel; // Keep for backward compatibility,
-  connectionAnnotations: ConnectionAnnotation; // Enhanced connection annotations,
+  connectionLabels: ConnectionLabel; // Keep for backward compatibility;
+  connectionAnnotations: ConnectionAnnotation; // Enhanced connection annotations;
   labelPreferences: NodeLabelPreferences;
   regionGroupPreferences: RegionGroupPreferences;
   connectionAnnotationPreferences: ConnectionAnnotationPreferences;
-  metadata: {
+  metadata: { }
   author: string;
   created: string;
   modified: string;
   version: string;
-}
-};
-}
-}
-export interface StickyNoteAction {
-  type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'startEdit' | 'stopEdit';
-  noteId?: string;
-  note?: Partial<StickyNote>;
 
-}
+
+};
+
+
+export interface StickyNoteAction { type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'startEdit' | 'stopEdit';
+  noteId?: string;
+  note?: Partial<StickyNote> }
+
   position?: { x: number; y: number };
   size?: { width: number; height: number };
   content?: string;
   color?: StickyNoteColor;
-}
-}
+
+
 export interface StickyNoteContextMenuOptions {
   x: number;
   y: number;
@@ -275,5 +260,5 @@ export interface StickyNoteContextMenuOptions {
   onDuplicate?: () => void;
   // Predefined color schemes for sticky notes
   // Default sticky note configuration
-}
-}
+
+

@@ -32,7 +32,7 @@ import {
   ScopeType,
   ViolationStatus,
   QuotaEventType
-} from '../../../../packages/core/types/UsageQuotaTypes';
+ from '../../../../packages/core/types/UsageQuotaTypes';
 import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
 export class UsageQuotaService {
@@ -62,7 +62,7 @@ export class UsageQuotaService {
     this.auditService = auditService;
 
     this.initializeService();
-  }
+
 
   // =============================================================================
   // Core Quota Management
@@ -87,7 +87,7 @@ export class UsageQuotaService {
       if (quotas.length === 0) {
         console.log(`✅ No quotas found for ${request.quotaType}:${request.resourceIdentifier}, allowing request`);
         return this.createAllowedResult();
-      }
+
 
       // Check each applicable quota (highest priority first)
       const sortedQuotas = quotas.sort((a, b) => b.priority - a.priority);
@@ -110,22 +110,21 @@ export class UsageQuotaService {
               request,
               result,
               violationType: 'quota_exceeded'
-  }
+
             severity: this.getViolationSeverity(result),
             category: 'system'
           });
 
           return result;
-        }
-      }
+
+
 
       // All quotas passed, track the usage
       await this.trackUsage(sortedQuotas[0], request);
       
       console.log(`✅ Quota check passed for user ${request.userId}`);
       return this.createAllowedResult(sortedQuotas[0], request);
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Error checking quota for user ${request.userId}:`, error);
       
       await this.logQuotaEvent({
@@ -135,18 +134,18 @@ export class UsageQuotaService {
           request,
           error: error.message,
           stack: error.stack
-  }
+
         severity: 'high',
         category: 'system'
       });
 
       // Fail open by default (configurable)
       return this.createAllowedResult();
-    } finally {
+ finally {
       const duration = Date.now() - startTime;
       console.log(`⏱️ Quota check completed in ${duration}ms`);
-    }
-  }
+
+
 
   /**
    * Track usage for a quota
@@ -192,12 +191,11 @@ export class UsageQuotaService {
       this.cacheExpiry.set(cacheKey, Date.now() + this.CACHE_TTL);
 
       console.log(`📊 Usage tracked: ${request.usageAmount} ${quota.limitUnit} for quota ${quota.quotaId}`);
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Error tracking usage for quota ${quota.quotaId}:`, error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get current usage for a quota and user
@@ -210,7 +208,7 @@ export class UsageQuotaService {
     // Check cache first
     if (this.usageCache.has(cacheKey) && this.cacheExpiry.get(cacheKey)! > Date.now()) {
       return this.usageCache.get(cacheKey)!;
-    }
+
 
     try {
       const result = await this.db.query(`
@@ -227,12 +225,11 @@ export class UsageQuotaService {
       this.cacheExpiry.set(cacheKey, Date.now() + this.CACHE_TTL);
 
       return usage;
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Error getting current usage for quota ${quota.quotaId}:`, error);
       return 0; // Fail gracefully
-    }
-  }
+
+
 
   // =============================================================================
   // Quota Violation Handling
@@ -271,8 +268,8 @@ export class UsageQuotaService {
             quotaName: quota.quotaName,
             resourceIdentifier: request.resourceIdentifier,
             usageAmount: request.usageAmount
-          }
-  }
+
+
         status: 'active',
         appealSubmitted: false
       };
@@ -293,18 +290,17 @@ export class UsageQuotaService {
             quotaType: quota.quotaType,
             violationCount: await this.getRecentViolationCount(request.userId),
             enforcementAction: quota.enforcementAction
-  }
+
           timestamp: new Date()
         });
-      }
+
 
       console.log(`✅ Violation handled for quota ${quota.quotaId}`);
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error handling quota violation:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Execute enforcement action based on quota configuration
@@ -352,8 +348,8 @@ export class UsageQuotaService {
 
     default:
       console.warn(`⚠️ Unknown enforcement action: ${quota.enforcementAction}`);
-    }
-  }
+
+
 
   // =============================================================================
   // Quota Management Operations
@@ -429,12 +425,11 @@ export class UsageQuotaService {
 
       console.log(`✅ Quota created successfully: ${quotaId}`);
       return newQuota;
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error creating quota:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Update an existing quota
@@ -452,7 +447,7 @@ export class UsageQuotaService {
       const currentQuota = await this.getQuotaById(quotaId);
       if (!currentQuota) {
         throw new Error(`Quota not found: ${quotaId}`);
-      }
+
 
       // Merge updates
       const updatedQuota = {
@@ -479,18 +474,18 @@ export class UsageQuotaService {
           paramCount++;
           updateFields.push(`applies_to_value = $${paramCount}`);
           values.push(value.value);
-        } else if (key === 'configuration' || key === 'metadata') {
+ else if (key === 'configuration' || key === 'metadata') {
           updateFields.push(`${this.camelToSnake(key)} = $${paramCount}`);
           values.push(JSON.stringify(value));
-        } else {
+ else {
           updateFields.push(`${this.camelToSnake(key)} = $${paramCount}`);
           values.push(value);
-        }
-      }
+
+
 
       if (updateFields.length === 0) {
         throw new Error('No valid fields to update');
-      }
+
 
       // Add updated_at
       paramCount++;
@@ -519,19 +514,18 @@ export class UsageQuotaService {
           previousState: currentQuota,
           updates,
           newState: updatedQuota
-  }
+
         severity: 'medium',
         category: 'admin'
       });
 
       console.log(`✅ Quota updated successfully: ${quotaId}`);
       return updatedQuota;
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Error updating quota ${quotaId}:`, error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get quota by ID
@@ -541,7 +535,7 @@ export class UsageQuotaService {
     // Check cache first
     if (this.quotaCache.has(quotaId)) {
       return this.quotaCache.get(quotaId)!;
-    }
+
 
     try {
       const result = await this.db.query(`
@@ -550,7 +544,7 @@ export class UsageQuotaService {
 
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       const quota = this.mapDbRowToQuota(result.rows[0]);
       
@@ -558,12 +552,11 @@ export class UsageQuotaService {
       this.quotaCache.set(quotaId, quota);
       
       return quota;
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Error getting quota ${quotaId}:`, error);
       return null;
-    }
-  }
+
+
 
   /**
    * Get user's quota usage summary
@@ -598,7 +591,7 @@ export class UsageQuotaService {
             lastViolation: violations.length > 0 ? violations[0].violationTimestamp : undefined,
             violationCount: violations.length
           };
-  }
+
       );
 
       // Get violation summary
@@ -617,7 +610,7 @@ export class UsageQuotaService {
           type: 'day',
           value: 30,
           timezone: 'UTC'
-  }
+
         quotas: quotaDetails,
         totalViolations,
         activeViolations: activeViolations.length,
@@ -627,12 +620,11 @@ export class UsageQuotaService {
       };
 
       return summary;
-
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Error getting user quota summary for ${userId}:`, error);
       throw error;
-    }
-  }
+
+
 
   // =============================================================================
   // Helper Methods
@@ -665,12 +657,11 @@ export class UsageQuotaService {
       ]);
 
       return result.rows.map(row => this.mapDbRowToQuota(row));
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error finding applicable quotas:', error);
       return [];
-    }
-  }
+
+
 
   /**
    * Check a single quota against request
@@ -710,14 +701,14 @@ export class UsageQuotaService {
       
       if (quota.gracePeriodMinutes > 0) {
         result.retryAfter = new Date(Date.now() + quota.gracePeriodMinutes * 60000);
-      }
+
 
       // Add recommendations based on enforcement action
       result.recommendations = this.generateQuotaRecommendations(quota, result);
-    }
+
 
     return result;
-  }
+
 
   /**
    * Generate recommendations based on quota state
@@ -736,7 +727,7 @@ export class UsageQuotaService {
         actionUrl: '/billing/upgrade',
         priority: 'high'
       });
-    }
+
 
     if (quota.quotaType === 'api_requests' && result.utilizationPercentage >= 75) {
       recommendations.push({
@@ -745,7 +736,7 @@ export class UsageQuotaService {
         description: 'Consider batching requests or implementing caching to reduce API calls',
         priority: 'medium'
       });
-    }
+
 
     if (result.enforcementAction === 'upgrade_prompt') {
       recommendations.push({
@@ -755,10 +746,10 @@ export class UsageQuotaService {
         actionUrl: '/billing/upgrade',
         priority: 'high'
       });
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Get current time period for quota calculation
@@ -813,10 +804,10 @@ export class UsageQuotaService {
 
     default:
       throw new Error(`Unsupported limit period: ${limitPeriod}`);
-    }
+
 
     return { start, end };
-  }
+
 
   /**
    * Map database row to UsageQuota object
@@ -833,7 +824,7 @@ export class UsageQuotaService {
       appliesTo: {
         type: row.applies_to_type,
         value: row.applies_to_value
-  }
+
       enforcementAction: row.enforcement_action,
       resetBehavior: row.reset_behavior,
       gracePeriodMinutes: parseInt(row.grace_period_minutes),
@@ -848,7 +839,7 @@ export class UsageQuotaService {
       configuration: JSON.parse(row.configuration),
       metadata: JSON.parse(row.metadata)
     };
-  }
+
 
   /**
    * Create allowed quota check result
@@ -864,7 +855,7 @@ export class UsageQuotaService {
       warningTriggered: false,
       recommendations: []
     };
-  }
+
 
   /**
    * Initialize the service
@@ -881,12 +872,11 @@ export class UsageQuotaService {
       await this.preloadCriticalQuotas();
       
       console.log('✅ Usage Quota Service initialized successfully');
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize Usage Quota Service:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Start background cleanup processes
@@ -899,8 +889,8 @@ export class UsageQuotaService {
         if (expiry < now) {
           this.usageCache.delete(key);
           this.cacheExpiry.delete(key);
-        }
-      }
+
+
     }, 300000);
 
     // Clean old tracking records (configurable retention)
@@ -911,11 +901,11 @@ export class UsageQuotaService {
           WHERE usage_timestamp < NOW() - INTERVAL '90 days'
         `);
         console.log('🧹 Cleaned old usage tracking records');
-      } catch (error) {
+ catch (error) {
         console.error('❌ Error cleaning old tracking records:', error);
-      }
+
     }, 86400000); // Daily cleanup
-  }
+
 
   /**
    * Preload critical quotas into cache
@@ -934,14 +924,13 @@ export class UsageQuotaService {
       for (const row of result.rows) {
         const quota = this.mapDbRowToQuota(row);
         this.quotaCache.set(quota.quotaId, quota);
-      }
+
 
       console.log(`📋 Preloaded ${result.rows.length} critical quotas into cache`);
-
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error preloading quotas:', error);
-    }
-  }
+
+
 
   // Additional helper methods would be implemented here...
   // (insertViolation, getUserQuotas, calculateUsageTrend, etc.)
@@ -952,21 +941,21 @@ export class UsageQuotaService {
       const v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
-  }
+
 
   private camelToSnake(str: string): string {
     return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-  }
+
 
   private clearQuotaCache(): void {
     this.quotaCache.clear();
-  }
+
 
   private async logQuotaEvent(event: Partial<QuotaEventLog>): Promise<void> {
 
     // Implementation for logging quota events
     console.log(`📝 Quota event: ${event.eventType}`, event);
-  }
+
 
   // Placeholder methods - would be fully implemented
   private async insertViolation(_____violation: QuotaViolation): Promise<void> { }
@@ -1015,4 +1004,3 @@ export class UsageQuotaService {
     _____userId: string,
     _____quotaDetails: unknown[]
   ): Promise<any[]> { return []; }
-}

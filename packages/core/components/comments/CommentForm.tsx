@@ -3,9 +3,9 @@
  * Form for creating and editing comments
  */
 import React, { useState, useRef, useEffect } from 'react';
-}
-interface CommentFormProps {
-  onSubmit: (content: string) => Promise<void>;
+
+
+interface CommentFormProps { onSubmit: (content: string) => Promise<void>
   onCancel: () => void;
   initialValue?: string;
   placeholder?: string;
@@ -13,53 +13,43 @@ interface CommentFormProps {
   userId: string;
   compact?: boolean;
   autoFocus?: boolean;
-  export const CommentForm: React.FC<CommentFormProps> = ({,)
-  onSubmit,
-  onCancel,
-  initialValue = '',
-  placeholder = 'Write a comment...',
-  submitText = 'Post Comment',
-  userId,
-  compact = false,
+  export const CommentForm: React.FC<CommentFormProps> = ({);
+  onSubmit;
+  onCancel;
+  initialValue = '';
+  placeholder = 'Write a comment...';
+  submitText = 'Post Comment';
+  userId;
+  compact = false }
   autoFocus = true
-}
-}) => {
-  const [content, setContent] = useState(initialValue);
+
+
+}) => { const [content, setContent] = useState(initialValue);
   const [submitting, setSubmitting] = useState(false);
   const [focused, setFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     if (autoFocus && textareaRef.current) {
-      textareaRef.current.focus();
-  }, [autoFocus]);
+      textareaRef.current.focus() }, [autoFocus]);
   useEffect(() => {
     // Auto-resize textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;}
   }, [content]);
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => { e.preventDefault();
     if (!content.trim() || submitting) return;
     setSubmitting(true);
     try {
       await onSubmit(content.trim());
-      setContent('');
-    } catch (error) {
-  console.error('Failed to submit comment:', error);
-} finally {
-      setSubmitting(false);
-  };
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      setContent('') } catch (error) { console.error('Failed to submit comment:', error) } finally { setSubmitting(false) };
+  const handleKeyDown = (e: React.KeyboardEvent) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       handleSubmit(e);
     if (e.key === 'Escape') {
       e.preventDefault();
-      onCancel();
-  };
-  const insertFormatting = (before: string, after: string = '') => {
-    if (!textareaRef.current) return;
+      onCancel() };
+  const insertFormatting = (before: string, after: string = '') => { if (!textareaRef.current) return;
     const textarea = textareaRef.current;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
@@ -74,8 +64,7 @@ interface CommentFormProps {
       if (textarea) {
         const newCursorPos = start + before.length + selectedText.length;
         textarea.setSelectionRange(newCursorPos, newCursorPos);
-        textarea.focus();
-    }, 0);
+        textarea.focus() }, 0);
   };
   const isExpanded = focused || content.length > 0;
   return;

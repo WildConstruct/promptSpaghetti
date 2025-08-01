@@ -27,7 +27,12 @@ trustAnalysis: {
 }
 ;
 // Recommended Actions
-recommendedActions: Array;
+recommendedActions: Array < {
+    action: ModerationAction,
+    reason: string,
+    priority: number,
+    automated: boolean
+} > ;
 // Review Information
 requiresHumanReview: boolean;
 reviewPriority: 'low' | 'medium' | 'high' | 'urgent';
@@ -39,7 +44,11 @@ timestamp: string;
 version: string;
 ;
 // Actions
-actions: Array;
+actions: Array < {
+    condition: string, // e.g., "confidence > 80",
+    action: ModerationAction,
+    parameters: (Record)
+} > ;
 // Configuration
 autoExecute: boolean;
 requiresApproval: boolean;
@@ -50,10 +59,16 @@ createdAt: string;
 updatedAt: string;
 createdBy: string;
 ;
-priorityRules: Array;
+priorityRules: Array < {
+    condition: string,
+    priority: number
+} > ;
 autoAssignment: {
     enabled: boolean;
-    rules: Array;
+    rules: Array < {
+        condition: string,
+        assignTo: string
+    } > ;
 }
 ;
 export class AutomatedModerationService {
@@ -317,8 +332,7 @@ Promise < ModerationResult > {
                 reviewPriority: ModerationResult['reviewPriority'];
                 assignedReviewer ?  : string;
                 reviewDeadline ?  : string;
-            }
-        } > {
+            } } > {
             const: { policyResults, mlAnalysis, trustAnalysis } = analysis,
             // Analyze violations and risk factors
             const: criticalViolations = policyResults.filter(r => ),
@@ -486,7 +500,7 @@ Promise < ModerationResult > {
                                     },
                                     averageConfidence: 84.2,
                                     humanReviewRate: 18.5,
-                                    topViolationReasons: [,
+                                    topViolationReasons: [
                                         { reason: 'quality_issues', count: 156 },
                                         { reason: 'spam_detected', count: 89 },
                                         { reason: 'policy_violation', count: 67 },
@@ -647,46 +661,46 @@ Promise < ModerationResult > {
                                                                             {
                                                                                 id: 'general-review',
                                                                                 name: 'General Review Queue',
-                                                                                filters: {
-                                                                                    requiresReview: true,
-                                                                                },
-                                                                                priorityRules: [{},
-                                                                                    condition, 'severity === "critical"',
-                                                                                    priority, 1,]
-                                                                            }
-                                                                        ],
-                                                                        autoAssignment: {
-                                                                            enabled: true,
-                                                                            rules: [{},
-                                                                                condition, 'contentType === "template"',
-                                                                                assignTo, 'template-moderator',]
-                                                                        }
+                                                                                filters: {},
+                                                                                requiresReview: true,
+                                                                            },
+                                                                            priorityRules, [{},
+                                                                                condition, 'severity === "critical"',
+                                                                                priority, 1,]
+                                                                        ]
                                                                     };
-                                                                    {
-                                                                        id: 'high-priority',
-                                                                            name;
-                                                                        'High Priority Review',
-                                                                            filters;
-                                                                        {
-                                                                            severityLevels: ['critical', 'high'],
-                                                                                requiresReview;
-                                                                            true,
-                                                                            ;
-                                                                        }
-                                                                        priorityRules: [{},
-                                                                            condition, 'severity === "critical"',
-                                                                            priority, 1,];
-                                                                    }
                                                                     autoAssignment: {
                                                                         enabled: true,
                                                                             rules;
                                                                         [{},
-                                                                            condition, 'severity === "critical"',
-                                                                            assignTo, 'senior-moderator',];
+                                                                            condition, 'contentType === "template"',
+                                                                            assignTo, 'template-moderator',];
                                                                     }
-                                                                    ;
-                                                                    export default AutomatedModerationService;
                                                                 }
+                                                                {
+                                                                    id: 'high-priority',
+                                                                        name;
+                                                                    'High Priority Review',
+                                                                        filters;
+                                                                    {
+                                                                        severityLevels: ['critical', 'high'],
+                                                                            requiresReview;
+                                                                        true,
+                                                                        ;
+                                                                    }
+                                                                    priorityRules: [{},
+                                                                        condition, 'severity === "critical"',
+                                                                        priority, 1,];
+                                                                }
+                                                                autoAssignment: {
+                                                                    enabled: true,
+                                                                        rules;
+                                                                    [{},
+                                                                        condition, 'severity === "critical"',
+                                                                        assignTo, 'senior-moderator',];
+                                                                }
+                                                                ;
+                                                                export default AutomatedModerationService;
                                                             }
                                                         }
                                                     }

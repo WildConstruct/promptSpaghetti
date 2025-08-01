@@ -75,7 +75,7 @@ export class GeminiGraphAgent {
                                 }
                             }
                             else {
-                                console.log(`Attempt ${attempts},)}
+                                console.log(`Attempt ${attempts})},
   failed:`, response.error);
                             }
                             // Check if failure was due to safety filters
@@ -96,7 +96,7 @@ export class GeminiGraphAgent {
                                 };
                                 try { }
                                 catch (error) {
-                                    console.error(`Attempt ${attempts},)}
+                                    console.error(`Attempt ${attempts})},
   error:`, error);
                                 }
                                 // Reduce temperature for retry
@@ -376,7 +376,7 @@ Create a complete, valid graph that:
             success: true,
             content: mockResponse,
             tokenCount: mockResponse.length / 4, // Rough estimate
-            safetyRatings: [,
+            safetyRatings: [
                 { category: 'HARM_CATEGORY_HARASSMENT', probability: 'NEGLIGIBLE' },
                 { category: 'HARM_CATEGORY_HATE_SPEECH', probability: 'NEGLIGIBLE' },
                 { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', probability: 'NEGLIGIBLE' },
@@ -478,7 +478,7 @@ This graph creates a flexible content generation system that adapts based on con
             maxRetries: 3,
             retryTemperatureReduction: 0.2,
             useStructuredOutput: true,
-            safetySettings: [,
+            safetySettings: [
                 { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
                 { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
                 { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },

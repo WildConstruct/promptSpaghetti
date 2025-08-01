@@ -14,21 +14,21 @@ jest.mock('../../stores/uiSettingsStore', () => ({)
 jest.mock('../graphStore', () => ({)
   useGraphStore: () => ({ nodes: [], edges: [] })
 }));
-jest.mock('../hooks/useRealTimePreview', () => ({)
-  useRealTimePreview: () => ({,)
+jest.mock('../hooks/useRealTimePreview', () => ({ )
+  useRealTimePreview: () => ({);
   variants: [],
-    isGenerating: false,
+    isGenerating: false }
     performance: { averageExecutionTime: 0, totalGenerations: 0, successRate: 100 },
     error: null,
-    requestPreview: jest.fn<unknown, unknown>(),
-    forcePreview: jest.fn<unknown, unknown>(),
-    refreshVariant: jest.fn<unknown, unknown>(),
-    clearVariants: jest.fn<unknown, unknown>(),
+    requestPreview: jest.fn<unknown, unknown>()
+    forcePreview: jest.fn<unknown, unknown>()
+    refreshVariant: jest.fn<unknown, unknown>()
+    clearVariants: jest.fn<unknown, unknown>()
     getPerformanceInsights: () => [];
-  }
+
 }));
-jest.mock('../components/Inspector/WeightControlSlider', () => ({)
-  WeightControlSlider: () => <div data-testid="weight-control-slider">Weight Control</div>,
+jest.mock('../components/Inspector/WeightControlSlider', () => ({ )
+  WeightControlSlider: () => <div data-testid="weight-control-slider">Weight Control</div> }
   useWeightControlIntegration: () => ({ handleOptionsChange: jest.fn<unknown, unknown>() })
 }));
 describe('Inspector Integration - Basic Validation', () => {
@@ -48,14 +48,13 @@ describe('Inspector Integration - Basic Validation', () => {
     expect(SequentialEditor).toBeDefined();
     expect(VariableEditor).toBeDefined();
   });
-  it('help integration is properly imported in editors', () => {
-    // Test that the import statements work
+  it('help integration is properly imported in editors', () => { // Test that the import statements work
     const concatEditorSource = require('fs').readFileSync(;);
-      require.resolve('../components/Inspector/editors/ConcatEditor'), 
+      require.resolve('../components/Inspector/editors/ConcatEditor')
       'utf8'
     );
     const outputEditorSource = require('fs').readFileSync(;);
-      require.resolve('../components/Inspector/editors/OutputEditor'), 
+      require.resolve('../components/Inspector/editors/OutputEditor') }
       'utf8'
     );
     expect(concatEditorSource).toMatch(/useContextualHelp/);
@@ -66,21 +65,19 @@ describe('Inspector Integration - Basic Validation', () => {
     const { HelpProvider } = require('../components/Help/HelpContentManager');
     const TestComponent = () => {
       const { useContextualHelp } = require('../components/Help/HelpIntegration');
-      const { wrapWithHelp } = useContextualHelp({)
-  id: 'test-help',
-  title: 'Test Help',
-  description: 'Test description',
-  category: 'basic',
-  trigger: 'hover',
+      const { wrapWithHelp } = useContextualHelp({ )
+  id: 'test-help'
+  title: 'Test Help'
+  description: 'Test description'
+  category: 'basic'
+  trigger: 'hover' }
 });
       return wrapWithHelp(<div>Test Content</div>);
     };
-    expect(() => {
-      render();
+    expect(() => { render();
         <HelpProvider>
           <TestComponent />
         </HelpProvider>
-      );
-    }).not.toThrow();
+      ) }).not.toThrow();
   });
 });

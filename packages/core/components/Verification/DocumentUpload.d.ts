@@ -7,16 +7,15 @@
 import React from 'react';
 
 }
-interface DocumentUploadProps {
-    acceptedTypes?: string[];
+}
+interface DocumentUploadProps { acceptedTypes?: string[];
     maxFileSize?: number;
     maxFiles?: number;
     onFilesChange: (files: File[]) => void;
     existingFiles?: UploadedFile[];
     disabled?: boolean;
-    placeholder?: string;
-
-
+    placeholder?: string }
+}
 }
 interface UploadedFile {
     id: string;
@@ -29,4 +28,5 @@ interface UploadedFile {
 export declare const DocumentUpload: React.FC<DocumentUploadProps>;
 export default DocumentUpload;
 //# sourceMappingURL=DocumentUpload.d.ts.map
+}
 }

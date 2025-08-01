@@ -6,35 +6,38 @@ import { SessionRotationService, SessionRotationPolicy } from '../auth/services/
 import { requireAuth } from '../auth/middleware/requireAuth';
 import { requirePermission } from '../auth/middleware/requirePermission';
 
-}
-}
+
+
 export interface SessionRotationPolicyRequest {
   Body: Partial<SessionRotationPolicy>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionRotationHistoryQuery {
   Querystring: {
     limit?: string;
     offset?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface SessionRotationStatsQuery {
   Querystring: {
     startDate?: string;
     endDate?: string;
-}
-}
+
+
+
   };
-}
+
 
 export async function sessionRotationRoutes(
   server: FastifyInstance,
@@ -53,7 +56,7 @@ export async function sessionRotationRoutes(
           return reply.status(400).send({
             error: 'No organization associated with user'
           });
-        }
+
 
         // Get organization policy from database
         const result = await server.db.query(`
@@ -73,7 +76,7 @@ export async function sessionRotationRoutes(
             graceWindowMinutes: 5,
             isDefault: true
           });
-        }
+
 
         const policy = result.rows[0];
         return reply.send({
@@ -86,13 +89,13 @@ export async function sessionRotationRoutes(
           graceWindowMinutes: policy.grace_window_minutes,
           isDefault: false
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to retrieve session rotation policy'
         });
-      }
-    }
+
+
   });
 
   // Update organization's session rotation policy
@@ -111,7 +114,7 @@ export async function sessionRotationRoutes(
           return reply.status(400).send({
             error: 'No organization associated with user'
           });
-        }
+
 
         const now = new Date();
         
@@ -152,7 +155,7 @@ export async function sessionRotationRoutes(
           details: {
             organizationId,
             updates
-  }
+
           sessionId: request.sessionId,
           severity: 'info'
         });
@@ -161,13 +164,13 @@ export async function sessionRotationRoutes(
           success: true,
           message: 'Session rotation policy updated successfully'
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to update session rotation policy'
         });
-      }
-    }
+
+
   });
 
   // Get user's session rotation history
@@ -193,15 +196,15 @@ export async function sessionRotationRoutes(
             limit,
             offset,
             total: parseInt(countResult.rows[0].total)
-          }
+
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to retrieve session rotation history'
         });
-      }
-    }
+
+
   });
 
   // Get session rotation statistics (admin only)
@@ -220,13 +223,13 @@ export async function sessionRotationRoutes(
         const stats = await sessionRotationService.getRotationStats(start, end);
 
         return reply.send(stats);
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to retrieve session rotation statistics'
         });
-      }
-    }
+
+
   });
 
   // Check if session is in grace period
@@ -240,7 +243,7 @@ export async function sessionRotationRoutes(
           return reply.status(400).send({
             error: 'No active session'
           });
-        }
+
 
         const inGracePeriod = await sessionRotationService.isSessionInGracePeriod(sessionId);
         
@@ -252,20 +255,20 @@ export async function sessionRotationRoutes(
           );
           if (result.rows.length > 0) {
             graceExpiresAt = result.rows[0].expires_at;
-          }
-        }
+
+
 
         return reply.send({
           inGracePeriod,
           graceExpiresAt
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to check grace period status'
         });
-      }
-    }
+
+
   });
 
   // Manually trigger session rotation for a user (admin only)
@@ -283,7 +286,7 @@ export async function sessionRotationRoutes(
           return reply.status(400).send({
             error: 'userId and reason are required'
           });
-        }
+
 
         const result = await sessionRotationService.handlePrivilegeChange({
           userId,
@@ -300,19 +303,19 @@ export async function sessionRotationRoutes(
             targetUserId: userId,
             reason,
             result
-  }
+
           sessionId: request.sessionId,
           severity: 'warning'
         });
 
         return reply.send(result);
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to rotate sessions'
         });
-      }
-    }
+
+
   });
 
   // Clean up expired grace windows (maintenance endpoint)
@@ -329,12 +332,11 @@ export async function sessionRotationRoutes(
           success: true,
           cleanedCount
         });
-      } catch (error) {
+ catch (error) {
         request.log.error(error);
         return reply.status(500).send({
           error: 'Failed to cleanup grace windows'
         });
-      }
-    }
+
+
   });
-}

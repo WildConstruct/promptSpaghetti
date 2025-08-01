@@ -2,6 +2,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 }
 }
+}
 export interface PolicyUpdateRequest {
     requestId: string;
     policyId: string;
@@ -27,6 +28,8 @@ export interface PolicyUpdateRequest {
 }
 }
 }
+}
+}
 export interface PolicyChange {
     changeId: string;
     changeType: ChangeType;
@@ -37,6 +40,8 @@ export interface PolicyChange {
     legalBasis?: string;
     affectedUsers: string[];
     breakingChange: boolean;
+}
+}
 }
 }
 }
@@ -54,6 +59,8 @@ export interface ImpactAssessment {
 }
 }
 }
+}
+}
 export interface UserImpact {
     affectedUserCount: number;
     userSegments: string[];
@@ -61,6 +68,8 @@ export interface UserImpact {
     notificationRequired: boolean;
     trainingRequired: boolean;
     communicationPlan: string;
+}
+}
 }
 }
 }
@@ -78,6 +87,8 @@ export interface SystemImpact {
 }
 }
 }
+}
+}
 export interface ComplianceImpact {
     regulatoryFrameworks: string[];
     complianceRequirements: string[];
@@ -89,12 +100,16 @@ export interface ComplianceImpact {
 }
 }
 }
+}
+}
 export interface RiskAssessment {
     riskLevel: RiskLevel;
     identifiedRisks: Risk[];
     mitigationMeasures: string[];
     residualRisk: RiskLevel;
     acceptanceCriteria: string[];
+}
+}
 }
 }
 }
@@ -113,12 +128,16 @@ export interface Risk {
 }
 }
 }
+}
+}
 export interface PerformanceImpact {
     expectedLoadIncrease: number;
     storageRequirements: number;
     processingOverhead: number;
     networkImpact: string;
     scalabilityConsiderations: string[];
+}
+}
 }
 }
 }
@@ -136,12 +155,16 @@ export interface ReviewRequirement {
 }
 }
 }
+}
+}
 export interface ApprovalWorkflow {
     workflowId: string;
     stages: ApprovalStage[];
     currentStageIndex: number;
     escalationRules: EscalationRule[];
     timeoutSettings: TimeoutSettings;
+}
+}
 }
 }
 }
@@ -163,6 +186,8 @@ export interface ApprovalStage {
 }
 }
 }
+}
+}
 export interface Approver {
     approverId: string;
     approverRole: string;
@@ -171,6 +196,8 @@ export interface Approver {
     comments?: string;
     decidedAt?: Date;
     qualifications: string[];
+}
+}
 }
 }
 }
@@ -186,11 +213,15 @@ export interface EscalationRule {
 }
 }
 }
+}
+}
 export interface TimeoutSettings {
     stageTimeoutHours: number;
     workflowTimeoutDays: number;
     reminderIntervalHours: number;
     autoEscalate: boolean;
+}
+}
 }
 }
 }
@@ -217,6 +248,8 @@ export interface PolicyVersion {
 }
 }
 }
+}
+}
 export interface PolicyDeployment {
     deploymentId: string;
     policyVersionId: string;
@@ -234,6 +267,8 @@ export interface PolicyDeployment {
 }
 }
 }
+}
+}
 export interface ValidationResult {
     validationType: ValidationType;
     status: ValidationStatus;
@@ -246,11 +281,15 @@ export interface ValidationResult {
 }
 }
 }
+}
+}
 export interface DeploymentSchedule {
     phases: DeploymentPhase[];
     rollbackTriggers: string[];
     successCriteria: string[];
     monitoringPeriod: number;
+}
+}
 }
 }
 }
@@ -269,12 +308,16 @@ export interface DeploymentPhase {
 }
 }
 }
+}
+}
 export interface RolloutStrategy {
     strategyType: RolloutType;
     parameters: Record<string, any>;
     canaryPercentage?: number;
     blueGreenConfig?: BlueGreenConfig;
     featureFlagConfig?: FeatureFlagConfig;
+}
+}
 }
 }
 }
@@ -290,6 +333,8 @@ export interface BlueGreenConfig {
 }
 }
 }
+}
+}
 export interface FeatureFlagConfig {
     flagName: string;
     defaultValue: boolean;
@@ -300,11 +345,14 @@ export interface FeatureFlagConfig {
 }
 }
 }
+}
+}
 export interface RolloutRule {
     ruleId: string;
     condition: string;
     percentage: number;
     userSegments: string[];
+}
 }
 }
 }

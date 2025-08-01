@@ -6,17 +6,19 @@ import { TopPerformingTemplate } from './TopPerformingTemplate';
 import { TrendChart } from './TrendChart';
 import { formatNumber, formatCurrency, formatPercentage } from '../../../utils/formatters';
 import './DashboardOverview.css';
-}
+
+
 interface DashboardOverviewProps {
   dashboard: CreatorDashboard;,
-  insights: AnalyticsInsight;
+  insights: AnalyticsInsight;,
   onRefresh: () => void;
-  export const DashboardOverview: React.FC<DashboardOverviewProps> = ({,)
+  export const DashboardOverview: React.FC<DashboardOverviewProps> = ({),
   dashboard,
   insights,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onRefresh
-}
+
+
 }) => {
   const { overview, performance_summary } = dashboard;
   // Calculate trend indicators

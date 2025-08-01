@@ -14,12 +14,12 @@ const testGraph: Graph = {
       type: 'SetVariable',
       key: 'greeting',
       value: 'Hello'
-  }
+
     {
       id: 'var2',
       type: 'GetVariable',
       key: 'greeting'
-  }
+
     // Multiple weighted choices to ensure variety across seeds
     {
       id: 'choice1',
@@ -31,7 +31,7 @@ const testGraph: Graph = {
         { value: 'fantastic', weight: 0.4 },
         { value: 'incredible', weight: 0.2 }
       ]
-  }
+
     {
       id: 'choice2',
       type: 'WeightedChoice',
@@ -41,24 +41,24 @@ const testGraph: Graph = {
         { value: 'planet', weight: 0.5 },
         { value: 'earth', weight: 0.3 }
       ]
-  }
+
     // Concat nodes to combine outputs
     {
       id: 'space',
       type: 'WeightedChoice',
       choices: [{ value: ' ', weight: 1 }]
-  }
+
     {
       id: 'concat1',
       type: 'Concat',
       inputs: ['var2', 'space', 'choice1', 'space', 'choice2']
-  }
+
     // Final output
     {
       id: 'output',
       type: 'Output',
       inputs: ['concat1']
-    }
+
   ]
 };
 
@@ -102,7 +102,7 @@ describe('Determinism Test Matrix', () => {
       
       const result = await executeGraph(graphWithSeed);
       results.add(result.outputs[0]);
-    }
+
     
     // Expect at least 3 different outputs from 5 seeds
     // (Some seeds may produce the same output by chance, but not all)

@@ -10,7 +10,7 @@ import {
   TransferPolicy,
   DataClassification,
   TransferType
-} from '../services/DataClassificationService';
+ from '../services/DataClassificationService';
 
 export async function dataClassificationRoutes(
   fastify: FastifyInstance,
@@ -24,7 +24,7 @@ export async function dataClassificationRoutes(
       metadata?: Record<string, any>;
       filename?: string;
     };
-  }>('/classification/classify', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/classification/classify', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { dataId, content, metadata = {}, filename } = request.body as any;
 
@@ -33,7 +33,7 @@ export async function dataClassificationRoutes(
           success: false,
           error: 'dataId and content are required'
         });
-      }
+
 
       const result = await dataClassificationService.classifyData(
         dataId,
@@ -46,19 +46,19 @@ export async function dataClassificationRoutes(
         success: true,
         classification: result
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to classify data'
       });
-    }
+
   });
 
   // Evaluate transfer request endpoint
   fastify.post<{
     Body: DataTransferRequest;
-  }>('/classification/evaluate-transfer', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/classification/evaluate-transfer', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const transferRequest = request.body as DataTransferRequest;
 
@@ -68,7 +68,7 @@ export async function dataClassificationRoutes(
           success: false,
           error: 'dataId, sourceClassification, and transferType are required'
         });
-      }
+
 
       const decision = await dataClassificationService.evaluateTransferRequest(transferRequest);
 
@@ -76,19 +76,19 @@ export async function dataClassificationRoutes(
         success: true,
         decision
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to evaluate transfer request'
       });
-    }
+
   });
 
   // Get classification history endpoint
   fastify.get<{
     Params: { dataId: string };
-  }>('/classification/history/:dataId', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/classification/history/:dataId', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { dataId } = request.params as { dataId: string };
 
@@ -98,13 +98,13 @@ export async function dataClassificationRoutes(
         success: true,
         history
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to get classification history'
       });
-    }
+
   });
 
   // Get transfer audit log endpoint
@@ -117,7 +117,7 @@ export async function dataClassificationRoutes(
       endDate?: string;
       limit?: string;
     };
-  }>('/classification/audit-log', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/classification/audit-log', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { dataId, userId, classification, startDate, endDate, limit } = request.query as any;
 
@@ -135,19 +135,19 @@ export async function dataClassificationRoutes(
         success: true,
         auditLog
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to get transfer audit log'
       });
-    }
+
   });
 
   // Create classification rule endpoint
   fastify.post<{
     Body: Omit<ClassificationRule, 'id' | 'createdAt' | 'updatedAt'>;
-  }>('/classification/rules', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/classification/rules', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const ruleData = request.body as any;
 
@@ -157,7 +157,7 @@ export async function dataClassificationRoutes(
           success: false,
           error: 'name, classification, and conditions are required'
         });
-      }
+
 
       // Validate classification value
       const validClassifications: DataClassification[] = ['public', 'internal', 'confidential', 'restricted'];
@@ -166,7 +166,7 @@ export async function dataClassificationRoutes(
           success: false,
           error: `Invalid classification. Must be one of: ${validClassifications.join(', ')}`
         });
-      }
+
 
       const rule = await dataClassificationService.createClassificationRule(ruleData);
 
@@ -174,19 +174,19 @@ export async function dataClassificationRoutes(
         success: true,
         rule
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to create classification rule'
       });
-    }
+
   });
 
   // Create transfer policy endpoint
   fastify.post<{
     Body: Omit<TransferPolicy, 'id' | 'createdAt' | 'updatedAt'>;
-  }>('/classification/policies', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/classification/policies', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const policyData = request.body as any;
 
@@ -196,7 +196,7 @@ export async function dataClassificationRoutes(
           success: false,
           error: 'name, sourceClassification, transferType, and action are required'
         });
-      }
+
 
       // Validate enum values
       const validClassifications: DataClassification[] = ['public', 'internal', 'confidential', 'restricted'];
@@ -208,21 +208,21 @@ export async function dataClassificationRoutes(
           success: false,
           error: `Invalid sourceClassification. Must be one of: ${validClassifications.join(', ')}`
         });
-      }
+
 
       if (!validTransferTypes.includes(policyData.transferType)) {
         return reply.status(400).send({
           success: false,
           error: `Invalid transferType. Must be one of: ${validTransferTypes.join(', ')}`
         });
-      }
+
 
       if (!validActions.includes(policyData.action)) {
         return reply.status(400).send({
           success: false,
           error: `Invalid action. Must be one of: ${validActions.join(', ')}`
         });
-      }
+
 
       const policy = await dataClassificationService.createTransferPolicy(policyData);
 
@@ -230,13 +230,13 @@ export async function dataClassificationRoutes(
         success: true,
         policy
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to create transfer policy'
       });
-    }
+
   });
 
   // Bulk classification endpoint
@@ -247,9 +247,9 @@ export async function dataClassificationRoutes(
         content: string;
         metadata?: Record<string, any>;
         filename?: string;
-      }>;
+>;
     };
-  }>('/classification/bulk-classify', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/classification/bulk-classify', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { items } = request.body as any;
 
@@ -258,14 +258,14 @@ export async function dataClassificationRoutes(
           success: false,
           error: 'items array is required and must not be empty'
         });
-      }
+
 
       if (items.length > 100) {
         return reply.status(400).send({
           success: false,
           error: 'Maximum 100 items allowed per bulk request'
         });
-      }
+
 
       const results = [];
       const errors = [];
@@ -280,14 +280,14 @@ export async function dataClassificationRoutes(
             item.filename
           );
           results.push(result);
-        } catch (error) {
+ catch (error) {
           errors.push({
             index: i,
             dataId: item.dataId,
             error: error instanceof Error ? error.message : 'Unknown error'
           });
-        }
-      }
+
+
 
       return reply.send({
         success: true,
@@ -297,13 +297,13 @@ export async function dataClassificationRoutes(
         successCount: results.length,
         errorCount: errors.length
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to process bulk classification'
       });
-    }
+
   });
 
   // Bulk transfer evaluation endpoint
@@ -311,7 +311,7 @@ export async function dataClassificationRoutes(
     Body: {
       requests: DataTransferRequest[];
     };
-  }>('/classification/bulk-evaluate-transfer', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/classification/bulk-evaluate-transfer', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { requests } = request.body as any;
 
@@ -320,14 +320,14 @@ export async function dataClassificationRoutes(
           success: false,
           error: 'requests array is required and must not be empty'
         });
-      }
+
 
       if (requests.length > 50) {
         return reply.status(400).send({
           success: false,
           error: 'Maximum 50 requests allowed per bulk evaluation'
         });
-      }
+
 
       const decisions = [];
       const errors = [];
@@ -337,14 +337,14 @@ export async function dataClassificationRoutes(
         try {
           const decision = await dataClassificationService.evaluateTransferRequest(transferRequest);
           decisions.push(decision);
-        } catch (error) {
+ catch (error) {
           errors.push({
             index: i,
             requestId: transferRequest.id,
             error: error instanceof Error ? error.message : 'Unknown error'
           });
-        }
-      }
+
+
 
       return reply.send({
         success: true,
@@ -354,13 +354,13 @@ export async function dataClassificationRoutes(
         successCount: decisions.length,
         errorCount: errors.length
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to process bulk transfer evaluation'
       });
-    }
+
   });
 
   // Get classification statistics endpoint
@@ -377,24 +377,24 @@ export async function dataClassificationRoutes(
             internal: 0,
             confidential: 0,
             restricted: 0
-  }
+
           totalTransferRequests: 0,
           transferDecisions: {
             allowed: 0,
             denied: 0,
             pending_approval: 0
-  }
+
           rulesCount: 0,
           policiesCount: 0
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to get classification statistics'
       });
-    }
+
   });
 
   // Validate classification rule endpoint
@@ -407,7 +407,7 @@ export async function dataClassificationRoutes(
         filename?: string;
       };
     };
-  }>('/classification/validate-rule', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/classification/validate-rule', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { rule, testData } = request.body as any;
 
@@ -416,7 +416,7 @@ export async function dataClassificationRoutes(
           success: false,
           error: 'rule and testData are required'
         });
-      }
+
 
       // This would typically validate the rule against test data
       // For now, return validation structure
@@ -427,15 +427,15 @@ export async function dataClassificationRoutes(
           matchesTestData: false,
           conditionResults: [],
           recommendations: []
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Failed to validate classification rule'
       });
-    }
+
   });
 
   // Health check endpoint for data classification service
@@ -448,12 +448,11 @@ export async function dataClassificationRoutes(
         timestamp: new Date().toISOString(),
         version: '1.0.0'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
         error: 'Service health check failed'
       });
-    }
+
   });
-}

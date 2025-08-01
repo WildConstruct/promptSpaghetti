@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-export interface UserAvatarProps {
-    userId: string;
+}
+export interface UserAvatarProps { userId: string;
     userName?: string;
     userAvatar?: string;
     status: 'active' | 'idle' | 'away' | 'offline';
@@ -12,8 +12,8 @@ export interface UserAvatarProps {
     onClick?: (userId: string) => void;
     className?: string;
 
-export declare const UserAvatar: React.FC<UserAvatarProps>;
-
+export declare const UserAvatar: React.FC<UserAvatarProps> }
+}
 }
 export interface UserAvatarListProps {
     users: Array<{
@@ -21,6 +21,7 @@ export interface UserAvatarListProps {
         userName?: string;
         userAvatar?: string;
         status: 'active' | 'idle' | 'away' | 'offline'
+}
 }
   }>;
     maxVisible?: number;

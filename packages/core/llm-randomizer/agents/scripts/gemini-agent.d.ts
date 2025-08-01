@@ -1,5 +1,4 @@
-export interface GeminiAgentConfig {
-    apiKey: string;
+export interface GeminiAgentConfig { apiKey: string;
     model: string;
     temperature: number;
     maxOutputTokens: number;
@@ -8,14 +7,14 @@ export interface GeminiAgentConfig {
     useStructuredOutput: boolean;
     safetySettings?: Array<{
         category: string;
-        threshold: string;
+        threshold: string }
 }
     }>;
     stopSequences?: string[];
 
 }
-export interface GeminiGenerationRequest {
-    purpose: string;
+}
+export interface GeminiGenerationRequest { purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
     nodeCount: number;
     nodeTypes: string[];
@@ -24,26 +23,23 @@ export interface GeminiGenerationRequest {
     style?: 'creative' | 'logical' | 'balanced';
     domain?: string;
     constraints?: string[];
-    examples?: string[];
-
+    examples?: string[] }
 }
-export interface GeminiGenerationResult {
-    success: boolean;
+}
+export interface GeminiGenerationResult { success: boolean;
     graph?: string;
     errors?: string[];
     warnings?: string[];
     attempts: number;
     safetyRatings?: Array<{
         category: string;
-        probability: string;
+        probability: string }
 }
     }>;
-    metadata: {
-        model: string;
+    metadata: { model: string;
         temperature: number;
         tokenCount: number;
-        generationTime: number;
-    };
+        generationTime: number };
 
 export declare class GeminiGraphAgent {
     private config;

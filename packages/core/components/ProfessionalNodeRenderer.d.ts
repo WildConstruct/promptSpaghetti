@@ -2,6 +2,7 @@ import React from 'react';
 import { NodeMeta } from '../Palette';
 
 }
+}
 interface ProfessionalNodeRendererProps {
     id: string;
     data: Record<string, unknown>;
@@ -24,4 +25,5 @@ interface ProfessionalNodeRendererProps {
 export declare const ProfessionalNodeRenderer: React.NamedExoticComponent<ProfessionalNodeRendererProps>;
 export default ProfessionalNodeRenderer;
 //# sourceMappingURL=ProfessionalNodeRenderer.d.ts.map
+}
 }

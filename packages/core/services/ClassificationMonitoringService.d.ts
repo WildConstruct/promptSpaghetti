@@ -9,8 +9,8 @@
 import { DataClassificationLevel, OperationContext } from '../types/DataClassification';
 
 }
-export interface MonitoringEvent {
-    id: string;
+}
+export interface MonitoringEvent { id: string;
     timestamp: Date;
     eventType: 'CLASSIFICATION' | 'ACCESS' | 'VALIDATION' | 'POLICY_CHANGE' | 'VIOLATION' | 'COMPLIANCE_CHECK';
     classification: DataClassificationLevel;
@@ -20,19 +20,17 @@ export interface MonitoringEvent {
     result: 'SUCCESS' | 'FAILURE' | 'WARNING';
     details: Record<string, any>;
     context: OperationContext;
-    metrics?: MonitoringMetrics;
-
+    metrics?: MonitoringMetrics }
 }
-export interface MonitoringMetrics {
-    processingTimeMs: number;
+}
+export interface MonitoringMetrics { processingTimeMs: number;
     dataSize?: number;
     violationCount?: number;
     complianceScore?: number;
-    riskScore?: number;
-
+    riskScore?: number }
 }
-export interface ClassificationStats {
-    classification: DataClassificationLevel;
+}
+export interface ClassificationStats { classification: DataClassificationLevel;
     totalEvents: number;
     successCount: number;
     failureCount: number;
@@ -40,21 +38,19 @@ export interface ClassificationStats {
     averageProcessingTime: number;
     violationRate: number;
     complianceRate: number;
-    lastUpdated: Date;
-
+    lastUpdated: Date }
 }
-export interface UserActivity {
-    userId: string;
+}
+export interface UserActivity { userId: string;
     totalEvents: number;
     classificationCounts: Record<DataClassificationLevel, number>;
     violationCount: number;
     lastActivity: Date;
     riskScore: number;
-    suspiciousActivities: string[];
-
+    suspiciousActivities: string[] }
 }
-export interface MonitoringAlert {
-    id: string;
+}
+export interface MonitoringAlert { id: string;
     timestamp: Date;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     type: 'THRESHOLD_EXCEEDED' | 'UNUSUAL_PATTERN' | 'COMPLIANCE_VIOLATION' | 'SECURITY_RISK';
@@ -62,11 +58,10 @@ export interface MonitoringAlert {
     details: Record<string, any>;
     resolved: boolean;
     resolvedAt?: Date;
-    resolvedBy?: string;
-
+    resolvedBy?: string }
 }
-export interface MonitoringThreshold {
-    name: string;
+}
+export interface MonitoringThreshold { name: string;
     description: string;
     metric: string;
     operator: '>' | '<' | '>=' | '<=' | '==' | '!=';
@@ -74,28 +69,25 @@ export interface MonitoringThreshold {
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     enabled: boolean;
     cooldownMinutes: number;
-    lastTriggered?: Date;
-
+    lastTriggered?: Date }
 }
-export interface MonitoringDashboard {
-    overallStats: {
+}
+export interface MonitoringDashboard { overallStats: {
         totalEvents: number;
         successRate: number;
         averageProcessingTime: number;
         activeUsers: number;
         violationCount: number;
-        complianceScore: number;
+        complianceScore: number }
 }
     };
     classificationBreakdown: ClassificationStats[];
     topUsers: UserActivity[];
     recentAlerts: MonitoringAlert[];
-    trendData: {
-        timestamp: Date;
+    trendData: { timestamp: Date;
         eventCount: number;
         violationCount: number;
-        complianceScore: number;
-    }[];
+        complianceScore: number }[];
 
 export declare class ClassificationMonitoringService {
     private events;

@@ -69,7 +69,8 @@ export const ExtensionPointSchema = z.object({
         .optional(),
     constraints: z
         .object({
-        performance: z
+        performance: z,
+        : 
             .object({
             maxExecutionTime: z.number().optional(),
             maxMemoryUsage: z.number().optional(),
@@ -263,27 +264,27 @@ export class ExtensionPointRegistry {
                             type: 'string',
                             required: true,
                             description: 'Unique node identifier',
-                        },
+                        }
                     ],
                     returnType: 'TOutput',
                     examples: ['class CustomNode extends RuntimeNode<string> { ... }'],
-                },
+                }
             ],
             dependencies: ['runtime.context'],
             examples: [
                 {
                     name: 'Basic Custom Node',
                     description: 'Simple custom node implementation',
-                    code: `class CustomNode extends RuntimeNode<string> {
-  constructor(id: string, private customData: string) {
-    super(id);
-  }
+                    code: `class CustomNode extends RuntimeNode<string> {,
+  constructor(id: string, private customData: string) {,
+  super(id);
+}
   run(ctx: ExecutionContext): string {
     return this.customData + ' processed';
   }
 }`,
                     language: 'typescript',
-                },
+                }
             ],
             constraints: {
                 performance: {
@@ -328,11 +329,11 @@ export class ExtensionPointRegistry {
                             type: 'AdvancedNodeConfig',
                             required: true,
                             description: 'Advanced node configuration',
-                        },
+                        }
                     ],
                     returnType: 'TOutput',
                     examples: ['class AdvancedCustomNode extends AdvancedRuntimeNode<string> { ... }'],
-                },
+                }
             ],
             dependencies: ['runtime.context.advanced', 'runtime.validation'],
             metadata: {
@@ -369,11 +370,11 @@ export class ExtensionPointRegistry {
                             type: '(partial: Record<string, unknown>) => void',
                             required: true,
                             description: 'Change handler function',
-                        },
+                        }
                     ],
                     returnType: 'React.ReactElement',
                     examples: ['export const CustomEditor: React.FC<BaseNodeEditorProps> = (props) => { ... }'],
-                },
+                }
             ],
             dependencies: ['ui.inspector.context'],
             metadata: {
@@ -404,11 +405,11 @@ export class ExtensionPointRegistry {
                             type: 'z.literal',
                             required: true,
                             description: 'Node type literal',
-                        },
+                        }
                     ],
                     returnType: 'ZodSchema',
                     examples: ['export const CustomNodeSchema = BaseNode.extend({ ... })'],
-                },
+                }
             ],
             dependencies: ['schema.base'],
             metadata: {
@@ -445,11 +446,11 @@ export class ExtensionPointRegistry {
                             type: 'FastifyReply',
                             required: true,
                             description: 'HTTP reply object',
-                        },
+                        }
                     ],
                     returnType: 'Promise<void>',
                     examples: ['app.post("/api/custom", async (req, reply) => { ... })'],
-                },
+                }
             ],
             dependencies: ['api.authentication'],
             metadata: {

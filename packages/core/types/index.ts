@@ -19,8 +19,7 @@ export * from './TrustTypes';
 export * from './EnforcementTypes';
 
 // Re-export commonly used types for convenience
-export type {
-  // Core policy types
+export type { // Core policy types
   BasePolicy,
   PolicyType,
   PolicyStatus,
@@ -53,11 +52,10 @@ export type {
   // Common response types
   PolicyServiceResponse,
   PolicyValidationResult,
-  EvaluationContext,
-} from './PolicyInterfaces';
+  EvaluationContext }
+ from './PolicyInterfaces';
 
-export type {
-  // Core promotion types
+export type { // Core promotion types
   BasePromotion,
   DiscountPromotion,
   ContentPromotion,
@@ -80,23 +78,21 @@ export type {
   PromotionServiceResponse,
   PromotionEligibilityCheck,
   PromotionApplicationResult,
-  PromotionSearchResult,
-} from './PromotionInterfaces';
+  PromotionSearchResult }
+ from './PromotionInterfaces';
 
-export type {
-  PolicyServiceResponse,
+export type { PolicyServiceResponse,
   CreatePolicyRequest,
   UpdatePolicyRequest,
   PolicyTestCase,
-  PolicyTestResult,
-} from './PolicyServices';
+  PolicyTestResult }
+ from './PolicyServices';
 
-export type {
-  BasePolicyEvent,
+export type { BasePolicyEvent,
   PolicyEventType,
   PolicyLifecycleEvent,
   PolicyAssignmentEvent,
   ComplianceEvent,
   SecurityEvent,
-  PolicyNotification,
-} from './PolicyEvents';
+  PolicyNotification }
+ from './PolicyEvents';

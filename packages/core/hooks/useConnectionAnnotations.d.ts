@@ -1,13 +1,13 @@
 import { Edge } from 'reactflow';
 import { AnnotatedEdge } from '../components/Annotations/ConnectionAnnotations';
 }
-interface UseConnectionAnnotationsProps {
-    edges: Edge[];
-    onEdgesChange: (edges: Edge[]) => void;
-    autoOptimizePositions?: boolean;
 }
-interface UseConnectionAnnotationsReturn {
-    annotatedEdges: AnnotatedEdge[];
+interface UseConnectionAnnotationsProps { edges: Edge[];
+    onEdgesChange: (edges: Edge[]) => void;
+    autoOptimizePositions?: boolean }
+}
+}
+interface UseConnectionAnnotationsReturn { annotatedEdges: AnnotatedEdge[];
     selectedEdgeId: string | null;
     showAllLabels: boolean;
     labelEditMode: boolean;
@@ -28,43 +28,35 @@ interface UseConnectionAnnotationsReturn {
     getVisibleLabelsCount: () => number;
 
 export declare const useConnectionAnnotations: ()
-  { edges,
-  onEdgesChange,
+  { edges;
+  onEdgesChange }
+}
 }
   autoOptimizePositions }: UseConnectionAnnotationsProps
 ) => UseConnectionAnnotationsReturn;
-export declare const connectionAnnotationPresets: {
-    dataFlow: {
+export declare const connectionAnnotationPresets: { dataFlow: {
         labelStyle: {
             color: string;
             backgroundColor: string;
-            border: string;
-        };
+            border: string };
     };
-    control: {
-        labelStyle: {
+    control: { labelStyle: {
             color: string;
             backgroundColor: string;
-            border: string;
-        };
+            border: string };
     };
-    dependency: {
-        labelStyle: {
+    dependency: { labelStyle: {
             color: string;
             backgroundColor: string;
-            border: string;
-        };
+            border: string };
     };
-    error: {
-        labelStyle: {
+    error: { labelStyle: {
             color: string;
             backgroundColor: string;
-            border: string;
-        };
+            border: string };
     };
 };
-export declare const labelTemplates: {
-    success: string;
+export declare const labelTemplates: { success: string;
     failure: string;
     fallback: string;
     optional: string;
@@ -74,8 +66,7 @@ export declare const labelTemplates: {
     input: string;
     output: string;
     config: string;
-    data: string;
-};
+    data: string };
 export declare const createPresetConnection: ()
   baseEdge: Edge,
   preset: keyof typeof connectionAnnotationPresets,

@@ -5,29 +5,28 @@ import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { TemplateEditor } from '../TemplateEditor';
-import { 
-  ContextualTooltip, 
+import { ContextualTooltip, 
   HelpfulInput, 
   HelpfulButton,
-  HelpfulSection,
+  HelpfulSection }
   useContextualHelp 
-} from '../../Help';
+ from '../../Help';
 
 export interface ConcatEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Concat specific props can be added here
 const SEPARATOR_PRESETS: SelectOption = [
-  { value: '', label: 'No separator (direct concatenation)' },
-  { value: ' ', label: 'Space' },
-  { value: '\n', label: 'New line' },
-  { value: ', ', label: 'Comma and space' },
-  { value: ' | ', label: 'Pipe with spaces' },
-  { value: ' - ', label: 'Dash with spaces' },
+  { value: '', label: 'No separator (direct concatenation)' }
+  { value: ' ', label: 'Space' }
+  { value: '\n', label: 'New line' }
+  { value: ', ', label: 'Comma and space' }
+  { value: ' | ', label: 'Pipe with spaces' }
+  { value: ' - ', label: 'Dash with spaces' }
   { value: 'custom', label: 'Custom separator...' }
 ];
 const JOIN_MODES: SelectOption = [
-  { value: 'all', label: 'Join All Inputs' },
-  { value: 'non-empty', label: 'Join Non-Empty Only' },
-  { value: 'first-n', label: 'Join First N Inputs' },
+  { value: 'all', label: 'Join All Inputs' }
+  { value: 'non-empty', label: 'Join Non-Empty Only' }
+  { value: 'first-n', label: 'Join First N Inputs' }
   { value: 'last-n', label: 'Join Last N Inputs' }
 ];
 
@@ -50,20 +49,14 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
   };
-  const handleSeparatorChange = (value: unknown) => {
-    const mode = value as string;
+  const handleSeparatorChange = (value: unknown) => { const mode = value as string;
     setSeparatorMode(mode);
     if (mode !== 'custom') {
-      handleFieldChange('separator', mode);
-    } else {
-      handleFieldChange('separator', customSeparator);
-  };
-  const handleCustomSeparatorChange = (value: unknown) => {
-    const strValue = value as string;
+      handleFieldChange('separator', mode) } else { handleFieldChange('separator', customSeparator) };
+  const handleCustomSeparatorChange = (value: unknown) => { const strValue = value as string;
     handleFieldChange('customSeparator', strValue);
     if (separatorMode === 'custom') {
-      handleFieldChange('separator', strValue);
-  };
+      handleFieldChange('separator', strValue) };
   const getDisplaySeparator = () => {
     const actualSeparator = separatorMode === 'custom' ? customSeparator : separator;
     switch (actualSeparator) {
@@ -74,41 +67,41 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
     default: return `"${actualSeparator}"`;}
   };
   // Contextual help for the node name field
-  const { wrapWithHelp: wrapNameHelp } = useContextualHelp({)
-  id: 'concat-node-name',
-  title: 'Concatenation Name',
-  description: 'Give your concatenation node a descriptive name to identify it in your workflow.',
-  category: 'basic',
-  trigger: 'focus',
-  position: 'right',
-  showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
-  examples: ['Text Combiner', 'Dialogue Merger', 'Content Assembler'],
-  priority: 'high',
+  const { wrapWithHelp: wrapNameHelp } = useContextualHelp({ )
+  id: 'concat-node-name'
+  title: 'Concatenation Name'
+  description: 'Give your concatenation node a descriptive name to identify it in your workflow.'
+  category: 'basic'
+  trigger: 'focus'
+  position: 'right'
+  showOnDisclosureLevel: ['basic', 'advanced', 'debug']
+  examples: ['Text Combiner', 'Dialogue Merger', 'Content Assembler']
+  priority: 'high' }
 });
   // Contextual help for template editor
-  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({)
-  id: 'concat-template',
-    title: 'Output Template',
-    description: 'Define how concatenated inputs should be formatted. Use {variable} syntax to reference specific inputs.',
-    category: 'basic',
-    trigger: 'hover',
-    position: 'top',
-    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
-    examples: ['Combining {input1} and {input2}', '{character}: {dialogue}'],
-    relatedFeatures: ['variable-extraction', 'input-ports'],
-    priority: 'medium'
+  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({ )
+  id: 'concat-template'
+    title: 'Output Template' }
+    description: 'Define how concatenated inputs should be formatted. Use {variable} syntax to reference specific inputs.'
+    category: 'basic'
+    trigger: 'hover'
+    position: 'top'
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug']
+    examples: ['Combining {input1} and {input2}', '{character}: {dialogue}']
+    relatedFeatures: ['variable-extraction', 'input-ports']
+    priority: 'medium';
   });
   // Contextual help for join mode
-  const { wrapWithHelp: wrapJoinModeHelp } = useContextualHelp({)
-  id: 'concat-join-mode',
-  title: 'Join Mode',
-  description: 'Control which inputs are included in the concatenation result.',
-  category: 'advanced',
-  trigger: 'hover',
-  position: 'right',
-  showOnDisclosureLevel: ['advanced', 'debug'],
-  examples: ['Join All: combines everything', 'Non-Empty: skips empty inputs'],
-  priority: 'medium',
+  const { wrapWithHelp: wrapJoinModeHelp } = useContextualHelp({ )
+  id: 'concat-join-mode'
+  title: 'Join Mode'
+  description: 'Control which inputs are included in the concatenation result.'
+  category: 'advanced'
+  trigger: 'hover'
+  position: 'right'
+  showOnDisclosureLevel: ['advanced', 'debug']
+  examples: ['Join All: combines everything', 'Non-Empty: skips empty inputs']
+  priority: 'medium' }
 });
   return;
     <div className="concat-editor">
@@ -133,32 +126,31 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
         )}
         {wrapTemplateHelp()
           <div style={{ marginBottom: 16 }}>
-            <label style={{
-  display: 'block',
-  fontSize: 12,
-  fontWeight: 500,
-  color: '#e2e8f0',
-  marginBottom: 6,
-}}>
+            <label style={ {
+  display: 'block'
+  fontSize: 12
+  fontWeight: 500
+  color: '#e2e8f0'
+  marginBottom: 6 }
+}>
               Output Template (Optional)
             </label>
             <TemplateEditor
               value={template}
               onChange={(value) => handleFieldChange('template', value)}
-              onVariablesChange={(variables, extractedVariables) => {
-                handleFieldChange('extractedVariables', extractedVariables || []);
-              }}
+              onVariablesChange={ (variables, extractedVariables) => {
+                handleFieldChange('extractedVariables', extractedVariables || []) }}
               placeholder="Use a template like 'Combining {input1} and {input2}' for more control..."
               showPreview={true}
               showRealTimePreview={true}
               autoComplete={true}
               nodeType="concat"
             />
-            <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 4,
-}}>
+            <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 4 }
+}>
               If specified, uses template instead of simple concatenation. Variables become input ports.
             </div>
           </div>
@@ -213,44 +205,44 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
           />
         )}
         <div style={{ marginBottom: 16 }}>
-          <label style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-  fontSize: 12,
-  color: '#e2e8f0',
-  cursor: 'pointer',
-  marginBottom: 8,
-}}>
+          <label style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8
+  fontSize: 12
+  color: '#e2e8f0'
+  cursor: 'pointer'
+  marginBottom: 8 }
+}>
             <input
               type="checkbox"
               checked={trimInputs}
               onChange={(e) => handleFieldChange('trimInputs', e.target.checked)}
-              style={{
-  width: 14,
-  height: 14,
-  cursor: 'pointer',
-}}
+              style={ {
+  width: 14
+  height: 14
+  cursor: 'pointer' }
+}
             />
             Trim input whitespace
           </label>
-          <label style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-  fontSize: 12,
-  color: '#e2e8f0',
-  cursor: 'pointer',
-}}>
+          <label style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8
+  fontSize: 12
+  color: '#e2e8f0'
+  cursor: 'pointer' }
+}>
             <input
               type="checkbox"
               checked={preserveOrder}
               onChange={(e) => handleFieldChange('preserveOrder', e.target.checked)}
-              style={{
-  width: 14,
-  height: 14,
-  cursor: 'pointer',
-}}
+              style={ {
+  width: 14
+  height: 14
+  cursor: 'pointer' }
+}
             />
             Preserve input order
           </label>
@@ -297,14 +289,14 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
         priority="standard"
         fieldName="preview"
       >
-        <div style={{
-  background: '#1a202c',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  padding: 12,
-  fontSize: 12,
-  color: '#e2e8f0',
-}}>
+        <div style={ {
+  background: '#1a202c'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  padding: 12
+  fontSize: 12
+  color: '#e2e8f0' }
+}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
             Concatenation Configuration:
           </div>
@@ -321,17 +313,17 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
           </div>
           <div style={{ marginBottom: 4 }}>
             <span style={{ color: '#a0aec0' }}>Options:</span>{' '}
-            {[
-              trimInputs && 'Trim inputs',
+            { [
+              trimInputs && 'Trim inputs' }
               preserveOrder && 'Preserve order'
             ].filter(Boolean).join(', ') || 'None'}
           </div>
-          <div style={{
-  marginTop: 12,
-  padding: 8,
-  background: 'rgba(66, 153, 225, 0.1)',
-  borderRadius: 2,
-}}>
+          <div style={ {
+  marginTop: 12
+  padding: 8
+  background: 'rgba(66, 153, 225, 0.1)'
+  borderRadius: 2 }
+}>
             <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
               Example with inputs ["Hello", "World", "!"]:
             </div>
@@ -341,13 +333,13 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
               {suffix}
             </div>
           </div>
-          {(prefix || suffix) && ()
+          { (prefix || suffix) && ()
             <div style={{
-  marginTop: 8,
-  fontSize: 10,
-  color: '#a0aec0',
-  fontStyle: 'italic',
-}}>
+  marginTop: 8
+  fontSize: 10
+  color: '#a0aec0'
+  fontStyle: 'italic' }
+}>
               * Prefix and suffix are applied to the final concatenated result
             </div>
           )}

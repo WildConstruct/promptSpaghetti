@@ -9,8 +9,8 @@
 import { ExtensionManifest } from './ExtensionLifecycleManager';
 
 }
-export interface SandboxOptions {
-    timeout: number;
+}
+export interface SandboxOptions { timeout: number;
     memoryLimit: number;
     allowedModules: string[];
     blockedModules: string[];
@@ -18,21 +18,19 @@ export interface SandboxOptions {
     enableNetwork: boolean;
     enableChildProcess: boolean;
     maxCallStack: number;
-    contextName: string;
-
+    contextName: string }
 }
-export interface ResourceUsage {
-    memoryUsed: number;
+}
+export interface ResourceUsage { memoryUsed: number;
     executionTime: number;
     apiCalls: number;
     fileOperations: number;
-    networkRequests: number;
-
+    networkRequests: number }
 }
-export interface SandboxContext {
-    require: (id: string) => any;
+}
+export interface SandboxContext { require: (id: string) => any;
     module: {
-        exports: any;
+        exports: any }
 }
     };
     exports: any;

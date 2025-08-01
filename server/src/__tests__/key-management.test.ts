@@ -6,7 +6,7 @@ import {
   KeyManagementConfig,
   KeyGenerationRequest,
   KeyOperationContext
-} from '../services/KeyManagementService';
+ from '../services/KeyManagementService';
 import * as crypto from 'crypto';
 
 describe('KeyManagementService', () => {
@@ -320,8 +320,8 @@ describe('KeyManagementService', () => {
             authentication_tag: Buffer.from('tag'),
             is_active: true,
             expires_at: null
-          }]
-  }
+]
+
         .mockResolvedValueOnce({ rows: [] }); // log access
 
       // Mock decryption
@@ -361,7 +361,7 @@ describe('KeyManagementService', () => {
             encrypted_key_material: Buffer.from('encrypted'),
             is_active: false, // Inactive key
             expires_at: null
-          }]
+]
         });
 
       await expect(
@@ -384,7 +384,7 @@ describe('KeyManagementService', () => {
             encrypted_key_material: Buffer.from('encrypted'),
             is_active: true,
             expires_at: pastDate // Expired
-          }]
+]
         });
 
       await expect(
@@ -672,7 +672,7 @@ describe('KeyManagementService', () => {
           key_length: 256,
           is_active: true,
           created_at: new Date()
-  }
+
         {
           key_id: 'key2',
           purpose: 'token_signing',
@@ -680,7 +680,7 @@ describe('KeyManagementService', () => {
           key_length: 256,
           is_active: true,
           created_at: new Date()
-        }
+
       ];
 
       mockDb.query.mockResolvedValueOnce({ rows: keys });

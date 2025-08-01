@@ -114,6 +114,7 @@ knowledge_transfer: {
 }
 ;
 ;
+;
 // Readability analysis
 readability: {
     flesch_reading_ease: number;
@@ -164,15 +165,17 @@ export class ContentQualityAssessmentService {
         this.apiClient = apiClient;
         // Primary Quality Assessment Methods
         async;
-        runComprehensiveAssessment(contentId, string);
-        versionId: string,
+        runComprehensiveAssessment(contentId, string),
+            versionId;
+        string,
             options;
         {
             include_automated ?  : boolean;
             include_editorial ?  : boolean;
             include_community ?  : boolean;
             assigned_reviewer ?  : string;
-            priority ?  : 'normal' | 'high' | 'urgent';
+            priority ?  : 'normal' | 'high' | 'urgent',
+            ;
         }
         { }
         Promise < CommunityContentQualityMetrics > {
@@ -192,8 +195,9 @@ catch (error) {
     console.error('Failed to run comprehensive quality assessment:', error);
     throw error;
     async;
-    runAutomatedAnalysis(contentId, string);
-    versionId: string,
+    runAutomatedAnalysis(contentId, string),
+        versionId;
+    string,
         options;
     {
         include_plagiarism_check ?  : boolean;
@@ -215,8 +219,9 @@ catch (error) {
         throw error;
         // Editorial Review Management
         async;
-        assignEditorialReview(contentId, string);
-        versionId: string,
+        assignEditorialReview(contentId, string),
+            versionId;
+        string,
             reviewerId;
         string,
             options;
@@ -244,8 +249,9 @@ catch (error) {
     console.error('Failed to assign editorial review:', error);
     throw error;
     async;
-    submitEditorialReview(contentId, string);
-    versionId: string,
+    submitEditorialReview(contentId, string),
+        versionId;
+    string,
         review;
     Omit;
     Promise < EditorialReview > {
@@ -272,8 +278,9 @@ catch (error) {
             throw error;
             // Quality Issue Management
             async;
-            flagQualityIssue(contentId, string);
-            versionId: string,
+            flagQualityIssue(contentId, string),
+                versionId;
+            string,
                 flag;
             Omit;
             Promise < QualityFlag > {
@@ -293,8 +300,9 @@ catch (error) {
         console.error('Failed to flag quality issue:', error);
         throw error;
         async;
-        resolveQualityIssue(contentId, string);
-        versionId: string,
+        resolveQualityIssue(contentId, string),
+            versionId;
+        string,
             flagId;
         string,
             resolution;
@@ -313,15 +321,22 @@ catch (error) {
                 throw error;
                 // Quality Benchmarking and Analytics
                 async;
-                getQualityBenchmarks(category ?  : string);
-                contentType ?  : string,
+                getQualityBenchmarks(category ?  : string),
+                    contentType ?  : string,
                     timeRange ?  : 'week' | 'month' | 'quarter' | 'year';
                 Promise < {
                     overall_average: number,
                     grade_distribution: (Record),
-                    common_issues: (Array),
-                    improvement_trends: (Array)
-                } > {
+                    common_issues: Array < {
+                        issue_type: string,
+                        frequency: number,
+                        avg_severity: number
+                    } > ,
+                    improvement_trends: Array < {
+                        metric: string,
+                        trend: 'improving' | 'stable' | 'declining',
+                        change_percentage: number
+                    } >  } > {
                     try: {
                         const: params = new URLSearchParams(),
                         if(category) { }, params, : .append('category', category),
@@ -348,15 +363,22 @@ catch (error) {
                             total_content_assessed: number,
                             avg_community_quality: number,
                             quality_distribution: (Record),
-                            top_contributors: (Array)
-                        },
+                            top_contributors: Array < {
+                                user_id: string,
+                                username: string,
+                                avg_quality: number,
+                                content_count: number
+                            } >  },
                         review_queue: {
                             pending_reviews: number,
                             avg_review_time: number,
                             urgent_items: number,
-                            reviewer_workload: (Array)
-                        }
-                    } > {
+                            reviewer_workload: Array < {
+                                reviewer_id: string,
+                                pending_count: number,
+                                avg_turnaround: number
+                            } > 
+                        } } > {
                         try: {
                             const: params = new URLSearchParams(),
                             if(userId) { }, params, : .append('user_id', userId),
@@ -370,8 +392,9 @@ catch (error) {
                         throw error;
                         // Quality Improvement Tools
                         async;
-                        generateImprovementPlan(contentId, string);
-                        versionId: string,
+                        generateImprovementPlan(contentId, string),
+                            versionId;
+                        string,
                             targetGrade;
                         'A+' | 'A' | 'B+' | 'B';
                         Promise < {
@@ -397,8 +420,9 @@ catch (error) {
                     console.error('Failed to generate improvement plan:', error);
                     throw error;
                     async;
-                    applyAutomatedFixes(contentId, string);
-                    versionId: string,
+                    applyAutomatedFixes(contentId, string),
+                        versionId;
+                    string,
                         fixTypes;
                     (Array),
                         confidence_threshold;
@@ -408,7 +432,11 @@ catch (error) {
                         fixes_available: number,
                         new_version_id: string,
                         quality_improvement: number,
-                        applied_fixes: (Array)
+                        applied_fixes: Array < {
+                            type: string,
+                            description: string,
+                            confidence: number
+                        } > 
                     } > {
                         try: {
                             const: response = await this.apiClient.post(`/api/content/${contentId}/versions/${versionId}/auto-fix`, {})
@@ -427,14 +455,22 @@ catch (error) {
                 throw error;
                 // Quality Training and Guidelines
                 async;
-                getQualityGuidelines(contentType ?  : string);
-                difficultyLevel ?  : string;
+                getQualityGuidelines(contentType ?  : string),
+                    difficultyLevel ?  : string;
                 Promise < {
                     general_guidelines: string,
                     specific_criteria: (Record),
-                    examples: (Array),
-                    common_mistakes: (Array)
-                } > {
+                    examples: Array < {
+                        title: string,
+                        description: string,
+                        quality_score: number,
+                        exemplary_aspects: string
+                    } > ,
+                    common_mistakes: Array < {
+                        mistake: string,
+                        impact: string,
+                        how_to_avoid: string
+                    } >  } > {
                     try: {
                         const: params = new URLSearchParams(),
                         if(contentType) { }, params, : .append('content_type', contentType),

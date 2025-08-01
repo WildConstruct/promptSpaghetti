@@ -12,7 +12,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle
-} from '../ui/Card';
+ from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
@@ -25,21 +25,22 @@ import {
   CheckCircle,
   Filter,
   ArrowUpDown
-} from 'lucide-react';
+ from 'lucide-react';
 import { QualityAlert } from '../../hooks/useQualityMetrics';
 
 // =============================================================================
 // Quality Alerts Panel Component
 // =============================================================================
 
-}
+
 export interface QualityAlertsPanelProps {
   alerts: QualityAlert;
   onAlertAction?: (alertId: string, action: 'acknowledge' | 'resolve' | 'dismiss') => void;
   compact?: boolean;
   className?: string;
-}
-}
+
+
+
 export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({)
   alerts,
   onAlertAction,

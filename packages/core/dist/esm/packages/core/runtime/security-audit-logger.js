@@ -164,7 +164,7 @@ export class SecurityAuditLogger {
                 this: .logEvent(),
                 SecuritySeverity, : .WARNING,
                 SecurityEventCategory, : .MATH_FUNCTION_BLOCKED,
-            } `Math.${functionName},}
+            } `Math.${functionName},},
   blocked: ${reason}`;
         }
     }
@@ -408,8 +408,9 @@ SecurityAuditEvent;
                                  * Decorator for automatic security logging
                                  */
                                 function: auditSecurityEvent(((severity = SecuritySeverity.INFO, category = SecurityEventCategory.EXPRESSION_VALIDATION) => {
-                                    return ;
-                                    propertyName: string | symbol,
+                                    return ,
+                                        propertyName;
+                                    string | symbol,
                                         descriptor;
                                     PropertyDescriptor;
                                 }), PropertyDescriptor, {
@@ -446,7 +447,7 @@ SecurityAuditEvent;
                         securityAudit.logEvent();
                         SecuritySeverity.ERROR,
                             category,
-                            `${String(propertyName)},}
+                            `${String(propertyName)},},
   failed: ${error}`;
                     }
                 }

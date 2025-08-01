@@ -48,8 +48,8 @@ const searchInputRef = useRef(null);
 const searchTimeoutRef = useRef();
 const suggestionsRef = useRef(null);
 // Popular searches for suggestions
-const popularSearches = useMemo(() => []);
-'getting started',
+const popularSearches = useMemo(() => [
+    'getting started',
     'marketplace guide',
     'template creation',
     'selling templates',
@@ -57,9 +57,8 @@ const popularSearches = useMemo(() => []);
     'api documentation',
     'troubleshooting',
     'billing help',
-    'account security';
-[];
-;
+    'account security'
+], []);
 // Debounced search
 const performSearch = useCallback(async (query, filters) => {
     if (!query.trim()) {

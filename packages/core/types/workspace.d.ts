@@ -4,34 +4,28 @@
  */
 
 }
-export interface Workspace {
-    id: string;
+}
+export interface Workspace { id: string;
     owner_id: string;
     name: string;
     description?: string;
     settings: Record<string, any>;
     created_at: Date;
     updated_at: Date;
-    archived_at?: Date | null;
-
-
+    archived_at?: Date | null }
 }
-export interface CreateWorkspace {
-    name: string;
+}
+export interface CreateWorkspace { name: string;
     description?: string;
-    settings?: Record<string, any>;
-
-
+    settings?: Record<string, any> }
 }
-export interface UpdateWorkspace {
-    name?: string;
+}
+export interface UpdateWorkspace { name?: string;
     description?: string;
-    settings?: Record<string, any>;
-
-
+    settings?: Record<string, any> }
 }
-export interface Project {
-    id: string;
+}
+export interface Project { id: string;
     workspace_id: string;
     name: string;
     description?: string;
@@ -39,28 +33,22 @@ export interface Project {
     metadata: Record<string, any>;
     created_by: string;
     created_at: Date;
-    updated_at: Date;
-
-
+    updated_at: Date }
 }
-export interface CreateProject {
-    workspace_id: string;
+}
+export interface CreateProject { workspace_id: string;
     name: string;
     description?: string;
-    metadata?: Record<string, any>;
-
-
+    metadata?: Record<string, any> }
 }
-export interface UpdateProject {
-    name?: string;
+}
+export interface UpdateProject { name?: string;
     description?: string;
     status?: Project['status'];
-    metadata?: Record<string, any>;
-
-
+    metadata?: Record<string, any> }
 }
-export interface Resource {
-    id: string;
+}
+export interface Resource { id: string;
     project_id: string;
     name: string;
     type: 'graph' | 'template' | 'file' | 'export';
@@ -73,12 +61,10 @@ export interface Resource {
     version: number;
     created_by: string;
     created_at: Date;
-    updated_at: Date;
-
-
+    updated_at: Date }
 }
-export interface CreateResource {
-    project_id: string;
+}
+export interface CreateResource { project_id: string;
     name: string;
     type: Resource['type'];
     content_type?: string;
@@ -86,35 +72,29 @@ export interface CreateResource {
     storage_path?: string;
     content_data?: Record<string, any>;
     size_bytes?: number;
-    checksum?: string;
-
-
+    checksum?: string }
 }
-export interface ACLRole {
-    id: string;
+}
+export interface ACLRole { id: string;
     workspace_id: string;
     name: string;
     description?: string;
     permissions: number;
     is_system_role: boolean;
     created_at: Date;
-    updated_at: Date;
-
-
+    updated_at: Date }
 }
-export interface UserMembership {
-    id: string;
+}
+export interface UserMembership { id: string;
     user_id: string;
     workspace_id: string;
     status: 'pending' | 'active' | 'suspended' | 'left';
     invited_by?: string;
     joined_at: Date;
-    last_active_at: Date;
-
-
+    last_active_at: Date }
 }
-export interface ActivityEvent {
-    id: string;
+}
+export interface ActivityEvent { id: string;
     workspace_id: string;
     project_id?: string;
     resource_id?: string;
@@ -122,12 +102,10 @@ export interface ActivityEvent {
     event_type: string;
     event_data: Record<string, any>;
     aggregation_key?: string;
-    created_at: Date;
-
-
+    created_at: Date }
 }
-export interface Comment {
-    id: string;
+}
+export interface Comment { id: string;
     resource_id: string;
     parent_id?: string;
     author_id: string;
@@ -140,28 +118,22 @@ export interface Comment {
     resolved_by?: string;
     resolved_at?: Date;
     created_at: Date;
-    updated_at: Date;
-
-
+    updated_at: Date }
 }
-export interface CreateComment {
-    resource_id: string;
+}
+export interface CreateComment { resource_id: string;
     parent_id?: string;
     author_id: string;
     content_markdown: string;
     target_type?: Comment['target_type'];
-    target_data?: Record<string, any>;
-
-
+    target_data?: Record<string, any> }
 }
-export interface UpdateComment {
-    content_markdown?: string;
-    status?: Comment['status'];
-
-
 }
-export interface Notification {
-    id: string;
+export interface UpdateComment { content_markdown?: string;
+    status?: Comment['status'] }
+}
+}
+export interface Notification { id: string;
     user_id: string;
     workspace_id: string;
     event_id?: string;
@@ -172,71 +144,51 @@ export interface Notification {
     priority: 'low' | 'normal' | 'high' | 'urgent';
     delivery_channel: 'in_app' | 'email' | 'push';
     read_at?: Date;
-    delivered_at: Date;
-
-
+    delivered_at: Date }
 }
-export interface WorkspaceWithMembership extends Workspace {
-    membership?: UserMembership;
-    role_permissions?: number;
-
 }
-export interface ProjectWithStats extends Project {
-    resource_count?: number;
+export interface WorkspaceWithMembership extends Workspace { membership?: UserMembership;
+    role_permissions?: number }
+}
+export interface ProjectWithStats extends Project { resource_count?: number;
     comment_count?: number;
-    last_activity?: Date;
-
+    last_activity?: Date }
 }
-export interface CommentWithReplies extends Comment {
-    replies?: CommentWithReplies[];
+export interface CommentWithReplies extends Comment { replies?: CommentWithReplies[];
     author_name?: string;
-    author_avatar?: string;
-
+    author_avatar?: string }
 }
-export interface ActivityEventWithActorInfo extends ActivityEvent {
-    actor_name?: string;
-    actor_avatar?: string;
-
+export interface ActivityEventWithActorInfo extends ActivityEvent { actor_name?: string;
+    actor_avatar?: string }
 }
-export interface PaginationMeta {
-    page: number;
+export interface PaginationMeta { page: number;
     limit: number;
     total: number;
     total_pages: number;
     has_next: boolean;
-    has_prev: boolean;
-
-
+    has_prev: boolean }
 }
-export interface PaginatedResponse<T> {
-    data: T[];
-    pagination: PaginationMeta;
-
 }
-export interface WorkspaceFilter {
-    search?: string;
-    archived?: boolean;
-
-
+export interface PaginatedResponse<T> { data: T[];
+    pagination: PaginationMeta }
 }
-export interface ProjectFilter {
-    search?: string;
+export interface WorkspaceFilter { search?: string;
+    archived?: boolean }
+}
+}
+export interface ProjectFilter { search?: string;
     status?: Project['status'][];
-    created_by?: string;
-
-
+    created_by?: string }
 }
-export interface ActivityEventFilter {
-    project_id?: string;
+}
+export interface ActivityEventFilter { project_id?: string;
     actor_id?: string;
     event_types?: string[];
     from_date?: Date;
-    to_date?: Date;
-
-
+    to_date?: Date }
 }
-export interface CommentFilter {
-    resource_id?: string;
+}
+export interface CommentFilter { resource_id?: string;
     author_id?: string;
     status?: Comment['status'][];
     target_type?: Comment['target_type'];
@@ -262,7 +214,7 @@ export declare const PERMISSIONS: {
     readonly USER_ASSIGN_ROLES: number;
     readonly ACTIVITY_READ: number;
     readonly NOTIFICATION_MANAGE: number;
-    readonly EXPORT_DATA: number;
+    readonly EXPORT_DATA: number }
 }
 };
 export declare function hasPermission(userPermissions: number, requiredPermission: number): boolean;

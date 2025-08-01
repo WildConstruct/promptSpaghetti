@@ -15,7 +15,7 @@ import {
   ThreatIntelligenceExport,
   FieldMapping,
   FilterCriteria 
-} from '../services/SecuritySIEMIntegrationEngine';
+ from '../services/SecuritySIEMIntegrationEngine';
 import { SecurityAPIIntegrationPlatform } from '../services/SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../services/SecurityPolicyAnalysisEngine';
 import { SecurityIntelligenceAutomationEngine } from '../services/SecurityIntelligenceAutomationEngine';
@@ -23,18 +23,18 @@ import { SecurityIntelligenceAutomationEngine } from '../services/SecurityIntell
 // Global SIEM integration engine instance
 let siemEngine: SecuritySIEMIntegrationEngine | null = null;
 
-}
-}
+
+
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
   error?: string;
   message?: string;
   timestamp: number;
-}
 
-}
-}
+
+
+
 interface CreateSIEMConnectionRequest {
   connection_configuration: {
     connection_name: string;
@@ -46,8 +46,9 @@ interface CreateSIEMConnectionRequest {
     ssl_enabled: boolean;
     data_format: 'cef' | 'leef' | 'json' | 'xml' | 'csv' | 'syslog' | 'stix_taxii' | 'misp';
     streaming_enabled?: boolean;
-}
-}
+
+
+
   };
   advanced_settings?: {
     batch_size?: number;
@@ -62,10 +63,10 @@ interface CreateSIEMConnectionRequest {
     test_data_export?: boolean;
     validate_configuration?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface ExportThreatIntelligenceRequest {
   export_configuration: {
     connection_id: string;
@@ -74,8 +75,9 @@ interface ExportThreatIntelligenceRequest {
     time_range?: {
       start: number;
       end: number;
-}
-}
+
+
+
     };
     include_metadata?: boolean;
     compression_enabled?: boolean;
@@ -94,10 +96,10 @@ interface ExportThreatIntelligenceRequest {
     retry_on_failure?: boolean;
     notification_on_completion?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface StartStreamingRequest {
   streaming_configuration: {
     connection_id: string;
@@ -106,8 +108,9 @@ interface StartStreamingRequest {
     batch_size?: number;
     flush_interval?: number;
     quality_checks?: boolean;
-}
-}
+
+
+
   };
   filter_criteria?: {
     include_filters?: any[];
@@ -122,10 +125,10 @@ interface StartStreamingRequest {
     buffer_size?: number;
     compression_enabled?: boolean;
   };
-}
 
-}
-}
+
+
+
 interface CreateExportJobRequest {
   job_configuration: {
     job_name: string;
@@ -135,8 +138,9 @@ interface CreateExportJobRequest {
     export_format: string;
     schedule?: string;
     trigger_conditions?: string[];
-}
-}
+
+
+
   };
   export_settings?: {
     filter_criteria?: any;
@@ -150,18 +154,19 @@ interface CreateExportJobRequest {
     notification_channels?: string[];
     escalation_rules?: any;
   };
-}
 
-}
-}
+
+
+
 interface ConfigureMappingRequest {
   mapping_configuration: {
     connection_id: string;
     field_mappings?: FieldMapping[];
     transformation_rules?: string[];
     validation_rules?: string[];
-}
-}
+
+
+
   };
   enrichment_configuration?: {
     enrichment_rules?: any[];
@@ -173,18 +178,19 @@ interface ConfigureMappingRequest {
     exclude_filters?: any[];
     priority_filters?: any[];
   };
-}
 
-}
-}
+
+
+
 interface SearchExportHistoryRequest {
   search_criteria: {
     connection_ids?: string[];
     date_range?: {
       start: number;
       end: number;
-}
-}
+
+
+
     };
     export_status?: string[];
     data_types?: string[];
@@ -196,13 +202,13 @@ interface SearchExportHistoryRequest {
     limit?: number;
     offset?: number;
   };
-}
+
 
 async function initializeSIEMEngine(): Promise<void> {
 
   if (siemEngine) {
     return;
-  }
+
 
   const config: SIEMIntegrationConfig = {
     integration_settings: {
@@ -214,7 +220,7 @@ async function initializeSIEMEngine(): Promise<void> {
       incident_synchronization: true,
       threat_feed_integration: true,
       alert_forwarding: true
-  }
+
     supported_platforms: {
       splunk: true,
       qradar: true,
@@ -228,7 +234,7 @@ async function initializeSIEMEngine(): Promise<void> {
       phantom: true,
       demisto: true,
       custom_apis: true
-  }
+
     data_formats: {
       cef: true,
       leef: true,
@@ -239,7 +245,7 @@ async function initializeSIEMEngine(): Promise<void> {
       stix_taxii: true,
       misp: true,
       custom_formats: true
-  }
+
     export_capabilities: {
       intelligence_data: true,
       threat_indicators: true,
@@ -249,7 +255,7 @@ async function initializeSIEMEngine(): Promise<void> {
       compliance_reports: true,
       correlation_results: true,
       workflow_logs: true
-  }
+
     streaming_options: {
       real_time_events: true,
       batch_processing: true,
@@ -259,7 +265,7 @@ async function initializeSIEMEngine(): Promise<void> {
       compression_enabled: true,
       encryption_enabled: true,
       authentication_required: true
-  }
+
     quality_controls: {
       data_validation: true,
       format_verification: true,
@@ -269,7 +275,7 @@ async function initializeSIEMEngine(): Promise<void> {
       retry_mechanisms: true,
       delivery_confirmation: true,
       audit_logging: true
-    }
+
   };
 
   // Get required dependencies (mocked for now)
@@ -292,7 +298,7 @@ async function initializeSIEMEngine(): Promise<void> {
   );
 
   await siemEngine.initialize();
-}
+
 
 export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
   // Initialize the SIEM integration engine
@@ -316,25 +322,25 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               platform_type: {
                 type: 'string',
                 enum: ['splunk', 'qradar', 'arcsight', 'sentinel', 'elastic_siem', 'chronicle', 'sumo_logic', 'securonix', 'logrhythm', 'phantom', 'demisto', 'custom']
-  }
+
               endpoint_url: { type: 'string', format: 'uri' },
               authentication_method: {
                 type: 'string',
                 enum: ['api_key', 'oauth', 'basic_auth', 'certificate', 'token']
-  }
+
               authentication_config: { type: 'object' },
               protocol: {
                 type: 'string',
                 enum: ['https', 'tcp', 'udp', 'kafka', 'amqp']
-  }
+
               ssl_enabled: { type: 'boolean' },
               data_format: {
                 type: 'string',
                 enum: ['cef', 'leef', 'json', 'xml', 'csv', 'syslog', 'stix_taxii', 'misp']
-  }
+
               streaming_enabled: { type: 'boolean' }
-            }
-  }
+
+
           advanced_settings: {
             type: 'object',
             properties: {
@@ -342,18 +348,18 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               flush_interval_seconds: { type: 'number', minimum: 1, maximum: 3600 },
               max_retry_attempts: { type: 'number', minimum: 0, maximum: 10 },
               compression_type: { type: 'string' }
-            }
-  }
+
+
           testing_options: {
             type: 'object',
             properties: {
               test_connection: { type: 'boolean' },
               test_data_export: { type: 'boolean' },
               validate_configuration: { type: 'boolean' }
-            }
-          }
-        }
-  }
+
+
+
+
       response: {
         200: {
           type: 'object',
@@ -369,22 +375,22 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
                     connection_name: { type: 'string' },
                     platform_type: { type: 'string' },
                     connection_status: { type: 'string' }
-                  }
-                }
-              }
-  }
+
+
+
+
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { connection_configuration, advanced_settings, testing_options } = request.body;
 
       if (!siemEngine) {
         throw new Error('SIEM integration engine not initialized');
-      }
+
 
       const connection = await siemEngine.createSIEMConnection(
         connection_configuration.platform_type,
@@ -397,7 +403,7 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
           ssl_enabled: connection_configuration.ssl_enabled,
           data_format: connection_configuration.data_format,
           streaming_enabled: connection_configuration.streaming_enabled
-        }
+
       );
 
       return {
@@ -409,44 +415,43 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
             platform_type: connection.platform_type,
             connection_status: connection.connection_status,
             streaming_enabled: connection.streaming_config.streaming_enabled
-  }
+
           connection_details: {
             endpoint_url: connection.connection_details.endpoint_url,
             protocol: connection.connection_details.protocol,
             ssl_enabled: connection.connection_details.ssl_enabled,
             data_format: connection.data_mapping.format_transformation,
             authentication_method: connection.connection_details.authentication_method
-  }
+
           configuration_validation: {
             connection_test_passed: connection.connection_status === 'active',
             field_mappings_configured: connection.data_mapping.field_mappings.length,
             streaming_configuration_valid: connection.streaming_config.streaming_enabled,
             advanced_settings_applied: !!advanced_settings
-  }
+
           performance_settings: {
             batch_size: connection.streaming_config.batch_size,
             flush_interval_seconds: connection.streaming_config.flush_interval_seconds,
             max_retry_attempts: connection.streaming_config.max_retry_attempts,
             compression_enabled: !!connection.streaming_config.compression_type
-  }
+
           next_steps: {
             configure_field_mapping: connection.data_mapping.field_mappings.length === 0,
             test_data_export: testing_options?.test_data_export || false,
             setup_streaming: connection_configuration.streaming_enabled && !connection.streaming_config.streaming_enabled,
             monitor_performance: true
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('SIEM connection creation failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 2: Export Threat Intelligence
@@ -469,22 +474,22 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
                 items: {
                   type: 'string',
                   enum: ['indicators', 'ttps', 'threat_actors', 'campaigns', 'vulnerabilities']
-  }
+
                 minItems: 1
-  }
+
               export_format: { type: 'string' },
               time_range: {
                 type: 'object',
                 properties: {
                   start: { type: 'number' },
                   end: { type: 'number' }
-                }
-  }
+
+
               include_metadata: { type: 'boolean' },
               compression_enabled: { type: 'boolean' },
               encryption_enabled: { type: 'boolean' }
-            }
-  }
+
+
           filter_options: {
             type: 'object',
             properties: {
@@ -493,35 +498,35 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               source_filters: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               classification_filters: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-  }
+
+
+
           delivery_options: {
             type: 'object',
             properties: {
               delivery_method: {
                 type: 'string',
                 enum: ['push', 'pull', 'streaming']
-  }
+
               delivery_confirmation: { type: 'boolean' },
               retry_on_failure: { type: 'boolean' },
               notification_on_completion: { type: 'boolean' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { export_configuration, filter_options, delivery_options } = request.body;
 
       if (!siemEngine) {
         throw new Error('SIEM integration engine not initialized');
-      }
+
 
       const exportResult = await siemEngine.exportThreatIntelligence(
         export_configuration.connection_id,
@@ -534,11 +539,11 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
             exclude_filters: [],
             severity_threshold: filter_options.severity_threshold,
             confidence_threshold: filter_options.confidence_threshold
-          } : undefined,
+ : undefined,
           include_metadata: export_configuration.include_metadata,
           compression_enabled: export_configuration.compression_enabled,
           encryption_enabled: export_configuration.encryption_enabled
-        }
+
       );
 
       const recordsCount = 
@@ -558,46 +563,45 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
             data_types_exported: export_configuration.data_types,
             total_records_exported: recordsCount,
             export_format: exportResult.formatting.output_format
-  }
+
           data_breakdown: {
             indicators_exported: exportResult.intelligence_data.indicators?.length || 0,
             ttps_exported: exportResult.intelligence_data.ttps?.length || 0,
             threat_actors_exported: exportResult.intelligence_data.threat_actors?.length || 0,
             campaigns_exported: exportResult.intelligence_data.campaigns?.length || 0,
             vulnerabilities_exported: exportResult.intelligence_data.vulnerabilities?.length || 0
-  }
+
           export_metadata: {
             source_systems: exportResult.metadata.source_systems,
             data_freshness: exportResult.metadata.data_freshness,
             validation_status: exportResult.metadata.validation_status,
             confidence_levels: exportResult.metadata.confidence_levels,
             classification_levels: exportResult.metadata.classification_levels
-  }
+
           formatting_details: {
             output_format: exportResult.formatting.output_format,
             schema_version: exportResult.formatting.schema_version,
             compression_applied: exportResult.formatting.compression_applied,
             encryption_applied: exportResult.formatting.encryption_applied,
             checksum: exportResult.formatting.checksum
-  }
+
           delivery_status: {
             delivery_method: delivery_options?.delivery_method || 'push',
             delivery_confirmation: delivery_options?.delivery_confirmation || false,
             estimated_delivery_time: this.calculateEstimatedDeliveryTime(recordsCount),
             retry_configuration: delivery_options?.retry_on_failure || false
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Threat intelligence export failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 3: Start Real-Time Streaming
@@ -618,24 +622,24 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               data_types: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               streaming_mode: {
                 type: 'string',
                 enum: ['real_time', 'batch', 'hybrid']
-  }
+
               batch_size: { type: 'number', minimum: 1, maximum: 10000 },
               flush_interval: { type: 'number', minimum: 1, maximum: 3600 },
               quality_checks: { type: 'boolean' }
-            }
-  }
+
+
           filter_criteria: {
             type: 'object',
             properties: {
               severity_threshold: { type: 'string' },
               confidence_threshold: { type: 'number', minimum: 0, maximum: 1 },
               time_window_hours: { type: 'number', minimum: 1, maximum: 168 }
-            }
-  }
+
+
           performance_settings: {
             type: 'object',
             properties: {
@@ -643,18 +647,18 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               latency_target_ms: { type: 'number', minimum: 100 },
               buffer_size: { type: 'number', minimum: 100 },
               compression_enabled: { type: 'boolean' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { streaming_configuration, filter_criteria, performance_settings } = request.body;
 
       if (!siemEngine) {
         throw new Error('SIEM integration engine not initialized');
-      }
+
 
       const streamingResult = await siemEngine.startRealTimeStreaming(
         streaming_configuration.connection_id,
@@ -666,11 +670,11 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
             severity_threshold: filter_criteria.severity_threshold,
             confidence_threshold: filter_criteria.confidence_threshold,
             time_window_hours: filter_criteria.time_window_hours
-          } : undefined,
+ : undefined,
           batch_size: streaming_configuration.batch_size,
           flush_interval: streaming_configuration.flush_interval,
           quality_checks: streaming_configuration.quality_checks
-        }
+
       );
 
       return {
@@ -682,42 +686,41 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
             streaming_status: streamingResult.status,
             streaming_mode: streaming_configuration.streaming_mode,
             started_at: Date.now()
-  }
+
           configuration_details: {
             data_types: streaming_configuration.data_types || ['all'],
             batch_size: streaming_configuration.batch_size || 1000,
             flush_interval_seconds: streaming_configuration.flush_interval || 30,
             quality_checks_enabled: streaming_configuration.quality_checks !== false
-  }
+
           filter_settings: {
             severity_threshold: filter_criteria?.severity_threshold || 'medium',
             confidence_threshold: filter_criteria?.confidence_threshold || 0.7,
             time_window_hours: filter_criteria?.time_window_hours || 24,
             filters_applied: !!filter_criteria
-  }
+
           performance_configuration: {
             max_throughput: performance_settings?.max_throughput || 1000,
             latency_target_ms: performance_settings?.latency_target_ms || 1000,
             buffer_size: performance_settings?.buffer_size || 5000,
             compression_enabled: performance_settings?.compression_enabled || true
-  }
+
           monitoring_endpoints: {
             stream_status: `/api/security-siem-integration/streaming/${streamingResult.stream_id}/status`,
             stream_metrics: `/api/security-siem-integration/streaming/${streamingResult.stream_id}/metrics`,
             stream_control: `/api/security-siem-integration/streaming/${streamingResult.stream_id}/control`
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Real-time streaming start failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 4: Create Export Job
@@ -738,28 +741,28 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               job_type: {
                 type: 'string',
                 enum: ['batch', 'scheduled', 'triggered']
-  }
+
               connection_id: { type: 'string' },
               data_types: {
                 type: 'array',
                 items: { type: 'string' },
                 minItems: 1
-  }
+
               export_format: { type: 'string' },
               schedule: { type: 'string' },
               trigger_conditions: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-  }
+
+
+
           export_settings: {
             type: 'object',
             properties: {
               quality_checks: { type: 'boolean' },
               error_handling: { type: 'string' }
-            }
-  }
+
+
           notification_settings: {
             type: 'object',
             properties: {
@@ -768,19 +771,19 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               notification_channels: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { job_configuration, export_settings, notification_settings } = request.body;
 
       if (!siemEngine) {
         throw new Error('SIEM integration engine not initialized');
-      }
+
 
       const exportJob = await siemEngine.createExportJob({
         job_name: job_configuration.job_name,
@@ -803,43 +806,42 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
             job_status: exportJob.job_status,
             connection_id: exportJob.export_configuration.connection_id,
             created_at: Date.now()
-  }
+
           job_configuration: {
             data_types: exportJob.export_configuration.data_types,
             export_format: exportJob.export_configuration.export_format,
             schedule: job_configuration.schedule || 'manual',
             trigger_conditions: job_configuration.trigger_conditions || [],
             transformation_rules: exportJob.export_configuration.transformation_rules || []
-  }
+
           execution_settings: {
             quality_checks_enabled: export_settings?.quality_checks !== false,
             error_handling_strategy: export_settings?.error_handling || 'retry_with_backoff',
             max_retry_attempts: 3,
             timeout_minutes: 30
-  }
+
           notification_configuration: {
             notify_on_completion: notification_settings?.notify_on_completion || false,
             notify_on_failure: notification_settings?.notify_on_failure || true,
             notification_channels: notification_settings?.notification_channels || ['email'],
             escalation_enabled: false
-  }
+
           monitoring_details: {
             job_status_endpoint: `/api/security-siem-integration/jobs/${exportJob.job_id}/status`,
             job_logs_endpoint: `/api/security-siem-integration/jobs/${exportJob.job_id}/logs`,
             job_control_endpoint: `/api/security-siem-integration/jobs/${exportJob.job_id}/control`
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Export job creation failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 5: Configure Field Mapping
@@ -868,67 +870,67 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
                     data_type: {
                       type: 'string',
                       enum: ['string', 'number', 'boolean', 'date', 'object', 'array']
-  }
+
                     transformation: { type: 'string' },
                     required: { type: 'boolean' },
                     default_value: {}
-                  }
-                }
-  }
+
+
+
               transformation_rules: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               validation_rules: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-  }
+
+
+
           enrichment_configuration: {
             type: 'object',
             properties: {
               enrichment_rules: {
                 type: 'array',
                 items: { type: 'object' }
-  }
+
               lookup_tables: {
                 type: 'array',
                 items: { type: 'object' }
-  }
+
               external_data_sources: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-  }
+
+
+
           filter_configuration: {
             type: 'object',
             properties: {
               include_filters: {
                 type: 'array',
                 items: { type: 'object' }
-  }
+
               exclude_filters: {
                 type: 'array',
                 items: { type: 'object' }
-  }
+
               priority_filters: {
                 type: 'array',
                 items: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { mapping_configuration, enrichment_configuration, filter_configuration } = request.body;
 
       if (!siemEngine) {
         throw new Error('SIEM integration engine not initialized');
-      }
+
 
       const mappingResult = await siemEngine.configureSIEMMapping(
         mapping_configuration.connection_id,
@@ -938,9 +940,9 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
           filter_criteria: filter_configuration ? {
             include_filters: filter_configuration.include_filters || [],
             exclude_filters: filter_configuration.exclude_filters || []
-          } : undefined,
+ : undefined,
           transformation_rules: mapping_configuration.transformation_rules
-        }
+
       );
 
       return {
@@ -952,43 +954,42 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
             field_mappings_count: mapping_configuration.field_mappings?.length || 0,
             transformation_rules_count: mapping_configuration.transformation_rules?.length || 0,
             validation_passed: mappingResult.validation_results.valid || false
-  }
+
           field_mapping_details: {
             required_fields_mapped: mapping_configuration.field_mappings?.filter(m => m.required).length || 0,
             optional_fields_mapped: mapping_configuration.field_mappings?.filter(m => !m.required).length || 0,
             transformation_functions: mapping_configuration.field_mappings?.filter(m => m.transformation).length || 0,
             default_values_set: mapping_configuration.field_mappings?.filter(m => m.default_value !== undefined).length || 0
-  }
+
           enrichment_settings: {
             enrichment_rules_configured: enrichment_configuration?.enrichment_rules?.length || 0,
             lookup_tables_configured: enrichment_configuration?.lookup_tables?.length || 0,
             external_sources_connected: enrichment_configuration?.external_data_sources?.length || 0,
             enrichment_enabled: (enrichment_configuration?.enrichment_rules?.length || 0) > 0
-  }
+
           filter_configuration: {
             include_filters_count: filter_configuration?.include_filters?.length || 0,
             exclude_filters_count: filter_configuration?.exclude_filters?.length || 0,
             priority_filters_count: filter_configuration?.priority_filters?.length || 0,
             filtering_enabled: !!filter_configuration
-  }
+
           validation_results: {
             configuration_valid: mappingResult.validation_results.valid || false,
             validation_errors: mappingResult.validation_results.errors || [],
             test_results: mappingResult.validation_results.test_results || {},
             recommendations: this.generateMappingRecommendations(mapping_configuration)
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('SIEM mapping configuration failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 6: Search Export History
@@ -1007,28 +1008,28 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               connection_ids: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               date_range: {
                 type: 'object',
                 properties: {
                   start: { type: 'number' },
                   end: { type: 'number' }
-                }
-  }
+
+
               export_status: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               data_types: {
                 type: 'array',
                 items: { type: 'string' }
-  }
+
               job_types: {
                 type: 'array',
                 items: { type: 'string' }
-              }
-            }
-  }
+
+
+
           result_options: {
             type: 'object',
             properties: {
@@ -1036,18 +1037,18 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               sort_criteria: { type: 'string' },
               limit: { type: 'number', minimum: 1, maximum: 1000 },
               offset: { type: 'number', minimum: 0 }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       const { search_criteria, result_options } = request.body;
 
       if (!siemEngine) {
         throw new Error('SIEM integration engine not initialized');
-      }
+
 
       // Simulate export history search
       const mockExports = Array.from({ length: Math.min(result_options?.limit || 50, 100) }, (_, i) => ({
@@ -1071,13 +1072,13 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
           exp.export_timestamp >= search_criteria.date_range!.start &&
           exp.export_timestamp <= search_criteria.date_range!.end
         );
-      }
+
 
       if (search_criteria.export_status) {
         filteredExports = filteredExports.filter(exp =>
           search_criteria.export_status!.includes(exp.export_status)
         );
-      }
+
 
       // Apply sorting and pagination
       const sortedExports = filteredExports.sort((a, b) => b.export_timestamp - a.export_timestamp);
@@ -1094,7 +1095,7 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
             search_criteria_applied: Object.keys(search_criteria).length,
             result_offset: offset,
             result_limit: limit
-  }
+
           export_results: paginatedExports.map(exp => ({
             export_id: exp.export_id,
             connection_id: exp.connection_id,
@@ -1112,8 +1113,8 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
                 throughput_records_per_second: Math.round(exp.records_exported / (exp.duration_ms / 1000)),
                 error_count: Math.floor((1 - exp.success_rate) * exp.records_exported),
                 retry_attempts: Math.floor(Math.random() * 3)
-              }
-  }
+
+
           })),
           aggregate_statistics: {
             total_records_exported: filteredExports.reduce((sum, exp) => sum + exp.records_exported, 0),
@@ -1125,25 +1126,24 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               completed: filteredExports.filter(exp => exp.export_status === 'completed').length,
               failed: filteredExports.filter(exp => exp.export_status === 'failed').length,
               running: filteredExports.filter(exp => exp.export_status === 'running').length
-  }
+
             data_type_distribution: {
               indicators: filteredExports.filter(exp => exp.data_types.includes('indicators')).length,
               ttps: filteredExports.filter(exp => exp.data_types.includes('ttps')).length,
               threat_actors: filteredExports.filter(exp => exp.data_types.includes('threat_actors')).length
-            }
-          }
-  }
+
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Export history search failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Route 7: Get SIEM Integration Analytics
@@ -1165,18 +1165,18 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
                 export_performance: { type: 'object' },
                 data_quality_metrics: { type: 'object' },
                 operational_insights: { type: 'object' }
-              }
-  }
+
+
             timestamp: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply): Promise<APIResponse> => {
     try {
       if (!siemEngine) {
         throw new Error('SIEM integration engine not initialized');
-      }
+
 
       const analytics = siemEngine.getSIEMIntegrationAnalytics();
 
@@ -1190,7 +1190,7 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
             real_time_streams_active: analytics.integration_summary.real_time_streams_active,
             data_volume_exported_mb: analytics.integration_summary.data_volume_exported,
             integration_health_score: analytics.integration_summary.integration_health_score
-  }
+
           platform_status: analytics.platform_status.map(platform => ({
             platform_name: platform.platform_name,
             connection_status: platform.connection_status,
@@ -1199,7 +1199,7 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               throughput_events_per_second: platform.performance_metrics.throughput,
               average_latency_ms: platform.performance_metrics.latency,
               uptime_percentage: platform.performance_metrics.uptime
-  }
+
             error_count: platform.error_count,
             health_status: platform.error_count === 0 ? 'healthy' : 'degraded'
           })),
@@ -1212,8 +1212,8 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               total_errors: analytics.export_performance.error_analysis.total_failed,
               error_rate: analytics.export_performance.error_analysis.failure_rate,
               common_error_types: analytics.export_performance.error_analysis.common_errors
-            }
-  }
+
+
           data_quality_metrics: {
             validation_pass_rate: analytics.data_quality_metrics.validation_pass_rate,
             format_compliance_rate: analytics.data_quality_metrics.format_compliance_rate,
@@ -1225,55 +1225,53 @@ export default async function siemIntegrationRoutes(fastify: FastifyInstance) {
               analytics.data_quality_metrics.duplicate_detection_rate +
               analytics.data_quality_metrics.enrichment_success_rate
             ) / 4
-  }
+
           operational_insights: {
             peak_export_times: analytics.operational_insights.peak_export_times,
             resource_utilization: analytics.operational_insights.resource_utilization,
             bottleneck_analysis: analytics.operational_insights.bottleneck_analysis,
             optimization_recommendations: analytics.operational_insights.optimization_recommendations
-  }
+
           trend_analysis: {
             export_volume_trend: 'increasing',
             success_rate_trend: 'stable',
             performance_trend: 'improving',
             error_rate_trend: 'decreasing'
-          }
-  }
+
+
         timestamp: Date.now()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('SIEM integration analytics retrieval failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
         timestamp: Date.now()
       };
-    }
+
   });
 
   // Helper functions
   function calculateEstimatedDeliveryTime(recordCount: number): number {
     // Estimate delivery time based on record count
     return Math.max(recordCount * 10, 1000); // minimum 1 second
-  }
+
 
   function generateMappingRecommendations(mappingConfig: any): string[] {
     const recommendations: string[] = [];
     
     if (!mappingConfig.field_mappings || mappingConfig.field_mappings.length === 0) {
       recommendations.push('Configure field mappings for data transformation');
-    }
+
     
     if (!mappingConfig.transformation_rules || mappingConfig.transformation_rules.length === 0) {
       recommendations.push('Add transformation rules for data formatting');
-    }
+
     
     const requiredFields = mappingConfig.field_mappings?.filter((m: any) => m.required).length || 0;
     if (requiredFields === 0) {
       recommendations.push('Define required fields for data validation');
-    }
+
     
     return recommendations;
-  }
-}
+

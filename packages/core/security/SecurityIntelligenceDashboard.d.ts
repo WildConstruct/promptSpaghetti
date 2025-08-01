@@ -13,52 +13,51 @@ import { SecurityAnomaly } from './SecurityAnomalyDetector';
 import { ThreatForecast } from './SecurityThreatForecasting';
 
 }
-export interface SecurityDashboardConfig {
-    refreshInterval: number;
+}
+export interface SecurityDashboardConfig { refreshInterval: number;
     enableRealTimeUpdates: boolean;
     retentionPeriodDays: number;
     enableExecutiveReports: boolean;
     enableThreatIntelligence: boolean;
     enableComplianceReporting: boolean;
     alertThresholds: DashboardAlertThresholds;
-    reportingSchedules: ReportingSchedule[];
-
+    reportingSchedules: ReportingSchedule[] }
 }
-export interface DashboardAlertThresholds {
-    criticalThreatCount: number;
+}
+export interface DashboardAlertThresholds { criticalThreatCount: number;
     anomalyVolumeThreshold: number;
     responseTimeThresholdMs: number;
     systemHealthThreshold: number;
-    complianceScoreThreshold: number;
-
+    complianceScoreThreshold: number }
 }
-export interface ReportingSchedule {
-    reportType: ReportType;
+}
+export interface ReportingSchedule { reportType: ReportType;
     frequency: ReportFrequency;
     recipients: string[];
     nextExecution: Date;
     enabled: boolean;
 
 export declare enum ReportType {
-    EXECUTIVE_SUMMARY = "executive_summary",
-    THREAT_INTELLIGENCE = "threat_intelligence",
-    SECURITY_POSTURE = "security_posture",
-    COMPLIANCE_STATUS = "compliance_status",
-    INCIDENT_ANALYSIS = "incident_analysis",
-    TREND_ANALYSIS = "trend_analysis",
+    EXECUTIVE_SUMMARY = "executive_summary";
+    THREAT_INTELLIGENCE = "threat_intelligence";
+    SECURITY_POSTURE = "security_posture";
+    COMPLIANCE_STATUS = "compliance_status";
+    INCIDENT_ANALYSIS = "incident_analysis";
+    TREND_ANALYSIS = "trend_analysis";
     OPERATIONAL_METRICS = "operational_metrics"
 
 export declare enum ReportFrequency {
-    REAL_TIME = "real_time",
-    HOURLY = "hourly",
-    DAILY = "daily",
-    WEEKLY = "weekly",
-    MONTHLY = "monthly",
+    REAL_TIME = "real_time";
+    HOURLY = "hourly";
+    DAILY = "daily";
+    WEEKLY = "weekly";
+    MONTHLY = "monthly" }
     QUARTERLY = "quarterly"
 
 }
-export interface SecurityPosture {
-    overallScore: number;
+}
+}
+export interface SecurityPosture { overallScore: number;
     threatLevel: ThreatLevel;
     complianceScore: number;
     systemHealth: number;
@@ -68,24 +67,24 @@ export interface SecurityPosture {
     recommendations: SecurityRecommendation[];
 
 export declare enum ThreatLevel {
-    MINIMAL = "minimal",
-    LOW = "low",
-    MODERATE = "moderate",
-    ELEVATED = "elevated",
-    HIGH = "high",
+    MINIMAL = "minimal";
+    LOW = "low";
+    MODERATE = "moderate";
+    ELEVATED = "elevated";
+    HIGH = "high" }
     SEVERE = "severe"
 
 }
-export interface PostureTrend {
-    metric: string;
+}
+}
+export interface PostureTrend { metric: string;
     direction: 'improving' | 'declining' | 'stable';
     changePercent: number;
     timeframe: string;
-    significance: 'high' | 'medium' | 'low';
-
+    significance: 'high' | 'medium' | 'low' }
 }
-export interface RiskFactor {
-    id: string;
+}
+export interface RiskFactor { id: string;
     category: RiskCategory;
     severity: 'critical' | 'high' | 'medium' | 'low';
     impact: number;
@@ -95,16 +94,17 @@ export interface RiskFactor {
     estimatedResolutionTime: number;
 
 export declare enum RiskCategory {
-    TECHNICAL = "technical",
-    OPERATIONAL = "operational",
-    COMPLIANCE = "compliance",
-    THREAT_INTELLIGENCE = "threat_intelligence",
-    HUMAN_FACTOR = "human_factor",
+    TECHNICAL = "technical";
+    OPERATIONAL = "operational";
+    COMPLIANCE = "compliance";
+    THREAT_INTELLIGENCE = "threat_intelligence";
+    HUMAN_FACTOR = "human_factor" }
     INFRASTRUCTURE = "infrastructure"
 
 }
-export interface SecurityRecommendation {
-    id: string;
+}
+}
+export interface SecurityRecommendation { id: string;
     priority: 'immediate' | 'high' | 'medium' | 'low';
     category: string;
     title: string;
@@ -114,21 +114,19 @@ export interface SecurityRecommendation {
     implementationCost: number;
     riskReduction: number;
     dependencies: string[];
-    timeline: string;
-
+    timeline: string }
 }
-export interface ThreatIntelligenceData {
-    activeThreatCount: number;
+}
+export interface ThreatIntelligenceData { activeThreatCount: number;
     highSeverityThreats: ThreatSummary[];
     threatsByCategory: Record<string, number>;
     geographicalThreats: GeographicalThreat[];
     attackVectors: AttackVector[];
     threatTrends: ThreatTrend[];
-    indicators: ThreatIndicator[];
-
+    indicators: ThreatIndicator[] }
 }
-export interface ThreatSummary {
-    id: string;
+}
+export interface ThreatSummary { id: string;
     type: string;
     severity: string;
     confidence: number;
@@ -136,79 +134,66 @@ export interface ThreatSummary {
     lastSeen: Date;
     affectedSystems: string[];
     description: string;
-    status: 'active' | 'mitigated' | 'resolved';
-
+    status: 'active' | 'mitigated' | 'resolved' }
 }
-export interface GeographicalThreat {
-    country: string;
+}
+export interface GeographicalThreat { country: string;
     region: string;
     threatCount: number;
     severityDistribution: Record<string, number>;
-    primaryThreatTypes: string[];
-
+    primaryThreatTypes: string[] }
 }
-export interface AttackVector {
-    vector: string;
+}
+export interface AttackVector { vector: string;
     frequency: number;
     successRate: number;
     averageDamage: number;
-    trend: 'increasing' | 'decreasing' | 'stable';
-
+    trend: 'increasing' | 'decreasing' | 'stable' }
 }
-export interface ThreatTrend {
-    timeframe: string;
+}
+export interface ThreatTrend { timeframe: string;
     threatType: string;
     volumeChange: number;
     severityChange: number;
-    newVariants: number;
-
+    newVariants: number }
 }
-export interface ThreatIndicator {
-    type: 'ip' | 'domain' | 'hash' | 'pattern';
+}
+export interface ThreatIndicator { type: 'ip' | 'domain' | 'hash' | 'pattern';
     value: string;
     confidence: number;
     sources: string[];
     firstSeen: Date;
-    associatedThreats: string[];
-
+    associatedThreats: string[] }
 }
-export interface DashboardMetrics {
-    securityEvents: {
+}
+export interface DashboardMetrics { securityEvents: {
         total: number;
         critical: number;
         resolved: number;
-        averageResponseTime: number;
+        averageResponseTime: number }
 }
     };
-    anomalies: {
-        detected: number;
+    anomalies: { detected: number;
         falsePositives: number;
-        accuracy: number;
-    };
-    systemHealth: {
-        availability: number;
+        accuracy: number };
+    systemHealth: { availability: number;
         performance: number;
-        errors: number;
-    };
-    compliance: {
-        overallScore: number;
+        errors: number };
+    compliance: { overallScore: number;
         violations: number;
-        auditReadiness: number;
-    };
-    threats: {
-        active: number;
+        auditReadiness: number };
+    threats: { active: number;
         mitigated: number;
-        severity: Record<string, number>;
-    };
+        severity: Record<string, number> };
 
 }
-export interface ExecutiveReport {
-    id: string;
+}
+export interface ExecutiveReport { id: string;
     reportType: ReportType;
     generatedAt: Date;
     period: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     summary: ExecutiveSummary;
@@ -218,43 +203,39 @@ export interface ExecutiveReport {
     appendices: ReportAppendix[];
 
 }
-export interface ExecutiveSummary {
-    overallStatus: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
+}
+export interface ExecutiveSummary { overallStatus: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
     keyHighlights: string[];
     majorConcerns: string[];
     actionItems: string[];
-    budgetImpact: string;
-
+    budgetImpact: string }
 }
-export interface KeyMetric {
-    name: string;
+}
+export interface KeyMetric { name: string;
     value: number | string;
     unit: string;
     trend: 'up' | 'down' | 'stable';
     context: string;
-    benchmark: number | string;
-
+    benchmark: number | string }
 }
-export interface Finding {
-    id: string;
+}
+export interface Finding { id: string;
     category: string;
     severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
     title: string;
     description: string;
     evidence: string[];
     impact: string;
-    recommendation: string;
-
+    recommendation: string }
 }
-export interface ReportAppendix {
-    title: string;
+}
+export interface ReportAppendix { title: string;
     type: 'chart' | 'table' | 'text' | 'image';
     content: unknown;
-    description: string;
-
+    description: string }
 }
-export interface DashboardWidget {
-    id: string;
+}
+export interface DashboardWidget { id: string;
     type: WidgetType;
     title: string;
     position: WidgetPosition;
@@ -265,30 +246,29 @@ export interface DashboardWidget {
     isVisible: boolean;
 
 export declare enum WidgetType {
-    METRIC_CARD = "metric_card",
-    LINE_CHART = "line_chart",
-    BAR_CHART = "bar_chart",
-    PIE_CHART = "pie_chart",
-    HEAT_MAP = "heat_map",
-    TABLE = "table",
-    GAUGE = "gauge",
-    TREND_INDICATOR = "trend_indicator",
-    ALERT_LIST = "alert_list",
+    METRIC_CARD = "metric_card";
+    LINE_CHART = "line_chart";
+    BAR_CHART = "bar_chart";
+    PIE_CHART = "pie_chart";
+    HEAT_MAP = "heat_map";
+    TABLE = "table";
+    GAUGE = "gauge";
+    TREND_INDICATOR = "trend_indicator";
+    ALERT_LIST = "alert_list" }
     THREAT_MAP = "threat_map"
 
 }
-export interface WidgetPosition {
-    x: number;
-    y: number;
-
 }
-export interface WidgetSize {
-    width: number;
-    height: number;
-
 }
-export interface WidgetConfig {
-    theme: 'light' | 'dark';
+export interface WidgetPosition { x: number;
+    y: number }
+}
+}
+export interface WidgetSize { width: number;
+    height: number }
+}
+}
+export interface WidgetConfig { theme: 'light' | 'dark';
     colors: string[];
     showLegend: boolean;
     showLabels: boolean;
@@ -327,7 +307,7 @@ export declare class SecurityIntelligenceDashboard extends EventEmitter {
      */
     generateExecutiveReport(reportType: ReportType, period: {)
         start: Date;
-        end: Date;
+        end: Date }
 }
     }): Promise<ExecutiveReport>;
     private generateExecutiveSummary;

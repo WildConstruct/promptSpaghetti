@@ -12,25 +12,22 @@ export { NodeValidationService } from './NodeValidationService';
 
 export { ContextValidationFramework, ContextValidationUtils } from './ContextValidationFramework';
 
-export type {
-  NodeValidationConfig,
+export type { NodeValidationConfig,
   NodeValidationResult,
   SecurityThreat,
   PerformanceIssue,
   TypeError,
   ValidationServiceConfig,
   ValidationServiceMetrics,
-  ValidationCacheEntry,
-} from './NodeValidationFramework';
+  ValidationCacheEntry }
+ from './NodeValidationFramework';
 
-export type {
-  ValidationServiceConfig as ServiceConfig,
-  ValidationServiceMetrics as ServiceMetrics,
-} from './NodeValidationService';
+export type { ValidationServiceConfig as ServiceConfig,
+  ValidationServiceMetrics as ServiceMetrics }
+ from './NodeValidationService';
 
-export type {
-  ContextValidationResult,
+export type { ContextValidationResult,
   ContextValidationRule,
   ContextValidationRuleResult,
-  ContextValidationConfig,
-} from './ContextValidationFramework';
+  ContextValidationConfig }
+ from './ContextValidationFramework';

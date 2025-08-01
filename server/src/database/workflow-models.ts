@@ -7,8 +7,8 @@ import { z } from 'zod';
 // WORKFLOW STATE MODELS
 // =============================================================================
 
-}
-}
+
+
 export interface WorkflowState {
   id: string;
   workspace_id: string;
@@ -22,12 +22,13 @@ export interface WorkflowState {
   sort_order: number;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowTransition {
   id: string;
   workspace_id: string;
@@ -39,12 +40,13 @@ export interface WorkflowTransition {
   required_permissions: bigint;
   conditions: Record<string, any>;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowApproval {
   id: string;
   workspace_id: string;
@@ -68,12 +70,13 @@ export interface WorkflowApproval {
   
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowApprovalReviewer {
   id: string;
   approval_id: string;
@@ -82,12 +85,13 @@ export interface WorkflowApprovalReviewer {
   reviewed_at?: Date;
   review_comment?: string;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowLock {
   id: string;
   workspace_id: string;
@@ -99,12 +103,13 @@ export interface WorkflowLock {
   expires_at?: Date;
   auto_release: boolean;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowHistoryEntry {
   id: string;
   workspace_id: string;
@@ -125,12 +130,13 @@ export interface WorkflowHistoryEntry {
   ip_address?: string;
   user_agent?: string;
   session_id?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowSchedule {
   id: string;
   workspace_id: string;
@@ -158,12 +164,13 @@ export interface WorkflowSchedule {
   created_by: string;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowExecutionLog {
   id: string;
   schedule_id: string;
@@ -180,9 +187,10 @@ export interface WorkflowExecutionLog {
   // Retry information
   retry_attempt: number;
   next_retry_at?: Date;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // ZOD VALIDATION SCHEMAS
@@ -204,20 +212,21 @@ export interface WorkflowExecutionLog {
 // WORKFLOW OPERATION TYPES
 // =============================================================================
 
-}
-}
+
+
 export interface StateTransitionRequest {
   resource_id: string;
   to_state_id: string;
   comment?: string;
   metadata?: Record<string, any>;
   force?: boolean; // Bypass approval if user has permission
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StateTransitionResult {
   success: boolean;
   new_state_id?: string;
@@ -225,24 +234,26 @@ export interface StateTransitionResult {
   approval_id?: string;
   error?: string;
   workflow_history_id?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowStateFilter {
   workspace_id?: string;
   is_initial?: boolean;
   is_final?: boolean;
   is_locked?: boolean;
   name_contains?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowApprovalFilter {
   workspace_id?: string;
   resource_id?: string;
@@ -250,12 +261,13 @@ export interface WorkflowApprovalFilter {
   status?: 'pending' | 'approved' | 'rejected' | 'cancelled';
   priority?: 'low' | 'medium' | 'high' | 'urgent';
   overdue?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowHistoryFilter {
   workspace_id?: string;
   resource_id?: string;
@@ -263,40 +275,43 @@ export interface WorkflowHistoryFilter {
   action_type?: string;
   date_from?: Date;
   date_to?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowLockFilter {
   workspace_id?: string;
   resource_id?: string;
   locked_by?: string;
   lock_type?: 'edit' | 'state_change' | 'delete' | 'custom';
   expired?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WorkflowScheduleFilter {
   workspace_id?: string;
   resource_id?: string;
   schedule_type?: 'cron' | 'interval' | 'once';
   enabled?: boolean;
   overdue?: boolean;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // WORKFLOW STATISTICS
 // =============================================================================
 
-}
-}
+
+
 export interface WorkflowStatistics {
   total_states: number;
   total_transitions: number;
@@ -314,8 +329,9 @@ export interface WorkflowStatistics {
     rejected: number;
     cancelled: number;
     avg_approval_time_hours: number;
-}
-}
+
+
+
   };
   
   // Lock statistics
@@ -332,14 +348,14 @@ export interface WorkflowStatistics {
     successful_executions: number;
     failed_executions: number;
   };
-}
+
 
 // =============================================================================
 // WORKFLOW EVENTS
 // =============================================================================
 
-}
-}
+
+
 export interface WorkflowEvent {
   type: 'state_changed' | 'approval_requested' | 'approval_completed' | 'lock_acquired' | 'lock_released' | 'schedule_executed';
   workspace_id: string;
@@ -347,9 +363,10 @@ export interface WorkflowEvent {
   actor_id: string;
   timestamp: Date;
   data: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export type WorkflowEventHandler = (event: WorkflowEvent) => void | Promise<void>;
 
@@ -357,8 +374,8 @@ export type WorkflowEventHandler = (event: WorkflowEvent) => void | Promise<void
 // WORKFLOW CONFIGURATION
 // =============================================================================
 
-}
-}
+
+
 export interface WorkflowConfiguration {
   auto_lock_on_state_change: boolean;
   auto_release_locks_on_completion: boolean;
@@ -371,7 +388,7 @@ export interface WorkflowConfiguration {
     approval_completed: boolean;
     lock_acquired: boolean;
     schedule_failed: boolean;
-}
-}
+
+
+
   };
-}

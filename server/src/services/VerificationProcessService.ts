@@ -12,7 +12,7 @@ export enum VerificationStatus {
   REJECTED = 'rejected',
   EXPIRED = 'expired',
   CANCELLED = 'cancelled'
-}
+
 
 // Verification request types
 export enum VerificationType {
@@ -20,7 +20,7 @@ export enum VerificationType {
   BUSINESS = 'business',
   DEVELOPER = 'developer',
   PREMIUM = 'premium'
-}
+
 
 // Document types for verification
 export enum DocumentType {
@@ -33,11 +33,12 @@ export enum DocumentType {
   BANK_STATEMENT = 'bank_statement',
   ARTICLES_OF_INCORPORATION = 'articles_of_incorporation',
   OTHER = 'other'
-}
+
 
 // Interfaces
-}
-}
+
+
+
 export interface VerificationRequest {
   id?: string;
   user_id: string;
@@ -52,17 +53,18 @@ export interface VerificationRequest {
     business_info?: unknown;
     documents?: VerificationDocument[];
     notes?: string;
-}
-}
+
+
+
   };
   admin_notes?: string;
   rejection_reason?: string;
   created_at?: Date;
   updated_at?: Date;
-}
 
-}
-}
+
+
+
 export interface VerificationDocument {
   id?: string;
   request_id: string;
@@ -75,12 +77,13 @@ export interface VerificationDocument {
   uploaded_at: Date;
   verified: boolean;
   verification_notes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VerificationQueueItem {
   id: string;
   user_id: string;
@@ -91,24 +94,26 @@ export interface VerificationQueueItem {
   user_email: string;
   document_count: number;
   days_pending: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VerificationDecision {
   request_id: string;
   decision: 'approve' | 'reject';
   admin_notes?: string;
   rejection_reason?: string;
   follow_up_required?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VerificationStats {
   total_pending: number;
   total_under_review: number;
@@ -118,10 +123,11 @@ export interface VerificationStats {
     pending: number;
     approved: number;
     rejected: number;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 export class VerificationProcessService {
   private readonly UPLOAD_DIR = path.join(process.cwd(), 'uploads', 'verification');
@@ -133,7 +139,7 @@ export class VerificationProcessService {
 
   constructor(private pool: Pool) {
     this.ensureUploadDirectory();
-  }
+
 
   // Initialize verification tables
   async initializeSchema(): Promise<void> {
@@ -188,13 +194,13 @@ export class VerificationProcessService {
       `);
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Submit verification request
   async submitVerificationRequest(
@@ -207,7 +213,7 @@ export class VerificationProcessService {
     const existingRequest = await this.getUserActiveRequest(userId, verificationType);
     if (existingRequest) {
       throw new BadRequestException('You already have an active verification request of this type');
-    }
+
 
     // Set expiry date (30 days from submission)
     const expiryDate = new Date();
@@ -231,10 +237,10 @@ export class VerificationProcessService {
       });
 
       return result.rows[0];
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Upload verification document
   async uploadDocument(
@@ -245,28 +251,28 @@ export class VerificationProcessService {
       buffer: Buffer;
       mimetype: string;
       size: number;
-  }
+
     documentType: DocumentType
   ): Promise<VerificationDocument> {
 
     // Validate file
     if (file.size > this.MAX_FILE_SIZE) {
       throw new BadRequestException('File size exceeds 10MB limit');
-    }
+
 
     if (!this.ALLOWED_MIME_TYPES.includes(file.mimetype)) {
       throw new BadRequestException('File type not allowed');
-    }
+
 
     // Verify request ownership
     const request = await this.getVerificationRequest(requestId);
     if (!request || request.user_id !== userId) {
       throw new ForbiddenException('Not authorized to upload to this request');
-    }
+
 
     if (request.status !== VerificationStatus.PENDING) {
       throw new BadRequestException('Cannot upload documents to requests that are not pending');
-    }
+
 
     // Generate file hash and path
     const hash = crypto.createHash('sha256').update(file.buffer).digest('hex');
@@ -297,14 +303,14 @@ export class VerificationProcessService {
           document_type: documentType, 
           file_name: file.originalname,
           file_size: file.size
-        }
+
       });
 
       return result.rows[0];
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get verification queue (admin)
   async getVerificationQueue(
@@ -316,7 +322,7 @@ export class VerificationProcessService {
       offset?: number;
       sort_by?: 'submitted_at' | 'priority' | 'type';
       sort_order?: 'asc' | 'desc';
-    } = {}
+ = {}
   ): Promise<{ items: VerificationQueueItem[]; total: number }> {
 
     const {
@@ -326,7 +332,7 @@ export class VerificationProcessService {
       offset = 0,
       sort_by = 'submitted_at',
       sort_order = 'asc'
-    } = filters;
+ = filters;
 
     let whereClause = '1=1';
     const queryParams: unknown[] = [];
@@ -335,12 +341,12 @@ export class VerificationProcessService {
     if (status) {
       whereClause += ` AND vr.status = $${++paramCount}`;
       queryParams.push(status);
-    }
+
 
     if (type) {
       whereClause += ` AND vr.verification_type = $${++paramCount}`;
       queryParams.push(type);
-    }
+
 
     // Calculate priority score (higher = more urgent)
     const priorityScore = `
@@ -397,10 +403,10 @@ export class VerificationProcessService {
         items: result.rows,
         total: parseInt(countResult.rows[0].total)
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Process verification decision (admin)
   async processVerificationDecision(
@@ -411,11 +417,11 @@ export class VerificationProcessService {
     const request = await this.getVerificationRequest(decision.request_id);
     if (!request) {
       throw new NotFoundException('Verification request not found');
-    }
+
 
     if (![VerificationStatus.PENDING, VerificationStatus.UNDER_REVIEW].includes(request.status)) {
       throw new BadRequestException('Request cannot be processed in its current state');
-    }
+
 
     const newStatus = decision.decision === 'approve' 
       ? VerificationStatus.APPROVED 
@@ -444,7 +450,7 @@ export class VerificationProcessService {
       // Update user verification status in marketplace (if approved)
       if (decision.decision === 'approve') {
         await this.updateUserVerificationBadges(client, request.user_id, request.verification_type);
-      }
+
 
       // Audit log
       await this.auditLog(client, {
@@ -455,18 +461,18 @@ export class VerificationProcessService {
           decision: decision.decision,
           verification_type: request.verification_type,
           target_user_id: request.user_id
-        }
+
       });
 
       await client.query('COMMIT');
       return result.rows[0];
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get verification statistics (admin)
   async getVerificationStatistics(timeframe: 'week' | 'month' | 'quarter' = 'month'): Promise<VerificationStats> {
@@ -517,10 +523,10 @@ export class VerificationProcessService {
         approval_rate: parseFloat(overall.approval_rate) || 0,
         by_type: byType
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get user's verification requests
   async getUserVerificationRequests(userId: string): Promise<VerificationRequest[]> {
@@ -551,12 +557,12 @@ export class VerificationProcessService {
         metadata: {
           ...row.metadata,
           documents: row.documents || []
-        }
+
       }));
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Private helper methods
   private async getVerificationRequest(requestId: string): Promise<VerificationRequest | null> {
@@ -568,10 +574,10 @@ export class VerificationProcessService {
         [requestId]
       );
       return result.rows[0] || null;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   private async getUserActiveRequest(userId: string, type: VerificationType): Promise<VerificationRequest | null> {
 
@@ -586,10 +592,10 @@ export class VerificationProcessService {
         [userId, type]
       );
       return result.rows[0] || null;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   private async updateUserVerificationBadges(
     client: PoolClient,
@@ -606,7 +612,7 @@ export class VerificationProcessService {
          active = true`,
       [userId, verificationType]
     );
-  }
+
 
   private async auditLog(client: PoolClient, entry: { action: string; user_id: string; details: unknown }): Promise<void> {
 
@@ -615,11 +621,10 @@ export class VerificationProcessService {
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,
       [entry.action, entry.user_id, JSON.stringify(entry.details), 'system', 'VerificationProcessService']
     );
-  }
+
 
   private ensureUploadDirectory(): void {
     if (!fs.existsSync(this.UPLOAD_DIR)) {
       fs.mkdirSync(this.UPLOAD_DIR, { recursive: true });
-    }
-  }
-}
+
+

@@ -6,6 +6,9 @@
  */
 import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 ;
+fps: number;
+size: number;
+;
 metadata: {
     model: string;
     prompt: string;
@@ -16,7 +19,8 @@ metadata: {
     camera_motion ?  : string;
     style_preset ?  : string;
     generation_time: number;
-    status: 'completed' | 'processing' | 'failed';
+    status: 'completed' | 'processing' | 'failed',
+    ;
 }
 ;
 usage: {
@@ -145,8 +149,7 @@ export class RunwayMLAdapter extends BaseAIModel {
                     }
                     finally {
                     }
-                }
-            } };
+                } } };
         Promise < RunwayMLGenerationResult > {
             const: runwayOptions, RunwayMLRequestOptions = {
                 text_prompt: prompt,
@@ -168,8 +171,9 @@ export class RunwayMLAdapter extends BaseAIModel {
                 };
                 return this.process(prompt, runwayOptions);
                 async;
-                generateVideoToVideo(prompt, string);
-                videoData: string,
+                generateVideoToVideo(prompt, string),
+                    videoData;
+                string,
                     options ?  : Partial;
                 Promise < RunwayMLGenerationResult > {
                     const: runwayOptions, RunwayMLRequestOptions = {

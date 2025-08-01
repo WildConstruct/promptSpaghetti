@@ -15,8 +15,8 @@ export class RetryError extends Error {
     this.originalError = originalError;
     this.retryHistory = retryHistory;
     this.name = 'RetryError';
-  }
-}
+
+
 export class RetryUtils {
   static DEFAULT_OPTIONS = {
     maxAttempts: 3,
@@ -50,7 +50,7 @@ export class RetryUtils {
         });
         config.onSuccess(attempt, result);
         return result;
-      } catch (error) {
+ catch (error) {
         const duration = Date.now() - attemptStart;
         lastError = error instanceof Error ? error : new Error(String(error));
         retryHistory.push({
@@ -64,17 +64,17 @@ export class RetryUtils {
         // Check if error is retryable
         if (!this.isRetryableError(lastError, config.retryableErrors)) {
           break;
-        }
+
         // If this was the last attempt, don't wait
         if (attempt === config.maxAttempts) {
           break;
-        }
+
         // Calculate delay for next attempt
         const delay = this.calculateDelay(attempt, config);
         retryHistory[retryHistory.length - 1].delay = delay;
         await this.sleep(delay);
-      }
-    }
+
+
     const totalTime = Date.now() - startTime;
     config.onFailure(config.maxAttempts, lastError);
     throw new RetryError(
@@ -83,7 +83,7 @@ export class RetryUtils {
       lastError,
       retryHistory
     );
-  }
+
   /**
    * Execute a function with retry logic and return detailed result
    */
@@ -98,7 +98,7 @@ export class RetryUtils {
         totalTime: Date.now() - startTime,
         retryHistory: [],
       };
-    } catch (error) {
+ catch (error) {
       if (error instanceof RetryError) {
         return {
           success: false,
@@ -107,7 +107,7 @@ export class RetryUtils {
           totalTime: Date.now() - startTime,
           retryHistory: error.retryHistory,
         };
-      }
+
       return {
         success: false,
         error: error instanceof Error ? error : new Error(String(error)),
@@ -115,8 +115,8 @@ export class RetryUtils {
         totalTime: Date.now() - startTime,
         retryHistory: [],
       };
-    }
-  }
+
+
   /**
    * Create a retryable version of an async function
    */
@@ -124,7 +124,7 @@ export class RetryUtils {
     return async (...args) => {
       return this.execute(() => fn(...args), options);
     };
-  }
+
   /**
    * Retry with exponential backoff specifically for database operations
    */
@@ -147,7 +147,7 @@ export class RetryUtils {
       ...options,
     };
     return this.execute(operation, dbOptions);
-  }
+
   /**
    * Retry with exponential backoff specifically for HTTP operations
    */
@@ -174,7 +174,7 @@ export class RetryUtils {
       ...options,
     };
     return this.execute(operation, httpOptions);
-  }
+
   /**
    * Retry with circuit breaker pattern
    */
@@ -182,7 +182,7 @@ export class RetryUtils {
     const circuitState = this.getCircuitState(circuitBreakerKey);
     if (circuitState.isOpen()) {
       throw new Error(`Circuit breaker is OPEN for ${circuitBreakerKey}`);
-    }
+
     try {
       const result = await this.execute(operation, {
         ...options,
@@ -196,11 +196,11 @@ export class RetryUtils {
         },
       });
       return result;
-    } catch (error) {
+ catch (error) {
       circuitState.recordFailure();
       throw error;
-    }
-  }
+
+
   /**
    * Calculate delay with exponential backoff and jitter
    */
@@ -212,36 +212,36 @@ export class RetryUtils {
       const jitterRange = exponentialDelay * 0.1;
       const jitter = Math.random() * jitterRange * 2 - jitterRange;
       return Math.max(0, exponentialDelay + jitter);
-    }
+
     return exponentialDelay;
-  }
+
   /**
    * Check if an error is retryable
    */
   static isRetryableError(error, retryableErrors) {
     if (retryableErrors.length === 0) {
       return true; // Retry all errors if no specific errors specified
-    }
+
     return retryableErrors.some(pattern => {
       if (typeof pattern === 'string') {
         return error.message.includes(pattern) || error.name === pattern;
-      }
+
       if (typeof pattern === 'number') {
         // For HTTP status codes
         return error.status === pattern || error.statusCode === pattern;
-      }
+
       if (pattern instanceof RegExp) {
         return pattern.test(error.message) || pattern.test(error.name);
-      }
+
       return false;
     });
-  }
+
   /**
    * Sleep for specified milliseconds
    */
   static sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
   /**
    * Circuit breaker state management
    */
@@ -249,10 +249,10 @@ export class RetryUtils {
   static getCircuitState(key) {
     if (!this.circuitStates.has(key)) {
       this.circuitStates.set(key, new CircuitBreakerState());
-    }
+
     return this.circuitStates.get(key);
-  }
-}
+
+
 /**
  * Circuit Breaker State Management
  */
@@ -267,23 +267,23 @@ class CircuitBreakerState {
       if (Date.now() - this.lastFailureTime > this.resetTimeout) {
         this.state = 'HALF_OPEN';
         return false;
-      }
+
       return true;
-    }
+
     return false;
-  }
+
   recordSuccess() {
     this.failures = 0;
     this.state = 'CLOSED';
-  }
+
   recordFailure() {
     this.failures++;
     this.lastFailureTime = Date.now();
     if (this.failures >= this.maxFailures) {
       this.state = 'OPEN';
-    }
-  }
-}
+
+
+
 /**
  * Retry decorators for class methods
  */
@@ -292,52 +292,52 @@ export function retryable(options = {}) {
     if (!descriptor) {
       console.warn(`@retryable decorator: PropertyDescriptor is undefined for ${propertyKey}`);
       return descriptor;
-    }
+
     const originalMethod = descriptor.value;
     if (typeof originalMethod !== 'function') {
       console.warn(`@retryable decorator: ${propertyKey} is not a function`);
       return descriptor;
-    }
+
     descriptor.value = async function (...args) {
       return RetryUtils.execute(() => originalMethod.apply(this, args), options);
     };
     return descriptor;
   };
-}
+
 export function retryableDatabase(options = {}) {
   return function (target, propertyKey, descriptor) {
     if (!descriptor) {
       console.warn(`@retryableDatabase decorator: PropertyDescriptor is undefined for ${propertyKey}`);
       return descriptor;
-    }
+
     const originalMethod = descriptor.value;
     if (typeof originalMethod !== 'function') {
       console.warn(`@retryableDatabase decorator: ${propertyKey} is not a function`);
       return descriptor;
-    }
+
     descriptor.value = async function (...args) {
       return RetryUtils.executeDatabase(() => originalMethod.apply(this, args), options);
     };
     return descriptor;
   };
-}
+
 export function retryableHttp(options = {}) {
   return function (target, propertyKey, descriptor) {
     if (!descriptor) {
       console.warn(`@retryableHttp decorator: PropertyDescriptor is undefined for ${propertyKey}`);
       return descriptor;
-    }
+
     const originalMethod = descriptor.value;
     if (typeof originalMethod !== 'function') {
       console.warn(`@retryableHttp decorator: ${propertyKey} is not a function`);
       return descriptor;
-    }
+
     descriptor.value = async function (...args) {
       return RetryUtils.executeHttp(() => originalMethod.apply(this, args), options);
     };
     return descriptor;
   };
-}
+
 /**
  * Utility functions for common patterns
  */
@@ -352,7 +352,7 @@ export class RetryPatterns {
       maxDelay: 1000,
       retryableErrors: ['EBUSY', 'EMFILE', 'ENFILE', 'ENOENT', /file.*busy/i, /resource.*temporarily.*unavailable/i],
     });
-  }
+
   /**
    * Retry pattern for external API calls
    */
@@ -368,7 +368,7 @@ export class RetryPatterns {
         console.warn(`API call to ${serviceName || 'external service'} failed (attempt ${attempt}):`, error.message);
       },
     });
-  }
+
   /**
    * Retry pattern for log analysis operations
    */
@@ -384,5 +384,5 @@ export class RetryPatterns {
         console.warn(`Log analysis operation failed (attempt ${attempt}):`, error.message);
       },
     });
-  }
-}
+
+

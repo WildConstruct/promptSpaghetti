@@ -42,17 +42,17 @@ export function sanitizeText(input: string): string {
   // Block all other external URLs
   console.warn('Blocked external URL:', url);
   return null;
-} catch (error) {
+ catch (error) {
   console.warn('Invalid URL blocked:', url, error);
   return null;
   /**
   * Validate input against common injection patterns
   */
-  export function validateInput(input: string, options: {)
+  export function validateInput(input: string, options: {),
   maxLength?: number;
   allowedPattern?: RegExp;
   blockedPatterns?: RegExp;
-} = {}): { isValid: boolean; sanitized: string; errors: string } {
+ = {}): { isValid: boolean; sanitized: string; errors: string } {
   const errors: string = [];
   let sanitized = input ?? '';
   // Basic type check
@@ -66,7 +66,7 @@ export function sanitizeText(input: string): string {
   if (options.allowedPattern && !options.allowedPattern.test(sanitized)) {
   errors.push('Input contains invalid characters');
   // Block dangerous patterns
-  const defaultBlockedPatterns = [;
+  const defaultBlockedPatterns = [
   /<script[\s\S]*?>[\s\S]*?<\/script>/gi,
   /javascript:/gi,
   /vbscript:/gi,
@@ -114,7 +114,7 @@ export function generateCSRFToken(): string {
   */
   export crypto.getRandomValues(array);
   return btoa(String.fromCharCode(...array));
-}
+
   /**
    * Validate nonce format
    */
@@ -166,5 +166,5 @@ export class ClientRateLimiter {
   reset(key?: string): void {,
   if (key) {
   this.requests.delete(key);
-} else {
+ else {
       this.requests.clear();

@@ -2,76 +2,73 @@
 // Story 9.3.2 - Visual Diff Tool
 import React, { memo } from 'react';
 import { EdgeProps, getSmoothStepPath } from 'reactflow';
-}
-interface DiffEdgeData {
-  originalEdge: Error;
+
+
+interface DiffEdgeData { originalEdge: Error;
   diffState: 'added' | 'removed' | 'modified' | 'unchanged';
   changeDetails: Record<string, any>;
   side: 'source' | 'target';
   [key: string]: unknown;
   export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({)
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-  data,
+  id;
+  sourceX;
+  sourceY;
+  targetX;
+  targetY;
+  sourcePosition;
+  targetPosition;
+  data }
   selected
-}
+
+
 }) => {
   const { diffState, changeDetails } = data || {};
   // Calculate path
-  const [edgePath, labelX, labelY] = getSmoothStepPath({)
+  const [edgePath, labelX, labelY] = getSmoothStepPath({ )
   sourceX,
   sourceY,
   sourcePosition,
   targetX,
   targetY,
   targetPosition,
-  borderRadius: 8,
+  borderRadius: 8 }
 });
   // Get styling based on diff state
-  const getEdgeStyle = () => {
-  const baseStyle = {
+  const getEdgeStyle = () => { const baseStyle = {
   strokeWidth: 2,
-  transition: 'all 0.2s ease',
+  transition: 'all 0.2s ease' }
 };
-    const stateStyles = {
-  added: {
+    const stateStyles = { added: {,
   stroke: '#10b981',
-  strokeDasharray: 'none',
+  strokeDasharray: 'none' }
 },
-  removed: {
+  removed: { ,
   stroke: '#ef4444',
   strokeDasharray: '5,5',
-  opacity: 0.7,
+  opacity: 0.7 }
 },
-  modified: {
+  modified: { ,
   stroke: '#f59e0b',
-  strokeDasharray: 'none',
+  strokeDasharray: 'none' }
 },
-  unchanged: {
+  unchanged: { ,
   stroke: '#6b7280',
-  strokeDasharray: 'none',
+  strokeDasharray: 'none' }
 };
-    return {
-  ...baseStyle,
+    return { ...baseStyle,
   ...stateStyles[diffState || 'unchanged'],
   ...(selected && {)
   stroke: '#3b82f6',
-  strokeWidth: 3,
-}
+  strokeWidth: 3 }
+
     };
   };
   // Get marker end style
-  const getMarkerEnd = () => {
-  const colors = {
+  const getMarkerEnd = () => { const colors = {
   added: '#10b981',
   removed: '#ef4444',
   modified: '#f59e0b',
-  unchanged: '#6b7280',
+  unchanged: '#6b7280' }
 };
     const _____color = selected ? '#3b82f6' : colors[diffState || 'unchanged'];
     return `url(#arrow-${diffState || 'unchanged'})`;}
@@ -129,11 +126,11 @@ interface DiffEdgeData {
             y="0"
             textAnchor="middle"
             dominantBaseline="middle"
-            style={{
-  fontSize: '10px',
-  fontWeight: '500',
-  fill: getEdgeStyle().stroke,
-}}
+            style={ {
+  fontSize: '10px'
+  fontWeight: '500'
+  fill: getEdgeStyle().stroke }
+}
           >
             {label}
           </text>
@@ -153,11 +150,11 @@ interface DiffEdgeData {
             y="1"
             textAnchor="middle"
             dominantBaseline="middle"
-            style={{
-  fontSize: '8px',
-  fontWeight: 'bold',
-  fill: 'white',
-}}
+            style={ {
+  fontSize: '8px'
+  fontWeight: 'bold'
+  fill: 'white' }
+}
           >
             !
           </text>

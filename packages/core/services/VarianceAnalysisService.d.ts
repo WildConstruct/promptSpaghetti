@@ -8,35 +8,32 @@
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 
 }
-export interface VarianceMetrics {
-    overallVariance: 'low' | 'medium' | 'high';
+}
+export interface VarianceMetrics { overallVariance: 'low' | 'medium' | 'high';
     varianceScore: number;
     diversityMetrics: {
         outputLengthVariance: number;
         vocabularyDiversity: number;
         structuralDiversity: number;
-        executionPathDiversity: number;
+        executionPathDiversity: number }
 }
     };
-    creativeRange: {
-        uniqueElements: string[];
+    creativeRange: { uniqueElements: string[];
         commonElements: string[];
         repetitionRate: number;
-        creativityScore: number;
-    };
+        creativityScore: number };
     suggestions: VarianceSuggestion[];
 
 }
-export interface VarianceSuggestion {
-    type: 'increase' | 'decrease' | 'optimize';
+}
+export interface VarianceSuggestion { type: 'increase' | 'decrease' | 'optimize';
     category: 'weights' | 'structure' | 'content' | 'execution';
     message: string;
     impact: 'low' | 'medium' | 'high';
-    actionable: boolean;
-
+    actionable: boolean }
 }
-export interface DiversityIndicator {
-    metric: string;
+}
+export interface DiversityIndicator { metric: string;
     value: number;
     level: 'low' | 'medium' | 'high';
     description: string;
@@ -59,21 +56,17 @@ export declare class VarianceAnalysisService {
         background: string;
         border: string;
         icon: string;
-        description: string;
+        description: string }
 }
-    } | {
-        color: string;
+    } | { color: string;
         background: string;
         border: string;
         icon: string;
-        description: string;
-    } | {
-        color: string;
+        description: string } | { color: string;
         background: string;
         border: string;
         icon: string;
-        description: string;
-    };
+        description: string };
     private createMinimalVariance;
     private calculateLengthVariance;
     private calculateVocabularyDiversity;

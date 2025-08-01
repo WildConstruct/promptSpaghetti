@@ -19,7 +19,8 @@ contentTypeOptions: {
 ;
 xssProtection: {
     enabled: boolean;
-    mode: 'filter' | 'block';
+    mode: 'filter' | 'block',
+    ;
 }
 ;
 referrerPolicy: {
@@ -84,8 +85,7 @@ const DEFAULT_CONFIG = {
                 accelerometer: '()',
             }
         },
-        function: createSecurityMiddleware(config ?  : Partial)
-    } }, { const: finalConfig = mergeConfig(DEFAULT_CONFIG, config || {}) };
+        function: createSecurityMiddleware(config ?  : Partial) } }, { const: finalConfig = mergeConfig(DEFAULT_CONFIG, config || {}) };
 return (req, res, next) => {
     // Generate nonce for CSP if enabled
     if (finalConfig.csp.enabled && finalConfig.csp.useNonces) {
@@ -310,13 +310,7 @@ return (req, res, next) => {
                                                                                             /**
                                                                                              * CSP violation report handler
                                                                                              */
-                                                                                            function: createCSPReportHandler()
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
+                                                                                            function: createCSPReportHandler() } } } } } }
                                                                 }, { return:  };
                                                                 (req, res) => {
                                                                     try {
@@ -324,8 +318,9 @@ return (req, res, next) => {
                                                                         if (report && report['csp-report']) {
                                                                             const violation = report['csp-report'];
                                                                             // Log the violation (in production, send to monitoring service)
-                                                                            console.warn('CSP Violation:', {});
-                                                                            documentUri: violation['document-uri'],
+                                                                            console.warn('CSP Violation:', {}),
+                                                                                documentUri;
+                                                                            violation['document-uri'],
                                                                                 violatedDirective;
                                                                             violation['violated-directive'],
                                                                                 blockedUri;

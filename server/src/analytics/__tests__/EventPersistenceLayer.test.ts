@@ -13,14 +13,14 @@ import {
   EventStatistics,
   EventAggregation,
   StoredEventSchema
-} from '../EventPersistenceLayer';
+ from '../EventPersistenceLayer';
 import {
   UnifiedAnalyticsEvent,
   AnalyticsEventType,
   EventCategory,
   EventSeverity,
   EventFilter
-} from '../UnifiedEventBus';
+ from '../UnifiedEventBus';
 
 // Mock database for testing
 class MockDatabase {
@@ -34,9 +34,9 @@ class MockDatabase {
       const tableName = sql.match(/CREATE TABLE IF NOT EXISTS (\w+)/)?.[1];
       if (tableName && !this.tables[tableName]) {
         this.tables[tableName] = [];
-      }
-    }
-  }
+
+
+
 
   prepare(sql: string) {
     this.queries.push(sql);
@@ -49,25 +49,25 @@ class MockDatabase {
           this.tables[tableName] = this.tables[tableName] || [];
           this.tables[tableName].push(row);
           return { changes: 1 };
-        }
+
         if (sql.includes('DELETE')) {
           const beforeLength = this.tables[tableName]?.length || 0;
           this.tables[tableName] = [];
           return { changes: beforeLength };
-        }
+
         if (sql.includes('UPDATE')) {
           return { changes: 1 };
-        }
+
         return { changes: 0 };
-  }
+
       get: (...params: any[]) => {
         if (sql.includes('SELECT COUNT')) {
           return { count: this.tables[tableName]?.length || 0 };
-        }
+
         if (sql.includes('SELECT *') && params.length > 0) {
           const id = params[0];
           return this.tables[tableName]?.find(row => row.id === id);
-        }
+
         if (sql.includes('MIN(timestamp)')) {
           const events = this.tables[tableName] || [];
           if (events.length === 0) return { earliest: null, latest: null };
@@ -76,12 +76,12 @@ class MockDatabase {
             earliest: Math.min(...timestamps),
             latest: Math.max(...timestamps)
           };
-        }
+
         if (sql.includes('SUM(LENGTH')) {
           return { size: 1000 }; // Mock size
-        }
+
         return null;
-  }
+
       all: (...params: any[]) => {
         const events = this.tables[tableName] || [];
         if (sql.includes('GROUP BY type')) {
@@ -90,36 +90,36 @@ class MockDatabase {
             return acc;
           }, {} as Record<string, number>);
           return Object.entries(grouped).map(([type, count]) => ({ type, count }));
-        }
+
         if (sql.includes('GROUP BY category')) {
           const grouped = events.reduce((acc, event) => {
             acc[event.category] = (acc[event.category] || 0) + 1;
             return acc;
           }, {} as Record<string, number>);
           return Object.entries(grouped).map(([category, count]) => ({ category, count }));
-        }
+
         if (sql.includes('GROUP BY severity')) {
           const grouped = events.reduce((acc, event) => {
             acc[event.severity] = (acc[event.severity] || 0) + 1;
             return acc;
           }, {} as Record<string, number>);
           return Object.entries(grouped).map(([severity, count]) => ({ severity, count }));
-        }
+
         if (sql.includes('GROUP BY source')) {
           const grouped = events.reduce((acc, event) => {
             acc[event.source] = (acc[event.source] || 0) + 1;
             return acc;
           }, {} as Record<string, number>);
           return Object.entries(grouped).map(([source, count]) => ({ source, count }));
-        }
+
         return events;
-      }
+
     };
-  }
+
 
   transaction(fn: Function) {
     return (data: unknown) => fn(data);
-  }
+
 
   private createRowFromParams(params: any[]): any {
     const [
@@ -133,8 +133,8 @@ class MockDatabase {
       session_id, user_id, organization_id, request_id, trace_id,
       data, metadata, tags, environment, region, stored_at, retention_date
     };
-  }
-}
+
+
 
 describe('DatabaseEventRepository', () => {
   let repository: EventRepository;
@@ -230,7 +230,7 @@ describe('DatabaseEventRepository', () => {
           category: EventCategory.SECURITY,
           severity: EventSeverity.CRITICAL,
           source: 'component-c'
-  }
+
       ];
 
       await repository.saveBatch(events);
@@ -290,7 +290,7 @@ describe('DatabaseEventRepository', () => {
           category: EventCategory.PERFORMANCE,
           severity: EventSeverity.WARNING,
           userId: 'user-456'
-  }
+
       ];
 
       await repository.saveBatch(events);
@@ -300,7 +300,7 @@ describe('DatabaseEventRepository', () => {
       const options: EventQueryOptions = {
         filter: {
           types: [AnalyticsEventType.USER_INTERACTION]
-        }
+
       };
 
       const events = await repository.findMany(options);
@@ -311,7 +311,7 @@ describe('DatabaseEventRepository', () => {
       const options: EventQueryOptions = {
         filter: {
           categories: [EventCategory.PERFORMANCE]
-        }
+
       };
 
       const events = await repository.findMany(options);
@@ -322,7 +322,7 @@ describe('DatabaseEventRepository', () => {
       const options: EventQueryOptions = {
         filter: {
           severities: [EventSeverity.WARNING]
-        }
+
       };
 
       const events = await repository.findMany(options);
@@ -333,7 +333,7 @@ describe('DatabaseEventRepository', () => {
       const options: EventQueryOptions = {
         filter: {
           userId: 'user-123'
-        }
+
       };
 
       const events = await repository.findMany(options);
@@ -413,7 +413,7 @@ describe('DatabaseEventRepository', () => {
           category: EventCategory.USER,
           severity: EventSeverity.INFO,
           source: 'component-a'
-  }
+
       ];
 
       await repository.saveBatch(events);
@@ -477,7 +477,7 @@ describe('DatabaseEventRepository', () => {
         createTestEvent({ 
           id: 'recent-event-1',
           timestamp: Date.now() - (1 * 24 * 60 * 60 * 1000) // 1 day ago
-  }
+
       ];
 
       await repository.saveBatch(oldEvents);
@@ -602,7 +602,7 @@ describe('InMemoryEventRepository', () => {
           id: 'filter-2',
           type: AnalyticsEventType.PERFORMANCE_METRIC,
           userId: 'user-456'
-  }
+
       ];
 
       await repository.saveBatch(events);
@@ -624,7 +624,7 @@ describe('InMemoryEventRepository', () => {
         createTestEvent({ 
           type: AnalyticsEventType.PERFORMANCE_METRIC,
           category: EventCategory.PERFORMANCE
-  }
+
       ];
 
       await repository.saveBatch(events);

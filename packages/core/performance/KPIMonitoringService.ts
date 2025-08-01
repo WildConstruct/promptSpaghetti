@@ -3,21 +3,19 @@
  * Real-time monitoring and alerting system for performance KPIs
  */
 import { EventEmitter } from 'events';
-import { 
-  corePerformanceKPIs, 
+import { corePerformanceKPIs, 
   KPIDefinition, 
   KPISnapshot, 
   calculateKPIStatus, 
   calculateKPITrend,
-  generateKPIRecommendations,
+  generateKPIRecommendations }
   getCriticalKPIs
-} from './PerformanceKPIs';
+ from './PerformanceKPIs';
 import { PerformanceBaseline, BaselineSnapshot } from './PerformanceBaseline';
 import { PerformanceMonitoringDashboard, DashboardAlert } from './PerformanceMonitoringDashboard';
 
-}
-export interface KPIAlert {
-  id: string;
+
+export interface KPIAlert { id: string;
   kpiId: string;
   kpiName: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -25,58 +23,59 @@ export interface KPIAlert {
   value: number;
   target: number;
   threshold: number;
-  trend: 'improving' | 'stable' | 'degrading';
+  trend: 'improving' | 'stable' | 'degrading' }
   message: string;
   recommendations: string;
   timestamp: number;
   acknowledged: boolean;
-}
-}
-}
-export interface KPIMonitoringConfig {
-  monitoringInterval: number;        // Monitoring frequency in ms,
-  alertingEnabled: boolean;          // Enable/disable alerting,
-  alertThresholds: {
-  critical: number;                // Alert after N critical violations,
-  consecutive: number;             // Alert after N consecutive violations,
-  degradationThreshold: number;   // Alert on performance degradation %,
-}
+
+
+
+
+export interface KPIMonitoringConfig { monitoringInterval: number;        // Monitoring frequency in ms;
+  alertingEnabled: boolean;          // Enable/disable alerting;
+  alertThresholds: {;
+  critical: number;                // Alert after N critical violations;
+  consecutive: number;             // Alert after N consecutive violations;
+  degradationThreshold: number;   // Alert on performance degradation % }
+
+
 };
-  kpiFilters: {
+  kpiFilters: { ,
   categories: string;            // Monitor only specific categories,
   priorities: string;            // Monitor only specific priorities,
-  enabled: string;               // Monitor only specific KPI IDs,
+  enabled: string;               // Monitor only specific KPI IDs }
 };
-  baseline: {
+  baseline: { ,
   autoCapture: boolean;            // Automatically capture baselines,
   captureInterval: number;         // Baseline capture frequency in ms,
-  retentionPeriod: number;         // How long to keep baselines in ms,
+  retentionPeriod: number;         // How long to keep baselines in ms }
 };
-  reporting: {
+  reporting: { ,
   enabled: boolean;
-  interval: number;                // Report generation frequency in ms,
+  interval: number;                // Report generation frequency in ms }
   includeRecommendations: boolean;
   emailRecipients: string;
 };
-}
-}
-export interface KPITrendAnalysis {
-  kpiId: string;
+
+
+export interface KPITrendAnalysis { kpiId: string;
   trend: 'improving' | 'stable' | 'degrading';
   changePercent: number;
   periodDays: number;
   significance: 'minor' | 'moderate' | 'major';
-  projection: {
+  projection: { }
   nextWeek: number;
   nextMonth: number;
   confidence: number;
-}
+
+
 };
 /**
  * KPI Monitoring Service
  * Provides real-time monitoring, alerting, and trend analysis for performance KPIs
  */
-}
+
 export class KPIMonitoringService extends EventEmitter {
   private config: KPIMonitoringConfig;
   private baseline: PerformanceBaseline;
@@ -87,32 +86,31 @@ export class KPIMonitoringService extends EventEmitter {
   private monitoringInterval?: NodeJS.Timer;
   private baselineInterval?: NodeJS.Timer;
   private reportingInterval?: NodeJS.Timer;
-  constructor(config: Partial<KPIMonitoringConfig> = {}) {
-  super();
+  constructor(config: Partial<KPIMonitoringConfig> = {}) { super();
   this.config = {
-  monitoringInterval: 30000,      // 30 seconds,
-  alertingEnabled: true,
+  monitoringInterval: 30000,      // 30 seconds
+  alertingEnabled: true
   alertThresholds: {
-  critical: 3,                  // Alert after 3 critical violations,
-  consecutive: 2,               // Alert after 2 consecutive violations,
-  degradationThreshold: 20     // Alert on 20% degradation,
-},
-  kpiFilters: {
-  categories: [],               // Monitor all categories,
-  priorities: ['critical', 'high'], // Monitor critical and high priority,
-  enabled: []                   // Monitor all KPIs,
-},
-  baseline: {
-  autoCapture: true,
-  captureInterval: 3600000,     // 1 hour,
-  retentionPeriod: 2592000000   // 30 days,
-},
-  reporting: {
-  enabled: false,
-  interval: 86400000,           // 24 hours,
-  includeRecommendations: true,
-  emailRecipients: [],
-}
+  critical: 3,                  // Alert after 3 critical violations
+  consecutive: 2,               // Alert after 2 consecutive violations
+  degradationThreshold: 20     // Alert on 20% degradation }
+
+  kpiFilters: { 
+  categories: [],               // Monitor all categories
+  priorities: ['critical', 'high'], // Monitor critical and high priority
+  enabled: []                   // Monitor all KPIs }
+
+  baseline: { 
+  autoCapture: true
+  captureInterval: 3600000,     // 1 hour
+  retentionPeriod: 2592000000   // 30 days }
+
+  reporting: { 
+  enabled: false
+  interval: 86400000,           // 24 hours
+  includeRecommendations: true
+  emailRecipients: [] }
+
       ...config
     };
     this.baseline = new PerformanceBaseline();
@@ -121,9 +119,7 @@ export class KPIMonitoringService extends EventEmitter {
   /**
    * Start KPI monitoring
    */
-  async startMonitoring(): Promise<void> {
-
-    if (this.isMonitoring) {
+  async startMonitoring(): Promise<void> { if (this.isMonitoring) {
       console.log('🔍 KPI monitoring is already running');
       return;
     console.log('🚀 Starting KPI monitoring service...');
@@ -132,30 +128,22 @@ export class KPIMonitoringService extends EventEmitter {
     if (this.config.baseline.autoCapture) {
       try {
         await this.baseline.captureBaseline();
-        console.log('📊 Initial baseline captured');
-      } catch (error) {
-  console.error('❌ Failed to capture initial baseline:', error);
+        console.log('📊 Initial baseline captured') } catch (error) { console.error('❌ Failed to capture initial baseline:', error);
   // Start monitoring interval
   this.monitoringInterval = setInterval(() => {
-  this.performMonitoringCycle();
-}, this.config.monitoringInterval);
+  this.performMonitoringCycle() }, this.config.monitoringInterval);
     // Start baseline capture interval
-    if (this.config.baseline.autoCapture) {
-      this.baselineInterval = setInterval(() => {
-        this.captureScheduledBaseline();
-      }, this.config.baseline.captureInterval);
+    if (this.config.baseline.autoCapture) { this.baselineInterval = setInterval(() => {
+        this.captureScheduledBaseline() }, this.config.baseline.captureInterval);
     // Start reporting interval
-    if (this.config.reporting.enabled) {
-      this.reportingInterval = setInterval(() => {
-        this.generateScheduledReport();
-      }, this.config.reporting.interval);
+    if (this.config.reporting.enabled) { this.reportingInterval = setInterval(() => {
+        this.generateScheduledReport() }, this.config.reporting.interval);
     this.emit('monitoring-started');
     console.log('✅ KPI monitoring started successfully');
   /**
    * Stop KPI monitoring
    */
-  stopMonitoring(): void {
-  if (!this.isMonitoring) return;
+  stopMonitoring(): void { if (!this.isMonitoring) return;
   console.log('⏹️ Stopping KPI monitoring service...');
   this.isMonitoring = false;
   if (this.monitoringInterval) {
@@ -172,7 +160,7 @@ export class KPIMonitoringService extends EventEmitter {
   /**
   * Perform a monitoring cycle
   */
-  private async performMonitoringCycle(): Promise<void> {,
+  private async performMonitoringCycle(): Promise<void> {
   try {
   console.log('🔍 Performing KPI monitoring cycle...');
   // Get KPIs to monitor based on filters
@@ -186,12 +174,11 @@ export class KPIMonitoringService extends EventEmitter {
   // Clean up old data
   this.cleanupOldData();
   this.emit('monitoring-cycle-complete', {)
-  timestamp: Date.now(),
-  kpisMonitored: kpisToMonitor.length,
-  alertsGenerated: this.alerts.filter(a => !a.acknowledged).length,
+  timestamp: Date.now()
+  kpisMonitored: kpisToMonitor.length
+  alertsGenerated: this.alerts.filter(a => !a.acknowledged).length }
 });
-    } catch (error) {
-      console.error('❌ Error in monitoring cycle:', error);
+ catch (error) { console.error('❌ Error in monitoring cycle:', error);
       this.emit('monitoring-error', error);
   /**
    * Process a KPI snapshot and generate alerts if needed
@@ -234,9 +221,9 @@ export class KPIMonitoringService extends EventEmitter {
   /**
    * Create a KPI alert
    */
-  private async createKPIAlert(snapshot: KPISnapshot, )
-    kpi: KPIDefinition, 
-    type: 'status_violation' | 'trend_degradation' | 'consecutive_violations'): Promise<void> {,
+  private async createKPIAlert(snapshot: KPISnapshot);
+  kpi: KPIDefinition
+    type: 'status_violation' | 'trend_degradation' | 'consecutive_violations'): Promise<void> { }
     // Check if similar alert already exists and is unacknowledged
     const existingAlert = this.alerts.find(alert => ;);
       alert.kpiId === snapshot.kpiId && 
@@ -286,14 +273,13 @@ export class KPIMonitoringService extends EventEmitter {
   /**
    * Analyze trend for a KPI
    */
-  private analyzeTrend(history: KPISnapshot): KPITrendAnalysis {
-    if (history.length < 5) {
+  private analyzeTrend(history: KPISnapshot): KPITrendAnalysis { if (history.length < 5) {
       return {
         kpiId: history[0]?.kpiId || '',
         trend: 'stable',
         changePercent: 0,
         periodDays: 0,
-        significance: 'minor',
+        significance: 'minor' }
         projection: { nextWeek: 0, nextMonth: 0, confidence: 0 }
       };
     const recent = history.slice(-10); // Last 10 snapshots;
@@ -326,16 +312,15 @@ export class KPIMonitoringService extends EventEmitter {
   changePercent,
   periodDays,
   significance,
-  projection: {
+  projection: {,
   nextWeek: projectedWeekly,
-  nextMonth: projectedMonthly,
+  nextMonth: projectedMonthly }
   confidence
 };
   /**
    * Get filtered KPIs based on configuration
    */
-  private getFilteredKPIs(): KPIDefinition {
-  let filtered = [...corePerformanceKPIs];
+  private getFilteredKPIs(): KPIDefinition { let filtered = [...corePerformanceKPIs];
   // Filter by categories
   if (this.config.kpiFilters.categories.length > 0) {
   filtered = filtered.filter(kpi => )
@@ -366,43 +351,36 @@ export class KPIMonitoringService extends EventEmitter {
   /**
   * Capture scheduled baseline
   */
-  private async captureScheduledBaseline(): Promise<void> {,
-  try {
-  console.log('📊 Capturing scheduled baseline...');
+  private async captureScheduledBaseline(): Promise<void> { }
+  try { console.log('📊 Capturing scheduled baseline...');
   await this.baseline.captureBaseline();
-  this.emit('baseline-captured');
-} catch (error) {
-  console.error('❌ Failed to capture scheduled baseline:', error);
+  this.emit('baseline-captured') } catch (error) { console.error('❌ Failed to capture scheduled baseline:', error);
   /**
   * Generate scheduled report
   */
-  private async generateScheduledReport(): Promise<void> {,
-  try {
-  console.log('📈 Generating scheduled KPI report...');
+  private async generateScheduledReport(): Promise<void> { }
+  try { console.log('📈 Generating scheduled KPI report...');
   const report = this.generateKPIReport();
-  this.emit('report-generated', report);
-} catch (error) {
-  console.error('❌ Failed to generate scheduled report:', error);
+  this.emit('report-generated', report) } catch (error) { console.error('❌ Failed to generate scheduled report:', error);
   /**
   * Generate comprehensive KPI report
   */
   generateKPIReport(): {
   timestamp: number;
-  summary: {
+  summary: { }
   totalKPIs: number;
   monitoredKPIs: number;
   alertsActive: number;
   averageScore: number;
 };
-    kpiStatus: Array<{
+    kpiStatus: Array<{ ,
   kpiId: string;
   name: string;
   category: string;
   status: string;
   value: number;
   target: number;
-  trend: string;
-}>;
+  trend: string }>;
     alerts: KPIAlert;
   trends: KPITrendAnalysis;
     recommendations: string;
@@ -413,7 +391,7 @@ export class KPIMonitoringService extends EventEmitter {
     const averageScore = latestBaseline ? ;
       this.calculateAverageKPIScore(latestBaseline.kpiSnapshots) : 0;
     // Get KPI status
-    const kpiStatus = monitoredKPIs.map(kpi => {)
+    const kpiStatus = monitoredKPIs.map(kpi => { )
   const history = this.kpiHistory.get(kpi.id) || [];
   const latest = history[history.length - 1];
   return {
@@ -423,7 +401,7 @@ export class KPIMonitoringService extends EventEmitter {
   status: latest?.status || 'unknown',
   value: latest?.value || 0,
   target: kpi.target,
-  trend: latest?.trend || 'stable',
+  trend: latest?.trend || 'stable' }
 };
     });
     // Generate trend analyses
@@ -432,29 +410,26 @@ export class KPIMonitoringService extends EventEmitter {
       .filter(trend => trend.significance !== 'minor');
     // Generate recommendations
     const recommendations = this.generateSystemRecommendations(activeAlerts, trends);
-    return {
-  timestamp: Date.now(),
-  summary: {
+    return { timestamp: Date.now(),
+  summary: {,
   totalKPIs: corePerformanceKPIs.length,
   monitoredKPIs: monitoredKPIs.length,
-  alertsActive: activeAlerts.length,
+  alertsActive: activeAlerts.length }
   averageScore
-}
+
       kpiStatus,
       alerts: activeAlerts,
       trends,
       recommendations
     };
-  private calculateAverageKPIScore(snapshots: KPISnapshot): number {
-  if (snapshots.length === 0) return 0;
+  private calculateAverageKPIScore(snapshots: KPISnapshot): number { if (snapshots.length === 0) return 0;
   const scores = snapshots.map(snapshot => {)
   switch (snapshot.status) {
   case 'excellent': return 100;
   case 'good': return 80;
   case 'warning': return 60;
   case 'critical': return 30;
-  default: return 70;
-});
+  default: return 70 });
     return Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
   private generateSystemRecommendations(alerts: KPIAlert, trends: KPITrendAnalysis): string {
     const recommendations = new Set<string>();
@@ -488,15 +463,14 @@ export class KPIMonitoringService extends EventEmitter {
   /**
    * Get current KPI status
    */
-  getCurrentKPIStatus(): Array<{ kpiId: string; status: string; value: number; trend: string }> {
-  return this.getFilteredKPIs().map(kpi => {)
+  getCurrentKPIStatus(): Array<{ kpiId: string; status: string; value: number; trend: string }> { return this.getFilteredKPIs().map(kpi => {)
   const history = this.kpiHistory.get(kpi.id) || [];
   const latest = history[history.length - 1];
   return {
   kpiId: kpi.id,
   status: latest?.status || 'unknown',
   value: latest?.value || 0,
-  trend: latest?.trend || 'stable',
+  trend: latest?.trend || 'stable' }
 };
     });
   /**
@@ -540,9 +514,7 @@ export class KPIMonitoringService extends EventEmitter {
   /**
    * Force immediate monitoring cycle
    */
-  async triggerMonitoringCycle(): Promise<void> {
-
-  if (!this.isMonitoring) {
+  async triggerMonitoringCycle(): Promise<void> { if (!this.isMonitoring) {
   throw new Error('Monitoring is not running');
   await this.performMonitoringCycle();
   /**
@@ -554,26 +526,25 @@ export class KPIMonitoringService extends EventEmitter {
   kpiHistory: Record<string, KPISnapshot>;
   baselines: BaselineSnapshot;
   return {
-  config: this.config,
-  alerts: this.alerts,
-  kpiHistory: Object.fromEntries(this.kpiHistory),
-  baselines: this.baseline.getBaselineHistory(),
+  config: this.config
+  alerts: this.alerts
+  kpiHistory: Object.fromEntries(this.kpiHistory)
+  baselines: this.baseline.getBaselineHistory() }
 };
   /**
    * Get monitoring status
    */
-  getMonitoringStatus(): {
-  isRunning: boolean;
+  getMonitoringStatus(): { isRunning: boolean;
   uptime: number;
   kpisMonitored: number;
   activeAlerts: number;
   lastCycle?: number;
   return {
-  isRunning: this.isMonitoring,
-  uptime: this.isMonitoring ? Date.now() - (this.monitoringInterval as any)?._idleStart || 0 : 0,
-  kpisMonitored: this.getFilteredKPIs().length,
-  activeAlerts: this.getActiveAlerts().length,
-  lastCycle: this.baseline.getLatestBaseline()?.timestamp,
+  isRunning: this.isMonitoring
+  uptime: this.isMonitoring ? Date.now() - (this.monitoringInterval as any)?._idleStart || 0 : 0
+  kpisMonitored: this.getFilteredKPIs().length
+  activeAlerts: this.getActiveAlerts().length
+  lastCycle: this.baseline.getLatestBaseline()?.timestamp }
 };
 
 export default KPIMonitoringService;

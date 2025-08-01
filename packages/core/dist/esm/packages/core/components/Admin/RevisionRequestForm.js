@@ -328,7 +328,7 @@ div >
     ;
 }
 { /* Priority indicator */ }
-_jsxs("div", { className: `mt-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(formData.priority)}`, children: ["},} Priority: ", formData.priority.charAt(0).toUpperCase() + formData.priority.slice(1)] });
+_jsxs("div", { className: `mt-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(formData.priority)}`, children: ["},}, Priority: ", formData.priority.charAt(0).toUpperCase() + formData.priority.slice(1)] });
 div >
 ;
 div >

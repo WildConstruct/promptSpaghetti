@@ -9,7 +9,7 @@ import {
   SecurityControl, 
   SecurityControlTest,
   EffectivenessReport 
-} from '../SecurityControlTestingEngine';
+ from '../SecurityControlTestingEngine';
 import { SecurityAPIIntegrationPlatform } from '../SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../SecurityPolicyAnalysisEngine';
 import { SecurityOptimizationEngine } from '../SecurityOptimizationEngine';
@@ -34,8 +34,8 @@ describe('SecurityControlTestingEngine', () => {
       getPlatformMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         api_calls: { total_requests: 1000, successful_requests: 950 },
         security_analytics: { threats_detected: 15, detection_accuracy_percent: 94 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPolicyEngine = {
       on: jest.fn<unknown[], unknown>(),
@@ -43,16 +43,16 @@ describe('SecurityControlTestingEngine', () => {
         validation_passed: true,
         validation_errors: [],
         validation_warnings: []
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockOptimizationEngine = {
       on: jest.fn<unknown[], unknown>(),
       performComprehensiveAnalysis: jest.fn<unknown[], unknown>().mockResolvedValue({
         recommendations: [],
         optimization_opportunities: 3
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     // Setup configuration
     config = {
@@ -63,7 +63,7 @@ describe('SecurityControlTestingEngine', () => {
         regression_testing_enabled: true,
         performance_testing_enabled: true,
         security_testing_enabled: true
-  }
+
       effectiveness_measurement: {
         enabled: true,
         real_time_monitoring: true,
@@ -71,7 +71,7 @@ describe('SecurityControlTestingEngine', () => {
         comparative_analysis: true,
         trend_analysis: true,
         statistical_significance_testing: true
-  }
+
       optimization_settings: {
         enabled: true,
         automatic_optimization: false,
@@ -82,8 +82,8 @@ describe('SecurityControlTestingEngine', () => {
           effectiveness_threshold: 80,
           performance_threshold: 500,
           reliability_threshold: 99
-        }
-  }
+
+
       test_categories: {
         authentication_controls: true,
         authorization_controls: true,
@@ -92,14 +92,14 @@ describe('SecurityControlTestingEngine', () => {
         incident_response_controls: true,
         compliance_controls: true,
         monitoring_controls: true
-  }
+
       reporting_settings: {
         detailed_reports_enabled: true,
         executive_summaries_enabled: true,
         trend_reports_enabled: true,
         compliance_reports_enabled: true,
         real_time_dashboards_enabled: true
-      }
+
     };
 
     // Setup sample security control
@@ -115,10 +115,10 @@ describe('SecurityControlTestingEngine', () => {
           mfa_required_roles: ['admin', 'security_officer'],
           backup_codes_enabled: true,
           session_timeout_minutes: 30
-  }
+
         dependencies: ['identity_provider', 'token_service'],
         deployment_scope: ['admin_panel', 'api_gateway', 'database_access']
-  }
+
       testing_parameters: {
         test_frequency_hours: 12,
         test_scenarios: [
@@ -131,18 +131,18 @@ describe('SecurityControlTestingEngine', () => {
           detection_rate_minimum: 95,
           false_positive_rate_maximum: 5,
           response_time_maximum_ms: 500
-  }
+
         performance_thresholds: {
           max_response_time_ms: 500,
           min_availability_percent: 99.5,
           max_cpu_usage_percent: 15
-  }
+
         failure_conditions: [
           'mfa_bypass_successful',
           'detection_rate_below_threshold',
           'excessive_false_positives'
         ]
-  }
+
       effectiveness_metrics: {
         detection_rate: 97.5,
         false_positive_rate: 2.1,
@@ -150,7 +150,7 @@ describe('SecurityControlTestingEngine', () => {
         response_time_ms: 245,
         throughput_capacity: 1000,
         reliability_score: 99.2
-  }
+
       metadata: {
         created_by: 'security_team',
         created_at: Date.now() - 86400000,
@@ -158,7 +158,7 @@ describe('SecurityControlTestingEngine', () => {
         last_optimized: Date.now() - 172800000,
         status: 'active',
         version: '2.1.0'
-      }
+
     };
 
     engine = new SecurityControlTestingEngine(config, mockPlatform, mockPolicyEngine, mockOptimizationEngine);
@@ -167,7 +167,7 @@ describe('SecurityControlTestingEngine', () => {
   afterEach(async () => {
     if (engine) {
       await engine.shutdown();
-    }
+
   });
 
   describe('Initialization', () => {
@@ -239,7 +239,7 @@ describe('SecurityControlTestingEngine', () => {
         testing_parameters: {
           ...sampleControl.testing_parameters,
           test_frequency_hours: -1 // Invalid negative frequency
-        }
+
       };
 
       await expect(engine.registerSecurityControl(invalidControl)).rejects.toThrow();
@@ -295,7 +295,7 @@ describe('SecurityControlTestingEngine', () => {
       for (const environment of environments) {
         const testResults = await engine.testSecurityControl(sampleControl.id, ['functional'], environment);
         expect(testResults[0].test_execution.environment).toBe(environment);
-      }
+
     });
 
     it('should detect security issues during testing', async () => {
@@ -401,7 +401,7 @@ describe('SecurityControlTestingEngine', () => {
       for (const targetSet of targets) {
         const result = await engine.optimizeSecurityControl(sampleControl.id, targetSet);
         expect(result.optimization_targets).toEqual(expect.arrayContaining(targetSet));
-      }
+
     });
 
     it('should provide rollback capabilities', async () => {
@@ -565,7 +565,7 @@ describe('SecurityControlTestingEngine', () => {
       if (alertHandler) {
         await alertHandler({ severity: 'high', type: 'threat_detected', controlId: sampleControl.id });
         // Should not throw
-      }
+
     });
 
     it('should handle policy engine events', async () => {
@@ -575,7 +575,7 @@ describe('SecurityControlTestingEngine', () => {
       if (policyHandler) {
         await policyHandler({ policyId: 'test_policy', result: { validation_passed: true } });
         // Should not throw
-      }
+
     });
 
     it('should handle optimization engine events', async () => {
@@ -585,7 +585,7 @@ describe('SecurityControlTestingEngine', () => {
       if (optimizationHandler) {
         await optimizationHandler({ recommendationId: 'test', controlId: sampleControl.id });
         // Should not throw
-      }
+
     });
   });
 
@@ -638,7 +638,7 @@ describe('SecurityControlTestingEngine', () => {
         optimization_settings: {
           ...config.optimization_settings,
           enabled: false
-        }
+
       };
 
       const engineWithoutOptimization = new SecurityControlTestingEngine(
@@ -669,7 +669,7 @@ describe('SecurityControlTestingEngine', () => {
           incident_response_controls: false,
           compliance_controls: false,
           monitoring_controls: false
-        }
+
       };
 
       const engineWithLimitedCategories = new SecurityControlTestingEngine(

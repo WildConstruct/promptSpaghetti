@@ -21,7 +21,7 @@ export const DragReorderDemo = ({
         'character-traits': {
             title: '🎭 Character Trait Generation',
             description: 'Generate diverse character traits for screenplay development',
-            options: [,
+            options: [
                 { id: '1', text: 'Mysterious and enigmatic', weight: 25, category: 'Personality' },
                 { id: '2', text: 'Witty and charming', weight: 30, category: 'Personality' },
                 { id: '3', text: 'Brooding and intense', weight: 20, category: 'Personality' },
@@ -33,7 +33,7 @@ export const DragReorderDemo = ({
         'dialogue-styles': {
             title: '💬 Dialogue Style Variations',
             description: 'Control dialogue generation patterns for different character archetypes',
-            options: [,
+            options: [
                 { id: '1', text: 'Sharp, witty one-liners', weight: 40, category: 'Comedy' },
                 { id: '2', text: 'Philosophical monologues', weight: 15, category: 'Drama' },
                 { id: '3', text: 'Casual, naturalistic speech', weight: 50, category: 'Realism' },
@@ -45,7 +45,7 @@ export const DragReorderDemo = ({
         'scene-settings': {
             title: '🏙️ Scene Setting Selection',
             description: 'Generate varied locations for screenplay scenes',
-            options: [,
+            options: [
                 { id: '1', text: 'Urban rooftop at sunset', weight: 35, category: 'Exterior' },
                 { id: '2', text: 'Cozy coffee shop interior', weight: 45, category: 'Interior' },
                 { id: '3', text: 'Abandoned warehouse', weight: 20, category: 'Exterior' },
@@ -58,7 +58,7 @@ export const DragReorderDemo = ({
         'plot-twists': {
             title: '🎲 Plot Twist Generation',
             description: 'Control the likelihood of different plot twist types',
-            options: [,
+            options: [
                 { id: '1', text: 'Character betrayal reveal', weight: 40, category: 'Character' },
                 { id: '2', text: 'Hidden family connection', weight: 30, category: 'Relationship' },
                 { id: '3', text: 'False death scenario', weight: 20, category: 'Survival' },
@@ -178,7 +178,7 @@ export const DragReorderDemo = ({
                     padding: '12px',
                     background: styles.secondary,
                     border: `1px solid ${styles.border}`
-                } }), ", borderRadius: '12px' }}>", _jsx("span", { style: {
+                } }), ", borderRadius: '12px'; }}>", _jsx("span", { style: {
                     padding: '6px 12px',
                     background: styles.accent,
                     color: styles.background,
@@ -317,7 +317,7 @@ borderRadius: '16px',
                         padding: '12px',
                         background: styles.accent + '10',
                         border: `1px solid ${styles.accent}30`
-                    }, ", borderRadius: '8px' }}>", _jsx("div", { style: { fontSize: '12px', opacity: 0.7, marginBottom: '4px' }, children: "Most Likely:" }), _jsx("div", { style: { fontWeight: 600, color: styles.accent }, children: statistics.mostLikely.text }), _jsxs("div", { style: { fontSize: '12px', opacity: 0.7 }, children: [((statistics.mostLikely.weight / statistics.totalWeight) * 100).toFixed(1), "% probability"] })] }));
+                    }, ", borderRadius: '8px'; }}>", _jsx("div", { style: { fontSize: '12px', opacity: 0.7, marginBottom: '4px' }, children: "Most Likely:" }), _jsx("div", { style: { fontWeight: 600, color: styles.accent }, children: statistics.mostLikely.text }), _jsxs("div", { style: { fontSize: '12px', opacity: 0.7 }, children: [((statistics.mostLikely.weight / statistics.totalWeight) * 100).toFixed(1), "% probability"] })] }));
 div >
 ;
 div >
@@ -478,7 +478,7 @@ borderRadius: '16px',
 'Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
  >
     _jsx("code", { style: { color: styles.text }, children: `import { DragReorderWeightManager } from './WeightManagement/DragReorderWeightManager';
-const filmOptions = [;
+const filmOptions = [
   { id: '1', text: 'Mysterious protagonist', weight: 25 },
   { id: '2', text: 'Witty dialogue', weight: 30 },
   { id: '3', text: 'Plot twist revelation', weight: 20 }];

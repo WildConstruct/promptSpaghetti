@@ -18,16 +18,17 @@ import {
   usePermissions,
   PermissionGate,
   PERMISSIONS
-} from '../shared';
+ from '../shared';
 import type { TableColumn, TableAction, FormSchema } from '../shared';
-}
+
+
 interface User {
   id: string;,
-  name: string;
+  name: string;,
   email: string;,
-  status: 'active' | 'suspended' | 'deleted' | 'locked' | 'pending_activation';
+  status: 'active' | 'suspended' | 'deleted' | 'locked' | 'pending_activation';,
   roles: string;,
-  lastLogin: string | null;
+  lastLogin: string | null;,
   createdAt: string;,
   loginAttempts: number;
   export const UserManagementDashboard: React.FC = () => {,
@@ -43,7 +44,8 @@ interface User {
   current: 1,
   pageSize: 10,
   total: 0,
-}
+
+
 });
   const { getUsers, updateUserStatus, deleteUser, loading, error } = useAdminUserApi();
   const { hasPermission } = usePermissions();
@@ -58,7 +60,7 @@ interface User {
 });
       setUsers(response.data.users || []);
       setPagination(prev => ({ ...prev, total: response.data.total || 0 }));
-    } catch (err) {
+ catch (err) {
   console.error('Failed to load users:', err);
 }, [getUsers, pagination.current, pagination.pageSize, searchTerm, statusFilter]);
   useEffect(() => {
@@ -69,7 +71,7 @@ interface User {
     try {
       await updateUserStatus(userId, newStatus, reason);
       await loadUsers();
-    } catch (err) {
+ catch (err) {
   console.error('Failed to update user status:', err);
 }, [updateUserStatus, loadUsers]);
   // Handle user deletion
@@ -77,7 +79,7 @@ interface User {
     try {
       await deleteUser(userId, reason);
       await loadUsers();
-    } catch (err) {
+ catch (err) {
   console.error('Failed to delete user:', err);
 }, [deleteUser, loadUsers]);
   // Bulk operations
@@ -87,26 +89,26 @@ interface User {
     setSelectedUsers([]);
   }, [selectedUsers, handleStatusChange]);
   // Calculate metrics
-  const metrics = [;
+  const metrics = [
     {
   value: users.length,
   label: 'Total Users',
   format: 'number' as const,
-}
+
     {
   value: users.filter(u => u.status === 'active').length,
   label: 'Active Users',
   format: 'number' as const,
-  trend: {
+  trend: {,
   value: 8,
   direction: 'up' as const,
   label: 'vs last month',
-}
+
     {
   value: users.filter(u => u.status === 'pending_activation').length,
   label: 'Pending Activation',
   format: 'number' as const,
-}
+
     {
       value: Math.round((users.filter(u => u.lastLogin && new Date(u.lastLogin) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length / Math.max(users.length, 1)) * 100),
       label: 'Active This Month',
@@ -127,7 +129,7 @@ interface User {
             {record.email}
           </div>
         </div>
-  }
+
     {
       key: 'status',
       title: 'Status',
@@ -135,14 +137,14 @@ interface User {
       sortable: true,
       filterable: true,
       filterType: 'select',
-      filterOptions: [,
+      filterOptions: [
         { label: 'Active', value: 'active' },
         { label: 'Suspended', value: 'suspended' },
         { label: 'Locked', value: 'locked' },
         { label: 'Pending', value: 'pending_activation' }
       ],
       render: (status) => <StatusBadge status={status} />
-  }
+
     {
       key: 'roles',
       title: 'Roles',
@@ -160,7 +162,7 @@ interface User {
             </span>
           )}
         </div>
-  }
+
     {
       key: 'lastLogin',
       title: 'Last Login',
@@ -170,7 +172,7 @@ interface User {
         <div style={{ fontSize: '12px', color: '#6b7280' }}>
           {lastLogin ? new Date(lastLogin).toLocaleDateString() : 'Never'}
         </div>
-  }
+
     {
       key: 'createdAt',
       title: 'Created',
@@ -192,7 +194,7 @@ interface User {
   setShowEditModal(true);
 },
   disabled: (user) => !hasPermission('users', 'update') || user.status === 'deleted'
-  }
+
     {
   key: 'message',
   label: 'Send Message',
@@ -201,7 +203,7 @@ interface User {
   console.log('Send message to:', user.email);
 },
   disabled: (user) => user.status !== 'active';
-  }
+
     {
       key: 'delete',
       label: 'Delete',
@@ -213,7 +215,7 @@ interface User {
   disabled: (user) => !hasPermission('users', 'delete'),
       danger: true];
   // Bulk actions
-  const bulkActions = [;
+  const bulkActions = [
     {
   key: 'activate',
   label: 'Activate Selected',
@@ -222,7 +224,7 @@ interface User {
   const reason = prompt('Enter reason for activation:');
   if (reason) {
   handleBulkStatusChange('active', reason);
-}
+
     {
   key: 'suspend',
   label: 'Suspend Selected',
@@ -237,56 +239,56 @@ interface User {
   title: 'Create New User',
   description: 'Add a new user to the system',
   layout: 'two-column',
-  fields: [,
+  fields: [
   {
   name: 'name',
   label: 'Full Name',
   type: 'text',
   required: true,
   placeholder: 'Enter full name',
-  validation: {
+  validation: {,
   minLength: 2,
   maxLength: 100,
-}
+
       {
   name: 'email',
   label: 'Email Address',
   type: 'email',
   required: true,
   placeholder: 'Enter email address',
-  validation: {
+  validation: {,
   pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
-}
+
       {
         name: 'roles',
         label: 'Roles',
         type: 'multiselect',
         required: true,
-        options: [,
+        options: [
           { label: 'Admin', value: 'admin' },
           { label: 'Moderator', value: 'moderator' },
           { label: 'User', value: 'user' },
           { label: 'Viewer', value: 'viewer' }
         ]
-  }
+
       {
         name: 'department',
         label: 'Department',
         type: 'select',
-        options: [,
+        options: [
           { label: 'Engineering', value: 'engineering' },
           { label: 'Marketing', value: 'marketing' },
           { label: 'Sales', value: 'sales' },
           { label: 'Support', value: 'support' }
         ]
-  }
+
       {
   name: 'sendWelcomeEmail',
   label: 'Send Welcome Email',
   type: 'checkbox',
   defaultValue: true,
   help: 'User will receive an email with login instructions',
-}
+
       {
   name: 'requirePasswordChange',
   label: 'Require Password Change',
@@ -296,7 +298,7 @@ interface User {
   submitText: 'Create User',
   cancelText: 'Cancel',
 };
-  const breadcrumbs = [;
+  const breadcrumbs = [
     { label: 'Admin', href: '/admin' },
     { label: 'User Management' }
   ];
@@ -315,7 +317,7 @@ interface User {
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer',
-}}
+
         >
           <Download size={16} />
           Export
@@ -336,7 +338,7 @@ interface User {
   fontSize: '14px',
   fontWeight: '500',
   cursor: 'pointer',
-}}
+
         >
           <Plus size={16} />
           Add User
@@ -357,7 +359,7 @@ interface User {
   gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
   gap: '20px',
   marginBottom: '24px',
-}}>
+}>
         <MetricsCard
           title="User Analytics"
           metrics={metrics}
@@ -385,12 +387,12 @@ interface User {
   },
   showSizeChanger: true,
           pageSizeOptions: [10, 25, 50, 100]
-        }}
+
         emptyText="No users found"
         emptyAction={hasPermission('users', 'create') ? {
   label: 'Add First User',
   onClick: () => setShowCreateModal(true),
-} : undefined}
+ : undefined}
       />
       {/* Create User Modal */}
       {showCreateModal && ()
@@ -405,7 +407,7 @@ interface User {
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 1000,
-}}>
+}>
           <div style={{
   backgroundColor: '#ffffff',
   borderRadius: '8px',
@@ -413,7 +415,7 @@ interface User {
   maxWidth: '90vw',
   maxHeight: '90vh',
   overflow: 'auto',
-}}>
+}>
             <AdminFormBuilder
               schema={createUserSchema}
               onSubmit={async (values) => {
@@ -421,7 +423,7 @@ interface User {
   // API call would go here
   setShowCreateModal(false);
   loadUsers();
-}}
+}
               onCancel={() => setShowCreateModal(false)}
               loading={loading}
             />

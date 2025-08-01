@@ -4,50 +4,41 @@ import { useNotifications } from '../../hooks/useNotifications';
 import { NotificationItem } from './NotificationItem';
 import { NotificationPreferences } from './NotificationPreferences';
 import { NotificationType, NotificationPriority } from '../../types/NotificationTypes';
-}
-interface NotificationCenterProps {
-  userId: string;
+
+
+interface NotificationCenterProps { userId: string;
   workspaceId?: string;
   className?: string;
-  const NotificationCenter: React.FC<NotificationCenterProps> = ({ ),
-  userId,
-  workspaceId,
+  const NotificationCenter: React.FC<NotificationCenterProps> = ({ );
+  userId;
+  workspaceId }
   className
-}
-}) => {
-  const [showPreferences, setShowPreferences] = useState(false);
+
+
+}) => { const [showPreferences, setShowPreferences] = useState(false);
   const [filter, setFilter] = useState<NotificationType | 'all'>('all');
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
   const {
-    notifications,
-    unreadCount,
-    loading,
-    error,
-    markAsRead,
-    markAllAsRead,
-    deleteNotification,
-    refreshNotifications,
+    notifications
+    unreadCount
+    loading
+    error
+    markAsRead
+    markAllAsRead
+    deleteNotification
+    refreshNotifications }
     realTimeConnection
-  } = useNotifications(userId, workspaceId);
-  const filteredNotifications = notifications.filter(notification => {)
+ = useNotifications(userId, workspaceId);
+  const filteredNotifications = notifications.filter(notification => { )
   if (showUnreadOnly && notification.read_at) return false;
     if (filter !== 'all' && notification.type !== filter) return false;
-    return true;
-  });
-  const handleMarkAsRead = useCallback(async (notificationId: string) => {
-    await markAsRead(notificationId);
-  }, [markAsRead]);
-  const handleMarkAllAsRead = useCallback(async () => {
-    await markAllAsRead();
-  }, [markAllAsRead]);
-  const handleDelete = useCallback(async (notificationId: string) => {
-    await deleteNotification(notificationId);
-  }, [deleteNotification]);
-  const toggleOpen = () => {
-    setIsOpen(!isOpen);
+    return true });
+  const handleMarkAsRead = useCallback(async (notificationId: string) => { await markAsRead(notificationId) }, [markAsRead]);
+  const handleMarkAllAsRead = useCallback(async () => { await markAllAsRead() }, [markAllAsRead]);
+  const handleDelete = useCallback(async (notificationId: string) => { await deleteNotification(notificationId) }, [deleteNotification]);
+  const toggleOpen = () => { setIsOpen(!isOpen);
     if (!isOpen) {
-      refreshNotifications();
-  };
+      refreshNotifications() };
   // Real-time connection status indicator
   const connectionStatus = realTimeConnection?.status || 'disconnected';
   return;
@@ -55,11 +46,11 @@ interface NotificationCenterProps {
       {/* Notification Bell Button */}
       <button
         onClick={toggleOpen}
-        className={`relative p-2 rounded-lg transition-colors ${
+        className={ `relative p-2 rounded-lg transition-colors ${
   isOpen
   ? 'bg-blue-100 text-blue-600'
-  : 'hover:bg-gray-100 text-gray-600',
-}`}
+  : 'hover:bg-gray-100 text-gray-600' }
+`}
         aria-label={`Notifications (${unreadCount} unread)`}
       >
         {unreadCount > 0 ? <Bell className="w-5 h-5" /> : <BellOff className="w-5 h-5" />}
@@ -70,11 +61,11 @@ interface NotificationCenterProps {
           </span>
         )}
         {/* Connection Status Indicator */}
-        <div className={`absolute -bottom-1 -right-1 w-2 h-2 rounded-full ${
-  connectionStatus === 'connected' ? 'bg-green-400' :,
-  connectionStatus === 'connecting' ? 'bg-yellow-400' :,
+        <div className={ `absolute -bottom-1 -right-1 w-2 h-2 rounded-full ${
+  connectionStatus === 'connected' ? 'bg-green-400' :
+  connectionStatus === 'connecting' ? 'bg-yellow-400' : }
   'bg-red-400'
-}`} />
+`} />
       </button>
       {/* Notification Dropdown */}
       {isOpen && ()

@@ -9,8 +9,8 @@ import { Template } from './TemplatePreviewModal';
 import { EmbedConfiguration, EmbedTheme, EmbedSize, EmbedFeatures } from '../embed/EmbeddableContent';
 
 }
-export interface EmbeddedTemplatePreviewProps {
-    template: Template;
+}
+export interface EmbeddedTemplatePreviewProps { template: Template;
     embedConfig: EmbedConfiguration;
     showCustomization?: boolean;
     onCustomize?: (config: Partial<EmbedConfiguration>) => void;
@@ -27,41 +27,33 @@ export interface EmbeddedTemplatePreviewProps {
     showSocialActions?: boolean;
     showPurchaseButton?: boolean;
     maxWidth?: number;
-    maxHeight?: number;
-
-
+    maxHeight?: number }
 }
-export interface ShareMethod {
-    type: 'link' | 'embed' | 'social' | 'email' | 'copy';
+}
+export interface ShareMethod { type: 'link' | 'embed' | 'social' | 'email' | 'copy';
     platform?: 'twitter' | 'linkedin' | 'facebook' | 'reddit' | 'discord';
-    customization?: EmbedCustomization;
-
-
+    customization?: EmbedCustomization }
 }
-export interface EmbedCustomization {
-    size: EmbedSize;
+}
+export interface EmbedCustomization { size: EmbedSize;
     theme: EmbedTheme;
     features: EmbedFeatures;
     layout: EmbedLayout;
     branding: EmbedBranding;
-    social: EmbedSocialConfig;
-
-
+    social: EmbedSocialConfig }
 }
-export interface EmbedLayout {
-    orientation: 'horizontal' | 'vertical' | 'grid';
+}
+export interface EmbedLayout { orientation: 'horizontal' | 'vertical' | 'grid';
     showHeader: boolean;
     showFooter: boolean;
     showSidebar: boolean;
     contentAlignment: 'left' | 'center' | 'right';
     spacing: 'tight' | 'normal' | 'loose';
     borderRadius: number;
-    shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl';
-
-
+    shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl' }
 }
-export interface EmbedBranding {
-    showLogo: boolean;
+}
+export interface EmbedBranding { showLogo: boolean;
     showTitle: boolean;
     showAuthor: boolean;
     showPoweredBy: boolean;
@@ -70,30 +62,25 @@ export interface EmbedBranding {
         secondary: string;
         accent: string;
         background: string;
-        text: string;
-
+        text: string }
 }
     };
-    customFonts?: {
-        heading: string;
-        body: string;
-    };
+    customFonts?: { heading: string;
+        body: string };
 
 }
-export interface EmbedSocialConfig {
-    showLikes: boolean;
+}
+export interface EmbedSocialConfig { showLikes: boolean;
     showShares: boolean;
     showComments: boolean;
     showRating: boolean;
     showDownloads: boolean;
     enableInteraction: boolean;
     showAuthorInfo: boolean;
-    showStats: boolean;
-
-
+    showStats: boolean }
 }
-export interface PreviewSize {
-    width: number;
+}
+export interface PreviewSize { width: number;
     height: number;
     label: string;
     icon: React.ComponentType<unknown>;
@@ -103,15 +90,13 @@ export declare const PREVIEW_SIZES: PreviewSize[];
 export declare const EmbedCodeGenerator: React.FC<{
     template: Template;
     customization: EmbedCustomization;
-    onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
+    onCustomizationChange: (updates: Partial<EmbedCustomization>) => void }
 }
 }>;
-export declare const EmbedCustomizationPanel: React.FC<{
-    customization: EmbedCustomization;
+export declare const EmbedCustomizationPanel: React.FC<{ customization: EmbedCustomization;
     onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
     previewSize: PreviewSize;
-    onPreviewSizeChange: (size: PreviewSize) => void;
-}>;
+    onPreviewSizeChange: (size: PreviewSize) => void }>;
 export declare const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps>;
 export default EmbeddedTemplatePreview;
 //# sourceMappingURL=EmbeddedTemplatePreview.d.ts.map

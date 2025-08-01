@@ -8,10 +8,10 @@ import {
   AuditSeverity,
   AuditContext,
   CreateAuditEventRequest
-} from '../database/audit-models';
+ from '../database/audit-models';
 
-}
-}
+
+
 export interface AuditMiddlewareOptions {
   enabled?: boolean;
   excludeRoutes?: string[];
@@ -21,9 +21,10 @@ export interface AuditMiddlewareOptions {
   logSecurityEvents?: boolean;
   sensitiveHeaders?: string[];
   sensitiveParams?: string[];
-}
-}
-}
+
+
+
+
 
 export class AuditMiddleware {
   private options: Required<AuditMiddlewareOptions>;
@@ -43,7 +44,7 @@ export class AuditMiddleware {
       sensitiveParams: ['password', 'token', 'secret', 'key'],
       ...options
     };
-  }
+
 
   /**
    * Main middleware function
@@ -52,12 +53,12 @@ export class AuditMiddleware {
     return async (request: FastifyRequest, reply: FastifyReply) => {
       if (!this.options.enabled) {
         return;
-      }
+
 
       // Skip excluded routes and methods
       if (this.shouldSkipRequest(request)) {
         return;
-      }
+
 
       const startTime = Date.now();
       const context = this.createAuditContext(request);
@@ -69,7 +70,7 @@ export class AuditMiddleware {
       // Log security-related events immediately
       if (this.options.logSecurityEvents) {
         await this.logSecurityEvents(request, context);
-      }
+
 
       // Hook into response to log completion
       reply.addHook('onSend', async (request, reply, payload) => {
@@ -84,7 +85,7 @@ export class AuditMiddleware {
         await this.logRequestError(request, reply, error, duration, context);
       });
     };
-  }
+
 
   /**
    * Feature Toggle specific audit methods
@@ -93,7 +94,7 @@ export class AuditMiddleware {
     return {
       logToggleCreated: async (toggleId: string, toggleData: Record<string, unknown>) => {
         await this.auditService.logToggleCreated(toggleId, toggleData, context);
-  }
+
       logToggleUpdated: async (
         toggleId: string,
         beforeData: Record<string,
@@ -102,13 +103,13 @@ export class AuditMiddleware {
         unknown>
       ) => {
         await this.auditService.logToggleUpdated(toggleId, beforeData, afterData, context);
-  }
+
       logToggleEnabled: async (toggleId: string, toggleName: string) => {
         await this.auditService.logToggleEnabled(toggleId, toggleName, context);
-  }
+
       logToggleDisabled: async (toggleId: string, toggleName: string) => {
         await this.auditService.logToggleDisabled(toggleId, toggleName, context);
-  }
+
       logToggleDeleted: async (toggleId: string, toggleName: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.TOGGLE_DELETED,
@@ -121,9 +122,9 @@ export class AuditMiddleware {
           description: `Feature toggle "${toggleName}" was deleted`,
           outcome: 'success'
         }, context);
-      }
+
     };
-  }
+
 
   /**
    * Schedule specific audit methods
@@ -132,10 +133,10 @@ export class AuditMiddleware {
     return {
       logScheduleCreated: async (scheduleId: string, scheduleData: Record<string, unknown>) => {
         await this.auditService.logScheduleCreated(scheduleId, scheduleData, context);
-  }
+
       logScheduleExecuted: async (scheduleId: string, scheduleName: string, execution: Record<string, unknown>) => {
         await this.auditService.logScheduleExecuted(scheduleId, scheduleName, execution, context);
-  }
+
       logScheduleDeleted: async (scheduleId: string, scheduleName: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SCHEDULE_DELETED,
@@ -148,7 +149,7 @@ export class AuditMiddleware {
           description: `Schedule "${scheduleName}" was deleted`,
           outcome: 'success'
         }, context);
-  }
+
       logSchedulePaused: async (scheduleId: string, scheduleName: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SCHEDULE_PAUSED,
@@ -161,7 +162,7 @@ export class AuditMiddleware {
           description: `Schedule "${scheduleName}" was paused`,
           outcome: 'success'
         }, context);
-  }
+
       logScheduleResumed: async (scheduleId: string, scheduleName: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SCHEDULE_RESUMED,
@@ -174,9 +175,9 @@ export class AuditMiddleware {
           description: `Schedule "${scheduleName}" was resumed`,
           outcome: 'success'
         }, context);
-      }
+
     };
-  }
+
 
   /**
    * User management audit methods
@@ -196,7 +197,7 @@ export class AuditMiddleware {
           outcome: 'success',
           afterValue: this.sanitizeUserData(userData)
         }, context);
-  }
+
       logUserUpdated: async (
         userId: string,
         beforeData: Record<string,
@@ -217,7 +218,7 @@ export class AuditMiddleware {
           beforeValue: this.sanitizeUserData(beforeData),
           afterValue: this.sanitizeUserData(afterData)
         }, context);
-  }
+
       logUserDeleted: async (userId: string, userEmail: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.USER_DELETED,
@@ -230,7 +231,7 @@ export class AuditMiddleware {
           description: `User ${userEmail} was deleted`,
           outcome: 'success'
         }, context);
-  }
+
       logPasswordChanged: async (userId: string, userEmail: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.PASSWORD_CHANGED,
@@ -243,9 +244,9 @@ export class AuditMiddleware {
           description: `Password changed for user ${userEmail}`,
           outcome: 'success'
         }, context);
-      }
+
     };
-  }
+
 
   /**
    * System configuration audit methods
@@ -266,7 +267,7 @@ export class AuditMiddleware {
           beforeValue,
           afterValue
         }, context);
-  }
+
       logSystemStartup: async () => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SYSTEM_STARTUP,
@@ -277,7 +278,7 @@ export class AuditMiddleware {
           description: 'System started up',
           outcome: 'success'
         }, context);
-  }
+
       logSystemShutdown: async () => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SYSTEM_SHUTDOWN,
@@ -288,24 +289,24 @@ export class AuditMiddleware {
           description: 'System shut down',
           outcome: 'success'
         }, context);
-      }
+
     };
-  }
+
 
   // Private helper methods
   private shouldSkipRequest(request: FastifyRequest): boolean {
     // Skip excluded routes
     if (this.options.excludeRoutes.some(route => request.url.includes(route))) {
       return true;
-    }
+
 
     // Skip excluded methods
     if (this.options.excludeMethods.includes(request.method)) {
       return true;
-    }
+
 
     return false;
-  }
+
 
   private createAuditContext(request: FastifyRequest): AuditContext {
     return {
@@ -325,9 +326,9 @@ export class AuditMiddleware {
         headers: this.sanitizeHeaders(request.headers),
         params: this.sanitizeParams(request.params as any),
         query: this.sanitizeParams(request.query as any)
-      }
+
     };
-  }
+
 
   private createAuditHelpers(context: AuditContext) {
     return {
@@ -359,7 +360,7 @@ export class AuditMiddleware {
           error: {
             code: error.code || 'UNKNOWN_ERROR',
             message: error.message
-          }
+
         }, context),
 
       toggles: this.createFeatureToggleAuditor(context),
@@ -367,7 +368,7 @@ export class AuditMiddleware {
       users: this.createUserAuditor(context),
       system: this.createSystemAuditor(context)
     };
-  }
+
 
   private async logSecurityEvents(request: FastifyRequest, context: AuditContext): Promise<void> {
 
@@ -386,7 +387,7 @@ export class AuditMiddleware {
         context,
         { userAgent, ip, reason: 'suspicious_user_agent' }
       );
-    }
+
 
     // Check for rapid requests (basic rate limiting detection)
     // This would typically integrate with a rate limiting service
@@ -394,8 +395,8 @@ export class AuditMiddleware {
     // Check for authentication attempts on protected routes
     if (request.url.includes('/auth') || request.url.includes('/login')) {
       // This will be logged by the authentication handler
-    }
-  }
+
+
 
   private async logRequestCompletion(
     request: FastifyRequest, 
@@ -415,7 +416,7 @@ export class AuditMiddleware {
         context,
         duration
       );
-    }
+
 
     // Always log failed requests with more detail
     if (reply.statusCode >= 400) {
@@ -433,10 +434,10 @@ export class AuditMiddleware {
           duration,
           endpoint: request.url,
           method: request.method
-        }
+
       }, context);
-    }
-  }
+
+
 
   private async logRequestError(
     request: FastifyRequest,
@@ -459,14 +460,14 @@ export class AuditMiddleware {
         code: (error as any).code || 'INTERNAL_ERROR',
         message: error.message,
         stack: error.stack
-  }
+
       metadata: {
         duration,
         endpoint: request.url,
         method: request.method
-      }
+
     }, context);
-  }
+
 
   private getClientIP(request: FastifyRequest): string {
     // Check various headers for the real IP
@@ -477,7 +478,7 @@ export class AuditMiddleware {
       request.socket?.remoteAddress ||
       'unknown'
     )?.split(',')[0]?.trim() || 'unknown';
-  }
+
 
   private sanitizeHeaders(headers: Record<string, unknown>): Record<string, unknown> {
     const sanitized = { ...headers };
@@ -485,11 +486,11 @@ export class AuditMiddleware {
     this.options.sensitiveHeaders.forEach(header => {
       if (sanitized[header]) {
         sanitized[header] = '[REDACTED]';
-      }
+
     });
     
     return sanitized;
-  }
+
 
   private sanitizeParams(params: Record<string, unknown>): Record<string, unknown> {
     if (!params || typeof params !== 'object') return params;
@@ -499,11 +500,11 @@ export class AuditMiddleware {
     this.options.sensitiveParams.forEach(param => {
       if (sanitized[param]) {
         sanitized[param] = '[REDACTED]';
-      }
+
     });
     
     return sanitized;
-  }
+
 
   private sanitizeUserData(userData: Record<string, unknown>): Record<string, unknown> {
     if (!userData) return userData;
@@ -518,8 +519,8 @@ export class AuditMiddleware {
     delete sanitized.refreshToken;
     
     return sanitized;
-  }
-}
+
+
 
 // Extend FastifyRequest interface to include audit context
 declare module 'fastify' {
@@ -533,8 +534,8 @@ declare module 'fastify' {
       schedules: ReturnType<AuditMiddleware['createScheduleAuditor']>;
       users: ReturnType<AuditMiddleware['createUserAuditor']>;
       system: ReturnType<AuditMiddleware['createSystemAuditor']>;
-}
-}
+
+
+
     };
-  }
-}
+

@@ -18,8 +18,7 @@ import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
 // Session Security Types
-export enum SessionSecurityLevel {
-  LOW = 'low',
+export enum SessionSecurityLevel { LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
@@ -40,28 +39,28 @@ export enum SessionSecurityLevel {
   MFA_CHANGE = 'mfa_change'
   // Session Configuration
   export interface SessionConfiguration {
-  maxAge: number; // milliseconds,
-  rotationInterval: number; // milliseconds,
+  maxAge: number; // milliseconds;
+  rotationInterval: number; // milliseconds;
   securityLevel: SessionSecurityLevel;
   allowMultipleDevices: boolean;
   maxConcurrentSessions: number;
   requireReauthentication: boolean;
-  reauthenticationInterval: number; // milliseconds,
+  reauthenticationInterval: number; // milliseconds;
   enableActivityTracking: boolean;
   enableAnomalyDetection: boolean;
-  encryptionSettings: {
+  encryptionSettings: { }
   algorithm: string;
   keyDerivation: 'pbkdf2' | 'scrypt' | 'argon2';
   iterations: number;
   saltLength: number;
-}
+
+
 };
 
 // Session Data
-}
-}
-export interface SecureSession {
-  id: string;
+
+
+export interface SecureSession { id: string;
   userId: string;
   deviceId: string;
   createdAt: Date;
@@ -78,13 +77,14 @@ export interface SecureSession {
   csrfToken: string;
   mfaVerified: boolean;
   mfaExpiresAt?: Date;
-  metadata: {
-  deviceInfo: {
-  type: 'desktop' | 'mobile' | 'tablet' | 'unknown';
+  metadata: {;
+  deviceInfo: {;
+  type: 'desktop' | 'mobile' | 'tablet' | 'unknown' }
   os: string;
   browser: string;
   version: string;
-}
+
+
 };
     location: {
       country?: string;
@@ -92,91 +92,87 @@ export interface SecureSession {
       city?: string;
       coordinates?: { lat: number; lon: number };
     };
-    security: {
+    security: { ,
   isVpn: boolean;
   isProxy: boolean;
   riskScore: number;
-  trustLevel: 'low' | 'medium' | 'high'
+  trustLevel: 'low' | 'medium' | 'high' }
+};
   };
-  };
-  activities: Array<{
+  activities: Array<{ ,
   timestamp: Date;
   action: string;
   endpoint: string;
   riskScore: number;
-  anomalyDetected: boolean;
-}>;
-  rotationHistory: Array<{
+  anomalyDetected: boolean }>;
+  rotationHistory: Array<{ ,
   timestamp: Date;
   oldTokenHash: string;
   newTokenHash: string;
-  reason: string;
-}>;
+  reason: string }>;
 
 // Session Context
-}
-}
-export interface SessionContext {
-  ipAddress: string;
+
+
+export interface SessionContext { ipAddress: string;
   userAgent: string;
   deviceFingerprint: string;
   requestHeaders: Record<string, string>;
-  geolocation?: {
+  geolocation?: { }
   country: string;
   region: string;
   city: string;
-}
+
+
 };
-  securityFlags: {
+  securityFlags: { 
   isSuspiciousLocation: boolean;
   isNewDevice: boolean;
   hasVpn: boolean;
-  hasProxy: boolean;
-};
+  hasProxy: boolean };
 
 // Session Validation Result
-}
-}
-export interface SessionValidationResult {
-  isValid: boolean;
+
+
+export interface SessionValidationResult { isValid: boolean;
   session?: SecureSession;
   requiresRotation: boolean;
   requiresReauthentication: boolean;
-  securityIssues: Array<{
-  type: 'warning' | 'critical';
+  securityIssues: Array<{;
+  type: 'warning' | 'critical' }
   description: string;
   recommendation: string;
-}
-}>;
-  anomalies: Array<{
+
+
+>;
+  anomalies: Array<{ ,
   type: string;
-  severity: 'low' | 'medium' | 'high';
+  severity: 'low' | 'medium' | 'high' }
   description: string;
   confidence: number;
-}>;
+>;
 
 // Activity Pattern
-}
-}
-export interface ActivityPattern {
-  userId: string;
+
+
+export interface ActivityPattern { userId: string;
   deviceId: string;
-  pattern: {
+  pattern: { }
   typicalHours: number;
   typicalDays: number;
   commonLocations: string;
   usualEndpoints: string;
   averageSessionDuration: number;
-}
+
+
 };
   lastUpdated: Date;
   confidence: number;
 /**
  * Comprehensive secure session management service
  */
-}
-export class SecureSessionManager extends EventEmitter {
-  private sessions: Map<string, SecureSession> = new Map();
+
+export class SecureSessionManager extends EventEmitter { private sessions: Map<string, SecureSession> = new Map();
   private userSessions: Map<string, Set<string>> = new Map();
   private deviceSessions: Map<string, Set<string>> = new Map();
   private activityPatterns: Map<string, ActivityPattern> = new Map();
@@ -193,12 +189,10 @@ export class SecureSessionManager extends EventEmitter {
    * Create a new secure session
    */
   public async createSession(
-    userId: string,
-    context: SessionContext,
-    securityLevel: SessionSecurityLevel = SessionSecurityLevel.MEDIUM,
-    mfaVerified: boolean = false): Promise<{ session: SecureSession; token: string }> {
-
-    const config = this.sessionConfigs.get(securityLevel)!;
+    userId: string
+    context: SessionContext
+    securityLevel: SessionSecurityLevel = SessionSecurityLevel.MEDIUM }
+    mfaVerified: boolean = false): Promise<{ session: SecureSession; token: string }> { const config = this.sessionConfigs.get(securityLevel)!;
     const deviceId = this.generateDeviceId(context);
     // Check concurrent session limits
     await this.enforceConcurrentSessionLimits(userId, config);
@@ -229,14 +223,14 @@ export class SecureSessionManager extends EventEmitter {
       csrfToken,
       mfaVerified,
       mfaExpiresAt: mfaVerified ? new Date(now.getTime() + (30 * 60 * 1000)) : undefined, // 30 min MFA validity
-      metadata: {
-  deviceInfo: this.parseDeviceInfo(context.userAgent),
+      metadata: {,
+  deviceInfo: this.parseDeviceInfo(context.userAgent) }
         location: context.geolocation || {},
-        security: {
+        security: { ,
   isVpn: context.securityFlags.hasVpn,
   isProxy: context.securityFlags.hasProxy,
   riskScore: this.calculateRiskScore(context),
-  trustLevel: this.calculateTrustLevel(userId, context),
+  trustLevel: this.calculateTrustLevel(userId, context) }
 },
   activities: [],
       rotationHistory: [];
@@ -261,54 +255,49 @@ export class SecureSessionManager extends EventEmitter {
   public async validateSession(
     sessionId: string,
     token: string,
-    context: SessionContext): Promise<SessionValidationResult> {,
+    context: SessionContext): Promise<SessionValidationResult> { 
   const session = this.sessions.get(sessionId);
-  const result: SessionValidationResult = {,
-  isValid: false,
-  requiresRotation: false,
-  requiresReauthentication: false,
-  securityIssues: [],
-  anomalies: [],
+  const result: SessionValidationResult = {
+  isValid: false
+  requiresRotation: false
+  requiresReauthentication: false
+  securityIssues: []
+  anomalies: [] }
 };
-    if (!session) {
-  result.securityIssues.push({)
-  type: 'critical',
-  description: 'Session not found',
-  recommendation: 'Re-authenticate user',
+    if (!session) { result.securityIssues.push({)
+  type: 'critical'
+  description: 'Session not found'
+  recommendation: 'Re-authenticate user' }
 });
       return result;
     // Validate token hash
     const tokenHash = this.hashToken(token);
-    if (tokenHash !== session.tokenHash) {
-  result.securityIssues.push({)
-  type: 'critical',
-  description: 'Invalid session token',
-  recommendation: 'Terminate session and re-authenticate',
+    if (tokenHash !== session.tokenHash) { result.securityIssues.push({)
+  type: 'critical'
+  description: 'Invalid session token'
+  recommendation: 'Terminate session and re-authenticate' }
 });
       await this.terminateSession(sessionId, SessionTerminationReason.SECURITY_VIOLATION);
       return result;
     // Check session state
-    if (session.state !== SessionState.ACTIVE) {
-      result.securityIssues.push({)
-  type: 'critical',
+    if (session.state !== SessionState.ACTIVE) { result.securityIssues.push({)
+  type: 'critical' }
         description: `Session is ${session.state}`}
-},
+
   recommendation: 'Re-authenticate user';
   });
       return result;
     // Check expiration
     const now = new Date();
-    if (session.expiresAt < now) {
-  result.securityIssues.push({)
+    if (session.expiresAt < now) { result.securityIssues.push({)
   type: 'critical',
   description: 'Session has expired',
-  recommendation: 'Re-authenticate user',
+  recommendation: 'Re-authenticate user' }
 });
       await this.terminateSession(sessionId, SessionTerminationReason.TIMEOUT);
       return result;
     // Check MFA expiration
-    if (session.mfaVerified && session.mfaExpiresAt && session.mfaExpiresAt < now) {
-  session.mfaVerified = false;
+    if (session.mfaVerified && session.mfaExpiresAt && session.mfaExpiresAt < now) { session.mfaVerified = false;
   session.mfaExpiresAt = undefined;
   result.requiresReauthentication = true;
   // Validate context consistency
@@ -335,7 +324,7 @@ export class SecureSessionManager extends EventEmitter {
   /**
   * Rotate session token
   */
-  public async rotateSession(sessionId: string): Promise<string | null> {,
+  public async rotateSession(sessionId: string): Promise<string | null> {
   const session = this.sessions.get(sessionId);
   if (!session || session.state !== SessionState.ACTIVE) {
   return null;
@@ -349,10 +338,10 @@ export class SecureSessionManager extends EventEmitter {
   session.csrfToken = this.generateCSRFToken();
   // Record rotation
   session.rotationHistory.push({)
-  timestamp: new Date(),
-  oldTokenHash,
-  newTokenHash,
-  reason: 'automaticRotation',
+  timestamp: new Date()
+  oldTokenHash
+  newTokenHash
+  reason: 'automaticRotation' }
 });
     this.emit('sessionRotated', { sessionId, oldTokenHash, newTokenHash });
     return newToken;
@@ -360,8 +349,8 @@ export class SecureSessionManager extends EventEmitter {
    * Terminate session
    */
   public async terminateSession(
-    sessionId: string,
-    reason: SessionTerminationReason,
+    sessionId: string
+    reason: SessionTerminationReason
     terminatedBy?: string
   ): Promise<boolean> {
 
@@ -383,12 +372,10 @@ export class SecureSessionManager extends EventEmitter {
    * Terminate all sessions for a user
    */
   public async terminateAllUserSessions(
-    userId: string,
-    reason: SessionTerminationReason,
+    userId: string
+    reason: SessionTerminationReason
     excludeSessionId?: string
-  ): Promise<number> {
-
-    const userSessionIds = this.userSessions.get(userId);
+  ): Promise<number> { const userSessionIds = this.userSessions.get(userId);
     if (!userSessionIds) {
       return 0;
     let terminated = 0;
@@ -427,27 +414,22 @@ export class SecureSessionManager extends EventEmitter {
     const sessions = Array.from(this.sessions.values());
     const now = new Date();
     const stats = {
-      total: sessions.length,
-      active: 0,
-      expired: 0,
-      revoked: 0,
-      bySecurityLevel: {} as Record<SessionSecurityLevel, number>,
-      byDevice: {} as Record<string, number>,
+      total: sessions.length
+      active: 0
+      expired: 0
+      revoked: 0 }
+      bySecurityLevel: {} as Record<SessionSecurityLevel, number>
+      byDevice: {} as Record<string, number>
       averageSessionDuration: 0;
   };
     // Initialize counters
-    Object.values(SessionSecurityLevel).forEach(level => {)
-  stats.bySecurityLevel[level] = 0;
-    });
+    Object.values(SessionSecurityLevel).forEach(level => { )
+  stats.bySecurityLevel[level] = 0 });
     let totalDuration = 0;
-    sessions.forEach(session => {)
+    sessions.forEach(session => { )
   // Count by state
       if (session.state === SessionState.ACTIVE && session.expiresAt > now) {
-        stats.active++;
-      } else if (session.expiresAt <= now) {
-        stats.expired++;
-      } else if (session.state === SessionState.REVOKED) {
-        stats.revoked++;
+        stats.active++ } else if (session.expiresAt <= now) { stats.expired++ } else if (session.state === SessionState.REVOKED) { stats.revoked++;
       // Count by security level
       stats.bySecurityLevel[session.securityLevel]++;
       // Count by device type
@@ -455,8 +437,7 @@ export class SecureSessionManager extends EventEmitter {
       stats.byDevice[deviceType] = (stats.byDevice[deviceType] || 0) + 1;
       // Calculate duration
       const duration = session.lastActivity.getTime() - session.createdAt.getTime();
-      totalDuration += duration;
-    });
+      totalDuration += duration });
     stats.averageSessionDuration = sessions.length > 0 ? totalDuration / sessions.length : 0;
     return stats;
   // Private helper methods
@@ -501,8 +482,7 @@ export class SecureSessionManager extends EventEmitter {
     else if (/Safari/.test(userAgent)) browser = 'Safari';
     else if (/Edge/.test(userAgent)) browser = 'Edge';
     return { type, os, browser, version: '1.0' };
-  private calculateRiskScore(context: SessionContext): number {
-    let score = 0;
+  private calculateRiskScore(context: SessionContext): number { let score = 0;
     if (context.securityFlags.hasVpn) score += 20;
     if (context.securityFlags.hasProxy) score += 30;
     if (context.securityFlags.isSuspiciousLocation) score += 25;
@@ -516,10 +496,9 @@ export class SecureSessionManager extends EventEmitter {
     if (riskScore > 20 || !isKnownDevice) return 'medium';
     return 'high';
   private validateSessionContext(((
-    session: SecureSession,
+    session: SecureSession }
     context: SessionContext
-  ): { issues: SessionValidationResult['securityIssues']; anomalies: SessionValidationResult['anomalies'] } {
-  const issues: SessionValidationResult['securityIssues'] = [];
+  ): { issues: SessionValidationResult['securityIssues']; anomalies: SessionValidationResult['anomalies'] } { const issues: SessionValidationResult['securityIssues'] = [];
   const anomalies: SessionValidationResult['anomalies'] = [];
   // Check IP address consistency
   if (session.ipAddress !== context.ipAddress) {
@@ -527,38 +506,34 @@ export class SecureSessionManager extends EventEmitter {
   issues.push({)
   type: 'critical',
   description: 'IP address mismatch detected',
-  recommendation: 'Terminate session and re-authenticate',
+  recommendation: 'Terminate session and re-authenticate' }
 });
-      } else {
-  anomalies.push({)
+ else { anomalies.push({)
   type: 'ipChange',
   severity: 'medium',
   description: 'Session IP address changed',
-  confidence: 0.8,
+  confidence: 0.8 }
 });
     // Check device fingerprint consistency
-    if (session.fingerprint !== context.deviceFingerprint) {
-  issues.push({)
+    if (session.fingerprint !== context.deviceFingerprint) { issues.push({)
   type: 'critical',
   description: 'Device fingerprint mismatch',
-  recommendation: 'Terminate session - possible session hijacking',
+  recommendation: 'Terminate session - possible session hijacking' }
 });
     // Check for suspicious location changes
-    if (context.securityFlags.isSuspiciousLocation) {
-  anomalies.push({)
+    if (context.securityFlags.isSuspiciousLocation) { anomalies.push({)
   type: 'locationAnomaly',
   severity: 'high',
   description: 'Unusual location detected',
-  confidence: 0.9,
+  confidence: 0.9 }
 });
     return { issues, anomalies };
-  private recordActivity(session: SecureSession, context: SessionContext, action: string): void {
-  const activity = {
+  private recordActivity(session: SecureSession, context: SessionContext, action: string): void { const activity = {
   timestamp: new Date(),
   action,
   endpoint: context.requestHeaders['x-requested-endpoint'] || 'unknown',
   riskScore: this.calculateRiskScore(context),
-  anomalyDetected: false // Would be set by anomaly detection,
+  anomalyDetected: false // Would be set by anomaly detection }
 };
     session.activities.push(activity);
     // Keep only last 100 activities
@@ -568,16 +543,15 @@ export class SecureSessionManager extends EventEmitter {
   private updateActivityPattern(userId: string, deviceId: string, context: SessionContext): void {
     const key = `${userId}:${deviceId}`;}
     let pattern = this.activityPatterns.get(key);
-    if (!pattern) {
-  pattern = {
+    if (!pattern) { pattern = {
   userId,
   deviceId,
-  pattern: {
+  pattern: {,
   typicalHours: [],
   typicalDays: [],
   commonLocations: [],
   usualEndpoints: [],
-  averageSessionDuration: 0,
+  averageSessionDuration: 0 }
 },
   lastUpdated: new Date(),
         confidence: 0.1;
@@ -594,13 +568,12 @@ export class SecureSessionManager extends EventEmitter {
     // Update location if available
     if (context.geolocation) {
       const location = `${context.geolocation.city}, ${context.geolocation.country}`;}
-      if (!pattern.pattern.commonLocations.includes(location)) {
-  pattern.pattern.commonLocations.push(location);
+      if (!pattern.pattern.commonLocations.includes(location)) { pattern.pattern.commonLocations.push(location);
   pattern.lastUpdated = now;
   pattern.confidence = Math.min(1.0, pattern.confidence + 0.1);
   this.activityPatterns.set(key, pattern);
   private async enforceConcurrentSessionLimits((userId: string,
-  config: SessionConfiguration): Promise<void> {,
+  config: SessionConfiguration): Promise<void> {
   if (!config.allowMultipleDevices || config.maxConcurrentSessions <= 0) {
   return;
   const userSessions = this.getUserSessions(userId);
@@ -624,14 +597,14 @@ export class SecureSessionManager extends EventEmitter {
   reauthenticationInterval: 0,
   enableActivityTracking: true,
   enableAnomalyDetection: false,
-  encryptionSettings: {
+  encryptionSettings: {,
   algorithm: 'aes-256-gcm',
   keyDerivation: 'pbkdf2',
   iterations: 10000,
-  saltLength: 16,
+  saltLength: 16 }
 });
     // Medium security configuration
-    this.sessionConfigs.set(SessionSecurityLevel.MEDIUM, {)
+    this.sessionConfigs.set(SessionSecurityLevel.MEDIUM, { )
   maxAge: 8 * 60 * 60 * 1000, // 8 hours,
   rotationInterval: 4 * 60 * 60 * 1000, // 4 hours,
   securityLevel: SessionSecurityLevel.MEDIUM,
@@ -641,14 +614,14 @@ export class SecureSessionManager extends EventEmitter {
   reauthenticationInterval: 2 * 60 * 60 * 1000, // 2 hours,
   enableActivityTracking: true,
   enableAnomalyDetection: true,
-  encryptionSettings: {
+  encryptionSettings: {,
   algorithm: 'aes-256-gcm',
   keyDerivation: 'scrypt',
   iterations: 16384,
-  saltLength: 32,
+  saltLength: 32 }
 });
     // High security configuration
-    this.sessionConfigs.set(SessionSecurityLevel.HIGH, {)
+    this.sessionConfigs.set(SessionSecurityLevel.HIGH, { )
   maxAge: 4 * 60 * 60 * 1000, // 4 hours,
   rotationInterval: 60 * 60 * 1000, // 1 hour,
   securityLevel: SessionSecurityLevel.HIGH,
@@ -658,14 +631,14 @@ export class SecureSessionManager extends EventEmitter {
   reauthenticationInterval: 60 * 60 * 1000, // 1 hour,
   enableActivityTracking: true,
   enableAnomalyDetection: true,
-  encryptionSettings: {
+  encryptionSettings: {,
   algorithm: 'aes-256-gcm',
   keyDerivation: 'argon2',
   iterations: 100000,
-  saltLength: 32,
+  saltLength: 32 }
 });
     // Critical security configuration
-    this.sessionConfigs.set(SessionSecurityLevel.CRITICAL, {)
+    this.sessionConfigs.set(SessionSecurityLevel.CRITICAL, { )
   maxAge: 60 * 60 * 1000, // 1 hour,
   rotationInterval: 15 * 60 * 1000, // 15 minutes,
   securityLevel: SessionSecurityLevel.CRITICAL,
@@ -675,33 +648,26 @@ export class SecureSessionManager extends EventEmitter {
   reauthenticationInterval: 30 * 60 * 1000, // 30 minutes,
   enableActivityTracking: true,
   enableAnomalyDetection: true,
-  encryptionSettings: {
+  encryptionSettings: {,
   algorithm: 'aes-256-gcm',
   keyDerivation: 'argon2',
   iterations: 200000,
-  saltLength: 64,
+  saltLength: 64 }
 });
-  private startSessionRotation(): void {
-    // Rotate sessions every 5 minutes
+  private startSessionRotation(): void { // Rotate sessions every 5 minutes
     this.rotationTimer = setInterval(() => {
-      this.performAutomaticRotation();
-    }, 5 * 60 * 1000);
-  private async performAutomaticRotation(): Promise<void> {
-
-  const now = new Date();
+      this.performAutomaticRotation() }, 5 * 60 * 1000);
+  private async performAutomaticRotation(): Promise<void> { const now = new Date();
   for (const [sessionId, session] of this.sessions) {
   if (session.state !== SessionState.ACTIVE) continue;
   const config = this.sessionConfigs.get(session.securityLevel)!;
   const timeSinceCreation = now.getTime() - session.createdAt.getTime();
   if (timeSinceCreation >= config.rotationInterval) {
   await this.rotateSession(sessionId);
-  private startAnomalyDetection(): void {,
+  private startAnomalyDetection(): void { }
   // Run anomaly detection every 2 minutes
-  setInterval(() => {
-  this.detectAnomalies();
-}, 2 * 60 * 1000);
-  private detectAnomalies(): void {
-  const now = new Date();
+  setInterval(() => { this.detectAnomalies() }, 2 * 60 * 1000);
+  private detectAnomalies(): void { const now = new Date();
   const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
   for (const [sessionId, session] of this.sessions) {
   if (session.state !== SessionState.ACTIVE) continue;
@@ -711,23 +677,22 @@ export class SecureSessionManager extends EventEmitter {
   );
   if (recentActivities.length > 50) { // Too many requests
   this.emit('anomalyDetected', {)
-  sessionId,
-  type: 'rapidActivity',
-  severity: 'high',
-  description: 'Unusually high activity detected',
-  recommendation: 'Monitor for automation',
+  sessionId
+  type: 'rapidActivity'
+  severity: 'high'
+  description: 'Unusually high activity detected'
+  recommendation: 'Monitor for automation' }
 });
       // Check for location anomalies
       const pattern = this.activityPatterns.get(`${session.userId}:${session.deviceId}`);}
-      if (pattern && pattern.confidence > 0.5) {
-  const currentHour = now.getHours();
+      if (pattern && pattern.confidence > 0.5) { const currentHour = now.getHours();
   if (!pattern.pattern.typicalHours.includes(currentHour)) {
   this.emit('anomalyDetected', {)
-  sessionId,
-  type: 'unusualTime',
-  severity: 'medium',
-  description: 'Activity outside typical hours',
-  recommendation: 'Verify user identity',
+  sessionId
+  type: 'unusualTime'
+  severity: 'medium'
+  description: 'Activity outside typical hours'
+  recommendation: 'Verify user identity' }
 });
   /**
    * Clean up expired sessions

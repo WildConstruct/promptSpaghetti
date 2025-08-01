@@ -56,8 +56,8 @@ type ComplianceAssessment = z.infer<typeof ComplianceAssessmentSchema>;
 type DeidentificationOptions = z.infer<typeof DeidentificationOptionsSchema>;
 type DeidentificationResult = z.infer<typeof DeidentificationResultSchema>;
 
-}
-}
+
+
 interface HIPAARule {
   id: string;
   name: string;
@@ -65,9 +65,10 @@ interface HIPAARule {
   category: 'administrative' | 'physical' | 'technical';
   severity: 'info' | 'warning' | 'error' | 'critical';
   checkFunction: (content: string, context?: Record<string, unknown>) => Promise<boolean>;
-}
-}
-}
+
+
+
+
 
 export class HIPAAComplianceService {
   private phiPatterns: Map<PHIElement['type'], RegExp[]>;
@@ -81,7 +82,7 @@ export class HIPAAComplianceService {
     this.initializePhiPatterns();
     this.initializeComplianceRules();
     this.initializeSafeHarborIdentifiers();
-  }
+
 
   /**
    * Assess HIPAA compliance of healthcare content
@@ -109,7 +110,7 @@ export class HIPAAComplianceService {
           description: `Detected ${phiElements.length} potential PHI elements`,
           recommendation: 'Consider de-identification before processing'
         });
-      }
+
 
       // Check content-based compliance rules
       const contentComplianceResults = await this.checkContentCompliance(content, documentType);
@@ -122,8 +123,8 @@ export class HIPAAComplianceService {
             description: result.description,
             recommendation: result.recommendation
           });
-        }
-      }
+
+
 
       // Determine overall risk level
       const riskLevel = this.determineRiskLevel(totalScore, phiElements);
@@ -138,11 +139,10 @@ export class HIPAAComplianceService {
         recommendations,
         phiElements
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`HIPAA compliance assessment failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * De-identify healthcare content by removing or replacing PHI
@@ -178,7 +178,7 @@ export class HIPAAComplianceService {
         ({ content: deidentifiedContent, removedElements: removedElements } = 
             await this.applySyntheticDataMethod(content, phiElements, preserveStructure));
         break;
-      }
+
 
       // Apply custom rules if provided
       if (customRules.length > 0) {
@@ -188,7 +188,7 @@ export class HIPAAComplianceService {
         );
         deidentifiedContent = customResult.content;
         warnings.push(...customResult.warnings);
-      }
+
 
       // Calculate confidence based on PHI detection coverage
       const confidence = this.calculateDeidentificationConfidence(
@@ -201,7 +201,7 @@ export class HIPAAComplianceService {
       const residualPHI = await this.detectPHIElements(deidentifiedContent);
       if (residualPHI.length > 0) {
         warnings.push(`Potential residual PHI detected: ${residualPHI.length} elements`);
-      }
+
 
       return {
         content: deidentifiedContent,
@@ -210,11 +210,10 @@ export class HIPAAComplianceService {
         warnings,
         method
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`De-identification failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Validate that processing patient data is HIPAA-compliant
@@ -230,16 +229,15 @@ export class HIPAAComplianceService {
         const criticalPHI = phiElements.filter(phi => phi.riskLevel === 'critical');
         if (criticalPHI.length > 0) {
           throw new Error(`Critical PHI detected in patient data: ${criticalPHI.map(p => p.type).join(', ')}`);
-        }
-      }
+
+
 
       // Validate data structure for minimum necessary principle
       await this.validateMinimumNecessary(patientData);
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Patient data validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Validate that content processing is safe for HIPAA compliance
@@ -251,17 +249,16 @@ export class HIPAAComplianceService {
       
       if (assessment.riskLevel === 'critical') {
         throw new Error('Content contains critical HIPAA violations and cannot be processed');
-      }
+
 
       const criticalPHI = assessment.phiElements.filter(phi => phi.riskLevel === 'critical');
       if (criticalPHI.length > 0) {
         throw new Error(`Critical PHI detected: ${criticalPHI.map(p => p.type).join(', ')}`);
-      }
 
-    } catch (error) {
+ catch (error) {
       throw new Error(`Safe processing validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get service health status
@@ -280,17 +277,17 @@ export class HIPAAComplianceService {
           phiPatternsLoaded: patternsLoaded,
           complianceRulesLoaded: rulesLoaded,
           safeHarborIdentifiersLoaded: identifiersLoaded
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         details: {
           error: error instanceof Error ? error.message : 'Unknown error'
-        }
+
       };
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -314,18 +311,18 @@ export class HIPAAComplianceService {
             confidence: this.calculatePHIConfidence(type, match[0]),
             riskLevel
           });
-        }
-      }
-    }
+
+
+
 
     // Sort by position for consistent processing
     return phiElements.sort((a, b) => a.start - b.start);
-  }
+
 
   private assessPHIRisk(phiElements: PHIElement[]): { score: number; severity: 'info' | 'warning' | 'error' | 'critical' } {
     if (phiElements.length === 0) {
       return { score: 0, severity: 'info' };
-    }
+
 
     const criticalElements = phiElements.filter(p => p.riskLevel === 'critical').length;
     const highElements = phiElements.filter(p => p.riskLevel === 'high').length;
@@ -340,7 +337,7 @@ export class HIPAAComplianceService {
     else if (highElements > 0 || mediumElements > 3) severity = 'warning';
 
     return { score, severity };
-  }
+
 
   private async checkContentCompliance(
     content: string,
@@ -352,7 +349,7 @@ export class HIPAAComplianceService {
     recommendation: string;
     penalty: number;
     passed: boolean;
-  }>> {
+>> {
     const results = [];
 
     // Check for encryption requirements
@@ -365,7 +362,7 @@ export class HIPAAComplianceService {
         penalty: 10,
         passed: false
       });
-    }
+
 
     // Check for audit trail requirements
     if (documentType === 'patient_record' && !this.hasAuditTrail(content)) {
@@ -377,10 +374,10 @@ export class HIPAAComplianceService {
         penalty: 15,
         passed: false
       });
-    }
+
 
     return results;
-  }
+
 
   private determineRiskLevel(score: number, phiElements: PHIElement[]): 'low' | 'medium' | 'high' | 'critical' {
     const criticalPHI = phiElements.filter(p => p.riskLevel === 'critical').length;
@@ -389,7 +386,7 @@ export class HIPAAComplianceService {
     if (score < 70) return 'high';
     if (score < 85) return 'medium';
     return 'low';
-  }
+
 
   private generateRecommendations(
     findings: Array<{ category: string; severity: string; recommendation: string }>,
@@ -405,15 +402,15 @@ export class HIPAAComplianceService {
     if (phiElements.length > 0) {
       recommendations.add('Consider implementing de-identification procedures');
       recommendations.add('Ensure minimum necessary principle compliance');
-    }
+
 
     // Add document-type specific recommendations
     if (documentType === 'research_data') {
       recommendations.add('Verify IRB approval for research use of healthcare data');
-    }
+
 
     return Array.from(recommendations);
-  }
+
 
   private async applySafeHarborMethod(
     content: string,
@@ -439,11 +436,11 @@ export class HIPAAComplianceService {
           deidentifiedContent.slice(element.end);
 
         removedElements.push(element);
-      }
-    }
+
+
 
     return { content: deidentifiedContent, removedElements };
-  }
+
 
   private async applyExpertDeterminationMethod(
     content: string,
@@ -453,7 +450,7 @@ export class HIPAAComplianceService {
 
     // More conservative approach - remove more potential identifiers
     return this.applySafeHarborMethod(content, phiElements, preserveStructure);
-  }
+
 
   private async applySyntheticDataMethod(
     content: string,
@@ -476,10 +473,10 @@ export class HIPAAComplianceService {
         deidentifiedContent.slice(element.end);
 
       removedElements.push(element);
-    }
+
 
     return { content: deidentifiedContent, removedElements };
-  }
+
 
   private async applyCustomDeidentificationRules(
     content: string,
@@ -494,13 +491,13 @@ export class HIPAAComplianceService {
       try {
         const regex = new RegExp(rule, 'gi');
         processedContent = processedContent.replace(regex, '[CUSTOM_REDACTED]');
-      } catch (error) {
+ catch (error) {
         warnings.push(`Invalid custom rule: ${rule}`);
-      }
-    }
+
+
 
     return { content: processedContent, warnings };
-  }
+
 
   private calculateDeidentificationConfidence(
     originalElements: PHIElement[],
@@ -513,7 +510,7 @@ export class HIPAAComplianceService {
     const methodMultiplier = method === 'safe_harbor' ? 0.9 : method === 'expert_determination' ? 0.95 : 0.85;
 
     return Math.min(removalRate * methodMultiplier, 1.0);
-  }
+
 
   private async validateMinimumNecessary(patientData: Record<string, unknown>): Promise<void> {
 
@@ -523,8 +520,8 @@ export class HIPAAComplianceService {
     
     if (presentUnnecessaryFields.length > 0) {
       throw new Error(`Potentially unnecessary PHI fields detected: ${presentUnnecessaryFields.join(', ')}`);
-    }
-  }
+
+
 
   private assessPHIElementRisk(type: PHIElement['type'], _____value: string): PHIElement['riskLevel'] {
     const criticalTypes: PHIElement['type'][] = ['ssn', 'medical_record_number', 'biometric_identifier'];
@@ -533,7 +530,7 @@ export class HIPAAComplianceService {
     if (criticalTypes.includes(type)) return 'critical';
     if (highTypes.includes(type)) return 'high';
     return 'medium';
-  }
+
 
   private calculatePHIConfidence(type: PHIElement['type'], _____value: string): number {
     // Mock confidence calculation based on pattern strength
@@ -543,7 +540,7 @@ export class HIPAAComplianceService {
     if (strongPatterns.includes(type)) return 0.95;
     if (mediumPatterns.includes(type)) return 0.85;
     return 0.75;
-  }
+
 
   private generateStructuralReplacement(element: PHIElement): string {
     switch (element.type) {
@@ -554,8 +551,8 @@ export class HIPAAComplianceService {
     case 'ssn': return '[SSN]';
     case 'address': return '[ADDRESS]';
     default: return '[REDACTED]';
-    }
-  }
+
+
 
   private generateSyntheticReplacement(element: PHIElement): string {
     switch (element.type) {
@@ -565,18 +562,18 @@ export class HIPAAComplianceService {
     case 'date': return '01/01/2023';
     case 'ssn': return '123-45-6789';
     default: return '[SYNTHETIC]';
-    }
-  }
+
+
 
   private isContentEncrypted(content: string): boolean {
     // Simple heuristic - check for encryption markers
     return content.includes('-----BEGIN') || content.length < content.replace(/[A-Za-z0-9+/=]/g, '').length * 0.75;
-  }
+
 
   private hasAuditTrail(content: string): boolean {
     // Check for audit-related metadata
     return content.includes('audit') || content.includes('timestamp') || content.includes('accessed_by');
-  }
+
 
   private initializePhiPatterns(): void {
     // Social Security Numbers
@@ -596,7 +593,7 @@ export class HIPAAComplianceService {
     // Email addresses
     this.phiPatterns.set('email', [
       /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2
-}\b/g
+\b/g
     ]);
 
     // Dates
@@ -612,7 +609,7 @@ export class HIPAAComplianceService {
       /\bMedical Record:?\s*\d+/gi,
       /\b\d{6,12}\b/g // Assuming MRNs are 6-12 digits
     ]);
-  }
+
 
   private initializeComplianceRules(): void {
     // Administrative safeguards
@@ -634,7 +631,7 @@ export class HIPAAComplianceService {
       severity: 'warning',
       checkFunction: async (content) => this.isContentEncrypted(content) || content.length < 500
     });
-  }
+
 
   private initializeSafeHarborIdentifiers(): void {
     const identifiers: PHIElement['type'][] = [
@@ -645,5 +642,4 @@ export class HIPAAComplianceService {
     ];
 
     identifiers.forEach(id => this.safeHarborIdentifiers.add(id));
-  }
-}
+

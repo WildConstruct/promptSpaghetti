@@ -5,16 +5,15 @@
 import { ExtensionPointCategory, ExtensionPointPriority, ExtensionPointLifecycle } from './ExtensionPointRegistry';
 
 }
-export interface DocumentationOptions {
-    includeExamples?: boolean;
+}
+export interface DocumentationOptions { includeExamples?: boolean;
     includeConstraints?: boolean;
     includeMetadata?: boolean;
     format?: 'markdown' | 'html' | 'json';
     filterBy?: {
         category?: ExtensionPointCategory;
         priority?: ExtensionPointPriority;
-        lifecycle?: ExtensionPointLifecycle;
-
+        lifecycle?: ExtensionPointLifecycle }
 }
     };
 

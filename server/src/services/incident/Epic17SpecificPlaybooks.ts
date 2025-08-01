@@ -30,7 +30,7 @@ import {
   SystemDependency,
   PlaybookConfiguration,
   PlaybookMetadata
-} from '../../../../packages/core/types/Epic17IncidentPlaybooks';
+ from '../../../../packages/core/types/Epic17IncidentPlaybooks';
 // import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
 export class Epic17SpecificPlaybooks {
@@ -49,7 +49,7 @@ export class Epic17SpecificPlaybooks {
       this.getBackupRecoveryPlaybook(),
       this.getIntegrationFailurePlaybook()
     ];
-  }
+
 
   // =============================================================================
   // 1. Feature Toggle Emergency Response Playbook
@@ -74,20 +74,20 @@ export class Epic17SpecificPlaybooks {
           reputationRisk: 'high',
           complianceRisk: 'medium',
           description: 'Feature toggle system failure affects user experience and system functionality'
-  }
+
         userImpact: {
           adminUsers: { affected: true, count: 50, impactType: 'service_unavailable', severity: 'critical', estimatedDuration: 15 },
           regularUsers: { affected: true, count: 50000, impactType: 'degraded_performance', severity: 'medium', estimatedDuration: 30 },
           externalUsers: { affected: false, count: 0, impactType: 'service_unavailable', severity: 'low', estimatedDuration: 0 },
           systemUsers: { affected: true, count: 10, impactType: 'service_unavailable', severity: 'high', estimatedDuration: 20 }
-  }
+
         dataImpact: {
           dataAtRisk: false,
           dataTypes: ['feature_toggles'],
           severity: 'low',
           backupStatus: 'available',
           recoveryComplexity: 'simple'
-  }
+
         complianceImplications: [
           {
             regulation: 'SOX',
@@ -96,7 +96,7 @@ export class Epic17SpecificPlaybooks {
             reportingRequired: false,
             timelineRequirement: 24,
             stakeholders: ['compliance_team']
-          }
+
         ],
         dependencies: [
           {
@@ -105,9 +105,9 @@ export class Epic17SpecificPlaybooks {
             impactIfUnavailable: 'high',
             failoverAvailable: false,
             estimatedRecoveryTime: 5
-          }
+
         ]
-  }
+
       triggerConditions: {
         healthCheckFailures: [
           {
@@ -118,7 +118,7 @@ export class Epic17SpecificPlaybooks {
             consecutiveFailures: 3,
             timeWindow: 5,
             severity: 'high'
-          }
+
         ],
         alertTriggers: [
           {
@@ -130,7 +130,7 @@ export class Epic17SpecificPlaybooks {
             conditions: [
               { field: 'error_rate', operator: 'greater_than', value: 5, required: true }
             ]
-          }
+
         ],
         metricThresholds: [
           {
@@ -140,7 +140,7 @@ export class Epic17SpecificPlaybooks {
             threshold: 5000,
             duration: 5,
             aggregation: 'average'
-          }
+
         ],
         manualTriggers: [
           {
@@ -150,7 +150,7 @@ export class Epic17SpecificPlaybooks {
             urgencyLevel: 'emergency',
             confirmationRequired: true,
             reasonRequired: true
-          }
+
         ],
         cascadingFailures: [
           {
@@ -161,10 +161,10 @@ export class Epic17SpecificPlaybooks {
             ],
             timeWindow: 30,
             minAffectedSystems: 2
-          }
+
         ],
         timeBasedTriggers: []
-  }
+
       automatedSteps: [
         {
           stepId: 'validate-system-status',
@@ -180,10 +180,10 @@ export class Epic17SpecificPlaybooks {
             parameters: {
               diagnosticTypes: ['health_check', 'error_logs', 'performance_metrics'],
               timeWindow: 300 // 5 minutes
-  }
+
             credentials: [],
             permissions: []
-  }
+
           conditions: [],
           timeout: 60,
           retryPolicy: {
@@ -193,7 +193,7 @@ export class Epic17SpecificPlaybooks {
             retryConditions: [
               { errorType: 'timeout', shouldRetry: true }
             ]
-  }
+
           dependsOn: [],
           prerequisites: [],
           validation: {
@@ -205,7 +205,7 @@ export class Epic17SpecificPlaybooks {
               { condition: 'timeout', severity: 'medium', action: 'continue', description: 'Diagnostic timeout' }
             ],
             timeoutBehavior: 'continue'
-  }
+
           instructions: 'System will automatically collect diagnostic information',
           expectedOutcome: 'Complete system health assessment available',
           troubleshooting: [
@@ -220,12 +220,12 @@ export class Epic17SpecificPlaybooks {
                   estimatedTime: 5,
                   requirements: ['Monitoring API access'],
                   risks: ['Incomplete diagnostic data']
-                }
+
               ],
               escalationPath: 'Escalate to monitoring team'
-            }
+
           ]
-  }
+
         {
           stepId: 'emergency-kill-switch',
           name: 'Activate Emergency Kill Switch',
@@ -244,22 +244,22 @@ export class Epic17SpecificPlaybooks {
               rollbackConfig: {
                 enabled: true,
                 conditions: ['manual_approval', 'health_check_passed']
-              }
-  }
+
+
             credentials: [
               { type: 'service_account', scope: 'feature_management', required: true, fallbackOptions: [] }
             ],
             permissions: [
               { permission: 'emergency_actions', system: 'feature_management', required: true, justification: 'System stability protection' }
             ]
-  }
+
           conditions: [
             {
               type: 'guard',
               expression: 'severity >= "high" AND error_rate > 10',
               description: 'Only activate kill switch for severe issues',
               required: true
-            }
+
           ],
           timeout: 120,
           retryPolicy: {
@@ -269,7 +269,7 @@ export class Epic17SpecificPlaybooks {
             retryConditions: [
               { errorType: 'network_error', shouldRetry: true }
             ]
-  }
+
           dependsOn: ['validate-system-status'],
           prerequisites: [
             {
@@ -277,7 +277,7 @@ export class Epic17SpecificPlaybooks {
               description: 'Emergency action permissions validated',
               validationMethod: 'auth_check',
               required: true
-            }
+
           ],
           validation: {
             validationType: 'automated',
@@ -288,17 +288,17 @@ export class Epic17SpecificPlaybooks {
               { condition: 'activation_failed', severity: 'critical', action: 'escalate', description: 'Failed to activate emergency kill switch' }
             ],
             timeoutBehavior: 'escalate'
-  }
+
           rollbackAction: {
             actionType: 'toggle_feature_flag',
             targetSystem: 'feature_management',
             parameters: {
               action: 'restore_previous_state',
               confirmationRequired: true
-  }
+
             credentials: [],
             permissions: []
-  }
+
           instructions: 'Emergency kill switch will disable all feature toggles temporarily',
           expectedOutcome: 'All feature toggles disabled, system stabilized',
           troubleshooting: [
@@ -313,12 +313,12 @@ export class Epic17SpecificPlaybooks {
                   estimatedTime: 15,
                   requirements: ['Admin dashboard access'],
                   risks: ['Slower response time']
-                }
+
               ],
               escalationPath: 'Escalate to feature management team'
-            }
+
           ]
-  }
+
         {
           stepId: 'notify-stakeholders',
           name: 'Notify Stakeholders',
@@ -337,10 +337,10 @@ export class Epic17SpecificPlaybooks {
               message: 'Feature toggle emergency response activated - kill switch engaged',
               includeDetails: true,
               acknowledgeRequired: true
-  }
+
             credentials: [],
             permissions: []
-  }
+
           conditions: [],
           timeout: 60,
           retryPolicy: {
@@ -350,7 +350,7 @@ export class Epic17SpecificPlaybooks {
             retryConditions: [
               { errorType: 'notification_failed', shouldRetry: true }
             ]
-  }
+
           dependsOn: [],
           prerequisites: [],
           validation: {
@@ -360,11 +360,11 @@ export class Epic17SpecificPlaybooks {
             ],
             failureCriteria: [],
             timeoutBehavior: 'continue'
-  }
+
           instructions: 'Automated stakeholder notification',
           expectedOutcome: 'All relevant stakeholders notified of incident',
           troubleshooting: []
-        }
+
       ],
 
       manualSteps: [
@@ -382,10 +382,10 @@ export class Epic17SpecificPlaybooks {
             parameters: {
               investigation_areas: ['configuration_changes', 'deployment_history', 'system_logs'],
               timeWindow: 3600
-  }
+
             credentials: [],
             permissions: []
-  }
+
           conditions: [],
           timeout: 1800, // 30 minutes
           retryPolicy: { maxRetries: 0, retryDelay: 0, backoffStrategy: 'fixed', retryConditions: [] },
@@ -398,11 +398,11 @@ export class Epic17SpecificPlaybooks {
             ],
             failureCriteria: [],
             timeoutBehavior: 'escalate'
-  }
+
           instructions: 'Manually investigate logs, configuration changes, and recent deployments to identify root cause',
           expectedOutcome: 'Root cause identified and documented',
           troubleshooting: []
-        }
+
       ],
 
       escalationMatrix: [
@@ -420,7 +420,7 @@ export class Epic17SpecificPlaybooks {
               parameters: { specialistType: 'feature_management_expert', urgency: 'high' },
               delay: 0,
               reversible: false
-            }
+
           ],
           schedule: {
             level: 1,
@@ -428,10 +428,10 @@ export class Epic17SpecificPlaybooks {
             recipients: ['feature_team_lead'],
             channels: ['slack', 'phone'],
             requiredAcknowledgment: true
-  }
+
           approvals: [],
           notifications: []
-        }
+
       ],
 
       recoveryProcedures: [
@@ -455,7 +455,7 @@ export class Epic17SpecificPlaybooks {
                 parameters: { healthCheck: true },
                 credentials: [],
                 permissions: []
-  }
+
               validation: {
                 validationType: 'automated',
                 successCriteria: [
@@ -463,15 +463,15 @@ export class Epic17SpecificPlaybooks {
                 ],
                 failureCriteria: [],
                 timeoutBehavior: 'fail'
-  }
+
               estimatedTime: 5
-            }
+
           ],
           estimatedTime: 30,
           successRate: 0.95,
           dependencies: [],
           fallbackProcedures: []
-        }
+
       ],
 
       rollbackProcedures: [
@@ -494,10 +494,10 @@ export class Epic17SpecificPlaybooks {
                 parameters: { backupType: 'configuration', maxAge: 3600 },
                 credentials: [],
                 permissions: []
-  }
+
               pointOfNoReturn: false,
               estimatedTime: 10
-            }
+
           ],
           safetyChecks: [
             {
@@ -508,12 +508,12 @@ export class Epic17SpecificPlaybooks {
               automated: true,
               passRequired: true,
               failureAction: 'stop'
-            }
+
           ],
           estimatedTime: 15,
           dataLossRisk: 'none',
           automaticExecution: false
-        }
+
       ],
 
       integrations: [
@@ -526,35 +526,35 @@ export class Epic17SpecificPlaybooks {
             type: 'service_account',
             credentials: { source: 'environment', key: 'FEATURE_MGMT_TOKEN', fallbackKeys: [] },
             refreshPolicy: { enabled: true, refreshInterval: 24, expiryBuffer: 60, retryAttempts: 3 }
-  }
+
           configuration: {
             timeout: 30,
             retryPolicy: { maxRetries: 3, retryDelay: 10, backoffStrategy: 'exponential', retryConditions: [] },
             rateLimiting: { enabled: true, requestsPerSecond: 10, burstSize: 20, backoffStrategy: 'exponential' },
             circuitBreaker: { enabled: true, failureThreshold: 5, timeoutThreshold: 30, recoveryTime: 60 }
-  }
+
           healthCheck: {
             enabled: true,
             interval: 30,
             endpoint: '/health',
             expectedResponse: { status: 'healthy' },
             timeout: 10
-  }
+
           fallbackOptions: [
             {
               type: 'manual_process',
               description: 'Manual feature toggle management via admin panel',
               configuration: { adminPanelUrl: 'https://admin.feature-management.internal' },
               automaticActivation: false
-            }
+
           ]
-        }
+
       ],
 
       configuration: this.getDefaultPlaybookConfiguration(),
       metadata: this.getDefaultPlaybookMetadata('epic17-feature-toggle-emergency')
     };
-  }
+
 
   // =============================================================================
   // 2. Admin System Outage Response Playbook
@@ -579,20 +579,20 @@ export class Epic17SpecificPlaybooks {
           reputationRisk: 'high',
           complianceRisk: 'high',
           description: 'Admin system outage prevents administrative operations and monitoring'
-  }
+
         userImpact: {
           adminUsers: { affected: true, count: 200, impactType: 'service_unavailable', severity: 'critical', estimatedDuration: 45 },
           regularUsers: { affected: false, count: 0, impactType: 'service_unavailable', severity: 'low', estimatedDuration: 0 },
           externalUsers: { affected: false, count: 0, impactType: 'service_unavailable', severity: 'low', estimatedDuration: 0 },
           systemUsers: { affected: true, count: 20, impactType: 'service_unavailable', severity: 'high', estimatedDuration: 30 }
-  }
+
         dataImpact: {
           dataAtRisk: false,
           dataTypes: ['admin_configurations', 'audit_logs'],
           severity: 'medium',
           backupStatus: 'available',
           recoveryComplexity: 'moderate'
-  }
+
         complianceImplications: [
           {
             regulation: 'SOX',
@@ -601,7 +601,7 @@ export class Epic17SpecificPlaybooks {
             reportingRequired: true,
             timelineRequirement: 4,
             stakeholders: ['compliance_team', 'audit_team']
-          }
+
         ],
         dependencies: [
           {
@@ -610,9 +610,9 @@ export class Epic17SpecificPlaybooks {
             impactIfUnavailable: 'critical',
             failoverAvailable: true,
             estimatedRecoveryTime: 20
-          }
+
         ]
-  }
+
       triggerConditions: {
         healthCheckFailures: [
           {
@@ -623,7 +623,7 @@ export class Epic17SpecificPlaybooks {
             consecutiveFailures: 2,
             timeWindow: 3,
             severity: 'critical'
-          }
+
         ],
         alertTriggers: [
           {
@@ -635,7 +635,7 @@ export class Epic17SpecificPlaybooks {
             conditions: [
               { field: 'response_status', operator: 'equals', value: 503, required: true }
             ]
-          }
+
         ],
         metricThresholds: [
           {
@@ -645,12 +645,12 @@ export class Epic17SpecificPlaybooks {
             threshold: 50,
             duration: 5,
             aggregation: 'average'
-          }
+
         ],
         manualTriggers: [],
         cascadingFailures: [],
         timeBasedTriggers: []
-  }
+
       automatedSteps: [
         {
           stepId: 'activate-backup-admin',
@@ -668,10 +668,10 @@ export class Epic17SpecificPlaybooks {
               targetService: 'backup_admin_dashboard',
               trafficPercentage: 100,
               healthCheckEnabled: true
-  }
+
             credentials: [],
             permissions: []
-  }
+
           conditions: [],
           timeout: 300,
           retryPolicy: { maxRetries: 2, retryDelay: 30, backoffStrategy: 'linear', retryConditions: [] },
@@ -684,11 +684,11 @@ export class Epic17SpecificPlaybooks {
             ],
             failureCriteria: [],
             timeoutBehavior: 'escalate'
-  }
+
           instructions: 'Automatically failover to backup admin infrastructure',
           expectedOutcome: 'Backup admin system activated and receiving traffic',
           troubleshooting: []
-        }
+
       ],
 
       manualSteps: [],
@@ -699,7 +699,7 @@ export class Epic17SpecificPlaybooks {
       configuration: this.getDefaultPlaybookConfiguration(),
       metadata: this.getDefaultPlaybookMetadata('epic17-admin-system-outage')
     };
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -714,7 +714,7 @@ export class Epic17SpecificPlaybooks {
         parallelExecution: true,
         automaticRetry: true,
         rollbackOnFailure: true
-  }
+
       notification: {
         enabled: true,
         channels: [
@@ -734,9 +734,9 @@ export class Epic17SpecificPlaybooks {
               { name: 'playbookName', type: 'string', required: true },
               { name: 'system', type: 'string', required: true }
             ]
-          }
+
         ]
-  }
+
       logging: {
         enabled: true,
         level: 'info',
@@ -748,7 +748,7 @@ export class Epic17SpecificPlaybooks {
           highSeverityRetention: 365,
           auditRetention: 2555, // 7 years
           compressionEnabled: true
-  }
+
         sensitiveDataHandling: {
           maskingEnabled: true,
           fieldMasks: [
@@ -756,8 +756,8 @@ export class Epic17SpecificPlaybooks {
           ],
           encryptionRequired: true,
           accessRestrictions: []
-        }
-  }
+
+
       security: {
         authenticationRequired: true,
         authorizationRequired: true,
@@ -770,9 +770,9 @@ export class Epic17SpecificPlaybooks {
               { action: 'execute', granted: true, restrictions: ['approval_required'] }
             ],
             conditions: []
-          }
+
         ]
-  }
+
       performance: {
         enableMetrics: true,
         metricCollection: {
@@ -780,21 +780,21 @@ export class Epic17SpecificPlaybooks {
           interval: 30,
           metrics: ['execution_time', 'success_rate', 'error_rate'],
           aggregation: { windowSize: 300, functions: ['avg', 'max', 'count'], retentionPeriod: 24 }
-  }
+
         optimizations: {
           caching: { enabled: true, ttl: 300, maxSize: 100, strategy: 'lru' },
           parallelization: { enabled: true, maxWorkers: 5, queueSize: 100, loadBalancing: 'round_robin' },
           resourcePooling: { enabled: true, poolSize: 10, connectionTimeout: 30, idleTimeout: 300 }
-  }
+
         resourceLimits: {
           maxMemoryUsage: 512,
           maxCpuUsage: 80,
           maxExecutionTime: 120,
           maxConcurrentOperations: 10
-        }
-      }
+
+
     };
-  }
+
 
   private static getDefaultPlaybookMetadata(____playbookId: string): PlaybookMetadata {
     return {
@@ -809,7 +809,7 @@ export class Epic17SpecificPlaybooks {
         testResults: [],
         testCoverage: 85,
         simulationResults: []
-  }
+
       usage: {
         totalExecutions: 0,
         successfulExecutions: 0,
@@ -821,8 +821,8 @@ export class Epic17SpecificPlaybooks {
           dailyDistribution: new Array(7).fill(0),
           monthlyDistribution: new Array(12).fill(0),
           seasonalTrends: []
-        }
-  }
+
+
       performance: {
         averageResolutionTime: 25,
         successRate: 92,
@@ -833,11 +833,11 @@ export class Epic17SpecificPlaybooks {
           manualEffortReduction: 4,
           mttrImprovement: 40,
           businessImpactReduction: 60
-  }
+
         trends: []
-      }
+
     };
-  }
+
 
   // Placeholder methods for other playbooks (would implement similar detailed structures)
   private static getContentSecurityIncidentPlaybook(): Epic17IncidentPlaybook {
@@ -858,17 +858,17 @@ export class Epic17SpecificPlaybooks {
           reputationRisk: 'critical',
           complianceRisk: 'high',
           description: 'Malicious content poses security risk to users and platform'
-  }
+
         userImpact: {
           adminUsers: { affected: true, count: 20, impactType: 'security_concern', severity: 'medium', estimatedDuration: 60 },
           regularUsers: { affected: true, count: 25000, impactType: 'security_concern', severity: 'high', estimatedDuration: 30 },
           externalUsers: { affected: false, count: 0, impactType: 'service_unavailable', severity: 'low', estimatedDuration: 0 },
           systemUsers: { affected: false, count: 0, impactType: 'service_unavailable', severity: 'low', estimatedDuration: 0 }
-  }
+
         dataImpact: { dataAtRisk: true, dataTypes: ['content_data'], severity: 'high', backupStatus: 'available', recoveryComplexity: 'moderate' },
         complianceImplications: [],
         dependencies: []
-  }
+
       triggerConditions: {
         healthCheckFailures: [],
         alertTriggers: [],
@@ -876,7 +876,7 @@ export class Epic17SpecificPlaybooks {
         manualTriggers: [],
         cascadingFailures: [],
         timeBasedTriggers: []
-  }
+
       automatedSteps: [],
       manualSteps: [],
       escalationMatrix: [],
@@ -886,26 +886,25 @@ export class Epic17SpecificPlaybooks {
       configuration: this.getDefaultPlaybookConfiguration(),
       metadata: this.getDefaultPlaybookMetadata('epic17-content-security-incident')
     };
-  }
+
 
   // Additional placeholder playbook methods...
   private static getUserManagementBreachPlaybook(): Epic17IncidentPlaybook {
     return { ...this.getContentSecurityIncidentPlaybook(), id: 'epic17-user-management-breach', category: 'user_management_breach' };
-  }
+
 
   private static getMarketplaceFraudPlaybook(): Epic17IncidentPlaybook {
     return { ...this.getContentSecurityIncidentPlaybook(), id: 'epic17-marketplace-fraud', category: 'marketplace_fraud' };
-  }
+
 
   private static getSystemPerformancePlaybook(): Epic17IncidentPlaybook {
     return { ...this.getContentSecurityIncidentPlaybook(), id: 'epic17-system-performance', category: 'system_performance' };
-  }
+
 
   private static getBackupRecoveryPlaybook(): Epic17IncidentPlaybook {
     return { ...this.getContentSecurityIncidentPlaybook(), id: 'epic17-backup-recovery', category: 'backup_recovery' };
-  }
+
 
   private static getIntegrationFailurePlaybook(): Epic17IncidentPlaybook {
     return { ...this.getContentSecurityIncidentPlaybook(), id: 'epic17-integration-failure', category: 'integration_failure' };
-  }
-}
+

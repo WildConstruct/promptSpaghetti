@@ -4,16 +4,15 @@ import { EventEmitter } from 'events';
  */
 
 }
-export interface AnalyticsResponse<T = unknown> {
-    success: boolean;
+}
+export interface AnalyticsResponse<T = unknown> { success: boolean;
     data?: T;
     error?: string;
     details?: string;
     meta?: {
         period?: {
             startTime: number;
-            endTime: number;
-        };
+            endTime: number };
         generatedAt?: number;
         totalDataPoints?: number;
         [key: string]: any;
@@ -23,6 +22,7 @@ export interface AnalyticsResponse<T = unknown> {
  * Analytics query parameters
  */
 
+}
 }
 export interface AnalyticsQuery {
     startTime?: number;
@@ -38,6 +38,8 @@ export interface AnalyticsQuery {
  */
 
 }
+}
+}
 export interface TimeRange {
     startTime: number;
     endTime: number;
@@ -48,6 +50,8 @@ export interface TimeRange {
  * Budget configuration
  */
 
+}
+}
 }
 export interface BudgetConfig {
     name: string;
@@ -65,6 +69,8 @@ export interface BudgetConfig {
  */
 
 }
+}
+}
 export interface ReportConfig {
     startTime: number;
     endTime: number;
@@ -79,8 +85,9 @@ export interface ReportConfig {
  */
 
 }
-export interface AnalyticsClientConfig {
-    baseUrl: string;
+}
+}
+export interface AnalyticsClientConfig { baseUrl: string;
     apiKey?: string;
     timeout?: number;
     retryCount?: number;
@@ -105,8 +112,8 @@ export declare class AnalyticsClient extends EventEmitter {
      * Get time series data
      */
     getTimeSeries();
-      metric: 'executions' | 'tokens' | 'cost' | 'errors',
-      timeRange: TimeRange,
+      metric: 'executions' | 'tokens' | 'cost' | 'errors';
+      timeRange: TimeRange }
     ): Promise<AnalyticsResponse>;
     /**
      * Get heat map data
@@ -194,4 +201,5 @@ export declare class AnalyticsClient extends EventEmitter {
  */
 export declare const defaultAnalyticsClient: AnalyticsClient;
 //# sourceMappingURL=AnalyticsClient.d.ts.map
+}
 }

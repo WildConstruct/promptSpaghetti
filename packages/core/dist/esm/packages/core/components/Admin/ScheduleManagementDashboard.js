@@ -18,7 +18,12 @@ import { Select } from '../ui/Select';
 import { Calendar, Clock, PlayCircle, PauseCircle, StopCircle, Edit, FileText, Plus, Search, Download, RefreshCw, CheckCircle, XCircle, BarChart3, Bell, Activity, Zap, Target, Trash2 } from 'lucide-react';
  > ;
 // Upcoming schedules
-upcomingSchedules: Array;
+upcomingSchedules: Array < {
+    id: string,
+    name: string,
+    type: string,
+    nextExecution: Date
+} > ;
 const STATUS_CONFIG = {};
 pending: {
     color: 'text-yellow-600 bg-yellow-100', icon;
@@ -106,7 +111,7 @@ export const ScheduleManagementDashboard = ({
         averageExecutionTime: 1.8,
         featureToggleSchedules: 28,
         contentSchedules: 17,
-        recentExecutions: [,
+        recentExecutions: [
             {
                 id: 'exec-1',
                 name: 'Feature Rollout - 50%',
@@ -130,8 +135,9 @@ export const ScheduleManagementDashboard = ({
                 status: 'failed',
                 executedAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
                 duration: 0.3
-            }],
-        upcomingSchedules: [,
+            }
+        ],
+        upcomingSchedules: [
             {
                 id: 'upcoming-1',
                 name: 'Blog Post Publication',
@@ -143,7 +149,8 @@ export const ScheduleManagementDashboard = ({
                 name: 'Weekly Maintenance',
                 type: 'Feature Toggle',
                 nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
-            }]
+            }
+        ]
     };
     useEffect(() => {
         // Simulate loading schedules and analytics

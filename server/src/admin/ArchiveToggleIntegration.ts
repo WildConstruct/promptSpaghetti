@@ -20,7 +20,7 @@ import ArchiveManagementService, {
   DataClassification,
   SourceType,
   BusinessCriticality
-} from './ArchiveManagementService';
+ from './ArchiveManagementService';
 import { ArchiveToggleService } from './ArchiveToggleService';
 import { AuditService } from '../auth/services/AuditService';
 import {
@@ -28,13 +28,14 @@ import {
   ArchiveToggleEvaluationResult,
   ArchiveToggleMode,
   ComplianceStatus
-} from './ArchiveToggleTypes';
+ from './ArchiveToggleTypes';
 
 /**
  * Extended archive options with toggle-aware features
  */
-}
-}
+
+
+
 export interface ToggleAwareArchiveOptions {
   // Standard archive options
   description?: string;
@@ -56,15 +57,17 @@ export interface ToggleAwareArchiveOptions {
   isScheduledOperation?: boolean;
   userConsentToken?: string;
   adminOverrideReason?: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Archive operation result with toggle evaluation details
  */
-}
-}
+
+
+
 export interface ToggleAwareArchiveResult {
   archive?: ArchiveRecord;
   toggleEvaluation: ArchiveToggleEvaluationResult;
@@ -73,9 +76,10 @@ export interface ToggleAwareArchiveResult {
   requiresUserAction: boolean;
   complianceStatus: ComplianceStatus;
   auditTrailId?: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Archive Toggle Integration Service
@@ -98,7 +102,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
     
     this.setupArchiveServiceInterception();
     this.setupEventForwarding();
-  }
+
   
   /**
    * Create archive with toggle evaluation
@@ -128,7 +132,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
           requiresUserAction: false,
           complianceStatus: ComplianceStatus.PENDING_REVIEW
         };
-      }
+
       
       // Build evaluation context
       const evaluationContext: ArchiveToggleEvaluationContext = {
@@ -161,7 +165,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
             category,
             evaluation,
             reason: evaluation.reason
-  }
+
           severity: 'warning'
         });
         
@@ -172,7 +176,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
           requiresUserAction: evaluation.requiresUserConsent || evaluation.requiresAdminApproval,
           complianceStatus: ComplianceStatus.NON_COMPLIANT
         };
-      }
+
       
       // Check additional requirements
       const requirementsCheck = await this.checkAdditionalRequirements(evaluation, options, createdBy);
@@ -184,7 +188,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
           requiresUserAction: true,
           complianceStatus: ComplianceStatus.REQUIRES_CONSENT
         };
-      }
+
       
       // Proceed with archive creation
       const enhancedOptions = this.enhanceArchiveOptions(options, evaluation);
@@ -205,7 +209,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
           evaluation,
           toggleMode: evaluation.mode,
           complianceRequirements: evaluation.appliedComplianceRules
-  }
+
         severity: 'info'
       });
       
@@ -224,8 +228,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
         requiresUserAction: false,
         complianceStatus: ComplianceStatus.COMPLIANT
       };
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'toggle_aware_archive_creation_failed',
         userId: createdBy,
@@ -236,13 +239,13 @@ export class ArchiveToggleIntegration extends EventEmitter {
           sourceIdentifier,
           archiveType,
           category
-  }
+
         severity: 'error'
       });
       
       throw error;
-    }
-  }
+
+
   
   /**
    * Bulk archive operations with toggle evaluation
@@ -255,7 +258,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
       archiveType: ArchiveType;
       category: ArchiveCategory;
       options?: ToggleAwareArchiveOptions;
-    }>,
+>,
     createdBy: string
   ): Promise<{
     successful: ToggleAwareArchiveResult[];
@@ -267,7 +270,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
       blocked: number;
       failed: number;
     };
-  }> {
+> {
 
     const results = {
       successful: [] as ToggleAwareArchiveResult[],
@@ -290,11 +293,10 @@ export class ArchiveToggleIntegration extends EventEmitter {
         
         if (result.success) {
           results.successful.push(result);
-        } else {
+ else {
           results.blocked.push(result);
-        }
-        
-      } catch (error) {
+
+ catch (error) {
         results.failed.push({
           toggleEvaluation: this.createErrorEvaluation(error, createdBy),
           success: false,
@@ -302,8 +304,8 @@ export class ArchiveToggleIntegration extends EventEmitter {
           requiresUserAction: false,
           complianceStatus: ComplianceStatus.UNKNOWN
         });
-      }
-    }
+
+
     
     const summary = {
       total: requests.length,
@@ -320,12 +322,12 @@ export class ArchiveToggleIntegration extends EventEmitter {
       details: {
         summary,
         requestCount: requests.length
-  }
+
       severity: results.failed.length > 0 ? 'warning' : 'info'
     });
     
     return { ...results, summary };
-  }
+
   
   /**
    * Check if user has permission to perform archive operation
@@ -340,7 +342,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
       isEmergency?: boolean;
       isScheduled?: boolean;
       complianceRequirements?: string[];
-    } = {}
+ = {}
   ): Promise<{
     allowed: boolean;
     evaluation: ArchiveToggleEvaluationResult;
@@ -349,7 +351,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
       needsAdminApproval: boolean;
       needsComplianceCheck: boolean;
     };
-  }> {
+> {
 
     const context: ArchiveToggleEvaluationContext = {
       userId,
@@ -373,9 +375,9 @@ export class ArchiveToggleIntegration extends EventEmitter {
         needsConsent: evaluation.requiresUserConsent,
         needsAdminApproval: evaluation.requiresAdminApproval,
         needsComplianceCheck: evaluation.complianceChecksRequired
-      }
+
     };
-  }
+
   
   /**
    * Get archive toggle status for UI display
@@ -400,14 +402,14 @@ export class ArchiveToggleIntegration extends EventEmitter {
         failed: number;
         successRate: number;
       };
-    }>;
+>;
     summary: {
       totalToggles: number;
       enabledToggles: number;
       overriddenToggles: number;
       complianceIssues: number;
     };
-  }> {
+> {
     const configs = this.toggleService.listToggleConfigs(filters);
     
     const toggles = configs.map(config => {
@@ -429,7 +431,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
           successRate: state?.archiveOperationsCount 
             ? ((state.archiveOperationsCount - state.failedArchiveOperations) / state.archiveOperationsCount * 100)
             : 100
-        }
+
       };
     });
     
@@ -444,7 +446,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
     };
     
     return { toggles, summary };
-  }
+
   
   /**
    * Generate compliance report for archive toggles
@@ -455,7 +457,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
     includeUserData?: boolean;
     includeSystemData?: boolean;
     format?: 'summary' | 'detailed';
-  } = {}): Promise<{
+ = {}): Promise<{
     reportId: string;
     generatedAt: Date;
     period: { start?: Date; end?: Date };
@@ -473,9 +475,9 @@ export class ArchiveToggleIntegration extends EventEmitter {
       operationsCount: number;
       violationsCount: number;
       lastViolation?: Date;
-    }>;
+>;
     recommendations: string[];
-  }> {
+> {
     const reportId = `compliance_report_${Date.now()}`;
     const generatedAt = new Date();
     
@@ -517,7 +519,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
       period: {
         start: options.startDate,
         end: options.endDate
-  }
+
       summary,
       toggleCompliance,
       recommendations
@@ -532,12 +534,12 @@ export class ArchiveToggleIntegration extends EventEmitter {
       details: {
         reportOptions: options,
         summary
-  }
+
       severity: 'info'
     });
     
     return report;
-  }
+
   
   // Private helper methods
   
@@ -565,15 +567,14 @@ export class ArchiveToggleIntegration extends EventEmitter {
           details: {
             archiveId: archive.id,
             context
-  }
+
           severity: 'info'
         });
-        
-      } catch (error) {
+ catch (error) {
         console.error('Failed to update toggle statistics:', error);
-      }
+
     });
-  }
+
   
   private setupEventForwarding(): void {
     // Forward relevant events from toggle service
@@ -588,14 +589,14 @@ export class ArchiveToggleIntegration extends EventEmitter {
     this.toggleService.on('emergency_override_applied', (state, config) => {
       this.emit('archive_emergency_override', { state, config });
     });
-  }
+
   
   private determineTriggerType(options: ToggleAwareArchiveOptions): 'user' | 'system' | 'policy' | 'emergency' {
     if (options.isEmergencyOperation) return 'emergency';
     if (options.isScheduledOperation) return 'policy';
     if (options.adminOverrideReason) return 'user';
     return 'system';
-  }
+
   
   private async checkAdditionalRequirements(
     evaluation: ArchiveToggleEvaluationResult,
@@ -609,7 +610,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
         satisfied: false,
         reason: 'User consent required but not provided'
       };
-    }
+
     
     // Check admin approval requirement
     if (evaluation.requiresAdminApproval && !options.adminOverrideReason) {
@@ -617,7 +618,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
         satisfied: false,
         reason: 'Admin approval required but not provided'
       };
-    }
+
     
     // Check compliance requirements
     if (evaluation.complianceChecksRequired && !options.complianceRequirements?.length) {
@@ -625,10 +626,10 @@ export class ArchiveToggleIntegration extends EventEmitter {
         satisfied: false,
         reason: 'Compliance requirements not specified'
       };
-    }
+
     
     return { satisfied: true, reason: 'All requirements satisfied' };
-  }
+
   
   private enhanceArchiveOptions(
     options: ToggleAwareArchiveOptions,
@@ -645,9 +646,9 @@ export class ArchiveToggleIntegration extends EventEmitter {
           appliedRules: evaluation.appliedComplianceRules,
           mode: evaluation.mode,
           evaluatedAt: evaluation.evaluatedAt
-        }
+
       };
-    }
+
     
     // Add toggle-specific tags
     const toggleTags = [
@@ -657,16 +658,16 @@ export class ArchiveToggleIntegration extends EventEmitter {
     
     if (evaluation.requiresUserConsent) {
       toggleTags.push('consent_required');
-    }
+
     
     if (evaluation.complianceChecksRequired) {
       toggleTags.push('compliance_verified');
-    }
+
     
     enhancedOptions.tags = [...(enhancedOptions.tags || []), ...toggleTags];
     
     return enhancedOptions;
-  }
+
   
   private createBypassEvaluation(userId: string): ArchiveToggleEvaluationResult {
     return {
@@ -685,7 +686,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
       relatedRetentionPolicies: [],
       appliedComplianceRules: []
     };
-  }
+
   
   private createErrorEvaluation(error: unknown, userId: string): ArchiveToggleEvaluationResult {
     return {
@@ -704,7 +705,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
       relatedRetentionPolicies: [],
       appliedComplianceRules: []
     };
-  }
+
   
   private generateComplianceRecommendations(
     toggleCompliance: any[],
@@ -714,11 +715,11 @@ export class ArchiveToggleIntegration extends EventEmitter {
     
     if (summary.complianceViolations > 0) {
       recommendations.push('Review and address compliance violations in archive toggle configurations');
-    }
+
     
     if (summary.emergencyOverrides > 0) {
       recommendations.push('Review emergency overrides and ensure they are properly documented');
-    }
+
     
     const lowSuccessRateToggles = toggleCompliance.filter(t => {
       const successRate = t.operationsCount > 0 
@@ -729,7 +730,7 @@ export class ArchiveToggleIntegration extends EventEmitter {
     
     if (lowSuccessRateToggles.length > 0) {
       recommendations.push('Review toggles with low success rates and optimize their configurations');
-    }
+
     
     const nonCompliantToggles = toggleCompliance.filter(t => 
       t.complianceStatus === ComplianceStatus.NON_COMPLIANT
@@ -737,14 +738,14 @@ export class ArchiveToggleIntegration extends EventEmitter {
     
     if (nonCompliantToggles.length > 0) {
       recommendations.push('Update non-compliant toggles to meet regulatory requirements');
-    }
+
     
     if (recommendations.length === 0) {
       recommendations.push('Archive toggle compliance is in good standing');
-    }
+
     
     return recommendations;
-  }
-}
+
+
 
 export default ArchiveToggleIntegration;

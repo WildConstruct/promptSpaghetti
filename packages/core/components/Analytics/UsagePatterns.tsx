@@ -11,7 +11,8 @@ import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Ba
 /**
  * Heat map component props
  */
-}
+
+
 interface HeatMapProps {
   data: Array<{ x: number; y: number; intensity: number }>;
   width?: number;
@@ -19,8 +20,7 @@ interface HeatMapProps {
 /**
  * Canvas heat map component
  */
-const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400 }) => {
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400 }) => { const canvasRef = React.useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !data.length) return;
@@ -37,7 +37,7 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
       const alpha = Math.max(0.1, normalized);
       // Create radial gradient for each point
       const gradient = ctx.createRadialGradient(;);
-        point.x, point.y, 0,
+        point.x, point.y, 0 }
         point.x, point.y, 20
       );
       gradient.addColorStop(0, `rgba(59, 130, 246, ${alpha})`);}
@@ -109,17 +109,17 @@ const UserJourneyFlow: React.FC<{ journeyData: unknown }> = ({ journeyData }) =>
  * Usage patterns props
  */
 
-}
-export interface UsagePatternsProps {
-  analyticsClient: AnalyticsClient;
-}
+
+export interface UsagePatternsProps { analyticsClient: AnalyticsClient }
+},
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
 /**
  * Usage patterns state
  */
-}
+
+
 interface UsagePatternsState {
   loading: boolean;
   error: string | null;
@@ -132,23 +132,22 @@ interface UsagePatternsState {
   /**
   * Usage patterns component
   */
-}
-}
-export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
-  analyticsClient,
-  timeRange,
-  userId,
+
+
+export const UsagePatterns: React.FC<UsagePatternsProps> = ({ )
+  analyticsClient
+  timeRange
+  userId }
   organizationId
-}) => {
-  const [state, setState] = useState<UsagePatternsState>({)
-  loading: true,
-  error: null,
-  heatMapData: [],
-  hourlyPattern: null,
-  dailyPattern: null,
-  weeklyPattern: null,
-  journeyFlows: [],
-  selectedPattern: 'hourly',
+}) => { const [state, setState] = useState<UsagePatternsState>({)
+  loading: true
+  error: null
+  heatMapData: []
+  hourlyPattern: null
+  dailyPattern: null
+  weeklyPattern: null
+  journeyFlows: []
+  selectedPattern: 'hourly' }
 });
   /**
    * Load usage patterns data
@@ -157,39 +156,38 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
       const [heatMapResponse, hourlyResponse, dailyResponse, weeklyResponse] = await Promise.all([)
-        analyticsClient.getHeatMap(timeRange),
-        analyticsClient.getUsagePatterns('hourly'),
-        analyticsClient.getUsagePatterns('daily'),
+        analyticsClient.getHeatMap(timeRange)
+        analyticsClient.getUsagePatterns('hourly')
+        analyticsClient.getUsagePatterns('daily')
         analyticsClient.getUsagePatterns('weekly')
       ]);
       if (!heatMapResponse.success) {
         throw new Error('Failed to load heat map data');
       // Generate mock journey flows data
-      const mockJourneyFlows = [;
-        { sourceStep: 'Landing', targetStep: 'Node Creation', userCount: 150, percentage: 25.5, averageTime: 30000, successRate: 0.85 },
-        { sourceStep: 'Node Creation', targetStep: 'Connection', userCount: 120, percentage: 20.4, averageTime: 45000, successRate: 0.92 },
-        { sourceStep: 'Connection', targetStep: 'Execution', userCount: 110, percentage: 18.7, averageTime: 60000, successRate: 0.88 },
-        { sourceStep: 'Execution', targetStep: 'Results', userCount: 95, percentage: 16.2, averageTime: 15000, successRate: 0.95 },
-        { sourceStep: 'Results', targetStep: 'Export', userCount: 40, percentage: 6.8, averageTime: 20000, successRate: 0.98 },
-        { sourceStep: 'Node Creation', targetStep: 'Template', userCount: 35, percentage: 5.9, averageTime: 25000, successRate: 0.90 },
-        { sourceStep: 'Template', targetStep: 'Execution', userCount: 30, percentage: 5.1, averageTime: 35000, successRate: 0.87 },
+      const mockJourneyFlows = [
+        { sourceStep: 'Landing', targetStep: 'Node Creation', userCount: 150, percentage: 25.5, averageTime: 30000, successRate: 0.85 }
+        { sourceStep: 'Node Creation', targetStep: 'Connection', userCount: 120, percentage: 20.4, averageTime: 45000, successRate: 0.92 }
+        { sourceStep: 'Connection', targetStep: 'Execution', userCount: 110, percentage: 18.7, averageTime: 60000, successRate: 0.88 }
+        { sourceStep: 'Execution', targetStep: 'Results', userCount: 95, percentage: 16.2, averageTime: 15000, successRate: 0.95 }
+        { sourceStep: 'Results', targetStep: 'Export', userCount: 40, percentage: 6.8, averageTime: 20000, successRate: 0.98 }
+        { sourceStep: 'Node Creation', targetStep: 'Template', userCount: 35, percentage: 5.9, averageTime: 25000, successRate: 0.90 }
+        { sourceStep: 'Template', targetStep: 'Execution', userCount: 30, percentage: 5.1, averageTime: 35000, successRate: 0.87 }
         { sourceStep: 'Execution', targetStep: 'Save', userCount: 25, percentage: 4.3, averageTime: 12000, successRate: 0.96 }
       ];
-      setState(prev => ({)
-  ...prev,
-  loading: false,
-  heatMapData: heatMapResponse.data || [],
-  hourlyPattern: hourlyResponse.success ? hourlyResponse.data : null,
-  dailyPattern: dailyResponse.success ? dailyResponse.data : null,
-  weeklyPattern: weeklyResponse.success ? weeklyResponse.data : null,
-  journeyFlows: mockJourneyFlows,
+      setState(prev => ({ )
+  ...prev
+  loading: false
+  heatMapData: heatMapResponse.data || []
+  hourlyPattern: hourlyResponse.success ? hourlyResponse.data : null
+  dailyPattern: dailyResponse.success ? dailyResponse.data : null
+  weeklyPattern: weeklyResponse.success ? weeklyResponse.data : null
+  journeyFlows: mockJourneyFlows }
 }));
-    } catch (error) {
-  console.error('Failed to load usage data:', error);
+ catch (error) { console.error('Failed to load usage data:', error);
   setState(prev => ({)
-  ...prev,
-  loading: false,
-  error: error instanceof Error ? error.message : 'Failed to load usage data',
+  ...prev
+  loading: false
+  error: error instanceof Error ? error.message : 'Failed to load usage data' }
 }));
   }, [analyticsClient, timeRange]);
   /**
@@ -201,51 +199,46 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
   /**
    * Get current pattern data
    */
-  const getCurrentPatternData = useCallback(() => {
-  switch (state.selectedPattern) {
-  case 'hourly':,
+  const getCurrentPatternData = useCallback(() => { switch (state.selectedPattern) {
+  case 'hourly':
   return state.hourlyPattern;
-  case 'daily':,
+  case 'daily':
   return state.dailyPattern;
-  case 'weekly':,
+  case 'weekly':
   return state.weeklyPattern;
-  default:,
+  default: }
   return null;
 }, [state.selectedPattern, state.hourlyPattern, state.dailyPattern, state.weeklyPattern]);
   /**
    * Format pattern data for charts
    */
-  const formatPatternData = useCallback((patternData: unknown) => {
-  if (!patternData || !patternData.data) return [];
-  return patternData.data.map((item: unknown) => ({,)
-  period: new Date(item.period).toLocaleDateString(),
-  value: item.value,
-  timestamp: new Date(item.period).getTime(),
+  const formatPatternData = useCallback((patternData: unknown) => { if (!patternData || !patternData.data) return [];
+  return patternData.data.map((item: unknown) => ({)
+  period: new Date(item.period).toLocaleDateString()
+  value: item.value
+  timestamp: new Date(item.period).getTime() }
 }));
   }, []);
   /**
    * Generate hourly distribution data
    */
-  const generateHourlyDistribution = useCallback(() => {
-  if (!state.hourlyPattern || !state.hourlyPattern.data) return [];
+  const generateHourlyDistribution = useCallback(() => { if (!state.hourlyPattern || !state.hourlyPattern.data) return [];
   const hourlyData = new Array(24).fill(0);
-  state.hourlyPattern.data.forEach((item: unknown) => {,
+  state.hourlyPattern.data.forEach((item: unknown) => { }
   const hour = new Date(item.period).getHours();
   hourlyData[hour] += item.value;
 });
     return hourlyData.map((value, hour) => ({)
   hour: `${hour.toString().padStart(2, '0')}:00`}
-}
-      value,
+
+      value
       percentage: (value / Math.max(...hourlyData)) * 100;
   }));
   }, [state.hourlyPattern]);
   /**
    * Load data on mount
    */
-  useEffect(() => {
-    loadUsageData();
-  }, [loadUsageData]);
+  useEffect(() => { loadUsageData() }, [loadUsageData]);
   if (state.loading) {
     return;
       <div className="usage-patterns">
@@ -489,7 +482,7 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
                   {state.journeyFlows.length > 0 ? 
                     (state.journeyFlows.reduce((sum, flow) => sum + flow.successRate, 0) / state.journeyFlows.length * 100).toFixed(1) : 
                     '0'
-                  }%
+%
                 </div>
               </CardContent>
             </Card>

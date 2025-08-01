@@ -9,25 +9,24 @@ import { z } from 'zod';
 // Types and Interfaces
 // ========================================
 
-}
-export interface RateLimitConfig {
-  windowMs: number;           // Time window in milliseconds,
-  maxRequests: number;        // Maximum requests per window,
+
+export interface RateLimitConfig { windowMs: number;           // Time window in milliseconds;
+  maxRequests: number;        // Maximum requests per window;
   keyGenerator?: (context: RateLimitContext) => string;
   skipSuccessfulRequests?: boolean;
   skipFailedRequests?: boolean;
   resetExpiredHits?: boolean;
-  standardHeaders?: boolean;  // Send rate limit info in headers,
-  legacyHeaders?: boolean;    // Send X-RateLimit headers,
-  store?: RateLimitStore;     // Storage backend,
+  standardHeaders?: boolean;  // Send rate limit info in headers;
+  legacyHeaders?: boolean;    // Send X-RateLimit headers;
+  store?: RateLimitStore;     // Storage backend }
   onLimitReached?: (context: RateLimitContext, info: RateLimitInfo) => void;
   message?: string | ((info: RateLimitInfo) => string);
   statusCode?: number;
-}
-}
-}
-export interface RateLimitContext {
-  ip?: string;
+
+
+
+
+export interface RateLimitContext { ip?: string;
   userId?: string;
   endpoint?: string;
   userAgent?: string;
@@ -37,100 +36,87 @@ export interface RateLimitContext {
   body?: unknown;
   timestamp?: number;
   sessionId?: string;
-  organizationId?: string;
-}
-}
-}
-export interface RateLimitInfo {
-  totalHits: number;
+  organizationId?: string }
+
+
+
+export interface RateLimitInfo { totalHits: number;
   totalHitsInWindow: number;
   remainingRequests: number;
   resetTime: Date;
   windowStart: Date;
   windowEnd: Date;
   exceeded: boolean;
-  retryAfter?: number;
-}
-}
-}
-export interface RateLimitResult {
-  allowed: boolean;
+  retryAfter?: number }
+
+
+
+export interface RateLimitResult { allowed: boolean;
   info: RateLimitInfo;
   headers: Record<string, string>;
-  error?: string;
-}
-}
-}
-export interface RateLimitStore {
-  get(key: string): Promise<RateLimitData | null>;
-  set(key: string, data: RateLimitData, ttlMs: number): Promise<void>;
-}
+  error?: string }
+
+
+
+export interface RateLimitStore { get(key: string): Promise<RateLimitData | null>;
+  set(key: string, data: RateLimitData, ttlMs: number): Promise<void> }
+
   increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }>;
   reset(key: string): Promise<void>;
   cleanup(): Promise<void>;
-}
-}
-export interface RateLimitData {
-  hits: number;
+
+
+export interface RateLimitData { hits: number;
   resetTime: number;
-  windowStart: number;
-}
-}
-export enum RateLimitStrategyType {
-  FIXED_WINDOW = 'fixed_window',
-  SLIDING_WINDOW = 'sliding_window',
-  TOKEN_BUCKET = 'token_bucket',
+  windowStart: number }
+
+export enum RateLimitStrategyType { FIXED_WINDOW = 'fixed_window'
+  SLIDING_WINDOW = 'sliding_window'
+  TOKEN_BUCKET = 'token_bucket'
   LEAKY_BUCKET = 'leaky_bucket'
   export enum RateLimitScope {
-  GLOBAL = 'global',
-  IP = 'ip',
-  USER = 'user',
-  ENDPOINT = 'endpoint',
+  GLOBAL = 'global'
+  IP = 'ip'
+  USER = 'user'
+  ENDPOINT = 'endpoint'
   CUSTOM = 'custom'
   // ========================================
   // Validation Schemas
   // ========================================
   const RateLimitConfigSchema = z.object({)
-  windowMs: z.number().min(1000).max(86400000), // 1 second to 24 hours,
-  maxRequests: z.number().min(1).max(10000),
-  skipSuccessfulRequests: z.boolean().optional(),
-  skipFailedRequests: z.boolean().optional(),
-  resetExpiredHits: z.boolean().optional(),
-  standardHeaders: z.boolean().optional(),
-  legacyHeaders: z.boolean().optional(),
-  message: z.string().optional(),
-  statusCode: z.number().min(400).max(599).optional(),
+  windowMs: z.number().min(1000).max(86400000), // 1 second to 24 hours
+  maxRequests: z.number().min(1).max(10000)
+  skipSuccessfulRequests: z.boolean().optional()
+  skipFailedRequests: z.boolean().optional()
+  resetExpiredHits: z.boolean().optional()
+  standardHeaders: z.boolean().optional()
+  legacyHeaders: z.boolean().optional()
+  message: z.string().optional()
+  statusCode: z.number().min(400).max(599).optional() }
 });
 
 // ========================================
 // In-Memory Store Implementation
 // ========================================
 
-export class MemoryRateLimitStore implements RateLimitStore {
-  private store: Map<string, RateLimitData> = new Map();
+export class MemoryRateLimitStore implements RateLimitStore { private store: Map<string, RateLimitData> = new Map();
   private cleanupInterval: NodeJS.Timeout;
-  constructor(cleanupIntervalMs: number = 60000) {,
+  constructor(cleanupIntervalMs: number = 60000) { }
   // Cleanup expired entries every minute
-  this.cleanupInterval = setInterval(() => {
-  this.cleanup();
-}, cleanupIntervalMs);
-  async get(key: string): Promise<RateLimitData | null> {
-
-  const data = this.store.get(key);
+  this.cleanupInterval = setInterval(() => { this.cleanup() }, cleanupIntervalMs);
+  async get(key: string): Promise<RateLimitData | null> { const data = this.store.get(key);
   if (!data) return null;
   // Check if expired
   if (Date.now() > data.resetTime) {
   this.store.delete(key);
   return null;
   return data;
-  async set(key: string, data: RateLimitData, ttlMs: number): Promise<void> {,
+  async set(key: string, data: RateLimitData, ttlMs: number): Promise<void> {
   this.store.set(key, {)
-  ...data,
-  resetTime: Date.now() + ttlMs,
+  ...data
+  resetTime: Date.now() + ttlMs }
 });
-  async increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }> {
-
-  const now = Date.now();
+  async increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }> { const now = Date.now();
   const existing = await this.get(key);
   if (!existing || now > existing.resetTime) {
   // Start new window
@@ -138,20 +124,18 @@ export class MemoryRateLimitStore implements RateLimitStore {
   const data: RateLimitData = {,
   hits: 1,
   resetTime,
-  windowStart: now,
+  windowStart: now }
 };
       this.store.set(key, data);
-      return {
-  hits: 1,
-  resetTime: new Date(resetTime),
+      return { hits: 1,
+  resetTime: new Date(resetTime) }
 };
-    } else {
-  // Increment existing
+ else { // Increment existing
   existing.hits++;
   this.store.set(key, existing);
   return {
   hits: existing.hits,
-  resetTime: new Date(existing.resetTime),
+  resetTime: new Date(existing.resetTime) }
 };
   async reset(key: string): Promise<void> {
 
@@ -166,12 +150,11 @@ export class MemoryRateLimitStore implements RateLimitStore {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
     this.store.clear();
-  getStats(): { totalKeys: number; totalHits: number } {
-  let totalHits = 0;
+  getStats(): { totalKeys: number; totalHits: number } { let totalHits = 0;
   for (const data of this.store.values()) {
   totalHits += data.hits;
   return {
-  totalKeys: this.store.size,
+  totalKeys: this.store.size }
   totalHits
 };
 
@@ -273,41 +256,38 @@ export class FixedWindowStrategy extends RateLimitStrategy {
       const windowStart = new Date(resetTime.getTime() - this.config.windowMs);
       const remainingRequests = Math.max(0, this.config.maxRequests - hits);
       const exceeded = hits > this.config.maxRequests;
-      const info: RateLimitInfo = {,
-  totalHits: hits,
-  totalHitsInWindow: hits,
-  remainingRequests,
-  resetTime,
-  windowStart,
-  windowEnd: resetTime,
-  exceeded,
-  retryAfter: exceeded ? Math.ceil((resetTime.getTime() - now.getTime()) / 1000) : undefined,
+      const info: RateLimitInfo = { 
+  totalHits: hits
+  totalHitsInWindow: hits
+  remainingRequests
+  resetTime
+  windowStart
+  windowEnd: resetTime
+  exceeded
+  retryAfter: exceeded ? Math.ceil((resetTime.getTime() - now.getTime()) / 1000) : undefined }
 };
       const headers = this.generateHeaders(info);
-      return {
-  allowed: !exceeded,
-  info,
-  headers,
-  error: exceeded ? this.generateErrorMessage(info) : undefined,
+      return { allowed: !exceeded
+  info
+  headers
+  error: exceeded ? this.generateErrorMessage(info) : undefined }
 };
-    } catch (error) {
-  console.error('Rate limit check failed:', error);
+ catch (error) { console.error('Rate limit check failed:', error);
   // Fail open - allow request if store is unavailable
   const now = new Date();
-  const defaultInfo: RateLimitInfo = {,
-  totalHits: 0,
-  totalHitsInWindow: 0,
-  remainingRequests: this.config.maxRequests,
-  resetTime: new Date(now.getTime() + this.config.windowMs),
-  windowStart: now,
-  windowEnd: new Date(now.getTime() + this.config.windowMs),
-  exceeded: false,
+  const defaultInfo: RateLimitInfo = {
+  totalHits: 0
+  totalHitsInWindow: 0
+  remainingRequests: this.config.maxRequests
+  resetTime: new Date(now.getTime() + this.config.windowMs)
+  windowStart: now
+  windowEnd: new Date(now.getTime() + this.config.windowMs)
+  exceeded: false }
 };
-      return {
-  allowed: true,
-  info: defaultInfo,
-  headers: this.generateHeaders(defaultInfo),
-  error: 'Rate limit store unavailable',
+      return { allowed: true
+  info: defaultInfo
+  headers: this.generateHeaders(defaultInfo)
+  error: 'Rate limit store unavailable' }
 };
   async reset(key: string): Promise<void> {
 
@@ -340,8 +320,7 @@ export class RateLimiter {
   private config: RateLimitConfig;
   private strategy: RateLimitStrategy;
   private keyGenerator: (context: RateLimitContext) => string;
-  constructor(config: Partial<RateLimitConfig> = {}) {
-  // Validate and set default configuration
+  constructor(config: Partial<RateLimitConfig> = {}) { // Validate and set default configuration
   this.config = this.createConfig(config);
   // Create store if not provided
   const store = this.config.store || new MemoryRateLimitStore();
@@ -349,55 +328,51 @@ export class RateLimiter {
   this.strategy = new FixedWindowStrategy(this.config, store);
   // Set key generator
   this.keyGenerator = this.config.keyGenerator || RateLimitKeyGenerator.byIP;
-  private createConfig(customConfig: Partial<RateLimitConfig>): RateLimitConfig {,
-  const defaultConfig: RateLimitConfig = {,
-  windowMs: 15 * 60 * 1000, // 15 minutes,
-  maxRequests: 100,
-  skipSuccessfulRequests: false,
-  skipFailedRequests: false,
-  resetExpiredHits: true,
-  standardHeaders: true,
-  legacyHeaders: false,
-  statusCode: 429,
-  message: 'Too many requests from this IP, please try again later.',
+  private createConfig(customConfig: Partial<RateLimitConfig>): RateLimitConfig {
+  const defaultConfig: RateLimitConfig = {
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  maxRequests: 100
+  skipSuccessfulRequests: false
+  skipFailedRequests: false
+  resetExpiredHits: true
+  standardHeaders: true
+  legacyHeaders: false
+  statusCode: 429
+  message: 'Too many requests from this IP, please try again later.' }
 };
     const config = { ...defaultConfig, ...customConfig };
     // Validate configuration
-    try {
-      RateLimitConfigSchema.parse(config);
-    } catch (error) {
+    try { RateLimitConfigSchema.parse(config) } catch (error) {
       throw new Error(`Invalid rate limit configuration: ${error instanceof Error ? error.message : 'Unknown error'}`);}
     return config;
   /**
    * Check if request should be rate limited
    */
-  async checkLimit(context: RateLimitContext): Promise<RateLimitResult> {
-
-  const key = this.keyGenerator(context);
+  async checkLimit(context: RateLimitContext): Promise<RateLimitResult> { const key = this.keyGenerator(context);
   return await this.strategy.checkLimit(key, context);
   /**
   * Reset rate limit for a specific key
   */
-  async resetLimit(context: RateLimitContext): Promise<void> {,
+  async resetLimit(context: RateLimitContext): Promise<void> {
   const key = this.keyGenerator(context);
   await this.strategy.reset(key);
   /**
   * Get current rate limit info without incrementing
   */
-  async getCurrentInfo(context: RateLimitContext): Promise<RateLimitInfo | null> {,
+  async getCurrentInfo(context: RateLimitContext): Promise<RateLimitInfo | null> {
   const key = this.keyGenerator(context);
   const data = await this.config.store?.get(key);
   if (!data) return null;
   const resetTime = new Date(data.resetTime);
   const windowStart = new Date(data.windowStart);
   return {
-  totalHits: data.hits,
-  totalHitsInWindow: data.hits,
-  remainingRequests: Math.max(0, this.config.maxRequests - data.hits),
-  resetTime,
-  windowStart,
-  windowEnd: resetTime,
-  exceeded: data.hits > this.config.maxRequests,
+  totalHits: data.hits
+  totalHitsInWindow: data.hits
+  remainingRequests: Math.max(0, this.config.maxRequests - data.hits)
+  resetTime
+  windowStart
+  windowEnd: resetTime
+  exceeded: data.hits > this.config.maxRequests }
 };
   /**
    * Update configuration
@@ -415,9 +390,7 @@ export class RateLimiter {
   /**
    * Cleanup resources
    */
-  async cleanup(): Promise<void> {
-
-  if (this.config.store) {
+  async cleanup(): Promise<void> { if (this.config.store) {
   await this.config.store.cleanup();
   // Cleanup memory store if it's the default one
   if (this.config.store instanceof MemoryRateLimitStore) {
@@ -429,79 +402,73 @@ export class RateLimiter {
   /**
   * Strict rate limiting for authentication endpoints
   */
-  static authentication(): Partial<RateLimitConfig> {,
+  static authentication(): Partial<RateLimitConfig> {
   return {
-  windowMs: 15 * 60 * 1000, // 15 minutes,
-  maxRequests: 5,
-  keyGenerator: RateLimitKeyGenerator.byIP,
-  message: 'Too many authentication attempts. Please try again later.',
-  standardHeaders: true,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  maxRequests: 5
+  keyGenerator: RateLimitKeyGenerator.byIP
+  message: 'Too many authentication attempts. Please try again later.'
+  standardHeaders: true }
 };
   /**
    * Moderate rate limiting for API endpoints
    */
-  static api(): Partial<RateLimitConfig> {
-  return {
-  windowMs: 15 * 60 * 1000, // 15 minutes,
-  maxRequests: 1000,
-  keyGenerator: RateLimitKeyGenerator.byUserAndEndpoint,
-  standardHeaders: true,
-  skipSuccessfulRequests: false,
+  static api(): Partial<RateLimitConfig> { return {
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  maxRequests: 1000
+  keyGenerator: RateLimitKeyGenerator.byUserAndEndpoint
+  standardHeaders: true
+  skipSuccessfulRequests: false }
 };
   /**
    * Lenient rate limiting for public content
    */
-  static public(): Partial<RateLimitConfig> {
-  return {
-  windowMs: 15 * 60 * 1000, // 15 minutes,
-  maxRequests: 5000,
-  keyGenerator: RateLimitKeyGenerator.byIP,
-  standardHeaders: true,
-  skipSuccessfulRequests: true,
+  static public(): Partial<RateLimitConfig> { return {
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  maxRequests: 5000
+  keyGenerator: RateLimitKeyGenerator.byIP
+  standardHeaders: true
+  skipSuccessfulRequests: true }
 };
   /**
    * Very strict rate limiting for password reset
    */
-  static passwordReset(): Partial<RateLimitConfig> {
-  return {
-  windowMs: 60 * 60 * 1000, // 1 hour,
-  maxRequests: 3,
-  keyGenerator: RateLimitKeyGenerator.byIP,
-  message: 'Too many password reset attempts. Please try again later.',
-  standardHeaders: true,
+  static passwordReset(): Partial<RateLimitConfig> { return {
+  windowMs: 60 * 60 * 1000, // 1 hour
+  maxRequests: 3
+  keyGenerator: RateLimitKeyGenerator.byIP
+  message: 'Too many password reset attempts. Please try again later.'
+  standardHeaders: true }
 };
   /**
    * Rate limiting for email sending
    */
-  static emailSending(): Partial<RateLimitConfig> {
-  return {
-  windowMs: 60 * 60 * 1000, // 1 hour,
-  maxRequests: 10,
-  keyGenerator: RateLimitKeyGenerator.byUser,
-  message: 'Email sending limit reached. Please try again later.',
-  standardHeaders: true,
+  static emailSending(): Partial<RateLimitConfig> { return {
+  windowMs: 60 * 60 * 1000, // 1 hour
+  maxRequests: 10
+  keyGenerator: RateLimitKeyGenerator.byUser
+  message: 'Email sending limit reached. Please try again later.'
+  standardHeaders: true }
 };
   /**
    * Rate limiting for file uploads
    */
-  static fileUpload(): Partial<RateLimitConfig> {
-  return {
-  windowMs: 60 * 60 * 1000, // 1 hour,
-  maxRequests: 50,
-  keyGenerator: RateLimitKeyGenerator.byUser,
-  message: 'File upload limit reached. Please try again later.',
-  standardHeaders: true,
+  static fileUpload(): Partial<RateLimitConfig> { return {
+  windowMs: 60 * 60 * 1000, // 1 hour
+  maxRequests: 50
+  keyGenerator: RateLimitKeyGenerator.byUser
+  message: 'File upload limit reached. Please try again later.'
+  standardHeaders: true }
 };
   /**
    * Rate limiting for search operations
    */
-  static search(): Partial<RateLimitConfig> {
-  return {
-  windowMs: 60 * 1000, // 1 minute,
-  maxRequests: 100,
-  keyGenerator: RateLimitKeyGenerator.byUser,
-  skipSuccessfulRequests: false,
-  standardHeaders: true,
+  static search(): Partial<RateLimitConfig> { return {
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 100
+  keyGenerator: RateLimitKeyGenerator.byUser
+  skipSuccessfulRequests: false
+  standardHeaders: true }
 };
 
 // ========================================
@@ -532,7 +499,7 @@ export class RateLimitUtils {
    */
   static extractIP(headers: Record<string, string>): string | undefined {
     // Check common proxy headers
-    const possibleHeaders = [;
+    const possibleHeaders = [
       'cf-connecting-ip',      // Cloudflare
       'x-forwarded-for',       // Standard proxy header
       'x-real-ip',             // Nginx
@@ -559,16 +526,15 @@ export class RateLimitUtils {
   /**
    * Calculate optimal window size based on expected traffic
    */
-  static calculateOptimalWindow(expectedRequestsPerHour: number): number {
-  // Simple heuristic: window should be long enough to smooth traffic spikes,
+  static calculateOptimalWindow(expectedRequestsPerHour: number): number { // Simple heuristic: window should be long enough to smooth traffic spikes }
   // but short enough to be responsive to attacks
   const requestsPerMinute = expectedRequestsPerHour / 60;
   const baseWindow = 15 * 60 * 1000; // 15 minutes;
   if (requestsPerMinute > 1000) {
   return 5 * 60 * 1000; // 5 minutes for high traffic
-} else if (requestsPerMinute > 100) {
+ else if (requestsPerMinute > 100) {
       return baseWindow; // 15 minutes for moderate traffic
-    } else {
+ else {
       return 30 * 60 * 1000; // 30 minutes for low traffic
 
 export default RateLimiter;

@@ -22,7 +22,7 @@ jest.mock('../templates/ProjectTemplateManager', () => ({)
 }));
 
 // Mock react-icons to avoid issues
-jest.mock('react-icons/fi', () => ({)
+jest.mock('react-icons/fi', () => ({ )
   FiUpload: () => <div data-testid="upload-icon">Upload</div>,
   FiDownload: () => <div data-testid="download-icon">Download</div>,
   FiGitBranch: () => <div data-testid="git-icon">Git</div>,
@@ -37,41 +37,20 @@ jest.mock('react-icons/fi', () => ({)
   FiClock: () => <div data-testid="clock-icon">Clock</div>,
   FiTag: () => <div data-testid="tag-icon">Tag</div>,
   FiArrowRight: () => <div data-testid="arrow-right-icon">Arrow</div>,
-  FiRefreshCw: () => <div data-testid="refresh-icon">Refresh</div>,
+  FiRefreshCw: () => <div data-testid="refresh-icon">Refresh</div> }
 }));
 import { TemplateImportExportDialog } from '../components/templates/TemplateImportExportDialog';
 
 // Mock template data
-const mockTemplate = {
-  id: 'template-123',
-  name: 'Test Template',
-  description: 'Test template for unit tests',
-  version: '1.0.0',
-  author: 'Test Author',
-  tags: ['test'],
-  createdAt: new Date('2024-01-01'),
-  updatedAt: new Date('2024-01-01'),
-  isPublic: false,
-  graph: {
-  nodes: [],
-  edges: [],
-},
-  metadata: {
+const mockTemplate = {},
+  metadata: { ,
   category: 'test',
   difficulty: 'beginner',
-  estimatedTime: 5,
+  estimatedTime: 5 }
 };
-const defaultProps = {
-  isOpen: true,
-  onClose: jest.fn(),
-  mode: 'import' as const,
-  onImportComplete: jest.fn(),
-  onExportComplete: jest.fn(),
-};
-describe('TemplateImportExportDialog', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+const defaultProps = {};
+describe('TemplateImportExportDialog', () => { beforeEach(() => {
+    jest.clearAllMocks() });
   describe('Basic Rendering', () => {
     it('renders without crashing when closed', () => {
       render(<TemplateImportExportDialog {...defaultProps} isOpen={false} />);
@@ -102,9 +81,7 @@ describe('TemplateImportExportDialog', () => {
       expect(screen.queryByPlaceholderText('Git repository URL')).not.toBeInTheDocument();
       // Click git source
       const gitButton = screen.getByText('Git Repository');
-      await act(async () => {
-        await userEvent.click(gitButton);
-      });
+      await act(async () => { await userEvent.click(gitButton) });
       // Should show git inputs
       expect(screen.getByPlaceholderText('Git repository URL')).toBeInTheDocument();
     });
@@ -114,9 +91,7 @@ describe('TemplateImportExportDialog', () => {
       render(<TemplateImportExportDialog {...defaultProps} />);
       // Select URL source
       const urlButton = screen.getByText('URL');
-      await act(async () => {
-        await userEvent.click(urlButton);
-      });
+      await act(async () => { await userEvent.click(urlButton) });
       // URL input should be present but continue button should not (no URL entered)
       expect(screen.getByPlaceholderText('Template URL')).toBeInTheDocument();
       expect(screen.queryByText('Continue')).not.toBeInTheDocument();
@@ -150,10 +125,8 @@ describe('TemplateImportExportDialog', () => {
       const onClose = jest.fn();
       render(<TemplateImportExportDialog {...defaultProps} onClose={onClose} />);
       const closeButton = screen.getByTestId('x-icon').closest('button');
-      if (closeButton) {
-        await userEvent.click(closeButton);
-        expect(onClose).toHaveBeenCalled();
-    });
+      if (closeButton) { await userEvent.click(closeButton);
+        expect(onClose).toHaveBeenCalled() });
     it('calls onClose when cancel is clicked', async () => {
       const onClose = jest.fn();
       render(<TemplateImportExportDialog {...defaultProps} onClose={onClose} />);
@@ -220,11 +193,9 @@ describe('TemplateImportExportDialog', () => {
     it('handles different source types without errors', async () => {
       render(<TemplateImportExportDialog {...defaultProps} />);
       const sourceTypes = ['Local File', 'Git Repository', 'URL', 'Marketplace'];
-      for (const sourceType of sourceTypes) {
-        const button = screen.getByText(sourceType);
+      for (const sourceType of sourceTypes) { const button = screen.getByText(sourceType);
         await act(async () => {
-          await userEvent.click(button);
-        });
+          await userEvent.click(button) });
         // Should not throw errors when switching between source types
         expect(screen.getByText(sourceType)).toBeInTheDocument();
     });
@@ -242,9 +213,7 @@ describe('TemplateImportExportDialog', () => {
     it('handles keyboard navigation', () => {
       render(<TemplateImportExportDialog {...defaultProps} />);
       const firstButton = screen.getAllByRole('button')[0];
-      if (firstButton) {
-        firstButton.focus();
-        expect(firstButton).toHaveFocus();
-    });
+      if (firstButton) { firstButton.focus();
+        expect(firstButton).toHaveFocus() });
   });
 });

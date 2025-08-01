@@ -101,7 +101,7 @@ export var TransformExtensionHelpers;
             pipeline: config.pipeline || {},
             metadata: config.metadata || {
                 author: 'Unknown',
-                license: 'MIT'
+                license: 'MIT',
             }
         };
     }

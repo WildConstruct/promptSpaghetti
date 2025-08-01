@@ -77,33 +77,13 @@ export const BulkAssignmentTools = ({
     status: 'draft';
 }
 ;
-const steps = [];
-{
-    number: 1, title;
-    'Select Targets', description;
-    'Choose users, teams, or services';
-}
-{
-    number: 2, title;
-    'Choose Resources', description;
-    'Select what to assign';
-}
-{
-    number: 3, title;
-    'Configure Options', description;
-    'Set execution parameters';
-}
-{
-    number: 4, title;
-    'Review & Resolve', description;
-    'Review conflicts and validate';
-}
-{
-    number: 5, title;
-    'Execute', description;
-    'Run the bulk assignment';
-}
-;
+const steps = [
+    { number: 1, title: 'Select Targets', description: 'Choose users, teams, or services' },
+    { number: 2, title: 'Choose Resources', description: 'Select what to assign' },
+    { number: 3, title: 'Configure Options', description: 'Set execution parameters' },
+    { number: 4, title: 'Review & Resolve', description: 'Review conflicts and validate' },
+    { number: 5, title: 'Execute', description: 'Run the bulk assignment' }
+];
 const canProceedToNextStep = useMemo(() => {
     switch (currentStep) {
         case 1: return operation.targets.length > 0;

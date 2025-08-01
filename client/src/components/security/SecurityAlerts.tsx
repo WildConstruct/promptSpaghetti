@@ -19,16 +19,17 @@ import {
   Info,
   Zap,
   Shield
-} from 'lucide-react';
+ from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-}
+
+
 interface SecurityAlert {
   id: string;,
-  type: 'critical' | 'high' | 'medium' | 'low' | 'info';
+  type: 'critical' | 'high' | 'medium' | 'low' | 'info';,
   category: 'authentication' | 'authorization' | 'data_access' | 'system' | 'api' | 'network';,
-  title: string;
+  title: string;,
   message: string;,
-  timestamp: Date;
+  timestamp: Date;,
   source: string;,
   status: 'unread' | 'read' | 'acknowledged' | 'dismissed';
   actions?: AlertAction;
@@ -36,7 +37,7 @@ interface SecurityAlert {
   escalation_level: number;
   interface AlertAction {
   id: string;,
-  label: string;
+  label: string;,
   type: 'primary' | 'secondary' | 'danger';,
   action: 'block_ip' | 'quarantine_user' | 'escalate' | 'investigate' | 'dismiss';
   interface SecurityAlertsProps {
@@ -47,7 +48,8 @@ interface SecurityAlert {
   onAlertAction,
   maxVisible = 50,
   showDismissed = false
-}
+
+
 }) => {
   const [alerts, setAlerts] = useState<SecurityAlert>([]);
   const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert>([]);
@@ -79,12 +81,12 @@ interface SecurityAlert {
           source: 'Authentication Service',
           status: 'unread',
           escalation_level: 3,
-          actions: [,
+          actions: [
             { id: 'block-ip', label: 'Block IP', type: 'danger', action: 'block_ip' },
             { id: 'investigate', label: 'Investigate', type: 'secondary', action: 'investigate' }
           ],
           metadata: { ip: '192.168.1.100', attempts: 127, duration: '5 minutes' }
-  }
+
         {
           id: 'alert-2',
           type: 'high',
@@ -95,11 +97,11 @@ interface SecurityAlert {
           source: 'API Gateway',
           status: 'read',
           escalation_level: 2,
-          actions: [,
+          actions: [
             { id: 'rate-limit', label: 'Apply Rate Limit', type: 'primary', action: 'block_ip' },
             { id: 'investigate', label: 'Investigate', type: 'secondary', action: 'investigate' }
           ]
-  }
+
         {
           id: 'alert-3',
           type: 'medium',
@@ -110,11 +112,11 @@ interface SecurityAlert {
           source: 'Authorization Service',
           status: 'acknowledged',
           escalation_level: 1,
-          actions: [,
+          actions: [
             { id: 'quarantine', label: 'Quarantine User', type: 'danger', action: 'quarantine_user' },
             { id: 'review', label: 'Review Permissions', type: 'secondary', action: 'investigate' }
           ]
-  }
+
         {
   id: 'alert-4',
   type: 'info',
@@ -125,7 +127,7 @@ interface SecurityAlert {
   source: 'Security Scanner',
   status: 'read',
   escalation_level: 0,
-}
+
         {
   id: 'alert-5',
   type: 'high',
@@ -144,7 +146,7 @@ interface SecurityAlert {
   );
   if (newCriticalAlerts.length > 0 && soundEnabled) {
   playAlertSound();
-} catch (error) {
+ catch (error) {
   console.error('Failed to load security alerts:', error);
   setIsLoading(false);
 }, [soundEnabled]);
@@ -158,7 +160,7 @@ interface SecurityAlert {
     filtered.sort((a, b) => {
       if (sortBy === 'timestamp') {
         return b.timestamp.getTime() - a.timestamp.getTime();
-      } else {
+ else {
         const severityOrder = { critical: 4, high: 3, medium: 2, low: 1, info: 0 };
         return severityOrder[b.type] - severityOrder[a.type];
     });
@@ -220,7 +222,7 @@ interface SecurityAlert {
       onAlertAction?.(alertId, actionType);
       // Here you would make the actual API call
       console.log(`Performing action: ${actionType} on alert: ${alertId}`);}
-    } catch (error) {
+ catch (error) {
   console.error('Failed to perform alert action:', error);
 };
   const handleStatusChange = (alertId: string, newStatus: SecurityAlert['status']) => {
@@ -295,9 +297,9 @@ interface SecurityAlert {
                     onChange={(e) => {
                       if (e.target.checked) {
                         setSelectedFilters([...selectedFilters, severity]);
-                      } else {
+ else {
                         setSelectedFilters(selectedFilters.filter(f => f !== severity));
-                    }}
+}
                   />
                   <span className="capitalize">{severity}</span>
                 </label>
@@ -315,9 +317,9 @@ interface SecurityAlert {
                     onChange={(e) => {
                       if (e.target.checked) {
                         setSelectedFilters([...selectedFilters, category]);
-                      } else {
+ else {
                         setSelectedFilters(selectedFilters.filter(f => f !== category));
-                    }}
+}
                   />
                   <span className="capitalize">{category.replace('_', ' ')}</span>
                 </label>

@@ -14,7 +14,7 @@ import {
   getTemplateById,
   getTemplatesByCategory,
   validateTemplate
-} from '../index';
+ from '../index';
 describe('Node Templates', () => {
   describe('Individual Templates', () => {
     test('panelArchetypeTemplate should be valid', () => {
@@ -103,7 +103,7 @@ describe('Node Templates', () => {
         type: 'logic', 
         position: { x: 0, y: 0 },
         data: { label: 'Test' }
-      } as any)).toBe(false);
+ as any)).toBe(false);
     });
   });
   describe('Data Integrity', () => {

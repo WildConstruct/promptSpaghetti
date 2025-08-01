@@ -14,7 +14,7 @@ import {
   Trash2,
   History,
   Zap
-} from 'lucide-react';
+ from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { CreateToggleModal } from './CreateToggleModal';
@@ -27,7 +27,8 @@ import { ToggleParametersManager } from './ToggleParametersManager';
 import './FeatureToggleDashboard.css';
 import './CreateToggleModal.css';
 import './ToggleDetailsModal.css';
-}
+
+
 interface FeatureToggle {
   id: string;,
   key: string,
@@ -40,13 +41,17 @@ interface FeatureToggle {
   createdAt: string;,
   updatedAt: string,
   version: number;
-}
+
+
+
 interface DashboardFilters {
   search: string;
   enabled?: boolean;
   type?: string;
   claudeImpact?: string;
-}
+
+
+
 interface DashboardState {
   toggles: FeatureToggle;,
   total: number,
@@ -56,46 +61,12 @@ interface DashboardState {
   currentPage: number,
   pageSize: number;
 
-}
 
-export const FeatureToggleDashboard: React.FC = () => {
-  const [state, setState] = useState<DashboardState>({
-  toggles: [],
-    total: 0,
-    loading: true
-}
-    filters: { search: '' },
-    currentPage: 1,
-    pageSize: 20;
-  });
-  const [selectedToggles, setSelectedToggles] = useState<Set<string>>(new Set());
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [detailsToggleId, setDetailsToggleId] = useState<string | null>(null);
-  const [editToggleId, setEditToggleId] = useState<string | null>(null);
-  const [showBulkOperations, setShowBulkOperations] = useState(false);
-  const [auditHistoryToggleId, setAuditHistoryToggleId] = useState<string | null>(null);
-  const [archiveConfirmToggleId, setArchiveConfirmToggleId] = useState<string | null>(null);
-  const [showStatusOverridePanel, setShowStatusOverridePanel] = useState(false);
-  const [selectedToggleForOverride, setSelectedToggleForOverride] = useState<string | null>(null);
-  const [showParametersManager, setShowParametersManager] = useState(false);
-  const [parametersToggleId, setParametersToggleId] = useState<string | null>(null);
-  // Fetch toggles data
-  const fetchToggles = useCallback(async () => {
-    setState(prev => ({ ...prev, loading: true, error: undefined }));
-    try {
-      const params = new URLSearchParams();
-      if (state.filters.search) params.append('search', state.filters.search);
-      if (state.filters.enabled !== undefined) params.append('enabled', state.filters.enabled.toString());
-      if (state.filters.type) params.append('type', state.filters.type);
-      if (state.filters.claudeImpact) params.append('claudeImpact', state.filters.claudeImpact);
-      params.append('limit', state.pageSize.toString());
-      params.append('offset', ((state.currentPage - 1) * state.pageSize).toString());
-      const response = await fetch(`/api/feature-toggles/toggles?${params}`, {)}
-  },
+
+export const FeatureToggleDashboard = () => { return null; },
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
       });
       if (!response.ok) {
@@ -107,7 +78,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   total: data.total,
   loading: false
 }));
-    } catch (error) {
+ catch (error) {
   setState(prev => ({
   ...prev,
   loading: false,
@@ -130,7 +101,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify(body);
@@ -139,7 +110,7 @@ export const FeatureToggleDashboard: React.FC = () => {
         throw new Error(`Failed to ${toggle.enabled ? 'deactivate' : 'activate'} toggle`);}
       // Refresh data
       fetchToggles();
-    } catch (error) {
+ catch (error) {
   alert(error instanceof Error ? error.message : 'Operation failed');
 };
   // Handle percentage rollout changes
@@ -150,18 +121,18 @@ export const FeatureToggleDashboard: React.FC = () => {
   method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({ ),
           percentage,
           reason: `Percentage updated to ${percentage}% from dashboard`}
-  }
+
       });
       if (!response.ok) {
         throw new Error('Failed to update percentage');
       fetchToggles();
-    } catch (error) {
+ catch (error) {
   alert(error instanceof Error ? error.message : 'Operation failed');
 };
   // Handle override panel opening
@@ -177,18 +148,18 @@ export const FeatureToggleDashboard: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({ ),
           reason: `EMERGENCY DISABLE: ${reason}`}
-  }
+
       });
       if (!response.ok) {
         throw new Error('Failed to emergency disable toggle');
       fetchToggles();
       alert('Toggle emergency disabled successfully');
-    } catch (error) {
+ catch (error) {
   alert(error instanceof Error ? error.message : 'Emergency disable failed');
 };
   // Handle override creation
@@ -207,18 +178,18 @@ export const FeatureToggleDashboard: React.FC = () => {
   method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({ ),
           parameters,
           reason: 'Parameters updated from dashboard';
-  }
+
       });
       if (!response.ok) {
         throw new Error('Failed to update toggle parameters');
       fetchToggles(); // Refresh to show updated toggle
-    } catch (error) {
+ catch (error) {
   alert(error instanceof Error ? error.message : 'Failed to update parameters');
 };
   const handleParametersSave = async () => {
@@ -240,7 +211,7 @@ export const FeatureToggleDashboard: React.FC = () => {
         throw new Error('Failed to archive toggle');
       fetchToggles();
       setArchiveConfirmToggleId(null);
-    } catch (error) {
+ catch (error) {
   alert(error instanceof Error ? error.message : 'Archive failed');
 };
   // Get toggle type badge color
@@ -281,7 +252,7 @@ export const FeatureToggleDashboard: React.FC = () => {
     case 'scheduled':
       return toggle.value.enabled ? 'Active schedule' : 'Inactive';
     case 'segmentation':
-      return `${toggle.value.rules?.length || 0} rules`;}}
+      return `${toggle.value.rules?.length || 0} rules`;}},
   default:
       return 'Unknown';
   };
@@ -297,7 +268,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   const newSet = new Set(prev);
       if (newSet.has(toggleId)) {
         newSet.delete(toggleId);
-      } else {
+ else {
         newSet.add(toggleId);
       return newSet;
     });
@@ -309,7 +280,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
       });
       if (!response.ok) {
@@ -317,14 +288,14 @@ export const FeatureToggleDashboard: React.FC = () => {
       // Refresh toggles list
       await fetchToggles();
       setArchiveConfirmToggleId(null);
-    } catch (error) {
+ catch (error) {
       console.error('Error archiving toggle:', error);
       setState(prev => ({ ...prev, error: 'Failed to archive toggle' }));
   };
   const handleSelectAll = () => {
     if (selectedToggles.size === state.toggles.length) {
       setSelectedToggles(new Set());
-    } else {
+ else {
       setSelectedToggles(new Set(state.toggles.map(t => t.id)));
   };
   const handleCreateToggle = async (toggleData: {
@@ -339,7 +310,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   method: 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
         'Content-Type': 'application/json'
   },
   body: JSON.stringify(toggleData);
@@ -537,7 +508,7 @@ export const FeatureToggleDashboard: React.FC = () => {
   hasActiveOverride: false, // TODO: Add override detection logic,
   percentage: toggle.type === 'percentage_rollout' ? 50 : undefined,
   rolloutStatus: toggle.type === 'percentage_rollout' ? 'ACTIVE' : undefined
-}}
+
                         onToggleChange={handleToggleStatus}
                         onPercentageChange={handlePercentageChange}
                         onOverrideClick={handleOverrideClick}
@@ -662,7 +633,7 @@ export const FeatureToggleDashboard: React.FC = () => {
           onEdit={(id) => {
             setDetailsToggleId(null);
             setEditToggleId(id);
-          }}
+}
         />
       )}
       {/* Edit Modal */}
@@ -674,7 +645,7 @@ export const FeatureToggleDashboard: React.FC = () => {
           onSave={() => {
             setEditToggleId(null);
             fetchToggles();
-          }}
+}
         />
       )}
       {/* Bulk Operations Modal */}
@@ -685,7 +656,7 @@ export const FeatureToggleDashboard: React.FC = () => {
         onComplete={() => {
           setSelectedToggles(new Set());
           fetchToggles();
-        }}
+}
       />
       {/* Audit History Modal */}
       {auditHistoryToggleId && ()
@@ -749,7 +720,7 @@ export const FeatureToggleDashboard: React.FC = () => {
         onClose={() => {
           setShowStatusOverridePanel(false);
           setSelectedToggleForOverride(null);
-        }}
+}
         onOverrideCreated={handleOverrideCreated}
       />
       {/* Parameters Manager Modal */}
@@ -757,7 +728,7 @@ export const FeatureToggleDashboard: React.FC = () => {
         <div className="modal-overlay" onClick={() => {
           setShowParametersManager(false);
           setParametersToggleId(null);
-        }}>
+}>
           <div className="modal parameters-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Manage Toggle Parameters</h2>
@@ -766,7 +737,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                 onClick={() => {
                   setShowParametersManager(false);
                   setParametersToggleId(null);
-                }}
+}
               >
                 ×
               </button>

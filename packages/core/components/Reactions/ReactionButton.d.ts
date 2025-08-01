@@ -8,27 +8,25 @@
 import React from 'react';
 
 }
-export interface ReactionType {
-    id: string;
+}
+export interface ReactionType { id: string;
     emoji: string;
     label: string;
     category: 'positive' | 'neutral' | 'negative';
     weight: number;
-    description: string;
-
+    description: string }
 }
-export interface ReactionData {
-    reactionId: string;
+}
+export interface ReactionData { reactionId: string;
     contentId: string;
     contentType: 'template' | 'comment' | 'review' | 'project' | 'user';
     userId: string;
     reactionType: string;
     timestamp: Date;
-    metadata?: Record<string, unknown>;
-
+    metadata?: Record<string, unknown> }
 }
-export interface ReactionSummary {
-    contentId: string;
+}
+export interface ReactionSummary { contentId: string;
     totalReactions: number;
     reactionCounts: Record<string, number>;
     userReaction?: string;
@@ -36,12 +34,13 @@ export interface ReactionSummary {
         type: string;
         emoji: string;
         count: number;
-        percentage: number;
+        percentage: number }
 }
     }>;
     sentimentScore: number;
     engagementLevel: 'low' | 'medium' | 'high' | 'viral';
 
+}
 }
 export interface ReactionButtonProps {
     contentId: string;
@@ -60,4 +59,5 @@ export interface ReactionButtonProps {
 export declare const ReactionButton: React.FC<ReactionButtonProps>;
 export default ReactionButton;
 //# sourceMappingURL=ReactionButton.d.ts.map
+}
 }

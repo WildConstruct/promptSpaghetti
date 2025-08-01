@@ -9,7 +9,7 @@ import HistoricalAnalyticsService, {
   HistoricalQuery, 
   RetentionPolicy,
   ArchivalConfig 
-} from '../HistoricalAnalyticsService';
+ from '../HistoricalAnalyticsService';
 import { EventRepository } from '../EventPersistenceLayer';
 import { 
   UnifiedAnalyticsEvent, 
@@ -17,7 +17,7 @@ import {
   EventCategory, 
   EventSeverity,
   EventFilter 
-} from '../UnifiedEventBus';
+ from '../UnifiedEventBus';
 
 // Mock Event Repository
 class MockEventRepository implements EventRepository {
@@ -29,21 +29,21 @@ class MockEventRepository implements EventRepository {
     const savedEvent = { ...event, id: event.id || `event-${this.nextId++}` };
     this.events.push(savedEvent);
     return savedEvent.id;
-  }
+
 
   async saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]> {
 
     const ids: string[] = [];
     for (const event of events) {
       ids.push(await this.save(event));
-    }
+
     return ids;
-  }
+
 
   async findById(id: string): Promise<UnifiedAnalyticsEvent | null> {
 
     return this.events.find(e => e.id === id) || null;
-  }
+
 
   async findMany(options: unknown): Promise<UnifiedAnalyticsEvent[]> {
 
@@ -63,19 +63,19 @@ class MockEventRepository implements EventRepository {
             event.type === type || event.type.toString() === type.toString()
           );
           if (!eventTypeMatches) return false;
-        }
+
         
         if (filter.categories && Array.isArray(filter.categories)) {
           const categoryMatches = filter.categories.some((cat: string) => 
             event.category === cat || event.category.toString() === cat.toString()
           );
           if (!categoryMatches) return false;
-        }
+
         
         if (filter.userId && event.userId !== filter.userId) return false;
         return true;
       });
-    }
+
 
     // Apply sorting
     if (options.sortBy === 'timestamp') {
@@ -83,13 +83,13 @@ class MockEventRepository implements EventRepository {
         const direction = options.sortOrder === 'desc' ? -1 : 1;
         return direction * (a.timestamp - b.timestamp);
       });
-    }
+
 
     // Apply pagination
     const offset = options.offset || 0;
     const limit = options.limit || filtered.length;
     return filtered.slice(offset, offset + limit);
-  }
+
 
   async count(filter?: EventFilter): Promise<number> {
 
@@ -102,7 +102,7 @@ class MockEventRepository implements EventRepository {
       if (filter.categories && !filter.categories.includes(event.category)) return false;
       return true;
     }).length;
-  }
+
 
   async delete(id: string): Promise<boolean> {
 
@@ -110,18 +110,18 @@ class MockEventRepository implements EventRepository {
     if (index >= 0) {
       this.events.splice(index, 1);
       return true;
-    }
+
     return false;
-  }
+
 
   async deleteBatch(ids: string[]): Promise<number> {
 
     let deleted = 0;
     for (const id of ids) {
       if (await this.delete(id)) deleted++;
-    }
+
     return deleted;
-  }
+
 
   async getStatistics(filter?: EventFilter): Promise<any> {
 
@@ -135,19 +135,19 @@ class MockEventRepository implements EventRepository {
       timeRange: {
         earliest: Math.min(...events.map(e => e.timestamp)),
         latest: Math.max(...events.map(e => e.timestamp))
-  }
+
       storageSize: JSON.stringify(events).length
     };
-  }
+
 
   async getAggregations(): Promise<any[]> {
 
     return [];
-  }
+
 
   async getTimeSeriesData(): Promise<Array<{ timestamp: number; value: number }>> {
     return [];
-  }
+
 
   async cleanup(retentionDays: number): Promise<number> {
 
@@ -155,18 +155,18 @@ class MockEventRepository implements EventRepository {
     const toDelete = this.events.filter(e => e.timestamp < cutoff);
     this.events = this.events.filter(e => e.timestamp >= cutoff);
     return toDelete.length;
-  }
+
 
   async archive(beforeDate: number): Promise<number> {
 
     const toArchive = this.events.filter(e => e.timestamp < beforeDate);
     return toArchive.length;
-  }
+
 
   async optimize(): Promise<void> {
 
     // Mock optimization
-  }
+
 
   private groupBy(events: UnifiedAnalyticsEvent[], field: keyof UnifiedAnalyticsEvent): Record<string, number> {
     return events.reduce((acc, event) => {
@@ -174,13 +174,13 @@ class MockEventRepository implements EventRepository {
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-  }
+
 
   // Helper method to seed test data
   seedTestData(events: UnifiedAnalyticsEvent[]): void {
     this.events = [...events];
-  }
-}
+
+
 
 describe('HistoricalAnalyticsService', () => {
   let service: HistoricalAnalyticsService;
@@ -240,7 +240,7 @@ describe('HistoricalAnalyticsService', () => {
           timestamp: now - (12 * 60 * 60 * 1000), // 12 hours ago
           type: AnalyticsEventType.USER_INTERACTION,
           data: { value: 40 }
-  }
+
       ];
 
       mockRepository.seedTestData(events);
@@ -293,7 +293,7 @@ describe('HistoricalAnalyticsService', () => {
         aggregationType: 'count',
         filter: {
           types: [AnalyticsEventType.USER_INTERACTION]
-  }
+
         limit: 1000,
         offset: 0
       };
@@ -330,7 +330,7 @@ describe('HistoricalAnalyticsService', () => {
         
         // Different granularities should produce different numbers of data points
         expect(result.dataPoints.length).toBeGreaterThanOrEqual(0);
-      }
+
     });
 
 
@@ -378,7 +378,7 @@ describe('HistoricalAnalyticsService', () => {
       // Results should be different (different pages)
       if (result2.dataPoints.length > 0) {
         expect(result1.dataPoints[0].timestamp).not.toBe(result2.dataPoints[0].timestamp);
-      }
+
     });
 
     it('should handle avg aggregation type', async () => {
@@ -525,7 +525,7 @@ describe('HistoricalAnalyticsService', () => {
           retentionDays: 30,
           archiveBeforeDelete: true,
           compressionLevel: 'medium' as const
-        }],
+],
         enabled: true
       };
 
@@ -549,7 +549,7 @@ describe('HistoricalAnalyticsService', () => {
           timestamp: oldTimestamp + 1000,
           type: AnalyticsEventType.USER_INTERACTION,
           category: EventCategory.USER
-  }
+
       ];
 
       await mockRepository.saveBatch(oldEvents);
@@ -564,7 +564,7 @@ describe('HistoricalAnalyticsService', () => {
           retentionDays: 30,
           archiveBeforeDelete: true,
           compressionLevel: 'medium'
-        }],
+],
         enabled: true
       }, true); // immediateExecution = true
 
@@ -582,7 +582,7 @@ describe('HistoricalAnalyticsService', () => {
         createTestEvent({ 
           timestamp: Date.now() - (100 * 24 * 60 * 60 * 1000),
           type: AnalyticsEventType.USER_INTERACTION
-  }
+
       ];
 
       await mockRepository.saveBatch(oldEvents);
@@ -597,7 +597,7 @@ describe('HistoricalAnalyticsService', () => {
           retentionDays: 30,
           archiveBeforeDelete: true,
           compressionLevel: 'medium'
-        }],
+],
         enabled: false // Disabled
       });
 
@@ -624,7 +624,7 @@ describe('HistoricalAnalyticsService', () => {
         createTestEvent({ 
           timestamp: now - (12 * 60 * 60 * 1000),
           userId: 'user-1'
-  }
+
       ];
 
       await mockRepository.saveBatch(events);
@@ -680,7 +680,7 @@ describe('HistoricalAnalyticsService', () => {
         const page1Ids = page1.map(e => e.id);
         const page2Ids = page2.map(e => e.id);
         expect(page1Ids.some(id => page2Ids.includes(id))).toBe(false);
-      }
+
     });
   });
 
@@ -797,7 +797,7 @@ describe('HistoricalAnalyticsService', () => {
           retentionDays: 30,
           archiveBeforeDelete: true,
           compressionLevel: 'medium'
-        }],
+],
         enabled: true
       }, true);
 
@@ -829,10 +829,10 @@ describe('HistoricalAnalyticsService', () => {
       try {
         await service.queryHistoricalData(invalidQuery as HistoricalQuery);
         // If it doesn't throw, that's also acceptable behavior
-      } catch (error) {
+ catch (error) {
         expect(error).toBeInstanceOf(Error);
         expect(error.message).toContain('query');
-      }
+
     });
 
     it('should handle repository errors gracefully', async () => {
@@ -892,7 +892,7 @@ describe('HistoricalAnalyticsService', () => {
           retentionDays: 30,
           archiveBeforeDelete: true,
           compressionLevel: 'medium'
-        }],
+],
         enabled: true
       }, true); // immediateExecution = true
 

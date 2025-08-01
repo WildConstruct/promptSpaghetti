@@ -10,33 +10,13 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
 import { useState } from 'react';
 {
     const [activePreview, setActivePreview] = useState(selectedPlatform);
-    const previewOptions = [];
-    {
-        id: 'opengraph', label;
-        'Web Preview', icon;
-        '🌐';
-    }
-    {
-        id: 'twitter', label;
-        'Twitter Card', icon;
-        '🐦';
-    }
-    {
-        id: 'linkedin', label;
-        'LinkedIn', icon;
-        '💼';
-    }
-    {
-        id: 'discord', label;
-        'Discord', icon;
-        '💬';
-    }
-    {
-        id: 'embed', label;
-        'Embed Code', icon;
-        '📄';
-    }
-    ;
+    const previewOptions = [
+        { id: 'opengraph', label: 'Web Preview', icon: '🌐' },
+        { id: 'twitter', label: 'Twitter Card', icon: '🐦' },
+        { id: 'linkedin', label: 'LinkedIn', icon: '💼' },
+        { id: 'discord', label: 'Discord', icon: '💬' },
+        { id: 'embed', label: 'Embed Code', icon: '📄' }
+    ];
     const renderOpenGraphPreview = () => ();
     ;
     _jsxs("div", { style: {
@@ -51,7 +31,7 @@ import { useState } from 'react';
                 width: '100%',
                 height: '200px',
                 backgroundImage: `url(${shareConfig.thumbnailUrl})`
-            }, ", backgroundSize: 'cover', backgroundPosition: 'center' }}>"] });
+            }, ", backgroundSize: 'cover', backgroundPosition: 'center'; }}>"] });
 }
 _jsxs("div", { style: { padding: '16px' }, children: [_jsx("div", { style: {
                 fontSize: '12px',
@@ -86,7 +66,7 @@ _jsxs("div", { style: {
             width: '100%',
             height: '250px',
             backgroundImage: `url(${shareConfig.thumbnailUrl})`
-        }, ", backgroundSize: 'cover', backgroundPosition: 'center' }}>"] });
+        }, ", backgroundSize: 'cover', backgroundPosition: 'center'; }}>"] });
 _jsxs("div", { style: { padding: '12px' }, children: [_jsx("div", { style: {
                 fontSize: '15px',
                 color: '#536471',
@@ -120,7 +100,7 @@ _jsxs("div", { style: {
             width: '100%',
             height: '200px',
             backgroundImage: `url(${shareConfig.thumbnailUrl})`
-        }, ", backgroundSize: 'cover', backgroundPosition: 'center' }}>"] });
+        }, ", backgroundSize: 'cover', backgroundPosition: 'center'; }}>"] });
 _jsxs("div", { style: { padding: '12px' }, children: [_jsx("div", { style: {
                 fontSize: '14px',
                 fontWeight: '600',
@@ -171,7 +151,7 @@ _jsxs("div", { style: {
                     maxWidth: '400px',
                     height: '200px',
                     backgroundImage: `url(${shareConfig.thumbnailUrl})`
-                }, ", backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '4px' }}>"] }), ")}"] });
+                }, ", backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '4px'; }}>"] }), ")}"] });
 div >
 ;
 ;
@@ -260,7 +240,7 @@ const renderPreview = () => {
                         < button, key = { option, : .id }, onClick = {}()), " => setActivePreview(option.id)} style=", {
                         padding: '8px 12px',
                         border: `1px solid ${activePreview === option.id ? '#3b82f6' : '#d1d5db'}`
-                    }, ", backgroundColor: activePreview === option.id ? '#eff6ff' : 'white', color: activePreview === option.id ? '#3b82f6' : '#6b7280', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px' }} >", _jsx("span", { children: option.icon }), option.label] }), "))}"] });
+                    }, ", backgroundColor: activePreview === option.id ? '#eff6ff' : 'white', color: activePreview === option.id ? '#3b82f6' : '#6b7280', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px'; }} >", _jsx("span", { children: option.icon }), option.label] }), "))}"] });
     { /* Preview Content */ }
     _jsx("div", { style: {
             display: 'flex',

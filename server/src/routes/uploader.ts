@@ -14,7 +14,7 @@ import {
   UploadCategory,
   */ SecurityLevel,
   StorageBackend
-} from '../admin/UploaderArchitecture';
+ from '../admin/UploaderArchitecture';
 import { pipeline } from 'stream/promises';
 import { createHash } from 'crypto';
 import { Readable } from 'stream';
@@ -131,13 +131,13 @@ export async function uploaderRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof InitiateUploadSchema>
-  }>('/initiate', {
+>('/initiate', {
     preHandler: fastify.requirePermission([
       {
         resource: 'uploads',
         action: 'create',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -158,7 +158,7 @@ export async function uploaderRoutes(
           storageBackend: uploadData.storageBackend,
           notifyOnComplete: true,
           notifyOnError: true
-  }
+
         {
           purpose: uploadData.purpose,
           description: uploadData.description,
@@ -176,7 +176,7 @@ export async function uploaderRoutes(
           extractMetadata: uploadData.extractMetadata,
           generateThumbnails: uploadData.generateThumbnails,
           performOCR: uploadData.performOCR
-        }
+
       );
 
       return reply.code(201).send({
@@ -190,11 +190,10 @@ export async function uploaderRoutes(
           totalChunks: Math.ceil(uploadRequest.size / uploadRequest.options.maxChunkSize),
           processingPipeline: uploadRequest.metadata.requiresProcessing ? 
             ['virus_scan', 'metadata_extraction'] : []
-  }
+
         message: 'Upload initiated successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error initiating upload:', error);
       
       if (error instanceof z.ZodError) {
@@ -203,14 +202,14 @@ export async function uploaderRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to initiate upload',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -220,14 +219,14 @@ export async function uploaderRoutes(
   fastify.post<{
     Params: z.infer<typeof UploadIdSchema>;
     Body: z.infer<typeof UploadChunkSchema> & { chunk: Buffer }
-  }>('/:uploadId/chunks', {
+>('/:uploadId/chunks', {
     preHandler: [
       fastify.requirePermission([
         {
           resource: 'uploads',
           action: 'upload',
           allowSuperAdmin: true
-        }
+
       ])
     ]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -241,7 +240,7 @@ export async function uploaderRoutes(
           success: false,
           error: 'No file chunk provided'
         });
-      }
+
 
       const chunkBuffer = await data.toBuffer();
       
@@ -255,7 +254,7 @@ export async function uploaderRoutes(
           success: false,
           error: 'Missing or invalid chunk metadata'
         });
-      }
+
 
       // Validate chunk data
       const chunkValidation = UploadChunkSchema.parse({
@@ -285,14 +284,13 @@ export async function uploaderRoutes(
             totalChunks: progress.totalChunks,
             speed: progress.speed,
             estimatedTimeRemaining: progress.estimatedTimeRemaining
-  }
+
           uploadComplete: progress.status === 'completed',
           processingStarted: progress.status === 'processing'
-  }
+
         message: `Chunk ${chunkValidation.chunkNumber + 1}/${totalChunks} uploaded successfully`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error uploading chunk:', error);
       
       if (error instanceof z.ZodError) {
@@ -301,14 +299,14 @@ export async function uploaderRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to upload chunk',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -318,13 +316,13 @@ export async function uploaderRoutes(
   fastify.get<{
     Params: z.infer<typeof UploadIdSchema>;
     Querystring: { includeChunks?: boolean; includeJobs?: boolean }
-  }>('/:uploadId', {
+>('/:uploadId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'uploads',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -339,7 +337,7 @@ export async function uploaderRoutes(
           success: false,
           error: 'Upload not found'
         });
-      }
+
 
       // Check permission to access this upload
       const user = (request.user as unknown);
@@ -348,7 +346,7 @@ export async function uploaderRoutes(
           success: false,
           error: 'Access denied'
         });
-      }
+
 
       const progress = await uploaderService.getUploadProgress(uploadId);
       const responseData: unknown = {
@@ -365,25 +363,24 @@ export async function uploaderRoutes(
           updatedAt: uploadRequest.updatedAt,
           completedAt: uploadRequest.completedAt,
           expiresAt: uploadRequest.expiresAt
-  }
+
         progress,
         metadata: uploadRequest.metadata
       };
 
       if (query.includeChunks) {
         responseData.chunks = uploadRequest.chunks;
-      }
+
 
       if (query.includeJobs) {
         responseData.processingJobs = await uploaderService.getProcessingJobs(uploadId);
-      }
+
 
       return reply.send({
         success: true,
         data: responseData
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting upload:', error);
       
       return reply.code(500).send({
@@ -391,7 +388,7 @@ export async function uploaderRoutes(
         error: 'Failed to get upload status',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -400,13 +397,13 @@ export async function uploaderRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof UploadQuerySchema>
-  }>('/query', {
+>('/query', {
     preHandler: fastify.requirePermission([
       {
         resource: 'uploads',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -416,7 +413,7 @@ export async function uploaderRoutes(
       // Restrict query to user's uploads unless they're an admin
       if (!(user as any).isSuperAdmin) {
         query.uploadedBy = (user as any).id;
-      }
+
 
       const result = await uploaderService.queryUploads(query);
 
@@ -429,11 +426,10 @@ export async function uploaderRoutes(
             limit: query.limit,
             offset: query.offset,
             hasMore: result.hasMore
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       console.error('Error querying uploads:', error);
       
       if (error instanceof z.ZodError) {
@@ -442,14 +438,14 @@ export async function uploaderRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to query uploads',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -459,13 +455,13 @@ export async function uploaderRoutes(
   fastify.delete<{
     Params: z.infer<typeof UploadIdSchema>;
     Body: { reason?: string }
-  }>('/:uploadId', {
+>('/:uploadId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'uploads',
         action: 'delete',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -479,8 +475,7 @@ export async function uploaderRoutes(
         success: true,
         message: 'Upload cancelled successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error cancelling upload:', error);
       
       return reply.code(500).send({
@@ -488,7 +483,7 @@ export async function uploaderRoutes(
         error: 'Failed to cancel upload',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -498,13 +493,13 @@ export async function uploaderRoutes(
   fastify.post<{
     Params: { uploadId: string; jobId: string };
     Body: z.infer<typeof ProcessingJobControlSchema>
-  }>('/:uploadId/processing/:jobId', {
+>('/:uploadId/processing/:jobId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'uploads',
         action: 'manage_processing',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -525,8 +520,7 @@ export async function uploaderRoutes(
         data: result,
         message: `Processing job ${controlData.action} completed successfully`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error controlling processing job:', error);
       
       if (error instanceof z.ZodError) {
@@ -535,14 +529,14 @@ export async function uploaderRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to control processing job',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -552,13 +546,13 @@ export async function uploaderRoutes(
   fastify.get<{
     Params: z.infer<typeof UploadIdSchema>;
     Querystring: { variant?: string }
-  }>('/:uploadId/download', {
+>('/:uploadId/download', {
     preHandler: fastify.requirePermission([
       {
         resource: 'uploads',
         action: 'download',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -573,7 +567,7 @@ export async function uploaderRoutes(
           success: false,
           error: 'File not found or not accessible'
         });
-      }
+
 
       // Set appropriate headers
       reply.header('Content-Disposition', `attachment; filename="${downloadInfo.filename}"`);
@@ -583,8 +577,7 @@ export async function uploaderRoutes(
       // Stream the file
       const fileStream = await uploaderService.createDownloadStream(downloadInfo.location);
       return reply.send(fileStream);
-
-    } catch (error) {
+ catch (error) {
       console.error('Error downloading file:', error);
       
       return reply.code(500).send({
@@ -592,7 +585,7 @@ export async function uploaderRoutes(
         error: 'Failed to download file',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -601,13 +594,13 @@ export async function uploaderRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof BulkOperationSchema>
-  }>('/bulk', {
+>('/bulk', {
     preHandler: fastify.requirePermission([
       {
         resource: 'uploads',
         action: 'bulk_operations',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -629,11 +622,10 @@ export async function uploaderRoutes(
           successful: result.successful,
           failed: result.failed,
           results: result.results
-  }
+
         message: `Bulk operation completed: ${result.successful} successful, ${result.failed} failed`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error performing bulk operation:', error);
       
       if (error instanceof z.ZodError) {
@@ -642,14 +634,14 @@ export async function uploaderRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to perform bulk operation',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -663,14 +655,14 @@ export async function uploaderRoutes(
       groupBy?: string;
       category?: string;
       uploadType?: string;
-    }
-  }>('/statistics', {
+
+>('/statistics', {
     preHandler: fastify.requirePermission([
       {
         resource: 'uploads',
         action: 'read_statistics',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -701,12 +693,11 @@ export async function uploaderRoutes(
           period: {
             start: startDate.toISOString(),
             end: endDate.toISOString()
-  }
-          generatedAt: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+          generatedAt: new Date().toISOString()
+
+      });
+ catch (error) {
       console.error('Error getting upload statistics:', error);
       
       return reply.code(500).send({
@@ -714,7 +705,7 @@ export async function uploaderRoutes(
         error: 'Failed to get upload statistics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -736,23 +727,21 @@ export async function uploaderRoutes(
             storageProviders: health.storageProviders,
             processingQueue: health.processingQueue,
             database: health.database
-  }
+
           metrics: {
             activeUploads: health.metrics.activeUploads,
             queuedJobs: health.metrics.queuedJobs,
             processingJobs: health.metrics.processingJobs,
             totalStorage: health.metrics.totalStorageUsed,
             averageUploadTime: health.metrics.averageUploadTime
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       return reply.code(503).send({
         success: false,
         error: 'Uploader system unhealthy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}

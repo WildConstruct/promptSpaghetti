@@ -8,9 +8,8 @@ import { NodeValidationFramework, NodeValidationResult, NodeValidationConfig } f
 import { AdvancedNodeData, ValidationResult } from '../runtime/advanced';
 import { EventEmitter } from 'events';
 
-}
-export interface ValidationServiceConfig extends NodeValidationConfig {
-  /** Enable validation result caching */
+
+export interface ValidationServiceConfig extends NodeValidationConfig { /** Enable validation result caching */
   enableCaching: boolean;
   /** Cache expiration time in milliseconds */
   cacheExpirationMs: number;
@@ -25,10 +24,10 @@ export interface ValidationServiceConfig extends NodeValidationConfig {
   averageValidationTime: number;
   securityThreatsDetected: number;
   performanceIssuesDetected: number;
-  cacheHitRate: number;
-}
-}
-}
+  cacheHitRate: number }
+
+
+
 export interface ValidationCacheEntry {
   result: NodeValidationResult;
   timestamp: number;
@@ -36,41 +35,39 @@ export interface ValidationCacheEntry {
   /**
   * Node Validation Service with caching, monitoring, and batch operations
   */
-}
-}
+
+
 export class NodeValidationService extends EventEmitter {
   private framework: NodeValidationFramework;
   private config: ValidationServiceConfig;
   private cache = new Map<string, ValidationCacheEntry>();
   private metrics: ValidationServiceMetrics;
   private validationHistory: { timestamp: number; duration: number; success: boolean }[] = [];
-  constructor(config: Partial<ValidationServiceConfig> = {}) {
-  super();
+  constructor(config: Partial<ValidationServiceConfig> = {}) { super();
   this.config = {
   // NodeValidationFramework config
-  strictTypeValidation: true,
-  securityValidation: true,
-  performanceValidation: true,
-  schemaValidation: true,
-  maxExecutionDepth: 100,
-  maxMemoryUsage: 50 * 1024 * 1024,
-  maxExecutionTime: 10000,
+  strictTypeValidation: true
+  securityValidation: true
+  performanceValidation: true
+  schemaValidation: true
+  maxExecutionDepth: 100
+  maxMemoryUsage: 50 * 1024 * 1024
+  maxExecutionTime: 10000
   // Service-specific config
-  enableCaching: true,
-  cacheExpirationMs: 5 * 60 * 1000, // 5 minutes,
-  enableMonitoring: true,
-  batchSize: 10,
+  enableCaching: true
+  cacheExpirationMs: 5 * 60 * 1000, // 5 minutes
+  enableMonitoring: true
+  batchSize: 10 }
   ...config
 };
     this.framework = new NodeValidationFramework(this.config);
     this.metrics = this.initializeMetrics();
     // Set up cache cleanup
-    if (this.config.enableCaching) {
-  setInterval(() => this.cleanupCache(), this.config.cacheExpirationMs);
+    if (this.config.enableCaching) { setInterval(() => this.cleanupCache(), this.config.cacheExpirationMs);
   /**
   * Validate a single node with caching and monitoring
   */
-  async validateNode(nodeData: AdvancedNodeData): Promise<NodeValidationResult> {,
+  async validateNode(nodeData: AdvancedNodeData): Promise<NodeValidationResult> {
   const startTime = Date.now();
   let result: NodeValidationResult;
   let fromCache = false;
@@ -91,47 +88,42 @@ export class NodeValidationService extends EventEmitter {
   if (this.config.enableMonitoring) {
   this.updateMetrics(startTime, result, fromCache);
   this.emitValidationEvent('validation_complete', {)
-  nodeId: nodeData.id,
-  nodeType: nodeData.type,
-  valid: result.valid,
-  fromCache,
-  duration: Date.now() - startTime,
+  nodeId: nodeData.id
+  nodeType: nodeData.type
+  valid: result.valid
+  fromCache
+  duration: Date.now() - startTime }
 });
       return result;
-    } catch (error) {
-      // Handle validation errors gracefully
-      const errorResult: NodeValidationResult = {,
-  valid: false,
+ catch (error) { // Handle validation errors gracefully
+      const errorResult: NodeValidationResult = {
+  valid: false }
         errors: [`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`]}
-},
-  warnings: [],
-        security: { passed: false, threats: [], riskLevel: 'critical' },
-        performance: { passed: false, issues: [], estimatedMemoryUsage: 0, estimatedExecutionTime: 0 },
-        typeSafety: { passed: false, typeErrors: [], compatibility: 'incompatible' },
+
+  warnings: []
+        security: { passed: false, threats: [], riskLevel: 'critical' }
+        performance: { passed: false, issues: [], estimatedMemoryUsage: 0, estimatedExecutionTime: 0 }
+        typeSafety: { passed: false, typeErrors: [], compatibility: 'incompatible' }
         schema: { passed: false, schemaErrors: [] }
       };
-      if (this.config.enableMonitoring) {
-  this.updateMetrics(startTime, errorResult, false);
+      if (this.config.enableMonitoring) { this.updateMetrics(startTime, errorResult, false);
   this.emitValidationEvent('validation_error', {)
-  nodeId: nodeData.id,
-  nodeType: nodeData.type,
-  error: error instanceof Error ? error.message : 'Unknown error',
+  nodeId: nodeData.id
+  nodeType: nodeData.type
+  error: error instanceof Error ? error.message : 'Unknown error' }
 });
       return errorResult;
   /**
    * Validate multiple nodes in batch with parallel processing
    */
-  async validateNodeBatch(nodes: AdvancedNodeData): Promise<NodeValidationResult> {
-
-  if (nodes.length === 0) return [];
+  async validateNodeBatch(nodes: AdvancedNodeData): Promise<NodeValidationResult> { if (nodes.length === 0) return [];
   const batches = this.chunkArray(nodes, this.config.batchSize);
   const results: NodeValidationResult = [];
   this.emitValidationEvent('batch_validation_start', {)
-  totalNodes: nodes.length,
-  batchCount: batches.length,
+  totalNodes: nodes.length
+  batchCount: batches.length }
 });
-    for (let i = 0; i < batches.length; i++) {
-  const batch = batches[i];
+    for (let i = 0; i < batches.length; i++) { const batch = batches[i];
   const batchResults = await Promise.all(;);
   batch.map(node => this.validateNode(node))
   );
@@ -140,22 +132,21 @@ export class NodeValidationService extends EventEmitter {
   completedBatches: i + 1,
   totalBatches: batches.length,
   completedNodes: results.length,
-  totalNodes: nodes.length,
+  totalNodes: nodes.length }
 });
-    this.emitValidationEvent('batch_validation_complete', {)
+    this.emitValidationEvent('batch_validation_complete', { )
   totalNodes: nodes.length,
   validNodes: results.filter(r => r.valid).length,
-  invalidNodes: results.filter(r => !r.valid).length,
+  invalidNodes: results.filter(r => !r.valid).length }
 });
     return results;
   /**
    * Validate node with real-time streaming results
    */
-  async *validateNodeStream(nodes: AdvancedNodeData): AsyncGenerator<{,
+  async *validateNodeStream(nodes: AdvancedNodeData): AsyncGenerator<{ ,
   index: number;
   node: AdvancedNodeData;
-  result: NodeValidationResult;
-}> {
+  result: NodeValidationResult }> {
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       const result = await this.validateNode(node);
@@ -168,16 +159,14 @@ export class NodeValidationService extends EventEmitter {
   /**
    * Clear validation cache
    */
-  clearCache(): void {
-  this.cache.clear();
+  clearCache(): void { this.cache.clear();
   this.emitValidationEvent('cache_cleared', {)
-  clearedEntries: this.cache.size,
+  clearedEntries: this.cache.size }
 });
   /**
    * Get cache statistics
    */
-  getCacheStats(): {
-  size: number;
+  getCacheStats(): { size: number;
   hitRate: number;
   oldestEntry: number;
   newestEntry: number;
@@ -187,7 +176,7 @@ export class NodeValidationService extends EventEmitter {
   size: this.cache.size,
   hitRate: this.metrics.cacheHitRate,
   oldestEntry: Math.min(...timestamps),
-  newestEntry: Math.max(...timestamps),
+  newestEntry: Math.max(...timestamps) }
 };
   /**
    * Configure validation settings at runtime
@@ -195,50 +184,47 @@ export class NodeValidationService extends EventEmitter {
   updateConfig(newConfig: Partial<ValidationServiceConfig>): void {
     this.config = { ...this.config, ...newConfig };
     this.framework = new NodeValidationFramework(this.config);
-    this.emitValidationEvent('config_updated', {)
-  newConfig: this.config,
+    this.emitValidationEvent('config_updated', { )
+  newConfig: this.config }
 });
   /**
    * Export validation report
    */
-  exportValidationReport(nodes: AdvancedNodeData, results: NodeValidationResult): string {
-  const report = {
-  timestamp: new Date().toISOString(),
+  exportValidationReport(nodes: AdvancedNodeData, results: NodeValidationResult): string { const report = {
+  timestamp: new Date().toISOString()
   summary: {
-  totalNodes: nodes.length,
-  validNodes: results.filter(r => r.valid).length,
-  invalidNodes: results.filter(r => !r.valid).length,
-  securityThreats: results.reduce((sum, r) => sum + r.security.threats.length, 0),
-  performanceIssues: results.reduce((sum, r) => sum + r.performance.issues.length, 0),
-  typeErrors: results.reduce((sum, r) => sum + r.typeSafety.typeErrors.length, 0),
-},
-  metrics: this.getMetrics(),
-      results: results.map((result, index) => ({)
-  nodeId: nodes[index].id,
-  nodeType: nodes[index].type,
-  valid: result.valid,
-  errors: result.errors,
-  warnings: result.warnings,
-  security: result.security,
-  performance: result.performance,
-  typeSafety: result.typeSafety,
-  schema: result.schema,
+  totalNodes: nodes.length
+  validNodes: results.filter(r => r.valid).length
+  invalidNodes: results.filter(r => !r.valid).length
+  securityThreats: results.reduce((sum, r) => sum + r.security.threats.length, 0)
+  performanceIssues: results.reduce((sum, r) => sum + r.performance.issues.length, 0)
+  typeErrors: results.reduce((sum, r) => sum + r.typeSafety.typeErrors.length, 0) }
+
+  metrics: this.getMetrics()
+      results: results.map((result, index) => ({ )
+  nodeId: nodes[index].id
+  nodeType: nodes[index].type
+  valid: result.valid
+  errors: result.errors
+  warnings: result.warnings
+  security: result.security
+  performance: result.performance
+  typeSafety: result.typeSafety
+  schema: result.schema }
 }))
     };
     return JSON.stringify(report, null, 2);
   // Private helper methods
-  private initializeMetrics(): ValidationServiceMetrics {
-  return {
-  totalValidations: 0,
-  successfulValidations: 0,
-  failedValidations: 0,
-  averageValidationTime: 0,
-  securityThreatsDetected: 0,
-  performanceIssuesDetected: 0,
-  cacheHitRate: 0,
+  private initializeMetrics(): ValidationServiceMetrics { return {
+  totalValidations: 0
+  successfulValidations: 0
+  failedValidations: 0
+  averageValidationTime: 0
+  securityThreatsDetected: 0
+  performanceIssuesDetected: 0
+  cacheHitRate: 0 }
 };
-  private getCachedResult(nodeData: AdvancedNodeData): NodeValidationResult | null {
-  const nodeHash = this.generateNodeHash(nodeData);
+  private getCachedResult(nodeData: AdvancedNodeData): NodeValidationResult | null { const nodeHash = this.generateNodeHash(nodeData);
   const cached = this.cache.get(nodeHash);
   if (cached && Date.now() - cached.timestamp < this.config.cacheExpirationMs) {
   return cached.result;
@@ -247,37 +233,32 @@ export class NodeValidationService extends EventEmitter {
   const nodeHash = this.generateNodeHash(nodeData);
   this.cache.set(nodeHash, {)
   result,
-  timestamp: Date.now(),
+  timestamp: Date.now() }
   nodeHash
 });
-  private generateNodeHash(nodeData: AdvancedNodeData): string {
-  // Simple hash based on node content - in production use a proper hash function
+  private generateNodeHash(nodeData: AdvancedNodeData): string { // Simple hash based on node content - in production use a proper hash function
   const content = JSON.stringify({)
   id: nodeData.id,
   type: nodeData.type,
   config: nodeData.config,
-  data: nodeData.data,
+  data: nodeData.data }
 });
     let hash = 0;
-    for (let i = 0; i < content.length; i++) {
-  const char = content.charCodeAt(i);
+    for (let i = 0; i < content.length; i++) { const char = content.charCodeAt(i);
   hash = ((hash << 5) - hash) + char;
   hash = hash & hash; // Convert to 32bit integer
   return hash.toString(36);
-  private updateMetrics(startTime: number, result: NodeValidationResult, fromCache: boolean): void {,
+  private updateMetrics(startTime: number, result: NodeValidationResult, fromCache: boolean): void { }
   const duration = Date.now() - startTime;
   this.metrics.totalValidations++;
-  if (result.valid) {
-  this.metrics.successfulValidations++;
-} else {
+  if (result.valid) { this.metrics.successfulValidations++ } else {
       this.metrics.failedValidations++;
     this.metrics.securityThreatsDetected += result.security.threats.length;
     this.metrics.performanceIssuesDetected += result.performance.issues.length;
     // Update average validation time
     this.validationHistory.push({ timestamp: Date.now(), duration, success: result.valid });
     // Keep only recent history (last 100 validations)
-    if (this.validationHistory.length > 100) {
-  this.validationHistory = this.validationHistory.slice(-100);
+    if (this.validationHistory.length > 100) { this.validationHistory = this.validationHistory.slice(-100);
   const totalTime = this.validationHistory.reduce((sum, h) => sum + h.duration, 0);
   this.metrics.averageValidationTime = totalTime / this.validationHistory.length;
   // Update cache hit rate
@@ -295,17 +276,16 @@ export class NodeValidationService extends EventEmitter {
   if (expiredKeys.length > 0) {
   this.emitValidationEvent('cache_cleanup', {)
   expiredEntries: expiredKeys.length,
-  remainingEntries: this.cache.size,
+  remainingEntries: this.cache.size }
 });
-  private emitValidationEvent(eventType: string, data: any): void {
-  this.emit('validation_event', {)
+  private emitValidationEvent(eventType: string, data: any): void { this.emit('validation_event', {)
   type: eventType,
-  timestamp: Date.now(),
+  timestamp: Date.now() }
   data
 });
     // Also emit specific event type
     this.emit(eventType, data);
-  private chunkArray<T>(array: T, chunkSize: number): T[] {
+  private chunkArray<T>(array: T, chunkSize: number): T {
     const chunks: T = [];
     for (let i = 0; i < array.length; i += chunkSize) {
       chunks.push(array.slice(i, i + chunkSize));

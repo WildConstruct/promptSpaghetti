@@ -7,8 +7,7 @@
 export * from './PromotionTypes';
 export * from './TrustTypes';
 export * from './EnforcementTypes';
-export type {
-  BasePolicy,
+export type { BasePolicy,
   PolicyType,
   PolicyStatus,
   PolicyScope,
@@ -30,10 +29,9 @@ export type {
   IPolicyNotificationService,
   PolicyServiceResponse,
   PolicyValidationResult,
-  EvaluationContext,
+  EvaluationContext }
 } from './PolicyInterfaces';
-export type {
-  BasePromotion,
+export type { BasePromotion,
   DiscountPromotion,
   ContentPromotion,
   BundlePromotion,
@@ -49,22 +47,20 @@ export type {
   PromotionServiceResponse,
   PromotionEligibilityCheck,
   PromotionApplicationResult,
-  PromotionSearchResult,
+  PromotionSearchResult }
 } from './PromotionInterfaces';
-export type {
-  PolicyServiceResponse,
+export type { PolicyServiceResponse,
   CreatePolicyRequest,
   UpdatePolicyRequest,
   PolicyTestCase,
-  PolicyTestResult,
+  PolicyTestResult }
 } from './PolicyServices';
-export type {
-  BasePolicyEvent,
+export type { BasePolicyEvent,
   PolicyEventType,
   PolicyLifecycleEvent,
   PolicyAssignmentEvent,
   ComplianceEvent,
   SecurityEvent,
-  PolicyNotification,
+  PolicyNotification }
 } from './PolicyEvents';
 //# sourceMappingURL=index.d.ts.map

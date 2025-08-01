@@ -32,12 +32,13 @@ metadata: {
     'returning',
     ;
 }
-outcomes: [,
+outcomes: [
     {
         type: 'conversion',
         value: Math.random() * 100,
         timestamp: Date.now()
-    }];
+    }
+];
 ;
 export const UserBehaviorFlowVisualization = ({
     analyticsInfrastructure,
@@ -166,5 +167,11 @@ div >
 ;
 ;
 ;
+timeRange: {
+    start: number;
+    end: number;
+}
+;
+version: string;
 ;
 export default UserBehaviorFlowVisualization;

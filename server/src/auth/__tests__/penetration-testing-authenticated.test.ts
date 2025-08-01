@@ -40,7 +40,7 @@ jest.mock('../config', () => ({
       maxLoginAttempts: 5,
       sessionTimeout: 30 * 60 * 1000,
       tokenRotationInterval: 15 * 60 * 1000
-    }
+
   }))
 }));
 
@@ -59,19 +59,19 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
       email: 'admin@example.com',
       roles: ['admin'],
       permissions: ['users:read', 'users:write', 'admin:*']
-  }
+
     user: {
       id: 2, 
       email: 'user@example.com',
       roles: ['user'],
       permissions: ['profile:read', 'profile:write']
-  }
+
     limitedUser: {
       id: 3,
       email: 'limited@example.com', 
       roles: ['limited'],
       permissions: ['profile:read']
-    }
+
   };
 
   // Valid authentication tokens for testing
@@ -90,31 +90,31 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
       generateToken: jest.fn<unknown[], unknown>(),
       refreshToken: jest.fn<unknown[], unknown>(),
       revokeToken: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     sessionService = {
       getSession: jest.fn<unknown[], unknown>(),
       createSession: jest.fn<unknown[], unknown>(),
       updateSession: jest.fn<unknown[], unknown>(),
       deleteSession: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     rbacService = {
       hasPermission: jest.fn<unknown[], unknown>(),
       getUserRoles: jest.fn<unknown[], unknown>(),
       checkAccess: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     auditService = {
       logEvent: jest.fn<unknown[], unknown>(),
       logSecurityEvent: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     userService = {
       findById: jest.fn<unknown[], unknown>(),
       findByEmail: jest.fn<unknown[], unknown>(),
       createUser: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     // Setup service mock behaviors
     tokenService.validateToken.mockImplementation(async (token: string) => {
@@ -158,17 +158,17 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         const auth = request.headers.authorization;
         if (!auth || !auth.startsWith('Bearer ')) {
           return reply.code(401).send({ error: 'Unauthorized' });
-        }
+
 
         const token = auth.substring(7);
         const validation = await tokenService.validateToken(token);
         if (!validation.valid) {
           return reply.code(401).send({ error: 'Invalid token' });
-        }
+
 
         // Attach user context
         request.user = validation.payload;
-      }
+
     });
 
     // Define test routes with different permission requirements
@@ -176,7 +176,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
       const hasPermission = await rbacService.hasPermission(request.user?.userId, 'admin:read');
       if (!hasPermission) {
         return reply.code(403).send({ error: 'Insufficient permissions' });
-      }
+
       return { data: 'admin-only-data', sensitive: true };
     });
 
@@ -189,7 +189,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
       const isAdmin = await rbacService.hasPermission(currentUserId, 'admin:*');
       if (!isAdmin && currentUserId !== requestedUserId) {
         return reply.code(403).send({ error: 'Cannot access other user data' });
-      }
+
 
       return { userId: requestedUserId, data: 'user-specific-data' };
     });
@@ -198,7 +198,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
       const hasPermission = await rbacService.hasPermission(request.user?.userId, 'users:write');
       if (!hasPermission) {
         return reply.code(403).send({ error: 'Write permission required' });
-      }
+
       return { success: true, action: 'completed' };
     });
   });
@@ -206,7 +206,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
   afterEach(async () => {
     if (fastify) {
       await fastify.close();
-    }
+
     jest.clearAllMocks();
   });
 
@@ -218,7 +218,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/admin',
         headers: {
           authorization: `Bearer ${validTokens.admin}`
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -233,7 +233,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/admin',
         headers: {
           authorization: `Bearer ${tamperedToken}`
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -248,7 +248,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         headers: {
           authorization: `Bearer ${validTokens.admin}`,
           'x-forwarded-for': '192.168.1.100'
-        }
+
       });
 
       const response2 = await fastify.inject({
@@ -257,7 +257,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         headers: {
           authorization: `Bearer ${validTokens.admin}`,
           'x-forwarded-for': '10.0.0.1' // Different IP
-        }
+
       });
 
       // Both should work in this test (real implementation would track IP)
@@ -273,7 +273,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           url: '/api/protected/admin',
           headers: {
             authorization: `Bearer ${validTokens.admin}`
-          }
+
   }
       );
 
@@ -294,7 +294,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/user/1', // Admin's user ID
         headers: {
           authorization: `Bearer ${validTokens.user}` // Regular user token
-        }
+
       });
 
       expect(response.statusCode).toBe(403);
@@ -308,7 +308,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/admin',
         headers: {
           authorization: `Bearer ${validTokens.user}`
-        }
+
       });
 
       expect(response.statusCode).toBe(403);
@@ -322,7 +322,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/sensitive-action',
         headers: {
           authorization: `Bearer ${validTokens.limited}`
-        }
+
       });
 
       expect(response.statusCode).toBe(403);
@@ -341,7 +341,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/admin',
         headers: {
           authorization: `Bearer ${manipulatedToken}`
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -360,7 +360,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/admin',
         headers: {
           authorization: `Bearer ${invalidToken}`
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -378,7 +378,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           method: 'GET', 
           url: '/api/protected/admin',
           headers: { authorization: `Bearer ${validTokens.admin}` }
-  }
+
       ]);
 
       // JWT tokens can be reused until expiry (not replay protected)
@@ -398,7 +398,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/admin',
         headers: {
           authorization: 'Bearer expired-token'
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -422,7 +422,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         });
 
         expect(response.statusCode).toBe(401);
-      }
+
     });
 
     it('should validate request parameter tampering', async () => {
@@ -432,7 +432,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/user/1', // Admin user ID
         headers: {
           authorization: `Bearer ${validTokens.user}` // User token
-        }
+
       });
 
       expect(response.statusCode).toBe(403);
@@ -452,12 +452,12 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           url: endpoint,
           headers: {
             authorization: `Bearer ${validTokens.user}`
-          }
+
         });
 
         // Should get 403 (Forbidden) for insufficient permissions or 404 for nonexistent
         expect([403, 404, 405].includes(response.statusCode)).toBe(true);
-      }
+
     });
   });
 
@@ -469,7 +469,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/admin',
         headers: {
           authorization: `Bearer ${validTokens.admin}`
-        }
+
       });
 
       expect(adminResponse.statusCode).toBe(200);
@@ -482,7 +482,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/admin',
         headers: {
           authorization: `Bearer ${validTokens.user}`
-        }
+
       });
 
       expect(userResponse.statusCode).toBe(403);
@@ -495,7 +495,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/user/2', // User's own ID
         headers: {
           authorization: `Bearer ${validTokens.user}`
-        }
+
       });
 
       expect(user1Response.statusCode).toBe(200);
@@ -506,7 +506,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/user/3', // Different user ID
         headers: {
           authorization: `Bearer ${validTokens.user}`
-        }
+
       });
 
       expect(user2Response.statusCode).toBe(403);
@@ -521,7 +521,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/sensitive-action',
         headers: {
           authorization: `Bearer ${validTokens.limited}`
-        }
+
       });
 
       expect(response.statusCode).toBe(403);
@@ -539,7 +539,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           method: 'POST',
           url: '/api/protected/sensitive-action',
           headers: { authorization: `Bearer ${validTokens.admin}` }
-  }
+
       ]);
 
       expect(responses[0].statusCode).toBe(200);
@@ -553,7 +553,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         url: '/api/protected/admin',
         headers: {
           authorization: `Bearer ${validTokens.admin}`
-        }
+
       });
 
       // Verify audit service was called (mocked)
@@ -570,7 +570,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           url: '/api/protected/admin',
           headers: {
             authorization: `Bearer ${validTokens.admin}`
-          }
+
   }
       );
 
@@ -597,12 +597,12 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           url: `/api/protected/user/${encodeURIComponent(input)}`,
           headers: {
             authorization: `Bearer ${validTokens.admin}`
-          }
+
         });
 
         // Should handle malicious input gracefully (400 or 404)
         expect([200, 400, 404].includes(response.statusCode)).toBe(true);
-      }
+
     });
   });
 });

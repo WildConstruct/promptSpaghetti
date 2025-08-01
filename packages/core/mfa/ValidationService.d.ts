@@ -8,48 +8,40 @@ import { EventEmitter } from 'events';
 import { VerificationCodeData, ValidationResult } from './CodeGenerator';
 
 }
-export interface VerificationCodeStorage {
-    save(code: VerificationCodeData): Promise<void>;
+}
+export interface VerificationCodeStorage { save(code: VerificationCodeData): Promise<void>;
     findById(id: string): Promise<VerificationCodeData | null>;
     findByUserAndPurpose(userId: string, purpose: string): Promise<VerificationCodeData[]>;
     update(id: string, updates: Partial<VerificationCodeData>): Promise<void>;
     delete(id: string): Promise<void>;
     deleteExpired(): Promise<number>;
-    findByUser(userId: string): Promise<VerificationCodeData[]>;
-
+    findByUser(userId: string): Promise<VerificationCodeData[]> }
 }
-export interface RateLimiter {
-    isAllowed(key: string, limit: number, windowMs: number): Promise<boolean>;
+}
+export interface RateLimiter { isAllowed(key: string, limit: number, windowMs: number): Promise<boolean>;
     increment(key: string, windowMs: number): Promise<number>;
-    reset(key: string): Promise<void>;
-
+    reset(key: string): Promise<void> }
 }
-export interface ValidationServiceConfig {
-    rateLimiting: {
+}
+export interface ValidationServiceConfig { rateLimiting: {
         enabled: boolean;
         maxGenerationsPerHour: number;
         maxValidationAttemptsPerHour: number;
-        maxValidationAttemptsPerCode: number;
+        maxValidationAttemptsPerCode: number }
 }
     };
-    monitoring: {
-        enabled: boolean;
+    monitoring: { enabled: boolean;
         alertOnSuspiciousActivity: boolean;
-        logAllValidations: boolean;
-    };
-    cleanup: {
-        autoDeleteExpired: boolean;
-        cleanupIntervalMinutes: number;
-    };
-    security: {
-        constantTimeValidation: boolean;
+        logAllValidations: boolean };
+    cleanup: { autoDeleteExpired: boolean;
+        cleanupIntervalMinutes: number };
+    security: { constantTimeValidation: boolean;
         logFailedAttempts: boolean;
-        blockAfterFailures: number;
-    };
+        blockAfterFailures: number };
 
 }
-export interface ValidationAttempt {
-    id: string;
+}
+export interface ValidationAttempt { id: string;
     userId: string;
     codeId: string;
     inputCode: string;
@@ -57,11 +49,10 @@ export interface ValidationAttempt {
     reason?: string;
     ipAddress?: string;
     userAgent?: string;
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface SuspiciousActivity {
-    type: 'rapid_fire' | 'enumeration' | 'expired_code_use' | 'brute_force';
+}
+export interface SuspiciousActivity { type: 'rapid_fire' | 'enumeration' | 'expired_code_use' | 'brute_force';
     userId: string;
     details: Record<string, any>;
     timestamp: Date;
@@ -84,28 +75,24 @@ export declare class ValidationService extends EventEmitter {
         expirationMinutes?: number;
         maxAttempts?: number;
         metadata?: Record<string, any>;
-        ipAddress?: string;
+        ipAddress?: string }
 }
-    }): Promise<{
-        code: string;
-        id: string;
-    }>;
+    }): Promise<{ code: string;
+        id: string }>;
     /**
      * Validate a verification code
      */
-    validateVerificationCode(codeId: string, inputCode: string, options?: {)
+    validateVerificationCode(codeId: string, inputCode: string, options?: { )
         userId?: string;
         ipAddress?: string;
         userAgent?: string;
-        purpose?: string;
-    }): Promise<ValidationResult>;
+        purpose?: string }): Promise<ValidationResult>;
     /**
      * Validate code by user and purpose (convenience method)
      */
-    validateByUserAndPurpose(userId: string, purpose: string, inputCode: string, options?: {)
+    validateByUserAndPurpose(userId: string, purpose: string, inputCode: string, options?: { )
         ipAddress?: string;
-        userAgent?: string;
-    }): Promise<ValidationResult>;
+        userAgent?: string }): Promise<ValidationResult>;
     /**
      * Invalidate a specific verification code
      */
@@ -117,15 +104,13 @@ export declare class ValidationService extends EventEmitter {
     /**
      * Get validation statistics for a user
      */
-    getUserValidationStats(userId: string): Promise<{
-        totalCodes: number;
+    getUserValidationStats(userId: string): Promise<{ totalCodes: number;
         activeCodes: number;
         expiredCodes: number;
         usedCodes: number;
         totalAttempts: number;
         successfulValidations: number;
-        failedValidations: number;
-    }>;
+        failedValidations: number }>;
     /**
      * Clean up expired codes
      */
@@ -140,7 +125,7 @@ export declare class ValidationService extends EventEmitter {
     private checkForSuspiciousActivity;
 
 export declare function createValidationService(storage: VerificationCodeStorage)
-  rateLimiter: RateLimiter,
+  rateLimiter: RateLimiter
   environment?: 'development' | 'production'
 ): ValidationService;
 export default ValidationService;

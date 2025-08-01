@@ -5,11 +5,11 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
  */
 
 }
-export interface ExportOptionsProps {
-    analyticsClient: AnalyticsClient;
+}
+export interface ExportOptionsProps { analyticsClient: AnalyticsClient;
     timeRange: {
         startTime: number;
-        endTime: number;
+        endTime: number }
 }
     };
     className?: string;

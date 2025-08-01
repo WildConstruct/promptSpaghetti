@@ -18,11 +18,12 @@ import {
   AlertCircle,
   CheckCircle,
   XCircle
-} from 'lucide-react';
+ from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './EmergencyKillSwitchPanel.css';
-}
+
+
 interface EmergencyKillSwitch {
   id: string;,
   name: string,
@@ -36,7 +37,9 @@ interface EmergencyKillSwitch {
   lastActivated?: string;
   lastActivatedBy?: string,
   activationCount: number;
-}
+
+
+
 interface KillSwitchActivation {
   id: string;,
   killSwitchId: string,
@@ -46,7 +49,9 @@ interface KillSwitchActivation {
   affectedToggles: string,
   status: 'ACTIVE' | 'ROLLED_BACK' | 'EXPIRED';
   autoRollbackAt?: string;
-}
+
+
+
 interface EmergencyMetrics {
   totalKillSwitches: number;,
   activeKillSwitches: number,
@@ -55,37 +60,15 @@ interface EmergencyMetrics {
   totalActivations: number;
   lastActivation?: string;
 
-}
 
-export const EmergencyKillSwitchPanel: React.FC = () => {
-  const [killSwitches, setKillSwitches] = useState<EmergencyKillSwitch[]>([]);
-  const [activeActivations, setActiveActivations] = useState<KillSwitchActivation[]>([]);
-  const [metrics, setMetrics] = useState<EmergencyMetrics | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  // Modal states
-  const [showActivateModal, setShowActivateModal] = useState<string | null>(null);
-  const [showRollbackModal, setShowRollbackModal] = useState<string | null>(null);
-  const [activationReason, setActivationReason] = useState('');
-  const [rollbackReason, setRollbackReason] = useState('');
-  const [autoRollbackMinutes, setAutoRollbackMinutes] = useState<number | undefined>(undefined);
-  // Load emergency data
-  const loadEmergencyData = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      // Load kill switches, activations, and metrics in parallel
-      const [killSwitchesRes, activationsRes, metricsRes] = await Promise.all([)
-        fetch('/api/emergency/kill-switches', {
-}
-  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        }),
+
+export const EmergencyKillSwitchPanel = () => { return null; }),
         fetch('/api/emergency/activations/active', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
         fetch('/api/emergency/metrics', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-  }
+
       ]);
       if (!killSwitchesRes.ok || !activationsRes.ok || !metricsRes.ok) {
         throw new Error('Failed to load emergency data');
@@ -97,9 +80,9 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       setKillSwitches(killSwitchesData.killSwitches || []);
       setActiveActivations(activationsData.activations || []);
       setMetrics(metricsData.metrics || null);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load emergency data');
-} finally {
+ finally {
       setLoading(false);
   }, []);
   useEffect(() => {
@@ -119,7 +102,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({ reason })
@@ -127,7 +110,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       if (!response.ok) throw new Error('Emergency action failed');
       alert('🚨 EMERGENCY: All toggles have been disabled!');
       loadEmergencyData();
-    } catch (err) {
+ catch (err) {
       alert(`Emergency action failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
   };
   const handleEmergencyClaudeImpact = async () => {
@@ -140,7 +123,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({ reason })
@@ -148,7 +131,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       if (!response.ok) throw new Error('Emergency action failed');
       alert('🚨 EMERGENCY: Claude-impacting toggles have been disabled!');
       loadEmergencyData();
-    } catch (err) {
+ catch (err) {
       alert(`Emergency action failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
   };
   const handleActivateKillSwitch = async (killSwitchId: string) => {
@@ -161,20 +144,20 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({ ),
           reason: activationReason,
           autoRollbackMinutes 
-  }
+
       });
       if (!response.ok) throw new Error('Kill switch activation failed');
       setShowActivateModal(null);
       setActivationReason('');
       setAutoRollbackMinutes(undefined);
       loadEmergencyData();
-    } catch (err) {
+ catch (err) {
       alert(`Activation failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
   };
   const handleRollbackActivation = async (activationId: string) => {
@@ -187,7 +170,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
   method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-}
+
           'Content-Type': 'application/json'
   },
   body: JSON.stringify({ reason: rollbackReason })
@@ -196,7 +179,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       setShowRollbackModal(null);
       setRollbackReason('');
       loadEmergencyData();
-    } catch (err) {
+ catch (err) {
       alert(`Rollback failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
   };
   const getScopeDisplay = (scope: string) => {

@@ -1,8 +1,7 @@
 // Epic 9.4.2 - Approval Statistics Component
 // Comprehensive statistics and analytics for approval workflows
 import React, { useState, useEffect } from 'react';
-import { 
-  ChartBarIcon,
+import { ChartBarIcon,
   ClockIcon,
   CheckCircleIcon,
   XCircleIcon,
@@ -10,23 +9,23 @@ import {
   TrendingUpIcon,
   TrendingDownIcon,
   UserGroupIcon,
-  DocumentTextIcon,
+  DocumentTextIcon }
   ArrowPathIcon
-} from '@heroicons/react/24/outline';
-}
-interface ApprovalStatistics {
-  total_requests: number;
+ from '@heroicons/react/24/outline';
+
+
+interface ApprovalStatistics { total_requests: number;
   pending_requests: number;
   overdue_requests: number;
   avg_approval_time_hours: number;
   approval_rate: number;
   by_urgency: Record<string, number>;
-  by_status: Record<string, number>;
-}
+  by_status: Record<string, number> }
+
   top_reviewers: Array<{ reviewer_id: string; count: number }>;
-}
-interface PerformanceMetrics {
-  avg_completion_time: number;
+
+
+interface PerformanceMetrics { avg_completion_time: number;
   avg_first_review_time: number;
   avg_criteria_pass_rate: number;
   avg_satisfaction_score: number;
@@ -38,13 +37,13 @@ interface PerformanceMetrics {
   workspaceId: string;
   period?: '7d' | '30d' | '90d' | '1y';
   refreshInterval?: number;
-  export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({,)
-  workspaceId,
-  period = '30d',
+  export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({);
+  workspaceId;
+  period = '30d' }
   refreshInterval = 30000 // 30 seconds
-}
-}) => {
-  const [statistics, setStatistics] = useState<ApprovalStatistics | null>(null);
+
+
+}) => { const [statistics, setStatistics] = useState<ApprovalStatistics | null>(null);
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,8 +51,7 @@ interface PerformanceMetrics {
   useEffect(() => {
     fetchStatistics();
     const interval = setInterval(fetchStatistics, refreshInterval);
-    return () => clearInterval(interval);
-  }, [workspaceId, period, refreshInterval]);
+    return () => clearInterval(interval) }, [workspaceId, period, refreshInterval]);
   const fetchStatistics = async () => {
     try {
       setLoading(true);
@@ -61,21 +59,15 @@ interface PerformanceMetrics {
       // Fetch general statistics
       const [statsResponse, performanceResponse] = await Promise.all([)
         fetch(`/api/approval/statistics/${workspaceId}`)}
-}
+
         fetch(`/api/approval/statistics/${workspaceId}/performance?period=${period}`)}
       ]);
-      if (!statsResponse.ok || !performanceResponse.ok) {
-        throw new Error('Failed to fetch statistics');
+      if (!statsResponse.ok || !performanceResponse.ok) { throw new Error('Failed to fetch statistics');
       const stats = await statsResponse.json();
       const performance = await performanceResponse.json();
       setStatistics(stats);
       setPerformanceMetrics(performance);
-      setLastUpdated(new Date());
-    } catch (error) {
-  setError(error instanceof Error ? error.message : 'Failed to fetch statistics');
-} finally {
-      setLoading(false);
-  };
+      setLastUpdated(new Date()) } catch (error) { setError(error instanceof Error ? error.message : 'Failed to fetch statistics') } finally { setLoading(false) };
   const formatDuration = (hours: number) => {
     if (hours < 1) return `${Math.round(hours * 60)}m`;}
     if (hours < 24) return `${Math.round(hours)}h`;}
@@ -90,26 +82,22 @@ interface PerformanceMetrics {
     case 'expired': return 'bg-gray-100 text-gray-800';
     default: return 'bg-gray-100 text-gray-800';
   };
-  const getUrgencyColor = (urgency: string) => {
-  switch (urgency) {
+  const getUrgencyColor = (urgency: string) => { switch (urgency) {
   case 'critical': return 'bg-red-500';
   case 'high': return 'bg-orange-500';
   case 'medium': return 'bg-yellow-500';
   case 'low': return 'bg-green-500';
-  default: return 'bg-gray-500';
-};
-      } else if (current < previous) {
-      return <TrendingDownIcon className="h-4 w-4 text-red-500" />;
-    return <div className="h-4 w-4" />;
-  };
-  const StatCard: React.FC<{,
+  default: return 'bg-gray-500' };
+ else if (current < previous) { return <TrendingDownIcon className="h-4 w-4 text-red-500" />;
+    return <div className="h-4 w-4" /> };
+  const StatCard: React.FC<{ ,
   title: string;
   value: string | number;
-  icon: React.ReactNode;
+  icon: React.ReactNode }
   color: string;
   trend?: React.ReactNode;
   subtitle?: string;
-}> = ({ title, value, icon, color, trend, subtitle }) => ()
+> = ({ title, value, icon, color, trend, subtitle }) => ()
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex items-center">
         <div className={`p-3 rounded-md ${color}`}>}
@@ -128,12 +116,11 @@ interface PerformanceMetrics {
       </div>
     </div>
   );
-  const ChartCard: React.FC<{,
+  const ChartCard: React.FC<{ ,
   title: string;
   data: Record<string, number>;
   type: 'bar' | 'pie';
-  colorMap?: (key: string) => string;
-}> = ({ title, data, type, colorMap }) => ()
+  colorMap?: (key: string) => string }> = ({ title, data, type, colorMap }) => ()
     <div className="bg-white rounded-lg shadow p-6">
       <h3 className="text-lg font-medium text-gray-900 mb-4">{title}</h3>
       {type === 'bar' ? ()
@@ -283,15 +270,14 @@ interface PerformanceMetrics {
             title="Requests by Status"
             data={statistics.by_status}
             type="bar"
-            colorMap={(status) => {
+            colorMap={ (status) => {
   switch (status) {
   case 'pending': return 'bg-yellow-500';
   case 'in_review': return 'bg-blue-500';
   case 'approved': return 'bg-green-500';
   case 'rejected': return 'bg-red-500';
   case 'expired': return 'bg-gray-500';
-  default: return 'bg-gray-500';
-}}
+  default: return 'bg-gray-500' }}
           />
         )}
         {/* Urgency Distribution */}
@@ -360,18 +346,18 @@ interface PerformanceMetrics {
         <h3 className="text-lg font-medium text-gray-900 mb-4">System Health</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex items-center space-x-3">
-            <div className={`w-3 h-3 rounded-full ${
-  statistics && statistics.overdue_requests === 0 ? 'bg-green-500' : 'bg-red-500',
-}`} />
+            <div className={ `w-3 h-3 rounded-full ${
+  statistics && statistics.overdue_requests === 0 ? 'bg-green-500' : 'bg-red-500' }
+`} />
             <div>
               <p className="text-sm font-medium text-gray-900">Overdue Requests</p>
               <p className="text-xs text-gray-600">{statistics?.overdue_requests || 0} overdue</p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <div className={`w-3 h-3 rounded-full ${
-  statistics && statistics.avg_approval_time_hours < 48 ? 'bg-green-500' : 'bg-yellow-500',
-}`} />
+            <div className={ `w-3 h-3 rounded-full ${
+  statistics && statistics.avg_approval_time_hours < 48 ? 'bg-green-500' : 'bg-yellow-500' }
+`} />
             <div>
               <p className="text-sm font-medium text-gray-900">Response Time</p>
               <p className="text-xs text-gray-600">
@@ -380,9 +366,9 @@ interface PerformanceMetrics {
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <div className={`w-3 h-3 rounded-full ${
-  statistics && statistics.approval_rate > 80 ? 'bg-green-500' : 'bg-yellow-500',
-}`} />
+            <div className={ `w-3 h-3 rounded-full ${
+  statistics && statistics.approval_rate > 80 ? 'bg-green-500' : 'bg-yellow-500' }
+`} />
             <div>
               <p className="text-sm font-medium text-gray-900">Approval Rate</p>
               <p className="text-xs text-gray-600">{statistics ? formatPercentage(statistics.approval_rate) : 'N/A'}</p>

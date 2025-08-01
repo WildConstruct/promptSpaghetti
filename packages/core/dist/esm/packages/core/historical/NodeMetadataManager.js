@@ -257,11 +257,11 @@ export class NodeMetadataManager {
                 name: 'Era Tag Inheritance',
                 sourceType: 'SetVariable',
                 targetType: 'WeightedChoice',
-                conditions: [,
+                conditions: [
                     { field: 'variableName', operator: 'contains', value: 'era' },
                     { field: 'value', operator: 'in', value: ['medieval', 'renaissance', 'ancient'] }
                 ],
-                transformations: [,
+                transformations: [
                     { type: 'copy', config: { tagTypes: ['era'] } }
                 ],
                 enabled: true
@@ -271,10 +271,10 @@ export class NodeMetadataManager {
                 name: 'Material Tag Inheritance',
                 sourceType: 'WeightedChoice',
                 targetType: 'Concat',
-                conditions: [,
+                conditions: [
                     { field: 'choices', operator: 'contains', value: 'material' }
                 ],
-                transformations: [,
+                transformations: [
                     { type: 'copy', config: { tagTypes: ['material', 'era'] } }
                 ],
                 enabled: true
@@ -284,10 +284,10 @@ export class NodeMetadataManager {
                 name: 'Social Class Tag Inheritance',
                 sourceType: 'SetVariable',
                 targetType: 'Output',
-                conditions: [,
+                conditions: [
                     { field: 'variableName', operator: 'matches', value: /social|class|rank/i }
                 ],
-                transformations: [,
+                transformations: [
                     { type: 'copy', config: { tagTypes: ['social_class', 'era'] } }
                 ],
                 enabled: true

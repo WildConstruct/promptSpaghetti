@@ -4,17 +4,16 @@
 import React from 'react';
 
 }
-export interface OptimizationSettings {
-    deadCodeElimination: boolean;
+}
+export interface OptimizationSettings { deadCodeElimination: boolean;
     constantPropagation: boolean;
     resultCaching: boolean;
     parallelExecution: boolean;
     memoryOptimization: boolean;
     precompilation: boolean;
     performanceMonitoring: boolean;
-    debugMode: boolean;
-
-
+    debugMode: boolean }
+}
 }
 interface OptimizationControlsProps {
     settings: OptimizationSettings;
@@ -25,4 +24,5 @@ interface OptimizationControlsProps {
 export declare const OptimizationControls: React.FC<OptimizationControlsProps>;
 export default OptimizationControls;
 //# sourceMappingURL=OptimizationControls.d.ts.map
+}
 }

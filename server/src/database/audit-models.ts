@@ -67,14 +67,14 @@ export enum AuditEventType {
   GDPR_REQUEST = 'gdpr_request',
   DATA_RETENTION_APPLIED = 'data_retention_applied',
   COMPLIANCE_REPORT_GENERATED = 'compliance_report_generated'
-}
+
 
 export enum AuditSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
+
 
 export enum AuditCategory {
   AUTHENTICATION = 'authentication',
@@ -85,7 +85,7 @@ export enum AuditCategory {
   COMPLIANCE = 'compliance',
   PERFORMANCE = 'performance',
   ERROR = 'error'
-}
+
 
 export enum ComplianceStandard {
   SOC2 = 'soc2',
@@ -95,11 +95,12 @@ export enum ComplianceStandard {
   PCI_DSS = 'pci_dss',
   CCPA = 'ccpa',
   SOX = 'sox'
-}
+
 
 // Core audit event model
-}
-}
+
+
+
 export interface AuditEvent {
   id: string;
   eventType: AuditEventType;
@@ -143,8 +144,9 @@ export interface AuditEvent {
     coordinates?: {
       latitude: number;
       longitude: number;
-}
-}
+
+
+
     };
   };
   
@@ -170,11 +172,12 @@ export interface AuditEvent {
     message: string;
     stack?: string;
   };
-}
+
 
 // Audit trail for tracking changes over time
-}
-}
+
+
+
 export interface AuditTrail {
   id: string;
   resourceType: string;
@@ -185,13 +188,15 @@ export interface AuditTrail {
   totalEvents: number;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
+
+
+
+
 
 // Audit session for tracking user sessions
-}
-}
+
+
+
 export interface AuditSession {
   id: string;
   sessionId: string;
@@ -218,13 +223,15 @@ export interface AuditSession {
   
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
+
+
+
+
 
 // Compliance report model
-}
-}
+
+
+
 export interface ComplianceReport {
   id: string;
   reportType: 'access_report' | 'change_report' | 'security_report' | 'retention_report';
@@ -237,8 +244,9 @@ export interface ComplianceReport {
     userIds?: string[];
     resourceTypes?: string[];
     eventTypes?: AuditEventType[];
-}
-}
+
+
+
   };
   
   // Report data
@@ -257,7 +265,7 @@ export interface ComplianceReport {
     description: string;
     severity: AuditSeverity;
     remediation?: string;
-  }>;
+>;
   
   // Report metadata
   generatedBy: string;
@@ -269,11 +277,12 @@ export interface ComplianceReport {
   // Digital signature for integrity
   signature?: string;
   checksum?: string;
-}
+
 
 // Audit configuration
-}
-}
+
+
+
 export interface AuditConfiguration {
   id: string;
   
@@ -307,8 +316,9 @@ export interface AuditConfiguration {
     dayOfWeek?: number;
     dayOfMonth?: number;
     time: string; // HH:mm format
-}
-}
+
+
+
   };
   
   // Notification settings
@@ -318,11 +328,12 @@ export interface AuditConfiguration {
   
   createdAt: Date;
   updatedAt: Date;
-}
+
 
 // Audit statistics
-}
-}
+
+
+
 export interface AuditStatistics {
   totalEvents: number;
   eventsByType: Record<AuditEventType, number>;
@@ -340,9 +351,10 @@ export interface AuditStatistics {
     userId: string;
     userEmail: string;
     eventCount: number;
-}
-}
-  }>;
+
+
+
+>;
   
   // Resource statistics
   topResources: Array<{
@@ -350,7 +362,7 @@ export interface AuditStatistics {
     resourceId: string;
     resourceName?: string;
     eventCount: number;
-  }>;
+>;
   
   // Security statistics
   securityEvents: number;
@@ -368,11 +380,12 @@ export interface AuditStatistics {
   };
   
   generatedAt: Date;
-}
+
 
 // Request/Response types for API
-}
-}
+
+
+
 export interface CreateAuditEventRequest {
   eventType: AuditEventType;
   category: AuditCategory;
@@ -388,12 +401,13 @@ export interface CreateAuditEventRequest {
   metadata?: Record<string, any>;
   tags?: string[];
   complianceStandards?: ComplianceStandard[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AuditEventQuery {
   // Time filters
   startDate?: string;
@@ -431,12 +445,13 @@ export interface AuditEventQuery {
   limit?: number;
   sortBy?: 'timestamp' | 'severity' | 'eventType' | 'actorEmail';
   sortOrder?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AuditEventResponse {
   events: AuditEvent[];
   pagination: {
@@ -444,8 +459,9 @@ export interface AuditEventResponse {
     limit: number;
     total: number;
     totalPages: number;
-}
-}
+
+
+
   };
   summary: {
     totalEvents: number;
@@ -457,10 +473,10 @@ export interface AuditEventResponse {
       end: Date;
     };
   };
-}
 
-}
-}
+
+
+
 export interface CreateComplianceReportRequest {
   reportType: ComplianceReport['reportType'];
   standard: ComplianceStandard;
@@ -468,13 +484,15 @@ export interface CreateComplianceReportRequest {
   endDate: string;
   scope?: ComplianceReport['scope'];
   format?: ComplianceReport['format'];
-}
-}
-}
+
+
+
+
 
 // Audit middleware context
-}
-}
+
+
+
 export interface AuditContext {
   actorId?: string;
   actorType: 'user' | 'system' | 'service' | 'anonymous';
@@ -487,13 +505,15 @@ export interface AuditContext {
   ipAddress?: string;
   userAgent?: string;
   metadata?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 // Export configuration for different formats
-}
-}
+
+
+
 export interface ExportConfiguration {
   format: 'json' | 'csv' | 'xml' | 'pdf';
   includeMetadata: boolean;
@@ -502,11 +522,12 @@ export interface ExportConfiguration {
   encryption?: {
     algorithm: string;
     keyId: string;
-}
-}
+
+
+
   };
   digitalSignature?: boolean;
-}
+
 
 export default {
   AuditEventType,

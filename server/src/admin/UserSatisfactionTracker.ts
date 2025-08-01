@@ -15,8 +15,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface SatisfactionSurvey {
   surveyId: string;
   userId: string;
@@ -35,8 +35,9 @@ export interface SatisfactionSurvey {
     negativeAspects: string[];
     suggestions: string[];
     openFeedback?: string;
-}
-}
+
+
+
   };
   
   // Feature-Specific Ratings
@@ -55,10 +56,10 @@ export interface SatisfactionSurvey {
   ipAddress?: string;
   userAgent?: string;
   source: SatisfactionSource;
-}
 
-}
-}
+
+
+
 export interface SatisfactionMetrics {
   // Aggregate Scores
   overallSatisfaction: {
@@ -66,8 +67,9 @@ export interface SatisfactionMetrics {
     trend: 'improving' | 'stable' | 'declining';
     changeFromPrevious: number;
     sampleSize: number;
-}
-}
+
+
+
   };
   
   // NPS Metrics
@@ -120,10 +122,10 @@ export interface SatisfactionMetrics {
     retentionPrediction: number; // percentage
     revenueImpact: number; // estimated revenue impact
   };
-}
 
-}
-}
+
+
+
 export interface SatisfactionContext {
   // Product Context
   templateId?: string;
@@ -140,12 +142,13 @@ export interface SatisfactionContext {
   purchaseHistory: number; // number of previous purchases
   supportHistory: number; // number of previous tickets
   userRole: 'buyer' | 'seller' | 'admin' | 'moderator';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SatisfactionAlert {
   alertId: string;
   alertType: 'satisfaction_drop' | 'nps_decline' | 'high_churn_risk' | 'feature_dissatisfaction';
@@ -171,12 +174,13 @@ export interface SatisfactionAlert {
   acknowledged: boolean;
   acknowledgedBy?: string;
   resolvedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SatisfactionDashboard {
   // Summary Metrics
   summary: {
@@ -185,8 +189,9 @@ export interface SatisfactionDashboard {
     responseRate: number;
     totalResponses: number;
     trendDirection: 'up' | 'down' | 'stable';
-}
-}
+
+
+
   };
   
   // Real-time Metrics
@@ -223,7 +228,7 @@ export interface SatisfactionDashboard {
   // Time Data
   timestamp: Date;
   dataFreshness: number; // minutes since last update
-}
+
 
 // Supporting Types
 export type SatisfactionSurveyType = 
@@ -242,28 +247,30 @@ export type SatisfactionSource =
   | 'api_integration'
   | 'manual_entry';
 
-}
-}
+
+
 export interface SatisfactionTrendPoint {
   date: Date;
   score: number;
   responses: number;
   segments: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SatisfactionDriver {
   factor: string;
   impact: number; // correlation coefficient
   frequency: number; // how often mentioned
   sentiment: 'positive' | 'negative' | 'neutral';
   examples: string[];
-}
-}
-}
+
+
+
+
 
 /**
  * User Satisfaction Tracking Service
@@ -297,7 +304,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     this.databaseService = dependencies.databaseService;
     this.redisService = dependencies.redisService;
     this.auditService = dependencies.auditService;
-  }
+
 
   /**
    * Initialize user satisfaction tracking service
@@ -320,7 +327,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     this.startAlertMonitoring();
     
     console.log('✅ User Satisfaction Tracking initialized successfully');
-  }
+
 
   /**
    * Record a new satisfaction survey
@@ -342,7 +349,7 @@ export class UserSatisfactionTracker extends EventEmitter {
         purchaseHistory: 0,
         supportHistory: 0,
         userRole: 'buyer'
-  }
+
       npsScore: surveyData.npsScore || 0,
       satisfactionRating: surveyData.satisfactionRating || 0,
       usabilityRating: surveyData.usabilityRating || 0,
@@ -351,7 +358,7 @@ export class UserSatisfactionTracker extends EventEmitter {
         positiveAspects: [],
         negativeAspects: [],
         suggestions: []
-  }
+
       featureRatings: surveyData.featureRatings || {},
       completionTime: surveyData.completionTime || 0,
       responseQuality: surveyData.responseQuality || 'medium',
@@ -387,14 +394,14 @@ export class UserSatisfactionTracker extends EventEmitter {
         surveyType: survey.surveyType,
         npsScore: survey.npsScore,
         satisfactionRating: survey.satisfactionRating
-  }
+
       timestamp: new Date()
-    } as any);
+ as any);
     
     this.emit('survey_recorded', survey);
     
     return survey;
-  }
+
 
   /**
    * Get satisfaction metrics for dashboard
@@ -407,14 +414,14 @@ export class UserSatisfactionTracker extends EventEmitter {
     // Return cached metrics if recent enough
     if (this.metricsCache && Date.now() - this.lastMetricsUpdate.getTime() < 5 * 60 * 1000) {
       return this.metricsCache;
-    }
+
     
     const metrics = await this.calculateSatisfactionMetrics(timeframe, segments);
     this.metricsCache = metrics;
     this.lastMetricsUpdate = new Date();
     
     return metrics;
-  }
+
 
   /**
    * Get satisfaction dashboard data
@@ -426,14 +433,14 @@ export class UserSatisfactionTracker extends EventEmitter {
       const cacheAge = Date.now() - this.dashboardCache.timestamp.getTime();
       if (cacheAge < 5 * 60 * 1000) {
         return this.dashboardCache;
-      }
-    }
+
+
     
     const dashboard = await this.generateSatisfactionDashboard();
     this.dashboardCache = dashboard;
     
     return dashboard;
-  }
+
 
   /**
    * Create satisfaction survey for user
@@ -453,7 +460,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     await this.storeSurveyTemplate(surveyId, userId, surveyType, context, questions);
     
     return { surveyId, questions };
-  }
+
 
   /**
    * Submit satisfaction survey response
@@ -472,7 +479,7 @@ export class UserSatisfactionTracker extends EventEmitter {
       ...surveyData,
       surveyId // Keep the original survey ID for tracking
     });
-  }
+
 
   /**
    * Get user satisfaction trends
@@ -487,7 +494,7 @@ export class UserSatisfactionTracker extends EventEmitter {
       nps: SatisfactionTrendPoint[];
     };
     insights: string[];
-  }> {
+> {
 
     const surveys = await this.getUserSurveys(userId, timeframe);
     
@@ -499,7 +506,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     const insights = await this.generateUserInsights(userId, surveys, trends);
     
     return { surveys, trends, insights };
-  }
+
 
   /**
    * Get satisfaction alerts
@@ -513,14 +520,14 @@ export class UserSatisfactionTracker extends EventEmitter {
     
     if (severity) {
       alerts = alerts.filter(alert => severity.includes(alert.severity));
-    }
+
     
     if (acknowledged !== undefined) {
       alerts = alerts.filter(alert => alert.acknowledged === acknowledged);
-    }
+
     
     return alerts.sort((a, b) => b.triggeredAt.getTime() - a.triggeredAt.getTime());
-  }
+
 
   /**
    * Acknowledge satisfaction alert
@@ -533,7 +540,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     const alert = this.activeAlerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert ${alertId} not found`);
-    }
+
     
     alert.acknowledged = true;
     alert.acknowledgedBy = acknowledgedBy;
@@ -541,7 +548,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     await this.updateSatisfactionAlert(alert);
     
     this.emit('alert_acknowledged', alert);
-  }
+
 
   // Private implementation methods
 
@@ -614,8 +621,8 @@ export class UserSatisfactionTracker extends EventEmitter {
     
     for (const schema of schemas) {
       await this.databaseService.query(schema);
-    }
-  }
+
+
 
   /**
    * Load recent surveys from database
@@ -632,10 +639,10 @@ export class UserSatisfactionTracker extends EventEmitter {
     for (const row of rows) {
       const survey = this.mapRowToSurvey(row);
       this.satisfactionCache.set(survey.surveyId, survey);
-    }
+
     
     console.log(`📊 Loaded ${rows.length} recent satisfaction surveys`);
-  }
+
 
   /**
    * Start periodic updates for metrics and caches
@@ -645,7 +652,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     this.metricsUpdateInterval = setInterval(async () => {
       await this.refreshSatisfactionMetrics();
     }, 5 * 60 * 1000);
-  }
+
 
   /**
    * Start alert monitoring
@@ -655,7 +662,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     this.alertCheckInterval = setInterval(async () => {
       await this.checkForNewAlerts();
     }, 60 * 1000);
-  }
+
 
   /**
    * Calculate comprehensive satisfaction metrics
@@ -697,7 +704,7 @@ export class UserSatisfactionTracker extends EventEmitter {
       satisfactionDrivers,
       businessImpact
     };
-  }
+
 
   /**
    * Generate satisfaction dashboard
@@ -716,7 +723,7 @@ export class UserSatisfactionTracker extends EventEmitter {
         totalResponses: metrics.overallSatisfaction.sampleSize,
         trendDirection: metrics.overallSatisfaction.trend === 'improving' ? 'up' : 
           metrics.overallSatisfaction.trend === 'declining' ? 'down' : 'stable'
-  }
+
       realtime: await this.generateRealtimeMetrics(),
       segments: await this.generateSegmentAnalysis(),
       features: await this.generateFeatureAnalysis(),
@@ -725,7 +732,7 @@ export class UserSatisfactionTracker extends EventEmitter {
       timestamp: new Date(),
       dataFreshness: Math.round((Date.now() - this.lastMetricsUpdate.getTime()) / (1000 * 60))
     };
-  }
+
 
   // Many additional helper methods would be implemented here for:
   // - Survey question generation
@@ -743,12 +750,12 @@ export class UserSatisfactionTracker extends EventEmitter {
   private validateSurveyData(survey: SatisfactionSurvey): void {
     if (survey.npsScore < 0 || survey.npsScore > 10) {
       throw new Error('NPS score must be between 0 and 10');
-    }
+
     if (survey.satisfactionRating < 1 || survey.satisfactionRating > 5) {
       throw new Error('Satisfaction rating must be between 1 and 5');
-    }
+
     // Additional validation...
-  }
+
 
   private async storeSatisfactionSurvey(survey: SatisfactionSurvey): Promise<void> {
 
@@ -765,7 +772,7 @@ export class UserSatisfactionTracker extends EventEmitter {
       survey.responseQuality, survey.adminSession, survey.supportTicketId, survey.ipAddress,
       survey.userAgent, survey.source
     ]);
-  }
+
 
   private mapRowToSurvey(row: any): SatisfactionSurvey {
     return {
@@ -788,7 +795,7 @@ export class UserSatisfactionTracker extends EventEmitter {
       userAgent: row.user_agent,
       source: row.source
     };
-  }
+
 
   // Additional placeholder methods for the core functionality
   private async processSurveyInsights(survey: SatisfactionSurvey): Promise<void> {}
@@ -821,4 +828,3 @@ export class UserSatisfactionTracker extends EventEmitter {
   private async generateRealtimeMetrics(): Promise<any> { return {}; }
   private async generateSegmentAnalysis(): Promise<any> { return {}; }
   private async generateFeatureAnalysis(): Promise<any> { return {}; }
-}

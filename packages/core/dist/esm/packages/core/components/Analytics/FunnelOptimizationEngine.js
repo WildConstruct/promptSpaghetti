@@ -52,7 +52,7 @@ export const FunnelOptimizationEngine = ({
                 funnelId: funnelDefinition.id,
                 startDate: timeRange.start,
                 endDate: timeRange.end,
-                metrics: [,
+                metrics: [
                     'conversion_optimization_opportunities',
                     'user_experience_metrics',
                     'technical_performance',
@@ -128,62 +128,44 @@ export const FunnelOptimizationEngine = ({
              * Optimization Engine Header Component
              */
         }
-        {
-            const views = [];
-            {
-                key: 'recommendations', label;
-                'Recommendations';
-            }
-            {
-                key: 'experiments', label;
-                'Experiments';
-            }
-            {
-                key: 'roadmap', label;
-                'Roadmap';
-            }
-            {
-                key: 'allocation', label;
-                'Resources';
-            }
-            ;
-            const criticalRecommendations = analysisData.recommendations;
-            filter(rec => rec.priority === 'critical').length;
-            const totalPotentialImpact = analysisData.impactPredictions;
-            reduce((sum, pred) => sum + pred.predictedImpact
-                .find(impact => impact.metric === 'conversion_rate')?.changeRelative || 0, 0);
-            return;
-            _jsxs("div", { className: "optimization-engine-header", children: [_jsxs("div", { className: "header-info", children: [_jsxs("h3", { children: ["Optimization Engine: ", funnelDefinition.name] }), _jsx("p", { children: "AI-powered recommendations for conversion optimization" }), _jsxs("div", { className: "optimization-summary", children: [_jsxs("div", { className: "summary-metric", children: [_jsx("span", { className: "label", children: "Current Conversion Rate" }), _jsxs("span", { className: "value", children: [currentPerformance.overallConversionRate.toFixed(2), "%"] })] }), _jsxs("div", { className: "summary-metric", children: [_jsx("span", { className: "label", children: "Critical Issues" }), _jsx("span", { className: "value", children: criticalRecommendations })] }), _jsxs("div", { className: "summary-metric", children: [_jsx("span", { className: "label", children: "Potential Uplift" }), _jsxs("span", { className: "value", children: ["+", totalPotentialImpact.toFixed(1), "%"] })] })] })] }), _jsxs("div", { className: "header-controls", children: [_jsxs("div", { className: "view-selector", children: [views.map(view => ()
-                                        < button, key = { view, : .key }, onClick = {}()), " => onViewChange(view.key as any)} className=", `view-button ${activeView === view.key ? 'active' : ''}`, ">", view.label] }), "))}"] })] });
-            div >
-            ;
-            ;
-        }
-        ;
-        /**
-         * Recommendations View Component
-         */
     }
-    {
-        const prioritizedRecommendations = useMemo(() => {
-            return [...recommendations].sort((a, b) => {
-                const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1, nice_to_have: 0 };
-                if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
-                    return priorityOrder[b.priority] - priorityOrder[a.priority];
-                    return b.impactScore - a.impactScore;
-                }
-            });
-        }, [recommendations]);
-        return;
-        _jsxs("div", { className: "recommendations-view", children: [_jsxs("div", { className: "recommendations-overview", children: [_jsx("h4", { children: "Optimization Recommendations" }), _jsxs("div", { className: "overview-stats", children: [_jsxs("div", { className: "stat", children: [_jsx("span", { className: "label", children: "Total Recommendations" }), _jsx("span", { className: "value", children: recommendations.length })] }), _jsxs("div", { className: "stat", children: [_jsx("span", { className: "label", children: "High Priority" }), _jsx("span", { className: "value", children: recommendations.filter(r => r.priority === 'critical' || r.priority === 'high').length })] }), _jsxs("div", { className: "stat", children: [_jsx("span", { className: "label", children: "Quick Wins" }), _jsx("span", { className: "value", children: recommendations.filter(r => r.effortScore < 30 && r.impactScore > 60).length })] })] })] }), _jsxs("div", { className: "recommendations-list", children: [prioritizedRecommendations.map(recommendation => ()
-                            < RecommendationCard, key = { recommendation, : .id }, recommendation = { recommendation }, impactPrediction = { impactPredictions, : .find(p => p.recommendationId === recommendation.id) }, isSelected = { selectedRecommendation } === recommendation.id), "onSelect=", () => onRecommendationSelect(recommendation.id), "/> ))}"] })] });
-        ;
-    }
-    ;
-    /**
-     * Recommendation Card Component
-     */
 }
+{
+    const views = [
+        { key: 'recommendations', label: 'Recommendations' },
+        { key: 'experiments', label: 'Experiments' },
+        { key: 'roadmap', label: 'Roadmap' },
+        { key: 'allocation', label: 'Resources' }
+    ];
+    const criticalRecommendations = analysisData.recommendations;
+    filter(rec => rec.priority === 'critical').length;
+    const totalPotentialImpact = analysisData.impactPredictions;
+    reduce((sum, pred) => sum + pred.predictedImpact
+        .find(impact => impact.metric === 'conversion_rate')?.changeRelative || 0, 0);
+    return;
+    _jsxs("div", { className: "optimization-engine-header", children: [_jsxs("div", { className: "header-info", children: [_jsxs("h3", { children: ["Optimization Engine: ", funnelDefinition.name] }), _jsx("p", { children: "AI-powered recommendations for conversion optimization" }), _jsxs("div", { className: "optimization-summary", children: [_jsxs("div", { className: "summary-metric", children: [_jsx("span", { className: "label", children: "Current Conversion Rate" }), _jsxs("span", { className: "value", children: [currentPerformance.overallConversionRate.toFixed(2), "%"] })] }), _jsxs("div", { className: "summary-metric", children: [_jsx("span", { className: "label", children: "Critical Issues" }), _jsx("span", { className: "value", children: criticalRecommendations })] }), _jsxs("div", { className: "summary-metric", children: [_jsx("span", { className: "label", children: "Potential Uplift" }), _jsxs("span", { className: "value", children: ["+", totalPotentialImpact.toFixed(1), "%"] })] })] })] }), _jsxs("div", { className: "header-controls", children: [_jsxs("div", { className: "view-selector", children: [views.map(view => ()
+                                < button, key = { view, : .key }, onClick = {}()), " => onViewChange(view.key as any)} className=", `view-button ${activeView === view.key ? 'active' : ''}`, ">", view.label] }), "))}"] })] });
+    div >
+    ;
+    ;
+}
+;
+{
+    const prioritizedRecommendations = useMemo(() => {
+        return [...recommendations].sort((a, b) => {
+            const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1, nice_to_have: 0 };
+            if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+                return priorityOrder[b.priority] - priorityOrder[a.priority];
+                return b.impactScore - a.impactScore;
+            }
+        });
+    }, [recommendations]);
+    return;
+    _jsxs("div", { className: "recommendations-view", children: [_jsxs("div", { className: "recommendations-overview", children: [_jsx("h4", { children: "Optimization Recommendations" }), _jsxs("div", { className: "overview-stats", children: [_jsxs("div", { className: "stat", children: [_jsx("span", { className: "label", children: "Total Recommendations" }), _jsx("span", { className: "value", children: recommendations.length })] }), _jsxs("div", { className: "stat", children: [_jsx("span", { className: "label", children: "High Priority" }), _jsx("span", { className: "value", children: recommendations.filter(r => r.priority === 'critical' || r.priority === 'high').length })] }), _jsxs("div", { className: "stat", children: [_jsx("span", { className: "label", children: "Quick Wins" }), _jsx("span", { className: "value", children: recommendations.filter(r => r.effortScore < 30 && r.impactScore > 60).length })] })] })] }), _jsxs("div", { className: "recommendations-list", children: [prioritizedRecommendations.map(recommendation => ()
+                        < RecommendationCard, key = { recommendation, : .id }, recommendation = { recommendation }, impactPrediction = { impactPredictions, : .find(p => p.recommendationId === recommendation.id) }, isSelected = { selectedRecommendation } === recommendation.id), "onSelect=", () => onRecommendationSelect(recommendation.id), "/> ))}"] })] });
+    ;
+}
+;
 {
     return;
     _jsxs("div", { className: `recommendation-card ${recommendation.priority} ${isSelected ? 'selected' : ''}`, onClick: onSelect, children: [_jsxs("div", { className: "recommendation-header", children: [_jsxs("div", { className: "recommendation-title", children: [_jsx("h5", { children: recommendation.title }), _jsxs("span", { className: `priority-badge ${recommendation.priority}`, children: ["}", recommendation.priority.toUpperCase()] })] }), _jsxs("div", { className: "impact-score", children: [_jsx("span", { className: "score", children: recommendation.impactScore }), _jsx("span", { className: "label", children: "Impact" })] })] }), _jsx("p", { className: "recommendation-description", children: recommendation.description }), _jsxs("div", { className: "recommendation-metrics", children: [_jsxs("div", { className: "metric", children: [_jsx("span", { className: "label", children: "ROI" }), _jsxs("span", { className: "value", children: [recommendation.roiEstimate.toFixed(1), "x"] })] }), _jsxs("div", { className: "metric", children: [_jsx("span", { className: "label", children: "Effort" }), _jsxs("span", { className: "value", children: [recommendation.effortScore, "/100"] })] }), _jsxs("div", { className: "metric", children: [_jsx("span", { className: "label", children: "Risk" }), _jsxs("span", { className: "value", children: [recommendation.riskScore, "/100"] })] }), _jsxs("div", { className: "metric", children: [_jsx("span", { className: "label", children: "Time to Impact" }), _jsxs("span", { className: "value", children: [recommendation.timeToImpact, " days"] })] })] }), impactPrediction && ()
@@ -395,176 +377,215 @@ Promise < OptimizationAnalysisData > {
             timeToImpact: 7,
             affectedSteps: ['step-2'],
             targetedGoals: ['increase_conversion_rate', 'reduce_drop_off'],
-            implementation: {
-                phases: [,
-                    {
-                        phase: 'Research & Design',
-                        description: 'User research and UX design improvements',
-                        duration: 7,
-                        deliverables: ['User journey analysis', 'New UX designs', 'Prototype'],
-                        dependencies: [],
-                        resources: ['UX Designer', 'User Researcher'],
-                        milestones: [,
-                            {
-                                name: 'Research Complete',
-                                date: Date.now() + 3 * 86400000,
-                                criteria: ['User interviews completed', 'Pain points identified'],
-                                dependencies: []
-                            }]
-                    },
-                    {
-                        phase: 'Development',
-                        description: 'Implement UX improvements',
-                        duration: 7,
-                        deliverables: ['Updated UI components', 'Improved filtering', 'Enhanced search'],
-                        dependencies: ['Research & Design'],
-                        resources: ['Frontend Developer', 'Backend Developer'],
-                        milestones: [,
-                            {
-                                name: 'Development Complete',
-                                date: Date.now() + 10 * 86400000,
-                                criteria: ['Features implemented', 'Testing complete'],
-                                dependencies: ['Research Complete']
-                            }],
-                    }
-                ],
-                resources: [,
-                    {
-                        type: 'design',
-                        hours: 40,
-                        skills: ['UX Design', 'User Research'],
-                        urgency: 'immediate',
-                    },
-                    {
-                        type: 'development',
-                        hours: 80,
-                        skills: ['React', 'TypeScript', 'API Integration'],
-                        urgency: 'soon'
-                    }],
-                timeline: [],
-                risksAndMitigations: [,
-                    {
-                        risk: 'User adoption of new interface',
-                        probability: 0.3,
-                        impact: 40,
-                        mitigation: 'Gradual rollout with user feedback',
-                        contingency: 'Rollback capability with feature flags'
-                    }],
-                successCriteria: [,
-                    {
-                        metric: 'Step 2 conversion rate',
-                        target: 80,
-                        measurement: 'Percentage of users completing template browse',
-                        timeframe: 30,
-                    },
-                    {
-                        metric: 'Time spent on step',
-                        target: 120,
-                        measurement: 'Average seconds spent browsing templates',
-                        timeframe: 30
-                    }]
-            },
-            validation: {
-                hypothesis: 'Improved template browsing UX will increase step conversion rate by 15%',
-                testMethod: 'ab_test',
-                sampleSize: 10000,
-                duration: 14,
-                successMetrics: [,
-                    {
-                        metric: 'conversion_rate',
-                        target: 15,
-                        tolerance: 5,
-                        significance: 0.05
-                    }],
-                stopConditions: [,
-                    {
-                        condition: 'conversion_rate_decrease',
-                        threshold: -5,
-                        action: 'stop'
-                    }]
-            },
-            dependencies: [],
-            alternatives: [,
+            implementation: {},
+            phases: [
                 {
-                    title: 'Simplified Quick Browse Mode',
-                    description: 'Add a simplified browse mode for quick decisions',
-                    impactScore: 65,
-                    effortScore: 30,
-                    riskScore: 15,
-                    tradeoffs: ['Lower long-term engagement', 'Simpler to implement']
-                }]
+                    phase: 'Research & Design',
+                    description: 'User research and UX design improvements',
+                    duration: 7,
+                    deliverables: ['User journey analysis', 'New UX designs', 'Prototype'],
+                    dependencies: [],
+                    resources: ['UX Designer', 'User Researcher'],
+                    milestones: [
+                        {
+                            name: 'Research Complete',
+                            date: Date.now() + 3 * 86400000,
+                            criteria: ['User interviews completed', 'Pain points identified'],
+                            dependencies: []
+                        }
+                    ]
+                },
+                {
+                    phase: 'Development',
+                    description: 'Implement UX improvements',
+                    duration: 7,
+                    deliverables: ['Updated UI components', 'Improved filtering', 'Enhanced search'],
+                    dependencies: ['Research & Design'],
+                    resources: ['Frontend Developer', 'Backend Developer'],
+                    milestones: [
+                        {
+                            name: 'Development Complete',
+                            date: Date.now() + 10 * 86400000,
+                            criteria: ['Features implemented', 'Testing complete'],
+                            dependencies: ['Research Complete']
+                        }
+                    ]
+                }
+            ],
+            resources: [
+                {
+                    type: 'design',
+                    hours: 40,
+                    skills: ['UX Design', 'User Research'],
+                    urgency: 'immediate',
+                },
+                {
+                    type: 'development',
+                    hours: 80,
+                    skills: ['React', 'TypeScript', 'API Integration'],
+                    urgency: 'soon'
+                }
+            ],
+            timeline: [],
+            risksAndMitigations: [
+                {
+                    risk: 'User adoption of new interface',
+                    probability: 0.3,
+                    impact: 40,
+                    mitigation: 'Gradual rollout with user feedback',
+                    contingency: 'Rollback capability with feature flags'
+                }
+            ],
+            successCriteria: [
+                {
+                    metric: 'Step 2 conversion rate',
+                    target: 80,
+                    measurement: 'Percentage of users completing template browse',
+                    timeframe: 30,
+                },
+                {
+                    metric: 'Time spent on step',
+                    target: 120,
+                    measurement: 'Average seconds spent browsing templates',
+                    timeframe: 30
+                }
+            ]
         },
-        {
-            id: 'rec-002',
-            title: 'Add Progressive Template Previews',
-            description: 'Implement progressive template loading and preview system to reduce bounce rate and improve engagement',
-            category: 'technical_performance',
-            priority: 'high',
-            impactScore: 70,
-            confidenceScore: 0.8,
-            effortScore: 45,
-            riskScore: 30,
-            roiEstimate: 3.1,
-            timeToImplement: 10,
-            timeToImpact: 5,
-            affectedSteps: ['step-2', 'step-3'],
-            targetedGoals: ['improve_user_experience', 'reduce_time_to_convert'],
-            implementation: {
-                phases: [,
-                    {
-                        phase: 'Technical Architecture',
-                        description: 'Design progressive loading system',
-                        duration: 3,
-                        deliverables: ['Technical specification', 'Architecture design'],
-                        dependencies: [],
-                        resources: ['Technical Lead', 'Senior Developer'],
-                        milestones: [],
-                    },
-                    {
-                        phase: 'Implementation',
-                        description: 'Build progressive preview system',
-                        duration: 7,
-                        deliverables: ['Preview system', 'Lazy loading', 'Performance optimization'],
-                        dependencies: ['Technical Architecture'],
-                        resources: ['Frontend Developer', 'Backend Developer'],
-                        milestones: []
-                    }],
-                resources: [,
-                    {
-                        type: 'development',
-                        hours: 60,
-                        skills: ['React', 'Performance Optimization', 'CDN'],
-                        urgency: 'soon'
-                    }],
-                timeline: [],
-                risksAndMitigations: [],
-                successCriteria: [,
-                    {
-                        metric: 'Page load time',
-                        target: 2000,
-                        measurement: 'Milliseconds to interactive',
-                        timeframe: 14
-                    }]
+        validation, {},
+        hypothesis, 'Improved template browsing UX will increase step conversion rate by 15%',
+        testMethod, 'ab_test',
+        sampleSize, 10000,
+        duration, 14,
+        successMetrics, [
+            {
+                metric: 'conversion_rate',
+                target: 15,
+                tolerance: 5,
+                significance: 0.05
+            }
+        ],
+        stopConditions, [
+            {
+                condition: 'conversion_rate_decrease',
+                threshold: -5,
+                action: 'stop'
+            }
+        ]
+    ]
+},
+    dependencies;
+[],
+    alternatives;
+[
+    {
+        title: 'Simplified Quick Browse Mode',
+        description: 'Add a simplified browse mode for quick decisions',
+        impactScore: 65,
+        effortScore: 30,
+        riskScore: 15,
+        tradeoffs: ['Lower long-term engagement', 'Simpler to implement']
+    }
+],
+;
+{
+    id: 'rec-002',
+        title;
+    'Add Progressive Template Previews',
+        description;
+    'Implement progressive template loading and preview system to reduce bounce rate and improve engagement',
+        category;
+    'technical_performance',
+        priority;
+    'high',
+        impactScore;
+    70,
+        confidenceScore;
+    0.8,
+        effortScore;
+    45,
+        riskScore;
+    30,
+        roiEstimate;
+    3.1,
+        timeToImplement;
+    10,
+        timeToImpact;
+    5,
+        affectedSteps;
+    ['step-2', 'step-3'],
+        targetedGoals;
+    ['improve_user_experience', 'reduce_time_to_convert'],
+        implementation;
+    {
+        phases: [
+            {
+                phase: 'Technical Architecture',
+                description: 'Design progressive loading system',
+                duration: 3,
+                deliverables: ['Technical specification', 'Architecture design'],
+                dependencies: [],
+                resources: ['Technical Lead', 'Senior Developer'],
+                milestones: [],
             },
-            validation: {
-                hypothesis: 'Progressive previews will reduce bounce rate by 20%',
-                testMethod: 'ab_test',
-                sampleSize: 8000,
-                duration: 10,
-                successMetrics: [,
-                    {
-                        metric: 'bounce_rate',
-                        target: -20,
-                        tolerance: 5,
-                        significance: 0.05
-                    }],
-                stopConditions: [],
-            },
-            dependencies: [],
-            alternatives: []
-        }
-    ],
-    const: experimentPlans, ExperimentPlan = [
+            {
+                phase: 'Implementation',
+                description: 'Build progressive preview system',
+                duration: 7,
+                deliverables: ['Preview system', 'Lazy loading', 'Performance optimization'],
+                dependencies: ['Technical Architecture'],
+                resources: ['Frontend Developer', 'Backend Developer'],
+                milestones: []
+            }
+        ],
+            resources;
+        [
+            {
+                type: 'development',
+                hours: 60,
+                skills: ['React', 'Performance Optimization', 'CDN'],
+                urgency: 'soon'
+            }
+        ],
+            timeline;
+        [],
+            risksAndMitigations;
+        [],
+            successCriteria;
+        [
+            {
+                metric: 'Page load time',
+                target: 2000,
+                measurement: 'Milliseconds to interactive',
+                timeframe: 14
+            }
+        ];
+    }
+    validation: {
+        hypothesis: 'Progressive previews will reduce bounce rate by 20%',
+            testMethod;
+        'ab_test',
+            sampleSize;
+        8000,
+            duration;
+        10,
+            successMetrics;
+        [
+            {
+                metric: 'bounce_rate',
+                target: -20,
+                tolerance: 5,
+                significance: 0.05
+            }
+        ],
+            stopConditions;
+        [],
+        ;
+    }
+    dependencies: [],
+        alternatives;
+    [];
+    ;
+    const experimentPlans = [
         {
             id: 'exp-001',
             name: 'Template Browse UX Optimization',
@@ -572,7 +593,7 @@ Promise < OptimizationAnalysisData > {
             hypothesis: 'Improved filtering and search will increase step conversion by 15%',
             experimentType: 'ab_test',
             targetSteps: ['step-2'],
-            variants: [,
+            variants: [
                 {
                     id: 'control',
                     name: 'Current Experience',
@@ -586,7 +607,7 @@ Promise < OptimizationAnalysisData > {
                     id: 'treatment',
                     name: 'Enhanced Browse UX',
                     description: 'Improved filtering, search, and layout',
-                    changes: [,
+                    changes: [
                         {
                             type: 'ui',
                             element: 'Template Grid',
@@ -598,93 +619,113 @@ Promise < OptimizationAnalysisData > {
                             element: 'Search Bar',
                             change: 'Enhanced search with autocomplete and suggestions',
                             rationale: 'Faster template discovery reduces frustration'
-                        }],
+                        }
+                    ],
                     trafficPercentage: 50,
                     expectedImpact: 15,
                     riskLevel: 'medium'
-                }],
-            trafficAllocation: {
-                strategy: 'equal',
-                exclusionCriteria: ['Mobile users under 5 sessions'],
-                inclusionCriteria: ['Active template browsers'],
-            },
-            duration: 14,
-            sampleSize: {
-                minimumDetectableEffect: 15,
-                baselineConversionRate: 65,
-                power: 0.8,
-                significance: 0.05,
-                calculatedSampleSize: 10000,
-                recommendedDuration: 14,
-                confidenceInterval: [0.8, 1.2],
-            },
-            successMetrics: [,
-                {
-                    name: 'Step Conversion Rate',
-                    type: 'primary',
-                    calculation: 'Users completing step / Users entering step',
-                    target: 15,
-                    minimumDetectableEffect: 10
-                }],
-            guardrailMetrics: [,
-                {
-                    name: 'Overall Funnel Conversion',
-                    threshold: -5,
-                    direction: 'decrease',
-                    action: 'stop'
-                }],
-            analysisFramework: {
-                method: 'frequentist',
-                interimAnalyses: [,
-                    {
-                        day: 7,
-                        purpose: 'Early signal detection',
-                        metrics: ['conversion_rate', 'engagement'],
-                        decisionCriteria: ['Statistical significance', 'Guardrail violations']
-                    }],
-                finalAnalysis: {
-                    methods: ['T-test', 'Chi-square'],
-                    visualizations: ['Conversion funnel', 'Time series'],
-                    segmentAnalysis: ['Device type', 'User segment'],
-                    statisticalTests: ['Welch t-test', 'Mann-Whitney U'],
-                },
-                reportingSchedule: [,
-                    {
-                        frequency: 'daily',
-                        audience: ['Product Team', 'Engineering'],
-                        content: ['Key metrics', 'Guardrails', 'User feedback']
-                    }]
-            },
-            riskAssessment: {
-                businessRisks: [,
-                    {
-                        risk: 'Decreased conversion rate',
-                        probability: 0.2,
-                        impact: 50,
-                        mitigation: 'Real-time monitoring with automatic stop conditions'
-                    }],
-                technicalRisks: [,
-                    {
-                        risk: 'Performance degradation',
-                        probability: 0.3,
-                        impact: 30,
-                        mitigation: 'Load testing and performance monitoring'
-                    }],
-                userExperienceRisks: [,
-                    {
-                        risk: 'User confusion with new interface',
-                        probability: 0.4,
-                        impact: 25,
-                        mitigation: 'User feedback collection and support documentation'
-                    }],
-                mitigationPlans: []
-            }
+                }
+            ],
+            trafficAllocation: {},
+            strategy: 'equal',
+            exclusionCriteria: ['Mobile users under 5 sessions'],
+            inclusionCriteria: ['Active template browsers'],
+        },
+        duration, 14,
+        sampleSize, {},
+        minimumDetectableEffect, 15,
+        baselineConversionRate, 65,
+        power, 0.8,
+        significance, 0.05,
+        calculatedSampleSize, 10000,
+        recommendedDuration, 14,
+        confidenceInterval, [0.8, 1.2],
+    ];
+}
+successMetrics: [
+    {
+        name: 'Step Conversion Rate',
+        type: 'primary',
+        calculation: 'Users completing step / Users entering step',
+        target: 15,
+        minimumDetectableEffect: 10
+    }
+],
+    guardrailMetrics;
+[
+    {
+        name: 'Overall Funnel Conversion',
+        threshold: -5,
+        direction: 'decrease',
+        action: 'stop'
+    }
+],
+    analysisFramework;
+{
+    method: 'frequentist',
+        interimAnalyses;
+    [
+        {
+            day: 7,
+            purpose: 'Early signal detection',
+            metrics: ['conversion_rate', 'engagement'],
+            decisionCriteria: ['Statistical significance', 'Guardrail violations']
         }
     ],
-    return: {
+        finalAnalysis;
+    {
+        methods: ['T-test', 'Chi-square'],
+            visualizations;
+        ['Conversion funnel', 'Time series'],
+            segmentAnalysis;
+        ['Device type', 'User segment'],
+            statisticalTests;
+        ['Welch t-test', 'Mann-Whitney U'],
+        ;
+    }
+    reportingSchedule: [
+        {
+            frequency: 'daily',
+            audience: ['Product Team', 'Engineering'],
+            content: ['Key metrics', 'Guardrails', 'User feedback']
+        }
+    ],
+    ;
+}
+riskAssessment: {
+    businessRisks: [
+        {
+            risk: 'Decreased conversion rate',
+            probability: 0.2,
+            impact: 50,
+            mitigation: 'Real-time monitoring with automatic stop conditions'
+        }
+    ],
+        technicalRisks;
+    [
+        {
+            risk: 'Performance degradation',
+            probability: 0.3,
+            impact: 30,
+            mitigation: 'Load testing and performance monitoring'
+        }
+    ],
+        userExperienceRisks;
+    [
+        {
+            risk: 'User confusion with new interface',
+            probability: 0.4,
+            impact: 25,
+            mitigation: 'User feedback collection and support documentation'
+        }
+    ],
+        mitigationPlans;
+    [];
+    ;
+    return {
         recommendations,
         experimentPlans,
-        impactPredictions: recommendations.map(rec => ({}), recommendationId, rec.id, predictedImpact, [,
+        impactPredictions: recommendations.map(rec => ({}), recommendationId, rec.id, predictedImpact, [
             {
                 metric: 'conversion_rate',
                 currentValue: currentPerformance.overallConversionRate,
@@ -692,13 +733,15 @@ Promise < OptimizationAnalysisData > {
                 changeAbsolute: currentPerformance.overallConversionRate * rec.impactScore / 100 * 0.3,
                 changeRelative: rec.impactScore * 0.3,
                 confidence: rec.confidenceScore
-            }], confidenceInterval, [rec.impactScore * 0.2, rec.impactScore * 0.4], timeToRealization, rec.timeToImpact, factorsConsidered, ['Historical performance', 'Industry benchmarks', 'User behavior patterns'], assumptions, ['Consistent traffic patterns', 'No external market changes'], sensitivityAnalysis, {
-            factors: [,
+            }
+        ], confidenceInterval, [rec.impactScore * 0.2, rec.impactScore * 0.4], timeToRealization, rec.timeToImpact, factorsConsidered, ['Historical performance', 'Industry benchmarks', 'User behavior patterns'], assumptions, ['Consistent traffic patterns', 'No external market changes'], sensitivityAnalysis, {
+            factors: [
                 {
                     factor: 'Implementation quality',
                     impact: 0.3,
                     uncertainty: 0.2
-                }],
+                }
+            ],
             scenarios: [],
         }),
         resourceAllocation: {
@@ -707,14 +750,19 @@ Promise < OptimizationAnalysisData > {
         },
         expectedROI: rec.roiEstimate,
         priority: index + 1
-    },
+    };
     priorities: {
         highImpactLowEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore < 40).map(r => r.id),
-        highImpactHighEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore >= 40).map(r => r.id),
-        lowImpactLowEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore < 40).map(r => r.id),
-        lowImpactHighEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore >= 40).map(r => r.id),
-    },
-    timeline: Array.from({ length: 6 }, (_, i) => ({}), period, `Month ${i + 1}`) };
+            highImpactHighEffort;
+        recommendations.filter(r => r.impactScore > 70 && r.effortScore >= 40).map(r => r.id),
+            lowImpactLowEffort;
+        recommendations.filter(r => r.impactScore <= 70 && r.effortScore < 40).map(r => r.id),
+            lowImpactHighEffort;
+        recommendations.filter(r => r.impactScore <= 70 && r.effortScore >= 40).map(r => r.id),
+        ;
+    }
+    timeline: Array.from({ length: 6 }, (_, i) => ({}), period, `Month ${i + 1}`);
+}
 allocations: recommendations.filter((_, index) => index % 6 === i).map((rec, allocIndex) => ({}), recommendationId, rec.id, allocatedBudget, rec.effortScore * 500, allocatedTime, rec.timeToImplement, allocatedResources, [], expectedROI, rec.roiEstimate, priority, allocIndex + 1);
 capacity: {
     available: 100,
@@ -744,19 +792,20 @@ optimization: {
         ;
     }
     optimizationRoadmap: {
-        phases: [,
+        phases: [
             {
                 phase: 'Quick Wins (Month 1)',
                 duration: 30,
                 objectives: ['Implement low-effort, high-impact improvements'],
                 deliverables: ['Performance optimizations', 'Copy improvements', 'Minor UX fixes'],
-                resources: [,
+                resources: [
                     {
                         type: 'development',
                         hours: 80,
                         skills: ['Frontend optimization'],
                         urgency: 'immediate'
-                    }],
+                    }
+                ],
                 risks: ['Resource conflicts'],
                 successCriteria: ['5% conversion rate improvement'],
             },
@@ -765,18 +814,20 @@ optimization: {
                 duration: 60,
                 objectives: ['Deploy significant UX and technical improvements'],
                 deliverables: ['New template browse UX', 'Progressive loading', 'Mobile optimization'],
-                resources: [,
+                resources: [
                     {
                         type: 'development',
                         hours: 200,
                         skills: ['React', 'UX Design', 'Performance'],
                         urgency: 'soon'
-                    }],
+                    }
+                ],
                 risks: ['Integration complexity', 'User adoption'],
                 successCriteria: ['15% conversion rate improvement']
-            }],
+            }
+        ],
             milestones;
-        [,
+        [
             {
                 name: 'Quick Wins Deployed',
                 date: Date.now() + 30 * 86400000,
@@ -784,7 +835,8 @@ optimization: {
                 dependencies: [],
                 successCriteria: ['All phase 1 deliverables complete'],
                 impact: 5
-            }],
+            }
+        ],
             dependencies;
         [],
             riskMitigations;
@@ -793,13 +845,14 @@ optimization: {
         {
             definition: 'Overall funnel conversion rate increased by 20%',
                 metrics;
-            [,
+            [
                 {
                     metric: 'Conversion Rate',
                     target: 20,
                     measurement: 'Percentage improvement from baseline',
                     frequency: 'Weekly'
-                }],
+                }
+            ],
                 timeline;
             90,
                 dependencies;
@@ -809,10 +862,10 @@ optimization: {
         riskAssessment: {
             overallRiskScore: 35,
                 riskCategories;
-            [,
+            [
                 {
                     category: 'Implementation',
-                    risks: [,
+                    risks: [
                         {
                             id: 'impl-001',
                             description: 'Development delays due to complexity',
@@ -822,10 +875,12 @@ optimization: {
                             category: 'Implementation',
                             triggers: ['Technical challenges', 'Resource constraints'],
                             indicators: ['Missed milestones', 'Developer feedback']
-                        }],
+                        }
+                    ],
                     overallScore: 24,
                     trend: 'stable'
-                }],
+                }
+            ],
                 mitigationStrategies;
             [],
                 contingencyPlans;
@@ -842,7 +897,7 @@ optimization: {
                 ;
             }
             competitiveAnalysis: {
-                competitors: [,
+                competitors: [
                     {
                         name: 'Competitor A',
                         strengths: ['Fast loading', 'Intuitive navigation'],
@@ -853,19 +908,20 @@ optimization: {
                     }
                 ],
                     benchmarks;
-                [,
+                [
                     {
                         metric: 'Conversion Rate',
                         ourValue: currentPerformance.overallConversionRate,
-                        competitorValues: [,
+                        competitorValues: [
                             { competitor: 'Competitor A', value: 22, confidence: 0.8 }
                         ],
                         marketLeader: 25,
                         marketAverage: 18,
                         ourRanking: 3
-                    }],
+                    }
+                ],
                     opportunities;
-                [,
+                [
                     {
                         opportunity: 'Template Preview Innovation',
                         description: 'Implement interactive template previews',
@@ -873,7 +929,8 @@ optimization: {
                         difficulty: 60,
                         timeframe: 3,
                         requirements: ['3D preview technology', 'Advanced rendering']
-                    }],
+                    }
+                ],
                     threats;
                 [],
                     positioning;
@@ -891,7 +948,7 @@ optimization: {
                     ['Focus on UX improvements', 'Leverage data advantages'],
                     ;
                 }
-                trends: [,
+                trends: [
                     {
                         trend: 'AI-Powered Personalization',
                         description: 'Using AI to personalize user experiences',
@@ -901,7 +958,9 @@ optimization: {
                         timeframe: 12,
                         implementation: ['ML model development', 'User behavior analysis'],
                         examples: ['Netflix recommendations', 'Amazon product suggestions']
-                    }];
+                    }
+                ],
+                ;
             }
             ;
             export default FunnelOptimizationEngine;

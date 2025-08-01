@@ -9,7 +9,7 @@
 import { 
   SecurityAnalyticsIntegrationService,
   SecurityAnalyticsIntegrationConfig
-} from '../SecurityAnalyticsIntegrationService';
+ from '../SecurityAnalyticsIntegrationService';
 import { AnalyticsCollector } from '../../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../../database/analytics-dao';
 import { AdminAuthGuard } from '../../admin/guards/AdminAuthGuard';
@@ -29,19 +29,19 @@ const mockSecurityAnalyticsPerformanceMonitor = {
   on: jest.fn<unknown[], unknown>(),
   getCurrentPerformanceProfile: jest.fn<unknown[], unknown>().mockResolvedValue({
     current_state: { overall_performance_score: 85 }
-  } as unknown),
+ as unknown),
   getSystemMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
     throughput_events_per_second: 100,
     latency_p95_ms: 50,
     memory_usage_mb: 128,
     cpu_usage_percent: 30,
     availability_percent: 99.5
-  } as unknown),
+ as unknown),
   getSecurityMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
     active_threats: 2,
     events_processed: 1000,
     compliance_violations: 0
-  } as unknown),
+ as unknown),
   shutdown: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown),
   emit: jest.fn<unknown[], unknown>()
 };
@@ -73,7 +73,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
         performance_event_forwarding: true,
         batch_size: 10,
         flush_interval_ms: 1000
-  }
+
       epic17_admin_integration: {
         enabled: true,
         auth_guard: new AdminAuthGuard() as jest.Mocked<AdminAuthGuard>,
@@ -81,7 +81,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
         diagnostic_service: mockDiagnosticService,
         admin_notification_enabled: true,
         security_alert_threshold: 5
-  }
+
       performance_monitoring: {
         real_time_monitoring_enabled: true,
         performance_threshold_ms: 500,
@@ -89,14 +89,14 @@ describe('SecurityAnalyticsIntegrationService', () => {
         cpu_threshold_percent: 70,
         alert_on_degradation: true,
         auto_optimization_enabled: false
-  }
+
       security_features: {
         threat_detection_enabled: true,
         anomaly_detection_sensitivity: 0.8,
         correlation_analysis_enabled: true,
         predictive_analytics_enabled: false,
         automated_response_enabled: false
-      }
+
     };
 
     service = new SecurityAnalyticsIntegrationService(mockConfig);
@@ -364,7 +364,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
           performance_score: 85,
           active_threats_detected: 20,
           system_availability_percent: 99.5
-  }
+
         affected_components: ['threat_detection'],
         recommended_actions: ['Immediate investigation required'],
         created_at: Date.now()
@@ -391,12 +391,12 @@ describe('SecurityAnalyticsIntegrationService', () => {
           epic1_analytics: true,
           epic17_admin: true,
           real_time_monitoring: expect.any(Boolean)
-  }
+
         current_metrics: expect.any(Object),
         system_health: expect.objectContaining({
           buffer_sizes: expect.any(Object),
           monitoring_active: expect.any(Boolean)
-  }
+
       });
     });
 
@@ -523,7 +523,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
       // Force buffer to batch size
       for (let i = 0; i < mockConfig.epic1_analytics_integration.batch_size; i++) {
         service['metricsBuffer'].push({ ...mockMetrics, timestamp: Date.now() + i });
-      }
+
 
       await service['flushMetricsBuffer']();
 

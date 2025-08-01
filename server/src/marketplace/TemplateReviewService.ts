@@ -18,19 +18,20 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
-}
-}
+
+
 export interface ReviewCriteria {
   quality: number;        // 1-5 stars - Code/template quality
   usability: number;      // 1-5 stars - Ease of use
   documentation: number;  // 1-5 stars - Documentation quality
   support: number;        // 1-5 stars - Creator responsiveness
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemplateReview {
   id: string;
   templateId: string;
@@ -60,18 +61,19 @@ export interface TemplateReview {
       quality: number;
       usability: number;
       support: number;
-}
-}
+
+
+
     };
   };
   
   // Fraud detection
   fraudScore: number;     // 0 to 1 (higher = more suspicious)
   fraudFlags: string[];
-}
 
-}
-}
+
+
+
 export interface ReviewSubmission {
   templateId: string;
   userId: string;
@@ -83,13 +85,14 @@ export interface ReviewSubmission {
     ipAddress?: string;
     purchaseVerified?: boolean;
     usageDuration?: number; // days since purchase
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface AggregatedRating {
   templateId: string;
   overall: {
@@ -97,8 +100,9 @@ export interface AggregatedRating {
     count: number;
     distribution: Record<1 | 2 | 3 | 4 | 5, number>;
     confidence: number;
-}
-}
+
+
+
   };
   criteria: {
     quality: { average: number; count: number };
@@ -113,10 +117,10 @@ export interface AggregatedRating {
     negativeCount: number;
   };
   lastUpdated: Date;
-}
 
-}
-}
+
+
+
 export interface ModerationQueue {
   pending: TemplateReview[];
   flagged: TemplateReview[];
@@ -126,10 +130,11 @@ export interface ModerationQueue {
     moderatorId: string;
     timestamp: Date;
     reason?: string;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 @Injectable()
 export class TemplateReviewService {
@@ -144,7 +149,7 @@ export class TemplateReviewService {
       maxRetriesPerRequest: 3,
       keyPrefix: 'template_reviews:'
     });
-  }
+
 
   /**
    * Submit a new template review
@@ -192,17 +197,17 @@ export class TemplateReviewService {
       // Update aggregated ratings if approved automatically
       if (status === 'pending' && fraudScore < 0.3) {
         await this.approveReview(reviewId, 'system-auto-approve');
-      }
+
 
       // Cache invalidation for template ratings
       await this.invalidateTemplateCache(submission.templateId);
 
       return reviewId;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to submit review:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get reviews for a template with pagination and filtering
@@ -215,13 +220,13 @@ export class TemplateReviewService {
       sortBy?: 'newest' | 'oldest' | 'helpful' | 'rating';
       minRating?: number;
       verified?: boolean;
-    } = {}
+ = {}
   ): Promise<{
     reviews: TemplateReview[];
     total: number;
     hasMore: boolean;
     aggregated: AggregatedRating;
-  }> {
+> {
 
     try {
       const {
@@ -230,7 +235,7 @@ export class TemplateReviewService {
         sortBy = 'newest',
         minRating,
         verified
-      } = options;
+ = options;
 
       const offset = (page - 1) * limit;
 
@@ -246,13 +251,13 @@ export class TemplateReviewService {
         query += ` AND overall_rating >= $${paramIndex}`;
         params.push(minRating);
         paramIndex++;
-      }
+
 
       if (verified !== undefined) {
         query += ` AND verified = $${paramIndex}`;
         params.push(verified);
         paramIndex++;
-      }
+
 
       // Add sorting
       const sortMap = {
@@ -283,11 +288,11 @@ export class TemplateReviewService {
       const hasMore = offset + limit < total;
 
       return { reviews, total, hasMore, aggregated };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get template reviews:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get aggregated rating for a template
@@ -299,7 +304,7 @@ export class TemplateReviewService {
       const cached = await this.redis.get(`aggregated:${templateId}`);
       if (cached) {
         return JSON.parse(cached);
-      }
+
 
       // Calculate aggregated rating
       const query = `
@@ -328,7 +333,7 @@ export class TemplateReviewService {
 
       if (!row || row.total_count === 0) {
         return this.getEmptyAggregatedRating(templateId);
-      }
+
 
       const totalCount = parseInt(row.total_count);
       const confidence = this.calculateConfidenceScore(totalCount, parseFloat(row.avg_rating));
@@ -344,33 +349,33 @@ export class TemplateReviewService {
             3: parseInt(row.rating_3) || 0,
             4: parseInt(row.rating_4) || 0,
             5: parseInt(row.rating_5) || 0
-  }
+
           confidence
-  }
+
         criteria: {
           quality: { 
             average: parseFloat(row.avg_quality) || 0, 
             count: totalCount 
-  }
+
           usability: { 
             average: parseFloat(row.avg_usability) || 0, 
             count: totalCount 
-  }
+
           documentation: { 
             average: parseFloat(row.avg_documentation) || 0, 
             count: totalCount 
-  }
+
           support: { 
             average: parseFloat(row.avg_support) || 0, 
             count: totalCount 
-          }
-  }
+
+
         sentiment: {
           averageScore: parseFloat(row.avg_sentiment) || 0,
           positiveCount: parseInt(row.positive_sentiment) || 0,
           neutralCount: parseInt(row.neutral_sentiment) || 0,
           negativeCount: parseInt(row.negative_sentiment) || 0
-  }
+
         lastUpdated: new Date()
       };
 
@@ -378,11 +383,11 @@ export class TemplateReviewService {
       await this.redis.setex(`aggregated:${templateId}`, 300, JSON.stringify(aggregated));
 
       return aggregated;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get aggregated rating:', error);
       return this.getEmptyAggregatedRating(templateId);
-    }
-  }
+
+
 
   /**
    * Approve a review (moderation)
@@ -405,12 +410,12 @@ export class TemplateReviewService {
         
         // Log moderation action
         await this.logModerationAction(reviewId, 'approved', moderatorId);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to approve review:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Reject a review (moderation)
@@ -431,12 +436,12 @@ export class TemplateReviewService {
       if (result.rows.length > 0) {
         // Log moderation action
         await this.logModerationAction(reviewId, 'rejected', moderatorId, reason);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to reject review:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get moderation queue
@@ -473,11 +478,11 @@ export class TemplateReviewService {
           reason: row.reason
         }))
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get moderation queue:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Mark review as helpful
@@ -508,13 +513,13 @@ export class TemplateReviewService {
         `, [reviewId]);
 
         await this.pool.query('COMMIT');
-      }
-    } catch (error) {
+
+ catch (error) {
       await this.pool.query('ROLLBACK');
       console.error('Failed to mark review as helpful:', error);
       throw error;
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -539,9 +544,9 @@ export class TemplateReviewService {
         quality: score * 0.8, // Simplified aspect analysis
         usability: score * 0.9,
         support: score * 0.7
-      }
+
     };
-  }
+
 
   private async calculateFraudScore(submission: ReviewSubmission): Promise<number> {
 
@@ -551,18 +556,18 @@ export class TemplateReviewService {
     const contentLength = submission.content.length;
     if (contentLength < 20 || contentLength > 2000) {
       fraudScore += 0.2;
-    }
+
 
     // Check for identical ratings across criteria (suspicious)
     const { quality, usability, documentation, support } = submission.criteria;
     if (quality === usability && usability === documentation && documentation === support) {
       fraudScore += 0.3;
-    }
+
 
     // Check user history (would implement database checks)
     // For now, return calculated score
     return Math.min(fraudScore, 1);
-  }
+
 
   private async generateFraudFlags(submission: ReviewSubmission): Promise<string[]> {
 
@@ -570,19 +575,19 @@ export class TemplateReviewService {
     
     if (submission.content.length < 20) {
       flags.push('content_too_short');
-    }
+
     
     if (submission.content.length > 2000) {
       flags.push('content_too_long');
-    }
+
 
     const { quality, usability, documentation, support } = submission.criteria;
     if (quality === usability && usability === documentation && documentation === support) {
       flags.push('identical_ratings');
-    }
+
 
     return flags;
-  }
+
 
   private calculateConfidenceScore(reviewCount: number, averageRating: number): number {
     // Confidence increases with review count and decreases with extreme ratings
@@ -590,7 +595,7 @@ export class TemplateReviewService {
     const ratingFactor = 1 - Math.abs(averageRating - 3) / 2; // Lower confidence for very high/low ratings
     
     return Math.round((countFactor * ratingFactor) * 100) / 100;
-  }
+
 
   private getEmptyAggregatedRating(templateId: string): AggregatedRating {
     return {
@@ -600,21 +605,21 @@ export class TemplateReviewService {
         count: 0,
         distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
         confidence: 0
-  }
+
       criteria: {
         quality: { average: 0, count: 0 },
         usability: { average: 0, count: 0 },
         documentation: { average: 0, count: 0 },
         support: { average: 0, count: 0 }
-  }
+
       sentiment: {
         averageScore: 0,
         positiveCount: 0,
         neutralCount: 0,
         negativeCount: 0
-  }
+
       lastUpdated: new Date(};
-  }
+
 
   private async storeReview(review: TemplateReview): Promise<void> {
 
@@ -648,7 +653,7 @@ export class TemplateReviewService {
       review.fraudScore,
       JSON.stringify(review.fraudFlags)
     ]);
-  }
+
 
   private mapRowToReview(row: any): TemplateReview {
     return {
@@ -662,7 +667,7 @@ export class TemplateReviewService {
         usability: row.usability_rating,
         documentation: row.documentation_rating,
         support: row.support_rating
-  }
+
       overallRating: row.overall_rating,
       timestamp: row.timestamp,
       verified: row.verified,
@@ -679,17 +684,17 @@ export class TemplateReviewService {
           quality: row.sentiment_score * 0.8,
           usability: row.sentiment_score * 0.9,
           support: row.sentiment_score * 0.7
-        }
-  }
+
+
       fraudScore: row.fraud_score,
       fraudFlags: row.fraud_flags ? JSON.parse(row.fraud_flags) : []
     };
-  }
+
 
   private async invalidateTemplateCache(templateId: string): Promise<void> {
 
     await this.redis.del(`aggregated:${templateId}`);
-  }
+
 
   private async logModerationAction(
     reviewId: string, 
@@ -705,7 +710,7 @@ export class TemplateReviewService {
     `;
 
     await this.pool.query(query, [reviewId, action, moderatorId, reason]);
-  }
+
 
   /**
    * Cleanup resources
@@ -715,8 +720,7 @@ export class TemplateReviewService {
     try {
       await this.redis.quit();
       console.log('TemplateReviewService destroyed successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Error during TemplateReviewService destruction:', error);
-    }
-  }
-}
+
+

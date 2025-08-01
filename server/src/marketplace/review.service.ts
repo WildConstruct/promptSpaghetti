@@ -17,7 +17,7 @@ import {
   SentimentScore,
   CreateReviewSchema,
   UpdateReviewSchema
-} from './review.types.js';
+ from './review.types.js';
 import { DatabaseService } from '../database/database.service.js';
 
 export class ReviewService {
@@ -27,7 +27,7 @@ export class ReviewService {
   constructor(fastify: FastifyInstance) {
     this.fastify = fastify;
     this.db = fastify.db;
-  }
+
 
   // =============================================
   // Review Management
@@ -51,7 +51,7 @@ export class ReviewService {
 
     if (purchaseCheck.length === 0) {
       throw new Error('You must purchase this template before reviewing it');
-    }
+
 
     // Check if user has already reviewed this template
     const existingReview = await this.db.query(
@@ -61,7 +61,7 @@ export class ReviewService {
 
     if (existingReview.length > 0) {
       throw new Error('You have already reviewed this template');
-    }
+
 
     const reviewId = crypto.randomUUID();
     const purchaseId = purchaseCheck[0].order_id;
@@ -71,7 +71,7 @@ export class ReviewService {
     let sentiment: SentimentScore | undefined;
     if (validated.comment) {
       sentiment = await this.analyzeSentiment(validated.comment);
-    }
+
 
     const review: ReviewWithDetails = {
       id: reviewId,
@@ -94,7 +94,7 @@ export class ReviewService {
       helpfulness_votes: {
         helpful: 0,
         not_helpful: 0
-  }
+
       flags: [],
       flag_count: 0
     };
@@ -118,13 +118,13 @@ export class ReviewService {
     if (verified && !this.hasProblematicContent(validated.comment || '')) {
       await this.approveReview(reviewId, 'system-auto-approval');
       review.status = ReviewStatus.APPROVED;
-    }
+
 
     // Update template rating statistics
     await this.updateTemplateRatingStats(validated.template_id);
 
     return review;
-  }
+
 
   async updateReview(
     reviewId: string,
@@ -138,7 +138,7 @@ export class ReviewService {
     const review = await this.getReviewById(reviewId);
     if (!review || review.buyer_id !== userId) {
       throw new Error('Review not found or not owned by user');
-    }
+
 
     // Check if review is still editable (within 24 hours)
     const editWindow = 24 * 60 * 60 * 1000; // 24 hours
@@ -147,13 +147,13 @@ export class ReviewService {
     
     if (now - createdAt > editWindow) {
       throw new Error('Review can no longer be edited');
-    }
+
 
     // Analyze sentiment if comment was updated
     let sentiment = review.sentiment_ai;
     if (validated.comment && validated.comment !== review.comment) {
       sentiment = await this.analyzeSentiment(validated.comment);
-    }
+
 
     // Update review
     const updateFields = [];
@@ -162,39 +162,39 @@ export class ReviewService {
     if (validated.stars !== undefined) {
       updateFields.push('stars = ?');
       updateValues.push(validated.stars);
-    }
+
     if (validated.title !== undefined) {
       updateFields.push('title = ?');
       updateValues.push(validated.title);
-    }
+
     if (validated.comment !== undefined) {
       updateFields.push('comment = ?');
       updateValues.push(validated.comment);
-    }
+
     if (validated.pros !== undefined) {
       updateFields.push('pros = ?');
       updateValues.push(JSON.stringify(validated.pros));
-    }
+
     if (validated.cons !== undefined) {
       updateFields.push('cons = ?');
       updateValues.push(JSON.stringify(validated.cons));
-    }
+
     if (validated.use_case !== undefined) {
       updateFields.push('use_case = ?');
       updateValues.push(validated.use_case);
-    }
+
     if (validated.difficulty_rating !== undefined) {
       updateFields.push('difficulty_rating = ?');
       updateValues.push(validated.difficulty_rating);
-    }
+
     if (validated.would_recommend !== undefined) {
       updateFields.push('would_recommend = ?');
       updateValues.push(validated.would_recommend);
-    }
+
     if (sentiment !== review.sentiment_ai) {
       updateFields.push('sentiment_ai = ?');
       updateValues.push(sentiment);
-    }
+
 
     updateFields.push('updated_at = datetime("now")');
     updateFields.push('status = ?');
@@ -211,7 +211,7 @@ export class ReviewService {
     await this.updateTemplateRatingStats(review.template_id);
 
     return await this.getReviewById(reviewId) as ReviewWithDetails;
-  }
+
 
   async deleteReview(reviewId: string, userId: string): Promise<void> {
 
@@ -219,7 +219,7 @@ export class ReviewService {
     const review = await this.getReviewById(reviewId);
     if (!review || review.buyer_id !== userId) {
       throw new Error('Review not found or not owned by user');
-    }
+
 
     // Soft delete - change status to hidden
     await this.db.query(
@@ -229,7 +229,7 @@ export class ReviewService {
 
     // Update template rating statistics
     await this.updateTemplateRatingStats(review.template_id);
-  }
+
 
   // =============================================
   // Review Retrieval and Filtering
@@ -246,7 +246,7 @@ export class ReviewService {
     limit: number;
     hasMore: boolean;
     metrics: ReviewMetrics;
-  }> {
+> {
 
     const offset = (pagination.page - 1) * pagination.limit;
     
@@ -257,40 +257,40 @@ export class ReviewService {
     if (filters.rating) {
       whereClause += ' AND stars = ?';
       params.push(filters.rating);
-    }
+
 
     if (filters.verified_only) {
       whereClause += ' AND verified_purchase = true';
-    }
+
 
     if (filters.has_comment) {
       whereClause += ' AND comment IS NOT NULL AND comment != ""';
-    }
+
 
     if (filters.use_case) {
       whereClause += ' AND use_case = ?';
       params.push(filters.use_case);
-    }
+
 
     if (filters.difficulty_min) {
       whereClause += ' AND difficulty_rating >= ?';
       params.push(filters.difficulty_min);
-    }
+
 
     if (filters.difficulty_max) {
       whereClause += ' AND difficulty_rating <= ?';
       params.push(filters.difficulty_max);
-    }
+
 
     if (filters.date_from) {
       whereClause += ' AND created_at >= ?';
       params.push(filters.date_from.toISOString());
-    }
+
 
     if (filters.date_to) {
       whereClause += ' AND created_at <= ?';
       params.push(filters.date_to.toISOString());
-    }
+
 
     // Build ORDER BY clause
     let orderClause = 'created_at DESC';
@@ -310,7 +310,7 @@ export class ReviewService {
     case ReviewSortBy.VERIFIED_FIRST:
       orderClause = 'verified_purchase DESC, created_at DESC';
       break;
-    }
+
 
     // Get reviews
     const reviews = await this.db.query(
@@ -346,7 +346,7 @@ export class ReviewService {
       hasMore,
       metrics
     };
-  }
+
 
   async getReviewById(reviewId: string): Promise<ReviewWithDetails | null> {
 
@@ -358,7 +358,7 @@ export class ReviewService {
     if (result.length === 0) return null;
 
     return await this.enhanceReview(result[0]);
-  }
+
 
   // =============================================
   // Review Interactions
@@ -382,18 +382,18 @@ export class ReviewService {
         'UPDATE review_helpfulness_votes SET vote = ?, updated_at = datetime("now") WHERE id = ?',
         [vote, existingVote[0].id]
       );
-    } else {
+ else {
       // Create new vote
       const voteId = crypto.randomUUID();
       await this.db.query(
         'INSERT INTO review_helpfulness_votes (id, review_id, user_id, vote, created_at) VALUES (?, ?, ?, ?, datetime("now"))',
         [voteId, reviewId, userId, vote]
       );
-    }
+
 
     // Update helpfulness counts on review
     await this.updateReviewHelpfulnessStats(reviewId);
-  }
+
 
   async flagReview(
     reviewId: string,
@@ -410,7 +410,7 @@ export class ReviewService {
 
     if (existingFlag.length > 0) {
       throw new Error('You have already flagged this review');
-    }
+
 
     const flagId = crypto.randomUUID();
     await this.db.query(
@@ -425,8 +425,8 @@ export class ReviewService {
     const flagCount = await this.getReviewFlagCount(reviewId);
     if (flagCount >= 3) {
       await this.hideReview(reviewId, 'auto-flag-threshold');
-    }
-  }
+
+
 
   // =============================================
   // Creator Responses
@@ -442,7 +442,7 @@ export class ReviewService {
     const review = await this.getReviewById(reviewId);
     if (!review) {
       throw new Error('Review not found');
-    }
+
 
     const templateCheck = await this.db.query(
       'SELECT owner_id FROM marketplace_templates WHERE id = ?',
@@ -451,7 +451,7 @@ export class ReviewService {
 
     if (templateCheck.length === 0 || templateCheck[0].owner_id !== creatorId) {
       throw new Error('You can only respond to reviews of your own templates');
-    }
+
 
     // Check if creator has already responded
     const existingResponse = await this.db.query(
@@ -461,7 +461,7 @@ export class ReviewService {
 
     if (existingResponse.length > 0) {
       throw new Error('You have already responded to this review');
-    }
+
 
     const responseId = crypto.randomUUID();
     const creatorResponse: CreatorResponse = {
@@ -479,7 +479,7 @@ export class ReviewService {
     );
 
     return creatorResponse;
-  }
+
 
   // =============================================
   // Review Moderation
@@ -491,7 +491,7 @@ export class ReviewService {
       'UPDATE template_reviews SET status = ?, moderation_reason = ?, updated_at = datetime("now") WHERE id = ?',
       [ReviewStatus.APPROVED, `Approved by ${moderatorId}`, reviewId]
     );
-  }
+
 
   async rejectReview(reviewId: string, moderatorId: string, reason: string): Promise<void> {
 
@@ -499,7 +499,7 @@ export class ReviewService {
       'UPDATE template_reviews SET status = ?, moderation_reason = ?, updated_at = datetime("now") WHERE id = ?',
       [ReviewStatus.REJECTED, reason, reviewId]
     );
-  }
+
 
   async hideReview(reviewId: string, reason: string): Promise<void> {
 
@@ -507,7 +507,7 @@ export class ReviewService {
       'UPDATE template_reviews SET status = ?, moderation_reason = ?, updated_at = datetime("now") WHERE id = ?',
       [ReviewStatus.HIDDEN, reason, reviewId]
     );
-  }
+
 
   async getModerationQueue(): Promise<ReviewModerationQueue> {
 
@@ -548,9 +548,9 @@ export class ReviewService {
         approved_today: stats[0]?.approved_today || 0,
         rejected_today: stats[0]?.rejected_today || 0,
         flagged_today: stats[0]?.flagged_today || 0
-      }
+
     };
-  }
+
 
   // =============================================
   // Analytics and Metrics
@@ -586,12 +586,12 @@ export class ReviewService {
         three_star: result.three_star || 0,
         two_star: result.two_star || 0,
         one_star: result.one_star || 0
-  }
+
       verified_percentage: total > 0 ? (result.verified_count / total) * 100 : 0,
       response_rate: 0, // Would calculate from creator responses
       helpfulness_score: parseFloat(result.helpfulness_score) || 0
     };
-  }
+
 
   // =============================================
   // Helper Methods
@@ -640,20 +640,20 @@ export class ReviewService {
         verified: true, // Would check verification status
         total_reviews: 0, // Would count user's total reviews
         average_rating_given: 0 // Would calculate average rating given
-      } : undefined,
+ : undefined,
       helpfulness_votes: {
         helpful: helpfulnessVotes[0]?.helpful || 0,
         not_helpful: helpfulnessVotes[0]?.not_helpful || 0
-  }
+
       flags: flags.map(f => f.flag_type),
       flag_count: flags.length,
       creator_response: creatorResponse[0] ? {
         ...creatorResponse[0],
         created_at: new Date(creatorResponse[0].created_at),
         updated_at: new Date(creatorResponse[0].updated_at)
-      } : undefined
+ : undefined
     };
-  }
+
 
   private async updateTemplateRatingStats(templateId: string): Promise<void> {
 
@@ -663,7 +663,7 @@ export class ReviewService {
       'UPDATE marketplace_templates SET stats = ? WHERE id = ?',
       [JSON.stringify(metrics), templateId]
     );
-  }
+
 
   private async updateReviewHelpfulnessStats(reviewId: string): Promise<void> {
 
@@ -680,7 +680,7 @@ export class ReviewService {
       'UPDATE template_reviews SET helpful_votes = ?, not_helpful_votes = ? WHERE id = ?',
       [stats[0].helpful, stats[0].not_helpful, reviewId]
     );
-  }
+
 
   private async updateReviewFlagStats(reviewId: string): Promise<void> {
 
@@ -690,7 +690,7 @@ export class ReviewService {
       'UPDATE template_reviews SET flag_count = ? WHERE id = ?',
       [flagCount, reviewId]
     );
-  }
+
 
   private async getReviewFlagCount(reviewId: string): Promise<number> {
 
@@ -699,7 +699,7 @@ export class ReviewService {
       [reviewId, 'pending']
     );
     return result[0].count;
-  }
+
 
   private async analyzeSentiment(text: string): Promise<SentimentScore> {
 
@@ -720,7 +720,7 @@ export class ReviewService {
     if (score <= -2) return SentimentScore.VERY_NEGATIVE;
     if (score <= -1) return SentimentScore.NEGATIVE;
     return SentimentScore.NEUTRAL;
-  }
+
 
   private hasProblematicContent(text: string): boolean {
     // Simple content filtering - in production, use a proper moderation service
@@ -728,5 +728,4 @@ export class ReviewService {
     const lowerText = text.toLowerCase();
     
     return problematicWords.some(word => lowerText.includes(word));
-  }
-}
+

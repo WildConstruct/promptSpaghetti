@@ -1,14 +1,13 @@
 // packages/core/runtime/nodes/__tests__/Conditional.test.ts
 // Comprehensive tests for Conditional node
-import {
-  ConditionalNode,
+import { ConditionalNode,
   ConditionalBranch,
   ConditionalConfig,
   createConditionalNode,
   ConditionPresets,
-  ConditionalBuilder,
+  ConditionalBuilder }
   conditional
-} from '../Conditional';
+ from '../Conditional';
 import { AdvancedExecutionUtils } from '../../advanced';
 describe('Conditional Node', () => {
   let node: ConditionalNode;
@@ -35,21 +34,15 @@ describe('Conditional Node', () => {
       const result = node.run(context);
       expect(result).toBe('excellent'); // First match wins
     });
-    test('should return default when no conditions match', () => {
-      context.variables.score = 30;
+    test('should return default when no conditions match', () => { context.variables.score = 30;
       const result = node.run(context);
-      expect(result).toBe('poor');
-    });
-    test('should handle empty conditions gracefully', () => {
-      const emptyNode = new ConditionalNode('empty', [], 'default');
+      expect(result).toBe('poor') });
+    test('should handle empty conditions gracefully', () => { const emptyNode = new ConditionalNode('empty', [], 'default');
       const result = emptyNode.run(context);
-      expect(result).toBe('default');
-    });
-    test('should be deterministic with same context', () => {
-      const result1 = node.run(context);
+      expect(result).toBe('default') });
+    test('should be deterministic with same context', () => { const result1 = node.run(context);
       const result2 = node.run(context);
-      expect(result1).toBe(result2);
-    });
+      expect(result1).toBe(result2) });
   });
   describe('Expression Evaluation', () => {
     test('should evaluate numeric comparisons', () => {
@@ -186,12 +179,11 @@ describe('Conditional Node', () => {
       expect(patternNode.run(context)).toBe('other-email');
     });
   });
-  describe('Custom Functions', () => {
-  test('should support custom functions in configuration', () => {
+  describe('Custom Functions', () => { test('should support custom functions in configuration', () => {
   const customConfig: ConditionalConfig = {,
-  customFunctions: {
+  customFunctions: {,
   isEven: (n: number) => n % 2 === 0,
-  capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
+  capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1) }
 };
       const branches: ConditionalBranch = [
         { condition: 'isEven(number)', output: 'even' },
@@ -203,11 +195,10 @@ describe('Conditional Node', () => {
       context.variables.number = 7;
       expect(customNode.run(context)).toBe('odd');
     });
-    test('should support custom functions with multiple parameters', () => {
-  const customConfig: ConditionalConfig = {,
-  customFunctions: {
+    test('should support custom functions with multiple parameters', () => { const customConfig: ConditionalConfig = {,
+  customFunctions: {,
   between: (value: number, min: number, max: number) => value >= min && value <= max,
-  distance: (x1: number, y1: number, x2: number, y2: number) =>,
+  distance: (x1: number, y1: number, x2: number, y2: number) => }
   Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 };
       const branches: ConditionalBranch = [
@@ -224,18 +215,14 @@ describe('Conditional Node', () => {
       expect(multiParamNode.run(context)).toBe('near-origin');
     });
   });
-  describe('Validation', () => {
-    test('should validate basic configuration', () => {
+  describe('Validation', () => { test('should validate basic configuration', () => {
       const validation = node.validate();
       expect(validation.valid).toBe(true);
-      expect(validation.errors).toHaveLength(0);
-    });
-    test('should warn about empty conditions', () => {
-      const emptyNode = new ConditionalNode('empty', [], 'default');
+      expect(validation.errors).toHaveLength(0) });
+    test('should warn about empty conditions', () => { const emptyNode = new ConditionalNode('empty', [], 'default');
       const validation = emptyNode.validate();
       expect(validation.valid).toBe(true);
-      expect(validation.warnings).toContain('No conditional branches configured - will always return default output');
-    });
+      expect(validation.warnings).toContain('No conditional branches configured - will always return default output') });
     test('should validate empty condition expressions', () => {
       const invalidBranches: ConditionalBranch = [
         { condition: '', output: 'invalid' },
@@ -306,20 +293,17 @@ describe('Conditional Node', () => {
       expect(() => globalNode.run(context)).toThrow('Dangerous pattern detected');
     });
   });
-  describe('Serialization', () => {
-    test('should serialize node data', () => {
+  describe('Serialization', () => { test('should serialize node data', () => {
       const serialized = node.serialize();
       expect(serialized.id).toBe('test-conditional');
       expect(serialized.type).toBe('Conditional');
       expect(serialized.config).toBeDefined();
       expect(serialized.data.branches).toHaveLength(3);
       expect(serialized.data.defaultOutput).toBe('poor');
-      expect(serialized.metadata?.version).toBe('1.0.0');
-    });
-    test('should include conditional config in serialization', () => {
-  const customConfig: ConditionalConfig = {,
+      expect(serialized.metadata?.version).toBe('1.0.0') });
+    test('should include conditional config in serialization', () => { const customConfig: ConditionalConfig = {,
   allowVariableAccess: false,
-  strictMode: true,
+  strictMode: true }
 };
       const configNode = new ConditionalNode('config', [], 'default', customConfig);
       const serialized = configNode.serialize();
@@ -362,14 +346,12 @@ describe('Conditional Node', () => {
       expect(factoryNode.id).toBe('factory-test');
     });
   });
-  describe.skip('Condition Presets', () => {
-    test('should provide preset condition builders', () => {
+  describe.skip('Condition Presets', () => { test('should provide preset condition builders', () => {
       expect(ConditionPresets.greaterThan('score', 90)).toBe('score > 90');
       expect(ConditionPresets.equals('status', 'active')).toBe('status === "active"');
       expect(ConditionPresets.hasVariable('user')).toBe('hasVariable(\'user\')');
       expect(ConditionPresets.startsWith('name', 'Mr')).toBe('startsWith(name, \'Mr\')');
-      expect(ConditionPresets.and('a > 5', 'b < 10')).toBe('(a > 5) && (b < 10)');
-    });
+      expect(ConditionPresets.and('a > 5', 'b < 10')).toBe('(a > 5) && (b < 10)') });
     test('should work with preset conditions', () => {
       const presetBranches: ConditionalBranch = [
         { condition: ConditionPresets.greaterThan('score', 90), output: 'excellent' },
@@ -396,8 +378,7 @@ describe('Conditional Node', () => {
       expect(branches[0]).toEqual({ condition: 'score > 90', output: 'A' });
       expect(builder.getDefaultOutput()).toBe('F');
     });
-    test('should build functional conditional node', () => {
-      const builtNode = conditional('grades');
+    test('should build functional conditional node', () => { const builtNode = conditional('grades');
         .if('score >= 90', 'A')
         .elseIf('score >= 80', 'B')
         .elseIf('score >= 70', 'C')
@@ -407,7 +388,6 @@ describe('Conditional Node', () => {
       context.variables.score = 85;
       expect(builtNode.run(context)).toBe('B');
       context.variables.score = 55;
-      expect(builtNode.run(context)).toBe('F');
-    });
+      expect(builtNode.run(context)).toBe('F') });
   });
 });

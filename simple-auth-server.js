@@ -27,7 +27,7 @@ const users = [
     lastName: 'User',
     isEmailVerified: true,
     roles: ['admin', 'user']
-  }
+
 ];
 
 // Mock JWT token creation
@@ -50,9 +50,9 @@ const parseJSON = (req: any): Promise<any> => {
     req.on('end', () => {
       try {
         resolve(body ? JSON.parse(body) : {});
-      } catch (err) {
+ catch (err) {
         reject(err);
-      }
+
     });
   });
 };
@@ -81,7 +81,7 @@ const server = http.createServer(async (req: any, res: any) => {
     });
     res.end();
     return;
-  }
+
 
   try {
     // LOGIN endpoint
@@ -93,7 +93,7 @@ const server = http.createServer(async (req: any, res: any) => {
       
       if (!user) {
         return sendJSON(res, 401, { message: 'Invalid email or password' });
-      }
+
       
       const accessToken = createMockToken(user);
       const refreshToken = createMockToken(user) + '_refresh';
@@ -111,7 +111,7 @@ const server = http.createServer(async (req: any, res: any) => {
         refreshToken,
         expiresAt: new Date(Date.now() + (15 * 60 * 1000)).toISOString()
       });
-    }
+
     
     // REGISTER endpoint
     else if (pathname === '/api/auth/register' && method === 'POST') {
@@ -120,7 +120,7 @@ const server = http.createServer(async (req: any, res: any) => {
       
       if (users.find((u: any) => u.email === email)) {
         return sendJSON(res, 400, { message: 'User with this email already exists' });
-      }
+
       
       const newUser = {
         id: String(users.length + 1),
@@ -143,9 +143,9 @@ const server = http.createServer(async (req: any, res: any) => {
           lastName: newUser.lastName,
           isEmailVerified: newUser.isEmailVerified,
           roles: newUser.roles
-        }
+
       });
-    }
+
     
     // ME endpoint
     else if (pathname === '/api/auth/me' && method === 'GET') {
@@ -153,7 +153,7 @@ const server = http.createServer(async (req: any, res: any) => {
       
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return sendJSON(res, 401, { message: 'No token provided' });
-      }
+
       
       try {
         const token = authHeader.substring(7);
@@ -162,7 +162,7 @@ const server = http.createServer(async (req: any, res: any) => {
         const user = users.find((u: any) => u.id === payload.userId);
         if (!user) {
           return sendJSON(res, 401, { message: 'Invalid token' });
-        }
+
         
         sendJSON(res, 200, {
           id: user.id,
@@ -172,10 +172,10 @@ const server = http.createServer(async (req: any, res: any) => {
           isEmailVerified: user.isEmailVerified,
           roles: user.roles
         });
-      } catch {
+ catch {
         sendJSON(res, 401, { message: 'Invalid token' });
-      }
-    }
+
+
     
     // REFRESH endpoint
     else if (pathname === '/api/auth/refresh' && method === 'POST') {
@@ -183,7 +183,7 @@ const server = http.createServer(async (req: any, res: any) => {
       
       if (!refreshToken) {
         return sendJSON(res, 401, { message: 'No refresh token provided' });
-      }
+
       
       const mockUser = users[0];
       sendJSON(res, 200, {
@@ -191,13 +191,13 @@ const server = http.createServer(async (req: any, res: any) => {
         refreshToken: refreshToken,
         expiresAt: new Date(Date.now() + (15 * 60 * 1000)).toISOString()
       });
-    }
+
     
     // LOGOUT endpoint
     else if (pathname === '/api/auth/logout' && method === 'POST') {
       console.log('👋 Logout request');
       sendJSON(res, 200, { message: 'Logged out successfully' });
-    }
+
     
     // Health check
     else if (pathname === '/api/health' && method === 'GET') {
@@ -206,7 +206,7 @@ const server = http.createServer(async (req: any, res: any) => {
         message: 'Simple Auth Server Running',
         timestamp: new Date().toISOString()
       });
-    }
+
     
     // Root endpoint
     else if (pathname === '/' && method === 'GET') {
@@ -225,17 +225,16 @@ const server = http.createServer(async (req: any, res: any) => {
           { email: 'admin@example.com', password: 'admin123', role: 'admin' }
         ]
       });
-    }
+
     
     // 404 Not Found
     else {
       sendJSON(res, 404, { message: 'Endpoint not found' });
-    }
-    
-  } catch (error) {
+
+ catch (error) {
     console.error('Server error:', error);
     sendJSON(res, 500, { message: 'Internal server error' });
-  }
+
 });
 
 // Start server

@@ -11,8 +11,8 @@ import crypto from 'crypto';
 import { FastifyRequest } from 'fastify';
 import { AuditService } from './AuditService';
 
-}
-}
+
+
 export interface WebhookProvider {
   providerId: string;
   name: string;
@@ -26,12 +26,13 @@ export interface WebhookProvider {
   eventTypes: string[];
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WebhookValidationResult {
   valid: boolean;
   providerId?: string;
@@ -43,12 +44,13 @@ export interface WebhookValidationResult {
   timestamp?: Date;
   error?: string;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WebhookRequest {
   providerId: string;
   signature: string;
@@ -56,12 +58,13 @@ export interface WebhookRequest {
   headers: Record<string, string>;
   timestamp?: string;
   eventType?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WebhookEvent {
   eventId: string;
   providerId: string;
@@ -73,12 +76,13 @@ export interface WebhookEvent {
   attempts: number;
   lastAttempt?: Date;
   error?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WebhookConfig {
   providers: Record<string, WebhookProvider>;
   globalTimeout: number;
@@ -87,9 +91,10 @@ export interface WebhookConfig {
   enableReplayProtection: boolean;
   replayWindowSeconds: number;
   enableAuditLogging: boolean;
-}
-}
-}
+
+
+
+
 
 export class WebhookAuthenticationService {
   private providers = new Map<string, WebhookProvider>();
@@ -111,7 +116,7 @@ export class WebhookAuthenticationService {
     };
 
     this.initializeProviders();
-  }
+
 
   /**
    * Register a webhook provider with the authentication service
@@ -134,16 +139,16 @@ export class WebhookAuthenticationService {
           name: provider.name,
           endpoints: provider.endpoints,
           eventTypes: provider.eventTypes
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['webhook_management'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Validate incoming webhook request with signature verification
@@ -157,13 +162,13 @@ export class WebhookAuthenticationService {
         const error = `Unknown webhook provider: ${request.providerId}`;
         await this.logValidationEvent('WEBHOOK_VALIDATION_FAILED', request.providerId, { error });
         return { valid: false, error };
-      }
+
 
       if (!provider.active) {
         const error = `Webhook provider is inactive: ${request.providerId}`;
         await this.logValidationEvent('WEBHOOK_PROVIDER_INACTIVE', request.providerId, { error });
         return { valid: false, error, providerId: request.providerId, provider };
-      }
+
 
       // Verify signature
       const signatureValidation = this.verifySignature(request, provider);
@@ -174,7 +179,7 @@ export class WebhookAuthenticationService {
           receivedSignature: request.signature
         });
         return signatureValidation;
-      }
+
 
       // Parse payload
       let payload: any;
@@ -182,11 +187,11 @@ export class WebhookAuthenticationService {
         payload = typeof request.payload === 'string' 
           ? JSON.parse(request.payload) 
           : request.payload;
-      } catch (error) {
+ catch (error) {
         const parseError = `Invalid JSON payload: ${error.message}`;
         await this.logValidationEvent('WEBHOOK_PAYLOAD_INVALID', request.providerId, { error: parseError });
         return { valid: false, error: parseError, providerId: request.providerId, provider };
-      }
+
 
       // Check for replay attacks if enabled
       if (this.config.enableReplayProtection) {
@@ -197,8 +202,8 @@ export class WebhookAuthenticationService {
             timestamp: request.timestamp
           });
           return replayCheck;
-        }
-      }
+
+
 
       // Validate event type if provided
       if (request.eventType && provider.eventTypes.length > 0) {
@@ -206,8 +211,8 @@ export class WebhookAuthenticationService {
           const error = `Unsupported event type: ${request.eventType}`;
           await this.logValidationEvent('WEBHOOK_EVENT_TYPE_INVALID', request.providerId, { error });
           return { valid: false, error, providerId: request.providerId, provider };
-        }
-      }
+
+
 
       const result: WebhookValidationResult = {
         valid: true,
@@ -221,7 +226,7 @@ export class WebhookAuthenticationService {
         metadata: {
           headers: request.headers,
           payloadSize: JSON.stringify(payload).length
-        }
+
       };
 
       await this.logValidationEvent('WEBHOOK_VALIDATION_SUCCESS', request.providerId, {
@@ -230,13 +235,12 @@ export class WebhookAuthenticationService {
       });
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       const errorMessage = `Webhook validation error: ${error.message}`;
       await this.logValidationEvent('WEBHOOK_VALIDATION_ERROR', request.providerId, { error: errorMessage });
       return { valid: false, error: errorMessage };
-    }
-  }
+
+
 
   /**
    * Validate webhook from Fastify request
@@ -249,7 +253,7 @@ export class WebhookAuthenticationService {
     const provider = this.providers.get(providerId);
     if (!provider) {
       return { valid: false, error: `Unknown provider: ${providerId}` };
-    }
+
 
     const signature = request.headers[provider.signatureHeader.toLowerCase()] as string;
     if (!signature) {
@@ -258,7 +262,7 @@ export class WebhookAuthenticationService {
         error: `Missing signature header: ${provider.signatureHeader}`,
         providerId
       };
-    }
+
 
     const payload = request.body as string | Buffer;
     const eventType = this.extractEventType(request, provider);
@@ -275,21 +279,21 @@ export class WebhookAuthenticationService {
     };
 
     return await this.validateWebhook(webhookRequest);
-  }
+
 
   /**
    * Get registered providers
    */
   getProviders(): WebhookProvider[] {
     return Array.from(this.providers.values());
-  }
+
 
   /**
    * Get specific provider
    */
   getProvider(providerId: string): WebhookProvider | undefined {
     return this.providers.get(providerId);
-  }
+
 
   /**
    * Update provider configuration
@@ -299,7 +303,7 @@ export class WebhookAuthenticationService {
     const provider = this.providers.get(providerId);
     if (!provider) {
       return false;
-    }
+
 
     const updatedProvider = {
       ...provider,
@@ -315,18 +319,18 @@ export class WebhookAuthenticationService {
         details: {
           providerId,
           updates: Object.keys(updates)
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['webhook_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
-    }
+
 
     return true;
-  }
+
 
   /**
    * Remove provider
@@ -344,12 +348,12 @@ export class WebhookAuthenticationService {
           frameworks: ['SOC2'],
           requirements: ['webhook_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
-    }
+
 
     return removed;
-  }
+
 
   /**
    * Test webhook provider configuration
@@ -359,7 +363,7 @@ export class WebhookAuthenticationService {
     const provider = this.providers.get(providerId);
     if (!provider) {
       return { valid: false, error: `Provider not found: ${providerId}` };
-    }
+
 
     const testSignature = this.generateSignature(JSON.stringify(testPayload), provider);
     
@@ -373,7 +377,7 @@ export class WebhookAuthenticationService {
     };
 
     return await this.validateWebhook(testRequest);
-  }
+
 
   /**
    * Get webhook statistics
@@ -388,7 +392,7 @@ export class WebhookAuthenticationService {
       replayProtectionEnabled: this.config.enableReplayProtection,
       processedEventsCount: this.processedEvents.size
     };
-  }
+
 
   // Private helper methods
 
@@ -397,7 +401,7 @@ export class WebhookAuthenticationService {
     Object.entries(this.config.providers).forEach(([providerId, provider]) => {
       this.providers.set(providerId, provider);
     });
-  }
+
 
   private verifySignature(request: WebhookRequest, provider: WebhookProvider): WebhookValidationResult {
     try {
@@ -417,15 +421,15 @@ export class WebhookAuthenticationService {
         computedSignature,
         error: valid ? undefined : 'Signature verification failed'
       };
-    } catch (error) {
+ catch (error) {
       return {
         valid: false,
         providerId: request.providerId,
         provider,
         error: `Signature verification error: ${error.message}`
       };
-    }
-  }
+
+
 
   private generateSignature(payload: string | Buffer, provider: WebhookProvider): string {
     const data = typeof payload === 'string' ? payload : payload.toString('utf8');
@@ -434,14 +438,14 @@ export class WebhookAuthenticationService {
     const signature = hmac.digest('hex');
     
     return provider.signaturePrefix ? `${provider.signaturePrefix}${signature}` : signature;
-  }
+
 
   private normalizeSignature(signature: string, provider: WebhookProvider): string {
     if (provider.signaturePrefix && signature.startsWith(provider.signaturePrefix)) {
       return signature.substring(provider.signaturePrefix.length);
-    }
+
     return signature;
-  }
+
 
   private checkReplayProtection(request: WebhookRequest, payload: any): WebhookValidationResult {
     // Generate event ID for replay detection
@@ -453,7 +457,7 @@ export class WebhookAuthenticationService {
         error: 'Duplicate webhook event detected',
         providerId: request.providerId
       };
-    }
+
 
     // Check timestamp if available
     if (request.timestamp) {
@@ -464,7 +468,7 @@ export class WebhookAuthenticationService {
           error: 'Invalid timestamp format',
           providerId: request.providerId
         };
-      }
+
 
       const now = Date.now();
       const age = now - timestampMs;
@@ -475,7 +479,7 @@ export class WebhookAuthenticationService {
           error: 'Webhook timestamp too old',
           providerId: request.providerId
         };
-      }
+
 
       if (age < -60000) { // 1 minute in future
         return {
@@ -483,8 +487,8 @@ export class WebhookAuthenticationService {
           error: 'Webhook timestamp too far in future',
           providerId: request.providerId
         };
-      }
-    }
+
+
 
     // Add to processed events
     this.processedEvents.add(eventId);
@@ -492,15 +496,15 @@ export class WebhookAuthenticationService {
     // Clean up old events periodically
     if (this.processedEvents.size > 10000) {
       this.cleanupProcessedEvents();
-    }
+
 
     return { valid: true, providerId: request.providerId };
-  }
+
 
   private generateEventId(request: WebhookRequest, payload: any): string {
     const data = `${request.providerId}:${request.signature}:${JSON.stringify(payload)}`;
     return crypto.createHash('sha256').update(data).digest('hex');
-  }
+
 
   private extractEventType(request: FastifyRequest, provider: WebhookProvider): string | undefined {
     // Common event type header patterns
@@ -516,21 +520,21 @@ export class WebhookAuthenticationService {
       const value = request.headers[header];
       if (value && typeof value === 'string') {
         return value;
-      }
-    }
+
+
 
     // Try to extract from payload
     try {
       const payload = request.body as any;
       if (payload && typeof payload === 'object') {
         return payload.type || payload.event_type || payload.eventType;
-      }
-    } catch (error) {
+
+ catch (error) {
       // Ignore payload parsing errors
-    }
+
 
     return undefined;
-  }
+
 
   private cleanupProcessedEvents(): void {
     // Keep only the most recent 5000 events
@@ -540,7 +544,7 @@ export class WebhookAuthenticationService {
     events.slice(-5000).forEach(eventId => {
       this.processedEvents.add(eventId);
     });
-  }
+
 
   private async logValidationEvent(eventType: string, providerId: string, details: any): Promise<void> {
 
@@ -550,14 +554,13 @@ export class WebhookAuthenticationService {
         details: {
           providerId,
           ...details
-  }
+
         riskLevel: eventType.includes('FAILED') || eventType.includes('INVALID') ? 'HIGH' : 'LOW',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['webhook_security'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
-    }
-  }
-}
+
+

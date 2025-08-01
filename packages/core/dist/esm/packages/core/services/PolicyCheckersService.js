@@ -69,8 +69,9 @@ executeCheck(((request, policyType) => {
 return results[0];
 // Validate content against all applicable policies
 async;
-validateContent(content, {});
-id: string;
+validateContent(content, {}),
+    id;
+string;
 type: string;
 data: Record;
 author ?  : string;
@@ -130,8 +131,9 @@ return {
 };
 // Validate user action against policies
 async;
-validateUserAction(action, {});
-userId: string;
+validateUserAction(action, {}),
+    userId;
+string;
 userRole: string;
 action: string;
 resource ?  : string;
@@ -192,7 +194,7 @@ Promise < {
         totalCheckers: this.checkers.size,
         checksExecutedToday: 1250,
         averageExecutionTime: 45, // ms
-        topViolationTypes: [,
+        topViolationTypes: [
             { type: 'content_quality', count: 23 },
             { type: 'access_control', count: 18 },
             { type: 'data_protection', count: 12 }
@@ -254,8 +256,9 @@ new Date().toISOString(),
 0;
 ;
 async;
-logPolicyCheckExecution(request, PolicyCheckRequest);
-results: PolicyCheckResult,
+logPolicyCheckExecution(request, PolicyCheckRequest),
+    results;
+PolicyCheckResult,
     totalExecutionTimeMs;
 number;
 Promise < void  > {

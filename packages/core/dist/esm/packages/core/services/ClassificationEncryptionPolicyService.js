@@ -236,8 +236,9 @@ export class ClassificationEncryptionPolicyService {
         * Validate encryption compliance for data
         */
         async;
-        validateEncryptionCompliance(dataId, string);
-        classification: DataClassificationLevel,
+        validateEncryptionCompliance(dataId, string),
+            classification;
+        DataClassificationLevel,
             encryptionStatus;
         {
             encrypted: boolean;
@@ -327,8 +328,9 @@ export class ClassificationEncryptionPolicyService {
                     warnings,
                     recommendations
                 };
-                validateEncryptionAlgorithm(algorithm, string);
-                classification: DataClassificationLevel,
+                validateEncryptionAlgorithm(algorithm, string),
+                    classification;
+                DataClassificationLevel,
                     keyLength;
                 number;
                 ValidationResult;

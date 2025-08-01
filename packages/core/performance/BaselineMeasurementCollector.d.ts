@@ -6,8 +6,8 @@
 import { TestEnvironment } from './PerformanceBaselines';
 
 }
-interface SystemInfo {
-    nodeVersion: string;
+}
+interface SystemInfo { nodeVersion: string;
     platform: string;
     arch: string;
     memory: NodeJS.MemoryUsage;
@@ -82,7 +82,7 @@ export declare class BaselineMeasurementCollector {
 export declare function collectSystemBaselines(environment?: TestEnvironment, iterations?: number): Promise<{
     report: any;
     collection: any;
-    systemInfo: SystemInfo;
+    systemInfo: SystemInfo }
 }
 }>;
 export default BaselineMeasurementCollector;

@@ -15,31 +15,32 @@ import {
   DataRetrievalRateLimit,
   DataRequestDetails,
   DataRetrievalDecision
-} from '../../../packages/core/security/DataRetrievalRateLimit';
+ from '../../../packages/core/security/DataRetrievalRateLimit';
 import {
   DataRetrievalConfigurationFactory
-} from '../../../packages/core/security/DataRetrievalConfiguration';
+ from '../../../packages/core/security/DataRetrievalConfiguration';
 import { RateLimitingService } from '../../../packages/core/security/RateLimitingService';
 import {
   SubjectAttributes,
   ObjectAttributes,
   DataOperation,
   DataClassificationLevel
-} from '../../../packages/core/security/DataClassificationAccessControl';
+ from '../../../packages/core/security/DataClassificationAccessControl';
 
-}
-}
+
+
 interface DataRetrievalRateLimitOptions {
   environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION';
   enableLogging?: boolean;
   enableMetrics?: boolean;
   customConfig?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface AuthenticatedRequest extends FastifyRequest {
   user?: {
     id: string;
@@ -49,15 +50,16 @@ interface AuthenticatedRequest extends FastifyRequest {
     department?: string;
     riskScore?: number;
   };
-}
+
 
 declare module 'fastify' {
   interface FastifyInstance {
     dataRetrievalRateLimit: DataRetrievalRateLimit;
-}
-}
-  }
-}
+
+
+
+
+
 
 /**
  * Extract subject attributes from authenticated request
@@ -66,7 +68,7 @@ function extractSubjectAttributes(request: AuthenticatedRequest): SubjectAttribu
   const user = request.user;
   if (!user) {
     throw new Error('User not authenticated');
-  }
+
 
   // Extract device information from headers
   const deviceInfo = {
@@ -116,7 +118,7 @@ function extractSubjectAttributes(request: AuthenticatedRequest): SubjectAttribu
     mfaVerified: request.headers['x-mfa-verified'] === 'true',
     trustLevel: calculateTrustLevel(deviceInfo, location, user.riskScore || 20)
   };
-}
+
 
 /**
  * Extract object attributes from request
@@ -148,7 +150,7 @@ function extractObjectAttributes(request: FastifyRequest): ObjectAttributes {
     sourceSystem: request.headers['x-source-system'] as string || 'api',
     encryptionStatus: 'ENCRYPTED'
   };
-}
+
 
 /**
  * Extract request details for rate limiting
@@ -173,9 +175,9 @@ function extractRequestDetails(request: FastifyRequest, operation: DataOperation
       purpose: request.headers['x-access-purpose'] as string || 'general',
       endpoint: request.url,
       method: request.method
-    }
+
   };
-}
+
 
 /**
  * Determine operation from request path and method
@@ -206,8 +208,8 @@ function determineOperation(request: FastifyRequest): DataOperation {
     return 'DELETE';
   default:
     return 'read';
-  }
-}
+
+
 
 /**
  * Create the data retrieval rate limiting middleware
@@ -257,19 +259,19 @@ async function dataRetrievalRateLimitMiddleware(
     dataRetrievalRateLimit.on('exemptionUsed', (event) => {
       fastify.log.info('Rate limit exemption used', event);
     });
-  }
+
 
   // Create the middleware hook
   fastify.addHook('preHandler', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     // Skip rate limiting for health checks and non-data endpoints
     if (isExcludedPath(request.url)) {
       return;
-    }
+
 
     // Skip if user is not authenticated (let auth middleware handle it)
     if (!request.user) {
       return;
-    }
+
 
     try {
       const startTime = Date.now();
@@ -313,18 +315,18 @@ async function dataRetrievalRateLimitMiddleware(
           retryAfter: decision.retryAfter,
           quotaRemaining: decision.quotaRemaining
         });
-      } else {
+ else {
         // Add success headers
         if (decision.quotaRemaining) {
           reply.header('X-Rate-Limit-Remaining-Bytes', decision.quotaRemaining.bytes.toString());
           reply.header('X-Rate-Limit-Remaining-Records', decision.quotaRemaining.records.toString());
           reply.header('X-Rate-Limit-Remaining-Requests', decision.quotaRemaining.requests.toString());
-        }
+
 
         // Add warnings if present
         if (decision.warnings && decision.warnings.length > 0) {
           reply.header('X-Rate-Limit-Warnings', decision.warnings.join('; '));
-        }
+
 
         // Log successful access with metrics
         if (options.enableLogging) {
@@ -336,12 +338,11 @@ async function dataRetrievalRateLimitMiddleware(
             quotaUsed: {
               bytes: requestDetails.estimatedBytes,
               records: requestDetails.estimatedRecords
-            }
-          });
-        }
-      }
 
-    } catch (error) {
+          });
+
+
+ catch (error) {
       fastify.log.error('Error in data retrieval rate limiting middleware', {
         error: error.message,
         stack: error.stack,
@@ -355,7 +356,7 @@ async function dataRetrievalRateLimitMiddleware(
         error: 'Service Unavailable',
         message: 'Rate limiting service temporarily unavailable'
       });
-    }
+
   });
 
   // Add metrics endpoint if enabled
@@ -378,18 +379,18 @@ async function dataRetrievalRateLimitMiddleware(
                   INTERNAL: { type: 'number' },
                   CONFIDENTIAL: { type: 'number' },
                   RESTRICTED: { type: 'number' }
-                }
-              }
-            }
-          }
-        }
-      }
+
+
+
+
+
+
     }, async (request, reply) => {
       const metrics = dataRetrievalRateLimit.getMetrics();
       reply.send(metrics);
     });
-  }
-}
+
+
 
 // Helper functions
 function isExcludedPath(url: string): boolean {
@@ -402,7 +403,7 @@ function isExcludedPath(url: string): boolean {
   ];
   
   return excludedPaths.some(path => url.startsWith(path));
-}
+
 
 function getDeviceTypeFromUserAgent(userAgent: string): 'DESKTOP' | 'LAPTOP' | 'MOBILE' | 'TABLET' | 'SERVER' {
   const ua = userAgent.toLowerCase();
@@ -410,7 +411,7 @@ function getDeviceTypeFromUserAgent(userAgent: string): 'DESKTOP' | 'LAPTOP' | '
   if (ua.includes('tablet') || ua.includes('ipad')) return 'TABLET';
   if (ua.includes('server')) return 'SERVER';
   return 'DESKTOP'; // Default assumption
-}
+
 
 function getOSFromUserAgent(userAgent: string): string {
   const ua = userAgent.toLowerCase();
@@ -420,7 +421,7 @@ function getOSFromUserAgent(userAgent: string): string {
   if (ua.includes('android')) return 'Android';
   if (ua.includes('ios')) return 'iOS';
   return 'Unknown';
-}
+
 
 function getBrowserFromUserAgent(userAgent: string): string {
   const ua = userAgent.toLowerCase();
@@ -429,7 +430,7 @@ function getBrowserFromUserAgent(userAgent: string): string {
   if (ua.includes('safari') && !ua.includes('chrome')) return 'Safari';
   if (ua.includes('edge')) return 'Edge';
   return 'Unknown';
-}
+
 
 function calculateTrustLevel(
   device: Record<string, unknown>,
@@ -448,7 +449,7 @@ function calculateTrustLevel(
   if (score >= 60) return 'HIGH';
   if (score >= 40) return 'MEDIUM';
   return 'LOW';
-}
+
 
 function estimateRequestSize(request: FastifyRequest, operation: DataOperation): number {
   // Base estimates in bytes
@@ -465,7 +466,7 @@ function estimateRequestSize(request: FastifyRequest, operation: DataOperation):
     'RESTORE': 52428800, // 50MB
     'ARCHIVE': 20971520, // 20MB
     'PURGE': 1024
-  } as const;
+ as const;
 
   const baseSize = baseEstimates[operation] || 1024;
   
@@ -474,7 +475,7 @@ function estimateRequestSize(request: FastifyRequest, operation: DataOperation):
     parseInt(request.headers['content-length']) : 0;
   
   return Math.max(baseSize, bodySize);
-}
+
 
 function estimateRecordCount(request: FastifyRequest, operation: DataOperation): number {
   // Base estimates for record counts
@@ -491,16 +492,16 @@ function estimateRecordCount(request: FastifyRequest, operation: DataOperation):
     'RESTORE': 1000,
     'ARCHIVE': 500,
     'PURGE': 1
-  } as const;
+ as const;
 
   // Check for hints in query parameters or headers
   const limit = (request.query as any)?.limit;
   if (limit && !isNaN(parseInt(limit))) {
     return Math.min(parseInt(limit), 1000); // Cap at 1000
-  }
+
 
   return baseEstimates[operation] || 1;
-}
+
 
 function determineBatchType(request: FastifyRequest): 'SINGLE' | 'BATCH' | 'STREAM' {
   const query = request.query as any;
@@ -514,7 +515,7 @@ function determineBatchType(request: FastifyRequest): 'SINGLE' | 'BATCH' | 'STRE
   if (limit > 1) return 'BATCH';
   
   return 'SINGLE';
-}
+
 
 // Export as Fastify plugin
 export default fp(dataRetrievalRateLimitMiddleware, {

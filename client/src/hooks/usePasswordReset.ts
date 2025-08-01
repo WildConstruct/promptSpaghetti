@@ -1,7 +1,8 @@
 // Epic 11 usePasswordReset Hook
 // React hook for password reset functionality
 import { useState, useCallback } from 'react';
-}
+
+
 interface PasswordResetRequestResponse {
   success: boolean;,
   message: string;
@@ -23,7 +24,8 @@ interface PasswordResetRequestResponse {
   const clearMessages = useCallback(() => {
   setError(null);
   setSuccess(null);
-}
+
+
 }, []);
   const requestPasswordReset = useCallback(async (email: string): Promise<void> => {
   setLoading(true);
@@ -32,7 +34,7 @@ interface PasswordResetRequestResponse {
   try {
   const response = await fetch('/api/auth/password-reset/request', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ email })
@@ -41,18 +43,18 @@ interface PasswordResetRequestResponse {
       if (!response.ok) {
         throw new Error(data.message || 'Failed to request password reset');
       setSuccess(data.message);
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
   setError(errorMessage);
   throw err;
-} finally {
+ finally {
       setLoading(false);
   }, []);
   const validateToken = useCallback(async (token: string): Promise<PasswordResetValidationResponse> => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/auth/password-reset/validate/${encodeURIComponent(token)}`, {},}
+      const response = await fetch(`/api/auth/password-reset/validate/${encodeURIComponent(token)}`, {},},
   method: 'GET',
         headers: {
   'Content-Type': 'application/json',
@@ -64,11 +66,11 @@ interface PasswordResetRequestResponse {
       if (!data.valid) {
         setError(data.error || 'Invalid or expired token');
       return data;
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to validate token';
   setError(errorMessage);
   throw err;
-} finally {
+ finally {
       setLoading(false);
   }, []);
   const confirmPasswordReset = useCallback(async (;);
@@ -81,24 +83,24 @@ interface PasswordResetRequestResponse {
   try {
   const response = await fetch('/api/auth/password-reset/confirm', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({),
           token,
           newPassword,
           confirmPassword
-  }
+
       });
       const data: PasswordResetConfirmResponse = await response.json();
       if (!response.ok) {
         throw new Error(data.message || 'Failed to reset password');
       setSuccess(data.message);
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to reset password';
   setError(errorMessage);
   throw err;
-} finally {
+ finally {
       setLoading(false);
   }, []);
   const getTokenExpirationInfo = useCallback(() => {
@@ -114,7 +116,7 @@ interface PasswordResetRequestResponse {
     let formatted = '';
     if (hours > 0) {
       formatted = `${hours}h ${minutes}m`;}
-    } else {
+ else {
       formatted = `${minutes}m`;}
     return {
   expired: false,

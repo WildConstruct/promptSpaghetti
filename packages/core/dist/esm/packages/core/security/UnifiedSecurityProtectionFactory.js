@@ -67,8 +67,8 @@ export var SecurityProfile;
     SecurityProfile[SecurityProfile["UnifiedSecurityProtectionFactory"] = void 0] = "UnifiedSecurityProtectionFactory";
 })(SecurityProfile || (SecurityProfile = {}));
 {
-    createUnifiedProtection(profile, SecurityProfile = SecurityProfile.PRODUCTION);
-    customConfig ?  : Partial;
+    createUnifiedProtection(profile, SecurityProfile = SecurityProfile.PRODUCTION),
+        customConfig ?  : Partial;
     {
         rateLimitingService: RateLimitingService;
         throttlingEngine: AdaptiveThrottlingRulesEngine;
@@ -490,13 +490,12 @@ export var SecurityProfile;
                                                                                                                                     enableAlerting: true,
                                                                                                                                     alertChannels: ['email', 'slack', 'webhook'],
                                                                                                                                     escalationPolicy: {
-                                                                                                                                        levels: [,
+                                                                                                                                        levels: [
                                                                                                                                             { threshold: 0.8, delay: 5 },
                                                                                                                                             { threshold: 0.9, delay: 2 },
                                                                                                                                             { threshold: 0.95, delay: 0 }
                                                                                                                                         ]
-                                                                                                                                    }
-                                                                                                                                }((base, custom) => {
+                                                                                                                                    } }((base, custom) => {
                                                                                                                                     const merged = { ...base };
                                                                                                                                     if (custom.rateLimiting) {
                                                                                                                                         merged.rateLimiting = { ...merged.rateLimiting, ...custom.rateLimiting };
@@ -574,61 +573,54 @@ export var SecurityProfile;
                                                                                                                                                 enableMetrics: true,
                                                                                                                                                 enableHealthChecks: true,
                                                                                                                                                 alertThresholds: { errorRate: 5, responseTime: 1000, systemHealth: 90 }
-                                                                                                                                            }
-                                                                                                                                            // Authentication service protection
-                                                                                                                                            ,
-                                                                                                                                            // Authentication service protection
-                                                                                                                                            authentication: {
-                                                                                                                                                rateLimiting: { enabled: true, strictMode: true },
-                                                                                                                                                throttling: { enabled: true, analyticsEnabled: true, defaultRules: true },
-                                                                                                                                                integration: {
-                                                                                                                                                    mode: IntegrationMode.SEQUENTIAL,
-                                                                                                                                                    strategy: CoordinationStrategy.MOST_RESTRICTIVE,
-                                                                                                                                                    fallback: FallbackBehavior.BLOCK,
-                                                                                                                                                    priorities: { rateLimiting: 95, throttling: 85 }
-                                                                                                                                                },
-                                                                                                                                                analytics: {
-                                                                                                                                                    enableUsagePatterns: true,
-                                                                                                                                                    enableScalingAnalytics: false,
-                                                                                                                                                    enableCrossSystemLearning: true,
-                                                                                                                                                    enableAnalyticsInsights: true,
-                                                                                                                                                },
-                                                                                                                                                monitoring: {
-                                                                                                                                                    enableMetrics: true,
-                                                                                                                                                    enableHealthChecks: true,
-                                                                                                                                                    alertThresholds: { errorRate: 2, responseTime: 500, systemHealth: 95 }
-                                                                                                                                                }
-                                                                                                                                                // Microservices protection
+                                                                                                                                                // Authentication service protection
                                                                                                                                                 ,
-                                                                                                                                                // Microservices protection
-                                                                                                                                                microservices: {
-                                                                                                                                                    rateLimiting: { enabled: true, strictMode: false },
+                                                                                                                                                // Authentication service protection
+                                                                                                                                                authentication: {
+                                                                                                                                                    rateLimiting: { enabled: true, strictMode: true },
                                                                                                                                                     throttling: { enabled: true, analyticsEnabled: true, defaultRules: true },
                                                                                                                                                     integration: {
-                                                                                                                                                        mode: IntegrationMode.PARALLEL,
-                                                                                                                                                        strategy: CoordinationStrategy.DYNAMIC_SELECTION,
-                                                                                                                                                        fallback: FallbackBehavior.USE_THROTTLING,
-                                                                                                                                                        priorities: { rateLimiting: 70, throttling: 80 }
+                                                                                                                                                        mode: IntegrationMode.SEQUENTIAL,
+                                                                                                                                                        strategy: CoordinationStrategy.MOST_RESTRICTIVE,
+                                                                                                                                                        fallback: FallbackBehavior.BLOCK,
+                                                                                                                                                        priorities: { rateLimiting: 95, throttling: 85 }
                                                                                                                                                     },
                                                                                                                                                     analytics: {
                                                                                                                                                         enableUsagePatterns: true,
-                                                                                                                                                        enableScalingAnalytics: true,
+                                                                                                                                                        enableScalingAnalytics: false,
                                                                                                                                                         enableCrossSystemLearning: true,
                                                                                                                                                         enableAnalyticsInsights: true,
                                                                                                                                                     },
                                                                                                                                                     monitoring: {
                                                                                                                                                         enableMetrics: true,
                                                                                                                                                         enableHealthChecks: true,
-                                                                                                                                                        alertThresholds: { errorRate: 8, responseTime: 2000, systemHealth: 80 }
-                                                                                                                                                    },
-                                                                                                                                                    : .integration.priorities.rateLimiting < 0 || config.integration.priorities.rateLimiting > 100
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
+                                                                                                                                                        alertThresholds: { errorRate: 2, responseTime: 500, systemHealth: 95 }
+                                                                                                                                                        // Microservices protection
+                                                                                                                                                        ,
+                                                                                                                                                        // Microservices protection
+                                                                                                                                                        microservices: {
+                                                                                                                                                            rateLimiting: { enabled: true, strictMode: false },
+                                                                                                                                                            throttling: { enabled: true, analyticsEnabled: true, defaultRules: true },
+                                                                                                                                                            integration: {
+                                                                                                                                                                mode: IntegrationMode.PARALLEL,
+                                                                                                                                                                strategy: CoordinationStrategy.DYNAMIC_SELECTION,
+                                                                                                                                                                fallback: FallbackBehavior.USE_THROTTLING,
+                                                                                                                                                                priorities: { rateLimiting: 70, throttling: 80 }
+                                                                                                                                                            },
+                                                                                                                                                            analytics: {
+                                                                                                                                                                enableUsagePatterns: true,
+                                                                                                                                                                enableScalingAnalytics: true,
+                                                                                                                                                                enableCrossSystemLearning: true,
+                                                                                                                                                                enableAnalyticsInsights: true,
+                                                                                                                                                            },
+                                                                                                                                                            monitoring: {
+                                                                                                                                                                enableMetrics: true,
+                                                                                                                                                                enableHealthChecks: true,
+                                                                                                                                                                alertThresholds: { errorRate: 8, responseTime: 2000, systemHealth: 80 }
+                                                                                                                                                            },
+                                                                                                                                                            : .integration.priorities.rateLimiting < 0 || config.integration.priorities.rateLimiting > 100 } } } } }
                                                                                                                                     }
-                                                                                                                                })
-                                                                                                                            }
-                                                                                                                        }
+                                                                                                                                }) } }
                                                                                                                     };
                                                                                                                     {
                                                                                                                         errors.push('Rate limiting priority must be between 0 and 100');
@@ -661,20 +653,9 @@ export var SecurityProfile;
                                                                                                                             }
                                                                                                                         }
                                                                                                                     }
-                                                                                                                }
-                                                                                                            }
+                                                                                                                } }
                                                                                                         };
-                                                                                                    }
-                                                                                                }
-                                                                                            } }
-                                                                                    }
-                                                                                } }
-                                                                        }
-                                                                    } }
-                                                            }
-                                                        } }
-                                                }
-                                            }
+                                                                                                    } } } } } } } } } } } } } } }
                                         };
                                 }
                             }

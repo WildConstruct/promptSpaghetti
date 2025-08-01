@@ -17,11 +17,12 @@ import {
   ConflictResolutionStrategy,
   ValidationError,
   BulkAssignmentStatus
-} from '../types/PolicyAssignmentTypes';
+ from '../types/PolicyAssignmentTypes';
 
 // Request/Response schemas
-}
-}
+
+
+
 interface CreateAssignmentRequest {
   Body: {
     policyId: string;
@@ -36,13 +37,14 @@ interface CreateAssignmentRequest {
     conditions?: any[];
     inheritance?: any;
     metadata?: any;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface BulkAssignmentRequest {
   Body: {
     title: string;
@@ -55,14 +57,15 @@ interface BulkAssignmentRequest {
       dryRun?: boolean;
       executionMode?: string;
       rollbackOnError?: boolean;
-}
-}
+
+
+
     };
   };
-}
 
-}
-}
+
+
+
 interface GetAssignmentsRequest {
   Querystring: {
     targetType?: AssignmentTargetType;
@@ -72,54 +75,59 @@ interface GetAssignmentsRequest {
     page?: number;
     limit?: number;
     includeInherited?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface AssignmentByIdRequest {
   Params: {
     assignmentId: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface BulkAssignmentByIdRequest {
   Params: {
     bulkAssignmentId: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ConflictAnalysisRequest {
   Body: {
     assignments: any[];
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface EffectivePoliciesRequest {
   Params: {
     targetType: AssignmentTargetType;
     targetId: string;
-}
-}
+
+
+
   };
   Querystring: {
     contextDate?: string;
   };
-}
+
 
 export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
   const policyAssignmentService = new PolicyAssignmentService();
@@ -135,7 +143,7 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
       targetType: { 
         type: 'string', 
         enum: ['USER', 'ROLE', 'TEAM', 'ORG_UNIT', 'DEPARTMENT', 'LOCATION', 'DATA_TYPE', 'SYSTEM'] 
-  }
+
       targetId: { type: 'string', minLength: 1 },
       targetDisplayName: { type: 'string' },
       effectiveDate: { type: 'string', format: 'date-time' },
@@ -144,7 +152,7 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
       conditions: { type: 'array' },
       inheritance: { type: 'object' },
       metadata: { type: 'object' }
-    }
+
   };
 
   const bulkAssignmentSchema = {
@@ -158,28 +166,28 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         minItems: 1,
         maxItems: 1000,
         items: assignmentSchema
-  }
+
       strategy: {
         type: 'object',
         properties: {
           conflictResolution: { 
             type: 'string', 
             enum: ['MOST_RESTRICTIVE', 'LEAST_RESTRICTIVE', 'HIGHEST_PRIORITY', 'EXPLICIT_OVERRIDE', 'MANUAL_REVIEW'] 
-  }
+
           inheritanceHandling: { 
             type: 'string', 
             enum: ['PRESERVE_EXISTING', 'OVERRIDE_EXISTING', 'MERGE_WITH_EXISTING', 'SKIP_INHERITED'] 
-  }
+
           approvalRequired: { type: 'boolean' },
           dryRun: { type: 'boolean' },
           executionMode: { 
             type: 'string', 
             enum: ['IMMEDIATE', 'SCHEDULED', 'STAGED', 'MANUAL_TRIGGER'] 
-  }
+
           rollbackOnError: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   };
 
   // Create single policy assignment
@@ -196,8 +204,8 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             data: { type: 'object' },
             message: { type: 'string' }
-          }
-  }
+
+
         400: {
           description: 'Invalid request data',
           type: 'object',
@@ -205,10 +213,10 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             error: { type: 'string' },
             validationErrors: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<CreateAssignmentRequest>, reply: FastifyReply) => {
     try {
       const userId = request.user?.id || 'system';
@@ -225,7 +233,7 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         data: assignment,
         message: 'Policy assignment created successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error creating assignment:', error);
       
       if (error instanceof Error && error.message.includes('validation failed')) {
@@ -234,13 +242,13 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
           error: error.message,
           validationErrors: []
         });
-      } else {
+ else {
         reply.code(500).send({
           success: false,
           error: 'Internal server error'
         });
-      }
-    }
+
+
   });
 
   // Create bulk policy assignments
@@ -257,10 +265,10 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             data: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<BulkAssignmentRequest>, reply: FastifyReply) => {
     try {
       const userId = request.user?.id || 'system';
@@ -279,13 +287,13 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         data: bulkAssignment,
         message: 'Bulk policy assignment created successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error creating bulk assignment:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to create bulk assignment'
       });
-    }
+
   });
 
   // Execute bulk assignment
@@ -298,9 +306,9 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         required: ['bulkAssignmentId'],
         properties: {
           bulkAssignmentId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<BulkAssignmentByIdRequest>, reply: FastifyReply) => {
     try {
       const userId = request.user?.id || 'system';
@@ -312,13 +320,13 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Bulk assignment execution started'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error executing bulk assignment:', error);
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to execute bulk assignment'
       });
-    }
+
   });
 
   // Get policy assignments with filtering
@@ -336,9 +344,9 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
           page: { type: 'integer', minimum: 1, default: 1 },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           includeInherited: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<GetAssignmentsRequest>, reply: FastifyReply) => {
     try {
       const { page = 1, limit = 20, ...filters } = request.query;
@@ -357,16 +365,16 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
             limit,
             totalCount,
             totalPages: Math.ceil(totalCount / limit)
-          }
-        }
+
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting assignments:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve assignments'
       });
-    }
+
   });
 
   // Get assignment by ID
@@ -379,9 +387,9 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         required: ['assignmentId'],
         properties: {
           assignmentId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<AssignmentByIdRequest>, reply: FastifyReply) => {
     try {
       const { assignmentId } = request.params;
@@ -396,19 +404,19 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
           error: 'Assignment not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
         data: assignment
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting assignment:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve assignment'
       });
-    }
+
   });
 
   // Get effective policies for a target
@@ -422,15 +430,15 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         properties: {
           targetType: { type: 'string' },
           targetId: { type: 'string' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           contextDate: { type: 'string', format: 'date-time' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<EffectivePoliciesRequest>, reply: FastifyReply) => {
     try {
       const { targetType, targetId } = request.params;
@@ -450,15 +458,15 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
           contextDate: contextDate.toISOString(),
           effectivePolicies,
           count: effectivePolicies.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting effective policies:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve effective policies'
       });
-    }
+
   });
 
   // Analyze conflicts for proposed assignments
@@ -473,10 +481,10 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
           assignments: {
             type: 'array',
             items: assignmentSchema
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<ConflictAnalysisRequest>, reply: FastifyReply) => {
     try {
       const { assignments } = request.body;
@@ -504,15 +512,15 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
           conflictCount: conflicts.length,
           hasConflicts: conflicts.length > 0,
           criticalConflicts: conflicts.filter(c => c.severity === 'CRITICAL').length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error analyzing conflicts:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to analyze conflicts'
       });
-    }
+
   });
 
   // Revoke assignment
@@ -525,15 +533,15 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         required: ['assignmentId'],
         properties: {
           assignmentId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', minLength: 1 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<AssignmentByIdRequest & { Body: { reason?: string } }>, reply: FastifyReply) => {
     try {
       const { assignmentId } = request.params;
@@ -546,13 +554,13 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Assignment revoked successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error revoking assignment:', error);
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to revoke assignment'
       });
-    }
+
   });
 
   // Get assignment analytics
@@ -567,27 +575,27 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
           policyType: { type: 'string' },
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
     try {
       const filters: any = {};
       
       if (request.query.targetType) {
         filters.targetType = request.query.targetType;
-      }
+
       
       if (request.query.policyType) {
         filters.policyType = request.query.policyType;
-      }
+
       
       if (request.query.startDate && request.query.endDate) {
         filters.dateRange = {
           start: new Date(request.query.startDate),
           end: new Date(request.query.endDate)
         };
-      }
+
 
       const analytics = await policyAssignmentService.getAssignmentAnalytics(filters);
 
@@ -595,13 +603,13 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         success: true,
         data: analytics
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting analytics:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve analytics'
       });
-    }
+
   });
 
   // Get bulk assignment status
@@ -614,9 +622,9 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         required: ['bulkAssignmentId'],
         properties: {
           bulkAssignmentId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<BulkAssignmentByIdRequest>, reply: FastifyReply) => {
     try {
       const { bulkAssignmentId } = request.params;
@@ -631,19 +639,19 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
           error: 'Bulk assignment not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
         data: bulkAssignment
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting bulk assignment:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve bulk assignment'
       });
-    }
+
   });
 
   // Apply inheritance to a target
@@ -656,17 +664,17 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         required: ['assignmentId'],
         properties: {
           assignmentId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['childTargetType', 'childTargetId'],
         properties: {
           childTargetType: { type: 'string' },
           childTargetId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (
     request: FastifyRequest<AssignmentByIdRequest & { Body: { childTargetType: AssignmentTargetType; childTargetId: string } }>,
     reply: FastifyReply
@@ -681,12 +689,11 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Inheritance applied successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error applying inheritance:', error);
       reply.code(500).send({
         success: false,
         error: 'Failed to apply inheritance'
       });
-    }
+
   });
-}

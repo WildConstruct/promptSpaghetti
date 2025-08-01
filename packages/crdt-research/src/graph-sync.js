@@ -36,45 +36,45 @@ export class GraphSyncHandler {
       this.syncState.lastSync = Date.now();
       if (this.onUpdate) {
         this.onUpdate(update, origin);
-      }
+
     });
-  }
+
   /**
    * Get the graph instance
    */
   getGraph() {
     return this.graph;
-  }
+
   /**
    * Get the Yjs document
    */
   getDoc() {
     return this.doc;
-  }
+
   /**
    * Apply an update from a remote peer
    */
   applyUpdate(update, origin) {
     Y.applyUpdate(this.doc, update, origin);
-  }
+
   /**
    * Get the current document state as an update
    */
   getStateAsUpdate() {
     return Y.encodeStateAsUpdate(this.doc);
-  }
+
   /**
    * Get state vector for synchronization
    */
   getStateVector() {
     return Y.encodeStateVector(this.doc);
-  }
+
   /**
    * Get diff update from a state vector
    */
   getDiffUpdate(stateVector) {
     return Y.encodeStateAsUpdate(this.doc, stateVector);
-  }
+
   /**
    * Create a sync message
    */
@@ -95,9 +95,9 @@ export class GraphSyncHandler {
       case 'awareness':
         message.awareness = data;
         break;
-    }
+
     return message;
-  }
+
   /**
    * Handle incoming sync message
    */
@@ -108,23 +108,23 @@ export class GraphSyncHandler {
         if (message.stateVector) {
           const diffUpdate = this.getDiffUpdate(message.stateVector);
           return this.createSyncMessage('update', diffUpdate);
-        }
+
         break;
       case 'update':
         // Apply the update
         if (message.update) {
           this.applyUpdate(message.update, message.userId);
-        }
+
         break;
       case 'awareness':
         // Update awareness information
         if (message.awareness && message.userId) {
           this.updateAwareness(message.userId, message.awareness);
-        }
+
         break;
-    }
+
     return null;
-  }
+
   /**
    * Update user presence/awareness
    */
@@ -135,18 +135,18 @@ export class GraphSyncHandler {
     this.awareness.forEach((presence, id) => {
       if (now - presence.timestamp > 30000) {
         this.awareness.delete(id);
-      }
+
     });
     if (this.onAwarenessUpdate) {
       this.onAwarenessUpdate(this.awareness);
-    }
-  }
+
+
   /**
    * Get current awareness state
    */
   getAwareness() {
     return new Map(this.awareness);
-  }
+
   /**
    * Set local user presence
    */
@@ -160,31 +160,31 @@ export class GraphSyncHandler {
       timestamp: Date.now(),
     };
     this.updateAwareness(this.syncState.userId, fullPresence);
-  }
+
   /**
    * Subscribe to document updates
    */
   onDocumentUpdate(callback) {
     this.onUpdate = callback;
-  }
+
   /**
    * Subscribe to awareness updates
    */
   onAwarenessChange(callback) {
     this.onAwarenessUpdate = callback;
-  }
+
   /**
    * Get sync state
    */
   getSyncState() {
     return { ...this.syncState };
-  }
+
   /**
    * Create a snapshot of the current state
    */
   createSnapshot() {
     return Y.encodeSnapshot(this.doc);
-  }
+
   /**
    * Restore from a snapshot
    */
@@ -192,7 +192,7 @@ export class GraphSyncHandler {
     const newDoc = Y.decodeSnapshot(snapshot);
     const update = Y.encodeStateAsUpdate(newDoc);
     Y.applyUpdate(this.doc, update);
-  }
+
   /**
    * Get operation history
    */
@@ -200,14 +200,14 @@ export class GraphSyncHandler {
     // This would integrate with Yjs history plugin
     // For now, return empty array
     return [];
-  }
+
   /**
    * Calculate document size
    */
   getDocumentSize() {
     const update = this.getStateAsUpdate();
     return update.byteLength;
-  }
+
   /**
    * Garbage collect deleted items
    */
@@ -215,12 +215,12 @@ export class GraphSyncHandler {
     // Yjs automatically handles garbage collection
     // This method can be used to force GC if needed
     this.doc.gc = true;
-  }
+
   /**
    * Destroy the sync handler
    */
   destroy() {
     this.doc.destroy();
     this.awareness.clear();
-  }
-}
+
+

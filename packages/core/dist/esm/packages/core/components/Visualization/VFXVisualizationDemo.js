@@ -44,21 +44,21 @@ export const VFXVisualizationDemo = ({
         }
         ;
         const addRandomScene = () => {
-            const periods = [];
-            'Ancient Egypt (3100-332 BCE)',
+            const periods = [
+                'Ancient Egypt (3100-332 BCE)',
                 'Classical Greece (5th-4th century BCE)',
                 'Byzantine Empire (330-1453 CE)',
                 'Renaissance Italy (14th-16th century)',
-                'Edo Japan (1603-1868)';
+                'Edo Japan (1603-1868)'
+            ];
+            const randomPeriod = periods[Math.floor(Math.random() * periods.length)];
+            const newScene = generateRandomScene();
+            ;
+            `generated-${Date.now()}`;
         };
     };
-    ;
-    const randomPeriod = periods[Math.floor(Math.random() * periods.length)];
-    const newScene = generateRandomScene();
-    ;
-    `generated-${Date.now()}`;
+    `Generated ${randomPeriod.split(' ')[0]} Scene`;
 }
-`Generated ${randomPeriod.split(' ')[0]} Scene`;
 randomPeriod;
 ;
 setScenes(prev => [...prev, newScene]);
@@ -109,7 +109,7 @@ _jsxs("div", { className: selectedVisualizationMode === 'compact' ? 'max-w-4xl' 
 }
 _jsx("style", { children: `
         .vfx-visualization-demo {
-          max-width: 1400px;
+          max-width: 1400px;,
   margin: 0 auto;
           padding: 1rem;
         .compact-mode {

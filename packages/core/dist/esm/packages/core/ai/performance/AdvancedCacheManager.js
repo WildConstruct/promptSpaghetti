@@ -130,8 +130,9 @@ export class LRUEvictionStrategy {
                                                                                 this.recordHit(Date.now() - startTime);
                                                                                 return value;
                                                                                 async;
-                                                                                set(key, string);
-                                                                                value: T,
+                                                                                set(key, string),
+                                                                                    value;
+                                                                                T,
                                                                                     options;
                                                                                 {
                                                                                     ttl ?  : number;

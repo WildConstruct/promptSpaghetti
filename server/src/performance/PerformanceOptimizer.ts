@@ -5,8 +5,9 @@ import { MetricsCollector, PerformanceAlert } from './MetricsCollector';
 /**
  * Optimization strategy configuration
  */
-}
-}
+
+
+
 export interface OptimizationStrategy {
   name: string;
   description: string;
@@ -18,31 +19,35 @@ export interface OptimizationStrategy {
     latencyThreshold?: number;
     errorRateThreshold?: number;
     connectionCountThreshold?: number;
-}
-}
+
+
+
   };
   actions: OptimizationAction[];
-}
+
 
 /**
  * Optimization action types
  */
-}
-}
+
+
+
 export interface OptimizationAction {
   type: 'throttle' | 'batch' | 'cache' | 'compress' | 'prioritize' | 'scale' | 'cleanup';
   target: string;
   parameters: any;
   description: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Optimization result
  */
-}
-}
+
+
+
 export interface OptimizationResult {
   strategyName: string;
   actionsExecuted: OptimizationAction[];
@@ -54,11 +59,12 @@ export interface OptimizationResult {
     memoryReduction?: number;
     latencyReduction?: number;
     errorRateReduction?: number;
-}
-}
+
+
+
   };
   errors: string[];
-}
+
 
 /**
  * Performance optimizer for collaborative editing system
@@ -79,14 +85,14 @@ export class PerformanceOptimizer extends EventEmitter {
     this.metricsCollector = metricsCollector;
     this.initializeStrategies();
     this.setupEventListeners();
-  }
+
 
   /**
    * Set WebSocket server reference
    */
   setWebSocketServer(wsServer: WebSocketServer): void {
     this.wsServer = wsServer;
-  }
+
 
   /**
    * Start performance optimization monitoring
@@ -94,7 +100,7 @@ export class PerformanceOptimizer extends EventEmitter {
   start(): void {
     if (this.isActive) {
       return;
-    }
+
 
     this.isActive = true;
     console.log('Starting performance optimizer');
@@ -105,7 +111,7 @@ export class PerformanceOptimizer extends EventEmitter {
     }, 10000);
 
     this.emit('optimizer_started');
-  }
+
 
   /**
    * Stop performance optimization
@@ -113,7 +119,7 @@ export class PerformanceOptimizer extends EventEmitter {
   stop(): void {
     if (!this.isActive) {
       return;
-    }
+
 
     this.isActive = false;
     console.log('Stopping performance optimizer');
@@ -121,10 +127,10 @@ export class PerformanceOptimizer extends EventEmitter {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = null;
-    }
+
 
     this.emit('optimizer_stopped');
-  }
+
 
   /**
    * Add or update optimization strategy
@@ -132,7 +138,7 @@ export class PerformanceOptimizer extends EventEmitter {
   addStrategy(strategy: OptimizationStrategy): void {
     this.strategies.set(strategy.name, strategy);
     this.emit('strategy_added', strategy);
-  }
+
 
   /**
    * Remove optimization strategy
@@ -141,9 +147,9 @@ export class PerformanceOptimizer extends EventEmitter {
     const removed = this.strategies.delete(strategyName);
     if (removed) {
       this.emit('strategy_removed', strategyName);
-    }
+
     return removed;
-  }
+
 
   /**
    * Enable or disable a strategy
@@ -154,9 +160,9 @@ export class PerformanceOptimizer extends EventEmitter {
       strategy.enabled = enabled;
       this.emit('strategy_updated', strategy);
       return true;
-    }
+
     return false;
-  }
+
 
   /**
    * Force execute a specific optimization strategy
@@ -166,25 +172,25 @@ export class PerformanceOptimizer extends EventEmitter {
     const strategy = this.strategies.get(strategyName);
     if (!strategy) {
       throw new Error(`Strategy not found: ${strategyName}`);
-    }
+
 
     console.log(`Executing optimization strategy: ${strategyName}`);
     return await this.applyOptimization(strategy);
-  }
+
 
   /**
    * Get optimization history
    */
   getOptimizationHistory(): OptimizationResult[] {
     return [...this.optimizationHistory];
-  }
+
 
   /**
    * Get current optimization strategies
    */
   getStrategies(): OptimizationStrategy[] {
     return Array.from(this.strategies.values());
-  }
+
 
   /**
    * Get performance recommendations
@@ -194,7 +200,7 @@ export class PerformanceOptimizer extends EventEmitter {
     const activeAlerts = this.metricsCollector.getActiveAlerts();
     
     return this.generateRecommendations(currentMetrics, activeAlerts);
-  }
+
 
   /**
    * WebSocket message batching optimization
@@ -204,7 +210,7 @@ export class PerformanceOptimizer extends EventEmitter {
     
     if (!this.messageBuffer.has(bufferKey)) {
       this.messageBuffer.set(bufferKey, []);
-    }
+
 
     const buffer = this.messageBuffer.get(bufferKey)!;
     buffer.push(...messages);
@@ -214,17 +220,17 @@ export class PerformanceOptimizer extends EventEmitter {
       const batchedMessages = this.createMessageBatch(buffer);
       this.messageBuffer.set(bufferKey, []);
       return batchedMessages;
-    }
+
 
     return [];
-  }
+
 
   /**
    * Response caching optimization
    */
   getCachedResponse(key: string): any | null {
     return this.responseCache.get(key) || null;
-  }
+
 
   /**
    * Set cached response
@@ -236,14 +242,14 @@ export class PerformanceOptimizer extends EventEmitter {
     setTimeout(() => {
       this.responseCache.delete(key);
     }, ttl);
-  }
+
 
   /**
    * Connection pooling optimization
    */
   getConnectionPool(documentId: string): any[] {
     return this.connectionPools.get(documentId) || [];
-  }
+
 
   /**
    * Initialize default optimization strategies
@@ -258,14 +264,14 @@ export class PerformanceOptimizer extends EventEmitter {
       triggerConditions: {
         latencyThreshold: 500,
         connectionCountThreshold: 10
-  }
+
       actions: [
         {
           type: 'batch',
           target: 'websocket_messages',
           parameters: { batchSize: 10, batchInterval: 100 },
           description: 'Batch WebSocket messages for efficient transmission'
-        }
+
       ]
     });
 
@@ -278,14 +284,14 @@ export class PerformanceOptimizer extends EventEmitter {
       triggerConditions: {
         cpuThreshold: 70,
         latencyThreshold: 1000
-  }
+
       actions: [
         {
           type: 'cache',
           target: 'graph_operations',
           parameters: { ttl: 60000, maxEntries: 1000 },
           description: 'Cache graph operation results'
-        }
+
       ]
     });
 
@@ -299,14 +305,14 @@ export class PerformanceOptimizer extends EventEmitter {
         cpuThreshold: 85,
         memoryThreshold: 90,
         connectionCountThreshold: 100
-  }
+
       actions: [
         {
           type: 'throttle',
           target: 'new_connections',
           parameters: { maxPerSecond: 5, queueSize: 50 },
           description: 'Limit new connection rate'
-        }
+
       ]
     });
 
@@ -318,14 +324,14 @@ export class PerformanceOptimizer extends EventEmitter {
       priority: 'low',
       triggerConditions: {
         latencyThreshold: 2000
-  }
+
       actions: [
         {
           type: 'compress',
           target: 'large_messages',
           parameters: { threshold: 1024, algorithm: 'gzip' },
           description: 'Compress messages larger than 1KB'
-        }
+
       ]
     });
 
@@ -338,7 +344,7 @@ export class PerformanceOptimizer extends EventEmitter {
       triggerConditions: {
         latencyThreshold: 1500,
         connectionCountThreshold: 20
-  }
+
       actions: [
         {
           type: 'prioritize',
@@ -349,10 +355,10 @@ export class PerformanceOptimizer extends EventEmitter {
               'conflict_resolution': 1,
               'presence_update': 2,
               'cursor_update': 3
-            }
-  }
+
+
           description: 'Process critical messages first'
-        }
+
       ]
     });
 
@@ -364,7 +370,7 @@ export class PerformanceOptimizer extends EventEmitter {
       priority: 'critical',
       triggerConditions: {
         memoryThreshold: 85
-  }
+
       actions: [
         {
           type: 'cleanup',
@@ -372,9 +378,9 @@ export class PerformanceOptimizer extends EventEmitter {
           parameters: { 
             cleanupTypes: ['old_sessions', 'expired_cache', 'disconnected_users'],
             forceGC: true
-  }
+
           description: 'Clean up memory and run garbage collection'
-        }
+
       ]
     });
 
@@ -386,23 +392,23 @@ export class PerformanceOptimizer extends EventEmitter {
       priority: 'high',
       triggerConditions: {
         latencyThreshold: 3000
-  }
+
       actions: [
         {
           type: 'batch',
           target: 'conflict_operations',
           parameters: { batchSize: 5, timeout: 200 },
           description: 'Batch conflict resolution operations'
-  }
+
         {
           type: 'prioritize',
           target: 'conflict_queue',
           parameters: { strategy: 'fifo_with_merge' },
           description: 'Prioritize and merge similar conflicts'
-        }
+
       ]
     });
-  }
+
 
   /**
    * Evaluate current performance and apply optimizations
@@ -411,7 +417,7 @@ export class PerformanceOptimizer extends EventEmitter {
 
     if (!this.isActive) {
       return;
-    }
+
 
     const currentMetrics = this.metricsCollector.getCurrentMetrics();
     const activeAlerts = this.metricsCollector.getActiveAlerts();
@@ -420,7 +426,7 @@ export class PerformanceOptimizer extends EventEmitter {
     for (const strategy of this.strategies.values()) {
       if (!strategy.enabled) {
         continue;
-      }
+
 
       if (await this.shouldTriggerStrategy(strategy, currentMetrics, activeAlerts)) {
         try {
@@ -430,16 +436,16 @@ export class PerformanceOptimizer extends EventEmitter {
           // Keep only last 100 optimization results
           if (this.optimizationHistory.length > 100) {
             this.optimizationHistory.splice(0, this.optimizationHistory.length - 100);
-          }
+
           
           this.emit('optimization_applied', result);
-        } catch (error) {
+ catch (error) {
           console.error(`Failed to apply optimization ${strategy.name}:`, error);
           this.emit('optimization_failed', strategy, error);
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Check if strategy should be triggered
@@ -455,30 +461,30 @@ export class PerformanceOptimizer extends EventEmitter {
     // Check CPU threshold
     if (conditions.cpuThreshold && metrics.system?.cpuUsage > conditions.cpuThreshold) {
       return true;
-    }
+
 
     // Check memory threshold
     if (conditions.memoryThreshold && metrics.system?.memoryUsage?.percentage > conditions.memoryThreshold) {
       return true;
-    }
+
 
     // Check latency threshold
     if (conditions.latencyThreshold && metrics.webSocket?.messageLatency > conditions.latencyThreshold) {
       return true;
-    }
+
 
     // Check error rate threshold
     if (conditions.errorRateThreshold && metrics.webSocket?.errorRate > conditions.errorRateThreshold) {
       return true;
-    }
+
 
     // Check connection count threshold
     if (conditions.connectionCountThreshold && this.wsServer) {
       const healthMetrics = this.wsServer.getHealthMetrics();
       if (healthMetrics.totalConnections > conditions.connectionCountThreshold) {
         return true;
-      }
-    }
+
+
 
     // Check for relevant alerts
     const relevantAlerts = alerts.filter(alert => 
@@ -486,7 +492,7 @@ export class PerformanceOptimizer extends EventEmitter {
     );
 
     return relevantAlerts.length > 0;
-  }
+
 
   /**
    * Check if alert is relevant to strategy
@@ -505,7 +511,7 @@ export class PerformanceOptimizer extends EventEmitter {
 
     const relevantTargets = alertTargetMap[alert.metric] || [];
     return relevantTargets.some(target => strategyTargets.includes(target));
-  }
+
 
   /**
    * Apply optimization strategy
@@ -525,12 +531,12 @@ export class PerformanceOptimizer extends EventEmitter {
         await this.executeOptimizationAction(action);
         actionsExecuted.push(action);
         console.log(`Executed action: ${action.type} on ${action.target}`);
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to execute action ${action.type}:`, error);
         errors.push(`${action.type}: ${error instanceof Error ? error.message : String(error)}`);
         success = false;
-      }
-    }
+
+
 
     // Wait a moment for metrics to stabilize
     await this.wait(5000);
@@ -553,7 +559,7 @@ export class PerformanceOptimizer extends EventEmitter {
     };
 
     return result;
-  }
+
 
   /**
    * Execute individual optimization action
@@ -584,8 +590,8 @@ export class PerformanceOptimizer extends EventEmitter {
       break;
     default:
       throw new Error(`Unknown optimization action type: ${action.type}`);
-    }
-  }
+
+
 
   /**
    * Execute throttle optimization
@@ -596,8 +602,8 @@ export class PerformanceOptimizer extends EventEmitter {
       // Implement connection throttling
       console.log(`Throttling new connections: max ${action.parameters.maxPerSecond} per second`);
       // Would integrate with WebSocket server connection handling
-    }
-  }
+
+
 
   /**
    * Execute batch optimization
@@ -607,11 +613,11 @@ export class PerformanceOptimizer extends EventEmitter {
     if (action.target === 'websocket_messages') {
       console.log(`Enabling message batching: size ${action.parameters.batchSize}, interval ${action.parameters.batchInterval}ms`);
       // Message batching is handled in optimizeMessageBatching method
-    } else if (action.target === 'conflict_operations') {
+ else if (action.target === 'conflict_operations') {
       console.log(`Batching conflict operations: size ${action.parameters.batchSize}`);
       // Would integrate with conflict resolver
-    }
-  }
+
+
 
   /**
    * Execute cache optimization
@@ -621,8 +627,8 @@ export class PerformanceOptimizer extends EventEmitter {
     if (action.target === 'graph_operations') {
       console.log(`Enabling response caching: TTL ${action.parameters.ttl}ms, max entries ${action.parameters.maxEntries}`);
       // Response caching is handled in getCachedResponse/setCachedResponse methods
-    }
-  }
+
+
 
   /**
    * Execute compress optimization
@@ -632,8 +638,8 @@ export class PerformanceOptimizer extends EventEmitter {
     if (action.target === 'large_messages') {
       console.log(`Enabling message compression for messages > ${action.parameters.threshold} bytes`);
       // Would integrate with WebSocket message handling
-    }
-  }
+
+
 
   /**
    * Execute prioritize optimization
@@ -643,11 +649,11 @@ export class PerformanceOptimizer extends EventEmitter {
     if (action.target === 'message_queue') {
       console.log('Enabling message prioritization');
       // Would integrate with message queue processing
-    } else if (action.target === 'conflict_queue') {
+ else if (action.target === 'conflict_queue') {
       console.log('Optimizing conflict queue prioritization');
       // Would integrate with conflict resolution queue
-    }
-  }
+
+
 
   /**
    * Execute scale optimization
@@ -656,7 +662,7 @@ export class PerformanceOptimizer extends EventEmitter {
 
     console.log(`Scaling optimization for ${action.target}`);
     // Would trigger auto-scaling mechanisms
-  }
+
 
   /**
    * Execute cleanup optimization
@@ -675,15 +681,15 @@ export class PerformanceOptimizer extends EventEmitter {
       // Force garbage collection if enabled
       if (action.parameters.forceGC && global.gc) {
         global.gc();
-      }
+
       
       // Clean up disconnected connection pools
       for (const [documentId, connections] of this.connectionPools.entries()) {
         const activeConnections = connections.filter(conn => conn.isActive);
         this.connectionPools.set(documentId, activeConnections);
-      }
-    }
-  }
+
+
+
 
   /**
    * Calculate metrics improvement
@@ -694,15 +700,15 @@ export class PerformanceOptimizer extends EventEmitter {
     if (preMetrics.system && postMetrics.system) {
       improvement.cpuReduction = preMetrics.system.cpuUsage - postMetrics.system.cpuUsage;
       improvement.memoryReduction = preMetrics.system.memoryUsage.percentage - postMetrics.system.memoryUsage.percentage;
-    }
+
 
     if (preMetrics.webSocket && postMetrics.webSocket) {
       improvement.latencyReduction = preMetrics.webSocket.messageLatency - postMetrics.webSocket.messageLatency;
       improvement.errorRateReduction = preMetrics.webSocket.errorRate - postMetrics.webSocket.errorRate;
-    }
+
 
     return improvement;
-  }
+
 
   /**
    * Generate performance recommendations
@@ -713,40 +719,40 @@ export class PerformanceOptimizer extends EventEmitter {
     // CPU recommendations
     if (metrics.system?.cpuUsage > 80) {
       recommendations.push('Enable connection throttling and message batching to reduce CPU load');
-    }
+
 
     // Memory recommendations
     if (metrics.system?.memoryUsage?.percentage > 85) {
       recommendations.push('Execute memory cleanup and enable response caching with shorter TTL');
-    }
+
 
     // Latency recommendations
     if (metrics.webSocket?.messageLatency > 1000) {
       recommendations.push('Enable message compression and prioritization for better response times');
-    }
+
 
     // Error rate recommendations
     if (metrics.webSocket?.errorRate > 5) {
       recommendations.push('Implement connection throttling and improve error handling');
-    }
+
 
     // Alert-based recommendations
     const criticalAlerts = alerts.filter(a => a.severity === 'critical');
     if (criticalAlerts.length > 0) {
       recommendations.push('Critical performance issues detected. Consider immediate scaling or maintenance');
-    }
+
 
     // Conflict resolution recommendations
     if (metrics.collaboration?.conflictResolutionTime > 3000) {
       recommendations.push('Optimize conflict resolution by enabling batching and prioritization');
-    }
+
 
     if (recommendations.length === 0) {
       recommendations.push('System performance is optimal. Continue monitoring.');
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Create message batch
@@ -759,9 +765,9 @@ export class PerformanceOptimizer extends EventEmitter {
       const messageType = message.type || 'unknown';
       if (!groupedMessages.has(messageType)) {
         groupedMessages.set(messageType, []);
-      }
+
       groupedMessages.get(messageType)!.push(message);
-    }
+
 
     // Create batched messages
     const batchedMessages: any[] = [];
@@ -773,16 +779,16 @@ export class PerformanceOptimizer extends EventEmitter {
           payload: {
             messages: typeMessages,
             count: typeMessages.length
-  }
+
           timestamp: Date.now()
         });
-      } else {
+ else {
         batchedMessages.push(...typeMessages);
-      }
-    }
+
+
 
     return batchedMessages;
-  }
+
 
   /**
    * Setup event listeners
@@ -792,9 +798,9 @@ export class PerformanceOptimizer extends EventEmitter {
       if (alert.severity === 'critical') {
         // Trigger immediate optimization for critical alerts
         this.evaluateOptimizations();
-      }
+
     });
-  }
+
 
   /**
    * Utility function to wait
@@ -802,5 +808,4 @@ export class PerformanceOptimizer extends EventEmitter {
   private wait(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-}
+

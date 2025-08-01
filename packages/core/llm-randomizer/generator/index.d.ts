@@ -10,8 +10,7 @@ export { RandomizerWorkflow, WorkflowOptions, WorkflowResult, WorkflowError, Wor
 /**
  * Complete randomizer system factory
  */
-export declare class RandomizerSystem {
-    private parameterManager;
+export declare class RandomizerSystem { private parameterManager;
     private workflow;
     constructor(options?: Partial<ParameterManagerOptions>);
     /**
@@ -26,8 +25,8 @@ export declare class RandomizerSystem {
      * Quick generation with minimal setup
      */
     quickGenerate();
-      purpose: string,
-      complexity?: ComplexityLevelType,
+      purpose: string
+      complexity?: ComplexityLevelType }
       provider?: LLMProviderType
     ): Promise<WorkflowResult>;
     /**
@@ -41,8 +40,7 @@ export declare class RandomizerSystem {
     /**
      * Get generation history with statistics
      */
-    getHistory(): {
-        entries: import("./parameters/parameter-manager").ParameterHistory[];
+    getHistory(): { entries: import("./parameters/parameter-manager").ParameterHistory[];
         stats: {
             totalGenerations: number;
             successRate: number;
@@ -51,25 +49,20 @@ export declare class RandomizerSystem {
             mostUsedProvider: string;
             popularNodeTypes: Array<{
                 nodeType: string;
-                count: number;
-            }>;
+                count: number }>;
         };
     };
     /**
      * Export all data
      */
-    exportData(): {
-        presets: import("./parameters/parameter-schema").ParameterPreset[];
+    exportData(): { presets: import("./parameters/parameter-schema").ParameterPreset[];
         history: import("./parameters/parameter-manager").ParameterHistory[];
-        exported: string;
-    };
+        exported: string };
     /**
      * Import data
      */
-    importData(data: unknown): {
-        presetsImported: number;
+    importData(data: unknown): { presetsImported: number;
         historyImported: number;
-        errors: string[];
-    };
+        errors: string[] };
 
 //# sourceMappingURL=index.d.ts.map

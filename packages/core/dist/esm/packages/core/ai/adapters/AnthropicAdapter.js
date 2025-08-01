@@ -6,6 +6,14 @@
  */
 import { BaseAIModel, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 tool_choice ?  : { type: 'auto' | 'any' | 'tool', name: string };
+'text' | 'image';
+text ?  : string;
+source ?  : {
+    type: 'base64',
+    media_type: string,
+    data: string
+};
+;
  > ;
  > ;
 model: string;

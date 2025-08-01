@@ -15,25 +15,22 @@
  * - Cohort-based temporal analysis
  */
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { 
-  ConversionFunnelDefinition,
+import { ConversionFunnelDefinition,
   ConversionStep,
-  UserSegment,
+  UserSegment }
   ConversionCohort
-} from '../../analytics/ConversionDataModel';
-import { 
-  ConversionAnalyticsInfrastructure,
-  ConversionMetricQuery,
+ from '../../analytics/ConversionDataModel';
+import { ConversionAnalyticsInfrastructure,
+  ConversionMetricQuery }
   ConversionMetricResult
-} from '../../analytics/ConversionAnalyticsInfrastructure';
+ from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Time tracking interfaces
 
-}
-export interface FunnelTimeTrackingProps {
-  funnelDefinition: ConversionFunnelDefinition;
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-}
+
+export interface FunnelTimeTrackingProps { funnelDefinition: ConversionFunnelDefinition;
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure }
+},
   timeRange: { start: number; end: number };
   segments?: UserSegment;
   cohorts?: ConversionCohort;
@@ -43,34 +40,31 @@ export interface FunnelTimeTrackingProps {
   realTimeUpdates?: boolean;
   onAnomalyDetected?: (anomaly: PerformanceAnomaly) => void;
   onExport?: (data: TimeTrackingExportData) => void;
-}
+
 export type TimeGranularity = 'hour' | 'day' | 'week' | 'month' | 'quarter';
 
-}
-export interface TimeTrackingData {
-  performanceTimeline: PerformanceTimelineData;
+
+export interface TimeTrackingData { performanceTimeline: PerformanceTimelineData;
   trendAnalysis: TrendAnalysis;
   seasonalPatterns: SeasonalPattern;
   anomalies: PerformanceAnomaly;
   stepTimeAnalysis: StepTimeAnalysis;
   conversionVelocity: ConversionVelocityData;
   comparativePeriods: ComparativePeriodAnalysis;
-  realTimeMetrics: RealTimeMetrics;
-}
-}
-}
-export interface PerformanceTimelineData {
-  timestamp: number;
+  realTimeMetrics: RealTimeMetrics }
+
+
+
+export interface PerformanceTimelineData { timestamp: number;
   period: string;
   granularity: TimeGranularity;
   overallMetrics: TimelineMetrics;
   stepMetrics: StepTimelineMetrics;
-  environmentalFactors: EnvironmentalFactor;
-}
-}
-}
-export interface TimelineMetrics {
-  totalEntries: number;
+  environmentalFactors: EnvironmentalFactor }
+
+
+
+export interface TimelineMetrics { totalEntries: number;
   totalConversions: number;
   conversionRate: number;
   averageTimeToConvert: number;
@@ -78,12 +72,11 @@ export interface TimelineMetrics {
   revenuePerEntry: number;
   revenuePerConversion: number;
   dropOffCount: number;
-  dropOffRate: number;
-}
-}
-}
-export interface StepTimelineMetrics {
-  stepId: string;
+  dropOffRate: number }
+
+
+
+export interface StepTimelineMetrics { stepId: string;
   stepName: string;
   entries: number;
   conversions: number;
@@ -91,98 +84,95 @@ export interface StepTimelineMetrics {
   averageTimeSpent: number;
   dropOffs: number;
   dropOffRate: number;
-  revenue: number;
-}
-}
-}
-export interface EnvironmentalFactor {
-  factor: string;
+  revenue: number }
+
+
+
+export interface EnvironmentalFactor { factor: string;
   value: number | string;
-  impact: 'positive' | 'negative' | 'neutral';
+  impact: 'positive' | 'negative' | 'neutral' }
   confidence: number;
-}
-}
-}
-export interface TrendAnalysis {
-  stepId?: string; // If null, overall funnel trend,
+
+
+
+
+export interface TrendAnalysis { stepId?: string; // If null, overall funnel trend;
   stepName?: string;
   metric: 'conversion_rate' | 'drop_off_rate' | 'time_to_convert' | 'revenue';
   trend: TrendDirection;
   trendStrength: 'strong' | 'moderate' | 'weak';
-  changeRate: number; // Percentage change per period,
-  significance: number; // Statistical significance (p-value),
-  confidence: number; // Confidence level,
+  changeRate: number; // Percentage change per period;
+  significance: number; // Statistical significance (p-value);
+  confidence: number; // Confidence level }
   forecast: ForecastData;
   insights: TrendInsight;
-}
-}
+
+
 export type TrendDirection = 'increasing' | 'decreasing' | 'stable' | 'volatile';
 
-}
-export interface ForecastData {
-  timestamp: number;
+
+export interface ForecastData { timestamp: number;
   predictedValue: number;
-  confidenceInterval: {
+  confidenceInterval: { }
   lower: number;
   upper: number;
-}
+
+
 };
   factors: string;
-}
-}
-export interface TrendInsight {
-  type: 'opportunity' | 'risk' | 'pattern' | 'recommendation';
+
+
+export interface TrendInsight { type: 'opportunity' | 'risk' | 'pattern' | 'recommendation';
   title: string;
   description: string;
   impact: number;
-  urgency: 'high' | 'medium' | 'low';
+  urgency: 'high' | 'medium' | 'low' }
   actionable: boolean;
   recommendedActions: string;
-}
-}
-}
-export interface SeasonalPattern {
-  pattern: 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+
+
+
+
+export interface SeasonalPattern { pattern: 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
   description: string;
-  strength: number; // 0-1, how pronounced the pattern is,
+  strength: number; // 0-1, how pronounced the pattern is;
   peaks: SeasonalPeak;
   troughs: SeasonalTrough;
   businessImpact: number;
-  reliability: number; // How consistent the pattern is,
+  reliability: number; // How consistent the pattern is }
   recommendations: SeasonalRecommendation;
-}
-}
-}
-export interface SeasonalPeak {
-  period: string;
+
+
+
+
+export interface SeasonalPeak { period: string;
   value: number;
   consistency: number;
-  duration: number; // Duration in periods,
+  duration: number; // Duration in periods }
   contributingFactors: string;
-}
-}
-}
-export interface SeasonalTrough {
-  period: string;
+
+
+
+
+export interface SeasonalTrough { period: string;
   value: number;
   consistency: number;
   duration: number;
-  contributingFactors: string;
-}
-}
-}
-export interface SeasonalRecommendation {
-  type: 'marketing' | 'operations' | 'product' | 'support';
+  contributingFactors: string }
+
+
+
+export interface SeasonalRecommendation { type: 'marketing' | 'operations' | 'product' | 'support' }
   title: string;
   description: string;
   timing: string;
   expectedImpact: number;
   implementation: string;
-}
-}
-}
-export interface PerformanceAnomaly {
-  id: string;
+
+
+
+
+export interface PerformanceAnomaly { id: string;
   timestamp: number;
   stepId?: string;
   stepName?: string;
@@ -191,105 +181,103 @@ export interface PerformanceAnomaly {
   severity: 'critical' | 'high' | 'medium' | 'low';
   expectedValue: number;
   actualValue: number;
-  deviation: number; // Standard deviations from expected,
+  deviation: number; // Standard deviations from expected;
   confidence: number;
   possibleCauses: PossibleCause;
   businessImpact: number;
   autoResolved: boolean;
-  investigationStatus: 'pending' | 'investigating' | 'resolved' | 'false_positive'
-}
-  }
-}
-export interface PossibleCause {
-  category: 'technical' | 'external' | 'product' | 'marketing' | 'seasonal';
+  investigationStatus: 'pending' | 'investigating' | 'resolved' | 'false_positive' }
+
+
+
+
+export interface PossibleCause { category: 'technical' | 'external' | 'product' | 'marketing' | 'seasonal';
   description: string;
-  likelihood: number; // 0-1,
+  likelihood: number; // 0-1 }
   evidence: string;
   investigationSteps: string;
-}
-}
-}
-export interface StepTimeAnalysis {
-  stepId: string;
+
+
+
+
+export interface StepTimeAnalysis { stepId: string;
   stepName: string;
   timeToReach: TimeDistribution;
   timeSpentOnStep: TimeDistribution;
   timeToConvert: TimeDistribution;
   abandonmentTiming: AbandonmentTiming;
-  temporalPatterns: StepTemporalPattern;
-}
-}
-}
-export interface TimeDistribution {
-  mean: number;
+  temporalPatterns: StepTemporalPattern }
+
+
+
+export interface TimeDistribution { mean: number;
   median: number;
   p25: number;
   p75: number;
   p90: number;
   p95: number;
   standardDeviation: number;
-  skewness: number;
-}
-}
-}
-export interface AbandonmentTiming {
-  earlyAbandonment: number; // % abandoning in first 30 seconds,
-  midAbandonment: number; // % abandoning after 30s-5min,
-  lateAbandonment: number; // % abandoning after 5min,
+  skewness: number }
+
+
+
+export interface AbandonmentTiming { earlyAbandonment: number; // % abandoning in first 30 seconds;
+  midAbandonment: number; // % abandoning after 30s-5min;
+  lateAbandonment: number; // % abandoning after 5min }
   averageTimeBeforeAbandonment: number;
   peakAbandonmentTime: number;
-}
-}
-}
-export interface StepTemporalPattern {
-  pattern: string;
+
+
+
+
+export interface StepTemporalPattern { pattern: string;
   frequency: number;
   impact: number;
   timeframe: string;
-  description: string;
-}
-}
-}
-export interface ConversionVelocityData {
-  timestamp: number;
+  description: string }
+
+
+
+export interface ConversionVelocityData { timestamp: number;
   period: string;
   averageConversionTime: number;
-  conversionVelocity: number; // Conversions per hour,
-  velocityTrend: 'accelerating' | 'decelerating' | 'stable';
+  conversionVelocity: number; // Conversions per hour;
+  velocityTrend: 'accelerating' | 'decelerating' | 'stable' }
   stepVelocities: StepVelocityData;
   bottleneckAnalysis: BottleneckAnalysis;
-}
-}
-}
-export interface StepVelocityData {
-  stepId: string;
+
+
+
+
+export interface StepVelocityData { stepId: string;
   stepName: string;
   averageProcessingTime: number;
-  throughput: number; // Users per hour,
-  efficiency: number; // Conversion rate / time,
-  bottleneckSeverity: 'none' | 'minor' | 'moderate' | 'severe'
-}
-  }
-}
-export interface BottleneckAnalysis {
-  stepId: string;
+  throughput: number; // Users per hour;
+  efficiency: number; // Conversion rate / time;
+  bottleneckSeverity: 'none' | 'minor' | 'moderate' | 'severe' }
+
+
+
+
+export interface BottleneckAnalysis { stepId: string;
   stepName: string;
   bottleneckType: 'time' | 'capacity' | 'conversion';
-  severity: number; // 0-100,
-  impact: number; // Users affected per hour,
+  severity: number; // 0-100;
+  impact: number; // Users affected per hour }
   solutions: BottleneckSolution;
-}
-}
-}
-export interface BottleneckSolution {
-  title: string;
+
+
+
+
+export interface BottleneckSolution { title: string;
   description: string;
   effort: 'low' | 'medium' | 'high';
-  expectedImprovement: number; // % improvement in velocity,
-  implementationTime: number; // Days,
-}
-}
-}
+  expectedImprovement: number; // % improvement in velocity;
+  implementationTime: number; // Days }
+
+
+
+
 export interface ComparativePeriodAnalysis {
   baselinePeriod: { start: number; end: number; label: string };
   comparisonPeriod: { start: number; end: number; label: string };
@@ -297,99 +285,94 @@ export interface ComparativePeriodAnalysis {
   stepComparisons: StepPeriodComparison;
   significantChanges: SignificantChange;
   insights: PeriodInsight;
-}
-}
-export interface PeriodComparison {
-  metric: string;
+
+
+export interface PeriodComparison { metric: string;
   baselineValue: number;
   comparisonValue: number;
   changeAbsolute: number;
   changeRelative: number;
   significance: number;
   confidence: number;
-  direction: 'improvement' | 'decline' | 'no_change'
-}
-  }
-}
-export interface StepPeriodComparison {
-  stepId: string;
+  direction: 'improvement' | 'decline' | 'no_change' }
+
+
+
+
+export interface StepPeriodComparison { stepId: string;
   stepName: string;
-  comparisons: PeriodComparison;
-}
-}
-}
-export interface SignificantChange {
-  stepId?: string;
+  comparisons: PeriodComparison }
+
+
+
+export interface SignificantChange { stepId?: string;
   stepName?: string;
   metric: string;
   changeType: 'improvement' | 'decline';
-  magnitude: 'small' | 'moderate' | 'large';
+  magnitude: 'small' | 'moderate' | 'large' }
   significance: number;
   businessImpact: number;
   possibleReasons: string;
-}
-}
-}
-export interface PeriodInsight {
-  type: 'performance' | 'trend' | 'anomaly' | 'opportunity';
+
+
+
+
+export interface PeriodInsight { type: 'performance' | 'trend' | 'anomaly' | 'opportunity';
   title: string;
   description: string;
   evidence: string;
   recommendations: string;
-  priority: 'high' | 'medium' | 'low'
-}
-  }
-}
-export interface RealTimeMetrics {
-  currentConversionRate: number;
+  priority: 'high' | 'medium' | 'low' }
+
+
+
+
+export interface RealTimeMetrics { currentConversionRate: number;
   currentVelocity: number;
   activeUsers: number;
   conversionsLast24Hours: number;
   averageTimeToConvert: number;
   currentBottlenecks: string;
   alertsActive: number;
-  lastUpdated: number;
-}
-}
-}
+  lastUpdated: number }
+
+
+
 export interface TimeTrackingExportData {
   timeRange: { start: number; end: number };
   granularity: TimeGranularity;
   data: TimeTrackingData;
-  charts: {
+  charts: { ,
   timeline: string;
   trends: string;
   seasonality: string;
-  anomalies: string;
-};
-  insights: {
+  anomalies: string };
+  insights: { ,
   trends: TrendInsight;
   seasonal: SeasonalRecommendation;
-  anomalies: PerformanceAnomaly;
-};
-  metadata: {
+  anomalies: PerformanceAnomaly };
+  metadata: { ,
   exportedAt: number;
   dataQuality: number;
-  analysisDepth: 'basic' | 'standard' | 'comprehensive'
-  };
+  analysisDepth: 'basic' | 'standard' | 'comprehensive' }
+};
 /**
  * Main Funnel Time Tracking Component
  */
-}
-export const FunnelTimeTracking: React.FC<FunnelTimeTrackingProps> = ({)
-  funnelDefinition,
-  analyticsInfrastructure,
-  timeRange,
-  segments = [],
-  cohorts = [],
-  granularity = 'day',
-  showTrends = true,
-  showAnomalies = true,
-  realTimeUpdates = false,
-  onAnomalyDetected,
+
+export const FunnelTimeTracking: React.FC<FunnelTimeTrackingProps> = ({ )
+  funnelDefinition
+  analyticsInfrastructure
+  timeRange
+  segments = []
+  cohorts = []
+  granularity = 'day'
+  showTrends = true
+  showAnomalies = true
+  realTimeUpdates = false
+  onAnomalyDetected }
   onExport
-}) => {
-  const [trackingData, setTrackingData] = useState<TimeTrackingData | null>(null);
+}) => { const [trackingData, setTrackingData] = useState<TimeTrackingData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTimeframe, setSelectedTimeframe] = useState<TimeGranularity>(granularity);
@@ -400,92 +383,81 @@ export const FunnelTimeTracking: React.FC<FunnelTimeTrackingProps> = ({)
   try {
   setLoading(true);
   setError(null);
-  const query: ConversionMetricQuery = {,
-  funnelId: funnelDefinition.id,
-  startDate: timeRange.start,
-  endDate: timeRange.end,
-  metrics: [,
-  'conversion_rate',
-  'time_to_convert',
-  'velocity',
-  'user_journey_timing',
-  'step_performance',
+  const query: ConversionMetricQuery = {
+  funnelId: funnelDefinition.id
+  startDate: timeRange.start
+  endDate: timeRange.end
+  metrics: [
+  'conversion_rate'
+  'time_to_convert'
+  'velocity'
+  'user_journey_timing'
+  'step_performance'
   'temporal_patterns'
-  ],
-  groupBy: ['funnel_step', selectedTimeframe],
-  filters: [,
+  ]
+  groupBy: ['funnel_step', selectedTimeframe]
+  filters: [
   ...segments.map(segment => ({)
-  field: 'userContext.segmentIds',
-  operator: 'contains',
-  value: segment.id,
-})),
-          ...cohorts.map(cohort => ({)
-  field: 'userContext.cohortIds',
-  operator: 'contains',
-  value: cohort.id,
+  field: 'userContext.segmentIds'
+  operator: 'contains'
+  value: segment.id }
 }))
-        ],
+          ...cohorts.map(cohort => ({ )
+  field: 'userContext.cohortIds'
+  operator: 'contains'
+  value: cohort.id }
+}))
+        ]
         aggregation: { interval: selectedTimeframe }
       };
       const results = await analyticsInfrastructure.queryMetrics(query);
       const processedData = await processTimeTrackingData(;);
-        funnelDefinition,
-        results,
-        selectedTimeframe,
-        timeRange,
-        segments,
+        funnelDefinition
+        results
+        selectedTimeframe
+        timeRange
+        segments
         cohorts
       );
       setTrackingData(processedData);
       // Check for anomalies and notify
-      if (showAnomalies && processedData.anomalies.length > 0) {
-        processedData.anomalies
+      if (showAnomalies && processedData.anomalies.length > 0) { processedData.anomalies
           .filter(anomaly => anomaly.severity === 'critical' || anomaly.severity === 'high')
-          .forEach(anomaly => onAnomalyDetected?.(anomaly));
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load time tracking data');
-} finally {
-      setLoading(false);
-  }, [
-    funnelDefinition,
-    analyticsInfrastructure,
-    timeRange,
-    selectedTimeframe,
-    segments,
-    cohorts,
-    showAnomalies,
+          .forEach(anomaly => onAnomalyDetected?.(anomaly)) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to load time tracking data') } finally { setLoading(false) }, [
+    funnelDefinition
+    analyticsInfrastructure
+    timeRange
+    selectedTimeframe
+    segments
+    cohorts
+    showAnomalies
     onAnomalyDetected
   ]);
-  useEffect(() => {
-    loadTrackingData();
-  }, [loadTrackingData]);
+  useEffect(() => { loadTrackingData() }, [loadTrackingData]);
   // Real-time updates
-  useEffect(() => {
-    if (!realTimeUpdates) return;
+  useEffect(() => { if (!realTimeUpdates) return;
     const interval = setInterval(loadTrackingData, 30000); // Update every 30 seconds;
-    return () => clearInterval(interval);
-  }, [realTimeUpdates, loadTrackingData]);
-  const handleExport = useCallback(async () => {
-  if (!trackingData) return;
-  const exportData: TimeTrackingExportData = {,
-  timeRange,
-  granularity: selectedTimeframe,
-  data: trackingData,
+    return () => clearInterval(interval) }, [realTimeUpdates, loadTrackingData]);
+  const handleExport = useCallback(async () => { if (!trackingData) return;
+  const exportData: TimeTrackingExportData = {
+  timeRange
+  granularity: selectedTimeframe
+  data: trackingData
   charts: {
-  timeline: 'timeline-chart-svg',
-  trends: 'trends-chart-svg',
-  seasonality: 'seasonality-chart-svg',
-  anomalies: 'anomalies-chart-svg',
-},
-  insights: {
-  trends: trackingData.trendAnalysis.flatMap(t => t.insights),
-  seasonal: trackingData.seasonalPatterns.flatMap(p => p.recommendations),
-  anomalies: trackingData.anomalies.filter(a => a.severity === 'critical' || a.severity === 'high'),
-},
-  metadata: {
-  exportedAt: Date.now(),
-  dataQuality: 0.95,
-  analysisDepth: 'comprehensive',
+  timeline: 'timeline-chart-svg'
+  trends: 'trends-chart-svg'
+  seasonality: 'seasonality-chart-svg'
+  anomalies: 'anomalies-chart-svg' }
+
+  insights: { 
+  trends: trackingData.trendAnalysis.flatMap(t => t.insights)
+  seasonal: trackingData.seasonalPatterns.flatMap(p => p.recommendations)
+  anomalies: trackingData.anomalies.filter(a => a.severity === 'critical' || a.severity === 'high') }
+
+  metadata: { 
+  exportedAt: Date.now()
+  dataQuality: 0.95
+  analysisDepth: 'comprehensive' }
 };
     onExport?.(exportData);
   }, [trackingData, timeRange, selectedTimeframe, onExport]);
@@ -542,27 +514,28 @@ export const FunnelTimeTracking: React.FC<FunnelTimeTrackingProps> = ({)
 /**
  * Time Tracking Header Component
  */
-}
-interface TimeTrackingHeaderProps {
-  funnelDefinition: ConversionFunnelDefinition;
+
+
+interface TimeTrackingHeaderProps { funnelDefinition: ConversionFunnelDefinition;
   realTimeMetrics: RealTimeMetrics;
   selectedTimeframe: TimeGranularity;
-  onTimeframeChange: (timeframe: TimeGranularity) => void;
+  onTimeframeChange: (timeframe: TimeGranularity) => void
   activeView: string;
-  onViewChange: (view: 'timeline' | 'trends' | 'seasonality' | 'anomalies') => void;
+  onViewChange: (view: 'timeline' | 'trends' | 'seasonality' | 'anomalies') => void
   onExport: () => void;
-  const TimeTrackingHeader: React.FC<TimeTrackingHeaderProps> = ({,)
-  funnelDefinition,
-  realTimeMetrics,
-  selectedTimeframe,
-  onTimeframeChange,
-  activeView,
-  onViewChange,
+  const TimeTrackingHeader: React.FC<TimeTrackingHeaderProps> = ({);
+  funnelDefinition;
+  realTimeMetrics;
+  selectedTimeframe;
+  onTimeframeChange;
+  activeView;
+  onViewChange }
   onExport
-}
+
+
 }) => {
   const timeframes: TimeGranularity = ['hour', 'day', 'week', 'month'];
-  const views = [;
+  const views = [
     { key: 'timeline', label: 'Timeline' },
     { key: 'trends', label: 'Trends' },
     { key: 'seasonality', label: 'Seasonality' },
@@ -631,18 +604,19 @@ interface TimeTrackingHeaderProps {
 /**
  * Timeline View Component
  */
-}
-interface TimelineViewProps {
-  performanceTimeline: PerformanceTimelineData;
+
+
+interface TimelineViewProps { performanceTimeline: PerformanceTimelineData;
   stepTimeAnalysis: StepTimeAnalysis;
   conversionVelocity: ConversionVelocityData;
   granularity: TimeGranularity;
-  const TimelineView: React.FC<TimelineViewProps> = ({,)
-  performanceTimeline,
-  stepTimeAnalysis,
-  conversionVelocity,
+  const TimelineView: React.FC<TimelineViewProps> = ({);
+  performanceTimeline;
+  stepTimeAnalysis;
+  conversionVelocity }
   granularity
-}
+
+
 }) => {
   return;
     <div className="timeline-view">
@@ -670,11 +644,11 @@ interface TimelineViewProps {
 /**
  * Conversion Rate Timeline Component
  */
-}
-interface ConversionRateTimelineProps {
-  data: PerformanceTimelineData;
-  granularity: TimeGranularity;
-}
+
+
+interface ConversionRateTimelineProps { data: PerformanceTimelineData;
+  granularity: TimeGranularity }
+
 const ConversionRateTimeline: React.FC<ConversionRateTimelineProps> = ({ data, granularity }) => {
   const maxRate = Math.max(...data.map(d => d.overallMetrics.conversionRate));
   const chartWidth = 800;
@@ -755,11 +729,11 @@ const ConversionRateTimeline: React.FC<ConversionRateTimelineProps> = ({ data, g
 /**
  * Velocity Timeline Component
  */
-}
-interface VelocityTimelineProps {
-  data: ConversionVelocityData;
-  granularity: TimeGranularity;
-}
+
+
+interface VelocityTimelineProps { data: ConversionVelocityData;
+  granularity: TimeGranularity }
+
 const VelocityTimeline: React.FC<VelocityTimelineProps> = ({ data, granularity }) => {
   return;
     <div className="velocity-timeline">
@@ -796,10 +770,10 @@ const VelocityTimeline: React.FC<VelocityTimelineProps> = ({ data, granularity }
 /**
  * Step Time Card Component
  */
-}
-interface StepTimeCardProps {
-  analysis: StepTimeAnalysis;
-}
+
+
+interface StepTimeCardProps { analysis: StepTimeAnalysis }
+
 const StepTimeCard: React.FC<StepTimeCardProps> = ({ analysis }) => {
   return;
     <div className="step-time-card">
@@ -834,11 +808,11 @@ const StepTimeCard: React.FC<StepTimeCardProps> = ({ analysis }) => {
 /**
  * Trends View Component
  */
-}
-interface TrendsViewProps {
-  trendAnalysis: TrendAnalysis;
-  comparativePeriods: ComparativePeriodAnalysis;
-}
+
+
+interface TrendsViewProps { trendAnalysis: TrendAnalysis;
+  comparativePeriods: ComparativePeriodAnalysis }
+
 const TrendsView: React.FC<TrendsViewProps> = ({ trendAnalysis, comparativePeriods }) => {
   const significantTrends = trendAnalysis.filter(t => t.significance < 0.05);
   return;
@@ -865,10 +839,10 @@ const TrendsView: React.FC<TrendsViewProps> = ({ trendAnalysis, comparativePerio
 /**
  * Trend Card Component
  */
-}
-interface TrendCardProps {
-  trend: TrendAnalysis;
-}
+
+
+interface TrendCardProps { trend: TrendAnalysis }
+
 const TrendCard: React.FC<TrendCardProps> = ({ trend }) => {
   return;
     <div className={`trend-card ${trend.trend}`}>}
@@ -914,10 +888,10 @@ const TrendCard: React.FC<TrendCardProps> = ({ trend }) => {
 /**
  * Comparative Period Card Component
  */
-}
-interface ComparativePeriodCardProps {
-  comparison: ComparativePeriodAnalysis;
-}
+
+
+interface ComparativePeriodCardProps { comparison: ComparativePeriodAnalysis }
+
 const ComparativePeriodCard: React.FC<ComparativePeriodCardProps> = ({ comparison }) => {
   return;
     <div className="comparative-period-card">
@@ -953,10 +927,10 @@ const ComparativePeriodCard: React.FC<ComparativePeriodCardProps> = ({ compariso
 /**
  * Seasonality View Component
  */
-}
-interface SeasonalityViewProps {
-  seasonalPatterns: SeasonalPattern;
-}
+
+
+interface SeasonalityViewProps { seasonalPatterns: SeasonalPattern }
+
 const SeasonalityView: React.FC<SeasonalityViewProps> = ({ seasonalPatterns }) => {
   return;
     <div className="seasonality-view">
@@ -972,10 +946,10 @@ const SeasonalityView: React.FC<SeasonalityViewProps> = ({ seasonalPatterns }) =
 /**
  * Seasonal Pattern Card Component
  */
-}
-interface SeasonalPatternCardProps {
-  pattern: SeasonalPattern;
-}
+
+
+interface SeasonalPatternCardProps { pattern: SeasonalPattern }
+
 const SeasonalPatternCard: React.FC<SeasonalPatternCardProps> = ({ pattern }) => {
   return;
     <div className="seasonal-pattern-card">
@@ -1023,11 +997,11 @@ const SeasonalPatternCard: React.FC<SeasonalPatternCardProps> = ({ pattern }) =>
 /**
  * Anomalies View Component
  */
-}
-interface AnomaliesViewProps {
-  anomalies: PerformanceAnomaly;
-  onAnomalyInvestigate: (anomaly: PerformanceAnomaly) => void;
-}
+
+
+interface AnomaliesViewProps { anomalies: PerformanceAnomaly;
+  onAnomalyInvestigate: (anomaly: PerformanceAnomaly) => void }
+
 const AnomaliesView: React.FC<AnomaliesViewProps> = ({ anomalies, onAnomalyInvestigate }) => {
   const activeAnomalies = anomalies.filter(a => !a.autoResolved && a.investigationStatus !== 'resolved');
   const criticalAnomalies = activeAnomalies.filter(a => a.severity === 'critical');
@@ -1051,7 +1025,7 @@ const AnomaliesView: React.FC<AnomaliesViewProps> = ({ anomalies, onAnomalyInves
           .sort((a, b) => {
             const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
             return severityOrder[b.severity] - severityOrder[a.severity];
-  }
+
           .map(anomaly => ()
             <AnomalyCard
               key={anomaly.id}
@@ -1066,11 +1040,11 @@ const AnomaliesView: React.FC<AnomaliesViewProps> = ({ anomalies, onAnomalyInves
 /**
  * Anomaly Card Component
  */
-}
-interface AnomalyCardProps {
-  anomaly: PerformanceAnomaly;
-  onInvestigate: () => void;
-}
+
+
+interface AnomalyCardProps { anomaly: PerformanceAnomaly;
+  onInvestigate: () => void }
+
 const AnomalyCard: React.FC<AnomalyCardProps> = ({ anomaly, onInvestigate }) => {
   return;
     <div className={`anomaly-card ${anomaly.severity}`}>}
@@ -1130,11 +1104,11 @@ const TimeTrackingLoadingState: React.FC = () => ()
     <p>Loading time-based analysis...</p>
   </div>
 );
-}
-interface TimeTrackingErrorStateProps {
-  error: string;
-  onRetry: () => void;
-}
+
+
+interface TimeTrackingErrorStateProps { error: string;
+  onRetry: () => void }
+
 const TimeTrackingErrorState: React.FC<TimeTrackingErrorStateProps> = ({ error, onRetry }) => ()
   <div className="time-tracking-error">
     <div className="error-message">
@@ -1157,12 +1131,12 @@ function formatDuration(milliseconds: number): string {
   if (hours > 0) return `${hours}h ${minutes % 60}m`;}
   if (minutes > 0) return `${minutes}m ${seconds % 60}s`;}
   return `${seconds}s`;}
-async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinition)
+async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinition),
   metricResults: ConversionMetricResult,
   granularity: TimeGranularity,
   timeRange: { start: number; end: number },
   segments: UserSegment,
-  cohorts: ConversionCohort): Promise<TimeTrackingData> {,
+  cohorts: ConversionCohort): Promise<TimeTrackingData> { 
   // Simplified implementation - in production would process actual time-series data
   const now = Date.now();
   const dayMs = 86400000;
@@ -1177,7 +1151,7 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   timestamp,
   period: new Date(timestamp).toISOString().split('T')[0],
   granularity,
-  overallMetrics: {
+  overallMetrics: {,
   totalEntries: 1000 + Math.floor(Math.random() * 200),
   totalConversions: Math.floor((1000 + Math.random() * 200) * conversionRate / 100),
   conversionRate,
@@ -1186,9 +1160,9 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   revenuePerEntry: 2.5 + Math.random(),
   revenuePerConversion: 15 + Math.random() * 10,
   dropOffCount: 850 + Math.floor(Math.random() * 100),
-  dropOffRate: 85 - conversionRate,
+  dropOffRate: 85 - conversionRate }
 },
-  stepMetrics: funnelDefinition.steps.map((step, stepIndex) => ({)
+  stepMetrics: funnelDefinition.steps.map((step, stepIndex) => ({ )
   stepId: step.id,
   stepName: step.name,
   entries: 1000 - (stepIndex * 150) + Math.floor(Math.random() * 50),
@@ -1197,26 +1171,24 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   averageTimeSpent: 60000 + (stepIndex * 30000) + Math.random() * 30000,
   dropOffs: 150 + Math.floor(Math.random() * 50),
   dropOffRate: 15 + (stepIndex * 5) + Math.random() * 5,
-  revenue: 500 + Math.random() * 200,
+  revenue: 500 + Math.random() * 200 }
 })),
-      environmentalFactors: [,
-        {
-  factor: 'Server load',
+      environmentalFactors: [
+        { factor: 'Server load',
   value: 50 + Math.random() * 30,
-  impact: Math.random() > 0.7 ? 'negative' : 'neutral',
+  impact: Math.random() > 0.7 ? 'negative' : 'neutral' }
   confidence: 0.8];
-  });
+});
   // Generate trend analysis
   const trendAnalysis: TrendAnalysis = [
-    {
-  metric: 'conversion_rate',
+    { metric: 'conversion_rate',
   trend: 'increasing',
   trendStrength: 'moderate',
   changeRate: 2.3,
   significance: 0.023,
   confidence: 0.85,
   forecast: [],
-  insights: [,
+  insights: [
   {
   type: 'opportunity',
   title: 'Sustained Conversion Improvement',
@@ -1224,7 +1196,7 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   impact: 15,
   urgency: 'medium',
   actionable: true,
-  recommendedActions: [,
+  recommendedActions: [
   'Continue current optimization strategies',
   'Document successful changes for replication'
   ]
@@ -1236,14 +1208,14 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   pattern: 'weekly',
   description: 'Higher conversion rates on weekdays, lower on weekends',
   strength: 0.65,
-  peaks: [,
+  peaks: [
   {
   period: 'Tuesday',
   value: 18.5,
   consistency: 0.8,
   duration: 1,
   contributingFactors: ['Business user engagement']],
-  troughs: [,
+  troughs: [
   {
   period: 'Sunday',
   value: 12.3,
@@ -1252,15 +1224,14 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   contributingFactors: ['Lower traffic volume']],
   businessImpact: 12.5,
   reliability: 0.75,
-  recommendations: [,
+  recommendations: [
   {
   type: 'marketing',
   title: 'Optimize weekend campaigns',
   description: 'Adjust marketing spend and messaging for weekend traffic patterns',
   timing: 'Weekly',
   expectedImpact: 8,
-  implementation: ['Update ad scheduling', 'Create weekend-specific content']]
-  ];
+  implementation: ['Update ad scheduling', 'Create weekend-specific content']]];
   // Generate anomalies
   const anomalies: PerformanceAnomaly = [
   {
@@ -1275,7 +1246,7 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   actualValue: 12.3,
   deviation: 2.8,
   confidence: 0.92,
-  possibleCauses: [,
+  possibleCauses: [
   {
   category: 'technical',
   description: 'Template loading performance degradation',
@@ -1290,10 +1261,10 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   trendAnalysis,
   seasonalPatterns,
   anomalies,
-  stepTimeAnalysis: funnelDefinition.steps.map(step => ({)
+  stepTimeAnalysis: funnelDefinition.steps.map(step => ({),
   stepId: step.id,
   stepName: step.name,
-  timeToReach: {
+  timeToReach: {,
   mean: 300000,
   median: 240000,
   p25: 180000,
@@ -1301,9 +1272,9 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   p90: 600000,
   p95: 720000,
   standardDeviation: 150000,
-  skewness: 1.2,
+  skewness: 1.2 }
 },
-  timeSpentOnStep: {
+  timeSpentOnStep: { ,
   mean: 120000,
   median: 90000,
   p25: 60000,
@@ -1311,9 +1282,9 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   p90: 240000,
   p95: 300000,
   standardDeviation: 80000,
-  skewness: 2.1,
+  skewness: 2.1 }
 },
-  timeToConvert: {
+  timeToConvert: { ,
   mean: 3600000,
   median: 2400000,
   p25: 1800000,
@@ -1321,59 +1292,58 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   p90: 7200000,
   p95: 10800000,
   standardDeviation: 2400000,
-  skewness: 1.8,
+  skewness: 1.8 }
 },
-  abandonmentTiming: {
+  abandonmentTiming: { ,
   earlyAbandonment: 25,
   midAbandonment: 45,
   lateAbandonment: 30,
   averageTimeBeforeAbandonment: 180000,
-  peakAbandonmentTime: 240000,
+  peakAbandonmentTime: 240000 }
 },
-  temporalPatterns: [,
-        {
-  pattern: 'Extended browsing before conversion',
+  temporalPatterns: [
+        { pattern: 'Extended browsing before conversion',
   frequency: 35,
   impact: 12,
-  timeframe: 'Step completion',
+  timeframe: 'Step completion' }
   description: 'Users spend 3x longer browsing before converting'];
-  })),
-    conversionVelocity: performanceTimeline.map(point => ({)
+})),
+    conversionVelocity: performanceTimeline.map(point => ({ ),
   timestamp: point.timestamp,
   period: point.period,
   averageConversionTime: point.overallMetrics.averageTimeToConvert,
   conversionVelocity: point.overallMetrics.totalConversions / 24, // per hour,
   velocityTrend: Math.random() > 0.5 ? 'accelerating' : 'stable',
-  stepVelocities: point.stepMetrics.map(step => ({)
+  stepVelocities: point.stepMetrics.map(step => ({),
   stepId: step.stepId,
   stepName: step.stepName,
   averageProcessingTime: step.averageTimeSpent,
   throughput: step.conversions / 24,
   efficiency: step.conversionRate / (step.averageTimeSpent / 60000),
-  bottleneckSeverity: step.conversionRate < 70 ? 'moderate' : 'minor',
+  bottleneckSeverity: step.conversionRate < 70 ? 'moderate' : 'minor' }
 })),
       bottleneckAnalysis: point.stepMetrics,
         .filter(step => step.conversionRate < 70)
-        .map(step => ({)
+        .map(step => ({ )
   stepId: step.stepId,
   stepName: step.stepName,
   bottleneckType: 'conversion',
   severity: 100 - step.conversionRate,
   impact: step.dropOffs,
-  solutions: [,
+  solutions: [
   {
   title: 'Optimize step UX',
   description: 'Improve user experience for this step',
   effort: 'medium',
-  expectedImprovement: 15,
+  expectedImprovement: 15 }
   implementationTime: 7];
-  }))
+}))
     })),
-    comparativePeriods: [,
+    comparativePeriods: [
       {
         baselinePeriod: { start: now - dayMs * 60, end: now - dayMs * 30, label: 'Previous Month' },
         comparisonPeriod: { start: now - dayMs * 30, end: now, label: 'Current Month' },
-        overallComparison: {
+        overallComparison: { ,
   metric: 'conversion_rate',
   baselineValue: 14.2,
   comparisonValue: 16.8,
@@ -1381,12 +1351,11 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   changeRelative: 18.3,
   significance: 0.012,
   confidence: 0.95,
-  direction: 'improvement',
+  direction: 'improvement' }
 },
   stepComparisons: [],
-        significantChanges: [,
-          {
-  stepId: 'step-2',
+        significantChanges: [
+          { stepId: 'step-2',
   stepName: 'Template Browse',
   metric: 'conversion_rate',
   changeType: 'improvement',
@@ -1395,7 +1364,7 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   businessImpact: 850,
   possibleReasons: ['UX improvements', 'Better template organization']],
   insights: []],
-  realTimeMetrics: {
+  realTimeMetrics: {,
   currentConversionRate: 16.8,
   currentVelocity: 3.2,
   activeUsers: 145,
@@ -1403,7 +1372,7 @@ async function processTimeTrackingData(funnelDefinition: ConversionFunnelDefinit
   averageTimeToConvert: 3600000,
   currentBottlenecks: ['Template Browse'],
   alertsActive: anomalies.filter(a => a.severity === 'critical').length,
-  lastUpdated: now,
+  lastUpdated: now }
 };
 
 export default FunnelTimeTracking;

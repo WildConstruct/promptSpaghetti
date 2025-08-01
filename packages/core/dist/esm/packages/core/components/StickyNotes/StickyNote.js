@@ -15,123 +15,178 @@ onMove: (position) => void ;
 onResize: (size) => void ;
 onBringToFront: () => void ;
 className ?  : string;
-const COLOR_THEMES = {
+const COLOR_THEMES, string;
+text: string;
+shadow: string;
+header: string;
+ > ;
+{
     yellow: {
         background: '#FEF3C7',
-        border: '#F59E0B',
-        text: '#92400E',
-        shadow: 'rgba(245, 158, 11, 0.2)',
-        header: '#F59E0B',
-    },
+            border;
+        '#F59E0B',
+            text;
+        '#92400E',
+            shadow;
+        'rgba(245, 158, 11, 0.2)',
+            header;
+        '#F59E0B',
+        ;
+    }
     blue: {
         background: '#DBEAFE',
-        border: '#3B82F6',
-        text: '#1E40AF',
-        shadow: 'rgba(59, 130, 246, 0.2)',
-        header: '#3B82F6',
-    },
+            border;
+        '#3B82F6',
+            text;
+        '#1E40AF',
+            shadow;
+        'rgba(59, 130, 246, 0.2)',
+            header;
+        '#3B82F6',
+        ;
+    }
     green: {
         background: '#D1FAE5',
-        border: '#10B981',
-        text: '#047857',
-        shadow: 'rgba(16, 185, 129, 0.2)',
-        header: '#10B981',
-    },
+            border;
+        '#10B981',
+            text;
+        '#047857',
+            shadow;
+        'rgba(16, 185, 129, 0.2)',
+            header;
+        '#10B981',
+        ;
+    }
     red: {
         background: '#FEE2E2',
-        border: '#EF4444',
-        text: '#DC2626',
-        shadow: 'rgba(239, 68, 68, 0.2)',
-        header: '#EF4444',
-    },
+            border;
+        '#EF4444',
+            text;
+        '#DC2626',
+            shadow;
+        'rgba(239, 68, 68, 0.2)',
+            header;
+        '#EF4444',
+        ;
+    }
     purple: {
         background: '#EDE9FE',
-        border: '#8B5CF6',
-        text: '#7C3AED',
-        shadow: 'rgba(139, 92, 246, 0.2)',
-        header: '#8B5CF6',
-    },
+            border;
+        '#8B5CF6',
+            text;
+        '#7C3AED',
+            shadow;
+        'rgba(139, 92, 246, 0.2)',
+            header;
+        '#8B5CF6',
+        ;
+    }
     orange: {
         background: '#FED7AA',
-        border: '#F97316',
-        text: '#C2410C',
-        shadow: 'rgba(249, 115, 22, 0.2)',
-        header: '#F97316',
-    },
+            border;
+        '#F97316',
+            text;
+        '#C2410C',
+            shadow;
+        'rgba(249, 115, 22, 0.2)',
+            header;
+        '#F97316',
+        ;
+    }
     pink: {
         background: '#FCE7F3',
-        border: '#EC4899',
-        text: '#BE185D',
-        shadow: 'rgba(236, 72, 153, 0.2)',
-        header: '#EC4899',
-    },
+            border;
+        '#EC4899',
+            text;
+        '#BE185D',
+            shadow;
+        'rgba(236, 72, 153, 0.2)',
+            header;
+        '#EC4899',
+        ;
+    }
     gray: {
         background: '#F3F4F6',
-        border: '#6B7280',
-        text: '#374151',
-        shadow: 'rgba(107, 114, 128, 0.2)',
-        header: '#6B7280',
-    },
-    const: CATEGORY_ICONS
-}, { general: , '📝': , technical: , '⚙️': , creative: , '💡': , feedback: , '💬': , question: , '❓': , decision: , '✅': , 'action-item': , '🎯': , reference: , '📚': , };
-export const StickyNote = ({
-    note,
-    selected,
-    editing,
-    ghostMode,
-    onUpdate,
-    onSelect,
-    onStartEdit,
-    onStopEdit,
-    onDelete,
-    onMove,
-    onResize,
-    onBringToFront,
-    className = ''
-});
-{
-    const [isDragging, setIsDragging] = useState(false);
-    const [isResizing, setIsResizing] = useState(false);
-    const [resizeHandle, setResizeHandle] = useState(null);
-    const [dragStart, setDragStart] = useState(null);
-    const [contentHeight, setContentHeight] = useState(note.size.height - 60); // Account for header
-    const noteRef = useRef(null);
-    const contentRef = useRef(null);
-    const theme = COLOR_THEMES[note.appearance.color];
-    // Auto-resize content area
-    const adjustContentHeight = useCallback(() => {
-        if (contentRef.current && editing) {
-            contentRef.current.style.height = 'auto';
-            const scrollHeight = contentRef.current.scrollHeight;
-            const newHeight = Math.max(40, Math.min(300, scrollHeight));
-            contentRef.current.style.height = `${newHeight}px`;
-        }
-        if (newHeight !== contentHeight) {
-            setContentHeight(newHeight);
-            onResize({});
-            width: note.size.width,
-                height;
-            newHeight + 60; // Add header height,
-        }
-    });
-}
-[editing, contentHeight, note.size.width, onResize];
-;
-// Handle drag start
-const handleMouseDown = (e) => {
-    if (!note.behavior.draggable || editing || isResizing)
-        return;
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-    setDragStart({});
-    x: e.clientX - note.position.x,
-        y;
-    e.clientY - note.position.y,
+            border;
+        '#6B7280',
+            text;
+        '#374151',
+            shadow;
+        'rgba(107, 114, 128, 0.2)',
+            header;
+        '#6B7280',
+        ;
+    }
     ;
-};
-onBringToFront();
-onSelect(e.ctrlKey || e.metaKey);
+    const CATEGORY_ICONS = {
+        general: '📝',
+        technical: '⚙️',
+        creative: '💡',
+        feedback: '💬',
+        question: '❓',
+        decision: '✅',
+        'action-item': '🎯',
+        reference: '📚',
+    };
+    export const StickyNote = ({
+        note,
+        selected,
+        editing,
+        ghostMode,
+        onUpdate,
+        onSelect,
+        onStartEdit,
+        onStopEdit,
+        onDelete,
+        onMove,
+        onResize,
+        onBringToFront,
+        className = ''
+    });
+    {
+        const [isDragging, setIsDragging] = useState(false);
+        const [isResizing, setIsResizing] = useState(false);
+        const [resizeHandle, setResizeHandle] = useState(null);
+        const [dragStart, setDragStart] = useState(null);
+        const [contentHeight, setContentHeight] = useState(note.size.height - 60); // Account for header
+        const noteRef = useRef(null);
+        const contentRef = useRef(null);
+        const theme = COLOR_THEMES[note.appearance.color];
+        // Auto-resize content area
+        const adjustContentHeight = useCallback(() => {
+            if (contentRef.current && editing) {
+                contentRef.current.style.height = 'auto';
+                const scrollHeight = contentRef.current.scrollHeight;
+                const newHeight = Math.max(40, Math.min(300, scrollHeight));
+                contentRef.current.style.height = `${newHeight}px`;
+            }
+            if (newHeight !== contentHeight) {
+                setContentHeight(newHeight);
+                onResize({});
+                width: note.size.width,
+                    height;
+                newHeight + 60; // Add header height,
+            }
+        });
+    }
+    [editing, contentHeight, note.size.width, onResize];
+    ;
+    // Handle drag start
+    const handleMouseDown = (e) => {
+        if (!note.behavior.draggable || editing || isResizing)
+            return;
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+        setDragStart({});
+        x: e.clientX - note.position.x,
+            y;
+        e.clientY - note.position.y,
+        ;
+    };
+    onBringToFront();
+    onSelect(e.ctrlKey || e.metaKey);
+}
 ;
 // Handle resize start
 const handleResizeStart = (e, handle) => {

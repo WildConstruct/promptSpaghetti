@@ -17,8 +17,8 @@ import * as crypto from 'crypto';
 // Toggle Status Controls Types and Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface ToggleStatusControlsConfig {
   // General settings
   enabled: boolean;
@@ -34,8 +34,9 @@ export interface ToggleStatusControlsConfig {
     maintenanceToggles: boolean;
     securityToggles: boolean;
     complianceToggles: boolean;
-}
-}
+
+
+
   };
   
   // Access control
@@ -87,7 +88,7 @@ export interface ToggleStatusControlsConfig {
     alertOnFailedToggles: boolean;
     metricsRetentionDays: number;
   };
-}
+
 
 export enum ToggleCategory {
   FEATURE = 'feature',
@@ -98,7 +99,7 @@ export enum ToggleCategory {
   COMPLIANCE = 'compliance',
   EXPERIMENTAL = 'experimental',
   USER_INTERFACE = 'user_interface'
-}
+
 
 export enum ToggleType {
   BOOLEAN = 'boolean',
@@ -109,7 +110,7 @@ export enum ToggleType {
   GEOGRAPHIC = 'geographic',
   USER_BASED = 'user_based',
   LOAD_BASED = 'load_based'
-}
+
 
 export enum ToggleStatus {
   ENABLED = 'enabled',
@@ -119,7 +120,7 @@ export enum ToggleStatus {
   DEPRECATED = 'deprecated',
   EXPERIMENTAL = 'experimental',
   ROLLOUT = 'rollout'
-}
+
 
 export enum TogglePriority {
   LOW = 'low',
@@ -127,10 +128,10 @@ export enum TogglePriority {
   HIGH = 'high',
   CRITICAL = 'critical',
   EMERGENCY = 'emergency'
-}
 
-}
-}
+
+
+
 export interface SafetyCheck {
   checkId: string;
   checkName: string;
@@ -142,12 +143,13 @@ export interface SafetyCheck {
   errorMessage: string;
   warningThreshold?: number;
   parameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ToggleDefinition {
   toggleId: string;
   name: string;
@@ -187,12 +189,13 @@ export interface ToggleDefinition {
   usageMetrics: ToggleUsageMetrics;
   lastAccessed: Date;
   accessCount: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationRule {
   ruleId: string;
   ruleName: string;
@@ -202,12 +205,13 @@ export interface ValidationRule {
   warningMessage?: string;
   enabled: boolean;
   parameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ToggleDependency {
   dependencyId: string;
   dependentToggleId: string;
@@ -215,12 +219,13 @@ export interface ToggleDependency {
   condition?: string;
   description: string;
   enforced: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScheduledToggleChange {
   changeId: string;
   scheduledTime: Date;
@@ -230,12 +235,13 @@ export interface ScheduledToggleChange {
   scheduledBy: string;
   autoApprove: boolean;
   rollbackAfter?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ToggleCondition {
   conditionId: string;
   conditionType: 'user' | 'time' | 'geography' | 'load' | 'percentage' | 'custom';
@@ -243,12 +249,13 @@ export interface ToggleCondition {
   targetValue: any;
   enabled: boolean;
   priority: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ToggleUsageMetrics {
   totalAccesses: number;
   uniqueUsers: number;
@@ -257,12 +264,13 @@ export interface ToggleUsageMetrics {
   lastUsed: Date;
   peakUsage: Date;
   geographicDistribution: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ToggleChangeRequest {
   changeId: string;
   toggleId: string;
@@ -302,12 +310,13 @@ export interface ToggleChangeRequest {
   rollbackAvailable: boolean;
   rollbackDeadline?: Date;
   rollbackData?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ToggleBulkOperation {
   operationId: string;
   operationType: 'bulk_enable' | 'bulk_disable' | 'bulk_update' | 'bulk_delete';
@@ -334,12 +343,13 @@ export interface ToggleBulkOperation {
   initiatedAt: Date;
   completedAt?: Date;
   rollbackAvailable: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ToggleBulkOperationResult {
   toggleId: string;
   success: boolean;
@@ -347,12 +357,13 @@ export interface ToggleBulkOperationResult {
   newValue: any;
   errorMessage?: string;
   executionTime: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ToggleStatusOverview {
   totalToggles: number;
   activeToggles: number;
@@ -379,9 +390,10 @@ export interface ToggleStatusOverview {
   averageResponseTime: number;
   totalRequests: number;
   errorRate: number;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Toggle Status Controls Service Implementation
@@ -409,7 +421,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
     this.auditService = auditService;
     
     this.initializeService();
-  }
+
 
   /**
    * Initialize the toggle status controls service
@@ -423,20 +435,19 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       // Set up auto-refresh if enabled
       if (this.config.autoRefreshInterval > 0) {
         this.setupAutoRefresh();
-      }
+
       
       // Initialize real-time updates if enabled
       if (this.config.realTimeUpdates.enabled) {
         await this.setupRealTimeUpdates();
-      }
+
       
       this.emit('service:initialized', { timestamp: new Date() });
-      
-    } catch (error) {
+ catch (error) {
       this.emit('service:error', { error: error.message, timestamp: new Date() });
       throw error;
-    }
-  }
+
+
 
   /**
    * Create a new toggle definition
@@ -492,7 +503,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
           lastUsed: new Date(),
           peakUsage: new Date(),
           geographicDistribution: {}
-  }
+
         lastAccessed: new Date(),
         accessCount: 0
       };
@@ -535,12 +546,11 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       this.emit('toggle:created', { toggleId, toggle, createdBy });
       
       return { toggleId, toggle };
-      
-    } catch (error) {
+ catch (error) {
       this.emit('toggle:creation_error', { error: error.message, toggleData, createdBy });
       throw new Error(`Failed to create toggle: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Update toggle status
@@ -556,7 +566,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       skipApproval?: boolean;
       emergency?: boolean;
       rollbackDeadline?: Date;
-    } = {}
+ = {}
   ): Promise<{ success: boolean; previousState: any; changeId: string }> {
 
     try {
@@ -564,7 +574,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       const toggle = await this.getToggle(toggleId);
       if (!toggle) {
         throw new Error(`Toggle ${toggleId} not found`);
-      }
+
       
       // Store previous state for rollback
       const previousState = {
@@ -607,15 +617,15 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
         await this.saveChangeRequest(changeRequest);
         
         return { success: false, previousState, changeId };
-      }
+
       
       // Perform safety checks if not skipped
       if (!options.skipValidation) {
         const validationResult = await this.performSafetyChecks(toggle, newStatus, newValue);
         if (!validationResult.passed) {
           throw new Error(`Safety checks failed: ${validationResult.errors.join(', ')}`);
-        }
-      }
+
+
       
       // Update toggle in database
       await this.database.query(`
@@ -649,7 +659,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       // Propagate changes if real-time updates are enabled
       if (this.config.realTimeUpdates.enabled) {
         await this.propagateToggleChange(toggleId, toggle);
-      }
+
       
       // Audit the change
       await this.auditService.logAction('toggle_updated', updatedBy, {
@@ -671,8 +681,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       });
       
       return { success: true, previousState, changeId };
-      
-    } catch (error) {
+ catch (error) {
       this.emit('toggle:update_error', { 
         error: error.message, 
         toggleId, 
@@ -681,8 +690,8 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
         updatedBy 
       });
       throw new Error(`Failed to update toggle status: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Get toggle by ID
@@ -693,7 +702,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       // Check cache first
       if (this.toggleCache.has(toggleId)) {
         return this.toggleCache.get(toggleId)!;
-      }
+
       
       // Load from database
       const result = await this.database.query(`
@@ -702,7 +711,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       
       if (result.rows.length === 0) {
         return null;
-      }
+
       
       const toggle = this.parseToggleFromDatabase(result.rows[0]);
       
@@ -710,12 +719,11 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       this.toggleCache.set(toggleId, toggle);
       
       return toggle;
-      
-    } catch (error) {
+ catch (error) {
       this.emit('toggle:fetch_error', { error: error.message, toggleId });
       throw new Error(`Failed to get toggle: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * List toggles with filtering and pagination
@@ -731,11 +739,11 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
     offset?: number;
     sortBy?: string;
     sortOrder?: 'ASC' | 'DESC';
-  } = {}): Promise<{
+ = {}): Promise<{
     toggles: ToggleDefinition[];
     total: number;
     hasMore: boolean;
-  }> {
+> {
 
     try {
       // Build query conditions
@@ -746,32 +754,32 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       if (options.category) {
         conditions.push(`category = $${paramIndex++}`);
         params.push(options.category);
-      }
+
       
       if (options.status) {
         conditions.push(`current_status = $${paramIndex++}`);
         params.push(options.status);
-      }
+
       
       if (options.priority) {
         conditions.push(`priority = $${paramIndex++}`);
         params.push(options.priority);
-      }
+
       
       if (options.owner) {
         conditions.push(`owner = $${paramIndex++}`);
         params.push(options.owner);
-      }
+
       
       if (options.environment) {
         conditions.push(`environment = $${paramIndex++}`);
         params.push(options.environment);
-      }
+
       
       if (options.tags && options.tags.length > 0) {
         conditions.push(`tags && $${paramIndex++}`);
         params.push(JSON.stringify(options.tags));
-      }
+
       
       const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
       const sortBy = options.sortBy || 'last_modified';
@@ -800,12 +808,11 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
         total,
         hasMore: offset + limit < total
       };
-      
-    } catch (error) {
+ catch (error) {
       this.emit('toggles:list_error', { error: error.message, options });
       throw new Error(`Failed to list toggles: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Perform bulk toggle operation
@@ -844,7 +851,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
               executionTime: Date.now() - startTime
             });
             continue;
-          }
+
           
           const previousValue = toggle.currentValue;
           let newValue: any;
@@ -870,7 +877,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
               executionTime: Date.now() - startTime
             });
             continue;
-          }
+
           
           // Update toggle
           const updateResult = await this.updateToggleStatus(
@@ -892,11 +899,10 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
           
           if (updateResult.success) {
             operation.successfulToggles++;
-          } else {
+ else {
             operation.failedToggles++;
-          }
-          
-        } catch (error) {
+
+ catch (error) {
           results.push({
             toggleId,
             success: false,
@@ -906,10 +912,10 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
             executionTime: Date.now() - startTime
           });
           operation.failedToggles++;
-        }
+
         
         operation.processedToggles++;
-      }
+
       
       // Update operation status
       operation.operationStatus = operation.failedToggles > 0 ? 'partially_failed' : 'completed';
@@ -931,12 +937,11 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       this.emit('bulk_operation:completed', { operationId, operation, results, operatedBy });
       
       return { operationId, results };
-      
-    } catch (error) {
+ catch (error) {
       this.emit('bulk_operation:error', { error: error.message, operation, operatedBy });
       throw new Error(`Failed to perform bulk operation: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Get toggle status overview
@@ -1017,12 +1022,11 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
         totalRequests: 0,
         errorRate: 0
       };
-      
-    } catch (error) {
+ catch (error) {
       this.emit('overview:error', { error: error.message });
       throw new Error(`Failed to get toggle status overview: ${error.message}`);
-    }
-  }
+
+
 
   // =============================================================================
   // Private Helper Methods
@@ -1032,18 +1036,18 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
     const sanitizedName = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
     const timestamp = Date.now();
     return `${category}_${sanitizedName}_${timestamp}`;
-  }
+
 
   private async validateToggleDefinition(toggle: ToggleDefinition): Promise<void> {
 
     // Validate required fields
     if (!toggle.name || toggle.name.trim().length === 0) {
       throw new Error('Toggle name is required');
-    }
+
     
     if (!toggle.description || toggle.description.trim().length === 0) {
       throw new Error('Toggle description is required');
-    }
+
     
     // Validate unique name within category
     const existingToggle = await this.database.query(`
@@ -1053,8 +1057,8 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
     
     if (existingToggle.rows.length > 0) {
       throw new Error(`Toggle with name '${toggle.name}' already exists in category '${toggle.category}'`);
-    }
-  }
+
+
 
   private getDefaultSafetyChecks(category: ToggleCategory): SafetyCheck[] {
     const defaultChecks: SafetyCheck[] = [
@@ -1067,7 +1071,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
         required: true,
         errorMessage: 'Basic validation failed',
         parameters: {}
-      }
+
     ];
     
     // Add category-specific safety checks
@@ -1097,21 +1101,21 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
         parameters: {}
       });
       break;
-    }
+
     
     return defaultChecks;
-  }
+
 
   private requiresApproval(priority: TogglePriority): boolean {
     return this.config.accessControl.requireApprovalForCriticalToggles && 
            (priority === TogglePriority.HIGH || priority === TogglePriority.CRITICAL);
-  }
+
 
   private incrementVersion(currentVersion: string): string {
     const parts = currentVersion.split('.');
     const patch = parseInt(parts[2] || '0') + 1;
     return `${parts[0]}.${parts[1]}.${patch}`;
-  }
+
 
   private async performSafetyChecks(
     toggle: ToggleDefinition, 
@@ -1133,10 +1137,10 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
           const max = rule.parameters.max || 100;
           if (newValue < min || newValue > max) {
             errors.push(rule.errorMessage);
-          }
-        }
-      }
-    }
+
+
+
+
     
     // Dependency checks
     if (toggle.dependencies) {
@@ -1151,22 +1155,22 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
             newStatus === ToggleStatus.ENABLED && 
             dependentToggle.currentStatus !== ToggleStatus.ENABLED) {
           errors.push(`Toggle requires ${dependency.dependentToggleId} to be enabled`);
-        }
+
         
         if (dependency.dependencyType === 'conflicts' && 
             newStatus === ToggleStatus.ENABLED && 
             dependentToggle.currentStatus === ToggleStatus.ENABLED) {
           errors.push(`Toggle conflicts with ${dependency.dependentToggleId}`);
-        }
-      }
-    }
+
+
+
     
     return {
       passed: errors.length === 0,
       errors,
       warnings
     };
-  }
+
 
   private async recordToggleChange(
     toggleId: string,
@@ -1191,7 +1195,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       reason,
       changedBy
     ]);
-  }
+
 
   private async propagateToggleChange(toggleId: string, toggle: ToggleDefinition): Promise<void> {
 
@@ -1205,8 +1209,8 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
         JSON.stringify(toggle),
         this.config.performance.cacheTTL
       );
-    }
-  }
+
+
 
   private parseToggleFromDatabase(row: any): ToggleDefinition {
     return {
@@ -1243,7 +1247,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       lastAccessed: row.last_accessed,
       accessCount: row.access_count || 0
     };
-  }
+
 
   private async loadToggleDefinitions(): Promise<void> {
 
@@ -1254,25 +1258,25 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
     for (const row of result.rows) {
       const toggle = this.parseToggleFromDatabase(row);
       this.toggleCache.set(toggle.toggleId, toggle);
-    }
-  }
+
+
 
   private setupAutoRefresh(): void {
     this.refreshInterval = setInterval(async () => {
       try {
         await this.loadToggleDefinitions();
         this.emit('cache:refreshed', { timestamp: new Date() });
-      } catch (error) {
+ catch (error) {
         this.emit('cache:refresh_error', { error: error.message });
-      }
+
     }, this.config.autoRefreshInterval * 1000);
-  }
+
 
   private async setupRealTimeUpdates(): Promise<void> {
 
     // Implement real-time update mechanism
     // This would set up WebSocket connections, Redis subscriptions, etc.
-  }
+
 
   private async saveChangeRequest(changeRequest: ToggleChangeRequest): Promise<void> {
 
@@ -1295,7 +1299,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       JSON.stringify(changeRequest.validationErrors), JSON.stringify(changeRequest.warnings),
       changeRequest.executionStatus, changeRequest.rollbackAvailable, changeRequest.rollbackDeadline
     ]);
-  }
+
 
   private async saveBulkOperation(operation: ToggleBulkOperation): Promise<void> {
 
@@ -1316,7 +1320,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       JSON.stringify(operation.errors), operation.initiatedBy, operation.initiatedAt,
       operation.rollbackAvailable
     ]);
-  }
+
 
   private async updateBulkOperation(operation: ToggleBulkOperation): Promise<void> {
 
@@ -1330,7 +1334,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
       operation.operationStatus, JSON.stringify(operation.results), JSON.stringify(operation.errors),
       operation.completedAt, operation.operationId
     ]);
-  }
+
 
   private async deleteToggle(toggleId: string, deletedBy: string): Promise<void> {
 
@@ -1342,7 +1346,7 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
     this.toggleCache.delete(toggleId);
     
     await this.auditService.logAction('toggle_deleted', deletedBy, { toggleId });
-  }
+
 
   /**
    * Cleanup service resources
@@ -1351,12 +1355,12 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
 
     if (this.refreshInterval) {
       clearInterval(this.refreshInterval);
-    }
+
     
     this.toggleCache.clear();
     this.removeAllListeners();
-  }
-}
+
+
 
 // Export service for Epic 17 implementation
 export default Epic17ToggleStatusControlsService;

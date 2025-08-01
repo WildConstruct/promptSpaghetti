@@ -3,67 +3,62 @@
 import React from 'react';
 import { Lock, AlertTriangle, Users, Shield } from 'lucide-react';
 import { WorkflowLock } from '../types/locking';
-}
-interface LockIndicatorProps {
-  lock: WorkflowLock;
+
+
+interface LockIndicatorProps { lock: WorkflowLock;
   size?: 'small' | 'medium' | 'large';
   showTooltip?: boolean;
   className?: string;
-  export const LockIndicator: React.FC<LockIndicatorProps> = ({,)
-  lock,
-  size = 'medium',
-  showTooltip = true,
+  export const LockIndicator: React.FC<LockIndicatorProps> = ({);
+  lock;
+  size = 'medium';
+  showTooltip = true }
   className = ''
-}
-}) => {
-  const sizeClasses = {
+
+
+}) => { const sizeClasses = {
   small: 'h-4 w-4',
   medium: 'h-5 w-5',
-  large: 'h-6 w-6',
+  large: 'h-6 w-6' }
 };
-  const containerSizeClasses = {
-  small: 'p-1',
+  const containerSizeClasses = { small: 'p-1',
   medium: 'p-2',
-  large: 'p-3',
+  large: 'p-3' }
 };
-  const getIconAndColor = () => {
-  const isExpired = lock.expires_at && new Date(lock.expires_at) < new Date();
+  const getIconAndColor = () => { const isExpired = lock.expires_at && new Date(lock.expires_at) < new Date();
   if (isExpired) {
   return {
   icon: AlertTriangle,
   color: 'text-red-500',
   bg: 'bg-red-100',
-  border: 'border-red-300',
+  border: 'border-red-300' }
 };
-    switch (lock.lock_type) {
-  case 'admin':,
+    switch (lock.lock_type) { case 'admin':,
   return {
   icon: Shield,
   color: 'text-purple-500',
   bg: 'bg-purple-100',
-  border: 'border-purple-300',
+  border: 'border-purple-300' }
 };
     case 'delete':
-      return {
-  icon: AlertTriangle,
+      return { icon: AlertTriangle,
   color: 'text-red-500',
   bg: 'bg-red-100',
-  border: 'border-red-300',
+  border: 'border-red-300' }
 };
     case 'state_change':
-      return {
-  icon: Users,
+      return { icon: Users,
   color: 'text-orange-500',
   bg: 'bg-orange-100',
-  border: 'border-orange-300',
+  border: 'border-orange-300' }
 };
     case 'edit':
     default:
-      return {,
+      return { ,
   icon: Lock,
   color: 'text-blue-500',
   bg: 'bg-blue-100',
-  border: 'border-blue-300',
+  border: 'border-blue-300' }
 };
   };
   const { icon: Icon, color, bg, border } = getIconAndColor();
@@ -120,16 +115,17 @@ interface LockIndicatorProps {
 };
 
 // Resource Lock Status Component
-}
-interface ResourceLockStatusProps {
-  resourceId: string;
+
+
+interface ResourceLockStatusProps { resourceId: string;
   locks: WorkflowLock;
   className?: string;
-  export const ResourceLockStatus: React.FC<ResourceLockStatusProps> = ({,)
-  resourceId,
-  locks,
+  export const ResourceLockStatus: React.FC<ResourceLockStatusProps> = ({);
+  resourceId;
+  locks }
   className = ''
-}
+
+
 }) => {
   const resourceLocks = locks.filter(lock => lock.resource_id === resourceId);
   if (resourceLocks.length === 0) {
@@ -166,20 +162,20 @@ interface ResourceLockStatusProps {
 };
 
 // Lock Type Badge Component
-}
-interface LockTypeBadgeProps {
-  lockType: string;
+
+
+interface LockTypeBadgeProps { lockType: string;
   size?: 'small' | 'medium';
   className?: string;
-  export const LockTypeBadge: React.FC<LockTypeBadgeProps> = ({,)
-  lockType,
-  size = 'medium',
+  export const LockTypeBadge: React.FC<LockTypeBadgeProps> = ({);
+  lockType;
+  size = 'medium' }
   className = ''
-}
-}) => {
-  const sizeClasses = {
+
+
+}) => { const sizeClasses = {
   small: 'px-2 py-1 text-xs',
-  medium: 'px-3 py-1 text-sm',
+  medium: 'px-3 py-1 text-sm' }
 };
   const getTypeConfig = () => {
     switch (lockType) {

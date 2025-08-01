@@ -18,8 +18,8 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
-}
-}
+
+
 export interface CurationCriteria {
   originality: number;      // 0-1 - How original/unique is the content
   quality: number;          // 0-1 - Overall technical quality
@@ -27,12 +27,13 @@ export interface CurationCriteria {
   documentation: number;    // 0-1 - Quality of documentation/examples
   marketFit: number;        // 0-1 - How well it fits market needs
   safety: number;           // 0-1 - Content safety and appropriateness
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CurationItem {
   id: string;
   templateId: string;
@@ -47,8 +48,9 @@ export interface CurationItem {
     category: string;
     complexity: 'beginner' | 'intermediate' | 'advanced';
     estimatedUseTime: number; // minutes
-}
-}
+
+
+
   };
   
   // Curation assessment
@@ -85,10 +87,10 @@ export interface CurationItem {
     appealCount: number;
     revisionCount: number;
   };
-}
 
-}
-}
+
+
+
 export interface CuratorProfile {
   id: string;
   userId: string;
@@ -108,8 +110,9 @@ export interface CuratorProfile {
     throughputScore: number;   // Reviews per week
     qualityScore: number;      // Quality of feedback provided
     overallRating: number;     // Combined performance score
-}
-}
+
+
+
   };
   
   // Workload
@@ -124,10 +127,10 @@ export interface CuratorProfile {
   status: 'active' | 'away' | 'overloaded' | 'inactive';
   availableUntil?: Date;
   lastActive: Date;
-}
 
-}
-}
+
+
+
 export interface CurationQueue {
   highPriority: CurationItem[];
   standard: CurationItem[];
@@ -140,13 +143,14 @@ export interface CurationQueue {
     averageWaitTime: number;
     completionRate: number;
     curatorUtilization: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface QualityTrend {
   period: 'day' | 'week' | 'month';
   timestamp: Date;
@@ -155,12 +159,13 @@ export interface QualityTrend {
     submissionCount: number;
     approvalRate: number;
     revisionRate: number;
-}
-}
+
+
+
     topCategories: Array<{ category: string; count: number; quality: number }>;
     curatorEfficiency: number;
   };
-}
+
 
 @Injectable()
 export class CurationService {
@@ -175,7 +180,7 @@ export class CurationService {
       maxRetriesPerRequest: 3,
       keyPrefix: 'curation:'
     });
-  }
+
 
   /**
    * Submit content for curation
@@ -208,7 +213,7 @@ export class CurationService {
           category: templateData.category,
           complexity: this.assessComplexity(templateData),
           estimatedUseTime: this.estimateUseTime(templateData)
-  }
+
         aiAssessment,
         status: aiAssessment.overallScore > 0.8 ? 'pending_curator' : 'pending_ai',
         priority: this.calculatePriority(aiAssessment, templateData),
@@ -217,7 +222,7 @@ export class CurationService {
           curatorAgreement: 0,
           appealCount: 0,
           revisionCount: 0
-        }
+
       };
 
       // Store curation item
@@ -226,17 +231,17 @@ export class CurationService {
       // Auto-assign to curator if high quality
       if (curationItem.status === 'pending_curator') {
         await this.assignToCurator(curationId);
-      }
+
 
       // Update queue statistics
       await this.updateQueueStatistics();
 
       return curationId;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to submit for curation:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get curation queue for management interface
@@ -247,7 +252,7 @@ export class CurationService {
     priority?: string;
     status?: string;
     limit?: number;
-  } = {}): Promise<CurationQueue> {
+ = {}): Promise<CurationQueue> {
 
     try {
       const { curatorId, category, priority, status, limit = 50 } = options;
@@ -261,25 +266,25 @@ export class CurationService {
         whereClause += ` AND curator_id = $${paramIndex}`;
         params.push(curatorId);
         paramIndex++;
-      }
+
 
       if (category) {
         whereClause += ` AND content->>'category' = $${paramIndex}`;
         params.push(category);
         paramIndex++;
-      }
+
 
       if (priority) {
         whereClause += ` AND priority = $${paramIndex}`;
         params.push(priority);
         paramIndex++;
-      }
+
 
       if (status) {
         whereClause += ` AND status = $${paramIndex}`;
         params.push(status);
         paramIndex++;
-      }
+
 
       // Get items by priority
       const [highPriorityResult, standardResult, lowPriorityResult, revisionResult, appealedResult, statsResult] = await Promise.all([
@@ -329,11 +334,11 @@ export class CurationService {
         appealed: appealedResult.rows.map(this.mapRowToCurationItem),
         statistics: statsResult
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get curation queue:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Assign curation item to curator
@@ -344,11 +349,11 @@ export class CurationService {
       // Auto-select curator if not specified
       if (!curatorId) {
         curatorId = await this.selectOptimalCurator(curationId);
-      }
+
 
       if (!curatorId) {
         throw new Error('No available curator found');
-      }
+
 
       const query = `
         UPDATE marketplace_curation_queue 
@@ -363,11 +368,11 @@ export class CurationService {
 
       // Log assignment
       await this.logCurationAction(curationId, 'assigned', curatorId);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to assign to curator:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Complete curator review
@@ -420,12 +425,12 @@ export class CurationService {
       // If approved, trigger publication process
       if (decision === 'approved') {
         await this.triggerPublication(curationId);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to complete curator review:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get curator performance analytics
@@ -439,13 +444,13 @@ export class CurationService {
       reviewTime: number;
       accuracyScore: number;
       timestamp: Date;
-    }>;
+>;
     trends: {
       weeklyThroughput: number[];
       qualityTrend: number[];
       categoryDistribution: Record<string, number>;
     };
-  }> {
+> {
     try {
       const [profileResult, reviewsResult, trendsResult] = await Promise.all([
         this.getCuratorProfile(curatorId),
@@ -458,11 +463,11 @@ export class CurationService {
         recentReviews: reviewsResult,
         trends: trendsResult
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get curator analytics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get quality trends and insights
@@ -503,13 +508,13 @@ export class CurationService {
           revisionRate: parseFloat(row.revision_rate) || 0,
           topCategories: [], // Would calculate separately
           curatorEfficiency: row.avg_review_hours ? 24 / parseFloat(row.avg_review_hours) : 0
-        }
+
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get quality trends:', error);
       return [];
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -538,13 +543,13 @@ export class CurationService {
       suggestedTags: this.suggestTags(templateData),
       reasoning: this.generateReasoning(criteria, overallScore)
     };
-  }
+
 
   private assessOriginality(templateData: any): number {
     // Simplified - would check against existing templates
     const uniqueWords = new Set(templateData.description?.toLowerCase().split(/\s+/) || []);
     return Math.min(uniqueWords.size / 100, 1);
-  }
+
 
   private assessQuality(templateData: any): number {
     // Check for quality indicators
@@ -555,13 +560,13 @@ export class CurationService {
     if (templateData.examples?.length > 0) score += 0.2;
     
     return Math.min(score, 1);
-  }
+
 
   private assessCompleteness(templateData: any): number {
     const requiredFields = ['title', 'description', 'category'];
     const presentFields = requiredFields.filter(field => templateData[field]).length;
     return presentFields / requiredFields.length;
-  }
+
 
   private assessDocumentation(templateData: any): number {
     let score = 0;
@@ -571,14 +576,14 @@ export class CurationService {
     if (templateData.usage_notes) score += 0.3;
     
     return Math.min(score, 1);
-  }
+
 
   private assessMarketFit(templateData: any): number {
     // Simplified market fit assessment
     const popularCategories = ['business', 'creative', 'technical', 'educational'];
     const isPopularCategory = popularCategories.includes(templateData.category?.toLowerCase());
     return isPopularCategory ? 0.8 : 0.6;
-  }
+
 
   private assessSafety(templateData: any): number {
     // Check for safety issues
@@ -587,7 +592,7 @@ export class CurationService {
     const hasUnsafeTerms = unsafeTerms.some(term => content.includes(term));
     
     return hasUnsafeTerms ? 0.2 : 1.0;
-  }
+
 
   private calculateConfidence(criteria: CurationCriteria): number {
     // Higher confidence when scores are consistent
@@ -596,7 +601,7 @@ export class CurationService {
     const variance = scores.reduce((sum, score) => sum + Math.pow(score - mean, 2), 0) / scores.length;
     
     return Math.max(0, 1 - variance);
-  }
+
 
   private generateFlags(templateData: any, criteria: CurationCriteria): string[] {
     const flags: string[] = [];
@@ -607,7 +612,7 @@ export class CurationService {
     if (!templateData.description || templateData.description.length < 50) flags.push('poor_description');
     
     return flags;
-  }
+
 
   private suggestCategory(templateData: any): string {
     // Simplified category suggestion
@@ -619,7 +624,7 @@ export class CurationService {
     if (content.includes('education') || content.includes('learning')) return 'educational';
     
     return templateData.category || 'general';
-  }
+
 
   private suggestTags(templateData: any): string[] {
     // Extract potential tags from content
@@ -627,17 +632,17 @@ export class CurationService {
     const commonTags = ['automation', 'productivity', 'creative', 'business', 'ai', 'writing'];
     
     return commonTags.filter(tag => content.includes(tag));
-  }
+
 
   private generateReasoning(criteria: CurationCriteria, overallScore: number): string {
     if (overallScore >= 0.8) {
       return 'High-quality submission with strong scores across all criteria. Recommended for fast-track approval.';
-    } else if (overallScore >= 0.6) {
+ else if (overallScore >= 0.6) {
       return 'Good quality submission with some areas for improvement. Standard curation process recommended.';
-    } else {
+ else {
       return 'Below-average submission requiring significant improvements before approval.';
-    }
-  }
+
+
 
   private assessComplexity(templateData: any): 'beginner' | 'intermediate' | 'advanced' {
     const content = (templateData.description || '').toLowerCase();
@@ -645,20 +650,20 @@ export class CurationService {
     if (content.includes('advanced') || content.includes('complex')) return 'advanced';
     if (content.includes('intermediate') || content.length > 200) return 'intermediate';
     return 'beginner';
-  }
+
 
   private estimateUseTime(templateData: any): number {
     // Estimate based on content complexity
     const contentLength = (templateData.description || '').length;
     return Math.max(5, Math.min(contentLength / 20, 60)); // 5-60 minutes
-  }
+
 
   private calculatePriority(aiAssessment: CurationItem['aiAssessment'], templateData: any): 'low' | 'medium' | 'high' | 'urgent' {
     if (aiAssessment.flags.includes('safety_concern')) return 'urgent';
     if (aiAssessment.overallScore >= 0.8) return 'high';
     if (aiAssessment.overallScore >= 0.6) return 'medium';
     return 'low';
-  }
+
 
   private async getTemplateData(templateId: string): Promise<any> {
 
@@ -669,7 +674,7 @@ export class CurationService {
     `;
     const result = await this.pool.query(query, [templateId]);
     return result.rows[0] || {};
-  }
+
 
   private async selectOptimalCurator(curationId: string): Promise<string | null> {
 
@@ -685,7 +690,7 @@ export class CurationService {
     
     const result = await this.pool.query(query);
     return result.rows[0]?.id || null;
-  }
+
 
   private async storeCurationItem(item: CurationItem): Promise<void> {
 
@@ -707,7 +712,7 @@ export class CurationService {
       item.priority,
       JSON.stringify(item.metrics)
     ]);
-  }
+
 
   private mapRowToCurationItem(row: any): CurationItem {
     return {
@@ -722,25 +727,25 @@ export class CurationService {
       priority: row.priority,
       metrics: JSON.parse(row.metrics || '{}')
     };
-  }
+
 
   private async getCuratorProfile(curatorId: string): Promise<CuratorProfile> {
 
     // Implementation would fetch from curator profiles table
     return {} as CuratorProfile;
-  }
+
 
   private async getCuratorRecentReviews(curatorId: string): Promise<any[]> {
 
     // Implementation would fetch recent reviews
     return [];
-  }
+
 
   private async getCuratorTrends(curatorId: string): Promise<any> {
 
     // Implementation would calculate trends
     return { weeklyThroughput: [], qualityTrend: [], categoryDistribution: {} };
-  }
+
 
   private async getCurationStatistics(): Promise<CurationQueue['statistics']> {
 
@@ -762,14 +767,14 @@ export class CurationService {
       completionRate: parseFloat(row.completion_rate) || 0,
       curatorUtilization: 0.75 // Would calculate from curator workload
     };
-  }
+
 
   private async updateQueueStatistics(): Promise<void> {
 
     // Update cached queue statistics
     const stats = await this.getCurationStatistics();
     await this.redis.setex('queue_stats', 300, JSON.stringify(stats));
-  }
+
 
   private async updateCuratorWorkload(curatorId: string, action: 'assigned' | 'completed'): Promise<void> {
 
@@ -780,12 +785,12 @@ export class CurationService {
       WHERE id = $2
     `;
     await this.pool.query(query, [increment, curatorId]);
-  }
+
 
   private async updateCuratorPerformance(curatorId: string, decision: string, qualityScore: number): Promise<void> {
 
     // Implementation would update curator performance metrics
-  }
+
 
   private async logCurationAction(curationId: string, action: string, userId: string): Promise<void> {
 
@@ -794,7 +799,7 @@ export class CurationService {
       VALUES ($1, $2, $3, NOW())
     `;
     await this.pool.query(query, [curationId, action, userId]);
-  }
+
 
   private async checkAIOverride(curationId: string, decision: string): Promise<boolean> {
 
@@ -809,13 +814,13 @@ export class CurationService {
     
     const aiRecommendation = aiScore > 0.7 ? 'approved' : 'rejected';
     return decision !== aiRecommendation;
-  }
+
 
   private async triggerPublication(curationId: string): Promise<void> {
 
     // Implementation would trigger template publication workflow
     console.log(`Triggering publication for curation item: ${curationId}`);
-  }
+
 
   /**
    * Cleanup resources
@@ -825,8 +830,7 @@ export class CurationService {
     try {
       await this.redis.quit();
       console.log('CurationService destroyed successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Error during CurationService destruction:', error);
-    }
-  }
-}
+
+

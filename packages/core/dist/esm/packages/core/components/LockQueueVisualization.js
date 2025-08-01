@@ -35,7 +35,8 @@ const getPriorityColor = (priority) => {
             case 2: return 'High';
             case 3: return 'Medium';
             case 4: return 'Low';
-            default: return 'Normal';
+            default: return 'Normal',
+            ;
         }
         ;
         if (queue.length === 0) {

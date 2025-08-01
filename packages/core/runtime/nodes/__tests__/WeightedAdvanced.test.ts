@@ -1,12 +1,11 @@
 // packages/core/runtime/nodes/__tests__/WeightedAdvanced.test.ts
 // Comprehensive tests for WeightedAdvanced node
-import {
-  WeightedAdvancedNode,
+import { WeightedAdvancedNode,
   WeightedChoice,
   WeightDistributionConfig,
-  createWeightedAdvancedNode,
+  createWeightedAdvancedNode }
   DistributionPresets
-} from '../WeightedAdvanced';
+ from '../WeightedAdvanced';
 import { AdvancedExecutionUtils } from '../../advanced';
 describe('WeightedAdvanced Node', () => {
   let node: WeightedAdvancedNode;
@@ -23,17 +22,13 @@ describe('WeightedAdvanced Node', () => {
       seed: 12345;
   });
   });
-  describe('Basic Functionality', () => {
-    test('should execute and return a choice', () => {
+  describe('Basic Functionality', () => { test('should execute and return a choice', () => {
       const result = node.run(context);
       expect(typeof result).toBe('string');
-      expect(['apple', 'banana', 'cherry']).toContain(result);
-    });
-    test('should be deterministic with same seed', () => {
-      const result1 = node.run(context);
+      expect(['apple', 'banana', 'cherry']).toContain(result) });
+    test('should be deterministic with same seed', () => { const result1 = node.run(context);
       const result2 = node.run(context);
-      expect(result1).toBe(result2);
-    });
+      expect(result1).toBe(result2) });
     test('should produce different results with different seeds', () => {
       const results1: string = [];
       const results2: string = [];
@@ -59,11 +54,9 @@ describe('WeightedAdvanced Node', () => {
       const result = singleChoiceNode.run(context);
       expect(result).toBe('only');
     });
-    test('should handle empty choices', () => {
-      const emptyNode = new WeightedAdvancedNode('empty', []);
+    test('should handle empty choices', () => { const emptyNode = new WeightedAdvancedNode('empty', []);
       const result = emptyNode.run(context);
-      expect(result).toBe('');
-    });
+      expect(result).toBe('') });
   });
   describe('Distribution Algorithms', () => {
     const testChoices: WeightedChoice = [
@@ -81,10 +74,9 @@ describe('WeightedAdvanced Node', () => {
   });
         return linearNode.run(ctx);
       });
-      const counts = {
-  first: results.filter(r => r === 'first').length,
+      const counts = { first: results.filter(r => r === 'first').length,
   second: results.filter(r => r === 'second').length,
-  third: results.filter(r => r === 'third').length,
+  third: results.filter(r => r === 'third').length }
 };
       // Should roughly follow 4:2:1 ratio
       expect(counts.first).toBeGreaterThan(counts.second);
@@ -99,23 +91,19 @@ describe('WeightedAdvanced Node', () => {
   });
         return expNode.run(ctx);
       });
-      const counts = {
-  first: results.filter(r => r === 'first').length,
+      const counts = { first: results.filter(r => r === 'first').length,
   second: results.filter(r => r === 'second').length,
-  third: results.filter(r => r === 'third').length,
+  third: results.filter(r => r === 'third').length }
 };
       // Exponential should make higher weights even more dominant
       expect(counts.first).toBeGreaterThan(counts.second * 2);
     });
-    test('should apply gaussian distribution', () => {
-      const gaussianNode = new WeightedAdvancedNode('gaussian', testChoices, DistributionPresets.gaussian);
+    test('should apply gaussian distribution', () => { const gaussianNode = new WeightedAdvancedNode('gaussian', testChoices, DistributionPresets.gaussian);
       // Test that it runs without errors
       const result = gaussianNode.run(context);
-      expect(['first', 'second', 'third']).toContain(result);
-    });
-    test('should handle custom distribution parameters', () => {
-      const customConfig: WeightDistributionConfig = {,
-  type: 'exponential',
+      expect(['first', 'second', 'third']).toContain(result) });
+    test('should handle custom distribution parameters', () => { const customConfig: WeightDistributionConfig = {,
+  type: 'exponential' }
         parameters: { factor: 3 },
         normalize: true,
         minWeight: 0.1;
@@ -145,11 +133,10 @@ describe('WeightedAdvanced Node', () => {
       const result = smallNode.run(context);
       expect(['tiny1', 'tiny2']).toContain(result);
     });
-    test('should apply minimum weight threshold', () => {
-  const minWeightConfig: WeightDistributionConfig = {,
+    test('should apply minimum weight threshold', () => { const minWeightConfig: WeightDistributionConfig = {,
   type: 'linear',
   minWeight: 1,
-  normalize: false,
+  normalize: false }
 };
       const thresholdChoices: WeightedChoice = [
         { value: 'low', weight: 0.1 },
@@ -160,18 +147,14 @@ describe('WeightedAdvanced Node', () => {
       expect(['low', 'high']).toContain(result);
     });
   });
-  describe('Validation', () => {
-    test('should validate basic configuration', () => {
+  describe('Validation', () => { test('should validate basic configuration', () => {
       const validation = node.validate();
       expect(validation.valid).toBe(true);
-      expect(validation.errors).toHaveLength(0);
-    });
-    test('should warn about empty choices', () => {
-      const emptyNode = new WeightedAdvancedNode('empty', []);
+      expect(validation.errors).toHaveLength(0) });
+    test('should warn about empty choices', () => { const emptyNode = new WeightedAdvancedNode('empty', []);
       const validation = emptyNode.validate();
       expect(validation.valid).toBe(true);
-      expect(validation.warnings).toContain('No choices configured - node will depend on dynamic inputs');
-    });
+      expect(validation.warnings).toContain('No choices configured - node will depend on dynamic inputs') });
     test('should validate negative weights', () => {
       const negativeChoices: WeightedChoice = [
         { value: 'good', weight: 1 },
@@ -202,9 +185,8 @@ describe('WeightedAdvanced Node', () => {
       expect(validation.valid).toBe(false);
       expect(validation.errors.some(e => e.includes('All weights are zero'))).toBe(true);
     });
-    test('should validate distribution configuration', () => {
-      const invalidConfig: WeightDistributionConfig = {,
-  type: 'exponential',
+    test('should validate distribution configuration', () => { const invalidConfig: WeightDistributionConfig = {,
+  type: 'exponential' }
         parameters: { factor: -1 }
       };
       const invalidNode = new WeightedAdvancedNode('invalid', [{ value: 'test', weight: 1 }], invalidConfig);
@@ -226,11 +208,9 @@ describe('WeightedAdvanced Node', () => {
       ]);
       expect(serialized.metadata?.version).toBe('1.0.0');
     });
-    test('should include distribution config in serialization', () => {
-      const expNode = new WeightedAdvancedNode('exp', [], DistributionPresets.exponential);
+    test('should include distribution config in serialization', () => { const expNode = new WeightedAdvancedNode('exp', [], DistributionPresets.exponential);
       const serialized = expNode.serialize();
-      expect(serialized.data.distributionConfig).toEqual(DistributionPresets.exponential);
-    });
+      expect(serialized.data.distributionConfig).toEqual(DistributionPresets.exponential) });
   });
   describe('Performance and Caching', () => {
     test('should use caching for repeated executions', () => {
@@ -290,16 +270,12 @@ describe('WeightedAdvanced Node', () => {
     });
   });
 });
-describe('Distribution Presets', () => {
-  test('should provide correct preset configurations', () => {
+describe('Distribution Presets', () => { test('should provide correct preset configurations', () => {
     expect(DistributionPresets.linear.type).toBe('linear');
     expect(DistributionPresets.exponential.type).toBe('exponential');
     expect(DistributionPresets.gaussian.type).toBe('gaussian');
-    expect(DistributionPresets.uniform.minWeight).toBe(1);
-  });
-  test('should all have normalize enabled', () => {
-    Object.values(DistributionPresets).forEach(preset => {)
-  expect(preset.normalize).toBe(true);
-    });
+    expect(DistributionPresets.uniform.minWeight).toBe(1) });
+  test('should all have normalize enabled', () => { Object.values(DistributionPresets).forEach(preset => {)
+  expect(preset.normalize).toBe(true) });
   });
 });

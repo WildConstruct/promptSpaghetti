@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 
-export enum ConnectionState {
-  CONNECTED = 'connected',
+export enum ConnectionState { CONNECTED = 'connected',
   CONNECTING = 'connecting',
   DISCONNECTED = 'disconnected',
   RECONNECTING = 'reconnecting',
@@ -11,29 +10,27 @@ export enum ConnectionState {
   EXCELLENT = 'excellent',
   GOOD = 'good',
   FAIR = 'fair',
-  POOR = 'poor',
+  POOR = 'poor' }
   UNKNOWN = 'unknown'
-  export interface ConnectionMetrics {
-  latency: number;
+  export interface ConnectionMetrics { latency: number;
   packetLoss: number;
   bandwidth: number;
   jitter: number;
   lastMeasurement: number;
-  measurementCount: number;
-}
-}
-}
-export interface NetworkInfo {
-  type: 'wifi' | 'cellular' | 'ethernet' | 'unknown';
+  measurementCount: number }
+
+
+
+export interface NetworkInfo { type: 'wifi' | 'cellular' | 'ethernet' | 'unknown' }
   effectiveType: '2g' | '3g' | '4g' | 'slow-2g' | 'unknown';
   downlink: number;
   rtt: number;
   saveData: boolean;
-}
-}
-}
-export interface ConnectionStateData {
-  state: ConnectionState;
+
+
+
+
+export interface ConnectionStateData { state: ConnectionState;
   quality: ConnectionQuality;
   isOnline: boolean;
   lastConnected: number | null;
@@ -42,34 +39,34 @@ export interface ConnectionStateData {
   totalDowntime: number;
   metrics: ConnectionMetrics;
   networkInfo: NetworkInfo | null;
-  stateHistory: Array<{
+  stateHistory: Array<{ }
   state: ConnectionState;
   timestamp: number;
   reason?: string;
-}
-}>;
-}
-}
-export interface ConnectionStateConfig {
-  pingInterval: number;
+
+
+>;
+
+
+export interface ConnectionStateConfig { pingInterval: number;
   qualityCheckInterval: number;
-  latencyThreshold: {
+  latencyThreshold: { }
   excellent: number;
   good: number;
   fair: number;
-}
+
+
 };
-  packetLossThreshold: {
+  packetLossThreshold: { ,
   excellent: number;
   good: number;
-  fair: number;
-};
+  fair: number };
   maxHistorySize: number;
   offlineDetectionTimeout: number;
   onlineCheckUrl: string;
   enableNetworkInfoAPI: boolean;
   enablePerformanceMonitoring: boolean;
-}
+
 export class ConnectionStateManager extends EventEmitter {
   private state: ConnectionState = ConnectionState.DISCONNECTED;
   private quality: ConnectionQuality = ConnectionQuality.UNKNOWN;
@@ -80,20 +77,19 @@ export class ConnectionStateManager extends EventEmitter {
   private offlineTimer: NodeJS.Timeout | null = null;
   private performanceObserver: PerformanceObserver | null = null;
   private networkChangeHandler: (() => void) | null = null;
-  constructor(config: Partial<ConnectionStateConfig> = {}) {
-  super();
+  constructor(config: Partial<ConnectionStateConfig> = {}) { super();
   this.config = {
-  pingInterval: 5000, // 5 seconds,
-  qualityCheckInterval: 10000, // 10 seconds,
+  pingInterval: 5000, // 5 seconds
+  qualityCheckInterval: 10000, // 10 seconds
   latencyThreshold: {
   excellent: 50,  // < 50ms,
   good: 150,      // < 150ms,
-  fair: 300       // < 300ms,
+  fair: 300       // < 300ms }
 },
-  packetLossThreshold: {
+  packetLossThreshold: { ,
   excellent: 0.01, // < 1%,
   good: 0.05,      // < 5%,
-  fair: 0.15       // < 15%,
+  fair: 0.15       // < 15% }
 },
   maxHistorySize: 100,
       offlineDetectionTimeout: 15000, // 15 seconds
@@ -102,21 +98,20 @@ export class ConnectionStateManager extends EventEmitter {
       enablePerformanceMonitoring: true,
       ...config
     };
-    this.stateData = {
-  state: ConnectionState.DISCONNECTED,
+    this.stateData = { state: ConnectionState.DISCONNECTED,
   quality: ConnectionQuality.UNKNOWN,
   isOnline: navigator.onLine,
   lastConnected: null,
   disconnectedAt: null,
   reconnectAttempts: 0,
   totalDowntime: 0,
-  metrics: {
+  metrics: {,
   latency: 0,
   packetLoss: 0,
   bandwidth: 0,
   jitter: 0,
   lastMeasurement: Date.now(),
-  measurementCount: 0,
+  measurementCount: 0 }
 },
   networkInfo: null,
       stateHistory: [];
@@ -190,12 +185,12 @@ export class ConnectionStateManager extends EventEmitter {
         (newState === ConnectionState.DISCONNECTED || newState === ConnectionState.OFFLINE)) {
       this.updateDowntime();
     console.log(`Connection state changed: ${previousState} -> ${newState}${reason ? ` (${reason})` : ''}`);}
-    this.emit('state_changed', {)
+    this.emit('state_changed', { )
   previousState,
   newState,
   timestamp,
   reason,
-  stateData: this.getStateData(),
+  stateData: this.getStateData() }
 });
   /**
    * Update connection quality based on metrics
@@ -209,10 +204,10 @@ export class ConnectionStateManager extends EventEmitter {
       this.quality = newQuality;
       this.stateData.quality = newQuality;
       console.log(`Connection quality changed: ${previousQuality} -> ${newQuality}`);}
-      this.emit('quality_changed', {)
-  previousQuality,
-        newQuality,
-        metrics: { ...this.stateData.metrics },
+      this.emit('quality_changed', { )
+  previousQuality
+        newQuality }
+        metrics: { ...this.stateData.metrics }
         timestamp: Date.now();
   });
   /**
@@ -241,81 +236,75 @@ export class ConnectionStateManager extends EventEmitter {
   /**
    * Perform connection test
    */
-  async testConnection(): Promise<ConnectionMetrics> {
-
-  const startTime = performance.now();
+  async testConnection(): Promise<ConnectionMetrics> { const startTime = performance.now();
   try {
   const response = await fetch(this.config.onlineCheckUrl, {)
-  method: 'HEAD',
-  cache: 'no-cache',
-  timeout: 5000,
-} as any);
+  method: 'HEAD'
+  cache: 'no-cache'
+  timeout: 5000 }
+ as any);
       const endTime = performance.now();
       const latency = endTime - startTime;
-      const metrics: ConnectionMetrics = {
-  latency,
-  packetLoss: response.ok ? 0 : 1,
-  bandwidth: 0, // Would need separate bandwidth test,
-  jitter: Math.abs(latency - this.stateData.metrics.latency),
-  lastMeasurement: Date.now(),
-  measurementCount: this.stateData.metrics.measurementCount + 1,
+      const metrics: ConnectionMetrics = { latency
+  packetLoss: response.ok ? 0 : 1
+  bandwidth: 0, // Would need separate bandwidth test
+  jitter: Math.abs(latency - this.stateData.metrics.latency)
+  lastMeasurement: Date.now()
+  measurementCount: this.stateData.metrics.measurementCount + 1 }
 };
       return metrics;
-    } catch (error) {
-  const endTime = performance.now();
+ catch (error) { const endTime = performance.now();
   const latency = endTime - startTime;
   return {
-  latency,
-  packetLoss: 1,
-  bandwidth: 0,
-  jitter: 0,
-  lastMeasurement: Date.now(),
-  measurementCount: this.stateData.metrics.measurementCount + 1,
+  latency
+  packetLoss: 1
+  bandwidth: 0
+  jitter: 0
+  lastMeasurement: Date.now()
+  measurementCount: this.stateData.metrics.measurementCount + 1 }
 };
   /**
    * Get connection statistics
    */
-  getStatistics() {
-  const now = Date.now();
+  getStatistics() { const now = Date.now();
   const uptime = this.stateData.lastConnected ? now - this.stateData.lastConnected : 0;
   const stateFrequency = this.calculateStateFrequency();
   return {
-  currentState: this.state,
-  currentQuality: this.quality,
-  uptime,
-  totalDowntime: this.stateData.totalDowntime,
-  reconnectAttempts: this.stateData.reconnectAttempts,
-  averageLatency: this.stateData.metrics.latency,
-  packetLossRate: this.stateData.metrics.packetLoss,
-  measurementCount: this.stateData.metrics.measurementCount,
-  stateFrequency,
-  reliability: this.calculateReliability(),
-  lastMeasurement: this.stateData.metrics.lastMeasurement,
+  currentState: this.state
+  currentQuality: this.quality
+  uptime
+  totalDowntime: this.stateData.totalDowntime
+  reconnectAttempts: this.stateData.reconnectAttempts
+  averageLatency: this.stateData.metrics.latency
+  packetLossRate: this.stateData.metrics.packetLoss
+  measurementCount: this.stateData.metrics.measurementCount
+  stateFrequency
+  reliability: this.calculateReliability()
+  lastMeasurement: this.stateData.metrics.lastMeasurement }
 };
   /**
    * Reset connection state and metrics
    */
-  reset(): void {
-  this.stopAllTimers();
+  reset(): void { this.stopAllTimers();
   this.state = ConnectionState.DISCONNECTED;
   this.quality = ConnectionQuality.UNKNOWN;
   this.stateData = {
-  state: ConnectionState.DISCONNECTED,
-  quality: ConnectionQuality.UNKNOWN,
-  isOnline: navigator.onLine,
-  lastConnected: null,
-  disconnectedAt: null,
-  reconnectAttempts: 0,
-  totalDowntime: 0,
+  state: ConnectionState.DISCONNECTED
+  quality: ConnectionQuality.UNKNOWN
+  isOnline: navigator.onLine
+  lastConnected: null
+  disconnectedAt: null
+  reconnectAttempts: 0
+  totalDowntime: 0
   metrics: {
-  latency: 0,
-  packetLoss: 0,
-  bandwidth: 0,
-  jitter: 0,
-  lastMeasurement: Date.now(),
-  measurementCount: 0,
-},
-  networkInfo: null,
+  latency: 0
+  packetLoss: 0
+  bandwidth: 0
+  jitter: 0
+  lastMeasurement: Date.now()
+  measurementCount: 0 }
+
+  networkInfo: null
       stateHistory: [];
   };
     this.startQualityMonitoring();
@@ -323,8 +312,7 @@ export class ConnectionStateManager extends EventEmitter {
   /**
    * Cleanup and stop monitoring
    */
-  cleanup(): void {
-  this.stopAllTimers();
+  cleanup(): void { this.stopAllTimers();
   if (this.performanceObserver) {
   this.performanceObserver.disconnect();
   if (this.networkChangeHandler) {
@@ -334,28 +322,23 @@ export class ConnectionStateManager extends EventEmitter {
   /**
   * Initialize network monitoring
   */
-  private initializeNetworkMonitoring(): void {,
+  private initializeNetworkMonitoring(): void { }
   // Monitor online/offline events
-  this.networkChangeHandler = () => {
-  const isOnline = navigator.onLine;
+  this.networkChangeHandler = () => { const isOnline = navigator.onLine;
   this.stateData.isOnline = isOnline;
   if (isOnline) {
-  this.setState(ConnectionState.CONNECTING, 'Browser detected online');
-} else {
-        this.setState(ConnectionState.OFFLINE, 'Browser detected offline');
-    };
+  this.setState(ConnectionState.CONNECTING, 'Browser detected online') } else { this.setState(ConnectionState.OFFLINE, 'Browser detected offline') };
     window.addEventListener('online', this.networkChangeHandler);
     window.addEventListener('offline', this.networkChangeHandler);
     // Network Information API
-    if (this.config.enableNetworkInfoAPI && 'connection' in navigator) {
-  const connection = (navigator as any).connection;
+    if (this.config.enableNetworkInfoAPI && 'connection' in navigator) { const connection = (navigator as any).connection;
   const updateNetworkInfo = () => {
   this.stateData.networkInfo = {
-  type: connection.type || 'unknown',
-  effectiveType: connection.effectiveType || 'unknown',
-  downlink: connection.downlink || 0,
-  rtt: connection.rtt || 0,
-  saveData: connection.saveData || false,
+  type: connection.type || 'unknown'
+  effectiveType: connection.effectiveType || 'unknown'
+  downlink: connection.downlink || 0
+  rtt: connection.rtt || 0
+  saveData: connection.saveData || false }
 };
         this.emit('network_info_changed', this.stateData.networkInfo);
       };
@@ -364,8 +347,7 @@ export class ConnectionStateManager extends EventEmitter {
   /**
    * Initialize performance monitoring
    */
-  private initializePerformanceMonitoring(): void {
-  if (!this.config.enablePerformanceMonitoring || !window.PerformanceObserver) {
+  private initializePerformanceMonitoring(): void { if (!this.config.enablePerformanceMonitoring || !window.PerformanceObserver) {
   return;
   try {
   this.performanceObserver = new PerformanceObserver((entries) => {
@@ -373,73 +355,57 @@ export class ConnectionStateManager extends EventEmitter {
   if (entry.entryType === 'navigation') {
   const navEntry = entry as PerformanceNavigationTiming;
   this.updateMetrics({)
-  latency: navEntry.responseEnd - navEntry.requestStart,
-  bandwidth: navEntry.transferSize / (navEntry.loadEventEnd - navEntry.loadEventStart) * 1000,
+  latency: navEntry.responseEnd - navEntry.requestStart
+  bandwidth: navEntry.transferSize / (navEntry.loadEventEnd - navEntry.loadEventStart) * 1000 }
 });
       });
       this.performanceObserver.observe({ entryTypes: ['navigation', 'resource'] });
-    } catch (error) {
-  console.warn('Performance monitoring not available:', error);
+ catch (error) { console.warn('Performance monitoring not available:', error);
   /**
   * Start ping monitoring
   */
-  private startPingMonitoring(): void {,
+  private startPingMonitoring(): void { }
   if (this.pingTimer) return;
-  this.pingTimer = setInterval(async () => {
-  try {
+  this.pingTimer = setInterval(async () => { try {
   const metrics = await this.testConnection();
   this.updateMetrics(metrics);
   this.updateQuality();
   // Detect disconnection based on failed pings
   if (metrics.packetLoss >= 1) {
-  this.handlePingFailure();
-} catch (error) {
-        this.handlePingFailure();
-    }, this.config.pingInterval);
+  this.handlePingFailure() } catch (error) { this.handlePingFailure() }, this.config.pingInterval);
   /**
    * Stop ping monitoring
    */
-  private stopPingMonitoring(): void {
-  if (this.pingTimer) {
+  private stopPingMonitoring(): void { if (this.pingTimer) {
   clearInterval(this.pingTimer);
   this.pingTimer = null;
   /**
   * Start quality monitoring
   */
-  private startQualityMonitoring(): void {,
+  private startQualityMonitoring(): void { }
   if (this.qualityTimer) return;
-  this.qualityTimer = setInterval(() => {
-  this.updateQuality();
-}, this.config.qualityCheckInterval);
+  this.qualityTimer = setInterval(() => { this.updateQuality() }, this.config.qualityCheckInterval);
   /**
    * Handle ping failure
    */
-  private handlePingFailure(): void {
-    if (this.offlineTimer) return; // Already handling
+  private handlePingFailure(): void { if (this.offlineTimer) return; // Already handling
     this.offlineTimer = setTimeout(() => {
       if (this.state === ConnectionState.CONNECTED) {
         this.setState(ConnectionState.DISCONNECTED, 'Ping failures detected');
-      this.offlineTimer = null;
-    }, this.config.offlineDetectionTimeout);
+      this.offlineTimer = null }, this.config.offlineDetectionTimeout);
   /**
    * Calculate connection quality based on metrics
    */
-  private calculateQuality(): ConnectionQuality {
-    if (this.stateData.metrics.measurementCount === 0) {
+  private calculateQuality(): ConnectionQuality { if (this.stateData.metrics.measurementCount === 0) {
       return ConnectionQuality.UNKNOWN;
     const latency = this.stateData.metrics.latency;
     const packetLoss = this.stateData.metrics.packetLoss;
     // Determine quality based on thresholds
     if (latency <= this.config.latencyThreshold.excellent && )
         packetLoss <= this.config.packetLossThreshold.excellent) {
-      return ConnectionQuality.EXCELLENT;
-    } else if (latency <= this.config.latencyThreshold.good && )
-               packetLoss <= this.config.packetLossThreshold.good) {
-      return ConnectionQuality.GOOD;
-    } else if (latency <= this.config.latencyThreshold.fair && )
-               packetLoss <= this.config.packetLossThreshold.fair) {
-      return ConnectionQuality.FAIR;
-    } else {
+      return ConnectionQuality.EXCELLENT } else if (latency <= this.config.latencyThreshold.good && )
+               packetLoss <= this.config.packetLossThreshold.good) { return ConnectionQuality.GOOD } else if (latency <= this.config.latencyThreshold.fair && )
+               packetLoss <= this.config.packetLossThreshold.fair) { return ConnectionQuality.FAIR } else {
       return ConnectionQuality.POOR;
   /**
    * Add state to history
@@ -447,8 +413,7 @@ export class ConnectionStateManager extends EventEmitter {
   private addToStateHistory(state: ConnectionState, timestamp: number, reason?: string): void {
     this.stateData.stateHistory.push({ state, timestamp, reason });
     // Trim history if too large
-    if (this.stateData.stateHistory.length > this.config.maxHistorySize) {
-  this.stateData.stateHistory = this.stateData.stateHistory.slice(-this.config.maxHistorySize);
+    if (this.stateData.stateHistory.length > this.config.maxHistorySize) { this.stateData.stateHistory = this.stateData.stateHistory.slice(-this.config.maxHistorySize);
   /**
   * Update total downtime
   */
@@ -459,14 +424,14 @@ export class ConnectionStateManager extends EventEmitter {
   /**
   * Calculate state frequency
   */
-  private calculateStateFrequency(): Record<ConnectionState, number> {,
-  const frequency: Record<ConnectionState, number> = {,
-  [ConnectionState.CONNECTED]: 0,
-  [ConnectionState.CONNECTING]: 0,
-  [ConnectionState.DISCONNECTED]: 0,
-  [ConnectionState.RECONNECTING]: 0,
-  [ConnectionState.FAILED]: 0,
-  [ConnectionState.OFFLINE]: 0,
+  private calculateStateFrequency(): Record<ConnectionState, number> {
+  const frequency: Record<ConnectionState, number> = {
+  [ConnectionState.CONNECTED]: 0
+  [ConnectionState.CONNECTING]: 0
+  [ConnectionState.DISCONNECTED]: 0
+  [ConnectionState.RECONNECTING]: 0
+  [ConnectionState.FAILED]: 0
+  [ConnectionState.OFFLINE]: 0 }
 };
     for (const entry of this.stateData.stateHistory) {
       frequency[entry.state]++;

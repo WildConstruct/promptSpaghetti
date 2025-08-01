@@ -11,10 +11,10 @@ import {
   CreateWorkflowApprovalSchema,
   ApproveWorkflowSchema,
   RejectWorkflowSchema
-} from '../database/workflow-models';
+ from '../database/workflow-models';
 
-}
-}
+
+
 export interface ApprovalCriteria {
   id: string;
   workspace_id: string;
@@ -25,12 +25,13 @@ export interface ApprovalCriteria {
   is_required: boolean;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApprovalRule {
   id: string;
   workspace_id: string;
@@ -60,12 +61,13 @@ export interface ApprovalRule {
   
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApprovalRequest {
   id: string;
   workspace_id: string;
@@ -97,12 +99,13 @@ export interface ApprovalRequest {
   
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewerAssignment {
   id: string;
   approval_request_id: string;
@@ -124,16 +127,17 @@ export interface ReviewerAssignment {
     passed: boolean;
     score: number;
     comment?: string;
-}
-}
-  }>;
+
+
+
+>;
   
   created_at: Date;
   updated_at: Date;
-}
 
-}
-}
+
+
+
 export interface ApprovalNotification {
   id: string;
   approval_request_id: string;
@@ -145,9 +149,10 @@ export interface ApprovalNotification {
   read_at?: Date;
   action_taken?: string;
   created_at: Date;
-}
-}
-}
+
+
+
+
 
 export class ApprovalService {
   private dao: WorkflowDAO;
@@ -156,7 +161,7 @@ export class ApprovalService {
   constructor(db: Database) {
     this.db = db;
     this.dao = new WorkflowDAO(db);
-  }
+
 
   // =============================================================================
   // APPROVAL CRITERIA MANAGEMENT
@@ -179,7 +184,7 @@ export class ApprovalService {
     ]);
 
     return result.rows[0];
-  }
+
 
   async getApprovalCriteria(workspaceId: string): Promise<ApprovalCriteria[]> {
 
@@ -193,7 +198,7 @@ export class ApprovalService {
       ...row,
       conditions: JSON.parse(row.conditions || '{}')
     }));
-  }
+
 
   async updateApprovalCriteria(id: string, updates: Partial<ApprovalCriteria>): Promise<ApprovalCriteria | null> {
 
@@ -213,7 +218,7 @@ export class ApprovalService {
     `, [id, ...values]);
 
     return result.rows[0] || null;
-  }
+
 
   async deleteApprovalCriteria(id: string): Promise<boolean> {
 
@@ -222,7 +227,7 @@ export class ApprovalService {
       [id]
     );
     return result.rowCount > 0;
-  }
+
 
   // =============================================================================
   // APPROVAL RULES MANAGEMENT
@@ -264,7 +269,7 @@ export class ApprovalService {
       escalation_reviewers: JSON.parse(result.rows[0].escalation_reviewers || '[]'),
       auto_approval_conditions: JSON.parse(result.rows[0].auto_approval_conditions || '{}')
     };
-  }
+
 
   async getApprovalRules(workspaceId: string, transitionId?: string): Promise<ApprovalRule[]> {
 
@@ -277,7 +282,7 @@ export class ApprovalService {
     if (transitionId) {
       query += ' AND transition_id = $2';
       params.push(transitionId);
-    }
+
 
     query += ' ORDER BY name';
 
@@ -289,7 +294,7 @@ export class ApprovalService {
       escalation_reviewers: JSON.parse(row.escalation_reviewers || '[]'),
       auto_approval_conditions: JSON.parse(row.auto_approval_conditions || '{}')
     }));
-  }
+
 
   // =============================================================================
   // REVIEWER ASSIGNMENT
@@ -316,8 +321,8 @@ export class ApprovalService {
             'primary',
             'Automatic assignment based on resource ownership'
           ));
-        }
-      }
+
+
       break;
 
     case 'role_based':
@@ -331,8 +336,8 @@ export class ApprovalService {
             'primary',
             'Role-based assignment'
           ));
-        }
-      }
+
+
       break;
 
     case 'round_robin':
@@ -346,18 +351,18 @@ export class ApprovalService {
             'primary',
             'Round-robin assignment'
           ));
-        }
-      }
+
+
       break;
 
     case 'manual':
     default:
       // Manual assignment will be handled separately
       break;
-    }
+
 
     return assignments;
-  }
+
 
   private async createReviewerAssignment(
     approvalRequestId: string,
@@ -377,7 +382,7 @@ export class ApprovalService {
       ...result.rows[0],
       criteria_evaluations: {}
     };
-  }
+
 
   private async getResourceOwners(resourceId: string): Promise<string[]> {
 
@@ -394,7 +399,7 @@ export class ApprovalService {
     `, [resourceId]);
 
     return result.rows.map(row => row.owner);
-  }
+
 
   private async getRoleBasedReviewers(workspaceId: string, resourceId: string): Promise<string[]> {
 
@@ -410,7 +415,7 @@ export class ApprovalService {
     `, [resourceId]);
 
     return result.rows.map(row => row.user_id);
-  }
+
 
   private async getRoundRobinReviewers(workspaceId: string, count: number): Promise<string[]> {
 
@@ -430,7 +435,7 @@ export class ApprovalService {
     `, [workspaceId, count]);
 
     return result.rows.map(row => row.user_id);
-  }
+
 
   // =============================================================================
   // APPROVAL REQUEST MANAGEMENT
@@ -457,7 +462,7 @@ export class ApprovalService {
 
       if (!rule) {
         throw new Error('No approval rule found for this transition');
-      }
+
 
       // Create approval request
       const result = await client.query(`
@@ -496,7 +501,7 @@ export class ApprovalService {
 
       return approvalRequest;
     });
-  }
+
 
   async getApprovalRequests(
     workspaceId: string,
@@ -507,7 +512,7 @@ export class ApprovalService {
       resource_id?: string;
       overdue?: boolean;
       urgency?: string;
-    } = {}
+ = {}
   ): Promise<ApprovalRequest[]> {
 
     let query = `
@@ -524,12 +529,12 @@ export class ApprovalService {
     if (filters.status) {
       query += ` AND ar.status = $${paramIndex++}`;
       params.push(filters.status);
-    }
+
 
     if (filters.requester_id) {
       query += ` AND ar.requester_id = $${paramIndex++}`;
       params.push(filters.requester_id);
-    }
+
 
     if (filters.reviewer_id) {
       query += ` AND EXISTS (
@@ -538,21 +543,21 @@ export class ApprovalService {
         AND ra2.reviewer_id = $${paramIndex++}
       )`;
       params.push(filters.reviewer_id);
-    }
+
 
     if (filters.resource_id) {
       query += ` AND ar.resource_id = $${paramIndex++}`;
       params.push(filters.resource_id);
-    }
+
 
     if (filters.urgency) {
       query += ` AND ar.urgency = $${paramIndex++}`;
       params.push(filters.urgency);
-    }
+
 
     if (filters.overdue) {
       query += ' AND ar.due_date < NOW() AND ar.status IN (\'pending\', \'in_review\')';
-    }
+
 
     query += `
       GROUP BY ar.id
@@ -568,7 +573,7 @@ export class ApprovalService {
         ? (parseInt(row.approved_count) / row.required_approvals) * 100 
         : 0
     }));
-  }
+
 
   async getReviewerAssignments(approvalRequestId: string): Promise<ReviewerAssignment[]> {
 
@@ -584,7 +589,7 @@ export class ApprovalService {
       ...row,
       criteria_evaluations: JSON.parse(row.criteria_evaluations || '{}')
     }));
-  }
+
 
   // =============================================================================
   // APPROVAL ACTIONS
@@ -638,10 +643,10 @@ export class ApprovalService {
       if (approvedCount >= request.required_approvals) {
         newStatus = 'approved';
         completed = true;
-      } else if (rejectedCount > 0) {
+ else if (rejectedCount > 0) {
         newStatus = 'rejected';
         completed = true;
-      }
+
 
       // Update approval request status
       if (completed) {
@@ -654,14 +659,14 @@ export class ApprovalService {
         // If approved, execute the state transition
         if (newStatus === 'approved') {
           await this.executeApprovedTransition(request);
-        }
-      } else {
+
+ else {
         await client.query(`
           UPDATE approval_requests 
           SET status = 'in_review', current_approvals = $1
           WHERE id = $2
         `, [approvedCount, approvalRequestId]);
-      }
+
 
       return {
         success: true,
@@ -669,7 +674,7 @@ export class ApprovalService {
         rejected: newStatus === 'rejected'
       };
     });
-  }
+
 
   private async executeApprovedTransition(request: ApprovalRequest): Promise<void> {
 
@@ -681,9 +686,9 @@ export class ApprovalService {
       metadata: {
         approval_request_id: request.id,
         approved_by: 'system'
-      }
+
     }, 'system');
-  }
+
 
   // =============================================================================
   // ESCALATION MANAGEMENT
@@ -703,8 +708,8 @@ export class ApprovalService {
 
     for (const request of overdueRequests.rows) {
       await this.escalateApprovalRequest(request);
-    }
-  }
+
+
 
   private async escalateApprovalRequest(request: unknown): Promise<void> {
 
@@ -718,7 +723,7 @@ export class ApprovalService {
         'escalated',
         'Escalated due to timeout'
       );
-    }
+
 
     // Update request status
     await this.db.query(`
@@ -729,7 +734,7 @@ export class ApprovalService {
 
     // Send escalation notifications
     await this.sendEscalationNotifications(request, escalationReviewers);
-  }
+
 
   // =============================================================================
   // NOTIFICATION SYSTEM
@@ -751,8 +756,8 @@ export class ApprovalService {
         `Approval Required: ${request.title}`,
         `You have been assigned to review an approval request for ${request.title}. Please review and provide your decision.`
       ]);
-    }
-  }
+
+
 
   private async sendEscalationNotifications(
     request: unknown,
@@ -770,8 +775,8 @@ export class ApprovalService {
         `Escalated Approval: ${request.title}`,
         'An approval request has been escalated to you due to timeout. Please review urgently.'
       ]);
-    }
-  }
+
+
 
   // =============================================================================
   // STATISTICS AND REPORTING
@@ -786,7 +791,7 @@ export class ApprovalService {
     by_urgency: Record<string, number>;
     by_status: Record<string, number>;
     top_reviewers: Array<{ reviewer_id: string; count: number }>;
-  }> {
+> {
     const [
       totalResult,
       pendingResult,
@@ -828,5 +833,4 @@ export class ApprovalService {
         count: parseInt(row.count)
       }))
     };
-  }
-}
+

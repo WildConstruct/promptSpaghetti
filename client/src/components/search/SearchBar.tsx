@@ -8,7 +8,8 @@
  */
 import React, { useState, useRef, useEffect } from 'react';
 import { useSearch } from './SearchContext';
-}
+
+
 interface SearchBarProps {
   placeholder?: string;
   autoFocus?: boolean;
@@ -16,14 +17,15 @@ interface SearchBarProps {
   showSuggestions?: boolean;
   onSearch?: (query: string) => void;
   className?: string;
-  export const SearchBar: React.FC<SearchBarProps> = ({,)
+  export const SearchBar: React.FC<SearchBarProps> = ({),
   placeholder = 'Search...',
   autoFocus = false,
   showHistory = true,
   showSuggestions = true,
   onSearch,
   className = ''
-}
+
+
 }) => {
   const {
     query,
@@ -33,7 +35,7 @@ interface SearchBarProps {
     error,
     hasActiveFilters,
     resetQuery
-  } = useSearch();
+ = useSearch();
   const [isOpen, setIsOpen] = useState(false);
   const [suggestions] = useState<string>([)
     'name:',
@@ -206,7 +208,7 @@ interface SearchBarProps {
   borderTopColor: '#3b82f6',
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
-}} />
+} />
             </div>
           )}
           {/* Clear button */}
@@ -229,7 +231,7 @@ interface SearchBarProps {
   color: '#FFFFFF',
   borderRadius: '6px',
   margin: '4px',
-}}
+}
             disabled={isLoading || !query.text.trim()}
             title="Search"
           >
@@ -247,7 +249,7 @@ interface SearchBarProps {
   borderRadius: '4px',
   fontSize: '12px',
   color: '#dc2626',
-}}>
+}>
           {error}
         </div>
       )}
@@ -264,7 +266,7 @@ interface SearchBarProps {
   display: 'flex',
   alignItems: 'center',
   gap: '4px',
-}}>
+}>
           <span>🔽 Filters active</span>
           <button
             onClick={resetQuery}
@@ -275,7 +277,7 @@ interface SearchBarProps {
   cursor: 'pointer',
   fontSize: '11px',
   textDecoration: 'underline',
-}}
+}
           >
             Clear all
           </button>
@@ -295,10 +297,10 @@ interface SearchBarProps {
                   onClick={() => handleSuggestionClick(suggestion)}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = '#f9fafb';
-                  }}
+}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
-                  }}
+}
                 >
                   <span style={{ color: '#3b82f6' }}>🏷️</span>
                   <span>{suggestion}</span>
@@ -325,10 +327,10 @@ interface SearchBarProps {
                   onClick={() => handleHistoryClick(historyItem)}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = '#f9fafb';
-                  }}
+}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
-                  }}
+}
                 >
                   <span style={{ color: '#6b7280' }}>🕐</span>
                   <span>{historyItem.text}</span>
@@ -339,7 +341,7 @@ interface SearchBarProps {
   backgroundColor: '#dbeafe',
   padding: '2px 6px',
   borderRadius: '10px',
-}}>
+}>
                       +{historyItem.filters.length} filters
                     </span>
                   )}
@@ -355,7 +357,7 @@ interface SearchBarProps {
   textAlign: 'center',
   color: '#9ca3af',
   fontSize: '14px',
-}}>
+}>
               Start typing to search...
             </div>
           )}

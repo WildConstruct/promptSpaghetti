@@ -15,7 +15,7 @@ import {
   AnalyticsEventSchema,
   AnalyticsQuerySchema,
   CustomReportSchema
-} from './analytics.types';
+ from './analytics.types';
 
 export class AnalyticsService {
   constructor(private db: Database) {}
@@ -40,7 +40,7 @@ export class AnalyticsService {
     );
 
     return this.mapEventRow(event);
-  }
+
 
   async batchTrackEvents(events: AnalyticsEventInput[]): Promise<AnalyticsEvent[]> {
 
@@ -68,7 +68,7 @@ export class AnalyticsService {
     );
 
     return results.map(this.mapEventRow);
-  }
+
 
   // Query Analytics Data
   async queryAnalytics(queryInput: AnalyticsQueryInput): Promise<any[]> {
@@ -79,7 +79,7 @@ export class AnalyticsService {
     const results = await this.db.query(sql, params);
     
     return results;
-  }
+
 
   // Template Metrics
   async getTemplateMetrics(
@@ -135,11 +135,11 @@ export class AnalyticsService {
         error_count: parseInt(metricsRow.error_count) || 0,
         success_rate: parseFloat(metricsRow.success_rate) || 1.0,
         conversion_rate: this.calculateConversionRate(metricsRow)
-  }
+
       demographics,
       trends
     };
-  }
+
 
   // Creator Dashboard
   async getCreatorDashboard(
@@ -160,7 +160,7 @@ export class AnalyticsService {
 
     if (templateIds.length === 0) {
       return this.getEmptyCreatorDashboard(creatorId, timeRange, start, end);
-    }
+
 
     // Get overview metrics
     const overview = await this.getCreatorOverview(templateIds, start, end);
@@ -184,7 +184,7 @@ export class AnalyticsService {
       traffic_metrics: trafficMetrics,
       financial_metrics: financialMetrics
     };
-  }
+
 
   // Custom Reports
   async createCustomReport(
@@ -210,7 +210,7 @@ export class AnalyticsService {
     );
 
     return this.mapReportRow(report);
-  }
+
 
   async getCustomReports(creatorId: string): Promise<CustomReport[]> {
 
@@ -220,7 +220,7 @@ export class AnalyticsService {
     );
 
     return reports.map(this.mapReportRow);
-  }
+
 
   async generateReport(reportId: string): Promise<any> {
 
@@ -231,7 +231,7 @@ export class AnalyticsService {
 
     if (!report) {
       throw new Error('Report not found');
-    }
+
 
     const configuration = JSON.parse(report.configuration);
     const results = await this.queryAnalytics(configuration.query);
@@ -242,7 +242,7 @@ export class AnalyticsService {
       data: results,
       configuration: configuration.visualization
     };
-  }
+
 
   // Analytics Insights
   async generateInsights(
@@ -265,7 +265,7 @@ export class AnalyticsService {
     insights.push(...opportunityInsights);
 
     return insights;
-  }
+
 
   // Helper Methods
   private buildAnalyticsQuery(query: AnalyticsQuery): { sql: string; params: any[] } {
@@ -286,7 +286,7 @@ export class AnalyticsService {
         return `COUNT(DISTINCT CASE WHEN event_type = '${metric}' THEN user_id END) as ${metric}_unique`;
       default:
         return `COUNT(CASE WHEN event_type = '${metric}' THEN 1 END) as ${metric}_count`;
-      }
+
     });
 
     sql += metricSelects.join(', ');
@@ -294,7 +294,7 @@ export class AnalyticsService {
     // Group by fields
     if (query.group_by && query.group_by.length > 0) {
       sql += ', ' + query.group_by.join(', ');
-    }
+
 
     sql += ' FROM analytics_events WHERE 1=1';
 
@@ -303,13 +303,13 @@ export class AnalyticsService {
       sql += ` AND template_id IN (SELECT id FROM templates WHERE creator_id = $${paramIndex})`;
       params.push(query.creator_id);
       paramIndex++;
-    }
+
 
     if (query.template_ids && query.template_ids.length > 0) {
       sql += ` AND template_id = ANY($${paramIndex})`;
       params.push(query.template_ids);
       paramIndex++;
-    }
+
 
     // Time range
     const { start, end } = this.getTimeRangeDates(query.time_range, query.start_date, query.end_date);
@@ -323,31 +323,31 @@ export class AnalyticsService {
         sql += ` AND metadata->>'location'->>'country' = ANY($${paramIndex})`;
         params.push(query.filters.countries);
         paramIndex++;
-      }
+
 
       if (query.filters.device_types && query.filters.device_types.length > 0) {
         sql += ` AND metadata->>'device_type' = ANY($${paramIndex})`;
         params.push(query.filters.device_types);
         paramIndex++;
-      }
-    }
+
+
 
     // Group by
     if (query.group_by && query.group_by.length > 0) {
       sql += ' GROUP BY ' + query.group_by.join(', ');
-    }
+
 
     // Sort
     if (query.sort) {
       sql += ` ORDER BY ${query.sort.field} ${query.sort.direction}`;
-    }
+
 
     // Limit and offset
     sql += ` LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
     params.push(query.limit || 100, query.offset || 0);
 
     return { sql, params };
-  }
+
 
   private getTimeRangeDates(
     timeRange: TimeRange,
@@ -381,10 +381,10 @@ export class AnalyticsService {
       break;
     default:
       start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
-    }
+
 
     return { start, end };
-  }
+
 
   private async getTemplateDemographics(
     templateId: string,
@@ -429,7 +429,7 @@ export class AnalyticsService {
       })),
       user_segments: [] // Placeholder for user segments
     };
-  }
+
 
   private async getTemplateTrends(
     templateId: string,
@@ -461,15 +461,15 @@ export class AnalyticsService {
         views_growth: 0, // Calculate based on previous period
         downloads_growth: 0,
         revenue_growth: 0
-      }
+
     };
-  }
+
 
   private calculateConversionRate(metricsRow: any): number {
     const views = parseInt(metricsRow.views) || 0;
     const downloads = parseInt(metricsRow.downloads) || 0;
     return views > 0 ? (downloads / views) * 100 : 0;
-  }
+
 
   private getEmptyCreatorDashboard(
     creatorId: string,
@@ -495,8 +495,8 @@ export class AnalyticsService {
           views: 0,
           downloads: 0,
           revenue: 0
-        }
-  }
+
+
       performance_summary: {
         views_trend: 0,
         downloads_trend: 0,
@@ -504,23 +504,23 @@ export class AnalyticsService {
         rating_trend: 0,
         market_share: 0,
         ranking_position: 0
-  }
+
       traffic_metrics: {
         unique_visitors: 0,
         returning_visitors: 0,
         bounce_rate: 0,
         average_session_duration: 0,
         top_referrers: []
-  }
+
       financial_metrics: {
         gross_revenue: 0,
         net_revenue: 0,
         platform_fee: 0,
         payout_amount: 0,
         revenue_by_template: []
-      }
+
     };
-  }
+
 
   private async getCreatorOverview(templateIds: string[], start: Date, end: Date): Promise<any> {
 
@@ -538,9 +538,9 @@ export class AnalyticsService {
         views: 0,
         downloads: 0,
         revenue: 0
-      }
+
     };
-  }
+
 
   private async getCreatorPerformance(templateIds: string[], start: Date, end: Date): Promise<any> {
 
@@ -553,7 +553,7 @@ export class AnalyticsService {
       market_share: 0,
       ranking_position: 0
     };
-  }
+
 
   private async getCreatorTraffic(templateIds: string[], start: Date, end: Date): Promise<any> {
 
@@ -565,7 +565,7 @@ export class AnalyticsService {
       average_session_duration: 0,
       top_referrers: []
     };
-  }
+
 
   private async getCreatorFinancials(templateIds: string[], start: Date, end: Date): Promise<any> {
 
@@ -577,25 +577,25 @@ export class AnalyticsService {
       payout_amount: 0,
       revenue_by_template: []
     };
-  }
+
 
   private async generateTrendInsights(creatorId: string, templateIds?: string[]): Promise<AnalyticsInsight[]> {
 
     // Implementation placeholder
     return [];
-  }
+
 
   private async detectAnomalies(creatorId: string, templateIds?: string[]): Promise<AnalyticsInsight[]> {
 
     // Implementation placeholder
     return [];
-  }
+
 
   private async findOpportunities(creatorId: string, templateIds?: string[]): Promise<AnalyticsInsight[]> {
 
     // Implementation placeholder
     return [];
-  }
+
 
   private mapEventRow(row: any): AnalyticsEvent {
     return {
@@ -608,7 +608,7 @@ export class AnalyticsService {
       timestamp: new Date(row.timestamp),
       created_at: new Date(row.created_at)
     };
-  }
+
 
   private mapReportRow(row: any): CustomReport {
     return {
@@ -622,5 +622,4 @@ export class AnalyticsService {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at)
     };
-  }
-}
+

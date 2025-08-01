@@ -48,7 +48,7 @@ class TestDataCleanup {
       sizeThresholds: {
         maxFileSize: 100,
         maxDirectorySize: 1000
-      }
+
     };
     
     this.statistics = {
@@ -57,7 +57,7 @@ class TestDataCleanup {
       bytesFreed: 0,
       errorsEncountered: 0
     };
-  }
+
 
   log(message: string, level: string = 'info'): void {
     const timestamp = new Date().toISOString();
@@ -70,7 +70,7 @@ class TestDataCleanup {
     };
     
     console.log(`[${timestamp}] ${colors[level] || chalk.white}${message}${chalk.reset('')}`);
-  }
+
 
   async run(options: any = {}): Promise<void> {
     this.log('Starting test data cleanup...', 'header');
@@ -81,12 +81,12 @@ class TestDataCleanup {
         aggressive = false,
         maxAge = 7,
         skipBackup = false
-      } = options;
+ = options;
 
       // Create backup before cleanup (unless skipped)
       if (!skipBackup && !dryRun) {
         await this.createBackup();
-      }
+
 
       // Clean temporary files
       await this.cleanTemporaryFiles(dryRun, maxAge);
@@ -109,19 +109,18 @@ class TestDataCleanup {
       // Aggressive cleanup (only if explicitly enabled)
       if (aggressive) {
         await this.aggressiveCleanup(dryRun);
-      }
+
 
       // Clean empty directories
       await this.cleanEmptyDirectories(dryRun);
 
       // Generate report
       this.generateReport(dryRun);
-
-    } catch (error) {
+ catch (error) {
       this.log(`Cleanup failed: ${error.message}`, 'error');
       throw error;
-    }
-  }
+
+
 
   async createBackup(): Promise<void> {
     this.log('Creating backup before cleanup...', 'info');
@@ -143,7 +142,7 @@ class TestDataCleanup {
     await fs.writeFile(manifestPath, JSON.stringify(manifest, null, 2));
     
     this.log(`Backup manifest created: ${manifestPath}`, 'success');
-  }
+
 
   async cleanTemporaryFiles(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning temporary files...', 'info');
@@ -166,8 +165,8 @@ class TestDataCleanup {
           dryRun,
           type: 'temporary'
         });
-      }
-    }
+
+
 
     // Clean temp files in common directories
     const commonDirs = ['tests', 'test-data', 'coverage'];
@@ -175,9 +174,9 @@ class TestDataCleanup {
       const fullPath = path.join(this.projectRoot, dir);
       if (await this.exists(fullPath)) {
         await this.cleanFilesInDirectory(fullPath, tempPatterns, maxAge, dryRun);
-      }
-    }
-  }
+
+
+
 
   async cleanTestDatabases(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning test databases...', 'info');
@@ -199,9 +198,9 @@ class TestDataCleanup {
       const fullPath = path.join(this.projectRoot, dir);
       if (await this.exists(fullPath)) {
         await this.cleanFilesInDirectory(fullPath, dbPatterns, maxAge, dryRun);
-      }
-    }
-  }
+
+
+
 
   async cleanTestSnapshots(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning test snapshots...', 'info');
@@ -222,9 +221,9 @@ class TestDataCleanup {
       const fullPath = path.join(this.projectRoot, dir);
       if (await this.exists(fullPath)) {
         await this.cleanFilesInDirectory(fullPath, snapshotPatterns, maxAge, dryRun);
-      }
-    }
-  }
+
+
+
 
   async cleanCoverageReports(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning coverage reports...', 'info');
@@ -244,8 +243,8 @@ class TestDataCleanup {
             path: filePath,
             mtime: stats.mtime
           });
-        }
-      }
+
+
       
       // Sort by modification time, keep the latest
       reports.sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
@@ -255,10 +254,10 @@ class TestDataCleanup {
         const age = (Date.now() - report.mtime.getTime()) / (1000 * 60 * 60 * 24);
         if (age > maxAge) {
           await this.removeFile(report.path, dryRun, 'coverage report');
-        }
-      }
-    }
-  }
+
+
+
+
 
   async cleanBrowserTestResults(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning browser test results...', 'info');
@@ -277,9 +276,9 @@ class TestDataCleanup {
           dryRun,
           type: 'browser test results'
         });
-      }
-    }
-  }
+
+
+
 
   async cleanLogFiles(dryRun: boolean, maxAge: number): Promise<void> {
     this.log('Cleaning log files...', 'info');
@@ -302,9 +301,9 @@ class TestDataCleanup {
       const fullPath = path.join(this.projectRoot, dir);
       if (await this.exists(fullPath)) {
         await this.cleanFilesInDirectory(fullPath, logPatterns, maxAge, dryRun);
-      }
-    }
-  }
+
+
+
 
   async aggressiveCleanup(dryRun: boolean): Promise<void> {
     this.log('Performing aggressive cleanup...', 'warning');
@@ -319,12 +318,12 @@ class TestDataCleanup {
       const fullPath = path.join(this.projectRoot, dir);
       if (await this.exists(fullPath)) {
         await this.removeDirectory(fullPath, dryRun, 'test node_modules');
-      }
-    }
+
+
     
     // Clean large test files
     await this.cleanLargeTestFiles(dryRun);
-  }
+
 
   async cleanLargeTestFiles(dryRun: boolean): Promise<void> {
     const maxSize = this.cleanupConfig.sizeThresholds.maxFileSize * 1024 * 1024; // MB to bytes
@@ -335,9 +334,9 @@ class TestDataCleanup {
       const fullPath = path.join(this.projectRoot, dir);
       if (await this.exists(fullPath)) {
         await this.findAndRemoveLargeFiles(fullPath, maxSize, dryRun);
-      }
-    }
-  }
+
+
+
 
   async findAndRemoveLargeFiles(directory: string, maxSize: number, dryRun: boolean): Promise<void> {
     try {
@@ -348,18 +347,18 @@ class TestDataCleanup {
         
         if (entry.isDirectory()) {
           await this.findAndRemoveLargeFiles(fullPath, maxSize, dryRun);
-        } else if (entry.isFile()) {
+ else if (entry.isFile()) {
           const stats = await fs.stat(fullPath);
           if (stats.size > maxSize) {
             const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
             await this.removeFile(fullPath, dryRun, `large test file (${sizeMB}MB)`);
-          }
-        }
-      }
-    } catch (error) {
+
+
+
+ catch (error) {
       this.statistics.errorsEncountered++;
-    }
-  }
+
+
 
   async cleanEmptyDirectories(dryRun: boolean): Promise<void> {
     this.log('Cleaning empty directories...', 'info');
@@ -371,9 +370,9 @@ class TestDataCleanup {
     for (const dir of cleanupDirs) {
       if (await this.exists(dir)) {
         await this.removeEmptyDirectories(dir, dryRun);
-      }
-    }
-  }
+
+
+
 
   async removeEmptyDirectories(directory: string, dryRun: boolean): Promise<void> {
     try {
@@ -385,18 +384,18 @@ class TestDataCleanup {
         const stats = await fs.stat(fullPath);
         if (stats.isDirectory()) {
           await this.removeEmptyDirectories(fullPath, dryRun);
-        }
-      }
+
+
       
       // Check if directory is now empty
       const remainingEntries = await fs.readdir(directory);
       if (remainingEntries.length === 0) {
         await this.removeDirectory(directory, dryRun, 'empty directory');
-      }
-    } catch (error) {
+
+ catch (error) {
       this.statistics.errorsEncountered++;
-    }
-  }
+
+
 
   async cleanDirectory(directory: string, options: any): Promise<void> {
     const { maxAge, patterns = [], dryRun, type = 'directory' } = options;
@@ -412,21 +411,21 @@ class TestDataCleanup {
         if (stats.mtime < cutoffDate) {
           if (entry.isDirectory()) {
             await this.removeDirectory(fullPath, dryRun, type);
-          } else {
+ else {
             // Check if file matches cleanup patterns
             const shouldClean = patterns.length === 0 || 
               patterns.some(pattern => pattern.test(entry.name));
             
             if (shouldClean) {
               await this.removeFile(fullPath, dryRun, type);
-            }
-          }
-        }
-      }
-    } catch (error) {
+
+
+
+
+ catch (error) {
       this.statistics.errorsEncountered++;
-    }
-  }
+
+
 
   async cleanFilesInDirectory(directory: string, patterns: RegExp[], maxAge: number, dryRun: boolean): Promise<void> {
     const cutoffDate = new Date(Date.now() - (maxAge * 24 * 60 * 60 * 1000));
@@ -443,18 +442,18 @@ class TestDataCleanup {
             
             if (stats.mtime < cutoffDate) {
               await this.removeFile(fullPath, dryRun, 'pattern match');
-            }
-          }
-        } else if (entry.isDirectory()) {
+
+
+ else if (entry.isDirectory()) {
           // Recursively clean subdirectories
           const subDir = path.join(directory, entry.name);
           await this.cleanFilesInDirectory(subDir, patterns, maxAge, dryRun);
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       this.statistics.errorsEncountered++;
-    }
-  }
+
+
 
   async removeFile(filePath: string, dryRun: boolean, type: string = 'file'): Promise<void> {
     try {
@@ -463,41 +462,41 @@ class TestDataCleanup {
       
       if (dryRun) {
         this.log(`Would remove ${type}: ${filePath} (${sizeMB}MB)`, 'warning');
-      } else {
+ else {
         await fs.unlink(filePath);
         this.log(`Removed ${type}: ${filePath} (${sizeMB}MB)`, 'success');
         this.statistics.filesRemoved++;
         this.statistics.bytesFreed += stats.size;
-      }
-    } catch (error) {
+
+ catch (error) {
       this.log(`Failed to remove ${filePath}: ${error.message}`, 'error');
       this.statistics.errorsEncountered++;
-    }
-  }
+
+
 
   async removeDirectory(dirPath: string, dryRun: boolean, type: string = 'directory'): Promise<void> {
     try {
       if (dryRun) {
         this.log(`Would remove ${type}: ${dirPath}`, 'warning');
-      } else {
+ else {
         await fs.rm(dirPath, { recursive: true, force: true });
         this.log(`Removed ${type}: ${dirPath}`, 'success');
         this.statistics.directoriesRemoved++;
-      }
-    } catch (error) {
+
+ catch (error) {
       this.log(`Failed to remove directory ${dirPath}: ${error.message}`, 'error');
       this.statistics.errorsEncountered++;
-    }
-  }
+
+
 
   async exists(path: string): Promise<boolean> {
     try {
       await fs.access(path);
       return true;
-    } catch {
+ catch {
       return false;
-    }
-  }
+
+
 
   generateReport(dryRun: boolean): void {
     this.log('\n📊 Cleanup Report:', 'header');
@@ -513,12 +512,12 @@ class TestDataCleanup {
     
     if (this.statistics.errorsEncountered > 0) {
       this.log(`Errors encountered: ${this.statistics.errorsEncountered}`, 'error');
-    }
+
     
     if (dryRun) {
       this.log('\nRun without --dry-run to perform actual cleanup', 'warning');
-    }
-  }
+
+
 
   async runCleanupSchedule(): Promise<void> {
     this.log('Running scheduled cleanup tasks...', 'header');
@@ -539,14 +538,14 @@ class TestDataCleanup {
     // Weekly cleanup (Sundays)
     if (dayOfWeek === 0) {
       await this.run({ maxAge: 7, aggressive: false });
-    }
+
     
     // Monthly cleanup (1st of month)
     if (dayOfMonth === 1) {
       await this.run({ maxAge: 30, aggressive: true });
-    }
-  }
-}
+
+
+
 
 // CLI mode
 if (require.main === module) {
@@ -565,16 +564,16 @@ if (require.main === module) {
     try {
       if (options.schedule) {
         await cleanup.runCleanupSchedule();
-      } else {
+ else {
         await cleanup.run(options);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Cleanup failed:', error.message);
       process.exit(1);
-    }
-  }
+
+
   
   main();
-}
+
 
 module.exports = TestDataCleanup;

@@ -24,7 +24,7 @@ export enum InvestigationStatus {
   RESOLVED = 'RESOLVED',
   CLOSED = 'CLOSED',
   ESCALATED = 'ESCALATED'
-}
+
 
 /**
  * Investigation priority levels
@@ -34,7 +34,7 @@ export enum InvestigationPriority {
   MEDIUM = 'MEDIUM', 
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL'
-}
+
 
 /**
  * Investigation categories
@@ -48,7 +48,7 @@ export enum InvestigationCategory {
   ANOMALY_DETECTION = 'ANOMALY_DETECTION',
   FRAUD_DETECTION = 'FRAUD_DETECTION',
   INSIDER_THREAT = 'INSIDER_THREAT'
-}
+
 
 /**
  * Task status for investigation tasks
@@ -59,7 +59,7 @@ export enum TaskStatus {
   COMPLETED = 'COMPLETED',
   BLOCKED = 'BLOCKED',
   CANCELLED = 'CANCELLED'
-}
+
 
 /**
  * Evidence types for investigations
@@ -73,13 +73,14 @@ export enum EvidenceType {
   NETWORK_CAPTURE = 'NETWORK_CAPTURE',
   USER_STATEMENT = 'USER_STATEMENT',
   SYSTEM_OUTPUT = 'SYSTEM_OUTPUT'
-}
+
 
 /**
  * Investigation record
  */
-}
-}
+
+
+
 export interface Investigation {
   id: string;
   title: string;
@@ -118,15 +119,17 @@ export interface Investigation {
   // Metadata
   tags: string[];
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Investigation task
  */
-}
-}
+
+
+
 export interface InvestigationTask {
   id: string;
   investigationId: string;
@@ -146,15 +149,17 @@ export interface InvestigationTask {
   actualHours?: number;
   
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Evidence record
  */
-}
-}
+
+
+
 export interface Evidence {
   id: string;
   investigationId: string;
@@ -191,15 +196,17 @@ export interface Evidence {
   confidentialityLevel: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
   
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Custody chain record
  */
-}
-}
+
+
+
 export interface CustodyRecord {
   id: string;
   evidenceId: string;
@@ -208,15 +215,17 @@ export interface CustodyRecord {
   transferredAt: Date;
   reason: string;
   signature: string; // Digital signature/hash
-}
-}
-}
+
+
+
+
 
 /**
  * Investigation comment/update
  */
-}
-}
+
+
+
 export interface InvestigationComment {
   id: string;
   investigationId: string;
@@ -237,15 +246,17 @@ export interface InvestigationComment {
   attachments: string[]; // Evidence IDs
   
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Team notification
  */
-}
-}
+
+
+
 export interface TeamNotification {
   id: string;
   recipientId: string;
@@ -263,15 +274,17 @@ export interface TeamNotification {
   actionTaken?: boolean;
   
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Collaboration metrics
  */
-}
-}
+
+
+
 export interface CollaborationMetrics {
   investigationCount: number;
   openInvestigations: number;
@@ -280,9 +293,10 @@ export interface CollaborationMetrics {
   teamWorkload: Record<string, number>;
   evidenceCollected: number;
   complianceIssues: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Audit Team Collaboration Service
@@ -298,7 +312,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
     super();
     this.db = db;
     this.auditService = auditService;
-  }
+
 
   /**
    * Initialize database schema for collaboration
@@ -448,11 +462,11 @@ export class AuditTeamCollaborationService extends EventEmitter {
       `);
 
       console.log('Audit team collaboration schema initialized successfully');
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize collaboration schema:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Create a new investigation
@@ -465,25 +479,25 @@ export class AuditTeamCollaborationService extends EventEmitter {
     // Input validation
     if (!investigation.title || investigation.title.trim().length === 0) {
       throw new Error('Investigation title is required and cannot be empty');
-    }
+
     if (investigation.title.length > 500) {
       throw new Error('Investigation title cannot exceed 500 characters');
-    }
+
     if (!investigation.leadInvestigator || investigation.leadInvestigator.trim().length === 0) {
       throw new Error('Lead investigator is required');
-    }
+
     if (!investigation.reportedBy || investigation.reportedBy.trim().length === 0) {
       throw new Error('Reporter is required');
-    }
+
     if (!investigation.assignedTeam || investigation.assignedTeam.length === 0) {
       throw new Error('At least one team member must be assigned');
-    }
+
     if (investigation.assignedTeam.some(member => !member || member.trim().length === 0)) {
       throw new Error('All assigned team members must have valid identifiers');
-    }
+
     if (investigation.dueDate && investigation.dueDate <= new Date()) {
       throw new Error('Due date must be in the future');
-    }
+
 
     const id = uuidv4();
     const now = new Date();
@@ -536,13 +550,13 @@ export class AuditTeamCollaborationService extends EventEmitter {
           category: investigation.category,
           priority: investigation.priority,
           assignedTeam: investigation.assignedTeam
-  }
+
         severity: 'info'
       });
 
       this.emit('investigationCreated', createdInvestigation);
       return createdInvestigation;
-    } catch (error) {
+ catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Failed to create investigation:', {
         error: errorMessage,
@@ -554,17 +568,17 @@ export class AuditTeamCollaborationService extends EventEmitter {
       // Provide specific error messages for common database issues
       if (errorMessage.includes('duplicate key')) {
         throw new Error('An investigation with similar details already exists');
-      }
+
       if (errorMessage.includes('foreign key')) {
         throw new Error('Invalid reference to external resource');
-      }
+
       if (errorMessage.includes('connection')) {
         throw new Error('Database connection failed. Please try again.');
-      }
+
       
       throw new Error(`Failed to create investigation: ${errorMessage}`);
-    }
-  }
+
+
 
   /**
    * Update investigation status and details
@@ -595,12 +609,12 @@ export class AuditTeamCollaborationService extends EventEmitter {
         updateFields.push(`${dbField} = $${paramIndex}`);
         values.push((updates as any)[key]);
         paramIndex++;
-      }
-    }
+
+
 
     if (updateFields.length === 0) {
       return; // Nothing to update
-    }
+
 
     // Always update the updated_at timestamp
     updateFields.push(`updated_at = $${paramIndex}`);
@@ -626,7 +640,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           updatedBy,
           changes: Object.keys(updates),
           newStatus: updates.status
-  }
+
         severity: 'info'
       });
 
@@ -640,15 +654,15 @@ export class AuditTeamCollaborationService extends EventEmitter {
             message: `Investigation "${investigation.title}" status changed to ${updates.status}`,
             investigationId: id
           });
-        }
-      }
+
+
 
       this.emit('investigationUpdated', { id, updates, updatedBy });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to update investigation:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Create a task within an investigation
@@ -661,28 +675,28 @@ export class AuditTeamCollaborationService extends EventEmitter {
     // Input validation
     if (!task.title || task.title.trim().length === 0) {
       throw new Error('Task title is required and cannot be empty');
-    }
+
     if (task.title.length > 500) {
       throw new Error('Task title cannot exceed 500 characters');
-    }
+
     if (!task.investigationId || task.investigationId.trim().length === 0) {
       throw new Error('Investigation ID is required');
-    }
+
     if (!task.assignedTo || task.assignedTo.trim().length === 0) {
       throw new Error('Task must be assigned to someone');
-    }
+
     if (task.estimatedHours && (task.estimatedHours < 0 || task.estimatedHours > 1000)) {
       throw new Error('Estimated hours must be between 0 and 1000');
-    }
+
     if (task.dueDate && task.dueDate <= new Date()) {
       throw new Error('Task due date must be in the future');
-    }
+
     
     // Verify investigation exists
     const investigation = await this.getInvestigation(task.investigationId);
     if (!investigation) {
       throw new Error(`Investigation with ID ${task.investigationId} does not exist`);
-    }
+
 
     const id = uuidv4();
     const now = new Date();
@@ -719,7 +733,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
 
       this.emit('taskCreated', createdTask);
       return createdTask;
-    } catch (error) {
+ catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Failed to create task:', {
         error: errorMessage,
@@ -731,14 +745,14 @@ export class AuditTeamCollaborationService extends EventEmitter {
       
       if (errorMessage.includes('foreign key')) {
         throw new Error('Invalid investigation ID or task dependency reference');
-      }
+
       if (errorMessage.includes('connection')) {
         throw new Error('Database connection failed. Please try again.');
-      }
+
       
       throw new Error(`Failed to create task: ${errorMessage}`);
-    }
-  }
+
+
 
   /**
    * Add evidence to an investigation
@@ -752,34 +766,34 @@ export class AuditTeamCollaborationService extends EventEmitter {
     // Input validation
     if (!evidence.title || evidence.title.trim().length === 0) {
       throw new Error('Evidence title is required and cannot be empty');
-    }
+
     if (evidence.title.length > 500) {
       throw new Error('Evidence title cannot exceed 500 characters');
-    }
+
     if (!evidence.investigationId || evidence.investigationId.trim().length === 0) {
       throw new Error('Investigation ID is required');
-    }
+
     if (!evidence.type) {
       throw new Error('Evidence type is required');
-    }
+
     if (!evidence.source || evidence.source.trim().length === 0) {
       throw new Error('Evidence source is required');
-    }
+
     if (!collectedBy || collectedBy.trim().length === 0) {
       throw new Error('Evidence collector identifier is required');
-    }
+
     if (evidence.fileSize && evidence.fileSize < 0) {
       throw new Error('File size cannot be negative');
-    }
+
     if (evidence.fileSize && evidence.fileSize > 10 * 1024 * 1024 * 1024) { // 10GB limit
       throw new Error('File size cannot exceed 10GB');
-    }
+
     
     // Verify investigation exists
     const investigation = await this.getInvestigation(evidence.investigationId);
     if (!investigation) {
       throw new Error(`Investigation with ID ${evidence.investigationId} does not exist`);
-    }
+
 
     const id = uuidv4();
     const collectedAt = new Date();
@@ -826,12 +840,12 @@ export class AuditTeamCollaborationService extends EventEmitter {
           transferredAt: collectedAt,
           reason: 'Initial collection',
           signature
-        }]
+]
       };
 
       this.emit('evidenceAdded', createdEvidence);
       return createdEvidence;
-    } catch (error) {
+ catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Failed to add evidence:', {
         error: errorMessage,
@@ -844,14 +858,14 @@ export class AuditTeamCollaborationService extends EventEmitter {
       
       if (errorMessage.includes('foreign key')) {
         throw new Error('Invalid investigation ID or task reference');
-      }
+
       if (errorMessage.includes('connection')) {
         throw new Error('Database connection failed. Please try again.');
-      }
+
       
       throw new Error(`Failed to add evidence: ${errorMessage}`);
-    }
-  }
+
+
 
   /**
    * Add comment to investigation
@@ -861,25 +875,25 @@ export class AuditTeamCollaborationService extends EventEmitter {
     // Input validation
     if (!comment.investigationId || comment.investigationId.trim().length === 0) {
       throw new Error('Investigation ID is required');
-    }
+
     if (!comment.author || comment.author.trim().length === 0) {
       throw new Error('Comment author is required');
-    }
+
     if (!comment.content || comment.content.trim().length === 0) {
       throw new Error('Comment content cannot be empty');
-    }
+
     if (comment.content.length > 10000) {
       throw new Error('Comment content cannot exceed 10,000 characters');
-    }
+
     if (comment.mentions && comment.mentions.some(mention => !mention || mention.trim().length === 0)) {
       throw new Error('All mentioned users must have valid identifiers');
-    }
+
     
     // Verify investigation exists
     const investigation = await this.getInvestigation(comment.investigationId);
     if (!investigation) {
       throw new Error(`Investigation with ID ${comment.investigationId} does not exist`);
-    }
+
 
     const id = uuidv4();
     const now = new Date();
@@ -906,10 +920,10 @@ export class AuditTeamCollaborationService extends EventEmitter {
           taskId: comment.taskId,
           commentId: id
         });
-      }
+
 
       this.emit('commentAdded', { ...comment, id, createdAt: now });
-    } catch (error) {
+ catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Failed to add comment:', {
         error: errorMessage,
@@ -921,14 +935,14 @@ export class AuditTeamCollaborationService extends EventEmitter {
       
       if (errorMessage.includes('foreign key')) {
         throw new Error('Invalid investigation ID or task reference');
-      }
+
       if (errorMessage.includes('connection')) {
         throw new Error('Database connection failed. Please try again.');
-      }
+
       
       throw new Error(`Failed to add comment: ${errorMessage}`);
-    }
-  }
+
+
 
   /**
    * Get investigation details
@@ -942,14 +956,14 @@ export class AuditTeamCollaborationService extends EventEmitter {
 
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       return this.mapDatabaseInvestigation(result.rows[0]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get investigation:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get investigations with filtering
@@ -961,7 +975,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
     priority?: InvestigationPriority;
     limit?: number;
     offset?: number;
-  } = {}): Promise<{ investigations: Investigation[]; total: number }> {
+ = {}): Promise<{ investigations: Investigation[]; total: number }> {
 
     const conditions: string[] = [];
     const params: unknown[] = [];
@@ -971,25 +985,25 @@ export class AuditTeamCollaborationService extends EventEmitter {
       conditions.push(`status = $${paramIndex}`);
       params.push(filters.status);
       paramIndex++;
-    }
+
 
     if (filters.assignedTo) {
       conditions.push(`$${paramIndex} = ANY(assigned_team)`);
       params.push(filters.assignedTo);
       paramIndex++;
-    }
+
 
     if (filters.category) {
       conditions.push(`category = $${paramIndex}`);
       params.push(filters.category);
       paramIndex++;
-    }
+
 
     if (filters.priority) {
       conditions.push(`priority = $${paramIndex}`);
       params.push(filters.priority);
       paramIndex++;
-    }
+
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const limit = filters.limit || 50;
@@ -1015,11 +1029,11 @@ export class AuditTeamCollaborationService extends EventEmitter {
         investigations: dataResult.rows.map(this.mapDatabaseInvestigation),
         total: parseInt(countResult.rows[0].total)
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get investigations:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get collaboration metrics
@@ -1091,11 +1105,11 @@ export class AuditTeamCollaborationService extends EventEmitter {
         evidenceCollected: parseInt(evidenceResult.rows[0]?.evidence_count || '0'),
         complianceIssues: 0 // TODO: Implement compliance issue tracking
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get collaboration metrics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Send notifications to team members
@@ -1109,22 +1123,22 @@ export class AuditTeamCollaborationService extends EventEmitter {
     if (!recipients || recipients.length === 0) {
       console.warn('No recipients provided for notification');
       return;
-    }
+
     if (recipients.some(recipient => !recipient || recipient.trim().length === 0)) {
       throw new Error('All recipients must have valid identifiers');
-    }
+
     if (!notification.title || notification.title.trim().length === 0) {
       throw new Error('Notification title is required');
-    }
+
     if (!notification.message || notification.message.trim().length === 0) {
       throw new Error('Notification message is required');
-    }
+
     if (notification.title.length > 500) {
       throw new Error('Notification title cannot exceed 500 characters');
-    }
+
     if (notification.message.length > 10000) {
       throw new Error('Notification message cannot exceed 10,000 characters');
-    }
+
 
     const notificationPromises = recipients.map(async (recipientId) => {
       try {
@@ -1148,7 +1162,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           recipientId,
           createdAt: new Date()
         });
-      } catch (error) {
+ catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         console.error(`Failed to send notification to ${recipientId}:`, {
           error: errorMessage,
@@ -1157,16 +1171,16 @@ export class AuditTeamCollaborationService extends EventEmitter {
           timestamp: new Date().toISOString()
         });
         // Don't throw here to avoid failing the entire batch for one recipient
-      }
+
     });
 
     try {
       await Promise.allSettled(notificationPromises);
-    } catch (error) {
+ catch (error) {
       console.error('Some notifications failed to send:', error);
       // Don't throw to avoid breaking the main operation
-    }
-  }
+
+
 
   /**
    * Generate custody chain signature
@@ -1175,7 +1189,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
     const crypto = require('crypto');
     const data = `${evidenceId}:${transferredTo}:${timestamp.getTime()}`;
     return crypto.createHash('sha256').update(data).digest('hex');
-  }
+
 
   /**
    * Map database row to Investigation object
@@ -1208,8 +1222,8 @@ export class AuditTeamCollaborationService extends EventEmitter {
       tags: row.tags || [],
       metadata: row.metadata || {}
     };
-  }
-}
+
+
 
 export {
   InvestigationStatus,

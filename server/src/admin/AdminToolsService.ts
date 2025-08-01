@@ -24,8 +24,8 @@ import { SystemDiagnostics, SystemHealthReport } from './SystemDiagnostics';
 import { HealthCheckFramework } from './HealthCheckFramework';
 import crypto from 'crypto';
 
-}
-}
+
+
 export interface AdminDashboardData {
   systemHealth: {
     status: 'healthy' | 'warning' | 'critical';
@@ -34,8 +34,9 @@ export interface AdminDashboardData {
     activeUsers: number;
     totalRequests: number;
     errorRate: number;
-}
-}
+
+
+
   };
   userMetrics: {
     totalUsers: number;
@@ -61,10 +62,10 @@ export interface AdminDashboardData {
   securityAlerts: SecurityAlert[];
   recentActivities: AdminActivity[];
   scheduledMaintenance: MaintenanceTask[];
-}
 
-}
-}
+
+
+
 export interface SecurityAlert {
   id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -75,12 +76,13 @@ export interface SecurityAlert {
   resolvedBy?: string;
   resolvedAt?: Date;
   metadata?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AdminActivity {
   id: string;
   adminId: string;
@@ -92,12 +94,13 @@ export interface AdminActivity {
   userAgent: string;
   result: 'success' | 'failure' | 'partial';
   details?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MaintenanceTask {
   id: string;
   name: string;
@@ -109,24 +112,26 @@ export interface MaintenanceTask {
   category: 'backup' | 'update' | 'cleanup' | 'optimization' | 'security';
   createdBy: string;
   assignedTo?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserManagementAction {
   userId: string;
   action: 'activate' | 'deactivate' | 'suspend' | 'delete' | 'verify' | 'reset_password' | 'force_logout';
   reason: string;
   duration?: number; // For suspension duration in hours
   notifyUser?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemConfiguration {
   category: string;
   settings: Record<string, unknown>;
@@ -134,21 +139,23 @@ export interface SystemConfiguration {
   modifiedBy: string;
   version: number;
   description?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkUserOperation {
   operation: 'activate' | 'deactivate' | 'suspend' | 'grant_role' | 'revoke_role' | 'send_notification';
   userIds: string[];
   parameters?: Record<string, unknown>;
   reason: string;
   scheduledAt?: Date;
-}
-}
-}
+
+
+
+
 
 export class AdminToolsService {
   private dbService: DatabaseService;
@@ -175,7 +182,7 @@ export class AdminToolsService {
     this.directPermissionService = directPermissionService;
     this.systemDiagnostics = systemDiagnostics;
     this.healthCheckFramework = healthCheckFramework;
-  }
+
 
   /**
    * Get comprehensive admin dashboard data
@@ -219,20 +226,19 @@ export class AdminToolsService {
         recentActivities,
         scheduledMaintenance
       };
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'admin_dashboard_error',
         userId: adminId,
         resourceType: 'admin_dashboard',
         details: {
           error: error instanceof Error ? error.message : String(error)
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Perform bulk user management operation
@@ -245,7 +251,7 @@ export class AdminToolsService {
     success: number;
     failed: number;
     results: Array<{ userId: string; success: boolean; error?: string }>;
-  }> {
+> {
     const results: Array<{ userId: string; success: boolean; error?: string }> = [];
     let successCount = 0;
     let failedCount = 0;
@@ -285,7 +291,7 @@ export class AdminToolsService {
                 roleId: operation.parameters.roleId,
                 grantedBy: adminId
               }, context);
-            }
+
             break;
               
           case 'revoke_role':
@@ -297,25 +303,24 @@ export class AdminToolsService {
                 operation.reason,
                 context
               );
-            }
+
             break;
               
           default:
             throw new Error(`Unsupported operation: ${operation.operation}`);
-          }
+
 
           results.push({ userId, success: true });
           successCount++;
-
-        } catch (error) {
+ catch (error) {
           results.push({ 
             userId, 
             success: false, 
             error: error instanceof Error ? error.message : String(error)
           });
           failedCount++;
-        }
-      }
+
+
 
       // Log bulk operation
       await this.auditService.logAction({
@@ -328,15 +333,14 @@ export class AdminToolsService {
           successCount,
           failedCount,
           reason: operation.reason
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
 
       return { success: successCount, failed: failedCount, results };
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'bulk_user_operation_failed',
         userId: adminId,
@@ -345,14 +349,14 @@ export class AdminToolsService {
           operation: operation.operation,
           reason: operation.reason,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Perform individual user management action
@@ -422,7 +426,7 @@ export class AdminToolsService {
           
       default:
         throw new Error(`Unsupported action: ${action.action}`);
-      }
+
 
       // Log user action
       await this.auditService.logAction({
@@ -434,13 +438,12 @@ export class AdminToolsService {
           reason: action.reason,
           duration: action.duration,
           notifyUser: action.notifyUser
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: `user_${action.action}_failed`,
         userId: adminId,
@@ -449,14 +452,14 @@ export class AdminToolsService {
         details: {
           reason: action.reason,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Get system configuration
@@ -469,13 +472,13 @@ export class AdminToolsService {
     if (category) {
       query += ' WHERE category = $1';
       params.push(category);
-    }
+
 
     query += ' ORDER BY category, last_modified DESC';
 
     const result = await this.dbService.query(query, params);
     return result.rows.map(this.mapSystemConfiguration);
-  }
+
 
   /**
    * Update system configuration
@@ -520,13 +523,12 @@ export class AdminToolsService {
           version: newVersion,
           description,
           settingsKeys: Object.keys(settings)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'system_configuration_update_failed',
         userId: adminId,
@@ -534,14 +536,14 @@ export class AdminToolsService {
         resourceId: category,
         details: {
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Get comprehensive system health report
@@ -560,25 +562,24 @@ export class AdminToolsService {
           reportId: healthReport.reportId,
           healthScore: healthReport.healthScore,
           overallHealth: healthReport.overallHealth
-  }
+
         severity: 'info'
       });
 
       return healthReport;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'system_health_report_failed',
         userId: adminId,
         resourceType: 'system_health',
         details: {
           error: error instanceof Error ? error.message : String(error)
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   /**
    * Schedule maintenance task
@@ -631,15 +632,14 @@ export class AdminToolsService {
           priority: task.priority,
           scheduledAt: task.scheduledAt.toISOString(),
           assignedTo: task.assignedTo
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
       });
 
       return scheduledTask;
-
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'maintenance_task_schedule_failed',
         userId: adminId,
@@ -647,14 +647,14 @@ export class AdminToolsService {
         details: {
           name: task.name,
           error: error instanceof Error ? error.message : String(error)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -668,7 +668,7 @@ export class AdminToolsService {
       totalRequests: 45000,
       errorRate: 0.02
     };
-  }
+
 
   private async getUserMetrics() {
     const [userStats] = await Promise.all([
@@ -691,7 +691,7 @@ export class AdminToolsService {
       blockedUsers: parseInt(stats.blocked_users),
       pendingVerifications: parseInt(stats.pending_verifications)
     };
-  }
+
 
   private async getPermissionMetrics() {
     const [roleStats, permStats, tempStats, emergencyStats] = await Promise.all([
@@ -711,7 +711,7 @@ export class AdminToolsService {
       emergencyAccess: tempStats.emergency,
       expiringSoon: emergencyStats
     };
-  }
+
 
   private async getSystemMetrics() {
     // This would integrate with system monitoring
@@ -723,7 +723,7 @@ export class AdminToolsService {
       databaseConnections: 12, // Would query actual connections
       cacheHitRate: 94.5
     };
-  }
+
 
   private async getSecurityAlerts(): Promise<SecurityAlert[]> {
 
@@ -735,7 +735,7 @@ export class AdminToolsService {
     `).catch(() => ({ rows: [] }));
 
     return result.rows.map(this.mapSecurityAlert);
-  }
+
 
   private async getRecentAdminActivities(_adminId: string): Promise<AdminActivity[]> {
 
@@ -762,7 +762,7 @@ export class AdminToolsService {
       result: 'success', // Would determine from details
       details: row.details ? JSON.parse(row.details) : undefined
     }));
-  }
+
 
   private async getScheduledMaintenance(): Promise<MaintenanceTask[]> {
 
@@ -774,7 +774,7 @@ export class AdminToolsService {
     `).catch(() => ({ rows: [] }));
 
     return result.rows.map(this.mapMaintenanceTask);
-  }
+
 
   private mapSystemConfiguration(row: Record<string, unknown>): SystemConfiguration {
     return {
@@ -785,7 +785,7 @@ export class AdminToolsService {
       version: row.version,
       description: row.description
     };
-  }
+
 
   private mapSecurityAlert(row: Record<string, unknown>): SecurityAlert {
     return {
@@ -799,7 +799,7 @@ export class AdminToolsService {
       resolvedAt: row.resolved_at,
       metadata: row.metadata ? JSON.parse(row.metadata) : undefined
     };
-  }
+
 
   private mapMaintenanceTask(row: Record<string, unknown>): MaintenanceTask {
     return {
@@ -814,5 +814,4 @@ export class AdminToolsService {
       createdBy: row.created_by,
       assignedTo: row.assigned_to
     };
-  }
-}
+

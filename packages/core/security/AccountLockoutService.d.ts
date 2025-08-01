@@ -13,8 +13,7 @@
  * - Compliance reporting
  */
 import { EventEmitter } from 'events';
-export declare enum LockoutStatus {
-    ACTIVE = "active",
+export declare enum LockoutStatus { ACTIVE = "active",
     PENDING_REVIEW = "pending_review",
     UNLOCKED = "unlocked",
     EXPIRED = "expired",
@@ -46,12 +45,12 @@ export declare enum NotificationType {
     LOCKOUT_NOTIFICATION = "lockout_notification",
     UNLOCK_NOTIFICATION = "unlock_notification",
     SECURITY_ALERT = "security_alert",
-    ADMIN_ACTION_REQUIRED = "admin_action_required",
+    ADMIN_ACTION_REQUIRED = "admin_action_required" }
     COMPLIANCE_REPORT = "compliance_report"
 
 }
-export interface AccountLockout {
-    id: string;
+}
+export interface AccountLockout { id: string;
     userId: string;
     userEmail: string;
     status: LockoutStatus;
@@ -66,7 +65,7 @@ export interface AccountLockout {
         userAgent?: string;
         geolocation?: string;
         riskScore: number;
-        threatLevel: string;
+        threatLevel: string }
 }
     };
     adminActions: AdminAction[];
@@ -74,8 +73,8 @@ export interface AccountLockout {
     auditTrail: AuditEntry[];
 
 }
-export interface AdminAction {
-    id: string;
+}
+export interface AdminAction { id: string;
     adminId: string;
     adminEmail: string;
     adminRole: AdminRole;
@@ -87,11 +86,10 @@ export interface AdminAction {
     approvalRequired: boolean;
     approvedBy?: string;
     approvalTime?: Date;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface LockoutNotification {
-    id: string;
+}
+export interface LockoutNotification { id: string;
     type: NotificationType;
     recipient: string;
     channel: 'email' | 'sms' | 'push' | 'admin_console';
@@ -99,33 +97,30 @@ export interface LockoutNotification {
     deliveredAt?: Date;
     readAt?: Date;
     content: string;
-    status: 'pending' | 'sent' | 'delivered' | 'failed' | 'read';
-
+    status: 'pending' | 'sent' | 'delivered' | 'failed' | 'read' }
 }
-export interface AuditEntry {
-    id: string;
+}
+export interface AuditEntry { id: string;
     timestamp: Date;
     event: string;
     actor: string;
     actorType: 'user' | 'admin' | 'system';
     details: Record<string, any>;
     ipAddress?: string;
-    sessionId?: string;
-
+    sessionId?: string }
 }
-export interface UnlockRequest {
-    lockoutId: string;
+}
+export interface UnlockRequest { lockoutId: string;
     adminId: string;
     reason: string;
     method: UnlockMethod;
     urgency: 'low' | 'medium' | 'high' | 'emergency';
     justification: string;
     approvalRequired: boolean;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface UnlockPolicy {
-    adminRole: AdminRole;
+}
+export interface UnlockPolicy { adminRole: AdminRole;
     canUnlock: boolean;
     requiresApproval: boolean;
     maxLockoutDuration: number;
@@ -145,27 +140,24 @@ export declare class AccountLockoutService extends EventEmitter {
      * Create a new account lockout
      */
     createLockout();
-      userId: string,
-      userEmail: string,
-      reason: LockoutReason,
+      userId: string;
+      userEmail: string;
+      reason: LockoutReason }
       metadata?: Partial<AccountLockout['metadata']>
     ): Promise<string>;
     /**
      * Administrator unlock capability with comprehensive security
      */
-    adminUnlock(lockoutId: string, unlockRequest: UnlockRequest): Promise<{
-        success: boolean;
+    adminUnlock(lockoutId: string, unlockRequest: UnlockRequest): Promise<{ success: boolean;
         message: string;
-        requiresApproval?: boolean;
+        requiresApproval?: boolean }
 }
     }>;
     /**
      * Emergency unlock capability for critical situations
      */
-    emergencyUnlock(lockoutId: string, adminId: string, emergencyCode: string, justification: string): Promise<{
-        success: boolean;
-        message: string;
-    }>;
+    emergencyUnlock(lockoutId: string, adminId: string, emergencyCode: string, justification: string): Promise<{ success: boolean;
+        message: string }>;
     /**
      * Approve pending unlock request
      */
@@ -175,10 +167,8 @@ export declare class AccountLockoutService extends EventEmitter {
       approverId: string,
       approved: boolean,
       comments?: string
-    ): Promise<{
-        success: boolean;
-        message: string;
-    }>;
+    ): Promise<{ success: boolean;
+        message: string }>;
     /**
      * Get lockout status and details
      */
@@ -202,11 +192,9 @@ export declare class AccountLockoutService extends EventEmitter {
     /**
      * Get lockout statistics and reports
      */
-    getLockoutStatistics(dateRange?: {)
+    getLockoutStatistics(dateRange?: { )
         start: Date;
-        end: Date;
-    }): {
-        totalLockouts: number;
+        end: Date }): { totalLockouts: number;
         activeLockouts: number;
         lockoutsByReason: Record<LockoutReason, number>;
         averageLockoutDuration: number;
@@ -214,8 +202,7 @@ export declare class AccountLockoutService extends EventEmitter {
         emergencyUnlocks: number;
         topAffectedUsers: Array<{
             userId: string;
-            count: number;
-        }>;
+            count: number }>;
     };
     private requestUnlockApproval;
     private performUnlock;

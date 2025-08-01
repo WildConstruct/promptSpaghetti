@@ -12,29 +12,27 @@ import { SecurityIntelligence } from './MLSecurityAnalyticsFramework';
 import { SecurityAnomaly } from './SecurityAnomalyDetector';
 
 }
-export interface DataQualityConfig {
-    enableRealTimeValidation: boolean;
+}
+export interface DataQualityConfig { enableRealTimeValidation: boolean;
     validationInterval: number;
     qualityThresholds: QualityThresholds;
     enableAutomaticRemediation: boolean;
     retentionPeriodDays: number;
     alertingEnabled: boolean;
     reportingEnabled: boolean;
-    validationRules: ValidationRule[];
-
+    validationRules: ValidationRule[] }
 }
-export interface QualityThresholds {
-    completeness: number;
+}
+export interface QualityThresholds { completeness: number;
     accuracy: number;
     consistency: number;
     timeliness: number;
     validity: number;
     uniqueness: number;
-    overall: number;
-
+    overall: number }
 }
-export interface ValidationRule {
-    id: string;
+}
+export interface ValidationRule { id: string;
     name: string;
     description: string;
     ruleType: ValidationRuleType;
@@ -46,30 +44,31 @@ export interface ValidationRule {
     violationCount: number;
 
 export declare enum ValidationRuleType {
-    SCHEMA_VALIDATION = "schema_validation",
-    RANGE_CHECK = "range_check",
-    FORMAT_VALIDATION = "format_validation",
-    REFERENCE_INTEGRITY = "reference_integrity",
-    BUSINESS_RULE = "business_rule",
-    TEMPORAL_CONSISTENCY = "temporal_consistency",
-    CROSS_FIELD_VALIDATION = "cross_field_validation",
-    STATISTICAL_OUTLIER = "statistical_outlier",
-    DUPLICATE_DETECTION = "duplicate_detection",
+    SCHEMA_VALIDATION = "schema_validation";
+    RANGE_CHECK = "range_check";
+    FORMAT_VALIDATION = "format_validation";
+    REFERENCE_INTEGRITY = "reference_integrity";
+    BUSINESS_RULE = "business_rule";
+    TEMPORAL_CONSISTENCY = "temporal_consistency";
+    CROSS_FIELD_VALIDATION = "cross_field_validation";
+    STATISTICAL_OUTLIER = "statistical_outlier";
+    DUPLICATE_DETECTION = "duplicate_detection";
     COMPLETENESS_CHECK = "completeness_check"
 
 export declare enum ValidationSeverity {
-    INFO = "info",
-    WARNING = "warning",
-    ERROR = "error",
+    INFO = "info";
+    WARNING = "warning";
+    ERROR = "error" }
     CRITICAL = "critical"
 
 }
-export interface DataQualityReport {
-    reportId: string;
+}
+}
+export interface DataQualityReport { reportId: string;
     generatedAt: Date;
     period: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     overallScore: number;
@@ -80,24 +79,25 @@ export interface DataQualityReport {
     dataSourceMetrics: DataSourceQuality[];
 
 }
-export interface QualityDimensionScore {
-    dimension: QualityDimension;
+}
+export interface QualityDimensionScore { dimension: QualityDimension;
     score: number;
     trend: 'improving' | 'declining' | 'stable';
     violationCount: number;
     issuesSummary: string[];
 
 export declare enum QualityDimension {
-    COMPLETENESS = "completeness",
-    ACCURACY = "accuracy",
-    CONSISTENCY = "consistency",
-    TIMELINESS = "timeliness",
-    VALIDITY = "validity",
+    COMPLETENESS = "completeness";
+    ACCURACY = "accuracy";
+    CONSISTENCY = "consistency";
+    TIMELINESS = "timeliness";
+    VALIDITY = "validity" }
     UNIQUENESS = "uniqueness"
 
 }
-export interface DataQualityViolation {
-    violationId: string;
+}
+}
+export interface DataQualityViolation { violationId: string;
     timestamp: Date;
     ruleId: string;
     ruleName: string;
@@ -112,37 +112,36 @@ export interface DataQualityViolation {
     context: Record<string, unknown>;
     isResolved: boolean;
     resolvedAt?: Date;
-    remediation?: RemediationAction;
-
+    remediation?: RemediationAction }
 }
-export interface RemediationAction {
-    actionType: RemediationActionType;
+}
+export interface RemediationAction { actionType: RemediationActionType;
     description: string;
     executedAt: Date;
     result: 'success' | 'failure' | 'partial';
     details: string;
 
 export declare enum RemediationActionType {
-    DATA_CORRECTION = "data_correction",
-    RECORD_FLAGGING = "record_flagging",
-    SOURCE_NOTIFICATION = "source_notification",
-    AUTOMATIC_REPAIR = "automatic_repair",
-    QUARANTINE = "quarantine",
-    ENRICHMENT = "enrichment",
+    DATA_CORRECTION = "data_correction";
+    RECORD_FLAGGING = "record_flagging";
+    SOURCE_NOTIFICATION = "source_notification";
+    AUTOMATIC_REPAIR = "automatic_repair";
+    QUARANTINE = "quarantine";
+    ENRICHMENT = "enrichment" }
     TRANSFORMATION = "transformation"
 
 }
-export interface QualityTrend {
-    dimension: QualityDimension;
+}
+}
+export interface QualityTrend { dimension: QualityDimension;
     timeframe: string;
     direction: 'improving' | 'declining' | 'stable';
     changePercent: number;
     significance: 'high' | 'medium' | 'low';
-    driverFactors: string[];
-
+    driverFactors: string[] }
 }
-export interface QualityRecommendation {
-    id: string;
+}
+export interface QualityRecommendation { id: string;
     priority: 'immediate' | 'high' | 'medium' | 'low';
     category: string;
     title: string;
@@ -150,50 +149,45 @@ export interface QualityRecommendation {
     expectedImpact: string;
     estimatedEffort: string;
     targetDimensions: QualityDimension[];
-    implementationSteps: string[];
-
+    implementationSteps: string[] }
 }
-export interface DataSourceQuality {
-    sourceName: string;
+}
+export interface DataSourceQuality { sourceName: string;
     sourceType: string;
     overallScore: number;
     recordCount: number;
     qualityIssues: number;
     lastValidated: Date;
     dimensions: Record<QualityDimension, number>;
-    commonIssues: string[];
-
+    commonIssues: string[] }
 }
-export interface DataQualityMetrics {
-    totalRecordsProcessed: number;
+}
+export interface DataQualityMetrics { totalRecordsProcessed: number;
     totalViolations: number;
     criticalViolations: number;
     averageQualityScore: number;
     dataSourceCount: number;
     automatedRemediations: number;
     manualInterventions: number;
-    qualityTrend: 'improving' | 'declining' | 'stable';
-
+    qualityTrend: 'improving' | 'declining' | 'stable' }
 }
-export interface ValidationContext {
-    recordId: string;
+}
+export interface ValidationContext { recordId: string;
     dataSource: string;
     timestamp: Date;
     metadata: Record<string, unknown>;
-    relatedRecords?: unknown[];
-
+    relatedRecords?: unknown[] }
 }
-export interface QualityProfile {
-    dataSourceName: string;
+}
+export interface QualityProfile { dataSourceName: string;
     expectedSchema: Record<string, FieldExpectation>;
     statisticalBaseline: StatisticalBaseline;
     businessRules: BusinessRule[];
     lastUpdated: Date;
-    validationHistory: ValidationHistoryEntry[];
-
+    validationHistory: ValidationHistoryEntry[] }
 }
-export interface FieldExpectation {
-    fieldName: string;
+}
+export interface FieldExpectation { fieldName: string;
     dataType: string;
     required: boolean;
     format?: string;
@@ -201,52 +195,49 @@ export interface FieldExpectation {
     maxValue?: number;
     allowedValues?: unknown[];
     nullablePercent: number;
-    uniquenessRequired: boolean;
-
+    uniquenessRequired: boolean }
 }
-export interface StatisticalBaseline {
-    recordCount: {
+}
+export interface StatisticalBaseline { recordCount: {
         mean: number;
         standardDeviation: number;
         min: number;
-        max: number;
+        max: number }
 }
     };
     fieldStatistics: Record<string, FieldStatistics>;
     temporalPatterns: TemporalPattern[];
 
 }
-export interface FieldStatistics {
-    fieldName: string;
+}
+export interface FieldStatistics { fieldName: string;
     dataType: string;
     nullPercent: number;
     uniquePercent: number;
     averageLength?: number;
     commonValues: Array<{
         value: unknown;
-        frequency: number;
+        frequency: number }
 }
     }>;
     outlierThreshold: number;
 
 }
-export interface TemporalPattern {
-    pattern: 'hourly' | 'daily' | 'weekly' | 'monthly';
-    expectedVolume: number[];
-    variationThreshold: number;
-
 }
-export interface BusinessRule {
-    ruleId: string;
+export interface TemporalPattern { pattern: 'hourly' | 'daily' | 'weekly' | 'monthly';
+    expectedVolume: number[];
+    variationThreshold: number }
+}
+}
+export interface BusinessRule { ruleId: string;
     name: string;
     description: string;
     expression: string;
     severity: ValidationSeverity;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface ValidationHistoryEntry {
-    timestamp: Date;
+}
+export interface ValidationHistoryEntry { timestamp: Date;
     overallScore: number;
     violationCount: number;
     processingTime: number;
@@ -296,7 +287,7 @@ export declare class SecurityDataQualityMonitor extends EventEmitter {
      */
     generateQualityReport(period: {)
         start: Date;
-        end: Date;
+        end: Date }
 }
     }): Promise<DataQualityReport>;
     private calculateQualityDimensions;

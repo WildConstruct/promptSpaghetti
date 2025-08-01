@@ -353,9 +353,8 @@ import { SecurityValidation } from './security';
                         }
                     }
                 }
-                export const advancedSecurityAnalyzer = new AdvancedSecurityAnalyzer();
-                // Enhanced validation functions that use advanced analysis
             }
+            export const advancedSecurityAnalyzer = new AdvancedSecurityAnalyzer();
             // Enhanced validation functions that use advanced analysis
         }
         // Enhanced validation functions that use advanced analysis

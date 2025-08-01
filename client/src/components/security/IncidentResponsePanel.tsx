@@ -20,41 +20,42 @@ import {
   Calendar,
   Target,
   Activity
-} from 'lucide-react';
+ from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
-}
+
+
 interface SecurityIncident {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
-  severity: 'critical' | 'high' | 'medium' | 'low';
+  severity: 'critical' | 'high' | 'medium' | 'low';,
   status: 'open' | 'investigating' | 'contained' | 'resolved' | 'closed';,
-  created_at: Date;
+  created_at: Date;,
   updated_at: Date;
   assigned_to?: string;
   reporter: string;,
-  category: string;
+  category: string;,
   affected_systems: string;,
-  evidence: Evidence;
+  evidence: Evidence;,
   timeline: TimelineEntry;,
   response_actions: ResponseAction;
   interface Evidence {
   id: string;,
-  type: 'log' | 'screenshot' | 'file' | 'url' | 'note';
+  type: 'log' | 'screenshot' | 'file' | 'url' | 'note';,
   title: string;,
-  content: string;
+  content: string;,
   collected_at: Date;,
   collected_by: string;
   interface TimelineEntry {
   id: string;,
-  timestamp: Date;
+  timestamp: Date;,
   event: string;,
-  description: string;
+  description: string;,
   author: string;,
   type: 'status_change' | 'assignment' | 'action' | 'note' | 'evidence';
   interface ResponseAction {
   id: string;,
-  title: string;
+  title: string;,
   description: string;,
   status: 'pending' | 'in_progress' | 'completed' | 'skipped';
   assigned_to?: string;
@@ -68,7 +69,8 @@ interface SecurityIncident {
   incidentId,
   onIncidentUpdate,
   // onClose // Commented out unused prop
-}
+
+
 }) => {
   const [incident, setIncident] = useState<SecurityIncident | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -95,7 +97,7 @@ interface SecurityIncident {
   reporter: 'system.monitor@company.com',
   category: 'Authentication',
   affected_systems: ['Authentication Service', 'User Database', 'API Gateway'],
-  evidence: [,
+  evidence: [
   {
   id: 'evidence-1',
   type: 'log',
@@ -103,7 +105,7 @@ interface SecurityIncident {
   content: '2025-07-22 05:45:12 - Failed login attempt for user suspicious@domain.com from 192.168.1.100',
   collected_at: new Date(Date.now() - 1 * 60 * 60 * 1000),
   collected_by: 'security.team@company.com',
-}
+
           {
   id: 'evidence-2',
   type: 'note',
@@ -111,7 +113,7 @@ interface SecurityIncident {
   content: 'IP address shows no previous legitimate access. Pattern suggests automated attack tool.',
   collected_at: new Date(Date.now() - 45 * 60 * 1000),
   collected_by: 'analyst@company.com'],
-  timeline: [,
+  timeline: [
   {
   id: 'timeline-1',
   timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
@@ -119,7 +121,7 @@ interface SecurityIncident {
   description: 'Automated detection triggered incident creation',
   author: 'system.monitor@company.com',
   type: 'status_change',
-}
+
           {
   id: 'timeline-2',
   timestamp: new Date(Date.now() - 1.5 * 60 * 60 * 1000),
@@ -127,7 +129,7 @@ interface SecurityIncident {
   description: 'Incident escalated to security team for investigation',
   author: 'incident.manager@company.com',
   type: 'assignment',
-}
+
           {
   id: 'timeline-3',
   timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
@@ -135,7 +137,7 @@ interface SecurityIncident {
   description: 'Temporarily blocked source IP 192.168.1.100 to prevent further attempts',
   author: 'security.team@company.com',
   type: 'action'],
-  response_actions: [,
+  response_actions: [
   {
   id: 'action-1',
   title: 'Block Source IP',
@@ -143,7 +145,7 @@ interface SecurityIncident {
   status: 'completed',
   assigned_to: 'security.team@company.com',
   completed_at: new Date(Date.now() - 1 * 60 * 60 * 1000),
-}
+
           {
   id: 'action-2',
   title: 'Analyze Attack Pattern',
@@ -151,7 +153,7 @@ interface SecurityIncident {
   status: 'in_progress',
   assigned_to: 'analyst@company.com',
   due_date: new Date(Date.now() + 2 * 60 * 60 * 1000),
-}
+
           {
   id: 'action-3',
   title: 'Update Rate Limiting',
@@ -159,7 +161,7 @@ interface SecurityIncident {
   status: 'pending',
   assigned_to: 'devops@company.com',
   due_date: new Date(Date.now() + 4 * 60 * 60 * 1000)];
-  };
+};
       setIncident(mockIncident);
       setIsLoading(false);
     }, 800);

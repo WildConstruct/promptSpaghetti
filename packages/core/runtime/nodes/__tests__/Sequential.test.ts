@@ -1,16 +1,15 @@
 // packages/core/runtime/nodes/__tests__/Sequential.test.ts
 // Comprehensive tests for Sequential node
-import { 
-  SequentialNode, 
+import { SequentialNode, 
   createSequentialNode,
   createSequencePattern,
   LinearPattern,
   CyclicalPattern,
   RandomPattern,
   WeightedPattern,
-  SequentialPresets,
+  SequentialPresets }
   SequenceState
-} from '../Sequential';
+ from '../Sequential';
 import { AdvancedExecutionUtils } from '../../advanced';
 import type { AdvancedExecutionContext } from '../../advanced';
 describe('Sequential Node', () => {
@@ -21,13 +20,11 @@ describe('Sequential Node', () => {
       seed: 12345;
   });
   });
-  describe('Basic Functionality', () => {
-    test('should create Sequential node with default linear pattern', () => {
+  describe('Basic Functionality', () => { test('should create Sequential node with default linear pattern', () => {
       const sequence = ['first', 'second', 'third'];
       const node = new SequentialNode('test-sequential', sequence);
       expect(node).toBeDefined();
-      expect(node.id).toBe('test-sequential');
-    });
+      expect(node.id).toBe('test-sequential') });
     test('should process linear sequence in order', () => {
       const sequence = ['alpha', 'beta', 'gamma'];
       const node = new SequentialNode('linear-test', sequence, new LinearPattern());
@@ -36,11 +33,9 @@ describe('Sequential Node', () => {
       expect(node.run(context)).toBe('gamma');
       expect(node.run(context)).toBe('gamma'); // Should stay on last item
     });
-    test('should handle empty sequence gracefully', () => {
-      const node = new SequentialNode('empty-test', []);
+    test('should handle empty sequence gracefully', () => { const node = new SequentialNode('empty-test', []);
       const result = node.run(context);
-      expect(result).toBe('');
-    });
+      expect(result).toBe('') });
     test('should be deterministic with same seed', () => {
       const sequence = ['one', 'two', 'three'];
       const node1 = new SequentialNode('det-test1', sequence);
@@ -52,8 +47,7 @@ describe('Sequential Node', () => {
       expect(results1).toEqual(results2);
     });
   });
-  describe('Linear Pattern', () => {
-    test('should process items in order and stop at end', () => {
+  describe('Linear Pattern', () => { test('should process items in order and stop at end', () => {
       const pattern = new LinearPattern();
       const sequence = ['first', 'second', 'third'];
       const node = new SequentialNode('linear', sequence, pattern);
@@ -61,17 +55,13 @@ describe('Sequential Node', () => {
       expect(node.run(context)).toBe('second');
       expect(node.run(context)).toBe('third');
       expect(node.run(context)).toBe('third');
-      expect(node.run(context)).toBe('third');
-    });
-    test('should handle single item sequence', () => {
-      const pattern = new LinearPattern();
+      expect(node.run(context)).toBe('third') });
+    test('should handle single item sequence', () => { const pattern = new LinearPattern();
       const node = new SequentialNode('single', ['only'], pattern);
       expect(node.run(context)).toBe('only');
-      expect(node.run(context)).toBe('only');
-    });
+      expect(node.run(context)).toBe('only') });
   });
-  describe('Cyclical Pattern', () => {
-    test('should cycle through sequence infinitely', () => {
+  describe('Cyclical Pattern', () => { test('should cycle through sequence infinitely', () => {
       const pattern = new CyclicalPattern();
       const sequence = ['A', 'B', 'C'];
       const node = new SequentialNode('cyclical', sequence, pattern);
@@ -84,15 +74,12 @@ describe('Sequential Node', () => {
       expect(node.run(context)).toBe('B');
       expect(node.run(context)).toBe('C');
       // Third cycle start
-      expect(node.run(context)).toBe('A');
-    });
-    test('should handle single item cycle', () => {
-      const pattern = new CyclicalPattern();
+      expect(node.run(context)).toBe('A') });
+    test('should handle single item cycle', () => { const pattern = new CyclicalPattern();
       const node = new SequentialNode('single-cycle', ['repeat'], pattern);
       expect(node.run(context)).toBe('repeat');
       expect(node.run(context)).toBe('repeat');
-      expect(node.run(context)).toBe('repeat');
-    });
+      expect(node.run(context)).toBe('repeat') });
   });
   describe('Random Pattern', () => {
     test('should select items randomly', () => {
@@ -100,12 +87,10 @@ describe('Sequential Node', () => {
       const sequence = ['red', 'green', 'blue'];
       const node = new SequentialNode('random', sequence, pattern);
       const results: string = [];
-      for (let i = 0; i < 10; i++) {
-        results.push(node.run(context));
+      for (let i = 0; i < 10; i++) { results.push(node.run(context));
       // All results should be from the sequence
       results.forEach(result => {)
-  expect(sequence).toContain(result);
-      });
+  expect(sequence).toContain(result) });
       // With randomness and 10 iterations, we should see some variation
       const uniqueResults = new Set(results);
       expect(uniqueResults.size).toBeGreaterThan(1);
@@ -115,13 +100,11 @@ describe('Sequential Node', () => {
       const sequence = ['x', 'y', 'z'];
       const node = new SequentialNode('no-repeats', sequence, pattern);
       const results: string = [];
-      for (let i = 0; i < 3; i++) {
-        results.push(node.run(context));
+      for (let i = 0; i < 3; i++) { results.push(node.run(context));
       // Should get all items without repeats
       expect(new Set(results).size).toBe(3);
       sequence.forEach(item => {)
-  expect(results).toContain(item);
-      });
+  expect(results).toContain(item) });
     });
     test('should be deterministic with same seed', () => {
       const pattern = new RandomPattern({ allowRepeats: true });
@@ -132,11 +115,9 @@ describe('Sequential Node', () => {
       const ctx2 = AdvancedExecutionUtils.enhanceContext({ variables: {}, seed: 777 });
       const results1: string = [];
       const results2: string = [];
-      for (let i = 0; i < 5; i++) {
-        results1.push(node1.run(ctx1));
+      for (let i = 0; i < 5; i++) { results1.push(node1.run(ctx1));
         results2.push(node2.run(ctx2));
-      expect(results1).toEqual(results2);
-    });
+      expect(results1).toEqual(results2) });
   });
   describe('Weighted Pattern', () => {
     test('should select items based on weights', () => {
@@ -145,25 +126,21 @@ describe('Sequential Node', () => {
       const sequence = ['frequent', 'rare1', 'rare2'];
       const node = new SequentialNode('weighted', sequence, pattern);
       const results: string = [];
-      for (let i = 0; i < 20; i++) {
-        results.push(node.run(context));
+      for (let i = 0; i < 20; i++) { results.push(node.run(context));
       // Should heavily favor 'frequent'
       const frequentCount = results.filter(r => r === 'frequent').length;
       const rareCount = results.filter(r => r !== 'frequent').length;
-      expect(frequentCount).toBeGreaterThan(rareCount);
-    });
+      expect(frequentCount).toBeGreaterThan(rareCount) });
     test('should handle equal weights', () => {
       const weights = [1, 1, 1];
       const pattern = new WeightedPattern({ weights });
       const sequence = ['equal1', 'equal2', 'equal3'];
       const node = new SequentialNode('equal-weights', sequence, pattern);
       const results: string = [];
-      for (let i = 0; i < 15; i++) {
-        results.push(node.run(context));
+      for (let i = 0; i < 15; i++) { results.push(node.run(context));
       // Should see all items
       const uniqueResults = new Set(results);
-      expect(uniqueResults.size).toBe(3);
-    });
+      expect(uniqueResults.size).toBe(3) });
     test('should throw error if weights length mismatches sequence', () => {
       expect(() => {
         new WeightedPattern({ weights: [1, 2] }); // Will fail when used with different length sequence
@@ -179,12 +156,10 @@ describe('Sequential Node', () => {
       const sequence = ['never1', 'always', 'never2'];
       const node = new SequentialNode('zero-weights', sequence, pattern);
       const results: string = [];
-      for (let i = 0; i < 10; i++) {
-        results.push(node.run(context));
+      for (let i = 0; i < 10; i++) { results.push(node.run(context));
       // Should only return 'always'
       results.forEach(result => {)
-  expect(result).toBe('always');
-      });
+  expect(result).toBe('always') });
     });
     test('should handle all zero weights gracefully', () => {
       const weights = [0, 0, 0];
@@ -196,8 +171,7 @@ describe('Sequential Node', () => {
       expect(sequence).toContain(result);
     });
   });
-  describe('State Management', () => {
-    test('should track execution state correctly', () => {
+  describe('State Management', () => { test('should track execution state correctly', () => {
       const sequence = ['one', 'two', 'three'];
       const node = new SequentialNode('state-test', sequence);
       // Initial state
@@ -212,10 +186,8 @@ describe('Sequential Node', () => {
       node.run(context);
       state = node.getCurrentState(context);
       expect(state!.index).toBe(2);
-      expect(state!.history).toEqual(['one', 'two']);
-    });
-    test('should reset state correctly', () => {
-      const sequence = ['x', 'y', 'z'];
+      expect(state!.history).toEqual(['one', 'two']) });
+    test('should reset state correctly', () => { const sequence = ['x', 'y', 'z'];
       const node = new SequentialNode('reset-test', sequence);
       // Execute a few times
       node.run(context);
@@ -229,10 +201,8 @@ describe('Sequential Node', () => {
       expect(state!.index).toBe(0);
       expect(state!.history).toEqual([]);
       // Next run should start from beginning
-      expect(node.run(context)).toBe('x');
-    });
-    test('should maintain separate state per node', () => {
-      const sequence = ['shared1', 'shared2'];
+      expect(node.run(context)).toBe('x') });
+    test('should maintain separate state per node', () => { const sequence = ['shared1', 'shared2'];
       const node1 = new SequentialNode('node1', sequence);
       const node2 = new SequentialNode('node2', sequence);
       // Execute nodes independently
@@ -246,41 +216,32 @@ describe('Sequential Node', () => {
       expect(state1!.index).toBe(2);
       expect(state2!.index).toBe(2);
       expect(state1!.history).toEqual(['shared1', 'shared2']);
-      expect(state2!.history).toEqual(['shared1', 'shared2']);
-    });
+      expect(state2!.history).toEqual(['shared1', 'shared2']) });
   });
-  describe('Validation', () => {
-    test('should validate basic configuration', () => {
+  describe('Validation', () => { test('should validate basic configuration', () => {
       const node = new SequentialNode('validation-test', ['valid1', 'valid2']);
       const result = node.validate();
       expect(result.valid).toBe(true);
-      expect(result.errors).toHaveLength(0);
-    });
-    test('should warn about empty sequence', () => {
-      const node = new SequentialNode('empty-validation', []);
+      expect(result.errors).toHaveLength(0) });
+    test('should warn about empty sequence', () => { const node = new SequentialNode('empty-validation', []);
       const result = node.validate();
       expect(result.valid).toBe(true); // Warning, not error
-      expect(result.warnings).toContain('No sequence items configured - will return empty string');
-    });
-    test('should warn about invalid sequence items', () => {
-      const node = new SequentialNode('invalid-items', ['valid', null as any, undefined as any]);
+      expect(result.warnings).toContain('No sequence items configured - will return empty string') });
+    test('should warn about invalid sequence items', () => { const node = new SequentialNode('invalid-items', ['valid', null as any, undefined as any]);
       const result = node.validate();
       expect(result.valid).toBe(true); // Warning, not error
-      expect(result.warnings.length).toBeGreaterThan(0);
-    });
-    test('should validate weighted pattern configuration', () => {
-      const validWeightedNode = createSequentialNode(;);
+      expect(result.warnings.length).toBeGreaterThan(0) });
+    test('should validate weighted pattern configuration', () => { const validWeightedNode = createSequentialNode(;);
         'valid-weighted', 
         ['a', 'b'], 
-        'weighted', 
+        'weighted' }
         { weights: [1, 2] }
       );
       const result = validWeightedNode.validate();
       expect(result.valid).toBe(true);
     });
   });
-  describe('Serialization', () => {
-    test('should serialize node data correctly', () => {
+  describe('Serialization', () => { test('should serialize node data correctly', () => {
       const sequence = ['serialize1', 'serialize2'];
       const node = new SequentialNode('serialize-test', sequence);
       const serialized = node.serialize();
@@ -288,8 +249,7 @@ describe('Sequential Node', () => {
       expect(serialized.type).toBe('Sequential');
       expect(serialized.data.sequence).toEqual(sequence);
       expect(serialized.data.pattern.type).toBe('linear');
-      expect(serialized.metadata?.version).toBe('1.0.0');
-    });
+      expect(serialized.metadata?.version).toBe('1.0.0') });
     test('should serialize weighted pattern with config', () => {
       const weights = [2, 3, 1];
       const node = createSequentialNode('weighted-serialize', ['a', 'b', 'c'], 'weighted', { weights });
@@ -328,13 +288,11 @@ describe('Sequential Node', () => {
       expect(duration).toBeLessThan(1000); // Less than 1 second
     });
   });
-  describe('Factory Functions', () => {
-    test('should create node via factory function', () => {
+  describe('Factory Functions', () => { test('should create node via factory function', () => {
       const sequence = ['factory1', 'factory2'];
       const node = createSequentialNode('factory-test', sequence, 'cyclical');
       expect(node).toBeInstanceOf(SequentialNode);
-      expect(node.id).toBe('factory-test');
-    });
+      expect(node.id).toBe('factory-test') });
     test('should create patterns via factory', () => {
       const linearPattern = createSequencePattern('linear');
       const cyclicalPattern = createSequencePattern('cyclical');
@@ -346,8 +304,7 @@ describe('Sequential Node', () => {
       expect(weightedPattern).toBeInstanceOf(WeightedPattern);
     });
   });
-  describe('Preset Patterns', () => {
-    test('should provide preset pattern builders', () => {
+  describe('Preset Patterns', () => { test('should provide preset pattern builders', () => {
       const sequence = ['preset1', 'preset2', 'preset3'];
       const linearPreset = SequentialPresets.linear(sequence);
       const cyclePreset = SequentialPresets.cycle(sequence);
@@ -360,10 +317,8 @@ describe('Sequential Node', () => {
       expect(randomPreset.type).toBe('random');
       expect(shufflePreset.type).toBe('random');
       expect(weightedPreset.type).toBe('weighted');
-      expect(uniformPreset.type).toBe('weighted');
-    });
-    test('should work with preset patterns', () => {
-  const sequence = ['test1', 'test2', 'test3'];
+      expect(uniformPreset.type).toBe('weighted') });
+    test('should work with preset patterns', () => { const sequence = ['test1', 'test2', 'test3'];
   const shufflePattern = SequentialPresets.shuffle();
   const node = new SequentialNode('preset-shuffle', sequence, shufflePattern);
   const results: string = [];
@@ -371,7 +326,6 @@ describe('Sequential Node', () => {
   results.push(node.run(context));
   // Should get all items at least once in first 3 iterations
   const firstThree = results.slice(0, 3);
-  expect(new Set(firstThree).size).toBe(3);
-});
+  expect(new Set(firstThree).size).toBe(3) });
   });
 });

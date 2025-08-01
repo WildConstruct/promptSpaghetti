@@ -20,14 +20,14 @@ import {
   ReviewDecision,
   ReviewMetadata,
   ReviewCriteria
-} from '../types/ReviewTools.js';
+ from '../types/ReviewTools.js';
 
 // =============================================================================
 // Review Process Configuration
 // =============================================================================
 
-}
-}
+
+
 export interface ReviewProcessTemplate {
   id: string;
   name: string;
@@ -64,12 +64,13 @@ export interface ReviewProcessTemplate {
   updated_at: Date;
   created_by: string;
   active: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewStage {
   id: string;
   name: string;
@@ -96,65 +97,71 @@ export interface ReviewStage {
   onApprove?: StageAction[];
   onReject?: StageAction[];
   onEscalate?: StageAction[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StageAction {
   type: 'assign_reviewer' | 'send_notification' | 'update_metadata' | 'create_task' | 'call_webhook';
   config: Record<string, any>;
   condition?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationThreshold {
   condition: string; // e.g., "time_elapsed > 24h" or "decision_confidence < 60"
   level: number;
   action: EscalationAction;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationAction {
   type: 'assign_senior_reviewer' | 'require_consensus' | 'notify_admin' | 'auto_approve' | 'auto_reject';
   config: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRule {
   id: string;
   condition: string;
   action: EscalationAction;
   priority: number;
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutoApprovalRule {
   id: string;
   condition: string;
   confidence_threshold: number;
   max_value?: number; // For amount-based rules
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationSettings {
   email: boolean;
   slack: boolean;
@@ -170,16 +177,17 @@ export interface NotificationSettings {
   reviewers: boolean;
   admins: boolean;
   stakeholders: string[];
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Review Process State Management
 // =============================================================================
 
-}
-}
+
+
 export interface ReviewProcess {
   id: string;
   reviewId: string;
@@ -209,9 +217,10 @@ export interface ReviewProcess {
   processData: Record<string, any>;
   
   created_by: string;
-}
-}
-}
+
+
+
+
 
 export type ReviewProcessStatus = 
   | 'pending'
@@ -224,8 +233,8 @@ export type ReviewProcessStatus =
   | 'expired'
   | 'cancelled';
 
-}
-}
+
+
 export interface ReviewProcessResult {
   reviewId: string;
   processId: string;
@@ -247,9 +256,10 @@ export interface ReviewProcessResult {
   summary: string;
   recommendations: string[];
   completed_at: Date;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Main Service Implementation
@@ -270,14 +280,14 @@ export class ReviewProcessService {
     this.db = db;
     this.logger = logger;
     this.reviewerAssignmentService = reviewerAssignmentService;
-  }
+
 
   async initialize(): Promise<void> {
 
     await this.loadProcessTemplates();
     await this.initializeDatabase();
     this.logger.log('ReviewProcessService initialized');
-  }
+
 
   // =============================================================================
   // Process Template Management
@@ -319,29 +329,28 @@ export class ReviewProcessService {
       
       this.logger.log(`Created review process template: ${templateId}`);
       return templateId;
-      
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getProcessTemplate(templateId: string): Promise<ReviewProcessTemplate | null> {
 
     return this.processTemplates.get(templateId) || null;
-  }
+
 
   async getProcessTemplateForReviewType(reviewType: ReviewType): Promise<ReviewProcessTemplate | null> {
 
     for (const template of this.processTemplates.values()) {
       if (template.reviewType === reviewType && template.active) {
         return template;
-      }
-    }
+
+
     return null;
-  }
+
 
   // =============================================================================
   // Review Process Orchestration
@@ -352,13 +361,13 @@ export class ReviewProcessService {
     const template = await this.getProcessTemplateForReviewType(reviewItem.reviewType);
     if (!template) {
       throw new Error(`No active process template found for review type: ${reviewItem.reviewType}`);
-    }
+
 
     // Check auto-approval rules first
     const autoApprovalResult = await this.checkAutoApprovalRules(reviewItem, template);
     if (autoApprovalResult.shouldAutoApprove) {
       return await this.executeAutoApproval(reviewItem, autoApprovalResult);
-    }
+
 
     const processId = `process_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const dueDate = new Date(Date.now() + template.slaHours * 60 * 60 * 1000);
@@ -391,19 +400,19 @@ export class ReviewProcessService {
     
     this.logger.log(`Started review process ${processId} for review ${reviewItem.reviewId}`);
     return processId;
-  }
+
 
   async processReviewDecision(reviewId: string, decision: ReviewDecision): Promise<void> {
 
     const reviewProcess = await this.getReviewProcess(reviewId);
     if (!reviewProcess) {
       throw new Error(`Review process not found for review: ${reviewId}`);
-    }
+
 
     const template = this.processTemplates.get(reviewProcess.templateId);
     if (!template) {
       throw new Error(`Process template not found: ${reviewProcess.templateId}`);
-    }
+
 
     // Record the decision
     await this.recordDecision(reviewProcess, decision);
@@ -415,34 +424,34 @@ export class ReviewProcessService {
     const currentStage = template.stages.find(s => s.id === reviewProcess.currentStage);
     if (!currentStage) {
       throw new Error(`Current stage not found: ${reviewProcess.currentStage}`);
-    }
+
 
     // Check if stage is complete
     const stageComplete = await this.isStageComplete(reviewProcess, currentStage);
     
     if (stageComplete) {
       await this.completeStage(reviewProcess, currentStage, template);
-    } else {
+ else {
       // Check if we need more reviewers for consensus
       if (template.requiresConsensus) {
         await this.evaluateConsensusRequirement(reviewProcess, template);
-      }
-    }
+
+
 
     await this.saveReviewProcess(reviewProcess);
-  }
+
 
   async escalateReview(reviewId: string, reason: string, escalatedBy: string): Promise<void> {
 
     const reviewProcess = await this.getReviewProcess(reviewId);
     if (!reviewProcess) {
       throw new Error(`Review process not found for review: ${reviewId}`);
-    }
+
 
     const template = this.processTemplates.get(reviewProcess.templateId);
     if (!template) {
       throw new Error(`Process template not found: ${reviewProcess.templateId}`);
-    }
+
 
     reviewProcess.status = 'escalated';
     reviewProcess.escalation_count += 1;
@@ -452,8 +461,8 @@ export class ReviewProcessService {
     for (const rule of template.escalationRules.filter(r => r.enabled)) {
       if (await this.evaluateCondition(rule.condition, reviewProcess)) {
         await this.executeEscalationAction(reviewProcess, rule.action);
-      }
-    }
+
+
 
     await this.saveReviewProcess(reviewProcess);
     
@@ -465,7 +474,7 @@ export class ReviewProcessService {
     });
 
     this.logger.log(`Review ${reviewId} escalated: ${reason}`);
-  }
+
 
   // =============================================================================
   // Stage Management
@@ -489,15 +498,15 @@ export class ReviewProcessService {
     // Execute stage actions
     if (stage.onApprove) {
       // These will be executed when stage conditions are met
-    }
+
 
     reviewProcess.total_reviewers += assignments.length;
     
     // Set timeout for stage if configured
     if (stage.timeoutMinutes > 0) {
       await this.scheduleStageTimeout(reviewProcess.id, stage.id, stage.timeoutMinutes);
-    }
-  }
+
+
 
   private async completeStage(
     reviewProcess: ReviewProcess, 
@@ -518,12 +527,12 @@ export class ReviewProcessService {
     if (stageDecision === 'approve' && stage.onApprove) {
       for (const action of stage.onApprove) {
         await this.executeStageAction(reviewProcess, action);
-      }
-    } else if (stageDecision === 'reject' && stage.onReject) {
+
+ else if (stageDecision === 'reject' && stage.onReject) {
       for (const action of stage.onReject) {
         await this.executeStageAction(reviewProcess, action);
-      }
-    }
+
+
 
     // Determine next stage
     const nextStages = await this.getNextStages(reviewProcess, template);
@@ -531,19 +540,19 @@ export class ReviewProcessService {
     if (nextStages.length === 0) {
       // Process complete
       await this.completeReviewProcess(reviewProcess, template);
-    } else {
+ else {
       // Start next stages
       for (const nextStage of nextStages) {
         if (!reviewProcess.activeStages.includes(nextStage.id)) {
           reviewProcess.activeStages.push(nextStage.id);
           reviewProcess.pendingStages = reviewProcess.pendingStages.filter(s => s !== nextStage.id);
           await this.executeStage(reviewProcess, nextStage);
-        }
-      }
+
+
       
       reviewProcess.currentStage = nextStages[0].id;
-    }
-  }
+
+
 
   private async completeReviewProcess(
     reviewProcess: ReviewProcess, 
@@ -566,7 +575,7 @@ export class ReviewProcessService {
     await this.sendProcessCompletionNotifications(reviewProcess, template, result);
     
     this.logger.log(`Review process ${reviewProcess.id} completed with decision: ${finalDecision}`);
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -579,7 +588,7 @@ export class ReviewProcessService {
 
     if (!template.autoApprovalRules || template.autoApprovalRules.length === 0) {
       return { shouldAutoApprove: false };
-    }
+
 
     for (const rule of template.autoApprovalRules.filter(r => r.enabled)) {
       const conditionMet = await this.evaluateCondition(rule.condition, reviewItem);
@@ -591,11 +600,11 @@ export class ReviewProcessService {
           reason: rule.condition,
           confidence: reviewItem.metadata.confidenceScore
         };
-      }
-    }
+
+
 
     return { shouldAutoApprove: false };
-  }
+
 
   private async executeAutoApproval(
     reviewItem: ReviewItem, 
@@ -626,7 +635,7 @@ export class ReviewProcessService {
       processData: {
         auto_approval_reason: approvalResult.reason,
         auto_approval_confidence: approvalResult.confidence
-  }
+
       created_by: 'system'
     };
 
@@ -634,7 +643,7 @@ export class ReviewProcessService {
     
     this.logger.log(`Auto-approved review ${reviewItem.reviewId}: ${approvalResult.reason}`);
     return processId;
-  }
+
 
   private async assignReviewersForStage(
     reviewProcess: ReviewProcess, 
@@ -653,11 +662,11 @@ export class ReviewProcessService {
       metadata: {
         stage: stage.name,
         processId: reviewProcess.id
-      }
+
     });
 
     return assignments.map(a => a.reviewer_id);
-  }
+
 
   private async evaluateCondition(condition: string, context: unknown): Promise<boolean> {
 
@@ -672,8 +681,8 @@ export class ReviewProcessService {
           const hours = parseInt(match[1]);
           const elapsed = Date.now() - context.started_at?.getTime();
           return elapsed > hours * 60 * 60 * 1000;
-        }
-      }
+
+
       
       if (condition.includes('confidence')) {
         // Parse confidence conditions like "decision_confidence < 60"
@@ -681,15 +690,15 @@ export class ReviewProcessService {
         if (match) {
           const threshold = parseInt(match[1]);
           return context.metadata?.confidenceScore < threshold;
-        }
-      }
+
+
 
       return false;
-    } catch (error) {
+ catch (error) {
       this.logger.error(`Error evaluating condition: ${condition}`, error);
       return false;
-    }
-  }
+
+
 
   private async isStageComplete(reviewProcess: ReviewProcess, stage: ReviewStage): Promise<boolean> {
 
@@ -702,15 +711,15 @@ export class ReviewProcessService {
     // Check if minimum reviewers have made decisions
     if (decisions.length < stage.minReviewers) {
       return false;
-    }
+
 
     // Check if all assigned reviewers have made decisions
     if (decisions.length < assignments.length) {
       return false;
-    }
+
 
     return true;
-  }
+
 
   private async getStageDecision(reviewProcess: ReviewProcess, stage: ReviewStage): Promise<DecisionType> {
 
@@ -719,7 +728,7 @@ export class ReviewProcessService {
 
     if (decisions.length === 0) {
       return 'defer';
-    }
+
 
     // Simple majority rule - can be made more sophisticated
     const approvals = decisions.filter((d: unknown) => d.decision === 'approve').length;
@@ -727,12 +736,12 @@ export class ReviewProcessService {
 
     if (approvals > rejections) {
       return 'approve';
-    } else if (rejections > approvals) {
+ else if (rejections > approvals) {
       return 'reject';
-    } else {
+ else {
       return 'escalate';
-    }
-  }
+
+
 
   private async getNextStages(
     reviewProcess: ReviewProcess, 
@@ -742,7 +751,7 @@ export class ReviewProcessService {
     const currentStageIndex = template.stages.findIndex(s => s.id === reviewProcess.currentStage);
     if (currentStageIndex === -1 || currentStageIndex === template.stages.length - 1) {
       return [];
-    }
+
 
     const nextStage = template.stages[currentStageIndex + 1];
     
@@ -750,25 +759,25 @@ export class ReviewProcessService {
     const dependenciesMet = await this.checkStageDependencies(reviewProcess, nextStage);
     if (!dependenciesMet) {
       return [];
-    }
+
 
     return [nextStage];
-  }
+
 
   private async checkStageDependencies(reviewProcess: ReviewProcess, stage: ReviewStage): Promise<boolean> {
 
     if (!stage.dependencies || stage.dependencies.length === 0) {
       return true;
-    }
+
 
     for (const depId of stage.dependencies) {
       if (!reviewProcess.completedStages.includes(depId)) {
         return false;
-      }
-    }
+
+
 
     return true;
-  }
+
 
   // =============================================================================
   // Database Operations
@@ -811,10 +820,10 @@ export class ReviewProcessService {
       };
 
       this.processTemplates.set(template.id, template);
-    }
+
 
     this.logger.log(`Loaded ${this.processTemplates.size} review process templates`);
-  }
+
 
   private async saveReviewProcess(reviewProcess: ReviewProcess): Promise<void> {
 
@@ -843,7 +852,7 @@ export class ReviewProcessService {
       JSON.stringify(reviewProcess.stageData), JSON.stringify(reviewProcess.processData),
       reviewProcess.created_by
     ]);
-  }
+
 
   private async getReviewProcess(reviewId: string): Promise<ReviewProcess | null> {
 
@@ -854,7 +863,7 @@ export class ReviewProcessService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     return {
@@ -878,7 +887,7 @@ export class ReviewProcessService {
       processData: JSON.parse(row.process_data || '{}'),
       created_by: row.created_by
     };
-  }
+
 
   private async initializeDatabase(): Promise<void> {
 
@@ -944,70 +953,68 @@ export class ReviewProcessService {
         CREATE INDEX IF NOT EXISTS idx_review_processes_status ON review_processes(status);
         CREATE INDEX IF NOT EXISTS idx_review_processes_due_date ON review_processes(due_date);
       `);
-
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Placeholder methods for unimplemented functionality
   private async executeAutoApproval(___reviewItem: ReviewItem, ___autoApprovalResult: unknown): Promise<string> {
 
     throw new Error('Method not implemented');
-  }
+
 
   private async recordDecision(___reviewProcess: ReviewProcess, ___decision: ReviewDecision): Promise<void> {
 
     // Implementation needed
-  }
+
 
   private async evaluateConsensusRequirement(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate): Promise<void> {
 
     // Implementation needed
-  }
+
 
   private async executeEscalationAction(___reviewProcess: ReviewProcess, ___action: EscalationAction): Promise<void> {
 
     // Implementation needed
-  }
+
 
   private async logProcessEvent(___processId: string, ___eventType: string, ___data: Record<string, unknown>): Promise<void> {
 
     // Implementation needed
-  }
+
 
   private async scheduleStageTimeout(___processId: string, ___stageId: string, ___timeoutMinutes: number): Promise<void> {
 
     // Implementation needed
-  }
+
 
   private async executeStageAction(___reviewProcess: ReviewProcess, ___action: StageAction): Promise<void> {
 
     // Implementation needed
-  }
+
 
   private async calculateFinalDecision(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate): Promise<DecisionType> {
 
     return 'approve'; // Placeholder
-  }
+
 
   private async isConsensusReached(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate): Promise<boolean> {
 
     return false; // Placeholder
-  }
+
 
   private async generateProcessResult(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate, ___finalDecision: DecisionType): Promise<ReviewProcessResult> {
 
     return {} as ReviewProcessResult; // Placeholder
-  }
+
 
   private async saveProcessResult(___result: ReviewProcessResult): Promise<void> {
 
     // Implementation needed
-  }
+
 
   private async sendProcessCompletionNotifications(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate, ___result: ReviewProcessResult): Promise<void> {
 
     // Implementation needed
-  }
-}
+

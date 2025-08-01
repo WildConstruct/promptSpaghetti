@@ -10,30 +10,32 @@ import { PreviewModal } from './PreviewModal';
 import { PurchaseModal } from './PurchaseModal';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './TemplateDetail.css';
-}
+
+
 interface TemplateDetailProps {
   templateId: string;
   className?: string;
-  export const TemplateDetail: React.FC<TemplateDetailProps> = ({,)
+  export const TemplateDetail: React.FC<TemplateDetailProps> = ({),
   templateId,
   className = ''
-}
+
+
 }) => {
   const [template, setTemplate] = useState<unknown>(null);
   const [similarTemplates, setSimilarTemplates] = useState<Array<{
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  rating: number;
+  rating: number;,
   price: number;
-}>>([]);
+>>([]);
   const [reviews, setReviews] = useState<Array<{
   id: string;,
-  rating: number;
+  rating: number;,
   comment: string;,
-  author: string;
+  author: string;,
   date: string;
-}>>([]);
+>>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
@@ -61,9 +63,9 @@ interface TemplateDetailProps {
       if (reviewsResponse.ok) {
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData || []);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load template');
-} finally {
+ finally {
       setLoading(false);
   }, [templateId, getTemplate]);
   const handlePreview = () => {

@@ -131,13 +131,13 @@ export async function categoryManagementRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof CreateCategorySchema>
-  }>('/', {
+>('/', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'create',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -156,8 +156,7 @@ export async function categoryManagementRoutes(
         data: category,
         message: 'Category created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating category:', error);
       
       if (error instanceof z.ZodError) {
@@ -166,14 +165,14 @@ export async function categoryManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to create category',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -183,13 +182,13 @@ export async function categoryManagementRoutes(
   fastify.get<{
     Params: z.infer<typeof CategoryIdSchema>;
     Querystring: { includeRelationships?: boolean }
-  }>('/:categoryId', {
+>('/:categoryId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -203,14 +202,13 @@ export async function categoryManagementRoutes(
           success: false,
           error: 'Category not found'
         });
-      }
+
 
       return reply.send({
         success: true,
         data: category
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting category:', error);
       
       if (error instanceof z.ZodError) {
@@ -219,14 +217,14 @@ export async function categoryManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to get category',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -236,13 +234,13 @@ export async function categoryManagementRoutes(
   fastify.put<{
     Params: z.infer<typeof CategoryIdSchema>;
     Body: z.infer<typeof UpdateCategorySchema>
-  }>('/:categoryId', {
+>('/:categoryId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'update',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -262,8 +260,7 @@ export async function categoryManagementRoutes(
         data: category,
         message: 'Category updated successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error updating category:', error);
       
       if (error instanceof z.ZodError) {
@@ -272,14 +269,14 @@ export async function categoryManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to update category',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -289,13 +286,13 @@ export async function categoryManagementRoutes(
   fastify.delete<{
     Params: z.infer<typeof CategoryIdSchema>;
     Querystring: { cascadeDelete?: boolean; transferChildrenTo?: string }
-  }>('/:categoryId', {
+>('/:categoryId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'delete',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -317,8 +314,7 @@ export async function categoryManagementRoutes(
         success: true,
         message: 'Category deleted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error deleting category:', error);
       
       if (error instanceof z.ZodError) {
@@ -327,14 +323,14 @@ export async function categoryManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to delete category',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -343,13 +339,13 @@ export async function categoryManagementRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof CategoryQuerySchema>
-  }>('/query', {
+>('/query', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -365,10 +361,9 @@ export async function categoryManagementRoutes(
           hasMore: result.hasMore,
           limit: query.pagination?.limit || 50,
           offset: query.pagination?.offset || 0
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error querying categories:', error);
       
       if (error instanceof z.ZodError) {
@@ -377,14 +372,14 @@ export async function categoryManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to query categories',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -396,14 +391,14 @@ export async function categoryManagementRoutes(
       domain?: string; 
       rootCategoryId?: string; 
       maxDepth?: number;
-    }
-  }>('/tree', {
+
+>('/tree', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -426,10 +421,9 @@ export async function categoryManagementRoutes(
           domain: query.domain,
           rootCategoryId: query.rootCategoryId,
           maxDepth: query.maxDepth
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting category tree:', error);
       
       return reply.code(500).send({
@@ -437,7 +431,7 @@ export async function categoryManagementRoutes(
         error: 'Failed to get category tree',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -447,13 +441,13 @@ export async function categoryManagementRoutes(
   fastify.post<{
     Params: z.infer<typeof CategoryIdSchema>;
     Body: z.infer<typeof CategoryRelationshipSchema>
-  }>('/:categoryId/relationships', {
+>('/:categoryId/relationships', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'manage_relationships',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -478,8 +472,7 @@ export async function categoryManagementRoutes(
         data: relationship,
         message: 'Category relationship created successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error creating category relationship:', error);
       
       if (error instanceof z.ZodError) {
@@ -488,14 +481,14 @@ export async function categoryManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to create category relationship',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -507,14 +500,14 @@ export async function categoryManagementRoutes(
     Querystring: { 
       periodStart?: string; 
       periodEnd?: string; 
-    }
-  }>('/:categoryId/statistics', {
+
+>('/:categoryId/statistics', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'read_statistics',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -540,10 +533,9 @@ export async function categoryManagementRoutes(
           categoryId,
           periodStart: periodStart?.toISOString(),
           periodEnd: periodEnd?.toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting category statistics:', error);
       
       return reply.code(500).send({
@@ -551,7 +543,7 @@ export async function categoryManagementRoutes(
         error: 'Failed to get category statistics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -563,14 +555,14 @@ export async function categoryManagementRoutes(
     Querystring: { 
       periodStart?: string; 
       periodEnd?: string; 
-    }
-  }>('/:categoryId/analytics', {
+
+>('/:categoryId/analytics', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'read_analytics',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -597,10 +589,9 @@ export async function categoryManagementRoutes(
           categoryId,
           periodStart: periodStart.toISOString(),
           periodEnd: periodEnd.toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting category analytics:', error);
       
       return reply.code(500).send({
@@ -608,7 +599,7 @@ export async function categoryManagementRoutes(
         error: 'Failed to get category analytics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -617,13 +608,13 @@ export async function categoryManagementRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof BulkOperationSchema>
-  }>('/bulk', {
+>('/bulk', {
     preHandler: fastify.requirePermission([
       {
         resource: 'categories',
         action: 'bulk_operations',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -638,15 +629,14 @@ export async function categoryManagementRoutes(
       const result = await categoryService.performBulkOperation({
         ...bulkOperation,
         requestedBy: user.id
-      } as any, user.id, context);
+ as any, user.id, context);
 
       return reply.send({
         success: true,
         data: result,
         message: `Bulk operation completed: ${result.success} successful, ${result.failed} failed`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error performing bulk operation:', error);
       
       if (error instanceof z.ZodError) {
@@ -655,14 +645,14 @@ export async function categoryManagementRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to perform bulk operation',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -675,7 +665,7 @@ export async function categoryManagementRoutes(
         resource: 'categories',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -686,35 +676,35 @@ export async function categoryManagementRoutes(
           description: 'System-wide configuration categories',
           allowsChildren: true,
           defaultAccessLevel: 'admin_only'
-  }
+
         {
           domain: 'user_activities',
           name: 'User Activities',
           description: 'User activity and behavior categories',
           allowsChildren: false,
           defaultAccessLevel: 'read_only'
-  }
+
         {
           domain: 'admin_tools',
           name: 'Administrative Tools',
           description: 'Administrative tool and management categories',
           allowsChildren: true,
           defaultAccessLevel: 'admin_only'
-  }
+
         {
           domain: 'content_management',
           name: 'Content Management',
           description: 'Content creation and management categories',
           allowsChildren: true,
           defaultAccessLevel: 'read_write'
-  }
+
         {
           domain: 'security',
           name: 'Security',
           description: 'Security and compliance categories',
           allowsChildren: true,
           defaultAccessLevel: 'admin_only'
-        }
+
       ];
 
       return reply.send({
@@ -723,10 +713,9 @@ export async function categoryManagementRoutes(
         metadata: {
           totalDomains: domains.length,
           generatedAt: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting category domains:', error);
       
       return reply.code(500).send({
@@ -734,7 +723,7 @@ export async function categoryManagementRoutes(
         error: 'Failed to get category domains',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -755,13 +744,13 @@ export async function categoryManagementRoutes(
           bulkOperations: 'operational',
           analytics: 'operational',
           templateSystem: 'operational'
-  }
+
         metrics: {
           totalCategories: 0, // Would query actual count
           totalDomains: 25,
           averageHierarchyDepth: 2.3,
           uptime: process.uptime()
-  }
+
         environment: process.env.NODE_ENV || 'development'
       };
 
@@ -769,13 +758,11 @@ export async function categoryManagementRoutes(
         success: true,
         data: healthStatus
       });
-
-    } catch (error) {
+ catch (error) {
       return reply.code(503).send({
         success: false,
         error: 'Category management system unhealthy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}

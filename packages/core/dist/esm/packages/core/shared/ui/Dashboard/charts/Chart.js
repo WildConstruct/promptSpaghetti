@@ -48,7 +48,12 @@ export const Chart = ({
     className = ''
 });
 {
-    const [hoveredPoint, setHoveredPoint] = React.useState(null);
+    const [hoveredPoint, setHoveredPoint] = React.useState < {
+        point: ChartDataPoint,
+        series: ChartSeries,
+        x: number,
+        y: number
+    } | null > (null);
     const chartRef = React.useRef(null);
     const colors = defaultColors[colorScheme] || defaultColors.default;
     // Calculate chart dimensions and scales
@@ -261,8 +266,9 @@ const renderPieChart = () => {
                 const x2 = centerX + radius * Math.cos(((currentAngle + angle) * Math.PI) / 180);
                 const y2 = centerY + radius * Math.sin(((currentAngle + angle) * Math.PI) / 180);
                 const largeArcFlag = angle > 180 ? 1 : 0;
-                const pathData = [];
-                `M ${centerX} ${centerY}`;
+                const pathData = [
+                    `M ${centerX} ${centerY}`
+                ];
             }), "`L $", x1, " $", y1, "`} } `A $", radius, " $", radius, " 0 $", largeArcFlag, " 1 $", x2, " $", y2, "`} } 'Z' ].join(' '); const color = point.color || getSeriesColor(index, series[0]); const result = (;);", _jsx("path", { d: pathData, fill: color, className: "pie-slice", onMouseEnter: (e) => handleDataPointInteraction(point, series[0], e, 'hover'), onClick: (e) => handleDataPointInteraction(point, series[0], e, 'click') }, `slice-${index}`), "); currentAngle += angle; return result; })}"] });
 };
 ;

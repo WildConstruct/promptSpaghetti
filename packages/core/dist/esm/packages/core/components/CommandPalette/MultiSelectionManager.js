@@ -7,7 +7,10 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
  */
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useReactFlow } from 'reactflow';
-export const MultiSelectionManager = ({ nodes, edges, selectedNodes, selectedEdges, onNodesSelect, onEdgesSelect, onSelectionChange, theme = 'cinema', disabled = false }) => {
+onSelectionChange: (selection) => void ;
+theme ?  : 'light' | 'dark' | 'cinema';
+disabled ?  : boolean;
+export const MultiSelectionManager = ({ nodes, edges, selectedNodes, selectedEdges, onNodesSelect, onEdgesSelect, onSelectionChange, theme = 'cinema', disabled = false, }) => {
     const [selectionRect, setSelectionRect] = useState({
         startX: 0,
         startY: 0,
@@ -70,7 +73,7 @@ export const MultiSelectionManager = ({ nodes, edges, selectedNodes, selectedEdg
         setSelectionRect(prev => ({
             ...prev,
             currentX,
-            currentY
+            currentY,
         }));
         // Update selection based on current rectangle
         updateSelectionFromRect(selectionRect.startX, selectionRect.startY, currentX, currentY);
@@ -97,10 +100,7 @@ export const MultiSelectionManager = ({ nodes, edges, selectedNodes, selectedEdg
             const nodeY = node.position.y;
             const nodeWidth = node.width || 200; // Default width
             const nodeHeight = node.height || 100; // Default height
-            return (nodeX >= flowStartX &&
-                nodeY >= flowStartY &&
-                nodeX + nodeWidth <= flowEndX &&
-                nodeY + nodeHeight <= flowEndY);
+            return (nodeX >= flowStartX && nodeY >= flowStartY && nodeX + nodeWidth <= flowEndX && nodeY + nodeHeight <= flowEndY);
         });
         // Update selection
         onNodesSelect(nodesInSelection);
@@ -190,7 +190,7 @@ export const MultiSelectionManager = ({ nodes, edges, selectedNodes, selectedEdg
                 background: 'var(--color-bg-secondary)',
                 text: 'var(--color-text-primary)',
                 accent: 'var(--color-accent-orange)',
-            }
+            },
         };
         return themes[theme];
     };
@@ -214,7 +214,7 @@ export const MultiSelectionManager = ({ nodes, edges, selectedNodes, selectedEdg
             borderRadius: '2px',
             pointerEvents: 'none',
             zIndex: 1000,
-            transition: 'none'
+            transition: 'none',
         };
     };
     return (_jsxs(_Fragment, { children: [_jsx("div", { ref: selectionRef, style: {
@@ -227,7 +227,7 @@ export const MultiSelectionManager = ({ nodes, edges, selectedNodes, selectedEdg
                     pointerEvents: disabled ? 'none' : 'auto',
                 }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, children: _jsx("div", { style: getSelectionRectStyle() }) }), (selectedNodes.length > 0 || selectedEdges.length > 0) && (_jsx(SelectionInfoPanel, { selectedNodes: selectedNodes, selectedEdges: selectedEdges, onClearSelection: handleClearSelection, onSelectAll: handleSelectAll, onInvertSelection: handleInvertSelection, theme: theme }))] }));
 };
-const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, onSelectAll, onInvertSelection, theme }) => {
+const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, onSelectAll, onInvertSelection, theme, }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const getThemeStyles = () => {
         const themes = {
@@ -257,7 +257,7 @@ const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, on
                 textSecondary: 'var(--color-text-secondary)',
                 accent: 'var(--color-accent-orange)',
                 hover: 'var(--color-ui-hover)',
-            }
+            },
         };
         return themes[theme];
     };
@@ -273,7 +273,7 @@ const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, on
             zIndex: 1001,
             minWidth: '280px',
             maxWidth: '400px',
-            fontFamily: 'var(--font-family-primary)'
+            fontFamily: 'var(--font-family-primary)',
         }, children: [_jsxs("div", { style: {
                     padding: '12px 16px',
                     background: styles.secondary,
@@ -282,7 +282,7 @@ const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, on
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                 }, onClick: () => setIsExpanded(!isExpanded), children: [_jsxs("div", { style: {
                             display: 'flex',
                             alignItems: 'center',
@@ -313,7 +313,7 @@ const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, on
                                     fontSize: '12px',
                                     fontWeight: '500',
                                     cursor: 'pointer',
-                                    transition: 'all var(--transition-fast)'
+                                    transition: 'all var(--transition-fast)',
                                 }, title: "Select All (\u2318A)", children: "Select All" }), _jsx("button", { onClick: onInvertSelection, style: {
                                     padding: '6px 12px',
                                     background: 'transparent',
@@ -323,7 +323,7 @@ const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, on
                                     fontSize: '12px',
                                     fontWeight: '500',
                                     cursor: 'pointer',
-                                    transition: 'all var(--transition-fast)'
+                                    transition: 'all var(--transition-fast)',
                                 }, title: "Invert Selection (\u2318I)", children: "Invert" }), _jsx("button", { onClick: onClearSelection, style: {
                                     padding: '6px 12px',
                                     background: 'transparent',
@@ -333,7 +333,7 @@ const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, on
                                     fontSize: '12px',
                                     fontWeight: '500',
                                     cursor: 'pointer',
-                                    transition: 'all var(--transition-fast)'
+                                    transition: 'all var(--transition-fast)',
                                 }, title: "Clear Selection (Esc)", children: "Clear" })] }), selectedNodes.length > 0 && (_jsxs("div", { style: { marginBottom: '12px' }, children: [_jsx("div", { style: {
                                     color: styles.textSecondary,
                                     fontSize: '12px',
@@ -346,13 +346,13 @@ const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, on
                                     overflowY: 'auto',
                                     border: `1px solid ${styles.border}`,
                                     borderRadius: '4px',
-                                    background: styles.secondary
+                                    background: styles.secondary,
                                 }, children: selectedNodes.map((node, index) => (_jsxs("div", { style: {
                                         padding: '8px 12px',
                                         borderBottom: index < selectedNodes.length - 1 ? `1px solid ${styles.border}` : 'none',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '8px'
+                                        gap: '8px',
                                     }, children: [_jsx("div", { style: {
                                                 width: '8px',
                                                 height: '8px',
@@ -369,7 +369,7 @@ const SelectionInfoPanel = ({ selectedNodes, selectedEdges, onClearSelection, on
                             padding: '8px 12px',
                             background: styles.secondary,
                             borderRadius: '4px',
-                            border: `1px solid ${styles.border}`
+                            border: `1px solid ${styles.border}`,
                         }, children: [_jsx("div", { style: {
                                     color: styles.textSecondary,
                                     fontSize: '11px',

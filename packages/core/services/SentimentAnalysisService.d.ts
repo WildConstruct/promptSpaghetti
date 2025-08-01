@@ -7,8 +7,7 @@
  * Task: E16-1753114247016-0B348A - Create sentiment analysis
  */
 import { SentimentAnalysis, SentimentAnalytics, SentimentAnalysisConfig, AnalyzeSentimentRequest, SentimentAnalysisResponse, FeedbackSourceType } from '../types/SentimentAnalysisTypes';
-export declare class SentimentAnalysisService {
-    private baseUrl;
+export declare class SentimentAnalysisService { private baseUrl;
     private config;
     private modelCache;
     private analysisCache;
@@ -17,8 +16,7 @@ export declare class SentimentAnalysisService {
         baseUrl: string;
         config?: SentimentAnalysisConfig;
         cacheEnabled?: boolean;
-        cacheTTL?: number;
-    });
+        cacheTTL?: number });
     /**
      * Analyze sentiment for multiple texts
      */
@@ -26,19 +24,17 @@ export declare class SentimentAnalysisService {
     /**
      * Get sentiment analytics for a resource
      */
-    getSentimentAnalytics(resourceId: string, resourceType: string, timeRange: {)
+    getSentimentAnalytics(resourceId: string, resourceType: string, timeRange: { )
         start: Date;
-        end: Date;
-    }): Promise<SentimentAnalytics>;
+        end: Date }): Promise<SentimentAnalytics>;
     /**
      * Analyze single text for real-time processing
      */
-    analyzeText(textId: string, content: string, sourceType: FeedbackSourceType, options?: {)
+    analyzeText(textId: string, content: string, sourceType: FeedbackSourceType, options?: { )
         includeEmotions?: boolean;
         includeToxicity?: boolean;
         includeTopics?: boolean;
-        language?: string;
-    }): Promise<SentimentAnalysis>;
+        language?: string }): Promise<SentimentAnalysis>;
     /**
      * Update sentiment analysis configuration
      */

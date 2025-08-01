@@ -10,8 +10,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface UserBehaviorEvent {
-    id: string;
+}
+export interface UserBehaviorEvent { id: string;
     userId: string;
     sessionId: string;
     timestamp: Date;
@@ -26,32 +26,31 @@ export interface UserBehaviorEvent {
     dataVolumeBytes?: number;
 
 export declare enum UserActionType {
-    LOGIN = "login",
-    LOGOUT = "logout",
-    FILE_ACCESS = "file_access",
-    FILE_DOWNLOAD = "file_download",
-    FILE_UPLOAD = "file_upload",
-    API_CALL = "api_call",
-    PERMISSION_REQUEST = "permission_request",
-    CONFIGURATION_CHANGE = "configuration_change",
-    DATA_EXPORT = "data_export",
-    ADMIN_ACTION = "admin_action",
-    SEARCH_QUERY = "search_query",
+    LOGIN = "login";
+    LOGOUT = "logout";
+    FILE_ACCESS = "file_access";
+    FILE_DOWNLOAD = "file_download";
+    FILE_UPLOAD = "file_upload";
+    API_CALL = "api_call";
+    PERMISSION_REQUEST = "permission_request";
+    CONFIGURATION_CHANGE = "configuration_change";
+    DATA_EXPORT = "data_export";
+    ADMIN_ACTION = "admin_action";
+    SEARCH_QUERY = "search_query" }
     NAVIGATION = "navigation"
 
 }
-export interface GeolocationData {
-    country: string;
+}
+}
+export interface GeolocationData { country: string;
     region: string;
     city: string;
     latitude: number;
     longitude: number;
-    timezone: string;
-
-
+    timezone: string }
 }
-export interface UserBehaviorProfile {
-    userId: string;
+}
+export interface UserBehaviorProfile { userId: string;
     createdAt: Date;
     lastUpdated: Date;
     totalEvents: number;
@@ -73,31 +72,25 @@ export interface UserBehaviorProfile {
     ipAddressStability: number;
     baselineRiskScore: number;
     anomalyThreshold: number;
-    adaptationRate: number;
-
-
+    adaptationRate: number }
 }
-export interface TravelPattern {
-    fromLocation: GeolocationData;
+}
+export interface TravelPattern { fromLocation: GeolocationData;
     toLocation: GeolocationData;
     frequency: number;
     typicalDuration: number;
-    lastOccurrence: Date;
-
-
+    lastOccurrence: Date }
 }
-export interface ResourceAccess {
-    resource: string;
+}
+export interface ResourceAccess { resource: string;
     accessCount: number;
     averageAccessTime: number;
     typicalAccessPattern: number[];
     lastAccessed: Date;
-    riskScore: number;
-
-
+    riskScore: number }
 }
-export interface BehaviorAnomaly {
-    id: string;
+}
+export interface BehaviorAnomaly { id: string;
     userId: string;
     detectedAt: Date;
     anomalyType: AnomalyType;
@@ -115,34 +108,34 @@ export interface BehaviorAnomaly {
     falsePositive?: boolean;
 
 export declare enum AnomalyType {
-    UNUSUAL_LOGIN_TIME = "unusual_login_time",
-    UNUSUAL_LOCATION = "unusual_location",
-    EXCESSIVE_ACCESS_VOLUME = "excessive_access_volume",
-    UNUSUAL_RESOURCE_ACCESS = "unusual_resource_access",
-    RAPID_PERMISSION_ESCALATION = "rapid_permission_escalation",
-    SUSPICIOUS_DATA_EXPORT = "suspicious_data_export",
-    ABNORMAL_SESSION_DURATION = "abnormal_session_duration",
-    UNUSUAL_DEVICE_USAGE = "unusual_device_usage",
-    ATYPICAL_NAVIGATION_PATTERN = "atypical_navigation_pattern",
-    BULK_DATA_ACCESS = "bulk_data_access",
-    OFF_HOURS_ACTIVITY = "off_hours_activity",
+    UNUSUAL_LOGIN_TIME = "unusual_login_time";
+    UNUSUAL_LOCATION = "unusual_location";
+    EXCESSIVE_ACCESS_VOLUME = "excessive_access_volume";
+    UNUSUAL_RESOURCE_ACCESS = "unusual_resource_access";
+    RAPID_PERMISSION_ESCALATION = "rapid_permission_escalation";
+    SUSPICIOUS_DATA_EXPORT = "suspicious_data_export";
+    ABNORMAL_SESSION_DURATION = "abnormal_session_duration";
+    UNUSUAL_DEVICE_USAGE = "unusual_device_usage";
+    ATYPICAL_NAVIGATION_PATTERN = "atypical_navigation_pattern";
+    BULK_DATA_ACCESS = "bulk_data_access";
+    OFF_HOURS_ACTIVITY = "off_hours_activity";
     IMPOSSIBLE_TRAVEL = "impossible_travel"
 
 export declare enum AnomalySeverity {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
+    LOW = "low";
+    MEDIUM = "medium";
+    HIGH = "high" }
     CRITICAL = "critical"
 
 }
-export interface RiskAssessment {
-    overallRisk: number;
+}
+}
+export interface RiskAssessment { overallRisk: number;
     businessImpact: number;
     probabilityOfThreat: number;
     potentialDamage: string[];
-    mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate';
-
-
+    mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate' }
+}
 }
 export interface BehaviorAnalyticsConfig {
     profileUpdateInterval: number;
@@ -219,4 +212,5 @@ export declare class UserBehaviorAnalyticsFactory {
 
 export default UserBehaviorAnalytics;
 //# sourceMappingURL=UserBehaviorAnalytics.d.ts.map
+}
 }

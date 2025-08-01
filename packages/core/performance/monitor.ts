@@ -3,9 +3,8 @@
  * Real-time performance tracking and metrics collection
  */
 
-}
-export interface PerformanceMetric {
-  name: string;
+
+export interface PerformanceMetric { name: string;
   values: number;
   average: number;
   min: number;
@@ -13,59 +12,52 @@ export interface PerformanceMetric {
   p95: number;
   p99: number;
   count: number;
-  lastUpdated: number;
-}
-}
-}
-export interface PerformanceAlert {
-  metric: string;
+  lastUpdated: number }
+
+
+
+export interface PerformanceAlert { metric: string;
   threshold: number;
   currentValue: number;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  timestamp: number;
-}
-}
-}
-export interface PerformanceConfig {
-  maxSamples: number;
+  timestamp: number }
+
+
+
+export interface PerformanceConfig { maxSamples: number;
   alertThresholds: Record<string, number>;
   enableLogging: boolean;
-  enableAlerts: boolean;
-}
-}
+  enableAlerts: boolean }
+
 export class PerformanceMonitor {
   private metrics: Map<string, PerformanceMetric> = new Map();
   private alerts: PerformanceAlert = [];
   private config: PerformanceConfig;
   private timers: Map<string, number> = new Map();
-  constructor(config: Partial<PerformanceConfig> = {}) {
-  this.config = {
-  maxSamples: 1000,
+  constructor(config: Partial<PerformanceConfig> = {}) { this.config = {
+  maxSamples: 1000
   alertThresholds: {
-  'graph-execution': 1000, // 1 second,
-  'component-render': 100,  // 100ms,
-  'api-response': 200,      // 200ms,
-  'memory-usage': 100,      // 100MB,
+  'graph-execution': 1000, // 1 second
+  'component-render': 100,  // 100ms
+  'api-response': 200,      // 200ms
+  'memory-usage': 100,      // 100MB }
   ...config.alertThresholds
-},
-  enableLogging: true,
-      enableAlerts: true,
+
+  enableLogging: true
+      enableAlerts: true
       ...config
     };
     // Initialize performance observer if available
-    if (typeof window !== 'undefined' && 'PerformanceObserver' in window) {
-  this.initializePerformanceObserver();
-  private initializePerformanceObserver(): void {,
-  try {
-  const observer = new PerformanceObserver((list) => {
+    if (typeof window !== 'undefined' && 'PerformanceObserver' in window) { this.initializePerformanceObserver();
+  private initializePerformanceObserver(): void { }
+  try { const observer = new PerformanceObserver((list) => {
   const entries = list.getEntries();
   entries.forEach(entry => {)
   if (entry.entryType === 'measure') {
-  this.recordMetric(entry.name, entry.duration);
-});
+  this.recordMetric(entry.name, entry.duration) });
       });
       observer.observe({ entryTypes: ['measure'] });
-    } catch (error) {
+ catch (error) {
       console.warn('Performance Observer not available:', error);
   /**
    * Start timing a performance metric
@@ -89,29 +81,26 @@ export class PerformanceMonitor {
         performance.measure(name, `${name}-start`, `${name}-end`);}
         const measure = performance.getEntriesByName(name)[0] as PerformanceMeasure;
         duration = measure.duration;
-      } catch (error) {
-        // Fallback to Date.now() if performance API fails
-        duration = Date.now() - startTime;
-    } else {
-  duration = Date.now() - startTime;
+ catch (error) { // Fallback to Date.now() if performance API fails
+        duration = Date.now() - startTime } else { duration = Date.now() - startTime;
   this.timers.delete(name);
   this.recordMetric(name, duration);
   return duration;
   /**
   * Record a performance metric value
   */
-  recordMetric(name: string, value: number): void {,
+  recordMetric(name: string, value: number): void {
   if (!this.metrics.has(name)) {
   this.metrics.set(name, {)
-  name,
-  values: [],
-  average: 0,
-  min: Infinity,
-  max: -Infinity,
-  p95: 0,
-  p99: 0,
-  count: 0,
-  lastUpdated: Date.now(),
+  name
+  values: []
+  average: 0
+  min: Infinity
+  max: -Infinity
+  p95: 0
+  p99: 0
+  count: 0
+  lastUpdated: Date.now() }
 });
     const metric = this.metrics.get(name)!;
     metric.values.push(value);
@@ -138,18 +127,17 @@ export class PerformanceMonitor {
   /**
    * Check if a metric value exceeds alert thresholds
    */
-  private checkAlerts(metricName: string, value: number): void {
-  if (!this.config.enableAlerts) return;
+  private checkAlerts(metricName: string, value: number): void { if (!this.config.enableAlerts) return;
   const threshold = this.config.alertThresholds[metricName];
   if (!threshold) return;
   if (value > threshold) {
   const severity = this.calculateSeverity(value, threshold);
-  const alert: PerformanceAlert = {,
-  metric: metricName,
-  threshold,
-  currentValue: value,
-  severity,
-  timestamp: Date.now(),
+  const alert: PerformanceAlert = {
+  metric: metricName
+  threshold
+  currentValue: value
+  severity
+  timestamp: Date.now() }
 };
       this.alerts.push(alert);
       // Keep only recent alerts (last 100)
@@ -158,8 +146,7 @@ export class PerformanceMonitor {
       // Log critical alerts
       if (severity === 'critical') {
         console.error(`🚨 Critical performance alert: ${metricName} = ${value.toFixed(2)}ms (threshold: ${threshold}ms)`);}
-  private calculateSeverity(value: number, threshold: number): 'low' | 'medium' | 'high' | 'critical' {
-  const ratio = value / threshold;
+  private calculateSeverity(value: number, threshold: number): 'low' | 'medium' | 'high' | 'critical' { const ratio = value / threshold;
   if (ratio > 3) return 'critical';
   if (ratio > 2) return 'high';
   if (ratio > 1.5) return 'medium';
@@ -167,49 +154,48 @@ export class PerformanceMonitor {
   /**
   * Get all performance metrics
   */
-  getMetrics(): PerformanceMetric {,
+  getMetrics(): PerformanceMetric {
   return Array.from(this.metrics.values());
   /**
   * Get a specific performance metric
   */
-  getMetric(name: string): PerformanceMetric | undefined {,
+  getMetric(name: string): PerformanceMetric | undefined {
   return this.metrics.get(name);
   /**
   * Get recent performance alerts
   */
-  getAlerts(limit: number = 10): PerformanceAlert {,
+  getAlerts(limit: number = 10): PerformanceAlert {
   return this.alerts.slice(-limit);
   /**
   * Clear all metrics and alerts
   */
-  clear(): void {,
+  clear(): void {
   this.metrics.clear();
   this.alerts.length = 0;
   this.timers.clear();
   /**
   * Get performance summary
   */
-  getSummary(): Record<string, any> {,
+  getSummary(): Record<string, any> {
   const metrics = this.getMetrics();
   const recentAlerts = this.getAlerts(5);
   return {
-  totalMetrics: metrics.length,
-  totalSamples: metrics.reduce((sum, m) => sum + m.count, 0),
-  averagePerformance: metrics.reduce((sum, m) => sum + m.average, 0) / metrics.length || 0,
-  recentAlerts: recentAlerts.length,
-  criticalAlerts: recentAlerts.filter(a => a.severity === 'critical').length,
-  lastUpdated: Math.max(...metrics.map(m => m.lastUpdated), 0),
+  totalMetrics: metrics.length
+  totalSamples: metrics.reduce((sum, m) => sum + m.count, 0)
+  averagePerformance: metrics.reduce((sum, m) => sum + m.average, 0) / metrics.length || 0
+  recentAlerts: recentAlerts.length
+  criticalAlerts: recentAlerts.filter(a => a.severity === 'critical').length
+  lastUpdated: Math.max(...metrics.map(m => m.lastUpdated), 0) }
 };
   /**
    * Export metrics to JSON
    */
-  exportMetrics(): string {
-  return JSON.stringify({)
-  timestamp: Date.now(),
-  config: this.config,
-  metrics: this.getMetrics(),
-  alerts: this.getAlerts(50),
-  summary: this.getSummary(),
+  exportMetrics(): string { return JSON.stringify({)
+  timestamp: Date.now()
+  config: this.config
+  metrics: this.getMetrics()
+  alerts: this.getAlerts(50)
+  summary: this.getSummary() }
 }, null, 2);
   /**
    * Measure memory usage
@@ -219,40 +205,34 @@ export class PerformanceMonitor {
       const memory = (performance as any).memory;
       const memoryUsage = memory.usedJSHeapSize / 1024 / 1024; // MB;
       this.recordMetric(`${name}-memory`, memoryUsage);}
-    } else if (typeof process !== 'undefined' && process.memoryUsage) {
+ else if (typeof process !== 'undefined' && process.memoryUsage) {
       const memoryUsage = process.memoryUsage().heapUsed / 1024 / 1024; // MB;
       this.recordMetric(`${name}-memory`, memoryUsage);}
   /**
    * Measure function execution time
    */
-  measure<T>(name: string, fn: () => T): T {
-    this.startTiming(name);
+  measure<T>(name: string, fn: () => T): T { this.startTiming(name);
     try {
       const result = fn();
       this.endTiming(name);
-      return result;
-    } catch (error) {
-  this.endTiming(name);
+      return result } catch (error) { this.endTiming(name);
   throw error;
   /**
   * Measure async function execution time
   */
-  async measureAsync<T>(name: string, fn: () => Promise<T>): Promise<T> {,
+  async measureAsync<T>(name: string, fn: () => Promise<T>): Promise<T> { }
   this.startTiming(name);
-  try {
-  const result = await fn();
+  try { const result = await fn();
   this.endTiming(name);
-  return result;
-} catch (error) {
-  this.endTiming(name);
+  return result } catch (error) { this.endTiming(name);
   throw error;
   /**
   * Create a performance decorator
   */
-  createDecorator(metricName: string) {,
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {,
+  createDecorator(metricName: string) {
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
   const originalMethod = descriptor.value;
-  descriptor.value = async function (...args: any) {,
+  descriptor.value = async function (...args: any) { }
   const monitor = this.performanceMonitor || new PerformanceMonitor();
   return await monitor.measureAsync(metricName, () => originalMethod.apply(this, args));
 };
@@ -262,21 +242,20 @@ export class PerformanceMonitor {
 export const performanceMonitor = new PerformanceMonitor();
 
 // Performance decorator
-export function Performance(metricName: string) {
-  return performanceMonitor.createDecorator(metricName);
+export function Performance(metricName: string) { return performanceMonitor.createDecorator(metricName);
   // Helper function to measure execution time
-  export function measurePerformance<T>(name: string, fn: () => T): T {,
+  export function measurePerformance<T>(name: string, fn: () => T): T {
   return performanceMonitor.measure(name, fn);
   // Helper function to measure async execution time
-  export function measurePerformanceAsync<T>(name: string, fn: () => Promise<T>): Promise<T> {,
+  export function measurePerformanceAsync<T>(name: string, fn: () => Promise<T>): Promise<T> {
   return performanceMonitor.measureAsync(name, fn);
   // React hook for performance monitoring
   export function usePerformanceMonitor() {
   return {
-  startTiming: (name: string) => performanceMonitor.startTiming(name),
-  endTiming: (name: string) => performanceMonitor.endTiming(name),
-  recordMetric: (name: string, value: number) => performanceMonitor.recordMetric(name, value),
-  getMetrics: () => performanceMonitor.getMetrics(),
-  getSummary: () => performanceMonitor.getSummary(),
-  measureMemory: (name: string) => performanceMonitor.measureMemory(name),
+  startTiming: (name: string) => performanceMonitor.startTiming(name)
+  endTiming: (name: string) => performanceMonitor.endTiming(name)
+  recordMetric: (name: string, value: number) => performanceMonitor.recordMetric(name, value)
+  getMetrics: () => performanceMonitor.getMetrics()
+  getSummary: () => performanceMonitor.getSummary()
+  measureMemory: (name: string) => performanceMonitor.measureMemory(name) }
 };

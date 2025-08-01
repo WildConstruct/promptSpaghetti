@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-interface ActivityFeedProps {
-    workspaceId?: string;
+}
+interface ActivityFeedProps { workspaceId?: string;
     projectId?: string;
     userId?: string;
     className?: string;
@@ -11,7 +11,7 @@ interface ActivityFeedProps {
     showSearch?: boolean;
     realTime?: boolean;
 
-export declare const ActivityFeed: React.FC<ActivityFeedProps>;
+export declare const ActivityFeed: React.FC<ActivityFeedProps> }
 }
 export {};
 //# sourceMappingURL=ActivityFeed.d.ts.map

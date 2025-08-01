@@ -12,20 +12,21 @@ import {
   CheckCircle,
   X,
   RefreshCw
-} from 'lucide-react';
+ from 'lucide-react';
 import { Badge } from '../../common/Badge';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
-}
+
+
 interface UserPreview {
   id: string;,
   email: string;
   name?: string;
   userType: 'admin' | 'user' | 'beta_tester' | 'premium';,
-  subscriptionTier: 'free' | 'pro' | 'enterprise';
+  subscriptionTier: 'free' | 'pro' | 'enterprise';,
   country: string;,
-  language: string;
+  language: string;,
   registrationDate: string;,
-  lastLogin: string;
+  lastLogin: string;,
   loginCount: number;,
   featureUsage: number;
   experimentGroup?: string;
@@ -33,22 +34,23 @@ interface UserPreview {
   orgId?: string;
   interface TogglePreview {
   key: string;,
-  name: string;
+  name: string;,
   enabled: boolean;,
-  value: Error;
+  value: Error;,
   reason: string;
   segmentMatched?: string;
   interface UserPreviewToolProps {
   isOpen: boolean;,
   onClose: () => void;
   toggleId?: string;
-  rules?: Array<{
+  rules?: Array<{,
   attribute: string;,
-  operator: string;
+  operator: string;,
   value: Error;
   logicalOperator?: 'AND' | 'OR';
-}
-}>;
+
+
+>;
 
 export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
   const [loading, setLoading] = useState(false);
@@ -75,7 +77,7 @@ export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
         loginCount: 142,
         featureUsage: 89,
         experimentGroup: 'variant_a',
-        customAttributes: {
+        customAttributes: {,
   department: 'engineering',
   seniority: 'senior',
   team_size: 8,
@@ -84,9 +86,9 @@ export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
   };
       setSelectedUser(mockUser);
       await evaluateUserToggles(mockUser);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to search user:', error);
-} finally {
+ finally {
       setSearching(false);
   };
   const evaluateUserToggles = async (user: UserPreview) => {
@@ -103,7 +105,7 @@ export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
   value: true,
   reason: 'User is in beta_tester segment',
   segmentMatched: 'Beta Users',
-}
+
         {
   key: 'advanced_features',
   name: 'Advanced Features',
@@ -111,14 +113,14 @@ export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
   value: true,
   reason: 'User has pro subscription',
   segmentMatched: 'Premium Users',
-}
+
         {
   key: 'experimental_ai',
   name: 'Experimental AI Features',
   enabled: false,
   value: false,
   reason: 'Feature disabled for user type',
-}
+
         {
   key: 'claude_model_v2',
   name: 'Claude Model V2',
@@ -126,9 +128,9 @@ export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
   value: 'sonnet-4',
   reason: 'Percentage rollout (user in 25%)'];
   setUserToggles(mockToggles);
-} catch (error) {
+ catch (error) {
   console.error('Failed to evaluate toggles:', error);
-} finally {
+ finally {
       setEvaluating(false);
   };
   const refreshUserData = async () => {
@@ -136,9 +138,9 @@ export const [userToggles, setUserToggles] = useState<TogglePreview>([]);
     setLoading(true);
     try {
       await evaluateUserToggles(selectedUser);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to refresh user data:', error);
-} finally {
+ finally {
       setLoading(false);
   };
   const formatAttributeValue = (value: Error): string => {

@@ -12,8 +12,9 @@ import { createReadStream, createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
 
 // File system types
-}
-}
+
+
+
 export interface TreeNode {
   id: string;
   name: string;
@@ -34,8 +35,9 @@ export interface TreeNode {
     author?: string;
     version?: string;
     thumbnail?: string;
-}
-}
+
+
+
   };
   permissions?: {
     read: boolean;
@@ -43,29 +45,31 @@ export interface TreeNode {
     delete: boolean;
     share: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface FileOperationResponse {
   success: boolean;
   message?: string;
   data?: unknown;
   error?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FileStats {
   totalFiles: number;
   totalFolders: number;
   totalSize: number;
   recentFiles: TreeNode[];
-}
-}
-}
+
+
+
+
 
 // Docker volume paths (configurable via environment)
 const FILE_STORAGE_ROOT = process.env.FILE_STORAGE_ROOT || '/app/storage/user-files';
@@ -78,17 +82,17 @@ async function ensureDirectories() {
   try {
     await fs.mkdir(FILE_STORAGE_ROOT, { recursive: true });
     await fs.mkdir(TEMP_UPLOAD_DIR, { recursive: true });
-  } catch (error) {
+ catch (error) {
     console.error('Failed to create storage directories:', error);
-  }
-}
+
+
 
 /**
  * Convert file system path to API path
  */
 function toApiPath(fsPath: string): string {
   return fsPath.replace(FILE_STORAGE_ROOT, '').replace(/\\/g, '/') || '/';
-}
+
 
 /**
  * Convert API path to file system path
@@ -96,7 +100,7 @@ function toApiPath(fsPath: string): string {
 function toFsPath(apiPath: string): string {
   const normalized = apiPath.replace(/^\/+/, '').replace(/\\/g, '/');
   return path.join(FILE_STORAGE_ROOT, normalized);
-}
+
 
 /**
  * Get file metadata from file system
@@ -139,7 +143,7 @@ async function getFileMetadata(fsPath: string, apiPath: string): Promise<TreeNod
         write: true,
         delete: true,
         share: true
-      }
+
     };
 
     // Add metadata for PSG files
@@ -157,18 +161,18 @@ async function getFileMetadata(fsPath: string, apiPath: string): Promise<TreeNod
             version: data.version || data.metadata?.version || '1.0'
           };
           node.tags.push('graph', 'project');
-        }
-      } catch {
+
+ catch {
         // Ignore metadata parsing errors
-      }
-    }
+
+
 
     return node;
-  } catch (error) {
+ catch (error) {
     console.error('Failed to get file metadata:', error);
     return null;
-  }
-}
+
+
 
 /**
  * Build directory tree recursively
@@ -197,23 +201,23 @@ async function buildDirectoryTree(fsPath: string, apiPath: string, depth = 0): P
         const children = await buildDirectoryTree(entryFsPath, entryApiPath, depth + 1);
         node.children = children;
         node.isExpanded = depth === 0; // Only expand root level
-      }
+
 
       nodes.push(node);
-    }
+
 
     // Sort: directories first, then files, alphabetically
     return nodes.sort((a, b) => {
       if (a.type !== b.type) {
         return a.type === 'folder' ? -1 : 1;
-      }
+
       return a.name.localeCompare(b.name);
     });
-  } catch (error) {
+ catch (error) {
     console.error('Failed to build directory tree:', error);
     return [];
-  }
-}
+
+
 
 /**
  * Register file system API routes
@@ -225,15 +229,15 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
   // List directory contents
   fastify.get<{
     Querystring: { path?: string };
-  }>('/api/files/list', {
+>('/api/files/list', {
     schema: {
       querystring: {
         type: 'object',
         properties: {
           path: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { path?: string } }>, reply: FastifyReply) => {
     try {
       const apiPath = request.query.path || '/';
@@ -246,23 +250,23 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Access denied'
         });
-      }
+
 
       const tree = await buildDirectoryTree(fsPath, apiPath);
       return reply.send(tree);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to list directory:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to list directory contents'
       });
-    }
+
   });
 
   // Move file or folder
   fastify.post<{
     Body: { sourcePath: string; targetPath: string };
-  }>('/api/files/move', {
+>('/api/files/move', {
     schema: {
       body: {
         type: 'object',
@@ -270,9 +274,9 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
         properties: {
           sourcePath: { type: 'string' },
           targetPath: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: { sourcePath: string; targetPath: string } }>, reply: FastifyReply) => {
     try {
       const { sourcePath, targetPath } = request.body;
@@ -289,7 +293,7 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Access denied'
         });
-      }
+
 
       // Ensure target directory exists
       await fs.mkdir(path.dirname(targetFsPath), { recursive: true });
@@ -302,20 +306,20 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
         message: `Moved ${sourcePath} to ${targetPath}`,
         data: { sourcePath, targetPath, operation: 'move' }
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to move file:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to move file',
         message: error.message
       });
-    }
+
   });
 
   // Copy file or folder
   fastify.post<{
     Body: { sourcePath: string; targetPath: string };
-  }>('/api/files/copy', {
+>('/api/files/copy', {
     schema: {
       body: {
         type: 'object',
@@ -323,9 +327,9 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
         properties: {
           sourcePath: { type: 'string' },
           targetPath: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: { sourcePath: string; targetPath: string } }>, reply: FastifyReply) => {
     try {
       const { sourcePath, targetPath } = request.body;
@@ -342,7 +346,7 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Access denied'
         });
-      }
+
 
       // Ensure target directory exists
       await fs.mkdir(path.dirname(targetFsPath), { recursive: true });
@@ -355,20 +359,20 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
         message: `Copied ${sourcePath} to ${targetPath}`,
         data: { sourcePath, targetPath, operation: 'copy' }
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to copy file:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to copy file',
         message: error.message
       });
-    }
+
   });
 
   // Rename file or folder
   fastify.post<{
     Body: { path: string; newName: string };
-  }>('/api/files/rename', {
+>('/api/files/rename', {
     schema: {
       body: {
         type: 'object',
@@ -376,9 +380,9 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
         properties: {
           path: { type: 'string' },
           newName: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: { path: string; newName: string } }>, reply: FastifyReply) => {
     try {
       const { path: filePath, newName } = request.body;
@@ -395,7 +399,7 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Access denied'
         });
-      }
+
 
       // Rename the file/folder
       await fs.rename(sourceFsPath, targetFsPath);
@@ -405,29 +409,29 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
         message: `Renamed to ${newName}`,
         data: { oldPath: filePath, newName, newPath: toApiPath(targetFsPath) }
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to rename file:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to rename file',
         message: error.message
       });
-    }
+
   });
 
   // Delete file or folder
   fastify.delete<{
     Body: { path: string };
-  }>('/api/files/delete', {
+>('/api/files/delete', {
     schema: {
       body: {
         type: 'object',
         required: ['path'],
         properties: {
           path: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: { path: string } }>, reply: FastifyReply) => {
     try {
       const { path: filePath } = request.body;
@@ -442,35 +446,35 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Access denied'
         });
-      }
+
 
       // Delete file or directory
       const stats = await fs.stat(fsPath);
       if (stats.isDirectory()) {
         await fs.rm(fsPath, { recursive: true, force: true });
-      } else {
+ else {
         await fs.unlink(fsPath);
-      }
+
 
       return reply.send({
         success: true,
         message: `Deleted ${filePath}`,
         data: { path: filePath }
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to delete file:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to delete file',
         message: error.message
       });
-    }
+
   });
 
   // Create folder
   fastify.post<{
     Body: { parentPath: string; folderName: string };
-  }>('/api/files/create-folder', {
+>('/api/files/create-folder', {
     schema: {
       body: {
         type: 'object',
@@ -478,9 +482,9 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
         properties: {
           parentPath: { type: 'string' },
           folderName: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: { parentPath: string; folderName: string } }>, reply: FastifyReply) => {
     try {
       const { parentPath, folderName } = request.body;
@@ -496,7 +500,7 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Access denied'
         });
-      }
+
 
       // Create folder
       await fs.mkdir(folderFsPath, { recursive: true });
@@ -508,21 +512,21 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
         message: `Created folder ${folderName}`,
         data: { parentPath, folderName, path: newPath }
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to create folder:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to create folder',
         message: error.message
       });
-    }
+
   });
 
   // Upload file
   fastify.post('/api/files/upload', {
     schema: {
       consumes: ['multipart/form-data']
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const data = await request.file();
@@ -531,7 +535,7 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'No file provided'
         });
-      }
+
 
       const parentPath = data.fields.parentPath?.value || '/';
       const parentFsPath = toFsPath(parentPath);
@@ -546,7 +550,7 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Access denied'
         });
-      }
+
 
       // Ensure parent directory exists
       await fs.mkdir(parentFsPath, { recursive: true });
@@ -562,31 +566,31 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           fileName: data.filename, 
           size: (await fs.stat(fileFsPath)).size,
           path: toApiPath(fileFsPath)
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to upload file:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to upload file',
         message: error.message
       });
-    }
+
   });
 
   // Get file properties
   fastify.get<{
     Querystring: { path: string };
-  }>('/api/files/properties', {
+>('/api/files/properties', {
     schema: {
       querystring: {
         type: 'object',
         required: ['path'],
         properties: {
           path: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { path: string } }>, reply: FastifyReply) => {
     try {
       const { path: filePath } = request.query;
@@ -601,7 +605,7 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Access denied'
         });
-      }
+
 
       const node = await getFileMetadata(fsPath, filePath);
       if (!node) {
@@ -609,31 +613,31 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'File not found'
         });
-      }
+
 
       return reply.send(node);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get file properties:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get file properties'
       });
-    }
+
   });
 
   // Check if file exists
   fastify.get<{
     Querystring: { path: string };
-  }>('/api/files/exists', {
+>('/api/files/exists', {
     schema: {
       querystring: {
         type: 'object',
         required: ['path'],
         properties: {
           path: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { path: string } }>, reply: FastifyReply) => {
     try {
       const { path: filePath } = request.query;
@@ -645,32 +649,32 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
       
       if (!resolvedPath.startsWith(rootPath)) {
         return reply.send({ exists: false });
-      }
+
 
       try {
         await fs.access(fsPath);
         return reply.send({ exists: true });
-      } catch {
+ catch {
         return reply.send({ exists: false });
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to check file existence:', error);
       return reply.send({ exists: false });
-    }
+
   });
 
   // Get file statistics
   fastify.get<{
     Querystring: { path?: string };
-  }>('/api/files/stats', {
+>('/api/files/stats', {
     schema: {
       querystring: {
         type: 'object',
         properties: {
           path: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: { path?: string } }>, reply: FastifyReply) => {
     try {
       const apiPath = request.query.path || '/';
@@ -685,7 +689,7 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Access denied'
         });
-      }
+
 
       const stats: FileStats = {
         totalFiles: 0,
@@ -707,7 +711,7 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
             if (entry.isDirectory()) {
               stats.totalFolders++;
               await countItems(entryPath);
-            } else {
+ else {
               stats.totalFiles++;
               const fileStat = await fs.stat(entryPath);
               stats.totalSize += fileStat.size;
@@ -719,14 +723,14 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
                 const node = await getFileMetadata(entryPath, apiFilePath);
                 if (node) {
                   stats.recentFiles.push(node);
-                }
-              }
-            }
-          }
-        } catch (error) {
+
+
+
+
+ catch (error) {
           // Skip directories we can't read
-        }
-      }
+
+
 
       await countItems(fsPath);
 
@@ -735,15 +739,14 @@ export async function registerFileSystemRoutes(fastify: FastifyInstance) {
       stats.recentFiles = stats.recentFiles.slice(0, 10); // Limit to 10
 
       return reply.send(stats);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get file stats:', error);
       return reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get file statistics'
       });
-    }
+
   });
 
   fastify.log.info('File system API routes registered successfully');
   fastify.log.info(`Storage root: ${FILE_STORAGE_ROOT}`);
-}

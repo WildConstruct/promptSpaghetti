@@ -5,14 +5,13 @@
  * zoom, download, sharing, and detailed information display.
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import {
-  QuickPreviewElement,
-  Epic16InteractiveElementsService,
+import { QuickPreviewElement,
+  Epic16InteractiveElementsService }
   InteractionType
-} from '../../services/Epic16InteractiveElementsService';
-}
-interface QuickPreviewWidgetProps {
-  element: QuickPreviewElement;
+ from '../../services/Epic16InteractiveElementsService';
+
+
+interface QuickPreviewWidgetProps { element: QuickPreviewElement;
   interactiveService: Epic16InteractiveElementsService;
   userId: string;
   templateId: string;
@@ -53,19 +52,19 @@ interface QuickPreviewWidgetProps {
   isPurchased: boolean;
   isInWishlist: boolean;
   canDownload: boolean;
-  export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({,)
-  element,
-  interactiveService,
-  userId,
-  templateId,
-  templateData,
-  onClose,
-  onDownload,
-  onShare,
+  export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({);
+  element;
+  interactiveService;
+  userId;
+  templateId;
+  templateData;
+  onClose;
+  onDownload;
+  onShare }
   onPurchase
-}
-}) => {
-  // Configuration
+
+
+}) => { // Configuration
   const previewConfig = element.config.preview_config;
   const theme = element.config.theme;
   // State management
@@ -83,30 +82,30 @@ interface QuickPreviewWidgetProps {
   useEffect(() => {
     const trackView = async () => {
       await interactiveService.trackInteraction(element.id, {)
-  type: InteractionType.CUSTOM,
-        user_id: userId,
-        timestamp: new Date(),
+  type: InteractionType.CUSTOM
+        user_id: userId
+        timestamp: new Date()
         context: {
-  page_url: window.location.href,
-          referrer: document.referrer,
-          user_agent: navigator.userAgent,
+  page_url: window.location.href
+          referrer: document.referrer
+          user_agent: navigator.userAgent }
           screen_resolution: `${screen.width}x${screen.height}`}
-},
+
   viewport_size: `${window.innerWidth}x${window.innerHeight}`}
-},
+
   device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
           session_id: 'session-' + Date.now(),
-          ab_test_variant: null;
-  },
-  data: {
+          ab_test_variant: null
+
+  data: { ,
   action: 'preview_opened',
   template_id: templateId,
   template_category: templateData.category,
-  template_price: templateData.price,
+  template_price: templateData.price }
 },
-  result: {
+  result: { ,
   success: true,
-          conversion: false,
+          conversion: false }
           data: { template_id: templateId }
   },
   duration: 0;
@@ -115,34 +114,21 @@ interface QuickPreviewWidgetProps {
     trackView();
   }, [element.id, interactiveService, userId, templateId, templateData.category, templateData.price]);
   // Handle image navigation
-  const nextImage = useCallback(() => {
-  setCurrentImageIndex((prev) =>
+  const nextImage = useCallback(() => { setCurrentImageIndex((prev) =>
   prev < templateData.thumbnails.length - 1 ? prev + 1 : 0);
-  setImageLoaded(false);
-}, [templateData.thumbnails.length]);
-  const prevImage = useCallback(() => {
-  setCurrentImageIndex((prev) =>
+  setImageLoaded(false) }, [templateData.thumbnails.length]);
+  const prevImage = useCallback(() => { setCurrentImageIndex((prev) =>
   prev > 0 ? prev - 1 : templateData.thumbnails.length - 1);
-  setImageLoaded(false);
-}, [templateData.thumbnails.length]);
+  setImageLoaded(false) }, [templateData.thumbnails.length]);
   // Handle zoom
-  const handleZoomIn = useCallback(() => {
-    setZoomLevel(prev => Math.min(prev + 0.5, 3));
-  }, []);
-  const handleZoomOut = useCallback(() => {
-    setZoomLevel(prev => Math.max(prev - 0.5, 0.5));
-  }, []);
-  const toggleZoom = useCallback(() => {
-    if (isZoomed) {
+  const handleZoomIn = useCallback(() => { setZoomLevel(prev => Math.min(prev + 0.5, 3)) }, []);
+  const handleZoomOut = useCallback(() => { setZoomLevel(prev => Math.max(prev - 0.5, 0.5)) }, []);
+  const toggleZoom = useCallback(() => { if (isZoomed) {
       setIsZoomed(false);
-      setZoomLevel(1);
-    } else {
-      setIsZoomed(true);
-      setZoomLevel(1.5);
-  }, [isZoomed]);
+      setZoomLevel(1) } else { setIsZoomed(true);
+      setZoomLevel(1.5) }, [isZoomed]);
   // Handle wishlist toggle
-  const handleWishlistToggle = useCallback(async () => {
-    setWishlistLoading(true);
+  const handleWishlistToggle = useCallback(async () => { setWishlistLoading(true);
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -150,142 +136,134 @@ interface QuickPreviewWidgetProps {
   type: InteractionType.CLICK,
         user_id: userId,
         timestamp: new Date(),
-        context: {
+        context: {,
   page_url: window.location.href,
           referrer: document.referrer,
-          user_agent: navigator.userAgent,
+          user_agent: navigator.userAgent }
           screen_resolution: `${screen.width}x${screen.height}`}
 },
   viewport_size: `${window.innerWidth}x${window.innerHeight}`}
 },
   device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
           session_id: 'session-' + Date.now(),
-          ab_test_variant: null;
-  },
-  data: {
+          ab_test_variant: null
+
+  data: { ,
   action: templateData.isInWishlist ? 'wishlist_remove' : 'wishlist_add',
-  template_id: templateId,
+  template_id: templateId }
 },
-  result: {
+  result: { ,
   success: true,
-          conversion: !templateData.isInWishlist,
+          conversion: !templateData.isInWishlist }
           data: { wishlist_status: !templateData.isInWishlist }
   },
   duration: 500;
   });
       // Update local state (in real app, this would be managed by global state)
       templateData.isInWishlist = !templateData.isInWishlist;
-    } catch (error) {
-  console.error('Failed to update wishlist:', error);
-} finally {
-      setWishlistLoading(false);
-  }, [element.id, interactiveService, userId, templateId, templateData]);
+ catch (error) { console.error('Failed to update wishlist:', error) } finally { setWishlistLoading(false) }, [element.id, interactiveService, userId, templateId, templateData]);
   // Handle share
-  const handleShare = useCallback(async (platform: string) => {
-    onShare?.(templateId, platform);
+  const handleShare = useCallback(async (platform: string) => { onShare?.(templateId, platform);
     setShowShareMenu(false);
     await interactiveService.trackInteraction(element.id, {)
   type: InteractionType.CLICK,
       user_id: userId,
       timestamp: new Date(),
-      context: {
+      context: {,
   page_url: window.location.href,
         referrer: document.referrer,
-        user_agent: navigator.userAgent,
+        user_agent: navigator.userAgent }
         screen_resolution: `${screen.width}x${screen.height}`}
 },
   viewport_size: `${window.innerWidth}x${window.innerHeight}`}
 },
   device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
         session_id: 'session-' + Date.now(),
-        ab_test_variant: null;
-  },
-  data: {
+        ab_test_variant: null
+
+  data: { ,
   action: 'template_shared',
   template_id: templateId,
-  share_platform: platform,
+  share_platform: platform }
 },
-  result: {
+  result: { ,
   success: true,
-        conversion: true,
+        conversion: true }
         data: { platform }
   },
   duration: 0;
   });
   }, [element.id, interactiveService, userId, templateId, onShare]);
   // Handle download
-  const handleDownload = useCallback(async () => {
-    onDownload?.(templateId);
+  const handleDownload = useCallback(async () => { onDownload?.(templateId);
     await interactiveService.trackInteraction(element.id, {)
   type: InteractionType.CLICK,
       user_id: userId,
       timestamp: new Date(),
-      context: {
+      context: {,
   page_url: window.location.href,
         referrer: document.referrer,
-        user_agent: navigator.userAgent,
+        user_agent: navigator.userAgent }
         screen_resolution: `${screen.width}x${screen.height}`}
 },
   viewport_size: `${window.innerWidth}x${window.innerHeight}`}
 },
   device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
         session_id: 'session-' + Date.now(),
-        ab_test_variant: null;
-  },
-  data: {
+        ab_test_variant: null
+
+  data: { ,
   action: 'template_downloaded',
   template_id: templateId,
-  was_purchased: templateData.isPurchased,
+  was_purchased: templateData.isPurchased }
 },
-  result: {
+  result: { ,
   success: true,
-        conversion: true,
+        conversion: true }
         data: { template_id: templateId }
   },
   duration: 0;
   });
   }, [element.id, interactiveService, userId, templateId, templateData.isPurchased, onDownload]);
   // Handle purchase
-  const handlePurchase = useCallback(async () => {
-    onPurchase?.(templateId);
+  const handlePurchase = useCallback(async () => { onPurchase?.(templateId);
     await interactiveService.trackInteraction(element.id, {)
   type: InteractionType.CLICK,
       user_id: userId,
       timestamp: new Date(),
-      context: {
+      context: {,
   page_url: window.location.href,
         referrer: document.referrer,
-        user_agent: navigator.userAgent,
+        user_agent: navigator.userAgent }
         screen_resolution: `${screen.width}x${screen.height}`}
 },
   viewport_size: `${window.innerWidth}x${window.innerHeight}`}
 },
   device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
         session_id: 'session-' + Date.now(),
-        ab_test_variant: null;
-  },
-  data: {
+        ab_test_variant: null
+
+  data: { ,
   action: 'purchase_initiated',
   template_id: templateId,
   price: templateData.price,
-  currency: templateData.currency,
+  currency: templateData.currency }
 },
-  result: {
+  result: { ,
   success: true,
   conversion: true,
-  data: {
+  data: {,
   template_id: templateId,
   price: templateData.price,
-  currency: templateData.currency,
+  currency: templateData.currency }
 },
   duration: 0;
   });
   }, [element.id, interactiveService, userId, templateId, templateData.price, templateData.currency, onPurchase]);
   // Format price
-  const formatPrice = useCallback((price: number, currency: string) => {
-  return new Intl.NumberFormat('en-US', {)
+  const formatPrice = useCallback((price: number, currency: string) => { return new Intl.NumberFormat('en-US', {)
   style: 'currency',
-  currency: currency,
+  currency: currency }
 }).format(price);
   }, []);
   // Render stars for rating
@@ -310,10 +288,10 @@ interface QuickPreviewWidgetProps {
       <div 
         ref={containerRef}
         className="bg-white rounded-lg shadow-2xl max-w-6xl w-full max-h-full overflow-hidden flex"
-        style={{ 
-          backgroundColor: theme.background_color,
+        style={ { 
+          backgroundColor: theme.background_color }
           borderRadius: `${theme.border_radius}px`}
-        }}
+
       >
         {/* Image Preview Section */}
         <div className="flex-1 relative bg-gray-100">
@@ -323,14 +301,14 @@ interface QuickPreviewWidgetProps {
               ref={imageRef}
               src={templateData.thumbnails[currentImageIndex]}
               alt={`${templateData.title} preview ${currentImageIndex + 1}`}
-              className={`max-w-full max-h-full object-contain transition-all duration-300 ${
-  isZoomed ? 'cursor-move' : 'cursor-zoom-in',
-}`}
+              className={ `max-w-full max-h-full object-contain transition-all duration-300 ${
+  isZoomed ? 'cursor-move' : 'cursor-zoom-in' }
+`}
               style={{ 
                 transform: `scale(${zoomLevel})`}
-},
+
   filter: imageLoaded ? 'none' : 'blur(4px)';
-  }}
+
               onLoad={() => setImageLoaded(true)}
               onClick={previewConfig.zoom_enabled ? toggleZoom : undefined}
             />
@@ -464,11 +442,11 @@ interface QuickPreviewWidgetProps {
                 <button
                   onClick={handleWishlistToggle}
                   disabled={wishlistLoading}
-                  className={`p-2 rounded-full transition-all ${
+                  className={ `p-2 rounded-full transition-all ${
   templateData.isInWishlist
-  ? 'text-red-500 bg-red-50 hover:bg-red-100',
-  : 'text-gray-400 hover:text-red-500 hover:bg-red-50',
-}`}
+  ? 'text-red-500 bg-red-50 hover:bg-red-100'
+  : 'text-gray-400 hover:text-red-500 hover:bg-red-50' }
+`}
                   title={templateData.isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
                 >
                   <svg className="w-5 h-5" fill={templateData.isInWishlist ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
@@ -526,11 +504,11 @@ interface QuickPreviewWidgetProps {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab as any)}
-                  className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-all ${
+                  className={ `flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-all ${
   activeTab === tab
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
                 >
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
@@ -627,8 +605,8 @@ interface QuickPreviewWidgetProps {
                 {/* Mock reviews */}
                 <div className="space-y-4">
                   {[
-                    { name: 'Sarah Johnson', rating: 5, comment: 'Excellent template! Very well designed and easy to customize.', date: '2 days ago' },
-                    { name: 'Mike Chen', rating: 4, comment: 'Good quality, though I wish it had more color variations.', date: '1 week ago' },
+                    { name: 'Sarah Johnson', rating: 5, comment: 'Excellent template! Very well designed and easy to customize.', date: '2 days ago' }
+                    { name: 'Mike Chen', rating: 4, comment: 'Good quality, though I wish it had more color variations.', date: '1 week ago' }
                     { name: 'Emma Wilson', rating: 5, comment: 'Perfect for my project. Great value for money!', date: '2 weeks ago' }
                   ].map((review, index) => ()
                     <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">

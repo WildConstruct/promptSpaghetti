@@ -44,6 +44,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Create enhanced workspace with collaborative features
    */
   async createCollaborativeWorkspace(data: CreateEnhancedWorkspace, userId: string): Promise<EnhancedWorkspace> {
+
     const transaction = this.db.transaction(() => {
       // Create base workspace
       const baseWorkspace = this.createWorkspace(
@@ -108,6 +109,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Get enhanced workspace with collaborative features
    */
   async getEnhancedWorkspace(workspaceId: string): Promise<EnhancedWorkspace | null> {
+
     const stmt = this.db.prepare(`
       SELECT w.*, 
              COALESCE(w.active_sessions, 0) as active_sessions,
@@ -137,6 +139,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Update workspace collaboration settings
    */
   async updateCollaborationSettings(workspaceId: string, settings: Partial<CollaborationSettings>): Promise<void> {
+
     const stmt = this.db.prepare(`
       UPDATE workspaces 
       SET collaboration_settings = json_patch(collaboration_settings, ?),
@@ -152,6 +155,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Update workspace resource quotas
    */
   async updateResourceQuotas(workspaceId: string, quotas: Partial<ResourceQuotas>): Promise<void> {
+
     const stmt = this.db.prepare(`
       UPDATE workspaces 
       SET resource_quotas = json_patch(resource_quotas, ?),
@@ -167,6 +171,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Update workspace usage statistics
    */
   async updateUsageStats(workspaceId: string, stats: Partial<UsageStats>): Promise<void> {
+
     const stmt = this.db.prepare(`
       UPDATE workspaces 
       SET usage_stats = json_patch(usage_stats, ?),
@@ -189,6 +194,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Create new edit session
    */
   async createEditSession(session: Omit<EditSession, 'id'>): Promise<EditSession> {
+
     const stmt = this.db.prepare(`
       INSERT INTO edit_sessions 
       (resource_id, user_id, workspace_id, session_info, editing_state, collaboration_metadata, expires_at)
@@ -223,6 +229,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Get active edit sessions for a resource
    */
   async getActiveEditSessions(resourceId: string): Promise<EditSession[]> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM edit_sessions 
       WHERE resource_id = ? 
@@ -246,6 +253,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Get active edit sessions for a workspace
    */
   async getWorkspaceEditSessions(workspaceId: string): Promise<EditSession[]> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM edit_sessions 
       WHERE workspace_id = ? 
@@ -269,6 +277,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Update edit session
    */
   async updateEditSession(sessionId: string, updates: Partial<EditSession>): Promise<void> {
+
     const setParts = [];
     const values = [];
 
@@ -303,6 +312,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * End edit session
    */
   async endEditSession(sessionId: string): Promise<void> {
+
     const getStmt = this.db.prepare('SELECT workspace_id FROM edit_sessions WHERE id = ?');
     const session = getStmt.get(sessionId);
 
@@ -318,6 +328,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Cleanup expired edit sessions
    */
   async cleanupExpiredEditSessions(): Promise<number> {
+
     const stmt = this.db.prepare(`
       DELETE FROM edit_sessions 
       WHERE expires_at <= CURRENT_TIMESTAMP
@@ -347,6 +358,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Update user presence in workspace
    */
   async updateUserPresence(presence: UserPresence): Promise<void> {
+
     const stmt = this.db.prepare(`
       INSERT INTO user_presence 
       (user_id, workspace_id, presence_status, current_context, collaboration_state, session_metadata, updated_at)
@@ -374,6 +386,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Get user presence in workspace
    */
   async getUserPresence(userId: string, workspaceId: string): Promise<UserPresence | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM user_presence 
       WHERE user_id = ? AND workspace_id = ?
@@ -398,6 +411,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Get all active users in workspace
    */
   async getWorkspacePresence(workspaceId: string): Promise<UserPresence[]> {
+
     const stmt = this.db.prepare(`
       SELECT up.*, u.name, u.email, u.avatar
       FROM user_presence up
@@ -423,6 +437,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Remove user presence (user going offline)
    */
   async removeUserPresence(userId: string, workspaceId: string): Promise<void> {
+
     const stmt = this.db.prepare(`
       DELETE FROM user_presence 
       WHERE user_id = ? AND workspace_id = ?
@@ -439,6 +454,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Update workspace context for user
    */
   async updateWorkspaceContext(context: WorkspaceContext): Promise<void> {
+
     const stmt = this.db.prepare(`
       INSERT INTO workspace_contexts 
       (workspace_id, user_id, navigation_state, collaboration_context, workspace_preferences, cache_state, expires_at)
@@ -468,6 +484,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Get workspace context for user
    */
   async getWorkspaceContext(userId: string, workspaceId: string): Promise<WorkspaceContext | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM workspace_contexts 
       WHERE user_id = ? AND workspace_id = ?
@@ -497,6 +514,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Get detailed resource quotas for workspace
    */
   async getDetailedResourceQuotas(workspaceId: string): Promise<DetailedResourceQuotas | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM resource_quotas WHERE workspace_id = ?
     `);
@@ -536,6 +554,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
     quotaType: keyof DetailedResourceQuotas,
     requestedUsage: number
   ): Promise<{ allowed: boolean; reason?: string; current: number; limit: number }> {
+
     const quotas = await this.getDetailedResourceQuotas(workspaceId);
     if (!quotas) {
       throw new Error('Resource quotas not found');
@@ -576,6 +595,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Record quota usage event
    */
   async recordQuotaUsage(event: Omit<QuotaUsageEvent, 'id'>): Promise<void> {
+
     const stmt = this.db.prepare(`
       INSERT INTO quota_usage_events 
       (workspace_id, user_id, quota_type, usage_delta, context)
@@ -592,6 +612,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Update quota usage counters
    */
   private async updateQuotaUsage(workspaceId: string, quotaType: string, delta: number): Promise<void> {
+
     const currentField = `current_${quotaType}`;
 
     const stmt = this.db.prepare(`
@@ -612,6 +633,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Check if user has collaborative permission
    */
   async hasCollaborativePermission(userId: string, workspaceId: string, permission: number): Promise<boolean> {
+
     const userPerms = await this.getUserPermissions(userId, workspaceId);
     if (!userPerms) return false;
 
@@ -625,6 +647,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
     userId: string,
     workspaceId: string
   ): Promise<{ permissions: number; collaborative_permissions: string[] }> {
+
     const userPerms = await this.getUserPermissions(userId, workspaceId);
     if (!userPerms) {
       return { permissions: 0, collaborative_permissions: [] };
@@ -675,6 +698,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
    * Increment/decrement active session count
    */
   private async incrementActiveSessionCount(workspaceId: string, delta: number): Promise<void> {
+
     const stmt = this.db.prepare(`
       UPDATE workspaces 
       SET active_sessions = MAX(0, active_sessions + ?),

@@ -1,45 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { useCorrectionsStore, Notification } from '../correctionsStore';
-}
-interface NotificationSystemProps {
-  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
-  maxVisible?: number;
-  autoHideDuration?: number;
-}
-}
 
-export const NotificationSystem: React.FC<NotificationSystemProps> = ({
-  position = 'top-right',
-  maxVisible = 5,
+
+interface NotificationSystemProps { position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+  maxVisible?: number;
+  autoHideDuration?: number }
+
+
+
+export const NotificationSystem: React.FC<NotificationSystemProps> = ({ position = 'top-right'
+  maxVisible = 5 }
   autoHideDuration = 5000
 }) => {
   const { notifications, dismissNotification, clearNotifications } = useCorrectionsStore();
   const [visibleNotifications, setVisibleNotifications] = useState<Notification>([]);
-  useEffect(() => {
-    // Show only the most recent notifications
-    setVisibleNotifications(notifications.slice(0, maxVisible));
-  }, [notifications, maxVisible]);
-  useEffect(() => {
-    // Auto-hide notifications after duration
+  useEffect(() => { // Show only the most recent notifications
+    setVisibleNotifications(notifications.slice(0, maxVisible)) }, [notifications, maxVisible]);
+  useEffect(() => { // Auto-hide notifications after duration
     if (autoHideDuration > 0) {
       const timers = visibleNotifications.map(notification => {)
   return setTimeout(() => {
-          dismissNotification(notification.id);
-        }, autoHideDuration);
+          dismissNotification(notification.id) }, autoHideDuration);
       });
-      return () => {
-        timers.forEach(timer => clearTimeout(timer));
-      };
+      return () => { timers.forEach(timer => clearTimeout(timer)) };
   }, [visibleNotifications, autoHideDuration, dismissNotification]);
-  const getPositionStyles = () => {
-  const baseStyles = {
-  position: 'fixed' as const,
-  zIndex: 9999,
-  display: 'flex',
-  flexDirection: 'column' as const,
-  gap: '8px',
-  width: '320px',
-  maxWidth: '90vw',
+  const getPositionStyles = () => { const baseStyles = {
+  position: 'fixed' as const
+  zIndex: 9999
+  display: 'flex'
+  flexDirection: 'column' as const
+  gap: '8px'
+  width: '320px'
+  maxWidth: '90vw' }
 };
     switch (position) {
     case 'top-right':
@@ -53,61 +45,55 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
     default:
       return { ...baseStyles, top: '20px', right: '20px' };
   };
-  const getNotificationStyles = (type: Notification['type']) => {
-  const baseStyles = {
-  padding: '12px 16px',
-  borderRadius: '6px',
-  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  border: '1px solid',
-  display: 'flex',
-  alignItems: 'flex-start',
-  justifyContent: 'space-between',
-  gap: '12px',
-  animation: 'slideIn 0.3s ease-out',
-  fontSize: '14px',
-  fontFamily: 'system-ui, -apple-system, sans-serif',
+  const getNotificationStyles = (type: Notification['type']) => { const baseStyles = {
+  padding: '12px 16px'
+  borderRadius: '6px'
+  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+  border: '1px solid'
+  display: 'flex'
+  alignItems: 'flex-start'
+  justifyContent: 'space-between'
+  gap: '12px'
+  animation: 'slideIn 0.3s ease-out'
+  fontSize: '14px'
+  fontFamily: 'system-ui, -apple-system, sans-serif' }
 };
-    switch (type) {
-  case 'success':,
+    switch (type) { case 'success':
   return {
-  ...baseStyles,
-  background: '#065f46',
-  borderColor: '#10b981',
-  color: '#d1fae5',
+  ...baseStyles
+  background: '#065f46'
+  borderColor: '#10b981'
+  color: '#d1fae5' }
 };
     case 'error':
-      return {
-  ...baseStyles,
-  background: '#7f1d1d',
-  borderColor: '#ef4444',
-  color: '#fee2e2',
+      return { ...baseStyles
+  background: '#7f1d1d'
+  borderColor: '#ef4444'
+  color: '#fee2e2' }
 };
     case 'warning':
-      return {
-  ...baseStyles,
-  background: '#78350f',
-  borderColor: '#f59e0b',
-  color: '#fef3c7',
+      return { ...baseStyles
+  background: '#78350f'
+  borderColor: '#f59e0b'
+  color: '#fef3c7' }
 };
     case 'info':
     default:
-      return {
-  ...baseStyles,
-  background: '#1e3a8a',
-  borderColor: '#3b82f6',
-  color: '#dbeafe',
+      return { ...baseStyles
+  background: '#1e3a8a'
+  borderColor: '#3b82f6'
+  color: '#dbeafe' }
 };
   };
-  const getIcon = (type: Notification['type']) => {
-  switch (type) {
-  case 'success':,
+  const getIcon = (type: Notification['type']) => { switch (type) {
+  case 'success':
   return '✓';
-  case 'error':,
+  case 'error':
   return '✕';
-  case 'warning':,
+  case 'warning':
   return '⚠';
-  case 'info':,
-  default:,
+  case 'info':
+  default: }
   return 'ℹ';
 };
   const formatTimestamp = (timestamp: Date) => {
@@ -126,13 +112,13 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
   return;
     <>
       {/* CSS Animation */}
-      <style>{`
+      <style>{ `
         @keyframes slideIn {
           from {
-            transform: translateX(100%);
+            transform: translateX(100%)
   opacity: 0;
           to {
-            transform: translateX(0);
+            transform: translateX(0) }
   opacity: 1;
         @keyframes fadeOut {
           from {
@@ -147,79 +133,79 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
             style={getNotificationStyles(notification.type)}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', flex: 1 }}>
-              <div style={{
-  fontSize: '16px',
-  marginTop: '2px',
-  flexShrink: 0,
-}}>
+              <div style={ {
+  fontSize: '16px'
+  marginTop: '2px'
+  flexShrink: 0 }
+}>
                 {getIcon(notification.type)}
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{
-  fontWeight: 600,
-  marginBottom: '2px',
-  fontSize: '13px',
-}}>
+                <div style={ {
+  fontWeight: 600
+  marginBottom: '2px'
+  fontSize: '13px' }
+}>
                   {notification.title}
                 </div>
-                <div style={{
-  fontSize: '12px',
-  opacity: 0.9,
-  lineHeight: '1.4',
-}}>
+                <div style={ {
+  fontSize: '12px'
+  opacity: 0.9
+  lineHeight: '1.4' }
+}>
                   {notification.message}
                 </div>
-                <div style={{
-  fontSize: '10px',
-  opacity: 0.7,
-  marginTop: '4px',
-}}>
+                <div style={ {
+  fontSize: '10px'
+  opacity: 0.7
+  marginTop: '4px' }
+}>
                   {formatTimestamp(notification.timestamp)}
                 </div>
               </div>
             </div>
             <button
               onClick={() => dismissNotification(notification.id)}
-              style={{
-  background: 'none',
-  border: 'none',
-  color: 'inherit',
-  cursor: 'pointer',
-  fontSize: '14px',
-  padding: '0 4px',
-  opacity: 0.7,
-  flexShrink: 0,
-}}
+              style={ {
+  background: 'none'
+  border: 'none'
+  color: 'inherit'
+  cursor: 'pointer'
+  fontSize: '14px'
+  padding: '0 4px'
+  opacity: 0.7
+  flexShrink: 0 }
+
               title="Dismiss"
             >
               ×
             </button>
           </div>
         ))}
-        {notifications.length > maxVisible && ()
+        { notifications.length > maxVisible && ()
           <div style={{
-  padding: '8px 12px',
-  background: '#2d3748',
-  border: '1px solid #4a5568',
-  borderRadius: '4px',
-  color: '#a0aec0',
-  fontSize: '12px',
-  textAlign: 'center',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-}}>
+  padding: '8px 12px'
+  background: '#2d3748'
+  border: '1px solid #4a5568'
+  borderRadius: '4px'
+  color: '#a0aec0'
+  fontSize: '12px'
+  textAlign: 'center'
+  display: 'flex'
+  justifyContent: 'space-between'
+  alignItems: 'center' }
+}>
             <span>+{notifications.length - maxVisible} more notifications</span>
             <button
               onClick={clearNotifications}
-              style={{
-  background: 'none',
-  border: 'none',
-  color: '#63b3ed',
-  cursor: 'pointer',
-  fontSize: '11px',
-  padding: 0,
-}}
+              style={ {
+  background: 'none'
+  border: 'none'
+  color: '#63b3ed'
+  cursor: 'pointer'
+  fontSize: '11px'
+  padding: 0 }
+}
             >
               Clear all
             </button>

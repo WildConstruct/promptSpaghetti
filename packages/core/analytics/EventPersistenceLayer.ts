@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { UnifiedAnalyticsEvent, EventFilter, AnalyticsEventType } from './UnifiedEventBus';
 
 // Event Storage Schema
-export const StoredEventSchema = z.object({)
+export const StoredEventSchema = z.object({ )
   id: z.string().uuid(),
   type: z.string(),
   category: z.string(),
@@ -30,14 +30,14 @@ export const StoredEventSchema = z.object({)
   environment: z.string(),
   region: z.string().nullable(),
   storedAt: z.number(),
-  retentionDate: z.number().nullable(),
+  retentionDate: z.number().nullable() }
 });
 
 export type StoredEvent = z.infer<typeof StoredEventSchema>;
 
 // Event Query Options
 
-}
+
 export interface EventQueryOptions {
   filter?: EventFilter;
   sortBy?: 'timestamp' | 'type' | 'severity' | 'source';
@@ -46,12 +46,12 @@ export interface EventQueryOptions {
   offset?: number;
   includeMetadata?: boolean;
   // Event Statistics
-}
-}
-}
-export interface EventStatistics {
-  totalEvents: number;
-}
+
+
+
+
+export interface EventStatistics { totalEvents: number }
+
   eventsByType: { [type: string]: number };
   eventsByCategory: { [category: string]: number };
   eventsBySeverity: { [severity: string]: number };
@@ -60,29 +60,28 @@ export interface EventStatistics {
   storageSize: number;
 
 // Event Aggregation
-}
-}
-export interface EventAggregation {
-  groupBy: string;
+
+
+export interface EventAggregation { groupBy: string;
   timeGranularity?: 'hour' | 'day' | 'week' | 'month';
-  aggregates: {
+  aggregates: { }
   count: number;
   firstSeen: number;
   lastSeen: number;
   uniqueSources: number;
   uniqueUsers: number;
   uniqueSessions: number;
-}
+
+
 };
 /**
  * Event Repository Interface
  * 
  * Following repository pattern from Story 1.4 for consistent data access
  */
-}
-}
-export interface EventRepository {
-  // Core CRUD operations
+
+
+export interface EventRepository { // Core CRUD operations
   save(event: UnifiedAnalyticsEvent): Promise<string>;
   saveBatch(events: UnifiedAnalyticsEvent): Promise<string>;
   findById(id: string): Promise<UnifiedAnalyticsEvent | null>;
@@ -94,10 +93,10 @@ export interface EventRepository {
   getStatistics(filter?: EventFilter): Promise<EventStatistics>;
   getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation>;
   getTimeSeriesData();
-    metric: string,
-    granularity: string,
-    filter?: EventFilter
-}
+  metric: string;
+  granularity: string;
+  filter?: EventFilter }
+
   ): Promise<Array<{ timestamp: number; value: number }>>;
   // Maintenance operations
   cleanup(retentionDays: number): Promise<number>;
@@ -108,7 +107,7 @@ export interface EventRepository {
  * 
  * SQLite-based implementation for production use
  */
-}
+
 export class DatabaseEventRepository implements EventRepository {
   private db: any; // Database connection from Story 1.4
   private tableName = 'unified_analytics_events';
@@ -121,36 +120,36 @@ export class DatabaseEventRepository implements EventRepository {
   private initializeSchema(): void {
     const createTableSQL = `;
       CREATE TABLE IF NOT EXISTS ${this.tableName} ()}
-        id TEXT PRIMARY KEY,
-        type TEXT NOT NULL,
-        category TEXT NOT NULL,
-        severity TEXT NOT NULL,
-        timestamp INTEGER NOT NULL,
-        source TEXT NOT NULL,
-        version TEXT NOT NULL DEFAULT '1.0.0',
-        session_id TEXT,
-        user_id TEXT,
-        organization_id TEXT,
-        request_id TEXT,
-        trace_id TEXT,
-        data TEXT NOT NULL,
-        metadata TEXT NOT NULL DEFAULT '{}',
-        tags TEXT NOT NULL DEFAULT '[]',
-        environment TEXT NOT NULL DEFAULT 'development',
-        region TEXT,
-        stored_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000),
-        retention_date INTEGER,
+        id TEXT PRIMARY KEY
+        type TEXT NOT NULL
+        category TEXT NOT NULL
+        severity TEXT NOT NULL
+        timestamp INTEGER NOT NULL
+        source TEXT NOT NULL
+        version TEXT NOT NULL DEFAULT '1.0.0'
+        session_id TEXT
+        user_id TEXT
+        organization_id TEXT
+        request_id TEXT
+        trace_id TEXT
+        data TEXT NOT NULL
+        metadata TEXT NOT NULL DEFAULT '{}'
+        tags TEXT NOT NULL DEFAULT '[]'
+        environment TEXT NOT NULL DEFAULT 'development'
+        region TEXT
+        stored_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000)
+        retention_date INTEGER
         -- Indexes for performance
-        INDEX idx_timestamp (timestamp),
-        INDEX idx_type (type),
-        INDEX idx_category (category),
-        INDEX idx_severity (severity),
-        INDEX idx_source (source),
-        INDEX idx_user_id (user_id),
-        INDEX idx_session_id (session_id),
-        INDEX idx_organization_id (organization_id),
-        INDEX idx_environment (environment),
-        INDEX idx_stored_at (stored_at),
+        INDEX idx_timestamp (timestamp)
+        INDEX idx_type (type)
+        INDEX idx_category (category)
+        INDEX idx_severity (severity)
+        INDEX idx_source (source)
+        INDEX idx_user_id (user_id)
+        INDEX idx_session_id (session_id)
+        INDEX idx_organization_id (organization_id)
+        INDEX idx_environment (environment)
+        INDEX idx_stored_at (stored_at)
         INDEX idx_retention_date (retention_date)
     `;
     this.db.exec(createTableSQL);
@@ -161,32 +160,32 @@ export class DatabaseEventRepository implements EventRepository {
 
     const stmt = this.db.prepare(`;);
       INSERT OR REPLACE INTO ${this.tableName} ()}
-        id, type, category, severity, timestamp, source, version,
-        session_id, user_id, organization_id, request_id, trace_id,
+        id, type, category, severity, timestamp, source, version
+        session_id, user_id, organization_id, request_id, trace_id
         data, metadata, tags, environment, region, stored_at, retention_date
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     const now = Date.now();
     const retentionDate = this.calculateRetentionDate(event);
     stmt.run()
-      event.id,
-      event.type,
-      event.category,
-      event.severity,
-      event.timestamp,
-      event.source,
-      event.version,
-      event.sessionId || null,
-      event.userId || null,
-      event.organizationId || null,
-      event.requestId || null,
-      event.traceId || null,
-      JSON.stringify(event.data),
-      JSON.stringify(event.metadata),
-      JSON.stringify(event.tags),
-      event.environment,
-      event.region || null,
-      now,
+      event.id
+      event.type
+      event.category
+      event.severity
+      event.timestamp
+      event.source
+      event.version
+      event.sessionId || null
+      event.userId || null
+      event.organizationId || null
+      event.requestId || null
+      event.traceId || null
+      JSON.stringify(event.data)
+      JSON.stringify(event.metadata)
+      JSON.stringify(event.tags)
+      event.environment
+      event.region || null
+      now
       retentionDate
     );
     return event.id;
@@ -197,34 +196,33 @@ export class DatabaseEventRepository implements EventRepository {
 
     const stmt = this.db.prepare(`;);
       INSERT OR REPLACE INTO ${this.tableName} ()}
-        id, type, category, severity, timestamp, source, version,
-        session_id, user_id, organization_id, request_id, trace_id,
+        id, type, category, severity, timestamp, source, version
+        session_id, user_id, organization_id, request_id, trace_id
         data, metadata, tags, environment, region, stored_at, retention_date
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
-    const transaction = this.db.transaction((events: UnifiedAnalyticsEvent) => {
-      const now = Date.now();
+    const transaction = this.db.transaction((events: UnifiedAnalyticsEvent) => { const now = Date.now();
       for (const event of events) {
         const retentionDate = this.calculateRetentionDate(event);
         stmt.run()
-          event.id,
-          event.type,
-          event.category,
-          event.severity,
-          event.timestamp,
-          event.source,
-          event.version,
-          event.sessionId || null,
-          event.userId || null,
-          event.organizationId || null,
-          event.requestId || null,
-          event.traceId || null,
-          JSON.stringify(event.data),
-          JSON.stringify(event.metadata),
-          JSON.stringify(event.tags),
-          event.environment,
-          event.region || null,
-          now,
+          event.id
+          event.type
+          event.category
+          event.severity
+          event.timestamp
+          event.source
+          event.version
+          event.sessionId || null
+          event.userId || null
+          event.organizationId || null
+          event.requestId || null
+          event.traceId || null
+          JSON.stringify(event.data)
+          JSON.stringify(event.metadata)
+          JSON.stringify(event.tags)
+          event.environment
+          event.region || null
+          now }
           retentionDate
         );
     });
@@ -338,16 +336,15 @@ export class DatabaseEventRepository implements EventRepository {
       FROM ${this.tableName} ${whereClause}
     `);
     const sizeResult = sizeStmt.get(...params);
-    return {
-  totalEvents: totalResult.count,
-  eventsByType,
-  eventsByCategory,
-  eventsBySeverity,
-  eventsBySource,
+    return { totalEvents: totalResult.count
+  eventsByType
+  eventsByCategory
+  eventsBySeverity
+  eventsBySource
   timeRange: {
-  earliest: timeResult.earliest || 0,
-  latest: timeResult.latest || 0,
-},
+  earliest: timeResult.earliest || 0
+  latest: timeResult.latest || 0 }
+
   storageSize: sizeResult.size || 0;
   };
   /**
@@ -359,12 +356,12 @@ export class DatabaseEventRepository implements EventRepository {
     const sql = `;
       SELECT 
         ${groupBy}
-}
-        COUNT(*) as count,
-        MIN(timestamp) as firstSeen,
-        MAX(timestamp) as lastSeen,
-        COUNT(DISTINCT source) as uniqueSources,
-        COUNT(DISTINCT user_id) as uniqueUsers,
+
+        COUNT(*) as count
+        MIN(timestamp) as firstSeen
+        MAX(timestamp) as lastSeen
+        COUNT(DISTINCT source) as uniqueSources
+        COUNT(DISTINCT user_id) as uniqueUsers
         COUNT(DISTINCT session_id) as uniqueSessions
       FROM ${this.tableName} ${whereClause}
       GROUP BY ${groupBy}
@@ -372,21 +369,21 @@ export class DatabaseEventRepository implements EventRepository {
     `;
     const stmt = this.db.prepare(sql);
     const results = stmt.all(...params);
-    return results.map((row: any) => ({,)
-  groupBy: row[groupBy],
+    return results.map((row: any) => ({ );
+  groupBy: row[groupBy]
   aggregates: {
-  count: row.count,
-  firstSeen: row.firstSeen,
-  lastSeen: row.lastSeen,
-  uniqueSources: row.uniqueSources,
-  uniqueUsers: row.uniqueUsers,
-  uniqueSessions: row.uniqueSessions,
+  count: row.count
+  firstSeen: row.firstSeen
+  lastSeen: row.lastSeen
+  uniqueSources: row.uniqueSources
+  uniqueUsers: row.uniqueUsers
+  uniqueSessions: row.uniqueSessions }
 }));
   /**
    * Get time series data
    */
-  async getTimeSeriesData(metric: string, )
-    granularity: string, 
+  async getTimeSeriesData(metric: string);
+  granularity: string
     filter?: EventFilter
   ): Promise<Array<{ timestamp: number; value: number }>> {
     const { whereClause, params } = this.buildWhereClause(filter);
@@ -409,7 +406,7 @@ export class DatabaseEventRepository implements EventRepository {
     const sql = `;
       SELECT 
         strftime('%s', ${timeGrouping}) * 1000 as timestamp}
-}
+
         COUNT(*) as value
       FROM ${this.tableName} ${whereClause}
       GROUP BY ${timeGrouping}
@@ -417,9 +414,9 @@ export class DatabaseEventRepository implements EventRepository {
     `;
     const stmt = this.db.prepare(sql);
     const results = stmt.all(...params);
-    return results.map((row: any) => ({,)
-  timestamp: parseInt(row.timestamp),
-  value: row.value,
+    return results.map((row: any) => ({ );
+  timestamp: parseInt(row.timestamp)
+  value: row.value }
 }));
   /**
    * Cleanup old events
@@ -450,32 +447,30 @@ export class DatabaseEventRepository implements EventRepository {
   /**
    * Optimize database
    */
-  async optimize(): Promise<void> {
-
-  this.db.exec('VACUUM');
+  async optimize(): Promise<void> { this.db.exec('VACUUM');
   this.db.exec('ANALYZE');
   /**
   * Map database row to event object
   */
-  private mapRowToEvent(row: any): UnifiedAnalyticsEvent {,
+  private mapRowToEvent(row: any): UnifiedAnalyticsEvent {
   return {
-  id: row.id,
-  type: row.type,
-  category: row.category,
-  severity: row.severity,
-  timestamp: row.timestamp,
-  source: row.source,
-  version: row.version,
-  sessionId: row.session_id,
-  userId: row.user_id,
-  organizationId: row.organization_id,
-  requestId: row.request_id,
-  traceId: row.trace_id,
-  data: JSON.parse(row.data),
-  metadata: JSON.parse(row.metadata),
-  tags: JSON.parse(row.tags),
-  environment: row.environment,
-  region: row.region,
+  id: row.id
+  type: row.type
+  category: row.category
+  severity: row.severity
+  timestamp: row.timestamp
+  source: row.source
+  version: row.version
+  sessionId: row.session_id
+  userId: row.user_id
+  organizationId: row.organization_id
+  requestId: row.request_id
+  traceId: row.trace_id
+  data: JSON.parse(row.data)
+  metadata: JSON.parse(row.metadata)
+  tags: JSON.parse(row.tags)
+  environment: row.environment
+  region: row.region }
 };
   /**
    * Build WHERE clause for filtering
@@ -542,13 +537,12 @@ export class DatabaseEventRepository implements EventRepository {
   /**
    * Calculate retention date for event
    */
-  private calculateRetentionDate(event: UnifiedAnalyticsEvent): number | null {
-  // Default retention policies by event type
+  private calculateRetentionDate(event: UnifiedAnalyticsEvent): number | null { // Default retention policies by event type
   const retentionDays = {
   [AnalyticsEventType.ERROR_EVENT]: 90,
   [AnalyticsEventType.SECURITY_EVENT]: 365,
   [AnalyticsEventType.REVENUE_EVENT]: 2555, // 7 years,
-  default: 30,
+  default: 30 }
 };
     const days = retentionDays[event.type as keyof typeof retentionDays] || retentionDays.default;
     return Date.now() + (days * 24 * 60 * 60 * 1000);
@@ -577,22 +571,18 @@ class InMemoryEventRepository implements EventRepository {
     for (const event of events) {
       this.events.set(event.id, { ...event });
     return events.map(e => e.id);
-  async findById(id: string): Promise<UnifiedAnalyticsEvent | null> {
-
-  return this.events.get(id) || null;
-  async findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent> {,
+  async findById(id: string): Promise<UnifiedAnalyticsEvent | null> { return this.events.get(id) || null;
+  async findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent> { }
   let events = Array.from(this.events.values());
   // Apply filtering
-  if (options.filter) {
-  events = events.filter(event => this.matchesFilter(event, options.filter!));
+  if (options.filter) { events = events.filter(event => this.matchesFilter(event, options.filter!));
   // Apply sorting
   if (options.sortBy) {
   events.sort((a, b) => {
   const aVal = (a as any)[options.sortBy!];
   const bVal = (b as any)[options.sortBy!];
   const result = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-  return options.sortOrder === 'asc' ? result : -result;
-});
+  return options.sortOrder === 'asc' ? result : -result });
     // Apply pagination
     const start = options.offset || 0;
     const end = options.limit ? start + options.limit : undefined;
@@ -623,8 +613,7 @@ class InMemoryEventRepository implements EventRepository {
     let earliest = Number.MAX_SAFE_INTEGER;
     let latest = 0;
     let storageSize = 0;
-    for (const event of events) {
-      eventsByType[event.type] = (eventsByType[event.type] || 0) + 1;
+    for (const event of events) { eventsByType[event.type] = (eventsByType[event.type] || 0) + 1;
       eventsByCategory[event.category] = (eventsByCategory[event.category] || 0) + 1;
       eventsBySeverity[event.severity] = (eventsBySeverity[event.severity] || 0) + 1;
       eventsBySource[event.source] = (eventsBySource[event.source] || 0) + 1;
@@ -636,7 +625,7 @@ class InMemoryEventRepository implements EventRepository {
       eventsByType,
       eventsByCategory,
       eventsBySeverity,
-      eventsBySource,
+      eventsBySource }
       timeRange: { earliest, latest },
       storageSize
     };
@@ -646,22 +635,21 @@ class InMemoryEventRepository implements EventRepository {
       ? Array.from(this.events.values()).filter(e => this.matchesFilter(e, filter))
       : Array.from(this.events.values());
     const groups: { [key: string]: UnifiedAnalyticsEvent } = {};
-    for (const event of events) {
-  const key = (event as any)[groupBy] || 'unknown';
+    for (const event of events) { const key = (event as any)[groupBy] || 'unknown';
   if (!groups[key]) groups[key] = [];
   groups[key].push(event);
   return Object.entries(groups).map(([key, groupEvents]) => ({)
-  groupBy: key,
+  groupBy: key
   aggregates: {
-  count: groupEvents.length,
-  firstSeen: Math.min(...groupEvents.map(e => e.timestamp)),
-  lastSeen: Math.max(...groupEvents.map(e => e.timestamp)),
-  uniqueSources: new Set(groupEvents.map(e => e.source)).size,
-  uniqueUsers: new Set(groupEvents.map(e => e.userId).filter(Boolean)).size,
-  uniqueSessions: new Set(groupEvents.map(e => e.sessionId).filter(Boolean)).size,
+  count: groupEvents.length
+  firstSeen: Math.min(...groupEvents.map(e => e.timestamp))
+  lastSeen: Math.max(...groupEvents.map(e => e.timestamp))
+  uniqueSources: new Set(groupEvents.map(e => e.source)).size
+  uniqueUsers: new Set(groupEvents.map(e => e.userId).filter(Boolean)).size
+  uniqueSessions: new Set(groupEvents.map(e => e.sessionId).filter(Boolean)).size }
 }));
   async getTimeSeriesData(metric: string)
-    granularity: string,
+  granularity: string
     filter?: EventFilter
   ): Promise<Array<{ timestamp: number; value: number }>> {
     // Simplified implementation for in-memory repository

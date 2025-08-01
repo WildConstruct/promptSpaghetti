@@ -1,7 +1,8 @@
 // Epic 16 Marketplace - Star Rating Component
 import React from 'react';
 import './StarRating.css';
-}
+
+
 interface StarRatingProps {
   rating: number;
   maxRating?: number;
@@ -9,14 +10,15 @@ interface StarRatingProps {
   interactive?: boolean;
   onRatingChange?: (rating: number) => void;
   className?: string;
-  export const StarRating: React.FC<StarRatingProps> = ({,)
+  export const StarRating: React.FC<StarRatingProps> = ({),
   rating,
   maxRating = 5,
   size = 'medium',
   interactive = false,
   onRatingChange,
   className = ''
-}
+
+
 }) => {
   const [hoveredRating, setHoveredRating] = React.useState<number | null>(null);
   const handleStarClick = (starRating: number) => {,
@@ -36,9 +38,9 @@ interface StarRatingProps {
   const starValue = starIndex + 1;
   if (effectiveRating >= starValue) {
   return 'full';
-} else if (effectiveRating >= starValue - 0.5) {
+ else if (effectiveRating >= starValue - 0.5) {
       return 'half';
-    } else {
+ else {
       return 'empty';
   };
   const renderStar = (index: number) => {

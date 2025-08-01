@@ -37,7 +37,7 @@ class TestAutomationOrchestrator {
         failed: 0,
         skipped: 0,
         passRate: 0
-      }
+
     };
 
     this.testSuites = [
@@ -89,9 +89,9 @@ class TestAutomationOrchestrator {
         critical: false,
         timeout: 240000,
         description: 'Mobile device compatibility tests'
-      }
+
     ];
-  }
+
 
   /**
    * Run all test suites with comprehensive orchestration
@@ -106,22 +106,21 @@ class TestAutomationOrchestrator {
       
       if (this.options.parallel) {
         await this.runTestsInParallel();
-      } else {
+ else {
         await this.runTestsSequentially();
-      }
+
       
       await this.generateReports();
       await this.cleanupTestEnvironment();
-      
-    } catch (error) {
+ catch (error) {
       console.error(chalk.red('❌ Test orchestration failed:'), error.message);
       process.exit(1);
-    } finally {
+ finally {
       this.results.endTime = Date.now();
       this.results.totalDuration = this.results.endTime - this.results.startTime;
       await this.printFinalSummary();
-    }
-  }
+
+
 
   /**
    * Run specific test suite by name
@@ -134,7 +133,7 @@ class TestAutomationOrchestrator {
     if (!suite) {
       console.error(chalk.red(`❌ Test suite "${suiteName}" not found`));
       process.exit(1);
-    }
+
 
     console.log(chalk.blue.bold(`🎯 Running specific test suite: ${suite.name}\n`));
     
@@ -149,7 +148,7 @@ class TestAutomationOrchestrator {
     this.results.totalDuration = this.results.endTime - this.results.startTime;
     
     await this.printFinalSummary();
-  }
+
 
   /**
    * Setup test environment
@@ -160,7 +159,7 @@ class TestAutomationOrchestrator {
     // Ensure output directory exists
     if (!fs.existsSync(this.options.outputDir)) {
       fs.mkdirSync(this.options.outputDir, { recursive: true });
-    }
+
 
     // Clean previous test results
     await this.executeCommand('rm -rf coverage/ playwright-report/ test-results/');
@@ -169,13 +168,13 @@ class TestAutomationOrchestrator {
     if (process.env.NODE_ENV !== 'ci') {
       try {
         await this.executeCommand('npm run test:setup', { timeout: 30000 });
-      } catch (error) {
+ catch (error) {
         console.warn(chalk.yellow('⚠️ Test setup script not found, continuing...'));
-      }
-    }
+
+
 
     console.log(chalk.green('✅ Test environment ready\n'));
-  }
+
 
   /**
    * Run tests in parallel
@@ -186,7 +185,7 @@ class TestAutomationOrchestrator {
     const promises = this.testSuites.map(async (suite) => {
       try {
         return await this.runSingleTestSuite(suite);
-      } catch (error) {
+ catch (error) {
         return {
           ...suite,
           status: 'failed',
@@ -194,14 +193,14 @@ class TestAutomationOrchestrator {
           duration: 0,
           output: error.toString()
         };
-      }
+
     });
 
     this.results.suites = await Promise.allSettled(promises);
     this.results.suites = this.results.suites.map(result => 
       result.status === 'fulfilled' ? result.value : result.reason
     );
-  }
+
 
   /**
    * Run tests sequentially
@@ -217,9 +216,9 @@ class TestAutomationOrchestrator {
         console.log(chalk.red(`💥 Critical test suite failed: ${suite.name}`));
         console.log(chalk.red('🚨 Stopping execution due to fail-fast mode'));
         break;
-      }
-    }
-  }
+
+
+
 
   /**
    * Run a single test suite
@@ -251,19 +250,18 @@ class TestAutomationOrchestrator {
 
         console.log(chalk.green(`✅ ${suite.name} passed (${duration}ms)\n`));
         return result;
-
-      } catch (error) {
+ catch (error) {
         lastError = error;
         
         if (attempt <= this.options.retries) {
           console.log(chalk.yellow(`⚠️ ${suite.name} failed (attempt ${attempt}), retrying...\n`));
           attempt++;
           await this.sleep(2000); // Wait 2 seconds before retry
-        } else {
+ else {
           break;
-        }
-      }
-    }
+
+
+
 
     const duration = Date.now() - startTime;
     const result = {
@@ -277,7 +275,7 @@ class TestAutomationOrchestrator {
 
     console.log(chalk.red(`❌ ${suite.name} failed after ${attempt - 1} attempts (${duration}ms)\n`));
     return result;
-  }
+
 
   /**
    * Execute a command with promise
@@ -298,33 +296,33 @@ class TestAutomationOrchestrator {
         stdout += data;
         if (options.verbose || process.env.VERBOSE) {
           process.stdout.write(data);
-        }
+
       });
 
       child.stderr?.on('data', (data) => {
         stderr += data;
         if (options.verbose || process.env.VERBOSE) {
           process.stderr.write(data);
-        }
+
       });
 
       child.on('close', (code) => {
         if (code === 0) {
           resolve(stdout);
-        } else {
+ else {
           const error = new Error(`Command failed with code ${code}: ${command}`);
           error.stdout = stdout;
           error.stderr = stderr;
           error.code = code;
           reject(error);
-        }
+
       });
 
       child.on('error', (error) => {
         reject(error);
       });
     });
-  }
+
 
   /**
    * Generate comprehensive test reports
@@ -344,7 +342,7 @@ class TestAutomationOrchestrator {
         platform: process.platform,
         ci: !!process.env.CI,
         coverage: this.options.coverage
-      }
+
     };
 
     // JSON Report
@@ -358,7 +356,7 @@ class TestAutomationOrchestrator {
     await this.generateJUnitReport(reportData);
 
     console.log(chalk.green(`✅ Reports generated in ${this.options.outputDir}/\n`));
-  }
+
 
   /**
    * Generate HTML report
@@ -432,7 +430,7 @@ class TestAutomationOrchestrator {
 
     const htmlReportPath = path.join(this.options.outputDir, 'test-automation-report.html');
     fs.writeFileSync(htmlReportPath, html);
-  }
+
 
   /**
    * Generate JUnit XML report
@@ -451,7 +449,7 @@ class TestAutomationOrchestrator {
 
     const xmlReportPath = path.join(this.options.outputDir, 'junit-report.xml');
     fs.writeFileSync(xmlReportPath, xml);
-  }
+
 
   /**
    * Calculate test summary
@@ -469,7 +467,7 @@ class TestAutomationOrchestrator {
 
     this.results.summary = summary;
     return summary;
-  }
+
 
   /**
    * Print final summary
@@ -506,21 +504,21 @@ class TestAutomationOrchestrator {
       criticalFailures.forEach(suite => {
         console.log(chalk.red(`   • ${suite.name}: ${suite.error || 'Unknown error'}`));
       });
-    }
+
 
     // Success/failure determination
     if (criticalFailures.length > 0) {
       console.log(chalk.red.bold('\n💥 TEST SUITE FAILED - Critical tests failed'));
       process.exit(1);
-    } else if (summary.failed > 0) {
+ else if (summary.failed > 0) {
       console.log(chalk.yellow.bold('\n⚠️ TEST SUITE COMPLETED WITH WARNINGS - Non-critical tests failed'));
       console.log(chalk.gray('   Non-critical test failures do not block deployment'));
       process.exit(0);
-    } else {
+ else {
       console.log(chalk.green.bold('\n🎉 ALL TESTS PASSED SUCCESSFULLY!'));
       process.exit(0);
-    }
-  }
+
+
 
   /**
    * Cleanup test environment
@@ -532,20 +530,20 @@ class TestAutomationOrchestrator {
     try {
       await this.executeCommand('pkill -f "jest" || true');
       await this.executeCommand('pkill -f "playwright" || true');
-    } catch (error) {
+ catch (error) {
       // Ignore cleanup errors
-    }
+
 
     console.log(chalk.green('✅ Test environment cleaned up\n'));
-  }
+
 
   /**
    * Utility: Sleep for specified milliseconds
    */
   async sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-}
+
+
 
 // CLI Interface
 if (require.main === module) {
@@ -567,21 +565,21 @@ if (require.main === module) {
   const timeoutIndex = args.indexOf('--timeout');
   if (timeoutIndex !== -1) {
     options.timeout = parseInt(args[timeoutIndex + 1]) * 1000;
-  }
+
 
   // Handle retries option
   const retriesIndex = args.indexOf('--retries');
   if (retriesIndex !== -1) {
     options.retries = parseInt(args[retriesIndex + 1]);
-  }
+
 
   const orchestrator = new TestAutomationOrchestrator(options);
 
   if (suite) {
     orchestrator.runSpecificSuite(suite);
-  } else {
+ else {
     orchestrator.runAllTests();
-  }
-}
+
+
 
 module.exports = TestAutomationOrchestrator;

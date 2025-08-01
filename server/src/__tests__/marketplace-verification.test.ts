@@ -4,7 +4,7 @@ import {
   VerificationType, 
   DocumentType, 
   VerificationStatus 
-} from '../services/VerificationProcessService';
+ from '../services/VerificationProcessService';
 import { DocumentVerificationService } from '../services/DocumentVerificationService';
 
 // Mock pg Pool
@@ -12,7 +12,7 @@ const mockPool = {
   connect: jest.fn<unknown[], unknown>(),
   query: jest.fn<unknown[], unknown>(),
   end: jest.fn<unknown[], unknown>()
-} as unknown as Pool;
+ as unknown as Pool;
 
 // Mock client
 const mockClient = {
@@ -94,7 +94,7 @@ describe('Marketplace Verification System', () => {
             user_email: 'user1@example.com',
             document_count: 2,
             days_pending: 1
-          }
+
         ];
 
         mockClient.query
@@ -157,7 +157,7 @@ describe('Marketplace Verification System', () => {
         jest.doMock('fs', () => ({
           promises: {
             readFile: jest.fn<unknown[], unknown>().mockResolvedValue(Buffer.from('mock-file-content' as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown))
-  }
+
           existsSync: jest.fn<unknown[], unknown>().mockReturnValue(true as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown)
         }));
 
@@ -168,14 +168,14 @@ describe('Marketplace Verification System', () => {
               width: 1000,
               height: 800,
               density: 200
-            } as unknown as unknown as unknown as unknown as unknown),
+ as unknown as unknown as unknown as unknown as unknown),
             stats: jest.fn<unknown[], unknown>().mockResolvedValue({
               channels: [
                 { std: 10.5 },
                 { std: 11.2 },
                 { std: 9.8 }
               ]
-            } as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown)
+ as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown)
           });
         });
 

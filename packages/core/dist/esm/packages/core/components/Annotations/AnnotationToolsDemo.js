@@ -170,7 +170,7 @@ export const AnnotationToolsDemo = ({
             attachments;
         [],
             replies;
-        [,
+        [
             {
                 id: 'reply-001',
                 content: 'I can reduce the blur amount by 30%. Will that work?',
@@ -369,7 +369,7 @@ export const AnnotationToolsDemo = ({
                         360, height;
                         120;
                     }
-                    points: [,
+                    points: [
                         { x: 30, y: 80 },
                         { x: 390, y: 200 }
                     ];
@@ -438,7 +438,7 @@ export const AnnotationToolsDemo = ({
                             360, height;
                             120;
                         }
-                        points: [,
+                        points: [
                             { x: 30, y: 230 },
                             { x: 390, y: 350 }
                         ];
@@ -663,7 +663,7 @@ CardContent >
 Card >
     _jsx("style", { children: `
         .annotation-tools-demo {
-          max-width: 1400px;
+          max-width: 1400px;,
   margin: 0 auto;
           padding: 1rem;
         @media (max-width: 768px) {

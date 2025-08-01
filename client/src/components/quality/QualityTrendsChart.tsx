@@ -18,13 +18,13 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer
-} from 'recharts';
+ from 'recharts';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle
-} from '../ui/Card';
+ from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
@@ -35,14 +35,15 @@ import { QualityTrends } from '../../hooks/useQualityMetrics';
 // Quality Trends Chart Component
 // =============================================================================
 
-}
+
 export interface QualityTrendsChartProps {
   trends: QualityTrends | null;
   compact?: boolean;
   className?: string;
   onTimeRangeChange?: (timeRange: string) => void;
-}
-}
+
+
+
 export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
   trends,
   compact = false,
@@ -130,14 +131,14 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
   color,
   name: key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1'),
 }));
-    } else if (selectedMetric === 'overall') {
+ else if (selectedMetric === 'overall') {
       return [{ key: 'overall', color: chartColors.overall, name: 'Overall' }];
-    } else {
+ else {
   return [{
   key: selectedMetric,
   color: chartColors[selectedMetric as keyof typeof chartColors],
   name: selectedMetric.charAt(0).toUpperCase() + selectedMetric.slice(1).replace(/([A-Z])/g, ' $1'),
-}];
+];
   };
   // Get trend direction for a metric
   const getTrendDirection = (metricKey: string) => {
@@ -157,13 +158,14 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
   };
   // Custom tooltip
   interface TooltipEntry {
-    name?: string;
-    value?: number | string;
-    color?: string;
+  name?: string;
+  value?: number | string;
+  color?: string;
   const CustomTooltip = (;);
-    { active,
-    payload,
-}
+  { active,
+  payload,
+
+
     label }: { active?: boolean; payload?: TooltipEntry; label?: string }
   ) => {
     if (active && payload && payload.length) {

@@ -15,11 +15,12 @@ import {
   ApiPermission,
   ApiRole,
   PermissionCheck
-} from '../auth/services/ApiPermissionAssignmentService';
+ from '../auth/services/ApiPermissionAssignmentService';
 
 // Request/Response Types
-}
-}
+
+
+
 interface CreatePermissionRequest {
   name: string;
   description?: string;
@@ -28,12 +29,13 @@ interface CreatePermissionRequest {
   scope: ApiPermissionScope;
   resource: string;
   conditions?: any[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface AssignPermissionRequest {
   userId: string;
   permissionId: string;
@@ -44,36 +46,39 @@ interface AssignPermissionRequest {
     teamId?: string;
     apiKeyId?: string;
     resourceId?: string;
-}
-}
+
+
+
   };
   conditions?: any[];
   reason: string;
   requiresApproval?: boolean;
-}
 
-}
-}
+
+
+
 interface RevokePermissionRequest {
   reason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CreateRoleRequest {
   name: string;
   description?: string;
   category: 'api_admin' | 'api_manager' | 'api_user' | 'api_viewer' | 'custom';
   permissions: string[];
   scope: ApiPermissionScope;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface AssignRoleRequest {
   userId: string;
   roleId: string;
@@ -82,14 +87,15 @@ interface AssignRoleRequest {
     organizationId?: string;
     teamId?: string;
     resourceId?: string;
-}
-}
+
+
+
   };
   reason: string;
-}
 
-}
-}
+
+
+
 interface CheckPermissionRequest {
   userId: string;
   type: ApiPermissionType;
@@ -102,13 +108,14 @@ interface CheckPermissionRequest {
     apiKeyId?: string;
     resourceId?: string;
     metadata?: Record<string, any>;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetPermissionsQuery {
   type?: ApiPermissionType;
   scope?: ApiPermissionScope;
@@ -116,12 +123,13 @@ interface GetPermissionsQuery {
   includeSystem?: boolean;
   page?: number;
   limit?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface GetAssignmentsQuery {
   userId?: string;
   permissionId?: string;
@@ -130,21 +138,23 @@ interface GetAssignmentsQuery {
   expiringInDays?: number;
   page?: number;
   limit?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface GetAnalyticsQuery {
   startDate: string;
   endDate: string;
   userId?: string;
   type?: ApiPermissionType;
   includeDetails?: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Register API permission assignment routes
@@ -154,7 +164,7 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
 
   if (!permissionService) {
     throw new Error('ApiPermissionAssignmentService not registered with Fastify instance');
-  }
+
 
   // =============================================================================
   // Permission Management Routes
@@ -174,9 +184,9 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           includeSystem: { type: 'boolean', default: true },
           page: { type: 'number', default: 1 },
           limit: { type: 'number', default: 20, maximum: 100 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: GetPermissionsQuery }>, reply: FastifyReply) => {
     try {
       const { type, scope, page = 1, limit = 20 } = request.query;
@@ -186,7 +196,7 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
       // Apply additional filters
       if (!request.query.includeSystem) {
         permissions = permissions.filter(p => !p.metadata.tags.includes('system'));
-      }
+
 
       // Pagination
       const startIndex = (page - 1) * limit;
@@ -202,16 +212,16 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
             limit,
             total: permissions.length,
             pages: Math.ceil(permissions.length / limit)
-          }
-        }
+
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get permissions'
       };
-    }
+
   });
 
   /**
@@ -230,9 +240,9 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           scope: { type: 'string' },
           resource: { type: 'string' },
           conditions: { type: 'array' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: CreatePermissionRequest }>, reply: FastifyReply) => {
     try {
       const userId = request.user?.id || 'system';
@@ -245,13 +255,13 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         data: permission,
         message: 'Permission created successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create permission'
       };
-    }
+
   });
 
   /**
@@ -264,9 +274,9 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         required: ['permissionId'],
         properties: {
           permissionId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { permissionId: string } }>, reply: FastifyReply) => {
     try {
       const { permissionId } = request.params;
@@ -279,19 +289,19 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           success: false,
           error: `Permission ${permissionId} not found`
         };
-      }
+
 
       return {
         success: true,
         data: permission
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get permission'
       };
-    }
+
   });
 
   // =============================================================================
@@ -315,9 +325,9 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           conditions: { type: 'array' },
           reason: { type: 'string', minLength: 1, maxLength: 500 },
           requiresApproval: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: AssignPermissionRequest }>, reply: FastifyReply) => {
     try {
       const assignedBy = request.user?.id || 'system';
@@ -339,13 +349,13 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         data: assignment,
         message: 'Permission assigned successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to assign permission'
       };
-    }
+
   });
 
   /**
@@ -358,20 +368,20 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         required: ['assignmentId'],
         properties: {
           assignmentId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['reason'],
         properties: {
           reason: { type: 'string', minLength: 1, maxLength: 500 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { assignmentId: string };
     Body: RevokePermissionRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { assignmentId } = request.params;
       const { reason } = request.body;
@@ -383,13 +393,13 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Permission assignment revoked successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to revoke permission assignment'
       };
-    }
+
   });
 
   /**
@@ -402,21 +412,21 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         required: ['userId'],
         properties: {
           userId: { type: 'string' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           includeExpired: { type: 'boolean', default: false },
           scope: { type: 'string' },
           type: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { userId: string };
     Querystring: { includeExpired?: boolean; scope?: ApiPermissionScope; type?: ApiPermissionType };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
       const { includeExpired, scope, type } = request.query;
@@ -431,13 +441,13 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         success: true,
         data: userPermissions
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get user permissions'
       };
-    }
+
   });
 
   /**
@@ -455,9 +465,9 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           resource: { type: 'string' },
           scope: { type: 'string' },
           context: { type: 'object' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: CheckPermissionRequest }>, reply: FastifyReply) => {
     try {
       const result = await permissionService.checkPermission(request.body);
@@ -470,13 +480,13 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         data: result,
         message: result.reason
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to check permission'
       };
-    }
+
   });
 
   // =============================================================================
@@ -496,9 +506,9 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           includeSystem: { type: 'boolean', default: true },
           page: { type: 'number', default: 1 },
           limit: { type: 'number', default: 20, maximum: 100 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       category?: string;
@@ -506,8 +516,8 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
       includeSystem?: boolean;
       page?: number;
       limit?: number;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { category, scope, includeSystem = true, page = 1, limit = 20 } = request.query;
 
@@ -515,7 +525,7 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
 
       if (!includeSystem) {
         roles = roles.filter(r => !r.isSystemRole);
-      }
+
 
       // Pagination
       const startIndex = (page - 1) * limit;
@@ -531,16 +541,16 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
             limit,
             total: roles.length,
             pages: Math.ceil(roles.length / limit)
-          }
-        }
+
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get roles'
       };
-    }
+
   });
 
   /**
@@ -557,9 +567,9 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           category: { type: 'string' },
           permissions: { type: 'array', items: { type: 'string' }, minItems: 1 },
           scope: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: CreateRoleRequest }>, reply: FastifyReply) => {
     try {
       const createdBy = request.user?.id || 'system';
@@ -572,13 +582,13 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         data: role,
         message: 'Role created successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create role'
       };
-    }
+
   });
 
   /**
@@ -595,9 +605,9 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           expiresAt: { type: 'string', format: 'date-time' },
           scopeContext: { type: 'object' },
           reason: { type: 'string', minLength: 1, maxLength: 500 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: AssignRoleRequest }>, reply: FastifyReply) => {
     try {
       const assignedBy = request.user?.id || 'system';
@@ -619,16 +629,16 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         data: {
           assignments,
           assignmentCount: assignments.length
-  }
+
         message: 'Role assigned successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to assign role'
       };
-    }
+
   });
 
   // =============================================================================
@@ -649,9 +659,9 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           userId: { type: 'string' },
           type: { type: 'string' },
           includeDetails: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: GetAnalyticsQuery }>, reply: FastifyReply) => {
     try {
       const { startDate, endDate } = request.query;
@@ -665,13 +675,13 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         success: true,
         data: analytics
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to generate analytics'
       };
-    }
+
   });
 
   /**
@@ -684,12 +694,12 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         properties: {
           userId: { type: 'string' },
           limit: { type: 'number', default: 50, maximum: 200 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: { userId?: string; limit?: number }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { userId, limit = 50 } = request.query;
 
@@ -700,15 +710,15 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         data: {
           activities,
           total: activities.length
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get activities'
       };
-    }
+
   });
 
   /**
@@ -723,15 +733,15 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         data: {
           templates,
           total: templates.length
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get templates'
       };
-    }
+
   });
 
   // =============================================================================
@@ -761,34 +771,34 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           activeAssignments: analytics.summary.activeAssignments,
           uniqueUsers: analytics.summary.uniqueUsers,
           recentActivityCount: recentActivities.length
-  }
+
         breakdown: analytics.breakdown,
         security: {
           overPrivilegedUsers: analytics.security.overPrivilegedUsers.length,
           unusedPermissions: analytics.security.unusedPermissions.length,
           expiringAssignments: analytics.security.expiringAssignments.length,
           suspiciousActivity: analytics.security.suspiciousActivity.length
-  }
+
         recentActivity: recentActivities.slice(0, 5),
         recommendations: analytics.recommendations.slice(0, 3),
         trends: {
           weeklyGrants: recentActivities.filter(a => a.action === 'granted').length,
           weeklyRevocations: recentActivities.filter(a => a.action === 'revoked').length,
           weeklyUsage: recentActivities.filter(a => a.action === 'used').length
-        }
+
       };
 
       return {
         success: true,
         data: dashboard
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to generate dashboard'
       };
-    }
+
   });
 
   /**
@@ -805,18 +815,18 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           database: true,
           auditService: true,
           rbacIntegration: true
-  }
+
         metrics: {
           memoryUsage: process.memoryUsage(),
           loadAverage: require('os').loadavg()
-        }
+
       };
 
       return {
         success: true,
         data: health
       };
-    } catch (error) {
+ catch (error) {
       reply.status(503);
       return {
         success: false,
@@ -824,12 +834,12 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         data: {
           status: 'unhealthy',
           timestamp: new Date().toISOString()
-        }
+
       };
-    }
+
   });
 
   console.log('🔐 API Permission Assignment routes registered successfully');
-}
+
 
 export default apiPermissionAssignmentRoutes;

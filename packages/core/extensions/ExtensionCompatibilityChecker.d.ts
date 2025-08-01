@@ -4,8 +4,7 @@
  */
 import { ExtensionManifest } from './ExtensionManifest';
 import { CompatibilityIssue } from './ExtensionVersionManager';
-export declare class ExtensionCompatibilityChecker {
-    private static instance;
+export declare class ExtensionCompatibilityChecker { private static instance;
     private compatibilityRules;
     private platformFeatures;
     private systemCapabilities;
@@ -16,7 +15,7 @@ export declare class ExtensionCompatibilityChecker {
      */
     checkExtensionCompatibility();
       extension: ExtensionManifest,
-      context: CompatibilityContext,
+      context: CompatibilityContext }
     ): ExtensionCompatibilityResult;
     /**
      * Check system compatibility
@@ -76,16 +75,15 @@ export declare class ExtensionCompatibilityChecker {
     private initializeDefaultRules;
 
 }
-export interface CompatibilityContext {
-    systemVersion: string;
+}
+export interface CompatibilityContext { systemVersion: string;
     platform: string;
     availableExtensions: Map<string, ExtensionManifest>;
     grantedPermissions: string[];
-    browserInfo?: Record<string, string>;
-
+    browserInfo?: Record<string, string> }
 }
-export interface ExtensionCompatibilityResult {
-    compatible: boolean;
+}
+export interface ExtensionCompatibilityResult { compatible: boolean;
     issues: CompatibilityIssue[];
     warnings: string[];
     recommendations: string[];
@@ -93,20 +91,21 @@ export interface ExtensionCompatibilityResult {
     dependencyCheck: CompatibilityCheck;
     platformCheck: CompatibilityCheck;
     permissionCheck: CompatibilityCheck;
-    securityCheck: CompatibilityCheck;
+    securityCheck: CompatibilityCheck }
 }
-interface CompatibilityCheck {
-    compatible: boolean;
+}
+interface CompatibilityCheck { compatible: boolean;
     issues: CompatibilityIssue[];
-    warnings: string[];
+    warnings: string[] }
 }
-interface CompatibilityRule {
-    id: string;
+}
+interface CompatibilityRule { id: string;
     name: string;
     description: string;
-    check: (extension: ExtensionManifest) => {,
+    check: (extension: ExtensionManifest) => { }
         compatible: boolean;
         issues: CompatibilityIssue[];
+}
 }
     };
 

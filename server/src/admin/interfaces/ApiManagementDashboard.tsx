@@ -40,7 +40,7 @@ import {
   LinearProgress,
   Tooltip,
   Badge
-} from '@mui/material';
+ from '@mui/material';
 import {
   Add,
   Delete,
@@ -57,12 +57,12 @@ import {
   Refresh,
   FilterList,
   Search
-} from '@mui/icons-material';
+ from '@mui/icons-material';
 import { Line, Doughnut, Bar } from 'react-chartjs-2';
 import { format, subDays } from 'date-fns';
 
-}
-}
+
+
 interface ApiKey {
   keyId: string;
   keyPrefix: string;
@@ -77,8 +77,9 @@ interface ApiKey {
     requestsPerMinute: number;
     requestsPerHour: number;
     requestsPerDay: number;
-}
-}
+
+
+
   };
   userName: string;
   userEmail: string;
@@ -89,10 +90,10 @@ interface ApiKey {
     rotationCount: number;
     purpose: string;
   };
-}
 
-}
-}
+
+
+
 interface SecurityAlert {
   id: string;
   type: 'rate_limit' | 'error_spike' | 'unusual_activity' | 'security_threat';
@@ -101,12 +102,13 @@ interface SecurityAlert {
   timestamp: Date;
   keyId?: string;
   resolved: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UsageMetrics {
   [keyId: string]: {
     keyId: string;
@@ -120,314 +122,14 @@ interface UsageMetrics {
       endpoint: string;
       calls: number;
       errorRate: number;
-}
-}
-    }>;
-  };
-}
 
-const ApiManagementDashboard: React.FC = () => {
-  const [currentTab, setCurrentTab] = useState(0);
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedKey, setSelectedKey] = useState<ApiKey | null>(null);
-  const [showKeyDialog, setShowKeyDialog] = useState(false);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
-  const [metrics, setMetrics] = useState<UsageMetrics>({});
-  const [statistics, setStatistics] = useState<any>({});
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [scopeFilter, setScopeFilter] = useState<string>('all');
 
-  // Fetch API keys with pagination and filtering
-  const fetchApiKeys = useCallback(async (params: {
-    status?: string;
-    limit?: number;
-    offset?: number;
-    sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
-  } = {}) => {
-    try {
-      setLoading(true);
-      const query = new URLSearchParams();
-      
-      if (params.status && params.status !== 'all') {
-        query.append('status', params.status);
-      }
-      if (params.limit) query.append('limit', params.limit.toString());
-      if (params.offset) query.append('offset', params.offset.toString());
-      if (params.sortBy) query.append('sortBy', params.sortBy);
-      if (params.sortOrder) query.append('sortOrder', params.sortOrder);
 
-      const response = await fetch(`/api/api-keys/admin/all?${query}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch API keys');
-      }
-      
-      const data = await response.json();
-      setApiKeys(data.apiKeys || []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Fetch security alerts
-  const fetchAlerts = useCallback(async () => {
-    try {
-      const response = await fetch('/api/api-keys/admin/alerts');
-      if (response.ok) {
-        const data = await response.json();
-        setAlerts(data.alerts || []);
-      }
-    } catch (err) {
-      console.warn('Failed to fetch security alerts:', err);
-    }
-  }, []);
-
-  // Fetch usage metrics
-  const fetchMetrics = useCallback(async (timeRange: '1h' | '24h' | '7d' | '30d' = '24h') => {
-    try {
-      const response = await fetch(`/api/api-keys/admin/metrics?timeRange=${timeRange}`);
-      if (response.ok) {
-        const data = await response.json();
-        setMetrics(data.metrics || {});
-      }
-    } catch (err) {
-      console.warn('Failed to fetch usage metrics:', err);
-    }
-  }, []);
-
-  // Fetch global statistics
-  const fetchStatistics = useCallback(async () => {
-    try {
-      const response = await fetch('/api/api-keys/admin/statistics');
-      if (response.ok) {
-        const data = await response.json();
-        setStatistics(data.globalStatistics || {});
-      }
-    } catch (err) {
-      console.warn('Failed to fetch statistics:', err);
-    }
-  }, []);
-
-  // Load initial data
-  useEffect(() => {
-    fetchApiKeys({ limit: 100 });
-    fetchAlerts();
-    fetchMetrics();
-    fetchStatistics();
-  }, [fetchApiKeys, fetchAlerts, fetchMetrics, fetchStatistics]);
-
-  // Auto-refresh alerts and metrics
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchAlerts();
-      fetchMetrics();
-      fetchStatistics();
-    }, 30000); // Every 30 seconds
-
-    return () => clearInterval(interval);
-  }, [fetchAlerts, fetchMetrics, fetchStatistics]);
-
-  // Filter API keys based on search and filters
-  const filteredApiKeys = apiKeys.filter(key => {
-    const matchesSearch = searchQuery === '' || 
-      key.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      key.userEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      key.keyPrefix.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'all' || key.status === statusFilter;
-    
-    const matchesScope = scopeFilter === 'all' || 
-      key.scopes.some(scope => scope.includes(scopeFilter));
-
-    return matchesSearch && matchesStatus && matchesScope;
-  });
-
-  // Handle API key operations
-  const handleRevokeKey = async (keyId: string, reason: string = 'Admin revocation') => {
-    try {
-      const response = await fetch('/api/api-keys/admin/revoke', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ keyId, reason })
-      });
-
-      if (response.ok) {
-        await fetchApiKeys({ status: statusFilter !== 'all' ? statusFilter : undefined });
-        setError(null);
-      } else {
-        throw new Error('Failed to revoke API key');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
-    }
+>;
   };
 
-  const handleSuspendKey = async (keyId: string, reason: string, duration: string = '24h') => {
-    try {
-      const response = await fetch('/api/api-keys/admin/suspend', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ keyId, reason, duration })
-      });
 
-      if (response.ok) {
-        await fetchApiKeys({ status: statusFilter !== 'all' ? statusFilter : undefined });
-        setError(null);
-      } else {
-        throw new Error('Failed to suspend API key');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
-    }
-  };
-
-  const handleUpdateRateLimits = async (keyId: string, rateLimits: {
-    requestsPerMinute: number;
-    requestsPerHour: number;
-    requestsPerDay: number;
-  }) => {
-    try {
-      const response = await fetch('/api/api-keys/admin/rate-limits', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ keyId, rateLimits })
-      });
-
-      if (response.ok) {
-        await fetchApiKeys({ status: statusFilter !== 'all' ? statusFilter : undefined });
-        setError(null);
-      } else {
-        throw new Error('Failed to update rate limits');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
-    }
-  };
-
-  // Get status color
-  const getStatusColor = (status: string): 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' => {
-    switch (status) {
-    case 'active': return 'success';
-    case 'suspended': return 'warning';
-    case 'revoked': return 'error';
-    case 'expired': return 'secondary';
-    default: return 'default';
-    }
-  };
-
-  // Get alert severity color
-  const getAlertSeverityColor = (severity: string): 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' => {
-    switch (severity) {
-    case 'critical': return 'error';
-    case 'high': return 'warning';
-    case 'medium': return 'info';
-    case 'low': return 'default';
-    default: return 'default';
-    }
-  };
-
-  // Render overview dashboard
-  const renderOverview = () => (
-    <Grid container spacing={3}>
-      {/* Key Statistics Cards */}
-      <Grid item xs={12} md={3}>
-        <Card>
-          <CardContent>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" color="primary">Total Keys</Typography>
-              <Security color="primary" />
-            </Box>
-            <Typography variant="h4">{statistics.totalKeys || 0}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              {statistics.activeKeys || 0} active
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      <Grid item xs={12} md={3}>
-        <Card>
-          <CardContent>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" color="success.main">Active Usage</Typography>
-              <Timeline color="success" />
-            </Box>
-            <Typography variant="h4">{statistics.keysUsedLast24Hours || 0}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              Last 24 hours
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      <Grid item xs={12} md={3}>
-        <Card>
-          <CardContent>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" color="warning.main">Alerts</Typography>
-              <Badge badgeContent={alerts.filter(a => !a.resolved).length} color="error">
-                <Warning color="warning" />
-              </Badge>
-            </Box>
-            <Typography variant="h4">{alerts.filter(a => a.severity === 'high' || a.severity === 'critical').length}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              High/Critical
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      <Grid item xs={12} md={3}>
-        <Card>
-          <CardContent>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Typography variant="h6" color="info.main">Avg Key Age</Typography>
-              <Analytics color="info" />
-            </Box>
-            <Typography variant="h4">{statistics.averageKeyAge || 0}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              Days
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      {/* Usage Chart */}
-      <Grid item xs={12} md={8}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              API Usage Over Time
-            </Typography>
-            {/* Placeholder for usage chart */}
-            <Box height={300} display="flex" alignItems="center" justifyContent="center">
-              <Typography color="textSecondary">
-                Usage chart would be rendered here with real-time data
-              </Typography>
-            </Box>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      {/* Security Alerts */}
-      <Grid item xs={12} md={4}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Recent Security Alerts
-            </Typography>
-            <Box maxHeight={300} overflow="auto">
-              {alerts.slice(0, 5).map((alert) => (
-                <Alert
-                  key={alert.id}
-                  severity={alert.severity === 'critical' ? 'error' : alert.severity === 'high' ? 'warning' : 'info'}
-                  sx={{ mb: 1 }}
+const ApiManagementDashboard = () => { return null; }
                 >
                   <Typography variant="body2" fontWeight="medium">
                     {alert.type.replace('_', ' ').toUpperCase()}
@@ -501,7 +203,7 @@ const ApiManagementDashboard: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             InputProps={{
               startAdornment: <Search />
-            }}
+}
           />
           <FormControl size="small" sx={{ minWidth: 120 }}>
             <InputLabel>Status</InputLabel>
@@ -601,7 +303,7 @@ const ApiManagementDashboard: React.FC = () => {
                   </Typography>
                   <Typography variant="caption" color={
                     (metrics[key.keyId]?.errorRate || 0) > 0.1 ? 'error' : 'textSecondary'
-                  }>
+>
                     {((metrics[key.keyId]?.errorRate || 0) * 100).toFixed(1)}% errors
                   </Typography>
                 </TableCell>
@@ -617,7 +319,7 @@ const ApiManagementDashboard: React.FC = () => {
                     <IconButton size="small" onClick={() => {
                       setSelectedKey(key);
                       setShowKeyDialog(true);
-                    }}>
+}>
                       <Visibility />
                     </IconButton>
                   </Tooltip>
@@ -694,7 +396,7 @@ const ApiManagementDashboard: React.FC = () => {
                   <Button size="small">
                     Investigate
                   </Button>
-                }
+
               >
                 <Typography variant="body2" fontWeight="medium">
                   {alert.type.replace('_', ' ').toUpperCase()} - {alert.severity.toUpperCase()}
@@ -720,7 +422,7 @@ const ApiManagementDashboard: React.FC = () => {
         {error}
       </Alert>
     );
-  }
+
 
   return (
     <Box p={3}>
@@ -808,16 +510,16 @@ const ApiManagementDashboard: React.FC = () => {
                 if (selectedKey) {
                   handleSuspendKey(selectedKey.keyId, 'Admin suspension');
                   setShowKeyDialog(false);
-                }
-              }}>
+
+}>
                 Suspend
               </Button>
               <Button color="error" onClick={() => {
                 if (selectedKey) {
                   handleRevokeKey(selectedKey.keyId);
                   setShowKeyDialog(false);
-                }
-              }}>
+
+}>
                 Revoke
               </Button>
             </>

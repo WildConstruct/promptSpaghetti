@@ -4,35 +4,33 @@
  */
 import React from 'react';
 
-}
-export interface FilterOptions {
-  status: 'all' | 'enabled' | 'disabled';
-  type: 'all' | 'node' | 'ui' | 'transform' | 'storage';
-  sortBy: 'name' | 'version' | 'lastUpdated' | 'size'
-}
-  }
-}
-export interface ExtensionSearchFilterProps {
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-  filterOptions: FilterOptions;
-  onFilterChange: (options: FilterOptions) => void;
-  viewMode: 'installed' | 'marketplace';
-}
-}
 
-export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
-  searchQuery,
-  onSearchChange,
-  filterOptions,
-  onFilterChange,
+export interface FilterOptions { status: 'all' | 'enabled' | 'disabled';
+  type: 'all' | 'node' | 'ui' | 'transform' | 'storage';
+  sortBy: 'name' | 'version' | 'lastUpdated' | 'size' }
+
+
+
+
+export interface ExtensionSearchFilterProps { searchQuery: string;
+  onSearchChange: (query: string) => void
+  filterOptions: FilterOptions;
+  onFilterChange: (options: FilterOptions) => void }
+  viewMode: 'installed' | 'marketplace';
+
+
+
+
+export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({ searchQuery
+  onSearchChange
+  filterOptions
+  onFilterChange }
   viewMode
-}) => {
-  const handleFilterChange = (key: keyof FilterOptions, value: string) => {
-    onFilterChange({
-      ...filterOptions,
-      [key]: value,
-    });
+}) => { const handleFilterChange = (key: keyof FilterOptions, value: string) => {
+  onFilterChange({
+  ...filterOptions
+  [key]: value }
+});
   };
   return (
     <div className="extension-search-filter">
@@ -211,14 +209,14 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({
             )}
             <button 
               className="clear-all-filters"
-              onClick={() => {
+              onClick={ () => {
   onSearchChange('');
   onFilterChange({)
-  status: 'all',
-  type: 'all',
-  sortBy: 'name',
+  status: 'all'
+  type: 'all'
+  sortBy: 'name' }
 });
-              }}
+
             >
               Clear all filters
             </button>

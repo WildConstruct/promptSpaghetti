@@ -8,18 +8,17 @@ import { ZodSchema } from 'zod';
 import '../../styles/smoothAnimations.css';
 
 }
-export interface SmoothInspectorPanelProps {
-    node: Error | null;
+}
+export interface SmoothInspectorPanelProps { node: Error | null;
     schema: ZodSchema<unknown> | null;
     onChange: (partial: Record<string, unknown>) => void;
     onClose?: () => void;
     onGlobalPreviewRequest?: () => void;
     initialWidth?: number;
     minWidth?: number;
-    maxWidth?: number;
-
+    maxWidth?: number }
 }
-export declare const SmoothInspectorPanel: ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth, minWidth, maxWidth }: {)
+export declare const SmoothInspectorPanel: ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth, minWidth, maxWidth }: { )
     node: any;
     schema: any;
     onChange: any;
@@ -27,6 +26,5 @@ export declare const SmoothInspectorPanel: ({ node, schema, onChange, onClose, o
     onGlobalPreviewRequest: any;
     initialWidth?: number | undefined;
     minWidth?: number | undefined;
-    maxWidth?: number | undefined;
-}) => import("react/jsx-runtime").JSX.Element;
+    maxWidth?: number | undefined }) => import("react/jsx-runtime").JSX.Element;
 //# sourceMappingURL=SmoothInspectorPanel.d.ts.map

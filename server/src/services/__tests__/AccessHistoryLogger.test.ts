@@ -11,7 +11,7 @@ import {
   RiskLevel,
   AccessContext,
   AccessHistoryEvent
-} from '../AccessHistoryLogger';
+ from '../AccessHistoryLogger';
 import { DataProtectionEventLogger } from '../../../../packages/core/security/DataProtectionEventLogger';
 import { SecurityEventCoordinator } from '../SecurityEventCoordinator';
 import { AuditService } from '../../auth/services/AuditService';
@@ -39,7 +39,7 @@ describe('AccessHistoryLogger', () => {
       country: 'US',
       region: 'CA',
       city: 'San Francisco'
-  }
+
     deviceInfo: {
       deviceType: 'desktop',
       browserName: 'Chrome',
@@ -47,7 +47,7 @@ describe('AccessHistoryLogger', () => {
       osName: 'Windows',
       osVersion: '10',
       fingerprint: 'fp_12345'
-  }
+
     requestId: 'req-789',
     endpoint: '/api/users',
     method: 'GET',
@@ -160,8 +160,8 @@ describe('AccessHistoryLogger', () => {
               sessionId: 'session-123',
               userId: 'user-456',
               ipAddress: '192.168.1.100'
-  }
-  }
+
+
   }
       );
     });
@@ -184,8 +184,8 @@ describe('AccessHistoryLogger', () => {
           geolocation: {
             country: 'CN', // High-risk country
             vpn_detected: true
-          }
-        }
+
+
       };
 
       await accessHistoryLogger.logAccessEvent(highRiskEvent);
@@ -195,7 +195,7 @@ describe('AccessHistoryLogger', () => {
           details: expect.objectContaining({
             riskLevel: expect.stringMatching(/high|critical/),
             riskFactors: expect.arrayContaining(['HIGH_RISK_COUNTRY', 'VPN_DETECTED'])
-  }
+
   }
       );
     });
@@ -210,7 +210,7 @@ describe('AccessHistoryLogger', () => {
         expect.objectContaining({
           details: expect.objectContaining({
             riskFactors: expect.arrayContaining(['OFF_HOURS_ACCESS'])
-  }
+
   }
       );
     });
@@ -229,7 +229,7 @@ describe('AccessHistoryLogger', () => {
           outcome: AccessResult.FAILURE,
           details: expect.objectContaining({
             riskFactors: expect.arrayContaining(['ACCESS_FAILURE'])
-  }
+
   }
       );
     });
@@ -260,8 +260,8 @@ describe('AccessHistoryLogger', () => {
           geolocation: {
             country: 'CN',
             vpn_detected: true
-          }
-        }
+
+
       };
 
       await accessHistoryLogger.logAccessEvent(highRiskEvent);
@@ -305,7 +305,7 @@ describe('AccessHistoryLogger', () => {
           outcome: AccessResult.SUCCESS,
           details: expect.objectContaining({
             operation: AccessEventType.LOGIN_SUCCESS
-  }
+
   }
       );
     });
@@ -327,8 +327,8 @@ describe('AccessHistoryLogger', () => {
             metadata: expect.objectContaining({
               reason: 'Invalid credentials',
               attempts: 3
-  }
-  }
+
+
   }
       );
     });
@@ -384,8 +384,8 @@ describe('AccessHistoryLogger', () => {
             permissions: ['profile:read'],
             metadata: expect.objectContaining({
               dataSize: 1024
-  }
-  }
+
+
   }
       );
     });
@@ -403,7 +403,7 @@ describe('AccessHistoryLogger', () => {
           AccessResult.SUCCESS,
           [`document:${operation}`]
         );
-      }
+
 
       expect(mockAuditService.logEvent).toHaveBeenCalledTimes(operations.length);
     });
@@ -426,8 +426,8 @@ describe('AccessHistoryLogger', () => {
             metadata: expect.objectContaining({
               auditRequired: expect.any(Boolean),
               sensitiveOperation: expect.any(Boolean)
-  }
-  }
+
+
   }
       );
     });
@@ -461,8 +461,8 @@ describe('AccessHistoryLogger', () => {
               statusCode: 200,
               responseTime: 150,
               responseSize: 2048
-  }
-  }
+
+
   }
       );
     });
@@ -480,7 +480,7 @@ describe('AccessHistoryLogger', () => {
           100,
           200
         );
-      }
+
 
       expect(mockAuditService.logEvent).toHaveBeenCalledTimes(methods.length);
     });
@@ -502,8 +502,8 @@ describe('AccessHistoryLogger', () => {
             metadata: expect.objectContaining({
               auditRequired: expect.any(Boolean),
               sensitiveOperation: expect.any(Boolean)
-  }
-  }
+
+
   }
       );
     });
@@ -585,7 +585,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['read'],
           context: mockContext,
           result: AccessResult.SUCCESS
-  }
+
         {
           eventType: AccessEventType.RESOURCE_WRITE,
           resourceType: 'document',
@@ -594,7 +594,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['write'],
           context: { ...mockContext, userId: 'user-789' },
           result: AccessResult.SUCCESS
-  }
+
         {
           eventType: AccessEventType.API_ACCESS,
           resourceType: 'api',
@@ -603,12 +603,12 @@ describe('AccessHistoryLogger', () => {
           permissions: ['api:read'],
           context: mockContext,
           result: AccessResult.SUCCESS
-        }
+
       ];
 
       for (const event of events) {
         await accessHistoryLogger.logAccessEvent(event);
-      }
+
     });
 
     it('should retrieve user access history', async () => {
@@ -672,7 +672,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['read'],
           context: mockContext,
           result: AccessResult.SUCCESS
-  }
+
         {
           eventType: AccessEventType.RESOURCE_WRITE,
           resourceType: 'document',
@@ -681,12 +681,12 @@ describe('AccessHistoryLogger', () => {
           permissions: ['write'],
           context: mockContext,
           result: AccessResult.SUCCESS
-        }
+
       ];
 
       for (const event of events) {
         await accessHistoryLogger.logAccessEvent(event);
-      }
+
     });
 
     it('should generate resource access summary', async () => {
@@ -733,7 +733,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['read'],
           context: mockContext,
           result: AccessResult.SUCCESS
-  }
+
         {
           eventType: AccessEventType.RESOURCE_READ,
           resourceType: 'document',
@@ -742,7 +742,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['read'],
           context: { ...mockContext, userId: 'user-789' },
           result: AccessResult.SUCCESS
-  }
+
         {
           eventType: AccessEventType.LOGIN_FAILURE,
           resourceType: 'authentication',
@@ -751,12 +751,12 @@ describe('AccessHistoryLogger', () => {
           permissions: [],
           context: mockContext,
           result: AccessResult.FAILURE
-        }
+
       ];
 
       for (const event of events) {
         await accessHistoryLogger.logAccessEvent(event);
-      }
+
     });
 
     it('should generate comprehensive access analytics', async () => {
@@ -828,7 +828,7 @@ describe('AccessHistoryLogger', () => {
         geolocation: {
           country: 'US',
           vpn_detected: true
-        }
+
       };
 
       await accessHistoryLogger.logAccessEvent({
@@ -845,7 +845,7 @@ describe('AccessHistoryLogger', () => {
         expect.objectContaining({
           details: expect.objectContaining({
             riskFactors: expect.arrayContaining(['VPN_DETECTED'])
-  }
+
   }
       );
     });
@@ -865,7 +865,7 @@ describe('AccessHistoryLogger', () => {
           context: rapidContext,
           result: AccessResult.SUCCESS
         });
-      }
+
 
       // The last few events should show rapid access pattern
       const lastCall = mockAuditService.logEvent.mock.calls.slice(-1)[0];
@@ -887,7 +887,7 @@ describe('AccessHistoryLogger', () => {
         expect.objectContaining({
           details: expect.objectContaining({
             riskFactors: expect.arrayContaining(['PERMISSION_ESCALATION'])
-  }
+
   }
       );
     });
@@ -979,7 +979,7 @@ describe('AccessHistoryLogger', () => {
         context: {
           ...mockContext,
           ipAddress: 'invalid-ip-address'
-        }
+
       };
 
       await expect(accessHistoryLogger.logAccessEvent(eventWithInvalidIP))
@@ -992,7 +992,7 @@ describe('AccessHistoryLogger', () => {
         context: {
           ...mockContext,
           sessionId: 'invalid session id!' // Contains invalid characters
-        }
+
       };
 
       await expect(accessHistoryLogger.logAccessEvent(eventWithInvalidSession))

@@ -5,25 +5,23 @@
  * Handles subscription lifecycle, event publishing, and performance optimization.
  */
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { 
-  globalEventBus, 
+import { globalEventBus, 
   BaseEvent, 
   EventFilter, 
   EventHandler, 
   EventPriority,
-  EventCategory,
+  EventCategory }
   EventFactory
-} from '../EventSystem';
+ from '../EventSystem';
 /**
  * Hook for subscribing to events with automatic cleanup
  */
 export function useEventSubscription<T extends BaseEvent = BaseEvent>(filter: EventFilter)
-  handler: EventHandler<T>,
-  options?: {
-  priority?: EventPriority;
+  handler: EventHandler<T>
+  options?: { priority?: EventPriority;
   once?: boolean;
   enabled?: boolean;
-  ): void {,
+  ): void {
   const handlerRef = useRef(handler);
   const subscriptionIdRef = useRef<string | null>(null);
   // Update handler reference
@@ -33,242 +31,199 @@ export function useEventSubscription<T extends BaseEvent = BaseEvent>(filter: Ev
   if (options?.enabled === false) {
   return;
   // Create stable wrapper for handler
-  const stableHandler: EventHandler<T> = (event) => {,
+  const stableHandler: EventHandler<T> = (event) => { }
   handlerRef.current(event);
 };
     // Subscribe to events
     subscriptionIdRef.current = globalEventBus.subscribe()
-      filter,
-      stableHandler,
-      {
-  priority: options?.priority ?? EventPriority.MEDIUM,
+      filter
+      stableHandler
+      { priority: options?.priority ?? EventPriority.MEDIUM }
   once: options?.once ?? false);
   // Cleanup on unmount or dependency change
-  return () => {
-  if (subscriptionIdRef.current) {
+  return () => { if (subscriptionIdRef.current) {
   globalEventBus.unsubscribe(subscriptionIdRef.current);
-  subscriptionIdRef.current = null;
-};
+  subscriptionIdRef.current = null };
   }, [
-    JSON.stringify(filter), 
-    options?.priority, 
-    options?.once, 
+    JSON.stringify(filter)
+    options?.priority
+    options?.once
     options?.enabled
   ]);
 /**
  * Hook for publishing events
  */
-export function useEventPublisher() {
-  return useCallback(async (event: BaseEvent) => {,
-  try {
-  await globalEventBus.publish(event);
-} catch (error) {
-  console.error('Failed to publish event:', error);
-  throw error;
-}, []);
+export function useEventPublisher() { return useCallback(async (event: BaseEvent) => { }
+  try { await globalEventBus.publish(event) } catch (error) { console.error('Failed to publish event:', error);
+  throw error }, []);
 /**
  * Hook for workflow events
  */
-export function useWorkflowEvents(userId?: string) {
-  const publish = useEventPublisher();
+export function useWorkflowEvents(userId?: string) { const publish = useEventPublisher();
   const publishTaskCreated = useCallback((taskId: string, data?: any) => {
     const event = EventFactory.createWorkflowEvent(;);
-      'task_created',
-      { taskId, data },
-      'workflow-hook',
+      'task_created' }
+      { taskId, data }
+      'workflow-hook'
       userId
     );
     return publish(event);
   }, [publish, userId]);
-  const publishTaskCompleted = useCallback((taskId: string, data?: any) => {
-    const event = EventFactory.createWorkflowEvent(;);
-      'task_completed',
-      { taskId, data },
-      'workflow-hook',
+  const publishTaskCompleted = useCallback((taskId: string, data?: any) => { const event = EventFactory.createWorkflowEvent(;);
+      'task_completed' }
+      { taskId, data }
+      'workflow-hook'
       userId
     );
     return publish(event);
   }, [publish, userId]);
-  const publishTemplateUsed = useCallback((templateId: string, data?: any) => {
-    const event = EventFactory.createWorkflowEvent(;);
-      'template_used',
-      { templateId, data },
-      'workflow-hook',
+  const publishTemplateUsed = useCallback((templateId: string, data?: any) => { const event = EventFactory.createWorkflowEvent(;);
+      'template_used' }
+      { templateId, data }
+      'workflow-hook'
       userId
     );
     return publish(event);
   }, [publish, userId]);
-  return {
-    publishTaskCreated,
-    publishTaskCompleted,
+  return { publishTaskCreated
+    publishTaskCompleted }
     publishTemplateUsed
   };
 /**
  * Hook for analytics events
  */
-export function useAnalyticsEvents(userId?: string) {
-  const publish = useEventPublisher();
+export function useAnalyticsEvents(userId?: string) { const publish = useEventPublisher();
   const trackUserAction = useCallback((action: string, data?: any) => {
     const event = EventFactory.createAnalyticsEvent(;);
-      'user_action',
-      { action, data },
-      'analytics-hook',
+      'user_action' }
+      { action, data }
+      'analytics-hook'
       userId
     );
     return publish(event);
   }, [publish, userId]);
-  const trackFeatureUsage = useCallback((feature: string, duration?: number, data?: any) => {
-    const event = EventFactory.createAnalyticsEvent(;);
-      'feature_used',
-      { feature, duration, data },
-      'analytics-hook',
+  const trackFeatureUsage = useCallback((feature: string, duration?: number, data?: any) => { const event = EventFactory.createAnalyticsEvent(;);
+      'feature_used' }
+      { feature, duration, data }
+      'analytics-hook'
       userId
     );
     return publish(event);
   }, [publish, userId]);
-  const trackPerformance = useCallback((metric: string, value: number, data?: any) => {
-    const event = EventFactory.createAnalyticsEvent(;);
-      'performance_metric',
-      { action: metric, value, data },
-      'analytics-hook',
+  const trackPerformance = useCallback((metric: string, value: number, data?: any) => { const event = EventFactory.createAnalyticsEvent(;);
+      'performance_metric' }
+      { action: metric, value, data }
+      'analytics-hook'
       userId
     );
     return publish(event);
   }, [publish, userId]);
-  return {
-    trackUserAction,
-    trackFeatureUsage,
+  return { trackUserAction
+    trackFeatureUsage }
     trackPerformance
   };
 /**
  * Hook for UI events
  */
-export function useUIEvents(componentName: string, userId?: string, sessionId?: string) {
-  const publish = useEventPublisher();
+export function useUIEvents(componentName: string, userId?: string, sessionId?: string) { const publish = useEventPublisher();
   const publishComponentMounted = useCallback((data?: any) => {
     const event = EventFactory.createUIEvent(;);
-      'component_mounted',
-      { component: componentName, data },
-      'ui-hook',
-      userId,
+      'component_mounted' }
+      { component: componentName, data }
+      'ui-hook'
+      userId
       sessionId
     );
     return publish(event);
   }, [publish, componentName, userId, sessionId]);
-  const publishUserInteraction = useCallback((action: string, data?: any) => {
-    const event = EventFactory.createUIEvent(;);
-      'user_interaction',
-      { component: componentName, action, data },
-      'ui-hook',
-      userId,
+  const publishUserInteraction = useCallback((action: string, data?: any) => { const event = EventFactory.createUIEvent(;);
+      'user_interaction' }
+      { component: componentName, action, data }
+      'ui-hook'
+      userId
       sessionId
     );
     return publish(event);
   }, [publish, componentName, userId, sessionId]);
-  const publishStateChange = useCallback((data?: any) => {
-    const event = EventFactory.createUIEvent(;);
-      'state_change',
-      { component: componentName, data },
-      'ui-hook',
-      userId,
+  const publishStateChange = useCallback((data?: any) => { const event = EventFactory.createUIEvent(;);
+      'state_change' }
+      { component: componentName, data }
+      'ui-hook'
+      userId
       sessionId
     );
     return publish(event);
   }, [publish, componentName, userId, sessionId]);
   // Auto-publish component mount/unmount
-  useEffect(() => {
-    publishComponentMounted();
+  useEffect(() => { publishComponentMounted();
     return () => {
       const event = EventFactory.createUIEvent(;);
-        'component_unmounted',
-        { component: componentName },
-        'ui-hook',
-        userId,
+        'component_unmounted' }
+        { component: componentName }
+        'ui-hook'
+        userId
         sessionId
       );
       publish(event);
     };
   }, []);
-  return {
-    publishUserInteraction,
+  return { publishUserInteraction }
     publishStateChange
   };
 /**
  * Hook for event history and querying
  */
-export function useEventHistory(filter?: EventFilter, limit?: number) {
-  const [history, setHistory] = useState<BaseEvent>([]);
+export function useEventHistory(filter?: EventFilter, limit?: number) { const [history, setHistory] = useState<BaseEvent>([]);
   const [loading, setLoading] = useState(false);
   const refreshHistory = useCallback(() => {
     setLoading(true);
     try {
       const events = globalEventBus.getHistory(filter, limit);
-      setHistory(events);
-    } catch (error) {
-  console.error('Failed to get event history:', error);
-} finally {
-      setLoading(false);
-  }, [filter, limit]);
+      setHistory(events) } catch (error) { console.error('Failed to get event history:', error) } finally { setLoading(false) }, [filter, limit]);
   // Auto-refresh on filter change
-  useEffect(() => {
-    refreshHistory();
-  }, [refreshHistory]);
+  useEffect(() => { refreshHistory() }, [refreshHistory]);
   // Subscribe to new events to auto-update history
   useEventSubscription();
-    filter || {},
-    () => {
-      refreshHistory();
-  }
+    filter || {}
+    () => { refreshHistory() }
     { priority: EventPriority.LOW }
   );
-  return {
-    history,
-    loading,
+  return { history
+    loading }
     refreshHistory
   };
 /**
  * Hook for event statistics and monitoring
  */
-export function useEventStats() {
-  const [stats, setStats] = useState(globalEventBus.getStats());
+export function useEventStats() { const [stats, setStats] = useState(globalEventBus.getStats());
   const refreshStats = useCallback(() => {
-    setStats(globalEventBus.getStats());
-  }, []);
+    setStats(globalEventBus.getStats()) }, []);
   // Auto-refresh stats periodically
-  useEffect(() => {
-    const interval = setInterval(refreshStats, 5000); // Every 5 seconds;
-    return () => clearInterval(interval);
-  }, [refreshStats]);
-  return {
-    ...stats,
+  useEffect(() => { const interval = setInterval(refreshStats, 5000); // Every 5 seconds;
+    return () => clearInterval(interval) }, [refreshStats]);
+  return { ...stats }
     refreshStats
   };
 /**
  * Hook for debounced event publishing
  */
-export function useDebouncedEventPublisher(delay: number = 300) {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+export function useDebouncedEventPublisher(delay: number = 300) { const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const publish = useEventPublisher();
-  const debouncedPublish = useCallback((event: BaseEvent) => {,
-  if (timeoutRef.current) {
-  clearTimeout(timeoutRef.current);
+  const debouncedPublish = useCallback((event: BaseEvent) => { }
+  if (timeoutRef.current) { clearTimeout(timeoutRef.current);
   timeoutRef.current = setTimeout(() => {
-  publish(event);
-}, delay);
+  publish(event) }, delay);
   }, [publish, delay]);
   // Cleanup on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(() => { return () => {
       if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-    };
+        clearTimeout(timeoutRef.current) };
   }, []);
   return debouncedPublish;
 /**
  * Hook for batched event publishing
  */
-export function useBatchedEventPublisher(batchSize: number = 10, flushInterval: number = 1000) {
-  const batchRef = useRef<BaseEvent>([]);
+export function useBatchedEventPublisher(batchSize: number = 10, flushInterval: number = 1000) { const batchRef = useRef<BaseEvent>([]);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const publish = useEventPublisher();
   const flushBatch = useCallback(async () => {
@@ -277,12 +232,8 @@ export function useBatchedEventPublisher(batchSize: number = 10, flushInterval: 
     batchRef.current = [];
     // Publish all events in batch
     try {
-      await Promise.all(batch.map(event => publish(event)));
-    } catch (error) {
-  console.error('Failed to publish event batch:', error);
-}, [publish]);
-  const addToBatch = useCallback((event: BaseEvent) => {
-    batchRef.current.push(event);
+      await Promise.all(batch.map(event => publish(event))) } catch (error) { console.error('Failed to publish event batch:', error) }, [publish]);
+  const addToBatch = useCallback((event: BaseEvent) => { batchRef.current.push(event);
     // Flush if batch is full
     if (batchRef.current.length >= batchSize) {
       flushBatch();
@@ -290,46 +241,39 @@ export function useBatchedEventPublisher(batchSize: number = 10, flushInterval: 
     // Set timer to flush batch
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(flushBatch, flushInterval);
-  }, [batchSize, flushInterval, flushBatch]);
+    timeoutRef.current = setTimeout(flushBatch, flushInterval) }, [batchSize, flushInterval, flushBatch]);
   // Cleanup on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(() => { return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       // Flush remaining events
-      flushBatch();
-    };
+      flushBatch() };
   }, [flushBatch]);
-  return {
-    addToBatch,
+  return { addToBatch }
     flushBatch
   };
 /**
  * Hook for conditional event subscriptions
  */
 export function useConditionalEventSubscription<T extends BaseEvent = BaseEvent>()
-  condition: () => boolean,
-  filter: EventFilter,
-  handler: EventHandler<T>,
-  options?: {
-  priority?: EventPriority;
+  condition: () => boolean
+  filter: EventFilter
+  handler: EventHandler<T>
+  options?: { priority?: EventPriority;
   checkInterval?: number;
   const [enabled, setEnabled] = useState(condition());
   const checkInterval = options?.checkInterval ?? 1000;
   // Periodically check condition
   useEffect(() => {
   const interval = setInterval(() => {
-  setEnabled(condition());
-}, checkInterval);
+  setEnabled(condition()) }, checkInterval);
     return () => clearInterval(interval);
   }, [condition, checkInterval]);
   // Subscribe when enabled
   useEventSubscription();
-    filter,
-    handler,
-    {
-  priority: options?.priority,
+    filter
+    handler
+    { priority: options?.priority
   enabled
   );
   return enabled;
@@ -337,27 +281,26 @@ export function useConditionalEventSubscription<T extends BaseEvent = BaseEvent>
   * Hook for event-driven state updates
   */
   export function useEventState<T>()
-  initialState: T,
-  filter: EventFilter,
-  updateFn: (currentState: T, event: BaseEvent) => T): [T, React.Dispatch<React.SetStateAction<T>>] {,
+  initialState: T
+  filter: EventFilter
+  updateFn: (currentState: T, event: BaseEvent) => T): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [state, setState] = useState<T>(initialState);
   useEventSubscription();
-  filter,
-  (event: BaseEvent) => {,
+  filter
+  (event: BaseEvent) => { }
   setState(currentState => updateFn(currentState, event));
-}
+
     { priority: EventPriority.HIGH }
   );
   return [state, setState];
 /**
  * Performance monitoring hook for events
  */
-export function useEventPerformanceMonitor() {
-  const [metrics, setMetrics] = useState({)
-  totalEvents: 0,
-  eventsPerSecond: 0,
-  avgProcessingTime: 0,
-  errorRate: 0,
+export function useEventPerformanceMonitor() { const [metrics, setMetrics] = useState({)
+  totalEvents: 0
+  eventsPerSecond: 0
+  avgProcessingTime: 0
+  errorRate: 0 }
 });
   useEffect(() => {
     let eventCount = 0;
@@ -366,33 +309,28 @@ export function useEventPerformanceMonitor() {
     const startTime = Date.now();
     // Subscribe to all events
     const subscriptionId = globalEventBus.subscribe(;);
-      {},
-      (event: BaseEvent) => {
-  eventCount++;
+      {}
+      (event: BaseEvent) => { eventCount++;
   const processingTime = Date.now() - event.timestamp.getTime();
   totalProcessingTime += processingTime;
   // Update metrics
   const elapsed = Date.now() - startTime;
   setMetrics({)
-  totalEvents: eventCount,
-  eventsPerSecond: (eventCount / elapsed) * 1000,
-  avgProcessingTime: totalProcessingTime / eventCount,
-  errorRate: errorCount / eventCount,
+  totalEvents: eventCount
+  eventsPerSecond: (eventCount / elapsed) * 1000
+  avgProcessingTime: totalProcessingTime / eventCount
+  errorRate: errorCount / eventCount }
 });
-  }
+
       { priority: EventPriority.LOW }
     );
     // Subscribe to error events
     const errorSubscriptionId = globalEventBus.subscribe(;);
-      { types: ['handler_error', 'system_error'] },
-      () => {
-        errorCount++;
-  }
+      { types: ['handler_error', 'system_error'] }
+      () => { errorCount++ }
       { priority: EventPriority.LOW }
     );
-    return () => {
-      globalEventBus.unsubscribe(subscriptionId);
-      globalEventBus.unsubscribe(errorSubscriptionId);
-    };
+    return () => { globalEventBus.unsubscribe(subscriptionId);
+      globalEventBus.unsubscribe(errorSubscriptionId) };
   }, []);
   return metrics;

@@ -16,8 +16,8 @@
 import { Database } from '../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
-}
-}
+
+
 export interface OperationType {
   id: string;
   name: string;
@@ -57,12 +57,13 @@ export interface OperationType {
   updatedAt: Date;
   createdBy: string;
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OperationParameter {
   name: string;
   displayName: string;
@@ -84,22 +85,24 @@ export interface OperationParameter {
   // Dependencies
   dependsOn?: string[];
   conditionallyRequired?: ConditionalRequirement[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OperationCapability {
   capability: string;
   description: string;
   limitations?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceRequirements {
   cpuIntensive: boolean;
   memoryIntensive: boolean;
@@ -109,12 +112,13 @@ export interface ResourceRequirements {
   estimatedCpuUsage?: number; // percentage
   estimatedMemoryUsage?: number; // MB
   estimatedDiskUsage?: number; // MB
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UIConfiguration {
   icon?: string;
   color?: string;
@@ -125,50 +129,55 @@ export interface UIConfiguration {
   allowCancel: boolean;
   grouping?: string;
   sortOrder: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ParameterConstraint {
   type: 'min' | 'max' | 'length' | 'pattern' | 'enum' | 'custom';
   value: any;
   message: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationRule {
   rule: string;
   message: string;
   severity: 'error' | 'warning' | 'info';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ParameterOption {
   value: any;
   label: string;
   description?: string;
   disabled?: boolean;
   group?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConditionalRequirement {
   condition: string; // JavaScript expression
   message: string;
-}
-}
-}
+
+
+
+
 
 export enum OperationCategory {
   USER_MANAGEMENT = 'user_management',
@@ -181,14 +190,14 @@ export enum OperationCategory {
   CONTENT_MODERATION = 'content_moderation',
   PERFORMANCE = 'performance',
   MIGRATION = 'migration'
-}
+
 
 export enum RiskLevel {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
+
 
 export enum ExecutionMode {
   IMMEDIATE = 'immediate',
@@ -196,7 +205,7 @@ export enum ExecutionMode {
   BATCH = 'batch',
   BACKGROUND = 'background',
   DISTRIBUTED = 'distributed'
-}
+
 
 export enum ParameterType {
   STRING = 'string',
@@ -209,7 +218,7 @@ export enum ParameterType {
   FILE = 'file',
   USER_ID = 'user_id',
   QUERY = 'query'
-}
+
 
 export enum InputType {
   TEXT = 'text',
@@ -224,7 +233,7 @@ export enum InputType {
   FILE_UPLOAD = 'file_upload',
   USER_PICKER = 'user_picker',
   QUERY_BUILDER = 'query_builder'
-}
+
 
 export enum TargetType {
   USERS = 'users',
@@ -234,10 +243,10 @@ export enum TargetType {
   SESSIONS = 'sessions',
   DATA_RECORDS = 'data_records',
   SYSTEM = 'system'
-}
 
-}
-}
+
+
+
 export interface OperationExecution {
   id: string;
   operationTypeId: string;
@@ -271,12 +280,13 @@ export interface OperationExecution {
   
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionProgress {
   percentage: number;
   currentStep: string;
@@ -284,12 +294,13 @@ export interface ExecutionProgress {
   completedSteps: number;
   estimatedTimeRemaining?: number;
   lastUpdateTime: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OperationResult {
   targetId: string;
   targetType: string;
@@ -297,23 +308,25 @@ export interface OperationResult {
   message?: string;
   data?: any;
   timestamp: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OperationLog {
   level: 'debug' | 'info' | 'warn' | 'error';
   message: string;
   timestamp: Date;
   context?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OperationError {
   code: string;
   message: string;
@@ -321,12 +334,13 @@ export interface OperationError {
   targetId?: string;
   timestamp: Date;
   recoverable: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceUsage {
   peakMemoryMB: number;
   avgCpuPercent: number;
@@ -335,9 +349,10 @@ export interface ResourceUsage {
   networkInMB: number;
   networkOutMB: number;
   databaseQueries: number;
-}
-}
-}
+
+
+
+
 
 export enum ExecutionStatus {
   PENDING = 'pending',
@@ -347,7 +362,7 @@ export enum ExecutionStatus {
   FAILED = 'failed',
   CANCELLED = 'cancelled',
   TIMEOUT = 'timeout'
-}
+
 
 export class OperationTypesService {
   private db: Database;
@@ -358,7 +373,7 @@ export class OperationTypesService {
     this.db = db;
     this.auditService = auditService;
     this.initializeDefaultOperationTypes();
-  }
+
 
   /**
    * Get all operation types
@@ -375,17 +390,17 @@ export class OperationTypesService {
     if (category) {
       query += ` AND category = $${paramIndex++}`;
       values.push(category);
-    }
+
 
     if (!includeDeprecated) {
       query += ' AND is_deprecated = false';
-    }
+
 
     query += ' ORDER BY category, sort_order, display_name';
 
     const result = await this.db.query(query, values);
     return result.rows.map(row => this.mapOperationTypeRow(row));
-  }
+
 
   /**
    * Get operation type by ID
@@ -398,7 +413,7 @@ export class OperationTypesService {
     );
 
     return result.rows.length > 0 ? this.mapOperationTypeRow(result.rows[0]) : null;
-  }
+
 
   /**
    * Create new operation type
@@ -458,7 +473,7 @@ export class OperationTypesService {
     });
 
     return created;
-  }
+
 
   /**
    * Update operation type
@@ -472,7 +487,7 @@ export class OperationTypesService {
     const existing = await this.getOperationType(id);
     if (!existing) {
       throw new Error('Operation type not found');
-    }
+
 
     // Build update query
     const updateFields = [];
@@ -485,16 +500,16 @@ export class OperationTypesService {
         if (['capabilities', 'resource_requirements', 'parameters', 'required_permissions', 'supported_targets', 'execution_mode', 'ui_config', 'tags'].includes(columnName)) {
           updateFields.push(`${columnName} = $${paramIndex++}`);
           values.push(JSON.stringify(value));
-        } else {
+ else {
           updateFields.push(`${columnName} = $${paramIndex++}`);
           values.push(value);
-        }
-      }
+
+
     });
 
     if (updateFields.length === 0) {
       return existing;
-    }
+
 
     updateFields.push('updated_at = NOW()');
     values.push(id);
@@ -515,7 +530,7 @@ export class OperationTypesService {
     });
 
     return updated;
-  }
+
 
   /**
    * Delete operation type
@@ -525,7 +540,7 @@ export class OperationTypesService {
     const existing = await this.getOperationType(id);
     if (!existing) {
       throw new Error('Operation type not found');
-    }
+
 
     // Check if operation type is in use
     const executionsResult = await this.db.query(
@@ -536,7 +551,7 @@ export class OperationTypesService {
     const executionCount = parseInt(executionsResult.rows[0].count);
     if (executionCount > 0) {
       throw new Error(`Cannot delete operation type with ${executionCount} executions. Mark as deprecated instead.`);
-    }
+
 
     await this.db.query('DELETE FROM operation_types WHERE id = $1', [id]);
 
@@ -544,7 +559,7 @@ export class OperationTypesService {
       operationTypeId: id,
       name: existing.name
     });
-  }
+
 
   /**
    * Validate operation parameters
@@ -556,12 +571,12 @@ export class OperationTypesService {
     isValid: boolean;
     errors: ValidationError[];
     warnings: ValidationError[];
-  }> {
+> {
 
     const operationType = await this.getOperationType(operationTypeId);
     if (!operationType) {
       throw new Error('Operation type not found');
-    }
+
 
     const errors: ValidationError[] = [];
     const warnings: ValidationError[] = [];
@@ -578,12 +593,12 @@ export class OperationTypesService {
           code: 'REQUIRED_PARAMETER'
         });
         continue;
-      }
+
 
       // Skip validation if parameter is not provided and not required
       if (value === undefined || value === null) {
         continue;
-      }
+
 
       // Type validation
       if (!this.validateParameterType(value, paramDef.type)) {
@@ -593,7 +608,7 @@ export class OperationTypesService {
           code: 'INVALID_TYPE'
         });
         continue;
-      }
+
 
       // Constraint validation
       for (const constraint of paramDef.constraints) {
@@ -604,8 +619,8 @@ export class OperationTypesService {
             message: constraintResult.message,
             code: 'CONSTRAINT_VIOLATION'
           });
-        }
-      }
+
+
 
       // Custom validation rules
       for (const rule of paramDef.validation) {
@@ -617,16 +632,16 @@ export class OperationTypesService {
               message: ruleResult.message,
               code: 'VALIDATION_RULE'
             });
-          } else if (rule.severity === 'warning') {
+ else if (rule.severity === 'warning') {
             warnings.push({
               parameter: paramDef.name,
               message: ruleResult.message,
               code: 'VALIDATION_WARNING'
             });
-          }
-        }
-      }
-    }
+
+
+
+
 
     // Check conditional requirements
     for (const paramDef of operationType.parameters) {
@@ -640,18 +655,18 @@ export class OperationTypesService {
                 message: condition.message,
                 code: 'CONDITIONAL_REQUIREMENT'
               });
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
 
     return {
       isValid: errors.length === 0,
       errors,
       warnings
     };
-  }
+
 
   /**
    * Get operation categories with counts
@@ -660,7 +675,7 @@ export class OperationTypesService {
     category: OperationCategory;
     count: number;
     description: string;
-  }>> {
+>> {
     const query = `
       SELECT 
         category,
@@ -679,7 +694,7 @@ export class OperationTypesService {
       count: parseInt(row.count),
       description: this.getCategoryDescription(row.category)
     }));
-  }
+
 
   /**
    * Initialize default operation types
@@ -687,7 +702,7 @@ export class OperationTypesService {
   private initializeDefaultOperationTypes(): void {
     // This would be populated with system default operation types
     // For now, we'll define them programmatically when first created
-  }
+
 
   /**
    * Helper methods
@@ -696,20 +711,20 @@ export class OperationTypesService {
   private validateOperationType(operationType: Omit<OperationType, 'id' | 'createdAt' | 'updatedAt'>): void {
     if (!operationType.name || operationType.name.trim().length === 0) {
       throw new Error('Operation type name is required');
-    }
+
 
     if (!operationType.displayName || operationType.displayName.trim().length === 0) {
       throw new Error('Operation type display name is required');
-    }
+
 
     if (!operationType.category) {
       throw new Error('Operation type category is required');
-    }
+
 
     if (!operationType.version || !/^\d+\.\d+\.\d+$/.test(operationType.version)) {
       throw new Error('Operation type version must be in semver format (e.g., 1.0.0)');
-    }
-  }
+
+
 
   private validateParameterType(value: any, type: ParameterType): boolean {
     switch (type) {
@@ -734,13 +749,13 @@ export class OperationTypesService {
       return typeof value === 'string' || typeof value === 'object';
     default:
       return true;
-    }
-  }
+
+
 
   private validateConstraint(value: any, constraint: ParameterConstraint): {
     isValid: boolean;
     message: string;
-  } {
+ {
     switch (constraint.type) {
     case 'min':
       const isValidMin = typeof value === 'number' ? value >= constraint.value :
@@ -775,8 +790,8 @@ export class OperationTypesService {
       
     default:
       return { isValid: true, message: '' };
-    }
-  }
+
+
 
   private async validateRule(
     value: any, 
@@ -788,23 +803,23 @@ export class OperationTypesService {
       // This would implement custom validation logic
       // For now, return valid
       return { isValid: true, message: '' };
-    } catch (error) {
+ catch (error) {
       return { 
         isValid: false, 
         message: rule.message || 'Validation rule failed'
       };
-    }
-  }
+
+
 
   private evaluateCondition(condition: string, parameters: Record<string, any>): boolean {
     try {
       // This would safely evaluate JavaScript conditions
       // For now, return false
       return false;
-    } catch (error) {
+ catch (error) {
       return false;
-    }
-  }
+
+
 
   private getCategoryDescription(category: OperationCategory): string {
     const descriptions: Record<OperationCategory, string> = {
@@ -821,7 +836,7 @@ export class OperationTypesService {
     };
 
     return descriptions[category] || 'System operations';
-  }
+
 
   private mapOperationTypeRow(row: any): OperationType {
     return {
@@ -853,21 +868,22 @@ export class OperationTypesService {
       createdBy: row.created_by,
       tags: JSON.parse(row.tags || '[]')
     };
-  }
+
 
   private camelToSnakeCase(str: string): string {
     return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-  }
-}
 
-}
-}
+
+
+
+
 export interface ValidationError {
   parameter: string;
   message: string;
   code: string;
-}
-}
-}
+
+
+
+
 
 export default OperationTypesService;

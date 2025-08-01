@@ -22,7 +22,7 @@ interface UserInfoRequest extends FastifyRequest {
   headers: {
     authorization?: string;
   };
-}
+
 
 interface TokenIntrospectionRequest extends FastifyRequest {
   body: {
@@ -31,7 +31,7 @@ interface TokenIntrospectionRequest extends FastifyRequest {
     client_id?: string;
     client_secret?: string;
   };
-}
+
 
 export default async function openidConnectRoutes(fastify: FastifyInstance) {
   // Initialize OIDC service
@@ -65,13 +65,13 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip,
           timestamp: new Date()
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['discovery_endpoint'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return reply
@@ -79,28 +79,27 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
         .header('Cache-Control', 'public, max-age=3600') // Cache for 1 hour
         .status(200)
         .send(discoveryDocument);
-
-    } catch (error) {
+ catch (error) {
       await fastify.audit.logEvent({
         eventType: 'OIDC_DISCOVERY_ERROR',
         details: {
           error: error.message,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-  }
+
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['error_handling'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return reply.status(500).send({
         error: 'server_error',
         error_description: 'Unable to generate discovery document'
       });
-    }
+
   });
 
   /**
@@ -119,7 +118,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           error: 'invalid_token',
           error_description: 'Missing or invalid Authorization header'
         });
-      }
+
 
       const accessToken = authHeader.substring(7); // Remove 'Bearer ' prefix
 
@@ -133,13 +132,13 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           claimsCount: Object.keys(userInfo).length,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0', 'GDPR'],
           requirements: ['userinfo_endpoint', 'data_access'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return reply
@@ -148,21 +147,20 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
         .header('Pragma', 'no-cache')
         .status(200)
         .send(userInfo);
-
-    } catch (error) {
+ catch (error) {
       await fastify.audit.logEvent({
         eventType: 'OIDC_USERINFO_ERROR',
         details: {
           error: error.message,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['security'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       // Determine appropriate error response
@@ -171,21 +169,21 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           error: 'invalid_token',
           error_description: 'The access token is invalid or expired'
         });
-      }
+
 
       if (error.message.includes('insufficient_scope')) {
         return reply.status(403).send({
           error: 'insufficient_scope',
           error_description: 'The request requires higher privileges than provided'
         });
-      }
+
 
       return reply.status(500).send({
         error: 'server_error',
         error_description: 'Unable to process UserInfo request'
       });
-    }
-  }
+
+
 
   // Register both GET and POST handlers for UserInfo endpoint
   fastify.get('/userinfo', handleUserInfoRequest);
@@ -207,13 +205,13 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           keyCount: jwks.keys.length,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['jwks_endpoint'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return reply
@@ -221,28 +219,27 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
         .header('Cache-Control', 'public, max-age=3600') // Cache for 1 hour
         .status(200)
         .send(jwks);
-
-    } catch (error) {
+ catch (error) {
       await fastify.audit.logEvent({
         eventType: 'OIDC_JWKS_ERROR',
         details: {
           error: error.message,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
           requirements: ['error_handling'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return reply.status(500).send({
         error: 'server_error',
         error_description: 'Unable to generate JWKS'
       });
-    }
+
   });
 
   /**
@@ -260,7 +257,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           error: 'invalid_request',
           error_description: 'Token parameter is required'
         });
-      }
+
 
       // Verify client authentication for introspection
       // (Implementation would depend on client authentication method)
@@ -288,18 +285,17 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
             tokenActive: true,
             clientId: tokenPayload.aud,
             tokenType: token_type_hint || 'access_token'
-  }
+
           riskLevel: 'LOW',
           compliance: {
             frameworks: ['RFC7662', 'OIDC1.0'],
             requirements: ['token_introspection'],
             evidenceLevel: 'STANDARD'
-          }
+
         });
 
         return reply.status(200).send(introspectionResponse);
-
-      } catch (tokenError) {
+ catch (tokenError) {
         // Token is invalid or expired
         const introspectionResponse = {
           active: false
@@ -311,39 +307,38 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
             tokenActive: false,
             tokenError: tokenError.message,
             tokenType: token_type_hint || 'access_token'
-  }
+
           riskLevel: 'LOW',
           compliance: {
             frameworks: ['RFC7662', 'OIDC1.0'],
             requirements: ['token_introspection'],
             evidenceLevel: 'STANDARD'
-          }
+
         });
 
         return reply.status(200).send(introspectionResponse);
-      }
 
-    } catch (error) {
+ catch (error) {
       await fastify.audit.logEvent({
         eventType: 'OIDC_TOKEN_INTROSPECTION_ERROR',
         details: {
           error: error.message,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['RFC7662'],
           requirements: ['error_handling'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return reply.status(500).send({
         error: 'server_error',
         error_description: 'Unable to process introspection request'
       });
-    }
+
   });
 
   /**
@@ -365,24 +360,24 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
             keys: 'ok',
             jwt_signing: 'ok',
             dependencies: 'ok'
-          }
+
         });
-      } else {
+ else {
         return reply.status(503).send({
           status: 'unhealthy',
           service: 'openid-connect',
           timestamp: new Date().toISOString(),
           error: 'OIDC service health check failed'
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       return reply.status(503).send({
         status: 'unhealthy',
         service: 'openid-connect',
         timestamp: new Date().toISOString(),
         error: error.message
       });
-    }
+
   });
 
   // Error handler for OIDC routes
@@ -396,13 +391,13 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
         url: request.url,
         userAgent: request.headers['user-agent'],
         ipAddress: request.ip
-  }
+
       riskLevel: 'HIGH',
       compliance: {
         frameworks: ['OIDC1.0'],
         requirements: ['error_handling'],
         evidenceLevel: 'ENHANCED'
-      }
+
     });
 
     // Return standardized OIDC error response
@@ -411,4 +406,3 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
       error_description: 'An internal server error occurred'
     });
   });
-}

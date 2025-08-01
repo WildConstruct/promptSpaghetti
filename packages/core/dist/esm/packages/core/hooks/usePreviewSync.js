@@ -218,7 +218,23 @@ GraphChangeAnalysis => {
             }
             const data = await response.json();
             // Transform results
-            const results = data.results.map((result) => ({}), seed, result.seed, output, result.output?.startsWith('Error:') ? undefined : result.output, error, result.output?.startsWith('Error:') ? result.output : undefined, executionTimeMs, result.executionTimeMs, executionPath, result.executionPath, weightChoices, result.weightChoices || [], usedNodeIds, result.executionPath?.nodeExecutionOrder || [], usedEdgeIds, []);
+            const results = data.results.map((result) => ({}));
+            seed: result.seed,
+                output;
+            result.output?.startsWith('Error:') ? undefined : result.output,
+                error;
+            result.output?.startsWith('Error:') ? result.output : undefined,
+                executionTimeMs;
+            result.executionTimeMs,
+                executionPath;
+            result.executionPath,
+                weightChoices;
+            result.weightChoices || [],
+                usedNodeIds;
+            result.executionPath?.nodeExecutionOrder || [],
+                usedEdgeIds;
+            [],
+            ;
         }
         ;
         // Calculate performance stats

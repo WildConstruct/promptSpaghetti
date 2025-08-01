@@ -157,8 +157,9 @@ export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend(
 }), 
 // Interactive Elements
 codeExamples;
-(z.object({}));
-id: z.string(),
+(z.object({}),
+    id);
+z.string(),
     language;
 z.string(),
     code;
@@ -274,8 +275,9 @@ export const PatternLibraryContributionSchema = BaseContributionSchema.extend({
 }), 
 // Examples and Variations
 examples;
-(z.object({}));
-title: z.string(),
+(z.object({}),
+    title);
+z.string(),
     description;
 z.string(),
     code;

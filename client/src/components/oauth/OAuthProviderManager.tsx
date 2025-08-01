@@ -11,12 +11,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
-}
+
+
 interface OAuthProvider {
   id: string;,
-  name: string;
+  name: string;,
   displayName: string;,
-  description: string;
+  description: string;,
   iconUrl: string;,
   status: 'active' | 'inactive' | 'testing' | 'error';
   configuration?: OAuthProviderConfiguration;
@@ -26,105 +27,71 @@ interface OAuthProvider {
   updatedAt: Date;
   interface OAuthProviderConfiguration {
   clientId: string;,
-  clientSecret: string;
+  clientSecret: string;,
   scopes: string;,
-  endpoints: {
+  endpoints: {,
   authorization: string;,
-  token: string;
+  token: string;,
   userInfo: string;
   revocation?: string;
-}
+
+
 };
   redirectUri: string;,
   additionalParams: Record<string, string>;
-  securitySettings: {
+  securitySettings: {,
   enablePKCE: boolean;
   enableCertificatePinning: boolean;,
-  enableMTLS: boolean;
+  enableMTLS: boolean;,
   stateParameterLength: number;,
   tokenBindingRequired: boolean;
 };
-  complianceSettings: {
+  complianceSettings: {,
   gdprCompliant: boolean;
   ccpaCompliant: boolean;,
-  dataRetentionDays: number;
+  dataRetentionDays: number;,
   auditLevel: 'basic' | 'standard' | 'enhanced';
 };
-}
+
+
 interface ProviderStatistics {
   totalLogins: number;,
-  successfulLogins: number;
+  successfulLogins: number;,
   failedLogins: number;
   lastLoginAt?: Date;
   averageResponseTime: number;,
-  uptime: number;
+  uptime: number;,
   errorRate: number;
   interface ProviderTestResult {
   success: boolean;,
-  responseTime: number;
+  responseTime: number;,
   errors: string;,
-  warnings: string;
-  endpoints: {
+  warnings: string;,
+  endpoints: {,
   authorization: boolean;,
-  token: boolean;
+  token: boolean;,
   userInfo: boolean;
-}
+
+
 };
-  securityChecks: {
+  securityChecks: {,
   tlsVersion: string;
   certificateValid: boolean;,
   pkceSupported: boolean;
 };
 
-export const OAuthProviderManager: React.FC = () => {
-  // State management
-  const [providers, setProviders] = useState<OAuthProvider>([]);
-  const [selectedProvider, setSelectedProvider] = useState<OAuthProvider | null>(null);
-  const [ setShowAddProvider] = useState(false);
-  const [showTestResults, setShowTestResults] = useState(false);
-  const [testResults, setTestResults] = useState<Record<string, ProviderTestResult>>({});
-  const [loading, setLoading] = useState(false);
-  const [testing, setTesting] = useState<Record<string, boolean>>({});
-  const [error, setError] = useState<string | null>(null);
-  // Auth store for API calls
-  const { authenticatedFetch } = useAuthStore();
-  // Load providers on mount
-  useEffect(() => {
-    loadProviders();
-  }, [loadProviders]);
-  // API functions
-  const loadProviders = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await authenticatedFetch('/api/oauth-guidance/providers');
-      const data = await response.json();
-      if (data.success) {
-        setProviders(data.data.providers || []);
-      } else {
-        setError('Failed to load OAuth providers');
-    } catch (err) {
-  setError('Failed to connect to OAuth service');
-  console.error('Failed to load OAuth providers:', err);
-} finally {
-      setLoading(false);
-  }, [authenticatedFetch]);
-  const testProvider = async (providerId: string) => {
-    setTesting(prev => ({ ...prev, [providerId]: true }));
-    try {
-      const response = await authenticatedFetch(`/api/oauth-guidance/test-provider/${providerId}`, {)}
-  },
+export const OAuthProviderManager = () => { return null; },
   method: 'POST';
   });
       const data = await response.json();
       if (data.success) {
         setTestResults(prev => ({ ...prev, [providerId]: data.data.testResult }));
         setShowTestResults(true);
-      } else {
+ else {
         setError(`Failed to test provider: ${data.message}`);}
-    } catch (err) {
+ catch (err) {
       setError(`Failed to test provider: ${err.message}`);}
-    } finally {
+ finally {
       setTesting(prev => ({ ...prev, [providerId]: false }));
   };
   const toggleProviderStatus = async (providerId: string, newStatus: 'active' | 'inactive') => {
@@ -138,9 +105,9 @@ export const OAuthProviderManager: React.FC = () => {
       const data = await response.json();
       if (data.success) {
         await loadProviders(); // Reload providers to reflect changes
-      } else {
+ else {
         setError(`Failed to update provider status: ${data.message}`);}
-    } catch (err) {
+ catch (err) {
       setError(`Failed to update provider status: ${err.message}`);}
   };
   const deleteProvider = async (providerId: string) => {
@@ -156,9 +123,9 @@ export const OAuthProviderManager: React.FC = () => {
         await loadProviders();
         if (selectedProvider?.id === providerId) {
           setSelectedProvider(null);
-      } else {
+ else {
         setError(`Failed to delete provider: ${data.message}`);}
-    } catch (err) {
+ catch (err) {
       setError(`Failed to delete provider: ${err.message}`);}
   };
   // Utility functions
@@ -266,7 +233,7 @@ export const OAuthProviderManager: React.FC = () => {
   selectedProvider?.id === provider.id
   ? 'border-blue-500 bg-blue-50'
   : 'border-gray-200 hover:border-gray-300',
-}`}
+`}
                       onClick={() => setSelectedProvider(provider)}
                     >
                       <div className="flex items-center justify-between">
@@ -277,7 +244,7 @@ export const OAuthProviderManager: React.FC = () => {
                             className="w-8 h-8 mr-3 rounded"
                             onError={(e) => {
                               e.currentTarget.src = '/icons/oauth-default.svg';
-                            }}
+}
                           />
                           <div>
                             <h3 className="font-semibold text-gray-900">{provider.displayName}</h3>
@@ -294,7 +261,7 @@ export const OAuthProviderManager: React.FC = () => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 testProvider(provider.id);
-                              }}
+}
                               disabled={testing[provider.id]}
                               className="text-blue-600 hover:text-blue-800 disabled:text-gray-400"
                               title="Test provider"
@@ -311,7 +278,7 @@ export const OAuthProviderManager: React.FC = () => {
                               onClick={(e) => {
   e.stopPropagation();
   toggleProviderStatus(provider.id, provider.status === 'active' ? 'inactive' : 'active');
-}}
+}
                               className="text-gray-600 hover:text-gray-800"
                               title={provider.status === 'active' ? 'Deactivate' : 'Activate'}
                             >
@@ -324,7 +291,7 @@ export const OAuthProviderManager: React.FC = () => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 deleteProvider(provider.id);
-                              }}
+}
                               className="text-red-600 hover:text-red-800"
                               title="Delete provider"
                             >
@@ -382,7 +349,7 @@ export const OAuthProviderManager: React.FC = () => {
                     className="w-8 h-8 mr-3 rounded"
                     onError={(e) => {
                       e.currentTarget.src = '/icons/oauth-default.svg';
-                    }}
+}
                   />
                   <h2 className="text-lg font-semibold text-gray-900">{selectedProvider.displayName}</h2>
                 </div>
@@ -497,7 +464,7 @@ export const OAuthProviderManager: React.FC = () => {
   selectedProvider.status === 'active'
   ? 'bg-red-600 text-white hover:bg-red-700',
   : 'bg-green-600 text-white hover:bg-green-700',
-}`}
+`}
                   >
                     {selectedProvider.status === 'active' ? 'Deactivate' : 'Activate'}
                   </button>
@@ -546,12 +513,12 @@ export const OAuthProviderManager: React.FC = () => {
                         className="w-6 h-6 mr-2 rounded"
                         onError={(e) => {
                           e.currentTarget.src = '/icons/oauth-default.svg';
-                        }}
+}
                       />
                       <h4 className="font-semibold text-gray-900">{provider.displayName}</h4>
                       <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
   result.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800',
-}`}>
+`}>
                         {result.success ? 'PASSED' : 'FAILED'}
                       </span>
                     </div>

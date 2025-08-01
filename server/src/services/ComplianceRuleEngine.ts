@@ -11,8 +11,8 @@
 
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface ComplianceRule {
   ruleId: string;
   name: string;
@@ -34,12 +34,13 @@ export interface ComplianceRule {
   testing: RuleTesting;
   lifecycle: RuleLifecycle;
   compliance: RuleCompliance;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleScope {
   scopeId: string;
   applicability: ScopeApplicability;
@@ -50,24 +51,26 @@ export interface RuleScope {
   temporalScope: TemporalScope;
   technicalScope: TechnicalScope;
   exceptions: ScopeException[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScopeApplicability {
   universal: boolean;
   conditional: boolean;
   conditions: ApplicabilityCondition[];
   triggers: ApplicabilityTrigger[];
   exemptions: ScopeExemption[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApplicabilityCondition {
   conditionId: string;
   type: ConditionType;
@@ -76,12 +79,13 @@ export interface ApplicabilityCondition {
   context: ConditionContext;
   weight: number;
   required: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApplicabilityTrigger {
   triggerId: string;
   event: TriggerEvent;
@@ -89,12 +93,13 @@ export interface ApplicabilityTrigger {
   frequency: TriggerFrequency;
   conditions: TriggerCondition[];
   actions: TriggerAction[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataTypeScope {
   dataTypeId: string;
   category: DataCategory;
@@ -110,12 +115,13 @@ export interface DataTypeScope {
   metadata: boolean;
   temporaryData: boolean;
   archivalData: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProcessingActivityScope {
   activityId: string;
   type: ProcessingType;
@@ -130,12 +136,13 @@ export interface ProcessingActivityScope {
   commercialUse: boolean;
   researchUse: boolean;
   statisticalUse: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GeographicScope {
   countries: string[];
   regions: string[];
@@ -143,12 +150,13 @@ export interface GeographicScope {
   adequacyDecisions: AdequacyDecision[];
   transferMechanisms: TransferMechanism[];
   localizations: LocalizationRequirement[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OrganizationalScope {
   departments: string[];
   roles: string[];
@@ -158,12 +166,13 @@ export interface OrganizationalScope {
   processors: string[];
   controllers: string[];
   jointControllers: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TemporalScope {
   effectiveDate: Date;
   expiryDate?: Date;
@@ -173,12 +182,13 @@ export interface TemporalScope {
   frequency: TemporalFrequency;
   businessHours: BusinessHours;
   holidays: Holiday[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TechnicalScope {
   systems: string[];
   platforms: string[];
@@ -188,12 +198,13 @@ export interface TechnicalScope {
   storageTypes: string[];
   networkTypes: string[];
   deploymentTypes: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleCondition {
   conditionId: string;
   type: ConditionType;
@@ -206,12 +217,13 @@ export interface RuleCondition {
   required: boolean;
   validationRules: ValidationRule[];
   errorHandling: ErrorHandling;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConditionOperand {
   operandId: string;
   type: OperandType;
@@ -220,12 +232,13 @@ export interface ConditionOperand {
   transformation: DataTransformation[];
   validation: OperandValidation;
   caching: OperandCaching;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConditionContext {
   contextId: string;
   scope: ContextScope;
@@ -236,12 +249,13 @@ export interface ConditionContext {
   request: ContextRequest;
   system: ContextSystem;
   data: ContextData;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConditionEvaluation {
   method: EvaluationMethod;
   algorithm: EvaluationAlgorithm;
@@ -250,12 +264,13 @@ export interface ConditionEvaluation {
   performance: EvaluationPerformance;
   accuracy: EvaluationAccuracy;
   confidence: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleAction {
   actionId: string;
   type: ActionType;
@@ -269,12 +284,13 @@ export interface RuleAction {
   notification: ActionNotification;
   audit: ActionAudit;
   compliance: ActionCompliance;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActionOperation {
   operationType: OperationType;
   target: ActionTarget;
@@ -284,12 +300,13 @@ export interface ActionOperation {
   authorization: ActionAuthorization;
   encryption: ActionEncryption;
   validation: ActionValidation;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActionExecution {
   mode: ExecutionMode;
   timing: ExecutionTiming;
@@ -299,12 +316,13 @@ export interface ActionExecution {
   parallelization: ParallelizationPolicy;
   transaction: TransactionPolicy;
   idempotency: IdempotencyPolicy;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleConflict {
   conflictId: string;
   type: ConflictType;
@@ -315,12 +333,13 @@ export interface RuleConflict {
   escalation: ConflictEscalation;
   detection: ConflictDetection;
   prevention: ConflictPrevention;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConflictResolution {
   strategy: ResolutionStrategy;
   mechanism: ResolutionMechanism;
@@ -329,12 +348,13 @@ export interface ConflictResolution {
   fallback: ResolutionFallback;
   documentation: ResolutionDocumentation;
   approval: ResolutionApproval;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleDependency {
   dependencyId: string;
   type: DependencyType;
@@ -344,12 +364,13 @@ export interface RuleDependency {
   validation: DependencyValidation;
   monitoring: DependencyMonitoring;
   resolution: DependencyResolution;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleMetadata {
   author: string;
   version: string;
@@ -363,12 +384,13 @@ export interface RuleMetadata {
   references: Reference[];
   changelog: ChangelogEntry[];
   annotations: Annotation[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleValidation {
   validationId: string;
   schema: ValidationSchema;
@@ -378,12 +400,13 @@ export interface RuleValidation {
   performance: ValidationPerformance;
   security: ValidationSecurity;
   compliance: ValidationCompliance;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleTesting {
   testingId: string;
   testSuites: TestSuite[];
@@ -393,12 +416,13 @@ export interface RuleTesting {
   reliability: TestReliability;
   regression: RegressionTest[];
   automation: TestAutomation;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TestSuite {
   suiteId: string;
   name: string;
@@ -409,12 +433,13 @@ export interface TestSuite {
   teardown: TestTeardown;
   configuration: TestConfiguration;
   environment: TestEnvironment;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Test {
   testId: string;
   name: string;
@@ -427,12 +452,13 @@ export interface Test {
   execution: TestExecution;
   assertions: TestAssertion[];
   mocks: TestMock[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleLifecycle {
   lifecycleId: string;
   stages: LifecycleStage[];
@@ -442,12 +468,13 @@ export interface RuleLifecycle {
   monitoring: LifecycleMonitoring;
   maintenance: LifecycleMaintenance;
   retirement: LifecycleRetirement;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleCompliance {
   complianceId: string;
   frameworks: ComplianceFrameworkRequirement[];
@@ -457,12 +484,13 @@ export interface RuleCompliance {
   reporting: ComplianceReporting;
   evidence: ComplianceEvidence[];
   attestations: ComplianceAttestation[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleEvaluationContext {
   contextId: string;
   timestamp: Date;
@@ -474,12 +502,13 @@ export interface RuleEvaluationContext {
   system?: SystemContext;
   configuration?: ConfigurationContext;
   security?: SecurityContext;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleEvaluationResult {
   resultId: string;
   ruleId: string;
@@ -492,12 +521,13 @@ export interface RuleEvaluationResult {
   warnings: EvaluationWarning[];
   actions: ExecutedAction[];
   audit: EvaluationAudit;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvaluationOutcome {
   result: EvaluationResult;
   verdict: EvaluationVerdict;
@@ -506,12 +536,13 @@ export interface EvaluationOutcome {
   recommendations: OutcomeRecommendation[];
   nextActions: NextAction[];
   escalation: OutcomeEscalation;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleEngineConfiguration {
   engineId: string;
   version: string;
@@ -524,9 +555,10 @@ export interface RuleEngineConfiguration {
   clustering: EngineClusteringConfig;
   scaling: EngineScalingConfig;
   maintenance: EngineMaintenanceConfig;
-}
-}
-}
+
+
+
+
 
 // Enums and Types
 export type ComplianceFramework = 'GDPR' | 'CCPA' | 'SOX' | 'HIPAA' | 'PCI_DSS' | 'ISO_27001' | 'SOC_2' | 'NIST' | 'PIPEDA' | 'LGPD' | 'PDPA' | 'CUSTOM';
@@ -554,7 +586,7 @@ export class ComplianceRuleEngine {
     this.configuration = configuration;
     this.auditService = auditService;
     this.initializeEngine();
-  }
+
 
   /**
    * Initialize the rule engine with default configuration
@@ -570,7 +602,7 @@ export class ComplianceRuleEngine {
     this.loadRuleDependencies();
     
     console.log(`ComplianceRuleEngine initialized with ${this.rules.size} rules`);
-  }
+
 
   /**
    * Register a new compliance rule
@@ -584,20 +616,20 @@ export class ComplianceRuleEngine {
         framework: rule.framework,
         category: rule.category,
         priority: rule.priority
-  }
+
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: [rule.framework],
         requirements: ['rule_management'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
 
     // Validate rule schema
     const validation = await this.validateRule(rule);
     if (!validation.valid) {
       throw new Error(`Rule validation failed: ${validation.errors.join(', ')}`);
-    }
+
 
     // Detect conflicts with existing rules
     const conflicts = await this.detectRuleConflicts(rule);
@@ -614,35 +646,35 @@ export class ComplianceRuleEngine {
           ruleId: rule.ruleId,
           conflictsDetected: conflicts.length,
           registered: true
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: [rule.framework],
           requirements: ['rule_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return { registered: true, ruleId: rule.ruleId, conflicts };
-    } else {
+ else {
       await this.auditService.logEvent({
         eventType: 'RULE_REGISTRATION_BLOCKED',
         details: {
           ruleId: rule.ruleId,
           blockingConflicts: blockingConflicts.length,
           registered: false
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: [rule.framework],
           requirements: ['rule_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return { registered: false, ruleId: rule.ruleId, conflicts: blockingConflicts };
-    }
-  }
+
+
 
   /**
    * Evaluate rules against a given context
@@ -662,13 +694,13 @@ export class ComplianceRuleEngine {
         frameworks,
         categories,
         ruleCount: this.rules.size
-  }
+
       riskLevel: 'LOW',
       compliance: {
         frameworks: frameworks.length > 0 ? frameworks : ['GDPR'],
         requirements: ['rule_evaluation'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
 
     try {
@@ -687,8 +719,8 @@ export class ComplianceRuleEngine {
         // Handle immediate actions if required
         if (result.outcome.severity === 'BLOCKING' && result.outcome.result === 'FAIL') {
           await this.executeImmediateActions(result);
-        }
-      }
+
+
 
       // Resolve conflicts between rule results
       const resolvedResults = await this.resolveRuleConflicts(results);
@@ -703,36 +735,35 @@ export class ComplianceRuleEngine {
           duration,
           compliantRules: results.filter(r => r.outcome.result === 'PASS').length,
           nonCompliantRules: results.filter(r => r.outcome.result === 'FAIL').length
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: frameworks.length > 0 ? frameworks : ['GDPR'],
           requirements: ['rule_evaluation'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       return resolvedResults;
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logEvent({
         eventType: 'RULE_EVALUATION_ERROR',
         details: {
           contextId: context.contextId,
           error: error instanceof Error ? error.message : 'Unknown error',
           duration: Date.now() - startTime
-  }
+
         riskLevel: 'HIGH',
         compliance: {
           frameworks: frameworks.length > 0 ? frameworks : ['GDPR'],
           requirements: ['rule_evaluation'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
       
       throw error;
-    }
-  }
+
+
 
   /**
    * Evaluate a single rule against context
@@ -746,7 +777,7 @@ export class ComplianceRuleEngine {
       const applicable = await this.isRuleApplicable(rule, context);
       if (!applicable) {
         return this.createSkippedResult(rule, context, 'Rule not applicable to context');
-      }
+
 
       // Evaluate rule conditions
       const conditionResults = await this.evaluateConditions(rule.conditions, context);
@@ -772,7 +803,7 @@ export class ComplianceRuleEngine {
           duration: Date.now() - startTime,
           memoryUsage: process.memoryUsage().heapUsed,
           cpuUsage: 0 // Would be calculated from actual CPU metrics
-  }
+
         errors: [],
         warnings: [],
         actions,
@@ -781,15 +812,14 @@ export class ComplianceRuleEngine {
           evaluatedBy: 'rule-engine',
           version: this.configuration.version,
           environment: this.configuration.environment
-        }
+
       };
 
       return result;
-      
-    } catch (error) {
+ catch (error) {
       return this.createErrorResult(rule, context, error);
-    }
-  }
+
+
 
   /**
    * Validate rule schema and constraints
@@ -801,49 +831,49 @@ export class ComplianceRuleEngine {
     // Basic schema validation
     if (!rule.ruleId || rule.ruleId.trim().length === 0) {
       errors.push('Rule ID is required');
-    }
+
 
     if (!rule.name || rule.name.trim().length === 0) {
       errors.push('Rule name is required');
-    }
+
 
     if (!rule.framework) {
       errors.push('Compliance framework is required');
-    }
+
 
     if (!rule.conditions || rule.conditions.length === 0) {
       errors.push('At least one condition is required');
-    }
+
 
     if (!rule.actions || rule.actions.length === 0) {
       errors.push('At least one action is required');
-    }
+
 
     // Validate conditions
     for (const condition of rule.conditions || []) {
       if (!condition.type) {
         errors.push(`Condition ${condition.conditionId} missing type`);
-      }
+
       if (!condition.operator) {
         errors.push(`Condition ${condition.conditionId} missing operator`);
-      }
-    }
+
+
 
     // Validate actions
     for (const action of rule.actions || []) {
       if (!action.type) {
         errors.push(`Action ${action.actionId} missing type`);
-      }
-    }
+
+
 
     // Check for circular dependencies
     const circularDeps = this.detectCircularDependencies(rule);
     if (circularDeps.length > 0) {
       errors.push(`Circular dependencies detected: ${circularDeps.join(', ')}`);
-    }
+
 
     return { valid: errors.length === 0, errors };
-  }
+
 
   /**
    * Detect conflicts between rules
@@ -874,7 +904,7 @@ export class ComplianceRuleEngine {
               fallback: {} as any,
               documentation: {} as any,
               approval: {} as any
-  }
+
             priority: 'HIGH',
             escalation: {} as any,
             detection: {} as any,
@@ -882,12 +912,12 @@ export class ComplianceRuleEngine {
           };
           
           conflicts.push(conflict);
-        }
-      }
-    }
+
+
+
 
     return conflicts;
-  }
+
 
   /**
    * Get rules applicable to the given context
@@ -903,26 +933,26 @@ export class ComplianceRuleEngine {
       // Filter by framework
       if (frameworks.length > 0 && !frameworks.includes(rule.framework)) {
         continue;
-      }
+
 
       // Filter by category
       if (categories.length > 0 && !categories.includes(rule.category)) {
         continue;
-      }
+
 
       // Check if rule is active
       if (rule.status !== 'ACTIVE') {
         continue;
-      }
+
 
       // Check scope applicability (simplified)
       if (this.isRuleApplicableToContext(rule, context)) {
         applicable.push(rule);
-      }
-    }
+
+
 
     return applicable;
-  }
+
 
   /**
    * Sort rules by priority and dependencies
@@ -939,7 +969,7 @@ export class ComplianceRuleEngine {
       const bDeps = b.dependencies?.length || 0;
       return aDeps - bDeps;
     });
-  }
+
 
   /**
    * Helper methods for rule evaluation
@@ -947,12 +977,12 @@ export class ComplianceRuleEngine {
   private async isRuleApplicable(rule: ComplianceRule, context: RuleEvaluationContext): Promise<boolean> {
 
     return this.isRuleApplicableToContext(rule, context);
-  }
+
 
   private isRuleApplicableToContext(_____rule: ComplianceRule, _____context: RuleEvaluationContext): boolean {
     // Simplified applicability check
     return true; // In a real implementation, this would check scope conditions
-  }
+
 
   private async evaluateConditions(conditions: RuleCondition[], _____context: RuleEvaluationContext): Promise<any[]> {
 
@@ -962,7 +992,7 @@ export class ComplianceRuleEngine {
       result: true, // Would evaluate actual condition logic
       confidence: 0.9
     }));
-  }
+
 
   private determineRuleOutcome(rule: ComplianceRule, conditionResults: unknown[]): EvaluationOutcome {
     // Simplified outcome determination
@@ -977,7 +1007,7 @@ export class ComplianceRuleEngine {
       nextActions: [],
       escalation: {} as any
     };
-  }
+
 
   private async executeRuleActions(
     _____rule: ComplianceRule,
@@ -987,7 +1017,7 @@ export class ComplianceRuleEngine {
 
     // Simplified action execution
     return [];
-  }
+
 
   private collectEvaluationEvidence(
     _____rule: ComplianceRule,
@@ -996,12 +1026,12 @@ export class ComplianceRuleEngine {
   ): unknown[] {
     // Simplified evidence collection
     return [];
-  }
+
 
   private calculateConfidence(_____conditionResults: unknown[]): number {
     // Simplified confidence calculation
     return 0.95;
-  }
+
 
   private createSkippedResult(
     rule: ComplianceRule,
@@ -1020,7 +1050,7 @@ export class ComplianceRuleEngine {
         recommendations: [],
         nextActions: [],
         escalation: {} as any
-  }
+
       confidence: 0,
       evidence: [],
       performance: { duration: 0, memoryUsage: 0, cpuUsage: 0 },
@@ -1032,9 +1062,9 @@ export class ComplianceRuleEngine {
         evaluatedBy: 'rule-engine',
         version: this.configuration.version,
         environment: this.configuration.environment
-      }
+
     };
-  }
+
 
   private createErrorResult(rule: ComplianceRule, context: RuleEvaluationContext, error: Error): RuleEvaluationResult {
     return {
@@ -1049,7 +1079,7 @@ export class ComplianceRuleEngine {
         recommendations: [],
         nextActions: [],
         escalation: {} as any
-  }
+
       confidence: 0,
       evidence: [],
       performance: { duration: 0, memoryUsage: 0, cpuUsage: 0 },
@@ -1061,56 +1091,56 @@ export class ComplianceRuleEngine {
         evaluatedBy: 'rule-engine',
         version: this.configuration.version,
         environment: this.configuration.environment
-      }
+
     };
-  }
+
 
   private async executeImmediateActions(_____result: RuleEvaluationResult): Promise<void> {
 
     // Implementation for immediate action execution
-  }
+
 
   private async resolveRuleConflicts(results: RuleEvaluationResult[]): Promise<RuleEvaluationResult[]> {
 
     // Implementation for conflict resolution
     return results;
-  }
+
 
   private buildRuleIndexes(): void {
     // Build indexes for efficient rule querying
-  }
+
 
   private setupMonitoring(): void {
     // Setup monitoring and alerting
-  }
+
 
   private loadRuleDependencies(): void {
     // Load and validate rule dependencies
-  }
+
 
   private updateRuleIndexes(_____rule: ComplianceRule): void {
     // Update rule indexes when new rule is added
-  }
+
 
   private detectCircularDependencies(_____rule: ComplianceRule): string[] {
     // Detect circular dependencies
     return [];
-  }
+
 
   private checkScopeOverlap(_____scope1: RuleScope, _____scope2: RuleScope): boolean {
     // Check if two rule scopes overlap
     return true; // Simplified
-  }
+
 
   private checkActionConflicts(_____actions1: RuleAction[], _____actions2: RuleAction[]): unknown[] {
     // Check for conflicting actions
     return [];
-  }
+
 
   private determineConflictSeverity(_____rule1: ComplianceRule, _____rule2: ComplianceRule): ConflictSeverity {
     // Determine severity of conflict between rules
     return 'MEDIUM';
-  }
+
 
   /**
    * Public API methods
@@ -1119,17 +1149,17 @@ export class ComplianceRuleEngine {
   async getRule(ruleId: string): Promise<ComplianceRule | undefined> {
 
     return this.rules.get(ruleId);
-  }
+
 
   async getRulesByFramework(framework: ComplianceFramework): Promise<ComplianceRule[]> {
 
     return Array.from(this.rules.values()).filter(rule => rule.framework === framework);
-  }
+
 
   async getRulesByCategory(category: RuleCategory): Promise<ComplianceRule[]> {
 
     return Array.from(this.rules.values()).filter(rule => rule.category === category);
-  }
+
 
   async updateRule(
     ruleId: string,
@@ -1139,7 +1169,7 @@ export class ComplianceRuleEngine {
     const existingRule = this.rules.get(ruleId);
     if (!existingRule) {
       throw new Error(`Rule ${ruleId} not found`);
-    }
+
 
     const updatedRule = { ...existingRule, ...updates };
     const conflicts = await this.detectRuleConflicts(updatedRule);
@@ -1147,10 +1177,10 @@ export class ComplianceRuleEngine {
     if (conflicts.filter(c => c.severity === 'BLOCKING').length === 0) {
       this.rules.set(ruleId, updatedRule);
       return { updated: true, conflicts };
-    }
+
 
     return { updated: false, conflicts };
-  }
+
 
   async deleteRule(ruleId: string): Promise<{ deleted: boolean }> {
 
@@ -1165,12 +1195,12 @@ export class ComplianceRuleEngine {
           frameworks: ['GDPR'],
           requirements: ['rule_management'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
-    }
+
 
     return { deleted };
-  }
+
 
   async getEngineStatus(): Promise<EngineStatus> {
 
@@ -1182,12 +1212,13 @@ export class ComplianceRuleEngine {
       uptime: Date.now(),
       lastUpdate: new Date()
     };
-  }
-}
+
+
 
 // Additional interfaces for completeness
-}
-}
+
+
+
 interface EngineStatus {
   ruleCount: number;
   status: string;
@@ -1195,9 +1226,10 @@ interface EngineStatus {
   environment: string;
   uptime: number;
   lastUpdate: Date;
-}
-}
-}
+
+
+
+
 
 type ConflictSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'BLOCKING';
 type OutcomeSeverity = 'INFO' | 'WARNING' | 'ERROR' | 'BLOCKING';

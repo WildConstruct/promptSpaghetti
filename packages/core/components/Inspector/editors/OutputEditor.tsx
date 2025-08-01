@@ -4,25 +4,24 @@ import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { TemplateEditor } from '../TemplateEditor';
-import { 
-  ContextualTooltip, 
+import { ContextualTooltip, 
   HelpfulInput, 
   HelpfulButton,
-  HelpfulSection,
+  HelpfulSection }
   useContextualHelp 
-} from '../../Help';
+ from '../../Help';
 
 export interface OutputEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Output specific props can be added here
 const OUTPUT_FORMATS: SelectOption = [
-  { value: 'text', label: 'Plain Text' },
-  { value: 'markdown', label: 'Markdown' },
-  { value: 'html', label: 'HTML' },
+  { value: 'text', label: 'Plain Text' }
+  { value: 'markdown', label: 'Markdown' }
+  { value: 'html', label: 'HTML' }
   { value: 'json', label: 'JSON' }
 ];
 const OUTPUT_DESTINATIONS: SelectOption = [
-  { value: 'final', label: 'Final Output' },
-  { value: 'intermediate', label: 'Intermediate Result' },
+  { value: 'final', label: 'Final Output' }
+  { value: 'intermediate', label: 'Intermediate Result' }
   { value: 'debug', label: 'Debug Output' }
 ];
 
@@ -43,9 +42,8 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
     newTransformations[index] = transformation;
     onChange({ transformations: newTransformations });
   };
-  const addTransformation = () => {
-  onChange({ )
-  transformations: [...transformations, ''],
+  const addTransformation = () => { onChange({ )
+  transformations: [...transformations, ''] }
 });
   };
   const removeTransformation = (index: number) => {
@@ -53,42 +51,42 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
     onChange({ transformations: newTransformations });
   };
   // Contextual help for the output name field
-  const { wrapWithHelp: wrapNameHelp } = useContextualHelp({)
-  id: 'output-node-name',
-  title: 'Output Name',
-  description: 'Give your output node a descriptive name to identify its purpose in your workflow.',
-  category: 'basic',
-  trigger: 'focus',
-  position: 'right',
-  showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
-  examples: ['Final Script', 'Character Description', 'Scene Summary'],
-  priority: 'high',
+  const { wrapWithHelp: wrapNameHelp } = useContextualHelp({ )
+  id: 'output-node-name'
+  title: 'Output Name'
+  description: 'Give your output node a descriptive name to identify its purpose in your workflow.'
+  category: 'basic'
+  trigger: 'focus'
+  position: 'right'
+  showOnDisclosureLevel: ['basic', 'advanced', 'debug']
+  examples: ['Final Script', 'Character Description', 'Scene Summary']
+  priority: 'high' }
 });
   // Contextual help for template editor
-  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({)
-  id: 'output-template',
-    title: 'Output Template',
-    description: 'Define the final format of your generated content. Use {variable} syntax to insert dynamic content from connected nodes.',
-    category: 'basic',
-    trigger: 'hover',
-    position: 'top',
-    showOnDisclosureLevel: ['basic', 'advanced', 'debug'],
-    examples: ['Final result: {content}', '{character},
-  says: "{dialogue}"'],
-    relatedFeatures: ['variable-system', 'node-connections'],
-    priority: 'high'
+  const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({ )
+  id: 'output-template'
+    title: 'Output Template' }
+    description: 'Define the final format of your generated content. Use {variable} syntax to insert dynamic content from connected nodes.'
+    category: 'basic'
+    trigger: 'hover'
+    position: 'top'
+    showOnDisclosureLevel: ['basic', 'advanced', 'debug']
+    examples: ['Final result: {content}', '{character}
+  says: "{dialogue}"']
+    relatedFeatures: ['variable-system', 'node-connections']
+    priority: 'high';
   });
   // Contextual help for format selection
-  const { wrapWithHelp: wrapFormatHelp } = useContextualHelp({)
-  id: 'output-format',
-  title: 'Output Format',
-  description: 'Choose how the final output should be formatted for export or display.',
-  category: 'advanced',
-  trigger: 'hover',
-  position: 'right',
-  showOnDisclosureLevel: ['advanced', 'debug'],
-  examples: ['Plain Text: simple text', 'Markdown: formatted text', 'JSON: structured data'],
-  priority: 'medium',
+  const { wrapWithHelp: wrapFormatHelp } = useContextualHelp({ )
+  id: 'output-format'
+  title: 'Output Format'
+  description: 'Choose how the final output should be formatted for export or display.'
+  category: 'advanced'
+  trigger: 'hover'
+  position: 'right'
+  showOnDisclosureLevel: ['advanced', 'debug']
+  examples: ['Plain Text: simple text', 'Markdown: formatted text', 'JSON: structured data']
+  priority: 'medium' }
 });
   return;
     <div className="output-editor">
@@ -113,32 +111,31 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
         )}
         {wrapTemplateHelp()
           <div style={{ marginBottom: 16 }}>
-            <label style={{
-  display: 'block',
-  fontSize: 12,
-  fontWeight: 500,
-  color: '#e2e8f0',
-  marginBottom: 6,
-}}>
+            <label style={ {
+  display: 'block'
+  fontSize: 12
+  fontWeight: 500
+  color: '#e2e8f0'
+  marginBottom: 6 }
+}>
               Output Template
             </label>
             <TemplateEditor
               value={template}
               onChange={(value) => handleFieldChange('template', value)}
-              onVariablesChange={(variables, extractedVariables) => {
-                handleFieldChange('extractedVariables', extractedVariables || []);
-              }}
+              onVariablesChange={ (variables, extractedVariables) => {
+                handleFieldChange('extractedVariables', extractedVariables || []) }}
               placeholder="Enter output template... Use {variable} syntax for dynamic content."
               showPreview={true}
               showRealTimePreview={true}
               autoComplete={true}
               nodeType="output"
             />
-            <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 4,
-}}>
+            <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 4 }
+}>
               Use {'{variable}'} syntax to create dynamic content. Variables will appear as connection ports.
             </div>
           </div>
@@ -172,32 +169,32 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
           onChange={(value) => handleFieldChange('destination', value)}
         />
         <div style={{ marginBottom: 16 }}>
-          <label style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-  fontSize: 12,
-  color: '#e2e8f0',
-  cursor: 'pointer',
-}}>
+          <label style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8
+  fontSize: 12
+  color: '#e2e8f0'
+  cursor: 'pointer' }
+}>
             <input
               type="checkbox"
               checked={includeMetadata}
               onChange={(e) => handleFieldChange('includeMetadata', e.target.checked)}
-              style={{
-  width: 14,
-  height: 14,
-  cursor: 'pointer',
-}}
+              style={ {
+  width: 14
+  height: 14
+  cursor: 'pointer' }
+}
             />
             Include execution metadata
           </label>
-          <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 2,
-  marginLeft: 22,
-}}>
+          <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 2
+  marginLeft: 22 }
+}>
             Adds execution metadata like timestamp, node path, and seed information
           </div>
         </div>
@@ -212,86 +209,86 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
         fieldName="transformations"
       >
         <div style={{ marginBottom: 12 }}>
-          <div style={{
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 8,
-}}>
-            <label style={{
-  fontWeight: 500,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}>
+          <div style={ {
+  display: 'flex'
+  justifyContent: 'space-between'
+  alignItems: 'center'
+  marginBottom: 8 }
+}>
+            <label style={ {
+  fontWeight: 500
+  color: '#e2e8f0'
+  fontSize: 12 }
+}>
               Transformations
             </label>
             <button
               onClick={addTransformation}
-              style={{
-  padding: '4px 8px',
-  fontSize: 10,
-  background: '#4299e1',
-  border: 'none',
-  borderRadius: 2,
-  color: 'white',
-  cursor: 'pointer',
-}}
+              style={ {
+  padding: '4px 8px'
+  fontSize: 10
+  background: '#4299e1'
+  border: 'none'
+  borderRadius: 2
+  color: 'white'
+  cursor: 'pointer' }
+}
             >
               + Add
             </button>
           </div>
-          {transformations.length === 0 ? ()
+          { transformations.length === 0 ? ()
             <div style={{
-  padding: 12,
-  background: '#2d3748',
-  border: '1px dashed #4a5568',
-  borderRadius: 4,
-  textAlign: 'center',
-  color: '#a0aec0',
-  fontSize: 12,
-  fontStyle: 'italic',
-}}>
+  padding: 12
+  background: '#2d3748'
+  border: '1px dashed #4a5568'
+  borderRadius: 4
+  textAlign: 'center'
+  color: '#a0aec0'
+  fontSize: 12
+  fontStyle: 'italic' }
+}>
               No transformations configured. Add transformations to modify output.
             </div>
           ) : ()
-            <div style={{
-  background: '#2d3748',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  padding: 8,
-}}>
+            <div style={ {
+  background: '#2d3748'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  padding: 8 }
+}>
               {transformations.map((transformation: string, index: number) => ()
-                <div key={index} style={{
-  display: 'flex',
-  gap: 8,
-  marginBottom: index < transformations.length - 1 ? 8 : 0,
-}}>
+                <div key={index} style={ {
+  display: 'flex'
+  gap: 8
+  marginBottom: index < transformations.length - 1 ? 8 : 0 }
+}>
                   <input
                     type="text"
                     value={transformation}
                     onChange={(e) => handleTransformationChange(index, e.target.value)}
                     placeholder="e.g., trim, lowercase, capitalize"
-                    style={{
-  flex: 1,
-  padding: 6,
-  border: '1px solid #4a5568',
-  borderRadius: 2,
-  background: '#1a202c',
-  color: '#e2e8f0',
-  fontSize: 12,
-}}
+                    style={ {
+  flex: 1
+  padding: 6
+  border: '1px solid #4a5568'
+  borderRadius: 2
+  background: '#1a202c'
+  color: '#e2e8f0'
+  fontSize: 12 }
+}
                   />
                   <button
                     onClick={() => removeTransformation(index)}
-                    style={{
-  padding: '4px 6px',
-  background: '#e53e3e',
-  border: 'none',
-  borderRadius: 2,
-  color: 'white',
-  cursor: 'pointer',
-  fontSize: 10,
-}}
+                    style={ {
+  padding: '4px 6px'
+  background: '#e53e3e'
+  border: 'none'
+  borderRadius: 2
+  color: 'white'
+  cursor: 'pointer'
+  fontSize: 10 }
+}
                   >
                     ✕
                   </button>
@@ -300,11 +297,11 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
             </div>
           )}
         </div>
-        <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  lineHeight: 1.4,
-}}>
+        <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  lineHeight: 1.4 }
+}>
           <strong>Available transformations:</strong><br />
           • trim - Remove leading/trailing whitespace<br />
           • lowercase, uppercase, capitalize - Text case transformations<br />
@@ -322,15 +319,15 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
         priority="standard"
         fieldName="preview"
       >
-        <div style={{
-  background: '#1a202c',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  padding: 12,
-  fontSize: 12,
-  color: '#e2e8f0',
-  marginBottom: 16,
-}}>
+        <div style={ {
+  background: '#1a202c'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  padding: 12
+  fontSize: 12
+  color: '#e2e8f0'
+  marginBottom: 16 }
+}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
             Output Configuration Summary:
           </div>
@@ -351,13 +348,13 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
               <span style={{ color: '#a0aec0' }}>Transformations:</span> {transformations.filter(Boolean).join(' → ')}
             </div>
           )}
-          {template && ()
+          { template && ()
             <div style={{
-  marginTop: 8,
-  padding: 8,
-  background: 'rgba(66, 153, 225, 0.1)',
-  borderRadius: 2,
-}}>
+  marginTop: 8
+  padding: 8
+  background: 'rgba(66, 153, 225, 0.1)'
+  borderRadius: 2 }
+}>
               <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Template Preview:
               </div>
@@ -368,25 +365,25 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
           )}
         </div>
         {/* Raw Node Data (Debug only) */}
-        <div style={{
-  background: '#0d1117',
-  border: '1px solid #21262d',
-  borderRadius: 4,
-  padding: 12,
-  fontSize: 11,
-  color: '#8b949e',
-}}>
+        <div style={ {
+  background: '#0d1117'
+  border: '1px solid #21262d'
+  borderRadius: 4
+  padding: 12
+  fontSize: 11
+  color: '#8b949e' }
+}>
           <div style={{ marginBottom: 8, fontWeight: 500, color: '#f0f6fc' }}>
             Raw Node Data:
           </div>
-          <pre style={{
-  margin: 0,
-  whiteSpace: 'pre-wrap',
-  wordBreak: 'break-all',
-  fontFamily: 'Monaco, Consolas, "Courier New", monospace',
-  fontSize: 10,
-  lineHeight: 1.4,
-}}>
+          <pre style={ {
+  margin: 0
+  whiteSpace: 'pre-wrap'
+  wordBreak: 'break-all'
+  fontFamily: 'Monaco, Consolas, "Courier New", monospace'
+  fontSize: 10
+  lineHeight: 1.4 }
+}>
             {JSON.stringify(nodeData, null, 2)}
           </pre>
         </div>

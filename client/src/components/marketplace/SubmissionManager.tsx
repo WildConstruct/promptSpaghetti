@@ -2,17 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './SubmissionManager.css';
-}
+
+
 interface Submission {
   id: string;,
-  template_id: string;
+  template_id: string;,
   status: 'draft' | 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';,
-  version_number: number;
-  submission_data: {
+  version_number: number;,
+  submission_data: {,
   title: string;,
-  description: string;
+  description: string;,
   price_cents: number;
-}
+
+
 };
   validation_results: ValidationResult;
   review_comments?: string;
@@ -21,15 +23,16 @@ interface Submission {
   reviewed_at?: string;
   created_at: string;,
   updated_at: string;
-}
+
+
 interface ValidationResult {
   severity: 'error' | 'warning' | 'info';,
   message: string;
   interface SubmissionStats {
   total_submissions: number;,
-  approved_submissions: number;
+  approved_submissions: number;,
   rejected_submissions: number;,
-  pending_submissions: number;
+  pending_submissions: number;,
   avg_review_score: number;,
   avg_review_time_hours: number;
   const STATUS_COLORS = {
@@ -39,7 +42,8 @@ interface ValidationResult {
   changes_requested: '#ef4444',
   approved: '#10b981',
   rejected: '#ef4444',
-}
+
+
 };
 const STATUS_LABELS = {
   draft: 'Draft',
@@ -50,29 +54,14 @@ const STATUS_LABELS = {
   rejected: 'Rejected',
 };
 
-export const SubmissionManager: React.FC = () => {
-  const [submissions, setSubmissions] = useState<Submission>([]);
-  const [stats, setStats] = useState<SubmissionStats | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedTab, setSelectedTab] = useState<'all' | 'drafts' | 'submitted' | 'approved' | 'rejected'>('all');
-  useEffect(() => {
-    fetchSubmissions();
-    fetchStats();
-  }, []);
-  const fetchSubmissions = async () => {
-    try {
-      const response = await fetch('/api/marketplace/submissions', {)
-  headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`}
-      });
+export const SubmissionManager = () => { return null; });
       if (!response.ok) {
         throw new Error('Failed to fetch submissions');
       const data = await response.json();
       setSubmissions(data);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to fetch submissions');
-} finally {
+ finally {
       setIsLoading(false);
   };
   const fetchStats = async () => {
@@ -84,7 +73,7 @@ export const SubmissionManager: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         setStats(data);
-    } catch (err) {
+ catch (err) {
   console.error('Failed to fetch stats:', err);
 };
   const handleDeleteSubmission = async (id: string) => {
@@ -99,7 +88,7 @@ export const SubmissionManager: React.FC = () => {
       });
       if (response.ok) {
         setSubmissions(submissions.filter(s => s.id !== id));
-    } catch (err) {
+ catch (err) {
   console.error('Failed to delete submission:', err);
 };
   const handleResubmit = async (id: string) => {
@@ -112,7 +101,7 @@ export const SubmissionManager: React.FC = () => {
       });
       if (response.ok) {
         fetchSubmissions();
-    } catch (err) {
+ catch (err) {
   console.error('Failed to resubmit:', err);
 };
   const getFilteredSubmissions = () => {

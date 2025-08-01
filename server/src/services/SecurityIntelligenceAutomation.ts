@@ -13,15 +13,15 @@ import {
   SecurityEvent,
   SecurityEventType,
   SecurityEventSeverity
-} from './SecurityIntelligenceDataPipeline';
+ from './SecurityIntelligenceDataPipeline';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../database/analytics-dao';
 import { PerformanceMonitoringService } from '../analytics/PerformanceMonitoringService';
 import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
-}
-}
+
+
 export interface SecurityIntelligenceAutomationConfig {
   automation: {
     enabled: boolean;
@@ -31,8 +31,9 @@ export interface SecurityIntelligenceAutomationConfig {
     retry_delay_ms: number;
     failure_escalation: boolean;
     success_rate_threshold: number;
-}
-}
+
+
+
   };
   threat_detection: {
     enabled: boolean;
@@ -86,10 +87,10 @@ export interface SecurityIntelligenceAutomationConfig {
     unified_logging: boolean;
     cross_epic_automation: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface AutomationRule {
   id: string;
   name: string;
@@ -106,9 +107,10 @@ export interface AutomationRule {
   success_rate: number;
   last_execution: number;
   tags: string[];
-}
-}
-}
+
+
+
+
 
 export enum AutomationRuleType {
   THREAT_DETECTION = 'threat_detection',
@@ -119,17 +121,17 @@ export enum AutomationRuleType {
   DATA_PROTECTION = 'data_protection',
   ACCESS_CONTROL = 'access_control',
   NETWORK_SECURITY = 'network_security'
-}
+
 
 export enum AutomationPriority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
 
-}
-}
+
+
+
 export interface AutomationCondition {
   id: string;
   type: ConditionType;
@@ -137,9 +139,10 @@ export interface AutomationCondition {
   operator: ConditionOperator;
   value: unknown;
   logical_operator?: LogicalOperator;
-}
-}
-}
+
+
+
+
 
 export enum ConditionType {
   EVENT_FIELD = 'event_field',
@@ -149,7 +152,7 @@ export enum ConditionType {
   PATTERN_MATCH = 'pattern_match',
   ML_PREDICTION = 'ml_prediction',
   CUSTOM_FUNCTION = 'custom_function'
-}
+
 
 export enum ConditionOperator {
   EQUALS = 'equals',
@@ -160,16 +163,16 @@ export enum ConditionOperator {
   REGEX_MATCH = 'regex_match',
   IN_LIST = 'in_list',
   RANGE = 'range'
-}
+
 
 export enum LogicalOperator {
   AND = 'and',
   OR = 'or',
   NOT = 'not'
-}
 
-}
-}
+
+
+
 export interface AutomationAction {
   id: string;
   type: AutomationActionType;
@@ -178,9 +181,10 @@ export interface AutomationAction {
   retry_attempts: number;
   on_failure: FailureAction;
   depends_on?: string[];
-}
-}
-}
+
+
+
+
 
 export enum AutomationActionType {
   ALERT_CREATION = 'alert_creation',
@@ -195,17 +199,17 @@ export enum AutomationActionType {
   NETWORK_ISOLATION = 'network_isolation',
   USER_ACCOUNT_ACTION = 'user_account_action',
   SYSTEM_COMMAND = 'system_command'
-}
+
 
 export enum FailureAction {
   CONTINUE = 'continue',
   STOP = 'stop',
   RETRY = 'retry',
   ESCALATE = 'escalate'
-}
 
-}
-}
+
+
+
 export interface SecurityPlaybook {
   id: string;
   name: string;
@@ -223,9 +227,10 @@ export interface SecurityPlaybook {
   execution_count: number;
   success_rate: number;
   tags: string[];
-}
-}
-}
+
+
+
+
 
 export enum PlaybookCategory {
   THREAT_RESPONSE = 'threat_response',
@@ -235,10 +240,10 @@ export enum PlaybookCategory {
   FORENSIC_INVESTIGATION = 'forensic_investigation',
   BUSINESS_CONTINUITY = 'business_continuity',
   PREVENTIVE_MAINTENANCE = 'preventive_maintenance'
-}
 
-}
-}
+
+
+
 export interface PlaybookStep {
   id: string;
   name: string;
@@ -252,9 +257,10 @@ export interface PlaybookStep {
   depends_on: string[];
   on_success: StepTransition[];
   on_failure: StepTransition[];
-}
-}
-}
+
+
+
+
 
 export enum PlaybookStepType {
   AUTOMATED_ACTION = 'automated_action',
@@ -265,27 +271,29 @@ export enum PlaybookStepType {
   DATA_COLLECTION = 'data_collection',
   ANALYSIS_STEP = 'analysis_step',
   NOTIFICATION_STEP = 'notification_step'
-}
 
-}
-}
+
+
+
 export interface StepTransition {
   target_step_id: string;
   condition?: AutomationCondition;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PlaybookTrigger {
   id: string;
   type: TriggerType;
   conditions: AutomationCondition[];
   enabled: boolean;
-}
-}
-}
+
+
+
+
 
 export enum TriggerType {
   EVENT_BASED = 'event_based',
@@ -293,19 +301,20 @@ export enum TriggerType {
   THRESHOLD_BASED = 'threshold_based',
   MANUAL_TRIGGER = 'manual_trigger',
   API_TRIGGER = 'api_trigger'
-}
 
-}
-}
+
+
+
 export interface PlaybookVariable {
   name: string;
   type: VariableType;
   default_value?: unknown;
   description: string;
   required: boolean;
-}
-}
-}
+
+
+
+
 
 export enum VariableType {
   STRING = 'string',
@@ -314,10 +323,10 @@ export enum VariableType {
   ARRAY = 'array',
   OBJECT = 'object',
   DATE = 'date'
-}
 
-}
-}
+
+
+
 export interface AutomationExecution {
   id: string;
   rule_id?: string;
@@ -334,9 +343,10 @@ export interface AutomationExecution {
   execution_log: ExecutionLogEntry[];
   context: Record<string, unknown>;
   assigned_analyst?: string;
-}
-}
-}
+
+
+
+
 
 export enum ExecutionStatus {
   PENDING = 'pending',
@@ -346,10 +356,10 @@ export enum ExecutionStatus {
   FAILED = 'failed',
   CANCELLED = 'cancelled',
   TIMEOUT = 'timeout'
-}
 
-}
-}
+
+
+
 export interface ExecutionLogEntry {
   timestamp: number;
   level: LogLevel;
@@ -357,9 +367,10 @@ export interface ExecutionLogEntry {
   action_id?: string;
   message: string;
   data?: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 export enum LogLevel {
   DEBUG = 'debug',
@@ -367,10 +378,10 @@ export enum LogLevel {
   WARN = 'warn',
   ERROR = 'error',
   CRITICAL = 'critical'
-}
 
-}
-}
+
+
+
 export interface AutomationMetrics {
   total_automations: number;
   active_executions: number;
@@ -383,12 +394,13 @@ export interface AutomationMetrics {
   playbook_execution_metrics: PlaybookMetrics;
   rule_execution_metrics: RuleMetrics;
   performance_metrics: AutomationPerformanceMetrics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PlaybookMetrics {
   total_playbooks: number;
   active_playbooks: number;
@@ -396,24 +408,26 @@ export interface PlaybookMetrics {
   average_execution_time_ms: number;
   success_rate: number;
   most_used_playbooks: PlaybookUsageMetric[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PlaybookUsageMetric {
   playbook_id: string;
   playbook_name: string;
   execution_count: number;
   success_rate: number;
   average_duration_ms: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleMetrics {
   total_rules: number;
   active_rules: number;
@@ -421,24 +435,26 @@ export interface RuleMetrics {
   average_response_time_ms: number;
   false_positive_rate: number;
   most_triggered_rules: RuleUsageMetric[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleUsageMetric {
   rule_id: string;
   rule_name: string;
   trigger_count: number;
   success_rate: number;
   false_positive_rate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutomationPerformanceMetrics {
   cpu_utilization_percent: number;
   memory_utilization_percent: number;
@@ -446,9 +462,10 @@ export interface AutomationPerformanceMetrics {
   disk_io_operations_per_second: number;
   database_query_time_ms: number;
   api_response_time_ms: number;
-}
-}
-}
+
+
+
+
 
 export class SecurityIntelligenceAutomation extends EventEmitter {
   private config: SecurityIntelligenceAutomationConfig;
@@ -487,7 +504,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     this.performanceMonitoringService = performanceMonitoringService;
     this.diagnosticService = diagnosticService;
     this.healthCheckFramework = healthCheckFramework;
-  }
+
 
   async initialize(): Promise<void> {
 
@@ -497,12 +514,12 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       // Initialize Epic 1 Analytics Integration
       if (this.config.epic_integration.epic1_analytics_enabled) {
         await this.initializeEpic1Integration();
-      }
+
 
       // Initialize Epic 17 Admin Integration
       if (this.config.epic_integration.epic17_admin_enabled) {
         await this.initializeEpic17Integration();
-      }
+
 
       // Initialize automation services
       await this.initializeAutomationServices();
@@ -514,7 +531,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       // Start automation engine
       if (this.config.automation.enabled) {
         await this.startAutomationEngine();
-      }
+
 
       // Initialize health checks
       await this.initializeHealthChecks();
@@ -522,12 +539,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       this.isInitialized = true;
       this.emit('automation_initialized');
       console.log('Security Intelligence Automation initialized successfully');
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize Security Intelligence Automation:', error);
       throw error;
-    }
-  }
+
+
 
   private async initializeEpic1Integration(): Promise<void> {
 
@@ -539,7 +555,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         automation_version: '1.0.0',
         integration_type: 'epic1_analytics',
         timestamp: Date.now()
-      }
+
     });
 
     // Initialize performance monitoring
@@ -550,9 +566,9 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       tags: {
         component: 'security_intelligence_automation',
         integration: 'epic1'
-      }
+
     });
-  }
+
 
   private async initializeEpic17Integration(): Promise<void> {
 
@@ -567,7 +583,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
           healthy: status.overall_health === 'healthy',
           details: status
         };
-  }
+
       interval_ms: 30000,
       timeout_ms: 5000,
       critical: true
@@ -580,10 +596,10 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       category: 'security_intelligence',
       collector: async () => {
         return await this.collectDiagnostics();
-  }
+
       schedule: '*/5 * * * *'
     });
-  }
+
 
   private async initializeAutomationServices(): Promise<void> {
 
@@ -601,7 +617,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     setInterval(() => {
       this.cleanupCompletedExecutions();
     }, 300000); // Cleanup every 5 minutes
-  }
+
 
   private async loadDefaultAutomationRules(): Promise<void> {
 
@@ -618,7 +634,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             field: 'severity',
             operator: ConditionOperator.EQUALS,
             value: SecurityEventSeverity.CRITICAL
-          }
+
         ],
         actions: [
           {
@@ -628,11 +644,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
               priority: 'critical',
               auto_assign: true,
               escalate_immediately: true
-  }
+
             timeout_ms: 30000,
             retry_attempts: 3,
             on_failure: FailureAction.ESCALATE
-  }
+
           {
             id: 'notify_team',
             type: AutomationActionType.SLACK_NOTIFICATION,
@@ -640,11 +656,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
               channel: '#security-alerts',
               mention: '@security-team',
               template: 'critical_threat_alert'
-  }
+
             timeout_ms: 10000,
             retry_attempts: 2,
             on_failure: FailureAction.CONTINUE
-          }
+
         ],
         priority: AutomationPriority.CRITICAL,
         enabled: true,
@@ -655,7 +671,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         success_rate: 0,
         last_execution: 0,
         tags: ['threat_detection', 'incident_response', 'critical']
-  }
+
       {
         id: 'malware_containment',
         name: 'Malware Detection and Containment',
@@ -668,7 +684,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             field: 'event_type',
             operator: ConditionOperator.EQUALS,
             value: SecurityEventType.MALWARE_DETECTION
-          }
+
         ],
         actions: [
           {
@@ -678,23 +694,23 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
               isolation_type: 'endpoint',
               duration_minutes: 60,
               notify_user: true
-  }
+
             timeout_ms: 60000,
             retry_attempts: 2,
             on_failure: FailureAction.ESCALATE
-  }
+
           {
             id: 'collect_forensics',
             type: AutomationActionType.SCRIPT_EXECUTION,
             parameters: {
               script: 'collect_malware_forensics.sh',
               elevated_privileges: true
-  }
+
             timeout_ms: 300000,
             retry_attempts: 1,
             on_failure: FailureAction.CONTINUE,
             depends_on: ['isolate_endpoint']
-          }
+
         ],
         priority: AutomationPriority.HIGH,
         enabled: true,
@@ -705,7 +721,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         success_rate: 0,
         last_execution: 0,
         tags: ['malware', 'containment', 'forensics']
-  }
+
       {
         id: 'suspicious_login_analysis',
         name: 'Suspicious Login Pattern Analysis',
@@ -718,7 +734,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             field: 'event_type',
             operator: ConditionOperator.EQUALS,
             value: SecurityEventType.AUTHENTICATION_FAILURE
-  }
+
           {
             id: 'frequency_check',
             type: ConditionType.FREQUENCY,
@@ -726,7 +742,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             operator: ConditionOperator.GREATER_THAN,
             value: 5,
             logical_operator: LogicalOperator.AND
-          }
+
         ],
         actions: [
           {
@@ -736,11 +752,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
               isolation_type: 'ip_address',
               duration_minutes: 30,
               block_type: 'temporary'
-  }
+
             timeout_ms: 30000,
             retry_attempts: 2,
             on_failure: FailureAction.ESCALATE
-  }
+
           {
             id: 'security_team_alert',
             type: AutomationActionType.EMAIL_NOTIFICATION,
@@ -748,11 +764,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
               recipients: ['security@company.com'],
               subject: 'Suspicious Login Activity Detected',
               template: 'suspicious_login_alert'
-  }
+
             timeout_ms: 15000,
             retry_attempts: 1,
             on_failure: FailureAction.CONTINUE
-          }
+
         ],
         priority: AutomationPriority.MEDIUM,
         enabled: true,
@@ -763,16 +779,16 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         success_rate: 0,
         last_execution: 0,
         tags: ['authentication', 'brute_force', 'ip_blocking']
-      }
+
     ];
 
     // Load rules into memory
     for (const rule of defaultRules) {
       this.automationRules.set(rule.id, rule);
-    }
+
 
     console.log(`Loaded ${defaultRules.length} default automation rules`);
-  }
+
 
   private async loadDefaultSecurityPlaybooks(): Promise<void> {
 
@@ -795,11 +811,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
               parameters: {
                 script: 'assess_data_breach.py',
                 parameters: ['--scope', 'full', '--priority', 'high']
-  }
+
               timeout_ms: 300000,
               retry_attempts: 2,
               on_failure: FailureAction.ESCALATE
-  }
+
             conditions: [],
             timeout_ms: 300000,
             manual_approval: false,
@@ -807,7 +823,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             depends_on: [],
             on_success: [{ target_step_id: 'containment' }],
             on_failure: [{ target_step_id: 'manual_escalation' }]
-  }
+
           {
             id: 'containment',
             name: 'Breach Containment',
@@ -819,11 +835,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
               parameters: {
                 script: 'contain_breach.py',
                 immediate_action: true
-  }
+
               timeout_ms: 180000,
               retry_attempts: 1,
               on_failure: FailureAction.ESCALATE
-  }
+
             conditions: [],
             timeout_ms: 180000,
             manual_approval: false,
@@ -831,7 +847,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             depends_on: ['initial_assessment'],
             on_success: [{ target_step_id: 'notification' }],
             on_failure: [{ target_step_id: 'manual_containment' }]
-  }
+
           {
             id: 'notification',
             name: 'Stakeholder Notification',
@@ -844,11 +860,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
                 recipients: ['legal@company.com', 'compliance@company.com', 'executive@company.com'],
                 template: 'data_breach_notification',
                 urgency: 'high'
-  }
+
               timeout_ms: 60000,
               retry_attempts: 3,
               on_failure: FailureAction.ESCALATE
-  }
+
             conditions: [],
             timeout_ms: 3600000, // 1 hour for manual review
             manual_approval: true,
@@ -856,7 +872,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             depends_on: ['containment'],
             on_success: [{ target_step_id: 'investigation' }],
             on_failure: [{ target_step_id: 'escalation' }]
-          }
+
         ],
         triggers: [
           {
@@ -869,10 +885,10 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
                 field: 'event_type',
                 operator: ConditionOperator.EQUALS,
                 value: SecurityEventType.DATA_EXFILTRATION
-              }
+
             ],
             enabled: true
-          }
+
         ],
         variables: [
           {
@@ -881,13 +897,13 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             default_value: 'medium',
             description: 'Severity level of the data breach',
             required: true
-  }
+
           {
             name: 'affected_records',
             type: VariableType.NUMBER,
             description: 'Number of records potentially affected',
             required: false
-          }
+
         ],
         approval_required: true,
         execution_timeout_ms: 86400000, // 24 hours
@@ -897,7 +913,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         execution_count: 0,
         success_rate: 0,
         tags: ['data_breach', 'incident_response', 'compliance']
-  }
+
       {
         id: 'phishing_response',
         name: 'Phishing Attack Response Playbook',
@@ -918,11 +934,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
                 method: 'POST',
                 extract_iocs: true,
                 reputation_check: true
-  }
+
               timeout_ms: 120000,
               retry_attempts: 2,
               on_failure: FailureAction.CONTINUE
-  }
+
             conditions: [],
             timeout_ms: 120000,
             manual_approval: false,
@@ -930,7 +946,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             depends_on: [],
             on_success: [{ target_step_id: 'block_sender' }],
             on_failure: [{ target_step_id: 'manual_analysis' }]
-  }
+
           {
             id: 'block_sender',
             name: 'Block Phishing Sender',
@@ -943,11 +959,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
                 endpoint: '/api/email-security/block',
                 method: 'POST',
                 block_type: 'sender_and_domain'
-  }
+
               timeout_ms: 30000,
               retry_attempts: 3,
               on_failure: FailureAction.RETRY
-  }
+
             conditions: [],
             timeout_ms: 30000,
             manual_approval: false,
@@ -955,7 +971,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             depends_on: ['email_analysis'],
             on_success: [{ target_step_id: 'user_notification' }],
             on_failure: [{ target_step_id: 'manual_blocking' }]
-  }
+
           {
             id: 'user_notification',
             name: 'Notify Affected Users',
@@ -968,11 +984,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
                 template: 'phishing_warning',
                 include_indicators: true,
                 training_link: true
-  }
+
               timeout_ms: 60000,
               retry_attempts: 2,
               on_failure: FailureAction.CONTINUE
-  }
+
             conditions: [],
             timeout_ms: 60000,
             manual_approval: false,
@@ -980,7 +996,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             depends_on: ['block_sender'],
             on_success: [{ target_step_id: 'ioc_sharing' }],
             on_failure: [{ target_step_id: 'manual_notification' }]
-          }
+
         ],
         triggers: [
           {
@@ -993,10 +1009,10 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
                 field: 'raw_data.email_subject',
                 operator: ConditionOperator.REGEX_MATCH,
                 value: '(urgent|action required|verify account|suspended|click here)'
-              }
+
             ],
             enabled: true
-          }
+
         ],
         variables: [
           {
@@ -1004,13 +1020,13 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             type: VariableType.ARRAY,
             description: 'List of users who received the phishing email',
             required: true
-  }
+
           {
             name: 'sender_reputation',
             type: VariableType.NUMBER,
             description: 'Reputation score of the sender',
             required: false
-          }
+
         ],
         approval_required: false,
         execution_timeout_ms: 1800000, // 30 minutes
@@ -1020,16 +1036,16 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         execution_count: 0,
         success_rate: 0,
         tags: ['phishing', 'email_security', 'user_protection']
-      }
+
     ];
 
     // Load playbooks into memory
     for (const playbook of defaultPlaybooks) {
       this.securityPlaybooks.set(playbook.id, playbook);
-    }
+
 
     console.log(`Loaded ${defaultPlaybooks.length} default security playbooks`);
-  }
+
 
   private async startAutomationEngine(): Promise<void> {
 
@@ -1044,7 +1060,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     }, 5000); // Evaluate every 5 seconds
 
     console.log('Security automation engine started');
-  }
+
 
   private async initializeHealthChecks(): Promise<void> {
 
@@ -1053,9 +1069,9 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       const health = await this.performHealthCheck();
       if (health.overall_health !== 'healthy') {
         this.emit('automation_health_warning', health);
-      }
+
     }, 30000);
-  }
+
 
   private async handleSecurityEventForAutomation(event: SecurityEvent): Promise<void> {
 
@@ -1065,20 +1081,19 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       
       for (const rule of triggeredRules) {
         await this.executeAutomationRule(rule, event);
-      }
+
 
       // Check for playbook triggers
       const triggeredPlaybooks = await this.evaluatePlaybooksForEvent(event);
       
       for (const playbook of triggeredPlaybooks) {
         await this.executeSecurityPlaybook(playbook, event);
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error('Error handling security event for automation:', error);
       this.emit('automation_error', { event, error });
-    }
-  }
+
+
 
   private async evaluateRulesForEvent(event: SecurityEvent): Promise<AutomationRule[]> {
 
@@ -1090,14 +1105,14 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       try {
         if (await this.evaluateConditions(rule.conditions, event)) {
           triggeredRules.push(rule);
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error(`Error evaluating rule ${ruleId}:`, error);
-      }
-    }
+
+
 
     return triggeredRules;
-  }
+
 
   private async evaluatePlaybooksForEvent(event: SecurityEvent): Promise<SecurityPlaybook[]> {
 
@@ -1109,15 +1124,15 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
           if (trigger.enabled && await this.evaluateConditions(trigger.conditions, event)) {
             triggeredPlaybooks.push(playbook);
             break; // Only need one trigger to match
-          }
-        }
-      } catch (error) {
+
+
+ catch (error) {
         console.error(`Error evaluating playbook ${playbookId}:`, error);
-      }
-    }
+
+
 
     return triggeredPlaybooks;
-  }
+
 
   private async evaluateConditions(
     conditions: AutomationCondition[],
@@ -1144,15 +1159,15 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         case LogicalOperator.NOT:
           result = result && !conditionResult;
           break;
-      }
+
 
       if (condition.logical_operator) {
         currentLogicalOp = condition.logical_operator;
-      }
-    }
+
+
 
     return result;
-  }
+
 
   private async evaluateCondition(
     condition: AutomationCondition,
@@ -1188,11 +1203,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         break;
       default:
         return false;
-    }
+
 
     // Evaluate condition based on operator
     return this.evaluateOperator(fieldValue, condition.operator, condition.value);
-  }
+
 
   private evaluateOperator(fieldValue: unknown, operator: ConditionOperator, expectedValue: unknown): boolean {
     switch (operator) {
@@ -1210,25 +1225,25 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         if (typeof fieldValue === 'string' && typeof expectedValue === 'string') {
           const regex = new RegExp(expectedValue, 'i');
           return regex.test(fieldValue);
-        }
+
         return false;
       case ConditionOperator.IN_LIST:
         return Array.isArray(expectedValue) && expectedValue.includes(fieldValue);
       case ConditionOperator.RANGE:
         if (typeof fieldValue === 'number' && Array.isArray(expectedValue) && expectedValue.length === 2) {
           return fieldValue >= expectedValue[0] && fieldValue <= expectedValue[1];
-        }
+
         return false;
       default:
         return false;
-    }
-  }
+
+
 
   private getNestedValue(obj: Record<string, unknown>, path: string): unknown {
     return path.split('.').reduce((current, key) => {
       return current && typeof current === 'object' ? (current as Record<string, unknown>)[key] : undefined;
     }, obj);
-  }
+
 
   private async calculateThreatScore(event: SecurityEvent): Promise<number> {
 
@@ -1249,14 +1264,14 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       case SecurityEventSeverity.LOW:
         score += 20;
         break;
-    }
+
 
     // Additional scoring based on threat indicators
     score += event.threat_indicators.length * 5;
 
     // Cap score at 100
     return Math.min(score, 100);
-  }
+
 
   private async getEventFrequency(field: string, event: SecurityEvent): Promise<number> {
 
@@ -1264,14 +1279,14 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     const fieldValue = this.getNestedValue(event, field);
     // In real implementation, this would query the database for frequency
     return Math.floor(Math.random() * 10) + 1;
-  }
+
 
   private async getMachineLearningPrediction(event: SecurityEvent, field: string): Promise<number> {
 
     // Implement ML prediction (mock implementation)
     // In real implementation, this would call ML models
     return Math.random();
-  }
+
 
   private async executeCustomFunction(
     functionName: string,
@@ -1283,7 +1298,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     // Implement custom function execution (mock implementation)
     console.log(`Executing custom function: ${functionName}`);
     return true;
-  }
+
 
   async executeAutomationRule(rule: AutomationRule, triggerEvent?: SecurityEvent): Promise<string> {
 
@@ -1302,7 +1317,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       context: {
         rule_name: rule.name,
         trigger_event_id: triggerEvent?.id
-      }
+
     };
 
     this.activeExecutions.set(executionId, execution);
@@ -1325,7 +1340,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             action.id,
             `Action completed successfully: ${action.type}`
           );
-        } catch (error) {
+ catch (error) {
           this.addExecutionLog(
             execution,
             LogLevel.ERROR,
@@ -1336,13 +1351,13 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
           
           if (action.on_failure === FailureAction.STOP) {
             throw error;
-          } else if (action.on_failure === FailureAction.ESCALATE) {
+ else if (action.on_failure === FailureAction.ESCALATE) {
             await this.escalateExecution(execution, error as Error);
             throw error;
-          }
+
           // Continue on CONTINUE or RETRY
-        }
-      }
+
+
 
       execution.status = ExecutionStatus.COMPLETED;
       execution.end_time = Date.now();
@@ -1374,13 +1389,12 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             duration_ms: execution.duration_ms,
             steps_completed: execution.steps_completed,
             timestamp: Date.now()
-          }
+
         });
-      }
+
 
       return executionId;
-
-    } catch (error) {
+ catch (error) {
       execution.status = ExecutionStatus.FAILED;
       execution.end_time = Date.now();
       execution.duration_ms = execution.end_time - execution.start_time;
@@ -1401,8 +1415,8 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       this.activeExecutions.delete(executionId);
 
       throw error;
-    }
-  }
+
+
 
   async executeSecurityPlaybook(
     playbook: SecurityPlaybook,
@@ -1428,7 +1442,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         playbook_version: playbook.version,
         variables: variables || {},
         trigger_event_id: triggerEvent?.id
-      }
+
     };
 
     this.activeExecutions.set(executionId, execution);
@@ -1455,7 +1469,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         );
         this.emit('playbook_approval_required', { execution, playbook });
         return executionId; // Return early, execution will continue when approved
-      }
+
 
       // Execute playbook steps
       await this.executePlaybookSteps(playbook, execution);
@@ -1477,8 +1491,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       this.activeExecutions.delete(executionId);
 
       return executionId;
-
-    } catch (error) {
+ catch (error) {
       execution.status = ExecutionStatus.FAILED;
       execution.end_time = Date.now();
       execution.duration_ms = execution.end_time - execution.start_time;
@@ -1499,8 +1512,8 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       this.activeExecutions.delete(executionId);
 
       throw error;
-    }
-  }
+
+
 
   private async executePlaybookSteps(playbook: SecurityPlaybook, execution: AutomationExecution): Promise<void> {
 
@@ -1520,8 +1533,8 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
               undefined,
               `Step dependencies not met: ${step.depends_on.join(', ')}`);
             continue;
-          }
-        }
+
+
 
         // Evaluate step conditions
         if (step.conditions.length > 0) {
@@ -1534,27 +1547,26 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
             this.addExecutionLog(execution, LogLevel.INFO, step.id, undefined, 'Step conditions not met - skipping');
             stepResults.set(step.id, true); // Consider skipped steps as successful
             continue;
-          }
-        }
+
+
 
         // Handle parallel execution
         if (step.parallel_execution) {
           const stepPromise = this.executePlaybookStep(step, execution);
           parallelSteps.set(step.id, stepPromise);
-        } else {
+ else {
           // Wait for any pending parallel steps to complete
           if (parallelSteps.size > 0) {
             await Promise.all(parallelSteps.values());
             parallelSteps.clear();
-          }
+
 
           // Execute step synchronously
           await this.executePlaybookStep(step, execution);
           stepResults.set(step.id, true);
           execution.steps_completed++;
-        }
 
-      } catch (error) {
+ catch (error) {
         stepResults.set(step.id, false);
         this.addExecutionLog(execution, LogLevel.ERROR, step.id, undefined, `Step failed: ${(error as Error).message}`);
         
@@ -1576,19 +1588,19 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
                 `Transitioning to step: ${transition.target_step_id}`
               );
               break;
-            }
-          }
-        } else {
+
+
+ else {
           throw error; // Re-throw if no failure handling is defined
-        }
-      }
-    }
+
+
+
 
     // Wait for any remaining parallel steps
     if (parallelSteps.size > 0) {
       await Promise.all(parallelSteps.values());
-    }
-  }
+
+
 
   private async executePlaybookStep(step: PlaybookStep, execution: AutomationExecution): Promise<void> {
 
@@ -1600,13 +1612,13 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       this.addExecutionLog(execution, LogLevel.INFO, step.id, undefined, 'Step requires manual approval - pausing');
       this.emit('step_approval_required', { execution, step });
       return; // Step will be resumed when approved
-    }
+
 
     // Execute the step action
     await this.executeAction(step.action, execution, execution.trigger_event);
     
     this.addExecutionLog(execution, LogLevel.INFO, step.id, step.action.id, `Step completed: ${step.name}`);
-  }
+
 
   private async executeAction(
     action: AutomationAction,
@@ -1650,7 +1662,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
           break;
         default:
           throw new Error(`Unsupported action type: ${action.type}`);
-      }
+
 
       const duration = Date.now() - startTime;
       this.addExecutionLog(
@@ -1660,8 +1672,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         action.id,
         `Action executed successfully in ${duration}ms`
       );
-
-    } catch (error) {
+ catch (error) {
       const duration = Date.now() - startTime;
       this.addExecutionLog(
         execution,
@@ -1683,11 +1694,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         action.retry_attempts--;
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
         await this.executeAction(action, execution, triggerEvent);
-      } else {
+ else {
         throw error;
-      }
-    }
-  }
+
+
+
 
   // Action execution methods (mock implementations)
   private async executeAlertCreation(
@@ -1698,7 +1709,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Creating alert:', action.parameters);
     // Mock implementation - in production, this would create an actual alert
-  }
+
 
   private async executeIncidentCreation(
     action: AutomationAction,
@@ -1708,7 +1719,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Creating incident:', action.parameters);
     // Mock implementation - in production, this would create an actual incident
-  }
+
 
   private async executeEmailNotification(
     action: AutomationAction,
@@ -1718,7 +1729,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Sending email notification:', action.parameters);
     // Mock implementation - in production, this would send an actual email
-  }
+
 
   private async executeSlackNotification(
     action: AutomationAction,
@@ -1728,7 +1739,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Sending Slack notification:', action.parameters);
     // Mock implementation - in production, this would send a Slack message
-  }
+
 
   private async executeWebhookCall(
     action: AutomationAction,
@@ -1738,7 +1749,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Calling webhook:', action.parameters);
     // Mock implementation - in production, this would make an HTTP request
-  }
+
 
   private async executeScriptExecution(
     action: AutomationAction,
@@ -1748,7 +1759,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Executing script:', action.parameters);
     // Mock implementation - in production, this would execute a script
-  }
+
 
   private async executeApiCall(
     action: AutomationAction,
@@ -1758,7 +1769,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Making API call:', action.parameters);
     // Mock implementation - in production, this would make an API call
-  }
+
 
   private async executeDatabaseUpdate(
     action: AutomationAction,
@@ -1768,7 +1779,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Updating database:', action.parameters);
     // Mock implementation - in production, this would update the database
-  }
+
 
   private async executeNetworkIsolation(
     action: AutomationAction,
@@ -1778,7 +1789,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Performing network isolation:', action.parameters);
     // Mock implementation - in production, this would isolate network resources
-  }
+
 
   private async executeUserAccountAction(
     action: AutomationAction,
@@ -1788,7 +1799,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
 
     console.log('Performing user account action:', action.parameters);
     // Mock implementation - in production, this would perform user account actions
-  }
+
 
   private addExecutionLog(
     execution: AutomationExecution,
@@ -1807,7 +1818,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       message: message || '',
       data
     });
-  }
+
 
   private async escalateExecution(execution: AutomationExecution, error: Error): Promise<void> {
 
@@ -1823,7 +1834,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     this.emit('execution_escalated', { execution, error });
     
     // In production, this would notify administrators via email, Slack, etc.
-  }
+
 
   private monitorActiveExecutions(): void {
     const now = Date.now();
@@ -1852,9 +1863,9 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         // Move to history
         this.executionHistory.push(execution);
         this.activeExecutions.delete(executionId);
-      }
-    }
-  }
+
+
+
 
   private async collectAutomationMetrics(): Promise<void> {
 
@@ -1879,10 +1890,10 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         category: 'security_intelligence',
         metadata: metrics
       });
-    }
+
 
     this.emit('automation_metrics_collected', metrics);
-  }
+
 
   private calculateAverageExecutionTime(): number {
     const completedExecutions = this.executionHistory.filter(e => e.duration_ms !== undefined);
@@ -1890,26 +1901,26 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     
     const totalTime = completedExecutions.reduce((sum, e) => sum + (e.duration_ms || 0), 0);
     return totalTime / completedExecutions.length;
-  }
+
 
   private calculateOverallSuccessRate(): number {
     if (this.executionHistory.length === 0) return 0;
     
     const successfulExecutions = this.executionHistory.filter(e => e.status === ExecutionStatus.COMPLETED).length;
     return successfulExecutions / this.executionHistory.length;
-  }
+
 
   private async calculateThreatDetectionRate(): Promise<number> {
 
     // Mock implementation - in production, this would calculate actual detection rates
     return 0.94; // 94% detection rate
-  }
+
 
   private async calculateIncidentResponseTime(): Promise<number> {
 
     // Mock implementation - in production, this would calculate actual response times
     return 45000; // 45 seconds average response time
-  }
+
 
   private async getPlaybookMetrics(): Promise<PlaybookMetrics> {
 
@@ -1933,7 +1944,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
           average_duration_ms: 120000 // Mock value
         }))
     };
-  }
+
 
   private async getRuleMetrics(): Promise<RuleMetrics> {
 
@@ -1957,7 +1968,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
           false_positive_rate: 0.05 // Mock value
         }))
     };
-  }
+
 
   private async getAutomationPerformanceMetrics(): Promise<AutomationPerformanceMetrics> {
 
@@ -1969,7 +1980,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       database_query_time_ms: 25,
       api_response_time_ms: 89
     };
-  }
+
 
   private cleanupCompletedExecutions(): void {
     // Keep only the last 1000 completed executions
@@ -1977,14 +1988,14 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     if (this.executionHistory.length > maxHistorySize) {
       this.executionHistory.sort((a, b) => (b.end_time || 0) - (a.end_time || 0));
       this.executionHistory = this.executionHistory.slice(0, maxHistorySize);
-    }
-  }
+
+
 
   private async evaluateAutomationRules(): Promise<void> {
 
     // This method would be called periodically to evaluate time-based rules
     // For now, this is a placeholder for scheduled rule evaluation
-  }
+
 
   // Public API methods
 
@@ -2009,30 +2020,30 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     this.emit('automation_rule_created', fullRule);
     
     return ruleId;
-  }
+
 
   async updateAutomationRule(ruleId: string, updates: Partial<AutomationRule>): Promise<void> {
 
     const rule = this.automationRules.get(ruleId);
     if (!rule) {
       throw new Error(`Automation rule not found: ${ruleId}`);
-    }
+
 
     const updatedRule = { ...rule, ...updates, updated_at: Date.now() };
     this.automationRules.set(ruleId, updatedRule);
     this.emit('automation_rule_updated', updatedRule);
-  }
+
 
   async deleteAutomationRule(ruleId: string): Promise<void> {
 
     const rule = this.automationRules.get(ruleId);
     if (!rule) {
       throw new Error(`Automation rule not found: ${ruleId}`);
-    }
+
 
     this.automationRules.delete(ruleId);
     this.emit('automation_rule_deleted', rule);
-  }
+
 
   async createSecurityPlaybook(
     playbook: Omit<SecurityPlaybook,
@@ -2054,41 +2065,41 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     this.emit('security_playbook_created', fullPlaybook);
     
     return playbookId;
-  }
+
 
   async updateSecurityPlaybook(playbookId: string, updates: Partial<SecurityPlaybook>): Promise<void> {
 
     const playbook = this.securityPlaybooks.get(playbookId);
     if (!playbook) {
       throw new Error(`Security playbook not found: ${playbookId}`);
-    }
+
 
     const updatedPlaybook = { ...playbook, ...updates, updated_at: Date.now() };
     this.securityPlaybooks.set(playbookId, updatedPlaybook);
     this.emit('security_playbook_updated', updatedPlaybook);
-  }
+
 
   async deleteSecurityPlaybook(playbookId: string): Promise<void> {
 
     const playbook = this.securityPlaybooks.get(playbookId);
     if (!playbook) {
       throw new Error(`Security playbook not found: ${playbookId}`);
-    }
+
 
     this.securityPlaybooks.delete(playbookId);
     this.emit('security_playbook_deleted', playbook);
-  }
+
 
   async approveExecution(executionId: string, approvedBy: string): Promise<void> {
 
     const execution = this.activeExecutions.get(executionId);
     if (!execution) {
       throw new Error(`Execution not found: ${executionId}`);
-    }
+
 
     if (execution.status !== ExecutionStatus.PAUSED) {
       throw new Error(`Execution is not in paused state: ${execution.status}`);
-    }
+
 
     execution.assigned_analyst = approvedBy;
     this.addExecutionLog(execution, LogLevel.INFO, undefined, undefined, `Execution approved by: ${approvedBy}`);
@@ -2098,18 +2109,18 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       const playbook = this.securityPlaybooks.get(execution.playbook_id);
       if (playbook) {
         await this.executePlaybookSteps(playbook, execution);
-      }
-    }
+
+
 
     this.emit('execution_approved', { execution, approvedBy });
-  }
+
 
   async cancelExecution(executionId: string, reason: string): Promise<void> {
 
     const execution = this.activeExecutions.get(executionId);
     if (!execution) {
       throw new Error(`Execution not found: ${executionId}`);
-    }
+
 
     execution.status = ExecutionStatus.CANCELLED;
     execution.end_time = Date.now();
@@ -2122,25 +2133,25 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     // Move to history
     this.executionHistory.push(execution);
     this.activeExecutions.delete(executionId);
-  }
+
 
   getAutomationRules(): AutomationRule[] {
     return Array.from(this.automationRules.values());
-  }
+
 
   getSecurityPlaybooks(): SecurityPlaybook[] {
     return Array.from(this.securityPlaybooks.values());
-  }
+
 
   getActiveExecutions(): AutomationExecution[] {
     return Array.from(this.activeExecutions.values());
-  }
+
 
   getExecutionHistory(limit: number = 100): AutomationExecution[] {
     return this.executionHistory
       .sort((a, b) => (b.end_time || b.start_time) - (a.end_time || a.start_time))
       .slice(0, limit);
-  }
+
 
   async getAutomationMetrics(): Promise<AutomationMetrics> {
 
@@ -2156,7 +2167,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       playbook_execution_metrics: await this.getPlaybookMetrics(),
       rule_execution_metrics: await this.getRuleMetrics(),
       performance_metrics: await this.getAutomationPerformanceMetrics(};
-  }
+
 
   private async performHealthCheck(): Promise<{ overall_health: string; details: Record<string, unknown> }> {
     const health = {
@@ -2175,11 +2186,11 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       overall_health: overallHealth,
       details: health
     };
-  }
+
 
   async getHealthStatus(): Promise<Record<string, unknown>> {
     return await this.performHealthCheck();
-  }
+
 
   private async collectDiagnostics(): Promise<Record<string, unknown>> {
     return {
@@ -2188,35 +2199,35 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
         total_rules: this.automationRules.size,
         enabled_rules: Array.from(this.automationRules.values()).filter(r => r.enabled).length,
         rule_types: this.getRuleTypeDistribution()
-  }
+
       playbook_statistics: {
         total_playbooks: this.securityPlaybooks.size,
         playbook_categories: this.getPlaybookCategoryDistribution()
-  }
+
       execution_statistics: {
         active_executions: this.activeExecutions.size,
         execution_history_size: this.executionHistory.length,
         success_rate: this.calculateOverallSuccessRate()
-  }
+
       performance_metrics: await this.getAutomationPerformanceMetrics(),
       health_status: await this.performHealthCheck(};
-  }
+
 
   private getRuleTypeDistribution(): Record<string, number> {
     const distribution: Record<string, number> = {};
     for (const rule of this.automationRules.values()) {
       distribution[rule.type] = (distribution[rule.type] || 0) + 1;
-    }
+
     return distribution;
-  }
+
 
   private getPlaybookCategoryDistribution(): Record<string, number> {
     const distribution: Record<string, number> = {};
     for (const playbook of this.securityPlaybooks.values()) {
       distribution[playbook.category] = (distribution[playbook.category] || 0) + 1;
-    }
+
     return distribution;
-  }
+
 
   getStatus(): Record<string, unknown> {
     return {
@@ -2227,7 +2238,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
       execution_history_size: this.executionHistory.length,
       configuration: this.config
     };
-  }
+
 
   async shutdown(): Promise<void> {
 
@@ -2236,7 +2247,7 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     // Cancel all active executions
     for (const [executionId, execution] of this.activeExecutions) {
       await this.cancelExecution(executionId, 'System shutdown');
-    }
+
 
     // Clear data structures
     this.automationRules.clear();
@@ -2249,5 +2260,4 @@ export class SecurityIntelligenceAutomation extends EventEmitter {
     this.isInitialized = false;
     this.emit('automation_shutdown');
     console.log('Security Intelligence Automation shutdown complete');
-  }
-}
+

@@ -27,7 +27,7 @@ import {
   ArchiveType,
   ArchiveCategory,
   DataClassification
-} from '../ArchiveToggleTypes';
+ from '../ArchiveToggleTypes';
 
 // Request/Response schemas for validation
 const createArchiveToggleSchema = {
@@ -43,7 +43,7 @@ const createArchiveToggleSchema = {
     complianceRequired: { type: 'boolean' },
     customSettings: { type: 'object' },
     orgId: { type: 'string', format: 'uuid' }
-  }
+
 };
 
 const updateArchiveToggleSchema = {
@@ -58,7 +58,7 @@ const updateArchiveToggleSchema = {
     complianceRequired: { type: 'boolean' },
     reason: { type: 'string', minLength: 10, maxLength: 500 },
     customSettings: { type: 'object' }
-  }
+
 };
 
 const setToggleStateSchema = {
@@ -67,7 +67,7 @@ const setToggleStateSchema = {
   properties: {
     enabled: { type: 'boolean' },
     reason: { type: 'string', minLength: 10, maxLength: 200 }
-  }
+
 };
 
 const emergencyOverrideSchema = {
@@ -77,7 +77,7 @@ const emergencyOverrideSchema = {
     enabled: { type: 'boolean' },
     reason: { type: 'string', minLength: 10, maxLength: 500 },
     ttlMinutes: { type: 'number', minimum: 1, maximum: 1440 } // Max 24 hours
-  }
+
 };
 
 const evaluateArchivingSchema = {
@@ -93,16 +93,16 @@ const evaluateArchivingSchema = {
     complianceRequirements: { 
       type: 'array', 
       items: { type: 'string' }
-  }
+
     hasUserConsent: { type: 'boolean' },
     isEmergency: { type: 'boolean' },
     isScheduled: { type: 'boolean' },
     triggeredBy: { 
       type: 'string', 
       enum: ['user', 'system', 'policy', 'emergency'] 
-  }
+
     requestId: { type: 'string' }
-  }
+
 };
 
 export async function archiveToggleRoutes(fastify: FastifyInstance) {
@@ -129,7 +129,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         error: 'Archive management permissions required',
         required_permission: 'archive.manage'
       });
-    }
+
   };
 
   // Middleware for compliance officer permissions
@@ -140,7 +140,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         error: 'Compliance management permissions required',
         required_permission: 'compliance.manage'
       });
-    }
+
   };
 
   // GET /archive-toggles - List archive toggles
@@ -156,9 +156,9 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           orgId: { type: 'string' },
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'number', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const query = request.query as any;
@@ -194,13 +194,13 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         offset: query.offset,
         hasMore: query.offset + paginatedConfigs.length < total
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error listing archive toggles:', error);
       return reply.code(500).send({ 
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // POST /archive-toggles - Create new archive toggle
@@ -219,7 +219,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         config,
         state
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error creating archive toggle:', error);
       
       if (error.message.includes('already exists')) {
@@ -227,13 +227,13 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           error: 'Conflict',
           message: error.message 
         });
-      }
+
       
       return reply.code(400).send({ 
         error: 'Bad Request',
         message: error instanceof Error ? error.message : 'Invalid request'
       });
-    }
+
   });
 
   // GET /archive-toggles/:id - Get specific archive toggle
@@ -244,8 +244,8 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -256,7 +256,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           error: 'Archive toggle not found',
           toggleId: id
         });
-      }
+
 
       const state = toggleService.getToggleState(id);
       
@@ -269,13 +269,13 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           state?.lastToggleTime?.getTime() || 0
 
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error getting archive toggle:', error);
       return reply.code(500).send({ 
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // PUT /archive-toggles/:id - Update archive toggle configuration
@@ -286,9 +286,9 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-  }
+
       body: updateArchiveToggleSchema
-    }
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -303,20 +303,20 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         config,
         state
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error updating archive toggle:', error);
       
       if (error.message.includes('not found')) {
         return reply.code(404).send({ 
           error: 'Archive toggle not found' 
         });
-      }
+
       
       return reply.code(400).send({ 
         error: 'Bad Request',
         message: error instanceof Error ? error.message : 'Invalid request'
       });
-    }
+
   });
 
   // POST /archive-toggles/:id/state - Enable/disable archive toggle
@@ -327,9 +327,9 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-  }
+
       body: setToggleStateSchema
-    }
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -345,20 +345,20 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         action: enabled ? 'enabled' : 'disabled',
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error setting toggle state:', error);
       
       if (error.message.includes('not found')) {
         return reply.code(404).send({ 
           error: 'Archive toggle not found' 
         });
-      }
+
       
       return reply.code(400).send({ 
         error: 'Bad Request',
         message: error instanceof Error ? error.message : 'Invalid request'
       });
-    }
+
   });
 
   // POST /archive-toggles/:id/emergency-override - Apply emergency override
@@ -369,9 +369,9 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-  }
+
       body: emergencyOverrideSchema
-    }
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -399,28 +399,28 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           ttlMinutes,
           appliedBy: user.id,
           appliedAt: new Date().toISOString()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error applying emergency override:', error);
       
       if (error.message.includes('not found')) {
         return reply.code(404).send({ 
           error: 'Archive toggle not found' 
         });
-      }
+
       
       if (error.message.includes('not allowed')) {
         return reply.code(403).send({ 
           error: 'Emergency override not allowed for this toggle' 
         });
-      }
+
       
       return reply.code(400).send({ 
         error: 'Bad Request',
         message: error instanceof Error ? error.message : 'Invalid request'
       });
-    }
+
   });
 
   // POST /archive-toggles/evaluate - Evaluate archiving permissions
@@ -447,17 +447,17 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         context: {
           ...context,
           timestamp: context.timestamp.toISOString()
-  }
+
         evaluatedAt: new Date().toISOString(),
         evaluatedFor: user?.id || 'system'
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error evaluating archive toggle:', error);
       return reply.code(400).send({ 
         error: 'Evaluation failed',
         message: error instanceof Error ? error.message : 'Invalid evaluation context'
       });
-    }
+
   });
 
   // GET /archive-toggles/:id/audit - Get detailed audit history
@@ -468,7 +468,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-  }
+
       querystring: {
         type: 'object',
         properties: {
@@ -477,9 +477,9 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           endDate: { type: 'string', format: 'date-time' },
           action: { type: 'string' },
           actorId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -491,7 +491,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           error: 'Archive toggle not found',
           toggleId: id
         });
-      }
+
 
       const state = toggleService.getToggleState(id);
       let auditTrail = state?.auditTrail || [];
@@ -500,20 +500,20 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
       if (query.startDate) {
         const startDate = new Date(query.startDate);
         auditTrail = auditTrail.filter(entry => entry.timestamp >= startDate);
-      }
+
 
       if (query.endDate) {
         const endDate = new Date(query.endDate);
         auditTrail = auditTrail.filter(entry => entry.timestamp <= endDate);
-      }
+
 
       if (query.action) {
         auditTrail = auditTrail.filter(entry => entry.action === query.action);
-      }
+
 
       if (query.actorId) {
         auditTrail = auditTrail.filter(entry => entry.actorId === query.actorId);
-      }
+
 
       // Sort by timestamp (newest first) and apply limit
       auditTrail = auditTrail
@@ -528,13 +528,13 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         filteredEntries: auditTrail.length,
         generatedAt: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error getting audit history:', error);
       return reply.code(500).send({ 
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // GET /archive-toggles/:id/compliance - Get compliance status
@@ -545,8 +545,8 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -559,7 +559,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           error: 'Archive toggle not found',
           toggleId: id
         });
-      }
+
 
       // Calculate compliance metrics
       const complianceReport = {
@@ -572,7 +572,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           soxCompliant: config.soxCompliant,
           complianceRequired: config.complianceRequired,
           requiresExplicitConsent: config.requiresExplicitConsent
-  }
+
         operationalMetrics: {
           totalArchiveOperations: state.archiveOperationsCount,
           failedOperations: state.failedArchiveOperations,
@@ -580,30 +580,30 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
             ? ((state.archiveOperationsCount - state.failedArchiveOperations) / state.archiveOperationsCount * 100).toFixed(2) + '%'
             : 'N/A',
           lastOperation: state.lastArchiveOperation?.toISOString()
-  }
+
         consentStatus: {
           hasUserConsent: state.hasUserConsent,
           lastConsentCheck: state.lastConsentCheck?.toISOString(),
           consentRequired: config.requiresExplicitConsent
-  }
+
         auditStatus: {
           auditingEnabled: config.auditArchiveOperations,
           totalAuditEntries: state.auditTrail.length,
           lastAuditEntry: state.auditTrail.length > 0 
             ? state.auditTrail[state.auditTrail.length - 1].timestamp.toISOString()
             : null
-  }
+
         generatedAt: new Date().toISOString()
       };
 
       return reply.send(complianceReport);
-    } catch (error) {
+ catch (error) {
       request.log.error('Error getting compliance status:', error);
       return reply.code(500).send({ 
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // DELETE /archive-toggles/:id - Archive/disable toggle (soft delete)
@@ -614,14 +614,14 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-  }
+
       querystring: {
         type: 'object',
         properties: {
           reason: { type: 'string', minLength: 10, maxLength: 200 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -640,20 +640,20 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         disabledBy: user.id,
         reason: defaultReason
       });
-    } catch (error) {
+ catch (error) {
       request.log.error('Error disabling archive toggle:', error);
       
       if (error.message.includes('not found')) {
         return reply.code(404).send({ 
           error: 'Archive toggle not found' 
         });
-      }
+
       
       return reply.code(400).send({ 
         error: 'Bad Request',
         message: error instanceof Error ? error.message : 'Invalid request'
       });
-    }
+
   });
 
   // Health check endpoint
@@ -675,16 +675,15 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
             const state = toggleService.getToggleState(c.id);
             return state?.isOverridden;
           }).length
-        }
+
       };
       
       return reply.send(healthCheck);
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({ 
         status: 'unhealthy', 
         error: error.message,
         timestamp: new Date().toISOString()
       });
-    }
+
   });
-}

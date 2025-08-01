@@ -1,8 +1,7 @@
 import React from 'react';
 
-}
-export interface UserAvatarProps {
-  userId: string;
+
+export interface UserAvatarProps { userId: string;
   userName?: string;
   userAvatar?: string;
   status: 'active' | 'idle' | 'away' | 'offline';
@@ -10,63 +9,54 @@ export interface UserAvatarProps {
   showStatus?: boolean;
   showTooltip?: boolean;
   onClick?: (userId: string) => void;
-  className?: string;
-}
-}
-export const UserAvatar: React.FC<UserAvatarProps> = ({)
-  userId,
-  userName,
-  userAvatar,
-  status,
-  size = 'medium',
-  showStatus = true,
-  showTooltip = true,
-  onClick,
+  className?: string }
+
+export const UserAvatar: React.FC<UserAvatarProps> = ({ )
+  userId
+  userName
+  userAvatar
+  status
+  size = 'medium'
+  showStatus = true
+  showTooltip = true
+  onClick }
   className = ''
-}) => {
-  const sizeClasses = {
-  small: 'w-6 h-6 text-xs',
-  medium: 'w-8 h-8 text-sm',
-  large: 'w-12 h-12 text-base',
+}) => { const sizeClasses = {
+  small: 'w-6 h-6 text-xs'
+  medium: 'w-8 h-8 text-sm'
+  large: 'w-12 h-12 text-base' }
 };
-  const statusColors = {
-  active: 'bg-green-500',
-  idle: 'bg-yellow-500',
-  away: 'bg-orange-500',
-  offline: 'bg-gray-400',
+  const statusColors = { active: 'bg-green-500'
+  idle: 'bg-yellow-500'
+  away: 'bg-orange-500'
+  offline: 'bg-gray-400' }
 };
-  const statusSizes = {
-  small: 'w-2 h-2',
-  medium: 'w-2.5 h-2.5',
-  large: 'w-3 h-3',
+  const statusSizes = { small: 'w-2 h-2'
+  medium: 'w-2.5 h-2.5'
+  large: 'w-3 h-3' }
 };
-  const getInitials = (name?: string): string => {
-    if (!name) return userId.slice(0, 2).toUpperCase();
+  const getInitials = (name?: string): string => { if (!name) return userId.slice(0, 2).toUpperCase();
     return name
       .split(' ')
       .map(word => word[0])
       .join('')
       .slice(0, 2)
-      .toUpperCase();
-  };
-  const getBackgroundColor = (id: string): string => {
-    const colors = [;
-      'bg-red-500',
-      'bg-blue-500',
-      'bg-green-500',
-      'bg-yellow-500',
-      'bg-purple-500',
-      'bg-pink-500',
-      'bg-indigo-500',
+      .toUpperCase() };
+  const getBackgroundColor = (id: string): string => { const colors = [
+      'bg-red-500'
+      'bg-blue-500'
+      'bg-green-500'
+      'bg-yellow-500'
+      'bg-purple-500'
+      'bg-pink-500'
+      'bg-indigo-500' }
       'bg-teal-500'
     ];
     const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return colors[hash % colors.length];
   };
-  const handleClick = () => {
-    if (onClick) {
-      onClick(userId);
-  };
+  const handleClick = () => { if (onClick) {
+      onClick(userId) };
   const avatarContent = userAvatar ? (;);
     <img
       src={userAvatar}
@@ -96,40 +86,38 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({)
   );
 };
 
-}
-export interface UserAvatarListProps {
-  users: Array<{
+
+export interface UserAvatarListProps { users: Array<{;
   userId: string;
   userName?: string;
   userAvatar?: string;
-  status: 'active' | 'idle' | 'away' | 'offline'
-}
-  }>;
+  status: 'active' | 'idle' | 'away' | 'offline' }
+
+
+>;
   maxVisible?: number;
   size?: 'small' | 'medium' | 'large';
   showOverflow?: boolean;
   onUserClick?: (userId: string) => void;
   className?: string;
-}
-export const UserAvatarList: React.FC<UserAvatarListProps> = ({)
-  users,
-  maxVisible = 5,
-  size = 'medium',
-  showOverflow = true,
-  onUserClick,
+
+export const UserAvatarList: React.FC<UserAvatarListProps> = ({ )
+  users
+  maxVisible = 5
+  size = 'medium'
+  showOverflow = true
+  onUserClick }
   className = ''
-}) => {
-  const visibleUsers = users.slice(0, maxVisible);
+}) => { const visibleUsers = users.slice(0, maxVisible);
   const overflowCount = users.length - maxVisible;
   const sizeClasses = {
-  small: 'w-6 h-6 text-xs -ml-1',
-  medium: 'w-8 h-8 text-sm -ml-2',
-  large: 'w-12 h-12 text-base -ml-3',
+  small: 'w-6 h-6 text-xs -ml-1'
+  medium: 'w-8 h-8 text-sm -ml-2'
+  large: 'w-12 h-12 text-base -ml-3' }
 };
-  const overflowSizeClasses = {
-  small: 'w-6 h-6 text-xs',
-  medium: 'w-8 h-8 text-sm',
-  large: 'w-12 h-12 text-base',
+  const overflowSizeClasses = { small: 'w-6 h-6 text-xs'
+  medium: 'w-8 h-8 text-sm'
+  large: 'w-12 h-12 text-base' }
 };
   return;
     <div className={`flex items-center ${className}`}>}

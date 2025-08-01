@@ -11,8 +11,8 @@
 
 import { EventEmitter } from 'events';
 
-}
-}
+
+
 export interface TimeoutConfig {
   // Database timeouts
   database: {
@@ -20,8 +20,9 @@ export interface TimeoutConfig {
     query: number;
     transaction: number;
     migration: number;
-}
-}
+
+
+
   };
   
   // Redis timeouts
@@ -64,32 +65,34 @@ export interface TimeoutConfig {
     verify: number;
     template: number;
   };
-}
 
-}
-}
+
+
+
 export interface RetryConfig {
   maxRetries: number;
   baseDelay: number;
   maxDelay: number;
   backoffMultiplier: number;
   jitterEnabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CircuitBreakerConfig {
   failureThreshold: number;
   resetTimeout: number;
   monitoringPeriod: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeoutMetrics {
   totalOperations: number;
   timeouts: number;
@@ -97,12 +100,13 @@ export interface TimeoutMetrics {
   circuitBreakerTrips: number;
   averageExecutionTime: number;
   lastTimeout: Date | null;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OperationResult<T> {
   success: boolean;
   data?: T;
@@ -111,7 +115,7 @@ export interface OperationResult<T> {
   totalTime: number;
   timedOut: boolean;
   circuitBreakerOpen: boolean;
-}
+
 
 type OperationType = keyof TimeoutConfig;
 type OperationSubtype<T extends OperationType> = keyof TimeoutConfig[T];
@@ -120,18 +124,19 @@ enum CircuitBreakerState {
   CLOSED = 'closed',
   OPEN = 'open',
   HALF_OPEN = 'half_open'
-}
 
-}
-}
+
+
+
 interface CircuitBreaker {
   state: CircuitBreakerState;
   failureCount: number;
   lastFailureTime: Date | null;
   nextAttemptTime: Date | null;
-}
-}
-}
+
+
+
+
 
 export class TimeoutManager extends EventEmitter {
   private config: TimeoutConfig;
@@ -166,7 +171,7 @@ export class TimeoutManager extends EventEmitter {
 
     // Clean up circuit breakers periodically
     setInterval(() => this.cleanupCircuitBreakers(), this.circuitBreakerConfig.monitoringPeriod);
-  }
+
 
   /**
    * Build timeout configuration with environment variable overrides
@@ -178,19 +183,19 @@ export class TimeoutManager extends EventEmitter {
         query: parseInt(process.env.DB_QUERY_TIMEOUT || '30000'),
         transaction: parseInt(process.env.DB_TRANSACTION_TIMEOUT || '60000'),
         migration: parseInt(process.env.DB_MIGRATION_TIMEOUT || '300000')
-  }
+
       redis: {
         connect: parseInt(process.env.REDIS_CONNECT_TIMEOUT || '5000'),
         operation: parseInt(process.env.REDIS_OP_TIMEOUT || '10000'),
         pipeline: parseInt(process.env.REDIS_PIPELINE_TIMEOUT || '15000'),
         publish: parseInt(process.env.REDIS_PUBLISH_TIMEOUT || '5000')
-  }
+
       api: {
         authentication: parseInt(process.env.API_AUTH_TIMEOUT || '15000'),
         webhook: parseInt(process.env.API_WEBHOOK_TIMEOUT || '30000'),
         notification: parseInt(process.env.API_NOTIFICATION_TIMEOUT || '10000'),
         export: parseInt(process.env.API_EXPORT_TIMEOUT || '120000')
-  }
+
       auth: {
         login: parseInt(process.env.AUTH_LOGIN_TIMEOUT || '10000'),
         register: parseInt(process.env.AUTH_REGISTER_TIMEOUT || '15000'),
@@ -198,22 +203,22 @@ export class TimeoutManager extends EventEmitter {
         tokenRefresh: parseInt(process.env.AUTH_TOKEN_REFRESH_TIMEOUT || '5000'),
         captcha: parseInt(process.env.AUTH_CAPTCHA_TIMEOUT || '10000'),
         twoFactor: parseInt(process.env.AUTH_2FA_TIMEOUT || '30000')
-  }
+
       file: {
         upload: parseInt(process.env.FILE_UPLOAD_TIMEOUT || '120000'),
         download: parseInt(process.env.FILE_DOWNLOAD_TIMEOUT || '60000'),
         processing: parseInt(process.env.FILE_PROCESSING_TIMEOUT || '300000'),
         validation: parseInt(process.env.FILE_VALIDATION_TIMEOUT || '30000')
-  }
+
       email: {
         send: parseInt(process.env.EMAIL_SEND_TIMEOUT || '15000'),
         verify: parseInt(process.env.EMAIL_VERIFY_TIMEOUT || '10000'),
         template: parseInt(process.env.EMAIL_TEMPLATE_TIMEOUT || '5000')
-      }
+
     };
 
     return this.mergeDeep(defaultConfig, overrides || {});
-  }
+
 
   /**
    * Deep merge configuration objects
@@ -224,13 +229,13 @@ export class TimeoutManager extends EventEmitter {
     for (const key in source) {
       if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
         result[key] = this.mergeDeep(target[key] || {}, source[key]);
-      } else {
+ else {
         result[key] = source[key];
-      }
-    }
+
+
     
     return result;
-  }
+
 
   /**
    * Execute operation with timeout, retry, and circuit breaker protection
@@ -258,11 +263,11 @@ export class TimeoutManager extends EventEmitter {
           timedOut: false,
           circuitBreakerOpen: true
         };
-      } else {
+ else {
         // Move to half-open state
         circuitBreaker.state = CircuitBreakerState.HALF_OPEN;
-      }
-    }
+
+
 
     let attempts = 0;
     let lastError: Error | null = null;
@@ -281,7 +286,7 @@ export class TimeoutManager extends EventEmitter {
         // Success - reset circuit breaker if it was half-open
         if (circuitBreaker.state === CircuitBreakerState.HALF_OPEN) {
           this.resetCircuitBreaker(metricKey);
-        }
+
 
         const totalTime = Date.now() - startTime;
         this.updateMetrics(metricKey, true, totalTime, false, false);
@@ -294,8 +299,7 @@ export class TimeoutManager extends EventEmitter {
           timedOut: false,
           circuitBreakerOpen: false
         };
-
-      } catch (error) {
+ catch (error) {
         lastError = error as Error;
         
         // Update circuit breaker on failure
@@ -304,15 +308,15 @@ export class TimeoutManager extends EventEmitter {
         // Don't retry if circuit breaker opened or if it's the last attempt
         if (circuitBreaker.state === CircuitBreakerState.OPEN || attempts > this.retryConfig.maxRetries) {
           break;
-        }
+
 
         // Wait before retry
         if (attempts <= this.retryConfig.maxRetries) {
           const delay = this.calculateRetryDelay(attempts - 1);
           await this.sleep(delay);
-        }
-      }
-    }
+
+
+
 
     const totalTime = Date.now() - startTime;
     const timedOut = lastError?.name === 'TimeoutError';
@@ -327,7 +331,7 @@ export class TimeoutManager extends EventEmitter {
       timedOut,
       circuitBreakerOpen: circuitBreaker.state === CircuitBreakerState.OPEN
     };
-  }
+
 
   /**
    * Internal method to execute operation with timeout
@@ -361,10 +365,10 @@ export class TimeoutManager extends EventEmitter {
       ]);
 
       return result;
-    } finally {
+ finally {
       this.activeOperations.delete(operationId);
-    }
-  }
+
+
 
   /**
    * Execute operation with fallback
@@ -383,7 +387,7 @@ export class TimeoutManager extends EventEmitter {
 
     if (primaryResult.success) {
       return primaryResult;
-    }
+
 
     // Try fallback operation
     const fallbackResult = await this.executeWithTimeout(
@@ -401,7 +405,7 @@ export class TimeoutManager extends EventEmitter {
     });
 
     return fallbackResult;
-  }
+
 
   /**
    * Cancel active operation
@@ -412,9 +416,9 @@ export class TimeoutManager extends EventEmitter {
       controller.abort();
       this.activeOperations.delete(operationId);
       return true;
-    }
+
     return false;
-  }
+
 
   /**
    * Cancel all active operations
@@ -424,11 +428,11 @@ export class TimeoutManager extends EventEmitter {
     
     for (const controller of this.activeOperations.values()) {
       controller.abort();
-    }
+
     
     this.activeOperations.clear();
     return count;
-  }
+
 
   /**
    * Get circuit breaker for operation
@@ -441,9 +445,9 @@ export class TimeoutManager extends EventEmitter {
         lastFailureTime: null,
         nextAttemptTime: null
       });
-    }
+
     return this.circuitBreakers.get(metricKey)!;
-  }
+
 
   /**
    * Record failure for circuit breaker
@@ -460,8 +464,8 @@ export class TimeoutManager extends EventEmitter {
       );
 
       this.emit('circuit_breaker_opened', { metricKey, failureCount: circuitBreaker.failureCount });
-    }
-  }
+
+
 
   /**
    * Reset circuit breaker
@@ -474,7 +478,7 @@ export class TimeoutManager extends EventEmitter {
     circuitBreaker.nextAttemptTime = null;
 
     this.emit('circuit_breaker_reset', { metricKey });
-  }
+
 
   /**
    * Clean up old circuit breakers
@@ -486,10 +490,10 @@ export class TimeoutManager extends EventEmitter {
       if (breaker.lastFailureTime && breaker.lastFailureTime.getTime() < cutoffTime) {
         if (breaker.state === CircuitBreakerState.CLOSED && breaker.failureCount === 0) {
           this.circuitBreakers.delete(key);
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Calculate retry delay with exponential backoff and jitter
@@ -502,10 +506,10 @@ export class TimeoutManager extends EventEmitter {
       // Add 0-25% jitter to prevent thundering herd
       const jitter = cappedDelay * 0.25 * Math.random();
       return cappedDelay + jitter;
-    }
+
     
     return cappedDelay;
-  }
+
 
   /**
    * Update metrics for operation
@@ -526,7 +530,7 @@ export class TimeoutManager extends EventEmitter {
         averageExecutionTime: 0,
         lastTimeout: null
       });
-    }
+
 
     const metrics = this.metrics.get(metricKey)!;
     metrics.totalOperations++;
@@ -534,11 +538,11 @@ export class TimeoutManager extends EventEmitter {
     if (timeout) {
       metrics.timeouts++;
       metrics.lastTimeout = new Date();
-    }
+
     
     if (circuitBreakerTrip) {
       metrics.circuitBreakerTrips++;
-    }
+
 
     // Update average execution time
     metrics.averageExecutionTime = 
@@ -551,8 +555,8 @@ export class TimeoutManager extends EventEmitter {
         executionTime,
         totalTimeouts: metrics.timeouts
       });
-    }
-  }
+
+
 
   /**
    * Get metrics for operation type
@@ -560,17 +564,17 @@ export class TimeoutManager extends EventEmitter {
   getMetrics(operationType?: string): Map<string, TimeoutMetrics> | TimeoutMetrics | null {
     if (!operationType) {
       return this.metrics;
-    }
+
     
     return this.metrics.get(operationType) || null;
-  }
+
 
   /**
    * Get all circuit breaker states
    */
   getCircuitBreakerStates(): Map<string, CircuitBreaker> {
     return new Map(this.circuitBreakers);
-  }
+
 
   /**
    * Get health status
@@ -580,7 +584,7 @@ export class TimeoutManager extends EventEmitter {
     openCircuitBreakers: number;
     totalTimeouts: number;
     operationTypes: string[];
-    } {
+ {
     const openCircuitBreakers = Array.from(this.circuitBreakers.values())
       .filter(cb => cb.state === CircuitBreakerState.OPEN).length;
 
@@ -593,7 +597,7 @@ export class TimeoutManager extends EventEmitter {
       totalTimeouts,
       operationTypes: Array.from(this.metrics.keys())
     };
-  }
+
 
   /**
    * Reset all metrics and circuit breakers
@@ -602,14 +606,14 @@ export class TimeoutManager extends EventEmitter {
     this.metrics.clear();
     this.circuitBreakers.clear();
     this.cancelAllOperations();
-  }
+
 
   /**
    * Get timeout configuration
    */
   getConfig(): TimeoutConfig {
     return { ...this.config };
-  }
+
 
   /**
    * Update timeout configuration
@@ -617,7 +621,7 @@ export class TimeoutManager extends EventEmitter {
   updateConfig(updates: Partial<TimeoutConfig>): void {
     this.config = this.mergeDeep(this.config, updates);
     this.emit('config_updated', this.config);
-  }
+
 
   /**
    * Sleep utility
@@ -625,23 +629,23 @@ export class TimeoutManager extends EventEmitter {
   private sleep(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-}
+
+
 
 // Error classes
 export class TimeoutError extends Error {
   constructor(operation: string, timeout: number) {
     super(`Operation '${operation}' timed out after ${timeout}ms`);
     this.name = 'TimeoutError';
-  }
-}
+
+
 
 export class CircuitBreakerOpenError extends Error {
   constructor(operation: string) {
     super(`Circuit breaker is open for operation '${operation}'`);
     this.name = 'CircuitBreakerOpenError';
-  }
-}
+
+
 
 // Singleton instance
 let timeoutManagerInstance: TimeoutManager | null = null;
@@ -649,9 +653,9 @@ let timeoutManagerInstance: TimeoutManager | null = null;
 export function getTimeoutManager(): TimeoutManager {
   if (!timeoutManagerInstance) {
     timeoutManagerInstance = new TimeoutManager();
-  }
+
   return timeoutManagerInstance;
-}
+
 
 export function initializeTimeoutManager(
   config?: Partial<TimeoutConfig>,
@@ -660,4 +664,3 @@ export function initializeTimeoutManager(
 ): TimeoutManager {
   timeoutManagerInstance = new TimeoutManager(config, retryConfig, circuitBreakerConfig);
   return timeoutManagerInstance;
-}

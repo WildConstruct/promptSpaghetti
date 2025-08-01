@@ -13,7 +13,7 @@ import {
   IntegrationType,
   IntegrationEventType,
   IntegrationOperation
-} from '../analytics/IntegrationAnalyticsService';
+ from '../analytics/IntegrationAnalyticsService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
@@ -42,7 +42,7 @@ export class IntegrationAnalyticsServiceWrapper {
     if (this.isInitialized) {
       console.log('⚠️ Integration Analytics Service already initialized');
       return;
-    }
+
 
     try {
       console.log('🚀 Initializing Integration Analytics Service...');
@@ -91,35 +91,34 @@ export class IntegrationAnalyticsServiceWrapper {
             metricAggregationEnabled: config.metricAggregation.enabled,
             monitoringEnabled: config.monitoring.healthCheckInterval > 0,
             costTrackingEnabled: config.costTracking.enabled
-          }
-  }
+
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['integration_monitoring'],
           evidenceLevel: 'STANDARD'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('❌ Failed to initialize Integration Analytics Service:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get analytics service instance
    */
   public getAnalyticsService(): IntegrationAnalyticsService | null {
     return this.analyticsService;
-  }
+
 
   /**
    * Check if service is initialized
    */
   public isServiceInitialized(): boolean {
     return this.isInitialized;
-  }
+
 
   /**
    * Record integration event (convenience method)
@@ -148,7 +147,7 @@ export class IntegrationAnalyticsServiceWrapper {
     if (!this.analyticsService) {
       console.warn('⚠️ Integration Analytics Service not initialized - event not recorded');
       return;
-    }
+
 
     this.analyticsService.recordEvent({
       integrationId: eventData.integrationId,
@@ -167,13 +166,13 @@ export class IntegrationAnalyticsServiceWrapper {
         totalCost: eventData.costData.totalCost,
         currency: eventData.costData.currency || 'USD',
         billingUnit: 'request'
-      } : undefined,
+ : undefined,
       context: {
         environment: 'development',
         ...eventData.context
-      }
+
     });
-  }
+
 
   /**
    * Get integration health summary
@@ -181,7 +180,7 @@ export class IntegrationAnalyticsServiceWrapper {
   public getIntegrationHealthSummary(): unknown {
     if (!this.analyticsService) {
       return { error: 'Service not initialized' };
-    }
+
 
     const dashboard = this.analyticsService.getAnalyticsDashboard();
     return {
@@ -194,7 +193,7 @@ export class IntegrationAnalyticsServiceWrapper {
       healthSummary: dashboard.healthSummary.slice(0, 5), // Top 5
       timestamp: dashboard.timestamp
     };
-  }
+
 
   /**
    * Shutdown the analytics service
@@ -203,7 +202,7 @@ export class IntegrationAnalyticsServiceWrapper {
 
     if (!this.isInitialized || !this.analyticsService) {
       return;
-    }
+
 
     try {
       console.log('⏹️ Shutting down Integration Analytics Service...');
@@ -217,24 +216,24 @@ export class IntegrationAnalyticsServiceWrapper {
         userId: 'system',
         details: {
           timestamp: new Date()
-  }
+
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
           requirements: ['integration_monitoring'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       this.analyticsService = null;
       this.isInitialized = false;
 
       console.log('✅ Integration Analytics Service shutdown completed');
-    } catch (error) {
+ catch (error) {
       console.error('❌ Error during Integration Analytics Service shutdown:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Create analytics service configuration
@@ -246,32 +245,32 @@ export class IntegrationAnalyticsServiceWrapper {
         interval: 5000, // 5 seconds
         maxEventsInMemory: 10000,
         persistenceBatchSize: 100
-  }
+
       metricAggregation: {
         enabled: true,
         interval: 60000, // 1 minute
         aggregationWindows: [5, 15, 60, 1440] // 5min, 15min, 1hr, 1day
-  }
+
       monitoring: {
         healthCheckInterval: 30000, // 30 seconds
         alertThresholds: {
           errorRate: 5.0, // 5%
           responseTime: 5000, // 5 seconds
           availability: 95.0 // 95%
-        }
-  }
+
+
       costTracking: {
         enabled: true,
         defaultCurrency: 'USD',
         costOptimizationThreshold: 100.0 // $100
-  }
+
       reporting: {
         retentionPeriod: 90, // 90 days
         maxReportSize: 50 * 1024 * 1024, // 50MB
         scheduledReports: true
-      }
+
     };
-  }
+
 
   /**
    * Set up automatic event tracking for common integrations
@@ -298,7 +297,7 @@ export class IntegrationAnalyticsServiceWrapper {
       // Track different types of integrations based on route patterns
       this.trackIntegrationByRoute(route, responseTime, success, request, reply);
     });
-  }
+
 
   /**
    * Track integration events based on route patterns
@@ -328,9 +327,9 @@ export class IntegrationAnalyticsServiceWrapper {
           userId: request.user?.id,
           requestId: request.id,
           environment: process.env.NODE_ENV || 'development'
-        }
+
       });
-    }
+
 
     // Authentication operations
     if (route.includes('/auth/')) {
@@ -347,9 +346,9 @@ export class IntegrationAnalyticsServiceWrapper {
           userId: request.user?.id,
           requestId: request.id,
           environment: process.env.NODE_ENV || 'development'
-        }
+
       });
-    }
+
 
     // Cache operations (if Redis is involved)
     if (route.includes('/api/') && responseTime < 50) { // Likely cache hit
@@ -365,10 +364,10 @@ export class IntegrationAnalyticsServiceWrapper {
           userId: request.user?.id,
           requestId: request.id,
           environment: process.env.NODE_ENV || 'development'
-        }
+
       });
-    }
-  }
+
+
 
   /**
    * Map HTTP method to integration operation
@@ -381,8 +380,8 @@ export class IntegrationAnalyticsServiceWrapper {
     case 'patch': return IntegrationOperation.UPDATE;
     case 'delete': return IntegrationOperation.DELETE;
     default: return IntegrationOperation.QUERY;
-    }
-  }
+
+
 
   /**
    * Set up integration monitoring hooks
@@ -395,9 +394,9 @@ export class IntegrationAnalyticsServiceWrapper {
       // Could trigger alerts, notifications, etc.
       if (!event.success && event.errorCategory) {
         console.warn(`🔍 Integration Error Detected: ${event.integrationName} - ${event.errorMessage}`);
-      }
+
     });
-  }
+
 
   /**
    * Set up periodic health checks for integrations
@@ -422,9 +421,9 @@ export class IntegrationAnalyticsServiceWrapper {
           success: true,
           context: {
             environment: process.env.NODE_ENV || 'development'
-          }
+
         });
-      } catch (error) {
+ catch (error) {
         this.analyticsService!.recordEvent({
           integrationId: 'postgres-main-db',
           integrationType: IntegrationType.DATABASE,
@@ -436,9 +435,9 @@ export class IntegrationAnalyticsServiceWrapper {
           errorMessage: error instanceof Error ? error.message : 'Database health check failed',
           context: {
             environment: process.env.NODE_ENV || 'development'
-          }
+
         });
-      }
+
     }, 60000); // Every minute
 
     // Periodic health check for Redis
@@ -458,9 +457,9 @@ export class IntegrationAnalyticsServiceWrapper {
           success: true,
           context: {
             environment: process.env.NODE_ENV || 'development'
-          }
+
         });
-      } catch (error) {
+ catch (error) {
         this.analyticsService!.recordEvent({
           integrationId: 'redis-cache',
           integrationType: IntegrationType.CACHE_LAYER,
@@ -472,11 +471,11 @@ export class IntegrationAnalyticsServiceWrapper {
           errorMessage: error instanceof Error ? error.message : 'Redis health check failed',
           context: {
             environment: process.env.NODE_ENV || 'development'
-          }
+
         });
-      }
+
     }, 60000); // Every minute
-  }
+
 
   /**
    * Get service health status
@@ -486,14 +485,14 @@ export class IntegrationAnalyticsServiceWrapper {
     initialized: boolean;
     collecting: boolean;
     timestamp: Date;
-    } {
+ {
     return {
       status: this.isInitialized ? 'healthy' : 'not_initialized',
       initialized: this.isInitialized,
       collecting: this.analyticsService !== null,
       timestamp: new Date()
     };
-  }
+
 
   /**
    * Get service statistics
@@ -503,7 +502,7 @@ export class IntegrationAnalyticsServiceWrapper {
       return {
         error: 'Service not initialized'
       };
-    }
+
 
     try {
       const dashboard = this.analyticsService.getAnalyticsDashboard();
@@ -515,28 +514,28 @@ export class IntegrationAnalyticsServiceWrapper {
           healthy: dashboard.healthSummary.filter(i => i.status === 'healthy').length,
           degraded: dashboard.healthSummary.filter(i => i.status === 'degraded').length,
           failing: dashboard.healthSummary.filter(i => i.status === 'failing').length
-  }
+
         performanceMetrics: {
           averageResponseTime: dashboard.performanceAnalysis.averageResponseTime,
           totalThroughput: dashboard.performanceAnalysis.throughputAnalysis.totalThroughput
-  }
+
         errorMetrics: {
           totalErrors: dashboard.errorAnalysis.totalErrors,
           criticalErrors: dashboard.errorAnalysis.criticalErrors.length
-  }
+
         costMetrics: {
           totalCost: dashboard.costAnalysis.totalCost,
           projectedMonthlyCost: dashboard.costAnalysis.projectedMonthlyCost,
           potentialSavings: dashboard.costAnalysis.potentialSavings
-  }
+
         timestamp: dashboard.timestamp
       };
-    } catch (error) {
+ catch (error) {
       return {
         error: error instanceof Error ? error.message : 'Failed to get statistics'
       };
-    }
-  }
+
+
 
   /**
    * Record custom integration event (public API for other services)
@@ -563,7 +562,7 @@ export class IntegrationAnalyticsServiceWrapper {
     if (!this.analyticsService) {
       console.warn('⚠️ Integration Analytics Service not initialized - custom event not recorded');
       return;
-    }
+
 
     // Map string types to enums (with fallbacks)
     const integrationType = Object.values(IntegrationType).find(t => 
@@ -595,14 +594,14 @@ export class IntegrationAnalyticsServiceWrapper {
         totalCost: eventData.costData.totalCost,
         currency: eventData.costData.currency || 'USD',
         billingUnit: 'request'
-      } : undefined,
+ : undefined,
       context: {
         environment: process.env.NODE_ENV || 'development',
         ...eventData.context
-  }
+
       metadata: eventData.context || {}
     });
-  }
-}
+
+
 
 export default IntegrationAnalyticsServiceWrapper;

@@ -13,9 +13,8 @@
 import { AnalyticsClient } from './AnalyticsClient';
 import { ConversionArchitectureManager, CrossDeviceIdentity, DeviceIdentity, LinkingSignal } from './ConversionFunnelArchitecture';
 
-}
-export interface EnhancedSession {
-  sessionId: string;
+
+export interface EnhancedSession { sessionId: string;
   userId: string;
   deviceId: string;
   startTime: number;
@@ -29,12 +28,13 @@ export interface EnhancedSession {
   referrer: string;
   initialPage: string;
   userAgent: string;
-  ipHash: string; // Privacy-compliant hashed IP,
-  location?: {
+  ipHash: string; // Privacy-compliant hashed IP;
+  location?: {;
   country?: string;
   region?: string;
-  city?: string; // Only if user consents,
-}
+  city?: string; // Only if user consents }
+
+
 };
   // Attribution data
   utmSource?: string;
@@ -54,23 +54,20 @@ export interface EnhancedSession {
   personalizationConsent: boolean;
   crossDeviceConsent: boolean;
   // Technical metadata
-  viewport: {
+  viewport: { ,
   width: number;
-  height: number;
-};
-  deviceType: 'desktop' | 'mobile' | 'tablet';
+  height: number };
+  deviceType: 'desktop' | 'mobile' | 'tablet';,
   browser: string;
   os: string;
-}
-}
-export interface SessionEvent {
-  sessionId: string;
+
+
+export interface SessionEvent { sessionId: string;
   timestamp: number;
   type: SessionEventType;
   page?: string;
-  properties: Record<string, any>;
-}
-}
+  properties: Record<string, any> }
+
 export type SessionEventType = 
   | 'session_start'
   | 'session_end'
@@ -80,9 +77,8 @@ export type SessionEventType =
   | 'cross_device_link'
   | 'consent_update';
 
-}
-export interface SessionAnalytics {
-  totalSessions: number;
+
+export interface SessionAnalytics { totalSessions: number;
   uniqueUsers: number;
   averageSessionDuration: number;
   averagePagesPerSession: number;
@@ -98,125 +94,102 @@ export interface SessionAnalytics {
   hourlyDistribution: number;
   dailyDistribution: number;
   // User journey insights
-  commonPaths: Array<{
+  commonPaths: Array<{ }
   path: string;
   frequency: number;
   conversionRate: number;
-}
-}>;
-  dropoffPoints: Array<{
+
+
+>;
+  dropoffPoints: Array<{ ,
   page: string;
   dropoffRate: number;
-  recoverableUsers: number;
-}>;
+  recoverableUsers: number }>;
 /**
  * Enhanced Session Tracking Manager
  * Integrates with Epic 1 AnalyticsClient for comprehensive session management
  */
-}
-export class SessionTrackingManager {
-  private analyticsClient: AnalyticsClient;
-  private conversionArchitecture: ConversionArchitectureManager;
-  private currentSession: EnhancedSession | null = null;
-  private sessionStorage: Map<string, EnhancedSession> = new Map();
-  private sessionEvents: SessionEvent = [];
-  private sessionTimeout: number = 30 * 60 * 1000; // 30 minutes,
-  private heartbeatInterval: number = 30 * 1000; // 30 seconds,
-  private heartbeatTimer?: NodeJS.Timeout;
-  private privacyConfig = {
-  sessionStorageKey: 'ps_session',
-  consentStorageKey: 'ps_consent',
-  crossDeviceStorageKey: 'ps_cross_device',
-  maxSessionAge: 24 * 60 * 60 * 1000, // 24 hours,
-  dataRetentionDays: 730 // 2 years for GDPR compliance,
-};
-  constructor(analyticsClient: AnalyticsClient, conversionArchitecture: ConversionArchitectureManager) {
-  this.analyticsClient = analyticsClient;
+
+export class SessionTrackingManager {};
+  constructor(analyticsClient: AnalyticsClient, conversionArchitecture: ConversionArchitectureManager) { this.analyticsClient = analyticsClient;
   this.conversionArchitecture = conversionArchitecture;
   this.initializeSessionTracking();
   this.setupHeartbeat();
   this.bindVisibilityEvents();
-  private initializeSessionTracking(): void {,
+  private initializeSessionTracking(): void { }
   // Check for existing session
   const existingSessionData = this.getStoredSession();
-  if (existingSessionData && this.isSessionValid(existingSessionData)) {
-  this.currentSession = existingSessionData;
-  this.updateLastActivity();
-} else {
-  this.startNewSession();
+  if (existingSessionData && this.isSessionValid(existingSessionData)) { this.currentSession = existingSessionData;
+  this.updateLastActivity() } else { this.startNewSession();
   // Track session start
   if (this.currentSession) {
   this.trackSessionEvent('session_start', window.location.pathname);
-  private startNewSession(): void {,
+  private startNewSession(): void {
   const consent = this.getConsentPreferences();
   const deviceInfo = this.getDeviceInfo();
   const attributionData = this.getAttributionData();
   this.currentSession = {
-  sessionId: this.generateSessionId(),
-  userId: this.getCurrentUserId(),
-  deviceId: this.getDeviceId(),
-  startTime: Date.now(),
-  lastActivity: Date.now(),
+  sessionId: this.generateSessionId()
+  userId: this.getCurrentUserId()
+  deviceId: this.getDeviceId()
+  startTime: Date.now()
+  lastActivity: Date.now()
   // Cross-device tracking (if consented)
-  crossDeviceSessionId: consent.crossDeviceConsent ? this.getCrossDeviceSessionId() : undefined,
-  linkedSessions: [],
+  crossDeviceSessionId: consent.crossDeviceConsent ? this.getCrossDeviceSessionId() : undefined
+  linkedSessions: []
   // Session context
-  referrer: document.referrer,
-  initialPage: window.location.pathname,
-  userAgent: navigator.userAgent,
-  ipHash: this.getHashedIP(),
-  location: consent.analyticsConsent ? this.getLocationData() : undefined,
+  referrer: document.referrer
+  initialPage: window.location.pathname
+  userAgent: navigator.userAgent
+  ipHash: this.getHashedIP()
+  location: consent.analyticsConsent ? this.getLocationData() : undefined
   // Attribution data
-  ...attributionData,
+  ...attributionData
   // Session metrics
-  pageViews: 1,
-  events: 0,
-  conversionEvents: 0,
-  bounced: true, // Will be updated based on engagement,
-  engaged: false,
+  pageViews: 1
+  events: 0
+  conversionEvents: 0
+  bounced: true, // Will be updated based on engagement
+  engaged: false
   // Privacy and consent
-  trackingConsent: consent.trackingConsent,
-  analyticsConsent: consent.analyticsConsent,
-  personalizationConsent: consent.personalizationConsent,
-  crossDeviceConsent: consent.crossDeviceConsent,
+  trackingConsent: consent.trackingConsent
+  analyticsConsent: consent.analyticsConsent
+  personalizationConsent: consent.personalizationConsent
+  crossDeviceConsent: consent.crossDeviceConsent
   // Technical metadata
   viewport: {
-  width: window.innerWidth,
-  height: window.innerHeight,
-},
-  deviceType: deviceInfo.deviceType,
-      browser: deviceInfo.browser,
+  width: window.innerWidth
+  height: window.innerHeight }
+
+  deviceType: deviceInfo.deviceType
+      browser: deviceInfo.browser
       os: deviceInfo.os;
   };
     this.saveSessionToStorage();
     this.attemptCrossDeviceLinking();
-  private getConsentPreferences(): {
-  trackingConsent: boolean;
+  private getConsentPreferences(): { trackingConsent: boolean;
   analyticsConsent: boolean;
   personalizationConsent: boolean;
   crossDeviceConsent: boolean;
   const stored = localStorage.getItem(this.privacyConfig.consentStorageKey);
   if (stored) {
   try {
-  return JSON.parse(stored);
-} catch (e) {
-  console.warn('Failed to parse consent preferences');
+  return JSON.parse(stored) } catch (e) { console.warn('Failed to parse consent preferences');
   // Default to privacy-first approach
   return {
-  trackingConsent: false,
-  analyticsConsent: true, // Basic analytics usually allowed,
-  personalizationConsent: false,
-  crossDeviceConsent: false,
+  trackingConsent: false
+  analyticsConsent: true, // Basic analytics usually allowed
+  personalizationConsent: false
+  crossDeviceConsent: false }
 };
-  private getDeviceInfo(): {
-  deviceType: 'desktop' | 'mobile' | 'tablet';
+  private getDeviceInfo(): { deviceType: 'desktop' | 'mobile' | 'tablet' }
   browser: string;
   os: string;
   const userAgent = navigator.userAgent;
   let deviceType: 'desktop' | 'mobile' | 'tablet' = 'desktop';
   if (/tablet|ipad/i.test(userAgent)) {
   deviceType = 'tablet'
-  } else if (/mobile|iphone|android/i.test(userAgent)) {
+ else if (/mobile|iphone|android/i.test(userAgent)) {
       deviceType = 'mobile';
     let browser = 'unknown';
     if (userAgent.includes('Chrome')) browser = 'chrome';
@@ -230,22 +203,20 @@ export class SessionTrackingManager {
     else if (userAgent.includes('Android')) os = 'android';
     else if (userAgent.includes('iOS')) os = 'ios';
     return { deviceType, browser, os };
-  private getAttributionData(): {
-  utmSource?: string;
+  private getAttributionData(): { utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
   utmContent?: string;
   utmTerm?: string;
   const params = new URLSearchParams(window.location.search);
   return {
-  utmSource: params.get('utm_source') || undefined,
-  utmMedium: params.get('utm_medium') || undefined,
-  utmCampaign: params.get('utm_campaign') || undefined,
-  utmContent: params.get('utm_content') || undefined,
-  utmTerm: params.get('utm_term') || undefined,
+  utmSource: params.get('utm_source') || undefined
+  utmMedium: params.get('utm_medium') || undefined
+  utmCampaign: params.get('utm_campaign') || undefined
+  utmContent: params.get('utm_content') || undefined
+  utmTerm: params.get('utm_term') || undefined }
 };
-  private getLocationData(): { country?: string; region?: string; city?: string } | undefined {
-    // This would integrate with a geolocation service
+  private getLocationData(): { country?: string; region?: string; city?: string } | undefined { // This would integrate with a geolocation service
     // For MVP, return undefined to respect privacy
     return undefined;
   private attemptCrossDeviceLinking(): void {
@@ -258,34 +229,31 @@ export class SessionTrackingManager {
     const recentLogin = this.checkForRecentLogin();
     if (recentLogin) {
       linkingSignals.push({)
-  type: 'login',
-        strength: 1.0,
-        timestamp: Date.now(),
+  type: 'login'
+        strength: 1.0
+        timestamp: Date.now() }
         metadata: { loginTime: recentLogin }
       });
     // Check for behavioral signals (probabilistic linking)
     const behavioralSignals = this.checkBehavioralSignals();
     linkingSignals.push(...behavioralSignals);
-    if (linkingSignals.length > 0) {
-  const deviceIdentity: DeviceIdentity = {,
-  deviceId,
-  deviceType: this.currentSession.deviceType,
-  fingerprint: this.generateDeviceFingerprint(),
-  firstSeen: Date.now(),
-  lastSeen: Date.now(),
-  userAgent: this.currentSession.userAgent,
-  ipAddress: this.currentSession.ipHash,
-  linkedAt: Date.now(),
-  linkingSignals: [],
+    if (linkingSignals.length > 0) { const deviceIdentity: DeviceIdentity = {
+  deviceId
+  deviceType: this.currentSession.deviceType
+  fingerprint: this.generateDeviceFingerprint()
+  firstSeen: Date.now()
+  lastSeen: Date.now()
+  userAgent: this.currentSession.userAgent
+  ipAddress: this.currentSession.ipHash
+  linkedAt: Date.now()
+  linkingSignals: [] }
 };
       const linked = this.conversionArchitecture.linkDeviceIdentity(userId, deviceIdentity, linkingSignals);
-      if (linked) {
-  this.trackSessionEvent('cross_device_link', undefined, { )
-  deviceId,
-  confidence: this.calculateLinkingConfidence(linkingSignals),
+      if (linked) { this.trackSessionEvent('cross_device_link', undefined, { )
+  deviceId
+  confidence: this.calculateLinkingConfidence(linkingSignals) }
 });
-  private checkForRecentLogin(): number | null {
-  // Check if user logged in within the last few minutes
+  private checkForRecentLogin(): number | null { // Check if user logged in within the last few minutes
   const loginTimestamp = sessionStorage.getItem('last_login_time');
   if (loginTimestamp) {
   const loginTime = parseInt(loginTimestamp);
@@ -306,15 +274,14 @@ export class SessionTrackingManager {
   type: 'behavioral',
   strength: similarity,
   timestamp: Date.now(),
-  metadata: {
-  similarSession: session.sessionId,
+  metadata: {,
+  similarSession: session.sessionId }
   similarity
 });
     });
     return signals;
-  private generateBehavioralFingerprint(): string {
-  // Create a privacy-compliant behavioral fingerprint
-  const patterns = [;
+  private generateBehavioralFingerprint(): string { // Create a privacy-compliant behavioral fingerprint
+  const patterns = [
   this.currentSession?.viewport.width + 'x' + this.currentSession?.viewport.height,
   this.currentSession?.deviceType,
   this.currentSession?.browser,
@@ -322,7 +289,7 @@ export class SessionTrackingManager {
   ];
   return btoa(patterns.join('|')).substring(0, 16);
   private generateBehavioralFingerprintFromSession(session: EnhancedSession): string {,
-  const patterns = [;
+  const patterns = [
   session.viewport.width + 'x' + session.viewport.height,
   session.deviceType,
   session.browser,
@@ -336,21 +303,19 @@ export class SessionTrackingManager {
   for (let i = 0; i < length; i++) {
   if (fp1[i] === fp2[i]) matches++;
   return length > 0 ? matches / length : 0;
-  private calculateLinkingConfidence(signals: LinkingSignal): number {,
+  private calculateLinkingConfidence(signals: LinkingSignal): number { }
   if (signals.length === 0) return 0;
   let totalStrength = 0;
   let totalWeight = 0;
-  signals.forEach(signal => {)
+  signals.forEach(signal => { )
   const weight = signal.type === 'login' ? 1.0 : 0.5;
   totalStrength += signal.strength * weight;
-  totalWeight += weight;
-});
+  totalWeight += weight });
     return totalWeight > 0 ? totalStrength / totalWeight : 0;
   /**
    * Track page view
    */
-  public trackPageView(page: string, properties: Record<string, any> = {}): void {
-  if (!this.currentSession) return;
+  public trackPageView(page: string, properties: Record<string, any> = {}): void { if (!this.currentSession) return;
   this.updateLastActivity();
   this.currentSession.pageViews++;
   // Update engagement status
@@ -361,32 +326,30 @@ export class SessionTrackingManager {
   this.saveSessionToStorage();
   // Send to analytics client
   this.analyticsClient.getSummary({)
-  userId: parseInt(this.currentSession.userId) || undefined,
+  userId: parseInt(this.currentSession.userId) || undefined }
 });
   /**
    * Track conversion event
    */
-  public trackConversionEvent(eventType: string, value?: number, properties: Record<string, any> = {}): void {
-    if (!this.currentSession) return;
+  public trackConversionEvent(eventType: string, value?: number, properties: Record<string, any> = {}): void { if (!this.currentSession) return;
     this.updateLastActivity();
     this.currentSession.conversionEvents++;
     this.currentSession.engaged = true;
     this.currentSession.bounced = false;
     this.trackSessionEvent('conversion', undefined, {)
-  eventType,
-      value,
+  eventType
+      value }
       ...properties
     });
     this.saveSessionToStorage();
   /**
    * Update consent preferences
    */
-  public updateConsentPreferences(consent: {)
+  public updateConsentPreferences(consent: { )
   trackingConsent?: boolean;
   analyticsConsent?: boolean;
   personalizationConsent?: boolean;
-  crossDeviceConsent?: boolean;
-}): void {
+  crossDeviceConsent?: boolean }): void {
     if (!this.currentSession) return;
     // Update current session
     Object.assign(this.currentSession, consent);
@@ -419,49 +382,37 @@ export class SessionTrackingManager {
   public getCurrentSessionAnalytics(): Partial<SessionAnalytics> {
     if (!this.currentSession) return {};
     const duration = Date.now() - this.currentSession.startTime;
-    return {
-  totalSessions: 1,
-  uniqueUsers: 1,
-  averageSessionDuration: duration,
-  averagePagesPerSession: this.currentSession.pageViews,
-  bounceRate: this.currentSession.bounced ? 100 : 0,
-  conversionRate: this.currentSession.conversionEvents > 0 ? 100 : 0,
-  crossDeviceUsers: this.currentSession.crossDeviceSessionId ? 1 : 0,
-  sessionsWithConsent: this.currentSession.analyticsConsent ? 1 : 0,
+    return { totalSessions: 1
+  uniqueUsers: 1
+  averageSessionDuration: duration
+  averagePagesPerSession: this.currentSession.pageViews
+  bounceRate: this.currentSession.bounced ? 100 : 0
+  conversionRate: this.currentSession.conversionEvents > 0 ? 100 : 0
+  crossDeviceUsers: this.currentSession.crossDeviceSessionId ? 1 : 0
+  sessionsWithConsent: this.currentSession.analyticsConsent ? 1 : 0
   deviceBreakdown: {
-  [this.currentSession.deviceType]: 1,
-},
-  sourceBreakdown: {
-  [this.currentSession.utmSource || 'direct']: 1,
+  [this.currentSession.deviceType]: 1 }
+
+  sourceBreakdown: { [this.currentSession.utmSource || 'direct']: 1 }
 };
   // Private helper methods
-  private setupHeartbeat(): void {
-    this.heartbeatTimer = setInterval(() => {
-      this.updateLastActivity();
-    }, this.heartbeatInterval);
-  private bindVisibilityEvents(): void {
-    document.addEventListener('visibilitychange', () => {
+  private setupHeartbeat(): void { this.heartbeatTimer = setInterval(() => {
+      this.updateLastActivity() }, this.heartbeatInterval);
+  private bindVisibilityEvents(): void { document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        this.endSession();
-      } else {
-        this.updateLastActivity();
-    });
-    window.addEventListener('beforeunload', () => {
-      this.endSession();
-    });
-  private trackSessionEvent(type: SessionEventType, page?: string, properties: Record<string, any> = {}): void {
-  const event: SessionEvent = {,
-  sessionId: this.currentSession?.sessionId || 'unknown',
-  timestamp: Date.now(),
-  type,
-  page,
+        this.endSession() } else { this.updateLastActivity() });
+    window.addEventListener('beforeunload', () => { this.endSession() });
+  private trackSessionEvent(type: SessionEventType, page?: string, properties: Record<string, any> = {}): void { const event: SessionEvent = {
+  sessionId: this.currentSession?.sessionId || 'unknown'
+  timestamp: Date.now()
+  type
+  page }
   properties
 };
     this.sessionEvents.push(event);
     // Keep only recent events in memory
-    if (this.sessionEvents.length > 1000) {
-  this.sessionEvents = this.sessionEvents.slice(-500);
-  private updateLastActivity(): void {,
+    if (this.sessionEvents.length > 1000) { this.sessionEvents = this.sessionEvents.slice(-500);
+  private updateLastActivity(): void {
   if (this.currentSession) {
   this.currentSession.lastActivity = Date.now();
   // Check for engagement (>30 seconds)
@@ -469,18 +420,15 @@ export class SessionTrackingManager {
   if (duration > 30000) {
   this.currentSession.engaged = true;
   this.currentSession.bounced = false;
-  private saveSessionToStorage(): void {,
+  private saveSessionToStorage(): void {
   if (this.currentSession && this.currentSession.analyticsConsent) {
   sessionStorage.setItem(this.privacyConfig.sessionStorageKey, JSON.stringify(this.currentSession));
-  private getStoredSession(): EnhancedSession | null {,
+  private getStoredSession(): EnhancedSession | null { }
   const stored = sessionStorage.getItem(this.privacyConfig.sessionStorageKey);
-  if (stored) {
-  try {
-  return JSON.parse(stored);
-} catch (e) {
-  console.warn('Failed to parse stored session');
+  if (stored) { try {
+  return JSON.parse(stored) } catch (e) { console.warn('Failed to parse stored session');
   return null;
-  private isSessionValid(session: EnhancedSession): boolean {,
+  private isSessionValid(session: EnhancedSession): boolean {
   const now = Date.now();
   const age = now - session.lastActivity;
   return age < this.sessionTimeout && (now - session.startTime) < this.privacyConfig.maxSessionAge;
@@ -492,7 +440,7 @@ export class SessionTrackingManager {
   if (this.currentSession?.analyticsConsent) {
   // Send session data to analytics backend
   this.analyticsClient.getSummary({)
-  userId: parseInt(this.currentSession.userId) || undefined,
+  userId: parseInt(this.currentSession.userId) || undefined }
 });
   // Utility methods
   private generateSessionId(): string {
@@ -511,11 +459,10 @@ export class SessionTrackingManager {
       crossDeviceId = `xdev_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
       localStorage.setItem(this.privacyConfig.crossDeviceStorageKey, crossDeviceId);
     return crossDeviceId;
-  private getHashedIP(): string {
-  // This would be provided by the server or a privacy-compliant service
+  private getHashedIP(): string { // This would be provided by the server or a privacy-compliant service
   return 'hashed_ip_placeholder';
   private generateDeviceFingerprint(): string {,
-  const components = [;
+  const components = [
   navigator.userAgent,
   navigator.language,
   screen.width + 'x' + screen.height,
@@ -523,7 +470,7 @@ export class SessionTrackingManager {
   ];
   return btoa(components.join('|')).substring(0, 32);
   // Export factory function for integration with Epic 1 analytics
-  export const createSessionTrackingManager = (analyticsClient: AnalyticsClient, conversionArchitecture: ConversionArchitectureManager): SessionTrackingManager => {,
+  export const createSessionTrackingManager = (analyticsClient: AnalyticsClient, conversionArchitecture: ConversionArchitectureManager): SessionTrackingManager => { }
   return new SessionTrackingManager(analyticsClient, conversionArchitecture);
 };
 

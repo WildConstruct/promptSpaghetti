@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface MarketplaceTemplate {
-    id: string;
+}
+export interface MarketplaceTemplate { id: string;
     title: string;
     description: string;
     thumbnailUrl?: string;
@@ -25,11 +25,12 @@ export interface MarketplaceTemplate {
     stats: {
         downloads: number;
         views: number;
-        likes: number;
+        likes: number }
 }
     };
     createdAt: Date;
     updatedAt: Date;
+}
 }
 interface MarketplaceCardProps {
     template: MarketplaceTemplate;
@@ -44,4 +45,5 @@ interface MarketplaceCardProps {
 export declare const MarketplaceCard: React.FC<MarketplaceCardProps>;
 export default MarketplaceCard;
 //# sourceMappingURL=MarketplaceCard.d.ts.map
+}
 }

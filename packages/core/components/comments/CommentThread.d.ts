@@ -6,6 +6,7 @@ import React from 'react';
 import { Comment } from '../../types/workspace';
 
 }
+}
 interface CommentThreadProps {
     comment: Comment;
     workspaceId: string;
@@ -20,4 +21,5 @@ interface CommentThreadProps {
 export declare const CommentThread: React.FC<CommentThreadProps>;
 export default CommentThread;
 //# sourceMappingURL=CommentThread.d.ts.map
+}
 }

@@ -254,26 +254,7 @@ export const performanceTargets = {
                                                                                 /**
                                                                                  * Environment-specific target adjustments
                                                                                  */
-                                                                                const: environmentAdjustments
-                                                                            } < string, number
-                                                                        } >> 
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+                                                                                const: environmentAdjustments } < string, number } >>  } } } } } } } } } } } } } } } } }
 }, { development: { 
 // More lenient targets for development environment
 multiplier_warning: , 1.5: , multiplier_critical: , 2.0: , }, staging: { 
@@ -363,28 +344,34 @@ export const deviceAdjustments = {
                                         ;
                                         passed: boolean;
                                         score: number;
-                                        violations: Array;
-                                        recommendations: string;
-                                        const targets = getAdjustedTargets(config);
-                                        const violations = [];
-                                        let score = 100;
-                                        for (const [kpiId, current] of Object.entries(currentMetrics)) {
-                                            const target = targets[kpiId];
-                                            if (!target)
-                                                continue;
-                                            if (current > target.critical) {
-                                                violations.push({});
-                                                kpiId,
-                                                    current,
-                                                    target;
-                                                target.target,
-                                                    severity;
-                                                'critical',
-                                                ;
-                                            }
+                                        violations: Array < {};
+                                        kpiId: string;
+                                        current: number;
+                                        target: number;
+                                        severity: 'warning' | 'critical',
+                                        ;
+                                    }
+                                     > ;
+                                    recommendations: string;
+                                    const targets = getAdjustedTargets(config);
+                                    const violations = [];
+                                    let score = 100;
+                                    for (const [kpiId, current] of Object.entries(currentMetrics)) {
+                                        const target = targets[kpiId];
+                                        if (!target)
+                                            continue;
+                                        if (current > target.critical) {
+                                            violations.push({});
+                                            kpiId,
+                                                current,
+                                                target;
+                                            target.target,
+                                                severity;
+                                            'critical',
                                             ;
-                                            score -= 20;
                                         }
+                                        ;
+                                        score -= 20;
                                     }
                                 }
                             }

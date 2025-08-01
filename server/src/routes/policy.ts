@@ -14,32 +14,34 @@ import {
   PolicyStatus,
   PolicyEvaluationContext,
   ComplianceFramework
-} from '../../../packages/core/services/PolicyManagement';
+ from '../../../packages/core/services/PolicyManagement';
 
 // Request/Response Types
-}
-}
+
+
+
 interface CreatePolicyRequest {
   Body: Omit<UnifiedPolicy, 'id' | 'metadata'>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UpdatePolicyRequest {
   Params: { policyId: string };
   Body: Partial<UnifiedPolicy>;
-}
 
-}
-}
+
+
+
 interface DeletePolicyRequest {
   Params: { policyId: string };
-}
 
-}
-}
+
+
+
 interface GetPoliciesRequest {
   Querystring: {
     domain?: PolicyDomain;
@@ -49,13 +51,14 @@ interface GetPoliciesRequest {
     limit?: number;
     offset?: number;
     search?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface EvaluatePolicyRequest {
   Body: {
     entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
@@ -65,8 +68,9 @@ interface EvaluatePolicyRequest {
       type: string;
       parameters: Record<string, any>;
       riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-}
-}
+
+
+
     };
     contentContext?: {
       historicalPeriod?: string;
@@ -76,13 +80,13 @@ interface EvaluatePolicyRequest {
     };
     additionalContext?: Record<string, any>;
   };
-}
 
-}
-}
+
+
+
 interface ComplianceReportRequest {
   Params: { framework: ComplianceFramework };
-}
+
 
 /**
  * Register policy management routes
@@ -100,7 +104,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
     const authHeader = request.headers.authorization;
     if (!authHeader) {
       return reply.code(401).send({ error: 'Authorization header required' });
-    }
+
     
     // Mock user extraction - in production, decode JWT token
     (request as any).user = {
@@ -130,7 +134,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
         limit = 50, 
         offset = 0, 
         search 
-      } = request.query;
+ = request.query;
 
       let policies = policyManager.getPolicies({
         domain,
@@ -147,7 +151,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
           policy.description.toLowerCase().includes(searchLower) ||
           policy.metadata.tags.some(tag => tag.toLowerCase().includes(searchLower))
         );
-      }
+
 
       // Apply pagination
       const total = policies.length;
@@ -160,15 +164,15 @@ export async function policyRoutes(fastify: FastifyInstance) {
           limit,
           offset,
           hasMore: offset + limit < total
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get policies:', error);
       return reply.code(500).send({ 
         error: 'Failed to retrieve policies',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -181,16 +185,16 @@ export async function policyRoutes(fastify: FastifyInstance) {
       
       if (!policy) {
         return reply.code(404).send({ error: 'Policy not found' });
-      }
+
 
       return { policy };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get policy:', error);
       return reply.code(500).send({ 
         error: 'Failed to retrieve policy',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -203,7 +207,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
       // Check permissions
       if (!user.permissions.includes('policy:write')) {
         return reply.code(403).send({ error: 'Insufficient permissions' });
-      }
+
 
       const policyData = request.body;
       
@@ -212,7 +216,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
         return reply.code(400).send({ 
           error: 'Missing required fields: name, domain, type' 
         });
-      }
+
 
       const policy = await policyManager.createPolicy(policyData, user.id);
 
@@ -223,13 +227,13 @@ export async function policyRoutes(fastify: FastifyInstance) {
       });
 
       return reply.code(201).send({ policy });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to create policy:', error);
       return reply.code(500).send({ 
         error: 'Failed to create policy',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -242,7 +246,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
       // Check permissions
       if (!user.permissions.includes('policy:write')) {
         return reply.code(403).send({ error: 'Insufficient permissions' });
-      }
+
 
       const { policyId } = request.params;
       const updates = request.body;
@@ -257,17 +261,17 @@ export async function policyRoutes(fastify: FastifyInstance) {
       });
 
       return { policy };
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.code(404).send({ error: 'Policy not found' });
-      }
+
       
       fastify.log.error('Failed to update policy:', error);
       return reply.code(500).send({ 
         error: 'Failed to update policy',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -280,7 +284,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
       // Check permissions
       if (!user.permissions.includes('policy:delete')) {
         return reply.code(403).send({ error: 'Insufficient permissions' });
-      }
+
 
       const { policyId } = request.params;
       
@@ -292,17 +296,17 @@ export async function policyRoutes(fastify: FastifyInstance) {
       });
 
       return reply.code(204).send();
-    } catch (error) {
+ catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {
         return reply.code(404).send({ error: 'Policy not found' });
-      }
+
       
       fastify.log.error('Failed to delete policy:', error);
       return reply.code(500).send({ 
         error: 'Failed to delete policy',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -318,7 +322,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
         operation, 
         contentContext, 
         additionalContext 
-      } = request.body;
+ = request.body;
 
       // Build evaluation context
       const context: PolicyEvaluationContext = {
@@ -332,12 +336,12 @@ export async function policyRoutes(fastify: FastifyInstance) {
           userAgent: request.headers['user-agent'] || 'Unknown',
           geolocation: undefined,
           authenticationMethod: 'jwt'
-  }
+
         operation: {
           type: operation.type,
           parameters: operation.parameters,
           riskLevel: operation.riskLevel || 'MEDIUM'
-  }
+
         contentContext,
         additionalContext: additionalContext || {}
       };
@@ -363,15 +367,15 @@ export async function policyRoutes(fastify: FastifyInstance) {
           restricted: results.filter(r => r.result === 'RESTRICT').length,
           escalated: results.filter(r => r.result === 'ESCALATE').length,
           reviewRequired: results.filter(r => r.metadata.reviewRequired).length
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Policy evaluation failed:', error);
       return reply.code(500).send({ 
         error: 'Policy evaluation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -383,8 +387,8 @@ export async function policyRoutes(fastify: FastifyInstance) {
       entityType?: string; 
       limit?: number; 
       offset?: number;
-    } 
-  }>('/policies/evaluations', async (request, reply) => {
+ 
+>('/policies/evaluations', async (request, reply) => {
     try {
       const { entityId, entityType, limit = 50, offset = 0 } = request.query;
 
@@ -399,15 +403,15 @@ export async function policyRoutes(fastify: FastifyInstance) {
           limit,
           offset,
           hasMore: false
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get evaluation history:', error);
       return reply.code(500).send({ 
         error: 'Failed to retrieve evaluation history',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -420,8 +424,8 @@ export async function policyRoutes(fastify: FastifyInstance) {
       entityType?: string;
       limit?: number; 
       offset?: number;
-    } 
-  }>('/policies/violations', async (request, reply) => {
+ 
+>('/policies/violations', async (request, reply) => {
     try {
       const { resolved, severity, entityType, limit = 50, offset = 0 } = request.query;
 
@@ -436,15 +440,15 @@ export async function policyRoutes(fastify: FastifyInstance) {
           limit,
           offset,
           hasMore: false
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get violations:', error);
       return reply.code(500).send({ 
         error: 'Failed to retrieve violations',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -458,7 +462,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
       // Check permissions
       if (!user.permissions.includes('policy:read')) {
         return reply.code(403).send({ error: 'Insufficient permissions' });
-      }
+
 
       const report = await policyManager.generateComplianceReport(framework);
 
@@ -469,13 +473,13 @@ export async function policyRoutes(fastify: FastifyInstance) {
       });
 
       return { report };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to generate compliance report:', error);
       return reply.code(500).send({ 
         error: 'Failed to generate compliance report',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -513,17 +517,17 @@ export async function policyRoutes(fastify: FastifyInstance) {
           updatedThisWeek: policies.filter(p => 
             Date.now() - p.metadata.updatedAt.getTime() < 7 * 24 * 60 * 60 * 1000
           ).length
-        }
+
       };
 
       return { statistics };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get statistics:', error);
       return reply.code(500).send({ 
         error: 'Failed to retrieve statistics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -535,8 +539,8 @@ export async function policyRoutes(fastify: FastifyInstance) {
       historicalPeriod: string;
       culturalContext: string;
       contentMetadata: Record<string, any>;
-    }
-  }>('/policies/vfx/historical-accuracy', async (request, reply) => {
+
+>('/policies/vfx/historical-accuracy', async (request, reply) => {
     try {
       const { templateId, historicalPeriod, culturalContext, contentMetadata } = request.body;
       
@@ -549,18 +553,18 @@ export async function policyRoutes(fastify: FastifyInstance) {
           ipAddress: request.ip,
           userAgent: request.headers['user-agent'] || 'Unknown',
           authenticationMethod: 'jwt'
-  }
+
         operation: {
           type: 'historical_accuracy_validation',
           parameters: contentMetadata,
           riskLevel: 'HIGH'
-  }
+
         contentContext: {
           historicalPeriod,
           culturalContext,
           accuracyLevel: 'STRICT',
           expertReviewed: false
-  }
+
         additionalContext: {}
       });
 
@@ -581,13 +585,13 @@ export async function policyRoutes(fastify: FastifyInstance) {
       };
 
       return { validation };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('VFX historical accuracy validation failed:', error);
       return reply.code(500).send({ 
         error: 'Historical accuracy validation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -598,15 +602,15 @@ export async function policyRoutes(fastify: FastifyInstance) {
       format: 'json' | 'yaml' | 'csv';
       domain?: PolicyDomain;
       status?: PolicyStatus;
-    } 
-  }>('/policies/export', async (request, reply) => {
+ 
+>('/policies/export', async (request, reply) => {
     try {
       const user = (request as any).user;
       
       // Check permissions
       if (!user.permissions.includes('policy:read')) {
         return reply.code(403).send({ error: 'Insufficient permissions' });
-      }
+
 
       const { format = 'json', domain, status } = request.query;
       
@@ -629,14 +633,14 @@ export async function policyRoutes(fastify: FastifyInstance) {
           
       default:
         return reply.code(400).send({ error: 'Invalid format specified' });
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error('Failed to export policies:', error);
       return reply.code(500).send({ 
         error: 'Failed to export policies',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Register error handler
@@ -654,6 +658,6 @@ export async function policyRoutes(fastify: FastifyInstance) {
   });
 
   fastify.log.info('Policy management routes registered');
-}
+
 
 export default policyRoutes;

@@ -1,6 +1,7 @@
 import React from 'react';
 
 }
+}
 interface CommentThreadProps {
     resourceId: string;
     resourceType: 'project' | 'resource' | 'node' | 'region';
@@ -18,4 +19,5 @@ interface CommentThreadProps {
 declare const CommentThread: React.FC<CommentThreadProps>;
 export default CommentThread;
 //# sourceMappingURL=CommentThread.d.ts.map
+}
 }

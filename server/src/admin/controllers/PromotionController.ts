@@ -21,7 +21,7 @@ import {
   Logger,
   BadRequestException,
   NotFoundException
-} from '@nestjs/common';
+ from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiTags,
@@ -29,15 +29,16 @@ import {
   ApiResponse,
   ApiQuery,
   ApiParam
-} from '@nestjs/swagger';
+ from '@nestjs/swagger';
 import { AdminAuthGuard } from '../guards/AdminAuthGuard';
 import { RequirePermissions } from '../decorators/RequirePermissions';
 import { PromotionSchedulingService } from '../../services/PromotionSchedulingService';
 import { AuditService } from '../../auth/services/AuditService';
 
 // Request/Response DTOs
-}
-}
+
+
+
 export interface CreatePromotionRequest {
   title: string;
   description?: string;
@@ -53,12 +54,13 @@ export interface CreatePromotionRequest {
   rotation_config: any;
   target_metrics?: any;
   ab_test_config?: any;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UpdatePromotionRequest {
   title?: string;
   description?: string;
@@ -66,23 +68,25 @@ export interface UpdatePromotionRequest {
   rotation_config?: any;
   target_metrics?: any;
   end_date?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PromotionPreviewRequest {
   content_ids: string[];
   slot_id: string;
   rotation_config?: any;
   ab_test_config?: any;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PromotionPreviewResponse {
   schedule: {
     id: string;
@@ -92,8 +96,9 @@ export interface PromotionPreviewResponse {
     start_date: Date;
     end_date: Date;
     status: string;
-}
-}
+
+
+
   };
   content: Array<{
     id: string;
@@ -103,7 +108,7 @@ export interface PromotionPreviewResponse {
     rating: number;
     downloads: number;
     performance_score: number;
-  }>;
+>;
   rotation_config: any;
   predicted_performance: {
     estimated_impressions: number;
@@ -113,10 +118,10 @@ export interface PromotionPreviewResponse {
     confidence_level: number;
   };
   ab_test_config?: any;
-}
 
-}
-}
+
+
+
 export interface PromotionDashboard {
   active_promotions: number;
   total_impressions: number;
@@ -126,9 +131,10 @@ export interface PromotionDashboard {
   top_performing_slots: any[];
   recent_promotions: any[];
   performance_trends: any[];
-}
-}
-}
+
+
+
+
 
 @ApiTags('admin/promotions')
 @ApiBearerAuth()
@@ -170,7 +176,7 @@ export class PromotionController {
       recent_promotions: activePromotions.schedules.slice(0, 10),
       performance_trends: performanceMetrics.trends || []
     };
-  }
+
 
   // Promotion Slots Management
 
@@ -179,7 +185,7 @@ export class PromotionController {
   @RequirePermissions(['admin:promotion:read'])
   async getPromotionSlots() {
     return this.promotionService.getPromotionSlots();
-  }
+
 
   @Get('slots/:id')
   @ApiOperation({ summary: 'Get specific promotion slot' })
@@ -189,9 +195,9 @@ export class PromotionController {
     const slot = await this.promotionService.getPromotionSlot(slotId);
     if (!slot) {
       throw new NotFoundException(`Promotion slot ${slotId} not found`);
-    }
+
     return slot;
-  }
+
 
   // Promotion Schedules Management
 
@@ -219,7 +225,7 @@ export class PromotionController {
       page: page ? parseInt(page) : undefined,
       limit: limit ? parseInt(limit) : undefined
     });
-  }
+
 
   @Get('schedules/:id')
   @ApiOperation({ summary: 'Get specific promotion schedule' })
@@ -229,9 +235,9 @@ export class PromotionController {
     const schedule = await this.promotionService.getPromotionSchedule(scheduleId);
     if (!schedule) {
       throw new NotFoundException(`Promotion schedule ${scheduleId} not found`);
-    }
+
     return schedule;
-  }
+
 
   @Post('schedules')
   @ApiOperation({ summary: 'Create new promotion schedule' })
@@ -243,7 +249,7 @@ export class PromotionController {
     // Validate required fields
     if (!request.title || !request.slot_id || !request.start_date || !request.end_date) {
       throw new BadRequestException('Missing required fields: title, slot_id, start_date, end_date');
-    }
+
 
     const schedule = await this.promotionService.createPromotionSchedule(
       {
@@ -254,13 +260,13 @@ export class PromotionController {
         status: 'DRAFT',
         created_by: userId,
         metadata: {}
-  }
+
       userId
     );
 
     this.logger.log(`Promotion schedule created: ${schedule.id} by ${userId}`);
     return schedule;
-  }
+
 
   @Put('schedules/:id')
   @ApiOperation({ summary: 'Update promotion schedule' })
@@ -274,7 +280,7 @@ export class PromotionController {
     const updates: any = { ...request };
     if (request.end_date) {
       updates.end_date = new Date(request.end_date);
-    }
+
 
     const schedule = await this.promotionService.updatePromotionSchedule(
       scheduleId,
@@ -283,7 +289,7 @@ export class PromotionController {
     );
 
     return schedule;
-  }
+
 
   @Delete('schedules/:id')
   @ApiOperation({ summary: 'Delete promotion schedule' })
@@ -303,7 +309,7 @@ export class PromotionController {
     });
 
     return { success: true };
-  }
+
 
   // Promotion Control Actions
 
@@ -329,7 +335,7 @@ export class PromotionController {
     });
 
     return schedule;
-  }
+
 
   @Post('schedules/:id/pause')
   @ApiOperation({ summary: 'Pause promotion schedule' })
@@ -353,7 +359,7 @@ export class PromotionController {
     });
 
     return schedule;
-  }
+
 
   @Post('schedules/:id/stop')
   @ApiOperation({ summary: 'Stop promotion schedule' })
@@ -377,7 +383,7 @@ export class PromotionController {
     });
 
     return schedule;
-  }
+
 
   // Content Selection and Preview
 
@@ -398,7 +404,7 @@ export class PromotionController {
       content_details: contentDetails,
       selection_criteria: criteria
     };
-  }
+
 
   @Post('preview')
   @ApiOperation({ summary: 'Preview promotion before scheduling' })
@@ -412,7 +418,7 @@ export class PromotionController {
     const slot = await this.promotionService.getPromotionSlot(request.slot_id);
     if (!slot) {
       throw new BadRequestException(`Invalid slot ID: ${request.slot_id}`);
-    }
+
 
     // Get content details
     const contentDetails = await this.getContentDetails(request.content_ids);
@@ -433,13 +439,13 @@ export class PromotionController {
         start_date: new Date(),
         end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week
         status: 'PREVIEW'
-  }
+
       content: contentDetails,
       rotation_config: request.rotation_config || {},
       predicted_performance: predictedPerformance,
       ab_test_config: request.ab_test_config
     };
-  }
+
 
   // Performance and Analytics
 
@@ -459,7 +465,7 @@ export class PromotionController {
       startDate ? new Date(startDate) : undefined,
       endDate ? new Date(endDate) : undefined
     );
-  }
+
 
   @Get('analytics/performance-trends')
   @ApiOperation({ summary: 'Get promotion performance trends' })
@@ -467,14 +473,14 @@ export class PromotionController {
   @RequirePermissions(['admin:promotion:read'])
   async getPerformanceTrends(@Query('period') period = '30d') {
     return this.getPromotionTrends(period);
-  }
+
 
   @Get('analytics/slot-utilization')
   @ApiOperation({ summary: 'Get slot utilization analytics' })
   @RequirePermissions(['admin:promotion:read'])
   async getSlotUtilization() {
     return this.getSlotUtilizationMetrics();
-  }
+
 
   // Templates
 
@@ -483,7 +489,7 @@ export class PromotionController {
   @RequirePermissions(['admin:promotion:read'])
   async getPromotionTemplates() {
     return this.promotionService.getPromotionTemplates();
-  }
+
 
   @Post('templates')
   @ApiOperation({ summary: 'Create promotion template' })
@@ -493,7 +499,7 @@ export class PromotionController {
     @Query('user_id') userId: string
   ) {
     return this.promotionService.createPromotionTemplate(templateData, userId);
-  }
+
 
   // Bulk Operations
 
@@ -520,7 +526,7 @@ export class PromotionController {
       failed: results.filter(r => r.status === 'rejected').length,
       results
     };
-  }
+
 
   @Post('schedules/bulk/pause')
   @ApiOperation({ summary: 'Pause multiple promotion schedules' })
@@ -545,7 +551,7 @@ export class PromotionController {
       failed: results.filter(r => r.status === 'rejected').length,
       results
     };
-  }
+
 
   // Helper methods
 
@@ -561,7 +567,7 @@ export class PromotionController {
       downloads: Math.floor(Math.random() * 1000) + 100,
       performance_score: Math.floor(Math.random() * 30) + 70
     }));
-  }
+
 
   private async predictPromotionPerformance(
     contentIds: string[],
@@ -580,7 +586,7 @@ export class PromotionController {
       estimated_revenue: Math.floor(Math.random() * 3000) + 1000,
       confidence_level: 75 + Math.floor(Math.random() * 20)
     };
-  }
+
 
   private async getOverallPerformanceMetrics(): Promise<any> {
 
@@ -592,7 +598,7 @@ export class PromotionController {
       average_ctr: 2.5,
       trends: []
     };
-  }
+
 
   private async getPromotionTrends(period: string): Promise<any> {
 
@@ -603,7 +609,7 @@ export class PromotionController {
       ctr_trend: [],
       conversion_trend: []
     };
-  }
+
 
   private async getSlotUtilizationMetrics(): Promise<any> {
 
@@ -612,5 +618,4 @@ export class PromotionController {
       slots: [],
       utilization_rates: {}
     };
-  }
-}
+

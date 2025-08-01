@@ -29,7 +29,7 @@ describe('NodeFactory', () => {
   label: 'Test Template',
           description: 'Test description',
           category: 'logic',
-          options: [,
+          options: [
             { label: 'Option 1', value: 'option1', weight: 1 }
           ]
       };
@@ -41,7 +41,7 @@ describe('NodeFactory', () => {
   const invalidTemplate = {
   id: 'invalid',
   type: 'invalid-type'
-} as any;
+ as any;
       const result = factory.registerTemplate(invalidTemplate);
       expect(result).toBe(false);
       expect(factory.getTemplate('invalid')).toBeUndefined();

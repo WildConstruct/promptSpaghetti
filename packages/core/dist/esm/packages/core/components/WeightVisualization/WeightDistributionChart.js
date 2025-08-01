@@ -8,19 +8,19 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useMemo, useState, useCallback } from 'react';
 // Professional color schemes for visualization
 const COLOR_SCHEMES = {
-    professional: [,
+    professional: [
         '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
         '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#6366f1'
     ],
-    cinema4d: [,
+    cinema4d: [
         '#ff7c00', '#4d9eff', '#00d4aa', '#ff4757', '#9c88ff',
         '#ffa502', '#2ed573', '#ff6b6b', '#5f27cd', '#00d2d3'
     ],
-    warm: [,
+    warm: [
         '#ff6b6b', '#ffa500', '#ff7f50', '#dc143c', '#ff1493',
         '#ff69b4', '#ffb347', '#ff8c00', '#ff4500', '#ff6347'
     ],
-    cool: [,
+    cool: [
         '#4169e1', '#00ced1', '#32cd32', '#20b2aa', '#4682b4',
         '#6495ed', '#00bfff', '#1e90ff', '#87ceeb', '#87cefa'
     ]
@@ -94,7 +94,7 @@ export const WeightDistributionChart = ({
                                 transform,
                                 transformOrigin,
                                 transition: `transform ${animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`
-                            } }), ", filter: isHovered ? 'brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.2))' : 'none', cursor: 'pointer' }} onMouseEnter=", () => handleOptionHover(option), "onMouseLeave=", () => handleOptionHover(null), "onClick=", () => handleOptionClick(option), "/>", showLabels && option.percentage > 5 && ()
+                            } }), ", filter: isHovered ? 'brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.2))' : 'none', cursor: 'pointer'; }} onMouseEnter=", () => handleOptionHover(option), "onMouseLeave=", () => handleOptionHover(null), "onClick=", () => handleOptionClick(option), "/>", showLabels && option.percentage > 5 && ()
                             < g >
                             _jsx("text", { x: labelX, y: labelY - 6, textAnchor: "middle", fontSize: "11", fontWeight: "500", fill: "#e5e7eb", style: { pointerEvents: 'none' }, children: option.text.length > 12 ? `${option.text.slice(0, 12)}...` : option.text }), showPercentages && ()
                             < text, "x=", labelX, "y=", labelY + 6, "textAnchor=\"middle\" fontSize=\"10\" fill=\"#9ca3af\" style=", { pointerEvents: 'none' }, ">", option.percentage.toFixed(1), "%"] }, option.id), ")}"] });
@@ -146,7 +146,7 @@ const BarChart = () => {
                     0.2,
                     1
                   ), filter ${animationDuration}ms`
-                            } }), ", filter: isHovered ? 'brightness(1.1) drop-shadow(0 2px 4px rgba(0,0,0,0.2))' : 'none', cursor: 'pointer' }} onMouseEnter=", () => handleOptionHover(option), "onMouseLeave=", () => handleOptionHover(null), "onClick=", () => handleOptionClick(option), "/>", _jsx("text", { x: -8, y: y + barHeight / 2, textAnchor: "end", fontSize: "11", fontWeight: "500", fill: "#e5e7eb", dominantBaseline: "middle", style: { pointerEvents: 'none' }, children: option.text.length > 10 ? `${option.text.slice(0, 10)}...` : option.text }), showPercentages && ()
+                            } }), ", filter: isHovered ? 'brightness(1.1) drop-shadow(0 2px 4px rgba(0,0,0,0.2))' : 'none', cursor: 'pointer'; }} onMouseEnter=", () => handleOptionHover(option), "onMouseLeave=", () => handleOptionHover(null), "onClick=", () => handleOptionClick(option), "/>", _jsx("text", { x: -8, y: y + barHeight / 2, textAnchor: "end", fontSize: "11", fontWeight: "500", fill: "#e5e7eb", dominantBaseline: "middle", style: { pointerEvents: 'none' }, children: option.text.length > 10 ? `${option.text.slice(0, 10)}...` : option.text }), showPercentages && ()
                             < text, "x=", barWidth + 8, "y=", y + barHeight / 2, "textAnchor=\"start\" fontSize=\"10\" fill=\"#9ca3af\" dominantBaseline=\"middle\" style=", { pointerEvents: 'none' }, ">", option.percentage.toFixed(1), "%"] }, option.id);
             })] });
 };

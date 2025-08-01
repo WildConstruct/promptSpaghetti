@@ -56,7 +56,7 @@ describe('OAuth Security Enhancements', () => {
           authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
           tokenUrl: 'https://oauth2.googleapis.com/token',
           userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
-  }
+
         github: {
           clientId: 'github-client-id',
           clientSecret: 'github-client-secret',
@@ -65,7 +65,7 @@ describe('OAuth Security Enhancements', () => {
           authorizationUrl: 'https://github.com/login/oauth/authorize',
           tokenUrl: 'https://github.com/login/oauth/access_token',
           userInfoUrl: 'https://api.github.com/user'
-  }
+
         microsoft: {
           clientId: 'microsoft-client-id',
           clientSecret: 'microsoft-client-secret',
@@ -74,8 +74,8 @@ describe('OAuth Security Enhancements', () => {
           authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
           tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
           userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
-        }
-      }
+
+
     };
 
     // Create mocked services
@@ -299,7 +299,7 @@ describe('OAuth Security Enhancements', () => {
           clientId: mockConfig.oauth.google.clientId,
           scopes: mockConfig.oauth.google.scopes,
           pkceUsed: true
-  }
+
         severity: 'LOW'
       });
     });
@@ -425,7 +425,7 @@ describe('OAuth Security Enhancements', () => {
           eventType: 'OAUTH_AUTHORIZATION_URL_GENERATED',
           details: expect.objectContaining({
             pkceUsed: true
-  }
+
   }
       );
     });

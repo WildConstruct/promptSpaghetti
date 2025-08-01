@@ -14,7 +14,8 @@ permissions: {
 ;
 theme: {
     variant: 'light' | 'dark' | 'auto';
-    density: 'compact' | 'comfortable' | 'spacious';
+    density: 'compact' | 'comfortable' | 'spacious',
+    ;
 }
 ;
 position: {
@@ -54,7 +55,8 @@ health: {
     database: 'healthy' | 'warning' | 'error';
     cache: 'healthy' | 'warning' | 'error';
     api: 'healthy' | 'warning' | 'error';
-    storage: 'healthy' | 'warning' | 'error';
+    storage: 'healthy' | 'warning' | 'error',
+    ;
 }
 ;
 uptime: number;

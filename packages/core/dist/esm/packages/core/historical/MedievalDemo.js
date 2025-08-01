@@ -163,7 +163,8 @@ export class MedievalDemoDatabase {
         clothing.push({
             id: 'medieval_peasant_male_tunic_001',
             type: 'garment',
-            content: 'A simple woolen tunic reaching to mid-thigh, made of coarse brown wool with minimal decoration. The sleeves are long and loose, practical for farm work.',
+            content: ,
+            'A simple woolen tunic reaching to mid-thigh, made of coarse brown wool with minimal decoration. The sleeves are long and loose, practical for farm work.': ,
             description: 'Basic peasant tunic for daily wear',
             metadata: {
                 era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL],
@@ -192,7 +193,7 @@ export class MedievalDemoDatabase {
                         value: 'patched and mended',
                         probability: 0.6,
                         era_specific: true,
-                    },
+                    }
                 ],
             },
             constraints: [],
@@ -208,7 +209,8 @@ export class MedievalDemoDatabase {
         clothing.push({
             id: 'medieval_noble_female_gown_001',
             type: 'garment',
-            content: 'An elegant gown of fine blue wool with fitted bodice and flowing skirt reaching to the ankles. Decorated with embroidered trim and silver thread.',
+            content: ,
+            'An elegant gown of fine blue wool with fitted bodice and flowing skirt reaching to the ankles. Decorated with embroidered trim and silver thread.': ,
             description: "Noble lady's formal gown",
             metadata: {
                 era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
@@ -230,7 +232,7 @@ export class MedievalDemoDatabase {
                         value: 'silk imported from Byzantine',
                         probability: 0.2,
                         era_specific: true,
-                    },
+                    }
                 ],
             },
             constraints: [],
@@ -247,7 +249,8 @@ export class MedievalDemoDatabase {
         clothing.push({
             id: 'medieval_monk_robe_001',
             type: 'garment',
-            content: 'A simple brown woolen robe with wide sleeves and a rope belt. The fabric is rough and undyed, symbolizing humility and poverty.',
+            content: ,
+            'A simple brown woolen robe with wide sleeves and a rope belt. The fabric is rough and undyed, symbolizing humility and poverty.': ,
             description: "Benedictine monk's habit",
             metadata: {
                 era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL],
@@ -286,7 +289,8 @@ export class MedievalDemoDatabase {
         materials.push({
             id: 'medieval_wool_material_001',
             type: 'material',
-            content: "Coarse woolen cloth woven from sheep's wool, the most common fabric in medieval Europe. Available in natural colors and dyed with local plants.",
+            content: ,
+            "Coarse woolen cloth woven from sheep's wool, the most common fabric in medieval Europe. Available in natural colors and dyed with local plants.": ,
             description: 'Basic wool fabric for medieval clothing',
             metadata: {
                 era: [MEDIEVAL_PERIODS.EARLY_MEDIEVAL, MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
@@ -314,7 +318,7 @@ export class MedievalDemoDatabase {
                         probability: 0.6,
                         era_specific: true,
                         social_class: ['peasant'],
-                    },
+                    }
                 ],
             },
             constraints: [],
@@ -323,7 +327,8 @@ export class MedievalDemoDatabase {
         materials.push({
             id: 'medieval_linen_material_001',
             type: 'material',
-            content: 'Fine linen cloth woven from flax fibers, prized for undergarments and shirts. Naturally white or cream colored, sometimes bleached.',
+            content: ,
+            'Fine linen cloth woven from flax fibers, prized for undergarments and shirts. Naturally white or cream colored, sometimes bleached.': ,
             description: 'Linen fabric for medieval undergarments',
             metadata: {
                 era: [MEDIEVAL_PERIODS.HIGH_MEDIEVAL, MEDIEVAL_PERIODS.LATE_MEDIEVAL],
@@ -369,7 +374,7 @@ export class MedievalDemoDatabase {
                         value: 'bronze buckle with decoration',
                         probability: 0.3,
                         social_class: ['merchant', 'noble'],
-                    },
+                    }
                 ],
             },
             constraints: [],
@@ -409,7 +414,7 @@ export const MEDIEVAL_DEMO_CONSTRAINTS = [
         rule: 'era_compatibility',
         eras: [
             { name: 'High Medieval', period: { start: 1000, end: 1300 }, region: ['Europe'], accuracy: 'high' },
-            { name: 'Late Medieval', period: { start: 1300, end: 1500 }, region: ['Europe'], accuracy: 'high' },
+            { name: 'Late Medieval', period: { start: 1300, end: 1500 }, region: ['Europe'], accuracy: 'high' }
         ],
         enforcement: 'strict',
         message: 'Clothing items should match medieval period accuracy',
@@ -419,7 +424,7 @@ export const MEDIEVAL_DEMO_CONSTRAINTS = [
         id: 'medieval-material-availability',
         rule: 'material_availability',
         eras: [
-            { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' },
+            { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' }
         ],
         enforcement: 'warning',
         message: 'Some materials may have been rare or unavailable in medieval Europe',
@@ -429,12 +434,12 @@ export const MEDIEVAL_DEMO_CONSTRAINTS = [
         id: 'social-class-restrictions',
         rule: 'social_class_appropriateness',
         eras: [
-            { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' },
+            { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' }
         ],
         social_classes: ['peasant', 'artisan', 'merchant', 'noble'],
         enforcement: 'suggestion',
         message: 'Consider social class appropriateness for clothing and accessories',
         historical_basis: 'Medieval society had strict hierarchies reflected in clothing and possessions',
-    },
+    }
 ];
 export default MedievalDemoDatabase;

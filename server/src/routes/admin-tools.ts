@@ -69,7 +69,7 @@ export async function adminToolsRoutes(
       resource: 'system',
       action: 'admin',
       allowSuperAdmin: true
-    }
+
   ]));
 
   /**
@@ -87,10 +87,9 @@ export async function adminToolsRoutes(
         metadata: {
           generatedAt: new Date().toISOString(),
           adminId: user.id
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting admin dashboard data:', error);
       
       return reply.code(500).send({
@@ -98,7 +97,7 @@ export async function adminToolsRoutes(
         error: 'Failed to get dashboard data',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -107,7 +106,7 @@ export async function adminToolsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof UserManagementActionSchema>
-  }>('/users/action', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/users/action', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const action = UserManagementActionSchema.parse(request.body);
       const user = (request.user as any);
@@ -123,8 +122,7 @@ export async function adminToolsRoutes(
         success: true,
         message: `User ${action.action} completed successfully`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error performing user action:', error);
       
       if (error instanceof z.ZodError) {
@@ -133,14 +131,14 @@ export async function adminToolsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to perform user action',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -149,7 +147,7 @@ export async function adminToolsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof BulkUserOperationSchema>
-  }>('/users/bulk-action', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/users/bulk-action', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const bulkOperation = BulkUserOperationSchema.parse(request.body);
       const user = (request.user as any);
@@ -166,8 +164,7 @@ export async function adminToolsRoutes(
         data: result,
         message: `Bulk operation completed: ${result.success} successful, ${result.failed} failed`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error performing bulk user operation:', error);
       
       if (error instanceof z.ZodError) {
@@ -176,14 +173,14 @@ export async function adminToolsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to perform bulk operation',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -192,7 +189,7 @@ export async function adminToolsRoutes(
    */
   fastify.get<{
     Querystring: { category?: string }
-  }>('/config', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/config', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = request.query as { category?: string };
       const configurations = await adminToolsService.getSystemConfiguration(query.category);
@@ -203,10 +200,9 @@ export async function adminToolsRoutes(
         metadata: {
           totalConfigurations: configurations.length,
           categories: [...new Set(configurations.map(c => c.category))]
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting system configuration:', error);
       
       return reply.code(500).send({
@@ -214,7 +210,7 @@ export async function adminToolsRoutes(
         error: 'Failed to get system configuration',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -223,7 +219,7 @@ export async function adminToolsRoutes(
    */
   fastify.put<{
     Body: z.infer<typeof SystemConfigurationSchema>
-  }>('/config', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/config', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const configData = SystemConfigurationSchema.parse(request.body);
       const user = (request.user as any);
@@ -245,8 +241,7 @@ export async function adminToolsRoutes(
         success: true,
         message: `System configuration for ${configData.category} updated successfully`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error updating system configuration:', error);
       
       if (error instanceof z.ZodError) {
@@ -255,14 +250,14 @@ export async function adminToolsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to update system configuration',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -280,10 +275,9 @@ export async function adminToolsRoutes(
         metadata: {
           generatedAt: new Date().toISOString(),
           reportVersion: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting system health report:', error);
       
       return reply.code(500).send({
@@ -291,7 +285,7 @@ export async function adminToolsRoutes(
         error: 'Failed to get system health report',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -300,7 +294,7 @@ export async function adminToolsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof MaintenanceTaskSchema>
-  }>('/maintenance', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/maintenance', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const taskData = MaintenanceTaskSchema.parse(request.body);
       const user = (request.user as any);
@@ -321,8 +315,7 @@ export async function adminToolsRoutes(
         data: task,
         message: 'Maintenance task scheduled successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error scheduling maintenance task:', error);
       
       if (error instanceof z.ZodError) {
@@ -331,14 +324,14 @@ export async function adminToolsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to schedule maintenance task',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -347,7 +340,7 @@ export async function adminToolsRoutes(
    */
   fastify.get<{
     Querystring: z.infer<typeof QueryParamsSchema>
-  }>('/maintenance', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/maintenance', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = QueryParamsSchema.parse(request.query);
       
@@ -361,15 +354,14 @@ export async function adminToolsRoutes(
           totalPages: 0,
           hasNextPage: false,
           hasPreviousPage: false
-        }
+
       };
 
       return reply.send({
         success: true,
         ...tasks
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting maintenance tasks:', error);
       
       return reply.code(500).send({
@@ -377,7 +369,7 @@ export async function adminToolsRoutes(
         error: 'Failed to get maintenance tasks',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -386,7 +378,7 @@ export async function adminToolsRoutes(
    */
   fastify.get<{
     Querystring: z.infer<typeof QueryParamsSchema>
-  }>('/security/alerts', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/security/alerts', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = QueryParamsSchema.parse(request.query);
       
@@ -400,15 +392,14 @@ export async function adminToolsRoutes(
           totalPages: 0,
           hasNextPage: false,
           hasPreviousPage: false
-        }
+
       };
 
       return reply.send({
         success: true,
         ...alerts
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting security alerts:', error);
       
       return reply.code(500).send({
@@ -416,7 +407,7 @@ export async function adminToolsRoutes(
         error: 'Failed to get security alerts',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -425,7 +416,7 @@ export async function adminToolsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof SecurityAlertResolveSchema>
-  }>('/security/alerts/resolve', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/security/alerts/resolve', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const resolveData = SecurityAlertResolveSchema.parse(request.body);
       const user = (request.user as any);
@@ -437,8 +428,7 @@ export async function adminToolsRoutes(
         success: true,
         message: 'Security alert resolved successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error resolving security alert:', error);
       
       if (error instanceof z.ZodError) {
@@ -447,14 +437,14 @@ export async function adminToolsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to resolve security alert',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -466,8 +456,8 @@ export async function adminToolsRoutes(
       timeframe?: string;
       metricType?: string;
       limit?: number;
-    }
-  }>('/metrics', async (request: FastifyRequest, reply: FastifyReply) => {
+
+>('/metrics', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = request.query as { 
         timeframe?: string;
@@ -493,20 +483,19 @@ export async function adminToolsRoutes(
             timestamp: new Date(Date.now() - (i * 60 * 60 * 1000)).toISOString(),
             value: Math.floor(Math.random() * 1000)
           }))
-  }
+
         metadata: {
           timeframe,
           dataPoints: 24,
           generatedAt: new Date().toISOString()
-        }
+
       };
 
       return reply.send({
         success: true,
         data: metrics
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting system metrics:', error);
       
       return reply.code(500).send({
@@ -514,7 +503,7 @@ export async function adminToolsRoutes(
         error: 'Failed to get system metrics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -524,7 +513,7 @@ export async function adminToolsRoutes(
   fastify.get<{
     Params: { type: string };
     Querystring: { format?: string; dateRange?: string }
-  }>('/export/:type', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/export/:type', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { type } = request.params as { type: string };
       const query = request.query as { format?: string; dateRange?: string };
@@ -540,7 +529,7 @@ export async function adminToolsRoutes(
           error: 'Invalid export type',
           validTypes
         });
-      }
+
       
       // This would generate actual export data
       const exportData = {
@@ -557,8 +546,7 @@ export async function adminToolsRoutes(
       reply.header('Content-Disposition', `attachment; filename="${type}_export_${new Date().toISOString().split('T')[0]}.${format}"`);
       
       return reply.send(exportData);
-
-    } catch (error) {
+ catch (error) {
       console.error('Error exporting admin data:', error);
       
       return reply.code(500).send({
@@ -566,7 +554,7 @@ export async function adminToolsRoutes(
         error: 'Failed to export data',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -587,7 +575,7 @@ export async function adminToolsRoutes(
           securityAlerts: 'available',
           metricsCollection: 'available',
           dataExport: 'available'
-  }
+
         uptime: process.uptime(),
         environment: process.env.NODE_ENV || 'development'
       };
@@ -596,13 +584,11 @@ export async function adminToolsRoutes(
         success: true,
         data: status
       });
-
-    } catch (error) {
+ catch (error) {
       return reply.code(503).send({
         success: false,
         error: 'Admin tools service unhealthy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}

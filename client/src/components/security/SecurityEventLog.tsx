@@ -16,30 +16,32 @@ import {
   XCircle,
   ChevronDown,
   ExternalLink
-} from 'lucide-react';
+ from 'lucide-react';
 import { format } from 'date-fns';
-}
+
+
 interface SecurityEvent {
   id: string;,
-  timestamp: Date;
+  timestamp: Date;,
   severity: 'critical' | 'high' | 'medium' | 'low' | 'info';,
-  category: 'authentication' | 'authorization' | 'data_access' | 'system' | 'api' | 'network';
+  category: 'authentication' | 'authorization' | 'data_access' | 'system' | 'api' | 'network';,
   event_type: string;,
   description: string;
   source_ip?: string;
   user_id?: string;
   user_email?: string;
   resource: string;,
-  action: string;
+  action: string;,
   outcome: 'success' | 'failure' | 'blocked';
   metadata?: Record<string, unknown>;
   interface SecurityEventLogProps {
   onEventClick?: (event: SecurityEvent) => void;
-  initialFilters?: {
+  initialFilters?: {,
   severity?: string;
   category?: string;
   dateRange?: [Date, Date];
-}
+
+
 };
 const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   onEventClick, 
@@ -73,7 +75,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   resource: '/auth/login',
   action: 'LOGIN_ATTEMPT',
   outcome: 'blocked',
-}
+
         {
   id: 'evt-002',
   timestamp: new Date(Date.now() - 10 * 60 * 1000),
@@ -87,7 +89,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   resource: '/api/templates',
   action: 'GET_TEMPLATES',
   outcome: 'blocked',
-}
+
         {
   id: 'evt-003',
   timestamp: new Date(Date.now() - 15 * 60 * 1000),
@@ -101,7 +103,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   resource: '/admin/users',
   action: 'ACCESS_ADMIN_PANEL',
   outcome: 'blocked',
-}
+
         {
   id: 'evt-004',
   timestamp: new Date(Date.now() - 20 * 60 * 1000),
@@ -115,7 +117,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   resource: '/auth/login',
   action: 'LOGIN',
   outcome: 'success',
-}
+
         {
           id: 'evt-005',
           timestamp: new Date(Date.now() - 25 * 60 * 1000),
@@ -160,7 +162,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   bValue = bValue.toLowerCase();
   if (sortDirection === 'asc') {
   return aValue > bValue ? 1 : -1;
-} else {
+ else {
   return aValue < bValue ? 1 : -1;
 });
     return filtered;
@@ -194,12 +196,12 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   const handleSort = (field: keyof SecurityEvent) => {
   if (sortField === field) {
   setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-} else {
+ else {
       setSortField(field);
       setSortDirection('desc');
   };
   const handleExport = () => {
-    const csvContent = [;
+    const csvContent = [
       'Timestamp,Severity,Category,Event Type,Description,Source IP,User Email,Resource,Action,Outcome',
       ...filteredAndSortedEvents.map(event => [)
         format(event.timestamp, 'yyyy-MM-dd HH:mm:ss'),
@@ -207,7 +209,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
         event.category,
         event.event_type,
         `"${event.description}"`}
-}
+
         event.source_ip || '',
         event.user_email || '',
         event.resource,
@@ -280,9 +282,9 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
                       onChange={(e) => {
                         if (e.target.checked) {
                           setSelectedSeverity([...selectedSeverity, severity]);
-                        } else {
+ else {
                           setSelectedSeverity(selectedSeverity.filter(s => s !== severity));
-                      }}
+}
                     />
                     <span className="capitalize">{severity}</span>
                   </label>
@@ -300,9 +302,9 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
                       onChange={(e) => {
                         if (e.target.checked) {
                           setSelectedCategory([...selectedCategory, category]);
-                        } else {
+ else {
                           setSelectedCategory(selectedCategory.filter(c => c !== category));
-                      }}
+}
                     />
                     <span className="capitalize">{category.replace('_', ' ')}</span>
                   </label>

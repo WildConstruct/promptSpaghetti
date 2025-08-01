@@ -6,8 +6,7 @@
  * user skill assessment, and learning path optimization.
  */
 import { SkillLevel, SkillDomain, SkillLevelClassification, ContentSkillTag, UserSkillProfile, LearningGoal, ContentRecommendation, OptimizedLearningPath, ContentSuggestion, CommunitySkillFeedback, ValidationResult, SkillAssessmentEngine } from './SkillLevelTagging';
-export declare class SkillLevelTaggingService implements SkillAssessmentEngine {
-    private apiClient;
+export declare class SkillLevelTaggingService implements SkillAssessmentEngine { private apiClient;
     constructor(apiClient: any);
     analyzeContent(content: any): Promise<SkillLevelClassification>;
     classifyDifficulty(content: any, domain: SkillDomain): Promise<SkillLevel>;
@@ -19,11 +18,10 @@ export declare class SkillLevelTaggingService implements SkillAssessmentEngine {
     suggestNextContent(userId: string, currentContent: string): Promise<ContentSuggestion[]>;
     recommendLearningPath(userId: string, targetSkills: Array<{)
         domain: SkillDomain;
-        level: SkillLevel;
-    }>): Promise<string[]>;
+        level: SkillLevel }>): Promise<string[]>;
     optimizeLearningPath(userId: string, pathId: string): Promise<OptimizedLearningPath>;
     incorporateCommunityFeedback(contentId: string, feedback: CommunitySkillFeedback): Promise<void>;
-    submitSkillFeedback(userId: string, contentId: string, feedback: {)
+    submitSkillFeedback(userId: string, contentId: string, feedback: { )
         perceived_difficulty: number;
         level_appropriateness: 'too_easy' | 'just_right' | 'too_hard';
         suggested_level?: SkillLevel;
@@ -31,21 +29,18 @@ export declare class SkillLevelTaggingService implements SkillAssessmentEngine {
             helped_learn_skill: boolean;
             clear_explanations: boolean;
             good_examples: boolean;
-            would_recommend: boolean;
-        };
+            would_recommend: boolean };
         improvement_suggestions?: string[];
     }): Promise<void>;
     validateSkillTagging(contentId: string): Promise<ValidationResult>;
-    auditSkillClassifications(domain?: SkillDomain): Promise<{
-        total_content: number;
+    auditSkillClassifications(domain?: SkillDomain): Promise<{ total_content: number;
         classification_accuracy: number;
         community_consensus: number;
         issues_found: Array<{
             content_id: string;
             issue_type: string;
             severity: string;
-            description: string;
-        }>;
+            description: string }>;
     }>;
     private extractDifficultyFactors;
     private calculateBeginnerScore;

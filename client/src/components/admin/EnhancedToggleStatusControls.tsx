@@ -12,8 +12,9 @@ import {
   ToggleLeft, ToggleRight, Percent, Shield, AlertTriangle, 
   Settings, Zap, TrendingUp, Activity,
   RefreshCw, Pause, Play, CheckCircle
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface FeatureToggle {
   id: string;,
   key: string,
@@ -35,7 +36,8 @@ interface FeatureToggle {
   onOverrideClick?: (toggleId: string) => void;
   onEmergencyDisable?: (toggleId: string, reason: string) => void;
   compact?: boolean;
-  }
+
+
 
 const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> = ({
   toggle,
@@ -44,7 +46,7 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
   onOverrideClick,
   onEmergencyDisable,
   compact = false
-}
+
 }) => {
   const [showPercentageSlider, setShowPercentageSlider] = useState(false);
   const [showEmergencyConfirm, setShowEmergencyConfirm] = useState(false);
@@ -178,7 +180,7 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
   toggle.enabled
   ? 'bg-green-100 text-green-700 hover:bg-green-200',
   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-}`}
+`}
             disabled={toggle.hasActiveOverride}
           >
             {toggle.enabled ? ()

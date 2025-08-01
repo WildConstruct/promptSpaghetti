@@ -4,8 +4,8 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { NewDeviceDetectionService } from '../services/NewDeviceDetectionService';
 
-}
-}
+
+
 interface DetectDeviceRequest {
   deviceFingerprint: string;
   ipAddress?: string;
@@ -15,33 +15,36 @@ interface DetectDeviceRequest {
     city: string;
     latitude?: number;
     longitude?: number;
-}
-}
+
+
+
   };
   metadata?: {
     sessionId?: string;
     authMethod?: string;
   };
-}
 
-}
-}
+
+
+
 interface ApproveDeviceRequest {
   deviceFingerprint: string;
   approvalMethod: string;
   verificationCode?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RejectDeviceRequest {
   deviceFingerprint: string;
   reason: string;
-}
-}
-}
+
+
+
+
 
 export async function newDeviceDetectionRoutes(
   fastify: FastifyInstance,
@@ -50,17 +53,17 @@ export async function newDeviceDetectionRoutes(
   // Detect new device
   fastify.post<{
     Body: DetectDeviceRequest;
-  }>('/device/detect', {
+>('/device/detect', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: DetectDeviceRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { deviceFingerprint, location, metadata } = request.body;
 
@@ -73,7 +76,7 @@ export async function newDeviceDetectionRoutes(
         metadata: {
           ...metadata,
           loginTime: new Date()
-        }
+
       };
 
       const result = await detectionService.detectNewDevice(context);
@@ -82,29 +85,29 @@ export async function newDeviceDetectionRoutes(
         detection: result,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Device detection error:', error);
       reply.code(500).send({
         error: 'Failed to detect device',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Approve new device
   fastify.post<{
     Body: ApproveDeviceRequest;
-  }>('/device/approve', {
+>('/device/approve', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: ApproveDeviceRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { deviceFingerprint, approvalMethod, verificationCode } = request.body;
 
@@ -113,7 +116,7 @@ export async function newDeviceDetectionRoutes(
         // This would integrate with your verification service
         // For now, simplified implementation
         request.log.info('Verification code provided:', verificationCode);
-      }
+
 
       const success = await detectionService.approveDevice(
         userId,
@@ -128,35 +131,35 @@ export async function newDeviceDetectionRoutes(
           deviceFingerprint,
           timestamp: new Date().toISOString()
         };
-      } else {
+ else {
         reply.code(400).send({
           error: 'Failed to approve device',
           message: 'Device approval failed'
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       request.log.error('Device approval error:', error);
       reply.code(500).send({
         error: 'Failed to approve device',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Reject new device
   fastify.post<{
     Body: RejectDeviceRequest;
-  }>('/device/reject', {
+>('/device/reject', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: RejectDeviceRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { deviceFingerprint, reason } = request.body;
 
@@ -173,35 +176,35 @@ export async function newDeviceDetectionRoutes(
           deviceFingerprint,
           timestamp: new Date().toISOString()
         };
-      } else {
+ else {
         reply.code(400).send({
           error: 'Failed to reject device',
           message: 'Device rejection failed'
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       request.log.error('Device rejection error:', error);
       reply.code(500).send({
         error: 'Failed to reject device',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get device verification status
   fastify.get<{
     Params: { fingerprint: string };
-  }>('/device/:fingerprint/verification-status', {
+>('/device/:fingerprint/verification-status', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Params: { fingerprint: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { fingerprint } = request.params;
 
@@ -215,29 +218,29 @@ export async function newDeviceDetectionRoutes(
         status,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Verification status error:', error);
       reply.code(500).send({
         error: 'Failed to get verification status',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get recent new devices
   fastify.get<{
     Querystring: { days?: number };
-  }>('/device/recent-new', {
+>('/device/recent-new', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Querystring: { days?: number };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       if (!userId) {
         reply.code(401).send({ error: 'User not authenticated' });
         return;
-      }
+
 
       const { days = 30 } = request.query;
 
@@ -249,29 +252,29 @@ export async function newDeviceDetectionRoutes(
         timeframe: `${days} days`,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Recent devices error:', error);
       reply.code(500).send({
         error: 'Failed to get recent devices',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Get device detection statistics
   fastify.get<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>('/device/admin/detection-stats', {
+>('/device/admin/detection-stats', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { timeframe = 'week' } = request.query;
       
@@ -316,29 +319,29 @@ export async function newDeviceDetectionRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Detection statistics error:', error);
       reply.code(500).send({
         error: 'Failed to get detection statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Get users with multiple new devices
   fastify.get<{
     Querystring: { threshold?: number; days?: number };
-  }>('/device/admin/multi-device-users', {
+>('/device/admin/multi-device-users', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: { threshold?: number; days?: number };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { threshold = 5, days = 30 } = request.query;
 
@@ -374,13 +377,13 @@ export async function newDeviceDetectionRoutes(
         totalUsers: users.rows.length,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Multi-device users error:', error);
       reply.code(500).send({
         error: 'Failed to get multi-device users',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Health check
@@ -406,7 +409,7 @@ export async function newDeviceDetectionRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
@@ -414,7 +417,7 @@ export async function newDeviceDetectionRoutes(
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -451,44 +454,43 @@ export async function newDeviceDetectionRoutes(
           method: 'POST',
           description: 'Detect if a device is new and assess risk',
           auth: 'required'
-  }
+
         {
           path: '/device/approve',
           method: 'POST',
           description: 'Approve a new device after verification',
           auth: 'required'
-  }
+
         {
           path: '/device/reject',
           method: 'POST',
           description: 'Reject and block a suspicious device',
           auth: 'required'
-  }
+
         {
           path: '/device/:fingerprint/verification-status',
           method: 'GET',
           description: 'Check if device needs verification',
           auth: 'required'
-  }
+
         {
           path: '/device/recent-new',
           method: 'GET',
           description: 'Get user\'s recent new devices',
           auth: 'required'
-  }
+
         {
           path: '/device/admin/detection-stats',
           method: 'GET',
           description: 'Get detection statistics (admin)',
           auth: 'admin required'
-  }
+
         {
           path: '/device/admin/multi-device-users',
           method: 'GET',
           description: 'Find users with many new devices',
           auth: 'admin required'
-        }
+
       ]
     };
   });
-}

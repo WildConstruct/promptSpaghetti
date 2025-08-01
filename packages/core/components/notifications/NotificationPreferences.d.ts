@@ -6,11 +6,11 @@ import React from 'react';
 import { NotificationManager } from './NotificationManager';
 
 }
-interface NotificationPreferencesProps {
-    notificationManager: NotificationManager;
+}
+interface NotificationPreferencesProps { notificationManager: NotificationManager;
     className?: string;
 
-export declare const NotificationPreferences: React.FC<NotificationPreferencesProps>;
+export declare const NotificationPreferences: React.FC<NotificationPreferencesProps> }
 }
 export {};
 //# sourceMappingURL=NotificationPreferences.d.ts.map

@@ -6,8 +6,8 @@
 import { Badge, UserBadge, UserBadgeProgress, BadgeUnlockEvent, BadgeCategory } from '../gamification/BadgeSystem';
 
 }
-export interface BadgeSystemHookConfig {
-    userId?: string;
+}
+export interface BadgeSystemHookConfig { userId?: string;
     autoCheckBadges?: boolean;
     enableNotifications?: boolean;
     checkInterval?: number;
@@ -24,11 +24,12 @@ export declare const useBadgeSystem: (config?: BadgeSystemHookConfig) => {
     getBadgeProgress: (badgeId: string) => number;
     getBadgesByCategory: (category: BadgeCategory) => Badge[];
     getBadgesByTier: (badges?: Badge[]) => Record<string, Badge[]>;
-    getNextBadges: (limit?: number) => Array<Badge & {,
+    getNextBadges: (limit?: number) => Array<Badge & { }
         progress: number;
 }
+}
     }>;
-    getStatistics: () => {,
+    getStatistics: () => { 
         templatesCreated: number;
         templatesDownloaded: number;
         projectsCompleted: number;
@@ -45,8 +46,7 @@ export declare const useBadgeSystem: (config?: BadgeSystemHookConfig) => {
         badgeCount: number;
         completionPercentage: number;
         streak: number;
-        lastActivity: number;
-    } | null;
+        lastActivity: number } | null;
     getLeaderboardPosition: () => number;
     markNotificationRead: (unlockEventIndex: number) => void;
     clearAllNotifications: () => void;

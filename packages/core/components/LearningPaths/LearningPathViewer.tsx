@@ -5,32 +5,31 @@
  * progress tracking, interactive content, and assessments.
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  LearningPath,
+import { LearningPath,
   LearningModule,
   LearningActivity,
   UserEnrollment,
-  ModuleProgress,
+  ModuleProgress }
   Epic16LearningPathService
-} from '../../services/Epic16LearningPathService';
-}
-interface LearningPathViewerProps {
-  path: LearningPath;
+ from '../../services/Epic16LearningPathService';
+
+
+interface LearningPathViewerProps { path: LearningPath;
   learningService: Epic16LearningPathService;
   userId: string;
   enrollment?: UserEnrollment;
   onProgress?: (progress: number) => void;
   onComplete?: () => void;
-  export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({,)
-  path,
-  learningService,
-  userId,
-  enrollment,
-  onProgress,
+  export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({);
+  path;
+  learningService;
+  userId;
+  enrollment;
+  onProgress }
   onComplete
-}
-}) => {
-  // State management
+
+
+}) => { // State management
   const [currentModule, setCurrentModule] = useState<LearningModule | null>(null);
   const [currentActivity, setCurrentActivity] = useState<LearningActivity | null>(null);
   const [moduleProgress, setModuleProgress] = useState<ModuleProgress | null>(null);
@@ -45,54 +44,37 @@ interface LearningPathViewerProps {
       setCurrentModule(module);
       // Set progress if available
       if (enrollment?.progress.moduleProgress[module.id]) {
-        setModuleProgress(enrollment.progress.moduleProgress[module.id]);
-  }, [path, enrollment]);
+        setModuleProgress(enrollment.progress.moduleProgress[module.id]) }, [path, enrollment]);
   // Calculate overall progress
-  const overallProgress = useMemo(() => {
-    if (!enrollment) return 0;
-    return enrollment.progress.overallProgress;
-  }, [enrollment]);
+  const overallProgress = useMemo(() => { if (!enrollment) return 0;
+    return enrollment.progress.overallProgress }, [enrollment]);
   // Handle module selection
-  const handleModuleSelect = useCallback((module: LearningModule) => {
-    setCurrentModule(module);
+  const handleModuleSelect = useCallback((module: LearningModule) => { setCurrentModule(module);
     setCurrentActivity(null);
     // Set progress for this module
     if (enrollment?.progress.moduleProgress[module.id]) {
-      setModuleProgress(enrollment.progress.moduleProgress[module.id]);
-    } else {
-      setModuleProgress(null);
-  }, [enrollment]);
+      setModuleProgress(enrollment.progress.moduleProgress[module.id]) } else { setModuleProgress(null) }, [enrollment]);
   // Handle activity selection
-  const handleActivitySelect = useCallback((activity: LearningActivity) => {
-    setCurrentActivity(activity);
-  }, []);
+  const handleActivitySelect = useCallback((activity: LearningActivity) => { setCurrentActivity(activity) }, []);
   // Handle activity completion
-  const handleActivityComplete = useCallback(async (activityId: string) => {
-    if (!currentModule || !enrollment) return;
+  const handleActivityComplete = useCallback(async (activityId: string) => { if (!currentModule || !enrollment) return;
     setLoading(true);
     setError(null);
     try {
       const updatedProgress = await learningService.updateProgress(;);
-        userId,
-        path.id,
-        currentModule.id,
+        userId
+        path.id
+        currentModule.id }
         activityId
       );
-      if (updatedProgress) {
-        // Update local progress
+      if (updatedProgress) { // Update local progress
         setModuleProgress(updatedProgress.moduleProgress[currentModule.id] || null);
         onProgress?.(updatedProgress.overallProgress);
         // Check if path is completed
         if (updatedProgress.overallProgress >= 100) {
-          onComplete?.();
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to update progress');
-} finally {
-      setLoading(false);
-  }, [currentModule, enrollment, learningService, userId, path.id, onProgress, onComplete]);
+          onComplete?.() } catch (err) { setError(err instanceof Error ? err.message : 'Failed to update progress') } finally { setLoading(false) }, [currentModule, enrollment, learningService, userId, path.id, onProgress, onComplete]);
   // Get module status
-  const getModuleStatus = useCallback((module: LearningModule) => {
-  if (!enrollment) return 'not_started';
+  const getModuleStatus = useCallback((module: LearningModule) => { if (!enrollment) return 'not_started';
   const completed = enrollment.progress.completedModules.includes(module.id);
   const current = enrollment.progress.currentModule === module.id;
   const progress = enrollment.progress.moduleProgress[module.id];
@@ -102,8 +84,8 @@ interface LearningPathViewerProps {
   const prerequisitesMet = module.prerequisites.every(prereqId =>;);
   enrollment.progress.completedModules.includes(prereqId)
   );
-  return prerequisitesMet ? 'available' : 'locked'
-  }, [enrollment]);
+  return prerequisitesMet ? 'available' : 'locked' }
+}, [enrollment]);
   // Get activity status
   const getActivityStatus = useCallback((activity: LearningActivity) => {
     if (!enrollment || !currentModule) return 'not_started';
@@ -166,13 +148,13 @@ interface LearningPathViewerProps {
             return;
               <div
                 key={module.id}
-                className={`rounded-lg border p-4 cursor-pointer transition-all ${
+                className={ `rounded-lg border p-4 cursor-pointer transition-all ${
   isActive
   ? 'bg-blue-50 border-blue-200'
-  : status === 'locked',
+  : status === 'locked'
   ? 'bg-gray-50 border-gray-200 opacity-50 cursor-not-allowed'
-  : 'bg-white border-gray-200 hover:border-gray-300',
-}`}
+  : 'bg-white border-gray-200 hover:border-gray-300' }
+`}
                 onClick={() => status !== 'locked' && handleModuleSelect(module)}
               >
                 <div className="flex items-start space-x-3">
@@ -357,11 +339,11 @@ interface LearningPathViewerProps {
                   return;
                     <div
                       key={activity.id}
-                      className={`border rounded-md p-3 cursor-pointer transition-all ${
+                      className={ `border rounded-md p-3 cursor-pointer transition-all ${
   isActive
   ? 'bg-blue-50 border-blue-200'
-  : 'bg-white border-gray-200 hover:border-gray-300',
-}`}
+  : 'bg-white border-gray-200 hover:border-gray-300' }
+`}
                       onClick={() => handleActivitySelect(activity)}
                     >
                       <div className="flex items-center space-x-3">
@@ -466,22 +448,21 @@ interface LearningPathViewerProps {
 };
 
 // Activity Viewer Component
-}
-interface ActivityViewerProps {
-  activity: LearningActivity;
+
+
+interface ActivityViewerProps { activity: LearningActivity;
   onComplete: () => void;
   loading?: boolean;
-  const ActivityViewer: React.FC<ActivityViewerProps> = ({,)
-  activity,
-  onComplete,
+  const ActivityViewer: React.FC<ActivityViewerProps> = ({);
+  activity;
+  onComplete }
   loading = false
-}
-}) => {
-  const [completed, setCompleted] = useState(false);
+
+
+}) => { const [completed, setCompleted] = useState(false);
   const handleComplete = () => {
     setCompleted(true);
-    onComplete();
-  };
+    onComplete() };
   return;
     <div className="p-6">
       {/* Activity header */}
@@ -523,7 +504,7 @@ interface ActivityViewerProps {
             </svg>
             <p className="mt-2">Interactive activity content would be rendered here</p>
             <p className="text-sm mt-1">
-              Implementation would include multimedia content, interactive exercises,
+              Implementation would include multimedia content, interactive exercises
               code editors, simulations, and assessment tools based on activity type.
             </p>
           </div>
@@ -574,13 +555,13 @@ interface ActivityViewerProps {
         <button
           onClick={handleComplete}
           disabled={completed || loading}
-          className={`px-6 py-2 text-sm font-medium rounded-md ${
+          className={ `px-6 py-2 text-sm font-medium rounded-md ${
   completed
   ? 'bg-green-100 text-green-800 cursor-not-allowed'
-  : loading,
+  : loading
   ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-  : 'bg-blue-600 text-white hover:bg-blue-700',
-}`}
+  : 'bg-blue-600 text-white hover:bg-blue-700' }
+`}
         >
           {completed ? 'Completed ✓' : loading ? 'Saving...' : 'Mark as Complete'}
         </button>

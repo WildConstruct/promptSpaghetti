@@ -217,17 +217,18 @@ const totalWebhookCalls = useMemo(() => {
 const webhookSuccessRate = useMemo(() => {
     const total = totalWebhookCalls;
     const successful = webhooks.reduce((sum, webhook) => sum + webhook.success_count, 0);
-    return total > 0 ? (successful / total * 100).toFixed(1) : '0';
+    return total > 0 ? (successful / total * 100).toFixed(1) : '0',
+    ;
 }, [webhooks, totalWebhookCalls]);
-const availableEvents = [];
-'approval_requested',
+const availableEvents = [
+    'approval_requested',
     'approval_completed',
     'state_changed',
     'resource_locked',
     'resource_unlocked',
     'workflow_completed',
-    'schedule_executed';
-;
+    'schedule_executed'
+];
 const renderApiKeysTab = () => ();
 ;
 _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h3", { className: "text-lg font-semibold", children: "API Keys" }), _jsxs("button", { onClick: () => setShowCreateApiKey(true), className: "flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors", children: [_jsx(PlusIcon, { className: "h-4 w-4" }), _jsx("span", { children: "Create API Key" })] })] }), _jsx("div", { className: "space-y-3", children: apiKeys.map(key => ()
@@ -278,30 +279,15 @@ _jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-
 ;
 const renderDocumentationTab = () => ();
 ;
-_jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold", children: "API Documentation" }), _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h4", { className: "font-medium mb-4", children: "Authentication" }), _jsx("p", { className: "text-sm text-gray-600 mb-4", children: "Include your API key in the Authorization header:" }), _jsx("code", { className: "block bg-gray-100 p-3 rounded text-sm", children: "Authorization: Bearer YOUR_API_KEY," })] }), _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h4", { className: "font-medium mb-4", children: "Workflow Operations" }), _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("h5", { className: "font-medium text-sm", children: "Get Workflow States" }), _jsx("code", { className: "block bg-gray-100 p-3 rounded text-sm mt-2", children: "GET /api/workflow/states/:workspaceId" })] }), _jsxs("div", { children: [_jsx("h5", { className: "font-medium text-sm", children: "Transition State" }), _jsxs("code", { className: "block bg-gray-100 p-3 rounded text-sm mt-2", children: ["POST /api/workflow/transition", JSON.stringify({}), "resource_id: 'resource_uuid', to_state_id: 'state_uuid', comment: 'Transition comment', }, null, 2)}"] })] }), _jsxs("div", { children: [_jsx("h5", { className: "font-medium text-sm", children: "Create Approval" }), _jsxs("code", { className: "block bg-gray-100 p-3 rounded text-sm mt-2", children: ["POST /api/workflow/approvals", JSON.stringify({}), "resource_id: 'resource_uuid', transition_id: 'transition_uuid', requester_id: 'user_id', }, null, 2)}"] })] })] })] }), _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h4", { className: "font-medium mb-4", children: "Webhook Events" }), _jsx("p", { className: "text-sm text-gray-600 mb-4", children: "Your webhook endpoint will receive POST requests with the following structure:" }), _jsxs("code", { className: "block bg-gray-100 p-3 rounded text-sm", children: [JSON.stringify({}), "event: 'state_changed', timestamp: '2024-01-20T10:30:00Z', workspace_id: 'workspace_uuid', resource_id: 'resource_uuid', data: ", previous_state, ": 'draft', new_state: 'approved', actor_id: 'user_id', }, null, 2)}"] })] })] });
+_jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold", children: "API Documentation" }), _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h4", { className: "font-medium mb-4", children: "Authentication" }), _jsx("p", { className: "text-sm text-gray-600 mb-4", children: "Include your API key in the Authorization header:" }), _jsx("code", { className: "block bg-gray-100 p-3 rounded text-sm", children: "Authorization: Bearer YOUR_API_KEY," })] }), _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h4", { className: "font-medium mb-4", children: "Workflow Operations" }), _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("h5", { className: "font-medium text-sm", children: "Get Workflow States" }), _jsx("code", { className: "block bg-gray-100 p-3 rounded text-sm mt-2", children: "GET /api/workflow/states/:workspaceId" })] }), _jsxs("div", { children: [_jsx("h5", { className: "font-medium text-sm", children: "Transition State" }), _jsxs("code", { className: "block bg-gray-100 p-3 rounded text-sm mt-2", children: ["POST /api/workflow/transition", JSON.stringify({}), "resource_id: 'resource_uuid', to_state_id: 'state_uuid', comment: 'Transition comment', }, null, 2)}"] })] }), _jsxs("div", { children: [_jsx("h5", { className: "font-medium text-sm", children: "Create Approval" }), _jsxs("code", { className: "block bg-gray-100 p-3 rounded text-sm mt-2", children: ["POST /api/workflow/approvals", JSON.stringify({}), "resource_id: 'resource_uuid', transition_id: 'transition_uuid', requester_id: 'user_id', }, null, 2)}"] })] })] })] }), _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h4", { className: "font-medium mb-4", children: "Webhook Events" }), _jsx("p", { className: "text-sm text-gray-600 mb-4", children: "Your webhook endpoint will receive POST requests with the following structure:" }), _jsxs("code", { className: "block bg-gray-100 p-3 rounded text-sm", children: [JSON.stringify({}), "event: 'state_changed', timestamp: '2024-01-20T10:30:00Z', workspace_id: 'workspace_uuid', resource_id: 'resource_uuid', data: ", (,
+                            previous_state), ": 'draft', new_state: 'approved', actor_id: 'user_id', }, null, 2)}"] })] })] });
 ;
-const tabs = [];
-{
-    id: 'api_keys', label;
-    'API Keys', icon;
-    KeyIcon;
-}
-{
-    id: 'webhooks', label;
-    'Webhooks', icon;
-    BellIcon;
-}
-{
-    id: 'usage', label;
-    'Usage', icon;
-    ChartBarIcon;
-}
-{
-    id: 'documentation', label;
-    'Documentation', icon;
-    GlobeAltIcon;
-}
-;
+const tabs = [
+    { id: 'api_keys', label: 'API Keys', icon: KeyIcon },
+    { id: 'webhooks', label: 'Webhooks', icon: BellIcon },
+    { id: 'usage', label: 'Usage', icon: ChartBarIcon },
+    { id: 'documentation', label: 'Documentation', icon: GlobeAltIcon }
+];
 return;
 _jsx("div", { className: "bg-white rounded-lg shadow-sm border border-gray-200", children: _jsxs("div", { className: "border-b border-gray-200 p-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsx(GlobeAltIcon, { className: "h-6 w-6 text-gray-600" }), _jsxs("div", { children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900", children: "API Integration" }), _jsx("p", { className: "text-sm text-gray-500", children: "Manage API keys, webhooks, and external integrations" })] })] }), onClose && ()
                         < button, "onClick=", onClose, "className=\"text-gray-400 hover:text-gray-600 transition-colors\" >", _jsx(XCircleIcon, { className: "h-5 w-5" })] }), ")}"] }) });

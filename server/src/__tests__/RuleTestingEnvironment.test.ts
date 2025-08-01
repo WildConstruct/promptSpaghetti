@@ -28,7 +28,7 @@ jest.mock('../services/RuleTestingFramework', () => ({
       recommendations: [],
       attachments: [],
       generated: new Date( as unknown as unknown).toISOString()
-  }
+
   }))
 }));
 
@@ -48,17 +48,17 @@ describe('RuleTestingEnvironment', () => {
         maxExecutionTime: 10000,
         maxRuleCount: 100,
         maxConcurrency: 5
-  }
+
       data: {
         generateSyntheticData: true,
         datasetSize: 'small',
         includeEdgeCases: true
-  }
+
       reporting: {
         enableRealTimeReporting: true,
         generateDetailedReports: true,
         exportResults: true
-      }
+
     };
 
     testEnvironment = new RuleTestingEnvironment(mockConfig);
@@ -171,7 +171,7 @@ describe('RuleTestingEnvironment', () => {
         expect(result).toHaveProperty('duration');
         if (result.metrics) {
           expect(result.metrics).toHaveProperty('rulesPerSecond');
-        }
+
       });
     });
 
@@ -187,7 +187,7 @@ describe('RuleTestingEnvironment', () => {
         if (result.results && result.status === 'PASSED') {
           expect(result.results).toHaveProperty('detected');
           expect(result.results).toHaveProperty('resolved');
-        }
+
       });
     });
 
@@ -303,7 +303,7 @@ describe('RuleTestingEnvironment', () => {
           generateSyntheticData: false,
           datasetSize: 'small' as const,
           includeEdgeCases: false
-        }
+
       };
       
       const envWithoutData = new RuleTestingEnvironment(configWithoutData);
@@ -352,7 +352,7 @@ describe('RuleTestingEnvironment', () => {
           maxExecutionTime: 60000,
           maxRuleCount: 10000,
           maxConcurrency: 20
-        }
+
       };
       
       const highPerfEnv = new RuleTestingEnvironment(highPerformanceConfig);

@@ -44,7 +44,7 @@ const ExecuteRestoreSchema = z.object({
     on_completion: z.boolean(),
     on_error: z.boolean(),
     notification_channels: z.array(z.string())
-  }
+
 });
 
 // =============================================================================
@@ -67,17 +67,17 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: z.boolean(),
           data: z.array(z.any()),
           totalCount: z.number()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       limit: number;
       offset: number;
       backup_type?: string;
       validation_status?: string;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { limit, offset, backup_type, validation_status } = request.query;
       
@@ -96,12 +96,12 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
       if (backup_type) {
         query += ` AND rp.backup_type = $${params.length + 1}`;
         params.push(backup_type);
-      }
+
       
       if (validation_status) {
         query += ` AND rp.validation_status = $${params.length + 1}`;
         params.push(validation_status);
-      }
+
       
       query += `
         ORDER BY rp.recovery_point_timestamp DESC
@@ -125,14 +125,13 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         data: result.rows,
         totalCount: parseInt(countResult.rows[0].total)
       });
-      
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get recovery points');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get recovery points'
       });
-    }
+
   });
 
   // Get available tables for a recovery point
@@ -146,12 +145,12 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: z.boolean(),
           tables: z.array(z.string()),
           schemas: z.array(z.string()).optional()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { recoveryPointId: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { recoveryPointId } = request.params;
       
@@ -171,7 +170,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Recovery point not found'
         });
-      }
+
       
       const point = result.rows[0];
       
@@ -180,7 +179,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
       
       if (point.included_tables && point.included_tables.length > 0) {
         availableTables = point.included_tables;
-      } else {
+ else {
         // Query information_schema to get all tables
         const tablesResult = await fastify.pg.pool.query(`
           SELECT table_name 
@@ -197,22 +196,21 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           availableTables = availableTables.filter(table => 
             !point.excluded_tables.includes(table)
           );
-        }
-      }
+
+
       
       return reply.code(200).send({
         success: true,
         tables: availableTables,
         schemas: point.affected_schemas || ['public']
       });
-      
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get tables for recovery point');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get tables for recovery point'
       });
-    }
+
   });
 
   // Generate restore preview
@@ -234,13 +232,13 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
             estimated_duration_minutes: z.number(),
             warnings: z.array(z.string()),
             recommendations: z.array(z.string())
-  }
-  }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof RestorePreviewSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { recovery_point_id, table_filters, restore_scope } = request.body;
       
@@ -254,7 +252,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Recovery point not found'
         });
-      }
+
       
       const recoveryPoint = recoveryResult.rows[0];
       
@@ -263,23 +261,23 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
       
       if (table_filters?.include_tables && table_filters.include_tables.length > 0) {
         affectedTables = table_filters.include_tables;
-      } else if (recoveryPoint.included_tables) {
+ else if (recoveryPoint.included_tables) {
         affectedTables = recoveryPoint.included_tables;
-      } else {
+ else {
         // Get all tables from schema
         const tablesResult = await fastify.pg.pool.query(`
           SELECT table_name FROM information_schema.tables 
           WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
         `);
         affectedTables = tablesResult.rows.map(row => row.table_name);
-      }
+
       
       // Remove excluded tables
       if (table_filters?.exclude_tables && table_filters.exclude_tables.length > 0) {
         affectedTables = affectedTables.filter(table => 
           !table_filters.exclude_tables!.includes(table)
         );
-      }
+
       
       // Generate estimates for each table
       const tableEstimates = await Promise.all(
@@ -313,14 +311,14 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
             // Apply record limit if specified
             if (table_filters?.limit_records && table_filters.limit_records < estimatedRecords) {
               estimatedRecords = table_filters.limit_records;
-            }
+
             
             // Apply WHERE conditions (simplified estimation)
             if (table_filters?.where_conditions && table_filters.where_conditions[tableName]) {
               // Rough estimate: WHERE conditions typically reduce records by 10-90%
               // In practice, you'd want to execute EXPLAIN to get better estimates
               estimatedRecords = Math.floor(estimatedRecords * 0.5); // Conservative 50% estimate
-            }
+
             
             // Estimate potential conflicts based on table activity
             const potentialConflicts = Math.floor((stats.n_tup_upd || 0) * 0.1); // 10% of recent updates
@@ -331,7 +329,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
               size_mb: Math.round((sizeInfo.size_bytes || 0) / 1024 / 1024 * 100) / 100,
               potential_conflicts: potentialConflicts
             };
-          } catch (error) {
+ catch (error) {
             request.log.warn({ tableName, error }, 'Failed to get table estimates');
             return {
               table_name: tableName,
@@ -339,8 +337,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
               size_mb: 0,
               potential_conflicts: 0
             };
-          }
-  }
+
       );
       
       // Calculate totals
@@ -366,7 +363,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
       case 'full_database':
         estimatedDuration *= 1.3;
         break;
-      }
+
       
       // Generate warnings and recommendations
       const warnings: string[] = [];
@@ -374,21 +371,21 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
       
       if (totalConflicts > 0) {
         warnings.push(`${totalConflicts} potential conflicts detected. Consider using 'backup_first' strategy.`);
-      }
+
       
       if (affectedTables.length > 50) {
         warnings.push('Large number of tables selected. Consider breaking into smaller restore operations.');
         recommendations.push('Use table-level filtering to process tables in batches.');
-      }
+
       
       if (totalSizeMB > 1000) {
         warnings.push('Large restore size detected. This operation may take significant time.');
         recommendations.push('Schedule restore during maintenance window.');
-      }
+
       
       if (table_filters?.where_conditions) {
         recommendations.push('WHERE conditions will be applied during restore. Ensure conditions are optimized for performance.');
-      }
+
       
       return reply.code(200).send({
         success: true,
@@ -399,16 +396,15 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           estimated_duration_minutes: Math.ceil(estimatedDuration),
           warnings,
           recommendations
-        }
+
       });
-      
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to generate restore preview');
       return reply.code(500).send({
         success: false,
         error: 'Failed to generate restore preview'
       });
-    }
+
   });
 
   // Execute selective restore
@@ -420,12 +416,12 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: z.boolean(),
           request_id: z.string(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof ExecuteRestoreSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const restoreConfig = request.body;
       
@@ -483,14 +479,13 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         request_id: requestId,
         message: 'Selective restore operation started successfully'
       });
-      
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to execute selective restore');
       return reply.code(500).send({
         success: false,
         error: 'Failed to execute selective restore'
       });
-    }
+
   });
 
   // Get active restore operations
@@ -500,9 +495,9 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           data: z.array(z.any())
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const result = await fastify.pg.pool.query(`
@@ -550,14 +545,13 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         success: true,
         data: activeRestores
       });
-      
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get active restore operations');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get active restore operations'
       });
-    }
+
   });
 
   // Cancel restore operation
@@ -570,12 +564,12 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { requestId: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
       
@@ -595,7 +589,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Restore request not found or cannot be cancelled'
         });
-      }
+
       
       // Here you would also signal the actual restore process to stop
       // Example: await restoreFunctionalityService.cancelRestore(requestId);
@@ -606,14 +600,13 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Restore operation cancelled successfully'
       });
-      
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to cancel restore operation');
       return reply.code(500).send({
         success: false,
         error: 'Failed to cancel restore operation'
       });
-    }
+
   });
 
   // Get restore operation details
@@ -626,12 +619,12 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           data: z.any()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { requestId: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { requestId } = request.params;
       
@@ -652,22 +645,21 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Restore request not found'
         });
-      }
+
       
       return reply.code(200).send({
         success: true,
         data: result.rows[0]
       });
-      
-    } catch (error) {
+ catch (error) {
       request.log.error({ error }, 'Failed to get restore operation details');
       return reply.code(500).send({
         success: false,
         error: 'Failed to get restore operation details'
       });
-    }
+
   });
-}
+
 
 // Export for registration
 export default selectiveRestoreRoutes;

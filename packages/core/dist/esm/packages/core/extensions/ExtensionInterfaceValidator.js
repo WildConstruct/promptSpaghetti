@@ -75,8 +75,9 @@ export class ExtensionInterfaceValidator {
                 errors,
                 warnings
             };
-            validateMethodSignatures(extension, any);
-            expectedSignatures: Record;
+            validateMethodSignatures(extension, any),
+                expectedSignatures;
+            Record;
             ExtensionValidationResult;
             {
                 const errors = [];
@@ -140,8 +141,9 @@ export class ExtensionInterfaceValidator {
                                                 errors,
                                                 warnings
                                             };
-                                            validateExtensionDependencies(extension, any);
-                                            availableExtensions: Map;
+                                            validateExtensionDependencies(extension, any),
+                                                availableExtensions;
+                                            Map;
                                             ExtensionValidationResult;
                                             {
                                                 const errors = [];
@@ -219,20 +221,24 @@ export class ExtensionInterfaceValidator {
                                                                     validations: [],
                                                                 },
                                                                 // Run all validations
-                                                                const: validations = []
-                                                            }, { name: 'Type Validation', result: extensionTypeChecker.validateExtensionType(extension) }, { name: 'Interface Validation', result: this.validateInterfaceCompatibility(extension, 'BaseExtension') }, { name: 'Configuration Validation', result: this.validateExtensionConfiguration(extension) }, { name: 'Method Signatures', result: this.validateMethodSignatures(extension, this.getBaseMethodSignatures()) });
-                                                            for (const validation of validations) {
-                                                                report.validations.push({});
-                                                                name: validation.name,
-                                                                    valid;
-                                                                validation.result.valid,
-                                                                    errors;
-                                                                validation.result.errors || [],
-                                                                    warnings;
-                                                                validation.result.warnings || [],
-                                                                ;
-                                                            }
-                                                            ;
+                                                                const: validations = [
+                                                                    { name: 'Type Validation', result: extensionTypeChecker.validateExtensionType(extension) },
+                                                                    { name: 'Interface Validation', result: this.validateInterfaceCompatibility(extension, 'BaseExtension') },
+                                                                    { name: 'Configuration Validation', result: this.validateExtensionConfiguration(extension) },
+                                                                    { name: 'Method Signatures', result: this.validateMethodSignatures(extension, this.getBaseMethodSignatures()) }
+                                                                ],
+                                                                for(, validation, of, validations) {
+                                                                    report.validations.push({});
+                                                                    name: validation.name,
+                                                                        valid;
+                                                                    validation.result.valid,
+                                                                        errors;
+                                                                    validation.result.errors || [],
+                                                                        warnings;
+                                                                    validation.result.warnings || [],
+                                                                    ;
+                                                                }
+                                                            });
                                                             if (!validation.result.valid) {
                                                                 report.overallValid = false;
                                                                 return report;
@@ -456,8 +462,6 @@ export class ExtensionInterfaceValidator {
                                                                                                                                     return fn.constructor.name === 'AsyncFunction';
                                                                                                                                     // Interface Types
                                                                                                                                 }
-                                                                                                                                // Export singletons
-                                                                                                                                export const runtimeTypeChecker = ExtensionRuntimeTypeChecker.getInstance();
                                                                                                                             }
                                                                                                                         }
                                                                                                                     }
@@ -465,6 +469,8 @@ export class ExtensionInterfaceValidator {
                                                                                                             }
                                                                                                         }
                                                                                                     }
+                                                                                                    // Export singletons
+                                                                                                    export const runtimeTypeChecker = ExtensionRuntimeTypeChecker.getInstance();
                                                                                                 }
                                                                                             }
                                                                                         }

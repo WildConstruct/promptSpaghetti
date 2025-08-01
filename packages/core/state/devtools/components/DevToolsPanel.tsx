@@ -16,67 +16,64 @@ import { PerformancePanel } from './PerformancePanel';
 import { StateInspectorPanel } from './StateInspectorPanel';
 import { DependencyGraphPanel } from './DependencyGraphPanel';
 
-}
-export interface DevToolsPanelProps {
-  devTools: StateDevTools;
+
+export interface DevToolsPanelProps { devTools: StateDevTools;
   timeTravel: TimeTravel;
   performanceProfiler: PerformanceProfiler;
   isOpen?: boolean;
   onClose?: () => void;
   defaultTab?: string;
   position?: 'bottom' | 'right' | 'floating';
-  theme?: 'light' | 'dark' | 'auto'
-}
-  }
-}
-export interface DevToolsState {
-  activeTab: string;
+  theme?: 'light' | 'dark' | 'auto' }
+
+
+
+
+export interface DevToolsState { activeTab: string;
   isRecording: boolean;
-  timeTravelState: TimeTravelState | null;
+  timeTravelState: TimeTravelState | null }
   performanceAlerts: PerformanceAlert;
   selectedDomain: string;
   dependencyGraph: DependencyGraph | null;
   performanceReport: PerformanceReport | null;
-const TABS = [;
-}
+  const TABS = [
+
+
   { id: 'inspector', label: 'State Inspector', icon: '🔍' },
   { id: 'timetravel', label: 'Time Travel', icon: '⏰' },
   { id: 'performance', label: 'Performance', icon: '📊' },
   { id: 'dependencies', label: 'Dependencies', icon: '🔗' },
   { id: 'settings', label: 'Settings', icon: '⚙️' }
 ];
-}
-export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
-  devTools,
-  timeTravel,
-  performanceProfiler,
-  isOpen = true,
-  onClose,
-  defaultTab = 'inspector',
-  position = 'bottom',
+
+export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({ )
+  devTools
+  timeTravel
+  performanceProfiler
+  isOpen = true
+  onClose
+  defaultTab = 'inspector'
+  position = 'bottom' }
   theme = 'auto'
-}) => {
-  const [state, setState] = useState<DevToolsState>({)
-  activeTab: defaultTab,
-  isRecording: false,
-  timeTravelState: null,
-  performanceAlerts: [],
-  selectedDomain: 'all',
-  dependencyGraph: null,
-  performanceReport: null,
+}) => { const [state, setState] = useState<DevToolsState>({)
+  activeTab: defaultTab
+  isRecording: false
+  timeTravelState: null
+  performanceAlerts: []
+  selectedDomain: 'all'
+  dependencyGraph: null
+  performanceReport: null }
 });
   // Update state from DevTools
-  const updateDevToolsState = useCallback(() => {
-  setState(prevState => ({)
-  ...prevState,
-  timeTravelState: timeTravel.getTimeTravelState(),
-  performanceAlerts: performanceProfiler.getAlerts(),
-  isRecording: timeTravel.getTimeTravelState()?.isReplaying || false,
+  const updateDevToolsState = useCallback(() => { setState(prevState => ({)
+  ...prevState
+  timeTravelState: timeTravel.getTimeTravelState()
+  performanceAlerts: performanceProfiler.getAlerts()
+  isRecording: timeTravel.getTimeTravelState()?.isReplaying || false }
 }));
   }, [timeTravel, performanceProfiler]);
   // Setup event listeners
-  useEffect(() => {
-    updateDevToolsState();
+  useEffect(() => { updateDevToolsState();
     const handleStateChange = () => updateDevToolsState();
     const handleTimeTravel = () => updateDevToolsState();
     const handlePerformanceAlert = () => updateDevToolsState();
@@ -86,53 +83,41 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
     return () => {
       devTools.off('stateRecorded', handleStateChange);
       timeTravel.off('positionChanged', handleTimeTravel);
-      performanceProfiler.off('alertCreated', handlePerformanceAlert);
-    };
+      performanceProfiler.off('alertCreated', handlePerformanceAlert) };
   }, [devTools, timeTravel, performanceProfiler, updateDevToolsState]);
   // Generate dependency graph
-  const generateDependencyGraph = useCallback(async () => {
-  try {
+  const generateDependencyGraph = useCallback(async () => { try {
   const graph = devTools.visualizeStateDependencies({)
-  domains: state.selectedDomain === 'all' ? undefined : [state.selectedDomain],
-  includeComponents: true,
-  includeSelectors: true,
-  layout: 'hierarchical',
+  domains: state.selectedDomain === 'all' ? undefined : [state.selectedDomain]
+  includeComponents: true
+  includeSelectors: true
+  layout: 'hierarchical' }
 });
       setState(prev => ({ ...prev, dependencyGraph: graph }));
-    } catch (error) {
-  console.error('Failed to generate dependency graph:', error);
-}, [devTools, state.selectedDomain]);
+ catch (error) { console.error('Failed to generate dependency graph:', error) }, [devTools, state.selectedDomain]);
   // Generate performance report
   const generatePerformanceReport = useCallback(async () => {
     try {
       const report = devTools.detectStateBottlenecks();
       setState(prev => ({ ...prev, performanceReport: report }));
-    } catch (error) {
-  console.error('Failed to generate performance report:', error);
-}, [devTools]);
+ catch (error) { console.error('Failed to generate performance report:', error) }, [devTools]);
   // Tab handlers
   const handleTabChange = (tabId: string) => {
     setState(prev => ({ ...prev, activeTab: tabId }));
     // Load data for specific tabs
-    if (tabId === 'dependencies' && !state.dependencyGraph) {
-      generateDependencyGraph();
+    if (tabId === 'dependencies' && !state.dependencyGraph) { generateDependencyGraph();
     if (tabId === 'performance' && !state.performanceReport) {
-      generatePerformanceReport();
-  };
-  const handleRecordingToggle = () => {
-    if (state.isRecording) {
+      generatePerformanceReport() };
+  const handleRecordingToggle = () => { if (state.isRecording) {
       devTools.stopRecording();
-      timeTravel.stopRecording();
-    } else {
+      timeTravel.stopRecording() } else {
       devTools.startRecording();
       timeTravel.startRecording();
     setState(prev => ({ ...prev, isRecording: !prev.isRecording }));
   };
-  const handleClearHistory = () => {
-    devTools.clearHistory();
+  const handleClearHistory = () => { devTools.clearHistory();
     timeTravel.clearHistory();
-    updateDevToolsState();
-  };
+    updateDevToolsState() };
   const handleDomainChange = (domain: string) => {
     setState(prev => ({ ...prev, selectedDomain: domain }));
   };
@@ -227,7 +212,7 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
           />
         )}
       </div>
-      <style jsx>{`
+      <style jsx>{ `
         .devtools-panel {
           position: fixed;
   background: var(--devtools-bg, #1e1e1e);
@@ -254,7 +239,7 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
           bottom: 20px;
   width: 400px;
         .devtools-panel--floating {
-          top: 50%;
+          top: 50%
   left: 50%;
           transform: translate(-50%, -50%);
           width: 800px;
@@ -266,7 +251,7 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
         .devtools-header {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between
   padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-header-bg, #2d2d2d);
@@ -290,34 +275,32 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
   cursor: pointer;
           font-size: 12px;
   transition: background 0.2s;
-        .devtools-btn:hover {,
+        .devtools-btn:hover {
   background: var(--devtools-hover, #404040);
         .devtools-btn.recording {
           background: #e74c3c;
-          border-color: #e74c3c;
+          border-color: #e74c3c }
   animation: pulse 1s infinite;
-        @keyframes pulse {
-          0% { opacity: 1; }
-          50% { opacity: 0.7; }
-          100% { opacity: 1; }
-        .devtools-tabs {
-          display: flex;
+        @keyframes pulse { 0% { opacity: 1 }
+          50% { opacity: 0.7 }
+          100% { opacity: 1 }
+        .devtools-tabs { display: flex;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-tabs-bg, #252525);
         .devtools-tab {
           background: transparent;
   border: none;
           color: var(--devtools-text, #aaa);
-          padding: 8px 12px;
+          padding: 8px 12px
   cursor: pointer;
           display: flex;
           align-items: center;
   gap: 6px;
           font-size: 12px;
-          border-bottom: 2px solid transparent;
+          border-bottom: 2px solid transparent
   transition: all 0.2s;
           position: relative;
-        .devtools-tab:hover {,
+        .devtools-tab:hover {
   background: var(--devtools-hover, #404040);
           color: var(--devtools-text, #fff);
         .devtools-tab.active {
@@ -325,7 +308,7 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
           border-bottom-color: var(--devtools-active, #61dafb);
           background: var(--devtools-active-bg, #2a2a2a);
         .devtools-badge {
-          background: #e74c3c;
+          background: #e74c3c }
   color: white;
           font-size: 10px;
   padding: 2px 6px;
@@ -345,44 +328,41 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
 };
 
 // DevTools Settings Panel Component
-}
-interface DevToolsSettingsPanelProps {
-  devTools: StateDevTools;
+
+
+interface DevToolsSettingsPanelProps { devTools: StateDevTools;
   timeTravel: TimeTravel;
   performanceProfiler: PerformanceProfiler;
-  const DevToolsSettingsPanel: React.FC<DevToolsSettingsPanelProps> = ({,)
-  devTools,
-  timeTravel,
+  const DevToolsSettingsPanel: React.FC<DevToolsSettingsPanelProps> = ({);
+  devTools;
+  timeTravel }
   performanceProfiler
-}
-}) => {
-  const [settings, setSettings] = useState({)
+
+
+}) => { const [settings, setSettings] = useState({)
   maxHistorySize: 1000,
   sampleRate: 100,
   enableAlerts: true,
-  alertThresholds: {
+  alertThresholds: {,
   updateLatency: 100,
   memoryUsage: 100 * 1024 * 1024,
-  renderTime: 16,
+  renderTime: 16 }
 });
-  const handleSettingChange = (key: string, value: any) => {
-  setSettings(prev => ({)
+  const handleSettingChange = (key: string, value: any) => { setSettings(prev => ({)
   ...prev,
-  [key]: value,
+  [key]: value }
 }));
   };
-  const handleThresholdChange = (metric: string, value: number) => {
-  setSettings(prev => ({)
+  const handleThresholdChange = (metric: string, value: number) => { setSettings(prev => ({)
   ...prev,
-  alertThresholds: {
+  alertThresholds: {,
   ...prev.alertThresholds,
-  [metric]: value,
+  [metric]: value }
 }));
   };
-  const exportSession = () => {
-  const sessionData = devTools.exportSession();
+  const exportSession = () => { const sessionData = devTools.exportSession();
   const blob = new Blob([JSON.stringify(sessionData, null, 2)], {
-  type: 'application/json',
+  type: 'application/json' }
 });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -458,11 +438,11 @@ interface DevToolsSettingsPanelProps {
           Clear All History
         </button>
       </div>
-      <style jsx>{`
+      <style jsx>{ `
         .devtools-settings {
           padding: 16px;
         .devtools-settings h4 {
-          margin: 16px 0 8px 0;
+          margin: 16px 0 8px 0
   color: var(--devtools-text, #fff);
           font-size: 14px;
           border-bottom: 1px solid var(--devtools-border, #333);
@@ -475,7 +455,7 @@ interface DevToolsSettingsPanelProps {
           font-size: 12px;
   color: var(--devtools-text, #ccc);
         .setting-group input[type="number"] {
-          width: 100%;
+          width: 100% }
   padding: 4px 8px;
           background: var(--devtools-input-bg, #2a2a2a);
           border: 1px solid var(--devtools-border, #333);

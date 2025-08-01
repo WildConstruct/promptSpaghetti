@@ -17,8 +17,8 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
-}
-}
+
+
 interface SearchEvent {
   sessionId: string;
   userId?: string;
@@ -30,12 +30,13 @@ interface SearchEvent {
   source: 'elasticsearch' | 'postgresql';
   userAgent?: string;
   ipAddress?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SearchClickEvent {
   sessionId: string;
   userId?: string;
@@ -44,12 +45,13 @@ interface SearchClickEvent {
   position: number;
   timestamp: Date;
   clickedFromSearch: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SearchAbandonmentEvent {
   sessionId: string;
   userId?: string;
@@ -58,18 +60,20 @@ interface SearchAbandonmentEvent {
   scrollDepth: number;
   timestamp: Date;
   reason: 'no_results' | 'irrelevant_results' | 'timeout' | 'navigation';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SearchMetrics {
   period: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   totalSearches: number;
   averageResponseTime: number;
@@ -84,12 +88,12 @@ interface SearchMetrics {
     count: number;
     avgResponseTime: number;
     clickThroughRate: number;
-  }>;
+>;
   topFilters: Array<{
     filter: string;
     value: string;
     count: number;
-  }>;
+>;
   conversionFunnel: {
     searches: number;
     clicks: number;
@@ -101,36 +105,37 @@ interface SearchMetrics {
     searches: number;
     avgResponseTime: number;
     clickThroughRate: number;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 interface SearchOptimizationRecommendations {
   slowQueries: Array<{
     query: string;
     avgResponseTime: number;
     frequency: number;
     recommendation: string;
-}
-}
-  }>;
+
+
+
+>;
   lowPerformingFilters: Array<{
     filter: string;
     clickThroughRate: number;
     recommendation: string;
-  }>;
+>;
   indexOptimizations: Array<{
     field: string;
     impact: 'high' | 'medium' | 'low';
     recommendation: string;
-  }>;
+>;
   cacheOptimizations: Array<{
     queryPattern: string;
     hitRate: number;
     recommendation: string;
-  }>;
-}
+>;
+
 
 @Injectable()
 export class SearchAnalyticsService {
@@ -144,7 +149,7 @@ export class SearchAnalyticsService {
       retryDelayOnFailover: 100,
       maxRetriesPerRequest: 3
     });
-  }
+
 
   /**
    * Track a search event with performance metrics
@@ -160,11 +165,10 @@ export class SearchAnalyticsService {
       
       // Check for performance alerts
       await this.checkPerformanceAlerts(event);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track search event:', error);
-    }
-  }
+
+
 
   /**
    * Track search result click events
@@ -192,11 +196,10 @@ export class SearchAnalyticsService {
 
       // Update click-through rate metrics
       await this.updateClickThroughMetrics(event);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track click event:', error);
-    }
-  }
+
+
 
   /**
    * Track search abandonment events
@@ -223,11 +226,10 @@ export class SearchAnalyticsService {
 
       // Update abandonment rate metrics
       await this.updateAbandonmentMetrics(event);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track abandonment event:', error);
-    }
-  }
+
+
 
   /**
    * Get comprehensive search metrics for a time period
@@ -261,11 +263,11 @@ export class SearchAnalyticsService {
         conversionFunnel: conversionData,
         performanceByHour: performanceData
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get search metrics:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get real-time search performance metrics
@@ -292,11 +294,11 @@ export class SearchAnalyticsService {
         errorRate1h: parseFloat(metrics[5] || '0'),
         timestamp: new Date()
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get real-time metrics:', error);
       return {};
-    }
-  }
+
+
 
   /**
    * Get search optimization recommendations
@@ -327,11 +329,11 @@ export class SearchAnalyticsService {
         indexOptimizations: indexRecommendations,
         cacheOptimizations: cacheRecommendations
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get optimization recommendations:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Create A/B test for search ranking
@@ -362,11 +364,11 @@ export class SearchAnalyticsService {
       ]);
 
       return result.rows[0].id;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to create A/B test:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Get A/B test assignment for a user session
@@ -395,11 +397,11 @@ export class SearchAnalyticsService {
       await this.redis.setex(`ab_test:${sessionId}`, 86400, variant);
 
       return variant;
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get A/B test variant:', error);
       return null;
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -424,7 +426,7 @@ export class SearchAnalyticsService {
       event.userAgent,
       event.ipAddress
     ]);
-  }
+
 
   private async updateRealTimeMetrics(event: SearchEvent): Promise<void> {
 
@@ -437,7 +439,7 @@ export class SearchAnalyticsService {
       this.redis.expire(key, 7200), // 2 hours
       this.updatePercentileMetrics(event.responseTimeMs)
     ]);
-  }
+
 
   private async updatePercentileMetrics(responseTime: number): Promise<void> {
 
@@ -447,7 +449,7 @@ export class SearchAnalyticsService {
     
     await this.redis.zadd(key, now, responseTime);
     await this.redis.zremrangebyscore(key, 0, now - 3600000); // Keep last hour
-  }
+
 
   private async updateClickThroughMetrics(event: SearchClickEvent): Promise<void> {
 
@@ -458,7 +460,7 @@ export class SearchAnalyticsService {
       this.redis.hincrby(key, 'total_clicks', 1),
       this.redis.expire(key, 7200)
     ]);
-  }
+
 
   private async updateAbandonmentMetrics(event: SearchAbandonmentEvent): Promise<void> {
 
@@ -470,20 +472,20 @@ export class SearchAnalyticsService {
       this.redis.hincrby(key, `reason_${event.reason}`, 1),
       this.redis.expire(key, 7200)
     ]);
-  }
+
 
   private async checkPerformanceAlerts(event: SearchEvent): Promise<void> {
 
     // Alert if response time exceeds threshold
     if (event.responseTimeMs > 1000) { // 1 second threshold
       console.warn(`Slow search detected: ${event.responseTimeMs}ms for query "${event.query}"`);
-    }
+
 
     // Alert if no results for common queries
     if (event.resultCount === 0 && event.query.length > 3) {
       console.warn(`No results for query: "${event.query}"`);
-    }
-  }
+
+
 
   private async getBasicMetrics(startDate: Date, endDate: Date): Promise<any> {
 
@@ -524,7 +526,7 @@ export class SearchAnalyticsService {
       averagePosition: parseFloat(ctrRow.average_position || '0'),
       abandonmentRate: 0 // TODO: Calculate from abandonment events
     };
-  }
+
 
   private async getTopQueries(startDate: Date, endDate: Date): Promise<any[]> {
 
@@ -550,13 +552,13 @@ export class SearchAnalyticsService {
       avgResponseTime: parseFloat(row.avg_response_time || '0'),
       clickThroughRate: parseFloat(row.click_through_rate || '0')
     }));
-  }
+
 
   private async getTopFilters(startDate: Date, endDate: Date): Promise<any[]> {
 
     // This would analyze the filters JSON to find most used filters
     return []; // TODO: Implement filter analysis
-  }
+
 
   private async getConversionFunnel(startDate: Date, endDate: Date): Promise<any> {
 
@@ -567,7 +569,7 @@ export class SearchAnalyticsService {
       previews: 0,
       purchases: 0
     };
-  }
+
 
   private async getPerformanceByTime(
     startDate: Date,
@@ -577,7 +579,7 @@ export class SearchAnalyticsService {
 
     // TODO: Implement time-based performance analysis
     return [];
-  }
+
 
   private async getSlowQueries(startDate: Date, endDate: Date): Promise<any[]> {
 
@@ -601,33 +603,32 @@ export class SearchAnalyticsService {
       frequency: parseInt(row.frequency),
       recommendation: this.generateSlowQueryRecommendation(row.query, row.avg_response_time)
     }));
-  }
+
 
   private async getLowPerformingFilters(startDate: Date, endDate: Date): Promise<any[]> {
 
     // TODO: Implement filter performance analysis
     return [];
-  }
+
 
   private async getIndexOptimizations(): Promise<any[]> {
 
     // TODO: Implement index optimization recommendations
     return [];
-  }
+
 
   private async getCacheOptimizations(startDate: Date, endDate: Date): Promise<any[]> {
 
     // TODO: Implement cache optimization recommendations
     return [];
-  }
+
 
   private generateSlowQueryRecommendation(query: string, responseTime: number): string {
     if (responseTime > 2000) {
       return 'Consider adding specific indexes for this query pattern or implementing query caching';
-    } else if (responseTime > 1000) {
+ else if (responseTime > 1000) {
       return 'Optimize query structure or add result caching for frequently used searches';
-    } else {
+ else {
       return 'Monitor query performance and consider preprocessing for common patterns';
-    }
-  }
-}
+
+

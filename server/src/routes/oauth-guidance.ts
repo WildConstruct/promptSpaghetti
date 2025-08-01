@@ -15,7 +15,7 @@ import {
   OAuthClientType,
   OAuthGrantType,
   ConfigurationStatus
-} from '../services/OAuthGuidanceService';
+ from '../services/OAuthGuidanceService';
 
 // Request/Response Schemas
 const GenerateConfigurationRequestSchema = z.object({
@@ -39,7 +39,7 @@ const SecurityAssessmentRequestSchema = z.object({
     dataFlowAnalysis: z.boolean().default(false),
     threatModeling: z.boolean().default(false),
     penetrationTesting: z.boolean().default(false)
-  }
+
 });
 
 const UpdateConfigurationRequestSchema = z.object({
@@ -58,7 +58,7 @@ const UpdateConfigurationRequestSchema = z.object({
       mtlsRequired: z.boolean().optional(),
       dpopRequired: z.boolean().optional()
     }).optional()
-  }
+
 });
 
 const GenerateGuidanceRequestSchema = z.object({
@@ -100,7 +100,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof GenerateConfigurationRequestSchema>;
-  }>('/generate-configuration', {
+>('/generate-configuration', {
     schema: {
       description: 'Generate OAuth configuration with security recommendations',
       tags: ['OAuth Guidance'],
@@ -119,12 +119,12 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
                 securityLevel: { type: 'string' },
                 recommendedGrantTypes: { type: 'array', items: { type: 'string' } },
                 securityFeatures: { type: 'array', items: { type: 'string' } }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -132,8 +132,8 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
       if (!request.user.permissions.includes('oauth:configure')) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const { clientType, useCase, dataClassifications, complianceRequirements } = request.body;
@@ -157,17 +157,16 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
               result.configuration.securityConfiguration.mtlsRequired ? 'mTLS' : null,
               result.configuration.securityConfiguration.dpopRequired ? 'DPoP' : null
             ].filter(Boolean)
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error generating OAuth configuration:', error);
         reply.code(500).send({
           error: 'Failed to generate OAuth configuration',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -176,7 +175,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof ValidateConfigurationRequestSchema>;
-  }>('/validate-configuration', {
+>('/validate-configuration', {
     schema: {
       description: 'Validate OAuth configuration against security and compliance requirements',
       tags: ['OAuth Guidance'],
@@ -195,15 +194,15 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
                 criticalIssues: { type: 'number' },
                 highIssues: { type: 'number' },
                 complianceStatus: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { configId } = request.body;
@@ -228,17 +227,16 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
             securityIssues: validation.securityIssues,
             complianceIssues: validation.complianceIssues,
             recommendations: validation.recommendations
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error validating OAuth configuration:', error);
         reply.code(500).send({
           error: 'Failed to validate OAuth configuration',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -247,7 +245,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof SecurityAssessmentRequestSchema>;
-  }>('/security-assessment', {
+>('/security-assessment', {
     schema: {
       description: 'Conduct comprehensive security assessment of OAuth integration',
       tags: ['OAuth Guidance'],
@@ -264,12 +262,12 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
                 assessmentId: { type: 'string' },
                 status: { type: 'string' },
                 estimatedCompletion: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -277,8 +275,8 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
       if (!request.user.permissions.includes('oauth:assess')) {
         reply.code(403).send({ error: 'Insufficient permissions for security assessments' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const { clientId, assessmentType, scope } = request.body;
@@ -303,17 +301,16 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
             assessmentId: result.assessmentId,
             status: 'IN_PROGRESS',
             estimatedCompletion: estimatedCompletion.toISOString()
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error conducting security assessment:', error);
         reply.code(500).send({
           error: 'Failed to conduct security assessment',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -322,7 +319,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: z.infer<typeof GenerateGuidanceRequestSchema>;
-  }>('/generate-guidance', {
+>('/generate-guidance', {
     schema: {
       description: 'Generate detailed implementation guidance for OAuth configuration',
       tags: ['OAuth Guidance'],
@@ -341,15 +338,15 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
                 version: { type: 'string' },
                 sections: { type: 'number' },
                 codeExamples: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { configId, guidanceType, includeCodeExamples, includeSecurityConsiderations, includeComplianceNotes } = request.body;
@@ -364,17 +361,16 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
             version: '1.0',
             sections: 8,
             codeExamples: includeCodeExamples ? 12 : 0
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error generating guidance:', error);
         reply.code(500).send({
           error: 'Failed to generate guidance',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -384,7 +380,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
   fastify.put<{
     Params: { configId: string };
     Body: z.infer<typeof UpdateConfigurationRequestSchema>['updates'];
-  }>('/configuration/:configId', {
+>('/configuration/:configId', {
     schema: {
       description: 'Update OAuth configuration settings',
       tags: ['OAuth Guidance'],
@@ -393,9 +389,9 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           configId: { type: 'string' }
-  }
+
         required: ['configId']
-  }
+
       body: UpdateConfigurationRequestSchema.shape.updates,
       response: {
         200: {
@@ -408,12 +404,12 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
                 configId: { type: 'string' },
                 updated: { type: 'boolean' },
                 validationRequired: { type: 'boolean' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -421,8 +417,8 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
       if (!request.user.permissions.includes('oauth:configure')) {
         reply.code(403).send({ error: 'Insufficient permissions for configuration updates' });
         return;
-      }
-  }
+
+
     handler: async (request, reply) => {
       try {
         const { configId } = request.params;
@@ -436,17 +432,16 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
             configId,
             updated: true,
             validationRequired: true
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error updating OAuth configuration:', error);
         reply.code(500).send({
           error: 'Failed to update OAuth configuration',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -455,7 +450,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: z.infer<typeof ListConfigurationsQuerySchema>;
-  }>('/configurations', {
+>('/configurations', {
     schema: {
       description: 'List OAuth configurations with filtering and pagination',
       tags: ['OAuth Guidance'],
@@ -477,17 +472,17 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
                     limit: { type: 'number' },
                     total: { type: 'number' },
                     pages: { type: 'number' }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { clientType, status, environment, page, limit } = request.query;
@@ -502,7 +497,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
             environment: 'PRODUCTION',
             createdAt: new Date().toISOString(),
             securityLevel: 'ENHANCED'
-          }
+
         ];
 
         const total = configurations.length;
@@ -517,18 +512,17 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
               limit,
               total,
               pages
-            }
-          }
-        });
 
-      } catch (error) {
+
+        });
+ catch (error) {
         fastify.log.error('Error listing OAuth configurations:', error);
         reply.code(500).send({
           error: 'Failed to list OAuth configurations',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -537,7 +531,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Params: { configId: string };
-  }>('/configuration/:configId', {
+>('/configuration/:configId', {
     schema: {
       description: 'Get detailed OAuth configuration information',
       tags: ['OAuth Guidance'],
@@ -546,22 +540,22 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           configId: { type: 'string' }
-  }
+
         required: ['configId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { configId } = request.params;
@@ -578,22 +572,21 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
               pkceRequired: true,
               mtlsRequired: false,
               dpopRequired: true
-  }
+
             complianceSettings: {
               gdprCompliance: { enabled: true },
               ccpaCompliance: { enabled: true }
-            }
-          }
-        });
 
-      } catch (error) {
+
+        });
+ catch (error) {
         fastify.log.error('Error getting OAuth configuration:', error);
         reply.code(500).send({
           error: 'Failed to get OAuth configuration',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -602,7 +595,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: z.infer<typeof AssessmentQuerySchema>;
-  }>('/assessments', {
+>('/assessments', {
     schema: {
       description: 'List security assessments with filtering and pagination',
       tags: ['OAuth Guidance'],
@@ -618,15 +611,15 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
               properties: {
                 assessments: { type: 'array' },
                 pagination: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { clientId, assessmentType, dateRange, page, limit } = request.query;
@@ -641,7 +634,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
             assessmentDate: new Date().toISOString(),
             riskScore: 25,
             status: 'COMPLETED'
-          }
+
         ];
 
         reply.send({
@@ -653,18 +646,17 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
               limit,
               total: assessments.length,
               pages: Math.ceil(assessments.length / limit)
-            }
-          }
-        });
 
-      } catch (error) {
+
+        });
+ catch (error) {
         fastify.log.error('Error listing security assessments:', error);
         reply.code(500).send({
           error: 'Failed to list security assessments',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -673,7 +665,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Params: { assessmentId: string };
-  }>('/assessment/:assessmentId', {
+>('/assessment/:assessmentId', {
     schema: {
       description: 'Get detailed security assessment results',
       tags: ['OAuth Guidance'],
@@ -682,22 +674,22 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           assessmentId: { type: 'string' }
-  }
+
         required: ['assessmentId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { assessmentId } = request.params;
@@ -716,18 +708,17 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
             complianceStatus: {
               gdprCompliant: true,
               ccpaCompliant: true
-            }
-          }
-        });
 
-      } catch (error) {
+
+        });
+ catch (error) {
         fastify.log.error('Error getting security assessment:', error);
         reply.code(500).send({
           error: 'Failed to get security assessment',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -737,7 +728,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
   fastify.get<{
     Params: { configId: string };
     Querystring: { format?: 'PDF' | 'HTML' | 'MARKDOWN' };
-  }>('/configuration/:configId/export', {
+>('/configuration/:configId/export', {
     schema: {
       description: 'Export OAuth configuration documentation',
       tags: ['OAuth Guidance'],
@@ -746,19 +737,19 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           configId: { type: 'string' }
-  }
+
         required: ['configId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           format: { type: 'string', enum: ['PDF', 'HTML', 'MARKDOWN'], default: 'PDF' }
-        }
-      }
-  }
+
+
+
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-  }
+
     handler: async (request, reply) => {
       try {
         const { configId } = request.params;
@@ -772,16 +763,14 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
             downloadUrl: `/api/downloads/oauth-config-${configId}.${format.toLowerCase()}`,
             format,
             generatedAt: new Date().toISOString()
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         fastify.log.error('Error exporting OAuth configuration:', error);
         reply.code(500).send({
           error: 'Failed to export OAuth configuration',
           message: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
   });
-}

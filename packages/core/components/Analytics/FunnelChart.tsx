@@ -15,25 +15,22 @@
  * - Accessibility compliance
  */
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { 
-  ConversionFunnelDefinition,
+import { ConversionFunnelDefinition,
   ConversionStep,
-  UserSegment,
+  UserSegment }
   ConversionCohort
-} from '../../analytics/ConversionDataModel';
-import { 
-  ConversionAnalyticsInfrastructure,
-  ConversionMetricQuery,
+ from '../../analytics/ConversionDataModel';
+import { ConversionAnalyticsInfrastructure,
+  ConversionMetricQuery }
   ConversionMetricResult
-} from '../../analytics/ConversionAnalyticsInfrastructure';
+ from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Chart interfaces
 
-}
-export interface FunnelChartProps {
-  funnelDefinition: ConversionFunnelDefinition;
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-}
+
+export interface FunnelChartProps { funnelDefinition: ConversionFunnelDefinition;
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure }
+},
   timeRange: { start: number; end: number };
   segments?: UserSegment;
   cohorts?: ConversionCohort;
@@ -42,7 +39,7 @@ export interface FunnelChartProps {
   realTimeUpdates?: boolean;
   onStepClick?: (step: ConversionStep, metrics: StepMetrics) => void;
   onExport?: (chartData: ChartExportData) => void;
-}
+
 export type FunnelChartMode = 
   | 'standard'
   | 'horizontal'
@@ -50,9 +47,8 @@ export type FunnelChartMode =
   | 'waterfall'
   | 'heatmap';
 
-}
-export interface StepMetrics {
-  stepId: string;
+
+export interface StepMetrics { stepId: string;
   stepName: string;
   order: number;
   totalEntries: number;
@@ -64,41 +60,38 @@ export interface StepMetrics {
   revenue: number;
   revenuePerConversion: number;
   previousStepConversionRate?: number;
-  comparisonData?: StepComparisonMetrics;
-}
-}
-}
-export interface StepComparisonMetrics {
-  previousPeriod: {
+  comparisonData?: StepComparisonMetrics }
+
+
+
+export interface StepComparisonMetrics { previousPeriod: {;
   conversionRate: number;
   change: number;
-  direction: 'improvement' | 'decline' | 'no_change'
-}
+  direction: 'improvement' | 'decline' | 'no_change' }
+
+
   };
-  benchmark: {
+  benchmark: { ,
   conversionRate: number;
   percentile: number;
-  industry: string;
-};
-  segments: Array<{
+  industry: string };
+  segments: Array<{ ,
   segmentId: string;
   segmentName: string;
   conversionRate: number;
-  performance: 'above_average' | 'below_average' | 'average'
-  }>;
-}
-}
-export interface FunnelChartData {
-  steps: StepMetrics;
+  performance: 'above_average' | 'below_average' | 'average' }
+>;
+
+
+export interface FunnelChartData { steps: StepMetrics;
   overallMetrics: OverallFunnelMetrics;
   dropoffAnalysis: DropoffAnalysis;
   trends: FunnelTrend;
-  segmentComparisons: SegmentFunnelComparison;
-}
-}
-}
-export interface OverallFunnelMetrics {
-  totalEntries: number;
+  segmentComparisons: SegmentFunnelComparison }
+
+
+
+export interface OverallFunnelMetrics { totalEntries: number;
   totalConversions: number;
   overallConversionRate: number;
   averageTimeToConvert: number;
@@ -107,77 +100,75 @@ export interface OverallFunnelMetrics {
   revenuePerConversion: number;
   totalDropoffs: number;
   biggestDropoffStep: string;
-  mostEfficientStep: string;
-}
-}
-}
-export interface DropoffAnalysis {
-  stepId: string;
+  mostEfficientStep: string }
+
+
+
+export interface DropoffAnalysis { stepId: string;
   stepName: string;
   dropOffCount: number;
   dropOffRate: number;
   dropOffReasons: DropoffReason;
   recoveryOpportunity: number;
   recommendedActions: string;
-  severity: 'critical' | 'high' | 'medium' | 'low'
-}
-  }
-}
-export interface DropoffReason {
-  reason: string;
+  severity: 'critical' | 'high' | 'medium' | 'low' }
+
+
+
+
+export interface DropoffReason { reason: string;
   category: 'technical' | 'user_experience' | 'content' | 'external';
   percentage: number;
   count: number;
-  confidence: number;
-}
-}
-}
-export interface FunnelTrend {
-  period: string;
+  confidence: number }
+
+
+
+export interface FunnelTrend { period: string;
   conversionRate: number;
   entries: number;
   conversions: number;
-  revenue: number;
-}
-}
-}
-export interface SegmentFunnelComparison {
-  segmentId: string;
+  revenue: number }
+
+
+
+export interface SegmentFunnelComparison { segmentId: string;
   segmentName: string;
   overallConversionRate: number;
-  stepPerformance: Array<{
+  stepPerformance: Array<{ }
   stepId: string;
   conversionRate: number;
   relativePerformance: number;
-}
-}>;
+
+
+>;
   insights: string;
-}
-}
-export interface ChartExportData {
-  chartMode: FunnelChartMode;
+
+
+export interface ChartExportData { chartMode: FunnelChartMode;
   data: FunnelChartData;
-  visualization: {
+  visualization: { }
   svg: string;
   png?: string;
   pdf?: string;
-}
+
+
 };
-  metadata: {
+  metadata: {,
   exportedAt: number;
     timeRange: { start: number; end: number };
     filters: unknown;
   };
-}
-}
-export interface InteractionState {
-  hoveredStep: string | null;
+
+
+export interface InteractionState { hoveredStep: string | null }
   selectedStep: string | null;
-}
+
+},
   tooltipPosition: { x: number; y: number } | null;
   tooltipContent: StepTooltipContent | null;
-}
-}
+
+
 export interface StepTooltipContent {
   stepName: string;
   metrics: StepMetrics;
@@ -186,148 +177,133 @@ export interface StepTooltipContent {
   /**
   * Main Funnel Chart Component
   */
-}
-}
-export const FunnelChart: React.FC<FunnelChartProps> = ({)
-  funnelDefinition,
-  analyticsInfrastructure,
-  timeRange,
-  segments = [],
-  cohorts = [],
-  chartMode = 'standard',
-  showDropoffAnalysis = true,
-  realTimeUpdates = false,
-  onStepClick,
+
+
+export const FunnelChart: React.FC<FunnelChartProps> = ({ )
+  funnelDefinition
+  analyticsInfrastructure
+  timeRange
+  segments = []
+  cohorts = []
+  chartMode = 'standard'
+  showDropoffAnalysis = true
+  realTimeUpdates = false
+  onStepClick }
   onExport
-}) => {
-  const [chartData, setChartData] = useState<FunnelChartData | null>(null);
+}) => { const [chartData, setChartData] = useState<FunnelChartData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [interactionState, setInteractionState] = useState<InteractionState>({)
-  hoveredStep: null,
-  selectedStep: null,
-  tooltipPosition: null,
-  tooltipContent: null,
+  hoveredStep: null
+  selectedStep: null
+  tooltipPosition: null
+  tooltipContent: null }
 });
   const chartRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   // Load funnel chart data
-  const loadChartData = useCallback(async () => {
-  try {
+  const loadChartData = useCallback(async () => { try {
   setLoading(true);
   setError(null);
-  const query: ConversionMetricQuery = {,
-  funnelId: funnelDefinition.id,
-  startDate: timeRange.start,
-  endDate: timeRange.end,
-  metrics: [,
-  'conversion_rate',
-  'user_count',
-  'revenue',
-  'drop_off_rate',
-  'time_spent',
+  const query: ConversionMetricQuery = {
+  funnelId: funnelDefinition.id
+  startDate: timeRange.start
+  endDate: timeRange.end
+  metrics: [
+  'conversion_rate'
+  'user_count'
+  'revenue'
+  'drop_off_rate'
+  'time_spent'
   'step_completion_rate'
-  ],
-  groupBy: ['funnel_step', 'date'],
-  filters: [,
+  ]
+  groupBy: ['funnel_step', 'date']
+  filters: [
   ...segments.map(segment => ({)
-  field: 'userContext.segmentIds',
-  operator: 'contains',
-  value: segment.id,
-})),
-          ...cohorts.map(cohort => ({)
-  field: 'userContext.cohortIds',
-  operator: 'contains',
-  value: cohort.id,
+  field: 'userContext.segmentIds'
+  operator: 'contains'
+  value: segment.id }
 }))
-        ],
+          ...cohorts.map(cohort => ({ )
+  field: 'userContext.cohortIds'
+  operator: 'contains'
+  value: cohort.id }
+}))
+        ]
         aggregation: { interval: 'day' }
       };
       const results = await analyticsInfrastructure.queryMetrics(query);
       const processedData = await processFunnelChartData(;);
-        funnelDefinition,
-        results,
-        segments,
-        cohorts,
+        funnelDefinition
+        results
+        segments
+        cohorts
         timeRange
       );
       setChartData(processedData);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load chart data');
-} finally {
-      setLoading(false);
-  }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts]);
-  useEffect(() => {
-    loadChartData();
-  }, [loadChartData]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load chart data') } finally { setLoading(false) }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts]);
+  useEffect(() => { loadChartData() }, [loadChartData]);
   // Real-time updates
-  useEffect(() => {
-    if (!realTimeUpdates) return;
+  useEffect(() => { if (!realTimeUpdates) return;
     const interval = setInterval(loadChartData, 30000); // Update every 30 seconds;
-    return () => clearInterval(interval);
-  }, [realTimeUpdates, loadChartData]);
+    return () => clearInterval(interval) }, [realTimeUpdates, loadChartData]);
   // Chart dimensions and scaling
-  const chartDimensions = useMemo(() => {
-    if (!containerRef.current || !chartData) return null;
+  const chartDimensions = useMemo(() => { if (!containerRef.current || !chartData) return null;
     const containerWidth = containerRef.current.clientWidth;
     const containerHeight = Math.min(containerWidth * 0.6, 500);
     return {
-      width: containerWidth,
-      height: containerHeight,
-      margin: { top: 40, right: 80, bottom: 60, left: 80 },
-      chartWidth: containerWidth - 160,
+      width: containerWidth
+      height: containerHeight }
+      margin: { top: 40, right: 80, bottom: 60, left: 80 }
+      chartWidth: containerWidth - 160
       chartHeight: containerHeight - 100;
   };
   }, [chartData, containerRef.current?.clientWidth]);
   // Handle step interactions
-  const handleStepHover = useCallback((stepId: string | null, event?: React.MouseEvent) => {
-    if (!chartData) return;
+  const handleStepHover = useCallback((stepId: string | null, event?: React.MouseEvent) => { if (!chartData) return;
     if (stepId && event) {
       const step = chartData.steps.find(s => s.stepId === stepId);
       if (step) {
         const rect = event.currentTarget.getBoundingClientRect();
         setInteractionState({)
-  hoveredStep: stepId,
-          selectedStep: interactionState.selectedStep,
-          tooltipPosition: { x: rect.right + 10, y: rect.top },
-          tooltipContent: {
-  stepName: step.stepName,
-  metrics: step,
-  comparisonData: step.comparisonData,
-  insights: generateStepInsights(step),
+  hoveredStep: stepId
+          selectedStep: interactionState.selectedStep }
+          tooltipPosition: { x: rect.right + 10, y: rect.top }
+          tooltipContent: { 
+  stepName: step.stepName
+  metrics: step
+  comparisonData: step.comparisonData
+  insights: generateStepInsights(step) }
 });
-    } else {
-  setInteractionState(prev => ({)
-  ...prev,
-  hoveredStep: null,
-  tooltipPosition: null,
-  tooltipContent: null,
+ else { setInteractionState(prev => ({)
+  ...prev
+  hoveredStep: null
+  tooltipPosition: null
+  tooltipContent: null }
 }));
   }, [chartData, interactionState.selectedStep]);
-  const handleStepClick = useCallback((stepId: string) => {
-  if (!chartData) return;
+  const handleStepClick = useCallback((stepId: string) => { if (!chartData) return;
   const step = chartData.steps.find(s => s.stepId === stepId);
   if (step) {
   setInteractionState(prev => ({)
-  ...prev,
-  selectedStep: stepId === prev.selectedStep ? null : stepId,
+  ...prev
+  selectedStep: stepId === prev.selectedStep ? null : stepId }
 }));
       onStepClick?.(funnelDefinition.steps.find(s => s.id === stepId)!, step);
   }, [chartData, funnelDefinition.steps, onStepClick]);
-  const handleExport = useCallback(async () => {
-  if (!chartData || !chartRef.current) return;
+  const handleExport = useCallback(async () => { if (!chartData || !chartRef.current) return;
   const svgElement = chartRef.current;
   const svgString = new XMLSerializer().serializeToString(svgElement);
-  const exportData: ChartExportData = {,
-  chartMode,
-  data: chartData,
+  const exportData: ChartExportData = {
+  chartMode
+  data: chartData
   visualization: {
-  svg: svgString,
-},
-  metadata: {
-  exportedAt: Date.now(),
-  timeRange,
-  filters: [],
+  svg: svgString }
+
+  metadata: { 
+  exportedAt: Date.now()
+  timeRange
+  filters: [] }
 };
     onExport?.(exportData);
   }, [chartData, chartMode, timeRange, onExport]);
@@ -414,18 +390,19 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({)
 /**
  * Funnel Chart Header Component
  */
-}
-interface FunnelChartHeaderProps {
-  funnelDefinition: ConversionFunnelDefinition;
+
+
+interface FunnelChartHeaderProps { funnelDefinition: ConversionFunnelDefinition;
   overallMetrics: OverallFunnelMetrics;
   chartMode: FunnelChartMode;
   onExport: () => void;
-  const FunnelChartHeader: React.FC<FunnelChartHeaderProps> = ({,)
-  funnelDefinition,
-  overallMetrics,
-  chartMode,
+  const FunnelChartHeader: React.FC<FunnelChartHeaderProps> = ({);
+  funnelDefinition;
+  overallMetrics;
+  chartMode }
   onExport
-}
+
+
 }) => {
   return;
     <div className="funnel-chart-header">
@@ -463,20 +440,21 @@ interface FunnelChartHeaderProps {
 /**
  * Standard Funnel Chart Component
  */
-}
-interface StandardFunnelChartProps {
-  data: FunnelChartData;
+
+
+interface StandardFunnelChartProps { data: FunnelChartData;
   dimensions: unknown;
   interactionState: InteractionState;
   onStepHover: (stepId: string | null, event?: React.MouseEvent) => void;
   onStepClick: (stepId: string) => void;
-  const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({,)
-  data,
-  dimensions,
-  interactionState,
-  onStepHover,
+  const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({);
+  data;
+  dimensions;
+  interactionState;
+  onStepHover }
   onStepClick
-}
+
+
 }) => {
   const { steps } = data;
   const { chartWidth, chartHeight, margin } = dimensions;
@@ -566,11 +544,11 @@ interface StandardFunnelChartProps {
 /**
  * Horizontal Funnel Chart Component
  */
-const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({)
-  data,
-  dimensions,
-  interactionState,
-  onStepHover,
+const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({ )
+  data
+  dimensions
+  interactionState
+  onStepHover }
   onStepClick
 }) => {
   const { steps } = data;
@@ -649,10 +627,10 @@ const WaterfallFunnelChart: React.FC<StandardFunnelChartProps> = () => ()
 /**
  * Drop-off Analysis Panel Component
  */
-}
-interface DropoffAnalysisPanelProps {
-  dropoffAnalysis: DropoffAnalysis;
-}
+
+
+interface DropoffAnalysisPanelProps { dropoffAnalysis: DropoffAnalysis }
+
 const DropoffAnalysisPanel: React.FC<DropoffAnalysisPanelProps> = ({ dropoffAnalysis }) => {
   const criticalDropoffs = dropoffAnalysis;
     .filter(d => d.severity === 'critical' || d.severity === 'high')
@@ -695,10 +673,10 @@ const DropoffAnalysisPanel: React.FC<DropoffAnalysisPanelProps> = ({ dropoffAnal
 /**
  * Segment Comparison Panel Component
  */
-}
-interface SegmentComparisonPanelProps {
-  segmentComparisons: SegmentFunnelComparison;
-}
+
+
+interface SegmentComparisonPanelProps { segmentComparisons: SegmentFunnelComparison }
+
 const SegmentComparisonPanel: React.FC<SegmentComparisonPanelProps> = ({ segmentComparisons }) => {
   return;
     <div className="segment-comparison-panel">
@@ -726,22 +704,21 @@ const SegmentComparisonPanel: React.FC<SegmentComparisonPanelProps> = ({ segment
 /**
  * Step Tooltip Component
  */
-}
-interface StepTooltipProps {
-  content: StepTooltipContent;
-}
+
+
+interface StepTooltipProps { content: StepTooltipContent }
+},
   position: { x: number; y: number };
   onClose: () => void;
-const StepTooltip: React.FC<StepTooltipProps> = ({ content, position, onClose }) => {
-  return;
+const StepTooltip: React.FC<StepTooltipProps> = ({ content, position, onClose }) => { return;
   <div
   className="step-tooltip"
   style={{
-  position: 'fixed',
-  left: position.x,
-  top: position.y,
-  zIndex: 1000,
-}}
+  position: 'fixed'
+  left: position.x
+  top: position.y
+  zIndex: 1000 }
+}
     >
       <div className="tooltip-header">
         <h4>{content.stepName}</h4>
@@ -790,11 +767,11 @@ const FunnelChartLoadingState: React.FC = () => ()
     <p>Loading funnel chart...</p>
   </div>
 );
-}
-interface FunnelChartErrorStateProps {
-  error: string;
-  onRetry: () => void;
-}
+
+
+interface FunnelChartErrorStateProps { error: string;
+  onRetry: () => void }
+
 const FunnelChartErrorState: React.FC<FunnelChartErrorStateProps> = ({ error, onRetry }) => ()
   <div className="funnel-chart-error">
     <div className="error-message">
@@ -823,31 +800,26 @@ function formatDuration(milliseconds: number): string {
   if (hours > 0) return `${hours}h ${minutes % 60}m`;}
   if (minutes > 0) return `${minutes}m ${seconds % 60}s`;}
   return `${seconds}s`;}
-function generateStepInsights(step: StepMetrics): string {
-  const insights: string = [];
+function generateStepInsights(step: StepMetrics): string { const insights: string = [];
   if (step.conversionRate > 80) {
-  insights.push('High-performing step with excellent conversion rate');
-} else if (step.conversionRate < 40) {
-    insights.push('Low conversion rate - optimization opportunity');
+  insights.push('High-performing step with excellent conversion rate') } else if (step.conversionRate < 40) { insights.push('Low conversion rate - optimization opportunity');
   if (step.dropOffRate > 50) {
     insights.push('High drop-off rate - investigate user experience issues');
   if (step.averageTimeSpent > 300000) { // 5 minutes
     insights.push('Users spend significant time on this step');
   return insights;
-async function processFunnelChartData(funnelDefinition: ConversionFunnelDefinition)
+async function processFunnelChartData(funnelDefinition: ConversionFunnelDefinition),
   metricResults: ConversionMetricResult,
   segments: UserSegment,
-  cohorts: ConversionCohort,
+  cohorts: ConversionCohort }
   timeRange: { start: number; end: number }
-): Promise<FunnelChartData> {
-
-  // Simplified implementation - in production would process actual metrics
-  const steps: StepMetrics = funnelDefinition.steps.map((step, index) => ({,)
-  stepId: step.id,
-  stepName: step.name,
-  order: step.order,
-  totalEntries: 1000 - (index * 150),
-  totalConversions: 1000 - ((index + 1) * 150),
+): Promise<FunnelChartData> { // Simplified implementation - in production would process actual metrics
+  const steps: StepMetrics = funnelDefinition.steps.map((step, index) => ({)
+  stepId: step.id
+  stepName: step.name
+  order: step.order
+  totalEntries: 1000 - (index * 150)
+  totalConversions: 1000 - ((index + 1) * 150)
   conversionRate: index < funnelDefinition.steps.length - 1 ? ,
   ((1000 - ((index + 1) * 150)) / (1000 - (index * 150))) * 100 : 100,
   dropOffCount: 150,
@@ -855,25 +827,25 @@ async function processFunnelChartData(funnelDefinition: ConversionFunnelDefiniti
   averageTimeSpent: 120000 + (index * 30000),
   revenue: 500 * (index + 1),
   revenuePerConversion: 25 + (index * 5),
-  comparisonData: {
-  previousPeriod: {
+  comparisonData: {,
+  previousPeriod: {,
   conversionRate: 75 + (Math.random() * 20),
   change: (Math.random() - 0.5) * 20,
-  direction: Math.random() > 0.5 ? 'improvement' : 'decline',
+  direction: Math.random() > 0.5 ? 'improvement' : 'decline' }
 },
-  benchmark: {
+  benchmark: { ,
   conversionRate: 70 + (Math.random() * 15),
   percentile: 60 + (Math.random() * 30),
-  industry: 'marketplace',
+  industry: 'marketplace' }
 },
-  segments: segments.slice(0, 2).map(segment => ({)
+  segments: segments.slice(0, 2).map(segment => ({ )
   segmentId: segment.id,
   segmentName: segment.name,
   conversionRate: 60 + (Math.random() * 40),
-  performance: Math.random() > 0.5 ? 'above_average' : 'below_average' as any,
+  performance: Math.random() > 0.5 ? 'above_average' : 'below_average' as any }
 }))
   }));
-  const overallMetrics: OverallFunnelMetrics = {,
+  const overallMetrics: OverallFunnelMetrics = { ,
   totalEntries: 1000,
   totalConversions: 150,
   overallConversionRate: 15.0,
@@ -883,57 +855,55 @@ async function processFunnelChartData(funnelDefinition: ConversionFunnelDefiniti
   revenuePerConversion: 25,
   totalDropoffs: 850,
   biggestDropoffStep: steps[1]?.stepId || '',
-  mostEfficientStep: steps[0]?.stepId || '',
+  mostEfficientStep: steps[0]?.stepId || '' }
 };
   const dropoffAnalysis: DropoffAnalysis = steps
     .filter(step => step.dropOffRate > 10)
-    .map(step => ({)
+    .map(step => ({ )
   stepId: step.stepId,
   stepName: step.stepName,
   dropOffCount: step.dropOffCount,
   dropOffRate: step.dropOffRate,
-  dropOffReasons: [,
+  dropOffReasons: [
   {
   reason: 'Complex form fields',
   category: 'user_experience',
   percentage: 35,
   count: Math.floor(step.dropOffCount * 0.35),
-  confidence: 0.85,
-}
-        {
-  reason: 'Page load time',
+  confidence: 0.85 }
+
+        { reason: 'Page load time',
   category: 'technical',
   percentage: 25,
   count: Math.floor(step.dropOffCount * 0.25),
   confidence: 0.78],
   recoveryOpportunity: 45,
-  recommendedActions: [,
+  recommendedActions: [
   'Simplify form fields and reduce required information',
   'Optimize page loading performance',
   'Add progress indicators to improve user experience'
   ],
-  severity: step.dropOffRate > 30 ? 'critical' : step.dropOffRate > 20 ? 'high' : 'medium',
+  severity: step.dropOffRate > 30 ? 'critical' : step.dropOffRate > 20 ? 'high' : 'medium' }
 }));
-  const segmentComparisons: SegmentFunnelComparison = segments.map(segment => ({)
+  const segmentComparisons: SegmentFunnelComparison = segments.map(segment => ({ ),
   segmentId: segment.id,
   segmentName: segment.name,
   overallConversionRate: segment.performance.averageConversionRate,
-  stepPerformance: steps.map(step => ({)
+  stepPerformance: steps.map(step => ({),
   stepId: step.stepId,
   conversionRate: step.conversionRate * (0.8 + Math.random() * 0.4),
-  relativePerformance: (Math.random() - 0.5) * 40,
+  relativePerformance: (Math.random() - 0.5) * 40 }
 })),
-    insights: [,
+    insights: [
       `${segment.name} shows ${Math.random() > 0.5 ? 'above' : 'below'} average performance`}
-}
+
       `Strongest performance in step ${steps[Math.floor(Math.random() * steps.length)].stepName}`}
     ]
   }));
-  return {
-  steps,
+  return { steps,
   overallMetrics,
   dropoffAnalysis,
-  trends: [], // TODO: Implement trend analysis,
+  trends: [], // TODO: Implement trend analysis }
   segmentComparisons
 };
 

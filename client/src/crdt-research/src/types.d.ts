@@ -3,9 +3,12 @@
  */
 
 }
+}
 export interface NodeData {
     [key: string]: any;
 
+}
+}
 }
 export interface Edge {
     id: string;
@@ -22,6 +25,8 @@ export type PeerId = string;
  */
 
 }
+}
+}
 export interface LogicalTimestamp {
     counter: number;
     peerId: PeerId;
@@ -29,6 +34,8 @@ export interface LogicalTimestamp {
  * Base interface for all CRDT operations
  */
 
+}
+}
 }
 export interface CRDTOperation {
     id: string;
@@ -39,6 +46,8 @@ export interface CRDTOperation {
  * Graph-specific CRDT operations
  */
 
+}
+}
 }
 export interface GraphOperation extends CRDTOperation {
     type: 'node' | 'edge' | 'addNode' | 'removeNode' | 'updateNode' | 'addEdge' | 'removeEdge';
@@ -52,6 +61,7 @@ export interface GraphOperation extends CRDTOperation {
  */
 
 }
+}
 export interface CRDTGraph {
     nodes: Map<string, CRDTNode>;
     edges: Map<string, CRDTEdge>;
@@ -62,12 +72,15 @@ export interface CRDTGraph {
  */
 
 }
+}
+}
 export interface CRDTNode {
     id: string;
     type: 'WeightedChoice' | 'Concat' | 'Output' | 'SetVariable' | 'GetVariable' | 'Include' | string;
     position: {
         x: number;
         y: number;
+}
 }
     };
     data: any;
@@ -80,6 +93,7 @@ export interface CRDTNode {
  * CRDT-enhanced edge with metadata
  */
 
+}
 }
 export interface CRDTEdge {
     id: string;
@@ -100,6 +114,8 @@ export type ConflictResolutionStrategy = 'lastWriteWins' | 'multiValue' | 'custo
  */
 
 }
+}
+}
 export interface CRDTConfig {
     peerId: PeerId;
     conflictResolution: ConflictResolutionStrategy;
@@ -110,6 +126,8 @@ export interface CRDTConfig {
  */
 
 }
+}
+}
 export interface UserPresence {
     userId: string;
     cursor?: {
@@ -117,6 +135,7 @@ export interface UserPresence {
         position?: {
             x: number;
             y: number;
+}
 }
         };
     };
@@ -129,6 +148,7 @@ export interface UserPresence {
  */
 
 }
+}
 export interface SyncState {
     documentId: string;
     userId: string;
@@ -138,6 +158,8 @@ export interface SyncState {
  * Synchronization message between peers
  */
 
+}
+}
 }
 export interface SyncMessage {
     type: 'sync' | 'update' | 'awareness' | 'operation' | 'state' | 'request';
@@ -154,6 +176,8 @@ export interface SyncMessage {
  */
 
 }
+}
+}
 export interface NodeOperation extends GraphOperation {
     type: 'node';
     action: 'create' | 'update' | 'delete';
@@ -163,6 +187,7 @@ export interface NodeOperation extends GraphOperation {
  * Edge operation types
  */
 
+}
 }
 export interface EdgeOperation extends GraphOperation {
     type: 'edge';

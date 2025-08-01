@@ -11,18 +11,19 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types and interfaces
-}
+
+
 interface LinkedOAuthAccount {
   id: string;,
-  providerId: string;
+  providerId: string;,
   providerName: string;,
-  providerDisplayName: string;
+  providerDisplayName: string;,
   accountId: string;,
-  accountEmail: string;
+  accountEmail: string;,
   accountName: string;
   avatarUrl?: string;
   scopes: string;,
-  permissions: Permission;
+  permissions: Permission;,
   status: 'active' | 'inactive' | 'error' | 'expired';,
   linkedAt: Date;
   lastUsedAt?: Date;
@@ -30,155 +31,66 @@ interface LinkedOAuthAccount {
   metadata: AccountMetadata;
   interface Permission {
   scope: string;,
-  description: string;
+  description: string;,
   granted: boolean;,
-  required: boolean;
+  required: boolean;,
   category: 'profile' | 'email' | 'calendar' | 'files' | 'repositories' | 'custom';
   interface AccountMetadata {
   tokenType: string;,
-  hasRefreshToken: boolean;
+  hasRefreshToken: boolean;,
   loginCount: number;,
-  securityLevel: 'basic' | 'standard' | 'high';
-  complianceFlags: {
+  securityLevel: 'basic' | 'standard' | 'high';,
+  complianceFlags: {,
   gdprConsent: boolean;,
-  ccpaConsent: boolean;
+  ccpaConsent: boolean;,
   dataProcessingConsent: boolean;
-}
+
+
 };
-}
+
+
 interface AvailableProvider {
   id: string;,
-  name: string;
+  name: string;,
   displayName: string;,
-  description: string;
+  description: string;,
   iconUrl: string;,
-  scopes: ProviderScope;
+  scopes: ProviderScope;,
   features: string;,
-  status: 'available' | 'configured' | 'maintenance';
+  status: 'available' | 'configured' | 'maintenance';,
   complianceLevel: 'basic' | 'standard' | 'enterprise';
-}
+
+
+
 interface ProviderScope {
   scope: string;,
-  displayName: string;
+  displayName: string;,
   description: string;,
-  required: boolean;
+  required: boolean;,
   sensitive: boolean;,
   category: 'profile' | 'email' | 'calendar' | 'files' | 'repositories' | 'custom';
-/* interface LinkingResult {
-   success: boolean;
-   accountId?: string; */
-//   error?: string;
-//   warnings?: string;
-//   requiresConsent?: boolean;
-//   consentUrl?: string;
+  /* interface LinkingResult {
+  success: boolean;
+  accountId?: string; */,
+  //   error?: string;
+  //   warnings?: string;
+  //   requiresConsent?: boolean;
+  //   consentUrl?: string;
 
-}
+
 // }
 
-export const OAuthUserAccountManager: React.FC = () => {
-  // State management
-  const [linkedAccounts, setLinkedAccounts] = useState<LinkedOAuthAccount>([]);
-  const [availableProviders, setAvailableProviders] = useState<AvailableProvider>([]);
-  const [selectedAccount, setSelectedAccount] = useState<LinkedOAuthAccount | null>(null);
-  const [showLinkProvider, setShowLinkProvider] = useState(false);
-  const [linking, setLinking] = useState<Record<string, boolean>>({});
-  const [unlinking, setUnlinking] = useState<Record<string, boolean>>({});
-  const [refreshing, setRefreshing] = useState<Record<string, boolean>>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  // Auth store for API calls
-  const { authenticatedFetch, user: _user } = useAuthStore(); // eslint-disable-line @typescript-eslint/no-unused-vars
-  // Load data on mount
-  useEffect(() => {
-    loadLinkedAccounts();
-    loadAvailableProviders();
-  }, [loadLinkedAccounts, loadAvailableProviders]);
-  // API functions
-  const loadLinkedAccounts = useCallback(async () => {
-    try {
-      const response = await authenticatedFetch('/auth/oauth/accounts');
-      const data = await response.json();
-      if (data.success) {
-        setLinkedAccounts(data.data.accounts || []);
-      } else {
-        setError('Failed to load linked accounts');
-    } catch (err) {
-  setError('Failed to load linked accounts');
-  console.error('Failed to load linked accounts:', err);
-} finally {
-      setLoading(false);
-  }, [authenticatedFetch]);
-  const loadAvailableProviders = useCallback(async () => {
-    try {
-      const response = await authenticatedFetch('/auth/oauth/providers');
-      const data = await response.json();
-      if (data.success) {
-        setAvailableProviders(data.data.providers || []);
-    } catch (err) {
-  console.error('Failed to load available providers:', err);
-}, [authenticatedFetch]);
-  const initiateOAuthLink = async (providerId: string) => {
-    setLinking(prev => ({ ...prev, [providerId]: true }));
-    setError(null);
-    try {
-      const response = await authenticatedFetch('/auth/oauth/link', {)
-  method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ),
-          provider: providerId,
-          returnUrl: window.location.href;
-  }
-      });
-      const data = await response.json();
-      if (data.success && data.data.authorizationUrl) {
-        // Redirect to OAuth provider
-        window.location.href = data.data.authorizationUrl;
-      } else {
-        setError(`Failed to initiate OAuth linking: ${data.message}`);}
-    } catch (err) {
-      setError(`Failed to initiate OAuth linking: ${err.message}`);}
-    } finally {
-      setLinking(prev => ({ ...prev, [providerId]: false }));
-  };
-  const unlinkAccount = async (accountId: string) => {
-    if (!confirm('Are you sure you want to unlink this OAuth account? This will revoke access to your data from this provider.')) {
-      return;
-    setUnlinking(prev => ({ ...prev, [accountId]: true }));
-    setError(null);
-    try {
-      const response = await authenticatedFetch('/auth/oauth/unlink', {)
-  method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accountId })
-      });
-      const data = await response.json();
-      if (data.success) {
-        await loadLinkedAccounts(); // Reload accounts
-        if (selectedAccount?.id === accountId) {
-          setSelectedAccount(null);
-      } else {
-        setError(`Failed to unlink account: ${data.message}`);}
-    } catch (err) {
-      setError(`Failed to unlink account: ${err.message}`);}
-    } finally {
-      setUnlinking(prev => ({ ...prev, [accountId]: false }));
-  };
-  const refreshAccount = async (accountId: string) => {
-    setRefreshing(prev => ({ ...prev, [accountId]: true }));
-    setError(null);
-    try {
-      const response = await authenticatedFetch(`/auth/oauth/refresh/${accountId}`, {)}
-  },
+export const OAuthUserAccountManager = () => { return null; },
   method: 'POST';
   });
       const data = await response.json();
       if (data.success) {
         await loadLinkedAccounts(); // Reload accounts
-      } else {
+ else {
         setError(`Failed to refresh account: ${data.message}`);}
-    } catch (err) {
+ catch (err) {
       setError(`Failed to refresh account: ${err.message}`);}
-    } finally {
+ finally {
       setRefreshing(prev => ({ ...prev, [accountId]: false }));
   };
   // Utility functions
@@ -298,7 +210,7 @@ export const OAuthUserAccountManager: React.FC = () => {
   selectedAccount?.id === account.id
   ? 'border-blue-500 bg-blue-50'
   : 'border-gray-200 hover:border-gray-300',
-}`}
+`}
                       onClick={() => setSelectedAccount(account)}
                     >
                       <div className="flex items-center justify-between">
@@ -310,7 +222,7 @@ export const OAuthUserAccountManager: React.FC = () => {
                               className="w-10 h-10 rounded-full"
                               onError={(e) => {
                                 e.currentTarget.src = '/icons/default-avatar.svg';
-                              }}
+}
                             />
                             <img
                               src={availableProviders.find(p => p.id === account.providerId)?.iconUrl || '/icons/oauth-default.svg'}
@@ -318,7 +230,7 @@ export const OAuthUserAccountManager: React.FC = () => {
                               className="w-4 h-4 absolute -bottom-1 -right-1 rounded border border-white"
                               onError={(e) => {
                                 e.currentTarget.src = '/icons/oauth-default.svg';
-                              }}
+}
                             />
                           </div>
                           <div className="ml-3">
@@ -349,7 +261,7 @@ export const OAuthUserAccountManager: React.FC = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               refreshAccount(account.id);
-                            }}
+}
                             disabled={refreshing[account.id]}
                             className="text-blue-600 hover:text-blue-800 disabled:text-gray-400"
                             title="Refresh connection"
@@ -366,7 +278,7 @@ export const OAuthUserAccountManager: React.FC = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               unlinkAccount(account.id);
-                            }}
+}
                             disabled={unlinking[account.id]}
                             className="text-red-600 hover:text-red-800 disabled:text-gray-400"
                             title="Unlink account"
@@ -419,7 +331,7 @@ export const OAuthUserAccountManager: React.FC = () => {
                     className="w-10 h-10 rounded-full mr-3"
                     onError={(e) => {
                       e.currentTarget.src = '/icons/default-avatar.svg';
-                    }}
+}
                   />
                   <div>
                     <h2 className="text-lg font-semibold text-gray-900">{selectedAccount.accountName}</h2>
@@ -484,7 +396,7 @@ export const OAuthUserAccountManager: React.FC = () => {
                           )}
                           <span className={`w-2 h-2 rounded-full ${
   permission.granted ? 'bg-green-400' : 'bg-red-400',
-}`}></span>
+`}></span>
                         </div>
                       </div>
                     ))}
@@ -500,7 +412,7 @@ export const OAuthUserAccountManager: React.FC = () => {
   selectedAccount.metadata.securityLevel === 'high' ? 'text-green-600' :,
   selectedAccount.metadata.securityLevel === 'standard' ? 'text-blue-600' :,
   'text-gray-600'
-}`}>
+`}>
                         {selectedAccount.metadata.securityLevel.toUpperCase()}
                       </span>
                     </div>
@@ -621,7 +533,7 @@ export const OAuthUserAccountManager: React.FC = () => {
                         onClick={() => {
                           if (!isLinked) {
                             initiateOAuthLink(provider.id);
-                        }}
+}
                         disabled={linking[provider.id] || isLinked}
                         className={`w-full p-3 border rounded-lg flex items-center transition-all ${
   isLinked
@@ -629,7 +541,7 @@ export const OAuthUserAccountManager: React.FC = () => {
   : linking[provider.id],
   ? 'bg-gray-50 border-gray-200 cursor-wait'
   : 'hover:bg-gray-50 border-gray-200',
-}`}
+`}
                       >
                         <img
                           src={provider.iconUrl}
@@ -637,7 +549,7 @@ export const OAuthUserAccountManager: React.FC = () => {
                           className="w-6 h-6 mr-3"
                           onError={(e) => {
                             e.currentTarget.src = '/icons/oauth-default.svg';
-                          }}
+}
                         />
                         <div className="flex-1 text-left">
                           <div className="font-medium text-gray-900">{provider.displayName}</div>

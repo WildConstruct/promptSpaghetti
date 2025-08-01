@@ -37,7 +37,7 @@ export const ExperimentBuilder = ({
         type: 'prompt',
         hypothesis: '',
         description: '',
-        variants: [,
+        variants: [
             { id: 'control', name: 'Control', description: 'Original version' },
             { id: 'variant-1', name: 'Variant 1', description: 'Test version' }
         ],

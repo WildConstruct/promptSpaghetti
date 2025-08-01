@@ -22,12 +22,12 @@ import {
   EvaluationOptions,
   BatchEvaluationOptions,
   ConditionEvaluator
-} from '../RuleEvaluationEngine';
+ from '../RuleEvaluationEngine';
 import {
   ComplianceRule,
   RuleEvaluationContext,
   RuleEvaluationResult
-} from '../ComplianceRuleEngine';
+ from '../ComplianceRuleEngine';
 
 // Type aliases for string literals since enums aren't defined
 type ComplianceFramework = 'SOC_2' | 'GDPR' | 'HIPAA' | 'PCI_DSS';
@@ -57,7 +57,7 @@ describe('RuleEvaluationEngine', () => {
       batchSize: 100,
       enableProfiling: true,
       performanceMetrics: true
-    } as EvaluationPerformanceConfig,
+ as EvaluationPerformanceConfig,
     caching: {
       enabled: true,
       ttl: 300,
@@ -66,7 +66,7 @@ describe('RuleEvaluationEngine', () => {
       compressionEnabled: false,
       distributedCache: false,
       cacheKeyPrefix: 'test-eval-'
-    } as EvaluationCachingConfig,
+ as EvaluationCachingConfig,
     optimization: {
       enableParallelExecution: true,
       enableLazyEvaluation: true,
@@ -75,7 +75,7 @@ describe('RuleEvaluationEngine', () => {
       enableConditionReordering: true,
       enableBatchProcessing: true,
       enableVectorization: false
-    } as EvaluationOptimizationConfig,
+ as EvaluationOptimizationConfig,
     security: {
       sandboxMode: true,
       maxExecutionTime: 10000,
@@ -83,7 +83,7 @@ describe('RuleEvaluationEngine', () => {
       blockedOperations: ['WRITE', 'DELETE'],
       encryptResults: false,
       auditAllEvaluations: true
-    } as EvaluationSecurityConfig,
+ as EvaluationSecurityConfig,
     monitoring: {
       enableRealTimeMetrics: true,
       enableAlerting: false,
@@ -93,7 +93,7 @@ describe('RuleEvaluationEngine', () => {
       ],
       healthCheckInterval: 30000,
       metricRetentionDays: 7
-    } as EvaluationMonitoringConfig
+ as EvaluationMonitoringConfig
   };
 
   const mockRule: ComplianceRule = {
@@ -115,21 +115,21 @@ describe('RuleEvaluationEngine', () => {
           field: 'securityLevel',
           operator: 'EQUALS' as ComparisonOperator,
           value: 'HIGH'
-        }
-      }
+
+
     ] as any,
     actions: [],
     metadata: {
       tags: ['test', 'security'],
       owner: 'test-owner',
       reviewDate: new Date('2024-12-31')
-  }
+
     audit: {
       createdAt: new Date(),
       createdBy: 'test-user',
       version: '1.0',
       environment: 'test'
-    }
+
   };
 
   const mockContext: RuleEvaluationContext = {
@@ -188,7 +188,7 @@ describe('RuleEvaluationEngine', () => {
             engineId: 'test-evaluation-engine',
             version: '1.0.0',
             environment: 'test'
-  }
+
   }
       );
     });
@@ -233,8 +233,8 @@ describe('RuleEvaluationEngine', () => {
             operand: {
               expression: 'while(true) { /* infinite loop */ }',
               variables: {}
-            }
-          }
+
+
         ]
       };
 
@@ -260,8 +260,8 @@ describe('RuleEvaluationEngine', () => {
             operand: {
               expression: 'require("fs").readFileSync("/etc/passwd")',
               variables: {}
-            }
-          }
+
+
         ]
       };
 
@@ -300,7 +300,7 @@ describe('RuleEvaluationEngine', () => {
           backoffStrategy: 'EXPONENTIAL',
           baseDelay: 100,
           maxDelay: 1000
-  }
+
         progressReporting: true,
         partialResults: true
       };
@@ -336,8 +336,8 @@ describe('RuleEvaluationEngine', () => {
             operand: {
               expression: 'Math.random() < 0.7 ? true : throw new Error("Random failure")',
               variables: {}
-            }
-          }
+
+
         ]
       };
 
@@ -348,7 +348,7 @@ describe('RuleEvaluationEngine', () => {
           backoffStrategy: 'EXPONENTIAL',
           baseDelay: 50,
           maxDelay: 500
-  }
+
         progressReporting: false,
         partialResults: true
       };
@@ -369,10 +369,10 @@ describe('RuleEvaluationEngine', () => {
           passed: true,
           confidence: 1.0,
           metadata: {}
-        } as unknown as unknown),
+ as unknown as unknown),
         validate: jest.fn<unknown[], unknown>().mockReturnValue({ isValid: true } as unknown as unknown),
         optimize: jest.fn<unknown[], unknown>().mockReturnValue({} as unknown as unknown)
-      } as any;
+ as any;
 
       engine.registerConditionEvaluator(customEvaluator);
 
@@ -388,7 +388,7 @@ describe('RuleEvaluationEngine', () => {
           field: 'classification',
           operator: 'EQUALS',
           value: 'CONFIDENTIAL'
-        }
+
       };
 
       const ruleWithDataField: ComplianceRule = {
@@ -409,7 +409,7 @@ describe('RuleEvaluationEngine', () => {
             conditionId: 'INVALID-COND',
             type: 'INVALID_TYPE' as ConditionType,
             operand: {}
-          }
+
         ]
       };
 
@@ -443,8 +443,8 @@ describe('RuleEvaluationEngine', () => {
           caching: {
             ...mockEngineConfig.caching,
             ttl: 1 // 1 second TTL
-          }
-  }
+
+
         mockAuditService
       );
 
@@ -468,8 +468,8 @@ describe('RuleEvaluationEngine', () => {
           caching: {
             ...mockEngineConfig.caching,
             maxCacheSize: 2 // Very small cache
-          }
-  }
+
+
         mockAuditService
       );
 
@@ -482,7 +482,7 @@ describe('RuleEvaluationEngine', () => {
 
       for (const rule of rules) {
         await smallCacheEngine.evaluateRule(rule, mockContext);
-      }
+
 
       const cacheStats = smallCacheEngine.getCacheStats();
       expect(cacheStats.evictionCount).toBeGreaterThan(0);
@@ -516,8 +516,8 @@ describe('RuleEvaluationEngine', () => {
             operand: {
               expression: 'new Promise(resolve => setTimeout(resolve, 2000)).then(() => true)', // 2 second delay
               variables: {}
-            }
-          }
+
+
         ]
       };
 
@@ -538,7 +538,7 @@ describe('RuleEvaluationEngine', () => {
       const malformedRule = {
         ...mockRule,
         conditions: null // Invalid conditions
-      } as any;
+ as any;
 
       const result = await engine.evaluateRule(malformedRule, mockContext);
 
@@ -557,8 +557,8 @@ describe('RuleEvaluationEngine', () => {
             operand: {
               expression: 'throw new Error("Test error")',
               variables: {}
-            }
-          }
+
+
         ]
       };
 
@@ -581,8 +581,8 @@ describe('RuleEvaluationEngine', () => {
               field: 'nonExistentField',
               operator: 'EQUALS',
               value: 'someValue'
-            }
-          }
+
+
         ]
       };
 
@@ -592,7 +592,7 @@ describe('RuleEvaluationEngine', () => {
         expect(result.errors[0].context).toBeDefined();
         expect(result.errors[0].context.ruleId).toBe('CONTEXT-ERROR-RULE');
         expect(result.errors[0].context.conditionId).toBe('CONTEXT-ERROR-COND');
-      }
+
     });
   });
 
@@ -629,7 +629,7 @@ describe('RuleEvaluationEngine', () => {
           compliance: expect.objectContaining({
             frameworks: ['SOC_2'],
             evidenceLevel: 'ENHANCED'
-  }
+
   }
       );
     });
@@ -645,19 +645,18 @@ expect.extend({
         message: () => `expected ${received} not to be one of ${validOptions.join(', ')}`,
         pass: true
       };
-    } else {
+ else {
       return {
         message: () => `expected ${received} to be one of ${validOptions.join(', ')}`,
         pass: false
       };
-    }
-  }
+
+
 });
 
 declare global {
   namespace jest {
     interface Matchers<R> {
       toBeOneOf(validOptions: any[]): R;
-    }
-  }
-}
+
+

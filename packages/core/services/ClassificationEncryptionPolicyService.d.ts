@@ -6,16 +6,15 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  DataClassificationLevel,
+import { DataClassificationLevel,
   EncryptionRequirements,
-  OperationContext,
+  OperationContext }
   ValidationResult
 } from '../types/DataClassification';
 
 }
-export interface EncryptionPolicy {
-    id: string;
+}
+export interface EncryptionPolicy { id: string;
     name: string;
     description: string;
     classification: DataClassificationLevel;
@@ -24,12 +23,10 @@ export interface EncryptionPolicy {
     keyManagement: KeyManagementPolicy;
     complianceFrameworks: string[];
     effectiveDate: Date;
-    version: string;
-
-
+    version: string }
 }
-export interface EncryptionAlgorithm {
-    name: string;
+}
+export interface EncryptionAlgorithm { name: string;
     keyLength: number;
     mode?: string;
     approved: boolean;
@@ -37,24 +34,20 @@ export interface EncryptionAlgorithm {
     maxClassification?: DataClassificationLevel;
     fipsCompliant: boolean;
     quantumResistant: boolean;
-    deprecatedDate?: Date;
-
-
+    deprecatedDate?: Date }
 }
-export interface KeyManagementPolicy {
-    keyRotationDays: number;
+}
+export interface KeyManagementPolicy { keyRotationDays: number;
     keyEscrowRequired: boolean;
     hsmRequired: boolean;
     keyDerivationFunction: string;
     keyStorageLocation: 'SOFTWARE' | 'HSM' | 'CLOUD_KMS' | 'AIR_GAPPED_HSM';
     multiPartyControl: boolean;
     keyRecoveryProcedure: string;
-    auditLogging: boolean;
-
-
+    auditLogging: boolean }
 }
-export interface EncryptionCompliance {
-    dataId: string;
+}
+export interface EncryptionCompliance { dataId: string;
     classification: DataClassificationLevel;
     encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED' | 'PARTIAL' | 'UNKNOWN';
     algorithm?: string;
@@ -64,12 +57,10 @@ export interface EncryptionCompliance {
     complianceScore: number;
     violations: string[];
     recommendations: string[];
-    assessmentDate: Date;
-
-
+    assessmentDate: Date }
 }
-export interface EncryptionAuditEvent {
-    id: string;
+}
+export interface EncryptionAuditEvent { id: string;
     timestamp: Date;
     eventType: 'KEY_ROTATION' | 'ENCRYPTION_APPLIED' | 'DECRYPTION_ACCESSED' | 'POLICY_VIOLATION' | 'COMPLIANCE_CHECK';
     dataId: string;
@@ -113,7 +104,7 @@ export declare class ClassificationEncryptionPolicyService {
         encrypted: boolean;
         algorithm?: string;
         keyLength?: number;
-        lastRotationDate?: Date;
+        lastRotationDate?: Date }
 }
     }, context: OperationContext): Promise<ValidationResult>;
     /**

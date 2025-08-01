@@ -9,18 +9,16 @@
 import React from 'react';
 import { StickyNote as StickyNoteType } from '../../types/CollaborationTypes';
 }
-interface StickyNotesLayerProps {
-    notes: StickyNoteType[];
+}
+interface StickyNotesLayerProps { notes: StickyNoteType[];
     onNotesChange: (notes: StickyNoteType[]) => void;
     canvasSize: {
         width: number;
-        height: number;
+        height: number }
 }
     };
-    canvasOffset: {
-        x: number;
-        y: number;
-    };
+    canvasOffset: { x: number;
+        y: number };
     zoom: number;
     author?: string;
     readOnly?: boolean;

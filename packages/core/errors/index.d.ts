@@ -5,8 +5,7 @@
  * with contextual, recoverable errors that provide better developer experience
  * and user feedback.
  */
-export declare enum ErrorCode {
-    GRAPH_VALIDATION_ERROR = "GRAPH_VALIDATION_ERROR",
+export declare enum ErrorCode { GRAPH_VALIDATION_ERROR = "GRAPH_VALIDATION_ERROR",
     GRAPH_EXECUTION_ERROR = "GRAPH_EXECUTION_ERROR",
     NODE_EXECUTION_ERROR = "NODE_EXECUTION_ERROR",
     DATABASE_CONNECTION_ERROR = "DATABASE_CONNECTION_ERROR",
@@ -31,12 +30,12 @@ export declare enum ErrorCode {
 export declare enum ErrorSeverity {
     LOW = "low",
     MEDIUM = "medium",
-    HIGH = "high",
+    HIGH = "high" }
     CRITICAL = "critical"
 
 }
-export interface ErrorContext {
-    timestamp: string;
+}
+export interface ErrorContext { timestamp: string;
     userId?: string;
     sessionId?: string;
     requestId?: string;
@@ -44,11 +43,10 @@ export interface ErrorContext {
     operation?: string;
     stackTrace?: string;
     originalError?: any;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface RecoveryAction {
-    type: 'retry' | 'fallback' | 'redirect' | 'reset' | 'manual';
+}
+export interface RecoveryAction { type: 'retry' | 'fallback' | 'redirect' | 'reset' | 'manual';
     description: string;
     action?: () => Promise<void> | void;
     url?: string;
@@ -67,22 +65,20 @@ export declare abstract class BaseError extends Error {
         suggestions?: string[];
         recoveryActions?: RecoveryAction[];
         userMessage?: string;
-        cause?: Error;
+        cause?: Error }
 }
     });
     /**
      * Convert error to JSON for API responses and logging
      */
-    toJSON(): {
-        name: string;
+    toJSON(): { name: string;
         message: string;
         code: ErrorCode;
         severity: ErrorSeverity;
         context: ErrorContext;
         suggestions: string[];
         recoveryActions: RecoveryAction[];
-        userMessage: string | undefined;
-    };
+        userMessage: string | undefined };
     /**
      * Get user-friendly error message
      */
@@ -94,17 +90,14 @@ export declare abstract class BaseError extends Error {
 /**
  * Graph-related errors
  */
-export declare class GraphValidationError extends BaseError {
-    validationErrors: Array<{
+export declare class GraphValidationError extends BaseError { validationErrors: Array<{
         field: string;
         value: any;
-        expected: string;
-    }>;
-    constructor(message: string, validationErrors: Array<{)
+        expected: string }>;
+    constructor(message: string, validationErrors: Array<{ )
         field: string;
         value: any;
-        expected: string;
-    }>, context?: Partial<ErrorContext>);
+        expected: string }>, context?: Partial<ErrorContext>);
 
 export declare class GraphExecutionError extends BaseError {
     constructor(message: string, context?: Partial<ErrorContext>, cause?: Error);

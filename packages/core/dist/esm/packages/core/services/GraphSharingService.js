@@ -1,4 +1,27 @@
 ;
+// Version control
+versionControl: {
+    version: number;
+    previousVersion ?  : string;
+    changes: string;
+    tags: string;
+    branch ?  : string;
+}
+;
+// Sharing settings
+sharing: {
+    permissions: 'private' | 'read_only' | 'collaborative' | 'public';
+    collaborators: Array < {
+        userId: string,
+        name: string,
+        role: 'viewer' | 'editor' | 'admin',
+        addedAt: string
+    } > ;
+    shareUrl ?  : string;
+    expiresAt ?  : string;
+}
+;
+;
 // Complete graph structure
 graph: {
     nodes: Node;
@@ -22,22 +45,87 @@ graph: {
 // All annotation types
 annotations: {
     // Connection labels (already handled in AnnotatedEdge)
-    connectionLabels: Array;
+    connectionLabels: Array < {
+        edgeId: string,
+        label: string,
+        style: any,
+        position: any,
+        visible: boolean
+    } > ;
     // Sticky notes
-    stickyNotes: Array;
+    stickyNotes: Array < {
+        id: string,
+        position: { x: number, y: number },
+        size: { width: number, height: number },
+        content: string,
+        color: string,
+        fontSize: number,
+        author: string,
+        createdAt: string,
+        updatedAt: string,
+        visible: boolean
+    } > ;
     // Node labels/annotations
-    nodeLabels: Array;
+    nodeLabels: Array < {
+        nodeId: string,
+        label: string,
+        description: string,
+        tags: string,
+        color: string,
+        notes: string
+    } > ;
     // Region grouping/areas
-    regions: Array;
+    regions: Array < {
+        id: string,
+        name: string,
+        bounds: { x: number, y: number, width: number, height: number },
+        color: string,
+        opacity: number,
+        nodeIds: string,
+        description: string,
+        collapsed: boolean
+    } > ;
     // Comments and discussions
-    comments: Array;
+    comments: Array < {
+        id: string,
+        content: string,
+        author: string,
+        timestamp: string,
+        position: { x: number, y: number },
+        targetType: 'node' | 'edge' | 'region' | 'canvas',
+        targetId: string,
+        resolved: boolean,
+        replies: Array < {
+            id: string,
+            content: string,
+            author: string,
+            timestamp: string
+        } > 
+    } > ;
 }
- > ;
 ;
 // Collaboration metadata
 collaboration: {
-    changeHistory: Array;
-    conflicts: Array;
+    changeHistory: Array < {
+        id: string,
+        timestamp: string,
+        author: string,
+        operation: string,
+        target: string,
+        before: any,
+        after: any,
+        description: string
+    } > ;
+    conflicts: Array < {
+        id: string,
+        timestamp: string,
+        type: 'merge' | 'edit' | 'delete',
+        targetType: 'node' | 'edge' | 'annotation',
+        targetId: string,
+        authors: string,
+        resolved: boolean,
+        resolution: any
+    } > ;
     lastSync: string;
     syncStatus: 'synced' | 'pending' | 'conflict' | 'offline';
 }
@@ -61,8 +149,9 @@ export class GraphSharingService {
              * Export graph with all annotations for sharing
              */
             async;
-            exportForSharing(nodes, Node);
-            edges: AnnotatedEdge,
+            exportForSharing(nodes, Node),
+                edges;
+            AnnotatedEdge,
                 annotations;
             any = {},
                 metadata;
@@ -133,7 +222,7 @@ export class GraphSharingService {
                             },
                             compatibility: {
                                 minVersion: '1.0.0',
-                                features: [,
+                                features: [
                                     'connection-labels',
                                     'sticky-notes',
                                     'node-annotations',
@@ -151,8 +240,7 @@ export class GraphSharingService {
                                 validateIntegrity: boolean,
                                 mergeConflicts: 'overwrite' | 'merge' | 'ask',
                                 preserveAnnotations: boolean
-                            } = {}
-                        }
+                            } = {} }
                     } };
                 Promise < {
                     success: boolean,
@@ -270,8 +358,9 @@ export class GraphSharingService {
                                  * Create a new version of a shared graph
                                  */
                                 async;
-                                createVersion(baseGraph, SharedGraphFormat);
-                                changes: {
+                                createVersion(baseGraph, SharedGraphFormat),
+                                    changes;
+                                {
                                     nodes ?  : Node;
                                     edges ?  : AnnotatedEdge;
                                     annotations ?  : Partial;
@@ -291,7 +380,7 @@ export class GraphSharingService {
                                                     ...baseGraph.metadata.versionControl,
                                                     version: baseGraph.metadata.versionControl.version + 1,
                                                     previousVersion: baseGraph.metadata.exportId,
-                                                    changes: [,
+                                                    changes: [
                                                         ...baseGraph.metadata.versionControl.changes,
                                                         changes.changeDescription
                                                     ]
@@ -307,7 +396,7 @@ export class GraphSharingService {
                                                 },
                                                 collaboration: {
                                                     ...baseGraph.collaboration,
-                                                    changeHistory: [,
+                                                    changeHistory: [
                                                         ...baseGraph.collaboration.changeHistory,
                                                         {
                                                             id: this.generateChangeId(),
@@ -316,7 +405,8 @@ export class GraphSharingService {
                                                             operation: 'version_update',
                                                             target: 'graph',
                                                             description: changes.changeDescription
-                                                        }],
+                                                        }
+                                                    ],
                                                     lastSync: new Date().toISOString(),
                                                 },
                                                 // Store new version

@@ -8,9 +8,8 @@ export type WorkflowAction =
   | 'archive'
   | 'return_to_draft';
 
-}
-export interface WorkflowConfig {
-  id: string;
+
+export interface WorkflowConfig { id: string;
   name: string;
   description?: string;
   workspace_id?: string;
@@ -19,12 +18,11 @@ export interface WorkflowConfig {
   default_state: WorkflowState;
   is_active: boolean;
   created_at: string;
-  updated_at: string;
-}
-}
-}
-export interface WorkflowStateConfig {
-  id: WorkflowState;
+  updated_at: string }
+
+
+
+export interface WorkflowStateConfig { id: WorkflowState;
   name: string;
   description?: string;
   color: string;
@@ -33,12 +31,11 @@ export interface WorkflowStateConfig {
   is_final: boolean;
   required_permissions: string;
   auto_actions?: WorkflowAutoAction;
-  metadata?: Record<string, any>;
-}
-}
-}
-export interface WorkflowTransition {
-  id: string;
+  metadata?: Record<string, any> }
+
+
+
+export interface WorkflowTransition { id: string;
   from_state: WorkflowState;
   to_state: WorkflowState;
   action: WorkflowAction;
@@ -47,35 +44,34 @@ export interface WorkflowTransition {
   required_permissions: string;
   conditions?: WorkflowCondition;
   auto_conditions?: WorkflowAutoCondition;
-  metadata?: Record<string, any>;
-}
-}
-}
-export interface WorkflowCondition {
-  type: 'permission' | 'approval_count' | 'custom';
+  metadata?: Record<string, any> }
+
+
+
+export interface WorkflowCondition { type: 'permission' | 'approval_count' | 'custom' }
   config: Record<string, any>;
   error_message?: string;
-}
-}
-}
-export interface WorkflowAutoCondition {
-  type: 'time_based' | 'field_based' | 'external';
+
+
+
+
+export interface WorkflowAutoCondition { type: 'time_based' | 'field_based' | 'external';
   config: Record<string, any>;
-  delay?: number; // seconds,
-}
-}
-}
-export interface WorkflowAutoAction {
-  type: 'notification' | 'assignment' | 'field_update' | 'webhook';
+  delay?: number; // seconds }
+
+
+
+
+export interface WorkflowAutoAction { type: 'notification' | 'assignment' | 'field_update' | 'webhook';
   config: Record<string, any>;
-  delay?: number; // seconds,
-}
-}
-}
-export interface WorkflowInstance {
-  id: string;
+  delay?: number; // seconds }
+
+
+
+
+export interface WorkflowInstance { id: string;
   resource_id: string;
-  resource_type: 'project' | 'resource';
+  resource_type: 'project' | 'resource' }
   workflow_config_id: string;
   current_state: WorkflowState;
   current_state_entered_at: string;
@@ -84,11 +80,11 @@ export interface WorkflowInstance {
   history: WorkflowHistoryEntry;
   created_at: string;
   updated_at: string;
-}
-}
-}
-export interface WorkflowHistoryEntry {
-  id: string;
+
+
+
+
+export interface WorkflowHistoryEntry { id: string;
   from_state?: WorkflowState;
   to_state: WorkflowState;
   action?: WorkflowAction;
@@ -96,35 +92,33 @@ export interface WorkflowHistoryEntry {
   actor_name?: string;
   comment?: string;
   metadata?: Record<string, any>;
-  created_at: string;
-}
-}
-}
-export interface WorkflowTransitionRequest {
-  action: WorkflowAction;
+  created_at: string }
+
+
+
+export interface WorkflowTransitionRequest { action: WorkflowAction;
   comment?: string;
-  metadata?: Record<string, any>;
-}
-}
-}
-export interface WorkflowStats {
-  total_instances: number;
+  metadata?: Record<string, any> }
+
+
+
+export interface WorkflowStats { total_instances: number;
   by_state: Record<WorkflowState, number>;
   by_resource_type: Record<string, number>;
-  average_time_in_state: Record<WorkflowState, number>; // seconds,
-  transition_counts: Record<string, number>; // transition_id -> count,
-  recent_activity: {
+  average_time_in_state: Record<WorkflowState, number>; // seconds;
+  transition_counts: Record<string, number>; // transition_id -> count;
+  recent_activity: { }
   today: number;
   this_week: number;
   this_month: number;
-}
+
+
 };
 
 // Approval Process Types
-}
-}
-export interface ApprovalRequest {
-  id: string;
+
+
+export interface ApprovalRequest { id: string;
   workflow_instance_id: string;
   requested_by: string;
   requested_by_name?: string;
@@ -137,32 +131,31 @@ export interface ApprovalRequest {
   approved_at?: string;
   rejected_at?: string;
   created_at: string;
-  updated_at: string;
-}
-}
-}
-export interface ApprovalReviewer {
-  user_id: string;
+  updated_at: string }
+
+
+
+export interface ApprovalReviewer { user_id: string;
   user_name?: string;
   user_email?: string;
   status: 'pending' | 'approved' | 'rejected';
   comment?: string;
-  responded_at?: string;
-}
-}
-}
+  responded_at?: string }
+
+
+
 export interface ApprovalResponse {
   decision: 'approve' | 'reject';
   comment?: string;
   metadata?: Record<string, any>;
   // Locking Types
-}
-}
-}
-export interface ResourceLock {
-  id: string;
+
+
+
+
+export interface ResourceLock { id: string;
   resource_id: string;
-  resource_type: 'project' | 'resource' | 'node' | 'region';
+  resource_type: 'project' | 'resource' | 'node' | 'region' }
   lock_type: 'read' | 'write' | 'exclusive';
   locked_by: string;
   locked_by_name?: string;
@@ -171,23 +164,23 @@ export interface ResourceLock {
   auto_release: boolean;
   metadata?: Record<string, any>;
   created_at: string;
-}
-}
-}
-export interface LockRequest {
-  resource_id: string;
+
+
+
+
+export interface LockRequest { resource_id: string;
   resource_type: 'project' | 'resource' | 'node' | 'region';
   lock_type: 'read' | 'write' | 'exclusive';
   reason?: string;
-  duration?: number; // seconds,
+  duration?: number; // seconds }
   auto_release?: boolean;
   metadata?: Record<string, any>;
   // Audit Trail Types
-}
-}
-}
-export interface AuditLogEntry {
-  id: string;
+
+
+
+
+export interface AuditLogEntry { id: string;
   resource_id?: string;
   resource_type?: string;
   actor_id: string;
@@ -198,12 +191,13 @@ export interface AuditLogEntry {
   ip_address?: string;
   user_agent?: string;
   session_id?: string;
-  risk_level: 'low' | 'medium' | 'high' | 'critical';
+  risk_level: 'low' | 'medium' | 'high' | 'critical' }
   categories: string;
   created_at: string;
-}
-}
-}
+
+
+
+
 export interface AuditFilter {
   resource_id?: string;
   resource_type?: string;
@@ -215,11 +209,11 @@ export interface AuditFilter {
   date_to?: string;
   search?: string;
   // API Integration Types
-}
-}
-}
-export interface WorkflowWebhook {
-  id: string;
+
+
+
+
+export interface WorkflowWebhook { id: string;
   workflow_config_id: string;
   name: string;
   url: string;
@@ -227,22 +221,22 @@ export interface WorkflowWebhook {
   events: WorkflowWebhookEvent;
   headers?: Record<string, string>;
   is_active: boolean;
-  retry_config: {
+  retry_config: { }
   max_retries: number;
   backoff_factor: number;
   max_delay: number;
-}
+
+
 };
   created_at: string;
   updated_at: string;
-}
-}
-export interface WorkflowWebhookEvent {
-  event_type: 'state_changed' | 'approval_requested' | 'approved' | 'rejected';
-  conditions?: Record<string, any>;
-}
-}
-}
+
+
+export interface WorkflowWebhookEvent { event_type: 'state_changed' | 'approval_requested' | 'approved' | 'rejected';
+  conditions?: Record<string, any> }
+
+
+
 export interface WebhookDeliveryLog {
   id: string;
   webhook_id: string;
@@ -255,23 +249,24 @@ export interface WebhookDeliveryLog {
   retry_count: number;
   created_at: string;
   // Scheduled Execution Types
-}
-}
-}
-export interface ScheduledExecution {
-  id: string;
+
+
+
+
+export interface ScheduledExecution { id: string;
   name: string;
   description?: string;
   resource_id: string;
   resource_type: 'project' | 'resource';
   schedule_type: 'cron' | 'interval' | 'one_time';
-  schedule_config: {
+  schedule_config: { }
   cron_expression?: string;
   interval_seconds?: number;
   execute_at?: string;
-}
+
+
 };
-  action_type: 'workflow_transition' | 'approval_request' | 'custom';
+  action_type: 'workflow_transition' | 'approval_request' | 'custom';,
   action_config: Record<string, any>;
   is_active: boolean;
   last_executed_at?: string;
@@ -280,8 +275,8 @@ export interface ScheduledExecution {
   failure_count: number;
   created_at: string;
   updated_at: string;
-}
-}
+
+
 export interface ExecutionResult {
   id: string;
   scheduled_execution_id: string;
@@ -291,28 +286,28 @@ export interface ExecutionResult {
   execution_time_ms: number;
   executed_at: string;
   // Hook return types
-}
-}
-}
-export interface UseWorkflowReturn {
-  instance: WorkflowInstance | null;
+
+
+
+
+export interface UseWorkflowReturn { instance: WorkflowInstance | null;
   config: WorkflowConfig | null;
   loading: boolean;
   error: Error | null;
   // Actions
-  transition: (request: WorkflowTransitionRequest) => Promise<WorkflowInstance>;
+  transition: (request: WorkflowTransitionRequest) => Promise<WorkflowInstance>
   refreshInstance: () => Promise<void>;
   // Computed properties
   availableTransitions: WorkflowTransition;
-  canTransition: (action: WorkflowAction) => boolean;
+  canTransition: (action: WorkflowAction) => boolean }
   currentStateConfig: WorkflowStateConfig | null;
-}
-}
-}
-export interface UseWorkflowStatsReturn {
-  stats: WorkflowStats | null;
+
+
+
+
+export interface UseWorkflowStatsReturn { stats: WorkflowStats | null;
   loading: boolean;
-  error: Error | null;
+  error: Error | null }
   refreshStats: () => Promise<void>;
-}
-}
+
+

@@ -28,7 +28,7 @@ import {
   TemplateAnalytics,
   PaginatedResult,
   PaginationOptions
-} from './template-models';
+ from './template-models';
 
 export class TemplateDAO {
   constructor(private db: Database) {}
@@ -74,7 +74,7 @@ export class TemplateDAO {
     );
 
     return this.getTemplate(id)!;
-  }
+
 
   async getTemplate(id: string): Promise<ProjectTemplate | null> {
 
@@ -94,7 +94,7 @@ export class TemplateDAO {
     if (!row) return null;
 
     return this.mapTemplateRow(row);
-  }
+
 
   async getTemplateWithStats(id: string, userId?: string): Promise<ProjectTemplateWithStats | null> {
 
@@ -135,7 +135,7 @@ export class TemplateDAO {
       can_edit: template.created_by === userId || template.workspace_id === userId, // Simplified permission check
       can_delete: template.created_by === userId
     };
-  }
+
 
   async getTemplates(
     filter: TemplateFilter = {},
@@ -154,49 +154,49 @@ export class TemplateDAO {
     if (filter.search) {
       whereClause += ' AND (t.name ILIKE ? OR t.description ILIKE ? OR ? = ANY(t.tags))';
       params.push(`%${filter.search}%`, `%${filter.search}%`, filter.search);
-    }
+
 
     if (filter.category) {
       whereClause += ' AND t.category = ?';
       params.push(filter.category);
-    }
+
 
     if (filter.tags && filter.tags.length > 0) {
       whereClause += ' AND t.tags && ?';
       params.push(JSON.stringify(filter.tags));
-    }
+
 
     if (filter.difficulty_level && filter.difficulty_level.length > 0) {
       const placeholders = filter.difficulty_level.map(() => '?').join(',');
       whereClause += ` AND t.difficulty_level IN (${placeholders})`;
       params.push(...filter.difficulty_level);
-    }
+
 
     if (filter.visibility && filter.visibility.length > 0) {
       const placeholders = filter.visibility.map(() => '?').join(',');
       whereClause += ` AND t.visibility IN (${placeholders})`;
       params.push(...filter.visibility);
-    }
+
 
     if (filter.min_rating) {
       whereClause += ' AND t.rating_average >= ?';
       params.push(filter.min_rating);
-    }
+
 
     if (filter.is_featured !== undefined) {
       whereClause += ' AND t.is_featured = ?';
       params.push(filter.is_featured);
-    }
+
 
     if (filter.created_by) {
       whereClause += ' AND t.created_by = ?';
       params.push(filter.created_by);
-    }
+
 
     if (filter.workspace_id) {
       whereClause += ' AND t.workspace_id = ?';
       params.push(filter.workspace_id);
-    }
+
 
     // Build ORDER BY clause
     let orderClause = '';
@@ -224,13 +224,13 @@ export class TemplateDAO {
             LOG(t.usage_count + 1) * 0.3
           ) DESC, t.created_at DESC`;
         params.push(`%${filter.search}%`, `%${filter.search}%`, filter.search);
-      } else {
+ else {
         orderClause = `ORDER BY t.created_at ${sort_order.toUpperCase()}`;
-      }
+
       break;
     default:
       orderClause = `ORDER BY t.created_at ${sort_order.toUpperCase()}`;
-    }
+
 
     const countStmt = this.db.prepare(`
       SELECT COUNT(*) as total
@@ -289,9 +289,9 @@ export class TemplateDAO {
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
         has_prev: page > 1
-      }
+
     };
-  }
+
 
   async updateTemplate(
     id: string,
@@ -305,67 +305,67 @@ export class TemplateDAO {
     if (data.name) {
       setClause.push('name = ?');
       params.push(data.name);
-    }
+
     if (data.description !== undefined) {
       setClause.push('description = ?');
       params.push(data.description);
-    }
+
     if (data.template_data) {
       setClause.push('template_data = ?');
       params.push(JSON.stringify(data.template_data));
-    }
+
     if (data.thumbnail_url !== undefined) {
       setClause.push('thumbnail_url = ?');
       params.push(data.thumbnail_url);
-    }
+
     if (data.category) {
       setClause.push('category = ?');
       params.push(data.category);
-    }
+
     if (data.tags) {
       setClause.push('tags = ?');
       params.push(JSON.stringify(data.tags));
-    }
+
     if (data.difficulty_level) {
       setClause.push('difficulty_level = ?');
       params.push(data.difficulty_level);
-    }
+
     if (data.version) {
       setClause.push('version = ?');
       params.push(data.version);
-    }
+
     if (data.compatibility_version !== undefined) {
       setClause.push('compatibility_version = ?');
       params.push(data.compatibility_version);
-    }
+
     if (data.estimated_time_minutes !== undefined) {
       setClause.push('estimated_time_minutes = ?');
       params.push(data.estimated_time_minutes);
-    }
+
     if (data.visibility) {
       setClause.push('visibility = ?');
       params.push(data.visibility);
-    }
+
     if (data.is_featured !== undefined) {
       setClause.push('is_featured = ?');
       params.push(data.is_featured);
-    }
+
     if (data.customizable_fields) {
       setClause.push('customizable_fields = ?');
       params.push(JSON.stringify(data.customizable_fields));
-    }
+
     if (data.default_values) {
       setClause.push('default_values = ?');
       params.push(JSON.stringify(data.default_values));
-    }
+
     if (data.validation_rules) {
       setClause.push('validation_rules = ?');
       params.push(JSON.stringify(data.validation_rules));
-    }
+
 
     if (setClause.length === 0) {
       return this.getTemplate(id);
-    }
+
 
     setClause.push('updated_at = ?');
     params.push(new Date().toISOString());
@@ -379,7 +379,7 @@ export class TemplateDAO {
 
     stmt.run(...params);
     return this.getTemplate(id);
-  }
+
 
   async archiveTemplate(id: string): Promise<boolean> {
 
@@ -392,7 +392,7 @@ export class TemplateDAO {
     const now = new Date().toISOString();
     const result = stmt.run(now, now, id);
     return result.changes > 0;
-  }
+
 
   async publishTemplate(id: string): Promise<boolean> {
 
@@ -405,7 +405,7 @@ export class TemplateDAO {
     const now = new Date().toISOString();
     const result = stmt.run(now, now, id);
     return result.changes > 0;
-  }
+
 
   // ====== TEMPLATE USAGE OPERATIONS ======
 
@@ -435,7 +435,7 @@ export class TemplateDAO {
     );
 
     return this.getTemplateUsage(id)!;
-  }
+
 
   async getTemplateUsage(id: string): Promise<TemplateUsage | null> {
 
@@ -452,7 +452,7 @@ export class TemplateDAO {
     if (!row) return null;
 
     return this.mapUsageRow(row);
-  }
+
 
   async updateTemplateUsage(
     id: string,
@@ -466,31 +466,31 @@ export class TemplateDAO {
     if (data.customizations_applied) {
       setClause.push('customizations_applied = ?');
       params.push(JSON.stringify(data.customizations_applied));
-    }
+
     if (data.completion_status) {
       setClause.push('completion_status = ?');
       params.push(data.completion_status);
-    }
+
     if (data.time_to_complete_minutes !== undefined) {
       setClause.push('time_to_complete_minutes = ?');
       params.push(data.time_to_complete_minutes);
-    }
+
     if (data.user_rating !== undefined) {
       setClause.push('user_rating = ?');
       params.push(data.user_rating);
-    }
+
     if (data.user_feedback !== undefined) {
       setClause.push('user_feedback = ?');
       params.push(data.user_feedback);
-    }
+
     if (data.completed_at !== undefined) {
       setClause.push('completed_at = ?');
       params.push(data.completed_at ? data.completed_at.toISOString() : null);
-    }
+
 
     if (setClause.length === 0) {
       return this.getTemplateUsage(id);
-    }
+
 
     setClause.push('last_accessed_at = ?');
     params.push(new Date().toISOString());
@@ -505,7 +505,7 @@ export class TemplateDAO {
 
     stmt.run(...params);
     return this.getTemplateUsage(id);
-  }
+
 
   // ====== TEMPLATE REVIEWS OPERATIONS ======
 
@@ -533,7 +533,7 @@ export class TemplateDAO {
     );
 
     return this.getTemplateReview(id)!;
-  }
+
 
   async getTemplateReview(id: string): Promise<TemplateReview | null> {
 
@@ -549,7 +549,7 @@ export class TemplateDAO {
     if (!row) return null;
 
     return this.mapReviewRow(row);
-  }
+
 
   async getTemplateReviews(
     filter: TemplateReviewFilter = {},
@@ -564,30 +564,30 @@ export class TemplateDAO {
     if (filter.template_id) {
       whereClause += ' AND tr.template_id = ?';
       params.push(filter.template_id);
-    }
+
 
     if (filter.user_id) {
       whereClause += ' AND tr.user_id = ?';
       params.push(filter.user_id);
-    }
+
 
     if (filter.min_rating) {
       whereClause += ' AND tr.rating >= ?';
       params.push(filter.min_rating);
-    }
+
 
     if (filter.max_rating) {
       whereClause += ' AND tr.rating <= ?';
       params.push(filter.max_rating);
-    }
+
 
     if (filter.has_text !== undefined) {
       if (filter.has_text) {
         whereClause += ' AND tr.review_text IS NOT NULL AND LENGTH(tr.review_text) > 0';
-      } else {
+ else {
         whereClause += ' AND (tr.review_text IS NULL OR LENGTH(tr.review_text) = 0)';
-      }
-    }
+
+
 
     const countStmt = this.db.prepare(`
       SELECT COUNT(*) as total
@@ -624,9 +624,9 @@ export class TemplateDAO {
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
         has_prev: page > 1
-      }
+
     };
-  }
+
 
   // ====== TEMPLATE FAVORITES OPERATIONS ======
 
@@ -649,7 +649,7 @@ export class TemplateDAO {
       workspace_id: workspaceId,
       created_at: new Date(now)
     };
-  }
+
 
   async removeTemplateFavorite(templateId: string, userId: string): Promise<boolean> {
 
@@ -660,7 +660,7 @@ export class TemplateDAO {
 
     const result = stmt.run(templateId, userId);
     return result.changes > 0;
-  }
+
 
   async getUserFavoriteTemplates(
     userId: string,
@@ -711,9 +711,9 @@ export class TemplateDAO {
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
         has_prev: page > 1
-      }
+
     };
-  }
+
 
   // ====== TEMPLATE CATEGORIES OPERATIONS ======
 
@@ -737,7 +737,7 @@ export class TemplateDAO {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at)
     }));
-  }
+
 
   // ====== ANALYTICS AND REPORTING ======
 
@@ -787,9 +787,9 @@ export class TemplateDAO {
       const existingTrend = usageTrend.find(t => t.date === row.usage_date);
       if (existingTrend) {
         existingTrend.count += row.source_count;
-      } else {
+ else {
         usageTrend.push({ date: row.usage_date, count: row.source_count });
-      }
+
     });
 
     // Process rating data
@@ -808,20 +808,20 @@ export class TemplateDAO {
         average_completion_time: usageRows.length > 0 ? usageRows[0].avg_completion_time || 0 : 0,
         usage_by_source: usageBySource,
         usage_trend: usageTrend.sort((a, b) => a.date.localeCompare(b.date))
-  }
+
       rating_stats: {
         average_rating: averageRating,
         rating_distribution: ratingDistribution,
         review_count: reviewCount,
         recent_reviews: [] // TODO: Implement recent reviews
-  }
+
       performance_metrics: {
         conversion_rate: 0.85, // TODO: Calculate actual conversion rate
         retention_rate: 0.65, // TODO: Calculate actual retention rate
         recommendation_score: averageRating * 0.4 + (totalUsages / 100) * 0.6 // Simplified scoring
-      }
+
     };
-  }
+
 
   // ====== UTILITY METHODS ======
 
@@ -855,7 +855,7 @@ export class TemplateDAO {
       deprecated_at: row.deprecated_at ? new Date(row.deprecated_at) : undefined,
       replacement_template_id: row.replacement_template_id
     };
-  }
+
 
   private mapUsageRow(row: unknown): TemplateUsage {
     return {
@@ -874,7 +874,7 @@ export class TemplateDAO {
       last_accessed_at: new Date(row.last_accessed_at),
       source: row.source
     };
-  }
+
 
   private mapReviewRow(row: unknown): TemplateReview {
     return {
@@ -889,5 +889,4 @@ export class TemplateDAO {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at)
     };
-  }
-}
+

@@ -17,13 +17,12 @@ import { useRateLimitingMetrics } from '../hooks/useRateLimitingMetrics';
 // Example 1: Basic Performance Metrics Setup
 // ========================================
 
-export function BasicMetricsExample() {
-  console.log('=== Basic Rate Limiting Performance Metrics Example ===');
+export function BasicMetricsExample() { console.log('=== Basic Rate Limiting Performance Metrics Example ===');
   // Create rate limiting service
   const rateLimitingService = new RateLimitingService();
   // Create adaptive throttling engine
   const throttlingEngine = new AdaptiveThrottlingRulesEngine(;);
-    rateLimitingService,
+    rateLimitingService }
     true, // Enable default rules
     { enableAnalytics: true }
   );
@@ -31,19 +30,18 @@ export function BasicMetricsExample() {
   const metricsService = new RateLimitingPerformanceMetrics(;);
     rateLimitingService,
     throttlingEngine,
-    {
-  enableRealTimeMetrics: true,
+    { enableRealTimeMetrics: true,
   metricsRetentionPeriod: 24, // 24 hours,
-  visualizationOptions: {
+  visualizationOptions: {,
   enableCharts: true,
   enableHeatmaps: true,
   enableTimeseries: true,
   enableGeospatialMaps: true,
-  refreshInterval: 5 // 5 seconds,
+  refreshInterval: 5 // 5 seconds }
 },
-  alerting: {
+  alerting: { ,
   enableAlerts: true,
-  alertThresholds: {
+  alertThresholds: {,
   highResponseTime: 150,
   lowThroughput: 50,
   highErrorRate: 8,
@@ -52,57 +50,51 @@ export function BasicMetricsExample() {
   metricsService.startMetricsCollection();
   // Listen for events
   metricsService.on('metricsUpdated', (data) => {
-  console.log('📊 Metrics updated:', {,)
+  console.log('📊 Metrics updated:', {),
   responseTime: data.metrics.responseTime.average.toFixed(2) + 'ms',
   throughput: data.metrics.throughput.requestsPerSecond.toFixed(1) + ' rps',
   blockRate: data.metrics.errorRates.blockRate.toFixed(1) + '%',
-  collectionTime: data.collectionTime + 'ms',
+  collectionTime: data.collectionTime + 'ms' }
 });
   });
-  metricsService.on('alertCreated', (alert) => {
-  console.log('🚨 Alert created:', {,)
+  metricsService.on('alertCreated', (alert) => { console.log('🚨 Alert created:', {),
   condition: alert.condition,
   severity: alert.severity,
   currentValue: alert.currentValue,
-  threshold: alert.threshold,
+  threshold: alert.threshold }
 });
   });
   // Simulate some traffic
-  setTimeout(() => {
-    console.log('Simulating traffic...');
-    simulateTraffic(rateLimitingService);
-  }, 2000);
+  setTimeout(() => { console.log('Simulating traffic...');
+    simulateTraffic(rateLimitingService) }, 2000);
   return metricsService;
 
 // ========================================
 // Example 2: React Dashboard Integration
 // ========================================
 
-export function RateLimitingDashboardExample() {
-  // Rate limiting service instance
+export function RateLimitingDashboardExample() { // Rate limiting service instance
   const [rateLimitingService] = useState(() => new RateLimitingService());
   // Throttling engine with analytics enabled
   const [throttlingEngine] = useState(() => new AdaptiveThrottlingRulesEngine()
     rateLimitingService,
-    true,
+    true }
     { enableAnalytics: true }
   ));
   // Use the custom hook for metrics management
-  const metricsHook = useRateLimitingMetrics({)
+  const metricsHook = useRateLimitingMetrics({ )
   rateLimitingService,
   throttlingEngine,
-  options: {
+  options: {,
   autoRefresh: true,
   refreshInterval: 3,
   timeRange: '1h',
   enableAlerts: true,
-  retainHistoryHours: 48,
+  retainHistoryHours: 48 }
 });
   // Simulate traffic on component mount
-  useEffect(() => {
-    const trafficTimer = setInterval(() => {
-      simulateTraffic(rateLimitingService);
-    }, 1000);
+  useEffect(() => { const trafficTimer = setInterval(() => {
+      simulateTraffic(rateLimitingService) }, 1000);
     return () => clearInterval(trafficTimer);
   }, [rateLimitingService]);
   if (metricsHook.error) {
@@ -135,16 +127,16 @@ export function RateLimitingDashboardExample() {
               </p>
             </div>
             <div className="flex items-center space-x-4">
-              <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-  metricsHook.systemStatus === 'healthy' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :,
-  metricsHook.systemStatus === 'warning' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' :,
-  'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
-}`}>
-                <div className={`w-2 h-2 rounded-full mr-2 ${
+              <div className={ `inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+  metricsHook.systemStatus === 'healthy' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :
+  metricsHook.systemStatus === 'warning' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' :
+  'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' }
+`}>
+                <div className={ `w-2 h-2 rounded-full mr-2 ${
   metricsHook.systemStatus === 'healthy' ? 'bg-green-500' :,
-  metricsHook.systemStatus === 'warning' ? 'bg-yellow-500' :,
+  metricsHook.systemStatus === 'warning' ? 'bg-yellow-500' : }
   'bg-red-500'
-}`}></div>
+`}></div>
                 {metricsHook.systemStatus.charAt(0).toUpperCase() + metricsHook.systemStatus.slice(1)}
               </div>
               {metricsHook.isConnected && ()
@@ -158,9 +150,8 @@ export function RateLimitingDashboardExample() {
       </div>
       {/* Dashboard Content */}
       <RateLimitingMetricsDashboard
-        metricsService={
-          new RateLimitingPerformanceMetrics()
-            rateLimitingService,
+        metricsService={ new RateLimitingPerformanceMetrics()
+            rateLimitingService }
             throttlingEngine
         theme="light"
         autoRefresh={true}
@@ -174,20 +165,18 @@ export function RateLimitingDashboardExample() {
 // Example 3: Advanced Visualization Features
 // ========================================
 
-export function AdvancedVisualizationExample() {
-  console.log('=== Advanced Visualization Features Example ===');
+export function AdvancedVisualizationExample() { console.log('=== Advanced Visualization Features Example ===');
   const rateLimitingService = new RateLimitingService();
   const throttlingEngine = new AdaptiveThrottlingRulesEngine(;);
     rateLimitingService,
-    true,
+    true }
     { enableAnalytics: true }
   );
   const metricsService = new RateLimitingPerformanceMetrics(;);
     rateLimitingService,
     throttlingEngine,
-    {
-  enableRealTimeMetrics: true,
-  visualizationOptions: {
+    { enableRealTimeMetrics: true,
+  visualizationOptions: {,
   enableCharts: true,
   enableHeatmaps: true,
   enableTimeseries: true,
@@ -200,32 +189,32 @@ export function AdvancedVisualizationExample() {
   setTimeout(() => {
   // Get time series data
   const timeSeriesData = metricsService.generateTimeSeriesData('1h');
-  console.log('📈 Time Series Data:', {,)
+  console.log('📈 Time Series Data:', {),
   dataPoints: timeSeriesData.timestamps.length,
   avgResponseTime: timeSeriesData.responseTime.reduce((a, b) => a + b, 0) / timeSeriesData.responseTime.length,
-  avgThroughput: timeSeriesData.throughput.reduce((a, b) => a + b, 0) / timeSeriesData.throughput.length,
+  avgThroughput: timeSeriesData.throughput.reduce((a, b) => a + b, 0) / timeSeriesData.throughput.length }
 });
     // Get heatmap data
     const heatmapData = metricsService.generateHeatmapData();
-    console.log('🔥 Heatmap Data:', {)
+    console.log('🔥 Heatmap Data:', { )
   endpoints: heatmapData.endpoints.length,
   timeSlots: heatmapData.timeSlots.length,
-  totalDataPoints: heatmapData.activityMatrix.length * heatmapData.activityMatrix[0].length,
+  totalDataPoints: heatmapData.activityMatrix.length * heatmapData.activityMatrix[0].length }
 });
     // Get geospatial data
     const geoData = metricsService.generateGeospatialData();
-    console.log('🌍 Geospatial Data:', {)
+    console.log('🌍 Geospatial Data:', { )
   locations: geoData.locations.length,
   totalRequests: geoData.locations.reduce((sum, loc) => sum + loc.requestCount, 0),
-  totalBlocks: geoData.locations.reduce((sum, loc) => sum + loc.blockCount, 0),
+  totalBlocks: geoData.locations.reduce((sum, loc) => sum + loc.blockCount, 0) }
 });
     // Get distribution data
     const distributionData = metricsService.generateDistributionData();
-    console.log('📊 Distribution Data:', {)
+    console.log('📊 Distribution Data:', { )
   endpoints: Object.keys(distributionData.endpointDistribution).length,
   threatLevels: Object.keys(distributionData.threatLevelDistribution).length,
   responseTimeRanges: distributionData.responseTimeDistribution.length,
-  userAgents: Object.keys(distributionData.userAgentDistribution).length,
+  userAgents: Object.keys(distributionData.userAgentDistribution).length }
 });
     // Get complete visualization data
         console.log('🎯 Complete Visualization Data Generated');
@@ -236,12 +225,11 @@ export function AdvancedVisualizationExample() {
 // Example 4: Custom Widget Creation
 // ========================================
 
-export function CustomWidgetExample() {
-  console.log('=== Custom Widget Creation Example ===');
+export function CustomWidgetExample() { console.log('=== Custom Widget Creation Example ===');
   const rateLimitingService = new RateLimitingService();
   const metricsService = new RateLimitingPerformanceMetrics(rateLimitingService);
   // Create custom widgets
-  const customWidgets = [;
+  const customWidgets = [
   {
   widgetId: 'security-overview',
   widgetType: 'chart' as const,
@@ -249,36 +237,34 @@ export function CustomWidgetExample() {
   description: 'Real-time security metrics overview',
   dataSource: 'current',
   refreshInterval: 1,
-  config: {
+  config: {,
   chartType: 'gauge' as const,
-  metrics: ['threatLevel', 'blockRate'],
+  metrics: ['threatLevel', 'blockRate'] }
 },
   position: { x: 0, y: 0, width: 4, height: 4 }
-  }
-    {
-  widgetId: 'endpoint-performance',
+
+    { widgetId: 'endpoint-performance',
   widgetType: 'table' as const,
   title: 'Endpoint Performance',
   description: 'Performance metrics by endpoint',
   dataSource: 'distribution',
   refreshInterval: 10,
-  config: {
+  config: {,
   metrics: ['endpointDistribution'],
-  dimensions: ['endpoint', 'requests', 'responseTime'],
+  dimensions: ['endpoint', 'requests', 'responseTime'] }
 },
   position: { x: 4, y: 0, width: 8, height: 6 }
-  }
-    {
-  widgetId: 'threat-timeline',
+
+    { widgetId: 'threat-timeline',
   widgetType: 'chart' as const,
   title: 'Threat Activity Timeline',
   description: 'Historical threat activity over time',
   dataSource: 'timeseries',
   refreshInterval: 30,
-  config: {
+  config: {,
   chartType: 'area' as const,
   timeRange: '24h',
-  metrics: ['blockRate', 'errorRate'],
+  metrics: ['blockRate', 'errorRate'] }
 },
   position: { x: 0, y: 4, width: 12, height: 6 }
   ];
@@ -303,35 +289,32 @@ export function CustomWidgetExample() {
 // Example 5: Alert Management System
 // ========================================
 
-export function AlertManagementExample() {
-  console.log('=== Alert Management System Example ===');
+export function AlertManagementExample() { console.log('=== Alert Management System Example ===');
   const rateLimitingService = new RateLimitingService();
   const metricsService = new RateLimitingPerformanceMetrics(;);
   rateLimitingService,
   undefined,
   {
-  alerting: {
+  alerting: {,
   enableAlerts: true,
-  alertThresholds: {
+  alertThresholds: {,
   highResponseTime: 100, // Low threshold for demo,
   lowThroughput: 10,
   highErrorRate: 5,
   highBlockRate: 15);
   // Set up alert event listeners
   metricsService.on('alertCreated', (alert) => {
-  console.log('🚨 ALERT CREATED:', {,)
+  console.log('🚨 ALERT CREATED:', {),
   id: alert.alertId,
   type: alert.alertType,
   severity: alert.severity,
   condition: alert.condition,
   current: alert.currentValue,
   threshold: alert.threshold,
-  recommendations: alert.recommendedActions,
+  recommendations: alert.recommendedActions }
 });
   });
-  metricsService.on('alertAcknowledged', (data) => {
-  console.log('✅ Alert acknowledged:', data.alertId);
-});
+  metricsService.on('alertAcknowledged', (data) => { console.log('✅ Alert acknowledged:', data.alertId) });
   // Start monitoring
   metricsService.startMetricsCollection();
   // Simulate high load to trigger alerts
@@ -353,9 +336,7 @@ export function AlertManagementExample() {
           timestamp: alert.timestamp.toLocaleString();
   });
         // Acknowledge alert after 5 seconds
-        setTimeout(() => {
-          metricsService.acknowledgeAlert(alert.alertId);
-        }, 5000 + (index * 1000));
+        setTimeout(() => { metricsService.acknowledgeAlert(alert.alertId) }, 5000 + (index * 1000));
       });
     }, 3000);
   }, 2000);
@@ -365,8 +346,7 @@ export function AlertManagementExample() {
 // Example 6: Data Export and Analysis
 // ========================================
 
-export function DataExportExample() {
-  console.log('=== Data Export and Analysis Example ===');
+export function DataExportExample() { console.log('=== Data Export and Analysis Example ===');
   const rateLimitingService = new RateLimitingService();
   const metricsService = new RateLimitingPerformanceMetrics(rateLimitingService);
   // Start metrics collection
@@ -374,32 +354,30 @@ export function DataExportExample() {
   // Generate some data first
   for (let i = 0; i < 10; i++) {
     setTimeout(() => {
-      simulateTraffic(rateLimitingService);
-    }, i * 200);
+      simulateTraffic(rateLimitingService) }, i * 200);
   // Export data after collection
-  setTimeout(() => {
-  console.log('Exporting metrics data...');
+  setTimeout(() => { console.log('Exporting metrics data...');
   // Export as JSON
   const jsonExport = metricsService.exportMetrics('json');
   const jsonData = JSON.parse(jsonExport);
-  console.log('📄 JSON Export:', {,)
+  console.log('📄 JSON Export:', {),
   metricsCount: jsonData.metricsCount,
   timeRange: jsonData.timeRange,
   alertsCount: jsonData.alerts.length,
-  configurationKeys: Object.keys(jsonData.configuration),
+  configurationKeys: Object.keys(jsonData.configuration) }
 });
     // Export as CSV
     const csvExport = metricsService.exportMetrics('csv');
     const csvLines = csvExport.split('\n');
-    console.log('📊 CSV Export:', {)
+    console.log('📊 CSV Export:', { )
   headers: csvLines[0],
   dataRows: csvLines.length - 1,
-  sampleRow: csvLines[1],
+  sampleRow: csvLines[1] }
 });
     // Get system status
     const systemStatus = metricsService.getSystemStatus();
-    console.log('🔍 System Status:', {)
-  status: systemStatus.status,
+    console.log('🔍 System Status:', { )
+  status: systemStatus.status }
       uptime: `${Math.round(systemStatus.uptime / 1000)}s`}
 },
   metricsCollected: systemStatus.systemInfo.metricsCollected,
@@ -411,8 +389,7 @@ export function DataExportExample() {
 // ========================================
 // Traffic Simulation Utility
 // ========================================
-function simulateTraffic(rateLimitingService: RateLimitingService, highVolume: boolean = false) {
-  const endpoints = ['/auth/login', '/auth/register', '/auth/mfa/verify', '/api/users', '/api/data'];
+function simulateTraffic(rateLimitingService: RateLimitingService, highVolume: boolean = false) { const endpoints = ['/auth/login', '/auth/register', '/auth/mfa/verify', '/api/users', '/api/data'];
   const userAgents = ['Chrome', 'Firefox', 'Safari', 'Bot'];
   const ips = ['192.168.1.100', '10.0.0.50', '203.0.113.1', '198.51.100.1'];
   const requestCount = highVolume ? 50 : 10;
@@ -423,12 +400,12 @@ function simulateTraffic(rateLimitingService: RateLimitingService, highVolume: b
     const success = Math.random() > (highVolume ? 0.3 : 0.1); // Higher failure rate for high volume;
     // Check rate limit
     rateLimitingService.checkRateLimit(ip, endpoint, {)
-  userAgent,
+  userAgent }
       userId: success ? `user_${Math.floor(Math.random() * 1000)}` : undefined}
     });
     // Record attempt
-    rateLimitingService.recordAttempt(ip, endpoint, success, {)
-  userAgent,
+    rateLimitingService.recordAttempt(ip, endpoint, success, { )
+  userAgent }
       userId: success ? `user_${Math.floor(Math.random() * 1000)}` : undefined}
     });
 
@@ -439,7 +416,7 @@ function simulateTraffic(rateLimitingService: RateLimitingService, highVolume: b
 export function runAllExamples() {
   console.log('🚀 Running all Rate Limiting Performance Metrics examples...\n');
   // Run examples with delays to avoid interference
-  const examples = [;
+  const examples = [
     { name: 'Basic Metrics', fn: BasicMetricsExample, delay: 0 },
     { name: 'Advanced Visualization', fn: AdvancedVisualizationExample, delay: 5000 },
     { name: 'Custom Widgets', fn: CustomWidgetExample, delay: 10000 },
@@ -450,34 +427,27 @@ export function runAllExamples() {
   examples.forEach(({ name, fn, delay }) => {
     setTimeout(() => {
       console.log(`\n--- Starting ${name} Example ---`);}
-      try {
-        const service = fn();
+      try { const service = fn();
         if (service) {
-          services.push(service);
-      } catch (error) {
-        console.error(`Error in ${name},)}
+          services.push(service) } catch (error) {
+        console.error(`Error in ${name})},
   example:`, error);}
     }, delay);
   });
   // Cleanup after all examples
-  setTimeout(() => {
-    console.log('\n🧹 Cleaning up examples...');
+  setTimeout(() => { console.log('\n🧹 Cleaning up examples...');
     services.forEach(service => {)
   try {
-        service.destroy();
-      } catch (error) {
-  console.error('Error during cleanup:', error);
-});
+        service.destroy() } catch (error) { console.error('Error during cleanup:', error) });
     console.log('✅ All examples completed and cleaned up');
   }, 30000);
 
 // Export all examples for individual use
-export {
-  BasicMetricsExample,
+export { BasicMetricsExample,
   AdvancedVisualizationExample,
   CustomWidgetExample,
   AlertManagementExample,
-  DataExportExample,
+  DataExportExample }
   simulateTraffic
 };
 

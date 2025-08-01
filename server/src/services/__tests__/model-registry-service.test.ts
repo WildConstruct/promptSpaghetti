@@ -25,7 +25,7 @@ describe('ModelRegistryService', () => {
         accuracy: 0.95,
         inferenceTime: 100,
         memoryUsage: 1024
-  }
+
       metadata: { test: true }
     };
 
@@ -144,7 +144,7 @@ describe('ModelRegistryService', () => {
         performanceMetrics: {
           accuracy: 0.98,
           inferenceTime: 50
-        }
+
       };
 
       const updatedModel = await service.updateModel(testModelId, updates);
@@ -184,11 +184,11 @@ describe('ModelRegistryService', () => {
         {
           type: 'hyperparameters' as const,
           description: 'Updated learning rate to 0.001'
-  }
+
         {
           type: 'training_data' as const,
           description: 'Added 10k new training samples'
-        }
+
       ];
 
       const newVersion = await service.createModelVersion(testModelId, '1.1.0', changes);
@@ -448,7 +448,7 @@ describe('ModelRegistryService', () => {
           accuracy: 0.95,
           precision: 0.93,
           inferenceTime: 100
-        }
+
       });
 
       const model2 = await service.registerModel({
@@ -461,7 +461,7 @@ describe('ModelRegistryService', () => {
           accuracy: 0.88,
           precision: 0.90,
           inferenceTime: 50
-        }
+
       });
 
       model1Id = model1.id;
@@ -552,7 +552,7 @@ describe('ModelRegistryService', () => {
           name: 'Parent Model',
           version: '1.0.0',
           relationship: 'fine_tuned_from'
-        }]
+]
       });
 
       expect(updatedLineage.parentModels).toHaveLength(1);
@@ -569,7 +569,7 @@ describe('ModelRegistryService', () => {
           name: 'Training Dataset v1',
           version: '1.0.0',
           size: 10000
-        }]
+]
       });
 
       expect(updatedLineage.trainingDatasets).toHaveLength(1);

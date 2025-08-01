@@ -8,6 +8,7 @@ export type WeightDistributionType = 'linear' | 'exponential' | 'gaussian' | 'cu
  */
 
 }
+}
 export interface WeightedChoice {
     value: string;
     weight: number;
@@ -16,8 +17,9 @@ export interface WeightedChoice {
  */
 
 }
-export interface WeightDistributionConfig {
-    type: WeightDistributionType;
+}
+}
+export interface WeightDistributionConfig { type: WeightDistributionType;
     /** Parameters for distribution (e.g., exponential factor, gaussian mean/std) */
     parameters?: Record<string, number>;
     /** Normalization settings */
@@ -81,37 +83,30 @@ export declare class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
  * Factory function for creating WeightedAdvanced nodes
  */
 export declare function createWeightedAdvancedNode(id: string)
-  choices: WeightedChoice[],
+  choices: WeightedChoice[] }
   distributionConfig?: WeightDistributionConfig
 ): WeightedAdvancedNode;
 /**
  * Default distribution configurations for common use cases
  */
-export declare const DistributionPresets: {
-    linear: {
+export declare const DistributionPresets: { linear: {
         type: "linear";
-        normalize: true;
+        normalize: true }
 }
     };
-    exponential: {
-        type: "exponential";
+    exponential: { type: "exponential";
         parameters: {
-            factor: number;
-        };
+            factor: number };
         normalize: true;
     };
-    gaussian: {
-        type: "gaussian";
+    gaussian: { type: "gaussian";
         parameters: {
             mean: number;
-            std: number;
-        };
+            std: number };
         normalize: true;
     };
-    uniform: {
-        type: "linear";
+    uniform: { type: "linear";
         normalize: true;
-        minWeight: number;
-    };
+        minWeight: number };
 };
 //# sourceMappingURL=WeightedAdvanced.d.ts.map

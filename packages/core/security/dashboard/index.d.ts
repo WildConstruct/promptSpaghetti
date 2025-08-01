@@ -22,13 +22,11 @@ export { ComplianceSecurityDashboard, ComplianceFramework, ComplianceStatus, typ
  * Creates and configures a complete security dashboard framework instance
  * with registry, themes, and default dashboard types.
  */
-export declare class SecurityDashboardFactory {
-    private framework;
+export declare class SecurityDashboardFactory { private framework;
     private registry;
     constructor(options?: {)
         frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
-        registryOptions?: Partial<RegistryOptions>;
-    });
+        registryOptions?: Partial<RegistryOptions> });
     /**
      * Get the framework instance
      */
@@ -41,16 +39,16 @@ export declare class SecurityDashboardFactory {
      * Create a dashboard from template
      */
     createDashboard();
-      templateId: string,
-      userId: string,
+      templateId: string
+      userId: string
       overrides?: Partial<DashboardConfig>
     ): Promise<DashboardConfig | null>;
     /**
      * Create a dashboard from preset
      */
     createDashboardFromPreset();
-      presetId: string,
-      userId: string,
+      presetId: string
+      userId: string
       overrides?: Partial<DashboardConfig>
     ): Promise<DashboardConfig | null>;
     /**
@@ -72,18 +70,14 @@ export declare class SecurityDashboardFactory {
     /**
      * Get framework statistics
      */
-    getStatistics(): {
-        framework: {
+    getStatistics(): { framework: {
             dashboardCount: number;
             widgetCount: number;
-            themeCount: number;
-        };
-        registry: {
-            dashboardCount: number;
+            themeCount: number };
+        registry: { dashboardCount: number;
             presetCount: number;
             widgetCount: number;
-            categoriesByType: Record<DashboardType, number>;
-        };
+            categoriesByType: Record<DashboardType, number> };
     };
     /**
      * Destroy the factory and cleanup resources
@@ -92,18 +86,15 @@ export declare class SecurityDashboardFactory {
 /**
  * Default factory instance for convenience
  */
-export declare function createSecurityDashboardFactory(options?: {)
+export declare function createSecurityDashboardFactory(options?: { )
     frameworkOptions?: Partial<SecurityDashboardFrameworkOptions>;
-    registryOptions?: Partial<RegistryOptions>;
-}): SecurityDashboardFactory;
+    registryOptions?: Partial<RegistryOptions> }): SecurityDashboardFactory;
 /**
  * Utility function to get supported dashboard types
  */
-export declare function getSupportedDashboardTypes(): {
-    type: DashboardType;
+export declare function getSupportedDashboardTypes(): { type: DashboardType;
     name: string;
     description: string;
-    targetRoles: SecurityRole[];
-}[];
+    targetRoles: SecurityRole[] }[];
 export default SecurityDashboardFactory;
 //# sourceMappingURL=index.d.ts.map

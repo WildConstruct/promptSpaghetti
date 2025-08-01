@@ -129,8 +129,7 @@ export class EventBus extends EventEmitter {
             options ?  : {
                 priority: EventPriority,
                 once: boolean,
-                string
-            };
+                string };
         {
             const subscription = {
                 id: crypto.randomUUID(),

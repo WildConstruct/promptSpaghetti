@@ -126,10 +126,10 @@ if (visibleNotifications.length === 0) {
     _jsxs(_Fragment, { children: [_jsx("style", { children: `
         @keyframes slideIn {
           from {
-            transform: translateX(100%);
+            transform: translateX(100%);,
   opacity: 0;
           to {
-            transform: translateX(0);
+            transform: translateX(0);,
   opacity: 1;
         @keyframes fadeOut {
           from {

@@ -32,32 +32,27 @@ import { SecurityAlertingConfig } from '../SecurityAlertingAnalytics';
 import { ComplianceFramework } from '../SecurityLogger';
 
 }
-export interface SecurityAlertingConfigurationUIProps {
-    currentConfig: SecurityAlertingConfig;
+}
+export interface SecurityAlertingConfigurationUIProps { currentConfig: SecurityAlertingConfig;
     onConfigChange: (config: SecurityAlertingConfig) => Promise<void>;
     onValidateConfig: (config: SecurityAlertingConfig) => Promise<ValidationResult>;
     userRole: 'admin' | 'security_admin' | 'security_analyst';
     complianceFrameworks: ComplianceFramework[];
     theme?: 'light' | 'dark' | 'cinema';
     readOnly?: boolean;
-    allowAdvancedSettings?: boolean;
-
-
+    allowAdvancedSettings?: boolean }
 }
-export interface ValidationResult {
-    isValid: boolean;
+}
+export interface ValidationResult { isValid: boolean;
     errors: ConfigValidationError[];
     warnings: ConfigValidationWarning[];
-    securityScore: number;
-
-
+    securityScore: number }
 }
-export interface ConfigValidationError {
-    field: string;
+}
+export interface ConfigValidationError { field: string;
     message: string;
-    severity: 'error' | 'critical';
-
-
+    severity: 'error' | 'critical' }
+}
 }
 export interface ConfigValidationWarning {
     field: string;
@@ -71,4 +66,5 @@ export interface ConfigValidationWarning {
 export declare const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigurationUIProps>;
 export default SecurityAlertingConfigurationUI;
 //# sourceMappingURL=SecurityAlertingConfigurationUI.d.ts.map
+}
 }

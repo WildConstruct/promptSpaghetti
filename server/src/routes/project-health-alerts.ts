@@ -8,7 +8,7 @@ import {
   ProjectHealthAlertService,
   ProjectHealthAlert,
   AlertThresholds
-} from '../services/project-health-alert-service';
+ from '../services/project-health-alert-service';
 import { AttributionService } from '../services/attribution-service';
 import { AnalyticsDAO } from '../database/analytics-dao';
 import { getDatabase } from '../database/connection';
@@ -62,7 +62,7 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
    */
   fastify.get<{
     Querystring: z.infer<typeof GetAlertsQuerySchema>
-  }>('/api/project-health-alerts', {
+>('/api/project-health-alerts', {
     schema: {
       querystring: GetAlertsQuerySchema,
       response: {
@@ -84,15 +84,15 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
                   detectedAt: { type: 'string' },
                   status: { type: 'string' },
                   recommendedActions: { type: 'array', items: { type: 'string' } }
-                }
-              }
-  }
+
+
+
             total: { type: 'number' },
             hasMore: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Querystring: z.infer<typeof GetAlertsQuerySchema> }>, reply: FastifyReply) => {
     try {
       const { workspaceId, severity, alertType, status, limit, offset } = request.query;
@@ -105,15 +105,15 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
       
       if (severity) {
         filteredAlerts = filteredAlerts.filter(alert => alert.severity === severity);
-      }
+
       
       if (alertType) {
         filteredAlerts = filteredAlerts.filter(alert => alert.alertType === alertType);
-      }
+
       
       if (status) {
         filteredAlerts = filteredAlerts.filter(alert => alert.status === status);
-      }
+
 
       // Sort by severity and detection time
       filteredAlerts.sort((a, b) => {
@@ -133,14 +133,13 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
         total: filteredAlerts.length,
         hasMore
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting project health alerts:', error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: 'Failed to retrieve project health alerts'
       });
-    }
+
   });
 
   /**
@@ -149,7 +148,7 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
    */
   fastify.post<{
     Body: { workspaceId: string; thresholds?: z.infer<typeof AlertThresholdsSchema> }
-  }>('/api/project-health-alerts/scan', {
+>('/api/project-health-alerts/scan', {
     schema: {
       body: {
         type: 'object',
@@ -157,9 +156,9 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
         properties: {
           workspaceId: { type: 'string' },
           thresholds: AlertThresholdsSchema
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { workspaceId, thresholds = {} } = request.body;
@@ -172,14 +171,13 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
         alerts: alerts.slice(0, 10), // Return first 10 for preview
         scanTimestamp: new Date().toISOString()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error scanning for alerts:', error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: 'Failed to scan for project health alerts'
       });
-    }
+
   });
 
   /**
@@ -189,15 +187,15 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
   fastify.put<{
     Params: { alertId: string };
     Body: z.infer<typeof AlertActionSchema> & { userId?: string }
-  }>('/api/project-health-alerts/:alertId/action', {
+>('/api/project-health-alerts/:alertId/action', {
     schema: {
       params: {
         type: 'object',
         properties: {
           alertId: { type: 'string' }
-  }
+
         required: ['alertId']
-  }
+
       body: {
         type: 'object',
         required: ['action'],
@@ -205,9 +203,9 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
           action: { type: 'string', enum: ['acknowledge', 'resolve', 'dismiss'] },
           reason: { type: 'string' },
           userId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { alertId } = request.params;
@@ -223,7 +221,7 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
       case 'dismiss':
         await alertService.dismissAlert(alertId, userId, reason || 'No reason provided');
         break;
-      }
+
 
       return {
         success: true,
@@ -231,14 +229,13 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
         alertId,
         timestamp: new Date().toISOString()
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Error performing action ${request.body.action} on alert:`, error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: `Failed to ${request.body.action} alert`
       });
-    }
+
   });
 
   /**
@@ -248,22 +245,22 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
   fastify.get<{
     Params: { projectId: string };
     Querystring: { includeMetrics?: boolean }
-  }>('/api/project-health-alerts/project/:projectId', {
+>('/api/project-health-alerts/project/:projectId', {
     schema: {
       params: {
         type: 'object',
         properties: {
           projectId: { type: 'string' }
-  }
+
         required: ['projectId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           includeMetrics: { type: 'boolean' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { projectId } = request.params;
@@ -292,17 +289,16 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
           collaboration: collaborationStats,
           timeline: activityTimeline
         };
-      }
+
 
       return response;
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting project health details:', error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: 'Failed to get project health details'
       });
-    }
+
   });
 
   /**
@@ -311,16 +307,16 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
    */
   fastify.get<{
     Params: { workspaceId: string }
-  }>('/api/project-health-alerts/workspace/:workspaceId/summary', {
+>('/api/project-health-alerts/workspace/:workspaceId/summary', {
     schema: {
       params: {
         type: 'object',
         properties: {
           workspaceId: { type: 'string' }
-  }
+
         required: ['workspaceId']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -350,11 +346,11 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
       let workspaceHealthStatus = 'HEALTHY';
       if (criticalAlerts > 0) {
         workspaceHealthStatus = 'CRITICAL';
-      } else if (highAlerts > 2) {
+ else if (highAlerts > 2) {
         workspaceHealthStatus = 'AT_RISK';
-      } else if (totalAlerts > 5) {
+ else if (totalAlerts > 5) {
         workspaceHealthStatus = 'NEEDS_ATTENTION';
-      }
+
 
       return {
         workspaceId,
@@ -365,22 +361,21 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
           alertsByType,
           projectsWithIssues: projectsWithIssues.length,
           mostCommonIssue: Object.entries(alertsByType).sort(([,a], [,b]) => b - a)[0]?.[0] || null
-  }
+
         recentAlerts: alerts
           .sort((a, b) => new Date(b.detectedAt).getTime() - new Date(a.detectedAt).getTime())
           .slice(0, 5), // 5 most recent alerts
         recommendations: generateWorkspaceRecommendations(alerts)
       };
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting workspace health summary:', error);
       return reply.status(500).send({
         error: 'Internal server error',
         message: 'Failed to get workspace health summary'
       });
-    }
+
   });
-}
+
 
 /**
  * Generate workspace-level recommendations based on alert patterns
@@ -397,27 +392,26 @@ function generateWorkspaceRecommendations(alerts: ProjectHealthAlert[]): string[
   
   if (alertsByType['STALLED_PROJECT'] > totalAlerts * 0.4) {
     recommendations.push('Multiple projects appear stalled - consider team capacity review');
-  }
+
   
   if (alertsByType['UNEVEN_CONTRIBUTIONS'] > totalAlerts * 0.3) {
     recommendations.push('Contribution imbalance detected - review task distribution and mentoring');
-  }
+
   
   if (alertsByType['LOW_ENGAGEMENT'] > totalAlerts * 0.3) {
     recommendations.push('Low engagement across workspace - consider team sync and goal alignment');
-  }
+
   
   if (alertsByType['HIGH_ERROR_RATE'] > 2) {
     recommendations.push('Multiple projects with high error rates - technical review recommended');
-  }
+
 
   if (alerts.filter(a => a.severity === 'CRITICAL').length > 0) {
     recommendations.push('Critical issues require immediate attention');
-  }
+
 
   if (recommendations.length === 0) {
     recommendations.push('Workspace health is good - maintain current practices');
-  }
+
 
   return recommendations;
-}

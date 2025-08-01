@@ -8,6 +8,7 @@ import { PSGFile } from '../projectManager';
  */
 
 }
+}
 export interface SerializationOptions {
     format: 'json' | 'binary' | 'compressed';
     compression?: 'gzip' | 'lz4' | 'brotli';
@@ -20,8 +21,9 @@ export interface SerializationOptions {
  */
 
 }
-export interface SerializationResult {
-    data: string | ArrayBuffer;
+}
+}
+export interface SerializationResult { data: string | ArrayBuffer;
     format: string;
     size: number;
     compressionRatio?: number;
@@ -46,24 +48,21 @@ export declare class OptimizedSerializer {
      * Incremental serialization - only serialize changes
      */
     serializeIncremental();
-      projectData: PSGFile,
-      projectId: string,
+      projectData: PSGFile;
+      projectId: string }
       options?: SerializationOptions
-    ): Promise<SerializationResult & {
-        isIncremental: boolean;
-        deltaSize: number;
+    ): Promise<SerializationResult & { isIncremental: boolean;
+        deltaSize: number }
 }
     }>;
     /**
      * Get serialization performance metrics
      */
-    getMetrics(): {
-        averageSerializationTime: number;
+    getMetrics(): { averageSerializationTime: number;
         totalSerializations: number;
         compressionStats: {
             averageRatio: number;
-            timeSaved: number;
-        };
+            timeSaved: number };
     };
     private optimizeOptions;
     private estimateSize;

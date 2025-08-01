@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
+import { Card, 
   Avatar, 
   Typography, 
   Tag, 
@@ -14,11 +13,10 @@ import {
   Divider,
   Alert,
   Popover,
-  Timeline,
+  Timeline }
   Empty
-} from 'antd';
-import {
-  UserOutlined,
+ from 'antd';
+import { UserOutlined,
   HistoryOutlined,
   EyeOutlined,
   SettingOutlined,
@@ -28,53 +26,50 @@ import {
   EditOutlined,
   DeleteOutlined,
   PlusOutlined,
-  NodeIndexOutlined,
+  NodeIndexOutlined }
   ShareAltOutlined
-} from '@ant-design/icons';
-import { 
-  ChangeAttribution,
+ from '@ant-design/icons';
+import { ChangeAttribution,
   AttributionPrivacySettings,
   ResourceType,
   ChangeType,
   CHANGE_TYPE_DESCRIPTIONS,
-  RESOURCE_TYPE_DESCRIPTIONS,
+  RESOURCE_TYPE_DESCRIPTIONS }
   AUTHOR_TYPE_DESCRIPTIONS
-} from '../../types/attribution';
+ from '../../types/attribution';
 import { useAttribution } from '../../hooks/useAttribution';
 import { ContributorVisualization } from './ContributorVisualization';
 const { Text, _____Title } = Typography;
-}
-interface AttributionPanelProps {
-  projectId: string;
+
+
+interface AttributionPanelProps { projectId: string;
   selectedResourceType?: ResourceType;
   selectedResourceId?: string;
   visible: boolean;
   onClose: () => void;
-  onAttributionRecord?: (attribution: ChangeAttribution) => void;
-}
-interface AuthorIndicatorProps {
-  attribution: ChangeAttribution;
+  onAttributionRecord?: (attribution: ChangeAttribution) => void }
+
+
+interface AuthorIndicatorProps { attribution: ChangeAttribution;
   showDetails?: boolean;
-  onClick?: () => void;
-}
-const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDetails = true, onClick }) => {
-  const getAuthorInitials = (name?: string) => {,
+  onClick?: () => void }
+
+const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDetails = true, onClick }) => { const getAuthorInitials = (name?: string) => { }
   if (!name) return '?';
   return name.split(' ').map(n => n[0]).join('').toUpperCase();
 };
-  const getAuthorColor = (authorType: string) => {
-  switch (authorType) {
-  case 'user':,
+  const getAuthorColor = (authorType: string) => { switch (authorType) {
+  case 'user':
   return '#1890ff';
-  case 'anonymous':,
+  case 'anonymous':
   return '#d9d9d9';
-  case 'guest':,
+  case 'guest':
   return '#faad14';
-  case 'system':,
+  case 'system':
   return '#52c41a';
-  case 'api':,
+  case 'api':
   return '#722ed1';
-  default:,
+  default: }
   return '#8c8c8c';
 };
   const getChangeTypeIcon = (changeType: ChangeType) => {
@@ -145,9 +140,9 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
       <div 
         style={{ cursor: 'pointer', padding: '4px', borderRadius: '4px' }}
         onClick={onClick}
-        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f5f5f5'; }}
+        onMouseEnter={ (e) => { e.currentTarget.style.backgroundColor = '#f5f5f5' }}
         onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'
-  }}
+
       >
         {content}
       </div>
@@ -155,87 +150,65 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
   return content;
 };
 
-export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
-  projectId,
-  selectedResourceType,
-  selectedResourceId,
-  visible,
-  onClose,
+export const AttributionPanel: React.FC<AttributionPanelProps> = ({ )
+  projectId
+  selectedResourceType
+  selectedResourceId
+  visible
+  onClose }
   onAttributionRecord
-}) => {
-  const [attributions, setAttributions] = useState<ChangeAttribution>([]);
+}) => { const [attributions, setAttributions] = useState<ChangeAttribution>([]);
   const [showContributors, setShowContributors] = useState(false);
   const [privacySettings, setPrivacySettings] = useState<AttributionPrivacySettings | null>(null);
   const [showPrivacySettings, setShowPrivacySettings] = useState(false);
   const [selectedAttribution, setSelectedAttribution] = useState<ChangeAttribution | null>(null);
   const { 
-    listAttributions, 
-    getResourceAttribution, 
-    getPrivacySettings, 
-    updatePrivacySettings,
-    loading, 
+    listAttributions
+    getResourceAttribution
+    getPrivacySettings
+    updatePrivacySettings
+    loading }
     error 
-  } = useAttribution();
-  useEffect(() => {
-    if (visible) {
+ = useAttribution();
+  useEffect(() => { if (visible) {
       loadPrivacySettings();
       if (selectedResourceType && selectedResourceId) {
-        loadResourceAttributions();
-      } else {
-        loadRecentAttributions();
-  }, [visible, projectId, selectedResourceType, selectedResourceId]);
-  const loadPrivacySettings = async () => {
-    try {
+        loadResourceAttributions() } else { loadRecentAttributions() }, [visible, projectId, selectedResourceType, selectedResourceId]);
+  const loadPrivacySettings = async () => { try {
       const settings = await getPrivacySettings(projectId);
-      setPrivacySettings(settings);
-    } catch (error) {
-  console.error('Failed to load privacy settings:', error);
-};
-  const loadResourceAttributions = async () => {
-    if (!selectedResourceType || !selectedResourceId) return;
+      setPrivacySettings(settings) } catch (error) { console.error('Failed to load privacy settings:', error) };
+  const loadResourceAttributions = async () => { if (!selectedResourceType || !selectedResourceId) return;
     try {
       const resourceAttributions = await getResourceAttribution(;);
-        projectId, 
-        selectedResourceType, 
+        projectId
+        selectedResourceType }
         selectedResourceId
       );
       setAttributions(resourceAttributions);
-    } catch (error) {
-  console.error('Failed to load resource attributions:', error);
-};
-  const loadRecentAttributions = async () => {
-  try {
+ catch (error) { console.error('Failed to load resource attributions:', error) };
+  const loadRecentAttributions = async () => { try {
   const recentAttributions = await listAttributions({)
-  projectId,
-  limit: 50,
-  offset: 0,
-  sortBy: 'created_at',
-  sortOrder: 'desc',
+  projectId
+  limit: 50
+  offset: 0
+  sortBy: 'created_at'
+  sortOrder: 'desc' }
 });
       setAttributions(recentAttributions);
-    } catch (error) {
-  console.error('Failed to load recent attributions:', error);
-};
-  const handlePrivacySettingsChange = async (settings: Partial<AttributionPrivacySettings>) => {
-    try {
+ catch (error) { console.error('Failed to load recent attributions:', error) };
+  const handlePrivacySettingsChange = async (settings: Partial<AttributionPrivacySettings>) => { try {
       const updatedSettings = await updatePrivacySettings({)
-  projectId,
+  projectId }
         settings: { ...privacySettings, ...settings } as any
       });
       setPrivacySettings(updatedSettings);
-    } catch (error) {
-  console.error('Failed to update privacy settings:', error);
-};
-  const handleAttributionClick = (attribution: ChangeAttribution) => {
-    setSelectedAttribution(attribution);
-  };
+ catch (error) { console.error('Failed to update privacy settings:', error) };
+  const handleAttributionClick = (attribution: ChangeAttribution) => { setSelectedAttribution(attribution) };
   const groupedAttributions = attributions.reduce((groups, attribution) => {
     const key = `${attribution.resourceType}:${attribution.resourceId}`;}
-    if (!groups[key]) {
-      groups[key] = [];
+    if (!groups[key]) { groups[key] = [];
     groups[key].push(attribution);
-    return groups;
-  }, {} as Record<string, ChangeAttribution>);
+    return groups }, {} as Record<string, ChangeAttribution>);
   const renderAttributionList = () => {
     if (selectedResourceType && selectedResourceId) {
       // Show attributions for specific resource
@@ -258,7 +231,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
           />
         </div>
       );
-    } else {
+ else {
       // Show recent attributions grouped by resource
       return;
         <div>
@@ -299,11 +272,11 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
                     >
                       <Avatar
                         size={20}
-                        style={{
-  backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9',
-  fontSize: '10px',
-  cursor: 'pointer',
-}}
+                        style={ {
+  backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9'
+  fontSize: '10px'
+  cursor: 'pointer' }
+}
                         onClick={() => handleAttributionClick(attribution)}
                       >
                         {attribution.authorName?.[0] || '?'}

@@ -57,24 +57,24 @@ describe('SecurityAnalyticsOptimizer', () => {
         memory_threshold_mb: 512,
         cpu_threshold_percent: 80,
         latency_threshold_ms: 1000
-  }
+
       caching: {
         enabled: true,
         cache_ttl_seconds: 3600,
         max_cache_size_mb: 100,
         cache_strategies: ['lru', 'ttl']
-  }
+
       resource_management: {
         auto_scaling_enabled: true,
         max_concurrent_operations: 10,
         resource_pool_size: 20,
         garbage_collection_interval_ms: 300000
-  }
+
       analytics_integration: {
         epic1_optimization_events: true,
         epic17_admin_notifications: true,
         optimization_metrics_tracking: true
-  }
+
       security_validation: {
         enabled: true,
         threat_detection_enabled: true,
@@ -83,7 +83,7 @@ describe('SecurityAnalyticsOptimizer', () => {
         rate_limit_optimization_requests: true,
         max_optimization_requests_per_hour: 10,
         security_scanning_enabled: true
-      }
+
     };
 
     optimizer = new SecurityAnalyticsOptimizer(
@@ -98,7 +98,7 @@ describe('SecurityAnalyticsOptimizer', () => {
   afterEach(async () => {
     if (optimizer && typeof optimizer.shutdown === 'function') {
       await optimizer.shutdown();
-    }
+
     jest.clearAllMocks();
   });
 
@@ -238,7 +238,7 @@ describe('SecurityAnalyticsOptimizer', () => {
           security_events_processed: 500,
           compliance_violations: 0,
           system_availability_percent: 99.0
-  }
+
         created_at: Date.now()
       };
 
@@ -286,7 +286,7 @@ describe('SecurityAnalyticsOptimizer', () => {
           security_events_processed: 1000,
           compliance_violations: 0,
           system_availability_percent: 99.5
-  }
+
         created_at: Date.now()
       };
 
@@ -333,7 +333,7 @@ describe('SecurityAnalyticsOptimizer', () => {
           security_events_processed: 500,
           compliance_violations: 0,
           system_availability_percent: 99.0
-  }
+
         created_at: Date.now()
       };
 
@@ -368,7 +368,7 @@ describe('SecurityAnalyticsOptimizer', () => {
           security_events_processed: 500,
           compliance_violations: 0,
           system_availability_percent: 99.0
-  }
+
         created_at: Date.now()
       };
 
@@ -458,7 +458,7 @@ describe('SecurityAnalyticsOptimizer', () => {
           security_events_processed: 500,
           compliance_violations: 0,
           system_availability_percent: 99.0
-  }
+
         created_at: Date.now()
       };
 
@@ -497,7 +497,7 @@ describe('SecurityAnalyticsOptimizer', () => {
           security_events_processed: 500,
           compliance_violations: 0,
           system_availability_percent: 99.0
-  }
+
         created_at: Date.now()
       };
 
@@ -514,7 +514,7 @@ describe('SecurityAnalyticsOptimizer', () => {
         expect.objectContaining({
           type: 'system_optimization',
           action: 'optimization_completed'
-  }
+
       );
     });
 
@@ -540,7 +540,7 @@ describe('SecurityAnalyticsOptimizer', () => {
           security_events_processed: 100,
           compliance_violations: 2,
           system_availability_percent: 85.0
-  }
+
         created_at: Date.now()
       };
 

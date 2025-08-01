@@ -42,19 +42,19 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 interface ExportRequestBody extends AuthenticatedRequest {
   Body: z.infer<typeof ExportRequestSchema>;
-}
+
 
 interface ExportJobRequest extends AuthenticatedRequest {
   Params: { jobId: string };
-}
+
 
 interface ExportHistoryRequest extends AuthenticatedRequest {
   Querystring: z.infer<typeof ExportHistoryQuerySchema>;
-}
+
 
 export async function dataExportRoutes(fastify: FastifyInstance) {
   // Get the data export service from the DI container
@@ -69,7 +69,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Valid authentication token required'
         });
-      }
+
 
       const token = authHeader.slice(7);
       const user = await fastify.jwt.verify(token) as any;
@@ -79,15 +79,15 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Invalid authentication token'
         });
-      }
+
 
       request.user = user;
-    } catch (error) {
+ catch (error) {
       return reply.code(401).send({
         error: 'Unauthorized',
         message: 'Authentication failed'
       });
-    }
+
   };
 
   // Rate limiting configuration
@@ -110,24 +110,24 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           exportType: { 
             type: 'string',
             enum: ['USER_DATA', 'ACCESS_LOGS', 'AUDIT_TRAIL', 'SYSTEM_LOGS', 'COMPLIANCE_REPORT', 'SECURITY_EVENTS', 'CUSTOM_QUERY']
-  }
+
           dataCategories: { 
             type: 'array',
             items: { type: 'string' },
             minItems: 1
-  }
+
           format: {
             type: 'string',
             enum: ['JSON', 'CSV', 'XML', 'PDF', 'XLSX']
-  }
+
           purpose: { type: 'string', minLength: 10 },
           timeRange: {
             type: 'object',
             properties: {
               startDate: { type: 'string', format: 'date-time' },
               endDate: { type: 'string', format: 'date-time' }
-            }
-  }
+
+
           filters: {
             type: 'object',
             properties: {
@@ -136,14 +136,14 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
               operations: { type: 'array', items: { type: 'string' } },
               userIds: { type: 'array', items: { type: 'string' } },
               customFilters: { type: 'object' }
-            }
-  }
+
+
           includeMetadata: { type: 'boolean', default: false },
           anonymize: { type: 'boolean', default: false },
           encryptOutput: { type: 'boolean', default: false }
-  }
+
         required: ['exportType', 'dataCategories', 'format', 'purpose']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -151,10 +151,10 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
             jobId: { type: 'string' },
             estimatedTime: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: ExportRequestBody, reply: FastifyReply) => {
     try {
       const validatedBody = ExportRequestSchema.parse(request.body);
@@ -180,22 +180,21 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
         estimatedTime: result.estimatedTime,
         message: 'Export request submitted successfully. You will be notified when the export is ready.'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error requesting data export:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to process export request'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -210,9 +209,9 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           jobId: { type: 'string' }
-  }
+
         required: ['jobId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -225,10 +224,10 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
             recordCount: { type: 'number' },
             fileSize: { type: 'number' },
             errorMessage: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: ExportJobRequest, reply: FastifyReply) => {
     try {
       const { jobId } = request.params;
@@ -240,7 +239,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'Export job not found'
         });
-      }
+
 
       reply.send({
         jobId: job.jobId,
@@ -252,14 +251,13 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
         fileSize: job.fileSize,
         errorMessage: job.errorMessage
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting export job status:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get export job status'
       });
-    }
+
   });
 
   /**
@@ -274,10 +272,10 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           jobId: { type: 'string' }
-  }
+
         required: ['jobId']
-      }
-    }
+
+
   }, async (request: ExportJobRequest, reply: FastifyReply) => {
     try {
       const { jobId } = request.params;
@@ -290,7 +288,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: 'Export file no longer available'
         });
-      }
+
 
       // Set headers for file download
       reply.header('Content-Disposition', `attachment; filename="${downloadInfo.fileName}"`);
@@ -299,8 +297,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
       // Stream the file
       const stream = fs.createReadStream(downloadInfo.filePath);
       reply.send(stream);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error downloading export file:', error);
       
       if (error.message === 'Export job not found' || error.message === 'Export job not completed') {
@@ -308,13 +305,13 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           error: 'Not Found',
           message: error.message
         });
-      } else {
+ else {
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to download export file'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -333,13 +330,13 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           status: { 
             type: 'string',
             enum: ['QUEUED', 'PROCESSING', 'COMPLETED', 'FAILED', 'CANCELLED']
-  }
+
           exportType: {
             type: 'string',
             enum: ['USER_DATA', 'ACCESS_LOGS', 'AUDIT_TRAIL', 'SYSTEM_LOGS', 'COMPLIANCE_REPORT', 'SECURITY_EVENTS', 'CUSTOM_QUERY']
-          }
-        }
-  }
+
+
+
       response: {
         200: {
           type: 'object',
@@ -356,21 +353,21 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
                   endTime: { type: 'string', format: 'date-time' },
                   recordCount: { type: 'number' },
                   fileSize: { type: 'number' }
-                }
-              }
-  }
+
+
+
             pagination: {
               type: 'object',
               properties: {
                 limit: { type: 'integer' },
                 offset: { type: 'integer' },
                 total: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: ExportHistoryRequest, reply: FastifyReply) => {
     try {
       const queryParams = ExportHistoryQuerySchema.parse(request.query);
@@ -386,12 +383,12 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
       
       if (queryParams.status) {
         filteredHistory = filteredHistory.filter(job => job.status === queryParams.status);
-      }
+
       
       if (queryParams.exportType) {
         // Would need to store export type in job metadata to filter
         // For now, we'll include all jobs
-      }
+
 
       reply.send({
         exports: filteredHistory.map(job => ({
@@ -407,24 +404,23 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           limit: queryParams.limit,
           offset: queryParams.offset,
           total: filteredHistory.length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid query parameters',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error getting export history:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to get export history'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -439,19 +435,19 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           jobId: { type: 'string' }
-  }
+
         required: ['jobId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: ExportJobRequest, reply: FastifyReply) => {
     try {
       const { jobId } = request.params;
@@ -462,8 +458,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Export job cancelled successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error cancelling export job:', error);
       
       if (error.message === 'Export job not found' || error.message === 'Cannot cancel completed job') {
@@ -471,13 +466,13 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           error: 'Bad Request',
           message: error.message
         });
-      } else {
+ else {
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to cancel export job'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -503,9 +498,9 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
                   supportedFormats: { type: 'array', items: { type: 'string' } },
                   estimatedTime: { type: 'string' },
                   maxRecords: { type: 'number' }
-                }
-              }
-  }
+
+
+
             formats: {
               type: 'array',
               items: {
@@ -516,13 +511,13 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
                   mimeType: { type: 'string' },
                   supportsAnonymization: { type: 'boolean' },
                   supportsEncryption: { type: 'boolean' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     reply.send({
       exportTypes: [
@@ -533,7 +528,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           supportedFormats: ['JSON', 'CSV', 'XML'],
           estimatedTime: '2-5 minutes',
           maxRecords: 1000
-  }
+
         {
           type: 'ACCESS_LOGS',
           description: 'Export user access and activity logs',
@@ -541,7 +536,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           supportedFormats: ['JSON', 'CSV'],
           estimatedTime: '5-15 minutes',
           maxRecords: 50000
-  }
+
         {
           type: 'AUDIT_TRAIL',
           description: 'Export audit trail and compliance data',
@@ -549,7 +544,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           supportedFormats: ['JSON', 'CSV', 'PDF'],
           estimatedTime: '10-30 minutes',
           maxRecords: 100000
-  }
+
         {
           type: 'SECURITY_EVENTS',
           description: 'Export security events and alerts',
@@ -557,7 +552,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           supportedFormats: ['JSON', 'CSV'],
           estimatedTime: '5-20 minutes',
           maxRecords: 25000
-        }
+
       ],
       formats: [
         {
@@ -566,28 +561,28 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           mimeType: 'application/json',
           supportsAnonymization: true,
           supportsEncryption: true
-  }
+
         {
           format: 'CSV',
           description: 'Comma Separated Values',
           mimeType: 'text/csv',
           supportsAnonymization: true,
           supportsEncryption: true
-  }
+
         {
           format: 'XML',
           description: 'Extensible Markup Language',
           mimeType: 'application/xml',
           supportsAnonymization: true,
           supportsEncryption: true
-  }
+
         {
           format: 'PDF',
           description: 'Portable Document Format',
           mimeType: 'application/pdf',
           supportsAnonymization: false,
           supportsEncryption: true
-        }
+
       ]
     });
   });
@@ -608,10 +603,10 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
             version: { type: 'string' },
             queueStatus: { type: 'string' },
             activeJobs: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     // In a real implementation, you would check the export queue status
     reply.send({
@@ -622,9 +617,8 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
       activeJobs: 0
     });
   });
-}
+
 
 // Register the plugin
 export default async function (fastify: FastifyInstance) {
   await fastify.register(dataExportRoutes, { prefix: '/api/data-export' });
-}

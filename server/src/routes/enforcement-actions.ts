@@ -20,11 +20,12 @@ import {
   TargetType,
   ViolationCategory,
   AppealStatus
-} from '../../../packages/core/types/EnforcementTypes';
+ from '../../../packages/core/types/EnforcementTypes';
 
 // Request/Response type definitions
-}
-}
+
+
+
 interface CreateEnforcementActionRequest {
   Body: {
     targetType: TargetType;
@@ -38,17 +39,18 @@ interface CreateEnforcementActionRequest {
       type: 'temporary' | 'permanent' | 'conditional';
       duration?: number;
       condition?: string;
-}
-}
+
+
+
     };
     effectiveFrom?: Date;
     effectiveUntil?: Date;
     tags?: string[];
   };
-}
 
-}
-}
+
+
+
 interface ListEnforcementActionsRequest {
   Querystring: {
     targetType?: TargetType;
@@ -61,13 +63,14 @@ interface ListEnforcementActionsRequest {
     toDate?: string;
     limit?: number;
     offset?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface CreateViolationReportRequest {
   Body: {
     targetType: TargetType;
@@ -79,14 +82,15 @@ interface CreateViolationReportRequest {
     detectionMethod?: {
       method: string;
       confidence: number;
-}
-}
+
+
+
     };
   };
-}
 
-}
-}
+
+
+
 interface SubmitAppealRequest {
   Body: {
     enforcementActionId: string;
@@ -96,8 +100,9 @@ interface SubmitAppealRequest {
       claimsInnocence?: boolean;
       claimsError?: boolean;
       newEvidence?: boolean;
-}
-}
+
+
+
     };
     description: string;
     evidence?: any[];
@@ -107,31 +112,33 @@ interface SubmitAppealRequest {
       justification: string;
     };
   };
-}
 
-}
-}
+
+
+
 interface ProcessAppealDecisionRequest {
   Body: {
     outcome: 'approved' | 'denied' | 'partially_approved';
     reasoning: string;
     modifiedActions?: any[];
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface AnalyticsRequest {
   Querystring: {
     startDate: string;
     endDate: string;
     format?: 'json' | 'csv';
-}
-}
+
+
+
   };
-}
+
 
 export async function enforcementActionsRoutes(fastify: FastifyInstance) {
   const enforcementService = new EnforcementActionService(
@@ -170,7 +177,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                 'transaction_block', 'payment_hold', 'verification_required', 'feature_restriction',
                 'marketplace_ban', 'shadow_ban', 'rate_limit', 'manual_review_required'
               ]
-  }
+
             severity: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
             reason: { type: 'string', description: 'Reason for the enforcement action' },
             description: { type: 'string', description: 'Detailed description of the action' },
@@ -178,20 +185,20 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
               type: 'array', 
               items: { type: 'object' },
               description: 'Supporting evidence for the action'
-  }
+
             duration: {
               type: 'object',
               properties: {
                 type: { type: 'string', enum: ['temporary', 'permanent', 'conditional'] },
                 duration: { type: 'number', description: 'Duration in minutes for temporary actions' },
                 condition: { type: 'string', description: 'Condition for conditional actions' }
-              }
-  }
+
+
             effectiveFrom: { type: 'string', format: 'date-time' },
             effectiveUntil: { type: 'string', format: 'date-time' },
             tags: { type: 'array', items: { type: 'string' } }
-          }
-  }
+
+
         response: {
           201: {
             type: 'object',
@@ -208,22 +215,22 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                   targetId: { type: 'string' },
                   reason: { type: 'string' },
                   createdAt: { type: 'string', format: 'date-time' }
-                }
-  }
+
+
               message: { type: 'string' }
-            }
-  }
+
+
           400: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               error: { type: 'string' },
               code: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<CreateEnforcementActionRequest>, reply: FastifyReply) => {
       try {
         // Verify admin permissions
@@ -234,7 +241,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             error: 'Authentication required',
             code: 'UNAUTHORIZED'
           });
-        }
+
 
         const hasAdminAccess = await fastify.authService.hasPermission(userId, 'admin:enforcement:create');
         if (!hasAdminAccess) {
@@ -243,7 +250,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             error: 'Insufficient permissions',
             code: 'FORBIDDEN'
           });
-        }
+
 
         // Parse dates if provided
         const actionData = {
@@ -265,19 +272,17 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             targetId: action.targetId,
             reason: action.reason,
             createdAt: action.createdAt
-  }
+
           message: 'Enforcement action created successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error creating enforcement action:', error);
         reply.code(400).send({
           success: false,
           error: error.message,
           code: 'CREATE_ACTION_FAILED'
         });
-      }
-    }
+
   );
 
   /**
@@ -296,26 +301,26 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           required: ['id'],
           properties: {
             id: { type: 'string', description: 'Enforcement action ID' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               action: { type: 'object' }
-            }
-  }
+
+
           404: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               error: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -324,7 +329,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const action = await enforcementService.getEnforcementAction(request.params.id);
         if (!action) {
@@ -332,7 +337,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Enforcement action not found'
           });
-        }
+
 
         // Check permissions - admin or target user can view
         const hasAdminAccess = await fastify.authService.hasPermission(userId, 'admin:enforcement:read');
@@ -343,20 +348,19 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         reply.send({
           success: true,
           action
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error retrieving enforcement action:', error);
         reply.code(500).send({
           success: false,
           error: 'Internal server error'
         });
-      }
+
     }
   );
 
@@ -384,8 +388,8 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             toDate: { type: 'string', format: 'date' },
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
             offset: { type: 'integer', minimum: 0, default: 0 }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -399,13 +403,13 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                   limit: { type: 'integer' },
                   offset: { type: 'integer' },
                   hasMore: { type: 'boolean' }
-                }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
+
     async (request: FastifyRequest<ListEnforcementActionsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -414,7 +418,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAdminAccess = await fastify.authService.hasPermission(userId, 'admin:enforcement:read');
         if (!hasAdminAccess) {
@@ -422,7 +426,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const filters = {
           ...request.query,
@@ -442,17 +446,15 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             limit: filters.limit,
             offset: filters.offset,
             hasMore: (filters.offset + filters.limit) < result.total
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         console.error('Error listing enforcement actions:', error);
         reply.code(500).send({
           success: false,
           error: 'Internal server error'
         });
-      }
-    }
+
   );
 
   /**
@@ -471,8 +473,8 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           required: ['id'],
           properties: {
             id: { type: 'string', description: 'Enforcement action ID' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -480,11 +482,11 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               executed: { type: 'boolean' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -493,7 +495,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasExecutePermission = await fastify.authService.hasPermission(userId, 'admin:enforcement:execute');
         if (!hasExecutePermission) {
@@ -501,7 +503,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const executed = await enforcementService.executeEnforcementAction(request.params.id);
 
@@ -510,15 +512,13 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           executed,
           message: executed ? 'Enforcement action executed successfully' : 'Failed to execute enforcement action'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error executing enforcement action:', error);
         reply.code(400).send({
           success: false,
           error: error.message
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -550,7 +550,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                 'legal_compliance', 'terms_of_service', 'community_guidelines', 'payment_issues',
                 'technical_violation'
               ]
-  }
+
             description: { type: 'string', minLength: 10 },
             severity: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
             evidence: { type: 'array', items: { type: 'object' } },
@@ -559,10 +559,10 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
               properties: {
                 method: { type: 'string' },
                 confidence: { type: 'number', minimum: 0, maximum: 100 }
-              }
-            }
-          }
-  }
+
+
+
+
         response: {
           201: {
             type: 'object',
@@ -574,14 +574,14 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                   reportId: { type: 'string' },
                   status: { type: 'string' },
                   reportedAt: { type: 'string', format: 'date-time' }
-                }
-  }
+
+
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<CreateViolationReportRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -590,7 +590,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const reportData = {
           ...request.body,
@@ -605,18 +605,16 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             reportId: report.reportId,
             status: report.status,
             reportedAt: report.reportedAt
-  }
+
           message: 'Violation report submitted successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error creating violation report:', error);
         reply.code(400).send({
           success: false,
           error: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -635,10 +633,10 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           required: ['id'],
           properties: {
             id: { type: 'string', description: 'Violation report ID' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -647,7 +645,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'admin:reports:read');
         if (!hasAccess) {
@@ -655,7 +653,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const report = await enforcementService.getViolationReport(request.params.id);
         if (!report) {
@@ -663,21 +661,19 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Violation report not found'
           });
-        }
+
 
         reply.send({
           success: true,
           report
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error retrieving violation report:', error);
         reply.code(500).send({
           success: false,
           error: 'Internal server error'
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -709,8 +705,8 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                 claimsInnocence: { type: 'boolean' },
                 claimsError: { type: 'boolean' },
                 newEvidence: { type: 'boolean' }
-              }
-  }
+
+
             description: { type: 'string', minLength: 10 },
             evidence: { type: 'array', items: { type: 'object' } },
             requestedOutcome: {
@@ -720,12 +716,12 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                 action: { type: 'string' },
                 specificRequest: { type: 'string' },
                 justification: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     async (request: FastifyRequest<SubmitAppealRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -734,7 +730,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const appealData = {
           ...request.body,
@@ -750,18 +746,16 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             status: appeal.status,
             submittedAt: appeal.submittedAt,
             reviewDeadline: appeal.reviewDeadline
-  }
+
           message: 'Appeal submitted successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error submitting appeal:', error);
         reply.code(400).send({
           success: false,
           error: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -780,8 +774,8 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           required: ['id'],
           properties: {
             id: { type: 'string', description: 'Appeal ID' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['outcome', 'reasoning'],
@@ -789,10 +783,10 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             outcome: { type: 'string', enum: ['approved', 'denied', 'partially_approved'] },
             reasoning: { type: 'string', minLength: 10 },
             modifiedActions: { type: 'array', items: { type: 'object' } }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -801,7 +795,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasDecisionPermission = await fastify.authService.hasPermission(userId, 'admin:appeals:decide');
         if (!hasDecisionPermission) {
@@ -809,7 +803,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const decision = {
           ...request.body,
@@ -825,18 +819,16 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             status: appeal.status,
             decision: appeal.decision,
             decidedAt: appeal.decidedAt
-  }
+
           message: 'Appeal decision processed successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error processing appeal decision:', error);
         reply.code(400).send({
           success: false,
           error: error.message
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -861,10 +853,10 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             startDate: { type: 'string', format: 'date' },
             endDate: { type: 'string', format: 'date' },
             format: { type: 'string', enum: ['json', 'csv'], default: 'json' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request: FastifyRequest<AnalyticsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -873,7 +865,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAnalyticsAccess = await fastify.authService.hasPermission(userId, 'admin:analytics:read');
         if (!hasAnalyticsAccess) {
@@ -881,7 +873,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const timeRange = {
           startDate: new Date(request.query.startDate),
@@ -894,22 +886,20 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           // TODO: Implement CSV export
           reply.type('text/csv');
           reply.send('CSV export not yet implemented');
-        } else {
+ else {
           reply.send({
             success: true,
             analytics,
             generatedAt: new Date()
           });
-        }
 
-      } catch (error) {
+ catch (error) {
         console.error('Error generating enforcement analytics:', error);
         reply.code(400).send({
           success: false,
           error: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -923,8 +913,8 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
         summary: 'Get enforcement dashboard',
         description: 'Retrieve summary data for enforcement dashboard',
         security: [{ bearerAuth: [] }]
-      }
-  }
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -933,7 +923,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'admin:enforcement:read');
         if (!hasAccess) {
@@ -941,7 +931,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         // Get last 30 days of data for dashboard
         const endDate = new Date();
@@ -965,16 +955,15 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             trends: analytics.trends,
             recentActivity: recentActions.actions,
             lastUpdated: new Date()
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         console.error('Error generating enforcement dashboard:', error);
         reply.code(500).send({
           success: false,
           error: 'Internal server error'
         });
-      }
+
     }
   );
 
@@ -988,8 +977,8 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
         tags: ['System'],
         summary: 'Enforcement system health',
         description: 'Check health status of enforcement system'
-      }
-  }
+
+
     async (request, reply) => {
       try {
         // Basic health checks
@@ -1000,27 +989,24 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             enforcementService: 'operational',
             database: 'operational',
             automation: 'operational'
-  }
+
           metrics: {
             pendingActions: 0,
             pendingReports: 0,
             pendingAppeals: 0
-          }
+
         };
 
         reply.send({
           success: true,
           health
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error checking enforcement system health:', error);
         reply.code(500).send({
           success: false,
           error: 'Health check failed',
           status: 'unhealthy'
         });
-      }
-    }
+
   );
-}

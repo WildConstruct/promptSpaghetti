@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 
-}
+
 export interface GraphVersion {
   id: string;,
-  version: number;
+  version: number;,
   createdAt: Date;
   description?: string;
   graphData: any;
-}
-}
+
+
+
 export const useGraphVersions = (graphId: string) => {
   const [versions, setVersions] = useState<GraphVersion>([]);
   const [loading, setLoading] = useState(false);
@@ -25,7 +26,7 @@ export const useGraphVersions = (graphId: string) => {
     try {
       // Would normally save to API
       setLoading(false);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to save version');
   setLoading(false);
 };

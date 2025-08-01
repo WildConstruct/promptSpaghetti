@@ -10,7 +10,7 @@ import {
   DeletionTriggerType,
   VerificationStep,
   SafetyCheck
-} from '../services/FinancialDataLifecycleService';
+ from '../services/FinancialDataLifecycleService';
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 import { jwtAuthMiddleware } from '../auth/middleware/jwtAuthMiddleware';
 
@@ -115,12 +115,12 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
                 currentStage: { type: 'string' },
                 retentionExpiresAt: { type: 'string', format: 'date-time' },
                 createdAt: { type: 'string', format: 'date-time' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = RegisterFinancialDataSchema.parse(request.body);
@@ -128,7 +128,7 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
 
       if (!userId) {
         return reply.code(401).send({ success: false, error: 'Authentication required' });
-      }
+
 
       const financialService = (fastify as any).financialDataLifecycleService as FinancialDataLifecycleService;
       
@@ -147,15 +147,15 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
           currentStage: record.currentStage,
           retentionExpiresAt: record.retentionExpiresAt?.toISOString(),
           createdAt: record.createdAt.toISOString()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to register financial data:', error);
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Registration failed'
       });
-    }
+
   });
 
   /**
@@ -188,16 +188,16 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
                       retentionExpiresAt: { type: 'string' },
                       legalHold: { type: 'boolean' },
                       daysOverdue: { type: 'number' }
-                    }
-                  }
-  }
+
+
+
                 totalCount: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const query = GetRecordsReadyForDeletionSchema.parse(request.query);
@@ -205,7 +205,7 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
 
       if (!userId) {
         return reply.code(401).send({ success: false, error: 'Authentication required' });
-      }
+
 
       const financialService = (fastify as any).financialDataLifecycleService as FinancialDataLifecycleService;
       
@@ -233,15 +233,15 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
             lastAccessedAt: record.lastAccessedAt.toISOString()
           })),
           totalCount: records.length
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get records ready for deletion:', error);
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Query failed'
       });
-    }
+
   });
 
   /**
@@ -268,12 +268,12 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
                 requireApproval: { type: 'boolean' },
                 isActive: { type: 'boolean' },
                 createdAt: { type: 'string', format: 'date-time' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = CreateDeletionWorkflowSchema.parse(request.body);
@@ -281,7 +281,7 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
 
       if (!userId) {
         return reply.code(401).send({ success: false, error: 'Authentication required' });
-      }
+
 
       // TODO: Check if user has permission to create deletion workflows
       // This would typically require admin or data protection officer role
@@ -303,15 +303,15 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
           requireApproval: workflow.requireApproval,
           isActive: workflow.isActive,
           createdAt: workflow.createdAt.toISOString()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to create deletion workflow:', error);
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Workflow creation failed'
       });
-    }
+
   });
 
   /**
@@ -346,15 +346,15 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
                       scheduledAt: { type: 'string', format: 'date-time' },
                       executedAt: { type: 'string', format: 'date-time' },
                       errorMessage: { type: 'string' }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = ExecuteDeletionWorkflowSchema.parse(request.body);
@@ -362,7 +362,7 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
 
       if (!userId) {
         return reply.code(401).send({ success: false, error: 'Authentication required' });
-      }
+
 
       // TODO: Check if user has permission to execute deletion workflows
       // This would typically require admin or data protection officer role
@@ -390,15 +390,15 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
             executedAt: exec.executedAt?.toISOString(),
             errorMessage: exec.errorMessage
           }))
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to execute deletion workflow:', error);
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Workflow execution failed'
       });
-    }
+
   });
 
   /**
@@ -426,12 +426,12 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
                 regulatoryFramework: { type: 'string' },
                 approvalStatus: { type: 'string' },
                 generatedAt: { type: 'string', format: 'date-time' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = GenerateComplianceReportSchema.parse(request.body);
@@ -439,7 +439,7 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
 
       if (!userId) {
         return reply.code(401).send({ success: false, error: 'Authentication required' });
-      }
+
 
       // TODO: Check if user has permission to generate compliance reports
       // This would typically require compliance officer or admin role
@@ -466,15 +466,15 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
           approvalStatus: report.approvalStatus,
           generatedAt: report.generatedAt.toISOString(),
           summaryStatistics: report.summaryStatistics
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to generate compliance report:', error);
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Report generation failed'
       });
-    }
+
   });
 
   /**
@@ -489,9 +489,9 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
         type: 'object',
         properties: {
           reportId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['reportId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -512,12 +512,12 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
                 reportData: { type: 'object' },
                 summaryStatistics: { type: 'object' },
                 generatedAt: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { reportId } = request.params as { reportId: string };
@@ -525,7 +525,7 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
 
       if (!userId) {
         return reply.code(401).send({ success: false, error: 'Authentication required' });
-      }
+
 
       // Query the report from database
       const financialService = (fastify as any).financialDataLifecycleService as FinancialDataLifecycleService;
@@ -541,7 +541,7 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
           success: false,
           error: 'Report not found or access denied'
         });
-      }
+
 
       const row = rows[0];
       return reply.send({
@@ -562,15 +562,15 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
           generatedAt: row.generated_at,
           createdAt: row.created_at,
           updatedAt: row.updated_at
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get compliance report:', error);
       return reply.code(400).send({
         success: false,
         error: error instanceof Error ? error.message : 'Report retrieval failed'
       });
-    }
+
   });
 
   /**
@@ -589,10 +589,10 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
             service: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' },
             version: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     return reply.send({
       success: true,
@@ -601,4 +601,3 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
       version: '1.0.0'
     });
   });
-}

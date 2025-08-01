@@ -14,7 +14,7 @@ import {
   ActivityType, 
   ActivityCategory, 
   ActivityQuery 
-} from '../services/ActivityHistoryService';
+ from '../services/ActivityHistoryService';
 import { requirePermission } from '../middleware/permission-auth';
 
 // Request validation schemas
@@ -111,7 +111,7 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     permissions: string[];
   };
-}
+
 
 /**
  * Register activity history routes
@@ -140,22 +140,21 @@ export async function registerActivityHistoryRoutes(
         success: true,
         message: 'Activity recorded successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid request data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to record activity:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to record activity'
       });
-    }
+
   });
 
   // Query activities with filtering and pagination
@@ -174,7 +173,7 @@ export async function registerActivityHistoryRoutes(
           success: false,
           error: 'Insufficient permissions to view other users\' activities'
         });
-      }
+
 
       const query: ActivityQuery = {
         ...queryParams,
@@ -193,24 +192,23 @@ export async function registerActivityHistoryRoutes(
           hasMore: result.hasMore,
           limit: query.limit || 50,
           offset: query.offset || 0
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid query parameters',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to query activities:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve activities'
       });
-    }
+
   });
 
   // Get activity summary for a user
@@ -234,7 +232,7 @@ export async function registerActivityHistoryRoutes(
           success: false,
           error: 'Insufficient permissions to view other users\' activity summary'
         });
-      }
+
 
       // Calculate date range based on period
       let start: Date, end: Date;
@@ -242,7 +240,7 @@ export async function registerActivityHistoryRoutes(
       if (startDate && endDate) {
         start = new Date(startDate);
         end = new Date(endDate);
-      } else {
+ else {
         end = new Date();
         switch (period) {
         case 'day':
@@ -259,8 +257,8 @@ export async function registerActivityHistoryRoutes(
           break;
         default:
           start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000); // Default to week
-        }
-      }
+
+
 
       const summary = await activityService.getActivitySummary(
         effectiveUserId,
@@ -275,17 +273,16 @@ export async function registerActivityHistoryRoutes(
           userId: effectiveUserId,
           dateRange: { start, end },
           period: period || 'week'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error('Failed to get activity summary:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve activity summary',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   // Export activities
@@ -304,7 +301,7 @@ export async function registerActivityHistoryRoutes(
           success: false,
           error: 'Insufficient permissions to export other users\' activities'
         });
-      }
+
 
       const exportResult = await activityService.exportActivities(
         effectiveUserId,
@@ -330,29 +327,28 @@ export async function registerActivityHistoryRoutes(
       case 'json':
       default:
         contentType = 'application/json';
-      }
+
 
       reply.header('Content-Type', contentType);
       reply.header('Content-Disposition', 
         `attachment; filename="activity_export_${Date.now()}.${exportData.format}"`);
 
       return reply.code(200).send(exportResult);
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid export parameters',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to export activities:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to export activities'
       });
-    }
+
   });
 
   // Create activity bookmark
@@ -367,22 +363,21 @@ export async function registerActivityHistoryRoutes(
         success: false,
         error: 'Activity bookmarks not yet implemented'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid bookmark data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to create bookmark:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to create bookmark'
       });
-    }
+
   });
 
   // Get user's activity bookmarks
@@ -395,14 +390,13 @@ export async function registerActivityHistoryRoutes(
         success: false,
         error: 'Activity bookmarks retrieval not yet implemented'
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get bookmarks:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve bookmarks'
       });
-    }
+
   });
 
   // Get activity analytics/insights
@@ -424,7 +418,7 @@ export async function registerActivityHistoryRoutes(
           success: false,
           error: 'Insufficient permissions to view activity analytics'
         });
-      }
+
 
       // For now, return placeholder analytics
       const analytics = {
@@ -438,13 +432,13 @@ export async function registerActivityHistoryRoutes(
             workdayVsWeekend: { workday: 0.8, weekend: 0.2 },
             peakActivity: '10:00-11:00',
             averageSessionDuration: 1800 // seconds
-  }
+
           trends: {
             activityGrowth: '+15%',
             sessionLengthTrend: '+5%',
             resourceUsageTrend: '+10%'
-          }
-  }
+
+
         generatedAt: new Date().toISOString()
       };
 
@@ -452,14 +446,13 @@ export async function registerActivityHistoryRoutes(
         success: true,
         data: analytics
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get activity analytics:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve activity analytics'
       });
-    }
+
   });
 
   // Get activity types and categories (for UI dropdowns)
@@ -488,14 +481,13 @@ export async function registerActivityHistoryRoutes(
         success: true,
         data: metadata
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get activity metadata:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve activity metadata'
       });
-    }
+
   });
 
   // Bulk record activities (for batch operations)
@@ -519,25 +511,24 @@ export async function registerActivityHistoryRoutes(
         success: true,
         data: {
           recordedCount: activities.length
-  }
+
         message: `Successfully recorded ${activities.length} activities`
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         return reply.code(400).send({
           success: false,
           error: 'Invalid activities data',
           details: error.errors
         });
-      }
+
 
       fastify.log.error('Failed to record batch activities:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to record batch activities'
       });
-    }
+
   });
 
   // Health check for activity system
@@ -559,8 +550,7 @@ export async function registerActivityHistoryRoutes(
         success: true,
         data: health
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Activity system health check failed:', error);
       return reply.code(500).send({
         success: false,
@@ -568,9 +558,9 @@ export async function registerActivityHistoryRoutes(
         data: {
           status: 'unhealthy',
           error: error instanceof Error ? error.message : String(error)
-        }
+
       });
-    }
+
   });
 
   // Admin endpoint to get system-wide activity statistics
@@ -592,7 +582,7 @@ export async function registerActivityHistoryRoutes(
           totalRecords: 0,
           sizeBytes: 0,
           retentionDate: new Date()
-  }
+
         generatedAt: new Date().toISOString()
       };
 
@@ -600,15 +590,14 @@ export async function registerActivityHistoryRoutes(
         success: true,
         data: stats
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get system activity stats:', error);
       return reply.code(500).send({
         success: false,
         error: 'Failed to retrieve system activity statistics'
       });
-    }
+
   });
-}
+
 
 export default registerActivityHistoryRoutes;

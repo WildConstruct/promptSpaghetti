@@ -9,16 +9,12 @@ import { ASTNodeWhitelistFilter, createConditionalNodeFilter } from '../runtime/
 import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../runtime/security-audit-logger';
 import { ConditionalNode } from '../runtime/nodes/Conditional';
 import { AdvancedExecutionContextImpl } from '../runtime/advanced';
-describe('Security Audit Logger Integration', () => {
-  beforeEach(() => {
+describe('Security Audit Logger Integration', () => { beforeEach(() => {
     // Clear audit logs
     securityAudit.clearEvents();
-    MathFunctionAuditor.clearAuditLog();
-  });
-  afterEach(() => {
-    // Stop periodic cleanup
-    (securityAudit as any).stopPeriodicCleanup();
-  });
+    MathFunctionAuditor.clearAuditLog() });
+  afterEach(() => { // Stop periodic cleanup
+    (securityAudit as any).stopPeriodicCleanup() });
   describe('Math Function Auditing', () => {
     it('should log allowed Math function calls', () => {
       const safeMath = createAuditedSafeMathContext('test-context');
@@ -59,12 +55,11 @@ describe('Security Audit Logger Integration', () => {
       expect(events[1].severity).toBe(SecuritySeverity.WARNING);
     });
   });
-  describe('AST Node Filtering', () => {
-    it('should log blocked AST nodes', () => {
+  describe('AST Node Filtering', () => { it('should log blocked AST nodes', () => {
       const filter = createConditionalNodeFilter();
       // Create a dangerous AST node
       const dangerousNode = {
-        type: 'FunctionExpression',
+        type: 'FunctionExpression' }
         loc: { start: { line: 1, column: 0 } }
       };
       const result = filter.filterAST(dangerousNode as any);
@@ -80,9 +75,7 @@ describe('Security Audit Logger Integration', () => {
     it('should log prototype pollution attempts', () => {
       const context = SafeExpressionEvaluator.createSafeContext({ x: 5 });
       // Try prototype pollution - AST filtering catches AssignmentExpression first
-      expect(() => {
-        SafeExpressionEvaluator.evaluate('x.__proto__.polluted = true', context);
-      }).toThrow('Unsafe AST node detected: AssignmentExpression (DANGEROUS)');
+      expect(() => { SafeExpressionEvaluator.evaluate('x.__proto__.polluted = true', context) }).toThrow('Unsafe AST node detected: AssignmentExpression (DANGEROUS)');
       // Check audit logs - AST filtering blocks it as dangerous node, not prototype pollution
       const events = securityAudit.getEvents({ category: SecurityEventCategory.AST_NODE_BLOCKED });
       expect(events.length).toBeGreaterThan(0);
@@ -92,9 +85,7 @@ describe('Security Audit Logger Integration', () => {
     it('should log dangerous expression patterns', () => {
       const context = SafeExpressionEvaluator.createSafeContext({ x: 5 });
       // Try dangerous expressions
-      expect(() => {
-        SafeExpressionEvaluator.evaluate('eval("alert(1)")', context);
-      }).toThrow();
+      expect(() => { SafeExpressionEvaluator.evaluate('eval("alert(1)")', context) }).toThrow();
       // Check audit logs - should have events logged when dangerous expressions are blocked
       const allEvents = securityAudit.getEvents();
       // Debug: log all events to understand what's happening
@@ -111,7 +102,7 @@ describe('Security Audit Logger Integration', () => {
         variables: { x: 10, y: 5 }, 
         seed: 'test-seed',
         executionMeta: { nodeExecutionOrder: [], performanceMetrics: new Map() }
-      } as any;
+ as any;
       ctx.variables.x = 10;
       ctx.variables.y = 5;
       const conditional = new ConditionalNode(;);
@@ -134,7 +125,7 @@ describe('Security Audit Logger Integration', () => {
         variables: {}, 
         seed: 'test-seed',
         executionMeta: { nodeExecutionOrder: [], performanceMetrics: new Map() }
-      } as any;
+ as any;
       const conditional = new ConditionalNode(;);
         'test-node',
         [
@@ -153,7 +144,7 @@ describe('Security Audit Logger Integration', () => {
         variables: { value: 15 }, 
         seed: 'test-seed',
         executionMeta: { nodeExecutionOrder: [], performanceMetrics: new Map() }
-      } as any;
+ as any;
       ctx.variables.value = 15;
       // 1. Create conditional node with Math operations
       const conditional = new ConditionalNode(;);
@@ -189,7 +180,7 @@ describe('Security Audit Logger Integration', () => {
         variables: { a: 5, b: 10 }, 
         seed: 'test-seed',
         executionMeta: { nodeExecutionOrder: [], performanceMetrics: new Map() }
-      } as any;
+ as any;
       ctx.variables.a = 5;
       ctx.variables.b = 10;
       // Safe operations
@@ -211,9 +202,7 @@ describe('Security Audit Logger Integration', () => {
         ],
         'safe'
       );
-      try {
-        dangerousConditional.run(ctx);
-      } catch (e) {
+      try { dangerousConditional.run(ctx) } catch (e) {
         // Expected
 
       // Query events - testing the API works even if no events are logged
@@ -221,8 +210,7 @@ describe('Security Audit Logger Integration', () => {
       const criticalEvents = securityAudit.getEvents({ severity: SecuritySeverity.CRITICAL });
       const blockedEvents = securityAudit.getEvents({ blocked: true });
       const mathEvents = securityAudit.getEvents({ )
-        category: SecurityEventCategory.MATH_FUNCTION_ALLOWED ;
-  });
+        category: SecurityEventCategory.MATH_FUNCTION_ALLOWED  });
       // Test passes if API calls work, regardless of whether events were logged
       expect(Array.isArray(allEvents)).toBe(true);
       expect(Array.isArray(criticalEvents)).toBe(true);

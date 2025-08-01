@@ -21,9 +21,8 @@ import { EmbedAnalytics } from '../analytics/EmbedAnalytics';
 
 // Core Embed Interfaces
 
-}
-export interface EmbedConfig {
-  id: string;
+
+export interface EmbedConfig { id: string;
   type: EmbedType;
   title: string;
   description?: string;
@@ -34,9 +33,8 @@ export interface EmbedConfig {
   security: SecurityConfig;
   analytics: AnalyticsConfig;
   permissions: PermissionConfig;
-  metadata: EmbedMetadata;
-}
-}
+  metadata: EmbedMetadata }
+
 export type EmbedType = 
   | 'widget'
   | 'form'
@@ -50,88 +48,85 @@ export type EmbedType =
   | 'feed'
   | 'custom';
 
-}
-export interface EmbedContent {
-  html?: string;
+
+export interface EmbedContent { html?: string;
   css?: string;
   javascript?: string;
   data?: ContentData;
   template?: TemplateConfig;
   components: ComponentConfig;
   layout: LayoutConfig;
-  interactions: InteractionConfig;
-}
-}
-}
-export interface ContentData {
-  static: Record<string, any>;
+  interactions: InteractionConfig }
+
+
+
+export interface ContentData { static: Record<string, any>;
   dynamic: DynamicDataConfig;
   realTime: boolean;
-  refreshInterval?: number; // milliseconds,
-  cachingStrategy: 'none' | 'browser' | 'cdn' | 'aggressive';
+  refreshInterval?: number; // milliseconds;
+  cachingStrategy: 'none' | 'browser' | 'cdn' | 'aggressive' }
   compression: boolean;
-}
-}
-}
-export interface DynamicDataConfig {
-  id: string;
+
+
+
+
+export interface DynamicDataConfig { id: string;
   source: DataSource;
   endpoint: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   headers?: Record<string, string>;
   authentication?: AuthConfig;
-  transform?: string; // JavaScript function as string,
+  transform?: string; // JavaScript function as string }
   fallback?: any;
   errorHandling: ErrorHandlingConfig;
-}
-}
-}
-export interface DataSource {
-  type: 'api' | 'database' | 'file' | 'stream' | 'websocket';
+
+
+
+
+export interface DataSource { type: 'api' | 'database' | 'file' | 'stream' | 'websocket' }
   url: string;
   credentials?: string;
   timeout: number;
   retryPolicy: RetryPolicy;
-}
-}
-}
-export interface AuthConfig {
-  type: 'none' | 'api_key' | 'bearer' | 'basic' | 'oauth';
+
+
+
+
+export interface AuthConfig { type: 'none' | 'api_key' | 'bearer' | 'basic' | 'oauth' }
   credentials: Record<string, string>;
   refreshToken?: string;
   expiryTime?: Date;
-}
-}
-}
-export interface ErrorHandlingConfig {
-  strategy: 'fail' | 'fallback' | 'retry' | 'ignore';
+
+
+
+
+export interface ErrorHandlingConfig { strategy: 'fail' | 'fallback' | 'retry' | 'ignore' }
   maxRetries: number;
   backoffMs: number;
   fallbackValue?: any;
   errorMessage?: string;
-}
-}
-}
-export interface RetryPolicy {
-  maxAttempts: number;
+
+
+
+
+export interface RetryPolicy { maxAttempts: number;
   backoffStrategy: 'linear' | 'exponential' | 'fixed';
   baseDelay: number;
   maxDelay: number;
-  jitter: boolean;
-}
-}
-}
-export interface TemplateConfig {
-  engine: 'mustache' | 'handlebars' | 'react' | 'vue' | 'custom';
+  jitter: boolean }
+
+
+
+export interface TemplateConfig { engine: 'mustache' | 'handlebars' | 'react' | 'vue' | 'custom' }
   template: string;
   partials?: Record<string, string>;
   helpers?: Record<string, string>;
   data?: Record<string, any>;
-}
-}
-}
-export interface ComponentConfig {
-  id: string;
+
+
+
+
+export interface ComponentConfig { id: string;
   type: ComponentType;
   name: string;
   version: string;
@@ -140,9 +135,8 @@ export interface ComponentConfig {
   events: ComponentEvent;
   dependencies?: string;
   async: boolean;
-  lazy: boolean;
-}
-}
+  lazy: boolean }
+
 export type ComponentType = 
   | 'button'
   | 'input'
@@ -165,138 +159,131 @@ export type ComponentType =
   | 'spinner'
   | 'custom';
 
-}
-export interface ComponentStyling {
-  css?: string;
+
+export interface ComponentStyling { css?: string;
   classes?: string;
   inline?: Record<string, string>;
   theme?: string;
   responsive?: ResponsiveConfig;
-  animations?: AnimationConfig;
-}
-}
-}
-export interface ResponsiveConfig {
-  breakpoints: Record<string, number>;
+  animations?: AnimationConfig }
+
+
+
+export interface ResponsiveConfig { breakpoints: Record<string, number>;
   rules: ResponsiveRule;
-  strategy: 'mobile-first' | 'desktop-first';
-}
-}
-}
-export interface ResponsiveRule {
-  breakpoint: string;
+  strategy: 'mobile-first' | 'desktop-first' }
+
+
+
+export interface ResponsiveRule { breakpoint: string;
   styles: Record<string, string>;
-  behavior?: Record<string, any>;
-}
-}
-}
-export interface AnimationConfig {
-  trigger: 'load' | 'hover' | 'click' | 'scroll' | 'custom';
+  behavior?: Record<string, any> }
+
+
+
+export interface AnimationConfig { trigger: 'load' | 'hover' | 'click' | 'scroll' | 'custom' }
   type: 'fade' | 'slide' | 'scale' | 'rotate' | 'bounce' | 'custom';
   duration: number;
   easing: string;
   delay?: number;
   loop?: boolean | number;
-}
-}
-}
-export interface ComponentEvent {
-  type: string;
-  handler: string; // JavaScript function as string,
+
+
+
+
+export interface ComponentEvent { type: string;
+  handler: string; // JavaScript function as string }
   preventDefault?: boolean;
   stopPropagation?: boolean;
   debounce?: number;
   throttle?: number;
-}
-}
-}
-export interface LayoutConfig {
-  type: 'fixed' | 'fluid' | 'responsive' | 'adaptive';
+
+
+
+
+export interface LayoutConfig { type: 'fixed' | 'fluid' | 'responsive' | 'adaptive' }
   container: ContainerConfig;
   grid?: GridConfig;
   flexbox?: FlexboxConfig;
   position: PositionConfig;
   overflow: OverflowConfig;
-}
-}
-}
-export interface ContainerConfig {
-  width: DimensionValue;
+
+
+
+
+export interface ContainerConfig { width: DimensionValue;
   height: DimensionValue;
   maxWidth?: DimensionValue;
   maxHeight?: DimensionValue;
   minWidth?: DimensionValue;
   minHeight?: DimensionValue;
   padding: SpacingValue;
-  margin: SpacingValue;
-}
-}
-}
-export interface GridConfig {
-  columns: number | 'auto';
+  margin: SpacingValue }
+
+
+
+export interface GridConfig { columns: number | 'auto' }
   rows: number | 'auto';
   gap: SpacingValue;
-  areas?: string[];
+  areas?: string;
   autoFlow: 'row' | 'column' | 'row dense' | 'column dense';
-}
-}
-}
-export interface FlexboxConfig {
-  direction: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+
+
+
+
+export interface FlexboxConfig { direction: 'row' | 'column' | 'row-reverse' | 'column-reverse';
   wrap: 'nowrap' | 'wrap' | 'wrap-reverse';
-  justify: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
+  justify: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly' }
   align: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
   gap: SpacingValue;
-}
-}
-}
-export interface PositionConfig {
-  type: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
+
+
+
+
+export interface PositionConfig { type: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
   top?: DimensionValue;
   right?: DimensionValue;
   bottom?: DimensionValue;
   left?: DimensionValue;
-  zIndex?: number;
-}
-}
-}
-export interface OverflowConfig {
-  x: 'visible' | 'hidden' | 'scroll' | 'auto';
-  y: 'visible' | 'hidden' | 'scroll' | 'auto'
-}
-  }
+  zIndex?: number }
+
+
+
+export interface OverflowConfig { x: 'visible' | 'hidden' | 'scroll' | 'auto';
+  y: 'visible' | 'hidden' | 'scroll' | 'auto' }
+
+
 export type DimensionValue = string | number | 'auto' | 'inherit' | 'initial' | 'unset';
 export type SpacingValue = string | number | { top?: DimensionValue; right?: DimensionValue; bottom?: DimensionValue; left?: DimensionValue };
 
-}
-export interface InteractionConfig {
-  id: string;
+
+export interface InteractionConfig { id: string;
   trigger: InteractionTrigger;
   action: InteractionAction;
-  condition?: string; // JavaScript expression,
+  condition?: string; // JavaScript expression }
   throttle?: number;
   debounce?: number;
   once?: boolean;
-}
-}
-}
-export interface InteractionTrigger {
-  type: 'click' | 'hover' | 'focus' | 'scroll' | 'resize' | 'keypress' | 'custom';
-  target?: string; // CSS selector,
-  key?: string; // for keypress,
-  threshold?: number; // for scroll,
-}
-}
-}
-export interface InteractionAction {
-  type: 'navigate' | 'submit' | 'toggle' | 'animate' | 'update' | 'emit' | 'custom';
+
+
+
+
+export interface InteractionTrigger { type: 'click' | 'hover' | 'focus' | 'scroll' | 'resize' | 'keypress' | 'custom';
+  target?: string; // CSS selector;
+  key?: string; // for keypress;
+  threshold?: number; // for scroll }
+
+
+
+
+export interface InteractionAction { type: 'navigate' | 'submit' | 'toggle' | 'animate' | 'update' | 'emit' | 'custom';
   params: Record<string, any>;
-  callback?: string; // JavaScript function as string,
-}
-}
-}
-export interface EmbedStyling {
-  theme: ThemeConfig;
+  callback?: string; // JavaScript function as string }
+
+
+
+
+export interface EmbedStyling { theme: ThemeConfig;
   customCSS?: string;
   variables: Record<string, string>;
   responsive: ResponsiveConfig;
@@ -305,24 +292,22 @@ export interface EmbedStyling {
   colors: ColorPalette;
   spacing: SpacingScale;
   shadows: ShadowConfig;
-  borders: BorderConfig;
-}
-}
-}
-export interface ThemeConfig {
-  name: string;
+  borders: BorderConfig }
+
+
+
+export interface ThemeConfig { name: string;
   variant: 'light' | 'dark' | 'auto';
   colorScheme: ColorScheme;
   typography: TypographyConfig;
   spacing: SpacingConfig;
   borderRadius: BorderRadiusConfig;
   shadows: boolean;
-  animations: boolean;
-}
-}
-}
-export interface ColorScheme {
-  primary: string;
+  animations: boolean }
+
+
+
+export interface ColorScheme { primary: string;
   secondary: string;
   success: string;
   warning: string;
@@ -330,24 +315,25 @@ export interface ColorScheme {
   info: string;
   background: string;
   surface: string;
-  text: {
+  text: { }
   primary: string;
   secondary: string;
   disabled: string;
-}
+
+
 };
   border: string;
   divider: string;
-}
-}
-export interface TypographyConfig {
-  fontFamily: {
+
+
+export interface TypographyConfig { fontFamily: { }
   primary: string;
   secondary?: string;
   monospace: string;
-}
+
+
 };
-  fontSize: {
+  fontSize: { 
   xs: string;
   sm: string;
   base: string;
@@ -355,51 +341,46 @@ export interface TypographyConfig {
   xl: string;
   '2xl': string;
   '3xl': string;
-  '4xl': string;
-};
-  fontWeight: {
+  '4xl': string };
+  fontWeight: { 
   light: number;
   normal: number;
   medium: number;
   semibold: number;
-  bold: number;
-};
-  lineHeight: {
+  bold: number };
+  lineHeight: { 
   tight: number;
   normal: number;
-  relaxed: number;
-};
-}
-}
-export interface SpacingConfig {
-  scale: 'linear' | 'geometric' | 'custom';
+  relaxed: number };
+
+
+export interface SpacingConfig { scale: 'linear' | 'geometric' | 'custom' }
   base: number;
   values: Record<string, number>;
-}
-}
-}
-export interface BorderRadiusConfig {
-  none: string;
+
+
+
+
+export interface BorderRadiusConfig { none: string;
   sm: string;
   base: string;
   lg: string;
   xl: string;
-  full: string;
-}
-}
-}
-export interface FontConfig {
-  family: string;
+  full: string }
+
+
+
+export interface FontConfig { family: string;
   source: 'google' | 'adobe' | 'system' | 'custom';
   url?: string;
   weights: number;
   styles: ('normal' | 'italic')[];
-  display: 'auto' | 'block' | 'swap' | 'fallback' | 'optional'
-}
-  }
-}
-export interface ColorPalette {
-  [key: string]: {
+  display: 'auto' | 'block' | 'swap' | 'fallback' | 'optional' }
+
+
+
+
+export interface ColorPalette { [key: string]: { }
   50: string;
   100: string;
   200: string;
@@ -410,47 +391,42 @@ export interface ColorPalette {
   700: string;
   800: string;
   900: string;
-}
+
+
 };
-}
-}
-export interface SpacingScale {
-  [key: string]: string;
-}
-}
-}
-export interface ShadowConfig {
-  name: string;
-  value: string;
-}
-}
-}
-export interface BorderConfig {
-  width: Record<string, string>;
+
+
+export interface SpacingScale { [key: string]: string }
+
+
+
+export interface ShadowConfig { name: string;
+  value: string }
+
+
+
+export interface BorderConfig { width: Record<string, string>;
   style: Record<string, string>;
-  color: Record<string, string>;
-}
-}
-}
-export interface EmbedBehavior {
-  responsive: boolean;
+  color: Record<string, string> }
+
+
+
+export interface EmbedBehavior { responsive: boolean;
   autoResize: boolean;
   crossDomain: boolean;
   sandbox: SandboxConfig;
   loading: LoadingConfig;
   communication: CommunicationConfig;
   lifecycle: LifecycleConfig;
-  performance: PerformanceConfig;
-}
-}
-}
-export interface SandboxConfig {
-  enabled: boolean;
+  performance: PerformanceConfig }
+
+
+
+export interface SandboxConfig { enabled: boolean;
   permissions: SandboxPermission;
   allowedDomains: string;
-  cspDirectives: Record<string, string>;
-}
-}
+  cspDirectives: Record<string, string> }
+
 export type SandboxPermission = 
   | 'allow-scripts'
   | 'allow-forms'
@@ -463,234 +439,213 @@ export type SandboxPermission =
   | 'allow-top-navigation'
   | 'allow-downloads';
 
-}
-export interface LoadingConfig {
-  strategy: 'eager' | 'lazy' | 'conditional';
+
+export interface LoadingConfig { strategy: 'eager' | 'lazy' | 'conditional';
   placeholder?: PlaceholderConfig;
   skeleton?: SkeletonConfig;
   spinner?: SpinnerConfig;
   timeout: number;
-  fallback?: FallbackConfig;
-}
-}
-}
-export interface PlaceholderConfig {
-  type: 'image' | 'text' | 'custom';
+  fallback?: FallbackConfig }
+
+
+
+export interface PlaceholderConfig { type: 'image' | 'text' | 'custom' }
   content: string;
   styling?: Record<string, string>;
-}
-}
-}
-export interface SkeletonConfig {
-  enabled: boolean;
+
+
+
+
+export interface SkeletonConfig { enabled: boolean;
   animation: 'pulse' | 'wave' | 'none';
   color: string;
-  highlightColor: string;
-}
-}
-}
-export interface SpinnerConfig {
-  type: 'circle' | 'dots' | 'bars' | 'custom';
+  highlightColor: string }
+
+
+
+export interface SpinnerConfig { type: 'circle' | 'dots' | 'bars' | 'custom' }
   size: 'sm' | 'md' | 'lg';
   color: string;
   speed: number;
-}
-}
-}
-export interface FallbackConfig {
-  content: string;
+
+
+
+
+export interface FallbackConfig { content: string;
   styling?: Record<string, string>;
   retry?: boolean;
-  retryText?: string;
-}
-}
-}
-export interface CommunicationConfig {
-  enabled: boolean;
+  retryText?: string }
+
+
+
+export interface CommunicationConfig { enabled: boolean;
   protocol: 'postMessage' | 'custom';
   allowedOrigins: string;
   messageTypes: string;
-  encryption?: EncryptionConfig;
-}
-}
-}
-export interface EncryptionConfig {
-  enabled: boolean;
+  encryption?: EncryptionConfig }
+
+
+
+export interface EncryptionConfig { enabled: boolean;
   algorithm: 'AES' | 'RSA';
   keySize: number;
   publicKey?: string;
-  privateKey?: string;
-}
-}
-}
-export interface LifecycleConfig {
-  hooks: LifecycleHook;
+  privateKey?: string }
+
+
+
+export interface LifecycleConfig { hooks: LifecycleHook;
   autoMount: boolean;
   autoDestroy: boolean;
   persistState: boolean;
-  stateKey?: string;
-}
-}
-}
-export interface LifecycleHook {
-  stage: 'beforeMount' | 'mounted' | 'beforeUpdate' | 'updated' | 'beforeDestroy' | 'destroyed';
-  handler: string; // JavaScript function as string,
+  stateKey?: string }
+
+
+
+export interface LifecycleHook { stage: 'beforeMount' | 'mounted' | 'beforeUpdate' | 'updated' | 'beforeDestroy' | 'destroyed';
+  handler: string; // JavaScript function as string }
   async: boolean;
-}
-}
-}
-export interface PerformanceConfig {
-  lazyLoading: boolean;
+
+
+
+
+export interface PerformanceConfig { lazyLoading: boolean;
   codesplitting: boolean;
   bundleOptimization: boolean;
   compression: boolean;
   caching: CachingConfig;
-  monitoring: MonitoringConfig;
-}
-}
-}
-export interface CachingConfig {
-  enabled: boolean;
+  monitoring: MonitoringConfig }
+
+
+
+export interface CachingConfig { enabled: boolean;
   strategy: 'memory' | 'localStorage' | 'sessionStorage' | 'indexedDB';
-  ttl: number; // seconds,
-  maxSize: number; // bytes,
+  ttl: number; // seconds;
+  maxSize: number; // bytes }
   version: string;
-}
-}
-}
-export interface MonitoringConfig {
-  enabled: boolean;
+
+
+
+
+export interface MonitoringConfig { enabled: boolean;
   metrics: string;
-  sampling: number; // 0-1,
+  sampling: number; // 0-1 }
   reporting: ReportingConfig;
-}
-}
-}
-export interface ReportingConfig {
-  endpoint: string;
+
+
+
+
+export interface ReportingConfig { endpoint: string;
   batchSize: number;
-  flushInterval: number; // milliseconds,
+  flushInterval: number; // milliseconds }
   authentication?: AuthConfig;
-}
-}
-}
-export interface SecurityConfig {
-  csp: CSPConfig;
+
+
+
+
+export interface SecurityConfig { csp: CSPConfig;
   cors: CORSConfig;
   authentication?: AuthConfig;
   rateLimit?: RateLimitConfig;
   validation: ValidationConfig;
-  sanitization: SanitizationConfig;
-}
-}
-}
-export interface CSPConfig {
-  enabled: boolean;
+  sanitization: SanitizationConfig }
+
+
+
+export interface CSPConfig { enabled: boolean;
   directives: Record<string, string>;
   reportUri?: string;
-  reportOnly: boolean;
-}
-}
-}
-export interface CORSConfig {
-  enabled: boolean;
+  reportOnly: boolean }
+
+
+
+export interface CORSConfig { enabled: boolean;
   allowedOrigins: string;
   allowedMethods: string;
   allowedHeaders: string;
   credentials: boolean;
-  maxAge: number;
-}
-}
-}
-export interface RateLimitConfig {
-  enabled: boolean;
+  maxAge: number }
+
+
+
+export interface RateLimitConfig { enabled: boolean;
   requests: number;
   windowMs: number;
   skipSuccessfulRequests?: boolean;
-  skipFailedRequests?: boolean;
-}
-}
-}
-export interface ValidationConfig {
-  enabled: boolean;
+  skipFailedRequests?: boolean }
+
+
+
+export interface ValidationConfig { enabled: boolean;
   schemas: Record<string, any>;
   strict: boolean;
-  stripUnknown: boolean;
-}
-}
-}
-export interface SanitizationConfig {
-  enabled: boolean;
+  stripUnknown: boolean }
+
+
+
+export interface SanitizationConfig { enabled: boolean;
   htmlSanitizer?: HTMLSanitizerConfig;
   cssSanitizer?: CSSSanitizerConfig;
-  jsSanitizer?: JSSanitizerConfig;
-}
-}
-}
-export interface HTMLSanitizerConfig {
-  allowedTags: string;
+  jsSanitizer?: JSSanitizerConfig }
+
+
+
+export interface HTMLSanitizerConfig { allowedTags: string;
   allowedAttributes: Record<string, string>;
   allowedSchemes: string;
-  allowedClasses: string;
-}
-}
-}
-export interface CSSSanitizerConfig {
-  allowedProperties: string;
+  allowedClasses: string }
+
+
+
+export interface CSSSanitizerConfig { allowedProperties: string;
   allowedValues: Record<string, string>;
   allowedUnits: string;
-  blockedSelectors: string;
-}
-}
-}
-export interface JSSanitizerConfig {
-  allowedFunctions: string;
+  blockedSelectors: string }
+
+
+
+export interface JSSanitizerConfig { allowedFunctions: string;
   blockedKeywords: string;
   maxExecutionTime: number;
-  memoryLimit: number;
-}
-}
-}
-export interface AnalyticsConfig {
-  enabled: boolean;
+  memoryLimit: number }
+
+
+
+export interface AnalyticsConfig { enabled: boolean;
   trackingId?: string;
   events: AnalyticsEvent;
   sampling: number;
-  privacy: PrivacyConfig;
-}
-}
-}
-export interface AnalyticsEvent {
-  name: string;
+  privacy: PrivacyConfig }
+
+
+
+export interface AnalyticsEvent { name: string;
   trigger: string;
   properties?: Record<string, any>;
   category?: string;
-  label?: string;
-}
-}
-}
-export interface PrivacyConfig {
-  anonymizeIp: boolean;
+  label?: string }
+
+
+
+export interface PrivacyConfig { anonymizeIp: boolean;
   respectDoNotTrack: boolean;
   cookieConsent: boolean;
-  dataRetention: number; // days,
-}
-}
-}
-export interface PermissionConfig {
-  required: Permission;
+  dataRetention: number; // days }
+
+
+
+
+export interface PermissionConfig { required: Permission;
   optional: Permission;
   requestOnDemand: boolean;
-  gracefulDegradation: boolean;
-}
-}
-}
-export interface Permission {
-  type: PermissionType;
+  gracefulDegradation: boolean }
+
+
+
+export interface Permission { type: PermissionType;
   reason: string;
-  fallback?: string;
-}
-}
+  fallback?: string }
+
 export type PermissionType = 
   | 'geolocation'
   | 'camera'
@@ -701,9 +656,8 @@ export type PermissionType =
   | 'storage'
   | 'cookies';
 
-}
-export interface EmbedMetadata {
-  name: string;
+
+export interface EmbedMetadata { name: string;
   description: string;
   version: string;
   author: AuthorInfo;
@@ -717,18 +671,18 @@ export interface EmbedMetadata {
   created: Date;
   updated: Date;
   deprecated?: boolean;
-  deprecationMessage?: string;
-}
-}
-}
+  deprecationMessage?: string }
+
+
+
 export interface AuthorInfo {
   name: string;
   email?: string;
   url?: string;
   organization?: string;
   // Runtime Classes
-}
-}
+
+
 export class EmbeddableContent extends EventEmitter {
   private config: EmbedConfig;
   private analytics?: EmbedAnalytics;
@@ -738,19 +692,16 @@ export class EmbeddableContent extends EventEmitter {
   private isLoaded = false;
   private communicationChannel?: MessageChannel;
   private state: EmbedState = {};
-  constructor(config: EmbedConfig) {
-  super();
+  constructor(config: EmbedConfig) { super();
   this.config = config;
   if (config.analytics.enabled) {
   this.analytics = new EmbedAnalytics({)
-  embedId: config.id,
-  trackingEnabled: true,
-  domain: window?.location?.hostname || 'unknown',
+  embedId: config.id
+  trackingEnabled: true
+  domain: window?.location?.hostname || 'unknown' }
 });
   // Core Lifecycle Methods
-  async initialize(container: HTMLElement | string): Promise<void> {
-
-  try {
+  async initialize(container: HTMLElement | string): Promise<void> { try {
   // Resolve container
   this.container = typeof container === 'string'
   ? document.getElementById(container) || document.querySelector(container)
@@ -764,8 +715,7 @@ export class EmbeddableContent extends EventEmitter {
   this.setupSecurity();
   // Create iframe if needed
   if (this.config.behavior.sandbox.enabled) {
-  await this.createSecureIframe();
-} else {
+  await this.createSecureIframe() } else {
         await this.renderDirectly();
       // Set up communication
       if (this.config.behavior.communication.enabled) {
@@ -779,7 +729,7 @@ export class EmbeddableContent extends EventEmitter {
       this.emit('initialized', { embedId: this.config.id });
       // Execute lifecycle hook
       await this.executeLifecycleHook('mounted');
-    } catch (error) {
+ catch (error) {
       this.emit('error', { type: 'initialization', error: error.message });
       throw error;
   async load(): Promise<void> {
@@ -803,9 +753,7 @@ export class EmbeddableContent extends EventEmitter {
       this.isLoaded = true;
       this.emit('loaded', { embedId: this.config.id });
       // Track analytics
-      if (this.analytics) {
-        this.analytics.trackPageView();
-    } catch (error) {
+      if (this.analytics) { this.analytics.trackPageView() } catch (error) {
       this.hideLoadingState();
       this.showErrorState(error.message);
       this.emit('error', { type: 'loading', error: error.message });
@@ -826,9 +774,7 @@ export class EmbeddableContent extends EventEmitter {
       this.setupInteractions();
     await this.executeLifecycleHook('updated');
     this.emit('updated', { embedId: this.config.id, updates });
-  async destroy(): Promise<void> {
-
-    await this.executeLifecycleHook('beforeDestroy');
+  async destroy(): Promise<void> { await this.executeLifecycleHook('beforeDestroy');
     // Clean up event listeners
     this.removeAllListeners();
     // Clean up analytics
@@ -836,8 +782,7 @@ export class EmbeddableContent extends EventEmitter {
       this.analytics.stop();
     // Remove iframe or content
     if (this.iframe) {
-      this.iframe.remove();
-    } else if (this.container) {
+      this.iframe.remove() } else if (this.container) {
       this.container.innerHTML = '';
     // Clean up communication
     if (this.communicationChannel) {
@@ -846,14 +791,13 @@ export class EmbeddableContent extends EventEmitter {
     await this.executeLifecycleHook('destroyed');
     this.emit('destroyed', { embedId: this.config.id });
   // Communication Methods
-  sendMessage(type: string, data: any): void {
-  if (!this.config.behavior.communication.enabled) {
+  sendMessage(type: string, data: any): void { if (!this.config.behavior.communication.enabled) {
   return;
   const message = {
-  type,
-  data,
-  embedId: this.config.id,
-  timestamp: Date.now(),
+  type
+  data
+  embedId: this.config.id
+  timestamp: Date.now() }
 };
     if (this.iframe) {
       this.iframe.contentWindow?.postMessage(message, '*');
@@ -913,9 +857,7 @@ export class EmbeddableContent extends EventEmitter {
         this.emit('iframeLoaded', { embedId: this.config.id });
         resolve();
       };
-      this.iframe!.onerror = (error) => {
-        reject(new Error('Failed to load iframe'));
-      };
+      this.iframe!.onerror = (error) => { reject(new Error('Failed to load iframe')) };
       this.container!.appendChild(this.iframe!);
     });
   private async renderDirectly(): Promise<void> {
@@ -926,14 +868,9 @@ export class EmbeddableContent extends EventEmitter {
     contentContainer.className = `embed-content embed-${this.config.type}`;}
     contentContainer.id = `embed-${this.config.id}`;}
     this.container.appendChild(contentContainer);
-  private async loadContent(): Promise<void> {
-
-    const content = this.config.content;
+  private async loadContent(): Promise<void> { const content = this.config.content;
     if (content.template) {
-      await this.renderTemplate();
-    } else if (content.html) {
-      await this.renderHTML();
-    } else if (content.components.length > 0) {
+      await this.renderTemplate() } else if (content.html) { await this.renderHTML() } else if (content.components.length > 0) {
       await this.renderComponents();
   private async renderTemplate(): Promise<void> {
 
@@ -962,22 +899,17 @@ export class EmbeddableContent extends EventEmitter {
     this.applyComponentStyles(element, component.styling);
     // Set up component events
     this.setupComponentEvents(element, component.events);
-    if (this.iframe) {
-      // Inject into iframe
+    if (this.iframe) { // Inject into iframe
       const iframeDoc = this.iframe.contentDocument;
-      iframeDoc?.body.appendChild(element);
-    } else {
-  // Inject directly
+      iframeDoc?.body.appendChild(element) } else { // Inject directly
   this.container?.appendChild(element);
-  private async loadDependencies(): Promise<void> {,
+  private async loadDependencies(): Promise<void> {
   const dependencies = this.getAllDependencies();
   for (const dep of dependencies) {
   await this.loadDependency(dep);
-  private async loadDependency(dependency: string): Promise<void> {,
+  private async loadDependency(dependency: string): Promise<void> { }
   // Simulate dependency loading
-  return new Promise((resolve) => {
-  setTimeout(resolve, 100);
-});
+  return new Promise((resolve) => { setTimeout(resolve, 100) });
   private async applyStyles(): Promise<void> {
 
     const styling = this.config.styling;
@@ -1010,8 +942,7 @@ export class EmbeddableContent extends EventEmitter {
         --embed-text: ${colorScheme.text.primary};}
         --embed-font-family: ${typography.fontFamily.primary};}
         --embed-font-size: ${typography.fontSize.base};}
-      .embed-content {
-        background-color: var(--embed-background);
+      .embed-content { background-color: var(--embed-background) }
   color: var(--embed-text);
         font-family: var(--embed-font-family);
         font-size: var(--embed-font-size);
@@ -1021,7 +952,7 @@ export class EmbeddableContent extends EventEmitter {
     for (const rule of responsive.rules) {
       const breakpoint = responsive.breakpoints[rule.breakpoint];
       if (breakpoint) {
-        css += `@media (max-width: ${breakpoint}px) {\n`;}
+        css += `@media (max-width: ${breakpoint}px) { \n` }
         for (const [property, value] of Object.entries(rule.styles)) {
           css += `  .embed-content { ${property}: ${value}; }\n`;}
         css += '}\n';
@@ -1034,37 +965,25 @@ export class EmbeddableContent extends EventEmitter {
   animation: ${animation.type} ${animation.duration}ms ${animation.easing};}
       `;
     return css;
-  private async injectCSS(css: string): Promise<void> {
-
-    const style = document.createElement('style');
+  private async injectCSS(css: string): Promise<void> { const style = document.createElement('style');
     style.textContent = css;
     if (this.iframe?.contentDocument) {
-      this.iframe.contentDocument.head.appendChild(style);
-    } else {
-  document.head.appendChild(style);
-  private async injectHTML(html: string): Promise<void> {,
-  if (this.iframe?.contentDocument) {
-  this.iframe.contentDocument.body.innerHTML = html;
-} else if (this.container) {
-  this.container.innerHTML = html;
-  private setupInteractions(): void {,
+      this.iframe.contentDocument.head.appendChild(style) } else { document.head.appendChild(style);
+  private async injectHTML(html: string): Promise<void> { }
+  if (this.iframe?.contentDocument) { this.iframe.contentDocument.body.innerHTML = html } else if (this.container) { this.container.innerHTML = html;
+  private setupInteractions(): void {
   const interactions = this.config.content.interactions;
   for (const interaction of interactions) {
   this.setupInteraction(interaction);
-  private setupInteraction(interaction: InteractionConfig): void {,
+  private setupInteraction(interaction: InteractionConfig): void { }
   const target = interaction.trigger.target ;
   ? document.querySelector(interaction.trigger.target)
   : this.container;
   if (!target) return;
   const handler = this.createInteractionHandler(interaction);
-  if (interaction.debounce) {
-  target.addEventListener(interaction.trigger.type, this.debounce(handler, interaction.debounce));
-} else if (interaction.throttle) {
-      target.addEventListener(interaction.trigger.type, this.throttle(handler, interaction.throttle));
-    } else {
-  target.addEventListener(interaction.trigger.type, handler);
-  private createInteractionHandler(interaction: InteractionConfig): EventListener {,
-  return (event: Event) => {,
+  if (interaction.debounce) { target.addEventListener(interaction.trigger.type, this.debounce(handler, interaction.debounce)) } else if (interaction.throttle) { target.addEventListener(interaction.trigger.type, this.throttle(handler, interaction.throttle)) } else { target.addEventListener(interaction.trigger.type, handler);
+  private createInteractionHandler(interaction: InteractionConfig): EventListener {
+  return (event: Event) => {
   // Check condition if provided
   if (interaction.condition && !this.evaluateCondition(interaction.condition)) {
   return;
@@ -1073,97 +992,80 @@ export class EmbeddableContent extends EventEmitter {
   // Track analytics
   if (this.analytics) {
   this.analytics.trackInteraction()
-  interaction.trigger.target || 'embed',
-  interaction.action.type,
+  interaction.trigger.target || 'embed'
+  interaction.action.type }
   interaction.action.params
   );
   // Remove if once
-  if (interaction.once) {
-  (event.target as Element)?.removeEventListener(interaction.trigger.type, this);
-};
-  private executeAction(action: InteractionAction, event: Event): void {
-  switch (action.type) {
-  case 'navigate':,
+  if (interaction.once) { (event.target as Element)?.removeEventListener(interaction.trigger.type, this) };
+  private executeAction(action: InteractionAction, event: Event): void { switch (action.type) {
+  case 'navigate':
   if (action.params.url) {
   window.open(action.params.url, action.params.target || '_self');
   break;
-  case 'submit':,
+  case 'submit':
   this.handleSubmitAction(action.params);
   break;
-  case 'toggle':,
+  case 'toggle':
   this.handleToggleAction(action.params);
   break;
-  case 'animate':,
+  case 'animate':
   this.handleAnimateAction(action.params);
   break;
-  case 'update':,
+  case 'update':
   this.handleUpdateAction(action.params);
   break;
-  case 'emit':,
+  case 'emit':
   this.emit(action.params.event, action.params.data);
   break;
-  case 'custom':,
+  case 'custom':
   if (action.callback) {
   this.executeCustomCallback(action.callback, event, action.params);
   break;
-  private setupCommunication(): void {,
+  private setupCommunication(): void { }
   if (typeof window === 'undefined') return;
-  window.addEventListener('message', (event) => {
-  // Validate origin
+  window.addEventListener('message', (event) => { // Validate origin
   const allowedOrigins = this.config.behavior.communication.allowedOrigins;
   if (allowedOrigins.length > 0 && !allowedOrigins.includes(event.origin)) {
   return;
   // Process message
-  this.processMessage(event.data);
-});
-  private processMessage(message: any): void {
-  if (message.embedId !== this.config.id) {
+  this.processMessage(event.data) });
+  private processMessage(message: any): void { if (message.embedId !== this.config.id) {
   return;
   this.emit('messageReceived', message);
   // Handle predefined message types
   switch (message.type) {
-  case 'resize':,
+  case 'resize':
   this.handleResize(message.data);
   break;
-  case 'update':,
+  case 'update':
   this.handleUpdate(message.data);
   break;
-  case 'state':,
+  case 'state':
   this.handleStateMessage(message.data);
   break;
-  private setupResponsiveBehavior(): void {,
+  private setupResponsiveBehavior(): void { }
   if (typeof window === 'undefined') return;
-  const resizeObserver = new ResizeObserver((entries) => {
-  for (const entry of entries) {
-  this.handleContainerResize(entry.contentRect);
-});
-    if (this.container) {
-  resizeObserver.observe(this.container);
-  private setupSecurity(): void {,
+  const resizeObserver = new ResizeObserver((entries) => { for (const entry of entries) {
+  this.handleContainerResize(entry.contentRect) });
+    if (this.container) { resizeObserver.observe(this.container);
+  private setupSecurity(): void {
   // Apply CSP if enabled
   if (this.config.security.csp.enabled) {
   this.applyCsp();
   // Set up rate limiting
   if (this.config.security.rateLimit?.enabled) {
   this.setupRateLimit();
-  private async executeLifecycleHook(stage: LifecycleHook['stage']): Promise<void> {,
+  private async executeLifecycleHook(stage: LifecycleHook['stage']): Promise<void> { }
   const hooks = this.config.behavior.lifecycle.hooks.filter(h => h.stage === stage);
-  for (const hook of hooks) {
-  try {
+  for (const hook of hooks) { try {
   if (hook.async) {
-  await this.executeAsyncHook(hook.handler);
-} else {
-          this.executeSyncHook(hook.handler);
-      } catch (error) {
+  await this.executeAsyncHook(hook.handler) } else { this.executeSyncHook(hook.handler) } catch (error) {
         this.emit('hookError', { stage, error: error.message });
   // Utility helper methods
-  private showLoadingState(): void {
-    const loadingConfig = this.config.behavior.loading;
+  private showLoadingState(): void { const loadingConfig = this.config.behavior.loading;
     if (loadingConfig.skeleton?.enabled) {
-      this.showSkeleton();
-    } else if (loadingConfig.spinner) {
-      this.showSpinner();
-    } else if (loadingConfig.placeholder) {
+      this.showSkeleton() } else if (loadingConfig.spinner) { this.showSpinner() } else if (loadingConfig.placeholder) {
       this.showPlaceholder();
   private hideLoadingState(): void {
     // Remove loading indicators
@@ -1177,16 +1079,16 @@ export class EmbeddableContent extends EventEmitter {
   private showSkeleton(): void { /* Implementation */ }
   private showSpinner(): void { /* Implementation */ }
   private showPlaceholder(): void { /* Implementation */ }
-  private buildIframeSrc(): string { return 'about:blank'; }
-  private buildCSPString(): string { return ''; }
+  private buildIframeSrc(): string { return 'about:blank' }
+  private buildCSPString(): string { return '' }
   private gatherTemplateData(): Promise<any> { return Promise.resolve({}); }
-  private processTemplate(template: string, data: any): string { return template; }
-  private sanitizeHTML(html: string): string { return html; }
+  private processTemplate(template: string, data: any): string { return template }
+  private sanitizeHTML(html: string): string { return html }
   private applyComponentStyles(element: HTMLElement, styling: ComponentStyling): void { /* Implementation */ }
   private setupComponentEvents(element: HTMLElement, events: ComponentEvent): void { /* Implementation */ }
-  private getAllDependencies(): string { return []; }
+  private getAllDependencies(): string { return [] }
   private applyTheme(theme: ThemeConfig): void { /* Implementation */ }
-  private evaluateCondition(condition: string): boolean { return true; }
+  private evaluateCondition(condition: string): boolean { return true }
   private handleSubmitAction(params: any): void { /* Implementation */ }
   private handleToggleAction(params: any): void { /* Implementation */ }
   private handleAnimateAction(params: any): void { /* Implementation */ }
@@ -1198,241 +1100,236 @@ export class EmbeddableContent extends EventEmitter {
   private handleContainerResize(rect: DOMRectReadOnly): void { /* Implementation */ }
   private applyCsp(): void { /* Implementation */ }
   private setupRateLimit(): void { /* Implementation */ }
-  private executeAsyncHook(handler: string): Promise<void> { return Promise.resolve(); }
+  private executeAsyncHook(handler: string): Promise<void> { return Promise.resolve() }
   private executeSyncHook(handler: string): void { /* Implementation */ }
   private async renderWithData(): Promise<void> { /* Implementation */ }
   private persistState(): void { /* Implementation */ }
-  private debounce<T extends (...args: unknown) => unknown>(func: T, wait: number): T {
-  let timeout: NodeJS.Timeout;
-  return ((...args: unknown) => {,
+  private debounce<T extends (...args: unknown) => unknown>(func: T, wait: number): T { let timeout: NodeJS.Timeout;
+  return ((...args: unknown) => { }
   clearTimeout(timeout);
   timeout = setTimeout(() => func.apply(this, args), wait);
 }) as T;
-  private throttle<T extends (...args: unknown) => unknown>(func: T, limit: number): T {
-  let inThrottle: boolean;
-  return ((...args: unknown) => {,
-  if (!inThrottle) {
-  func.apply(this, args);
+  private throttle<T extends (...args: unknown) => unknown>(func: T, limit: number): T { let inThrottle: boolean;
+  return ((...args: unknown) => { }
+  if (!inThrottle) { func.apply(this, args);
   inThrottle = true;
-  setTimeout(() => inThrottle = false, limit);
-}) as T;
+  setTimeout(() => inThrottle = false, limit) }) as T;
 
 // Factory and Builder Classes
 export class EmbedBuilder {
   private config: Partial<EmbedConfig> = {};
-  constructor(id: string, type: EmbedType) {
-  this.config = {
-  id,
-  type,
-  title: '',
-  version: '1.0.0',
+  constructor(id: string, type: EmbedType) { this.config = {
+  id
+  type
+  title: ''
+  version: '1.0.0'
   content: {
-  components: [],
+  components: []
   layout: {
-  type: 'fluid',
+  type: 'fluid'
   container: {
-  width: '100%',
-  height: 'auto',
-  padding: 0,
-  margin: 0,
-},
-  position: {
-  type: 'relative',
-},
-  overflow: {
-  x: 'hidden',
-  y: 'auto',
-},
-  interactions: [];
-  },
-  styling: {
+  width: '100%'
+  height: 'auto'
+  padding: 0
+  margin: 0 }
+
+  position: { 
+  type: 'relative' }
+
+  overflow: { 
+  x: 'hidden'
+  y: 'auto' }
+
+  interactions: []
+
+  styling: { 
   theme: {
-  name: 'default',
-  variant: 'light',
+  name: 'default'
+  variant: 'light'
   colorScheme: {
-  primary: '#007bff',
-  secondary: '#6c757d',
-  success: '#28a745',
-  warning: '#ffc107',
-  error: '#dc3545',
-  info: '#17a2b8',
-  background: '#ffffff',
-  surface: '#f8f9fa',
+  primary: '#007bff'
+  secondary: '#6c757d'
+  success: '#28a745'
+  warning: '#ffc107'
+  error: '#dc3545'
+  info: '#17a2b8'
+  background: '#ffffff'
+  surface: '#f8f9fa'
   text: {
-  primary: '#212529',
-  secondary: '#6c757d',
-  disabled: '#adb5bd',
-},
-  border: '#dee2e6',
-            divider: '#e9ecef';
-  },
-  typography: {
+  primary: '#212529'
+  secondary: '#6c757d'
+  disabled: '#adb5bd' }
+
+  border: '#dee2e6'
+            divider: '#e9ecef'
+
+  typography: { 
   fontFamily: {
-  primary: 'system-ui, -apple-system, sans-serif',
-  monospace: 'Monaco, monospace',
-},
-  fontSize: {
-  xs: '0.75rem',
-  sm: '0.875rem',
-  base: '1rem',
-  lg: '1.125rem',
-  xl: '1.25rem',
-  '2xl': '1.5rem',
-  '3xl': '1.875rem',
-  '4xl': '2.25rem',
-},
-  fontWeight: {
-  light: 300,
-  normal: 400,
-  medium: 500,
-  semibold: 600,
-  bold: 700,
-},
-  lineHeight: {
-  tight: 1.25,
-  normal: 1.5,
-  relaxed: 1.75,
-},
-  spacing: {
-  scale: 'geometric',
-            base: 4,
+  primary: 'system-ui, -apple-system, sans-serif'
+  monospace: 'Monaco, monospace' }
+
+  fontSize: { 
+  xs: '0.75rem'
+  sm: '0.875rem'
+  base: '1rem'
+  lg: '1.125rem'
+  xl: '1.25rem'
+  '2xl': '1.5rem'
+  '3xl': '1.875rem'
+  '4xl': '2.25rem' }
+
+  fontWeight: { 
+  light: 300
+  normal: 400
+  medium: 500
+  semibold: 600
+  bold: 700 }
+
+  lineHeight: { 
+  tight: 1.25
+  normal: 1.5
+  relaxed: 1.75 }
+
+  spacing: { 
+  scale: 'geometric'
+            base: 4 }
             values: {}
-  },
-  borderRadius: {
-  none: '0',
-  sm: '0.125rem',
-  base: '0.25rem',
-  lg: '0.5rem',
-  xl: '1rem',
-  full: '9999px',
-},
-  shadows: true,
-          animations: true;
-  },
-  variables: {},
-        responsive: {
+
+  borderRadius: { 
+  none: '0'
+  sm: '0.125rem'
+  base: '0.25rem'
+  lg: '0.5rem'
+  xl: '1rem'
+  full: '9999px' }
+
+  shadows: true
+          animations: true
+
+  variables: {}
+        responsive: { 
   breakpoints: {
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-},
-  rules: [],
-          strategy: 'mobile-first';
-  },
-  animations: [],
-        fonts: [],
-        colors: {},
-        spacing: {},
-        shadows: [],
+  sm: 640
+  md: 768
+  lg: 1024
+  xl: 1280 }
+
+  rules: []
+          strategy: 'mobile-first'
+
+  animations: []
+        fonts: []
+        colors: {}
+        spacing: {}
+        shadows: []
         borders: {
-  width: {},
-          style: {},
+  width: {}
+          style: {}
           color: {}
-  },
-  behavior: {
-  responsive: true,
-        autoResize: true,
-        crossDomain: true,
+
+  behavior: { 
+  responsive: true
+        autoResize: true
+        crossDomain: true
         sandbox: {
-  enabled: false,
-          permissions: ['allow-scripts', 'allow-same-origin'],
-          allowedDomains: [],
+  enabled: false
+          permissions: ['allow-scripts', 'allow-same-origin']
+          allowedDomains: [] }
           cspDirectives: {}
-  },
-  loading: {
-  strategy: 'eager',
-  timeout: 30000,
+
+  loading: { 
+  strategy: 'eager'
+  timeout: 30000
   fallback: {
-  content: 'Failed to load content',
-  retry: true,
-  retryText: 'Retry',
-},
-  communication: {
-  enabled: true,
-  protocol: 'postMessage',
-  allowedOrigins: [],
-  messageTypes: [],
-},
-  lifecycle: {
-  hooks: [],
-  autoMount: true,
-  autoDestroy: true,
-  persistState: false,
-},
-  performance: {
-  lazyLoading: true,
-  codesplitting: false,
-  bundleOptimization: true,
-  compression: true,
+  content: 'Failed to load content'
+  retry: true
+  retryText: 'Retry' }
+
+  communication: { 
+  enabled: true
+  protocol: 'postMessage'
+  allowedOrigins: []
+  messageTypes: [] }
+
+  lifecycle: { 
+  hooks: []
+  autoMount: true
+  autoDestroy: true
+  persistState: false }
+
+  performance: { 
+  lazyLoading: true
+  codesplitting: false
+  bundleOptimization: true
+  compression: true
   caching: {
-  enabled: true,
-  strategy: 'memory',
-  ttl: 3600,
-  maxSize: 10485760,
-  version: '1.0',
-},
-  monitoring: {
-  enabled: true,
-  metrics: ['loadTime', 'renderTime', 'interactionLatency'],
-  sampling: 1.0,
+  enabled: true
+  strategy: 'memory'
+  ttl: 3600
+  maxSize: 10485760
+  version: '1.0' }
+
+  monitoring: { 
+  enabled: true
+  metrics: ['loadTime', 'renderTime', 'interactionLatency']
+  sampling: 1.0
   reporting: {
-  endpoint: '',
-  batchSize: 100,
-  flushInterval: 30000,
-},
-  security: {
+  endpoint: ''
+  batchSize: 100
+  flushInterval: 30000 }
+
+  security: { 
   csp: {;
-  enabled: false,
-          directives: {},
-          reportOnly: false;
-  },
-  cors: {
-  enabled: true,
-  allowedOrigins: ['*'],
-  allowedMethods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
-  credentials: false,
-  maxAge: 86400,
-},
-  validation: {
-  enabled: true,
-          schemas: {},
-          strict: false,
-          stripUnknown: true;
-  },
-  sanitization: {
-  enabled: true,
-},
-  analytics: {
-  enabled: false,
-  events: [],
-  sampling: 1.0,
+  enabled: false }
+          directives: {}
+          reportOnly: false
+
+  cors: { 
+  enabled: true
+  allowedOrigins: ['*']
+  allowedMethods: ['GET', 'POST']
+  allowedHeaders: ['Content-Type']
+  credentials: false
+  maxAge: 86400 }
+
+  validation: { 
+  enabled: true }
+          schemas: {}
+          strict: false
+          stripUnknown: true
+
+  sanitization: { 
+  enabled: true }
+
+  analytics: { 
+  enabled: false
+  events: []
+  sampling: 1.0
   privacy: {
-  anonymizeIp: true,
-  respectDoNotTrack: true,
-  cookieConsent: false,
-  dataRetention: 90,
-},
-  permissions: {
-  required: [],
-  optional: [],
-  requestOnDemand: true,
-  gracefulDegradation: true,
-},
-  metadata: {
-  name: '',
-  description: '',
-  version: '1.0.0',
+  anonymizeIp: true
+  respectDoNotTrack: true
+  cookieConsent: false
+  dataRetention: 90 }
+
+  permissions: { 
+  required: []
+  optional: []
+  requestOnDemand: true
+  gracefulDegradation: true }
+
+  metadata: { 
+  name: ''
+  description: ''
+  version: '1.0.0'
   author: {
-  name: '',
-},
-  license: 'MIT',
-        keywords: [],
-        category: 'general',
-        tags: [],
-        created: new Date(),
-        updated: new Date(),
+  name: '' }
+
+  license: 'MIT'
+        keywords: []
+        category: 'general'
+        tags: []
+        created: new Date()
+        updated: new Date()
         deprecated: false;
   };
   title(title: string): this {
@@ -1459,11 +1356,10 @@ export class EmbedBuilder {
   metadata(metadata: Partial<EmbedMetadata>): this {
     this.config.metadata = { ...this.config.metadata!, ...metadata };
     return this;
-  build(): EmbedConfig {
-  // Validate configuration
+  build(): EmbedConfig { // Validate configuration
   this.validateConfig();
   return this.config as EmbedConfig;
-  private validateConfig(): void {,
+  private validateConfig(): void {
   if (!this.config.id) {
   throw new Error('Embed ID is required');
   if (!this.config.type) {
@@ -1473,7 +1369,8 @@ export class EmbedBuilder {
   interface EmbedState {
   [key: string]: any;
   export default {
-  EmbeddableContent,
+  EmbeddableContent }
   EmbedBuilder
-}
+
+
 };

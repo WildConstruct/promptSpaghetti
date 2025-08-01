@@ -144,14 +144,20 @@ const dropdownStyle = {
     zIndex: 1000,
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
 };
-const optionStyle = (selected, disabled) => ({
-    padding: 8,
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    background: selected ? '#4299e1' : 'transparent',
-    color: disabled ? '#718096' : '#e2e8f0',
-    fontSize: 13,
-    borderBottom: '1px solid #4a5568',
-});
+const optionStyle = (selected, disabled) => ({});
+padding: 8,
+    cursor;
+disabled ? 'not-allowed' : 'pointer',
+    background;
+selected ? '#4299e1' : 'transparent',
+    color;
+disabled ? '#718096' : '#e2e8f0',
+    fontSize;
+13,
+    borderBottom;
+'1px solid #4a5568',
+;
+;
 return;
 _jsxs("div", { style: containerStyle, ref: dropdownRef, children: [_jsxs("label", { htmlFor: inputId, style: labelStyle, children: [label, error && ()
                     < span, " style=", { color: '#f56565', marginLeft: 4, fontSize: 10 }, "> *"] }), ")}"] })

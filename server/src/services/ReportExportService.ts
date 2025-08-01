@@ -22,7 +22,7 @@ export enum ExportFormat {
   JSON = 'json',
   XML = 'xml',
   HTML = 'html'
-}
+
 
 /**
  * Export delivery methods
@@ -32,13 +32,14 @@ export enum DeliveryMethod {
   EMAIL = 'email',
   API = 'api',
   WEBHOOK = 'webhook'
-}
+
 
 /**
  * Report data structure
  */
-}
-}
+
+
+
 export interface ReportData {
   metadata: {
     title: string;
@@ -46,8 +47,9 @@ export interface ReportData {
     generatedAt: Date;
     generatedBy: string;
     version: string;
-}
-}
+
+
+
   };
   summary: Record<string, any>;
   data: Array<Record<string, any>>;
@@ -56,19 +58,20 @@ export interface ReportData {
     title: string;
     data: Record<string, unknown>[];
     options?: Record<string, any>;
-  }>;
+>;
   customSections?: Array<{
     title: string;
     content: string | Record<string, any>;
     type: 'text' | 'table' | 'chart' | 'html';
-  }>;
-}
+>;
+
 
 /**
  * Export configuration
  */
-}
-}
+
+
+
 export interface ExportConfig {
   format: ExportFormat;
   delivery: DeliveryMethod;
@@ -80,8 +83,9 @@ export interface ExportConfig {
     compression?: boolean;
     encryption?: boolean;
     password?: string;
-}
-}
+
+
+
   };
   deliveryConfig?: {
     email?: {
@@ -101,13 +105,14 @@ export interface ExportConfig {
       headers?: Record<string, string>;
     };
   };
-}
+
 
 /**
  * Export result
  */
-}
-}
+
+
+
 export interface ExportResult {
   id: string;
   success: boolean;
@@ -123,16 +128,18 @@ export interface ExportResult {
     recordCount: number;
     processingTime: number;
     compressionRatio?: number;
-}
-}
+
+
+
   };
-}
+
 
 /**
  * Scheduled export configuration
  */
-}
-}
+
+
+
 export interface ScheduledExport {
   id: string;
   name: string;
@@ -145,14 +152,15 @@ export interface ScheduledExport {
     dayOfWeek?: number; // 0-6 for weekly
     dayOfMonth?: number; // 1-31 for monthly
     cron?: string; // Custom cron expression
-}
-}
+
+
+
   };
   enabled: boolean;
   lastRun?: Date;
   nextRun?: Date;
   createdBy: string;
-}
+
 
 /**
  * Report Export Service
@@ -167,7 +175,7 @@ export class ReportExportService extends EventEmitter {
     super();
     this.outputDirectory = outputDirectory;
     this.ensureOutputDirectory();
-  }
+
 
   /**
    * Export report in specified format with delivery options
@@ -227,19 +235,19 @@ export class ReportExportService extends EventEmitter {
         break;
       default:
         throw new Error(`Unsupported export format: ${config.format}`);
-      }
+
 
       fileSize = Buffer.isBuffer(fileContent) ? fileContent.length : Buffer.byteLength(fileContent);
 
       // Apply compression if requested
       if (config.options?.compression) {
         fileContent = await this.compressContent(fileContent);
-      }
+
 
       // Apply encryption if requested
       if (config.options?.encryption && config.options?.password) {
         fileContent = await this.encryptContent(fileContent, config.options.password);
-      }
+
 
       // Handle delivery
       let downloadUrl: string | undefined;
@@ -264,7 +272,7 @@ export class ReportExportService extends EventEmitter {
         await this.deliverViaAPI(fileContent, filename, config);
         deliveredAt = new Date();
         break;
-      }
+
 
       const processingTime = Date.now() - startTime;
 
@@ -282,15 +290,14 @@ export class ReportExportService extends EventEmitter {
           recordCount: reportData.data.length,
           processingTime,
           compressionRatio: config.options?.compression ? 0.7 : undefined // Mock compression ratio
-        }
+
       };
 
       this.exportHistory.push(result);
       this.emit('export_completed', result);
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       const processingTime = Date.now() - startTime;
 
       const result: ExportResult = {
@@ -305,15 +312,15 @@ export class ReportExportService extends EventEmitter {
         metadata: {
           recordCount: reportData.data?.length || 0,
           processingTime
-        }
+
       };
 
       this.exportHistory.push(result);
       this.emit('export_failed', result);
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Export to PDF format
@@ -358,7 +365,7 @@ startxref
 %%EOF`;
 
     return Buffer.from(mockPDFContent);
-  }
+
 
   /**
    * Export to Excel format
@@ -371,7 +378,7 @@ startxref
     // This would use a real Excel generation library
     // For now, return CSV content as a mock
     return Buffer.from(csvContent);
-  }
+
 
   /**
    * Export to CSV format
@@ -379,7 +386,7 @@ startxref
   private exportToCSV(reportData: ReportData, _____config: ExportConfig): string {
     if (!reportData.data || reportData.data.length === 0) {
       return 'No data available';
-    }
+
 
     const headers = Object.keys(reportData.data[0]);
     const csvRows = [headers.join(',')];
@@ -390,14 +397,14 @@ startxref
         // Escape commas and quotes in CSV
         if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
           return `"${value.replace(/"/g, '""')}"`;
-        }
+
         return value;
       });
       csvRows.push(values.join(','));
     });
 
     return csvRows.join('\n');
-  }
+
 
   /**
    * Export to JSON format
@@ -410,19 +417,19 @@ startxref
         generatedAt: new Date().toISOString(),
         includeCharts: config.options?.includeCharts || false,
         includeRawData: config.options?.includeRawData !== false
-      }
+
     };
 
     if (!config.options?.includeRawData) {
       delete exportData.data;
-    }
+
 
     if (!config.options?.includeCharts) {
       delete exportData.charts;
-    }
+
 
     return JSON.stringify(exportData, null, 2);
-  }
+
 
   /**
    * Export to XML format
@@ -437,7 +444,7 @@ startxref
         case '\'': return '&apos;';
         case '"': return '&quot;';
         default: return c;
-        }
+
       });
     };
 
@@ -456,7 +463,7 @@ startxref
         xml += `    <${key}>${escapeXml(String(value))}</${key}>\n`;
       });
       xml += '  </summary>\n';
-    }
+
 
     if (config.options?.includeRawData !== false && reportData.data) {
       xml += '  <data>\n';
@@ -468,11 +475,11 @@ startxref
         xml += '    </record>\n';
       });
       xml += '  </data>\n';
-    }
+
 
     xml += '</report>';
     return xml;
-  }
+
 
   /**
    * Export to HTML format
@@ -569,7 +576,7 @@ startxref
     </div>
 </body>
 </html>`;
-  }
+
 
   /**
    * Compress content (mock implementation)
@@ -580,7 +587,7 @@ startxref
     const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
     // Simulate compression by returning the same content (real implementation would compress)
     return buffer;
-  }
+
 
   /**
    * Encrypt content (mock implementation)
@@ -591,7 +598,7 @@ startxref
     const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
     // Simulate encryption by returning the same content (real implementation would encrypt)
     return buffer;
-  }
+
 
   /**
    * Deliver report via email
@@ -600,7 +607,7 @@ startxref
 
     if (!config.deliveryConfig?.email) {
       throw new Error('Email configuration required for email delivery');
-    }
+
 
     // Mock email delivery - in production, use nodemailer or similar
     console.log(`Mock: Sending email to ${config.deliveryConfig.email.to.join(', ')}`);
@@ -609,7 +616,7 @@ startxref
     
     // Simulate email sending delay
     await new Promise(resolve => setTimeout(resolve, 1000));
-  }
+
 
   /**
    * Deliver report via webhook
@@ -618,7 +625,7 @@ startxref
 
     if (!config.deliveryConfig?.webhook) {
       throw new Error('Webhook configuration required for webhook delivery');
-    }
+
 
     // Mock webhook delivery - in production, use fetch or axios
     console.log(`Mock: Sending to webhook ${config.deliveryConfig.webhook.url}`);
@@ -627,7 +634,7 @@ startxref
     
     // Simulate webhook call delay
     await new Promise(resolve => setTimeout(resolve, 500));
-  }
+
 
   /**
    * Deliver report via API
@@ -636,7 +643,7 @@ startxref
 
     if (!config.deliveryConfig?.api) {
       throw new Error('API configuration required for API delivery');
-    }
+
 
     // Mock API delivery - in production, use fetch or axios
     console.log(`Mock: Sending to API ${config.deliveryConfig.api.endpoint}`);
@@ -645,7 +652,7 @@ startxref
     
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 750));
-  }
+
 
   /**
    * Generate filename
@@ -654,7 +661,7 @@ startxref
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const title = reportData.metadata.title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
     return `${title}-${timestamp}.${format}`;
-  }
+
 
   /**
    * Schedule recurring report export
@@ -664,10 +671,10 @@ startxref
     
     if (scheduledExport.enabled) {
       this.setupScheduleTimer(scheduledExport);
-    }
+
 
     this.emit('schedule_created', scheduledExport);
-  }
+
 
   /**
    * Setup timer for scheduled export
@@ -677,7 +684,7 @@ startxref
     const existingTimer = this.scheduleTimers.get(scheduledExport.id);
     if (existingTimer) {
       clearTimeout(existingTimer);
-    }
+
 
     const nextRun = this.calculateNextRun(scheduledExport.schedule);
     const delay = nextRun.getTime() - Date.now();
@@ -685,9 +692,9 @@ startxref
     const timer = setTimeout(async () => {
       try {
         await this.executeScheduledExport(scheduledExport);
-      } catch (error) {
+ catch (error) {
         this.emit('scheduled_export_error', { scheduledExport, error });
-      }
+
       
       // Schedule next execution
       this.setupScheduleTimer(scheduledExport);
@@ -697,7 +704,7 @@ startxref
     
     // Update next run time
     scheduledExport.nextRun = nextRun;
-  }
+
 
   /**
    * Calculate next run time for scheduled export
@@ -713,24 +720,24 @@ startxref
     case 'daily':
       if (nextRun <= now) {
         nextRun.setDate(nextRun.getDate() + 1);
-      }
+
       break;
     case 'weekly':
       nextRun.setDate(nextRun.getDate() + ((7 + (schedule.dayOfWeek || 0) - nextRun.getDay()) % 7));
       if (nextRun <= now) {
         nextRun.setDate(nextRun.getDate() + 7);
-      }
+
       break;
     case 'monthly':
       nextRun.setDate(schedule.dayOfMonth || 1);
       if (nextRun <= now) {
         nextRun.setMonth(nextRun.getMonth() + 1);
-      }
+
       break;
-    }
+
 
     return nextRun;
-  }
+
 
   /**
    * Execute scheduled export
@@ -743,9 +750,9 @@ startxref
       if (typeof scheduledExport.reportQuery === 'string') {
         // In production, this would execute a database query or call a service
         throw new Error('String-based report queries not yet implemented');
-      } else {
+ else {
         reportData = await scheduledExport.reportQuery();
-      }
+
 
       // Execute export
       const result = await this.exportReport(reportData, scheduledExport.exportConfig);
@@ -754,11 +761,11 @@ startxref
       scheduledExport.lastRun = new Date();
       
       this.emit('scheduled_export_completed', { scheduledExport, result });
-    } catch (error) {
+ catch (error) {
       this.emit('scheduled_export_failed', { scheduledExport, error });
       throw error;
-    }
-  }
+
+
 
   /**
    * Get export history
@@ -767,14 +774,14 @@ startxref
     return this.exportHistory
       .sort((a, b) => b.generatedAt.getTime() - a.generatedAt.getTime())
       .slice(0, limit);
-  }
+
 
   /**
    * Get scheduled exports
    */
   getScheduledExports(): ScheduledExport[] {
     return Array.from(this.scheduledExports.values());
-  }
+
 
   /**
    * Cancel scheduled export
@@ -784,10 +791,10 @@ startxref
     if (timer) {
       clearTimeout(timer);
       this.scheduleTimers.delete(id);
-    }
+
     
     return this.scheduledExports.delete(id);
-  }
+
 
   /**
    * Ensure output directory exists
@@ -795,8 +802,8 @@ startxref
   private ensureOutputDirectory(): void {
     if (!existsSync(this.outputDirectory)) {
       mkdirSync(this.outputDirectory, { recursive: true });
-    }
-  }
+
+
 
   /**
    * Get export statistics
@@ -808,7 +815,7 @@ startxref
     averageProcessingTime: number;
     formatBreakdown: Record<string, number>;
     deliveryBreakdown: Record<string, number>;
-    } {
+ {
     const total = this.exportHistory.length;
     const successful = this.exportHistory.filter(e => e.success).length;
     const failed = total - successful;
@@ -833,5 +840,4 @@ startxref
       formatBreakdown,
       deliveryBreakdown
     };
-  }
-}
+

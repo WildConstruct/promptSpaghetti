@@ -1,16 +1,14 @@
-export interface AnthropicAgentConfig {
-    apiKey: string;
+export interface AnthropicAgentConfig { apiKey: string;
     model: string;
     temperature: number;
     maxTokens: number;
     maxRetries: number;
     retryTemperatureReduction: number;
     useXmlFormatting: boolean;
-    stopSequences?: string[];
-
+    stopSequences?: string[] }
 }
-export interface ClaudeGenerationRequest {
-    purpose: string;
+}
+export interface ClaudeGenerationRequest { purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
     nodeCount: number;
     nodeTypes: string[];
@@ -18,11 +16,10 @@ export interface ClaudeGenerationRequest {
     focusAreas?: string[];
     style?: 'creative' | 'logical' | 'balanced';
     domain?: string;
-    userContext?: string;
-
+    userContext?: string }
 }
-export interface ClaudeGenerationResult {
-    success: boolean;
+}
+export interface ClaudeGenerationResult { success: boolean;
     graph?: string;
     errors?: string[];
     warnings?: string[];
@@ -32,7 +29,7 @@ export interface ClaudeGenerationResult {
         model: string;
         temperature: number;
         tokenCount: number;
-        generationTime: number;
+        generationTime: number }
 }
     };
 

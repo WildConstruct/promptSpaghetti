@@ -17,8 +17,8 @@ import { SessionLimitManager, SessionLimitMetrics } from './SessionLimitManager'
 // import { SessionLimitViolation } from './SessionLimitManager';
 import { ConnectionManager } from '../websocket/ConnectionManager';
 
-}
-}
+
+
 export interface AlertRule {
   id: string;
   name: string;
@@ -31,35 +31,38 @@ export interface AlertRule {
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertCondition {
   metric: string;
   operator: 'gt' | 'gte' | 'lt' | 'lte' | 'eq' | 'neq';
   threshold: number;
   timeWindow: number; // minutes
   aggregation: 'sum' | 'avg' | 'max' | 'min' | 'count';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertAction {
   type: 'email' | 'webhook' | 'slack' | 'pagerduty' | 'websocket' | 'log';
   target: string;
   template?: string;
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Alert {
   id: string;
   ruleId: string;
@@ -75,20 +78,22 @@ export interface Alert {
   resolvedAt?: Date;
   createdAt: Date;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MonitoringDashboard {
   overview: {
     totalActiveSessions: number;
     violationsLast24h: number;
     averageResponseTime: number;
     systemHealth: 'healthy' | 'warning' | 'critical';
-}
-}
+
+
+
   };
   realTimeMetrics: {
     sessionsPerMinute: number;
@@ -105,7 +110,7 @@ export interface MonitoringDashboard {
     activeAlerts: Alert[];
     recentAlerts: Alert[];
   };
-}
+
 
 export class SessionLimitMonitor extends EventEmitter {
   private dbService: DatabaseService;
@@ -139,7 +144,7 @@ export class SessionLimitMonitor extends EventEmitter {
     this.auditService = auditService;
     this.sessionLimitManager = sessionLimitManager;
     this.connectionManager = connectionManager;
-  }
+
   
   /**
    * Initialize the monitoring system
@@ -160,12 +165,11 @@ export class SessionLimitMonitor extends EventEmitter {
       
       console.log('SessionLimitMonitor initialized successfully');
       this.emit('monitor_initialized');
-      
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize SessionLimitMonitor:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Start real-time monitoring
@@ -174,11 +178,11 @@ export class SessionLimitMonitor extends EventEmitter {
     this.monitoringInterval = setInterval(async () => {
       try {
         await this.performMonitoringCycle();
-      } catch (error) {
+ catch (error) {
         console.error('Error in monitoring cycle:', error);
-      }
+
     }, 60000); // Every minute
-  }
+
   
   /**
    * Start metrics collection
@@ -187,11 +191,11 @@ export class SessionLimitMonitor extends EventEmitter {
     this.metricsCollectionInterval = setInterval(async () => {
       try {
         await this.collectAndStoreMetrics();
-      } catch (error) {
+ catch (error) {
         console.error('Error collecting metrics:', error);
-      }
+
     }, 300000); // Every 5 minutes
-  }
+
   
   /**
    * Start alert processing
@@ -200,11 +204,11 @@ export class SessionLimitMonitor extends EventEmitter {
     this.alertProcessingInterval = setInterval(async () => {
       try {
         await this.processAlerts();
-      } catch (error) {
+ catch (error) {
         console.error('Error processing alerts:', error);
-      }
+
     }, 30000); // Every 30 seconds
-  }
+
   
   /**
    * Create or update an alert rule
@@ -248,12 +252,11 @@ export class SessionLimitMonitor extends EventEmitter {
       this.emit('alert_rule_created', alertRule);
       
       return ruleId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error creating alert rule:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Get monitoring dashboard data
@@ -304,20 +307,19 @@ export class SessionLimitMonitor extends EventEmitter {
           violationsLast24h,
           averageResponseTime: currentMetrics.performance.averageCheckTime,
           systemHealth
-  }
+
         realTimeMetrics,
         trends,
         alerts: {
           activeAlerts,
           recentAlerts
-        }
+
       };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting dashboard data:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Acknowledge an alert
@@ -338,15 +340,14 @@ export class SessionLimitMonitor extends EventEmitter {
         alert.status = 'acknowledged';
         alert.acknowledgedBy = acknowledgedBy;
         alert.acknowledgedAt = now;
-      }
+
       
       this.emit('alert_acknowledged', { alertId, acknowledgedBy });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error acknowledging alert:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Resolve an alert
@@ -367,15 +368,14 @@ export class SessionLimitMonitor extends EventEmitter {
         alert.status = 'resolved';
         alert.resolvedAt = now;
         this.activeAlerts.delete(alertId);
-      }
+
       
       this.emit('alert_resolved', { alertId, resolvedBy });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error resolving alert:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Get alert rules
@@ -383,7 +383,7 @@ export class SessionLimitMonitor extends EventEmitter {
   async getAlertRules(): Promise<AlertRule[]> {
 
     return Array.from(this.alertRules.values());
-  }
+
   
   /**
    * Update alert rule
@@ -394,7 +394,7 @@ export class SessionLimitMonitor extends EventEmitter {
       const rule = this.alertRules.get(ruleId);
       if (!rule) {
         throw new Error('Alert rule not found');
-      }
+
       
       const updatedRule = { ...rule, ...updates, updatedAt: new Date() };
       
@@ -420,12 +420,11 @@ export class SessionLimitMonitor extends EventEmitter {
       this.alertRules.set(ruleId, updatedRule);
       
       this.emit('alert_rule_updated', updatedRule);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error updating alert rule:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Delete alert rule
@@ -437,12 +436,11 @@ export class SessionLimitMonitor extends EventEmitter {
       this.alertRules.delete(ruleId);
       
       this.emit('alert_rule_deleted', ruleId);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error deleting alert rule:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Manually trigger an alert for testing
@@ -453,7 +451,7 @@ export class SessionLimitMonitor extends EventEmitter {
       const rule = this.alertRules.get(ruleId);
       if (!rule) {
         throw new Error('Alert rule not found');
-      }
+
       
       const alert: Alert = {
         id: require('crypto').randomUUID(),
@@ -470,12 +468,11 @@ export class SessionLimitMonitor extends EventEmitter {
       };
       
       await this.createAlert(alert);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error triggering test alert:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Get performance metrics
@@ -504,12 +501,11 @@ export class SessionLimitMonitor extends EventEmitter {
         errorCount: parseInt(row.error_count),
         errorRate: row.request_count > 0 ? parseInt(row.error_count) / parseInt(row.request_count) : 0
       }));
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting performance metrics:', error);
       return [];
-    }
-  }
+
+
   
   /**
    * Cleanup old data
@@ -539,11 +535,10 @@ export class SessionLimitMonitor extends EventEmitter {
       `, [oldAlertCutoff]);
       
       console.log('Monitor cleanup completed');
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error during monitor cleanup:', error);
-    }
-  }
+
+
   
   /**
    * Shutdown the monitor
@@ -552,19 +547,19 @@ export class SessionLimitMonitor extends EventEmitter {
 
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
-    }
+
     
     if (this.alertProcessingInterval) {
       clearInterval(this.alertProcessingInterval);
-    }
+
     
     if (this.metricsCollectionInterval) {
       clearInterval(this.metricsCollectionInterval);
-    }
+
     
     this.emit('monitor_shutdown');
     console.log('SessionLimitMonitor shut down');
-  }
+
   
   // Private methods
   
@@ -642,7 +637,7 @@ export class SessionLimitMonitor extends EventEmitter {
       CREATE INDEX IF NOT EXISTS idx_session_limit_metrics_timestamp 
       ON session_limit_metrics(timestamp)
     `);
-  }
+
   
   private async loadAlertRules(): Promise<void> {
 
@@ -662,8 +657,8 @@ export class SessionLimitMonitor extends EventEmitter {
         createdAt: row.created_at,
         updatedAt: row.updated_at
       });
-    }
-  }
+
+
   
   private async performMonitoringCycle(): Promise<void> {
 
@@ -676,11 +671,11 @@ export class SessionLimitMonitor extends EventEmitter {
       
       try {
         await this.evaluateAlertRule(rule, metrics);
-      } catch (error) {
+ catch (error) {
         console.error(`Error evaluating alert rule ${rule.name}:`, error);
-      }
-    }
-  }
+
+
+
   
   private async evaluateAlertRule(rule: AlertRule, metrics: SessionLimitMetrics): Promise<void> {
 
@@ -690,7 +685,7 @@ export class SessionLimitMonitor extends EventEmitter {
     
     if (inCooldown) {
       return;
-    }
+
     
     // Evaluate conditions
     const triggered = await this.evaluateConditions(rule.conditions, metrics);
@@ -714,8 +709,8 @@ export class SessionLimitMonitor extends EventEmitter {
       
       // Set cooldown
       await this.redisService.setex(cooldownKey, rule.cooldownMinutes * 60, '1');
-    }
-  }
+
+
   
   private async evaluateConditions(
     conditions: AlertCondition[], 
@@ -732,14 +727,14 @@ export class SessionLimitMonitor extends EventEmitter {
       if (!conditionMet) {
         allConditionsMet = false;
         break;
-      }
-    }
+
+
     
     return {
       isTriggered: allConditionsMet,
       values
     };
-  }
+
   
   private async getMetricValue(condition: AlertCondition, metrics: SessionLimitMetrics): Promise<number> {
 
@@ -756,8 +751,8 @@ export class SessionLimitMonitor extends EventEmitter {
       return metrics.performance.errorRate;
     default:
       return 0;
-    }
-  }
+
+
   
   private evaluateCondition(condition: AlertCondition, value: number): boolean {
     switch (condition.operator) {
@@ -775,8 +770,8 @@ export class SessionLimitMonitor extends EventEmitter {
       return value !== condition.threshold;
     default:
       return false;
-    }
-  }
+
+
   
   private async createAlert(alert: Alert): Promise<void> {
 
@@ -807,10 +802,10 @@ export class SessionLimitMonitor extends EventEmitter {
     const rule = this.alertRules.get(alert.ruleId);
     if (rule) {
       await this.executeAlertActions(alert, rule.actions);
-    }
+
     
     this.emit('alert_created', alert);
-  }
+
   
   private async executeAlertActions(alert: Alert, actions: AlertAction[]): Promise<void> {
 
@@ -819,11 +814,11 @@ export class SessionLimitMonitor extends EventEmitter {
       
       try {
         await this.executeAlertAction(alert, action);
-      } catch (error) {
+ catch (error) {
         console.error(`Error executing alert action ${action.type}:`, error);
-      }
-    }
-  }
+
+
+
   
   private async executeAlertAction(alert: Alert, action: AlertAction): Promise<void> {
 
@@ -833,7 +828,7 @@ export class SessionLimitMonitor extends EventEmitter {
         // Broadcast to admin connections
         // Implementation would depend on connection manager API
         console.log('Broadcasting alert via WebSocket:', alert.title);
-      }
+
       break;
         
     case 'log':
@@ -846,14 +841,14 @@ export class SessionLimitMonitor extends EventEmitter {
         
     default:
       console.log(`Unsupported alert action type: ${action.type}`);
-    }
-  }
+
+
   
   private async sendWebhookAlert(webhookUrl: string, alert: Alert): Promise<void> {
 
     // Implementation for webhook alerts
     console.log(`Sending webhook alert to ${webhookUrl}:`, alert.title);
-  }
+
   
   private async collectAndStoreMetrics(): Promise<void> {
 
@@ -877,17 +872,16 @@ export class SessionLimitMonitor extends EventEmitter {
       // Keep only last 24 hours in memory
       const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
       this.metricsHistory = this.metricsHistory.filter(m => m.timestamp > cutoff);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error collecting and storing metrics:', error);
-    }
-  }
+
+
   
   private async processAlerts(): Promise<void> {
 
     // Auto-resolve alerts that are no longer applicable
     // Implementation would check current conditions against active alerts
-  }
+
   
   private calculateSystemHealth(
     metrics: SessionLimitMetrics, 
@@ -895,14 +889,14 @@ export class SessionLimitMonitor extends EventEmitter {
   ): 'healthy' | 'warning' | 'critical' {
     if (metrics.performance.errorRate > 0.05 || violationsLast24h > 100) {
       return 'critical';
-    }
+
     
     if (metrics.performance.errorRate > 0.01 || violationsLast24h > 50) {
       return 'warning';
-    }
+
     
     return 'healthy';
-  }
+
   
   private async getRealTimeMetrics(): Promise<unknown> {
 
@@ -913,7 +907,7 @@ export class SessionLimitMonitor extends EventEmitter {
       topViolationTypes: [],
       topUsersByViolations: []
     };
-  }
+
   
   private async getTrends(): Promise<unknown> {
 
@@ -923,7 +917,7 @@ export class SessionLimitMonitor extends EventEmitter {
       violationTrends: [],
       performanceTrends: []
     };
-  }
+
   
   private mapDatabaseAlert(row: unknown): Alert {
     return {
@@ -942,5 +936,4 @@ export class SessionLimitMonitor extends EventEmitter {
       createdAt: row.created_at,
       metadata: row.metadata || {}
     };
-  }
-}
+

@@ -24,7 +24,7 @@ export enum LifecycleStage {
   DELETION_PENDING = 'DELETION_PENDING',
   DELETED = 'DELETED',
   PURGED = 'PURGED'
-}
+
 
 export enum DataCategory {
   PERSONAL_DATA = 'PERSONAL_DATA',
@@ -33,10 +33,10 @@ export enum DataCategory {
   COMMUNICATION_DATA = 'COMMUNICATION_DATA',
   BEHAVIORAL_DATA = 'BEHAVIORAL_DATA',
   SYSTEM_DATA = 'SYSTEM_DATA'
-}
 
-}
-}
+
+
+
 export interface DataRecord {
   id: string;
   entityType: string;
@@ -49,24 +49,26 @@ export interface DataRecord {
   dependencies: string[];
   complianceFlags: ComplianceFlag[];
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceFlag {
   framework: string; // GDPR, CCPA, HIPAA, etc.
   requirement: string;
   status: 'COMPLIANT' | 'NON_COMPLIANT' | 'PENDING' | 'UNKNOWN';
   lastChecked: Date;
   details: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TransitionRule {
   id: string;
   name: string;
@@ -76,34 +78,37 @@ export interface TransitionRule {
   actions: TransitionAction[];
   priority: number;
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TransitionCondition {
   type: 'TIME_BASED' | 'EVENT_BASED' | 'POLICY_BASED' | 'DEPENDENCY_BASED';
   field: string;
   operator: 'EQUALS' | 'GREATER_THAN' | 'LESS_THAN' | 'CONTAINS' | 'EXISTS';
   value: Error;
   evaluator?: (record: DataRecord) => boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TransitionAction {
   type: 'NOTIFY' | 'UPDATE_METADATA' | 'TRIGGER_WORKFLOW' | 'LOG_EVENT';
   parameters: Record<string, any>;
   async: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BatchProcessingConfig {
   batchSize: number;
   concurrency: number;
@@ -111,12 +116,13 @@ export interface BatchProcessingConfig {
   retryDelay: number;
   timeoutMs: number;
   memoryLimit: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProcessingResult {
   processedCount: number;
   successCount: number;
@@ -124,21 +130,23 @@ export interface ProcessingResult {
   errors: ProcessingError[];
   duration: number;
   throughput: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProcessingError {
   recordId: string;
   error: string;
   stage: string;
   timestamp: Date;
   retryable: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Refactored Data Lifecycle Service
@@ -170,7 +178,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
 
     this.initializeTransitionRules();
     this.startPeriodicProcessing();
-  }
+
 
   /**
    * CRITICAL FIX: Implement getRecordsEligibleForTransition
@@ -196,7 +204,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       if (rules.length === 0) {
         this.logger.warn('No transition rules found', { fromStage, toStage });
         return [];
-      }
+
 
       // Query records in the source stage
       const candidateRecords = await this.queryRecordsByStage(fromStage, limit);
@@ -207,8 +215,8 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       for (const record of candidateRecords) {
         if (await this.evaluateTransitionEligibility(record, rules)) {
           eligibleRecords.push(record);
-        }
-      }
+
+
 
       const duration = Date.now() - startTime;
       this.performanceMonitor.recordMetric('records_eligibility_check', {
@@ -226,16 +234,15 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       });
 
       return eligibleRecords;
-      
-    } catch (error) {
+ catch (error) {
       this.logger.error('Failed to get eligible records', {
         fromStage,
         toStage,
         error: error.message
       });
       throw new Error(`Eligibility check failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * CRITICAL FIX: Implement performAutomaticClassification
@@ -268,7 +275,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
         result.successCount += batchResult.successCount;
         result.failureCount += batchResult.failureCount;
         result.errors.push(...batchResult.errors);
-      }
+
 
       result.duration = Date.now() - startTime;
       result.throughput = result.processedCount / (result.duration / 1000);
@@ -288,15 +295,14 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       });
 
       return result;
-      
-    } catch (error) {
+ catch (error) {
       this.logger.error('Automatic classification failed', {
         error: error.message,
         recordsCount: records.length
       });
       throw new Error(`Classification failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * CRITICAL FIX: Implement checkCompliance
@@ -320,7 +326,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       for (const framework of frameworks) {
         const flag = await this.evaluateFrameworkCompliance(record, framework);
         complianceFlags.push(flag);
-      }
+
 
       // Update record with latest compliance status
       record.complianceFlags = complianceFlags;
@@ -337,16 +343,15 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       });
 
       return complianceFlags;
-      
-    } catch (error) {
+ catch (error) {
       this.logger.error('Compliance check failed', {
         recordId: record.id,
         frameworks,
         error: error.message
       });
       throw new Error(`Compliance check failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * NEW: Batch processing implementation for enterprise scale
@@ -368,7 +373,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
 
     if (records.length === 0) {
       return result;
-    }
+
 
     this.logger.info('Starting batch processing', {
       operation,
@@ -397,7 +402,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
         result.successCount += batchResult.successCount;
         result.failureCount += batchResult.failureCount;
         result.errors.push(...batchResult.errors);
-      }
+
 
       result.duration = Date.now() - startTime;
       result.throughput = result.processedCount / (result.duration / 1000);
@@ -420,16 +425,15 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       });
 
       return result;
-      
-    } catch (error) {
+ catch (error) {
       this.logger.error('Batch processing failed', {
         operation,
         recordCount: records.length,
         error: error.message
       });
       throw new Error(`Batch processing failed: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * NEW: Automated lifecycle progression
@@ -446,7 +450,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
         duration: 0,
         throughput: 0
       };
-    }
+
 
     this.isProcessing = true;
     const startTime = Date.now();
@@ -484,8 +488,8 @@ export class RefactoredDataLifecycleService extends EventEmitter {
             aggregateResult.successCount += transitionResult.successCount;
             aggregateResult.failureCount += transitionResult.failureCount;
             aggregateResult.errors.push(...transitionResult.errors);
-          }
-        } catch (error) {
+
+ catch (error) {
           this.logger.error('Stage transition failed', {
             fromStage: transition.fromStage,
             toStage: transition.toStage,
@@ -499,8 +503,8 @@ export class RefactoredDataLifecycleService extends EventEmitter {
             timestamp: new Date(),
             retryable: true
           });
-        }
-      }
+
+
 
       aggregateResult.duration = Date.now() - startTime;
       aggregateResult.throughput = aggregateResult.processedCount / (aggregateResult.duration / 1000);
@@ -516,20 +520,19 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       this.emit('lifecycle:progression_completed', aggregateResult);
       
       return aggregateResult;
-      
-    } finally {
+ finally {
       this.isProcessing = false;
-    }
-  }
+
+
 
   // Helper methods for batch processing
   private createBatches<T>(items: T[], batchSize: number): T[][] {
     const batches: T[][] = [];
     for (let i = 0; i < items.length; i += batchSize) {
       batches.push(items.slice(i, i + batchSize));
-    }
+
     return batches;
-  }
+
 
   private async executeConcurrentBatches<T>(
     promises: Promise<T>[],
@@ -545,7 +548,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       for (const result of batchResults) {
         if (result.status === 'fulfilled') {
           results.push(result.value);
-        } else {
+ else {
           this.logger.error('Batch execution failed', {
             error: result.reason?.message
           });
@@ -560,16 +563,16 @@ export class RefactoredDataLifecycleService extends EventEmitter {
               stage: 'batch_execution',
               timestamp: new Date(),
               retryable: true
-            }],
+],
             duration: 0,
             throughput: 0
-          } as T);
-        }
-      }
-    }
+ as T);
+
+
+
     
     return results;
-  }
+
 
   private async processSingleBatch(
     records: DataRecord[],
@@ -607,11 +610,10 @@ export class RefactoredDataLifecycleService extends EventEmitter {
           break;
         default:
           throw new Error(`Unknown operation: ${operation}`);
-        }
+
         
         result.successCount++;
-        
-      } catch (error) {
+ catch (error) {
         result.failureCount++;
         result.errors.push({
           recordId: record.id,
@@ -620,20 +622,20 @@ export class RefactoredDataLifecycleService extends EventEmitter {
           timestamp: new Date(),
           retryable: this.isRetryableError(error)
         });
-      }
-    }
+
+
 
     result.duration = Date.now() - startTime;
     result.throughput = result.processedCount / (result.duration / 1000);
 
     return result;
-  }
+
 
   // Classification and transition implementations
   private async processBatchClassification(records: DataRecord[]): Promise<ProcessingResult> {
 
     return this.processSingleBatch(records, 'CLASSIFY', 0);
-  }
+
 
   private async classifyRecord(record: DataRecord): Promise<void> {
 
@@ -652,14 +654,14 @@ export class RefactoredDataLifecycleService extends EventEmitter {
         newCategory: classification.category,
         confidence: classification.confidence
       });
-    }
-  }
+
+
 
   private async analyzeRecordContent(record: DataRecord): Promise<{
     category: DataCategory;
     confidence: number;
     reason: string;
-  }> {
+> {
 
     // Implement content analysis logic
     // This would use ML models or rule-based classification
@@ -674,7 +676,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
         confidence: 0.9,
         reason: 'Entity type or metadata indicates financial data'
       };
-    }
+
     
     if (entityType.includes('health') || metadata.hasHealthData) {
       return {
@@ -682,7 +684,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
         confidence: 0.85,
         reason: 'Entity type or metadata indicates health data'
       };
-    }
+
     
     if (entityType.includes('communication') || metadata.messageData) {
       return {
@@ -690,7 +692,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
         confidence: 0.8,
         reason: 'Entity type or metadata indicates communication data'
       };
-    }
+
     
     // Default classification
     return {
@@ -698,7 +700,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       confidence: 0.5,
       reason: 'No clear classification indicators found'
     };
-  }
+
 
   // Implementation of missing core methods
   private async queryRecordsByStage(
@@ -712,7 +714,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       .filter(record => record.currentStage === stage);
     
     return limit ? records.slice(0, limit) : records;
-  }
+
 
   private async evaluateTransitionEligibility(
     record: DataRecord,
@@ -725,10 +727,10 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       const eligible = await this.evaluateRuleConditions(record, rule.conditions);
       if (eligible) {
         return true;
-      }
-    }
+
+
     return false;
-  }
+
 
   private async evaluateRuleConditions(
     record: DataRecord,
@@ -739,10 +741,10 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       const result = await this.evaluateCondition(record, condition);
       if (!result) {
         return false; // All conditions must pass
-      }
-    }
+
+
     return true;
-  }
+
 
   private async evaluateCondition(
     record: DataRecord,
@@ -752,7 +754,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     // Custom evaluator takes precedence
     if (condition.evaluator) {
       return condition.evaluator(record);
-    }
+
     
     const fieldValue = this.getFieldValue(record, condition.field);
     
@@ -769,8 +771,8 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       return fieldValue !== undefined && fieldValue !== null;
     default:
       return false;
-    }
-  }
+
+
 
   private getFieldValue(record: DataRecord, field: string): unknown {
     const fieldPath = field.split('.');
@@ -778,10 +780,10 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     
     for (const part of fieldPath) {
       value = value?.[part];
-    }
+
     
     return value;
-  }
+
 
   private async evaluateFrameworkCompliance(
     record: DataRecord,
@@ -806,8 +808,8 @@ export class RefactoredDataLifecycleService extends EventEmitter {
         lastChecked: now,
         details: { error: `Unknown framework: ${framework}` }
       };
-    }
-  }
+
+
 
   private evaluateGDPRCompliance(record: DataRecord, now: Date): ComplianceFlag {
     // GDPR Article 5(e) - data minimization and retention
@@ -820,12 +822,12 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     if (retentionExpired && record.currentStage !== LifecycleStage.DELETION_PENDING) {
       status = 'NON_COMPLIANT';
       details.violation = 'Data retention period exceeded';
-    }
+
     
     if (!hasLegalBasis) {
       status = 'NON_COMPLIANT';
       details.missingLegalBasis = true;
-    }
+
     
     return {
       framework: 'GDPR',
@@ -834,7 +836,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       lastChecked: now,
       details
     };
-  }
+
 
   private evaluateCCPACompliance(record: DataRecord, now: Date): ComplianceFlag {
     // CCPA Section 1798.105 - Right to delete
@@ -852,11 +854,11 @@ export class RefactoredDataLifecycleService extends EventEmitter {
         status = 'NON_COMPLIANT';
         details.violation = 'Delete request not processed within 45 days';
         details.daysSinceRequest = Math.floor(daysSinceRequest);
-      } else {
+ else {
         status = 'PENDING';
         details.daysSinceRequest = Math.floor(daysSinceRequest);
-      }
-    }
+
+
     
     return {
       framework: 'CCPA',
@@ -865,7 +867,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       lastChecked: now,
       details
     };
-  }
+
 
   private evaluateHIPAACompliance(record: DataRecord, now: Date): ComplianceFlag {
     // HIPAA requires data to be retained for 6 years minimum
@@ -880,7 +882,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       status = 'NON_COMPLIANT';
       details.violation = 'Health data deleted before 6-year minimum retention';
       details.dataAgeYears = dataAge / (365 * 24 * 60 * 60 * 1000);
-    }
+
     
     return {
       framework: 'HIPAA',
@@ -889,23 +891,23 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       lastChecked: now,
       details
     };
-  }
+
 
   // Utility and helper methods
   private isRetentionExpired(record: DataRecord): boolean {
     const expiryDate = new Date(record.createdAt.getTime() + record.retentionPeriod);
     return new Date() > expiryDate;
-  }
+
 
   private isRetryableError(error: Error): boolean {
     const retryableErrors = ['TIMEOUT', 'NETWORK_ERROR', 'TEMPORARY_FAILURE', 'RATE_LIMITED'];
     return retryableErrors.some(type => error.message?.includes(type));
-  }
+
 
   private getTransitionRules(fromStage: LifecycleStage, toStage: LifecycleStage): TransitionRule[] {
     const key = `${fromStage}->${toStage}`;
     return this.transitionRules.get(key) || [];
-  }
+
 
   private getEnabledStageTransitions(): { fromStage: LifecycleStage; toStage: LifecycleStage }[] {
     const transitions: { fromStage: LifecycleStage; toStage: LifecycleStage }[] = [];
@@ -917,11 +919,11 @@ export class RefactoredDataLifecycleService extends EventEmitter {
           fromStage: fromStage as LifecycleStage,
           toStage: toStage as LifecycleStage
         });
-      }
-    }
+
+
     
     return transitions;
-  }
+
 
   private async executeStageTransition(
     records: DataRecord[],
@@ -930,7 +932,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
 
     // Implement actual stage transition logic
     return this.processBatch(records, 'TRANSITION');
-  }
+
 
   private async processRecordTransition(record: DataRecord): Promise<void> {
 
@@ -938,7 +940,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     // This would update the database and trigger any necessary actions
     record.lastModified = new Date();
     this.recordCache.set(record.id, record);
-  }
+
 
   private initializeTransitionRules(): void {
     // Initialize default transition rules
@@ -954,18 +956,18 @@ export class RefactoredDataLifecycleService extends EventEmitter {
             field: 'lastModified',
             operator: 'LESS_THAN',
             value: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // 30 days ago
-          }
+
         ],
         actions: [
           {
             type: 'UPDATE_METADATA',
             parameters: { agingStarted: new Date() },
             async: false
-          }
+
         ],
         priority: 1,
         enabled: true
-      }
+
       // Add more default rules as needed
     ];
 
@@ -975,21 +977,21 @@ export class RefactoredDataLifecycleService extends EventEmitter {
       const existingRules = this.transitionRules.get(key) || [];
       existingRules.push(rule);
       this.transitionRules.set(key, existingRules);
-    }
-  }
+
+
 
   private startPeriodicProcessing(): void {
     // Run lifecycle progression every hour
     setInterval(async () => {
       try {
         await this.processLifecycleProgression();
-      } catch (error) {
+ catch (error) {
         this.logger.error('Periodic lifecycle progression failed', {
           error: error.message
         });
-      }
+
     }, 60 * 60 * 1000); // 1 hour
-  }
-}
+
+
 
 export default RefactoredDataLifecycleService;

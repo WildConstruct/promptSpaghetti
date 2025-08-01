@@ -22,7 +22,7 @@ import { logger } from '../../utils/logger';
 import { 
   SecurityAlertingAnalytics,
   SecurityAlertingConfig
-} from '../../../../packages/core/security/SecurityAlertingAnalytics';
+ from '../../../../packages/core/security/SecurityAlertingAnalytics';
 import { ProjectHealthAlertService } from '../project-health-alert-service';
 import { HealthMonitoringService, SystemHealthSummary, HealthStatus } from '../HealthMonitoringService';
 // import { SecurityAlert } from '../../../../packages/core/security/CentralizedAccessControlService';
@@ -33,7 +33,7 @@ export enum AlertPriority {
   HIGH = 'HIGH',
   CRITICAL = 'CRITICAL',
   EMERGENCY = 'EMERGENCY'
-}
+
 
 export enum AlertCategory {
   AUTHENTICATION = 'AUTHENTICATION',
@@ -46,7 +46,7 @@ export enum AlertCategory {
   PERFORMANCE = 'PERFORMANCE',
   AVAILABILITY = 'AVAILABILITY',
   SECURITY_INCIDENT = 'SECURITY_INCIDENT'
-}
+
 
 export enum AlertSource {
   SECURITY_ANALYTICS = 'SECURITY_ANALYTICS',
@@ -58,7 +58,7 @@ export enum AlertSource {
   EXTERNAL_THREAT_FEED = 'EXTERNAL_THREAT_FEED',
   USER_REPORT = 'USER_REPORT',
   AUTOMATED_SCAN = 'AUTOMATED_SCAN'
-}
+
 
 export enum AlertStatus {
   NEW = 'NEW',
@@ -68,10 +68,10 @@ export enum AlertStatus {
   CLOSED = 'CLOSED',
   DISMISSED = 'DISMISSED',
   ESCALATED = 'ESCALATED'
-}
 
-}
-}
+
+
+
 export interface UnifiedAlert {
   id: string;
   title: string;
@@ -122,12 +122,13 @@ export interface UnifiedAlert {
   automatedResponse: boolean;
   requiresManualReview: boolean;
   escalationRules: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertResponseAction {
   id: string;
   alertId: string;
@@ -142,13 +143,14 @@ export interface AlertResponseAction {
     success: boolean;
     message: string;
     details?: unknown;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface AlertComment {
   id: string;
   alertId: string;
@@ -157,12 +159,13 @@ export interface AlertComment {
   createdAt: Date;
   isSystemGenerated: boolean;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertAttachment {
   id: string;
   alertId: string;
@@ -173,12 +176,13 @@ export interface AlertAttachment {
   uploadedAt: Date;
   description?: string;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertRule {
   id: string;
   name: string;
@@ -204,44 +208,48 @@ export interface AlertRule {
   updatedAt: Date;
   lastTriggered?: Date;
   triggerCount: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertCondition {
   field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'GREATER_THAN' | 'LESS_THAN' | 'IN' | 'NOT_IN' | 'REGEX';
   value: Error;
   weight: number; // 0-1, importance of this condition
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleAction {
   type: 'EMAIL' | 'SMS' | 'WEBHOOK' | 'SLACK' | 'TEAMS' | 'PAGER' | 'EXECUTE_SCRIPT' | 'UPDATE_STATUS' | 'ASSIGN';
   parameters: Record<string, any>;
   conditions: ActionCondition[];
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActionCondition {
   condition: string;
   value: Error;
   operator: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertingConfiguration {
   // General settings
   enableRealTimeProcessing: boolean;
@@ -273,12 +281,13 @@ export interface AlertingConfiguration {
   // Notification settings
   notificationChannels: NotificationChannel[];
   escalationChain: EscalationRule[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationChannel {
   id: string;
   type: 'EMAIL' | 'SMS' | 'WEBHOOK' | 'SLACK' | 'TEAMS' | 'PAGER';
@@ -290,44 +299,48 @@ export interface NotificationChannel {
     maxPerMinute: number;
     maxPerHour: number;
     maxPerDay: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ChannelCondition {
   field: string;
   operator: string;
   value: Error;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRule {
   level: number;
   triggerAfter: number; // milliseconds
   conditions: EscalationCondition[];
   actions: RuleAction[];
   assignTo?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationCondition {
   condition: string;
   value: Error;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertMetrics {
   totalAlerts: number;
   alertsByPriority: Record<AlertPriority, number>;
@@ -345,25 +358,26 @@ export interface AlertMetrics {
     hourly: number[];
     daily: number[];
     weekly: number[];
-}
-}
+
+
+
   };
   
   topAlertTypes: Array<{
     type: string;
     count: number;
     averageSeverity: number;
-  }>;
+>;
   
   performanceMetrics: {
     processingTime: number;
     correlationAccuracy: number;
     systemLoad: number;
   };
-}
 
-}
-}
+
+
+
 export interface AlertDashboard {
   summary: {
     totalActive: number;
@@ -371,8 +385,9 @@ export interface AlertDashboard {
     high: number;
     newAlerts: number;
     unassigned: number;
-}
-}
+
+
+
   };
   
   recentAlerts: UnifiedAlert[];
@@ -389,8 +404,8 @@ export interface AlertDashboard {
     priority: AlertPriority;
     description: string;
     impact: string;
-  }[];
-}
+[];
+
 
 /**
  * Main Unified Security Alerting Framework Service
@@ -441,7 +456,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     this.startProcessingLoop();
     
     logger.info('Unified Security Alerting Framework initialized');
-  }
+
   
   /**
    * Process incoming alert from any source
@@ -496,7 +511,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       // Process immediately if high priority
       if (priority === AlertPriority.CRITICAL || priority === AlertPriority.EMERGENCY) {
         await this.processAlertImmediate(alert);
-      }
+
       
       // Update metrics
       this.updateProcessingMetrics(Date.now() - startTime);
@@ -509,8 +524,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       });
       
       return alert;
-      
-    } catch (error) {
+ catch (error) {
       logger.error('Failed to process alert', {
         title,
         priority,
@@ -519,15 +533,15 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
         error: error instanceof Error ? error.message : String(error)
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Get alert by ID
    */
   getAlert(alertId: string): UnifiedAlert | null {
     return this.alerts.get(alertId) || null;
-  }
+
   
   /**
    * Get all alerts with filtering
@@ -543,32 +557,32 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       userId?: string;
       limit?: number;
       offset?: number;
-    } = {}
+ = {}
   ): UnifiedAlert[] {
     let alerts = Array.from(this.alerts.values());
     
     // Apply filters
     if (filters.status) {
       alerts = alerts.filter(a => filters.status!.includes(a.status));
-    }
+
     if (filters.priority) {
       alerts = alerts.filter(a => filters.priority!.includes(a.priority));
-    }
+
     if (filters.category) {
       alerts = alerts.filter(a => filters.category!.includes(a.category));
-    }
+
     if (filters.source) {
       alerts = alerts.filter(a => filters.source!.includes(a.source));
-    }
+
     if (filters.workspaceId) {
       alerts = alerts.filter(a => a.workspaceId === filters.workspaceId);
-    }
+
     if (filters.projectId) {
       alerts = alerts.filter(a => a.projectId === filters.projectId);
-    }
+
     if (filters.userId) {
       alerts = alerts.filter(a => a.userId === filters.userId);
-    }
+
     
     // Sort by priority and creation time
     alerts.sort((a, b) => {
@@ -591,7 +605,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     const end = start + (filters.limit || alerts.length);
     
     return alerts.slice(start, end);
-  }
+
   
   /**
    * Update alert status
@@ -606,7 +620,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     const alert = this.alerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert not found: ${alertId}`);
-    }
+
     
     const previousStatus = alert.status;
     alert.status = status;
@@ -624,12 +638,12 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     case AlertStatus.ESCALATED:
       alert.escalatedAt = new Date();
       break;
-    }
+
     
     // Add comment if provided
     if (comment && userId) {
       this.addAlertComment(alertId, userId, comment);
-    }
+
     
     // Emit status change event
     this.emit('alertStatusChanged', {
@@ -646,7 +660,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     });
     
     return alert;
-  }
+
   
   /**
    * Assign alert to user
@@ -660,7 +674,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     const alert = this.alerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert not found: ${alertId}`);
-    }
+
     
     alert.assignedTo = assigneeId;
     alert.assignedBy = assignerId;
@@ -671,7 +685,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     if (alert.status === AlertStatus.NEW) {
       alert.status = AlertStatus.ACKNOWLEDGED;
       alert.acknowledgedAt = new Date();
-    }
+
     
     this.emit('alertAssigned', {
       alert,
@@ -680,7 +694,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     });
     
     return alert;
-  }
+
   
   /**
    * Add comment to alert
@@ -694,7 +708,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     const alert = this.alerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert not found: ${alertId}`);
-    }
+
     
     const comment: AlertComment = {
       id: this.generateCommentId(),
@@ -711,7 +725,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     this.emit('alertCommentAdded', { alert, comment });
     
     return comment;
-  }
+
   
   /**
    * Execute response action
@@ -726,7 +740,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     const alert = this.alerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert not found: ${alertId}`);
-    }
+
     
     const action: AlertResponseAction = {
       id: this.generateActionId(),
@@ -750,8 +764,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       action.result = result;
       
       this.emit('responseActionCompleted', { alert, action });
-      
-    } catch (error) {
+ catch (error) {
       action.status = 'FAILED';
       action.completedAt = new Date();
       action.result = {
@@ -760,10 +773,10 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       };
       
       this.emit('responseActionFailed', { alert, action, error });
-    }
+
     
     return action;
-  }
+
   
   /**
    * Get alert dashboard data
@@ -802,7 +815,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       systemHealth: {} as SystemHealthSummary, // Would be populated from health monitoring
       trendAnalysis: this.generateTrendAnalysis(),
       recommendations: this.generateRecommendations(};
-  }
+
   
   /**
    * Get alerting metrics
@@ -854,15 +867,15 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
         hourly: [],
         daily: [],
         weekly: []
-  }
+
       topAlertTypes: [],
       performanceMetrics: {
         processingTime: this.metrics.averageProcessingTime,
         correlationAccuracy: 0, // Would be calculated
         systemLoad: 0 // Would be calculated
-      }
+
     };
-  }
+
   
   // PRIVATE HELPER METHODS
   
@@ -875,7 +888,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       averageProcessingTime: 0,
       processingTimes: []
     };
-  }
+
   
   private setupServiceIntegrations(): void {
     // Listen to security analytics alerts
@@ -909,9 +922,9 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
             riskScore: data.to === HealthStatus.CRITICAL ? 90 : 70
           }
         );
-      }
+
     });
-  }
+
   
   private loadConfiguration(): void {
     // Load notification channels
@@ -921,7 +934,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     
     // Load escalation rules
     this.escalationRules = [...this.config.escalationChain];
-  }
+
   
   private async startProcessingLoop(): Promise<void> {
 
@@ -932,37 +945,37 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       if (this.processingQueue.length === 0) {
         setTimeout(processAlerts, 1000);
         return;
-      }
+
       
       const alertsToProcess = this.processingQueue.splice(0, this.config.batchSize);
       
       for (const alert of alertsToProcess) {
         try {
           await this.processAlertFull(alert);
-        } catch (error) {
+ catch (error) {
           logger.error(`Failed to process alert ${alert.id}`, {
             error: error instanceof Error ? error.message : String(error)
           });
-        }
-      }
+
+
       
       setTimeout(processAlerts, 100);
     };
     
     processAlerts();
-  }
+
   
   private async processAlertImmediate(alert: UnifiedAlert): Promise<void> {
 
     await this.processAlertFull(alert);
-  }
+
   
   private async processAlertFull(alert: UnifiedAlert): Promise<void> {
 
     // Correlation analysis
     if (this.config.enableCorrelation) {
       await this.performCorrelationAnalysis(alert);
-    }
+
     
     // Apply alert rules
     await this.applyAlertRules(alert);
@@ -974,7 +987,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     await this.sendNotifications(alert);
     
     this.metrics.totalProcessed++;
-  }
+
   
   private async performCorrelationAnalysis(alert: UnifiedAlert): Promise<void> {
 
@@ -996,7 +1009,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       recentAlerts.forEach(a => {
         if (!a.correlatedAlerts.includes(alert.id)) {
           a.correlatedAlerts.push(alert.id);
-        }
+
       });
       
       this.metrics.totalCorrelated++;
@@ -1005,8 +1018,8 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
         primaryAlert: alert,
         correlatedAlerts: recentAlerts
       });
-    }
-  }
+
+
   
   private shouldCorrelate(alert1: UnifiedAlert, alert2: UnifiedAlert): boolean {
     // Correlation logic
@@ -1017,7 +1030,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       alert1.userId === alert2.userId ||
       alert1.affectedResources.some(r => alert2.affectedResources.includes(r))
     );
-  }
+
   
   private async applyAlertRules(alert: UnifiedAlert): Promise<void> {
 
@@ -1029,9 +1042,9 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
         
         rule.lastTriggered = new Date();
         rule.triggerCount++;
-      }
-    }
-  }
+
+
+
   
   private ruleMatches(alert: UnifiedAlert, rule: AlertRule): boolean {
     // Check if rule applies to this alert
@@ -1050,7 +1063,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     
     // Check conditions
     return rule.conditions.every(condition => this.conditionMatches(alert, condition));
-  }
+
   
   private conditionMatches(alert: UnifiedAlert, condition: AlertCondition): boolean {
     const alertValue = this.getAlertFieldValue(alert, condition.field);
@@ -1076,8 +1089,8 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       return new RegExp(String(condition.value)).test(String(alertValue));
     default:
       return false;
-    }
-  }
+
+
   
   private getAlertFieldValue(alert: UnifiedAlert, field: string): unknown {
     // Navigate nested fields like 'originalAlert.type'
@@ -1087,13 +1100,13 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     for (const part of parts) {
       if (value && typeof value === 'object') {
         value = value[part];
-      } else {
+ else {
         return undefined;
-      }
-    }
+
+
     
     return value;
-  }
+
   
   private async executeRuleActions(alert: UnifiedAlert, rule: AlertRule): Promise<void> {
 
@@ -1102,15 +1115,15 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       
       try {
         await this.executeAction(alert, action);
-      } catch (error) {
+ catch (error) {
         logger.error(`Failed to execute rule action for alert ${alert.id}`, {
           ruleId: rule.id,
           actionType: action.type,
           error: error instanceof Error ? error.message : String(error)
         });
-      }
-    }
-  }
+
+
+
   
   private async executeAction(alert: UnifiedAlert, action: RuleAction): Promise<void> {
 
@@ -1128,13 +1141,13 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       await this.assignAlert(alert.id, action.parameters.assignee, 'system');
       break;
       // Additional action types would be implemented here
-    }
-  }
+
+
   
   private async checkEscalationConditions(____alert: UnifiedAlert): Promise<void> {
 
     // Escalation logic would be implemented here
-  }
+
   
   private async sendNotifications(alert: UnifiedAlert): Promise<void> {
 
@@ -1143,9 +1156,9 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       
       if (this.shouldNotifyChannel(alert, channel)) {
         await this.sendChannelNotification(alert, channel);
-      }
-    }
-  }
+
+
+
   
   private shouldNotifyChannel(alert: UnifiedAlert, channel: NotificationChannel): boolean {
     return channel.conditions.every(condition => 
@@ -1156,7 +1169,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
         weight: 1
   }
     );
-  }
+
   
   private async sendChannelNotification(alert: UnifiedAlert, channel: NotificationChannel): Promise<void> {
 
@@ -1165,7 +1178,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       alertId: alert.id,
       channelId: channel.id
     });
-  }
+
   
   private async performResponseAction(
     actionType: AlertResponseAction['actionType'],
@@ -1175,17 +1188,17 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
 
     // Response action implementation would go here
     return { success: true, message: `${actionType} executed successfully` };
-  }
+
   
   private async sendEmailNotification(____alert: UnifiedAlert, ____parameters: unknown): Promise<void> {
 
     // Email notification implementation
-  }
+
   
   private async sendWebhookNotification(____alert: UnifiedAlert, ____parameters: unknown): Promise<void> {
 
     // Webhook notification implementation
-  }
+
   
   private generateTrendAnalysis(): unknown {
     return {
@@ -1193,22 +1206,22 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       resolutionTimes: [],
       escalationRates: []
     };
-  }
+
   
   private generateRecommendations(): unknown[] {
     return [];
-  }
+
   
   private updateProcessingMetrics(processingTime: number): void {
     this.metrics.processingTimes.push(processingTime);
     if (this.metrics.processingTimes.length > 100) {
       this.metrics.processingTimes.shift();
-    }
+
     
     this.metrics.averageProcessingTime = 
       this.metrics.processingTimes.reduce((sum, time) => sum + time, 0) / 
       this.metrics.processingTimes.length;
-  }
+
   
   private mapPriorityToSeverity(priority: AlertPriority): 'INFO' | 'WARNING' | 'ERROR' | 'CRITICAL' {
     switch (priority) {
@@ -1221,8 +1234,8 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     case AlertPriority.CRITICAL:
     case AlertPriority.EMERGENCY:
       return 'CRITICAL';
-    }
-  }
+
+
   
   private mapSeverityToPriority(severity: string): AlertPriority {
     switch (severity?.toUpperCase()) {
@@ -1236,8 +1249,8 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       return AlertPriority.LOW;
     default:
       return AlertPriority.MEDIUM;
-    }
-  }
+
+
   
   private calculateRiskScore(priority: AlertPriority, category: AlertCategory): number {
     const baseScores = {
@@ -1262,19 +1275,19 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     };
     
     return Math.min(100, Math.round(baseScores[priority] * categoryMultipliers[category]));
-  }
+
   
   private generateAlertId(): string {
     return `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateCommentId(): string {
     return `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateActionId(): string {
     return `action-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   /**
    * Cleanup resources and stop processing
@@ -1283,7 +1296,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     this.isProcessing = false;
     this.removeAllListeners();
     logger.info('Unified Security Alerting Framework destroyed');
-  }
-}
+
+
 
 export default UnifiedSecurityAlertingFramework;

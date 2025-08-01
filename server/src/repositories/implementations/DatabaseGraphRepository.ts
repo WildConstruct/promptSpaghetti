@@ -9,6 +9,7 @@ export class DatabaseGraphRepository implements GraphRepository {
   constructor(private db: Database.Database) {}
 
   async save(graph: Graph): Promise<GraphId> {
+
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO graphs (id, user_id, name, data, version, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -29,6 +30,7 @@ export class DatabaseGraphRepository implements GraphRepository {
   }
 
   async findById(id: GraphId): Promise<Graph | null> {
+
     const stmt = this.db.prepare(`
       SELECT id, user_id, name, data, version, created_at, updated_at
       FROM graphs 
@@ -50,6 +52,7 @@ export class DatabaseGraphRepository implements GraphRepository {
   }
 
   async findByUser(userId: UserId): Promise<Graph[]> {
+
     const stmt = this.db.prepare(`
       SELECT id, user_id, name, data, version, created_at, updated_at
       FROM graphs 
@@ -70,22 +73,26 @@ export class DatabaseGraphRepository implements GraphRepository {
   }
 
   async delete(id: GraphId): Promise<boolean> {
+
     const stmt = this.db.prepare('DELETE FROM graphs WHERE id = ?');
     const result = stmt.run(id);
     return result.changes > 0;
   }
 
   async exists(id: GraphId): Promise<boolean> {
+
     const stmt = this.db.prepare('SELECT 1 FROM graphs WHERE id = ? LIMIT 1');
     return stmt.get(id) !== undefined;
   }
 
   async saveWithTransaction(graph: Graph, tx: TransactionContext): Promise<GraphId> {
+
     // Transaction context will be handled by the transaction wrapper
     return this.save(graph);
   }
 
   async findByNamePattern(userId: UserId, pattern: string): Promise<Graph[]> {
+
     const stmt = this.db.prepare(`
       SELECT id, user_id, name, data, version, created_at, updated_at
       FROM graphs 
@@ -106,6 +113,7 @@ export class DatabaseGraphRepository implements GraphRepository {
   }
 
   async getMetadata(id: GraphId): Promise<GraphMetadata | null> {
+
     const stmt = this.db.prepare(`
       SELECT id, user_id, name, version, created_at, updated_at
       FROM graphs 

@@ -8,6 +8,7 @@ import React from 'react';
 import { KnowledgeBaseArticle, Epic16KnowledgeBaseService } from '../../services/Epic16KnowledgeBaseService';
 
 }
+}
 interface KnowledgeBaseArticleViewerProps {
     article: KnowledgeBaseArticle;
     knowledgeService: Epic16KnowledgeBaseService;
@@ -18,4 +19,5 @@ interface KnowledgeBaseArticleViewerProps {
 export declare const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProps>;
 export default KnowledgeBaseArticleViewer;
 //# sourceMappingURL=KnowledgeBaseArticleViewer.d.ts.map
+}
 }

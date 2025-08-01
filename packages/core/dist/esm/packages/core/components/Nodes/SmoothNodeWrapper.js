@@ -164,11 +164,14 @@ if (isPressed) {
 }
 ;
 // Professional handle styling
-const getHandleStyle = (type) => ({
-    width: 12,
-    height: 12,
-    borderRadius: '50%',
-    border: `2px solid ${colors.primary}` });
+const getHandleStyle = (type) => ({});
+width: 12,
+    height;
+12,
+    borderRadius;
+'50%',
+    border;
+`2px solid ${colors.primary}`;
 background: type === 'source' ? colors.primary : 'rgba(31, 41, 55, 0.9)',
     boxShadow;
 `0 2px 8px ${colors.primary}40`;

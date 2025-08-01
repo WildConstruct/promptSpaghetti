@@ -18,7 +18,7 @@ import {
   RotationPolicy,
   ManagedCredential,
   RotationJob
-} from './RotationManagementService';
+ from './RotationManagementService';
 import { AuthService } from '../auth/services/AuthService';
 import { AuditService } from '../auth/services/AuditService';
 
@@ -26,8 +26,8 @@ import { AuditService } from '../auth/services/AuditService';
 // REQUEST/RESPONSE INTERFACES
 // ==========================================
 
-}
-}
+
+
 export interface RotationResponse<T = any> {
   success: boolean;
   data?: T;
@@ -38,10 +38,10 @@ export interface RotationResponse<T = any> {
     processingTime: number;
     version: string;
   };
-}
 
-}
-}
+
+
+
 export interface CreateRotationPolicyRequest {
   name: string;
   description: string;
@@ -58,8 +58,9 @@ export interface CreateRotationPolicyRequest {
     forbiddenPatterns?: string[];
     mustInclude?: string[];
     expirationDays?: number;
-}
-}
+
+
+
   };
   notifications?: {
     enabled: boolean;
@@ -67,17 +68,17 @@ export interface CreateRotationPolicyRequest {
       type: 'email' | 'slack' | 'webhook';
       target: string;
       priority: RotationPriority;
-    }>;
+>;
   };
   rollbackPolicy?: {
     enabled: boolean;
     automaticRollback: boolean;
     rollbackTimeout: number;
   };
-}
 
-}
-}
+
+
+
 export interface RegisterCredentialRequest {
   name: string;
   description: string;
@@ -88,30 +89,32 @@ export interface RegisterCredentialRequest {
     environment: string[];
     services: string[];
     accessLevel: 'read' | 'write' | 'admin' | 'service';
-}
-}
+
+
+
   };
   dependencies?: Array<{
     type: 'service' | 'database' | 'api';
     name: string;
     critical: boolean;
     validationEndpoint?: string;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface RotationRequest {
   credentialId: string;
   reason?: string;
   priority?: RotationPriority;
   executeImmediately?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkRotationRequest {
   credentialIds: string[];
   reason?: string;
@@ -120,19 +123,21 @@ export interface BulkRotationRequest {
     executeAt?: string; // ISO date
     staggered?: boolean;
     staggerDelay?: number; // milliseconds between rotations
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface RotationAnalyticsRequest {
   timeRange: {
     start: string;
     end: string;
-}
-}
+
+
+
   };
   filters?: {
     type?: RotationType[];
@@ -141,19 +146,20 @@ export interface RotationAnalyticsRequest {
   };
   includeDetails?: boolean;
   groupBy?: 'type' | 'status' | 'day' | 'week';
-}
 
-}
-}
+
+
+
 export interface EmergencyRotationRequest {
   credentialId: string;
   reason: string;
   compromisedAt?: string; // ISO date
   affectedServices?: string[];
   mitigationActions?: string[];
-}
-}
-}
+
+
+
+
 
 // ==========================================
 // API PLUGIN IMPLEMENTATION
@@ -173,7 +179,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
     if (!authHeader) {
       reply.code(401).send({ success: false, error: 'Authorization header required' });
       return;
-    }
+
 
     const token = authHeader.replace('Bearer ', '');
     try {
@@ -181,12 +187,12 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
       if (!user || !user.permissions.includes('rotation_management')) {
         reply.code(403).send({ success: false, error: 'Insufficient permissions for rotation management' });
         return;
-      }
+
       request.user = user;
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ success: false, error: 'Invalid authentication token' });
       return;
-    }
+
   });
 
   // ==========================================
@@ -217,11 +223,11 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
               forbiddenPatterns: { type: 'array', items: { type: 'string' } },
               mustInclude: { type: 'array', items: { type: 'string' } },
               expirationDays: { type: 'number', minimum: 1 }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `create_policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -241,7 +247,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           forbiddenPatterns: ['password', '123456', 'admin'],
           mustInclude: [],
           ...request.body.requirements
-  }
+
         notifications: {
           enabled: request.body.notifications?.enabled || false,
           channels: request.body.notifications?.channels || [],
@@ -252,7 +258,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
             { event: 'rotation_failed', advanceNotice: 0, enabled: true }
           ],
           escalationRules: []
-  }
+
         rollbackPolicy: {
           enabled: request.body.rollbackPolicy?.enabled || true,
           automaticRollback: request.body.rollbackPolicy?.automaticRollback || false,
@@ -260,7 +266,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           rollbackTimeout: request.body.rollbackPolicy?.rollbackTimeout || 600000, // 10 minutes
           validationChecks: [],
           preserveHistory: 5
-        }
+
       });
 
       // Audit logging
@@ -273,7 +279,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           name: request.body.name,
           rotationType: request.body.rotationType,
           rotationInterval: request.body.rotationInterval
-        }
+
       });
 
       const response: RotationResponse<{ policyId: string }> = {
@@ -284,12 +290,11 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
+
       };
 
       reply.code(201).send(response);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Rotation policy creation failed: ${error.message}`);
       reply.code(500).send({
         success: false,
@@ -299,9 +304,9 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
+
       });
-    }
+
   });
 
   // List rotation policies
@@ -310,8 +315,8 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
       type?: RotationType;
       limit?: number;
       offset?: number;
-    } 
-  }>('/policies', {
+ 
+>('/policies', {
     schema: {
       querystring: {
         type: 'object',
@@ -319,9 +324,9 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           type: { type: 'string', enum: Object.values(RotationType) },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -342,22 +347,21 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           total: policies.length,
           offset,
           limit
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId: `list_policies_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Failed to list rotation policies: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve rotation policies'
       });
-    }
+
   });
 
   // Get specific rotation policy
@@ -367,10 +371,10 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
         type: 'object',
         properties: {
           policyId: { type: 'string' }
-  }
+
         required: ['policyId']
-      }
-    }
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -383,7 +387,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           error: 'Rotation policy not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
@@ -393,15 +397,14 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           requestId: `get_policy_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve rotation policy'
       });
-    }
+
   });
 
   // ==========================================
@@ -427,8 +430,8 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
               environment: { type: 'array', items: { type: 'string' } },
               services: { type: 'array', items: { type: 'string' } },
               accessLevel: { type: 'string', enum: ['read', 'write', 'admin', 'service'] }
-            }
-  }
+
+
           dependencies: {
             type: 'array',
             items: {
@@ -439,12 +442,12 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
                 name: { type: 'string' },
                 critical: { type: 'boolean' },
                 validationEndpoint: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `register_credential_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -470,7 +473,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           name: request.body.name,
           type: request.body.type,
           policyId: request.body.policyId
-        }
+
       });
 
       reply.code(201).send({
@@ -481,16 +484,15 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Credential registration failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: error.message || 'Failed to register credential'
       });
-    }
+
   });
 
   // List managed credentials
@@ -501,8 +503,8 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
       dueForRotation?: boolean;
       limit?: number;
       offset?: number;
-    } 
-  }>('/credentials', {
+ 
+>('/credentials', {
     schema: {
       querystring: {
         type: 'object',
@@ -512,9 +514,9 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           dueForRotation: { type: 'boolean' },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -528,7 +530,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
       if (request.query.dueForRotation) {
         const now = new Date();
         credentials = credentials.filter(cred => cred.nextRotationDue <= now);
-      }
+
 
       // Apply pagination
       const offset = request.query.offset || 0;
@@ -542,7 +544,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           ...cred.currentVersion,
           value: '[HIDDEN]', // Never expose credential values
           salt: '[HIDDEN]'
-  }
+
         versions: cred.versions.map(v => ({
           ...v,
           value: '[HIDDEN]',
@@ -558,21 +560,20 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           offset,
           limit,
           dueForRotation: credentials.filter(c => c.nextRotationDue <= new Date()).length
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId: `list_credentials_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve credentials'
       });
-    }
+
   });
 
   // ==========================================
@@ -590,9 +591,9 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           reason: { type: 'string', maxLength: 200 },
           priority: { type: 'string', enum: Object.values(RotationPriority), default: 'medium' },
           executeImmediately: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `rotate_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -615,7 +616,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           reason: request.body.reason,
           priority: request.body.priority,
           initiatedBy: request.user.userId
-        }
+
       });
 
       reply.send({
@@ -625,22 +626,21 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           credentialId: request.body.credentialId,
           status: 'initiated',
           message: 'Rotation job created successfully'
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Rotation initiation failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: error.message || 'Failed to initiate rotation'
       });
-    }
+
   });
 
   // Bulk rotation
@@ -659,11 +659,11 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
               executeAt: { type: 'string', format: 'date-time' },
               staggered: { type: 'boolean', default: false },
               staggerDelay: { type: 'integer', minimum: 1000, default: 30000 }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `bulk_rotate_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -681,7 +681,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
             await new Promise(resolve => 
               setTimeout(resolve, request.body.schedule?.staggerDelay || 30000)
             );
-          }
+
 
           const jobId = await rotationService.rotateCredential(
             credentialId,
@@ -690,10 +690,10 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           );
 
           jobIds.push(jobId);
-        } catch (error) {
+ catch (error) {
           errors.push({ credentialId, error: error.message });
-        }
-      }
+
+
 
       // Audit logging
       await auditService.logAction({
@@ -708,7 +708,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           jobIds,
           errors: errors.slice(0, 10), // Limit logged errors
           reason: request.body.reason
-        }
+
       });
 
       reply.send({
@@ -720,21 +720,20 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           errorCount: errors.length,
           errors,
           message: `Initiated ${jobIds.length} of ${request.body.credentialIds.length} rotations`
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Bulk rotation failed'
       });
-    }
+
   });
 
   // Emergency rotation
@@ -749,9 +748,9 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           compromisedAt: { type: 'string', format: 'date-time' },
           affectedServices: { type: 'array', items: { type: 'string' } },
           mitigationActions: { type: 'array', items: { type: 'string' } }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `emergency_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -777,7 +776,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           mitigationActions: request.body.mitigationActions || [],
           initiatedBy: request.user.userId,
           timestamp: new Date()
-        }
+
       });
 
       reply.send({
@@ -788,22 +787,21 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           priority: RotationPriority.EMERGENCY,
           status: 'initiated',
           message: 'Emergency rotation initiated - processing with highest priority'
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Emergency rotation failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Emergency rotation failed'
       });
-    }
+
   });
 
   // ==========================================
@@ -818,8 +816,8 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
       priority?: RotationPriority;
       limit?: number;
       offset?: number;
-    } 
-  }>('/jobs', {
+ 
+>('/jobs', {
     schema: {
       querystring: {
         type: 'object',
@@ -829,9 +827,9 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           priority: { type: 'string', enum: Object.values(RotationPriority) },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -845,7 +843,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
       let filteredJobs = jobs;
       if (request.query.priority) {
         filteredJobs = jobs.filter(job => job.priority === request.query.priority);
-      }
+
 
       // Apply pagination
       const offset = request.query.offset || 0;
@@ -864,22 +862,21 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
             pending: jobs.filter(j => j.status === RotationStatus.PENDING).length,
             completed: jobs.filter(j => j.status === RotationStatus.COMPLETED).length,
             failed: jobs.filter(j => j.status === RotationStatus.FAILED).length
-          }
-  }
+
+
         metadata: {
           timestamp: new Date(),
           requestId: `list_jobs_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve rotation jobs'
       });
-    }
+
   });
 
   // Get specific job details
@@ -889,10 +886,10 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
         type: 'object',
         properties: {
           jobId: { type: 'string' }
-  }
+
         required: ['jobId']
-      }
-    }
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -906,7 +903,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           error: 'Rotation job not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
@@ -916,15 +913,14 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           requestId: `get_job_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve rotation job'
       });
-    }
+
   });
 
   // ==========================================
@@ -944,21 +940,21 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
             properties: {
               start: { type: 'string', format: 'date-time' },
               end: { type: 'string', format: 'date-time' }
-            }
-  }
+
+
           filters: {
             type: 'object',
             properties: {
               type: { type: 'array', items: { type: 'string', enum: Object.values(RotationType) } },
               status: { type: 'array', items: { type: 'string', enum: Object.values(RotationStatus) } },
               priority: { type: 'array', items: { type: 'string', enum: Object.values(RotationPriority) } }
-            }
-  }
+
+
           includeDetails: { type: 'boolean', default: true },
           groupBy: { type: 'string', enum: ['type', 'status', 'day', 'week'], default: 'type' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -978,15 +974,14 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           requestId: `analytics_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to generate rotation analytics'
       });
-    }
+
   });
 
   // Get rotation health summary
@@ -1009,12 +1004,12 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
         recentRotations: {
           lastHour: jobs.filter(j => j.completedAt && j.completedAt > oneHourAgo).length,
           lastDay: jobs.filter(j => j.completedAt && j.completedAt > oneDayAgo).length
-  }
+
         jobStatus: {
           active: jobs.filter(j => j.status === RotationStatus.IN_PROGRESS).length,
           pending: jobs.filter(j => j.status === RotationStatus.PENDING).length,
           failed: jobs.filter(j => j.status === RotationStatus.FAILED && j.completedAt && j.completedAt > oneDayAgo).length
-  }
+
         averageRotationTime: jobs
           .filter(j => j.duration)
           .reduce((sum, j) => sum + j.duration!, 0) / Math.max(1, jobs.filter(j => j.duration).length),
@@ -1031,15 +1026,14 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           requestId: `health_summary_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to get rotation health summary'
       });
-    }
+
   });
 
   // ==========================================
@@ -1064,23 +1058,22 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
             policyEngine: 'operational',
             jobScheduler: 'operational',
             credentialStore: 'operational'
-  }
+
           statistics: {
             managedCredentials: credentials.length,
             rotationPolicies: policies.length,
             activeJobs: jobs.filter(j => j.status === RotationStatus.IN_PROGRESS).length,
             pendingJobs: jobs.filter(j => j.status === RotationStatus.PENDING).length
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       fastify.log.error(`Rotation system health check failed: ${error.message}`);
       reply.code(503).send({
         success: false,
         error: 'Rotation system health check failed'
       });
-    }
+
   });
 
   fastify.log.info('Rotation Management API routes registered successfully');

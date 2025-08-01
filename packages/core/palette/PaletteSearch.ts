@@ -6,7 +6,7 @@ import { getNodeCategories, getCategoryById } from './NodeCategory';
  * Search result with relevance scoring
  */
 
-}
+
 export interface SearchResult {
   node: NodeMeta;
   relevance: number;
@@ -15,30 +15,31 @@ export interface SearchResult {
   /**
   * Search options configuration
   */
-}
-}
-}
-export interface SearchOptions {
-  fuzzyThreshold?: number;    // 0-1, higher = more fuzzy matching,
-  maxResults?: number;        // Maximum number of results to return,
-  includeCategories?: boolean; // Include category names in search,
-  sortByRelevance?: boolean;  // Sort results by relevance score,
-  minimumRelevance?: number;  // Minimum relevance score to include,
+
+
+
+
+export interface SearchOptions { fuzzyThreshold?: number;    // 0-1, higher = more fuzzy matching;
+  maxResults?: number;        // Maximum number of results to return;
+  includeCategories?: boolean; // Include category names in search;
+  sortByRelevance?: boolean;  // Sort results by relevance score;
+  minimumRelevance?: number;  // Minimum relevance score to include;
   /**
   * Default search options
   */
-  const DEFAULT_SEARCH_OPTIONS: Required<SearchOptions> = {,
-  fuzzyThreshold: 0.6,
-  maxResults: 50,
-  includeCategories: true,
-  sortByRelevance: true,
-  minimumRelevance: 0.1,
-}
+  const DEFAULT_SEARCH_OPTIONS: Required<SearchOptions> = {;
+  fuzzyThreshold: 0.6;
+  maxResults: 50;
+  includeCategories: true;
+  sortByRelevance: true;
+  minimumRelevance: 0.1 }
+
+
 };
 /**
  * Advanced palette search engine
  */
-}
+
 export class PaletteSearch {
   private nodes: NodeMeta;
   private searchIndex: SearchIndex;
@@ -120,9 +121,9 @@ export class PaletteSearch {
     const matchedFields: string = [];
     let totalRelevance = 0;
     // Define searchable fields with weights
-    const searchFields = [;
-      { field: 'label', content: node.label, weight: 3 },
-      { field: 'id', content: node.id, weight: 2 },
+    const searchFields = [
+      { field: 'label', content: node.label, weight: 3 }
+      { field: 'id', content: node.id, weight: 2 }
       { field: 'tooltip', content: node.tooltip, weight: 1.5 }
     ];
     // Add category information if enabled
@@ -131,7 +132,7 @@ export class PaletteSearch {
   const category = getCategoryById(catId);
         if (category) {
           searchFields.push(
-            { field: 'category-name', content: category.name, weight: 1 },
+            { field: 'category-name', content: category.name, weight: 1 }
             { field: 'category-desc', content: category.description, weight: 0.5 }
           );
           // Add category keywords
@@ -144,8 +145,7 @@ export class PaletteSearch {
     for (const term of searchTerms) {
       let termRelevance = 0;
       let termMatched = false;
-      for (const { field, content, weight } of searchFields) {
-        const fieldContent = content.toLowerCase();
+      for (const { field, content, weight } of searchFields) { const fieldContent = content.toLowerCase();
         let fieldScore = 0;
         // Exact match (highest score)
         if (fieldContent === term) {
@@ -167,9 +167,7 @@ export class PaletteSearch {
           if (!matchedFields.includes(field)) {
             matchedFields.push(field);
       if (termMatched) {
-        totalRelevance += termRelevance;
-      } else {
-  // If any term doesn't match, reduce overall relevance
+        totalRelevance += termRelevance } else { // If any term doesn't match, reduce overall relevance
   totalRelevance *= 0.5;
   // Normalize relevance score
   const normalizedRelevance = Math.min(totalRelevance / (searchTerms.length * 3), 1);
@@ -178,14 +176,13 @@ export class PaletteSearch {
   return {
   node,
   relevance: normalizedRelevance,
-  matchedFields,
+  matchedFields }
   categories
 };
   /**
    * Calculate fuzzy matching score using Levenshtein distance
    */
-  private calculateFuzzyScore(term: string, target: string): number {
-  if (term === target) return 1;
+  private calculateFuzzyScore(term: string, target: string): number { if (term === target) return 1;
   if (term.length === 0) return target.length === 0 ? 1 : 0;
   if (target.length === 0) return 0;
   const distance = this.levenshteinDistance(term, target);
@@ -194,16 +191,13 @@ export class PaletteSearch {
   /**
   * Calculate Levenshtein distance between two strings
   */
-  private levenshteinDistance(a: string, b: string): number {,
+  private levenshteinDistance(a: string, b: string): number { }
   const matrix = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
   for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
   for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
-  for (let i = 1; i <= a.length; i++) {
-  for (let j = 1; j <= b.length; j++) {
+  for (let i = 1; i <= a.length; i++) { for (let j = 1; j <= b.length; j++) {
   if (a[i - 1] === b[j - 1]) {
-  matrix[i][j] = matrix[i - 1][j - 1];
-} else {
-  matrix[i][j] = Math.min()
+  matrix[i][j] = matrix[i - 1][j - 1] } else { matrix[i][j] = Math.min()
   matrix[i - 1][j] + 1,     // deletion
   matrix[i][j - 1] + 1,     // insertion
   matrix[i - 1][j - 1] + 1  // substitution
@@ -217,14 +211,13 @@ export class PaletteSearch {
   for (const node of nodes) {
   const categories = getNodeCategories(node.id);
   // Index searchable content
-  const searchableContent = [;
-  node.label,
-  node.id,
-  node.tooltip,
-  ...categories.map(catId => {)
+  const searchableContent = [
+  node.label
+  node.id
+  node.tooltip }
+  ...categories.map(catId => { )
   const cat = getCategoryById(catId);
-  return cat ? [cat.name, cat.description, ...(cat.metadata?.keywords || [])] : [];
-}).flat()
+  return cat ? [cat.name, cat.description, ...(cat.metadata?.keywords || [])] : [] }).flat()
       ];
       for (const content of searchableContent) {
         const words = content.toLowerCase().split(/\s+/);
@@ -239,24 +232,27 @@ export class PaletteSearch {
 /**
  * Search index structure
  */
-}
+
+
 interface SearchIndex {
   terms: Map<string, TermInfo>;
-/**
- * Term information in search index
- */
-}
-interface TermInfo {
-  frequency: number;
+  /**
+  * Term information in search index
+  */
+
+
+
+interface TermInfo { frequency: number;
   nodes: Set<string>;
-/**
- * Utility function to highlight search terms in text
- */
-export function highlightSearchTerms(text: string, searchTerms: string): string {
+  /**
+  * Utility function to highlight search terms in text
+  */
+  export function highlightSearchTerms(text: string, searchTerms: string): string { }
   if (!searchTerms.length) return text;
   let highlighted = text;
   for (const term of searchTerms) {
-}
+
+
     const regex = new RegExp(`(${term})`, 'gi');}
     highlighted = highlighted.replace(regex, '<mark>$1</mark>');
   return highlighted;

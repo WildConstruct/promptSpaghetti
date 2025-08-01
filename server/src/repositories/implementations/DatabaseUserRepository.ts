@@ -40,7 +40,7 @@ export class DatabaseUserRepository implements UserRepository {
       createdAt: new Date(now),
       updatedAt: new Date(now)
     };
-  }
+
 
   async findById(id: UserId): Promise<User | null> {
 
@@ -63,7 +63,7 @@ export class DatabaseUserRepository implements UserRepository {
       updatedAt: new Date(row.updated_at),
       lastLoginAt: row.last_login_at ? new Date(row.last_login_at) : undefined
     };
-  }
+
 
   async findByEmail(email: string): Promise<User | null> {
 
@@ -86,7 +86,7 @@ export class DatabaseUserRepository implements UserRepository {
       updatedAt: new Date(row.updated_at),
       lastLoginAt: row.last_login_at ? new Date(row.last_login_at) : undefined
     };
-  }
+
 
   async update(id: UserId, updates: Partial<User>): Promise<User> {
 
@@ -96,19 +96,19 @@ export class DatabaseUserRepository implements UserRepository {
     if (updates.email !== undefined) {
       setClause.push('email = ?');
       values.push(updates.email);
-    }
+
     if (updates.name !== undefined) {
       setClause.push('name = ?');
       values.push(updates.name);
-    }
+
     if (updates.organizationId !== undefined) {
       setClause.push('organization_id = ?');
       values.push(updates.organizationId);
-    }
+
     if (updates.isActive !== undefined) {
       setClause.push('is_active = ?');
       values.push(updates.isActive);
-    }
+
     
     setClause.push('updated_at = ?');
     values.push(Date.now());
@@ -125,10 +125,10 @@ export class DatabaseUserRepository implements UserRepository {
     const updatedUser = await this.findById(id);
     if (!updatedUser) {
       throw new Error(`User ${id} not found after update`);
-    }
+
     
     return updatedUser;
-  }
+
 
   async delete(id: UserId): Promise<boolean> {
 
@@ -141,13 +141,13 @@ export class DatabaseUserRepository implements UserRepository {
     
     const result = stmt.run(Date.now(), id);
     return result.changes > 0;
-  }
+
 
   async exists(id: UserId): Promise<boolean> {
 
     const stmt = this.db.prepare('SELECT 1 FROM users WHERE id = ? AND is_active = 1 LIMIT 1');
     return stmt.get(id) !== undefined;
-  }
+
 
   async authenticate(email: string, password: string): Promise<User | null> {
 
@@ -180,7 +180,7 @@ export class DatabaseUserRepository implements UserRepository {
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),
       lastLoginAt: new Date(};
-  }
+
 
   async updatePassword(id: UserId, newPassword: string): Promise<boolean> {
 
@@ -194,7 +194,7 @@ export class DatabaseUserRepository implements UserRepository {
     
     const result = stmt.run(passwordHash, Date.now(), id);
     return result.changes > 0;
-  }
+
 
   async findByOrganization(organizationId: string): Promise<User[]> {
 
@@ -216,7 +216,7 @@ export class DatabaseUserRepository implements UserRepository {
       updatedAt: new Date(row.updated_at),
       lastLoginAt: row.last_login_at ? new Date(row.last_login_at) : undefined
     }));
-  }
+
 
   async getUserStats(id: UserId): Promise<UserStats> {
 
@@ -237,10 +237,9 @@ export class DatabaseUserRepository implements UserRepository {
       totalExecutions: executionsResult?.count || 0,
       lastLoginAt: user?.lastLoginAt || null,
       accountCreatedAt: user?.createdAt || new Date(};
-  }
+
 
   private generateUserId(): string {
     // Generate a simple UUID-like identifier
     return 'user_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
-  }
-}
+

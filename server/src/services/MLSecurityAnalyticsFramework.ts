@@ -14,15 +14,15 @@ import {
   SecurityEvent,
   SecurityEventType,
   SecurityEventSeverity
-} from './SecurityIntelligenceDataPipeline';
+ from './SecurityIntelligenceDataPipeline';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../database/analytics-dao';
 import { PerformanceMonitoringService } from '../analytics/PerformanceMonitoringService';
 import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
-}
-}
+
+
 export interface MLSecurityAnalyticsConfig {
   ml_framework: {
     enabled: boolean;
@@ -33,8 +33,9 @@ export interface MLSecurityAnalyticsConfig {
     feature_store_enabled: boolean;
     model_versioning: boolean;
     a_b_testing: boolean;
-}
-}
+
+
+
   };
   threat_detection: {
     enabled: boolean;
@@ -82,10 +83,10 @@ export interface MLSecurityAnalyticsConfig {
     performance_tracking: boolean;
     unified_monitoring: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface MLModel {
   id: string;
   name: string;
@@ -103,9 +104,10 @@ export interface MLModel {
   performance_metrics: ModelPerformanceMetrics;
   deployment_config: ModelDeploymentConfig;
   metadata: ModelMetadata;
-}
-}
-}
+
+
+
+
 
 export enum MLModelType {
   BINARY_CLASSIFICATION = 'binary_classification',
@@ -116,7 +118,7 @@ export enum MLModelType {
   TIME_SERIES_FORECASTING = 'time_series_forecasting',
   NATURAL_LANGUAGE_PROCESSING = 'natural_language_processing',
   REINFORCEMENT_LEARNING = 'reinforcement_learning'
-}
+
 
 export enum MLAlgorithm {
   RANDOM_FOREST = 'random_forest',
@@ -132,7 +134,7 @@ export enum MLAlgorithm {
   AUTOENCODER = 'autoencoder',
   K_MEANS = 'k_means',
   DBSCAN = 'dbscan'
-}
+
 
 export enum ModelStatus {
   TRAINING = 'training',
@@ -142,10 +144,10 @@ export enum ModelStatus {
   DEPRECATED = 'deprecated',
   FAILED = 'failed',
   ARCHIVED = 'archived'
-}
 
-}
-}
+
+
+
 export interface ModelFeature {
   name: string;
   type: FeatureType;
@@ -154,9 +156,10 @@ export interface ModelFeature {
   transformation: FeatureTransformation[];
   statistics: FeatureStatistics;
   data_quality: FeatureDataQuality;
-}
-}
-}
+
+
+
+
 
 export enum FeatureType {
   NUMERICAL = 'numerical',
@@ -167,17 +170,18 @@ export enum FeatureType {
   GEOSPATIAL = 'geospatial',
   TIME_SERIES = 'time_series',
   GRAPH = 'graph'
-}
 
-}
-}
+
+
+
 export interface FeatureTransformation {
   type: TransformationType;
   parameters: Record<string, unknown>;
   order: number;
-}
-}
-}
+
+
+
+
 
 export enum TransformationType {
   NORMALIZATION = 'normalization',
@@ -190,10 +194,10 @@ export enum TransformationType {
   PCA = 'pca',
   TFIDF = 'tfidf',
   WORD_EMBEDDINGS = 'word_embeddings'
-}
 
-}
-}
+
+
+
 export interface FeatureStatistics {
   count: number;
   mean?: number;
@@ -204,12 +208,13 @@ export interface FeatureStatistics {
   unique_values?: number;
   missing_values: number;
   outliers: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FeatureDataQuality {
   completeness: number;
   validity: number;
@@ -217,12 +222,13 @@ export interface FeatureDataQuality {
   accuracy: number;
   uniqueness: number;
   timeliness: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelPerformanceMetrics {
   accuracy?: number;
   precision?: number;
@@ -239,12 +245,13 @@ export interface ModelPerformanceMetrics {
   classification_report?: ClassificationReport;
   cross_validation_scores?: number[];
   validation_curves?: ValidationCurve[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ClassificationReport {
   classes: string[];
   precision: number[];
@@ -253,53 +260,57 @@ export interface ClassificationReport {
   support: number[];
   macro_avg: MetricSummary;
   weighted_avg: MetricSummary;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MetricSummary {
   precision: number;
   recall: number;
   f1_score: number;
   support: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationCurve {
   parameter_name: string;
   parameter_values: unknown[];
   train_scores: number[];
   validation_scores: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelDeploymentConfig {
   deployment_type: DeploymentType;
   resource_requirements: ResourceRequirements;
   scaling_config: ScalingConfig;
   monitoring_config: MonitoringConfig;
   rollback_config: RollbackConfig;
-}
-}
-}
+
+
+
+
 
 export enum DeploymentType {
   REAL_TIME = 'real_time',
   BATCH = 'batch',
   STREAMING = 'streaming',
   ON_DEMAND = 'on_demand'
-}
 
-}
-}
+
+
+
 export interface ResourceRequirements {
   cpu_cores: number;
   memory_gb: number;
@@ -307,12 +318,13 @@ export interface ResourceRequirements {
   gpu_memory_gb?: number;
   storage_gb: number;
   network_bandwidth_mbps: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ScalingConfig {
   auto_scaling: boolean;
   min_instances: number;
@@ -321,12 +333,13 @@ export interface ScalingConfig {
   target_memory_utilization: number;
   scale_up_cooldown_seconds: number;
   scale_down_cooldown_seconds: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MonitoringConfig {
   accuracy_threshold: number;
   latency_threshold_ms: number;
@@ -334,23 +347,25 @@ export interface MonitoringConfig {
   error_rate_threshold: number;
   drift_detection_threshold: number;
   alert_channels: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackConfig {
   auto_rollback: boolean;
   rollback_threshold: number;
   previous_version_retention: number;
   rollback_window_minutes: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelMetadata {
   training_start_time: number;
   training_end_time: number;
@@ -362,12 +377,13 @@ export interface ModelMetadata {
   reproducibility_hash: string;
   experiment_id?: string;
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrainingJob {
   id: string;
   model_id: string;
@@ -381,9 +397,10 @@ export interface TrainingJob {
   logs: TrainingLog[];
   error_message?: string;
   artifacts: TrainingArtifact[];
-}
-}
-}
+
+
+
+
 
 export enum TrainingJobStatus {
   QUEUED = 'queued',
@@ -392,10 +409,10 @@ export enum TrainingJobStatus {
   FAILED = 'failed',
   CANCELLED = 'cancelled',
   PAUSED = 'paused'
-}
 
-}
-}
+
+
+
 export interface TrainingConfig {
   algorithm: MLAlgorithm;
   hyperparameters: Record<string, unknown>;
@@ -407,12 +424,13 @@ export interface TrainingConfig {
   patience: number;
   cross_validation: boolean;
   cv_folds: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DatasetInfo {
   source: string;
   size: number;
@@ -422,12 +440,13 @@ export interface DatasetInfo {
   class_distribution?: Record<string, number>;
   data_quality_score: number;
   preprocessing_steps: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrainingProgress {
   current_epoch: number;
   total_epochs: number;
@@ -437,12 +456,13 @@ export interface TrainingProgress {
   estimated_time_remaining_ms: number;
   current_metrics: Record<string, number>;
   best_metrics: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrainingLog {
   timestamp: number;
   level: LogLevel;
@@ -450,19 +470,20 @@ export interface TrainingLog {
   epoch?: number;
   batch?: number;
   metrics?: Record<string, number>;
-}
-}
-}
+
+
+
+
 
 export enum LogLevel {
   DEBUG = 'debug',
   INFO = 'info',
   WARN = 'warn',
   ERROR = 'error'
-}
 
-}
-}
+
+
+
 export interface TrainingArtifact {
   type: ArtifactType;
   name: string;
@@ -470,9 +491,10 @@ export interface TrainingArtifact {
   size: number;
   checksum: string;
   created_at: number;
-}
-}
-}
+
+
+
+
 
 export enum ArtifactType {
   MODEL_WEIGHTS = 'model_weights',
@@ -484,10 +506,10 @@ export enum ArtifactType {
   CONFUSION_MATRIX = 'confusion_matrix',
   ROC_CURVE = 'roc_curve',
   TRAINING_LOG = 'training_log'
-}
 
-}
-}
+
+
+
 export interface InferenceRequest {
   id: string;
   model_id: string;
@@ -497,19 +519,20 @@ export interface InferenceRequest {
   priority: InferencePriority;
   callback_url?: string;
   metadata: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 export enum InferencePriority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
 
-}
-}
+
+
+
 export interface InferenceResponse {
   request_id: string;
   model_id: string;
@@ -520,12 +543,13 @@ export interface InferenceResponse {
   feature_importance?: FeatureImportance[];
   explanation?: ModelExplanation;
   metadata: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelPrediction {
   sample_id: string;
   prediction: unknown;
@@ -534,31 +558,34 @@ export interface ModelPrediction {
   anomaly_score?: number;
   cluster_id?: number;
   explanation?: SampleExplanation;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FeatureImportance {
   feature_name: string;
   importance: number;
   rank: number;
   contribution: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelExplanation {
   method: ExplanationMethod;
   global_importance: FeatureImportance[];
   model_insights: ModelInsight[];
   decision_boundaries?: DecisionBoundary[];
-}
-}
-}
+
+
+
+
 
 export enum ExplanationMethod {
   SHAP = 'shap',
@@ -566,18 +593,19 @@ export enum ExplanationMethod {
   PERMUTATION_IMPORTANCE = 'permutation_importance',
   FEATURE_ABLATION = 'feature_ablation',
   INTEGRATED_GRADIENTS = 'integrated_gradients'
-}
 
-}
-}
+
+
+
 export interface ModelInsight {
   type: InsightType;
   description: string;
   importance: number;
   supporting_data: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 export enum InsightType {
   FEATURE_CORRELATION = 'feature_correlation',
@@ -585,86 +613,93 @@ export enum InsightType {
   MODEL_BIAS = 'model_bias',
   PERFORMANCE_DEGRADATION = 'performance_degradation',
   OUTLIER_DETECTION = 'outlier_detection'
-}
 
-}
-}
+
+
+
 export interface DecisionBoundary {
   feature_x: string;
   feature_y: string;
-}
-}
+
+
+
   boundary_points: Array<{ x: number; y: number }>;
   class_regions: ClassRegion[];
-}
 
-}
-}
+
+
+
 export interface ClassRegion {
   class_name: string;
   confidence: number;
-}
-}
-  region_points: Array<{ x: number; y: number }>;
-}
 
-}
-}
+
+
+  region_points: Array<{ x: number; y: number }>;
+
+
+
+
 export interface SampleExplanation {
   feature_contributions: FeatureContribution[];
   counterfactuals?: Counterfactual[];
   similar_samples?: SimilarSample[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FeatureContribution {
   feature_name: string;
   value: unknown;
   contribution: number;
   importance: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Counterfactual {
   feature_name: string;
   original_value: unknown;
   counterfactual_value: unknown;
   impact: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SimilarSample {
   sample_id: string;
   similarity_score: number;
   prediction: unknown;
   confidence: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MLSecurityAnalyticsMetrics {
   model_metrics: ModelMetrics;
   training_metrics: TrainingMetrics;
   inference_metrics: InferenceMetrics;
   system_metrics: SystemMetrics;
   business_metrics: BusinessMetrics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelMetrics {
   total_models: number;
   active_models: number;
@@ -674,12 +709,13 @@ export interface ModelMetrics {
   best_performing_models: ModelPerformanceSummary[];
   model_drift_incidents: number;
   model_performance_trends: ModelTrend[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelPerformanceSummary {
   model_id: string;
   model_name: string;
@@ -688,31 +724,33 @@ export interface ModelPerformanceSummary {
   recall: number;
   f1_score: number;
   deployment_date: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelTrend {
   model_id: string;
   metric_name: string;
-}
-}
+
+
+
   trend_data: Array<{ timestamp: number; value: number }>;
   trend_direction: TrendDirection;
   significance: number;
-}
+
 
 export enum TrendDirection {
   IMPROVING = 'improving',
   STABLE = 'stable',
   DEGRADING = 'degrading',
   VOLATILE = 'volatile'
-}
 
-}
-}
+
+
+
 export interface TrainingMetrics {
   total_training_jobs: number;
   successful_trainings: number;
@@ -721,24 +759,26 @@ export interface TrainingMetrics {
   training_success_rate: number;
   resource_utilization: ResourceUtilization;
   hyperparameter_optimization_jobs: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceUtilization {
   cpu_utilization_percent: number;
   memory_utilization_percent: number;
   gpu_utilization_percent?: number;
   storage_utilization_gb: number;
   network_utilization_mbps: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface InferenceMetrics {
   total_inference_requests: number;
   successful_inferences: number;
@@ -747,83 +787,90 @@ export interface InferenceMetrics {
   inference_throughput_per_second: number;
   accuracy_degradation_alerts: number;
   model_serving_errors: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemMetrics {
   ml_framework_health: FrameworkHealth;
   feature_store_metrics: FeatureStoreMetrics;
   model_registry_metrics: ModelRegistryMetrics;
   monitoring_system_metrics: MonitoringSystemMetrics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FrameworkHealth {
   overall_health_score: number;
   component_health: Record<string, number>;
   error_rates: Record<string, number>;
   response_times: Record<string, number>;
   resource_usage: ResourceUtilization;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FeatureStoreMetrics {
   total_features: number;
   feature_quality_score: number;
   feature_freshness_score: number;
   feature_usage_statistics: FeatureUsageStats[];
   data_drift_incidents: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FeatureUsageStats {
   feature_name: string;
   usage_count: number;
   models_using: number;
   last_used: number;
   quality_score: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModelRegistryMetrics {
   total_registered_models: number;
   model_versions: number;
   active_deployments: number;
   model_downloads: number;
   registry_storage_usage_gb: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MonitoringSystemMetrics {
   alerts_generated: number;
   alerts_resolved: number;
   monitoring_coverage: number;
   detection_accuracy: number;
   false_positive_rate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BusinessMetrics {
   threat_detection_improvement: number;
   false_positive_reduction: number;
@@ -832,9 +879,10 @@ export interface BusinessMetrics {
   security_posture_score: number;
   cost_savings: number;
   roi_percentage: number;
-}
-}
-}
+
+
+
+
 
 export class MLSecurityAnalyticsFramework extends EventEmitter {
   private config: MLSecurityAnalyticsConfig;
@@ -873,7 +921,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     this.performanceMonitoringService = performanceMonitoringService;
     this.diagnosticService = diagnosticService;
     this.healthCheckFramework = healthCheckFramework;
-  }
+
 
   async initialize(): Promise<void> {
 
@@ -883,12 +931,12 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       // Initialize Epic 1 Analytics Integration
       if (this.config.epic_integration.epic1_analytics_enabled) {
         await this.initializeEpic1Integration();
-      }
+
 
       // Initialize Epic 17 Admin Integration
       if (this.config.epic_integration.epic17_admin_enabled) {
         await this.initializeEpic17Integration();
-      }
+
 
       // Initialize ML framework components
       await this.initializeMLFramework();
@@ -900,7 +948,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       // Start ML services
       if (this.config.ml_framework.enabled) {
         await this.startMLServices();
-      }
+
 
       // Initialize health checks
       await this.initializeHealthChecks();
@@ -908,12 +956,11 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       this.isInitialized = true;
       this.emit('ml_framework_initialized');
       console.log('ML Security Analytics Framework initialized successfully');
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize ML Security Analytics Framework:', error);
       throw error;
-    }
-  }
+
+
 
   private async initializeEpic1Integration(): Promise<void> {
 
@@ -925,7 +972,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         framework_version: '1.0.0',
         integration_type: 'epic1_analytics',
         timestamp: Date.now()
-      }
+
     });
 
     // Initialize performance monitoring
@@ -936,9 +983,9 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       tags: {
         component: 'ml_security_analytics_framework',
         integration: 'epic1'
-      }
+
     });
-  }
+
 
   private async initializeEpic17Integration(): Promise<void> {
 
@@ -953,7 +1000,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
           healthy: status.overall_health === 'healthy',
           details: status
         };
-  }
+
       interval_ms: 30000,
       timeout_ms: 10000,
       critical: true
@@ -966,10 +1013,10 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       category: 'ml_security',
       collector: async () => {
         return await this.collectDiagnostics();
-  }
+
       schedule: '*/10 * * * *'
     });
-  }
+
 
   private async initializeMLFramework(): Promise<void> {
 
@@ -988,13 +1035,13 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       setInterval(() => {
         this.monitorFeatureStore();
       }, 300000); // Check every 5 minutes
-    }
+
 
     // Initialize metrics collection
     setInterval(async () => {
       await this.collectMLMetrics();
     }, 120000); // Collect every 2 minutes
-  }
+
 
   private async loadDefaultModels(): Promise<void> {
 
@@ -1029,7 +1076,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               quartiles: [0.2, 0.4, 0.7],
               missing_values: 0,
               outliers: 150
-  }
+
             data_quality: {
               completeness: 1.0,
               validity: 0.98,
@@ -1037,8 +1084,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               accuracy: 0.95,
               uniqueness: 0.92,
               timeliness: 0.99
-            }
-  }
+
+
           {
             name: 'source_ip_reputation',
             type: FeatureType.NUMERICAL,
@@ -1056,7 +1103,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               quartiles: [-1.2, -0.1, 0.8],
               missing_values: 1200,
               outliers: 890
-  }
+
             data_quality: {
               completeness: 0.988,
               validity: 0.94,
@@ -1064,8 +1111,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               accuracy: 0.89,
               uniqueness: 0.85,
               timeliness: 0.91
-            }
-  }
+
+
           {
             name: 'event_frequency_24h',
             type: FeatureType.NUMERICAL,
@@ -1084,7 +1131,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               quartiles: [1, 2, 4],
               missing_values: 0,
               outliers: 45
-  }
+
             data_quality: {
               completeness: 1.0,
               validity: 1.0,
@@ -1092,8 +1139,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               accuracy: 0.97,
               uniqueness: 0.88,
               timeliness: 1.0
-            }
-          }
+
+
         ],
         hyperparameters: {
           n_estimators: 100,
@@ -1101,7 +1148,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
           min_samples_split: 5,
           min_samples_leaf: 2,
           random_state: 42
-  }
+
         performance_metrics: {
           accuracy: 0.943,
           precision: 0.941,
@@ -1115,7 +1162,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             [12, 45, 67, 9102]
           ],
           cross_validation_scores: [0.941, 0.943, 0.946, 0.940, 0.944]
-  }
+
         deployment_config: {
           deployment_type: DeploymentType.REAL_TIME,
           resource_requirements: {
@@ -1124,7 +1171,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             gpu_required: false,
             storage_gb: 1,
             network_bandwidth_mbps: 100
-  }
+
           scaling_config: {
             auto_scaling: true,
             min_instances: 2,
@@ -1133,7 +1180,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             target_memory_utilization: 80,
             scale_up_cooldown_seconds: 300,
             scale_down_cooldown_seconds: 600
-  }
+
           monitoring_config: {
             accuracy_threshold: 0.90,
             latency_threshold_ms: 100,
@@ -1141,14 +1188,14 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             error_rate_threshold: 0.05,
             drift_detection_threshold: 0.1,
             alert_channels: ['email', 'slack']
-  }
+
           rollback_config: {
             auto_rollback: true,
             rollback_threshold: 0.85,
             previous_version_retention: 3,
             rollback_window_minutes: 60
-          }
-  }
+
+
         metadata: {
           training_start_time: Date.now() - 7200000,
           training_end_time: Date.now() - 3600000,
@@ -1160,11 +1207,11 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             'scikit-learn': '1.0.2',
             'pandas': '1.4.2',
             'numpy': '1.21.5'
-  }
+
           reproducibility_hash: 'sha256:a1b2c3d4e5f6',
           tags: ['threat_detection', 'classification', 'production']
-        }
-  }
+
+
       {
         id: 'anomaly_detector_v1',
         name: 'Security Anomaly Detector',
@@ -1196,7 +1243,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               quartiles: [3.5, 4.1, 4.9],
               missing_values: 0,
               outliers: 2344
-  }
+
             data_quality: {
               completeness: 1.0,
               validity: 0.99,
@@ -1204,8 +1251,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               accuracy: 0.96,
               uniqueness: 0.94,
               timeliness: 1.0
-            }
-  }
+
+
           {
             name: 'connection_frequency',
             type: FeatureType.NUMERICAL,
@@ -1223,7 +1270,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               quartiles: [5, 12, 22],
               missing_values: 0,
               outliers: 1234
-  }
+
             data_quality: {
               completeness: 1.0,
               validity: 1.0,
@@ -1231,21 +1278,21 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               accuracy: 0.98,
               uniqueness: 0.91,
               timeliness: 1.0
-            }
-          }
+
+
         ],
         hyperparameters: {
           n_estimators: 100,
           contamination: 0.1,
           random_state: 42,
           n_jobs: -1
-  }
+
         performance_metrics: {
           precision: 0.85,
           recall: 0.78,
           f1_score: 0.81,
           auc_roc: 0.92
-  }
+
         deployment_config: {
           deployment_type: DeploymentType.STREAMING,
           resource_requirements: {
@@ -1254,7 +1301,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             gpu_required: false,
             storage_gb: 2,
             network_bandwidth_mbps: 500
-  }
+
           scaling_config: {
             auto_scaling: true,
             min_instances: 1,
@@ -1263,7 +1310,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             target_memory_utilization: 70,
             scale_up_cooldown_seconds: 180,
             scale_down_cooldown_seconds: 300
-  }
+
           monitoring_config: {
             accuracy_threshold: 0.80,
             latency_threshold_ms: 50,
@@ -1271,14 +1318,14 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             error_rate_threshold: 0.03,
             drift_detection_threshold: 0.15,
             alert_channels: ['email', 'slack', 'webhook']
-  }
+
           rollback_config: {
             auto_rollback: true,
             rollback_threshold: 0.75,
             previous_version_retention: 2,
             rollback_window_minutes: 30
-          }
-  }
+
+
         metadata: {
           training_start_time: Date.now() - 10800000,
           training_end_time: Date.now() - 7200000,
@@ -1289,20 +1336,20 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
           dependencies: {
             'scikit-learn': '1.0.2',
             'pandas': '1.4.2'
-  }
+
           reproducibility_hash: 'sha256:b2c3d4e5f6g7',
           tags: ['anomaly_detection', 'network_security', 'streaming']
-        }
-      }
+
+
     ];
 
     // Load models into memory
     for (const model of defaultModels) {
       this.models.set(model.id, model);
-    }
+
 
     console.log(`Loaded ${defaultModels.length} default ML models`);
-  }
+
 
   private async initializeFeatureStore(): Promise<void> {
 
@@ -1310,11 +1357,11 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     for (const model of this.models.values()) {
       for (const feature of model.features) {
         this.featureStore.set(feature.name, feature);
-      }
-    }
+
+
 
     console.log(`Initialized feature store with ${this.featureStore.size} features`);
-  }
+
 
   private async startMLServices(): Promise<void> {
 
@@ -1326,10 +1373,10 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     // Start model training scheduler if enabled
     if (this.config.ml_framework.model_auto_retrain) {
       this.startModelTrainingScheduler();
-    }
+
 
     console.log('ML Security Analytics services started');
-  }
+
 
   private async initializeHealthChecks(): Promise<void> {
 
@@ -1338,9 +1385,9 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       const health = await this.performHealthCheck();
       if (health.overall_health !== 'healthy') {
         this.emit('ml_framework_health_warning', health);
-      }
+
     }, 60000);
-  }
+
 
   private async handleSecurityEventForML(event: SecurityEvent): Promise<void> {
 
@@ -1364,17 +1411,16 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             event_id: event.id,
             event_type: event.event_type,
             source_ip: event.source?.ip_address || 'unknown'
-          }
+
         };
 
         await this.processInferenceRequest(inferenceRequest);
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error('Error handling security event for ML:', error);
       this.emit('ml_processing_error', { event, error });
-    }
-  }
+
+
 
   private async extractFeaturesFromEvent(event: SecurityEvent): Promise<Record<string, unknown>> {
     // Feature engineering logic
@@ -1390,7 +1436,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     if (event.source?.ip_address) {
       features.source_ip_reputation = await this.getIPReputation(event.source.ip_address);
       features.source_country = await this.getIPCountry(event.source.ip_address);
-    }
+
 
     // Threat indicator features
     features.threat_indicator_count = event.threat_indicators.length;
@@ -1406,10 +1452,10 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       features.network_traffic_volume = event.network_context.bytes_transferred || 0;
       features.connection_duration = event.network_context.duration_seconds || 0;
       features.port_number = event.network_context.destination_port || 0;
-    }
+
 
     return features;
-  }
+
 
   private normalizeSeverity(severity: SecurityEventSeverity): number {
     const severityMap = {
@@ -1419,7 +1465,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       [SecurityEventSeverity.CRITICAL]: 1.0
     };
     return severityMap[severity] || 0.0;
-  }
+
 
   private encodeEventType(eventType: SecurityEventType): number {
     // One-hot encoding for event types (simplified)
@@ -1438,14 +1484,14 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       [SecurityEventType.THREAT_INTELLIGENCE_MATCH]: 12
     };
     return eventTypeMap[eventType] || 0;
-  }
+
 
   private async getIPReputation(ipAddress: string): Promise<number> {
 
     // Mock IP reputation lookup - in production, this would query threat intelligence feeds
     const hash = this.simpleHash(ipAddress);
     return (hash % 100) / 100 - 0.5; // Range: -0.5 to 0.5
-  }
+
 
   private async getIPCountry(ipAddress: string): Promise<string> {
 
@@ -1453,13 +1499,13 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     const countries = ['US', 'CN', 'RU', 'DE', 'GB', 'FR', 'JP'];
     const hash = this.simpleHash(ipAddress);
     return countries[hash % countries.length];
-  }
+
 
   private async getEventFrequency(event: SecurityEvent, timeWindowMs: number): Promise<number> {
 
     // Mock frequency calculation - in production, this would query the database
     return Math.floor(Math.random() * 10) + 1;
-  }
+
 
   private simpleHash(str: string): number {
     let hash = 0;
@@ -1467,9 +1513,9 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       const char = str.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32-bit integer
-    }
+
     return Math.abs(hash);
-  }
+
 
   private getInferencePriority(severity: SecurityEventSeverity): InferencePriority {
     switch (severity) {
@@ -1483,8 +1529,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         return InferencePriority.LOW;
       default:
         return InferencePriority.LOW;
-    }
-  }
+
+
 
   private async processInferenceRequest(request: InferenceRequest): Promise<InferenceResponse> {
 
@@ -1495,7 +1541,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       const model = this.models.get(request.model_id);
       if (!model) {
         throw new Error(`Model not found: ${request.model_id}`);
-      }
+
 
       // Simulate ML inference (in production, this would call actual ML models)
       const predictions: ModelPrediction[] = request.input_data.map((sample, index) => {
@@ -1520,7 +1566,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         metadata: {
           inference_time: Date.now(),
           model_name: model.name
-        }
+
       };
 
       // Track inference metrics
@@ -1536,29 +1582,28 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             batch_size: request.batch_size,
             priority: request.priority,
             timestamp: Date.now()
-          }
+
         });
-      }
+
 
       this.emit('inference_completed', { request, response });
       this.activeInferences.delete(request.id);
 
       return response;
-
-    } catch (error) {
+ catch (error) {
       const processingTime = Date.now() - startTime;
       this.emit('inference_failed', { request, error, processing_time_ms: processingTime });
       this.activeInferences.delete(request.id);
       throw error;
-    }
-  }
+
+
 
   private simulateModelInference(model: MLModel, inputData: Record<string, unknown>): {
     value: unknown;
     confidence: number;
     probabilities?: Record<string, number>;
     anomaly_score?: number;
-  } {
+ {
     // Simulate inference based on model type
     switch (model.type) {
       case MLModelType.BINARY_CLASSIFICATION:
@@ -1570,7 +1615,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
           probabilities: {
             '0': binaryPrediction === 0 ? binaryConfidence : 1 - binaryConfidence,
             '1': binaryPrediction === 1 ? binaryConfidence : 1 - binaryConfidence
-          }
+
         };
 
       case MLModelType.MULTI_CLASS_CLASSIFICATION:
@@ -1582,9 +1627,9 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         classes.forEach((cls, idx) => {
           if (idx === classIndex) {
             probabilities[cls] = multiConfidence;
-          } else {
+ else {
             probabilities[cls] = (1 - multiConfidence) / (classes.length - 1);
-          }
+
         });
 
         return {
@@ -1614,8 +1659,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
           value: null,
           confidence: 0.0
         };
-    }
-  }
+
+
 
   private startModelTrainingScheduler(): void {
     // Schedule automatic model retraining based on configuration
@@ -1626,13 +1671,13 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     }, trainingInterval);
 
     console.log('Model training scheduler started');
-  }
+
 
   private parseSchedule(schedule: string): number {
     // Parse cron-like schedule string to milliseconds
     // For simplicity, using daily retraining (24 hours)
     return 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-  }
+
 
   private async scheduleModelRetraining(): Promise<void> {
 
@@ -1642,13 +1687,12 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
 
       for (const model of modelsToRetrain) {
         await this.startModelTraining(model.id);
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error('Error in model retraining scheduler:', error);
       this.emit('training_scheduler_error', error);
-    }
-  }
+
+
 
   private shouldRetrainModel(model: MLModel): boolean {
     // Determine if model needs retraining based on various factors
@@ -1660,14 +1704,14 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       (model.performance_metrics.accuracy || 0) < performanceThreshold || // Performance degradation
       model.status === ModelStatus.TRAINED // Newly trained models ready for deployment
     );
-  }
+
 
   async startModelTraining(modelId: string, trainingConfig?: Partial<TrainingConfig>): Promise<string> {
 
     const model = this.models.get(modelId);
     if (!model) {
       throw new Error(`Model not found: ${modelId}`);
-    }
+
 
     const jobId = `training_job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
@@ -1688,7 +1732,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         cross_validation: true,
         cv_folds: this.config.model_management.cross_validation_folds,
         ...trainingConfig
-  }
+
       dataset_info: {
         source: 'security_events_dataset',
         size: 1000000, // 1M samples
@@ -1697,7 +1741,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         classes: model.type === MLModelType.MULTI_CLASS_CLASSIFICATION ? 4 : undefined,
         data_quality_score: 0.95,
         preprocessing_steps: ['normalization', 'feature_selection', 'train_test_split']
-  }
+
       progress: {
         current_epoch: 0,
         total_epochs: 100,
@@ -1707,7 +1751,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         estimated_time_remaining_ms: 0,
         current_metrics: {},
         best_metrics: {}
-  }
+
       logs: [],
       artifacts: []
     };
@@ -1719,7 +1763,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
 
     this.emit('training_job_started', trainingJob);
     return jobId;
-  }
+
 
   private async executeTrainingJob(job: TrainingJob): Promise<void> {
 
@@ -1756,7 +1800,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
 
             if (!job.progress.best_metrics.accuracy || accuracy > job.progress.best_metrics.accuracy) {
               job.progress.best_metrics = { ...job.progress.current_metrics };
-            }
+
 
             this.addTrainingLog(
               job,
@@ -1764,8 +1808,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
               `Epoch ${epoch},
               Batch ${batch}: accuracy=${accuracy.toFixed(4
             )}, loss=${loss.toFixed(4)}`);
-          }
-        }
+
+
 
         // Check for early stopping
         if (job.training_config.early_stopping && epoch > job.training_config.patience) {
@@ -1781,9 +1825,9 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
           if (!isImproving) {
             this.addTrainingLog(job, LogLevel.INFO, `Early stopping at epoch ${epoch} - no improvement`);
             break;
-          }
-        }
-      }
+
+
+
 
       // Training completed successfully
       job.status = TrainingJobStatus.COMPLETED;
@@ -1800,7 +1844,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         };
         model.updated_at = Date.now();
         model.status = ModelStatus.TRAINED;
-      }
+
 
       this.addTrainingLog(job, LogLevel.INFO, `Training completed successfully in ${job.duration_ms}ms`);
       this.emit('training_job_completed', job);
@@ -1817,11 +1861,10 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             final_accuracy: job.progress.best_metrics.accuracy,
             epochs_completed: job.progress.current_epoch,
             timestamp: Date.now()
-          }
-        });
-      }
 
-    } catch (error) {
+        });
+
+ catch (error) {
       job.status = TrainingJobStatus.FAILED;
       job.end_time = Date.now();
       job.duration_ms = job.end_time - job.start_time;
@@ -1829,8 +1872,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
 
       this.addTrainingLog(job, LogLevel.ERROR, `Training failed: ${(error as Error).message}`);
       this.emit('training_job_failed', { job, error });
-    }
-  }
+
+
 
   private addTrainingLog(
     job: TrainingJob,
@@ -1849,7 +1892,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       batch,
       metrics
     });
-  }
+
 
   private monitorModelPerformance(): void {
     // Monitor deployed models for performance degradation
@@ -1868,9 +1911,9 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
           current_accuracy: currentAccuracy,
           threshold_accuracy: thresholdAccuracy
         });
-      }
-    }
-  }
+
+
+
 
   private monitorTrainingJobs(): void {
     // Monitor active training jobs for timeouts or issues
@@ -1890,9 +1933,9 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
 
         this.addTrainingLog(job, LogLevel.ERROR, 'Training job timed out after 24 hours');
         this.emit('training_job_timeout', job);
-      }
-    }
-  }
+
+
+
 
   private monitorFeatureStore(): void {
     // Monitor feature store health and data quality
@@ -1909,8 +1952,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
 
       if (overallQuality > 0.8) {
         healthyFeatures++;
-      }
-    }
+
+
 
     const featureHealthScore = healthyFeatures / totalFeatures;
     if (featureHealthScore < 0.9) {
@@ -1919,8 +1962,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         healthy_features: healthyFeatures,
         health_score: featureHealthScore
       });
-    }
-  }
+
+
 
   private async collectMLMetrics(): Promise<void> {
 
@@ -1934,7 +1977,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         best_performing_models: this.getBestPerformingModels(),
         model_drift_incidents: 0, // Would be calculated from actual drift detection
         model_performance_trends: []
-  }
+
       training_metrics: {
         total_training_jobs: this.trainingJobs.size,
         successful_trainings: Array.from(this.trainingJobs.values()).filter(j => j.status === TrainingJobStatus.COMPLETED).length,
@@ -1947,9 +1990,9 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
           gpu_utilization_percent: 45.2,
           storage_utilization_gb: 156.7,
           network_utilization_mbps: 89.3
-  }
+
         hyperparameter_optimization_jobs: 0
-  }
+
       inference_metrics: {
         total_inference_requests: 0, // Would be tracked from actual requests
         successful_inferences: 0,
@@ -1958,7 +2001,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         inference_throughput_per_second: 1247,
         accuracy_degradation_alerts: 0,
         model_serving_errors: 0
-  }
+
       system_metrics: {
         ml_framework_health: {
           overall_health_score: 0.94,
@@ -1967,47 +2010,47 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             'feature_store': 0.92,
             'training_cluster': 0.91,
             'inference_service': 0.96
-  }
+
           error_rates: {
             'training_failures': 0.02,
             'inference_failures': 0.01,
             'model_loading_failures': 0.005
-  }
+
           response_times: {
             'model_training_start': 2.4,
             'inference_latency': 0.085,
             'model_deployment': 15.6
-  }
+
           resource_usage: {
             cpu_utilization_percent: 68.2,
             memory_utilization_percent: 74.1,
             gpu_utilization_percent: 52.3,
             storage_utilization_gb: 234.5,
             network_utilization_mbps: 123.7
-          }
-  }
+
+
         feature_store_metrics: {
           total_features: this.featureStore.size,
           feature_quality_score: 0.91,
           feature_freshness_score: 0.89,
           feature_usage_statistics: this.getFeatureUsageStatistics(),
           data_drift_incidents: 2
-  }
+
         model_registry_metrics: {
           total_registered_models: this.models.size,
           model_versions: this.models.size * 2.3, // Average versions per model
           active_deployments: Array.from(this.models.values()).filter(m => m.status === ModelStatus.DEPLOYED).length,
           model_downloads: 456,
           registry_storage_usage_gb: 12.7
-  }
+
         monitoring_system_metrics: {
           alerts_generated: 23,
           alerts_resolved: 21,
           monitoring_coverage: 0.95,
           detection_accuracy: 0.88,
           false_positive_rate: 0.12
-        }
-  }
+
+
       business_metrics: {
         threat_detection_improvement: 0.34, // 34% improvement
         false_positive_reduction: 0.28, // 28% reduction
@@ -2016,7 +2059,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         security_posture_score: 0.87,
         cost_savings: 125000, // $125K annually
         roi_percentage: 3.2 // 320% ROI
-      }
+
     };
 
     // Send metrics to Epic 1 Analytics
@@ -2026,10 +2069,10 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         category: 'ml_security',
         metadata: metrics
       });
-    }
+
 
     this.emit('ml_metrics_collected', metrics);
-  }
+
 
   private calculateAverageAccuracy(): number {
     const accuracies = Array.from(this.models.values())
@@ -2038,7 +2081,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     
     if (accuracies.length === 0) return 0;
     return accuracies.reduce((sum, acc) => sum + acc, 0) / accuracies.length;
-  }
+
 
   private getBestPerformingModels(): ModelPerformanceSummary[] {
     return Array.from(this.models.values())
@@ -2054,7 +2097,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         f1_score: model.performance_metrics.f1_score || 0,
         deployment_date: model.created_at
       }));
-  }
+
 
   private calculateAverageTrainingTime(): number {
     const completedJobs = Array.from(this.trainingJobs.values())
@@ -2063,7 +2106,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     if (completedJobs.length === 0) return 0;
     const totalTime = completedJobs.reduce((sum, job) => sum + (job.duration_ms || 0), 0);
     return totalTime / completedJobs.length;
-  }
+
 
   private calculateTrainingSuccessRate(): number {
     const allJobs = Array.from(this.trainingJobs.values());
@@ -2071,7 +2114,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     
     const successfulJobs = allJobs.filter(job => job.status === TrainingJobStatus.COMPLETED).length;
     return successfulJobs / allJobs.length;
-  }
+
 
   private getFeatureUsageStatistics(): FeatureUsageStats[] {
     return Array.from(this.featureStore.values())
@@ -2083,7 +2126,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         quality_score: (feature.data_quality.completeness + feature.data_quality.validity + 
                        feature.data_quality.consistency + feature.data_quality.accuracy) / 4
       }));
-  }
+
 
   // Public API methods
 
@@ -2102,73 +2145,73 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     this.emit('model_created', model);
     
     return modelId;
-  }
+
 
   async updateModel(modelId: string, updates: Partial<MLModel>): Promise<void> {
 
     const model = this.models.get(modelId);
     if (!model) {
       throw new Error(`Model not found: ${modelId}`);
-    }
+
 
     const updatedModel = { ...model, ...updates, updated_at: Date.now() };
     this.models.set(modelId, updatedModel);
     this.emit('model_updated', updatedModel);
-  }
+
 
   async deleteModel(modelId: string): Promise<void> {
 
     const model = this.models.get(modelId);
     if (!model) {
       throw new Error(`Model not found: ${modelId}`);
-    }
+
 
     this.models.delete(modelId);
     this.emit('model_deleted', model);
-  }
+
 
   async deployModel(modelId: string): Promise<void> {
 
     const model = this.models.get(modelId);
     if (!model) {
       throw new Error(`Model not found: ${modelId}`);
-    }
+
 
     if (model.status !== ModelStatus.TRAINED) {
       throw new Error(`Model must be trained before deployment: ${model.status}`);
-    }
+
 
     model.status = ModelStatus.DEPLOYED;
     model.updated_at = Date.now();
 
     this.emit('model_deployed', model);
-  }
+
 
   async getModel(modelId: string): Promise<MLModel> {
 
     const model = this.models.get(modelId);
     if (!model) {
       throw new Error(`Model not found: ${modelId}`);
-    }
+
     return model;
-  }
+
 
   getModels(): MLModel[] {
     return Array.from(this.models.values());
-  }
+
 
   async getTrainingJob(jobId: string): Promise<TrainingJob> {
 
     const job = this.trainingJobs.get(jobId);
     if (!job) {
       throw new Error(`Training job not found: ${jobId}`);
-    }
+
     return job;
-  }
+
 
   getTrainingJobs(): TrainingJob[] {
     return Array.from(this.trainingJobs.values());
-  }
+
 
   async getMLMetrics(): Promise<MLSecurityAnalyticsMetrics> {
 
@@ -2183,7 +2226,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         best_performing_models: this.getBestPerformingModels(),
         model_drift_incidents: 0,
         model_performance_trends: []
-  }
+
       training_metrics: {
         total_training_jobs: this.trainingJobs.size,
         successful_trainings: Array.from(this.trainingJobs.values()).filter(j => j.status === TrainingJobStatus.COMPLETED).length,
@@ -2196,9 +2239,9 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
           gpu_utilization_percent: 45.2,
           storage_utilization_gb: 156.7,
           network_utilization_mbps: 89.3
-  }
+
         hyperparameter_optimization_jobs: 0
-  }
+
       inference_metrics: {
         total_inference_requests: 0,
         successful_inferences: 0,
@@ -2207,7 +2250,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         inference_throughput_per_second: 1247,
         accuracy_degradation_alerts: 0,
         model_serving_errors: 0
-  }
+
       system_metrics: {
         ml_framework_health: {
           overall_health_score: 0.94,
@@ -2216,47 +2259,47 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
             'feature_store': 0.92,
             'training_cluster': 0.91,
             'inference_service': 0.96
-  }
+
           error_rates: {
             'training_failures': 0.02,
             'inference_failures': 0.01,
             'model_loading_failures': 0.005
-  }
+
           response_times: {
             'model_training_start': 2.4,
             'inference_latency': 0.085,
             'model_deployment': 15.6
-  }
+
           resource_usage: {
             cpu_utilization_percent: 68.2,
             memory_utilization_percent: 74.1,
             gpu_utilization_percent: 52.3,
             storage_utilization_gb: 234.5,
             network_utilization_mbps: 123.7
-          }
-  }
+
+
         feature_store_metrics: {
           total_features: this.featureStore.size,
           feature_quality_score: 0.91,
           feature_freshness_score: 0.89,
           feature_usage_statistics: this.getFeatureUsageStatistics(),
           data_drift_incidents: 2
-  }
+
         model_registry_metrics: {
           total_registered_models: this.models.size,
           model_versions: this.models.size * 2.3,
           active_deployments: Array.from(this.models.values()).filter(m => m.status === ModelStatus.DEPLOYED).length,
           model_downloads: 456,
           registry_storage_usage_gb: 12.7
-  }
+
         monitoring_system_metrics: {
           alerts_generated: 23,
           alerts_resolved: 21,
           monitoring_coverage: 0.95,
           detection_accuracy: 0.88,
           false_positive_rate: 0.12
-        }
-  }
+
+
       business_metrics: {
         threat_detection_improvement: 0.34,
         false_positive_reduction: 0.28,
@@ -2265,11 +2308,11 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         security_posture_score: 0.87,
         cost_savings: 125000,
         roi_percentage: 3.2
-      }
+
     };
 
     return metrics;
-  }
+
 
   private async performHealthCheck(): Promise<{ overall_health: string; details: Record<string, unknown> }> {
     const health = {
@@ -2288,11 +2331,11 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       overall_health: overallHealth,
       details: health
     };
-  }
+
 
   async getHealthStatus(): Promise<Record<string, unknown>> {
     return await this.performHealthCheck();
-  }
+
 
   private async collectDiagnostics(): Promise<Record<string, unknown>> {
     return {
@@ -2302,60 +2345,60 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         models_by_status: this.getModelStatusDistribution(),
         models_by_type: this.getModelTypeDistribution(),
         models_by_algorithm: this.getModelAlgorithmDistribution()
-  }
+
       training_statistics: {
         total_training_jobs: this.trainingJobs.size,
         jobs_by_status: this.getTrainingJobStatusDistribution(),
         average_training_time: this.calculateAverageTrainingTime()
-  }
+
       feature_store_statistics: {
         total_features: this.featureStore.size,
         features_by_type: this.getFeatureTypeDistribution(),
         average_feature_quality: this.calculateAverageFeatureQuality()
-  }
+
       performance_metrics: await this.getMLMetrics(),
       health_status: await this.performHealthCheck(};
-  }
+
 
   private getModelStatusDistribution(): Record<string, number> {
     const distribution: Record<string, number> = {};
     for (const model of this.models.values()) {
       distribution[model.status] = (distribution[model.status] || 0) + 1;
-    }
+
     return distribution;
-  }
+
 
   private getModelTypeDistribution(): Record<string, number> {
     const distribution: Record<string, number> = {};
     for (const model of this.models.values()) {
       distribution[model.type] = (distribution[model.type] || 0) + 1;
-    }
+
     return distribution;
-  }
+
 
   private getModelAlgorithmDistribution(): Record<string, number> {
     const distribution: Record<string, number> = {};
     for (const model of this.models.values()) {
       distribution[model.algorithm] = (distribution[model.algorithm] || 0) + 1;
-    }
+
     return distribution;
-  }
+
 
   private getTrainingJobStatusDistribution(): Record<string, number> {
     const distribution: Record<string, number> = {};
     for (const job of this.trainingJobs.values()) {
       distribution[job.status] = (distribution[job.status] || 0) + 1;
-    }
+
     return distribution;
-  }
+
 
   private getFeatureTypeDistribution(): Record<string, number> {
     const distribution: Record<string, number> = {};
     for (const feature of this.featureStore.values()) {
       distribution[feature.type] = (distribution[feature.type] || 0) + 1;
-    }
+
     return distribution;
-  }
+
 
   private calculateAverageFeatureQuality(): number {
     const qualities = Array.from(this.featureStore.values()).map(feature => 
@@ -2365,7 +2408,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     
     if (qualities.length === 0) return 0;
     return qualities.reduce((sum, quality) => sum + quality, 0) / qualities.length;
-  }
+
 
   getStatus(): Record<string, unknown> {
     return {
@@ -2377,7 +2420,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       feature_store_size: this.featureStore.size,
       configuration: this.config
     };
-  }
+
 
   async shutdown(): Promise<void> {
 
@@ -2390,8 +2433,8 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
         job.end_time = Date.now();
         job.duration_ms = job.end_time - job.start_time;
         job.error_message = 'System shutdown';
-      }
-    }
+
+
 
     // Clear data structures
     this.models.clear();
@@ -2405,5 +2448,4 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     this.isInitialized = false;
     this.emit('ml_framework_shutdown');
     console.log('ML Security Analytics Framework shutdown complete');
-  }
-}
+

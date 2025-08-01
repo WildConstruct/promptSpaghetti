@@ -9,8 +9,8 @@ import { healthMonitoringService, HealthStatus } from './HealthMonitoringService
 import { circuitBreakerService } from './CircuitBreakerService';
 // import { retryService } from './RetryService'; // Unused import removed
 
-}
-}
+
+
 export interface SystemMetrics {
   timestamp: number;
   uptime: number;
@@ -21,8 +21,9 @@ export interface SystemMetrics {
     perMinute: number;
     byCategory: Record<ErrorCategory, number>;
     bySeverity: Record<ErrorSeverity, number>;
-}
-}
+
+
+
   };
   requestMetrics: {
     total: number;
@@ -38,16 +39,16 @@ export interface SystemMetrics {
     failures: number;
     requests: number;
     failureRate: number;
-  }>;
+>;
   healthScore: number;
   dependencyHealth: Record<string, {
     status: HealthStatus;
     responseTime: number;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface AlertRule {
   id: string;
   name: string;
@@ -57,12 +58,13 @@ export interface AlertRule {
   enabled: boolean;
   cooldownMs: number; // Minimum time between alerts
   lastTriggered?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Alert {
   id: string;
   ruleId: string;
@@ -73,9 +75,10 @@ export interface Alert {
   metrics: SystemMetrics;
   resolved: boolean;
   resolvedAt?: number;
-}
-}
-}
+
+
+
+
 
 class OperationalMetricsService extends EventEmitter {
   private startTime: number = Date.now();
@@ -98,14 +101,14 @@ class OperationalMetricsService extends EventEmitter {
     super();
     this.setupDefaultAlertRules();
     this.startMetricsCollection();
-  }
+
 
   static getInstance(): OperationalMetricsService {
     if (!OperationalMetricsService.instance) {
       OperationalMetricsService.instance = new OperationalMetricsService();
-    }
+
     return OperationalMetricsService.instance;
-  }
+
 
   private setupDefaultAlertRules(): void {
     // High error rate alert
@@ -160,7 +163,7 @@ class OperationalMetricsService extends EventEmitter {
         return Object.values(metrics.circuitBreakerMetrics).some(
           breaker => breaker.state === 'open'
         );
-  }
+
       severity: 'high',
       description: 'One or more circuit breakers are open',
       enabled: true,
@@ -174,13 +177,13 @@ class OperationalMetricsService extends EventEmitter {
       condition: (metrics) => {
         const usedMemoryMB = metrics.memoryUsage.heapUsed / 1024 / 1024;
         return usedMemoryMB > 512; // 512 MB threshold
-  }
+
       severity: 'medium',
       description: 'Memory usage exceeds 512MB',
       enabled: true,
       cooldownMs: 15 * 60 * 1000 // 15 minutes
     });
-  }
+
 
   public recordError(error: BaseError): void {
     const minute = Math.floor(Date.now() / 60000); // Current minute
@@ -195,9 +198,9 @@ class OperationalMetricsService extends EventEmitter {
       const keyMinute = parseInt(key.split(':')[2]);
       if (keyMinute < cutoff) {
         this.errorCounts.delete(key);
-      }
+
     });
-  }
+
 
   public recordRequest(responseTimeMs: number, successful: boolean): void {
     this.requestTimes.push(responseTimeMs);
@@ -205,23 +208,23 @@ class OperationalMetricsService extends EventEmitter {
 
     if (successful) {
       this.requestCounts.successful++;
-    } else {
+ else {
       this.requestCounts.failed++;
-    }
+
 
     // Keep only last 1000 request times for percentile calculations
     if (this.requestTimes.length > 1000) {
       this.requestTimes.shift();
-    }
+
 
     // Update requests per second calculation
     const now = Date.now();
     if (now - this.requestCounts.lastMinuteTimestamp > 60000) {
       this.requestCounts.lastMinute = 0;
       this.requestCounts.lastMinuteTimestamp = now;
-    }
+
     this.requestCounts.lastMinute++;
-  }
+
 
   private calculatePercentile(values: number[], percentile: number): number {
     if (values.length === 0) return 0;
@@ -229,7 +232,7 @@ class OperationalMetricsService extends EventEmitter {
     const sorted = [...values].sort((a, b) => a - b);
     const index = Math.ceil((percentile / 100) * sorted.length) - 1;
     return sorted[Math.max(0, index)];
-  }
+
 
   private async getCpuUsage(): Promise<number> {
 
@@ -242,7 +245,7 @@ class OperationalMetricsService extends EventEmitter {
     const percentage = (totalUsage / 1000 / 100) * 100; // Convert to percentage
     
     return Math.min(100, Math.max(0, percentage)); // Clamp between 0-100
-  }
+
 
   public async collectMetrics(): Promise<SystemMetrics> {
 
@@ -263,7 +266,7 @@ class OperationalMetricsService extends EventEmitter {
         errorsByCategory[category as ErrorCategory] += count;
         errorsBySeverity[severity as ErrorSeverity] += count;
         totalErrorsThisMinute += count;
-      }
+
     });
 
     // Calculate request metrics
@@ -304,12 +307,12 @@ class OperationalMetricsService extends EventEmitter {
           responseTime: dep.responseTimeMs
         };
       });
-    } catch (error) {
+ catch (error) {
       logger.error(
         'Error collecting health metrics',
         { error: error instanceof Error ? error.message : String(error
         ) });
-    }
+
 
     const metrics: SystemMetrics = {
       timestamp: now,
@@ -321,7 +324,7 @@ class OperationalMetricsService extends EventEmitter {
         perMinute: totalErrorsThisMinute,
         byCategory: errorsByCategory,
         bySeverity: errorsBySeverity
-  }
+
       requestMetrics: {
         total: this.requestCounts.total,
         successful: this.requestCounts.successful,
@@ -330,7 +333,7 @@ class OperationalMetricsService extends EventEmitter {
         p95ResponseTime: Math.round(p95ResponseTime * 100) / 100,
         p99ResponseTime: Math.round(p99ResponseTime * 100) / 100,
         requestsPerSecond: Math.round(requestsPerSecond * 100) / 100
-  }
+
       circuitBreakerMetrics,
       healthScore,
       dependencyHealth
@@ -340,35 +343,35 @@ class OperationalMetricsService extends EventEmitter {
     this.metricsHistory.push(metrics);
     if (this.metricsHistory.length > this.maxHistorySize) {
       this.metricsHistory.shift();
-    }
+
 
     // Check alert rules
     this.checkAlertRules(metrics);
 
     return metrics;
-  }
+
 
   public addAlertRule(rule: AlertRule): void {
     this.alertRules.set(rule.id, rule);
     logger.info(`Added alert rule: ${rule.name}`, { id: rule.id, severity: rule.severity });
-  }
+
 
   public removeAlertRule(ruleId: string): void {
     this.alertRules.delete(ruleId);
     logger.info(`Removed alert rule: ${ruleId}`);
-  }
+
 
   public getAlertRules(): AlertRule[] {
     return Array.from(this.alertRules.values());
-  }
+
 
   public getActiveAlerts(): Alert[] {
     return Array.from(this.activeAlerts.values()).filter(alert => !alert.resolved);
-  }
+
 
   public getAllAlerts(): Alert[] {
     return Array.from(this.activeAlerts.values());
-  }
+
 
   private checkAlertRules(metrics: SystemMetrics): void {
     this.alertRules.forEach((rule) => {
@@ -377,7 +380,7 @@ class OperationalMetricsService extends EventEmitter {
       // Check cooldown
       if (rule.lastTriggered && (Date.now() - rule.lastTriggered) < rule.cooldownMs) {
         return;
-      }
+
 
       try {
         const shouldAlert = rule.condition(metrics);
@@ -407,11 +410,11 @@ class OperationalMetricsService extends EventEmitter {
               errorRate: metrics.errorRate.perMinute,
               healthScore: metrics.healthScore,
               responseTime: metrics.requestMetrics.p95ResponseTime
-            }
+
           });
 
           this.emit('alertTriggered', alert);
-        } else if (!shouldAlert && existingAlert && !existingAlert.resolved) {
+ else if (!shouldAlert && existingAlert && !existingAlert.resolved) {
           // Resolve existing alert
           existingAlert.resolved = true;
           existingAlert.resolvedAt = Date.now();
@@ -422,19 +425,19 @@ class OperationalMetricsService extends EventEmitter {
           });
 
           this.emit('alertResolved', existingAlert);
-        }
-      } catch (error) {
+
+ catch (error) {
         logger.error(`Error checking alert rule '${rule.name}'`, {
           error: error instanceof Error ? error.message : String(error)
         });
-      }
+
     });
-  }
+
 
   public getMetricsHistory(limit?: number): SystemMetrics[] {
     const history = limit ? this.metricsHistory.slice(-limit) : this.metricsHistory;
     return [...history]; // Return copy to prevent modification
-  }
+
 
   public getMetricsSummary(minutes: number = 60): {
     averageHealthScore: number;
@@ -442,7 +445,7 @@ class OperationalMetricsService extends EventEmitter {
     averageResponseTime: number;
     peakMemoryUsage: number;
     alertCount: number;
-  } {
+ {
     const cutoff = Date.now() - (minutes * 60 * 1000);
     const recentMetrics = this.metricsHistory.filter(m => m.timestamp >= cutoff);
 
@@ -454,7 +457,7 @@ class OperationalMetricsService extends EventEmitter {
         peakMemoryUsage: 0,
         alertCount: 0
       };
-    }
+
 
     const averageHealthScore = recentMetrics.reduce((sum, m) => sum + m.healthScore, 0) / recentMetrics.length;
     const totalErrors = recentMetrics.reduce((sum, m) => sum + m.errorRate.perMinute, 0);
@@ -472,23 +475,23 @@ class OperationalMetricsService extends EventEmitter {
       peakMemoryUsage,
       alertCount
     };
-  }
+
 
   private startMetricsCollection(): void {
     // Collect metrics every 30 seconds
     setInterval(async () => {
       try {
         await this.collectMetrics();
-      } catch (error) {
+ catch (error) {
         logger.error('Error collecting operational metrics', {
           error: error instanceof Error ? error.message : String(error)
         });
-      }
+
     }, 30000);
 
     logger.info('Operational metrics collection started');
-  }
-}
+
+
 
 // Export singleton instance
 export const operationalMetricsService = new OperationalMetricsService();

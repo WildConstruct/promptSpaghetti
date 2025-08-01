@@ -56,151 +56,144 @@ const handleLogExecutionStepsChange = useCallback((logExecutionSteps) => {
 [settings, onChange];
 ;
 // Performance setting sections
-const performanceSections = [];
-{
-    id: 'monitoring',
-        title;
-    'Performance Monitoring',
-        icon;
-    FiActivity,
-        settings;
-    [,
-        {
-            key: 'showExecutionTimes',
-            label: 'Show execution times',
-            description: 'Display timing information for graph execution',
-            enabled: settings.showExecutionTimes,
-            handler: handleShowExecutionTimesChange,
-            icon: FiCpu,
-            impact: 'Low performance impact',
-        },
-        {
-            key: 'showMemoryUsage',
-            label: 'Show memory usage',
-            description: 'Monitor memory consumption during execution',
-            enabled: settings.showMemoryUsage,
-            handler: handleShowMemoryUsageChange,
-            icon: FiDatabase,
-            impact: 'Medium performance impact'
-        }];
-}
-{
-    id: 'optimization',
-        title;
-    'Performance Optimization',
-        icon;
-    FiMonitor,
-        settings;
-    [,
-        {
-            key: 'enableCaching',
-            label: 'Enable result caching',
-            description: 'Cache node execution results to improve performance',
-            enabled: settings.enableCaching,
-            handler: handleEnableCachingChange,
-            icon: FiDatabase,
-            impact: 'High performance benefit'
-        }];
-}
-{
-    id: 'debugging',
-        title;
-    'Debug & Logging',
-        icon;
-    FiFileText,
-        settings;
-    [,
-        {
-            key: 'logExecutionSteps',
-            label: 'Log execution steps',
-            description: 'Log detailed execution information to console',
-            enabled: settings.logExecutionSteps,
-            handler: handleLogExecutionStepsChange,
-            icon: FiFileText,
-            impact: 'High performance impact'
-        }],
-    ;
-    ;
-    // Get performance impact color
-    const getImpactColor = (impact) => {
-        if (impact.includes('Low'))
-            return '#10b981';
-        if (impact.includes('Medium'))
-            return '#f59e0b';
-        if (impact.includes('High') && impact.includes('benefit'))
-            return '#3b82f6';
-        if (impact.includes('High') && impact.includes('impact'))
-            return '#ef4444';
-        return uiColors.text.primary;
-    };
-    // Get enabled settings count
-    const enabledCount = Object.values(settings).filter(Boolean).length;
-    const totalCount = Object.keys(settings).length;
-    return;
-    _jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    marginBottom: '16px',
-                }, children: [_jsx(FiMonitor, { size: 18, color: uiColors.accent.primary }), _jsx("h3", { style: {
-                            margin: 0,
-                            fontSize: '16px',
-                            fontWeight: 600,
-                            color: uiColors.text.primary,
-                        }, children: "Performance & Debug Settings" })] }), _jsx("div", { style: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    marginBottom: '20px',
-                    padding: '12px',
-                    backgroundColor: uiColors.ui.hover,
-                    borderRadius: '8px',
-                    border: `1px solid ${uiColors.ui.border}`
-                } }), "}>", _jsxs("div", { style: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    color: uiColors.text.primary,
-                }, children: [_jsx(FiActivity, { size: 16 }), "Performance Profile"] }), _jsxs("div", { style: {
-                    fontSize: '12px',
-                    color: uiColors.text.secondary,
-                    marginLeft: 'auto',
-                }, children: [enabledCount, "/", totalCount, " settings enabled"] }), _jsx("div", { style: ({
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    fontSize: '12px',
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    backgroundColor: enabledCount <= 2,
-                }
-                    ? '#10b981' + '20'
-                    : enabledCount <= 3,
-                        ? '#f59e0b' + '20'
-                        : '#ef4444' + '20',
-                    color) }), ": enabledCount ", _jsx(, {}), "= 2 , ? '#10b981' : enabledCount ", _jsx(, {}), "= 3, ? '#f59e0b' : '#ef4444', }}>", enabledCount <= 2 ? ()
-                <  >
-                _jsx(FiEye, { size: 12 })
-                :
-            , "Optimized"] });
-    enabledCount <= 3 ? ()
-        <  >
-        _jsx(FiActivity, { size: 12 })
-        :
-    ;
-    Balanced;
-     >
-    ;
-    ()
-        <  >
-        _jsx(FiEyeOff, { size: 12 });
-    Debug;
-    Mode;
-     >
-    ;
-}
+const performanceSections = [
+    {
+        id: 'monitoring',
+        title: 'Performance Monitoring',
+        icon: FiActivity,
+        settings: [
+            {
+                key: 'showExecutionTimes',
+                label: 'Show execution times',
+                description: 'Display timing information for graph execution',
+                enabled: settings.showExecutionTimes,
+                handler: handleShowExecutionTimesChange,
+                icon: FiCpu,
+                impact: 'Low performance impact',
+            },
+            {
+                key: 'showMemoryUsage',
+                label: 'Show memory usage',
+                description: 'Monitor memory consumption during execution',
+                enabled: settings.showMemoryUsage,
+                handler: handleShowMemoryUsageChange,
+                icon: FiDatabase,
+                impact: 'Medium performance impact'
+            }
+        ]
+    },
+    {
+        id: 'optimization',
+        title: 'Performance Optimization',
+        icon: FiMonitor,
+        settings: [
+            {
+                key: 'enableCaching',
+                label: 'Enable result caching',
+                description: 'Cache node execution results to improve performance',
+                enabled: settings.enableCaching,
+                handler: handleEnableCachingChange,
+                icon: FiDatabase,
+                impact: 'High performance benefit'
+            }
+        ]
+    },
+    {
+        id: 'debugging',
+        title: 'Debug & Logging',
+        icon: FiFileText,
+        settings: [
+            {
+                key: 'logExecutionSteps',
+                label: 'Log execution steps',
+                description: 'Log detailed execution information to console',
+                enabled: settings.logExecutionSteps,
+                handler: handleLogExecutionStepsChange,
+                icon: FiFileText,
+                impact: 'High performance impact'
+            }
+        ]
+    }
+];
+// Get performance impact color
+const getImpactColor = (impact) => {
+    if (impact.includes('Low'))
+        return '#10b981';
+    if (impact.includes('Medium'))
+        return '#f59e0b';
+    if (impact.includes('High') && impact.includes('benefit'))
+        return '#3b82f6';
+    if (impact.includes('High') && impact.includes('impact'))
+        return '#ef4444';
+    return uiColors.text.primary;
+};
+// Get enabled settings count
+const enabledCount = Object.values(settings).filter(Boolean).length;
+const totalCount = Object.keys(settings).length;
+return;
+_jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '16px',
+            }, children: [_jsx(FiMonitor, { size: 18, color: uiColors.accent.primary }), _jsx("h3", { style: {
+                        margin: 0,
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        color: uiColors.text.primary,
+                    }, children: "Performance & Debug Settings" })] }), _jsx("div", { style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                marginBottom: '20px',
+                padding: '12px',
+                backgroundColor: uiColors.ui.hover,
+                borderRadius: '8px',
+                border: `1px solid ${uiColors.ui.border}`
+            } }), "}>", _jsxs("div", { style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '14px',
+                fontWeight: 500,
+                color: uiColors.text.primary,
+            }, children: [_jsx(FiActivity, { size: 16 }), "Performance Profile"] }), _jsxs("div", { style: {
+                fontSize: '12px',
+                color: uiColors.text.secondary,
+                marginLeft: 'auto',
+            }, children: [enabledCount, "/", totalCount, " settings enabled"] }), _jsx("div", { style: ({
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '12px',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                backgroundColor: enabledCount <= 2,
+            }
+                ? '#10b981' + '20'
+                : enabledCount <= 3,
+                    ? '#f59e0b' + '20'
+                    : '#ef4444' + '20',
+                color) }), ": enabledCount ", _jsx(, {}), "= 2 , ? '#10b981' : enabledCount ", _jsx(, {}), "= 3, ? '#f59e0b' : '#ef4444', }}>", enabledCount <= 2 ? ()
+            <  >
+            _jsx(FiEye, { size: 12 })
+            :
+        , "Optimized"] });
+enabledCount <= 3 ? ()
+    <  >
+    _jsx(FiActivity, { size: 12 })
+    :
+;
+Balanced;
+ >
+;
+()
+    <  >
+    _jsx(FiEyeOff, { size: 12 });
+Debug;
+Mode;
+ >
+;
 div >
 ;
 div >

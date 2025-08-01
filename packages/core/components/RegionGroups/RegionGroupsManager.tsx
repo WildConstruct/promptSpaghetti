@@ -13,42 +13,39 @@ import React, { useCallback, useState } from 'react';
 import { useReactFlow, useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { RegionGroupsLayer } from '../Annotations/RegionGroupsLayer';
-}
-interface RegionGroupsManagerProps {
-  disabled?: boolean;
+
+
+interface RegionGroupsManagerProps { disabled?: boolean;
   readonly?: boolean;
   author?: string;
   selectedGroupId?: string | null;
   onGroupHover?: (groupId: string | null) => void;
   onGroupSelect?: (groupId: string | null) => void;
-  export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({,)
-  disabled = false,
-  readonly = false,
-  author = 'Anonymous',
-  selectedGroupId = null,
-  onGroupHover,
+  export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({);
+  disabled = false;
+  readonly = false;
+  author = 'Anonymous';
+  selectedGroupId = null;
+  onGroupHover }
   onGroupSelect
-}
-}) => {
-  const { 
+
+
+}) => { const { 
     nodes,
-    annotations,
+    annotations }
     setRegionGroups
-  } = useGraphStore();
+ = useGraphStore();
     const viewport = useViewport();
   const [hoveredGroupId, setHoveredGroupId] = useState<string | null>(null);
   // Handle region groups changes from the layer
-  const handleRegionGroupsChange = useCallback((groups: unknown) => {
-    setRegionGroups(groups);
-  }, [setRegionGroups]);
+  const handleRegionGroupsChange = useCallback((groups: unknown) => { setRegionGroups(groups) }, [setRegionGroups]);
   // Handle group hover state
     }, [onGroupHover]);
   // Handle group selection
     }, [onGroupSelect]);
   // Get canvas size and offset from ReactFlow
-  const canvasOffset = {
-  x: viewport.x,
-  y: viewport.y,
+  const canvasOffset = { x: viewport.x
+  y: viewport.y }
 };
   // Don't render if disabled
   if (disabled) {

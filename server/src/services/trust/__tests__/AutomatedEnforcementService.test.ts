@@ -18,7 +18,7 @@ import {
   TransactionTrustScore,
   RiskFactor,
   FraudIndicator
-} from '../../../../packages/core/types/TrustTypes';
+ from '../../../../packages/core/types/TrustTypes';
 
 // Mock dependencies
 jest.mock('../../../database/connection');
@@ -42,17 +42,17 @@ describe('AutomatedEnforcementService', () => {
     mockDatabase = {
       getClient: jest.fn<unknown[], unknown>().mockResolvedValue(mockClient as unknown as unknown as unknown as unknown as unknown),
       query: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     mockTrustScoreService = {
       calculateUserTrustScore: jest.fn<unknown[], unknown>(),
       calculateTemplateTrustScore: jest.fn<unknown[], unknown>(),
       getUserVerificationStatus: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     mockAuditService = {
       logEvent: jest.fn<unknown[], unknown>()
-    } as any;
+ as any;
 
     // Create service instance
     enforcementService = new AutomatedEnforcementService(
@@ -161,7 +161,7 @@ describe('AutomatedEnforcementService', () => {
           impact: 20,
           description: 'Recent security breach',
           mitigation: ['Security review']
-  }
+
         {
           factor: 'suspicious_activity',
           severity: 'high',
@@ -169,7 +169,7 @@ describe('AutomatedEnforcementService', () => {
           impact: 15,
           description: 'Unusual login patterns',
           mitigation: ['Activity monitoring']
-        }
+
       ];
 
       const userTrustScore: UserTrustScore = {
@@ -232,7 +232,7 @@ describe('AutomatedEnforcementService', () => {
       mockTrustScoreService.calculateUserTrustScore.mockResolvedValue({
         ...userTrustScore,
         score: 95 // High trust user
-      } as unknown as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown as unknown);
 
       // Act
       const actions = await enforcementService.enforceUserTrustPolicies(userTrustScore);
@@ -270,7 +270,7 @@ describe('AutomatedEnforcementService', () => {
             recommendedAction: 'Immediate patching required',
             reportedDate: new Date(),
             status: 'active'
-          }
+
         ]
       };
 
@@ -317,7 +317,7 @@ describe('AutomatedEnforcementService', () => {
             recommendedAction: 'Add input validation',
             reportedDate: new Date(),
             status: 'active'
-          }
+
         ]
       };
 
@@ -349,7 +349,7 @@ describe('AutomatedEnforcementService', () => {
           confidence: 80,
           description: 'Transaction initiated through VPN',
           detectedDate: new Date()
-  }
+
         {
           indicator: 'suspicious_velocity',
           type: 'behavioral',
@@ -357,7 +357,7 @@ describe('AutomatedEnforcementService', () => {
           confidence: 95,
           description: 'Unusual transaction velocity',
           detectedDate: new Date()
-        }
+
       ];
 
       const transactionTrustScore: TransactionTrustScore = {
@@ -378,7 +378,7 @@ describe('AutomatedEnforcementService', () => {
           riskFactors: [],
           mitigationStrategies: [],
           recommendedActions: []
-  }
+
         fraudScore: 85, // Above threshold (80)
         fraudIndicators,
         transactionContext: {} as any
@@ -426,7 +426,7 @@ describe('AutomatedEnforcementService', () => {
           riskFactors: [],
           mitigationStrategies: [],
           recommendedActions: []
-  }
+
         fraudScore: 60, // Below fraud threshold but multiple indicators
         fraudIndicators, // 3 indicators (at threshold)
         transactionContext: {} as any
@@ -593,12 +593,12 @@ describe('AutomatedEnforcementService', () => {
         notificationSettings: {
           adminAlerts: false,
           userNotifications: false
-  }
+
         reviewSettings: {
           autoReviewEnabled: false,
           appealProcessEnabled: false,
           adminOverrideRequired: false
-        }
+
       };
 
       const disabledService = new AutomatedEnforcementService(
@@ -662,29 +662,29 @@ describe('AutomatedEnforcementService', () => {
           enabled: true,
           triggers: {
             trustScoreThresholds: { suspend: 25, restrict: 40, flag: 60 }
-  }
+
           actions: {
             autoSuspension: true,
             autoRestriction: true,
             autoFlagging: true,
             requireManualReview: false,
             notifyAdmins: false
-  }
+
           exemptions: {
             highTrustUsers: false,
             verifiedUsers: false,
             whitelistedEntities: ['user-whitelisted'] // This user is exempt
-          }
-        }],
+
+],
         notificationSettings: {
           adminAlerts: false,
           userNotifications: false
-  }
+
         reviewSettings: {
           autoReviewEnabled: false,
           appealProcessEnabled: false,
           adminOverrideRequired: false
-        }
+
       };
 
       const exemptService = new AutomatedEnforcementService(

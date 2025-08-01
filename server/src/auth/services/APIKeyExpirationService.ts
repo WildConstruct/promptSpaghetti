@@ -24,47 +24,50 @@ export enum APIKeyType {
   PRODUCTION = 'production',
   TESTING = 'testing',
   API_ACCESS = 'api_access'
-}
+
 
 export enum ExpirationPolicyEnum {
   FIXED_DURATION = 'fixed_duration',
   USAGE_BASED = 'usage_based', 
   SLIDING_WINDOW = 'sliding_window',
   NEVER = 'never'
-}
+
 
 export enum APIKeyStatus {
   ACTIVE = 'active',
   EXPIRED = 'expired',
   REVOKED = 'revoked',
   PENDING = 'pending'
-}
+
 
 // Keep interface for backward compatibility
-}
-}
+
+
+
 export interface ExpirationPolicy {
   warningDays: number; // Days before expiration to send warning
   gracePerioddDays: number; // Days after expiration before cleanup
   autoCleanup: boolean; // Whether to automatically clean up expired keys
   notifyUsers: boolean; // Whether to notify users of expiring keys
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationPolicy {
   maxAgedays: number; // Maximum age before rotation is recommended
   autoRotate: boolean; // Whether to automatically rotate keys
   rotationWarningDays: number; // Days before recommended rotation
   criticalAgedays: number; // Age at which rotation becomes critical
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExpirationCheck {
   keyId: string;
   userId: string;
@@ -73,12 +76,13 @@ export interface ExpirationCheck {
   daysUntilExpiration?: number;
   daysSinceExpiration?: number;
   recommendedAction: 'none' | 'warn_user' | 'rotate' | 'cleanup';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationCheck {
   keyId: string;
   userId: string;
@@ -87,9 +91,10 @@ export interface RotationCheck {
   status: 'fresh' | 'aging' | 'rotation_recommended' | 'rotation_critical';
   rotationCount: number;
   recommendedAction: 'none' | 'schedule_rotation' | 'force_rotation';
-}
-}
-}
+
+
+
+
 
 export class ApiKeyExpirationService {
   private expirationPolicy: ExpirationPolicy;
@@ -117,7 +122,7 @@ export class ApiKeyExpirationService {
       rotationWarningDays: rotationPolicy.rotationWarningDays || 30,
       criticalAgedays: rotationPolicy.criticalAgedays || 730 // 2 years
     };
-  }
+
 
   /**
    * Start the expiration and rotation monitoring service
@@ -125,32 +130,32 @@ export class ApiKeyExpirationService {
   startMonitoring(intervalHours: number = 24): void {
     if (this.processingInterval) {
       this.stopMonitoring();
-    }
+
 
     const intervalMs = intervalHours * 60 * 60 * 1000;
     this.processingInterval = setInterval(async () => {
       try {
         await this.processExpirationChecks();
         await this.processRotationChecks();
-      } catch (error) {
+ catch (error) {
         console.error('Expiration service monitoring error:', error);
         await this.auditService.logEvent({
           eventType: 'EXPIRATION_SERVICE_ERROR',
           details: {
             error: error instanceof Error ? error.message : 'Unknown error'
-  }
+
           riskLevel: 'MEDIUM',
           compliance: {
             frameworks: ['SOC2'],
             requirements: ['key_management'],
             evidenceLevel: 'STANDARD'
-          }
+
         });
-      }
+
     }, intervalMs);
 
     console.log(`API Key expiration monitoring started (interval: ${intervalHours} hours)`);
-  }
+
 
   /**
    * Stop the monitoring service
@@ -160,8 +165,8 @@ export class ApiKeyExpirationService {
       clearInterval(this.processingInterval);
       this.processingInterval = null;
       console.log('API Key expiration monitoring stopped');
-    }
-  }
+
+
 
   /**
    * Check for expiring and expired API keys
@@ -193,10 +198,10 @@ export class ApiKeyExpirationService {
         if (daysSinceExpiration > this.expirationPolicy.gracePerioddDays) {
           status = 'critical';
           recommendedAction = 'cleanup';
-        } else {
+ else {
           status = 'expired';
           recommendedAction = 'rotate';
-        }
+
         
         checks.push({
           keyId: row.key_id,
@@ -206,7 +211,7 @@ export class ApiKeyExpirationService {
           daysSinceExpiration,
           recommendedAction
         });
-      } else if (daysUntilExpiration <= this.expirationPolicy.warningDays) {
+ else if (daysUntilExpiration <= this.expirationPolicy.warningDays) {
         // Expiring soon
         status = 'warning';
         recommendedAction = 'warn_user';
@@ -219,7 +224,7 @@ export class ApiKeyExpirationService {
           daysUntilExpiration,
           recommendedAction
         });
-      } else {
+ else {
         // Still active
         checks.push({
           keyId: row.key_id,
@@ -229,11 +234,11 @@ export class ApiKeyExpirationService {
           daysUntilExpiration,
           recommendedAction: 'none'
         });
-      }
-    }
+
+
 
     return checks;
-  }
+
 
   /**
    * Check for keys that need rotation based on age
@@ -263,16 +268,16 @@ export class ApiKeyExpirationService {
       if (ageInDays >= this.rotationPolicy.criticalAgedays) {
         status = 'rotation_critical';
         recommendedAction = 'force_rotation';
-      } else if (ageInDays >= this.rotationPolicy.maxAgedays) {
+ else if (ageInDays >= this.rotationPolicy.maxAgedays) {
         status = 'rotation_recommended';
         recommendedAction = 'schedule_rotation';
-      } else if (ageInDays >= (this.rotationPolicy.maxAgedays - this.rotationPolicy.rotationWarningDays)) {
+ else if (ageInDays >= (this.rotationPolicy.maxAgedays - this.rotationPolicy.rotationWarningDays)) {
         status = 'aging';
         recommendedAction = 'none';
-      } else {
+ else {
         status = 'fresh';
         recommendedAction = 'none';
-      }
+
 
       checks.push({
         keyId: row.key_id,
@@ -283,10 +288,10 @@ export class ApiKeyExpirationService {
         rotationCount,
         recommendedAction
       });
-    }
+
 
     return checks;
-  }
+
 
   /**
    * Process expiration checks and take appropriate actions
@@ -302,14 +307,14 @@ export class ApiKeyExpirationService {
         if (this.expirationPolicy.autoCleanup) {
           await this.cleanupExpiredKey(check);
           processedCount++;
-        }
+
         break;
           
       case 'warn_user':
         if (this.expirationPolicy.notifyUsers) {
           await this.notifyUserOfExpiration(check);
           processedCount++;
-        }
+
         break;
           
       case 'rotate':
@@ -317,8 +322,8 @@ export class ApiKeyExpirationService {
         await this.markAsExpired(check);
         processedCount++;
         break;
-      }
-    }
+
+
 
     await this.auditService.logEvent({
       eventType: 'EXPIRATION_CHECK_COMPLETED',
@@ -330,16 +335,16 @@ export class ApiKeyExpirationService {
           warning: checks.filter(c => c.status === 'warning').length,
           expired: checks.filter(c => c.status === 'expired').length,
           critical: checks.filter(c => c.status === 'critical').length
-        }
-  }
+
+
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['key_management'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
-  }
+
 
   /**
    * Process rotation checks and take appropriate actions
@@ -353,11 +358,11 @@ export class ApiKeyExpirationService {
       if (check.recommendedAction === 'force_rotation' && this.rotationPolicy.autoRotate) {
         await this.notifyForceRotation(check);
         processedCount++;
-      } else if (check.recommendedAction === 'schedule_rotation') {
+ else if (check.recommendedAction === 'schedule_rotation') {
         await this.notifyScheduleRotation(check);
         processedCount++;
-      }
-    }
+
+
 
     await this.auditService.logEvent({
       eventType: 'ROTATION_CHECK_COMPLETED',
@@ -369,16 +374,16 @@ export class ApiKeyExpirationService {
           aging: checks.filter(c => c.status === 'aging').length,
           rotationRecommended: checks.filter(c => c.status === 'rotation_recommended').length,
           rotationCritical: checks.filter(c => c.status === 'rotation_critical').length
-        }
-  }
+
+
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['key_management'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
-  }
+
 
   /**
    * Clean up expired API key
@@ -401,15 +406,15 @@ export class ApiKeyExpirationService {
         name: check.name,
         daysSinceExpiration: check.daysSinceExpiration,
         reason: 'Automatic cleanup after grace period'
-  }
+
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['key_management'],
         evidenceLevel: 'ENHANCED'
-      }
+
     });
-  }
+
 
   /**
    * Mark key as expired
@@ -431,15 +436,15 @@ export class ApiKeyExpirationService {
         keyId: check.keyId,
         name: check.name,
         daysSinceExpiration: check.daysSinceExpiration
-  }
+
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['key_management'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
-  }
+
 
   /**
    * Notify user of expiring key
@@ -455,15 +460,15 @@ export class ApiKeyExpirationService {
         name: check.name,
         daysUntilExpiration: check.daysUntilExpiration,
         notificationType: 'expiration_warning'
-  }
+
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['key_management'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
-  }
+
 
   /**
    * Notify user of force rotation requirement
@@ -479,15 +484,15 @@ export class ApiKeyExpirationService {
         ageInDays: check.ageInDays,
         rotationCount: check.rotationCount,
         notificationType: 'force_rotation'
-  }
+
       riskLevel: 'HIGH',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['key_management'],
         evidenceLevel: 'ENHANCED'
-      }
+
     });
-  }
+
 
   /**
    * Notify user of recommended rotation
@@ -503,15 +508,15 @@ export class ApiKeyExpirationService {
         ageInDays: check.ageInDays,
         rotationCount: check.rotationCount,
         notificationType: 'schedule_rotation'
-  }
+
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
         requirements: ['key_management'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
-  }
+
 
   /**
    * Get expiration and rotation summary
@@ -533,7 +538,7 @@ export class ApiKeyExpirationService {
       expiration: ExpirationPolicy;
       rotation: RotationPolicy;
     };
-  }> {
+> {
 
     const [expirationChecks, rotationChecks] = await Promise.all([
       this.checkExpirations(),
@@ -546,38 +551,37 @@ export class ApiKeyExpirationService {
         warning: expirationChecks.filter(c => c.status === 'warning').length,
         expired: expirationChecks.filter(c => c.status === 'expired').length,
         critical: expirationChecks.filter(c => c.status === 'critical').length
-  }
+
       rotations: {
         fresh: rotationChecks.filter(c => c.status === 'fresh').length,
         aging: rotationChecks.filter(c => c.status === 'aging').length,
         recommended: rotationChecks.filter(c => c.status === 'rotation_recommended').length,
         critical: rotationChecks.filter(c => c.status === 'rotation_critical').length
-  }
+
       policies: {
         expiration: this.expirationPolicy,
         rotation: this.rotationPolicy
-      }
+
     };
-  }
+
 
   /**
    * Update expiration policy
    */
   updateExpirationPolicy(policy: Partial<ExpirationPolicy>): void {
     this.expirationPolicy = { ...this.expirationPolicy, ...policy };
-  }
+
 
   /**
    * Update rotation policy
    */
   updateRotationPolicy(policy: Partial<RotationPolicy>): void {
     this.rotationPolicy = { ...this.rotationPolicy, ...policy };
-  }
+
 
   /**
    * Cleanup service resources
    */
   destroy(): void {
     this.stopMonitoring();
-  }
-}
+

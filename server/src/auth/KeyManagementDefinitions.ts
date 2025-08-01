@@ -37,7 +37,7 @@ export enum KeyType {
   BACKUP_KEY = 'backup_key',
   RECOVERY_KEY = 'recovery_key',
   AUDIT_KEY = 'audit_key'
-}
+
 
 export enum KeyStatus {
   PENDING = 'pending',        // Key created but not yet active
@@ -49,7 +49,7 @@ export enum KeyStatus {
   COMPROMISED = 'compromised',// Key suspected of being compromised
   ARCHIVED = 'archived',      // Key archived for compliance
   DESTROYED = 'destroyed'     // Key permanently destroyed
-}
+
 
 export enum KeyAlgorithm {
   // Symmetric Algorithms
@@ -79,7 +79,7 @@ export enum KeyAlgorithm {
   PBKDF2_SHA256 = 'pbkdf2-sha256',
   SCRYPT = 'scrypt',
   ARGON2ID = 'argon2id'
-}
+
 
 export enum KeySecurityLevel {
   LOW = 'low',              // Basic protection
@@ -87,7 +87,7 @@ export enum KeySecurityLevel {
   HIGH = 'high',           // Enhanced security
   CRITICAL = 'critical',   // Maximum security
   ULTRA = 'ultra'         // Ultra-high security with HSM
-}
+
 
 export enum KeyStorageTier {
   MEMORY = 'memory',       // In-memory cache (fastest)
@@ -96,14 +96,14 @@ export enum KeyStorageTier {
   HSM = 'hsm',            // Hardware Security Module
   CLOUD = 'cloud',        // Cloud key management service
   HYBRID = 'hybrid'       // Multi-tier storage
-}
+
 
 // =============================================================================
 // Key Management Interfaces
 // =============================================================================
 
-}
-}
+
+
 export interface KeyDefinition {
   // Identity
   keyId: string;
@@ -148,12 +148,13 @@ export interface KeyDefinition {
   publicKey?: Buffer;        // Public key for asymmetric keys
   parentKeyId?: string;      // For derived keys
   derivationParams?: KeyDerivationParams;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyPermission {
   permissionId: string;
   permissionType: ApiPermissionType;
@@ -164,23 +165,25 @@ export interface KeyPermission {
   grantedAt: Date;
   grantedBy: string;
   expiresAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PermissionCondition {
   field: string;
   operator: 'eq' | 'ne' | 'in' | 'nin' | 'gt' | 'gte' | 'lt' | 'lte' | 'regex' | 'exists';
   value: unknown;
   logicalOperator?: 'AND' | 'OR';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyDerivationParams {
   algorithm: KeyAlgorithm;
   salt: Buffer;
@@ -189,16 +192,17 @@ export interface KeyDerivationParams {
   parallelism?: number;
   keyLength: number;
   additionalData?: Buffer;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Key Management Operations
 // =============================================================================
 
-}
-}
+
+
 export interface KeyGenerationRequest {
   keyName: string;
   keyType: KeyType;
@@ -215,12 +219,13 @@ export interface KeyGenerationRequest {
   complianceLabels?: string[];
   parentKeyId?: string;
   derivationParams?: Partial<KeyDerivationParams>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyPermissionRequest {
   permissionType: ApiPermissionType;
   action: ApiPermissionAction;
@@ -228,12 +233,13 @@ export interface KeyPermissionRequest {
   resourcePattern: string;
   conditions?: PermissionCondition[];
   expiresAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyRotationRequest {
   keyId: string;
   reason: string;
@@ -241,24 +247,26 @@ export interface KeyRotationRequest {
   forceRotation?: boolean;
   notifyUsers?: boolean;
   inheritPermissions?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyRevocationRequest {
   keyId: string;
   reason: string;
   revokedBy: string;
   effectiveAt?: Date;
   notifyUsers?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyOperationContext {
   operationId: string;
   userId: string;
@@ -270,12 +278,13 @@ export interface KeyOperationContext {
   requestedResource?: string;
   securityContext?: SecurityContext;
   auditMetadata?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityContext {
   authenticationLevel: 'basic' | 'mfa' | 'strong' | 'certificate';
   authorizationLevel: 'user' | 'admin' | 'system';
@@ -283,24 +292,26 @@ export interface SecurityContext {
   trustLevel: 'untrusted' | 'low' | 'medium' | 'high';
   deviceInfo?: DeviceInfo;
   locationInfo?: LocationInfo;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeviceInfo {
   deviceId?: string;
   deviceType: 'desktop' | 'mobile' | 'tablet' | 'server' | 'iot';
   isManaged: boolean;
   isTrusted: boolean;
   lastSeen?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LocationInfo {
   country?: string;
   region?: string;
@@ -308,16 +319,17 @@ export interface LocationInfo {
   ipAddress: string;
   isTrustedLocation: boolean;
   vpnDetected?: boolean;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Key Management Policies
 // =============================================================================
 
-}
-}
+
+
 export interface KeyManagementPolicy {
   policyId: string;
   policyName: string;
@@ -345,12 +357,13 @@ export interface KeyManagementPolicy {
   updatedAt: Date;
   version: number;
   isActive: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyGenerationRules {
   minimumKeySize: number;
   allowedAlgorithms: KeyAlgorithm[];
@@ -361,12 +374,13 @@ export interface KeyGenerationRules {
   approvalRoles: string[];
   mandatoryTags: string[];
   forbiddenPurposes?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyRotationRules {
   mandatoryRotationDays: number;
   warningDays: number;
@@ -375,12 +389,13 @@ export interface KeyRotationRules {
   requireApprovalForManual: boolean;
   maxUsageBeforeRotation?: number;
   rotationOnCompromise: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyAccessRules {
   requireMFA: boolean;
   allowedRoles: string[];
@@ -390,34 +405,37 @@ export interface KeyAccessRules {
   concurrentAccessLimit?: number;
   sessionTimeout: number;
   auditAllAccess: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeRestriction {
   allowedHours: number[];      // 0-23
   allowedDays: number[];       // 0-6 (Sunday-Saturday)
   timezone: string;
   exceptions?: TimeException[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeException {
   startTime: Date;
   endTime: Date;
   reason: string;
   approvedBy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LocationRestriction {
   allowedCountries?: string[];
   blockedCountries?: string[];
@@ -425,12 +443,13 @@ export interface LocationRestriction {
   blockedNetworks?: string[];
   allowVPN: boolean;
   allowMobileData: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceRequirement {
   framework: string;          // e.g., 'SOC2', 'PCI-DSS', 'FIPS-140-2'
   requirement: string;
@@ -438,20 +457,22 @@ export interface ComplianceRequirement {
   mandatoryFields: string[];
   validationRules: ValidationRule[];
   retentionPeriod: number;    // days
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationRule {
   field: string;
   rule: 'required' | 'min_length' | 'max_length' | 'pattern' | 'enum';
   value?: unknown;
   errorMessage: string;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Key Management Operations and Events  
@@ -485,10 +506,10 @@ export enum KeyOperationType {
   BACKUP = 'backup',
   RESTORE = 'restore',
   AUDIT = 'audit'
-}
 
-}
-}
+
+
+
 export interface KeyEvent {
   eventId: string;
   eventType: KeyOperationType;
@@ -518,12 +539,13 @@ export interface KeyEvent {
   
   // Metadata
   metadata: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceContext {
   frameworks: string[];
   requirements: string[];
@@ -531,16 +553,17 @@ export interface ComplianceContext {
   retentionRequired: boolean;
   retentionPeriod?: number;
   classification?: string;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Key Management Analytics and Monitoring
 // =============================================================================
 
-}
-}
+
+
 export interface KeyMetrics {
   // Key Counts
   totalKeys: number;
@@ -576,18 +599,20 @@ export interface KeyMetrics {
   emergencyRotations: number;
   backupsCreated: number;
   recoveriesPerformed: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KeyAnalytics {
   timeRange: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   
   // Usage Patterns
@@ -611,14 +636,14 @@ export interface KeyAnalytics {
   responseTimePercentiles: Record<string, number>;
   throughputTrends: Array<{ timestamp: Date; value: number }>;
   resourceUtilization: Record<string, number>;
-}
+
 
 // =============================================================================
 // Key Management Configuration
 // =============================================================================
 
-}
-}
+
+
 export interface KeyManagementConfiguration {
   // Service Configuration
   serviceName: string;
@@ -653,12 +678,13 @@ export interface KeyManagementConfiguration {
   // Performance Configuration
   cacheConfiguration: CacheConfiguration;
   concurrencyLimits: ConcurrencyLimits;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StorageConfig {
   provider: string;
   endpoint?: string;
@@ -667,18 +693,19 @@ export interface StorageConfig {
     enabled: boolean;
     algorithm: string;
     keyId?: string;
-}
-}
+
+
+
   };
   backup: {
     enabled: boolean;
     schedule: string;
     retention: number;
   };
-}
 
-}
-}
+
+
+
 export interface MasterKeyConfig {
   algorithm: KeyAlgorithm;
   keySize: number;
@@ -686,35 +713,38 @@ export interface MasterKeyConfig {
   backupEnabled: boolean;
   hsmEnabled: boolean;
   hsmConfig?: HSMConfig;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HSMConfig {
   provider: 'aws-cloudhsm' | 'azure-keyvault' | 'gcp-hsm' | 'pkcs11';
   endpoint: string;
   credentials: Record<string, string>;
   keySlots: number[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EncryptionDefaults {
   symmetricAlgorithm: KeyAlgorithm;
   asymmetricAlgorithm: KeyAlgorithm;
   signingAlgorithm: KeyAlgorithm;
   hashingAlgorithm: string;
   keyDerivationAlgorithm: KeyAlgorithm;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityDefaults {
   minimumKeySize: number;
   defaultSecurityLevel: KeySecurityLevel;
@@ -722,24 +752,26 @@ export interface SecurityDefaults {
   sessionTimeout: number;
   maxFailedAttempts: number;
   accountLockoutDuration: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessControlConfig {
   enabled: boolean;
   defaultDeny: boolean;
   permissionCaching: boolean;
   cacheTTL: number;
   auditAllDecisions: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AuditConfiguration {
   enabled: boolean;
   logAllOperations: boolean;
@@ -747,12 +779,13 @@ export interface AuditConfiguration {
   encryptLogs: boolean;
   signLogs: boolean;
   realTimeAlerting: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertingConfig {
   enabled: boolean;
   alertChannels: string[];
@@ -761,33 +794,36 @@ export interface AlertingConfig {
     responseTime: number;
     failedAuthentications: number;
     anomaliesPerHour: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface CacheConfiguration {
   enabled: boolean;
   provider: 'memory' | 'redis';
   ttl: number;
   maxSize: number;
   compressionEnabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConcurrencyLimits {
   maxConcurrentOperations: number;
   maxConcurrentGenerations: number;
   maxConcurrentRotations: number;
   rateLimits: Record<KeyOperationType, number>;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Export Statement

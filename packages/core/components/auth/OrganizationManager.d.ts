@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-interface Organization {
-    id: string;
+}
+interface Organization { id: string;
     name: string;
     slug: string;
     description?: string;
@@ -13,30 +13,25 @@ interface Organization {
     plan: 'free' | 'pro' | 'enterprise';
     maxUsers: number;
     createdAt: Date;
-    updatedAt: Date;
-
-
+    updatedAt: Date }
 }
-interface OrganizationManagerProps {
-    currentUser?: {
+}
+interface OrganizationManagerProps { currentUser?: {
         id: string;
         name: string;
         email: string;
-        role: string;
-
+        role: string }
 }
     };
     onOrganizationChange?: (org: Organization) => void;
-    onInvitationSent?: (invitation: {)
+    onInvitationSent?: (invitation: { )
         id: string;
         email: string;
-        role: string;
-    }) => void;
-    onMembershipUpdated?: (membership: {)
+        role: string }) => void;
+    onMembershipUpdated?: (membership: { )
         id: string;
         userId: string;
-        role: string;
-    }) => void;
+        role: string }) => void;
 
 export declare const OrganizationManager: React.FC<OrganizationManagerProps>;
 export {};

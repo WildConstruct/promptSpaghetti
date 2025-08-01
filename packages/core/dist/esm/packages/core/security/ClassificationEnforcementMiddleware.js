@@ -18,9 +18,6 @@ const HTTP_METHOD_TO_OPERATION = {
     PATCH: 'update',
     DELETE: 'delete',
 };
-/**
- * Create classification enforcement middleware
- */
 export function createClassificationEnforcementMiddleware(config = {}) {
     const finalConfig = { ...DEFAULT_CONFIG, ...config };
     const enforcer = createClassificationEnforcer(finalConfig.environment);
@@ -88,7 +85,7 @@ export function createAccessControlMiddleware(operation) {
                 purpose: req.headers['x-purpose'] || 'unspecified',
                 environment: process.env.NODE_ENV || 'production',
                 source: req.headers['x-source'] || 'api',
-                requestId: req.headers['x-request-id'] || generateRequestId()
+                requestId: req.headers['x-request-id'] || generateRequestId(),
             });
             // Store decision in request
             if (req.classification) {
@@ -315,99 +312,100 @@ function handleMiddlewareError(error, req, res, config) {
             message: config.detailedErrors ? error.message : 'Internal server error',
         });
     }
-}
-/**
- * Validate classification level
- */
-function isValidClassification(value) {
-    return ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'].includes(value);
-}
-/**
- * Detect classification from data
- */
-async function detectClassificationFromData(data) {
-    if (!data || typeof data !== 'object') {
+    /**
+     * Validate classification level
+     */
+    function isValidClassification(value) {
+        return ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'].includes(value);
+    }
+    /**
+     * Detect classification from data
+     */
+    async function detectClassificationFromData(data) {
+        if (!data || typeof data !== 'object') {
+            return null;
+        }
+        // Check for explicit classification field
+        if (data.classification && isValidClassification(data.classification)) {
+            return data.classification;
+        }
+        // Use DataClassificationHelpers to detect
+        try {
+            const element = {
+                id: 'detect-' + Date.now(),
+                fieldName: 'request-data',
+                value: JSON.stringify(data),
+                dataType: 'object',
+                context: {},
+                source: 'request',
+                timestamp: new Date(),
+            };
+            const enhanced = DataClassificationHelpers.enhanceDataElement(element);
+            if (enhanced.sensitivityLevel) {
+                // Map sensitivity level to classification level
+                const mapping = {
+                    PUBLIC: 'PUBLIC',
+                    INTERNAL: 'INTERNAL',
+                    CONFIDENTIAL: 'CONFIDENTIAL',
+                    RESTRICTED: 'RESTRICTED',
+                };
+                return mapping[enhanced.sensitivityLevel];
+            }
+        }
+        catch (error) {
+            console.error('Error detecting classification:', error);
+        }
         return null;
     }
-    // Check for explicit classification field
-    if (data.classification && isValidClassification(data.classification)) {
-        return data.classification;
+    /**
+     * Generate request ID
+     */
+    function generateRequestId() {
+        return `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     }
-    // Use DataClassificationHelpers to detect
-    try {
-        const element = {
-            id: 'detect-' + Date.now(),
-            fieldName: 'request-data',
-            value: JSON.stringify(data),
-            dataType: 'object',
-            context: {},
-            source: 'request',
-            timestamp: new Date(),
+    /**
+     * Route-specific enforcement configuration
+     */
+    export function enforceClassification(classification, options = {}) {
+        return (req, res, next) => {
+            // Set classification for the route
+            req.classification = { level: classification };
+            // Check allowed operations
+            if (options.allowedOperations) {
+                const operation = HTTP_METHOD_TO_OPERATION[req.method] || 'read';
+                if (!options.allowedOperations.includes(operation)) {
+                    return res.status(405).json({
+                        error: 'Method not allowed for this classification',
+                        classification,
+                        allowedOperations: options.allowedOperations,
+                    });
+                }
+                // Check required controls
+                if (options.requiredControls) {
+                    const currentControls = extractCurrentControls(req, DEFAULT_CONFIG);
+                    const missingControls = options.requiredControls.filter(control => !currentControls.includes(control));
+                    if (missingControls.length > 0) {
+                        return res.status(403).json({
+                            error: 'Missing required security controls',
+                            missingControls,
+                            classification
+                        });
+                    }
+                    // Run custom validation
+                    if (options.customValidation && !options.customValidation(req)) {
+                        return res.status(403).json({
+                            error: 'Custom validation failed',
+                            classification
+                        });
+                    }
+                    next();
+                }
+                ;
+            }
+            /**
+             * Export middleware factories
+             */
+            export { createClassificationEnforcementMiddleware as classificationEnforcement, createAccessControlMiddleware as accessControl, createOperationValidationMiddleware as operationValidation };
         };
-        const enhanced = DataClassificationHelpers.enhanceDataElement(element);
-        if (enhanced.sensitivityLevel) {
-            // Map sensitivity level to classification level
-            const mapping = {
-                PUBLIC: 'PUBLIC',
-                INTERNAL: 'INTERNAL',
-                CONFIDENTIAL: 'CONFIDENTIAL',
-                RESTRICTED: 'RESTRICTED',
-            };
-            return mapping[enhanced.sensitivityLevel];
-        }
     }
-    catch (error) {
-        console.error('Error detecting classification:', error);
-    }
-    return null;
 }
-/**
- * Generate request ID
- */
-function generateRequestId() {
-    return `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-}
-/**
- * Route-specific enforcement configuration
- */
-export function enforceClassification(classification, options = {}) {
-    return (req, res, next) => {
-        // Set classification for the route
-        req.classification = { level: classification };
-        // Check allowed operations
-        if (options.allowedOperations) {
-            const operation = HTTP_METHOD_TO_OPERATION[req.method] || 'read';
-            if (!options.allowedOperations.includes(operation)) {
-                return res.status(405).json({
-                    error: 'Method not allowed for this classification',
-                    classification,
-                    allowedOperations: options.allowedOperations,
-                });
-            }
-        }
-        // Check required controls
-        if (options.requiredControls) {
-            const currentControls = extractCurrentControls(req, DEFAULT_CONFIG);
-            const missingControls = options.requiredControls.filter(control => !currentControls.includes(control));
-            if (missingControls.length > 0) {
-                return res.status(403).json({
-                    error: 'Missing required security controls',
-                    missingControls,
-                    classification
-                });
-            }
-        }
-        // Run custom validation
-        if (options.customValidation && !options.customValidation(req)) {
-            return res.status(403).json({
-                error: 'Custom validation failed',
-                classification
-            });
-        }
-        next();
-    };
-}
-/**
- * Export middleware factories
- */
-export { createClassificationEnforcementMiddleware as classificationEnforcement, createAccessControlMiddleware as accessControl, createOperationValidationMiddleware as operationValidation };

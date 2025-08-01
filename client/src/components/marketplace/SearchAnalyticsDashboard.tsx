@@ -14,17 +14,17 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer
-} from 'recharts';
+ from 'recharts';
 import { API_URL } from '../../config/environment';
 
 // Analytics interface for search data structure - commented out as unused
 // interface SearchAnalytics {
-//   period_start: Date;
-//   period_end: Date;
-//   total_searches: number;
-//   unique_users: number;
+  //   period_start: Date;
+  //   period_end: Date;
+  //   total_searches: number;
+  //   unique_users: number;
 
-}
+
 //   top_queries: Array<{ query: string; count: number; avg_results: number }>;
 //   popular_filters: Array<{ filter: string; value: string; count: number }>;
 //   zero_result_queries: Array<{ query: string; count: number }>;
@@ -35,18 +35,21 @@ import { API_URL } from '../../config/environment';
 //     avg_time_to_action: number;
 //   };
 // }
-}
+
+
 interface SearchInsights {
   trending_topics: string;,
-  emerging_queries: string;
+  emerging_queries: string;,
   declining_queries: string;,
   zero_result_opportunities: string;
-}
+
+},
   popular_categories: Array<{ category: string; searches: number }>;
-}
+
+
 interface PopularTerm {
   query: string;,
-  count: number;
+  count: number;,
   trend: 'up' | 'down' | 'stable';
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
   export const [popularTerms, setPopularTerms] = useState<PopularTerm>([]);
@@ -57,7 +60,8 @@ interface PopularTerm {
   const [dateRange, setDateRange] = useState({)
   start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   end: new Date().toISOString().split('T')[0],
-}
+
+
 });
   const getAuthHeaders = () => {
     const token = localStorage.getItem('auth_token');
@@ -82,7 +86,7 @@ interface PopularTerm {
         fetch(`${API_URL}/api/marketplace/analytics/search/insights`, {)}
   },
   headers: getAuthHeaders();
-  }
+
       ]);
       if (!analyticsRes.ok || !popularTermsRes.ok || !insightsRes.ok) {
         throw new Error('Failed to fetch analytics data');
@@ -94,9 +98,9 @@ interface PopularTerm {
       setAnalytics(analyticsData);
       setPopularTerms(popularTermsData.popular_terms || []);
       setInsights(insightsData);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to fetch analytics');
-} finally {
+ finally {
       setLoading(false);
   }, [timeframe, dateRange]);
   useEffect(() => {
@@ -388,8 +392,8 @@ interface PopularTerm {
         .popular-term {
           display: flex;
           align-items: center;,
-  gap: 10px;
-          padding: 8px 0;
+  gap: 10px;,
+  padding: 8px 0;
           border-bottom: 1px solid #f3f4f6;
         .popular-term:last-child {
           border-bottom: none;
@@ -434,25 +438,25 @@ interface PopularTerm {
           text-align: center;
         .spinner {
           width: 40px;,
-  height: 40px;
-          border: 4px solid #f3f4f6;
+  height: 40px;,
+  border: 4px solid #f3f4f6;
           border-top: 4px solid #3b82f6;
           border-radius: 50%;,
-  animation: spin 1s linear infinite;
-          margin: 0 auto 20px;
+  animation: spin 1s linear infinite;,
+  margin: 0 auto 20px;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         .error-message {
           text-align: center;,
-  padding: 40px;
-          background: white;
+  padding: 40px;,
+  background: white;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         .retry-button {
           background: #3b82f6;,
-  color: white;
-          border: none;,
+  color: white;,
+  border: none;,
   padding: 10px 20px;
           border-radius: 6px;,
   cursor: pointer;

@@ -4,8 +4,8 @@
  */
 
 }
-export interface NodeExecutionStep {
-    nodeId: string;
+}
+export interface NodeExecutionStep { nodeId: string;
     nodeType: string;
     stepIndex: number;
     timestamp: number;
@@ -13,27 +13,24 @@ export interface NodeExecutionStep {
     inputs: ExecutionInput[];
     output: unknown;
     randomChoice?: RandomChoiceInfo;
-    error?: string;
-
+    error?: string }
 }
-export interface ExecutionInput {
-    sourceNodeId?: string;
+}
+export interface ExecutionInput { sourceNodeId?: string;
     value: unknown;
-    inputIndex: number;
-
+    inputIndex: number }
 }
-export interface RandomChoiceInfo {
-    choiceType: 'weighted' | 'uniform' | 'conditional' | 'sequential' | 'markov';
+}
+export interface RandomChoiceInfo { choiceType: 'weighted' | 'uniform' | 'conditional' | 'sequential' | 'markov';
     availableOptions: string[];
     selectedOption: string;
     selectionReason: string;
     probability?: number;
     weight?: number;
-    conditionMet?: boolean;
-
+    conditionMet?: boolean }
 }
-export interface ExecutionPath {
-    id: string;
+}
+export interface ExecutionPath { id: string;
     seed: number;
     startTime: number;
     endTime: number;
@@ -42,29 +39,26 @@ export interface ExecutionPath {
     finalOutput: string;
     nodeExecutionOrder: string[];
     randomizationPoints: RandomChoiceInfo[];
-    error?: string;
-
+    error?: string }
 }
-export interface PathVisualizationData {
-    executionPath: ExecutionPath;
+}
+export interface PathVisualizationData { executionPath: ExecutionPath;
     pathColor: string;
     highlightedNodes: string[];
     executionFlow: ExecutionFlowEdge[];
     variance: number;
-    creativityScore: number;
-
+    creativityScore: number }
 }
-export interface ExecutionFlowEdge {
-    from: string;
+}
+export interface ExecutionFlowEdge { from: string;
     to: string;
     stepIndex: number;
     dataFlow: unknown;
     executionTimeMs: number;
-    isRandomChoice: boolean;
-
+    isRandomChoice: boolean }
 }
-export interface PreviewResultWithPath {
-    seed: number;
+}
+export interface PreviewResultWithPath { seed: number;
     output: string;
     error?: string;
     usedNodeIds?: string[];
@@ -76,42 +70,40 @@ export interface PreviewResultWithPath {
         nodeExecutionOrder: string[];
         randomChoices: RandomChoiceInfo[];
         performanceBreakdown: Record<string, number>;
-        memoryUsage?: number;
+        memoryUsage?: number }
 }
     };
 
 }
-export interface MultiSeedPreviewResult {
-    results: PreviewResultWithPath[];
+}
+export interface MultiSeedPreviewResult { results: PreviewResultWithPath[];
     aggregateStats: {
         totalTime: number;
         averageTime: number;
         variance: number;
         uniquePaths: number;
         commonNodes: string[];
-        divergencePoints: string[];
+        divergencePoints: string[] }
 }
     };
     pathComparison: PathComparisonData;
 
 }
-export interface PathComparisonData {
-    sharedSteps: NodeExecutionStep[];
+}
+export interface PathComparisonData { sharedSteps: NodeExecutionStep[];
     divergentPaths: {
         resultId: string;
         divergencePoint: string;
-        uniqueSteps: NodeExecutionStep[];
+        uniqueSteps: NodeExecutionStep[] }
 }
     }[];
-    varianceAnalysis: {
-        highVarianceNodes: string[];
+    varianceAnalysis: { highVarianceNodes: string[];
         consistentNodes: string[];
-        randomizationImpact: number;
-    };
+        randomizationImpact: number };
 
 }
-export interface ExecutionTracker {
-    startTracking(seed: number): string;
+}
+export interface ExecutionTracker { startTracking(seed: number): string;
     recordNodeExecution(executionId: string, step: NodeExecutionStep): void;
     recordRandomChoice(executionId: string, choice: RandomChoiceInfo): void;
     finishTracking(executionId: string, output: string): ExecutionPath;
@@ -119,16 +111,15 @@ export interface ExecutionTracker {
     clearTracker(executionId: string): void;
 
 export declare const EXECUTION_PATH_COLORS: readonly ["#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6", "#F97316", "#06B6D4", "#84CC16", "#EC4899", "#6B7280"];
-export type ExecutionPathColor = typeof EXECUTION_PATH_COLORS[number];
-
+export type ExecutionPathColor = typeof EXECUTION_PATH_COLORS[number] }
 }
-export interface NodeHighlightStyle {
-    color: ExecutionPathColor;
+}
+export interface NodeHighlightStyle { color: ExecutionPathColor;
     opacity: number;
     strokeWidth: number;
     animation?: 'pulse' | 'glow' | 'none';
-    order: number;
-
+    order: number }
+}
 }
 export interface ExecutionVisualizationConfig {
     showExecutionOrder: boolean;
@@ -141,4 +132,5 @@ export interface ExecutionVisualizationConfig {
 
 export declare const defaultVisualizationConfig: ExecutionPathVisualizationConfig;
 //# sourceMappingURL=ExecutionPath.d.ts.map
+}
 }

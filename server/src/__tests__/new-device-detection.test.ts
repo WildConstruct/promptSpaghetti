@@ -26,12 +26,12 @@ describe('NewDeviceDetectionService', () => {
       city: 'San Francisco',
       latitude: 37.7749,
       longitude: -122.4194
-  }
+
     metadata: {
       loginTime: new Date(),
       sessionId: 'session-123',
       authMethod: 'password'
-    }
+
   };
 
   beforeEach(() => {
@@ -64,7 +64,7 @@ describe('NewDeviceDetectionService', () => {
       assessVerificationRequirement: jest.fn<unknown[], unknown>().mockResolvedValue({
         required: false,
         level: 'none'
-      } as unknown as unknown)
+ as unknown as unknown)
     };
 
     // Mock email service
@@ -80,13 +80,13 @@ describe('NewDeviceDetectionService', () => {
         considerLocationChange: true,
         considerUserAgentChange: true,
         maxSimilarDevices: 5
-  }
+
       riskAssessment: {
         newDeviceBaseRisk: 50,
         trustedUserDiscount: 20,
         suspiciousPatternMultiplier: 1.5,
         recentBreachMultiplier: 2.0
-  }
+
       verification: {
         lowRiskMethods: ['email_code'],
         mediumRiskMethods: ['email_code', 'sms_code'],
@@ -95,26 +95,26 @@ describe('NewDeviceDetectionService', () => {
         gracePeriodHours: 24,
         maxAttempts: 3,
         lockoutDurationMinutes: 30
-  }
+
       notifications: {
         notifyOnNewDevice: true,
         notifyOnSimilarDevice: false,
         notifyOnHighRisk: true,
         includeDeviceDetails: true,
         includeLocationDetails: true
-  }
+
       autoApproval: {
         enabled: true,
         requireLowRisk: true,
         requireTrustedNetwork: false,
         requireBusinessHours: true,
         maxAutoApprovalsPerDay: 5
-  }
+
       cache: {
         detectionResultTtl: 3600,
         deviceListTtl: 1800,
         riskAssessmentTtl: 900
-      }
+
     };
 
     detectionService = new NewDeviceDetectionService(
@@ -138,7 +138,7 @@ describe('NewDeviceDetectionService', () => {
       mockDb.query.mockImplementation((query) => {
         if (query.includes('device_user_associations')) {
           return Promise.resolve({ rows: [] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -165,15 +165,15 @@ describe('NewDeviceDetectionService', () => {
               is_primary: true,
               last_accessed: new Date(),
               verification_status: 'verified'
-            }]
+]
           });
-        }
+
         if (query.includes('COUNT')) {
           return Promise.resolve({ rows: [{ device_count: '1' }] });
-        }
+
         if (query.includes('EXTRACT(HOUR')) {
           return Promise.resolve({ rows: [{ hour: new Date().getHours(), count: '10' }] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -193,20 +193,20 @@ describe('NewDeviceDetectionService', () => {
           trust_score: 70,
           last_seen: new Date(),
           is_trusted: true
-  }
+
         {
           id: 'device-2',
           fingerprint: 'similar-fingerprint-2',
           trust_score: 60,
           last_seen: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
           is_trusted: false
-        }
+
       ];
 
       mockDb.query.mockImplementation((query) => {
         if (query.includes('device_user_associations')) {
           return Promise.resolve({ rows: similarDevices });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -253,17 +253,17 @@ describe('NewDeviceDetectionService', () => {
               components: {
                 userAgent: testContext.userAgent,
                 location: { country: 'Canada', city: 'Toronto' } // Different location
-  }
+
               is_trusted: true,
               last_accessed: new Date()
-            }]
+]
           });
-        }
+
         if (query.includes('security_events')) {
           return Promise.resolve({
             rows: [{ event_type: 'suspicious_login', severity: 'medium' }]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -279,7 +279,7 @@ describe('NewDeviceDetectionService', () => {
       mockDb.query.mockImplementation((query) => {
         if (query.includes('device_user_associations')) {
           return Promise.resolve({ rows: [] }); // No devices
-        }
+
         if (query.includes('users u')) {
           return Promise.resolve({
             rows: [{
@@ -287,9 +287,9 @@ describe('NewDeviceDetectionService', () => {
               avg_trust_score: null,
               account_age: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days old
               high_severity_events: '0'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -306,9 +306,9 @@ describe('NewDeviceDetectionService', () => {
               fingerprint: 'existing-device',
               trust_score: 85,
               is_trusted: true
-            }]
+]
           });
-        }
+
         if (query.includes('users u')) {
           return Promise.resolve({
             rows: [{
@@ -316,9 +316,9 @@ describe('NewDeviceDetectionService', () => {
               avg_trust_score: '80',
               account_age: new Date(Date.now() - 400 * 24 * 60 * 60 * 1000), // Over 1 year
               high_severity_events: '0'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -333,13 +333,13 @@ describe('NewDeviceDetectionService', () => {
       mockDb.query.mockImplementation((query) => {
         if (query.includes('device_user_associations')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('COUNT(DISTINCT device_fingerprint)')) {
           return Promise.resolve({ rows: [{ device_count: '5' }] }); // Many devices in 1 hour
-        }
+
         if (query.includes('EXTRACT(HOUR')) {
           return Promise.resolve({ rows: [] }); // No common access hours
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -353,10 +353,10 @@ describe('NewDeviceDetectionService', () => {
       mockDb.query.mockImplementation((query) => {
         if (query.includes('device_user_associations')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('security_events') && query.includes('breach_count')) {
           return Promise.resolve({ rows: [{ breach_count: '2' }] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -369,7 +369,7 @@ describe('NewDeviceDetectionService', () => {
       mockDb.query.mockImplementation((query) => {
         if (query.includes('device_user_associations')) {
           return Promise.resolve({ rows: [] });
-        }
+
         if (query.includes('user_location_history')) {
           return Promise.resolve({
             rows: [
@@ -378,7 +378,7 @@ describe('NewDeviceDetectionService', () => {
               // United States not in history
             ]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -397,7 +397,7 @@ describe('NewDeviceDetectionService', () => {
       for (const level of riskLevels) {
         const methods = (detectionService as any).getVerificationMethods(level);
         expect(methods).toEqual((testPolicy.verification as any)[`${level}RiskMethods`]);
-      }
+
     });
 
     it('should not require verification for auto-approved devices', async () => {
@@ -408,9 +408,9 @@ describe('NewDeviceDetectionService', () => {
               fingerprint: 'similar-device',
               trust_score: 75,
               is_trusted: true
-            }]
+]
           });
-        }
+
         if (query.includes('users u')) {
           return Promise.resolve({
             rows: [{
@@ -418,9 +418,9 @@ describe('NewDeviceDetectionService', () => {
               avg_trust_score: '75',
               account_age: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000),
               high_severity_events: '0'
-            }]
+]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -432,7 +432,7 @@ describe('NewDeviceDetectionService', () => {
         metadata: {
           ...testContext.metadata,
           loginTime: new Date('2024-01-15T10:00:00') // Monday 10 AM
-        }
+
       };
 
       const result = await detectionService.detectNewDevice(businessHourContext);
@@ -449,7 +449,7 @@ describe('NewDeviceDetectionService', () => {
         metadata: {
           ...testContext.metadata,
           loginTime: new Date('2024-01-15T02:00:00') // 2 AM
-        }
+
       };
 
       const result = await detectionService.detectNewDevice(lateNightContext);
@@ -465,7 +465,7 @@ describe('NewDeviceDetectionService', () => {
           return Promise.resolve({
             rows: [{ email: 'user@example.com', display_name: 'Test User' }]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
     });
@@ -488,10 +488,10 @@ describe('NewDeviceDetectionService', () => {
           return Promise.resolve({
             rows: [{ email: 'user@example.com', display_name: 'Test User' }]
           });
-        }
+
         if (query.includes('security_events') && query.includes('breach_count')) {
           return Promise.resolve({ rows: [{ breach_count: '3' }] });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 
@@ -533,7 +533,7 @@ describe('NewDeviceDetectionService', () => {
         notifications: {
           ...testPolicy.notifications,
           notifyOnNewDevice: false
-        }
+
       };
 
       const serviceNoNotify = new NewDeviceDetectionService(
@@ -572,7 +572,7 @@ describe('NewDeviceDetectionService', () => {
         details: {
           deviceFingerprint: testFingerprint,
           approvalMethod: 'email_verification'
-  }
+
         severity: 'info'
       });
       expect(mockRedis.del).toHaveBeenCalled();
@@ -598,7 +598,7 @@ describe('NewDeviceDetectionService', () => {
         details: {
           deviceFingerprint: testFingerprint,
           reason
-  }
+
         severity: 'warning'
       });
       expect(mockRedis.del).toHaveBeenCalled();
@@ -635,8 +635,8 @@ describe('NewDeviceDetectionService', () => {
           is_trusted: true,
           verification_status: 'verified',
           trust_score: 85
-        }]
-      } as unknown as unknown);
+]
+ as unknown as unknown);
 
       const status = await detectionService.getDeviceVerificationStatus(
         testUserId,
@@ -667,8 +667,8 @@ describe('NewDeviceDetectionService', () => {
           is_trusted: false,
           verification_status: 'unverified',
           trust_score: 25
-        }]
-      } as unknown as unknown);
+]
+ as unknown as unknown);
 
       const status = await detectionService.getDeviceVerificationStatus(
         testUserId,
@@ -689,14 +689,14 @@ describe('NewDeviceDetectionService', () => {
           risk_level: 'medium',
           location: { country: 'US', city: 'NYC' },
           approved: true
-  }
+
         {
           fingerprint: 'device-2',
           detected_at: new Date('2024-01-05'),
           risk_level: 'high',
           location: { country: 'UK', city: 'London' },
           approved: false
-        }
+
       ];
 
       mockDb.query.mockResolvedValue({ rows: recentDevices } as unknown as unknown);
@@ -787,7 +787,7 @@ describe('NewDeviceDetectionService', () => {
           return Promise.resolve({
             rows: [{ email: 'user@example.com', display_name: 'Test User' }]
           });
-        }
+
         return Promise.resolve({ rows: [] });
       });
 

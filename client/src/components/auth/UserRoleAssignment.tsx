@@ -2,7 +2,8 @@
 // Interface for assigning and managing user roles with organization and team context
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Plus, X, Calendar, Users, Shield, AlertCircle } from 'lucide-react';
-}
+
+
 interface User {
   id: string;,
   email: string;
@@ -18,11 +19,11 @@ interface User {
   organizationId?: string;
   interface UserRole {
   id: string;,
-  userId: string;
+  userId: string;,
   roleId: string;,
-  roleName: string;
+  roleName: string;,
   roleScope: string;,
-  grantedBy: string;
+  grantedBy: string;,
   grantedAt: string;
   expiresAt?: string;
   scopeContext?: Record<string, unknown>;
@@ -44,7 +45,8 @@ interface User {
   const [assignmentForm, setAssignmentForm] = useState<AssignRoleData>({)
   userId: '',
   roleId: '',
-}
+
+
 });
   const [assignmentExpiry, setAssignmentExpiry] = useState('');
   const [assignmentContext, setAssignmentContext] = useState('');
@@ -64,9 +66,9 @@ interface User {
       if (response.ok) {
         const data = await response.json();
         setUsers(data.users || []);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load users:', error);
-} finally {
+ finally {
       setLoading(false);
   }, [searchQuery]);
   const loadRoles = useCallback(async () => {
@@ -79,7 +81,7 @@ interface User {
       if (response.ok) {
         const data = await response.json();
         setRoles(data.roles || []);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load roles:', error);
 }, [roleFilter]);
   const loadUserRoles = async (userId: string) => {
@@ -91,7 +93,7 @@ interface User {
       if (response.ok) {
   const data = await response.json();
   // Transform roles to include assignment details
-  const userRolesWithDetails = data.roles.map((role: Error) => ({,)
+  const userRolesWithDetails = data.roles.map((role: Error) => ({),
   id: role.assignmentId || role.id,
   userId,
   roleId: role.id,
@@ -103,7 +105,7 @@ interface User {
   scopeContext: role.scopeContext,
 }));
         setUserRoles(userRolesWithDetails);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load user roles:', error);
 };
   const handleUserSelect = (user: User) => {
@@ -124,12 +126,12 @@ interface User {
       if (assignmentContext) {
         try {
           assignmentData.scopeContext = JSON.parse(assignmentContext);
-        } catch {
+ catch {
   alert('Invalid JSON in scope context');
   return;
   const response = await fetch('/api/auth/rbac/assign-role', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   credentials: 'include',
@@ -141,13 +143,13 @@ interface User {
         setAssignmentExpiry('');
         setAssignmentContext('');
         loadUserRoles(selectedUser.id);
-      } else {
+ else {
         const error = await response.json();
         alert(error.message || 'Failed to assign role');
-    } catch (error) {
+ catch (error) {
   console.error('Failed to assign role:', error);
   alert('Failed to assign role');
-} finally {
+ finally {
       setLoading(false);
   };
   const handleRemoveRole = async (roleId: string) => {
@@ -157,21 +159,21 @@ interface User {
   try {
   const response = await fetch('/api/auth/rbac/remove-role', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   credentials: 'include',
-        body: JSON.stringify({,)
+        body: JSON.stringify({);
   userId: selectedUser.id,
   roleId
-}
+
       });
       if (response.ok) {
         loadUserRoles(selectedUser.id);
-      } else {
+ else {
         const error = await response.json();
         alert(error.message || 'Failed to remove role');
-    } catch (error) {
+ catch (error) {
   console.error('Failed to remove role:', error);
   alert('Failed to remove role');
 };
@@ -230,7 +232,7 @@ interface User {
   selectedUser?.id === user.id
   ? 'border-blue-500 bg-blue-50'
   : 'border-gray-200 hover:bg-gray-50',
-}`}
+`}
                 >
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium">
@@ -305,7 +307,7 @@ interface User {
   userRole.roleScope === 'global' ? 'bg-blue-100 text-blue-800' :,
   userRole.roleScope === 'organization' ? 'bg-green-100 text-green-800' :,
   'bg-yellow-100 text-yellow-800'
-}`}>
+`}>
                                   {userRole.roleScope}
                                 </span>
                                 <span className="text-xs text-gray-500">
@@ -324,7 +326,7 @@ interface User {
   isRoleExpired(userRole.expiresAt) ? 'text-red-600' :,
   isRoleExpiringSoon(userRole.expiresAt) ? 'text-yellow-600' :,
   'text-gray-500'
-}`}>
+`}>
                                       {isRoleExpired(userRole.expiresAt) ? 'Expired' : 'Expires'}{' '}
                                       {new Date(userRole.expiresAt).toLocaleDateString()}
                                     </span>

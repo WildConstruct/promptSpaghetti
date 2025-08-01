@@ -8,8 +8,8 @@ import { authenticator } from 'otplib';
 import QRCode from 'qrcode';
 import base32 from 'base32';
 
-}
-}
+
+
 export interface TOTPConfiguration {
   id: string;
   userId: string;
@@ -25,24 +25,26 @@ export interface TOTPConfiguration {
   lastUsedCode?: string;
   enabled: boolean;
   backupCodes: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TOTPValidationResult {
   valid: boolean;
   timeRemaining: number; // Seconds until code expires
   usedPreviously: boolean;
   drift: number; // Time drift in periods
   message: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TOTPEnrollmentData {
   configurationId: string;
   secret: string;
@@ -53,21 +55,23 @@ export interface TOTPEnrollmentData {
   issuer: string;
   accountName: string;
   expiresAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TOTPGenerationOptions {
   algorithm?: 'SHA1' | 'SHA256' | 'SHA512';
   digits?: number;
   period?: number;
   issuer?: string;
   window?: number; // Clock skew tolerance in periods
-}
-}
-}
+
+
+
+
 
 export class TOTPService {
   private readonly defaultOptions: Required<TOTPGenerationOptions> = {
@@ -92,7 +96,7 @@ export class TOTPService {
       step: this.defaultOptions.period,
       window: this.defaultOptions.window
     };
-  }
+
 
   /**
    * Generate a new TOTP configuration for enrollment
@@ -162,7 +166,7 @@ export class TOTPService {
       accountName: formattedAccountName,
       expiresAt: new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
     };
-  }
+
 
   /**
    * Verify TOTP code and complete enrollment
@@ -180,7 +184,7 @@ export class TOTPService {
         success: false,
         message: 'Configuration not found or expired. Please restart enrollment.'
       };
-    }
+
 
     // Validate the provided code
     const validation = await this.validateTOTPCode(tempConfig.secret, code, {
@@ -195,7 +199,7 @@ export class TOTPService {
         success: false,
         message: validation.message
       };
-    }
+
 
     // Enable the configuration
     tempConfig.enabled = true;
@@ -222,7 +226,7 @@ export class TOTPService {
       message: 'TOTP authenticator successfully configured',
       configuration: tempConfig
     };
-  }
+
 
   /**
    * Validate a TOTP code for authentication
@@ -244,7 +248,7 @@ export class TOTPService {
         drift: 0,
         message: 'Invalid code format. Code must contain only digits.'
       };
-    }
+
 
     if (code.length !== config.digits) {
       return {
@@ -254,7 +258,7 @@ export class TOTPService {
         drift: 0,
         message: `Code must be exactly ${config.digits} digits.`
       };
-    }
+
 
     // Set authenticator options for this validation
     const originalOptions = { ...authenticator.options };
@@ -286,10 +290,10 @@ export class TOTPService {
             if (testCode === code) {
               drift = i;
               break;
-            }
-          }
-        }
-      }
+
+
+
+
 
       return {
         valid: isValid,
@@ -298,11 +302,11 @@ export class TOTPService {
         drift,
         message: isValid ? 'Code is valid' : 'Invalid or expired code'
       };
-    } finally {
+ finally {
       // Restore original options
       authenticator.options = originalOptions;
-    }
-  }
+
+
 
   /**
    * Authenticate user with TOTP code
@@ -322,14 +326,14 @@ export class TOTPService {
         success: false,
         message: 'No active TOTP configurations found'
       };
-    }
+
 
     // Try each active configuration
     for (const config of activeConfigs) {
       // Check if this code was recently used to prevent replay attacks
       if (await this.wasCodeRecentlyUsed(config.id, code)) {
         continue;
-      }
+
 
       const validation = await this.validateTOTPCode(config.secret, code, {
         algorithm: config.algorithm,
@@ -360,8 +364,8 @@ export class TOTPService {
           success: true,
           message: 'Authentication successful'
         };
-      }
-    }
+
+
 
     // Log failed authentication
     await this.logTOTPEvent({
@@ -375,7 +379,7 @@ export class TOTPService {
       success: false,
       message: 'Invalid or expired code'
     };
-  }
+
 
   /**
    * Generate QR code for authenticator app
@@ -389,14 +393,14 @@ export class TOTPService {
         color: {
           dark: '#000000',
           light: '#FFFFFF'
-  }
+
         errorCorrectionLevel: 'H',
         width: 256
       });
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to generate QR code: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Generate authenticator URI
@@ -424,7 +428,7 @@ export class TOTPService {
     uri.searchParams.set('period', period.toString());
     
     return uri.toString();
-  }
+
 
   /**
    * Format secret for manual entry
@@ -432,7 +436,7 @@ export class TOTPService {
   private formatSecretForManualEntry(secret: string): string {
     // Insert spaces every 4 characters for readability
     return secret.replace(/(.{4})/g, '$1 ').trim();
-  }
+
 
   /**
    * Format account name
@@ -440,7 +444,7 @@ export class TOTPService {
   private formatAccountName(accountName: string): string {
     // Remove special characters and normalize
     return accountName.replace(/[^a-zA-Z0-9@._-]/g, '').toLowerCase();
-  }
+
 
   /**
    * Generate backup codes
@@ -450,11 +454,11 @@ export class TOTPService {
     if (this.recoveryCodeService) {
       // Use the recovery code service if available
       return Array.from({ length: 10 }, () => this.generateBackupCode());
-    }
+
     
     // Generate simple backup codes
     return Array.from({ length: 10 }, () => this.generateBackupCode());
-  }
+
 
   private generateBackupCode(): string {
     // Generate 8-character backup code
@@ -462,13 +466,13 @@ export class TOTPService {
     let code = '';
     for (let i = 0; i < 8; i++) {
       code += chars[crypto.randomInt(0, chars.length)];
-    }
+
     return code;
-  }
+
 
   private generateConfigurationId(): string {
     return `TOTP-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   // Database interaction methods
   
@@ -490,11 +494,11 @@ export class TOTPService {
         config.label, JSON.stringify(config.backupCodes),
         new Date(Date.now() + 10 * 60 * 1000) // 10 minutes expiry
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Error storing temp TOTP configuration:', error);
       throw new Error('Failed to store temporary configuration');
-    }
-  }
+
+
 
   private async getTempConfiguration(configId: string): Promise<TOTPConfiguration | null> {
 
@@ -506,7 +510,7 @@ export class TOTPService {
 
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       const row = result.rows[0];
       return {
@@ -523,11 +527,11 @@ export class TOTPService {
         enabled: false, // Temp configs are never enabled
         backupCodes: JSON.parse(row.backup_codes)
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting temp TOTP configuration:', error);
       return null;
-    }
-  }
+
+
 
   private async removeTempConfiguration(configId: string): Promise<void> {
 
@@ -535,10 +539,10 @@ export class TOTPService {
       await this.db.query(`
         DELETE FROM temp_totp_configurations WHERE id = $1
       `, [configId]);
-    } catch (error) {
+ catch (error) {
       console.error('Error removing temp TOTP configuration:', error);
-    }
-  }
+
+
 
   private async storeConfiguration(config: TOTPConfiguration): Promise<void> {
 
@@ -560,11 +564,11 @@ export class TOTPService {
         config.enabled, JSON.stringify(config.backupCodes),
         JSON.stringify([]), config.lastUsedAt, config.lastUsedCode
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Error storing TOTP configuration:', error);
       throw new Error('Failed to store TOTP configuration');
-    }
-  }
+
+
 
   private async updateConfiguration(config: TOTPConfiguration): Promise<void> {
 
@@ -574,10 +578,10 @@ export class TOTPService {
           last_used_at = $1, last_used_code = $2
         WHERE user_id = $3
       `, [config.lastUsedAt, config.lastUsedCode, config.userId]);
-    } catch (error) {
+ catch (error) {
       console.error('Error updating TOTP configuration:', error);
-    }
-  }
+
+
 
   private async getUserConfigurations(userId: string): Promise<TOTPConfiguration[]> {
 
@@ -602,11 +606,11 @@ export class TOTPService {
         enabled: row.is_enabled,
         backupCodes: JSON.parse(row.backup_codes || '[]')
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting user TOTP configurations:', error);
       return [];
-    }
-  }
+
+
 
   private async wasCodeRecentlyUsed(configId: string, code: string): Promise<boolean> {
 
@@ -619,11 +623,11 @@ export class TOTPService {
       `, [parseInt(configId), codeHash]);
 
       return parseInt(result.rows[0]?.count || '0') > 0;
-    } catch (error) {
+ catch (error) {
       console.error('Error checking used code:', error);
       return false;
-    }
-  }
+
+
 
   private async storeUsedCode(configId: string, code: string, usedAt: Date): Promise<void> {
 
@@ -637,10 +641,10 @@ export class TOTPService {
         parseInt(configId), codeHash, usedAt,
         new Date(usedAt.getTime() + 2 * 60 * 1000) // 2 minutes expiry
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Error storing used code:', error);
-    }
-  }
+
+
 
   private async logTOTPEvent(event: {
     userId: string;
@@ -668,14 +672,14 @@ export class TOTPService {
         details: {
           configurationId: event.configurationId,
           ...event.metadata
-  }
+
         ipAddress: event.sourceIP,
         severity: event.action.includes('failed') ? 'warning' : 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error logging TOTP event:', error);
-    }
-  }
+
+
 
   // Public utility methods
 
@@ -695,10 +699,10 @@ export class TOTPService {
 
     try {
       return authenticator.generate(secret);
-    } finally {
+ finally {
       authenticator.options = originalOptions;
-    }
-  }
+
+
 
   /**
    * Get time remaining for current code
@@ -707,7 +711,7 @@ export class TOTPService {
     const currentTime = Math.floor(Date.now() / 1000);
     const currentPeriod = Math.floor(currentTime / period);
     return (currentPeriod + 1) * period - currentTime;
-  }
+
 
   /**
    * Disable TOTP configuration
@@ -729,11 +733,11 @@ export class TOTPService {
         action: 'configuration_disabled',
         metadata: { reason }
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error disabling TOTP configuration:', error);
       throw new Error('Failed to disable TOTP configuration');
-    }
-  }
+
+
 
   /**
    * Regenerate backup codes for a user
@@ -756,11 +760,11 @@ export class TOTPService {
       });
 
       return backupCodes;
-    } catch (error) {
+ catch (error) {
       console.error('Error regenerating backup codes:', error);
       throw new Error('Failed to regenerate backup codes');
-    }
-  }
+
+
 
   /**
    * Authenticate with backup code
@@ -779,7 +783,7 @@ export class TOTPService {
 
       if (result.rows.length === 0) {
         return { success: false, message: 'TOTP not configured' };
-      }
+
 
       const { backup_codes, used_backup_codes } = result.rows[0];
       const backupCodes = JSON.parse(backup_codes || '[]');
@@ -787,11 +791,11 @@ export class TOTPService {
 
       if (!backupCodes.includes(code)) {
         return { success: false, message: 'Invalid backup code' };
-      }
+
 
       if (usedCodes.includes(code)) {
         return { success: false, message: 'Backup code already used' };
-      }
+
 
       // Mark code as used
       const newUsedCodes = [...usedCodes, code];
@@ -815,11 +819,11 @@ export class TOTPService {
         message: 'Backup code authenticated successfully',
         remainingCodes
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error authenticating backup code:', error);
       return { success: false, message: 'Authentication service error' };
-    }
-  }
+
+
 
   /**
    * Check and enforce rate limiting
@@ -849,14 +853,14 @@ export class TOTPService {
         `, [userId, attemptType, ipAddress, now]);
 
         return { allowed: true, remainingAttempts: maxAttempts - 1 };
-      }
+
 
       const { attempts, window_start, blocked_until } = result.rows[0];
 
       // Check if currently blocked
       if (blocked_until && blocked_until > now) {
         return { allowed: false, resetTime: blocked_until };
-      }
+
 
       // Check if window has expired
       const windowStart = new Date(window_start);
@@ -871,7 +875,7 @@ export class TOTPService {
         `, [now, userId, attemptType, ipAddress]);
 
         return { allowed: true, remainingAttempts: maxAttempts - 1 };
-      }
+
 
       // Check if limit exceeded
       if (attempts >= maxAttempts) {
@@ -883,7 +887,7 @@ export class TOTPService {
         `, [blockUntil, userId, attemptType, ipAddress]);
 
         return { allowed: false, resetTime: blockUntil };
-      }
+
 
       // Increment attempts
       await this.db.query(`
@@ -893,11 +897,11 @@ export class TOTPService {
       `, [userId, attemptType, ipAddress]);
 
       return { allowed: true, remainingAttempts: maxAttempts - attempts - 1 };
-    } catch (error) {
+ catch (error) {
       console.error('Error checking rate limit:', error);
       return { allowed: true }; // Fail open
-    }
-  }
+
+
 
   /**
    * Get TOTP statistics for admin dashboard
@@ -908,7 +912,7 @@ export class TOTPService {
     authenticationsToday: number;
     failedAttemptsToday: number;
     averageBackupCodesRemaining: number;
-  }> {
+> {
 
     try {
       const stats = await this.db.query(`
@@ -928,9 +932,8 @@ export class TOTPService {
         failedAttemptsToday: parseInt(row.failed_attempts_today || '0'),
         averageBackupCodesRemaining: parseFloat(row.avg_backup_codes || '0')
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting TOTP statistics:', error);
       throw error;
-    }
-  }
-}
+
+

@@ -22,9 +22,8 @@ export type ActivityEventType =
   | 'collaboration_started'
   | 'collaboration_ended';
 
-}
-export interface ActivityEvent {
-  id: string;
+
+export interface ActivityEvent { id: string;
   workspace_id?: string;
   project_id?: string;
   resource_id?: string;
@@ -33,67 +32,62 @@ export interface ActivityEvent {
   type: ActivityEventType;
   description: string;
   details?: string | Record<string, any>;
-  metadata?: {
+  metadata?: { }
   project_name?: string;
   resource_name?: string;
   resource_type?: string;
   old_value?: any;
   new_value?: any;
   [key: string]: any;
-}
+
+
 };
   resource_url?: string;
   aggregation_key?: string;
   created_at: string;
-}
-}
-export interface ActivityStats {
-  total: number;
-  by_type: Record<ActivityEventType, number>;
 
-}
+
+export interface ActivityStats { total: number;
+  by_type: Record<ActivityEventType, number> }
+
   by_actor: Record<string, { name: string; count: number }>;
-  recent_activity: {
+  recent_activity: { 
   today: number;
   this_week: number;
-  this_month: number;
-};
+  this_month: number };
   trends: {
   daily: Array<{ date: string; count: number }>;
     hourly: Array<{ hour: number; count: number }>;
   };
-}
-}
-export interface ActivityActor {
-  id: string;
+
+
+export interface ActivityActor { id: string;
   name: string;
   avatar_url?: string;
   activity_count: number;
-  last_activity: string;
-}
-}
-}
-export interface ActivityFilter {
-  search?: string;
+  last_activity: string }
+
+
+
+export interface ActivityFilter { search?: string;
   type?: ActivityEventType;
   actor_id?: string;
   date_from?: string;
   date_to?: string;
   project_id?: string;
-  resource_id?: string;
-}
-}
-}
-export interface ActivityListResponse {
-  activities: ActivityEvent;
+  resource_id?: string }
+
+
+
+export interface ActivityListResponse { activities: ActivityEvent;
   total: number;
   has_more: boolean;
   next_cursor?: string;
   stats?: ActivityStats;
-  actors?: ActivityActor;
-}
-}
-}
+  actors?: ActivityActor }
+
+
+
 export interface ActivityEventCreateRequest {
   workspace_id?: string;
   project_id?: string;
@@ -106,27 +100,26 @@ export interface ActivityEventCreateRequest {
   resource_url?: string;
   aggregation_key?: string;
   // Real-time activity connection types
-}
-}
-}
-export interface ActivityRealTimeConnection {
-  status: 'connected' | 'connecting' | 'disconnected' | 'error';
+
+
+
+
+export interface ActivityRealTimeConnection { status: 'connected' | 'connecting' | 'disconnected' | 'error';
   lastConnected?: Date;
   reconnectAttempts: number;
-  error?: string;
-}
-}
-}
-export interface ActivityRealTimeEvent {
-  type: 'activity_created' | 'activity_updated' | 'activity_deleted';
+  error?: string }
+
+
+
+export interface ActivityRealTimeEvent { type: 'activity_created' | 'activity_updated' | 'activity_deleted' }
   activity: ActivityEvent;
   timestamp: string;
   // Hook return types
-}
-}
-}
-export interface UseActivityFeedOptions {
-  workspaceId?: string;
+
+
+
+
+export interface UseActivityFeedOptions { workspaceId?: string;
   projectId?: string;
   userId?: string;
   searchTerm?: string;
@@ -134,12 +127,11 @@ export interface UseActivityFeedOptions {
   dateFilter?: 'today' | 'week' | 'month';
   actorFilter?: string;
   realTime?: boolean;
-  limit?: number;
-}
-}
-}
-export interface UseActivityFeedReturn {
-  activities: ActivityEvent;
+  limit?: number }
+
+
+
+export interface UseActivityFeedReturn { activities: ActivityEvent;
   loading: boolean;
   error: Error | null;
   hasMore: boolean;
@@ -147,8 +139,8 @@ export interface UseActivityFeedReturn {
   actors: ActivityActor | null;
   realTimeConnection: ActivityRealTimeConnection | null;
   // Actions
-  refreshActivities: () => Promise<void>;
+  refreshActivities: () => Promise<void> }
   loadMore: () => Promise<void>;
   createActivity: (activity: ActivityEventCreateRequest) => Promise<void>;
-}
-}
+
+

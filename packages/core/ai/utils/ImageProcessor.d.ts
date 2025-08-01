@@ -6,8 +6,8 @@
  */
 
 }
-export interface ImageMetadata {
-    width: number;
+}
+export interface ImageMetadata { width: number;
     height: number;
     format: string;
     size: number;
@@ -20,13 +20,13 @@ export interface ImageMetadata {
         model?: string;
         prompt?: string;
         seed?: number;
-        parameters?: Record<string, any>;
+        parameters?: Record<string, any> }
 }
     };
 
 }
-export interface ImageProcessingOptions {
-    format?: 'jpeg' | 'png' | 'webp' | 'avif';
+}
+export interface ImageProcessingOptions { format?: 'jpeg' | 'png' | 'webp' | 'avif';
     quality?: number;
     width?: number;
     height?: number;
@@ -34,61 +34,49 @@ export interface ImageProcessingOptions {
     compression?: 'lossy' | 'lossless';
     optimize?: boolean;
     progressive?: boolean;
-    removeMetadata?: boolean;
-
+    removeMetadata?: boolean }
 }
-export interface ImageVariationOptions {
-    count: number;
+}
+export interface ImageVariationOptions { count: number;
     strength: number;
     seed?: number;
-    preserveStyle?: boolean;
-
+    preserveStyle?: boolean }
 }
-export interface ImageBatchProcessingOptions {
-    concurrency?: number;
+}
+export interface ImageBatchProcessingOptions { concurrency?: number;
     outputFormat?: 'jpeg' | 'png' | 'webp';
     quality?: number;
     resize?: {
         width: number;
-        height: number;
+        height: number }
 }
     };
-    watermark?: {
-        text?: string;
+    watermark?: { text?: string;
         image?: string;
         position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
-        opacity: number;
-    };
+        opacity: number };
 
-export declare class ImageProcessor {
-    private canvas;
+export declare class ImageProcessor { private canvas;
     private ctx;
     constructor();
     convertFormat(imageData: string | ArrayBuffer, options: ImageProcessingOptions): Promise<{
         data: string;
-        metadata: ImageMetadata;
-    }>;
+        metadata: ImageMetadata }>;
     extractMetadata(imageData: string | ArrayBuffer): Promise<ImageMetadata>;
-    compress(imageData: string, quality?: number, format?: 'jpeg' | 'webp'): Promise<{
-        data: string;
+    compress(imageData: string, quality?: number, format?: 'jpeg' | 'webp'): Promise<{ data: string;
         compressionRatio: number;
         originalSize: number;
-        compressedSize: number;
-    }>;
+        compressedSize: number }>;
     resize(imageData: string, width: number, height?: number, maintainAspectRatio?: boolean): Promise<string>;
-    processBatch(images: string[], options: ImageBatchProcessingOptions): Promise<Array<{
-        original: string;
+    processBatch(images: string[], options: ImageBatchProcessingOptions): Promise<Array<{ original: string;
         processed: string;
-        metadata: ImageMetadata;
-    }>>;
+        metadata: ImageMetadata }>>;
     generateVariations(imageData: string, options: ImageVariationOptions): Promise<string[]>;
-    compareImages(image1: string, image2: string): Promise<{
-        similarity: number;
+    compareImages(image1: string, image2: string): Promise<{ similarity: number;
         differences: {
             colorDifference: number;
             structuralDifference: number;
-            pixelDifference: number;
-        };
+            pixelDifference: number };
     }>;
     private _loadImage;
     private _setupCanvas;

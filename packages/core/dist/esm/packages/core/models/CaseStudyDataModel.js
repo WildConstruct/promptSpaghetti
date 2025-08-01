@@ -135,7 +135,8 @@ config: {
 }
 ;
 'helpfulVotes' | 'roiValue' | 'timeSaved' | 'title' | 'priority';
-direction: 'asc' | 'desc';
+direction: 'asc' | 'desc',
+;
 ;
 include ?  : ('media' | 'templates' | 'metrics' | 'author' | 'engagement')[];
 ;

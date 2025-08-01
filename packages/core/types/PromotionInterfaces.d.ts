@@ -6,8 +6,7 @@
  * including discounts, campaigns, content promotion, and analytics.
  */
 import { z } from 'zod';
-export declare enum PromotionType {
-    PERCENTAGE_DISCOUNT = "percentage_discount",
+export declare enum PromotionType { PERCENTAGE_DISCOUNT = "percentage_discount",
     FIXED_AMOUNT_DISCOUNT = "fixed_amount_discount",
     BUY_ONE_GET_ONE = "buy_one_get_one",
     BULK_DISCOUNT = "bulk_discount",
@@ -68,12 +67,13 @@ export declare enum PromotionTrigger {
     ITEM_COUNT = "item_count",
     PAGE_VIEW = "page_view",
     REFERRAL = "referral",
-    FIRST_PURCHASE = "first_purchase",
+    FIRST_PURCHASE = "first_purchase" }
     REPEAT_PURCHASE = "repeat_purchase"
 /**
  * Base promotion interface - foundation for all promotion types
  */
 
+}
 }
 export interface BasePromotion {
     readonly id: string;
@@ -110,6 +110,8 @@ export interface BasePromotion {
  */
 
 }
+}
+}
 export interface DiscountPromotion extends BasePromotion {
     type: PromotionType.PERCENTAGE_DISCOUNT | PromotionType.FIXED_AMOUNT_DISCOUNT | PromotionType.BULK_DISCOUNT | PromotionType.BUY_ONE_GET_ONE;
     discount_config: DiscountConfiguration;
@@ -125,6 +127,7 @@ export interface DiscountPromotion extends BasePromotion {
  */
 
 }
+}
 export interface ContentPromotion extends BasePromotion {
     type: PromotionType.FEATURED_CONTENT | PromotionType.CATEGORY_SPOTLIGHT | PromotionType.TRENDING_CAROUSEL | PromotionType.EDITOR_CHOICE | PromotionType.NEW_ARRIVALS | PromotionType.CREATOR_SPOTLIGHT;
     content_selection_strategy: ContentSelectionStrategy;
@@ -138,6 +141,7 @@ export interface ContentPromotion extends BasePromotion {
  */
 
 }
+}
 export interface BundlePromotion extends BasePromotion {
     type: PromotionType.CROSS_SELL | PromotionType.UPSELL | PromotionType.BUNDLE_DEAL;
     bundle_config: BundleConfiguration;
@@ -150,18 +154,16 @@ export interface BundlePromotion extends BasePromotion {
  */
 
 }
-export interface CampaignPromotion extends BasePromotion {
-    campaign_name: string;
+}
+export interface CampaignPromotion extends BasePromotion { campaign_name: string;
     campaign_theme: string;
     campaign_objectives: string[];
     child_promotions: string[];
     channels: CampaignChannel[];
     budget?: CampaignBudget;
-    campaign_metrics: CampaignMetrics;
-
+    campaign_metrics: CampaignMetrics }
 }
-export interface DiscountConfiguration {
-    type: 'percentage' | 'fixed_amount' | 'buy_x_get_y' | 'tiered';
+export interface DiscountConfiguration { type: 'percentage' | 'fixed_amount' | 'buy_x_get_y' | 'tiered';
     percentage?: number;
     fixed_amount_cents?: number;
     buy_quantity?: number;
@@ -170,18 +172,16 @@ export interface DiscountConfiguration {
     tiers?: DiscountTier[];
     currency: string;
     compound_with_other_discounts: boolean;
-    apply_to_sale_items: boolean;
-
+    apply_to_sale_items: boolean }
 }
-export interface DiscountTier {
-    minimum_quantity: number;
+}
+export interface DiscountTier { minimum_quantity: number;
     minimum_amount_cents?: number;
     discount_percentage?: number;
-    fixed_discount_cents?: number;
-
+    fixed_discount_cents?: number }
 }
-export interface ApplicableItemsFilter {
-    include_categories?: string[];
+}
+export interface ApplicableItemsFilter { include_categories?: string[];
     include_tags?: string[];
     include_creators?: string[];
     include_license_types?: string[];
@@ -196,31 +196,27 @@ export interface ApplicableItemsFilter {
     min_rating?: number;
     min_download_count?: number;
     created_after?: Date;
-    updated_after?: Date;
-
+    updated_after?: Date }
 }
-export interface PromotionTargetingRule {
-    type: PromotionTargetType;
+}
+export interface PromotionTargetingRule { type: PromotionTargetType;
     conditions: TargetingCondition[];
-    operator: 'AND' | 'OR';
-
+    operator: 'AND' | 'OR' }
 }
-export interface TargetingCondition {
-    field: string;
+}
+export interface TargetingCondition { field: string;
     operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'not_in';
     value: any;
-    weight?: number;
-
+    weight?: number }
 }
-export interface ContentSelectionStrategy {
-    method: 'manual' | 'automatic' | 'hybrid';
+}
+export interface ContentSelectionStrategy { method: 'manual' | 'automatic' | 'hybrid';
     automatic_refresh: boolean;
     refresh_interval_hours?: number;
-    performance_based_rotation: boolean;
-
+    performance_based_rotation: boolean }
 }
-export interface ContentSelectionCriteria {
-    min_rating?: number;
+}
+export interface ContentSelectionCriteria { min_rating?: number;
     min_download_count?: number;
     quality_score_threshold?: number;
     categories?: string[];
@@ -236,17 +232,15 @@ export interface ContentSelectionCriteria {
     max_per_creator?: number;
     max_per_category?: number;
     diversification_rules?: ContentDiversificationRule[];
-    max_content_count: number;
-
+    max_content_count: number }
 }
-export interface ContentDiversificationRule {
-    attribute: 'creator' | 'category' | 'content_type' | 'price_range';
+}
+export interface ContentDiversificationRule { attribute: 'creator' | 'category' | 'content_type' | 'price_range';
     max_percentage: number;
-    enforce_minimum_variety: boolean;
-
+    enforce_minimum_variety: boolean }
 }
-export interface ContentDisplayConfiguration {
-    display_location: string;
+}
+export interface ContentDisplayConfiguration { display_location: string;
     layout_type: 'carousel' | 'grid' | 'list' | 'featured_card' | 'banner';
     max_visible_items: number;
     theme: string;
@@ -257,103 +251,92 @@ export interface ContentDisplayConfiguration {
     cta_text?: string;
     cta_style?: string;
     mobile_layout?: string;
-    tablet_layout?: string;
-
+    tablet_layout?: string }
 }
-export interface ContentRotationConfig {
-    rotation_type: 'fixed_time' | 'performance_based' | 'equal_time' | 'weighted';
+}
+export interface ContentRotationConfig { rotation_type: 'fixed_time' | 'performance_based' | 'equal_time' | 'weighted';
     rotation_interval_minutes?: number;
     performance_thresholds?: {
         min_ctr?: number;
         min_conversions?: number;
-        max_time_minutes?: number;
+        max_time_minutes?: number }
 }
     };
-    weight_factors?: {
-        performance_weight: number;
+    weight_factors?: { performance_weight: number;
         recency_weight: number;
-        diversity_weight: number;
-    };
+        diversity_weight: number };
     randomize_order: boolean;
     allow_repeat_within_session: boolean;
 
 }
-export interface BundleConfiguration {
-    bundle_type: 'fixed' | 'flexible' | 'dynamic';
+}
+export interface BundleConfiguration { bundle_type: 'fixed' | 'flexible' | 'dynamic';
     required_items?: string[];
     flexible_options?: BundleFlexibleOption[];
     dynamic_strategy?: 'collaborative_filtering' | 'content_similarity' | 'purchase_history';
     min_items: number;
     max_items: number;
-    allow_duplicates: boolean;
-
+    allow_duplicates: boolean }
 }
-export interface BundleFlexibleOption {
-    category: string;
+}
+export interface BundleFlexibleOption { category: string;
     required_count: number;
-    available_items?: string[];
-
+    available_items?: string[] }
 }
-export interface BundleItem {
-    item_id: string;
+}
+export interface BundleItem { item_id: string;
     required: boolean;
     discount_percentage?: number;
-    position?: number;
-
+    position?: number }
 }
-export interface BundleRecommendationStrategy {
-    recommendation_engine: 'rule_based' | 'ml_powered' | 'hybrid';
+}
+export interface BundleRecommendationStrategy { recommendation_engine: 'rule_based' | 'ml_powered' | 'hybrid';
     rules?: BundleRecommendationRule[];
     ml_model_id?: string;
     confidence_threshold?: number;
     max_recommendations: number;
-    personalization_level: 'low' | 'medium' | 'high';
-
+    personalization_level: 'low' | 'medium' | 'high' }
 }
-export interface BundleRecommendationRule {
-    trigger_item_id?: string;
+}
+export interface BundleRecommendationRule { trigger_item_id?: string;
     trigger_category?: string;
     recommended_categories?: string[];
     recommended_items?: string[];
-    boost_score: number;
-
+    boost_score: number }
 }
-export interface BundleTrigger {
-    trigger_type: 'cart_add' | 'page_view' | 'checkout_start' | 'time_on_page';
+}
+export interface BundleTrigger { trigger_type: 'cart_add' | 'page_view' | 'checkout_start' | 'time_on_page';
     trigger_conditions: Record<string, any>;
     display_timing: 'immediate' | 'delayed' | 'on_exit_intent';
-    delay_seconds?: number;
-
+    delay_seconds?: number }
 }
-export interface CampaignChannel {
-    channel: 'email' | 'web' | 'mobile_app' | 'social_media' | 'external_ads';
+}
+export interface CampaignChannel { channel: 'email' | 'web' | 'mobile_app' | 'social_media' | 'external_ads';
     enabled: boolean;
     channel_config: Record<string, any>;
     channel_metrics: {
         impressions: number;
         clicks: number;
         conversions: number;
-        spend?: number;
+        spend?: number }
 }
     };
 
 }
-export interface CampaignBudget {
-    total_budget_cents: number;
+}
+export interface CampaignBudget { total_budget_cents: number;
     daily_budget_cents?: number;
     spend_to_date_cents: number;
     budget_allocation: Record<string, number>;
-    budget_alerts: BudgetAlert[];
-
+    budget_alerts: BudgetAlert[] }
 }
-export interface BudgetAlert {
-    threshold_percentage: number;
+}
+export interface BudgetAlert { threshold_percentage: number;
     alert_channels: ('email' | 'dashboard' | 'slack')[];
-    recipients: string[];
-
+    recipients: string[] }
 }
-export interface PromotionPerformanceMetrics {
-    total_uses: number;
+}
+export interface PromotionPerformanceMetrics { total_uses: number;
     unique_users: number;
     conversion_rate: number;
     total_discount_given_cents: number;
@@ -368,7 +351,7 @@ export interface PromotionPerformanceMetrics {
     peak_usage_period?: {
         start: Date;
         end: Date;
-        usage_count: number;
+        usage_count: number }
 }
     };
     repeat_usage_rate: number;
@@ -378,8 +361,8 @@ export interface PromotionPerformanceMetrics {
     metrics_updated_at: Date;
 
 }
-export interface ContentPromotionMetrics {
-    content_id: string;
+}
+export interface ContentPromotionMetrics { content_id: string;
     content_title: string;
     impressions: number;
     clicks: number;
@@ -396,11 +379,10 @@ export interface ContentPromotionMetrics {
     total_display_time_minutes: number;
     performance_score: number;
     period_start: Date;
-    period_end: Date;
-
+    period_end: Date }
 }
-export interface CampaignMetrics {
-    total_reach: number;
+}
+export interface CampaignMetrics { total_reach: number;
     total_impressions: number;
     total_clicks: number;
     total_conversions: number;
@@ -415,26 +397,22 @@ export interface CampaignMetrics {
         clicks: number;
         conversions: number;
         spend_cents: number;
-        roas: number;
+        roas: number }
 }
     }>;
-    promotion_performance: Array<{
-        promotion_id: string;
+    promotion_performance: Array<{ promotion_id: string;
         promotion_name: string;
         contribution_to_revenue: number;
-        usage_count: number;
-    }>;
-    daily_metrics: Array<{
-        date: string;
+        usage_count: number }>;
+    daily_metrics: Array<{ date: string;
         impressions: number;
         clicks: number;
         conversions: number;
-        spend_cents: number;
-    }>;
+        spend_cents: number }>;
 
 }
-export interface PromotionRule {
-    id: string;
+}
+export interface PromotionRule { id: string;
     name: string;
     description: string;
     conditions: PromotionRuleCondition[];
@@ -446,24 +424,21 @@ export interface PromotionRule {
     success_rate: number;
     created_at: Date;
     updated_at: Date;
-    created_by: string;
-
+    created_by: string }
 }
-export interface PromotionRuleCondition {
-    field: string;
+}
+export interface PromotionRuleCondition { field: string;
     operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'regex_match';
     value: any;
-    negate?: boolean;
-
+    negate?: boolean }
 }
-export interface PromotionRuleAction {
-    action_type: 'apply_promotion' | 'suggest_promotion' | 'trigger_campaign' | 'send_notification';
+}
+export interface PromotionRuleAction { action_type: 'apply_promotion' | 'suggest_promotion' | 'trigger_campaign' | 'send_notification';
     parameters: Record<string, any>;
-    delay_seconds?: number;
-
+    delay_seconds?: number }
 }
-export interface PromotionTemplate {
-    id: string;
+}
+export interface PromotionTemplate { id: string;
     name: string;
     description: string;
     template_type: PromotionType;
@@ -473,11 +448,10 @@ export interface PromotionTemplate {
     use_case_examples: string[];
     created_by: string;
     created_at: Date;
-    usage_count: number;
-
+    usage_count: number }
 }
-export interface PromotionTemplateField {
-    field_name: string;
+}
+export interface PromotionTemplateField { field_name: string;
     display_name: string;
     field_type: 'text' | 'number' | 'boolean' | 'date' | 'select' | 'multi_select';
     required: boolean;
@@ -485,19 +459,18 @@ export interface PromotionTemplateField {
     validation_rules?: ValidationRule[];
     options?: {
         value: any;
-        label: string;
+        label: string }
 }
     }[];
 
 }
-export interface ValidationRule {
-    rule_type: 'min' | 'max' | 'pattern' | 'custom';
-    value: any;
-    error_message: string;
-
 }
-export interface PromotionAuditLog {
-    id: string;
+export interface ValidationRule { rule_type: 'min' | 'max' | 'pattern' | 'custom';
+    value: any;
+    error_message: string }
+}
+}
+export interface PromotionAuditLog { id: string;
     promotion_id: string;
     action: 'created' | 'updated' | 'activated' | 'deactivated' | 'deleted' | 'applied' | 'expired';
     description: string;
@@ -508,42 +481,38 @@ export interface PromotionAuditLog {
     old_values?: Record<string, any>;
     new_values?: Record<string, any>;
     metadata: Record<string, any>;
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface PromotionServiceResponse<T> {
-    success: boolean;
+}
+export interface PromotionServiceResponse<T> { success: boolean;
     data?: T;
     error?: {
         code: string;
         message: string;
-        details?: any;
-}
+        details?: any }
     };
-    metadata?: {
-        request_id: string;
+    metadata?: { request_id: string;
         timestamp: Date;
-        execution_time_ms: number;
-    };
+        execution_time_ms: number };
 
 }
-export interface PromotionEligibilityCheck {
-    promotion_id: string;
+}
+export interface PromotionEligibilityCheck { promotion_id: string;
     eligible: boolean;
     reasons?: string[];
     discount_amount_cents?: number;
     missing_requirements?: {
         minimum_purchase_amount?: number;
         required_items?: string[];
-        user_criteria?: string[];
+        user_criteria?: string[] }
 }
     };
     conflicts_with?: string[];
     can_stack_with?: string[];
 
 }
-export interface PromotionApplicationResult {
-    success: boolean;
+}
+export interface PromotionApplicationResult { success: boolean;
     promotion_id: string;
     discount_applied_cents: number;
     original_total_cents: number;
@@ -553,7 +522,7 @@ export interface PromotionApplicationResult {
         item_id: string;
         original_price_cents: number;
         discounted_price_cents: number;
-        discount_amount_cents: number;
+        discount_amount_cents: number }
 }
     }>;
     applied_at: Date;
@@ -561,8 +530,8 @@ export interface PromotionApplicationResult {
     usage_recorded: boolean;
 
 }
-export interface PromotionSearchCriteria {
-    status?: PromotionStatus[];
+}
+export interface PromotionSearchCriteria { status?: PromotionStatus[];
     type?: PromotionType[];
     enabled?: boolean;
     active_on?: Date;
@@ -581,11 +550,10 @@ export interface PromotionSearchCriteria {
     page?: number;
     limit?: number;
     sort_by?: 'name' | 'created_at' | 'start_date' | 'usage_count' | 'roi';
-    sort_order?: 'asc' | 'desc';
-
+    sort_order?: 'asc' | 'desc' }
 }
-export interface PromotionSearchResult {
-    promotions: BasePromotion[];
+}
+export interface PromotionSearchResult { promotions: BasePromotion[];
     total_count: number;
     has_more: boolean;
     aggregates: {
@@ -593,26 +561,19 @@ export interface PromotionSearchResult {
         total_scheduled: number;
         total_expired: number;
         total_discount_given_cents: number;
-        average_conversion_rate: number;
+        average_conversion_rate: number }
 }
     };
-    facets?: {
-        types: Array<{
+    facets?: { types: Array<{
             type: PromotionType;
-            count: number;
-        }>;
-        statuses: Array<{
-            status: PromotionStatus;
-            count: number;
-        }>;
-        creators: Array<{
-            creator: string;
-            count: number;
-        }>;
+            count: number }>;
+        statuses: Array<{ status: PromotionStatus;
+            count: number }>;
+        creators: Array<{ creator: string;
+            count: number }>;
     };
 
-export declare const CreatePromotionSchema: z.ZodObject<{
-    type: z.ZodNativeEnum<typeof PromotionType>;
+export declare const CreatePromotionSchema: z.ZodObject<{ type: z.ZodNativeEnum<typeof PromotionType>;
     name: z.ZodString;
     description: z.ZodString;
     start_date: z.ZodDate;
@@ -623,24 +584,19 @@ export declare const CreatePromotionSchema: z.ZodObject<{
     usage_limit: z.ZodOptional<z.ZodNumber>;
     user_usage_limit: z.ZodOptional<z.ZodNumber>;
     target_type: z.ZodNativeEnum<typeof PromotionTargetType>;
-    targeting_rules: z.ZodArray<z.ZodObject<{,
+    targeting_rules: z.ZodArray<z.ZodObject<{ }
         type: z.ZodNativeEnum<typeof PromotionTargetType>;
         conditions: z.ZodArray<z.ZodAny, "many">;
         operator: z.ZodEnum<["AND", "OR"]>;
-    }, "strip", z.ZodTypeAny, {
-        type: PromotionTargetType;
+    }, "strip", z.ZodTypeAny, { type: PromotionTargetType;
         operator: "AND" | "OR";
-        conditions: any[];
-    }, {
-        type: PromotionTargetType;
+        conditions: any[] }, { type: PromotionTargetType;
         operator: "AND" | "OR";
-        conditions: any[];
-    }>, "many">;
+        conditions: any[] }>, "many">;
     priority: z.ZodDefault<z.ZodNumber>;
     stackable: z.ZodDefault<z.ZodBoolean>;
     metadata: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodAny>>;
-}, "strip", z.ZodTypeAny, {
-    name: string;
+}, "strip", z.ZodTypeAny, { name: string;
     description: string;
     priority: number;
     type: PromotionType;
@@ -653,14 +609,12 @@ export declare const CreatePromotionSchema: z.ZodObject<{
     targeting_rules: {
         type: PromotionTargetType;
         operator: "AND" | "OR";
-        conditions: any[];
-    }[];
+        conditions: any[] }[];
     stackable: boolean;
     promo_code?: string | undefined;
     usage_limit?: number | undefined;
     user_usage_limit?: number | undefined;
-}, {
-    name: string;
+}, { name: string;
     description: string;
     type: PromotionType;
     target_type: PromotionTargetType;
@@ -671,8 +625,7 @@ export declare const CreatePromotionSchema: z.ZodObject<{
     targeting_rules: {
         type: PromotionTargetType;
         operator: "AND" | "OR";
-        conditions: any[];
-    }[];
+        conditions: any[] }[];
     priority?: number | undefined;
     metadata?: Record<string, any> | undefined;
     promo_code?: string | undefined;
@@ -680,8 +633,7 @@ export declare const CreatePromotionSchema: z.ZodObject<{
     user_usage_limit?: number | undefined;
     stackable?: boolean | undefined;
 }>;
-export declare const UpdatePromotionSchema: z.ZodObject<{
-    name: z.ZodOptional<z.ZodString>;
+export declare const UpdatePromotionSchema: z.ZodObject<{ name: z.ZodOptional<z.ZodString>;
     description: z.ZodOptional<z.ZodString>;
     status: z.ZodOptional<z.ZodNativeEnum<typeof PromotionStatus>>;
     enabled: z.ZodOptional<z.ZodBoolean>;
@@ -690,9 +642,7 @@ export declare const UpdatePromotionSchema: z.ZodObject<{
     usage_limit: z.ZodOptional<z.ZodNumber>;
     priority: z.ZodOptional<z.ZodNumber>;
     targeting_rules: z.ZodOptional<z.ZodArray<z.ZodAny, "many">>;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
-}, "strip", z.ZodTypeAny, {
-    name?: string | undefined;
+    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>> }, "strip", z.ZodTypeAny, { name?: string | undefined;
     description?: string | undefined;
     priority?: number | undefined;
     status?: PromotionStatus | undefined;
@@ -701,9 +651,7 @@ export declare const UpdatePromotionSchema: z.ZodObject<{
     start_date?: Date | undefined;
     end_date?: Date | undefined;
     usage_limit?: number | undefined;
-    targeting_rules?: any[] | undefined;
-}, {
-    name?: string | undefined;
+    targeting_rules?: any[] | undefined }, { name?: string | undefined;
     description?: string | undefined;
     priority?: number | undefined;
     status?: PromotionStatus | undefined;
@@ -712,43 +660,30 @@ export declare const UpdatePromotionSchema: z.ZodObject<{
     start_date?: Date | undefined;
     end_date?: Date | undefined;
     usage_limit?: number | undefined;
-    targeting_rules?: any[] | undefined;
-}>;
-export declare const ApplyPromotionSchema: z.ZodObject<{
-    promotion_id: z.ZodString;
+    targeting_rules?: any[] | undefined }>;
+export declare const ApplyPromotionSchema: z.ZodObject<{ promotion_id: z.ZodString;
     user_id: z.ZodString;
     cart_id: z.ZodOptional<z.ZodString>;
     promo_code: z.ZodOptional<z.ZodString>;
-    force_apply: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    user_id: string;
+    force_apply: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { user_id: string;
     promotion_id: string;
     force_apply: boolean;
     promo_code?: string | undefined;
-    cart_id?: string | undefined;
-}, {
-    user_id: string;
+    cart_id?: string | undefined }, { user_id: string;
     promotion_id: string;
     promo_code?: string | undefined;
     cart_id?: string | undefined;
-    force_apply?: boolean | undefined;
-}>;
-export declare const CheckEligibilitySchema: z.ZodObject<{
-    promotion_id: z.ZodString;
+    force_apply?: boolean | undefined }>;
+export declare const CheckEligibilitySchema: z.ZodObject<{ promotion_id: z.ZodString;
     user_id: z.ZodString;
     cart_id: z.ZodOptional<z.ZodString>;
-    item_ids: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-}, "strip", z.ZodTypeAny, {
-    user_id: string;
+    item_ids: z.ZodOptional<z.ZodArray<z.ZodString, "many">> }, "strip", z.ZodTypeAny, { user_id: string;
     promotion_id: string;
     cart_id?: string | undefined;
-    item_ids?: string[] | undefined;
-}, {
-    user_id: string;
+    item_ids?: string[] | undefined }, { user_id: string;
     promotion_id: string;
     cart_id?: string | undefined;
-    item_ids?: string[] | undefined;
-}>;
+    item_ids?: string[] | undefined }>;
 export type { BasePromotion, DiscountPromotion, ContentPromotion, BundlePromotion, CampaignPromotion, DiscountConfiguration, DiscountTier, ApplicableItemsFilter, PromotionTargetingRule, TargetingCondition, ContentSelectionStrategy, ContentSelectionCriteria, ContentDiversificationRule, ContentDisplayConfiguration, ContentRotationConfig, BundleConfiguration, BundleFlexibleOption, BundleItem, BundleRecommendationStrategy, BundleRecommendationRule, BundleTrigger, CampaignChannel, CampaignBudget, BudgetAlert, PromotionPerformanceMetrics, ContentPromotionMetrics, CampaignMetrics, PromotionRule, PromotionRuleCondition, PromotionRuleAction, PromotionTemplate, PromotionTemplateField, ValidationRule, PromotionAuditLog, PromotionServiceResponse, PromotionEligibilityCheck, PromotionApplicationResult, PromotionSearchCriteria, PromotionSearchResult };
 export { PromotionType, PromotionStatus, PromotionTargetType, PromotionApplicationType, DiscountApplicationScope, PromotionTrigger, CreatePromotionSchema, UpdatePromotionSchema, ApplyPromotionSchema, CheckEligibilitySchema };
 //# sourceMappingURL=PromotionInterfaces.d.ts.map

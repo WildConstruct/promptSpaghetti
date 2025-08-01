@@ -12,7 +12,7 @@ import {
   ThreatIntelligenceAnalysisConfig,
   MachineLearningAnalysisConfig,
   RiskAssessmentConfig
-} from '../SecurityDataCorrelationAnalysisArchitecture';
+ from '../SecurityDataCorrelationAnalysisArchitecture';
 import { SecurityEventCorrelationEngine } from '../SecurityEventCorrelationEngine';
 import { SecurityIntelligenceDataMart } from '../SecurityIntelligenceDataMart';
 import { SecurityIntelligenceDataModelEngine } from '../SecurityIntelligenceDataModel';
@@ -93,14 +93,14 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
             data_format: 'json',
             location: '/security/events',
             filters: []
-  }
+
           {
             source_id: 'threat_intel_source',
             source_type: 'intelligence',
             data_format: 'json',
             location: '/threat/intel',
             filters: []
-          }
+
         ],
         correlation_config: {
           temporal: true,
@@ -112,60 +112,60 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
             spatial: 0.7,
             behavioral: 0.75,
             network: 0.8
-  }
+
           dimension_weights: {
             temporal: 0.25,
             spatial: 0.20,
             behavioral: 0.25,
             network: 0.30
-          }
-  }
+
+
         pattern_config: {
           attack_patterns: true,
           fraud_patterns: true,
           insider_threat_patterns: true,
           recognition_algorithms: ['rule_based', 'machine_learning', 'hybrid'],
           confidence_threshold: 0.8
-  }
+
         threat_intel_config: {
           attribution: true,
           campaigns: true,
           threat_actors: true,
           intelligence_sources: ['commercial_feeds', 'open_source', 'internal'],
           enrichment_enabled: true
-  }
+
         ml_config: {
           anomaly_detection: {
             enabled: true,
             algorithms: ['isolation_forest', 'one_class_svm'],
             sensitivity: 0.7
-  }
+
           classification: {
             enabled: true,
             models: ['random_forest', 'gradient_boosting'],
             confidence_threshold: 0.8
-  }
+
           prediction: {
             enabled: true,
             prediction_types: ['next_attack_stage', 'risk_escalation'],
             time_horizon_hours: 24
-  }
+
           model_selection: ['supervised', 'unsupervised', 'ensemble'],
           confidence_threshold: 0.8
-  }
+
         risk_config: {
           risk_factors: ['threat_severity', 'asset_criticality', 'exposure_level'],
           impact_assessment: {
             categories: ['financial', 'operational', 'reputational'],
             weighting_method: 'weighted_average'
-  }
+
           likelihood_assessment: {
             methods: ['historical_analysis', 'threat_intelligence', 'expert_judgment'],
             time_horizon: '30_days'
-  }
+
           mitigation: true,
           scoring_method: 'quantitative'
-  }
+
         processing_options: {
           priority: 'high',
           timeout_minutes: 30,
@@ -174,7 +174,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
             { dimension: 'completeness', threshold: 95, required: true },
             { dimension: 'accuracy', threshold: 85, required: true }
           ]
-        }
+
       };
 
       const analysisResult = await correlationAnalysisEngine.executeCorrelationAnalysis(analysisRequest);
@@ -225,7 +225,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           analysis_confidence: expect.any(Number),
           false_positive_probability: expect.any(Number),
           completeness_score: expect.any(Number)
-  }
+
       }));
     });
 
@@ -237,7 +237,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
             source_type: 'events',
             data_format: 'json',
             location: '/test/events'
-          }
+
         ],
         correlation_config: {
           temporal: true,
@@ -246,40 +246,40 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           network: false,
           correlation_thresholds: { temporal: 0.8 },
           dimension_weights: { temporal: 1.0 }
-  }
+
         pattern_config: {
           attack_patterns: true,
           fraud_patterns: false,
           insider_threat_patterns: false,
           recognition_algorithms: ['rule_based'],
           confidence_threshold: 0.8
-  }
+
         threat_intel_config: {
           attribution: false,
           campaigns: false,
           threat_actors: false,
           intelligence_sources: [],
           enrichment_enabled: false
-  }
+
         ml_config: {
           anomaly_detection: { enabled: false, algorithms: [], sensitivity: 0.5 },
           classification: { enabled: false, models: [], confidence_threshold: 0.8 },
           prediction: { enabled: false, prediction_types: [], time_horizon_hours: 24 },
           model_selection: [],
           confidence_threshold: 0.8
-  }
+
         risk_config: {
           risk_factors: [],
           impact_assessment: { categories: [], weighting_method: 'equal' },
           likelihood_assessment: { methods: [], time_horizon: '24_hours' },
           mitigation: false,
           scoring_method: 'qualitative'
-  }
+
         processing_options: {
           priority: 'medium',
           timeout_minutes: 15,
           quality_requirements: []
-        }
+
       };
 
       const analysisPromise = correlationAnalysisEngine.executeCorrelationAnalysis(analysisRequest);
@@ -308,7 +308,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
         ml_config: null,
         risk_config: null,
         processing_options: null
-      } as any;
+ as any;
 
       const analysisPromise = correlationAnalysisEngine.executeCorrelationAnalysis(invalidAnalysisRequest);
 
@@ -339,14 +339,14 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           source_type: 'events' as const,
           data_format: 'json' as const,
           location: '/temporal/events'
-        }
+
       ];
 
       const config = {
         temporal: {
           time_windows: [300, 900, 1800], // 5min, 15min, 30min
           correlation_threshold: 0.8
-        }
+
       };
 
       // Access private method for testing
@@ -364,7 +364,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           behavioral_correlations_count: expect.any(Number),
           network_correlations_count: expect.any(Number),
           total_processing_time_ms: expect.any(Number)
-  }
+
       }));
     });
 
@@ -423,7 +423,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           enabled: true,
           types: ['apt', 'ransomware', 'insider_threat'],
           confidence_threshold: 0.7
-        }
+
       };
 
       // Access private method for testing
@@ -441,7 +441,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           insider_threat_patterns_count: expect.any(Number),
           high_confidence_patterns: expect.any(Number),
           critical_severity_patterns: expect.any(Number)
-  }
+
       }));
     });
 
@@ -608,7 +608,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           confidence_level: expect.any(Number),
           risk_category: expect.any(String),
           priority_level: expect.any(String)
-  }
+
       }));
     });
 
@@ -716,40 +716,40 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           network: false,
           correlation_thresholds: {},
           dimension_weights: {}
-  }
+
         pattern_config: {
           attack_patterns: false,
           fraud_patterns: false,
           insider_threat_patterns: false,
           recognition_algorithms: [],
           confidence_threshold: 0.8
-  }
+
         threat_intel_config: {
           attribution: false,
           campaigns: false,
           threat_actors: false,
           intelligence_sources: [],
           enrichment_enabled: false
-  }
+
         ml_config: {
           anomaly_detection: { enabled: false, algorithms: [], sensitivity: 0.5 },
           classification: { enabled: false, models: [], confidence_threshold: 0.8 },
           prediction: { enabled: false, prediction_types: [], time_horizon_hours: 24 },
           model_selection: [],
           confidence_threshold: 0.8
-  }
+
         risk_config: {
           risk_factors: [],
           impact_assessment: { categories: [], weighting_method: 'equal' },
           likelihood_assessment: { methods: [], time_horizon: '24_hours' },
           mitigation: false,
           scoring_method: 'qualitative'
-  }
+
         processing_options: {
           priority: 'low',
           timeout_minutes: 10,
           quality_requirements: []
-        }
+
       };
 
       await expect(correlationAnalysisEngine.executeCorrelationAnalysis(analysisRequest))
@@ -764,7 +764,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
             source_type: 'events',
             data_format: 'json',
             location: '/timeout/test'
-          }
+
         ],
         correlation_config: {
           temporal: true,
@@ -773,40 +773,40 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           network: false,
           correlation_thresholds: { temporal: 0.8 },
           dimension_weights: { temporal: 1.0 }
-  }
+
         pattern_config: {
           attack_patterns: true,
           fraud_patterns: false,
           insider_threat_patterns: false,
           recognition_algorithms: ['rule_based'],
           confidence_threshold: 0.8
-  }
+
         threat_intel_config: {
           attribution: false,
           campaigns: false,
           threat_actors: false,
           intelligence_sources: [],
           enrichment_enabled: false
-  }
+
         ml_config: {
           anomaly_detection: { enabled: false, algorithms: [], sensitivity: 0.5 },
           classification: { enabled: false, models: [], confidence_threshold: 0.8 },
           prediction: { enabled: false, prediction_types: [], time_horizon_hours: 24 },
           model_selection: [],
           confidence_threshold: 0.8
-  }
+
         risk_config: {
           risk_factors: [],
           impact_assessment: { categories: [], weighting_method: 'equal' },
           likelihood_assessment: { methods: [], time_horizon: '24_hours' },
           mitigation: false,
           scoring_method: 'qualitative'
-  }
+
         processing_options: {
           priority: 'critical',
           timeout_minutes: 0.01, // Very short timeout
           quality_requirements: []
-        }
+
       };
 
       // Mock a long-running operation
@@ -823,7 +823,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           temporal: true,
           correlation_thresholds: { temporal: 1.5 }, // Invalid threshold > 1
           dimension_weights: { temporal: -0.5 } // Invalid negative weight
-        }
+
       };
 
       // Test would validate configuration parameters before processing
@@ -832,7 +832,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
         if (invalidConfig.correlation_config.correlation_thresholds.temporal > 1 ||
             invalidConfig.correlation_config.dimension_weights.temporal < 0) {
           throw new Error('Invalid configuration parameters');
-        }
+
       }).toThrow('Invalid configuration parameters');
     });
   });
@@ -852,7 +852,7 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
             source_type: 'events',
             data_format: 'json',
             location: '/performance/test'
-          }
+
         ],
         correlation_config: {
           temporal: true,
@@ -861,40 +861,40 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           network: false,
           correlation_thresholds: { temporal: 0.8 },
           dimension_weights: { temporal: 1.0 }
-  }
+
         pattern_config: {
           attack_patterns: true,
           fraud_patterns: false,
           insider_threat_patterns: false,
           recognition_algorithms: ['rule_based'],
           confidence_threshold: 0.8
-  }
+
         threat_intel_config: {
           attribution: false,
           campaigns: false,
           threat_actors: false,
           intelligence_sources: [],
           enrichment_enabled: false
-  }
+
         ml_config: {
           anomaly_detection: { enabled: false, algorithms: [], sensitivity: 0.5 },
           classification: { enabled: false, models: [], confidence_threshold: 0.8 },
           prediction: { enabled: false, prediction_types: [], time_horizon_hours: 24 },
           model_selection: [],
           confidence_threshold: 0.8
-  }
+
         risk_config: {
           risk_factors: [],
           impact_assessment: { categories: [], weighting_method: 'equal' },
           likelihood_assessment: { methods: [], time_horizon: '24_hours' },
           mitigation: false,
           scoring_method: 'qualitative'
-  }
+
         processing_options: {
           priority: 'medium',
           timeout_minutes: 5,
           quality_requirements: []
-        }
+
       };
 
       const result = await correlationAnalysisEngine.executeCorrelationAnalysis(simpleAnalysisRequest);
@@ -923,42 +923,42 @@ describe('SecurityDataCorrelationAnalysisEngine', () => {
           network: true,
           correlation_thresholds: { temporal: 0.8, spatial: 0.7, behavioral: 0.75, network: 0.8 },
           dimension_weights: { temporal: 0.25, spatial: 0.25, behavioral: 0.25, network: 0.25 }
-  }
+
         pattern_config: {
           attack_patterns: true,
           fraud_patterns: true,
           insider_threat_patterns: true,
           recognition_algorithms: ['rule_based', 'machine_learning'],
           confidence_threshold: 0.8
-  }
+
         threat_intel_config: {
           attribution: true,
           campaigns: true,
           threat_actors: true,
           intelligence_sources: ['commercial_feeds', 'open_source'],
           enrichment_enabled: true
-  }
+
         ml_config: {
           anomaly_detection: { enabled: true, algorithms: ['isolation_forest'], sensitivity: 0.7 },
           classification: { enabled: true, models: ['random_forest'], confidence_threshold: 0.8 },
           prediction: { enabled: true, prediction_types: ['next_attack_stage'], time_horizon_hours: 24 },
           model_selection: ['supervised', 'unsupervised'],
           confidence_threshold: 0.8
-  }
+
         risk_config: {
           risk_factors: ['threat_severity', 'asset_criticality'],
           impact_assessment: { categories: ['financial', 'operational'], weighting_method: 'weighted_average' },
           likelihood_assessment: { methods: ['historical_analysis'], time_horizon: '30_days' },
           mitigation: true,
           scoring_method: 'quantitative'
-  }
+
         processing_options: {
           priority: 'high',
           timeout_minutes: 30,
           quality_requirements: [
             { dimension: 'data_quality', threshold: 90, required: true }
           ]
-        }
+
       };
 
       const result = await correlationAnalysisEngine.executeCorrelationAnalysis(largeDatasetRequest);

@@ -47,6 +47,12 @@ referrer ?  : string;
 sessionSource: string;
 deviceType: 'desktop' | 'tablet' | 'mobile';
 browserVersion: string;
+dateRange: {
+    start: number;
+    end: number;
+}
+;
+analysisVersion: string;
 ;
 // Mock data generators
 const generateMockSession = () => ({
@@ -60,10 +66,8 @@ Math.random() * 1800000 + 60000,
 Array.from({ length: Math.floor(Math.random() * 8) + 1 }, () => ({}), pageId, `page_${Math.random().toString(36).substr(2, 8)}`, url, `/page/${Math.floor(Math.random() * 20) + 1}`, title, `Page ${Math.floor(Math.random() * 20) + 1}`, timestamp, Date.now() - Math.random() * 3600000, loadTime, Math.random() * 3000 + 500, timeOnPage, Math.random() * 300000 + 30000, scrollDepth, Math.random() * 100, interactions, Math.floor(Math.random() * 50) + 5, exitType, ['navigation', 'close', 'refresh', 'timeout'][Math.floor(Math.random() * 4)]);
 interactions: Array.from({ length: Math.floor(Math.random() * 100) + 20 }, () => ({}), interactionId, `interaction_${Math.random().toString(36).substr(2, 8)}`, type, ['click', 'scroll', 'hover', 'keypress', 'form_input'][Math.floor(Math.random() * 5)], element, {
     tagName: ['button', 'a', 'input', 'div', 'span'][Math.floor(Math.random() * 5)],
-    id: Math.random() > 0.5 ? `elem_${Math.random().toString(36).substr(2, 6)}` : undefined
-}, className, `class-${Math.floor(Math.random() * 10)}`, text, `Element text ${Math.floor(Math.random() * 100)}`, xpath, `/html/body/div[${Math.floor(Math.random() * 5) + 1}]`, selector, `.class-${Math.floor(Math.random() * 10)}`, attributes, {}, timestamp, Date.now() - Math.random() * 3600000, coordinates, { x: Math.random() * 1920, y: Math.random() * 1080 }, context, {
-    pageUrl: `/page/${Math.floor(Math.random() * 20) + 1}`
-}, viewportSize, { width: 1920, height: 1080 }, scrollPosition, { x: 0, y: Math.random() * 2000 }, timestamp, Date.now(), userAgent, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)');
+    id: Math.random() > 0.5 ? `elem_${Math.random().toString(36).substr(2, 6)}` : undefined }, className, `class-${Math.floor(Math.random() * 10)}`, text, `Element text ${Math.floor(Math.random() * 100)}`, xpath, `/html/body/div[${Math.floor(Math.random() * 5) + 1}]`, selector, `.class-${Math.floor(Math.random() * 10)}`, attributes, {}, timestamp, Date.now() - Math.random() * 3600000, coordinates, { x: Math.random() * 1920, y: Math.random() * 1080 }, context, {
+    pageUrl: `/page/${Math.floor(Math.random() * 20) + 1}` }, viewportSize, { width: 1920, height: 1080 }, scrollPosition, { x: 0, y: Math.random() * 2000 }, timestamp, Date.now(), userAgent, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)');
 navigationFlow: [],
     performance;
 {

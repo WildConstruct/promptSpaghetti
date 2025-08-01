@@ -25,28 +25,27 @@ export declare const SENSITIVITY_LEVEL_MAPPING: Record<DataSensitivityLevel, Cla
  */
 
 }
-export interface EnhancedDataElement extends DataElement {
-    sensitivityLevel?: DataSensitivityLevel;
+}
+export interface EnhancedDataElement extends DataElement { sensitivityLevel?: DataSensitivityLevel;
     handlingRequirements?: DataHandlingRequirements;
     securityMarkings?: {
         label: string;
         color: string;
-        displayFormat: string;
-    };
+        displayFormat: string };
 /**
  * Security policy enforcement result
  */
 
 }
-export interface SecurityPolicyEnforcementResult {
-    compliant: boolean;
+}
+export interface SecurityPolicyEnforcementResult { compliant: boolean;
     violations: string[];
     recommendations: string[];
     requiredActions: {
         encryption: boolean;
         accessControl: string[];
         monitoring: string;
-        retention: string;
+        retention: string }
 }
     };
     riskScore: number;
@@ -55,8 +54,8 @@ export interface SecurityPolicyEnforcementResult {
  */
 
 }
-export interface DataFlowSecurityAssessment {
-    sourceLevel: DataSensitivityLevel;
+}
+export interface DataFlowSecurityAssessment { sourceLevel: DataSensitivityLevel;
     targetLevel: DataSensitivityLevel;
     transferAllowed: boolean;
     requiredControls: string[];
@@ -97,63 +96,55 @@ export declare class DataClassificationHelpers {
         encrypted: boolean;
         accessControl: string[];
         monitoring: string;
-        retention: string;
+        retention: string }
 }
     }): SecurityPolicyEnforcementResult;
     /**
      * Assess security for data transfer between systems
      */
     static assessDataFlowSecurity(sourceLevel: DataSensitivityLevel)
-      targetLevel: DataSensitivityLevel,
-      transferMethod: string,
-      encryptionInPlace: boolean,
+      targetLevel: DataSensitivityLevel
+      transferMethod: string
+      encryptionInPlace: boolean
     ): DataFlowSecurityAssessment;
     /**
      * Generate data handling compliance report
      */
-    static generateComplianceReport(elements: EnhancedDataElement[], currentPolicies: Record<string, any>): {
-        summary: {
+    static generateComplianceReport(elements: EnhancedDataElement[], currentPolicies: Record<string, any>): { summary: {
             totalElements: number;
             compliantElements: number;
             highRiskElements: number;
-            violationCount: number;
-        };
+            violationCount: number };
         levelBreakdown: Record<DataSensitivityLevel, number>;
-        violations: Array<{
-            elementId: string;
+        violations: Array<{ elementId: string;
             sensitivityLevel: DataSensitivityLevel;
             violations: string[];
-            riskScore: number;
-        }>;
+            riskScore: number }>;
         recommendations: string[];
     };
     /**
      * Validate field value against sensitivity level requirements
      */
-    static validateFieldValue(fieldName: string, value: any, sensitivityLevel: DataSensitivityLevel): {
-        valid: boolean;
+    static validateFieldValue(fieldName: string, value: any, sensitivityLevel: DataSensitivityLevel): { valid: boolean;
         errors: string[];
-        sanitizedValue?: any;
-    };
+        sanitizedValue?: any };
 /**
  * Integration adapter for existing DataClassifier
  */
-export declare class DataClassifierIntegration {
-    /**
+export declare class DataClassifierIntegration { /**
      * Enhance ClassificationResult with sensitivity information
      */
     static enhanceClassificationResult(result: ClassificationResult): ClassificationResult & {
         sensitivityLevel: DataSensitivityLevel;
         handlingRequirements: DataHandlingRequirements;
-        securityMarkings: ReturnType<typeof DataSensitivityUtils.generateSecurityMarkings>;
-    };
+        securityMarkings: ReturnType<typeof DataSensitivityUtils.generateSecurityMarkings> };
     /**
      * Create DataElement from enhanced data with sensitivity
      */
     static createDataElementFromSensitive(id: string)
-      fieldName: string,
-      value: any,
-      sensitivityLevel: DataSensitivityLevel,
+      fieldName: string
+      value: any
+      sensitivityLevel: DataSensitivityLevel
       source?: string
     ): EnhancedDataElement;
 

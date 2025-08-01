@@ -1,5 +1,4 @@
-export interface TemplatePreviewVariant {
-    id: string;
+export interface TemplatePreviewVariant { id: string;
     seed: number;
     result: string;
     timestamp: number;
@@ -7,19 +6,17 @@ export interface TemplatePreviewVariant {
     substitutions: Record<string, string>;
     variablesUsed: string[];
     hasErrors: boolean;
-    errorMessage?: string;
-
+    errorMessage?: string }
 }
-export interface TemplatePreviewPerformance {
-    averageExecutionTime: number;
+}
+export interface TemplatePreviewPerformance { averageExecutionTime: number;
     totalGenerations: number;
     successRate: number;
     lastUpdate: number;
-    templatesProcessed: number;
-
+    templatesProcessed: number }
 }
-export interface TemplatePreviewConfig {
-    maxVariants: number;
+}
+export interface TemplatePreviewConfig { maxVariants: number;
     debounceMs: number;
     enablePerformanceTracking: boolean;
     autoRefresh: boolean;
@@ -27,9 +24,9 @@ export interface TemplatePreviewConfig {
     errorOnUndefinedVariables: boolean;
 
 export declare const useTemplatePreview: ()
-  template: string,
-  variableValues?: Record<string,
-  string>,
+  template: string;
+  variableValues?: Record<string;
+  string>;
   customConfig?: Partial<TemplatePreviewConfig>
 ) => {
     variants: TemplatePreviewVariant[];
@@ -43,9 +40,10 @@ export declare const useTemplatePreview: ()
     forcePreview: () => void;
     refreshVariant: (variantId: string) => Promise<void>;
     clearVariants: () => void;
-    getPerformanceInsights: () => {,
+    getPerformanceInsights: () => { }
         isPerformanceGood: boolean;
         insights: string[];
+}
 }
     };
 };

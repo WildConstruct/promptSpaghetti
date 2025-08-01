@@ -16,8 +16,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { requireAuth, requireAdmin } from '../middleware/auth';
 
-}
-}
+
+
 interface EnforcementRoutes {
   '/enforcement/actions': {
     GET: {
@@ -29,8 +29,9 @@ interface EnforcementRoutes {
         limit?: number;
         offset?: number;
         include_expired?: boolean;
-}
-}
+
+
+
       };
     };
   };
@@ -101,7 +102,7 @@ interface EnforcementRoutes {
       };
     };
   };
-}
+
 
 export default async function automatedEnforcementRoutes(fastify: FastifyInstance) {
   // Initialize services
@@ -132,8 +133,8 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           request.url.includes('/review') ||
           request.url.includes('/reverse')) {
         await requireAdmin(request, reply);
-      }
-    }
+
+
   });
 
   /**
@@ -156,8 +157,8 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
             offset: { type: 'integer', minimum: 0, default: 0 },
             include_expired: { type: 'boolean', default: false }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -179,17 +180,17 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
                     actionTimestamp: { type: 'string', format: 'date-time' },
                     expiresAt: { type: 'string', format: 'date-time' },
                     reviewRequired: { type: 'boolean' }
-                  }
-                }
-  }
+
+
+
               total: { type: 'integer' },
               limit: { type: 'integer' },
               offset: { type: 'integer' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request, reply) => {
       try {
         const {
@@ -200,7 +201,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           limit = 20,
           offset = 0,
           include_expired = false
-        } = request.query;
+ = request.query;
 
         // Build query conditions
         let whereClause = '';
@@ -210,30 +211,30 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
         if (entity_type) {
           conditions.push(`entity_type = $${params.length + 1}`);
           params.push(entity_type);
-        }
+
 
         if (entity_id) {
           conditions.push(`entity_id = $${params.length + 1}`);
           params.push(entity_id);
-        }
+
 
         if (action_type) {
           conditions.push(`action_type = $${params.length + 1}`);
           params.push(action_type);
-        }
+
 
         if (severity) {
           conditions.push(`severity = $${params.length + 1}`);
           params.push(severity);
-        }
+
 
         if (!include_expired) {
           conditions.push('(expires_at IS NULL OR expires_at > NOW())');
-        }
+
 
         if (conditions.length > 0) {
           whereClause = `WHERE ${conditions.join(' AND ')}`;
-        }
+
 
         // Get actions with total count
         const actionsResult = await db.query(`
@@ -269,12 +270,10 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           limit,
           offset
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching enforcement actions:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -294,8 +293,8 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             entity_type: { type: 'string', enum: ['user', 'template', 'transaction'] },
             entity_id: { type: 'string' },
             reason: { type: 'string' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -304,12 +303,12 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
               actions: {
                 type: 'array',
                 items: { type: 'object' }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     async (request, reply) => {
       try {
         const { entity_type, entity_id, reason } = request.body;
@@ -330,7 +329,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             entity_id,
             reason,
             actions_generated: actions.length
-  }
+
           severity: 'info'
         });
 
@@ -338,12 +337,10 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           message: `Enforcement evaluation triggered for ${entity_type} ${entity_id}`,
           actions
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error triggering enforcement evaluation:', error);
         reply.status(500).send({ error: error.message || 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -367,10 +364,10 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             user_id: { type: 'string' },
             template_id: { type: 'string' },
             transaction_id: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const report = request.body;
@@ -390,9 +387,9 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
               user_id: report.user_id,
               template_id: report.template_id,
               transaction_id: report.transaction_id
-  }
+
             actions_generated: actions.length
-  }
+
           severity: report.severity === 'critical' ? 'error' : 'warning'
         });
 
@@ -400,12 +397,10 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           message: 'Suspicious activity report processed',
           actions
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error processing suspicious activity report:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -435,14 +430,14 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
                     policy_config: { type: 'object' },
                     created_at: { type: 'string', format: 'date-time' },
                     updated_at: { type: 'string', format: 'date-time' }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
+
+
     async (request, reply) => {
       try {
         const result = await db.query(`
@@ -453,12 +448,10 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
         reply.send({
           policies: result.rows
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error fetching enforcement policies:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -480,10 +473,10 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             description: { type: 'string' },
             enabled: { type: 'boolean' },
             policy_config: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { policy_id, name, description, enabled, policy_config } = request.body;
@@ -503,7 +496,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             policy_id,
             name,
             enabled
-  }
+
           severity: 'info'
         });
 
@@ -511,15 +504,14 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           message: 'Enforcement policy created',
           policy: result.rows[0]
         });
-
-      } catch (error) {
+ catch (error) {
         if (error.code === '23505') { // Unique violation
           reply.status(409).send({ error: 'Policy ID already exists' });
-        } else {
+ else {
           fastify.log.error('Error creating enforcement policy:', error);
           reply.status(500).send({ error: 'Internal server error' });
-        }
-      }
+
+
     }
   );
 
@@ -538,8 +530,8 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           required: ['policyId'],
           properties: {
             policyId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           properties: {
@@ -547,10 +539,10 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             description: { type: 'string' },
             enabled: { type: 'boolean' },
             policy_config: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -565,13 +557,13 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           if (value !== undefined) {
             params.push(key === 'policy_config' ? JSON.stringify(value) : value);
             updateFields.push(`${key} = $${params.length}`);
-          }
+
         });
 
         if (updateFields.length === 0) {
           reply.status(400).send({ error: 'No valid update fields provided' });
           return;
-        }
+
 
         updateFields.push('updated_at = NOW()');
         params.push(policyId);
@@ -586,7 +578,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
         if (result.rows.length === 0) {
           reply.status(404).send({ error: 'Policy not found' });
           return;
-        }
+
 
         // Log policy update
         await auditService.logEvent({
@@ -595,7 +587,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           details: {
             policy_id: policyId,
             updates: Object.keys(updates)
-  }
+
           severity: 'info'
         });
 
@@ -603,12 +595,10 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           message: 'Enforcement policy updated',
           policy: result.rows[0]
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error updating enforcement policy:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
 
   /**
@@ -626,10 +616,10 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           required: ['policyId'],
           properties: {
             policyId: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -644,7 +634,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
         if (result.rows.length === 0) {
           reply.status(404).send({ error: 'Policy not found' });
           return;
-        }
+
 
         // Log policy deletion
         await auditService.logEvent({
@@ -653,18 +643,15 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           details: {
             policy_id: policyId,
             name: result.rows[0].name
-  }
+
           severity: 'warning'
         });
 
         reply.send({
           message: 'Enforcement policy deleted'
         });
-
-      } catch (error) {
+ catch (error) {
         fastify.log.error('Error deleting enforcement policy:', error);
         reply.status(500).send({ error: 'Internal server error' });
-      }
-    }
+
   );
-}

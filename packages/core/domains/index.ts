@@ -33,7 +33,7 @@ export * from '../shared/ui/Dashboard';
 
 // Domain registry for dynamic loading
 
-}
+
 export interface DomainRegistry {
   'graph-editor': () => Promise<any>;
   'admin-dashboard': () => Promise<any>;
@@ -41,79 +41,74 @@ export interface DomainRegistry {
   'targeting': () => Promise<any>;
   'runtime': () => Promise<any>;
   // Domain factory registry
-}
-}
-export const createDomainRegistry = (): DomainRegistry => ({)
-  'graph-editor': () => import('./graph-editor'),
-  'admin-dashboard': () => import('./admin-dashboard'),
-  'security': () => import('./security'),
-  'targeting': () => import('./targeting'),
-  'runtime': () => import('./runtime'),
+
+
+export const createDomainRegistry = (): DomainRegistry => ({ )
+  'graph-editor': () => import('./graph-editor')
+  'admin-dashboard': () => import('./admin-dashboard')
+  'security': () => import('./security')
+  'targeting': () => import('./targeting')
+  'runtime': () => import('./runtime') }
 });
 
 // Domain metadata
-export const DOMAIN_METADATA = {
-  'graph-editor': {
-  name: 'Graph Editor',
-  description: 'Visual graph editing and execution',
-  version: '1.0.0',
-  status: 'active',
-  dependencies: ['runtime', 'shared'],
-  features: ['node-editing', 'visual-flow', 'execution', 'validation', 'inspector-system'],
-  components: 15,
-  hooks: 6,
-  services: 4,
-}
-  'admin-dashboard': {
-  name: 'Admin Dashboard',
-  description: 'Administrative interface and controls',
-  version: '1.0.0',
-  status: 'active',
-  dependencies: ['security', 'shared'],
-  features: ['user-management', 'security-monitoring', 'api-management', 'system-metrics', 'widget-system'],
-  components: 12,
-  hooks: 5,
-  services: 6,
-}
-  'security': {
-  name: 'Security Framework',
-  description: 'Authentication, authorization, and security monitoring',
-  version: '1.0.0',
-  status: 'active',
-  dependencies: ['shared'],
-  features: ['access-control', 'audit-logging', 'threat-detection', 'compliance', 'encryption'],
-  components: 8,
-  hooks: 5,
-  services: 7,
-}
-  'runtime': {
-  name: 'Runtime Engine',
-  description: 'Core execution engine for graphs and nodes',
-  version: '1.0.0',
-  status: 'active',
-  dependencies: ['shared'],
-  features: ['node-execution', 'graph-processing', 'validation', 'performance-monitoring', 'caching'],
-  components: 6,
-  hooks: 5,
-  services: 6,
-}
-  'targeting': {
-  name: 'Advanced Targeting',
-  description: 'Audience targeting and segmentation (Epic 17)',
-  version: '0.1.0',
-  status: 'planned',
-  dependencies: ['runtime', 'shared'],
-  features: ['audience-builder', 'condition-engine', 'preview', 'analytics', 'segmentation'],
-  components: 0,
-  hooks: 0,
-  services: 0,
-} as const;
+export const DOMAIN_METADATA = { 'graph-editor': {
+  name: 'Graph Editor'
+  description: 'Visual graph editing and execution'
+  version: '1.0.0'
+  status: 'active'
+  dependencies: ['runtime', 'shared']
+  features: ['node-editing', 'visual-flow', 'execution', 'validation', 'inspector-system']
+  components: 15
+  hooks: 6
+  services: 4 }
+
+  'admin-dashboard': { name: 'Admin Dashboard'
+  description: 'Administrative interface and controls'
+  version: '1.0.0'
+  status: 'active'
+  dependencies: ['security', 'shared']
+  features: ['user-management', 'security-monitoring', 'api-management', 'system-metrics', 'widget-system']
+  components: 12
+  hooks: 5
+  services: 6 }
+
+  'security': { name: 'Security Framework'
+  description: 'Authentication, authorization, and security monitoring'
+  version: '1.0.0'
+  status: 'active'
+  dependencies: ['shared']
+  features: ['access-control', 'audit-logging', 'threat-detection', 'compliance', 'encryption']
+  components: 8
+  hooks: 5
+  services: 7 }
+
+  'runtime': { name: 'Runtime Engine'
+  description: 'Core execution engine for graphs and nodes'
+  version: '1.0.0'
+  status: 'active'
+  dependencies: ['shared']
+  features: ['node-execution', 'graph-processing', 'validation', 'performance-monitoring', 'caching']
+  components: 6
+  hooks: 5
+  services: 6 }
+
+  'targeting': { name: 'Advanced Targeting'
+  description: 'Audience targeting and segmentation (Epic 17)'
+  version: '0.1.0'
+  status: 'planned'
+  dependencies: ['runtime', 'shared']
+  features: ['audience-builder', 'condition-engine', 'preview', 'analytics', 'segmentation']
+  components: 0
+  hooks: 0
+  services: 0 }
+ as const;
 
 export type DomainName = keyof typeof DOMAIN_METADATA;
 
 // Domain status tracking
 
-}
+
 export interface DomainStatus {
   name: DomainName;
   loaded: boolean;
@@ -121,25 +116,11 @@ export interface DomainStatus {
   error?: Error;
   loadTime?: number;
   // Domain manager for coordinating domain loading and communication
-}
-}
-export class DomainManager {
-  private domains = new Map<DomainName, any>();
-  private status = new Map<DomainName, DomainStatus>();
-  private registry: DomainRegistry;
-  constructor() {
-  this.registry = createDomainRegistry();
-  // Initialize status for all domains
-  Object.keys(DOMAIN_METADATA).forEach(name => {)
-  this.status.set(name as DomainName, {)
-  name: name as DomainName,
-  loaded: false,
-  initialized: false,
-});
-    });
-  async loadDomain(name: DomainName): Promise<any> {
 
-  if (this.domains.has(name)) {
+
+export class DomainManager {});
+    });
+  async loadDomain(name: DomainName): Promise<any> { if (this.domains.has(name)) {
   return this.domains.get(name);
   const startTime = Date.now();
   try {
@@ -147,38 +128,36 @@ export class DomainManager {
   const loadTime = Date.now() - startTime;
   this.domains.set(name, domainModule);
   this.status.set(name, {)
-  name,
-  loaded: true,
-  initialized: false,
+  name
+  loaded: true
+  initialized: false }
   loadTime
 });
       return domainModule;
-    } catch (error) {
-  this.status.set(name, {)
-  name,
-  loaded: false,
-  initialized: false,
-  error: error as Error,
+ catch (error) { this.status.set(name, {)
+  name
+  loaded: false
+  initialized: false
+  error: error as Error }
 });
       throw error;
-  getDomain(name: DomainName): any {
-  return this.domains.get(name);
-  getDomainStatus(name: DomainName): DomainStatus | undefined {,
+  getDomain(name: DomainName): any { return this.domains.get(name);
+  getDomainStatus(name: DomainName): DomainStatus | undefined {
   return this.status.get(name);
-  getAllDomainStatus(): DomainStatus {,
+  getAllDomainStatus(): DomainStatus {
   return Array.from(this.status.values());
-  isLoaded(name: DomainName): boolean {,
+  isLoaded(name: DomainName): boolean {
   return this.status.get(name)?.loaded ?? false;
-  async preloadDomains(domains: DomainName): Promise<void> {,
+  async preloadDomains(domains: DomainName): Promise<void> {
   await Promise.all(domains.map(name => this.loadDomain(name)));
-  unloadDomain(name: DomainName): void {,
+  unloadDomain(name: DomainName): void {
   this.domains.delete(name);
   const status = this.status.get(name);
   if (status) {
   this.status.set(name, {)
-  ...status,
-  loaded: false,
-  initialized: false,
+  ...status
+  loaded: false
+  initialized: false }
 });
 
 // Global domain manager instance

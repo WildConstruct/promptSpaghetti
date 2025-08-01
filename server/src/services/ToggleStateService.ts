@@ -15,11 +15,12 @@ import {
   ToggleType, 
   ToggleEvaluationContext,
   ClaudeImpact 
-} from '../database/feature-toggle-models';
+ from '../database/feature-toggle-models';
 
 // State query interface
-}
-}
+
+
+
 export interface ToggleStateQuery {
   keys?: string[];
   types?: ToggleType[];
@@ -30,8 +31,9 @@ export interface ToggleStateQuery {
   lastModified?: {
     since?: string;
     until?: string;
-}
-}
+
+
+
   };
   includeMetadata?: boolean;
   includeAudit?: boolean;
@@ -39,37 +41,41 @@ export interface ToggleStateQuery {
   offset?: number;
   sort?: 'name' | 'key' | 'created_at' | 'updated_at' | 'usage_count';
   order?: 'asc' | 'desc';
-}
+
 
 // Bulk operation interface
-}
-}
+
+
+
 export interface BulkStateOperation {
   operation: 'enable' | 'disable' | 'toggle' | 'update_values';
   toggles: Array<string | {
     key: string;
     value?: unknown;
     reason?: string;
-}
-}
-  }>;
+
+
+
+>;
   reason?: string;
   dryRun?: boolean;
   rollbackOnError?: boolean;
   actorId?: string;
   timestamp?: Date;
-}
+
 
 // State comparison interface
-}
-}
+
+
+
 export interface StateComparisonRequest {
   left: {
     orgId?: string;
     timestamp?: string;
     filters?: ToggleStateQuery;
-}
-}
+
+
+
   };
   right: {
     orgId?: string;
@@ -81,40 +87,45 @@ export interface StateComparisonRequest {
     includeMetadata?: boolean;
     diffFormat?: 'unified' | 'split' | 'json';
   };
-}
+
 
 // State watch interface
-}
-}
+
+
+
 export interface StateWatchRequest {
   keys?: string[];
   events?: string[];
   filters?: ToggleStateQuery;
   callback: (event: unknown) => void;
-}
-}
-}
+
+
+
+
 
 // Response interfaces
-}
-}
+
+
+
 export interface ToggleStateQueryResult {
   states: unknown[];
   total: number;
   cacheHit?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkOperationResult {
   results: {
     successful: unknown[];
     failed: unknown[];
     rollbacks: unknown[];
-}
-}
+
+
+
   };
   summary: {
     total: number;
@@ -122,17 +133,18 @@ export interface BulkOperationResult {
     failed: number;
     skipped: number;
   };
-}
 
-}
-}
+
+
+
 export interface StateCloneRequest {
   source: {
     orgId?: string;
     keys?: string[];
     filters?: ToggleStateQuery;
-}
-}
+
+
+
   };
   target: {
     orgId: string;
@@ -146,7 +158,7 @@ export interface StateCloneRequest {
     dryRun?: boolean;
     actorId?: string;
   };
-}
+
 
 export class ToggleStateService extends EventEmitter {
   private dao: FeatureToggleDAO;
@@ -159,7 +171,7 @@ export class ToggleStateService extends EventEmitter {
     
     // Set up cache cleanup interval
     setInterval(() => this.cleanupCache(), 5 * 60 * 1000); // 5 minutes
-  }
+
 
   // ==========================================
   // STATE QUERIES
@@ -174,7 +186,7 @@ export class ToggleStateService extends EventEmitter {
     const cached = this.cache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < 30000) { // 30 second cache
       return { ...cached.result, cacheHit: true };
-    }
+
 
     try {
       // Build the query for DAO
@@ -210,7 +222,7 @@ export class ToggleStateService extends EventEmitter {
         break;
       default: // 'full'
         formattedStates = result.toggles;
-      }
+
 
       const queryResult = {
         states: formattedStates,
@@ -225,10 +237,10 @@ export class ToggleStateService extends EventEmitter {
       });
 
       return queryResult;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to query toggle states: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 200 })
   async getStateSummary(options: {
@@ -262,7 +274,7 @@ export class ToggleStateService extends EventEmitter {
       case '30d':
         sinceDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
         break;
-      }
+
 
       const recentlyModified = sinceDate 
         ? toggles.filter(t => t.updatedAt >= sinceDate!)
@@ -282,7 +294,6 @@ export class ToggleStateService extends EventEmitter {
           newestToggle: toggles.reduce((newest, t) => 
             !newest || t.createdAt > newest.createdAt ? t : newest, null as FeatureToggle | null
 
-  }
         topModified: recentlyModified
           .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
           .slice(0, 10)
@@ -296,10 +307,10 @@ export class ToggleStateService extends EventEmitter {
       };
 
       return summary;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get state summary: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 200 })
   async getStateChanges(options: {
@@ -327,18 +338,18 @@ export class ToggleStateService extends EventEmitter {
               toggleKey: key,
               toggleName: toggle.name
             })));
-          }
-        }
-      }
+
+
+
 
       // Sort by timestamp descending
       changes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
       
       return changes.slice(0, options.limit || 50);
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to get state changes: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   // ==========================================
   // BULK OPERATIONS
@@ -373,7 +384,7 @@ export class ToggleStateService extends EventEmitter {
             });
             summary.failed++;
             continue;
-          }
+
 
           let updatedToggle;
           const reason = typeof toggleSpec === 'object' ? 
@@ -385,7 +396,7 @@ export class ToggleStateService extends EventEmitter {
             if (toggle.enabled) {
               summary.skipped++;
               continue;
-            }
+
             updatedToggle = await this.dao.updateToggle({
               id: toggle.id,
               enabled: true,
@@ -397,7 +408,7 @@ export class ToggleStateService extends EventEmitter {
             if (!toggle.enabled) {
               summary.skipped++;
               continue;
-            }
+
             updatedToggle = await this.dao.updateToggle({
               id: toggle.id,
               enabled: false,
@@ -420,14 +431,14 @@ export class ToggleStateService extends EventEmitter {
                 value: toggleSpec.value,
                 reason
               }, operation.actorId || 'system');
-            } else {
+ else {
               results.failed.push({
                 key: toggleKey,
                 error: 'No value provided for update_values operation'
               });
               summary.failed++;
               continue;
-            }
+
             break;
 
           default:
@@ -437,7 +448,7 @@ export class ToggleStateService extends EventEmitter {
             });
             summary.failed++;
             continue;
-          }
+
 
           results.successful.push({
             key: toggleKey,
@@ -453,8 +464,7 @@ export class ToggleStateService extends EventEmitter {
             operation: operation.operation,
             timestamp: new Date()
           });
-
-        } catch (error) {
+ catch (error) {
           results.failed.push({
             key: typeof toggleSpec === 'string' ? toggleSpec : toggleSpec.key,
             error: error instanceof Error ? error.message : 'Unknown error'
@@ -471,27 +481,27 @@ export class ToggleStateService extends EventEmitter {
                   key: successfulOp.key,
                   status: 'attempted'
                 });
-              } catch (rollbackError) {
+ catch (rollbackError) {
                 results.rollbacks.push({
                   key: successfulOp.key,
                   status: 'failed',
                   error: rollbackError instanceof Error ? rollbackError.message : 'Unknown error'
                 });
-              }
-            }
+
+
             break;
-          }
-        }
-      }
+
+
+
 
       // Clear relevant caches
       this.clearCacheByPattern('query:*');
 
       return { results, summary };
-    } catch (error) {
+ catch (error) {
       throw new Error(`Bulk operation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   // ==========================================
   // STATE CLONING
@@ -529,7 +539,7 @@ export class ToggleStateService extends EventEmitter {
               reason: 'Target already exists'
             });
             continue;
-          }
+
 
           if (request.options?.dryRun) {
             cloneResults.copied.push({
@@ -538,7 +548,7 @@ export class ToggleStateService extends EventEmitter {
               status: 'would_copy'
             });
             continue;
-          }
+
 
           // Create or update the toggle in target org
           const toggleData = {
@@ -563,14 +573,13 @@ export class ToggleStateService extends EventEmitter {
             toggleId: newToggle.id,
             status: existingToggle ? 'updated' : 'created'
           });
-
-        } catch (error) {
+ catch (error) {
           cloneResults.failed.push({
             sourceKey: sourceToggle.key,
             error: error instanceof Error ? error.message : 'Unknown error'
           });
-        }
-      }
+
+
 
       return {
         summary: {
@@ -578,13 +587,13 @@ export class ToggleStateService extends EventEmitter {
           copied: cloneResults.copied.length,
           skipped: cloneResults.skipped.length,
           failed: cloneResults.failed.length
-  }
+
         details: cloneResults
       };
-    } catch (error) {
+ catch (error) {
       throw new Error(`State cloning failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   // ==========================================
   // REAL-TIME MONITORING
@@ -601,21 +610,21 @@ export class ToggleStateService extends EventEmitter {
       if (request.keys && request.keys.length > 0) {
         if (!request.keys.includes(event.toggleKey)) {
           return;
-        }
-      }
+
+
 
       if (request.events && request.events.length > 0) {
         if (!request.events.includes(event.type)) {
           return;
-        }
-      }
+
+
 
       // Call the callback
       try {
         request.callback(event);
-      } catch (error) {
+ catch (error) {
         console.error('Error in state watch callback:', error);
-      }
+
     };
 
     this.on('stateChange', handleStateChange);
@@ -625,7 +634,7 @@ export class ToggleStateService extends EventEmitter {
       this.watchers.delete(watcherId);
       this.off('stateChange', handleStateChange);
     };
-  }
+
 
   // ==========================================
   // STATE COMPARISON
@@ -653,13 +662,13 @@ export class ToggleStateService extends EventEmitter {
           leftOnly: 0,
           rightOnly: 0,
           different: 0
-  }
+
         details: {
           common: [] as any[],
           leftOnly: [] as any[],
           rightOnly: [] as any[],
           different: [] as any[]
-        }
+
       };
 
       // Find common keys
@@ -682,33 +691,33 @@ export class ToggleStateService extends EventEmitter {
               differences: this.calculateDifferences(leftToggle, rightToggle)
             });
             comparison.summary.different++;
-          } else {
+ else {
             comparison.details.common.push({
               key,
               toggle: leftToggle
             });
             comparison.summary.common++;
-          }
-        } else if (leftToggle) {
+
+ else if (leftToggle) {
           comparison.details.leftOnly.push({
             key,
             toggle: leftToggle
           });
           comparison.summary.leftOnly++;
-        } else if (rightToggle) {
+ else if (rightToggle) {
           comparison.details.rightOnly.push({
             key,
             toggle: rightToggle
           });
           comparison.summary.rightOnly++;
-        }
-      }
+
+
 
       return comparison;
-    } catch (error) {
+ catch (error) {
       throw new Error(`State comparison failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   // ==========================================
   // HEALTH & DIAGNOSTICS
@@ -737,24 +746,24 @@ export class ToggleStateService extends EventEmitter {
           recentlyModified: summary.recentlyModified,
           cacheHitRate: this.calculateCacheHitRate(),
           watcherCount: this.watchers.size
-        }
+
       };
 
       // Health checks
       if (summary.activeToggles === 0) {
         health.issues.push('No active toggles found');
         health.score -= 20;
-      }
+
 
       if (summary.recentlyModified > summary.totalToggles * 0.5) {
         health.issues.push('High toggle modification rate detected');
         health.score -= 10;
-      }
+
 
       if (this.cache.size > 1000) {
         health.issues.push('Cache size is large, consider cleanup');
         health.score -= 5;
-      }
+
 
       health.status = health.score >= 80 ? 'healthy' : 
         health.score >= 60 ? 'warning' : 'critical';
@@ -764,18 +773,18 @@ export class ToggleStateService extends EventEmitter {
           ...health,
           details: summary
         };
-      }
+
 
       return health;
-    } catch (error) {
+ catch (error) {
       return {
         status: 'critical',
         score: 0,
         issues: [`System health check failed: ${error instanceof Error ? error.message : 'Unknown error'}`],
         metrics: {}
       };
-    }
-  }
+
+
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 200 })
   async validateStates(options: {
@@ -805,12 +814,12 @@ export class ToggleStateService extends EventEmitter {
         if (checks.includes('dependencies')) {
           // Check for circular dependencies, missing dependencies, etc.
           // This would require a more sophisticated dependency tracking system
-        }
+
 
         // Conflict checks
         if (checks.includes('conflicts')) {
           // Check for conflicting toggles that shouldn't be enabled together
-        }
+
 
         // Claude impact checks
         if (checks.includes('claude_impact')) {
@@ -820,8 +829,8 @@ export class ToggleStateService extends EventEmitter {
               issue: 'High Claude impact toggle is disabled',
               suggestion: 'Consider enabling or reducing impact level'
             });
-          }
-        }
+
+
 
         // Performance checks
         if (checks.includes('performance')) {
@@ -831,20 +840,20 @@ export class ToggleStateService extends EventEmitter {
               issue: 'Dynamic toggle has very low cache TTL',
               suggestion: 'Consider increasing cache TTL for better performance'
             });
-          }
-        }
-      }
+
+
+
 
       validation.isValid = validation.issues.length === 0;
       return validation;
-    } catch (error) {
+ catch (error) {
       validation.isValid = false;
       validation.issues.push({
         error: `Validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       });
       return validation;
-    }
-  }
+
+
 
   // ==========================================
   // PRIVATE HELPER METHODS
@@ -876,38 +885,38 @@ export class ToggleStateService extends EventEmitter {
           break;
         default:
           groupValue = 'unknown';
-        }
+
 
         grouped[groupField][groupValue] = (grouped[groupField][groupValue] || 0) + 1;
-      }
-    }
+
+
 
     return grouped;
-  }
+
 
   private calculateDifferences(left: unknown, right: unknown): string[] {
     const differences = [];
     
     if (left.enabled !== right.enabled) {
       differences.push(`enabled: ${left.enabled} → ${right.enabled}`);
-    }
+
     
     if (JSON.stringify(left.value) !== JSON.stringify(right.value)) {
       differences.push('value changed');
-    }
+
     
     if (left.version !== right.version) {
       differences.push(`version: ${left.version} → ${right.version}`);
-    }
+
 
     return differences;
-  }
+
 
   private calculateCacheHitRate(): number {
     // Simple cache hit rate calculation
     // In a real implementation, you'd track cache hits vs misses
     return Math.random() * 0.3 + 0.7; // Mock 70-100% hit rate
-  }
+
 
   private cleanupCache(): void {
     const now = Date.now();
@@ -916,9 +925,9 @@ export class ToggleStateService extends EventEmitter {
     for (const [key, value] of this.cache.entries()) {
       if (now - value.timestamp > maxAge) {
         this.cache.delete(key);
-      }
-    }
-  }
+
+
+
 
   private clearCacheByPattern(pattern: string): void {
     const regex = new RegExp(pattern.replace('*', '.*'));
@@ -926,7 +935,6 @@ export class ToggleStateService extends EventEmitter {
     for (const key of this.cache.keys()) {
       if (regex.test(key)) {
         this.cache.delete(key);
-      }
-    }
-  }
-}
+
+
+

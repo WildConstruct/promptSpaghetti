@@ -2,68 +2,73 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/environment';
-}
+
+
 interface User {
-  id: string;,
+  id: string;
   display_name: string;
   avatar_url?: string;
-  creator_tier: 'bronze' | 'silver' | 'gold' | 'platinum';,
+  creator_tier: 'bronze' | 'silver' | 'gold' | 'platinum';
   verification_status: 'verified' | 'unverified';
-  followers_count: number;,
+  followers_count: number;
   following_count: number;
-  templates_count: number;,
+  templates_count: number;
   total_revenue: number;
   interface Post {
-  id: string;,
+  id: string;
   author: User;
   content: string;
   images?: string;
   template_id?: string;
   template_preview?: {
-  id: string;,
+    
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   price_cents: number;
-}
+
+
 };
-  type: 'text' | 'template_showcase' | 'tutorial' | 'question' | 'announcement';,
+  type: 'text' | 'template_showcase' | 'tutorial' | 'question' | 'announcement';
   likes_count: number;
-  comments_count: number;,
+  comments_count: number;
   shares_count: number;
-  is_liked: boolean;,
+  is_liked: boolean;
   is_bookmarked: boolean;
-  created_at: string;,
+  created_at: string;
   updated_at: string;
   tags: string;
-}
+
+
 interface Discussion {
-  id: string;,
+  id: string;
   title: string;
-  content: string;,
+  content: string;
   author: User;
-  category: string;,
+  category: string;
   tags: string;
-  replies_count: number;,
+  replies_count: number;
   views_count: number;
-  last_activity_at: string;,
+  last_activity_at: string;
   is_pinned: boolean;
-  is_solved: boolean;,
+  is_solved: boolean;
   created_at: string;
-}
+
+
+
 interface Event {
-  id: string;,
+  id: string;
   title: string;
-  description: string;,
+  description: string;
   type: 'webinar' | 'workshop' | 'community_call' | 'contest' | 'launch';
-  start_date: string;,
+  start_date: string;
   end_date: string;
   attendees_count: number;
   max_attendees?: number;
-  is_attending: boolean;,
+  is_attending: boolean;
   organizer: User;
   tags: string;
-
-export const [discussions, setDiscussions] = useState<Discussion>([]);
+  export const [discussions, setDiscussions] = useState<Discussion>([]);
   const [events, setEvents] = useState<Event>([]);
   const [topCreators, setTopCreators] = useState<User>([]);
   const [following, setFollowing] = useState<Set<string>>(new Set());
@@ -74,13 +79,13 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
   const [showNewPostForm, setShowNewPostForm] = useState(false);
   const navigate = useNavigate();
   const getAuthHeaders = () => {
-    const token = localStorage.getItem('auth_token');
-    return {
-      'Content-Type': 'application/json',
-}
+  const token = localStorage.getItem('auth_token');
+  return {
+  'Content-Type': 'application/json',
+
+
       ...(token && { 'Authorization': `Bearer ${token}` })}
-    };
-  };
+    }};
   const fetchCommunityData = useCallback(async () => {
     try {
       setLoading(true);
@@ -101,7 +106,7 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
         fetch(`${API_URL}/api/marketplace/community/creators`, {)}
   },
   headers: getAuthHeaders();
-  }
+
       ]);
       if (!postsRes.ok || !discussionsRes.ok || !eventsRes.ok || !creatorsRes.ok) {
         throw new Error('Failed to fetch community data');
@@ -122,9 +127,9 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           followingSet.add(creator.id);
       });
       setFollowing(followingSet);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load community data');
-} finally {
+ catch (err) {
+  setError(err instanceof Error?: err.message : 'Failed to load community data');
+ finally {
       setLoading(false);
   }, [feedFilter]);
   useEffect(() => {
@@ -143,9 +148,9 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
   ? {
   ...post,
   is_liked: !post.is_liked,
-  likes_count: post.is_liked ? post.likes_count - 1 : post.likes_count + 1,
+  likes_count: post.is_liked?: post.likes_count - 1 : post.likes_count + 1,
   : post));
-} catch (error) {
+ catch (error) {
   console.error('Failed to like post:', error);
 }, []);
   const handleFollowCreator = useCallback(async (creatorId: string) => {
@@ -161,7 +166,7 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
   const newSet = new Set(prev);
           if (isFollowing) {
             newSet.delete(creatorId);
-          } else {
+ else {
             newSet.add(creatorId);
           return newSet;
         });
@@ -173,7 +178,7 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
   ? creator.followers_count - 1
   : creator.followers_count + 1,
   : creator));
-} catch (error) {
+ catch (error) {
   console.error('Failed to follow/unfollow creator:', error);
 }, [following]);
   const handleCreatePost = useCallback(async () => {
@@ -183,17 +188,16 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
   },
   method: 'POST',
         headers: getAuthHeaders(),
-        body: JSON.stringify({,)
-  content: newPostContent,
-  type: 'text',
-}
-      });
+        body: JSON.stringify({);
+  content: newPostContent;
+  type: 'text'
+  });
       if (response.ok) {
         const newPost = await response.json();
         setPosts(prev => [newPost, ...prev]);
         setNewPostContent('');
         setShowNewPostForm(false);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to create post:', error);
 }, [newPostContent]);
   const getTierBadge = (tier: string) => {
@@ -218,17 +222,17 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
   };
   const formatCurrency = (cents: number) => `$${(cents / 100).toFixed(2)}`;}
   if (loading) {
-    return;
-      <div className="community-hub loading">
+    return (
+    <div className="community-hub loading">
         <div className="loading-spinner">
           <div className="spinner"></div>
           <p>Loading community...</p>
         </div>
       </div>
-    );
+  );
   if (error) {
-    return;
-      <div className="community-hub error">
+    return (
+    <div className="community-hub error">
         <div className="error-message">
           <h3>Failed to load community</h3>
           <p>{error}</p>
@@ -237,8 +241,8 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           </button>
         </div>
       </div>
-    );
-  return;
+  );
+  return (
     <div className="community-hub">
       {/* Header */}
       <div className="community-header">
@@ -292,7 +296,7 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
                 <textarea
                   value={newPostContent}
                   onChange={(e) => setNewPostContent(e.target.value)}
-                  placeholder="What's on your mind? Share a tip, ask a question, or showcase your work..."
+                  placeholder="What's on your mind?: Share a tip, ask a question, or showcase your work..."
                   rows={4}
                 />
                 <div className="form-actions">
@@ -538,7 +542,7 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
                   <div className="rank">
                     {index + 1 <= 3 ? ()
                       <span className="medal">
-                        {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
+                        {index === 0 ? '🥇' : index[] === 1 ? '🥈' : '🥉'}
                       </span>
                     ) : ()
                       <span className="rank-number">#{index + 1}</span>
@@ -676,9 +680,9 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
       </div>
       <style>{`
         .community-hub {
-          max-width: 1200px;,
+          max-width: 1200px;
   margin: 0 auto;
-          padding: 20px;
+  padding: 20px;
         .community-header {
           display: flex;
           justify-content: space-between;
@@ -687,102 +691,105 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           padding-bottom: 20px;
           border-bottom: 2px solid #e1e5e9;
         .header-content h1 {
-          margin: 0 0 5px 0;,
+          margin: 0 0 5px 0;
   color: #1f2937;
           font-size: 32px;
         .header-content p {
-          margin: 0;,
+          margin: 0;
   color: #6b7280;
           font-size: 16px;
         .create-post-btn {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: white;
-          border: none;,
+  border: none;
   padding: 12px 24px;
           border-radius: 8px;
-          font-weight: 500;,
+          font-weight: 500;
   cursor: pointer;
-        .create-post-btn:hover {,
+        .create-post-btn:hover {
+    
   background: #2563eb;
         .community-tabs {
-          display: flex;,
+          display: flex;
   gap: 2px;
           margin-bottom: 30px;
           border-bottom: 2px solid #e1e5e9;
         .tab {
-          background: none;,
+          background: none;
   border: none;
-          padding: 12px 20px;,
+  padding: 12px 20px;
   cursor: pointer;
-          color: #6b7280;
+  color: #6b7280;
           font-weight: 500;
           border-bottom: 2px solid transparent;
         .tab.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
-        .tab:hover {,
+        .tab:hover {
+    
   color: #1f2937;
         .feed-filters {
           margin-bottom: 20px;
         .filter-buttons {
-          display: flex;,
+          display: flex;
   gap: 10px;
         .filter-btn {
-          background: #f3f4f6;,
+          background: #f3f4f6;
   border: none;
-          padding: 8px 16px;
-          border-radius: 20px;,
+  padding: 8px 16px;
+          border-radius: 20px;
   cursor: pointer;
-          color: #6b7280;
+  color: #6b7280;
           font-size: 14px;
         .filter-btn.active {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: white;
         .new-post-form {
-          background: white;,
+          background: white;
   padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           margin-bottom: 20px;
         .new-post-form h3 {
-          margin: 0 0 15px 0;,
+          margin: 0 0 15px 0;
   color: #1f2937;
         .new-post-form textarea {
-          width: 100%;,
+          width: 100%;
   padding: 12px;
-          border: 1px solid #d1d5db;
-          border-radius: 8px;,
+  border: 1px solid #d1d5db;
+          border-radius: 8px;
   resize: vertical;
           font-family: inherit;
           font-size: 14px;
         .form-actions {
           display: flex;
-          justify-content: flex-end;,
+          justify-content: flex-end;
   gap: 10px;
           margin-top: 15px;
         .cancel-btn {
-          background: #f3f4f6;,
+          background: #f3f4f6;
   color: #374151;
-          border: none;,
+  border: none;
   padding: 8px 16px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
         .post-btn {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: white;
-          border: none;,
+  border: none;
   padding: 8px 16px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
-        .post-btn:disabled {,
+        .post-btn:disabled {
+    
   background: #9ca3af;
-          cursor: not-allowed;
+  cursor: not-allowed;
         .posts-feed {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 20px;
         .post-card {
-          background: white;,
+          background: white;
   padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -793,24 +800,24 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           margin-bottom: 15px;
         .author-info {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 12px;
         .author-avatar {
-          width: 40px;,
+          width: 40px;
   height: 40px;
           border-radius: 50%;
           object-fit: cover;
         .author-avatar.small {
-          width: 24px;,
+          width: 24px;
   height: 24px;
         .author-avatar.large {
-          width: 80px;,
+          width: 80px;
   height: 80px;
         .author-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
-          display: flex;
-          align-items: center;,
+  display: flex;
+          align-items: center;
   gap: 5px;
         .verified-badge {
           color: #22c55e;
@@ -818,85 +825,86 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
         .tier-badge {
           font-size: 12px;
         .post-time {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
         .post-type-badge {
-          background: #f3f4f6;,
+          background: #f3f4f6;
   padding: 4px 8px;
           border-radius: 12px;
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
           text-transform: capitalize;
         .post-content p {
-          margin: 0 0 15px 0;,
+          margin: 0 0 15px 0;
   color: #374151;
           line-height: 1.6;
         .template-preview {
-          background: #f9fafb;,
+          background: #f9fafb;
   border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 15px;
-          margin: 15px 0;
+  margin: 15px 0;
         .template-preview h4 {
-          margin: 0 0 8px 0;,
+          margin: 0 0 8px 0;
   color: #1f2937;
         .template-preview p {
-          margin: 0 0 10px 0;,
+          margin: 0 0 10px 0;
   color: #6b7280;
           font-size: 14px;
         .template-price {
-          font-weight: 600;,
+          font-weight: 600;
   color: #059669;
           margin-bottom: 10px;
         .view-template-btn {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: white;
-          border: none;,
+  border: none;
   padding: 6px 12px;
           border-radius: 6px;
-          font-size: 12px;,
+          font-size: 12px;
   cursor: pointer;
         .post-images {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 10px;,
+          gap: 10px;
   margin: 15px 0;
         .post-images img {
-          width: 100%;,
+          width: 100%;
   height: 200px;
           object-fit: cover;
           border-radius: 8px;
         .post-tags, .discussion-tags, .event-tags {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 8px;
-          margin: 15px 0;
+  margin: 15px 0;
         .tag {
-          background: #e5e7eb;,
+          background: #e5e7eb;
   color: #374151;
-          padding: 2px 8px;
+  padding: 2px 8px;
           border-radius: 12px;
           font-size: 12px;
         .post-actions {
-          display: flex;,
+          display: flex;
   gap: 15px;
           padding-top: 15px;
           border-top: 1px solid #e5e7eb;
         .action-btn {
-          background: none;,
+          background: none;
   border: none;
-          color: #6b7280;,
+  color: #6b7280;
   cursor: pointer;
-          font-size: 14px;,
+          font-size: 14px;
   display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 5px;
-          padding: 5px 10px;
+  padding: 5px 10px;
           border-radius: 6px;
-        .action-btn:hover {,
+        .action-btn:hover {
+    
   background: #f3f4f6;
         .action-btn.active {
-          color: #3b82f6;,
+          color: #3b82f6;
   background: #dbeafe;
         .discussions-header, .events-header, .leaderboard-header, .creators-header {
           display: flex;
@@ -904,18 +912,18 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           align-items: center;
           margin-bottom: 20px;
         .new-discussion-btn {
-          background: #10b981;,
+          background: #10b981;
   color: white;
-          border: none;,
+  border: none;
   padding: 10px 20px;
-          border-radius: 8px;,
+          border-radius: 8px;
   cursor: pointer;
         .discussions-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 15px;
         .discussion-card {
-          background: white;,
+          background: white;
   padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -925,7 +933,7 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           align-items: center;
           margin-bottom: 10px;
         .discussion-badges {
-          display: flex;,
+          display: flex;
   gap: 8px;
         .badge {
           padding: 2px 8px;
@@ -933,40 +941,41 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           font-size: 11px;
           font-weight: 500;
         .badge.pinned {
-          background: #fef3c7;,
+          background: #fef3c7;
   color: #92400e;
         .badge.solved {
-          background: #d1fae5;,
+          background: #d1fae5;
   color: #065f46;
         .badge.category {
-          background: #e0e7ff;,
+          background: #e0e7ff;
   color: #3730a3;
         .discussion-title a {
           color: #1f2937;
           text-decoration: none;
           font-weight: 600;
-        .discussion-title a:hover {,
+        .discussion-title a:hover {
+    
   color: #3b82f6;
         .discussion-excerpt {
-          color: #6b7280;,
+          color: #6b7280;
   margin: 10px 0;
           line-height: 1.5;
         .discussion-meta {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   margin: 15px 0;
         .discussion-stats {
-          display: flex;,
+          display: flex;
   gap: 15px;
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
         .events-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
           gap: 20px;
         .event-card {
-          background: white;,
+          background: white;
   padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -976,17 +985,17 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           align-items: center;
           margin-bottom: 15px;
         .event-type {
-          background: #dbeafe;,
+          background: #dbeafe;
   color: #1e40af;
-          padding: 4px 8px;
+  padding: 4px 8px;
           border-radius: 12px;
           font-size: 12px;
           text-transform: capitalize;
         .event-date {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
         .event-title {
-          margin: 0 0 10px 0;,
+          margin: 0 0 10px 0;
   color: #1f2937;
         .event-description {
           color: #6b7280;
@@ -995,52 +1004,52 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
         .event-details {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   margin: 15px 0;
         .organizer {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
         .organizer-avatar {
-          width: 24px;,
+          width: 24px;
   height: 24px;
           border-radius: 50%;
           object-fit: cover;
         .attendance {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
         .event-actions {
-          display: flex;,
+          display: flex;
   gap: 10px;
           margin-top: 15px;
         .attend-btn {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: white;
-          border: none;,
+  border: none;
   padding: 8px 16px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
-          flex: 1;
+  flex: 1;
         .attend-btn.attending {
           background: #22c55e;
         .share-btn {
-          background: #f3f4f6;,
+          background: #f3f4f6;
   color: #374151;
-          border: none;,
+  border: none;
   padding: 8px 16px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
         .leaderboard-list {
           display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   gap: 15px;
         .leaderboard-item {
-          background: white;,
+          background: white;
   padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 20px;
         .rank {
           font-size: 24px;
@@ -1053,64 +1062,64 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           color: #6b7280;
         .creator-info {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 15px;
-          flex: 1;
+  flex: 1;
         .creator-avatar {
-          width: 50px;,
+          width: 50px;
   height: 50px;
           border-radius: 50%;
           object-fit: cover;
         .creator-details {
           flex: 1;
         .creator-name {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
-          display: flex;
-          align-items: center;,
+  display: flex;
+          align-items: center;
   gap: 8px;
           margin-bottom: 4px;
         .creator-stats {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
         .creator-metrics {
-          display: flex;,
+          display: flex;
   gap: 30px;
         .metric {
           text-align: center;
         .metric .value {
           display: block;
           font-size: 18px;
-          font-weight: bold;,
+          font-weight: bold;
   color: #1f2937;
         .metric .label {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
         .creator-actions {
-          display: flex;,
+          display: flex;
   gap: 10px;
         .follow-btn {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: white;
-          border: none;,
+  border: none;
   padding: 8px 16px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
         .follow-btn.following {
           background: #6b7280;
         .profile-btn {
-          background: #f3f4f6;,
+          background: #f3f4f6;
   color: #374151;
-          border: none;,
+  border: none;
   padding: 8px 16px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
         .creators-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 20px;
         .creator-card {
-          background: white;,
+          background: white;
   padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -1119,23 +1128,23 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
           margin-bottom: 15px;
         .creator-badges {
           display: flex;
-          justify-content: center;,
+          justify-content: center;
   gap: 8px;
           margin-top: 10px;
         .creator-stats-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 15px;,
+          gap: 15px;
   margin: 20px 0;
         .stat {
           text-align: center;
         .stat .value {
           display: block;
           font-size: 20px;
-          font-weight: bold;,
+          font-weight: bold;
   color: #1f2937;
         .stat .label {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
         .loading, .error {
           display: flex;
@@ -1145,39 +1154,155 @@ export const [discussions, setDiscussions] = useState<Discussion>([]);
         .loading-spinner {
           text-align: center;
         .spinner {
-          width: 40px;,
+          width: 40px;
   height: 40px;
-          border: 4px solid #f3f4f6;
+  border: 4px solid #f3f4f6;
           border-top: 4px solid #3b82f6;
-          border-radius: 50%;,
+          border-radius: 50%;
   animation: spin 1s linear infinite;
-          margin: 0 auto 20px;
+  margin: 0 auto 20px;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         .error-message {
-          text-align: center;,
+          text-align: center;
   padding: 40px;
-          background: white;
+  background: white;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         .retry-button {
-          background: #3b82f6;,
+          background: #3b82f6;
   color: white;
-          border: none;,
+  border: none;
   padding: 10px 20px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
           margin-top: 15px;
-        .retry-button:hover {,
+        .retry-button:hover {
+    
   background: #2563eb;
         select {
-          padding: 8px 12px;,
+          padding: 8px 12px;
   border: 1px solid #d1d5db;
-          border-radius: 6px;,
+          border-radius: 6px;
   background: white;
-          color: #374151;
+  color: #374151;
       `}</style>
     </div>
   );
 };
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}

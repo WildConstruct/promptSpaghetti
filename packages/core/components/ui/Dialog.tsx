@@ -1,26 +1,24 @@
 import React from 'react';
 
-}
-interface DialogProps {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  children?: React.ReactNode;
 
-}
+interface DialogProps { open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children?: React.ReactNode }
+
 export const Dialog: React.FC<DialogProps> = ({ children, ...props }) => ()
   <div className="dialog" {...props}>{children}</div>
 );
 
 export const DialogTrigger: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ )
-  children, 
+  children }
   ...props 
 }) => ()
   <button className="dialog-trigger" {...props}>{children}</button>
 );
 
 export const DialogContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ )
-  children, 
-  className,
+  children
+  className }
   ...props 
 }) => ()
   <div className={`dialog-content ${className || ''}`} {...props}>}
@@ -29,8 +27,8 @@ export const DialogContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
 );
 
 export const DialogHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ )
-  children, 
-  className,
+  children
+  className }
   ...props 
 }) => ()
   <div className={`dialog-header ${className || ''}`} {...props}>}
@@ -39,8 +37,8 @@ export const DialogHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ )
 );
 
 export const DialogTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({ )
-  children, 
-  className,
+  children
+  className }
   ...props 
 }) => ()
   <h2 className={`dialog-title ${className || ''}`} {...props}>}
@@ -49,8 +47,8 @@ export const DialogTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = (
 );
 
 export const DialogDescription: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({ )
-  children, 
-  className,
+  children
+  className }
   ...props 
 }) => ()
   <p className={`dialog-description ${className || ''}`} {...props}>}
@@ -59,7 +57,7 @@ export const DialogDescription: React.FC<React.HTMLAttributes<HTMLParagraphEleme
 );
 
 export const DialogClose: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ )
-  children, 
+  children }
   ...props 
 }) => ()
   <button className="dialog-close" {...props}>{children}</button>

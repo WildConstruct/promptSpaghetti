@@ -4,19 +4,19 @@ import {
   MarketplacePolicyType,
   PolicyStatus,
   UserRole
-} from '../services/MarketplacePolicyPublishingService';
+ from '../services/MarketplacePolicyPublishingService';
 import {
   MarketplacePolicyEnforcementService,
   ViolationType,
   ViolationSeverity
-} from '../services/MarketplacePolicyEnforcementService';
+ from '../services/MarketplacePolicyEnforcementService';
 
 // Mock pg Pool
 const mockPool = {
   connect: jest.fn<unknown[], unknown>(),
   query: jest.fn<unknown[], unknown>(),
   end: jest.fn<unknown[], unknown>()
-} as unknown as Pool;
+ as unknown as Pool;
 
 // Mock client
 const mockClient = {
@@ -56,12 +56,12 @@ describe('Marketplace Policy Management System', () => {
               visible_to: [UserRole.SELLER],
               conditions: [],
               subsections: []
-            }],
+],
             variables: [],
             templates: [],
             attachments: [],
             localization: []
-  }
+
           metadata: {
             target_audience: [UserRole.SELLER],
             jurisdictions: ['US'],
@@ -73,7 +73,7 @@ describe('Marketplace Policy Management System', () => {
             categories: ['marketplace'],
             priority: 'medium',
             risk_level: 'low'
-  }
+
           created_by: 'admin-123',
           updated_by: 'admin-123'
         };
@@ -99,7 +99,7 @@ describe('Marketplace Policy Management System', () => {
             policy_type: MarketplacePolicyType.CONTENT_POLICY,
             title: 'Test Policy',
             description: 'Test description'
-          } as any, 'admin-123')
+ as any, 'admin-123')
         ).rejects.toThrow('Database error');
       });
     });
@@ -127,14 +127,14 @@ describe('Marketplace Policy Management System', () => {
             type: 'immediate' as const,
             start_date: new Date(),
             rollback_triggers: []
-  }
+
           notification_settings: {
             enabled: true,
             channels: ['email'],
             audience: [UserRole.ALL],
             template_id: 'notification-template',
             send_reminders: false
-          }
+
         };
 
         const result = await publishingService.publishPolicy(publishingRequest, 'admin-123');
@@ -158,14 +158,14 @@ describe('Marketplace Policy Management System', () => {
             type: 'immediate' as const,
             start_date: new Date(),
             rollback_triggers: []
-  }
+
           notification_settings: {
             enabled: false,
             channels: [],
             audience: [],
             template_id: '',
             send_reminders: false
-          }
+
         };
 
         await expect(
@@ -257,14 +257,14 @@ describe('Marketplace Policy Management System', () => {
               value: 'spam',
               weight: 0.8,
               logical_operator: 'and'
-            }
+
           ],
           enforcement_config: {
             severity_mapping: { spam: ViolationSeverity.MEDIUM },
             automatic_actions: [],
             escalation_rules: [],
             grace_period_hours: 24
-  }
+
           created_by: 'admin-123'
         };
 
@@ -296,15 +296,15 @@ describe('Marketplace Policy Management System', () => {
                 operator: 'contains',
                 value: 'spam',
                 weight: 1.0
-              }
+
             ],
             ai_model_config: null,
             enforcement_config: {
               automatic_actions: [],
               escalation_rules: [],
               grace_period_hours: 24
-            }
-          }
+
+
         ];
 
         const mockViolation = {
@@ -507,7 +507,7 @@ describe('Marketplace Policy Management System', () => {
               critical_severity: '2',
               pending_reviews: '15',
               avg_resolution_time: '48.5'
-            }] 
+] 
           }) // Summary stats
           .mockResolvedValueOnce({ rows: [] }) // Recent violations
           .mockResolvedValueOnce({ rows: [] }); // Active actions
@@ -544,22 +544,22 @@ describe('Marketplace Policy Management System', () => {
           categories: [],
           priority: 'medium',
           risk_level: 'low'
-  }
+
         publication: {
           publishing_status: 'pending',
           publication_channels: [],
           rollout_strategy: { type: 'immediate', start_date: new Date(), rollback_triggers: [] },
           notification_settings: {
             enabled: false, channels: [], audience: [], template_id: '', send_reminders: false
-          }
-  }
+
+
         enforcement: { enabled: true, automatic_enforcement: false, violation_detection: {
           enabled: true, detection_rules: [], ai_assisted: true, confidence_threshold: 0.8, review_required: true
         }, enforcement_actions: [], grace_period_hours: 24, escalation_rules: [] },
         analytics: {
           views: 0, acknowledgments: 0, violations: 0, enforcement_actions: 0, 
           user_feedback: [], compliance_score: 0, last_updated: new Date()
-  }
+
         created_by: 'admin-123',
         updated_by: 'admin-123'
       };
@@ -585,14 +585,14 @@ describe('Marketplace Policy Management System', () => {
             operator: 'ai_classify',
             value: ViolationType.INAPPROPRIATE_CONTENT,
             weight: 1.0
-          }
+
         ],
         enforcement_config: {
           severity_mapping: {},
           automatic_actions: [],
           escalation_rules: [],
           grace_period_hours: 24
-  }
+
         created_by: 'admin-123'
       };
 
@@ -629,7 +629,7 @@ describe('Marketplace Policy Management System', () => {
             id: 'action-123', 
             violation_id: 'violation-123',
             status: 'pending' 
-          }] 
+] 
         }) // Get action
         .mockResolvedValueOnce({ rows: [] }) // UPDATE action
         .mockResolvedValueOnce({ rows: [] }) // Check violation complete

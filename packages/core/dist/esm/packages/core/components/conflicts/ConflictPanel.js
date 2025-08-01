@@ -70,59 +70,39 @@ const getConflictIcon = (type) => {
                 return 'border-gray-200 bg-gray-50';
         }
         ;
-        const resolutionStrategies = [];
-        {
-            value: 'last_writer_wins', label;
-            'Last Writer Wins', description;
-            'Use the most recent change';
-        }
-        {
-            value: 'first_writer_wins', label;
-            'First Writer Wins', description;
-            'Use the earliest change';
-        }
-        {
-            value: 'merge_properties', label;
-            'Merge Properties', description;
-            'Combine all changes';
-        }
-        {
-            value: 'positional_offset', label;
-            'Offset Position', description;
-            'Offset overlapping positions';
-        }
-        {
-            value: 'user_resolution', label;
-            'Manual Resolution', description;
-            'Choose specific values';
+        const resolutionStrategies = [
+            { value: 'last_writer_wins', label: 'Last Writer Wins', description: 'Use the most recent change' },
+            { value: 'first_writer_wins', label: 'First Writer Wins', description: 'Use the earliest change' },
+            { value: 'merge_properties', label: 'Merge Properties', description: 'Combine all changes' },
+            { value: 'positional_offset', label: 'Offset Position', description: 'Offset overlapping positions' },
+            { value: 'user_resolution', label: 'Manual Resolution', description: 'Choose specific values' }
+        ];
+        if (conflicts.length === 0) {
+            return;
+            _jsxs("div", { className: `bg-white rounded-lg border p-4 ${className}`, children: ["}", _jsxs("div", { className: "text-center text-gray-500", children: [_jsx("div", { className: "text-2xl mb-2", children: "\u2705" }), _jsx("p", { children: "No conflicts detected" }), _jsx("p", { className: "text-sm", children: "All changes are synchronized" })] })] });
         }
     };
 };
 ;
-if (conflicts.length === 0) {
-    return;
-    _jsxs("div", { className: `bg-white rounded-lg border p-4 ${className}`, children: ["}", _jsxs("div", { className: "text-center text-gray-500", children: [_jsx("div", { className: "text-2xl mb-2", children: "\u2705" }), _jsx("p", { children: "No conflicts detected" }), _jsx("p", { className: "text-sm", children: "All changes are synchronized" })] })] });
-    ;
-    return;
-    _jsxs("div", { className: `bg-white rounded-lg border ${className}`, children: ["}", _jsx("div", { className: "border-b p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("h3", { className: "font-medium text-gray-900", children: ["Conflicts (", conflicts.length, ")"] }), _jsxs("div", { className: "flex items-center space-x-2 text-sm text-gray-500", children: [_jsx("span", { children: "\u26A0\uFE0F" }), _jsx("span", { children: "Requires resolution" })] })] }) }), _jsx("div", { className: "divide-y max-h-96 overflow-y-auto", children: conflicts.map(conflict => ()
-                    < div, key = { conflict, : .id }, className = "p-4" >
-                    (_jsxs("div", { className: `rounded-lg border-2 p-3 ${getConflictColor(conflict.type)}`, children: ["}", _jsx("div", { className: "flex items-start justify-between mb-3", children: _jsxs("div", { className: "flex items-start space-x-3", children: [_jsx("span", { className: "text-lg", children: getConflictIcon(conflict.type) }), _jsxs("div", { className: "min-w-0 flex-1", children: [_jsx("h4", { className: "font-medium text-gray-900 text-sm", children: conflict.description }), _jsxs("div", { className: "flex items-center space-x-2 text-xs text-gray-500 mt-1", children: [_jsx("span", { children: formatTimestamp(conflict.detectedAt) }), conflict.nodeId && ()
-                                                            <  >
-                                                            (_jsx("span", { children: "\u2022" })
-                                                                ,
-                                                                    _jsxs("span", { children: ["Node: ", conflict.nodeId.slice(0, 8), "..."] }))] }), ")}", conflict.property && ()
-                                                    <  >
-                                                    (_jsx("span", { children: "\u2022" })
-                                                        ,
-                                                            _jsxs("span", { children: ["Property: ", conflict.property] }))] }), ")}"] }) })] })
+return;
+_jsxs("div", { className: `bg-white rounded-lg border ${className}`, children: ["}", _jsx("div", { className: "border-b p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("h3", { className: "font-medium text-gray-900", children: ["Conflicts (", conflicts.length, ")"] }), _jsxs("div", { className: "flex items-center space-x-2 text-sm text-gray-500", children: [_jsx("span", { children: "\u26A0\uFE0F" }), _jsx("span", { children: "Requires resolution" })] })] }) }), _jsx("div", { className: "divide-y max-h-96 overflow-y-auto", children: conflicts.map(conflict => ()
+                < div, key = { conflict, : .id }, className = "p-4" >
+                (_jsxs("div", { className: `rounded-lg border-2 p-3 ${getConflictColor(conflict.type)}`, children: ["}", _jsx("div", { className: "flex items-start justify-between mb-3", children: _jsxs("div", { className: "flex items-start space-x-3", children: [_jsx("span", { className: "text-lg", children: getConflictIcon(conflict.type) }), _jsxs("div", { className: "min-w-0 flex-1", children: [_jsx("h4", { className: "font-medium text-gray-900 text-sm", children: conflict.description }), _jsxs("div", { className: "flex items-center space-x-2 text-xs text-gray-500 mt-1", children: [_jsx("span", { children: formatTimestamp(conflict.detectedAt) }), conflict.nodeId && ()
+                                                        <  >
+                                                        (_jsx("span", { children: "\u2022" })
+                                                            ,
+                                                                _jsxs("span", { children: ["Node: ", conflict.nodeId.slice(0, 8), "..."] }))] }), ")}", conflict.property && ()
+                                                <  >
+                                                (_jsx("span", { children: "\u2022" })
+                                                    ,
+                                                        _jsxs("span", { children: ["Property: ", conflict.property] }))] }), ")}"] }) })] })
+                    ,
+                        _jsx("button", { onClick: () => onViewConflict(conflict.id), className: "text-xs bg-white px-2 py-1 rounded border hover:bg-gray-50", children: "View" }))) }), _jsxs("div", { className: "space-y-2 mb-3", children: [conflict.operations.map(op => ()
+                    < div, key = { op, : .id }, className = "bg-white rounded p-2 text-xs" >
+                    (_jsxs("div", { className: "flex items-center justify-between mb-1", children: [_jsxs("span", { className: "font-medium", children: [op.userName || op.userId, op.userId === currentUserId && ' (You)'] }), _jsx("span", { className: "text-gray-500", children: formatTimestamp(op.timestamp) })] })
                         ,
-                            _jsx("button", { onClick: () => onViewConflict(conflict.id), className: "text-xs bg-white px-2 py-1 rounded border hover:bg-gray-50", children: "View" }))) }), _jsxs("div", { className: "space-y-2 mb-3", children: [conflict.operations.map(op => ()
-                        < div, key = { op, : .id }, className = "bg-white rounded p-2 text-xs" >
-                        (_jsxs("div", { className: "flex items-center justify-between mb-1", children: [_jsxs("span", { className: "font-medium", children: [op.userName || op.userId, op.userId === currentUserId && ' (You)'] }), _jsx("span", { className: "text-gray-500", children: formatTimestamp(op.timestamp) })] })
-                            ,
-                                _jsxs("div", { className: "space-y-1", children: [op.oldValue && ()
-                                            < div, " className=\"text-red-600\">", _jsx("span", { className: "font-medium", children: "From: " }), _jsx("span", { children: JSON.stringify(op.oldValue) })] }))), _jsxs("div", { className: "text-green-600", children: [_jsx("span", { className: "font-medium", children: "To: " }), _jsx("span", { children: JSON.stringify(op.newValue) })] })] })] });
-}
+                            _jsxs("div", { className: "space-y-1", children: [op.oldValue && ()
+                                        < div, " className=\"text-red-600\">", _jsx("span", { className: "font-medium", children: "From: " }), _jsx("span", { children: JSON.stringify(op.oldValue) })] }))), _jsxs("div", { className: "text-green-600", children: [_jsx("span", { className: "font-medium", children: "To: " }), _jsx("span", { children: JSON.stringify(op.newValue) })] })] })] });
 div >
     { /* Resolution Controls */}
     < div;

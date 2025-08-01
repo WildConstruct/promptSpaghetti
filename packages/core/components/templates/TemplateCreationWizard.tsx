@@ -4,38 +4,38 @@
  */
 import React, { useState, useEffect } from 'react';
 import { ProjectTemplate, TemplateVariable, CustomizationPoint, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
-}
-interface TemplateCreationWizardProps {
-  graphData: unknown; // The current graph to turn into a template,
+
+
+interface TemplateCreationWizardProps { graphData: unknown; // The current graph to turn into a template;
   isOpen: boolean;
   onClose: () => void;
-  onComplete: (template: ProjectTemplate) => void;
+  onComplete: (template: ProjectTemplate) => void
   templateManager: ProjectTemplateManager;
   type WizardStep = 'basic' | 'variables' | 'customization' | 'preview' | 'publish';
-  export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({,)
-  graphData,
-  isOpen,
-  onClose,
-  onComplete,
+  export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({);
+  graphData;
+  isOpen;
+  onClose;
+  onComplete }
   templateManager
-}
-}) => {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('basic');
+
+
+}) => { const [currentStep, setCurrentStep] = useState<WizardStep>('basic');
   const [templateData, setTemplateData] = useState<Partial<ProjectTemplate>>({)
-  name: '',
-  description: '',
-  category: '',
-  tags: [],
-  version: '1.0.0',
-  complexity_level: 'beginner',
-  estimated_time: 30,
-  prerequisites: [],
-  learning_objectives: [],
-  is_public: false,
-  is_featured: false,
-  variables: [],
-  customization_points: [],
-  graph_data: graphData,
+  name: ''
+  description: ''
+  category: ''
+  tags: []
+  version: '1.0.0'
+  complexity_level: 'beginner'
+  estimated_time: 30
+  prerequisites: []
+  learning_objectives: []
+  is_public: false
+  is_featured: false
+  variables: []
+  customization_points: []
+  graph_data: graphData }
 });
   const [categories, setCategories] = useState<TemplateCategory>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,27 +44,21 @@ interface TemplateCreationWizardProps {
       loadCategories();
       setTemplateData(prev => ({ ...prev, graph_data: graphData }));
   }, [isOpen, graphData]);
-  const loadCategories = async () => {
-    try {
+  const loadCategories = async () => { try {
       const cats = templateManager.getCategories();
-      setCategories(cats);
-    } catch (error) {
-  console.error('Failed to load categories:', error);
-};
+      setCategories(cats) } catch (error) { console.error('Failed to load categories:', error) };
   const steps: { key: WizardStep; title: string; description: string }[] = [
-    { key: 'basic', title: 'Basic Information', description: 'Template name, description, and category' },
-    { key: 'variables', title: 'Variables', description: 'Define configurable variables' },
-    { key: 'customization', title: 'Customization', description: 'Set up customization points' },
-    { key: 'preview', title: 'Preview', description: 'Review your template' },
+    { key: 'basic', title: 'Basic Information', description: 'Template name, description, and category' }
+    { key: 'variables', title: 'Variables', description: 'Define configurable variables' }
+    { key: 'customization', title: 'Customization', description: 'Set up customization points' }
+    { key: 'preview', title: 'Preview', description: 'Review your template' }
     { key: 'publish', title: 'Publish', description: 'Publish your template' }
   ];
   const currentStepIndex = steps.findIndex(step => step.key === currentStep);
   const validateCurrentStep = (): boolean => {
     const newErrors: Record<string, string> = {};
-    switch (currentStep) {
-  case 'basic':,
-  if (!templateData.name?.trim()) {
-  newErrors.name = 'Template name is required';
+    switch (currentStep) { case 'basic': }
+  if (!templateData.name?.trim()) { newErrors.name = 'Template name is required';
   if (!templateData.description?.trim()) {
   newErrors.description = 'Description is required';
   if (!templateData.category) {
@@ -73,23 +67,16 @@ interface TemplateCreationWizardProps {
   newErrors.estimated_time = 'Estimated time must be greater than 0';
   break;
   setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
-  const nextStep = () => {
-    if (validateCurrentStep()) {
+  return Object.keys(newErrors).length === 0 };
+  const nextStep = () => { if (validateCurrentStep()) {
       const nextIndex = Math.min(currentStepIndex + 1, steps.length - 1);
-      setCurrentStep(steps[nextIndex].key);
-  };
-  const prevStep = () => {
-    const prevIndex = Math.max(currentStepIndex - 1, 0);
-    setCurrentStep(steps[prevIndex].key);
-  };
-  const handleComplete = async () => {
-    try {
+      setCurrentStep(steps[nextIndex].key) };
+  const prevStep = () => { const prevIndex = Math.max(currentStepIndex - 1, 0);
+    setCurrentStep(steps[prevIndex].key) };
+  const handleComplete = async () => { try {
       const template = await templateManager.createTemplate(templateData as any);
       onComplete(template);
-      onClose();
-    } catch (error) {
+      onClose() } catch (error) {
       console.error('Failed to create template:', error);
       setErrors({ publish: 'Failed to create template. Please try again.' });
   };
@@ -97,67 +84,60 @@ interface TemplateCreationWizardProps {
     setTemplateData(prev => ({ ...prev, ...updates }));
     // Clear related errors
     const newErrors = { ...errors };
-    Object.keys(updates).forEach(key => {)
-  delete newErrors[key];
-    });
+    Object.keys(updates).forEach(key => { )
+  delete newErrors[key] });
     setErrors(newErrors);
   };
-  const addVariable = () => {
-  const newVariable: TemplateVariable = {,
-  id: crypto.randomUUID(),
-  name: '',
-  label: '',
-  type: 'text',
-  description: '',
-  default_value: '',
-  required: false,
+  const addVariable = () => { const newVariable: TemplateVariable = {
+  id: crypto.randomUUID()
+  name: ''
+  label: ''
+  type: 'text'
+  description: ''
+  default_value: ''
+  required: false }
 };
-    setTemplateData(prev => ({)
-  ...prev,
-  variables: [...(prev.variables || []), newVariable],
+    setTemplateData(prev => ({ )
+  ...prev
+  variables: [...(prev.variables || []), newVariable] }
 }));
   };
-  const updateVariable = (index: number, updates: Partial<TemplateVariable>) => {
-    setTemplateData(prev => ({)
-  ...prev,
+  const updateVariable = (index: number, updates: Partial<TemplateVariable>) => { setTemplateData(prev => ({)
+  ...prev }
       variables: prev.variables?.map((variable, i) => 
         i === index ? { ...variable, ...updates } : variable
       ) || []
     }));
   };
-  const removeVariable = (index: number) => {
-  setTemplateData(prev => ({)
-  ...prev,
-  variables: prev.variables?.filter((_, i) => i !== index) || [],
+  const removeVariable = (index: number) => { setTemplateData(prev => ({)
+  ...prev
+  variables: prev.variables?.filter((_, i) => i !== index) || [] }
 }));
   };
-  const addCustomizationPoint = () => {
-  const newPoint: CustomizationPoint = {,
-  id: crypto.randomUUID(),
-  name: '',
-  type: 'node_properties',
-  target_nodes: [],
-  properties: [],
-  description: '',
-  ui_component: 'input',
+  const addCustomizationPoint = () => { const newPoint: CustomizationPoint = {
+  id: crypto.randomUUID()
+  name: ''
+  type: 'node_properties'
+  target_nodes: []
+  properties: []
+  description: ''
+  ui_component: 'input' }
 };
-    setTemplateData(prev => ({)
-  ...prev,
-  customization_points: [...(prev.customization_points || []), newPoint],
+    setTemplateData(prev => ({ )
+  ...prev
+  customization_points: [...(prev.customization_points || []), newPoint] }
 }));
   };
-  const updateCustomizationPoint = (index: number, updates: Partial<CustomizationPoint>) => {
-    setTemplateData(prev => ({)
-  ...prev,
+  const updateCustomizationPoint = (index: number, updates: Partial<CustomizationPoint>) => { setTemplateData(prev => ({)
+  ...prev }
       customization_points: prev.customization_points?.map((point, i) => 
         i === index ? { ...point, ...updates } : point
       ) || []
     }));
   };
-  const removeCustomizationPoint = (index: number) => {
-  setTemplateData(prev => ({)
-  ...prev,
-  customization_points: prev.customization_points?.filter((_, i) => i !== index) || [],
+  const removeCustomizationPoint = (index: number) => { setTemplateData(prev => ({)
+  ...prev
+  customization_points: prev.customization_points?.filter((_, i) => i !== index) || [] }
 }));
   };
   if (!isOpen) return null;
@@ -191,22 +171,22 @@ interface TemplateCreationWizardProps {
                 key={step.key}
                 className={`flex items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}
               >
-                <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
+                <div className={ `flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
   index <= currentStepIndex
   ? 'bg-blue-500 text-white'
-  : 'bg-gray-200 text-gray-500',
-}`}>
+  : 'bg-gray-200 text-gray-500' }
+`}>
                   {index < currentStepIndex ? '✓' : index + 1}
                 </div>
-                <span className={`ml-2 text-sm ${
-  index <= currentStepIndex ? 'text-gray-900' : 'text-gray-500',
-}`}>
+                <span className={ `ml-2 text-sm ${
+  index <= currentStepIndex ? 'text-gray-900' : 'text-gray-500' }
+`}>
                   {step.title}
                 </span>
-                {index < steps.length - 1 && ()
+                { index < steps.length - 1 && ()
                   <div className={`flex-1 h-0.5 mx-4 ${
-  index < currentStepIndex ? 'bg-blue-500' : 'bg-gray-200',
-}`} />
+  index < currentStepIndex ? 'bg-blue-500' : 'bg-gray-200' }
+`} />
                 )}
               </div>
             ))}
@@ -289,13 +269,14 @@ interface TemplateCreationWizardProps {
 };
 
 // Step Components
-}
-interface BasicInfoStepProps {
-  data: Partial<ProjectTemplate>;
+
+
+interface BasicInfoStepProps { data: Partial<ProjectTemplate> }
   categories: TemplateCategory;
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
-}
+
+
 const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors, onChange }) => {
   const [newTag, setNewTag] = useState('');
   const addTag = () => {
@@ -318,9 +299,9 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
             value={data.name || ''}
             onChange={(e) => onChange({ name: e.target.value })}
             placeholder="Enter template name"
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-  errors.name ? 'border-red-300' : 'border-gray-300',
-}`}
+            className={ `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+  errors.name ? 'border-red-300' : 'border-gray-300' }
+`}
           />
           {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
         </div>
@@ -331,9 +312,9 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
           <select
             value={data.category || ''}
             onChange={(e) => onChange({ category: e.target.value })}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-  errors.category ? 'border-red-300' : 'border-gray-300',
-}`}
+            className={ `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+  errors.category ? 'border-red-300' : 'border-gray-300' }
+`}
           >
             <option value="">Select a category</option>
             {categories.map(category => ()
@@ -352,9 +333,9 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
           onChange={(e) => onChange({ description: e.target.value })}
           placeholder="Describe what this template does and when to use it"
           rows={3}
-          className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-  errors.description ? 'border-red-300' : 'border-gray-300',
-}`}
+          className={ `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+  errors.description ? 'border-red-300' : 'border-gray-300' }
+`}
         />
         {errors.description && <p className="text-sm text-red-600 mt-1">{errors.description}</p>}
       </div>
@@ -383,9 +364,9 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
             onChange={(e) => onChange({ estimated_time: parseInt(e.target.value) || 0 })}
             placeholder="30"
             min="1"
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-  errors.estimated_time ? 'border-red-300' : 'border-gray-300',
-}`}
+            className={ `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+  errors.estimated_time ? 'border-red-300' : 'border-gray-300' }
+`}
           />
           {errors.estimated_time && <p className="text-sm text-red-600 mt-1">{errors.estimated_time}</p>}
         </div>
@@ -432,13 +413,14 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
     </div>
   );
 };
-}
-interface VariablesStepProps {
-  variables: TemplateVariable;
+
+
+interface VariablesStepProps { variables: TemplateVariable;
   onAdd: () => void;
-  onUpdate: (index: number, updates: Partial<TemplateVariable>) => void;
+  onUpdate: (index: number, updates: Partial<TemplateVariable>) => void }
   onRemove: (index: number) => void;
-}
+
+
 const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdate, onRemove }) => {
   return;
     <div className="space-y-6">
@@ -557,14 +539,15 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
     </div>
   );
 };
-}
-interface CustomizationStepProps {
-  points: CustomizationPoint;
+
+
+interface CustomizationStepProps { points: CustomizationPoint;
   graphData: unknown;
-  onAdd: () => void;
-  onUpdate: (index: number, updates: Partial<CustomizationPoint>) => void;
+  onAdd: () => void
+  onUpdate: (index: number, updates: Partial<CustomizationPoint>) => void }
   onRemove: (index: number) => void;
-}
+
+
 const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData, onAdd, onUpdate, onRemove }) => {
   const _____availableNodes = graphData?.nodes?.map((node: Error) => node.id) || [];
   return;
@@ -664,10 +647,10 @@ const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData
     </div>
   );
 };
-}
-interface PreviewStepProps {
-  template: ProjectTemplate;
-}
+
+
+interface PreviewStepProps { template: ProjectTemplate }
+
 const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
   return;
     <div className="space-y-6">
@@ -723,12 +706,13 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
     </div>
   );
 };
-}
-interface PublishStepProps {
-  data: Partial<ProjectTemplate>;
+
+
+interface PublishStepProps { data: Partial<ProjectTemplate> }
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
-}
+
+
 const PublishStep: React.FC<PublishStepProps> = ({ data, errors, onChange }) => {
   return;
     <div className="space-y-6">

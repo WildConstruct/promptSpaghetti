@@ -7,12 +7,12 @@
 import React from 'react';
 
 }
-export interface DrawingAnnotation {
-    id: string;
+}
+export interface DrawingAnnotation { id: string;
     type: 'freehand' | 'arrow' | 'circle' | 'rectangle' | 'line' | 'text';
     points: Array<{
         x: number;
-        y: number;
+        y: number }
 }
     }>;
     style: DrawingStyle;
@@ -22,17 +22,15 @@ export interface DrawingAnnotation {
     visible: boolean;
     locked: boolean;
     text?: string;
-    transform?: {
-        rotation: number;
+    transform?: { rotation: number;
         scale: {
             x: number;
-            y: number;
-        };
+            y: number };
     };
 
 }
-export interface DrawingStyle {
-    color: string;
+}
+export interface DrawingStyle { color: string;
     thickness: number;
     opacity: number;
     fillColor?: string;
@@ -42,15 +40,14 @@ export interface DrawingStyle {
     lineJoin: 'round' | 'miter' | 'bevel';
     fontSize?: number;
     fontFamily?: string;
-    fontWeight?: 'normal' | 'bold';
-
+    fontWeight?: 'normal' | 'bold' }
 }
-export interface VFXUser {
-    id: string;
+}
+export interface VFXUser { id: string;
     name: string;
     role: string;
-    color: string;
-
+    color: string }
+}
 }
 export interface DrawingCanvasProps {
     width: number;
@@ -68,4 +65,5 @@ export interface DrawingCanvasProps {
 export declare const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps>;
 export default DrawingAnnotationsCanvas;
 //# sourceMappingURL=DrawingAnnotations.d.ts.map
+}
 }

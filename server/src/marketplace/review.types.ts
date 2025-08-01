@@ -9,7 +9,7 @@ export enum ReviewSortBy {
   LOWEST_RATED = 'lowest_rated',
   MOST_HELPFUL = 'most_helpful',
   VERIFIED_FIRST = 'verified_first'
-}
+
 
 export enum ReviewFilterBy {
   ALL = 'all',
@@ -21,7 +21,7 @@ export enum ReviewFilterBy {
   ONE_STAR = 'one_star',
   WITH_COMMENTS = 'with_comments',
   FLAGGED = 'flagged'
-}
+
 
 export enum ReviewFlag {
   INAPPROPRIATE = 'inappropriate',
@@ -31,12 +31,12 @@ export enum ReviewFlag {
   HARASSMENT = 'harassment',
   COPYRIGHT = 'copyright',
   OTHER = 'other'
-}
+
 
 export enum ReviewHelpfulness {
   HELPFUL = 'helpful',
   NOT_HELPFUL = 'not_helpful'
-}
+
 
 export enum ReviewStatus {
   PENDING = 'pending',
@@ -44,7 +44,7 @@ export enum ReviewStatus {
   REJECTED = 'rejected',
   FLAGGED = 'flagged',
   HIDDEN = 'hidden'
-}
+
 
 export enum SentimentScore {
   VERY_POSITIVE = 'very_positive',
@@ -52,11 +52,12 @@ export enum SentimentScore {
   NEUTRAL = 'neutral',
   NEGATIVE = 'negative',
   VERY_NEGATIVE = 'very_negative'
-}
+
 
 // Enhanced review interfaces
-}
-}
+
+
+
 export interface ReviewMetrics {
   total_reviews: number;
   average_rating: number;
@@ -66,16 +67,17 @@ export interface ReviewMetrics {
     three_star: number;
     two_star: number;
     one_star: number;
-}
-}
+
+
+
   };
   verified_percentage: number;
   response_rate: number; // Creator response rate
   helpfulness_score: number;
-}
 
-}
-}
+
+
+
 export interface ReviewWithDetails {
   id: string;
   template_id: string;
@@ -104,8 +106,9 @@ export interface ReviewWithDetails {
     verified: boolean;
     total_reviews: number;
     average_rating_given: number;
-}
-}
+
+
+
   };
   
   // Interaction metrics
@@ -136,11 +139,11 @@ export interface ReviewWithDetails {
     thumbnail_url?: string;
     filename: string;
     file_size: number;
-  }[];
-}
+[];
 
-}
-}
+
+
+
 export interface ReviewSubmission {
   template_id: string;
   stars: number;
@@ -152,12 +155,13 @@ export interface ReviewSubmission {
   difficulty_rating?: number;
   would_recommend: boolean;
   attachments?: File[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewFilters {
   rating?: number;
   verified_only?: boolean;
@@ -169,24 +173,26 @@ export interface ReviewFilters {
   date_to?: Date;
   sort_by?: ReviewSortBy;
   filter_by?: ReviewFilterBy;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewHelpfulnessVote {
   id: string;
   review_id: string;
   user_id: string;
   vote: ReviewHelpfulness;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewFlag {
   id: string;
   review_id: string;
@@ -197,12 +203,13 @@ export interface ReviewFlag {
   resolved_by?: string;
   resolved_at?: Date;
   created_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CreatorResponse {
   id: string;
   review_id: string;
@@ -210,20 +217,22 @@ export interface CreatorResponse {
   response: string;
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReviewAnalytics {
   template_id: string;
   period_start: Date;
   period_end: Date;
   metrics: ReviewMetrics;
   trends: {
-}
-}
+
+
+
     daily_reviews: Array<{ date: string; count: number; avg_rating: number }>;
     rating_trends: Array<{ date: string; rating: number }>;
     sentiment_trends: Array<{ date: string; sentiment: SentimentScore; count: number }>;
@@ -231,10 +240,10 @@ export interface ReviewAnalytics {
   top_keywords: Array<{ keyword: string; count: number; sentiment: SentimentScore }>;
   common_use_cases: Array<{ use_case: string; count: number; avg_rating: number }>;
   difficulty_distribution: Array<{ difficulty: number; count: number; avg_rating: number }>;
-}
 
-}
-}
+
+
+
 export interface ReviewModerationQueue {
   pending_reviews: ReviewWithDetails[];
   flagged_reviews: ReviewWithDetails[];
@@ -245,10 +254,11 @@ export interface ReviewModerationQueue {
     approved_today: number;
     rejected_today: number;
     flagged_today: number;
-}
-}
+
+
+
   };
-}
+
 
 // Validation Schemas
 export const CreateReviewSchema = z.object({

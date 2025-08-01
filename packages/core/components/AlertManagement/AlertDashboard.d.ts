@@ -7,10 +7,12 @@
 import React from 'react';
 
 }
+}
 interface AlertDashboardProps {
     className?: string;
 
 export declare const AlertDashboard: React.FC<AlertDashboardProps>;
 export default AlertDashboard;
 //# sourceMappingURL=AlertDashboard.d.ts.map
+}
 }

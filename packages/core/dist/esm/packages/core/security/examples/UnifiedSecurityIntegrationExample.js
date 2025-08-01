@@ -54,11 +54,9 @@ export function createQuickSecuritySetup() {
                         systemHealth: 90,
                     },
                     // Create with custom configuration
-                    const: security = UnifiedSecurityProtectionFactory.createUnifiedProtection()
-                },
+                    const: security = UnifiedSecurityProtectionFactory.createUnifiedProtection() },
                 SecurityProfile, : .PRODUCTION,
-                customConfig
-            } };
+                customConfig } };
         ;
         console.log('Created custom security protection with hierarchical mode');
         console.log('and weighted average coordination strategy');
@@ -241,13 +239,13 @@ if (stats.systemHealth.overallHealth < 80) {
             // ========================================
             export function demonstrateSecurityProfiles() {
                 console.log('=== Security Profiles Demonstration ===');
-                const profiles = [];
-                SecurityProfile.DEVELOPMENT,
+                const profiles = [
+                    SecurityProfile.DEVELOPMENT,
                     SecurityProfile.STAGING,
                     SecurityProfile.PRODUCTION,
                     SecurityProfile.HIGH_SECURITY,
-                    SecurityProfile.HIGH_VOLUME;
-                ;
+                    SecurityProfile.HIGH_VOLUME
+                ];
                 profiles.forEach(profile => { });
                 console.log(`\n--- ${profile.toUpperCase()} Profile ---`);
             }
@@ -345,33 +343,12 @@ export async function completeIntegrationExample() {
         // 2. Set up event handling
         setupEventHandling(security.integration);
         // 3. Simulate some requests
-        const testRequests = [];
-        {
-            ip: '192.168.1.100', endpoint;
-            '/api/users', method;
-            'GET', userAgent;
-            'Mozilla/5.0...';
-        }
-        {
-            ip: '192.168.1.100', endpoint;
-            '/api/users', method;
-            'POST', userAgent;
-            'Mozilla/5.0...', userId;
-            'user123';
-        }
-        {
-            ip: '10.0.0.50', endpoint;
-            '/auth/login', method;
-            'POST', userAgent;
-            'curl/7.68.0';
-        }
-        {
-            ip: '203.0.113.1', endpoint;
-            '/api/sensitive', method;
-            'GET', userAgent;
-            'Bot/1.0';
-        }
-        ;
+        const testRequests = [
+            { ip: '192.168.1.100', endpoint: '/api/users', method: 'GET', userAgent: 'Mozilla/5.0...' },
+            { ip: '192.168.1.100', endpoint: '/api/users', method: 'POST', userAgent: 'Mozilla/5.0...', userId: 'user123' },
+            { ip: '10.0.0.50', endpoint: '/auth/login', method: 'POST', userAgent: 'curl/7.68.0' },
+            { ip: '203.0.113.1', endpoint: '/api/sensitive', method: 'GET', userAgent: 'Bot/1.0' }
+        ];
         console.log('\nProcessing test requests...');
         for (const request of testRequests) {
             console.log(`\n--- Processing request to ${request.endpoint} ---`);

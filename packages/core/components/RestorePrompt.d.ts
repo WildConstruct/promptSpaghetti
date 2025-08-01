@@ -1,11 +1,11 @@
 import React from 'react';
 import { Edge, Node } from 'reactflow';
 }
-interface RestorePromptProps {
-    show: boolean;
+}
+interface RestorePromptProps { show: boolean;
     draft: {
         nodes: Node[];
-        edges: Edge[];
+        edges: Edge[] }
 }
     } | null;
     onRestore: (nodes: Node[], edges: Edge[]) => void;

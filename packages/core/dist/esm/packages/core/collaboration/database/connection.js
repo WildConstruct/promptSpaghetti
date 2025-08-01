@@ -59,8 +59,9 @@ export class DatabaseConnection {
                                 return result;
                             }
                             catch (error) {
-                                console.error('Query execution failed:', {});
-                                query: text.substring(0, 200),
+                                console.error('Query execution failed:', {}),
+                                    query;
+                                text.substring(0, 200),
                                     params;
                                 params?.slice(0, 5),
                                     error;
@@ -146,7 +147,7 @@ export class DatabaseConnection {
                                                             }, { private, query: string = '' };
                                                         }
                                                     },
-                                                    params: any[] = [],
+                                                    params: any = [],
                                                     paramCount: number = 0,
                                                     constructor(baseQuery) {
                                                         if (baseQuery) {

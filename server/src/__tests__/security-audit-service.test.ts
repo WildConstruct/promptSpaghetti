@@ -22,10 +22,10 @@ describe('SecurityAuditService', () => {
         scoreThreshold: 70,
         criticalIssues: 0,
         highIssues: 2
-  }
+
       notifications: {
         enabled: false
-      }
+
     };
 
     auditService = new SecurityAuditService(mockServer, mockConfig);
@@ -60,7 +60,7 @@ describe('SecurityAuditService', () => {
           method: 'HEAD',
           headers: expect.objectContaining({
             'User-Agent': 'SecurityAuditService/1.0'
-  }
+
   }
       );
     });
@@ -131,7 +131,7 @@ describe('SecurityAuditService', () => {
       // Simulate adding many records
       for (let i = 0; i < 5; i++) {
         await auditService.triggerManualAudit('/test-endpoint');
-      }
+
 
       const history = auditService.getAuditHistory();
       expect(history.length).toBeLessThanOrEqual(originalTrimLimit);

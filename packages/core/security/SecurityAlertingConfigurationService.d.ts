@@ -33,8 +33,8 @@ import { SecurityAlertingConfig } from './SecurityAlertingAnalytics';
 import { DataClassificationLevel } from './DataClassificationAccessControl';
 
 }
-export interface SecurityAlertingConfigurationServiceOptions {
-    storageBackend: 'filesystem' | 'database' | 'redis' | 'memory';
+}
+export interface SecurityAlertingConfigurationServiceOptions { storageBackend: 'filesystem' | 'database' | 'redis' | 'memory';
     enableCaching: boolean;
     cacheTimeout: number;
     enableValidation: boolean;
@@ -43,12 +43,10 @@ export interface SecurityAlertingConfigurationServiceOptions {
     backupInterval: number;
     maxBackups: number;
     encryptStorage: boolean;
-    requireApproval: boolean;
-
-
+    requireApproval: boolean }
 }
-export interface ConfigurationMetadata {
-    id: string;
+}
+export interface ConfigurationMetadata { id: string;
     version: number;
     createdAt: Date;
     updatedAt: Date;
@@ -59,59 +57,47 @@ export interface ConfigurationMetadata {
     checksum: string;
     size: number;
     tags: string[];
-    classification: DataClassificationLevel;
-
-
+    classification: DataClassificationLevel }
 }
-export interface ConfigurationChangeRequest {
-    configId: string;
+}
+export interface ConfigurationChangeRequest { configId: string;
     changes: Partial<SecurityAlertingConfig>;
     requestedBy: string;
     reason: string;
     urgency: 'low' | 'medium' | 'high' | 'critical';
     scheduledAt?: Date;
-    approvers?: string[];
-
-
+    approvers?: string[] }
 }
-export interface ConfigurationValidationResult {
-    isValid: boolean;
+}
+export interface ConfigurationValidationResult { isValid: boolean;
     errors: ValidationError[];
     warnings: ValidationWarning[];
     securityScore: number;
     complianceIssues: ComplianceIssue[];
-    performanceImpact: PerformanceImpact;
-
-
+    performanceImpact: PerformanceImpact }
 }
-export interface ValidationError {
-    field: string;
+}
+export interface ValidationError { field: string;
     message: string;
     severity: 'error' | 'critical';
     code: string;
-    suggestion?: string;
-
-
+    suggestion?: string }
 }
-export interface ValidationWarning {
-    field: string;
+}
+export interface ValidationWarning { field: string;
     message: string;
     impact: 'low' | 'medium' | 'high';
     code: string;
-    suggestion?: string;
-
-
+    suggestion?: string }
 }
-export interface ComplianceIssue {
-    framework: string;
+}
+export interface ComplianceIssue { framework: string;
     requirement: string;
     impact: 'minor' | 'major' | 'critical';
-    description: string;
-
-
+    description: string }
 }
-export interface PerformanceImpact {
-    cpuImpact: 'low' | 'medium' | 'high';
+}
+export interface PerformanceImpact { cpuImpact: 'low' | 'medium' | 'high';
     memoryImpact: 'low' | 'medium' | 'high';
     storageImpact: 'low' | 'medium' | 'high';
     networkImpact: 'low' | 'medium' | 'high';
@@ -141,8 +127,8 @@ export declare class SecurityAlertingConfigurationService extends EventEmitter {
      * Save configuration
      */
     saveConfiguration();
-      configId: string,
-      config: SecurityAlertingConfig,
+      configId: string;
+      config: SecurityAlertingConfig }
       metadata?: Partial<ConfigurationMetadata>
     ): Promise<boolean>;
     /**
@@ -178,4 +164,5 @@ export declare class SecurityAlertingConfigurationService extends EventEmitter {
 
 export default SecurityAlertingConfigurationService;
 //# sourceMappingURL=SecurityAlertingConfigurationService.d.ts.map
+}
 }

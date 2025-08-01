@@ -60,7 +60,7 @@ export const Palette = ({ nodes, collapsed, onToggle, onDragStart }) => {
                                 'memory',
                                 'smart',
                                 'process',
-                                'other',
+                                'other'
                             ];
                             const categoryLabels = {
                                 content: 'Content Building Blocks',

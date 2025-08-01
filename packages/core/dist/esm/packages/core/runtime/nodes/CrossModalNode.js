@@ -7,10 +7,27 @@
 import { AdvancedRuntimeNode, NodeExecutionResult } from '../advanced';
 import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, MultimodalAdapter } from '../../ai';
+resolution ?  : { width: number, height: number };
 ;
+sentiment: {
+    score: number;
+    label: string;
+}
 ;
-modality_insights: Array;
-cross_modal_connections: Array;
+complexity_score: number;
+;
+modality_insights: Array < {
+    modality: string,
+    confidence: number,
+    key_elements: string,
+    dominant_features: string
+} > ;
+cross_modal_connections: Array < {
+    connection_type: 'semantic' | 'temporal' | 'causal' | 'contextual',
+    modalities: string,
+    strength: number,
+    description: string
+} > ;
 extracted_information: {
     entities: Array;
     topics: Array;
@@ -268,11 +285,10 @@ catch (error) {
                                             throw new Error('Multimodal adapter not initialized');
                                             const startTime = Date.now();
                                             // Combine content for comparison
-                                            const combinedInputs = [];
-                                            contentA.map(input => ({ ...input, metadata: { ...input.metadata, group: 'A' } })),
-                                            ;
-                                            contentB.map(input => ({ ...input, metadata: { ...input.metadata, group: 'B' } }));
-                                            ;
+                                            const combinedInputs = [
+                                                ...contentA.map(input => ({ ...input, metadata: { ...input.metadata, group: 'A' } })),
+                                                ...contentB.map(input => ({ ...input, metadata: { ...input.metadata, group: 'B' } }))
+                                            ];
                                             // Perform comparison
                                             const result = await this.adapter.compareContent(combinedInputs, comparisonAspects);
                                             const processingTime = Date.now() - startTime;
@@ -322,8 +338,8 @@ catch (error) {
                     try { }
                     catch (error) {
                         console.warn(`Failed to initialize multimodal adapter:`, error);
-                        _analyzeComparison(result, Record < string);
-                        unknown > ,
+                        _analyzeComparison(result, Record < string),
+                            unknown > ,
                             contentA;
                         MultimodalInput,
                             contentB;
@@ -368,14 +384,14 @@ catch (error) {
                                         _extractSimilarities(summary, string);
                                         string;
                                         {
-                                            const similarityIndicators = [];
-                                            /both.*similar/i,
+                                            const similarityIndicators = [
+                                                /both.*similar/i,
                                                 /alike/i,
                                                 /comparable/i,
                                                 /resembl/i,
                                                 /common/i,
-                                                /shared/i;
-                                            ;
+                                                /shared/i
+                                            ];
                                             const sentences = summary.split(/[.!?]+/).filter(s => s.trim().length > 10);
                                             const similarities = [];
                                             sentences.forEach(sentence => { });
@@ -387,15 +403,15 @@ catch (error) {
                                             _extractDifferences(summary, string);
                                             string;
                                             {
-                                                const differenceIndicators = [];
-                                                /differ/i,
+                                                const differenceIndicators = [
+                                                    /differ/i,
                                                     /contrast/i,
                                                     /unlike/i,
                                                     /however/i,
                                                     /but/i,
                                                     /while.*other/i,
-                                                    /distinct/i;
-                                                ;
+                                                    /distinct/i
+                                                ];
                                                 const sentences = summary.split(/[.!?]+/).filter(s => s.trim().length > 10);
                                                 const differences = [];
                                                 sentences.forEach(sentence => { });
@@ -538,8 +554,9 @@ catch (error) {
                                                     try { }
                                                     catch (error) {
                                                         console.warn(`Failed to initialize multimodal adapter:`, error);
-                                                        _createAdaptationPlan(sourceContent, MultimodalInput);
-                                                        analysis: unknown,
+                                                        _createAdaptationPlan(sourceContent, MultimodalInput),
+                                                            analysis;
+                                                        unknown,
                                                             targetModality;
                                                         string,
                                                             style;
@@ -608,8 +625,9 @@ catch (error) {
                                                                                 if (complexityScore < 3)
                                                                                     return 'medium';
                                                                                 return 'high';
-                                                                                _determineAdaptationStrategy(sourceModalities, string);
-                                                                                targetModality: string,
+                                                                                _determineAdaptationStrategy(sourceModalities, string),
+                                                                                    targetModality;
+                                                                                string,
                                                                                     style;
                                                                                 string;
                                                                                 string;
@@ -660,8 +678,9 @@ catch (error) {
                                                                                         }
                                                                                         ;
                                                                                         return [...new Set(challenges)];
-                                                                                        _generateRecommendations(sourceModalities, string);
-                                                                                        targetModality: string,
+                                                                                        _generateRecommendations(sourceModalities, string),
+                                                                                            targetModality;
+                                                                                        string,
                                                                                             style;
                                                                                         string,
                                                                                             constraints;
@@ -703,8 +722,9 @@ catch (error) {
                                                                                             if (constraints.budget) {
                                                                                                 recommendations.push('Consider cost-effective production methods');
                                                                                                 return recommendations;
-                                                                                                _estimateAdaptationEffort(sourceModalities, string);
-                                                                                                targetModality: string,
+                                                                                                _estimateAdaptationEffort(sourceModalities, string),
+                                                                                                    targetModality;
+                                                                                                string,
                                                                                                     constraints;
                                                                                                 Record;
                                                                                                 'low' | 'medium' | 'high';
@@ -742,8 +762,9 @@ catch (error) {
                                                                                                                 return `${timeline} (extended due to constraints)`;
                                                                                                             }
                                                                                                             return timeline;
-                                                                                                            _generateAdaptedContentSpec(analysis, unknown);
-                                                                                                            targetModality: string,
+                                                                                                            _generateAdaptedContentSpec(analysis, unknown),
+                                                                                                                targetModality;
+                                                                                                            string,
                                                                                                                 plan;
                                                                                                             unknown;
                                                                                                             unknown;

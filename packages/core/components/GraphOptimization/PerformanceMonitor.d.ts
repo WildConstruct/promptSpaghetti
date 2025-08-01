@@ -4,15 +4,14 @@
 import React from 'react';
 
 }
-interface ExecutionMetric {
-    timestamp: number;
+}
+interface ExecutionMetric { timestamp: number;
     duration: number;
     memoryUsage: number;
     nodeCount: number;
     cacheHitRate: number;
-    outputLength: number;
-
-
+    outputLength: number }
+}
 }
 interface PerformanceMonitorProps {
     isVisible: boolean;
@@ -22,4 +21,5 @@ interface PerformanceMonitorProps {
 export declare const PerformanceMonitor: React.FC<PerformanceMonitorProps>;
 export default PerformanceMonitor;
 //# sourceMappingURL=PerformanceMonitor.d.ts.map
+}
 }

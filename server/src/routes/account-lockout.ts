@@ -11,9 +11,9 @@ export async function accountLockoutRoutes(
   // Get lockout status for a specific account
   fastify.get<{
     Params: { email: string };
-  }>('/lockout/status/:email', async (request: FastifyRequest<{
+>('/lockout/status/:email', async (request: FastifyRequest<{
     Params: { email: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { email } = request.params;
       const status = await lockoutService.getLockoutStatus(email);
@@ -23,28 +23,28 @@ export async function accountLockoutRoutes(
         status,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get lockout status:', error);
       reply.code(500).send({
         error: 'Failed to retrieve lockout status',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Generate unlock token for self-service unlock
   fastify.post<{
     Body: { email: string; captcha?: string };
-  }>('/lockout/request-unlock', async (request: FastifyRequest<{
+>('/lockout/request-unlock', async (request: FastifyRequest<{
     Body: { email: string; captcha?: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { email, captcha } = request.body;
 
       // TODO: Verify CAPTCHA if provided
       if (captcha) {
         // Implement CAPTCHA verification
-      }
+
 
       // Check if account is actually locked
       const status = await lockoutService.getLockoutStatus(email);
@@ -54,7 +54,7 @@ export async function accountLockoutRoutes(
           message: 'This account does not require unlocking'
         });
         return;
-      }
+
 
       // Generate unlock token
       const token = await lockoutService.generateUnlockToken(email);
@@ -68,21 +68,21 @@ export async function accountLockoutRoutes(
         ...(isDevelopment ? { token } : {}), // Only include token in development
         expiresIn: '15 minutes'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to request unlock:', error);
       reply.code(500).send({
         error: 'Failed to process unlock request',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Verify unlock token and unlock account
   fastify.post<{
     Body: { email: string; token: string };
-  }>('/lockout/unlock', async (request: FastifyRequest<{
+>('/lockout/unlock', async (request: FastifyRequest<{
     Body: { email: string; token: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { email, token } = request.body;
       const context = {
@@ -98,32 +98,32 @@ export async function accountLockoutRoutes(
           message: 'The unlock token is not valid or has expired'
         });
         return;
-      }
+
 
       return {
         message: 'Account has been successfully unlocked',
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to unlock account:', error);
       reply.code(500).send({
         error: 'Failed to unlock account',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Get lockout statistics
   fastify.get<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>('/lockout/admin/statistics', {
+>('/lockout/admin/statistics', {
     preHandler: async (request, reply) => {
       // TODO: Implement admin authentication check
       // For now, this is a placeholder
-    }
+
   }, async (request: FastifyRequest<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const timeframe = request.query.timeframe || 'week';
       const statistics = await lockoutService.getLockoutStatistics(timeframe);
@@ -133,25 +133,25 @@ export async function accountLockoutRoutes(
         statistics,
         generatedAt: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get lockout statistics:', error);
       reply.code(500).send({
         error: 'Failed to retrieve lockout statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Get list of currently locked accounts
   fastify.get<{
     Querystring: { limit?: string; offset?: string };
-  }>('/lockout/admin/locked-accounts', {
+>('/lockout/admin/locked-accounts', {
     preHandler: async (request, reply) => {
       // TODO: Implement admin authentication check
-    }
+
   }, async (request: FastifyRequest<{
     Querystring: { limit?: string; offset?: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const limit = request.query.limit ? parseInt(request.query.limit) : 50;
       const offset = request.query.offset ? parseInt(request.query.offset) : 0;
@@ -164,29 +164,29 @@ export async function accountLockoutRoutes(
           limit,
           offset,
           total: lockedAccounts.length
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get locked accounts:', error);
       reply.code(500).send({
         error: 'Failed to retrieve locked accounts',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Manually unlock an account
   fastify.post<{
     Body: { email: string; reason?: string };
-  }>('/lockout/admin/unlock', {
+>('/lockout/admin/unlock', {
     preHandler: async (request, reply) => {
       // TODO: Implement admin authentication check
       // Should verify admin role and log admin action
-    }
+
   }, async (request: FastifyRequest<{
     Body: { email: string; reason?: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { email, reason } = request.body;
       const context = {
@@ -205,13 +205,13 @@ export async function accountLockoutRoutes(
         reason,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to admin unlock account:', error);
       reply.code(500).send({
         error: 'Failed to unlock account',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Update lockout configuration
@@ -228,10 +228,10 @@ export async function accountLockoutRoutes(
       allowSelfUnlock?: boolean;
       captchaThreshold?: number;
     };
-  }>('/lockout/admin/config', {
+>('/lockout/admin/config', {
     preHandler: async (request, reply) => {
       // TODO: Implement admin authentication check
-    }
+
   }, async (request: FastifyRequest<{
     Body: {
       maxFailedAttempts?: number;
@@ -245,7 +245,7 @@ export async function accountLockoutRoutes(
       allowSelfUnlock?: boolean;
       captchaThreshold?: number;
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       // TODO: Implement configuration updates
       // This would update the lockout service configuration
@@ -255,20 +255,20 @@ export async function accountLockoutRoutes(
         config: request.body,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to update lockout config:', error);
       reply.code(500).send({
         error: 'Failed to update configuration',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get lockout configuration
   fastify.get('/lockout/admin/config', {
     preHandler: async (request, reply) => {
       // TODO: Implement admin authentication check
-    }
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // TODO: Get current configuration from lockout service
@@ -290,13 +290,13 @@ export async function accountLockoutRoutes(
         config,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get lockout config:', error);
       reply.code(500).send({
         error: 'Failed to retrieve configuration',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Health check for lockout system
@@ -312,17 +312,17 @@ export async function accountLockoutRoutes(
           database: 'connected',
           redis: 'connected',
           lockoutService: 'operational'
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Lockout system health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -345,32 +345,32 @@ export async function accountLockoutRoutes(
           path: '/lockout/status/:email',
           method: 'GET',
           description: 'Get lockout status for an account'
-  }
+
         {
           path: '/lockout/request-unlock',
           method: 'POST',
           description: 'Request unlock token for locked account'
-  }
+
         {
           path: '/lockout/unlock',
           method: 'POST',
           description: 'Unlock account using token'
-  }
+
         {
           path: '/lockout/admin/statistics',
           method: 'GET',
           description: 'Get lockout statistics (admin only)'
-  }
+
         {
           path: '/lockout/admin/locked-accounts',
           method: 'GET',
           description: 'List currently locked accounts (admin only)'
-  }
+
         {
           path: '/lockout/admin/unlock',
           method: 'POST',
           description: 'Manually unlock account (admin only)'
-        }
+
       ],
       configuration: {
         maxFailedAttempts: 'Maximum failed attempts before lockout',
@@ -379,7 +379,6 @@ export async function accountLockoutRoutes(
         progressiveMultipliers: 'Multipliers for progressive lockout durations',
         resetWindowHours: 'Hours after which failed attempts counter resets',
         captchaThreshold: 'Failed attempts before CAPTCHA is required'
-      }
+
     };
   });
-}

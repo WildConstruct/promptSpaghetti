@@ -3,8 +3,7 @@
  * Utility functions for working with extension manifests
  */
 import { ExtensionManifest } from './ExtensionManifest';
-export declare class ExtensionManifestUtils {
-    /**
+export declare class ExtensionManifestUtils { /**
      * Convert package.json to extension manifest
      */
     static convertPackageJsonToManifest(packageJson: any): ExtensionManifest;
@@ -22,8 +21,7 @@ export declare class ExtensionManifestUtils {
     static validateManifestDependencies(manifest: ExtensionManifest): {
         valid: boolean;
         errors: string[];
-        warnings: string[];
-    };
+        warnings: string[] };
     /**
      * Get manifest size information
      */
@@ -54,8 +52,7 @@ export declare class ExtensionManifestUtils {
     private static compress;
     private static countFields;
 
-export declare class ManifestTemplateGenerator {
-    /**
+export declare class ManifestTemplateGenerator { /**
      * Generate manifest template for extension type
      */
     static generateTemplate(extensionType: 'node' | 'ui' | 'transform' | 'storage'): string;
@@ -66,18 +63,17 @@ export declare class ManifestTemplateGenerator {
     private static generateNodeTemplate;
     private static generateUITemplate;
     private static generateTransformTemplate;
-    private static generateStorageTemplate;
+    private static generateStorageTemplate }
 }
-interface ManifestSizeInfo {
-    raw: number;
+interface ManifestSizeInfo { raw: number;
     compressed: number;
     compressionRatio: number;
     fieldCount: number;
     dependencyCount: number;
-    permissionCount: number;
+    permissionCount: number }
 }
-interface ManifestMetadata {
-    id: string;
+}
+interface ManifestMetadata { id: string;
     name: string;
     version: string;
     type: string;
@@ -91,7 +87,8 @@ interface ManifestMetadata {
     hasSecurity: boolean;
     dependencyCount: number;
     permissionCount: number;
-    size: ManifestSizeInfo;
+    size: ManifestSizeInfo }
+}
 }
 interface ManifestComparison {
     identical: boolean;
@@ -105,18 +102,18 @@ interface ManifestComparison {
         newValue: string;
         type: 'added' | 'removed' | 'modified'
 }
+}
   }>;
 }
-interface ManifestWizardQuestion {
-    key: string;
+}
+interface ManifestWizardQuestion { key: string;
     prompt: string;
     type: 'text' | 'select' | 'boolean';
     required?: boolean;
     default?: any;
     options?: string[];
     validation?: (value: any) => boolean;
-    transform?: (value: any) => any;
-
+    transform?: (value: any) => any }
 }
 export { ManifestTemplateGenerator };
 //# sourceMappingURL=ExtensionManifestUtils.d.ts.map

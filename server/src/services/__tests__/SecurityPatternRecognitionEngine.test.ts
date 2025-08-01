@@ -9,7 +9,7 @@ import {
   SecurityPattern,
   ThreatCluster,
   PatternRecognitionResult 
-} from '../SecurityPatternRecognitionEngine';
+ from '../SecurityPatternRecognitionEngine';
 import { SecurityAPIIntegrationPlatform } from '../SecurityAPIIntegrationPlatform';
 import { SecurityPolicyAnalysisEngine } from '../SecurityPolicyAnalysisEngine';
 import { SecurityRiskScoringEngine } from '../SecurityRiskScoringEngine';
@@ -34,24 +34,24 @@ describe('SecurityPatternRecognitionEngine', () => {
       getPlatformMetrics: jest.fn<unknown[], unknown>().mockResolvedValue({
         api_calls: { total_requests: 25000, successful_requests: 24750 },
         security_analytics: { threats_detected: 55, detection_accuracy_percent: 98 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockPolicyEngine = {
       on: jest.fn<unknown[], unknown>(),
       analyzePolicyImpact: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_analysis: { overall_risk_score: 35 },
         validation_results: { validation_passed: true }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     mockRiskScoringEngine = {
       on: jest.fn<unknown[], unknown>(),
       scoreSecurityRisk: jest.fn<unknown[], unknown>().mockResolvedValue({
         risk_id: 'risk_123',
         risk_scoring: { composite_score: 85 }
-      } as unknown)
-    } as any;
+ as unknown)
+ as any;
 
     // Setup configuration
     config = {
@@ -64,7 +64,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         behavioral_analysis_enabled: true,
         temporal_pattern_analysis: true,
         spatial_pattern_analysis: true
-  }
+
       threat_clustering: {
         enabled: true,
         clustering_algorithms: ['dbscan', 'hierarchical', 'kmeans', 'graph_clustering'],
@@ -72,12 +72,12 @@ describe('SecurityPatternRecognitionEngine', () => {
           high_similarity: 0.8,
           medium_similarity: 0.6,
           low_similarity: 0.4
-  }
+
         auto_clustering_enabled: true,
         manual_clustering_allowed: true,
         cluster_validation_enabled: true,
         cross_reference_clustering: true
-  }
+
       pattern_types: {
         attack_patterns: true,
         behavioral_patterns: true,
@@ -87,7 +87,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         data_access_patterns: true,
         anomaly_patterns: true,
         compliance_patterns: true
-  }
+
       analysis_algorithms: {
         machine_learning_enabled: true,
         deep_learning_models: true,
@@ -97,7 +97,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         network_analysis: true,
         natural_language_processing: true,
         computer_vision_analysis: false
-  }
+
       data_sources: {
         security_logs: true,
         network_traffic: true,
@@ -107,7 +107,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         user_behavior_data: true,
         system_performance_metrics: true,
         compliance_audit_data: true
-  }
+
       output_settings: {
         real_time_alerts: true,
         batch_reporting: true,
@@ -117,7 +117,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         siem_integration: true,
         incident_response_integration: true,
         threat_hunting_integration: true
-      }
+
     };
 
     // Setup sample pattern data
@@ -130,7 +130,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           source_ip: '192.168.1.100',
           user_agent: 'Mozilla/5.0...',
           event_type: 'authentication_failure'
-  }
+
         {
           timestamp: Date.now() - 3600000,
           log_level: 'WARNING',
@@ -138,7 +138,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           source_ip: '192.168.1.100',
           file_path: '/etc/passwd',
           event_type: 'file_access'
-        }
+
       ],
       network_traffic: [
         {
@@ -149,7 +149,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           protocol: 'TCP',
           bytes_transferred: 1024,
           connection_state: 'established'
-        }
+
       ],
       threat_intelligence: [
         {
@@ -158,7 +158,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           threat_type: 'malware_c2',
           confidence: 0.85,
           source: 'threat_feed_alpha'
-        }
+
       ]
     };
 
@@ -173,7 +173,7 @@ describe('SecurityPatternRecognitionEngine', () => {
   afterEach(async () => {
     if (engine) {
       await engine.shutdown();
-    }
+
   });
 
   describe('Initialization', () => {
@@ -279,7 +279,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         time_range: {
           start: Date.now() - 86400000 * 30,
           end: Date.now()
-        }
+
       };
 
       const result = await engine.recognizePatterns(historicalData, 'historical');
@@ -311,7 +311,7 @@ describe('SecurityPatternRecognitionEngine', () => {
             file_hash: 'abc123...',
             command_line: 'malware.exe --payload',
             parent_process: 'explorer.exe'
-          }
+
         ],
         threat_intelligence: samplePatternData.threat_intelligence
       };
@@ -543,7 +543,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         date_range: {
           start: Date.now() - 86400000, // Last 24 hours
           end: Date.now()
-        }
+
       };
 
       const results = await engine.searchPatterns(searchCriteria);
@@ -646,7 +646,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         time_range: {
           start: Date.now() - 86400000 * 7,
           end: Date.now()
-  }
+
         include_predictions: true,
         include_recommendations: true
       };
@@ -676,7 +676,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         time_range: {
           start: Date.now() - 86400000 * 30,
           end: Date.now()
-        }
+
       };
 
       const report = await engine.generatePatternReport(options);
@@ -830,7 +830,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           data: { pattern_id: 'pattern_123' }
         });
         // Should not throw
-      }
+
     });
 
     it('should handle policy engine events', async () => {
@@ -843,7 +843,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           violation: { type: 'access_pattern_anomaly' }
         });
         // Should not throw
-      }
+
     });
 
     it('should handle risk scoring engine events', async () => {
@@ -857,7 +857,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           pattern_associations: ['pattern_123']
         });
         // Should not throw
-      }
+
     });
   });
 
@@ -868,7 +868,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         pattern_recognition: {
           ...config.pattern_recognition,
           ml_pattern_detection: false
-        }
+
       };
 
       const engineWithoutML = new SecurityPatternRecognitionEngine(
@@ -894,7 +894,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           ...config.threat_clustering,
           clustering_algorithms: ['dbscan'],
           auto_clustering_enabled: false
-        }
+
       };
 
       const engineWithLimitedClustering = new SecurityPatternRecognitionEngine(
@@ -921,7 +921,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           ...config.data_sources,
           network_traffic: false,
           endpoint_telemetry: false
-        }
+
       };
 
       const engineWithRestrictedData = new SecurityPatternRecognitionEngine(

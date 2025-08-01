@@ -1,5 +1,26 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 ;
+text: {
+    primary: string;
+    secondary: string;
+    disabled: string;
+    inverse: string;
+}
+;
+border: {
+    primary: string;
+    secondary: string;
+    active: string;
+}
+;
+status: {
+    active: string;
+    inactive: string;
+    regex: string;
+    priority: string;
+}
+;
+;
 spacing: {
     xs: string;
     sm: string;
@@ -173,11 +194,8 @@ export const darkTheme = {
                         active: '#63b3ed',
                     },
                     // Theme context and provider
-                    import: React,
-                }
-            }
-        }
-    } }, { createContext, useContext, ReactNode }, from;
+                    import: React, }
+            } } } }, { createContext, useContext, ReactNode }, from;
 'react';
 const CorrectionsThemeContext = createContext(undefined);
 {
@@ -206,8 +224,7 @@ export const useCorrectionsTheme = () => {
             backgroundColor: theme.colors.primary,
             color: theme.colors.text.inverse,
             border: 'none',
-            padding: `${theme.spacing.sm} ${theme.spacing.lg}`
-        }
+            padding: `${theme.spacing.sm} ${theme.spacing.lg}` }
     },
         borderRadius), theme, radius, md, fontSize, fontWeight, cursor, transition;
 }, secondary;

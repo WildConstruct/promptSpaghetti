@@ -16,20 +16,21 @@ import { PerformanceMonitor, PerformanceDashboard as DashboardData, PerformanceM
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
-}
-}
+
+
 export interface DashboardConfig {
   enableWebSocket: boolean;
   websocketPort?: number;
   updateInterval: number; // milliseconds
   maxHistoryPoints: number;
   enableRealTimeAlerts: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DashboardClient {
   clientId: string;
   websocket?: WebSocket;
@@ -37,26 +38,28 @@ export interface DashboardClient {
   subscriptions: DashboardSubscription[];
   lastActivity: Date;
   isActive: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DashboardSubscription {
   type: 'metrics' | 'benchmarks' | 'alerts' | 'system_health';
   filters: {
     metricNames?: string[];
     categories?: string[];
     severities?: string[];
-}
-}
+
+
+
   };
   realTime: boolean;
-}
 
-}
-}
+
+
+
 export interface DashboardWidget {
   widgetId: string;
   type: WidgetType;
@@ -64,32 +67,35 @@ export interface DashboardWidget {
   config: WidgetConfig;
   data: any;
   lastUpdated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WidgetConfig {
   timeRange: TimeRange;
   refreshInterval: number; // milliseconds
   visualization: VisualizationType;
   metrics: string[];
-}
-}
+
+
+
   thresholds?: { warning: number; critical: number };
   chartOptions?: Record<string, any>;
-}
 
-}
-}
+
+
+
 export interface TimeRange {
   type: 'realtime' | 'last_hour' | 'last_24h' | 'last_7d' | 'custom';
   customStart?: Date;
   customEnd?: Date;
-}
-}
-}
+
+
+
+
 
 export type WidgetType = 
   | 'metric_chart'
@@ -142,7 +148,7 @@ export class PerformanceDashboard extends EventEmitter {
     this.performanceMonitor = performanceMonitor;
     this.databaseService = dependencies.databaseService;
     this.redisService = dependencies.redisService;
-  }
+
 
   /**
    * Initialize performance dashboard
@@ -154,7 +160,7 @@ export class PerformanceDashboard extends EventEmitter {
     // Initialize WebSocket server if enabled
     if (this.config.enableWebSocket) {
       await this.initializeWebSocketServer();
-    }
+
     
     // Initialize default widgets
     await this.initializeDefaultWidgets();
@@ -169,7 +175,7 @@ export class PerformanceDashboard extends EventEmitter {
     await this.loadHistoricalData();
     
     console.log('✅ Performance Dashboard initialized successfully');
-  }
+
 
   /**
    * Initialize WebSocket server for real-time updates
@@ -183,7 +189,7 @@ export class PerformanceDashboard extends EventEmitter {
       verifyClient: (info) => {
         // Add authentication if needed
         return true;
-      }
+
     });
 
     this.wsServer.on('connection', (ws, req) => {
@@ -195,7 +201,7 @@ export class PerformanceDashboard extends EventEmitter {
     });
 
     console.log(`🔌 Performance Dashboard WebSocket server started on port ${port}`);
-  }
+
 
   /**
    * Handle new WebSocket connection
@@ -230,7 +236,7 @@ export class PerformanceDashboard extends EventEmitter {
     this.sendDashboardData(clientId);
     
     console.log(`📱 Dashboard client connected: ${clientId}`);
-  }
+
 
   /**
    * Handle WebSocket message from client
@@ -257,13 +263,13 @@ export class PerformanceDashboard extends EventEmitter {
         break;
       default:
         console.warn(`Unknown message type from client ${clientId}:`, data.type);
-      }
+
       
       client.lastActivity = new Date();
-    } catch (error) {
+ catch (error) {
       console.error(`Error processing message from client ${clientId}:`, error);
-    }
-  }
+
+
 
   /**
    * Handle client subscription
@@ -287,8 +293,8 @@ export class PerformanceDashboard extends EventEmitter {
         subscriptionType: subscription.type,
         timestamp: new Date()
       }));
-    }
-  }
+
+
 
   /**
    * Handle client unsubscription
@@ -305,8 +311,8 @@ export class PerformanceDashboard extends EventEmitter {
         subscriptionType,
         timestamp: new Date()
       }));
-    }
-  }
+
+
 
   /**
    * Handle widget data request
@@ -324,8 +330,8 @@ export class PerformanceDashboard extends EventEmitter {
         data: widget.data,
         lastUpdated: widget.lastUpdated
       }));
-    }
-  }
+
+
 
   /**
    * Handle ping message
@@ -339,8 +345,8 @@ export class PerformanceDashboard extends EventEmitter {
         type: 'pong',
         timestamp: new Date()
       }));
-    }
-  }
+
+
 
   /**
    * Handle WebSocket disconnection
@@ -351,8 +357,8 @@ export class PerformanceDashboard extends EventEmitter {
       client.isActive = false;
       this.clients.delete(clientId);
       console.log(`📱 Dashboard client disconnected: ${clientId}`);
-    }
-  }
+
+
 
   /**
    * Initialize default dashboard widgets
@@ -364,7 +370,7 @@ export class PerformanceDashboard extends EventEmitter {
       type: WidgetType;
       title: string;
       config: Partial<WidgetConfig>;
-    }> = [
+> = [
       {
         id: 'system_health_gauge',
         type: 'system_health',
@@ -374,8 +380,8 @@ export class PerformanceDashboard extends EventEmitter {
           refreshInterval: 5000,
           visualization: 'gauge',
           metrics: ['system_health_score']
-        }
-  }
+
+
       {
         id: 'api_response_times',
         type: 'metric_chart',
@@ -386,8 +392,8 @@ export class PerformanceDashboard extends EventEmitter {
           visualization: 'line_chart',
           metrics: ['api_response_time'],
           thresholds: { warning: 200, critical: 1000 }
-        }
-  }
+
+
       {
         id: 'memory_usage_trend',
         type: 'metric_chart',
@@ -397,8 +403,8 @@ export class PerformanceDashboard extends EventEmitter {
           refreshInterval: 60000,
           visualization: 'area_chart',
           metrics: ['system_memory_heap_used', 'system_memory_heap_total']
-        }
-  }
+
+
       {
         id: 'performance_benchmarks',
         type: 'benchmark_summary',
@@ -408,8 +414,8 @@ export class PerformanceDashboard extends EventEmitter {
           refreshInterval: 300000,
           visualization: 'table',
           metrics: []
-        }
-  }
+
+
       {
         id: 'active_alerts',
         type: 'alert_list',
@@ -419,8 +425,8 @@ export class PerformanceDashboard extends EventEmitter {
           refreshInterval: 10000,
           visualization: 'table',
           metrics: []
-        }
-  }
+
+
       {
         id: 'cpu_usage_gauge',
         type: 'metric_chart',
@@ -430,8 +436,8 @@ export class PerformanceDashboard extends EventEmitter {
           refreshInterval: 30000,
           visualization: 'gauge',
           metrics: ['system_cpu_user', 'system_cpu_system']
-        }
-      }
+
+
     ];
     
     for (const widgetDef of defaultWidgets) {
@@ -445,16 +451,16 @@ export class PerformanceDashboard extends EventEmitter {
           visualization: 'line_chart',
           metrics: [],
           ...widgetDef.config
-        } as WidgetConfig,
+ as WidgetConfig,
         data: null,
         lastUpdated: new Date()
       };
       
       this.widgets.set(widget.widgetId, widget);
-    }
+
     
     console.log(`📊 Initialized ${defaultWidgets.length} default dashboard widgets`);
-  }
+
 
   /**
    * Start periodic dashboard updates
@@ -464,7 +470,7 @@ export class PerformanceDashboard extends EventEmitter {
       await this.updateDashboardData();
       this.broadcastUpdates();
     }, this.config.updateInterval);
-  }
+
 
   /**
    * Update dashboard data
@@ -481,11 +487,10 @@ export class PerformanceDashboard extends EventEmitter {
       
       // Update historical data
       this.updateHistoricalData();
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error updating dashboard data:', error);
-    }
-  }
+
+
 
   /**
    * Update all widgets
@@ -497,11 +502,11 @@ export class PerformanceDashboard extends EventEmitter {
         const widgetData = await this.generateWidgetData(widget);
         widget.data = widgetData;
         widget.lastUpdated = new Date();
-      } catch (error) {
+ catch (error) {
         console.error(`Error updating widget ${widgetId}:`, error);
-      }
-    }
-  }
+
+
+
 
   /**
    * Generate data for a specific widget
@@ -529,8 +534,8 @@ export class PerformanceDashboard extends EventEmitter {
       
     default:
       return null;
-    }
-  }
+
+
 
   /**
    * Generate system health widget data
@@ -546,7 +551,7 @@ export class PerformanceDashboard extends EventEmitter {
       uptime: this.dashboardData.systemOverview.monitoringUptime,
       lastUpdated: this.dashboardData.systemHealth.timestamp
     };
-  }
+
 
   /**
    * Generate metric chart widget data
@@ -569,7 +574,7 @@ export class PerformanceDashboard extends EventEmitter {
         // Create time labels if not already created
         if (chartData.labels.length === 0) {
           chartData.labels = relevantData.map(point => point.timestamp);
-        }
+
         
         chartData.datasets.push({
           label: metricName,
@@ -577,11 +582,11 @@ export class PerformanceDashboard extends EventEmitter {
           timestamps: relevantData.map(point => point.timestamp),
           thresholds: widget.config.thresholds
         });
-      }
-    }
+
+
     
     return chartData;
-  }
+
 
   /**
    * Generate benchmark summary widget data
@@ -599,9 +604,9 @@ export class PerformanceDashboard extends EventEmitter {
         onTrack: this.dashboardData.benchmarkSummary.filter(b => b.status === 'on_track').length,
         needsAttention: this.dashboardData.benchmarkSummary.filter(b => b.status === 'needs_attention').length,
         critical: this.dashboardData.benchmarkSummary.filter(b => b.status === 'critical').length
-      }
+
     };
-  }
+
 
   /**
    * Generate alert list widget data
@@ -618,9 +623,9 @@ export class PerformanceDashboard extends EventEmitter {
         total: this.dashboardData.activeAlerts.length,
         critical: this.dashboardData.activeAlerts.filter(a => a.severity === 'critical').length,
         warning: this.dashboardData.activeAlerts.filter(a => a.severity === 'warning').length
-      }
+
     };
-  }
+
 
   /**
    * Generate performance heatmap widget data
@@ -633,7 +638,7 @@ export class PerformanceDashboard extends EventEmitter {
       categories: ['API', 'Database', 'UI', 'System'],
       timeSlots: []
     };
-  }
+
 
   /**
    * Generate trend analysis widget data
@@ -649,7 +654,7 @@ export class PerformanceDashboard extends EventEmitter {
         change: metric.average - metric.latest
       })),
       overallTrend: this.calculateOverallTrend(};
-  }
+
 
   /**
    * Setup listeners for performance monitor events
@@ -666,7 +671,7 @@ export class PerformanceDashboard extends EventEmitter {
     this.performanceMonitor.on('alert_triggered', (alert: any) => {
       this.handleAlertTriggered(alert);
     });
-  }
+
 
   /**
    * Handle metric recorded event
@@ -675,7 +680,7 @@ export class PerformanceDashboard extends EventEmitter {
     // Update metrics history
     if (!this.metricsHistory.has(metric.name)) {
       this.metricsHistory.set(metric.name, []);
-    }
+
     
     const history = this.metricsHistory.get(metric.name)!;
     history.push({
@@ -686,11 +691,11 @@ export class PerformanceDashboard extends EventEmitter {
     // Limit history size
     if (history.length > this.config.maxHistoryPoints) {
       history.splice(0, history.length - this.config.maxHistoryPoints);
-    }
+
     
     // Broadcast real-time update to subscribed clients
     this.broadcastMetricUpdate(metric);
-  }
+
 
   /**
    * Handle benchmark recorded event
@@ -699,7 +704,7 @@ export class PerformanceDashboard extends EventEmitter {
     // Update benchmark history
     if (!this.benchmarksHistory.has(benchmark.benchmarkId)) {
       this.benchmarksHistory.set(benchmark.benchmarkId, []);
-    }
+
     
     const history = this.benchmarksHistory.get(benchmark.benchmarkId)!;
     history.push({
@@ -711,11 +716,11 @@ export class PerformanceDashboard extends EventEmitter {
     // Limit history size
     if (history.length > this.config.maxHistoryPoints) {
       history.splice(0, history.length - this.config.maxHistoryPoints);
-    }
+
     
     // Broadcast update to subscribed clients
     this.broadcastBenchmarkUpdate(benchmark);
-  }
+
 
   /**
    * Handle alert triggered event
@@ -723,8 +728,8 @@ export class PerformanceDashboard extends EventEmitter {
   private handleAlertTriggered(alert: any): void {
     if (this.config.enableRealTimeAlerts) {
       this.broadcastAlertUpdate(alert);
-    }
-  }
+
+
 
   /**
    * Broadcast metric update to subscribed clients
@@ -737,13 +742,13 @@ export class PerformanceDashboard extends EventEmitter {
         value: metric.value,
         timestamp: metric.timestamp,
         status: metric.status
-      }
+
     };
     
     this.broadcastToSubscribers('metrics', message, (subscription) => 
       !subscription.filters.metricNames || subscription.filters.metricNames.includes(metric.name)
     );
-  }
+
 
   /**
    * Broadcast benchmark update to subscribed clients
@@ -757,13 +762,13 @@ export class PerformanceDashboard extends EventEmitter {
         value: benchmark.current.value,
         improvement: benchmark.improvement,
         timestamp: benchmark.current.timestamp
-      }
+
     };
     
     this.broadcastToSubscribers('benchmarks', message, (subscription) => 
       !subscription.filters.categories || subscription.filters.categories.includes(benchmark.category)
     );
-  }
+
 
   /**
    * Broadcast alert update to subscribed clients
@@ -777,13 +782,13 @@ export class PerformanceDashboard extends EventEmitter {
         severity: alert.severity,
         description: alert.description,
         timestamp: alert.triggeredAt
-      }
+
     };
     
     this.broadcastToSubscribers('alerts', message, (subscription) => 
       !subscription.filters.severities || subscription.filters.severities.includes(alert.severity)
     );
-  }
+
 
   /**
    * Broadcast message to subscribers with optional filter
@@ -805,13 +810,13 @@ export class PerformanceDashboard extends EventEmitter {
       if (relevantSubscriptions.length > 0) {
         try {
           client.websocket.send(JSON.stringify(message));
-        } catch (error) {
+ catch (error) {
           console.error(`Error sending message to client ${client.clientId}:`, error);
           this.handleWebSocketDisconnection(client.clientId);
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Broadcast general dashboard updates
@@ -829,13 +834,13 @@ export class PerformanceDashboard extends EventEmitter {
       if (client.isActive && client.websocket) {
         try {
           client.websocket.send(JSON.stringify(updateMessage));
-        } catch (error) {
+ catch (error) {
           console.error(`Error broadcasting to client ${client.clientId}:`, error);
           this.handleWebSocketDisconnection(client.clientId);
-        }
-      }
-    }
-  }
+
+
+
+
 
   /**
    * Send dashboard data to specific client
@@ -853,10 +858,10 @@ export class PerformanceDashboard extends EventEmitter {
     
     try {
       client.websocket.send(JSON.stringify(message));
-    } catch (error) {
+ catch (error) {
       console.error(`Error sending dashboard data to client ${clientId}:`, error);
-    }
-  }
+
+
 
   /**
    * Send subscription data to client
@@ -880,7 +885,7 @@ export class PerformanceDashboard extends EventEmitter {
     case 'system_health':
       data = this.dashboardData?.systemHealth;
       break;
-    }
+
     
     if (data) {
       const message = {
@@ -892,11 +897,11 @@ export class PerformanceDashboard extends EventEmitter {
       
       try {
         client.websocket.send(JSON.stringify(message));
-      } catch (error) {
+ catch (error) {
         console.error(`Error sending subscription data to client ${clientId}:`, error);
-      }
-    }
-  }
+
+
+
 
   /**
    * Register dashboard routes with Fastify server
@@ -912,12 +917,12 @@ export class PerformanceDashboard extends EventEmitter {
           widgets: Array.from(this.widgets.values()),
           timestamp: new Date()
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
     
     // Widget data endpoint
@@ -931,19 +936,19 @@ export class PerformanceDashboard extends EventEmitter {
             success: false,
             error: 'Widget not found'
           });
-        }
+
         
         return reply.code(200).send({
           success: true,
           widget,
           data: widget.data
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
     
     // Performance report endpoint
@@ -965,12 +970,12 @@ export class PerformanceDashboard extends EventEmitter {
           success: true,
           report
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
     
     // Dashboard configuration endpoint
@@ -982,10 +987,10 @@ export class PerformanceDashboard extends EventEmitter {
           websocketPort: this.config.websocketPort,
           updateInterval: this.config.updateInterval,
           enableRealTimeAlerts: this.config.enableRealTimeAlerts
-        }
+
       });
     });
-  }
+
 
   /**
    * Get time range for widget
@@ -1020,8 +1025,8 @@ export class PerformanceDashboard extends EventEmitter {
         start: new Date(now.getTime() - 5 * 60 * 1000), // Last 5 minutes
         end: now
       };
-    }
-  }
+
+
 
   /**
    * Calculate time ago string
@@ -1034,7 +1039,7 @@ export class PerformanceDashboard extends EventEmitter {
     if (diff < 3600000) return `${Math.floor(diff / 60000)} minutes ago`;
     if (diff < 86400000) return `${Math.floor(diff / 3600000)} hours ago`;
     return `${Math.floor(diff / 86400000)} days ago`;
-  }
+
 
   /**
    * Calculate overall trend
@@ -1048,7 +1053,7 @@ export class PerformanceDashboard extends EventEmitter {
     if (improvingCount > degradingCount) return 'improving';
     if (degradingCount > improvingCount) return 'degrading';
     return 'stable';
-  }
+
 
   /**
    * Load historical performance data
@@ -1068,19 +1073,19 @@ export class PerformanceDashboard extends EventEmitter {
       for (const row of recentMetrics) {
         if (!this.metricsHistory.has(row.name)) {
           this.metricsHistory.set(row.name, []);
-        }
+
         
         this.metricsHistory.get(row.name)!.push({
           timestamp: new Date(row.timestamp),
           value: row.value
         });
-      }
+
       
       console.log(`📊 Loaded historical data for ${this.metricsHistory.size} metrics`);
-    } catch (error) {
+ catch (error) {
       console.warn('Could not load historical dashboard data:', error);
-    }
-  }
+
+
 
   /**
    * Update historical data with latest metrics
@@ -1089,7 +1094,7 @@ export class PerformanceDashboard extends EventEmitter {
     // This is called periodically to maintain history
     // Current implementation updates through event listeners
     // but this could also pull latest data from database
-  }
+
 
   /**
    * Get dashboard status
@@ -1099,14 +1104,14 @@ export class PerformanceDashboard extends EventEmitter {
     connectedClients: number;
     widgetCount: number;
     lastUpdate: Date;
-    } {
+ {
     return {
       active: this.updateInterval !== undefined,
       connectedClients: Array.from(this.clients.values()).filter(c => c.isActive).length,
       widgetCount: this.widgets.size,
       lastUpdate: this.lastUpdate
     };
-  }
+
 
   /**
    * Stop performance dashboard
@@ -1119,21 +1124,20 @@ export class PerformanceDashboard extends EventEmitter {
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
       this.updateInterval = undefined;
-    }
+
     
     // Close WebSocket server
     if (this.wsServer) {
       this.wsServer.close();
-    }
+
     
     // Disconnect all clients
     for (const client of this.clients.values()) {
       if (client.websocket) {
         client.websocket.close();
-      }
-    }
+
+
     this.clients.clear();
     
     console.log('✅ Performance Dashboard stopped successfully');
-  }
-}
+

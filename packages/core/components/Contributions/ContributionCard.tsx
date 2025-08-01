@@ -8,150 +8,141 @@
 import React from 'react';
 import { Contribution, ContributionType, ContributionStatus } from '../../types/contributions';
 
-}
-export interface ContributionCardProps {
-  contribution: Contribution;
+
+export interface ContributionCardProps { contribution: Contribution;
   variant?: 'compact' | 'standard' | 'detailed';
   showActions?: boolean;
   onClick?: (contribution: Contribution) => void;
   onEdit?: (contributionId: string) => void;
   onDelete?: (contributionId: string) => void;
   onView?: (contributionId: string) => void;
-  className?: string;
-}
-}
-export const ContributionCard: React.FC<ContributionCardProps> = ({)
-  contribution,
-  variant = 'standard',
-  showActions = false,
-  onClick,
-  onEdit,
-  onDelete,
-  onView,
+  className?: string }
+
+export const ContributionCard: React.FC<ContributionCardProps> = ({ )
+  contribution
+  variant = 'standard'
+  showActions = false
+  onClick
+  onEdit
+  onDelete
+  onView }
   className = ''
-}) => {
-  // Get type-specific styling and icons
-  const getTypeConfig = (type: ContributionType) => {,
+}) => { // Get type-specific styling and icons
+  const getTypeConfig = (type: ContributionType) => {
   const configs = {
   template: {
-  color: '#3b82f6',
-  bgColor: '#eff6ff',
-  icon: '📄',
-  label: 'Template',
-},
-  knowledge_article: {
-  color: '#10b981',
-  bgColor: '#ecfdf5',
-  icon: '📚',
-  label: 'Knowledge Article',
-},
-  tutorial: {
-  color: '#f59e0b',
-  bgColor: '#fffbeb',
-  icon: '🎓',
-  label: 'Tutorial',
-},
-  case_study: {
-  color: '#8b5cf6',
-  bgColor: '#f3e8ff',
-  icon: '📊',
-  label: 'Case Study',
-},
-  pattern_library: {
-  color: '#ef4444',
-  bgColor: '#fef2f2',
-  icon: '🔧',
-  label: 'Pattern Library',
-},
-  community_post: {
-  color: '#06b6d4',
-  bgColor: '#ecfeff',
-  icon: '💬',
-  label: 'Community Post',
-},
-  documentation: {
-  color: '#6b7280',
-  bgColor: '#f9fafb',
-  icon: '📋',
-  label: 'Documentation',
-},
-  review: {
-  color: '#84cc16',
-  bgColor: '#f7fee7',
-  icon: '⭐',
-  label: 'Review',
+  color: '#3b82f6'
+  bgColor: '#eff6ff'
+  icon: '📄'
+  label: 'Template' }
+
+  knowledge_article: { 
+  color: '#10b981'
+  bgColor: '#ecfdf5'
+  icon: '📚'
+  label: 'Knowledge Article' }
+
+  tutorial: { 
+  color: '#f59e0b'
+  bgColor: '#fffbeb'
+  icon: '🎓'
+  label: 'Tutorial' }
+
+  case_study: { 
+  color: '#8b5cf6'
+  bgColor: '#f3e8ff'
+  icon: '📊'
+  label: 'Case Study' }
+
+  pattern_library: { 
+  color: '#ef4444'
+  bgColor: '#fef2f2'
+  icon: '🔧'
+  label: 'Pattern Library' }
+
+  community_post: { 
+  color: '#06b6d4'
+  bgColor: '#ecfeff'
+  icon: '💬'
+  label: 'Community Post' }
+
+  documentation: { 
+  color: '#6b7280'
+  bgColor: '#f9fafb'
+  icon: '📋'
+  label: 'Documentation' }
+
+  review: { 
+  color: '#84cc16'
+  bgColor: '#f7fee7'
+  icon: '⭐'
+  label: 'Review' }
 };
     return configs[type] || configs.template;
   };
   // Get status styling
-  const getStatusConfig = (status: ContributionStatus) => {
-  const configs = {
+  const getStatusConfig = (status: ContributionStatus) => { const configs = {
   draft: {
-  color: '#6b7280',
-  bgColor: '#f9fafb',
-  label: 'Draft',
-},
-  submitted: {
-  color: '#3b82f6',
-  bgColor: '#eff6ff',
-  label: 'Submitted',
-},
-  under_review: {
-  color: '#f59e0b',
-  bgColor: '#fffbeb',
-  label: 'Under Review',
-},
-  revision_requested: {
-  color: '#ef4444',
-  bgColor: '#fef2f2',
-  label: 'Needs Revision',
-},
-  approved: {
-  color: '#10b981',
-  bgColor: '#ecfdf5',
-  label: 'Approved',
-},
-  published: {
-  color: '#10b981',
-  bgColor: '#ecfdf5',
-  label: 'Published',
-},
-  rejected: {
-  color: '#ef4444',
-  bgColor: '#fef2f2',
-  label: 'Rejected',
-},
-  archived: {
-  color: '#6b7280',
-  bgColor: '#f9fafb',
-  label: 'Archived',
+  color: '#6b7280'
+  bgColor: '#f9fafb'
+  label: 'Draft' }
+
+  submitted: { 
+  color: '#3b82f6'
+  bgColor: '#eff6ff'
+  label: 'Submitted' }
+
+  under_review: { 
+  color: '#f59e0b'
+  bgColor: '#fffbeb'
+  label: 'Under Review' }
+
+  revision_requested: { 
+  color: '#ef4444'
+  bgColor: '#fef2f2'
+  label: 'Needs Revision' }
+
+  approved: { 
+  color: '#10b981'
+  bgColor: '#ecfdf5'
+  label: 'Approved' }
+
+  published: { 
+  color: '#10b981'
+  bgColor: '#ecfdf5'
+  label: 'Published' }
+
+  rejected: { 
+  color: '#ef4444'
+  bgColor: '#fef2f2'
+  label: 'Rejected' }
+
+  archived: { 
+  color: '#6b7280'
+  bgColor: '#f9fafb'
+  label: 'Archived' }
 };
     return configs[status] || configs.draft;
   };
   const typeConfig = getTypeConfig(contribution.type);
   const statusConfig = getStatusConfig(contribution.status);
   // Format dates
-  const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {)
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
+  const formatDate = (dateString: string) => { return new Date(dateString).toLocaleDateString('en-US', {)
+  year: 'numeric'
+  month: 'short'
+  day: 'numeric' }
 });
   };
   // Format numbers
-  const formatNumber = (num: number) => {
-    if (num >= 1000000) {
+  const formatNumber = (num: number) => { if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'M';
     if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'K';
-    return num.toString();
-  };
+    return num.toString() };
   // Handle card click
-  const handleCardClick = (e: React.MouseEvent) => {
-    if (e.target instanceof HTMLElement && e.target.closest('.card-actions')) {
+  const handleCardClick = (e: React.MouseEvent) => { if (e.target instanceof HTMLElement && e.target.closest('.card-actions')) {
       return; // Don't trigger card click if clicking on actions
-    onClick?.(contribution);
-  };
+    onClick?.(contribution) };
   return;
     <div 
       className={`contribution-card ${variant} ${className}`}
@@ -160,17 +151,17 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
     >
       {/* Card Header */}
       <div className="card-header">
-        <div className="type-badge" style={{
-  color: typeConfig.color,
-  backgroundColor: typeConfig.bgColor,
-}}>
+        <div className="type-badge" style={ {
+  color: typeConfig.color
+  backgroundColor: typeConfig.bgColor }
+}>
           <span className="type-icon">{typeConfig.icon}</span>
           <span className="type-label">{typeConfig.label}</span>
         </div>
-        <div className="status-badge" style={{
-  color: statusConfig.color,
-  backgroundColor: statusConfig.bgColor,
-}}>
+        <div className="status-badge" style={ {
+  color: statusConfig.color
+  backgroundColor: statusConfig.bgColor }
+}>
           {statusConfig.label}
         </div>
       </div>
@@ -239,14 +230,13 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
           <span className="date">{formatDate(contribution.createdAt.toString())}</span>
         </div>
         {/* Card Actions */}
-        {showActions && ()
+        { showActions && ()
           <div className="card-actions">
             {onView && ()
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onView(contribution.id);
-                }}
+                  onView(contribution.id) }}
                 className="action-btn view-btn"
                 title="View"
               >
@@ -256,12 +246,11 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
                 </svg>
               </button>
             )}
-            {onEdit && ()
+            { onEdit && ()
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onEdit(contribution.id);
-                }}
+                  onEdit(contribution.id) }}
                 className="action-btn edit-btn"
                 title="Edit"
               >
@@ -271,12 +260,11 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
                 </svg>
               </button>
             )}
-            {onDelete && contribution.status === 'draft' && ()
+            { onDelete && contribution.status === 'draft' && ()
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  onDelete(contribution.id);
-                }}
+                  onDelete(contribution.id) }}
                 className="action-btn delete-btn"
                 title="Delete"
               >
@@ -288,13 +276,13 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
           </div>
         )}
       </div>
-      <style>{`
+      <style>{ `
         .contribution-card {
-          background: #ffffff;
+          background: #ffffff
   border: 1px solid #e5e7eb;
           border-radius: 12px;
   padding: 20px;
-          transition: all 0.2s ease;
+          transition: all 0.2s ease
   display: flex;
           flex-direction: column;
   gap: 16px;
@@ -349,7 +337,7 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
           flex-wrap: wrap;
   gap: 6px;
         .tag {
-          background: #f3f4f6;
+          background: #f3f4f6
   color: #4b5563;
           padding: 4px 8px;
           border-radius: 4px;
@@ -358,7 +346,7 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
           text-transform: uppercase;
           letter-spacing: 0.3px;
         .more-tags {
-          background: #e5e7eb;
+          background: #e5e7eb
   color: #6b7280;
         .card-metrics {
           display: flex;
@@ -397,31 +385,31 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
   gap: 6px;
           flex-shrink: 0;
         .action-btn {
-          background: #f9fafb;
+          background: #f9fafb
   border: 1px solid #e5e7eb;
           border-radius: 6px;
   padding: 6px;
           cursor: pointer;
   color: #6b7280;
-          transition: all 0.2s ease;
+          transition: all 0.2s ease
   display: flex;
           align-items: center;
           justify-content: center;
-        .action-btn:hover {,
+        .action-btn:hover {
   background: #f3f4f6;
-          border-color: #d1d5db;
+          border-color: #d1d5db
   color: #374151;
-        .edit-btn:hover {,
+        .edit-btn:hover {
   background: #eff6ff;
-          border-color: #3b82f6;
+          border-color: #3b82f6
   color: #3b82f6;
-        .delete-btn:hover {,
+        .delete-btn:hover {
   background: #fef2f2;
-          border-color: #ef4444;
+          border-color: #ef4444
   color: #ef4444;
-        .view-btn:hover {,
+        .view-btn:hover {
   background: #ecfdf5;
-          border-color: #10b981;
+          border-color: #10b981 }
   color: #10b981;
         @media (max-width: 640px) {
           .contribution-card {

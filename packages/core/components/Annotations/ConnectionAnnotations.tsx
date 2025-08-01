@@ -5,10 +5,9 @@ import { Edge, getBezierPath, EdgeProps } from 'reactflow';
 
 // Enhanced Edge interface with label support
 
-}
-export interface AnnotatedEdge extends Edge {
-  label?: string;
-  labelStyle?: {
+
+export interface AnnotatedEdge extends Edge { label?: string;
+  labelStyle?: { }
   fontSize?: number;
   color?: string;
   backgroundColor?: string;
@@ -20,23 +19,23 @@ export interface AnnotatedEdge extends Edge {
   labelOffset?: { x: number; y: number };
   showLabel?: boolean;
   interactive?: boolean; // Whether label can be edited by clicking
-}
-interface ConnectionLabelProps {
-  edge: AnnotatedEdge;
+
+
+interface ConnectionLabelProps { edge: AnnotatedEdge;
   x: number;
   y: number;
   onLabelChange?: (edgeId: string, newLabel: string) => void;
   onLabelStyleChange?: (edgeId: string, newStyle: AnnotatedEdge['labelStyle']) => void;
   // Floating connection label component
-  export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({,)
-  edge,
-  x,
-  y,
-  onLabelChange,
+  export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({);
+  edge;
+  x;
+  y;
+  onLabelChange }
   onLabelStyleChange
-}
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
+
+
+}) => { const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(edge.label || '');
   const labelStyle = useMemo(() => ({)
   fontSize: edge.labelStyle?.fontSize || 12,
@@ -45,7 +44,7 @@ interface ConnectionLabelProps {
     padding: edge.labelStyle?.padding || 4,
     borderRadius: edge.labelStyle?.borderRadius || 4,
     border: edge.labelStyle?.border || '1px solid #4a5568',
-    position: 'absolute' as const,
+    position: 'absolute' as const }
     transform: `translate(${x + (edge.labelOffset?.x || 0)}px, ${y + (edge.labelOffset?.y || 0)}px)`}
 },
   transformOrigin: 'center center',
@@ -57,27 +56,17 @@ interface ConnectionLabelProps {
     maxWidth: 200,
     textAlign: 'center' as const;
   }), [edge, x, y]);
-  const handleClick = useCallback(() => {
-    if (edge.interactive && !isEditing) {
+  const handleClick = useCallback(() => { if (edge.interactive && !isEditing) {
       setIsEditing(true);
-      setEditValue(edge.label || '');
-  }, [edge.interactive, edge.label, isEditing]);
-  const handleSubmit = useCallback(() => {
-    if (onLabelChange && editValue.trim() !== edge.label) {
+      setEditValue(edge.label || '') }, [edge.interactive, edge.label, isEditing]);
+  const handleSubmit = useCallback(() => { if (onLabelChange && editValue.trim() !== edge.label) {
       onLabelChange(edge.id, editValue.trim());
-    setIsEditing(false);
-  }, [onLabelChange, edge.id, edge.label, editValue]);
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    setIsEditing(false) }, [onLabelChange, edge.id, edge.label, editValue]);
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => { if (e.key === 'Enter') {
       e.preventDefault();
-      handleSubmit();
-    } else if (e.key === 'Escape') {
-      setIsEditing(false);
-      setEditValue(edge.label || '');
-  }, [handleSubmit, edge.label]);
-  const handleBlur = useCallback(() => {
-    handleSubmit();
-  }, [handleSubmit]);
+      handleSubmit() } else if (e.key === 'Escape') { setIsEditing(false);
+      setEditValue(edge.label || '') }, [handleSubmit, edge.label]);
+  const handleBlur = useCallback(() => { handleSubmit() }, [handleSubmit]);
   if (!edge.showLabel || !edge.label) {
     return null;
   return;
@@ -94,16 +83,16 @@ interface ConnectionLabelProps {
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
           autoFocus
-          style={{
-  background: 'transparent',
-  border: 'none',
-  outline: 'none',
-  color: 'inherit',
-  fontSize: 'inherit',
-  textAlign: 'center',
-  width: Math.max(60, editValue.length * 8 + 20),
-  padding: 0,
-}}
+          style={ {
+  background: 'transparent'
+  border: 'none'
+  outline: 'none'
+  color: 'inherit'
+  fontSize: 'inherit'
+  textAlign: 'center'
+  width: Math.max(60, editValue.length * 8 + 20)
+  padding: 0 }
+}
         />
       ) : ()
         <span>{edge.label}</span>
@@ -113,32 +102,31 @@ interface ConnectionLabelProps {
 };
 
 // Enhanced edge component with label support
-}
-interface AnnotatedEdgeComponentProps extends EdgeProps {
-  data?: AnnotatedEdge;
+
+
+interface AnnotatedEdgeComponentProps extends EdgeProps { data?: AnnotatedEdge;
   onLabelChange?: (edgeId: string, newLabel: string) => void;
   onLabelStyleChange?: (edgeId: string, newStyle: AnnotatedEdge['labelStyle']) => void;
 
 export const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps> = ({)
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-  style = {},
-  data,
-  markerEnd,
-  onLabelChange,
+  id
+  sourceX
+  sourceY
+  targetX
+  targetY
+  sourcePosition
+  targetPosition }
+  style = {}
+  data
+  markerEnd
+  onLabelChange
   onLabelStyleChange
-}) => {
-  const [edgePath, labelX, labelY] = getBezierPath({)
-  sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
+}) => { const [edgePath, labelX, labelY] = getBezierPath({)
+  sourceX
+    sourceY
+    sourcePosition
+    targetX
+    targetY }
     targetPosition
   });
   // Calculate label position based on labelPosition setting
@@ -146,11 +134,7 @@ export const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps> = ({)
     const annotatedEdge = data as AnnotatedEdge;
     if (!annotatedEdge?.labelPosition) return { x: labelX, y: labelY };
     let position = 0.5; // Default to center;
-    if (typeof annotatedEdge.labelPosition === 'number') {
-      position = Math.max(0, Math.min(1, annotatedEdge.labelPosition / 100));
-    } else if (annotatedEdge.labelPosition === 'start') {
-      position = 0.1;
-    } else if (annotatedEdge.labelPosition === 'end') {
+    if (typeof annotatedEdge.labelPosition === 'number') { position = Math.max(0, Math.min(1, annotatedEdge.labelPosition / 100)) } else if (annotatedEdge.labelPosition === 'start') { position = 0.1 } else if (annotatedEdge.labelPosition === 'end') {
       position = 0.9;
     // Calculate position along the curve
     const deltaX = targetX - sourceX;
@@ -183,18 +167,18 @@ export const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps> = ({)
 };
 
 // Connection label editing interface
-}
-interface ConnectionLabelEditorProps {
-  edge: AnnotatedEdge | null;
-  onUpdateEdge: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;
+
+
+interface ConnectionLabelEditorProps { edge: AnnotatedEdge | null;
+  onUpdateEdge: (edgeId: string, updates: Partial<AnnotatedEdge>) => void
   onClose: () => void;
-  export const ConnectionLabelEditor: React.FC<ConnectionLabelEditorProps> = ({,)
-  edge,
-  onUpdateEdge,
+  export const ConnectionLabelEditor: React.FC<ConnectionLabelEditorProps> = ({);
+  edge;
+  onUpdateEdge }
   onClose
-}
-}) => {
-  const [label, setLabel] = useState(edge?.label || '');
+
+
+}) => { const [label, setLabel] = useState(edge?.label || '');
   const [fontSize, setFontSize] = useState(edge?.labelStyle?.fontSize || 12);
   const [color, setColor] = useState(edge?.labelStyle?.color || '#e2e8f0');
   const [backgroundColor, setBackgroundColor] = useState(edge?.labelStyle?.backgroundColor || 'rgba(45, 55, 72, 0.9)');
@@ -204,18 +188,18 @@ interface ConnectionLabelEditorProps {
   const [interactive, setInteractive] = useState(edge?.interactive ?? true);
   const handleSubmit = useCallback(() => {
   if (!edge) return;
-  const updates: Partial<AnnotatedEdge> = {,
-  label: label.trim(),
+  const updates: Partial<AnnotatedEdge> = {
+  label: label.trim()
   labelStyle: {
-  ...edge.labelStyle,
-  fontSize,
-  color,
+  ...edge.labelStyle
+  fontSize
+  color }
   backgroundColor
-},
-  labelPosition: labelPosition === 'center' || labelPosition === 'start' || labelPosition === 'end' ,
+
+  labelPosition: labelPosition === 'center' || labelPosition === 'start' || labelPosition === 'end' 
         ? labelPosition as 'center' | 'start' | 'end'
-        : parseFloat(labelPosition) || 50,
-      showLabel,
+        : parseFloat(labelPosition) || 50
+      showLabel
       interactive
     };
     onUpdateEdge(edge.id, updates);
@@ -223,19 +207,19 @@ interface ConnectionLabelEditorProps {
   }, [edge, label, fontSize, color, backgroundColor, labelPosition, showLabel, interactive, onUpdateEdge, onClose]);
   if (!edge) return null;
   return;
-    <div style={{
-  position: 'fixed',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  background: '#2d3748',
-  border: '1px solid #4a5568',
-  borderRadius: 8,
-  padding: 20,
-  zIndex: 2000,
-  minWidth: 300,
-  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)',
-}}>
+    <div style={ {
+  position: 'fixed'
+  top: '50%'
+  left: '50%'
+  transform: 'translate(-50%, -50%)'
+  background: '#2d3748'
+  border: '1px solid #4a5568'
+  borderRadius: 8
+  padding: 20
+  zIndex: 2000
+  minWidth: 300
+  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)' }
+}>
       <h3 style={{ color: '#e2e8f0', marginBottom: 16, fontSize: 16 }}>
         Edit Connection Label
       </h3>
@@ -248,15 +232,15 @@ interface ConnectionLabelEditorProps {
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           placeholder="Enter connection description..."
-          style={{
-  width: '100%',
-  padding: 8,
-  background: '#1a202c',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}
+          style={ {
+  width: '100%'
+  padding: 8
+  background: '#1a202c'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  color: '#e2e8f0'
+  fontSize: 12 }
+}
         />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
@@ -270,15 +254,15 @@ interface ConnectionLabelEditorProps {
             onChange={(e) => setFontSize(parseInt(e.target.value) || 12)}
             min="8"
             max="24"
-            style={{
-  width: '100%',
-  padding: 6,
-  background: '#1a202c',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}
+            style={ {
+  width: '100%'
+  padding: 6
+  background: '#1a202c'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  color: '#e2e8f0'
+  fontSize: 12 }
+}
           />
         </div>
         <div>
@@ -288,15 +272,15 @@ interface ConnectionLabelEditorProps {
           <select
             value={labelPosition}
             onChange={(e) => setLabelPosition(e.target.value)}
-            style={{
-  width: '100%',
-  padding: 6,
-  background: '#1a202c',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}
+            style={ {
+  width: '100%'
+  padding: 6
+  background: '#1a202c'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  color: '#e2e8f0'
+  fontSize: 12 }
+
           >
             <option value="start">Start</option>
             <option value="center">Center</option>
@@ -315,14 +299,14 @@ interface ConnectionLabelEditorProps {
             type="color"
             value={color}
             onChange={(e) => setColor(e.target.value)}
-            style={{
-  width: '100%',
-  padding: 2,
-  background: '#1a202c',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  height: 32,
-}}
+            style={ {
+  width: '100%'
+  padding: 2
+  background: '#1a202c'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  height: 32 }
+
           />
         </div>
         <div>
@@ -333,14 +317,14 @@ interface ConnectionLabelEditorProps {
             type="color"
             value={backgroundColor.includes('rgba') ? '#2d3748' : backgroundColor}
             onChange={(e) => setBackgroundColor(e.target.value)}
-            style={{
-  width: '100%',
-  padding: 2,
-  background: '#1a202c',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  height: 32,
-}}
+            style={ {
+  width: '100%'
+  padding: 2
+  background: '#1a202c'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  height: 32 }
+}
           />
         </div>
       </div>
@@ -365,29 +349,29 @@ interface ConnectionLabelEditorProps {
       <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
         <button
           onClick={onClose}
-          style={{
-  padding: '8px 16px',
-  background: 'transparent',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  color: '#e2e8f0',
-  cursor: 'pointer',
-  fontSize: 12,
-}}
+          style={ {
+  padding: '8px 16px'
+  background: 'transparent'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  color: '#e2e8f0'
+  cursor: 'pointer'
+  fontSize: 12 }
+}
         >
           Cancel
         </button>
         <button
           onClick={handleSubmit}
-          style={{
-  padding: '8px 16px',
-  background: '#4299e1',
-  border: 'none',
-  borderRadius: 4,
-  color: 'white',
-  cursor: 'pointer',
-  fontSize: 12,
-}}
+          style={ {
+  padding: '8px 16px'
+  background: '#4299e1'
+  border: 'none'
+  borderRadius: 4
+  color: 'white'
+  cursor: 'pointer'
+  fontSize: 12 }
+}
         >
           Apply
         </button>
@@ -400,35 +384,35 @@ interface ConnectionLabelEditorProps {
 export const createAnnotatedEdge = (baseEdge: Edge)
   label?: string,
   options?: Partial<AnnotatedEdge>
-): AnnotatedEdge => ({)
-  ...baseEdge,
-  label: label || '',
+): AnnotatedEdge => ({ )
+  ...baseEdge
+  label: label || ''
   labelStyle: {
-  fontSize: 12,
-  color: '#e2e8f0',
-  backgroundColor: 'rgba(45, 55, 72, 0.9)',
-  padding: 4,
-  borderRadius: 4,
-  border: '1px solid #4a5568',
+  fontSize: 12
+  color: '#e2e8f0'
+  backgroundColor: 'rgba(45, 55, 72, 0.9)'
+  padding: 4
+  borderRadius: 4
+  border: '1px solid #4a5568' }
   ...options?.labelStyle
-},
-  labelPosition: options?.labelPosition || 'center',
-  labelOffset: options?.labelOffset || { x: 0, y: -10 },
-  showLabel: options?.showLabel ?? true,
-  interactive: options?.interactive ?? true,
+
+  labelPosition: options?.labelPosition || 'center'
+  labelOffset: options?.labelOffset || { x: 0, y: -10 }
+  showLabel: options?.showLabel ?? true
+  interactive: options?.interactive ?? true
   ...options
 });
 
 export const updateEdgeLabel = (edges: AnnotatedEdge)
-  edgeId: string,
-  updates: Partial<AnnotatedEdge>): AnnotatedEdge => {,
+  edgeId: string
+  updates: Partial<AnnotatedEdge>): AnnotatedEdge => {
   return edges.map(edge =>)
     edge.id === edgeId ? { ...edge, ...updates } : edge
   );
 };
 
 export const toggleEdgeLabel = (((
-    edges: AnnotatedEdge,
+    edges: AnnotatedEdge
     edgeId: string
   ): AnnotatedEdge => {
   return edges.map(edge =>)
@@ -460,9 +444,8 @@ export const optimizeLabelPositions = (edges: AnnotatedEdge): AnnotatedEdge => {
         positions.set(posKey, { x: offset.x, y: offset.y });
         break;
       // Adjust position if collision detected
-      offset = {
-  x: offset.x + (Math.random() - 0.5) * 20,
-  y: offset.y + (Math.random() - 0.5) * 20,
+      offset = { x: offset.x + (Math.random() - 0.5) * 20,
+  y: offset.y + (Math.random() - 0.5) * 20 }
 };
       attempts++;
     return { ...edge, labelOffset: offset };

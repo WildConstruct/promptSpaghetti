@@ -12,6 +12,9 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Input } from '../ui/Input';
 import { Save, Send, AlertTriangle, CheckCircle, XCircle, RefreshCw, Star, ThumbsUp, MessageSquare, Share2, Edit, Trash2, Eye, Clock, User } from 'lucide-react';
+'link' | 'file' | 'image' | 'video';
+url: string;
+title: string;
  > ;
 license: 'cc0' | 'cc-by' | 'cc-by-sa' | 'proprietary';
 ;
@@ -247,167 +250,169 @@ ErrorBoundaryState
                         return this.props.children;
                         // Main contribution form component
                     }
-                    onSubmit: (data) => Promise;
-                    onSaveDraft ?  : (data) => Promise;
-                    isLoading ?  : boolean;
-                    className ?  : string;
                 }
-                export const ContributionForm = ({
-                    initialData = {},
-                    onSubmit,
-                    onSaveDraft,
-                    isLoading = false,
-                    className = ''
-                });
-                {
-                    // Form state with comprehensive initialization
-                    const [formData, setFormData] = useState({});
-                    title: initialData.title || '',
-                        description;
-                    initialData.description || '',
-                        content;
-                    initialData.content || '',
-                        category;
-                    initialData.category || '',
-                        tags;
-                    initialData.tags || [],
-                        difficulty;
-                    initialData.difficulty || 'beginner',
-                        estimatedTime;
-                    initialData.estimatedTime || 60,
-                        prerequisites;
-                    initialData.prerequisites || [],
-                        resources;
-                    initialData.resources || [],
-                        license;
-                    initialData.license || 'cc-by',
-                    ;
+            }
+            onSubmit: (data) => Promise;
+            onSaveDraft ?  : (data) => Promise;
+            isLoading ?  : boolean;
+            className ?  : string;
+        },
+        const: ContributionForm, React, : (.FC) = ({
+            initialData = {},
+            onSubmit,
+            onSaveDraft,
+            isLoading = false,
+            className = ''
+        })
+    };
+{
+    // Form state with comprehensive initialization
+    const [formData, setFormData] = useState({});
+    title: initialData.title || '',
+        description;
+    initialData.description || '',
+        content;
+    initialData.content || '',
+        category;
+    initialData.category || '',
+        tags;
+    initialData.tags || [],
+        difficulty;
+    initialData.difficulty || 'beginner',
+        estimatedTime;
+    initialData.estimatedTime || 60,
+        prerequisites;
+    initialData.prerequisites || [],
+        resources;
+    initialData.resources || [],
+        license;
+    initialData.license || 'cc-by',
+    ;
+}
+;
+// Error state management
+const [errors, setErrors] = useState([]);
+const [submitError, setSubmitError] = useState(null);
+const [isSubmitting, setIsSubmitting] = useState(false);
+const [isDraftSaving, setIsDraftSaving] = useState(false);
+// Auto-save draft functionality
+const [lastSaved, setLastSaved] = useState(null);
+const [autoSaveTimer, setAutoSaveTimer] = useState(null);
+// Validation state
+const validationErrors = useMemo(() => {
+    return ContributionValidator.validateFormData(formData);
+}, [formData]);
+// Auto-save draft every 30 seconds if there are changes
+useEffect(() => {
+    if (onSaveDraft && !isSubmitting && !isDraftSaving) {
+        if (autoSaveTimer) {
+            clearTimeout(autoSaveTimer);
+            const timer = setTimeout(async () => {
+                try {
+                    setIsDraftSaving(true);
+                    await onSaveDraft(formData);
+                    setLastSaved(new Date());
+                }
+                catch (error) {
+                    console.error('Auto-save failed:', error);
+                }
+                finally {
+                    setIsDraftSaving(false);
+                }
+                30000;
+            });
+            setAutoSaveTimer(timer);
+            return () => {
+                if (autoSaveTimer) {
+                    clearTimeout(autoSaveTimer);
                 }
                 ;
-                // Error state management
-                const [errors, setErrors] = useState([]);
-                const [submitError, setSubmitError] = useState(null);
-                const [isSubmitting, setIsSubmitting] = useState(false);
-                const [isDraftSaving, setIsDraftSaving] = useState(false);
-                // Auto-save draft functionality
-                const [lastSaved, setLastSaved] = useState(null);
-                const [autoSaveTimer, setAutoSaveTimer] = useState(null);
-                // Validation state
-                const validationErrors = useMemo(() => {
-                    return ContributionValidator.validateFormData(formData);
-                }, [formData]);
-                // Auto-save draft every 30 seconds if there are changes
-                useEffect(() => {
-                    if (onSaveDraft && !isSubmitting && !isDraftSaving) {
-                        if (autoSaveTimer) {
-                            clearTimeout(autoSaveTimer);
-                            const timer = setTimeout(async () => {
-                                try {
-                                    setIsDraftSaving(true);
-                                    await onSaveDraft(formData);
-                                    setLastSaved(new Date());
-                                }
-                                catch (error) {
-                                    console.error('Auto-save failed:', error);
-                                }
-                                finally {
-                                    setIsDraftSaving(false);
-                                }
-                                30000;
-                            });
-                            setAutoSaveTimer(timer);
-                            return () => {
-                                if (autoSaveTimer) {
-                                    clearTimeout(autoSaveTimer);
-                                }
-                                ;
-                            }, [formData, onSaveDraft, isSubmitting, isDraftSaving];
-                        }
-                    }
-                });
-                // Form update handlers with error handling
-                const updateFormData = useCallback((field, value) => {
-                    try {
-                        setFormData(prev => ({}), ...prev, [field], value);
-                    }
-                    finally // Clear specific field errors when user makes changes
-                     { }
-                });
-                // Clear specific field errors when user makes changes
-                setErrors(prev => prev.filter(error => error.field !== field));
-                setSubmitError(null);
+            }, [formData, onSaveDraft, isSubmitting, isDraftSaving];
+        }
+    }
+});
+// Form update handlers with error handling
+const updateFormData = useCallback((field, value) => {
+    try {
+        setFormData(prev => ({}), ...prev, [field], value);
+    }
+    finally // Clear specific field errors when user makes changes
+     { }
+});
+// Clear specific field errors when user makes changes
+setErrors(prev => prev.filter(error => error.field !== field));
+setSubmitError(null);
+try { }
+catch (error) {
+    console.error('Error updating form data:', error);
+}
+[];
+;
+// Tag management with validation
+const addTag = useCallback((tag) => {
+    const trimmedTag = tag.trim().toLowerCase();
+    if (!trimmedTag)
+        return;
+    if (formData.tags.includes(trimmedTag)) {
+        setErrors(prev => [...prev, {}]);
+        field: 'tags',
+            message;
+        'Tag already exists',
+            code;
+        'DUPLICATE',
+        ;
+    }
+});
+return;
+if (formData.tags.length >= 10) {
+    setErrors(prev => [...prev, {}]);
+    field: 'tags',
+        message;
+    'Maximum 10 tags allowed',
+        code;
+    'MAX_COUNT',
+    ;
+}
+;
+return;
+updateFormData('tags', [...formData.tags, trimmedTag]);
+[formData.tags, updateFormData];
+;
+const removeTag = useCallback((index) => {
+    updateFormData('tags', formData.tags.filter((_, i) => i !== index));
+}, [formData.tags, updateFormData]);
+// Submit handler with comprehensive error handling
+const handleSubmit = useCallback(async (event) => {
+    event.preventDefault();
+    try {
+        setIsSubmitting(true);
+        setSubmitError(null);
+        setErrors([]);
+        // Validate form data
+        const validationErrors = ContributionValidator.validateFormData(formData);
+        if (validationErrors.length > 0) {
+            setErrors(validationErrors);
+            return;
+            // Submit to parent component
+            const result = await onSubmit(formData);
+            if (!result.success && result.error) {
+                setSubmitError(result.error);
             }
             try { }
             catch (error) {
-                console.error('Error updating form data:', error);
-            }
-            [];
-            ;
-            // Tag management with validation
-            const addTag = useCallback((tag) => {
-                const trimmedTag = tag.trim().toLowerCase();
-                if (!trimmedTag)
-                    return;
-                if (formData.tags.includes(trimmedTag)) {
-                    setErrors(prev => [...prev, {}]);
-                    field: 'tags',
-                        message;
-                    'Tag already exists',
-                        code;
-                    'DUPLICATE',
-                    ;
-                }
-            });
-            return;
-            if (formData.tags.length >= 10) {
-                setErrors(prev => [...prev, {}]);
-                field: 'tags',
+                console.error('Submit error:', error);
+                setSubmitError({});
+                type: 'unknown',
                     message;
-                'Maximum 10 tags allowed',
-                    code;
-                'MAX_COUNT',
+                'An unexpected error occurred while submitting',
+                    details;
+                error instanceof Error ? error.message : 'Unknown error',
                 ;
             }
-            ;
-            return;
-            updateFormData('tags', [...formData.tags, trimmedTag]);
-        }, [formData.tags, updateFormData]: ,
-        const: removeTag = useCallback((index) => {
-            updateFormData('tags', formData.tags.filter((_, i) => i !== index));
-        }, [formData.tags, updateFormData]),
-        // Submit handler with comprehensive error handling
-        const: handleSubmit = useCallback(async (event) => {
-            event.preventDefault();
-            try {
-                setIsSubmitting(true);
-                setSubmitError(null);
-                setErrors([]);
-                // Validate form data
-                const validationErrors = ContributionValidator.validateFormData(formData);
-                if (validationErrors.length > 0) {
-                    setErrors(validationErrors);
-                    return;
-                    // Submit to parent component
-                    const result = await onSubmit(formData);
-                    if (!result.success && result.error) {
-                        setSubmitError(result.error);
-                    }
-                    try { }
-                    catch (error) {
-                        console.error('Submit error:', error);
-                        setSubmitError({});
-                        type: 'unknown',
-                            message;
-                        'An unexpected error occurred while submitting',
-                            details;
-                        error instanceof Error ? error.message : 'Unknown error',
-                        ;
-                    }
-                }
-            }
-            finally { }
-        })
-    };
+        }
+    }
+    finally { }
+});
 try { }
 finally {
     setIsSubmitting(false);

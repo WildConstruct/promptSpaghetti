@@ -108,7 +108,7 @@ function demoPluginLoader(): void {
       id: 'plugin-c',
       version: '2.0.0',
       dependencies: { 'shared-lib': '^1.9.0' }
-    }
+
   ];
   
   console.log('Plugin Manifests:');
@@ -176,7 +176,7 @@ module.exports = {
       input: input,
       timestamp: Date.now()
     };
-  }
+
 };
   `;
   
@@ -290,7 +290,7 @@ module.exports = {
   console.log();
   
   console.log('🚀 Ready for production plugin ecosystem!');
-}
+
 
 // Example plugin manifest for reference
 function showExamplePluginManifest(): void {
@@ -341,7 +341,7 @@ function showExamplePluginManifest(): void {
           type: 'DataProcessor',
           category: 'processing',
           icon: 'processor'
-        }
+
       ]
     },
     
@@ -349,14 +349,13 @@ function showExamplePluginManifest(): void {
       build: 'tsc',
       test: 'jest',
       validate: 'pnpm-validate-node'
-    }
+
   };
   
   console.log(JSON.stringify(exampleManifest, null, 2));
-}
+
 
 // Run the demo
 if (require.main === module) {
   demoPluginLoader();
   showExamplePluginManifest();
-}

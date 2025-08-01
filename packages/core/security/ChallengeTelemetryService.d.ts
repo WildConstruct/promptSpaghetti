@@ -15,8 +15,7 @@
  * - Automated optimization suggestions
  */
 import { EventEmitter } from 'events';
-export declare enum ChallengeType {
-    CAPTCHA_IMAGE = "captcha_image",
+export declare enum ChallengeType { CAPTCHA_IMAGE = "captcha_image",
     CAPTCHA_AUDIO = "captcha_audio",
     CAPTCHA_MATH = "captcha_math",
     CAPTCHA_TEXT = "captcha_text",
@@ -46,12 +45,12 @@ export declare enum DifficultyLevel {
 export declare enum UserAgentType {
     HUMAN = "human",
     BOT_SUSPECTED = "bot_suspected",
-    BOT_CONFIRMED = "bot_confirmed",
+    BOT_CONFIRMED = "bot_confirmed" }
     UNKNOWN = "unknown"
 
 }
-export interface ChallengeEvent {
-    id: string;
+}
+export interface ChallengeEvent { id: string;
     sessionId: string;
     userId?: string;
     challengeType: ChallengeType;
@@ -72,37 +71,29 @@ export interface ChallengeEvent {
             city: string;
             coordinates?: {
                 lat: number;
-                lon: number;
+                lon: number }
 }
             };
         };
-        browserInfo: {
-            name: string;
+        browserInfo: { name: string;
             version: string;
             platform: string;
             mobile: boolean;
             touchSupport: boolean;
-            screenResolution: string;
-        };
-        networkInfo?: {
-            connectionType: string;
+            screenResolution: string };
+        networkInfo?: { connectionType: string;
             downloadSpeed?: number;
-            latency?: number;
-        };
+            latency?: number };
     };
-    challengeData: {
-        variant?: string;
+    challengeData: { variant?: string;
         parameters: Record<string, any>;
-        metadata: Record<string, any>;
-    };
-    userBehavior: {
-        mouseMovements?: number;
+        metadata: Record<string, any> };
+    userBehavior: { mouseMovements?: number;
         keystrokes?: number;
         clickPatterns?: Array<{
             x: number;
             y: number;
-            timestamp: number;
-        }>;
+            timestamp: number }>;
         focusEvents?: number;
         scrollEvents?: number;
         totalInteractionTime: number;
@@ -110,68 +101,52 @@ export interface ChallengeEvent {
         typingSpeed?: number;
         mouseVelocity?: number;
     };
-    fraudIndicators: {
-        riskScore: number;
+    fraudIndicators: { riskScore: number;
         indicators: string[];
         automationDetected: boolean;
         anomalousPattern: boolean;
         vpnDetected?: boolean;
-        proxyDetected?: boolean;
-    };
-    accessibility: {
-        screenReaderDetected: boolean;
+        proxyDetected?: boolean };
+    accessibility: { screenReaderDetected: boolean;
         highContrastMode: boolean;
         assistiveTechUsed: string[];
-        accommodationsApplied: string[];
-    };
+        accommodationsApplied: string[] };
 
 }
-export interface ChallengeStatistics {
-    challengeType: ChallengeType;
+}
+export interface ChallengeStatistics { challengeType: ChallengeType;
     period: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
-    metrics: {
-        totalAttempts: number;
+    metrics: { totalAttempts: number;
         successRate: number;
         averageCompletionTime: number;
         abandonmentRate: number;
         timeoutRate: number;
-        errorRate: number;
-    };
-    byDifficulty: Record<DifficultyLevel, {
-        attempts: number;
+        errorRate: number };
+    byDifficulty: Record<DifficultyLevel, { attempts: number;
         successRate: number;
-        averageTime: number;
-    }>;
-    byUserType: Record<UserAgentType, {
-        attempts: number;
+        averageTime: number }>;
+    byUserType: Record<UserAgentType, { attempts: number;
         successRate: number;
-        fraudScore: number;
-    }>;
-    fraudDetection: {
-        botAttempts: number;
+        fraudScore: number }>;
+    fraudDetection: { botAttempts: number;
         suspiciousActivities: number;
         preventedAttacks: number;
-        falsePositives: number;
-    };
-    accessibility: {
-        assistedCompletions: number;
+        falsePositives: number };
+    accessibility: { assistedCompletions: number;
         accommodationUsage: Record<string, number>;
-        accessibilitySuccessRate: number;
-    };
-    optimization: {
-        recommendedDifficulty: DifficultyLevel;
+        accessibilitySuccessRate: number };
+    optimization: { recommendedDifficulty: DifficultyLevel;
         performanceScore: number;
         userExperienceScore: number;
-        securityScore: number;
-    };
+        securityScore: number };
 
 }
-export interface TelemetryQuery {
-    startTime: Date;
+}
+export interface TelemetryQuery { startTime: Date;
     endTime: Date;
     challengeTypes?: ChallengeType[];
     outcomes?: ChallengeOutcome[];
@@ -186,18 +161,17 @@ export interface TelemetryQuery {
     includeFraudData?: boolean;
     aggregateBy?: 'hour' | 'day' | 'week' | 'month';
     limit?: number;
-    offset?: number;
-
+    offset?: number }
 }
-export interface ABTestConfig {
-    id: string;
+}
+export interface ABTestConfig { id: string;
     name: string;
     challengeType: ChallengeType;
     variants: Array<{
         id: string;
         name: string;
         parameters: Record<string, any>;
-        trafficPercentage: number;
+        trafficPercentage: number }
 }
     }>;
     startDate: Date;
@@ -206,29 +180,26 @@ export interface ABTestConfig {
     isActive: boolean;
 
 }
-export interface FraudPattern {
-    id: string;
+}
+export interface FraudPattern { id: string;
     name: string;
     description: string;
     conditions: Array<{
         field: string;
         operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in_range';
-        value: any;
+        value: any }
 }
     }>;
     severity: 'low' | 'medium' | 'high' | 'critical';
-    actions: Array<{
-        type: 'block' | 'challenge' | 'monitor' | 'flag';
-        parameters: Record<string, any>;
-    }>;
+    actions: Array<{ type: 'block' | 'challenge' | 'monitor' | 'flag';
+        parameters: Record<string, any> }>;
     confidence: number;
     lastUpdated: Date;
     isActive: boolean;
 /**
  * Comprehensive challenge telemetry service
  */
-export declare class ChallengeTelemetryService extends EventEmitter {
-    private events;
+export declare class ChallengeTelemetryService extends EventEmitter { private events;
     private statistics;
     private abTests;
     private fraudPatterns;
@@ -242,19 +213,19 @@ export declare class ChallengeTelemetryService extends EventEmitter {
      * Start tracking a challenge session
      */
     startChallengeSession();
-      sessionId: string,
-      challengeType: ChallengeType,
-      context: Partial<ChallengeEvent['context']>,
+      sessionId: string
+      challengeType: ChallengeType
+      context: Partial<ChallengeEvent['context']>
     ): void;
     /**
      * Record challenge completion
      */
     recordChallengeCompletion();
-      sessionId: string,
-      challengeId: string,
-      outcome: ChallengeOutcome,
-      timeToComplete: number,
-      userBehavior: ChallengeEvent['userBehavior'],
+      sessionId: string
+      challengeId: string
+      outcome: ChallengeOutcome
+      timeToComplete: number
+      userBehavior: ChallengeEvent['userBehavior'] }
       fraudIndicators?: Partial<ChallengeEvent['fraudIndicators']>
     ): void;
     /**
@@ -268,12 +239,10 @@ export declare class ChallengeTelemetryService extends EventEmitter {
     /**
      * Detect fraud patterns in real-time
      */
-    analyzeFraudPattern(event: ChallengeEvent): {
-        isfraudulent: boolean;
+    analyzeFraudPattern(event: ChallengeEvent): { isfraudulent: boolean;
         patterns: string[];
         riskScore: number;
-        recommendations: string[];
-    };
+        recommendations: string[] };
     /**
      * Create A/B test for challenge optimization
      */
@@ -281,16 +250,13 @@ export declare class ChallengeTelemetryService extends EventEmitter {
     /**
      * Get A/B test variant for a session
      */
-    getABTestVariant(challengeType: ChallengeType, sessionId: string): {
-        testId: string;
+    getABTestVariant(challengeType: ChallengeType, sessionId: string): { testId: string;
         variantId: string;
-        parameters: Record<string, any>;
-    } | null;
+        parameters: Record<string, any> } | null;
     /**
      * Get A/B test results
      */
-    getABTestResults(testId: string): {
-        test: ABTestConfig;
+    getABTestResults(testId: string): { test: ABTestConfig;
         results: Array<{
             variantId: string;
             variantName: string;
@@ -299,42 +265,33 @@ export declare class ChallengeTelemetryService extends EventEmitter {
             averageTime: number;
             conversionRate: number;
             confidenceLevel: number;
-            isStatisticallySignificant: boolean;
-        }>;
+            isStatisticallySignificant: boolean }>;
         recommendation: string;
     };
     /**
      * Get real-time dashboard data
      */
-    getDashboardData(): {
-        overview: {
+    getDashboardData(): { overview: {
             totalChallenges: number;
             successRate: number;
             averageCompletionTime: number;
             fraudAttempts: number;
-            activeABTests: number;
-        };
+            activeABTests: number };
         recentActivity: ChallengeEvent[];
-        topChallengeTypes: Array<{
-            type: ChallengeType;
+        topChallengeTypes: Array<{ type: ChallengeType;
             count: number;
-            successRate: number;
-        }>;
-        fraudAlerts: Array<{
-            level: string;
+            successRate: number }>;
+        fraudAlerts: Array<{ level: string;
             description: string;
-            timestamp: Date;
-        }>;
+            timestamp: Date }>;
         performanceMetrics: Array<{
             metric: string;
             value: number;
             trend: 'up' | 'down' | 'stable'
   }>;
-        geographicDistribution: Array<{
-            country: string;
+        geographicDistribution: Array<{ country: string;
             attempts: number;
-            successRate: number;
-        }>;
+            successRate: number }>;
     };
     private calculateStatistics;
     private getEventFieldValue;

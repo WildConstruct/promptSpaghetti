@@ -6,7 +6,12 @@
  */
 import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
  > ;
-words ?  : Array;
+ > ;
+words ?  : Array < {
+    word: string,
+    start: number,
+    end: number
+} > ;
 metadata: {
     model: string;
     task: string;
@@ -91,8 +96,7 @@ export class WhisperAdapter extends BaseAIModel {
                     }
                     finally {
                     }
-                }
-            } };
+                } } };
         Promise < WhisperTranscriptionResult > {
             try: {
                 : ._status !== AIModelStatus.READY
@@ -126,8 +130,7 @@ export class WhisperAdapter extends BaseAIModel {
                         language: transcriptionData.language || 'auto',
                         duration: audioDuration,
                         processing_time: processingTime,
-                        confidence_score: this._calculateConfidenceScore(transcriptionData),
-                    },
+                        confidence_score: this._calculateConfidenceScore(transcriptionData), },
                     usage: {
                         audio_duration: audioDuration,
                         cost: this._calculateCost(audioDuration),
@@ -277,8 +280,7 @@ export class WhisperAdapter extends BaseAIModel {
                                                                         formData.append('response_format', 'json');
                                                                         const response = await fetch(`${this.config.baseURL || 'https://api.openai.com'}/v1/audio/transcriptions`, {});
                                                                     }
-                                                                    finally {
-                                                                    }
+                                                                    finally { }
                                                                     method: 'POST',
                                                                         headers;
                                                                     {

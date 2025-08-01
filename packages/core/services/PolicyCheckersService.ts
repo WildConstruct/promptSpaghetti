@@ -25,25 +25,24 @@ export type PolicySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
 export type PolicyCheckStatus = 'passed' | 'failed' | 'warning' | 'requires_review';
 
-}
-export interface PolicyCheckResult {
-  checkId: string;
+
+export interface PolicyCheckResult { checkId: string;
   policyType: PolicyType;
   policyName: string;
   status: PolicyCheckStatus;
   severity: PolicySeverity;
-  score?: number; // 0-100 compliance score,
+  score?: number; // 0-100 compliance score }
   message: string;
   details: Record<string, any>;
   violations: PolicyViolation;
   recommendations: string;
   timestamp: string;
   executionTimeMs: number;
-}
-}
-}
-export interface PolicyViolation {
-  id: string;
+
+
+
+
+export interface PolicyViolation { id: string;
   ruleId: string;
   ruleName: string;
   description: string;
@@ -52,29 +51,28 @@ export interface PolicyViolation {
   value?: any;
   expectedValue?: any;
   location?: string;
-  context?: Record<string, any>;
-}
-}
-}
-export interface PolicyCheckRequest {
-  id: string;
+  context?: Record<string, any> }
+
+
+
+export interface PolicyCheckRequest { id: string;
   resourceType: 'content' | 'user' | 'template' | 'api_request' | 'system_config';
   resourceId: string;
   data: Record<string, any>;
-  context: {
+  context: { }
   userId?: string;
   userRole?: string;
   source: string;
   timestamp: string;
   metadata?: Record<string, any>;
-}
+
+
 };
   checksRequested?: PolicyType;
   skipCache?: boolean;
-}
-}
-export interface PolicyRule {
-  id: string;
+
+
+export interface PolicyRule { id: string;
   name: string;
   description: string;
   policyType: PolicyType;
@@ -88,50 +86,50 @@ export interface PolicyRule {
   executeOnUpdate?: boolean;
   executeOnAccess?: boolean;
   // Performance Settings
-  timeout?: number; // milliseconds,
-  cacheDuration?: number; // seconds,
+  timeout?: number; // milliseconds;
+  cacheDuration?: number; // seconds }
   // Metadata
   version: string;
   createdAt: string;
   updatedAt: string;
   createdBy: string;
-}
-}
-}
-export interface RuleCondition {
-  id: string;
+
+
+
+
+export interface RuleCondition { id: string;
   field: string;
-  operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'matches' | 'greater_than' | 'less_than' | 'in' | 'not_in';
+  operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'matches' | 'greater_than' | 'less_than' | 'in' | 'not_in' }
   value: any;
   caseSensitive?: boolean;
-}
-}
-}
+
+
+
+
 export interface RuleAction {
   id: string;
   type: 'block' | 'warn' | 'flag' | 'require_review' | 'auto_fix' | 'notify';
   parameters?: Record<string, any>;
   // Policy Checker Interface
-}
-}
-}
-export interface PolicyChecker {
-  name: string;
+
+
+
+
+export interface PolicyChecker { name: string;
   type: PolicyType;
   version: string;
   check(request: PolicyCheckRequest): Promise<PolicyCheckResult>;
   validateRule(rule: PolicyRule): Promise<boolean>;
-  getDefaultRules(): Promise<PolicyRule>;
-}
-}
+  getDefaultRules(): Promise<PolicyRule> }
+
 export class PolicyCheckersService {
   private checkers: Map<PolicyType, PolicyChecker> = new Map();
   private complianceMonitor: ComplianceMonitor;
   private contentQualityService: ContentQualityMetricsService;
   private cache: Map<string, { result: PolicyCheckResult; expiresAt: number }> = new Map();
   constructor();
-    complianceMonitor: ComplianceMonitor,
-    contentQualityService: ContentQualityMetricsService,
+    complianceMonitor: ComplianceMonitor
+    contentQualityService: ContentQualityMetricsService
     this.complianceMonitor = complianceMonitor;
     this.contentQualityService = contentQualityService;
     this.initializeBuiltInCheckers();
@@ -152,8 +150,7 @@ export class PolicyCheckersService {
           throw new Error(`Policy checker not found for type: ${checkType}`);}
         // Check cache first
         const cacheKey = `${request.id}-${checkType}`;}
-        if (!request.skipCache && this.cache.has(cacheKey)) {
-  const cached = this.cache.get(cacheKey)!;
+        if (!request.skipCache && this.cache.has(cacheKey)) { const cached = this.cache.get(cacheKey)!;
   if (cached.expiresAt > Date.now()) {
   return cached.result;
   // Execute check
@@ -161,11 +158,11 @@ export class PolicyCheckersService {
   // Cache result
   if (result.score !== undefined) {
   this.cache.set(cacheKey, {)
-  result,
-  expiresAt: Date.now() + (60 * 1000) // 1 minute default cache,
+  result
+  expiresAt: Date.now() + (60 * 1000) // 1 minute default cache }
 });
         return result;
-      } catch (error) {
+ catch (error) {
         console.error(`Policy check failed for ${checkType}:`, error);}
         return this.createErrorResult(checkType, error, request);
     });
@@ -176,42 +173,36 @@ export class PolicyCheckersService {
     return results;
   // Execute single policy check
   async executeCheck(((
-    request: PolicyCheckRequest,
+    request: PolicyCheckRequest
     policyType: PolicyType
-  ): Promise<PolicyCheckResult> {
-
-  const results = await this.executeChecks({)
-  ...request,
-  checksRequested: [policyType],
+  ): Promise<PolicyCheckResult> { const results = await this.executeChecks({)
+  ...request
+  checksRequested: [policyType] }
 });
     return results[0];
   // Validate content against all applicable policies
-  async validateContent(content: {)
+  async validateContent(content: { ) }
   id: string;
   type: string;
   data: Record<string, any>;
   author?: string;
   metadata?: Record<string, any>;
-}): Promise<{
-  isValid: boolean;
+}): Promise<{ isValid: boolean;
   overallScore: number;
   results: PolicyCheckResult;
   criticalViolations: PolicyViolation;
-  requiredActions: string;
-}> {
-
-    const request: PolicyCheckRequest = {,
+  requiredActions: string }> { const request: PolicyCheckRequest = { }
   id: `content-validation-${content.id}`}
 },
   resourceType: 'content',
       resourceId: content.id,
       data: content.data,
-      context: {
+      context: { ,
   userId: content.author,
   source: 'content_validation',
   timestamp: new Date().toISOString(),
-  metadata: {
-  contentType: content.type,
+  metadata: {,
+  contentType: content.type }
   ...content.metadata
 },
   checksRequested: ['content_quality', 'content_safety', 'marketplace_standards']
@@ -230,41 +221,36 @@ export class PolicyCheckersService {
     const requiredActions = results;
       .filter(r => r.status === 'failed' || r.status === 'requires_review')
       .flatMap(r => r.recommendations);
-    return {
-      isValid,
+    return { isValid,
       overallScore,
       results,
-      criticalViolations,
+      criticalViolations }
       requiredActions
     };
   // Validate user action against policies
-  async validateUserAction(action: {)
+  async validateUserAction(action: { ) }
   userId: string;
   userRole: string;
   action: string;
   resource?: string;
   context?: Record<string, any>;
-}): Promise<{
-  allowed: boolean;
+}): Promise<{ allowed: boolean;
   reasons: string;
-  results: PolicyCheckResult;
-}> {
-
-    const request: PolicyCheckRequest = {,
+  results: PolicyCheckResult }> { const request: PolicyCheckRequest = { }
   id: `user-action-${action.userId}-${Date.now()}`}
 },
   resourceType: 'user',
       resourceId: action.userId,
-      data: {
+      data: { ,
   action: action.action,
-  resource: action.resource,
+  resource: action.resource }
   ...action.context
 },
-  context: {
+  context: { ,
   userId: action.userId,
   userRole: action.userRole,
   source: 'user_action_validation',
-  timestamp: new Date().toISOString(),
+  timestamp: new Date().toISOString() }
 },
   checksRequested: ['access_control', 'security_compliance']
     };
@@ -282,14 +268,13 @@ export class PolicyCheckersService {
     averageExecutionTime: number;
   topViolationTypes: Array<{ type: string; count: number }>;
     complianceScore: number;
-  }> {
-    // This would typically query a database for real statistics
+> { // This would typically query a database for real statistics
     // For now, return mock data
     return {
       totalCheckers: this.checkers.size,
-      checksExecutedToday: 1250,
+      checksExecutedToday: 1250 }
       averageExecutionTime: 45, // ms
-      topViolationTypes: [,
+      topViolationTypes: [
         { type: 'content_quality', count: 23 },
         { type: 'access_control', count: 18 },
         { type: 'data_protection', count: 12 }
@@ -297,8 +282,7 @@ export class PolicyCheckersService {
       complianceScore: 94.2;
   };
   // Initialize built-in policy checkers
-  private initializeBuiltInCheckers(): void {
-    // Content Quality Checker
+  private initializeBuiltInCheckers(): void { // Content Quality Checker
     this.registerChecker(new ContentQualityPolicyChecker(this.contentQualityService));
     // Content Safety Checker
     this.registerChecker(new ContentSafetyPolicyChecker());
@@ -310,12 +294,12 @@ export class PolicyCheckersService {
     this.registerChecker(new DataProtectionPolicyChecker());
     // Regulatory Compliance Checker
     this.registerChecker(new RegulatoryCompliancePolicyChecker(this.complianceMonitor));
-  private createErrorResult(policyType: PolicyType, )
-    error: any, 
-    request: PolicyCheckRequest): PolicyCheckResult {,
+  private createErrorResult(policyType: PolicyType);
+  error: any, 
+    request: PolicyCheckRequest): PolicyCheckResult { }
     return {
       checkId: `error-${Date.now()}`}
-}
+
       policyType,
       policyName: `${policyType} Policy Check`}
 },
@@ -323,10 +307,10 @@ export class PolicyCheckersService {
       severity: 'critical',
       message: `Policy check failed: ${error.message}`}
 },
-  details: {
+  details: { ,
   error: error.message,
   stack: error.stack,
-  requestId: request.id,
+  requestId: request.id }
 },
   violations: [{,
   id: `violation-${Date.now()}`}
@@ -334,30 +318,30 @@ export class PolicyCheckersService {
   ruleId: 'system_error',
         ruleName: 'System Error',
         description: 'Policy check execution failed',
-        severity: 'critical'
-  }],
+        severity: 'critical';
+],
       recommendations: ['Review system logs', 'Contact administrator'],
       timestamp: new Date().toISOString(),
       executionTimeMs: 0;
   };
-  private async logPolicyCheckExecution(request: PolicyCheckRequest)
-    results: PolicyCheckResult,
-    totalExecutionTimeMs: number): Promise<void> {,
+  private async logPolicyCheckExecution(request: PolicyCheckRequest),
+  results: PolicyCheckResult,
+    totalExecutionTimeMs: number): Promise<void> {
     // Log to audit system
     const violations = results.flatMap(r => r.violations);
     const criticalViolations = violations.filter(v => v.severity === 'critical');
     console.log(`Policy check completed for ${request.resourceType}:${request.resourceId}`, {)}
-  },
-  requestId: request.id,
-      checksExecuted: results.length,
-      totalViolations: violations.length,
-      criticalViolations: criticalViolations.length,
-      executionTimeMs: totalExecutionTimeMs,
-      results: results.map(r => ({)
-  type: r.policyType,
-  status: r.status,
-  score: r.score,
-  violationCount: r.violations.length,
+
+  requestId: request.id
+      checksExecuted: results.length
+      totalViolations: violations.length
+      criticalViolations: criticalViolations.length
+      executionTimeMs: totalExecutionTimeMs
+      results: results.map(r => ({ )
+  type: r.policyType
+  status: r.status
+  score: r.score
+  violationCount: r.violations.length }
 }))
     });
 
@@ -398,45 +382,43 @@ class ContentQualityPolicyChecker implements PolicyChecker {
       score: qualityScore,
       message: `Content quality score: ${qualityScore}/100`}
 },
-  details: {
-  qualityMetrics: {
+  details: { ,
+  qualityMetrics: {,
   readability: qualityScore + 5,
   completeness: qualityScore - 3,
-  accuracy: qualityScore + 2,
-}
+  accuracy: qualityScore + 2 }
+
       violations,
       recommendations,
       timestamp: new Date().toISOString(),
       executionTimeMs: Date.now() - startTime;
   };
-  async validateRule(rule: PolicyRule): Promise<boolean> {
-
-  return rule.policyType === this.type;
-  async getDefaultRules(): Promise<PolicyRule> {,
+  async validateRule(rule: PolicyRule): Promise<boolean> { return rule.policyType === this.type;
+  async getDefaultRules(): Promise<PolicyRule> {
   return [{
-  id: 'content-quality-minimum',
-  name: 'Minimum Content Quality',
-  description: 'Ensure content meets minimum quality standards',
-  policyType: this.type,
-  enabled: true,
-  severity: 'medium',
-  conditions: [{,
-  id: 'quality-score',
-  field: 'qualityScore',
-  operator: 'greater_than',
-  value: 70,
-}],
-      actions: [{,
-  id: 'require-review',
-  type: 'require_review',
-}],
-      executeOnCreate: true,
-      executeOnUpdate: true,
-      version: '1.0.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: 'system'
-  }];
+  id: 'content-quality-minimum'
+  name: 'Minimum Content Quality'
+  description: 'Ensure content meets minimum quality standards'
+  policyType: this.type
+  enabled: true
+  severity: 'medium'
+  conditions: [{
+  id: 'quality-score'
+  field: 'qualityScore'
+  operator: 'greater_than'
+  value: 70 }
+]
+      actions: [{ 
+  id: 'require-review'
+  type: 'require_review' }
+]
+      executeOnCreate: true
+      executeOnUpdate: true
+      version: '1.0.0'
+      createdAt: new Date().toISOString()
+      updatedAt: new Date().toISOString()
+      createdBy: 'system';
+];
 class ContentSafetyPolicyChecker implements PolicyChecker {
   name = 'Content Safety Policy Checker';
   type: PolicyType = 'content_safety';
@@ -456,7 +438,7 @@ class ContentSafetyPolicyChecker implements PolicyChecker {
   ruleId: 'content_safety_standard',
         ruleName: 'Content Safety Standard',
         description: 'Content contains potentially unsafe elements',
-        severity: safetyScore < 70 ? 'critical' : 'medium'
+        severity: safetyScore < 70 ? 'critical' : 'medium';
   });
       recommendations.push('Review content for harmful or inappropriate material');
     return {
@@ -469,112 +451,105 @@ class ContentSafetyPolicyChecker implements PolicyChecker {
       score: safetyScore,
       message: `Content safety score: ${safetyScore}/100`}
 },
-  details: {
-  safetyAnalysis: {
+  details: { ,
+  safetyAnalysis: {,
   toxicity: safetyScore < 85,
   harassment: false,
   hate: false,
-  selfHarm: false,
-}
+  selfHarm: false }
+
       violations,
       recommendations,
       timestamp: new Date().toISOString(),
       executionTimeMs: Date.now() - startTime;
   };
-  async validateRule(rule: PolicyRule): Promise<boolean> {
-
-  return rule.policyType === this.type;
-  async getDefaultRules(): Promise<PolicyRule> {,
+  async validateRule(rule: PolicyRule): Promise<boolean> { return rule.policyType === this.type;
+  async getDefaultRules(): Promise<PolicyRule> {
   return [{
-  id: 'content-safety-standard',
-  name: 'Content Safety Standard',
-  description: 'Ensure content is safe and appropriate',
-  policyType: this.type,
-  enabled: true,
-  severity: 'critical',
-  conditions: [{,
-  id: 'safety-score',
-  field: 'safetyScore',
-  operator: 'greater_than',
-  value: 85,
-}],
-      actions: [{,
-  id: 'block-content',
-  type: 'block',
-}],
-      executeOnCreate: true,
-      executeOnUpdate: true,
-      version: '1.0.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: 'system'
-  }];
+  id: 'content-safety-standard'
+  name: 'Content Safety Standard'
+  description: 'Ensure content is safe and appropriate'
+  policyType: this.type
+  enabled: true
+  severity: 'critical'
+  conditions: [{
+  id: 'safety-score'
+  field: 'safetyScore'
+  operator: 'greater_than'
+  value: 85 }
+]
+      actions: [{ 
+  id: 'block-content'
+  type: 'block' }
+]
+      executeOnCreate: true
+      executeOnUpdate: true
+      version: '1.0.0'
+      createdAt: new Date().toISOString()
+      updatedAt: new Date().toISOString()
+      createdBy: 'system';
+];
 class SecurityCompliancePolicyChecker implements PolicyChecker {
   name = 'Security Compliance Policy Checker';
   type: PolicyType = 'security_compliance';
   version = '1.0.0';
   constructor(private complianceMonitor: ComplianceMonitor) {}
-  async check(request: PolicyCheckRequest): Promise<PolicyCheckResult> {
-
-  const startTime = Date.now();
+  async check(request: PolicyCheckRequest): Promise<PolicyCheckResult> { const startTime = Date.now();
   // Use existing compliance monitor
   const complianceResult = await this.complianceMonitor.runComplianceCheck();
   const violations: PolicyViolation = complianceResult.violations.map(v => ({)
-  id: v.id,
-  ruleId: v.checkType,
-  ruleName: v.checkType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-  description: v.description,
-  severity: v.severity as PolicySeverity,
+  id: v.id
+  ruleId: v.checkType
+  ruleName: v.checkType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+  description: v.description
+  severity: v.severity as PolicySeverity }
 }));
     return {
       checkId: `security-compliance-${Date.now()}`}
-},
-  policyType: this.type,
-      policyName: this.name,
-      status: complianceResult.overallStatus === 'compliant' ? 'passed' : 'failed',
-      severity: complianceResult.criticalViolations > 0 ? 'critical' : ,
-        complianceResult.highViolations > 0 ? 'high' : 'medium',
-      score: Math.round(complianceResult.compliancePercentage),
+
+  policyType: this.type
+      policyName: this.name
+      status: complianceResult.overallStatus === 'compliant' ? 'passed' : 'failed'
+      severity: complianceResult.criticalViolations > 0 ? 'critical' : 
+        complianceResult.highViolations > 0 ? 'high' : 'medium'
+      score: Math.round(complianceResult.compliancePercentage)
       message: `Security compliance: ${Math.round(complianceResult.compliancePercentage)}%`}
-},
-  details: {
-  complianceResult,
-  checksPerformed: complianceResult.results.length,
-}
-      violations,
-      recommendations: ['Review security compliance violations', 'Update security configurations'],
-      timestamp: new Date().toISOString(),
+
+  details: { complianceResult
+  checksPerformed: complianceResult.results.length }
+
+      violations
+      recommendations: ['Review security compliance violations', 'Update security configurations']
+      timestamp: new Date().toISOString()
       executionTimeMs: Date.now() - startTime;
   };
-  async validateRule(rule: PolicyRule): Promise<boolean> {
-
-  return rule.policyType === this.type;
-  async getDefaultRules(): Promise<PolicyRule> {,
+  async validateRule(rule: PolicyRule): Promise<boolean> { return rule.policyType === this.type;
+  async getDefaultRules(): Promise<PolicyRule> {
   return [{
-  id: 'security-compliance-minimum',
-  name: 'Minimum Security Compliance',
-  description: 'Ensure minimum security compliance standards are met',
-  policyType: this.type,
-  enabled: true,
-  severity: 'high',
-  conditions: [{,
-  id: 'compliance-score',
-  field: 'complianceScore',
-  operator: 'greater_than',
-  value: 80,
-}],
-      actions: [{,
-  id: 'require-security-review',
-  type: 'require_review',
-}],
-      executeOnCreate: true,
-      executeOnUpdate: true,
-      executeOnAccess: true,
-      version: '1.0.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: 'system'
-  }];
+  id: 'security-compliance-minimum'
+  name: 'Minimum Security Compliance'
+  description: 'Ensure minimum security compliance standards are met'
+  policyType: this.type
+  enabled: true
+  severity: 'high'
+  conditions: [{
+  id: 'compliance-score'
+  field: 'complianceScore'
+  operator: 'greater_than'
+  value: 80 }
+]
+      actions: [{ 
+  id: 'require-security-review'
+  type: 'require_review' }
+]
+      executeOnCreate: true
+      executeOnUpdate: true
+      executeOnAccess: true
+      version: '1.0.0'
+      createdAt: new Date().toISOString()
+      updatedAt: new Date().toISOString()
+      createdBy: 'system';
+];
 class AccessControlPolicyChecker implements PolicyChecker {
   name = 'Access Control Policy Checker';
   type: PolicyType = 'access_control';
@@ -589,56 +564,54 @@ class AccessControlPolicyChecker implements PolicyChecker {
     if (!hasValidAccess) {
       violations.push({)
   id: `access-${Date.now()}`}
-},
-  ruleId: 'valid_user_role',
-        ruleName: 'Valid User Role Required',
-        description: 'User does not have valid role for this action',
-        severity: 'critical'
+
+  ruleId: 'valid_user_role'
+        ruleName: 'Valid User Role Required'
+        description: 'User does not have valid role for this action'
+        severity: 'critical';
   });
     return {
       checkId: `access-control-${Date.now()}`}
-},
-  policyType: this.type,
-      policyName: this.name,
-      status: hasValidAccess ? 'passed' : 'failed',
-      severity: hasValidAccess ? 'info' : 'critical',
-      message: hasValidAccess ? 'Access control validated' : 'Access control violation',
-      details: {
-  userRole: request.context.userRole,
-  requiredRoles: ['admin', 'moderator', 'user'],
-}
-      violations,
-      recommendations: hasValidAccess ? [] : ['Verify user permissions', 'Contact administrator'],
-      timestamp: new Date().toISOString(),
+
+  policyType: this.type
+      policyName: this.name
+      status: hasValidAccess ? 'passed' : 'failed'
+      severity: hasValidAccess ? 'info' : 'critical'
+      message: hasValidAccess ? 'Access control validated' : 'Access control violation'
+      details: { 
+  userRole: request.context.userRole
+  requiredRoles: ['admin', 'moderator', 'user'] }
+
+      violations
+      recommendations: hasValidAccess ? [] : ['Verify user permissions', 'Contact administrator']
+      timestamp: new Date().toISOString()
       executionTimeMs: Date.now() - startTime;
   };
-  async validateRule(rule: PolicyRule): Promise<boolean> {
-
-  return rule.policyType === this.type;
-  async getDefaultRules(): Promise<PolicyRule> {,
+  async validateRule(rule: PolicyRule): Promise<boolean> { return rule.policyType === this.type;
+  async getDefaultRules(): Promise<PolicyRule> {
   return [{
-  id: 'access-control-basic',
-  name: 'Basic Access Control',
-  description: 'Ensure users have appropriate access permissions',
-  policyType: this.type,
-  enabled: true,
-  severity: 'critical',
-  conditions: [{,
-  id: 'valid-role',
-  field: 'userRole',
-  operator: 'in',
-  value: ['admin', 'moderator', 'user'],
-}],
-      actions: [{,
-  id: 'block-access',
-  type: 'block',
-}],
-      executeOnAccess: true,
-      version: '1.0.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: 'system'
-  }];
+  id: 'access-control-basic'
+  name: 'Basic Access Control'
+  description: 'Ensure users have appropriate access permissions'
+  policyType: this.type
+  enabled: true
+  severity: 'critical'
+  conditions: [{
+  id: 'valid-role'
+  field: 'userRole'
+  operator: 'in'
+  value: ['admin', 'moderator', 'user'] }
+]
+      actions: [{ 
+  id: 'block-access'
+  type: 'block' }
+]
+      executeOnAccess: true
+      version: '1.0.0'
+      createdAt: new Date().toISOString()
+      updatedAt: new Date().toISOString()
+      createdBy: 'system';
+];
 class DataProtectionPolicyChecker implements PolicyChecker {
   name = 'Data Protection Policy Checker';
   type: PolicyType = 'data_protection';
@@ -656,7 +629,7 @@ class DataProtectionPolicyChecker implements PolicyChecker {
   ruleId: 'gdpr_compliance',
         ruleName: 'GDPR Compliance',
         description: 'Data handling does not fully comply with GDPR requirements',
-        severity: 'medium'
+        severity: 'medium';
   });
     return {
       checkId: `data-protection-${Date.now()}`}
@@ -668,44 +641,42 @@ class DataProtectionPolicyChecker implements PolicyChecker {
       score,
       message: `Data protection compliance: ${score}%`}
 },
-  details: {
+  details: { ,
   gdprCompliance: score >= 90,
   dataEncryption: true,
-  consentManagement: score >= 85,
-}
+  consentManagement: score >= 85 }
+
       violations,
       recommendations: score < 90 ? ['Review data handling practices', 'Update privacy policies'] : [],
       timestamp: new Date().toISOString(),
       executionTimeMs: Date.now() - startTime;
   };
-  async validateRule(rule: PolicyRule): Promise<boolean> {
-
-  return rule.policyType === this.type;
-  async getDefaultRules(): Promise<PolicyRule> {,
+  async validateRule(rule: PolicyRule): Promise<boolean> { return rule.policyType === this.type;
+  async getDefaultRules(): Promise<PolicyRule> {
   return [{
-  id: 'gdpr-compliance',
-  name: 'GDPR Compliance',
-  description: 'Ensure GDPR data protection compliance',
-  policyType: this.type,
-  enabled: true,
-  severity: 'high',
-  conditions: [{,
-  id: 'gdpr-score',
-  field: 'gdprScore',
-  operator: 'greater_than',
-  value: 90,
-}],
-      actions: [{,
-  id: 'data-protection-review',
-  type: 'require_review',
-}],
-      executeOnCreate: true,
-      executeOnUpdate: true,
-      version: '1.0.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: 'system'
-  }];
+  id: 'gdpr-compliance'
+  name: 'GDPR Compliance'
+  description: 'Ensure GDPR data protection compliance'
+  policyType: this.type
+  enabled: true
+  severity: 'high'
+  conditions: [{
+  id: 'gdpr-score'
+  field: 'gdprScore'
+  operator: 'greater_than'
+  value: 90 }
+]
+      actions: [{ 
+  id: 'data-protection-review'
+  type: 'require_review' }
+]
+      executeOnCreate: true
+      executeOnUpdate: true
+      version: '1.0.0'
+      createdAt: new Date().toISOString()
+      updatedAt: new Date().toISOString()
+      createdBy: 'system';
+];
 class RegulatoryCompliancePolicyChecker implements PolicyChecker {
   name = 'Regulatory Compliance Policy Checker';
   type: PolicyType = 'regulatory_compliance';
@@ -724,7 +695,7 @@ class RegulatoryCompliancePolicyChecker implements PolicyChecker {
   ruleId: 'soc2_compliance',
         ruleName: 'SOC2 Compliance',
         description: 'Minor SOC2 compliance gaps detected',
-        severity: 'low'
+        severity: 'low';
   });
     return {
       checkId: `regulatory-compliance-${Date.now()}`}
@@ -736,42 +707,40 @@ class RegulatoryCompliancePolicyChecker implements PolicyChecker {
       score,
       message: `Regulatory compliance: ${score}%`}
 },
-  details: {
+  details: { ,
   soc2Compliance: score >= 95,
   auditTrails: true,
-  dataRetention: true,
-}
+  dataRetention: true }
+
       violations,
       recommendations: score < 95 ? ['Review compliance documentation'] : [],
       timestamp: new Date().toISOString(),
       executionTimeMs: Date.now() - startTime;
   };
-  async validateRule(rule: PolicyRule): Promise<boolean> {
-
-  return rule.policyType === this.type;
-  async getDefaultRules(): Promise<PolicyRule> {,
+  async validateRule(rule: PolicyRule): Promise<boolean> { return rule.policyType === this.type;
+  async getDefaultRules(): Promise<PolicyRule> {
   return [{
-  id: 'regulatory-compliance-soc2',
-  name: 'SOC2 Compliance',
-  description: 'Ensure SOC2 regulatory compliance',
-  policyType: this.type,
-  enabled: true,
-  severity: 'high',
-  conditions: [{,
-  id: 'soc2-score',
-  field: 'soc2Score',
-  operator: 'greater_than',
-  value: 95,
-}],
-      actions: [{,
-  id: 'compliance-review',
-  type: 'require_review',
-}],
-      executeOnCreate: true,
-      version: '1.0.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdBy: 'system'
-  }];
+  id: 'regulatory-compliance-soc2'
+  name: 'SOC2 Compliance'
+  description: 'Ensure SOC2 regulatory compliance'
+  policyType: this.type
+  enabled: true
+  severity: 'high'
+  conditions: [{
+  id: 'soc2-score'
+  field: 'soc2Score'
+  operator: 'greater_than'
+  value: 95 }
+]
+      actions: [{ 
+  id: 'compliance-review'
+  type: 'require_review' }
+]
+      executeOnCreate: true
+      version: '1.0.0'
+      createdAt: new Date().toISOString()
+      updatedAt: new Date().toISOString()
+      createdBy: 'system';
+];
 
 export default PolicyCheckersService;

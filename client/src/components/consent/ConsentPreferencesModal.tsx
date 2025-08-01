@@ -11,23 +11,25 @@ import {
   ConsentPreferences,
   ConsentConfiguration,
   ConsentTypeConfig
-} from '../../types/consent';
+ from '../../types/consent';
 import { useConsent } from '../../hooks/useConsent';
 import './ConsentPreferencesModal.css';
-}
+
+
 interface ConsentPreferencesModalProps {
   isOpen: boolean;,
-  onClose: () => void;
+  onClose: () => void;,
   onSave: (preferences: ConsentPreferences) => Promise<void>;,
-  preferences: ConsentPreferences | null;
+  preferences: ConsentPreferences | null;,
   config: ConsentConfiguration | null;
-  export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = ({,)
+  export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = ({),
   isOpen,
   onClose,
   onSave,
   preferences,
   config
-}
+
+
 }) => {
   const { hasConsent, grantConsent, withdrawConsent } = useConsent();
   const [localPreferences, setLocalPreferences] = useState<Record<ConsentType, boolean>>()
@@ -63,14 +65,14 @@ interface ConsentPreferencesModalProps {
         const currentStatus = hasConsent(consentType as ConsentType);
         if (granted && !currentStatus) {
           await grantConsent(consentType as ConsentType, 'preferences');
-        } else if (!granted && currentStatus) {
+ else if (!granted && currentStatus) {
           await withdrawConsent(consentType as ConsentType, 'preferences');
       // Call parent save handler
       await onSave(preferences);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to save consent preferences:', error);
   setError('Failed to save preferences. Please try again.');
-} finally {
+ finally {
       setIsLoading(false);
   };
   const handleCancel = () => {
@@ -190,7 +192,7 @@ interface ConsentPreferencesModalProps {
               onChange={(e) => {
   // Handle privacy setting change
   console.log('Data processing opt-out changed:', !e.target.checked);
-}}
+}
             />
             Allow data processing for service improvement
           </label>
@@ -203,7 +205,7 @@ interface ConsentPreferencesModalProps {
               onChange={(e) => {
   // Handle profile visibility change
   console.log('Profile visibility changed:', e.target.value);
-}}
+}
             >
               <option value="public">Public</option>
               <option value="limited">Limited</option>
@@ -218,7 +220,7 @@ interface ConsentPreferencesModalProps {
               checked={!privacySettings.trackingOptOut}
               onChange={(e) => {
   console.log('Tracking opt-out changed:', !e.target.checked);
-}}
+}
             />
             Allow cross-site tracking
           </label>
@@ -239,7 +241,7 @@ interface ConsentPreferencesModalProps {
               checked={commSettings.emailNotifications}
               onChange={(e) => {
   console.log('Email notifications changed:', e.target.checked);
-}}
+}
             />
             Email notifications
           </label>
@@ -251,7 +253,7 @@ interface ConsentPreferencesModalProps {
               checked={commSettings.marketingEmails}
               onChange={(e) => {
   console.log('Marketing emails changed:', e.target.checked);
-}}
+}
             />
             Marketing emails
           </label>
@@ -263,7 +265,7 @@ interface ConsentPreferencesModalProps {
               checked={commSettings.productUpdates}
               onChange={(e) => {
   console.log('Product updates changed:', e.target.checked);
-}}
+}
             />
             Product updates
           </label>
@@ -275,7 +277,7 @@ interface ConsentPreferencesModalProps {
               checked={commSettings.securityAlerts}
               onChange={(e) => {
   console.log('Security alerts changed:', e.target.checked);
-}}
+}
               disabled
             />
             Security alerts (required)

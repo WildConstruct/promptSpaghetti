@@ -104,8 +104,7 @@ PSGFile;
             /**
              * Validates a .psg file structure
              */
-            function: validatePSGFile(data, unknown), PSGFile
-        }
+            function: validatePSGFile(data, unknown), PSGFile }
     };
     {
         return PSGFileSchema.parse(data);
@@ -165,8 +164,7 @@ PSGFile;
         success: false,
         error: {
             type: PSGErrorType.FILE_TOO_LARGE,
-            message: `File size (${(jsonString.length / 1024 / 1024).toFixed(1)}MB) exceeds maximum allowed size (${(maxFileSize / 1024 / 1024).toFixed(1)}MB)`
-        }
+            message: `File size (${(jsonString.length / 1024 / 1024).toFixed(1)}MB) exceeds maximum allowed size (${(maxFileSize / 1024 / 1024).toFixed(1)}MB)` }
     },
         suggestions;
     ['Try reducing the number of nodes', 'Compress or optimize the project', 'Split into smaller projects'];
@@ -220,8 +218,7 @@ catch (syntaxError) {
                     success: false,
                     error: {
                         type: PSGErrorType.MISSING_REQUIRED_FIELDS,
-                        message: `Missing required fields: ${missingFields.join(', ')}`
-                    }
+                        message: `Missing required fields: ${missingFields.join(', ')}` }
                 },
                     details;
                 missingFields,
@@ -255,7 +252,7 @@ catch (syntaxError) {
                                 type: PSGErrorType.INVALID_SCHEMA,
                                 message: 'File format does not match expected structure',
                                 details: formattedErrors,
-                                suggestions: [,
+                                suggestions: [
                                     'Check if this file was created with a different version',
                                     'Try updating to the latest version of the application',
                                     'Contact support if this is a recently created file'
@@ -278,7 +275,7 @@ catch (syntaxError) {
                                         currentVersion: '1.0.0',
                                         compatibility
                                     },
-                                    suggestions: [,
+                                    suggestions: [
                                         compatibility.requiresUpgrade
                                             ? 'Update the application to a newer version'
                                             : 'This file was created with a newer version - consider updating',
@@ -419,181 +416,181 @@ catch (syntaxError) {
                                                         // Check for function strings or suspicious content
                                                         const value = obj[key];
                                                         if (typeof value === 'string') {
-                                                            const suspiciousPatterns = [];
-                                                            /javascript:/i,
+                                                            const suspiciousPatterns = [
+                                                                /javascript:/i,
                                                                 /data:text\/html/i,
-                                                                /eval\s*\(/i;
-                                                            /function\s*\(/i;
-                                                            /<script/i,
-                                                                /onload\s*=/i;
-                                                        }
-                                                    };
-                                                    ;
-                                                    for (const pattern of suspiciousPatterns) {
-                                                        if (pattern.test(value)) {
-                                                            violations.push(`Suspicious content in ${currentPath}: ${pattern.source}`);
-                                                        }
-                                                        // Recursively check nested objects
-                                                        if (typeof value === 'object' && value !== null) {
-                                                            checkObject(value, currentPath);
-                                                        }
-                                                        ;
-                                                        checkObject(data);
-                                                        return violations;
-                                                        /**
-                                                         * Validates internal data consistency
-                                                         */
-                                                        function validateDataConsistency(data) {
-                                                            const errors = [];
-                                                            try {
-                                                                // Check if nodes reference valid IDs
-                                                                if (data.graph?.nodes && data.graph?.edges) {
-                                                                    const nodeIds = new Set(data.graph.nodes.map((node) => node.id).filter(Boolean));
-                                                                    // Validate edges reference existing nodes
-                                                                    for (const edge of data.graph.edges) {
-                                                                        if (edge.source && !nodeIds.has(edge.source)) {
-                                                                            errors.push(`Edge references non-existent source node: ${edge.source}`);
-                                                                        }
-                                                                        if (edge.target && !nodeIds.has(edge.target)) {
-                                                                            errors.push(`Edge references non-existent target node: ${edge.target}`);
-                                                                        }
-                                                                        // Check for duplicate node IDs
-                                                                        const nodeIdArray = data.graph.nodes.map((node) => node.id).filter(Boolean);
-                                                                        const duplicates = nodeIdArray.filter((id, index) => nodeIdArray.indexOf(id) !== index);
-                                                                        if (duplicates.length > 0) {
-                                                                            errors.push(`Duplicate node IDs found: ${[...new Set(duplicates)].join(', ')}`);
-                                                                        }
-                                                                        // Validate metadata structure
-                                                                        if (data.metadata) {
-                                                                            if (data.metadata.created && data.metadata.modified) {
-                                                                                const created = new Date(data.metadata.created).getTime();
-                                                                                const modified = new Date(data.metadata.modified).getTime();
-                                                                                if (created > modified) {
-                                                                                    errors.push('Created date is later than modified date');
+                                                                /eval\s*\(/i,
+                                                                /function\s*\(/i,
+                                                                /<script/i,
+                                                                /onload\s*=/i
+                                                            ];
+                                                            for (const pattern of suspiciousPatterns) {
+                                                                if (pattern.test(value)) {
+                                                                    violations.push(`Suspicious content in ${currentPath}: ${pattern.source}`);
+                                                                }
+                                                                // Recursively check nested objects
+                                                                if (typeof value === 'object' && value !== null) {
+                                                                    checkObject(value, currentPath);
+                                                                }
+                                                                ;
+                                                                checkObject(data);
+                                                                return violations;
+                                                                /**
+                                                                 * Validates internal data consistency
+                                                                 */
+                                                                function validateDataConsistency(data) {
+                                                                    const errors = [];
+                                                                    try {
+                                                                        // Check if nodes reference valid IDs
+                                                                        if (data.graph?.nodes && data.graph?.edges) {
+                                                                            const nodeIds = new Set(data.graph.nodes.map((node) => node.id).filter(Boolean));
+                                                                            // Validate edges reference existing nodes
+                                                                            for (const edge of data.graph.edges) {
+                                                                                if (edge.source && !nodeIds.has(edge.source)) {
+                                                                                    errors.push(`Edge references non-existent source node: ${edge.source}`);
                                                                                 }
-                                                                                try { }
-                                                                                catch (error) {
-                                                                                    errors.push(`Error during consistency validation: ${error instanceof Error ? error.message : String(error)}`);
+                                                                                if (edge.target && !nodeIds.has(edge.target)) {
+                                                                                    errors.push(`Edge references non-existent target node: ${edge.target}`);
                                                                                 }
-                                                                                return errors;
-                                                                                /**
-                                                                                 * Validates data integrity and returns warnings for potential issues
-                                                                                 */
-                                                                                function validateDataIntegrity(psgFile) {
-                                                                                    const warnings = [];
-                                                                                    try {
-                                                                                        // Check graph complexity
-                                                                                        const nodeCount = psgFile.graph.nodes.length;
-                                                                                        const edgeCount = psgFile.graph.edges.length;
-                                                                                        if (nodeCount === 0) {
-                                                                                            warnings.push('Project contains no nodes');
+                                                                                // Check for duplicate node IDs
+                                                                                const nodeIdArray = data.graph.nodes.map((node) => node.id).filter(Boolean);
+                                                                                const duplicates = nodeIdArray.filter((id, index) => nodeIdArray.indexOf(id) !== index);
+                                                                                if (duplicates.length > 0) {
+                                                                                    errors.push(`Duplicate node IDs found: ${[...new Set(duplicates)].join(', ')}`);
+                                                                                }
+                                                                                // Validate metadata structure
+                                                                                if (data.metadata) {
+                                                                                    if (data.metadata.created && data.metadata.modified) {
+                                                                                        const created = new Date(data.metadata.created).getTime();
+                                                                                        const modified = new Date(data.metadata.modified).getTime();
+                                                                                        if (created > modified) {
+                                                                                            errors.push('Created date is later than modified date');
                                                                                         }
-                                                                                        else if (nodeCount > 1000) {
-                                                                                            warnings.push(`Large project with ${nodeCount} nodes may impact performance`);
+                                                                                        try { }
+                                                                                        catch (error) {
+                                                                                            errors.push(`Error during consistency validation: ${error instanceof Error ? error.message : String(error)}`);
                                                                                         }
-                                                                                        if (edgeCount > nodeCount * 3) {
-                                                                                            warnings.push('Unusually high edge-to-node ratio detected');
-                                                                                            // Check for isolated nodes (no connections)
-                                                                                            const connectedNodes = new Set();
-                                                                                            psgFile.graph.edges.forEach(edge => { });
-                                                                                            connectedNodes.add(edge.source);
-                                                                                            connectedNodes.add(edge.target);
-                                                                                        }
-                                                                                        ;
-                                                                                        const isolatedNodes = psgFile.graph.nodes.filter(node => !connectedNodes.has(node.id));
-                                                                                        if (isolatedNodes.length > 0 && nodeCount > 1) {
-                                                                                            warnings.push(`${isolatedNodes.length} isolated nodes detected (no connections)`);
-                                                                                        }
-                                                                                        // Check metadata completeness
-                                                                                        if (!psgFile.metadata.description && nodeCount > 5) {
-                                                                                            warnings.push('Consider adding a project description');
-                                                                                            // Check viewport settings
-                                                                                            if (psgFile.graph.viewport) {
-                                                                                                const { x, y, zoom } = psgFile.graph.viewport;
-                                                                                                if (Math.abs(x) > 10000 || Math.abs(y) > 10000) {
-                                                                                                    warnings.push('Viewport position is very far from origin');
-                                                                                                    if (zoom < 0.1 || zoom > 10) {
-                                                                                                        warnings.push('Unusual viewport zoom level');
-                                                                                                    }
-                                                                                                    try { }
-                                                                                                    catch (error) {
-                                                                                                        warnings.push(`Error during integrity validation: ${error instanceof Error ? error.message : String(error)}`);
-                                                                                                    }
-                                                                                                    return warnings;
-                                                                                                    pretty ?  : boolean;
-                                                                                                    validate ?  : boolean;
+                                                                                        return errors;
+                                                                                        /**
+                                                                                         * Validates data integrity and returns warnings for potential issues
+                                                                                         */
+                                                                                        function validateDataIntegrity(psgFile) {
+                                                                                            const warnings = [];
+                                                                                            try {
+                                                                                                // Check graph complexity
+                                                                                                const nodeCount = psgFile.graph.nodes.length;
+                                                                                                const edgeCount = psgFile.graph.edges.length;
+                                                                                                if (nodeCount === 0) {
+                                                                                                    warnings.push('Project contains no nodes');
                                                                                                 }
-                                                                                                { }
-                                                                                                {
-                                                                                                    success: true;
-                                                                                                    data: string;
-                                                                                                    warnings ?  : string;
+                                                                                                else if (nodeCount > 1000) {
+                                                                                                    warnings.push(`Large project with ${nodeCount} nodes may impact performance`);
                                                                                                 }
-                                                                                                 | {
-                                                                                                    success: false,
-                                                                                                    error: PSGError,
-                                                                                                    const: { pretty = false, validate = true } = options,
-                                                                                                    try: {
-                                                                                                        // Pre-serialization validation
-                                                                                                        if(validate) {
-                                                                                                            // If validation passes, continue
-                                                                                                            // Update timestamps
-                                                                                                            const updatedFile = {
-                                                                                                                ...psgFile,
-                                                                                                                exportMetadata: {
-                                                                                                                    ...psgFile.exportMetadata,
-                                                                                                                    exportDate: new Date().toISOString(),
-                                                                                                                },
-                                                                                                                const: jsonString = JSON.stringify(updatedFile, null, pretty ? 2 : 0),
-                                                                                                                // Check serialized size
-                                                                                                                const: sizeInMB = jsonString.length / (1024 * 1024),
-                                                                                                                const: warnings, string, []:  = [],
-                                                                                                                if(sizeInMB) { }
-                                                                                                            } > 5, { warnings };
-                                                                                                        }, : .push(`Large file size (${sizeInMB.toFixed(1)}MB) may affect loading performance`)
-                                                                                                    },
-                                                                                                    return: {
-                                                                                                        success: true,
-                                                                                                        data: jsonString,
-                                                                                                        warnings: warnings.length > 0 ? warnings : undefined,
-                                                                                                    }
-                                                                                                };
-                                                                                                try { }
-                                                                                                catch (error) {
-                                                                                                    if (error instanceof z.ZodError) {
-                                                                                                        return {
+                                                                                                if (edgeCount > nodeCount * 3) {
+                                                                                                    warnings.push('Unusually high edge-to-node ratio detected');
+                                                                                                    // Check for isolated nodes (no connections)
+                                                                                                    const connectedNodes = new Set();
+                                                                                                    psgFile.graph.edges.forEach(edge => { });
+                                                                                                    connectedNodes.add(edge.source);
+                                                                                                    connectedNodes.add(edge.target);
+                                                                                                }
+                                                                                                ;
+                                                                                                const isolatedNodes = psgFile.graph.nodes.filter(node => !connectedNodes.has(node.id));
+                                                                                                if (isolatedNodes.length > 0 && nodeCount > 1) {
+                                                                                                    warnings.push(`${isolatedNodes.length} isolated nodes detected (no connections)`);
+                                                                                                }
+                                                                                                // Check metadata completeness
+                                                                                                if (!psgFile.metadata.description && nodeCount > 5) {
+                                                                                                    warnings.push('Consider adding a project description');
+                                                                                                    // Check viewport settings
+                                                                                                    if (psgFile.graph.viewport) {
+                                                                                                        const { x, y, zoom } = psgFile.graph.viewport;
+                                                                                                        if (Math.abs(x) > 10000 || Math.abs(y) > 10000) {
+                                                                                                            warnings.push('Viewport position is very far from origin');
+                                                                                                            if (zoom < 0.1 || zoom > 10) {
+                                                                                                                warnings.push('Unusual viewport zoom level');
+                                                                                                            }
+                                                                                                            try { }
+                                                                                                            catch (error) {
+                                                                                                                warnings.push(`Error during integrity validation: ${error instanceof Error ? error.message : String(error)}`);
+                                                                                                            }
+                                                                                                            return warnings;
+                                                                                                            pretty ?  : boolean;
+                                                                                                            validate ?  : boolean;
+                                                                                                        }
+                                                                                                        { }
+                                                                                                        {
+                                                                                                            success: true;
+                                                                                                            data: string;
+                                                                                                            warnings ?  : string;
+                                                                                                        }
+                                                                                                         | {
                                                                                                             success: false,
-                                                                                                            error: {
-                                                                                                                type: PSGErrorType.INVALID_SCHEMA,
-                                                                                                                message: 'Data validation failed during serialization',
-                                                                                                                details: error.errors,
-                                                                                                                suggestions: ['Check data integrity before saving', 'Review recent changes to the project'],
+                                                                                                            error: PSGError,
+                                                                                                            const: { pretty = false, validate = true } = options,
+                                                                                                            try: {
+                                                                                                                // Pre-serialization validation
+                                                                                                                if(validate) {
+                                                                                                                    // If validation passes, continue
+                                                                                                                    // Update timestamps
+                                                                                                                    const updatedFile = {
+                                                                                                                        ...psgFile,
+                                                                                                                        exportMetadata: {
+                                                                                                                            ...psgFile.exportMetadata,
+                                                                                                                            exportDate: new Date().toISOString(),
+                                                                                                                        },
+                                                                                                                        const: jsonString = JSON.stringify(updatedFile, null, pretty ? 2 : 0),
+                                                                                                                        // Check serialized size
+                                                                                                                        const: sizeInMB = jsonString.length / (1024 * 1024),
+                                                                                                                        const: warnings, string = [],
+                                                                                                                        if(sizeInMB) { }
+                                                                                                                    } > 5, { warnings };
+                                                                                                                }, : .push(`Large file size (${sizeInMB.toFixed(1)}MB) may affect loading performance`)
                                                                                                             },
                                                                                                             return: {
-                                                                                                                success: false,
-                                                                                                                error: {
-                                                                                                                    type: PSGErrorType.CORRUPTED_DATA,
-                                                                                                                    message: 'Failed to serialize project data',
-                                                                                                                    details: error instanceof Error ? error.message : String(error),
-                                                                                                                    suggestions: ['Try saving with a different name', 'Check for circular references in data'],
-                                                                                                                }
+                                                                                                                success: true,
+                                                                                                                data: jsonString,
+                                                                                                                warnings: warnings.length > 0 ? warnings : undefined,
                                                                                                             }
                                                                                                         };
+                                                                                                        try { }
+                                                                                                        catch (error) {
+                                                                                                            if (error instanceof z.ZodError) {
+                                                                                                                return {
+                                                                                                                    success: false,
+                                                                                                                    error: {
+                                                                                                                        type: PSGErrorType.INVALID_SCHEMA,
+                                                                                                                        message: 'Data validation failed during serialization',
+                                                                                                                        details: error.errors,
+                                                                                                                        suggestions: ['Check data integrity before saving', 'Review recent changes to the project'],
+                                                                                                                    },
+                                                                                                                    return: {
+                                                                                                                        success: false,
+                                                                                                                        error: {
+                                                                                                                            type: PSGErrorType.CORRUPTED_DATA,
+                                                                                                                            message: 'Failed to serialize project data',
+                                                                                                                            details: error instanceof Error ? error.message : String(error),
+                                                                                                                            suggestions: ['Try saving with a different name', 'Check for circular references in data'],
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                };
+                                                                                                            }
+                                                                                                        }
                                                                                                     }
                                                                                                 }
                                                                                             }
+                                                                                            finally { }
                                                                                         }
                                                                                     }
-                                                                                    finally { }
                                                                                 }
                                                                             }
                                                                         }
                                                                     }
+                                                                    finally { }
                                                                 }
                                                             }
-                                                            finally { }
                                                         }
-                                                    }
+                                                    };
                                                 }
                                             }
                                         }

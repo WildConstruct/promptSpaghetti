@@ -4,18 +4,19 @@ import { MarketplaceDAO } from './dao';
 import { TemplateWithStats, EventType } from './types';
 import { Pool } from 'pg';
 
-}
-}
+
+
 interface RecommendationScore {
   templateId: string;
   score: number;
   reasons: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UserBehavior {
   userId: string;
   viewedTemplates: string[];
@@ -24,19 +25,21 @@ interface UserBehavior {
   searchQueries: string[];
   categories: string[];
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SimilarityMatrix {
   [templateId: string]: {
     [otherTemplateId: string]: number;
-}
-}
+
+
+
   };
-}
+
 
 @Injectable()
 export class RecommendationService {
@@ -47,7 +50,7 @@ export class RecommendationService {
 
   constructor(private pool: Pool) {
     this.dao = new MarketplaceDAO(pool);
-  }
+
 
   /**
    * Get personalized recommendations for a user
@@ -70,11 +73,11 @@ export class RecommendationService {
       // Fetch full template details
       const templateIds = topRecommendations.map(r => r.templateId);
       return this.getTemplatesByIds(templateIds);
-    } catch (error) {
+ catch (error) {
       console.error('Error generating personalized recommendations:', error);
       return this.getFallbackRecommendations(limit);
-    }
-  }
+
+
 
   /**
    * Get similar templates based on content and user behavior
@@ -94,11 +97,11 @@ export class RecommendationService {
         .map(([id]) => id);
 
       return this.getTemplatesByIds(similarTemplateIds);
-    } catch (error) {
+ catch (error) {
       console.error('Error getting similar templates:', error);
       return this.getFallbackSimilarTemplates(templateId, limit);
-    }
-  }
+
+
 
   /**
    * Get trending templates based on recent activity
@@ -143,7 +146,7 @@ export class RecommendationService {
     const result = await this.pool.query(query, [limit]);
     const templateIds = result.rows.map(row => row.template_id);
     return this.getTemplatesByIds(templateIds);
-  }
+
 
   /**
    * Get recommendations for new users (cold start problem)
@@ -180,7 +183,7 @@ export class RecommendationService {
     const result = await this.pool.query(query, [limit]);
     const templateIds = result.rows.map(row => row.id);
     return this.getTemplatesByIds(templateIds);
-  }
+
 
   /**
    * Get category-based recommendations
@@ -214,7 +217,7 @@ export class RecommendationService {
     const result = await this.pool.query(query, params);
     const templateIds = result.rows.map(row => row.id);
     return this.getTemplatesByIds(templateIds);
-  }
+
 
   /**
    * Get recommendations based on user's search history
@@ -228,7 +231,7 @@ export class RecommendationService {
     
     if (userBehavior.searchQueries.length === 0) {
       return this.getNewUserRecommendations(limit);
-    }
+
 
     // Combine all search terms
     const searchTerms = userBehavior.searchQueries.join(' ');
@@ -249,7 +252,7 @@ export class RecommendationService {
     const result = await this.pool.query(query, [searchTerms, limit]);
     const templateIds = result.rows.map(row => row.id);
     return this.getTemplatesByIds(templateIds);
-  }
+
 
   /**
    * Get user behavior data for recommendations
@@ -284,28 +287,28 @@ export class RecommendationService {
       case EventType.VIEW:
         if (!behavior.viewedTemplates.includes(row.template_id)) {
           behavior.viewedTemplates.push(row.template_id);
-        }
+
         break;
       case EventType.PURCHASE:
         if (!behavior.purchasedTemplates.includes(row.template_id)) {
           behavior.purchasedTemplates.push(row.template_id);
-        }
+
         break;
       case EventType.PREVIEW:
         if (!behavior.previewedTemplates.includes(row.template_id)) {
           behavior.previewedTemplates.push(row.template_id);
-        }
+
         break;
-      }
+
 
       // Extract search queries from metadata
       if (row.metadata?.query && !behavior.searchQueries.includes(row.metadata.query)) {
         behavior.searchQueries.push(row.metadata.query);
-      }
-    }
+
+
 
     return behavior;
-  }
+
 
   /**
    * Calculate personalized recommendation scores
@@ -343,8 +346,8 @@ export class RecommendationService {
         
         if (similarityScore > 0.3) {
           reasons.push('Similar to templates you viewed');
-        }
-      }
+
+
 
       // Category preference
       const categoryMatch = template.categories?.some(cat => 
@@ -353,7 +356,7 @@ export class RecommendationService {
       if (categoryMatch) {
         score += 15;
         reasons.push('Matches your interests');
-      }
+
 
       // Tag preference
       const tagMatch = template.tags.some(tag => 
@@ -362,20 +365,20 @@ export class RecommendationService {
       if (tagMatch) {
         score += 10;
         reasons.push('Related to your preferences');
-      }
+
 
       // Boost newer templates slightly
       const daysSinceCreated = (Date.now() - new Date(template.created_at).getTime()) / (1000 * 60 * 60 * 24);
       if (daysSinceCreated < 30) {
         score += 5;
         reasons.push('Recently added');
-      }
+
 
       // Boost free templates for new users
       if (template.price_cents === 0) {
         score += 8;
         reasons.push('Free to try');
-      }
+
 
       if (score > 0) {
         scores.push({
@@ -383,11 +386,11 @@ export class RecommendationService {
           score,
           reasons
         });
-      }
-    }
+
+
 
     return scores;
-  }
+
 
   /**
    * Calculate content similarity between templates
@@ -420,7 +423,7 @@ export class RecommendationService {
       if (totalTags > 0) {
         similarity += (commonTags / totalTags) * 0.4;
         totalFeatures++;
-      }
+
 
       // Category similarity
       const commonCategories = template.categories?.filter(cat => 
@@ -433,16 +436,16 @@ export class RecommendationService {
       if (totalCategories > 0) {
         similarity += (commonCategories / totalCategories) * 0.6;
         totalFeatures++;
-      }
+
 
       if (totalFeatures > 0) {
         similarity /= totalFeatures;
         maxSimilarity = Math.max(maxSimilarity, similarity);
-      }
-    }
+
+
 
     return maxSimilarity;
-  }
+
 
   /**
    * Update the similarity matrix (run periodically)
@@ -452,11 +455,11 @@ export class RecommendationService {
     const now = new Date();
     if (now.getTime() - this.lastMatrixUpdate.getTime() < this.MATRIX_UPDATE_INTERVAL) {
       return;
-    }
+
 
     await this.buildSimilarityMatrix();
     this.lastMatrixUpdate = now;
-  }
+
 
   /**
    * Build similarity matrix for all templates
@@ -476,12 +479,12 @@ export class RecommendationService {
             [otherTemplate.id]
           );
           matrix[template.id][otherTemplate.id] = similarity;
-        }
-      }
-    }
+
+
+
 
     this.similarityMatrix = matrix;
-  }
+
 
   /**
    * Get templates by IDs while preserving order
@@ -532,11 +535,11 @@ export class RecommendationService {
         name: row.owner_name,
         email: row.owner_email,
         verified: true
-      }
-    }]));
+
+]));
 
     return templateIds.map(id => templateMap.get(id)).filter(Boolean);
-  }
+
 
   /**
    * Fallback recommendations when personalization fails
@@ -544,7 +547,7 @@ export class RecommendationService {
   private async getFallbackRecommendations(limit: number): Promise<TemplateWithStats[]> {
 
     return this.getNewUserRecommendations(limit);
-  }
+
 
   /**
    * Fallback similar templates when similarity calculation fails
@@ -557,8 +560,7 @@ export class RecommendationService {
     const template = await this.dao.getTemplate(templateId);
     if (!template || !template.categories?.length) {
       return this.getFallbackRecommendations(limit);
-    }
+
 
     return this.getCategoryRecommendations(template.categories[0], limit, [templateId]);
-  }
-}
+

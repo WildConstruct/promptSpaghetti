@@ -7,31 +7,29 @@
  * - Middleware processing
  * - Performance and reliability
  */
-import {
-  EventBus,
+import { EventBus,
   BaseEvent,
   EventCategory,
   EventPriority,
   EventFactory,
   globalEventBus,
   LoggingMiddleware,
-  ValidationMiddleware,
+  ValidationMiddleware }
   RateLimitMiddleware
-} from '../events/EventSystem';
-import {
-  createLoggingMiddleware,
+ from '../events/EventSystem';
+import { createLoggingMiddleware,
   createValidationMiddleware,
   createRateLimitMiddleware,
-  createPerformanceMiddleware,
+  createPerformanceMiddleware }
   createDeduplicationMiddleware
-} from '../events/middleware/EventMiddleware';
+ from '../events/middleware/EventMiddleware';
 
 // Helper function to create test events
-const createTestEvent = (overrides?: Partial<BaseEvent>): BaseEvent => ({)
-  type: 'test_event',
-  timestamp: new Date(),
-  id: crypto.randomUUID(),
-  source: 'test-suite',
+const createTestEvent = (overrides?: Partial<BaseEvent>): BaseEvent => ({ )
+  type: 'test_event'
+  timestamp: new Date()
+  id: crypto.randomUUID()
+  source: 'test-suite' }
   ...overrides
 });
 describe('EventSystem', () => {
@@ -39,16 +37,14 @@ describe('EventSystem', () => {
   beforeEach(() => {
     eventBus = new EventBus({ maxHistorySize: 100 });
   });
-  afterEach(() => {
-    eventBus.removeAllListeners();
-    eventBus.clearHistory();
-  });
+  afterEach(() => { eventBus.removeAllListeners();
+    eventBus.clearHistory() });
   describe('EventBus Core Operations', () => {
     it('should publish and receive events', async () => {
       const mockHandler = jest.fn<unknown, unknown>();
       const testEvent = createTestEvent({ type: 'test_publish' });
       eventBus.subscribe()
-        { types: ['test_publish'] },
+        { types: ['test_publish'] }
         mockHandler
       );
       await eventBus.publish(testEvent);
@@ -69,7 +65,7 @@ describe('EventSystem', () => {
       const mockHandler = jest.fn<unknown, unknown>();
       const testEvent = createTestEvent({ type: 'test_unsubscribe' });
       const subscriptionId = eventBus.subscribe(;);
-        { types: ['test_unsubscribe'] },
+        { types: ['test_unsubscribe'] }
         mockHandler
       );
       await eventBus.publish(testEvent);
@@ -83,8 +79,8 @@ describe('EventSystem', () => {
       const mockHandler = jest.fn<unknown, unknown>();
       const testEvent = createTestEvent({ type: 'test_once' });
       eventBus.subscribe()
-        { types: ['test_once'] },
-        mockHandler,
+        { types: ['test_once'] }
+        mockHandler
         { once: true }
       );
       await eventBus.publish(testEvent);
@@ -133,21 +129,20 @@ describe('EventSystem', () => {
       expect(userHandler).toHaveBeenCalledTimes(1);
       expect(allHandler).toHaveBeenCalledTimes(2);
     });
-    it('should filter by time window', async () => {
-  const handler = jest.fn<unknown, unknown>();
+    it('should filter by time window', async () => { const handler = jest.fn<unknown, unknown>();
   const now = new Date();
   const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
   const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
   eventBus.subscribe({)
   timeWindow: {
-  start: oneHourAgo,
-  end: oneHourFromNow,
+  start: oneHourAgo
+  end: oneHourFromNow }
 }, handler);
       // Event within window
       await eventBus.publish(createTestEvent({ timestamp: now }));
       // Event outside window
-      await eventBus.publish(createTestEvent({)
-  timestamp: new Date(now.getTime() + 2 * 60 * 60 * 1000),
+      await eventBus.publish(createTestEvent({ )
+  timestamp: new Date(now.getTime() + 2 * 60 * 60 * 1000) }
 }));
       expect(handler).toHaveBeenCalledTimes(1);
     });
@@ -197,12 +192,11 @@ describe('EventSystem', () => {
       expect(history[1].type).toBe('event_3');
     });
   });
-  describe('Event Factory Functions', () => {
-    it('should create workflow events correctly', () => {
+  describe('Event Factory Functions', () => { it('should create workflow events correctly', () => {
       const workflowEvent = EventFactory.createWorkflowEvent(;);
-        'task_created',
-        { taskId: 'task-123' },
-        'test-factory',
+        'task_created' }
+        { taskId: 'task-123' }
+        'test-factory'
         'user-456'
       );
       expect(workflowEvent.type).toBe('task_created');
@@ -211,44 +205,38 @@ describe('EventSystem', () => {
       expect(workflowEvent.metadata?.category).toBe(EventCategory.WORKFLOW);
       expect(workflowEvent.metadata?.priority).toBe(EventPriority.HIGH);
     });
-    it('should create analytics events correctly', () => {
-      const analyticsEvent = EventFactory.createAnalyticsEvent(;);
-        'user_action',
-        { action: 'click', feature: 'button' },
-        'test-factory',
+    it('should create analytics events correctly', () => { const analyticsEvent = EventFactory.createAnalyticsEvent(;);
+        'user_action' }
+        { action: 'click', feature: 'button' }
+        'test-factory'
         'user-789'
       );
       expect(analyticsEvent.type).toBe('user_action');
       expect(analyticsEvent.metadata?.category).toBe(EventCategory.ANALYTICS);
       expect(analyticsEvent.metadata?.priority).toBe(EventPriority.MEDIUM);
     });
-    it('should create security events with correct priority', () => {
-      const criticalSecurityEvent = EventFactory.createSecurityEvent(;);
-        'auth_failure',
-        { severity: 'critical' },
-        'test-factory',
+    it('should create security events with correct priority', () => { const criticalSecurityEvent = EventFactory.createSecurityEvent(;);
+        'auth_failure' }
+        { severity: 'critical' }
+        'test-factory'
         'user-000'
       );
       expect(criticalSecurityEvent.metadata?.priority).toBe(EventPriority.CRITICAL);
       const lowSecurityEvent = EventFactory.createSecurityEvent(;);
-        'audit_log',
-        { severity: 'low' },
+        'audit_log'
+        { severity: 'low' }
         'test-factory'
       );
       expect(lowSecurityEvent.metadata?.priority).toBe(EventPriority.HIGH);
     });
   });
-  describe('Middleware Processing', () => {
-  it('should process middleware in order', async () => {
+  describe('Middleware Processing', () => { it('should process middleware in order', async () => {
   const executionOrder: string = [];
   const middleware1 = jest.fn((event, next) => {
   executionOrder.push('middleware1');
-  next();
-});
-      const middleware2 = jest.fn((event, next) => {
-        executionOrder.push('middleware2');
-        next();
-      });
+  next() });
+      const middleware2 = jest.fn((event, next) => { executionOrder.push('middleware2');
+        next() });
       eventBus.use(middleware1);
       eventBus.use(middleware2);
       await eventBus.publish(createTestEvent());
@@ -259,29 +247,25 @@ describe('EventSystem', () => {
       const successHandler = jest.fn<unknown, unknown>();
       eventBus.on('handler_error', errorHandler);
       eventBus.subscribe({}, successHandler);
-      eventBus.use((event, next) => {
-        throw new Error('Middleware error');
-      });
+      eventBus.use((event, next) => { throw new Error('Middleware error') });
       await eventBus.publish(createTestEvent());
       expect(errorHandler).toHaveBeenCalled();
       expect(successHandler).not.toHaveBeenCalled();
     });
     it('should apply validation middleware', async () => {
       eventBus.use(createValidationMiddleware({ strictMode: true }));
-      const invalidEvent = {
-  type: '',
-  timestamp: new Date(),
-  id: crypto.randomUUID(),
-  source: 'test',
+      const invalidEvent = { type: ''
+  timestamp: new Date()
+  id: crypto.randomUUID()
+  source: 'test' }
 };
       await expect(eventBus.publish(invalidEvent))
         .rejects
         .toThrow('Event validation failed');
     });
-    it('should apply rate limiting middleware', async () => {
-  eventBus.use(createRateLimitMiddleware({)
-  maxEventsPerSecond: 1,
-  strategy: 'error',
+    it('should apply rate limiting middleware', async () => { eventBus.use(createRateLimitMiddleware({)
+  maxEventsPerSecond: 1
+  strategy: 'error' }
 }));
       const testEvent = createTestEvent();
       // First event should pass
@@ -291,12 +275,11 @@ describe('EventSystem', () => {
         .rejects
         .toThrow('Rate limit exceeded');
     });
-    it('should apply deduplication middleware', async () => {
-  const handler = jest.fn<unknown, unknown>();
+    it('should apply deduplication middleware', async () => { const handler = jest.fn<unknown, unknown>();
   eventBus.use(createDeduplicationMiddleware({)
-  keyGenerator: (event) => event.type,
-  windowMs: 1000,
-  strategy: 'drop',
+  keyGenerator: (event) => event.type
+  windowMs: 1000
+  strategy: 'drop' }
 }));
       eventBus.subscribe({}, handler);
       const testEvent = createTestEvent({ type: 'duplicate_test' });
@@ -310,9 +293,7 @@ describe('EventSystem', () => {
       const errorHandler = jest.fn<unknown, unknown>();
       const workingHandler = jest.fn<unknown, unknown>();
       eventBus.on('handler_error', errorHandler);
-      eventBus.subscribe({}, () => {
-        throw new Error('Handler error');
-      });
+      eventBus.subscribe({}, () => { throw new Error('Handler error') });
       eventBus.subscribe({}, workingHandler);
       await eventBus.publish(createTestEvent());
       expect(errorHandler).toHaveBeenCalled();
@@ -321,9 +302,7 @@ describe('EventSystem', () => {
     it('should emit error events for handler failures', async () => {
       const errorEventHandler = jest.fn<unknown, unknown>();
       eventBus.subscribe({ types: ['handler_error'] }, errorEventHandler);
-      eventBus.subscribe({}, () => {
-        throw new Error('Test handler error');
-      });
+      eventBus.subscribe({}, () => { throw new Error('Test handler error') });
       await eventBus.publish(createTestEvent());
       expect(errorEventHandler).toHaveBeenCalled();
       const errorEvent = errorEventHandler.mock.calls[0][0];
@@ -348,18 +327,16 @@ describe('EventSystem', () => {
       eventBus.subscribe({}, jest.fn<unknown, unknown>());
       eventBus.use(() => {});
       const stats = eventBus.getStats();
-      expect(stats).toMatchObject({)
-  subscriptions: expect.any(Number),
-  middleware: expect.any(Number),
-  historySize: expect.any(Number),
-  eventTypes: expect.any(Array),
+      expect(stats).toMatchObject({ )
+  subscriptions: expect.any(Number)
+  middleware: expect.any(Number)
+  historySize: expect.any(Number)
+  eventTypes: expect.any(Array) }
 });
     });
   });
-  describe('Global Event Bus', () => {
-    it('should provide global event bus instance', () => {
-      expect(globalEventBus).toBeInstanceOf(EventBus);
-    });
+  describe('Global Event Bus', () => { it('should provide global event bus instance', () => {
+      expect(globalEventBus).toBeInstanceOf(EventBus) });
     it('should maintain state across imports', async () => {
       const handler = jest.fn<unknown, unknown>();
       globalEventBus.subscribe({}, handler);
@@ -368,36 +345,32 @@ describe('EventSystem', () => {
     });
   });
 });
-describe('Event System Integration', () => {
-  beforeEach(() => {
-    globalEventBus.clearHistory();
-  });
-  afterEach(() => {
-    // Clean up global event bus
-    globalEventBus.removeAllListeners();
-  });
+describe('Event System Integration', () => { beforeEach(() => {
+    globalEventBus.clearHistory() });
+  afterEach(() => { // Clean up global event bus
+    globalEventBus.removeAllListeners() });
   it('should integrate workflow and analytics events', async () => {
     const workflowHandler = jest.fn<unknown, unknown>();
     const analyticsHandler = jest.fn<unknown, unknown>();
     globalEventBus.subscribe()
-      { categories: [EventCategory.WORKFLOW] },
+      { categories: [EventCategory.WORKFLOW] }
       workflowHandler
     );
     globalEventBus.subscribe()
-      { categories: [EventCategory.ANALYTICS] },
+      { categories: [EventCategory.ANALYTICS] }
       analyticsHandler
     );
     // Publish workflow event that triggers analytics
     const taskCreatedEvent = EventFactory.createWorkflowEvent(;);
-      'task_created',
-      { taskId: 'task-integration' },
+      'task_created'
+      { taskId: 'task-integration' }
       'integration-test'
     );
     await globalEventBus.publish(taskCreatedEvent);
     // Simulate analytics event triggered by workflow
     const analyticsEvent = EventFactory.createAnalyticsEvent(;);
-      'user_action',
-      { action: 'task_created', feature: 'task_management' },
+      'user_action'
+      { action: 'task_created', feature: 'task_management' }
       'integration-test'
     );
     await globalEventBus.publish(analyticsEvent);
@@ -412,46 +385,43 @@ describe('Event System Integration', () => {
     const executionOrder: string = [];
     // UI event handler that triggers workflow event
     globalEventBus.subscribe()
-      { types: ['user_interaction'] },
-      async (event) => {
-        executionOrder.push('ui_handler');
+      { types: ['user_interaction'] }
+      async (event) => { executionOrder.push('ui_handler');
         const workflowEvent = EventFactory.createWorkflowEvent(;);
-          'task_started',
-          { originalEvent: event.id },
+          'task_started' }
+          { originalEvent: event.id }
           'ui-integration'
         );
         await globalEventBus.publish(workflowEvent);
     );
     // Workflow event handler that triggers analytics
     globalEventBus.subscribe()
-      { types: ['task_started'] },
-      async (event) => {
-        executionOrder.push('workflow_handler');
+      { types: ['task_started'] }
+      async (event) => { executionOrder.push('workflow_handler');
         const analyticsEvent = EventFactory.createAnalyticsEvent(;);
-          'performance_metric',
-          { action: 'task_started', value: 1 },
+          'performance_metric' }
+          { action: 'task_started', value: 1 }
           'workflow-integration'
         );
         await globalEventBus.publish(analyticsEvent);
     );
     // Analytics event handler
     globalEventBus.subscribe()
-      { types: ['performance_metric'] },
-      () => {
-        executionOrder.push('analytics_handler');
+      { types: ['performance_metric'] }
+      () => { executionOrder.push('analytics_handler');
     );
     // Start the chain
     const uiEvent = EventFactory.createUIEvent(;);
-      'user_interaction',
-      { component: 'task-form', action: 'submit' },
+      'user_interaction' }
+      { component: 'task-form', action: 'submit' }
       'integration-test'
     );
     await globalEventBus.publish(uiEvent);
     // Wait for async event chain to complete
     await new Promise(resolve => setTimeout(resolve, 10));
     expect(executionOrder).toEqual([)
-      'ui_handler',
-      'workflow_handler',
+      'ui_handler'
+      'workflow_handler'
       'analytics_handler'
     ]);
   });

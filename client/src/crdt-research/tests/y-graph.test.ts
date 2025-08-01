@@ -311,7 +311,7 @@ describe('YGraph CRDT Implementation', () => {
         type: 'node' as const,
         action: 'create' as const,
         targetId: 'node1',
-        data: {
+        data: {,
   id: 'node1',
           type: 'WeightedChoice' as const,
           position: { x: 100, y: 100 },

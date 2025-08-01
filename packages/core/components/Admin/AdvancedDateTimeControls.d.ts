@@ -10,24 +10,21 @@
 import React from 'react';
 
 }
-interface DateTimeSelection {
-    date: Date;
+}
+interface DateTimeSelection { date: Date;
     time: string;
     timezone: string;
     businessHoursOnly?: boolean;
     avoidWeekends?: boolean;
-    smartSuggestion?: boolean;
-
-
+    smartSuggestion?: boolean }
 }
-interface BusinessHours {
-    enabled: boolean;
+}
+interface BusinessHours { enabled: boolean;
     workdays: number[];
     startTime: string;
     endTime: string;
-    timezone: string;
-
-
+    timezone: string }
+}
 }
 interface AdvancedDateTimeControlsProps {
     value?: DateTimeSelection;
@@ -42,4 +39,5 @@ interface AdvancedDateTimeControlsProps {
 export declare const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps>;
 export default AdvancedDateTimeControls;
 //# sourceMappingURL=AdvancedDateTimeControls.d.ts.map
+}
 }

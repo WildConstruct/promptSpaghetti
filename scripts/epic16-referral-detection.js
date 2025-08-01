@@ -56,7 +56,7 @@ const config = {
     colors: process.stdout.isTTY && process.env.NO_COLOR !== '1',
     verbose: false,
     format: 'console' // console, json, html, csv
-  }
+
 };
 
 // Color utilities for terminal output
@@ -75,7 +75,7 @@ const colors = {
 function colorize(text, color) {
   if (!config.output.colors) return text;
   return `${colors[color]}${text}${colors.reset}`;
-}
+
 
 function log(level, message, data = null) {
   const timestamp = new Date().toISOString();
@@ -85,14 +85,14 @@ function log(level, message, data = null) {
     warning: colorize('⚠️', 'yellow'),
     error: colorize('❌', 'red'),
     debug: colorize('🔍', 'cyan')
-  }[level] || 'ℹ️';
+[level] || 'ℹ️';
   
   console.log(`${prefix} [${timestamp}] ${message}`);
   
   if (config.output.verbose && data) {
     console.log(`   Data: ${JSON.stringify(data, null, 2)}`);
-  }
-}
+
+
 
 // =============================================================================
 // Mock Referral Detection Service
@@ -111,7 +111,7 @@ class MockReferralDetectionService {
     };
     
     this.initializeDefaultData();
-  }
+
 
   async trackReferral(referralCode: string, referrerId: string, options: any = {}): Promise<string> {
     const startTime = Date.now();
@@ -194,11 +194,10 @@ class MockReferralDetectionService {
       await this.recordAnalyticsEvent(referralId, 'track', { processingTime: Date.now() - startTime });
       
       return referral;
-      
-    } catch (error) {
+ catch (error) {
       throw new Error(`Referral tracking failed: ${error.message}`);
-    }
-  }
+
+
 
   async calculateFraudRisk(options: any): Promise<any> {
     let riskScore = 0;
@@ -214,10 +213,10 @@ class MockReferralDetectionService {
       if (recentFromIp > this.config.fraudDetection.ipVelocityThreshold) {
         riskScore += 30;
         indicators.ipVelocity = recentFromIp;
-      } else if (recentFromIp > this.config.fraudDetection.ipVelocityThreshold / 2) {
+ else if (recentFromIp > this.config.fraudDetection.ipVelocityThreshold / 2) {
         riskScore += 15;
-      }
-    }
+
+
     
     // Device fingerprint check
     if (options.deviceFingerprint) {
@@ -229,40 +228,40 @@ class MockReferralDetectionService {
       if (recentFromDevice > this.config.fraudDetection.deviceReuseThreshold) {
         riskScore += 25;
         indicators.deviceReuse = recentFromDevice;
-      } else if (recentFromDevice > 2) {
+ else if (recentFromDevice > 2) {
         riskScore += 10;
-      }
-    }
+
+
     
     // Geographic anomaly check
     if (options.country && !['US', 'CA', 'GB', 'DE', 'FR'].includes(options.country)) {
       riskScore += this.config.fraudDetection.geoAnomalyRiskIncrease;
       indicators.geographicAnomaly = options.country;
-    }
+
     
     // Time pattern analysis (simplified)
     const hour = new Date().getHours();
     if (hour < 6 || hour > 22) {
       riskScore += 5;
       indicators.unusualTime = hour;
-    }
+
     
     // Determine risk level
     let riskLevel = 'low';
     if (riskScore >= 70) {
       riskLevel = 'critical';
-    } else if (riskScore >= 40) {
+ else if (riskScore >= 40) {
       riskLevel = 'high';
-    } else if (riskScore >= 20) {
+ else if (riskScore >= 20) {
       riskLevel = 'medium';
-    }
+
     
     return {
       riskScore: Math.min(100, riskScore),
       riskLevel,
       indicators
     };
-  }
+
 
   async createCampaign(campaignData: any): Promise<string> {
     const campaignId = crypto.randomUUID();
@@ -303,18 +302,18 @@ class MockReferralDetectionService {
 
     this.campaigns.set(campaignId, campaign);
     return campaign;
-  }
+
 
   async calculateReward(referralId: string): Promise<any> {
     const referral = this.referrals.get(referralId);
     if (!referral || referral.status !== 'verified' || !referral.conversionValue) {
       return null;
-    }
+
 
     const campaign = this.campaigns.get(referral.campaignId);
     if (!campaign || campaign.status !== 'active') {
       return null;
-    }
+
 
     let rewardAmount = 0;
     const rewardId = crypto.randomUUID();
@@ -330,15 +329,15 @@ class MockReferralDetectionService {
       // Simplified tiered calculation
       if (referral.conversionValue >= 100) {
         rewardAmount = 50;
-      } else if (referral.conversionValue >= 50) {
+ else if (referral.conversionValue >= 50) {
         rewardAmount = 25;
-      } else {
+ else {
         rewardAmount = 10;
-      }
+
       break;
     default:
       rewardAmount = 0;
-    }
+
 
     // Apply attribution model weight
     const attributionWeight = await this.calculateAttributionWeight(referralId, referral.attributionModel);
@@ -351,7 +350,7 @@ class MockReferralDetectionService {
         .reduce((sum, r) => sum + r.finalAmount, 0);
       
       rewardAmount = Math.min(rewardAmount, campaign.maxRewardPerReferrer - existingRewards);
-    }
+
 
     const reward = {
       id: rewardId,
@@ -379,7 +378,7 @@ class MockReferralDetectionService {
 
     this.rewards.set(rewardId, reward);
     return reward;
-  }
+
 
   async calculateAttributionWeight(referralId, model) {
     // Simplified attribution calculation
@@ -395,8 +394,8 @@ class MockReferralDetectionService {
       return 1.0; // Simplified for single touchpoint
     default:
       return 1.0;
-    }
-  }
+
+
 
   async generateAnalytics(options: any = {}): Promise<any> {
     const dateRange = {
@@ -449,7 +448,7 @@ class MockReferralDetectionService {
       analytics.summary.totalConversionValue / conversions.length : 0;
 
     return analytics;
-  }
+
 
   aggregateByField(referrals, field) {
     const breakdown = {};
@@ -458,7 +457,7 @@ class MockReferralDetectionService {
       breakdown[value] = (breakdown[value] || 0) + 1;
     });
     return breakdown;
-  }
+
 
   aggregateByCampaign(referrals) {
     const campaignStats = {};
@@ -473,16 +472,16 @@ class MockReferralDetectionService {
           conversionValue: 0,
           fraudAttempts: 0
         };
-      }
+
       
       campaignStats[r.campaignId].totalReferrals++;
       if (r.status === 'verified' && r.conversionValue) {
         campaignStats[r.campaignId].conversions++;
         campaignStats[r.campaignId].conversionValue += r.conversionValue;
-      }
+
       if (r.fraudRiskLevel === 'high' || r.fraudRiskLevel === 'critical') {
         campaignStats[r.campaignId].fraudAttempts++;
-      }
+
     });
     
     // Calculate conversion rates
@@ -492,7 +491,7 @@ class MockReferralDetectionService {
     });
     
     return campaignStats;
-  }
+
 
   analyzeFraudIndicators(referrals) {
     const indicators = {};
@@ -502,7 +501,7 @@ class MockReferralDetectionService {
         Object.keys(r.fraudIndicators).forEach(indicator => {
           indicators[indicator] = (indicators[indicator] || 0) + 1;
         });
-      }
+
     });
     
     return Object.entries(indicators)
@@ -512,7 +511,7 @@ class MockReferralDetectionService {
         obj[key] = value;
         return obj;
       }, {});
-  }
+
 
   generateTimeSeriesData(referrals, dateRange) {
     const dailyData = {};
@@ -529,7 +528,7 @@ class MockReferralDetectionService {
         conversionValue: 0,
         fraudAttempts: 0
       };
-    }
+
     
     // Aggregate referral data by day
     referrals.forEach(r => {
@@ -539,15 +538,15 @@ class MockReferralDetectionService {
         if (r.status === 'verified' && r.conversionValue) {
           dailyData[dateKey].conversions++;
           dailyData[dateKey].conversionValue += r.conversionValue;
-        }
+
         if (r.fraudRiskLevel === 'high' || r.fraudRiskLevel === 'critical') {
           dailyData[dateKey].fraudAttempts++;
-        }
-      }
+
+
     });
     
     return Object.values(dailyData).sort((a, b) => a.date.localeCompare(b.date));
-  }
+
 
   async updateCampaignMetrics(campaignId) {
     const campaign = this.campaigns.get(campaignId);
@@ -564,7 +563,7 @@ class MockReferralDetectionService {
       .reduce((sum, r) => sum + r.finalAmount, 0);
     
     campaign.updatedAt = new Date();
-  }
+
 
   async recordAnalyticsEvent(referralId, eventType, eventData) {
     // Record analytics event for monitoring and debugging
@@ -579,7 +578,7 @@ class MockReferralDetectionService {
     
     // In a real implementation, this would be stored in the database
     return event;
-  }
+
 
   async getHealthCheck(): Promise<any> {
     const totalReferrals = this.referrals.size;
@@ -593,9 +592,9 @@ class MockReferralDetectionService {
     let status = 'healthy';
     if (pendingReviews > 100 || highRiskCount > 50) {
       status = 'critical';
-    } else if (pendingReviews > 50 || highRiskCount > 20) {
+ else if (pendingReviews > 50 || highRiskCount > 20) {
       status = 'degraded';
-    }
+
     
     return {
       status,
@@ -612,9 +611,9 @@ class MockReferralDetectionService {
         pendingReviews,
         activeCampaigns: Array.from(this.campaigns.values()).filter(c => c.status === 'active').length,
         averageFraudRiskScore: last24Hours.reduce((sum, r) => sum + r.fraudRiskScore, 0) / last24Hours.length || 0
-      }
+
     };
-  }
+
 
   initializeDefaultData() {
     // Create default campaign
@@ -626,8 +625,8 @@ class MockReferralDetectionService {
       rewardValue: 10.0,
       status: 'active'
     });
-  }
-}
+
+
 
 // =============================================================================
 // Command Implementations
@@ -636,7 +635,7 @@ class MockReferralDetectionService {
 class ReferralDetectionCLI {
   constructor() {
     this.service = new MockReferralDetectionService(config);
-  }
+
 
   async executeCommand(command, args, options) {
     const startTime = Date.now();
@@ -666,23 +665,22 @@ class ReferralDetectionCLI {
         break;
       default:
         throw new Error(`Unknown command: ${command}`);
-      }
+
 
       const duration = Date.now() - startTime;
       log('success', `Epic 16 referral detection completed (${duration}ms)`);
       
       if (options.output) {
         await this.writeOutput(result, options.output, options.format);
-      }
+
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       const duration = Date.now() - startTime;
       log('error', `Epic 16 referral detection failed (${duration}ms): ${error.message}`);
       process.exit(1);
-    }
-  }
+
+
 
   async trackCommand(args, options) {
     const referralCode = options.code || `REF-${Date.now()}`;
@@ -723,7 +721,7 @@ class ReferralDetectionCLI {
       });
 
       log('success', `Referral tracked: ${referral.id} (Risk: ${referral.fraudRiskLevel}, Score: ${referral.fraudRiskScore})`);
-    }
+
 
     return {
       command: 'track',
@@ -734,7 +732,7 @@ class ReferralDetectionCLI {
       },
       results
     };
-  }
+
 
   async campaignCommand(args, options) {
     const action = args[0] || 'list';
@@ -772,7 +770,7 @@ class ReferralDetectionCLI {
         
       if (campaigns.length === 0) {
         console.log('No campaigns found.');
-      } else {
+ else {
         campaigns.forEach(campaign => {
           console.log(`\n${colorize(campaign.name, 'cyan')} (${campaign.id})`);
           console.log(`  Type: ${campaign.campaignType}`);
@@ -782,7 +780,7 @@ class ReferralDetectionCLI {
           console.log(`  Conversions: ${campaign.successfulConversions}`);
           console.log(`  Rewards Paid: ${campaign.totalRewardPaid} ${campaign.rewardCurrency}`);
         });
-      }
+
         
       return {
         command: 'campaign',
@@ -792,8 +790,8 @@ class ReferralDetectionCLI {
         
     default:
       throw new Error(`Unknown campaign action: ${action}`);
-    }
-  }
+
+
 
   async fraudCommand(args, options) {
     log('info', 'Analyzing fraud detection and risk assessment');
@@ -816,7 +814,7 @@ class ReferralDetectionCLI {
         Object.keys(r.fraudIndicators).forEach(indicator => {
           fraudIndicators[indicator] = (fraudIndicators[indicator] || 0) + 1;
         });
-      }
+
     });
     
     console.log('\n' + colorize('🛡️ Fraud Detection Analysis', 'bright'));
@@ -839,14 +837,14 @@ class ReferralDetectionCLI {
         .forEach(([indicator, count]) => {
           console.log(`  ${indicator}: ${colorize(count.toString(), 'red')}`);
         });
-    }
+
     
     if (highRiskReferrals.length > 0) {
       console.log('\n' + colorize('Recent High-Risk Referrals:', 'red'));
       highRiskReferrals.slice(0, 10).forEach(r => {
         console.log(`  ${r.id} - ${r.fraudRiskLevel} (${r.fraudRiskScore}) - ${r.ipAddress}`);
       });
-    }
+
 
     return {
       command: 'fraud',
@@ -863,9 +861,9 @@ class ReferralDetectionCLI {
           ipAddress: r.ipAddress,
           indicators: r.fraudIndicators
         }))
-      }
+
     };
-  }
+
 
   async rewardsCommand(args, options) {
     const action = args[0] || 'calculate';
@@ -893,8 +891,8 @@ class ReferralDetectionCLI {
           });
             
           log('success', `Reward calculated: ${reward.finalAmount} ${reward.currency} for referral ${referral.id}`);
-        }
-      }
+
+
         
       return {
         command: 'rewards',
@@ -917,7 +915,7 @@ class ReferralDetectionCLI {
         
       if (rewards.length === 0) {
         console.log('No rewards found.');
-      } else {
+ else {
         rewards.forEach(reward => {
           const statusColor = reward.status === 'paid' ? 'green' : reward.status === 'pending' ? 'yellow' : 'red';
           console.log(`${reward.id}: ${colorize(reward.finalAmount.toString(), 'green')} ${reward.currency} - ${colorize(reward.status, statusColor)}`);
@@ -925,7 +923,7 @@ class ReferralDetectionCLI {
           console.log(`  Referrer: ${reward.referrerId}`);
           console.log(`  Earned: ${reward.earnedAt.toISOString()}`);
         });
-      }
+
         
       return {
         command: 'rewards',
@@ -935,8 +933,8 @@ class ReferralDetectionCLI {
         
     default:
       throw new Error(`Unknown rewards action: ${action}`);
-    }
-  }
+
+
 
   async analyticsCommand(args, options) {
     const days = parseInt(options.days) || 30;
@@ -972,7 +970,7 @@ class ReferralDetectionCLI {
         .forEach(([source, count]) => {
           console.log(`  ${source}: ${colorize(count.toString(), 'cyan')}`);
         });
-    }
+
     
     if (Object.keys(analytics.countryBreakdown).length > 0) {
       console.log('\nTop Countries:');
@@ -982,13 +980,13 @@ class ReferralDetectionCLI {
         .forEach(([country, count]) => {
           console.log(`  ${country}: ${colorize(count.toString(), 'cyan')}`);
         });
-    }
+
 
     return {
       command: 'analytics',
       analytics
     };
-  }
+
 
   async healthCommand(args, options) {
     log('info', 'Checking Epic 16 referral detection system health');
@@ -999,7 +997,7 @@ class ReferralDetectionCLI {
       'healthy': 'green',
       'degraded': 'yellow',
       'unhealthy': 'red'
-    }[health.status] || 'white';
+[health.status] || 'white';
     
     console.log('\n' + colorize('🏥 System Health Check', 'bright'));
     console.log('=======================');
@@ -1010,7 +1008,7 @@ class ReferralDetectionCLI {
       const serviceStatusColor = status.status === 'healthy' ? 'green' : 'red';
       const responseTime = status.responseTime ? ` (${status.responseTime}ms)` : '';
       console.log(`  ${service}: ${colorize(status.status, serviceStatusColor)}${responseTime}`);
-    }
+
     
     console.log('\nSystem Metrics:');
     console.log(`  Total Referrals: ${colorize(health.metrics.totalReferrals.toString(), 'green')}`);
@@ -1023,12 +1021,12 @@ class ReferralDetectionCLI {
     // Exit with appropriate code for monitoring
     if (health.status === 'healthy') {
       process.exit(0);
-    } else if (health.status === 'degraded') {
+ else if (health.status === 'degraded') {
       process.exit(1);
-    } else {
+ else {
       process.exit(2);
-    }
-  }
+
+
 
   async writeOutput(data, outputFile, format) {
     let content;
@@ -1045,11 +1043,11 @@ class ReferralDetectionCLI {
       break;
     default:
       content = JSON.stringify(data, null, 2);
-    }
+
     
     fs.writeFileSync(outputFile, content, 'utf8');
     log('success', `Output written to: ${outputFile}`);
-  }
+
 
   convertToCSV(data) {
     // Simple CSV conversion for referral data
@@ -1059,9 +1057,9 @@ class ReferralDetectionCLI {
         headers.map(header => JSON.stringify(row[header] || '')).join(',')
       );
       return [headers.join(','), ...rows].join('\n');
-    }
+
     return JSON.stringify(data);
-  }
+
 
   convertToHTML(data) {
     return `
@@ -1093,8 +1091,8 @@ class ReferralDetectionCLI {
     <pre>${JSON.stringify(data, null, 2)}</pre>
 </body>
 </html>`;
-  }
-}
+
+
 
 // =============================================================================
 // Argument Parsing and Main Entry Point
@@ -1112,12 +1110,12 @@ function parseArguments() {
       const [key, value] = arg.substring(2).split('=');
       if (value !== undefined) {
         options[key] = value;
-      } else if (i + 1 < args.length && !args[i + 1].startsWith('--')) {
+ else if (i + 1 < args.length && !args[i + 1].startsWith('--')) {
         options[key] = args[++i];
-      } else {
+ else {
         options[key] = true;
-      }
-    } else if (arg.startsWith('-')) {
+
+ else if (arg.startsWith('-')) {
       const flags = arg.substring(1);
       for (const flag of flags) {
         const flagMap = {
@@ -1125,14 +1123,14 @@ function parseArguments() {
           'h': 'help'
         };
         options[flagMap[flag] || flag] = true;
-      }
-    } else {
+
+ else {
       positionalArgs.push(arg);
-    }
-  }
+
+
   
   return { command, args: positionalArgs, options };
-}
+
 
 function showHelp() {
   console.log(`
@@ -1219,7 +1217,7 @@ ${colorize('EXIT CODES:', 'cyan')}
   2    Critical issues (health check: unhealthy)  
   3    Error during execution
 `);
-}
+
 
 async function main() {
   const { command, args, options } = parseArguments();
@@ -1228,20 +1226,20 @@ async function main() {
   if (options.help || !command) {
     showHelp();
     return;
-  }
+
   
   if (options.verbose) {
     config.output.verbose = true;
-  }
+
   
   if (options.format) {
     config.output.format = options.format;
-  }
+
 
   // Initialize and execute CLI
   const cli = new ReferralDetectionCLI();
   await cli.executeCommand(command, args, options);
-}
+
 
 // Run the CLI
 if (require.main === module) {
@@ -1249,10 +1247,10 @@ if (require.main === module) {
     log('error', `Unexpected error: ${error.message}`);
     if (config.output.verbose) {
       console.error(error.stack);
-    }
+
     process.exit(3);
   });
-}
+
 
 module.exports = {
   ReferralDetectionCLI,

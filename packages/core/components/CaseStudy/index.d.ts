@@ -10,8 +10,7 @@ export { CaseStudyGallery } from './CaseStudyGallery';
 export type { CaseStudyGalleryProps } from './CaseStudyGallery';
 export { CaseStudyModal } from './CaseStudyModal';
 export type { CaseStudyModalProps } from './CaseStudyModal';
-export type {
-  CaseStudy,
+export type { CaseStudy,
   CaseStudyType,
   CaseStudyStatus,
   IndustryCategory,
@@ -28,12 +27,11 @@ export type {
   TemplateImplementation,
   CaseStudyMedia,
   MediaGallery,
-  MediaType,
+  MediaType }
 } from '../../models/CaseStudyDataModel';
 export type CaseStudyVariant = 'compact' | 'standard' | 'featured';
 export type CaseStudyLayout = 'grid' | 'list';
-export declare const CASE_STUDY_DEFAULTS: {
-  readonly variant: CaseStudyVariant;
+export declare const CASE_STUDY_DEFAULTS: { readonly variant: CaseStudyVariant;
   readonly layout: CaseStudyLayout;
   readonly pageSize: 12;
   readonly showFilters: true;
@@ -41,56 +39,29 @@ export declare const CASE_STUDY_DEFAULTS: {
   readonly showSort: true;
   readonly showMetrics: true;
   readonly showTemplates: true;
-  readonly showAuthor: true;
-};
-export declare const CASE_STUDY_FILTER_PRESETS: {
-  readonly featured: {
+  readonly showAuthor: true };
+export declare const CASE_STUDY_FILTER_PRESETS: { readonly featured: {
     readonly featuredOnly: true;
-    readonly status: readonly ['featured'];
-  };
-  readonly beginner: {
-    readonly difficulty: readonly ['beginner'];
-  };
-  readonly advanced: {
-    readonly difficulty: readonly ['advanced', 'expert'];
-  };
-  readonly templateSuccess: {
-    readonly type: readonly ['template-success'];
-  };
-  readonly roiAnalysis: {
-    readonly type: readonly ['roi-analysis'];
-  };
-  readonly industryShowcase: {
-    readonly type: readonly ['industry-showcase'];
-  };
-  readonly recentlyPublished: {
-    readonly publishedAfter: string;
-  };
+    readonly status: readonly ['featured'] };
+  readonly beginner: { readonly difficulty: readonly ['beginner'] };
+  readonly advanced: { readonly difficulty: readonly ['advanced', 'expert'] };
+  readonly templateSuccess: { readonly type: readonly ['template-success'] };
+  readonly roiAnalysis: { readonly type: readonly ['roi-analysis'] };
+  readonly industryShowcase: { readonly type: readonly ['industry-showcase'] };
+  readonly recentlyPublished: { readonly publishedAfter: string };
 };
-export declare const CASE_STUDY_SORT_PRESETS: {
-  readonly newest: {
+export declare const CASE_STUDY_SORT_PRESETS: { readonly newest: {
     readonly field: 'publishedAt';
-    readonly direction: 'desc';
-  };
-  readonly oldest: {
-    readonly field: 'publishedAt';
-    readonly direction: 'asc';
-  };
-  readonly mostViewed: {
-    readonly field: 'views';
-    readonly direction: 'desc';
-  };
-  readonly mostLiked: {
-    readonly field: 'likes';
-    readonly direction: 'desc';
-  };
-  readonly mostHelpful: {
-    readonly field: 'helpfulVotes';
-    readonly direction: 'desc';
-  };
-  readonly alphabetical: {
-    readonly field: 'title';
-    readonly direction: 'asc';
-  };
+    readonly direction: 'desc' };
+  readonly oldest: { readonly field: 'publishedAt';
+    readonly direction: 'asc' };
+  readonly mostViewed: { readonly field: 'views';
+    readonly direction: 'desc' };
+  readonly mostLiked: { readonly field: 'likes';
+    readonly direction: 'desc' };
+  readonly mostHelpful: { readonly field: 'helpfulVotes';
+    readonly direction: 'desc' };
+  readonly alphabetical: { readonly field: 'title';
+    readonly direction: 'asc' };
 };
 //# sourceMappingURL=index.d.ts.map

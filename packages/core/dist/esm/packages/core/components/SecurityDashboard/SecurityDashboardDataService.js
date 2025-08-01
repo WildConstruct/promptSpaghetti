@@ -55,8 +55,8 @@ export class SecurityDashboardDataService {
                 * Get active security alerts
                 */
                 async;
-                getActiveAlerts(filters ?  : {});
-                severity ?  : string;
+                getActiveAlerts(filters ?  : {}),
+                    severity ?  : string;
                 category ?  : string;
                 status ?  : string;
                 limit ?  : number;
@@ -383,7 +383,7 @@ for (let attempt = 1; attempt <= this.config.retryAttempts; attempt++) {
 }
 try { }
 catch (error) {
-    console.error(`API request attempt ${attempt},)}
+    console.error(`API request attempt ${attempt})},
   failed:`, error);
 }
 if (attempt === this.config.retryAttempts) {
@@ -462,7 +462,7 @@ if (attempt === this.config.retryAttempts) {
                                         assignee: 'analyst-1',
                                         affectedAssets: ['Server-Web-01'],
                                         indicators: ['192.168.1.100', 'failed.login'],
-                                        responseActions: [,
+                                        responseActions: [
                                             {
                                                 id: 'action-001',
                                                 type: 'investigate',
@@ -471,7 +471,8 @@ if (attempt === this.config.retryAttempts) {
                                                 status: 'in_progress',
                                                 performer: 'analyst-1',
                                                 timestamp: new Date(Date.now() - 30 * 60 * 1000)
-                                            }],
+                                            }
+                                        ]
                                     }
                                 ];
                                 getFallbackComplianceStatus();
@@ -489,7 +490,7 @@ if (attempt === this.config.retryAttempts) {
                                             framework: 'SOX',
                                             status: 'partial',
                                             score: 78,
-                                            violations: [,
+                                            violations: [
                                                 {
                                                     id: 'sox-001',
                                                     type: 'Access Control',
@@ -515,7 +516,8 @@ if (attempt === this.config.retryAttempts) {
                                                             export default SecurityDashboardDataService;
                                                         }
                                                     }
-                                                }]
+                                                }
+                                            ]
                                         }
                                     ];
                                 }

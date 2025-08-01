@@ -3,12 +3,11 @@
  * Advanced interface validation and runtime type checking for extensions
  */
 import { z } from 'zod';
-import { 
-  BaseExtension, 
+import { BaseExtension, 
   ExtensionValidationResult,
-  ExtensionError,
+  ExtensionError }
   ExtensionErrorType
-} from './interfaces/ExtensionInterfaces';
+ from './interfaces/ExtensionInterfaces';
 import { extensionTypeChecker } from './TypeDefinitions';
 
 // Enhanced Interface Validator
@@ -17,8 +16,7 @@ export class ExtensionInterfaceValidator {
   private validationCache: Map<string, ExtensionValidationResult> = new Map();
   private schemaCache: Map<string, z.ZodSchema<any>> = new Map();
   private constructor() {}
-  public static getInstance(): ExtensionInterfaceValidator {
-    if (!ExtensionInterfaceValidator.instance) {
+  public static getInstance(): ExtensionInterfaceValidator { if (!ExtensionInterfaceValidator.instance) {
       ExtensionInterfaceValidator.instance = new ExtensionInterfaceValidator();
     return ExtensionInterfaceValidator.instance;
   /**
@@ -38,7 +36,7 @@ export class ExtensionInterfaceValidator {
    * Validate extension interface compatibility
    */
   public validateInterfaceCompatibility(extension: any)
-    requiredInterface: string,
+  requiredInterface: string
     version?: string
   ): ExtensionValidationResult {
     const errors: string = [];
@@ -49,28 +47,27 @@ export class ExtensionInterfaceValidator {
       errors.push(...typeValidation.errors);
     // Interface validation
     const interfaceValidation = this.validateInterface(;);
-      extension,
+      extension }
       requiredInterface
     );
     if (!interfaceValidation.valid) {
       errors.push(...interfaceValidation.missingMethods.map(m => `Missing method: ${m}`));}
       errors.push(...interfaceValidation.invalidMethods.map(m => `Invalid method: ${m}`));}
     // Version compatibility
-    if (version && extension.version) {
-  const versionCompatibility = this.validateVersionCompatibility(extension.version, version);
+    if (version && extension.version) { const versionCompatibility = this.validateVersionCompatibility(extension.version, version);
   if (!versionCompatibility.valid) {
   errors.push(...versionCompatibility.errors);
   warnings.push(...versionCompatibility.warnings);
   return {
-  valid: errors.length === 0,
-  errors,
+  valid: errors.length === 0
+  errors }
   warnings
 };
   /**
    * Validate method signatures
    */
   public validateMethodSignatures(extension: any)
-    expectedSignatures: Record<string, MethodSignature>
+  expectedSignatures: Record<string, MethodSignature>
   ): ExtensionValidationResult {
     const errors: string = [];
     const warnings: string = [];
@@ -88,9 +85,8 @@ export class ExtensionInterfaceValidator {
         // For now, we'll just validate that it's a function
         if (signature.async && !this.isAsyncFunction(method)) {
           warnings.push(`Method ${methodName} should be async`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0
+  errors }
   warnings
 };
   /**
@@ -120,18 +116,17 @@ export class ExtensionInterfaceValidator {
               warnings.push(`Configuration field '${field}' should be boolean`);}
             if ((field === 'timeout' || field === 'retries') && typeof value !== 'number') {
               warnings.push(`Configuration field '${field}' should be number`);}
-    } catch (error) {
+ catch (error) {
       errors.push(`Configuration validation failed: ${error instanceof Error ? error.message : String(error)}`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0
+  errors }
   warnings
 };
   /**
    * Validate extension dependencies
    */
   public validateExtensionDependencies(extension: any)
-    availableExtensions: Map<string, BaseExtension>
+  availableExtensions: Map<string, BaseExtension>
   ): ExtensionValidationResult {
     const errors: string = [];
     const warnings: string = [];
@@ -149,16 +144,15 @@ export class ExtensionInterfaceValidator {
         const compatibility = this.validateVersionCompatibility(dependencyVersion, extensionVersion);
         if (!compatibility.valid) {
           warnings.push(`Dependency ${dependency} version compatibility issues: ${compatibility.errors.join(', ')}`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0
+  errors }
   warnings
 };
   /**
    * Validate extension permissions
    */
   public validateExtensionPermissions(((
-    extension: any,
+    extension: any
     grantedPermissions: string
   ): ExtensionValidationResult {
     const errors: string = [];
@@ -172,36 +166,33 @@ export class ExtensionInterfaceValidator {
       const dangerousPermissions = ['file-system', 'network', 'process', 'eval'];
       if (dangerousPermissions.includes(permission)) {
         warnings.push(`Dangerous permission requested: ${permission}`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0
+  errors }
   warnings
 };
   /**
    * Generate validation report
    */
-  public generateValidationReport(extension: any): ExtensionValidationReport {
-  const report: ExtensionValidationReport = {,
-  extensionId: extension.id || 'unknown',
-  extensionName: extension.name || 'Unknown',
-  version: extension.version || '0.0.0',
-  timestamp: new Date(),
-  overallValid: true,
-  validations: [],
+  public generateValidationReport(extension: any): ExtensionValidationReport { const report: ExtensionValidationReport = {
+  extensionId: extension.id || 'unknown'
+  extensionName: extension.name || 'Unknown'
+  version: extension.version || '0.0.0'
+  timestamp: new Date()
+  overallValid: true
+  validations: [] }
 };
     // Run all validations
-    const validations = [;
-      { name: 'Type Validation', result: extensionTypeChecker.validateExtensionType(extension) },
-      { name: 'Interface Validation', result: this.validateInterfaceCompatibility(extension, 'BaseExtension') },
-      { name: 'Configuration Validation', result: this.validateExtensionConfiguration(extension) },
+    const validations = [
+      { name: 'Type Validation', result: extensionTypeChecker.validateExtensionType(extension) }
+      { name: 'Interface Validation', result: this.validateInterfaceCompatibility(extension, 'BaseExtension') }
+      { name: 'Configuration Validation', result: this.validateExtensionConfiguration(extension) }
       { name: 'Method Signatures', result: this.validateMethodSignatures(extension, this.getBaseMethodSignatures()) }
     ];
-    for (const validation of validations) {
-  report.validations.push({)
-  name: validation.name,
-  valid: validation.result.valid,
-  errors: validation.result.errors || [],
-  warnings: validation.result.warnings || [],
+    for (const validation of validations) { report.validations.push({)
+  name: validation.name
+  valid: validation.result.valid
+  errors: validation.result.errors || []
+  warnings: validation.result.warnings || [] }
 });
       if (!validation.result.valid) {
         report.overallValid = false;
@@ -229,8 +220,7 @@ export class ExtensionInterfaceValidator {
       if (typeof extension[method] !== 'function') {
         errors.push(`Required method ${method} is missing or not a function`);}
     // Configuration method validation
-    if (typeof extension.getConfiguration !== 'function') {
-  errors.push('getConfiguration method is required');
+    if (typeof extension.getConfiguration !== 'function') { errors.push('getConfiguration method is required');
   if (typeof extension.setConfiguration !== 'function') {
   errors.push('setConfiguration method is required');
   // Health check validation
@@ -248,8 +238,8 @@ export class ExtensionInterfaceValidator {
   if (extension.permissions && !Array.isArray(extension.permissions)) {
   errors.push('Permissions must be an array');
   return {
-  valid: errors.length === 0,
-  errors,
+  valid: errors.length === 0
+  errors }
   warnings
 };
   private validateVersionCompatibility(version1: string, version2: string): ExtensionValidationResult {
@@ -264,9 +254,8 @@ export class ExtensionInterfaceValidator {
     // Minor version compatibility
     if (major1 === major2 && minor1 > minor2) {
       warnings.push(`Minor version compatibility issue: ${version1} vs ${version2}`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0
+  errors }
   warnings
 };
   private getCacheKey(extension: any): string {
@@ -278,13 +267,13 @@ export class ExtensionInterfaceValidator {
     return semverRegex.test(version);
   private getBaseMethodSignatures(): Record<string, MethodSignature> {
     return {
-      initialize: { parameterCount: 0, returnType: 'Promise<void>', async: true },
-      activate: { parameterCount: 0, returnType: 'Promise<void>', async: true },
-      deactivate: { parameterCount: 0, returnType: 'Promise<void>', async: true },
-      dispose: { parameterCount: 0, returnType: 'Promise<void>', async: true },
-      getConfiguration: { parameterCount: 0, returnType: 'any', async: false },
-      setConfiguration: { parameterCount: 1, returnType: 'void', async: false },
-      isHealthy: { parameterCount: 0, returnType: 'boolean', async: false },
+      initialize: { parameterCount: 0, returnType: 'Promise<void>', async: true }
+      activate: { parameterCount: 0, returnType: 'Promise<void>', async: true }
+      deactivate: { parameterCount: 0, returnType: 'Promise<void>', async: true }
+      dispose: { parameterCount: 0, returnType: 'Promise<void>', async: true }
+      getConfiguration: { parameterCount: 0, returnType: 'any', async: false }
+      setConfiguration: { parameterCount: 1, returnType: 'void', async: false }
+      isHealthy: { parameterCount: 0, returnType: 'boolean', async: false }
       getHealthStatus: { parameterCount: 0, returnType: 'any', async: false }
     };
 
@@ -302,28 +291,26 @@ export class ExtensionRuntimeTypeChecker {
    */
   public implementsInterface(obj: any, interfaceName: string): boolean {
     const cacheKey = `${interfaceName}-${obj.constructor.name}`;}
-    if (this.typeCache.has(cacheKey)) {
-  return this.typeCache.get(cacheKey);
+    if (this.typeCache.has(cacheKey)) { return this.typeCache.get(cacheKey);
   const result = this.performInterfaceCheck(obj, interfaceName);
   this.typeCache.set(cacheKey, result);
   return result;
   /**
   * Get runtime type information
   */
-  public getTypeInfo(obj: any): RuntimeTypeInfo {,
+  public getTypeInfo(obj: any): RuntimeTypeInfo {
   return {
-  type: typeof obj,
-  constructor: obj.constructor?.name || 'unknown',
-  prototype: Object.getPrototypeOf(obj)?.constructor?.name || 'unknown',
-  methods: this.getObjectMethods(obj),
-  properties: this.getObjectProperties(obj),
-  isExtension: this.isExtension(obj),
+  type: typeof obj
+  constructor: obj.constructor?.name || 'unknown'
+  prototype: Object.getPrototypeOf(obj)?.constructor?.name || 'unknown'
+  methods: this.getObjectMethods(obj)
+  properties: this.getObjectProperties(obj)
+  isExtension: this.isExtension(obj) }
 };
   /**
    * Validate method at runtime
    */
-  public validateMethod(obj: any, methodName: string, expectedSignature: MethodSignature): boolean {
-  const method = obj[methodName];
+  public validateMethod(obj: any, methodName: string, expectedSignature: MethodSignature): boolean { const method = obj[methodName];
   if (typeof method !== 'function') {
   return false;
   // Check parameter count
@@ -336,85 +323,76 @@ export class ExtensionRuntimeTypeChecker {
   /**
   * Create runtime type guard
   */
-  public createTypeGuard<T>(interfaceName: string): (obj: any) => obj is T {,
-  return (obj: any): obj is T => {,
+  public createTypeGuard<T>(interfaceName: string): (obj: any) => obj is T {
+  return (obj: any): obj is T => { }
   return this.implementsInterface(obj, interfaceName);
 };
-  private performInterfaceCheck(obj: any, interfaceName: string): boolean {
-  const requiredMethods = this.getRequiredMethods(interfaceName);
+  private performInterfaceCheck(obj: any, interfaceName: string): boolean { const requiredMethods = this.getRequiredMethods(interfaceName);
   for (const method of requiredMethods) {
   if (typeof obj[method] !== 'function') {
   return false;
   return true;
-  private getRequiredMethods(interfaceName: string): string {,
-  const interfaces: Record<string, string> = {,
-  'BaseExtension': ['initialize', 'activate', 'deactivate', 'dispose', 'getConfiguration', 'setConfiguration', 'isHealthy', 'getHealthStatus'],
-  'NodeExtension': ['getNodeDefinitions', 'createNodeInstance', 'validateNodeConfig', 'getNodeSchema', 'supportsAdvancedNodes'],
-  'UIExtension': ['getComponentDefinitions', 'createComponentInstance', 'getThemeContributions', 'getCommandContributions', 'getMenuContributions', 'getKeybindingContributions'],
-  'TransformExtension': ['getTransformDefinitions', 'createTransformInstance', 'validateTransformConfig', 'getTransformSchema', 'supportsPipeline'],
-  'StorageExtension': ['getStorageProviders', 'createStorageProvider', 'validateStorageConfig', 'getStorageSchema', 'supportsMigration'],
+  private getRequiredMethods(interfaceName: string): string {
+  const interfaces: Record<string, string> = {
+  'BaseExtension': ['initialize', 'activate', 'deactivate', 'dispose', 'getConfiguration', 'setConfiguration', 'isHealthy', 'getHealthStatus']
+  'NodeExtension': ['getNodeDefinitions', 'createNodeInstance', 'validateNodeConfig', 'getNodeSchema', 'supportsAdvancedNodes']
+  'UIExtension': ['getComponentDefinitions', 'createComponentInstance', 'getThemeContributions', 'getCommandContributions', 'getMenuContributions', 'getKeybindingContributions']
+  'TransformExtension': ['getTransformDefinitions', 'createTransformInstance', 'validateTransformConfig', 'getTransformSchema', 'supportsPipeline']
+  'StorageExtension': ['getStorageProviders', 'createStorageProvider', 'validateStorageConfig', 'getStorageSchema', 'supportsMigration'] }
 };
     return interfaces[interfaceName] || [];
-  private getObjectMethods(obj: any): string {
-  const methods: string = [];
+  private getObjectMethods(obj: any): string { const methods: string = [];
   let current = obj;
   while (current && current !== Object.prototype) {
   Object.getOwnPropertyNames(current).forEach(name => {)
   if (typeof current[name] === 'function' && !methods.includes(name)) {
-  methods.push(name);
-});
+  methods.push(name) });
       current = Object.getPrototypeOf(current);
     return methods;
-  private getObjectProperties(obj: any): string {
-  const properties: string = [];
+  private getObjectProperties(obj: any): string { const properties: string = [];
   let current = obj;
   while (current && current !== Object.prototype) {
   Object.getOwnPropertyNames(current).forEach(name => {)
   if (typeof current[name] !== 'function' && !properties.includes(name)) {
-  properties.push(name);
-});
+  properties.push(name) });
       current = Object.getPrototypeOf(current);
     return properties;
-  private isExtension(obj: any): boolean {
-    return obj && 
-           typeof obj.id === 'string' && 
-           typeof obj.name === 'string' && 
-           typeof obj.version === 'string' && 
-           typeof obj.initialize === 'function' && 
-           typeof obj.activate === 'function';
-  private isAsyncFunction(fn: Function): boolean {
-    return fn.constructor.name === 'AsyncFunction';
+  private isExtension(obj: any): boolean { return obj &&
+  typeof obj.id === 'string' &&
+  typeof obj.name === 'string' &&
+  typeof obj.version === 'string' &&
+  typeof obj.initialize === 'function' &&
+  typeof obj.activate === 'function';
+  private isAsyncFunction(fn: Function): boolean { }
+  return fn.constructor.name === 'AsyncFunction';
+  // Interface Types
 
-// Interface Types
-}
-interface MethodSignature {
-  parameterCount?: number;
+
+interface MethodSignature { parameterCount?: number;
   parameterTypes?: string;
   returnType?: string;
-  async?: boolean;
-}
-interface ExtensionValidationReport {
-  extensionId: string;
+  async?: boolean }
+
+
+interface ExtensionValidationReport { extensionId: string;
   extensionName: string;
   version: string;
   timestamp: Date;
   overallValid: boolean;
-  validations: ValidationResult;
-}
-interface ValidationResult {
-  name: string;
+  validations: ValidationResult }
+
+
+interface ValidationResult { name: string;
   valid: boolean;
   errors: string;
-  warnings: string;
-}
-interface RuntimeTypeInfo {
-  type: string;
+  warnings: string }
+
+
+interface RuntimeTypeInfo { type: string;
   constructor: string;
   prototype: string;
   methods: string;
   properties: string;
   isExtension: boolean;
-
-// Export singletons
-export const runtimeTypeChecker = ExtensionRuntimeTypeChecker.getInstance(); 
-}
+  // Export singletons
+  export const runtimeTypeChecker = ExtensionRuntimeTypeChecker.getInstance() }

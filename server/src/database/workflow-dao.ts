@@ -26,14 +26,14 @@ import {
   CreateWorkflowScheduleSchema,
   ApproveWorkflowSchema,
   RejectWorkflowSchema
-} from './workflow-models';
+ from './workflow-models';
 
 export class WorkflowDAO {
   private db: Database;
 
   constructor(db: Database) {
     this.db = db;
-  }
+
 
   // =============================================================================
   // WORKFLOW STATE OPERATIONS
@@ -62,7 +62,7 @@ export class WorkflowDAO {
     ]);
 
     return result.rows[0];
-  }
+
 
   async getWorkflowStates(filter: WorkflowStateFilter = {}): Promise<WorkflowState[]> {
 
@@ -76,33 +76,33 @@ export class WorkflowDAO {
     if (filter.workspace_id) {
       query += ` AND workspace_id = $${paramIndex++}`;
       params.push(filter.workspace_id);
-    }
+
 
     if (filter.is_initial !== undefined) {
       query += ` AND is_initial = $${paramIndex++}`;
       params.push(filter.is_initial);
-    }
+
 
     if (filter.is_final !== undefined) {
       query += ` AND is_final = $${paramIndex++}`;
       params.push(filter.is_final);
-    }
+
 
     if (filter.is_locked !== undefined) {
       query += ` AND is_locked = $${paramIndex++}`;
       params.push(filter.is_locked);
-    }
+
 
     if (filter.name_contains) {
       query += ` AND name ILIKE $${paramIndex++}`;
       params.push(`%${filter.name_contains}%`);
-    }
+
 
     query += ' ORDER BY sort_order, name';
 
     const result = await this.db.query(query, params);
     return result.rows;
-  }
+
 
   async getWorkflowStateById(id: string): Promise<WorkflowState | null> {
 
@@ -111,7 +111,7 @@ export class WorkflowDAO {
       [id]
     );
     return result.rows[0] || null;
-  }
+
 
   async updateWorkflowState(id: string, updates: Partial<WorkflowState>): Promise<WorkflowState | null> {
 
@@ -128,7 +128,7 @@ export class WorkflowDAO {
 
     const result = await this.db.query(query, [id, ...Object.values(updates)]);
     return result.rows[0] || null;
-  }
+
 
   async deleteWorkflowState(id: string): Promise<boolean> {
 
@@ -137,7 +137,7 @@ export class WorkflowDAO {
       [id]
     );
     return result.rowCount > 0;
-  }
+
 
   // =============================================================================
   // WORKFLOW TRANSITION OPERATIONS
@@ -165,7 +165,7 @@ export class WorkflowDAO {
     ]);
 
     return result.rows[0];
-  }
+
 
   async getWorkflowTransitions(workspaceId: string, fromStateId?: string): Promise<WorkflowTransition[]> {
 
@@ -178,13 +178,13 @@ export class WorkflowDAO {
     if (fromStateId) {
       query += ' AND from_state_id = $2';
       params.push(fromStateId);
-    }
+
 
     query += ' ORDER BY name';
 
     const result = await this.db.query(query, params);
     return result.rows;
-  }
+
 
   async getWorkflowTransitionById(id: string): Promise<WorkflowTransition | null> {
 
@@ -193,7 +193,7 @@ export class WorkflowDAO {
       [id]
     );
     return result.rows[0] || null;
-  }
+
 
   async deleteWorkflowTransition(id: string): Promise<boolean> {
 
@@ -202,7 +202,7 @@ export class WorkflowDAO {
       [id]
     );
     return result.rowCount > 0;
-  }
+
 
   // =============================================================================
   // STATE TRANSITION OPERATIONS
@@ -219,7 +219,7 @@ export class WorkflowDAO {
 
       if (currentStateResult.rows.length === 0) {
         return { success: false, error: 'Resource not found' };
-      }
+
 
       const currentStateId = currentStateResult.rows[0].workflow_state_id;
 
@@ -231,7 +231,7 @@ export class WorkflowDAO {
 
       if (transitionResult.rows.length === 0) {
         return { success: false, error: 'Invalid state transition' };
-      }
+
 
       const transition = transitionResult.rows[0];
 
@@ -265,7 +265,7 @@ export class WorkflowDAO {
           approval_required: true,
           approval_id: approvalResult.rows[0].id
         };
-      }
+
 
       // Perform direct state transition
       await client.query(
@@ -292,7 +292,7 @@ export class WorkflowDAO {
         workflow_history_id: historyResult.rows[0].id
       };
     });
-  }
+
 
   // =============================================================================
   // WORKFLOW APPROVAL OPERATIONS
@@ -320,7 +320,7 @@ export class WorkflowDAO {
     ]);
 
     return result.rows[0];
-  }
+
 
   async getWorkflowApprovals(filter: WorkflowApprovalFilter = {}): Promise<WorkflowApproval[]> {
 
@@ -337,37 +337,37 @@ export class WorkflowDAO {
     if (filter.workspace_id) {
       query += ` AND wa.workspace_id = $${paramIndex++}`;
       params.push(filter.workspace_id);
-    }
+
 
     if (filter.resource_id) {
       query += ` AND wa.resource_id = $${paramIndex++}`;
       params.push(filter.resource_id);
-    }
+
 
     if (filter.requester_id) {
       query += ` AND wa.requester_id = $${paramIndex++}`;
       params.push(filter.requester_id);
-    }
+
 
     if (filter.status) {
       query += ` AND wa.status = $${paramIndex++}`;
       params.push(filter.status);
-    }
+
 
     if (filter.priority) {
       query += ` AND wa.priority = $${paramIndex++}`;
       params.push(filter.priority);
-    }
+
 
     if (filter.overdue) {
       query += ' AND wa.due_date < CURRENT_TIMESTAMP AND wa.status = \'pending\'';
-    }
+
 
     query += ' ORDER BY wa.requested_at DESC';
 
     const result = await this.db.query(query, params);
     return result.rows;
-  }
+
 
   async approveWorkflow(approvalId: string, data: Zod.infer<typeof ApproveWorkflowSchema>): Promise<StateTransitionResult> {
 
@@ -384,7 +384,7 @@ export class WorkflowDAO {
 
       if (approvalResult.rows.length === 0) {
         return { success: false, error: 'Approval not found or already processed' };
-      }
+
 
       const approval = approvalResult.rows[0];
 
@@ -420,7 +420,7 @@ export class WorkflowDAO {
         new_state_id: transition.to_state_id
       };
     });
-  }
+
 
   async rejectWorkflow(approvalId: string, data: Zod.infer<typeof RejectWorkflowSchema>): Promise<boolean> {
 
@@ -437,7 +437,7 @@ export class WorkflowDAO {
 
       if (approvalResult.rows.length === 0) {
         return false;
-      }
+
 
       const approval = approvalResult.rows[0];
 
@@ -455,7 +455,7 @@ export class WorkflowDAO {
 
       return true;
     });
-  }
+
 
   // =============================================================================
   // WORKFLOW LOCK OPERATIONS
@@ -483,7 +483,7 @@ export class WorkflowDAO {
     ]);
 
     return result.rows[0];
-  }
+
 
   async getWorkflowLocks(filter: WorkflowLockFilter = {}): Promise<WorkflowLock[]> {
 
@@ -499,32 +499,32 @@ export class WorkflowDAO {
     if (filter.workspace_id) {
       query += ` AND wl.workspace_id = $${paramIndex++}`;
       params.push(filter.workspace_id);
-    }
+
 
     if (filter.resource_id) {
       query += ` AND wl.resource_id = $${paramIndex++}`;
       params.push(filter.resource_id);
-    }
+
 
     if (filter.locked_by) {
       query += ` AND wl.locked_by = $${paramIndex++}`;
       params.push(filter.locked_by);
-    }
+
 
     if (filter.lock_type) {
       query += ` AND wl.lock_type = $${paramIndex++}`;
       params.push(filter.lock_type);
-    }
+
 
     if (filter.expired) {
       query += ' AND wl.expires_at < CURRENT_TIMESTAMP';
-    }
+
 
     query += ' ORDER BY wl.locked_at DESC';
 
     const result = await this.db.query(query, params);
     return result.rows;
-  }
+
 
   async releaseWorkflowLock(lockId: string, actorId: string): Promise<boolean> {
 
@@ -536,7 +536,7 @@ export class WorkflowDAO {
 
       if (result.rows.length === 0) {
         return false;
-      }
+
 
       const lock = result.rows[0];
 
@@ -552,7 +552,7 @@ export class WorkflowDAO {
 
       return true;
     });
-  }
+
 
   async releaseExpiredLocks(): Promise<number> {
 
@@ -561,7 +561,7 @@ export class WorkflowDAO {
       WHERE expires_at < CURRENT_TIMESTAMP AND auto_release = true
     `);
     return result.rowCount;
-  }
+
 
   // =============================================================================
   // WORKFLOW HISTORY OPERATIONS
@@ -587,7 +587,7 @@ export class WorkflowDAO {
       data.comment,
       JSON.stringify(data.metadata || {})
     ]);
-  }
+
 
   async getWorkflowHistory(filter: WorkflowHistoryFilter = {}): Promise<WorkflowHistoryEntry[]> {
 
@@ -606,38 +606,38 @@ export class WorkflowDAO {
     if (filter.workspace_id) {
       query += ` AND wh.workspace_id = $${paramIndex++}`;
       params.push(filter.workspace_id);
-    }
+
 
     if (filter.resource_id) {
       query += ` AND wh.resource_id = $${paramIndex++}`;
       params.push(filter.resource_id);
-    }
+
 
     if (filter.actor_id) {
       query += ` AND wh.actor_id = $${paramIndex++}`;
       params.push(filter.actor_id);
-    }
+
 
     if (filter.action_type) {
       query += ` AND wh.action_type = $${paramIndex++}`;
       params.push(filter.action_type);
-    }
+
 
     if (filter.date_from) {
       query += ` AND wh.action_timestamp >= $${paramIndex++}`;
       params.push(filter.date_from);
-    }
+
 
     if (filter.date_to) {
       query += ` AND wh.action_timestamp <= $${paramIndex++}`;
       params.push(filter.date_to);
-    }
+
 
     query += ' ORDER BY wh.action_timestamp DESC';
 
     const result = await this.db.query(query, params);
     return result.rows;
-  }
+
 
   // =============================================================================
   // WORKFLOW STATISTICS
@@ -709,7 +709,7 @@ export class WorkflowDAO {
         acc[row.status] = parseInt(row.count);
         if (row.status === 'approved') {
           acc.avg_approval_time_hours = parseFloat(row.avg_hours) || 0;
-        }
+
         return acc;
       }, { pending: 0, approved: 0, rejected: 0, cancelled: 0, avg_approval_time_hours: 0 }),
       
@@ -720,7 +720,7 @@ export class WorkflowDAO {
           return acc;
         }, {}),
         avg_lock_duration_hours: lockStatsResult.rows.reduce((sum, row) => sum + (parseFloat(row.avg_hours) || 0), 0) / lockStatsResult.rows.length || 0
-  }
+
       schedule_stats: {
         total_active: parseInt(schedulesResult.rows[0].count),
         by_type: scheduleStatsResult.rows.reduce((acc, row) => {
@@ -729,7 +729,6 @@ export class WorkflowDAO {
         }, {}),
         successful_executions: scheduleStatsResult.rows.reduce((sum, row) => sum + parseInt(row.successful), 0),
         failed_executions: scheduleStatsResult.rows.reduce((sum, row) => sum + parseInt(row.failed), 0)
-      }
+
     };
-  }
-}
+

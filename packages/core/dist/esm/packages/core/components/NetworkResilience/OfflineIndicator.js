@@ -37,7 +37,8 @@ import { ConnectionState } from '../../network-resilience/ConnectionStateManager
         ;
         const getIndicatorType = () => {
             if (!status.isOnline) {
-                return status.connectionState === ConnectionState.FAILED ? 'error' : 'warning';
+                return status.connectionState === ConnectionState.FAILED ? 'error' : 'warning',
+                ;
             }
             else if (status.queueSize > 0) {
                 return 'info';

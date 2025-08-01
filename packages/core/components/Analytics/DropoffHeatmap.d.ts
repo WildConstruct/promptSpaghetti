@@ -19,12 +19,12 @@ import { ConversionFunnelDefinition, UserSegment, ConversionCohort } from '../..
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 }
-export interface DropoffHeatmapProps {
-    funnelDefinition: ConversionFunnelDefinition;
+}
+export interface DropoffHeatmapProps { funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     segments?: UserSegment[];
@@ -38,18 +38,17 @@ export interface DropoffHeatmapProps {
 export type HeatmapMode = 'absolute' | 'relative' | 'severity' | 'opportunity' | 'temporal';
 
 }
-export interface DropoffAnalysisData {
-    stepAnalysis: StepDropoffAnalysis[];
+}
+export interface DropoffAnalysisData { stepAnalysis: StepDropoffAnalysis[];
     transitionAnalysis: TransitionDropoffAnalysis[];
     temporalPatterns: TemporalDropoffPattern[];
     segmentAnalysis: SegmentDropoffAnalysis[];
     rootCauseAnalysis: RootCauseAnalysis[];
     recoveryOpportunities: RecoveryOpportunity[];
-    overallInsights: DropoffInsight[];
-
+    overallInsights: DropoffInsight[] }
 }
-export interface StepDropoffAnalysis {
-    stepId: string;
+}
+export interface StepDropoffAnalysis { stepId: string;
     stepName: string;
     stepOrder: number;
     totalEntries: number;
@@ -60,11 +59,10 @@ export interface StepDropoffAnalysis {
     userBehaviorAnalysis: UserBehaviorAnalysis;
     technicalAnalysis: TechnicalAnalysis;
     contentAnalysis: ContentAnalysis;
-    recoveryPotential: number;
-
+    recoveryPotential: number }
 }
-export interface TransitionDropoffAnalysis {
-    fromStepId: string;
+}
+export interface TransitionDropoffAnalysis { fromStepId: string;
     toStepId: string;
     fromStepName: string;
     toStepName: string;
@@ -73,8 +71,8 @@ export interface TransitionDropoffAnalysis {
     dropOffRate: number;
     averageTransitionTime: number;
     commonDropOffReasons: DropoffReason[];
-    recoveryActions: string[];
-
+    recoveryActions: string[] }
+}
 }
 export interface TemporalDropoffPattern {
     period: 'hour' | 'day' | 'week' | 'month';
@@ -85,168 +83,153 @@ export interface TemporalDropoffPattern {
         dropOffRate: number;
         trend: 'increasing' | 'decreasing' | 'stable'
 }
+}
   }>;
     insights: string[];
 
 }
-export interface SegmentDropoffAnalysis {
-    segmentId: string;
+}
+export interface SegmentDropoffAnalysis { segmentId: string;
     segmentName: string;
     overallDropOffRate: number;
     stepDropOffRates: Array<{
         stepId: string;
         stepName: string;
         dropOffRate: number;
-        relativePerformance: number;
+        relativePerformance: number }
 }
     }>;
     uniqueDropOffReasons: DropoffReason[];
     segmentInsights: string[];
 
 }
-export interface RootCauseAnalysis {
-    stepId: string;
+}
+export interface RootCauseAnalysis { stepId: string;
     stepName: string;
     primaryCauses: DropoffCause[];
     contributingFactors: ContributingFactor[];
     confidence: number;
     evidenceQuality: 'high' | 'medium' | 'low';
-    recommendations: CauseRecommendation[];
-
+    recommendations: CauseRecommendation[] }
 }
-export interface DropoffCause {
-    category: 'technical' | 'user_experience' | 'content' | 'external' | 'design';
+}
+export interface DropoffCause { category: 'technical' | 'user_experience' | 'content' | 'external' | 'design';
     subcategory: string;
     description: string;
     impact: number;
     confidence: number;
     evidence: Evidence[];
     mitigationComplexity: 'low' | 'medium' | 'high';
-    expectedImprovement: number;
-
+    expectedImprovement: number }
 }
-export interface ContributingFactor {
-    factor: string;
+}
+export interface ContributingFactor { factor: string;
     weight: number;
     description: string;
     measurable: boolean;
     currentValue?: number;
-    targetValue?: number;
-
+    targetValue?: number }
 }
-export interface Evidence {
-    type: 'user_feedback' | 'analytics' | 'technical_logs' | 'usability_testing';
+}
+export interface Evidence { type: 'user_feedback' | 'analytics' | 'technical_logs' | 'usability_testing';
     description: string;
     strength: 'strong' | 'moderate' | 'weak';
     source: string;
-    timestamp: number;
-
+    timestamp: number }
 }
-export interface CauseRecommendation {
-    title: string;
+}
+export interface CauseRecommendation { title: string;
     description: string;
     priority: 'high' | 'medium' | 'low';
     effort: 'low' | 'medium' | 'high';
     expectedImpact: number;
     implementationSteps: string[];
-    successMetrics: string[];
-
+    successMetrics: string[] }
 }
-export interface RecoveryOpportunity {
-    stepId: string;
+}
+export interface RecoveryOpportunity { stepId: string;
     stepName: string;
     recoveryPotential: number;
     recoveryValue: number;
     quickWins: QuickWin[];
     strategicInitiatives: StrategicInitiative[];
     timeToImpact: number;
-    confidenceLevel: number;
-
+    confidenceLevel: number }
 }
-export interface QuickWin {
-    title: string;
+}
+export interface QuickWin { title: string;
     description: string;
     effort: 'low' | 'medium';
     expectedImpact: number;
     implementationTime: number;
-    requirements: string[];
-
+    requirements: string[] }
 }
-export interface StrategicInitiative {
-    title: string;
+}
+export interface StrategicInitiative { title: string;
     description: string;
     effort: 'medium' | 'high';
     expectedImpact: number;
     implementationTime: number;
     dependencies: string[];
-    successMetrics: string[];
-
+    successMetrics: string[] }
 }
-export interface DropoffReason {
-    reason: string;
+}
+export interface DropoffReason { reason: string;
     category: string;
     percentage: number;
     count: number;
     confidence: number;
-    severity: 'critical' | 'high' | 'medium' | 'low';
-
+    severity: 'critical' | 'high' | 'medium' | 'low' }
 }
-export interface BenchmarkComparison {
-    industryAverage: number;
+}
+export interface BenchmarkComparison { industryAverage: number;
     topPerformers: number;
     yourPerformance: number;
     percentile: number;
-    improvementPotential: number;
-
+    improvementPotential: number }
 }
-export interface UserBehaviorAnalysis {
-    averageTimeOnStep: number;
+}
+export interface UserBehaviorAnalysis { averageTimeOnStep: number;
     interactionPatterns: InteractionPattern[];
     exitBehaviors: ExitBehavior[];
-    recoveryAttempts: number;
-
+    recoveryAttempts: number }
 }
-export interface InteractionPattern {
-    pattern: string;
+}
+export interface InteractionPattern { pattern: string;
     frequency: number;
     conversionImpact: number;
-    description: string;
-
+    description: string }
 }
-export interface ExitBehavior {
-    behavior: string;
+}
+export interface ExitBehavior { behavior: string;
     percentage: number;
     description: string;
-    preventable: boolean;
-
+    preventable: boolean }
 }
-export interface TechnicalAnalysis {
-    pageLoadTime: number;
+}
+export interface TechnicalAnalysis { pageLoadTime: number;
     errorRate: number;
     performanceScore: number;
     accessibilityIssues: AccessibilityIssue[];
-    mobileCompatibility: number;
-
+    mobileCompatibility: number }
 }
-export interface AccessibilityIssue {
-    type: string;
+}
+export interface AccessibilityIssue { type: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
     description: string;
     impact: string;
-    fixComplexity: 'low' | 'medium' | 'high';
-
+    fixComplexity: 'low' | 'medium' | 'high' }
 }
-export interface ContentAnalysis {
-    clarityScore: number;
+}
+export interface ContentAnalysis { clarityScore: number;
     complexityScore: number;
     engagementScore: number;
     completionRate: number;
     commonConfusionPoints: string[];
-    improvementSuggestions: string[];
-
+    improvementSuggestions: string[] }
 }
-export interface DropoffInsight {
-    type: 'pattern' | 'anomaly' | 'opportunity' | 'risk';
+}
+export interface DropoffInsight { type: 'pattern' | 'anomaly' | 'opportunity' | 'risk';
     severity: 'critical' | 'high' | 'medium' | 'low';
     title: string;
     description: string;
@@ -254,35 +237,29 @@ export interface DropoffInsight {
     impact: number;
     confidence: number;
     recommendations: string[];
-    timeframe: string;
-
+    timeframe: string }
 }
-export interface DropoffPointAnalysis {
-    stepId: string;
+}
+export interface DropoffPointAnalysis { stepId: string;
     analysis: StepDropoffAnalysis;
     rootCause: RootCauseAnalysis;
-    recovery: RecoveryOpportunity;
-
+    recovery: RecoveryOpportunity }
 }
-export interface DropoffExportData {
-    heatmapMode: HeatmapMode;
+}
+export interface DropoffExportData { heatmapMode: HeatmapMode;
     data: DropoffAnalysisData;
     visualizations: {
         heatmap: string;
         flowDiagram: string;
-        trends: string;
+        trends: string }
 }
     };
-    recommendations: {
-        quick: QuickWin[];
-        strategic: StrategicInitiative[];
-    };
-    metadata: {
-        exportedAt: number;
+    recommendations: { quick: QuickWin[];
+        strategic: StrategicInitiative[] };
+    metadata: { exportedAt: number;
         timeRange: {
             start: number;
-            end: number;
-        };
+            end: number };
         analysisDepth: 'basic' | 'detailed' | 'comprehensive'
   };
 /**

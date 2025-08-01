@@ -9,6 +9,7 @@ import React from 'react';
 import { CaseStudy } from '../../models/CaseStudyDataModel';
 
 }
+}
 export interface CaseStudyCardProps {
     caseStudy: CaseStudy;
     variant?: 'compact' | 'standard' | 'featured';
@@ -26,4 +27,5 @@ export interface CaseStudyCardProps {
 export declare const CaseStudyCard: React.FC<CaseStudyCardProps>;
 export default CaseStudyCard;
 //# sourceMappingURL=CaseStudyCard.d.ts.map
+}
 }

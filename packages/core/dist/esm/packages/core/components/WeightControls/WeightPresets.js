@@ -194,33 +194,13 @@ export const WeightPresets = ({
     const allPresets = [...BUILT_IN_PRESETS, ...customPresets];
     const filteredPresets = selectedCategory === 'all';
     allPresets: allPresets.filter(preset => preset.category === selectedCategory);
-    const categories = [];
-    {
-        id: 'all', name;
-        'All', icon;
-        '📋';
-    }
-    {
-        id: 'basic', name;
-        'Basic', icon;
-        '🎯';
-    }
-    {
-        id: 'creative', name;
-        'Creative', icon;
-        '🎨';
-    }
-    {
-        id: 'advanced', name;
-        'Advanced', icon;
-        '⚙️';
-    }
-    {
-        id: 'custom', name;
-        'Custom', icon;
-        '💾';
-    }
-    ;
+    const categories = [
+        { id: 'all', name: 'All', icon: '📋' },
+        { id: 'basic', name: 'Basic', icon: '🎯' },
+        { id: 'creative', name: 'Creative', icon: '🎨' },
+        { id: 'advanced', name: 'Advanced', icon: '⚙️' },
+        { id: 'custom', name: 'Custom', icon: '💾' }
+    ];
     const handleApplyPreset = (preset) => {
         const newWeights = preset.pattern(options);
         onApplyPreset(newWeights);

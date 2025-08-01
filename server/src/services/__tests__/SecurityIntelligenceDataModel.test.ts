@@ -11,7 +11,7 @@ import {
   AssetEntity,
   IncidentEntity,
   VulnerabilityEntity
-} from '../SecurityIntelligenceDataModel';
+ from '../SecurityIntelligenceDataModel';
 
 describe('SecurityIntelligenceDataModelEngine', () => {
   let dataModelEngine: SecurityIntelligenceDataModelEngine;
@@ -29,11 +29,11 @@ describe('SecurityIntelligenceDataModelEngine', () => {
             consumer_groups: ['security-analytics-group'],
             batch_size: 1000,
             max_poll_interval: 300000
-  }
+
           processing_parallelism: 4,
           checkpoint_interval: 10000,
           watermark_delay: 5000
-  }
+
         stream_analytics: {
           correlation_window_minutes: 15,
           anomaly_detection_enabled: true,
@@ -42,8 +42,8 @@ describe('SecurityIntelligenceDataModelEngine', () => {
             { metric: 'threat_severity', threshold: 80 },
             { metric: 'anomaly_score', threshold: 90 }
           ]
-        }
-  }
+
+
       batch_processing: {
         enabled: true,
         etl_schedules: {
@@ -51,19 +51,19 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           daily_jobs: [{ job_name: 'vuln_aggregation', schedule: '0 2 * * *' }],
           weekly_jobs: [{ job_name: 'trend_analysis', schedule: '0 2 * * 0' }],
           monthly_jobs: [{ job_name: 'compliance_reporting', schedule: '0 2 1 * *' }]
-  }
+
         ml_training: {
           model_retraining_schedule: '0 3 * * 0',
           feature_engineering_pipeline: { features: ['threat_indicators', 'asset_characteristics'] },
           model_validation_config: { validation_method: 'time_series_split' },
           automated_deployment: true
-  }
+
         analytics_aggregation: {
           metric_rollup_intervals: ['5m', '1h', '1d'],
           aggregation_functions: [{ function_name: 'avg' }, { function_name: 'count' }],
           materialized_view_refresh: '*/15 * * * *'
-        }
-  }
+
+
       data_quality: {
         validation_stages: [
           { stage_name: 'schema_validation', rules: ['required_fields', 'data_types'] },
@@ -81,13 +81,13 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           { policy_name: 'quarantine', actions: ['isolate_record'] }
         ],
         quality_monitoring: { monitoring_interval: 300 }
-  }
+
       performance_optimization: {
         caching_strategy: { strategy_type: 'multi_tier' },
         partitioning_strategy: { partition_type: 'time_based' },
         indexing_strategy: { index_type: 'composite' },
         compression_config: { compression_type: 'lz4' }
-      }
+
     };
 
     dataModelEngine = new SecurityIntelligenceDataModelEngine(config);
@@ -297,7 +297,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
 
         expect(result.processing_status).toBe('completed');
         expect(result.ingestion_id).toBeDefined();
-      }
+
     });
 
     it('should emit data ingestion events', async () => {
@@ -384,7 +384,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
 
         expect(result.processing_status).toBe('active');
         expect(result.stream_id).toBeDefined();
-      }
+
     });
 
     it('should detect anomalies when enabled', async () => {
@@ -463,7 +463,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           processing_window: {
             start: new Date(Date.now() - 86400000),
             end: new Date()
-          }
+
         }
       );
 
@@ -487,7 +487,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           quality_requirements: [
             { dimension: 'completeness', threshold: 95 }
           ]
-        }
+
       );
 
       expect(result.execution_status).toBe('completed');
@@ -504,7 +504,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           performance_targets: [
             { metric: 'processing_speed', target_value: 1000 }
           ]
-        }
+
       );
 
       expect(result.execution_status).toBe('completed');
@@ -523,7 +523,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
 
         expect(result.execution_status).toBe('completed');
         expect(result.job_id).toBeDefined();
-      }
+
     });
 
     it('should emit batch processing events', async () => {
@@ -567,7 +567,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
         {
           job_name: 'High Quality ETL Job',
           quality_requirements: qualityRequirements
-        }
+
       );
 
       expect(result.data_quality_score).toBeGreaterThanOrEqual(85);
@@ -690,7 +690,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
         expect(activity).toHaveProperty('timestamp');
         expect(activity).toHaveProperty('details');
         expect(activity.timestamp).toBeInstanceOf(Date);
-      }
+
     });
 
     it('should handle statistics generation errors gracefully', async () => {
@@ -867,7 +867,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
             { processing_priority: 'high' }
 
         );
-      }
+
 
       const results = await Promise.all(ingestionPromises);
       const processingTime = Date.now() - startTime;
@@ -920,14 +920,14 @@ describe('SecurityIntelligenceDataModelEngine', () => {
         operations.push(
           dataModelEngine.ingestSecurityData(`high_load_source_${i}`, 'event', { data: `test_${i}` })
         );
-      }
+
       
       // Add stream processing operations
       for (let i = 0; i < 2; i++) {
         operations.push(
           dataModelEngine.processStreamingData(`high_load_stream_${i}`)
         );
-      }
+
       
       // Add batch processing operations
       operations.push(
@@ -955,10 +955,10 @@ describe('SecurityIntelligenceDataModelEngine', () => {
               consumer_groups: ['group1', 'group2', 'group3'],
               batch_size: 5000,
               max_poll_interval: 600000
-  }
+
             processing_parallelism: 16
-          }
-        }
+
+
       };
 
       const complexEngine = new SecurityIntelligenceDataModelEngine(complexConfig);
@@ -985,18 +985,18 @@ describe('SecurityIntelligenceDataModelEngine', () => {
               consumer_groups: ['custom-group'],
               batch_size: 2000,
               max_poll_interval: 180000
-  }
+
             processing_parallelism: 8,
             checkpoint_interval: 5000,
             watermark_delay: 2000
-  }
+
           stream_analytics: {
             correlation_window_minutes: 30,
             anomaly_detection_enabled: false,
             pattern_matching_enabled: true,
             alert_thresholds: [{ metric: 'custom_metric', threshold: 95 }]
-          }
-        }
+
+
       };
 
       const customEngine = new SecurityIntelligenceDataModelEngine(customConfig);
@@ -1011,7 +1011,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
         stream_processing: {
           ...config.stream_processing,
           enabled: false
-        }
+
       };
 
       const disabledStreamEngine = new SecurityIntelligenceDataModelEngine(disabledStreamConfig);
@@ -1026,7 +1026,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
         batch_processing: {
           ...config.batch_processing,
           enabled: false
-        }
+
       };
 
       const disabledBatchEngine = new SecurityIntelligenceDataModelEngine(disabledBatchConfig);
@@ -1057,7 +1057,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
             { policy_name: 'comprehensive_quarantine', actions: ['isolate_record', 'detailed_analysis', 'manual_review', 'escalation'] }
           ],
           quality_monitoring: { monitoring_interval: 60 }
-        }
+
       };
 
       const strictQualityEngine = new SecurityIntelligenceDataModelEngine(strictQualityConfig);
@@ -1081,7 +1081,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           partitioning_strategy: { partition_type: 'hash_based' },
           indexing_strategy: { index_type: 'clustered' },
           compression_config: { compression_type: 'zstd' }
-        }
+
       };
 
       const optimizedEngine = new SecurityIntelligenceDataModelEngine(optimizedConfig);
@@ -1134,11 +1134,11 @@ describe('SecurityIntelligenceDataModelEngine', () => {
             item
           );
           results.push(result);
-        } catch (error) {
+ catch (error) {
           // Should handle errors gracefully
           console.log('Expected error handled:', error.message);
-        }
-      }
+
+
 
       // At least some should succeed
       expect(results.length).toBeGreaterThan(0);
@@ -1160,7 +1160,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           largeBatchData[i]
         );
         expect(result.processing_status).toBe('completed');
-      }
+
     });
 
     it('should provide meaningful error messages', async () => {
@@ -1170,11 +1170,11 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           'invalid_type' as any,
           {}
         );
-      } catch (error) {
+ catch (error) {
         expect(error.message).toBeDefined();
         expect(typeof error.message).toBe('string');
         expect(error.message.length).toBeGreaterThan(0);
-      }
+
     });
 
     it('should maintain data integrity during failures', async () => {
@@ -1183,9 +1183,9 @@ describe('SecurityIntelligenceDataModelEngine', () => {
       // Attempt operations that may fail
       try {
         await dataModelEngine.ingestSecurityData('test', 'invalid_type' as any, {});
-      } catch (error) {
+ catch (error) {
         // Expected to fail
-      }
+
       
       // Verify statistics are still accessible and consistent
       const finalStats = await dataModelEngine.getDataModelStatistics();

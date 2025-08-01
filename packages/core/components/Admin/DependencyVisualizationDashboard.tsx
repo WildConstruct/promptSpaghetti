@@ -5,20 +5,19 @@
  * Provides comprehensive visualization, analysis, and management capabilities.
  */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import {
-  DependencyGraph,
+import { DependencyGraph,
   DependencyAnalysis,
   DependencyConflict,
   ImpactAssessment,
   ToggleNode,
   DependencyEdge,
   ConflictType,
-  DependencyType,
+  DependencyType }
   FeatureToggleDependencyService
-} from '../../services/FeatureToggleDependencyService';
-}
-interface DashboardProps {
-  dependencyService: FeatureToggleDependencyService;
+ from '../../services/FeatureToggleDependencyService';
+
+
+interface DashboardProps { dependencyService: FeatureToggleDependencyService;
   selectedToggles?: string;
   onToggleSelect?: (toggleId: string) => void;
   onDependencyCreate?: (source: string, target: string) => void;
@@ -37,59 +36,51 @@ interface DashboardProps {
   epics: string;
   stories: string;
   searchTerm: string;
-  export const DependencyVisualizationDashboard: React.FC<DashboardProps> = ({,)
-  dependencyService,
-  selectedToggles = [],
-  onToggleSelect,
-  onDependencyCreate,
+  export const DependencyVisualizationDashboard: React.FC<DashboardProps> = ({);
+  dependencyService;
+  selectedToggles = [];
+  onToggleSelect;
+  onDependencyCreate }
   onConflictResolve
-}
-}) => {
-  // State management
+
+
+}) => { // State management
   const [graph, setGraph] = useState<DependencyGraph | null>(null);
   const [analysis, setAnalysis] = useState<DependencyAnalysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>({)
-  mode: 'graph',
-  layout: 'hierarchical',
-  showMetadata: true,
-  showConflicts: true,
-  showCriticalPath: true,
-  clusterView: false,
+  mode: 'graph'
+  layout: 'hierarchical'
+  showMetadata: true
+  showConflicts: true
+  showCriticalPath: true
+  clusterView: false }
 });
-  const [filters, setFilters] = useState<FilterState>({)
-  toggleTypes: [],
-  riskLevels: [],
-  dependencyTypes: [],
-  epics: [],
-  stories: [],
-  searchTerm: '',
+  const [filters, setFilters] = useState<FilterState>({ )
+  toggleTypes: []
+  riskLevels: []
+  dependencyTypes: []
+  epics: []
+  stories: []
+  searchTerm: '' }
 });
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [impactAnalysis, setImpactAnalysis] = useState<ImpactAssessment | null>(null);
   // Load data
-  useEffect(() => {
-    loadDependencyData();
-  }, [selectedToggles]);
-  const loadDependencyData = useCallback(async () => {
-  setLoading(true);
+  useEffect(() => { loadDependencyData() }, [selectedToggles]);
+  const loadDependencyData = useCallback(async () => { setLoading(true);
   setError(null);
   try {
   const [graphData, analysisData] = await Promise.all([)
-  dependencyService.generateDependencyGraph(selectedToggles.length > 0 ? selectedToggles : undefined),
+  dependencyService.generateDependencyGraph(selectedToggles.length > 0 ? selectedToggles : undefined) }
   dependencyService.analyzeDependencies(selectedToggles.length > 0 ? selectedToggles : undefined)]);
   setGraph(graphData);
   setAnalysis(analysisData);
-} catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load dependency data');
-} finally {
-      setLoading(false);
-  }, [dependencyService, selectedToggles]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load dependency data') } finally { setLoading(false) }, [dependencyService, selectedToggles]);
   // Filter nodes and edges based on current filters
-  const filteredGraph = useMemo(() => {
-  if (!graph) return null;
+  const filteredGraph = useMemo(() => { if (!graph) return null;
   let filteredNodes = graph.nodes;
   let filteredEdges = graph.edges;
   // Apply search filter
@@ -115,36 +106,31 @@ interface DashboardProps {
   filters.dependencyTypes.includes(edge.type)
   );
   const connectedNodeIds = new Set([);
-  ...filteredEdges.map(e => e.source),
+  ...filteredEdges.map(e => e.source)
   ...filteredEdges.map(e => e.target)
   ]);
   filteredNodes = filteredNodes.filter(node =>)
   connectedNodeIds.has(node.id)
   );
   return {
-  ...graph,
-  nodes: filteredNodes,
-  edges: filteredEdges,
+  ...graph
+  nodes: filteredNodes
+  edges: filteredEdges }
 };
   }, [graph, filters]);
   // Handle node selection
-  const handleNodeClick = useCallback(async (nodeId: string) => {
-    setSelectedNode(nodeId);
+  const handleNodeClick = useCallback(async (nodeId: string) => { setSelectedNode(nodeId);
     onToggleSelect?.(nodeId);
     // Load impact analysis for selected node
     try {
       const impact = await dependencyService.getImpactAnalysis(nodeId, 'activate');
-      setImpactAnalysis(impact);
-    } catch (err) {
-  console.error('Failed to load impact analysis:', err);
-}, [dependencyService, onToggleSelect]);
+      setImpactAnalysis(impact) } catch (err) { console.error('Failed to load impact analysis:', err) }, [dependencyService, onToggleSelect]);
   // Render conflict severity badge
-  const renderSeverityBadge = (severity: string) => {
-  const colors = {
-  critical: 'bg-red-500 text-white',
-  error: 'bg-red-400 text-white',
-  warning: 'bg-yellow-400 text-gray-800',
-  low: 'bg-gray-400 text-white',
+  const renderSeverityBadge = (severity: string) => { const colors = {
+  critical: 'bg-red-500 text-white'
+  error: 'bg-red-400 text-white'
+  warning: 'bg-yellow-400 text-gray-800'
+  low: 'bg-gray-400 text-white' }
 };
     return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[severity] || colors.low}`}>}
@@ -153,14 +139,13 @@ interface DashboardProps {
     );
   };
   // Render dependency type badge
-  const _____renderDependencyTypeBadge = (type: DependencyType) => {
-  const colors = {
+  const _____renderDependencyTypeBadge = (type: DependencyType) => { const colors = {
   [DependencyType.REQUIRES]: 'bg-blue-100 text-blue-800',
   [DependencyType.BLOCKS]: 'bg-red-100 text-red-800',
   [DependencyType.CONFLICTS]: 'bg-purple-100 text-purple-800',
   [DependencyType.ENHANCES]: 'bg-green-100 text-green-800',
   [DependencyType.FOLLOWS]: 'bg-yellow-100 text-yellow-800',
-  [DependencyType.PRECEDES]: 'bg-indigo-100 text-indigo-800',
+  [DependencyType.PRECEDES]: 'bg-indigo-100 text-indigo-800' }
 };
     return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[type]}`}>}
@@ -383,21 +368,22 @@ interface DashboardProps {
 };
 
 // Sub-components (simplified implementations)
-}
-interface GraphVisualizationProps {
-  graph: DependencyGraph | null;
+
+
+interface GraphVisualizationProps { graph: DependencyGraph | null;
   viewMode: ViewMode;
   selectedNode: string | null;
   hoveredNode: string | null;
-  onNodeClick: (nodeId: string) => void;
+  onNodeClick: (nodeId: string) => void
   onNodeHover: (nodeId: string | null) => void;
   onDependencyCreate?: (source: string, target: string) => void;
-  const GraphVisualization: React.FC<GraphVisualizationProps> = ({,)
-  graph,
-  viewMode,
-  selectedNode,
+  const GraphVisualization: React.FC<GraphVisualizationProps> = ({);
+  graph;
+  viewMode;
+  selectedNode }
   onNodeClick
-}
+
+
 }) => {
   if (!graph) {
     return;
@@ -429,11 +415,11 @@ interface GraphVisualizationProps {
     </div>
   );
 };
-}
-interface AnalysisViewProps {
-  analysis: DependencyAnalysis;
-  onConflictResolve?: (conflictId: string, resolution: string) => void;
-}
+
+
+interface AnalysisViewProps { analysis: DependencyAnalysis;
+  onConflictResolve?: (conflictId: string, resolution: string) => void }
+
 const AnalysisView: React.FC<AnalysisViewProps> = ({ analysis }) => {
   return;
     <div className="flex-1 p-6 bg-gray-50 overflow-y-auto">
@@ -459,12 +445,12 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analysis }) => {
                         </span>
                       </div>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-  violation.severity === 'critical' ? 'bg-red-500 text-white' :,
-  violation.severity === 'high' ? 'bg-red-400 text-white' :,
-  violation.severity === 'medium' ? 'bg-yellow-400 text-gray-800' :,
+                    <span className={ `px-2 py-1 rounded-full text-xs font-medium ${
+  violation.severity === 'critical' ? 'bg-red-500 text-white' :
+  violation.severity === 'high' ? 'bg-red-400 text-white' :
+  violation.severity === 'medium' ? 'bg-yellow-400 text-gray-800' : }
   'bg-gray-400 text-white'
-}`}>
+`}>
                       {violation.severity.toUpperCase()}
                     </span>
                   </div>
@@ -490,12 +476,12 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analysis }) => {
                       <p className="text-sm text-blue-700 mt-1">{rec.action}</p>
                       <p className="text-xs text-blue-600 mt-1">{rec.rationale}</p>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-  rec.priority === 'urgent' ? 'bg-red-500 text-white' :,
-  rec.priority === 'high' ? 'bg-yellow-500 text-white' :,
-  rec.priority === 'medium' ? 'bg-blue-500 text-white' :,
+                    <span className={ `px-2 py-1 rounded-full text-xs font-medium ${
+  rec.priority === 'urgent' ? 'bg-red-500 text-white' :
+  rec.priority === 'high' ? 'bg-yellow-500 text-white' :
+  rec.priority === 'medium' ? 'bg-blue-500 text-white' : }
   'bg-gray-500 text-white'
-}`}>
+`}>
                       {rec.priority.toUpperCase()}
                     </span>
                   </div>

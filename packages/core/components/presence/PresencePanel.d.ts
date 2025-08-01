@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-export interface PresenceUser {
-    userId: string;
+}
+export interface PresenceUser { userId: string;
     userName?: string;
     userAvatar?: string;
     status: 'active' | 'idle' | 'away' | 'offline';
@@ -10,8 +10,7 @@ export interface PresenceUser {
     cursor?: {
         x: number;
         y: number;
-        nodeId?: string;
-
+        nodeId?: string }
 }
     };
     selection?: string[];
@@ -19,6 +18,7 @@ export interface PresenceUser {
     isTyping?: boolean;
     focusedNodeId?: string;
 
+}
 }
 export interface PresencePanelProps {
     users: PresenceUser[];
@@ -33,4 +33,5 @@ export interface PresencePanelProps {
 
 export declare const PresencePanel: React.FC<PresencePanelProps>;
 //# sourceMappingURL=PresencePanel.d.ts.map
+}
 }

@@ -10,8 +10,8 @@ import { EventEmitter } from 'events';
 import { SecurityMLToolsEngine, SecurityMLModel } from './SecurityMLToolsEngine';
 import { SecurityStatisticalAnalysisEngine, SecurityStatistics } from './SecurityStatisticalAnalysisEngine';
 
-}
-}
+
+
 export interface SecurityRecommendation {
   recommendation_id: string;
   timestamp: number;
@@ -24,8 +24,9 @@ export interface SecurityRecommendation {
     rationale: string;
     expected_outcome: string;
     success_metrics: string[];
-}
-}
+
+
+
   };
   
   risk_context: {
@@ -47,7 +48,7 @@ export interface SecurityRecommendation {
       duration_days: number;
       deliverables: string[];
       success_criteria: string[];
-    }>;
+>;
   };
   
   ml_insights: {
@@ -58,7 +59,7 @@ export interface SecurityRecommendation {
       recommendation_id: string;
       similarity_score: number;
       outcome_success_rate: number;
-    }>;
+>;
     predicted_effectiveness: number; // 0-100
   };
   
@@ -76,10 +77,10 @@ export interface SecurityRecommendation {
     change_management_complexity: 'low' | 'medium' | 'high';
     communication_plan: string[];
   };
-}
 
-}
-}
+
+
+
 export interface RecommendationOptimization {
   optimization_id: string;
   timestamp: number;
@@ -94,9 +95,10 @@ export interface RecommendationOptimization {
     business_priorities: Array<{
       priority: string;
       weight: number;
-}
-}
-    }>;
+
+
+
+>;
   };
   
   optimization_results: {
@@ -110,7 +112,7 @@ export interface RecommendationOptimization {
       recommendations: string[];
       budget_allocation: number;
       expected_outcomes: string[];
-    }>;
+>;
   };
   
   trade_off_analysis: {
@@ -119,18 +121,18 @@ export interface RecommendationOptimization {
       risk_reduction: number;
       effort: number;
       recommendations: string[];
-    }>;
+>;
     sensitivity_analysis: Record<string, {
       parameter: string;
       impact_on_outcome: number;
       elasticity: number;
-    }>;
+>;
     scenario_analysis: Array<{
       scenario_name: string;
       probability: number;
       outcome_variance: number;
       recommended_adjustments: string[];
-    }>;
+>;
   };
   
   optimization_confidence: {
@@ -140,10 +142,10 @@ export interface RecommendationOptimization {
     uncertainty_factors: string[];
     confidence_intervals: Record<string, [number, number]>;
   };
-}
 
-}
-}
+
+
+
 export interface RecommendationOutcome {
   outcome_id: string;
   recommendation_id: string;
@@ -156,8 +158,9 @@ export interface RecommendationOutcome {
     risk_reduction_achieved: number;
     implementation_success: boolean;
     success_metrics_achieved: Record<string, boolean>;
-}
-}
+
+
+
   };
   
   predicted_vs_actual: {
@@ -175,7 +178,7 @@ export interface RecommendationOutcome {
       stakeholder: string;
       satisfaction_score: number; // 0-10
       feedback: string;
-    }>;
+>;
   };
   
   business_impact: {
@@ -185,10 +188,10 @@ export interface RecommendationOutcome {
     compliance_improvements: string[];
     customer_satisfaction_impact: number;
   };
-}
 
-}
-}
+
+
+
 export interface MLRecommendationModel {
   model_id: string;
   model_name: string;
@@ -199,8 +202,9 @@ export interface MLRecommendationModel {
     outcome_data_points: number;
     contextual_features: number;
     feedback_samples: number;
-}
-}
+
+
+
   };
   
   model_architecture: {
@@ -209,7 +213,7 @@ export interface MLRecommendationModel {
       layer_type: string;
       units: number;
       activation: string;
-    }>;
+>;
     embedding_dimensions: Record<string, number>;
     optimization_algorithm: string;
   };
@@ -228,7 +232,7 @@ export interface MLRecommendationModel {
       segment_name: string;
       characteristics: string[];
       recommendation_preferences: Record<string, number>;
-    }>;
+>;
     context_awareness: {
       temporal_factors: string[];
       environmental_factors: string[];
@@ -240,7 +244,7 @@ export interface MLRecommendationModel {
       update_frequency: string;
     };
   };
-}
+
 
 export class SecurityRecommendationOptimizationEngine extends EventEmitter {
   private mlEngine: SecurityMLToolsEngine;
@@ -258,7 +262,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
     super();
     this.mlEngine = mlEngine;
     this.statisticalEngine = statisticalEngine;
-  }
+
 
   /**
    * Initialize the recommendation optimization engine
@@ -272,12 +276,11 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       await this.setupFeedbackLoop();
       
       this.emit('initialized', { timestamp: Date.now() });
-      
-    } catch (error) {
+ catch (error) {
       this.emit('error', { error, context: 'initialization' });
       throw error;
-    }
-  }
+
+
 
   /**
    * Generate intelligent security recommendations using ML
@@ -289,7 +292,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       organizational_context: unknown;
       budget_constraints?: number;
       time_constraints?: number;
-  }
+
     userId?: string
   ): Promise<SecurityRecommendation[]> {
 
@@ -330,7 +333,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       // Store recommendations for tracking
       for (const recommendation of optimizedRecommendations) {
         this.recommendations.set(recommendation.recommendation_id, recommendation);
-      }
+
       
       this.emit('recommendations_generated', { 
         count: optimizedRecommendations.length,
@@ -339,12 +342,11 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       });
       
       return optimizedRecommendations;
-      
-    } catch (error) {
+ catch (error) {
       this.emit('recommendation_generation_error', { error, userId });
       throw error;
-    }
-  }
+
+
 
   /**
    * Optimize recommendation portfolio using advanced algorithms
@@ -404,12 +406,11 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       });
       
       return optimization;
-      
-    } catch (error) {
+ catch (error) {
       this.emit('portfolio_optimization_error', { optimizationId, error });
       throw error;
-    }
-  }
+
+
 
   /**
    * Track recommendation implementation outcomes
@@ -423,14 +424,14 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       actual_effort_hours: number;
       success_metrics: Record<string, unknown>;
       stakeholder_feedback: Array<{ stakeholder: string; rating: number; feedback: string }>;
-    }
+
   ): Promise<RecommendationOutcome> {
 
     try {
       const recommendation = this.recommendations.get(recommendationId);
       if (!recommendation) {
         throw new Error(`Recommendation ${recommendationId} not found`);
-      }
+
       
       // Calculate actual vs predicted variances
       const predictedVsActual = this.calculateVariances(recommendation, implementationData);
@@ -452,7 +453,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
           risk_reduction_achieved: this.calculateRiskReductionAchieved(implementationData.success_metrics),
           implementation_success: this.determineImplementationSuccess(implementationData.success_metrics),
           success_metrics_achieved: this.mapSuccessMetrics(recommendation, implementationData.success_metrics)
-  }
+
         predicted_vs_actual: predictedVsActual,
         lessons_learned: lessonsLearned,
         business_impact: businessImpact
@@ -470,12 +471,11 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       });
       
       return outcome;
-      
-    } catch (error) {
+ catch (error) {
       this.emit('outcome_tracking_error', { recommendationId, error });
       throw error;
-    }
-  }
+
+
 
   /**
    * Train recommendation models with feedback
@@ -490,7 +490,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
         recommendation_id: string;
         rating: number;
         feedback: string;
-      }>;
+>;
       contextual_data: Record<string, unknown>[];
     }
   ): Promise<MLRecommendationModel> {
@@ -522,7 +522,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
           outcome_data_points: trainingData.outcomes.length,
           contextual_features: processedData.feature_count,
           feedback_samples: trainingData.user_feedback.length
-  }
+
         model_architecture: architecture,
         performance_metrics: validationResults,
         personalization: personalizationConfig
@@ -537,12 +537,11 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       });
       
       return model;
-      
-    } catch (error) {
+ catch (error) {
       this.emit('model_training_error', { modelType, error });
       throw error;
-    }
-  }
+
+
 
   /**
    * Get personalized recommendations for a specific user
@@ -564,7 +563,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       if (!userProfile) {
         userProfile = await this.createUserProfile(userId, preferences);
         this.userPreferences.set(userId, userProfile);
-      }
+
       
       // Generate base recommendations
       const baseRecommendations = await this.generateRecommendations(securityContext, userId);
@@ -588,12 +587,11 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       });
       
       return rankedRecommendations;
-      
-    } catch (error) {
+ catch (error) {
       this.emit('personalization_error', { userId, error });
       throw error;
-    }
-  }
+
+
 
   /**
    * Perform A/B testing on recommendation strategies
@@ -616,7 +614,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       winner: 'a' | 'b' | 'inconclusive';
       confidence_level: number;
     };
-  }> {
+> {
     const testId = `ab_test_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
     
     try {
@@ -645,7 +643,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
         const aScore = Object.values(strategyAPerformance).reduce((sum, val) => sum + val, 0);
         const bScore = Object.values(strategyBPerformance).reduce((sum, val) => sum + val, 0);
         winner = aScore > bScore ? 'a' : 'b';
-      }
+
       
       const results = {
         test_id: testId,
@@ -655,7 +653,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
           statistical_significance: statisticalSignificance,
           winner: winner,
           confidence_level: confidenceLevel
-        }
+
       };
       
       this.emit('ab_test_completed', { 
@@ -665,12 +663,11 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       });
       
       return results;
-      
-    } catch (error) {
+ catch (error) {
       this.emit('ab_test_error', { testId, testName: testConfig.test_name, error });
       throw error;
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -687,7 +684,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
         outcome_data_points: 25000,
         contextual_features: 150,
         feedback_samples: 10000
-  }
+
       model_architecture: {
         algorithm: 'Matrix Factorization with Neural Networks',
         layers: [
@@ -701,9 +698,9 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
           'user_embedding': 64,
           'recommendation_embedding': 64,
           'context_embedding': 32
-  }
+
         optimization_algorithm: 'Adam'
-  }
+
       performance_metrics: {
         recommendation_accuracy: 0.87,
         outcome_prediction_accuracy: 0.82,
@@ -711,35 +708,35 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
         click_through_rate: 0.45,
         implementation_rate: 0.68,
         success_rate: 0.74
-  }
+
       personalization: {
         user_segmentation: [
           {
             segment_name: 'security_conscious',
             characteristics: ['high_risk_awareness', 'proactive_approach'],
             recommendation_preferences: { 'preventive': 0.6, 'detective': 0.3, 'corrective': 0.1 }
-  }
+
           {
             segment_name: 'cost_sensitive',
             characteristics: ['budget_constraints', 'roi_focused'],
             recommendation_preferences: { 'cost_effective': 0.8, 'high_impact': 0.2 }
-          }
+
         ],
         context_awareness: {
           temporal_factors: ['time_of_year', 'business_cycle', 'incident_history'],
           environmental_factors: ['threat_landscape', 'regulatory_changes', 'technology_updates'],
           organizational_factors: ['company_size', 'industry', 'security_maturity']
-  }
+
         adaptive_learning: {
           feedback_integration: true,
           online_learning_enabled: true,
           update_frequency: 'weekly'
-        }
-      }
+
+
     };
     
     this.recommendationModels.set(collaborativeFilteringModel.model_id, collaborativeFilteringModel);
-  }
+
 
   private async loadHistoricalOutcomes(): Promise<void> {
 
@@ -754,13 +751,13 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
         cost_efficiency: 0.92,
         user_satisfaction: 8.5,
         implementation_challenges: ['resource_constraints', 'change_resistance']
-      }
+
     ];
     
     for (const outcome of sampleOutcomes) {
       // Process and store outcomes for ML training
-    }
-  }
+
+
 
   private async initializeUserPreferences(): Promise<void> {
 
@@ -779,7 +776,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
     
     // Store default profile for new users
     this.userPreferences.set('default', defaultProfile);
-  }
+
 
   private async setupFeedbackLoop(): Promise<void> {
 
@@ -787,7 +784,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
     setInterval(async () => {
       await this.processFeedbackAndRetrain();
     }, 86400000); // Daily retraining
-  }
+
 
   private async processFeedbackAndRetrain(): Promise<void> {
 
@@ -798,14 +795,13 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       // Update models if sufficient new data
       if (recentFeedback.length > 100) {
         await this.incrementalModelUpdate(recentFeedback);
-      }
+
       
       this.emit('feedback_processed', { feedbackCount: recentFeedback.length });
-      
-    } catch (error) {
+ catch (error) {
       this.emit('feedback_processing_error', { error });
-    }
-  }
+
+
 
   private async generatePreventiveRecommendations(context: unknown): Promise<SecurityRecommendation[]> {
 
@@ -824,14 +820,14 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
           rationale: 'High threat volume indicates need for automated detection',
           expected_outcome: 'Reduce threat detection time by 60%',
           success_metrics: ['detection_time_reduction', 'false_positive_rate', 'threat_coverage']
-  }
+
         risk_context: {
           current_risk_level: 75,
           risk_reduction_potential: 40,
           threat_categories_addressed: ['malware', 'intrusion', 'data_exfiltration'],
           compliance_impact: { 'PCI_DSS': 'positive', 'GDPR': 'positive' },
           business_justification: 'Prevents potential data breaches and compliance violations'
-  }
+
         implementation: {
           complexity: 'medium',
           estimated_effort_hours: 160,
@@ -844,15 +840,15 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
               duration_days: 14,
               deliverables: ['architecture_design', 'requirements_spec'],
               success_criteria: ['stakeholder_approval', 'technical_feasibility']
-  }
+
             {
               phase_name: 'Implementation',
               duration_days: 30,
               deliverables: ['threat_detection_system', 'integration_testing'],
               success_criteria: ['system_performance', 'accuracy_targets']
-            }
+
           ]
-  }
+
         ml_insights: {
           confidence_score: 0.89,
           model_used: 'threat_prediction_model',
@@ -861,25 +857,25 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
             { recommendation_id: 'prev_hist_001', similarity_score: 0.85, outcome_success_rate: 0.78 }
           ],
           predicted_effectiveness: 82
-  }
+
         optimization_metrics: {
           cost_benefit_ratio: 3.2,
           roi_estimate: 220,
           time_to_value: 45,
           risk_reduction_per_dollar: 0.53,
           effort_efficiency_score: 88
-  }
+
         stakeholder_impact: {
           affected_departments: ['security', 'it_operations', 'compliance'],
           user_training_required: true,
           change_management_complexity: 'medium',
           communication_plan: ['stakeholder_briefing', 'training_sessions', 'rollout_communication']
-        }
+
       });
-    }
+
     
     return recommendations;
-  }
+
 
   private async generateDetectiveRecommendations(context: unknown): Promise<SecurityRecommendation[]> {
 
@@ -898,14 +894,14 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
           rationale: 'Current detection time exceeds industry benchmarks',
           expected_outcome: 'Reduce mean time to detection to under 60 minutes',
           success_metrics: ['detection_time', 'coverage_percentage', 'alert_accuracy']
-  }
+
         risk_context: {
           current_risk_level: 80,
           risk_reduction_potential: 35,
           threat_categories_addressed: ['insider_threats', 'advanced_persistent_threats'],
           compliance_impact: { 'SOX': 'positive', 'ISO_27001': 'positive' },
           business_justification: 'Faster incident detection reduces business impact'
-  }
+
         implementation: {
           complexity: 'high',
           estimated_effort_hours: 240,
@@ -918,34 +914,34 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
               duration_days: 21,
               deliverables: ['gap_analysis', 'siem_architecture', 'use_case_development'],
               success_criteria: ['comprehensive_coverage', 'performance_requirements']
-            }
+
           ]
-  }
+
         ml_insights: {
           confidence_score: 0.92,
           model_used: 'detection_optimization_model',
           feature_importance: { 'current_detection_time': 0.5, 'log_volume': 0.3, 'alert_quality': 0.2 },
           similar_recommendations: [],
           predicted_effectiveness: 87
-  }
+
         optimization_metrics: {
           cost_benefit_ratio: 2.8,
           roi_estimate: 180,
           time_to_value: 60,
           risk_reduction_per_dollar: 0.28,
           effort_efficiency_score: 85
-  }
+
         stakeholder_impact: {
           affected_departments: ['security_operations', 'incident_response'],
           user_training_required: true,
           change_management_complexity: 'high',
           communication_plan: ['executive_briefing', 'team_training', 'process_documentation']
-        }
+
       });
-    }
+
     
     return recommendations;
-  }
+
 
   private async generateCorrectiveRecommendations(context: unknown): Promise<SecurityRecommendation[]> {
 
@@ -964,14 +960,14 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
           rationale: 'Compliance score below acceptable threshold',
           expected_outcome: 'Achieve 95% compliance score within 90 days',
           success_metrics: ['compliance_score_improvement', 'remediation_time', 'audit_readiness']
-  }
+
         risk_context: {
           current_risk_level: 85,
           risk_reduction_potential: 50,
           threat_categories_addressed: ['regulatory_violations', 'audit_findings'],
           compliance_impact: { 'all_frameworks': 'critical' },
           business_justification: 'Avoid regulatory penalties and maintain business licenses'
-  }
+
         implementation: {
           complexity: 'very_high',
           estimated_effort_hours: 400,
@@ -984,34 +980,34 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
               duration_days: 14,
               deliverables: ['compliance_gap_report', 'remediation_roadmap'],
               success_criteria: ['complete_gap_identification', 'prioritized_action_plan']
-            }
+
           ]
-  }
+
         ml_insights: {
           confidence_score: 0.95,
           model_used: 'compliance_prediction_model',
           feature_importance: { 'current_score': 0.6, 'framework_requirements': 0.25, 'remediation_history': 0.15 },
           similar_recommendations: [],
           predicted_effectiveness: 91
-  }
+
         optimization_metrics: {
           cost_benefit_ratio: 4.5,
           roi_estimate: 350,
           time_to_value: 30,
           risk_reduction_per_dollar: 0.25,
           effort_efficiency_score: 75
-  }
+
         stakeholder_impact: {
           affected_departments: ['compliance', 'legal', 'risk_management', 'security'],
           user_training_required: false,
           change_management_complexity: 'high',
           communication_plan: ['board_briefing', 'regulatory_communication', 'staff_notification']
-        }
+
       });
-    }
+
     
     return recommendations;
-  }
+
 
   private async generateStrategicRecommendations(context: unknown): Promise<SecurityRecommendation[]> {
 
@@ -1030,14 +1026,14 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
           rationale: 'Current security model insufficient for modern threat landscape',
           expected_outcome: 'Achieve optimized security maturity level',
           success_metrics: ['maturity_level_improvement', 'breach_prevention', 'user_experience']
-  }
+
         risk_context: {
           current_risk_level: 60,
           risk_reduction_potential: 70,
           threat_categories_addressed: ['all_categories'],
           compliance_impact: { 'future_regulations': 'positive' },
           business_justification: 'Future-proof security architecture for digital transformation'
-  }
+
         implementation: {
           complexity: 'very_high',
           estimated_effort_hours: 2000,
@@ -1050,40 +1046,40 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
               duration_days: 60,
               deliverables: ['zero_trust_strategy', 'implementation_roadmap', 'pilot_plan'],
               success_criteria: ['stakeholder_alignment', 'technical_feasibility', 'budget_approval']
-  }
+
             {
               phase_name: 'Pilot Implementation',
               duration_days: 90,
               deliverables: ['pilot_deployment', 'performance_metrics', 'user_feedback'],
               success_criteria: ['pilot_success', 'minimal_disruption', 'positive_roi']
-            }
+
           ]
-  }
+
         ml_insights: {
           confidence_score: 0.78,
           model_used: 'strategic_planning_model',
           feature_importance: { 'current_maturity': 0.4, 'threat_evolution': 0.35, 'business_goals': 0.25 },
           similar_recommendations: [],
           predicted_effectiveness: 85
-  }
+
         optimization_metrics: {
           cost_benefit_ratio: 2.1,
           roi_estimate: 110,
           time_to_value: 180,
           risk_reduction_per_dollar: 0.14,
           effort_efficiency_score: 70
-  }
+
         stakeholder_impact: {
           affected_departments: ['all_departments'],
           user_training_required: true,
           change_management_complexity: 'very_high',
           communication_plan: ['transformation_communication', 'extensive_training', 'support_systems']
-        }
+
       });
-    }
+
     
     return recommendations;
-  }
+
 
   private async applyMLFiltering(
     recommendations: SecurityRecommendation[],
@@ -1102,8 +1098,8 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       if (userPrefs) {
         const personalizedScore = this.calculatePersonalizationScore(recommendation, userPrefs);
         recommendation.ml_insights.predicted_effectiveness *= personalizedScore;
-      }
-    }
+
+
     
     // Sort by combined ML score
     return recommendations.sort((a, b) => {
@@ -1111,7 +1107,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       const scoreB = b.ml_insights.confidence_score * b.ml_insights.predicted_effectiveness / 100;
       return scoreB - scoreA;
     });
-  }
+
 
   private calculateContextualFactors(recommendation: SecurityRecommendation, context: unknown): number {
     let factor = 1.0;
@@ -1120,16 +1116,16 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
     const threatLevel = context.current_statistics?.threat_landscape?.total_threats_detected || 0;
     if (threatLevel > 500 && recommendation.category === 'preventive') {
       factor *= 1.2;
-    }
+
     
     // Adjust based on compliance score
     const complianceScore = context.current_statistics?.compliance_analytics?.overall_compliance_score || 100;
     if (complianceScore < 80 && recommendation.category === 'corrective') {
       factor *= 1.3;
-    }
+
     
     return Math.min(factor, 1.5); // Cap at 150%
-  }
+
 
   private calculatePersonalizationScore(recommendation: SecurityRecommendation, userPrefs: unknown): number {
     let score = 1.0;
@@ -1137,22 +1133,22 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
     // Adjust for category preference
     if (userPrefs.preferred_categories?.includes(recommendation.category)) {
       score *= 1.1;
-    }
+
     
     // Adjust for budget sensitivity
     const budgetRatio = recommendation.implementation.estimated_cost / (userPrefs.typical_budget || 100000);
     if (userPrefs.budget_sensitivity > 0.8 && budgetRatio > 2.0) {
       score *= 0.7;
-    }
+
     
     // Adjust for time sensitivity
     const timeToValue = recommendation.optimization_metrics.time_to_value;
     if (userPrefs.time_sensitivity > 0.8 && timeToValue > 90) {
       score *= 0.8;
-    }
+
     
     return score;
-  }
+
 
   // Additional helper methods would be implemented here...
   // (Continuing with abbreviated implementations for space)
@@ -1183,10 +1179,10 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
           recommendations: selectedRecommendations.slice(0, 2),
           budget_allocation: 100000,
           expected_outcomes: ['Initial risk reduction', 'Process improvements']
-        }
+
       ]
     };
-  }
+
 
   private async performTradeOffAnalysis(recommendations: SecurityRecommendation[], params: unknown): Promise<unknown> {
 
@@ -1198,17 +1194,17 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       sensitivity_analysis: {
         'budget': { parameter: 'available_budget', impact_on_outcome: 0.7, elasticity: 1.2 },
         'time': { parameter: 'time_constraints', impact_on_outcome: 0.4, elasticity: 0.8 }
-  }
+
       scenario_analysis: [
         {
           scenario_name: 'budget_cut',
           probability: 0.3,
           outcome_variance: 0.25,
           recommended_adjustments: ['prioritize_high_impact', 'delay_strategic_initiatives']
-        }
+
       ]
     };
-  }
+
 
   private async calculateOptimizationConfidence(results: unknown): Promise<unknown> {
 
@@ -1220,9 +1216,9 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       confidence_intervals: {
         'cost': [results.total_cost * 0.9, results.total_cost * 1.2],
         'risk_reduction': [results.expected_risk_reduction * 0.8, results.expected_risk_reduction * 1.1]
-      }
+
     };
-  }
+
 
   // Simplified implementations for remaining private methods...
 
@@ -1233,7 +1229,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       effectiveness_variance: 0,
       timeline_variance: 0
     };
-  }
+
 
   private async analyzeBusinessImpact(
     recommendation: SecurityRecommendation,
@@ -1247,7 +1243,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       compliance_improvements: ['SOX compliance improved'],
       customer_satisfaction_impact: Math.floor(Math.random() * 10)
     };
-  }
+
 
   private async extractLessonsLearned(
     recommendation: SecurityRecommendation,
@@ -1260,41 +1256,41 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
       improvement_suggestions: ['better_change_management'],
       stakeholder_feedback: implementation.stakeholder_feedback || []
     };
-  }
+
 
   private calculateRiskReductionAchieved(metrics: unknown): number {
     return Math.floor(Math.random() * 40) + 20; // 20-60% reduction
-  }
+
 
   private determineImplementationSuccess(metrics: unknown): boolean {
     return Math.random() > 0.2; // 80% success rate
-  }
+
 
   private mapSuccessMetrics(recommendation: SecurityRecommendation, actualMetrics: unknown): Record<string, boolean> {
     const mapped: Record<string, boolean> = {};
     for (const metric of recommendation.recommendation_details.success_metrics) {
       mapped[metric] = Math.random() > 0.3; // 70% achievement rate
-    }
+
     return mapped;
-  }
+
 
   private async updateModelsWithOutcome(outcome: RecommendationOutcome): Promise<void> {
 
     // Update ML models with new outcome data for continuous learning
     this.emit('model_updated', { outcomeId: outcome.outcome_id });
-  }
+
 
   private async collectRecentFeedback(): Promise<unknown[]> {
 
     // Collect recent user feedback for model updates
     return []; // Simplified implementation
-  }
+
 
   private async incrementalModelUpdate(feedback: unknown[]): Promise<void> {
 
     // Perform incremental model updates
     this.emit('incremental_update_completed', { feedbackCount: feedback.length });
-  }
+
 
   // Additional helper methods would continue here...
 
@@ -1304,7 +1300,7 @@ export class SecurityRecommendationOptimizationEngine extends EventEmitter {
   async shutdown(): Promise<void> {
 
     this.emit('shutdown', { timestamp: Date.now() });
-  }
-}
+
+
 
 export default SecurityRecommendationOptimizationEngine;

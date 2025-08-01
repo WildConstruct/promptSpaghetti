@@ -14,8 +14,8 @@
  */
 
 }
-export interface MFAMethod {
-    id: string;
+}
+export interface MFAMethod { id: string;
     type: 'totp' | 'sms' | 'email' | 'backup_codes';
     name: string;
     enabled: boolean;
@@ -26,60 +26,55 @@ export interface MFAMethod {
         phoneNumber?: string;
         email?: string;
         appName?: string;
-        secretKey?: string;
+        secretKey?: string }
 }
     };
 
 }
-export interface BackupCode {
-    id: string;
+}
+export interface BackupCode { id: string;
     code: string;
     used: boolean;
-    usedAt?: Date;
-
+    usedAt?: Date }
 }
-export interface TrustedDevice {
-    id: string;
+}
+export interface TrustedDevice { id: string;
     name: string;
     type: 'desktop' | 'mobile' | 'tablet';
     browser: string;
     location: string;
     addedAt: Date;
     lastAccess: Date;
-    current: boolean;
-
+    current: boolean }
 }
-export interface SecurityEvent {
-    id: string;
+}
+export interface SecurityEvent { id: string;
     type: 'login' | 'mfa_enabled' | 'mfa_disabled' | 'device_added' | 'device_removed' | 'backup_used';
     description: string;
     timestamp: Date;
     ipAddress: string;
     location: string;
-    riskLevel: 'low' | 'medium' | 'high';
-
+    riskLevel: 'low' | 'medium' | 'high' }
 }
-export interface MFASettings {
-    requireMFA: boolean;
+}
+export interface MFASettings { requireMFA: boolean;
     allowBackupCodes: boolean;
     trustedDeviceExpiry: number;
     maxTrustedDevices: number;
     sessionTimeout: number;
     emailNotifications: boolean;
-    smsNotifications: boolean;
-
+    smsNotifications: boolean }
 }
-export interface MFAStatus {
-    enabled: boolean;
+}
+export interface MFAStatus { enabled: boolean;
     methodsConfigured: number;
     primaryMethod?: string;
     backupCodesRemaining: number;
     trustedDevicesCount: number;
-    lastSecurityEvent?: SecurityEvent;
-
+    lastSecurityEvent?: SecurityEvent }
 }
-export interface UseMFAManagementOptions {
-    userId: string;
+}
+export interface UseMFAManagementOptions { userId: string;
     autoRefresh?: boolean;
     refreshInterval?: number;
     onStatusChange?: (status: MFAStatus) => void;
@@ -87,11 +82,10 @@ export interface UseMFAManagementOptions {
     onError?: (error: Error) => void;
     enableRetryHandling?: boolean;
     maxRetryAttempts?: number;
-    retryTimeoutMs?: number;
-
+    retryTimeoutMs?: number }
 }
-export interface UseMFAManagementReturn {
-    mfaMethods: MFAMethod[];
+}
+export interface UseMFAManagementReturn { mfaMethods: MFAMethod[];
     backupCodes: BackupCode[];
     trustedDevices: TrustedDevice[];
     securityEvents: SecurityEvent[];
@@ -105,9 +99,10 @@ export interface UseMFAManagementReturn {
     operationTimeout: boolean;
     enableMethod: (methodId: string) => Promise<void>;
     disableMethod: (methodId: string) => Promise<void>;
-    setupTOTP: (userId: string) => Promise<{,
+    setupTOTP: (userId: string) => Promise<{ }
         secret: string;
         qrCode: string;
+}
 }
     }>;
     setupSMS: (phoneNumber: string) => Promise<void>;

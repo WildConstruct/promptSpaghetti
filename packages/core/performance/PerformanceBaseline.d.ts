@@ -6,14 +6,14 @@ import { KPISnapshot } from './PerformanceKPIs';
 import { EventEmitter } from 'events';
 
 }
-export interface BaselineSnapshot {
-    id: string;
+}
+export interface BaselineSnapshot { id: string;
     timestamp: number;
     environment: {
         userAgent?: string;
         viewport?: {
             width: number;
-            height: number;
+            height: number }
 }
         };
         connection?: string;
@@ -21,45 +21,38 @@ export interface BaselineSnapshot {
         hardwareConcurrency?: number;
     };
     kpiSnapshots: KPISnapshot[];
-    systemInfo: {
-        nodeVersion?: string;
+    systemInfo: { nodeVersion?: string;
         platform?: string;
-        memoryUsage?: NodeJS.MemoryUsage;
-    };
-    testConditions: {
-        graphComplexity: 'simple' | 'medium' | 'complex';
+        memoryUsage?: NodeJS.MemoryUsage };
+    testConditions: { graphComplexity: 'simple' | 'medium' | 'complex';
         dataSize: 'small' | 'medium' | 'large';
-        concurrentUsers: number;
-    };
+        concurrentUsers: number };
 
 }
-export interface BaselineSummary {
-    capturedAt: number;
+}
+export interface BaselineSummary { capturedAt: number;
     totalKPIs: number;
     criticalKPIs: number;
     kpisByStatus: {
         excellent: number;
         good: number;
         warning: number;
-        critical: number;
+        critical: number }
 }
     };
-    averageScores: {
-        runtime: number;
+    averageScores: { runtime: number;
         api: number;
         bundle: number;
         memory: number;
         network: number;
         build: number;
-        userExperience: number;
-    };
+        userExperience: number };
     recommendations: string[];
 /**
  * Performance Baseline Measurement System
  * Captures and manages performance baselines for comparison and improvement tracking
  */
-export declare class PerformanceBaseline extends EventEmitter {
-    private snapshots;
+export declare class PerformanceBaseline extends EventEmitter { private snapshots;
     private performanceTracker;
     private maxSnapshots;
     constructor();
@@ -119,8 +112,7 @@ export declare class PerformanceBaseline extends EventEmitter {
     compareBaselines(baseline1: BaselineSnapshot, baseline2: BaselineSnapshot): {
         improved: string[];
         degraded: string[];
-        unchanged: string[];
-    };
+        unchanged: string[] };
     /**
      * Export baseline data
      */

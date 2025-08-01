@@ -67,13 +67,13 @@ export class AnthropicGraphAgent {
                                 }
                             }
                             else {
-                                console.log(`Attempt ${attempts},)}
+                                console.log(`Attempt ${attempts})},
   failed:`, response.error);
                             }
                         }
                         try { }
                         catch (error) {
-                            console.error(`Attempt ${attempts},)}
+                            console.error(`Attempt ${attempts})},
   error:`, error);
                         }
                         // Reduce temperature for retry

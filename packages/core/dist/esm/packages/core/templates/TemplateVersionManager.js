@@ -4,8 +4,18 @@ migration_required: boolean;
 migration_complexity: 'simple' | 'moderate' | 'complex';
 estimated_migration_time: number; // minutes
  > ;
-variable_changes: Array;
-customization_changes: Array;
+variable_changes: Array < {
+    variable_id: string,
+    change_type: 'added' | 'removed' | 'modified',
+    old_variable: TemplateVariable,
+    new_variable: TemplateVariable
+} > ;
+customization_changes: Array < {
+    point_id: string,
+    change_type: 'added' | 'removed' | 'modified',
+    old_point: CustomizationPoint,
+    new_point: CustomizationPoint
+} > ;
 graph_changes: {
     nodes_added: number;
     nodes_removed: number;
@@ -25,15 +35,17 @@ export class TemplateVersionManager {
 { }
 // Version Management
 async;
-createVersion(template, ProjectTemplate);
-options: {
+createVersion(template, ProjectTemplate),
+    options;
+{
     version_number ?  : string;
     version_tag ?  : string;
     title ?  : string;
     description ?  : string;
     changelog ?  : string;
     branch_name ?  : string;
-    compatibility_level ?  : 'patch' | 'minor' | 'major';
+    compatibility_level ?  : 'patch' | 'minor' | 'major',
+    ;
 }
 { }
 Promise < TemplateVersion > {
@@ -61,9 +73,10 @@ Promise < TemplateVersion > {
         console.error('Failed to create template version:', error);
         throw error;
         async;
-        publishVersion(versionId, string, options, {});
-        release_notes ?  : string;
-        visibility ?  : 'private' | 'workspace' | 'public';
+        publishVersion(versionId, string, options, {}),
+            release_notes ?  : string;
+        visibility ?  : 'private' | 'workspace' | 'public',
+        ;
     }
 };
 { }
@@ -85,8 +98,8 @@ catch (error) {
     console.error('Failed to publish template version:', error);
     throw error;
     async;
-    getVersions(options, {});
-    include_drafts ?  : boolean;
+    getVersions(options, {}),
+        include_drafts ?  : boolean;
     branch_name ?  : string;
     limit ?  : number;
     offset ?  : number;
@@ -186,8 +199,8 @@ catch (error) {
         console.error('Failed to import template:', error);
         throw error;
         async;
-        importFromGit(gitUrl, string, options, {});
-        branch ?  : string;
+        importFromGit(gitUrl, string, options, {}),
+            branch ?  : string;
         commit ?  : string;
         credentials ?  : {
             username: string,
@@ -219,8 +232,8 @@ catch (error) {
         console.error('Failed to import template from Git:', error);
         throw error;
         async;
-        importFromMarketplace(marketplaceId, string, options, {});
-        version ?  : string;
+        importFromMarketplace(marketplaceId, string, options, {}),
+            version ?  : string;
         auto_update ?  : boolean;
         include_dependencies ?  : boolean;
     }
@@ -289,8 +302,8 @@ catch (error) {
     console.error('Failed to export template:', error);
     throw error;
     async;
-    exportVersionHistory(options, {});
-    branch_name ?  : string;
+    exportVersionHistory(options, {}),
+        branch_name ?  : string;
     start_version ?  : string;
     end_version ?  : string;
     format ?  : 'json' | 'csv' | 'timeline';
@@ -318,7 +331,11 @@ Promise < {
             satisfied: boolean,
             missing: TemplateDependency,
             conflicts: TemplateConflict,
-            recommendations: (Array)
+            recommendations: Array < {
+                template_id: string,
+                recommended_version: string,
+                reason: string
+            } > 
         } > {
             try: {
                 const: response = await this.apiClient.get(`/api/template-versions/${versionId}/dependencies`)
@@ -330,9 +347,10 @@ Promise < {
             console.error('Failed to check dependencies:', error);
             throw error;
             async;
-            resolveDependencies(versionId, string, options, {});
-            auto_install ?  : boolean;
-            update_strategy ?  : 'conservative' | 'latest' | 'compatible';
+            resolveDependencies(versionId, string, options, {}),
+                auto_install ?  : boolean;
+            update_strategy ?  : 'conservative' | 'latest' | 'compatible',
+            ;
         }
         Promise < {
             resolved: TemplateDependency,
@@ -357,7 +375,11 @@ Promise < {
                 instructions: string,
                 complexity: 'simple' | 'moderate' | 'complex',
                 estimated_time: number,
-                breaking_changes: (Array)
+                breaking_changes: Array < {
+                    type: string,
+                    description: string,
+                    action_required: string
+                } > 
             } > {
                 try: {
                     const: response = await this.apiClient.get()
@@ -458,19 +480,23 @@ Promise < {
                             mime_type: string
                         };
                     }
-                     > ;
-                    // Metadata and documentation
-                    documentation: {
-                        readme: string;
-                        changelog: string;
-                        api_docs ?  : string;
-                        examples ?  : Array;
-                    }
-                    ;
-                    // Verification
-                    checksums: Record;
-                    signature ?  : string;
                 }
+                 > ;
+                // Metadata and documentation
+                documentation: {
+                    readme: string;
+                    changelog: string;
+                    api_docs ?  : string;
+                    examples ?  : Array < {
+                        name: string,
+                        description: string,
+                        graph_data: any
+                    } > ;
+                }
+                ;
+                // Verification
+                checksums: Record;
+                signature ?  : string;
             }
         }
     }

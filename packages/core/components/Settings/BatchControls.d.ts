@@ -2,6 +2,7 @@ import React from 'react';
 import { BatchSettings } from '../../settings/types';
 
 }
+}
 export interface BatchControlsProps {
     settings: BatchSettings;
     onChange: (settings: BatchSettings) => void;
@@ -13,4 +14,5 @@ export interface BatchControlsProps {
  */
 export declare const BatchControls: React.FC<BatchControlsProps>;
 //# sourceMappingURL=BatchControls.d.ts.map
+}
 }

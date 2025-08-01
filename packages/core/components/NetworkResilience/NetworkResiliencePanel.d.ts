@@ -3,8 +3,8 @@ import { NetworkStatus } from '../../network-resilience/NetworkResilienceManager
 import { QueuedOperation } from '../../network-resilience/OfflineOperationQueue';
 
 }
-interface NetworkResiliencePanelProps {
-    status: NetworkStatus;
+}
+interface NetworkResiliencePanelProps { status: NetworkStatus;
     queuedOperations: QueuedOperation[];
     onRetryConnection?: () => void;
     onForceSync?: () => void;
@@ -13,7 +13,7 @@ interface NetworkResiliencePanelProps {
     isOpen: boolean;
     onClose: () => void;
 
-export declare const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps>;
+export declare const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> }
 }
 export {};
 //# sourceMappingURL=NetworkResiliencePanel.d.ts.map

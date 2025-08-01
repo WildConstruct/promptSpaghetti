@@ -28,15 +28,17 @@ import {
   Plus,
   Activity,
   TrendingUp
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface DataProtectionMetrics {
   retentionPolicies: {
   total: number;,
   active: number,
   expired: number;,
   violations: number;
-}
+
+
 };
   deletionWorkflows: {
   total: number,
@@ -59,7 +61,8 @@ interface DataProtectionMetrics {
   violations: number,
   lastAudit: string;
 };
-}
+
+
 interface RetentionPolicy {
   id: string;,
   name: string,
@@ -74,7 +77,9 @@ interface RetentionPolicy {
   updatedAt: string;,
   nextExecution: string,
   affectedRecords: number;
-}
+
+
+
 interface DeletionWorkflow {
   id: string;,
   name: string,
@@ -88,7 +93,9 @@ interface DeletionWorkflow {
   estimatedCompletion?: string,
   policyId: string;,
   errors: string;
-}
+
+
+
 interface ComplianceViolation {
   id: string;,
   type: 'retention_exceeded' | 'deletion_failed' | 'access_violation' | 'audit_failed',
@@ -99,49 +106,11 @@ interface ComplianceViolation {
   status: 'open' | 'investigating' | 'resolved' | 'dismissed';,
   framework: string;
   remediation?: string;
-type DashboardTab = 'overview' | 'policies' | 'workflows' | 'compliance' | 'analytics' | 'audit';
-}
+  type DashboardTab = 'overview' | 'policies' | 'workflows' | 'compliance' | 'analytics' | 'audit';
 
-const DataProtectionDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
-  const [metrics, setMetrics] = useState<DataProtectionMetrics | null>(null);
-  const [retentionPolicies, setRetentionPolicies] = useState<RetentionPolicy[]>([]);
-  const [deletionWorkflows, setDeletionWorkflows] = useState<DeletionWorkflow[]>([]);
-  const [complianceViolations, setComplianceViolations] = useState<ComplianceViolation[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
-  // Filters and search
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_searchTerm, _setSearchTerm] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_statusFilter, _setStatusFilter] = useState<string>('all');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_frameworkFilter, _setFrameworkFilter] = useState<string>('all');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-}
-  const [_dateRange, _setDateRange] = useState<{ start: string, end: string }>({
-  start: '',
-  end: ''
-});
-  // Modal states
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_showCreatePolicy, _setShowCreatePolicy] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_showCreateWorkflow, _setShowCreateWorkflow] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_selectedPolicy, _setSelectedPolicy] = useState<RetentionPolicy | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_selectedWorkflow, _setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
-  // Fetch dashboard data
-  const fetchDashboardData = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const [metricsRes, policiesRes, workflowsRes, violationsRes] = await Promise.all([)
-        fetch('/api/data-protection/metrics', {
-  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        }),
+
+
+const DataProtectionDashboard = () => { return null; }),
         fetch('/api/data-protection/policies', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
@@ -150,7 +119,7 @@ const DataProtectionDashboard: React.FC = () => {
         }),
         fetch('/api/data-protection/violations', {
   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-  }
+
       ]);
       if (!metricsRes.ok || !policiesRes.ok || !workflowsRes.ok || !violationsRes.ok) {
         throw new Error('Failed to fetch dashboard data');
@@ -165,9 +134,9 @@ const DataProtectionDashboard: React.FC = () => {
       setDeletionWorkflows(workflowsData.workflows || []);
       setComplianceViolations(violationsData.violations || []);
       setLastRefresh(new Date());
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
-} finally {
+ finally {
       setLoading(false);
   }, []);
   useEffect(() => {
@@ -363,7 +332,7 @@ const DataProtectionDashboard: React.FC = () => {
   activeTab === key
   ? 'border-blue-500 text-blue-600 bg-blue-50'
   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-} whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
+ whitespace-nowrap py-4 px-3 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{label}</span>

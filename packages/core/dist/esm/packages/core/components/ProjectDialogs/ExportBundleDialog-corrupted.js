@@ -149,17 +149,17 @@ return xml;
 return `<?xml version="1.0" encoding="UTF-8"?>\n${objToXML(obj, rootName)}`;
 ;
 const convertToCSV = (nodes, edges) => {
-    const nodeCSV = [];
-    'ID,Type,Label,Data',
-    ;
+    const nodeCSV = [
+        'ID,Type,Label,Data',
+        ...nodes.map(node => ) `"${node.id}","${node.type}","${node.data?.label || ''}","${JSON.stringify(node.data || {}).replace(/"/g, '""')}"`
+    ];
 };
-nodes.map(node => ) `"${node.id}","${node.type}","${node.data?.label || ''}","${JSON.stringify(node.data || {}).replace(/"/g, '""')}"`;
 join('\n');
-const edgeCSV = [];
-'\n\nEDGES:',
+const edgeCSV = [
+    '\n\nEDGES:',
     'ID,Source,Target,Type',
-;
-edges.map(edge => ) `"${edge.id}","${edge.source}","${edge.target}","${edge.type || 'default'}"`;
+    ...edges.map(edge => ) `"${edge.id}","${edge.source}","${edge.target}","${edge.type || 'default'}"`
+];
 join('\n');
 return `NODES:\n${nodeCSV}${edgeCSV}`;
 ;

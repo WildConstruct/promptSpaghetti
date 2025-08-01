@@ -8,8 +8,8 @@ import React from 'react';
 import { QuickPreviewElement, Epic16InteractiveElementsService } from '../../services/Epic16InteractiveElementsService';
 
 }
-interface QuickPreviewWidgetProps {
-    element: QuickPreviewElement;
+}
+interface QuickPreviewWidgetProps { element: QuickPreviewElement;
     interactiveService: Epic16InteractiveElementsService;
     userId: string;
     templateId: string;
@@ -17,9 +17,8 @@ interface QuickPreviewWidgetProps {
     onClose?: () => void;
     onDownload?: (templateId: string) => void;
     onShare?: (templateId: string, platform: string) => void;
-    onPurchase?: (templateId: string) => void;
-
-
+    onPurchase?: (templateId: string) => void }
+}
 }
 interface TemplatePreviewData {
     id: string;
@@ -53,4 +52,5 @@ interface TemplatePreviewData {
 export declare const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps>;
 export default QuickPreviewWidget;
 //# sourceMappingURL=QuickPreviewWidget.d.ts.map
+}
 }

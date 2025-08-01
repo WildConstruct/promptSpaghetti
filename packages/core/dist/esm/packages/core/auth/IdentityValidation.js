@@ -67,59 +67,30 @@ export class IdentityValidationService {
     }
     initializeMockData() {
         // Initialize with sample verified users
-        const sampleUsers = [];
-        {
-            userId: 'creator-johnsmith',
-                trustScore;
+        const sampleUsers = [
             {
+                userId: 'creator-johnsmith',
+                trustScore: {},
                 overall: 92,
-                    components;
-                {
-                    identity: 95, professional;
-                    90, community;
-                    88, activity;
-                    95;
-                }
+                components: { identity: 95, professional: 90, community: 88, activity: 95 },
                 tier: 'professional',
-                    badges;
-                ['verified_director', 'portfolio_verified', 'industry_member'],
-                    lastUpdated;
-                Date.now();
-            }
+                badges: ['verified_director', 'portfolio_verified', 'industry_member'],
+                lastUpdated: Date.now()
+            },
             {
                 userId: 'creator-maryjones',
-                    trustScore;
-                {
-                    overall: 88,
-                        components;
-                    {
-                        identity: 90, professional;
-                        85, community;
-                        92, activity;
-                        85;
-                    }
-                    tier: 'verified',
-                        badges;
-                    ['verified_email', 'portfolio_verified', 'social_verified'],
-                        lastUpdated;
-                    Date.now();
-                    ;
-                    sampleUsers.forEach(user => { });
-                    this.userTrustScores.set(user.userId, user.trustScore);
-                }
-                ;
-                /**
-                 * Submit identity validation request
-                 */
+                trustScore: {},
+                overall: 88,
+                components: { identity: 90, professional: 85, community: 92, activity: 85 },
+                tier: 'verified',
+                badges: ['verified_email', 'portfolio_verified', 'social_verified'],
+                lastUpdated: Date.now()
             }
-            /**
-             * Submit identity validation request
-             */
-        }
-        /**
-         * Submit identity validation request
-         */
+        ];
+        sampleUsers.forEach(user => { });
+        this.userTrustScores.set(user.userId, user.trustScore);
     }
+    ;
     /**
      * Submit identity validation request
      */

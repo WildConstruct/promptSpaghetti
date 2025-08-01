@@ -174,6 +174,21 @@ Enhanced Claude API cost tracking with ccusage integration:
 - **Dashboard integration**: Real-time cost widget shows actual vs estimated costs
 - **Automatic detection**: Uses actual ccusage data when available, falls back to estimates
 
+### tmux-cli Command to interact with CLI applications
+
+`tmux-cli` is a bash command that enables Claude Code to control CLI applications 
+running in separate tmux panes - launch programs, send input, capture output, 
+and manage interactive sessions. Run `tmux-cli --help` for detailed usage 
+instructions.
+
+Example uses:
+- Interact with a script that waits for user input
+- Launch another Claude Code instance to have it perform some analysis or review or 
+  debugging etc
+- Run a Python script with the Pdb debugger to step thru its execution, for 
+  code-understanding and debugging
+- Launch web apps and test them with browser automation MCP tools like Puppeteer
+
 ## Architecture Overview
 
 ### Monorepo Structure

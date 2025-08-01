@@ -5,22 +5,25 @@ import { WebSocketServer } from '../websocket/WebSocketServer';
 /**
  * Dashboard configuration
  */
-}
-}
+
+
+
 export interface DashboardConfig {
   refreshInterval: number; // milliseconds
   historyWindow: number;   // milliseconds
   alertThreshold: number;  // number of alerts before critical status
   autoRefresh: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Real-time dashboard data
  */
-}
-}
+
+
+
 export interface DashboardData {
   timestamp: number;
   health: {
@@ -28,8 +31,9 @@ export interface DashboardData {
     system: number;
     webSocket: number;
     collaboration: number;
-}
-}
+
+
+
   };
   metrics: {
     current: {
@@ -61,7 +65,7 @@ export interface DashboardData {
     recentDisconnections: number;
   };
   recommendations: string[];
-}
+
 
 /**
  * Performance monitoring dashboard
@@ -87,14 +91,14 @@ export class PerformanceDashboard extends EventEmitter {
     };
 
     this.setupMetricsListeners();
-  }
+
 
   /**
    * Set WebSocket server for connection metrics
    */
   setWebSocketServer(wsServer: WebSocketServer): void {
     this.wsServer = wsServer;
-  }
+
 
   /**
    * Start the dashboard
@@ -102,7 +106,7 @@ export class PerformanceDashboard extends EventEmitter {
   start(): void {
     if (this.isActive) {
       return;
-    }
+
 
     this.isActive = true;
     console.log('Starting performance dashboard');
@@ -111,10 +115,10 @@ export class PerformanceDashboard extends EventEmitter {
       this.refreshTimer = setInterval(() => {
         this.broadcastUpdate();
       }, this.config.refreshInterval);
-    }
+
 
     this.emit('dashboard_started');
-  }
+
 
   /**
    * Stop the dashboard
@@ -122,7 +126,7 @@ export class PerformanceDashboard extends EventEmitter {
   stop(): void {
     if (!this.isActive) {
       return;
-    }
+
 
     this.isActive = false;
     console.log('Stopping performance dashboard');
@@ -130,10 +134,10 @@ export class PerformanceDashboard extends EventEmitter {
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer);
       this.refreshTimer = null;
-    }
+
 
     this.emit('dashboard_stopped');
-  }
+
 
   /**
    * Add a dashboard client
@@ -146,7 +150,7 @@ export class PerformanceDashboard extends EventEmitter {
     this.sendToClient(client, dashboardData);
     
     this.emit('client_connected', { clientCount: this.dashboardClients.size });
-  }
+
 
   /**
    * Remove a dashboard client
@@ -154,14 +158,14 @@ export class PerformanceDashboard extends EventEmitter {
   removeClient(client: any): void {
     this.dashboardClients.delete(client);
     this.emit('client_disconnected', { clientCount: this.dashboardClients.size });
-  }
+
 
   /**
    * Get current dashboard data
    */
   getDashboardData(): DashboardData {
     return this.generateDashboardData();
-  }
+
 
   /**
    * Get performance report for a time period
@@ -175,25 +179,25 @@ export class PerformanceDashboard extends EventEmitter {
         start: startTime,
         end: endTime,
         duration: endTime - startTime
-  }
+
       summary: {
         totalMetrics: window.systemMetrics.length + window.webSocketMetrics.length + window.collaborationMetrics.length,
         averageHealth: this.calculateAverageHealth(window),
         alertCount: aggregated.alerts.length,
         criticalAlerts: aggregated.alerts.filter((a: PerformanceAlert) => a.severity === 'critical').length
-  }
+
       metrics: aggregated,
       trends: this.calculateTrends(window),
       insights: this.generateInsights(aggregated, window)
     };
-  }
+
 
   /**
    * Force a dashboard refresh
    */
   refresh(): void {
     this.broadcastUpdate();
-  }
+
 
   /**
    * Generate HTML dashboard
@@ -213,20 +217,20 @@ export class PerformanceDashboard extends EventEmitter {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
+
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #1a1a1a;
             color: #ffffff;
             line-height: 1.6;
-        }
+
 
         .dashboard {
             padding: 20px;
             max-width: 1400px;
             margin: 0 auto;
-        }
+
 
         .header {
             display: flex;
@@ -235,38 +239,38 @@ export class PerformanceDashboard extends EventEmitter {
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid #333;
-        }
+
 
         .title {
             font-size: 28px;
             font-weight: 600;
             color: #ffffff;
-        }
+
 
         .timestamp {
             color: #888;
             font-size: 14px;
-        }
+
 
         .health-overview {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
-        }
+
 
         .health-card {
             background: #2a2a2a;
             border-radius: 8px;
             padding: 20px;
             border: 1px solid #333;
-        }
+
 
         .health-score {
             font-size: 36px;
             font-weight: bold;
             margin-bottom: 10px;
-        }
+
 
         .health-score.excellent { color: #22c55e; }
         .health-score.good { color: #84cc16; }
@@ -278,45 +282,45 @@ export class PerformanceDashboard extends EventEmitter {
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
+
 
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
-        }
+
 
         .metric-card {
             background: #2a2a2a;
             border-radius: 8px;
             padding: 20px;
             border: 1px solid #333;
-        }
+
 
         .metric-title {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 15px;
             color: #ffffff;
-        }
+
 
         .metric-value {
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 5px;
-        }
+
 
         .metric-unit {
             color: #888;
             font-size: 14px;
-        }
+
 
         .trend-indicator {
             display: inline-block;
             margin-left: 10px;
             font-size: 14px;
-        }
+
 
         .trend-up { color: #ef4444; }
         .trend-down { color: #22c55e; }
@@ -324,14 +328,14 @@ export class PerformanceDashboard extends EventEmitter {
 
         .alerts-section {
             margin-bottom: 30px;
-        }
+
 
         .section-title {
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 15px;
             color: #ffffff;
-        }
+
 
         .alert-item {
             background: #2a2a2a;
@@ -339,7 +343,7 @@ export class PerformanceDashboard extends EventEmitter {
             padding: 15px;
             margin-bottom: 10px;
             border-left: 4px solid;
-        }
+
 
         .alert-item.warning { border-left-color: #f59e0b; }
         .alert-item.critical { border-left-color: #ef4444; }
@@ -349,7 +353,7 @@ export class PerformanceDashboard extends EventEmitter {
             justify-content: space-between;
             align-items: center;
             margin-bottom: 5px;
-        }
+
 
         .alert-severity {
             font-weight: 600;
@@ -357,23 +361,23 @@ export class PerformanceDashboard extends EventEmitter {
             font-size: 12px;
             padding: 2px 8px;
             border-radius: 4px;
-        }
+
 
         .alert-severity.warning {
             background: rgba(245, 158, 11, 0.2);
             color: #f59e0b;
-        }
+
 
         .alert-severity.critical {
             background: rgba(239, 68, 68, 0.2);
             color: #ef4444;
-        }
+
 
         .connections-info {
             display: flex;
             gap: 20px;
             margin-bottom: 30px;
-        }
+
 
         .connection-stat {
             background: #2a2a2a;
@@ -382,45 +386,45 @@ export class PerformanceDashboard extends EventEmitter {
             flex: 1;
             border: 1px solid #333;
             text-align: center;
-        }
+
 
         .connection-value {
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 5px;
-        }
+
 
         .connection-label {
             color: #888;
             font-size: 14px;
-        }
+
 
         .recommendations {
             background: #2a2a2a;
             border-radius: 8px;
             padding: 20px;
             border: 1px solid #333;
-        }
+
 
         .recommendation-item {
             margin-bottom: 10px;
             padding-left: 20px;
             position: relative;
-        }
+
 
         .recommendation-item:before {
             content: "•";
             position: absolute;
             left: 0;
             color: #22c55e;
-        }
+
 
         .no-data {
             text-align: center;
             color: #888;
             font-style: italic;
             padding: 20px;
-        }
+
 
         .auto-refresh {
             display: flex;
@@ -428,7 +432,7 @@ export class PerformanceDashboard extends EventEmitter {
             gap: 10px;
             color: #888;
             font-size: 14px;
-        }
+
 
         .refresh-indicator {
             width: 8px;
@@ -436,12 +440,12 @@ export class PerformanceDashboard extends EventEmitter {
             border-radius: 50%;
             background: #22c55e;
             animation: pulse 2s infinite;
-        }
+
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
-        }
+
     </style>
 </head>
 <body>
@@ -557,7 +561,7 @@ export class PerformanceDashboard extends EventEmitter {
     </script>
 </body>
 </html>`;
-  }
+
 
   /**
    * Setup metrics event listeners
@@ -571,9 +575,9 @@ export class PerformanceDashboard extends EventEmitter {
       if (this.isActive && this.dashboardClients.size > 0) {
         // Throttled updates to avoid overwhelming clients
         setTimeout(() => this.broadcastUpdate(), 100);
-      }
+
     });
-  }
+
 
   /**
    * Generate current dashboard data
@@ -593,7 +597,7 @@ export class PerformanceDashboard extends EventEmitter {
       metrics: {
         current: currentMetrics,
         trends
-  }
+
       alerts: {
         active: activeAlerts,
         recent: recentAlerts,
@@ -601,12 +605,12 @@ export class PerformanceDashboard extends EventEmitter {
           total: activeAlerts.length,
           critical: activeAlerts.filter(a => a.severity === 'critical').length,
           warning: activeAlerts.filter(a => a.severity === 'warning').length
-        }
-  }
+
+
       connections: connectionInfo,
       recommendations
     };
-  }
+
 
   /**
    * Calculate health scores for different systems
@@ -624,7 +628,7 @@ export class PerformanceDashboard extends EventEmitter {
       webSocket: webSocketHealth,
       collaboration: collaborationHealth
     };
-  }
+
 
   /**
    * Calculate system health score
@@ -648,7 +652,7 @@ export class PerformanceDashboard extends EventEmitter {
     score -= systemAlerts.filter(a => a.severity === 'warning').length * 10;
     
     return Math.max(0, Math.min(100, Math.round(score)));
-  }
+
 
   /**
    * Calculate WebSocket health score
@@ -672,7 +676,7 @@ export class PerformanceDashboard extends EventEmitter {
     score -= wsAlerts.filter(a => a.severity === 'warning').length * 10;
     
     return Math.max(0, Math.min(100, Math.round(score)));
-  }
+
 
   /**
    * Calculate collaboration health score
@@ -696,7 +700,7 @@ export class PerformanceDashboard extends EventEmitter {
     score -= collabAlerts.filter(a => a.severity === 'warning').length * 10;
     
     return Math.max(0, Math.min(100, Math.round(score)));
-  }
+
 
   /**
    * Get recent alerts (last hour)
@@ -706,7 +710,7 @@ export class PerformanceDashboard extends EventEmitter {
     return this.metricsCollector.getMetricsWindow(oneHourAgo, Date.now()).systemMetrics
       .map(() => []) // Simplified - would get actual recent alerts
       .flat();
-  }
+
 
   /**
    * Get connection information
@@ -720,7 +724,7 @@ export class PerformanceDashboard extends EventEmitter {
         recentConnections: 0,
         recentDisconnections: 0
       };
-    }
+
 
     const healthMetrics = this.wsServer.getHealthMetrics();
     const documentSessions = this.wsServer.getDocumentSessions();
@@ -734,7 +738,7 @@ export class PerformanceDashboard extends EventEmitter {
       recentConnections: 0, // Would track recent connections
       recentDisconnections: 0 // Would track recent disconnections
     };
-  }
+
 
   /**
    * Calculate current performance trends
@@ -750,7 +754,7 @@ export class PerformanceDashboard extends EventEmitter {
       latencyTrend: window.webSocketMetrics.slice(-20).map(m => m.messageLatency),
       errorRateTrend: window.webSocketMetrics.slice(-20).map(m => m.errorRate)
     };
-  }
+
 
   /**
    * Generate current recommendations
@@ -760,30 +764,30 @@ export class PerformanceDashboard extends EventEmitter {
 
     if (alerts.length > this.config.alertThreshold) {
       recommendations.push(`High alert count (${alerts.length}). Consider investigating underlying issues.`);
-    }
+
 
     if (metrics.system?.cpuUsage > 80) {
       recommendations.push('CPU usage is high. Consider scaling or optimizing processes.');
-    }
+
 
     if (metrics.system?.memoryUsage.percentage > 85) {
       recommendations.push('Memory usage is critical. Implement garbage collection or add more memory.');
-    }
+
 
     if (metrics.webSocket?.messageLatency > 1000) {
       recommendations.push('WebSocket latency is high. Optimize message processing or check network conditions.');
-    }
+
 
     if (alerts.filter(a => a.severity === 'critical').length > 0) {
       recommendations.push('Critical alerts detected. Immediate attention required.');
-    }
+
 
     if (recommendations.length === 0) {
       recommendations.push('System is performing well. Continue monitoring.');
-    }
+
 
     return recommendations;
-  }
+
 
   /**
    * Calculate average health over a time window
@@ -792,7 +796,7 @@ export class PerformanceDashboard extends EventEmitter {
     // Simplified calculation - would be more sophisticated in real implementation
     const alertCount = window.systemMetrics.length + window.webSocketMetrics.length + window.collaborationMetrics.length;
     return Math.max(0, 100 - (alertCount * 2));
-  }
+
 
   /**
    * Calculate performance trends
@@ -804,7 +808,7 @@ export class PerformanceDashboard extends EventEmitter {
       latencyTrend: this.calculateTrendDirection(window.webSocketMetrics.map((m: WebSocketMetrics) => m.messageLatency)),
       errorRateTrend: this.calculateTrendDirection(window.webSocketMetrics.map((m: WebSocketMetrics) => m.errorRate))
     };
-  }
+
 
   /**
    * Calculate trend direction (up, down, stable)
@@ -825,7 +829,7 @@ export class PerformanceDashboard extends EventEmitter {
     if (change > 5) return 'up';
     if (change < -5) return 'down';
     return 'stable';
-  }
+
 
   /**
    * Generate insights from performance data
@@ -836,18 +840,18 @@ export class PerformanceDashboard extends EventEmitter {
     // Performance insights
     if (aggregated.system?.cpu.mean > 70) {
       insights.push('Sustained high CPU usage detected. Consider horizontal scaling.');
-    }
+
 
     if (aggregated.webSocket?.messageLatency.p95 > 2000) {
       insights.push('95th percentile message latency is concerning. Network optimization needed.');
-    }
+
 
     if (aggregated.collaboration?.conflictRate.mean > 0.1) {
       insights.push('High conflict rate suggests user workflow improvements needed.');
-    }
+
 
     return insights;
-  }
+
 
   /**
    * Broadcast dashboard update to all clients
@@ -855,14 +859,14 @@ export class PerformanceDashboard extends EventEmitter {
   private broadcastUpdate(): void {
     if (this.dashboardClients.size === 0) {
       return;
-    }
+
 
     const dashboardData = this.generateDashboardData();
     
     this.dashboardClients.forEach(client => {
       this.sendToClient(client, dashboardData);
     });
-  }
+
 
   /**
    * Broadcast alert to all clients
@@ -871,7 +875,7 @@ export class PerformanceDashboard extends EventEmitter {
     this.dashboardClients.forEach(client => {
       this.sendToClient(client, { type: 'alert', alert });
     });
-  }
+
 
   /**
    * Send data to a specific client
@@ -880,14 +884,14 @@ export class PerformanceDashboard extends EventEmitter {
     try {
       if (client.send && typeof client.send === 'function') {
         client.send(JSON.stringify(data));
-      } else if (client.write && typeof client.write === 'function') {
+ else if (client.write && typeof client.write === 'function') {
         client.write(JSON.stringify(data));
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to send data to dashboard client:', error);
       this.dashboardClients.delete(client);
-    }
-  }
+
+
 
   /**
    * Get health class for styling
@@ -897,5 +901,4 @@ export class PerformanceDashboard extends EventEmitter {
     if (score >= 75) return 'good';
     if (score >= 50) return 'warning';
     return 'critical';
-  }
-}
+

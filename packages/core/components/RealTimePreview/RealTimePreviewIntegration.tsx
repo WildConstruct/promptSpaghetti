@@ -16,9 +16,9 @@ import { Node, Edge } from 'reactflow';
 import { EnhancedPreviewModal, EnhancedPreviewResult } from '../PreviewModal/EnhancedPreviewModal';
 import { useEnhancedPreview } from '../../hooks/useEnhancedPreview';
 import { useRealTimePreview, PreviewVariant, RealTimePreviewConfig } from '../../hooks/useRealTimePreview';
-}
-interface RealTimePreviewIntegrationProps {
-  nodes: Node;
+
+
+interface RealTimePreviewIntegrationProps { nodes: Node;
   edges: Edge;
   // Director-friendly configuration
   enableRealTime?: boolean;
@@ -29,122 +29,108 @@ interface RealTimePreviewIntegrationProps {
   onPreviewUpdate?: (variants: PreviewVariant) => void;
   onHighlightPath?: (nodeIds: string, edgeIds: string) => void;
   onError?: (error: string) => void;
-  export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProps> = ({,)
-  nodes,
-  edges,
-  enableRealTime = true,
-  previewCount = 3,
-  autoRefresh = true,
-  showVarianceAnalysis = true,
-  onPreviewUpdate,
-  onHighlightPath,
+  export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProps> = ({);
+  nodes;
+  edges;
+  enableRealTime = true;
+  previewCount = 3;
+  autoRefresh = true;
+  showVarianceAnalysis = true;
+  onPreviewUpdate;
+  onHighlightPath }
   onError
-}
-}) => {
-  // State for preview integration
+
+
+}) => { // State for preview integration
   const [showEnhancedModal, setShowEnhancedModal] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<PreviewVariant | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const lastGraphChange = useRef<number>(Date.now());
   // Real-time preview configuration
-  const realTimeConfig: RealTimePreviewConfig = useMemo(() => ({,)
-  maxVariants: previewCount,
-  debounceMs: 200, // Fast response for directors,
-  maxExecutionTime: 1500,
-  enablePerformanceTracking: true,
+  const realTimeConfig: RealTimePreviewConfig = useMemo(() => ({)
+  maxVariants: previewCount
+  debounceMs: 200, // Fast response for directors
+  maxExecutionTime: 1500
+  enablePerformanceTracking: true }
   autoRefresh
 }), [previewCount, autoRefresh]);
   // Real-time preview hook
-  const {
-  variants,
-  isGenerating: realTimeGenerating,
-  performance,
-  error: realTimeError,
-  generateVariants,
+  const { variants
+  isGenerating: realTimeGenerating
+  performance
+  error: realTimeError
+  generateVariants }
   clearVariants
-} = useRealTimePreview(realTimeConfig);
+ = useRealTimePreview(realTimeConfig);
   // Enhanced preview for detailed analysis
-  const {
-  loading: enhancedLoading,
-  error: enhancedError,
-  results: enhancedResults,
-  varianceAnalysis,
-  runEnhancedPreview,
+  const { loading: enhancedLoading
+  error: enhancedError
+  results: enhancedResults
+  varianceAnalysis
+  runEnhancedPreview }
   cancelPreview
-} = useEnhancedPreview();
+ = useEnhancedPreview();
   // Track graph changes for real-time updates
-  useEffect(() => {
-    if (!enableRealTime) return;
+  useEffect(() => { if (!enableRealTime) return;
     lastGraphChange.current = Date.now();
     // Generate real-time variants when graph changes
     const timer = setTimeout(() => {
-      generateVariants(nodes, edges);
-    }, realTimeConfig.debounceMs);
+      generateVariants(nodes, edges) }, realTimeConfig.debounceMs);
     return () => clearTimeout(timer);
   }, [nodes, edges, enableRealTime, generateVariants, realTimeConfig.debounceMs]);
   // Update callbacks
-  useEffect(() => {
-    onPreviewUpdate?.(variants);
-  }, [variants, onPreviewUpdate]);
-  useEffect(() => {
-    if (realTimeError) {
-      onError?.(realTimeError);
-  }, [realTimeError, onError]);
+  useEffect(() => { onPreviewUpdate?.(variants) }, [variants, onPreviewUpdate]);
+  useEffect(() => { if (realTimeError) {
+      onError?.(realTimeError) }, [realTimeError, onError]);
   // Handle variant selection and path highlighting
-  const handleVariantClick = useCallback((variant: PreviewVariant) => {
-  setSelectedVariant(variant);
+  const handleVariantClick = useCallback((variant: PreviewVariant) => { setSelectedVariant(variant);
   // Highlight execution path if available
   if (variant.seed && onHighlightPath) {
-  // Note: This would need execution path data from backend,
+  // Note: This would need execution path data from backend }
   // For now, we'll use placeholder logic
   const nodeIds = nodes.map(n => n.id);
   const edgeIds = edges.map(e => e.id);
   onHighlightPath(nodeIds, edgeIds);
 }, [nodes, edges, onHighlightPath]);
   // Open enhanced modal for detailed analysis
-  const handleOpenEnhancedModal = useCallback(async () => {
-  setShowEnhancedModal(true);
+  const handleOpenEnhancedModal = useCallback(async () => { setShowEnhancedModal(true);
   // Run enhanced preview with more comprehensive analysis
   await runEnhancedPreview({)
-  nodes,
-  edges,
-  runCount: 8, // More results for detailed analysis,
-  enableVarianceAnalysis: showVarianceAnalysis,
+  nodes
+  edges
+  runCount: 8, // More results for detailed analysis
+  enableVarianceAnalysis: showVarianceAnalysis }
 });
   }, [nodes, edges, runEnhancedPreview, showVarianceAnalysis]);
   // Convert real-time variants to enhanced results for modal
-  const convertedResults: EnhancedPreviewResult = useMemo(() => {
-    return variants.map((variant, index) => ({)
-  id: variant.id,
-      seed: variant.seed,
-      output: variant.result,
-      executionTimeMs: variant.executionTime,
+  const convertedResults: EnhancedPreviewResult = useMemo(() => { return variants.map((variant, index) => ({)
+  id: variant.id
+      seed: variant.seed
+      output: variant.result
+      executionTimeMs: variant.executionTime
       metadata: {
-  createdAt: new Date(variant.timestamp),
-        wordCount: variant.result.split(/\s+/).length,
-        characterCount: variant.result.length,
+  createdAt: new Date(variant.timestamp)
+        wordCount: variant.result.split(/\s+/).length
+        characterCount: variant.result.length
         estimatedReadingTime: Math.ceil(variant.result.split(/\s+/).length / 200), // ~200 WPM
-        contentType: 'mixed' as const,
+        contentType: 'mixed' as const }
         tags: [`seed-${variant.seed}`, `variant-${index + 1}`]}
-  },
+
   selected: variant === selectedVariant;
   }));
   }, [variants, selectedVariant]);
   // Calculate display metrics for director interface
-  const displayMetrics = useMemo(() => {
-    if (variants.length === 0) return null;
+  const displayMetrics = useMemo(() => { if (variants.length === 0) return null;
     const avgLength = variants.reduce((sum, v) => sum + v.result.length, 0) / variants.length;
     const avgExecutionTime = performance.averageExecutionTime;
     const variance = variants.reduce((sum, v) => {
       const diff = v.result.length - avgLength;
-      return sum + (diff * diff);
-    }, 0) / variants.length;
-    return {
-  averageLength: Math.round(avgLength),
-  averageExecutionTime: Math.round(avgExecutionTime),
-  variance: Math.round(Math.sqrt(variance)),
-  totalVariants: variants.length,
-  successRate: performance.successRate,
+      return sum + (diff * diff) }, 0) / variants.length;
+    return { averageLength: Math.round(avgLength)
+  averageExecutionTime: Math.round(avgExecutionTime)
+  variance: Math.round(Math.sqrt(variance))
+  totalVariants: variants.length
+  successRate: performance.successRate }
 };
   }, [variants, performance]);
   return;
@@ -249,13 +235,12 @@ interface RealTimePreviewIntegrationProps {
         varianceAnalysis={varianceAnalysis}
         onClose={() => setShowEnhancedModal(false)}
         onCancel={cancelPreview}
-        onResultHover={(index) => {
+        onResultHover={ (index) => {
           const result = enhancedResults[index] || convertedResults[index];
           if (result?.usedNodeIds && result?.usedEdgeIds) {
-            onHighlightPath?.(result.usedNodeIds, result.usedEdgeIds);
-        }}
+            onHighlightPath?.(result.usedNodeIds, result.usedEdgeIds) }}
       />
-      <style>{`
+      <style>{ `
         .real-time-preview-integration {
           position: relative;
           min-height: 60px;
@@ -297,32 +282,30 @@ interface RealTimePreviewIntegrationProps {
   height: 12px;
           border: 2px solid #444;
           border-top: 2px solid #ffd700;
-          border-radius: 50%;
+          border-radius: 50% }
   animation: spin 1s linear infinite;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        .header-controls {
-          display: flex;
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
+        .header-controls { display: flex;
   gap: 8px;
         .expand-btn, .detailed-btn {
-          background: #444;
+          background: #444
   border: none;
-          color: #fff;
+          color: #fff
   padding: 6px 12px;
           border-radius: 4px;
   cursor: pointer;
           font-size: 12px;
   transition: background 0.2s ease;
-        .expand-btn:hover, .detailed-btn:hover {,
+        .expand-btn:hover, .detailed-btn:hover {
   background: #555;
-        .detailed-btn:disabled {,
-  background: #333;
-          color: #666;
+        .detailed-btn:disabled {
+  background: #333
+  color: #666;
   cursor: not-allowed;
         .performance-metrics {
           display: flex;
-          justify-content: space-around;
+          justify-content: space-around
   padding: 8px 16px;
           background: rgba(255, 215, 0, 0.1);
           border-bottom: 1px solid #444;
@@ -352,13 +335,13 @@ interface RealTimePreviewIntegrationProps {
           flex-direction: column;
   gap: 12px;
         .variant-item {
-          background: #333;
+          background: #333
   border: 1px solid #444;
           border-radius: 6px;
   padding: 12px;
           cursor: pointer;
   transition: all 0.2s ease;
-        .variant-item:hover {,
+        .variant-item:hover {
   background: #3a3a3a;
           border-color: #555;
         .variant-item.selected {
@@ -371,7 +354,7 @@ interface RealTimePreviewIntegrationProps {
           margin-bottom: 8px;
           font-size: 12px;
         .variant-number {
-          background: #ffd700;
+          background: #ffd700
   color: #000;
           padding: 2px 6px;
           border-radius: 3px;
@@ -395,7 +378,7 @@ interface RealTimePreviewIntegrationProps {
           display: flex;
           align-items: center;
   gap: 8px;
-          padding: 12px 16px;
+          padding: 12px 16px }
   background: rgba(255, 0, 0, 0.1);
           border-top: 1px solid #444;
         .error-icon {

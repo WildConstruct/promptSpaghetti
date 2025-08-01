@@ -6,6 +6,10 @@
  */
 import { BaseAIModel, AIModelType, AIModelProvider, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
 ;
+fps: number;
+frame_count: number;
+size: number;
+;
 metadata: {
     model: string;
     input_image: string;

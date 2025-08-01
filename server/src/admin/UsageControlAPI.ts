@@ -19,7 +19,7 @@ import {
   UsageAnalytics,
   UsageSnapshot,
   UsageControlDecision
-} from './UsageControlService';
+ from './UsageControlService';
 import { AuthService } from '../auth/services/AuthService';
 import { AuditService } from '../auth/services/AuditService';
 
@@ -27,8 +27,8 @@ import { AuditService } from '../auth/services/AuditService';
 // REQUEST/RESPONSE INTERFACES
 // ==========================================
 
-}
-}
+
+
 export interface UsageControlResponse<T = any> {
   success: boolean;
   data?: T;
@@ -39,10 +39,10 @@ export interface UsageControlResponse<T = any> {
     processingTime: number;
     version: string;
   };
-}
 
-}
-}
+
+
+
 export interface CreateUsageLimitRequest {
   name: string;
   description: string;
@@ -58,8 +58,9 @@ export interface CreateUsageLimitRequest {
     operations?: string[];
     ipAddresses?: string[];
     apiKeys?: string[];
-}
-}
+
+
+
   };
   configuration?: {
     burstAllowance?: number;
@@ -71,12 +72,12 @@ export interface CreateUsageLimitRequest {
       percentage: number;
       action: 'warn' | 'alert' | 'escalate';
       channels: string[];
-    }>;
+>;
   };
-}
 
-}
-}
+
+
+
 export interface UpdateUsageLimitRequest {
   name?: string;
   description?: string;
@@ -92,14 +93,15 @@ export interface UpdateUsageLimitRequest {
     operations?: string[];
     ipAddresses?: string[];
     apiKeys?: string[];
-}
-}
+
+
+
   };
   configuration?: any;
-}
 
-}
-}
+
+
+
 export interface UsageCheckRequest {
   userId?: string;
   apiKey?: string;
@@ -108,18 +110,20 @@ export interface UsageCheckRequest {
   operation: string;
   method: string;
   requestSize?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UsageAnalyticsRequest {
   timeRange: {
     start: string;
     end: string;
-}
-}
+
+
+
   };
   filters?: {
     userIds?: string[];
@@ -127,18 +131,19 @@ export interface UsageAnalyticsRequest {
     operations?: string[];
   };
   includeDetails?: boolean;
-}
 
-}
-}
+
+
+
 export interface UsageControlConfigRequest {
   globalLimits?: {
     requestsPerMinute?: number;
     requestsPerHour?: number;
     bandwidthPerHour?: number; // bytes
     concurrentConnections?: number;
-}
-}
+
+
+
   };
   enforcementMode?: 'strict' | 'permissive' | 'monitoring_only';
   alerting?: {
@@ -150,18 +155,19 @@ export interface UsageControlConfigRequest {
     type: 'user' | 'role' | 'ip' | 'endpoint';
     value: string;
     reason: string;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface BulkUsageActionRequest {
   action: 'enable' | 'disable' | 'reset' | 'delete';
   limitIds: string[];
   reason?: string;
-}
-}
-}
+
+
+
+
 
 // ==========================================
 // API PLUGIN IMPLEMENTATION
@@ -181,7 +187,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
     if (!authHeader) {
       reply.code(401).send({ success: false, error: 'Authorization header required' });
       return;
-    }
+
 
     const token = authHeader.replace('Bearer ', '');
     try {
@@ -189,12 +195,12 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
       if (!user || !user.permissions.includes('usage_control_admin')) {
         reply.code(403).send({ success: false, error: 'Insufficient permissions for usage control administration' });
         return;
-      }
+
       request.user = user;
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ success: false, error: 'Invalid authentication token' });
       return;
-    }
+
   });
 
   // ==========================================
@@ -224,12 +230,12 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
               operations: { type: 'array', items: { type: 'string' } },
               ipAddresses: { type: 'array', items: { type: 'string' } },
               apiKeys: { type: 'array', items: { type: 'string' } }
-  }
+
             additionalProperties: false
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `create_limit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -242,7 +248,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         scope: {
           global: false,
           ...request.body.scope
-  }
+
         configuration: {
           burstAllowance: 10,
           gracePeriod: 1000,
@@ -253,7 +259,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           exemptions: [],
           customRules: [],
           ...request.body.configuration
-        }
+
       });
 
       // Audit logging
@@ -267,7 +273,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           type: request.body.type,
           threshold: request.body.threshold,
           timestamp: new Date()
-        }
+
       });
 
       const response: UsageControlResponse<{ limitId: string }> = {
@@ -278,12 +284,11 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
+
       };
 
       reply.code(201).send(response);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Usage limit creation failed: ${error.message}`);
       reply.code(500).send({
         success: false,
@@ -293,9 +298,9 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
+
       });
-    }
+
   });
 
   // List usage limits
@@ -305,8 +310,8 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
       type?: UsageLimitType; 
       limit?: number; 
       offset?: number 
-    } 
-  }>('/limits', {
+ 
+>('/limits', {
     schema: {
       querystring: {
         type: 'object',
@@ -315,9 +320,9 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           type: { type: 'string', enum: Object.values(UsageLimitType) },
           limit: { type: 'integer', minimum: 1, maximum: 1000, default: 50 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -339,22 +344,21 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           total: limits.length,
           offset,
           limit
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId: `list_limits_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Failed to list usage limits: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve usage limits'
       });
-    }
+
   });
 
   // Get specific usage limit
@@ -364,10 +368,10 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         type: 'object',
         properties: {
           limitId: { type: 'string' }
-  }
+
         required: ['limitId']
-      }
-    }
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -380,7 +384,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           error: 'Usage limit not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
@@ -390,31 +394,30 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           requestId: `get_limit_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Failed to get usage limit: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve usage limit'
       });
-    }
+
   });
 
   // Update usage limit
   fastify.put<{ 
     Params: { limitId: string }; 
     Body: UpdateUsageLimitRequest 
-  }>('/limits/:limitId', {
+>('/limits/:limitId', {
     schema: {
       params: {
         type: 'object',
         properties: {
           limitId: { type: 'string' }
-  }
+
         required: ['limitId']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -424,9 +427,9 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           period: { type: 'number', minimum: 1000 },
           action: { type: 'string', enum: Object.values(UsageControlAction) },
           status: { type: 'string', enum: Object.values(UsageControlStatus) }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `update_limit_${Date.now()}`;
@@ -443,7 +446,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           limitId: request.params.limitId,
           changes: request.body,
           timestamp: new Date()
-        }
+
       });
 
       reply.send({
@@ -451,22 +454,21 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         data: {
           limitId: request.params.limitId,
           message: 'Usage limit updated successfully'
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Usage limit update failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: error.message || 'Failed to update usage limit'
       });
-    }
+
   });
 
   // Delete usage limit
@@ -476,10 +478,10 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         type: 'object',
         properties: {
           limitId: { type: 'string' }
-  }
+
         required: ['limitId']
-      }
-    }
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -495,7 +497,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           limitId: request.params.limitId,
           deletedBy: request.user.userId,
           timestamp: new Date()
-        }
+
       });
 
       reply.send({
@@ -503,22 +505,21 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         data: {
           limitId: request.params.limitId,
           message: 'Usage limit deleted successfully'
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId: `delete_limit_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Usage limit deletion failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: error.message || 'Failed to delete usage limit'
       });
-    }
+
   });
 
   // ==========================================
@@ -539,9 +540,9 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           operation: { type: 'string' },
           method: { type: 'string' },
           requestSize: { type: 'number', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -560,13 +561,13 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
       let httpStatus = 200;
       if (!decision.allowed) {
         httpStatus = decision.action === UsageControlAction.REJECT ? 429 : 403;
-      }
+
 
       // Add rate limit headers
       const headers: Record<string, string> = {};
       if (decision.retryAfter) {
         headers['Retry-After'] = Math.ceil((decision.retryAfter.getTime() - Date.now()) / 1000).toString();
-      }
+
 
       Object.entries(decision.quotaRemaining).forEach(([limitId, remaining]) => {
         headers[`X-RateLimit-${limitId}-Remaining`] = remaining.toString();
@@ -583,16 +584,15 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           retryAfter: decision.retryAfter,
           quotaRemaining: decision.quotaRemaining,
           warnings: decision.warnings
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId: `usage_check_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Usage check failed: ${error.message}`);
       
       // Fail open - allow request but log error
@@ -605,9 +605,9 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           appliedLimits: [],
           quotaRemaining: {},
           warnings: ['Usage control system experiencing issues']
-        }
+
       });
-    }
+
   });
 
   // ==========================================
@@ -627,20 +627,20 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
             properties: {
               start: { type: 'string', format: 'date-time' },
               end: { type: 'string', format: 'date-time' }
-            }
-  }
+
+
           filters: {
             type: 'object',
             properties: {
               userIds: { type: 'array', items: { type: 'string' } },
               endpoints: { type: 'array', items: { type: 'string' } },
               operations: { type: 'array', items: { type: 'string' } }
-            }
-  }
+
+
           includeDetails: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -663,16 +663,15 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           requestId: `analytics_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Usage analytics generation failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to generate usage analytics'
       });
-    }
+
   });
 
   // Get current usage snapshot
@@ -690,16 +689,15 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           requestId: `snapshot_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Usage snapshot failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to get usage snapshot'
       });
-    }
+
   });
 
   // Get user usage statistics
@@ -708,24 +706,24 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
     Querystring: { 
       timeRange?: string;
       includeQuota?: boolean;
-    } 
-  }>('/users/:userId/stats', {
+ 
+>('/users/:userId/stats', {
     schema: {
       params: {
         type: 'object',
         properties: {
           userId: { type: 'string' }
-  }
+
         required: ['userId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           timeRange: { type: 'string', default: 'last_hour' },
           includeQuota: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -746,22 +744,21 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           userId: request.params.userId,
           timeRange: request.query.timeRange,
           ...stats
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId: `user_stats_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`User stats failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to get user usage statistics'
       });
-    }
+
   });
 
   // ==========================================
@@ -778,9 +775,9 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           action: { type: 'string', enum: ['enable', 'disable', 'reset', 'delete'] },
           limitIds: { type: 'array', items: { type: 'string' }, minItems: 1 },
           reason: { type: 'string', maxLength: 500 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `bulk_action_${Date.now()}`;
@@ -805,12 +802,12 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
             throw new Error('Reset action not yet implemented');
           default:
             throw new Error(`Unknown action: ${request.body.action}`);
-          }
+
           results.push({ limitId, success: true });
-        } catch (error) {
+ catch (error) {
           results.push({ limitId, success: false, error: error.message });
-        }
-      }
+
+
 
       // Audit logging
       await auditService.logAction({
@@ -823,7 +820,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           reason: request.body.reason,
           results,
           timestamp: new Date()
-        }
+
       });
 
       const successCount = results.filter(r => r.success).length;
@@ -837,22 +834,21 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           successCount,
           errorCount,
           results
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Bulk action failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: error.message || 'Bulk action failed'
       });
-    }
+
   });
 
   // Export usage data
@@ -861,8 +857,8 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
       format?: 'json' | 'csv' | 'xlsx';
       timeRange?: string;
       includeDetails?: boolean;
-    } 
-  }>('/export', {
+ 
+>('/export', {
     schema: {
       querystring: {
         type: 'object',
@@ -870,9 +866,9 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           format: { type: 'string', enum: ['json', 'csv', 'xlsx'], default: 'json' },
           timeRange: { type: 'string', default: 'last_day' },
           includeDetails: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -906,7 +902,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         exportData = JSON.stringify(analytics, null, 2);
         contentType = 'application/json';
         filename = `usage_export_${Date.now()}.json`;
-      }
+
 
       // Audit export
       await auditService.logAction({
@@ -918,20 +914,19 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           timeRange: request.query.timeRange,
           recordCount: analytics.totalRequests,
           timestamp: new Date()
-        }
+
       });
 
       reply.header('Content-Type', contentType);
       reply.header('Content-Disposition', `attachment; filename="${filename}"`);
       reply.send(exportData);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Usage export failed: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to export usage data'
       });
-    }
+
   });
 
   // ==========================================
@@ -950,13 +945,13 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           requestsPerHour: 50000,
           bandwidthPerHour: 1024 * 1024 * 1024, // 1GB
           concurrentConnections: 100
-  }
+
         enforcementMode: 'strict',
         alerting: {
           enabled: true,
           channels: ['email', 'slack'],
           thresholds: [75, 90, 95]
-  }
+
         exemptions: []
       };
 
@@ -968,15 +963,14 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           requestId: `get_config_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to get usage control configuration'
       });
-    }
+
   });
 
   // Update usage control configuration
@@ -992,8 +986,8 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
               requestsPerHour: { type: 'number', minimum: 1 },
               bandwidthPerHour: { type: 'number', minimum: 1 },
               concurrentConnections: { type: 'number', minimum: 1 }
-            }
-  }
+
+
           enforcementMode: { type: 'string', enum: ['strict', 'permissive', 'monitoring_only'] },
           alerting: {
             type: 'object',
@@ -1001,11 +995,11 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
               enabled: { type: 'boolean' },
               channels: { type: 'array', items: { type: 'string' } },
               thresholds: { type: 'array', items: { type: 'number' } }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -1021,28 +1015,27 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         details: {
           changes: request.body,
           timestamp: new Date()
-        }
+
       });
 
       reply.send({
         success: true,
         data: {
           message: 'Usage control configuration updated successfully'
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId: `update_config_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to update usage control configuration'
       });
-    }
+
   });
 
   // ==========================================
@@ -1065,24 +1058,23 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
             rateLimiting: 'operational',
             analytics: 'operational',
             monitoring: 'operational'
-  }
+
           metrics: {
             activeUsers: snapshot.activeUsers,
             currentConnections: snapshot.currentConnections,
             requestsPerMinute: snapshot.requestsPerMinute,
             activeLimits: snapshot.activeLimits,
             violationsInLastHour: snapshot.violationsInLastHour
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       fastify.log.error(`Usage control health check failed: ${error.message}`);
       reply.code(503).send({
         success: false,
         error: 'Usage control system health check failed'
       });
-    }
+
   });
 
   // Helper method for CSV conversion (would be more comprehensive in production)
@@ -1099,7 +1091,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
       ].join(',')
     ];
     return rows.join('\n');
-  }
+
 
   fastify.log.info('Usage Control API routes registered successfully');
 };

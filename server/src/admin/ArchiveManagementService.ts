@@ -21,8 +21,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { UploaderService } from './UploaderArchitecture';
 
-}
-}
+
+
 export interface ArchiveRecord {
   id: string;
   name: string;
@@ -78,12 +78,13 @@ export interface ArchiveRecord {
   createdBy: string;
   archivedBy: string;
   lastAccessedBy?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SourceMetadata {
   // Database source metadata
   databaseName?: string;
@@ -92,8 +93,9 @@ export interface SourceMetadata {
   dateRange?: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   
   // File source metadata
@@ -115,10 +117,10 @@ export interface SourceMetadata {
   
   // Custom source metadata
   customFields: Record<string, unknown>;
-}
 
-}
-}
+
+
+
 export interface RetentionPolicy {
   id: string;
   name: string;
@@ -127,50 +129,55 @@ export interface RetentionPolicy {
   storageTransitions?: StorageTransition[];
   notificationSettings: NotificationSettings;
   exceptions?: RetentionException[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StorageTransition {
   afterDays: number;
   targetStorageClass: StorageClass;
   conditions?: TransitionCondition[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TransitionCondition {
   type: 'access_frequency' | 'size' | 'age' | 'custom';
   operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
   value: unknown;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationSettings {
   notifyBeforeExpiration: boolean;
   notificationDays: number[];
   recipients: string[];
   channels: NotificationChannel[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetentionException {
   condition: string; // JSON logic expression
   action: 'extend' | 'preserve' | 'accelerate';
   parameters: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 export enum ArchiveType {
   FULL_BACKUP = 'full_backup',
@@ -186,7 +193,7 @@ export enum ArchiveType {
   MEDIA_ARCHIVE = 'media_archive',
   COMPLIANCE_ARCHIVE = 'compliance_archive',
   CUSTOM = 'custom'
-}
+
 
 export enum ArchiveCategory {
   SYSTEM_DATA = 'system_data',
@@ -201,7 +208,7 @@ export enum ArchiveCategory {
   TEMPORARY_DATA = 'temporary_data',
   HISTORICAL_DATA = 'historical_data',
   CUSTOM = 'custom'
-}
+
 
 export enum ArchiveStatus {
   QUEUED = 'queued',
@@ -217,7 +224,7 @@ export enum ArchiveStatus {
   DELETED = 'deleted',
   RESTORING = 'restoring',
   CORRUPTED = 'corrupted'
-}
+
 
 export enum SourceType {
   DATABASE_TABLE = 'database_table',
@@ -230,7 +237,7 @@ export enum SourceType {
   SYSTEM_GENERATED = 'system_generated',
   EXTERNAL_IMPORT = 'external_import',
   CUSTOM_SOURCE = 'custom_source'
-}
+
 
 export enum CompressionAlgorithm {
   GZIP = 'gzip',
@@ -241,7 +248,7 @@ export enum CompressionAlgorithm {
   SNAPPY = 'snappy',
   DEFLATE = 'deflate',
   NONE = 'none'
-}
+
 
 export enum EncryptionAlgorithm {
   AES_256_GCM = 'aes_256_gcm',
@@ -249,7 +256,7 @@ export enum EncryptionAlgorithm {
   CHACHA20_POLY1305 = 'chacha20_poly1305',
   AES_128_GCM = 'aes_128_gcm',
   NONE = 'none'
-}
+
 
 export enum ChecksumAlgorithm {
   SHA256 = 'sha256',
@@ -257,7 +264,7 @@ export enum ChecksumAlgorithm {
   MD5 = 'md5',
   CRC32 = 'crc32',
   BLAKE2B = 'blake2b'
-}
+
 
 export enum StorageClass {
   HOT = 'hot',              // Frequent access
@@ -266,7 +273,7 @@ export enum StorageClass {
   GLACIER = 'glacier',      // Long-term archive
   DEEP_GLACIER = 'deep_glacier', // Very long-term archive
   INTELLIGENT = 'intelligent'    // Automatic tiering
-}
+
 
 export enum RedundancyLevel {
   NONE = 'none',
@@ -274,7 +281,7 @@ export enum RedundancyLevel {
   ZONE_REDUNDANCY = 'zone_redundancy',
   REGION_REDUNDANCY = 'region_redundancy',
   CROSS_REGION_REDUNDANCY = 'cross_region_redundancy'
-}
+
 
 export enum ValidationStatus {
   PENDING = 'pending',
@@ -283,14 +290,14 @@ export enum ValidationStatus {
   INVALID = 'invalid',
   CORRUPTED = 'corrupted',
   FAILED = 'failed'
-}
+
 
 export enum BusinessCriticality {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
+
 
 export enum DataClassification {
   PUBLIC = 'public',
@@ -298,7 +305,7 @@ export enum DataClassification {
   CONFIDENTIAL = 'confidential',
   RESTRICTED = 'restricted',
   TOP_SECRET = 'top_secret'
-}
+
 
 export enum NotificationChannel {
   EMAIL = 'email',
@@ -306,10 +313,10 @@ export enum NotificationChannel {
   WEBHOOK = 'webhook',
   SMS = 'sms',
   SYSTEM_NOTIFICATION = 'system_notification'
-}
 
-}
-}
+
+
+
 export interface ArchiveJob {
   id: string;
   archiveId: string;
@@ -345,9 +352,10 @@ export interface ArchiveJob {
   retryCount: number;
   maxRetries: number;
   nextRetryAt?: Date;
-}
-}
-}
+
+
+
+
 
 export enum ArchiveJobType {
   CREATE_ARCHIVE = 'create_archive',
@@ -360,7 +368,7 @@ export enum ArchiveJobType {
   CLEANUP_EXPIRED = 'cleanup_expired',
   INTEGRITY_CHECK = 'integrity_check',
   COMPRESS_ARCHIVE = 'compress_archive'
-}
+
 
 export enum ArchiveJobStatus {
   QUEUED = 'queued',
@@ -370,10 +378,10 @@ export enum ArchiveJobStatus {
   CANCELLED = 'cancelled',
   PAUSED = 'paused',
   RETRY_SCHEDULED = 'retry_scheduled'
-}
 
-}
-}
+
+
+
 export interface ArchiveJobConfig {
   sourceConfig: any;
   compressionConfig?: CompressionConfig;
@@ -382,35 +390,38 @@ export interface ArchiveJobConfig {
   validationConfig?: ValidationConfig;
   notificationConfig?: NotificationConfig;
   customConfig?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CompressionConfig {
   algorithm: CompressionAlgorithm;
   level: number; // 1-9 for most algorithms
   blockSize?: number;
   parallelThreads?: number;
   skipUncompressible?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EncryptionConfig {
   algorithm: EncryptionAlgorithm;
   keyId: string;
   keyRotation: boolean;
   keyRotationDays: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StorageConfig {
   provider: string;
   bucket?: string;
@@ -418,34 +429,37 @@ export interface StorageConfig {
   storageClass: StorageClass;
   redundancyLevel: RedundancyLevel;
   serverSideEncryption?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationConfig {
   checksumAlgorithm: ChecksumAlgorithm;
   fullContentValidation: boolean;
   scheduleRegularChecks: boolean;
   validationFrequencyDays: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NotificationConfig {
   enabled: boolean;
   channels: NotificationChannel[];
   recipients: string[];
   template?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ArchiveQuery {
   archiveTypes?: ArchiveType[];
   categories?: ArchiveCategory[];
@@ -455,8 +469,9 @@ export interface ArchiveQuery {
   dateRange?: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   tags?: string[];
   businessCriticality?: BusinessCriticality[];
@@ -480,7 +495,7 @@ export interface ArchiveQuery {
   sortOrder?: 'asc' | 'desc';
   limit?: number;
   offset?: number;
-}
+
 
 export enum ArchiveSortField {
   CREATED_AT = 'created_at',
@@ -492,10 +507,10 @@ export enum ArchiveSortField {
   COMPRESSED_SIZE = 'compressed_size',
   COMPRESSION_RATIO = 'compression_ratio',
   ACCESS_COUNT = 'access_count'
-}
 
-}
-}
+
+
+
 export interface ArchiveStatistics {
   totalArchives: number;
   totalSize: number;
@@ -531,12 +546,13 @@ export interface ArchiveStatistics {
   invalidArchives: number;
   corruptedArchives: number;
   lastValidationRun?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RestoreRequest {
   archiveId: string;
   restoreType: RestoreType;
@@ -547,9 +563,10 @@ export interface RestoreRequest {
   reason: string;
   notifyOnComplete: boolean;
   expiresAt?: Date;
-}
-}
-}
+
+
+
+
 
 export enum RestoreType {
   FULL_RESTORE = 'full_restore',
@@ -557,22 +574,23 @@ export enum RestoreType {
   PREVIEW_RESTORE = 'preview_restore',
   METADATA_ONLY = 'metadata_only',
   VALIDATION_RESTORE = 'validation_restore'
-}
 
-}
-}
+
+
+
 export interface PartialRestoreConfig {
   filePattern?: string;
   directoryPaths?: string[];
   dateRange?: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   maxFiles?: number;
   maxSize?: number;
-}
+
 
 /**
  * Archive Management Service
@@ -602,7 +620,7 @@ export class ArchiveManagementService extends EventEmitter {
     this.startJobProcessor();
     this.startRetentionPolicyChecker();
     this.loadRetentionPolicies();
-  }
+
   
   /**
    * Create a new archive
@@ -625,7 +643,7 @@ export class ArchiveManagementService extends EventEmitter {
       dataClassification?: DataClassification;
       customMetadata?: Record<string, any>;
       priority?: number;
-    } = {}
+ = {}
   ): Promise<ArchiveRecord> {
 
     try {
@@ -638,7 +656,7 @@ export class ArchiveManagementService extends EventEmitter {
       
       if (!retentionPolicy) {
         throw new Error('No retention policy found');
-      }
+
       
       const archiveRecord: ArchiveRecord = {
         id: archiveId,
@@ -704,15 +722,14 @@ export class ArchiveManagementService extends EventEmitter {
           category,
           sourceType,
           sourceIdentifier
-  }
+
         severity: 'info'
       });
       
       this.emit('archive_created', archiveRecord);
       
       return archiveRecord;
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'archive_creation_failed',
         userId: createdBy,
@@ -721,12 +738,12 @@ export class ArchiveManagementService extends EventEmitter {
           error: error instanceof Error ? error.message : String(error),
           name,
           sourceIdentifier
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Query archives with filtering and pagination
@@ -735,7 +752,7 @@ export class ArchiveManagementService extends EventEmitter {
     archives: ArchiveRecord[];
     totalCount: number;
     hasMore: boolean;
-  }> {
+> {
 
     const conditions = [];
     const values = [];
@@ -745,54 +762,54 @@ export class ArchiveManagementService extends EventEmitter {
     if (query.archiveTypes && query.archiveTypes.length > 0) {
       conditions.push(`archive_type = ANY($${paramIndex++})`);
       values.push(query.archiveTypes);
-    }
+
     
     if (query.categories && query.categories.length > 0) {
       conditions.push(`category = ANY($${paramIndex++})`);
       values.push(query.categories);
-    }
+
     
     if (query.statuses && query.statuses.length > 0) {
       conditions.push(`status = ANY($${paramIndex++})`);
       values.push(query.statuses);
-    }
+
     
     if (query.createdBy) {
       conditions.push(`created_by = $${paramIndex++}`);
       values.push(query.createdBy);
-    }
+
     
     if (query.dateRange) {
       conditions.push(`created_at >= $${paramIndex++} AND created_at <= $${paramIndex++}`);
       values.push(query.dateRange.start, query.dateRange.end);
-    }
+
     
     if (query.tags && query.tags.length > 0) {
       conditions.push(`tags && $${paramIndex++}`);
       values.push(query.tags);
-    }
+
     
     if (query.searchTerm) {
       conditions.push(`(name ILIKE $${paramIndex} OR description ILIKE $${paramIndex})`);
       values.push(`%${query.searchTerm}%`);
       paramIndex++;
-    }
+
     
     if (query.expiringBefore) {
       conditions.push(`expires_at <= $${paramIndex++}`);
       values.push(query.expiringBefore);
-    }
+
     
     if (query.sizeRange) {
       if (query.sizeRange.min !== undefined) {
         conditions.push(`original_size >= $${paramIndex++}`);
         values.push(query.sizeRange.min);
-      }
+
       if (query.sizeRange.max !== undefined) {
         conditions.push(`original_size <= $${paramIndex++}`);
         values.push(query.sizeRange.max);
-      }
-    }
+
+
     
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     
@@ -827,7 +844,7 @@ export class ArchiveManagementService extends EventEmitter {
       totalCount,
       hasMore: offset + archives.length < totalCount
     };
-  }
+
   
   /**
    * Request archive restoration
@@ -843,18 +860,18 @@ export class ArchiveManagementService extends EventEmitter {
       reason?: string;
       notifyOnComplete?: boolean;
       expiresAt?: Date;
-    } = {}
+ = {}
   ): Promise<string> {
 
     try {
       const archive = await this.getArchiveById(archiveId);
       if (!archive) {
         throw new Error('Archive not found');
-      }
+
       
       if (archive.status !== ArchiveStatus.COMPLETED && archive.status !== ArchiveStatus.VALIDATED) {
         throw new Error(`Cannot restore archive with status: ${archive.status}`);
-      }
+
       
       const restoreId = this.generateRestoreId();
       
@@ -893,15 +910,14 @@ export class ArchiveManagementService extends EventEmitter {
           restoreId,
           restoreType,
           reason: options.reason
-  }
+
         severity: 'info'
       });
       
       this.emit('restore_requested', { archiveId, restoreId, restoreRequest });
       
       return restoreId;
-      
-    } catch (error) {
+ catch (error) {
       await this.auditService.logAction({
         action: 'restore_request_failed',
         userId: requestedBy,
@@ -909,12 +925,12 @@ export class ArchiveManagementService extends EventEmitter {
         resourceId: archiveId,
         details: {
           error: error instanceof Error ? error.message : String(error)
-  }
+
         severity: 'error'
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Get archive statistics
@@ -941,17 +957,17 @@ export class ArchiveManagementService extends EventEmitter {
     const stats = this.processStatisticsResult(result.rows);
     
     return stats;
-  }
+
   
   // Private helper methods
   
   private generateArchiveId(): string {
     return `archive_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private generateRestoreId(): string {
     return `restore_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private getDefaultRetentionPolicy(_category: ArchiveCategory, _type: ArchiveType): RetentionPolicy {
     // Implementation would return appropriate default policy based on category and type
@@ -965,9 +981,9 @@ export class ArchiveManagementService extends EventEmitter {
         notificationDays: [30, 7, 1],
         recipients: [],
         channels: [NotificationChannel.EMAIL]
-      }
+
     };
-  }
+
   
   private getComplianceRequirements(category: ArchiveCategory, type: ArchiveType): string[] {
     // Implementation would return compliance requirements based on category and type
@@ -975,80 +991,80 @@ export class ArchiveManagementService extends EventEmitter {
     
     if (category === ArchiveCategory.COMPLIANCE_DATA) {
       requirements.push('GDPR', 'SOX', 'HIPAA');
-    }
+
     
     if (type === ArchiveType.LOG_ARCHIVE) {
       requirements.push('Audit_Trail', 'Tamper_Proof');
-    }
+
     
     return requirements;
-  }
+
   
   // Placeholder methods that would be fully implemented
   
   private async storeArchiveRecord(_archive: ArchiveRecord): Promise<void> {
 
     // Implementation would store in database
-  }
+
   
   private async createArchiveJob(_archive: ArchiveRecord, _priority: number): Promise<ArchiveJob> {
 
     // Implementation would create archive job
     return {} as ArchiveJob;
-  }
+
   
   private async getArchiveById(id: string): Promise<ArchiveRecord | null> {
 
     // Implementation would retrieve from database
     return null;
-  }
+
   
   private async storeRestoreRequest(restoreId: string, request: RestoreRequest): Promise<void> {
 
     // Implementation would store restore request
-  }
+
   
   private async createRestoreJob(request: RestoreRequest, restoreId: string): Promise<ArchiveJob> {
 
     // Implementation would create restore job
     return {} as ArchiveJob;
-  }
+
   
   private async updateArchiveAccess(archiveId: string, userId: string): Promise<void> {
 
     // Implementation would update access tracking
-  }
+
   
   private mapArchiveRow(row: any): ArchiveRecord {
     // Implementation would map database row to ArchiveRecord
     return {} as ArchiveRecord;
-  }
+
   
   private processStatisticsResult(rows: any[]): ArchiveStatistics {
     // Implementation would process statistics
     return {} as ArchiveStatistics;
-  }
+
   
   private setupEventHandlers(): void {
     // Implementation would setup event handlers
-  }
+
   
   private startJobProcessor(): void {
     // Implementation would start job processing worker
-  }
+
   
   private startRetentionPolicyChecker(): void {
     // Implementation would start retention policy checker
-  }
+
   
   private async loadRetentionPolicies(): Promise<void> {
 
     // Implementation would load retention policies from database
-  }
-}
 
-}
-}
+
+
+
+
 export interface ArchiveConfig {
   defaultCompressionAlgorithm: CompressionAlgorithm;
   defaultStorageProvider: string;
@@ -1063,8 +1079,9 @@ export interface ArchiveConfig {
   validateOnCreate: boolean;
   regularValidationEnabled: boolean;
   notificationsEnabled: boolean;
-}
-}
-}
+
+
+
+
 
 export default ArchiveManagementService;

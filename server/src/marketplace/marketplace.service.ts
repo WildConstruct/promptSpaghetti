@@ -22,7 +22,7 @@ import {
   CreatePurchaseSchema,
   PreviewRequest,
   PreviewResponse
-} from './types';
+ from './types';
 import { Pool } from 'pg';
 import * as crypto from 'crypto';
 
@@ -38,7 +38,7 @@ export class MarketplaceService {
     this.elasticsearch = new ElasticsearchService(pool);
     this.claudePreview = new ClaudePreviewService(pool);
     this.searchAnalytics = new SearchAnalyticsService(pool);
-  }
+
 
   // Template operations
   async createTemplate(ownerId: string, templateData: any): Promise<MarketplaceTemplate> {
@@ -60,7 +60,7 @@ export class MarketplaceService {
     });
 
     return template;
-  }
+
 
   async getTemplate(id: string, userId?: string): Promise<TemplateWithStats | null> {
 
@@ -68,12 +68,12 @@ export class MarketplaceService {
     
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     // Only return listed templates to non-owners
     if (template.status !== TemplateStatus.LISTED && template.owner_id !== userId) {
       throw new ForbiddenException('Template not accessible');
-    }
+
 
     // Record view event
     if (userId) {
@@ -83,10 +83,10 @@ export class MarketplaceService {
         template_id: id,
         metadata: { page: 'detail' }
       });
-    }
+
 
     return template;
-  }
+
 
   async updateTemplate(id: string, userId: string, updates: any): Promise<MarketplaceTemplate> {
 
@@ -94,18 +94,18 @@ export class MarketplaceService {
     
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     if (template.owner_id !== userId) {
       throw new ForbiddenException('Not authorized to update this template');
-    }
+
 
     const validated = UpdateTemplateSchema.parse(updates);
     const updatedTemplate = await this.dao.updateTemplate(id, validated);
     
     if (!updatedTemplate) {
       throw new NotFoundException('Template not found');
-    }
+
 
     // Update Elasticsearch index if template is listed
     if (updatedTemplate.status === TemplateStatus.LISTED) {
@@ -113,21 +113,21 @@ export class MarketplaceService {
         const fullTemplate = await this.dao.getTemplate(id);
         if (fullTemplate) {
           await this.elasticsearch.indexTemplate(fullTemplate);
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error('Failed to update Elasticsearch index:', error);
-      }
-    } else if (updatedTemplate.status === TemplateStatus.ARCHIVED) {
+
+ else if (updatedTemplate.status === TemplateStatus.ARCHIVED) {
       // Remove from index if archived
       try {
         await this.elasticsearch.removeTemplate(id);
-      } catch (error) {
+ catch (error) {
         console.error('Failed to remove from Elasticsearch index:', error);
-      }
-    }
+
+
 
     return updatedTemplate;
-  }
+
 
   async deleteTemplate(id: string, userId: string): Promise<void> {
 
@@ -135,15 +135,15 @@ export class MarketplaceService {
     
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     if (template.owner_id !== userId) {
       throw new ForbiddenException('Not authorized to delete this template');
-    }
+
 
     // Soft delete by archiving
     await this.dao.updateTemplate(id, { status: TemplateStatus.ARCHIVED });
-  }
+
 
   async searchTemplates(
     filters: SearchFilters, 
@@ -174,11 +174,11 @@ export class MarketplaceService {
         has_more: ((filters.page || 1) * (filters.limit || 20)) < esResult.total,
         aggregations: esResult.aggregations
       };
-    } catch (error) {
+ catch (error) {
       console.error('Elasticsearch search failed, falling back to PostgreSQL:', error);
       result = await this.dao.searchTemplates(filters);
       searchDurationMs = Date.now() - searchStartTime;
-    }
+
 
     // Enhanced search analytics tracking
     if (filters.query || Object.keys(filters).length > 2) { // Only track meaningful searches
@@ -195,13 +195,13 @@ export class MarketplaceService {
           is_free: filters.is_free,
           is_featured: filters.is_featured,
           claude_models: filters.claude_models
-  }
+
         results_count: result.total,
         session_id: searchContext?.sessionId,
         ip_address: searchContext?.ipAddress,
         user_agent: searchContext?.userAgent
       });
-    }
+
 
     // Record search event in marketplace events (for broader analytics)
     if (userId) {
@@ -219,13 +219,13 @@ export class MarketplaceService {
             price_range: [filters.price_min, filters.price_max],
             sort_by: filters.sort_by,
             page: filters.page
-          }
-        }
+
+
       });
-    }
+
 
     return result;
-  }
+
 
   async getSearchSuggestions(query: string, limit: number = 10): Promise<string[]> {
 
@@ -235,28 +235,28 @@ export class MarketplaceService {
       
       if (analyticsSuggestions.length > 0) {
         return analyticsSuggestions.map(s => s.suggestion);
-      }
+
       
       // Fallback to Elasticsearch
       return await this.elasticsearch.getSearchSuggestions(query, limit);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get search suggestions:', error);
       return [];
-    }
-  }
+
+
 
   // New analytics methods for Story 16.1
   async getSearchAnalytics(startDate: Date, endDate: Date, userId?: string) {
     return this.searchAnalytics.getSearchAnalytics(startDate, endDate, userId);
-  }
+
 
   async getPopularSearchTerms(timeframe: 'day' | 'week' | 'month' = 'week', limit: number = 20) {
     return this.searchAnalytics.getPopularSearchTerms(timeframe, limit);
-  }
+
 
   async getSearchInsights() {
     return this.searchAnalytics.getSearchInsights();
-  }
+
 
   // Version management
   async createVersion(templateId: string, userId: string, versionData: any): Promise<TemplateVersion> {
@@ -265,11 +265,11 @@ export class MarketplaceService {
     
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     if (template.owner_id !== userId) {
       throw new ForbiddenException('Not authorized to create versions for this template');
-    }
+
 
     const validated = CreateVersionSchema.parse(versionData);
     
@@ -293,7 +293,7 @@ export class MarketplaceService {
     });
 
     return version;
-  }
+
 
   async getTemplateVersions(templateId: string, userId?: string): Promise<TemplateVersion[]> {
 
@@ -301,20 +301,20 @@ export class MarketplaceService {
     
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     // Only owners can see all versions
     if (template.owner_id !== userId) {
       throw new ForbiddenException('Not authorized to view template versions');
-    }
+
 
     return this.dao.getTemplateVersions(templateId);
-  }
+
 
   async getVersion(id: string): Promise<TemplateVersion | null> {
 
     return this.dao.getVersion(id);
-  }
+
 
   // Purchase operations
   async createPurchase(userId: string, purchaseData: any): Promise<MarketplacePurchase> {
@@ -324,11 +324,11 @@ export class MarketplaceService {
     const template = await this.dao.getTemplate(validated.template_id);
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     if (template.status !== TemplateStatus.LISTED) {
       throw new BadRequestException('Template is not available for purchase');
-    }
+
 
     // Check if user already owns this template
     const existingPurchases = await this.dao.getUserPurchases(userId, 1000);
@@ -338,13 +338,13 @@ export class MarketplaceService {
 
     if (alreadyOwned) {
       throw new BadRequestException('You already own this template');
-    }
+
 
     // Use current version if not specified
     const versionId = validated.version_id || template.current_version_id;
     if (!versionId) {
       throw new BadRequestException('No version available for this template');
-    }
+
 
     // Handle free templates
     if (template.price_cents === 0) {
@@ -366,7 +366,7 @@ export class MarketplaceService {
       });
 
       return purchase;
-    }
+
 
     // For paid templates, create pending purchase (will be completed via Stripe webhook)
     const purchase = await this.dao.createPurchase({
@@ -378,7 +378,7 @@ export class MarketplaceService {
     });
 
     return purchase;
-  }
+
 
   async completePurchase(stripeIntentId: string, status: PurchaseStatus): Promise<MarketplacePurchase | null> {
 
@@ -386,7 +386,7 @@ export class MarketplaceService {
     
     if (!purchase) {
       throw new NotFoundException('Purchase not found');
-    }
+
 
     const updatedPurchase = await this.dao.updatePurchase(purchase.id, { status });
     
@@ -400,17 +400,17 @@ export class MarketplaceService {
         metadata: { 
           amount: updatedPurchase.amount_cents,
           stripe_intent: stripeIntentId
-        }
+
       });
-    }
+
 
     return updatedPurchase;
-  }
+
 
   async getUserPurchases(userId: string): Promise<any[]> {
 
     return this.dao.getUserPurchases(userId);
-  }
+
 
   // Review operations
   async createReview(userId: string, reviewData: any): Promise<TemplateReview> {
@@ -420,7 +420,7 @@ export class MarketplaceService {
     const template = await this.dao.getTemplate(validated.template_id);
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     // Check if user has purchased the template
     const purchases = await this.dao.getUserPurchases(userId);
@@ -430,7 +430,7 @@ export class MarketplaceService {
 
     if (!hasPurchased) {
       throw new BadRequestException('You must purchase the template before reviewing');
-    }
+
 
     const review = await this.dao.createReview({
       ...validated,
@@ -446,38 +446,38 @@ export class MarketplaceService {
     });
 
     return review;
-  }
+
 
   async getTemplateReviews(templateId: string): Promise<any[]> {
 
     return this.dao.getTemplateReviews(templateId);
-  }
+
 
   // Preview system
   async previewTemplate(userId: string, request: PreviewRequest): Promise<PreviewResponse> {
 
     try {
       return await this.claudePreview.generatePreview(userId, request);
-    } catch (error) {
+ catch (error) {
       console.error('Preview generation failed:', error);
       throw new BadRequestException(error instanceof Error ? error.message : 'Preview generation failed');
-    }
-  }
+
+
 
   async getPreviewMetadata(templateId: string, versionId?: string): Promise<any> {
 
     try {
       return await this.claudePreview.getPreviewMetadata(templateId, versionId);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get preview metadata:', error);
       throw new NotFoundException(error instanceof Error ? error.message : 'Preview metadata not available');
-    }
-  }
+
+
 
   // Categories
   async getCategories() {
     return this.dao.getCategories();
-  }
+
 
   // Analytics
   async getTemplateAnalytics(templateId: string, userId: string) {
@@ -485,11 +485,11 @@ export class MarketplaceService {
     
     if (!template) {
       throw new NotFoundException('Template not found');
-    }
+
 
     if (template.owner_id !== userId) {
       throw new ForbiddenException('Not authorized to view analytics for this template');
-    }
+
 
     // TODO: Implement comprehensive analytics
     return {
@@ -505,13 +505,12 @@ export class MarketplaceService {
         avg_rating: template.avg_rating || 0,
         total_reviews: template.total_reviews || 0,
         refund_rate: 0 // TODO: Calculate from refunds
-      }
+
     };
-  }
+
 
   // Utility methods
   async refreshSearchIndex(): Promise<void> {
 
     await this.dao.refreshSearchIndex();
-  }
-}
+

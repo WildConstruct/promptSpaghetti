@@ -5,13 +5,12 @@ import { GraphParser, parseGraph, validateGraph } from '../graph-parser';
 import { GraphLexer } from '../lexer/graph-lexer';
 import { ASTBuilder } from '../ast/ast-builder';
 import { SemanticAnalyzer } from '../semantic/semantic-analyzer';
-describe('Epic 12 - Parser System', () => {
-  describe('GraphLexer', () => {
+describe('Epic 12 - Parser System', () => { describe('GraphLexer', () => {
     test('should tokenize simple graph format', () => {
       const content = `version: 1.0.0;
 ---NODES---
 test_node:
-  type: Output,
+  type: Output }
 ---END---`;
       const lexer = new GraphLexer(content);
       const { tokens, errors } = lexer.tokenize();
@@ -21,10 +20,9 @@ test_node:
       expect(tokens.some(t => t.value === '---NODES---')).toBe(true);
       expect(tokens.some(t => t.value === '---END---')).toBe(true);
     });
-    test('should handle section delimiters correctly', () => {
-      const content = `---NODES---;
+    test('should handle section delimiters correctly', () => { const content = `---NODES---;
 node1:
-  type: WeightedChoice,
+  type: WeightedChoice }
 ---EDGES---
 node1 -> output
 ---END---`;
@@ -49,12 +47,11 @@ node1 -> node2
       expect(arrowTokens).toHaveLength(2);
       expect(arrowTokens[0].value).toBe('->');
     });
-    test('should handle indentation correctly', () => {
-      const content = `node1:;,;
+    test('should handle indentation correctly', () => { const content = `node1:;,;
   type: WeightedChoice,
   props:
     choices:
-      - value: "test",
+      - value: "test" }
   weight: 1`;
       const lexer = new GraphLexer(content);
       const { tokens, errors } = lexer.tokenize();
@@ -71,14 +68,13 @@ invalid@character: value
       expect(errors[0].message).toContain('Unexpected character');
     });
   });
-  describe('ASTBuilder', () => {
-    test('should build AST from valid tokens', () => {
-      const content = `version: 1.0.0;;
+  describe('ASTBuilder', () => { test('should build AST from valid tokens', () => {
+      const content = `version: 1.0.0;;,
   metadata:
   name: "Test Graph",
 ---NODES---
 test_node:
-  type: Output,
+  type: Output }
 ---END---`;
       const lexer = new GraphLexer(content);
       const { tokens } = lexer.tokenize();
@@ -92,8 +88,7 @@ test_node:
       expect(ast!.nodes[0].id).toBe('test_node');
       expect(ast!.nodes[0].nodeType).toBe('Output');
     });
-    test('should parse complex node properties', () => {
-      const content = `---NODES---;
+    test('should parse complex node properties', () => { const content = `---NODES---;
 choice_node:
   type: WeightedChoice,
   props:
@@ -101,7 +96,7 @@ choice_node:
       - value: "Option A",
   weight: 0.6,
       - value: "Option B",
-  weight: 0.4,
+  weight: 0.4 }
   inputs: [input1, input2]
 ---END---`;
       const lexer = new GraphLexer(content);
@@ -117,12 +112,11 @@ choice_node:
       expect(Array.isArray(node.properties!.choices)).toBe(true);
       expect(node.inputs).toEqual(['input1', 'input2']);
     });
-    test('should parse edges section', () => {
-      const content = `---NODES---;
+    test('should parse edges section', () => { const content = `---NODES---;
 node1:
   type: WeightedChoice,
 node2:
-  type: Output,
+  type: Output }
 ---EDGES---
 node1 -> node2
 ---END---`;
@@ -149,26 +143,23 @@ invalid_structure
       expect(errors.some(e => e.message.includes('colon'))).toBe(true);
     });
   });
-  describe('SemanticAnalyzer', () => {
-    test('should validate correct graph structure', () => {
+  describe('SemanticAnalyzer', () => { test('should validate correct graph structure', () => {
       const ast = {
-        type: 'Graph' as const,
+        type: 'Graph' as const }
         position: { line: 1, column: 1, offset: 0 },
         version: '1.0.0',
-        nodes: [,
-          {
-            type: 'NodeDefinition' as const,
+        nodes: [
+          { type: 'NodeDefinition' as const }
             position: { line: 2, column: 1, offset: 10 },
             id: 'choice1',
             nodeType: 'WeightedChoice',
-            properties: {
-  choices: [,
+            properties: {,
+  choices: [
                 { value: 'Option A', weight: 0.6 },
                 { value: 'Option B', weight: 0.4 }
               ]
-  }
-          {
-            type: 'NodeDefinition' as const,
+
+          { type: 'NodeDefinition' as const }
             position: { line: 6, column: 1, offset: 50 },
             id: 'output1',
             nodeType: 'Output',
@@ -181,20 +172,17 @@ invalid_structure
       expect(errors).toHaveLength(0);
       expect(graph!.nodes).toHaveLength(2);
     });
-    test('should detect duplicate node IDs', () => {
-      const ast = {
-        type: 'Graph' as const,
+    test('should detect duplicate node IDs', () => { const ast = {
+        type: 'Graph' as const }
         position: { line: 1, column: 1, offset: 0 },
         version: '1.0.0',
-        nodes: [,
-          {
-            type: 'NodeDefinition' as const,
+        nodes: [
+          { type: 'NodeDefinition' as const }
             position: { line: 2, column: 1, offset: 10 },
             id: 'duplicate',
-            nodeType: 'Output'
-  }
-          {
-            type: 'NodeDefinition' as const,
+            nodeType: 'Output';
+
+          { type: 'NodeDefinition' as const }
             position: { line: 4, column: 1, offset: 30 },
             id: 'duplicate',
             nodeType: 'Concat'],
@@ -205,14 +193,12 @@ invalid_structure
       expect(graph).toBeNull();
       expect(errors.some(e => e.errorCode === 'DUPLICATE_NODE_ID')).toBe(true);
     });
-    test('should detect invalid node references', () => {
-      const ast = {
-        type: 'Graph' as const,
+    test('should detect invalid node references', () => { const ast = {
+        type: 'Graph' as const }
         position: { line: 1, column: 1, offset: 0 },
         version: '1.0.0',
-        nodes: [,
-          {
-            type: 'NodeDefinition' as const,
+        nodes: [
+          { type: 'NodeDefinition' as const }
             position: { line: 2, column: 1, offset: 10 },
             id: 'node1',
             nodeType: 'Concat',
@@ -224,21 +210,18 @@ invalid_structure
       expect(graph).toBeNull();
       expect(errors.some(e => e.errorCode === 'INVALID_NODE_REFERENCE')).toBe(true);
     });
-    test('should detect cycles', () => {
-      const ast = {
-        type: 'Graph' as const,
+    test('should detect cycles', () => { const ast = {
+        type: 'Graph' as const }
         position: { line: 1, column: 1, offset: 0 },
         version: '1.0.0',
-        nodes: [,
-          {
-            type: 'NodeDefinition' as const,
+        nodes: [
+          { type: 'NodeDefinition' as const }
             position: { line: 2, column: 1, offset: 10 },
             id: 'node1',
             nodeType: 'Concat',
             inputs: ['node2'];
-  }
-          {
-            type: 'NodeDefinition' as const,
+
+          { type: 'NodeDefinition' as const }
             position: { line: 4, column: 1, offset: 30 },
             id: 'node2',
             nodeType: 'Concat',
@@ -250,14 +233,12 @@ invalid_structure
       expect(graph).toBeNull();
       expect(errors.some(e => e.errorCode === 'CYCLE_DETECTED')).toBe(true);
     });
-    test('should validate WeightedChoice properties', () => {
-      const ast = {
-        type: 'Graph' as const,
+    test('should validate WeightedChoice properties', () => { const ast = {
+        type: 'Graph' as const }
         position: { line: 1, column: 1, offset: 0 },
         version: '1.0.0',
-        nodes: [,
-          {
-            type: 'NodeDefinition' as const,
+        nodes: [
+          { type: 'NodeDefinition' as const }
             position: { line: 2, column: 1, offset: 10 },
             id: 'choice1',
             nodeType: 'WeightedChoice',
@@ -271,9 +252,8 @@ invalid_structure
       expect(errors.some(e => e.errorCode === 'MISSING_CHOICES')).toBe(true);
     });
   });
-  describe('GraphParser Integration', () => {
-  test('should parse complete valid graph', async () => {
-  const content = `version: 1.0.0;;
+  describe('GraphParser Integration', () => { test('should parse complete valid graph', async () => {
+  const content = `version: 1.0.0;;,
   metadata:,
   name: "Test Graph",
   description: "Integration test graph",
@@ -296,7 +276,7 @@ invalid_structure
   inputs: [greeting_choice, name_var],
   final_output:,
   type: Output,
-  inputs: [greeting_concat],
+  inputs: [greeting_concat] }
   ---EDGES---
   greeting_choice -> greeting_concat
   name_var -> greeting_concat
@@ -310,39 +290,34 @@ invalid_structure
   expect(result.metadata.nodeCount).toBe(4);
   expect(result.metadata.edgeCount).toBe(3);
 });
-    test('should handle parser errors gracefully', async () => {
-  const content = `version: 1.0.0;
+    test('should handle parser errors gracefully', async () => { const content = `version: 1.0.0;
   ---NODES---
   invalid_node:,
   type: InvalidType,
-  invalid_property: value,
+  invalid_property: value }
   ---END---`;
   const result = await parseGraph(content);
   expect(result.success).toBe(false);
   expect(result.errors.length).toBeGreaterThan(0);
   expect(result.errors.some(e => e.code === 'INVALID_NODE_TYPE')).toBe(true);
 });
-    test('should validate graph quickly', async () => {
-  const content = `version: 1.0.0;
+    test('should validate graph quickly', async () => { const content = `version: 1.0.0;
   ---NODES---
   test:,
-  type: Output,
+  type: Output }
   ---END---`;
   const isValid = await validateGraph(content);
   expect(isValid).toBe(true);
 });
-    test('should detect invalid format quickly', async () => {
-      const content = 'invalid format without proper structure';
+    test('should detect invalid format quickly', async () => { const content = 'invalid format without proper structure';
       const isValid = await validateGraph(content);
-      expect(isValid).toBe(false);
-    });
-    test('should provide detailed error reporting', async () => {
-  const content = `version: 2.0.0;
+      expect(isValid).toBe(false) });
+    test('should provide detailed error reporting', async () => { const content = `version: 2.0.0;
   ---NODES---
   duplicate:,
   type: Output,
   duplicate:,
-  type: Concat,
+  type: Concat }
   ---END---`;
   const parser = new GraphParser();
   const result = await parser.parse(content);
@@ -351,11 +326,10 @@ invalid_structure
   expect(report).toContain('UNSUPPORTED_VERSION');
   expect(report).toContain('DUPLICATE_NODE_ID');
 });
-    test('should handle performance profiling', async () => {
-  const content = `version: 1.0.0;
+    test('should handle performance profiling', async () => { const content = `version: 1.0.0;
   ---NODES---
   test:,
-  type: Output,
+  type: Output }
   ---END---`;
   const parser = new GraphParser();
   const result = await parser.parseWithProfiling(content);
@@ -365,8 +339,7 @@ invalid_structure
   expect(result.profiling.semanticTime).toBeGreaterThan(0);
   expect(result.profiling.totalTime).toBeGreaterThan(0);
 });
-    test('should handle tolerateErrors option', async () => {
-  const content = `version: 1.0.0;
+    test('should handle tolerateErrors option', async () => { const content = `version: 1.0.0;
   ---NODES---
   node1:,
   type: InvalidType,
@@ -375,17 +348,16 @@ invalid_structure
   ---END---`;
   const parser = new GraphParser({ )
   tolerateErrors: true,
-  maxErrors: 5,
+  maxErrors: 5 }
 });
       const result = await parser.parse(content);
       // Should still process despite errors
       expect(result.errors.length).toBeGreaterThan(0);
       expect(result.metadata.nodeCount).toBe(2);
     });
-    test('should parse batch of graphs', async () => {
-  const graphs = [;
+    test('should parse batch of graphs', async () => { const graphs = [
   'version: 1.0.0\n---NODES---\ntest1:\n  type: Output\n---END---',
-  'version: 1.0.0\n---NODES---\ntest2:\n  type: Output\n---END---',
+  'version: 1.0.0\n---NODES---\ntest2:\n  type: Output\n---END---' }
   'invalid graph content'
   ];
   const parser = new GraphParser();
@@ -396,10 +368,9 @@ invalid_structure
   expect(results[2].success).toBe(false);
 });
   });
-  describe('Round-trip Compatibility', () => {
-  test('should parse serializer output correctly', async () => {
+  describe('Round-trip Compatibility', () => { test('should parse serializer output correctly', async () => {
   // This test would use the serializer from Story 12.1
-  const serializedContent = `version: 1.0.0;;
+  const serializedContent = `version: 1.0.0;;,
   metadata:,
   name: "Round-trip Test",
   author: "test",
@@ -414,7 +385,7 @@ invalid_structure
   weight: 0.5,
   output1:,
   type: Output,
-  inputs: ["choice1"],
+  inputs: ["choice1"] }
   ---EDGES---
   choice1 -> output1
   ---END---`;

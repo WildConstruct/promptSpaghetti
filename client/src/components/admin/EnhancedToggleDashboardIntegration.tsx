@@ -24,10 +24,11 @@ import {
   CheckCircle,
   XCircle,
   Loader
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Types from our enhanced services
-}
+
+
 interface EnhancedEvaluationResult {
   enabled: boolean;,
   value: Error,
@@ -42,7 +43,8 @@ interface EnhancedEvaluationResult {
   blockers: string,
   requirements: string;,
   canActivate: boolean;
-}
+
+
 };
   cascadeEffects?: unknown;
   riskAssessment?: {
@@ -58,7 +60,8 @@ interface EnhancedEvaluationResult {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   modelRecommendation?: string;
 };
-}
+
+
 interface OperationEnforcement {
   allowed: boolean;,
   blockers: unknown,
@@ -77,7 +80,8 @@ interface OperationEnforcement {
   overallRiskScore: number,
   estimatedAffectedUsers: number;,
   estimatedExecutionTime: number,
-  recommendedApprovals: string;,
+  recommendedApprovals: string;
+},
   safetyChecks: string;}
 
 
@@ -97,7 +101,7 @@ interface OperationEnforcement {
   tokensUsed?: number;
   riskLevel?: 'low' | 'medium' | 'high' | 'critical';
   costImpact?: 'none' | 'low' | 'medium' | 'high';
-}
+
 };
       performanceHints?: {
   priority?: 'low' | 'normal' | 'high' | 'critical';
@@ -122,18 +126,18 @@ interface OperationEnforcement {
   body: JSON.stringify({),
           toggleKey,
           context
-  }
+
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Enhanced evaluation failed');
       const data = await response.json();
       return data.result;
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
   setError(errorMessage);
   return null;
-} finally {
+ finally {
       setLoading(false);
   }, []);
   const evaluateBulkToggles = useCallback(async (;);
@@ -169,18 +173,18 @@ interface OperationEnforcement {
   body: JSON.stringify({),
           toggleKeys,
           context
-  }
+
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Bulk evaluation failed');
       const data = await response.json();
       return data.results;
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
   setError(errorMessage);
   return null;
-} finally {
+ finally {
       setLoading(false);
   }, []);
   return {
@@ -193,36 +197,11 @@ interface OperationEnforcement {
 /**
  * Hook for operation dependency enforcement
  */
-export const useOperationEnforcement = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const enforceOperation = useCallback(async (;);
-  operation: {
-  type: 'activate' | 'deactivate' | 'modify_value' | 'modify_config' | 'archive';,
-  targetToggleId: string,
-  reason: string;
-  newState?: boolean;
-  newValue?: unknown;
-},
-  context: {
-  requestSource: 'admin_dashboard',
-      urgencyLevel: 'low' | 'normal' | 'high' | 'emergency';
-      approvals?: unknown;
-      rolloutStrategy?: 'immediate' | 'gradual' | 'scheduled';
-  ): Promise<OperationEnforcement | null> => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/enhanced-feature-toggles/enforce-operation', {
-  method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`}
-  },
+export const useOperationEnforcement = () => { return null; },
   body: JSON.stringify({),
           operation,
           context
-  }
+
       });
       const data = await response.json();
       if (!response.ok) {
@@ -231,11 +210,11 @@ export const useOperationEnforcement = () => {
           return data.enforcement;
         throw new Error(data.error || 'Operation enforcement failed');
       return data.enforcement;
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
   setError(errorMessage);
   return null;
-} finally {
+ finally {
       setLoading(false);
   }, []);
   const executeOperation = useCallback(async (;);
@@ -255,18 +234,18 @@ export const useOperationEnforcement = () => {
           operation,
           context,
           enforcement
-  }
+
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Operation execution failed');
       const data = await response.json();
       return data.success;
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
   setError(errorMessage);
   return false;
-} finally {
+ finally {
       setLoading(false);
   }, []);
   return {
@@ -279,60 +258,24 @@ export const useOperationEnforcement = () => {
 /**
  * Hook for impact preview functionality
  */
-export const useImpactPreview = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const getImpactPreview = useCallback(async (;);
-  operation: {
-  type: string;,
-  targetToggleId: string,
-  reason: string;
-}
-    context?: {
-  claudeContext?: {
-  modelVersion?: string;
-  promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
-  tokensUsed?: number;
-  riskLevel?: 'low' | 'medium' | 'high' | 'critical';
-  costImpact?: 'none' | 'low' | 'medium' | 'high';
-};
-      performanceHints?: {
-  priority?: 'low' | 'normal' | 'high' | 'critical';
-  maxEvaluationTime?: number;
-};
-      dependencyContext?: {
-  enforceDependencies?: boolean;
-  cascadeEvaluation?: boolean;
-  impactAnalysis?: boolean;
-};
-      traceEnabled?: boolean;
-  ): Promise<ImpactPreview | null> => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/enhanced-feature-toggles/impact-preview', {
-  method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`}
-  },
+export const useImpactPreview = () => { return null; },
   body: JSON.stringify({),
   operation,
   context: context || {,
   requestSource: 'admin_dashboard',
-  urgencyLevel: 'normal'
-}
+  urgencyLevel: 'normal';
+
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Impact preview failed');
       const data = await response.json();
       return data.preview;
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
   setError(errorMessage);
   return null;
-} finally {
+ finally {
       setLoading(false);
   }, []);
   return {
@@ -351,7 +294,7 @@ export const RiskAssessmentBadge: React.FC<{
   riskScore: number;,
   recommendation: 'proceed' | 'caution' | 'review' | 'block';
 };
-}> = ({ riskAssessment }) => {
+> = ({ riskAssessment }) => {
   if (!riskAssessment) return null;
   const { riskScore } = riskAssessment;
   const getRiskColor = () => {
@@ -390,7 +333,7 @@ export const ClaudeImpactDisplay: React.FC<{
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   modelRecommendation?: string;
 };
-}> = ({ claudeMetadata }) => {
+> = ({ claudeMetadata }) => {
   if (!claudeMetadata || claudeMetadata.costImpact === 'none') return null;
   const getCostColor = () => {
   switch (claudeMetadata.costImpact) {
@@ -433,7 +376,7 @@ export const ClaudeImpactDisplay: React.FC<{
 export const PerformanceMetrics: React.FC<{,
   evaluationTime: number,
   cacheHit: boolean;
-}> = ({ evaluationTime, cacheHit }) => {
+> = ({ evaluationTime, cacheHit }) => {
   const getPerformanceColor = () => {
     if (evaluationTime > 100) return 'text-red-600';
     if (evaluationTime > 50) return 'text-orange-600';
@@ -467,7 +410,7 @@ export const DependencyStatusIndicator: React.FC<{
   blockers: string,
   canActivate: boolean;
 };
-}> = ({ dependencyStatus }) => {
+> = ({ dependencyStatus }) => {
   if (!dependencyStatus || !dependencyStatus.checked) return null;
   const hasBlockers = dependencyStatus.blockers.length > 0;
   const hasWarnings = dependencyStatus.warnings.length > 0;
@@ -503,7 +446,7 @@ export const DependencyStatusIndicator: React.FC<{
 export const CascadeEffectsPreview: React.FC<{
   cascadeEffects?: unknown;
   compact?: boolean;
-}> = ({ cascadeEffects, compact = false }) => {
+> = ({ cascadeEffects, compact = false }) => {
   if (!cascadeEffects || cascadeEffects.length === 0) return null;
   if (compact) {
     return;
@@ -545,7 +488,7 @@ export const ImpactPreviewModal: React.FC<{,
   reason: string;
 };
   onProceed: (enforcement: OperationEnforcement) => void;
-}> = ({ isOpen, onClose, operation, onProceed }) => {
+> = ({ isOpen, onClose, operation, onProceed }) => {
   const { getImpactPreview, loading: previewLoading } = useImpactPreview();
   const { enforceOperation, loading: enforcementLoading } = useOperationEnforcement();
   const [preview, setPreview] = useState<ImpactPreview | null>(null);
@@ -564,7 +507,7 @@ export const ImpactPreviewModal: React.FC<{,
         setEnforcement(result);
         if (result.allowed) {
           onProceed(result);
-    } else {
+ else {
       onProceed(enforcement);
   };
   if (!isOpen) return null;
@@ -605,7 +548,7 @@ export const ImpactPreviewModal: React.FC<{,
   recommendation: preview.overallRiskScore >= 0.8 ? 'block' : ,
   preview.overallRiskScore >= 0.6 ? 'review' :,
   preview.overallRiskScore >= 0.3 ? 'caution' : 'proceed'
-}} />
+} />
                   <div className="text-sm text-gray-600">
                     {preview.estimatedAffectedUsers.toLocaleString()} users affected
                   </div>
@@ -688,7 +631,7 @@ export const ImpactPreviewModal: React.FC<{,
   : preview.overallRiskScore >= 0.6,
   ? 'bg-orange-600 text-white hover:bg-orange-700',
   : 'bg-blue-600 text-white hover:bg-blue-700'
-}`}
+`}
               >
                 {enforcementLoading ? ()
                   <>

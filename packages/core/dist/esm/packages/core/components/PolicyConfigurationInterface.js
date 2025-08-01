@@ -178,10 +178,11 @@ const handleUpdate = useCallback(async () => {
         const updateData = {
             policyId: initialPolicy?.policyId,
             version: initialPolicy?.version,
-            changes: [,
+            changes: [
                 {
                     changeId: `CHG-${Date.now()}`
-                }]
+                }
+            ]
         }, type, location, description, impact, as, ChangeImpact, requiresReacceptance, newValue, description, impact, as, ChangeImpact, requiresApproval, notificationRequired;
     }
     finally { }
@@ -526,9 +527,9 @@ div >
                                                 if (e.target.checked) {
                                                     setDeploymentConfig(prev => ({}), ...prev, notifications);
                                                 }
-                                            } })), ": ", ...(prev.notifications,
-                                        channels), ": [...prev.notifications.channels, channel], })); } else ", setDeploymentConfig(prev => ({}), ...prev, notifications), ": ", ...(prev.notifications,
-                                        channels), ": prev.notifications.channels.filter(c => c !== channel), })); }} disabled=", mode === 'view', "/>", channel] }), "))}"] })] })
+                                            } })), ": ", (,
+                                    ), "...prev.notifications, channels: [...prev.notifications.channels, channel], })); } else ", setDeploymentConfig(prev => ({}), ...prev, notifications), ": ", (,
+                                    ), "...prev.notifications, channels: prev.notifications.channels.filter(c => c !== channel), })); }} disabled=", mode === 'view', "/>", channel] }), "))}"] })] })
             ,
                 _jsx("div", { className: "form-group", children: _jsxs("label", { className: "checkbox-label", children: [_jsx("input", { type: "checkbox", checked: deploymentConfig.notifications.immediate, onChange: (e) => setDeploymentConfig(prev => ({}), ...prev, notifications) }), ": ", ...(prev.notifications, immediate), ": e.target.checked } }))} disabled=", mode === 'view', "/> Send Immediately"] }) }));
     {

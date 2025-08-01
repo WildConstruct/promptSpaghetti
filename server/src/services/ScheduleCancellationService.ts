@@ -14,7 +14,7 @@ import {
   ScheduleExecution,
   ScheduleStatus,
   ExecutionStatus
-} from '../database/scheduling-models';
+ from '../database/scheduling-models';
 
 // Cancellation Types and Interfaces
 export type CancellationReason = 
@@ -35,8 +35,8 @@ export type CancellationMode =
   | 'after_completion' // Cancel after current cycle completes
   | 'scheduled'; // Cancel at a specific future time
 
-}
-}
+
+
 export interface CancellationRequest {
   scheduleIds: string[];
   reason: CancellationReason;
@@ -46,12 +46,13 @@ export interface CancellationRequest {
   notifyUsers?: boolean;
   rollbackPreviousExecutions?: boolean;
   cancelledBy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CancellationResult {
   id: string;
   requestId: string;
@@ -83,13 +84,14 @@ export interface CancellationResult {
     code: string;
     message: string;
     recoverable: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface CancellationAction {
   id: string;
   action: 'stop_schedule' | 'cancel_execution' | 'rollback_execution' | 'notify_users' | 'update_status';
@@ -98,12 +100,13 @@ export interface CancellationAction {
   success: boolean;
   details?: Record<string, any>;
   error?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkCancellationRequest {
   filters: {
     toggleIds?: string[];
@@ -112,8 +115,9 @@ export interface BulkCancellationRequest {
     tags?: string[];
     startDateFrom?: string;
     startDateTo?: string;
-}
-}
+
+
+
   };
   reason: CancellationReason;
   mode: CancellationMode;
@@ -121,10 +125,10 @@ export interface BulkCancellationRequest {
   maxSchedules?: number; // Safety limit
   dryRun?: boolean; // Preview what would be cancelled
   cancelledBy: string;
-}
 
-}
-}
+
+
+
 export interface BulkCancellationResult {
   requestId: string;
   totalRequested: number;
@@ -141,13 +145,14 @@ export interface BulkCancellationResult {
     togglesAffected: string[];
     totalExecutionsAffected: number;
     totalRollbacksPerformed: number;
-}
-}
+
+
+
   };
   
   executionTimeMs: number;
   timestamp: string;
-}
+
 
 export class ScheduleCancellationService {
   constructor(
@@ -177,7 +182,7 @@ export class ScheduleCancellationService {
 
     const results = await this.cancelMultipleSchedules(fullRequest);
     return results[0];
-  }
+
 
   async cancelMultipleSchedules(request: CancellationRequest): Promise<CancellationResult[]> {
 
@@ -188,16 +193,16 @@ export class ScheduleCancellationService {
       try {
         const result = await this.processSingleCancellation(requestId, scheduleId, request);
         results.push(result);
-      } catch (error) {
+ catch (error) {
         results.push(this.createErrorResult(requestId, scheduleId, request, error as Error));
-      }
-    }
+
+
 
     // Log bulk cancellation
     await this.logBulkCancellation(requestId, request, results);
 
     return results;
-  }
+
 
   async bulkCancelSchedules(request: BulkCancellationRequest): Promise<BulkCancellationResult> {
 
@@ -213,7 +218,7 @@ export class ScheduleCancellationService {
     
     if (request.dryRun) {
       return this.createDryRunResult(requestId, schedulesToProcess, request, startTime);
-    }
+
 
     // Process cancellations
     const cancellationRequest: CancellationRequest = {
@@ -247,7 +252,7 @@ export class ScheduleCancellationService {
     await this.logBulkCancellationResult(bulkResult);
 
     return bulkResult;
-  }
+
 
   // Core Cancellation Processing
   private async processSingleCancellation(
@@ -261,7 +266,7 @@ export class ScheduleCancellationService {
     
     if (!schedule) {
       throw new Error(`Schedule with ID ${scheduleId} not found`);
-    }
+
 
     // Validate cancellation is allowed
     await this.validateCancellation(schedule, request);
@@ -288,7 +293,7 @@ export class ScheduleCancellationService {
       case 'scheduled':
         await this.scheduleDelayCancellation(schedule, request.scheduledTime!, actionsTaken);
         break;
-      }
+
 
       // Count affected executions
       const executions = await this.schedulingDAO.getExecutionsBySchedule(scheduleId);
@@ -303,7 +308,7 @@ export class ScheduleCancellationService {
           schedule.toggleId, 
           actionsTaken
         );
-      }
+
 
       // Update schedule status and metadata
       await this.updateScheduleForCancellation(schedule, request, actionsTaken);
@@ -311,7 +316,7 @@ export class ScheduleCancellationService {
       // Send notifications if requested
       if (request.notifyUsers) {
         await this.sendCancellationNotifications(schedule, request, actionsTaken);
-      }
+
 
       const result: CancellationResult = {
         id: `cancellation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -338,13 +343,12 @@ export class ScheduleCancellationService {
       await this.logCancellation(result);
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       // Log failure and return error result
       console.error(`Cancellation failed for schedule ${scheduleId}:`, error);
       return this.createErrorResult(requestId, scheduleId, request, error as Error);
-    }
-  }
+
+
 
   // Cancellation Mode Implementations
   private async performImmediateCancellation(
@@ -368,7 +372,7 @@ export class ScheduleCancellationService {
       timestamp: new Date().toISOString(),
       success: true
     });
-  }
+
 
   private async performGracefulCancellation(
     schedule: FeatureToggleSchedule,
@@ -388,8 +392,8 @@ export class ScheduleCancellationService {
             ...schedule.metadata,
             gracefulCancellation: true,
             cancellationAfterExecution: runningExecution.id
-          }
-  }
+
+
         'cancellation-service'
       );
 
@@ -401,11 +405,11 @@ export class ScheduleCancellationService {
         success: true,
         details: { executionId: runningExecution.id }
       });
-    } else {
+ else {
       // No running execution, cancel immediately
       await this.performImmediateCancellation(schedule, actionsTaken);
-    }
-  }
+
+
 
   private async performAfterCompletionCancellation(
     schedule: FeatureToggleSchedule,
@@ -422,8 +426,8 @@ export class ScheduleCancellationService {
             ...schedule.metadata,
             cancelAfterCycle: true,
             maxExecutions: schedule.executionCount + 1 // Allow one more execution
-          }
-  }
+
+
         'cancellation-service'
       );
 
@@ -434,11 +438,11 @@ export class ScheduleCancellationService {
         timestamp: new Date().toISOString(),
         success: true
       });
-    } else {
+ else {
       // One-time schedule, cancel after execution
       await this.performGracefulCancellation(schedule, actionsTaken);
-    }
-  }
+
+
 
   private async scheduleDelayCancellation(
     schedule: FeatureToggleSchedule,
@@ -457,9 +461,9 @@ export class ScheduleCancellationService {
           scheduledCancellation: {
             time: cancelTime.toISOString(),
             status: 'scheduled'
-          }
-        }
-  }
+
+
+
       'cancellation-service'
     );
 
@@ -471,7 +475,7 @@ export class ScheduleCancellationService {
       success: true,
       details: { scheduledTime: cancelTime.toISOString() }
     });
-  }
+
 
   // Rollback Operations
   private async rollbackPreviousExecutions(
@@ -488,14 +492,14 @@ export class ScheduleCancellationService {
     
     if (!toggle) {
       throw new Error(`Feature toggle ${toggleId} not found for rollback`);
-    }
+
 
     // Rollback executions in reverse order (most recent first)
     for (const execution of successfulExecutions.reverse()) {
       try {
         await this.rollbackExecution(execution, toggle, actionsTaken);
         rollbackCount++;
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to rollback execution ${execution.id}:`, error);
         actionsTaken.push({
           id: `action_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -505,11 +509,11 @@ export class ScheduleCancellationService {
           success: false,
           error: error instanceof Error ? error.message : 'Unknown error'
         });
-      }
-    }
+
+
 
     return rollbackCount;
-  }
+
 
   private async rollbackExecution(
     execution: ScheduleExecution,
@@ -519,7 +523,7 @@ export class ScheduleCancellationService {
 
     if (!execution.beforeValue) {
       throw new Error('Cannot rollback execution without before value');
-    }
+
 
     // Restore previous value
     await this.featureToggleDAO.updateToggle({
@@ -535,7 +539,7 @@ export class ScheduleCancellationService {
         ...execution.metadata,
         rolledBackAt: new Date().toISOString(),
         rollbackReason: 'schedule_cancelled'
-      }
+
     });
 
     actionsTaken.push({
@@ -548,9 +552,9 @@ export class ScheduleCancellationService {
         executionId: execution.id,
         beforeValue: execution.beforeValue,
         afterValue: execution.afterValue
-      }
+
     });
-  }
+
 
   // Helper Methods
   private async validateCancellation(
@@ -561,12 +565,12 @@ export class ScheduleCancellationService {
     // Check if already cancelled
     if (schedule.status === ScheduleStatus.CANCELLED) {
       throw new Error('Schedule is already cancelled');
-    }
+
 
     // Check if completed
     if (schedule.status === ScheduleStatus.COMPLETED) {
       throw new Error('Cannot cancel completed schedule');
-    }
+
 
     // Validate scheduled cancellation time
     if (request.mode === 'scheduled' && request.scheduledTime) {
@@ -575,13 +579,13 @@ export class ScheduleCancellationService {
       
       if (scheduledTime <= now) {
         throw new Error('Scheduled cancellation time must be in the future');
-      }
+
 
       if (schedule.endTime && scheduledTime > schedule.endTime) {
         throw new Error('Scheduled cancellation time is after schedule end time');
-      }
-    }
-  }
+
+
+
 
   private async stopRunningExecutions(scheduleId: string, actionsTaken: CancellationAction[]): Promise<void> {
 
@@ -595,7 +599,7 @@ export class ScheduleCancellationService {
           ...execution.metadata,
           cancelledAt: new Date().toISOString(),
           cancelReason: 'schedule_cancelled'
-        }
+
       });
 
       actionsTaken.push({
@@ -606,14 +610,14 @@ export class ScheduleCancellationService {
         success: true,
         details: { executionId: execution.id }
       });
-    }
-  }
+
+
 
   private async getCurrentExecution(scheduleId: string): Promise<ScheduleExecution | null> {
 
     const executions = await this.schedulingDAO.getExecutionsBySchedule(scheduleId, 1);
     return executions.find(e => e.status === ExecutionStatus.RUNNING) || null;
-  }
+
 
   private async getRunningExecutions(scheduleId: string): Promise<ScheduleExecution[]> {
 
@@ -621,7 +625,7 @@ export class ScheduleCancellationService {
     return executions.filter(e => 
       e.status === ExecutionStatus.RUNNING || e.status === ExecutionStatus.PENDING
     );
-  }
+
 
   private async updateScheduleForCancellation(
     schedule: FeatureToggleSchedule,
@@ -640,8 +644,8 @@ export class ScheduleCancellationService {
           comment: request.comment,
           cancelledBy: request.cancelledBy,
           cancelledAt: new Date().toISOString()
-        }
-      }
+
+
     }, request.cancelledBy);
 
     actionsTaken.push({
@@ -651,7 +655,7 @@ export class ScheduleCancellationService {
       timestamp: new Date().toISOString(),
       success: true
     });
-  }
+
 
   private async sendCancellationNotifications(
     schedule: FeatureToggleSchedule,
@@ -672,9 +676,9 @@ export class ScheduleCancellationService {
       details: {
         recipients: ['admin@example.com'], // Would be actual recipients
         method: 'email'
-      }
+
     });
-  }
+
 
   private async findSchedulesForBulkOperation(filters: BulkCancellationRequest['filters']): Promise<FeatureToggleSchedule[]> {
 
@@ -688,18 +692,18 @@ export class ScheduleCancellationService {
 
     if (filters.toggleIds) {
       filtered = filtered.filter(s => filters.toggleIds!.includes(s.toggleId));
-    }
+
 
     if (filters.status) {
       filtered = filtered.filter(s => filters.status!.includes(s.status));
-    }
+
 
     if (filters.createdBy) {
       filtered = filtered.filter(s => filters.createdBy!.includes(s.createdBy));
-    }
+
 
     return filtered;
-  }
+
 
   private createDryRunResult(
     requestId: string,
@@ -739,7 +743,7 @@ export class ScheduleCancellationService {
       summary: this.generateBulkSummary(mockResults),
       executionTimeMs: Date.now() - startTime,
       timestamp: new Date().toISOString(};
-  }
+
 
   private generateBulkSummary(results: CancellationResult[]): BulkCancellationResult['summary'] {
     const reasonBreakdown = {} as Record<CancellationReason, number>;
@@ -755,11 +759,11 @@ export class ScheduleCancellationService {
       
       if (result.originalScheduleState?.toggleId && !togglesAffected.includes(result.originalScheduleState.toggleId)) {
         togglesAffected.push(result.originalScheduleState.toggleId);
-      }
+
 
       totalExecutionsAffected += result.executionsAffected;
       totalRollbacksPerformed += result.rollbacksPerformed;
-    }
+
 
     return {
       reasonBreakdown,
@@ -768,7 +772,7 @@ export class ScheduleCancellationService {
       totalExecutionsAffected,
       totalRollbacksPerformed
     };
-  }
+
 
   private createErrorResult(
     requestId: string,
@@ -796,9 +800,9 @@ export class ScheduleCancellationService {
         code: 'CANCELLATION_ERROR',
         message: error.message,
         recoverable: this.isRecoverableError(error)
-      }
+
     };
-  }
+
 
   private isRecoverableError(error: Error): boolean {
     const recoverablePatterns = [
@@ -811,7 +815,7 @@ export class ScheduleCancellationService {
 
     const message = error.message.toLowerCase();
     return recoverablePatterns.some(pattern => message.includes(pattern));
-  }
+
 
   // Logging Methods
   private async logCancellation(result: CancellationResult): Promise<void> {
@@ -825,7 +829,7 @@ export class ScheduleCancellationService {
       executionsAffected: result.executionsAffected,
       rollbacksPerformed: result.rollbacksPerformed
     });
-  }
+
 
   private async logBulkCancellation(
     requestId: string,
@@ -842,7 +846,7 @@ export class ScheduleCancellationService {
       mode: request.mode,
       cancelledBy: request.cancelledBy
     });
-  }
+
 
   private async logBulkCancellationResult(result: BulkCancellationResult): Promise<void> {
 
@@ -853,7 +857,7 @@ export class ScheduleCancellationService {
       failed: result.failed,
       executionTimeMs: result.executionTimeMs
     });
-  }
-}
+
+
 
 export default ScheduleCancellationService;

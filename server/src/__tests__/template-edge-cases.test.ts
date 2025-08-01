@@ -14,7 +14,7 @@ import {
   TemplateCreateRequest, 
   TemplateCustomizationRequest,
   TemplateExportFormat 
-} from '../types/template-models';
+ from '../types/template-models';
 import { initDatabase } from '../database';
 import Database from 'better-sqlite3';
 
@@ -443,7 +443,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
             defaultValue: 'test',
             description: 'Test variable',
             required: true
-          }],
+],
           customization_points: []
         };
 
@@ -468,7 +468,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
             defaultValue: 'test',
             description: 'Test variable',
             required: true
-          } as any],
+ as any],
           customization_points: []
         };
 
@@ -494,7 +494,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
               defaultValue: '{{var2}}',
               description: 'First variable',
               required: true
-  }
+
             {
               id: '2',
               name: 'var2',
@@ -502,7 +502,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
               defaultValue: '{{var1}}',
               description: 'Second variable',
               required: true
-            }
+
           ],
           customization_points: []
         };
@@ -531,7 +531,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
             type: 'text',
             default_value: 'Default',
             description: 'Test customization'
-          }]
+]
         };
 
         // Act & Assert
@@ -557,7 +557,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
             default_value: 'Default',
             description: 'Test customization',
             constraints: 'invalid constraints' as any
-          }]
+]
         };
 
         // Act & Assert
@@ -595,7 +595,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
           average_rating: 0,
           download_count: 0,
           favorite_count: 0
-  }
+
         .mockRejectedValueOnce(new Error('Template name already exists'));
 
       // Act
@@ -609,7 +609,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
       expect(results[1].status).toBe('rejected');
       if (results[1].status === 'rejected') {
         expect(results[1].reason.message).toContain('Template name already exists');
-      }
+
     });
 
     it('should handle concurrent template customization', async () => {
@@ -627,7 +627,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
         graph_data: {
           nodes: [{ id: '1', type: 'test', data: { label: 'Original' } }],
           edges: []
-  }
+
         variables: [],
         customization_points: [{
           id: '1',
@@ -636,7 +636,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
           type: 'text',
           default_value: 'Original',
           description: 'Test customization'
-        }],
+],
         created_at: new Date(),
         updated_at: new Date(),
         usage_count: 0,
@@ -701,9 +701,8 @@ describe('Template Edge Cases and Error Handling Tests', () => {
                 params: Object.fromEntries(
                   Array.from({ length: 100 }, (_, k) => [`param${k}`, `value${i}-${k}`])
 
-              }
-            }
-          }
+
+
         })),
         edges: Array.from({ length: 9999 }, (_, i) => ({
           id: `edge${i}`,
@@ -774,7 +773,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
         graph_data: { 
           nodes: [{ id: `node-${i}`, type: 'test', data: { label: `Node ${i}` } }], 
           edges: [] 
-  }
+
         variables: [],
         customization_points: []
       }));
@@ -932,7 +931,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
             defaultValue: 'test',
             description: 'Existing variable',
             required: true
-          }
+
         ],
         customization_points: [
           {
@@ -942,7 +941,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
             type: 'text',
             default_value: 'default',
             description: 'Invalid customization point'
-          }
+
         ]
       };
 
@@ -966,7 +965,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
           edges: [
             { id: 'edge1', source: 'node1', target: 'nonExistentNode', type: 'default' }
           ]
-  }
+
         variables: [],
         customization_points: []
       };

@@ -6,8 +6,8 @@
  */
 
 }
-export interface CacheConfig {
-    maxSize: number;
+}
+export interface CacheConfig { maxSize: number;
     maxMemoryMB: number;
     defaultTTL: number;
     evictionPolicy: 'LRU' | 'LFU' | 'TTL' | 'ADAPTIVE' | 'HYBRID';
@@ -16,13 +16,13 @@ export interface CacheConfig {
     diskCachePath?: string;
     metrics: {
         enabled: boolean;
-        reportingInterval: number;
+        reportingInterval: number }
 }
     };
 
 }
-export interface CacheItem<T = any> {
-    key: string;
+}
+export interface CacheItem<T = any> { key: string;
     value: T;
     size: number;
     createdAt: number;
@@ -35,12 +35,11 @@ export interface CacheItem<T = any> {
         modelType: string;
         inputHash: string;
         responseTime: number;
-        cost: number;
-    };
+        cost: number };
 
 }
-export interface CacheMetrics {
-    hitRate: number;
+}
+export interface CacheMetrics { hitRate: number;
     missRate: number;
     evictionRate: number;
     memoryUsage: number;
@@ -49,11 +48,10 @@ export interface CacheMetrics {
     totalRequests: number;
     cacheSize: number;
     compressionRatio: number;
-    costSavings: number;
-
+    costSavings: number }
 }
-export interface EvictionStrategy {
-    name: string;
+}
+export interface EvictionStrategy { name: string;
     shouldEvict(item: CacheItem, config: CacheConfig): boolean;
     selectItemsForEviction(items: CacheItem[], count: number): CacheItem[];
     calculatePriority(item: CacheItem): number;
@@ -93,7 +91,7 @@ export declare class AdvancedCacheManager {
     set<T>(key: string, value: T, options?: {)
         ttl?: number;
         priority?: number;
-        metadata?: Partial<CacheItem['metadata']>;
+        metadata?: Partial<CacheItem['metadata']> }
 }
     }): Promise<void>;
     delete(key: string): Promise<boolean>;
@@ -101,21 +99,15 @@ export declare class AdvancedCacheManager {
     getMetrics(): CacheMetrics;
     getSize(): number;
     getMemoryUsage(): number;
-    optimize(): Promise<{
-        itemsEvicted: number;
+    optimize(): Promise<{ itemsEvicted: number;
         memoryFreed: number;
-        optimizationTime: number;
-    }>;
-    analyzeHitPatterns(): {
-        topKeys: Array<{
+        optimizationTime: number }>;
+    analyzeHitPatterns(): { topKeys: Array<{
             key: string;
             hitRate: number;
-            accessCount: number;
-        }>;
-        lowPerformanceKeys: Array<{
-            key: string;
-            performance: number;
-        }>;
+            accessCount: number }>;
+        lowPerformanceKeys: Array<{ key: string;
+            performance: number }>;
         recommendations: string[];
     };
     private createEvictionStrategy;

@@ -15,12 +15,11 @@ export { default as SecurityDashboardMain } from './SecurityDashboardMain';
 export { default as SecurityDashboardDataService } from './SecurityDashboardDataService';
 
 // Core Framework Components (re-exported for convenience)
-export {
-  SecurityDashboardFramework,
+export { SecurityDashboardFramework,
   DashboardType,
   SecurityRole,
-  DashboardTheme,
-} from '../../security/dashboard/SecurityDashboardFramework';
+  DashboardTheme }
+ from '../../security/dashboard/SecurityDashboardFramework';
 
 export { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow';
 export { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard';
@@ -28,30 +27,27 @@ export { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSe
 export { ComplianceSecurityDashboard } from '../../security/dashboard/ComplianceSecurityDashboard';
 
 // Types and Interfaces
-export type {
-  SecurityDashboardMainProps,
+export type { SecurityDashboardMainProps,
   SecurityMetrics,
   SecurityAlert,
   ResponseAction,
   ComplianceStatus,
-  ComplianceViolation,
-} from './SecurityDashboardMain';
+  ComplianceViolation }
+ from './SecurityDashboardMain';
 
 export type { SecurityAction, DataServiceConfig, ApiResponse } from './SecurityDashboardDataService';
 
 // Framework Types (re-exported for convenience)
-export type {
-  DashboardConfig,
+export type { DashboardConfig,
   WidgetConfiguration,
   DashboardLayout,
   DashboardPermissions,
-  SecurityDashboardFrameworkOptions,
-} from '../../security/dashboard/SecurityDashboardFramework';
+  SecurityDashboardFrameworkOptions }
+ from '../../security/dashboard/SecurityDashboardFramework';
 
-export type {
-  SecurityWorkflowEvent,
+export type { SecurityWorkflowEvent,
   SecurityEventType,
   SecuritySeverity,
   SecurityActionType,
-  SecurityWorkflowConfig,
-} from '../../security/dashboard/SecurityDashboardWorkflow';
+  SecurityWorkflowConfig }
+ from '../../security/dashboard/SecurityDashboardWorkflow';

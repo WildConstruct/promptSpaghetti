@@ -153,7 +153,7 @@ _jsxs("div", { style: {
             width: '60px',
             padding: '4px 6px',
             border: `1px solid ${themeStyles.border}`
-        }, ", borderRadius: '4px', backgroundColor: themeStyles.background, color: themeStyles.text, fontSize: '12px', textAlign: 'center' }} /> )}", showWeights && !allowWeightEditing && ()
+        }, ", borderRadius: '4px', backgroundColor: themeStyles.background, color: themeStyles.text, fontSize: '12px', textAlign: 'center'; }} /> )}", showWeights && !allowWeightEditing && ()
             < span, " style=", {
             minWidth: '40px',
             textAlign: 'right',
@@ -580,7 +580,7 @@ div >
     (_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '12px' }, children: [_jsxs("span", { style: { fontSize: '14px', fontWeight: 500 }, children: ["Bulk Actions (", selectedItems.size, " selected):"] }), _jsx("button", { onClick: () => handleBulkWeightChange('equal'), style: {
                     background: 'transparent',
                     border: `1px solid ${themeStyles.accent}`
-                } }), ", color: themeStyles.accent, borderRadius: '4px', padding: '4px 8px', fontSize: '12px', cursor: 'pointer' }} > Equal Weights"] })
+                } }), ", color: themeStyles.accent, borderRadius: '4px', padding: '4px 8px', fontSize: '12px', cursor: 'pointer'; }} > Equal Weights"] })
         ,
             _jsx("button", { onClick: () => handleBulkWeightChange('normalize'), style: {
                     background: 'transparent',
@@ -633,18 +633,14 @@ _jsxs(DndContext, { sensors: sensors, collisionDetection: closestCenter, onDragS
                         /  >
                     ), ")}"] }) }), _jsx(DragOverlay, { dropAnimation: {
                 sideEffects: defaultDropAnimationSideEffects({}),
-                styles: {
-                    active: {
-                        opacity: '0.5',
-                    }
-                }
-            }
-                >
-                    {}
-                < div, style: {
-                background: themeStyles.accent + '20',
-                border: `1px solid ${themeStyles.accent}`
-            } }), ", borderRadius: '8px', padding: '16px', boxShadow: `0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px $", themeStyles.accent, "`} }, transform: 'scale(1.02)', userSelect: 'none', cursor: 'grabbing' }}>", _jsx("div", { style: {
+                styles: {},
+                active: {},
+                opacity: '0.5',
+            } }), "} >", draggedOption ? ()
+            < div : , " style=", {
+            background: themeStyles.accent + '20',
+            border: `1px solid ${themeStyles.accent}`
+        }, ", borderRadius: '8px', padding: '16px', boxShadow: `0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px $", themeStyles.accent, "`} }, transform: 'scale(1.02)', userSelect: 'none', cursor: 'grabbing'; }}>", _jsx("div", { style: {
                 fontSize: '14px',
                 fontWeight: 500,
                 color: themeStyles.text,

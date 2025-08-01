@@ -16,7 +16,7 @@ import {
   UpdateSlotRequest,
   CreatePlacementRequest,
   UpdatePlacementRequest
-} from '../services/placement/PlacementManagementService';
+ from '../services/placement/PlacementManagementService';
 import { AuditService } from '../auth/services/AuditService';
 import {
   PlacementSlot,
@@ -29,19 +29,20 @@ import {
   PlacementAnalytics,
   PlacementPreview,
   BulkPlacementOperation
-} from '../../../packages/core/types/PlacementTypes';
+ from '../../../packages/core/types/PlacementTypes';
 
-}
-}
+
+
 export interface PlacementAdminConfig {
   maxSlotsPerArea: number;
   maxPlacementsPerSlot: number;
   previewCacheTTL: number;
   bulkOperationLimit: number;
   analyticsRetentionDays: number;
-}
-}
-}
+
+
+
+
 
 export class PlacementAdminController {
   private db: Database;
@@ -66,7 +67,7 @@ export class PlacementAdminController {
       analyticsRetentionDays: 365,
       ...config
     };
-  }
+
 
   /**
    * Register all placement admin routes
@@ -104,7 +105,7 @@ export class PlacementAdminController {
     fastify.get('/admin/placement-system-status', this.getSystemStatus.bind(this));
     fastify.post('/admin/placement-system-maintenance', this.performSystemMaintenance.bind(this));
     fastify.get('/admin/placement-audit-log', this.getAuditLog.bind(this));
-  }
+
 
   // =============================================================================
   // Placement Slots Management
@@ -137,16 +138,16 @@ export class PlacementAdminController {
           limit: criteria.limit,
           offset: criteria.offset,
           hasMore: result.total > criteria.offset + criteria.limit
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve placement slots',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Create new placement slot
@@ -170,14 +171,14 @@ export class PlacementAdminController {
         data: slot,
         message: 'Placement slot created successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.status(400).send({
         success: false,
         error: 'Failed to create placement slot',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Get single placement slot by ID
@@ -194,20 +195,20 @@ export class PlacementAdminController {
           error: 'Placement slot not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
         data: slot
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve placement slot',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Update placement slot
@@ -226,14 +227,14 @@ export class PlacementAdminController {
         data: updatedSlot,
         message: 'Placement slot updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.status(400).send({
         success: false,
         error: 'Failed to update placement slot',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Delete placement slot
@@ -250,14 +251,14 @@ export class PlacementAdminController {
         success: true,
         message: 'Placement slot deleted successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.status(400).send({
         success: false,
         error: 'Failed to delete placement slot',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Content Placements Management
@@ -288,11 +289,11 @@ export class PlacementAdminController {
           start: new Date(query.dateFrom),
           end: new Date(query.dateTo)
         };
-      }
+
 
       if (query.createdBy) {
         criteria.createdBy = query.createdBy;
-      }
+
 
       const result = await this.placementService.searchContentPlacements(criteria);
 
@@ -304,16 +305,16 @@ export class PlacementAdminController {
           limit: criteria.limit,
           offset: criteria.offset,
           hasMore: result.total > criteria.offset + criteria.limit
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to search content placements',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Create content placement
@@ -334,14 +335,14 @@ export class PlacementAdminController {
         data: placement,
         message: 'Content placement created successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.status(400).send({
         success: false,
         error: 'Failed to create content placement',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Get single content placement
@@ -358,20 +359,20 @@ export class PlacementAdminController {
           error: 'Content placement not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
         data: placement
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve content placement',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Update content placement
@@ -390,14 +391,14 @@ export class PlacementAdminController {
         data: updatedPlacement,
         message: 'Content placement updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.status(400).send({
         success: false,
         error: 'Failed to update content placement',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Delete content placement
@@ -414,14 +415,14 @@ export class PlacementAdminController {
         success: true,
         message: 'Content placement deleted successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.status(400).send({
         success: false,
         error: 'Failed to delete content placement',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Preview and Testing
@@ -450,14 +451,14 @@ export class PlacementAdminController {
         data: preview,
         message: 'Placement preview generated successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to generate placement preview',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Get cached placement preview
@@ -475,16 +476,16 @@ export class PlacementAdminController {
           previewId: params.previewId,
           status: 'available',
           message: 'Preview data would be retrieved from cache'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve placement preview',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Analytics and Reporting
@@ -509,14 +510,14 @@ export class PlacementAdminController {
         success: true,
         data: analytics
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve placement analytics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Get slot-specific metrics
@@ -539,14 +540,14 @@ export class PlacementAdminController {
         success: true,
         data: metrics
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve slot metrics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Get performance report
@@ -561,13 +562,13 @@ export class PlacementAdminController {
         period: {
           startDate: query.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           endDate: query.endDate || new Date()
-  }
+
         summary: {
           totalSlots: await this.getSlotCount(),
           totalPlacements: await this.getPlacementCount(),
           totalImpressions: await this.getTotalImpressions(query),
           averageCTR: await this.getAverageCTR(query)
-  }
+
         topPerformers: await this.getTopPerformers(query),
         recommendations: await this.generateRecommendations()
       };
@@ -576,14 +577,14 @@ export class PlacementAdminController {
         success: true,
         data: reportData
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to generate performance report',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   // =============================================================================
   // System Administration
@@ -607,27 +608,27 @@ export class PlacementAdminController {
           systemLoad: this.getSystemLoad(),
           cacheHitRate: this.getCacheHitRate(),
           averageResponseTime: this.getAverageResponseTime()
-  }
+
         configuration: {
           maxSlotsPerArea: this.config.maxSlotsPerArea,
           maxPlacementsPerSlot: this.config.maxPlacementsPerSlot,
           previewCacheTTL: this.config.previewCacheTTL,
           bulkOperationLimit: this.config.bulkOperationLimit
-        }
+
       };
 
       reply.send({
         success: true,
         data: status
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve system status',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Get audit log for placement operations
@@ -652,14 +653,14 @@ export class PlacementAdminController {
         success: true,
         data: auditEntries
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve audit log',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Bulk Operations
@@ -684,7 +685,7 @@ export class PlacementAdminController {
           error: `Bulk operation limited to ${this.config.bulkOperationLimit} items`
         });
         return;
-      }
+
 
       const operation: BulkPlacementOperation = {
         operationId: this.generateOperationId(),
@@ -710,17 +711,17 @@ export class PlacementAdminController {
           operationId: operation.operationId,
           status: operation.status,
           estimatedDuration: this.estimateOperationDuration(body.targetPlacements.length)
-  }
+
         message: 'Bulk operation initiated successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.status(400).send({
         success: false,
         error: 'Failed to create bulk operation',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   /**
    * Get bulk operation status
@@ -737,20 +738,20 @@ export class PlacementAdminController {
           error: 'Bulk operation not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
         data: operation
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'Failed to retrieve bulk operation status',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   // =============================================================================
   // Private Helper Methods
@@ -759,39 +760,39 @@ export class PlacementAdminController {
   private getUserId(request: FastifyRequest): string {
     // Extract user ID from request (would be set by authentication middleware)
     return (request as any).user?.id || 'admin';
-  }
+
 
   private validateSlotRequest(request: CreateSlotRequest): void {
     if (!request.name || request.name.length < 3) {
       throw new Error('Slot name must be at least 3 characters long');
-    }
+
     if (!request.displayName || request.displayName.length < 3) {
       throw new Error('Display name must be at least 3 characters long');
-    }
+
     if (!request.placementArea || !request.position) {
       throw new Error('Placement area and position are required');
-    }
+
     if (request.maxItems < 1 || (request.minItems && request.minItems > request.maxItems)) {
       throw new Error('Invalid item limits');
-    }
-  }
+
+
 
   private validatePlacementRequest(request: CreatePlacementRequest): void {
     if (!request.slotId || !request.contentId || !request.contentType) {
       throw new Error('Slot ID, content ID, and content type are required');
-    }
+
     if (request.startTime && request.endTime && request.startTime >= request.endTime) {
       throw new Error('Start time must be before end time');
-    }
-  }
+
+
 
   private async checkSlotLimits(area: PlacementArea): Promise<void> {
 
     const currentCount = await this.getSlotCountByArea(area);
     if (currentCount >= this.config.maxSlotsPerArea) {
       throw new Error(`Maximum slots per area limit reached (${this.config.maxSlotsPerArea})`);
-    }
-  }
+
+
 
   // Placeholder methods for system metrics
   private async getSlotCount(): Promise<number> { return 25; }
@@ -811,11 +812,11 @@ export class PlacementAdminController {
   
   private generateOperationId(): string {
     return `bulk-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   
   private estimateOperationDuration(itemCount: number): number {
     return Math.ceil(itemCount * 0.5); // 0.5 seconds per item estimate
-  }
+
 
   private async storeBulkOperation(operation: BulkPlacementOperation): Promise<void> {
 
@@ -838,7 +839,7 @@ export class PlacementAdminController {
       operation.createdAt,
       operation.initiatedBy
     ]);
-  }
+
 
   private async getBulkOperation(operationId: string): Promise<BulkPlacementOperation | null> {
 
@@ -863,7 +864,7 @@ export class PlacementAdminController {
       completedAt: row.completed_at,
       initiatedBy: row.initiated_by
     };
-  }
+
 
   private async processBulkOperationAsync(operation: BulkPlacementOperation): Promise<void> {
 
@@ -881,13 +882,13 @@ export class PlacementAdminController {
         
         // Simulate processing time
         await new Promise(resolve => setTimeout(resolve, 100));
-      }
+
       
       // Mark as completed
       await this.updateBulkOperationStatus(operation.operationId, 'completed', 100);
       console.log(`✅ Bulk operation completed: ${operation.operationId}`);
     }, 1000);
-  }
+
 
   private async updateBulkOperationStatus(
     operationId: string, 
@@ -903,7 +904,7 @@ export class PlacementAdminController {
       ) THEN NOW() ELSE completed_at END
       WHERE operation_id = $1
     `, [operationId, status, progress]);
-  }
+
 
   /**
    * Perform system maintenance tasks
@@ -938,8 +939,8 @@ export class PlacementAdminController {
           break;
         default:
           results.push({ task, status: 'skipped', message: 'Unknown maintenance task' });
-        }
-      }
+
+
 
       await this.auditService.logEvent({
         userId,
@@ -953,32 +954,31 @@ export class PlacementAdminController {
         data: { results },
         message: 'System maintenance completed'
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({
         success: false,
         error: 'System maintenance failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
+
 
   private async cleanupExpiredPlacements(): Promise<void> {
 
     console.log('🧹 Cleaning up expired placements');
-  }
+
 
   private async rebuildCache(): Promise<void> {
 
     console.log('🔄 Rebuilding placement cache');
-  }
+
 
   private async updateMetrics(): Promise<void> {
 
     console.log('📊 Updating placement metrics');
-  }
+
 
   private async archiveOldData(): Promise<void> {
 
     console.log('📦 Archiving old placement data');
-  }
-}
+

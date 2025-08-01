@@ -437,8 +437,8 @@ Promise < StepExecutionStatus > {
                     SequenceDefinition | null;
                     {
                         return this.sequences.get(sequenceId) || null;
-                        listSequences(filters ?  : {});
-                        category ?  : string;
+                        listSequences(filters ?  : {}),
+                            category ?  : string;
                         tags ?  : string;
                         difficulty ?  : string;
                     }
@@ -874,8 +874,9 @@ Promise < StepExecutionStatus > {
                                                                                                                 step.performance.successRate = (executions.filter(ex => ex.status === 'completed').length / executions.length) * 100;
                                                                                                                 step.performance.failureRate = (executions.filter(ex => ex.status === 'failed').length / executions.length) * 100;
                                                                                                                 step.performance.retryRate = (executions.filter(ex => ex.attempts > 1).length / executions.length) * 100;
-                                                                                                                updateExecutionProgress(execution, SequenceExecution);
-                                                                                                                stepId: string,
+                                                                                                                updateExecutionProgress(execution, SequenceExecution),
+                                                                                                                    stepId;
+                                                                                                                string,
                                                                                                                     status;
                                                                                                                 StepExecutionStatus,
                                                                                                                     duration;

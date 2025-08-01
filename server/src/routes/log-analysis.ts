@@ -16,12 +16,13 @@ import {
   AnomalyType,
   AlertSeverity,
   AnalysisStatus
-} from '../admin/LogAnalysisService';
+ from '../admin/LogAnalysisService';
 import { Database } from '../database/connection';
 
 // Request type definitions
-}
-}
+
+
+
 interface IngestLogRequest {
   Body: {
     level: LogLevel;
@@ -30,13 +31,14 @@ interface IngestLogRequest {
     message: string;
     context?: Record<string, any>;
     metadata?: Record<string, any>;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface BatchIngestLogsRequest {
   Body: {
     logs: Array<{
@@ -53,14 +55,15 @@ interface BatchIngestLogsRequest {
       user_agent?: string;
       stack_trace?: string;
       metadata?: Record<string, any>;
-}
-}
-    }>;
-  };
-}
 
-}
-}
+
+
+>;
+  };
+
+
+
+
 interface CreateAnalysisRuleRequest {
   Body: {
     name: string;
@@ -75,8 +78,9 @@ interface CreateAnalysisRuleRequest {
       statistical_window_minutes?: number;
       ml_model?: string;
       custom_function?: string;
-}
-}
+
+
+
     };
     anomaly_type: AnomalyType;
     severity: AlertSeverity;
@@ -94,10 +98,10 @@ interface CreateAnalysisRuleRequest {
       custom_actions?: string[];
     };
   };
-}
 
-}
-}
+
+
+
 interface CreateAnalysisSessionRequest {
   Body: {
     name: string;
@@ -108,8 +112,9 @@ interface CreateAnalysisSessionRequest {
     time_range: {
       start_time: string;
       end_time?: string;
-}
-}
+
+
+
     };
     filters?: {
       components?: string[];
@@ -120,10 +125,10 @@ interface CreateAnalysisSessionRequest {
     };
     analysis_rules?: string[];
   };
-}
 
-}
-}
+
+
+
 interface ListLogEntriesRequest {
   Querystring: {
     source?: LogSource;
@@ -135,13 +140,14 @@ interface ListLogEntriesRequest {
     search?: string;
     page?: number;
     pageSize?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ListAnalysisRulesRequest {
   Querystring: {
     enabled?: boolean;
@@ -149,13 +155,14 @@ interface ListAnalysisRulesRequest {
     severity?: AlertSeverity;
     page?: number;
     pageSize?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ListAlertsRequest {
   Querystring: {
     status?: 'new' | 'acknowledged' | 'investigating' | 'resolved' | 'false_positive';
@@ -166,23 +173,25 @@ interface ListAlertsRequest {
     end_date?: string;
     page?: number;
     pageSize?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetAnalyticsRequest {
   Querystring: {
     start_date: string;
     end_date: string;
     source?: LogSource;
     include_patterns?: boolean;
-}
-}
+
+
+
   };
-}
+
 
 export async function logAnalysisRoutes(fastify: FastifyInstance) {
   // Initialize Log Analysis Service
@@ -209,18 +218,18 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           level: { 
             type: 'string', 
             enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
-  }
+
           source: { 
             type: 'string', 
             enum: ['application', 'database', 'web_server', 'system', 
               'security', 'audit', 'performance', 'user_activity']
-  }
+
           component: { type: 'string', maxLength: 200 },
           message: { type: 'string' },
           context: { type: 'object' },
           metadata: { type: 'object' }
-        }
-  }
+
+
       response: {
         201: {
           type: 'object',
@@ -228,10 +237,10 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             log_id: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { level, source, component, message, context = {}, metadata = {} } = request.body;
@@ -244,12 +253,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         log_id,
         message: 'Log entry ingested successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to ingest log entry'
       });
-    }
+
   });
 
   // Batch Ingest Log Entries
@@ -272,12 +281,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
                 level: { 
                   type: 'string', 
                   enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
-  }
+
                 source: { 
                   type: 'string', 
                   enum: ['application', 'database', 'web_server', 'system', 
                     'security', 'audit', 'performance', 'user_activity']
-  }
+
                 component: { type: 'string' },
                 message: { type: 'string' },
                 context: { type: 'object' },
@@ -288,11 +297,11 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
                 user_agent: { type: 'string' },
                 stack_trace: { type: 'string' },
                 metadata: { type: 'object' }
-              }
-            }
-          }
-        }
-  }
+
+
+
+
+
       response: {
         201: {
           type: 'object',
@@ -301,10 +310,10 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             log_ids: { type: 'array', items: { type: 'string' } },
             count: { type: 'integer' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { logs } = request.body;
@@ -322,12 +331,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         count: log_ids.length,
         message: `${log_ids.length} log entries ingested successfully`
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to batch ingest log entries'
       });
-    }
+
   });
 
   // ==========================================
@@ -347,11 +356,11 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             type: 'string', 
             enum: ['application', 'database', 'web_server', 'system', 
               'security', 'audit', 'performance', 'user_activity']
-  }
+
           level: { 
             type: 'string', 
             enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
-  }
+
           component: { type: 'string' },
           start_time: { type: 'string', format: 'date-time' },
           end_time: { type: 'string', format: 'date-time' },
@@ -359,8 +368,8 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           search: { type: 'string' },
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 1000, default: 100 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -374,18 +383,18 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
                 pageSize: { type: 'integer' },
                 total: { type: 'integer' },
                 totalPages: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { 
         source, level, component, start_time, end_time, user_id, search,
         page = 1, pageSize = 100 
-      } = request.query;
+ = request.query;
 
       const logs = await logAnalysisService.searchLogs({
         source,
@@ -404,12 +413,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         logs: logs.entries,
         pagination: logs.pagination
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to retrieve log entries'
       });
-    }
+
   });
 
   // ==========================================
@@ -434,34 +443,34 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
               type: 'string', 
               enum: ['application', 'database', 'web_server', 'system', 
                 'security', 'audit', 'performance', 'user_activity']
-            }
-  }
+
+
           log_levels: { 
             type: 'array', 
             items: { 
               type: 'string', 
               enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
-            }
-  }
+
+
           pattern_type: { 
             type: 'string', 
             enum: ['regex', 'keyword', 'statistical', 'ml_based', 'custom']
-  }
+
           pattern_definition: { type: 'object' },
           anomaly_type: { 
             type: 'string', 
             enum: ['error_spike', 'performance_degradation', 'unusual_activity',
               'security_threat', 'system_failure', 'data_anomaly',
               'access_anomaly', 'volume_anomaly']
-  }
+
           severity: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'info']
-  }
+
           trigger_conditions: { type: 'object' },
           actions: { type: 'object' }
-        }
-  }
+
+
       response: {
         201: {
           type: 'object',
@@ -469,10 +478,10 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             rule: { type: 'object' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const user = request.user;
@@ -483,12 +492,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         rule,
         message: 'Analysis rule created successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create analysis rule'
       });
-    }
+
   });
 
   // List Analysis Rules
@@ -506,15 +515,15 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             enum: ['error_spike', 'performance_degradation', 'unusual_activity',
               'security_threat', 'system_failure', 'data_anomaly',
               'access_anomaly', 'volume_anomaly']
-  }
+
           severity: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'info']
-  }
+
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -528,12 +537,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
                 pageSize: { type: 'integer' },
                 total: { type: 'integer' },
                 totalPages: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { enabled, anomaly_type, severity, page = 1, pageSize = 20 } = request.query;
@@ -557,14 +566,14 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           pageSize,
           total: rules.length,
           totalPages: Math.ceil(rules.length / pageSize)
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to list analysis rules'
       });
-    }
+
   });
 
   // ==========================================
@@ -586,37 +595,37 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           analysis_type: { 
             type: 'string', 
             enum: ['real_time', 'batch', 'historical', 'custom']
-  }
+
           log_sources: { 
             type: 'array', 
             items: { 
               type: 'string', 
               enum: ['application', 'database', 'web_server', 'system', 
                 'security', 'audit', 'performance', 'user_activity']
-            }
-  }
+
+
           log_levels: { 
             type: 'array', 
             items: { 
               type: 'string', 
               enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
-            }
-  }
+
+
           time_range: {
             type: 'object',
             required: ['start_time'],
             properties: {
               start_time: { type: 'string', format: 'date-time' },
               end_time: { type: 'string', format: 'date-time' }
-            }
-  }
+
+
           filters: { type: 'object' },
           analysis_rules: { 
             type: 'array', 
             items: { type: 'string' }
-          }
-        }
-  }
+
+
+
       response: {
         201: {
           type: 'object',
@@ -624,10 +633,10 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             session_id: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const user = request.user;
@@ -638,7 +647,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         time_range: {
           start_time: new Date(time_range.start_time),
           end_time: time_range.end_time ? new Date(time_range.end_time) : undefined
-        }
+
       };
 
       const session_id = await logAnalysisService.createAnalysisSession(
@@ -651,12 +660,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         session_id,
         message: 'Analysis session created successfully'
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create analysis session'
       });
-    }
+
   });
 
   // Start Analysis Session
@@ -669,18 +678,18 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           sessionId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { sessionId } = request.params;
@@ -690,13 +699,13 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Analysis session started successfully'
       });
-    } catch (error) {
+ catch (error) {
       const statusCode = error.message.includes('not found') ? 404 : 500;
       reply.code(statusCode).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to start analysis session'
       });
-    }
+
   });
 
   // ==========================================
@@ -715,24 +724,24 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           status: { 
             type: 'string', 
             enum: ['new', 'acknowledged', 'investigating', 'resolved', 'false_positive']
-  }
+
           severity: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'info']
-  }
+
           anomaly_type: { 
             type: 'string', 
             enum: ['error_spike', 'performance_degradation', 'unusual_activity',
               'security_threat', 'system_failure', 'data_anomaly',
               'access_anomaly', 'volume_anomaly']
-  }
+
           assigned_to: { type: 'string' },
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' },
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -746,18 +755,18 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
                 pageSize: { type: 'integer' },
                 total: { type: 'integer' },
                 totalPages: { type: 'integer' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { 
         status, severity, anomaly_type, assigned_to, start_date, end_date,
         page = 1, pageSize = 20 
-      } = request.query;
+ = request.query;
 
       const alerts = await logAnalysisService.listAlerts({
         status,
@@ -781,14 +790,14 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           pageSize,
           total: alerts.length,
           totalPages: Math.ceil(alerts.length / pageSize)
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to list alerts'
       });
-    }
+
   });
 
   // Acknowledge Alert
@@ -801,18 +810,18 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           alertId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { alertId } = request.params;
@@ -824,13 +833,13 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Alert acknowledged successfully'
       });
-    } catch (error) {
+ catch (error) {
       const statusCode = error.message.includes('not found') ? 404 : 500;
       reply.code(statusCode).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to acknowledge alert'
       });
-    }
+
   });
 
   // ==========================================
@@ -853,10 +862,10 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             type: 'string', 
             enum: ['application', 'database', 'web_server', 'system', 
               'security', 'audit', 'performance', 'user_activity']
-  }
+
           include_patterns: { type: 'boolean', default: false }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -868,12 +877,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
               properties: {
                 start: { type: 'string', format: 'date' },
                 end: { type: 'string', format: 'date' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { start_date, end_date, source, include_patterns = false } = request.query;
@@ -888,14 +897,14 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         period: {
           start: start_date,
           end: end_date
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get analytics report'
       });
-    }
+
   });
 
   // Get System Health
@@ -917,12 +926,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
                 recent_errors: { type: 'integer' },
                 alert_backlog: { type: 'integer' },
                 last_processed: { type: 'string', format: 'date-time' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const health = await logAnalysisService.getSystemHealth();
@@ -931,12 +940,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         success: true,
         health
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get system health'
       });
-    }
+
   });
 
   // ==========================================
@@ -953,18 +962,18 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           action: { type: 'string', enum: ['start', 'stop'] }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { action } = request.params;
@@ -972,9 +981,9 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
 
       if (action === 'start') {
         await logAnalysisService.startRealTimeProcessing();
-      } else {
+ else {
         await logAnalysisService.stopRealTimeProcessing();
-      }
+
 
       await fastify.auditService.logActivity(`log_processing_${action}`, user.id, {
         action
@@ -984,13 +993,13 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         success: true,
         message: `Log analysis processing ${action}ed successfully`
       });
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : `Failed to ${request.params.action} processing`
       });
-    }
+
   });
-}
+
 
 export default logAnalysisRoutes;

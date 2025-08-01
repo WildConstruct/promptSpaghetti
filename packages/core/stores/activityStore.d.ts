@@ -8,8 +8,8 @@
  */
 import { Activity, ActivityQuery, ActivityQueryResult, ActivityMetrics } from '../types/ActivityDataModel';
 }
-interface ActivityState {
-    activities: Activity[];
+}
+interface ActivityState { activities: Activity[];
     currentActivity: Activity | null;
     metrics: ActivityMetrics | null;
     isLoading: boolean;
@@ -29,10 +29,10 @@ interface ActivityState {
     currentPage: number;
     pageSize: number;
     hasNextPage: boolean;
-    hasPreviousPage: boolean;
+    hasPreviousPage: boolean }
 }
-interface ActivityActions {
-    setActivities: (activities: Activity[]) => void;
+}
+interface ActivityActions { setActivities: (activities: Activity[]) => void;
     addActivity: (activity: Activity) => void;
     updateActivity: (id: string, updates: Partial<Activity>) => void;
     removeActivity: (id: string) => void;
@@ -74,17 +74,16 @@ export declare const useActivityStore: import("zustand").UseBoundStore<Omit<impo
         (listener: (selectedState: ActivityStore, previousSelectedState: ActivityStore) => void): () => void;
         <U>(selector: (state: ActivityStore) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
             equalityFn?: ((a: U, b: U) => boolean) | undefined;
-            fireImmediately?: boolean;
+            fireImmediately?: boolean }
 }
         } | undefined): () => void;
     };
 }>;
-export declare const activitySelectors: {
-    getFilteredActivities: (state: ActivityStore) => Activity[];
+export declare const activitySelectors: { getFilteredActivities: (state: ActivityStore) => Activity[];
     getGroupedActivities: (state: ActivityStore) => Record<string, Activity[]>;
     getSelectedActivities: (state: ActivityStore) => Activity[];
     hasActiveFilters: (state: ActivityStore) => boolean;
-    getSummaryStats: (state: ActivityStore) => {,
+    getSummaryStats: (state: ActivityStore) => { }
         total: number;
         byType: Record<string, number>;
         bySeverity: Record<string, number>;
@@ -92,11 +91,9 @@ export declare const activitySelectors: {
         recent: number;
     };
 };
-export declare const useActivityStream: () => {
-    startStream: (filters: ActivityQuery) => Promise<void>;
+export declare const useActivityStream: () => { startStream: (filters: ActivityQuery) => Promise<void>;
     stopStream: () => void;
     isConnected: boolean;
-    subscriptionId: string | null;
-};
+    subscriptionId: string | null };
 export default useActivityStore;
 //# sourceMappingURL=activityStore.d.ts.map

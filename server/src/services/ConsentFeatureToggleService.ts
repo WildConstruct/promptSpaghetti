@@ -17,7 +17,7 @@ import {
   ToggleEvaluationContext,
   ToggleEvaluationResult,
   FeatureToggle
-} from '../database/feature-toggle-models';
+ from '../database/feature-toggle-models';
 
 // Consent types from Epic 19 implementation
 export enum ConsentType {
@@ -29,7 +29,7 @@ export enum ConsentType {
   SOCIAL_MEDIA = 'social_media',
   FUNCTIONAL = 'functional',
   PERFORMANCE = 'performance'
-}
+
 
 export enum ConsentStatus {
   GRANTED = 'granted',
@@ -37,42 +37,47 @@ export enum ConsentStatus {
   PENDING = 'pending',
   WITHDRAWN = 'withdrawn',
   EXPIRED = 'expired'
-}
+
 
 // Extended context to include consent information
-}
-}
+
+
+
 export interface ConsentAwareContext extends ToggleEvaluationContext {
   consents?: Record<ConsentType, ConsentStatus>;
   consentVersion?: string;
   consentTimestamp?: Date;
-}
+
 
 // Feature to consent mapping
-}
-}
+
+
+
 export interface FeatureConsentMapping {
   featureKey: string;
   requiredConsents: ConsentType[];
   requiredConsentLogic: 'AND' | 'OR'; // all required vs any required
   fallbackBehavior: 'disable' | 'default' | 'minimal';
   consentExplanation?: string;
-}
-}
-}
+
+
+
+
 
 // Configuration for consent-aware feature toggle
-}
-}
+
+
+
 export interface ConsentToggleConfig {
   enableConsentChecking: boolean;
   strictMode: boolean; // if true, deny access if consent status is uncertain
   defaultConsentStatus: ConsentStatus; // used when consent is unknown
   auditConsentUsage: boolean;
   consentCacheTimeout: number; // minutes
-}
-}
-}
+
+
+
+
 
 export class ConsentFeatureToggleService extends FeatureToggleService {
   private consentMappings: Map<string, FeatureConsentMapping> = new Map();
@@ -95,14 +100,14 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
     };
     
     this.initializeDefaultMappings();
-  }
+
 
   /**
    * Set the consent service instance for fetching consent data
    */
   setConsentService(consentService: ConsentServiceInterface): void {
     this.consentService = consentService;
-  }
+
 
   /**
    * Enhanced toggle evaluation that considers consent
@@ -119,12 +124,12 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
       // If consent checking is disabled, return base result
       if (!this.config.enableConsentChecking) {
         return baseResult;
-      }
+
       
       // If base toggle is already disabled, no need to check consent
       if (!baseResult.enabled) {
         return baseResult;
-      }
+
       
       // Check if this feature requires consent
       const mapping = this.consentMappings.get(key);
@@ -136,9 +141,9 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
             ...baseResult.metadata,
             consentChecked: false,
             consentRequired: false
-          }
+
         };
-      }
+
       
       // Get current consent status
       const consents = await this.getConsentStatus(context);
@@ -156,14 +161,13 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
             consentRequired: true,
             consentGranted: true,
             requiredConsents: mapping.requiredConsents
-          }
+
         };
-      }
+
       
       // Consent not granted, handle based on fallback behavior
       return this.handleConsentDenied(baseResult, mapping, consentResult);
-      
-    } catch (error) {
+ catch (error) {
       console.error(`Consent-aware toggle evaluation error for ${key}:`, error);
       
       if (this.config.strictMode) {
@@ -173,12 +177,12 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
           reason: 'Consent evaluation error (strict mode)',
           metadata: { error: error.message, consentError: true }
         };
-      }
+
       
       // Fallback to base evaluation in non-strict mode
       return await super.evaluateToggle(key, context);
-    }
-  }
+
+
 
   /**
    * Batch evaluation with consent awareness
@@ -203,10 +207,10 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
     
     for (const { key, result } of resolvedEvaluations) {
       results[key] = result;
-    }
+
     
     return results;
-  }
+
 
   /**
    * Register a feature-to-consent mapping
@@ -219,8 +223,8 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
         requiredConsents: mapping.requiredConsents,
         logic: mapping.requiredConsentLogic
       });
-    }
-  }
+
+
 
   /**
    * Register multiple feature-to-consent mappings
@@ -228,15 +232,15 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
   registerConsentMappings(mappings: FeatureConsentMapping[]): void {
     for (const mapping of mappings) {
       this.registerConsentMapping(mapping);
-    }
-  }
+
+
 
   /**
    * Get all registered consent mappings
    */
   getConsentMappings(): Record<string, FeatureConsentMapping> {
     return Object.fromEntries(this.consentMappings);
-  }
+
 
   /**
    * Check if a feature requires consent
@@ -244,7 +248,7 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
   isConsentRequired(featureKey: string): boolean {
     const mapping = this.consentMappings.get(featureKey);
     return mapping ? mapping.requiredConsents.length > 0 : false;
-  }
+
 
   /**
    * Get the consent requirements for a feature
@@ -252,7 +256,7 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
   getConsentRequirements(featureKey: string): ConsentType[] {
     const mapping = this.consentMappings.get(featureKey);
     return mapping ? mapping.requiredConsents : [];
-  }
+
 
   /**
    * Invalidate consent cache for user/session
@@ -263,8 +267,8 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
     // Implementation depends on caching strategy
     if (this.consentService?.clearCache) {
       await this.consentService.clearCache(userId, sessionId);
-    }
-  }
+
+
 
   // Private methods
 
@@ -277,63 +281,63 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
         requiredConsentLogic: 'AND',
         fallbackBehavior: 'disable',
         consentExplanation: 'Analytics tracking requires analytics consent'
-  }
+
       {
         featureKey: 'marketing_features',
         requiredConsents: [ConsentType.MARKETING],
         requiredConsentLogic: 'AND', 
         fallbackBehavior: 'disable',
         consentExplanation: 'Marketing features require marketing consent'
-  }
+
       {
         featureKey: 'personalized_recommendations',
         requiredConsents: [ConsentType.PERSONALIZATION, ConsentType.ANALYTICS],
         requiredConsentLogic: 'AND',
         fallbackBehavior: 'minimal',
         consentExplanation: 'Personalized recommendations require personalization and analytics consent'
-  }
+
       {
         featureKey: 'social_sharing',
         requiredConsents: [ConsentType.SOCIAL_MEDIA],
         requiredConsentLogic: 'AND',
         fallbackBehavior: 'disable',
         consentExplanation: 'Social sharing requires social media consent'
-  }
+
       {
         featureKey: 'performance_monitoring',
         requiredConsents: [ConsentType.PERFORMANCE],
         requiredConsentLogic: 'AND',
         fallbackBehavior: 'minimal',
         consentExplanation: 'Performance monitoring requires performance consent'
-      }
+
     ];
     
     this.registerConsentMappings(defaultMappings);
-  }
+
 
   private async getConsentStatus(context: ConsentAwareContext): Promise<Record<ConsentType, ConsentStatus>> {
     // If consent data is already in context, use it
     if (context.consents) {
       return context.consents;
-    }
+
     
     // Otherwise, fetch from consent service
     if (this.consentService) {
       try {
         return await this.consentService.getConsents(context.userId, context.sessionId);
-      } catch (error) {
+ catch (error) {
         console.warn('Failed to fetch consent data:', error);
-      }
-    }
+
+
     
     // Fallback to default status for all consent types
     const defaultConsents: Record<ConsentType, ConsentStatus> = {};
     for (const consentType of Object.values(ConsentType)) {
       defaultConsents[consentType] = this.config.defaultConsentStatus;
-    }
+
     
     return defaultConsents;
-  }
+
 
   private evaluateConsentRequirements(
     mapping: FeatureConsentMapping,
@@ -355,13 +359,13 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
       
       if (mapping.requiredConsentLogic === 'AND') {
         hasRequiredConsents = hasRequiredConsents && hasThisConsent;
-      } else {
+ else {
         hasRequiredConsents = hasRequiredConsents || hasThisConsent;
-      }
-    }
+
+
     
     return { hasConsent: hasRequiredConsents, details };
-  }
+
 
   private handleConsentDenied(
     baseResult: ToggleEvaluationResult,
@@ -381,7 +385,7 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
           consentGranted: false,
           consentDetails: consentResult.details,
           fallbackBehavior: 'disable'
-        }
+
       };
         
     case 'minimal':
@@ -396,7 +400,7 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
           consentGranted: false,
           consentDetails: consentResult.details,
           fallbackBehavior: 'minimal'
-        }
+
       };
         
     case 'default':
@@ -410,7 +414,7 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
           consentGranted: false,
           consentDetails: consentResult.details,
           fallbackBehavior: 'default'
-        }
+
       };
         
     default:
@@ -422,31 +426,33 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
           ...baseResult.metadata,
           consentChecked: true,
           consentError: true
-        }
+
       };
-    }
-  }
-}
+
+
+
 
 // Supporting interfaces
 
-}
-}
+
+
 interface ConsentEvaluationDetails {
   requiredConsents: ConsentType[];
   consentStatuses: Record<ConsentType, ConsentStatus>;
   logic: 'AND' | 'OR';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ConsentServiceInterface {
   getConsents(userId?: string, sessionId?: string): Promise<Record<ConsentType, ConsentStatus>>;
   clearCache?(userId?: string, sessionId?: string): Promise<void>;
-}
-}
-}
+
+
+
+
 
 export default ConsentFeatureToggleService;

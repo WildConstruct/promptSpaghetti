@@ -5,9 +5,8 @@
  * Comprehensive performance monitoring with real-time metrics, alerts, and analytics
  */
 
-}
-export interface PerformanceMetrics {
-  // Request metrics
+
+export interface PerformanceMetrics { // Request metrics
   totalRequests: number;
   successfulRequests: number;
   failedRequests: number;
@@ -32,12 +31,11 @@ export interface PerformanceMetrics {
   // Temporal metrics
   timestamp: number;
   windowStart: number;
-  windowEnd: number;
-}
-}
-}
-export interface PerformanceAlert {
-  id: string;
+  windowEnd: number }
+
+
+
+export interface PerformanceAlert { id: string;
   type: 'warning' | 'error' | 'critical';
   metric: string;
   threshold: number;
@@ -45,64 +43,63 @@ export interface PerformanceAlert {
   message: string;
   timestamp: number;
   resolved: boolean;
-  resolvedAt?: number;
-}
-}
-}
-export interface PerformanceThreshold {
-  metric: keyof PerformanceMetrics;
+  resolvedAt?: number }
+
+
+
+export interface PerformanceThreshold { metric: keyof PerformanceMetrics;
   warningThreshold: number;
   errorThreshold: number;
   criticalThreshold: number;
-  operator: 'greater_than' | 'less_than' | 'equals'
-}
-  }
-}
-export interface MonitoringConfig {
-  enabled: boolean;
-  collectionInterval: number; // milliseconds,
-  retentionPeriod: number; // milliseconds,
-  alerting: {
+  operator: 'greater_than' | 'less_than' | 'equals' }
+
+
+
+
+export interface MonitoringConfig { enabled: boolean;
+  collectionInterval: number; // milliseconds;
+  retentionPeriod: number; // milliseconds;
+  alerting: { }
   enabled: boolean;
   email?: string;
   webhook?: string;
   slackChannel?: string;
-}
+
+
 };
   thresholds: PerformanceThreshold;
-  sampling: {;
+  sampling: { ;
   enabled: boolean;
-  rate: number; // 0-1, percentage of requests to sample,
+  rate: number; // 0-1, percentage of requests to sample }
 };
-  storage: {
+  storage: { ,
   type: 'memory' | 'disk' | 'database';
   path?: string;
-  maxSize?: number;
-};
-}
-}
-export interface ModelPerformanceData {
-  modelId: string;
+  maxSize?: number };
+
+
+export interface ModelPerformanceData { modelId: string;
   modelType: string;
   provider: string;
   metrics: PerformanceMetrics;
   alerts: PerformanceAlert;
   lastUpdated: number;
-  healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline'
-}
-  }
-}
-export interface PerformanceReport {
-  summary: {
+  healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline' }
+
+
+
+
+export interface PerformanceReport { summary: { }
   totalModels: number;
   healthyModels: number;
   totalRequests: number;
   averageResponseTime: number;
   totalCost: number;
   successRate: number;
-}
+
+
 };
-  trends: {
+  trends: {,
   responseTimeTrend: Array<{ timestamp: number; value: number }>;
     successRateTrend: Array<{ timestamp: number; value: number }>;
     costTrend: Array<{ timestamp: number; value: number }>;
@@ -112,75 +109,67 @@ export interface PerformanceReport {
   activeAlerts: PerformanceAlert;
   recommendations: string;
   generatedAt: number;
-}
-export class PerformanceMonitor {
-  private config: MonitoringConfig;
+
+export class PerformanceMonitor { private config: MonitoringConfig;
   private models: Map<string, ModelPerformanceData> = new Map();
   private metricsHistory: Map<string, PerformanceMetrics> = new Map();
   private alerts: Map<string, PerformanceAlert> = new Map();
   private collectionTimer?: NodeJS.Timeout;
   private isRunning = false;
-  constructor(config: MonitoringConfig) {,
+  constructor(config: MonitoringConfig) {
   this.config = config;
   this.initializeDefaultThresholds();
-  start(): void {,
+  start(): void { }
   if (this.isRunning) return;
   this.isRunning = true;
-  if (this.config.enabled && this.config.collectionInterval > 0) {
-  this.collectionTimer = setInterval(() => {
+  if (this.config.enabled && this.config.collectionInterval > 0) { this.collectionTimer = setInterval(() => {
   this.collectMetrics();
   this.evaluateAlerts();
-  this.cleanupOldData();
-}, this.config.collectionInterval);
-  stop(): void {
-  if (!this.isRunning) return;
+  this.cleanupOldData() }, this.config.collectionInterval);
+  stop(): void { if (!this.isRunning) return;
   this.isRunning = false;
   if (this.collectionTimer) {
   clearInterval(this.collectionTimer);
   this.collectionTimer = undefined;
   registerModel();
-  modelId: string,
-  modelType: string,
-  provider: string): void {,
+  modelId: string
+  modelType: string
+  provider: string): void {
   if (!this.models.has(modelId)) {
   this.models.set(modelId, {)
-  modelId,
-  modelType,
-  provider,
-  metrics: this.createEmptyMetrics(),
-  alerts: [],
-  lastUpdated: Date.now(),
-  healthStatus: 'healthy',
+  modelId
+  modelType
+  provider
+  metrics: this.createEmptyMetrics()
+  alerts: []
+  lastUpdated: Date.now()
+  healthStatus: 'healthy' }
 });
       this.metricsHistory.set(modelId, []);
-  unregisterModel(modelId: string): void {
-    this.models.delete(modelId);
+  unregisterModel(modelId: string): void { this.models.delete(modelId);
     this.metricsHistory.delete(modelId);
     // Remove alerts for this model
     for (const [alertId, alert] of this.alerts.entries()) {
       if (alertId.startsWith(modelId)) {
         this.alerts.delete(alertId);
   recordRequest();
-    modelId: string,
-    responseTime: number,
-    success: boolean,
-    tokensUsed: { input: number; output: number },
-    cost: number): void {,
+    modelId: string
+    responseTime: number
+    success: boolean }
+    tokensUsed: { input: number; output: number }
+    cost: number): void { 
     const modelData = this.models.get(modelId);
     if (!modelData) return;
     const metrics = modelData.metrics;
     // Update request metrics
     metrics.totalRequests++;
     if (success) {
-      metrics.successfulRequests++;
-    } else {
-      metrics.failedRequests++;
+      metrics.successfulRequests++ } else { metrics.failedRequests++;
     // Update response time metrics
     if (metrics.totalRequests === 1) {
       metrics.averageResponseTime = responseTime;
       metrics.minResponseTime = responseTime;
-      metrics.maxResponseTime = responseTime;
-    } else {
+      metrics.maxResponseTime = responseTime } else {
       metrics.averageResponseTime = 
         ((metrics.averageResponseTime * (metrics.totalRequests - 1)) + responseTime) / metrics.totalRequests;
       metrics.minResponseTime = Math.min(metrics.minResponseTime, responseTime);
@@ -205,7 +194,7 @@ export class PerformanceMonitor {
     if (this.shouldSample()) {
       this.recordHistoricalMetrics(modelId, { ...metrics });
   recordResourceUsage();
-    modelId: string,
+    modelId: string
     resourceMetrics: {
       memoryUsage?: number;
       cpuUsage?: number;
@@ -233,8 +222,7 @@ export class PerformanceMonitor {
   getAlertsForModel(modelId: string): PerformanceAlert {
     return Array.from(this.alerts.values())
       .filter(alert => alert.id.startsWith(modelId));
-  generateReport(timeRange?: { start: number; end: number }): PerformanceReport {
-  const allModels = Array.from(this.models.values());
+  generateReport(timeRange?: { start: number; end: number }): PerformanceReport { const allModels = Array.from(this.models.values());
   const healthyModels = allModels.filter(m => m.healthStatus === 'healthy');
   const totalRequests = allModels.reduce((sum, m) => sum + m.metrics.totalRequests, 0);
   const totalResponseTime = allModels.reduce((sum, m) => ;
@@ -243,86 +231,82 @@ export class PerformanceMonitor {
   const totalSuccessful = allModels.reduce((sum, m) => sum + m.metrics.successfulRequests, 0);
   return {
   summary: {
-  totalModels: allModels.length,
-  healthyModels: healthyModels.length,
-  totalRequests,
-  averageResponseTime: totalRequests > 0 ? totalResponseTime / totalRequests : 0,
-  totalCost,
-  successRate: totalRequests > 0 ? totalSuccessful / totalRequests : 0,
-},
-  trends: this.generateTrends(timeRange),
-      topPerformers: this.getTopPerformers(),
-      bottomPerformers: this.getBottomPerformers(),
-      activeAlerts: this.getActiveAlerts(),
-      recommendations: this.generateRecommendations(),
+  totalModels: allModels.length
+  healthyModels: healthyModels.length
+  totalRequests
+  averageResponseTime: totalRequests > 0 ? totalResponseTime / totalRequests : 0
+  totalCost
+  successRate: totalRequests > 0 ? totalSuccessful / totalRequests : 0 }
+
+  trends: this.generateTrends(timeRange)
+      topPerformers: this.getTopPerformers()
+      bottomPerformers: this.getBottomPerformers()
+      activeAlerts: this.getActiveAlerts()
+      recommendations: this.generateRecommendations()
       generatedAt: Date.now();
   };
-  exportMetrics(format: 'json' | 'csv' | 'prometheus'): string {
-  const data = this.getAllModelsMetrics();
+  exportMetrics(format: 'json' | 'csv' | 'prometheus'): string { const data = this.getAllModelsMetrics();
   switch (format) {
-  case 'json':,
+  case 'json':
   return JSON.stringify(data, null, 2);
-  case 'csv':,
+  case 'csv':
   return this.convertToCSV(data);
-  case 'prometheus':,
+  case 'prometheus':
   return this.convertToPrometheus(data);
-  default:,
+  default:
   return JSON.stringify(data, null, 2);
   // Private helper methods
-  private initializeDefaultThresholds(): void {,
+  private initializeDefaultThresholds(): void {
   if (this.config.thresholds.length === 0) {
   this.config.thresholds = [
   {
-  metric: 'averageResponseTime',
-  warningThreshold: 5000,
-  errorThreshold: 10000,
-  criticalThreshold: 20000,
-  operator: 'greater_than',
-}
-        {
-  metric: 'errorRate',
-  warningThreshold: 0.05,
-  errorThreshold: 0.1,
-  criticalThreshold: 0.2,
-  operator: 'greater_than',
-}
-        {
-  metric: 'memoryUsage',
-  warningThreshold: 0.7,
-  errorThreshold: 0.85,
-  criticalThreshold: 0.95,
-  operator: 'greater_than',
-}
-        {
-  metric: 'successRate',
-  warningThreshold: 0.95,
-  errorThreshold: 0.9,
-  criticalThreshold: 0.8,
+  metric: 'averageResponseTime'
+  warningThreshold: 5000
+  errorThreshold: 10000
+  criticalThreshold: 20000
+  operator: 'greater_than' }
+
+        { metric: 'errorRate'
+  warningThreshold: 0.05
+  errorThreshold: 0.1
+  criticalThreshold: 0.2
+  operator: 'greater_than' }
+
+        { metric: 'memoryUsage'
+  warningThreshold: 0.7
+  errorThreshold: 0.85
+  criticalThreshold: 0.95
+  operator: 'greater_than' }
+
+        { metric: 'successRate'
+  warningThreshold: 0.95
+  errorThreshold: 0.9
+  criticalThreshold: 0.8
   operator: 'less_than'];
-  private createEmptyMetrics(): PerformanceMetrics {,
+  private createEmptyMetrics(): PerformanceMetrics {
   const now = Date.now();
   return {
-  totalRequests: 0,
-  successfulRequests: 0,
-  failedRequests: 0,
-  averageResponseTime: 0,
-  minResponseTime: 0,
-  maxResponseTime: 0,
-  memoryUsage: 0,
-  cpuUsage: 0,
-  networkLatency: 0,
-  diskIOUsage: 0,
-  tokensProcessed: 0,
-  tokensPerSecond: 0,
-  costPerRequest: 0,
-  totalCost: 0,
-  successRate: 0,
-  errorRate: 0,
-  timeoutRate: 0,
-  retryRate: 0,
-  timestamp: now,
-  windowStart: now,
-  windowEnd: now,
+  totalRequests: 0
+  successfulRequests: 0
+  failedRequests: 0
+  averageResponseTime: 0
+  minResponseTime: 0
+  maxResponseTime: 0
+  memoryUsage: 0
+  cpuUsage: 0
+  networkLatency: 0
+  diskIOUsage: 0
+  tokensProcessed: 0
+  tokensPerSecond: 0
+  costPerRequest: 0
+  totalCost: 0
+  successRate: 0
+  errorRate: 0
+  timeoutRate: 0
+  retryRate: 0
+  timestamp: now
+  windowStart: now
+  windowEnd: now }
 };
   private updateHealthStatus(modelId: string): void {
   const modelData = this.models.get(modelId);
@@ -332,9 +316,9 @@ export class PerformanceMonitor {
   // Check various health indicators
   if (metrics.errorRate > 0.2) {
   healthStatus = 'unhealthy'
-  } else if (metrics.errorRate > 0.1 || metrics.averageResponseTime > 10000) {
+ else if (metrics.errorRate > 0.1 || metrics.averageResponseTime > 10000) {
       healthStatus = 'degraded'
-  } else if (metrics.successRate < 0.8) {
+ else if (metrics.successRate < 0.8) {
       healthStatus = 'unhealthy';
     // Check if model has been inactive
     const timeSinceLastUpdate = Date.now() - modelData.lastUpdated;
@@ -369,8 +353,7 @@ export class PerformanceMonitor {
       const alertId = `${modelId}_${threshold.metric}`;}
       const shouldAlert = this.shouldTriggerAlert(currentValue, threshold);
       const existingAlert = this.alerts.get(alertId);
-      if (shouldAlert && !existingAlert) {
-  // Create new alert
+      if (shouldAlert && !existingAlert) { // Create new alert
   const alertType = this.determineAlertType(currentValue, threshold);
   const alert: PerformanceAlert = {,
   id: alertId,
@@ -380,12 +363,12 @@ export class PerformanceMonitor {
   currentValue,
   message: this.generateAlertMessage(modelId, threshold.metric, currentValue, alertType),
   timestamp: Date.now(),
-  resolved: false,
+  resolved: false }
 };
         this.alerts.set(alertId, alert);
         modelData.alerts.push(alert);
         this.sendAlert(alert);
-      } else if (!shouldAlert && existingAlert && !existingAlert.resolved) {
+ else if (!shouldAlert && existingAlert && !existingAlert.resolved) {
         // Resolve existing alert
         existingAlert.resolved = true;
         existingAlert.resolvedAt = Date.now();
@@ -406,8 +389,7 @@ export class PerformanceMonitor {
       if (value >= criticalThreshold) return 'critical';
       if (value >= errorThreshold) return 'error';
       return 'warning'
-  } else if (operator === 'less_than') {
-      if (value <= criticalThreshold) return 'critical';
+ else if (operator === 'less_than') { if (value <= criticalThreshold) return 'critical';
       if (value <= errorThreshold) return 'error';
       return 'warning';
     return 'warning';
@@ -420,10 +402,10 @@ export class PerformanceMonitor {
         return threshold.errorThreshold;
       default:
         return threshold.warningThreshold;
-  private generateAlertMessage(modelId: string, )
-    metric: string, 
+  private generateAlertMessage(modelId: string);
+  metric: string, 
     value: number, 
-    type: PerformanceAlert['type']): string {,
+    type: PerformanceAlert['type']): string { }
     const severity = type.toUpperCase();
     const formattedValue = this.formatMetricValue(metric, value);
     return `${severity}: Model ${modelId} has ${metric} of ${formattedValue}`;}
@@ -441,7 +423,7 @@ export class PerformanceMonitor {
         return `${(value * 100).toFixed(2)}%`;}
       case 'totalCost':
       case 'costPerRequest':
-        return `$${value.toFixed(4)}`;},}
+        return `$${value.toFixed(4)}`;},},
   default:
         return value.toString();
   private generateTrends(timeRange?: { start: number; end: number }): PerformanceReport['trends'] {
@@ -449,21 +431,20 @@ export class PerformanceMonitor {
     const now = Date.now();
     const points = 10;
     const interval = 300000; // 5 minutes;
-    const responseTimeTrend = Array.from({ length: points }, (_, i) => ({)
+    const responseTimeTrend = Array.from({ length: points }, (_, i) => ({ )
   timestamp: now - (interval * (points - i)),
-  value: Math.random() * 5000 + 1000 // Sample data,
+  value: Math.random() * 5000 + 1000 // Sample data }
 }));
-    const successRateTrend = Array.from({ length: points }, (_, i) => ({)
+    const successRateTrend = Array.from({ length: points }, (_, i) => ({ )
   timestamp: now - (interval * (points - i)),
-  value: 0.9 + (Math.random() * 0.1) // 90-100% success rate,
+  value: 0.9 + (Math.random() * 0.1) // 90-100% success rate }
 }));
-    const costTrend = Array.from({ length: points }, (_, i) => ({)
+    const costTrend = Array.from({ length: points }, (_, i) => ({ )
   timestamp: now - (interval * (points - i)),
-  value: Math.random() * 0.1 + 0.01 // $0.01-$0.11 per request,
+  value: Math.random() * 0.1 + 0.01 // $0.01-$0.11 per request }
 }));
-    return {
-      responseTimeTrend,
-      successRateTrend,
+    return { responseTimeTrend,
+      successRateTrend }
       costTrend
     };
   private getTopPerformers(): Array<{ modelId: string; metric: string; value: number }> {
@@ -507,8 +488,7 @@ export class PerformanceMonitor {
     console.warn(`Performance Alert: ${alert.message}`);}
   private sendAlertResolution(alert: PerformanceAlert): void {
     console.info(`Performance Alert Resolved: ${alert.message}`);}
-  private cleanupOldData(): void {
-    const cutoffTime = Date.now() - this.config.retentionPeriod;
+  private cleanupOldData(): void { const cutoffTime = Date.now() - this.config.retentionPeriod;
     // Clean up historical metrics
     for (const [modelId, history] of this.metricsHistory.entries()) {
       const filteredHistory = history.filter(m => m.timestamp > cutoffTime);
@@ -518,7 +498,7 @@ export class PerformanceMonitor {
       if (alert.resolved && alert.resolvedAt && alert.resolvedAt < cutoffTime) {
         this.alerts.delete(alertId);
   private convertToCSV(data: ModelPerformanceData): string {
-    const headers = [;
+    const headers = [
       'modelId', 'modelType', 'provider', 'totalRequests', 'successfulRequests',
       'averageResponseTime', 'successRate', 'errorRate', 'totalCost', 'healthStatus'
     ];
@@ -531,7 +511,7 @@ export class PerformanceMonitor {
       model.metrics.averageResponseTime.toFixed(2),
       (model.metrics.successRate * 100).toFixed(2),
       (model.metrics.errorRate * 100).toFixed(2),
-      model.metrics.totalCost.toFixed(4),
+      model.metrics.totalCost.toFixed(4) }
       model.healthStatus
     ]);
     return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');

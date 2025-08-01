@@ -9,8 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Textarea } from '../ui/Textarea';
-import { 
-  CheckCircle, 
+import { CheckCircle, 
   XCircle, 
   Clock, 
   AlertCircle, 
@@ -28,80 +27,71 @@ import {
   Smartphone,
   Globe,
   ArrowLeft,
-  Eye,
+  Eye }
   Download
-} from 'lucide-react';
-import type { 
-  IdentityValidationRequest, 
+ from 'lucide-react';
+import type { IdentityValidationRequest, 
   ValidationResult, 
   IdentityValidationType,
-  ValidationStatus,
+  ValidationStatus }
   IdentityValidationData 
-} from '../../auth/IdentityValidation';
+ from '../../auth/IdentityValidation';
 
-}
-export interface VerificationQueueProps {
-  request: IdentityValidationRequest;
+
+export interface VerificationQueueProps { request: IdentityValidationRequest;
   onBack: () => void;
   onStatusUpdate: (requestId: string, status: ValidationStatus, notes?: string) => void;
   onRequestUpdate?: (requestId: string, updates: Partial<IdentityValidationRequest>) => void;
-  className?: string;
-}
-}
-}
-export interface ReviewDecision {
-  status: ValidationStatus;
+  className?: string }
+
+
+
+export interface ReviewDecision { status: ValidationStatus;
   reviewNotes: string;
   nextSteps: string;
   flagged: boolean;
   requiresSeniorReview: boolean;
-  confidenceLevel: number;
-}
-}
-export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
-  request,
-  onBack,
-  onStatusUpdate,
-  onRequestUpdate,
+  confidenceLevel: number }
+
+export const VerificationQueue: React.FC<VerificationQueueProps> = ({ )
+  request
+  onBack
+  onStatusUpdate
+  onRequestUpdate }
   className = ''
-}) => {
-  const [_____activeSection, _____setActiveSection] = useState('details');
+}) => { const [_____activeSection, _____setActiveSection] = useState('details');
   const [reviewDecision, setReviewDecision] = useState<Partial<ReviewDecision>>({)
-  status: 'pending',
-  reviewNotes: '',
-  nextSteps: [],
-  flagged: false,
-  requiresSeniorReview: false,
-  confidenceLevel: 80,
+  status: 'pending'
+  reviewNotes: ''
+  nextSteps: []
+  flagged: false
+  requiresSeniorReview: false
+  confidenceLevel: 80 }
 });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const getVerificationTypeIcon = (type: IdentityValidationType) => {
-  const icons = {
-  email_verification: Mail,
-  phone_verification: Phone,
-  government_id: FileText,
-  professional_credentials: Award,
-  portfolio_verification: Camera,
-  social_media_verification: ExternalLink,
-  basic_profile: User,
-  industry_affiliation: Award,
-  address_verification: MapPin,
-  payment_method_verification: FileText,
+  const getVerificationTypeIcon = (type: IdentityValidationType) => { const icons = {
+  email_verification: Mail
+  phone_verification: Phone
+  government_id: FileText
+  professional_credentials: Award
+  portfolio_verification: Camera
+  social_media_verification: ExternalLink
+  basic_profile: User
+  industry_affiliation: Award
+  address_verification: MapPin
+  payment_method_verification: FileText }
 };
     return icons[type] || FileText;
   };
-  const getStatusColor = (status: ValidationStatus) => {
-  switch (status) {
+  const getStatusColor = (status: ValidationStatus) => { switch (status) {
   case 'approved': return 'text-green-600 bg-green-100';
   case 'rejected': return 'text-red-600 bg-red-100';
   case 'pending': return 'text-yellow-600 bg-yellow-100';
   case 'in_review': return 'text-blue-600 bg-blue-100';
   case 'requires_update': return 'text-orange-600 bg-orange-100';
   case 'expired': return 'text-gray-600 bg-gray-100';
-  default: return 'text-gray-600 bg-gray-100';
-};
-  const handleSubmitDecision = async () => {
-    if (!reviewDecision.status || !reviewDecision.reviewNotes) {
+  default: return 'text-gray-600 bg-gray-100' };
+  const handleSubmitDecision = async () => { if (!reviewDecision.status || !reviewDecision.reviewNotes) {
       alert('Please provide a status and review notes before submitting.');
       return;
     setIsSubmitting(true);
@@ -109,13 +99,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       onStatusUpdate(request.requestId, reviewDecision.status!, reviewDecision.reviewNotes);
-      onBack();
-    } catch (error) {
-  console.error('Error submitting review decision:', error);
-  alert('Error submitting review decision. Please try again.');
-} finally {
-      setIsSubmitting(false);
-  };
+      onBack() } catch (error) { console.error('Error submitting review decision:', error);
+  alert('Error submitting review decision. Please try again.') } finally { setIsSubmitting(false) };
   const renderRequestDetails = () => {
     const Icon = getVerificationTypeIcon(request.type);
     return;
@@ -206,15 +191,14 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       </CardContent>
     </Card>
   );
-  const renderVerificationData = () => {
-  switch (request.type) {
+  const renderVerificationData = () => { switch (request.type) {
   case 'government_id':,
   return renderGovernmentIdData();
   case 'professional_credentials':,
   return renderProfessionalCredentialsData();
   case 'social_media_verification':,
   return renderSocialMediaData();
-  default:,
+  default: }
   return renderGenericVerificationData();
 };
   const renderGovernmentIdData = () => {
@@ -411,8 +395,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
             <label>Decision</label>
             <select
               value={reviewDecision.status || 'pending'}
-              onChange={(e) => setReviewDecision(prev => ({ )
-                ...prev, 
+              onChange={ (e) => setReviewDecision(prev => ({ )
+                ...prev }
                 status: e.target.value as ValidationStatus ;
   }))}
               className="form-select"
@@ -427,8 +411,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
             <label>Review Notes *</label>
             <Textarea
               value={reviewDecision.reviewNotes || ''}
-              onChange={(e) => setReviewDecision(prev => ({ )
-                ...prev, 
+              onChange={ (e) => setReviewDecision(prev => ({ )
+                ...prev }
                 reviewNotes: e.target.value ;
   }))}
               placeholder="Provide detailed notes about your review decision..."
@@ -444,8 +428,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
                 min="0"
                 max="100"
                 value={reviewDecision.confidenceLevel || 80}
-                onChange={(e) => setReviewDecision(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setReviewDecision(prev => ({ )
+                  ...prev }
                   confidenceLevel: parseInt(e.target.value) ;
   }))}
                 className="slider"
@@ -458,8 +442,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
               <input
                 type="checkbox"
                 checked={reviewDecision.flagged || false}
-                onChange={(e) => setReviewDecision(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setReviewDecision(prev => ({ )
+                  ...prev }
                   flagged: e.target.checked ;
   }))}
               />
@@ -470,8 +454,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
               <input
                 type="checkbox"
                 checked={reviewDecision.requiresSeniorReview || false}
-                onChange={(e) => setReviewDecision(prev => ({ )
-                  ...prev, 
+                onChange={ (e) => setReviewDecision(prev => ({ )
+                  ...prev }
                   requiresSeniorReview: e.target.checked ;
   }))}
               />
@@ -524,11 +508,11 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
           </div>
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .verification-queue {
           max-width: 1400px;
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem
   display: flex;
           flex-direction: column;
   gap: 1.5rem;
@@ -541,7 +525,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   gap: 0.5rem;
         .queue-content {
           display: grid;
-          grid-template-columns: 1fr 400px;
+          grid-template-columns: 1fr 400px
   gap: 1.5rem;
         .content-main {
           display: flex;
@@ -564,11 +548,11 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
           flex-direction: column;
   gap: 0.25rem;
         .detail-label {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
           font-weight: 500;
         .detail-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem
   color: #1f2937;
           font-weight: 600;
         .profile-grid, .data-grid, .metadata-grid {
@@ -579,7 +563,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
           display: flex;
           align-items: center;
   gap: 0.75rem;
-          padding: 0.75rem;
+          padding: 0.75rem
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .profile-label, .data-label, .metadata-label {
@@ -587,7 +571,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   color: #374151;
           min-width: 100px;
         .profile-value, .data-value, .metadata-value {
-          color: #1f2937;
+          color: #1f2937
   flex: 1;
         .document-images, .credentials-list, .portfolio-list, .profiles-list {
           margin-top: 1rem;
@@ -612,7 +596,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
           display: flex;
           align-items: center;
   gap: 0.75rem;
-          padding: 0.75rem;
+          padding: 0.75rem
   border: 1px solid #e5e7eb;
           border-radius: 6px;
           margin-bottom: 0.5rem;
@@ -625,10 +609,10 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
           font-weight: 600;
   color: #1f2937;
         .credential-details, .portfolio-details, .profile-url, .profile-followers {
-          font-size: 0.75rem;
+          font-size: 0.75rem
   color: #6b7280;
         .data-dump {
-          background: #f9fafb;
+          background: #f9fafb
   padding: 1rem;
           border-radius: 6px;
           font-size: 0.75rem;
@@ -645,11 +629,11 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
           font-weight: 500;
   color: #374151;
         .form-select, .form-textarea {
-          padding: 0.5rem;
+          padding: 0.5rem
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        .form-select:focus, .form-textarea:focus {,
+        .form-select:focus, .form-textarea:focus {
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
@@ -671,20 +655,20 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
           display: flex;
           align-items: center;
   gap: 0.5rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem
   cursor: pointer;
         .action-buttons {
           margin-top: 1rem;
         .submit-button {
-          width: 100%;
+          width: 100%
   background: #059669;
           border-color: #059669;
-        .submit-button:hover:not(:disabled) {,
+        .submit-button:hover:not(:disabled) {
   background: #047857;
           border-color: #047857;
-        .submit-button:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+        .submit-button:disabled {
+  opacity: 0.5 }
+  cursor: not-allowed;
         @media (max-width: 1024px) {
           .queue-content {
             grid-template-columns: 1fr;

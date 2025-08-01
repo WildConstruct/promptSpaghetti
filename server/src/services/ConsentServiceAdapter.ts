@@ -9,8 +9,8 @@
 
 import { ConsentType, ConsentStatus } from './ConsentFeatureToggleService';
 
-}
-}
+
+
 interface ConsentRecord {
   consentId: string;
   userId?: string;
@@ -25,20 +25,22 @@ interface ConsentRecord {
   ipAddress: string;
   userAgent: string;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ConsentServiceConfig {
   cacheTimeout: number; // minutes
   strictMode: boolean;
   auditEnabled: boolean;
   defaultStatus: ConsentStatus;
-}
-}
-}
+
+
+
+
 
 /**
  * Service adapter for consent management integration
@@ -56,14 +58,14 @@ export class ConsentServiceAdapter {
       defaultStatus: ConsentStatus.DENIED,
       ...config
     };
-  }
+
 
   /**
    * Set the data access object for consent operations
    */
   setConsentDAO(dao: ConsentDAO): void {
     this.consentDAO = dao;
-  }
+
 
   /**
    * Get consent status for all consent types for a user/session
@@ -77,17 +79,17 @@ export class ConsentServiceAdapter {
       const cached = this.cache.get(cacheKey);
       if (cached && cached.expires > new Date()) {
         return cached.data;
-      }
+
 
       // Fetch from database
       let consents: Record<ConsentType, ConsentStatus>;
       
       if (this.consentDAO) {
         consents = await this.fetchConsentsFromDatabase(userId, sessionId);
-      } else {
+ else {
         // Fallback: try to fetch from API or use defaults
         consents = await this.fetchConsentsFromAPI(userId, sessionId);
-      }
+
 
       // Cache the result
       this.cache.set(cacheKey, {
@@ -103,21 +105,20 @@ export class ConsentServiceAdapter {
           consentTypes: Object.keys(consents).length,
           timestamp: new Date().toISOString()
         });
-      }
+
 
       return consents;
-
-    } catch (error) {
+ catch (error) {
       console.error('Error fetching consent data:', error);
 
       if (this.config.strictMode) {
         throw error;
-      }
+
 
       // Return default consents in non-strict mode
       return this.getDefaultConsents();
-    }
-  }
+
+
 
   /**
    * Get consent status for a specific consent type
@@ -126,7 +127,7 @@ export class ConsentServiceAdapter {
 
     const consents = await this.getConsents(userId, sessionId);
     return consents[consentType] || this.config.defaultStatus;
-  }
+
 
   /**
    * Check if consent is granted for a specific type
@@ -135,7 +136,7 @@ export class ConsentServiceAdapter {
 
     const status = await this.getConsent(consentType, userId, sessionId);
     return status === ConsentStatus.GRANTED;
-  }
+
 
   /**
    * Check if multiple consents are granted with AND/OR logic
@@ -151,10 +152,10 @@ export class ConsentServiceAdapter {
     
     if (logic === 'AND') {
       return consentTypes.every(type => consents[type] === ConsentStatus.GRANTED);
-    } else {
+ else {
       return consentTypes.some(type => consents[type] === ConsentStatus.GRANTED);
-    }
-  }
+
+
 
   /**
    * Clear consent cache for user/session
@@ -164,10 +165,10 @@ export class ConsentServiceAdapter {
     if (userId || sessionId) {
       const cacheKey = this.generateCacheKey(userId, sessionId);
       this.cache.delete(cacheKey);
-    } else {
+ else {
       // Clear all cache
       this.cache.clear();
-    }
+
 
     if (this.config.auditEnabled) {
       console.info('Consent cache cleared', {
@@ -175,8 +176,8 @@ export class ConsentServiceAdapter {
         sessionId: sessionId ? 'provided' : 'none',
         timestamp: new Date().toISOString()
       });
-    }
-  }
+
+
 
   /**
    * Get cache statistics
@@ -191,7 +192,7 @@ export class ConsentServiceAdapter {
       size: this.cache.size,
       entries
     };
-  }
+
 
   /**
    * Refresh consent data for a user/session
@@ -202,7 +203,7 @@ export class ConsentServiceAdapter {
     
     // Fetch fresh data
     return await this.getConsents(userId, sessionId);
-  }
+
 
   // Private methods
 
@@ -210,12 +211,12 @@ export class ConsentServiceAdapter {
     const userPart = userId || 'anonymous';
     const sessionPart = sessionId || 'no-session';
     return `${userPart}:${sessionPart}`;
-  }
+
 
   private async fetchConsentsFromDatabase(userId?: string, sessionId?: string): Promise<Record<ConsentType, ConsentStatus>> {
     if (!this.consentDAO) {
       throw new Error('ConsentDAO not configured');
-    }
+
 
     try {
       const records = await this.consentDAO.getConsentsByUserOrSession(userId, sessionId);
@@ -225,7 +226,7 @@ export class ConsentServiceAdapter {
       // Initialize with defaults
       for (const consentType of Object.values(ConsentType)) {
         consents[consentType] = this.config.defaultStatus;
-      }
+
       
       // Update with actual values from database
       for (const record of records) {
@@ -236,20 +237,20 @@ export class ConsentServiceAdapter {
           // Check if consent has expired
           if (record.expiresAt && record.expiresAt < new Date()) {
             consents[record.consentType] = ConsentStatus.EXPIRED;
-          } else if (record.withdrawnAt) {
+ else if (record.withdrawnAt) {
             consents[record.consentType] = ConsentStatus.WITHDRAWN;
-          } else {
+ else {
             consents[record.consentType] = record.status;
-          }
-        }
-      }
+
+
+
       
       return consents;
-    } catch (error) {
+ catch (error) {
       console.error('Database consent fetch error:', error);
       throw error;
-    }
-  }
+
+
 
   private async fetchConsentsFromAPI(userId?: string, sessionId?: string): Promise<Record<ConsentType, ConsentStatus>> {
     try {
@@ -263,26 +264,25 @@ export class ConsentServiceAdapter {
       const response = await fetch(`${apiUrl}/api/consents?${params.toString()}`, {
         headers: {
           'Content-Type': 'application/json'
-        }
+
       });
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-      }
+
       
       const data = await response.json();
       
       if (data.success && data.preferences) {
         return data.preferences.consents;
-      }
+
       
       throw new Error('Invalid API response format');
-      
-    } catch (error) {
+ catch (error) {
       console.warn('API consent fetch failed, using defaults:', error);
       return this.getDefaultConsents();
-    }
-  }
+
+
 
   private getDefaultConsents(): Record<ConsentType, ConsentStatus> {
     const consents: Record<ConsentType, ConsentStatus> = {};
@@ -291,29 +291,31 @@ export class ConsentServiceAdapter {
       // Necessary consent is usually granted by default
       if (consentType === ConsentType.NECESSARY) {
         consents[consentType] = ConsentStatus.GRANTED;
-      } else {
+ else {
         consents[consentType] = this.config.defaultStatus;
-      }
-    }
+
+
     
     return consents;
-  }
-}
+
+
 
 /**
  * Data access interface for consent records
  */
-}
-}
+
+
+
 interface ConsentDAO {
   getConsentsByUserOrSession(userId?: string, sessionId?: string): Promise<ConsentRecord[]>;
   getConsentByType(consentType: ConsentType, userId?: string, sessionId?: string): Promise<ConsentRecord | null>;
   createConsent(record: Omit<ConsentRecord, 'consentId'>): Promise<ConsentRecord>;
   updateConsent(consentId: string, updates: Partial<ConsentRecord>): Promise<ConsentRecord>;
   deleteConsent(consentId: string): Promise<void>;
-}
-}
-}
+
+
+
+
 
 /**
  * Singleton instance for easy access
@@ -323,8 +325,8 @@ let consentServiceAdapter: ConsentServiceAdapter | null = null;
 export function getConsentServiceAdapter(config?: Partial<ConsentServiceConfig>): ConsentServiceAdapter {
   if (!consentServiceAdapter) {
     consentServiceAdapter = new ConsentServiceAdapter(config);
-  }
+
   return consentServiceAdapter;
-}
+
 
 export default ConsentServiceAdapter;

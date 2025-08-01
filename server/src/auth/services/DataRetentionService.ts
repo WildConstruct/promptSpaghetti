@@ -15,8 +15,8 @@
 import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
-}
-}
+
+
 export interface RetentionPolicy {
   id: string;
   name: string;
@@ -27,24 +27,26 @@ export interface RetentionPolicy {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataType {
   type: string;
   category: 'user_data' | 'session_data' | 'audit_log' | 'analytics' | 'system_data';
   description: string;
   required: boolean; // Cannot be deleted
   sensitive: boolean; // Requires special handling
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetentionSchedule {
   policyId: string;
   scheduledAt: Date;
@@ -53,12 +55,13 @@ export interface RetentionSchedule {
   recordsProcessed: number;
   recordsDeleted: number;
   errors?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataExportRequest {
   id: string;
   userId: string;
@@ -69,12 +72,13 @@ export interface DataExportRequest {
   exportUrl?: string;
   expiresAt: Date;
   createdAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetentionReport {
   periodStart: Date;
   periodEnd: Date;
@@ -85,9 +89,10 @@ export interface RetentionReport {
   storageFreed: number; // Bytes
   errors: string[];
   executionTime: number; // Milliseconds
-}
-}
-}
+
+
+
+
 
 // Default data types in the system
 export const DEFAULT_DATA_TYPES: DataType[] = [
@@ -97,49 +102,49 @@ export const DEFAULT_DATA_TYPES: DataType[] = [
     description: 'User account information (email, profile)',
     required: false,
     sensitive: true
-  }
+
   {
     type: 'authentication_logs',
     category: 'audit_log',
     description: 'Login/logout and authentication events',
     required: false,
     sensitive: true
-  }
+
   {
     type: 'session_data',
     category: 'session_data',
     description: 'User session tokens and state',
     required: false,
     sensitive: true
-  }
+
   {
     type: 'project_data',
     category: 'user_data',
     description: 'User-created projects and graphs',
     required: false,
     sensitive: false
-  }
+
   {
     type: 'usage_analytics',
     category: 'analytics',
     description: 'User behavior and usage statistics',
     required: false,
     sensitive: false
-  }
+
   {
     type: 'error_logs',
     category: 'system_data',
     description: 'Application error logs and diagnostics',
     required: true,
     sensitive: false
-  }
+
   {
     type: 'audit_trails',
     category: 'audit_log',
     description: 'System audit and compliance logs',
     required: true,
     sensitive: true
-  }
+
 ];
 
 // Default retention policies for GDPR compliance
@@ -154,7 +159,7 @@ export const DEFAULT_RETENTION_POLICIES: Omit<RetentionPolicy, 'id' | 'createdAt
     retentionPeriod: 1095, // 3 years
     deleteType: 'soft',
     isActive: true
-  }
+
   {
     name: 'Session Data - Short Term',
     description: 'Short-term retention for session and temporary data',
@@ -164,7 +169,7 @@ export const DEFAULT_RETENTION_POLICIES: Omit<RetentionPolicy, 'id' | 'createdAt
     retentionPeriod: 90, // 3 months
     deleteType: 'hard',
     isActive: true
-  }
+
   {
     name: 'Analytics - Medium Term',
     description: 'Analytics data retention for business insights',
@@ -174,7 +179,7 @@ export const DEFAULT_RETENTION_POLICIES: Omit<RetentionPolicy, 'id' | 'createdAt
     retentionPeriod: 730, // 2 years
     deleteType: 'archive',
     isActive: true
-  }
+
   {
     name: 'Authentication Logs - Security',
     description: 'Authentication logs for security and compliance',
@@ -184,7 +189,7 @@ export const DEFAULT_RETENTION_POLICIES: Omit<RetentionPolicy, 'id' | 'createdAt
     retentionPeriod: 2555, // 7 years (compliance requirement)
     deleteType: 'archive',
     isActive: true
-  }
+
   {
     name: 'Deleted User Cleanup',
     description: 'Hard delete soft-deleted user accounts after grace period',
@@ -194,7 +199,7 @@ export const DEFAULT_RETENTION_POLICIES: Omit<RetentionPolicy, 'id' | 'createdAt
     retentionPeriod: 30, // 30 days after soft delete
     deleteType: 'hard',
     isActive: true
-  }
+
 ];
 
 export class DataRetentionService {
@@ -204,7 +209,7 @@ export class DataRetentionService {
   constructor(db: Database, auditService: AuditService) {
     this.db = db;
     this.auditService = auditService;
-  }
+
 
   /**
    * Initialize retention policies with default values
@@ -219,16 +224,16 @@ export class DataRetentionService {
         // Install default policies
         for (const policyTemplate of DEFAULT_RETENTION_POLICIES) {
           await this.createRetentionPolicy(policyTemplate);
-        }
+
 
         await this.auditService.logAction('system', 'data_retention', 'initialize', {
           policiesCreated: DEFAULT_RETENTION_POLICIES.length
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       throw new Error(`Failed to initialize default retention policies: ${error}`);
-    }
-  }
+
+
 
   /**
    * Create a new retention policy
@@ -263,7 +268,7 @@ export class DataRetentionService {
     });
 
     return this.mapPolicyRow(createdPolicy);
-  }
+
 
   /**
    * Get all retention policies
@@ -276,7 +281,7 @@ export class DataRetentionService {
 
     const result = await this.db.query(query);
     return result.rows.map(row => this.mapPolicyRow(row));
-  }
+
 
   /**
    * Update a retention policy
@@ -294,19 +299,19 @@ export class DataRetentionService {
       if (key === 'dataTypes') {
         fields.push(`data_types = $${valueIndex}`);
         values.push(JSON.stringify(value));
-      } else if (key === 'retentionPeriod') {
+ else if (key === 'retentionPeriod') {
         fields.push(`retention_period_days = $${valueIndex}`);
         values.push(value);
-      } else if (key === 'deleteType') {
+ else if (key === 'deleteType') {
         fields.push(`delete_type = $${valueIndex}`);
         values.push(value);
-      } else if (key === 'isActive') {
+ else if (key === 'isActive') {
         fields.push(`is_active = $${valueIndex}`);
         values.push(value);
-      } else {
+ else {
         fields.push(`${key} = $${valueIndex}`);
         values.push(value);
-      }
+
       valueIndex++;
     });
 
@@ -327,7 +332,7 @@ export class DataRetentionService {
     });
 
     return this.mapPolicyRow(updatedPolicy);
-  }
+
 
   /**
    * Execute retention policies (cleanup expired data)
@@ -353,11 +358,11 @@ export class DataRetentionService {
           
           if (result.errors && result.errors.length > 0) {
             errors.push(...result.errors);
-          }
-        } catch (error) {
+
+ catch (error) {
           errors.push(`Policy ${policy.id} failed: ${error}`);
-        }
-      }
+
+
 
       const report: RetentionReport = {
         periodStart,
@@ -374,7 +379,7 @@ export class DataRetentionService {
       await this.auditService.logAction('system', 'data_retention', 'execution_completed', report);
 
       return report;
-    } catch (error) {
+ catch (error) {
       errors.push(`Retention execution failed: ${error}`);
       
       const report: RetentionReport = {
@@ -392,8 +397,8 @@ export class DataRetentionService {
       await this.auditService.logAction('system', 'data_retention', 'execution_failed', report);
       
       return report;
-    }
-  }
+
+
 
   /**
    * Execute a specific retention policy
@@ -402,7 +407,7 @@ export class DataRetentionService {
     recordsProcessed: number;
     recordsDeleted: number;
     errors: string[];
-  }> {
+> {
 
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - policy.retentionPeriod);
@@ -416,10 +421,10 @@ export class DataRetentionService {
         const result = await this.processDataType(dataType, cutoffDate, policy.deleteType);
         totalProcessed += result.processed;
         totalDeleted += result.deleted;
-      } catch (error) {
+ catch (error) {
         errors.push(`Failed to process ${dataType.type}: ${error}`);
-      }
-    }
+
+
 
     // Record the schedule execution
     await this.recordScheduleExecution(policy.id, totalProcessed, totalDeleted, errors);
@@ -429,7 +434,7 @@ export class DataRetentionService {
       recordsDeleted: totalDeleted,
       errors
     };
-  }
+
 
   /**
    * Process a specific data type for retention
@@ -457,7 +462,7 @@ export class DataRetentionService {
           `, [cutoffDate]);
         processed = result.rowCount || 0;
         deleted = processed;
-      } else if (deleteType === 'hard') {
+ else if (deleteType === 'hard') {
         // Hard delete soft-deleted users past grace period
         const result = await this.db.query(`
             DELETE FROM users 
@@ -466,7 +471,7 @@ export class DataRetentionService {
           `, [cutoffDate]);
         processed = result.rowCount || 0;
         deleted = processed;
-      }
+
       break;
 
     case 'session_data':
@@ -484,7 +489,7 @@ export class DataRetentionService {
       if (deleteType === 'archive') {
         // Archive old authentication logs
         await this.archiveAuthenticationLogs(cutoffDate);
-      } else if (deleteType === 'hard') {
+ else if (deleteType === 'hard') {
         const result = await this.db.query(`
             DELETE FROM audit_logs 
             WHERE action_type = 'authentication' 
@@ -493,14 +498,14 @@ export class DataRetentionService {
           `, [cutoffDate]);
         processed = result.rowCount || 0;
         deleted = processed;
-      }
+
       break;
 
     case 'usage_analytics':
       // Archive or delete analytics data
       if (deleteType === 'archive') {
         await this.archiveAnalyticsData(cutoffDate);
-      }
+
       break;
 
     case 'project_data':
@@ -518,10 +523,10 @@ export class DataRetentionService {
       processed = projectResult.rowCount || 0;
       deleted = processed;
       break;
-    }
+
 
     return { processed, deleted };
-  }
+
 
   /**
    * Request data export for a user
@@ -577,7 +582,7 @@ export class DataRetentionService {
       id: created.id,
       ...exportRequest
     };
-  }
+
 
   /**
    * Process a data export request
@@ -599,7 +604,7 @@ export class DataRetentionService {
 
       if (result.rows.length === 0) {
         throw new Error('Export request not found');
-      }
+
 
       const exportRequest = result.rows[0];
       const dataTypes = JSON.parse(exportRequest.data_types);
@@ -622,8 +627,7 @@ export class DataRetentionService {
         userId: exportRequest.user_id,
         recordCount: exportData.recordCount
       });
-
-    } catch (error) {
+ catch (error) {
       // Mark as failed
       await this.db.query(
         'UPDATE data_export_requests SET status = $1 WHERE id = $2',
@@ -634,8 +638,8 @@ export class DataRetentionService {
         exportId,
         error: error instanceof Error ? error.message : String(error)
       });
-    }
-  }
+
+
 
   /**
    * Generate user data export
@@ -678,8 +682,8 @@ export class DataRetentionService {
         exportData.authenticationLogs = authResult.rows;
         recordCount += authResult.rowCount || 0;
         break;
-      }
-    }
+
+
 
     return {
       data: {
@@ -687,10 +691,10 @@ export class DataRetentionService {
         exportedAt: new Date().toISOString(),
         dataTypes,
         ...exportData
-  }
+
       recordCount
     };
-  }
+
 
   /**
    * Archive authentication logs to separate table
@@ -710,7 +714,7 @@ export class DataRetentionService {
       DELETE FROM audit_logs 
       WHERE action_type = 'authentication' AND created_at < $1
     `, [cutoffDate]);
-  }
+
 
   /**
    * Archive analytics data
@@ -724,7 +728,7 @@ export class DataRetentionService {
       SET archived_at = NOW() 
       WHERE created_at < $1 AND archived_at IS NULL
     `, [cutoffDate]);
-  }
+
 
   /**
    * Store export data (placeholder - would integrate with secure storage)
@@ -734,7 +738,7 @@ export class DataRetentionService {
     // In production, would upload to S3/Azure/GCP with encryption
     // For now, return a placeholder URL
     return `https://exports.example.com/data/${exportId}.json`;
-  }
+
 
   /**
    * Record retention schedule execution
@@ -761,7 +765,7 @@ export class DataRetentionService {
       recordsDeleted,
       JSON.stringify(errors)
     ]);
-  }
+
 
   /**
    * Get retention execution history
@@ -788,7 +792,7 @@ export class DataRetentionService {
       recordsDeleted: row.records_deleted,
       errors: JSON.parse(row.errors || '[]')
     }));
-  }
+
 
   /**
    * Map database row to RetentionPolicy
@@ -805,7 +809,7 @@ export class DataRetentionService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
+
 
   /**
    * Schedule automatic retention policy execution
@@ -818,7 +822,7 @@ export class DataRetentionService {
       frequency: 'daily',
       nextExecution: new Date(Date.now() + 24 * 60 * 60 * 1000)
     });
-  }
-}
+
+
 
 export default DataRetentionService;

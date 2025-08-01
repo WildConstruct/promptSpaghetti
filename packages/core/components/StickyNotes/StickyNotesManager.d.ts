@@ -12,6 +12,7 @@
 import React from 'react';
 
 }
+}
 interface StickyNotesManagerProps {
     disabled?: boolean;
     readonly?: boolean;
@@ -20,4 +21,5 @@ interface StickyNotesManagerProps {
 export declare const StickyNotesManager: React.FC<StickyNotesManagerProps>;
 export default StickyNotesManager;
 //# sourceMappingURL=StickyNotesManager.d.ts.map
+}
 }

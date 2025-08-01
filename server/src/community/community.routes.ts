@@ -5,52 +5,56 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { Pool } from 'pg';
 import { CommunityService, CreatePostRequest, CreateDiscussionRequest, CreateEventRequest } from './community.service';
 
-}
-}
+
+
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
     id: string;
     email: string;
     roles: string[];
   };
-}
 
-}
-}
+
+
+
 interface PostsQuerystring {
   filter?: 'all' | 'following' | 'trending';
   limit?: number;
   offset?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface DiscussionsQuerystring {
   category?: string;
   limit?: number;
   offset?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface EventsQuerystring {
   limit?: number;
   upcoming?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CreatorsQuerystring {
   limit?: number;
-}
-}
-}
+
+
+
+
 
 export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
   const communityService = new CommunityService(dbPool);
@@ -59,9 +63,9 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
   const requireAuth = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       await fastify.auth([fastify.verifyJWT])(request, reply);
-    } catch (error) {
+ catch (error) {
       throw fastify.httpErrors.unauthorized('Authentication required');
-    }
+
   };
 
   // Posts endpoints
@@ -74,9 +78,9 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
           filter: { type: 'string', enum: ['all', 'following', 'trending'], default: 'all' },
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { filter = 'all', limit = 20, offset = 0 } = request.query;
     const userId = request.user.id;
@@ -84,10 +88,10 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
     try {
       const posts = await communityService.getFeedPosts(userId, filter, limit, offset);
       return reply.send({ posts, filter, pagination: { limit, offset, has_more: posts.length === limit } });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch posts' });
-    }
+
   });
 
   fastify.post<{ Body: CreatePostRequest }>('/community/posts', {
@@ -102,9 +106,9 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
           template_id: { type: 'string', format: 'uuid' },
           type: { type: 'string', enum: ['text', 'template_showcase', 'tutorial', 'question', 'announcement'] },
           tags: { type: 'array', items: { type: 'string' }, maxItems: 10 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const userId = request.user.id;
     const postData = request.body;
@@ -112,10 +116,10 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
     try {
       const post = await communityService.createPost(userId, postData);
       return reply.status(201).send(post);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Failed to create post' });
-    }
+
   });
 
   fastify.post<{ Params: { postId: string } }>('/community/posts/:postId/like', {
@@ -125,10 +129,10 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         type: 'object',
         properties: {
           postId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['postId']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const userId = request.user.id;
     const { postId } = request.params;
@@ -136,10 +140,10 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
     try {
       const result = await communityService.likePost(userId, postId);
       return reply.send(result);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: 'Failed to like/unlike post' });
-    }
+
   });
 
   // Discussions endpoints
@@ -151,9 +155,9 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
           category: { type: 'string' },
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { category, limit = 20, offset = 0 } = request.query;
 
@@ -164,10 +168,10 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         category: category || 'all',
         pagination: { limit, offset, has_more: discussions.length === limit } 
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch discussions' });
-    }
+
   });
 
   fastify.post<{ Body: CreateDiscussionRequest }>('/community/discussions', {
@@ -181,9 +185,9 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
           content: { type: 'string', minLength: 10, maxLength: 10000 },
           category: { type: 'string', minLength: 1, maxLength: 50 },
           tags: { type: 'array', items: { type: 'string' }, maxItems: 10 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const userId = request.user.id;
     const discussionData = request.body;
@@ -191,10 +195,10 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
     try {
       const discussion = await communityService.createDiscussion(userId, discussionData);
       return reply.status(201).send(discussion);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Failed to create discussion' });
-    }
+
   });
 
   // Events endpoints
@@ -206,9 +210,9 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
           upcoming: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { limit = 20, upcoming = true } = request.query;
     const userId = request.user.id;
@@ -217,14 +221,14 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
       if (upcoming) {
         const events = await communityService.getUpcomingEvents(userId, limit);
         return reply.send({ events, filter: 'upcoming' });
-      } else {
+ else {
         // Could add getAllEvents method for past events
         return reply.send({ events: [], filter: 'all' });
-      }
-    } catch (error) {
+
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch events' });
-    }
+
   });
 
   fastify.post<{ Body: CreateEventRequest }>('/community/events', {
@@ -241,9 +245,9 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
           end_date: { type: 'string', format: 'date-time' },
           max_attendees: { type: 'integer', minimum: 1 },
           tags: { type: 'array', items: { type: 'string' }, maxItems: 10 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const userId = request.user.id;
     const eventData = request.body;
@@ -255,18 +259,18 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
       
       if (startDate >= endDate) {
         return reply.status(400).send({ error: 'End date must be after start date' });
-      }
+
       
       if (startDate <= new Date()) {
         return reply.status(400).send({ error: 'Start date must be in the future' });
-      }
+
 
       const event = await communityService.createEvent(userId, eventData);
       return reply.status(201).send(event);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Failed to create event' });
-    }
+
   });
 
   fastify.post<{ Params: { eventId: string } }>('/community/events/:eventId/attend', {
@@ -276,10 +280,10 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         type: 'object',
         properties: {
           eventId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['eventId']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const userId = request.user.id;
     const { eventId } = request.params;
@@ -287,10 +291,10 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
     try {
       const result = await communityService.attendEvent(userId, eventId);
       return reply.send(result);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: 'Failed to update event attendance' });
-    }
+
   });
 
   // User and social endpoints
@@ -301,25 +305,25 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         type: 'object',
         properties: {
           userId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['userId']
-      }
-    }
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const followerId = request.user.id;
     const { userId: followingId } = request.params;
 
     if (followerId === followingId) {
       return reply.status(400).send({ error: 'Cannot follow yourself' });
-    }
+
 
     try {
       const result = await communityService.followUser(followerId, followingId);
       return reply.send(result);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: 'Failed to follow/unfollow user' });
-    }
+
   });
 
   fastify.get<{ Querystring: CreatorsQuerystring }>('/community/creators', {
@@ -329,9 +333,9 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { limit = 10 } = request.query;
     const userId = request.user.id;
@@ -339,10 +343,10 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
     try {
       const creators = await communityService.getTopCreators(userId, limit);
       return reply.send({ creators });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch top creators' });
-    }
+
   });
 
   // Community stats endpoint
@@ -372,12 +376,12 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
           active_users_7d: parseInt(stats.active_users_7d),
           total_follows: parseInt(stats.total_follows),
           likes_last_7d: parseInt(stats.likes_last_7d)
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch community statistics' });
-    }
+
   });
 
   // Activity feed endpoint
@@ -389,9 +393,9 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { limit = 20, offset = 0 } = request.query as any;
     const userId = request.user.id;
@@ -416,9 +420,8 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         activities: result.rows,
         pagination: { limit, offset, has_more: result.rows.length === limit }
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch activity feed' });
-    }
+
   });
-}

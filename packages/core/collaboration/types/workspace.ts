@@ -1,5 +1,4 @@
-export interface WorkspaceId extends String {
-  readonly __brand: 'WorkspaceId';
+export interface WorkspaceId extends String { readonly __brand: 'WorkspaceId';
   export interface ProjectId extends String {
   readonly __brand: 'ProjectId';
   export interface UserId extends String {
@@ -32,44 +31,41 @@ export interface WorkspaceId extends String {
   RESOURCE_DELETE = 'resource.delete',
   USER_INVITE = 'user.invite',
   USER_JOIN = 'user.join',
-  USER_LEAVE = 'user.leave',
+  USER_LEAVE = 'user.leave' }
   USER_ROLE_CHANGE = 'user.role_change'
-  export interface Workspace {
-  id: WorkspaceId;
+  export interface Workspace { id: WorkspaceId;
   name: string;
   description?: string;
   settings: WorkspaceSettings;
   created_at: Date;
   updated_at: Date;
   created_by: UserId;
-  is_active: boolean;
-}
-}
-}
-export interface WorkspaceSettings {
-  visibility: 'private' | 'internal' | 'public';
-  features: {
+  is_active: boolean }
+
+
+
+export interface WorkspaceSettings { visibility: 'private' | 'internal' | 'public';
+  features: { }
   real_time_collaboration: boolean;
   version_history: boolean;
   comments: boolean;
   notifications: boolean;
   integrations: boolean;
-}
+
+
 };
-  limits: {
+  limits: { ,
   max_projects: number;
   max_members: number;
-  storage_quota_mb: number;
-};
-  permissions: {
+  storage_quota_mb: number };
+  permissions: { ,
   who_can_invite: 'owners' | 'admins' | 'members';
-  who_can_create_projects: 'owners' | 'admins' | 'members';
-  default_project_visibility: 'private' | 'workspace' | 'public'
-  };
-}
-}
-export interface Project {
-  id: ProjectId;
+  who_can_create_projects: 'owners' | 'admins' | 'members';,
+  default_project_visibility: 'private' | 'workspace' | 'public' }
+};
+
+
+export interface Project { id: ProjectId;
   workspace_id: WorkspaceId;
   name: string;
   description?: string;
@@ -78,28 +74,27 @@ export interface Project {
   updated_at: Date;
   created_by: UserId;
   is_active: boolean;
-  last_activity_at: Date;
-}
-}
-}
-export interface ProjectSettings {
-  visibility: 'private' | 'workspace' | 'public';
-  features: {
+  last_activity_at: Date }
+
+
+
+export interface ProjectSettings { visibility: 'private' | 'workspace' | 'public';
+  features: { }
   auto_save: boolean;
   version_control: boolean;
   real_time_sync: boolean;
   notifications: boolean;
-}
+
+
 };
-  collaboration: {
+  collaboration: { ,
   max_concurrent_editors: number;
-  conflict_resolution: 'manual' | 'automatic' | 'last_writer_wins';
+  conflict_resolution: 'manual' | 'automatic' | 'last_writer_wins' }
   presence_timeout_ms: number;
 };
-}
-}
-export interface Resource {
-  id: ResourceId;
+
+
+export interface Resource { id: ResourceId;
   project_id: ProjectId;
   name: string;
   type: ResourceType;
@@ -109,43 +104,39 @@ export interface Resource {
   updated_at: Date;
   created_by: UserId;
   is_active: boolean;
-  version: number;
-}
-}
-}
-export interface ResourceMetadata {
-  size_bytes: number;
+  version: number }
+
+
+
+export interface ResourceMetadata { size_bytes: number;
   mime_type?: string;
   checksum: string;
   tags: string;
-  custom_properties: Record<string, any>;
-}
-}
-}
-export interface WorkspaceMember {
-  workspace_id: WorkspaceId;
+  custom_properties: Record<string, any> }
+
+
+
+export interface WorkspaceMember { workspace_id: WorkspaceId;
   user_id: UserId;
   role: WorkspaceRole;
   joined_at: Date;
   invited_by: UserId;
   is_active: boolean;
-  last_activity_at: Date;
-}
-}
-}
-export interface ProjectMember {
-  project_id: ProjectId;
+  last_activity_at: Date }
+
+
+
+export interface ProjectMember { project_id: ProjectId;
   user_id: UserId;
   role: ProjectRole;
   joined_at: Date;
   invited_by: UserId;
   is_active: boolean;
-  last_activity_at: Date;
-}
-}
-}
-export interface ActivityEvent {
-  id: string;
+  last_activity_at: Date }
+
+
+
+export interface ActivityEvent { id: string;
   workspace_id: WorkspaceId;
   project_id?: ProjectId;
   resource_id?: ResourceId;
@@ -153,30 +144,26 @@ export interface ActivityEvent {
   type: ActivityType;
   details: ActivityDetails;
   metadata: ActivityMetadata;
-  created_at: Date;
-}
-}
-}
-export interface ActivityDetails {
-  action: string;
-  target_type: string;
-  target_id: string;
+  created_at: Date }
 
-}
+
+
+export interface ActivityDetails { action: string;
+  target_type: string;
+  target_id: string }
+
   changes?: Record<string, { from: any; to: any }>;
   description?: string;
-}
-}
-export interface ActivityMetadata {
-  user_agent?: string;
+
+
+export interface ActivityMetadata { user_agent?: string;
   ip_address?: string;
   session_id?: string;
-  request_id?: string;
-}
-}
-}
-export interface Comment {
-  id: string;
+  request_id?: string }
+
+
+
+export interface Comment { id: string;
   workspace_id: WorkspaceId;
   project_id?: ProjectId;
   resource_id?: ResourceId;
@@ -186,22 +173,20 @@ export interface Comment {
   metadata: CommentMetadata;
   created_at: Date;
   updated_at: Date;
-  is_active: boolean;
-}
-}
-}
-export interface CommentMetadata {
-  mentions: UserId;
+  is_active: boolean }
+
+
+
+export interface CommentMetadata { mentions: UserId;
   attachments: string;
   reactions: Record<string, UserId>;
   is_resolved: boolean;
   resolved_by?: UserId;
-  resolved_at?: Date;
-}
-}
-}
-export interface Notification {
-  id: string;
+  resolved_at?: Date }
+
+
+
+export interface Notification { id: string;
   user_id: UserId;
   workspace_id: WorkspaceId;
   project_id?: ProjectId;
@@ -211,16 +196,14 @@ export interface Notification {
   data: NotificationData;
   created_at: Date;
   read_at?: Date;
-  is_active: boolean;
-}
-}
-export enum NotificationType {
-  WORKSPACE_INVITE = 'workspace.invite',
-  PROJECT_INVITE = 'project.invite',
-  COMMENT_MENTION = 'comment.mention',
-  COMMENT_REPLY = 'comment.reply',
-  RESOURCE_SHARED = 'resource.shared',
-  ROLE_CHANGED = 'role.changed',
+  is_active: boolean }
+
+export enum NotificationType { WORKSPACE_INVITE = 'workspace.invite'
+  PROJECT_INVITE = 'project.invite'
+  COMMENT_MENTION = 'comment.mention'
+  COMMENT_REPLY = 'comment.reply'
+  RESOURCE_SHARED = 'resource.shared'
+  ROLE_CHANGED = 'role.changed' }
   ACTIVITY_DIGEST = 'activity.digest'
   export interface NotificationData {
   action_url?: string;
@@ -229,11 +212,11 @@ export enum NotificationType {
   target_id?: string;
   metadata?: Record<string, any>;
   // Workspace operations interface
-}
-}
-}
-export interface WorkspaceOperations {
-  // Workspace management
+
+
+
+
+export interface WorkspaceOperations { // Workspace management
   createWorkspace(data: Omit<Workspace, 'id' | 'created_at' | 'updated_at'>): Promise<Workspace>;
   getWorkspace(id: WorkspaceId): Promise<Workspace | null>;
   updateWorkspace(id: WorkspaceId, data: Partial<Workspace>): Promise<Workspace>;
@@ -266,6 +249,5 @@ export interface WorkspaceOperations {
   // Notifications
   createNotification(data: Omit<Notification, 'id' | 'created_at'>): Promise<Notification>;
   getUserNotifications(userId: UserId, unreadOnly?: boolean): Promise<Notification>;
-  markNotificationRead(id: string): Promise<void>;
-}
-}
+  markNotificationRead(id: string): Promise<void> }
+

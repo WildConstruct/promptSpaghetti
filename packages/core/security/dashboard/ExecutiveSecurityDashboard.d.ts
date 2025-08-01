@@ -30,23 +30,21 @@ import React from 'react';
 import { DashboardTheme } from './SecurityDashboardFramework';
 
 }
-export interface ExecutiveMetrics {
-    securityScore: number;
+}
+export interface ExecutiveMetrics { securityScore: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     incidentCount: {
         total: number;
         resolved: number;
         open: number;
-        critical: number;
+        critical: number }
 }
     };
     complianceScore: number;
-    financialImpact: {
-        prevented: number;
+    financialImpact: { prevented: number;
         incurred: number;
         savings: number;
-        roi: number;
-    };
+        roi: number };
     trends: {
         securityTrend: 'improving' | 'stable' | 'declining';
         threatTrend: 'increasing' | 'stable' | 'decreasing';
@@ -59,8 +57,8 @@ export interface ExecutiveMetrics {
   };
 
 }
-export interface ExecutiveInsight {
-    id: string;
+}
+export interface ExecutiveInsight { id: string;
     type: 'risk' | 'opportunity' | 'compliance' | 'investment';
     priority: 'low' | 'medium' | 'high' | 'critical';
     title: string;
@@ -71,8 +69,8 @@ export interface ExecutiveInsight {
     benefit: number;
     timeline: string;
     owner: string;
-    status: 'new' | 'in_progress' | 'completed' | 'deferred';
-
+    status: 'new' | 'in_progress' | 'completed' | 'deferred' }
+}
 }
 export interface ExecutiveSecurityDashboardProps {
     metrics: ExecutiveMetrics;
@@ -89,4 +87,5 @@ export interface ExecutiveSecurityDashboardProps {
 export declare const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProps>;
 export default ExecutiveSecurityDashboard;
 //# sourceMappingURL=ExecutiveSecurityDashboard.d.ts.map
+}
 }

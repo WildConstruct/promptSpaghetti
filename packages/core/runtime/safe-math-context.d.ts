@@ -33,12 +33,10 @@ export type BlockedMathFunction = typeof BLOCKED_MATH_FUNCTIONS[number];
 /**
  * Numeric limits for safe evaluation
  */
-export declare const NUMERIC_LIMITS: {
-    readonly MAX_SAFE_VALUE: number;
+export declare const NUMERIC_LIMITS: { readonly MAX_SAFE_VALUE: number;
     readonly MIN_SAFE_VALUE: number;
     readonly MAX_ARRAY_LENGTH: 1000;
-    readonly MAX_DECIMAL_PLACES: 10;
-};
+    readonly MAX_DECIMAL_PLACES: 10 };
 /**
  * Creates a safe Math context object
  */
@@ -51,6 +49,7 @@ export declare function validateMathFunctionCall(functionName: string): boolean;
  * Security audit for Math function usage
  */
 
+}
 }
 export interface MathFunctionAudit {
     functionName: string;
@@ -86,4 +85,5 @@ export declare function isInSafeRange(value: number): boolean;
 export declare function safeNumberCoercion(value: Error): number;
 export default createSafeMathContext;
 //# sourceMappingURL=safe-math-context.d.ts.map
+}
 }

@@ -11,8 +11,8 @@
 
 import { ComplianceRuleEngine, ComplianceRule, ComplianceFramework } from './ComplianceRuleEngine';
 
-}
-}
+
+
 export interface ISO27001Control {
   controlId: string;
   controlNumber: string;
@@ -29,12 +29,13 @@ export interface ISO27001Control {
   riskLevel: ControlRiskLevel;
   status: ControlStatus;
   metadata: ControlMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ISO27001Implementation {
   requirements: string[];
   guidelines: string[];
@@ -44,12 +45,13 @@ export interface ISO27001Implementation {
   frequency: ImplementationFrequency;
   validation: ValidationRequirement[];
   metrics: ControlMetric[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ISO27001Evidence {
   evidenceId: string;
   type: EvidenceType;
@@ -60,12 +62,13 @@ export interface ISO27001Evidence {
   location: string;
   responsible: string;
   automated: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ISO27001ComplianceMapping {
   soc2Mapping: string[];
   gdprMapping: string[];
@@ -73,12 +76,13 @@ export interface ISO27001ComplianceMapping {
   nistMapping: string[];
   cisMapping: string[];
   customMappings: CustomMapping[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImplementationProcedure {
   procedureId: string;
   name: string;
@@ -87,12 +91,13 @@ export interface ImplementationProcedure {
   frequency: string;
   responsible: string;
   documentation: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ProcedureStep {
   stepId: string;
   order: number;
@@ -101,24 +106,26 @@ export interface ProcedureStep {
   duration: string;
   prerequisites: string[];
   outputs: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResponsibleRole {
   role: string;
   responsibility: string;
   authority: AuthorityLevel;
   qualifications: string[];
   training: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationRequirement {
   validationId: string;
   type: ValidationType;
@@ -126,35 +133,38 @@ export interface ValidationRequirement {
   frequency: string;
   criteria: ValidationCriteria;
   responsible: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationCriteria {
   passCriteria: string[];
   failCriteria: string[];
   measurements: string[];
   thresholds: ValidationThreshold[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationThreshold {
   metric: string;
   target: number;
   warning: number;
   critical: number;
   unit: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ControlMetric {
   metricId: string;
   name: string;
@@ -165,34 +175,37 @@ export interface ControlMetric {
   frequency: string;
   source: string;
   automated: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceRetention {
   period: number;
   unit: RetentionUnit;
   disposal: DisposalMethod;
   archival: ArchivalRequirement;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CustomMapping {
   framework: string;
   mapping: string[];
   notes: string;
   verified: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ControlMetadata {
   version: string;
   lastUpdated: Date;
@@ -202,24 +215,26 @@ export interface ControlMetadata {
   tags: string[];
   references: ControlReference[];
   changeHistory: ControlChange[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ControlReference {
   type: ReferenceType;
   identifier: string;
   title: string;
   url?: string;
   version?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ControlChange {
   changeId: string;
   date: Date;
@@ -227,20 +242,22 @@ export interface ControlChange {
   reason: string;
   impact: ChangeImpact;
   approvedBy: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ArchivalRequirement {
   required: boolean;
   method: ArchivalMethod;
   location: string;
   access: ArchivalAccess;
-}
-}
-}
+
+
+
+
 
 // Enums
 export enum ISO27001Theme {
@@ -248,7 +265,7 @@ export enum ISO27001Theme {
   PEOPLE = 'people', 
   PHYSICAL = 'physical',
   TECHNOLOGICAL = 'technological'
-}
+
 
 export enum ISO27001Category {
   // Organizational controls (A.5)
@@ -266,7 +283,7 @@ export enum ISO27001Category {
   INFORMATION_SECURITY_INCIDENT_MANAGEMENT = 'information_security_incident_management',
   INFORMATION_SECURITY_BUSINESS_CONTINUITY = 'information_security_business_continuity',
   COMPLIANCE = 'compliance'
-}
+
 
 export enum ISO27001MaturityLevel {
   INITIAL = 'initial',
@@ -274,14 +291,14 @@ export enum ISO27001MaturityLevel {
   INTERMEDIATE = 'intermediate',
   ADVANCED = 'advanced',
   OPTIMIZED = 'optimized'
-}
+
 
 export enum ControlRiskLevel {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
+
 
 export enum ControlStatus {
   NOT_IMPLEMENTED = 'not_implemented',
@@ -290,7 +307,7 @@ export enum ControlStatus {
   IMPLEMENTED = 'implemented',
   VERIFIED = 'verified',
   NON_COMPLIANT = 'non_compliant'
-}
+
 
 export enum EvidenceType {
   DOCUMENT = 'document',
@@ -303,14 +320,14 @@ export enum EvidenceType {
   SCREENSHOT = 'screenshot',
   INTERVIEW = 'interview',
   OBSERVATION = 'observation'
-}
+
 
 export enum CollectionMethod {
   AUTOMATED = 'automated',
   MANUAL = 'manual',
   HYBRID = 'hybrid',
   THIRD_PARTY = 'third_party'
-}
+
 
 export enum EvidenceFrequency {
   CONTINUOUS = 'continuous',
@@ -320,34 +337,34 @@ export enum EvidenceFrequency {
   QUARTERLY = 'quarterly',
   ANNUALLY = 'annually',
   ON_DEMAND = 'on_demand'
-}
+
 
 export enum AuthorityLevel {
   EXECUTE = 'execute',
   APPROVE = 'approve',
   REVIEW = 'review',
   MONITOR = 'monitor'
-}
+
 
 export enum ValidationType {
   TECHNICAL = 'technical',
   PROCEDURAL = 'procedural',
   ADMINISTRATIVE = 'administrative',
   PHYSICAL = 'physical'
-}
+
 
 export enum RetentionUnit {
   DAYS = 'days',
   MONTHS = 'months',
   YEARS = 'years'
-}
+
 
 export enum DisposalMethod {
   SECURE_DELETE = 'secure_delete',
   PHYSICAL_DESTRUCTION = 'physical_destruction',
   CRYPTOGRAPHIC_ERASURE = 'cryptographic_erasure',
   ARCHIVAL = 'archival'
-}
+
 
 export enum ImplementationFrequency {
   ONCE = 'once',
@@ -357,7 +374,7 @@ export enum ImplementationFrequency {
   QUARTERLY = 'quarterly',
   ANNUALLY = 'annually',
   CONTINUOUS = 'continuous'
-}
+
 
 export enum ReferenceType {
   STANDARD = 'standard',
@@ -366,28 +383,28 @@ export enum ReferenceType {
   PROCEDURE = 'procedure',
   REGULATION = 'regulation',
   BEST_PRACTICE = 'best_practice'
-}
+
 
 export enum ChangeImpact {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
+
 
 export enum ArchivalMethod {
   DIGITAL = 'digital',
   PHYSICAL = 'physical',
   HYBRID = 'hybrid',
   CLOUD = 'cloud'
-}
+
 
 export enum ArchivalAccess {
   IMMEDIATE = 'immediate',
   WITHIN_24H = 'within_24h',
   WITHIN_WEEK = 'within_week',
   LONG_TERM = 'long_term'
-}
+
 
 /**
  * ISO 27001:2022 Controls Service
@@ -402,7 +419,7 @@ export class ISO27001ControlsService {
   constructor(complianceEngine: ComplianceRuleEngine) {
     this.complianceEngine = complianceEngine;
     this.initializeISO27001Controls();
-  }
+
 
   /**
    * Initialize all ISO 27001:2022 Annex A controls
@@ -419,7 +436,7 @@ export class ISO27001ControlsService {
     
     // A.8 Technological controls
     this.addTechnologicalControls();
-  }
+
 
   /**
    * Add A.5 Organizational controls (14 controls)
@@ -462,7 +479,7 @@ export class ISO27001ControlsService {
                 duration: '2 days',
                 prerequisites: ['Business impact assessment'],
                 outputs: ['Policy requirements document']
-  }
+
               {
                 stepId: 'A.5.1.P1.S2', 
                 order: 2,
@@ -471,7 +488,7 @@ export class ISO27001ControlsService {
                 duration: '5 days',
                 prerequisites: ['Policy requirements document'],
                 outputs: ['Draft policy document']
-  }
+
               {
                 stepId: 'A.5.1.P1.S3',
                 order: 3,
@@ -480,12 +497,12 @@ export class ISO27001ControlsService {
                 duration: '3 days', 
                 prerequisites: ['Draft policy document'],
                 outputs: ['Approved policy']
-              }
+
             ],
             frequency: 'As needed',
             responsible: 'Information Security Manager',
             documentation: ['Policy development template', 'Approval workflow']
-          }
+
         ],
         roles: [
           {
@@ -494,7 +511,7 @@ export class ISO27001ControlsService {
             authority: AuthorityLevel.EXECUTE,
             qualifications: ['CISSP or equivalent certification'],
             training: ['Policy development', 'Risk management']
-          }
+
         ],
         tools: ['Policy management system', 'Document collaboration platform'],
         frequency: ImplementationFrequency.ANNUALLY,
@@ -515,11 +532,11 @@ export class ISO27001ControlsService {
                   warning: 95,
                   critical: 90,
                   unit: 'percentage'
-                }
+
               ]
-  }
+
             responsible: 'Internal Audit'
-          }
+
         ],
         metrics: [
           {
@@ -532,9 +549,9 @@ export class ISO27001ControlsService {
             frequency: 'Monthly',
             source: 'HR Information System',
             automated: true
-          }
+
         ]
-  }
+
       evidence: [
         {
           evidenceId: 'A.5.1.E1',
@@ -551,12 +568,12 @@ export class ISO27001ControlsService {
               method: ArchivalMethod.DIGITAL,
               location: 'Corporate archive',
               access: ArchivalAccess.WITHIN_24H
-            }
-  }
+
+
           location: 'Policy management system',
           responsible: 'Information Security Manager',
           automated: false
-        }
+
       ],
       relatedControls: ['A.5.2', 'A.5.3', 'A.18.1'],
       complianceMapping: {
@@ -566,7 +583,7 @@ export class ISO27001ControlsService {
         nistMapping: ['PM-1'],
         cisMapping: ['CSC-1'],
         customMappings: []
-  }
+
       maturityLevel: ISO27001MaturityLevel.BASIC,
       riskLevel: ControlRiskLevel.HIGH,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -583,10 +600,10 @@ export class ISO27001ControlsService {
             identifier: 'ISO/IEC 27001:2022',
             title: 'Information security management systems — Requirements',
             version: '2022'
-          }
+
         ],
         changeHistory: []
-      }
+
     });
 
     // A.5.2 Information security roles and responsibilities
@@ -617,7 +634,7 @@ export class ISO27001ControlsService {
         frequency: ImplementationFrequency.ANNUALLY,
         validation: [],
         metrics: []
-  }
+
       evidence: [],
       relatedControls: ['A.5.1', 'A.6.1'],
       complianceMapping: {
@@ -627,7 +644,7 @@ export class ISO27001ControlsService {
         nistMapping: ['PM-2'],
         cisMapping: ['CSC-2'],
         customMappings: []
-  }
+
       maturityLevel: ISO27001MaturityLevel.BASIC,
       riskLevel: ControlRiskLevel.MEDIUM,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -647,7 +664,7 @@ export class ISO27001ControlsService {
     // A.5.12 Classification of information
     // A.5.13 Labelling of information
     // A.5.14 Information transfer
-  }
+
 
   /**
    * Add A.6 People controls (8 controls) 
@@ -681,7 +698,7 @@ export class ISO27001ControlsService {
         frequency: ImplementationFrequency.ONCE,
         validation: [],
         metrics: []
-  }
+
       evidence: [],
       relatedControls: ['A.6.2', 'A.6.3'],
       complianceMapping: {
@@ -691,7 +708,7 @@ export class ISO27001ControlsService {
         nistMapping: ['PS-3'],
         cisMapping: ['CSC-16'],
         customMappings: []
-  }
+
       maturityLevel: ISO27001MaturityLevel.BASIC,
       riskLevel: ControlRiskLevel.MEDIUM,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -706,7 +723,7 @@ export class ISO27001ControlsService {
     // A.6.6 Confidentiality or non-disclosure agreements
     // A.6.7 Remote working
     // A.6.8 Information security event reporting
-  }
+
 
   /**
    * Add A.7 Physical controls (14 controls)
@@ -740,7 +757,7 @@ export class ISO27001ControlsService {
         frequency: ImplementationFrequency.CONTINUOUS,
         validation: [],
         metrics: []
-  }
+
       evidence: [],
       relatedControls: ['A.7.2', 'A.7.3'],
       complianceMapping: {
@@ -750,7 +767,7 @@ export class ISO27001ControlsService {
         nistMapping: ['PE-3'],
         cisMapping: ['CSC-11'],
         customMappings: []
-  }
+
       maturityLevel: ISO27001MaturityLevel.INTERMEDIATE,
       riskLevel: ControlRiskLevel.HIGH,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -758,7 +775,7 @@ export class ISO27001ControlsService {
     });
 
     // Continue with remaining A.7 controls...
-  }
+
 
   /**
    * Add A.8 Technological controls (34 controls)
@@ -792,7 +809,7 @@ export class ISO27001ControlsService {
         frequency: ImplementationFrequency.CONTINUOUS,
         validation: [],
         metrics: []
-  }
+
       evidence: [],
       relatedControls: ['A.8.2', 'A.8.3'],
       complianceMapping: {
@@ -802,7 +819,7 @@ export class ISO27001ControlsService {
         nistMapping: ['AC-19'],
         cisMapping: ['CSC-1'],
         customMappings: []
-  }
+
       maturityLevel: ISO27001MaturityLevel.INTERMEDIATE,
       riskLevel: ControlRiskLevel.HIGH,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -810,14 +827,14 @@ export class ISO27001ControlsService {
     });
 
     // Continue with remaining A.8 controls...
-  }
+
 
   /**
    * Add a control to the service
    */
   private addControl(control: ISO27001Control): void {
     this.controls.set(control.controlId, control);
-  }
+
 
   /**
    * Create default metadata for a control
@@ -836,46 +853,46 @@ export class ISO27001ControlsService {
           identifier: 'ISO/IEC 27001:2022',
           title: 'Information security management systems — Requirements',
           version: '2022'
-        }
+
       ],
       changeHistory: []
     };
-  }
+
 
   /**
    * Get all ISO 27001 controls
    */
   public getAllControls(): ISO27001Control[] {
     return Array.from(this.controls.values());
-  }
+
 
   /**
    * Get control by ID
    */
   public getControl(controlId: string): ISO27001Control | undefined {
     return this.controls.get(controlId);
-  }
+
 
   /**
    * Get controls by theme
    */
   public getControlsByTheme(theme: ISO27001Theme): ISO27001Control[] {
     return Array.from(this.controls.values()).filter(control => control.theme === theme);
-  }
+
 
   /**
    * Get controls by category
    */
   public getControlsByCategory(category: ISO27001Category): ISO27001Control[] {
     return Array.from(this.controls.values()).filter(control => control.category === category);
-  }
+
 
   /**
    * Get controls by status
    */
   public getControlsByStatus(status: ControlStatus): ISO27001Control[] {
     return Array.from(this.controls.values()).filter(control => control.status === status);
-  }
+
 
   /**
    * Update control status
@@ -885,7 +902,7 @@ export class ISO27001ControlsService {
     const control = this.controls.get(controlId);
     if (!control) {
       return false;
-    }
+
 
     control.status = status;
     control.metadata.lastUpdated = new Date();
@@ -901,7 +918,7 @@ export class ISO27001ControlsService {
     });
 
     return true;
-  }
+
 
   /**
    * Generate compliance rules for ISO 27001 controls
@@ -930,7 +947,7 @@ export class ISO27001ControlsService {
             conditions: [],
             triggers: [],
             exemptions: []
-  }
+
           dataTypes: [],
           processingActivities: [],
           geographicScope: {} as Record<string, unknown>,
@@ -938,7 +955,7 @@ export class ISO27001ControlsService {
           temporalScope: {} as Record<string, unknown>,
           technicalScope: {} as Record<string, unknown>,
           exceptions: []
-  }
+
         conditions: [],
         actions: [],
         conflicts: [],
@@ -951,10 +968,10 @@ export class ISO27001ControlsService {
       };
 
       rules.push(rule);
-    }
+
 
     return rules;
-  }
+
 
   /**
    * Map control category to rule category
@@ -978,7 +995,7 @@ export class ISO27001ControlsService {
     };
 
     return mapping[category] || 'SECURITY';
-  }
+
 
   /**
    * Map risk level to priority
@@ -992,7 +1009,7 @@ export class ISO27001ControlsService {
     };
 
     return mapping[riskLevel];
-  }
+
 
   /**
    * Map risk level to severity
@@ -1006,7 +1023,7 @@ export class ISO27001ControlsService {
     };
 
     return mapping[riskLevel];
-  }
+
 
   /**
    * Integrate with compliance engine
@@ -1017,8 +1034,8 @@ export class ISO27001ControlsService {
     
     for (const rule of rules) {
       await this.complianceEngine.addRule(rule);
-    }
-  }
+
+
 
   /**
    * Generate ISO 27001 compliance report
@@ -1060,7 +1077,7 @@ export class ISO27001ControlsService {
       ),
       recommendations: this.generateRecommendations(controls)
     };
-  }
+
 
   /**
    * Generate recommendations based on control status
@@ -1071,24 +1088,24 @@ export class ISO27001ControlsService {
     const notImplemented = controls.filter(c => c.status === ControlStatus.NOT_IMPLEMENTED);
     if (notImplemented.length > 0) {
       recommendations.push(`Prioritize implementation of ${notImplemented.length} not implemented controls`);
-    }
+
 
     const highRiskNotImplemented = notImplemented.filter(c => c.riskLevel === ControlRiskLevel.HIGH || c.riskLevel === ControlRiskLevel.CRITICAL);
     if (highRiskNotImplemented.length > 0) {
       recommendations.push(`Focus on ${highRiskNotImplemented.length} high/critical risk controls: ${highRiskNotImplemented.map(c => c.controlNumber).join(', ')}`);
-    }
+
 
     const implemented = controls.filter(c => c.status === ControlStatus.IMPLEMENTED);
     if (implemented.length > 0) {
       recommendations.push(`Schedule verification for ${implemented.length} implemented controls`);
-    }
+
 
     return recommendations;
-  }
-}
 
-}
-}
+
+
+
+
 export interface ISO27001ComplianceReport {
   reportId: string;
   generatedAt: Date;
@@ -1099,8 +1116,9 @@ export interface ISO27001ComplianceReport {
   themeSummary: Record<ISO27001Theme, number>;
   gapAnalysis: ISO27001Control[];
   recommendations: string[];
-}
-}
-}
+
+
+
+
 
 export default ISO27001ControlsService;

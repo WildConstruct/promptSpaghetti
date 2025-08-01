@@ -6,22 +6,21 @@
  */
 
 }
-export interface EnhancedPreviewConfig {
-    maxResults?: number;
+}
+export interface EnhancedPreviewConfig { maxResults?: number;
     enableProfessionalMetadata?: boolean;
     enableAutoSave?: boolean;
     enableVarianceAnalysis?: boolean;
     seedStrategy?: 'random' | 'sequential' | 'custom';
-    customSeeds?: number[];
-
+    customSeeds?: number[] }
 }
-export interface VarianceAnalysis {
-    wordCountVariance: number;
+}
+export interface VarianceAnalysis { wordCountVariance: number;
     lengthDistribution: {
         min: number;
         max: number;
         avg: number;
-        std: number;
+        std: number }
 }
     };
     averageSimilarity: number;
@@ -35,6 +34,7 @@ export interface VarianceAnalysis {
     genreConsistency: number;
 
 }
+}
 export interface PreviewPerformanceStats {
     totalExecutionTime: number;
     averageExecutionTime: number;
@@ -46,4 +46,5 @@ export interface PreviewPerformanceStats {
 
 export declare const useEnhancedPreviewResultManagement: () => any;
 //# sourceMappingURL=useEnhancedPreview.d.ts.map
+}
 }

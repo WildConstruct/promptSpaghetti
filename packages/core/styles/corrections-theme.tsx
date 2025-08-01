@@ -1,51 +1,47 @@
 // Theme configuration for corrections UI components
 
-}
-export interface CorrectionsTheme {
-  colors: {
+
+export interface CorrectionsTheme { colors: {;
   primary: string;
   secondary: string;
   success: string;
   warning: string;
   error: string;
   info: string;
-  background: {
+  background: { }
   primary: string;
   secondary: string;
   tertiary: string;
   elevated: string;
   overlay: string;
-}
+
+
 };
-    text: {
+    text: { ,
   primary: string;
   secondary: string;
   disabled: string;
-  inverse: string;
-};
-    border: {
+  inverse: string };
+    border: { ,
   primary: string;
   secondary: string;
-  active: string;
-};
-    status: {
+  active: string };
+    status: { ,
   active: string;
   inactive: string;
   regex: string;
-  priority: string;
-};
+  priority: string };
   };
-  spacing: {
+  spacing: { ,
   xs: string;
   sm: string;
   md: string;
   lg: string;
   xl: string;
-  xxl: string;
-};
-  typography: {
+  xxl: string };
+  typography: { ,
   fontFamily: string;
-  fontSize: {
+  fontSize: { }
   xs: string;
   sm: string;
   md: string;
@@ -53,175 +49,167 @@ export interface CorrectionsTheme {
   xl: string;
   xxl: string;
 };
-    fontWeight: {
+    fontWeight: { ,
   normal: number;
   medium: number;
   semibold: number;
-  bold: number;
-};
-    lineHeight: {
+  bold: number };
+    lineHeight: { ,
   tight: number;
   normal: number;
-  loose: number;
-};
+  loose: number };
   };
-  shadows: {
+  shadows: { ,
   sm: string;
   md: string;
   lg: string;
-  xl: string;
-};
-  radius: {
+  xl: string };
+  radius: { ,
   none: string;
   xs: string;
   sm: string;
   md: string;
   lg: string;
   xl: string;
-  full: string;
-};
-  transitions: {
+  full: string };
+  transitions: { ,
   fast: string;
   normal: string;
-  slow: string;
-};
-  breakpoints: {
+  slow: string };
+  breakpoints: { ,
   mobile: string;
   tablet: string;
-  desktop: string;
-};
-}
-export const darkTheme: CorrectionsTheme = {,
-  colors: {
+  desktop: string };
+
+export const darkTheme: CorrectionsTheme = { ,
+  colors: {,
   primary: '#63b3ed',
   secondary: '#9f7aea',
   success: '#68d391',
   warning: '#fbb040',
   error: '#e53e3e',
   info: '#63b3ed',
-  background: {
+  background: {,
   primary: '#23272f',
   secondary: '#2a2e37',
   tertiary: '#1e2228',
   elevated: '#2d3748',
-  overlay: 'rgba(0, 0, 0, 0.8)',
+  overlay: 'rgba(0, 0, 0, 0.8)' }
 },
-  text: {
+  text: { ,
   primary: '#ffffff',
   secondary: '#a0aec0',
   disabled: '#718096',
-  inverse: '#000000',
+  inverse: '#000000' }
 },
-  border: {
+  border: { ,
   primary: '#444444',
   secondary: '#2d3748',
-  active: '#63b3ed',
+  active: '#63b3ed' }
 },
-  status: {
+  status: { ,
   active: '#68d391',
   inactive: '#718096',
   regex: '#9f7aea',
-  priority: '#fbb040',
+  priority: '#fbb040' }
 },
-  spacing: {
+  spacing: { ,
   xs: '4px',
   sm: '8px',
   md: '12px',
   lg: '16px',
   xl: '20px',
-  xxl: '24px',
+  xxl: '24px' }
 },
-  typography: {
+  typography: { ,
   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-  fontSize: {
+  fontSize: {,
   xs: '10px',
   sm: '12px',
   md: '14px',
   lg: '16px',
   xl: '18px',
-  xxl: '20px',
+  xxl: '20px' }
 },
-  fontWeight: {
+  fontWeight: { ,
   normal: 400,
   medium: 500,
   semibold: 600,
-  bold: 700,
+  bold: 700 }
 },
-  lineHeight: {
+  lineHeight: { ,
   tight: 1.25,
   normal: 1.5,
-  loose: 1.75,
+  loose: 1.75 }
 },
-  shadows: {
+  shadows: { ,
   sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
   md: '0 4px 6px rgba(0, 0, 0, 0.1)',
   lg: '0 10px 15px rgba(0, 0, 0, 0.1)',
-  xl: '0 20px 25px rgba(0, 0, 0, 0.15)',
+  xl: '0 20px 25px rgba(0, 0, 0, 0.15)' }
 },
-  radius: {
+  radius: { ,
   none: '0',
   xs: '2px',
   sm: '4px',
   md: '6px',
   lg: '8px',
   xl: '12px',
-  full: '9999px',
+  full: '9999px' }
 },
-  transitions: {
+  transitions: { ,
   fast: 'all 0.1s ease',
   normal: 'all 0.2s ease',
-  slow: 'all 0.3s ease',
+  slow: 'all 0.3s ease' }
 },
-  breakpoints: {
+  breakpoints: { ,
   mobile: '768px',
   tablet: '1024px',
-  desktop: '1280px',
+  desktop: '1280px' }
 };
 
-export const lightTheme: CorrectionsTheme = {
-  ...darkTheme,
-  colors: {
+export const lightTheme: CorrectionsTheme = { ...darkTheme,
+  colors: {,
   ...darkTheme.colors,
-  background: {
+  background: {,
   primary: '#ffffff',
   secondary: '#f7fafc',
   tertiary: '#edf2f7',
   elevated: '#e2e8f0',
-  overlay: 'rgba(0, 0, 0, 0.6)',
+  overlay: 'rgba(0, 0, 0, 0.6)' }
 },
-  text: {
+  text: { ,
   primary: '#1a202c',
   secondary: '#4a5568',
   disabled: '#a0aec0',
-  inverse: '#ffffff',
+  inverse: '#ffffff' }
 },
-  border: {
+  border: { ,
   primary: '#e2e8f0',
   secondary: '#cbd5e0',
-  active: '#63b3ed',
+  active: '#63b3ed' }
 };
 
 // Theme context and provider
 import React, { createContext, useContext, ReactNode } from 'react';
-}
-interface CorrectionsThemeContextType {
-  theme: CorrectionsTheme;
+
+
+interface CorrectionsThemeContextType { theme: CorrectionsTheme;
   isDark: boolean;
   toggleTheme: () => void;
   const CorrectionsThemeContext = createContext<CorrectionsThemeContextType | undefined>(undefined);
   interface CorrectionsThemeProviderProps {
   children: ReactNode;
   initialTheme?: 'light' | 'dark';
-  export const CorrectionsThemeProvider: React.FC<CorrectionsThemeProviderProps> = ({ ),
-  children,
+  export const CorrectionsThemeProvider: React.FC<CorrectionsThemeProviderProps> = ({ );
+  children }
   initialTheme = 'dark'
-}
-}) => {
-  const [isDark, setIsDark] = React.useState(initialTheme === 'dark');
+
+
+}) => { const [isDark, setIsDark] = React.useState(initialTheme === 'dark');
   const theme = isDark ? darkTheme : lightTheme;
   const toggleTheme = () => {
-  setIsDark(!isDark);
-};
+  setIsDark(!isDark) };
   return;
     <CorrectionsThemeContext.Provider value={{ theme, isDark, toggleTheme }}>
       {children}
@@ -229,32 +217,16 @@ interface CorrectionsThemeContextType {
   );
 };
 
-export const useCorrectionsTheme = () => {
-  const context = useContext(CorrectionsThemeContext);
-  if (!context) {
-    throw new Error('useCorrectionsTheme must be used within a CorrectionsThemeProvider');
-  return context;
-};
-
-// Utility functions for styles
-export const createStyles = (theme: CorrectionsTheme) => ({)
-  // Button styles
-  button: {
-  primary: {;
-  backgroundColor: theme.colors.primary,
-      color: theme.colors.text.inverse,
-      border: 'none',
-      padding: `${theme.spacing.sm} ${theme.spacing.lg}`}
-},
+export const useCorrectionsTheme = () => { return null; },
   borderRadius: theme.radius.md,
       fontSize: theme.typography.fontSize.md,
       fontWeight: theme.typography.fontWeight.medium,
       cursor: 'pointer',
-      transition: theme.transitions.normal;
-  },
-  secondary: {
+      transition: theme.transitions.normal
+
+  secondary: { ,
   backgroundColor: theme.colors.background.secondary,
-      color: theme.colors.text.primary,
+      color: theme.colors.text.primary }
       border: `1px solid ${theme.colors.border.primary}`}
 },
   padding: `${theme.spacing.sm} ${theme.spacing.lg}`}
@@ -263,12 +235,12 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       fontSize: theme.typography.fontSize.md,
       fontWeight: theme.typography.fontWeight.medium,
       cursor: 'pointer',
-      transition: theme.transitions.normal;
-  },
-  danger: {
+      transition: theme.transitions.normal
+
+  danger: { ,
   backgroundColor: theme.colors.error,
       color: theme.colors.text.inverse,
-      border: 'none',
+      border: 'none' }
       padding: `${theme.spacing.sm} ${theme.spacing.lg}`}
 },
   borderRadius: theme.radius.md,
@@ -276,12 +248,12 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       fontWeight: theme.typography.fontWeight.medium,
       cursor: 'pointer',
       transition: theme.transitions.normal;
-  }
+
   // Input styles
-  input: {
+  input: { ,
   base: {;
   backgroundColor: theme.colors.background.secondary,
-      color: theme.colors.text.primary,
+      color: theme.colors.text.primary }
       border: `1px solid ${theme.colors.border.primary}`}
 },
   padding: `${theme.spacing.sm} ${theme.spacing.md}`}
@@ -289,13 +261,12 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
   borderRadius: theme.radius.md,
       fontSize: theme.typography.fontSize.md,
       transition: theme.transitions.normal,
-      '&:focus': {
-  borderColor: theme.colors.border.active,
-  outline: 'none',
+      '&:focus': { borderColor: theme.colors.border.active,
+  outline: 'none' }
 },
-  search: {
+  search: { ,
   backgroundColor: theme.colors.background.secondary,
-      color: theme.colors.text.primary,
+      color: theme.colors.text.primary }
       border: `1px solid ${theme.colors.border.primary}`}
 },
   padding: `${theme.spacing.md} ${theme.spacing.lg}`}
@@ -304,94 +275,93 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       fontSize: theme.typography.fontSize.md,
       width: '100%',
       transition: theme.transitions.normal,
-      '&:focus': {
-  borderColor: theme.colors.border.active,
-  outline: 'none',
-}
+      '&:focus': { borderColor: theme.colors.border.active,
+  outline: 'none' }
+
   // Card styles
-  card: {
+  card: { ,
   base: {;
-  backgroundColor: theme.colors.background.secondary,
+  backgroundColor: theme.colors.background.secondary }
       border: `1px solid ${theme.colors.border.primary}`}
 },
   borderRadius: theme.radius.lg,
       padding: theme.spacing.lg,
       boxShadow: theme.shadows.sm,
-      transition: theme.transitions.normal;
-  },
-  elevated: {
-  backgroundColor: theme.colors.background.elevated,
+      transition: theme.transitions.normal
+
+  elevated: { ,
+  backgroundColor: theme.colors.background.elevated }
       border: `1px solid ${theme.colors.border.primary}`}
 },
   borderRadius: theme.radius.lg,
       padding: theme.spacing.lg,
       boxShadow: theme.shadows.md,
       transition: theme.transitions.normal;
-  }
+
   // Layout styles
-  panel: {
+  panel: { ,
   base: {;
   backgroundColor: theme.colors.background.primary,
-      color: theme.colors.text.primary,
+      color: theme.colors.text.primary }
       borderLeft: `1px solid ${theme.colors.border.primary}`}
 },
   height: '100vh',
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column' as const,
-      transition: theme.transitions.normal;
-  },
-  mobile: {
+      transition: theme.transitions.normal
+
+  mobile: { ,
   backgroundColor: theme.colors.background.primary,
   color: theme.colors.text.primary,
   height: '100vh',
   width: '100vw',
   overflow: 'hidden',
   display: 'flex',
-  flexDirection: 'column' as const,
-}
+  flexDirection: 'column' as const }
+
   // Status styles
-  status: {
-  active: {
-  color: theme.colors.status.active,
+  status: { ,
+  active: {,
+  color: theme.colors.status.active }
 },
-  inactive: {
-  color: theme.colors.status.inactive,
+  inactive: { ,
+  color: theme.colors.status.inactive }
 },
-  regex: {
+  regex: { ,
   backgroundColor: theme.colors.status.regex,
-      color: theme.colors.text.inverse,
+      color: theme.colors.text.inverse }
       padding: `${theme.spacing.xs} ${theme.spacing.sm}`}
 },
   borderRadius: theme.radius.sm,
       fontSize: theme.typography.fontSize.xs,
       fontWeight: theme.typography.fontWeight.medium;
-  }
+
   // Typography styles
-  text: {
-  heading: {
+  text: { ,
+  heading: {,
   fontSize: theme.typography.fontSize.xl,
   fontWeight: theme.typography.fontWeight.semibold,
   color: theme.colors.text.primary,
-  lineHeight: theme.typography.lineHeight.tight,
+  lineHeight: theme.typography.lineHeight.tight }
 },
-  subheading: {
+  subheading: { ,
   fontSize: theme.typography.fontSize.lg,
   fontWeight: theme.typography.fontWeight.medium,
   color: theme.colors.text.primary,
-  lineHeight: theme.typography.lineHeight.normal,
+  lineHeight: theme.typography.lineHeight.normal }
 },
-  body: {
+  body: { ,
   fontSize: theme.typography.fontSize.md,
   fontWeight: theme.typography.fontWeight.normal,
   color: theme.colors.text.primary,
-  lineHeight: theme.typography.lineHeight.normal,
+  lineHeight: theme.typography.lineHeight.normal }
 },
-  caption: {
+  caption: { ,
   fontSize: theme.typography.fontSize.sm,
   fontWeight: theme.typography.fontWeight.normal,
   color: theme.colors.text.secondary,
-  lineHeight: theme.typography.lineHeight.normal,
+  lineHeight: theme.typography.lineHeight.normal }
 });
 
 // Media query helpers
@@ -404,16 +374,15 @@ export const mediaQueries = {
 };
 
 // Animation presets
-export const animations = {
-  fadeIn: {
+export const animations = { fadeIn: { }
   from: { opacity: 0 },
     to: { opacity: 1 }
   },
-  slideIn: {
+  slideIn: {,
   from: { transform: 'translateX(100%)' },
     to: { transform: 'translateX(0)' }
   },
-  scaleIn: {
+  scaleIn: {,
   from: { transform: 'scale(0.95)', opacity: 0 },
     to: { transform: 'scale(1)', opacity: 1 }
 };

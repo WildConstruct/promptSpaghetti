@@ -77,13 +77,13 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
             { weight: 0.5, value: 'A' },
             { weight: 0.5, value: 'B' }
           ]
-        }
-  }
+
+
       {
         id: 'node2',
         type: 'Output',
         data: { value: 'output' }
-      }
+
     ],
     edges: [
       {
@@ -92,7 +92,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
         target: 'node2',
         sourceHandle: 'output',
         targetHandle: 'input'
-      }
+
     ]
   };
 
@@ -138,35 +138,35 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
             id: 'weighted',
             type: 'WeightedChoice',
             data: { choices: [{ weight: 1, value: 'choice' }] }
-  }
+
           {
             id: 'concat',
             type: 'Concat',
             data: { inputs: ['a', 'b', 'c'] }
-  }
+
           {
             id: 'output',
             type: 'Output',
             data: { value: 'output-value' }
-  }
+
           {
             id: 'include',
             type: 'Include',
             data: { 
               template: 'tmpl1',
               templates: { tmpl1: 'Template Content' }
-            }
-  }
+
+
           {
             id: 'setvar',
             type: 'SetVariable',
             data: { key: 'myVar', value: 'myValue' }
-  }
+
           {
             id: 'getvar',
             type: 'GetVariable',
             data: { key: 'myVar' }
-          }
+
         ],
         edges: []
       };
@@ -184,8 +184,8 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
             data: {
               choices: [{ weight: 1, value: 'advanced' }],
               distribution: 'exponential'
-            }
-  }
+
+
           {
             id: 'conditional',
             type: 'Conditional',
@@ -193,16 +193,16 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
               expression: 'x > 5',
               trueValue: 'yes',
               falseValue: 'no'
-            }
-  }
+
+
           {
             id: 'sequential',
             type: 'Sequential',
             data: {
               items: ['first', 'second', 'third'],
               mode: 'linear'
-            }
-  }
+
+
           {
             id: 'markov',
             type: 'Markov',
@@ -212,9 +212,9 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
                 A: { B: 0.5, C: 0.5 },
                 B: { A: 0.3, C: 0.7 },
                 C: { A: 1.0 }
-              }
-            }
-          }
+
+
+
         ],
         edges: []
       };
@@ -230,7 +230,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
             id: 'unknown',
             type: 'UnknownNodeType',
             data: {}
-          }
+
         ],
         edges: []
       };
@@ -320,7 +320,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
             id: 'error-node',
             type: 'WeightedChoice',
             data: null // This might cause an error
-          }
+
         ],
         edges: []
       };
@@ -343,7 +343,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
 
       for (const graph of malformedGraphs) {
         await expect(executeGraph(graph as any, 'seed')).rejects.toThrow();
-      }
+
     });
 
     it('should handle nodes with missing data', async () => {
@@ -455,7 +455,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
       for (const seed of specialSeeds) {
         const result = await executeGraph(validGraph, seed);
         expect(result).toBeDefined();
-      }
+
     });
 
     it('should handle concurrent executions', async () => {
@@ -492,7 +492,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
             id: 'adv',
             type: 'Conditional',
             data: { expression: 'true', trueValue: 'yes', falseValue: 'no' }
-          }
+
         ],
         edges: []
       };

@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface PolicyAnalyticsMetrics {
-    totalPolicies: number;
+}
+export interface PolicyAnalyticsMetrics { totalPolicies: number;
     activePolicies: number;
     totalViolations: number;
     violationTrend: 'up' | 'down' | 'stable';
@@ -19,21 +19,18 @@ export interface PolicyAnalyticsMetrics {
     topViolatedCategories: Array<{
         category: string;
         count: number;
-        percentage: number;
+        percentage: number }
 }
     }>;
-    enforcementEffectiveness: Array<{
-        actionType: string;
+    enforcementEffectiveness: Array<{ actionType: string;
         successRate: number;
-        count: number;
-    }>;
-    timeSeriesData: Array<{
-        date: string;
+        count: number }>;
+    timeSeriesData: Array<{ date: string;
         violations: number;
         enforcements: number;
-        preventions: number;
-    }>;
+        preventions: number }>;
 
+}
 }
 export interface PolicyAnalyticsDashboardProps {
     className?: string;
@@ -41,4 +38,5 @@ export interface PolicyAnalyticsDashboardProps {
 export declare const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps>;
 export default PolicyAnalyticsDashboard;
 //# sourceMappingURL=PolicyAnalyticsDashboard.d.ts.map
+}
 }

@@ -12,15 +12,20 @@ export { AnthropicGraphAgent, defaultAnthropicConfig, generateGraphWithClaude } 
 export { GeminiGraphAgent, defaultGeminiConfig, generateGraphWithGemini } from './scripts/gemini-agent';
 // Cross-Model Testing
 export { CrossModelTester, testCases, runCrossModelTests, generateTestReport } from './examples/cross-model-examples';
-(provider = 'openai', config = {}) => {
-    switch (provider) {
-        case 'openai':
-            return generateGraphWithOpenAI(request, config);
-        case 'claude':
-            return generateGraphWithClaude(request, config);
-        case 'gemini':
-            return generateGraphWithGemini(request, config);
-        default:
-            throw new Error(`Unsupported provider: ${provider}`);
-    }
+();
+provider: 'openai' | 'claude' | 'gemini';
+'openai',
+    config;
+(Partial) = {};
+Promise < AnyGenerationResult > {
+    switch(provider) {
+    },
+    case: 'openai',
+    return: generateGraphWithOpenAI(request, config),
+    case: 'claude',
+    return: generateGraphWithClaude(request, config),
+    case: 'gemini',
+    return: generateGraphWithGemini(request, config),
+    default: ,
+    throw: new Error(`Unsupported provider: ${provider}`)
 };

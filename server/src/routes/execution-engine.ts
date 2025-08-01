@@ -15,7 +15,7 @@ import {
   ExecutionMode,
   DependencyType,
   ExecutionPriority 
-} from '../admin/ExecutionEngine';
+ from '../admin/ExecutionEngine';
 
 // Validation schemas
 const ExecutionOperationTypeSchema = z.enum([
@@ -272,13 +272,13 @@ export async function executionEngineRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof ExecutionRequestSchema>
-  }>('/', {
+>('/', {
     preHandler: fastify.requirePermission([
       {
         resource: 'executions',
         action: 'create',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -295,7 +295,7 @@ export async function executionEngineRoutes(
           userId: user.id,
           ipAddress: request.ip,
           userAgent: request.headers['user-agent']
-        }
+
       };
 
       // Execute the operation
@@ -310,11 +310,10 @@ export async function executionEngineRoutes(
           startTime: result.startTime,
           stepsTotal: executionRequest.operation.steps.length,
           trackingUrl: `/api/executions/${result.executionId}`
-  }
+
         message: 'Execution started successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error starting execution:', error);
       
       if (error instanceof z.ZodError) {
@@ -323,14 +322,14 @@ export async function executionEngineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to start execution',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -343,14 +342,14 @@ export async function executionEngineRoutes(
       includeSteps?: boolean;
       includeMetrics?: boolean;
       includeResourceUsage?: boolean;
-    }
-  }>('/:executionId', {
+
+>('/:executionId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'executions',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -368,7 +367,7 @@ export async function executionEngineRoutes(
           success: false,
           error: 'Execution not found'
         });
-      }
+
 
       // Build response data
       const responseData: any = {
@@ -379,31 +378,30 @@ export async function executionEngineRoutes(
           completedSteps: execution.stepResults.size,
           totalSteps: execution.request.operation.steps.length,
           percentage: (execution.stepResults.size / execution.request.operation.steps.length) * 100
-  }
+
         startTime: execution.startTime,
         operation: {
           type: execution.request.operation.type,
           name: execution.request.operation.name,
           version: execution.request.operation.version
-  }
+
         requestedBy: execution.request.requestedBy,
         priority: execution.request.priority
       };
 
       if (query.includeSteps) {
         responseData.stepResults = Object.fromEntries(execution.stepResults);
-      }
+
 
       if (query.includeResourceUsage) {
         responseData.resourceUsage = execution.resourceUsage;
-      }
+
 
       return reply.send({
         success: true,
         data: responseData
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting execution status:', error);
       
       return reply.code(500).send({
@@ -411,7 +409,7 @@ export async function executionEngineRoutes(
         error: 'Failed to get execution status',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -421,13 +419,13 @@ export async function executionEngineRoutes(
   fastify.delete<{
     Params: z.infer<typeof ExecutionIdSchema>;
     Body: { reason?: string }
-  }>('/:executionId', {
+>('/:executionId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'executions',
         action: 'cancel',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -443,8 +441,7 @@ export async function executionEngineRoutes(
         success: true,
         message: 'Execution cancelled successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error cancelling execution:', error);
       
       return reply.code(500).send({
@@ -452,7 +449,7 @@ export async function executionEngineRoutes(
         error: 'Failed to cancel execution',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -461,13 +458,13 @@ export async function executionEngineRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof ExecutionQuerySchema>
-  }>('/query', {
+>('/query', {
     preHandler: fastify.requirePermission([
       {
         resource: 'executions',
         action: 'read',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -477,7 +474,7 @@ export async function executionEngineRoutes(
       // Restrict to user's executions unless admin
       if (!user.isSuperAdmin) {
         query.requestedBy = user.id;
-      }
+
 
       // This would query the execution logging service
       const result = {
@@ -495,11 +492,10 @@ export async function executionEngineRoutes(
             limit: query.limit,
             offset: query.offset,
             hasMore: result.hasMore
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       console.error('Error querying executions:', error);
       
       if (error instanceof z.ZodError) {
@@ -508,14 +504,14 @@ export async function executionEngineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to query executions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -528,14 +524,14 @@ export async function executionEngineRoutes(
       operationType?: string;
       environment?: string;
       detailed?: boolean;
-    }
-  }>('/statistics', {
+
+>('/statistics', {
     preHandler: fastify.requirePermission([
       {
         resource: 'executions',
         action: 'read_statistics',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -562,7 +558,7 @@ export async function executionEngineRoutes(
           avgCpuUsage: 0,
           avgMemoryUsage: 0,
           avgDuration: 0
-        }
+
       };
 
       return reply.send({
@@ -571,10 +567,9 @@ export async function executionEngineRoutes(
         metadata: {
           period: query.period || 'last_24h',
           generatedAt: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting execution statistics:', error);
       
       return reply.code(500).send({
@@ -582,7 +577,7 @@ export async function executionEngineRoutes(
         error: 'Failed to get execution statistics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -596,14 +591,14 @@ export async function executionEngineRoutes(
       stepId?: string;
       limit?: number;
       offset?: number;
-    }
-  }>('/:executionId/logs', {
+
+>('/:executionId/logs', {
     preHandler: fastify.requirePermission([
       {
         resource: 'executions',
         action: 'read_logs',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -626,8 +621,7 @@ export async function executionEngineRoutes(
         success: true,
         data: logs
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error getting execution logs:', error);
       
       return reply.code(500).send({
@@ -635,7 +629,7 @@ export async function executionEngineRoutes(
         error: 'Failed to get execution logs',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -644,13 +638,13 @@ export async function executionEngineRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof ExecutionRequestSchema>
-  }>('/validate', {
+>('/validate', {
     preHandler: fastify.requirePermission([
       {
         resource: 'executions',
         action: 'validate',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -666,15 +660,15 @@ export async function executionEngineRoutes(
           cpu: 0,
           memory: 0,
           disk: 0
-  }
+
         dependencies: {
           available: [],
           unavailable: []
-  }
+
         permissions: {
           granted: [],
           missing: []
-        }
+
       };
 
       // This would run actual validation logic
@@ -683,8 +677,7 @@ export async function executionEngineRoutes(
         success: true,
         data: validationResult
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error validating execution request:', error);
       
       if (error instanceof z.ZodError) {
@@ -693,14 +686,14 @@ export async function executionEngineRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to validate execution request',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -718,7 +711,7 @@ export async function executionEngineRoutes(
           loggingService: 'healthy',
           resourcePool: 'healthy',
           stepHandlers: 'healthy'
-  }
+
         metrics: {
           activeExecutions: 0,
           queuedExecutions: 0,
@@ -729,8 +722,8 @@ export async function executionEngineRoutes(
             cpu: 25.5,
             memory: 45.2,
             disk: 15.8
-          }
-  }
+
+
         capabilities: {
           maxConcurrentExecutions: 100,
           supportedOperationTypes: Object.values(ExecutionOperationType),
@@ -741,21 +734,19 @@ export async function executionEngineRoutes(
             rollback: true,
             monitoring: true,
             alerts: true
-          }
-        }
+
+
       };
 
       return reply.send({
         success: true,
         data: health
       });
-
-    } catch (error) {
+ catch (error) {
       return reply.code(503).send({
         success: false,
         error: 'Execution engine unhealthy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}

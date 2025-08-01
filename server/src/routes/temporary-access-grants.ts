@@ -13,19 +13,20 @@ import {
   GrantCreationRequest,
   GrantRevocationRequest,
   GrantSearchFilters
-} from '../services/TemporaryAccessGrantService';
+ from '../services/TemporaryAccessGrantService';
 import { 
   DataClassificationLevel,
   DataOperation,
   OperationContext
-} from '../../../../packages/core/types/DataClassification';
+ from '../../../../packages/core/types/DataClassification';
 import { AuditService } from '../auth/services/AuditService';
 import { DataAccessControlService } from '../services/DataAccessControlService';
 import { AccessRequestWorkflowService } from '../services/AccessRequestWorkflowService';
 
 // Request/Response Type Definitions
-}
-}
+
+
+
 interface CreateGrantRequest {
   Body: {
     granteeId: string;
@@ -42,22 +43,23 @@ interface CreateGrantRequest {
         window: number;
         burstAllowed?: boolean;
         burstLimit?: number;
-}
-}
-      }>;
-    }>;
+
+
+
+>;
+>;
     accessScope: {
       type: 'RESOURCE_SPECIFIC' | 'CLASSIFICATION_LEVEL' | 'DEPARTMENT' | 'PROJECT' | 'GLOBAL';
       targets: Array<{
         type: 'RESOURCE_ID' | 'RESOURCE_PATTERN' | 'CLASSIFICATION' | 'DEPARTMENT' | 'PROJECT';
         value: string;
         metadata?: Record<string, any>;
-      }>;
+>;
       exclusions?: Array<{
         type: 'RESOURCE_ID' | 'RESOURCE_PATTERN' | 'CLASSIFICATION' | 'DEPARTMENT' | 'PROJECT';
         value: string;
         metadata?: Record<string, any>;
-      }>;
+>;
       inheritanceLevel?: 'NONE' | 'CHILD_RESOURCES' | 'ALL_DESCENDANTS';
       cascadingPermissions?: boolean;
     };
@@ -81,7 +83,7 @@ interface CreateGrantRequest {
           specification: Record<string, any>;
           errorMessage: string;
           severity: 'ERROR' | 'WARNING' | 'INFO';
-        }>;
+>;
         dependencies?: string[];
         conflictsWith?: string[];
       };
@@ -89,7 +91,7 @@ interface CreateGrantRequest {
       fallbackBehavior: 'DENY' | 'PROMPT' | 'DEGRADE' | 'WARN';
       verificationRequired: boolean;
       reVerificationInterval?: number; // minutes
-    }>;
+>;
     businessJustification: string;
     technicalJustification: string;
     urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | 'EMERGENCY';
@@ -99,7 +101,7 @@ interface CreateGrantRequest {
       realTimeTracking: boolean;
       reportingFrequency: 'REALTIME' | 'HOURLY' | 'DAILY' | 'WEEKLY';
       retentionPeriod: number;
-    }>;
+>;
     security?: Partial<{
       encryptionRequired: boolean;
       keyRotationInterval: number;
@@ -108,7 +110,7 @@ interface CreateGrantRequest {
       tamperDetection: boolean;
       secureChannelRequired: boolean;
       certificateBasedAuth: boolean;
-    }>;
+>;
     customAttributes?: Record<string, any>;
   };
   Headers: {
@@ -116,30 +118,32 @@ interface CreateGrantRequest {
     'x-session-id'?: string;
     'user-agent'?: string;
   };
-}
 
-}
-}
+
+
+
 interface ActivateGrantRequest {
   Params: {
     grantId: string;
-}
-}
+
+
+
   };
   Headers: {
     'x-user-id': string;
     'x-session-id'?: string;
     'user-agent'?: string;
   };
-}
 
-}
-}
+
+
+
 interface ValidateAccessRequest {
   Params: {
     grantId: string;
-}
-}
+
+
+
   };
   Body: {
     operation: DataOperation;
@@ -150,15 +154,16 @@ interface ValidateAccessRequest {
     'x-session-id'?: string;
     'user-agent'?: string;
   };
-}
 
-}
-}
+
+
+
 interface RevokeGrantRequest {
   Params: {
     grantId: string;
-}
-}
+
+
+
   };
   Body: {
     reason: string;
@@ -171,15 +176,16 @@ interface RevokeGrantRequest {
     'x-session-id'?: string;
     'user-agent'?: string;
   };
-}
 
-}
-}
+
+
+
 interface ExtendGrantRequest {
   Params: {
     grantId: string;
-}
-}
+
+
+
   };
   Body: {
     extensionDuration: number; // hours
@@ -192,10 +198,10 @@ interface ExtendGrantRequest {
     'x-session-id'?: string;
     'user-agent'?: string;
   };
-}
 
-}
-}
+
+
+
 interface SearchGrantsRequest {
   Querystring: {
     granteeId?: string;
@@ -213,32 +219,34 @@ interface SearchGrantsRequest {
     activeOnly?: string;
     limit?: string;
     offset?: string;
-}
-}
+
+
+
   };
   Headers: {
     'x-user-id': string;
     'x-session-id'?: string;
     'user-agent'?: string;
   };
-}
 
-}
-}
+
+
+
 interface GetAnalyticsRequest {
   Querystring: {
     startDate?: string;
     endDate?: string;
     timeframe?: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
-}
-}
+
+
+
   };
   Headers: {
     'x-user-id': string;
     'x-session-id'?: string;
     'user-agent'?: string;
   };
-}
+
 
 /**
  * Helper function to extract operation context from request
@@ -254,9 +262,9 @@ function extractOperationContext(request: FastifyRequest): OperationContext {
       country: 'US', // In a real implementation, this would be extracted from IP
       region: 'CA',
       city: 'San Francisco'
-    }
+
   };
-}
+
 
 /**
  * Helper function to convert request body to grant creation request
@@ -280,7 +288,7 @@ function convertToGrantCreationRequest(body: CreateGrantRequest['Body']): GrantC
       exclusions: body.accessScope.exclusions || [],
       inheritanceLevel: body.accessScope.inheritanceLevel || 'NONE',
       cascadingPermissions: body.accessScope.cascadingPermissions || false
-  }
+
     timeWindow: {
       startTime: body.timeWindow.startTime ? new Date(body.timeWindow.startTime) : undefined,
       endTime: new Date(body.timeWindow.endTime),
@@ -291,7 +299,7 @@ function convertToGrantCreationRequest(body: CreateGrantRequest['Body']): GrantC
       extendable: body.timeWindow.extendable,
       maxExtensions: body.timeWindow.maxExtensions,
       extensionDuration: body.timeWindow.extensionDuration
-  }
+
     conditions: body.conditions?.map(c => ({
       type: c.type,
       specification: c.specification,
@@ -307,7 +315,7 @@ function convertToGrantCreationRequest(body: CreateGrantRequest['Body']): GrantC
     security: body.security,
     customAttributes: body.customAttributes
   };
-}
+
 
 /**
  * Helper function to parse search filters from query string
@@ -319,32 +327,32 @@ function parseSearchFilters(query: SearchGrantsRequest['Querystring']): GrantSea
   if (query.granterId) filters.granterId = query.granterId;
   if (query.status) {
     filters.status = query.status.split(',') as any[];
-  }
+
   if (query.permissions) {
     filters.permissions = query.permissions.split(',') as DataOperation[];
-  }
+
   if (query.classifications) {
     filters.classifications = query.classifications.split(',') as DataClassificationLevel[];
-  }
+
   if (query.createdAfter) filters.createdAfter = new Date(query.createdAfter);
   if (query.createdBefore) filters.createdBefore = new Date(query.createdBefore);
   if (query.expiresAfter) filters.expiresAfter = new Date(query.expiresAfter);
   if (query.expiresBefore) filters.expiresBefore = new Date(query.expiresBefore);
   if (query.riskLevel) {
     filters.riskLevel = query.riskLevel.split(',') as any[];
-  }
+
   if (query.tags) {
     filters.tags = query.tags.split(',');
-  }
+
   if (query.emergencyGrants) {
     filters.emergencyGrants = query.emergencyGrants === 'true';
-  }
+
   if (query.activeOnly) {
     filters.activeOnly = query.activeOnly === 'true';
-  }
+
 
   return filters;
-}
+
 
 /**
  * Register temporary access grant routes
@@ -366,8 +374,8 @@ export async function temporaryAccessGrantRoutes(
           'x-user-id': { type: 'string' },
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['granteeId', 'permissions', 'accessScope', 'timeWindow', 'businessJustification', 'technicalJustification', 'urgency'],
@@ -386,9 +394,9 @@ export async function temporaryAccessGrantRoutes(
                 exclusions: { type: 'array', items: { type: 'string' } },
                 usageLimit: { type: 'number' },
                 rateLimits: { type: 'array' }
-              }
-            }
-  }
+
+
+
           accessScope: {
             type: 'object',
             required: ['type', 'targets'],
@@ -398,8 +406,8 @@ export async function temporaryAccessGrantRoutes(
               exclusions: { type: 'array' },
               inheritanceLevel: { type: 'string' },
               cascadingPermissions: { type: 'boolean' }
-            }
-  }
+
+
           timeWindow: {
             type: 'object',
             required: ['endTime', 'timezone', 'maxSessionDuration', 'maxConcurrentSessions', 'sessionIdleTimeout', 'extendable', 'maxExtensions', 'extensionDuration'],
@@ -413,13 +421,13 @@ export async function temporaryAccessGrantRoutes(
               extendable: { type: 'boolean' },
               maxExtensions: { type: 'number' },
               extensionDuration: { type: 'number' }
-            }
-  }
+
+
           businessJustification: { type: 'string' },
           technicalJustification: { type: 'string' },
           urgency: { type: 'string', enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL', 'EMERGENCY'] }
-        }
-  }
+
+
       response: {
         201: {
           type: 'object',
@@ -427,17 +435,17 @@ export async function temporaryAccessGrantRoutes(
             success: { type: 'boolean' },
             grant: { type: 'object' },
             message: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             details: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request: FastifyRequest<CreateGrantRequest>, reply: FastifyReply) => {
       try {
         const granterId = request.headers['x-user-id'];
@@ -455,13 +463,13 @@ export async function temporaryAccessGrantRoutes(
           grant,
           message: 'Temporary access grant created successfully'
         });
-      } catch (error) {
+ catch (error) {
         reply.code(400).send({
           error: 'Failed to create temporary access grant',
           details: { message: error.message }
         });
-      }
-    }
+
+
   });
 
   // Activate temporary access grant
@@ -474,8 +482,8 @@ export async function temporaryAccessGrantRoutes(
         required: ['grantId'],
         properties: {
           grantId: { type: 'string' }
-        }
-  }
+
+
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -483,8 +491,8 @@ export async function temporaryAccessGrantRoutes(
           'x-user-id': { type: 'string' },
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -492,16 +500,16 @@ export async function temporaryAccessGrantRoutes(
             success: { type: 'boolean' },
             message: { type: 'string' },
             activatedAt: { type: 'string' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request: FastifyRequest<ActivateGrantRequest>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -515,14 +523,14 @@ export async function temporaryAccessGrantRoutes(
           message: 'Temporary access grant activated successfully',
           activatedAt: new Date().toISOString()
         });
-      } catch (error) {
+ catch (error) {
         if (error.message.includes('not found')) {
           reply.code(404).send({ error: error.message });
-        } else {
+ else {
           reply.code(400).send({ error: error.message });
-        }
-      }
-    }
+
+
+
   });
 
   // Validate access using temporary grant
@@ -535,16 +543,16 @@ export async function temporaryAccessGrantRoutes(
         required: ['grantId'],
         properties: {
           grantId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['operation', 'resourceId'],
         properties: {
           operation: { type: 'string' },
           resourceId: { type: 'string' }
-        }
-  }
+
+
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -552,8 +560,8 @@ export async function temporaryAccessGrantRoutes(
           'x-user-id': { type: 'string' },
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -563,10 +571,10 @@ export async function temporaryAccessGrantRoutes(
             warnings: { type: 'array' },
             riskScore: { type: 'number' },
             recommendations: { type: 'array' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request: FastifyRequest<ValidateAccessRequest>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -581,10 +589,10 @@ export async function temporaryAccessGrantRoutes(
         );
 
         reply.send(result);
-      } catch (error) {
+ catch (error) {
         reply.code(400).send({ error: error.message });
-      }
-    }
+
+
   });
 
   // Revoke temporary access grant
@@ -597,8 +605,8 @@ export async function temporaryAccessGrantRoutes(
         required: ['grantId'],
         properties: {
           grantId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['reason', 'immediate'],
@@ -607,8 +615,8 @@ export async function temporaryAccessGrantRoutes(
           immediate: { type: 'boolean' },
           notifyGrantee: { type: 'boolean' },
           auditRequired: { type: 'boolean' }
-        }
-  }
+
+
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -616,8 +624,8 @@ export async function temporaryAccessGrantRoutes(
           'x-user-id': { type: 'string' },
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -625,10 +633,10 @@ export async function temporaryAccessGrantRoutes(
             success: { type: 'boolean' },
             message: { type: 'string' },
             revokedAt: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request: FastifyRequest<RevokeGrantRequest>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -652,10 +660,10 @@ export async function temporaryAccessGrantRoutes(
           message: 'Temporary access grant revoked successfully',
           revokedAt: new Date().toISOString()
         });
-      } catch (error) {
+ catch (error) {
         reply.code(400).send({ error: error.message });
-      }
-    }
+
+
   });
 
   // Extend temporary access grant
@@ -668,8 +676,8 @@ export async function temporaryAccessGrantRoutes(
         required: ['grantId'],
         properties: {
           grantId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['extensionDuration', 'justification', 'urgency'],
@@ -678,8 +686,8 @@ export async function temporaryAccessGrantRoutes(
           justification: { type: 'string' },
           urgency: { type: 'string', enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'] },
           approverRequired: { type: 'boolean' }
-        }
-  }
+
+
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -687,8 +695,8 @@ export async function temporaryAccessGrantRoutes(
           'x-user-id': { type: 'string' },
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -697,10 +705,10 @@ export async function temporaryAccessGrantRoutes(
             grant: { type: 'object' },
             message: { type: 'string' },
             newExpirationTime: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request: FastifyRequest<ExtendGrantRequest>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -725,10 +733,10 @@ export async function temporaryAccessGrantRoutes(
           message: 'Temporary access grant extended successfully',
           newExpirationTime: extendedGrant.expiresAt.toISOString()
         });
-      } catch (error) {
+ catch (error) {
         reply.code(400).send({ error: error.message });
-      }
-    }
+
+
   });
 
   // Get grant details
@@ -741,23 +749,23 @@ export async function temporaryAccessGrantRoutes(
         required: ['grantId'],
         properties: {
           grantId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             grant: { type: 'object' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request: FastifyRequest<{ Params: { grantId: string } }>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -766,13 +774,13 @@ export async function temporaryAccessGrantRoutes(
         if (!grant) {
           reply.code(404).send({ error: 'Grant not found' });
           return;
-        }
+
 
         reply.send({ grant });
-      } catch (error) {
+ catch (error) {
         reply.code(400).send({ error: error.message });
-      }
-    }
+
+
   });
 
   // Search grants
@@ -798,8 +806,8 @@ export async function temporaryAccessGrantRoutes(
           activeOnly: { type: 'string' },
           limit: { type: 'string' },
           offset: { type: 'string' }
-        }
-  }
+
+
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -807,8 +815,8 @@ export async function temporaryAccessGrantRoutes(
           'x-user-id': { type: 'string' },
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -817,10 +825,10 @@ export async function temporaryAccessGrantRoutes(
             total: { type: 'number' },
             limit: { type: 'number' },
             offset: { type: 'number' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request: FastifyRequest<SearchGrantsRequest>, reply: FastifyReply) => {
       try {
         const filters = parseSearchFilters(request.query);
@@ -838,10 +846,10 @@ export async function temporaryAccessGrantRoutes(
           limit,
           offset
         });
-      } catch (error) {
+ catch (error) {
         reply.code(400).send({ error: error.message });
-      }
-    }
+
+
   });
 
   // Get grant analytics
@@ -855,8 +863,8 @@ export async function temporaryAccessGrantRoutes(
           startDate: { type: 'string' },
           endDate: { type: 'string' },
           timeframe: { type: 'string', enum: ['DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'] }
-        }
-  }
+
+
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -864,18 +872,18 @@ export async function temporaryAccessGrantRoutes(
           'x-user-id': { type: 'string' },
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             analytics: { type: 'object' },
             timeframe: { type: 'object' }
-          }
-        }
-      }
-  }
+
+
+
+
     handler: async (request: FastifyRequest<GetAnalyticsRequest>, reply: FastifyReply) => {
       try {
         let timeframe: { start: Date; end: Date } | undefined;
@@ -885,7 +893,7 @@ export async function temporaryAccessGrantRoutes(
             start: new Date(request.query.startDate),
             end: new Date(request.query.endDate)
           };
-        } else if (request.query.timeframe) {
+ else if (request.query.timeframe) {
           const now = new Date();
           const start = new Date();
           
@@ -905,10 +913,10 @@ export async function temporaryAccessGrantRoutes(
           case 'YEARLY':
             start.setFullYear(now.getFullYear() - 1);
             break;
-          }
+
           
           timeframe = { start, end: now };
-        }
+
 
         const analytics = await temporaryAccessGrantService.getGrantAnalytics(timeframe);
 
@@ -917,13 +925,13 @@ export async function temporaryAccessGrantRoutes(
           timeframe: timeframe ? {
             start: timeframe.start.toISOString(),
             end: timeframe.end.toISOString()
-          } : null
+ : null
         });
-      } catch (error) {
+ catch (error) {
         reply.code(400).send({ error: error.message });
-      }
-    }
+
+
   });
-}
+
 
 export default temporaryAccessGrantRoutes;

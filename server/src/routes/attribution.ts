@@ -6,7 +6,7 @@ import {
   AttributionFilterSchema,
   AttributionStatsRequestSchema,
   UpdatePrivacySettingsRequestSchema
-} from '../../../packages/core/types/attribution';
+ from '../../../packages/core/types/attribution';
 
 export async function attributionRoutes(fastify: FastifyInstance) {
   const attributionService = new AttributionService(fastify.db, fastify.log);
@@ -21,10 +21,10 @@ export async function attributionRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             data: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -44,13 +44,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: attribution
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to record attribution'
       });
-    }
+
   });
 
   // Get attribution statistics
@@ -60,9 +60,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['projectId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
@@ -76,9 +76,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
           includeTimeline: { type: 'boolean', default: false },
           includeHeatmap: { type: 'boolean', default: false },
           includeCollaborationMetrics: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { projectId } = request.params as { projectId: string };
@@ -104,13 +104,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: stats
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to get attribution statistics'
       });
-    }
+
   });
 
   // Get attribution timeline
@@ -120,9 +120,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['projectId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
@@ -136,9 +136,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
           dateTo: { type: 'string', format: 'date-time' },
           limit: { type: 'integer', minimum: 1, maximum: 1000, default: 100 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { projectId } = request.params as { projectId: string };
@@ -164,13 +164,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: timeline
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to get attribution timeline'
       });
-    }
+
   });
 
   // Get contributor statistics
@@ -180,17 +180,17 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['projectId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { projectId } = request.params as { projectId: string };
@@ -199,7 +199,7 @@ export async function attributionRoutes(fastify: FastifyInstance) {
       const dateRange = (query.startDate || query.endDate) ? {
         start: query.startDate ? new Date(query.startDate) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         end: query.endDate ? new Date(query.endDate) : new Date()
-      } : undefined;
+ : undefined;
 
       const contributors = await attributionService.getContributorStats(projectId, dateRange);
       
@@ -207,13 +207,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: contributors
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to get contributor statistics'
       });
-    }
+
   });
 
   // List attributions with filtering
@@ -239,10 +239,10 @@ export async function attributionRoutes(fastify: FastifyInstance) {
           offset: { type: 'integer', minimum: 0, default: 0 },
           sortBy: { type: 'string', enum: ['created_at', 'effective_at', 'change_size', 'confidence_score'], default: 'created_at' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
-  }
+
         required: ['projectId']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const query = request.query as any;
@@ -273,13 +273,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: attributions
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to list attributions'
       });
-    }
+
   });
 
   // Start attribution session
@@ -290,10 +290,10 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         properties: {
           projectId: { type: 'string', format: 'uuid' },
           sessionId: { type: 'string' }
-  }
+
         required: ['projectId']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { projectId, sessionId } = request.body as { projectId: string; sessionId?: string };
@@ -315,13 +315,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: session
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to start attribution session'
       });
-    }
+
   });
 
   // End attribution session
@@ -331,10 +331,10 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           sessionId: { type: 'string' }
-  }
+
         required: ['sessionId']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { sessionId } = request.body as { sessionId: string };
@@ -345,13 +345,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Session ended successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to end attribution session'
       });
-    }
+
   });
 
   // Update privacy settings
@@ -361,9 +361,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['projectId']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -380,18 +380,18 @@ export async function attributionRoutes(fastify: FastifyInstance) {
               trackKeystrokes: { type: 'boolean' },
               retentionDays: { type: 'integer', minimum: 1, maximum: 3650 },
               autoAnonymizeAfterDays: { type: 'integer', minimum: 1, maximum: 365 }
-            }
-          }
-  }
+
+
+
         required: ['settings']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
       if (!userId) {
         return reply.status(401).send({ success: false, error: 'Unauthorized' });
-      }
+
 
       const { projectId } = request.params as { projectId: string };
       const { settings } = request.body as { settings: any };
@@ -407,13 +407,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: privacySettings
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to update privacy settings'
       });
-    }
+
   });
 
   // Get privacy settings
@@ -423,16 +423,16 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['projectId']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
       if (!userId) {
         return reply.status(401).send({ success: false, error: 'Unauthorized' });
-      }
+
 
       const { projectId } = request.params as { projectId: string };
       
@@ -442,13 +442,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: privacySettings
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to get privacy settings'
       });
-    }
+
   });
 
   // Clean up old attribution data
@@ -458,10 +458,10 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['projectId']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { projectId } = request.params as { projectId: string };
@@ -472,13 +472,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Attribution data cleanup completed'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to cleanup attribution data'
       });
-    }
+
   });
 
   // Get attribution for specific resource
@@ -490,17 +490,17 @@ export async function attributionRoutes(fastify: FastifyInstance) {
           projectId: { type: 'string', format: 'uuid' },
           resourceType: { type: 'string', enum: ['node', 'edge', 'property', 'position', 'graph'] },
           resourceId: { type: 'string' }
-  }
+
         required: ['projectId', 'resourceType', 'resourceId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { projectId, resourceType, resourceId } = request.params as { 
@@ -526,13 +526,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: attributions
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to get resource attribution'
       });
-    }
+
   });
 
   // Get attribution for specific author
@@ -543,9 +543,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         properties: {
           projectId: { type: 'string', format: 'uuid' },
           authorId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['projectId', 'authorId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
@@ -553,9 +553,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
           offset: { type: 'integer', minimum: 0, default: 0 },
           dateFrom: { type: 'string', format: 'date-time' },
           dateTo: { type: 'string', format: 'date-time' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { projectId, authorId } = request.params as { projectId: string; authorId: string };
@@ -578,13 +578,13 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         success: true,
         data: attributions
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to get author attribution'
       });
-    }
+
   });
 
   // Batch record multiple attributions
@@ -599,11 +599,11 @@ export async function attributionRoutes(fastify: FastifyInstance) {
             type: 'array',
             items: CreateAttributionRequestSchema.omit({ projectId: true }),
             maxItems: 100
-          }
-  }
+
+
         required: ['projectId', 'attributions']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { projectId, batchId, attributions } = request.body as {
@@ -634,18 +634,17 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         
         const result = await attributionService.recordAttribution(attributionRequest, context);
         results.push(result);
-      }
+
       
       reply.status(201).send({
         success: true,
         data: results
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
         error: 'Failed to record batch attributions'
       });
-    }
+
   });
-}

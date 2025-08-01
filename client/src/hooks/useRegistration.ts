@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useAuth } from './useAuth';
 
-}
+
 export interface RegistrationData {
   email: string;,
   password: string;
@@ -11,41 +11,46 @@ export interface RegistrationData {
   lastName?: string;
   displayName?: string;
   invitationToken?: string;
-}
-}
-}
+
+
+
+
+
 export interface RegistrationResponse {
-  user: {
+  user: {,
   id: string;,
-  email: string;
+  email: string;,
   emailVerified: boolean;,
-  createdAt: string;
+  createdAt: string;,
   roles: string;,
   permissions: string;
-}
+
+
 };
   emailVerificationRequired: boolean;
   nextSteps?: string;
-}
-}
+
+
+
 export interface ValidationResult {
   isValid: boolean;,
-  errors: Array<{
+  errors: Array<{,
   field: string;,
-  message: string;
+  message: string;,
   code: string;
-}
-}>;
-  warnings: Array<{
+
+
+>;
+  warnings: Array<{,
   field: string;
   message: string;,
   code: string;
-}>;
-  suggestions: Array<{
+>;
+  suggestions: Array<{,
   field: string;
   suggestion: string;
-}>;
-}
+>;
+
 export const useRegistration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +62,7 @@ export const useRegistration = () => {
   try {
   const response = await fetch('/auth/register', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   body: JSON.stringify(data),
@@ -78,7 +83,7 @@ export const useRegistration = () => {
   user_id: result.user.id,
 });
       return result;
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Registration failed';
   setError(errorMessage);
   // Track registration failure
@@ -87,7 +92,7 @@ export const useRegistration = () => {
   error: errorMessage,
 });
       throw err;
-    } finally {
+ finally {
       setIsLoading(false);
   }, []);
   const validateField = useCallback(async (field: string, value: any): Promise<void> => {
@@ -95,7 +100,7 @@ export const useRegistration = () => {
   try {
   const response = await fetch('/auth/validate-field', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ field, value })
@@ -104,7 +109,7 @@ export const useRegistration = () => {
         const result = await response.json();
         if (result.validation) {
           setValidationResult(result.validation);
-    } catch (err) {
+ catch (err) {
   console.error('Field validation error:', err);
 }, []);
   const resendEmailVerification = useCallback(async (email: string): Promise<void> => {
@@ -113,7 +118,7 @@ export const useRegistration = () => {
   try {
   const response = await fetch('/auth/resend-verification', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ email }),
@@ -122,11 +127,11 @@ export const useRegistration = () => {
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to resend verification email');
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to resend verification email';
   setError(errorMessage);
   throw err;
-} finally {
+ finally {
       setIsLoading(false);
   }, []);
   const verifyEmail = useCallback(async (token: string): Promise<void> => {
@@ -135,7 +140,7 @@ export const useRegistration = () => {
   try {
   const response = await fetch('/auth/verify-email', {)
   method: 'POST',
-  headers: {
+  headers: {,
   'Content-Type': 'application/json',
 },
   body: JSON.stringify({ token }),
@@ -147,11 +152,11 @@ export const useRegistration = () => {
       // Track email verification
       if (window.gtag) {
         window.gtag('event', 'email_verified');
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Email verification failed';
   setError(errorMessage);
   throw err;
-} finally {
+ finally {
       setIsLoading(false);
   }, []);
   const clearError = useCallback(() => {
@@ -175,11 +180,11 @@ export const useRegistration = () => {
 
 // Helper hook for password strength calculation
 export const usePasswordStrength = (password: string) => {
-  const calculateStrength = useCallback((password: string): {
+  const calculateStrength = useCallback((password: string): {,
   score: number;,
-  feedback: string;
+  feedback: string;,
   strength: 'weak' | 'fair' | 'good' | 'strong';
-} => {
+ => {
     if (!password) {
       return { score: 0, feedback: [], strength: 'weak' };
     let score = 0;
@@ -187,7 +192,7 @@ export const usePasswordStrength = (password: string) => {
     // Length check
     if (password.length >= 12) {
       score += 25;
-    } else {
+ else {
       feedback.push('Use at least 12 characters');
     // Character variety
     if (/[a-z]/.test(password)) score += 15;
@@ -205,7 +210,7 @@ export const usePasswordStrength = (password: string) => {
     if (/[^A-Za-z0-9].*[^A-Za-z0-9]/.test(password)) score += 5;
     // Penalties
     if (/(.)\1{2
-}/.test(password)) {
+/.test(password)) {
   score -= 10;
   feedback.push('Avoid repeating characters');
   if (/123|abc|qwe|password/i.test(password)) {

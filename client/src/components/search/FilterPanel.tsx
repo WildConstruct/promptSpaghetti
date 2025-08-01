@@ -8,14 +8,16 @@
  */
 import React, { useState, useCallback } from 'react';
 import { useSearch, FilterCondition, FilterOperator, SortCondition, SortDirection } from './SearchContext';
-}
+
+
 interface FilterPanelProps {
   isOpen: boolean;,
   onToggle: () => void;
-}
+
+
   availableFields?: Array<{ key: string; label: string; type: 'text' | 'number' | 'date' | 'boolean' | 'select'; options?: string }>;
   className?: string;
-const DEFAULT_FIELDS = [;
+const DEFAULT_FIELDS = [
   { key: 'name', label: 'Name', type: 'text' as const },
   { key: 'type', label: 'Type', type: 'select' as const, options: ['file', 'folder', 'image', 'document', 'code'] },
   { key: 'size', label: 'Size', type: 'number' as const },
@@ -24,30 +26,30 @@ const DEFAULT_FIELDS = [;
   { key: 'author', label: 'Author', type: 'text' as const }
 ];
 const OPERATORS: Record<string, Array<{ value: FilterOperator; label: string }>> = {
-  text: [,
+  text: [
     { value: 'contains', label: 'Contains' },
     { value: 'equals', label: 'Equals' },
     { value: 'startsWith', label: 'Starts with' },
     { value: 'endsWith', label: 'Ends with' },
     { value: 'regex', label: 'Regex' }
   ],
-  number: [,
+  number: [
     { value: 'equals', label: 'Equals' },
     { value: 'greater', label: 'Greater than' },
     { value: 'less', label: 'Less than' },
     { value: 'between', label: 'Between' }
   ],
-  date: [,
+  date: [
     { value: 'equals', label: 'On' },
     { value: 'greater', label: 'After' },
     { value: 'less', label: 'Before' },
     { value: 'between', label: 'Between' }
   ],
-  select: [,
+  select: [
     { value: 'equals', label: 'Is' },
     { value: 'in', label: 'Is one of' }
   ],
-  boolean: [,
+  boolean: [
     { value: 'equals', label: 'Is' }
   ]
 };
@@ -70,7 +72,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
     hasActiveFilters,
     hasActiveSorts,
     resetQuery
-  } = useSearch();
+ = useSearch();
   const [newFilter, setNewFilter] = useState<Partial<FilterCondition>>({)
   field: availableFields[0]?.key || 'name',
   operator: 'contains',
@@ -121,9 +123,9 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
       if (typeof value === 'string') {
         const values = value.split(',').map(v => v.trim()).filter(Boolean);
         setNewFilter(prev => ({ ...prev, value, values }));
-      } else {
+ else {
         setNewFilter(prev => ({ ...prev, value, values: value }));
-    } else {
+ else {
       setNewFilter(prev => ({ ...prev, value }));
   }, []);
   // Render filter value input based on field type and operator
@@ -143,7 +145,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
             onChange={(e) => {
               const newValues = [e.target.value, values[1] || ''];
               onChange(newValues.join(','));
-            }}
+}
             style={{ flex: 1, padding: '4px 8px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '12px' }}
             placeholder="From"
           />
@@ -154,7 +156,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
             onChange={(e) => {
               const newValues = [values[0] || '', e.target.value];
               onChange(newValues.join(','));
-            }}
+}
             style={{ flex: 1, padding: '4px 8px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '12px' }}
             placeholder="To"
           />
@@ -168,7 +170,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
           onChange={(e) => {
             const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
             onChange(selectedValues.join(','));
-          }}
+}
           style={{
   width: '100%',
   minHeight: '60px',
@@ -176,7 +178,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   border: '1px solid #d1d5db',
   borderRadius: '4px',
   fontSize: '12px',
-}}
+}
         >
           {fieldConfig.options.map(option => ()
             <option key={option} value={option}>
@@ -238,7 +240,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   display: 'flex',
   alignItems: 'center',
   gap: '6px',
-}}
+
       >
         🔽 Filters
         {(hasActiveFilters || hasActiveSorts) && ()
@@ -247,28 +249,28 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   borderRadius: '10px',
   padding: '2px 6px',
   fontSize: '11px',
-}}>
+}>
             {query.filters.length + query.sorts.length}
           </span>
         )}
       </button>
     );
   return;
-    <div className={`filter-panel ${className}`} style={{},}
+    <div className={`filter-panel ${className}`} style={{},},
   backgroundColor: '#FFFFFF',
       border: '1px solid #e5e7eb',
       borderRadius: '8px',
       padding: '16px',
       minWidth: '320px',
       boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
-    }}>
+}>
       {/* Header */}
       <div style={{
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
   marginBottom: '16px',
-}}>
+}>
         <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
           Filters & Sorting
         </h3>
@@ -284,7 +286,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   borderRadius: '4px',
   fontSize: '11px',
   cursor: 'pointer',
-}}
+}
             >
               Clear All
             </button>
@@ -299,7 +301,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   borderRadius: '4px',
   fontSize: '11px',
   cursor: 'pointer',
-}}
+}
           >
             ✕
           </button>
@@ -325,7 +327,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   backgroundColor: '#f3f4f6',
   borderRadius: '4px',
   fontSize: '12px',
-}}
+}
                 >
                   <span style={{ fontWeight: '500', color: '#374151' }}>
                     {fieldConfig.label}
@@ -345,7 +347,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   cursor: 'pointer',
   fontSize: '12px',
   padding: '2px',
-}}
+}
                   >
                     ✕
                   </button>
@@ -372,7 +374,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   operator: operators[0].value,
   value: '',
 });
-            }}
+}
             style={{ padding: '6px 8px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '12px' }}
           >
             {availableFields.map(field => ()
@@ -413,7 +415,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   fontSize: '12px',
   cursor: 'pointer',
   disabled: !newFilter.field || !newFilter.operator || newFilter.value === '',
-}}
+
           >
             Add Filter
           </button>
@@ -439,7 +441,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   backgroundColor: '#f3f4f6',
   borderRadius: '4px',
   fontSize: '12px',
-}}
+}
                 >
                   <span style={{ fontWeight: '500', color: '#374151' }}>
                     {fieldConfig.label}
@@ -457,7 +459,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   fontSize: '12px',
   padding: '2px',
   marginLeft: 'auto',
-}}
+}
                   >
                     ✕
                   </button>
@@ -508,7 +510,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({)
   fontSize: '12px',
   cursor: 'pointer',
   whiteSpace: 'nowrap',
-}}
+}
           >
             Add Sort
           </button>

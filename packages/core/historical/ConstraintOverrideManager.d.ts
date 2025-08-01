@@ -8,28 +8,24 @@
 import { HistoricalConstraint, Era } from '../types/UTDG';
 
 }
-export interface ConstraintOverride {
-    id: string;
+}
+export interface ConstraintOverride { id: string;
     constraint_id: string;
     user_id?: string;
     reason: string;
     created_at: string;
     expires_at?: string;
     scope: 'global' | 'era' | 'project' | 'session';
-    conditions?: OverrideConditions;
-
-
+    conditions?: OverrideConditions }
 }
-export interface OverrideConditions {
-    era?: Era[];
+}
+export interface OverrideConditions { era?: Era[];
     node_types?: string[];
     social_classes?: string[];
-    max_authenticity_impact?: number;
-
-
+    max_authenticity_impact?: number }
 }
-export interface OverrideReason {
-    category: 'creative' | 'narrative' | 'technical' | 'artistic' | 'educational';
+}
+export interface OverrideReason { category: 'creative' | 'narrative' | 'technical' | 'artistic' | 'educational';
     description: string;
     justification: string;
     alternative_considered?: string;
@@ -44,17 +40,16 @@ export declare class ConstraintOverrideManager {
         userId?: string;
         duration?: number;
         scope?: 'global' | 'era' | 'project' | 'session';
-        conditions?: OverrideConditions;
+        conditions?: OverrideConditions }
 }
     }): ConstraintOverride;
     /**
      * Check if a constraint is currently overridden
      */
-    isConstraintOverridden(constraintId: string, context?: {)
+    isConstraintOverridden(constraintId: string, context?: { )
         era?: Era;
         nodeTypes?: string[];
-        socialClasses?: string[];
-    }): boolean;
+        socialClasses?: string[] }): boolean;
     /**
      * Get all active overrides
      */
@@ -70,12 +65,11 @@ export declare class ConstraintOverrideManager {
     /**
      * Get override history for audit purposes
      */
-    getOverrideHistory(filters?: {)
+    getOverrideHistory(filters?: { )
         constraintId?: string;
         userId?: string;
         fromDate?: string;
-        toDate?: string;
-    }): ConstraintOverride[];
+        toDate?: string }): ConstraintOverride[];
     /**
      * Calculate the authenticity impact of current overrides
      */
@@ -83,29 +77,23 @@ export declare class ConstraintOverrideManager {
     /**
      * Get suggested overrides for creative flexibility
      */
-    getSuggestedOverrides(constraints: HistoricalConstraint[], context: {)
+    getSuggestedOverrides(constraints: HistoricalConstraint[], context: { )
         era?: Era;
         creativeGoals?: string[];
-        narrativeNeeds?: string[];
-    }): {
-        constraint: HistoricalConstraint;
-        suggestedReason: OverrideReason;
-    }[];
+        narrativeNeeds?: string[] }): { constraint: HistoricalConstraint;
+        suggestedReason: OverrideReason }[];
     /**
      * Export override configuration for sharing/backup
      */
-    exportOverrides(): {
-        active: ConstraintOverride[];
+    exportOverrides(): { active: ConstraintOverride[];
         history: ConstraintOverride[];
-        export_date: string;
-    };
+        export_date: string };
     /**
      * Import override configuration
      */
-    importOverrides(data: {)
+    importOverrides(data: { )
         active: ConstraintOverride[];
-        history?: ConstraintOverride[];
-    }): void;
+        history?: ConstraintOverride[] }): void;
     /**
      * Check if override conditions match the given context
      */

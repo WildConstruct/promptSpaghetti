@@ -429,7 +429,7 @@ else {
         --embed-font-family: ${typography.fontFamily.primary};}
         --embed-font-size: ${typography.fontSize.base};}
       .embed-content {
-        background-color: var(--embed-background);
+        background-color: var(--embed-background);,
   color: var(--embed-text);
         font-family: var(--embed-font-family);
         font-size: var(--embed-font-size);
@@ -453,7 +453,7 @@ else {
             let css = '';
             for (const animation of animations) {
                 css += `
-        .animation-${animation.type} {},}
+        .animation-${animation.type} {},},
   animation: ${animation.type} ${animation.duration}ms ${animation.easing};}
       `;
                 return css;
@@ -982,18 +982,9 @@ else {
                                                                                 EmbedBuilder
                                                                             };
                                                                         }
-                                                                        ;
                                                                     }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                                                                    ;
+                                                                } } } } } } } } } }
                         };
                     }
                 }

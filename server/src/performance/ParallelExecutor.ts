@@ -13,26 +13,28 @@
 
 import { Graph, Node } from '../../../../packages/core/graphSchema';
 
-}
-}
+
+
 export interface ParallelExecutionOptions {
   maxConcurrency?: number;
   enableMemoization?: boolean;
   timeoutMs?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionResult {
   outputs: string[];
   executionTimeMs: number;
   parallelizationRatio: number; // Ratio of parallel vs sequential execution
   cacheHitRate: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Analyzes graph dependencies to identify independent execution paths
@@ -43,7 +45,7 @@ function analyzeDependencies(graph: Graph): Map<string, Set<string>> {
   // Initialize all nodes with empty dependency sets
   for (const node of graph.nodes) {
     dependencies.set(node.id, new Set());
-  }
+
   
   // Build dependency graph from edges
   if (graph.edges) {
@@ -51,11 +53,11 @@ function analyzeDependencies(graph: Graph): Map<string, Set<string>> {
       const targetDeps = dependencies.get(edge.target) || new Set();
       targetDeps.add(edge.source);
       dependencies.set(edge.target, targetDeps);
-    }
-  }
+
+
   
   return dependencies;
-}
+
 
 /**
  * Groups output nodes by their dependency chains to identify parallel execution opportunities
@@ -87,15 +89,15 @@ function groupOutputNodesByDependencies(
       if (!hasConflict) {
         currentGroup.push(otherId);
         processed.add(otherId);
-      }
-    }
+
+
     
     groups.push(currentGroup);
     processed.add(outputId);
-  }
+
   
   return groups;
-}
+
 
 /**
  * Recursively gets all dependencies for a node
@@ -116,11 +118,11 @@ function getAllDependencies(
     const transitiveDeps = getAllDependencies(dep, dependencies, visited);
     for (const transitive of transitiveDeps) {
       allDeps.add(transitive);
-    }
-  }
+
+
   
   return allDeps;
-}
+
 
 /**
  * Executes output node groups in parallel with shared memoization
@@ -136,7 +138,7 @@ export async function executeGraphInParallel(
     maxConcurrency = 4,
     enableMemoization = true,
     timeoutMs = 30000
-  } = options;
+ = options;
   
   // Analyze dependencies to find parallelization opportunities
   const dependencies = analyzeDependencies(graph);
@@ -154,13 +156,13 @@ export async function executeGraphInParallel(
     if (enableMemoization && memoCache.has(nodeId)) {
       cacheHits++;
       return memoCache.get(nodeId)!;
-    }
+
     
     const result = await dfsExecutor(nodeId);
     
     if (enableMemoization) {
       memoCache.set(nodeId, result);
-    }
+
     
     return result;
   };
@@ -182,13 +184,13 @@ export async function executeGraphInParallel(
     // Add all group promises, respecting max concurrency
     if (allOutputPromises.length + groupPromises.length <= maxConcurrency) {
       allOutputPromises.push(...groupPromises);
-    } else {
+ else {
       // Execute this group sequentially if it would exceed concurrency limit
       for (const promise of groupPromises) {
         allOutputPromises.push(promise);
-      }
-    }
-  }
+
+
+
   
   // Wait for all executions to complete
   const outputs = await Promise.all(allOutputPromises);
@@ -210,7 +212,7 @@ export async function executeGraphInParallel(
     parallelizationRatio,
     cacheHitRate
   };
-}
+
 
 /**
  * Fallback to sequential execution for complex dependency scenarios
@@ -227,8 +229,8 @@ export async function executeGraphSequential(
     if (node.type === 'Output') {
       const value = await dfsExecutor(node.id);
       outputs.push(value);
-    }
-  }
+
+
   
   const endTime = Date.now();
   
@@ -238,7 +240,7 @@ export async function executeGraphSequential(
     parallelizationRatio: 0, // No parallelization
     cacheHitRate: 0 // No caching
   };
-}
+
 
 /**
  * Adaptive executor that chooses between parallel and sequential based on graph complexity
@@ -254,30 +256,32 @@ export async function executeGraphAdaptive(
   // Use sequential execution for simple graphs to avoid overhead
   if (outputNodes.length <= 1 || (graph.edges?.length || 0) < 5) {
     return executeGraphSequential(graph, dfsExecutor);
-  }
+
   
   // Use parallel execution for complex graphs
   try {
     return await executeGraphInParallel(graph, dfsExecutor, options);
-  } catch (error) {
+ catch (error) {
     console.warn('Parallel execution failed, falling back to sequential:', error);
     return executeGraphSequential(graph, dfsExecutor);
-  }
-}
+
+
 
 /**
  * Performance monitoring utilities
  */
-}
-}
+
+
+
 export interface ParallelExecutionMetrics {
   averageParallelizationRatio: number;
   averageCacheHitRate: number;
   averageExecutionTime: number;
   totalExecutions: number;
-}
-}
-}
+
+
+
+
 
 class ExecutionMetricsCollector {
   private metrics: ExecutionResult[] = [];
@@ -288,8 +292,8 @@ class ExecutionMetricsCollector {
     // Keep only last 100 executions to prevent memory growth
     if (this.metrics.length > 100) {
       this.metrics.shift();
-    }
-  }
+
+
   
   getAggregatedMetrics(): ParallelExecutionMetrics {
     if (this.metrics.length === 0) {
@@ -299,7 +303,7 @@ class ExecutionMetricsCollector {
         averageExecutionTime: 0,
         totalExecutions: 0
       };
-    }
+
     
     const avgParallelization = this.metrics.reduce((sum, m) => sum + m.parallelizationRatio, 0) / this.metrics.length;
     const avgCacheHitRate = this.metrics.reduce((sum, m) => sum + m.cacheHitRate, 0) / this.metrics.length;
@@ -311,12 +315,12 @@ class ExecutionMetricsCollector {
       averageExecutionTime: avgExecutionTime,
       totalExecutions: this.metrics.length
     };
-  }
+
   
   reset(): void {
     this.metrics = [];
-  }
-}
+
+
 
 // Global metrics collector
 export const executionMetrics = new ExecutionMetricsCollector();

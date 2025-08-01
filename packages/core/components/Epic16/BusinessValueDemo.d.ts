@@ -8,14 +8,13 @@
 import React from 'react';
 
 }
-interface BusinessValueDemoProps {
-    className?: string;
+}
+interface BusinessValueDemoProps { className?: string;
     templateExample?: {
         name: string;
         price: number;
         description: string;
-        category: string;
-
+        category: string }
 }
     };
 

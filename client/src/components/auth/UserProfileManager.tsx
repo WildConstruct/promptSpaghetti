@@ -2,7 +2,8 @@
 // Comprehensive user profile management with inline editing
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-}
+
+
 interface UserProfile {
   id?: string;
   displayName?: string;
@@ -16,17 +17,18 @@ interface UserProfile {
   updatedAt?: string;
   interface ProfileCompleteness {
   percentage: number;,
-  completedFields: string;
+  completedFields: string;,
   missingFields: string;
   interface UserProfileManagerProps {
   onProfileUpdate?: (profile: UserProfile) => void;
   showCompleteness?: boolean;
   allowImageUpload?: boolean;
-  export const UserProfileManager: React.FC<UserProfileManagerProps> = ({,)
+  export const UserProfileManager: React.FC<UserProfileManagerProps> = ({),
   onProfileUpdate,
   showCompleteness = true,
   allowImageUpload = true
-}
+
+
 }) => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -38,12 +40,12 @@ interface UserProfile {
   const [error, setError] = useState<string | null>(null);
   const [tempValues, setTempValues] = useState<Partial<UserProfile>>({});
   // Available timezones and locales
-  const timezones = [;
+  const timezones = [
     'UTC', 'America/New_York', 'America/Los_Angeles', 'America/Chicago',
     'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Asia/Tokyo',
     'Asia/Shanghai', 'Asia/Mumbai', 'Australia/Sydney'
   ];
-  const locales = [;
+  const locales = [
     { code: 'en-US', name: 'English (US)' },
     { code: 'en-GB', name: 'English (UK)' },
     { code: 'es-ES', name: 'Español' },
@@ -65,10 +67,10 @@ interface UserProfile {
       setProfile(data.profile);
       if (showCompleteness) {
         setCompleteness(data.completeness);
-    } catch (error) {
+ catch (error) {
   console.error('Error fetching profile:', error);
   setError('Failed to load profile');
-} finally {
+ finally {
       setLoading(false);
   }, [showCompleteness]);
   useEffect(() => {
@@ -95,10 +97,10 @@ interface UserProfile {
       if (showCompleteness) {
         await fetchProfile();
       onProfileUpdate?.(data.profile);
-    } catch (error) {
+ catch (error) {
   console.error('Error updating profile:', error);
   setError('Failed to update profile');
-} finally {
+ finally {
       setSaving(false);
   };
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,10 +124,10 @@ interface UserProfile {
       const data = await response.json();
       setProfile(prev => prev ? { ...prev, avatarUrl: data.avatarUrl } : null);
       onProfileUpdate?.(profile ? { ...profile, avatarUrl: data.avatarUrl } : {});
-    } catch (error) {
+ catch (error) {
   console.error('Error uploading image:', error);
   setError(error.message || 'Failed to upload image');
-} finally {
+ finally {
       setUploadingImage(false);
   };
   const handleDeleteImage = async () => {
@@ -140,7 +142,7 @@ interface UserProfile {
         throw new Error('Failed to delete image');
       setProfile(prev => prev ? { ...prev, avatarUrl: null } : null);
       onProfileUpdate?.(profile ? { ...profile, avatarUrl: null } : {});
-    } catch (error) {
+ catch (error) {
   console.error('Error deleting image:', error);
   setError('Failed to delete image');
 };

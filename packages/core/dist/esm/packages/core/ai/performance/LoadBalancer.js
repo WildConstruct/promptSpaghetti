@@ -50,8 +50,9 @@ export class LoadBalancer {
                 removeModel(id) {
                     return this.instances.delete(id);
                     async;
-                    executeRequest(input, any);
-                    options: any = {},
+                    executeRequest(input, any),
+                        options;
+                    any = {},
                         priority;
                     'low' | 'normal' | 'high';
                     'normal';

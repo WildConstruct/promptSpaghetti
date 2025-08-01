@@ -8,6 +8,7 @@
 import React from 'react';
 
 }
+}
 export interface MarketplaceLeaderboardsProps {
     defaultTab?: 'templates' | 'creators' | 'categories' | 'engagement';
     onTemplateClick?: (templateId: string) => void;
@@ -18,4 +19,5 @@ export interface MarketplaceLeaderboardsProps {
 export declare const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps>;
 export default MarketplaceLeaderboards;
 //# sourceMappingURL=MarketplaceLeaderboards.d.ts.map
+}
 }

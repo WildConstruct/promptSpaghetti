@@ -9,8 +9,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface DataPipeline {
-    id: string;
+}
+export interface DataPipeline { id: string;
     name: string;
     description: string;
     type: 'ingestion' | 'transformation' | 'enrichment' | 'aggregation' | 'export' | 'analytics' | 'ml_processing';
@@ -21,49 +21,41 @@ export interface DataPipeline {
         batch_size: number;
         processing_interval_ms: number;
         retry_policy: RetryPolicy;
-        error_handling: ErrorHandlingStrategy;
+        error_handling: ErrorHandlingStrategy }
 }
     };
-    performance: {
-        target_throughput_records_per_second: number;
+    performance: { target_throughput_records_per_second: number;
         target_latency_ms: number;
         max_memory_usage_mb: number;
         max_cpu_usage_percent: number;
         parallelization_factor: number;
-        buffer_size_mb: number;
-    };
-    quality: {
-        data_validation_enabled: boolean;
+        buffer_size_mb: number };
+    quality: { data_validation_enabled: boolean;
         schema_enforcement: boolean;
         duplicate_detection: boolean;
         completeness_checks: boolean;
         freshness_requirements_minutes: number;
-        quality_thresholds: QualityThresholds;
-    };
-    monitoring: {
-        metrics_collection_enabled: boolean;
+        quality_thresholds: QualityThresholds };
+    monitoring: { metrics_collection_enabled: boolean;
         alerting_enabled: boolean;
         sampling_rate: number;
         detailed_logging: boolean;
-        trace_processing: boolean;
-    };
-    status: {
-        state: 'running' | 'paused' | 'stopped' | 'error' | 'maintenance';
+        trace_processing: boolean };
+    status: { state: 'running' | 'paused' | 'stopped' | 'error' | 'maintenance';
         last_execution: number;
         next_execution: number;
         records_processed_today: number;
         avg_processing_time_ms: number;
         current_throughput: number;
-        health_score: number;
-    };
+        health_score: number };
     created_by: string;
     created_at: number;
     last_updated: number;
     enabled: boolean;
 
 }
-export interface DataSource {
-    id: string;
+}
+export interface DataSource { id: string;
     name: string;
     type: 'database' | 'file_system' | 'api' | 'stream' | 'queue' | 'webhook' | 's3' | 'kafka';
     connection: {
@@ -71,24 +63,22 @@ export interface DataSource {
         authentication: Record<string, string>;
         connection_pool_size: number;
         timeout_ms: number;
-        retry_attempts: number;
+        retry_attempts: number }
 }
     };
     data_format: 'json' | 'csv' | 'xml' | 'parquet' | 'avro' | 'binary' | 'log_format';
     schema_definition?: string;
-    monitoring: {
-        availability_check_interval_ms: number;
+    monitoring: { availability_check_interval_ms: number;
         data_freshness_check_enabled: boolean;
         volume_monitoring_enabled: boolean;
         expected_volume_range: {
             min: number;
-            max: number;
-        };
+            max: number };
     };
 
 }
-export interface DataDestination {
-    id: string;
+}
+export interface DataDestination { id: string;
     name: string;
     type: 'database' | 'file_system' | 'api' | 'stream' | 'queue' | 'webhook' | 's3' | 'elasticsearch' | 'data_warehouse';
     connection: {
@@ -96,20 +86,18 @@ export interface DataDestination {
         authentication: Record<string, string>;
         batch_size: number;
         flush_interval_ms: number;
-        compression_enabled: boolean;
+        compression_enabled: boolean }
 }
     };
     data_format: 'json' | 'csv' | 'xml' | 'parquet' | 'avro' | 'binary';
     partitioning_strategy?: PartitioningStrategy;
-    monitoring: {
-        write_performance_tracking: boolean;
+    monitoring: { write_performance_tracking: boolean;
         storage_usage_monitoring: boolean;
-        availability_monitoring: boolean;
-    };
+        availability_monitoring: boolean };
 
 }
-export interface ProcessingStage {
-    id: string;
+}
+export interface ProcessingStage { id: string;
     name: string;
     description: string;
     stage_type: 'filter' | 'transform' | 'enrich' | 'validate' | 'aggregate' | 'normalize' | 'custom';
@@ -118,90 +106,79 @@ export interface ProcessingStage {
         input_schema?: string;
         output_schema?: string;
         transformation_rules: TransformationRule[];
-        validation_rules: ValidationRule[];
+        validation_rules: ValidationRule[] }
 }
     };
-    performance: {
-        max_processing_time_ms: number;
+    performance: { max_processing_time_ms: number;
         memory_limit_mb: number;
         parallel_execution: boolean;
-        checkpoint_interval: number;
-    };
-    error_handling: {
-        continue_on_error: boolean;
+        checkpoint_interval: number };
+    error_handling: { continue_on_error: boolean;
         dead_letter_queue_enabled: boolean;
         max_retry_attempts: number;
-        error_sampling_rate: number;
-    };
-    monitoring: {
-        execution_metrics: boolean;
+        error_sampling_rate: number };
+    monitoring: { execution_metrics: boolean;
         data_lineage_tracking: boolean;
         processing_time_tracking: boolean;
-        output_validation: boolean;
-    };
+        output_validation: boolean };
 
 }
-export interface TransformationRule {
-    id: string;
+}
+export interface TransformationRule { id: string;
     name: string;
     rule_type: 'field_mapping' | 'data_type_conversion' | 'format_standardization' | 'calculation' | 'lookup' | 'custom';
     source_field: string;
     target_field: string;
     transformation_logic: string;
     validation_criteria?: string;
-    error_action: 'skip_record' | 'default_value' | 'fail_pipeline' | 'log_and_continue';
-
+    error_action: 'skip_record' | 'default_value' | 'fail_pipeline' | 'log_and_continue' }
 }
-export interface ValidationRule {
-    id: string;
+}
+export interface ValidationRule { id: string;
     name: string;
     rule_type: 'required_field' | 'data_type' | 'format_pattern' | 'range_check' | 'uniqueness' | 'referential_integrity' | 'custom';
     field_name: string;
     validation_criteria: string;
     severity: 'warning' | 'error' | 'critical';
-    action_on_failure: 'skip_record' | 'fail_pipeline' | 'quarantine' | 'log_and_continue';
-
+    action_on_failure: 'skip_record' | 'fail_pipeline' | 'quarantine' | 'log_and_continue' }
 }
-export interface QualityThresholds {
-    completeness_percent_min: number;
+}
+export interface QualityThresholds { completeness_percent_min: number;
     accuracy_percent_min: number;
     consistency_percent_min: number;
     freshness_minutes_max: number;
     duplicate_percent_max: number;
-    error_rate_percent_max: number;
-
+    error_rate_percent_max: number }
 }
-export interface RetryPolicy {
-    max_attempts: number;
+}
+export interface RetryPolicy { max_attempts: number;
     initial_delay_ms: number;
     max_delay_ms: number;
     backoff_multiplier: number;
     retry_on_errors: string[];
-    dead_letter_queue_enabled: boolean;
-
+    dead_letter_queue_enabled: boolean }
 }
-export interface ErrorHandlingStrategy {
-    strategy: 'fail_fast' | 'continue_on_error' | 'circuit_breaker' | 'dead_letter_queue';
+}
+export interface ErrorHandlingStrategy { strategy: 'fail_fast' | 'continue_on_error' | 'circuit_breaker' | 'dead_letter_queue';
     error_threshold_percent: number;
     recovery_strategy: 'manual' | 'auto_retry' | 'fallback_pipeline' | 'alert_and_pause';
     notification_settings: {
         immediate_alerts: boolean;
         escalation_enabled: boolean;
-        escalation_delay_minutes: number;
+        escalation_delay_minutes: number }
 }
     };
 
 }
-export interface PartitioningStrategy {
-    strategy: 'time_based' | 'hash_based' | 'range_based' | 'custom';
+}
+export interface PartitioningStrategy { strategy: 'time_based' | 'hash_based' | 'range_based' | 'custom';
     partition_field: string;
     partition_count?: number;
     time_interval?: 'hourly' | 'daily' | 'weekly' | 'monthly';
-    custom_logic?: string;
-
+    custom_logic?: string }
 }
-export interface PipelineExecution {
-    id: string;
+}
+export interface PipelineExecution { id: string;
     pipeline_id: string;
     execution_start: number;
     execution_end?: number;
@@ -227,7 +204,7 @@ export interface PipelineExecution {
         memory_peak_mb: number;
         network_io_mb: number;
         storage_io_mb: number;
-        cost_estimate: number;
+        cost_estimate: number }
 }
     };
     status: 'running' | 'completed' | 'failed' | 'cancelled' | 'partially_completed';
@@ -236,8 +213,8 @@ export interface PipelineExecution {
     executed_by: string;
 
 }
-export interface StageExecution {
-    stage_id: string;
+}
+export interface StageExecution { stage_id: string;
     stage_name: string;
     execution_start: number;
     execution_end: number;
@@ -249,28 +226,26 @@ export interface StageExecution {
     performance_metrics: {
         processing_rate: number;
         memory_usage_mb: number;
-        cpu_usage_percent: number;
+        cpu_usage_percent: number }
 }
     };
-    quality_metrics: {
-        validation_pass_rate: number;
+    quality_metrics: { validation_pass_rate: number;
         transformation_success_rate: number;
-        data_integrity_score: number;
-    };
+        data_integrity_score: number };
     status: 'completed' | 'failed' | 'skipped';
     errors: string[];
     warnings: string[];
 
 }
-export interface ExecutionError {
-    error_type: string;
+}
+export interface ExecutionError { error_type: string;
     error_message: string;
     stage_id?: string;
     record_id?: string;
     timestamp: number;
     severity: 'warning' | 'error' | 'critical';
-    recovery_action?: string;
-
+    recovery_action?: string }
+}
 }
 export interface PipelineAlert {
     id: string;
@@ -289,20 +264,20 @@ export interface PipelineAlert {
         measurement_unit?: string;
         impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical'
 }
+}
   };
-    resolution: {
-        acknowledged: boolean;
+    resolution: { acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
         resolved: boolean;
         resolved_by?: string;
         resolved_at?: number;
         resolution_notes?: string;
-        auto_resolved: boolean;
-    };
+        auto_resolved: boolean };
     automated_actions: string[];
     recommended_actions: string[];
 
+}
 }
 export interface PipelineOptimizationRecommendation {
     id: string;
@@ -320,20 +295,17 @@ export interface PipelineOptimizationRecommendation {
         implementation_effort: 'low' | 'medium' | 'high';
         risk_level: 'low' | 'medium' | 'high'
 }
+}
   };
-    implementation: {
-        configuration_changes: Record<string, any>;
+    implementation: { configuration_changes: Record<string, any>;
         code_changes_required: boolean;
         testing_requirements: string[];
         rollback_plan: string;
-        estimated_implementation_hours: number;
-    };
-    validation: {
-        success_criteria: string[];
+        estimated_implementation_hours: number };
+    validation: { success_criteria: string[];
         measurement_method: string;
         validation_period_days: number;
-        rollback_triggers: string[];
-    };
+        rollback_triggers: string[] };
     generated_at: number;
     status: 'pending' | 'approved' | 'implemented' | 'validated' | 'rejected';
     reviewed_by?: string;
@@ -341,8 +313,8 @@ export interface PipelineOptimizationRecommendation {
     review_notes?: string;
 
 }
-export interface DataLineageRecord {
-    id: string;
+}
+export interface DataLineageRecord { id: string;
     pipeline_id: string;
     execution_id: string;
     record_id: string;
@@ -354,23 +326,20 @@ export interface DataLineageRecord {
         stage_name: string;
         processed_at: number;
         transformations_applied: string[];
-        validation_results: Record<string, boolean>;
+        validation_results: Record<string, boolean> }
 }
     }>;
     current_location: string;
     current_format: string;
     last_modified: number;
-    quality_scores: {
-        completeness: number;
+    quality_scores: { completeness: number;
         accuracy: number;
         consistency: number;
-        timeliness: number;
-    };
+        timeliness: number };
     dependent_records: string[];
     dependency_of_records: string[];
 
-export declare class SecurityDataPipelineMonitor extends EventEmitter {
-    private pipelines;
+export declare class SecurityDataPipelineMonitor extends EventEmitter { private pipelines;
     private executions;
     private alerts;
     private recommendations;
@@ -409,7 +378,7 @@ export declare class SecurityDataPipelineMonitor extends EventEmitter {
     getExecutionHistory(pipelineId: string, limit?: number): PipelineExecution[];
     getActiveAlerts(pipelineId?: string): PipelineAlert[];
     getOptimizationRecommendations();
-      pipelineId: string,
+      pipelineId: string }
       status?: PipelineOptimizationRecommendation['status']
     ): PipelineOptimizationRecommendation[];
     acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<void>;

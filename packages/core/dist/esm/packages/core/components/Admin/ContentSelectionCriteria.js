@@ -86,7 +86,7 @@ export const ContentSelectionCriteria = ({
                 exclude_current_promotions;
             true,
                 diversification_rules;
-            [,
+            [
                 { attribute: 'creator', max_percentage: 30, enforce_uniqueness: true },
                 { attribute: 'category', max_percentage: 40, enforce_uniqueness: false }
             ];
@@ -104,7 +104,7 @@ export const ContentSelectionCriteria = ({
         const [previewData] = useState({});
         total_matches: 187,
             sample_content;
-        [,
+        [
             {
                 id: 'content-1',
                 title: 'Professional Business Card Template',
@@ -122,7 +122,8 @@ export const ContentSelectionCriteria = ({
                 downloads: 1890,
                 category: 'Events',
                 match_reasons: ['Quality score', 'Recent engagement', 'Trending']
-            }],
+            }
+        ],
             category_distribution;
         {
             'Business';
@@ -285,11 +286,11 @@ div >
 return;
 _jsxs("div", { className: `content-selection-criteria ${className}`, children: ["}", _jsx("div", { className: "criteria-header", children: _jsxs("div", { className: "header-info", children: [_jsx("h2", { children: "Content Selection Criteria" }), _jsx("p", { children: "Create and manage criteria for featured content selection" })] }) }), _jsxs(Tabs, { value: activeTab, onValueChange: setActiveTab, className: "criteria-tabs", children: [_jsxs(TabsList, { className: "grid grid-cols-3 w-full", children: [_jsxs(TabsTrigger, { value: "builder", children: [_jsx(Filter, { className: "w-4 h-4 mr-2" }), "Criteria Builder"] }), _jsxs(TabsTrigger, { value: "templates", children: [_jsx(Target, { className: "w-4 h-4 mr-2" }), "Templates"] }), _jsxs(TabsTrigger, { value: "preview", children: [_jsx(Eye, { className: "w-4 h-4 mr-2" }), "Preview"] })] }), _jsx(TabsContent, { value: "builder", className: "tab-content", children: renderCriteriaBuilder() }), _jsx(TabsContent, { value: "templates", className: "tab-content", children: renderTemplates() }), _jsx(TabsContent, { value: "preview", className: "tab-content", children: renderPreview() })] }), _jsx("style", { children: `
         .content-selection-criteria {
-          max-width: 1400px;
+          max-width: 1400px;,
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem;,
   display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1.5rem;
         .criteria-header {
           display: flex;
@@ -297,7 +298,7 @@ _jsxs("div", { className: `content-selection-criteria ${className}`, children: [
           align-items: flex-start;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;
+          font-weight: 700;,
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
@@ -305,15 +306,15 @@ _jsxs("div", { className: `content-selection-criteria ${className}`, children: [
           font-size: 1rem;
         .criteria-builder {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1.5rem;
         .builder-sections {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .builder-section .section-title {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.5rem;
           font-size: 1.125rem;
         .filter-grid {
@@ -322,15 +323,15 @@ _jsxs("div", { className: `content-selection-criteria ${className}`, children: [
           gap: 1rem;
         .filter-item {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.5rem;
         .filter-item.span-2 {
           grid-column: span 2;
         .filter-item label {
-          font-weight: 500;
+          font-weight: 500;,
   color: #374151;
         .criteria-input {
-          padding: 0.5rem 0.75rem;
+          padding: 0.5rem 0.75rem;,
   border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
@@ -340,48 +341,48 @@ _jsxs("div", { className: `content-selection-criteria ${className}`, children: [
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         .input-with-unit {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.5rem;
         .input-with-unit .criteria-input {
           flex: 1;
         .input-unit {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
           font-weight: 500;
         .multi-select {
           display: flex;
-          flex-wrap: wrap;
+          flex-wrap: wrap;,
   gap: 0.5rem;
         .checkbox-label {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.375rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #374151;
           cursor: pointer;
         .checkbox-label input[type="checkbox"] {
-          width: 1rem;
+          width: 1rem;,
   height: 1rem;
         .checkbox-group {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.5rem;
         .builder-actions {
-          display: flex;
+          display: flex;,
   gap: 0.75rem;
           justify-content: flex-end;
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
         .templates-section {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .templates-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         .templates-header h3 {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin: 0;
         .templates-grid {
@@ -393,179 +394,179 @@ _jsxs("div", { className: `content-selection-criteria ${className}`, children: [
         .template-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start;,
   gap: 1rem;
         .template-info h4 {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin: 0 0 0.5rem 0;
         .template-info p {
           color: #6b7280;
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   margin: 0;
         .template-stats {
           display: flex;
           justify-content: space-between;
-          margin-bottom: 1rem;
+          margin-bottom: 1rem;,
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
         .stat-group {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.25rem;
         .stat-label {
-          font-size: 0.75rem;
+          font-size: 0.75rem;,
   color: #6b7280;
           font-weight: 500;
         .stat-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #1f2937;
           font-weight: 600;
         .template-preview h5 {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin: 0 0 0.5rem 0;
         .criteria-tags {
           display: flex;
-          flex-wrap: wrap;
+          flex-wrap: wrap;,
   gap: 0.375rem;
           margin-bottom: 1rem;
         .criteria-tag {
-          font-size: 0.75rem;
+          font-size: 0.75rem;,
   padding: 0.25rem 0.5rem;
-          background: #f3f4f6;
+          background: #f3f4f6;,
   color: #374151;
           display: flex;
           align-items: center;
         .template-actions {
-          display: flex;
+          display: flex;,
   gap: 0.5rem;
           justify-content: flex-end;
         .preview-section {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .preview-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         .preview-header h3 {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin: 0;
         .preview-actions {
-          display: flex;
+          display: flex;,
   gap: 0.5rem;
         .preview-metrics {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 1rem;
         .metric-card .card-content {
-          text-align: center;
+          text-align: center;,
   padding: 1.5rem;
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;
+          font-weight: 700;,
   color: #1f2937;
           line-height: 1;
         .metric-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
           margin-top: 0.5rem;
         .preview-content {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr;,
   gap: 1rem;
         .sample-content-list {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .sample-content-item {
-          padding: 1rem;
+          padding: 1rem;,
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .content-info h5 {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin: 0 0 0.5rem 0;
         .content-meta {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.5rem;
           margin-bottom: 0.5rem;
         .content-meta span {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
         .category-badge {
-          font-size: 0.75rem;
+          font-size: 0.75rem;,
   padding: 0.125rem 0.375rem;
         .content-stats {
-          display: flex;
+          display: flex;,
   gap: 1rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #374151;
           margin-bottom: 0.5rem;
         .match-reasons {
           display: flex;
-          flex-wrap: wrap;
+          flex-wrap: wrap;,
   gap: 0.25rem;
         .reason-badge {
-          font-size: 0.75rem;
+          font-size: 0.75rem;,
   padding: 0.125rem 0.375rem;
-          background: #eff6ff;
+          background: #eff6ff;,
   color: #1e40af;
         .distribution-charts {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1.5rem;
         .chart-section h5 {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin: 0 0 0.75rem 0;
         .distribution-bars {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.5rem;
         .distribution-bar {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.75rem;
         .bar-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #374151;
           min-width: 80px;
         .bar-container {
-          flex: 1;
+          flex: 1;,
   height: 20px;
           background: #f3f4f6;
-          border-radius: 10px;
+          border-radius: 10px;,
   overflow: hidden;
         .bar-fill {
-          height: 100%;
+          height: 100%;,
   background: #3b82f6;
           transition: width 0.3s ease;
         .bar-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #374151;
           font-weight: 600;
           min-width: 30px;
           text-align: right;
         .prediction-metrics {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.75rem;
         .prediction-item {
           display: flex;
-          justify-content: space-between;
+          justify-content: space-between;,
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
         .prediction-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
         .prediction-value {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #1f2937;
           font-weight: 600;
         @media (max-width: 1200px) {
@@ -579,7 +580,7 @@ _jsxs("div", { className: `content-selection-criteria ${className}`, children: [
             grid-column: span 1;
         @media (max-width: 768px) {
           .criteria-header {
-            flex-direction: column;
+            flex-direction: column;,
   gap: 1rem;
           .preview-metrics {
             grid-template-columns: 1fr;

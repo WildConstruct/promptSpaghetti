@@ -27,7 +27,7 @@ import {
   validateRestorationConfig,
   validateRestorationAttempt,
   validateConflictResolution
-} from '../../../packages/core/types/restoration';
+ from '../../../packages/core/types/restoration';
 
 export class RestorationService {
   private db: DatabaseClient;
@@ -36,7 +36,7 @@ export class RestorationService {
   constructor(db: DatabaseClient, logger: unknown) {
     this.db = db;
     this.logger = logger;
-  }
+
 
   /**
    * Create a new restoration attempt
@@ -77,7 +77,7 @@ export class RestorationService {
     });
 
     return restorationAttempt;
-  }
+
 
   /**
    * Generate a preview of what the restoration would do
@@ -144,10 +144,10 @@ export class RestorationService {
         totalConflicts: conflicts.length,
         estimatedDuration: this.estimateRestorationDuration(preview, conflicts),
         riskLevel: this.assessRiskLevel(conflicts)
-  }
+
       expiresAt
     };
-  }
+
 
   /**
    * Get restoration progress
@@ -160,7 +160,7 @@ export class RestorationService {
 
     if (attempt.rows.length === 0) {
       throw new Error(`Restoration attempt not found: ${restorationAttemptId}`);
-    }
+
 
     const operations = await this.db.query(`
       SELECT status, COUNT(*) as count
@@ -205,7 +205,7 @@ export class RestorationService {
         attempt.rows[0].created_at
 
     };
-  }
+
 
   /**
    * Resolve a conflict
@@ -236,7 +236,7 @@ export class RestorationService {
 
     if (result.rows.length === 0) {
       throw new Error(`Conflict not found: ${request.conflictId}`);
-    }
+
 
     return {
       conflictId: request.conflictId,
@@ -244,7 +244,7 @@ export class RestorationService {
       resolvedValue: resolution.resolvedValue,
       strategy: resolution.resolutionStrategy
     };
-  }
+
 
   /**
    * Cancel a restoration attempt
@@ -258,7 +258,7 @@ export class RestorationService {
       SET status = 'cancelled', updated_at = CURRENT_TIMESTAMP
       WHERE id = $1 AND initiated_by = $2
     `, [restorationAttemptId, userId]);
-  }
+
 
   /**
    * Get restoration statistics
@@ -303,7 +303,7 @@ export class RestorationService {
       })),
       recentAttempts: recent.rows.map(row => this.mapDatabaseRowToRestoration(row))
     };
-  }
+
 
   /**
    * Create a restoration bookmark
@@ -327,7 +327,7 @@ export class RestorationService {
     ]);
 
     return this.mapDatabaseRowToBookmark(result.rows[0]);
-  }
+
 
   /**
    * Get restoration bookmarks
@@ -341,7 +341,7 @@ export class RestorationService {
     `, [projectId, userId]);
 
     return result.rows.map(row => this.mapDatabaseRowToBookmark(row));
-  }
+
 
   /**
    * List restoration attempts with filtering
@@ -359,44 +359,44 @@ export class RestorationService {
       query += ` AND project_id = $${paramIndex}`;
       params.push(filter.projectId);
       paramIndex++;
-    }
+
 
     if (filter.initiatedBy) {
       query += ` AND initiated_by = $${paramIndex}`;
       params.push(filter.initiatedBy);
       paramIndex++;
-    }
+
 
     if (filter.status) {
       query += ` AND status = $${paramIndex}`;
       params.push(filter.status);
       paramIndex++;
-    }
+
 
     if (filter.restorationType) {
       query += ` AND restoration_type = $${paramIndex}`;
       params.push(filter.restorationType);
       paramIndex++;
-    }
+
 
     if (filter.dateFrom) {
       query += ` AND created_at >= $${paramIndex}`;
       params.push(filter.dateFrom);
       paramIndex++;
-    }
+
 
     if (filter.dateTo) {
       query += ` AND created_at <= $${paramIndex}`;
       params.push(filter.dateTo);
       paramIndex++;
-    }
+
 
     query += ` ORDER BY created_at DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
     params.push(filter.limit, filter.offset);
 
     const result = await this.db.query(query, params);
     return result.rows.map(row => this.mapDatabaseRowToRestoration(row));
-  }
+
 
   // Private methods
 
@@ -416,14 +416,14 @@ export class RestorationService {
 
       if (result.success) {
         await this.updateRestorationStatus(attempt.id, 'completed');
-      } else {
+ else {
         await this.updateRestorationStatus(attempt.id, 'failed', result.errorMessage);
-      }
-    } catch (error) {
+
+ catch (error) {
       this.logger.error('Restoration failed', { error, restorationAttemptId: attempt.id });
       await this.updateRestorationStatus(attempt.id, 'failed', error.message);
-    }
-  }
+
+
 
   private async createRestorationContext(attempt: RestorationAttempt): Promise<RestorationContext> {
 
@@ -441,7 +441,7 @@ export class RestorationService {
       currentState,
       config
     };
-  }
+
 
   private async generateRestorationOperations(____context: RestorationContext): Promise<RestorationOperation[]> {
 
@@ -449,7 +449,7 @@ export class RestorationService {
     // Implementation would generate operations based on the restoration strategy
     // This is a simplified placeholder
     return operations;
-  }
+
 
   private async executeRestorationOperations(
     restorationAttemptId: string,
@@ -469,7 +469,7 @@ export class RestorationService {
         // Update progress
         const progress = Math.floor((executedOperations / operations.length) * 100);
         await this.updateRestorationProgress(restorationAttemptId, progress);
-      }
+
 
       return {
         success: true,
@@ -478,7 +478,7 @@ export class RestorationService {
         conflictsResolved: resolvedConflicts,
         duration: Date.now() - startTime
       };
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         restorationAttemptId,
@@ -487,14 +487,14 @@ export class RestorationService {
         errorMessage: error.message,
         duration: Date.now() - startTime
       };
-    }
-  }
+
+
 
   private async executeOperation(____operation: RestorationOperation): Promise<void> {
 
     // Implementation would execute the specific operation
     // This is a placeholder
-  }
+
 
   private async detectConflicts(
     ____sourceSnapshot: unknown, 
@@ -507,7 +507,7 @@ export class RestorationService {
     // Implementation would detect conflicts between snapshots
     // This is a simplified placeholder
     return conflicts;
-  }
+
 
   private async generateRestorationPreview(
     ____sourceSnapshot: unknown, 
@@ -525,7 +525,7 @@ export class RestorationService {
       edgesToUpdate: [],
       edgesToDelete: []
     };
-  }
+
 
   private generateConflictSummary(conflicts: RestorationConflict[]): unknown {
     const summary = conflicts.reduce((acc, conflict) => {
@@ -537,7 +537,7 @@ export class RestorationService {
       totalConflicts: conflicts.length,
       conflictsByType: summary
     };
-  }
+
 
   private estimateRestorationDuration(preview: unknown, conflicts: RestorationConflict[]): number {
     const totalChanges = preview.nodesToAdd.length + preview.nodesToUpdate.length + 
@@ -546,13 +546,13 @@ export class RestorationService {
     
     // Estimate 100ms per change + 500ms per conflict
     return totalChanges * 100 + conflicts.length * 500;
-  }
+
 
   private assessRiskLevel(conflicts: RestorationConflict[]): 'low' | 'medium' | 'high' {
     if (conflicts.length === 0) return 'low';
     if (conflicts.length <= 5) return 'medium';
     return 'high';
-  }
+
 
   private estimateTimeRemaining(progressPercentage: number, startTime: Date): number {
     if (progressPercentage <= 0) return 0;
@@ -560,7 +560,7 @@ export class RestorationService {
     const elapsedTime = Date.now() - startTime.getTime();
     const totalEstimatedTime = (elapsedTime / progressPercentage) * 100;
     return Math.max(0, totalEstimatedTime - elapsedTime);
-  }
+
 
   private async updateRestorationStatus(
     restorationAttemptId: string,
@@ -573,7 +573,7 @@ export class RestorationService {
       SET status = $1, error_message = $2, updated_at = CURRENT_TIMESTAMP
       WHERE id = $3
     `, [status, errorMessage, restorationAttemptId]);
-  }
+
 
   private async updateRestorationProgress(restorationAttemptId: string, progress: number): Promise<void> {
 
@@ -582,19 +582,19 @@ export class RestorationService {
       SET progress_percentage = $1, updated_at = CURRENT_TIMESTAMP
       WHERE id = $2
     `, [progress, restorationAttemptId]);
-  }
+
 
   private async getSnapshotData(____snapshotId: string): Promise<unknown> {
 
     // Implementation would fetch snapshot data from S3
     return {};
-  }
+
 
   private async getCurrentProjectState(____projectId: string): Promise<unknown> {
 
     // Implementation would get current project state
     return {};
-  }
+
 
   private mapDatabaseRowToRestoration(row: unknown): RestorationAttempt {
     return {
@@ -613,7 +613,7 @@ export class RestorationService {
       updatedAt: row.updated_at,
       completedAt: row.completed_at
     };
-  }
+
 
   private mapDatabaseRowToBookmark(row: unknown): RestorationBookmark {
     return {
@@ -628,5 +628,4 @@ export class RestorationService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
-}
+

@@ -5,20 +5,21 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface RiskFactor {
   factor: string;
   weight: number;
   score: number;
   description: string;
   source: 'device' | 'location' | 'behavior' | 'time' | 'security';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VerificationContext {
   userId: string;
   ipAddress?: string;
@@ -30,14 +31,15 @@ export interface VerificationContext {
     country?: string;
     city?: string;
     timezone?: string;
-}
-}
+
+
+
   };
   timestamp: Date;
-}
 
-}
-}
+
+
+
 export interface VerificationRequirement {
   required: boolean;
   level: 'none' | 'email' | 'sms' | 'totp' | 'hardware_key' | 'admin_approval';
@@ -49,14 +51,15 @@ export interface VerificationRequirement {
     available: boolean;
     reason?: string;
     requiresAdminApproval?: boolean;
-}
-}
+
+
+
   };
   recommendations: string[];
-}
 
-}
-}
+
+
+
 export interface ThresholdConfig {
   // Risk score thresholds (0-100 scale)
   lowRisk: number;        // 0-30: No additional verification
@@ -71,8 +74,9 @@ export interface ThresholdConfig {
     behaviorAnomalies: number; // Unusual patterns
     timeFactors: number;      // Off-hours access
     securityEvents: number;   // Recent security incidents
-}
-}
+
+
+
   };
 
   // Time-based factors
@@ -90,7 +94,7 @@ export interface ThresholdConfig {
       riskMultiplier: number;
     };
   };
-}
+
 
 export class VerificationThresholdService {
   private db: DatabaseService;
@@ -108,7 +112,7 @@ export class VerificationThresholdService {
     this.redis = redis;
     this.auditService = auditService;
     this.config = this.buildConfig(config);
-  }
+
 
   private buildConfig(override?: Partial<ThresholdConfig>): ThresholdConfig {
     const defaultConfig: ThresholdConfig = {
@@ -122,7 +126,7 @@ export class VerificationThresholdService {
         behaviorAnomalies: 25,
         timeFactors: 15,
         securityEvents: 15
-  }
+
       offHoursMultiplier: 1.5,
       weekendMultiplier: 1.2,
       trustDecayDays: 30,
@@ -136,11 +140,11 @@ export class VerificationThresholdService {
         'delete_account': { baseThreshold: 80, riskMultiplier: 1.0 },
         'export_data': { baseThreshold: 35, riskMultiplier: 1.4 },
         'api_key_creation': { baseThreshold: 55, riskMultiplier: 1.6 }
-      }
+
     };
 
     return { ...defaultConfig, ...override };
-  }
+
 
   async assessVerificationRequirement(context: VerificationContext): Promise<VerificationRequirement> {
 
@@ -176,13 +180,13 @@ export class VerificationThresholdService {
       // Set expiration for time-sensitive requirements
       if (requirement.required && level !== 'admin_approval') {
         requirement.expires = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
-      }
+
 
       // Log the assessment
       await this.logAssessment(context, requirement);
 
       return requirement;
-    } catch (error) {
+ catch (error) {
       console.error('Error assessing verification requirement:', error);
       
       // Return conservative fallback
@@ -197,11 +201,11 @@ export class VerificationThresholdService {
           score: 75,
           description: 'Risk assessment failed - using conservative approach',
           source: 'security'
-        }],
+],
         recommendations: ['Complete TOTP verification due to assessment error']
       };
-    }
-  }
+
+
 
   private async calculateRiskFactors(context: VerificationContext): Promise<RiskFactor[]> {
 
@@ -258,13 +262,13 @@ export class VerificationThresholdService {
     });
 
     return factors;
-  }
+
 
   private async calculateDeviceTrust(context: VerificationContext): Promise<{ score: number; description: string }> {
 
     if (!context.deviceFingerprint) {
       return { score: 60, description: 'No device fingerprint available' };
-    }
+
 
     // Check if device is known and trusted
     const deviceHistory = await this.db.query(`
@@ -286,7 +290,7 @@ export class VerificationThresholdService {
     
     if (loginCount === 0) {
       return { score: 80, description: 'Unknown device - first time seen' };
-    }
+
 
     const successRate = loginCount > 0 ? successfulLogins / loginCount : 0;
     const daysSinceFirstSeen = device.first_seen ? 
@@ -311,13 +315,13 @@ export class VerificationThresholdService {
     description += `${loginCount} logins, ${Math.round(successRate * 100)}% success rate`;
 
     return { score: riskScore, description };
-  }
+
 
   private async calculateLocationRisk(context: VerificationContext): Promise<{ score: number; description: string }> {
 
     if (!context.geoLocation?.country || !context.ipAddress) {
       return { score: 40, description: 'Location information unavailable' };
-    }
+
 
     // Check historical locations for this user
     const locationHistory = await this.db.query(`
@@ -354,7 +358,7 @@ export class VerificationThresholdService {
         score: Math.min(riskScore, 100), 
         description: `Known location (${accessCount} previous visits, last: ${Math.round(daysSinceLastAccess)} days ago)` 
       };
-    }
+
 
     // Check if country is known (even if city is different)
     const knownCountry = locationHistory.rows.find(row => row.country === currentCountry);
@@ -363,14 +367,14 @@ export class VerificationThresholdService {
         score: 45, 
         description: `New city in known country (${currentCountry})` 
       };
-    }
+
 
     // Completely new country
     return { 
       score: 75, 
       description: `New country: ${currentCountry}` 
     };
-  }
+
 
   private async calculateBehaviorRisk(context: VerificationContext): Promise<{ score: number; description: string }> {
 
@@ -403,7 +407,7 @@ export class VerificationThresholdService {
     if (rapidCount > 10) {
       behaviorScore += 30;
       anomalies.push(`${rapidCount} actions in last 10 minutes`);
-    }
+
 
     // Check for off-pattern timing
     const currentHour = context.timestamp.getHours();
@@ -425,14 +429,14 @@ export class VerificationThresholdService {
     if (!isTypicalHour && typicalHours.rows.length > 0) {
       behaviorScore += 20;
       anomalies.push('unusual time of access');
-    }
+
 
     const description = anomalies.length > 0 ? 
       `Behavioral anomalies: ${anomalies.join(', ')}` : 
       'Normal behavior patterns';
 
     return { score: Math.min(behaviorScore, 100), description };
-  }
+
 
   private calculateTimeRisk(context: VerificationContext): { score: number; description: string } {
     const now = context.timestamp;
@@ -446,26 +450,26 @@ export class VerificationThresholdService {
     if (hour >= 22 || hour <= 6) {
       timeScore += 25;
       factors.push('off-hours access');
-    }
+
 
     // Weekend risk
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       timeScore += 15;
       factors.push('weekend access');
-    }
+
 
     // Very early morning (2 AM to 5 AM)
     if (hour >= 2 && hour <= 5) {
       timeScore += 20;
       factors.push('very early morning');
-    }
+
 
     const description = factors.length > 0 ? 
       `Time factors: ${factors.join(', ')}` : 
       'Normal access hours';
 
     return { score: timeScore, description };
-  }
+
 
   private async calculateSecurityRisk(context: VerificationContext): Promise<{ score: number; description: string }> {
 
@@ -495,7 +499,7 @@ export class VerificationThresholdService {
         if (count > 3) {
           securityScore += Math.min(count * 5, 30);
           events.push(`${count} failed logins`);
-        }
+
         break;
       case 'password_reset_requested':
         securityScore += 25;
@@ -509,17 +513,17 @@ export class VerificationThresholdService {
         if (hoursAgo < 24) {
           securityScore += 50;
           events.push('recent account lockout');
-        }
+
         break;
-      }
-    }
+
+
 
     const description = events.length > 0 ? 
       `Security events: ${events.join(', ')}` : 
       'No recent security events';
 
     return { score: Math.min(securityScore, 100), description };
-  }
+
 
   private calculateTotalRiskScore(factors: RiskFactor[]): number {
     const totalWeight = factors.reduce((sum, factor) => sum + factor.weight, 0);
@@ -527,7 +531,7 @@ export class VerificationThresholdService {
       sum + (factor.score * factor.weight), 0);
 
     return totalWeight > 0 ? weightedScore / totalWeight : 0;
-  }
+
 
   private async determineThreshold(context: VerificationContext, baseRiskScore: number): Promise<number> {
 
@@ -537,26 +541,26 @@ export class VerificationThresholdService {
     
     if (actionConfig) {
       return actionConfig.baseThreshold;
-    }
+
 
     // Default threshold based on risk level
     if (baseRiskScore <= this.config.lowRisk) return this.config.lowRisk;
     if (baseRiskScore <= this.config.mediumRisk) return this.config.mediumRisk;
     if (baseRiskScore <= this.config.highRisk) return this.config.highRisk;
     return this.config.criticalRisk;
-  }
+
 
   private determineVerificationLevel(riskScore: number, _____threshold: number): VerificationRequirement['level'] {
     if (riskScore <= this.config.lowRisk) {
       return 'none';
-    } else if (riskScore <= this.config.mediumRisk) {
+ else if (riskScore <= this.config.mediumRisk) {
       return 'email';
-    } else if (riskScore <= this.config.highRisk) {
+ else if (riskScore <= this.config.highRisk) {
       return 'totp';
-    } else {
+ else {
       return 'admin_approval';
-    }
-  }
+
+
 
   private async checkBypassOptions(
     context: VerificationContext, 
@@ -570,7 +574,7 @@ export class VerificationThresholdService {
         available: true,
         reason: 'Recent successful verification within grace period'
       };
-    }
+
 
     // Admin users might have bypass options for lower risk scenarios
     const userRoles = await this.db.query(`
@@ -584,10 +588,10 @@ export class VerificationThresholdService {
         reason: 'Admin user with moderate risk score',
         requiresAdminApproval: false
       };
-    }
+
 
     return { available: false };
-  }
+
 
   private generateRecommendations(factors: RiskFactor[], riskScore: number): string[] {
     const recommendations: string[] = [];
@@ -611,19 +615,19 @@ export class VerificationThresholdService {
         case 'security_events':
           recommendations.push('Recent security events require additional verification');
           break;
-        }
-      }
+
+
     });
 
     // Overall recommendations based on total risk
     if (riskScore > 80) {
       recommendations.push('High risk detected - consider temporary account restrictions');
-    } else if (riskScore > 60) {
+ else if (riskScore > 60) {
       recommendations.push('Moderate risk - monitor subsequent activities closely');
-    }
+
 
     return recommendations.length > 0 ? recommendations : ['No specific recommendations'];
-  }
+
 
   private async logAssessment(context: VerificationContext, requirement: VerificationRequirement): Promise<void> {
 
@@ -641,13 +645,13 @@ export class VerificationThresholdService {
           score: f.score,
           weight: f.weight
         }))
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       sessionId: context.sessionId,
       severity: requirement.level === 'admin_approval' ? 'warning' : 'info'
     });
-  }
+
 
   async recordVerificationCompletion(
     userId: string, 
@@ -664,7 +668,7 @@ export class VerificationThresholdService {
         method,
         completedAt: new Date().toISOString()
       }));
-    }
+
 
     await this.auditService.logEvent({
       userId,
@@ -674,10 +678,10 @@ export class VerificationThresholdService {
         method,
         success,
         gracePeriodSeconds: success ? (level === 'email' ? 300 : 1800) : 0
-  }
+
       severity: success ? 'info' : 'warning'
     });
-  }
+
 
   async updateThresholdConfig(updates: Partial<ThresholdConfig>): Promise<ThresholdConfig> {
 
@@ -690,11 +694,11 @@ export class VerificationThresholdService {
     });
 
     return this.config;
-  }
+
 
   getThresholdConfig(): ThresholdConfig {
     return { ...this.config };
-  }
+
 
   async getVerificationStatistics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<Record<string, unknown>> {
     const timeframes = {
@@ -718,5 +722,4 @@ export class VerificationThresholdService {
     `);
 
     return stats.rows[0];
-  }
-}
+

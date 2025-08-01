@@ -1,16 +1,13 @@
-export interface NodePreferences {
-    disclosureLevel: 'basic' | 'advanced' | 'debug';
+export interface NodePreferences { disclosureLevel: 'basic' | 'advanced' | 'debug';
     useGlobalDefault: boolean;
-    lastModified: number;
-
+    lastModified: number }
 }
-export interface NodeTypePreferences {
-    disclosureLevel: 'basic' | 'advanced' | 'debug';
-    collapsedSections: string[];
-
 }
-export interface UISettings {
-    debugMode: boolean;
+export interface NodeTypePreferences { disclosureLevel: 'basic' | 'advanced' | 'debug';
+    collapsedSections: string[] }
+}
+}
+export interface UISettings { debugMode: boolean;
     professionalUI: boolean;
     showTechnicalDetails: boolean;
     complexityLevel: 'basic' | 'advanced' | 'expert';
@@ -23,10 +20,10 @@ export interface UISettings {
     compactMode: boolean;
     showNodeIcons: boolean;
     demoMode: boolean;
-    hideAllTechnicalUI: boolean;
+    hideAllTechnicalUI: boolean }
 }
-interface UISettingsState extends UISettings {
-    setDebugMode: (enabled: boolean) => void;
+}
+interface UISettingsState extends UISettings { setDebugMode: (enabled: boolean) => void;
     setProfessionalUI: (enabled: boolean) => void;
     setShowTechnicalDetails: (enabled: boolean) => void;
     setComplexityLevel: (level: 'basic' | 'advanced' | 'expert') => void;
@@ -56,8 +53,7 @@ export declare const useUISettingsStore: import("zustand").UseBoundStore<Omit<im
         hasHydrated: () => boolean;
         onHydrate: (fn: (state: UISettingsState) => void) => () => void;
         onFinishHydration: (fn: (state: UISettingsState) => void) => () => void;
-        getOptions: () => Partial<import("zustand/middleware").PersistOptions<UISettingsState, any>>;
-}
+        getOptions: () => Partial<import("zustand/middleware").PersistOptions<UISettingsState, any>> }
     };
 }>;
 export declare const shouldShowField: (fieldName: string, fieldType?: string, store?: ReturnType<typeof useUISettingsStore>) => boolean;

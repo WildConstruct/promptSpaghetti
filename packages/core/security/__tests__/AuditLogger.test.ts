@@ -4,36 +4,29 @@
  * Comprehensive test suite for the audit logging system
  * Epic 19 Task T-1752989143998-485: Implement audit logging for data access
  */
-import {
-  AuditLogger,
+import { AuditLogger,
   createAuditLogger,
   AuditOperation,
   AuditLogLevel,
   InMemoryStorageBackend,
   type AuditLogEntry,
-  type AuditLoggerConfig,
+  type AuditLoggerConfig }
   type AuditQueryCriteria
-} from '../AuditLogger';
-import {
-  DataClassificationLevel,
+ from '../AuditLogger';
+import { DataClassificationLevel }
   type OperationContext
-} from '../../types/DataClassification';
-describe('AuditLogger', () => {
-  let logger: AuditLogger;
+ from '../../types/DataClassification';
+describe('AuditLogger', () => { let logger: AuditLogger;
   let mockDate: Date;
   beforeEach(() => {
   mockDate = new Date('2025-01-21T12:00:00.000Z');
   jest.useFakeTimers();
   jest.setSystemTime(mockDate);
-  logger = new AuditLogger();
-});
-  afterEach(() => {
-    logger.destroy();
+  logger = new AuditLogger() });
+  afterEach(() => { logger.destroy();
     jest.clearAllTimers();
-    jest.useRealTimers();
-  });
-  describe('Basic Logging', () => {
-  it('should log data access operations', async () => {
+    jest.useRealTimers() });
+  describe('Basic Logging', () => { it('should log data access operations', async () => {
   const context: OperationContext = {,
   operation: 'read',
   userId: 'user123',
@@ -45,7 +38,7 @@ describe('AuditLogger', () => {
   requestId: 'req-123',
   userRole: 'analyst',
   ipAddress: '192.168.1.1',
-  requestedAt: new Date(),
+  requestedAt: new Date() }
 };
       await logger.logDataAccess()
         context,
@@ -59,28 +52,27 @@ describe('AuditLogger', () => {
       await logger.flush();
       const logs = await logger.query({});
       expect(logs).toHaveLength(1);
-      expect(logs[0]).toMatchObject({)
+      expect(logs[0]).toMatchObject({ )
   userId: 'user123',
   operation: AuditOperation.READ,
   resourceType: 'customer_records',
   resourceId: 'cust_456',
   dataClassification: DataClassificationLevel.CONFIDENTIAL,
   success: true,
-  sensitiveAccess: true,
+  sensitiveAccess: true }
 });
     });
-    it('should generate unique IDs and timestamps', async () => {
-  await logger.log({)
+    it('should generate unique IDs and timestamps', async () => { await logger.log({)
   userId: 'user1',
   operation: AuditOperation.READ,
   resourceType: 'test',
-  resourceId: 'test1',
+  resourceId: 'test1' }
 });
-      await logger.log({)
+      await logger.log({ )
   userId: 'user2',
   operation: AuditOperation.WRITE,
   resourceType: 'test',
-  resourceId: 'test2',
+  resourceId: 'test2' }
 });
       // Flush buffered logs before querying
       await logger.flush();
@@ -89,14 +81,13 @@ describe('AuditLogger', () => {
       expect(logs[0].id).not.toBe(logs[1].id);
       expect(logs[0].correlationId).not.toBe(logs[1].correlationId);
     });
-    it('should handle all operation types', async () => {
-  const operations = Object.values(AuditOperation);
+    it('should handle all operation types', async () => { const operations = Object.values(AuditOperation);
   for (const op of operations) {
   await logger.log({)
   userId: 'user123',
   operation: op,
   resourceType: 'test',
-  resourceId: 'test123',
+  resourceId: 'test123' }
 });
       // Flush buffered logs before querying
       await logger.flush();
@@ -106,18 +97,17 @@ describe('AuditLogger', () => {
       expect(loggedOps).toEqual(expect.arrayContaining(operations));
     });
   });
-  describe('Security Features', () => {
-  it('should hash sensitive data when configured', async () => {
+  describe('Security Features', () => { it('should hash sensitive data when configured', async () => {
   const secureLogger = new AuditLogger({)
-  hashSensitiveData: true,
+  hashSensitiveData: true }
 });
-      await secureLogger.log({)
+      await secureLogger.log({ )
   userId: 'user123',
   operation: AuditOperation.READ,
   resourceType: 'test',
   resourceId: 'test123',
   ipAddress: '192.168.1.100',
-  sessionId: 'session-secret-123',
+  sessionId: 'session-secret-123' }
 });
       // Flush buffered logs before querying
       await secureLogger.flush();
@@ -128,18 +118,17 @@ describe('AuditLogger', () => {
       secureLogger.destroy();
     });
     it('should mark sensitive access correctly', async () => {
-      const classifications = [;
+      const classifications = [
         { level: DataClassificationLevel.PUBLIC, sensitive: false },
         { level: DataClassificationLevel.INTERNAL, sensitive: false },
         { level: DataClassificationLevel.CONFIDENTIAL, sensitive: true },
         { level: DataClassificationLevel.RESTRICTED, sensitive: true },
         { level: DataClassificationLevel.TOP_SECRET, sensitive: true }
       ];
-      for (const { level, sensitive } of classifications) {
-        await logger.log({)
+      for (const { level, sensitive } of classifications) { await logger.log({)
   userId: 'user123',
           operation: AuditOperation.READ,
-          resourceType: 'test',
+          resourceType: 'test' }
           resourceId: `test_${level}`}
 },
   dataClassification: level;
@@ -152,14 +141,13 @@ describe('AuditLogger', () => {
         expect(log.sensitiveAccess).toBe(expected?.sensitive);
     });
   });
-  describe('Buffering and Flushing', () => {
-  it('should buffer logs when async logging is enabled', async () => {
+  describe('Buffering and Flushing', () => { it('should buffer logs when async logging is enabled', async () => {
   const backend = new InMemoryStorageBackend();
   const asyncLogger = new AuditLogger({)
   storageBackend: backend,
   asyncLogging: true,
   bufferSize: 5,
-  flushInterval: 10000 // Long interval,
+  flushInterval: 10000 // Long interval }
 });
       // Add 3 logs (less than buffer size)
       for (let i = 0; i < 3; i++) {
@@ -180,13 +168,12 @@ describe('AuditLogger', () => {
       expect(afterFlush).toHaveLength(3);
       asyncLogger.destroy();
     });
-    it('should auto-flush when buffer is full', async () => {
-  const backend = new InMemoryStorageBackend();
+    it('should auto-flush when buffer is full', async () => { const backend = new InMemoryStorageBackend();
   const asyncLogger = new AuditLogger({)
   storageBackend: backend,
   asyncLogging: true,
   bufferSize: 3,
-  flushInterval: 10000,
+  flushInterval: 10000 }
 });
       // Add 3 logs to fill buffer
       for (let i = 0; i < 3; i++) {
@@ -202,19 +189,18 @@ describe('AuditLogger', () => {
       expect(logs).toHaveLength(3);
       asyncLogger.destroy();
     });
-    it('should flush on timer interval', async () => {
-  const backend = new InMemoryStorageBackend();
+    it('should flush on timer interval', async () => { const backend = new InMemoryStorageBackend();
   const asyncLogger = new AuditLogger({)
   storageBackend: backend,
   asyncLogging: true,
   bufferSize: 100,
-  flushInterval: 1000 // 1 second,
+  flushInterval: 1000 // 1 second }
 });
-      await asyncLogger.log({)
+      await asyncLogger.log({ )
   userId: 'user123',
   operation: AuditOperation.READ,
   resourceType: 'test',
-  resourceId: 'test123',
+  resourceId: 'test123' }
 });
       // Should be buffered
       let logs = await backend.query({});
@@ -222,10 +208,9 @@ describe('AuditLogger', () => {
       // Advance timer
       jest.advanceTimersByTime(1000);
       // Wait for async flush using fake timers
-      const flushPromise = new Promise(resolve => {)
+      const flushPromise = new Promise(resolve => { )
   jest.advanceTimersByTime(10);
-        resolve(undefined);
-      });
+        resolve(undefined) });
       await flushPromise;
       // Should be flushed
       logs = await backend.query({});
@@ -233,22 +218,21 @@ describe('AuditLogger', () => {
       asyncLogger.destroy();
     });
   });
-  describe('Filtering and Configuration', () => {
-  it('should respect included operations filter', async () => {
+  describe('Filtering and Configuration', () => { it('should respect included operations filter', async () => {
   const filteredLogger = new AuditLogger({)
-  includedOperations: [AuditOperation.WRITE, AuditOperation.DELETE],
+  includedOperations: [AuditOperation.WRITE, AuditOperation.DELETE] }
 });
-      await filteredLogger.log({)
+      await filteredLogger.log({ )
   userId: 'user123',
   operation: AuditOperation.READ,
   resourceType: 'test',
-  resourceId: 'test1',
+  resourceId: 'test1' }
 });
-      await filteredLogger.log({)
+      await filteredLogger.log({ )
   userId: 'user123',
   operation: AuditOperation.WRITE,
   resourceType: 'test',
-  resourceId: 'test2',
+  resourceId: 'test2' }
 });
       await filteredLogger.flush();
       const logs = await filteredLogger.query({});
@@ -256,21 +240,20 @@ describe('AuditLogger', () => {
       expect(logs[0].operation).toBe(AuditOperation.WRITE);
       filteredLogger.destroy();
     });
-    it('should respect excluded operations filter', async () => {
-  const filteredLogger = new AuditLogger({)
-  excludedOperations: [AuditOperation.LOGIN, AuditOperation.LOGOUT],
+    it('should respect excluded operations filter', async () => { const filteredLogger = new AuditLogger({)
+  excludedOperations: [AuditOperation.LOGIN, AuditOperation.LOGOUT] }
 });
-      await filteredLogger.log({)
+      await filteredLogger.log({ )
   userId: 'user123',
   operation: AuditOperation.LOGIN,
   resourceType: 'session',
-  resourceId: 'session123',
+  resourceId: 'session123' }
 });
-      await filteredLogger.log({)
+      await filteredLogger.log({ )
   userId: 'user123',
   operation: AuditOperation.READ,
   resourceType: 'test',
-  resourceId: 'test123',
+  resourceId: 'test123' }
 });
       await filteredLogger.flush();
       const logs = await filteredLogger.query({});
@@ -279,33 +262,29 @@ describe('AuditLogger', () => {
       filteredLogger.destroy();
     });
   });
-  describe('Query Functionality', () => {
-  beforeEach(async () => {
+  describe('Query Functionality', () => { beforeEach(async () => {
   // Add test data
-  const testData = [;
+  const testData = [
   {
   userId: 'user1',
   operation: AuditOperation.READ,
   dataClassification: DataClassificationLevel.PUBLIC,
   success: true,
-  timestamp: new Date('2025-01-21T10:00:00Z'),
-}
-        {
-  userId: 'user1',
+  timestamp: new Date('2025-01-21T10:00:00Z') }
+
+        { userId: 'user1',
   operation: AuditOperation.WRITE,
   dataClassification: DataClassificationLevel.CONFIDENTIAL,
   success: false,
-  timestamp: new Date('2025-01-21T11:00:00Z'),
-}
-        {
-  userId: 'user2',
+  timestamp: new Date('2025-01-21T11:00:00Z') }
+
+        { userId: 'user2',
   operation: AuditOperation.READ,
   dataClassification: DataClassificationLevel.CONFIDENTIAL,
   success: true,
-  timestamp: new Date('2025-01-21T12:00:00Z'),
-}
-        {
-  userId: 'user2',
+  timestamp: new Date('2025-01-21T12:00:00Z') }
+
+        { userId: 'user2',
   operation: AuditOperation.DELETE,
   dataClassification: DataClassificationLevel.RESTRICTED,
   success: true,
@@ -314,7 +293,7 @@ describe('AuditLogger', () => {
   await logger.log({)
   ...data,
   resourceType: 'test',
-  resourceId: 'test123',
+  resourceId: 'test123' }
 });
       await logger.flush();
     });
@@ -328,9 +307,8 @@ describe('AuditLogger', () => {
       expect(logs).toHaveLength(2);
       expect(logs.every(log => log.operation === AuditOperation.READ)).toBe(true);
     });
-    it('should filter by classification', async () => {
-  const logs = await logger.query({)
-  dataClassification: DataClassificationLevel.CONFIDENTIAL,
+    it('should filter by classification', async () => { const logs = await logger.query({)
+  dataClassification: DataClassificationLevel.CONFIDENTIAL }
 });
       expect(logs).toHaveLength(2);
     });
@@ -349,98 +327,93 @@ describe('AuditLogger', () => {
       const page3 = await logger.query({ limit: 2, offset: 4 });
       expect(page3).toHaveLength(0);
     });
-    it('should filter by date range', async () => {
-  const logs = await logger.query({)
+    it('should filter by date range', async () => { const logs = await logger.query({)
   startDate: new Date('2025-01-21T11:00:00Z'),
-  endDate: new Date('2025-01-21T12:00:00Z'),
+  endDate: new Date('2025-01-21T12:00:00Z') }
 });
       expect(logs).toHaveLength(2);
     });
   });
-  describe('Event Emission', () => {
-  it('should emit audit events', async () => {
+  describe('Event Emission', () => { it('should emit audit events', async () => {
   const auditHandler = jest.fn<unknown, unknown>();
   logger.on('audit', auditHandler);
   await logger.log({)
-  userId: 'user123',
-  operation: AuditOperation.READ,
-  resourceType: 'test',
-  resourceId: 'test123',
+  userId: 'user123'
+  operation: AuditOperation.READ
+  resourceType: 'test'
+  resourceId: 'test123' }
 });
       expect(auditHandler).toHaveBeenCalledTimes(1);
       expect(auditHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-  userId: 'user123',
-  operation: AuditOperation.READ,
-}
+        expect.objectContaining({ )
+  userId: 'user123'
+  operation: AuditOperation.READ }
+
       );
     });
-    it('should emit anomaly events for failures', async () => {
-  const anomalyHandler = jest.fn<unknown, unknown>();
+    it('should emit anomaly events for failures', async () => { const anomalyHandler = jest.fn<unknown, unknown>();
   const anomalyLogger = new AuditLogger({)
-  alertOnAnomaly: true,
+  alertOnAnomaly: true
   alertThresholds: {
-  failedAccessAttempts: 3,
-  timeWindow: 5,
+  failedAccessAttempts: 3
+  timeWindow: 5 }
 });
       anomalyLogger.on('anomaly', anomalyHandler);
-      await anomalyLogger.log({)
-  userId: 'user123',
-  operation: AuditOperation.READ,
-  resourceType: 'test',
-  resourceId: 'test123',
-  success: false,
+      await anomalyLogger.log({ )
+  userId: 'user123'
+  operation: AuditOperation.READ
+  resourceType: 'test'
+  resourceId: 'test123'
+  success: false }
 });
       // In production, this would track repeated failures
       // For now, it emits on each failure
       expect(anomalyHandler).toHaveBeenCalled();
       anomalyLogger.destroy();
     });
-    it('should emit error events on write failure', async () => {
-  const errorBackend = {
-  write: jest.fn<unknown, unknown>().mockRejectedValue(new Error('Write failed')),
-  query: jest.fn<unknown, unknown>().mockResolvedValue([] as unknown as unknown),
-  delete: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown),
-  rotate: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown),
+    it('should emit error events on write failure', async () => { const errorBackend = {
+  write: jest.fn<unknown, unknown>().mockRejectedValue(new Error('Write failed'))
+  query: jest.fn<unknown, unknown>().mockResolvedValue([] as unknown as unknown)
+  delete: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown)
+  rotate: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown) }
 };
-      const errorLogger = new AuditLogger({)
-  storageBackend: errorBackend,
-  asyncLogging: false,
+      const errorLogger = new AuditLogger({ )
+  storageBackend: errorBackend
+  asyncLogging: false }
 });
       const errorHandler = jest.fn<unknown, unknown>();
       errorLogger.on('error', errorHandler);
-      await expect(errorLogger.log({)
-  userId: 'user123',
-  operation: AuditOperation.READ,
-  resourceType: 'test',
-  resourceId: 'test123',
+      await expect(errorLogger.log({ )
+  userId: 'user123'
+  operation: AuditOperation.READ
+  resourceType: 'test'
+  resourceId: 'test123' }
 })).rejects.toThrow('Write failed');
       expect(errorHandler).toHaveBeenCalled();
       errorLogger.destroy();
     });
   });
-  describe('Statistics', () => {
-  it('should track operation metrics', async () => {
+  describe('Statistics', () => { it('should track operation metrics', async () => {
   await logger.log({)
-  userId: 'user1',
-  operation: AuditOperation.READ,
-  resourceType: 'test',
-  resourceId: 'test1',
-  success: true,
+  userId: 'user1'
+  operation: AuditOperation.READ
+  resourceType: 'test'
+  resourceId: 'test1'
+  success: true }
 });
-      await logger.log({)
-  userId: 'user2',
-  operation: AuditOperation.READ,
-  resourceType: 'test',
-  resourceId: 'test2',
-  success: true,
+      await logger.log({ )
+  userId: 'user2'
+  operation: AuditOperation.READ
+  resourceType: 'test'
+  resourceId: 'test2'
+  success: true }
 });
-      await logger.log({)
-  userId: 'user3',
-  operation: AuditOperation.WRITE,
-  resourceType: 'test',
-  resourceId: 'test3',
-  success: false,
+      await logger.log({ )
+  userId: 'user3'
+  operation: AuditOperation.WRITE
+  resourceType: 'test'
+  resourceId: 'test3'
+  success: false }
 });
       const stats = logger.getStatistics();
       expect(stats.totalOperations).toBe(3);
@@ -448,47 +421,45 @@ describe('AuditLogger', () => {
       expect(stats.operationCounts['WRITE_failure']).toBe(1);
     });
   });
-  describe('Storage Backend', () => {
-  it('should support custom storage backends', async () => {
+  describe('Storage Backend', () => { it('should support custom storage backends', async () => {
   const customBackend = {
-  write: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown),
-  query: jest.fn<unknown, unknown>().mockResolvedValue([] as unknown as unknown),
-  delete: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown),
-  rotate: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown),
+  write: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown)
+  query: jest.fn<unknown, unknown>().mockResolvedValue([] as unknown as unknown)
+  delete: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown)
+  rotate: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown) }
 };
-      const customLogger = new AuditLogger({)
-  storageBackend: customBackend,
-  asyncLogging: false,
+      const customLogger = new AuditLogger({ )
+  storageBackend: customBackend
+  asyncLogging: false }
 });
-      await customLogger.log({)
-  userId: 'user123',
-  operation: AuditOperation.READ,
-  resourceType: 'test',
-  resourceId: 'test123',
+      await customLogger.log({ )
+  userId: 'user123'
+  operation: AuditOperation.READ
+  resourceType: 'test'
+  resourceId: 'test123' }
 });
       expect(customBackend.write).toHaveBeenCalledWith()
-        expect.objectContaining({)
-  userId: 'user123',
-  operation: AuditOperation.READ,
-}
+        expect.objectContaining({ )
+  userId: 'user123'
+  operation: AuditOperation.READ }
+
       );
       customLogger.destroy();
     });
-    it('InMemoryStorageBackend should support all operations', async () => {
-  const backend = new InMemoryStorageBackend();
+    it('InMemoryStorageBackend should support all operations', async () => { const backend = new InMemoryStorageBackend();
   // Write
-  const entry: AuditLogEntry = {,
-  id: 'test123',
-  timestamp: new Date(),
-  correlationId: 'corr123',
-  userId: 'user123',
-  operation: AuditOperation.READ,
-  resourceType: 'test',
-  resourceId: 'resource123',
-  dataClassification: DataClassificationLevel.PUBLIC,
-  authorized: true,
-  success: true,
-  sensitiveAccess: false,
+  const entry: AuditLogEntry = {
+  id: 'test123'
+  timestamp: new Date()
+  correlationId: 'corr123'
+  userId: 'user123'
+  operation: AuditOperation.READ
+  resourceType: 'test'
+  resourceId: 'resource123'
+  dataClassification: DataClassificationLevel.PUBLIC
+  authorized: true
+  success: true
+  sensitiveAccess: false }
 };
       await backend.write(entry);
       // Query
@@ -506,35 +477,31 @@ describe('AuditLogger', () => {
       expect(afterRotate).toHaveLength(0);
     });
   });
-  describe('Factory Function', () => {
-  it('should create logger with factory function', () => {
+  describe('Factory Function', () => { it('should create logger with factory function', () => {
   const factoryLogger = createAuditLogger({)
-  logLevel: AuditLogLevel.VERBOSE,
-  bufferSize: 50,
+  logLevel: AuditLogLevel.VERBOSE
+  bufferSize: 50 }
 });
       expect(factoryLogger).toBeInstanceOf(AuditLogger);
       factoryLogger.destroy();
     });
   });
-  describe('Edge Cases', () => {
-    it('should handle empty flush', async () => {
-      await expect(logger.flush()).resolves.not.toThrow();
-    });
-    it('should handle missing optional fields', async () => {
-  await logger.log({)
-  userId: 'user123',
-  operation: AuditOperation.READ,
-  resourceType: 'test',
-  resourceId: 'test123',
+  describe('Edge Cases', () => { it('should handle empty flush', async () => {
+      await expect(logger.flush()).resolves.not.toThrow() });
+    it('should handle missing optional fields', async () => { await logger.log({)
+  userId: 'user123'
+  operation: AuditOperation.READ
+  resourceType: 'test'
+  resourceId: 'test123' }
   // No optional fields
 });
       await logger.flush();
       const logs = await logger.query({});
-      expect(logs[0]).toMatchObject({)
-  userId: 'user123',
-  authorized: true,
-  success: true,
-  sensitiveAccess: false,
+      expect(logs[0]).toMatchObject({ )
+  userId: 'user123'
+  authorized: true
+  success: true
+  sensitiveAccess: false }
 });
     });
     it('should handle concurrent logging', async () => {
@@ -547,7 +514,7 @@ describe('AuditLogger', () => {
   operation: AuditOperation.READ,
             resourceType: 'test',
             resourceId: `test${i}`}
-  }
+
         );
       await Promise.all(promises);
       await logger.flush();

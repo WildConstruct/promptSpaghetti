@@ -30,8 +30,7 @@ export class GraphCRDTAdapter {
             metadata: {
                 originalType: node.type,
                 inputs: node.inputs || [],
-                ...this.extractNodeMetadata(node)
-            }
+                ...this.extractNodeMetadata(node) }
         };
     }
     /**
@@ -114,7 +113,7 @@ export class GraphCRDTAdapter {
             source: crdtEdge.source,
             target: crdtEdge.target,
             sourceHandle: crdtEdge.sourceHandle,
-            targetHandle: crdtEdge.targetHandle
+            targetHandle: crdtEdge.targetHandle,
         };
     }
     /**
@@ -200,6 +199,9 @@ export class GraphCRDTAdapter {
         finally {
             this.isUpdating = false;
         }
+        /**
+         * Sync CRDT state back to current graph
+         */
     }
     /**
      * Sync CRDT state back to current graph
@@ -211,37 +213,48 @@ export class GraphCRDTAdapter {
         if (this.options.onGraphChange) {
             this.options.onGraphChange(this.currentGraph);
         }
-    }
-    /**
-     * Public API: Get current graph state
-     */
-    getGraph() {
-        return { ...this.currentGraph };
-    }
-    /**
-     * Public API: Add a node collaboratively
-     */
-    addNode(node, position) {
-        const crdtNode = this.toCRDTNode(node);
-        if (position) {
-            crdtNode.position = position;
+        /**
+         * Public API: Get current graph state
+         */
+        getGraph();
+        Graph;
+        {
+            return { ...this.currentGraph };
         }
-        this.isUpdating = true;
-        this.yGraph.addNode(crdtNode);
-        this.isUpdating = false;
-        this.syncToGraph();
-    }
-    /**
-     * Public API: Update a node collaboratively
-     */
-    updateNode(nodeId, updates) {
-        const existingNode = this.yGraph.getNode(nodeId);
-        if (!existingNode)
-            return;
-        const crdtUpdates = {
-            data: { ...existingNode.data, ...this.extractNodeData(updates) },
-            metadata: { ...existingNode.metadata, lastModified: Date.now() }
+        /**
+         * Public API: Add a node collaboratively
+         */
+        addNode(node, Node, position ?  : { x: number, y: number });
+        void {
+            const: crdtNode = this.toCRDTNode(node),
+            if(position) {
+                crdtNode.position = position;
+            },
+            this: .isUpdating = true,
+            this: .yGraph.addNode(crdtNode),
+            this: .isUpdating = false,
+            this: .syncToGraph()
         };
+        /**
+         * Public API: Update a node collaboratively
+         */
+        updateNode(nodeId, string, updates, (Partial));
+        void {
+            const: existingNode = this.yGraph.getNode(nodeId),
+            if(, existingNode) { }, return: ,
+            const: crdtUpdates
+        };
+        {
+            data: {
+                existingNode.data, ;
+                this.extractNodeData(updates);
+            }
+            metadata: {
+                existingNode.metadata, lastModified;
+                Date.now();
+            }
+        }
+        ;
         this.isUpdating = true;
         this.yGraph.updateNode(nodeId, crdtUpdates);
         this.isUpdating = false;
@@ -269,71 +282,86 @@ export class GraphCRDTAdapter {
             this.isUpdating = false;
             this.syncToGraph();
         }
-    }
-    /**
-     * Public API: Delete an edge collaboratively
-     */
-    deleteEdge(edgeId) {
-        this.isUpdating = true;
-        this.yGraph.deleteEdge(edgeId);
-        this.isUpdating = false;
-        this.syncToGraph();
-    }
-    /**
-     * Public API: Update node position (for React Flow integration)
-     */
-    updateNodePosition(nodeId, position) {
-        this.isUpdating = true;
-        this.yGraph.updateNode(nodeId, { position });
-        this.isUpdating = false;
-        // Don't sync to graph for position-only updates to avoid feedback loops
-    }
-    /**
-     * Public API: Set user presence
-     */
-    setUserPresence(presence) {
-        this.syncHandler.setLocalPresence(presence);
-    }
-    /**
-     * Public API: Get sync state
-     */
-    getSyncState() {
-        return this.syncHandler.getSyncState();
-    }
-    /**
-     * Public API: Apply remote update
-     */
-    applyRemoteUpdate(update) {
-        this.syncHandler.applyUpdate(update);
-    }
-    /**
-     * Public API: Get document state for initial sync
-     */
-    getDocumentState() {
-        return this.syncHandler.getStateAsUpdate();
-    }
-    /**
-     * Public API: Create snapshot
-     */
-    createSnapshot() {
-        return this.syncHandler.createSnapshot();
-    }
-    /**
-     * Public API: Get performance metrics
-     */
-    getMetrics() {
-        return {
-            documentSize: this.syncHandler.getDocumentSize(),
-            nodeCount: this.yGraph.getNodes().length,
-            edgeCount: this.yGraph.getEdges().length,
-            syncState: this.syncHandler.getSyncState(),
+        /**
+         * Public API: Delete an edge collaboratively
+         */
+        deleteEdge(edgeId, string);
+        void {
+            this: .isUpdating = true,
+            this: .yGraph.deleteEdge(edgeId),
+            this: .isUpdating = false,
+            this: .syncToGraph()
         };
-    }
-    /**
-     * Cleanup resources
-     */
-    destroy() {
-        this.syncHandler.destroy();
+        /**
+         * Public API: Update node position (for React Flow integration)
+         */
+        updateNodePosition(nodeId, string, position, { x: number, y: number });
+        void {
+            this: .isUpdating = true,
+            this: .yGraph.updateNode(nodeId, { position }),
+            this: .isUpdating = false
+        };
+        /**
+         * Public API: Set user presence
+         */
+        setUserPresence(presence, {
+            cursor: { nodeId: string, position: { x: number, y: number } },
+            selection: string,
+            name: string,
+            color: string
+        });
+        void {
+            this: .syncHandler.setLocalPresence(presence)
+        };
+        /**
+         * Public API: Get sync state
+         */
+        getSyncState();
+        {
+            return this.syncHandler.getSyncState();
+        }
+        /**
+         * Public API: Apply remote update
+         */
+        applyRemoteUpdate(update, Uint8Array);
+        void {
+            this: .syncHandler.applyUpdate(update)
+        };
+        /**
+         * Public API: Get document state for initial sync
+         */
+        getDocumentState();
+        Uint8Array;
+        {
+            return this.syncHandler.getStateAsUpdate();
+        }
+        /**
+         * Public API: Create snapshot
+         */
+        createSnapshot();
+        Uint8Array;
+        {
+            return this.syncHandler.createSnapshot();
+        }
+        /**
+         * Public API: Get performance metrics
+         */
+        getMetrics();
+        {
+            return {
+                documentSize: this.syncHandler.getDocumentSize(),
+                nodeCount: this.yGraph.getNodes().length,
+                edgeCount: this.yGraph.getEdges().length,
+                syncState: this.syncHandler.getSyncState(),
+            };
+        }
+        /**
+         * Cleanup resources
+         */
+        destroy();
+        void {
+            this: .syncHandler.destroy()
+        };
     }
 }
 /**

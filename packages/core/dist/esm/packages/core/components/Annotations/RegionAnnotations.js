@@ -33,43 +33,37 @@ const REGION_TYPES = {
         label: 'Selection',
         color: '#3b82f6',
         fillOpacity: 0.1,
-        description: 'Basic node selection area',
-    },
+        description: 'Basic node selection area', },
     highlight: {
         icon: _jsx(Target, { className: "w-4 h-4" }),
         label: 'Highlight',
         color: '#f59e0b',
         fillOpacity: 0.2,
-        description: 'Important area highlighting',
-    },
+        description: 'Important area highlighting', },
     problem_area: {
         icon: _jsx(AlertTriangle, { className: "w-4 h-4" }),
         label: 'Problem Area',
         color: '#ef4444',
         fillOpacity: 0.15,
-        description: 'Issues or problems requiring attention',
-    },
+        description: 'Issues or problems requiring attention', },
     optimization_zone: {
         icon: _jsx(Zap, { className: "w-4 h-4" }),
         label: 'Optimization Zone',
         color: '#10b981',
         fillOpacity: 0.12,
-        description: 'Areas for performance optimization',
-    },
+        description: 'Areas for performance optimization', },
     mars_zone: {
         icon: _jsx(Camera, { className: "w-4 h-4" }),
         label: 'MARS Zone',
         color: '#8b5cf6',
         fillOpacity: 0.18,
-        description: 'MARS methodology zone annotation',
-    },
+        description: 'MARS methodology zone annotation', },
     performance_area: {
         icon: _jsx(Clock, { className: "w-4 h-4" }),
         label: 'Performance Area',
         color: '#06b6d4',
         fillOpacity: 0.14,
-        description: 'Performance monitoring region',
-    },
+        description: 'Performance monitoring region', },
     // MARS zone configurations for VFX directors
     const: MARS_ZONES = {
         motion_source: { color: '#ef4444', label: 'Motion Source', icon: '🎬' },
@@ -281,34 +275,21 @@ const drawRegion = useCallback((ctx, region) => {
                                 ctx.strokeRect(selectionBounds.x, selectionBounds.y, selectionBounds.width, selectionBounds.height);
                                 // Draw corner handles
                                 const handleSize = 8;
-                                const handles = [];
-                                {
-                                    x: selectionBounds.x, y;
-                                    selectionBounds.y;
-                                }
-                                {
-                                    x: selectionBounds.x + selectionBounds.width, y;
-                                    selectionBounds.y;
-                                }
-                                {
-                                    x: selectionBounds.x + selectionBounds.width, y;
-                                    selectionBounds.y + selectionBounds.height;
-                                }
-                                {
-                                    x: selectionBounds.x, y;
-                                    selectionBounds.y + selectionBounds.height;
-                                }
+                                const handles = [
+                                    { x: selectionBounds.x, y: selectionBounds.y },
+                                    { x: selectionBounds.x + selectionBounds.width, y: selectionBounds.y },
+                                    { x: selectionBounds.x + selectionBounds.width, y: selectionBounds.y + selectionBounds.height },
+                                    { x: selectionBounds.x, y: selectionBounds.y + selectionBounds.height }
+                                ];
+                                ctx.fillStyle = '#3b82f6';
+                                handles.forEach(handle => { });
+                                ctx.fillRect(handle.x - handleSize / 2, handle.y - handleSize / 2, handleSize, handleSize);
                             }
                         }
                     }
             }
     }
 });
-;
-ctx.fillStyle = '#3b82f6';
-handles.forEach(handle => { });
-ctx.fillRect(handle.x - handleSize / 2, handle.y - handleSize / 2, handleSize, handleSize);
-;
 // Draw label
 ctx.globalAlpha = 1;
 ctx.fillStyle = region.style.borderColor;

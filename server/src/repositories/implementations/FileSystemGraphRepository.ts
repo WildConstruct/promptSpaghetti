@@ -12,6 +12,7 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   private async ensureBasePath(): Promise<void> {
+
     try {
       await fs.mkdir(this.basePath, { recursive: true });
     } catch (error) {
@@ -28,6 +29,7 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   async save(graph: Graph): Promise<GraphId> {
+
     const graphPath = this.getGraphPath(graph.id);
     await fs.mkdir(dirname(graphPath), { recursive: true });
 
@@ -45,6 +47,7 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   async findById(id: GraphId): Promise<Graph | null> {
+
     try {
       const graphPath = this.getGraphPath(id);
       const data = await fs.readFile(graphPath, 'utf8');
@@ -65,6 +68,7 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   async findByUser(userId: UserId): Promise<Graph[]> {
+
     try {
       const userGraphsPath = this.getUserGraphsPath(userId);
       const indexData = await fs.readFile(userGraphsPath, 'utf8');
@@ -89,6 +93,7 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   async delete(id: GraphId): Promise<boolean> {
+
     try {
       const graphPath = this.getGraphPath(id);
 
@@ -111,6 +116,7 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   async exists(id: GraphId): Promise<boolean> {
+
     try {
       const graphPath = this.getGraphPath(id);
       await fs.access(graphPath);
@@ -121,12 +127,14 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   async saveWithTransaction(graph: Graph, tx: TransactionContext): Promise<GraphId> {
+
     // File system doesn't support transactions, fall back to regular save
     // In production, this would be wrapped in a transaction mechanism
     return this.save(graph);
   }
 
   async findByNamePattern(userId: UserId, pattern: string): Promise<Graph[]> {
+
     const userGraphs = await this.findByUser(userId);
     const lowercasePattern = pattern.toLowerCase();
 
@@ -136,6 +144,7 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   async getMetadata(id: GraphId): Promise<GraphMetadata | null> {
+
     const graph = await this.findById(id);
     if (!graph) return null;
 
@@ -150,6 +159,7 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   private async updateUserGraphsIndex(userId: UserId, graphId: GraphId): Promise<void> {
+
     try {
       const userGraphsPath = this.getUserGraphsPath(userId);
       let graphIds: GraphId[] = [];
@@ -171,6 +181,7 @@ export class FileSystemGraphRepository implements GraphRepository {
   }
 
   private async removeFromUserGraphsIndex(userId: UserId, graphId: GraphId): Promise<void> {
+
     try {
       const userGraphsPath = this.getUserGraphsPath(userId);
       const data = await fs.readFile(userGraphsPath, 'utf8');

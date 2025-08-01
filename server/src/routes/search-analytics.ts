@@ -27,7 +27,7 @@ interface AuthenticatedRequest extends Request {
     roles: string[];
     email: string;
   };
-}
+
 
 const router = Router();
 
@@ -51,7 +51,7 @@ const initializeServices = (pool: Pool) => {
 const requireAdminRole = (req: AuthenticatedRequest, res: Response, next: Function) => {
   if (!req.user) {
     return res.status(401).json({ error: 'Authentication required' });
-  }
+
 
   const hasAdminRole = req.user.roles.some(role => 
     ['admin', 'administrator', 'search-admin'].includes(role)
@@ -59,7 +59,7 @@ const requireAdminRole = (req: AuthenticatedRequest, res: Response, next: Functi
 
   if (!hasAdminRole) {
     return res.status(403).json({ error: 'Admin access required' });
-  }
+
 
   next();
 };
@@ -84,7 +84,7 @@ router.get('/metrics',
           error: 'Validation failed', 
           details: errors.array() 
         });
-      }
+
 
       const { start_date, end_date, granularity = 'day', realtime } = req.query;
 
@@ -98,7 +98,7 @@ router.get('/metrics',
           realtime: realtimeMetrics,
           current: currentMetrics
         });
-      }
+
 
       // Get historical metrics
       const startDate = start_date ? new Date(start_date as string) : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
@@ -117,17 +117,15 @@ router.get('/metrics',
           start_date: startDate,
           end_date: endDate,
           granularity
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to get search metrics:', error);
       res.status(500).json({ 
         error: 'Failed to retrieve search metrics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -150,7 +148,7 @@ router.get('/alerts',
           error: 'Validation failed', 
           details: errors.array() 
         });
-      }
+
 
       const { active_only = 'true', severity, type, limit = '50' } = req.query;
 
@@ -161,10 +159,10 @@ router.get('/alerts',
         let filteredAlerts = activeAlerts;
         if (severity) {
           filteredAlerts = filteredAlerts.filter(alert => alert.severity === severity);
-        }
+
         if (type) {
           filteredAlerts = filteredAlerts.filter(alert => alert.type === type);
-        }
+
 
         return res.json({
           success: true,
@@ -174,9 +172,9 @@ router.get('/alerts',
             active_count: filteredAlerts.length,
             critical_count: filteredAlerts.filter(a => a.severity === 'critical').length,
             warning_count: filteredAlerts.filter(a => a.severity === 'warning').length
-          }
+
         });
-      }
+
 
       // Get alert history from database
       // This would include resolved alerts and historical data
@@ -186,17 +184,15 @@ router.get('/alerts',
           alerts: [],
           total: 0,
           message: 'Alert history not yet implemented'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to get alerts:', error);
       res.status(500).json({ 
         error: 'Failed to retrieve alerts',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -225,18 +221,16 @@ router.get('/health',
             error_rate: currentMetrics.errorRate.rate,
             throughput: currentMetrics.throughput.requestsPerSecond,
             cache_hit_rate: currentMetrics.infrastructure.cacheHitRate
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       console.error('Failed to get health status:', error);
       res.status(500).json({ 
         error: 'Failed to retrieve health status',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -257,7 +251,7 @@ router.get('/recommendations',
           error: 'Validation failed', 
           details: errors.array() 
         });
-      }
+
 
       const { days = '7', category } = req.query;
 
@@ -277,17 +271,15 @@ router.get('/recommendations',
           total: filteredRecommendations.length,
           analysis_period_days: parseInt(days as string),
           generated_at: new Date()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to get recommendations:', error);
       res.status(500).json({ 
         error: 'Failed to retrieve optimization recommendations',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -313,7 +305,7 @@ router.post('/events',
           error: 'Validation failed', 
           details: errors.array() 
         });
-      }
+
 
       const {
         session_id,
@@ -324,7 +316,7 @@ router.post('/events',
         source,
         user_agent,
         ip_address
-      } = req.body;
+ = req.body;
 
       const searchEvent = {
         sessionId: session_id,
@@ -345,15 +337,13 @@ router.post('/events',
         success: true,
         message: 'Search event tracked successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track search event:', error);
       res.status(500).json({ 
         error: 'Failed to track search event',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -376,7 +366,7 @@ router.post('/events/click',
           error: 'Validation failed', 
           details: errors.array() 
         });
-      }
+
 
       const {
         session_id,
@@ -384,7 +374,7 @@ router.post('/events/click',
         template_id,
         position,
         clicked_from_search = true
-      } = req.body;
+ = req.body;
 
       const clickEvent = {
         sessionId: session_id,
@@ -402,15 +392,13 @@ router.post('/events/click',
         success: true,
         message: 'Click event tracked successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track click event:', error);
       res.status(500).json({ 
         error: 'Failed to track click event',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -434,7 +422,7 @@ router.post('/ab-test',
           error: 'Validation failed', 
           details: errors.array() 
         });
-      }
+
 
       const {
         name,
@@ -442,7 +430,7 @@ router.post('/ab-test',
         variant_a,
         variant_b,
         traffic_split = 0.5
-      } = req.body;
+ = req.body;
 
       const testId = await searchAnalytics.createSearchABTest(
         name,
@@ -460,17 +448,15 @@ router.post('/ab-test',
           description,
           traffic_split,
           status: 'active'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to create A/B test:', error);
       res.status(500).json({ 
         error: 'Failed to create A/B test',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -484,7 +470,7 @@ router.get('/ab-test/:sessionId/variant',
 
       if (!sessionId) {
         return res.status(400).json({ error: 'Session ID is required' });
-      }
+
 
       const variant = await searchAnalytics.getABTestVariant(sessionId);
 
@@ -494,17 +480,15 @@ router.get('/ab-test/:sessionId/variant',
           session_id: sessionId,
           variant: variant,
           timestamp: new Date()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Failed to get A/B test variant:', error);
       res.status(500).json({ 
         error: 'Failed to get A/B test variant',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -537,30 +521,28 @@ router.get('/dashboard',
           health: {
             overall_status: overallHealth,
             services: healthStatus
-  }
+
           performance: currentMetrics,
           alerts: {
             active: activeAlerts,
             total: activeAlerts.length,
             critical: activeAlerts.filter(a => a.severity === 'critical').length,
             warning: activeAlerts.filter(a => a.severity === 'warning').length
-  }
+
           recommendations: {
             items: recommendations.slice(0, 5), // Top 5 recommendations
             total: recommendations.length,
             high_priority: recommendations.filter(r => r.priority === 'high' || r.priority === 'critical').length
-          }
-        }
-      });
 
-    } catch (error) {
+
+      });
+ catch (error) {
       console.error('Failed to get dashboard data:', error);
       res.status(500).json({ 
         error: 'Failed to retrieve dashboard data',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -576,14 +558,13 @@ router.get('/index/health',
         success: true,
         data: health
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get index health:', error);
       res.status(500).json({
         error: 'Failed to retrieve index health',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -601,16 +582,15 @@ router.get('/index/recommendations',
           recommendations,
           total: recommendations.length,
           generated_at: new Date()
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get index recommendations:', error);
       res.status(500).json({
         error: 'Failed to retrieve index recommendations',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -631,7 +611,7 @@ router.post('/index/rebuild',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { batch_size = 1000, enable_optimization = true } = req.body;
       const operationId = await indexManager.rebuildIndex(batch_size, enable_optimization);
@@ -642,16 +622,15 @@ router.post('/index/rebuild',
           operation_id: operationId,
           status: 'started',
           message: 'Index rebuild operation started'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to start index rebuild:', error);
       res.status(500).json({
         error: 'Failed to start index rebuild',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -669,16 +648,15 @@ router.post('/index/optimize',
           operation_id: operationId,
           status: 'started',
           message: 'Index optimization started'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to start index optimization:', error);
       res.status(500).json({
         error: 'Failed to start index optimization',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -696,20 +674,19 @@ router.get('/index/operations/:operationId',
         return res.status(404).json({
           error: 'Operation not found'
         });
-      }
+
 
       res.json({
         success: true,
         data: operation
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get operation status:', error);
       res.status(500).json({
         error: 'Failed to retrieve operation status',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -727,20 +704,19 @@ router.delete('/index/operations/:operationId',
         return res.status(404).json({
           error: 'Operation not found or cannot be cancelled'
         });
-      }
+
 
       res.json({
         success: true,
         message: 'Operation cancelled successfully'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to cancel operation:', error);
       res.status(500).json({
         error: 'Failed to cancel operation',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -756,14 +732,13 @@ router.post('/index/warmup',
         success: true,
         message: 'Index warmup completed'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to warm up index:', error);
       res.status(500).json({
         error: 'Failed to warm up index',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -779,14 +754,13 @@ router.get('/index/diagnostics',
         success: true,
         data: diagnostics
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get index diagnostics:', error);
       res.status(500).json({
         error: 'Failed to retrieve index diagnostics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -802,14 +776,13 @@ router.get('/cache/metrics',
         success: true,
         data: metrics
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get cache metrics:', error);
       res.status(500).json({
         error: 'Failed to retrieve cache metrics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -825,14 +798,13 @@ router.get('/cache/health',
         success: true,
         data: health
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get cache health:', error);
       res.status(500).json({
         error: 'Failed to retrieve cache health',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -854,7 +826,7 @@ router.post('/cache/invalidate',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { pattern, tags } = req.body;
       
@@ -862,7 +834,7 @@ router.post('/cache/invalidate',
         return res.status(400).json({
           error: 'Either pattern or tags must be provided'
         });
-      }
+
 
       const deletedCount = await cacheService.invalidate(pattern, tags);
       
@@ -872,16 +844,15 @@ router.post('/cache/invalidate',
           deleted_entries: deletedCount,
           pattern,
           tags
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to invalidate cache:', error);
       res.status(500).json({
         error: 'Failed to invalidate cache',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -897,14 +868,13 @@ router.post('/cache/warmup',
         success: true,
         message: 'Cache warmup initiated'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to warm up cache:', error);
       res.status(500).json({
         error: 'Failed to warm up cache',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -927,7 +897,7 @@ router.post('/cache/preload',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { queries } = req.body;
       
@@ -938,16 +908,15 @@ router.post('/cache/preload',
         data: {
           preloaded_queries: queries.length,
           message: 'Cache preload initiated'
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to preload cache:', error);
       res.status(500).json({
         error: 'Failed to preload cache',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -963,14 +932,13 @@ router.delete('/cache/clear',
         success: true,
         message: 'Cache cleared successfully'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to clear cache:', error);
       res.status(500).json({
         error: 'Failed to clear cache',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 /**
@@ -992,7 +960,7 @@ router.post('/cache/generate-key',
           error: 'Validation failed',
           details: errors.array()
         });
-      }
+
 
       const { query, filters = {}, options = {} } = req.body;
       const cacheKey = cacheService.generateCacheKey(query, filters, options);
@@ -1004,16 +972,15 @@ router.post('/cache/generate-key',
           query,
           filters,
           options
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       console.error('Failed to generate cache key:', error);
       res.status(500).json({
         error: 'Failed to generate cache key',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
-  }
+
 );
 
 // Export router and initialization function

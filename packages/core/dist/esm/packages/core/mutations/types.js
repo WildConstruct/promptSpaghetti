@@ -99,68 +99,69 @@ export function isNodeOperation(operation) {
                  * Events emitted by the mutation engine
                  */
             }
-            ;
-            'operation_failed';
-            {
-                operation: GraphOperation;
-                error: string;
-                validationErrors ?  : ValidationError;
-            }
-            ;
-            'batch_executed';
-            {
-                batchId: string;
-                results: OperationResult;
-                success: boolean;
-            }
-            ;
-            'undo_executed';
-            {
-                operation: GraphOperation;
-                success: boolean;
-            }
-            ;
-            'redo_executed';
-            {
-                operation: GraphOperation;
-                success: boolean;
-            }
-            ;
-            'conflict_detected';
-            {
-                conflict: OperationConflict;
-                resolutionStrategy: ConflictResolutionStrategy;
-            }
-            ;
-            'conflict_resolved';
-            {
-                conflict: OperationConflict;
-                resolution: GraphOperation;
-                strategy: ConflictResolutionStrategy;
-            }
-            ;
-            'snapshot_created';
-            {
-                snapshot: GraphSnapshot;
-                reason: 'operation' | 'interval' | 'manual';
-            }
-            ;
-            'validation_error';
-            {
-                operation: GraphOperation;
-                errors: ValidationError;
-            }
-            ;
-            'state_changed';
-            {
-                previousState: GraphState;
-                newState: GraphState;
-                operation: GraphOperation;
-            }
-            ;
-            /**
-             * Event listener type for mutation engine
-             */
         }
     }
+    ;
+    'operation_failed';
+    {
+        operation: GraphOperation;
+        error: string;
+        validationErrors ?  : ValidationError;
+    }
+    ;
+    'batch_executed';
+    {
+        batchId: string;
+        results: OperationResult;
+        success: boolean;
+    }
+    ;
+    'undo_executed';
+    {
+        operation: GraphOperation;
+        success: boolean;
+    }
+    ;
+    'redo_executed';
+    {
+        operation: GraphOperation;
+        success: boolean;
+    }
+    ;
+    'conflict_detected';
+    {
+        conflict: OperationConflict;
+        resolutionStrategy: ConflictResolutionStrategy;
+    }
+    ;
+    'conflict_resolved';
+    {
+        conflict: OperationConflict;
+        resolution: GraphOperation;
+        strategy: ConflictResolutionStrategy;
+    }
+    ;
+    'snapshot_created';
+    {
+        snapshot: GraphSnapshot;
+        reason: 'operation' | 'interval' | 'manual',
+        ;
+    }
+    ;
+    'validation_error';
+    {
+        operation: GraphOperation;
+        errors: ValidationError;
+    }
+    ;
+    'state_changed';
+    {
+        previousState: GraphState;
+        newState: GraphState;
+        operation: GraphOperation;
+    }
+    ;
+    /**
+     * Event listener type for mutation engine
+     */
 }

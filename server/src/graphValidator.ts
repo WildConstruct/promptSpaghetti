@@ -12,22 +12,24 @@
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 import { z } from 'zod';
 
-}
+
 export interface ValidationResult {
   valid: boolean;
   errors: ValidationError[];
-}
-}
 
-}
+
+
+
+
 export interface ValidationError {
   code: string;
   message: string;
   nodeId?: string;
   path?: string;
   severity: 'error' | 'warning';
-}
-}
+
+
+
 
 // Basic node schema with required fields
 const nodeSchema = z.object({
@@ -56,7 +58,7 @@ function validateGraphStructure(graph: any): ValidationError[] {
   try {
     graphSchema.parse(graph);
     return [];
-  } catch (error) {
+ catch (error) {
     if (error instanceof z.ZodError) {
       return error.errors.map(err => ({
         code: 'INVALID_STRUCTURE',
@@ -64,14 +66,14 @@ function validateGraphStructure(graph: any): ValidationError[] {
         path: err.path.join('.'),
         severity: 'error'
       }));
-    }
+
     return [{
       code: 'INVALID_STRUCTURE',
       message: 'Invalid graph structure',
       severity: 'error'
-    }];
-  }
-}
+];
+
+
 
 /**
  * Validates node references in the graph
@@ -90,13 +92,13 @@ function validateNodeReferences(graph: Graph): ValidationError[] {
             nodeId: node.id,
             severity: 'error'
           });
-        }
-      }
-    }
-  }
+
+
+
+
   
   return errors;
-}
+
 
 /**
  * Validates that the graph has at least one Output node
@@ -111,10 +113,10 @@ function validateOutputNodes(graph: Graph): ValidationError[] {
       message: 'Graph must have at least one Output node',
       severity: 'error'
     });
-  }
+
   
   return errors;
-}
+
 
 /**
  * Detects cycles in the graph
@@ -136,12 +138,12 @@ function detectCycles(graph: Graph): ValidationError[] {
         severity: 'error'
       });
       return true;
-    }
+
     
     // Already visited this node in a different path, no cycle here
     if (visited.has(nodeId)) {
       return false;
-    }
+
     
     const node = nodeMap.get(nodeId);
     if (!node) return false;
@@ -155,22 +157,22 @@ function detectCycles(graph: Graph): ValidationError[] {
       for (const inputId of node.inputs) {
         if (dfs(inputId)) {
           return true; // Cycle found
-        }
-      }
-    }
+
+
+
     
     // Remove from current path when backtracking
     path.delete(nodeId);
     return false;
-  }
+
   
   // Run DFS from each node to detect cycles
   for (const node of graph.nodes) {
     dfs(node.id);
-  }
+
   
   return errors;
-}
+
 
 /**
  * Validates node configurations based on their types
@@ -189,7 +191,7 @@ function validateNodeConfigurations(graph: Graph): ValidationError[] {
           nodeId: node.id,
           severity: 'error'
         });
-      } else {
+ else {
         // Validate that each choice has a value and positive weight
         for (let i = 0; i < node.choices.length; i++) {
           const choice = node.choices[i];
@@ -200,23 +202,23 @@ function validateNodeConfigurations(graph: Graph): ValidationError[] {
               nodeId: node.id,
               severity: 'error'
             });
-          } else if (!('value' in choice) || typeof choice.value !== 'string') {
+ else if (!('value' in choice) || typeof choice.value !== 'string') {
             errors.push({
               code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
               message: `WeightedChoice node "${node.id}" has a choice without a string value at index ${i}`,
               nodeId: node.id,
               severity: 'error'
             });
-          } else if (!('weight' in choice) || typeof choice.weight !== 'number' || choice.weight <= 0) {
+ else if (!('weight' in choice) || typeof choice.weight !== 'number' || choice.weight <= 0) {
             errors.push({
               code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
               message: `WeightedChoice node "${node.id}" has a choice without a positive weight at index ${i}`,
               nodeId: node.id,
               severity: 'error'
             });
-          }
-        }
-      }
+
+
+
       break;
         
     case 'Include':
@@ -227,7 +229,7 @@ function validateNodeConfigurations(graph: Graph): ValidationError[] {
           nodeId: node.id,
           severity: 'error'
         });
-      }
+
       break;
 
     case 'SetVariable':
@@ -239,13 +241,13 @@ function validateNodeConfigurations(graph: Graph): ValidationError[] {
           nodeId: node.id,
           severity: 'error'
         });
-      }
+
       break;
-    }
-  }
+
+
   
   return errors;
-}
+
 
 /**
  * Performs a full validation on the graph
@@ -258,7 +260,7 @@ export function validateGraph(graphData: unknown): ValidationResult {
       valid: false,
       errors: structureErrors
     };
-  }
+
   
   // Now we know it's a valid Graph type
   const graph = graphData as Graph;
@@ -281,4 +283,4 @@ export function validateGraph(graphData: unknown): ValidationResult {
     valid: allErrors.length === 0,
     errors: allErrors
   };
-}
+

@@ -7,73 +7,67 @@ import '@testing-library/jest-dom';
 import { OrganizationManager } from '../components/auth/OrganizationManager';
 
 // Mock the icon components
-jest.mock('lucide-react', () => ({)
-  Users: () => <div data-testid="users-icon" />,
-  Settings: () => <div data-testid="settings-icon" />,
-  Building2: () => <div data-testid="building-icon" />,
-  Plus: () => <div data-testid="plus-icon" />,
-  Edit2: () => <div data-testid="edit-icon" />,
-  Trash2: () => <div data-testid="trash-icon" />,
-  Globe: () => <div data-testid="globe-icon" />,
-  Crown: () => <div data-testid="crown-icon" />,
-  Shield: () => <div data-testid="shield-icon" />,
-  BarChart3: () => <div data-testid="chart-icon" />,
-  ChevronRight: () => <div data-testid="chevron-right-icon" />,
-  Palette: () => <div data-testid="palette-icon" />,
+jest.mock('lucide-react', () => ({ )
+  Users: () => <div data-testid="users-icon" />
+  Settings: () => <div data-testid="settings-icon" />
+  Building2: () => <div data-testid="building-icon" />
+  Plus: () => <div data-testid="plus-icon" />
+  Edit2: () => <div data-testid="edit-icon" />
+  Trash2: () => <div data-testid="trash-icon" />
+  Globe: () => <div data-testid="globe-icon" />
+  Crown: () => <div data-testid="crown-icon" />
+  Shield: () => <div data-testid="shield-icon" />
+  BarChart3: () => <div data-testid="chart-icon" />
+  ChevronRight: () => <div data-testid="chevron-right-icon" />
+  Palette: () => <div data-testid="palette-icon" /> }
 }));
-describe('OrganizationManager', () => {
-  const mockOrganizations = [;
+describe('OrganizationManager', () => { const mockOrganizations = [
     {
-      id: 'org-1',
-      name: 'Test Organization',
-      slug: 'test-org',
-      description: 'A test organization',
-      website: 'https://test.com',
-      logoUrl: null,
-      branding: {},
-      settings: {},
-      plan: 'free' as const,
-      maxUsers: 10,
-      createdAt: new Date('2023-01-01'),
+      id: 'org-1'
+      name: 'Test Organization'
+      slug: 'test-org'
+      description: 'A test organization'
+      website: 'https://test.com'
+      logoUrl: null }
+      branding: {}
+      settings: {}
+      plan: 'free' as const
+      maxUsers: 10
+      createdAt: new Date('2023-01-01')
       updatedAt: new Date('2023-01-01');
-  }
-    {
-      id: 'org-2',
-      name: 'Pro Organization',
-      slug: 'pro-org',
-      description: 'A pro organization',
-      website: 'https://pro.com',
-      logoUrl: null,
-      branding: {},
-      settings: {},
-      plan: 'pro' as const,
-      maxUsers: 100,
-      createdAt: new Date('2023-01-02'),
+
+    { id: 'org-2'
+      name: 'Pro Organization'
+      slug: 'pro-org'
+      description: 'A pro organization'
+      website: 'https://pro.com'
+      logoUrl: null }
+      branding: {}
+      settings: {}
+      plan: 'pro' as const
+      maxUsers: 100
+      createdAt: new Date('2023-01-02')
       updatedAt: new Date('2023-01-02')];
-  const mockStats = {
-  totalMembers: 15,
-  totalTeams: 8,
-  activeTeams: 8,
-  recentActivity: 3,
+  const mockStats = { totalMembers: 15
+  totalTeams: 8
+  activeTeams: 8
+  recentActivity: 3
   planLimits: {
-  maxUsers: 10,
-  maxTeams: 5,
-  maxStorage: 1024,
-},
-  usage: {
-  users: 8,
-  teams: 5,
-  storage: 512,
+  maxUsers: 10
+  maxTeams: 5
+  maxStorage: 1024 }
+
+  usage: { 
+  users: 8
+  teams: 5
+  storage: 512 }
 };
-  const defaultProps = {
-  onCreateOrganization: jest.fn(),
-  onUpdateOrganization: jest.fn(),
-  onDeleteOrganization: jest.fn(),
-  onViewStats: jest.fn(),
+  const defaultProps = { onCreateOrganization: jest.fn()
+  onUpdateOrganization: jest.fn()
+  onDeleteOrganization: jest.fn()
+  onViewStats: jest.fn() }
 };
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   it('renders the organization manager interface', () => {
     render(<OrganizationManager organizations={mockOrganizations} {...defaultProps} />);
     expect(screen.getByText('Organization Management')).toBeInTheDocument();
@@ -127,12 +121,11 @@ describe('OrganizationManager', () => {
     // Submit form
     const submitButton = screen.getByText('Create Organization', { selector: 'button' });
     await user.click(submitButton);
-    await waitFor(() => {
-  expect(mockCreate).toHaveBeenCalledWith({)
-  name: 'New Organization',
-  description: 'A new test organization',
-  website: 'https://neworg.com',
-  plan: 'free',
+    await waitFor(() => { expect(mockCreate).toHaveBeenCalledWith({)
+  name: 'New Organization'
+  description: 'A new test organization'
+  website: 'https://neworg.com'
+  plan: 'free' }
 });
     });
   });
@@ -185,12 +178,11 @@ describe('OrganizationManager', () => {
     // Submit form
     const submitButton = screen.getByText('Update Organization');
     await user.click(submitButton);
-    await waitFor(() => {
-  expect(mockUpdate).toHaveBeenCalledWith('org-1', {)
-  name: 'Updated Organization',
-  description: 'A test organization',
-  website: 'https://test.com',
-  plan: 'free',
+    await waitFor(() => { expect(mockUpdate).toHaveBeenCalledWith('org-1', {)
+  name: 'Updated Organization'
+  description: 'A test organization'
+  website: 'https://test.com'
+  plan: 'free' }
 });
     });
   });
@@ -221,9 +213,7 @@ describe('OrganizationManager', () => {
     // Confirm deletion
     const confirmButton = screen.getByText('Delete');
     await user.click(confirmButton);
-    await waitFor(() => {
-      expect(mockDelete).toHaveBeenCalledWith('org-1');
-    });
+    await waitFor(() => { expect(mockDelete).toHaveBeenCalledWith('org-1') });
   });
   it('displays organization statistics when stats button is clicked', async () => {
     const user = userEvent.setup();
@@ -238,9 +228,7 @@ describe('OrganizationManager', () => {
     // Click stats button for first organization
     const statsButtons = screen.getAllByTestId('chart-icon');
     await user.click(statsButtons[0].closest('button')!);
-    await waitFor(() => {
-      expect(mockViewStats).toHaveBeenCalledWith('org-1');
-    });
+    await waitFor(() => { expect(mockViewStats).toHaveBeenCalledWith('org-1') });
   });
   it('displays loading state during operations', async () => {
     const user = userEvent.setup();
@@ -281,9 +269,9 @@ describe('OrganizationManager', () => {
     expect(screen.getByText('Create your first organization to get started')).toBeInTheDocument();
   });
   it('shows proper plan badges for different organization plans', () => {
-    const orgsWithDifferentPlans = [;
-      { ...mockOrganizations[0], plan: 'free' as const },
-      { ...mockOrganizations[1], plan: 'pro' as const },
+    const orgsWithDifferentPlans = [
+      { ...mockOrganizations[0], plan: 'free' as const }
+      { ...mockOrganizations[1], plan: 'pro' as const }
       { ...mockOrganizations[0], id: 'org-3', plan: 'enterprise' as const, name: 'Enterprise Org' }
     ];
     render(<OrganizationManager organizations={orgsWithDifferentPlans} {...defaultProps} />);

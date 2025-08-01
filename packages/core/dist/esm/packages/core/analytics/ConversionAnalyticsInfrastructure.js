@@ -183,8 +183,7 @@ Promise < DataExportResult > {
                         sessionId;
                     currentEvent.sessionId,
                         properties;
-                    {
-                    }
+                    { }
                 }
                 finally {
                 }
@@ -247,7 +246,7 @@ catch (error) {
         stageResults: results,
     };
     chunkArray(array, T, size, number);
-    T[];
+    T;
     {
         const chunks = [];
         for (let i = 0; i < array.length; i += size) {
@@ -299,8 +298,9 @@ catch (error) {
                     // Continue with other metrics
                     return results;
                     async;
-                    calculateSingleMetric(metricType, ConversionMetricType);
-                    query: ConversionMetricQuery,
+                    calculateSingleMetric(metricType, ConversionMetricType),
+                        query;
+                    ConversionMetricQuery,
                         events;
                     FlexibleConversionEvent;
                     Promise < ConversionMetricResult > {
@@ -383,8 +383,9 @@ catch (error) {
                                     default:
                                         return false;
                                         async;
-                                        calculateMetadata(metricType, ConversionMetricType);
-                                        value: number,
+                                        calculateMetadata(metricType, ConversionMetricType),
+                                            value;
+                                        number,
                                             events;
                                         FlexibleConversionEvent;
                                         Promise < ConversionMetricResult['metadata'] > {
@@ -498,13 +499,19 @@ catch (error) {
                                                                         averageLatency: 0,
                                                                     }
                                                                 };
-                                                            }
-                                                        },
-                                                        interface, ValidationConfig };
+                                                            },
+                                                            interface, ProcessingConfig
+                                                        } };
                                                     {
-                                                        strict: boolean;
-                                                        requiredFields: string;
-                                                        customRules: string;
+                                                        validation: ValidationConfig;
+                                                        enrichment: EnrichmentConfig;
+                                                        transformation: TransformationConfig;
+                                                        aggregation: AggregationConfig;
+                                                        storage: StorageConfig;
+                                                        calculations: any;
+                                                        batchSize: number;
+                                                        continueOnError: boolean;
+                                                        forwardToEpic1: boolean;
                                                     }
                                             }
                                         }
@@ -552,228 +559,232 @@ class ConversionRateCalculator {
                                                         // Placeholder implementations for remaining calculators
                                                         class RetentionRateCalculator {
                                                         }
-                                                        async;
-                                                        calculate();
-                                                        Promise < number > { return: 0 };
-                                                        class ChurnRateCalculator {
-                                                            async calculate() { return 0; }
-                                                        }
-                                                        class FunnelCompletionCalculator {
-                                                            async calculate() { return 0; }
-                                                        }
-                                                        class StepConversionCalculator {
-                                                            async calculate() { return 0; }
-                                                        }
-                                                        class AttributionValueCalculator {
-                                                            async calculate() { return 0; }
-                                                        }
-                                                        class CohortPerformanceCalculator {
-                                                            async calculate() { return 0; }
-                                                        }
-                                                        class SegmentGrowthCalculator {
-                                                            async calculate() { return 0; }
-                                                        }
-                                                        class CustomMetricCalculator {
-                                                            async calculate() { return 0; }
-                                                        }
-                                                        // Processing stage implementations (simplified)
-                                                        class ValidationStage {
-                                                            config;
-                                                            constructor(config) {
-                                                                this.config = config;
-                                                            }
-                                                            getName() {
-                                                                return 'validation';
-                                                            }
-                                                            async process(event) {
-                                                                // Simplified validation
-                                                                const hasRequiredFields = this.config.requiredFields.every(field => );
-                                                                ;
-                                                                this.getFieldValue(event, field) !== undefined;
-                                                                ;
-                                                                return {
-                                                                    success: hasRequiredFields,
-                                                                    transformedEvent: event,
-                                                                    errors: hasRequiredFields ? [] : [{},
-                                                                        eventId, event.id,
-                                                                        stage, 'validation',
-                                                                        error, 'Missing required fields',
-                                                                        severity, 'error',]
-                                                                };
-                                                            }
-                                                            ;
-                                                            getFieldValue(event, field) {
-                                                                const fieldParts = field.split('.');
-                                                                let value = event;
-                                                                for (const part of fieldParts) {
-                                                                    value = value?.[part];
-                                                                    if (value === undefined)
-                                                                        break;
-                                                                    return value;
-                                                                    async;
-                                                                    getHealthStatus();
-                                                                    Promise < ComponentHealthStatus > {
-                                                                        return: {
+                                                    }
+                                                    async calculate() { return 0; }
+                                                }
+                                                class ChurnRateCalculator {
+                                                    async calculate() { return 0; }
+                                                }
+                                                class FunnelCompletionCalculator {
+                                                    async calculate() { return 0; }
+                                                }
+                                                class StepConversionCalculator {
+                                                    async calculate() { return 0; }
+                                                }
+                                                class AttributionValueCalculator {
+                                                    async calculate() { return 0; }
+                                                }
+                                                class CohortPerformanceCalculator {
+                                                    async calculate() { return 0; }
+                                                }
+                                                class SegmentGrowthCalculator {
+                                                    async calculate() { return 0; }
+                                                }
+                                                class CustomMetricCalculator {
+                                                    async calculate() { return 0; }
+                                                }
+                                                // Processing stage implementations (simplified)
+                                                class ValidationStage {
+                                                    config;
+                                                    constructor(config) {
+                                                        this.config = config;
+                                                    }
+                                                    getName() {
+                                                        return 'validation';
+                                                    }
+                                                    async process(event) {
+                                                        // Simplified validation
+                                                        const hasRequiredFields = this.config.requiredFields.every(field => );
+                                                        ;
+                                                        this.getFieldValue(event, field) !== undefined;
+                                                        ;
+                                                        return {
+                                                            success: hasRequiredFields,
+                                                            transformedEvent: event,
+                                                            errors: hasRequiredFields ? [] : [{},
+                                                                eventId, event.id,
+                                                                stage, 'validation',
+                                                                error, 'Missing required fields',
+                                                                severity, 'error',]
+                                                        };
+                                                    }
+                                                    ;
+                                                    getFieldValue(event, field) {
+                                                        const fieldParts = field.split('.');
+                                                        let value = event;
+                                                        for (const part of fieldParts) {
+                                                            value = value?.[part];
+                                                            if (value === undefined)
+                                                                break;
+                                                            return value;
+                                                            async;
+                                                            getHealthStatus();
+                                                            Promise < ComponentHealthStatus > {
+                                                                return: {
+                                                                    healthy: true,
+                                                                    uptime: Date.now(),
+                                                                    metrics: { errorRate: 0, averageLatency: 0 }
+                                                                },
+                                                                class: EnrichmentStage, implements, ProcessingStage
+                                                            };
+                                                            {
+                                                                constructor(private, config, EnrichmentConfig);
+                                                                { }
+                                                                getName();
+                                                                string;
+                                                                {
+                                                                    return 'enrichment';
+                                                                }
+                                                                async;
+                                                                process(event, FlexibleConversionEvent);
+                                                                Promise < StageProcessingResult > {
+                                                                    // Event is already enriched in ConversionDataRelationshipManager
+                                                                    return: { success: true, transformedEvent: event },
+                                                                    async getHealthStatus() {
+                                                                        return {
                                                                             healthy: true,
                                                                             uptime: Date.now(),
                                                                             metrics: { errorRate: 0, averageLatency: 0 }
-                                                                        },
-                                                                        class: EnrichmentStage, implements, ProcessingStage
-                                                                    };
-                                                                    {
-                                                                        constructor(private, config, EnrichmentConfig);
-                                                                        { }
-                                                                        getName();
-                                                                        string;
-                                                                        {
-                                                                            return 'enrichment';
-                                                                        }
-                                                                        async;
-                                                                        process(event, FlexibleConversionEvent);
-                                                                        Promise < StageProcessingResult > {
-                                                                            // Event is already enriched in ConversionDataRelationshipManager
-                                                                            return: { success: true, transformedEvent: event },
-                                                                            async getHealthStatus() {
-                                                                                return {
-                                                                                    healthy: true,
-                                                                                    uptime: Date.now(),
-                                                                                    metrics: { errorRate: 0, averageLatency: 0 }
-                                                                                };
-                                                                                class TransformationStage {
-                                                                                    config;
-                                                                                    constructor(config) {
-                                                                                        this.config = config;
-                                                                                    }
-                                                                                    getName() {
-                                                                                        return 'transformation';
-                                                                                    }
-                                                                                    async process(event) {
-                                                                                        const transformedEvent = { ...event };
-                                                                                        if (this.config.normalizeTimestamps) {
-                                                                                            transformedEvent.timestamp = Math.floor(transformedEvent.timestamp / 1000) * 1000;
-                                                                                            return { success: true, transformedEvent };
-                                                                                            async;
-                                                                                            getHealthStatus();
-                                                                                            Promise < ComponentHealthStatus > {
-                                                                                                return: {
+                                                                        };
+                                                                        class TransformationStage {
+                                                                            config;
+                                                                            constructor(config) {
+                                                                                this.config = config;
+                                                                            }
+                                                                            getName() {
+                                                                                return 'transformation';
+                                                                            }
+                                                                            async process(event) {
+                                                                                const transformedEvent = { ...event };
+                                                                                if (this.config.normalizeTimestamps) {
+                                                                                    transformedEvent.timestamp = Math.floor(transformedEvent.timestamp / 1000) * 1000;
+                                                                                    return { success: true, transformedEvent };
+                                                                                    async;
+                                                                                    getHealthStatus();
+                                                                                    Promise < ComponentHealthStatus > {
+                                                                                        return: {
+                                                                                            healthy: true,
+                                                                                            uptime: Date.now(),
+                                                                                            metrics: { errorRate: 0, averageLatency: 0 }
+                                                                                        },
+                                                                                        class: AggregationStage, implements, ProcessingStage
+                                                                                    };
+                                                                                    {
+                                                                                        constructor(private, config, AggregationConfig);
+                                                                                        { }
+                                                                                        getName();
+                                                                                        string;
+                                                                                        {
+                                                                                            return 'aggregation';
+                                                                                        }
+                                                                                        async;
+                                                                                        process(event, FlexibleConversionEvent);
+                                                                                        Promise < StageProcessingResult > {
+                                                                                            // Real-time aggregation would happen here
+                                                                                            return: { success: true, transformedEvent: event },
+                                                                                            async getHealthStatus() {
+                                                                                                return {
                                                                                                     healthy: true,
                                                                                                     uptime: Date.now(),
                                                                                                     metrics: { errorRate: 0, averageLatency: 0 }
-                                                                                                },
-                                                                                                class: AggregationStage, implements, ProcessingStage
-                                                                                            };
-                                                                                            {
-                                                                                                constructor(private, config, AggregationConfig);
-                                                                                                { }
-                                                                                                getName();
-                                                                                                string;
-                                                                                                {
-                                                                                                    return 'aggregation';
-                                                                                                }
-                                                                                                async;
-                                                                                                process(event, FlexibleConversionEvent);
-                                                                                                Promise < StageProcessingResult > {
-                                                                                                    // Real-time aggregation would happen here
-                                                                                                    return: { success: true, transformedEvent: event },
-                                                                                                    async getHealthStatus() {
-                                                                                                        return {
-                                                                                                            healthy: true,
-                                                                                                            uptime: Date.now(),
-                                                                                                            metrics: { errorRate: 0, averageLatency: 0 }
-                                                                                                        };
-                                                                                                        class StorageStage {
-                                                                                                            config;
-                                                                                                            constructor(config) {
-                                                                                                                this.config = config;
-                                                                                                            }
-                                                                                                            getName() {
-                                                                                                                return 'storage';
-                                                                                                            }
-                                                                                                            async process(event) {
-                                                                                                                // Storage logic would happen here
-                                                                                                                return { success: true, transformedEvent: event };
-                                                                                                                async;
-                                                                                                                getHealthStatus();
-                                                                                                                Promise < ComponentHealthStatus > {
-                                                                                                                    return: {
-                                                                                                                        healthy: true,
-                                                                                                                        uptime: Date.now(),
-                                                                                                                        metrics: { errorRate: 0, averageLatency: 0 }
-                                                                                                                    },
-                                                                                                                    // Data warehouse and API classes (simplified implementations)
-                                                                                                                    class: ConversionDataWarehouse
-                                                                                                                };
-                                                                                                                {
-                                                                                                                    constructor(private, config, DataWarehouseConfig);
-                                                                                                                    { }
-                                                                                                                    async;
-                                                                                                                    getHealthStatus();
-                                                                                                                    Promise < ComponentHealthStatus > {
-                                                                                                                        return: {
-                                                                                                                            healthy: true,
-                                                                                                                            uptime: Date.now(),
-                                                                                                                            metrics: { errorRate: 0, averageLatency: 0 }
-                                                                                                                        },
-                                                                                                                        class: ConversionAnalyticsAPI
-                                                                                                                    };
-                                                                                                                    {
-                                                                                                                        constructor();
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                            metricsCalculator;
-                                                                                                            dataWarehouse;
-                                                                                                            config;
-                                                                                                        }
-                                                                                                        { }
+                                                                                                };
+                                                                                                class StorageStage {
+                                                                                                    config;
+                                                                                                    constructor(config) {
+                                                                                                        this.config = config;
+                                                                                                    }
+                                                                                                    getName() {
+                                                                                                        return 'storage';
+                                                                                                    }
+                                                                                                    async process(event) {
+                                                                                                        // Storage logic would happen here
+                                                                                                        return { success: true, transformedEvent: event };
                                                                                                         async;
-                                                                                                        queryMetrics(query, ConversionMetricQuery);
-                                                                                                        Promise < ConversionMetricResult > {
-                                                                                                            // Implementation would fetch events and calculate metrics
-                                                                                                            return: [],
-                                                                                                            async getRealTimeMetrics(funnelId, timeWindow) {
+                                                                                                        getHealthStatus();
+                                                                                                        Promise < ComponentHealthStatus > {
+                                                                                                            return: {
+                                                                                                                healthy: true,
+                                                                                                                uptime: Date.now(),
+                                                                                                                metrics: { errorRate: 0, averageLatency: 0 }
+                                                                                                            },
+                                                                                                            // Data warehouse and API classes (simplified implementations)
+                                                                                                            class: ConversionDataWarehouse
+                                                                                                        };
+                                                                                                        {
+                                                                                                            constructor(private, config, DataWarehouseConfig);
+                                                                                                            { }
+                                                                                                            async;
+                                                                                                            getHealthStatus();
+                                                                                                            Promise < ComponentHealthStatus > {
+                                                                                                                return: {
+                                                                                                                    healthy: true,
+                                                                                                                    uptime: Date.now(),
+                                                                                                                    metrics: { errorRate: 0, averageLatency: 0 }
+                                                                                                                },
+                                                                                                                class: ConversionAnalyticsAPI
+                                                                                                            };
+                                                                                                            {
+                                                                                                                constructor();
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                    metricsCalculator;
+                                                                                                    dataWarehouse;
+                                                                                                    config;
+                                                                                                }
+                                                                                                { }
+                                                                                                async;
+                                                                                                queryMetrics(query, ConversionMetricQuery);
+                                                                                                Promise < ConversionMetricResult > {
+                                                                                                    // Implementation would fetch events and calculate metrics
+                                                                                                    return: [],
+                                                                                                    async getRealTimeMetrics(funnelId, timeWindow) {
+                                                                                                        return {
+                                                                                                            funnelId,
+                                                                                                            timestamp: Date.now(),
+                                                                                                            metrics: {
+                                                                                                                activeUsers: 0,
+                                                                                                                conversionsLastHour: 0,
+                                                                                                                conversionRate: 0,
+                                                                                                                averageTimeToConvert: 0,
+                                                                                                                topDropOffStep: 'unknown',
+                                                                                                            },
+                                                                                                            async exportData(request) {
                                                                                                                 return {
-                                                                                                                    funnelId,
-                                                                                                                    timestamp: Date.now(),
-                                                                                                                    metrics: {
-                                                                                                                        activeUsers: 0,
-                                                                                                                        conversionsLastHour: 0,
-                                                                                                                        conversionRate: 0,
-                                                                                                                        averageTimeToConvert: 0,
-                                                                                                                        topDropOffStep: 'unknown',
-                                                                                                                    },
-                                                                                                                    async exportData(request) {
-                                                                                                                        return {
-                                                                                                                            exportId: `export-${Date.now()}`
-                                                                                                                        };
-                                                                                                                    },
-                                                                                                                    status: 'pending'
+                                                                                                                    exportId: `export-${Date.now()}`
                                                                                                                 };
-                                                                                                                async;
-                                                                                                                getHealthStatus();
-                                                                                                                Promise < ComponentHealthStatus > {
-                                                                                                                    return: {
-                                                                                                                        healthy: true,
-                                                                                                                        uptime: Date.now(),
-                                                                                                                        metrics: { errorRate: 0, averageLatency: 0 }
-                                                                                                                    }
-                                                                                                                };
-                                                                                                                (config) => {
-                                                                                                                    return new ConversionAnalyticsInfrastructure(epic1Analytics, config);
-                                                                                                                    export default ConversionAnalyticsInfrastructure;
-                                                                                                                };
+                                                                                                            },
+                                                                                                            status: 'pending'
+                                                                                                        };
+                                                                                                        async;
+                                                                                                        getHealthStatus();
+                                                                                                        Promise < ComponentHealthStatus > {
+                                                                                                            return: {
+                                                                                                                healthy: true,
+                                                                                                                uptime: Date.now(),
+                                                                                                                metrics: { errorRate: 0, averageLatency: 0 }
                                                                                                             }
                                                                                                         };
+                                                                                                        ();
+                                                                                                        config: {
+                                                                                                            ;
+                                                                                                            processing: ProcessingConfig;
+                                                                                                            ConversionAnalyticsInfrastructure;
+                                                                                                            {
+                                                                                                                return new ConversionAnalyticsInfrastructure(epic1Analytics, config);
+                                                                                                                export default ConversionAnalyticsInfrastructure;
+                                                                                                            }
+                                                                                                        }
                                                                                                     }
                                                                                                 };
                                                                                             }
-                                                                                        }
+                                                                                        };
                                                                                     }
                                                                                 }
                                                                             }
-                                                                        };
+                                                                        }
                                                                     }
-                                                                }
+                                                                };
                                                             }
                                                         }
                                                     }

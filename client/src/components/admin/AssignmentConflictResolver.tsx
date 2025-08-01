@@ -10,9 +10,10 @@ import React, { useState, useEffect } from 'react';
 import { 
   PolicyConflict, 
   ConflictResolutionStrategy
-} from '../../types/PolicyAssignmentTypes';
+ from '../../types/PolicyAssignmentTypes';
 import './AssignmentConflictResolver.css';
-}
+
+
 interface AssignmentConflictResolverProps {
   conflicts: PolicyConflict;,
   onResolve: () => void;
@@ -25,12 +26,13 @@ interface AssignmentConflictResolverProps {
   interface ConflictGroup {
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';,
   conflicts: PolicyConflict;
-  }
+
+
 
 export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProps> = ({
   conflicts,
   onResolve
-}
+
 }) => {
   const [resolutions, setResolutions] = useState<Record<string, ConflictResolution>>({});
   const [selectedConflict, setSelectedConflict] = useState<PolicyConflict | null>(null);
@@ -86,9 +88,9 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
       });
       if (response.ok) {
         onResolve();
-    } catch (error) {
+ catch (error) {
   console.error('Error resolving conflicts:', error);
-} finally {
+ finally {
       setIsResolving(false);
   };
   const handleBulkStrategy = (strategy: ConflictResolutionStrategy) => {

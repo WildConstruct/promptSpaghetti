@@ -6,19 +6,18 @@
  * template creation, customization, sharing, and collaboration features.
  */
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { 
-  ExportTemplate, 
+import { ExportTemplate, 
   CreateExportTemplate, 
   UpdateExportTemplate, 
   ExportFormat,
   TemplateType,
-  ExportFormatDefinition,
+  ExportFormatDefinition }
   validateExportOptions
-} from '../../types/export';
+ from '../../types/export';
 import { useExport } from '../../hooks/useExport';
-}
-interface AdvancedExportTemplateManagerProps {
-  visible?: boolean;
+
+
+interface AdvancedExportTemplateManagerProps { visible?: boolean;
   onClose?: () => void;
   projectId?: string;
   onTemplateSelect?: (template: ExportTemplate) => void;
@@ -44,15 +43,16 @@ interface AdvancedExportTemplateManagerProps {
   parameters: Record<string, unknown>;
   customFields: Record<string, unknown>;
   previewData?: unknown;
-  export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManagerProps> = ({,)
-  visible = true,
-  onClose,
-  projectId = '',
-  onTemplateSelect,
-  enableSharing = true,
-  enableCollaboration = true,
+  export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManagerProps> = ({);
+  visible = true;
+  onClose;
+  projectId = '';
+  onTemplateSelect;
+  enableSharing = true;
+  enableCollaboration = true }
   className = ''
-}
+
+
 }) => {
   // State management
   const [templates, setTemplates] = useState<ExportTemplate>([]);
@@ -73,45 +73,34 @@ interface AdvancedExportTemplateManagerProps {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Hooks
-  const { 
-    getTemplates, 
-    createTemplate, 
-    updateTemplate, 
-    deleteTemplate,
-    shareTemplate,
+  const { getTemplates
+    createTemplate
+    updateTemplate
+    deleteTemplate
+    shareTemplate }
     getTemplateStats
-  } = useExport(projectId);
+ = useExport(projectId);
   // Load templates and stats
-  useEffect(() => {
-    loadTemplates();
-  }, [filter, sortBy, sortOrder]);
-  const loadTemplates = useCallback(async () => {
-    setLoading(true);
+  useEffect(() => { loadTemplates() }, [filter, sortBy, sortOrder]);
+  const loadTemplates = useCallback(async () => { setLoading(true);
     setError(null);
     try {
       const templatesData = await getTemplates({)
-  ...filter,
-        sortBy,
+  ...filter
+        sortBy }
         sortOrder
       });
       setTemplates(templatesData);
       // Load stats for each template
       const statsMap = new Map<string, TemplateStats>();
-      for (const template of templatesData) {
-        try {
+      for (const template of templatesData) { try {
           const stats = await getTemplateStats(template.id);
-          statsMap.set(template.id, stats);
-        } catch (err) {
+          statsMap.set(template.id, stats) } catch (err) {
           console.warn(`Failed to load stats for template ${template.id}:`, err);}
       setTemplateStats(statsMap);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load templates');
-} finally {
-      setLoading(false);
-  }, [filter, sortBy, sortOrder, getTemplates, getTemplateStats]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load templates') } finally { setLoading(false) }, [filter, sortBy, sortOrder, getTemplates, getTemplateStats]);
   // Filtered and sorted templates
-  const filteredTemplates = useMemo(() => {
-    let filtered = templates;
+  const filteredTemplates = useMemo(() => { let filtered = templates;
     // Apply search filter
     if (filter.search) {
       const searchLower = filter.search.toLowerCase();
@@ -128,53 +117,35 @@ interface AdvancedExportTemplateManagerProps {
     // Apply public/private filter
     if (filter.isPublic !== undefined) {
       filtered = filtered.filter(template => template.is_public === filter.isPublic);
-    return filtered;
-  }, [templates, filter]);
+    return filtered }, [templates, filter]);
   // Template creation handler
         setTemplates(prev => [...prev, newTemplate]);
       setIsCreating(false);
       setError(null);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to create template');
-} finally {
-      setLoading(false);
-  }, [createTemplate]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to create template') } finally { setLoading(false) }, [createTemplate]);
   // Template update handler
         setTemplates(prev => prev.map(t => t.id === templateId ? updatedTemplate : t));
       setIsEditing(false);
       setEditingTemplate(null);
       setError(null);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to update template');
-} finally {
-      setLoading(false);
-  }, [updateTemplate]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to update template') } finally { setLoading(false) }, [updateTemplate]);
   // Template deletion handler
-  const handleDeleteTemplate = useCallback(async (templateId: string) => {
-    if (!confirm('Are you sure you want to delete this template?')) return;
+  const handleDeleteTemplate = useCallback(async (templateId: string) => { if (!confirm('Are you sure you want to delete this template?')) return;
     setLoading(true);
     try {
       await deleteTemplate(templateId);
       setTemplates(prev => prev.filter(t => t.id !== templateId));
       if (selectedTemplate?.id === templateId) {
         setSelectedTemplate(null);
-      setError(null);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to delete template');
-} finally {
-      setLoading(false);
-  }, [deleteTemplate, selectedTemplate]);
+      setError(null) } catch (err) { setError(err instanceof Error ? err.message : 'Failed to delete template') } finally { setLoading(false) }, [deleteTemplate, selectedTemplate]);
   // Template selection handler
-  const handleSelectTemplate = useCallback((template: ExportTemplate) => {
-    setSelectedTemplate(template);
+  const handleSelectTemplate = useCallback((template: ExportTemplate) => { setSelectedTemplate(template);
     if (onTemplateSelect) {
-      onTemplateSelect(template);
-  }, [onTemplateSelect]);
+      onTemplateSelect(template) }, [onTemplateSelect]);
   // Template customization handler
-  const handleCustomizeTemplate = useCallback((template: ExportTemplate) => {
-    setCustomization({)
-  templateId: template.id,
-      parameters: template.format_options || {},
+  const handleCustomizeTemplate = useCallback((template: ExportTemplate) => { setCustomization({)
+  templateId: template.id }
+      parameters: template.format_options || {}
       customFields: {}
     });
     setShowPreview(true);
@@ -189,18 +160,13 @@ interface AdvancedExportTemplateManagerProps {
         t.id === templateId ? { ...t, is_public: isPublic } : t
       ));
       setError(null);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to share template');
-} finally {
-      setLoading(false);
-  }, [enableSharing, shareTemplate]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to share template') } finally { setLoading(false) }, [enableSharing, shareTemplate]);
   // Get template rating display
-  const getTemplateRating = useCallback((templateId: string) => {
-  const stats = templateStats.get(templateId);
+  const getTemplateRating = useCallback((templateId: string) => { const stats = templateStats.get(templateId);
   if (!stats || stats.totalRatings === 0) return null;
   return {
-  average: Math.round(stats.averageRating * 10) / 10,
-  count: stats.totalRatings,
+  average: Math.round(stats.averageRating * 10) / 10
+  count: stats.totalRatings }
 };
   }, [templateStats]);
   // Format display helpers
@@ -209,35 +175,33 @@ interface AdvancedExportTemplateManagerProps {
     if (count < 1000000) return `${Math.round(count / 100) / 10}K`;}
     return `${Math.round(count / 100000) / 10}M`;}
   }, []);
-  const formatDate = useCallback((dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
-  }, []);
+  const formatDate = useCallback((dateString: string) => { return new Date(dateString).toLocaleDateString() }, []);
   if (!visible) return null;
   return;
     <div
       className={`advanced-export-template-manager ${className}`}
-      style={{
-  position: 'fixed',
-  inset: '20px',
-  background: 'white',
-  border: '1px solid #e2e8f0',
-  borderRadius: '12px',
-  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-  zIndex: 1000,
-  overflow: 'hidden',
-  display: 'flex',
-  flexDirection: 'column',
-  fontFamily: 'system-ui, -apple-system, sans-serif',
-}}
+      style={ {
+  position: 'fixed'
+  inset: '20px'
+  background: 'white'
+  border: '1px solid #e2e8f0'
+  borderRadius: '12px'
+  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)'
+  zIndex: 1000
+  overflow: 'hidden'
+  display: 'flex'
+  flexDirection: 'column'
+  fontFamily: 'system-ui, -apple-system, sans-serif' }
+
     >
       {/* Header */}
       <div
-        style={{
-  padding: '20px 24px',
-  borderBottom: '1px solid #e2e8f0',
-  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  color: 'white',
-}}
+        style={ {
+  padding: '20px 24px'
+  borderBottom: '1px solid #e2e8f0'
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+  color: 'white' }
+}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
@@ -251,19 +215,19 @@ interface AdvancedExportTemplateManagerProps {
           {onClose && ()
             <button
               onClick={onClose}
-              style={{
-  background: 'rgba(255, 255, 255, 0.2)',
-  border: 'none',
-  borderRadius: '6px',
-  color: 'white',
-  width: '32px',
-  height: '32px',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '18px',
-}}
+              style={ {
+  background: 'rgba(255, 255, 255, 0.2)'
+  border: 'none'
+  borderRadius: '6px'
+  color: 'white'
+  width: '32px'
+  height: '32px'
+  cursor: 'pointer'
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  fontSize: '18px' }
+
             >
               ×
             </button>
@@ -272,33 +236,33 @@ interface AdvancedExportTemplateManagerProps {
       </div>
       {/* Navigation Tabs */}
       <div
-        style={{
-  padding: '16px 24px',
-  borderBottom: '1px solid #e2e8f0',
-  background: '#f8fafc',
-}}
+        style={ {
+  padding: '16px 24px'
+  borderBottom: '1px solid #e2e8f0'
+  background: '#f8fafc' }
+
       >
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
           {[
-            { key: 'browse', label: '🔍 Browse Templates', desc: 'Explore available templates' },
-            { key: 'create', label: '➕ Create Template', desc: 'Build new templates' },
-            ...(enableSharing ? [{ key: 'shared', label: '🌐 Shared Templates', desc: 'Community templates' }] : []),
+            { key: 'browse', label: '🔍 Browse Templates', desc: 'Explore available templates' }
+            { key: 'create', label: '➕ Create Template', desc: 'Build new templates' }
+            ...(enableSharing ? [{ key: 'shared', label: '🌐 Shared Templates', desc: 'Community templates' }] : [])
             ...(enableCollaboration ? [{ key: 'collaborate', label: '👥 Collaborate', desc: 'Team templates' }] : [])
           ].map(tab => ()
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as 'browse' | 'create' | 'shared' | 'collaborate')}
-              style={{
-  padding: '8px 16px',
-  background: activeTab === tab.key ? '#3b82f6' : 'transparent',
-  color: activeTab === tab.key ? 'white' : '#6b7280',
-  border: '1px solid #e2e8f0',
-  borderRadius: '6px',
-  cursor: 'pointer',
-  fontSize: '14px',
-  fontWeight: activeTab === tab.key ? '600' : 'normal',
-  transition: 'all 0.2s ease',
-}}
+              style={ {
+  padding: '8px 16px'
+  background: activeTab === tab.key ? '#3b82f6' : 'transparent'
+  color: activeTab === tab.key ? 'white' : '#6b7280'
+  border: '1px solid #e2e8f0'
+  borderRadius: '6px'
+  cursor: 'pointer'
+  fontSize: '14px'
+  fontWeight: activeTab === tab.key ? '600' : 'normal'
+  transition: 'all 0.2s ease' }
+
               title={tab.desc}
             >
               {tab.label}
@@ -313,23 +277,23 @@ interface AdvancedExportTemplateManagerProps {
               placeholder="Search templates..."
               value={filter.search || ''}
               onChange={(e) => setFilter(prev => ({ ...prev, search: e.target.value }))}
-              style={{
-  padding: '8px 12px',
-  border: '1px solid #e2e8f0',
-  borderRadius: '6px',
-  fontSize: '14px',
-  minWidth: '200px',
-}}
+              style={ {
+  padding: '8px 12px'
+  border: '1px solid #e2e8f0'
+  borderRadius: '6px'
+  fontSize: '14px'
+  minWidth: '200px' }
+
             />
             <select
               value={filter.format || ''}
               onChange={(e) => setFilter(prev => ({ ...prev, format: e.target.value as ExportFormat || undefined }))}
-              style={{
-  padding: '8px 12px',
-  border: '1px solid #e2e8f0',
-  borderRadius: '6px',
-  fontSize: '14px',
-}}
+              style={ {
+  padding: '8px 12px'
+  border: '1px solid #e2e8f0'
+  borderRadius: '6px'
+  fontSize: '14px' }
+
             >
               <option value="">All Formats</option>
               <option value="json">JSON</option>
@@ -345,12 +309,12 @@ interface AdvancedExportTemplateManagerProps {
             <select
               value={filter.type || ''}
               onChange={(e) => setFilter(prev => ({ ...prev, type: e.target.value as TemplateType || undefined }))}
-              style={{
-  padding: '8px 12px',
-  border: '1px solid #e2e8f0',
-  borderRadius: '6px',
-  fontSize: '14px',
-}}
+              style={ {
+  padding: '8px 12px'
+  border: '1px solid #e2e8f0'
+  borderRadius: '6px'
+  fontSize: '14px' }
+
             >
               <option value="">All Types</option>
               <option value="full">Full Export</option>
@@ -364,15 +328,15 @@ interface AdvancedExportTemplateManagerProps {
                 <button
                   key={mode}
                   onClick={() => setViewMode(mode as 'grid' | 'list' | 'table')}
-                  style={{
-  padding: '6px 10px',
-  background: viewMode === mode ? '#e2e8f0' : 'transparent',
-  border: '1px solid #e2e8f0',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  fontSize: '12px',
-  textTransform: 'capitalize',
-}}
+                  style={ {
+  padding: '6px 10px'
+  background: viewMode === mode ? '#e2e8f0' : 'transparent'
+  border: '1px solid #e2e8f0'
+  borderRadius: '4px'
+  cursor: 'pointer'
+  fontSize: '12px'
+  textTransform: 'capitalize' }
+
                 >
                   {mode}
                 </button>
@@ -380,17 +344,16 @@ interface AdvancedExportTemplateManagerProps {
             </div>
             <select
               value={`${sortBy}-${sortOrder}`}
-              onChange={(e) => {
+              onChange={ (e) => {
                 const [by, order] = e.target.value.split('-');
                 setSortBy(by as 'name' | 'created' | 'usage' | 'rating');
-                setSortOrder(order as 'asc' | 'desc');
-              }}
-              style={{
-  padding: '8px 12px',
-  border: '1px solid #e2e8f0',
-  borderRadius: '6px',
-  fontSize: '14px',
-}}
+                setSortOrder(order as 'asc' | 'desc') }}
+              style={ {
+  padding: '8px 12px'
+  border: '1px solid #e2e8f0'
+  borderRadius: '6px'
+  fontSize: '14px' }
+
             >
               <option value="name-asc">Name A-Z</option>
               <option value="name-desc">Name Z-A</option>
@@ -408,48 +371,48 @@ interface AdvancedExportTemplateManagerProps {
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
         {/* Main Content */}
         <div style={{ flex: 1, overflow: 'auto', padding: '20px 24px' }}>
-          {error && ()
+          { error && ()
             <div
               style={{
-  padding: '12px 16px',
-  background: '#fee2e2',
-  border: '1px solid #fecaca',
-  borderRadius: '8px',
-  color: '#dc2626',
-  marginBottom: '20px',
-  fontSize: '14px',
-}}
+  padding: '12px 16px'
+  background: '#fee2e2'
+  border: '1px solid #fecaca'
+  borderRadius: '8px'
+  color: '#dc2626'
+  marginBottom: '20px'
+  fontSize: '14px' }
+}
             >
               <strong>Error:</strong> {error}
             </div>
           )}
-          {loading && ()
+          { loading && ()
             <div
               style={{
-  padding: '40px',
-  textAlign: 'center',
-  color: '#6b7280',
-}}
+  padding: '40px'
+  textAlign: 'center'
+  color: '#6b7280' }
+}
             >
               <div style={{ fontSize: '24px', marginBottom: '12px' }}>⏳</div>
               <div>Loading templates...</div>
             </div>
           )}
           {/* Browse Templates Tab */}
-          {activeTab === 'browse' && !loading && ()
+          { activeTab === 'browse' && !loading && ()
             <div>
               {filteredTemplates.length === 0 ? ()
                 <div
                   style={{
-  padding: '60px 20px',
-  textAlign: 'center',
-  color: '#9ca3af',
-}}
+  padding: '60px 20px'
+  textAlign: 'center'
+  color: '#9ca3af' }
+}
                 >
                   <div style={{ fontSize: '48px', marginBottom: '16px' }}>📋</div>
                   <div style={{ fontSize: '18px', marginBottom: '8px' }}>No templates found</div>
                   <div style={{ fontSize: '14px' }}>
-                    {filter.search || filter.format || filter.type 
+                    { filter.search || filter.format || filter.type 
                       ? 'Try adjusting your filters or create a new template'
                       : 'Create your first export template to get started'
                   </div>
@@ -457,11 +420,11 @@ interface AdvancedExportTemplateManagerProps {
               ) : ()
                 <div
                   style={{
-  display: viewMode === 'grid' ? 'grid' : 'flex',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-  flexDirection: viewMode === 'list' ? 'column' : undefined,
-  gap: '16px',
-}}
+  display: viewMode === 'grid' ? 'grid' : 'flex'
+  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'
+  flexDirection: viewMode === 'list' ? 'column' : undefined
+  gap: '16px' }
+}
                 >
                   {filteredTemplates.map(template => {)
   const stats = templateStats.get(template.id);
@@ -469,16 +432,16 @@ interface AdvancedExportTemplateManagerProps {
                     return;
                       <div
                         key={template.id}
-                        style={{
-                          background: selectedTemplate?.id === template.id ? '#f0f9ff' : 'white',
+                        style={ {
+                          background: selectedTemplate?.id === template.id ? '#f0f9ff' : 'white' }
                           border: `2px solid ${selectedTemplate?.id === template.id ? '#0ea5e9' : '#e2e8f0'}`}
-},
-  borderRadius: '8px',
-                          padding: '16px',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                          position: 'relative'
-  }}
+
+  borderRadius: '8px'
+                          padding: '16px'
+                          cursor: 'pointer'
+                          transition: 'all 0.2s ease'
+                          position: 'relative';
+
                         onClick={() => handleSelectTemplate(template)}
                       >
                         {/* Template Header */}
@@ -492,33 +455,33 @@ interface AdvancedExportTemplateManagerProps {
                               {template.is_public && <span> • Public</span>}
                             </div>
                           </div>
-                          {template.is_system_template && ()
+                          { template.is_system_template && ()
                             <span
                               style={{
-  background: '#dbeafe',
-  color: '#1e40af',
-  padding: '2px 6px',
-  borderRadius: '4px',
-  fontSize: '10px',
-  fontWeight: '600',
-}}
+  background: '#dbeafe'
+  color: '#1e40af'
+  padding: '2px 6px'
+  borderRadius: '4px'
+  fontSize: '10px'
+  fontWeight: '600' }
+}
                             >
                               SYSTEM
                             </span>
                           )}
                         </div>
                         {/* Template Description */}
-                        {template.description && ()
+                        { template.description && ()
                           <p style={{
-  margin: '0 0 12px',
-  fontSize: '14px',
-  color: '#6b7280',
-  lineHeight: '1.4',
-  display: '-webkit-box',
-  WebkitLineClamp: 2,
-  WebkitBoxOrient: 'vertical',
-  overflow: 'hidden',
-}}>
+  margin: '0 0 12px'
+  fontSize: '14px'
+  color: '#6b7280'
+  lineHeight: '1.4'
+  display: '-webkit-box'
+  WebkitLineClamp: 2
+  WebkitBoxOrient: 'vertical'
+  overflow: 'hidden' }
+}>
                             {template.description}
                           </p>
                         )}
@@ -538,56 +501,53 @@ interface AdvancedExportTemplateManagerProps {
                         {/* Template Actions */}
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <button
-                            onClick={(e) => {
+                            onClick={ (e) => {
                               e.stopPropagation();
-                              handleCustomizeTemplate(template);
-                            }}
-                            style={{
-  padding: '6px 12px',
-  background: '#f3f4f6',
-  border: '1px solid #e2e8f0',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  fontSize: '12px',
-  color: '#374151',
-}}
+                              handleCustomizeTemplate(template) }}
+                            style={ {
+  padding: '6px 12px'
+  background: '#f3f4f6'
+  border: '1px solid #e2e8f0'
+  borderRadius: '4px'
+  cursor: 'pointer'
+  fontSize: '12px'
+  color: '#374151' }
+
                           >
                             🔧 Customize
                           </button>
-                          {enableSharing && ()
+                          { enableSharing && ()
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleShareTemplate(template.id, !template.is_public);
-                              }}
-                              style={{
-  padding: '6px 12px',
-  background: template.is_public ? '#fee2e2' : '#f0fdf4',
-  border: '1px solid #e2e8f0',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  fontSize: '12px',
-  color: template.is_public ? '#dc2626' : '#16a34a',
-}}
+                                handleShareTemplate(template.id, !template.is_public) }}
+                              style={ {
+  padding: '6px 12px'
+  background: template.is_public ? '#fee2e2' : '#f0fdf4'
+  border: '1px solid #e2e8f0'
+  borderRadius: '4px'
+  cursor: 'pointer'
+  fontSize: '12px'
+  color: template.is_public ? '#dc2626' : '#16a34a' }
+
                             >
                               {template.is_public ? '🔒 Make Private' : '🌐 Make Public'}
                             </button>
                           )}
-                          {!template.is_system_template && ()
+                          { !template.is_system_template && ()
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleDeleteTemplate(template.id);
-                              }}
-                              style={{
-  padding: '6px 12px',
-  background: '#fee2e2',
-  border: '1px solid #fecaca',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  fontSize: '12px',
-  color: '#dc2626',
-}}
+                                handleDeleteTemplate(template.id) }}
+                              style={ {
+  padding: '6px 12px'
+  background: '#fee2e2'
+  border: '1px solid #fecaca'
+  borderRadius: '4px'
+  cursor: 'pointer'
+  fontSize: '12px'
+  color: '#dc2626' }
+
                             >
                               🗑️ Delete
                             </button>
@@ -601,14 +561,14 @@ interface AdvancedExportTemplateManagerProps {
             </div>
           )}
           {/* Create Template Tab */}
-          {activeTab === 'create' && ()
+          { activeTab === 'create' && ()
             <div>
               <div
                 style={{
-  padding: '40px',
-  textAlign: 'center',
-  color: '#6b7280',
-}}
+  padding: '40px'
+  textAlign: 'center'
+  color: '#6b7280' }
+}
               >
                 <div style={{ fontSize: '48px', marginBottom: '16px' }}>🛠️</div>
                 <div style={{ fontSize: '18px', marginBottom: '8px' }}>Template Creation</div>
@@ -617,16 +577,16 @@ interface AdvancedExportTemplateManagerProps {
                 </div>
                 <button
                   onClick={() => setIsCreating(true)}
-                  style={{
-  padding: '12px 24px',
-  background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-  color: 'white',
-  border: 'none',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  fontSize: '16px',
-  fontWeight: '600',
-}}
+                  style={ {
+  padding: '12px 24px'
+  background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+  color: 'white'
+  border: 'none'
+  borderRadius: '8px'
+  cursor: 'pointer'
+  fontSize: '16px'
+  fontWeight: '600' }
+
                 >
                   ➕ Create New Template
                 </button>
@@ -634,13 +594,13 @@ interface AdvancedExportTemplateManagerProps {
             </div>
           )}
           {/* Shared Templates Tab */}
-          {activeTab === 'shared' && ()
+          { activeTab === 'shared' && ()
             <div
               style={{
-  padding: '40px',
-  textAlign: 'center',
-  color: '#6b7280',
-}}
+  padding: '40px'
+  textAlign: 'center'
+  color: '#6b7280' }
+}
             >
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>🌐</div>
               <div style={{ fontSize: '18px', marginBottom: '8px' }}>Community Templates</div>
@@ -650,13 +610,13 @@ interface AdvancedExportTemplateManagerProps {
             </div>
           )}
           {/* Collaborate Tab */}
-          {activeTab === 'collaborate' && ()
+          { activeTab === 'collaborate' && ()
             <div
               style={{
-  padding: '40px',
-  textAlign: 'center',
-  color: '#6b7280',
-}}
+  padding: '40px'
+  textAlign: 'center'
+  color: '#6b7280' }
+}
             >
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>👥</div>
               <div style={{ fontSize: '18px', marginBottom: '8px' }}>Team Collaboration</div>
@@ -667,14 +627,14 @@ interface AdvancedExportTemplateManagerProps {
           )}
         </div>
         {/* Side Panel */}
-        {selectedTemplate && ()
+        { selectedTemplate && ()
           <div
             style={{
-  width: '350px',
-  borderLeft: '1px solid #e2e8f0',
-  background: '#f8fafc',
-  overflow: 'auto',
-}}
+  width: '350px'
+  borderLeft: '1px solid #e2e8f0'
+  background: '#f8fafc'
+  overflow: 'auto' }
+}
           >
             <div style={{ padding: '20px' }}>
               <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: '600' }}>
@@ -735,17 +695,17 @@ interface AdvancedExportTemplateManagerProps {
                     Format Options
                   </h5>
                   <div
-                    style={{
-  background: 'white',
-  border: '1px solid #e2e8f0',
-  borderRadius: '4px',
-  padding: '8px',
-  fontSize: '11px',
-  color: '#374151',
-  fontFamily: 'monospace',
-  overflow: 'auto',
-  maxHeight: '150px',
-}}
+                    style={ {
+  background: 'white'
+  border: '1px solid #e2e8f0'
+  borderRadius: '4px'
+  padding: '8px'
+  fontSize: '11px'
+  color: '#374151'
+  fontFamily: 'monospace'
+  overflow: 'auto'
+  maxHeight: '150px' }
+
                   >
                     <pre style={{ margin: 0 }}>
                       {JSON.stringify(selectedTemplate.format_options, null, 2)}
@@ -757,48 +717,47 @@ interface AdvancedExportTemplateManagerProps {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <button
                   onClick={() => handleSelectTemplate(selectedTemplate)}
-                  style={{
-  padding: '10px 16px',
-  background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-  color: 'white',
-  border: 'none',
-  borderRadius: '6px',
-  cursor: 'pointer',
-  fontSize: '14px',
-  fontWeight: '600',
-}}
+                  style={ {
+  padding: '10px 16px'
+  background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+  color: 'white'
+  border: 'none'
+  borderRadius: '6px'
+  cursor: 'pointer'
+  fontSize: '14px'
+  fontWeight: '600' }
+
                 >
                   📤 Use This Template
                 </button>
                 <button
                   onClick={() => handleCustomizeTemplate(selectedTemplate)}
-                  style={{
-  padding: '10px 16px',
-  background: '#f3f4f6',
-  color: '#374151',
-  border: '1px solid #e2e8f0',
-  borderRadius: '6px',
-  cursor: 'pointer',
-  fontSize: '14px',
-}}
+                  style={ {
+  padding: '10px 16px'
+  background: '#f3f4f6'
+  color: '#374151'
+  border: '1px solid #e2e8f0'
+  borderRadius: '6px'
+  cursor: 'pointer'
+  fontSize: '14px' }
+
                 >
                   🔧 Customize Template
                 </button>
-                {!selectedTemplate.is_system_template && ()
+                { !selectedTemplate.is_system_template && ()
                   <button
                     onClick={() => {
                       setEditingTemplate(selectedTemplate);
-                      setIsEditing(true);
-                    }}
-                    style={{
-  padding: '10px 16px',
-  background: '#fffbeb',
-  color: '#d97706',
-  border: '1px solid #fed7aa',
-  borderRadius: '6px',
-  cursor: 'pointer',
-  fontSize: '14px',
-}}
+                      setIsEditing(true) }}
+                    style={ {
+  padding: '10px 16px'
+  background: '#fffbeb'
+  color: '#d97706'
+  border: '1px solid #fed7aa'
+  borderRadius: '6px'
+  cursor: 'pointer'
+  fontSize: '14px' }
+
                   >
                     ✏️ Edit Template
                   </button>

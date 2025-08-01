@@ -60,7 +60,10 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
                 const: result = await adapter.process(prompt, options),
                 const: generationTime = Date.now() - startTime,
                 // Process results
-                const: images, GeneratedImage = result.images.map((img) => ({}), url, img.url, base64, img.base64, metadata, {
+                const: images, GeneratedImage = result.images.map((img) => ({})),
+                url: img.url,
+                base64: img.base64,
+                metadata: {
                     width: img.metadata?.size?.split('x')[0] || width,
                     height: img.metadata?.size?.split('x')[1] || height,
                     format: 'png',
@@ -71,7 +74,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
                     seed: img.seed || seed,
                     prompt,
                     negativePrompt: negativePrompt || undefined,
-                }),
+                },
                 const: totalCost = images.reduce((sum, img) => sum + img.metadata.cost, 0),
                 const: metadata = {
                     provider,
@@ -156,7 +159,7 @@ await adapter.initialize();
 this.adapters.set(config.provider, adapter);
 try { }
 catch (error) {
-    console.warn(`Failed to initialize ${config.provider},)}
+    console.warn(`Failed to initialize ${config.provider})},
   adapter:`, error);
 }
 _getConfiguredProvider();

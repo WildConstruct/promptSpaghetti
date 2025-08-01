@@ -9,16 +9,15 @@
 import React from 'react';
 
 }
-export interface WidgetConfig {
-    id: string;
+}
+export interface WidgetConfig { id: string;
     title: string;
     type: 'metric' | 'chart' | 'list' | 'status' | 'alert';
     size: 'small' | 'medium' | 'large' | 'full-width';
     refreshInterval?: number;
     requiredPermissions: string[];
-    dataSource: string;
-
-
+    dataSource: string }
+}
 }
 interface MonitoringWidgetProps {
     config: WidgetConfig;
@@ -35,4 +34,5 @@ export declare const ActivityFeedWidget: React.FC<MonitoringWidgetProps>;
 export declare const MonitoringWidget: React.FC<MonitoringWidgetProps>;
 export default MonitoringWidget;
 //# sourceMappingURL=MonitoringWidgets.d.ts.map
+}
 }

@@ -6,8 +6,7 @@
  * analytics infrastructure, providing comprehensive insights into learning effectiveness,
  * community engagement, and knowledge base usage.
  */
-import { 
-  LearningAnalyticsService,
+import { LearningAnalyticsService,
   LearningAnalyticsEvent,
   TutorialAnalyticsEvent,
   KnowledgeBaseAnalyticsEvent,
@@ -31,14 +30,13 @@ import {
   CrossPlatformInsights,
   LearningDataExport,
   LearningAnalyticsReportConfig,
-  ComprehensiveAnalyticsReport,
+  ComprehensiveAnalyticsReport }
   ContentType
 } from './LearningAnalyticsExtension';
 import { TimeRange } from '../../../server/src/marketplace/analytics.types';
 import { SkillDomain, SkillAssessmentEngine } from '../community/SkillLevelTagging';
 import { MarketplaceTutorialSystemService } from '../community/MarketplaceTutorialSystem';
-export declare class LearningAnalyticsServiceImpl implements LearningAnalyticsService {
-    private apiClient;
+export declare class LearningAnalyticsServiceImpl implements LearningAnalyticsService { private apiClient;
     private skillAssessmentEngine;
     private tutorialService;
     constructor();
@@ -51,14 +49,14 @@ export declare class LearningAnalyticsServiceImpl implements LearningAnalyticsSe
     trackKnowledgeBaseEvent(event: KnowledgeBaseAnalyticsEvent): Promise<void>;
     trackCommunityEvent(event: CommunityAnalyticsEvent): Promise<void>;
     generateLearningEffectivenessMetrics();
-      contentId: string,
-      timeRange: TimeRange,
+      contentId: string
+      timeRange: TimeRange
     ): Promise<LearningEffectivenessMetrics>;
     generateUserLearningAnalytics(userId: string, timeRange: TimeRange): Promise<UserLearningAnalytics>;
     generateCommunityKnowledgeMetrics(communityId: string, timeRange: TimeRange): Promise<CommunityKnowledgeMetrics>;
     generateKnowledgeBaseUsageMetrics();
-      knowledgeBaseId: string,
-      timeRange: TimeRange,
+      knowledgeBaseId: string
+      timeRange: TimeRange }
     ): Promise<KnowledgeBaseUsageMetrics>;
     identifyLearningTrends(timeRange: TimeRange): Promise<LearningTrend[]>;
     detectContentPerformanceAnomalies(contentType: ContentType, threshold: number): Promise<PerformanceAnomaly[]>;

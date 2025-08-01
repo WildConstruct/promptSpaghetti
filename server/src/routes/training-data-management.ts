@@ -125,34 +125,34 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
       body: CreateDatasetSchema,
       response: {
         201: DatasetSchema
-      }
-    }
+
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof CreateDatasetSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const datasetData = request.body;
       const dataset = await trainingDataService.createDataset(datasetData);
       
       reply.code(201);
       return dataset;
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Dataset creation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Import dataset endpoint
   fastify.post('/api/training-data/datasets/import', {
     schema: {
       body: ImportDatasetSchema
-    }
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof ImportDatasetSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const importData = request.body;
       const importJob = await trainingDataService.importDataset(importData);
@@ -164,19 +164,19 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         estimated_completion_time: importJob.estimatedCompletionTime,
         progress_url: `/api/training-data/import-jobs/${importJob.id}`
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Dataset import failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Get dataset details endpoint
   fastify.get('/api/training-data/datasets/:id', async (request: FastifyRequest<{
     Params: { id: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { id } = request.params;
       const dataset = await trainingDataService.getDataset(id);
@@ -184,16 +184,16 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
       if (!dataset) {
         reply.code(404);
         return { error: 'Dataset not found' };
-      }
+
       
       return dataset;
-    } catch (error) {
+ catch (error) {
       reply.code(500);
       return {
         error: 'Failed to retrieve dataset',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // List datasets endpoint
@@ -205,11 +205,11 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         type: z.enum(['classification', 'regression', 'text_generation', 'question_answering', 'sentiment_analysis', 'named_entity_recognition']).optional(),
         status: z.enum(['creating', 'ready', 'processing', 'error']).optional(),
         search: z.string().optional()
-  }
-    }
+
+
   }, async (request: FastifyRequest<{
     Querystring: { page: number; limit: number; type?: string; status?: string; search?: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { page, limit, type, status, search } = request.query;
       const result = await trainingDataService.listDatasets({
@@ -225,23 +225,23 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         limit,
         total_pages: Math.ceil(result.total / limit)
       };
-    } catch (error) {
+ catch (error) {
       reply.code(500);
       return {
         error: 'Failed to list datasets',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Create labeling task endpoint
   fastify.post('/api/training-data/labeling-tasks', {
     schema: {
       body: LabelingTaskSchema
-    }
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof LabelingTaskSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const taskData = request.body;
       const labelingTask = await trainingDataService.createLabelingTask(taskData);
@@ -255,19 +255,19 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         assignment_url: `/api/training-data/labeling-tasks/${labelingTask.id}/assignments`,
         progress: labelingTask.progress
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Labeling task creation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Get labeling task status endpoint
   fastify.get('/api/training-data/labeling-tasks/:id', async (request: FastifyRequest<{
     Params: { id: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { id } = request.params;
       const task = await trainingDataService.getLabelingTask(id);
@@ -275,26 +275,26 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
       if (!task) {
         reply.code(404);
         return { error: 'Labeling task not found' };
-      }
+
       
       return task;
-    } catch (error) {
+ catch (error) {
       reply.code(500);
       return {
         error: 'Failed to retrieve labeling task',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Data augmentation endpoint
   fastify.post('/api/training-data/augmentation', {
     schema: {
       body: DataAugmentationSchema
-    }
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof DataAugmentationSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const augmentationData = request.body;
       const augmentationJob = await trainingDataService.augmentData(augmentationData);
@@ -308,23 +308,23 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         techniques_applied: augmentationJob.techniques,
         progress_url: `/api/training-data/augmentation-jobs/${augmentationJob.id}`
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Data augmentation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Quality assessment endpoint
   fastify.post('/api/training-data/quality-assessment', {
     schema: {
       body: QualityAssessmentSchema
-    }
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof QualityAssessmentSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const assessmentData = request.body;
       const assessment = await trainingDataService.assessQuality(assessmentData);
@@ -339,24 +339,24 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         report_url: assessment.reportUrl,
         completed_at: assessment.completedAt
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Quality assessment failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Dataset versioning endpoint
   fastify.post('/api/training-data/datasets/:id/versions', {
     schema: {
       body: DatasetVersionSchema
-    }
+
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Body: z.infer<typeof DatasetVersionSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { id } = request.params;
       const versionData = { ...request.body, dataset_id: id };
@@ -372,19 +372,19 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         size: version.size,
         parent_version_id: version.parentVersionId
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Dataset version creation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Get dataset versions endpoint
   fastify.get('/api/training-data/datasets/:id/versions', async (request: FastifyRequest<{
     Params: { id: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { id } = request.params;
       const versions = await trainingDataService.getDatasetVersions(id);
@@ -400,13 +400,13 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
           is_current: version.isCurrent
         }))
       };
-    } catch (error) {
+ catch (error) {
       reply.code(500);
       return {
         error: 'Failed to retrieve dataset versions',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Export dataset endpoint
@@ -424,12 +424,12 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
             end: z.string().datetime().optional()
           }).optional()
         }).default({})
-  }
-    }
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Body: { format: string; include_metadata: boolean; version_id?: string; filter: any }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { id } = request.params;
       const { format, include_metadata, version_id, filter } = request.body;
@@ -450,38 +450,38 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         download_url: exportJob.downloadUrl,
         progress_url: `/api/training-data/export-jobs/${exportJob.id}`
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Dataset export failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Delete dataset endpoint
   fastify.delete('/api/training-data/datasets/:id', async (request: FastifyRequest<{
     Params: { id: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { id } = request.params;
       await trainingDataService.deleteDataset(id);
       
       reply.code(204);
       return;
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Dataset deletion failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Get job status endpoint (generic for import, augmentation, export jobs)
   fastify.get('/api/training-data/jobs/:jobId', async (request: FastifyRequest<{
     Params: { jobId: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { jobId } = request.params;
       const job = await trainingDataService.getJobStatus(jobId);
@@ -489,7 +489,7 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
       if (!job) {
         reply.code(404);
         return { error: 'Job not found' };
-      }
+
       
       return {
         job_id: jobId,
@@ -500,13 +500,13 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         error_message: job.errorMessage,
         result: job.result
       };
-    } catch (error) {
+ catch (error) {
       reply.code(500);
       return {
         error: 'Failed to retrieve job status',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Training data service health check endpoint
@@ -519,20 +519,20 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         details: healthStatus.details,
         checked_at: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       reply.code(503);
       return {
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',
         checked_at: new Date().toISOString()
       };
-    }
+
   });
 
   // Get dataset statistics endpoint
   fastify.get('/api/training-data/datasets/:id/statistics', async (request: FastifyRequest<{
     Params: { id: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { id } = request.params;
       const statistics = await trainingDataService.getDatasetStatistics(id);
@@ -546,12 +546,11 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         temporal_metrics: statistics.temporalMetrics,
         generated_at: statistics.generatedAt
       };
-    } catch (error) {
+ catch (error) {
       reply.code(500);
       return {
         error: 'Failed to generate dataset statistics',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
-}

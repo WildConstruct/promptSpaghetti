@@ -5,14 +5,16 @@ import { ReportCard } from './ReportCard';
 import { ExportManager } from './ExportManager';
 import { analyticsService } from '../../../services/analyticsService';
 import './ReportsManager.css';
-}
+
+
 interface ReportsManagerProps {
   creatorId: string;
   className?: string;
-  export const ReportsManager: React.FC<ReportsManagerProps> = ({,)
+  export const ReportsManager: React.FC<ReportsManagerProps> = ({),
   creatorId,
   className = ''
-}
+
+
 }) => {
   const [reports, setReports] = useState<CustomReport>([]);
   const [loading, setLoading] = useState(true);
@@ -31,10 +33,10 @@ interface ReportsManagerProps {
       setError(null);
       const reportsData = await analyticsService.getCustomReports(creatorId);
       setReports(reportsData);
-    } catch (err) {
+ catch (err) {
   console.error('Failed to load reports:', err);
   setError(err instanceof Error ? err.message : 'Failed to load reports');
-} finally {
+ finally {
       setLoading(false);
   }, [creatorId]);
   // Load reports on mount
@@ -47,7 +49,7 @@ interface ReportsManagerProps {
   // Update existing report
   setReports(prev => )
   prev.map(r => r.id === report.id ? report : r));
-} else {
+ else {
       // Add new report
       setReports(prev => [report, ...prev]);
     setShowBuilder(false);
@@ -60,7 +62,7 @@ interface ReportsManagerProps {
     try {
       await analyticsService.deleteCustomReport(reportId);
       setReports(prev => prev.filter(r => r.id !== reportId));
-    } catch (err) {
+ catch (err) {
   console.error('Failed to delete report:', err);
   alert('Failed to delete report. Please try again.');
 };
@@ -78,7 +80,7 @@ interface ReportsManagerProps {
       link.download = `report_${reportId}_${new Date().toISOString().split('T')[0]}.json`;}
       link.click();
       URL.revokeObjectURL(url);
-    } catch (err) {
+ catch (err) {
   console.error('Failed to generate report:', err);
   alert('Failed to generate report. Please try again.');
 };
@@ -106,7 +108,7 @@ interface ReportsManagerProps {
   return 0;
   if (sortOrder === 'asc') {
   return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-} else {
+ else {
   return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
 });
   if (showBuilder) {
@@ -118,7 +120,7 @@ interface ReportsManagerProps {
         onCancel={() => {
           setShowBuilder(false);
           setSelectedReport(null);
-        }}
+}
         className={className}
       />
     );
@@ -258,7 +260,7 @@ interface ReportsManagerProps {
                 onEdit={(report) => {
                   setSelectedReport(report);
                   setShowBuilder(true);
-                }}
+}
                 onDelete={() => handleReportDelete(report.id)}
                 onGenerate={() => handleGenerateReport(report.id)}
               />

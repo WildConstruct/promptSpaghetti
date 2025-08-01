@@ -5,8 +5,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface LocationData {
   ipAddress: string;
   country?: string;
@@ -26,12 +26,13 @@ export interface LocationData {
   isMalicious?: boolean;
   accuracy?: number;
   lastUpdated?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LocationHistory {
   userId: string;
   location: LocationData;
@@ -42,12 +43,13 @@ export interface LocationHistory {
   verified: boolean;
   flagged: boolean;
   flagReason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LocationAlert {
   id: string;
   userId: string;
@@ -60,17 +62,18 @@ export interface LocationAlert {
     travelDistance?: number;
     travelTime?: number;
     riskFactors: string[];
-}
-}
+
+
+
   };
   timestamp: Date;
   acknowledged: boolean;
   acknowledgedBy?: string;
   acknowledgedAt?: Date;
-}
 
-}
-}
+
+
+
 export interface LocationRisk {
   overall: number;
   factors: {
@@ -80,14 +83,15 @@ export interface LocationRisk {
     maliciousIndicators: number;
     highRiskRegion: number;
     frequencyAnomalies: number;
-}
-}
+
+
+
   };
   recommendations: string[];
-}
 
-}
-}
+
+
+
 export interface LocationDetectionConfig {
   enabled: boolean;
   
@@ -96,8 +100,9 @@ export interface LocationDetectionConfig {
     primary: 'ipapi' | 'maxmind' | 'ipgeolocation' | 'ipstack';
     fallback?: string[];
     apiKeys: Record<string, string>;
-}
-}
+
+
+
   };
 
   // Risk thresholds
@@ -140,7 +145,7 @@ export interface LocationDetectionConfig {
     alertOnProxyDetection: boolean;
     webhookUrl?: string;
   };
-}
+
 
 export class LocationDetectionService {
   private db: DatabaseService;
@@ -158,7 +163,7 @@ export class LocationDetectionService {
     this.redis = redis;
     this.auditService = auditService;
     this.config = config;
-  }
+
 
   async initialize(): Promise<void> {
 
@@ -169,7 +174,7 @@ export class LocationDetectionService {
     await this.loadThreatIntelligence();
     
     console.log('Location Detection Service initialized');
-  }
+
 
   private async initializeTables(): Promise<void> {
 
@@ -261,7 +266,7 @@ export class LocationDetectionService {
       CREATE INDEX IF NOT EXISTS idx_ip_geolocation_cache_expires ON ip_geolocation_cache(expires_at);
       CREATE INDEX IF NOT EXISTS idx_malicious_ips_active ON malicious_ips(active);
     `);
-  }
+
 
   private async loadThreatIntelligence(): Promise<void> {
 
@@ -271,7 +276,7 @@ export class LocationDetectionService {
     
     // This would typically integrate with threat intelligence APIs
     console.log('Threat intelligence loaded (placeholder implementation)');
-  }
+
 
   async detectLocation(userId: string, ipAddress: string): Promise<LocationData> {
 
@@ -281,7 +286,7 @@ export class LocationDetectionService {
       if (cached) {
         await this.updateLocationHistory(userId, cached);
         return cached;
-      }
+
 
       // Get location from geolocation provider
       const location = await this.geolocateIP(ipAddress);
@@ -299,7 +304,7 @@ export class LocationDetectionService {
       await this.analyzeLocationThreats(userId, location);
 
       return location;
-    } catch (error) {
+ catch (error) {
       console.error('Location detection error:', error);
       
       // Return basic location data with error flag
@@ -308,8 +313,8 @@ export class LocationDetectionService {
         country: 'Unknown',
         accuracy: 0,
         lastUpdated: new Date(};
-    }
-  }
+
+
 
   private async getCachedLocation(ipAddress: string): Promise<LocationData | null> {
 
@@ -319,7 +324,7 @@ export class LocationDetectionService {
       const cached = await this.redis.get(redisKey);
       if (cached) {
         return JSON.parse(cached);
-      }
+
 
       // Try database cache
       const result = await this.db.query(`
@@ -336,14 +341,14 @@ export class LocationDetectionService {
         await this.redis.setex(redisKey, this.config.cache.ipLocationTtl, JSON.stringify(location));
         
         return location;
-      }
+
 
       return null;
-    } catch (error) {
+ catch (error) {
       console.error('Cache lookup error:', error);
       return null;
-    }
-  }
+
+
 
   private async geolocateIP(ipAddress: string): Promise<LocationData> {
 
@@ -361,8 +366,8 @@ export class LocationDetectionService {
         return await this.geolocateWithIPStack(ipAddress);
       default:
         throw new Error(`Unknown geolocation provider: ${provider}`);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error(`Primary provider ${provider} failed:`, error);
       
       // Try fallback providers
@@ -377,15 +382,15 @@ export class LocationDetectionService {
             return await this.geolocateWithIPGeolocation(ipAddress);
           case 'ipstack':
             return await this.geolocateWithIPStack(ipAddress);
-          }
-        } catch (fallbackError) {
+
+ catch (fallbackError) {
           console.error(`Fallback provider ${fallbackProvider} failed:`, fallbackError);
-        }
-      }
+
+
       
       throw new Error('All geolocation providers failed');
-    }
-  }
+
+
 
   private async geolocateWithIPAPI(ipAddress: string): Promise<LocationData> {
 
@@ -411,7 +416,7 @@ export class LocationDetectionService {
     
     if (data.status === 'fail') {
       throw new Error(data.message || 'IP-API request failed');
-    }
+
 
     return {
       ipAddress,
@@ -429,14 +434,14 @@ export class LocationDetectionService {
       isHosting: data.hosting,
       accuracy: 80, // IP-API generally good accuracy
       lastUpdated: new Date(};
-  }
+
 
   private async geolocateWithMaxMind(_____ipAddress: string): Promise<LocationData> {
 
     // MaxMind implementation (requires license)
     // This is a placeholder - would integrate with MaxMind GeoIP2 API
     throw new Error('MaxMind integration not implemented');
-  }
+
 
   private async geolocateWithIPGeolocation(ipAddress: string): Promise<LocationData> {
 
@@ -444,7 +449,7 @@ export class LocationDetectionService {
     const apiKey = this.config.providers.apiKeys.ipgeolocation;
     if (!apiKey) {
       throw new Error('IPGeolocation API key not configured');
-    }
+
 
     const response = await fetch(
       `https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&ip=${ipAddress}&fields=country_name,
@@ -479,7 +484,7 @@ export class LocationDetectionService {
       isMalicious: data.threat?.is_threat,
       accuracy: 85,
       lastUpdated: new Date(};
-  }
+
 
   private async geolocateWithIPStack(ipAddress: string): Promise<LocationData> {
 
@@ -487,7 +492,7 @@ export class LocationDetectionService {
     const apiKey = this.config.providers.apiKeys.ipstack;
     if (!apiKey) {
       throw new Error('IPStack API key not configured');
-    }
+
 
     const response = await fetch(`http://api.ipstack.com/${ipAddress}?access_key=${apiKey}&security=1`);
     const data = await response.json();
@@ -509,7 +514,7 @@ export class LocationDetectionService {
       isMalicious: data.security?.is_threat,
       accuracy: 90,
       lastUpdated: new Date(};
-  }
+
 
   private async enhanceWithThreatIntel(location: LocationData): Promise<void> {
 
@@ -523,11 +528,11 @@ export class LocationDetectionService {
     if (maliciousCheck.rows.length > 0) {
       location.isMalicious = true;
       // Could add threat details to location data
-    }
+
 
     // Additional threat intelligence checks would go here
     // (e.g., checking against known bot networks, compromised hosts, etc.)
-  }
+
 
   private async cacheLocation(ipAddress: string, location: LocationData): Promise<void> {
 
@@ -553,10 +558,10 @@ export class LocationDetectionService {
           last_updated = NOW(),
           expires_at = $4
       `, [ipAddress, locationJson, this.config.providers.primary, expiresAt]);
-    } catch (error) {
+ catch (error) {
       console.error('Location caching error:', error);
-    }
-  }
+
+
 
   private async updateLocationHistory(userId: string, location: LocationData): Promise<void> {
 
@@ -608,7 +613,7 @@ export class LocationDetectionService {
           location.isTor,
           location.isMalicious
         ]);
-      } else {
+ else {
         // Insert new record
         await this.db.query(`
           INSERT INTO user_location_history (
@@ -636,11 +641,11 @@ export class LocationDetectionService {
           location.isMalicious || false,
           location.accuracy || 0
         ]);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Location history update error:', error);
-    }
-  }
+
+
 
   private async analyzeLocationThreats(userId: string, location: LocationData): Promise<void> {
 
@@ -655,9 +660,9 @@ export class LocationDetectionService {
         description: `First access from ${location.country}`,
         metadata: {
           riskFactors: ['new_geographical_location']
-        }
+
       });
-    }
+
 
     // Check for new city
     const isNewCity = await this.isNewCity(userId, location.city, location.countryCode);
@@ -668,9 +673,9 @@ export class LocationDetectionService {
         description: `First access from ${location.city}, ${location.country}`,
         metadata: {
           riskFactors: ['new_city_location']
-        }
+
       });
-    }
+
 
     // Check for impossible travel
     const travelAnalysis = await this.analyzeImpossibleTravel(userId, location);
@@ -684,9 +689,9 @@ export class LocationDetectionService {
           travelDistance: travelAnalysis.distance,
           travelTime: travelAnalysis.timeMinutes,
           riskFactors: ['impossible_travel_speed']
-        }
+
       });
-    }
+
 
     // Check for proxy/VPN usage
     if (location.isProxy || location.isVpn || location.isTor) {
@@ -697,9 +702,9 @@ export class LocationDetectionService {
         description: `${proxyType} usage detected from ${location.country}`,
         metadata: {
           riskFactors: [`${proxyType.toLowerCase()}_usage`]
-        }
+
       });
-    }
+
 
     // Check for malicious IP
     if (location.isMalicious) {
@@ -709,9 +714,9 @@ export class LocationDetectionService {
         description: 'Access from known malicious IP address',
         metadata: {
           riskFactors: ['malicious_ip_address']
-        }
+
       });
-    }
+
 
     // Check for high-risk regions
     if (this.config.regionalRisk.enabled && location.countryCode) {
@@ -723,16 +728,16 @@ export class LocationDetectionService {
           description: `Access from high-risk region: ${location.country}`,
           metadata: {
             riskFactors: ['high_risk_geographical_region']
-          }
+
         });
-      }
-    }
+
+
 
     // Create alerts in database
     for (const alertData of alerts) {
       await this.createLocationAlert(userId, location, alertData);
-    }
-  }
+
+
 
   private async isNewCountry(userId: string, countryCode?: string): Promise<boolean> {
 
@@ -745,7 +750,7 @@ export class LocationDetectionService {
     `, [userId, countryCode]);
 
     return parseInt(result.rows[0].count) === 0;
-  }
+
 
   private async isNewCity(userId: string, city?: string, countryCode?: string): Promise<boolean> {
 
@@ -758,18 +763,18 @@ export class LocationDetectionService {
     `, [userId, city, countryCode]);
 
     return parseInt(result.rows[0].count) === 0;
-  }
+
 
   private async analyzeImpossibleTravel(userId: string, currentLocation: LocationData): Promise<{
     isImpossible: boolean;
     distance?: number;
     timeMinutes?: number;
     previousLocation?: LocationData;
-  }> {
+> {
 
     if (!this.config.impossibleTravel.enabled) {
       return { isImpossible: false };
-    }
+
 
     // Get the most recent location (within last 24 hours)
     const recentLocation = await this.db.query(`
@@ -785,7 +790,7 @@ export class LocationDetectionService {
 
     if (recentLocation.rows.length === 0 || !currentLocation.latitude || !currentLocation.longitude) {
       return { isImpossible: false };
-    }
+
 
     const prev = recentLocation.rows[0];
     const distance = this.calculateDistance(
@@ -812,9 +817,9 @@ export class LocationDetectionService {
         city: prev.city,
         latitude: prev.latitude,
         longitude: prev.longitude
-      }
+
     };
-  }
+
 
   private calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     // Haversine formula for calculating distance between two points on Earth
@@ -826,11 +831,11 @@ export class LocationDetectionService {
               Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-  }
+
 
   private toRadians(degrees: number): number {
     return degrees * (Math.PI / 180);
-  }
+
 
   private async createLocationAlert(
     userId: string,
@@ -865,8 +870,8 @@ export class LocationDetectionService {
             country: location.country,
             city: location.city,
             ipAddress: location.ipAddress
-          }
-  }
+
+
         ipAddress: location.ipAddress,
         severity: alertData.severity === 'critical' ? 'error' : 'warning'
       });
@@ -874,11 +879,11 @@ export class LocationDetectionService {
       // Send notifications if configured
       if (this.config.notifications.enabled) {
         await this.sendLocationAlert(userId, location, alertData);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error('Failed to create location alert:', error);
-    }
-  }
+
+
 
   private async sendLocationAlert(
     userId: string,
@@ -888,7 +893,7 @@ export class LocationDetectionService {
 
     // Implementation would send alerts via webhook, email, etc.
     console.log(`Location alert: ${alertData.alertType} for user ${userId} from ${location.country}`);
-  }
+
 
   async getUserLocationHistory(userId: string, limit = 50): Promise<LocationHistory[]> {
 
@@ -917,7 +922,7 @@ export class LocationDetectionService {
         timezone: row.timezone,
         isp: row.isp,
         organization: row.organization
-  }
+
       accessCount: row.access_count,
       firstAccess: row.first_access,
       lastAccess: row.last_access,
@@ -926,7 +931,7 @@ export class LocationDetectionService {
       flagged: row.flagged,
       flagReason: row.flag_reason
     }));
-  }
+
 
   async getLocationAlerts(
     userId?: string,
@@ -950,19 +955,19 @@ export class LocationDetectionService {
       query += ` AND user_id = $${paramIndex}`;
       params.push(userId);
       paramIndex++;
-    }
+
 
     if (severity) {
       query += ` AND severity = $${paramIndex}`;
       params.push(severity);
       paramIndex++;
-    }
+
 
     if (acknowledged !== undefined) {
       query += ` AND acknowledged = $${paramIndex}`;
       params.push(acknowledged);
       paramIndex++;
-    }
+
 
     query += ` ORDER BY created_at DESC LIMIT $${paramIndex}`;
     params.push(limit);
@@ -982,7 +987,7 @@ export class LocationDetectionService {
       acknowledgedBy: row.acknowledged_by,
       acknowledgedAt: row.acknowledged_at
     }));
-  }
+
 
   async acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<void> {
 
@@ -991,7 +996,7 @@ export class LocationDetectionService {
       SET acknowledged = true, acknowledged_by = $2, acknowledged_at = NOW()
       WHERE id = $1
     `, [alertId, acknowledgedBy]);
-  }
+
 
   async calculateLocationRisk(userId: string, location: LocationData): Promise<LocationRisk> {
 
@@ -1004,7 +1009,7 @@ export class LocationDetectionService {
         maliciousIndicators: 0,
         highRiskRegion: 0,
         frequencyAnomalies: 0
-  }
+
       recommendations: []
     };
 
@@ -1012,35 +1017,35 @@ export class LocationDetectionService {
     if (await this.isNewCountry(userId, location.countryCode)) {
       risk.factors.newLocation = this.config.riskThresholds.newCountry;
       risk.recommendations.push('Verify this is a legitimate login from the new country');
-    }
+
 
     const travelAnalysis = await this.analyzeImpossibleTravel(userId, location);
     if (travelAnalysis.isImpossible) {
       risk.factors.impossibleTravel = this.config.riskThresholds.impossibleTravel;
       risk.recommendations.push('Investigate impossible travel pattern');
-    }
+
 
     if (location.isProxy || location.isVpn || location.isTor) {
       risk.factors.proxyDetection = this.config.riskThresholds.proxyDetection;
       risk.recommendations.push('Monitor proxy/VPN usage for security implications');
-    }
+
 
     if (location.isMalicious) {
       risk.factors.maliciousIndicators = this.config.riskThresholds.maliciousIP;
       risk.recommendations.push('Block access from malicious IP address');
-    }
+
 
     if (this.config.regionalRisk.enabled && location.countryCode &&
         this.config.regionalRisk.highRiskCountries.includes(location.countryCode)) {
       risk.factors.highRiskRegion = 30;
       risk.recommendations.push('Enhanced monitoring for high-risk region');
-    }
+
 
     // Calculate overall risk score
     risk.overall = Math.min(100, Object.values(risk.factors).reduce((sum, value) => sum + value, 0));
 
     return risk;
-  }
+
 
   async getLocationStatistics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<Record<string, unknown>> {
     const timeframes = {
@@ -1079,5 +1084,4 @@ export class LocationDetectionService {
       ...alertStats.rows[0],
       timeframe
     };
-  }
-}
+

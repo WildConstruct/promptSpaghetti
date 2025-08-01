@@ -57,53 +57,53 @@ export var AlertSeverity;
             metrics ?  : Record;
         }
     }
-    ;
-    context: {
-        affectedSystems: string;
-        affectedUsers: string;
-        ipAddresses: string;
-        geolocation ?  : {
-            country: string,
-            region: string,
-            confidence: number
-        };
-    }
-    ;
-    risk: {
-        score: number; // 0-100
-        factors: Array;
-        likelihood: number; // 0-1,
-        impact: number; // 0-1
-    }
-    ;
-    compliance: {
-        frameworks: ComplianceFramework;
-        reportingRequired: boolean;
-        deadline ?  : Date;
-    }
-    ;
-    escalation: {
-        level: number;
-        maxLevel: number;
-        nextEscalation ?  : Date;
-        assignedTo ?  : string;
-    }
-    ;
-    resolution ?  : {
-        resolvedBy: string,
-        resolvedAt: Date,
-        solution: string,
-        preventionMeasures: string,
-        lessonsLearned: string
-    };
-    metadata: {
-        correlationId: string;
-        workflowVersion: string;
-        processingTime: number;
-        checksum: string;
-    }
-    ;
 }
+;
+context: {
+    affectedSystems: string;
+    affectedUsers: string;
+    ipAddresses: string;
+    geolocation ?  : {
+        country: string,
+        region: string,
+        confidence: number
+    };
+}
+;
+risk: {
+    score: number; // 0-100
+    factors: Array;
+    likelihood: number; // 0-1,
+    impact: number; // 0-1
+}
+;
+compliance: {
+    frameworks: ComplianceFramework;
+    reportingRequired: boolean;
+    deadline ?  : Date;
+}
+;
+escalation: {
+    level: number;
+    maxLevel: number;
+    nextEscalation ?  : Date;
+    assignedTo ?  : string;
+}
+;
+resolution ?  : {
+    resolvedBy: string,
+    resolvedAt: Date,
+    solution: string,
+    preventionMeasures: string,
+    lessonsLearned: string
+};
+metadata: {
+    correlationId: string;
+    workflowVersion: string;
+    processingTime: number;
+    checksum: string;
+}
+;
 ;
  > ;
 ;
@@ -510,8 +510,9 @@ finally {
                         this.executeEscalationStep(alert, policy, firstStep, execution);
                     }, firstStep.delay * 1000);
                     async;
-                    executeEscalationStep(alert, SecurityAlert);
-                    policy: EscalationPolicy,
+                    executeEscalationStep(alert, SecurityAlert),
+                        policy;
+                    EscalationPolicy,
                         step;
                     EscalationStep,
                         execution;
@@ -570,8 +571,9 @@ finally {
                                 step: workflowStep.id,
                             };
                             async;
-                            sendNotifications(alert, SecurityAlert);
-                            recipients: NotificationRecipient,
+                            sendNotifications(alert, SecurityAlert),
+                                recipients;
+                            NotificationRecipient,
                                 channels;
                             AlertChannel;
                             Promise < void  > {
@@ -934,11 +936,11 @@ finally {
                                                                                                                                                     string;
                                                                                                                                                     {
                                                                                                                                                         const baseContent = `🚨 SECURITY ALERT [${alert.severity.toUpperCase()}]
-  Title: ${alert.title}
+  Title: ${alert.title},
   Category: ${alert.category}
   Risk Score: ${alert.risk.score}/100
-  Time: ${alert.timestamp.toISOString()}
-  ID: ${alert.id}
+  Time: ${alert.timestamp.toISOString()},
+  ID: ${alert.id},
   Description:
 ${alert.description}
 Affected Systems: ${alert.context.affectedSystems.join(', ') || 'None'}
@@ -1078,7 +1080,7 @@ Do not reply to this email.`;
                                                                                                                                                                                 enabled;
                                                                                                                                                                             true,
                                                                                                                                                                                 conditions;
-                                                                                                                                                                            [,
+                                                                                                                                                                            [
                                                                                                                                                                                 { field: 'category', operator: 'eq', value: ThreatCategory.SYSTEM_COMPROMISE },
                                                                                                                                                                                 { field: 'risk.score', operator: 'gte', value: 80 }
                                                                                                                                                                             ],
@@ -1092,15 +1094,15 @@ Do not reply to this email.`;
                                                                                                                                                                                     name;
                                                                                                                                                                                 'Critical Escalation Policy',
                                                                                                                                                                                     steps;
-                                                                                                                                                                                [,
+                                                                                                                                                                                [
                                                                                                                                                                                     {
                                                                                                                                                                                         level: 1,
                                                                                                                                                                                         delay: 0,
-                                                                                                                                                                                        recipients: [,
+                                                                                                                                                                                        recipients: [
                                                                                                                                                                                             {
                                                                                                                                                                                                 type: 'team',
                                                                                                                                                                                                 identifier: 'security-team',
-                                                                                                                                                                                                contactMethods: [,
+                                                                                                                                                                                                contactMethods: [
                                                                                                                                                                                                     { channel: AlertChannel.PAGERDUTY, address: 'security-oncall', priority: 1 },
                                                                                                                                                                                                     { channel: AlertChannel.SLACK, address: '#security-alerts', priority: 2 }
                                                                                                                                                                                                 ]
@@ -1113,11 +1115,11 @@ Do not reply to this email.`;
                                                                                                                                                                                     {
                                                                                                                                                                                         level: 2,
                                                                                                                                                                                         delay: 300, // 5 minutes
-                                                                                                                                                                                        recipients: [,
+                                                                                                                                                                                        recipients: [
                                                                                                                                                                                             {
                                                                                                                                                                                                 type: 'role',
                                                                                                                                                                                                 identifier: 'security-manager',
-                                                                                                                                                                                                contactMethods: [,
+                                                                                                                                                                                                contactMethods: [
                                                                                                                                                                                                     { channel: AlertChannel.PAGERDUTY, address: 'security-manager', priority: 1 }
                                                                                                                                                                                                 ]
                                                                                                                                                                                             }
@@ -1125,7 +1127,8 @@ Do not reply to this email.`;
                                                                                                                                                                                         channels: [AlertChannel.PAGERDUTY, AlertChannel.EMAIL],
                                                                                                                                                                                         actions: ['notify_management'],
                                                                                                                                                                                         continueOnFailure: true
-                                                                                                                                                                                    }],
+                                                                                                                                                                                    }
+                                                                                                                                                                                ],
                                                                                                                                                                                     requiresAcknowledgment;
                                                                                                                                                                                 true,
                                                                                                                                                                                     autoResolve;
@@ -1133,7 +1136,7 @@ Do not reply to this email.`;
                                                                                                                                                                                     escalationTimeout;
                                                                                                                                                                                 300;
                                                                                                                                                                             }
-                                                                                                                                                                            automatedActions: [,
+                                                                                                                                                                            automatedActions: [
                                                                                                                                                                                 {
                                                                                                                                                                                     id: 'isolate-system',
                                                                                                                                                                                     name: 'Isolate Compromised System',
@@ -1141,13 +1144,14 @@ Do not reply to this email.`;
                                                                                                                                                                                     type: 'system',
                                                                                                                                                                                     action: 'isolate_system',
                                                                                                                                                                                     parameters: { isolation_level: 'network' },
-                                                                                                                                                                                    conditions: [,
+                                                                                                                                                                                    conditions: [
                                                                                                                                                                                         { field: 'severity', operator: 'eq', value: AlertSeverity.CRITICAL }
                                                                                                                                                                                     ],
                                                                                                                                                                                     maxExecutions: 1,
                                                                                                                                                                                     cooldownPeriod: 3600,
                                                                                                                                                                                     requiresApproval: false
-                                                                                                                                                                                }],
+                                                                                                                                                                                }
+                                                                                                                                                                            ],
                                                                                                                                                                                 compliance;
                                                                                                                                                                             [ComplianceFramework.SOX, ComplianceFramework.ISO_27001];
                                                                                                                                                                         },
@@ -1157,7 +1161,7 @@ Do not reply to this email.`;
                                                                                                                                                                         name: 'Data Exfiltration Detection',
                                                                                                                                                                         description: 'Detect large-scale data exfiltration attempts',
                                                                                                                                                                         enabled: true,
-                                                                                                                                                                        conditions: [,
+                                                                                                                                                                        conditions: [
                                                                                                                                                                             { field: 'category', operator: 'eq', value: ThreatCategory.DATA_EXFILTRATION },
                                                                                                                                                                             { field: 'severity', operator: 'in', value: [AlertSeverity.CRITICAL, AlertSeverity.HIGH] }
                                                                                                                                                                         ],
@@ -1166,22 +1170,22 @@ Do not reply to this email.`;
                                                                                                                                                                         escalationPolicy: {
                                                                                                                                                                             id: 'data-breach-escalation',
                                                                                                                                                                             name: 'Data Breach Escalation Policy',
-                                                                                                                                                                            steps: [,
+                                                                                                                                                                            steps: [
                                                                                                                                                                                 {
                                                                                                                                                                                     level: 1,
                                                                                                                                                                                     delay: 0,
-                                                                                                                                                                                    recipients: [,
+                                                                                                                                                                                    recipients: [
                                                                                                                                                                                         {
                                                                                                                                                                                             type: 'team',
                                                                                                                                                                                             identifier: 'security-team',
-                                                                                                                                                                                            contactMethods: [,
+                                                                                                                                                                                            contactMethods: [
                                                                                                                                                                                                 { channel: AlertChannel.PAGERDUTY, address: 'security-oncall', priority: 1 }
                                                                                                                                                                                             ]
                                                                                                                                                                                         },
                                                                                                                                                                                         {
                                                                                                                                                                                             type: 'role',
                                                                                                                                                                                             identifier: 'dpo', // Data Protection Officer
-                                                                                                                                                                                            contactMethods: [,
+                                                                                                                                                                                            contactMethods: [
                                                                                                                                                                                                 { channel: AlertChannel.EMAIL, address: 'dpo@company.com', priority: 1 }
                                                                                                                                                                                             ]
                                                                                                                                                                                         }
@@ -1189,12 +1193,13 @@ Do not reply to this email.`;
                                                                                                                                                                                     channels: [AlertChannel.PAGERDUTY, AlertChannel.EMAIL],
                                                                                                                                                                                     actions: ['activate_incident_response'],
                                                                                                                                                                                     continueOnFailure: true
-                                                                                                                                                                                }],
+                                                                                                                                                                                }
+                                                                                                                                                                            ],
                                                                                                                                                                             requiresAcknowledgment: true,
                                                                                                                                                                             autoResolve: false,
                                                                                                                                                                             escalationTimeout: 300
                                                                                                                                                                         },
-                                                                                                                                                                        automatedActions: [,
+                                                                                                                                                                        automatedActions: [
                                                                                                                                                                             {
                                                                                                                                                                                 id: 'block-data-export',
                                                                                                                                                                                 name: 'Block Data Export',
@@ -1206,7 +1211,8 @@ Do not reply to this email.`;
                                                                                                                                                                                 maxExecutions: 1,
                                                                                                                                                                                 cooldownPeriod: 1800,
                                                                                                                                                                                 requiresApproval: false
-                                                                                                                                                                            }],
+                                                                                                                                                                            }
+                                                                                                                                                                        ],
                                                                                                                                                                         compliance: [ComplianceFramework.GDPR, ComplianceFramework.ISO_27001]
                                                                                                                                                                     };
                                                                                                                                                                     ;
@@ -1218,7 +1224,7 @@ Do not reply to this email.`;
                                                                                                                                                                         name: 'Insider Threat Detection',
                                                                                                                                                                         description: 'Detect potential insider threat activities',
                                                                                                                                                                         enabled: true,
-                                                                                                                                                                        conditions: [,
+                                                                                                                                                                        conditions: [
                                                                                                                                                                             { field: 'category', operator: 'eq', value: ThreatCategory.INSIDER_THREAT },
                                                                                                                                                                             { field: 'risk.score', operator: 'gte', value: 60 }
                                                                                                                                                                         ],
@@ -1227,15 +1233,15 @@ Do not reply to this email.`;
                                                                                                                                                                         escalationPolicy: {
                                                                                                                                                                             id: 'insider-threat-escalation',
                                                                                                                                                                             name: 'Insider Threat Escalation Policy',
-                                                                                                                                                                            steps: [,
+                                                                                                                                                                            steps: [
                                                                                                                                                                                 {
                                                                                                                                                                                     level: 1,
                                                                                                                                                                                     delay: 0,
-                                                                                                                                                                                    recipients: [,
+                                                                                                                                                                                    recipients: [
                                                                                                                                                                                         {
                                                                                                                                                                                             type: 'team',
                                                                                                                                                                                             identifier: 'security-analysts',
-                                                                                                                                                                                            contactMethods: [,
+                                                                                                                                                                                            contactMethods: [
                                                                                                                                                                                                 { channel: AlertChannel.SLACK, address: '#security-alerts', priority: 1 }
                                                                                                                                                                                             ]
                                                                                                                                                                                         }
@@ -1243,12 +1249,13 @@ Do not reply to this email.`;
                                                                                                                                                                                     channels: [AlertChannel.SLACK, AlertChannel.EMAIL],
                                                                                                                                                                                     actions: [],
                                                                                                                                                                                     continueOnFailure: true
-                                                                                                                                                                                }],
+                                                                                                                                                                                }
+                                                                                                                                                                            ],
                                                                                                                                                                             requiresAcknowledgment: true,
                                                                                                                                                                             autoResolve: false,
                                                                                                                                                                             escalationTimeout: 900 // 15 minutes;
                                                                                                                                                                         },
-                                                                                                                                                                        automatedActions: [,
+                                                                                                                                                                        automatedActions: [
                                                                                                                                                                             {
                                                                                                                                                                                 id: 'enhance-monitoring',
                                                                                                                                                                                 name: 'Enhanced User Monitoring',
@@ -1260,7 +1267,8 @@ Do not reply to this email.`;
                                                                                                                                                                                 maxExecutions: 3,
                                                                                                                                                                                 cooldownPeriod: 3600,
                                                                                                                                                                                 requiresApproval: false
-                                                                                                                                                                            }],
+                                                                                                                                                                            }
+                                                                                                                                                                        ],
                                                                                                                                                                         compliance: [ComplianceFramework.ISO_27001]
                                                                                                                                                                     };
                                                                                                                                                                     ;
@@ -1272,34 +1280,35 @@ Do not reply to this email.`;
                                                                                                                                                                         name: 'Authentication Issues',
                                                                                                                                                                         description: 'Monitor authentication-related security events',
                                                                                                                                                                         enabled: true,
-                                                                                                                                                                        conditions: [,
+                                                                                                                                                                        conditions: [
                                                                                                                                                                             { field: 'category', operator: 'eq', value: ThreatCategory.AUTHENTICATION },
                                                                                                                                                                             { field: 'severity', operator: 'in', value: [AlertSeverity.MEDIUM, AlertSeverity.HIGH] }
                                                                                                                                                                         ],
                                                                                                                                                                         severity: AlertSeverity.MEDIUM,
                                                                                                                                                                         category: ThreatCategory.AUTHENTICATION,
-                                                                                                                                                                        suppressionRules: [,
+                                                                                                                                                                        suppressionRules: [
                                                                                                                                                                             {
                                                                                                                                                                                 id: 'auth-suppression',
                                                                                                                                                                                 description: 'Suppress duplicate auth alerts from same IP',
-                                                                                                                                                                                conditions: [,
+                                                                                                                                                                                conditions: [
                                                                                                                                                                                     { field: 'context.ipAddresses.0', operator: 'eq', value: '{same_ip}' }
                                                                                                                                                                                 ],
                                                                                                                                                                                 suppressionWindow: 1800, // 30 minutes
                                                                                                                                                                                 maxSuppressions: 5
-                                                                                                                                                                            }],
+                                                                                                                                                                            }
+                                                                                                                                                                        ],
                                                                                                                                                                         escalationPolicy: {
                                                                                                                                                                             id: 'auth-escalation',
                                                                                                                                                                             name: 'Authentication Escalation Policy',
-                                                                                                                                                                            steps: [,
+                                                                                                                                                                            steps: [
                                                                                                                                                                                 {
                                                                                                                                                                                     level: 1,
                                                                                                                                                                                     delay: 0,
-                                                                                                                                                                                    recipients: [,
+                                                                                                                                                                                    recipients: [
                                                                                                                                                                                         {
                                                                                                                                                                                             type: 'team',
                                                                                                                                                                                             identifier: 'security-analysts',
-                                                                                                                                                                                            contactMethods: [,
+                                                                                                                                                                                            contactMethods: [
                                                                                                                                                                                                 { channel: AlertChannel.EMAIL, address: 'security-analysts@company.com', priority: 1 }
                                                                                                                                                                                             ]
                                                                                                                                                                                         }
@@ -1307,12 +1316,13 @@ Do not reply to this email.`;
                                                                                                                                                                                     channels: [AlertChannel.EMAIL],
                                                                                                                                                                                     actions: [],
                                                                                                                                                                                     continueOnFailure: true
-                                                                                                                                                                                }],
+                                                                                                                                                                                }
+                                                                                                                                                                            ],
                                                                                                                                                                             requiresAcknowledgment: false,
                                                                                                                                                                             autoResolve: true,
                                                                                                                                                                             escalationTimeout: 3600 // 1 hour;
                                                                                                                                                                         },
-                                                                                                                                                                        automatedActions: [,
+                                                                                                                                                                        automatedActions: [
                                                                                                                                                                             {
                                                                                                                                                                                 id: 'rate-limit-auth',
                                                                                                                                                                                 name: 'Rate Limit Authentication',
@@ -1320,13 +1330,14 @@ Do not reply to this email.`;
                                                                                                                                                                                 type: 'network',
                                                                                                                                                                                 action: 'rate_limit',
                                                                                                                                                                                 parameters: { resource: 'auth', factor: 2 },
-                                                                                                                                                                                conditions: [,
+                                                                                                                                                                                conditions: [
                                                                                                                                                                                     { field: 'context.ipAddresses', operator: 'ne', value: [] }
                                                                                                                                                                                 ],
                                                                                                                                                                                 maxExecutions: 3,
                                                                                                                                                                                 cooldownPeriod: 1800,
                                                                                                                                                                                 requiresApproval: false
-                                                                                                                                                                            }],
+                                                                                                                                                                            }
+                                                                                                                                                                        ],
                                                                                                                                                                         compliance: [ComplianceFramework.ISO_27001]
                                                                                                                                                                     };
                                                                                                                                                                     ;

@@ -16,7 +16,7 @@ import {
   InvestigationCategory,
   TaskStatus,
   EvidenceType
-} from '../services/AuditTeamCollaborationService';
+ from '../services/AuditTeamCollaborationService';
 
 // Validation schemas
 const CreateInvestigationSchema = z.object({
@@ -120,9 +120,9 @@ export async function auditTeamCollaborationRoutes(
           success: z.boolean(),
           investigation: z.any(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const investigationData = request.body as z.infer<typeof CreateInvestigationSchema>;
@@ -140,14 +140,14 @@ export async function auditTeamCollaborationRoutes(
         investigation,
         message: 'Investigation created successfully'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error creating investigation:', error);
       reply.status(500).send({
         success: false,
         error: 'Failed to create investigation',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -163,9 +163,9 @@ export async function auditTeamCollaborationRoutes(
           total: z.number(),
           limit: z.number(),
           offset: z.number()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const filters = request.query as z.infer<typeof InvestigationFiltersSchema>;
@@ -178,14 +178,14 @@ export async function auditTeamCollaborationRoutes(
         limit: filters.limit,
         offset: filters.offset
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error getting investigations:', error);
       reply.status(500).send({
         success: false,
         error: 'Failed to get investigations',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -204,9 +204,9 @@ export async function auditTeamCollaborationRoutes(
         404: z.object({
           success: z.boolean(),
           error: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -218,20 +218,20 @@ export async function auditTeamCollaborationRoutes(
           error: 'Investigation not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
         investigation
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error getting investigation:', error);
       reply.status(500).send({
         success: false,
         error: 'Failed to get investigation',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -247,9 +247,9 @@ export async function auditTeamCollaborationRoutes(
         200: z.object({
           success: z.boolean(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = request.params as { id: string };
@@ -270,14 +270,14 @@ export async function auditTeamCollaborationRoutes(
         success: true,
         message: 'Investigation updated successfully'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error updating investigation:', error);
       reply.status(500).send({
         success: false,
         error: 'Failed to update investigation',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -291,9 +291,9 @@ export async function auditTeamCollaborationRoutes(
           success: z.boolean(),
           task: z.any(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const taskData = request.body as z.infer<typeof CreateTaskSchema>;
@@ -311,14 +311,14 @@ export async function auditTeamCollaborationRoutes(
         task,
         message: 'Task created successfully'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error creating task:', error);
       reply.status(500).send({
         success: false,
         error: 'Failed to create task',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -332,9 +332,9 @@ export async function auditTeamCollaborationRoutes(
           success: z.boolean(),
           evidence: z.any(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const evidenceData = request.body as z.infer<typeof AddEvidenceSchema>;
@@ -349,14 +349,14 @@ export async function auditTeamCollaborationRoutes(
         evidence,
         message: 'Evidence added successfully'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error adding evidence:', error);
       reply.status(500).send({
         success: false,
         error: 'Failed to add evidence',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -369,9 +369,9 @@ export async function auditTeamCollaborationRoutes(
         201: z.object({
           success: z.boolean(),
           message: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const commentData = request.body as z.infer<typeof AddCommentSchema>;
@@ -390,14 +390,14 @@ export async function auditTeamCollaborationRoutes(
         success: true,
         message: 'Comment added successfully'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error adding comment:', error);
       reply.status(500).send({
         success: false,
         error: 'Failed to add comment',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -413,9 +413,9 @@ export async function auditTeamCollaborationRoutes(
           success: z.boolean(),
           metrics: z.any(),
           timeframe: z.string()
-  }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { timeframe } = request.query as { timeframe: 'day' | 'week' | 'month' };
@@ -426,14 +426,14 @@ export async function auditTeamCollaborationRoutes(
         metrics,
         timeframe
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error getting collaboration metrics:', error);
       reply.status(500).send({
         success: false,
         error: 'Failed to get collaboration metrics',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -446,6 +446,6 @@ export async function auditTeamCollaborationRoutes(
       timestamp: new Date().toISOString()
     });
   });
-}
+
 
 export default auditTeamCollaborationRoutes;

@@ -3,33 +3,29 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { 
-  ContextualTooltip, 
+import { ContextualTooltip, 
   ProgressiveOnboardingSystem, 
-  BUILT_IN_HELP_CONTENT,
+  BUILT_IN_HELP_CONTENT }
   HelpContent 
-} from '../components/Help/ContextualHelpSystem';
-import { 
-  HelpProvider, 
+ from '../components/Help/ContextualHelpSystem';
+import { HelpProvider, 
   useHelpSystem, 
-  useOnboardingHelp,
+  useOnboardingHelp }
   HelpSystemSettings 
-} from '../components/Help/HelpContentManager';
-import { 
-  HelpfulInput, 
+ from '../components/Help/HelpContentManager';
+import { HelpfulInput, 
   HelpfulButton, 
-  HelpfulSection,
+  HelpfulSection }
   withHelp 
-} from '../components/Help/HelpIntegration';
+ from '../components/Help/HelpIntegration';
 
 // Mock the UI settings store
-jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({,)
-  complexityLevel: 'basic',
-}
+jest.mock('../stores/uiSettingsStore', () => ({ )
+  useUISettingsStore: () => ({);
+  complexityLevel: 'basic' }
+
 }));
-describe('ContextualTooltip', () => {
-  const mockHelpContent: HelpContent = {,
+describe('ContextualTooltip', () => { const mockHelpContent: HelpContent = {,
   id: 'test-help',
   title: 'Test Feature',
   description: 'This is a test feature that helps users understand functionality.',
@@ -38,7 +34,7 @@ describe('ContextualTooltip', () => {
   position: 'top',
   examples: ['Example 1', 'Example 2'],
   shortcut: 'Ctrl+T',
-  priority: 'high',
+  priority: 'high' }
 };
   it('renders children without tooltip initially', () => {
     render();
@@ -57,10 +53,8 @@ describe('ContextualTooltip', () => {
     );
     const button = screen.getByText('Test Button');
     fireEvent.mouseEnter(button);
-    await waitFor(() => {
-      expect(screen.getByText('Test Feature')).toBeInTheDocument();
-      expect(screen.getByText('This is a test feature that helps users understand functionality.')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Test Feature')).toBeInTheDocument();
+      expect(screen.getByText('This is a test feature that helps users understand functionality.')).toBeInTheDocument() });
   });
   it('hides tooltip on mouse leave', async () => {
     render();
@@ -71,14 +65,10 @@ describe('ContextualTooltip', () => {
     const button = screen.getByText('Test Button');
     // Show tooltip
     fireEvent.mouseEnter(button);
-    await waitFor(() => {
-      expect(screen.getByText('Test Feature')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Test Feature')).toBeInTheDocument() });
     // Hide tooltip
     fireEvent.mouseLeave(button);
-    await waitFor(() => {
-      expect(screen.queryByText('Test Feature')).not.toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.queryByText('Test Feature')).not.toBeInTheDocument() });
   });
   it('shows examples when provided', async () => {
     render();
@@ -87,10 +77,8 @@ describe('ContextualTooltip', () => {
       </ContextualTooltip>
     );
     fireEvent.mouseEnter(screen.getByText('Test Button'));
-    await waitFor(() => {
-      expect(screen.getByText('Example 1')).toBeInTheDocument();
-      expect(screen.getByText('Example 2')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Example 1')).toBeInTheDocument();
+      expect(screen.getByText('Example 2')).toBeInTheDocument() });
   });
   it('shows keyboard shortcut when provided', async () => {
     render();
@@ -99,9 +87,7 @@ describe('ContextualTooltip', () => {
       </ContextualTooltip>
     );
     fireEvent.mouseEnter(screen.getByText('Test Button'));
-    await waitFor(() => {
-      expect(screen.getByText('Ctrl+T')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Ctrl+T')).toBeInTheDocument() });
   });
   it('respects disabled prop', async () => {
     render();
@@ -111,9 +97,7 @@ describe('ContextualTooltip', () => {
     );
     fireEvent.mouseEnter(screen.getByText('Test Button'));
     // Wait a bit to ensure tooltip doesn't appear
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 100));
-    });
+    await act(async () => { await new Promise(resolve => setTimeout(resolve, 100)) });
     expect(screen.queryByText('Test Feature')).not.toBeInTheDocument();
   });
   it('handles click trigger correctly', async () => {
@@ -126,23 +110,17 @@ describe('ContextualTooltip', () => {
     const button = screen.getByText('Test Button');
     // Hover should not show tooltip
     fireEvent.mouseEnter(button);
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 50));
-    });
+    await act(async () => { await new Promise(resolve => setTimeout(resolve, 50)) });
     expect(screen.queryByText('Test Feature')).not.toBeInTheDocument();
     // Click should show tooltip
     fireEvent.click(button);
-    await waitFor(() => {
-      expect(screen.getByText('Test Feature')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Test Feature')).toBeInTheDocument() });
     // Click again should hide tooltip
     fireEvent.click(button);
-    await waitFor(() => {
-      expect(screen.queryByText('Test Feature')).not.toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.queryByText('Test Feature')).not.toBeInTheDocument() });
   });
   it('shows category icons correctly', async () => {
-    const testCases = [;
+    const testCases = [
       { category: 'basic' as const, icon: '🎯' },
       { category: 'advanced' as const, icon: '⚙️' },
       { category: 'debug' as const, icon: '🔧' },
@@ -156,23 +134,20 @@ describe('ContextualTooltip', () => {
         </ContextualTooltip>
       );
       fireEvent.mouseEnter(screen.getByText('Test Button'));
-      await waitFor(() => {
-        expect(screen.getByText(testCase.icon)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(testCase.icon)).toBeInTheDocument() });
       unmount();
   });
 });
-describe('HelpProvider and useHelpSystem', () => {
-  const TestComponent = () => {
+describe('HelpProvider and useHelpSystem', () => { const TestComponent = () => {
     const { 
       helpContent, 
       onboardingEnabled, 
       showHelpHints, 
       getHelpContent,
       toggleHelpHints,
-      startOnboarding,
+      startOnboarding }
       completeOnboarding
-    } = useHelpSystem();
+ = useHelpSystem();
     return;
       <div>
         <div data-testid="help-content-count">{helpContent.length}</div>
@@ -185,11 +160,8 @@ describe('HelpProvider and useHelpSystem', () => {
       </div>
     );
   };
-  beforeEach(() => {
-    localStorage.clear();
-  });
-  it('provides built-in help content by default', () => {
-    render();
+  beforeEach(() => { localStorage.clear() });
+  it('provides built-in help content by default', () => { render();
       <HelpProvider>
         <TestComponent />
       </HelpProvider>
@@ -197,18 +169,14 @@ describe('HelpProvider and useHelpSystem', () => {
     expect(screen.getByTestId('help-content-count')).toHaveTextContent()
       BUILT_IN_HELP_CONTENT.length.toString()
     );
-    expect(screen.getByTestId('test-help-exists')).toHaveTextContent('exists');
-  });
-  it('enables help hints by default', () => {
-    render();
+    expect(screen.getByTestId('test-help-exists')).toHaveTextContent('exists') });
+  it('enables help hints by default', () => { render();
       <HelpProvider>
         <TestComponent />
       </HelpProvider>
     );
-    expect(screen.getByTestId('show-help-hints')).toHaveTextContent('true');
-  });
-  it('can toggle help hints', () => {
-    render();
+    expect(screen.getByTestId('show-help-hints')).toHaveTextContent('true') });
+  it('can toggle help hints', () => { render();
       <HelpProvider>
         <TestComponent />
       </HelpProvider>
@@ -217,10 +185,8 @@ describe('HelpProvider and useHelpSystem', () => {
     fireEvent.click(screen.getByTestId('toggle-hints'));
     expect(screen.getByTestId('show-help-hints')).toHaveTextContent('false');
     fireEvent.click(screen.getByTestId('toggle-hints'));
-    expect(screen.getByTestId('show-help-hints')).toHaveTextContent('true');
-  });
-  it('handles onboarding state correctly', () => {
-    render();
+    expect(screen.getByTestId('show-help-hints')).toHaveTextContent('true') });
+  it('handles onboarding state correctly', () => { render();
       <HelpProvider>
         <TestComponent />
       </HelpProvider>
@@ -232,8 +198,7 @@ describe('HelpProvider and useHelpSystem', () => {
     expect(screen.getByTestId('onboarding-enabled')).toHaveTextContent('false');
     // Restart onboarding
     fireEvent.click(screen.getByTestId('start-onboarding'));
-    expect(screen.getByTestId('onboarding-enabled')).toHaveTextContent('true');
-  });
+    expect(screen.getByTestId('onboarding-enabled')).toHaveTextContent('true') });
   it('persists state to localStorage', () => {
     const { rerender } = render()
       <HelpProvider>
@@ -435,12 +400,12 @@ describe('withHelp HOC', () => {
   const TestButton = ({ children, ...props }: unknown) => ()
     <button {...props}>{children}</button>
   );
-  const helpContent: HelpContent = {,
+  const helpContent: HelpContent = { ,
   id: 'hoc-test',
   title: 'HOC Test',
   description: 'This tests the withHelp HOC',
   category: 'basic',
-  trigger: 'hover',
+  trigger: 'hover' }
 };
   it('wraps component with help when hints are enabled', async () => {
     const WrappedButton = withHelp(TestButton, helpContent);
@@ -451,9 +416,7 @@ describe('withHelp HOC', () => {
     );
     const button = screen.getByText('HOC Button');
     fireEvent.mouseEnter(button);
-    await waitFor(() => {
-      expect(screen.getByText('HOC Test')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('HOC Test')).toBeInTheDocument() });
   });
   it('renders component without help when hints are disabled', () => {
     const WrappedButton = withHelp(TestButton, helpContent);
@@ -478,21 +441,16 @@ describe('HelpSystemSettings', () => {
       </div>
     );
   };
-  beforeEach(() => {
-    localStorage.clear();
-  });
-  it('renders settings controls', () => {
-    render();
+  beforeEach(() => { localStorage.clear() });
+  it('renders settings controls', () => { render();
       <HelpProvider>
         <TestWrapper />
       </HelpProvider>
     );
     expect(screen.getByText('Help System Settings')).toBeInTheDocument();
     expect(screen.getByText('Show help tooltips and hints')).toBeInTheDocument();
-    expect(screen.getByText('Reset Help System')).toBeInTheDocument();
-  });
-  it('allows toggling help hints', () => {
-    render();
+    expect(screen.getByText('Reset Help System')).toBeInTheDocument() });
+  it('allows toggling help hints', () => { render();
       <HelpProvider>
         <TestWrapper />
       </HelpProvider>
@@ -500,8 +458,7 @@ describe('HelpSystemSettings', () => {
     expect(screen.getByTestId('hints-enabled')).toHaveTextContent('true');
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
-    expect(screen.getByTestId('hints-enabled')).toHaveTextContent('false');
-  });
+    expect(screen.getByTestId('hints-enabled')).toHaveTextContent('false') });
   it('shows restart tour button when onboarding is complete', () => {
     render();
       <HelpProvider enableOnboarding={false}>
@@ -512,23 +469,18 @@ describe('HelpSystemSettings', () => {
     expect(screen.getByText('Restart Tour')).toBeInTheDocument();
   });
 });
-describe('Built-in Help Content', () => {
-  it('includes expected help content categories', () => {
+describe('Built-in Help Content', () => { it('includes expected help content categories', () => {
     const categories = BUILT_IN_HELP_CONTENT.map(content => content.category);
     expect(categories).toContain('basic');
     expect(categories).toContain('advanced');
     expect(categories).toContain('debug');
-    expect(categories).toContain('onboarding');
-  });
-  it('includes help for essential features', () => {
-    const helpIds = BUILT_IN_HELP_CONTENT.map(content => content.id);
+    expect(categories).toContain('onboarding') });
+  it('includes help for essential features', () => { const helpIds = BUILT_IN_HELP_CONTENT.map(content => content.id);
     expect(helpIds).toContain('node-name');
     expect(helpIds).toContain('template-input');
     expect(helpIds).toContain('preview-button');
-    expect(helpIds).toContain('weight-controls');
-  });
-  it('has proper help content structure', () => {
-    BUILT_IN_HELP_CONTENT.forEach(content => {)
+    expect(helpIds).toContain('weight-controls') });
+  it('has proper help content structure', () => { BUILT_IN_HELP_CONTENT.forEach(content => {)
   expect(content).toHaveProperty('id');
       expect(content).toHaveProperty('title');
       expect(content).toHaveProperty('description');
@@ -536,7 +488,6 @@ describe('Built-in Help Content', () => {
       expect(typeof content.id).toBe('string');
       expect(typeof content.title).toBe('string');
       expect(typeof content.description).toBe('string');
-      expect(['basic', 'advanced', 'debug', 'onboarding']).toContain(content.category);
-    });
+      expect(['basic', 'advanced', 'debug', 'onboarding']).toContain(content.category) });
   });
 });

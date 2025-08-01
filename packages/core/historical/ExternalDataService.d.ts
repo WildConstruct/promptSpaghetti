@@ -7,16 +7,14 @@
 import { DataSource, HistoricalQuery, HistoricalQueryResult, UTDGNode } from '../types/UTDG';
 
 }
-export interface CacheEntry {
-    data: any;
+}
+export interface CacheEntry { data: any;
     timestamp: number;
     ttl: number;
-    source_id: string;
-
-
+    source_id: string }
 }
-export interface DataSourceRegistry {
-    [sourceId: string]: DataSource;
+}
+export interface DataSourceRegistry { [sourceId: string]: DataSource;
 
 export declare class ExternalDataService {
     private dataSources;
@@ -53,7 +51,7 @@ export declare class ExternalDataService {
     validateDataSource(sourceId: string): Promise<{
         valid: boolean;
         error?: string;
-        sample_data?: any;
+        sample_data?: any }
 }
     }>;
     /**
@@ -63,11 +61,9 @@ export declare class ExternalDataService {
     /**
      * Get cache statistics
      */
-    getCacheStats(): {
-        total_entries: number;
+    getCacheStats(): { total_entries: number;
         total_size: number;
-        hit_rate: number;
-    };
+        hit_rate: number };
     /**
      * Query a specific data source
      */

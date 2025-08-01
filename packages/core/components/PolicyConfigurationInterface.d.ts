@@ -10,27 +10,24 @@ import React from 'react';
 type PolicyType = 'PRIVACY_POLICY' | 'TERMS_OF_SERVICE' | 'COOKIE_POLICY' | 'DATA_PROCESSING_AGREEMENT' | 'CONSENT_POLICY' | 'RETENTION_POLICY' | 'SECURITY_POLICY' | 'ACCEPTABLE_USE_POLICY' | 'GDPR_POLICY' | 'CCPA_POLICY' | 'CUSTOM';
 
 }
-interface PolicyConfigurationInterfaceProps {
-    onPolicyCreate?: (policy: unknown) => void;
+}
+interface PolicyConfigurationInterfaceProps { onPolicyCreate?: (policy: unknown) => void;
     onPolicyUpdate?: (policy: unknown) => void;
     onPolicyDeploy?: (deployment: unknown) => void;
     initialPolicy?: unknown;
     mode?: 'create' | 'edit' | 'view';
     complianceFrameworks?: string[];
     jurisdictions?: string[];
-    templates?: PolicyTemplate[];
-
-
+    templates?: PolicyTemplate[] }
 }
-interface PolicyTemplate {
-    templateId: string;
+}
+interface PolicyTemplate { templateId: string;
     name: string;
     description: string;
     framework: string;
     policyType: PolicyType;
-    variables: TemplateVariable[];
-
-
+    variables: TemplateVariable[] }
+}
 }
 interface TemplateVariable {
     name: string;
@@ -42,4 +39,5 @@ interface TemplateVariable {
 export declare const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterfaceProps>;
 export default PolicyConfigurationInterface;
 //# sourceMappingURL=PolicyConfigurationInterface.d.ts.map
+}
 }

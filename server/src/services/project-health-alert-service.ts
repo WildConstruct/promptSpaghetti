@@ -8,8 +8,8 @@ import { WorkspaceDAO, ProjectWithStats } from '../database/workspace-dao';
 import { AttributionService } from './attribution-service';
 import { AnalyticsDAO } from '../database/analytics-dao';
 
-}
-}
+
+
 export interface AlertThresholds {
   // Stalled project detection
   stalledProject: {
@@ -17,8 +17,9 @@ export interface AlertThresholds {
     noExecutionDays: number;          // Days without graph execution
     noCollaborationDays: number;      // Days without multi-user activity
     minActivityThreshold: number;     // Minimum activities per week
-}
-}
+
+
+
   };
   
   // Uneven contribution detection
@@ -35,10 +36,10 @@ export interface AlertThresholds {
     minMonthlyGrowth: number;         // Minimum monthly activity growth
     maxErrorRate: number;             // Maximum acceptable error rate
   };
-}
 
-}
-}
+
+
+
 export interface ProjectHealthAlert {
   id: string;
   alertType: 'STALLED_PROJECT' | 'UNEVEN_CONTRIBUTIONS' | 'LOW_ENGAGEMENT' | 'HIGH_ERROR_RATE';
@@ -61,12 +62,13 @@ export interface ProjectHealthAlert {
   resolvedAt?: Date;
   dismissedBy?: string;
   dismissedReason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ContributionAnalysis {
   totalContributions: number;
   activeContributors: number;
@@ -75,16 +77,17 @@ export interface ContributionAnalysis {
     contributions: number;
     percentage: number;
     lastActivity: Date;
-}
-}
-  }>;
+
+
+
+>;
   giniCoefficient: number;            // Measure of contribution inequality (0 = equal, 1 = maximum inequality)
   dominantContributor?: {
     userId: string;
     percentage: number;
   };
   inactiveUsers: string[];
-}
+
 
 export class ProjectHealthAlertService {
   private workspaceDAO: WorkspaceDAO;
@@ -98,18 +101,18 @@ export class ProjectHealthAlertService {
       noExecutionDays: 14,            // 2 weeks without executions
       noCollaborationDays: 21,        // 3 weeks without collaboration
       minActivityThreshold: 5         // Minimum 5 activities per week
-  }
+
     unevenContributions: {
       maxContributionRatio: 0.75,     // No single user >75% of contributions
       minActiveContributors: 2,       // At least 2 active contributors
       contributionImbalanceThreshold: 0.6, // Gini coefficient threshold
       inactiveUserDays: 14           // 2 weeks to be considered inactive
-  }
+
     engagement: {
       minWeeklyActive: 2,             // At least 2 active users per week
       minMonthlyGrowth: 0.0,          // No negative growth
       maxErrorRate: 0.1               // Max 10% error rate
-    }
+
   };
 
   constructor(
@@ -120,7 +123,7 @@ export class ProjectHealthAlertService {
     this.workspaceDAO = new WorkspaceDAO(database);
     this.attributionService = attributionService;
     this.analyticsDAO = analyticsDAO;
-  }
+
 
   /**
    * Scan all projects for health issues and generate alerts
@@ -153,14 +156,14 @@ export class ProjectHealthAlertService {
         // Check for high error rates
         const errorRateAlert = await this.checkHighErrorRate(project, finalThresholds);
         if (errorRateAlert) alerts.push(errorRateAlert);
-      }
+
 
       return alerts;
-    } catch (error) {
+ catch (error) {
       console.error('Error scanning projects for alerts:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Check if a project is stalled based on activity patterns
@@ -199,13 +202,13 @@ export class ProjectHealthAlertService {
             title: `Project "${project.name}" appears stalled`,
             description: `No activity detected for ${daysSinceLastActivity} days. Last activity: ${
               project.last_activity ? new Date(project.last_activity).toLocaleDateString() : 'Unknown'
-            }`,
+`,
             detectedAt: now,
             triggeredBy: {
               daysSinceLastActivity,
               threshold: stalledProject.inactivityDays,
               lastActivity: project.last_activity
-  }
+
             affectedUsers: [], // Will be populated with project members
             recommendedActions: [
               'Check in with project team members',
@@ -215,8 +218,8 @@ export class ProjectHealthAlertService {
             ],
             status: 'ACTIVE'
           };
-        }
-      }
+
+
 
       // Check for low activity level
       const weeklyActivity = await this.getWeeklyActivityCount(project);
@@ -233,7 +236,7 @@ export class ProjectHealthAlertService {
           triggeredBy: {
             weeklyActivity,
             threshold: stalledProject.minActivityThreshold
-  }
+
           affectedUsers: [],
           recommendedActions: [
             'Encourage more frequent updates',
@@ -242,14 +245,14 @@ export class ProjectHealthAlertService {
           ],
           status: 'ACTIVE'
         };
-      }
+
 
       return null;
-    } catch (error) {
+ catch (error) {
       console.error('Error checking stalled project:', error);
       return null;
-    }
-  }
+
+
 
   /**
    * Check for uneven contribution patterns
@@ -282,7 +285,7 @@ export class ProjectHealthAlertService {
             threshold: unevenContributions.maxContributionRatio,
             giniCoefficient: contributionAnalysis.giniCoefficient,
             activeContributors: contributionAnalysis.activeContributors
-  }
+
           affectedUsers: contributionAnalysis.contributionDistribution.map(c => c.userId),
           recommendedActions: [
             'Encourage pair programming or collaborative editing',
@@ -292,7 +295,7 @@ export class ProjectHealthAlertService {
           ],
           status: 'ACTIVE'
         };
-      }
+
 
       // Check for insufficient active contributors
       if (contributionAnalysis.activeContributors < unevenContributions.minActiveContributors) {
@@ -309,7 +312,7 @@ export class ProjectHealthAlertService {
             activeContributors: contributionAnalysis.activeContributors,
             threshold: unevenContributions.minActiveContributors,
             inactiveUsers: contributionAnalysis.inactiveUsers
-  }
+
           affectedUsers: contributionAnalysis.inactiveUsers,
           recommendedActions: [
             'Engage inactive team members',
@@ -319,14 +322,14 @@ export class ProjectHealthAlertService {
           ],
           status: 'ACTIVE'
         };
-      }
+
 
       return null;
-    } catch (error) {
+ catch (error) {
       console.error('Error checking uneven contributions:', error);
       return null;
-    }
-  }
+
+
 
   /**
    * Check for low overall engagement
@@ -354,7 +357,7 @@ export class ProjectHealthAlertService {
           triggeredBy: {
             weeklyActiveUsers,
             threshold: engagement.minWeeklyActive
-  }
+
           affectedUsers: [],
           recommendedActions: [
             'Review project relevance and goals',
@@ -364,14 +367,14 @@ export class ProjectHealthAlertService {
           ],
           status: 'ACTIVE'
         };
-      }
+
 
       return null;
-    } catch (error) {
+ catch (error) {
       console.error('Error checking low engagement:', error);
       return null;
-    }
-  }
+
+
 
   /**
    * Check for high error rates in project executions
@@ -399,7 +402,7 @@ export class ProjectHealthAlertService {
           triggeredBy: {
             errorRate,
             threshold: engagement.maxErrorRate
-  }
+
           affectedUsers: [],
           recommendedActions: [
             'Review recent project changes for bugs',
@@ -409,14 +412,14 @@ export class ProjectHealthAlertService {
           ],
           status: 'ACTIVE'
         };
-      }
+
 
       return null;
-    } catch (error) {
+ catch (error) {
       console.error('Error checking high error rate:', error);
       return null;
-    }
-  }
+
+
 
   /**
    * Analyze contribution patterns for a project
@@ -462,7 +465,7 @@ export class ProjectHealthAlertService {
         ? {
           userId: contributionDistribution[0].userId,
           percentage: contributionDistribution[0].percentage
-        }
+
         : undefined;
 
       return {
@@ -473,11 +476,11 @@ export class ProjectHealthAlertService {
         dominantContributor,
         inactiveUsers
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error analyzing contributions:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Calculate Gini coefficient for measuring inequality
@@ -495,10 +498,10 @@ export class ProjectHealthAlertService {
     let weightedSum = 0;
     for (let i = 0; i < n; i++) {
       weightedSum += (2 * i - n + 1) * sortedValues[i];
-    }
+
 
     return weightedSum / (n * sum);
-  }
+
 
   /**
    * Get weekly activity count for a project
@@ -516,7 +519,7 @@ export class ProjectHealthAlertService {
     );
 
     return activities.length;
-  }
+
 
   /**
    * Get number of weekly active users for a project
@@ -535,7 +538,7 @@ export class ProjectHealthAlertService {
 
     const uniqueUsers = new Set(activities.map(activity => activity.actor_id));
     return uniqueUsers.size;
-  }
+
 
   /**
    * Get error rate for project executions
@@ -549,11 +552,11 @@ export class ProjectHealthAlertService {
       if (executions.total === 0) return 0;
       
       return executions.failed / executions.total;
-    } catch (error) {
+ catch (error) {
       console.warn('Could not get error rate, defaulting to 0:', error);
       return 0;
-    }
-  }
+
+
 
   /**
    * Get all active alerts for a workspace
@@ -563,7 +566,7 @@ export class ProjectHealthAlertService {
     // This would be implemented with a proper database table for storing alerts
     // For now, we'll generate fresh alerts each time
     return this.scanProjectsForAlerts(workspaceId);
-  }
+
 
   /**
    * Acknowledge an alert
@@ -572,7 +575,7 @@ export class ProjectHealthAlertService {
 
     // Implementation would update alert status in database
     console.log(`Alert ${alertId} acknowledged by user ${userId}`);
-  }
+
 
   /**
    * Resolve an alert
@@ -581,7 +584,7 @@ export class ProjectHealthAlertService {
 
     // Implementation would mark alert as resolved
     console.log(`Alert ${alertId} resolved`);
-  }
+
 
   /**
    * Dismiss an alert
@@ -590,5 +593,4 @@ export class ProjectHealthAlertService {
 
     // Implementation would mark alert as dismissed
     console.log(`Alert ${alertId} dismissed by user ${userId}: ${reason}`);
-  }
-}
+

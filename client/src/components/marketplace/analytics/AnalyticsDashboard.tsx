@@ -8,14 +8,16 @@ import { InsightsPanel } from './InsightsPanel';
 import { TimeRangeSelector } from './TimeRangeSelector';
 import { analyticsService } from '../../../services/analyticsService';
 import './AnalyticsDashboard.css';
-}
+
+
 interface AnalyticsDashboardProps {
   creatorId: string;
   className?: string;
-  export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({,)
+  export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({),
   creatorId,
   className = ''
-}
+
+
 }) => {
   const [dashboard, setDashboard] = useState<CreatorDashboard | null>(null);
   const [insights, setInsights] = useState<AnalyticsInsight>([]);
@@ -42,10 +44,10 @@ interface AnalyticsDashboardProps {
       ]);
       setDashboard(dashboardData);
       setInsights(insightsData);
-    } catch (err) {
+ catch (err) {
   console.error('Failed to load dashboard:', err);
   setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
-} finally {
+ finally {
       setLoading(false);
   }, [creatorId, timeRange, customStartDate, customEndDate]);
   // Refresh dashboard data
@@ -53,7 +55,7 @@ interface AnalyticsDashboardProps {
     try {
       setRefreshing(true);
       await loadDashboard();
-    } finally {
+ finally {
       setRefreshing(false);
   }, [loadDashboard]);
   // Handle time range change
@@ -248,7 +250,7 @@ interface AnalyticsDashboardProps {
             insights={insights}
             onInsightDismiss={(insightId) => {
               setInsights(insights.filter(i => i.id !== insightId));
-            }}
+}
             onRefresh={refreshDashboard}
           />
         </div>

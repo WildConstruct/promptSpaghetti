@@ -65,6 +65,7 @@ export var NotificationType;
     }
 }
 ;
+;
 conflictResolution: {
     autoResolve: boolean;
     preferredResolution: ConflictResolution;
@@ -78,12 +79,15 @@ securityAlerts: {
 }
 ;
 ;
+;
 metadata: {
     conflictId ?  : string;
     sessionPriority ?  : SessionPriority;
     deviceInfo ?  : any;
     locationInfo ?  : any;
 }
+;
+;
 ;
 ;
 ;
@@ -404,8 +408,9 @@ export class SessionConflictNotificationService extends EventEmitter {
                             notification.deliveryStatus[channel].status = DeliveryStatus.READ;
                             notification.deliveryStatus[channel].deliveredAt = new Date();
                             this.emit('notificationRead', { notificationId, channel, userId: notification.userId });
-                            handleNotificationAction(notificationId, string);
-                            actionId: string,
+                            handleNotificationAction(notificationId, string),
+                                actionId;
+                            string,
                                 userId;
                             string,
                                 data ?  : Record;
@@ -667,8 +672,9 @@ export class SessionConflictNotificationService extends EventEmitter {
                                             finally { }
                                             ;
                                             return true;
-                                            createConflictNotification(conflict, SessionConflict);
-                                            userId: string,
+                                            createConflictNotification(conflict, SessionConflict),
+                                                userId;
+                                            string,
                                                 preferences;
                                             UserNotificationPreferences;
                                             NotificationMessage;
@@ -727,8 +733,9 @@ export class SessionConflictNotificationService extends EventEmitter {
                             ;
                         }
                         ;
-                        createEvictionNotification(sessionId, string);
-                        userId: string,
+                        createEvictionNotification(sessionId, string),
+                            userId;
+                        string,
                             reason;
                         string,
                             gracePeriodMinutes;
@@ -798,8 +805,9 @@ export class SessionConflictNotificationService extends EventEmitter {
         }
         finally { }
         ;
-        createEmergencyOverrideNotification(adminUserId, string);
-        targetUserId: string,
+        createEmergencyOverrideNotification(adminUserId, string),
+            targetUserId;
+        string,
             evictedSessions;
         string,
             preferences;
@@ -836,8 +844,9 @@ new Date(Date.now() + this.config.expirationTime),
 { }
 metadata: { }
 ;
-createChoicePromptNotification(conflict, SessionConflict);
-userId: string,
+createChoicePromptNotification(conflict, SessionConflict),
+    userId;
+string,
     timeoutMinutes;
 number,
     preferences;
@@ -889,8 +898,9 @@ metadata: {
     ;
 }
 ;
-createGracePeriodWarningNotification(sessionId, string);
-userId: string,
+createGracePeriodWarningNotification(sessionId, string),
+    userId;
+string,
     minutesRemaining;
 number,
     preferences;
@@ -912,7 +922,7 @@ NotificationPriority.HIGH,
 `Your session grace period expires in ${minutesRemaining} minutes. Take action to keep your session active.`;
 actionRequired: true,
     actions;
-[,
+[
     {
         id: 'extend_session',
         label: 'Extend Session',
@@ -955,7 +965,7 @@ UserNotificationPreferences;
             timeoutMinutes: 5,
         },
         securityAlerts: {
-            enabledTypes: [,
+            enabledTypes: [
                 NotificationType.SESSION_CONFLICT,
                 NotificationType.SESSION_EVICTED,
                 NotificationType.EMERGENCY_OVERRIDE,

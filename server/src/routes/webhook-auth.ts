@@ -55,8 +55,8 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         requiredRole: 'admin' 
       });
       return;
-    }
-  }
+
+
 
   // Register new webhook provider
   fastify.post('/webhooks/providers', {
@@ -72,24 +72,24 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' },
             providerId: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             details: { type: 'object' }
-          }
-  }
+
+
         403: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             requiredRole: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Body: z.infer<typeof RegisterProviderSchema> }>, reply: FastifyReply) => {
     try {
       const providerData = request.body;
@@ -102,7 +102,7 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
           details: { providerId: providerData.providerId } 
         });
         return;
-      }
+
 
       await webhookAuthService.registerProvider({
         ...providerData,
@@ -114,13 +114,12 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         message: `Webhook provider '${providerData.name}' registered successfully`,
         providerId: providerData.providerId
       });
-
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         error: 'Failed to register webhook provider',
         details: { message: error.message }
       });
-    }
+
   });
 
   // Get all webhook providers
@@ -148,15 +147,15 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
                   eventTypes: { type: 'array', items: { type: 'string' } },
                   createdAt: { type: 'string', format: 'date-time' },
                   updatedAt: { type: 'string', format: 'date-time' }
-                }
-              }
-  }
+
+
+
             count: { type: 'number' },
             statistics: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const providers = webhookAuthService.getProviders();
@@ -182,13 +181,12 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         count: safeProviders.length,
         statistics
       });
-
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         error: 'Failed to fetch webhook providers',
         details: { message: error.message }
       });
-    }
+
   });
 
   // Get specific webhook provider
@@ -201,24 +199,24 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-  }
+
         required: ['providerId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             provider: { type: 'object' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Params: { providerId: string } }>, reply: FastifyReply) => {
     try {
       const { providerId } = request.params;
@@ -227,7 +225,7 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
       if (!provider) {
         reply.code(404).send({ error: `Provider not found: ${providerId}` });
         return;
-      }
+
 
       // Remove secret key from response
       const { secretKey, ...safeProvider } = provider;
@@ -236,15 +234,14 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
           ...safeProvider,
           createdAt: provider.createdAt.toISOString(),
           updatedAt: provider.updatedAt.toISOString()
-        } 
+ 
       });
-
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         error: 'Failed to fetch webhook provider',
         details: { message: error.message }
       });
-    }
+
   });
 
   // Update webhook provider
@@ -257,9 +254,9 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-  }
+
         required: ['providerId']
-  }
+
       body: UpdateProviderSchema,
       response: {
         200: {
@@ -267,20 +264,20 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ 
     Params: { providerId: string }, 
     Body: z.infer<typeof UpdateProviderSchema> 
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { providerId } = request.params;
       const updates = request.body;
@@ -290,19 +287,18 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
       if (!success) {
         reply.code(404).send({ error: `Provider not found: ${providerId}` });
         return;
-      }
+
 
       reply.send({
         success: true,
         message: `Provider '${providerId}' updated successfully`
       });
-
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         error: 'Failed to update webhook provider',
         details: { message: error.message }
       });
-    }
+
   });
 
   // Delete webhook provider
@@ -315,25 +311,25 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-  }
+
         required: ['providerId']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-  }
+
+
         404: {
           type: 'object',
           properties: {
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Params: { providerId: string } }>, reply: FastifyReply) => {
     try {
       const { providerId } = request.params;
@@ -343,19 +339,18 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
       if (!success) {
         reply.code(404).send({ error: `Provider not found: ${providerId}` });
         return;
-      }
+
 
       reply.send({
         success: true,
         message: `Provider '${providerId}' deleted successfully`
       });
-
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         error: 'Failed to delete webhook provider',
         details: { message: error.message }
       });
-    }
+
   });
 
   // Test webhook provider
@@ -368,9 +363,9 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-  }
+
         required: ['providerId']
-  }
+
       body: TestWebhookSchema,
       response: {
         200: {
@@ -379,22 +374,22 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             validation: { type: 'object' },
             message: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             validation: { type: 'object' },
             error: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ 
     Params: { providerId: string },
     Body: z.infer<typeof TestWebhookSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { providerId } = request.params;
       const { payload } = request.body;
@@ -409,28 +404,27 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             providerId: validation.providerId,
             signature: validation.signature,
             computedSignature: validation.computedSignature
-  }
+
           message: 'Webhook provider test successful'
         });
-      } else {
+ else {
         reply.code(400).send({
           success: false,
           validation: {
             valid: validation.valid,
             error: validation.error,
             providerId: validation.providerId
-  }
+
           error: validation.error || 'Webhook provider test failed'
         });
-      }
 
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         success: false,
         error: 'Failed to test webhook provider',
         validation: { valid: false, error: error.message }
       });
-    }
+
   });
 
   // Generic webhook endpoint for any provider
@@ -442,9 +436,9 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-  }
+
         required: ['providerId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -452,24 +446,24 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' },
             eventId: { type: 'string' }
-          }
-  }
+
+
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             details: { type: 'object' }
-          }
-  }
+
+
         401: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             validation: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest<{ Params: { providerId: string } }>, reply: FastifyReply) => {
     try {
       const { providerId } = request.params;
@@ -484,10 +478,10 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             valid: validation.valid,
             error: validation.error,
             providerId: validation.providerId
-          }
+
         });
         return;
-      }
+
 
       // Generate unique event ID for tracking
       const eventId = `${providerId}-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
@@ -504,13 +498,12 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         message: `Webhook from ${validation.provider?.name || providerId} processed successfully`,
         eventId
       });
-
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         error: 'Webhook processing failed',
         details: { message: error.message }
       });
-    }
+
   });
 
   // Webhook statistics endpoint
@@ -525,10 +518,10 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
           properties: {
             statistics: { type: 'object' },
             timestamp: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const statistics = webhookAuthService.getStatistics();
@@ -537,13 +530,12 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         statistics,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       reply.code(500).send({
         error: 'Failed to fetch webhook statistics',
         details: { message: error.message }
       });
-    }
+
   });
 
   // Health check for webhook authentication system
@@ -559,10 +551,10 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             checks: { type: 'object' },
             statistics: { type: 'object' },
             timestamp: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const statistics = webhookAuthService.getStatistics();
@@ -584,16 +576,14 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         statistics,
         timestamp: new Date().toISOString()
       });
-
-    } catch (error) {
+ catch (error) {
       reply.code(503).send({
         status: 'unhealthy',
         error: error.message,
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Store webhook auth service reference for use in other parts of the application
   fastify.decorate('webhookAuthService', webhookAuthService);
-}

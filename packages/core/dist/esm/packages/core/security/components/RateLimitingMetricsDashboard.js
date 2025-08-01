@@ -175,7 +175,7 @@ return {
     labels: Object.keys(distribution),
     datasets: [{},
         data, Object.values(distribution),
-        backgroundColor, [,
+        backgroundColor, [
             '#10B981', // LOW - Green
             '#F59E0B', // MEDIUM - Yellow
             '#EF4444', // HIGH - Red

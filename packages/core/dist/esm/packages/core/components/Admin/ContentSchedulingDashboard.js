@@ -288,20 +288,20 @@ return;
 _jsxs("div", { className: `content-scheduling-dashboard ${className}`, children: ["}", _jsxs("div", { className: "dashboard-header", children: [_jsxs("div", { className: "header-info", children: [_jsx("h2", { children: "Content Scheduling" }), _jsx("p", { children: "Manage content lifecycle, publication scheduling, and performance" })] }), _jsx("div", { className: "header-actions", children: _jsxs(Button, { variant: "outline", children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Export Report"] }) })] }), _jsxs(Tabs, { value: activeTab, onValueChange: setActiveTab, children: [_jsxs(TabsList, { className: "grid grid-cols-4 w-full", children: [_jsx(TabsTrigger, { value: "overview", children: "Overview" }), _jsxs(TabsTrigger, { value: "content", children: ["Content", _jsx(Badge, { className: "ml-2 text-xs", children: content.length })] }), _jsx(TabsTrigger, { value: "batch", children: "Batch Operations" }), _jsx(TabsTrigger, { value: "analytics", children: "Analytics" })] }), _jsx(TabsContent, { value: "overview", className: "tab-content", children: renderOverview() }), _jsx(TabsContent, { value: "content", className: "tab-content", children: renderContentList() }), _jsx(TabsContent, { value: "batch", className: "tab-content", children: renderBatchOperations() }), _jsx(TabsContent, { value: "analytics", className: "tab-content", children: renderAnalytics() })] }), selectedContent && ()
             < ContentDetailModal, "content=", selectedContent, "onClose=", () => setSelectedContent(null), "onUpdate=", loadData, "userRole=", userRole, "/> )}", _jsx("style", { children: `
         .content-scheduling-dashboard {
-          max-width: 1400px;
+          max-width: 1400px;,
   margin: 0 auto;
-          padding: 1.5rem;
+          padding: 1.5rem;,
   display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
+          align-items: flex-start;,
   gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;
+          font-weight: 700;,
   color: #1f2937;
           margin-bottom: 0.5rem;
         .header-info p {
@@ -309,7 +309,7 @@ _jsxs("div", { className: `content-scheduling-dashboard ${className}`, children:
           font-size: 1rem;
         .overview-section {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1.5rem;
         .metrics-grid {
           display: grid;
@@ -317,21 +317,21 @@ _jsxs("div", { className: `content-scheduling-dashboard ${className}`, children:
           gap: 1rem;
         .metric-item {
           display: flex;
-          align-items: flex-start;
+          align-items: flex-start;,
   gap: 0.75rem;
         .metric-info {
           flex: 1;
         .metric-label {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
           margin-bottom: 0.25rem;
         .metric-value {
           font-size: 1.5rem;
-          font-weight: 700;
+          font-weight: 700;,
   color: #1f2937;
           margin-bottom: 0.25rem;
         .metric-change {
-          font-size: 0.75rem;
+          font-size: 0.75rem;,
   color: #6b7280;
         .metric-change.positive {
           color: #059669;
@@ -339,98 +339,98 @@ _jsxs("div", { className: `content-scheduling-dashboard ${className}`, children:
           margin-top: 1rem;
         .upcoming-schedules {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .schedule-item {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 1rem;
-          padding: 0.75rem;
+          padding: 0.75rem;,
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .schedule-date {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.5rem;
           min-width: 120px;
-          font-weight: 500;
+          font-weight: 500;,
   color: #1f2937;
         .schedule-preview {
-          flex: 1;
+          flex: 1;,
   display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.25rem;
         .preview-item {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.5rem;
           font-size: 0.875rem;
         .item-title {
           color: #1f2937;
         .preview-more {
-          font-size: 0.75rem;
+          font-size: 0.75rem;,
   color: #6b7280;
           margin-top: 0.25rem;
         .performance-section {
           margin-top: 1rem;
         .performance-list {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.75rem;
         .performance-item {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 1rem;
-          padding: 0.75rem;
+          padding: 0.75rem;,
   border: 1px solid #e5e7eb;
           border-radius: 6px;
         .item-info {
           flex: 1;
         .item-title {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin-bottom: 0.25rem;
         .item-stats {
-          display: flex;
+          display: flex;,
   gap: 1rem;
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
         .item-chart {
-          width: 100px;
+          width: 100px;,
   height: 4px;
           background: #e5e7eb;
-          border-radius: 2px;
+          border-radius: 2px;,
   overflow: hidden;
         .performance-bar {
-          height: 100%;
+          height: 100%;,
   background: #3b82f6;
           transition: width 0.3s ease;
         .content-controls {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: center;,
   gap: 1rem;
-          padding: 1rem;
+          padding: 1rem;,
   background: #f9fafb;
           border-radius: 8px;
           margin-bottom: 1.5rem;
         .search-filters {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.75rem;
         .search-bar {
-          position: relative;
+          position: relative;,
   display: flex;
           align-items: center;
         .search-bar .lucide {
-          position: absolute;
+          position: absolute;,
   left: 0.75rem;
           z-index: 1;
         .search-input {
           padding-left: 2.25rem;
           min-width: 300px;
         .action-buttons {
-          display: flex;
+          display: flex;,
   gap: 0.5rem;
         .content-grid {
           display: grid;
@@ -438,7 +438,7 @@ _jsxs("div", { className: `content-scheduling-dashboard ${className}`, children:
           gap: 1rem;
         .batch-section {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1rem;
         .batch-header {
           display: flex;
@@ -446,44 +446,44 @@ _jsxs("div", { className: `content-scheduling-dashboard ${className}`, children:
           align-items: center;
         .batch-header h3 {
           font-size: 1.25rem;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .batch-list {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.75rem;
         .analytics-section {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1.5rem;
         .analytics-grid {
-          display: grid;
+          display: grid;,
   gap: 1rem;
         .type-performance {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.75rem;
         .type-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: center;,
   padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
         .type-info {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.5rem;
         .type-name {
-          font-weight: 500;
+          font-weight: 500;,
   color: #1f2937;
           text-transform: capitalize;
         .type-stats {
-          display: flex;
+          display: flex;,
   gap: 1rem;
         .stat {
           display: flex;
-          align-items: center;
+          align-items: center;,
   gap: 0.25rem;
           font-size: 0.875rem;
         .stat-label {
@@ -492,7 +492,7 @@ _jsxs("div", { className: `content-scheduling-dashboard ${className}`, children:
           color: #1f2937;
           font-weight: 500;
         .empty-state {
-          text-align: center;
+          text-align: center;,
   padding: 4rem 2rem;
           color: #6b7280;
         .empty-state h3 {
@@ -503,7 +503,7 @@ _jsxs("div", { className: `content-scheduling-dashboard ${className}`, children:
             align-items: stretch;
           .content-controls {
             flex-direction: column;
-            align-items: stretch;
+            align-items: stretch;,
   gap: 0.75rem;
           .search-filters {
             flex-direction: column;
@@ -516,11 +516,11 @@ _jsxs("div", { className: `content-scheduling-dashboard ${className}`, children:
             grid-template-columns: repeat(2, 1fr);
           .schedule-item {
             flex-direction: column;
-            align-items: stretch;
+            align-items: stretch;,
   gap: 0.75rem;
           .type-item {
             flex-direction: column;
-            align-items: stretch;
+            align-items: stretch;,
   gap: 0.75rem;
           .type-stats {
             justify-content: space-between;
@@ -573,24 +573,24 @@ CardContent >
           align-items: flex-start;
           margin-bottom: 1rem;
         .content-title {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin-bottom: 0.25rem;
           line-height: 1.4;
         .content-description {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
           line-height: 1.4;
         .content-badges {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.25rem;
           align-items: flex-end;
         .content-details {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.5rem;
-          margin-bottom: 1rem;
+          margin-bottom: 1rem;,
   padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
@@ -605,7 +605,7 @@ CardContent >
           color: #1f2937;
           text-align: right;
         .content-actions {
-          display: flex;
+          display: flex;,
   gap: 0.5rem;
           flex-wrap: wrap;
       ` });
@@ -645,29 +645,29 @@ _jsx(Card, { className: "batch-card", children: _jsxs(CardContent, { className: 
           align-items: flex-start;
           margin-bottom: 1rem;
         .batch-name {
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin-bottom: 0.25rem;
         .batch-operation {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
         .batch-progress {
           margin-bottom: 1rem;
         .progress-bar {
-          height: 4px;
+          height: 4px;,
   background: #e5e7eb;
-          border-radius: 2px;
+          border-radius: 2px;,
   overflow: hidden;
           margin-bottom: 0.5rem;
         .progress-fill {
-          height: 100%;
+          height: 100%;,
   background: #3b82f6;
           transition: width 0.3s ease;
         .progress-text {
-          font-size: 0.875rem;
+          font-size: 0.875rem;,
   color: #6b7280;
         .batch-actions {
-          display: flex;
+          display: flex;,
   gap: 0.5rem;
       ` });
 Card >
@@ -681,7 +681,7 @@ Card >
         ,
             _jsx("style", { children: `
         .modal-overlay {
-          position: fixed;
+          position: fixed;,
   inset: 0;
           background: rgba(0, 0, 0, 0.5);
           display: flex;
@@ -690,41 +690,41 @@ Card >
           z-index: 1000;
         .modal-content {
           background: white;
-          border-radius: 8px;
+          border-radius: 8px;,
   width: 90vw;
           max-width: 700px;
-          max-height: 80vh;
+          max-height: 80vh;,
   overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: center;,
   padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
         .modal-header h2 {
           font-size: 1.25rem;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
         .modal-body {
           padding: 1.5rem;
         .content-details {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 1.5rem;
         .detail-section h3 {
           font-size: 1rem;
-          font-weight: 600;
+          font-weight: 600;,
   color: #1f2937;
           margin-bottom: 1rem;
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 0.5rem;
         .detail-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr;,
   gap: 1rem;
         .detail-item {
           display: flex;
-          flex-direction: column;
+          flex-direction: column;,
   gap: 0.25rem;
         .detail-item label {
           color: #6b7280;
@@ -735,7 +735,7 @@ Card >
           font-size: 0.875rem;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
+          justify-content: flex-end;,
   gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;

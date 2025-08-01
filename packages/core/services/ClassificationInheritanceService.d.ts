@@ -5,81 +5,73 @@
  * Implements inheritance rules for data classification, allowing child elements
  * to inherit classifications from parent elements based on configurable rules
  */
-import { 
-  DataClassification,
+import { DataClassification,
   DataClassificationLevel,
-  ClassificationContext,
+  ClassificationContext }
   ValidationResult
 } from '../types/DataClassification';
 
 }
-export interface InheritanceRule {
-    id: string;
+}
+export interface InheritanceRule { id: string;
     name: string;
     description: string;
     priority: number;
     enabled: boolean;
     conditions: InheritanceCondition[];
     action: InheritanceAction;
-    overridePolicy: OverridePolicy;
-
+    overridePolicy: OverridePolicy }
 }
-export interface InheritanceCondition {
-    type: 'PARENT_TYPE' | 'PARENT_CLASSIFICATION' | 'CHILD_TYPE' | 'RELATIONSHIP_TYPE' | 'CONTEXT_MATCH';
+}
+export interface InheritanceCondition { type: 'PARENT_TYPE' | 'PARENT_CLASSIFICATION' | 'CHILD_TYPE' | 'RELATIONSHIP_TYPE' | 'CONTEXT_MATCH';
     field: string;
     operator: 'EQUALS' | 'CONTAINS' | 'MATCHES' | 'IN' | 'NOT_IN';
     value: string | string[];
-    required: boolean;
-
+    required: boolean }
 }
-export interface InheritanceAction {
-    type: 'INHERIT_EXACT' | 'INHERIT_ELEVATED' | 'INHERIT_REDUCED' | 'APPLY_MINIMUM' | 'APPLY_CUSTOM';
+}
+export interface InheritanceAction { type: 'INHERIT_EXACT' | 'INHERIT_ELEVATED' | 'INHERIT_REDUCED' | 'APPLY_MINIMUM' | 'APPLY_CUSTOM';
     customClassification?: DataClassificationLevel;
     elevationLevel?: number;
-    rationale: string;
-
+    rationale: string }
 }
-export interface OverridePolicy {
-    allowManualOverride: boolean;
+}
+export interface OverridePolicy { allowManualOverride: boolean;
     requireApprovalForOverride: boolean;
     maxOverrideLevel?: DataClassificationLevel;
-    overrideReasons: string[];
-
+    overrideReasons: string[] }
 }
-export interface DataRelationship {
-    parentId: string;
+}
+export interface DataRelationship { parentId: string;
     childId: string;
     relationshipType: 'CONTAINS' | 'DERIVES_FROM' | 'PROCESSES' | 'REFERENCES' | 'AGGREGATES';
     strength: 'WEAK' | 'MODERATE' | 'STRONG' | 'ABSOLUTE';
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface InheritanceContext {
-    parentElement: {
+}
+export interface InheritanceContext { parentElement: {
         id: string;
         type: string;
         classification?: DataClassification;
-        metadata?: Record<string, any>;
+        metadata?: Record<string, any> }
 }
     };
-    childElement: {
-        id: string;
+    childElement: { id: string;
         type: string;
         existingClassification?: DataClassification;
-        metadata?: Record<string, any>;
-    };
+        metadata?: Record<string, any> };
     relationship: DataRelationship;
     businessContext?: ClassificationContext;
 
 }
-export interface InheritanceResult {
-    elementId: string;
+}
+export interface InheritanceResult { elementId: string;
     inheritedClassification: DataClassification;
     appliedRules: AppliedRule[];
     confidence: number;
     requiresReview: boolean;
-    validationResult: ValidationResult;
-
+    validationResult: ValidationResult }
+}
 }
 export interface AppliedRule {
     ruleId: string;
@@ -164,4 +156,5 @@ export declare class ClassificationInheritanceService {
     batchApplyInheritance(contexts: InheritanceContext[]): Promise<Map<string, InheritanceResult>>;
 
 //# sourceMappingURL=ClassificationInheritanceService.d.ts.map
+}
 }

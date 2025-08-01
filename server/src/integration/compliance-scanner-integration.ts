@@ -19,8 +19,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
-}
-}
+
+
 export interface ComplianceScannerIntegrationConfig {
   enabledEnvironments: ('development' | 'staging' | 'production')[];
   autoStart: boolean;
@@ -28,9 +28,10 @@ export interface ComplianceScannerIntegrationConfig {
   gracefulShutdownTimeout: number; // milliseconds
   enableMetrics: boolean;
   enableDashboard: boolean;
-}
-}
-}
+
+
+
+
 
 export class ComplianceScannerIntegration {
   private registry = getScheduledComplianceScannerRegistry();
@@ -40,7 +41,7 @@ export class ComplianceScannerIntegration {
   
   constructor(config: ComplianceScannerIntegrationConfig) {
     this.config = config;
-  }
+
 
   /**
    * Initialize and integrate compliance scanning with the Fastify server
@@ -55,12 +56,12 @@ export class ComplianceScannerIntegration {
       databaseService: DatabaseService;
       redisService: RedisService;
       analyticsCollector: AnalyticsCollector;
-    }
+
   ): Promise<void> {
 
     if (this.isIntegrated) {
       throw new Error('Compliance scanner integration already active');
-    }
+
 
     // Initialize the registry with service dependencies
     await this.registry.initialize(services);
@@ -74,17 +75,17 @@ export class ComplianceScannerIntegration {
     // Start health monitoring if enabled
     if (this.config.healthCheckInterval > 0) {
       this.startHealthMonitoring();
-    }
+
 
     // Auto-start scanners if configured
     if (this.config.autoStart) {
       await this.registry.startAllScanners();
-    }
+
 
     this.isIntegrated = true;
     
     console.log('Compliance Scanner Integration: Successfully integrated with server');
-  }
+
 
   /**
    * Register API routes for compliance scanner management
@@ -99,12 +100,12 @@ export class ComplianceScannerIntegration {
           success: true,
           data: status
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     // Health check endpoint
@@ -117,12 +118,12 @@ export class ComplianceScannerIntegration {
           success: health.healthy,
           data: health
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     // Start all scanners endpoint
@@ -133,12 +134,12 @@ export class ComplianceScannerIntegration {
           success: true,
           message: 'All scanners started successfully'
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     // Stop all scanners endpoint
@@ -149,12 +150,12 @@ export class ComplianceScannerIntegration {
           success: true,
           message: 'All scanners stopped successfully'
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     // Get specific scanner details
@@ -168,7 +169,7 @@ export class ComplianceScannerIntegration {
             success: false,
             error: `Scanner '${scannerId}' not found`
           });
-        }
+
 
         const status = await scanner.getScannerStatus();
         const metrics = await scanner.getScannerMetrics();
@@ -179,14 +180,14 @@ export class ComplianceScannerIntegration {
             scannerId,
             status,
             metrics
-          }
+
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     // Trigger manual scan
@@ -201,7 +202,7 @@ export class ComplianceScannerIntegration {
             success: false,
             error: `Scanner '${scannerId}' not found`
           });
-        }
+
 
         // Use default schedule if none specified
         const targetScheduleId = scheduleId || 'manual-full-compliance-scan';
@@ -213,18 +214,18 @@ export class ComplianceScannerIntegration {
             executionId: execution.executionId,
             scheduleId: targetScheduleId,
             status: execution.status
-          }
+
         });
-      } catch (error) {
+ catch (error) {
         return reply.code(500).send({
           success: false,
           error: error.message
         });
-      }
+
     });
 
     console.log('Compliance Scanner Integration: API routes registered');
-  }
+
 
   /**
    * Register server lifecycle hooks for graceful startup/shutdown
@@ -238,7 +239,7 @@ export class ComplianceScannerIntegration {
       if (this.healthCheckInterval) {
         clearInterval(this.healthCheckInterval);
         this.healthCheckInterval = undefined;
-      }
+
 
       // Stop all scanners with timeout
       const shutdownPromise = this.registry.stopAllScanners();
@@ -259,7 +260,7 @@ export class ComplianceScannerIntegration {
     server.addHook('onReady', async () => {
       console.log('Compliance Scanner Integration: Server ready, compliance scanners active');
     });
-  }
+
 
   /**
    * Start periodic health monitoring
@@ -273,12 +274,12 @@ export class ComplianceScannerIntegration {
           
           // Could implement automatic remediation here
           // For now, just log the issues for manual intervention
-        }
-      } catch (error) {
+
+ catch (error) {
         console.error('Compliance Scanner Integration: Health check failed:', error);
-      }
+
     }, this.config.healthCheckInterval);
-  }
+
 
   /**
    * Get integration status
@@ -287,13 +288,13 @@ export class ComplianceScannerIntegration {
     integrated: boolean;
     config: ComplianceScannerIntegrationConfig;
     healthMonitoring: boolean;
-    } {
+ {
     return {
       integrated: this.isIntegrated,
       config: this.config,
       healthMonitoring: this.healthCheckInterval !== undefined
     };
-  }
+
 
   /**
    * Manually trigger health check
@@ -304,11 +305,11 @@ export class ComplianceScannerIntegration {
       scannerId: string;
       issue: string;
       severity: 'warning' | 'error';
-    }>;
-  }> {
+>;
+> {
     return await this.registry.performHealthCheck();
-  }
-}
+
+
 
 /**
  * Factory function to create compliance scanner integration with default configuration
@@ -327,4 +328,3 @@ export function createComplianceScannerIntegration(
 
   const config = { ...defaultConfig, ...overrides };
   return new ComplianceScannerIntegration(config);
-}

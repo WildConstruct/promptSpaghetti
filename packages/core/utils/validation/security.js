@@ -98,10 +98,10 @@ class SecurityValidation {
         for (const pattern of DANGEROUS_PATTERNS) {
             if (pattern.test(value)) {
                 return false;
-            }
-        }
+
+
         return true;
-    }
+
     /**
      * Validates that an expression is safe to evaluate
      */
@@ -115,7 +115,7 @@ class SecurityValidation {
         // Check against dangerous patterns first
         if (!SecurityValidation.validateSafeString(expression)) {
             return false;
-        }
+
         // Additional expression-specific validation
         const dangerousExpressionPatterns = [
             /function\s*\(/gi,
@@ -140,15 +140,15 @@ class SecurityValidation {
         for (const pattern of dangerousExpressionPatterns) {
             if (pattern.test(expression)) {
                 return false;
-            }
-        }
+
+
         // Check if expression contains only allowed patterns
         const basicSafePattern = /^[a-zA-Z0-9_$\s\.\[\]()===!==<>=+\-*\/&&\|\|!'"]+$/;
         if (!basicSafePattern.test(expression)) {
             return false;
-        }
+
         return true;
-    }
+
     /**
      * Validates that a variable name is safe for SetVariable nodes
      * - Must be alphanumeric with underscore and dash only
@@ -165,10 +165,10 @@ class SecurityValidation {
         // Check alphanumeric pattern first
         if (!exports.VARIABLE_NAME_PATTERN.test(name)) {
             return false;
-        }
+
         // Then check for dangerous patterns using the general property key validation
         return SecurityValidation.validateSafePropertyKey(name);
-    }
+
     /**
      * Validates that a property key is safe for object access
      */
@@ -199,17 +199,17 @@ class SecurityValidation {
         ];
         if (dangerousProperties.includes(key)) {
             return false;
-        }
+
         // Check for prototype pollution attempts
         if (key.includes('__proto__') || key.includes('constructor') || key.includes('prototype')) {
             return false;
-        }
+
         // Only allow alphanumeric, underscore, and dash
         if (!exports.VARIABLE_NAME_PATTERN.test(key)) {
             return false;
-        }
+
         return true;
-    }
+
     /**
      * Validates that a value is safe for storage/processing
      */
@@ -219,19 +219,19 @@ class SecurityValidation {
         // Check primitive types
         if (typeof value === 'string') {
             return SecurityValidation.validateSafeString(value) && value.length <= 10000;
-        }
+
         if (typeof value === 'number') {
             return isFinite(value) && !isNaN(value);
-        }
+
         if (typeof value === 'boolean') {
             return true;
-        }
+
         // Check arrays
         if (Array.isArray(value)) {
             if (value.length > 1000)
                 return false; // Prevent DoS via large arrays
             return value.every(item => SecurityValidation.validateSafeValue(item));
-        }
+
         // Check objects
         if (typeof value === 'object') {
             const keys = Object.keys(value);
@@ -243,12 +243,12 @@ class SecurityValidation {
                     return false;
                 if (!SecurityValidation.validateSafeValue(value[key]))
                     return false;
-            }
+
             return true;
-        }
+
         // Reject functions and other types
         return false;
-    }
+
     /**
      * Sanitizes a string by removing dangerous content
      */
@@ -259,30 +259,30 @@ class SecurityValidation {
         let sanitized = value;
         for (const pattern of DANGEROUS_PATTERNS) {
             sanitized = sanitized.replace(pattern, '');
-        }
+
         // Trim and limit length
         sanitized = sanitized.trim();
         if (sanitized.length > 10000) {
             sanitized = sanitized.substring(0, 10000);
-        }
+
         return sanitized;
-    }
+
     /**
      * Creates a safe property accessor that validates keys
      */
     static safePropertyAccess(obj: unknown, key: string, fallback: unknown = null): unknown {
         if (!obj || typeof obj !== 'object') {
             return fallback;
-        }
+
         if (!SecurityValidation.validateSafePropertyKey(key)) {
             return fallback;
-        }
+
         if (!Object.prototype.hasOwnProperty.call(obj, key)) {
             return fallback;
-        }
+
         return obj[key];
-    }
-}
+
+
 exports.SecurityValidation = SecurityValidation;
 /**
  * Secure Zod validation schemas
@@ -360,18 +360,18 @@ class SecurityTesting {
             const isBlocked = !validator(pattern);
             if (isBlocked) {
                 passed++;
-            }
+
             else {
                 failed++;
                 failedPatterns.push(pattern);
-            }
-        }
+
+
         console.log(`Security Test [${testName}]: ${passed} passed, ${failed} failed`);
         if (failed > 0) {
             console.warn('Failed patterns:', failedPatterns);
-        }
+
         return { passed, failed, failedPatterns };
-    }
+
     /**
      * Run comprehensive security tests
      */
@@ -384,8 +384,8 @@ class SecurityTesting {
         const totalFailed = stringTest.failed + expressionTest.failed + keyTest.failed;
         console.log(`🔐 Security Tests Complete: ${totalPassed} passed, ${totalFailed} failed`);
         return totalFailed === 0;
-    }
-}
+
+
 exports.SecurityTesting = SecurityTesting;
 /**
  * Common injection attack patterns for testing

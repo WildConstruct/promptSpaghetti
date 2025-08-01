@@ -2,39 +2,41 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './VersionEditor.css';
-}
+
+
 interface VersionData {
   version_number: string;,
-  status: 'draft' | 'published' | 'deprecated' | 'archived';
+  status: 'draft' | 'published' | 'deprecated' | 'archived';,
   visibility: 'public' | 'private' | 'beta';,
-  claude_model: string;
+  claude_model: string;,
   graph_json: Record<string, unknown>;
   prompt_yaml?: string;
   release_notes: string;,
   compatibility_level: 'breaking' | 'major' | 'minor' | 'patch';
   migration_guide?: string;
   deprecated_features: string;,
-  new_features: string;
+  new_features: string;,
   breaking_changes: string;,
-  bug_fixes: string;
+  bug_fixes: string;,
   known_issues: string;
   min_claude_version?: string;
   max_claude_version?: string;
   required_features: string;,
-  optional_features: string;
+  optional_features: string;,
   token_per_run_estimate: number;
-const CLAUDE_MODELS = [;
+  const CLAUDE_MODELS = [
   'claude-3-sonnet',
   'claude-3-haiku',
   'claude-3-opus',
   'claude-3.5-sonnet'
-];
-const DEFAULT_VERSION_DATA: VersionData = {,
+  ];
+  const DEFAULT_VERSION_DATA: VersionData = {,
   version_number: '',
   status: 'draft',
   visibility: 'private',
   claude_model: 'claude-3-sonnet',
-}
+
+},
   graph_json: {},
   release_notes: '',
   compatibility_level: 'minor',
@@ -48,26 +50,7 @@ const DEFAULT_VERSION_DATA: VersionData = {,
   token_per_run_estimate: 0;
   };
 
-export const VersionEditor: React.FC = () => {
-  const { templateId, versionId } = useParams<{ templateId: string; versionId?: string }>();
-  const navigate = useNavigate();
-  const [versionData, setVersionData] = useState<VersionData>(DEFAULT_VERSION_DATA);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [graphJsonString, setGraphJsonString] = useState('{}');
-  const [currentStep, setCurrentStep] = useState(1);
-  const [lastVersion, setLastVersion] = useState<string>('');
-  const totalSteps = 4;
-  useEffect(() => {
-    if (templateId) {
-      fetchLastVersion();
-      if (versionId) {
-        fetchVersion();
-  }, [templateId, versionId, fetchLastVersion, fetchVersion]);
-  const fetchLastVersion = useCallback(async () => {
-    try {
-      const response = await fetch(`/api/marketplace/templates/${templateId}/versions`, {)}
-  },
+export const VersionEditor = () => { return null; },
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
@@ -88,7 +71,7 @@ export const VersionEditor: React.FC = () => {
   token_per_run_estimate: latest.token_per_run_estimate,
 }));
             setGraphJsonString(JSON.stringify(latest.graph_json, null, 2));
-    } catch (error) {
+ catch (error) {
   console.error('Failed to fetch last version:', error);
 }, [templateId, versionId]);
   const fetchVersion = useCallback(async () => {
@@ -125,9 +108,9 @@ export const VersionEditor: React.FC = () => {
   token_per_run_estimate: version.token_per_run_estimate,
 });
       setGraphJsonString(JSON.stringify(version.graph_json, null, 2));
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to fetch version');
-} finally {
+ finally {
       setIsLoading(false);
   }, [versionId]);
   const handleInputChange = (field: keyof VersionData, value: string) => {
@@ -165,7 +148,7 @@ export const VersionEditor: React.FC = () => {
     try {
       const parsed = JSON.parse(value);
       handleInputChange('graph_json', parsed);
-    } catch (error) {
+ catch (error) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.debug('Invalid JSON input:', error);
   // Invalid JSON, don't update the version data
@@ -182,7 +165,7 @@ export const VersionEditor: React.FC = () => {
     case 'minor':
       return `${major}.${minor + 1}.0`;}
     case 'patch':
-      return `${major}.${minor}.${patch + 1}`;},}
+      return `${major}.${minor}.${patch + 1}`;},},
   default:
       return `${major}.${minor}.${patch + 1}`;}
   };
@@ -239,9 +222,9 @@ export const VersionEditor: React.FC = () => {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to save version');
             navigate(`/marketplace/templates/${templateId}/versions`);}
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to save version');
-} finally {
+ finally {
       setIsLoading(false);
   };
   const renderStep1 = () => (;);

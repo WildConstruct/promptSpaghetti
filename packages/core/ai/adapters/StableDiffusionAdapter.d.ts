@@ -7,17 +7,16 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface StableDiffusionConfig {
-    endpoint: string;
+}
+export interface StableDiffusionConfig { endpoint: string;
     apiType: 'automatic1111' | 'comfyui' | 'stability-ai' | 'replicate' | 'custom';
     apiKey?: string;
     timeout?: number;
     maxRetries?: number;
-    defaultModel?: string;
-
+    defaultModel?: string }
 }
-export interface StableDiffusionRequestOptions {
-    prompt: string;
+}
+export interface StableDiffusionRequestOptions { prompt: string;
     negative_prompt?: string;
     sampler_name?: string;
     scheduler?: string;
@@ -36,16 +35,14 @@ export interface StableDiffusionRequestOptions {
     inpaint_full_res?: boolean;
     lora_models?: Array<{
         name: string;
-        strength: number;
+        strength: number }
 }
     }>;
-    controlnet?: Array<{
-        model: string;
+    controlnet?: Array<{ model: string;
         image: string;
         strength: number;
         guidance_start?: number;
-        guidance_end?: number;
-    }>;
+        guidance_end?: number }>;
     restore_faces?: boolean;
     tiling?: boolean;
     enable_hr?: boolean;
@@ -56,14 +53,13 @@ export interface StableDiffusionRequestOptions {
     hr_resize_y?: number;
 
 }
-export interface StableDiffusionResponse {
-    images: string[];
-    parameters: Record<string, any>;
-    info: string;
-
 }
-export interface StableDiffusionGenerationResult {
-    images: Array<{
+export interface StableDiffusionResponse { images: string[];
+    parameters: Record<string, any>;
+    info: string }
+}
+}
+export interface StableDiffusionGenerationResult { images: Array<{
         base64: string;
         url?: string;
         seed: number;
@@ -72,7 +68,7 @@ export interface StableDiffusionGenerationResult {
             sampler: string;
             steps: number;
             cfg_scale: number;
-            size: string;
+            size: string }
 }
         };
     }>;
@@ -80,11 +76,10 @@ export interface StableDiffusionGenerationResult {
     negativePrompt?: string;
     parameters: Record<string, any>;
     generationTime: number;
-    usage: {
-        computeUnits: number;
-        estimatedCost: number;
-    };
+    usage: { computeUnits: number;
+        estimatedCost: number };
 
+}
 }
 export interface ModelInfo {
     name: string;
@@ -128,4 +123,5 @@ export declare class StableDiffusionAdapter extends BaseAIModel {
 
 export default StableDiffusionAdapter;
 //# sourceMappingURL=StableDiffusionAdapter.d.ts.map
+}
 }

@@ -1,12 +1,11 @@
-import {
-  GraphSchema,
-  NodeTypeEnum,
+import { GraphSchema,
+  NodeTypeEnum }
   WeightedChoiceNodeSchema
-} from '../graphSchema';
+ from '../graphSchema';
 describe('graphSchema validation', () => {
   it('accepts a minimal valid graph', () => {
     const valid = {
-      nodes: [,
+      nodes: [
         { id: 'n1', type: 'Output' as const }
       ]
     };
@@ -15,17 +14,16 @@ describe('graphSchema validation', () => {
   });
   it('rejects graph when a node is missing id', () => {
     const invalid = {
-      nodes: [,
+      nodes: [
         { type: 'Output' as const }
       ]
     };
     const result = GraphSchema.safeParse(invalid);
     expect(result.success).toBe(false);
   });
-  it('validates WeightedChoice node weights as positive numbers', () => {
-    const badNode = {
+  it('validates WeightedChoice node weights as positive numbers', () => { const badNode = {
       id: 'w1',
-      type: 'WeightedChoice' as const,
+      type: 'WeightedChoice' as const }
       choices: [{ value: 'A', weight: -1 }]
     };
     const res = WeightedChoiceNodeSchema.safeParse(badNode);

@@ -8,44 +8,44 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { AlertTriangle, Shield, Activity, Users, Server, Globe, Clock, TrendingUp, TrendingDown, AlertCircle, CheckCircle, XCircle, Zap } from 'lucide-react';
 
 // Types
-}
-interface DashboardMetrics {
-  security: {
+
+
+interface DashboardMetrics { security: {;
   active_alerts: number;
   critical_alerts: number;
-  threat_level: number; // 0-10,
+  threat_level: number; // 0-10 }
   incidents_today: number;
   mean_response_time: number;
   false_positive_rate: number;
-}
+
+
 };
-  performance: {
-  system_health: number; // 0-100,
+  performance: { ,
+  system_health: number; // 0-100 }
   avg_response_time: number;
   requests_per_minute: number;
   error_rate: number;
   cpu_usage: number;
   memory_usage: number;
 };
-  analytics: {
+  analytics: { ,
   active_users: number;
   daily_sessions: number;
   conversion_rate: number;
   bounce_rate: number;
   page_views_today: number;
-  revenue_today: number;
-};
-  infrastructure: {
+  revenue_today: number };
+  infrastructure: { ,
   services_up: number;
   services_total: number;
   database_health: number;
   network_latency: number;
   storage_usage: number;
-  backup_status: 'success' | 'warning' | 'error'
-  };
-}
-interface AlertSummary {
-  id: string;
+  backup_status: 'success' | 'warning' | 'error' }
+};
+
+
+interface AlertSummary { id: string;
   type: 'security' | 'performance' | 'infrastructure' | 'business';
   severity: 'low' | 'medium' | 'high' | 'critical';
   title: string;
@@ -67,90 +67,86 @@ interface AlertSummary {
   // Mock data hook (would be replaced with real API calls)
   const useDashboardData = () => {
   const [metrics, setMetrics] = useState<DashboardMetrics>({)
-  security: {
-  active_alerts: 12,
-  critical_alerts: 2,
-  threat_level: 3.5,
-  incidents_today: 5,
-  mean_response_time: 4200,
-  false_positive_rate: 0.08,
-}
+  security: {;
+  active_alerts: 12;
+  critical_alerts: 2;
+  threat_level: 3.5;
+  incidents_today: 5;
+  mean_response_time: 4200;
+  false_positive_rate: 0.08 }
+
+
 },
-  performance: {
+  performance: { ,
   system_health: 94,
   avg_response_time: 245,
   requests_per_minute: 1820,
   error_rate: 0.012,
   cpu_usage: 68,
-  memory_usage: 72,
+  memory_usage: 72 }
 },
-  analytics: {
+  analytics: { ,
   active_users: 2847,
   daily_sessions: 15624,
   conversion_rate: 0.034,
   bounce_rate: 0.28,
   page_views_today: 89453,
-  revenue_today: 24890.50,
+  revenue_today: 24890.50 }
 },
-  infrastructure: {
+  infrastructure: { ,
   services_up: 28,
   services_total: 30,
   database_health: 98,
   network_latency: 23,
   storage_usage: 0.67,
-  backup_status: 'success',
+  backup_status: 'success' }
 });
   const [alerts, setAlerts] = useState<AlertSummary>([)
-    {
-  id: 'alert_001',
-  type: 'security',
-  severity: 'high',
-  title: 'Unusual login patterns detected',
-  description: 'Multiple failed login attempts from various IP addresses',
-  timestamp: Date.now() - 300000,
-  source: 'Authentication System',
-  status: 'investigating',
-}
-    {
-  id: 'alert_002',
-  type: 'performance',
-  severity: 'medium',
-  title: 'High response times on API gateway',
-  description: 'Average response time exceeded 500ms threshold',
-  timestamp: Date.now() - 180000,
-  source: 'API Gateway',
-  status: 'active',
-}
-    {
-      id: 'alert_003',
-      type: 'infrastructure',
-      severity: 'critical',
-      title: 'Database connection pool exhausted',
-      description: 'Primary database connection pool at 98% capacity',
-      timestamp: Date.now() - 120000,
-      source: 'Database Monitor',
+    { id: 'alert_001'
+  type: 'security'
+  severity: 'high'
+  title: 'Unusual login patterns detected'
+  description: 'Multiple failed login attempts from various IP addresses'
+  timestamp: Date.now() - 300000
+  source: 'Authentication System'
+  status: 'investigating' }
+
+    { id: 'alert_002'
+  type: 'performance'
+  severity: 'medium'
+  title: 'High response times on API gateway'
+  description: 'Average response time exceeded 500ms threshold'
+  timestamp: Date.now() - 180000
+  source: 'API Gateway'
+  status: 'active' }
+
+    { id: 'alert_003'
+      type: 'infrastructure'
+      severity: 'critical'
+      title: 'Database connection pool exhausted'
+      description: 'Primary database connection pool at 98% capacity'
+      timestamp: Date.now() - 120000
+      source: 'Database Monitor' }
       status: 'active']);
   const [systemStatuses, setSystemStatuses] = useState<SystemStatus>([)
-    { name: 'Web Frontend', status: 'healthy', uptime: 0.999, last_check: Date.now(), response_time: 124 },
-    { name: 'API Gateway', status: 'degraded', uptime: 0.995, last_check: Date.now(), response_time: 456 },
-    { name: 'Auth Service', status: 'healthy', uptime: 0.998, last_check: Date.now(), response_time: 89 },
-    { name: 'Database', status: 'degraded', uptime: 0.992, last_check: Date.now(), error_count: 3 },
-    { name: 'Cache Layer', status: 'healthy', uptime: 1.0, last_check: Date.now(), response_time: 12 },
+    { name: 'Web Frontend', status: 'healthy', uptime: 0.999, last_check: Date.now(), response_time: 124 }
+    { name: 'API Gateway', status: 'degraded', uptime: 0.995, last_check: Date.now(), response_time: 456 }
+    { name: 'Auth Service', status: 'healthy', uptime: 0.998, last_check: Date.now(), response_time: 89 }
+    { name: 'Database', status: 'degraded', uptime: 0.992, last_check: Date.now(), error_count: 3 }
+    { name: 'Cache Layer', status: 'healthy', uptime: 1.0, last_check: Date.now(), response_time: 12 }
     { name: 'Message Queue', status: 'offline', uptime: 0.0, last_check: Date.now() - 300000 }
   ]);
   // Simulate real-time updates
-  useEffect(() => {
-  const interval = setInterval(() => {
+  useEffect(() => { const interval = setInterval(() => {
   setMetrics(prev => ({)
-  ...prev,
+  ...prev
   performance: {
-  ...prev.performance,
-  requests_per_minute: prev.performance.requests_per_minute + Math.floor(Math.random() * 100 - 50),
-  avg_response_time: Math.max(100, prev.performance.avg_response_time + Math.floor(Math.random() * 40 - 20)),
-},
-  analytics: {
-  ...prev.analytics,
-  active_users: Math.max(0, prev.analytics.active_users + Math.floor(Math.random() * 20 - 10)),
+  ...prev.performance
+  requests_per_minute: prev.performance.requests_per_minute + Math.floor(Math.random() * 100 - 50)
+  avg_response_time: Math.max(100, prev.performance.avg_response_time + Math.floor(Math.random() * 40 - 20)) }
+
+  analytics: { ...prev.analytics
+  active_users: Math.max(0, prev.analytics.active_users + Math.floor(Math.random() * 20 - 10)) }
 }));
     }, 5000);
     return () => clearInterval(interval);
@@ -159,24 +155,21 @@ interface AlertSummary {
 };
 
 // Components
-const MetricCard: React.FC<{,
+const MetricCard: React.FC<{ ,
   title: string;
   value: string | number;
   subtitle?: string;
   icon: React.ReactNode;
   trend?: 'up' | 'down' | 'stable';
   status?: 'good' | 'warning' | 'critical';
-  onClick?: () => void;
-}> = ({ title, value, subtitle, icon, trend, status = 'good', onClick }) => {
-  const statusColors = {
+  onClick?: () => void }> = ({ title, value, subtitle, icon, trend, status = 'good', onClick }) => { const statusColors = {
   good: 'bg-green-50 border-green-200',
   warning: 'bg-yellow-50 border-yellow-200',
-  critical: 'bg-red-50 border-red-200',
+  critical: 'bg-red-50 border-red-200' }
 };
-  const trendIcons = {
-  up: <TrendingUp className="w-4 h-4 text-green-500" />,
-  down: <TrendingDown className="w-4 h-4 text-red-500" />,
-  stable: <div className="w-4 h-4" />,
+  const trendIcons = { up: <TrendingUp className="w-4 h-4 text-green-500" />
+  down: <TrendingDown className="w-4 h-4 text-red-500" />
+  stable: <div className="w-4 h-4" /> }
 };
   return;
     <div 
@@ -197,23 +190,20 @@ const MetricCard: React.FC<{,
     </div>
   );
 };
-const AlertCard: React.FC<{ alert: AlertSummary; onAcknowledge: (id: string) => void }> = ({ alert, onAcknowledge }) => {
-  const severityColors = {
+const AlertCard: React.FC<{ alert: AlertSummary; onAcknowledge: (id: string) => void }> = ({ alert, onAcknowledge }) => { const severityColors = {
   low: 'border-blue-300 bg-blue-50',
   medium: 'border-yellow-300 bg-yellow-50',
   high: 'border-orange-300 bg-orange-50',
-  critical: 'border-red-300 bg-red-50',
+  critical: 'border-red-300 bg-red-50' }
 };
-  const severityIcons = {
-  low: <AlertCircle className="w-4 h-4 text-blue-600" />,
-  medium: <AlertTriangle className="w-4 h-4 text-yellow-600" />,
-  high: <AlertTriangle className="w-4 h-4 text-orange-600" />,
-  critical: <XCircle className="w-4 h-4 text-red-600" />,
+  const severityIcons = { low: <AlertCircle className="w-4 h-4 text-blue-600" />
+  medium: <AlertTriangle className="w-4 h-4 text-yellow-600" />
+  high: <AlertTriangle className="w-4 h-4 text-orange-600" />
+  critical: <XCircle className="w-4 h-4 text-red-600" /> }
 };
-  const statusIcons = {
-  active: <AlertCircle className="w-4 h-4 text-red-500" />,
-  investigating: <Clock className="w-4 h-4 text-yellow-500" />,
-  resolved: <CheckCircle className="w-4 h-4 text-green-500" />,
+  const statusIcons = { active: <AlertCircle className="w-4 h-4 text-red-500" />
+  investigating: <Clock className="w-4 h-4 text-yellow-500" />
+  resolved: <CheckCircle className="w-4 h-4 text-green-500" /> }
 };
   return;
     <div className={`p-4 rounded-lg border-2 ${severityColors[alert.severity]}`}>}
@@ -245,18 +235,16 @@ const AlertCard: React.FC<{ alert: AlertSummary; onAcknowledge: (id: string) => 
     </div>
   );
 };
-const SystemStatusIndicator: React.FC<{ system: SystemStatus }> = ({ system }) => {
-  const statusColors = {
+const SystemStatusIndicator: React.FC<{ system: SystemStatus }> = ({ system }) => { const statusColors = {
   healthy: 'bg-green-500',
   degraded: 'bg-yellow-500',
   unhealthy: 'bg-orange-500',
-  offline: 'bg-red-500',
+  offline: 'bg-red-500' }
 };
-  const statusIcons = {
-  healthy: <CheckCircle className="w-4 h-4 text-green-600" />,
-  degraded: <AlertTriangle className="w-4 h-4 text-yellow-600" />,
-  unhealthy: <AlertTriangle className="w-4 h-4 text-orange-600" />,
-  offline: <XCircle className="w-4 h-4 text-red-600" />,
+  const statusIcons = { healthy: <CheckCircle className="w-4 h-4 text-green-600" />
+  degraded: <AlertTriangle className="w-4 h-4 text-yellow-600" />
+  unhealthy: <AlertTriangle className="w-4 h-4 text-orange-600" />
+  offline: <XCircle className="w-4 h-4 text-red-600" /> }
 };
   return;
     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
@@ -302,27 +290,7 @@ const SimpleChart: React.FC<{ data: TimeSeriesData; height?: number }> = ({ data
 };
 
 // Main Dashboard Component
-export const UnifiedMonitoringDashboard: React.FC = () => {
-  const { metrics, alerts, systemStatuses } = useDashboardData();
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'security' | 'performance' | 'analytics' | 'infrastructure'>('overview');
-  const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h');
-  const handleAcknowledgeAlert = useCallback((alertId: string) => {
-    console.log(`Acknowledging alert: ${alertId}`);}
-    // Would send API request to acknowledge alert
-  }, []);
-  const criticalAlertsCount = useMemo(() => {
-    return alerts.filter(alert => alert.severity === 'critical' && alert.status === 'active').length;
-  }, [alerts]);
-  const systemHealthPercentage = useMemo(() => {
-    const healthyCount = systemStatuses.filter(s => s.status === 'healthy').length;
-    return Math.round((healthyCount / systemStatuses.length) * 100);
-  }, [systemStatuses]);
-  // Generate sample time series data
-  const generateTimeSeriesData = (baseValue: number, variance: number, points: number = 24): TimeSeriesData => {
-    return Array.from({ length: points }, (_, i) => ({)
-  timestamp: Date.now() - (points - i) * 60 * 60 * 1000,
-  value: baseValue + (Math.random() - 0.5) * variance,
-}));
+export const UnifiedMonitoringDashboard = () => { return null; }));
   };
   const responseTimeData = generateTimeSeriesData(metrics.performance.avg_response_time, 100);
   const requestRateData = generateTimeSeriesData(metrics.performance.requests_per_minute, 300);
@@ -367,11 +335,11 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors capitalize ${
+              className={ `px-4 py-2 rounded-md text-sm font-medium transition-colors capitalize ${
   selectedTab === tab
   ? 'bg-white text-gray-900 shadow-sm'
-  : 'text-gray-600 hover:text-gray-900',
-}`}
+  : 'text-gray-600 hover:text-gray-900' }
+`}
             >
               {tab}
             </button>
@@ -550,7 +518,7 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
             />
             <MetricCard
               title="Revenue Today"
-              value={`$${metrics.analytics.revenue_today.toLocaleString()}`}
+              value={`${metrics.analytics.revenue_today.toLocaleString()}`}
               icon={<Activity className="w-5 h-5 text-purple-600" />}
             />
           </div>

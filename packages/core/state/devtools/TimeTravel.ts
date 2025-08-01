@@ -10,30 +10,29 @@ import { StateSnapshot, StateChange } from '../containers/BaseStateContainer';
 
 // Time travel types
 
-}
-export interface TimeTravelConfig {
-  maxHistorySize: number;
+
+export interface TimeTravelConfig { maxHistorySize: number;
   enableBranching: boolean;
   enableSnapshots: boolean;
   enableDiffing: boolean;
   compressionEnabled: boolean;
   persistHistory: boolean;
-  autoSnapshot: {
+  autoSnapshot: { }
   enabled: boolean;
   interval: number;
   maxSnapshots: number;
-}
+
+
 };
-}
-}
-export interface TimelineEntry<T = any> {
-  id: string;
+
+
+export interface TimelineEntry<T = any> { id: string;
   timestamp: number;
-  type: 'snapshot' | 'change' | 'branch' | 'merge' | 'marker';
+  type: 'snapshot' | 'change' | 'branch' | 'merge' | 'marker'
   domain: string;
   snapshot?: StateSnapshot<T>;
   change?: StateChange<T>;
-  metadata: {
+  metadata: { }
   description?: string;
   author?: string;
   tags: string;
@@ -44,9 +43,8 @@ export interface TimelineEntry<T = any> {
   compressed: boolean;
 };
 
-}
-export interface TimeBranch {
-  id: string;
+
+export interface TimeBranch { id: string;
   name: string;
   description: string;
   created: number;
@@ -54,49 +52,47 @@ export interface TimeBranch {
   parentEntryId: string;
   headEntryId: string;
   entryIds: string;
-  metadata: {
+  metadata: { }
   author: string;
   tags: string;
   protected: boolean;
   color: string;
-}
+
+
 };
-}
-}
-export interface TimeTravelState {
-  currentPosition: number;
+
+
+export interface TimeTravelState { currentPosition: number;
   currentBranch: string;
   totalEntries: number;
   isReplaying: boolean;
   canGoBack: boolean;
   canGoForward: boolean;
   branches: string;
-  markers: TimelineMarker;
-}
-}
-}
-export interface TimelineMarker {
-  id: string;
+  markers: TimelineMarker }
+
+
+
+export interface TimelineMarker { id: string;
   entryId: string;
   name: string;
   description: string;
   color: string;
   timestamp: number;
-  type: 'bookmark' | 'bug' | 'feature' | 'test' | 'milestone'
-}
-  }
-}
-export interface StateDiff {
-  path: string;
+  type: 'bookmark' | 'bug' | 'feature' | 'test' | 'milestone' }
+
+
+
+
+export interface StateDiff { path: string;
   type: 'added' | 'removed' | 'modified' | 'unchanged';
   oldValue?: any;
   newValue?: any;
-  children?: StateDiff;
-}
-}
-}
-export interface ReplaySession {
-  id: string;
+  children?: StateDiff }
+
+
+
+export interface ReplaySession { id: string;
   name: string;
   description: string;
   timeline: TimelineEntry;
@@ -106,10 +102,10 @@ export interface ReplaySession {
   loop: boolean;
   breakpoints: number;
   created: number;
-  lastPlayed: number;
-}
-}
-}
+  lastPlayed: number }
+
+
+
 export interface TimelineQuery {
   timeRange?: { start: number; end: number };
   domains?: string;
@@ -121,7 +117,7 @@ export interface TimelineQuery {
   offset?: number;
 
 // Main TimeTravel class
-}
+
 export class TimeTravel extends EventEmitter {
   private config: TimeTravelConfig;
   private timeline: Map<string, TimelineEntry> = new Map();
@@ -133,87 +129,80 @@ export class TimeTravel extends EventEmitter {
   private replaySessions: Map<string, ReplaySession> = new Map();
   private isRecording = true;
   private isReplaying = false;
-  constructor(config: Partial<TimeTravelConfig> = {}) {
-  super();
+  constructor(config: Partial<TimeTravelConfig> = {}) { super();
   this.config = {
-  maxHistorySize: 1000,
-  enableBranching: true,
-  enableSnapshots: true,
-  enableDiffing: true,
-  compressionEnabled: true,
-  persistHistory: false,
+  maxHistorySize: 1000
+  enableBranching: true
+  enableSnapshots: true
+  enableDiffing: true
+  compressionEnabled: true
+  persistHistory: false
   autoSnapshot: {
-  enabled: true,
-  interval: 60000, // 1 minute,
-  maxSnapshots: 50,
-}
+  enabled: true
+  interval: 60000, // 1 minute
+  maxSnapshots: 50 }
+
       ...config
     };
     this.initializeMainBranch();
     this.setupAutoSnapshot();
   // Recording state changes
-  recordStateSnapshot<T>(snapshot: StateSnapshot<T>, domain: string, options: {)
+  recordStateSnapshot<T>(snapshot: StateSnapshot<T>, domain: string, options: { )
   description?: string;
   tags?: string;
-  marker?: Omit<TimelineMarker, 'id' | 'entryId' | 'timestamp'>;
-} = {}): string {
-    if (!this.isRecording) return '';
+  marker?: Omit<TimelineMarker, 'id' | 'entryId' | 'timestamp'> } = {}): string { if (!this.isRecording) return '';
     const entryId = this.generateEntryId();
     const compressed = this.config.compressionEnabled ? this.compressSnapshot(snapshot) : snapshot;
-    const entry: TimelineEntry<T> = {,
-  id: entryId,
-      timestamp: snapshot.timestamp,
-      type: 'snapshot',
-      domain,
-      snapshot: compressed,
-      metadata: {
+    const entry: TimelineEntry<T> = {
+  id: entryId
+      timestamp: snapshot.timestamp
+      type: 'snapshot'
+      domain
+      snapshot: compressed
+      metadata: { }
   description: options.description || `Snapshot for ${domain}`}
-},
-  tags: options.tags || [],
-        branchId: this.currentBranch,
-        parentId: this.getCurrentEntryId(),
-        childIds: [],
-        size: JSON.stringify(snapshot).length,
+
+  tags: options.tags || []
+        branchId: this.currentBranch
+        parentId: this.getCurrentEntryId()
+        childIds: []
+        size: JSON.stringify(snapshot).length
         compressed: this.config.compressionEnabled;
   };
     this.addEntryToTimeline(entry);
     // Add marker if specified
-    if (options.marker) {
-  this.addMarker({)
-  ...options.marker,
-  entryId,
-  timestamp: snapshot.timestamp,
+    if (options.marker) { this.addMarker({)
+  ...options.marker
+  entryId
+  timestamp: snapshot.timestamp }
 });
     this.emit('snapshotRecorded', { entry, domain });
     return entryId;
-  recordStateChange<T>(change: StateChange<T>, domain: string, options: {)
+  recordStateChange<T>(change: StateChange<T>, domain: string, options: { )
   description?: string;
-  tags?: string;
-} = {}): string {
-    if (!this.isRecording) return '';
+  tags?: string } = {}): string { if (!this.isRecording) return '';
     const entryId = this.generateEntryId();
-    const entry: TimelineEntry<T> = {,
-  id: entryId,
-      timestamp: change.timestamp,
-      type: 'change',
-      domain,
-      change,
-      metadata: {
+    const entry: TimelineEntry<T> = {
+  id: entryId
+      timestamp: change.timestamp
+      type: 'change'
+      domain
+      change
+      metadata: { }
   description: options.description || `${change.type} in ${domain}`}
-},
-  tags: options.tags || [],
-        branchId: this.currentBranch,
-        parentId: this.getCurrentEntryId(),
-        childIds: [],
-        size: JSON.stringify(change).length,
+
+  tags: options.tags || []
+        branchId: this.currentBranch
+        parentId: this.getCurrentEntryId()
+        childIds: []
+        size: JSON.stringify(change).length
         compressed: false;
   };
     this.addEntryToTimeline(entry);
     this.emit('changeRecorded', { entry, domain });
     return entryId;
   // Navigation
-  goToPosition(position: number): boolean {
-  if (position < 0 || position >= this.timelineOrder.length) {
+  goToPosition(position: number): boolean { if (position < 0 || position >= this.timelineOrder.length) {
   return false;
   const previousPosition = this.currentPosition;
   this.currentPosition = position;
@@ -224,11 +213,10 @@ export class TimeTravel extends EventEmitter {
   currentPosition: position,
   entry,
   canGoBack: this.canGoBack(),
-  canGoForward: this.canGoForward(),
+  canGoForward: this.canGoForward() }
 });
     return true;
-  goToEntry(entryId: string): boolean {
-  const position = this.timelineOrder.indexOf(entryId);
+  goToEntry(entryId: string): boolean { const position = this.timelineOrder.indexOf(entryId);
   if (position === -1) return false;
   return this.goToPosition(position);
   goToTimestamp(timestamp: number): boolean {,
@@ -254,20 +242,19 @@ export class TimeTravel extends EventEmitter {
   goToEnd(): boolean {,
   return this.goToPosition(this.timelineOrder.length - 1);
   // Branching
-  createBranch(name: string, options: {)
+  createBranch(name: string, options: {) }
   description?: string;
   fromEntryId?: string;
   author?: string;
   tags?: string;
   color?: string;
-} = {}): string {
-    if (!this.config.enableBranching) {
+ = {}): string { if (!this.config.enableBranching) {
       throw new Error('Branching is disabled');
     const branchId = this.generateBranchId();
     const fromEntryId = options.fromEntryId || this.getCurrentEntryId();
     const branch: TimeBranch = {,
   id: branchId,
-      name,
+      name }
       description: options.description || `Branch: ${name}`}
 },
   created: Date.now(),
@@ -275,17 +262,16 @@ export class TimeTravel extends EventEmitter {
       parentEntryId: fromEntryId,
       headEntryId: fromEntryId,
       entryIds: [fromEntryId],
-      metadata: {
+      metadata: { ,
   author: options.author || 'anonymous',
   tags: options.tags || [],
   protected: false,
-  color: options.color || this.generateRandomColor(),
+  color: options.color || this.generateRandomColor() }
 };
     this.branches.set(branchId, branch);
     this.emit('branchCreated', { branch, fromEntryId });
     return branchId;
-  switchBranch(branchId: string): boolean {
-  const branch = this.branches.get(branchId);
+  switchBranch(branchId: string): boolean { const branch = this.branches.get(branchId);
   if (!branch) return false;
   const previousBranch = this.currentBranch;
   this.currentBranch = branchId;
@@ -295,26 +281,25 @@ export class TimeTravel extends EventEmitter {
   this.currentPosition = headPosition;
   this.emit('branchSwitched', {)
   previousBranch,
-  currentBranch: branchId,
+  currentBranch: branchId }
   branch
 });
     return true;
-  mergeBranch(sourceBranchId: string, targetBranchId: string, options: {)
+  mergeBranch(sourceBranchId: string, targetBranchId: string, options: { )
   strategy?: 'fast-forward' | 'merge-commit' | 'squash';
-  message?: string;
-} = {}): string | null {
+  message?: string } = {}): string | null {
     const sourceBranch = this.branches.get(sourceBranchId);
     const targetBranch = this.branches.get(targetBranchId);
     if (!sourceBranch || !targetBranch) return null;
     const { strategy = 'merge-commit', message } = options;
     // Create merge entry
     const mergeEntryId = this.generateEntryId();
-    const mergeEntry: TimelineEntry = {,
+    const mergeEntry: TimelineEntry = { ,
   id: mergeEntryId,
       timestamp: Date.now(),
       type: 'merge',
       domain: 'system',
-      metadata: {
+      metadata: { }
   description: message || `Merge ${sourceBranch.name} into ${targetBranch.name}`}
 },
   tags: ['merge'],
@@ -328,10 +313,10 @@ export class TimeTravel extends EventEmitter {
     // Update target branch
     targetBranch.headEntryId = mergeEntryId;
     targetBranch.lastModified = Date.now();
-    this.emit('branchMerged', {)
+    this.emit('branchMerged', { )
   sourceBranch,
       targetBranch,
-      mergeEntry,
+      mergeEntry }
       strategy
     });
     return mergeEntryId;
@@ -341,17 +326,16 @@ export class TimeTravel extends EventEmitter {
     timeRange?: { start: number; end: number };
     domains?: string;
     speed?: number;
-  } = {}): string {
-  const sessionId = this.generateSessionId();
+ = {}): string { const sessionId = this.generateSessionId();
   const timeline = this.getFilteredTimeline({)
   timeRange: options.timeRange,
-  domains: options.domains,
+  domains: options.domains }
 });
-    const session: ReplaySession = {,
+    const session: ReplaySession = { ,
   id: sessionId,
-      name,
+      name }
       description: options.description || `Replay session: ${name}`}
-}
+
       timeline,
       currentIndex: 0,
       playbackSpeed: options.speed || 1,
@@ -364,12 +348,11 @@ export class TimeTravel extends EventEmitter {
     this.replaySessions.set(sessionId, session);
     this.emit('replaySessionCreated', { session });
     return sessionId;
-  startReplay(sessionId: string, options: {)
+  startReplay(sessionId: string, options: { )
   autoPlay?: boolean;
   loop?: boolean;
   speed?: number;
-  fromIndex?: number;
-} = {}): boolean {
+  fromIndex?: number } = {}): boolean {
     const session = this.replaySessions.get(sessionId);
     if (!session) return false;
     this.isReplaying = true;
@@ -379,31 +362,24 @@ export class TimeTravel extends EventEmitter {
     session.currentIndex = options.fromIndex || 0;
     session.lastPlayed = Date.now();
     this.emit('replayStarted', { session, options });
-    if (session.autoPlay) {
-  this.executeAutoReplay(session);
+    if (session.autoPlay) { this.executeAutoReplay(session);
   return true;
-  stepReplay(sessionId: string, direction: 'forward' | 'backward' = 'forward'): boolean {,
+  stepReplay(sessionId: string, direction: 'forward' | 'backward' = 'forward'): boolean { }
   const session = this.replaySessions.get(sessionId);
   if (!session || !this.isReplaying) return false;
   const step = direction === 'forward' ? 1 : -1;
   const newIndex = session.currentIndex + step;
-  if (newIndex < 0 || newIndex >= session.timeline.length) {
-  if (session.loop && direction === 'forward') {
-  session.currentIndex = 0;
-} else {
-        return false;
-    } else {
-  session.currentIndex = newIndex;
+  if (newIndex < 0 || newIndex >= session.timeline.length) { if (session.loop && direction === 'forward') {
+  session.currentIndex = 0 } else { return false } else { session.currentIndex = newIndex;
   const entry = session.timeline[session.currentIndex];
   this.emit('replayStep', {)
   session,
   entry,
   direction,
-  index: session.currentIndex,
+  index: session.currentIndex }
 });
     return true;
-  stopReplay(): void {
-  this.isReplaying = false;
+  stopReplay(): void { this.isReplaying = false;
   this.emit('replayStopped');
   // State diffing
   createStateDiff(fromEntryId: string, toEntryId: string): StateDiff {,
@@ -417,12 +393,12 @@ export class TimeTravel extends EventEmitter {
   const toState = this.extractStateFromEntry(toEntry);
   return this.calculateDeepDiff(fromState, toState, '');
   // Markers
-  addMarker(marker: Omit<TimelineMarker, 'id' | 'timestamp'>): string {,
+  addMarker(marker: Omit<TimelineMarker, 'id' | 'timestamp'>): string {
   const markerId = this.generateMarkerId();
-  const fullMarker: TimelineMarker = {,
-  ...marker,
-  id: markerId,
-  timestamp: Date.now(),
+  const fullMarker: TimelineMarker = {
+  ...marker
+  id: markerId
+  timestamp: Date.now() }
 };
     this.markers.set(markerId, fullMarker);
     this.emit('markerAdded', { marker: fullMarker });
@@ -433,50 +409,43 @@ export class TimeTravel extends EventEmitter {
       this.emit('markerRemoved', { markerId });
     return removed;
   // Query and search
-  queryTimeline(query: TimelineQuery): TimelineEntry {
-  return this.getFilteredTimeline(query);
-  searchTimeline(searchTerm: string, options: {)
+  queryTimeline(query: TimelineQuery): TimelineEntry { return this.getFilteredTimeline(query);
+  searchTimeline(searchTerm: string, options: {) }
   fields?: string;
   caseSensitive?: boolean;
   regex?: boolean;
-} = {}): TimelineEntry {
+ = {}): TimelineEntry {
     const { fields = ['description', 'tags'], caseSensitive = false, regex = false } = options;
     const searchValue = caseSensitive ? searchTerm : searchTerm.toLowerCase();
     const searchRegex = regex ? new RegExp(searchTerm, caseSensitive ? 'g' : 'gi') : null;
-    return Array.from(this.timeline.values()).filter(entry => {)
+    return Array.from(this.timeline.values()).filter(entry => { )
   return fields.some(field => {)
   const value = this.getFieldValue(entry, field);
   if (!value) return false;
   const stringValue = caseSensitive ? String(value) : String(value).toLowerCase();
   if (searchRegex) {
-  return searchRegex.test(stringValue);
-} else {
-          return stringValue.includes(searchValue);
-      });
+  return searchRegex.test(stringValue) } else { return stringValue.includes(searchValue) });
     });
   // Utility methods
-  private initializeMainBranch(): void {
-  const mainBranch: TimeBranch = {,
-  id: 'main',
-  name: 'main',
-  description: 'Main development branch',
-  created: Date.now(),
-  lastModified: Date.now(),
-  parentEntryId: '',
-  headEntryId: '',
-  entryIds: [],
+  private initializeMainBranch(): void { const mainBranch: TimeBranch = {
+  id: 'main'
+  name: 'main'
+  description: 'Main development branch'
+  created: Date.now()
+  lastModified: Date.now()
+  parentEntryId: ''
+  headEntryId: ''
+  entryIds: []
   metadata: {
-  author: 'system',
-  tags: ['main'],
-  protected: true,
-  color: '#007acc',
+  author: 'system'
+  tags: ['main']
+  protected: true
+  color: '#007acc' }
 };
     this.branches.set('main', mainBranch);
-  private setupAutoSnapshot(): void {
-    if (!this.config.autoSnapshot.enabled) return;
+  private setupAutoSnapshot(): void { if (!this.config.autoSnapshot.enabled) return;
     setInterval(() => {
-      this.createAutoSnapshot();
-    }, this.config.autoSnapshot.interval);
+      this.createAutoSnapshot() }, this.config.autoSnapshot.interval);
   private createAutoSnapshot(): void {
     // This would integrate with the state management system to create automatic snapshots
     this.emit('autoSnapshotTriggered');
@@ -545,16 +514,12 @@ export class TimeTravel extends EventEmitter {
       this.stepReplay(session.id);
       const delay = 1000 / session.playbackSpeed;
       await new Promise(resolve => setTimeout(resolve, delay));
-    if (session.currentIndex >= session.timeline.length) {
-      if (session.loop) {
+    if (session.currentIndex >= session.timeline.length) { if (session.loop) {
         session.currentIndex = 0;
-        this.executeAutoReplay(session);
-      } else {
+        this.executeAutoReplay(session) } else {
         this.emit('replayCompleted', { session });
-  private extractStateFromEntry(entry: TimelineEntry): any {
-    if (entry.snapshot) {
-      return entry.snapshot.state;
-    } else if (entry.change) {
+  private extractStateFromEntry(entry: TimelineEntry): any { if (entry.snapshot) {
+      return entry.snapshot.state } else if (entry.change) {
       return entry.change.payload;
     return {};
   private calculateDeepDiff(from: any, to: any, path: string): StateDiff {
@@ -573,12 +538,10 @@ export class TimeTravel extends EventEmitter {
         const keyPath = path ? `${path}.${key}` : key;}
         if (!(key in from)) {
           diffs.push({ path: keyPath, type: 'added', newValue: to[key] });
-        } else if (!(key in to)) {
+ else if (!(key in to)) {
           diffs.push({ path: keyPath, type: 'removed', oldValue: from[key] });
-        } else {
-          const childDiffs = this.calculateDeepDiff(from[key], to[key], keyPath);
-          diffs.push(...childDiffs);
-    } else {
+ else { const childDiffs = this.calculateDeepDiff(from[key], to[key], keyPath);
+          diffs.push(...childDiffs) } else {
       diffs.push({ path, type: 'modified', oldValue: from, newValue: to });
     return diffs;
   private getFieldValue(entry: TimelineEntry, field: string): any {
@@ -601,8 +564,7 @@ export class TimeTravel extends EventEmitter {
     return `marker_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   private generateSessionId(): string {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  private generateRandomColor(): string {
-  const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8'];
+  private generateRandomColor(): string { const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8'];
   return colors[Math.floor(Math.random() * colors.length)];
   // Public API methods
   getTimeTravelState(): TimeTravelState {,
@@ -614,10 +576,9 @@ export class TimeTravel extends EventEmitter {
   canGoBack: this.canGoBack(),
   canGoForward: this.canGoForward(),
   branches: Array.from(this.branches.keys()),
-  markers: Array.from(this.markers.values()),
+  markers: Array.from(this.markers.values()) }
 };
-  canGoBack(): boolean {
-  return this.currentPosition > 0;
+  canGoBack(): boolean { return this.currentPosition > 0;
   canGoForward(): boolean {,
   return this.currentPosition < this.timelineOrder.length - 1;
   getTimeline(): TimelineEntry {,
@@ -656,10 +617,10 @@ export class TimeTravel extends EventEmitter {
   branches: Object.fromEntries(this.branches),
   markers: Object.fromEntries(this.markers),
   config: this.config,
-  metadata: {
+  metadata: {,
   currentPosition: this.currentPosition,
   currentBranch: this.currentBranch,
-  exported: Date.now(),
+  exported: Date.now() }
 };
   importHistory(data: any): void {
     this.timeline = new Map(Object.entries(data.timeline || {}));

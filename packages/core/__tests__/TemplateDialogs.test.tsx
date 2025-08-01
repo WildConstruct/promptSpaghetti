@@ -8,18 +8,16 @@ import { TemplateBrowser } from '../components/TemplateDialogs/TemplateBrowser';
 import { TemplateSaveData, Template } from '../types/TemplateTypes';
 
 // Mock the template service
-jest.mock('../services/TemplateService', () => ({)
-  templateService: {
-  searchTemplates: jest.fn<unknown, unknown>(),
-  instantiateTemplate: jest.fn<unknown, unknown>(),
-  deleteTemplate: jest.fn<unknown, unknown>(),
+jest.mock('../services/TemplateService', () => ({ )
+  templateService: {,
+  searchTemplates: jest.fn<unknown, unknown>()
+  instantiateTemplate: jest.fn<unknown, unknown>()
+  deleteTemplate: jest.fn<unknown, unknown>() }
 }));
-describe('SaveTemplateDialog', () => {
-  const mockOnSave = jest.fn<unknown, unknown>();
+describe('SaveTemplateDialog', () => { const mockOnSave = jest.fn<unknown, unknown>();
   const mockOnClose = jest.fn<unknown, unknown>();
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks() });
   it('should render when open', () => {
     render();
       <SaveTemplateDialog
@@ -163,14 +161,13 @@ describe('SaveTemplateDialog', () => {
     await user.click(publicCheckbox);
     await user.click(annotationsCheckbox); // Uncheck it
     await user.click(saveButton);
-    await waitFor(() => {
-  expect(mockOnSave).toHaveBeenCalledWith({)
-  name: 'Complete Template',
-  description: 'A complete test template',
-  category: 'narrative',
-  tags: ['complete', 'test'],
-  isPublic: true,
-  includeAnnotations: false,
+    await waitFor(() => { expect(mockOnSave).toHaveBeenCalledWith({)
+  name: 'Complete Template'
+  description: 'A complete test template'
+  category: 'narrative'
+  tags: ['complete', 'test']
+  isPublic: true
+  includeAnnotations: false }
 });
     });
   });
@@ -190,9 +187,7 @@ describe('SaveTemplateDialog', () => {
     await user.type(nameInput, 'Error Template');
     await user.type(descriptionInput, 'This will fail');
     await user.click(saveButton);
-    await waitFor(() => {
-      expect(screen.getByText('Save failed')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Save failed')).toBeInTheDocument() });
   });
   it('should disable form during save', async () => {
     const user = userEvent.setup();
@@ -210,9 +205,7 @@ describe('SaveTemplateDialog', () => {
     await user.type(nameInput, 'Loading Template');
     await user.type(descriptionInput, 'This will show loading');
     await user.click(saveButton);
-    await waitFor(() => {
-      expect(screen.getByText('Saving...')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Saving...')).toBeInTheDocument() });
     // Form should be disabled
     expect(nameInput).toBeDisabled();
     expect(descriptionInput).toBeDisabled();
@@ -234,9 +227,7 @@ describe('SaveTemplateDialog', () => {
     await user.type(nameInput, 'Success Template');
     await user.type(descriptionInput, 'This will succeed');
     await user.click(saveButton);
-    await waitFor(() => {
-      expect(mockOnClose).toHaveBeenCalled();
-    });
+    await waitFor(() => { expect(mockOnClose).toHaveBeenCalled() });
   });
   it('should reset form on successful save', async () => {
     const user = userEvent.setup();
@@ -264,14 +255,13 @@ describe('SaveTemplateDialog', () => {
     // Form should be reset
     expect(screen.getByLabelText(/Template Name/)).toHaveValue('');
   });
-  it('should populate initial data', () => {
-  const initialData: Partial<TemplateSaveData> = {,
-  name: 'Pre-filled Template',
-  description: 'Pre-filled description',
-  category: 'character',
-  tags: ['pre-filled', 'test'],
-  isPublic: true,
-  includeAnnotations: false,
+  it('should populate initial data', () => { const initialData: Partial<TemplateSaveData> = {
+  name: 'Pre-filled Template'
+  description: 'Pre-filled description'
+  category: 'character'
+  tags: ['pre-filled', 'test']
+  isPublic: true
+  includeAnnotations: false }
 };
     render();
       <SaveTemplateDialog
@@ -290,86 +280,84 @@ describe('SaveTemplateDialog', () => {
     expect(screen.getByLabelText(/Include annotations/)).not.toBeChecked();
   });
 });
-describe('TemplateBrowser', () => {
-  const mockOnClose = jest.fn<unknown, unknown>();
+describe('TemplateBrowser', () => { const mockOnClose = jest.fn<unknown, unknown>();
   const mockOnApplyTemplate = jest.fn<unknown, unknown>();
   const sampleTemplates: Template = [
     {
-      id: 'template-1',
-      name: 'Character Generator',
-      description: 'Generates fantasy characters',
-      category: 'character',
-      version: '1.0.0',
-      author: 'author1',
-      rating: 4.5,
-      reviews: [,
+      id: 'template-1'
+      name: 'Character Generator'
+      description: 'Generates fantasy characters'
+      category: 'character'
+      version: '1.0.0'
+      author: 'author1'
+      rating: 4.5
+      reviews: [
         {
-          id: 'review-1',
-          author: 'user1',
-          rating: 5,
-          comment: 'Great template!',
-          timestamp: '2023-01-01T00:00:00.000Z',
-          helpful: 3],
-      graph: {
-  nodes: [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }],
-        edges: [],
-        annotations: {
-  stickyNotes: [],
-          nodeLabels: {},
-          regionGroups: [],
-          connectionLabels: {},
-          metadata: {
-  author: 'test',
-  created: '2023-01-01',
-  modified: '2023-01-01',
-  version: '1.0.0',
-},
-  metadata: {
-  created: '2023-01-01T00:00:00.000Z',
-  lastModified: '2023-01-01T00:00:00.000Z',
-  usageCount: 10,
-  tags: ['fantasy', 'rpg'],
-  complexity: 'simple',
-  nodeCount: 1,
-  estimatedOutputLength: 100,
-  isPublic: true,
-  language: 'en',
-}
-    {
-      id: 'template-2',
-      name: 'Setting Builder',
-      description: 'Creates detailed settings',
-      category: 'setting',
-      version: '1.0.0',
-      author: 'author2',
-      rating: 3.8,
-      reviews: [],
-      graph: {
-  nodes: [,
-          { id: 'n1', type: 'WeightedChoice', position: { x: 0, y: 0 }, data: {} },
+          id: 'review-1'
+          author: 'user1'
+          rating: 5
+          comment: 'Great template!'
+          timestamp: '2023-01-01T00:00:00.000Z'
+          helpful: 3]
+      graph: { }
+  nodes: [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }]
+        edges: []
+        annotations: { 
+  stickyNotes: [] }
+          nodeLabels: {}
+          regionGroups: []
+          connectionLabels: {}
+          metadata: { 
+  author: 'test'
+  created: '2023-01-01'
+  modified: '2023-01-01'
+  version: '1.0.0' }
+
+  metadata: { 
+  created: '2023-01-01T00:00:00.000Z'
+  lastModified: '2023-01-01T00:00:00.000Z'
+  usageCount: 10
+  tags: ['fantasy', 'rpg']
+  complexity: 'simple'
+  nodeCount: 1
+  estimatedOutputLength: 100
+  isPublic: true
+  language: 'en' }
+
+    { id: 'template-2'
+      name: 'Setting Builder'
+      description: 'Creates detailed settings'
+      category: 'setting'
+      version: '1.0.0'
+      author: 'author2'
+      rating: 3.8
+      reviews: []
+      graph: { }
+  nodes: [
+          { id: 'n1', type: 'WeightedChoice', position: { x: 0, y: 0 }, data: {} }
           { id: 'n2', type: 'Output', position: { x: 100, y: 0 }, data: {} }
-        ],
-        edges: [{ id: 'e1', source: 'n1', target: 'n2', type: 'step' }],
-        annotations: {
-  stickyNotes: [],
-          nodeLabels: {},
-          regionGroups: [],
-          connectionLabels: {},
-          metadata: {
-  author: 'test',
-  created: '2023-01-01',
-  modified: '2023-01-01',
-  version: '1.0.0',
-},
-  metadata: {
-  created: '2023-01-02T00:00:00.000Z',
-        lastModified: '2023-01-02T00:00:00.000Z',
-        usageCount: 5,
-        tags: ['worldbuilding'],
-        complexity: 'medium',
-        nodeCount: 2,
-        estimatedOutputLength: 200,
-        isPublic: true,
+        ]
+        edges: [{ id: 'e1', source: 'n1', target: 'n2', type: 'step' }]
+        annotations: { 
+  stickyNotes: [] }
+          nodeLabels: {}
+          regionGroups: []
+          connectionLabels: {}
+          metadata: { 
+  author: 'test'
+  created: '2023-01-01'
+  modified: '2023-01-01'
+  version: '1.0.0' }
+
+  metadata: { 
+  created: '2023-01-02T00:00:00.000Z'
+        lastModified: '2023-01-02T00:00:00.000Z'
+        usageCount: 5
+        tags: ['worldbuilding']
+        complexity: 'medium'
+        nodeCount: 2
+        estimatedOutputLength: 200
+        isPublic: true }
         language: 'en'];
   beforeEach(() => {
     jest.clearAllMocks();
@@ -386,10 +374,8 @@ describe('TemplateBrowser', () => {
     );
     expect(screen.getByText('Template Library')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Search templates...')).toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.getByText('Character Generator')).toBeInTheDocument();
-      expect(screen.getByText('Setting Builder')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Character Generator')).toBeInTheDocument();
+      expect(screen.getByText('Setting Builder')).toBeInTheDocument() });
   });
   it('should not render when closed', () => {
     render();
@@ -413,10 +399,9 @@ describe('TemplateBrowser', () => {
     );
     const searchInput = screen.getByPlaceholderText('Search templates...');
     await user.type(searchInput, 'character');
-    await waitFor(() => {
-  expect(templateService.searchTemplates).toHaveBeenCalledWith()
+    await waitFor(() => { expect(templateService.searchTemplates).toHaveBeenCalledWith()
   expect.objectContaining({)
-  searchTerm: 'character',
+  searchTerm: 'character' }
 }
       );
     });
@@ -433,10 +418,9 @@ describe('TemplateBrowser', () => {
     );
     const categorySelect = screen.getByLabelText(/Category/);
     await user.selectOptions(categorySelect, 'character');
-    await waitFor(() => {
-  expect(templateService.searchTemplates).toHaveBeenCalledWith()
+    await waitFor(() => { expect(templateService.searchTemplates).toHaveBeenCalledWith()
   expect.objectContaining({)
-  category: 'character',
+  category: 'character' }
 }
       );
     });
@@ -453,10 +437,9 @@ describe('TemplateBrowser', () => {
     );
     const sortSelect = screen.getByLabelText(/Sort By/);
     await user.selectOptions(sortSelect, 'rating');
-    await waitFor(() => {
-  expect(templateService.searchTemplates).toHaveBeenCalledWith()
+    await waitFor(() => { expect(templateService.searchTemplates).toHaveBeenCalledWith()
   expect.objectContaining({)
-  sortBy: 'rating',
+  sortBy: 'rating' }
 }
       );
     });
@@ -483,10 +466,8 @@ describe('TemplateBrowser', () => {
         onApplyTemplate={mockOnApplyTemplate}
       />
     );
-    await waitFor(() => {
-      expect(screen.getByText('No templates found')).toBeInTheDocument();
-      expect(screen.getByText('Try adjusting your search criteria or create a new template')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('No templates found')).toBeInTheDocument();
+      expect(screen.getByText('Try adjusting your search criteria or create a new template')).toBeInTheDocument() });
   });
   it('should handle template application', async () => {
     const user = userEvent.setup();
@@ -497,19 +478,17 @@ describe('TemplateBrowser', () => {
         onApplyTemplate={mockOnApplyTemplate}
       />
     );
-    await waitFor(() => {
-      expect(screen.getByText('Character Generator')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Character Generator')).toBeInTheDocument() });
     const applyButtons = screen.getAllByText('Apply Template');
     await user.click(applyButtons[0]);
     expect(mockOnApplyTemplate).toHaveBeenCalledWith()
-      'template-1',
-      expect.objectContaining({)
-  preservePositions: false,
-  mergeWithCurrent: false,
-  offsetX: 100,
-  offsetY: 100,
-}
+      'template-1'
+      expect.objectContaining({ )
+  preservePositions: false
+  mergeWithCurrent: false
+  offsetX: 100
+  offsetY: 100 }
+
     );
   });
   it('should handle instantiation options', async () => {
@@ -521,9 +500,7 @@ describe('TemplateBrowser', () => {
         onApplyTemplate={mockOnApplyTemplate}
       />
     );
-    await waitFor(() => {
-      expect(screen.getByText('Character Generator')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Character Generator')).toBeInTheDocument() });
     // Change instantiation options
     const preservePositionsCheckbox = screen.getByLabelText('Preserve positions');
     const mergeWithCurrentCheckbox = screen.getByLabelText('Merge with current');
@@ -532,11 +509,11 @@ describe('TemplateBrowser', () => {
     const applyButtons = screen.getAllByText('Apply Template');
     await user.click(applyButtons[0]);
     expect(mockOnApplyTemplate).toHaveBeenCalledWith()
-      'template-1',
-      expect.objectContaining({)
-  preservePositions: true,
-  mergeWithCurrent: true,
-}
+      'template-1'
+      expect.objectContaining({ )
+  preservePositions: true
+  mergeWithCurrent: true }
+
     );
   });
   it('should handle view mode switch', async () => {
@@ -548,9 +525,7 @@ describe('TemplateBrowser', () => {
         onApplyTemplate={mockOnApplyTemplate}
       />
     );
-    await waitFor(() => {
-      expect(screen.getByText('Character Generator')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Character Generator')).toBeInTheDocument() });
     // Switch to list view
     const listButton = screen.getByText('List');
     await user.click(listButton);
@@ -567,18 +542,14 @@ describe('TemplateBrowser', () => {
         onApplyTemplate={mockOnApplyTemplate}
       />
     );
-    await waitFor(() => {
-      expect(screen.getByText('Character Generator')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Character Generator')).toBeInTheDocument() });
     // Click on template card to open preview
     const templateCard = screen.getByText('Character Generator').closest('div');
     await user.click(templateCard!);
     // Preview modal should open
-    await waitFor(() => {
-      expect(screen.getByText('Generates fantasy characters')).toBeInTheDocument();
+    await waitFor(() => { expect(screen.getByText('Generates fantasy characters')).toBeInTheDocument();
       expect(screen.getByText('author1')).toBeInTheDocument();
-      expect(screen.getByText('4.5')).toBeInTheDocument();
-    });
+      expect(screen.getByText('4.5')).toBeInTheDocument() });
   });
   it('should handle template deletion for owned templates', async () => {
     const user = userEvent.setup();
@@ -591,9 +562,7 @@ describe('TemplateBrowser', () => {
         currentAuthor="author1"
       />
     );
-    await waitFor(() => {
-      expect(screen.getByText('Character Generator')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Character Generator')).toBeInTheDocument() });
     // Find delete button (should only appear for templates by current author)
     const deleteButton = screen.getByTitle('Delete template');
     // Mock window.confirm
@@ -614,8 +583,6 @@ describe('TemplateBrowser', () => {
         onApplyTemplate={mockOnApplyTemplate}
       />
     );
-    await waitFor(() => {
-      expect(screen.getByText('Network error')).toBeInTheDocument();
-    });
+    await waitFor(() => { expect(screen.getByText('Network error')).toBeInTheDocument() });
   });
 });

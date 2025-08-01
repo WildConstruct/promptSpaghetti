@@ -8,6 +8,7 @@ import React from 'react';
 import { HelpRequest, Epic16HelpRequestService } from '../../services/Epic16HelpRequestService';
 
 }
+}
 interface HelpRequestDashboardProps {
     helpService: Epic16HelpRequestService;
     userId: string;
@@ -17,4 +18,5 @@ interface HelpRequestDashboardProps {
 export declare const HelpRequestDashboard: React.FC<HelpRequestDashboardProps>;
 export default HelpRequestDashboard;
 //# sourceMappingURL=HelpRequestDashboard.d.ts.map
+}
 }

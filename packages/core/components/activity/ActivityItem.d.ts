@@ -6,6 +6,7 @@ import React from 'react';
 import { ActivityEventWithActorInfo } from '../../types/workspace';
 
 }
+}
 interface ActivityItemProps {
     activity: ActivityEventWithActorInfo;
     onClick?: () => void;
@@ -16,4 +17,5 @@ interface ActivityItemProps {
 export declare const ActivityItem: React.FC<ActivityItemProps>;
 export default ActivityItem;
 //# sourceMappingURL=ActivityItem.d.ts.map
+}
 }

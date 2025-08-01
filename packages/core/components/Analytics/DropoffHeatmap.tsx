@@ -15,25 +15,22 @@
  * - Export capabilities
  */
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { 
-  ConversionFunnelDefinition,
+import { ConversionFunnelDefinition,
   ConversionStep,
-  UserSegment,
+  UserSegment }
   ConversionCohort
-} from '../../analytics/ConversionDataModel';
-import { 
-  ConversionAnalyticsInfrastructure,
-  ConversionMetricQuery,
+ from '../../analytics/ConversionDataModel';
+import { ConversionAnalyticsInfrastructure,
+  ConversionMetricQuery }
   ConversionMetricResult
-} from '../../analytics/ConversionAnalyticsInfrastructure';
+ from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Drop-off analysis interfaces
 
-}
-export interface DropoffHeatmapProps {
-  funnelDefinition: ConversionFunnelDefinition;
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
-}
+
+export interface DropoffHeatmapProps { funnelDefinition: ConversionFunnelDefinition;
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure }
+},
   timeRange: { start: number; end: number };
   segments?: UserSegment;
   cohorts?: ConversionCohort;
@@ -42,7 +39,7 @@ export interface DropoffHeatmapProps {
   realTimeUpdates?: boolean;
   onDropoffPointClick?: (analysis: DropoffPointAnalysis) => void;
   onExport?: (data: DropoffExportData) => void;
-}
+
 export type HeatmapMode = 
   | 'absolute'
   | 'relative'
@@ -50,36 +47,34 @@ export type HeatmapMode =
   | 'opportunity'
   | 'temporal';
 
-}
-export interface DropoffAnalysisData {
-  stepAnalysis: StepDropoffAnalysis;
+
+export interface DropoffAnalysisData { stepAnalysis: StepDropoffAnalysis;
   transitionAnalysis: TransitionDropoffAnalysis;
   temporalPatterns: TemporalDropoffPattern;
   segmentAnalysis: SegmentDropoffAnalysis;
   rootCauseAnalysis: RootCauseAnalysis;
   recoveryOpportunities: RecoveryOpportunity;
-  overallInsights: DropoffInsight;
-}
-}
-}
-export interface StepDropoffAnalysis {
-  stepId: string;
+  overallInsights: DropoffInsight }
+
+
+
+export interface StepDropoffAnalysis { stepId: string;
   stepName: string;
   stepOrder: number;
   totalEntries: number;
   dropOffCount: number;
   dropOffRate: number;
-  dropOffSeverity: 'critical' | 'high' | 'medium' | 'low';
+  dropOffSeverity: 'critical' | 'high' | 'medium' | 'low' }
   benchmarkComparison: BenchmarkComparison;
   userBehaviorAnalysis: UserBehaviorAnalysis;
   technicalAnalysis: TechnicalAnalysis;
   contentAnalysis: ContentAnalysis;
   recoveryPotential: number;
-}
-}
-}
-export interface TransitionDropoffAnalysis {
-  fromStepId: string;
+
+
+
+
+export interface TransitionDropoffAnalysis { fromStepId: string;
   toStepId: string;
   fromStepName: string;
   toStepName: string;
@@ -88,197 +83,188 @@ export interface TransitionDropoffAnalysis {
   dropOffRate: number;
   averageTransitionTime: number;
   commonDropOffReasons: DropoffReason;
-  recoveryActions: string;
-}
-}
-}
-export interface TemporalDropoffPattern {
-  period: 'hour' | 'day' | 'week' | 'month';
+  recoveryActions: string }
+
+
+
+export interface TemporalDropoffPattern { period: 'hour' | 'day' | 'week' | 'month';
   periodValue: number;
-  dropOffRates: Array<{
+  dropOffRates: Array<{;
   stepId: string;
   stepName: string;
   dropOffRate: number;
-  trend: 'increasing' | 'decreasing' | 'stable'
-}
-  }>;
+  trend: 'increasing' | 'decreasing' | 'stable' }
+
+
+>;
   insights: string;
-}
-}
-export interface SegmentDropoffAnalysis {
-  segmentId: string;
+
+
+export interface SegmentDropoffAnalysis { segmentId: string;
   segmentName: string;
   overallDropOffRate: number;
-  stepDropOffRates: Array<{
+  stepDropOffRates: Array<{ }
   stepId: string;
   stepName: string;
   dropOffRate: number;
   relativePerformance: number;
-}
-}>;
+
+
+>;
   uniqueDropOffReasons: DropoffReason;
   segmentInsights: string;
-}
-}
-export interface RootCauseAnalysis {
-  stepId: string;
+
+
+export interface RootCauseAnalysis { stepId: string;
   stepName: string;
   primaryCauses: DropoffCause;
   contributingFactors: ContributingFactor;
   confidence: number;
   evidenceQuality: 'high' | 'medium' | 'low';
-  recommendations: CauseRecommendation;
-}
-}
-}
-export interface DropoffCause {
-  category: 'technical' | 'user_experience' | 'content' | 'external' | 'design';
+  recommendations: CauseRecommendation }
+
+
+
+export interface DropoffCause { category: 'technical' | 'user_experience' | 'content' | 'external' | 'design';
   subcategory: string;
   description: string;
-  impact: number; // 0-100,
-  confidence: number; // 0-1,
+  impact: number; // 0-100;
+  confidence: number; // 0-1;
   evidence: Evidence;
   mitigationComplexity: 'low' | 'medium' | 'high';
-  expectedImprovement: number; // Expected reduction in drop-off rate,
-}
-}
-}
-export interface ContributingFactor {
-  factor: string;
+  expectedImprovement: number; // Expected reduction in drop-off rate }
+
+
+
+
+export interface ContributingFactor { factor: string;
   weight: number;
   description: string;
   measurable: boolean;
   currentValue?: number;
-  targetValue?: number;
-}
-}
-}
-export interface Evidence {
-  type: 'user_feedback' | 'analytics' | 'technical_logs' | 'usability_testing';
+  targetValue?: number }
+
+
+
+export interface Evidence { type: 'user_feedback' | 'analytics' | 'technical_logs' | 'usability_testing';
   description: string;
-  strength: 'strong' | 'moderate' | 'weak';
+  strength: 'strong' | 'moderate' | 'weak' }
   source: string;
   timestamp: number;
-}
-}
-}
-export interface CauseRecommendation {
-  title: string;
+
+
+
+
+export interface CauseRecommendation { title: string;
   description: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: 'high' | 'medium' | 'low' }
   effort: 'low' | 'medium' | 'high';
   expectedImpact: number;
   implementationSteps: string;
   successMetrics: string;
-}
-}
-}
-export interface RecoveryOpportunity {
-  stepId: string;
+
+
+
+
+export interface RecoveryOpportunity { stepId: string;
   stepName: string;
-  recoveryPotential: number; // 0-100,
-  recoveryValue: number; // Potential revenue recovery,
+  recoveryPotential: number; // 0-100;
+  recoveryValue: number; // Potential revenue recovery;
   quickWins: QuickWin;
   strategicInitiatives: StrategicInitiative;
-  timeToImpact: number; // Days,
-  confidenceLevel: number; // 0-1,
-}
-}
-}
-export interface QuickWin {
-  title: string;
+  timeToImpact: number; // Days;
+  confidenceLevel: number; // 0-1 }
+
+
+
+
+export interface QuickWin { title: string;
   description: string;
   effort: 'low' | 'medium';
   expectedImpact: number;
-  implementationTime: number; // Hours,
+  implementationTime: number; // Hours }
   requirements: string;
-}
-}
-}
-export interface StrategicInitiative {
-  title: string;
+
+
+
+
+export interface StrategicInitiative { title: string;
   description: string;
   effort: 'medium' | 'high';
   expectedImpact: number;
-  implementationTime: number; // Days,
+  implementationTime: number; // Days }
   dependencies: string;
   successMetrics: string;
-}
-}
-}
-export interface DropoffReason {
-  reason: string;
+
+
+
+
+export interface DropoffReason { reason: string;
   category: string;
   percentage: number;
   count: number;
   confidence: number;
-  severity: 'critical' | 'high' | 'medium' | 'low'
-}
-  }
-}
-export interface BenchmarkComparison {
-  industryAverage: number;
+  severity: 'critical' | 'high' | 'medium' | 'low' }
+
+
+
+
+export interface BenchmarkComparison { industryAverage: number;
   topPerformers: number;
   yourPerformance: number;
   percentile: number;
-  improvementPotential: number;
-}
-}
-}
-export interface UserBehaviorAnalysis {
-  averageTimeOnStep: number;
+  improvementPotential: number }
+
+
+
+export interface UserBehaviorAnalysis { averageTimeOnStep: number;
   interactionPatterns: InteractionPattern;
   exitBehaviors: ExitBehavior;
-  recoveryAttempts: number;
-}
-}
-}
-export interface InteractionPattern {
-  pattern: string;
+  recoveryAttempts: number }
+
+
+
+export interface InteractionPattern { pattern: string;
   frequency: number;
   conversionImpact: number;
-  description: string;
-}
-}
-}
-export interface ExitBehavior {
-  behavior: string;
+  description: string }
+
+
+
+export interface ExitBehavior { behavior: string;
   percentage: number;
   description: string;
-  preventable: boolean;
-}
-}
-}
-export interface TechnicalAnalysis {
-  pageLoadTime: number;
+  preventable: boolean }
+
+
+
+export interface TechnicalAnalysis { pageLoadTime: number;
   errorRate: number;
   performanceScore: number;
   accessibilityIssues: AccessibilityIssue;
-  mobileCompatibility: number;
-}
-}
-}
-export interface AccessibilityIssue {
-  type: string;
+  mobileCompatibility: number }
+
+
+
+export interface AccessibilityIssue { type: string;
   severity: 'critical' | 'high' | 'medium' | 'low';
   description: string;
   impact: string;
-  fixComplexity: 'low' | 'medium' | 'high'
-}
-  }
-}
-export interface ContentAnalysis {
-  clarityScore: number;
+  fixComplexity: 'low' | 'medium' | 'high' }
+
+
+
+
+export interface ContentAnalysis { clarityScore: number;
   complexityScore: number;
   engagementScore: number;
   completionRate: number;
   commonConfusionPoints: string;
-  improvementSuggestions: string;
-}
-}
-}
-export interface DropoffInsight {
-  type: 'pattern' | 'anomaly' | 'opportunity' | 'risk';
+  improvementSuggestions: string }
+
+
+
+export interface DropoffInsight { type: 'pattern' | 'anomaly' | 'opportunity' | 'risk' }
   severity: 'critical' | 'high' | 'medium' | 'low';
   title: string;
   description: string;
@@ -287,49 +273,48 @@ export interface DropoffInsight {
   confidence: number;
   recommendations: string;
   timeframe: string;
-}
-}
-}
-export interface DropoffPointAnalysis {
-  stepId: string;
+
+
+
+
+export interface DropoffPointAnalysis { stepId: string;
   analysis: StepDropoffAnalysis;
   rootCause: RootCauseAnalysis;
-  recovery: RecoveryOpportunity;
-}
-}
-}
-export interface DropoffExportData {
-  heatmapMode: HeatmapMode;
+  recovery: RecoveryOpportunity }
+
+
+
+export interface DropoffExportData { heatmapMode: HeatmapMode;
   data: DropoffAnalysisData;
-  visualizations: {
+  visualizations: { }
   heatmap: string;
   flowDiagram: string;
   trends: string;
-}
+
+
 };
-  recommendations: {
+  recommendations: { ,
   quick: QuickWin;
-  strategic: StrategicInitiative;
-};
-  metadata: {
+  strategic: StrategicInitiative };
+  metadata: {,
   exportedAt: number;
     timeRange: { start: number; end: number };
-    analysisDepth: 'basic' | 'detailed' | 'comprehensive'
+    analysisDepth: 'basic' | 'detailed' | 'comprehensive';
   };
 /**
  * Main Drop-off Heatmap Component
  */
-}
-export const DropoffHeatmap: React.FC<DropoffHeatmapProps> = ({)
-  funnelDefinition,
-  analyticsInfrastructure,
-  timeRange,
-  segments = [],
-  cohorts = [],
-  heatmapMode = 'relative',
-  showRecoveryAnalysis = true,
-  realTimeUpdates = false,
-  onDropoffPointClick,
+
+export const DropoffHeatmap: React.FC<DropoffHeatmapProps> = ({ )
+  funnelDefinition
+  analyticsInfrastructure
+  timeRange
+  segments = []
+  cohorts = []
+  heatmapMode = 'relative'
+  showRecoveryAnalysis = true
+  realTimeUpdates = false
+  onDropoffPointClick }
   onExport
 }) => {
   const [analysisData, setAnalysisData] = useState<DropoffAnalysisData | null>(null);
@@ -339,71 +324,60 @@ export const DropoffHeatmap: React.FC<DropoffHeatmapProps> = ({)
   const [hoveredCell, setHoveredCell] = useState<{ stepId: string; metric: string } | null>(null);
   const heatmapRef = useRef<HTMLDivElement>(null);
   // Load drop-off analysis data
-  const loadAnalysisData = useCallback(async () => {
-  try {
+  const loadAnalysisData = useCallback(async () => { try {
   setLoading(true);
   setError(null);
-  const query: ConversionMetricQuery = {,
-  funnelId: funnelDefinition.id,
-  startDate: timeRange.start,
-  endDate: timeRange.end,
-  metrics: [,
-  'drop_off_rate',
-  'exit_behavior',
-  'user_journey',
-  'technical_performance',
-  'content_engagement',
+  const query: ConversionMetricQuery = {
+  funnelId: funnelDefinition.id
+  startDate: timeRange.start
+  endDate: timeRange.end
+  metrics: [
+  'drop_off_rate'
+  'exit_behavior'
+  'user_journey'
+  'technical_performance'
+  'content_engagement'
   'recovery_opportunities'
-  ],
-  groupBy: ['funnel_step', 'hour', 'user_segment'],
-  filters: [,
+  ]
+  groupBy: ['funnel_step', 'hour', 'user_segment']
+  filters: [
   ...segments.map(segment => ({)
-  field: 'userContext.segmentIds',
-  operator: 'contains',
-  value: segment.id,
-})),
-          ...cohorts.map(cohort => ({)
-  field: 'userContext.cohortIds',
-  operator: 'contains',
-  value: cohort.id,
+  field: 'userContext.segmentIds'
+  operator: 'contains'
+  value: segment.id }
 }))
-        ],
+          ...cohorts.map(cohort => ({ )
+  field: 'userContext.cohortIds'
+  operator: 'contains'
+  value: cohort.id }
+}))
+        ]
         aggregation: { interval: 'hour' }
       };
       const results = await analyticsInfrastructure.queryMetrics(query);
       const processedData = await processDropoffAnalysisData(;);
-        funnelDefinition,
-        results,
-        segments,
-        cohorts,
+        funnelDefinition
+        results
+        segments
+        cohorts
         timeRange
       );
       setAnalysisData(processedData);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load drop-off analysis');
-} finally {
-      setLoading(false);
-  }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts]);
-  useEffect(() => {
-    loadAnalysisData();
-  }, [loadAnalysisData]);
+ catch (err) { setError(err instanceof Error ? err.message : 'Failed to load drop-off analysis') } finally { setLoading(false) }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts]);
+  useEffect(() => { loadAnalysisData() }, [loadAnalysisData]);
   // Real-time updates
-  useEffect(() => {
-    if (!realTimeUpdates) return;
+  useEffect(() => { if (!realTimeUpdates) return;
     const interval = setInterval(loadAnalysisData, 60000); // Update every minute;
-    return () => clearInterval(interval);
-  }, [realTimeUpdates, loadAnalysisData]);
+    return () => clearInterval(interval) }, [realTimeUpdates, loadAnalysisData]);
   // Heatmap color scaling
-  const colorScale = useMemo(() => {
-  if (!analysisData) return null;
+  const colorScale = useMemo(() => { if (!analysisData) return null;
   const values = analysisData.stepAnalysis.map(step => {)
   switch (heatmapMode) {
   case 'absolute': return step.dropOffCount;
   case 'relative': return step.dropOffRate;
   case 'severity': return getSeverityScore(step.dropOffSeverity);
   case 'opportunity': return step.recoveryPotential;
-  default: return step.dropOffRate;
-});
+  default: return step.dropOffRate });
     const min = Math.min(...values);
     const max = Math.max(...values);
     return { min, max, range: max - min };
@@ -411,38 +385,36 @@ export const DropoffHeatmap: React.FC<DropoffHeatmapProps> = ({)
   const handleCellHover = useCallback((stepId: string | null, metric: string | null) => {
     setHoveredCell(stepId && metric ? { stepId, metric } : null);
   }, []);
-  const handleStepClick = useCallback((stepId: string) => {
-  if (!analysisData) return;
+  const handleStepClick = useCallback((stepId: string) => { if (!analysisData) return;
   const stepAnalysis = analysisData.stepAnalysis.find(s => s.stepId === stepId);
   const rootCause = analysisData.rootCauseAnalysis.find(r => r.stepId === stepId);
   const recovery = analysisData.recoveryOpportunities.find(r => r.stepId === stepId);
   if (stepAnalysis && rootCause && recovery) {
   setSelectedStep(stepId);
   onDropoffPointClick?.({)
-  stepId,
-  analysis: stepAnalysis,
-  rootCause,
+  stepId
+  analysis: stepAnalysis
+  rootCause }
   recovery
 });
   }, [analysisData, onDropoffPointClick]);
-  const handleExport = useCallback(async () => {
-  if (!analysisData) return;
-  const exportData: DropoffExportData = {,
-  heatmapMode,
-  data: analysisData,
+  const handleExport = useCallback(async () => { if (!analysisData) return;
+  const exportData: DropoffExportData = {
+  heatmapMode
+  data: analysisData
   visualizations: {
-  heatmap: 'heatmap-svg-data', // TODO: Generate actual SVG,
-  flowDiagram: 'flow-svg-data',
-  trends: 'trends-svg-data',
-},
-  recommendations: {
-  quick: analysisData.recoveryOpportunities.flatMap(r => r.quickWins),
-  strategic: analysisData.recoveryOpportunities.flatMap(r => r.strategicInitiatives),
-},
-  metadata: {
-  exportedAt: Date.now(),
-  timeRange,
-  analysisDepth: 'comprehensive',
+  heatmap: 'heatmap-svg-data', // TODO: Generate actual SVG
+  flowDiagram: 'flow-svg-data'
+  trends: 'trends-svg-data' }
+
+  recommendations: { 
+  quick: analysisData.recoveryOpportunities.flatMap(r => r.quickWins)
+  strategic: analysisData.recoveryOpportunities.flatMap(r => r.strategicInitiatives) }
+
+  metadata: { 
+  exportedAt: Date.now()
+  timeRange
+  analysisDepth: 'comprehensive' }
 };
     onExport?.(exportData);
   }, [analysisData, heatmapMode, timeRange, onExport]);
@@ -503,18 +475,19 @@ export const DropoffHeatmap: React.FC<DropoffHeatmapProps> = ({)
 /**
  * Drop-off Heatmap Header Component
  */
-}
-interface DropoffHeatmapHeaderProps {
-  funnelDefinition: ConversionFunnelDefinition;
+
+
+interface DropoffHeatmapHeaderProps { funnelDefinition: ConversionFunnelDefinition;
   heatmapMode: HeatmapMode;
   analysisData: DropoffAnalysisData;
   onExport: () => void;
-  const DropoffHeatmapHeader: React.FC<DropoffHeatmapHeaderProps> = ({,)
-  funnelDefinition,
-  heatmapMode,
-  analysisData,
+  const DropoffHeatmapHeader: React.FC<DropoffHeatmapHeaderProps> = ({);
+  funnelDefinition;
+  heatmapMode;
+  analysisData }
   onExport
-}
+
+
 }) => {
   const criticalDropoffs = analysisData.stepAnalysis.filter(s => s.dropOffSeverity === 'critical').length;
   const totalRecoveryValue = analysisData.recoveryOpportunities.reduce((sum, r) => sum + r.recoveryValue, 0);
@@ -549,23 +522,23 @@ interface DropoffHeatmapHeaderProps {
 /**
  * Heatmap Visualization Component
  */
-}
-interface HeatmapVisualizationProps {
-  analysisData: DropoffAnalysisData;
-  heatmapMode: HeatmapMode;
-}
+
+
+interface HeatmapVisualizationProps { analysisData: DropoffAnalysisData;
+  heatmapMode: HeatmapMode }
+},
   colorScale: { min: number; max: number; range: number } | null;
   hoveredCell: { stepId: string; metric: string } | null;
-  selectedStep: string | null;
-  onCellHover: (stepId: string | null, metric: string | null) => void;
+  selectedStep: string | null;,
+  onCellHover: (stepId: string | null, metric: string | null) => void
   onStepClick: (stepId: string) => void;
-const HeatmapVisualization: React.FC<HeatmapVisualizationProps> = ({)
-  analysisData,
-  heatmapMode,
-  colorScale,
-  hoveredCell,
-  selectedStep,
-  onCellHover,
+const HeatmapVisualization: React.FC<HeatmapVisualizationProps> = ({ )
+  analysisData
+  heatmapMode
+  colorScale
+  hoveredCell
+  selectedStep
+  onCellHover }
   onStepClick
 }) => {
   const metrics = ['Drop-off Rate', 'Recovery Potential', 'Severity', 'Impact'];
@@ -592,9 +565,9 @@ const HeatmapVisualization: React.FC<HeatmapVisualizationProps> = ({)
             </div>
             <div 
               className={`heatmap-cell dropoff-rate ${getSeverityClass(step.dropOffSeverity)}`}
-              style={{
-  backgroundColor: getHeatmapColor(step.dropOffRate, colorScale, 'dropoff'),
-}}
+              style={ {
+  backgroundColor: getHeatmapColor(step.dropOffRate, colorScale, 'dropoff') }
+}
               onMouseEnter={() => onCellHover(step.stepId, 'dropoff-rate')}
               onMouseLeave={() => onCellHover(null, null)}
             >
@@ -602,9 +575,9 @@ const HeatmapVisualization: React.FC<HeatmapVisualizationProps> = ({)
             </div>
             <div 
               className="heatmap-cell recovery-potential"
-              style={{
-  backgroundColor: getHeatmapColor(step.recoveryPotential, colorScale, 'recovery'),
-}}
+              style={ {
+  backgroundColor: getHeatmapColor(step.recoveryPotential, colorScale, 'recovery') }
+}
               onMouseEnter={() => onCellHover(step.stepId, 'recovery')}
               onMouseLeave={() => onCellHover(null, null)}
             >
@@ -634,14 +607,14 @@ const HeatmapVisualization: React.FC<HeatmapVisualizationProps> = ({)
 /**
  * Heatmap Legend Component
  */
-}
-interface HeatmapLegendProps {
-  heatmapMode: HeatmapMode;
-}
+
+
+interface HeatmapLegendProps { heatmapMode: HeatmapMode }
+},
   colorScale: { min: number; max: number; range: number } | null;
 const HeatmapLegend: React.FC<HeatmapLegendProps> = ({ heatmapMode, colorScale }) => {
   if (!colorScale) return null;
-  const gradientStops = [;
+  const gradientStops = [
     { offset: '0%', color: '#10b981' }, // Green (low drop-off)
     { offset: '50%', color: '#f59e0b' }, // Yellow (medium drop-off)
     { offset: '100%', color: '#ef4444' } // Red (high drop-off)
@@ -674,12 +647,12 @@ const HeatmapLegend: React.FC<HeatmapLegendProps> = ({ heatmapMode, colorScale }
 /**
  * Step Detail Panel Component
  */
-}
-interface StepDetailPanelProps {
-  stepId: string;
+
+
+interface StepDetailPanelProps { stepId: string;
   analysisData: DropoffAnalysisData;
-  onClose: () => void;
-}
+  onClose: () => void }
+
 const StepDetailPanel: React.FC<StepDetailPanelProps> = ({ stepId, analysisData, onClose }) => {
   const stepAnalysis = analysisData.stepAnalysis.find(s => s.stepId === stepId);
   const rootCause = analysisData.rootCauseAnalysis.find(r => r.stepId === stepId);
@@ -775,10 +748,10 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({ stepId, analysisData,
 /**
  * Recovery Opportunity Panel Component
  */
-}
-interface RecoveryOpportunityPanelProps {
-  opportunities: RecoveryOpportunity;
-}
+
+
+interface RecoveryOpportunityPanelProps { opportunities: RecoveryOpportunity }
+
 const RecoveryOpportunityPanel: React.FC<RecoveryOpportunityPanelProps> = ({ opportunities }) => {
   const totalRecoveryValue = opportunities.reduce((sum, opp) => sum + opp.recoveryValue, 0);
   const highConfidenceOpportunities = opportunities.filter(opp => opp.confidenceLevel > 0.7);
@@ -840,11 +813,11 @@ const RecoveryOpportunityPanel: React.FC<RecoveryOpportunityPanelProps> = ({ opp
 /**
  * Drop-off Insights Panel Component
  */
-}
-interface DropoffInsightsPanelProps {
-  insights: DropoffInsight;
-  rootCauses: RootCauseAnalysis;
-}
+
+
+interface DropoffInsightsPanelProps { insights: DropoffInsight;
+  rootCauses: RootCauseAnalysis }
+
 const DropoffInsightsPanel: React.FC<DropoffInsightsPanelProps> = ({ insights, rootCauses }) => {
   const criticalInsights = insights.filter(i => i.severity === 'critical' || i.severity === 'high');
   return;
@@ -884,10 +857,10 @@ const DropoffInsightsPanel: React.FC<DropoffInsightsPanelProps> = ({ insights, r
 /**
  * Temporal Patterns Panel Component
  */
-}
-interface TemporalPatternsPanelProps {
-  patterns: TemporalDropoffPattern;
-}
+
+
+interface TemporalPatternsPanelProps { patterns: TemporalDropoffPattern }
+
 const TemporalPatternsPanel: React.FC<TemporalPatternsPanelProps> = ({ patterns }) => {
   return;
     <div className="temporal-patterns-panel">
@@ -929,11 +902,11 @@ const DropoffAnalysisLoadingState: React.FC = () => ()
     <p>Analyzing drop-off patterns...</p>
   </div>
 );
-}
-interface DropoffAnalysisErrorStateProps {
-  error: string;
-  onRetry: () => void;
-}
+
+
+interface DropoffAnalysisErrorStateProps { error: string;
+  onRetry: () => void }
+
 const DropoffAnalysisErrorState: React.FC<DropoffAnalysisErrorStateProps> = ({ error, onRetry }) => ()
   <div className="dropoff-analysis-error">
     <div className="error-message">
@@ -956,7 +929,7 @@ function getSeverityScore(severity: string): number {
     default: return 0;
 function getSeverityClass(severity: string): string {
   return `severity-${severity}`;}
-function getHeatmapColor(value: number, )
+function getHeatmapColor(value: number);
   colorScale: { min: number; max: number; range: number } | null, 
   type: 'dropoff' | 'recovery'): string {,
   if (!colorScale) return '#f3f4f6';
@@ -965,175 +938,172 @@ function getHeatmapColor(value: number, )
     // Red scale for drop-offs (higher = worse)
     const intensity = Math.floor(normalized * 255);
     return `rgb(${255}, ${255 - intensity}, ${255 - intensity})`;}
-  } else {
+ else {
     // Green scale for recovery (higher = better)
     const intensity = Math.floor(normalized * 255);
     return `rgb(${255 - intensity}, ${255}, ${255 - intensity})`;}
-async function processDropoffAnalysisData(funnelDefinition: ConversionFunnelDefinition)
+async function processDropoffAnalysisData(funnelDefinition: ConversionFunnelDefinition),
   metricResults: ConversionMetricResult,
   segments: UserSegment,
   cohorts: ConversionCohort,
   timeRange: { start: number; end: number }
-): Promise<DropoffAnalysisData> {
-
-  // Simplified implementation - in production would process actual metrics
-  const stepAnalysis: StepDropoffAnalysis = funnelDefinition.steps.map((step, index) => ({,)
-  stepId: step.id,
-  stepName: step.name,
-  stepOrder: step.order,
-  totalEntries: 1000 - (index * 150),
-  dropOffCount: 150 + (index * 25),
-  dropOffRate: 15 + (index * 5) + (Math.random() * 10),
-  dropOffSeverity: index === 1 ? 'critical' : index === 2 ? 'high' : 'medium',
+): Promise<DropoffAnalysisData> { // Simplified implementation - in production would process actual metrics
+  const stepAnalysis: StepDropoffAnalysis = funnelDefinition.steps.map((step, index) => ({)
+  stepId: step.id
+  stepName: step.name
+  stepOrder: step.order
+  totalEntries: 1000 - (index * 150)
+  dropOffCount: 150 + (index * 25)
+  dropOffRate: 15 + (index * 5) + (Math.random() * 10)
+  dropOffSeverity: index === 1 ? 'critical' : index === 2 ? 'high' : 'medium'
   benchmarkComparison: {
-  industryAverage: 20 + (Math.random() * 15),
-  topPerformers: 10 + (Math.random() * 8),
-  yourPerformance: 15 + (index * 5) + (Math.random() * 10),
-  percentile: 40 + (Math.random() * 40),
-  improvementPotential: 5 + (Math.random() * 15),
-},
-  userBehaviorAnalysis: {
-  averageTimeOnStep: 60000 + (index * 30000),
-  interactionPatterns: [,
+  industryAverage: 20 + (Math.random() * 15)
+  topPerformers: 10 + (Math.random() * 8)
+  yourPerformance: 15 + (index * 5) + (Math.random() * 10)
+  percentile: 40 + (Math.random() * 40)
+  improvementPotential: 5 + (Math.random() * 15) }
+
+  userBehaviorAnalysis: { 
+  averageTimeOnStep: 60000 + (index * 30000)
+  interactionPatterns: [
   {
-  pattern: 'Multiple form attempts',
-  frequency: 45,
-  conversionImpact: -12,
-  description: 'Users attempt to fill form multiple times before abandoning'],
-  exitBehaviors: [,
+  pattern: 'Multiple form attempts'
+  frequency: 45
+  conversionImpact: -12
+  description: 'Users attempt to fill form multiple times before abandoning']
+  exitBehaviors: [
   {
-  behavior: 'Direct page close',
-  percentage: 35,
-  description: 'Users close tab/browser directly',
-  preventable: false],
-  recoveryAttempts: 2.3,
-},
-  technicalAnalysis: {
-  pageLoadTime: 2000 + (index * 500),
-  errorRate: Math.random() * 5,
-  performanceScore: 70 + (Math.random() * 25),
-  accessibilityIssues: [,
+  behavior: 'Direct page close'
+  percentage: 35
+  description: 'Users close tab/browser directly'
+  preventable: false]
+  recoveryAttempts: 2.3 }
+
+  technicalAnalysis: { 
+  pageLoadTime: 2000 + (index * 500)
+  errorRate: Math.random() * 5
+  performanceScore: 70 + (Math.random() * 25)
+  accessibilityIssues: [
   {
-  type: 'Missing alt text',
-  severity: 'medium',
-  description: 'Images missing alternative text',
-  impact: 'Screen reader accessibility',
-  fixComplexity: 'low'],
-  mobileCompatibility: 85 + (Math.random() * 10),
-},
-  contentAnalysis: {
-  clarityScore: 60 + (Math.random() * 30),
-  complexityScore: 40 + (Math.random() * 40),
-  engagementScore: 70 + (Math.random() * 20),
-  completionRate: 80 - (index * 10),
-  commonConfusionPoints: [,
-  'Form field labels unclear',
+  type: 'Missing alt text'
+  severity: 'medium'
+  description: 'Images missing alternative text'
+  impact: 'Screen reader accessibility'
+  fixComplexity: 'low']
+  mobileCompatibility: 85 + (Math.random() * 10) }
+
+  contentAnalysis: { 
+  clarityScore: 60 + (Math.random() * 30)
+  complexityScore: 40 + (Math.random() * 40)
+  engagementScore: 70 + (Math.random() * 20)
+  completionRate: 80 - (index * 10)
+  commonConfusionPoints: [
+  'Form field labels unclear'
   'Next step instructions missing'
-  ],
-  improvementSuggestions: [,
-  'Simplify form fields',
-  'Add progress indicators',
+  ]
+  improvementSuggestions: [
+  'Simplify form fields'
+  'Add progress indicators' }
   'Improve error messaging'
   ]
-},
+
   recoveryPotential: 60 + (Math.random() * 30);
   }));
-  const rootCauseAnalysis: RootCauseAnalysis = stepAnalysis.map(step => ({)
-  stepId: step.stepId,
-  stepName: step.stepName,
-  primaryCauses: [,
+  const rootCauseAnalysis: RootCauseAnalysis = stepAnalysis.map(step => ({ )
+  stepId: step.stepId
+  stepName: step.stepName
+  primaryCauses: [
   {
-  category: 'user_experience',
-  subcategory: 'form_complexity',
-  description: 'Complex form fields causing user confusion and abandonment',
-  impact: 35,
-  confidence: 0.85,
-  evidence: [,
+  category: 'user_experience'
+  subcategory: 'form_complexity'
+  description: 'Complex form fields causing user confusion and abandonment'
+  impact: 35
+  confidence: 0.85
+  evidence: [
   {
-  type: 'user_feedback',
-  description: '23% of exit surveys mention form difficulty',
-  strength: 'strong',
-  source: 'Exit survey analysis',
-  timestamp: Date.now() - 86400000],
-  mitigationComplexity: 'medium',
-  expectedImprovement: 15],
-  contributingFactors: [,
+  type: 'user_feedback'
+  description: '23% of exit surveys mention form difficulty'
+  strength: 'strong'
+  source: 'Exit survey analysis'
+  timestamp: Date.now() - 86400000]
+  mitigationComplexity: 'medium'
+  expectedImprovement: 15]
+  contributingFactors: [
   {
-  factor: 'Page load time',
-  weight: 0.3,
-  description: 'Slow loading affects user patience',
-  measurable: true,
-  currentValue: step.technicalAnalysis.pageLoadTime,
-  targetValue: 1500],
-  confidence: 0.8,
-  evidenceQuality: 'high',
-  recommendations: [,
+  factor: 'Page load time'
+  weight: 0.3
+  description: 'Slow loading affects user patience'
+  measurable: true
+  currentValue: step.technicalAnalysis.pageLoadTime
+  targetValue: 1500]
+  confidence: 0.8
+  evidenceQuality: 'high'
+  recommendations: [
   {
-  title: 'Simplify form fields',
-  description: 'Reduce required fields and improve field labels',
-  priority: 'high',
-  effort: 'medium',
-  expectedImpact: 15,
-  implementationSteps: [,
-  'Audit current form fields',
-  'Identify non-essential fields',
-  'Redesign form layout',
+  title: 'Simplify form fields'
+  description: 'Reduce required fields and improve field labels'
+  priority: 'high'
+  effort: 'medium'
+  expectedImpact: 15
+  implementationSteps: [
+  'Audit current form fields'
+  'Identify non-essential fields'
+  'Redesign form layout'
   'Test with users'
-  ],
-  successMetrics: [,
-  'Form completion rate increase',
-  'Time to complete reduction',
+  ]
+  successMetrics: [
+  'Form completion rate increase'
+  'Time to complete reduction' }
   'User satisfaction score improvement'
   ]
   ]
 }));
-  const recoveryOpportunities: RecoveryOpportunity = stepAnalysis.map(step => ({)
-  stepId: step.stepId,
-  stepName: step.stepName,
-  recoveryPotential: step.recoveryPotential,
-  recoveryValue: step.dropOffCount * 25, // $25 per recovered user,
-  quickWins: [,
+  const recoveryOpportunities: RecoveryOpportunity = stepAnalysis.map(step => ({ )
+  stepId: step.stepId
+  stepName: step.stepName
+  recoveryPotential: step.recoveryPotential
+  recoveryValue: step.dropOffCount * 25, // $25 per recovered user
+  quickWins: [
   {
-  title: 'Improve error messaging',
-  description: 'Provide clearer, more helpful error messages',
-  effort: 'low',
-  expectedImpact: 8,
-  implementationTime: 16,
-  requirements: ['UX review', 'Copy updates', 'Frontend changes']],
-  strategicInitiatives: [,
+  title: 'Improve error messaging'
+  description: 'Provide clearer, more helpful error messages'
+  effort: 'low'
+  expectedImpact: 8
+  implementationTime: 16
+  requirements: ['UX review', 'Copy updates', 'Frontend changes']]
+  strategicInitiatives: [
   {
-  title: 'Redesign step flow',
-  description: 'Complete redesign of the step user experience',
-  effort: 'high',
-  expectedImpact: 25,
-  implementationTime: 14,
-  dependencies: ['User research', 'Design system updates'],
-  successMetrics: ['Conversion rate improvement', 'User satisfaction']],
-  timeToImpact: 7,
-  confidenceLevel: 0.75,
+  title: 'Redesign step flow'
+  description: 'Complete redesign of the step user experience'
+  effort: 'high'
+  expectedImpact: 25
+  implementationTime: 14
+  dependencies: ['User research', 'Design system updates']
+  successMetrics: ['Conversion rate improvement', 'User satisfaction']]
+  timeToImpact: 7
+  confidenceLevel: 0.75 }
 }));
   const overallInsights: DropoffInsight = [
-    {
-  type: 'pattern',
-  severity: 'critical',
-  title: 'Step 2 Shows Critical Drop-off Rate',
-  description: 'Template browsing step has 35% drop-off rate, significantly above industry average',
-  affectedSteps: ['step-2'],
-  impact: 35,
-  confidence: 0.9,
-  recommendations: [,
-  'Implement progressive disclosure for template options',
-  'Add filtering and search capabilities',
+    { type: 'pattern'
+  severity: 'critical'
+  title: 'Step 2 Shows Critical Drop-off Rate'
+  description: 'Template browsing step has 35% drop-off rate, significantly above industry average'
+  affectedSteps: ['step-2']
+  impact: 35
+  confidence: 0.9
+  recommendations: [
+  'Implement progressive disclosure for template options'
+  'Add filtering and search capabilities'
   'Reduce cognitive load with better categorization'
-  ],
+  ]
   timeframe: 'immediate'];
   return {
-  stepAnalysis,
-  transitionAnalysis: [], // TODO: Implement transition analysis,
-  temporalPatterns: [], // TODO: Implement temporal pattern analysis,
-  segmentAnalysis: [], // TODO: Implement segment analysis,
-  rootCauseAnalysis,
-  recoveryOpportunities,
+  stepAnalysis
+  transitionAnalysis: [], // TODO: Implement transition analysis
+  temporalPatterns: [], // TODO: Implement temporal pattern analysis
+  segmentAnalysis: [], // TODO: Implement segment analysis
+  rootCauseAnalysis
+  recoveryOpportunities }
   overallInsights
 };
 

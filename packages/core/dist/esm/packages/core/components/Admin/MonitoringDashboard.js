@@ -10,6 +10,48 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { MonitoringWidget } from './MonitoringWidgets';
 {
+    id: 'key-metrics',
+        title;
+    'Key Performance Indicators',
+        type;
+    'metric',
+        size;
+    'medium',
+        requiredPermissions;
+    ['admin', 'executive', 'manager'],
+        dataSource;
+    '/api/monitoring/metrics/kpi',
+    ;
+}
+{
+    id: 'security-overview',
+        title;
+    'Security Status',
+        type;
+    'status',
+        size;
+    'medium',
+        requiredPermissions;
+    ['admin', 'executive', 'manager'],
+        dataSource;
+    '/api/monitoring/security/overview',
+    ;
+}
+{
+    id: 'alert-summary',
+        title;
+    'Alert Summary',
+        type;
+    'list',
+        size;
+    'medium',
+        requiredPermissions;
+    ['admin', 'executive', 'manager'],
+        dataSource;
+    '/api/monitoring/alerts/summary';
+    ;
+}
+{
     id: 'operational',
         name;
     'Operations Dashboard',
@@ -20,7 +62,7 @@ import { MonitoringWidget } from './MonitoringWidgets';
         refreshInterval;
     15000,
         widgets;
-    [,
+    [
         {
             id: 'resource-usage',
             title: 'Resource Usage',
@@ -52,7 +94,8 @@ import { MonitoringWidget } from './MonitoringWidgets';
             size: 'large',
             requiredPermissions: ['admin', 'operator', 'engineer'],
             dataSource: '/api/monitoring/health/detailed'
-        }];
+        }
+    ];
 }
 {
     id: 'security',
@@ -65,7 +108,7 @@ import { MonitoringWidget } from './MonitoringWidgets';
         refreshInterval;
     10000,
         widgets;
-    [,
+    [
         {
             id: 'security-overview',
             title: 'Security Overview',
@@ -89,7 +132,8 @@ import { MonitoringWidget } from './MonitoringWidgets';
             size: 'medium',
             requiredPermissions: ['admin', 'security', 'compliance'],
             dataSource: '/api/monitoring/compliance/metrics'
-        }];
+        }
+    ];
 }
 {
     id: 'analytics',
@@ -102,7 +146,7 @@ import { MonitoringWidget } from './MonitoringWidgets';
         refreshInterval;
     120000,
         widgets;
-    [,
+    [
         {
             id: 'performance-trends',
             title: 'Performance Trends',
@@ -126,8 +170,8 @@ import { MonitoringWidget } from './MonitoringWidgets';
             size: 'medium',
             requiredPermissions: ['admin', 'analyst', 'manager'],
             dataSource: '/api/monitoring/analytics/capacity'
-        }],
-    ;
+        }
+    ];
     ;
 }
 export const MonitoringDashboard = ({
@@ -169,7 +213,7 @@ export const MonitoringDashboard = ({
                     case 'system-health':
                         data = {
                             healthScore: Math.floor(Math.random() * 20) + 80,
-                            components: [,
+                            components: [
                                 { name: 'Database', status: 'healthy' },
                                 { name: 'API Gateway', status: 'healthy' },
                                 { name: 'Cache Layer', status: 'warning' },
@@ -202,7 +246,7 @@ export const MonitoringDashboard = ({
                                         blockedAttempts: Math.floor(Math.random() * 50) + 10,
                                         complianceScore: Math.floor(Math.random() * 10) + 90,
                                         lastScan: new Date().toISOString(),
-                                        threats: [,
+                                        threats: [
                                             { type: 'Brute Force', source: '192.168.1.100' },
                                             { type: 'SQL Injection', source: '10.0.0.50' }
                                         ]
@@ -210,7 +254,7 @@ export const MonitoringDashboard = ({
                                     break: ,
                                     case: 'activity-feed',
                                     data = {
-                                        activities: [,
+                                        activities: [
                                             {
                                                 id: 1,
                                                 timestamp: new Date(Date.now() - 60000).toISOString(),
@@ -231,7 +275,8 @@ export const MonitoringDashboard = ({
                                                 type: 'success',
                                                 message: 'Security scan completed',
                                                 source: 'security-scanner'
-                                            }]
+                                            }
+                                        ]
                                     },
                                     break: ,
                                     default: data = {},

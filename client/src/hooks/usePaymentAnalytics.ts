@@ -9,33 +9,36 @@ import { PaymentProvider } from '../../../server/src/marketplace/transaction.typ
 import { RevenueTimeRange } from '../types/revenue';
 import { PaymentAnalyticsData } from '../components/payment/PaymentAnalyticsDashboard';
 
-}
+
 export interface UsePaymentAnalyticsParams {
   timeRange: RevenueTimeRange;
-  customDateRange?: {
+  customDateRange?: {,
   start: Date | null;,
   end: Date | null;
-}
+
+
 };
   providers: PaymentProvider;
   autoRefresh?: boolean;
   refreshInterval?: number;
-}
-}
+
+
+
 export interface UsePaymentAnalyticsReturn {
   data: PaymentAnalyticsData | null;,
-  loading: boolean;
+  loading: boolean;,
   error: string | null;,
   refresh: () => Promise<void>;
-}
-}
+
+
+
 export const usePaymentAnalytics = ({)
   timeRange,
   customDateRange,
   providers,
   autoRefresh = true,
   refreshInterval = 300000 // 5 minutes
-}: UsePaymentAnalyticsParams): UsePaymentAnalyticsReturn => {
+: UsePaymentAnalyticsParams): UsePaymentAnalyticsReturn => {
   const [data, setData] = useState<PaymentAnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -82,7 +85,7 @@ export const usePaymentAnalytics = ({)
   providers,
   startDate: start.toISOString(),
   endDate: end.toISOString(),
-}
+
         }),
         fetch('/api/payment-analytics/method-metrics', {)
   method: 'POST',
@@ -93,7 +96,7 @@ export const usePaymentAnalytics = ({)
   providers,
   startDate: start.toISOString(),
   endDate: end.toISOString(),
-}
+
         }),
         fetch('/api/payment-analytics/failure-analysis', {)
   method: 'POST',
@@ -104,8 +107,8 @@ export const usePaymentAnalytics = ({)
   providers,
   startDate: start.toISOString(),
   endDate: end.toISOString(),
-}
-  }
+
+
       ]);
       // Check for API errors
       if (!providerMetricsRes.ok || !methodMetricsRes.ok || !failureAnalysisRes.ok) {
@@ -125,14 +128,14 @@ export const usePaymentAnalytics = ({)
         timeRange: { start, end }
       };
       setData(analyticsData);
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Failed to fetch payment analytics';
   setError(errorMessage);
   console.error('Payment analytics fetch error:', err);
   // Fallback to mock data for development
   if (process.env.NODE_ENV === 'development') {
   setData(generateMockPaymentAnalytics(getDateRange(), providers));
-} finally {
+ finally {
       setLoading(false);
   }, [providers, getDateRange]);
   // Manual refresh function
@@ -175,14 +178,14 @@ function generateMockPaymentAnalytics(((
   totalVolume: Math.floor(Math.random() * 1000000) + 500000,
   totalFees: Math.floor(Math.random() * 30000) + 15000,
   averageFeeRate: 2.9 + Math.random() * 0.5,
-  failuresByReason: {
+  failuresByReason: {,
   'card_declined': Math.floor(Math.random() * 100) + 20,
   'insufficient_funds': Math.floor(Math.random() * 50) + 10,
   'processing_error': Math.floor(Math.random() * 30) + 5,
   'expired_card': Math.floor(Math.random() * 20) + 3,
 },
   retrySuccessRate: 60 + Math.random() * 25,
-    performanceByCountry: [,
+    performanceByCountry: [
       { countryCode: 'US', successRate: 92 + Math.random() * 5, averageProcessingTime: 300 + Math.random() * 200 },
       { countryCode: 'CA', successRate: 90 + Math.random() * 6, averageProcessingTime: 350 + Math.random() * 150 },
       { countryCode: 'GB', successRate: 88 + Math.random() * 7, averageProcessingTime: 400 + Math.random() * 200 },
@@ -203,19 +206,19 @@ function generateMockPaymentAnalytics(((
       totalVolume: Math.floor(Math.random() * 500000) + 200000,
       userPreferenceRank: 1,
       conversionRate: 85 + Math.random() * 10,
-      ageGroupPerformance: [,
+      ageGroupPerformance: [
         { ageGroup: '18-24', successRate: 85 + Math.random() * 10, usage: Math.floor(Math.random() * 1000) + 500 },
         { ageGroup: '25-34', successRate: 90 + Math.random() * 8, usage: Math.floor(Math.random() * 1500) + 800 },
         { ageGroup: '35-44', successRate: 92 + Math.random() * 6, usage: Math.floor(Math.random() * 1200) + 600 },
         { ageGroup: '45-54', successRate: 89 + Math.random() * 8, usage: Math.floor(Math.random() * 800) + 400 },
         { ageGroup: '55+', successRate: 87 + Math.random() * 9, usage: Math.floor(Math.random() * 600) + 300 }
       ],
-      devicePerformance: [,
+      devicePerformance: [
         { deviceType: 'mobile' as const, successRate: 86 + Math.random() * 8, usage: Math.floor(Math.random() * 2000) + 1000 },
         { deviceType: 'desktop' as const, successRate: 91 + Math.random() * 6, usage: Math.floor(Math.random() * 1500) + 800 },
         { deviceType: 'tablet' as const, successRate: 89 + Math.random() * 7, usage: Math.floor(Math.random() * 500) + 200 }
       ]
-  }
+
     {
       methodType: 'digital_wallet' as const,
       provider,
@@ -224,14 +227,14 @@ function generateMockPaymentAnalytics(((
       totalVolume: Math.floor(Math.random() * 300000) + 150000,
       userPreferenceRank: 2,
       conversionRate: 90 + Math.random() * 8,
-      ageGroupPerformance: [,
+      ageGroupPerformance: [
         { ageGroup: '18-24', successRate: 94 + Math.random() * 5, usage: Math.floor(Math.random() * 800) + 400 },
         { ageGroup: '25-34', successRate: 95 + Math.random() * 4, usage: Math.floor(Math.random() * 1000) + 600 },
         { ageGroup: '35-44', successRate: 93 + Math.random() * 5, usage: Math.floor(Math.random() * 600) + 300 },
         { ageGroup: '45-54', successRate: 90 + Math.random() * 7, usage: Math.floor(Math.random() * 400) + 200 },
         { ageGroup: '55+', successRate: 88 + Math.random() * 8, usage: Math.floor(Math.random() * 200) + 100 }
       ],
-      devicePerformance: [,
+      devicePerformance: [
         { deviceType: 'mobile' as const, successRate: 94 + Math.random() * 5, usage: Math.floor(Math.random() * 1200) + 600 },
         { deviceType: 'desktop' as const, successRate: 92 + Math.random() * 6, usage: Math.floor(Math.random() * 800) + 400 },
         { deviceType: 'tablet' as const, successRate: 93 + Math.random() * 5, usage: Math.floor(Math.random() * 300) + 150 }
@@ -251,19 +254,19 @@ function generateMockPaymentAnalytics(((
   hour,
   frequency: Math.floor(Math.random() * 20) + 5,
 })),
-      geographicPattern: [,
+      geographicPattern: [
         { countryCode: 'US', frequency: Math.floor(Math.random() * 50) + 20 },
         { countryCode: 'CA', frequency: Math.floor(Math.random() * 30) + 10 },
         { countryCode: 'GB', frequency: Math.floor(Math.random() * 25) + 8 }
       ],
-      amountPattern: [,
+      amountPattern: [
         { amountRange: '$0-$10', frequency: Math.floor(Math.random() * 20) + 5 },
         { amountRange: '$10-$50', frequency: Math.floor(Math.random() * 40) + 15 },
         { amountRange: '$50-$100', frequency: Math.floor(Math.random() * 30) + 10 },
         { amountRange: '$100-$250', frequency: Math.floor(Math.random() * 20) + 8 },
         { amountRange: '$250+', frequency: Math.floor(Math.random() * 15) + 5 }
       ]
-  }
+
     {
       failureCode: 'insufficient_funds',
       provider,
@@ -277,19 +280,19 @@ function generateMockPaymentAnalytics(((
   hour,
   frequency: Math.floor(Math.random() * 15) + 3,
 })),
-      geographicPattern: [,
+      geographicPattern: [
         { countryCode: 'US', frequency: Math.floor(Math.random() * 30) + 12 },
         { countryCode: 'CA', frequency: Math.floor(Math.random() * 20) + 8 },
         { countryCode: 'GB', frequency: Math.floor(Math.random() * 15) + 5 }
       ],
-      amountPattern: [,
+      amountPattern: [
         { amountRange: '$0-$10', frequency: Math.floor(Math.random() * 10) + 2 },
         { amountRange: '$10-$50', frequency: Math.floor(Math.random() * 25) + 8 },
         { amountRange: '$50-$100', frequency: Math.floor(Math.random() * 20) + 6 },
         { amountRange: '$100-$250', frequency: Math.floor(Math.random() * 15) + 4 },
         { amountRange: '$250+', frequency: Math.floor(Math.random() * 10) + 2 }
       ]
-  }
+
     {
       failureCode: 'processing_error',
       provider,
@@ -303,12 +306,12 @@ function generateMockPaymentAnalytics(((
   hour,
   frequency: Math.floor(Math.random() * 8) + 1,
 })),
-      geographicPattern: [,
+      geographicPattern: [
         { countryCode: 'US', frequency: Math.floor(Math.random() * 15) + 6 },
         { countryCode: 'CA', frequency: Math.floor(Math.random() * 10) + 4 },
         { countryCode: 'GB', frequency: Math.floor(Math.random() * 8) + 3 }
       ],
-      amountPattern: [,
+      amountPattern: [
         { amountRange: '$0-$10', frequency: Math.floor(Math.random() * 5) + 1 },
         { amountRange: '$10-$50', frequency: Math.floor(Math.random() * 12) + 4 },
         { amountRange: '$50-$100', frequency: Math.floor(Math.random() * 10) + 3 },

@@ -8,17 +8,16 @@
 import React from 'react';
 
 }
-interface ROIResult {
-    templateTotalCost: number;
+}
+interface ROIResult { templateTotalCost: number;
     manualTotalCost: number;
     netSavings: number;
     roi: number;
     paybackMonths: number;
     monthlySavings: number;
     timeToValue: string;
-    efficiency: number;
-
-
+    efficiency: number }
+}
 }
 interface ROICalculatorProps {
     className?: string;
@@ -28,4 +27,5 @@ interface ROICalculatorProps {
 export declare const ROICalculator: React.FC<ROICalculatorProps>;
 export default ROICalculator;
 //# sourceMappingURL=ROICalculator.d.ts.map
+}
 }

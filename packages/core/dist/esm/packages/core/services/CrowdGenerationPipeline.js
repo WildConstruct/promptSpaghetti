@@ -229,8 +229,9 @@ clothing.accuracyScore;
 individuals.push(individual);
 return individuals;
 async;
-formGroups(individuals, CrowdIndividual);
-request: CrowdGenerationRequest,
+formGroups(individuals, CrowdIndividual),
+    request;
+CrowdGenerationRequest,
     context;
 HistoricalContext;
 Promise < CrowdGroup > {
@@ -402,53 +403,47 @@ Promise < CrowdGroup > {
                             getBehaviorPatterns(request) { return []; }
                             // Supporting classes and interfaces
                         };
-                        class CrowdGenerationError extends Error {
-                            cause;
-                            constructor(message, cause) {
-                                super(message);
-                                this.cause = cause;
-                                this.name = 'CrowdGenerationError';
-                                // Placeholder classes for dependency injection
-                                class HistoricalDataService {
-                                }
-                                async;
-                                query(query, HistoricalQuery);
-                                Promise < any > { return: { data: [] } };
-                                async;
-                                getSocialStructure(era, Era, region, string);
-                                Promise < any > { return: {} };
-                                async;
-                                getCulturalRules(era, Era, region, string);
-                                Promise < any > { return: {} };
-                                class ConstraintValidator {
-                                    async validateIndividual(individual, era, constraints) { return { violations: [] }; }
-                                    individuals;
-                                    era;
-                                    constraints;
-                                    Promise() { return { violations: [] }; }
-                                    individuals;
-                                    era;
-                                    constraints;
-                                    Promise() { return { violations: [] }; }
-                                }
-                                class HistoricalClothingGenerator {
-                                    async generateClothing(demographics, occupation, scene, context) {
-                                        return { items: [], accessories: [], accuracyScore: 0.9 };
-                                        class CrowdBehaviorEngine {
-                                            generateBehavior(demographics, occupation, activity, context) {
-                                                return {
-                                                    primary: 'standing',
-                                                    posture: 'neutral',
-                                                    movement: 'stationary',
-                                                    interactions: [],
-                                                };
-                                                class VFXExporter {
-                                                }
-                                                // Implementation would be defined elsewhere
-                                                export { CrowdGenerationPipeline, CrowdGenerationError };
-                                            }
-                                        }
+                    }
+                    class CrowdGenerationError extends Error {
+                        cause;
+                        constructor(message, cause) {
+                            super(message);
+                            this.cause = cause;
+                            this.name = 'CrowdGenerationError';
+                            // Placeholder classes for dependency injection
+                            class HistoricalDataService {
+                            }
+                        }
+                        async query(query) { return { data: [] }; }
+                        async getSocialStructure(era, region) { return {}; }
+                        async getCulturalRules(era, region) { return {}; }
+                    }
+                    class ConstraintValidator {
+                        async validateIndividual(individual, era, constraints) { return { violations: [] }; }
+                        individuals;
+                        era;
+                        constraints;
+                        Promise() { return { violations: [] }; }
+                        individuals;
+                        era;
+                        constraints;
+                        Promise() { return { violations: [] }; }
+                    }
+                    class HistoricalClothingGenerator {
+                        async generateClothing(demographics, occupation, scene, context) {
+                            return { items: [], accessories: [], accuracyScore: 0.9 };
+                            class CrowdBehaviorEngine {
+                                generateBehavior(demographics, occupation, activity, context) {
+                                    return {
+                                        primary: 'standing',
+                                        posture: 'neutral',
+                                        movement: 'stationary',
+                                        interactions: [],
+                                    };
+                                    class VFXExporter {
                                     }
+                                    // Implementation would be defined elsewhere
+                                    export { CrowdGenerationPipeline, CrowdGenerationError };
                                 }
                             }
                         }

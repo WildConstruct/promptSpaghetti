@@ -6,40 +6,32 @@
  */
 
 }
-export interface ResourceUsage {
-    memory: {
+}
+export interface ResourceUsage { memory: {
         used: number;
         available: number;
         percentage: number;
-        peak: number;
+        peak: number }
 }
     };
-    cpu: {
-        usage: number;
+    cpu: { usage: number;
         cores: number;
-        load: number[];
-    };
-    network: {
-        bytesIn: number;
+        load: number[] };
+    network: { bytesIn: number;
         bytesOut: number;
         latency: number;
-        bandwidth: number;
-    };
-    disk: {
-        used: number;
+        bandwidth: number };
+    disk: { used: number;
         available: number;
         ioOperations: number;
-        throughput: number;
-    };
-    gpu?: {
-        usage: number;
+        throughput: number };
+    gpu?: { usage: number;
         memory: number;
-        temperature: number;
-    };
+        temperature: number };
 
 }
-export interface OptimizationStrategy {
-    name: string;
+}
+export interface OptimizationStrategy { name: string;
     description: string;
     priority: 'low' | 'medium' | 'high';
     category: 'memory' | 'cpu' | 'network' | 'disk' | 'model' | 'caching';
@@ -47,61 +39,52 @@ export interface OptimizationStrategy {
         memory?: number;
         cpu?: number;
         cost?: number;
-        responseTime?: number;
+        responseTime?: number }
 }
     };
     implementation: () => Promise<void>;
     rollback: () => Promise<void>;
 
 }
-export interface ResourceOptimizationConfig {
-    enabled: boolean;
+}
+export interface ResourceOptimizationConfig { enabled: boolean;
     monitoringInterval: number;
     optimizationThresholds: {
         memoryUsage: number;
         cpuUsage: number;
         diskUsage: number;
-        responseTime: number;
+        responseTime: number }
 }
     };
-    strategies: {
-        memoryOptimization: boolean;
+    strategies: { memoryOptimization: boolean;
         modelPooling: boolean;
         requestBatching: boolean;
         dynamicScaling: boolean;
         intelligentCaching: boolean;
-        resourcePreemption: boolean;
-    };
-    limits: {
-        maxMemoryUsage: number;
+        resourcePreemption: boolean };
+    limits: { maxMemoryUsage: number;
         maxConcurrentRequests: number;
         maxModelInstances: number;
-        maxCacheSize: number;
-    };
+        maxCacheSize: number };
 
 }
-export interface ModelResourceProfile {
-    modelId: string;
+}
+export interface ModelResourceProfile { modelId: string;
     resourceRequirements: {
         memory: number;
         cpu: number;
         gpu?: number;
-        disk: number;
+        disk: number }
 }
     };
-    utilizationHistory: Array<{
-        timestamp: number;
-        usage: ResourceUsage;
-    }>;
+    utilizationHistory: Array<{ timestamp: number;
+        usage: ResourceUsage }>;
     optimizationApplied: string[];
-    efficiency: {
-        requestsPerSecond: number;
+    efficiency: { requestsPerSecond: number;
         costEfficiency: number;
-        resourceEfficiency: number;
-    };
+        resourceEfficiency: number };
 
-export declare class ResourceOptimizer {
-    private config;
+export declare class ResourceOptimizer { private config;
     private currentUsage;
     private modelProfiles;
     private activeOptimizations;
@@ -116,45 +99,32 @@ export declare class ResourceOptimizer {
     unregisterModel(modelId: string): void;
     optimizeMemoryUsage(): Promise<{
         memoryFreed: number;
-        optimizationsApplied: string[];
-    }>;
-    optimizeCPUUsage(): Promise<{
-        cpuSavings: number;
-        optimizationsApplied: string[];
-    }>;
-    optimizeNetworkUsage(): Promise<{
-        bandwidthSaved: number;
+        optimizationsApplied: string[] }>;
+    optimizeCPUUsage(): Promise<{ cpuSavings: number;
+        optimizationsApplied: string[] }>;
+    optimizeNetworkUsage(): Promise<{ bandwidthSaved: number;
         latencyImprovement: number;
-        optimizationsApplied: string[];
-    }>;
-    optimizeModelPerformance(modelId: string): Promise<{
-        responseTimeImprovement: number;
+        optimizationsApplied: string[] }>;
+    optimizeModelPerformance(modelId: string): Promise<{ responseTimeImprovement: number;
         resourceSavings: Partial<ResourceUsage>;
-        optimizationsApplied: string[];
-    }>;
-    generateOptimizationPlan(): Promise<{
-        currentState: ResourceUsage;
+        optimizationsApplied: string[] }>;
+    generateOptimizationPlan(): Promise<{ currentState: ResourceUsage;
         recommendedOptimizations: OptimizationStrategy[];
         estimatedImpact: {
             memoryReduction: number;
             cpuReduction: number;
             costSavings: number;
-            responseTimeImprovement: number;
-        };
+            responseTimeImprovement: number };
         implementationOrder: string[];
     }>;
-    applyOptimizationPlan(plan: OptimizationStrategy[]): Promise<{
-        applied: string[];
+    applyOptimizationPlan(plan: OptimizationStrategy[]): Promise<{ applied: string[];
         failed: Array<{
             strategy: string;
-            error: string;
-        }>;
-        totalImpact: {
-            memoryFreed: number;
+            error: string }>;
+        totalImpact: { memoryFreed: number;
             cpuSaved: number;
             costSaved: number;
-            responseTimeImproved: number;
-        };
+            responseTimeImproved: number };
     }>;
     getResourceUtilization(): ResourceUsage;
     getModelProfiles(): ModelResourceProfile[];

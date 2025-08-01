@@ -224,48 +224,48 @@ export function useAnimation(initialState = false) {
                                                 };
                                             }
                                         };
-                                        {
-                                            const [mounted, setMounted] = React.useState(false);
-                                            React.useEffect(() => {
-                                                const timer = setTimeout(() => setMounted(true), delay);
-                                                return () => clearTimeout(timer);
-                                            }, [delay]);
-                                            const getAnimationStyle = () => {
-                                                const baseStyle = {
-                                                    transition: `all ${duration}ms ${easingFunctions.cinema4d.professional}`
-                                                };
-                                            }, willChange;
-                                        }
-                                        ;
-                                        if (!mounted || !isVisible) {
-                                            switch (animationType) {
-                                                case 'fade':
-                                                    return { ...baseStyle, opacity: 0 };
-                                                case 'slide':
-                                                    return { ...baseStyle, opacity: 0, transform: 'translateY(20px)' };
-                                                case 'scale':
-                                                    return { ...baseStyle, opacity: 0, transform: 'scale(0.95)' };
-                                                case 'lift':
-                                                    return { ...baseStyle, opacity: 0, transform: 'translateY(10px)' };
-                                                default:
-                                                    return { ...baseStyle, opacity: 0 };
-                                                    return {
-                                                        ...baseStyle,
-                                                        opacity: 1,
-                                                        transform: 'translateY(0) scale(1)',
-                                                    };
-                                            }
-                                            ;
-                                            return;
-                                            _jsx("div", { className: className, style: {
-                                                    ...getAnimationStyle(),
-                                                    ...style
-                                                }, children: children });
-                                            ;
-                                        }
-                                        ;
                                     }
                                 }
+                                {
+                                    const [mounted, setMounted] = React.useState(false);
+                                    React.useEffect(() => {
+                                        const timer = setTimeout(() => setMounted(true), delay);
+                                        return () => clearTimeout(timer);
+                                    }, [delay]);
+                                    const getAnimationStyle = () => {
+                                        const baseStyle = {
+                                            transition: `all ${duration}ms ${easingFunctions.cinema4d.professional}`
+                                        };
+                                    }, willChange;
+                                }
+                                ;
+                                if (!mounted || !isVisible) {
+                                    switch (animationType) {
+                                        case 'fade':
+                                            return { ...baseStyle, opacity: 0 };
+                                        case 'slide':
+                                            return { ...baseStyle, opacity: 0, transform: 'translateY(20px)' };
+                                        case 'scale':
+                                            return { ...baseStyle, opacity: 0, transform: 'scale(0.95)' };
+                                        case 'lift':
+                                            return { ...baseStyle, opacity: 0, transform: 'translateY(10px)' };
+                                        default:
+                                            return { ...baseStyle, opacity: 0 };
+                                            return {
+                                                ...baseStyle,
+                                                opacity: 1,
+                                                transform: 'translateY(0) scale(1)',
+                                            };
+                                    }
+                                    ;
+                                    return;
+                                    _jsx("div", { className: className, style: {
+                                            ...getAnimationStyle(),
+                                            ...style
+                                        }, children: children });
+                                    ;
+                                }
+                                ;
                             } };
                     }
                 }

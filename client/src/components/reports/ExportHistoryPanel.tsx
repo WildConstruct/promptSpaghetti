@@ -21,13 +21,13 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '../ui/table';
+ from '../ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
-} from '../ui/dropdown-menu';
+ from '../ui/dropdown-menu';
 import {
   History,
   Clock,
@@ -45,38 +45,42 @@ import {
   Play,
   Pause,
   Calendar
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Types
-}
+
+
 interface ExportHistoryItem {
   id: string;,
-  success: boolean;
+  success: boolean;,
   format: string;,
-  delivery: string;
+  delivery: string;,
   filename: string;,
-  size: number;
+  size: number;,
   generatedAt: string;
   deliveredAt?: string;
   error?: string;
   downloadUrl?: string;
-  metadata: {
+  metadata: {,
   recordCount: number;,
   processingTime: number;
   compressionRatio?: number;
-}
+
+
 };
-}
+
+
 interface ScheduledExport {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  exportConfig: {
+  exportConfig: {,
   format: string;,
   delivery: string;
-}
+
+
 };
-  schedule: {
+  schedule: {,
   frequency: string;
   time: string;
   dayOfWeek?: number;
@@ -86,12 +90,13 @@ interface ScheduledExport {
   lastRun?: string;
   nextRun?: string;
   createdBy: string;
-}
+
+
 interface ExportStatistics {
   totalExports: number;,
-  successfulExports: number;
+  successfulExports: number;,
   failedExports: number;,
-  averageProcessingTime: number;
+  averageProcessingTime: number;,
   formatBreakdown: Record<string, number>;
   deliveryBreakdown: Record<string, number>;
   export const ExportHistoryPanel: React.FC = () => {,
@@ -106,7 +111,8 @@ interface ExportStatistics {
   // Load data on component mount
   useEffect(() => {
   loadExportData();
-}
+
+
 }, [loadExportData]);
   const loadExportData = useCallback(async (): Promise<void> => {
     setIsLoading(true);
@@ -116,9 +122,9 @@ interface ExportStatistics {
         loadScheduledExports(),
         loadExportStatistics();
       ]);
-    } catch (error: unknown) {
+ catch (error: unknown) {
   console.error('Failed to load export data:', error);
-} finally {
+ finally {
       setIsLoading(false);
   }, [loadExportHistory, loadScheduledExports, loadExportStatistics]);
   const loadExportHistory = useCallback(async (): Promise<void> => {
@@ -127,7 +133,7 @@ interface ExportStatistics {
       const data = await response.json();
       if (data.success) {
         setExportHistory(data.data);
-    } catch (error: unknown) {
+ catch (error: unknown) {
   console.error('Failed to load export history:', error);
 }, [formatFilter, deliveryFilter]);
   const loadScheduledExports = useCallback(async (): Promise<void> => {
@@ -136,7 +142,7 @@ interface ExportStatistics {
       const data = await response.json();
       if (data.success) {
         setScheduledExports(data.data);
-    } catch (error: unknown) {
+ catch (error: unknown) {
   console.error('Failed to load scheduled exports:', error);
 }, []);
   const loadExportStatistics = useCallback(async (): Promise<void> => {
@@ -145,7 +151,7 @@ interface ExportStatistics {
       const data = await response.json();
       if (data.success) {
         setStatistics(data.data);
-    } catch (error: unknown) {
+ catch (error: unknown) {
   console.error('Failed to load export statistics:', error);
 }, []);
   // Handle download
@@ -159,7 +165,7 @@ interface ExportStatistics {
       // This would be implemented with a PATCH endpoint
       // Reload data after update
       await loadScheduledExports();
-    } catch (error: unknown) {
+ catch (error: unknown) {
   console.error('Failed to toggle scheduled export:', error);
 };
   // Handle scheduled export deletion
@@ -171,7 +177,7 @@ interface ExportStatistics {
   });
       if (response.ok) {
         await loadScheduledExports();
-    } catch (error: unknown) {
+ catch (error: unknown) {
   console.error('Failed to delete scheduled export:', error);
 };
   // Filter export history based on search and filters
@@ -199,7 +205,7 @@ interface ExportStatistics {
   const getStatusBadge = (success: boolean, _error?: string) => {
     if (success) {
       return <Badge variant="default" className="bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" />Success</Badge>;
-    } else {
+ else {
       return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" />Failed</Badge>;
   };
   // Format file size
@@ -243,7 +249,7 @@ interface ExportStatistics {
                     {statistics.totalExports > 0 
                       ? Math.round((statistics.successfulExports / statistics.totalExports) * 100)
                       : 0
-                    }%
+%
                   </p>
                 </div>
                 <CheckCircle className="w-8 h-8 text-green-500" />

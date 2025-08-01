@@ -4,8 +4,8 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { AuthConfig } from '../types';
 
-}
-}
+
+
 export interface RegistrationMetrics {
   dailyRegistrations: number;
   weeklyRegistrations: number;
@@ -16,18 +16,19 @@ export interface RegistrationMetrics {
     step: string;
     count: number;
     percentage: number;
-}
-}
-  }>;
+
+
+
+>;
   sourceBreakdown: Record<string, {
     visits: number;
     registrations: number;
     conversionRate: number;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface FormAnalytics {
   fieldInteractionTime: Record<string, number>;
   fieldErrorRate: Record<string, number>;
@@ -35,11 +36,12 @@ export interface FormAnalytics {
     field: string;
     errorRate: number;
     averageTime: number;
-}
-}
-  }>;
+
+
+
+>;
   stepCompletionRates: Record<number, number>;
-}
+
 
 export class AnalyticsService {
   private db: DatabaseService;
@@ -48,7 +50,7 @@ export class AnalyticsService {
   constructor(config: AuthConfig, db: DatabaseService) {
     this.config = config;
     this.db = db;
-  }
+
 
   async trackRegistrationEvent(
     eventType: string,
@@ -77,10 +79,10 @@ export class AnalyticsService {
         data.referrer,
         JSON.stringify(data.additionalData || {})
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track registration event:', error);
-    }
-  }
+
+
 
   async trackFormFieldInteraction(
     sessionId: string,
@@ -107,10 +109,10 @@ export class AnalyticsService {
         data.errorMessage || null,
         data.timeSpentMs || null
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track form field interaction:', error);
-    }
-  }
+
+
 
   async trackRegistrationFunnel(
     sessionId: string,
@@ -134,10 +136,10 @@ export class AnalyticsService {
         JSON.stringify(data.stepData || {}),
         data.durationMs
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track registration funnel:', error);
-    }
-  }
+
+
 
   async getRegistrationMetrics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<RegistrationMetrics> {
 
@@ -250,11 +252,11 @@ export class AnalyticsService {
           return acc;
         }, {})
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get registration metrics:', error);
       throw error;
-    }
-  }
+
+
 
   async getFormAnalytics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<FormAnalytics> {
 
@@ -365,11 +367,11 @@ export class AnalyticsService {
           return acc;
         }, {})
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get form analytics:', error);
       throw error;
-    }
-  }
+
+
 
   async getABTestResults(experimentName: string): Promise<{
     variants: Array<{
@@ -377,10 +379,10 @@ export class AnalyticsService {
       participants: number;
       conversions: number;
       conversionRate: number;
-    }>;
+>;
     winner?: string;
     confidence?: number;
-  }> {
+> {
     try {
       const results = await this.db.query(`
         SELECT 
@@ -423,20 +425,20 @@ export class AnalyticsService {
           
           if (confidence > 95) {
             winner = best.variant;
-          }
-        }
-      }
+
+
+
 
       return {
         variants,
         winner,
         confidence
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get A/B test results:', error);
       throw error;
-    }
-  }
+
+
 
   async trackEmailDelivery(
     userId: string | null,
@@ -463,17 +465,17 @@ export class AnalyticsService {
         status,
         JSON.stringify(metadata || {})
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to track email delivery:', error);
-    }
-  }
+
+
 
   async getEmailDeliveryStats(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<{
     deliveryRates: Record<string, number>;
     openRates: Record<string, number>;
     clickRates: Record<string, number>;
     bounceRates: Record<string, number>;
-  }> {
+> {
     const timeframes = {
       day: '1 day',
       week: '1 week',
@@ -518,17 +520,17 @@ export class AnalyticsService {
         clickRates,
         bounceRates
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get email delivery stats:', error);
       throw error;
-    }
-  }
-}
+
+
+
 
 // Helper function for normal CDF approximation
 function normalCDF(x: number): number {
   return 0.5 * (1 + erf(x / Math.sqrt(2)));
-}
+
 
 function erf(x: number): number {
   // Approximation of error function
@@ -546,4 +548,3 @@ function erf(x: number): number {
   const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
 
   return sign * y;
-}

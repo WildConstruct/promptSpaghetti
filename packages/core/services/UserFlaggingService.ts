@@ -8,9 +8,8 @@
  */
 import { FlagSubmission, FlaggingStatus, FlaggingReason } from '../components/Flagging/FlaggingButton';
 
-}
-export interface UserFlagReport {
-  id: string;
+
+export interface UserFlagReport { id: string;
   contentId: string;
   contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
   reporterId: string;
@@ -18,7 +17,7 @@ export interface UserFlagReport {
   details?: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   category: 'content' | 'security' | 'legal' | 'spam' | 'harassment' | 'other';
-  status: 'pending' | 'investigating' | 'resolved' | 'dismissed';
+  status: 'pending' | 'investigating' | 'resolved' | 'dismissed' }
   createdAt: Date;
   updatedAt: Date;
   reviewedBy?: string;
@@ -26,21 +25,21 @@ export interface UserFlagReport {
   moderatorNote?: string;
   resolution?: FlagResolution;
   metadata: Record<string, unknown>;
-}
-}
-}
-export interface FlagResolution {
-  action: 'approved' | 'removed' | 'edited' | 'warning_issued' | 'user_suspended' | 'no_action';
+
+
+
+
+export interface FlagResolution { action: 'approved' | 'removed' | 'edited' | 'warning_issued' | 'user_suspended' | 'no_action' }
   reason: string;
   appealable: boolean;
   appealDeadline?: Date;
   notificationSent: boolean;
   precedentCase?: string;
-}
-}
-}
-export interface ContentFlagSummary {
-  contentId: string;
+
+
+
+
+export interface ContentFlagSummary { contentId: string;
   contentType: string;
   totalFlags: number;
   uniqueReporters: number;
@@ -51,10 +50,11 @@ export interface ContentFlagSummary {
   status: 'clean' | 'under_review' | 'violations_found' | 'content_removed';
   autoFlagged: boolean;
   mlConfidence?: number;
-  moderationPriority: 'low' | 'medium' | 'high' | 'urgent'
-}
-  }
-}
+  moderationPriority: 'low' | 'medium' | 'high' | 'urgent' }
+
+
+
+
 export interface FlaggingAnalytics {
   timeRange: { start: Date; end: Date };
   totalReports: number;
@@ -62,31 +62,26 @@ export interface FlaggingAnalytics {
   uniqueContent: number;
   reportsByReason: Record<string, number>;
   reportsBySeverity: Record<string, number>;
-  resolutionStats: {
+  resolutionStats: { 
   resolved: number;
   dismissed: number;
   pending: number;
-  avgResolutionTimeHours: number;
-};
-  topReporters: Array<{
+  avgResolutionTimeHours: number };
+  topReporters: Array<{ ,
   userId: string;
   reportCount: number;
-  accuracy: number;
-}>;
-  contentTrends: {
+  accuracy: number }>;
+  contentTrends: { ,
   mostFlaggedContentTypes: Record<string, number>;
   flagVolumeByHour: number;
-  flagVolumeByDay: number;
-};
-  moderationEfficiency: {
+  flagVolumeByDay: number };
+  moderationEfficiency: { 
   avgResponseTimeHours: number;
   accuracyRate: number;
-  escalationRate: number;
-};
-}
-}
-export interface FlaggingConfig {
-  enableUserFlagging: boolean;
+  escalationRate: number };
+
+
+export interface FlaggingConfig { enableUserFlagging: boolean;
   maxFlagsPerUser24h: number;
   maxFlagsPerContent: number;
   autoEscalationThreshold: number;
@@ -94,12 +89,13 @@ export interface FlaggingConfig {
   requireJustification: string;
   anonymousReporting: boolean;
   notifyContentOwner: boolean;
-  integrationSettings: {
+  integrationSettings: { }
   mlFlaggingWeight: number;
   userFlaggingWeight: number;
   combineScores: boolean;
   autoModerationThreshold: number;
-}
+
+
 };
 /**
  * User Flagging Service
@@ -107,42 +103,38 @@ export interface FlaggingConfig {
  * Handles user-initiated content flagging and integrates with the existing
  * ML flagging infrastructure for comprehensive content moderation.
  */
-}
-export class UserFlaggingService {
-  private baseUrl: string;
+
+export class UserFlaggingService { private baseUrl: string;
   private config: FlaggingConfig;
   private flagReports: Map<string, UserFlagReport> = new Map();
   private contentSummaries: Map<string, ContentFlagSummary> = new Map();
-  constructor(baseUrl: string = 'http://localhost:8000', config?: Partial<FlaggingConfig>) {,
+  constructor(baseUrl: string = 'http://localhost:8000', config?: Partial<FlaggingConfig>) {
   this.baseUrl = baseUrl;
   this.config = {
-  enableUserFlagging: true,
-  maxFlagsPerUser24h: 10,
-  maxFlagsPerContent: 50,
-  autoEscalationThreshold: 5,
-  enableDuplicateDetection: true,
-  requireJustification: ['harassment', 'security_issue', 'copyright_violation'],
-  anonymousReporting: false,
-  notifyContentOwner: false,
+  enableUserFlagging: true
+  maxFlagsPerUser24h: 10
+  maxFlagsPerContent: 50
+  autoEscalationThreshold: 5
+  enableDuplicateDetection: true
+  requireJustification: ['harassment', 'security_issue', 'copyright_violation']
+  anonymousReporting: false
+  notifyContentOwner: false
   integrationSettings: {
-  mlFlaggingWeight: 0.7,
-  userFlaggingWeight: 0.3,
-  combineScores: true,
-  autoModerationThreshold: 0.8,
-}
+  mlFlaggingWeight: 0.7
+  userFlaggingWeight: 0.3
+  combineScores: true
+  autoModerationThreshold: 0.8 }
+
       ...config
     };
   /**
    * Submit a user flag report
    */
-  async submitFlag(submission: FlagSubmission): Promise<{,
+  async submitFlag(submission: FlagSubmission): Promise<{ ,
   reportId: string;
   status: 'accepted' | 'rejected' | 'duplicate';
   message: string;
-  estimatedResolutionHours?: number;
-}> {
-
-  try {
+  estimatedResolutionHours?: number }> { try {
   // Validate submission
   this.validateFlagSubmission(submission);
   // Check rate limits
@@ -153,7 +145,7 @@ export class UserFlaggingService {
   return {
   reportId: duplicateCheck.existingReportId!,
   status: 'duplicate',
-  message: 'This content has already been flagged for the same reason.',
+  message: 'This content has already been flagged for the same reason.' }
 };
       // Create flag report
       const report = await this.createFlagReport(submission);
@@ -167,17 +159,15 @@ export class UserFlaggingService {
       if (this.config.notifyContentOwner) {
         await this.notifyContentOwner(report);
       console.log(`✅ Flag submitted: ${report.id} for content ${submission.contentId}`);}
-      return {
-  reportId: report.id,
+      return { reportId: report.id,
   status: 'accepted',
   message: 'Your report has been submitted and will be reviewed by our moderation team.',
-  estimatedResolutionHours: this.calculateEstimatedResolution(report),
+  estimatedResolutionHours: this.calculateEstimatedResolution(report) }
 };
-    } catch (error) {
-      console.error('Failed to submit flag:', error);
+ catch (error) { console.error('Failed to submit flag:', error);
       return {
         reportId: '',
-        status: 'rejected',
+        status: 'rejected' }
         message: `Failed to submit report: ${error.message}`}
       };
   /**
@@ -185,54 +175,48 @@ export class UserFlaggingService {
    */
   async getFlaggingStatus(contentId: string)
     userId?: string
-  ): Promise<FlaggingStatus> {
-
-  try {
+  ): Promise<FlaggingStatus> { try {
   const contentSummary = await this.getContentSummary(contentId);
   const userHasFlagged = userId ? await this.hasUserFlagged(contentId, userId) : false;
   return {
-  contentId,
+  contentId
   canFlag: this.config.enableUserFlagging && contentSummary.totalFlags < this.config.maxFlagsPerContent,
   alreadyFlagged: contentSummary.totalFlags > 0,
   flagCount: contentSummary.totalFlags,
   userHasFlagged,
   status: this.mapContentStatusToFlaggingStatus(contentSummary.status),
   resolvedAt: this.getLatestResolutionDate(contentId),
-  moderatorNote: this.getLatestModeratorNote(contentId),
+  moderatorNote: this.getLatestModeratorNote(contentId) }
 };
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to get flagging status for ${contentId}:`, error);}
       // Return safe default status
-      return {
-  contentId,
+      return { contentId,
   canFlag: false,
   alreadyFlagged: false,
   flagCount: 0,
   userHasFlagged: false,
-  status: 'none',
+  status: 'none' }
 };
   /**
    * Get user's flag reports
    */
-  async getUserFlagReports(userId: string)
-    options: {
+  async getUserFlagReports(userId: string),
+  options: {
       status?: 'pending' | 'investigating' | 'resolved' | 'dismissed';
       timeRange?: { start: Date; end: Date };
       limit?: number;
       offset?: number;
-    } = {}
-  ): Promise<{
-  reports: UserFlagReport;
+ = {}
+  ): Promise<{ reports: UserFlagReport;
   totalCount: number;
-  stats: {
+  stats: { }
   totalReports: number;
   pendingReports: number;
   resolvedReports: number;
   accuracyRate: number;
 };
-  }> {
-
-  try {
+> { try {
   // Fetch user's reports from storage/database
   const allReports = Array.from(this.flagReports.values());
   .filter(report => report.reporterId === userId);
@@ -254,28 +238,24 @@ export class UserFlaggingService {
   totalReports: allReports.length,
   pendingReports: allReports.filter(r => r.status === 'pending').length,
   resolvedReports: allReports.filter(r => r.status === 'resolved').length,
-  accuracyRate: this.calculateUserAccuracy(userId, allReports),
+  accuracyRate: this.calculateUserAccuracy(userId, allReports) }
 };
-      return {
-  reports: paginatedReports,
-  totalCount: filteredReports.length,
+      return { reports: paginatedReports,
+  totalCount: filteredReports.length }
   stats
 };
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to get flag reports for user ${userId}:`, error);}
       throw error;
   /**
    * Get flagging analytics
    */
   async getFlaggingAnalytics(timeRange?: { start: Date; end: Date })
-  ): Promise<FlaggingAnalytics> {
-
-  const range = timeRange || {
-  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago,
-  end: new Date(),
+  ): Promise<FlaggingAnalytics> { const range = timeRange || {
+  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
+  end: new Date() }
 };
-    try {
-  const allReports = Array.from(this.flagReports.values());
+    try { const allReports = Array.from(this.flagReports.values());
   .filter(report => )
   report.createdAt >= range.start &&
   report.createdAt <= range.end
@@ -290,18 +270,17 @@ export class UserFlaggingService {
   resolutionStats: this.calculateResolutionStats(allReports),
   topReporters: this.calculateTopReporters(allReports),
   contentTrends: this.calculateContentTrends(allReports),
-  moderationEfficiency: this.calculateModerationEfficiency(allReports),
+  moderationEfficiency: this.calculateModerationEfficiency(allReports) }
 };
-    } catch (error) {
-      console.error('Failed to get flagging analytics:', error);
+ catch (error) { console.error('Failed to get flagging analytics:', error);
       throw error;
   /**
    * Update flag report status (for moderators)
    */
-  async updateFlagStatus(reportId: string)
-    update: {
-  status: 'investigating' | 'resolved' | 'dismissed';
-      moderatorId: string;
+  async updateFlagStatus(reportId: string),
+  update: {;
+  status: 'investigating' | 'resolved' | 'dismissed' }
+  moderatorId: string;
       moderatorNote?: string;
       resolution?: FlagResolution;
   ): Promise<void> {
@@ -311,14 +290,13 @@ export class UserFlaggingService {
       if (!report) {
         throw new Error(`Flag report not found: ${reportId}`);}
       // Update report
-      const updatedReport: UserFlagReport = {
-  ...report,
-  status: update.status,
-  reviewedBy: update.moderatorId,
-  reviewedAt: new Date(),
-  moderatorNote: update.moderatorNote,
-  resolution: update.resolution,
-  updatedAt: new Date(),
+      const updatedReport: UserFlagReport = { ...report
+  status: update.status
+  reviewedBy: update.moderatorId
+  reviewedAt: new Date()
+  moderatorNote: update.moderatorNote
+  resolution: update.resolution
+  updatedAt: new Date() }
 };
       this.flagReports.set(reportId, updatedReport);
       // Update content summary
@@ -326,7 +304,7 @@ export class UserFlaggingService {
       // Send notification to reporter
       await this.notifyReporter(updatedReport);
       console.log(`✅ Flag status updated: ${reportId} - ${update.status}`);}
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to update flag status ${reportId}:`, error);}
       throw error;
   // Private helper methods
@@ -363,29 +341,28 @@ export class UserFlaggingService {
         report.reasonId === submission.reasonId &&
         report.status !== 'dismissed'
       );
-    return {
-  isDuplicate: !!existing,
-  existingReportId: existing?.id,
+    return { isDuplicate: !!existing,
+  existingReportId: existing?.id }
 };
   private async createFlagReport(submission: FlagSubmission): Promise<UserFlagReport> {
 
     const reportId = `flag_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-    const report: UserFlagReport = {,
-  id: reportId,
-  contentId: submission.contentId,
-  contentType: submission.contentType,
-  reporterId: submission.reporterId,
-  reasonId: submission.reasonId,
-  details: submission.details,
-  severity: this.getSeverityForReason(submission.reasonId),
-  category: this.getCategoryForReason(submission.reasonId),
-  status: 'pending',
-  createdAt: new Date(),
-  updatedAt: new Date(),
+    const report: UserFlagReport = { 
+  id: reportId
+  contentId: submission.contentId
+  contentType: submission.contentType
+  reporterId: submission.reporterId
+  reasonId: submission.reasonId
+  details: submission.details
+  severity: this.getSeverityForReason(submission.reasonId)
+  category: this.getCategoryForReason(submission.reasonId)
+  status: 'pending'
+  createdAt: new Date()
+  updatedAt: new Date()
   metadata: {
-  ...submission.metadata,
-  userAgent: 'web-interface',
-  ipAddress: 'xxx.xxx.xxx.xxx' // Would be captured in real implementation,
+  ...submission.metadata
+  userAgent: 'web-interface'
+  ipAddress: 'xxx.xxx.xxx.xxx' // Would be captured in real implementation }
 };
     this.flagReports.set(reportId, report);
     return report;
@@ -402,25 +379,24 @@ export class UserFlaggingService {
       if (combinedScore >= this.config.integrationSettings.autoModerationThreshold) {
         // Trigger automated moderation
         console.log(`🤖 Auto-moderation triggered for ${report.contentId} (score: ${combinedScore.toFixed(2)})`);}
-    } catch (error) {
-      console.error('ML flagging integration failed:', error);
+ catch (error) { console.error('ML flagging integration failed:', error);
       // Continue without ML integration
   private async updateContentSummary(report: UserFlagReport): Promise<void> {
 
     let summary = this.contentSummaries.get(report.contentId);
     if (!summary) {
       summary = {
-        contentId: report.contentId,
-        contentType: report.contentType,
-        totalFlags: 0,
-        uniqueReporters: 0,
-        flagsByReason: {},
-        averageSeverity: 0,
-        firstFlaggedAt: report.createdAt,
-        lastFlaggedAt: report.createdAt,
-        status: 'clean',
-        autoFlagged: false,
-        moderationPriority: 'low'
+        contentId: report.contentId
+        contentType: report.contentType
+        totalFlags: 0
+        uniqueReporters: 0 }
+        flagsByReason: {}
+        averageSeverity: 0
+        firstFlaggedAt: report.createdAt
+        lastFlaggedAt: report.createdAt
+        status: 'clean'
+        autoFlagged: false
+        moderationPriority: 'low';
   };
     // Update summary
     summary.totalFlags++;
@@ -444,41 +420,37 @@ export class UserFlaggingService {
       // For now, just update priority
       summary.moderationPriority = 'urgent';
       this.contentSummaries.set(report.contentId, summary);
-  private async getContentSummary(contentId: string): Promise<ContentFlagSummary> {
-
-    let summary = this.contentSummaries.get(contentId);
+  private async getContentSummary(contentId: string): Promise<ContentFlagSummary> { let summary = this.contentSummaries.get(contentId);
     if (!summary) {
       // Create empty summary for unflagged content
       summary = {
-        contentId,
-        contentType: 'unknown',
-        totalFlags: 0,
-        uniqueReporters: 0,
-        flagsByReason: {},
-        averageSeverity: 0,
-        firstFlaggedAt: new Date(),
-        lastFlaggedAt: new Date(),
-        status: 'clean',
-        autoFlagged: false,
-        moderationPriority: 'low'
+        contentId
+        contentType: 'unknown'
+        totalFlags: 0
+        uniqueReporters: 0 }
+        flagsByReason: {}
+        averageSeverity: 0
+        firstFlaggedAt: new Date()
+        lastFlaggedAt: new Date()
+        status: 'clean'
+        autoFlagged: false
+        moderationPriority: 'low';
   };
     return summary;
-  private async hasUserFlagged(contentId: string, userId: string): Promise<boolean> {
-
-  return Array.from(this.flagReports.values())
+  private async hasUserFlagged(contentId: string, userId: string): Promise<boolean> { return Array.from(this.flagReports.values())
   .some(report => )
   report.contentId === contentId &&
   report.reporterId === userId &&
   report.status !== 'dismissed'
   );
-  private mapContentStatusToFlaggingStatus(status: 'clean' | 'under_review' | 'violations_found' | 'content_removed'): 'none' | 'pending' | 'reviewed' | 'resolved' | 'dismissed' {,
+  private mapContentStatusToFlaggingStatus(status: 'clean' | 'under_review' | 'violations_found' | 'content_removed'): 'none' | 'pending' | 'reviewed' | 'resolved' | 'dismissed' {
   switch (status) {
   case 'clean': return 'none';
   case 'under_review': return 'pending';
   case 'violations_found': return 'resolved';
   case 'content_removed': return 'resolved';
   default: return 'none';
-  private getLatestResolutionDate(contentId: string): Date | undefined {,
+  private getLatestResolutionDate(contentId: string): Date | undefined {
   const reports = Array.from(this.flagReports.values());
   .filter(report => )
   report.contentId === contentId &&
@@ -487,10 +459,10 @@ export class UserFlaggingService {
   );
   if (reports.length === 0) return undefined;
   return reports.reduce((latest, report) =>
-  report.reviewedAt! > latest ? report.reviewedAt! : latest,
+  report.reviewedAt! > latest ? report.reviewedAt! : latest
   reports[0].reviewedAt!
   );
-  private getLatestModeratorNote(contentId: string): string | undefined {,
+  private getLatestModeratorNote(contentId: string): string | undefined {
   const reports = Array.from(this.flagReports.values());
   .filter(report => )
   report.contentId === contentId &&
@@ -500,45 +472,42 @@ export class UserFlaggingService {
   const latest = reports.reduce((latest, report) => ;
   report.reviewedAt! > latest.reviewedAt! ? report : latest);
   return latest.moderatorNote;
-  private getSeverityForReason(reasonId: string): 'low' | 'medium' | 'high' | 'critical' {,
-  const severityMap: Record<string, 'low' | 'medium' | 'high' | 'critical'> = {,
-  'security_issue': 'critical',
-  'harassment': 'high',
-  'copyright_violation': 'high',
-  'inappropriate_content': 'high',
-  'privacy_violation': 'high',
-  'misinformation': 'medium',
-  'spam': 'medium',
-  'low_quality': 'low',
-  'off_topic': 'low',
-  'other': 'medium',
+  private getSeverityForReason(reasonId: string): 'low' | 'medium' | 'high' | 'critical' {
+  const severityMap: Record<string, 'low' | 'medium' | 'high' | 'critical'> = {
+  'security_issue': 'critical'
+  'harassment': 'high'
+  'copyright_violation': 'high'
+  'inappropriate_content': 'high'
+  'privacy_violation': 'high'
+  'misinformation': 'medium'
+  'spam': 'medium'
+  'low_quality': 'low'
+  'off_topic': 'low'
+  'other': 'medium' }
 };
     return severityMap[reasonId] || 'medium';
-  private getCategoryForReason(reasonId: string): 'content' | 'security' | 'legal' | 'spam' | 'harassment' | 'other' {
-  const categoryMap: Record<string, 'content' | 'security' | 'legal' | 'spam' | 'harassment' | 'other'> = {,
-  'security_issue': 'security',
-  'harassment': 'harassment',
-  'copyright_violation': 'legal',
-  'privacy_violation': 'legal',
-  'spam': 'spam',
-  'inappropriate_content': 'content',
-  'misinformation': 'content',
-  'low_quality': 'content',
-  'off_topic': 'content',
-  'other': 'other',
+  private getCategoryForReason(reasonId: string): 'content' | 'security' | 'legal' | 'spam' | 'harassment' | 'other' { const categoryMap: Record<string, 'content' | 'security' | 'legal' | 'spam' | 'harassment' | 'other'> = {
+  'security_issue': 'security'
+  'harassment': 'harassment'
+  'copyright_violation': 'legal'
+  'privacy_violation': 'legal'
+  'spam': 'spam'
+  'inappropriate_content': 'content'
+  'misinformation': 'content'
+  'low_quality': 'content'
+  'off_topic': 'content'
+  'other': 'other' }
 };
     return categoryMap[reasonId] || 'other';
-  private calculateEstimatedResolution(report: UserFlagReport): number {
-  // Calculate estimated resolution time based on severity and queue
+  private calculateEstimatedResolution(report: UserFlagReport): number { // Calculate estimated resolution time based on severity and queue
   const baseHours = {
-  'critical': 1,
-  'high': 4,
-  'medium': 24,
-  'low': 72,
+  'critical': 1
+  'high': 4
+  'medium': 24
+  'low': 72 }
 };
     return baseHours[report.severity] || 24;
-  private determineContentStatus(summary: ContentFlagSummary): 'clean' | 'under_review' | 'violations_found' | 'content_removed' {
-  if (summary.totalFlags === 0) return 'clean';
+  private determineContentStatus(summary: ContentFlagSummary): 'clean' | 'under_review' | 'violations_found' | 'content_removed' { if (summary.totalFlags === 0) return 'clean';
   if (summary.totalFlags < 3) return 'under_review';
   return 'violations_found';
   private calculateModerationPriority(summary: ContentFlagSummary): 'low' | 'medium' | 'high' | 'urgent' {,
@@ -553,50 +522,42 @@ export class UserFlaggingService {
   r.resolution?.action !== 'no_action'
   );
   return (accurateReports.length / resolvedReports.length) * 100;
-  private aggregateByField<T extends Record<string, any>>((items: T,
-  field: keyof T): Record<string, number> {,
-  return items.reduce((acc, item) => {
-  const key = String(item[field]);
+  private aggregateByField<T extends Record<string, any>>((items: T
+  field: keyof T): Record<string, number> { }
+  return items.reduce((acc, item) => { const key = String(item[field]);
   acc[key] = (acc[key] || 0) + 1;
-  return acc;
-}, {} as Record<string, number>);
-  private calculateResolutionStats(reports: UserFlagReport): any {
-    const resolved = reports.filter(r => r.status === 'resolved');
+  return acc }, {} as Record<string, number>);
+  private calculateResolutionStats(reports: UserFlagReport): any { const resolved = reports.filter(r => r.status === 'resolved');
     const dismissed = reports.filter(r => r.status === 'dismissed');
     const pending = reports.filter(r => r.status === 'pending');
     const avgResolutionTime = resolved.length > 0 ? ;
       resolved.reduce((sum, r) => {
         if (r.reviewedAt && r.createdAt) {
           return sum + (r.reviewedAt.getTime() - r.createdAt.getTime()) / (1000 * 60 * 60);
-        return sum;
-      }, 0) / resolved.length : 0;
-    return {
-  resolved: resolved.length,
-  dismissed: dismissed.length,
-  pending: pending.length,
-  avgResolutionTimeHours: avgResolutionTime,
+        return sum }, 0) / resolved.length : 0;
+    return { resolved: resolved.length
+  dismissed: dismissed.length
+  pending: pending.length
+  avgResolutionTimeHours: avgResolutionTime }
 };
-  private calculateTopReporters(reports: UserFlagReport): any {
-  const reporterCounts = this.aggregateByField(reports, 'reporterId');
+  private calculateTopReporters(reports: UserFlagReport): any { const reporterCounts = this.aggregateByField(reports, 'reporterId');
   return Object.entries(reporterCounts)
   .map(([userId, count]) => ({)
-  userId,
-  reportCount: count,
-  accuracy: this.calculateUserAccuracy(userId, reports.filter(r => r.reporterId === userId)),
+  userId
+  reportCount: count
+  accuracy: this.calculateUserAccuracy(userId, reports.filter(r => r.reporterId === userId)) }
 }))
       .sort((a, b) => b.reportCount - a.reportCount)
       .slice(0, 10);
-  private calculateContentTrends(reports: UserFlagReport): any {
-  return {
-  mostFlaggedContentTypes: this.aggregateByField(reports, 'contentType'),
-  flagVolumeByHour: Array(24).fill(0), // Would be calculated from actual data,
-  flagVolumeByDay: Array(7).fill(0)    // Would be calculated from actual data,
+  private calculateContentTrends(reports: UserFlagReport): any { return {
+  mostFlaggedContentTypes: this.aggregateByField(reports, 'contentType')
+  flagVolumeByHour: Array(24).fill(0), // Would be calculated from actual data
+  flagVolumeByDay: Array(7).fill(0)    // Would be calculated from actual data }
 };
-  private calculateModerationEfficiency(reports: UserFlagReport): any {
-  return {
-  avgResponseTimeHours: 15.5,
-  accuracyRate: 94.2,
-  escalationRate: 8.5,
+  private calculateModerationEfficiency(reports: UserFlagReport): any { return {
+  avgResponseTimeHours: 15.5
+  accuracyRate: 94.2
+  escalationRate: 8.5 }
 };
   private async notifyContentOwner(report: UserFlagReport): Promise<void> {
 

@@ -13,14 +13,14 @@ export enum ViolationType {
   FRAUD_SUSPECTED = 'fraud_suspected',
   SPAM_CONTENT = 'spam_content',
   INAPPROPRIATE_CONTENT = 'inappropriate_content'
-}
+
 
 export enum ViolationSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
+
 
 export enum ViolationStatus {
   DETECTED = 'detected',
@@ -29,7 +29,7 @@ export enum ViolationStatus {
   DISMISSED = 'dismissed',
   RESOLVED = 'resolved',
   APPEALED = 'appealed'
-}
+
 
 export enum EnforcementActionType {
   WARNING = 'warning',
@@ -42,7 +42,7 @@ export enum EnforcementActionType {
   FINE_PENALTY = 'fine_penalty',
   FEATURE_RESTRICTION = 'feature_restriction',
   MANUAL_REVIEW_REQUIRED = 'manual_review_required'
-}
+
 
 export enum EnforcementStatus {
   PENDING = 'pending',
@@ -50,11 +50,12 @@ export enum EnforcementStatus {
   COMPLETED = 'completed',
   APPEALED = 'appealed',
   OVERTURNED = 'overturned'
-}
+
 
 // Core interfaces
-}
-}
+
+
+
 export interface PolicyViolation {
   id: string;
   policy_id: string;
@@ -74,12 +75,13 @@ export interface PolicyViolation {
   resolution?: ViolationResolution;
   enforcement_actions: EnforcementAction[];
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationEvidence {
   type: 'content' | 'behavior' | 'metadata' | 'transaction' | 'user_report';
   data: Record<string, unknown>;
@@ -87,12 +89,13 @@ export interface ViolationEvidence {
   collected_at: Date;
   attachments?: EvidenceAttachment[];
   ai_analysis?: AIAnalysisResult;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EvidenceAttachment {
   id: string;
   type: 'screenshot' | 'document' | 'log' | 'recording';
@@ -100,12 +103,13 @@ export interface EvidenceAttachment {
   description: string;
   mime_type: string;
   size: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AIAnalysisResult {
   model_version: string;
   confidence: number;
@@ -113,22 +117,24 @@ export interface AIAnalysisResult {
   reasoning: string;
   flags: string[];
   processed_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface Prediction {
   category: string;
   confidence: number;
   explanation: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationResolution {
   resolution_type: 'dismissed' | 'warning_issued' | 'action_taken' | 'escalated';
   reason: string;
@@ -136,12 +142,13 @@ export interface ViolationResolution {
   follow_up_required: boolean;
   resolved_at: Date;
   resolved_by: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnforcementAction {
   id: string;
   violation_id: string;
@@ -156,12 +163,13 @@ export interface EnforcementAction {
   executed_by?: string;
   appeal_deadline?: Date;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnforcementParameters {
   duration_hours?: number;
   restriction_level?: string;
@@ -170,22 +178,24 @@ export interface EnforcementParameters {
   warning_message?: string;
   appeal_allowed?: boolean;
   escalation_triggers?: EscalationTrigger[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationTrigger {
   condition: string;
   action: string;
   notify_roles: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationDetectionRule {
   id: string;
   policy_id: string;
@@ -200,89 +210,97 @@ export interface ViolationDetectionRule {
   created_at: Date;
   updated_at: Date;
   created_by: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DetectionCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'regex' | 'ai_classify';
   value: Error;
   weight: number;
   logical_operator?: 'and' | 'or';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AIModelConfig {
   model_name: string;
   version: string;
   confidence_threshold: number;
   features: string[];
   preprocessing: PreprocessingConfig;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PreprocessingConfig {
   text_normalization: boolean;
   content_extraction: boolean;
   feature_engineering: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RuleEnforcementConfig {
   severity_mapping: Record<string, ViolationSeverity>;
   automatic_actions: AutomaticAction[];
   escalation_rules: EscalationRule[];
   grace_period_hours: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AutomaticAction {
   trigger_confidence: number;
   action_type: EnforcementActionType;
   parameters: EnforcementParameters;
   requires_review: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationRule {
   condition: EscalationCondition;
   action: string;
   notify_users: string[];
   delay_hours: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EscalationCondition {
   type: 'violation_count' | 'severity_threshold' | 'time_elapsed' | 'appeal_filed';
   threshold: number;
   time_window_hours?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ViolationReport {
   reporter_id?: string;
   reporter_type: 'user' | 'admin' | 'system';
@@ -293,12 +311,13 @@ export interface ViolationReport {
   evidence_urls?: string[];
   additional_context?: string;
   anonymous: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnforcementDashboard {
   summary: EnforcementSummary;
   recent_violations: PolicyViolation[];
@@ -306,12 +325,13 @@ export interface EnforcementDashboard {
   pending_reviews: PolicyViolation[];
   escalated_cases: PolicyViolation[];
   analytics: EnforcementAnalytics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnforcementSummary {
   total_violations: number;
   violations_by_severity: Record<ViolationSeverity, number>;
@@ -320,43 +340,47 @@ export interface EnforcementSummary {
   pending_reviews: number;
   resolution_rate: number;
   avg_resolution_time_hours: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EnforcementAnalytics {
   detection_accuracy: number;
   false_positive_rate: number;
   appeal_success_rate: number;
   enforcement_effectiveness: Record<EnforcementActionType, EffectivenessMetric>;
   trend_data: TrendData[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EffectivenessMetric {
   usage_count: number;
   success_rate: number;
   repeat_violation_rate: number;
   appeal_rate: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TrendData {
   date: Date;
   violation_count: number;
   action_count: number;
   resolution_time: number;
-}
-}
-}
+
+
+
+
 
 export class MarketplacePolicyEnforcementService {
   constructor(private pool: Pool) {}
@@ -459,13 +483,13 @@ export class MarketplacePolicyEnforcementService {
       `);
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Create violation detection rule
   async createDetectionRule(
@@ -502,14 +526,14 @@ export class MarketplacePolicyEnforcementService {
           rule_id: result.rows[0].id,
           policy_id: ruleData.policy_id,
           violation_type: ruleData.violation_type
-        }
+
       });
 
       return this.mapToDetectionRule(result.rows[0]);
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Detect violations in content/behavior
   async detectViolations(
@@ -548,9 +572,9 @@ export class MarketplacePolicyEnforcementService {
           // Execute automatic enforcement if configured
           if (rule.automatic_enforcement && violationDetected.confidence >= 0.8) {
             await this.executeAutomaticEnforcement(violation, rule.enforcement_config, client);
-          }
-        }
-      }
+
+
+
 
       await this.auditLog(client, {
         action: 'violation_detection_completed',
@@ -560,14 +584,14 @@ export class MarketplacePolicyEnforcementService {
           content_type: contentType,
           violations_detected: violations.length,
           violation_ids: violations.map(v => v.id)
-        }
+
       });
 
       return violations;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Report violation manually
   async reportViolation(
@@ -603,7 +627,7 @@ export class MarketplacePolicyEnforcementService {
               additional_context: report.additional_context,
               reporter_id: report.anonymous ? null : reporterId,
               anonymous: report.anonymous
-  }
+
             source: 'user_report',
             collected_at: new Date()
           }),
@@ -622,14 +646,14 @@ export class MarketplacePolicyEnforcementService {
           target_id: report.target_id,
           target_type: report.target_type,
           violation_type: report.violation_type
-        }
+
       });
 
       return violation;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Execute enforcement action
   async executeEnforcementAction(
@@ -648,13 +672,13 @@ export class MarketplacePolicyEnforcementService {
 
       if (actionResult.rows.length === 0) {
         throw new NotFoundException('Enforcement action not found');
-      }
+
 
       const action = actionResult.rows[0];
       
       if (action.status !== EnforcementStatus.PENDING) {
         throw new BadRequestException('Action is not in pending status');
-      }
+
 
       // Execute the specific enforcement action
       const executionResult = await this.performEnforcementAction(action, executorId);
@@ -680,17 +704,17 @@ export class MarketplacePolicyEnforcementService {
           violation_id: action.violation_id,
           action_type: action.action_type,
           execution_result: executionResult
-        }
+
       });
 
       return { success: true, message: 'Enforcement action executed successfully' };
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get enforcement dashboard data
   async getEnforcementDashboard(__adminId: string): Promise<EnforcementDashboard> {
@@ -733,7 +757,7 @@ export class MarketplacePolicyEnforcementService {
           [ViolationSeverity.MEDIUM]: parseInt(summaryResult.rows[0].medium_severity) || 0,
           [ViolationSeverity.HIGH]: parseInt(summaryResult.rows[0].high_severity) || 0,
           [ViolationSeverity.CRITICAL]: parseInt(summaryResult.rows[0].critical_severity) || 0
-  }
+
         violations_by_type: {}, // Would be populated with actual data
         active_actions: actionsResult.rows.length,
         pending_reviews: parseInt(summaryResult.rows[0].pending_reviews) || 0,
@@ -751,10 +775,10 @@ export class MarketplacePolicyEnforcementService {
         escalated_cases: [], // Would be populated with escalated cases
         analytics: await this.calculateEnforcementAnalytics(client)
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // AI-assisted violation classification
   async classifyContentViolation(
@@ -769,7 +793,7 @@ export class MarketplacePolicyEnforcementService {
     
     if (cached) {
       return cached;
-    }
+
 
     // Simulate AI classification (in production, call actual AI service)
     const classification = await this.performAIClassification(content, contentType);
@@ -778,7 +802,7 @@ export class MarketplacePolicyEnforcementService {
     await this.cachePrediction(contentHash, classification);
     
     return classification;
-  }
+
 
   // Private helper methods
   private async checkRuleViolation(
@@ -802,8 +826,8 @@ export class MarketplacePolicyEnforcementService {
           result: conditionMet.result,
           confidence: conditionMet.confidence
         });
-      }
-    }
+
+
 
     const confidence = totalWeight > 0 ? score / totalWeight : 0;
     
@@ -816,7 +840,7 @@ export class MarketplacePolicyEnforcementService {
         source: rule.name,
         collected_at: new Date(}
     };
-  }
+
 
   private async evaluateCondition(
     condition: DetectionCondition,
@@ -850,12 +874,12 @@ export class MarketplacePolicyEnforcementService {
       
     default:
       return { met: false, result: fieldValue, confidence: 0.0 };
-    }
-  }
+
+
 
   private extractFieldValue(data: Record<string, unknown>, fieldPath: string): unknown {
     return fieldPath.split('.').reduce((obj, key) => obj?.[key], data);
-  }
+
 
   private async createViolationRecord(
     rule: ViolationDetectionRule,
@@ -891,7 +915,7 @@ export class MarketplacePolicyEnforcementService {
     );
 
     return this.mapToViolation(result.rows[0]);
-  }
+
 
   private async executeAutomaticEnforcement(
     violation: PolicyViolation,
@@ -913,9 +937,9 @@ export class MarketplacePolicyEnforcementService {
             true
           ]
         );
-      }
-    }
-  }
+
+
+
 
   private async performEnforcementAction(action: unknown, __executorId: string): Promise<unknown> {
 
@@ -923,7 +947,7 @@ export class MarketplacePolicyEnforcementService {
     // (suspend account, delist content, send warning, etc.)
     console.log(`Executing ${action.action_type} for violation ${action.violation_id}`);
     return { status: 'executed', message: 'Action completed successfully' };
-  }
+
 
   private async updateViolationStatusIfComplete(violationId: string, client: PoolClient): Promise<void> {
 
@@ -937,8 +961,8 @@ export class MarketplacePolicyEnforcementService {
         'UPDATE marketplace_policy_violations SET status = $1 WHERE id = $2',
         [ViolationStatus.RESOLVED, violationId]
       );
-    }
-  }
+
+
 
   private async calculateEnforcementAnalytics(__client: PoolClient): Promise<EnforcementAnalytics> {
 
@@ -950,7 +974,7 @@ export class MarketplacePolicyEnforcementService {
       enforcement_effectiveness: {},
       trend_data: []
     };
-  }
+
 
   private async performAIClassification(
     content: string,
@@ -967,12 +991,12 @@ export class MarketplacePolicyEnforcementService {
     if (content.toLowerCase().includes('spam') || content.toLowerCase().includes('buy now')) {
       violations.push(ViolationType.SPAM_CONTENT);
       confidence = 0.9;
-    }
+
     
     if (content.toLowerCase().includes('inappropriate') || content.toLowerCase().includes('offensive')) {
       violations.push(ViolationType.INAPPROPRIATE_CONTENT);
       confidence = 0.85;
-    }
+
 
     return {
       violations,
@@ -981,11 +1005,11 @@ export class MarketplacePolicyEnforcementService {
         ? `Content contains patterns indicative of ${violations.join(', ')}`
         : 'No violations detected in content'
     };
-  }
+
 
   private generateContentHash(content: string): string {
     return require('crypto').createHash('sha256').update(content).digest('hex');
-  }
+
 
   private async getCachedPrediction(contentHash: string): Promise<unknown> {
 
@@ -997,10 +1021,10 @@ export class MarketplacePolicyEnforcementService {
       );
       
       return result.rows.length > 0 ? result.rows[0] : null;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   private async cachePrediction(contentHash: string, prediction: unknown): Promise<void> {
 
@@ -1013,25 +1037,25 @@ export class MarketplacePolicyEnforcementService {
          predictions = EXCLUDED.predictions, confidence = EXCLUDED.confidence, created_at = CURRENT_TIMESTAMP`,
         [contentHash, 'claude-marketplace-v1', JSON.stringify(prediction), prediction.confidence]
       );
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   private determineSeverity(confidence: number, violationType: ViolationType): ViolationSeverity {
     if (violationType === ViolationType.FRAUD_SUSPECTED || violationType === ViolationType.INTELLECTUAL_PROPERTY) {
       return ViolationSeverity.CRITICAL;
-    }
+
     
     if (confidence >= 0.9) return ViolationSeverity.HIGH;
     if (confidence >= 0.7) return ViolationSeverity.MEDIUM;
     return ViolationSeverity.LOW;
-  }
+
 
   private async generateViolationId(): Promise<string> {
 
     return `VIO-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-  }
+
 
   private mapToDetectionRule(row: unknown): ViolationDetectionRule {
     return {
@@ -1052,7 +1076,7 @@ export class MarketplacePolicyEnforcementService {
       updated_at: row.updated_at,
       created_by: row.created_by
     };
-  }
+
 
   private mapToViolation(row: unknown): PolicyViolation {
     return {
@@ -1077,7 +1101,7 @@ export class MarketplacePolicyEnforcementService {
       enforcement_actions: [], // Would be populated separately
       metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata || '{}') : (row.metadata || {})
     };
-  }
+
 
   private mapToEnforcementAction(row: unknown): EnforcementAction {
     return {
@@ -1095,7 +1119,7 @@ export class MarketplacePolicyEnforcementService {
       appeal_deadline: row.appeal_deadline,
       metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata || '{}') : (row.metadata || {})
     };
-  }
+
 
   private async auditLog(
     client: PoolClient,
@@ -1107,5 +1131,4 @@ export class MarketplacePolicyEnforcementService {
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,
       [entry.action, entry.user_id, JSON.stringify(entry.details), 'system', 'MarketplacePolicyEnforcementService']
     );
-  }
-}
+

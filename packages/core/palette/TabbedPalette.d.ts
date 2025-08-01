@@ -2,6 +2,7 @@ import React from 'react';
 import { NodeMeta } from '../Palette';
 
 }
+}
 export interface TabbedPaletteProps {
     nodes: NodeMeta[];
     collapsed: boolean;
@@ -18,4 +19,5 @@ export interface TabbedPaletteProps {
  */
 export declare const TabbedPalette: React.FC<TabbedPaletteProps>;
 //# sourceMappingURL=TabbedPalette.d.ts.map
+}
 }

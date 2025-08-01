@@ -16,7 +16,12 @@ status ?  : string;
 searchText ?  : string;
 topTags: Array;
 contentTypeDistribution: Record;
-recentActivity: Array;
+recentActivity: Array < {
+    type: 'save' | 'rate' | 'tag' | 'export' | 'note',
+    timestamp: Date,
+    resultId: string,
+    details: string
+} > ;
 export const useResultManagementStore = create()();
 persist();
 (set, get) => ({
@@ -65,13 +70,14 @@ persist();
     },
     stats: {
         ...state.stats,
-        recentActivity: [,
+        recentActivity: [
             {
                 type: 'save',
                 timestamp: now,
                 resultId: id,
                 details: `Result saved (v${savedResult.version})`
-            }]
+            }
+        ]
     },
     ...state.stats.recentActivity.slice(0, 49) // Keep last 50 activities
 });
@@ -103,7 +109,7 @@ updateResult: (id, updates) => {
         const now = new Date();
         set((state) => ({}), savedResults, remainingResults, selectedResultIds, new Set([...state.selectedResultIds].filter(rid => rid !== id)), stats, {
             ...state.stats,
-            recentActivity: [,
+            recentActivity: [
                 {
                     type: 'save',
                     timestamp: now,
@@ -199,13 +205,14 @@ clearSelection: () => {
             const now = new Date();
             set((state) => ({}), stats, {
                 ...state.stats,
-                recentActivity: [,
+                recentActivity: [
                     {
                         type: 'rate',
                         timestamp: now,
                         resultId: id,
                         details: `Rated ${rating} stars`
-                    }]
+                    }
+                ]
             }, ...state.stats.recentActivity.slice(0, 49));
         }
         ;
@@ -221,13 +228,14 @@ clearSelection: () => {
         const now = new Date();
         set((state) => ({}), stats, {
             ...state.stats,
-            recentActivity: [,
+            recentActivity: [
                 {
                     type: 'tag',
                     timestamp: now,
                     resultId: id,
                     details: `Tagged: ${tags.join(', ')}`
-                }]
+                }
+            ]
         }, ...state.stats.recentActivity.slice(0, 49));
     };
     ;
@@ -245,7 +253,7 @@ clearSelection: () => {
     const now = new Date();
     set((state) => ({}), stats, {
         ...state.stats,
-        recentActivity: [,
+        recentActivity: [
             {
                 type: 'note',
                 timestamp: now,
@@ -372,13 +380,14 @@ updateCollection: (id, updates) => {
     ;
     set((state) => ({}), stats, {
         ...state.stats,
-        recentActivity: [,
+        recentActivity: [
             {
                 type: 'export',
                 timestamp: now,
                 resultId: resultIds.join(','),
                 details: `Bulk export (${format}) - ${resultIds.length} results`
-            }]
+            }
+        ]
     }, ...state.stats.recentActivity.slice(0, 49));
 };
 ;
@@ -515,7 +524,8 @@ getFilteredResults: () => {
                         name: 'result-management-storage',
                             // Custom serializer to handle Set and Date objects
                             serialize;
-                        (state) => JSON.stringify({});
+                        (state) => JSON.stringify({}),
+                        ;
                         state,
                             selectedResultIds;
                         Array.from(state.selectedResultIds),

@@ -333,13 +333,15 @@ export function createPythonExecutorClient(config) {
         }
         catch {
             return false;
-            (inputData, options = {}) => {
-                return pythonExecutorClient.execute({});
-                code,
-                    input_data;
-                inputData,
-                ;
+            ();
+            inputData: any,
                 options;
+            (Partial) = {};
+            Promise < PythonExecutionResult > {
+                return: pythonExecutorClient.execute({}),
+                code,
+                input_data: inputData,
+                ...options
             };
             ;
             /**

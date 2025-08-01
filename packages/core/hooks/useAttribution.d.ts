@@ -1,5 +1,4 @@
-import { 
-  CreateAttributionRequest,
+import { CreateAttributionRequest,
   AttributionFilter,
   AttributionStatsRequest,
   UpdatePrivacySettingsRequest,
@@ -7,21 +6,20 @@ import {
   AttributionStatsResponse,
   AttributionTimelineResponse,
   ContributorStatsResponse,
-  AttributionPrivacySettings,
+  AttributionPrivacySettings }
   AttributionSession
 } from '../types/attribution';
 
 }
-interface UseAttributionReturn {
-    loading: boolean;
+}
+interface UseAttributionReturn { loading: boolean;
     error: string | null;
     recordAttribution: (request: CreateAttributionRequest) => Promise<ChangeAttribution>;
     getAttributionStats: (request: AttributionStatsRequest) => Promise<AttributionStatsResponse>;
     getAttributionTimeline: (projectId: string, filter: AttributionFilter) => Promise<AttributionTimelineResponse>;
     getContributorStats: (projectId: string, dateRange?: {)
         start: Date;
-        end: Date;
-
+        end: Date }
 }
     }) => Promise<ContributorStatsResponse>;
     listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution[]>;
@@ -30,15 +28,14 @@ interface UseAttributionReturn {
     updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>;
     getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>;
     cleanupOldData: (projectId: string) => Promise<void>;
-    getResourceAttribution: (),
-      projectId: string,
-      resourceType: string,
-      resourceId: string,
+    getResourceAttribution: ()
+      projectId: string
+      resourceType: string
+      resourceId: string
     ) => Promise<ChangeAttribution[]>;
-    getAuthorAttribution: (projectId: string, authorId: string, dateRange?: {)
+    getAuthorAttribution: (projectId: string, authorId: string, dateRange?: { )
         start: Date;
-        end: Date;
-    }) => Promise<ChangeAttribution[]>;
+        end: Date }) => Promise<ChangeAttribution[]>;
     recordBatchAttributions: (projectId: string, attributions: any[], batchId?: string) => Promise<ChangeAttribution[]>;
     clearError: () => void;
 

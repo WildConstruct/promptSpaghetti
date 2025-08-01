@@ -3,57 +3,57 @@
 import { useCallback, useRef, useEffect } from 'react';
 import { Node, Edge, useReactFlow } from 'reactflow';
 import { parseTemplate } from '../utils/templateParser';
-}
-interface VariablePortCleanupOptions {
-  /**
-   * Whether to enable automatic cleanup of orphaned edges
-   * @default true
-   */
+
+
+interface VariablePortCleanupOptions { /**
+  * Whether to enable automatic cleanup of orphaned edges
+  * @default true
+  */
   enabled?: boolean;
   /**
-   * Debounce time in milliseconds before performing cleanup
-   * @default 100
-   */
+  * Debounce time in milliseconds before performing cleanup
+  * @default 100
+  */
   debounceMs?: number;
   /**
-   * Whether to attempt connection migration when variable names are similar
-   * @default false
-   */
+  * Whether to attempt connection migration when variable names are similar
+  * @default false
+  */
   enableMigration?: boolean;
   /**
-   * Minimum similarity score for connection migration (0-1)
-   * @default 0.8
-   */
+  * Minimum similarity score for connection migration (0-1)
+  * @default 0.8
+  */
   migrationThreshold?: number;
   /**
-   * Custom callback when edges are cleaned up
-   */
-  onEdgesCleanedUp?: (cleanedEdges: Edge) => void;
-}
+  * Custom callback when edges are cleaned up
+  */
+  onEdgesCleanedUp?: (cleanedEdges: Edge) => void }
+
+
 interface VariablePortInfo {
   nodeId: string;
   portId: string;
   variableName: string;
-/**
- * Hook for managing orphaned edge cleanup when variable ports change dynamically
- */
-}
-export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {}) => {
-  const {
+  /**
+  * Hook for managing orphaned edge cleanup when variable ports change dynamically
+  */
+
+
+export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {}) => { const {
     enabled = true,
     debounceMs = 100,
     enableMigration = false,
-    migrationThreshold = 0.8,
+    migrationThreshold = 0.8 }
     onEdgesCleanedUp
-  } = options;
+ = options;
   const { deleteElements, getEdges, getNodes } = useReactFlow();
   const cleanupTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastValidPortsRef = useRef<Set<string>>(new Set());
   /**
    * Calculate string similarity using Levenshtein distance
    */
-  const calculateSimilarity = useCallback((str1: string, str2: string): number => {
-  const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+  const calculateSimilarity = useCallback((str1: string, str2: string): number => { const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
   for (let i = 0; i <= str1.length; i += 1) {
   matrix[0][i] = i;
   for (let j = 0; j <= str2.length; j += 1) {
@@ -67,15 +67,14 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
   matrix[j - 1][i - 1] + indicator // substitution
   );
   const maxLength = Math.max(str1.length, str2.length);
-  return maxLength === 0 ? 1 : 1 - matrix[str2.length][str1.length] / maxLength;
-}, []);
+  return maxLength === 0 ? 1 : 1 - matrix[str2.length][str1.length] / maxLength }, []);
   /**
    * Get all valid handle IDs from current nodes
    */
-  const getValidHandleIds = useCallback((nodes: Node): {
-  handleIds: Set<string>,
-  variablePorts: Map<string, VariablePortInfo>,
-} => {
+  const getValidHandleIds = useCallback((nodes: Node): { ,
+  handleIds: Set<string>
+  variablePorts: Map<string, VariablePortInfo> }
+ => {
     const validHandleIds = new Set<string>();
     const variablePorts = new Map<string, VariablePortInfo>();
     nodes.forEach(node => {)
@@ -92,26 +91,23 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
             const portId = `variable-${variable.name}`;}
             const fullHandleId = `${node.id}-${portId}`;}
             validHandleIds.add(fullHandleId);
-            nodeVariablePorts.push({)
-  nodeId: node.id,
-  portId,
-  variableName: variable.name,
+            nodeVariablePorts.push({ )
+  nodeId: node.id
+  portId
+  variableName: variable.name }
 });
         });
-        if (nodeVariablePorts.length > 0) {
-          variablePorts.set(node.id, nodeVariablePorts);
-    });
+        if (nodeVariablePorts.length > 0) { variablePorts.set(node.id, nodeVariablePorts) });
     return { handleIds: validHandleIds, variablePorts };
   }, []);
   /**
    * Find edges that can be migrated to new variable ports
    */
   const findMigratableEdges = useCallback((;);
-    orphanedEdges: Edge,
-    oldVariablePorts: Map<string, VariablePortInfo>,
+    orphanedEdges: Edge
+    oldVariablePorts: Map<string, VariablePortInfo>
     newVariablePorts: Map<string, VariablePortInfo>
-  ): { migratedEdges: Edge, unmigratableEdges: Edge } => {
-  const migratedEdges: Edge = [];
+  ): { migratedEdges: Edge, unmigratableEdges: Edge } => { const migratedEdges: Edge = [];
   const unmigratableEdges: Edge = [];
   for (const edge of orphanedEdges) {
   let migrated = false;
@@ -131,14 +127,14 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
   bestScore = similarity;
   if (bestMatch) {
   migratedEdges.push({)
-  ...edge,
-  targetHandle: bestMatch.portId,
+  ...edge
+  targetHandle: bestMatch.portId
   // Add migration metadata
   data: {
-  ...edge.data,
-  migrated: true,
-  originalTargetHandle: edge.targetHandle,
-  migrationScore: bestScore,
+  ...edge.data
+  migrated: true
+  originalTargetHandle: edge.targetHandle
+  migrationScore: bestScore }
 });
             migrated = true;
       if (!migrated) {
@@ -161,25 +157,23 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
           const targetHandleId = `${edge.target}-${edge.targetHandle || 'target'}`;}
           return !currentValidHandleIds.has(sourceHandleId) || !currentValidHandleIds.has(targetHandleId);
         });
-        if (orphanedEdges.length === 0) {
-          lastValidPortsRef.current = currentValidHandleIds;
+        if (orphanedEdges.length === 0) { lastValidPortsRef.current = currentValidHandleIds;
           return;
         let edgesToDelete = orphanedEdges;
         let edgesToUpdate: Edge = [];
         // Attempt migration if enabled
         if (enableMigration && lastValidPortsRef.current.size > 0) {
-          // This is a simplified migration - in a full implementation,
+          // This is a simplified migration - in a full implementation }
           // you'd need to track the previous variable port state
           const { migratedEdges, unmigratableEdges } = findMigratableEdges()
-            orphanedEdges,
+            orphanedEdges
             new Map(), // Previous state would be tracked separately
             currentVariablePorts
           );
           edgesToUpdate = migratedEdges;
           edgesToDelete = unmigratableEdges;
         // Update migrated edges
-        if (edgesToUpdate.length > 0) {
-          // React Flow doesn't have a direct way to update edges in bulk,
+        if (edgesToUpdate.length > 0) { // React Flow doesn't have a direct way to update edges in bulk }
           // so we'd need to work with the parent component's edge state
           console.log(`Variable Port Cleanup: Migrated ${edgesToUpdate.length} edges`);}
         // Delete unmigrated orphaned edges
@@ -187,43 +181,31 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
           deleteElements({ edges: edgesToDelete });
           console.log(`Variable Port Cleanup: Removed ${edgesToDelete.length} orphaned edges`);}
           // Call cleanup callback
-          if (onEdgesCleanedUp) {
-            onEdgesCleanedUp(edgesToDelete);
+          if (onEdgesCleanedUp) { onEdgesCleanedUp(edgesToDelete);
         // Update the valid ports reference
-        lastValidPortsRef.current = currentValidHandleIds;
-      } catch (error) {
-  console.error('Variable Port Cleanup Error:', error);
-};
-    if (immediate) {
-      executeCleanup();
-    } else {
-      // Debounce the cleanup
+        lastValidPortsRef.current = currentValidHandleIds } catch (error) { console.error('Variable Port Cleanup Error:', error) };
+    if (immediate) { executeCleanup() } else { // Debounce the cleanup
       if (cleanupTimeoutRef.current) {
         clearTimeout(cleanupTimeoutRef.current);
-      cleanupTimeoutRef.current = setTimeout(executeCleanup, debounceMs);
-  }, [
-    enabled,
-    debounceMs,
-    enableMigration,
-    getNodes,
-    getEdges,
-    getValidHandleIds,
-    findMigratableEdges,
-    deleteElements,
+      cleanupTimeoutRef.current = setTimeout(executeCleanup, debounceMs) }, [
+    enabled
+    debounceMs
+    enableMigration
+    getNodes
+    getEdges
+    getValidHandleIds
+    findMigratableEdges
+    deleteElements
     onEdgesCleanedUp
   ]);
   /**
    * Trigger cleanup when nodes change
    */
-  const handleNodesChange = useCallback((nodes: Node) => {
-    performCleanup();
-  }, [performCleanup]);
+  const handleNodesChange = useCallback((nodes: Node) => { performCleanup() }, [performCleanup]);
   /**
    * Force immediate cleanup
    */
-  const forceCleanup = useCallback(() => {
-    performCleanup(true);
-  }, [performCleanup]);
+  const forceCleanup = useCallback(() => { performCleanup(true) }, [performCleanup]);
   /**
    * Get cleanup statistics
    */
@@ -236,25 +218,21 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
       const targetHandleId = `${edge.target}-${edge.targetHandle || 'target'}`;}
       return !validHandleIds.has(sourceHandleId) || !validHandleIds.has(targetHandleId);
     });
-    return {
-  totalEdges: edges.length,
-  orphanedEdges: orphanedEdges.length,
-  validHandles: validHandleIds.size,
-  orphanedEdgeIds: orphanedEdges.map(e => e.id),
+    return { totalEdges: edges.length
+  orphanedEdges: orphanedEdges.length
+  validHandles: validHandleIds.size
+  orphanedEdgeIds: orphanedEdges.map(e => e.id) }
 };
   }, [getNodes, getEdges, getValidHandleIds]);
   // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(() => { return () => {
       if (cleanupTimeoutRef.current) {
-        clearTimeout(cleanupTimeoutRef.current);
-    };
+        clearTimeout(cleanupTimeoutRef.current) };
   }, []);
-  return {
-  performCleanup,
-  handleNodesChange,
-  forceCleanup,
-  getCleanupStats,
-  isEnabled: enabled,
+  return { performCleanup
+  handleNodesChange
+  forceCleanup
+  getCleanupStats
+  isEnabled: enabled }
 };
 };

@@ -7,7 +7,7 @@ import {
   KeyOperation,
   Role,
   AccessPolicy
-} from '../services/AccessControlManager';
+ from '../services/AccessControlManager';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
@@ -57,7 +57,7 @@ describe('AccessControlManager', () => {
             action: 'encrypt' as KeyOperation,
             resource: 'key' as const,
             scope: 'organizational' as const
-          }
+
         ],
         parentRoles: [],
         isSystemRole: false,
@@ -162,9 +162,9 @@ describe('AccessControlManager', () => {
           action: 'encrypt',
           resource: 'key',
           scope: 'organizational'
-        }],
+],
         isActive: true
-      }]));
+]));
 
       // Mock no restrictive policies
       mockDb.query
@@ -195,9 +195,9 @@ describe('AccessControlManager', () => {
           action: 'read_metadata',
           resource: 'key',
           scope: 'personal'
-        }],
+],
         isActive: true
-      }]));
+]));
 
       mockDb.query.mockResolvedValueOnce({ rows: [] });
       mockAudit.logEvent.mockResolvedValueOnce(undefined);
@@ -223,9 +223,9 @@ describe('AccessControlManager', () => {
           action: 'destroy',
           resource: 'key',
           scope: 'organizational'
-        }],
+],
         isActive: true
-      }]));
+]));
 
       mockDb.query
         .mockResolvedValueOnce({ rows: [] })
@@ -259,10 +259,10 @@ describe('AccessControlManager', () => {
             type: 'time',
             operator: 'between',
             value: [8, 18] // Business hours
-          }]
-        }],
+]
+],
         isActive: true
-      }]));
+]));
 
       mockDb.query
         .mockResolvedValueOnce({ rows: [] })
@@ -316,9 +316,9 @@ describe('AccessControlManager', () => {
             type: 'operation' as const,
             operator: 'equals',
             value: 'destroy'
-  }
+
           action: 'require_approval' as const
-        }],
+],
         priority: 90,
         isEnabled: true,
         createdBy: 'admin-123'
@@ -429,17 +429,17 @@ describe('AccessControlManager', () => {
           context: { ...mockContext, timestamp: new Date('2025-07-20T14:00:00Z') },
           operation: 'encrypt' as KeyOperation,
           expectedRisk: 'low'
-  }
+
         {
           context: { ...mockContext, timestamp: new Date('2025-07-20T02:00:00Z') },
           operation: 'destroy' as KeyOperation,
           expectedRisk: 'critical'
-  }
+
         {
           context: { ...mockContext, riskScore: 75 },
           operation: 'export' as KeyOperation,
           expectedRisk: 'high'
-        }
+
       ];
 
       for (const testCase of contexts) {
@@ -452,9 +452,9 @@ describe('AccessControlManager', () => {
             action: '*',
             resource: 'key',
             scope: 'global'
-          }],
+],
           isActive: true
-        }]));
+]));
 
         mockDb.query
           .mockResolvedValueOnce({ rows: [] })
@@ -470,7 +470,7 @@ describe('AccessControlManager', () => {
 
         expect(decision.riskLevel).toBeDefined();
         // Note: Actual risk calculation logic would determine specific levels
-      }
+
     });
   });
 
@@ -481,12 +481,12 @@ describe('AccessControlManager', () => {
           constraint: { type: 'time', operator: 'between', value: [8, 18] },
           timestamp: new Date('2025-07-20T14:00:00Z'), // 2 PM
           expected: true
-  }
+
         {
           constraint: { type: 'time', operator: 'between', value: [8, 18] },
           timestamp: new Date('2025-07-20T22:00:00Z'), // 10 PM
           expected: false
-        }
+
       ];
 
       for (const test of timeConstraints) {
@@ -502,9 +502,9 @@ describe('AccessControlManager', () => {
             resource: 'key',
             scope: 'organizational',
             constraints: [test.constraint]
-          }],
+],
           isActive: true
-        }]));
+]));
 
         mockDb.query
           .mockResolvedValueOnce({ rows: [] })
@@ -520,7 +520,7 @@ describe('AccessControlManager', () => {
 
         // The exact behavior would depend on implementation details
         expect(decision).toBeDefined();
-      }
+
     });
 
     it('should evaluate location constraints', async () => {
@@ -530,7 +530,7 @@ describe('AccessControlManager', () => {
           country: 'US',
           region: 'California',
           city: 'San Francisco'
-        }
+
       };
 
       mockRedis.get.mockResolvedValueOnce(JSON.stringify([{
@@ -545,10 +545,10 @@ describe('AccessControlManager', () => {
             type: 'location',
             operator: 'equals',
             value: 'US'
-          }]
-        }],
+]
+],
         isActive: true
-      }]));
+]));
 
       mockDb.query
         .mockResolvedValueOnce({ rows: [] })
@@ -574,7 +574,7 @@ describe('AccessControlManager', () => {
         name: 'cached_role',
         permissions: [],
         isActive: true
-      }]);
+]);
 
       // First call - cache miss
       mockRedis.get.mockResolvedValueOnce(null);
@@ -588,7 +588,7 @@ describe('AccessControlManager', () => {
           created_at: new Date(),
           updated_at: new Date(),
           is_active: true
-        }]
+]
       });
       mockRedis.setex.mockResolvedValueOnce('OK');
       mockAudit.logEvent.mockResolvedValueOnce(undefined);

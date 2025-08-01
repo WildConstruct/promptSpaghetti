@@ -18,7 +18,11 @@ export const ConnectionAnnotationsLayer = ({ canEdit = true, showTooltips = true
     const [highlightedConnection, setHighlightedConnection] = useState(null);
     const [isCreatingLabel, setIsCreatingLabel] = useState(false);
     const [pendingConnection, setPendingConnection] = useState(null);
-    const [contextMenu, setContextMenu] = useState(null);
+    const [contextMenu, setContextMenu] = useState < {
+        x: number,
+        y: number,
+        connectionId: string
+    } | null > (null);
     const layerRef = useRef(null);
     const svgRef = useRef(null);
     // Get connection path coordinates for label positioning

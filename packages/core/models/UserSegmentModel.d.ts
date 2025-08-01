@@ -18,6 +18,7 @@
 import { z } from 'zod';
 
 }
+}
 export interface UserAttributes {
     userId: string;
     email?: string;
@@ -53,6 +54,7 @@ export interface UserAttributes {
         lastUsed: Date;
         frequency: 'never' | 'rare' | 'occasional' | 'frequent' | 'daily'
 }
+}
   }>;
     clickThroughRates: Record<string, number>;
     conversionRates: Record<string, number>;
@@ -74,8 +76,8 @@ export interface UserAttributes {
     healthScore: number;
 
 }
-export interface BehaviorEvent {
-    eventType: string;
+}
+export interface BehaviorEvent { eventType: string;
     eventData: Record<string, any>;
     timestamp: Date;
     sessionId?: string;
@@ -86,10 +88,11 @@ export interface BehaviorEvent {
         feature?: string;
         source?: string;
         campaign?: string;
-        referrer?: string;
+        referrer?: string }
 }
     };
 
+}
 }
 export interface SegmentCondition {
     id: string;
@@ -104,6 +107,7 @@ export interface SegmentCondition {
         value: number;
         unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months'
 }
+}
   };
     aggregation?: 'sum' | 'avg' | 'count' | 'min' | 'max' | 'distinct' | 'percentile';
     threshold?: number;
@@ -114,8 +118,8 @@ export interface SegmentCondition {
     matchRate: number;
 
 }
-export interface UserSegment {
-    id: string;
+}
+export interface UserSegment { id: string;
     name: string;
     description?: string;
     conditions: SegmentCondition[];
@@ -132,7 +136,7 @@ export interface UserSegment {
     estimatedUserCount?: number;
     userCountHistory: Array<{
         date: Date;
-        count: number;
+        count: number }
 }
     }>;
     conversionRate?: number;
@@ -156,42 +160,34 @@ export interface UserSegment {
         lastSync?: Date;
         syncStatus: 'pending' | 'syncing' | 'synced' | 'failed'
   }>;
-    validationRules: Array<{
-        rule: string;
+    validationRules: Array<{ rule: string;
         description: string;
-        isRequired: boolean;
-    }>;
+        isRequired: boolean }>;
     qualityScore: number;
     parentSegmentId?: string;
     childSegmentIds: string[];
     dependencies: string[];
-    treatmentVariants?: Record<string, {
-        name: string;
+    treatmentVariants?: Record<string, { name: string;
         allocation: number;
-        isControl: boolean;
-    }>;
-    schedule?: {
-        startDate?: Date;
+        isControl: boolean }>;
+    schedule?: { startDate?: Date;
         endDate?: Date;
         activeDays: number[];
         activeHours: {
             start: string;
             end: string;
-            timezone: string;
-        };
+            timezone: string };
     };
-    insights: Array<{
-        type: 'trend' | 'anomaly' | 'opportunity' | 'risk';
+    insights: Array<{ type: 'trend' | 'anomaly' | 'opportunity' | 'risk';
         title: string;
         description: string;
         severity: 'low' | 'medium' | 'high';
         actionable: boolean;
-        generatedAt: Date;
-    }>;
+        generatedAt: Date }>;
 
 }
-export interface UserCohort {
-    id: string;
+}
+export interface UserCohort { id: string;
     name: string;
     description?: string;
     cohortType: 'acquisition' | 'behavioral' | 'revenue' | 'feature_adoption' | 'custom';
@@ -199,7 +195,7 @@ export interface UserCohort {
     definitionEvent: BehaviorEvent;
     definitionTimeframe: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     analysisMetric: 'retention' | 'revenue' | 'engagement' | 'conversion' | 'churn';
@@ -207,14 +203,12 @@ export interface UserCohort {
         value: number;
         unit: 'days' | 'weeks' | 'months'
   };
-    cohortData: Array<{
-        cohortPeriod: string;
+    cohortData: Array<{ cohortPeriod: string;
         userCount: number;
         periodData: Array<{
             period: number;
             value: number;
-            userCount: number;
-        }>;
+            userCount: number }>;
     }>;
     createdAt: Date;
     lastCalculated: Date;
@@ -222,11 +216,11 @@ export interface UserCohort {
     isActive: boolean;
 
 }
-export interface SegmentAnalytics {
-    segmentId: string;
+}
+export interface SegmentAnalytics { segmentId: string;
     timeRange: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     totalUsers: number;
@@ -238,22 +232,16 @@ export interface SegmentAnalytics {
     averageSessionDuration: number;
     bounceRate: number;
     pageViewsPerSession: number;
-    conversionEvents: Record<string, {
-        eventCount: number;
+    conversionEvents: Record<string, { eventCount: number;
         uniqueUsers: number;
-        conversionRate: number;
-    }>;
+        conversionRate: number }>;
     totalRevenue: number;
     averageRevenuePerUser: number;
     customerLifetimeValue: number;
-    geographicBreakdown: Record<string, {
-        userCount: number;
-        percentage: number;
-    }>;
-    platformBreakdown: Record<string, {
-        userCount: number;
-        percentage: number;
-    }>;
+    geographicBreakdown: Record<string, { userCount: number;
+        percentage: number }>;
+    platformBreakdown: Record<string, { userCount: number;
+        percentage: number }>;
     activityHeatmap: Record<string, number>;
     weeklyPattern: Record<string, number>;
     benchmarkComparison: {
@@ -265,8 +253,8 @@ export interface SegmentAnalytics {
   }[];
 
 }
-export interface SegmentRule {
-    id: string;
+}
+export interface SegmentRule { id: string;
     name: string;
     description?: string;
     triggerEvents: string[];
@@ -280,7 +268,7 @@ export interface SegmentRule {
     retryPolicy: {
         maxRetries: number;
         backoffStrategy: 'linear' | 'exponential';
-        baseDelayMs: number;
+        baseDelayMs: number }
 }
     };
     isActive: boolean;
@@ -292,19 +280,18 @@ export interface SegmentRule {
     averageExecutionTime: number;
 
 }
-export interface SegmentAction {
-    id: string;
+}
+export interface SegmentAction { id: string;
     type: 'add_to_segment' | 'remove_from_segment' | 'send_notification' | 'trigger_webhook' | 'update_attribute' | 'log_event' | 'custom';
     parameters: Record<string, any>;
     conditions?: SegmentCondition[];
     onError: 'ignore' | 'retry' | 'fail_rule';
     executionCount: number;
     successCount: number;
-    lastExecuted?: Date;
-
+    lastExecuted?: Date }
 }
-export interface SegmentExport {
-    id: string;
+}
+export interface SegmentExport { id: string;
     segmentId: string;
     format: 'csv' | 'json' | 'parquet' | 'sql';
     includeFields: string[];
@@ -354,17 +341,13 @@ export declare const UserAttributesSchema: z.ZodObject<{
     featureUsage: z.ZodRecord<z.ZodString, z.ZodObject<{
         count: z.ZodNumber;
         lastUsed: z.ZodDate;
-        frequency: z.ZodEnum<["never", "rare", "occasional", "frequent", "daily"]>;
+        frequency: z.ZodEnum<["never", "rare", "occasional", "frequent", "daily"]> }
 }
-    }, "strip", z.ZodTypeAny, {
-        count: number;
+    }, "strip", z.ZodTypeAny, { count: number;
         frequency: "never" | "rare" | "daily" | "occasional" | "frequent";
-        lastUsed: Date;
-    }, {
-        count: number;
+        lastUsed: Date }, { count: number;
         frequency: "never" | "rare" | "daily" | "occasional" | "frequent";
-        lastUsed: Date;
-    }>>;
+        lastUsed: Date }>>;
     clickThroughRates: z.ZodRecord<z.ZodString, z.ZodNumber>;
     conversionRates: z.ZodRecord<z.ZodString, z.ZodNumber>;
     engagementScore: z.ZodNumber;
@@ -383,8 +366,7 @@ export declare const UserAttributesSchema: z.ZodObject<{
     lastSupportInteraction: z.ZodOptional<z.ZodDate>;
     npsScore: z.ZodOptional<z.ZodNumber>;
     healthScore: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    tags: string[];
+}, "strip", z.ZodTypeAny, { tags: string[];
     userId: string;
     permissions: string[];
     userRole: "admin" | "user" | "editor" | "owner" | "viewer";
@@ -405,8 +387,7 @@ export declare const UserAttributesSchema: z.ZodObject<{
     featureUsage: Record<string, {
         count: number;
         frequency: "never" | "rare" | "daily" | "occasional" | "frequent";
-        lastUsed: Date;
-    }>;
+        lastUsed: Date }>;
     clickThroughRates: Record<string, number>;
     customerLifetimeValue: number;
     monthlyRecurringRevenue: number;
@@ -436,8 +417,7 @@ export declare const UserAttributesSchema: z.ZodObject<{
     billingCycle?: "custom" | "monthly" | "yearly" | undefined;
     lastSupportInteraction?: Date | undefined;
     npsScore?: number | undefined;
-}, {
-    tags: string[];
+}, { tags: string[];
     userId: string;
     permissions: string[];
     userRole: "admin" | "user" | "editor" | "owner" | "viewer";
@@ -458,8 +438,7 @@ export declare const UserAttributesSchema: z.ZodObject<{
     featureUsage: Record<string, {
         count: number;
         frequency: "never" | "rare" | "daily" | "occasional" | "frequent";
-        lastUsed: Date;
-    }>;
+        lastUsed: Date }>;
     clickThroughRates: Record<string, number>;
     customerLifetimeValue: number;
     monthlyRecurringRevenue: number;
@@ -490,8 +469,7 @@ export declare const UserAttributesSchema: z.ZodObject<{
     lastSupportInteraction?: Date | undefined;
     npsScore?: number | undefined;
 }>;
-export declare const SegmentConditionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const SegmentConditionSchema: z.ZodObject<{ id: z.ZodString;
     type: z.ZodEnum<["attribute", "behavior", "demographic", "geographic", "temporal", "cohort", "custom"]>;
     field: z.ZodString;
     operator: z.ZodEnum<["equals", "not_equals", "in", "not_in", "greater_than", "less_than", "greater_equal", "less_equal", "contains", "not_contains", "starts_with", "ends_with", "regex", "exists", "not_exists", "between", "not_between", "within_days", "not_within_days", "relative_to_now", "percentile", "moving_average", "trend_up", "trend_down", "custom_function"]>;
@@ -499,7 +477,7 @@ export declare const SegmentConditionSchema: z.ZodObject<{
     logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR", "NOT"]>>;
     weight: z.ZodDefault<z.ZodNumber>;
     isEnabled: z.ZodDefault<z.ZodBoolean>;
-    timeWindow: z.ZodOptional<z.ZodObject<{,
+    timeWindow: z.ZodOptional<z.ZodObject<{ }
         value: z.ZodNumber;
         unit: z.ZodEnum<["minutes", "hours", "days", "weeks", "months"]>;
     }, "strip", z.ZodTypeAny, {
@@ -557,11 +535,10 @@ export declare const SegmentConditionSchema: z.ZodObject<{
     evaluationCount?: number | undefined;
     matchRate?: number | undefined;
 }>;
-export declare const UserSegmentSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const UserSegmentSchema: z.ZodObject<{ id: z.ZodString;
     name: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
-    conditions: z.ZodArray<z.ZodObject<{,
+    conditions: z.ZodArray<z.ZodObject<{
         id: z.ZodString;
         type: z.ZodEnum<["attribute", "behavior", "demographic", "geographic", "temporal", "cohort", "custom"]>;
         field: z.ZodString;
@@ -570,7 +547,7 @@ export declare const UserSegmentSchema: z.ZodObject<{
         logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR", "NOT"]>>;
         weight: z.ZodDefault<z.ZodNumber>;
         isEnabled: z.ZodDefault<z.ZodBoolean>;
-        timeWindow: z.ZodOptional<z.ZodObject<{,
+        timeWindow: z.ZodOptional<z.ZodObject<{ }
             value: z.ZodNumber;
             unit: z.ZodEnum<["minutes", "hours", "days", "weeks", "months"]>;
         }, "strip", z.ZodTypeAny, {
@@ -639,16 +616,11 @@ export declare const UserSegmentSchema: z.ZodObject<{
     category: z.ZodEnum<["behavioral", "demographic", "geographic", "engagement", "revenue", "lifecycle", "experimental", "custom"]>;
     userCount: z.ZodNumber;
     estimatedUserCount: z.ZodOptional<z.ZodNumber>;
-    userCountHistory: z.ZodArray<z.ZodObject<{,
+    userCountHistory: z.ZodArray<z.ZodObject<{ 
         date: z.ZodDate;
-        count: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        date: Date;
-        count: number;
-    }, {
-        date: Date;
-        count: number;
-    }>, "many">;
+        count: z.ZodNumber }, "strip", z.ZodTypeAny, { date: Date;
+        count: number }, { date: Date;
+        count: number }>, "many">;
     conversionRate: z.ZodOptional<z.ZodNumber>;
     averageLifetimeValue: z.ZodOptional<z.ZodNumber>;
     churnRate: z.ZodOptional<z.ZodNumber>;
@@ -664,110 +636,80 @@ export declare const UserSegmentSchema: z.ZodObject<{
     allowedUsers: z.ZodArray<z.ZodString, "many">;
     allowedRoles: z.ZodArray<z.ZodString, "many">;
     syncToExternalSystems: z.ZodDefault<z.ZodBoolean>;
-    externalSystemMappings: z.ZodRecord<z.ZodString, z.ZodObject<{
-        systemId: z.ZodString;
+    externalSystemMappings: z.ZodRecord<z.ZodString, z.ZodObject<{ systemId: z.ZodString;
         segmentId: z.ZodString;
         lastSync: z.ZodOptional<z.ZodDate>;
-        syncStatus: z.ZodDefault<z.ZodEnum<["pending", "syncing", "synced", "failed"]>>;
-    }, "strip", z.ZodTypeAny, {
-        systemId: string;
+        syncStatus: z.ZodDefault<z.ZodEnum<["pending", "syncing", "synced", "failed"]>> }, "strip", z.ZodTypeAny, { systemId: string;
         segmentId: string;
         syncStatus: "pending" | "failed" | "synced" | "syncing";
-        lastSync?: Date | undefined;
-    }, {
-        systemId: string;
+        lastSync?: Date | undefined }, { systemId: string;
         segmentId: string;
         lastSync?: Date | undefined;
-        syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined;
-    }>>;
-    validationRules: z.ZodArray<z.ZodObject<{,
+        syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined }>>;
+    validationRules: z.ZodArray<z.ZodObject<{ 
         rule: z.ZodString;
         description: z.ZodString;
-        isRequired: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        description: string;
+        isRequired: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { description: string;
         rule: string;
-        isRequired: boolean;
-    }, {
-        description: string;
+        isRequired: boolean }, { description: string;
         rule: string;
-        isRequired?: boolean | undefined;
-    }>, "many">;
+        isRequired?: boolean | undefined }>, "many">;
     qualityScore: z.ZodDefault<z.ZodNumber>;
     parentSegmentId: z.ZodOptional<z.ZodString>;
     childSegmentIds: z.ZodArray<z.ZodString, "many">;
     dependencies: z.ZodArray<z.ZodString, "many">;
-    treatmentVariants: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodObject<{
-        name: z.ZodString;
+    treatmentVariants: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodObject<{ name: z.ZodString;
         allocation: z.ZodNumber;
-        isControl: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
+        isControl: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { name: string;
         allocation: number;
-        isControl: boolean;
-    }, {
-        name: string;
+        isControl: boolean }, { name: string;
         allocation: number;
-        isControl?: boolean | undefined;
-    }>>>;
-    schedule: z.ZodOptional<z.ZodObject<{,
+        isControl?: boolean | undefined }>>>;
+    schedule: z.ZodOptional<z.ZodObject<{ 
         startDate: z.ZodOptional<z.ZodDate>;
         endDate: z.ZodOptional<z.ZodDate>;
         activeDays: z.ZodArray<z.ZodNumber, "many">;
-        activeHours: z.ZodObject<{,
+        activeHours: z.ZodObject<{ }
             start: z.ZodString;
             end: z.ZodString;
             timezone: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            start: string;
+        }, "strip", z.ZodTypeAny, { start: string;
             end: string;
-            timezone: string;
-        }, {
-            start: string;
+            timezone: string }, { start: string;
             end: string;
-            timezone: string;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        activeDays: number[];
+            timezone: string }>;
+    }, "strip", z.ZodTypeAny, { activeDays: number[];
         activeHours: {
             start: string;
             end: string;
-            timezone: string;
-        };
+            timezone: string };
         startDate?: Date | undefined;
         endDate?: Date | undefined;
-    }, {
-        activeDays: number[];
+    }, { activeDays: number[];
         activeHours: {
             start: string;
             end: string;
-            timezone: string;
-        };
+            timezone: string };
         startDate?: Date | undefined;
         endDate?: Date | undefined;
     }>>;
-    insights: z.ZodArray<z.ZodObject<{,
+    insights: z.ZodArray<z.ZodObject<{ 
         type: z.ZodEnum<["trend", "anomaly", "opportunity", "risk"]>;
         title: z.ZodString;
         description: z.ZodString;
         severity: z.ZodEnum<["low", "medium", "high"]>;
         actionable: z.ZodBoolean;
-        generatedAt: z.ZodDate;
-    }, "strip", z.ZodTypeAny, {
-        description: string;
+        generatedAt: z.ZodDate }, "strip", z.ZodTypeAny, { description: string;
         type: "anomaly" | "trend" | "opportunity" | "risk";
         title: string;
         severity: "low" | "medium" | "high";
         generatedAt: Date;
-        actionable: boolean;
-    }, {
-        description: string;
+        actionable: boolean }, { description: string;
         type: "anomaly" | "trend" | "opportunity" | "risk";
         title: string;
         severity: "low" | "medium" | "high";
         generatedAt: Date;
-        actionable: boolean;
-    }>, "many">;
+        actionable: boolean }>, "many">;
 }, "strip", z.ZodTypeAny, {
     id: string;
     createdAt: Date;
@@ -798,24 +740,20 @@ export declare const UserSegmentSchema: z.ZodObject<{
         lastEvaluated?: Date | undefined;
     }[];
     dependencies: string[];
-    insights: {
-        description: string;
+    insights: { description: string;
         type: "anomaly" | "trend" | "opportunity" | "risk";
         title: string;
         severity: "low" | "medium" | "high";
         generatedAt: Date;
-        actionable: boolean;
-    }[];
+        actionable: boolean }[];
     createdBy: string;
     qualityScore: number;
     userCount: number;
     joinLogic: "complex" | "all" | "any";
     isDynamic: boolean;
     isPrivate: boolean;
-    userCountHistory: {
-        date: Date;
-        count: number;
-    }[];
+    userCountHistory: { date: Date;
+        count: number }[];
     evaluationFrequency: "manual" | "daily" | "weekly" | "hourly" | "realtime";
     lastModifiedBy: string;
     lastModifiedAt: Date;
@@ -823,30 +761,24 @@ export declare const UserSegmentSchema: z.ZodObject<{
     allowedUsers: string[];
     allowedRoles: string[];
     syncToExternalSystems: boolean;
-    externalSystemMappings: Record<string, {
-        systemId: string;
+    externalSystemMappings: Record<string, { systemId: string;
         segmentId: string;
         syncStatus: "pending" | "failed" | "synced" | "syncing";
-        lastSync?: Date | undefined;
-    }>;
-    validationRules: {
-        description: string;
+        lastSync?: Date | undefined }>;
+    validationRules: { description: string;
         rule: string;
-        isRequired: boolean;
-    }[];
+        isRequired: boolean }[];
     childSegmentIds: string[];
     description?: string | undefined;
     icon?: string | undefined;
     churnRate?: number | undefined;
     averageLifetimeValue?: number | undefined;
     conversionRate?: number | undefined;
-    schedule?: {
-        activeDays: number[];
+    schedule?: { activeDays: number[];
         activeHours: {
             start: string;
             end: string;
-            timezone: string;
-        };
+            timezone: string };
         startDate?: Date | undefined;
         endDate?: Date | undefined;
     } | undefined;
@@ -856,11 +788,9 @@ export declare const UserSegmentSchema: z.ZodObject<{
     estimatedUserCount?: number | undefined;
     nextEvaluation?: Date | undefined;
     parentSegmentId?: string | undefined;
-    treatmentVariants?: Record<string, {
-        name: string;
+    treatmentVariants?: Record<string, { name: string;
         allocation: number;
-        isControl: boolean;
-    }> | undefined;
+        isControl: boolean }> | undefined;
 }, {
     id: string;
     createdAt: Date;
@@ -890,35 +820,27 @@ export declare const UserSegmentSchema: z.ZodObject<{
         matchRate?: number | undefined;
     }[];
     dependencies: string[];
-    insights: {
-        description: string;
+    insights: { description: string;
         type: "anomaly" | "trend" | "opportunity" | "risk";
         title: string;
         severity: "low" | "medium" | "high";
         generatedAt: Date;
-        actionable: boolean;
-    }[];
+        actionable: boolean }[];
     createdBy: string;
     userCount: number;
-    userCountHistory: {
-        date: Date;
-        count: number;
-    }[];
+    userCountHistory: { date: Date;
+        count: number }[];
     lastModifiedBy: string;
     lastModifiedAt: Date;
     allowedUsers: string[];
     allowedRoles: string[];
-    externalSystemMappings: Record<string, {
-        systemId: string;
+    externalSystemMappings: Record<string, { systemId: string;
         segmentId: string;
         lastSync?: Date | undefined;
-        syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined;
-    }>;
-    validationRules: {
-        description: string;
+        syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined }>;
+    validationRules: { description: string;
         rule: string;
-        isRequired?: boolean | undefined;
-    }[];
+        isRequired?: boolean | undefined }[];
     childSegmentIds: string[];
     description?: string | undefined;
     isActive?: boolean | undefined;
@@ -926,13 +848,11 @@ export declare const UserSegmentSchema: z.ZodObject<{
     churnRate?: number | undefined;
     averageLifetimeValue?: number | undefined;
     conversionRate?: number | undefined;
-    schedule?: {
-        activeDays: number[];
+    schedule?: { activeDays: number[];
         activeHours: {
             start: string;
             end: string;
-            timezone: string;
-        };
+            timezone: string };
         startDate?: Date | undefined;
         endDate?: Date | undefined;
     } | undefined;
@@ -949,24 +869,19 @@ export declare const UserSegmentSchema: z.ZodObject<{
     accessLevel?: "private" | "public" | "organization" | "team" | undefined;
     syncToExternalSystems?: boolean | undefined;
     parentSegmentId?: string | undefined;
-    treatmentVariants?: Record<string, {
-        name: string;
+    treatmentVariants?: Record<string, { name: string;
         allocation: number;
-        isControl?: boolean | undefined;
-    }> | undefined;
+        isControl?: boolean | undefined }> | undefined;
 }>;
-export declare class SegmentUtils {
-    /**
+export declare class SegmentUtils { /**
      * Evaluate if a user matches segment conditions
      */
     static evaluateUserForSegment(userAttributes: UserAttributes)
-      segment: UserSegment,
+      segment: UserSegment }
       behaviorHistory?: BehaviorEvent[]
-    ): {
-        matches: boolean;
+    ): { matches: boolean;
         matchingConditions: string[];
-        score: number;
-    };
+        score: number };
     /**
      * Evaluate a single condition against user attributes
      */
@@ -983,8 +898,7 @@ export declare class SegmentUtils {
      * Generate segment insights
      */
     static generateSegmentInsights(segment: UserSegment, analytics: SegmentAnalytics): UserSegment['insights'];
-declare const _default: {
-    UserAttributesSchema: z.ZodObject<{,
+declare const _default: { UserAttributesSchema: z.ZodObject<{ }
         userId: z.ZodString;
         email: z.ZodOptional<z.ZodString>;
         organizationId: z.ZodOptional<z.ZodString>;
@@ -1014,19 +928,13 @@ declare const _default: {
         totalLogins: z.ZodNumber;
         sessionCount: z.ZodNumber;
         averageSessionDuration: z.ZodNumber;
-        featureUsage: z.ZodRecord<z.ZodString, z.ZodObject<{
-            count: z.ZodNumber;
+        featureUsage: z.ZodRecord<z.ZodString, z.ZodObject<{ count: z.ZodNumber;
             lastUsed: z.ZodDate;
-            frequency: z.ZodEnum<["never", "rare", "occasional", "frequent", "daily"]>;
-        }, "strip", z.ZodTypeAny, {
-            count: number;
+            frequency: z.ZodEnum<["never", "rare", "occasional", "frequent", "daily"]> }, "strip", z.ZodTypeAny, { count: number;
             frequency: "never" | "rare" | "daily" | "occasional" | "frequent";
-            lastUsed: Date;
-        }, {
-            count: number;
+            lastUsed: Date }, { count: number;
             frequency: "never" | "rare" | "daily" | "occasional" | "frequent";
-            lastUsed: Date;
-        }>>;
+            lastUsed: Date }>>;
         clickThroughRates: z.ZodRecord<z.ZodString, z.ZodNumber>;
         conversionRates: z.ZodRecord<z.ZodString, z.ZodNumber>;
         engagementScore: z.ZodNumber;
@@ -1045,8 +953,7 @@ declare const _default: {
         lastSupportInteraction: z.ZodOptional<z.ZodDate>;
         npsScore: z.ZodOptional<z.ZodNumber>;
         healthScore: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        tags: string[];
+    }, "strip", z.ZodTypeAny, { tags: string[];
         userId: string;
         permissions: string[];
         userRole: "admin" | "user" | "editor" | "owner" | "viewer";
@@ -1067,8 +974,7 @@ declare const _default: {
         featureUsage: Record<string, {
             count: number;
             frequency: "never" | "rare" | "daily" | "occasional" | "frequent";
-            lastUsed: Date;
-        }>;
+            lastUsed: Date }>;
         clickThroughRates: Record<string, number>;
         customerLifetimeValue: number;
         monthlyRecurringRevenue: number;
@@ -1098,8 +1004,7 @@ declare const _default: {
         billingCycle?: "custom" | "monthly" | "yearly" | undefined;
         lastSupportInteraction?: Date | undefined;
         npsScore?: number | undefined;
-    }, {
-        tags: string[];
+    }, { tags: string[];
         userId: string;
         permissions: string[];
         userRole: "admin" | "user" | "editor" | "owner" | "viewer";
@@ -1120,8 +1025,7 @@ declare const _default: {
         featureUsage: Record<string, {
             count: number;
             frequency: "never" | "rare" | "daily" | "occasional" | "frequent";
-            lastUsed: Date;
-        }>;
+            lastUsed: Date }>;
         clickThroughRates: Record<string, number>;
         customerLifetimeValue: number;
         monthlyRecurringRevenue: number;
@@ -1152,7 +1056,7 @@ declare const _default: {
         lastSupportInteraction?: Date | undefined;
         npsScore?: number | undefined;
     }>;
-    SegmentConditionSchema: z.ZodObject<{,
+    SegmentConditionSchema: z.ZodObject<{ ,
         id: z.ZodString;
         type: z.ZodEnum<["attribute", "behavior", "demographic", "geographic", "temporal", "cohort", "custom"]>;
         field: z.ZodString;
@@ -1161,7 +1065,7 @@ declare const _default: {
         logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR", "NOT"]>>;
         weight: z.ZodDefault<z.ZodNumber>;
         isEnabled: z.ZodDefault<z.ZodBoolean>;
-        timeWindow: z.ZodOptional<z.ZodObject<{,
+        timeWindow: z.ZodOptional<z.ZodObject<{ }
             value: z.ZodNumber;
             unit: z.ZodEnum<["minutes", "hours", "days", "weeks", "months"]>;
         }, "strip", z.ZodTypeAny, {
@@ -1219,11 +1123,11 @@ declare const _default: {
         evaluationCount?: number | undefined;
         matchRate?: number | undefined;
     }>;
-    UserSegmentSchema: z.ZodObject<{,
+    UserSegmentSchema: z.ZodObject<{ ,
         id: z.ZodString;
         name: z.ZodString;
         description: z.ZodOptional<z.ZodString>;
-        conditions: z.ZodArray<z.ZodObject<{,
+        conditions: z.ZodArray<z.ZodObject<{
             id: z.ZodString;
             type: z.ZodEnum<["attribute", "behavior", "demographic", "geographic", "temporal", "cohort", "custom"]>;
             field: z.ZodString;
@@ -1232,7 +1136,7 @@ declare const _default: {
             logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR", "NOT"]>>;
             weight: z.ZodDefault<z.ZodNumber>;
             isEnabled: z.ZodDefault<z.ZodBoolean>;
-            timeWindow: z.ZodOptional<z.ZodObject<{,
+            timeWindow: z.ZodOptional<z.ZodObject<{ }
                 value: z.ZodNumber;
                 unit: z.ZodEnum<["minutes", "hours", "days", "weeks", "months"]>;
             }, "strip", z.ZodTypeAny, {
@@ -1301,16 +1205,11 @@ declare const _default: {
         category: z.ZodEnum<["behavioral", "demographic", "geographic", "engagement", "revenue", "lifecycle", "experimental", "custom"]>;
         userCount: z.ZodNumber;
         estimatedUserCount: z.ZodOptional<z.ZodNumber>;
-        userCountHistory: z.ZodArray<z.ZodObject<{,
+        userCountHistory: z.ZodArray<z.ZodObject<{ 
             date: z.ZodDate;
-            count: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            date: Date;
-            count: number;
-        }, {
-            date: Date;
-            count: number;
-        }>, "many">;
+            count: z.ZodNumber }, "strip", z.ZodTypeAny, { date: Date;
+            count: number }, { date: Date;
+            count: number }>, "many">;
         conversionRate: z.ZodOptional<z.ZodNumber>;
         averageLifetimeValue: z.ZodOptional<z.ZodNumber>;
         churnRate: z.ZodOptional<z.ZodNumber>;
@@ -1326,110 +1225,80 @@ declare const _default: {
         allowedUsers: z.ZodArray<z.ZodString, "many">;
         allowedRoles: z.ZodArray<z.ZodString, "many">;
         syncToExternalSystems: z.ZodDefault<z.ZodBoolean>;
-        externalSystemMappings: z.ZodRecord<z.ZodString, z.ZodObject<{
-            systemId: z.ZodString;
+        externalSystemMappings: z.ZodRecord<z.ZodString, z.ZodObject<{ systemId: z.ZodString;
             segmentId: z.ZodString;
             lastSync: z.ZodOptional<z.ZodDate>;
-            syncStatus: z.ZodDefault<z.ZodEnum<["pending", "syncing", "synced", "failed"]>>;
-        }, "strip", z.ZodTypeAny, {
-            systemId: string;
+            syncStatus: z.ZodDefault<z.ZodEnum<["pending", "syncing", "synced", "failed"]>> }, "strip", z.ZodTypeAny, { systemId: string;
             segmentId: string;
             syncStatus: "pending" | "failed" | "synced" | "syncing";
-            lastSync?: Date | undefined;
-        }, {
-            systemId: string;
+            lastSync?: Date | undefined }, { systemId: string;
             segmentId: string;
             lastSync?: Date | undefined;
-            syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined;
-        }>>;
-        validationRules: z.ZodArray<z.ZodObject<{,
+            syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined }>>;
+        validationRules: z.ZodArray<z.ZodObject<{ 
             rule: z.ZodString;
             description: z.ZodString;
-            isRequired: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            description: string;
+            isRequired: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { description: string;
             rule: string;
-            isRequired: boolean;
-        }, {
-            description: string;
+            isRequired: boolean }, { description: string;
             rule: string;
-            isRequired?: boolean | undefined;
-        }>, "many">;
+            isRequired?: boolean | undefined }>, "many">;
         qualityScore: z.ZodDefault<z.ZodNumber>;
         parentSegmentId: z.ZodOptional<z.ZodString>;
         childSegmentIds: z.ZodArray<z.ZodString, "many">;
         dependencies: z.ZodArray<z.ZodString, "many">;
-        treatmentVariants: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodObject<{
-            name: z.ZodString;
+        treatmentVariants: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodObject<{ name: z.ZodString;
             allocation: z.ZodNumber;
-            isControl: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
+            isControl: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { name: string;
             allocation: number;
-            isControl: boolean;
-        }, {
-            name: string;
+            isControl: boolean }, { name: string;
             allocation: number;
-            isControl?: boolean | undefined;
-        }>>>;
-        schedule: z.ZodOptional<z.ZodObject<{,
+            isControl?: boolean | undefined }>>>;
+        schedule: z.ZodOptional<z.ZodObject<{ 
             startDate: z.ZodOptional<z.ZodDate>;
             endDate: z.ZodOptional<z.ZodDate>;
             activeDays: z.ZodArray<z.ZodNumber, "many">;
-            activeHours: z.ZodObject<{,
+            activeHours: z.ZodObject<{ }
                 start: z.ZodString;
                 end: z.ZodString;
                 timezone: z.ZodString;
-            }, "strip", z.ZodTypeAny, {
-                start: string;
+            }, "strip", z.ZodTypeAny, { start: string;
                 end: string;
-                timezone: string;
-            }, {
-                start: string;
+                timezone: string }, { start: string;
                 end: string;
-                timezone: string;
-            }>;
-        }, "strip", z.ZodTypeAny, {
-            activeDays: number[];
+                timezone: string }>;
+        }, "strip", z.ZodTypeAny, { activeDays: number[];
             activeHours: {
                 start: string;
                 end: string;
-                timezone: string;
-            };
+                timezone: string };
             startDate?: Date | undefined;
             endDate?: Date | undefined;
-        }, {
-            activeDays: number[];
+        }, { activeDays: number[];
             activeHours: {
                 start: string;
                 end: string;
-                timezone: string;
-            };
+                timezone: string };
             startDate?: Date | undefined;
             endDate?: Date | undefined;
         }>>;
-        insights: z.ZodArray<z.ZodObject<{,
+        insights: z.ZodArray<z.ZodObject<{ 
             type: z.ZodEnum<["trend", "anomaly", "opportunity", "risk"]>;
             title: z.ZodString;
             description: z.ZodString;
             severity: z.ZodEnum<["low", "medium", "high"]>;
             actionable: z.ZodBoolean;
-            generatedAt: z.ZodDate;
-        }, "strip", z.ZodTypeAny, {
-            description: string;
+            generatedAt: z.ZodDate }, "strip", z.ZodTypeAny, { description: string;
             type: "anomaly" | "trend" | "opportunity" | "risk";
             title: string;
             severity: "low" | "medium" | "high";
             generatedAt: Date;
-            actionable: boolean;
-        }, {
-            description: string;
+            actionable: boolean }, { description: string;
             type: "anomaly" | "trend" | "opportunity" | "risk";
             title: string;
             severity: "low" | "medium" | "high";
             generatedAt: Date;
-            actionable: boolean;
-        }>, "many">;
+            actionable: boolean }>, "many">;
     }, "strip", z.ZodTypeAny, {
         id: string;
         createdAt: Date;
@@ -1460,24 +1329,20 @@ declare const _default: {
             lastEvaluated?: Date | undefined;
         }[];
         dependencies: string[];
-        insights: {
-            description: string;
+        insights: { description: string;
             type: "anomaly" | "trend" | "opportunity" | "risk";
             title: string;
             severity: "low" | "medium" | "high";
             generatedAt: Date;
-            actionable: boolean;
-        }[];
+            actionable: boolean }[];
         createdBy: string;
         qualityScore: number;
         userCount: number;
         joinLogic: "complex" | "all" | "any";
         isDynamic: boolean;
         isPrivate: boolean;
-        userCountHistory: {
-            date: Date;
-            count: number;
-        }[];
+        userCountHistory: { date: Date;
+            count: number }[];
         evaluationFrequency: "manual" | "daily" | "weekly" | "hourly" | "realtime";
         lastModifiedBy: string;
         lastModifiedAt: Date;
@@ -1485,30 +1350,24 @@ declare const _default: {
         allowedUsers: string[];
         allowedRoles: string[];
         syncToExternalSystems: boolean;
-        externalSystemMappings: Record<string, {
-            systemId: string;
+        externalSystemMappings: Record<string, { systemId: string;
             segmentId: string;
             syncStatus: "pending" | "failed" | "synced" | "syncing";
-            lastSync?: Date | undefined;
-        }>;
-        validationRules: {
-            description: string;
+            lastSync?: Date | undefined }>;
+        validationRules: { description: string;
             rule: string;
-            isRequired: boolean;
-        }[];
+            isRequired: boolean }[];
         childSegmentIds: string[];
         description?: string | undefined;
         icon?: string | undefined;
         churnRate?: number | undefined;
         averageLifetimeValue?: number | undefined;
         conversionRate?: number | undefined;
-        schedule?: {
-            activeDays: number[];
+        schedule?: { activeDays: number[];
             activeHours: {
                 start: string;
                 end: string;
-                timezone: string;
-            };
+                timezone: string };
             startDate?: Date | undefined;
             endDate?: Date | undefined;
         } | undefined;
@@ -1518,11 +1377,9 @@ declare const _default: {
         estimatedUserCount?: number | undefined;
         nextEvaluation?: Date | undefined;
         parentSegmentId?: string | undefined;
-        treatmentVariants?: Record<string, {
-            name: string;
+        treatmentVariants?: Record<string, { name: string;
             allocation: number;
-            isControl: boolean;
-        }> | undefined;
+            isControl: boolean }> | undefined;
     }, {
         id: string;
         createdAt: Date;
@@ -1552,35 +1409,27 @@ declare const _default: {
             matchRate?: number | undefined;
         }[];
         dependencies: string[];
-        insights: {
-            description: string;
+        insights: { description: string;
             type: "anomaly" | "trend" | "opportunity" | "risk";
             title: string;
             severity: "low" | "medium" | "high";
             generatedAt: Date;
-            actionable: boolean;
-        }[];
+            actionable: boolean }[];
         createdBy: string;
         userCount: number;
-        userCountHistory: {
-            date: Date;
-            count: number;
-        }[];
+        userCountHistory: { date: Date;
+            count: number }[];
         lastModifiedBy: string;
         lastModifiedAt: Date;
         allowedUsers: string[];
         allowedRoles: string[];
-        externalSystemMappings: Record<string, {
-            systemId: string;
+        externalSystemMappings: Record<string, { systemId: string;
             segmentId: string;
             lastSync?: Date | undefined;
-            syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined;
-        }>;
-        validationRules: {
-            description: string;
+            syncStatus?: "pending" | "failed" | "synced" | "syncing" | undefined }>;
+        validationRules: { description: string;
             rule: string;
-            isRequired?: boolean | undefined;
-        }[];
+            isRequired?: boolean | undefined }[];
         childSegmentIds: string[];
         description?: string | undefined;
         isActive?: boolean | undefined;
@@ -1588,13 +1437,11 @@ declare const _default: {
         churnRate?: number | undefined;
         averageLifetimeValue?: number | undefined;
         conversionRate?: number | undefined;
-        schedule?: {
-            activeDays: number[];
+        schedule?: { activeDays: number[];
             activeHours: {
                 start: string;
                 end: string;
-                timezone: string;
-            };
+                timezone: string };
             startDate?: Date | undefined;
             endDate?: Date | undefined;
         } | undefined;
@@ -1611,11 +1458,9 @@ declare const _default: {
         accessLevel?: "private" | "public" | "organization" | "team" | undefined;
         syncToExternalSystems?: boolean | undefined;
         parentSegmentId?: string | undefined;
-        treatmentVariants?: Record<string, {
-            name: string;
+        treatmentVariants?: Record<string, { name: string;
             allocation: number;
-            isControl?: boolean | undefined;
-        }> | undefined;
+            isControl?: boolean | undefined }> | undefined;
     }>;
     SegmentUtils: typeof SegmentUtils;
 };

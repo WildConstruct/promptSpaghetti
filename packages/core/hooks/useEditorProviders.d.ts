@@ -5,18 +5,16 @@
 import { Node, Edge } from 'reactflow';
 
 }
-export interface EditorStateContext {
-    nodes: Node[];
+}
+export interface EditorStateContext { nodes: Node[];
     edges: Edge[];
     selectedNodeId: string | null;
     isLoading: boolean;
     hasUnsavedChanges: boolean;
-    validationErrors: any[];
-
-
+    validationErrors: any[] }
 }
-export interface EditorActions {
-    addNode: (node: Node) => void;
+}
+export interface EditorActions { addNode: (node: Node) => void;
     updateNode: (nodeId: string, data: Record<string, unknown>) => void;
     removeNode: (nodeId: string) => void;
     addEdge: (edge: Edge) => void;
@@ -24,10 +22,11 @@ export interface EditorActions {
     selectNode: (nodeId: string | null) => void;
     focusNode: (nodeId: string) => void;
     saveGraph: () => Promise<void>;
-    loadGraph: (data: {),
+    loadGraph: (data: {) }
         nodes: Node[];
         edges: Edge[];
 
+}
 }
     }) => void;
     exportGraph: (format?: string) => any;
@@ -35,8 +34,8 @@ export interface EditorActions {
     executeGraph: () => Promise<any>;
 
 }
-export interface ProviderHook {
-    id: string;
+}
+export interface ProviderHook { id: string;
     name: string;
     version: string;
     priority: number;
@@ -50,10 +49,10 @@ export interface ProviderHook {
     onLoad?: (context: EditorStateContext) => void | Promise<void>;
     onNodeAdd?: (node: Node, context: EditorStateContext) => Node | void;
     onNodeUpdate?: ()
-      nodeId: string,
-      updates: Record<string,
-      unknown>,
-      context: EditorStateContext,
+      nodeId: string;
+      updates: Record<string;
+      unknown>;
+      context: EditorStateContext }
     ) => Record<string, unknown> | void;
     onNodeRemove?: (nodeId: string, context: EditorStateContext) => boolean | void;
     onEdgeAdd?: (edge: Edge, context: EditorStateContext) => Edge | void;
@@ -65,8 +64,9 @@ export interface ProviderHook {
 
 
 }
-export interface ProviderRegistry {
-    register: (hook: ProviderHook) => void;
+}
+}
+export interface ProviderRegistry { register: (hook: ProviderHook) => void;
     unregister: (hookId: string) => void;
     getHooks: () => ProviderHook[];
     getHook: (hookId: string) => ProviderHook | undefined;
@@ -74,15 +74,14 @@ export interface ProviderRegistry {
     executeCustomAction: (hookId: string, actionName: string, ...args: any[]) => any;
 
 export declare const useEditorProviders: ()
-  initialNodes: Node[],
-  initialEdges: Edge[],
-  selectedNodeId: string | null,
+  initialNodes: Node[];
+  initialEdges: Edge[];
+  selectedNodeId: string | null }
   validationErrors?: any[]
-) => {
-    registry: ProviderRegistry;
+) => { registry: ProviderRegistry;
     editorContext: EditorStateContext;
     editorActions: EditorActions;
-    isLoading: boolean;
+    isLoading: boolean }
 }
 };
 export declare export declare export declare export declare //# sourceMappingURL=useEditorProviders.d.ts.map

@@ -20,8 +20,8 @@ import validator from 'validator';
 // Security Validation Types
 // =============================================================================
 
-}
-}
+
+
 export interface SecurityValidationContext {
   userId: string;
   sessionId: string;
@@ -33,12 +33,13 @@ export interface SecurityValidationContext {
   resourceId?: string;
   requestData?: unknown;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AdminOperation {
   type: AdminOperationType;
   category: AdminOperationCategory;
@@ -47,9 +48,10 @@ export interface AdminOperation {
   requiresMFA?: boolean;
   privilegeLevel: PrivilegeLevel;
   auditLevel: AuditLevel;
-}
-}
-}
+
+
+
+
 
 export type AdminOperationType = 
   | 'feature_toggle'
@@ -76,8 +78,8 @@ export type SecuritySeverity = 'low' | 'medium' | 'high' | 'critical' | 'emergen
 export type PrivilegeLevel = 'standard' | 'elevated' | 'admin' | 'super_admin' | 'system';
 export type AuditLevel = 'basic' | 'detailed' | 'comprehensive' | 'forensic';
 
-}
-}
+
+
 export interface SecurityValidationResult {
   isValid: boolean;
   securityLevel: SecuritySeverity;
@@ -89,12 +91,13 @@ export interface SecurityValidationResult {
   sessionExtensionRequired: boolean;
   auditingRequired: boolean;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityViolation {
   violationType: ViolationType;
   severity: SecuritySeverity;
@@ -104,9 +107,10 @@ export interface SecurityViolation {
   detectionTime: Date;
   remediation: RemediationAction[];
   evidence: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export type ViolationType = 
   | 'privilege_escalation'
@@ -120,27 +124,29 @@ export type ViolationType =
   | 'authentication_bypass'
   | 'audit_tampering';
 
-}
-}
+
+
 export interface SecurityWarning {
   warningType: string;
   message: string;
   severity: SecuritySeverity;
   recommendations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RemediationAction {
   action: string;
   priority: number;
   automated: boolean;
   description: string;
-}
-}
-}
+
+
+
+
 
 export type AuthMethod = 'mfa_totp' | 'mfa_sms' | 'hardware_key' | 'biometric' | 'admin_approval';
 
@@ -148,8 +154,8 @@ export type AuthMethod = 'mfa_totp' | 'mfa_sms' | 'hardware_key' | 'biometric' |
 // Security Policy Configurations
 // =============================================================================
 
-}
-}
+
+
 export interface AdminSecurityPolicy {
   id: string;
   name: string;
@@ -164,23 +170,25 @@ export interface AdminSecurityPolicy {
   rateLimits: RateLimit[];
   auditRequirements: AuditRequirement[];
   enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TimeRestriction {
   startTime: string; // HH:mm
   endTime: string;   // HH:mm
   days: number[];    // 0-6 (Sunday-Saturday)
   timezone: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationRule {
   field: string;
   type: 'string' | 'number' | 'email' | 'url' | 'json' | 'custom';
@@ -191,35 +199,38 @@ export interface ValidationRule {
   allowedValues?: string[];
   sanitization: SanitizationType[];
   customValidator?: string;
-}
-}
-}
+
+
+
+
 
 export type SanitizationType = 'html_escape' | 'sql_escape' | 'json_escape' | 'trim' | 'lowercase' | 'uppercase';
 
-}
-}
+
+
 export interface RateLimit {
   operation: string;
   maxRequests: number;
   timeWindow: number; // minutes
   penalty: 'warn' | 'block' | 'delay';
   penaltyDuration: number; // minutes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AuditRequirement {
   level: AuditLevel;
   retention: number; // days
   fields: string[];
   realTimeAlerts: boolean;
   complianceFlags: string[];
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Main Service Implementation
@@ -245,7 +256,7 @@ export class AdminSecurityValidationService {
     this.logger = logger;
     this.accessControl = accessControl;
     this.securityScanning = securityScanning;
-  }
+
 
   async initialize(): Promise<void> {
 
@@ -253,7 +264,7 @@ export class AdminSecurityValidationService {
     await this.initializeRateLimiting();
     await this.setupPatternDetection();
     this.logger.log('AdminSecurityValidationService initialized');
-  }
+
 
   // =============================================================================
   // Core Validation Methods
@@ -308,14 +319,13 @@ export class AdminSecurityValidationService {
       result.requiresAdditionalAuth = await this.requiresAdditionalAuth(context, result);
       if (result.requiresAdditionalAuth) {
         result.additionalAuthMethods = await this.getRequiredAuthMethods(context);
-      }
+
 
       // 8. Log security event
       await this.logSecurityEvent(context, result);
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       this.logger.error('Security validation failed', error, {
         userId: context.userId,
         operation: context.operation.type
@@ -334,13 +344,13 @@ export class AdminSecurityValidationService {
           priority: 1,
           automated: true,
           description: 'Automatic security system failure protection'
-        }],
+],
         evidence: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
 
       return result;
-    }
-  }
+
+
 
   // =============================================================================
   // Session Validation
@@ -383,11 +393,11 @@ export class AdminSecurityValidationService {
             priority: 1,
             automated: true,
             description: 'Require fresh authentication for security'
-          }],
+],
           evidence: { sessionId: context.sessionId, userId: context.userId }
         });
         return result;
-      }
+
 
       const session = sessionResult.rows[0];
 
@@ -408,10 +418,10 @@ export class AdminSecurityValidationService {
             priority: 2,
             automated: false,
             description: 'Session timeout protection'
-          }],
+],
           evidence: { sessionAge, maxSessionAge }
         });
-      }
+
 
       // Check IP address consistency
       if (session.session_ip !== context.ipAddress) {
@@ -421,7 +431,7 @@ export class AdminSecurityValidationService {
           severity: 'medium',
           recommendations: ['Verify user location and device']
         });
-      }
+
 
       // Check user agent consistency
       if (session.session_user_agent !== context.userAgent) {
@@ -431,7 +441,7 @@ export class AdminSecurityValidationService {
           severity: 'low',
           recommendations: ['Monitor for session hijacking attempts']
         });
-      }
+
 
       // Check concurrent sessions
       const concurrentSessionsResult = await this.db.query(`
@@ -448,11 +458,10 @@ export class AdminSecurityValidationService {
           severity: 'medium',
           recommendations: ['Review session management policies']
         });
-      }
+
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       this.logger.error('Session validation failed', error);
       result.violations!.push({
         violationType: 'session_anomaly',
@@ -466,12 +475,12 @@ export class AdminSecurityValidationService {
           priority: 1,
           automated: true,
           description: 'Security system protection'
-        }],
+],
         evidence: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       return result;
-    }
-  }
+
+
 
   // =============================================================================
   // Privilege Validation
@@ -511,11 +520,11 @@ export class AdminSecurityValidationService {
             priority: 1,
             automated: true,
             description: 'Invalid user protection'
-          }],
+],
           evidence: { userId: context.userId }
         });
         return result;
-      }
+
 
       const user = userResult.rows[0];
 
@@ -533,11 +542,11 @@ export class AdminSecurityValidationService {
             priority: 1,
             automated: true,
             description: 'Inactive user protection'
-          }],
+],
           evidence: { userId: context.userId, userStatus: user.status }
         });
         return result;
-      }
+
 
       // Validate privilege level
       const requiredLevel = this.getNumericPrivilegeLevel(context.operation.privilegeLevel);
@@ -556,14 +565,14 @@ export class AdminSecurityValidationService {
             priority: 1,
             automated: true,
             description: 'Privilege escalation protection'
-          }],
+],
           evidence: { 
             requiredPrivilege: context.operation.privilegeLevel,
             userPrivilege: user.privilege_level,
             operation: context.operation.type
-          }
+
         });
-      }
+
 
       // Use AccessControlFramework for detailed permission checking
       const accessContext: Context = {
@@ -574,19 +583,19 @@ export class AdminSecurityValidationService {
             privilege_level: user.privilege_level,
             is_admin: user.is_admin,
             is_super_admin: user.is_super_admin
-          }
-  }
+
+
         resource: {
           type: context.resourceType,
           id: context.resourceId || '',
           attributes: {}
-  }
+
         environment: {
           ip_address: context.ipAddress,
           user_agent: context.userAgent,
           timestamp: context.timestamp.toISOString(),
           operation_type: context.operation.type
-        }
+
       };
 
       const permission: Permission = {
@@ -614,18 +623,17 @@ export class AdminSecurityValidationService {
             priority: 1,
             automated: true,
             description: 'Access control enforcement'
-          }],
+],
           evidence: {
             userId: context.userId,
             requiredPermission: permission,
             operation: context.operation.type
-          }
+
         });
-      }
+
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       this.logger.error('Privilege validation failed', error);
       result.violations!.push({
         violationType: 'privilege_escalation',
@@ -639,12 +647,12 @@ export class AdminSecurityValidationService {
           priority: 1,
           automated: true,
           description: 'Security system protection'
-        }],
+],
         evidence: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       return result;
-    }
-  }
+
+
 
   // =============================================================================
   // Input Data Validation
@@ -659,13 +667,13 @@ export class AdminSecurityValidationService {
 
     if (!context.requestData) {
       return result;
-    }
+
 
     try {
       const policy = await this.getSecurityPolicy(context.operation.type);
       if (!policy || !policy.dataValidationRules) {
         return result;
-      }
+
 
       for (const rule of policy.dataValidationRules) {
         const fieldValue = this.getFieldValue(context.requestData, rule.field);
@@ -684,15 +692,15 @@ export class AdminSecurityValidationService {
               priority: 2,
               automated: true,
               description: 'Input validation enforcement'
-            }],
+],
             evidence: { field: rule.field, value: fieldValue }
           });
           continue;
-        }
+
 
         if (fieldValue === undefined || fieldValue === null) {
           continue;
-        }
+
 
         // Validate field types and formats
         const validationError = await this.validateFieldValue(fieldValue, rule);
@@ -709,10 +717,10 @@ export class AdminSecurityValidationService {
               priority: 2,
               automated: true,
               description: 'Input sanitization'
-            }],
+],
             evidence: { field: rule.field, value: fieldValue, rule }
           });
-        }
+
 
         // Check for injection attempts
         const injectionAttempt = this.detectInjectionAttempt(fieldValue.toString());
@@ -729,20 +737,19 @@ export class AdminSecurityValidationService {
               priority: 1,
               automated: true,
               description: 'Injection attack prevention'
-            }],
+],
             evidence: { 
               field: rule.field, 
               value: fieldValue, 
               injectionType: injectionAttempt,
               detectedPatterns: this.getInjectionPatterns(fieldValue.toString())
-            }
+
           });
-        }
-      }
+
+
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       this.logger.error('Input validation failed', error);
       result.violations!.push({
         violationType: 'input_validation_failure',
@@ -756,12 +763,12 @@ export class AdminSecurityValidationService {
           priority: 1,
           automated: true,
           description: 'Security system protection'
-        }],
+],
         evidence: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       return result;
-    }
-  }
+
+
 
   // =============================================================================
   // Rate Limiting Validation
@@ -778,7 +785,7 @@ export class AdminSecurityValidationService {
       const policy = await this.getSecurityPolicy(context.operation.type);
       if (!policy?.rateLimits) {
         return result;
-      }
+
 
       for (const rateLimit of policy.rateLimits) {
         const key = `${context.userId}:${rateLimit.operation}`;
@@ -794,7 +801,7 @@ export class AdminSecurityValidationService {
             blockedUntil: 0
           };
           this.rateLimitCache.set(key, rateLimitState);
-        }
+
 
         // Clean old requests
         rateLimitState.requests = rateLimitState.requests.filter(timestamp => timestamp > windowStart);
@@ -813,17 +820,17 @@ export class AdminSecurityValidationService {
               priority: 2,
               automated: true,
               description: 'Rate limiting enforcement'
-            }],
+],
             evidence: { 
               operation: rateLimit.operation,
               requestCount: rateLimitState.requests.length,
               maxRequests: rateLimit.maxRequests,
               timeWindow: rateLimit.timeWindow,
               blockedUntil: rateLimitState.blockedUntil
-            }
+
           });
           continue;
-        }
+
 
         // Check rate limit
         if (rateLimitState.requests.length >= rateLimit.maxRequests) {
@@ -846,14 +853,14 @@ export class AdminSecurityValidationService {
                   priority: 2,
                   automated: true,
                   description: 'Rate limiting penalty'
-                }],
+],
                 evidence: { 
                   operation: rateLimit.operation,
                   requestCount: rateLimitState.requests.length,
                   maxRequests: rateLimit.maxRequests,
                   penalty: rateLimit.penalty,
                   penaltyDuration: rateLimit.penaltyDuration
-                }
+
               });
             break;
 
@@ -869,20 +876,19 @@ export class AdminSecurityValidationService {
           case 'delay':
               result.recommendations!.push(`Implement ${rateLimit.penaltyDuration}s delay for operation '${rateLimit.operation}'`);
             break;
-          }
-        }
+
+
 
         // Record this request
         rateLimitState.requests.push(now);
-      }
+
 
       return result;
-
-    } catch (error) {
+ catch (error) {
       this.logger.error('Rate limit validation failed', error);
       return result;
-    }
-  }
+
+
 
   // =============================================================================
   // Helper Methods
@@ -905,18 +911,18 @@ export class AdminSecurityValidationService {
         };
         
         this.securityPolicies.set(policy.operationType, policy);
-      }
+
       
       this.logger.log(`Loaded ${this.securityPolicies.size} security policies`);
-    } catch (error) {
+ catch (error) {
       this.logger.error('Failed to load security policies', error);
-    }
-  }
+
+
 
   private async getSecurityPolicy(operationType: AdminOperationType): Promise<AdminSecurityPolicy | null> {
 
     return this.securityPolicies.get(operationType) || null;
-  }
+
 
   private getNumericPrivilegeLevel(level: PrivilegeLevel): number {
     const levels: Record<PrivilegeLevel, number> = {
@@ -927,7 +933,7 @@ export class AdminSecurityValidationService {
       system: 5
     };
     return levels[level] || 0;
-  }
+
 
   private getFieldValue(data: Record<string, unknown>, field: string): unknown {
     const path = field.split('.');
@@ -935,12 +941,12 @@ export class AdminSecurityValidationService {
     for (const key of path) {
       if (value && typeof value === 'object') {
         value = value[key];
-      } else {
+ else {
         return undefined;
-      }
-    }
+
+
     return value;
-  }
+
 
   private async validateFieldValue(value: Error, rule: ValidationRule): Promise<string | null> {
 
@@ -951,42 +957,42 @@ export class AdminSecurityValidationService {
     case 'email':
       if (!validator.isEmail(stringValue)) {
         return 'Invalid email format';
-      }
+
       break;
     case 'url':
       if (!validator.isURL(stringValue)) {
         return 'Invalid URL format';
-      }
+
       break;
     case 'json':
       try {
         JSON.parse(stringValue);
-      } catch {
+ catch {
         return 'Invalid JSON format';
-      }
+
       break;
-    }
+
 
     // Length validation
     if (rule.minLength && stringValue.length < rule.minLength) {
       return `Minimum length is ${rule.minLength}`;
-    }
+
     if (rule.maxLength && stringValue.length > rule.maxLength) {
       return `Maximum length is ${rule.maxLength}`;
-    }
+
 
     // Pattern validation
     if (rule.pattern && !new RegExp(rule.pattern).test(stringValue)) {
       return 'Does not match required pattern';
-    }
+
 
     // Allowed values validation
     if (rule.allowedValues && !rule.allowedValues.includes(stringValue)) {
       return 'Value not in allowed list';
-    }
+
 
     return null;
-  }
+
 
   private detectInjectionAttempt(value: string): string | null {
     const patterns = {
@@ -1001,11 +1007,11 @@ export class AdminSecurityValidationService {
     for (const [type, pattern] of Object.entries(patterns)) {
       if (pattern.test(value)) {
         return type;
-      }
-    }
+
+
 
     return null;
-  }
+
 
   private getInjectionPatterns(value: string): string[] {
     const patterns = [];
@@ -1015,13 +1021,13 @@ export class AdminSecurityValidationService {
     let match;
     while ((match = sqlPattern.exec(value)) !== null) {
       patterns.push(`SQL: ${match[0]}`);
-    }
+
     while ((match = xssPattern.exec(value)) !== null) {
       patterns.push(`XSS: ${match[0]}`);
-    }
+
     
     return patterns;
-  }
+
 
   private mergeValidationResults(
     target: SecurityValidationResult, 
@@ -1033,8 +1039,8 @@ export class AdminSecurityValidationService {
     
     if (source.violations && source.violations.length > 0) {
       target.isValid = false;
-    }
-  }
+
+
 
   private async requiresAdditionalAuth(
     context: SecurityValidationContext, 
@@ -1044,7 +1050,7 @@ export class AdminSecurityValidationService {
     // Check if operation explicitly requires MFA
     if (context.operation.requiresMFA) {
       return true;
-    }
+
 
     // Check if there are high-severity violations
     const highSeverityViolations = result.violations.filter(v => 
@@ -1052,15 +1058,15 @@ export class AdminSecurityValidationService {
     );
     if (highSeverityViolations.length > 0) {
       return true;
-    }
+
 
     // Check privilege level requirements
     if (context.operation.privilegeLevel === 'super_admin' || context.operation.privilegeLevel === 'system') {
       return true;
-    }
+
 
     return false;
-  }
+
 
   private async getRequiredAuthMethods(context: SecurityValidationContext): Promise<AuthMethod[]> {
 
@@ -1069,20 +1075,20 @@ export class AdminSecurityValidationService {
     // Base MFA for high-privilege operations
     if (context.operation.privilegeLevel === 'admin' || context.operation.privilegeLevel === 'super_admin') {
       methods.push('mfa_totp');
-    }
+
 
     // Hardware key for system-level operations
     if (context.operation.privilegeLevel === 'system') {
       methods.push('hardware_key');
-    }
+
 
     // Admin approval for emergency actions
     if (context.operation.type === 'emergency_actions') {
       methods.push('admin_approval');
-    }
+
 
     return methods.length > 0 ? methods : ['mfa_totp'];
-  }
+
 
   private async logSecurityEvent(
     context: SecurityValidationContext, 
@@ -1112,10 +1118,10 @@ export class AdminSecurityValidationService {
         context.timestamp,
         JSON.stringify(result.metadata)
       ]);
-    } catch (error) {
+ catch (error) {
       this.logger.error('Failed to log security event', error);
-    }
-  }
+
+
 
   // Placeholder methods for full implementation
   private async initializeRateLimiting(): Promise<void> {
@@ -1132,20 +1138,20 @@ export class AdminSecurityValidationService {
         
         if (state.requests.length === 0 && (!state.blocked || now > state.blockedUntil)) {
           expiredKeys.push(key);
-        }
-      }
+
+
       
       for (const key of expiredKeys) {
         this.rateLimitCache.delete(key);
-      }
+
     }, 5 * 60 * 1000); // Clean every 5 minutes
-  }
+
 
   private async setupPatternDetection(): Promise<void> {
 
     // Initialize suspicious pattern detection
     // This would include behavioral analysis, anomaly detection, etc.
-  }
+
 
   private async detectSuspiciousPatterns(____context: SecurityValidationContext): Promise<Partial<SecurityValidationResult>> {
     // Placeholder for suspicious pattern detection
@@ -1154,7 +1160,7 @@ export class AdminSecurityValidationService {
       warnings: [],
       recommendations: []
     };
-  }
+
 
   private async applySecurityPolicies(____context: SecurityValidationContext): Promise<Partial<SecurityValidationResult>> {
     // Placeholder for security policy application
@@ -1163,31 +1169,32 @@ export class AdminSecurityValidationService {
       warnings: [],
       recommendations: []
     };
-  }
-}
+
+
 
 // =============================================================================
 // Supporting Interfaces
 // =============================================================================
 
-}
-}
+
+
 interface RateLimitState {
   requests: number[];
   blocked: boolean;
   blockedUntil: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SuspiciousActivity {
   userId: string;
   patterns: string[];
   severity: SecuritySeverity;
   detectedAt: Date;
   count: number;
-}
-}
-}
+
+
+

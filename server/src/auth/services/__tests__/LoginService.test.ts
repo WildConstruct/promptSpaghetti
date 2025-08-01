@@ -19,7 +19,7 @@ const mockUserService = {
   verifyPassword: jest.fn(),
   updateUser: jest.fn(),
   getUserById: jest.fn()
-} as jest.Mocked<UserService>;
+ as jest.Mocked<UserService>;
 
 const mockTokenService = {
   generateAccessToken: jest.fn(),
@@ -27,32 +27,32 @@ const mockTokenService = {
   refreshAccessToken: jest.fn(),
   verifyRefreshToken: jest.fn(),
   revokeAllUserTokens: jest.fn()
-} as jest.Mocked<TokenService>;
+ as jest.Mocked<TokenService>;
 
 const mockAuditService = {
   logEvent: jest.fn()
-} as jest.Mocked<AuditService>;
+ as jest.Mocked<AuditService>;
 
 const mockRateLimitService = {
   checkIPRateLimit: jest.fn()
-} as jest.Mocked<RateLimitService>;
+ as jest.Mocked<RateLimitService>;
 
 const mockEmailService = {
   sendLoginAlert: jest.fn(),
   sendAccountUnlocked: jest.fn(),
   sendAccountUnlockRequest: jest.fn()
-} as jest.Mocked<EmailService>;
+ as jest.Mocked<EmailService>;
 
 const mockDatabaseService = {
   query: jest.fn()
-} as jest.Mocked<DatabaseService>;
+ as jest.Mocked<DatabaseService>;
 
 const mockRedisService = {
   get: jest.fn(),
   set: jest.fn(),
   setex: jest.fn(),
   del: jest.fn()
-} as jest.Mocked<RedisService>;
+ as jest.Mocked<RedisService>;
 
 const mockConfig: AuthConfig = buildAuthConfig({
   JWT_SECRET: 'test-secret',
@@ -91,7 +91,7 @@ describe('LoginService', () => {
       country: 'US',
       city: 'New York',
       timezone: 'America/New_York'
-    }
+
   };
 
   beforeEach(() => {
@@ -145,7 +145,7 @@ describe('LoginService', () => {
           userId: mockUser.id,
           action: 'login_success',
           severity: 'info'
-  }
+
       );
     });
 
@@ -277,7 +277,7 @@ describe('LoginService', () => {
           action: 'suspicious_login',
           details: expect.objectContaining({
             reason: 'new_device'
-  }
+
   }
       );
     });
@@ -296,7 +296,7 @@ describe('LoginService', () => {
           action: 'suspicious_activity_detected',
           details: expect.objectContaining({
             type: 'rapid_attempts'
-  }
+
   }
       );
     });
@@ -404,14 +404,14 @@ describe('LoginService', () => {
           userId: mockUser.id,
           action: 'account_unlocked',
           severity: 'info'
-  }
+
       );
 
       expect(mockEmailService.sendAccountUnlocked).toHaveBeenCalledWith(
         mockUser.email,
         expect.objectContaining({
           displayName: mockUser.displayName
-  }
+
       );
     });
 
@@ -487,13 +487,13 @@ describe('LoginService', () => {
             description: 'Multiple failed login attempts detected',
             count: 3,
             severity: 'high'
-          }
+
         ],
         deviceAnalysis: {
           newDevices: 20,
           returningDevices: 80,
           suspiciousDevices: 2
-        }
+
       });
     });
 
@@ -524,7 +524,7 @@ describe('LoginService', () => {
           action: 'suspicious_activity_detected',
           details: expect.objectContaining({
             type: 'multiple_emails'
-  }
+
   }
       );
     });

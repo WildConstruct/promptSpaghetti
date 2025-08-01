@@ -82,10 +82,10 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
             systemSources: { type: 'array' },
             eventTypes: { type: 'array' },
             userPermissions: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const authContext = await authService.createAuthContextFromRequest(request);
@@ -97,7 +97,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           error: 'Dashboard access denied',
           reason: dashboardAuth.reason 
         });
-      }
+
 
       // Get user authorization capabilities
       const authSummary = authService.getAuthorizationSummary(authContext);
@@ -125,7 +125,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           { type: 'event_stream', name: 'Event Stream', category: 'monitoring' },
           { type: 'security_events', name: 'Security Events', category: 'security' }
         );
-      }
+
 
       if (authSummary.capabilities.canViewAnalytics) {
         availableWidgets.push(
@@ -137,14 +137,14 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           { type: 'user_activity', name: 'User Activity', category: 'business' },
           { type: 'integration_status', name: 'Integration Status', category: 'integration' }
         );
-      }
+
 
       if (authSummary.capabilities.canViewAdminDashboard) {
         availableWidgets.push(
           { type: 'system_health', name: 'System Health', category: 'admin' },
           { type: 'cost_tracking', name: 'Cost Tracking', category: 'admin' }
         );
-      }
+
 
       return reply.send({
         config,
@@ -153,14 +153,13 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
         eventTypes,
         userPermissions: authSummary.capabilities
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Dashboard config error:', error);
       return reply.code(500).send({ 
         error: 'Failed to get dashboard configuration',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -175,8 +174,8 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
         properties: {
           config: DashboardConfigSchema,
           query: DashboardQuerySchema.optional()
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -186,10 +185,10 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
             timeSeriesData: { type: 'object' },
             statistics: { type: 'object' },
             lastUpdate: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { config, query } = request.body as {
@@ -206,7 +205,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           error: 'Dashboard access denied',
           reason: dashboardAuth.reason 
         });
-      }
+
 
       // Build query filter
       const now = Date.now();
@@ -229,7 +228,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           error: 'Query access denied',
           reason: queryAuth.reason 
         });
-      }
+
 
       const authorizedFilter = queryAuth.filteredQuery!;
 
@@ -311,14 +310,13 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
         statistics,
         lastUpdate: now
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Dashboard data error:', error);
       return reply.code(500).send({ 
         error: 'Failed to get dashboard data',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -332,17 +330,17 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           widgetId: { type: 'string' }
-  }
+
         required: ['widgetId']
-  }
+
       body: {
         type: 'object',
         properties: {
           widgetConfig: WidgetConfigSchema,
           query: DashboardQuerySchema.optional()
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { widgetId } = request.params as { widgetId: string };
@@ -366,7 +364,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           error: 'Widget data access denied',
           reason: queryAuth.reason 
         });
-      }
+
 
       const authorizedFilter = queryAuth.filteredQuery!;
 
@@ -501,7 +499,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
               ...authorizedFilter, 
               categories: ['security'],
               types: ['SECURITY_EVENT', 'FRAUD_DETECTION']
-  }
+
             limit: 20,
             sortBy: 'timestamp',
             sortOrder: 'desc'
@@ -512,7 +510,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
 
         default:
           widgetData = { message: 'Widget type not implemented' };
-      }
+
 
       return reply.send({
         widgetId,
@@ -520,14 +518,13 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
         data: widgetData,
         lastUpdate: Date.now()
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Widget data error:', error);
       return reply.code(500).send({ 
         error: 'Failed to get widget data',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -544,10 +541,10 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
             wsEndpoint: { type: 'string' },
             connectionStats: { type: 'object' },
             subscriptionOptions: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const authContext = await authService.createAuthContextFromRequest(request);
@@ -559,7 +556,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           error: 'Real-time dashboard access denied',
           reason: dashboardAuth.reason 
         });
-      }
+
 
       // Get WebSocket server stats
       const connectionStats = wsServer.getStats();
@@ -581,17 +578,16 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
             severities: true,
             userId: queryAuth.filteredQuery?.userId ? false : true,
             organizationId: queryAuth.filteredQuery?.organizationId ? false : true
-          } : {}
-        }
-      });
+ : {}
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Real-time info error:', error);
       return reply.code(500).send({ 
         error: 'Failed to get real-time connection info',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -609,12 +605,12 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           widgets: {
             type: 'array',
             items: WidgetConfigSchema
-  }
+
           config: DashboardConfigSchema
-  }
+
         required: ['layoutId', 'name', 'widgets']
-      }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { layoutId, name, widgets, config } = request.body as {
@@ -633,7 +629,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           error: 'Dashboard layout save access denied',
           reason: dashboardAuth.reason 
         });
-      }
+
 
       // Validate widget configurations
       const validatedWidgets = widgets.map(widget => WidgetConfigSchema.parse(widget));
@@ -650,14 +646,13 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
         saved: true,
         timestamp: Date.now()
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Dashboard layout save error:', error);
       return reply.code(500).send({ 
         error: 'Failed to save dashboard layout',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -682,13 +677,13 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
                   config: { type: 'object' },
                   createdAt: { type: 'number' },
                   updatedAt: { type: 'number' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const authContext = await authService.createAuthContextFromRequest(request);
@@ -700,7 +695,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           error: 'Dashboard layouts access denied',
           reason: dashboardAuth.reason 
         });
-      }
+
 
       // In production, this would load from persistent storage
       const layouts = [
@@ -713,22 +708,21 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
             refreshInterval: 5000,
             maxEvents: 100,
             enableRealTime: true
-  }
+
           createdAt: Date.now() - 86400000,
           updatedAt: Date.now() - 86400000
-        }
+
       ];
 
       return reply.send({ layouts });
-
-    } catch (error) {
+ catch (error) {
       console.error('Dashboard layouts error:', error);
       return reply.code(500).send({ 
         error: 'Failed to get dashboard layouts',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}
+
 
 export default analyticsDashboardRoutes;

@@ -189,14 +189,14 @@ export const InlineNodeEditor = ({ node, isActive, onUpdate, onClose, onSubmit, 
                                     fontSize: 12,
                                 }, children: "Save" })] })] }), _jsx("style", { children: `
         @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: scale(0.95) translateY(-10px);
-          }
+  from {
+  opacity: 0;,
+  transform: scale(0.95) translateY(-10px);
+}
           to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
+  opacity: 1;,
+  transform: scale(1) translateY(0);
+}
         }
       ` })] }));
 };

@@ -398,30 +398,27 @@ div >
                         cursor: 'pointer',
                         textAlign: 'left',
                         transition: 'all 0.2s',
-                        ':hover': {
-                            borderColor: '#3b82f6',
-                            boxShadow: '0 2px 4px rgba(59, 130, 246, 0.1)',
-                        }
-                    }
-                        >
-                            _jsxs("div", { style: {
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 8,
-                                    marginBottom: 6,
-                                }, children: [_jsx("span", { style: { fontSize: 20 }, children: format.icon }), _jsx("span", { style: {
-                                            fontSize: 14,
-                                            fontWeight: 600,
-                                            color: '#1f2937',
-                                        }, children: format.name }), format.vfxCompatible && ()
-                                        < span, " style=", {
-                                        background: 'linear-gradient(135deg, #8b5cf6, #a855f7)',
-                                        color: 'white',
-                                        fontSize: 9,
-                                        padding: '1px 4px',
-                                        borderRadius: 4,
-                                        fontWeight: 500,
-                                    }, "> VFX"] }), ")}"] })
+                        ':hover': {},
+                        borderColor: '#3b82f6',
+                        boxShadow: '0 2px 4px rgba(59, 130, 246, 0.1)',
+                    }, ">", _jsxs("div", { style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                            marginBottom: 6,
+                        }, children: [_jsx("span", { style: { fontSize: 20 }, children: format.icon }), _jsx("span", { style: {
+                                    fontSize: 14,
+                                    fontWeight: 600,
+                                    color: '#1f2937',
+                                }, children: format.name }), format.vfxCompatible && ()
+                                < span, " style=", {
+                                background: 'linear-gradient(135deg, #8b5cf6, #a855f7)',
+                                color: 'white',
+                                fontSize: 9,
+                                padding: '1px 4px',
+                                borderRadius: 4,
+                                fontWeight: 500,
+                            }, "> VFX"] }), ")}"] })
                 ,
                     _jsx("div", { style: {
                             fontSize: 12,
@@ -585,8 +582,8 @@ button >
                                 }, children: "Resolution" }), _jsx("select", { value: `${exportOptions?.vfxOptions?.resolution?.[0]}x${exportOptions?.vfxOptions?.resolution?.[1]}`, onChange: (e) => {
                                     const [width, height] = e.target.value.split('x').map(Number);
                                     setExportOptions(prev => prev ? {} : );
-                                } }), "...prev, vfxOptions: ", ...(prev.vfxOptions,
-                                resolution), ": [width, height], } : null); }} style=", {
+                                } }), "...prev, vfxOptions: ", (,
+                            ), "...prev.vfxOptions, resolution: [width, height], } : null); }} style=", {
                                 width: '100%',
                                 padding: '6px 8px',
                                 border: '1px solid #d1d5db',

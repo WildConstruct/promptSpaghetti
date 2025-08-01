@@ -5,6 +5,7 @@
 import React from 'react';
 
 }
+}
 export interface ExtensionManagerPanelProps {
     className?: string;
     onClose?: () => void;
@@ -13,4 +14,5 @@ export interface ExtensionManagerPanelProps {
 export declare const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps>;
 export default ExtensionManagerPanel;
 //# sourceMappingURL=ExtensionManagerPanel.d.ts.map
+}
 }

@@ -40,6 +40,7 @@ export const SystemCondition = {
 };
 ;
 ;
+;
 export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     rules = new Map();
     circuitBreakerStates = new Map();
@@ -405,8 +406,9 @@ if (analyticsConfig) {
                                     }
                                     ;
                                     return adjustedResult;
-                                    applyInsightAdjustment(rule, ThrottlingRule);
-                                    context: ThrottlingDecisionContext,
+                                    applyInsightAdjustment(rule, ThrottlingRule),
+                                        context;
+                                    ThrottlingDecisionContext,
                                         result;
                                     ThrottlingResult,
                                         insight;
@@ -461,8 +463,9 @@ if (analyticsConfig) {
                                                 break;
                                                 return adjustedResult;
                                                 async;
-                                                recordThrottlingDecision(rule, ThrottlingRule);
-                                                context: ThrottlingDecisionContext,
+                                                recordThrottlingDecision(rule, ThrottlingRule),
+                                                    context;
+                                                ThrottlingDecisionContext,
                                                     result;
                                                 ThrottlingResult;
                                                 Promise < void  > {
@@ -513,8 +516,7 @@ if (analyticsConfig) {
                                                                     adjustmentFactor: 1.5,
                                                                     reason: 'Burst pattern detected, increase throttling to prevent overload',
                                                                     expectedImpact: 'Reduce load spikes by 30%',
-                                                                    validityPeriod: 30,
-                                                                },
+                                                                    validityPeriod: 30, },
                                                                 insights, : .push({}),
                                                                 insightId: `pattern-${ruleId}-${Date.now()}`
                                                             };
@@ -653,14 +655,14 @@ if (analyticsConfig) {
                                                     // In a real implementation, this would query historical data
                                                     // For now, simulate with recent system metrics
                                                     return: {
-                                                        requestVolume: [,
+                                                        requestVolume: [
                                                             this.systemMetrics.requestsPerSecond * 0.8,
                                                             this.systemMetrics.requestsPerSecond * 0.9,
                                                             this.systemMetrics.requestsPerSecond * 1.1,
                                                             this.systemMetrics.requestsPerSecond
                                                         ],
                                                         successRate: [98.5, 97.8, 98.1, 100 - this.systemMetrics.errorRate],
-                                                        averageLatency: [,
+                                                        averageLatency: [
                                                             this.systemMetrics.averageResponseTime * 0.9,
                                                             this.systemMetrics.averageResponseTime * 1.1,
                                                             this.systemMetrics.averageResponseTime * 0.95,
@@ -758,16 +760,17 @@ if (analyticsConfig) {
                                                                 enabled: true,
                                                                 priority: 999,
                                                                 mode: ThrottlingMode.PROGRESSIVE,
-                                                                triggerConditions: [,
+                                                                triggerConditions: [
                                                                     {
                                                                         type: 'endpoint',
                                                                         operator: 'contains',
                                                                         value: data.endpoint || ''
-                                                                    }],
+                                                                    }
+                                                                ],
                                                                 baseDelay: 1000,
                                                                 maxDelay: 10000,
                                                                 adaptiveMultiplier: 2.0,
-                                                                escalationSteps: [,
+                                                                escalationSteps: [
                                                                     {
                                                                         level: 1,
                                                                         delay: 1000,
@@ -1360,12 +1363,13 @@ if (analyticsConfig) {
                                                                                                                                         mode;
                                                                                                                                     ThrottlingMode.ADAPTIVE,
                                                                                                                                         triggerConditions;
-                                                                                                                                    [,
+                                                                                                                                    [
                                                                                                                                         {
                                                                                                                                             type: 'endpoint',
                                                                                                                                             operator: 'contains',
                                                                                                                                             value: '/api'
-                                                                                                                                        }],
+                                                                                                                                        }
+                                                                                                                                    ],
                                                                                                                                         baseDelay;
                                                                                                                                     100,
                                                                                                                                         maxDelay;
@@ -1426,7 +1430,7 @@ if (analyticsConfig) {
                                                                                                                                         mode;
                                                                                                                                     ThrottlingMode.CIRCUIT_BREAKER,
                                                                                                                                         triggerConditions;
-                                                                                                                                    [,
+                                                                                                                                    [
                                                                                                                                         {
                                                                                                                                             type: 'endpoint',
                                                                                                                                             operator: 'pattern_match',
@@ -1437,7 +1441,8 @@ if (analyticsConfig) {
                                                                                                                                             operator: 'greater_than',
                                                                                                                                             field: 'consecutive_failures',
                                                                                                                                             threshold: 3
-                                                                                                                                        }],
+                                                                                                                                        }
+                                                                                                                                    ],
                                                                                                                                         baseDelay;
                                                                                                                                     0,
                                                                                                                                         maxDelay;
@@ -1498,12 +1503,13 @@ if (analyticsConfig) {
                                                                                                                                         mode;
                                                                                                                                     ThrottlingMode.LOAD_SHEDDING,
                                                                                                                                         triggerConditions;
-                                                                                                                                    [,
+                                                                                                                                    [
                                                                                                                                         {
                                                                                                                                             type: 'system_load',
                                                                                                                                             operator: 'greater_than',
                                                                                                                                             threshold: 85
-                                                                                                                                        }],
+                                                                                                                                        }
+                                                                                                                                    ],
                                                                                                                                         baseDelay;
                                                                                                                                     0,
                                                                                                                                         maxDelay;
@@ -1542,12 +1548,13 @@ if (analyticsConfig) {
                                                                                                                                 enabled: true,
                                                                                                                                 priority: 700,
                                                                                                                                 mode: ThrottlingMode.BANDWIDTH_SHAPING,
-                                                                                                                                triggerConditions: [,
+                                                                                                                                triggerConditions: [
                                                                                                                                     {
                                                                                                                                         type: 'endpoint',
                                                                                                                                         operator: 'contains',
                                                                                                                                         value: '/preview'
-                                                                                                                                    }],
+                                                                                                                                    }
+                                                                                                                                ],
                                                                                                                                 baseDelay: 0,
                                                                                                                                 maxDelay: 2000,
                                                                                                                                 adaptiveMultiplier: 1.0,
@@ -1671,21 +1678,15 @@ if (analyticsConfig) {
                                                                                                                             * Get recent throttling attempts for integration with rate limiting
                                                                                                                             */
                                                                                                                             ,
-                                                                                                                            /**
-                                                                                                                            * Get recent throttling attempts for integration with rate limiting
-                                                                                                                            */
-                                                                                                                            getRecentThrottlingAttempts(identifier, endpoint) {
-                                                                                                                                // This would be implemented with actual attempt tracking
-                                                                                                                                // For now, return empty array as this is a placeholder for the integration
-                                                                                                                                return [];
-                                                                                                                                /**
-                                                                                                                                 * Remove a rule
-                                                                                                                                 */
-                                                                                                                            }
-                                                                                                                            /**
-                                                                                                                             * Remove a rule
-                                                                                                                             */
-                                                                                                                            ,
+                                                                                                                            Date,
+                                                                                                                            action: string,
+                                                                                                                            delay: number,
+                                                                                                                            ruleId: string,
+                                                                                                                            success: boolean
+                                                                                                                        } > {
+                                                                                                                            // This would be implemented with actual attempt tracking
+                                                                                                                            // For now, return empty array as this is a placeholder for the integration
+                                                                                                                            return: [],
                                                                                                                             /**
                                                                                                                              * Remove a rule
                                                                                                                              */

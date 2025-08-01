@@ -123,7 +123,7 @@ function checkSecurityPatterns(filePath: string): any[] {
     // Skip if file is explicitly allowed
     if (ALLOWED_PATTERNS.some(pattern => pattern.test(filePath) || pattern.test(content))) {
       return violations;
-    }
+
 
     // Check all security patterns
     Object.entries(SECURITY_PATTERNS).forEach(([category, patterns]) => {
@@ -141,7 +141,7 @@ function checkSecurityPatterns(filePath: string): any[] {
             severity: getSeverity(category),
             message: getSecurityMessage(category, match[0])
           });
-        }
+
       });
     });
 
@@ -161,20 +161,20 @@ function checkSecurityPatterns(filePath: string): any[] {
             severity: 'medium',
             message: getBestPracticeMessage(category, match[0])
           });
-        }
+
       });
     });
 
     return violations;
-  } catch (error) {
+ catch (error) {
     console.error(`Error checking ${filePath}:`, error.message);
     return [];
-  }
-}
+
+
 
 function getLineNumber(content: string, index: number): number {
   return content.substring(0, index).split('\n').length;
-}
+
 
 function getSeverity(category: string): string {
   const severityMap = {
@@ -188,7 +188,7 @@ function getSeverity(category: string): string {
     fileSystemRisks: 'high'
   };
   return severityMap[category] || 'medium';
-}
+
 
 function getSecurityMessage(category: string, match: string): string {
   const messages = {
@@ -202,7 +202,7 @@ function getSecurityMessage(category: string, match: string): string {
     authBypass: 'Authentication/authorization bypass pattern detected'
   };
   return messages[category] || 'Security vulnerability detected';
-}
+
 
 function getBestPracticeMessage(category: string, match: string): string {
   const messages = {
@@ -211,7 +211,7 @@ function getBestPracticeMessage(category: string, match: string): string {
     insecureRandom: 'Insecure random generation - use crypto.randomBytes() for security'
   };
   return messages[category] || 'Security best practice violation';
-}
+
 
 function main(): void {
   const filePaths = process.argv.slice(2);
@@ -222,7 +222,7 @@ function main(): void {
   if (filePaths.length === 0) {
     console.log('✅ Epic 17 Security Check: No files to check');
     process.exit(0);
-  }
+
 
   console.log(`🔒 Epic 17 Security Check: Scanning ${filePaths.length} files...`);
 
@@ -240,25 +240,25 @@ function main(): void {
           high: '🔥',
           medium: '⚠️',
           low: '💡'
-        }[violation.severity] || '⚠️';
+[violation.severity] || '⚠️';
 
         if (violation.severity === 'critical') {
           criticalCount++;
-        }
+
         
         console.log(`   Line ${violation.line}: ${severityIcon} ${violation.message}`);
         console.log(`      Pattern: ${violation.match.trim()}`);
         console.log(`      Severity: ${violation.severity.toUpperCase()}`);
       });
-    }
-  }
+
+
 
   if (hasErrors) {
     console.log(`\n💥 Epic 17 Security Check: Found ${totalViolations} security issues`);
     
     if (criticalCount > 0) {
       console.log(`💀 CRITICAL: ${criticalCount} critical security vulnerabilities must be fixed!`);
-    }
+
     
     console.log('\n🔧 Security fix guidelines:');
     console.log('   • Use parameterized queries to prevent SQL injection');
@@ -270,14 +270,14 @@ function main(): void {
     console.log('   • Implement proper authentication and authorization checks');
     
     process.exit(1);
-  } else {
+ else {
     console.log(`✅ Epic 17 Security Check: All ${filePaths.length} files passed security scan`);
     process.exit(0);
-  }
-}
+
+
 
 if (require.main === module) {
   main();
-}
+
 
 module.exports = { checkSecurityPatterns, SECURITY_PATTERNS, SECURITY_BEST_PRACTICES };

@@ -5,8 +5,8 @@
  */
 
 }
-export interface MedievalClothing {
-    id: string;
+}
+export interface MedievalClothing { id: string;
     name: string;
     description: string;
     socialClass: 'peasant' | 'merchant' | 'noble' | 'clergy' | 'royal';
@@ -15,7 +15,7 @@ export interface MedievalClothing {
     colors: string[];
     period: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     regions: string[];
@@ -25,8 +25,8 @@ export interface MedievalClothing {
     sources: string[];
 
 }
-export interface MedievalMaterial {
-    id: string;
+}
+export interface MedievalMaterial { id: string;
     name: string;
     type: 'fabric' | 'leather' | 'metal' | 'fur' | 'other';
     availability: 'common' | 'uncommon' | 'rare' | 'luxury';
@@ -35,11 +35,10 @@ export interface MedievalMaterial {
     socialStatus: 'any' | 'common' | 'merchant' | 'noble' | 'royal';
     tradingSources: string[];
     primaryUses: string[];
-    historicalNotes: string;
-
+    historicalNotes: string }
 }
-export interface MedievalLocation {
-    id: string;
+}
+export interface MedievalLocation { id: string;
     name: string;
     type: 'castle' | 'village' | 'town' | 'monastery' | 'forest' | 'field' | 'road' | 'tavern';
     description: string;
@@ -49,11 +48,10 @@ export interface MedievalLocation {
     timeOfDay: 'dawn' | 'morning' | 'midday' | 'afternoon' | 'evening' | 'night' | 'any';
     season: 'spring' | 'summer' | 'autumn' | 'winter' | 'any';
     geographicalRegion: string;
-    politicalContext: string;
-
+    politicalContext: string }
 }
-export interface MedievalCharacter {
-    id: string;
+}
+export interface MedievalCharacter { id: string;
     name: string;
     title?: string;
     profession: string;
@@ -65,33 +63,29 @@ export interface MedievalCharacter {
     skills: string[];
     possessions: string[];
     socialConnections: string[];
-    historicalContext: string;
-
+    historicalContext: string }
 }
-export interface MedievalScene {
-    id: string;
+}
+export interface MedievalScene { id: string;
     title: string;
     setting: MedievalLocation;
     characters: MedievalCharacter[];
     timeContext: {
         season: string;
         timeOfDay: string;
-        weather?: string;
+        weather?: string }
 }
     };
     activities: string[];
     socialDynamics: string[];
     historicalElements: string[];
-    sensoryDetails: {
-        sights: string[];
+    sensoryDetails: { sights: string[];
         sounds: string[];
         smells: string[];
-        textures: string[];
-    };
+        textures: string[] };
     narrativeHooks: string[];
 
-export declare class MedievalDemo {
-    private metadataManager;
+export declare class MedievalDemo { private metadataManager;
     private dataSourceManager;
     private clothingDatabase;
     private materialDatabase;
@@ -131,29 +125,24 @@ export declare class MedievalDemo {
         location?: string;
         timeOfDay?: string;
         season?: string;
-        theme?: string;
-    }): MedievalScene | null;
+        theme?: string }): MedievalScene | null;
     /**
      * Get clothing appropriate for character and context
      */
-    getAppropriateClothing(character: MedievalCharacter, context: {)
+    getAppropriateClothing(character: MedievalCharacter, context: { )
         occasion?: string;
         season?: string;
-        socialSetting?: string;
-    }): MedievalClothing[];
+        socialSetting?: string }): MedievalClothing[];
     /**
      * Validate medieval content for historical accuracy
      */
-    validateHistoricalAccuracy(content: {)
+    validateHistoricalAccuracy(content: { )
         era?: string;
         materials?: string[];
         socialClasses?: string[];
-        activities?: string[];
-    }): {
-        isValid: boolean;
+        activities?: string[] }): { isValid: boolean;
         violations: string[];
-        suggestions: string[];
-    };
+        suggestions: string[] };
     /**
      * Generate authentic medieval prompt elements
      */
@@ -161,14 +150,12 @@ export declare class MedievalDemo {
     /**
      * Create demo scenario with full medieval context
      */
-    createDemoScenario(theme?: string): {
-        scene: MedievalScene;
+    createDemoScenario(theme?: string): { scene: MedievalScene;
         characters: MedievalCharacter[];
         clothing: MedievalClothing[];
         materials: MedievalMaterial[];
         historicalContext: string;
-        promptSuggestions: string[];
-    };
+        promptSuggestions: string[] };
     /**
      * Generate historical context explanation
      */
@@ -184,13 +171,11 @@ export declare class MedievalDemo {
     /**
      * Get all medieval content for external use
      */
-    getAllMedievalContent(): {
-        clothing: MedievalClothing[];
+    getAllMedievalContent(): { clothing: MedievalClothing[];
         materials: MedievalMaterial[];
         locations: MedievalLocation[];
         characters: MedievalCharacter[];
-        scenes: MedievalScene[];
-    };
+        scenes: MedievalScene[] };
 
 export default MedievalDemo;
 //# sourceMappingURL=MedievalDemo.d.ts.map

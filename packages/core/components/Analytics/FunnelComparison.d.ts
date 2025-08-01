@@ -19,24 +19,23 @@ import { ConversionFunnelDefinition, FlexibleConversionEvent } from '../../analy
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 }
-export interface FunnelComparisonProps {
-    analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+}
+export interface FunnelComparisonProps { analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     primaryFunnel: ConversionFunnelDefinition;
     comparisonMode: ComparisonMode;
     comparisonConfig: ComparisonConfiguration;
     onInsightGenerated?: (insights: ComparisonInsight[]) => void;
     onExportRequest?: (data: ComparisonExportData) => void;
 
-export type ComparisonMode = 'time_period' | 'funnel_variant' | 'segment' | 'cohort' | 'ab_test' | 'geographic' | 'device_type';
-
+export type ComparisonMode = 'time_period' | 'funnel_variant' | 'segment' | 'cohort' | 'ab_test' | 'geographic' | 'device_type' }
 }
-export interface ComparisonConfiguration {
-    mode: ComparisonMode;
+}
+export interface ComparisonConfiguration { mode: ComparisonMode;
     baseline: ComparisonTarget;
     comparison: ComparisonTarget;
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     significanceLevel: number;
@@ -45,45 +44,41 @@ export interface ComparisonConfiguration {
     autoGenerateInsights: boolean;
 
 }
-export interface ComparisonTarget {
-    id: string;
+}
+export interface ComparisonTarget { id: string;
     name: string;
     description?: string;
     filters?: ComparisonFilter[];
     funnelDefinition?: ConversionFunnelDefinition;
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface ComparisonFilter {
-    type: 'segment' | 'cohort' | 'timeRange' | 'geography' | 'device' | 'custom';
+}
+export interface ComparisonFilter { type: 'segment' | 'cohort' | 'timeRange' | 'geography' | 'device' | 'custom';
     field: string;
     operator: string;
     value: Error;
-    description?: string;
-
+    description?: string }
 }
-export interface ComparisonResult {
-    baseline: FunnelPerformanceData;
+}
+export interface ComparisonResult { baseline: FunnelPerformanceData;
     comparison: FunnelPerformanceData;
     delta: PerformanceDelta;
     statisticalTests: StatisticalTestResult[];
     insights: ComparisonInsight[];
-    metadata: ComparisonMetadata;
-
+    metadata: ComparisonMetadata }
 }
-export interface FunnelPerformanceData {
-    targetId: string;
+}
+export interface FunnelPerformanceData { targetId: string;
     totalEntries: number;
     totalConversions: number;
     overallConversionRate: number;
     averageTimeToConvert: number;
     totalValue: number;
     stepPerformance: StepPerformanceData[];
-    additionalMetrics: Record<string, number>;
-
+    additionalMetrics: Record<string, number> }
 }
-export interface StepPerformanceData {
-    stepId: string;
+}
+export interface StepPerformanceData { stepId: string;
     stepName: string;
     order: number;
     entries: number;
@@ -92,14 +87,15 @@ export interface StepPerformanceData {
     dropOffCount: number;
     dropOffRate: number;
     averageTimeSpent: number;
-    value: number;
-
+    value: number }
+}
 }
 export interface PerformanceDelta {
     overallConversionRate: {
         absolute: number;
         relative: number;
         direction: 'improvement' | 'decline' | 'no_change'
+}
 }
   };
     totalConversions: {
@@ -120,12 +116,14 @@ export interface PerformanceDelta {
     stepDeltas: StepDelta[];
 
 }
+}
 export interface StepDelta {
     stepId: string;
     conversionRate: {
         absolute: number;
         relative: number;
         direction: 'improvement' | 'decline' | 'no_change'
+}
 }
   };
     dropOffRate: {
@@ -135,8 +133,8 @@ export interface StepDelta {
   };
 
 }
-export interface StatisticalTestResult {
-    testType: 'chi_square' | 'z_test' | 'fishers_exact' | 't_test';
+}
+export interface StatisticalTestResult { testType: 'chi_square' | 'z_test' | 'fishers_exact' | 't_test';
     metric: string;
     stepId?: string;
     pValue: number;
@@ -144,18 +142,16 @@ export interface StatisticalTestResult {
     isSignificant: boolean;
     confidenceInterval: [number, number];
     effectSize: number;
-    powerAnalysis?: PowerAnalysisResult;
-
+    powerAnalysis?: PowerAnalysisResult }
 }
-export interface PowerAnalysisResult {
-    currentPower: number;
+}
+export interface PowerAnalysisResult { currentPower: number;
     requiredSampleSize: number;
     detectedEffectSize: number;
-    recommendations: string[];
-
+    recommendations: string[] }
 }
-export interface ComparisonInsight {
-    type: 'significant_improvement' | 'significant_decline' | 'no_significant_difference' | 'sample_size_warning' | 'recommendation';
+}
+export interface ComparisonInsight { type: 'significant_improvement' | 'significant_decline' | 'no_significant_difference' | 'sample_size_warning' | 'recommendation';
     severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
     title: string;
     description: string;
@@ -163,14 +159,13 @@ export interface ComparisonInsight {
     stepId?: string;
     evidence: InsightEvidence;
     recommendations?: string[];
-    priority: number;
-
+    priority: number }
 }
-export interface InsightEvidence {
-    statisticalTest?: StatisticalTestResult;
+}
+export interface InsightEvidence { statisticalTest?: StatisticalTestResult;
     sampleSizes: {
         baseline: number;
-        comparison: number;
+        comparison: number }
 }
     };
     effectSize: number;
@@ -178,8 +173,8 @@ export interface InsightEvidence {
     additionalContext?: Record<string, any>;
 
 }
-export interface ComparisonMetadata {
-    comparisonId: string;
+}
+export interface ComparisonMetadata { comparisonId: string;
     generatedAt: number;
     configuration: ComparisonConfiguration;
     dataQuality: {
@@ -187,33 +182,32 @@ export interface ComparisonMetadata {
         comparisonSampleSize: number;
         dataCompleteness: number;
         outlierCount: number;
-        confidenceLevel: number;
+        confidenceLevel: number }
 }
     };
     executionTime: number;
     cacheHit: boolean;
 
 }
-export interface ComparisonExportData {
-    comparison: ComparisonResult;
+}
+export interface ComparisonExportData { comparison: ComparisonResult;
     rawData: {
         baselineEvents: FlexibleConversionEvent[];
-        comparisonEvents: FlexibleConversionEvent[];
+        comparisonEvents: FlexibleConversionEvent[] }
 }
     };
     visualizations: ComparisonVisualization[];
     reportSummary: string;
 
 }
-export interface ComparisonVisualization {
-    type: 'funnel_chart' | 'delta_chart' | 'significance_heatmap' | 'timeline_chart';
+}
+export interface ComparisonVisualization { type: 'funnel_chart' | 'delta_chart' | 'significance_heatmap' | 'timeline_chart';
     title: string;
     data: Record<string, unknown>;
-    configuration: unknown;
-
+    configuration: unknown }
 }
-export interface ABTestIntegration {
-    experimentId: string;
+}
+export interface ABTestIntegration { experimentId: string;
     experimentName: string;
     variants: ABTestVariant[];
     trafficAllocation: Record<string, number>;
@@ -223,17 +217,16 @@ export interface ABTestIntegration {
     primaryMetric: string;
     secondaryMetrics: string[];
     hypothesis: string;
-    successCriteria: ABTestSuccessCriteria;
-
+    successCriteria: ABTestSuccessCriteria }
 }
-export interface ABTestVariant {
-    id: string;
+}
+export interface ABTestVariant { id: string;
     name: string;
     description: string;
     funnelDefinition: ConversionFunnelDefinition;
     trafficPercentage: number;
-    isControl: boolean;
-
+    isControl: boolean }
+}
 }
 export interface ABTestSuccessCriteria {
     minimumDetectableEffect: number;
@@ -247,4 +240,5 @@ export interface ABTestSuccessCriteria {
 export declare const FunnelComparison: React.FC<FunnelComparisonProps>;
 export default FunnelComparison;
 //# sourceMappingURL=FunnelComparison.d.ts.map
+}
 }

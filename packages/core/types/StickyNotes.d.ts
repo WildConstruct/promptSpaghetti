@@ -4,98 +4,86 @@
  */
 
 }
-export interface StickyNote {
-    id: string;
+}
+export interface StickyNote { id: string;
     position: {
         x: number;
-        y: number;
+        y: number }
 }
     };
-    size: {
-        width: number;
-        height: number;
-    };
+    size: { width: number;
+        height: number };
     content: {
         text: string;
         markdown?: string;
         format: 'plain' | 'markdown' | 'rich'
   };
-    appearance: {
-        color: StickyNoteColor;
+    appearance: { color: StickyNoteColor;
         category?: StickyNoteCategory;
         opacity: number;
-        zIndex: number;
-    };
-    metadata: {
-        createdAt: string;
+        zIndex: number };
+    metadata: { createdAt: string;
         updatedAt: string;
         author: {
             id: string;
             name: string;
-            email?: string;
-        };
+            email?: string };
         version: number;
     };
-    behavior: {
-        draggable: boolean;
+    behavior: { draggable: boolean;
         resizable: boolean;
         editable: boolean;
-        minimized: boolean;
-    };
-    collaboration: {
-        locked: boolean;
+        minimized: boolean };
+    collaboration: { locked: boolean;
         lockedBy?: string;
         comments: StickyNoteComment[];
-        mentions: string[];
-    };
+        mentions: string[] };
 
 export type StickyNoteColor = 'yellow' | 'blue' | 'green' | 'red' | 'purple' | 'orange' | 'pink' | 'gray';
 export type StickyNoteCategory = 'general' | 'technical' | 'creative' | 'feedback' | 'question' | 'decision' | 'action-item' | 'reference';
 
 }
-export interface StickyNoteComment {
-    id: string;
+}
+export interface StickyNoteComment { id: string;
     text: string;
     author: {
         id: string;
-        name: string;
+        name: string }
 }
     };
     timestamp: string;
     resolved: boolean;
 
 }
-export interface StickyNoteGroup {
-    id: string;
+}
+export interface StickyNoteGroup { id: string;
     name: string;
     notes: string[];
     position: {
         x: number;
-        y: number;
+        y: number }
 }
     };
-    appearance: {
-        backgroundColor: string;
+    appearance: { backgroundColor: string;
         borderColor: string;
-        collapsed: boolean;
-    };
+        collapsed: boolean };
 
 }
-export interface StickyNoteFilter {
-    author?: string;
+}
+export interface StickyNoteFilter { author?: string;
     category?: StickyNoteCategory;
     color?: StickyNoteColor;
     dateRange?: {
         start: string;
-        end: string;
+        end: string }
 }
     };
     textSearch?: string;
     tags?: string[];
 
 }
-export interface StickyNoteState {
-    notes: Record<string, StickyNote>;
+}
+export interface StickyNoteState { notes: Record<string, StickyNote>;
     groups: Record<string, StickyNoteGroup>;
     selection: string[];
     activeNote?: string;
@@ -106,28 +94,27 @@ export interface StickyNoteState {
         snapToGrid: boolean;
         gridSize: number;
         defaultColor: StickyNoteColor;
-        defaultCategory: StickyNoteCategory;
+        defaultCategory: StickyNoteCategory }
 }
     };
 
 }
-export interface StickyNoteActions {
-    createNote: (position: {),
+}
+export interface StickyNoteActions { createNote: (position: {) }
         x: number;
         y: number;
+}
 }
     }, content?: string) => string;
     updateNote: (id: string, updates: Partial<StickyNote>) => void;
     deleteNote: (id: string) => void;
     duplicateNote: (id: string) => string;
-    moveNote: (id: string, position: {)
+    moveNote: (id: string, position: { )
         x: number;
-        y: number;
-    }) => void;
-    resizeNote: (id: string, size: {)
+        y: number }) => void;
+    resizeNote: (id: string, size: { )
         width: number;
-        height: number;
-    }) => void;
+        height: number }) => void;
     bringToFront: (id: string) => void;
     sendToBack: (id: string) => void;
     selectNote: (id: string, multiSelect?: boolean) => void;
@@ -153,23 +140,23 @@ export interface StickyNoteActions {
     updateSettings: (settings: Partial<StickyNoteState['settings']>) => void;
 
 }
-export interface StickyNoteEvent {
-    type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'select';
+}
+export interface StickyNoteEvent { type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'select';
     noteId: string;
     data?: any;
     position?: {
         x: number;
-        y: number;
+        y: number }
 }
     };
 
 }
-export interface StickyNoteReactFlowNode {
-    id: string;
+}
+export interface StickyNoteReactFlowNode { id: string;
     type: 'stickyNote';
     position: {
         x: number;
-        y: number;
+        y: number }
 }
     };
     data: StickyNote;
@@ -178,8 +165,8 @@ export interface StickyNoteReactFlowNode {
     deletable: boolean;
 
 }
-export interface StickyNoteTemplate {
-    id: string;
+}
+export interface StickyNoteTemplate { id: string;
     name: string;
     description: string;
     content: StickyNote['content'];
@@ -187,7 +174,7 @@ export interface StickyNoteTemplate {
     category: StickyNoteCategory;
     author: {
         id: string;
-        name: string;
+        name: string }
 }
     };
     createdAt: string;
@@ -195,19 +182,18 @@ export interface StickyNoteTemplate {
     tags: string[];
 
 }
-export interface StickyNoteTemplateLibrary {
-    templates: Record<string, StickyNoteTemplate>;
+}
+export interface StickyNoteTemplateLibrary { templates: Record<string, StickyNoteTemplate>;
     categories: StickyNoteCategory[];
     recentlyUsed: string[];
-    favorites: string[];
-
+    favorites: string[] }
 }
-export interface StickyNotePersistence {
-    save: (state: StickyNoteState) => Promise<void>;
+}
+export interface StickyNotePersistence { save: (state: StickyNoteState) => Promise<void>;
     load: () => Promise<StickyNoteState>;
     sync: (changes: Partial<StickyNoteState>) => Promise<void>;
-    subscribe: (callback: (state: StickyNoteState) => void) => () => void;
-
+    subscribe: (callback: (state: StickyNoteState) => void) => () => void }
+}
 }
 export interface StickyNoteShortcuts {
     'cmd+n': 'createNote';
@@ -221,4 +207,5 @@ export interface StickyNoteShortcuts {
 
 export default StickyNote;
 //# sourceMappingURL=StickyNotes.d.ts.map
+}
 }

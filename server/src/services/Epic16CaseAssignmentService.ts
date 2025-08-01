@@ -6,8 +6,8 @@
  * load balancing, skill-based routing, and assignment analytics.
  */
 
-}
-}
+
+
 export interface ModerationCase {
   id: string;
   caseNumber: string;
@@ -79,12 +79,13 @@ export interface ModerationCase {
   startedAt?: Date;
   completedAt?: Date;
   closedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ModeratorProfile {
   id: string;
   userId: string;
@@ -103,8 +104,9 @@ export interface ModeratorProfile {
   
   // Schedule
   timezone: string;
-}
-}
+
+
+
   workingHours: Record<string, { start: string; end: string }>;
   
   // Performance
@@ -134,10 +136,10 @@ export interface ModeratorProfile {
   // Timestamps
   createdAt: Date;
   updatedAt: Date;
-}
 
-}
-}
+
+
+
 export interface AssignmentRule {
   id: string;
   name: string;
@@ -169,12 +171,13 @@ export interface AssignmentRule {
   createdAt: Date;
   updatedAt: Date;
   lastUsed?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentHistory {
   id: string;
   caseId: string;
@@ -193,12 +196,13 @@ export interface AssignmentHistory {
   assignedBy?: string;
   metadata: Record<string, any>;
   createdAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentAnalytics {
   date: string;
   moderatorId?: string;
@@ -214,12 +218,13 @@ export interface AssignmentAnalytics {
   averageResolutionTime?: number; // minutes
   qualityScore?: number;
   assignmentMethods: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CaseFilter {
   statuses?: string[];
   priorities?: string[];
@@ -228,25 +233,27 @@ export interface CaseFilter {
   requiredSkills?: string[];
   flags?: string[];
   overdue?: boolean;
-}
-}
-  dateRange?: { start?: Date; end?: Date };
-}
 
-}
-}
+
+
+  dateRange?: { start?: Date; end?: Date };
+
+
+
+
 export interface AssignmentRequest {
   caseId: string;
   assignmentMethod?: string;
   preferredModerator?: string;
   forceAssign?: boolean;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignmentResult {
   success: boolean;
   assignedTo?: string;
@@ -257,9 +264,10 @@ export interface AssignmentResult {
   reason?: string;
   alternativeModerators?: string[];
   metadata: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 /**
  * Case Assignment Service
@@ -277,14 +285,14 @@ export class Epic16CaseAssignmentService {
 
   private constructor() {
     this.initializeDefaultRules();
-  }
+
 
   static getInstance(): Epic16CaseAssignmentService {
     if (!Epic16CaseAssignmentService.instance) {
       Epic16CaseAssignmentService.instance = new Epic16CaseAssignmentService();
-    }
+
     return Epic16CaseAssignmentService.instance;
-  }
+
 
   /**
    * Case Management
@@ -301,7 +309,7 @@ export class Epic16CaseAssignmentService {
 
     this.cases.set(moderationCase.id, moderationCase);
     return moderationCase;
-  }
+
 
   async updateCase(caseId: string, updates: Partial<ModerationCase>): Promise<ModerationCase | null> {
 
@@ -316,12 +324,12 @@ export class Epic16CaseAssignmentService {
 
     this.cases.set(caseId, updatedCase);
     return updatedCase;
-  }
+
 
   async getCase(caseId: string): Promise<ModerationCase | null> {
 
     return this.cases.get(caseId) || null;
-  }
+
 
   async getCases(filter?: CaseFilter): Promise<ModerationCase[]> {
 
@@ -331,35 +339,35 @@ export class Epic16CaseAssignmentService {
 
     if (filter.statuses?.length) {
       cases = cases.filter(c => filter.statuses!.includes(c.status));
-    }
+
 
     if (filter.priorities?.length) {
       cases = cases.filter(c => filter.priorities!.includes(c.priority));
-    }
+
 
     if (filter.categories?.length) {
       cases = cases.filter(c => filter.categories!.includes(c.category));
-    }
+
 
     if (filter.assignees?.length) {
       cases = cases.filter(c => c.assignedTo && filter.assignees!.includes(c.assignedTo));
-    }
+
 
     if (filter.requiredSkills?.length) {
       cases = cases.filter(c => 
         filter.requiredSkills!.some(skill => c.requiredSkills.includes(skill))
       );
-    }
+
 
     if (filter.flags?.length) {
       cases = cases.filter(c => 
         filter.flags!.some(flag => c.flags.includes(flag))
       );
-    }
+
 
     if (filter.overdue !== undefined) {
       cases = cases.filter(c => c.overdue === filter.overdue);
-    }
+
 
     if (filter.dateRange) {
       cases = cases.filter(c => {
@@ -367,20 +375,20 @@ export class Epic16CaseAssignmentService {
         return (!filter.dateRange!.start || date >= filter.dateRange!.start) &&
                (!filter.dateRange!.end || date <= filter.dateRange!.end);
       });
-    }
+
 
     return cases.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-  }
+
 
   async getUnassignedCases(): Promise<ModerationCase[]> {
 
     return this.getCases({ statuses: ['unassigned'] });
-  }
+
 
   async getCasesByModerator(moderatorId: string): Promise<ModerationCase[]> {
 
     return this.getCases({ assignees: [moderatorId] });
-  }
+
 
   /**
    * Moderator Management
@@ -396,7 +404,7 @@ export class Epic16CaseAssignmentService {
 
     this.moderators.set(profile.id, profile);
     return profile;
-  }
+
 
   async updateModeratorProfile(moderatorId: string, updates: Partial<ModeratorProfile>): Promise<ModeratorProfile | null> {
 
@@ -411,12 +419,12 @@ export class Epic16CaseAssignmentService {
 
     this.moderators.set(moderatorId, updatedProfile);
     return updatedProfile;
-  }
+
 
   async getModeratorProfile(moderatorId: string): Promise<ModeratorProfile | null> {
 
     return this.moderators.get(moderatorId) || null;
-  }
+
 
   async getAvailableModerators(): Promise<ModeratorProfile[]> {
 
@@ -438,7 +446,7 @@ export class Epic16CaseAssignmentService {
         const bQuality = b.qualityScore || 0;
         return bQuality - aQuality;
       });
-  }
+
 
   async updateModeratorAvailability(moderatorId: string, status: ModeratorProfile['availabilityStatus']): Promise<boolean> {
 
@@ -451,7 +459,7 @@ export class Epic16CaseAssignmentService {
 
     this.moderators.set(moderatorId, profile);
     return true;
-  }
+
 
   /**
    * Assignment Algorithm
@@ -469,7 +477,7 @@ export class Epic16CaseAssignmentService {
         reason: 'Case not found',
         metadata: {}
       };
-    }
+
 
     const queueTime = (Date.now() - moderationCase.createdAt.getTime()) / (1000 * 60); // minutes
 
@@ -483,7 +491,7 @@ export class Epic16CaseAssignmentService {
         reason: 'Case already assigned',
         metadata: {}
       };
-    }
+
 
     // Get available moderators
     const availableModerators = await this.getAvailableModerators();
@@ -496,7 +504,7 @@ export class Epic16CaseAssignmentService {
         reason: 'No available moderators',
         metadata: {}
       };
-    }
+
 
     // Handle preferred moderator
     if (request.preferredModerator) {
@@ -512,8 +520,8 @@ export class Epic16CaseAssignmentService {
           assignedBy,
           request.metadata || {}
         );
-      }
-    }
+
+
 
     // Find applicable assignment rules
     const applicableRules = this.getApplicableRules(moderationCase);
@@ -532,8 +540,8 @@ export class Epic16CaseAssignmentService {
       
       if (result.success) {
         return result;
-      }
-    }
+
+
 
     // Fallback to round robin if no rules worked
     const selectedModerator = this.selectModeratorRoundRobin(availableModerators);
@@ -548,7 +556,7 @@ export class Epic16CaseAssignmentService {
         assignedBy,
         request.metadata || {}
       );
-    }
+
 
     return {
       success: false,
@@ -558,7 +566,7 @@ export class Epic16CaseAssignmentService {
       reason: 'No suitable moderator found',
       metadata: {}
     };
-  }
+
 
   private async performAssignment(
     moderationCase: ModerationCase,
@@ -593,8 +601,8 @@ export class Epic16CaseAssignmentService {
       if (previousModerator) {
         previousModerator.currentCaseload = Math.max(0, previousModerator.currentCaseload - 1);
         this.moderators.set(previousModerator.id, previousModerator);
-      }
-    }
+
+
 
     // Record assignment history
     const assignmentHistory: AssignmentHistory = {
@@ -620,7 +628,7 @@ export class Epic16CaseAssignmentService {
       ruleUsed.usageCount++;
       ruleUsed.lastUsed = new Date();
       this.rules.set(ruleUsed.id, ruleUsed);
-    }
+
 
     return {
       success: true,
@@ -631,7 +639,7 @@ export class Epic16CaseAssignmentService {
       queueTime,
       metadata
     };
-  }
+
 
   private getApplicableRules(moderationCase: ModerationCase): AssignmentRule[] {
     return Array.from(this.rules.values())
@@ -642,13 +650,13 @@ export class Epic16CaseAssignmentService {
         if (rule.appliesToCategories.length > 0 && 
             !rule.appliesToCategories.includes(moderationCase.category)) {
           return false;
-        }
+
 
         // Check rule conditions
         return this.evaluateRuleConditions(rule.conditions, moderationCase);
-  }
+
       .sort((a, b) => b.priority - a.priority);
-  }
+
 
   private evaluateRuleConditions(conditions: Record<string, any>, moderationCase: ModerationCase): boolean {
     // Simple condition evaluation - in a real implementation, this would be more sophisticated
@@ -660,9 +668,9 @@ export class Epic16CaseAssignmentService {
           !value.some(skill => moderationCase.requiredSkills.includes(skill))) return false;
       if (key === 'language_requirements' && Array.isArray(value) &&
           !value.some(lang => moderationCase.languageRequirements.includes(lang))) return false;
-    }
+
     return true;
-  }
+
 
   private async applyAssignmentRule(
     moderationCase: ModerationCase,
@@ -697,7 +705,7 @@ export class Epic16CaseAssignmentService {
       break;
     default:
       selectedModerator = this.selectModeratorRoundRobin(availableModerators);
-    }
+
 
     if (selectedModerator) {
       return await this.performAssignment(
@@ -710,7 +718,7 @@ export class Epic16CaseAssignmentService {
         assignedBy,
         metadata
       );
-    }
+
 
     return {
       success: false,
@@ -721,7 +729,7 @@ export class Epic16CaseAssignmentService {
       reason: 'No suitable moderator found using rule',
       metadata
     };
-  }
+
 
   /**
    * Assignment Algorithms
@@ -753,7 +761,7 @@ export class Epic16CaseAssignmentService {
       // Preferred categories
       if (moderator.preferredCategories.includes(moderationCase.category)) {
         score += 15;
-      }
+
       
       // Quality score
       score += (moderator.qualityScore || 3) * 3;
@@ -770,7 +778,7 @@ export class Epic16CaseAssignmentService {
 
     scoredModerators.sort((a, b) => b.score - a.score);
     return scoredModerators[0]?.moderator || null;
-  }
+
 
   private selectModeratorByLoad(moderators: ModeratorProfile[]): ModeratorProfile | null {
     if (moderators.length === 0) return null;
@@ -778,7 +786,7 @@ export class Epic16CaseAssignmentService {
     return moderators.reduce((least, current) => 
       current.currentCaseload < least.currentCaseload ? current : least
     );
-  }
+
 
   private selectModeratorRoundRobin(moderators: ModeratorProfile[]): ModeratorProfile | null {
     if (moderators.length === 0) return null;
@@ -789,7 +797,7 @@ export class Epic16CaseAssignmentService {
       const bLastAssigned = this.getLastAssignmentTime(b.userId);
       return aLastAssigned - bLastAssigned;
     })[0];
-  }
+
 
   private selectModeratorByPriority(moderationCase: ModerationCase, moderators: ModeratorProfile[]): ModeratorProfile | null {
     if (moderators.length === 0) return null;
@@ -801,11 +809,11 @@ export class Epic16CaseAssignmentService {
       );
       if (seniorModerators.length > 0) {
         return this.selectModeratorByLoad(seniorModerators);
-      }
-    }
+
+
     
     return this.selectModeratorByLoad(moderators);
-  }
+
 
   private selectModeratorByAvailability(moderators: ModeratorProfile[]): ModeratorProfile | null {
     if (moderators.length === 0) return null;
@@ -813,14 +821,14 @@ export class Epic16CaseAssignmentService {
     // Filter to only available moderators and select by capacity
     const availableModerators = moderators.filter(m => m.availabilityStatus === 'available');
     return this.selectModeratorByLoad(availableModerators);
-  }
+
 
   private selectModeratorRandom(moderators: ModeratorProfile[]): ModeratorProfile | null {
     if (moderators.length === 0) return null;
     
     const randomIndex = Math.floor(Math.random() * moderators.length);
     return moderators[randomIndex];
-  }
+
 
   private calculateAssignmentScore(moderationCase: ModerationCase, moderator: ModeratorProfile): number {
     // Score from 0-1 based on how well the moderator matches the case
@@ -839,7 +847,7 @@ export class Epic16CaseAssignmentService {
     score += languageMatch * 0.2;
     
     return Math.min(1, score);
-  }
+
 
   private getLastAssignmentTime(moderatorUserId: string): number {
     const lastAssignment = this.history
@@ -847,7 +855,7 @@ export class Epic16CaseAssignmentService {
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0];
     
     return lastAssignment ? lastAssignment.createdAt.getTime() : 0;
-  }
+
 
   /**
    * Bulk Assignment
@@ -859,10 +867,10 @@ export class Epic16CaseAssignmentService {
     for (const caseId of caseIds) {
       const result = await this.assignCase({ caseId, assignmentMethod });
       results.push(result);
-    }
+
     
     return results;
-  }
+
 
   async reassignCase(caseId: string, newModerator: string, reason?: string): Promise<AssignmentResult> {
 
@@ -872,7 +880,7 @@ export class Epic16CaseAssignmentService {
       forceAssign: true,
       metadata: { reassignmentReason: reason }
     });
-  }
+
 
   /**
    * Analytics and Reporting
@@ -907,21 +915,21 @@ export class Epic16CaseAssignmentService {
           assignmentMethods: {}
         };
         analyticsMap.set(key, analytics);
-      }
+
 
       analytics.totalAssignments++;
       if (entry.assignmentType === 'initial') {
         analytics.initialAssignments++;
-      } else {
+ else {
         analytics.reassignments++;
-      }
+
 
       analytics.assignmentMethods[entry.assignmentMethod] = 
         (analytics.assignmentMethods[entry.assignmentMethod] || 0) + 1;
     });
 
     return Array.from(analyticsMap.values()).sort((a, b) => a.date.localeCompare(b.date));
-  }
+
 
   async getWorkloadDistribution(): Promise<Array<{ moderatorId: string; currentCaseload: number; maxCapacity: number; utilization: number }>> {
     return Array.from(this.moderators.values())
@@ -933,7 +941,7 @@ export class Epic16CaseAssignmentService {
         utilization: (m.currentCaseload / m.maxConcurrentCases) * 100
       }))
       .sort((a, b) => b.utilization - a.utilization);
-  }
+
 
   /**
    * Assignment Rules Management
@@ -950,13 +958,13 @@ export class Epic16CaseAssignmentService {
 
     this.rules.set(rule.id, rule);
     return rule;
-  }
+
 
   async getAssignmentRules(): Promise<AssignmentRule[]> {
 
     return Array.from(this.rules.values())
       .sort((a, b) => b.priority - a.priority);
-  }
+
 
   async updateAssignmentRule(ruleId: string, updates: Partial<AssignmentRule>): Promise<AssignmentRule | null> {
 
@@ -971,37 +979,37 @@ export class Epic16CaseAssignmentService {
 
     this.rules.set(ruleId, updatedRule);
     return updatedRule;
-  }
+
 
   /**
    * Utility Methods
    */
   private initializeDefaultRules(): void {
     // Default rules would be loaded from database in real implementation
-  }
+
 
   private generateCaseId(): string {
     return `case_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateCaseNumber(): string {
     const year = new Date().getFullYear();
     const sequence = Math.floor(Math.random() * 999999) + 1;
     return `MOD-${year}-${sequence.toString().padStart(6, '0')}`;
-  }
+
 
   private generateModeratorId(): string {
     return `moderator_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateRuleId(): string {
     return `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateHistoryId(): string {
     return `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
-}
+
+
 
 // Export singleton instance
 export const epic16CaseAssignmentService = Epic16CaseAssignmentService.getInstance();

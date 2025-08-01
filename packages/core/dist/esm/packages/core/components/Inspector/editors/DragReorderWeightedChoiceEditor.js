@@ -53,16 +53,17 @@ const handleAddChoice = useCallback(() => {
     if (!newChoiceText.trim())
         return;
     const currentChoices = data.choices || [];
-    const newChoices = [];
-}, ...currentChoices, {
-    text: newChoiceText.trim(),
-    weight: 1
-});
-onChange({ choices: newChoices });
-setNewChoiceText('');
-setIsAddingChoice(false);
-[data.choices, newChoiceText, onChange];
-;
+    const newChoices = [
+        ...currentChoices,
+        {
+            text: newChoiceText.trim(),
+            weight: 1
+        }
+    ];
+    onChange({ choices: newChoices });
+    setNewChoiceText('');
+    setIsAddingChoice(false);
+}, [data.choices, newChoiceText, onChange]);
 // Remove choice
 const _____removeChoice = useCallback((index) => {
     const currentChoices = data.choices || [];
@@ -280,7 +281,7 @@ borderRadius: '8px',
                     flex: 1,
                     padding: '8px 12px',
                     border: `1px solid ${styles.border}`
-                } }), ", borderRadius: '6px', background: styles.background, color: styles.text, fontSize: '14px' }} onKeyPress=", (e) => {
+                } }), ", borderRadius: '6px', background: styles.background, color: styles.text, fontSize: '14px'; }} onKeyPress=", (e) => {
                 if (e.key === 'Enter')
                     handleAddChoice();
                 if (e.key === 'Escape')
@@ -302,7 +303,7 @@ borderRadius: '8px',
                     background: 'transparent',
                     color: styles.text,
                     border: `1px solid ${styles.border}`
-                } }), ", borderRadius: '6px', padding: '8px 16px', fontSize: '14px', cursor: 'pointer' }} > Cancel"] });
+                } }), ", borderRadius: '6px', padding: '8px 16px', fontSize: '14px', cursor: 'pointer'; }} > Cancel"] });
 div >
 ;
 div >
@@ -406,7 +407,7 @@ borderRadius: '12px';
                             width: '60px',
                             padding: '4px 6px',
                             border: `1px solid ${styles.border}`
-                        } }), ", borderRadius: '4px', background: styles.background, color: styles.text, fontSize: '12px' }} />", _jsx("button", { onClick: generatePreview, style: {
+                        } }), ", borderRadius: '4px', background: styles.background, color: styles.text, fontSize: '12px'; }} />", _jsx("button", { onClick: generatePreview, style: {
                             background: styles.accent,
                             color: styles.background,
                             border: 'none',

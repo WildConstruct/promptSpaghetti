@@ -1,28 +1,27 @@
 // Shared types and engine placeholder
 
-export interface Node {
-  id: string;
+export interface Node { id: string;
   type: string;
-  data: Record<string, unknown>;
+  data: Record<string, unknown> }
   position: { x: number; y: number };
-}
 
-export interface Edge {
-  id: string;
+
+export interface Edge { id: string;
   source: string;
   target: string;
-  type?: string;
-}
+  type?: string }
 
-export interface Graph {
-  nodes: Node[];
-  edges: Edge[];
-  meta: {
-    version: string;
+
+export interface Graph { nodes: Node;
+  edges: Edge;
+  meta: { }
+  version: string;
+
   };
-}
+
 
 // Export new components and types
+
 export * from './components/Inspector';
 export * from './types/NodeTypes';
 export * from './utils/nodeDataUtils';
@@ -54,44 +53,41 @@ export { WorkspaceManager } from './components/FileManagement/WorkspaceManager';
 export type { WorkspaceManagerProps, WorkspaceSession } from './components/FileManagement/WorkspaceManager';
 
 // Epic 4: Inline Node Editing System - Complete Implementation ✅
-export {
-  InlineNodeEditor,
-  InlineEditorManager,
-  InlineEditorProvider,
-  InlineEditableNode,
-  GraphEditorWithInlineEditing,
-  useInlineEditor,
-  useInlineEditorContext,
-  useGraphWithInlineEditing,
-  createInlineEditingGraph,
-  withInlineEditing,
-  RichTextEditor,
-  NodeSpecificRichEditor,
-  WeightedChoiceEditor,
-  ConcatEditor,
-  VariableEditor,
-  ConditionalEditor,
-  OutputEditor,
-  BatchNodeEditor,
-} from './components/InlineEditor';
-export type {
-  InlineNodeEditorProps,
-  InlineEditorManagerProps,
-  InlineEditableNodeProps,
-  GraphEditorWithInlineEditingProps,
-} from './components/InlineEditor';
+export { InlineNodeEditor
+  InlineEditorManager
+  InlineEditorProvider
+  InlineEditableNode
+  GraphEditorWithInlineEditing
+  useInlineEditor
+  useInlineEditorContext
+  useGraphWithInlineEditing
+  createInlineEditingGraph
+  withInlineEditing
+  RichTextEditor
+  NodeSpecificRichEditor
+  WeightedChoiceEditor
+  ConcatEditor
+  VariableEditor
+  ConditionalEditor
+  OutputEditor
+  BatchNodeEditor }
+ from './components/InlineEditor';
+export type { InlineNodeEditorProps
+  InlineEditorManagerProps
+  InlineEditableNodeProps
+  GraphEditorWithInlineEditingProps }
+ from './components/InlineEditor';
 
 // Project Management System exports
 export { ProjectManager } from './projectManager';
 export { ServerProjectManager } from './serverProjectManager';
-export type {
-  ProjectMetadata,
-  PSGFile,
-  ProjectSettings,
-  SaveProjectOptions,
-  LoadProjectResult,
-  SaveProjectResult,
-} from './projectManager';
+export type { ProjectMetadata
+  PSGFile
+  ProjectSettings
+  SaveProjectOptions
+  LoadProjectResult
+  SaveProjectResult }
+ from './projectManager';
 export type { ServerProjectMetadata, ServerProject, ProjectListResponse, ProjectQuery } from './serverProjectManager';
 export { default as SaveProjectDialog } from './components/ProjectDialogs/SaveProjectDialog';
 export { default as LoadProjectDialog } from './components/ProjectDialogs/LoadProjectDialog';
@@ -109,30 +105,28 @@ export { default as ExportBundleDialog } from './components/ProjectDialogs/Expor
 // Epic 8.4 - Extension System Architecture exports (avoid conflicts)
 export { ExtensionLifecycleManager } from './extensions/ExtensionLifecycleManager';
 export { ExtensionPointRegistry } from './extensions/ExtensionPointRegistry';
-export {
-  BaseExtension,
-  ExtensionHealthStatus,
-  ExtensionContext,
-  ExtensionLogger,
-  ExtensionStorage,
-  ExtensionEventEmitter,
-  ExtensionRuntime,
-  ExtensionUIContext,
-  ExtensionAPIContext,
-  SystemInfo,
-  PerformanceMetrics,
-  ExtensionLifecycleState,
-  ExtensionErrorType,
-  ExtensionError,
-  ExtensionValidationResult,
-  ExtensionManifestSchema,
-  ExtensionManifest,
-} from './extensions/interfaces/ExtensionInterfaces';
-export {
-  NodeExtension,
-  NodeCategory,
+export { BaseExtension
+  ExtensionHealthStatus
+  ExtensionContext
+  ExtensionLogger
+  ExtensionStorage
+  ExtensionEventEmitter
+  ExtensionRuntime
+  ExtensionUIContext
+  ExtensionAPIContext
+  SystemInfo
+  PerformanceMetrics
+  ExtensionLifecycleState
+  ExtensionErrorType
+  ExtensionError
+  ExtensionValidationResult
+  ExtensionManifestSchema
+  ExtensionManifest }
+ from './extensions/interfaces/ExtensionInterfaces';
+export { NodeExtension
+  NodeCategory }
   // Skip NodeDefinition to avoid conflict
-} from './extensions/interfaces/NodeExtension';
+ from './extensions/interfaces/NodeExtension';
 export * from './extensions/interfaces/UIExtension';
 export * from './extensions/interfaces/TransformExtension';
 export * from './extensions/interfaces/StorageExtension';
@@ -141,21 +135,19 @@ export * from './components/ExtensionManager';
 // Epic 9.1.2 - Collaborative Editing exports
 export { GraphCRDTAdapter, createCollaborativeGraph } from './collaboration/GraphCRDTAdapter';
 export type { CollaborativeGraphOptions } from './collaboration/GraphCRDTAdapter';
-export {
-  useCollaborativeGraphStore,
-  useCollaborationEnabled,
-  useConnectedUsers,
-  useConnectionStatus,
-  useLocalPresence,
-  useCollaborativeGraph,
-  useCollaborativeActions,
-} from './collaboration/collaborativeGraphStore';
+export { useCollaborativeGraphStore
+  useCollaborationEnabled
+  useConnectedUsers
+  useConnectionStatus
+  useLocalPresence
+  useCollaborativeGraph
+  useCollaborativeActions }
+ from './collaboration/collaborativeGraphStore';
 export type { UserPresence, CollaborativeGraphState } from './collaboration/collaborativeGraphStore';
-export {
-  useCollaborativeReactFlow,
-  useNodeCollaborators,
-  useCollaborationStatus,
-} from './collaboration/useCollaborativeReactFlow';
+export { useCollaborativeReactFlow
+  useNodeCollaborators
+  useCollaborationStatus }
+ from './collaboration/useCollaborativeReactFlow';
 export { CollaborativePresence, CollaborationStatus, UserAvatars } from './collaboration/CollaborativePresence';
 
 // Epic 9.4 - Workflow Orchestration exports - TEMPORARILY DISABLED
@@ -167,62 +159,56 @@ export { CollaborativePresence, CollaborationStatus, UserAvatars } from './colla
 // export { ApiIntegrationManager } from './components/ApiIntegrationManager';
 // export { ScheduledExecutionManager } from './components/ScheduledExecutionManager';
 // export { useWorkflowStore } from './stores/workflowStore';
-// export type {
-//   WorkflowState,
-//   WorkflowTransition,
-//   WorkflowApproval,
-//   WorkflowLock,
-//   WorkflowHistoryEntry,
+// export type { //   WorkflowState
+//   WorkflowTransition
+//   WorkflowApproval
+//   WorkflowLock
+//   WorkflowHistoryEntry }
 //   WorkflowStatistics
 // } from './stores/workflowStore';
 
 // Epic 12 - LLM Agent Randomizer System exports
-export {
-  RandomizerPanel,
-  GraphPreview,
-  RandomizerWorkflow,
-  RandomizerSystem,
-  LLMRandomizerSystem,
-} from './llm-randomizer';
+export { RandomizerPanel
+  GraphPreview
+  RandomizerWorkflow
+  RandomizerSystem
+  LLMRandomizerSystem }
+ from './llm-randomizer';
 
 // Epic 19 - Security and Audit Logging exports
-export {
-  AuditLogger,
-  createAuditLogger,
-  AuditOperation,
-  AuditLogLevel,
-  InMemoryStorageBackend,
-  type AuditLogEntry,
-  type AuditLoggerConfig,
-  type AuditStorageBackend,
-  type AuditQueryCriteria,
-  type AlertThresholds,
-  type AuditStatistics,
-} from './security/AuditLogger';
+export { AuditLogger
+  createAuditLogger
+  AuditOperation
+  AuditLogLevel
+  InMemoryStorageBackend
+  type AuditLogEntry
+  type AuditLoggerConfig
+  type AuditStorageBackend
+  type AuditQueryCriteria
+  type AlertThresholds
+  type AuditStatistics }
+ from './security/AuditLogger';
 
 export { AuditIntegration, createAuditIntegration, type ComplianceReport } from './security/AuditIntegration';
 
-export {
-  DataClassifier,
-  createDataClassifier,
-  type DataClassificationResult,
-  type ClassificationPattern,
-  type ClassificationConfig,
-  type ComplianceValidationResult,
-} from './security/DataClassifier';
+export { DataClassifier
+  createDataClassifier
+  type DataClassificationResult
+  type ClassificationPattern
+  type ClassificationConfig
+  type ComplianceValidationResult }
+ from './security/DataClassifier';
 
-export {
-  ClassificationEnforcer,
-  createClassificationEnforcer,
-  type EnforcementResult,
-  type ClassificationHandlingRequirements,
-  type ClassificationEnforcementConfig,
-} from './security/ClassificationEnforcer';
+export { ClassificationEnforcer
+  createClassificationEnforcer
+  type EnforcementResult
+  type ClassificationHandlingRequirements
+  type ClassificationEnforcementConfig }
+ from './security/ClassificationEnforcer';
 
-export {
-  ClassificationEnforcementMiddleware,
-  createClassificationMiddleware,
-} from './security/ClassificationEnforcementMiddleware';
+export { ClassificationEnforcementMiddleware
+  createClassificationMiddleware }
+ from './security/ClassificationEnforcementMiddleware';
 
 export { DataClassificationLevel, type OperationContext, type ClassificationResult } from './types/DataClassification';
 
@@ -233,40 +219,37 @@ export { ConstraintValidator } from './historical/ConstraintValidator';
 
 export { ExternalDataService } from './historical/ExternalDataService';
 
-export {
-  MedievalDemoDatabase,
-  MEDIEVAL_DEMO_CONSTRAINTS,
-  MEDIEVAL_PERIODS,
-  MEDIEVAL_REGIONS,
-  MEDIEVAL_FABRICS,
-  MEDIEVAL_COLORS,
-} from './historical/MedievalDemo';
+export { MedievalDemoDatabase
+  MEDIEVAL_DEMO_CONSTRAINTS
+  MEDIEVAL_PERIODS
+  MEDIEVAL_REGIONS
+  MEDIEVAL_FABRICS
+  MEDIEVAL_COLORS }
+ from './historical/MedievalDemo';
 
-export type {
-  UTDGNode,
-  Era,
-  HistoricalConstraint,
-  ConstraintValidationResult,
-  DataSource,
-  HistoricalQuery,
-  HistoricalQueryResult,
-  MedievalClothing,
-  UTDGGraph,
-  ContentGenerationConfig,
-  GeneratedContent,
-  VFXExportData,
-  ValidationReport,
-  SocialClass,
-  Variation,
-} from './types/UTDG';
+export type { UTDGNode
+  Era
+  HistoricalConstraint
+  ConstraintValidationResult
+  DataSource
+  HistoricalQuery
+  HistoricalQueryResult
+  MedievalClothing
+  UTDGGraph
+  ContentGenerationConfig
+  GeneratedContent
+  VFXExportData
+  ValidationReport
+  SocialClass
+  Variation }
+ from './types/UTDG';
 
 export { HISTORICAL_ERAS } from './types/UTDG';
 
 // Runtime system exports
-export {
-  ExecutionContext,
-  RuntimeNode,
-  AdvancedRuntimeNode,
-  AdvancedExecutionContext,
-  AdvancedNodeConfig,
-} from './runtime';
+export { ExecutionContext
+  RuntimeNode
+  AdvancedRuntimeNode
+  AdvancedExecutionContext
+  AdvancedNodeConfig }
+ from './runtime';

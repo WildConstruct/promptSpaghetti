@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  Card, 
+import { Card, 
   Tabs, 
   Table, 
   Tag, 
@@ -13,46 +12,44 @@ import {
   Alert,
   Space,
   Statistic,
-  Row,
+  Row }
   Col
-} from 'antd';
-import {
-  PlusOutlined,
+ from 'antd';
+import { PlusOutlined,
   MinusOutlined,
   EditOutlined,
   WarningOutlined,
-  InfoCircleOutlined,
+  InfoCircleOutlined }
   QuestionCircleOutlined
-} from '@ant-design/icons';
-import { 
-  RestorationPreviewResponse, 
+ from '@ant-design/icons';
+import { RestorationPreviewResponse, 
   RestorationConfig, 
   RestorationConflict,
   ResolutionStrategy,
-  CONFLICT_DESCRIPTIONS,
+  CONFLICT_DESCRIPTIONS }
   RESOLUTION_STRATEGY_DESCRIPTIONS
-} from '../../types/restoration';
+ from '../../types/restoration';
 const { TabPane } = Tabs;
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { Option } = Select;
-}
-interface RestorationPreviewProps {
-  preview: RestorationPreviewResponse;
+
+
+interface RestorationPreviewProps { preview: RestorationPreviewResponse;
   config: RestorationConfig;
   onConflictResolve: (conflictId: string, strategy: ResolutionStrategy) => void;
-  export const RestorationPreview: React.FC<RestorationPreviewProps> = ({,)
-  preview,
-  config,
+  export const RestorationPreview: React.FC<RestorationPreviewProps> = ({);
+  preview;
+  config }
   onConflictResolve
-}
+
+
 }) => {
   const [activeTab, setActiveTab] = useState('changes');
   const [conflictResolutions, setConflictResolutions] = useState<Record<string, ResolutionStrategy>>({});
-  const handleConflictResolution = (conflictId: string, strategy: ResolutionStrategy) => {
-  setConflictResolutions(prev => ({)
-  ...prev,
-  [conflictId]: strategy,
+  const handleConflictResolution = (conflictId: string, strategy: ResolutionStrategy) => { setConflictResolutions(prev => ({)
+  ...prev
+  [conflictId]: strategy }
 }));
     onConflictResolve(conflictId, strategy);
   };
@@ -67,134 +64,121 @@ interface RestorationPreviewProps {
     default:
       return <InfoCircleOutlined />;
   };
-  const getChangeColor = (type: string) => {
-  switch (type) {
-  case 'add':,
+  const getChangeColor = (type: string) => { switch (type) {
+  case 'add':
   return 'success';
-  case 'update':,
+  case 'update':
   return 'processing';
-  case 'delete':,
+  case 'delete':
   return 'error';
-  default:,
+  default: }
   return 'default'
-  };
-  const getRiskLevelColor = (level: string) => {
-  switch (level) {
-  case 'low':,
+};
+  const getRiskLevelColor = (level: string) => { switch (level) {
+  case 'low':
   return 'success';
-  case 'medium':,
+  case 'medium':
   return 'warning';
-  case 'high':,
+  case 'high':
   return 'error';
-  default:,
+  default: }
   return 'default'
-  };
-  const nodeColumns = [;
-    {
-      title: 'Action',
-      dataIndex: 'action',
-      key: 'action',
-      width: 80,
-      render: (action: string) => (),
+};
+  const nodeColumns = [
+    { title: 'Action'
+      dataIndex: 'action'
+      key: 'action'
+      width: 80
+      render: (action: string) => () }
         <Tag color={getChangeColor(action) as any} icon={getChangeIcon(action)}>
           {action.toUpperCase()}
         </Tag>
-  }
-    {
-      title: 'Node ID',
+
+    { title: 'Node ID',
       dataIndex: 'id',
       key: 'id',
       width: 200,
-      render: (id: string) => (),
+      render: (id: string) => () }
         <Text code style={{ fontSize: '12px' }}>
           {id}
         </Text>
-  }
-    {
-  title: 'Type',
+
+    { title: 'Type',
   dataIndex: 'type',
   key: 'type',
-  width: 120,
-}
-    {
-  title: 'Label',
+  width: 120 }
+
+    { title: 'Label',
   dataIndex: 'label',
   key: 'label',
-  render: (label: string) => label || <Text type="secondary">No label</Text>,
-}
-    {
-      title: 'Properties',
+  render: (label: string) => label || <Text type="secondary">No label</Text> }
+
+    { title: 'Properties',
       dataIndex: 'properties',
       key: 'properties',
-      render: (properties: unknown) => (),
+      render: (properties: unknown) => () }
         <Text type="secondary">
           {properties ? Object.keys(properties).length : 0} properties
         </Text>
   ];
-  const edgeColumns = [;
-    {
-      title: 'Action',
+  const edgeColumns = [
+    { title: 'Action',
       dataIndex: 'action',
       key: 'action',
       width: 80,
-      render: (action: string) => (),
+      render: (action: string) => () }
         <Tag color={getChangeColor(action) as any} icon={getChangeIcon(action)}>
           {action.toUpperCase()}
         </Tag>
-  }
-    {
-      title: 'Edge ID',
+
+    { title: 'Edge ID',
       dataIndex: 'id',
       key: 'id',
       width: 200,
-      render: (id: string) => (),
+      render: (id: string) => () }
         <Text code style={{ fontSize: '12px' }}>
           {id}
         </Text>
-  }
-    {
-      title: 'From',
+
+    { title: 'From',
       dataIndex: 'source',
       key: 'source',
       width: 150,
-      render: (source: string) => (),
+      render: (source: string) => () }
         <Text code style={{ fontSize: '12px' }}>
           {source}
         </Text>
-  }
-    {
-      title: 'To',
+
+    { title: 'To',
       dataIndex: 'target',
       key: 'target',
       width: 150,
-      render: (target: string) => (),
+      render: (target: string) => () }
         <Text code style={{ fontSize: '12px' }}>
           {target}
         </Text>
-  }
-    {
-      title: 'Type',
+
+    { title: 'Type',
       dataIndex: 'type',
       key: 'type',
       width: 120];
-  const conflictColumns = [;
+  const conflictColumns = [
     {
       title: 'Conflict',
       dataIndex: 'conflictType',
       key: 'conflictType',
       width: 150,
-      render: (type: string) => (),
+      render: (type: string) => () }
         <Tooltip title={CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS]}>
           <Tag color="warning" icon={<WarningOutlined />}>
             {type.replace('_', ' ').toUpperCase()}
           </Tag>
         </Tooltip>
-  }
-    {
-      title: 'Resource',
+
+    { title: 'Resource',
       dataIndex: 'resourceId',
       key: 'resourceId',
-      width: 200,
+      width: 200 }
       render: (resourceId: string, record: RestorationConflict) => ()
         <div>
           <Text code style={{ fontSize: '12px' }}>
@@ -205,19 +189,17 @@ interface RestorationPreviewProps {
             {record.resourceType}
           </Text>
         </div>
-  }
-    {
-  title: 'Description',
+
+    { title: 'Description',
   dataIndex: 'conflictDescription',
   key: 'conflictDescription',
-  render: (description: string) => description || <Text type="secondary">No description</Text>,
-}
-    {
-      title: 'Resolution',
+  render: (description: string) => description || <Text type="secondary">No description</Text> }
+
+    { title: 'Resolution',
       dataIndex: 'id',
       key: 'resolution',
       width: 200,
-      render: (conflictId: string) => (),
+      render: (conflictId: string) => () }
         <Select
           placeholder="Choose resolution"
           style={{ width: '100%' }}
@@ -233,12 +215,12 @@ interface RestorationPreviewProps {
           ))}
         </Select>
   ];
-  const allNodeChanges = [;
+  const allNodeChanges = [
     ...preview.preview.nodesToAdd.map((node: Error) => ({ ...node, action: 'add' })),
     ...preview.preview.nodesToUpdate.map((node: Error) => ({ ...node, action: 'update' })),
     ...preview.preview.nodesToDelete.map((id: string) => ({ id, action: 'delete' }))
   ];
-  const allEdgeChanges = [;
+  const allEdgeChanges = [
     ...preview.preview.edgesToAdd.map((edge: Error) => ({ ...edge, action: 'add' })),
     ...preview.preview.edgesToUpdate.map((edge: Error) => ({ ...edge, action: 'update' })),
     ...preview.preview.edgesToDelete.map((id: string) => ({ id, action: 'delete' }))

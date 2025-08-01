@@ -157,7 +157,10 @@ export const VarianceAnalysis = ({ results, onSuggestionClick, compact = false }
                             color: professionalColors.text.primary,
                         }, children: "\uD83D\uDCA1 Optimization Suggestions" }), _jsx("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 }, children: analysis.suggestions.map((suggestion, index) => (_jsx(SuggestionCard, { suggestion: suggestion, onClick: () => onSuggestionClick?.(suggestion) }, index))) })] }))] }));
 };
-const CompactVarianceDisplay = ({ analysis, varianceInfo }) => (_jsxs("div", { style: {
+const CompactVarianceDisplay, VarianceMetrics;
+varianceInfo: ReturnType;
+ > ;
+({ analysis, varianceInfo }) => (_jsxs("div", { style: {
         display: 'flex',
         alignItems: 'center',
         gap: 8,
@@ -216,7 +219,10 @@ const DiversityMetricCard = ({ indicator }) => (_jsxs("div", { style: {
                 color: '#6b7280',
                 lineHeight: 1.3,
             }, children: indicator.description })] }));
-const SuggestionCard = ({ suggestion, onClick }) => {
+const SuggestionCard, VarianceSuggestion;
+onClick ?  : () => void ;
+ > ;
+({ suggestion, onClick }) => {
     const typeColors = {
         increase: { color: '#10b981', bg: '#f0fdf4', border: '#bbf7d0' },
         decrease: { color: '#ef4444', bg: '#fef2f2', border: '#fecaca' },

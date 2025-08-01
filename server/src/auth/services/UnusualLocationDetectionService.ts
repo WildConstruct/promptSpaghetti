@@ -8,8 +8,8 @@ import { RedisService } from '../database/RedisService';
 import { AuditService } from './AuditService';
 import { GeolocationService, GeolocationData, LocationHistory } from './GeolocationService';
 
-}
-}
+
+
 export interface UnusualLocationConfig {
   // Detection thresholds
   newLocationSuspicionThreshold: number; // km distance to be considered unusual
@@ -37,12 +37,13 @@ export interface UnusualLocationConfig {
   blockedCountries: string[]; // Country codes that are always flagged
   trustedASNs: string[]; // Trusted Autonomous System Numbers
   blockedASNs: string[]; // Blocked ASNs
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LocationRiskAssessment {
   riskScore: number; // 0-100
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -50,24 +51,26 @@ export interface LocationRiskAssessment {
   recommendation: 'allow' | 'challenge' | 'block';
   confidence: number; // 0-1
   reasoning: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LocationRiskFactor {
   factor: string;
   weight: number;
   value: number;
   description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UnusualLocationEvent {
   id: string;
   userId: string;
@@ -86,12 +89,13 @@ export interface UnusualLocationEvent {
   resolvedBy?: string;
   resolvedAt?: Date;
   notes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserLocationProfile {
   userId: string;
   typicalCountries: string[];
@@ -107,8 +111,9 @@ export interface UserLocationProfile {
     uniqueRegionsCount: number;
     typicalLoginHours: number[];
     weekendTravelFrequency: number;
-}
-}
+
+
+
   };
   riskProfile: {
     baselineRisk: number;
@@ -117,7 +122,7 @@ export interface UserLocationProfile {
     falsePosativeRate: number;
   };
   lastAnalysis: Date;
-}
+
 
 export class UnusualLocationDetectionService {
   private db: DatabaseService;
@@ -157,7 +162,7 @@ export class UnusualLocationDetectionService {
       blockedASNs: [],
       ...config
     };
-  }
+
 
   /**
    * Main method to detect unusual location for a login attempt
@@ -173,7 +178,7 @@ export class UnusualLocationDetectionService {
     riskAssessment: LocationRiskAssessment;
     event: UnusualLocationEvent;
     action: 'allow' | 'challenge' | 'block';
-  }> {
+> {
 
     try {
       // Get geolocation data
@@ -227,7 +232,7 @@ export class UnusualLocationDetectionService {
           riskLevel: riskAssessment.riskLevel,
           action,
           isUnusual
-        }
+
       });
 
       // Update user's location profile
@@ -239,12 +244,11 @@ export class UnusualLocationDetectionService {
         event,
         action
       };
-
-    } catch (error) {
+ catch (error) {
       console.error('Error in unusual location detection:', error);
       throw new Error('Failed to detect unusual location');
-    }
-  }
+
+
 
   /**
    * Assess risk level for a location based on multiple factors
@@ -269,14 +273,14 @@ export class UnusualLocationDetectionService {
     if (distanceRisk) {
       riskFactors.push(distanceRisk);
       totalRiskScore += distanceRisk.weight * distanceRisk.value;
-    }
+
 
     // Factor 3: Travel velocity analysis
     const velocityRisk = this.assessTravelVelocity(location, recentLocations);
     if (velocityRisk) {
       riskFactors.push(velocityRisk);
       totalRiskScore += velocityRisk.weight * velocityRisk.value;
-    }
+
 
     // Factor 4: IP reputation and hosting indicators
     const ipReputationRisk = this.assessIPReputation(location);
@@ -318,7 +322,7 @@ export class UnusualLocationDetectionService {
       confidence,
       reasoning: this.generateReasoning(riskFactors, normalizedRiskScore)
     };
-  }
+
 
   /**
    * Assess location familiarity based on user's history
@@ -332,17 +336,17 @@ export class UnusualLocationDetectionService {
     // Check if country is typical
     if (userProfile.typicalCountries.includes(location.countryCode)) {
       familiarityScore += 40;
-    }
+
     
     // Check if region is typical
     if (userProfile.typicalRegions.includes(location.region)) {
       familiarityScore += 30;
-    }
+
     
     // Check if city is typical
     if (userProfile.typicalCities.includes(location.city)) {
       familiarityScore += 30;
-    }
+
 
     // Check against frequent locations
     const isFrequentLocation = userProfile.frequentLocations.some(fl => 
@@ -353,7 +357,7 @@ export class UnusualLocationDetectionService {
 
     if (isFrequentLocation) {
       familiarityScore += 20;
-    }
+
 
     // Invert score - higher familiarity = lower risk
     const riskValue = Math.max(0, 100 - familiarityScore);
@@ -365,7 +369,7 @@ export class UnusualLocationDetectionService {
       description: `Location familiarity assessment: ${familiarityScore}% familiar`,
       severity: riskValue > 75 ? 'high' : riskValue > 50 ? 'medium' : 'low'
     };
-  }
+
 
   /**
    * Assess risk based on distance from previous location
@@ -376,12 +380,12 @@ export class UnusualLocationDetectionService {
   ): LocationRiskFactor | null {
     if (recentLocations.length === 0 || !location.coordinates) {
       return null;
-    }
+
 
     const mostRecentLocation = recentLocations[0];
     if (!mostRecentLocation.location.coordinates) {
       return null;
-    }
+
 
     // Calculate distance using geolocation service's Haversine implementation
     const distance = this.calculateDistance(
@@ -395,7 +399,7 @@ export class UnusualLocationDetectionService {
     let riskValue = 0;
     if (distance > this.config.newLocationSuspicionThreshold) {
       riskValue = Math.min(100, (distance / this.config.newLocationSuspicionThreshold) * 50);
-    }
+
 
     return {
       factor: 'distance_from_previous',
@@ -404,7 +408,7 @@ export class UnusualLocationDetectionService {
       description: `Distance from previous location: ${distance.toFixed(1)}km`,
       severity: riskValue > 75 ? 'high' : riskValue > 50 ? 'medium' : 'low'
     };
-  }
+
 
   /**
    * Assess impossible travel velocity
@@ -415,12 +419,12 @@ export class UnusualLocationDetectionService {
   ): LocationRiskFactor | null {
     if (recentLocations.length === 0 || !location.coordinates) {
       return null;
-    }
+
 
     const mostRecentLocation = recentLocations[0];
     if (!mostRecentLocation.location.coordinates) {
       return null;
-    }
+
 
     const distance = this.calculateDistance(
       location.coordinates.latitude,
@@ -433,7 +437,7 @@ export class UnusualLocationDetectionService {
     
     if (timeDifferenceHours === 0) {
       return null;
-    }
+
 
     const velocity = distance / timeDifferenceHours;
     
@@ -441,13 +445,13 @@ export class UnusualLocationDetectionService {
     if (velocity > this.config.velocityThresholdKmh) {
       // Impossible travel speed detected
       riskValue = 100;
-    } else if (velocity > this.config.velocityThresholdKmh * 0.7) {
+ else if (velocity > this.config.velocityThresholdKmh * 0.7) {
       // Very high speed travel
       riskValue = 80;
-    } else if (velocity > this.config.velocityThresholdKmh * 0.5) {
+ else if (velocity > this.config.velocityThresholdKmh * 0.5) {
       // High speed travel (possible but unusual)
       riskValue = 60;
-    }
+
 
     return {
       factor: 'travel_velocity',
@@ -456,7 +460,7 @@ export class UnusualLocationDetectionService {
       description: `Travel velocity: ${velocity.toFixed(1)}km/h over ${timeDifferenceHours.toFixed(1)}h`,
       severity: riskValue > 80 ? 'critical' : riskValue > 60 ? 'high' : 'medium'
     };
-  }
+
 
   /**
    * Assess IP reputation and hosting indicators
@@ -468,34 +472,34 @@ export class UnusualLocationDetectionService {
     if (location.isVpn) {
       riskValue += 30;
       indicators.push('VPN');
-    }
+
     
     if (location.isTor) {
       riskValue += 50;
       indicators.push('Tor');
-    }
+
     
     if (location.isProxy) {
       riskValue += 40;
       indicators.push('Proxy');
-    }
+
     
     if (location.isHosting) {
       riskValue += 25;
       indicators.push('Hosting Provider');
-    }
+
 
     // Check if ASN is in blocked list
     if (location.asn && this.config.blockedASNs.includes(location.asn)) {
       riskValue += 60;
       indicators.push('Blocked ASN');
-    }
+
 
     // Low confidence location data
     if (location.confidence < 0.5) {
       riskValue += 20;
       indicators.push('Low Confidence');
-    }
+
 
     return {
       factor: 'ip_reputation',
@@ -504,7 +508,7 @@ export class UnusualLocationDetectionService {
       description: `IP indicators: ${indicators.join(', ') || 'Clean'}`,
       severity: riskValue > 75 ? 'high' : riskValue > 40 ? 'medium' : 'low'
     };
-  }
+
 
   /**
    * Assess timezone consistency with user's typical patterns
@@ -522,7 +526,7 @@ export class UnusualLocationDetectionService {
     let riskValue = 0;
     if (typicalHours.length > 0 && !typicalHours.includes(currentHour)) {
       riskValue = 30; // Unusual time for this user
-    }
+
 
     return {
       factor: 'timezone_consistency',
@@ -531,7 +535,7 @@ export class UnusualLocationDetectionService {
       description: `Login time consistency: ${currentHour}h (typical: ${typicalHours.join(', ')}h)`,
       severity: riskValue > 50 ? 'medium' : 'low'
     };
-  }
+
 
   /**
    * Assess geopolitical risk of the location
@@ -542,12 +546,12 @@ export class UnusualLocationDetectionService {
     // Check if country is in blocked list
     if (this.config.blockedCountries.includes(location.countryCode)) {
       riskValue = 90;
-    }
+
     
     // Check if country is in trusted list
     if (this.config.trustedCountries.includes(location.countryCode)) {
       riskValue = Math.max(0, riskValue - 20);
-    }
+
 
     // Add additional geopolitical risk logic here
     // This could include consulting threat intelligence feeds
@@ -559,7 +563,7 @@ export class UnusualLocationDetectionService {
       description: `Country risk assessment: ${location.country} (${location.countryCode})`,
       severity: riskValue > 75 ? 'high' : riskValue > 50 ? 'medium' : 'low'
     };
-  }
+
 
   /**
    * Assess behavioral consistency
@@ -574,13 +578,13 @@ export class UnusualLocationDetectionService {
     if (!userProfile.typicalCountries.includes(location.countryCode) &&
         userProfile.typicalCountries.length >= this.config.typicalCountryLimit) {
       riskValue += 40;
-    }
+
 
     // Check if this matches the user's travel pattern
     if (!userProfile.travelPatterns.isFrequentTraveller && 
         !userProfile.typicalCountries.includes(location.countryCode)) {
       riskValue += 30;
-    }
+
 
     return {
       factor: 'behavioral_consistency',
@@ -589,7 +593,7 @@ export class UnusualLocationDetectionService {
       description: `Behavioral pattern match: ${userProfile.travelPatterns.isFrequentTraveller ? 'Frequent traveller' : 'Consistent location user'}`,
       severity: riskValue > 60 ? 'medium' : 'low'
     };
-  }
+
 
   /**
    * Calculate distance between two coordinates using Haversine formula
@@ -605,11 +609,11 @@ export class UnusualLocationDetectionService {
     
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-  }
+
 
   private degreesToRadians(degrees: number): number {
     return degrees * (Math.PI / 180);
-  }
+
 
   /**
    * Determine risk level from risk score
@@ -619,7 +623,7 @@ export class UnusualLocationDetectionService {
     if (riskScore >= 75) return 'high';
     if (riskScore >= 50) return 'medium';
     return 'low';
-  }
+
 
   /**
    * Generate recommendation based on risk assessment
@@ -632,14 +636,14 @@ export class UnusualLocationDetectionService {
     
     if (criticalFactors.length > 0 || riskScore >= 90) {
       return 'block';
-    }
+
     
     if (riskScore >= this.config.riskScoreThreshold) {
       return 'challenge';
-    }
+
     
     return 'allow';
-  }
+
 
   /**
    * Calculate confidence in the assessment
@@ -654,15 +658,15 @@ export class UnusualLocationDetectionService {
     // Reduce confidence if we have limited user history
     if (userProfile.frequentLocations.length < 3) {
       confidence *= 0.8;
-    }
+
     
     // Reduce confidence if location data is incomplete
     if (!location.coordinates) {
       confidence *= 0.7;
-    }
+
     
     return Math.max(0.1, Math.min(1.0, confidence));
-  }
+
 
   /**
    * Generate human-readable reasoning
@@ -675,7 +679,7 @@ export class UnusualLocationDetectionService {
     const highRiskFactors = riskFactors.filter(f => f.severity === 'high' || f.severity === 'critical');
     if (highRiskFactors.length > 0) {
       reasoning.push(`High-risk factors: ${highRiskFactors.map(f => f.factor).join(', ')}`);
-    }
+
     
     const topFactor = riskFactors.reduce((max, factor) => 
       factor.weight * factor.value > max.weight * max.value ? factor : max
@@ -683,7 +687,7 @@ export class UnusualLocationDetectionService {
     reasoning.push(`Primary concern: ${topFactor.description}`);
     
     return reasoning;
-  }
+
 
   /**
    * Determine action based on risk assessment
@@ -691,17 +695,17 @@ export class UnusualLocationDetectionService {
   private determineAction(riskAssessment: LocationRiskAssessment): 'allow' | 'challenge' | 'block' {
     if (this.config.autoBlockHighRisk && riskAssessment.riskLevel === 'critical') {
       return 'block';
-    }
+
     
     return riskAssessment.recommendation;
-  }
+
 
   /**
    * Map risk level to audit severity
    */
   private mapRiskLevelToSeverity(riskLevel: string): 'low' | 'medium' | 'high' | 'critical' {
     return riskLevel as 'low' | 'medium' | 'high' | 'critical';
-  }
+
 
   /**
    * Get user's location profile
@@ -715,10 +719,10 @@ export class UnusualLocationDetectionService {
     if (cached) {
       try {
         return JSON.parse(cached);
-      } catch (error) {
+ catch (error) {
         console.error('Error parsing cached location profile:', error);
-      }
-    }
+
+
 
     // Generate profile from database
     const profile = await this.generateUserLocationProfile(userId);
@@ -727,7 +731,7 @@ export class UnusualLocationDetectionService {
     await this.redis.setex(cacheKey, 3600, JSON.stringify(profile));
     
     return profile;
-  }
+
 
   /**
    * Generate user location profile from historical data
@@ -773,15 +777,15 @@ export class UnusualLocationDetectionService {
         uniqueRegionsCount: new Set(locationHistory.map(lh => lh.location.region)).size,
         typicalLoginHours: [], // Would need to calculate from login times
         weekendTravelFrequency: 0 // Would need to calculate
-  }
+
       riskProfile: {
         baselineRisk: 30, // Default baseline
         lastUpdated: new Date(),
         suspiciousLocationCount: 0,
         falsePosativeRate: 0.1 // Default 10%
-  }
+
       lastAnalysis: new Date(};
-  }
+
 
   /**
    * Get recent location history for velocity analysis
@@ -808,7 +812,7 @@ export class UnusualLocationDetectionService {
       frequency: 1,
       isTypical: false
     }));
-  }
+
 
   /**
    * Create unusual location event record
@@ -842,7 +846,7 @@ export class UnusualLocationDetectionService {
       // For now, using a placeholder
       timeSincePreviousLocation = 60; // minutes
       travelVelocity = distanceFromPrevious / (timeSincePreviousLocation / 60);
-    }
+
 
     const event: UnusualLocationEvent = {
       id: eventId,
@@ -884,7 +888,7 @@ export class UnusualLocationDetectionService {
     ]);
 
     return event;
-  }
+
 
   /**
    * Update user location profile with new data
@@ -900,7 +904,7 @@ export class UnusualLocationDetectionService {
     await this.redis.del(cacheKey);
     
     // The profile will be regenerated next time it's requested
-  }
+
 
   /**
    * Initialize database schema for unusual location detection
@@ -950,5 +954,4 @@ export class UnusualLocationDetectionService {
       CREATE INDEX IF NOT EXISTS idx_unusual_location_events_resolved 
       ON unusual_location_events(resolved);
     `);
-  }
-}
+

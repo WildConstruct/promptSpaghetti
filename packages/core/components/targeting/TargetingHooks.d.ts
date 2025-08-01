@@ -44,11 +44,9 @@ export declare     activeAudiences: TargetingAudience[];
 export declare     selectedRegions: string[];
     selectedCities: string[];
     excludeMode: boolean;
-    availableLocations: {
-        countries: never[];
+    availableLocations: { countries: never[];
         regions: never[];
-        cities: never[];
-    };
+        cities: never[] };
     setSelectedCountries: import("react").Dispatch<import("react").SetStateAction<string[]>>;
     setSelectedRegions: import("react").Dispatch<import("react").SetStateAction<string[]>>;
     setSelectedCities: import("react").Dispatch<import("react").SetStateAction<string[]>>;
@@ -57,13 +55,12 @@ export declare     selectedRegions: string[];
     toggleRegion: (regionCode: string) => void;
     toggleCity: (cityCode: string) => void;
     clearSelection: () => void;
-    getTargetingConfig: () => {,
+    getTargetingConfig: () => { 
         countries: string[];
         regions: string[];
         cities: string[];
-        excludeMode: boolean;
-    };
-    loadFromConfig: (config: {),
+        excludeMode: boolean };
+    loadFromConfig: (config: { ) }
         countries?: string[];
         regions?: string[];
         cities?: string[];

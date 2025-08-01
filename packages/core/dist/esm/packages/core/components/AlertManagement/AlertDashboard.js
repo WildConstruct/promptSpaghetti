@@ -12,7 +12,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { AlertTriangle, Clock, CheckCircle, XCircle, Search, Bell, Settings, TrendingUp, AlertOctagon } from 'lucide-react';
+import { AlertTriangle, Shield, Clock, CheckCircle, XCircle, Search, Bell, Settings, TrendingUp, AlertOctagon, Info } from 'lucide-react';
 import { alertSystem } from '../../services/AlertSystem';
 /**
 * Severity configurations for UI styling
@@ -24,7 +24,48 @@ const SEVERITY_CONFIG = {
         icon: AlertOctagon,
         priority: 5,
     }
-}, high, medium, low, info;
+};
+high: {
+    color: 'text-orange-700 bg-orange-50 border-orange-200',
+        badgeColor;
+    'bg-orange-100 text-orange-800',
+        icon;
+    AlertTriangle,
+        priority;
+    4,
+    ;
+}
+medium: {
+    color: 'text-yellow-700 bg-yellow-50 border-yellow-200',
+        badgeColor;
+    'bg-yellow-100 text-yellow-800',
+        icon;
+    Shield,
+        priority;
+    3,
+    ;
+}
+low: {
+    color: 'text-blue-700 bg-blue-50 border-blue-200',
+        badgeColor;
+    'bg-blue-100 text-blue-800',
+        icon;
+    Info,
+        priority;
+    2,
+    ;
+}
+info: {
+    color: 'text-gray-700 bg-gray-50 border-gray-200',
+        badgeColor;
+    'bg-gray-100 text-gray-800',
+        icon;
+    Info,
+        priority;
+    1,
+    ;
+}
+;
 /**
  * Status configurations for UI styling
  */

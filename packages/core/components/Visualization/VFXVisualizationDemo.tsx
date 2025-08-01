@@ -11,15 +11,13 @@ import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Switch } from '../ui/Switch';
 import { VFXPipelineVisualizer } from './VFXPipelineVisualizer';
-import { 
-  medievalCourtyard, 
+import { medievalCourtyard, 
   vikingVillage, 
   romanForum, 
-  sampleScenes, 
+  sampleScenes }
   generateRandomScene 
-} from './VFXSceneSamples';
-import { 
-  Play, 
+ from './VFXSceneSamples';
+import { Play, 
   Pause, 
   RotateCcw, 
   Settings, 
@@ -31,25 +29,22 @@ import {
   Clock,
   Film,
   Palette,
-  Users,
+  Users }
   Camera
-} from 'lucide-react';
+ from 'lucide-react';
 
-}
-export interface VFXVisualizationDemoProps {
-  className?: string;
+
+export interface VFXVisualizationDemoProps { className?: string;
   title?: string;
   showControlPanel?: boolean;
-  autoRotateScenes?: boolean;
-}
-}
-export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
-  className = '',
-  title = 'Wild Construct VFX Pipeline Demo',
-  showControlPanel = true,
+  autoRotateScenes?: boolean }
+
+export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({ )
+  className = ''
+  title = 'Wild Construct VFX Pipeline Demo'
+  showControlPanel = true }
   autoRotateScenes = false
-}) => {
-  const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
+}) => { const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
   const [scenes, setScenes] = useState(sampleScenes);
   const [isAutoRotating, setIsAutoRotating] = useState(autoRotateScenes);
   const [showDebugInfo, setShowDebugInfo] = useState(false);
@@ -60,41 +55,35 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
   if (!isAutoRotating) return;
   const interval = setInterval(() => {
   setCurrentSceneIndex((prevIndex) =>
-  prevIndex >= scenes.length - 1 ? 0 : prevIndex + 1);
-}, 8000); // Rotate every 8 seconds
+  prevIndex >= scenes.length - 1 ? 0 : prevIndex + 1) }, 8000); // Rotate every 8 seconds
     return () => clearInterval(interval);
   }, [isAutoRotating, scenes.length]);
   const currentScene = scenes[currentSceneIndex];
-  const handleSceneChange = (sceneId: string) => {
-    const index = scenes.findIndex(scene => scene.id === sceneId);
+  const handleSceneChange = (sceneId: string) => { const index = scenes.findIndex(scene => scene.id === sceneId);
     if (index !== -1) {
-      setCurrentSceneIndex(index);
-  };
-  const addRandomScene = () => {
-    const periods = [;
+      setCurrentSceneIndex(index) };
+  const addRandomScene = () => { const periods = [
       'Ancient Egypt (3100-332 BCE)',
       'Classical Greece (5th-4th century BCE)', 
       'Byzantine Empire (330-1453 CE)',
-      'Renaissance Italy (14th-16th century)',
+      'Renaissance Italy (14th-16th century)' }
       'Edo Japan (1603-1868)'
     ];
     const randomPeriod = periods[Math.floor(Math.random() * periods.length)];
     const newScene = generateRandomScene(;);
       `generated-${Date.now()}`}
-}
+
       `Generated ${randomPeriod.split(' ')[0]} Scene`}
-}
+
       randomPeriod
     );
     setScenes(prev => [...prev, newScene]);
   };
-  const resetToDefaults = () => {
-    setScenes(sampleScenes);
+  const resetToDefaults = () => { setScenes(sampleScenes);
     setCurrentSceneIndex(0);
     setIsAutoRotating(false);
     setShowDebugInfo(false);
-    setRealTimeUpdate(true);
-  };
+    setRealTimeUpdate(true) };
   return;
     <div className={`vfx-visualization-demo ${className}`}>}
       <Card className="mb-6">
@@ -300,11 +289,10 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
           scenes={scenes}
           realTimeUpdate={realTimeUpdate}
           showControls={selectedVisualizationMode !== 'compact'}
-          onSceneUpdate={(updatedScene) => {
+          onSceneUpdate={ (updatedScene) => {
   const updatedScenes = scenes.map(scene => ;);
   scene.id === updatedScene.id ? updatedScene : scene);
-  setScenes(updatedScenes);
-}}
+  setScenes(updatedScenes) }}
           className={selectedVisualizationMode === 'compact' ? 'compact-mode' : ''}
         />
       </div>
@@ -318,16 +306,16 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
               {scenes.map((_, index) => ()
                 <div
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-  index === currentSceneIndex ? 'bg-blue-600' : 'bg-gray-300',
-}`}
+                  className={ `w-2 h-2 rounded-full transition-colors ${
+  index === currentSceneIndex ? 'bg-blue-600' : 'bg-gray-300' }
+`}
                 />
               ))}
             </div>
           </div>
         </div>
       )}
-      <style>{`
+      <style>{ `
         .vfx-visualization-demo {
           max-width: 1400px;
   margin: 0 auto;
@@ -343,8 +331,8 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
         .auto-rotate-indicator {
           animation: pulse 2s ease-in-out infinite;
         @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+          0%, 100% { opacity: 1 }
+          50% { opacity: 0.5 }
       `}</style>
     </div>
   );

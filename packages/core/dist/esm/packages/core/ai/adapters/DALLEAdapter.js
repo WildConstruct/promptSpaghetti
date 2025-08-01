@@ -6,6 +6,7 @@
  */
 import { BaseAIModel, AIModelStatus, ModelInitializationError, ModelProcessingError, ModelUnavailableError } from '../BaseAIModel';
  > ;
+;
  > ;
 originalPrompt: string;
 optimizedPrompt ?  : string;
@@ -53,8 +54,7 @@ const capabilities = {
     customParameters: {
         size: {
             type: 'enum',
-            values: modelName === 'dall-e-3',
-        }
+            values: modelName === 'dall-e-3', }
             ? ['1024x1024', '1792x1024', '1024x1792']
             : ['256x256', '512x512', '1024x1024'],
         default: '1024x1024',
@@ -343,8 +343,9 @@ catch (error) {
                                         // General validations
                                         if (payload.prompt.length > 4000) {
                                             throw new Error('Prompt exceeds maximum length of 4000 characters');
-                                            _processImageResponse(response, DALLEResponse);
-                                            optimization: ImagePromptOptimization,
+                                            _processImageResponse(response, DALLEResponse),
+                                                optimization;
+                                            ImagePromptOptimization,
                                                 payload;
                                             any,
                                                 generationTime;

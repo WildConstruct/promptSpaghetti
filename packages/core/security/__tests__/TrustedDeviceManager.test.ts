@@ -4,166 +4,162 @@
  * Tests comprehensive trusted device management including registration,
  * verification, trust evaluation, and maintenance operations.
  */
-import {
-  TrustedDeviceManager,
+import { TrustedDeviceManager,
   TrustStatus,
   TrustLevel,
   VerificationMethod,
   TrustedDevice,
-  DeviceVerificationRequest,
+  DeviceVerificationRequest }
   TrustDecision
-} from '../TrustedDeviceManager';
-import {
-  DeviceFingerprintingService,
+ from '../TrustedDeviceManager';
+import { DeviceFingerprintingService,
   DeviceFingerprint,
   LocationData,
   RiskLevel,
-  FingerprintType,
+  FingerprintType }
   FingerprintContext
-} from '../DeviceFingerprintingService';
+ from '../DeviceFingerprintingService';
 
 // Mock the DeviceFingerprintingService
 jest.mock('../DeviceFingerprintingService');
-describe('TrustedDeviceManager', () => {
-  let manager: TrustedDeviceManager;
+describe('TrustedDeviceManager', () => { let manager: TrustedDeviceManager;
   let mockFingerprintService: jest.Mocked<DeviceFingerprintingService>;
   // Test data
   const testUserId = 'user-123';
-  const testContext: FingerprintContext = {,
-  ipAddress: '192.168.1.100',
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+  const testContext: FingerprintContext = {
+  ipAddress: '192.168.1.100'
+    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36' }
     headers: {}
   };
-  const testFingerprint: DeviceFingerprint = {,
-  id: 'fp-123',
-  type: FingerprintType.ENHANCED,
-  confidence: 95,
-  createdAt: new Date(),
-  lastSeen: new Date(),
-  seenCount: 1,
+  const testFingerprint: DeviceFingerprint = { 
+  id: 'fp-123'
+  type: FingerprintType.ENHANCED
+  confidence: 95
+  createdAt: new Date()
+  lastSeen: new Date()
+  seenCount: 1
   basic: {
-  userAgent: testContext.userAgent,
-  language: 'en-US',
-  platform: 'MacOS',
-  cookieEnabled: true,
-  doNotTrack: false,
-  timezone: 'America/Los_Angeles',
-  timezoneOffset: -480,
-},
-  enhanced: {
+  userAgent: testContext.userAgent
+  language: 'en-US'
+  platform: 'MacOS'
+  cookieEnabled: true
+  doNotTrack: false
+  timezone: 'America/Los_Angeles'
+  timezoneOffset: -480 }
+
+  enhanced: { 
   screen: {
-  width: 1920,
-  height: 1080,
-  colorDepth: 24,
-  pixelRatio: 2,
-  orientation: 'landscape',
-},
-  browser: {
-  name: 'Chrome',
-  version: '126',
-  engine: 'Blink',
-  engineVersion: '126',
-},
-  plugins: [],
-      fonts: [],
-      webgl: {
-  vendor: 'Intel',
-        renderer: 'Intel Iris',
-        version: 'WebGL 2.0',
-        shadingLanguageVersion: 'WebGL GLSL ES 3.00',
-        extensions: [],
+  width: 1920
+  height: 1080
+  colorDepth: 24
+  pixelRatio: 2
+  orientation: 'landscape' }
+
+  browser: { 
+  name: 'Chrome'
+  version: '126'
+  engine: 'Blink'
+  engineVersion: '126' }
+
+  plugins: []
+      fonts: []
+      webgl: { 
+  vendor: 'Intel'
+        renderer: 'Intel Iris'
+        version: 'WebGL 2.0'
+        shadingLanguageVersion: 'WebGL GLSL ES 3.00'
+        extensions: [] }
         parameters: {}
-  },
-  canvas: {
-  fingerprint: 'canvas-fp-123',
-  geometry: 'geo-123',
-  text: 'text-123',
-},
-  audio: {
-  fingerprint: 'audio-fp-123',
-  sampleRate: 48000,
-  channelCount: 2,
-  contextState: 'running',
-},
-  comprehensive: {
+
+  canvas: { 
+  fingerprint: 'canvas-fp-123'
+  geometry: 'geo-123'
+  text: 'text-123' }
+
+  audio: { 
+  fingerprint: 'audio-fp-123'
+  sampleRate: 48000
+  channelCount: 2
+  contextState: 'running' }
+
+  comprehensive: { 
   hardware: {
-  cpuCores: 8,
-  memory: 16,
-  touchSupport: false,
-  sensors: [],
-  bluetooth: true,
-  usb: true,
+  cpuCores: 8
+  memory: 16
+  touchSupport: false
+  sensors: []
+  bluetooth: true
+  usb: true
   webrtc: {
-  supported: true,
-  localCandidates: [],
-  stunServers: [],
-},
-  network: {
-  connectionType: 'wifi',
-  downlink: 100,
-  effectiveType: '4g',
-  rtt: 50,
-},
-  permissions: {
-  camera: 'granted',
-  microphone: 'granted',
-  location: 'prompt',
-  notifications: 'granted',
-  persistentStorage: 'granted',
-},
-  storage: {
-  localStorage: true,
-  sessionStorage: true,
-  indexedDB: true,
-  webSQL: false,
-  quota: 1000000,
-},
-  features: {
-  webAssembly: true,
-  serviceWorker: true,
-  webWorker: true,
-  webRTC: true,
-  webGL: true,
-  webGL2: true,
-  webVR: false,
-  webXR: false,
+  supported: true
+  localCandidates: []
+  stunServers: [] }
+
+  network: { 
+  connectionType: 'wifi'
+  downlink: 100
+  effectiveType: '4g'
+  rtt: 50 }
+
+  permissions: { 
+  camera: 'granted'
+  microphone: 'granted'
+  location: 'prompt'
+  notifications: 'granted'
+  persistentStorage: 'granted' }
+
+  storage: { 
+  localStorage: true
+  sessionStorage: true
+  indexedDB: true
+  webSQL: false
+  quota: 1000000 }
+
+  features: { 
+  webAssembly: true
+  serviceWorker: true
+  webWorker: true
+  webRTC: true
+  webGL: true
+  webGL2: true
+  webVR: false
+  webXR: false }
 };
-  const testLocation: LocationData = {,
-  id: 'loc-123',
-  timestamp: new Date(),
-  source: 'ip',
-  accuracy: 5000,
-  confidence: 85,
+  const testLocation: LocationData = { 
+  id: 'loc-123'
+  timestamp: new Date()
+  source: 'ip'
+  accuracy: 5000
+  confidence: 85
   coordinates: {
-  latitude: 37.7749,
-  longitude: -122.4194,
-  accuracy: 5000,
-},
-  address: {
-  country: 'United States',
-  countryCode: 'US',
-  region: 'California',
-  regionCode: 'CA',
-  city: 'San Francisco',
-  postalCode: '94102',
-},
-  network: {
-  ipAddress: '192.168.1.100',
-  isp: 'Comcast',
-  timezone: 'America/Los_Angeles',
-  vpnDetected: false,
-  proxyDetected: false,
-  torDetected: false,
-  hostingProvider: false,
-  datacenter: false,
-},
-  metadata: {
-  language: 'en',
-  currency: 'USD',
-  callingCode: '+1',
+  latitude: 37.7749
+  longitude: -122.4194
+  accuracy: 5000 }
+
+  address: { 
+  country: 'United States'
+  countryCode: 'US'
+  region: 'California'
+  regionCode: 'CA'
+  city: 'San Francisco'
+  postalCode: '94102' }
+
+  network: { 
+  ipAddress: '192.168.1.100'
+  isp: 'Comcast'
+  timezone: 'America/Los_Angeles'
+  vpnDetected: false
+  proxyDetected: false
+  torDetected: false
+  hostingProvider: false
+  datacenter: false }
+
+  metadata: { 
+  language: 'en'
+  currency: 'USD'
+  callingCode: '+1' }
 };
-  beforeEach(() => {
-  jest.useFakeTimers();
+  beforeEach(() => { jest.useFakeTimers();
   // Create mock fingerprint service
   mockFingerprintService = new DeviceFingerprintingService() as jest.Mocked<DeviceFingerprintingService>;
   // Mock the methods we need
@@ -175,42 +171,39 @@ describe('TrustedDeviceManager', () => {
   // Set default mock implementations
   mockFingerprintService.generateFingerprint.mockResolvedValue(testFingerprint as unknown as unknown as unknown as unknown as unknown as unknown);
   mockFingerprintService.assessRisk.mockReturnValue({)
-  deviceId: testFingerprint.id,
-  overallRisk: RiskLevel.LOW,
-  riskScore: 10,
-  factors: [],
-  recommendations: [],
-  timestamp: new Date( as unknown as unknown),
+  deviceId: testFingerprint.id
+  overallRisk: RiskLevel.LOW
+  riskScore: 10
+  factors: []
+  recommendations: []
+  timestamp: new Date( as unknown as unknown) }
 });
-    manager = new TrustedDeviceManager(mockFingerprintService, {)
-  maxDevicesPerUser: 5,
-  defaultTrustDurationDays: 30,
-  defaultVerificationIntervalDays: 7,
-  maxLocationRadiusKm: 50,
-  requireLocationCheck: true,
-  allowRoaming: false,
-  autoExpireInactiveDays: 90,
+    manager = new TrustedDeviceManager(mockFingerprintService, { )
+  maxDevicesPerUser: 5
+  defaultTrustDurationDays: 30
+  defaultVerificationIntervalDays: 7
+  maxLocationRadiusKm: 50
+  requireLocationCheck: true
+  allowRoaming: false
+  autoExpireInactiveDays: 90
   riskThreshold: {
-  full: 20,
-  partial: 50,
-  deny: 80,
-},
-  verificationMethods: [VerificationMethod.EMAIL, VerificationMethod.SMS],
-      enableAnomalyDetection: true,
+  full: 20
+  partial: 50
+  deny: 80 }
+
+  verificationMethods: [VerificationMethod.EMAIL, VerificationMethod.SMS]
+      enableAnomalyDetection: true
       enableAutoRenewal: true;
   });
   });
-  afterEach(() => {
-    jest.useRealTimers();
-    manager.removeAllListeners();
-  });
-  describe('Device Registration', () => {
-    test('should register a new trusted device', async () => {
-      const request: DeviceVerificationRequest = {,
-  userId: testUserId,
-        deviceFingerprint: testFingerprint,
-        location: testLocation,
-        verificationMethod: VerificationMethod.EMAIL,
+  afterEach(() => { jest.useRealTimers();
+    manager.removeAllListeners() });
+  describe('Device Registration', () => { test('should register a new trusted device', async () => {
+      const request: DeviceVerificationRequest = {
+  userId: testUserId
+        deviceFingerprint: testFingerprint
+        location: testLocation
+        verificationMethod: VerificationMethod.EMAIL }
         metadata: { source: 'web' }
       };
       const device = await manager.registerTrustedDevice(request);
@@ -224,31 +217,29 @@ describe('TrustedDeviceManager', () => {
       expect(device.type).toBe('desktop');
       expect(device.primaryLocation).toEqual(testLocation);
     });
-    test('should emit deviceRegistered event', async () => {
-  const eventHandler = jest.fn<unknown, unknown>();
+    test('should emit deviceRegistered event', async () => { const eventHandler = jest.fn<unknown, unknown>();
   manager.on('deviceRegistered', eventHandler);
-  const request: DeviceVerificationRequest = {,
-  userId: testUserId,
-  deviceFingerprint: testFingerprint,
-  location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  const request: DeviceVerificationRequest = {
+  userId: testUserId
+  deviceFingerprint: testFingerprint
+  location: testLocation
+  verificationMethod: VerificationMethod.EMAIL }
 };
       await manager.registerTrustedDevice(request);
       expect(eventHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-  userId: testUserId,
-  device: expect.objectContaining({,)
-  userId: testUserId,
-  fingerprintId: testFingerprint.id,
-}
+        expect.objectContaining({ )
+  userId: testUserId
+  device: expect.objectContaining({);
+  userId: testUserId
+  fingerprintId: testFingerprint.id }
+
   }
       );
     });
-    test('should enforce device limit per user', async () => {
-      // Register maximum number of devices
+    test('should enforce device limit per user', async () => { // Register maximum number of devices
       for (let i = 0; i < 5; i++) {
         const request: DeviceVerificationRequest = {,
-  userId: testUserId,
+  userId: testUserId }
           deviceFingerprint: { ...testFingerprint, id: `fp-${i}` }
 },
   location: testLocation,
@@ -256,8 +247,8 @@ describe('TrustedDeviceManager', () => {
   };
         await manager.registerTrustedDevice(request);
       // Try to register one more device
-      const extraRequest: DeviceVerificationRequest = {,
-  userId: testUserId,
+      const extraRequest: DeviceVerificationRequest = { ,
+  userId: testUserId }
         deviceFingerprint: { ...testFingerprint, id: 'fp-extra' },
         location: testLocation,
         verificationMethod: VerificationMethod.EMAIL;
@@ -269,14 +260,13 @@ describe('TrustedDeviceManager', () => {
       expect(userDevices.length).toBe(5);
     });
   });
-  describe('Device Verification', () => {
-  test('should verify a pending device', async () => {
+  describe('Device Verification', () => { test('should verify a pending device', async () => {
   // Register a device
   const request: DeviceVerificationRequest = {,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const pendingDevice = await manager.registerTrustedDevice(request);
       const verificationToken = pendingDevice.verificationToken!;
@@ -287,17 +277,14 @@ describe('TrustedDeviceManager', () => {
       expect(verifiedDevice.trustScore).toBe(100);
       expect(verifiedDevice.verificationToken).toBeUndefined();
     });
-    test('should reject invalid verification token', async () => {
-      await expect(manager.verifyDevice('invalid-token'))
-        .rejects.toThrow('Invalid verification token');
-    });
-    test('should reject expired verification token', async () => {
-  // Register a device
+    test('should reject invalid verification token', async () => { await expect(manager.verifyDevice('invalid-token'))
+        .rejects.toThrow('Invalid verification token') });
+    test('should reject expired verification token', async () => { // Register a device
   const request: DeviceVerificationRequest = {,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       const verificationToken = device.verificationToken!;
@@ -307,14 +294,13 @@ describe('TrustedDeviceManager', () => {
         .rejects.toThrow('Verification token expired');
     });
   });
-  describe('Trust Evaluation', () => {
-  test('should trust a verified device', async () => {
+  describe('Trust Evaluation', () => { test('should trust a verified device', async () => {
   // Register and verify a device
   const request: DeviceVerificationRequest = {,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       await manager.verifyDevice(device.verificationToken!);
@@ -327,20 +313,17 @@ describe('TrustedDeviceManager', () => {
       expect(decision.factors.notExpired).toBe(true);
       expect(decision.factors.notRevoked).toBe(true);
     });
-    test('should not trust unrecognized device', async () => {
-      const decision = await manager.checkDeviceTrust(testUserId, testContext, testLocation);
+    test('should not trust unrecognized device', async () => { const decision = await manager.checkDeviceTrust(testUserId, testContext, testLocation);
       expect(decision.trusted).toBe(false);
       expect(decision.reason).toBe('Device not recognized');
       expect(decision.requiresVerification).toBe(true);
-      expect(decision.verificationMethods).toEqual([VerificationMethod.EMAIL, VerificationMethod.SMS]);
-    });
-    test('should not trust expired device', async () => {
-  // Register and verify a device
+      expect(decision.verificationMethods).toEqual([VerificationMethod.EMAIL, VerificationMethod.SMS]) });
+    test('should not trust expired device', async () => { // Register and verify a device
   const request: DeviceVerificationRequest = {,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       await manager.verifyDevice(device.verificationToken!);
@@ -351,13 +334,12 @@ describe('TrustedDeviceManager', () => {
       expect(decision.reason).toContain('Device trust has expired');
       expect(decision.factors.notExpired).toBe(false);
     });
-    test('should not trust revoked device', async () => {
-  // Register and verify a device
+    test('should not trust revoked device', async () => { // Register and verify a device
   const request: DeviceVerificationRequest = {,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       await manager.verifyDevice(device.verificationToken!);
@@ -368,51 +350,47 @@ describe('TrustedDeviceManager', () => {
       expect(decision.reason).toContain('Device has been revoked');
       expect(decision.factors.notRevoked).toBe(false);
     });
-    test('should check location when required', async () => {
-  // Register and verify a device
+    test('should check location when required', async () => { // Register and verify a device
   const request: DeviceVerificationRequest = {,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       await manager.verifyDevice(device.verificationToken!);
       // Check trust from different location
-      const differentLocation: LocationData = {
-  ...testLocation,
-  coordinates: {
+      const differentLocation: LocationData = { ...testLocation,
+  coordinates: {,
   latitude: 40.7128, // New York,
   longitude: -74.0060,
-  accuracy: 5000,
+  accuracy: 5000 }
 },
-  address: {
-  ...testLocation.address,
+  address: { ...testLocation.address,
   city: 'New York',
   region: 'New York',
-  regionCode: 'NY',
+  regionCode: 'NY' }
 };
       const decision = await manager.checkDeviceTrust(testUserId, testContext, differentLocation);
       expect(decision.trusted).toBe(true); // Still trusted but...
       expect(decision.factors.locationMatch).toBe(false); // Location doesn't match
       expect(decision.riskScore).toBeGreaterThan(0);
     });
-    test('should handle high risk devices', async () => {
-  // Mock high risk assessment
+    test('should handle high risk devices', async () => { // Mock high risk assessment
   mockFingerprintService.assessRisk.mockReturnValue({)
   deviceId: testFingerprint.id,
   overallRisk: RiskLevel.HIGH,
   riskScore: 85,
   factors: [],
   recommendations: [],
-  timestamp: new Date( as unknown as unknown),
+  timestamp: new Date( as unknown as unknown) }
 });
       // Register and verify a device
-      const request: DeviceVerificationRequest = {,
+      const request: DeviceVerificationRequest = { ,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       await manager.verifyDevice(device.verificationToken!);
@@ -421,13 +399,12 @@ describe('TrustedDeviceManager', () => {
       expect(decision.reason).toContain('Risk level too high');
       expect(decision.factors.riskAcceptable).toBe(false);
     });
-    test('should require periodic verification when configured', async () => {
-  // Register and verify a device
+    test('should require periodic verification when configured', async () => { // Register and verify a device
   const request: DeviceVerificationRequest = {,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       await manager.verifyDevice(device.verificationToken!);
@@ -440,13 +417,12 @@ describe('TrustedDeviceManager', () => {
       expect(decision.factors.recentlyVerified).toBe(false);
     });
   });
-  describe('Device Management', () => {
-    test('should get user devices', async () => {
+  describe('Device Management', () => { test('should get user devices', async () => {
       // Register multiple devices
       const devices: TrustedDevice = [];
       for (let i = 0; i < 3; i++) {
         const request: DeviceVerificationRequest = {,
-  userId: testUserId,
+  userId: testUserId }
           deviceFingerprint: { ...testFingerprint, id: `fp-${i}` }
 },
   location: testLocation,
@@ -458,12 +434,11 @@ describe('TrustedDeviceManager', () => {
       expect(userDevices).toHaveLength(3);
       expect(userDevices.map(d => d.id)).toEqual(devices.map(d => d.id));
     });
-    test('should rename device', async () => {
-  const request: DeviceVerificationRequest = {,
+    test('should rename device', async () => { const request: DeviceVerificationRequest = {,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       const newName = 'My Work Laptop';
@@ -471,18 +446,17 @@ describe('TrustedDeviceManager', () => {
       expect(renamedDevice.name).toBe(newName);
       expect(renamedDevice.id).toBe(device.id);
     });
-    test('should update device settings', async () => {
-  const request: DeviceVerificationRequest = {,
+    test('should update device settings', async () => { const request: DeviceVerificationRequest = {,
   userId: testUserId,
   deviceFingerprint: testFingerprint,
   location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
-      const updatedDevice = manager.updateDeviceSettings(device.id, {)
+      const updatedDevice = manager.updateDeviceSettings(device.id, { )
   allowRoaming: true,
   maxLocationRadius: 100,
-  notifyOnNewLogin: false,
+  notifyOnNewLogin: false }
 });
       expect(updatedDevice.settings.allowRoaming).toBe(true);
       expect(updatedDevice.settings.maxLocationRadius).toBe(100);
@@ -495,126 +469,117 @@ describe('TrustedDeviceManager', () => {
         .toThrow('Device not found');
     });
   });
-  describe('Event Handling', () => {
-  test('should emit deviceTrusted event on successful trust check', async () => {
+  describe('Event Handling', () => { test('should emit deviceTrusted event on successful trust check', async () => {
   const eventHandler = jest.fn<unknown, unknown>();
   manager.on('deviceTrusted', eventHandler);
   // Register and verify a device
-  const request: DeviceVerificationRequest = {,
-  userId: testUserId,
-  deviceFingerprint: testFingerprint,
-  location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  const request: DeviceVerificationRequest = {
+  userId: testUserId
+  deviceFingerprint: testFingerprint
+  location: testLocation
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       await manager.verifyDevice(device.verificationToken!);
       // Check trust
       await manager.checkDeviceTrust(testUserId, testContext, testLocation);
       expect(eventHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-  userId: testUserId,
-  device: expect.objectContaining({,)
-  id: device.id,
-}),
-          decision: expect.objectContaining({,)
-  trusted: true,
-}
-  }
+        expect.objectContaining({ )
+  userId: testUserId
+  device: expect.objectContaining({);
+  id: device.id }
+})
+          decision: expect.objectContaining({ );
+  trusted: true }
+
       );
     });
-    test('should emit deviceUntrusted event on failed trust check', async () => {
-  const eventHandler = jest.fn<unknown, unknown>();
+    test('should emit deviceUntrusted event on failed trust check', async () => { const eventHandler = jest.fn<unknown, unknown>();
   manager.on('deviceUntrusted', eventHandler);
   // Check trust for unregistered device
   await manager.checkDeviceTrust(testUserId, testContext, testLocation);
   expect(eventHandler).toHaveBeenCalledWith()
   expect.objectContaining({)
-  userId: testUserId,
-  decision: expect.objectContaining({,)
-  trusted: false,
-}
+  userId: testUserId
+  decision: expect.objectContaining({)
+  trusted: false }
+
   }
       );
     });
-    test('should emit deviceRevoked event', async () => {
-  const eventHandler = jest.fn<unknown, unknown>();
+    test('should emit deviceRevoked event', async () => { const eventHandler = jest.fn<unknown, unknown>();
   manager.on('deviceRevoked', eventHandler);
   // Register a device
-  const request: DeviceVerificationRequest = {,
-  userId: testUserId,
-  deviceFingerprint: testFingerprint,
-  location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  const request: DeviceVerificationRequest = {
+  userId: testUserId
+  deviceFingerprint: testFingerprint
+  location: testLocation
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       // Revoke it
       await manager.revokeDevice(device.id, 'Test revocation');
       expect(eventHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-  userId: testUserId,
-  device: expect.objectContaining({,)
-  id: device.id,
-  trustStatus: TrustStatus.REVOKED,
-}),
+        expect.objectContaining({ )
+  userId: testUserId
+  device: expect.objectContaining({);
+  id: device.id
+  trustStatus: TrustStatus.REVOKED }
+})
           reason: 'Test revocation';
-  }
+
       );
     });
   });
-  describe('Device Types', () => {
-  test('should detect mobile device', async () => {
-  const mobileContext: FingerprintContext = {,
-  ...testContext,
-  userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7 like Mac OS X) AppleWebKit/605.1.15',
+  describe('Device Types', () => { test('should detect mobile device', async () => {
+  const mobileContext: FingerprintContext = {
+  ...testContext
+  userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7 like Mac OS X) AppleWebKit/605.1.15' }
 };
-      const mobileFingerprint: DeviceFingerprint = {
-  ...testFingerprint,
+      const mobileFingerprint: DeviceFingerprint = { ...testFingerprint
   basic: {
-  ...testFingerprint.basic,
-  userAgent: mobileContext.userAgent,
-  platform: 'iPhone',
+  ...testFingerprint.basic
+  userAgent: mobileContext.userAgent
+  platform: 'iPhone' }
 };
       mockFingerprintService.generateFingerprint.mockResolvedValue(mobileFingerprint as unknown as unknown as unknown as unknown as unknown as unknown);
-      const request: DeviceVerificationRequest = {,
-  userId: testUserId,
-  deviceFingerprint: mobileFingerprint,
-  location: testLocation,
-  verificationMethod: VerificationMethod.SMS,
+      const request: DeviceVerificationRequest = { 
+  userId: testUserId
+  deviceFingerprint: mobileFingerprint
+  location: testLocation
+  verificationMethod: VerificationMethod.SMS }
 };
       const device = await manager.registerTrustedDevice(request);
       expect(device.type).toBe('mobile');
     });
-    test('should detect tablet device', async () => {
-  const tabletContext: FingerprintContext = {,
-  ...testContext,
-  userAgent: 'Mozilla/5.0 (iPad; CPU OS 14_7 like Mac OS X) AppleWebKit/605.1.15',
+    test('should detect tablet device', async () => { const tabletContext: FingerprintContext = {
+  ...testContext
+  userAgent: 'Mozilla/5.0 (iPad; CPU OS 14_7 like Mac OS X) AppleWebKit/605.1.15' }
 };
-      const tabletFingerprint: DeviceFingerprint = {
-  ...testFingerprint,
+      const tabletFingerprint: DeviceFingerprint = { ...testFingerprint
   basic: {
-  ...testFingerprint.basic,
-  userAgent: tabletContext.userAgent,
-  platform: 'iPad',
+  ...testFingerprint.basic
+  userAgent: tabletContext.userAgent
+  platform: 'iPad' }
 };
       mockFingerprintService.generateFingerprint.mockResolvedValue(tabletFingerprint as unknown as unknown as unknown as unknown as unknown as unknown);
-      const request: DeviceVerificationRequest = {,
-  userId: testUserId,
-  deviceFingerprint: tabletFingerprint,
-  location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+      const request: DeviceVerificationRequest = { 
+  userId: testUserId
+  deviceFingerprint: tabletFingerprint
+  location: testLocation
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       expect(device.type).toBe('tablet');
     });
   });
-  describe('Auto-renewal', () => {
-  test('should auto-renew eligible devices during maintenance', async () => {
+  describe('Auto-renewal', () => { test('should auto-renew eligible devices during maintenance', async () => {
   // Register and verify a device
-  const request: DeviceVerificationRequest = {,
-  userId: testUserId,
-  deviceFingerprint: testFingerprint,
-  location: testLocation,
-  verificationMethod: VerificationMethod.EMAIL,
+  const request: DeviceVerificationRequest = {
+  userId: testUserId
+  deviceFingerprint: testFingerprint
+  location: testLocation
+  verificationMethod: VerificationMethod.EMAIL }
 };
       const device = await manager.registerTrustedDevice(request);
       await manager.verifyDevice(device.verificationToken!);
@@ -629,25 +594,22 @@ describe('TrustedDeviceManager', () => {
       expect(updatedDevice.expiresAt.getTime()).toBeGreaterThan(Date.now() + 20 * 24 * 60 * 60 * 1000);
     });
   });
-  describe('Error Handling', () => {
-    test('should handle fingerprint service errors', async () => {
+  describe('Error Handling', () => { test('should handle fingerprint service errors', async () => {
       mockFingerprintService.generateFingerprint.mockRejectedValue(new Error('Service error'));
       const decision = await manager.checkDeviceTrust(testUserId, testContext, testLocation);
       expect(decision.trusted).toBe(false);
       expect(decision.reason).toBe('Error checking device trust');
-      expect(decision.riskScore).toBe(100);
-    });
-    test('should emit error events', async () => {
-  const errorHandler = jest.fn<unknown, unknown>();
+      expect(decision.riskScore).toBe(100) });
+    test('should emit error events', async () => { const errorHandler = jest.fn<unknown, unknown>();
   manager.on('error', errorHandler);
   mockFingerprintService.generateFingerprint.mockRejectedValue(new Error('Service error'));
   await manager.checkDeviceTrust(testUserId, testContext, testLocation);
   expect(errorHandler).toHaveBeenCalledWith()
   expect.objectContaining({)
-  operation: 'checkDeviceTrust',
-  userId: testUserId,
-  error: 'Service error',
-}
+  operation: 'checkDeviceTrust'
+  userId: testUserId
+  error: 'Service error' }
+
       );
     });
   });

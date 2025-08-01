@@ -23,20 +23,21 @@ AsyncIterable;
 // ========================================
 class RedisLuaScripts {
     /**
-     * Atomic increment with expiration
-     * Returns current count and TTL
-     */
+    * Atomic increment with expiration
+    * Returns current count and TTL
+    */
     static INCREMENT_WITH_EXPIRY = `
-    local key = KEYS[1]
-    local window_ms = tonumber(ARGV[1])
-    local current_time = tonumber(ARGV[2])
-    -- Get current value and TTL
-    local current = redis.call('GET', key)
-    local ttl = redis.call('PTTL', key)
-    if current == false then
-        -- Key doesn't exist, create new window
-        redis.call('SET', key, 1)
-        redis.call('PEXPIRE', key, window_ms)
+  local key = KEYS[1]
+  local window_ms = tonumber(ARGV[1])
+  local current_time = tonumber(ARGV[2])
+  -- Get current value and TTL
+  local current = redis.call('GET', key)
+  local ttl = redis.call('PTTL', key)
+  if current == false then
+  -- Key doesn't exist, create new window
+  redis.call('SET', key, 1)
+  redis.call('PEXPIRE', key, window_ms)
+}
 }
         return {1, current_time + window_ms}
     else

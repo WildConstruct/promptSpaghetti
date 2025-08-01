@@ -4,8 +4,7 @@
  *
  * Unified interface for all AI model types with standardized methods
  */
-export declare enum AIModelType {
-    TEXT = "text",
+export declare enum AIModelType { TEXT = "text",
     IMAGE = "image",
     AUDIO = "audio",
     VIDEO = "video",
@@ -29,24 +28,22 @@ export declare enum AIModelStatus {
     READY = "ready",
     BUSY = "busy",
     ERROR = "error",
-    OFFLINE = "offline",
+    OFFLINE = "offline" }
     MAINTENANCE = "maintenance"
 
 }
-export interface ModelCapabilities {
-    inputTypes: string[];
+}
+export interface ModelCapabilities { inputTypes: string[];
     outputTypes: string[];
     maxInputSize?: number;
     maxOutputSize?: number;
     supportsBatch?: boolean;
     supportsStreaming?: boolean;
     supportsAsync?: boolean;
-    customParameters?: Record<string, unknown>;
-
-
+    customParameters?: Record<string, unknown> }
 }
-export interface ModelMetadata {
-    name: string;
+}
+export interface ModelMetadata { name: string;
     version: string;
     description: string;
     provider: AIModelProvider;
@@ -57,29 +54,27 @@ export interface ModelMetadata {
     maxConcurrency?: number;
     rateLimit?: {
         requestsPerMinute: number;
-        tokensPerMinute?: number;
-
+        tokensPerMinute?: number }
 }
     };
     tags?: string[];
     lastUpdated: Date;
 
 }
-export interface CostEstimate {
-    estimatedCost: number;
+}
+export interface CostEstimate { estimatedCost: number;
     currency: string;
     breakdown?: {
         inputCost: number;
         outputCost: number;
-        processingCost: number;
-
+        processingCost: number }
 }
     };
     confidence: number;
 
 }
-export interface HealthStatus {
-    status: AIModelStatus;
+}
+export interface HealthStatus { status: AIModelStatus;
     uptime: number;
     lastCheck: Date;
     responseTime?: number;
@@ -89,15 +84,14 @@ export interface HealthStatus {
         memoryUsage?: number;
         cpuUsage?: number;
         diskSpace?: number;
-        networkLatency?: number;
-
+        networkLatency?: number }
 }
     };
     issues?: string[];
 
 }
-export interface AIRequest {
-    id: string;
+}
+export interface AIRequest { id: string;
     input: unknown;
     options?: Record<string, unknown>;
     metadata?: {
@@ -105,15 +99,14 @@ export interface AIRequest {
         sessionId?: string;
         priority?: 'low' | 'normal' | 'high' | 'urgent';
         timeout?: number;
-        retryCount?: number;
-
+        retryCount?: number }
 }
     };
     createdAt: Date;
 
 }
-export interface AIResponse {
-    id: string;
+}
+export interface AIResponse { id: string;
     requestId: string;
     output: unknown;
     metadata?: {
@@ -122,21 +115,17 @@ export interface AIResponse {
         modelUsed: string;
         tokensUsed?: {
             input: number;
-            output: number;
-
+            output: number }
 }
         };
         quality?: number;
     };
-    error?: {
-        code: string;
+    error?: { code: string;
         message: string;
-        details?: unknown;
-    };
+        details?: unknown };
     completedAt: Date;
 
-export declare abstract class BaseAIModel {
-    protected _id: string;
+export declare abstract class BaseAIModel { protected _id: string;
     protected _metadata: ModelMetadata;
     protected _capabilities: ModelCapabilities;
     protected _status: AIModelStatus;
@@ -164,18 +153,14 @@ export declare abstract class BaseAIModel {
     protected _calculateTokenCost(input: unknown, options?: unknown): number;
     protected _assessOutputQuality(output: unknown): Promise<number>;
     protected _performHealthCheck(): Promise<void>;
-    protected _processBatch(requests: AIRequest[]): Promise<AIResponse[]>;
-
+    protected _processBatch(requests: AIRequest[]): Promise<AIResponse[]> }
 }
-export interface AIModelFactory {
-    createModel(config: ModelConfiguration): Promise<BaseAIModel>;
+export interface AIModelFactory { createModel(config: ModelConfiguration): Promise<BaseAIModel>;
     getSupportedTypes(): AIModelType[];
-    getDefaultConfiguration(type: AIModelType): ModelConfiguration;
-
-
+    getDefaultConfiguration(type: AIModelType): ModelConfiguration }
 }
-export interface ModelConfiguration {
-    id: string;
+}
+export interface ModelConfiguration { id: string;
     type: AIModelType;
     provider: AIModelProvider;
     endpoint?: string;
@@ -192,8 +177,7 @@ export declare class ModelProcessingError extends Error {
     constructor(modelId: string, cause: string);
 
 export declare class ModelUnavailableError extends Error {
-    constructor(modelId: string);
-
+    constructor(modelId: string) }
 }
 export { BaseAIModel as default };
 //# sourceMappingURL=BaseAIModel.d.ts.map

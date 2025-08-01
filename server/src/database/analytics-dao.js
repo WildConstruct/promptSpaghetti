@@ -6,7 +6,7 @@ export class AnalyticsDAO {
   db;
   constructor(database) {
     this.db = database;
-  }
+
   /**
    * Initialize analytics database schema
    */
@@ -18,7 +18,7 @@ export class AnalyticsDAO {
     // Execute schema SQL
     this.db.exec(schema);
     console.log('Analytics database schema initialized');
-  }
+
   /**
    * Create or update analytics session
    */
@@ -56,7 +56,7 @@ export class AnalyticsDAO {
       now
     );
     return result;
-  }
+
   /**
    * Store analytics event
    */
@@ -81,7 +81,7 @@ export class AnalyticsDAO {
       category,
       severity
     );
-  }
+
   /**
    * Store graph execution record
    */
@@ -113,7 +113,7 @@ export class AnalyticsDAO {
       execution.cpuTimeMs
     );
     return result;
-  }
+
   /**
    * Store node execution record
    */
@@ -141,7 +141,7 @@ export class AnalyticsDAO {
       execution.memoryDeltaMb
     );
     return result;
-  }
+
   /**
    * Store token usage record
    */
@@ -176,7 +176,7 @@ export class AnalyticsDAO {
       usage.latencyMs
     );
     return result;
-  }
+
   /**
    * Store user interaction record
    */
@@ -206,7 +206,7 @@ export class AnalyticsDAO {
       interaction.metadata || '{}'
     );
     return result;
-  }
+
   /**
    * Get analytics summary for a time period
    */
@@ -321,7 +321,7 @@ export class AnalyticsDAO {
       providerUsage: providerUsage || [],
       errorBreakdown: errorBreakdown || [],
     };
-  }
+
   /**
    * Get time-series data for analytics dashboard
    */
@@ -364,9 +364,9 @@ export class AnalyticsDAO {
         break;
       default:
         throw new Error(`Unknown metric: ${metric}`);
-    }
+
     return this.db.prepare(query).all(filters.startTime || 0, filters.endTime || Date.now());
-  }
+
   /**
    * Get heat map data for canvas interactions
    */
@@ -391,7 +391,7 @@ export class AnalyticsDAO {
       )
       .all(this.buildWhereParams(filters));
     return heatMapData;
-  }
+
   /**
    * Update aggregation tables (should be run periodically)
    */
@@ -456,7 +456,7 @@ export class AnalyticsDAO {
       )
       .run();
     console.log('Analytics aggregations updated');
-  }
+
   /**
    * Get events by filter criteria
    */
@@ -468,8 +468,8 @@ export class AnalyticsDAO {
       limitClause = `LIMIT ${filters.limit}`;
       if (filters.offset) {
         limitClause += ` OFFSET ${filters.offset}`;
-      }
-    }
+
+
     const events = this.db
       .prepare(
         `
@@ -489,7 +489,7 @@ export class AnalyticsDAO {
       organizationId: row.organization_id,
       metadata: JSON.parse(row.metadata),
     }));
-  }
+
   /**
    * Delete old analytics data beyond retention period
    */
@@ -529,7 +529,7 @@ export class AnalyticsDAO {
     });
     console.log(`Cleaned up ${totalDeleted} old analytics records`);
     return totalDeleted;
-  }
+
   /**
    * Build WHERE clause for filtering
    */
@@ -545,7 +545,7 @@ export class AnalyticsDAO {
               ? 'request_start'
               : 'timestamp';
       conditions.push(`${timeField} >= ?`);
-    }
+
     if (filters.endTime !== undefined) {
       const timeField =
         tableName === 'user_interactions'
@@ -556,19 +556,19 @@ export class AnalyticsDAO {
               ? 'request_start'
               : 'timestamp';
       conditions.push(`${timeField} <= ?`);
-    }
+
     if (filters.userId !== undefined) {
       conditions.push('user_id = ?');
-    }
+
     if (filters.sessionId !== undefined) {
       conditions.push('session_id = ?');
-    }
+
     if (filters.eventTypes && filters.eventTypes.length > 0) {
       const placeholders = filters.eventTypes.map(() => '?').join(', ');
       conditions.push(`event_type IN (${placeholders})`);
-    }
+
     return conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-  }
+
   /**
    * Build parameters array for WHERE clause
    */
@@ -580,9 +580,9 @@ export class AnalyticsDAO {
     if (filters.sessionId !== undefined) params.push(filters.sessionId);
     if (filters.eventTypes && filters.eventTypes.length > 0) {
       params.push(...filters.eventTypes);
-    }
+
     return params;
-  }
+
   /**
    * Get event category from event type
    */
@@ -592,7 +592,7 @@ export class AnalyticsDAO {
     if (eventType.includes('performance') || eventType.includes('token')) return 'performance';
     if (eventType.includes('error')) return 'error';
     return 'general';
-  }
+
   /**
    * Get event severity from event type
    */
@@ -600,7 +600,7 @@ export class AnalyticsDAO {
     if (eventType.includes('error')) return 'error';
     if (eventType.includes('warning')) return 'warning';
     return 'info';
-  }
+
   /**
    * Get project execution statistics for health monitoring
    */
@@ -628,7 +628,7 @@ export class AnalyticsDAO {
       averageExecutionTime: stats?.averageExecutionTime || 0,
       lastExecution: stats?.lastExecution,
     };
-  }
+
   /**
    * Get user activity statistics for a project
    */
@@ -651,7 +651,7 @@ export class AnalyticsDAO {
     `
       )
       .all(projectId, cutoffTime);
-  }
+
   /**
    * Get activity timeline for a project
    */
@@ -673,7 +673,7 @@ export class AnalyticsDAO {
     `
       )
       .all(projectId, cutoffTime);
-  }
+
   /**
    * Get collaboration patterns for a project
    */
@@ -739,7 +739,7 @@ export class AnalyticsDAO {
       collaborationRate,
       topCollaborators,
     };
-  }
+
   /**
    * Get project health score based on multiple metrics
    */
@@ -757,11 +757,11 @@ export class AnalyticsDAO {
     let recommendation = 'Project is healthy';
     if (score < 30) {
       recommendation = 'Critical: Project needs immediate attention';
-    } else if (score < 50) {
+ else if (score < 50) {
       recommendation = 'Warning: Project showing signs of stagnation';
-    } else if (score < 70) {
+ else if (score < 70) {
       recommendation = 'Monitor: Consider increasing team engagement';
-    }
+
     return {
       score: Math.round(score),
       factors: {
@@ -772,5 +772,5 @@ export class AnalyticsDAO {
       },
       recommendation,
     };
-  }
-}
+
+

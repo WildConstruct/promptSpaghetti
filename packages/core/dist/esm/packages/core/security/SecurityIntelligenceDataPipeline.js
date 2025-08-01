@@ -576,7 +576,7 @@ export var PipelineAlertType;
                     return {
                         schemaId: 'default',
                         version: '1.0.0',
-                        fields: [,
+                        fields: [
                             { name: 'id', type: FieldType.UUID, required: true, nullable: false },
                             { name: 'timestamp', type: FieldType.DATE, required: true, nullable: false },
                             { name: 'type', type: FieldType.STRING, required: true, nullable: false },
@@ -1018,8 +1018,9 @@ export var PipelineAlertType;
         ;
     }
     this.emit('executionError', { executionId, stage, error });
-    createAlert(type, PipelineAlertType);
-    severity: ValidationSeverity,
+    createAlert(type, PipelineAlertType),
+        severity;
+    ValidationSeverity,
         message;
     string,
         details;
@@ -1093,58 +1094,58 @@ export var PipelineAlertType;
                     return: metrics
                 };
             }
-            export class SecurityIntelligenceDataPipelineFactory {
-                static createDefaultConfig() {
-                    return {
-                        enableRealTimeProcessing: true,
-                        batchProcessingInterval: 5,
-                        maxBatchSize: 1000,
-                        enableDataValidation: true,
-                        enableDataEnrichment: true,
-                        enableDataTransformation: true,
-                        retentionPeriodDays: 30,
-                        enableErrorRecovery: true,
-                        parallelProcessingThreads: 4,
-                        dataQualityThresholds: {
-                            completeness: 95,
-                            accuracy: 90,
-                            consistency: 85,
-                            timeliness: 5,
-                            validity: 95,
-                        },
-                        outputFormats: [OutputFormat.JSON, OutputFormat.DATABASE]
-                    };
-                }
-                static createHighThroughputConfig() {
-                    return {
-                        ...this.createDefaultConfig(),
-                        enableRealTimeProcessing: true,
-                        batchProcessingInterval: 1,
-                        maxBatchSize: 5000,
-                        parallelProcessingThreads: 8,
-                        enableDataValidation: false, // Disable for performance,
-                        enableDataEnrichment: false,
-                    };
-                }
-                static createHighQualityConfig() {
-                    return {
-                        ...this.createDefaultConfig(),
-                        enableDataValidation: true,
-                        enableDataEnrichment: true,
-                        dataQualityThresholds: {
-                            completeness: 99,
-                            accuracy: 95,
-                            consistency: 95,
-                            timeliness: 2,
-                            validity: 99,
-                        },
-                        static createPipeline(config) {
-                            const fullConfig = { ...this.createDefaultConfig(), ...config };
-                            return new SecurityIntelligenceDataPipeline(fullConfig);
-                            export default SecurityIntelligenceDataPipeline;
-                        }
-                    };
-                }
+        }
+        export class SecurityIntelligenceDataPipelineFactory {
+            static createDefaultConfig() {
+                return {
+                    enableRealTimeProcessing: true,
+                    batchProcessingInterval: 5,
+                    maxBatchSize: 1000,
+                    enableDataValidation: true,
+                    enableDataEnrichment: true,
+                    enableDataTransformation: true,
+                    retentionPeriodDays: 30,
+                    enableErrorRecovery: true,
+                    parallelProcessingThreads: 4,
+                    dataQualityThresholds: {
+                        completeness: 95,
+                        accuracy: 90,
+                        consistency: 85,
+                        timeliness: 5,
+                        validity: 95,
+                    },
+                    outputFormats: [OutputFormat.JSON, OutputFormat.DATABASE]
+                };
+            }
+            static createHighThroughputConfig() {
+                return {
+                    ...this.createDefaultConfig(),
+                    enableRealTimeProcessing: true,
+                    batchProcessingInterval: 1,
+                    maxBatchSize: 5000,
+                    parallelProcessingThreads: 8,
+                    enableDataValidation: false, // Disable for performance,
+                    enableDataEnrichment: false,
+                };
+            }
+            static createHighQualityConfig() {
+                return {
+                    ...this.createDefaultConfig(),
+                    enableDataValidation: true,
+                    enableDataEnrichment: true,
+                    dataQualityThresholds: {
+                        completeness: 99,
+                        accuracy: 95,
+                        consistency: 95,
+                        timeliness: 2,
+                        validity: 99,
+                    },
+                    static createPipeline(config) {
+                        const fullConfig = { ...this.createDefaultConfig(), ...config };
+                        return new SecurityIntelligenceDataPipeline(fullConfig);
+                        export default SecurityIntelligenceDataPipeline;
+                    }
+                };
             }
         }
     }

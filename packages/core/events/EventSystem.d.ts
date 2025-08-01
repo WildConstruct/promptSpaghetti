@@ -13,8 +13,8 @@ import { EventEmitter } from 'events';
 import { z } from 'zod';
 
 }
-export interface BaseEvent {
-    type: string;
+}
+export interface BaseEvent { type: string;
     timestamp: Date;
     id: string;
     source: string;
@@ -29,16 +29,15 @@ export declare enum EventPriority {
     LOW = "low"
 
 export declare enum EventCategory {
-    COLLABORATION = "collaboration",
-    WORKFLOW = "workflow",
-    ANALYTICS = "analytics",
-    SECURITY = "security",
-    SYSTEM = "system",
-    UI = "ui",
+    COLLABORATION = "collaboration";
+    WORKFLOW = "workflow";
+    ANALYTICS = "analytics";
+    SECURITY = "security";
+    SYSTEM = "system";
+    UI = "ui" }
     PERFORMANCE = "performance"
 
-export declare export interface EventSubscription {
-    id: string;
+export declare export interface EventSubscription { id: string;
     filter: EventFilter;
     handler: EventHandler;
     priority: EventPriority;
@@ -52,16 +51,15 @@ export declare class EventBus extends EventEmitter {
     private maxHistorySize;
     constructor(options?: {)
         maxHistorySize?: number;
-        enableHistory?: boolean;
+        enableHistory?: boolean }
 }
     });
     /**
      * Subscribe to events with filtering
      */
-    subscribe<T extends BaseEvent = BaseEvent>(filter: EventFilter, handler: EventHandler<T>, options?: {)
+    subscribe<T extends BaseEvent = BaseEvent>(filter: EventFilter, handler: EventHandler<T>, options?: { )
         priority?: EventPriority;
-        once?: boolean;
-    }): string;
+        once?: boolean }): string;
     /**
      * Unsubscribe from events
      */
@@ -85,12 +83,10 @@ export declare class EventBus extends EventEmitter {
     /**
      * Get subscription statistics
      */
-    getStats(): {
-        subscriptions: number;
+    getStats(): { subscriptions: number;
         middleware: number;
         historySize: number;
-        eventTypes: string[];
-    };
+        eventTypes: string[] };
     private processMiddleware;
     private matchesFilter;
     private priorityOrder;

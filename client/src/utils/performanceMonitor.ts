@@ -4,25 +4,29 @@
  * Provides utilities for monitoring React component performance, API calls,
  * and user interactions with minimal overhead.
  */
-}
+
+
 interface PerformanceMetric {
   name: string;,
-  duration: number;
+  duration: number;,
   timestamp: number;,
   type: 'component' | 'api' | 'user_interaction' | 'custom';
   metadata?: Record<string, unknown>;
-}
+
+
+
 interface PerformanceConfig {
   enableLogging: boolean;,
-  sampleRate: number; // 0-1, percentage of operations to monitor
+  sampleRate: number; // 0-1, percentage of operations to monitor,
   bufferSize: number;,
-  flushInterval: number; // ms
-class PerformanceMonitor {
+  flushInterval: number; // ms,
+  class PerformanceMonitor {
   private metrics: PerformanceMetric = [];
   private config: PerformanceConfig;
   private flushTimer?: number;
   private observers: Map<string, PerformanceObserver> = new Map();
-}
+
+
   constructor(config: Partial<PerformanceConfig> = {}) {
   this.config = {
   enableLogging: process.env.NODE_ENV === 'development',
@@ -50,7 +54,7 @@ class PerformanceMonitor {
   duration: entry.duration,
   timestamp: entry.startTime,
   type: 'custom',
-  metadata: {
+  metadata: {,
   entryType: entry.entryType,
   name: entry.name,
 });
@@ -58,7 +62,7 @@ class PerformanceMonitor {
       });
       navObserver.observe({ entryTypes: ['navigation'] });
       this.observers.set('navigation', navObserver);
-    } catch (error) {
+ catch (error) {
   console.warn('Failed to initialize navigation observer:', error);
   // Monitor resource loading
   try {
@@ -71,7 +75,7 @@ class PerformanceMonitor {
   duration: entry.duration,
   timestamp: entry.startTime,
   type: 'custom',
-  metadata: {
+  metadata: {,
   name: entry.name,
   transferSize: (entry as PerformanceResourceTiming).transferSize,
   type: (entry as PerformanceResourceTiming).initiatorType,
@@ -80,7 +84,7 @@ class PerformanceMonitor {
       });
       resourceObserver.observe({ entryTypes: ['resource'] });
       this.observers.set('resource', resourceObserver);
-    } catch (error) {
+ catch (error) {
       console.warn('Failed to initialize resource observer:', error);
   /**
    * Measure execution time of a function
@@ -102,15 +106,15 @@ class PerformanceMonitor {
           const duration = performance.now() - startTime;
           this.addMetric({ name, duration, timestamp: startTime, type, metadata });
         });
-      } else {
+ else {
         const duration = performance.now() - startTime;
         this.addMetric({ name, duration, timestamp: startTime, type, metadata });
         return result;
-    } catch (error) {
+ catch (error) {
       const duration = performance.now() - startTime;
       this.addMetric({)
   name: `${name}_error`}
-}
+
         duration,
         timestamp: startTime,
         type,
@@ -157,7 +161,7 @@ class PerformanceMonitor {
   ): T | Promise<T> {
     return this.measureExecution()
       `interaction_${action}`}
-}
+
       handler,
       'user_interaction',
       metadata
@@ -226,7 +230,7 @@ class PerformanceMonitor {
   // Keep only the most recent 5000 metrics
   const recentMetrics = allMetrics.slice(-5000);
   sessionStorage.setItem('performance_metrics', JSON.stringify(recentMetrics));
-} catch (error) {
+ catch (error) {
   console.warn('Failed to store performance metrics:', error);
   /**
   * Start periodic flushing
@@ -272,7 +276,7 @@ export function usePerformanceTracking(componentName: string, dependencies: unkn
   });
 
 // Higher-order component for performance tracking
-export function withPerformanceTracking<P extends object>(WrappedComponent: React.ComponentType<P>,)
+export function withPerformanceTracking<P extends object>(WrappedComponent: React.ComponentType<P>)
   componentName?: string
 ): React.ComponentType<P> {
   const displayName = componentName || WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -295,12 +299,12 @@ export function withPerformanceTracking<P extends object>(WrappedComponent: Reac
         );
       }, delay);
     };
-  }
+
   /**
    * Throttle function with performance tracking
    */
-  throttle<T extends (...args: unknown) => unknown>(func: T,)
-    delay: number,
+  throttle<T extends (...args: unknown) => unknown>(func: T);
+  delay: number,
     name?: string
   ): (...args: Parameters<T>) => void {
   let lastCall = 0;

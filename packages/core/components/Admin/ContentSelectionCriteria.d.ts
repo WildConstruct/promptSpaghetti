@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface ContentCriteria {
-    min_rating?: number;
+}
+export interface ContentCriteria { min_rating?: number;
     min_download_count?: number;
     quality_score_threshold?: number;
     categories?: string[];
@@ -26,17 +26,15 @@ export interface ContentCriteria {
     exclude_recently_promoted?: boolean;
     exclude_current_promotions?: boolean;
     max_content_count?: number;
-    diversification_rules?: DiversificationRule[];
-
+    diversification_rules?: DiversificationRule[] }
 }
-export interface DiversificationRule {
-    attribute: string;
+}
+export interface DiversificationRule { attribute: string;
     max_percentage: number;
-    enforce_uniqueness: boolean;
-
+    enforce_uniqueness: boolean }
 }
-export interface SelectionCriteriaTemplate {
-    id: string;
+}
+export interface SelectionCriteriaTemplate { id: string;
     name: string;
     description: string;
     category: 'quality' | 'performance' | 'diversity' | 'trending' | 'seasonal' | 'custom';
@@ -45,11 +43,10 @@ export interface SelectionCriteriaTemplate {
     usage_count: number;
     created_by: string;
     created_at: Date;
-    last_used?: Date;
-
+    last_used?: Date }
 }
-export interface ContentSelectionPreview {
-    total_matches: number;
+}
+export interface ContentSelectionPreview { total_matches: number;
     sample_content: Array<{
         id: string;
         title: string;
@@ -57,22 +54,19 @@ export interface ContentSelectionPreview {
         rating: number;
         downloads: number;
         category: string;
-        match_reasons: string[];
+        match_reasons: string[] }
 }
     }>;
     category_distribution: Record<string, number>;
     creator_distribution: Record<string, number>;
-    quality_stats: {
-        avg_rating: number;
+    quality_stats: { avg_rating: number;
         avg_downloads: number;
-        avg_engagement: number;
-    };
-    performance_prediction: {
-        expected_ctr: number;
+        avg_engagement: number };
+    performance_prediction: { expected_ctr: number;
         expected_conversion_rate: number;
-        confidence_level: number;
-    };
+        confidence_level: number };
 
+}
 }
 export interface ContentSelectionCriteriaProps {
     className?: string;
@@ -80,4 +74,5 @@ export interface ContentSelectionCriteriaProps {
 export declare const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps>;
 export default ContentSelectionCriteria;
 //# sourceMappingURL=ContentSelectionCriteria.d.ts.map
+}
 }

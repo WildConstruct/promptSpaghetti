@@ -1,7 +1,6 @@
 export { GraphParser, ParserResult, ParserError, ParserOptions, parseGraph, validateGraph } from './graph-parser';
 export { GraphLexer, Token, TokenType, LexerPosition, LexerError } from './lexer/graph-lexer';
-export {
-  ASTBuilder,
+export { ASTBuilder,
   ASTNode,
   GraphAST,
   NodeDefinitionAST,
@@ -9,12 +8,11 @@ export {
   MetadataNode,
   PropertyNode,
   ArrayNode,
-  ParseError,
+  ParseError }
 } from './ast/ast-builder';
-export {
-  SemanticAnalyzer,
+export { SemanticAnalyzer,
   SemanticError,
   ValidationContext,
-  SemanticAnalysisResult,
+  SemanticAnalysisResult }
 } from './semantic/semantic-analyzer';
 //# sourceMappingURL=index.d.ts.map

@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface DocumentData {
-    id: string;
+}
+export interface DocumentData { id: string;
     type: 'image' | 'pdf' | 'document';
     fileName: string;
     fileSize: number;
@@ -19,8 +19,7 @@ export interface DocumentData {
     metadata?: {
         dimensions?: {
             width: number;
-            height: number;
-
+            height: number }
 }
         };
         pages?: number;
@@ -29,16 +28,15 @@ export interface DocumentData {
     };
 
 }
-export interface DocumentReviewProps {
-    documents: DocumentData[];
+}
+export interface DocumentReviewProps { documents: DocumentData[];
     requestId: string;
     userId: string;
     documentType: string;
     onReviewComplete: (documentId: string, approved: boolean, notes: string) => void;
     onBack: () => void;
-    className?: string;
-
-
+    className?: string }
+}
 }
 export interface ReviewAnnotation {
     id: string;
@@ -54,4 +52,5 @@ export interface ReviewAnnotation {
 export declare const DocumentReviewInterface: React.FC<DocumentReviewProps>;
 export default DocumentReviewInterface;
 //# sourceMappingURL=DocumentReviewInterface.d.ts.map
+}
 }

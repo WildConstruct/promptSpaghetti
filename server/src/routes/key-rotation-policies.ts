@@ -4,8 +4,8 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { KeyRotationPolicyService } from '../services/KeyRotationPolicyService';
 
-}
-}
+
+
 interface CreatePolicyRequest {
   policyName: string;
   description?: string;
@@ -38,39 +38,43 @@ interface CreatePolicyRequest {
   complianceFramework?: string[];
   retentionDays?: number;
   priority?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ScheduleRotationRequest {
   keyId: string;
   policyId: string;
   scheduledDate: string; // ISO date
   priority?: 'low' | 'medium' | 'high' | 'critical' | 'emergency';
   reason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ApproveRotationRequest {
   scheduleId: string;
   notes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ExecuteRotationRequest {
   scheduleId: string;
   force?: boolean;
-}
-}
-}
+
+
+
+
 
 export async function keyRotationPolicyRoutes(
   fastify: FastifyInstance,
@@ -80,17 +84,17 @@ export async function keyRotationPolicyRoutes(
   // Create rotation policy
   fastify.post<{
     Body: CreatePolicyRequest;
-  }>('/rotation-policies', {
+>('/rotation-policies', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'key_manager'].includes(role))) {
         reply.code(403).send({ error: 'Key management role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: CreatePolicyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       const {
@@ -115,7 +119,7 @@ export async function keyRotationPolicyRoutes(
         complianceFramework,
         retentionDays,
         priority
-      } = request.body;
+ = request.body;
 
       // Validate required fields
       if (!policyName || !keyPurpose) {
@@ -124,7 +128,7 @@ export async function keyRotationPolicyRoutes(
           required: ['policyName', 'keyPurpose']
         });
         return;
-      }
+
 
       // Validate at least one rotation trigger
       if (!rotationIntervalDays && !maxUsageCount && !rotationThresholdDate) {
@@ -133,7 +137,7 @@ export async function keyRotationPolicyRoutes(
           triggers: ['rotationIntervalDays', 'maxUsageCount', 'rotationThresholdDate']
         });
         return;
-      }
+
 
       // Validate cron expression if provided
       if (rotationSchedule) {
@@ -144,8 +148,8 @@ export async function keyRotationPolicyRoutes(
             example: '0 2 * * 0 (every Sunday at 2 AM)'
           });
           return;
-        }
-      }
+
+
 
       const policy = await rotationPolicyService.createPolicy({
         policyName,
@@ -185,27 +189,27 @@ export async function keyRotationPolicyRoutes(
           requiresApproval: policy.requiresApproval,
           priority: policy.priority,
           createdAt: policy.createdAt
-  }
+
         message: 'Rotation policy created successfully',
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Policy creation error:', error);
       reply.code(500).send({
         error: 'Failed to create rotation policy',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Evaluate key against policies
   fastify.post<{
     Body: { keyId: string };
-  }>('/rotation-policies/evaluate', {
+>('/rotation-policies/evaluate', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Body: { keyId: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyId } = request.body;
 
@@ -214,7 +218,7 @@ export async function keyRotationPolicyRoutes(
           error: 'Missing required field: keyId'
         });
         return;
-      }
+
 
       const evaluations = await rotationPolicyService.evaluateKey(keyId);
 
@@ -230,29 +234,29 @@ export async function keyRotationPolicyRoutes(
         ] : ['Key is compliant with all rotation policies'],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Key evaluation error:', error);
       reply.code(500).send({
         error: 'Failed to evaluate key',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Schedule rotation
   fastify.post<{
     Body: ScheduleRotationRequest;
-  }>('/rotation-policies/schedule', {
+>('/rotation-policies/schedule', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'key_manager'].includes(role))) {
         reply.code(403).send({ error: 'Key management role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: ScheduleRotationRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { keyId, policyId, scheduledDate, priority, reason } = request.body;
 
@@ -263,7 +267,7 @@ export async function keyRotationPolicyRoutes(
           required: ['keyId', 'policyId', 'scheduledDate']
         });
         return;
-      }
+
 
       // Validate date
       const scheduleDate = new Date(scheduledDate);
@@ -273,7 +277,7 @@ export async function keyRotationPolicyRoutes(
           example: '2024-12-31T10:00:00Z'
         });
         return;
-      }
+
 
       // Check if date is in the future
       if (scheduleDate <= new Date()) {
@@ -281,7 +285,7 @@ export async function keyRotationPolicyRoutes(
           error: 'Scheduled date must be in the future'
         });
         return;
-      }
+
 
       const schedule = await rotationPolicyService.scheduleRotation(
         keyId,
@@ -301,36 +305,36 @@ export async function keyRotationPolicyRoutes(
           priority: schedule.priority,
           rotationWindow: schedule.rotationWindow,
           approvalRequired: schedule.approvalRequired
-  }
+
         message: 'Rotation scheduled successfully',
         nextSteps: schedule.approvalRequired ? 
           ['Rotation requires approval before execution'] : 
           ['Rotation will execute automatically at scheduled time'],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Rotation scheduling error:', error);
       reply.code(500).send({
         error: 'Failed to schedule rotation',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Approve rotation
   fastify.post<{
     Body: ApproveRotationRequest;
-  }>('/rotation-policies/approve', {
+>('/rotation-policies/approve', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'security_admin'].includes(role))) {
         reply.code(403).send({ error: 'Security admin role required for approvals' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: ApproveRotationRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       const { scheduleId, notes } = request.body;
@@ -340,7 +344,7 @@ export async function keyRotationPolicyRoutes(
           error: 'Missing required field: scheduleId'
         });
         return;
-      }
+
 
       const success = await rotationPolicyService.approveRotation(scheduleId, userId, notes);
 
@@ -354,35 +358,35 @@ export async function keyRotationPolicyRoutes(
           message: 'Rotation approved successfully',
           nextSteps: ['Rotation will execute at scheduled time']
         };
-      } else {
+ else {
         reply.code(400).send({
           error: 'Failed to approve rotation',
           scheduleId
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       request.log.error('Rotation approval error:', error);
       reply.code(500).send({
         error: 'Failed to approve rotation',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Execute rotation
   fastify.post<{
     Body: ExecuteRotationRequest;
-  }>('/rotation-policies/execute', {
+>('/rotation-policies/execute', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'key_manager'].includes(role))) {
         reply.code(403).send({ error: 'Key management role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Body: ExecuteRotationRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       const { scheduleId, force } = request.body;
@@ -392,7 +396,7 @@ export async function keyRotationPolicyRoutes(
           error: 'Missing required field: scheduleId'
         });
         return;
-      }
+
 
       const success = await rotationPolicyService.executeRotation(scheduleId, userId);
 
@@ -404,30 +408,30 @@ export async function keyRotationPolicyRoutes(
           executedAt: new Date().toISOString(),
           message: 'Rotation executed successfully'
         };
-      } else {
+ else {
         reply.code(400).send({
           error: 'Failed to execute rotation',
           scheduleId,
           message: 'Check rotation logs for details'
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       request.log.error('Rotation execution error:', error);
       reply.code(500).send({
         error: 'Failed to execute rotation',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get upcoming rotations
   fastify.get<{
     Querystring: { days?: number; status?: string };
-  }>('/rotation-policies/upcoming', {
+>('/rotation-policies/upcoming', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Querystring: { days?: number; status?: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { days = 30, status } = request.query;
 
@@ -457,26 +461,26 @@ export async function keyRotationPolicyRoutes(
           pendingApproval: filteredRotations.filter(r => r.status === 'pending_approval').length,
           approved: filteredRotations.filter(r => r.status === 'approved').length,
           highPriority: filteredRotations.filter(r => r.priority === 'high' || r.priority === 'critical').length
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Upcoming rotations error:', error);
       reply.code(500).send({
         error: 'Failed to get upcoming rotations',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get rotation metrics
   fastify.get<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>('/rotation-policies/metrics', {
+>('/rotation-policies/metrics', {
     preHandler: [fastify.jwtAuth]
   }, async (request: FastifyRequest<{
     Querystring: { timeframe?: 'day' | 'week' | 'month' };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { timeframe = 'week' } = request.query;
 
@@ -493,7 +497,7 @@ export async function keyRotationPolicyRoutes(
             metrics.complianceScore >= 90 ? 'good' : 
               metrics.complianceScore >= 80 ? 'fair' : 'poor',
           actionRequired: metrics.overdueRotations > 0 || metrics.emergencyRotations > 0
-  }
+
         recommendations: [
           metrics.overdueRotations > 0 ? 'Address overdue rotations immediately' : null,
           metrics.complianceScore < 90 ? 'Review and improve rotation processes' : null,
@@ -502,13 +506,13 @@ export async function keyRotationPolicyRoutes(
         ].filter(Boolean),
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Rotation metrics error:', error);
       reply.code(500).send({
         error: 'Failed to get rotation metrics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Admin: Get rotation readiness
@@ -518,8 +522,8 @@ export async function keyRotationPolicyRoutes(
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const readinessData = await (rotationPolicyService as any).db.query(`
@@ -542,7 +546,7 @@ export async function keyRotationPolicyRoutes(
           readyToExecute: rotations.filter((r: any) => r.ready_to_execute).length,
           blockedRotations: rotations.filter((r: any) => !r.ready_to_execute).length,
           pendingApproval: rotations.filter((r: any) => r.blocking_reason?.includes('approval')).length
-  }
+
         recommendations: [
           'Review blocked rotations and resolve issues',
           'Ensure approvers are available for pending rotations',
@@ -550,13 +554,13 @@ export async function keyRotationPolicyRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Rotation readiness error:', error);
       reply.code(500).send({
         error: 'Failed to get rotation readiness',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Health check
@@ -594,7 +598,7 @@ export async function keyRotationPolicyRoutes(
         ],
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
@@ -602,7 +606,7 @@ export async function keyRotationPolicyRoutes(
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -615,50 +619,50 @@ export async function keyRotationPolicyRoutes(
           trigger: 'rotationIntervalDays',
           description: 'Rotate key every N days from creation/last rotation',
           example: 'rotationIntervalDays: 30'
-  }
+
         {
           trigger: 'maxUsageCount',
           description: 'Rotate key after N cryptographic operations',
           example: 'maxUsageCount: 10000'
-  }
+
         {
           trigger: 'rotationThresholdDate',
           description: 'Rotate key by specific date',
           example: 'rotationThresholdDate: "2024-12-31T23:59:59Z"'
-  }
+
         {
           trigger: 'inactivityDays',
           description: 'Rotate key if inactive for N days',
           example: 'inactivityDays: 90'
-        }
+
       ],
       approvalWorkflow: [
         {
           step: 1,
           description: 'Policy evaluation identifies rotation requirement',
           automatic: true
-  }
+
         {
           step: 2,
           description: 'Rotation scheduled with approval if required',
           userAction: 'Schedule via API or automatic trigger'
-  }
+
         {
           step: 3,
           description: 'Approval request sent to designated roles',
           automatic: true,
           condition: 'If requiresApproval: true'
-  }
+
         {
           step: 4,
           description: 'Security admin approves rotation',
           userAction: 'POST /rotation-policies/approve'
-  }
+
         {
           step: 5,
           description: 'Rotation executes during scheduled window',
           automatic: true
-        }
+
       ],
       complianceFeatures: [
         'Automated compliance score calculation',
@@ -674,44 +678,43 @@ export async function keyRotationPolicyRoutes(
           method: 'POST',
           description: 'Create new rotation policy',
           auth: 'key_manager role required'
-  }
+
         {
           path: '/rotation-policies/evaluate',
           method: 'POST',
           description: 'Evaluate key against rotation policies',
           auth: 'authenticated user'
-  }
+
         {
           path: '/rotation-policies/schedule',
           method: 'POST',
           description: 'Schedule key rotation',
           auth: 'key_manager role required'
-  }
+
         {
           path: '/rotation-policies/approve',
           method: 'POST',
           description: 'Approve pending rotation',
           auth: 'security_admin role required'
-  }
+
         {
           path: '/rotation-policies/execute',
           method: 'POST',
           description: 'Execute scheduled rotation',
           auth: 'key_manager role required'
-  }
+
         {
           path: '/rotation-policies/upcoming',
           method: 'GET',
           description: 'Get upcoming rotations',
           auth: 'authenticated user'
-  }
+
         {
           path: '/rotation-policies/metrics',
           method: 'GET',
           description: 'Get rotation performance metrics',
           auth: 'authenticated user'
-        }
+
       ]
     };
   });
-}

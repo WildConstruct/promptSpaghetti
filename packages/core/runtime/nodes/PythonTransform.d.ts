@@ -6,8 +6,8 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeData, Valida
 import { IOSpecBuilder } from '../io-system';
 
 }
-export interface PythonTransformConfig {
-    code: string;
+}
+export interface PythonTransformConfig { code: string;
     timeout?: number;
     memoryLimit?: string;
     allowedModules?: string[];
@@ -17,12 +17,11 @@ export interface PythonTransformConfig {
         executorUrl?: string;
         retryAttempts?: number;
         fallbackBehavior?: 'error' | 'skip' | 'default';
-        defaultOutput?: string;
+        defaultOutput?: string }
 }
     };
 
-export declare class PythonTransformNode extends AdvancedRuntimeNode<string> {
-    private pythonClient;
+export declare class PythonTransformNode extends AdvancedRuntimeNode<string> { private pythonClient;
     private pythonConfig;
     private ioHandler;
     constructor(id: string, config: PythonTransformConfig);
@@ -86,8 +85,7 @@ export declare class PythonTransformNode extends AdvancedRuntimeNode<string> {
     validateCode(): Promise<{
         valid: boolean;
         errors: string[];
-        warnings: string[];
-    }>;
+        warnings: string[] }>;
     /**
      * Check if Python executor service is available
      */
@@ -95,20 +93,16 @@ export declare class PythonTransformNode extends AdvancedRuntimeNode<string> {
     /**
      * Get service health information
      */
-    getServiceHealth(): Promise<{
-        status: string;
+    getServiceHealth(): Promise<{ status: string;
         version: string;
-        uptime: number;
-    } | null>;
+        uptime: number } | null>;
     /**
      * Get execution statistics
      */
-    getExecutionStats(context: AdvancedExecutionContext): {
-        executionsRun: number;
+    getExecutionStats(context: AdvancedExecutionContext): { executionsRun: number;
         successRate: number;
         averageExecutionTime: number;
-        securityViolations: number;
-    };
+        securityViolations: number };
     /**
      * Store execution metadata for statistics
      */

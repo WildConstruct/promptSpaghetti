@@ -9,20 +9,20 @@ import {
   CreateTutorialRequest,
   CreateCaseStudyRequest,
   SearchFilters
-} from './knowledge-base.service';
+ from './knowledge-base.service';
 
-}
-}
+
+
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
     id: string;
     email: string;
     roles: string[];
   };
-}
 
-}
-}
+
+
+
 interface ContentQuerystring {
   category?: string;
   difficulty_level?: string;
@@ -33,21 +33,23 @@ interface ContentQuerystring {
   is_community_contributed?: boolean;
   limit?: number;
   offset?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface SearchQuerystring {
   q: string;
   category?: string;
   difficulty_level?: string;
   content_type?: string;
   limit?: number;
-}
-}
-}
+
+
+
+
 
 export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool) {
   const knowledgeBaseService = new KnowledgeBaseService(dbPool);
@@ -56,9 +58,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
   const requireAuth = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       await fastify.auth([fastify.verifyJWT])(request, reply);
-    } catch (error) {
+ catch (error) {
       throw fastify.httpErrors.unauthorized('Authentication required');
-    }
+
   };
 
   // Helper function to check if user can create content
@@ -80,9 +82,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
           is_community_contributed: { type: 'boolean' },
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { tags, limit = 20, offset = 0, ...filters } = request.query;
 
@@ -97,10 +99,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         articles, 
         pagination: { limit, offset, has_more: articles.length === limit } 
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch articles' });
-    }
+
   });
 
   fastify.get<{ Params: { id: string } }>('/knowledge/articles/:id', {
@@ -109,10 +111,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.params;
     const userId = (request as any).user?.id;
@@ -124,10 +126,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
       await knowledgeBaseService.recordView('article', id, userId);
 
       return reply.send(article);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(404).send({ error: 'Article not found' });
-    }
+
   });
 
   fastify.post<{ Body: CreateArticleRequest }>('/knowledge/articles', {
@@ -155,26 +157,26 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
                 url: { type: 'string', format: 'uri' },
                 title: { type: 'string' },
                 description: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const userId = request.user.id;
 
     if (!canCreateContent(request.user)) {
       return reply.status(403).send({ error: 'Insufficient permissions to create content' });
-    }
+
 
     try {
       const article = await knowledgeBaseService.createArticle(userId, request.body);
       return reply.status(201).send(article);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Failed to create article' });
-    }
+
   });
 
   // Tutorial endpoints
@@ -189,9 +191,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
           author_id: { type: 'string', format: 'uuid' },
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { tags, limit = 20, offset = 0, ...filters } = request.query;
 
@@ -206,10 +208,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         tutorials, 
         pagination: { limit, offset, has_more: tutorials.length === limit } 
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch tutorials' });
-    }
+
   });
 
   fastify.get<{ Params: { id: string } }>('/knowledge/tutorials/:id', {
@@ -218,10 +220,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.params;
     const userId = (request as any).user?.id;
@@ -233,10 +235,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
       await knowledgeBaseService.recordView('tutorial', id, userId);
 
       return reply.send(tutorial);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(404).send({ error: 'Tutorial not found' });
-    }
+
   });
 
   fastify.post<{ Body: CreateTutorialRequest }>('/knowledge/tutorials', {
@@ -269,26 +271,26 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
                 estimated_duration: { type: 'integer', minimum: 1, maximum: 60 },
                 media: { type: 'array', items: { type: 'object' } },
                 interactive_elements: { type: 'array', items: { type: 'object' } }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const userId = request.user.id;
 
     if (!canCreateContent(request.user)) {
       return reply.status(403).send({ error: 'Insufficient permissions to create content' });
-    }
+
 
     try {
       const tutorial = await knowledgeBaseService.createTutorial(userId, request.body);
       return reply.status(201).send(tutorial);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Failed to create tutorial' });
-    }
+
   });
 
   // Case Study endpoints
@@ -303,9 +305,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
           is_featured: { type: 'boolean' },
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { tags, limit = 20, offset = 0, ...filters } = request.query;
 
@@ -320,10 +322,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         case_studies: caseStudies, 
         pagination: { limit, offset, has_more: caseStudies.length === limit } 
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch case studies' });
-    }
+
   });
 
   fastify.get<{ Params: { id: string } }>('/knowledge/case-studies/:id', {
@@ -332,10 +334,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { id } = request.params;
     const userId = (request as any).user?.id;
@@ -347,10 +349,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
       await knowledgeBaseService.recordView('case_study', id, userId);
 
       return reply.send(caseStudy);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(404).send({ error: 'Case study not found' });
-    }
+
   });
 
   fastify.post<{ Body: CreateCaseStudyRequest }>('/knowledge/case-studies', {
@@ -378,9 +380,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
                 label: { type: 'string' },
                 value: { type: 'string' },
                 description: { type: 'string' }
-              }
-            }
-  }
+
+
+
           templates_used: {
             type: 'array',
             items: {
@@ -390,27 +392,27 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
                 id: { type: 'string', format: 'uuid' },
                 title: { type: 'string' },
                 url: { type: 'string', format: 'uri' }
-              }
-            }
-  }
+
+
+
           screenshots: { type: 'array', items: { type: 'string', format: 'uri' } }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const userId = request.user.id;
 
     if (!canCreateContent(request.user)) {
       return reply.status(403).send({ error: 'Insufficient permissions to create content' });
-    }
+
 
     try {
       const caseStudy = await knowledgeBaseService.createCaseStudy(userId, request.body);
       return reply.status(201).send(caseStudy);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Failed to create case study' });
-    }
+
   });
 
   // Search endpoint
@@ -425,9 +427,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
           difficulty_level: { type: 'string', enum: ['beginner', 'intermediate', 'advanced', 'expert'] },
           content_type: { type: 'string', enum: ['article', 'tutorial', 'case_study'] },
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 20 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { q, limit = 20, ...filters } = request.query;
 
@@ -441,17 +443,17 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         filters: searchFilters,
         total_results: results.length
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Search failed' });
-    }
+
   });
 
   // Rating endpoint
   fastify.post<{ 
     Params: { type: string; id: string };
     Body: { is_helpful: boolean; rating?: number; feedback?: string } 
-  }>('/knowledge/:type/:id/rate', {
+>('/knowledge/:type/:id/rate', {
     preHandler: requireAuth,
     schema: {
       params: {
@@ -459,9 +461,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         properties: {
           type: { type: 'string', enum: ['articles', 'tutorials', 'case-studies'] },
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['type', 'id']
-  }
+
       body: {
         type: 'object',
         required: ['is_helpful'],
@@ -469,9 +471,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
           is_helpful: { type: 'boolean' },
           rating: { type: 'integer', minimum: 1, maximum: 5 },
           feedback: { type: 'string', maxLength: 1000 }
-        }
-      }
-    }
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { type, id } = request.params;
     const { is_helpful } = request.body;
@@ -484,10 +486,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
       await knowledgeBaseService.rateContent(contentType, id, userId, is_helpful);
       
       return reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: 'Failed to rate content' });
-    }
+
   });
 
   // Analytics endpoint
@@ -499,7 +501,7 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
       
       if (!user.roles?.includes('admin')) {
         return reply.status(403).send({ error: 'Admin access required' });
-      }
+
 
       // Get knowledge base statistics
       const analyticsQuery = `
@@ -521,10 +523,10 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         analytics: result.rows,
         generated_at: new Date().toISOString()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch analytics' });
-    }
+
   });
 
   // Popular content endpoint
@@ -535,9 +537,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         properties: {
           content_type: { type: 'string', enum: ['article', 'tutorial', 'case_study'] },
           limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { content_type, limit = 10 } = request.query as any;
 
@@ -548,7 +550,7 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
       if (content_type) {
         query += ' WHERE content_type = $1';
         params.push(content_type);
-      }
+
 
       query += ` ORDER BY engagement_score DESC LIMIT $${params.length + 1}`;
       params.push(limit);
@@ -560,9 +562,8 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         content_type: content_type || 'all',
         limit
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch popular content' });
-    }
+
   });
-}

@@ -12,6 +12,12 @@ import { UndoRedoManager, UndoRedoSystem } from './UndoRedoManager';
 import { MultiSelectionManager } from './MultiSelectionManager';
 import { AutosaveManager } from './AutosaveManager';
 import { KeyboardShortcutsManager } from './KeyboardShortcutsManager';
+onNodeCreate: (nodeType, position, data) => void ;
+onNodeDelete: (nodeIds) => void ;
+onExport: (format) => void ;
+onSave: () => void ;
+onLoad: () => void ;
+theme ?  : 'light' | 'dark' | 'cinema';
 export const ProfessionalIntegration = ({ nodes, edges, selectedNodes, selectedEdges, onNodesChange, onEdgesChange, onNodesSelect, onEdgesSelect, onNodeCreate, onNodeDelete, onExport, onSave, onLoad, theme = 'cinema', }) => {
     // Command Palette State
     const [showCommandPalette, setShowCommandPalette] = useState(false);
@@ -58,10 +64,9 @@ export const ProfessionalIntegration = ({ nodes, edges, selectedNodes, selectedE
                 description: 'Personality traits and characteristics',
                 category: 'character',
                 options: [
-                    ,
                     { label: 'Brave and determined', value: 'brave', weight: 1 },
                     { label: 'Intelligent and analytical', value: 'intelligent', weight: 1 },
-                    { label: 'Compassionate and caring', value: 'compassionate', weight: 1 },
+                    { label: 'Compassionate and caring', value: 'compassionate', weight: 1 }
                 ],
             });
             // Create dialogue node
@@ -222,21 +227,20 @@ export const ProfessionalIntegration = ({ nodes, edges, selectedNodes, selectedE
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
-        }
         /* Smooth node animations */
         .react-flow__node {
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
         .react-flow__node.selected {
-          transform: scale(1.02);
-        }
+  transform: scale(1.02);
+}
         /* Professional edge animations */
         .react-flow__edge {
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
         .react-flow__edge:hover {
-          stroke-width: 3px !important;
-        }
+  stroke-width: 3px !important;
+}
       ` })] }));
 };
 export default ProfessionalIntegration;

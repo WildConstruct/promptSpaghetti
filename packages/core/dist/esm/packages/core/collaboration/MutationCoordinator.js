@@ -355,7 +355,7 @@ if (options) {
                                                         suggestedResolution;
                                                     ResolutionStrategy.LAST_WRITER_WINS,
                                                         options;
-                                                    [,
+                                                    [
                                                         {
                                                             strategy: ResolutionStrategy.ACCEPT_LOCAL,
                                                             label: 'Keep Local Value',
@@ -376,7 +376,8 @@ if (options) {
                                                             description: 'Use the most recent change',
                                                             preview: compareOperations(op1, op2) > 0 ? op1.newValue : op2.newValue,
                                                             recommended: true
-                                                        }];
+                                                        }
+                                                    ];
                                                 },
                                                 return: {
                                                     op1: null,
@@ -770,7 +771,7 @@ if (options) {
                                                 boolean,
                                                 conflicts: ConflictOperation
                                             } > {
-                                                const: conflicts, ConflictOperation, []:  = [],
+                                                const: conflicts, ConflictOperation = [],
                                                 // Check for internal conflicts within the batch
                                                 for(let, i = 0, i, , operations) { }, : .length, i
                                             }++
@@ -875,8 +876,8 @@ if (options) {
                                                                                     /**
                                                                                     * Set event handlers
                                                                                     */
-                                                                                    setEventHandlers(handlers, {});
-                                                                                    onOperationApplied ?  : (operation) => void ;
+                                                                                    setEventHandlers(handlers, {}),
+                                                                                        onOperationApplied ?  : (operation) => void ;
                                                                                     onConflictDetected ?  : (conflict) => void ;
                                                                                     onConflictResolved ?  : (resolution) => void ;
                                                                                     onBatchCompleted ?  : (result) => void ;

@@ -55,11 +55,11 @@ const SessionLimitConfigSchema = z.object({
     highConcurrentSessions: z.number().min(1).max(100),
     suspiciousActivity: z.number().min(1).max(50),
     geographicAnomalies: z.number().min(1).max(20)
-  }
+
 });
 
-}
-}
+
+
 export interface ConfigurationTemplate {
   id: string;
   name: string;
@@ -70,23 +70,25 @@ export interface ConfigurationTemplate {
   isDefault: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConfigurationAuditLog {
   id: string;
   configId: string;
   action: 'created' | 'updated' | 'deleted' | 'applied';
-}
-}
+
+
+
   changes: Record<string, { old: unknown; new: unknown }>;
   userId: string;
   timestamp: Date;
   reason?: string;
-}
+
 
 export class SessionLimitConfigManager extends EventEmitter {
   private dbService: DatabaseService;
@@ -104,7 +106,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     super();
     this.dbService = dbService;
     this.redisService = redisService;
-  }
+
   
   /**
    * Load configuration with environment variable overrides
@@ -121,7 +123,7 @@ export class SessionLimitConfigManager extends EventEmitter {
       const cached = this.configCache.get(cacheKey);
       if (cached) {
         return cached;
-      }
+
       
       // Load base configuration
       let config = this.getDefaultConfiguration();
@@ -130,7 +132,7 @@ export class SessionLimitConfigManager extends EventEmitter {
       const dbConfig = await this.loadFromDatabase(scope, targetId);
       if (dbConfig) {
         config = { ...config, ...dbConfig };
-      }
+
       
       // Apply environment variable overrides
       config = this.applyEnvironmentOverrides(config);
@@ -142,12 +144,11 @@ export class SessionLimitConfigManager extends EventEmitter {
       this.configCache.set(cacheKey, validatedConfig);
       
       return validatedConfig;
-      
-    } catch (error) {
+ catch (error) {
       console.error(`Error loading configuration for ${scope}:${targetId}:`, error);
       return this.getDefaultConfiguration();
-    }
-  }
+
+
   
   /**
    * Save configuration with validation and audit logging
@@ -187,7 +188,7 @@ export class SessionLimitConfigManager extends EventEmitter {
           userId,
           reason
         );
-      }
+
       
       // Increment configuration version
       await this.incrementConfigVersion();
@@ -200,12 +201,11 @@ export class SessionLimitConfigManager extends EventEmitter {
         userId,
         reason
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error saving configuration:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Get configuration templates
@@ -219,7 +219,7 @@ export class SessionLimitConfigManager extends EventEmitter {
       if (category) {
         query += ' WHERE category = $1';
         params.push(category);
-      }
+
       
       query += ' ORDER BY is_default DESC, name ASC';
       
@@ -236,12 +236,11 @@ export class SessionLimitConfigManager extends EventEmitter {
         createdAt: row.created_at,
         updatedAt: row.updated_at
       }));
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting configuration templates:', error);
       return [];
-    }
-  }
+
+
   
   /**
    * Create configuration template
@@ -283,12 +282,11 @@ export class SessionLimitConfigManager extends EventEmitter {
       });
       
       return templateId;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error creating configuration template:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Apply configuration template
@@ -310,7 +308,7 @@ export class SessionLimitConfigManager extends EventEmitter {
       
       if (templateResult.rows.length === 0) {
         throw new Error('Template not found');
-      }
+
       
       const templateConfig = templateResult.rows[0].config;
       
@@ -330,12 +328,11 @@ export class SessionLimitConfigManager extends EventEmitter {
         userId,
         reason
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error applying configuration template:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Get configuration history
@@ -363,12 +360,11 @@ export class SessionLimitConfigManager extends EventEmitter {
         timestamp: row.timestamp,
         reason: row.reason
       }));
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting configuration history:', error);
       return [];
-    }
-  }
+
+
   
   /**
    * Validate configuration against schema
@@ -385,17 +381,16 @@ export class SessionLimitConfigManager extends EventEmitter {
       this.validateBusinessLogic(validatedConfig);
       
       return validatedConfig;
-      
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         const validationErrors = error.errors.map(err => 
           `${err.path.join('.')}: ${err.message}`
         ).join(', ');
         throw new Error(`Configuration validation failed: ${validationErrors}`);
-      }
+
       throw error;
-    }
-  }
+
+
   
   /**
    * Get effective configuration for a user/organization
@@ -413,19 +408,18 @@ export class SessionLimitConfigManager extends EventEmitter {
       if (organizationId) {
         const orgConfig = await this.loadConfiguration('organization', organizationId);
         config = this.mergeConfigurations(config, orgConfig);
-      }
+
       
       // Apply user-specific overrides
       const userConfig = await this.loadConfiguration('user', userId);
       config = this.mergeConfigurations(config, userConfig);
       
       return config;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting effective configuration:', error);
       return this.getDefaultConfiguration();
-    }
-  }
+
+
   
   /**
    * Real-time configuration updates via WebSocket
@@ -439,7 +433,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     // Implementation would depend on WebSocket integration
     // This is a placeholder for the real-time update system
     console.log(`Subscribed ${connectionId} to config updates for ${scope}:${targetId}`);
-  }
+
   
   private getDefaultConfiguration(): SessionLimitConfig {
     return {
@@ -485,9 +479,9 @@ export class SessionLimitConfigManager extends EventEmitter {
         highConcurrentSessions: parseInt(process.env.ALERT_HIGH_SESSIONS || '80'),
         suspiciousActivity: parseInt(process.env.ALERT_SUSPICIOUS_ACTIVITY || '5'),
         geographicAnomalies: parseInt(process.env.ALERT_GEOGRAPHIC_ANOMALIES || '3')
-      }
+
     };
-  }
+
   
   private applyEnvironmentOverrides(config: SessionLimitConfig): SessionLimitConfig {
     // Environment variables take precedence over database configuration
@@ -498,15 +492,15 @@ export class SessionLimitConfigManager extends EventEmitter {
       const envKey = this.camelToSnakeCase(key).toUpperCase();
       if (process.env[envKey] !== undefined) {
         (config as unknown)[key] = (envConfig as unknown)[key];
-      }
+
     });
     
     return config;
-  }
+
   
   private camelToSnakeCase(str: string): string {
     return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-  }
+
   
   private async loadFromDatabase(
     scope: string,
@@ -521,12 +515,11 @@ export class SessionLimitConfigManager extends EventEmitter {
       `, [scope, targetId]);
       
       return result.rows.length > 0 ? result.rows[0].config : null;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error loading configuration from database:', error);
       return null;
-    }
-  }
+
+
   
   private async saveToDatabase(
     config: SessionLimitConfig,
@@ -545,7 +538,7 @@ export class SessionLimitConfigManager extends EventEmitter {
       ON CONFLICT (scope, target_id)
       DO UPDATE SET config = $4, updated_by = $5, updated_at = $6
     `, [configId, scope, targetId, JSON.stringify(config), userId, now]);
-  }
+
   
   private validateBusinessLogic(config: SessionLimitConfig): void {
     // Business hours validation
@@ -555,8 +548,8 @@ export class SessionLimitConfigManager extends EventEmitter {
       
       if (startTime >= endTime) {
         throw new Error('Business hours start time must be before end time');
-      }
-    }
+
+
     
     // Geographic limits validation
     if (config.enableGeographicLimits) {
@@ -565,37 +558,37 @@ export class SessionLimitConfigManager extends EventEmitter {
       
       if (hasAllowedCountries && hasBlockedCountries) {
         throw new Error('Cannot specify both allowed and blocked countries');
-      }
-    }
+
+
     
     // Timeout validation
     if (config.idleTimeoutMinutes >= config.absoluteTimeoutHours * 60) {
       throw new Error('Idle timeout cannot be greater than absolute timeout');
-    }
-  }
+
+
   
   private parseTime(timeStr: string): number {
     const [hours, minutes] = timeStr.split(':').map(Number);
     return hours * 60 + minutes;
-  }
+
   
   private mergeConfigurations(
     base: SessionLimitConfig,
     override: Partial<SessionLimitConfig>
   ): SessionLimitConfig {
     return { ...base, ...override };
-  }
+
   
   private async invalidateRedisCache(scope: string, targetId: string | null): Promise<void> {
 
     const pattern = `session_limits:config:${scope}:${targetId || '*'}`;
     await this.redisService.invalidateCache(pattern);
-  }
+
   
   private async incrementConfigVersion(): Promise<void> {
 
     await this.redisService.incr(this.CONFIG_VERSION_KEY);
-  }
+
   
   private async logConfigurationChanges(
     oldConfig: SessionLimitConfig,
@@ -614,7 +607,7 @@ export class SessionLimitConfigManager extends EventEmitter {
       
       if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
         changes[key] = { old: oldValue, new: newValue };
-      }
+
     });
     
     if (Object.keys(changes).length > 0) {
@@ -631,6 +624,5 @@ export class SessionLimitConfigManager extends EventEmitter {
         new Date(),
         reason
       ]);
-    }
-  }
-}
+
+

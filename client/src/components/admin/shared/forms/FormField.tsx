@@ -7,7 +7,8 @@
 import React from 'react';
 import { Eye, EyeOff, AlertCircle, HelpCircle } from 'lucide-react';
 import { FormFieldSchema } from './AdminFormBuilder';
-}
+
+
 interface FormFieldProps {
   field: FormFieldSchema;,
   value: any;
@@ -17,7 +18,7 @@ interface FormFieldProps {
   showPassword?: boolean;
   onTogglePassword?: () => void;
   disabled?: boolean;
-  export const FormField: React.FC<FormFieldProps> = ({,)
+  export const FormField: React.FC<FormFieldProps> = ({),
   field,
   value,
   error,
@@ -26,7 +27,8 @@ interface FormFieldProps {
   showPassword = false,
   onTogglePassword,
   disabled = false
-}
+
+
 }) => {
   const fieldId = `field-${field.name}`;}
   const hasError = Boolean(error);
@@ -81,7 +83,7 @@ interface FormFieldProps {
             onChange={(e) => {
               const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
               onChange(selectedValues);
-            }}
+}
           >
             {field.options?.map((option) => ()
               <option 
@@ -134,7 +136,7 @@ interface FormFieldProps {
             onChange={(e) => {
   const files = e.target.files;
   onChange(field.multiple ? Array.from(files || []) : files?.[0] || null);
-}}
+}
             accept={field.accept}
             multiple={field.multiple}
           />

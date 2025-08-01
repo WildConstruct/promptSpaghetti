@@ -29,7 +29,7 @@ import {
   List,
   Avatar,
   Divider
-} from 'antd';
+ from 'antd';
 import {
   FileTextOutlined,
   ShieldCheckOutlined,
@@ -43,7 +43,7 @@ import {
   ExclamationCircleOutlined,
   BellOutlined,
   ReloadOutlined
-} from '@ant-design/icons';
+ from '@ant-design/icons';
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
@@ -51,7 +51,8 @@ const { Option } = Select;
 const { Search } = Input;
 
 // Types and interfaces
-}
+
+
 interface PolicyStats {
   total_policies: number;,
   active_policies: number,
@@ -59,14 +60,18 @@ interface PolicyStats {
   total_violations: number,
   open_violations: number;,
   appeal_rate: number;
-}
+
+
+
 interface PolicyDashboardData {
   statistics: PolicyStats;,
   recent_activities: unknown,
   policy_compliance_scores: Record<string, number>;
   enforcement_metrics: unknown;,
   trending_violations: unknown;
-}
+
+
+
 interface Policy {
   id: string;,
   title: string,
@@ -76,7 +81,9 @@ interface Policy {
   created_at: string,
   last_modified: string;,
   compliance_score: number;
-}
+
+
+
 interface Violation {
   id: string;,
   type: string,
@@ -87,72 +94,16 @@ interface Violation {
   policy_id?: string,
   seller_id: string;
 
-}
 
-export const PolicyManagementDashboard: React.FC = () => {
-  // State management
-  const [loading, setLoading] = useState(true);
-  const [dashboardData, setDashboardData] = useState<PolicyDashboardData | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [policies, setPolicies] = useState<Policy[]>([]);
-  const [violations, setViolations] = useState<Violation[]>([]);
-  const [selectedPolicy, setSelectedPolicy] = useState<Policy | null>(null);
-  const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null);
-  const [policyModalVisible, setPolicyModalVisible] = useState(false);
-  const [violationDrawerVisible, setViolationDrawerVisible] = useState(false);
-  const [ setFilters] = useState({
-}
-  dateRange: null as { start: Date, end: Date } | null,
-    policyType: null as string | null,
-    violationStatus: null as string | null;
-  });
-  // Data fetching
-  const fetchDashboardData = useCallback(async () => {
-    setLoading(true);
-    try {
-      // Mock API calls - replace with actual API integration
-      const [dashboardResponse, policiesResponse, violationsResponse] = await Promise.all([)
-        fetch('/admin/policy-management/dashboard').then(r => r.json()),
-        fetch('/admin/policy-management/policies').then(r => r.json()),
-        fetch('/admin/policy-management/violations').then(r => r.json())
-      ]);
-      setDashboardData(dashboardResponse);
-      setPolicies(policiesResponse.data || []);
-      setViolations(violationsResponse.data || []);
-    } catch (error) {
-  message.error('Failed to load dashboard data');
-  console.error('Dashboard loading error:', error);
-} finally {
-      setLoading(false);
-  }, []);
-  useEffect(() => {
-    fetchDashboardData();
-  }, [fetchDashboardData]);
-  // Event handlers
-  const handlePolicyCreate = () => {
-    setPolicyModalVisible(true);
-    setSelectedPolicy(null);
-  };
-  const handlePolicyEdit = (policy: Policy) => {
-    setSelectedPolicy(policy);
-    setPolicyModalVisible(true);
-  };
-  const handleViolationView = (violation: Violation) => {
-    setSelectedViolation(violation);
-    setViolationDrawerVisible(true);
-  };
-  const handlePolicyStatusChange = async (policyId: string, status: string) => {
-    try {
-      // Mock API call
-      await fetch(`/admin/policy-management/policies/${policyId}/status`, {)}
-  },
+
+export const PolicyManagementDashboard = () => { return null; },
   method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
       message.success('Policy status updated successfully');
       fetchDashboardData();
-    } catch {
+ catch {
       message.error('Failed to update policy status');
   };
   const handleViolationReview = async (violationId: string, action: string) => {
@@ -166,11 +117,11 @@ export const PolicyManagementDashboard: React.FC = () => {
       message.success('Violation reviewed successfully');
       fetchDashboardData();
       setViolationDrawerVisible(false);
-    } catch {
+ catch {
       message.error('Failed to review violation');
   };
   // Column definitions
-  const policyColumns = [;
+  const policyColumns = [
     {
       title: 'Policy Title',
       dataIndex: 'title',
@@ -182,7 +133,7 @@ export const PolicyManagementDashboard: React.FC = () => {
             {record.policy_type.replace('_', ' ').toUpperCase()}
           </Text>
         </Space>
-  }
+
     {
       title: 'Status',
       dataIndex: 'status',
@@ -200,34 +151,34 @@ export const PolicyManagementDashboard: React.FC = () => {
             {status.replace('_', ' ').toUpperCase()}
           </Tag>
         );
-  }
+
     {
       title: 'Version',
       dataIndex: 'version',
       key: 'version',
       render: (version: string) => <Tag>{version}</Tag>
-  }
+
     {
       title: 'Compliance Score',
       dataIndex: 'compliance_score',
       key: 'compliance_score',
-      render: (score: number) => (,
+      render: (score: number) => (
         <Progress 
           percent={score} 
           size="small" 
           status={score > 80 ? 'success' : score > 60 ? 'normal' : 'exception'}
         />
-  }
+
     {
   title: 'Last Modified',
   dataIndex: 'last_modified',
   key: 'last_modified',
   render: (date: string) => new Date(date).toLocaleDateString()
-}
+
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: Policy) => (,
+      render: (record: Policy) => (
         <Space>
           <Button size="small" icon={<EyeOutlined />} onClick={() => handlePolicyEdit(record)} />
           <Button size="small" icon={<EditOutlined />} type="primary" />
@@ -242,16 +193,16 @@ export const PolicyManagementDashboard: React.FC = () => {
           )}
         </Space>
   ];
-  const violationColumns = [;
+  const violationColumns = [
     {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      render: (type: string) => (,
+      render: (type: string) => (
         <Tag color="red">
           {type.replace('_', ' ').toUpperCase()}
         </Tag>
-  }
+
     {
       title: 'Severity',
       dataIndex: 'severity',
@@ -259,7 +210,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       render: (severity: string) => {
         const colors = { low: 'green', medium: 'orange', high: 'red', critical: 'purple' };
         return <Tag color={colors[severity as keyof typeof colors]}>{severity.toUpperCase()}</Tag>;
-  }
+
     {
       title: 'Status',
       dataIndex: 'status',
@@ -277,23 +228,23 @@ export const PolicyManagementDashboard: React.FC = () => {
             {status.replace('_', ' ').toUpperCase()}
           </Tag>
         ) : <Tag>{status}</Tag>;
-  }
+
     {
   title: 'Reported Date',
   dataIndex: 'reported_at',
   key: 'reported_at',
   render: (date: string) => new Date(date).toLocaleDateString()
-}
+
     {
   title: 'Description',
   dataIndex: 'description',
   key: 'description',
   ellipsis: true
-}
+
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: Violation) => (,
+      render: (record: Violation) => (
         <Space>
           <Button 
             size="small" 

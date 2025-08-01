@@ -7,17 +7,16 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface MidjourneyConfig {
-    apiKey?: string;
+}
+export interface MidjourneyConfig { apiKey?: string;
     serverUrl: string;
     timeout?: number;
     maxRetries?: number;
     pollInterval?: number;
-    maxPollAttempts?: number;
-
+    maxPollAttempts?: number }
 }
-export interface MidjourneyRequestOptions {
-    version?: 'v5' | 'v5.1' | 'v5.2' | 'v6';
+}
+export interface MidjourneyRequestOptions { version?: 'v5' | 'v5.1' | 'v5.2' | 'v6';
     aspectRatio?: '1:1' | '2:3' | '3:2' | '4:5' | '5:4' | '9:16' | '16:9';
     stylize?: number;
     chaos?: number;
@@ -28,11 +27,10 @@ export interface MidjourneyRequestOptions {
     noText?: boolean;
     tile?: boolean;
     weird?: number;
-    stop?: number;
-
+    stop?: number }
 }
-export interface MidjourneyJobStatus {
-    id: string;
+}
+export interface MidjourneyJobStatus { id: string;
     status: 'pending' | 'running' | 'completed' | 'failed';
     progress: number;
     imageUrl?: string;
@@ -49,13 +47,13 @@ export interface MidjourneyJobStatus {
         stylize: number;
         chaos: number;
         quality: number;
-        seed?: number;
+        seed?: number }
 }
     };
 
 }
-export interface MidjourneyResponse {
-    success: boolean;
+}
+export interface MidjourneyResponse { success: boolean;
     jobId: string;
     status: 'submitted' | 'in-progress' | 'completed' | 'failed';
     message?: string;
@@ -65,37 +63,33 @@ export interface MidjourneyResponse {
         upscaledImages?: string[];
         variations?: string[];
         prompt: string;
-        seed?: number;
+        seed?: number }
 }
     };
     error?: string;
 
 }
-export interface MidjourneyGenerationResult {
-    jobId: string;
+}
+export interface MidjourneyGenerationResult { jobId: string;
     status: 'completed' | 'failed';
     images: Array<{
         url: string;
         thumbnailUrl?: string;
         type: 'main' | 'upscaled' | 'variation';
-        index?: number;
+        index?: number }
 }
     }>;
     originalPrompt: string;
     processedPrompt: string;
-    metadata: {
-        version: string;
+    metadata: { version: string;
         aspectRatio: string;
         stylize: number;
         chaos: number;
         quality: number;
         seed?: number;
-        generationTime: number;
-    };
-    usage: {
-        credits: number;
-        estimatedCost: number;
-    };
+        generationTime: number };
+    usage: { credits: number;
+        estimatedCost: number };
 
 export declare class MidjourneyAdapter extends BaseAIModel {
     private config;

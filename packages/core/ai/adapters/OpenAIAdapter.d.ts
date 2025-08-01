@@ -7,13 +7,13 @@
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
 
 }
-export interface OpenAIConfig {
-    apiKey: string;
+}
+export interface OpenAIConfig { apiKey: string;
     baseURL?: string;
     organization?: string;
     timeout?: number;
-    maxRetries?: number;
-
+    maxRetries?: number }
+}
 }
 export interface OpenAIRequestOptions {
     model?: string;
@@ -28,21 +28,21 @@ export interface OpenAIRequestOptions {
     response_format?: {
         type: 'text' | 'json_object'
 }
+}
   };
     tools?: unknown[];
     tool_choice?: string | object;
 
 }
-export interface ChatMessage {
-    role: 'system' | 'user' | 'assistant' | 'tool';
+}
+export interface ChatMessage { role: 'system' | 'user' | 'assistant' | 'tool';
     content: string;
     name?: string;
     tool_calls?: unknown[];
-    tool_call_id?: string;
-
+    tool_call_id?: string }
 }
-export interface OpenAIResponse {
-    id: string;
+}
+export interface OpenAIResponse { id: string;
     object: string;
     created: number;
     model: string;
@@ -50,14 +50,12 @@ export interface OpenAIResponse {
         index: number;
         message?: ChatMessage;
         text?: string;
-        finish_reason: string;
+        finish_reason: string }
 }
     }>;
-    usage: {
-        prompt_tokens: number;
+    usage: { prompt_tokens: number;
         completion_tokens: number;
-        total_tokens: number;
-    };
+        total_tokens: number };
 
 export declare class OpenAIAdapter extends BaseAIModel {
     private config;

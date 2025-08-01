@@ -4,36 +4,28 @@
  * Tests comprehensive rate limiting, backoff strategies, threat detection,
  * and adaptive protection mechanisms for authentication endpoints.
  */
-import {
-  RateLimitingService,
+import { RateLimitingService,
   RateLimitStrategy,
   BackoffStrategy,
   EndpointCategory,
-  ThreatLevel,
+  ThreatLevel }
   RateLimitResult
-} from '../RateLimitingService';
-describe('RateLimitingService', () => {
-  let service: RateLimitingService;
+ from '../RateLimitingService';
+describe('RateLimitingService', () => { let service: RateLimitingService;
   let mockDate: Date;
   beforeEach(() => {
   mockDate = new Date('2025-01-15T10:00:00Z');
   jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
-  service = new RateLimitingService();
-});
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  describe('Basic Rate Limiting', () => {
-    test('should allow requests within limits', async () => {
+  service = new RateLimitingService() });
+  afterEach(() => { jest.restoreAllMocks() });
+  describe('Basic Rate Limiting', () => { test('should allow requests within limits', async () => {
       const identifier = 'user@example.com';
       const endpoint = '/auth/login';
       const result = await service.checkRateLimit(identifier, endpoint);
       expect(result.result).toBe(RateLimitResult.ALLOWED);
       expect(result.remainingRequests).toBeGreaterThan(0);
-      expect(result.threatLevel).toBe(ThreatLevel.LOW);
-    });
-    test('should block requests exceeding per-minute limit', async () => {
-      const identifier = 'aggressive-user@example.com';
+      expect(result.threatLevel).toBe(ThreatLevel.LOW) });
+    test('should block requests exceeding per-minute limit', async () => { const identifier = 'aggressive-user@example.com';
       const endpoint = '/auth/login';
       // Record 10 failed attempts (exceeds login limit)
       for (let i = 0; i < 10; i++) {
@@ -41,10 +33,8 @@ describe('RateLimitingService', () => {
       const result = await service.checkRateLimit(identifier, endpoint);
       expect(result.result).toBe(RateLimitResult.BLOCKED);
       expect(result.remainingRequests).toBe(0);
-      expect(result.retryAfter).toBeGreaterThan(0);
-    });
-    test('should handle different endpoints independently', async () => {
-      const identifier = 'multi-endpoint-user@example.com';
+      expect(result.retryAfter).toBeGreaterThan(0) });
+    test('should handle different endpoints independently', async () => { const identifier = 'multi-endpoint-user@example.com';
       const loginEndpoint = '/auth/login';
       const mfaEndpoint = '/auth/mfa/verify';
       // Exhaust login attempts
@@ -53,8 +43,7 @@ describe('RateLimitingService', () => {
       const loginResult = await service.checkRateLimit(identifier, loginEndpoint);
       const mfaResult = await service.checkRateLimit(identifier, mfaEndpoint);
       expect(loginResult.result).toBe(RateLimitResult.BLOCKED);
-      expect(mfaResult.result).toBe(RateLimitResult.ALLOWED);
-    });
+      expect(mfaResult.result).toBe(RateLimitResult.ALLOWED) });
   });
   describe('Backoff Strategies', () => {
     test('should implement exponential backoff', async () => {
@@ -71,8 +60,7 @@ describe('RateLimitingService', () => {
       expect(delay2).toBeGreaterThan(delay1);
       expect(delay2).toBeGreaterThanOrEqual(delay1 * 2); // Exponential growth
     });
-    test('should reset backoff on successful attempt', async () => {
-      const identifier = 'success-reset-user';
+    test('should reset backoff on successful attempt', async () => { const identifier = 'success-reset-user';
       const endpoint = '/auth/login';
       // Create backoff with failures
       service.recordAttempt(identifier, endpoint, false);
@@ -82,8 +70,7 @@ describe('RateLimitingService', () => {
       // Successful attempt should reset
       service.recordAttempt(identifier, endpoint, true);
       const delayAfter = service.getBackoffDelay(identifier, endpoint);
-      expect(delayAfter).toBe(0);
-    });
+      expect(delayAfter).toBe(0) });
     test('should cap backoff delay at maximum', async () => {
       const identifier = 'max-delay-user';
       const endpoint = '/auth/login';
@@ -95,8 +82,7 @@ describe('RateLimitingService', () => {
       expect(delay).toBeLessThanOrEqual(3600); // Max delay is 1 hour for login
     });
   });
-  describe('Threat Detection and Adaptive Limits', () => {
-    test('should detect high threat level for rapid failures', async () => {
+  describe('Threat Detection and Adaptive Limits', () => { test('should detect high threat level for rapid failures', async () => {
       const identifier = 'threat-user@example.com';
       const endpoint = '/auth/login';
       // Record many rapid failures
@@ -104,10 +90,8 @@ describe('RateLimitingService', () => {
         service.recordAttempt(identifier, endpoint, false);
       const result = await service.checkRateLimit(identifier, endpoint);
       expect([ThreatLevel.MEDIUM, ThreatLevel.HIGH, ThreatLevel.CRITICAL]).toContain(result.threatLevel);
-      expect(result.adaptiveMultiplier).toBeLessThan(1.0);
-    });
-    test('should apply adaptive limits based on threat level', async () => {
-      const lowThreatUser = 'low-threat@example.com';
+      expect(result.adaptiveMultiplier).toBeLessThan(1.0) });
+    test('should apply adaptive limits based on threat level', async () => { const lowThreatUser = 'low-threat@example.com';
       const highThreatUser = 'high-threat@example.com';
       const endpoint = '/auth/login';
       // Create high threat context for second user
@@ -115,21 +99,17 @@ describe('RateLimitingService', () => {
         service.recordAttempt(highThreatUser, endpoint, false);
       const lowThreatResult = await service.checkRateLimit(lowThreatUser, endpoint);
       const highThreatResult = await service.checkRateLimit(highThreatUser, endpoint);
-      expect(lowThreatResult.adaptiveMultiplier).toBeGreaterThan(highThreatResult.adaptiveMultiplier);
-    });
-    test('should escalate threat level with multiple endpoint attacks', async () => {
-      const identifier = 'multi-attack@example.com';
+      expect(lowThreatResult.adaptiveMultiplier).toBeGreaterThan(highThreatResult.adaptiveMultiplier) });
+    test('should escalate threat level with multiple endpoint attacks', async () => { const identifier = 'multi-attack@example.com';
       const endpoints = ['/auth/login', '/auth/mfa/verify', '/auth/password/reset'];
       // Attack multiple endpoints
       for (const endpoint of endpoints) {
         for (let i = 0; i < 5; i++) {
           service.recordAttempt(identifier, endpoint, false);
       const result = await service.checkRateLimit(identifier, '/auth/login');
-      expect([ThreatLevel.MEDIUM, ThreatLevel.HIGH, ThreatLevel.CRITICAL]).toContain(result.threatLevel);
-    });
+      expect([ThreatLevel.MEDIUM, ThreatLevel.HIGH, ThreatLevel.CRITICAL]).toContain(result.threatLevel) });
   });
-  describe('Exemption Management', () => {
-    test('should allow exempted identifiers to bypass limits', async () => {
+  describe('Exemption Management', () => { test('should allow exempted identifiers to bypass limits', async () => {
       const identifier = 'exempted-user@example.com';
       const endpoint = '/auth/login';
       // Add exemption
@@ -138,26 +118,21 @@ describe('RateLimitingService', () => {
       for (let i = 0; i < 20; i++) {
         service.recordAttempt(identifier, endpoint, false);
       const result = await service.checkRateLimit(identifier, endpoint);
-      expect(result.result).toBe(RateLimitResult.ALLOWED);
-    });
-    test('should emit exemption events', () => {
-      const identifier = 'event-test@example.com';
+      expect(result.result).toBe(RateLimitResult.ALLOWED) });
+    test('should emit exemption events', () => { const identifier = 'event-test@example.com';
       let exemptionAdded = false;
       let exemptionRemoved = false;
-      service.on('exemptionAdded', () => { exemptionAdded = true; });
-      service.on('exemptionRemoved', () => { exemptionRemoved = true; });
+      service.on('exemptionAdded', () => { exemptionAdded = true });
+      service.on('exemptionRemoved', () => { exemptionRemoved = true });
       service.addExemption(identifier);
       expect(exemptionAdded).toBe(true);
       service.removeExemption(identifier);
       expect(exemptionRemoved).toBe(true);
     });
-    test('should return false when removing non-existent exemption', () => {
-      const result = service.removeExemption('non-existent@example.com');
-      expect(result).toBe(false);
-    });
+    test('should return false when removing non-existent exemption', () => { const result = service.removeExemption('non-existent@example.com');
+      expect(result).toBe(false) });
   });
-  describe('Endpoint-Specific Configurations', () => {
-  test('should apply stricter limits to MFA endpoints', async () => {
+  describe('Endpoint-Specific Configurations', () => { test('should apply stricter limits to MFA endpoints', async () => {
   const identifier = 'mfa-test@example.com';
   const loginEndpoint = '/auth/login';
   const mfaEndpoint = '/auth/mfa/verify';
@@ -189,29 +164,23 @@ describe('RateLimitingService', () => {
   jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
   service.recordAttempt(identifier, mfaEndpoint, true);
   const mfaBlockedResult = await service.checkRateLimit(identifier, mfaEndpoint);
-  expect(mfaBlockedResult.result).toBe(RateLimitResult.BLOCKED);
-});
-    test('should apply very strict limits to password reset', async () => {
-      const identifier = 'reset-test@example.com';
+  expect(mfaBlockedResult.result).toBe(RateLimitResult.BLOCKED) });
+    test('should apply very strict limits to password reset', async () => { const identifier = 'reset-test@example.com';
       const endpoint = '/auth/password/reset';
       // Password reset allows only 3 per minute
       for (let i = 0; i < 3; i++) {
         service.recordAttempt(identifier, endpoint, false);
       const result = await service.checkRateLimit(identifier, endpoint);
-      expect(result.result).toBe(RateLimitResult.BLOCKED);
-    });
-    test('should apply strictest limits to registration', async () => {
-      const identifier = 'register-test@example.com';
+      expect(result.result).toBe(RateLimitResult.BLOCKED) });
+    test('should apply strictest limits to registration', async () => { const identifier = 'register-test@example.com';
       const endpoint = '/auth/register';
       // Registration allows only 2 per minute
       for (let i = 0; i < 2; i++) {
         service.recordAttempt(identifier, endpoint, false);
       const result = await service.checkRateLimit(identifier, endpoint);
-      expect(result.result).toBe(RateLimitResult.BLOCKED);
-    });
+      expect(result.result).toBe(RateLimitResult.BLOCKED) });
   });
-  describe('Limit Reset and Statistics', () => {
-    test('should reset limits for specific endpoint', async () => {
+  describe('Limit Reset and Statistics', () => { test('should reset limits for specific endpoint', async () => {
       const identifier = 'reset-test@example.com';
       const endpoint = '/auth/login';
       // Create blocked state
@@ -222,10 +191,8 @@ describe('RateLimitingService', () => {
       // Reset limits
       service.resetLimits(identifier, endpoint);
       result = await service.checkRateLimit(identifier, endpoint);
-      expect(result.result).toBe(RateLimitResult.ALLOWED);
-    });
-    test('should reset all limits for identifier', async () => {
-      const identifier = 'reset-all-test@example.com';
+      expect(result.result).toBe(RateLimitResult.ALLOWED) });
+    test('should reset all limits for identifier', async () => { const identifier = 'reset-all-test@example.com';
       const endpoints = ['/auth/login', '/auth/mfa/verify'];
       // Block both endpoints
       for (const endpoint of endpoints) {
@@ -235,8 +202,7 @@ describe('RateLimitingService', () => {
       service.resetLimits(identifier);
       for (const endpoint of endpoints) {
         const result = await service.checkRateLimit(identifier, endpoint);
-        expect(result.result).toBe(RateLimitResult.ALLOWED);
-    });
+        expect(result.result).toBe(RateLimitResult.ALLOWED) });
     test('should provide accurate statistics', async () => {
       const identifier = 'stats-test@example.com';
       const endpoint = '/auth/login';
@@ -253,8 +219,7 @@ describe('RateLimitingService', () => {
       );
     });
   });
-  describe('Warning Thresholds', () => {
-    test('should return warning when approaching limits', async () => {
+  describe('Warning Thresholds', () => { test('should return warning when approaching limits', async () => {
       const identifier = 'warning-test@example.com';
       const endpoint = '/auth/login';
       // Approach but don't exceed 80% of limit (8 out of 10)
@@ -266,8 +231,7 @@ describe('RateLimitingService', () => {
         jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
         service.recordAttempt(identifier, endpoint, true);
       const result = await service.checkRateLimit(identifier, endpoint);
-      expect(result.result).toBe(RateLimitResult.WARNING);
-    });
+      expect(result.result).toBe(RateLimitResult.WARNING) });
   });
   describe('Per-Second Rate Limiting', () => {
     test('should block rapid requests within same second', async () => {
@@ -281,43 +245,35 @@ describe('RateLimitingService', () => {
       expect(result.retryAfter).toBe(1); // Should retry after 1 second
     });
   });
-  describe('Event Emission', () => {
-    test('should emit rate limit exceeded events', async () => {
+  describe('Event Emission', () => { test('should emit rate limit exceeded events', async () => {
       const identifier = 'event-test@example.com';
       const endpoint = '/auth/login';
       let eventEmitted = false;
       service.on('rateLimitExceeded', (data) => {
         eventEmitted = true;
         expect(data.identifier).toBe(identifier);
-        expect(data.endpoint).toBe(endpoint);
-      });
+        expect(data.endpoint).toBe(endpoint) });
       // Exceed limits
-      for (let i = 0; i < 10; i++) {
-        service.recordAttempt(identifier, endpoint, false);
+      for (let i = 0; i < 10; i++) { service.recordAttempt(identifier, endpoint, false);
       await service.checkRateLimit(identifier, endpoint);
-      expect(eventEmitted).toBe(true);
-    });
-    test('should emit attempt recorded events', () => {
-      const identifier = 'record-test@example.com';
+      expect(eventEmitted).toBe(true) });
+    test('should emit attempt recorded events', () => { const identifier = 'record-test@example.com';
       const endpoint = '/auth/login';
       let attemptRecorded = false;
       service.on('attemptRecorded', (attempt) => {
         attemptRecorded = true;
         expect(attempt.identifier).toBe(identifier);
-        expect(attempt.endpoint).toBe(endpoint);
-      });
+        expect(attempt.endpoint).toBe(endpoint) });
       service.recordAttempt(identifier, endpoint, true);
       expect(attemptRecorded).toBe(true);
     });
   });
-  describe('Edge Cases and Error Handling', () => {
-    test('should handle unknown endpoints with default config', async () => {
+  describe('Edge Cases and Error Handling', () => { test('should handle unknown endpoints with default config', async () => {
       const identifier = 'unknown-endpoint@example.com';
       const endpoint = '/unknown/endpoint';
       const result = await service.checkRateLimit(identifier, endpoint);
       expect(result.result).toBe(RateLimitResult.ALLOWED);
-      expect(result.remainingRequests).toBeGreaterThan(0);
-    });
+      expect(result.remainingRequests).toBeGreaterThan(0) });
     test('should handle concurrent requests safely', async () => {
       const identifier = 'concurrent-test@example.com';
       const endpoint = '/auth/login';
@@ -328,10 +284,10 @@ describe('RateLimitingService', () => {
       const results = await Promise.all(promises);
       // All should complete without errors
       expect(results).toHaveLength(5);
-      results.forEach(result => {)
+      results.forEach(result => { )
   expect([)
           RateLimitResult.ALLOWED, 
-          RateLimitResult.WARNING, 
+          RateLimitResult.WARNING }
           RateLimitResult.BLOCKED
         ]).toContain(result.result);
       });

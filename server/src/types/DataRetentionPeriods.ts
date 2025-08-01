@@ -2,8 +2,8 @@
 // Define retention periods by data category for compliance
 // Task: T-1752989143998-476
 
-}
-}
+
+
 export interface DataRetentionPeriod {
   category: DataCategory;
   subcategory?: string;
@@ -14,9 +14,10 @@ export interface DataRetentionPeriod {
   archiveBeforeDeletion: boolean;
   reviewRequired: boolean;
   exceptions: RetentionException[];
-}
-}
-}
+
+
+
+
 
 export enum DataCategory {
   PERSONAL_IDENTIFIABLE = 'PERSONAL_IDENTIFIABLE',
@@ -29,7 +30,7 @@ export enum DataCategory {
   AUDIT_LOG = 'AUDIT_LOG',
   SECURITY = 'SECURITY',
   MARKETING = 'MARKETING'
-}
+
 
 export enum LegalBasis {
   GDPR_ARTICLE_6_1_A = 'GDPR_ARTICLE_6_1_A', // Consent
@@ -40,7 +41,7 @@ export enum LegalBasis {
   HIPAA_TREATMENT = 'HIPAA_TREATMENT',
   SOX_COMPLIANCE = 'SOX_COMPLIANCE',
   TAX_REQUIREMENT = 'TAX_REQUIREMENT'
-}
+
 
 export enum Jurisdiction {
   EU = 'EU',
@@ -49,25 +50,26 @@ export enum Jurisdiction {
   CANADA = 'CANADA',
   UK = 'UK',
   GLOBAL = 'GLOBAL'
-}
 
-}
-}
+
+
+
 export interface RetentionException {
   condition: string;
   extendedPeriod: number; // additional days
   reason: string;
   approval: ApprovalLevel;
-}
-}
-}
+
+
+
+
 
 export enum ApprovalLevel {
   AUTOMATIC = 'AUTOMATIC',
   SUPERVISOR = 'SUPERVISOR',
   LEGAL = 'LEGAL',
   DPO = 'DPO' // Data Protection Officer
-}
+
 
 // Standard retention periods by category
 export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
@@ -87,15 +89,15 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 365,
         reason: 'Contract fulfillment',
         approval: ApprovalLevel.AUTOMATIC
-  }
+
       {
         condition: 'legal_dispute',
         extendedPeriod: 3650,
         reason: 'Legal hold',
         approval: ApprovalLevel.LEGAL
-      }
+
     ]
-  }
+
   // Financial Data
   {
     category: DataCategory.FINANCIAL,
@@ -112,9 +114,9 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 1095,
         reason: 'Regulatory audit',
         approval: ApprovalLevel.LEGAL
-      }
+
     ]
-  }
+
   // Health Information
   {
     category: DataCategory.HEALTH,
@@ -131,9 +133,9 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 6570, // Until age of majority + additional years
         reason: 'Minor patient records',
         approval: ApprovalLevel.SUPERVISOR
-      }
+
     ]
-  }
+
   // Behavioral Data
   {
     category: DataCategory.BEHAVIORAL,
@@ -150,9 +152,9 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 730,
         reason: 'Security investigation',
         approval: ApprovalLevel.SUPERVISOR
-      }
+
     ]
-  }
+
   // Technical Data
   {
     category: DataCategory.TECHNICAL,
@@ -169,9 +171,9 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 1095,
         reason: 'Security forensics',
         approval: ApprovalLevel.SUPERVISOR
-      }
+
     ]
-  }
+
   // Communication Data
   {
     category: DataCategory.COMMUNICATION,
@@ -188,9 +190,9 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 2555,
         reason: 'Legal proceedings',
         approval: ApprovalLevel.LEGAL
-      }
+
     ]
-  }
+
   // User Preferences
   {
     category: DataCategory.PREFERENCE,
@@ -202,7 +204,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
     archiveBeforeDeletion: false,
     reviewRequired: false,
     exceptions: []
-  }
+
   // Audit Logs
   {
     category: DataCategory.AUDIT_LOG,
@@ -219,9 +221,9 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 3650,
         reason: 'Extended regulatory hold',
         approval: ApprovalLevel.DPO
-      }
+
     ]
-  }
+
   // Security Data
   {
     category: DataCategory.SECURITY,
@@ -238,9 +240,9 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 1095,
         reason: 'Active security investigation',
         approval: ApprovalLevel.SUPERVISOR
-      }
+
     ]
-  }
+
   // Marketing Data
   {
     category: DataCategory.MARKETING,
@@ -257,9 +259,9 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 0, // Immediate deletion
         reason: 'User consent withdrawal',
         approval: ApprovalLevel.AUTOMATIC
-      }
+
     ]
-  }
+
 ];
 
 // Helper functions for retention management
@@ -273,7 +275,7 @@ export function getRetentionPeriod(
     (!subcategory || period.subcategory === subcategory) &&
     (!jurisdiction || period.jurisdiction.includes(jurisdiction))
   );
-}
+
 
 export function calculateDeletionDate(
   retentionPeriod: DataRetentionPeriod,
@@ -290,15 +292,15 @@ export function calculateDeletionDate(
       );
       if (applicableException) {
         totalRetentionDays += applicableException.extendedPeriod;
-      }
-    }
-  }
+
+
+
   
   const deletionDate = new Date(dataCreatedAt);
   deletionDate.setDate(deletionDate.getDate() + totalRetentionDays);
   
   return deletionDate;
-}
+
 
 export function getApplicableJurisdictions(
   userLocation?: string,
@@ -309,15 +311,14 @@ export function getApplicableJurisdictions(
   // Add specific jurisdictions based on user and data location
   if (userLocation?.includes('EU') || dataLocation?.includes('EU')) {
     jurisdictions.push(Jurisdiction.EU);
-  }
+
   
   if (userLocation?.includes('US') || dataLocation?.includes('US')) {
     jurisdictions.push(Jurisdiction.US);
-  }
+
   
   if (userLocation?.includes('CA') || dataLocation?.includes('CA')) {
     jurisdictions.push(Jurisdiction.CALIFORNIA);
-  }
+
   
   return jurisdictions;
-}

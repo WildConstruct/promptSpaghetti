@@ -6,16 +6,16 @@
  */
 import React, { useState, useMemo } from 'react';
 import { VarianceAnalysis, EnhancedPreviewResult } from '../../hooks/useEnhancedPreview';
-}
-interface CreativeVarianceAnalyzerProps {
-  results: EnhancedPreviewResult;
+
+
+interface CreativeVarianceAnalyzerProps { results: EnhancedPreviewResult;
   varianceAnalysis: VarianceAnalysis | null;
-  className?: string;
-}
-interface AdvancedVarianceMetrics {
-  // Content structure analysis
-  sentenceLengthVariance: number;
-}
+  className?: string }
+
+
+interface AdvancedVarianceMetrics { // Content structure analysis
+  sentenceLengthVariance: number }
+},
   paragraphCount: { min: number; max: number; avg: number };
   readingComplexity: number; // 0-100 scale
   // Semantic analysis
@@ -31,19 +31,18 @@ interface AdvancedVarianceMetrics {
   clientPresentability: number;
   revisionPotential: number;
 
-export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> = ({)
-  results,
-  varianceAnalysis,
+export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> = ({ )
+  results
+  varianceAnalysis }
   className = ''
-}) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'creative' | 'professional'>('overview');
+}) => { const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'creative' | 'professional'>('overview');
   const [_____selectedMetric, _____setSelectedMetric] = useState<string | null>(null);
   // Calculate advanced metrics from results
   const advancedMetrics = useMemo((): AdvancedVarianceMetrics => {
     const validResults = results.filter(r => !r.error && r.output);
     if (validResults.length < 2) {
       return {
-        sentenceLengthVariance: 0,
+        sentenceLengthVariance: 0 }
         paragraphCount: { min: 0, max: 0, avg: 0 },
         readingComplexity: 0,
         vocabularyRichness: 0,
@@ -57,23 +56,20 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
         revisionPotential: 0;
   };
     // Sentence length analysis
-    const sentenceLengths = validResults.flatMap(r => {)
+    const sentenceLengths = validResults.flatMap(r => { )
   const sentences = r.output?.split(/[.!?]+/).filter(s => s.trim().length > 0) || [];
-      return sentences.map(s => s.trim().split(/\s+/).length);
-    });
+      return sentences.map(s => s.trim().split(/\s+/).length) });
     const avgSentenceLength = sentenceLengths.reduce((sum, len) => sum + len, 0) / sentenceLengths.length;
     const sentenceLengthVariance = sentenceLengths.reduce(;);
       (sum, len) => sum + Math.pow(len - avgSentenceLength, 2), 
       0
     ) / sentenceLengths.length;
     // Paragraph analysis
-    const paragraphCounts = validResults.map(r => {)
-  return r.output?.split(/\n\s*\n/).filter(p => p.trim().length > 0).length || 1;
-    });
-    const paragraphCount = {
-  min: Math.min(...paragraphCounts),
+    const paragraphCounts = validResults.map(r => { )
+  return r.output?.split(/\n\s*\n/).filter(p => p.trim().length > 0).length || 1 });
+    const paragraphCount = { min: Math.min(...paragraphCounts),
   max: Math.max(...paragraphCounts),
-  avg: paragraphCounts.reduce((sum, count) => sum + count, 0) / paragraphCounts.length,
+  avg: paragraphCounts.reduce((sum, count) => sum + count, 0) / paragraphCounts.length }
 };
     // Vocabulary richness (unique words / total words)
     const allWords = validResults.flatMap(r => ;);
@@ -86,8 +82,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
     const readingComplexity = Math.min(100, (avgSentenceLength * 2) + (avgWordLength * 3));
     // Repetition index (how much content repeats across results)
     const repetitionScores = [];
-    for (let i = 0; i < validResults.length; i++) {
-  for (let j = i + 1; j < validResults.length; j++) {
+    for (let i = 0; i < validResults.length; i++) { for (let j = i + 1; j < validResults.length; j++) {
   const text1 = validResults[i].output?.toLowerCase() || '';
   const text2 = validResults[j].output?.toLowerCase() || '';
   // Simple repetition detection based on common phrases
@@ -141,12 +136,11 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
   narrativeConsistency: Math.round(narrativeConsistency),
   industryReadiness: Math.round(industryReadiness),
   clientPresentability: Math.round(clientPresentability),
-  revisionPotential: Math.round(revisionPotential),
+  revisionPotential: Math.round(revisionPotential) }
 };
   }, [results, varianceAnalysis]);
   // Generate creative insights
-  const creativeInsights = useMemo(() => {
-  if (!varianceAnalysis) return [];
+  const creativeInsights = useMemo(() => { if (!varianceAnalysis) return [];
   const insights = [];
   if (varianceAnalysis.uniquenessScore > 80) {
   insights.push({)
@@ -154,67 +148,61 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
   title: 'High Creative Diversity',
   description: 'Results show excellent variation with minimal repetition - perfect for exploring different creative directions.',
   metric: 'uniquenessScore',
-  value: varianceAnalysis.uniquenessScore,
+  value: varianceAnalysis.uniquenessScore }
 });
-    } else if (varianceAnalysis.uniquenessScore < 40) {
-  insights.push({)
+ else if (varianceAnalysis.uniquenessScore < 40) { insights.push({)
   type: 'warning',
   title: 'Low Creative Diversity',
   description: 'Results are quite similar. Consider adjusting prompts or using different seeds for more variation.',
   metric: 'uniquenessScore',
-  value: varianceAnalysis.uniquenessScore,
+  value: varianceAnalysis.uniquenessScore }
 });
-    if (advancedMetrics.industryReadiness > 75) {
-  insights.push({)
+    if (advancedMetrics.industryReadiness > 75) { insights.push({)
   type: 'positive',
   title: 'Industry-Ready Content',
   description: 'Content meets professional standards with good vocabulary richness and complexity.',
   metric: 'industryReadiness',
-  value: advancedMetrics.industryReadiness,
+  value: advancedMetrics.industryReadiness }
 });
-    if (advancedMetrics.clientPresentability > 80) {
-  insights.push({)
+    if (advancedMetrics.clientPresentability > 80) { insights.push({)
   type: 'positive',
   title: 'Client-Presentable Quality',
   description: 'Results are polished and consistent enough for client presentation.',
   metric: 'clientPresentability',
-  value: advancedMetrics.clientPresentability,
+  value: advancedMetrics.clientPresentability }
 });
-    } else if (advancedMetrics.clientPresentability < 50) {
-  insights.push({)
+ else if (advancedMetrics.clientPresentability < 50) { insights.push({)
   type: 'suggestion',
   title: 'Consider Refinement',
   description: 'Content may benefit from additional refinement before client presentation.',
   metric: 'clientPresentability',
-  value: advancedMetrics.clientPresentability,
+  value: advancedMetrics.clientPresentability }
 });
-    if (varianceAnalysis.creativityScore > 70) {
-  insights.push({)
+    if (varianceAnalysis.creativityScore > 70) { insights.push({)
   type: 'positive',
   title: 'High Creative Value',
   description: 'Results demonstrate strong creative potential with good conceptual variety.',
   metric: 'creativityScore',
-  value: varianceAnalysis.creativityScore,
+  value: varianceAnalysis.creativityScore }
 });
-    if (advancedMetrics.revisionPotential > 75) {
-  insights.push({)
+    if (advancedMetrics.revisionPotential > 75) { insights.push({)
   type: 'info',
   title: 'Strong Revision Potential',
   description: 'These results provide excellent foundation material for further creative development.',
   metric: 'revisionPotential',
-  value: advancedMetrics.revisionPotential,
+  value: advancedMetrics.revisionPotential }
 });
     return insights;
   }, [varianceAnalysis, advancedMetrics]);
   if (!varianceAnalysis || results.length < 2) {
     return;
       <div className={`creative-variance-analyzer ${className}`} style={{},}
-  background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-        borderRadius: 12,
-        border: '1px solid #e2e8f0',
-        padding: 24,
-        textAlign: 'center'
-  }}>
+  background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)'
+        borderRadius: 12
+        border: '1px solid #e2e8f0'
+        padding: 24
+        textAlign: 'center';
+}>
         <div style={{ fontSize: 24, marginBottom: 12 }}>📊</div>
         <div style={{ fontSize: 16, fontWeight: 600, color: '#1e293b', marginBottom: 8 }}>
           Variance Analysis Unavailable
@@ -224,135 +212,133 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
         </div>
       </div>
     );
-  const MetricCard: React.FC<{,
+  const MetricCard: React.FC<{ ,
   title: string;
   value: number;
   suffix?: string;
   description: string;
   color: string;
-  onClick?: () => void;
-}> = ({ title, value, suffix = '', description, color, onClick }) => ()
+  onClick?: () => void }> = ({ title, value, suffix = '', description, color, onClick }) => ()
     <div 
-      style={{
-        background: 'white',
-        borderRadius: 8,
+      style={ {
+        background: 'white'
+        borderRadius: 8 }
         border: `2px solid ${color}20`}
-},
-  padding: 16,
-        cursor: onClick ? 'pointer' : 'default',
-        transition: 'all 0.2s',
-        ':hover': onClick ? {
-          borderColor: color,
-          transform: 'translateY(-2px)',
+
+  padding: 16
+        cursor: onClick ? 'pointer' : 'default'
+        transition: 'all 0.2s'
+        ':hover': onClick ? { borderColor: color
+          transform: 'translateY(-2px)' }
           boxShadow: `0 4px 12px ${color}20`}
-        } : {}
-      }}
+ : {}
+
       onClick={onClick}
     >
-      <div style={{
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 8,
-}}>
-        <span style={{
-  fontSize: 14,
-  fontWeight: 600,
-  color: '#374151',
-}}>
+      <div style={ {
+  display: 'flex'
+  justifyContent: 'space-between'
+  alignItems: 'center'
+  marginBottom: 8 }
+}>
+        <span style={ {
+  fontSize: 14
+  fontWeight: 600
+  color: '#374151' }
+}>
           {title}
         </span>
-        <span style={{
-  fontSize: 20,
-  fontWeight: 700,
-  color: color,
-}}>
+        <span style={ {
+  fontSize: 20
+  fontWeight: 700
+  color: color }
+}>
           {value}{suffix}
         </span>
       </div>
-      <div style={{
-  fontSize: 12,
-  color: '#6b7280',
-  lineHeight: 1.4,
-}}>
+      <div style={ {
+  fontSize: 12
+  color: '#6b7280'
+  lineHeight: 1.4 }
+}>
         {description}
       </div>
       {/* Progress bar */}
-      <div style={{
-  marginTop: 8,
-  height: 4,
-  background: '#f3f4f6',
-  borderRadius: 2,
-  overflow: 'hidden',
-}}>
-        <div style={{
-          height: '100%',
-          background: color,
+      <div style={ {
+  marginTop: 8
+  height: 4
+  background: '#f3f4f6'
+  borderRadius: 2
+  overflow: 'hidden' }
+}>
+        <div style={ {
+          height: '100%'
+          background: color }
           width: `${Math.min(100, value)}%`}
-},
+
   transition: 'width 0.3s ease';
-  }} />
+} />
       </div>
     </div>
   );
   return;
     <div className={`creative-variance-analyzer ${className}`} style={{},}
-  background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-      borderRadius: 12,
-      border: '1px solid #e2e8f0',
-      overflow: 'hidden'
-  }}>
+  background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)'
+      borderRadius: 12
+      border: '1px solid #e2e8f0'
+      overflow: 'hidden';
+}>
       {/* Header */}
-      <div style={{
-  padding: 20,
-  borderBottom: '1px solid #e2e8f0',
-  background: 'rgba(255, 255, 255, 0.8)',
-}}>
-        <h3 style={{
-  margin: 0,
-  fontSize: 18,
-  fontWeight: 600,
-  color: '#1e293b',
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-}}>
+      <div style={ {
+  padding: 20
+  borderBottom: '1px solid #e2e8f0'
+  background: 'rgba(255, 255, 255, 0.8)' }
+}>
+        <h3 style={ {
+  margin: 0
+  fontSize: 18
+  fontWeight: 600
+  color: '#1e293b'
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8 }
+}>
           📊 Creative Variance Analysis
         </h3>
-        <div style={{
-  fontSize: 14,
-  color: '#64748b',
-  marginTop: 4,
-}}>
+        <div style={ {
+  fontSize: 14
+  color: '#64748b'
+  marginTop: 4 }
+}>
           Professional insights for {results.length} generated results
         </div>
       </div>
       {/* Tab Navigation */}
-      <div style={{
-  display: 'flex',
-  borderBottom: '1px solid #e2e8f0',
-  background: 'rgba(255, 255, 255, 0.6)',
-}}>
+      <div style={ {
+  display: 'flex'
+  borderBottom: '1px solid #e2e8f0'
+  background: 'rgba(255, 255, 255, 0.6)' }
+}>
         {[
-          { id: 'overview', label: '🎯 Overview', icon: '🎯' },
-          { id: 'content', label: '📝 Content Analysis', icon: '📝' },
-          { id: 'creative', label: '🎨 Creative Metrics', icon: '🎨' },
+          { id: 'overview', label: '🎯 Overview', icon: '🎯' }
+          { id: 'content', label: '📝 Content Analysis', icon: '📝' }
+          { id: 'creative', label: '🎨 Creative Metrics', icon: '🎨' }
           { id: 'professional', label: '💼 Professional Assessment', icon: '💼' }
         ].map(tab => ()
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            style={{
-  flex: 1,
-  padding: 12,
-  border: 'none',
-  background: activeTab === tab.id ? '#3b82f6' : 'transparent',
-  color: activeTab === tab.id ? 'white' : '#64748b',
-  fontSize: 13,
-  fontWeight: 500,
-  cursor: 'pointer',
-  transition: 'all 0.2s',
-}}
+            style={ {
+  flex: 1
+  padding: 12
+  border: 'none'
+  background: activeTab === tab.id ? '#3b82f6' : 'transparent'
+  color: activeTab === tab.id ? 'white' : '#64748b'
+  fontSize: 13
+  fontWeight: 500
+  cursor: 'pointer'
+  transition: 'all 0.2s' }
+
           >
             {tab.label}
           </button>
@@ -364,41 +350,41 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
           <div>
             {/* Key Insights */}
             <div style={{ marginBottom: 24 }}>
-              <h4 style={{
-  margin: '0 0 12px 0',
-  fontSize: 14,
-  fontWeight: 600,
-  color: '#374151',
-}}>
+              <h4 style={ {
+  margin: '0 0 12px 0'
+  fontSize: 14
+  fontWeight: 600
+  color: '#374151' }
+}>
                 🔍 Key Creative Insights
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {creativeInsights.slice(0, 3).map((insight, index) => ()
-                  <div key={index} style={{
-                    padding: 12,
-                    background: insight.type === 'positive' ? '#dcfce7' :,
+                  <div key={index} style={ {
+                    padding: 12
+                    background: insight.type === 'positive' ? '#dcfce7' :
                       insight.type === 'warning' ? '#fef3c7' :
-                        insight.type === 'suggestion' ? '#dbeafe' : '#f3f4f6',
-                    borderRadius: 6,
+                        insight.type === 'suggestion' ? '#dbeafe' : '#f3f4f6'
+                    borderRadius: 6 }
                     borderLeft: `4px solid ${}
                       insight.type === 'positive' ? '#10b981' :
                         insight.type === 'warning' ? '#f59e0b' :
                           insight.type === 'suggestion' ? '#3b82f6' : '#6b7280'
-                    }`
-                  }}>
-                    <div style={{
-  fontSize: 13,
-  fontWeight: 600,
-  color: '#1f2937',
-  marginBottom: 4,
-}}>
+`
+}>
+                    <div style={ {
+  fontSize: 13
+  fontWeight: 600
+  color: '#1f2937'
+  marginBottom: 4 }
+}>
                       {insight.title} ({insight.value}%)
                     </div>
-                    <div style={{
-  fontSize: 12,
-  color: '#4b5563',
-  lineHeight: 1.4,
-}}>
+                    <div style={ {
+  fontSize: 12
+  color: '#4b5563'
+  lineHeight: 1.4 }
+}>
                       {insight.description}
                     </div>
                   </div>
@@ -406,11 +392,11 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
               </div>
             </div>
             {/* Quick Stats */}
-            <div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-  gap: 12,
-}}>
+            <div style={ {
+  display: 'grid'
+  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))'
+  gap: 12 }
+}>
               <MetricCard
                 title="Uniqueness"
                 value={varianceAnalysis.uniquenessScore}
@@ -442,12 +428,12 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
             </div>
           </div>
         )}
-        {activeTab === 'content' && ()
+        { activeTab === 'content' && ()
           <div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-  gap: 16,
-}}>
+  display: 'grid'
+  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))'
+  gap: 16 }
+}>
             <MetricCard
               title="Word Count Variance"
               value={Math.round(varianceAnalysis.wordCountVariance)}
@@ -491,12 +477,12 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
             />
           </div>
         )}
-        {activeTab === 'creative' && ()
+        { activeTab === 'creative' && ()
           <div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-  gap: 16,
-}}>
+  display: 'grid'
+  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))'
+  gap: 16 }
+}>
             <MetricCard
               title="Idea Density"
               value={advancedMetrics.ideaDensity}
@@ -541,14 +527,14 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
             />
           </div>
         )}
-        {activeTab === 'professional' && ()
+        { activeTab === 'professional' && ()
           <div>
             <div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-  gap: 16,
-  marginBottom: 24,
-}}>
+  display: 'grid'
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))'
+  gap: 16
+  marginBottom: 24 }
+}>
               <MetricCard
                 title="Industry Readiness"
                 value={advancedMetrics.industryReadiness}
@@ -580,37 +566,37 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
             </div>
             {/* Professional Recommendations */}
             <div>
-              <h4 style={{
-  margin: '0 0 12px 0',
-  fontSize: 14,
-  fontWeight: 600,
-  color: '#374151',
-}}>
+              <h4 style={ {
+  margin: '0 0 12px 0'
+  fontSize: 14
+  fontWeight: 600
+  color: '#374151' }
+}>
                 💼 Professional Recommendations
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {creativeInsights.filter(insight => )
                   ['industryReadiness', 'clientPresentability', 'professionalSuitability'].includes(insight.metric)
                 ).map((insight, index) => ()
-                  <div key={index} style={{
-  padding: 12,
-  background: 'white',
-  borderRadius: 6,
-  border: '1px solid #e5e7eb',
-}}>
-                    <div style={{
-  fontSize: 13,
-  fontWeight: 600,
-  color: '#1f2937',
-  marginBottom: 4,
-}}>
+                  <div key={index} style={ {
+  padding: 12
+  background: 'white'
+  borderRadius: 6
+  border: '1px solid #e5e7eb' }
+}>
+                    <div style={ {
+  fontSize: 13
+  fontWeight: 600
+  color: '#1f2937'
+  marginBottom: 4 }
+}>
                       {insight.title}
                     </div>
-                    <div style={{
-  fontSize: 12,
-  color: '#4b5563',
-  lineHeight: 1.4,
-}}>
+                    <div style={ {
+  fontSize: 12
+  color: '#4b5563'
+  lineHeight: 1.4 }
+}>
                       {insight.description}
                     </div>
                   </div>

@@ -1,5 +1,15 @@
-import { serializeProject, deserializeProject } from './utils/projectSerialization';
+import { serializeProject, deserializeProject, } from './utils/projectSerialization';
 import { createDefaultMetadata } from './schemas/psgSchema';
+;
+error ?  : string;
+warnings ?  : string;
+;
+isFavorite: boolean;
+;
+;
+created: Date;
+lastModified: Date;
+owner: string;
 export class ProjectManager {
     static instance;
     projects = new Map();
@@ -49,8 +59,8 @@ export class ProjectManager {
         return this.recentFiles.slice(0, limit);
     }
     /**
-    * Add file to recent files
-    */
+     * Add file to recent files
+     */
     addToRecentFiles(file) {
         // Remove if already exists
         this.recentFiles = this.recentFiles.filter(f => f.id !== file.id);
@@ -61,8 +71,8 @@ export class ProjectManager {
         this.saveUserData();
     }
     /**
-    * Toggle favorite status
-    */
+     * Toggle favorite status
+     */
     toggleFavorite(fileId) {
         if (this.favoriteFiles.has(fileId)) {
             this.favoriteFiles.delete(fileId);
@@ -102,9 +112,9 @@ export class ProjectManager {
                 tags: ['generated', 'mock'],
                 version: '1.0.0',
                 created: new Date(Date.now() - Math.random() * 60 * 24 * 60 * 60 * 1000), // Last 60 days
-                author: 'Mock User'
+                author: 'Mock User',
             },
-            isFavorite: Math.random() > 0.7
+            isFavorite: Math.random() > 0.7,
         };
     }
     loadUserData() {
@@ -189,7 +199,7 @@ export class ProjectManager {
      * Static method to load project from device (Story 6.1)
      */
     static async loadProjectFromDevice() {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             try {
                 const input = document.createElement('input');
                 input.type = 'file';
@@ -248,7 +258,7 @@ export class ProjectManager {
     static sanitizeFileName(fileName) {
         // Remove or replace invalid characters
         let sanitized = fileName
-            .replace(/[<>:"/\\|?*]/g, '_') // Replace invalid chars with underscore
+            .replace(/[<>:"/\\|?*]/g, '_') // Replace invalid chars with underscore,
             .replace(/\s+/g, '_'); // Replace spaces with underscore
         // Keep multiple underscores for now, then clean up
         sanitized = sanitized

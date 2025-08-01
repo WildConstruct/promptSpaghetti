@@ -64,8 +64,9 @@ if (this.config.cleanup.autoDeleteExpired) {
     * Generate and store a verification code
     */
     async;
-    generateVerificationCode(userId, string);
-    purpose: string,
+    generateVerificationCode(userId, string),
+        purpose;
+    string,
         options;
     {
         length ?  : number;
@@ -142,8 +143,9 @@ return { code, id: verificationCode.id };
  * Validate a verification code
  */
 async;
-validateVerificationCode(codeId, string);
-inputCode: string,
+validateVerificationCode(codeId, string),
+    inputCode;
+string,
     options;
 {
     userId ?  : string;
@@ -307,8 +309,9 @@ return result;
  * Validate code by user and purpose (convenience method)
  */
 async;
-validateByUserAndPurpose(userId, string);
-purpose: string,
+validateByUserAndPurpose(userId, string),
+    purpose;
+string,
     inputCode;
 string,
     options;

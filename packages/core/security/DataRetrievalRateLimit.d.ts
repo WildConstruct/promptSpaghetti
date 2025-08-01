@@ -13,25 +13,23 @@
  */
 import { EventEmitter } from 'events';
 import { RateLimitingService, BackoffStrategy } from './RateLimitingService';
-import { 
-  DataClassificationLevel,
+import { DataClassificationLevel,
   DataOperation,
-  SubjectAttributes,
+  SubjectAttributes }
   ObjectAttributes
 } from './DataClassificationAccessControl';
-export declare enum DataEndpointCategory {
-    DATA_READ = "data_read",
+export declare enum DataEndpointCategory { DATA_READ = "data_read",
     DATA_EXPORT = "data_export",
     DATA_SEARCH = "data_search",
     DATA_BULK_ACCESS = "data_bulk_access",
     DATA_STREAM = "data_stream",
     DATA_ANALYTICS = "data_analytics",
-    DATA_BACKUP = "data_backup",
+    DATA_BACKUP = "data_backup" }
     DATA_SYNC = "data_sync"
 
 }
-export interface DataRetrievalLimits {
-    classification: DataClassificationLevel;
+}
+export interface DataRetrievalLimits { classification: DataClassificationLevel;
     operation: DataOperation;
     limits: {
         requestsPerMinute: number;
@@ -41,25 +39,21 @@ export interface DataRetrievalLimits {
         bytesPerHour: number;
         recordsPerMinute: number;
         recordsPerHour: number;
-        concurrentRequests: number;
+        concurrentRequests: number }
 }
     };
-    backoff: {
-        strategy: BackoffStrategy;
+    backoff: { strategy: BackoffStrategy;
         baseDelay: number;
         maxDelay: number;
-        multiplier: number;
-    };
-    adaptiveFactors: {
-        userRiskMultiplier: number;
+        multiplier: number };
+    adaptiveFactors: { userRiskMultiplier: number;
         timeOfDayMultiplier: number;
         locationMultiplier: number;
-        deviceTrustMultiplier: number;
-    };
+        deviceTrustMultiplier: number };
 
 }
-export interface DataAccessAttempt {
-    userId: string;
+}
+export interface DataAccessAttempt { userId: string;
     resourceId: string;
     operation: DataOperation;
     classification: DataClassificationLevel;
@@ -70,11 +64,10 @@ export interface DataAccessAttempt {
     userAgent: string;
     success: boolean;
     rateLimited: boolean;
-    riskScore: number;
-
+    riskScore: number }
 }
-export interface RetrievalMetrics {
-    totalRequests: number;
+}
+export interface RetrievalMetrics { totalRequests: number;
     totalBytesTransferred: number;
     totalRecordsAccessed: number;
     rateLimitedRequests: number;
@@ -83,40 +76,36 @@ export interface RetrievalMetrics {
     classificationBreakdown: Record<DataClassificationLevel, number>;
     operationBreakdown: Record<DataOperation, number>;
     peakUsageTimes: TimeUsagePattern[];
-    suspiciousActivity: SuspiciousActivity[];
-
+    suspiciousActivity: SuspiciousActivity[] }
 }
-export interface UserDataUsage {
-    userId: string;
+}
+export interface UserDataUsage { userId: string;
     requestCount: number;
     bytesAccessed: number;
     recordsAccessed: number;
     classificationsAccessed: DataClassificationLevel[];
     lastAccess: Date;
     riskScore: number;
-    anomalyScore: number;
-
+    anomalyScore: number }
 }
-export interface TimeUsagePattern {
-    hour: number;
+}
+export interface TimeUsagePattern { hour: number;
     dayOfWeek: number;
     requestCount: number;
     averageRiskScore: number;
-    topOperations: DataOperation[];
-
+    topOperations: DataOperation[] }
 }
-export interface SuspiciousActivity {
-    userId: string;
+}
+export interface SuspiciousActivity { userId: string;
     activityType: 'UNUSUAL_VOLUME' | 'OFF_HOURS_ACCESS' | 'PRIVILEGE_ESCALATION' | 'BULK_DOWNLOAD' | 'RAPID_REQUESTS';
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     description: string;
     timestamp: Date;
     evidence: Record<string, any>;
-    riskScore: number;
-
+    riskScore: number }
 }
-export interface DataRetrievalConfig {
-    enableVolumeTracking: boolean;
+}
+export interface DataRetrievalConfig { enableVolumeTracking: boolean;
     enableBehaviorAnalysis: boolean;
     enableAdaptiveLimits: boolean;
     enableAnomalyDetection: boolean;
@@ -124,11 +113,10 @@ export interface DataRetrievalConfig {
     globalLimits: GlobalDataLimits;
     classificationLimits: Record<DataClassificationLevel, DataRetrievalLimits>;
     alertThresholds: AlertThresholds;
-    exemptions: DataAccessExemption[];
-
+    exemptions: DataAccessExemption[] }
 }
-export interface GlobalDataLimits {
-    maxConcurrentUsers: number;
+}
+export interface GlobalDataLimits { maxConcurrentUsers: number;
     maxDailyBytes: number;
     maxDailyRecords: number;
     maxRequestRate: number;
@@ -136,33 +124,27 @@ export interface GlobalDataLimits {
         enabled: boolean;
         thresholdCpuPercent: number;
         thresholdMemoryPercent: number;
-        throttlePercent: number;
+        throttlePercent: number }
 }
     };
 
 }
-export interface AlertThresholds {
-    volumeSpike: {
+}
+export interface AlertThresholds { volumeSpike: {
         percentIncrease: number;
-        timeWindow: number;
+        timeWindow: number }
 }
     };
-    userQuotaUsage: {
-        warningPercent: number;
-        criticalPercent: number;
-    };
-    classificationAccess: {
-        restrictedAccessCount: number;
-        timeWindow: number;
-    };
-    anomalyScore: {
-        warningThreshold: number;
-        criticalThreshold: number;
-    };
+    userQuotaUsage: { warningPercent: number;
+        criticalPercent: number };
+    classificationAccess: { restrictedAccessCount: number;
+        timeWindow: number };
+    anomalyScore: { warningThreshold: number;
+        criticalThreshold: number };
 
 }
-export interface DataAccessExemption {
-    id: string;
+}
+export interface DataAccessExemption { id: string;
     userId?: string;
     role?: string;
     ipAddress?: string;
@@ -172,11 +154,10 @@ export interface DataAccessExemption {
     conditions: ExemptionCondition[];
     approvedBy: string;
     approvedAt: Date;
-    auditRequired: boolean;
-
+    auditRequired: boolean }
 }
-export interface ExemptionCondition {
-    type: 'TIME_RANGE' | 'OPERATION' | 'CLASSIFICATION' | 'EMERGENCY' | 'BUSINESS_CRITICAL';
+}
+export interface ExemptionCondition { type: 'TIME_RANGE' | 'OPERATION' | 'CLASSIFICATION' | 'EMERGENCY' | 'BUSINESS_CRITICAL';
     specification: Record<string, any>;
     required: boolean;
 /**
@@ -194,10 +175,10 @@ export declare class DataRetrievalRateLimit extends EventEmitter {
      * Check if data retrieval request is allowed
      */
     checkDataRetrievalLimit();
-      subject: SubjectAttributes,
-      object: ObjectAttributes,
-      operation: DataOperation,
-      requestDetails: DataRequestDetails,
+      subject: SubjectAttributes;
+      object: ObjectAttributes;
+      operation: DataOperation;
+      requestDetails: DataRequestDetails }
     ): Promise<DataRetrievalDecision>;
     /**
      * Get current usage metrics
@@ -242,16 +223,16 @@ export declare class DataRetrievalRateLimit extends EventEmitter {
     private getSecondsUntilMidnight;
 
 }
-export interface DataRequestDetails {
-    operation: DataOperation;
+}
+}
+export interface DataRequestDetails { operation: DataOperation;
     estimatedBytes: number;
     estimatedRecords: number;
     requestType: 'SINGLE' | 'BATCH' | 'STREAM';
-    context: Record<string, any>;
-
+    context: Record<string, any> }
 }
-export interface DataRetrievalDecision {
-    decision: 'ALLOW' | 'DENY';
+}
+export interface DataRetrievalDecision { decision: 'ALLOW' | 'DENY';
     reason: string;
     exemptionId?: string;
     retryAfter?: number;
@@ -259,18 +240,16 @@ export interface DataRetrievalDecision {
     quotaRemaining?: {
         bytes: number;
         records: number;
-        requests: number;
+        requests: number }
 }
     };
-    metadata: {
-        timestamp: Date;
+    metadata: { timestamp: Date;
         evaluationTime: number;
-        appliedLimits: string[];
-    };
+        appliedLimits: string[] };
 
 }
-export interface UserQuota {
-    userId: string;
+}
+export interface UserQuota { userId: string;
     dailyByteLimit: number;
     dailyRecordLimit: number;
     dailyRequestLimit: number;
@@ -278,8 +257,8 @@ export interface UserQuota {
     recordsUsed: number;
     requestsUsed: number;
     resetAt: Date;
-    lastUpdated: Date;
-
+    lastUpdated: Date }
+}
 }
 export interface AnomalyCheck {
     isAnomalous: boolean;
@@ -289,4 +268,5 @@ export interface AnomalyCheck {
 
 export default DataRetrievalRateLimit;
 //# sourceMappingURL=DataRetrievalRateLimit.d.ts.map
+}
 }

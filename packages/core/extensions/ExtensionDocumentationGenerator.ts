@@ -4,19 +4,19 @@
  */
 import { ExtensionPoint, ExtensionPointCategory, ExtensionPointPriority, ExtensionPointLifecycle, extensionPointRegistry } from './ExtensionPointRegistry';
 
-}
-export interface DocumentationOptions {
-  includeExamples?: boolean;
+
+export interface DocumentationOptions { includeExamples?: boolean;
   includeConstraints?: boolean;
   includeMetadata?: boolean;
   format?: 'markdown' | 'html' | 'json';
-  filterBy?: {
+  filterBy?: { }
   category?: ExtensionPointCategory;
   priority?: ExtensionPointPriority;
   lifecycle?: ExtensionPointLifecycle;
-}
+
+
 };
-}
+
 export class ExtensionDocumentationGenerator {
   private static instance: ExtensionDocumentationGenerator;
   private constructor() {}
@@ -53,16 +53,15 @@ export class ExtensionDocumentationGenerator {
     const extensionPoint = extensionPointRegistry.get(extensionPointId);
     if (!extensionPoint) {
       throw new Error(`Extension point ${extensionPointId} not found`);}
-    return this.generateComplete({)
-  ...options,
+    return this.generateComplete({ )
+  ...options }
       filterBy: { ...options.filterBy }
     });
   /**
    * Generate documentation by category
    */
-  public generateByCategory(category: ExtensionPointCategory, options: DocumentationOptions = {}): string {
-    return this.generateComplete({)
-  ...options,
+  public generateByCategory(category: ExtensionPointCategory, options: DocumentationOptions = {}): string { return this.generateComplete({)
+  ...options }
       filterBy: { ...options.filterBy, category }
     });
   /**
@@ -110,22 +109,21 @@ export class ExtensionDocumentationGenerator {
   /**
    * Generate search index for extension points
    */
-  public generateSearchIndex(): any {
-    const registry = extensionPointRegistry;
+  public generateSearchIndex(): any { const registry = extensionPointRegistry;
     const extensionPoints = registry.getAll();
     return {
       version: '1.0.0',
       generated: new Date().toISOString(),
       count: extensionPoints.length,
-      documents: extensionPoints.map(ep => ({)
+      documents: extensionPoints.map(ep => ({),
   id: ep.id,
-        title: ep.name,
+        title: ep.name }
         content: `${ep.description} ${ep.interfaces.map(i => i.description).join(' ')}`}
 },
   category: ep.category,
         priority: ep.priority,
         lifecycle: ep.lifecycle,
-        keywords: [,
+        keywords: [
           ep.name.toLowerCase(),
           ep.category,
           ep.priority,
@@ -147,9 +145,8 @@ export class ExtensionDocumentationGenerator {
     });
     markdown += '\n';
     // Extension Points
-    extensionPoints.forEach(ep => {)
-  markdown += this.generateMarkdownExtensionPoint(ep, options);
-    });
+    extensionPoints.forEach(ep => { )
+  markdown += this.generateMarkdownExtensionPoint(ep, options) });
     return markdown;
   /**
    * Generate markdown for a single extension point
@@ -236,35 +233,34 @@ export class ExtensionDocumentationGenerator {
   /**
    * Generate HTML documentation
    */
-  private generateHTML(extensionPoints: ExtensionPoint, options: DocumentationOptions): string {
-    let html = `<!DOCTYPE html>;
+  private generateHTML(extensionPoints: ExtensionPoint, options: DocumentationOptions): string { let html = `<!DOCTYPE html>;
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Extension Point Documentation</title>
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { border-bottom: 2px solid #e1e5e9; padding-bottom: 20px; margin-bottom: 30px; }
-        .extension-point { border: 1px solid #e1e5e9; border-radius: 8px; padding: 20px; margin-bottom: 30px; }
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .badge.critical { background: #dc3545; color: white; }
-        .badge.high { background: #fd7e14; color: white; }
-        .badge.medium { background: #ffc107; color: black; }
-        .badge.low { background: #6c757d; color: white; }
-        .badge.stable { background: #28a745; color: white; }
-        .badge.experimental { background: #17a2b8; color: white; }
-        .badge.deprecated { background: #dc3545; color: white; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-        th, td { border: 1px solid #e1e5e9; padding: 8px; text-align: left; }
-        th { background: #f8f9fa; }
-        code { background: #f8f9fa; padding: 2px 4px; border-radius: 3px; }
-        pre { background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        .toc { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-        .toc ul { list-style: none; padding-left: 0; }
-        .toc li { margin: 5px 0; }
-        .toc a { text-decoration: none; color: #007bff; }
-        .toc a:hover { text-decoration: underline; }
+        body { font-family: system-ui, -apple-system, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px }
+        .header { border-bottom: 2px solid #e1e5e9; padding-bottom: 20px; margin-bottom: 30px }
+        .extension-point { border: 1px solid #e1e5e9; border-radius: 8px; padding: 20px; margin-bottom: 30px }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold }
+        .badge.critical { background: #dc3545; color: white }
+        .badge.high { background: #fd7e14; color: white }
+        .badge.medium { background: #ffc107; color: black }
+        .badge.low { background: #6c757d; color: white }
+        .badge.stable { background: #28a745; color: white }
+        .badge.experimental { background: #17a2b8; color: white }
+        .badge.deprecated { background: #dc3545; color: white }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0 }
+        th, td { border: 1px solid #e1e5e9; padding: 8px; text-align: left }
+        th { background: #f8f9fa }
+        code { background: #f8f9fa; padding: 2px 4px; border-radius: 3px }
+        pre { background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto }
+        .toc { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px }
+        .toc ul { list-style: none; padding-left: 0 }
+        .toc li { margin: 5px 0 }
+        .toc a { text-decoration: none; color: #007bff }
+        .toc a:hover { text-decoration: underline }
     </style>
 </head>
 <body>
@@ -278,9 +274,8 @@ export class ExtensionDocumentationGenerator {
             ${extensionPoints.map(ep => `<li><a href="#${ep.id.replace(/\./g, '-')}">${ep.name}</a></li>`).join('')}
         </ul>
     </div>`;
-    extensionPoints.forEach(ep => {)
-  html += this.generateHTMLExtensionPoint(ep, options);
-    });
+    extensionPoints.forEach(ep => { )
+  html += this.generateHTMLExtensionPoint(ep, options) });
     html += `
 </body>
 </html>`;
@@ -351,13 +346,12 @@ export class ExtensionDocumentationGenerator {
   /**
    * Generate JSON documentation
    */
-  private generateJSON(extensionPoints: ExtensionPoint, options: DocumentationOptions): string {
-  const doc = {
+  private generateJSON(extensionPoints: ExtensionPoint, options: DocumentationOptions): string { const doc = {
   version: '1.0.0',
   generated: new Date().toISOString(),
   count: extensionPoints.length,
   options: options,
-  extensionPoints: extensionPoints,
+  extensionPoints: extensionPoints }
 };
     return JSON.stringify(doc, null, 2);
   /**

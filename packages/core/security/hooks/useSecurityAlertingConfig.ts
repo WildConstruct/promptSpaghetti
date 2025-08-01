@@ -21,70 +21,69 @@
  * @since 2024-01-22
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { 
-  SecurityAlertingConfig, 
+import { SecurityAlertingConfig, 
   EscalationThresholds,
-  CorrelationRule,
+  CorrelationRule }
   ResponseAutomation
-} from '../SecurityAlertingAnalytics';
+ from '../SecurityAlertingAnalytics';
 import { SecurityLogger, SecurityEventType, LogLevel } from '../SecurityLogger';
 
-}
-export interface UseSecurityAlertingConfigOptions {
-  configId?: string;
+
+export interface UseSecurityAlertingConfigOptions { configId?: string;
   autoSave?: boolean;
-  autoSaveInterval?: number; // milliseconds,
-  validationDebounce?: number; // milliseconds,
+  autoSaveInterval?: number; // milliseconds;
+  validationDebounce?: number; // milliseconds }
   enableAuditLogging?: boolean;
   onConfigChange?: (config: SecurityAlertingConfig) => void;
   onValidationError?: (errors: ValidationError) => void;
   onSaveSuccess?: () => void;
   onSaveError?: (error: Error) => void;
-}
-}
-}
-export interface ValidationError {
-  field: string;
+
+
+
+
+export interface ValidationError { field: string;
   message: string;
-  severity: 'error' | 'warning' | 'info';
+  severity: 'error' | 'warning' | 'info' }
   code: string;
-}
-}
-}
-export interface ConfigurationState {
-  config: SecurityAlertingConfig;
+
+
+
+
+export interface ConfigurationState { config: SecurityAlertingConfig;
   originalConfig: SecurityAlertingConfig;
   isLoading: boolean;
   isSaving: boolean;
   isValidating: boolean;
   hasUnsavedChanges: boolean;
-  lastSaved: Date | null;
+  lastSaved: Date | null }
   validationErrors: ValidationError;
   validationWarnings: ValidationError;
   securityScore: number;
   configVersion: number;
-}
-}
-}
-export interface UseSecurityAlertingConfigReturn {
-  state: ConfigurationState;
-  actions: {
-  updateConfig: (config: Partial<SecurityAlertingConfig>) => void;
-  updateEscalationThresholds: (thresholds: Partial<EscalationThresholds>) => void;
-  addCorrelationRule: (rule: CorrelationRule) => void;
-  removeCorrelationRule: (ruleId: string) => void;
-  updateResponseAutomation: (automation: Partial<ResponseAutomation>) => void;
+
+
+
+
+export interface UseSecurityAlertingConfigReturn { state: ConfigurationState;
+  actions: {;
+  updateConfig: (config: Partial<SecurityAlertingConfig>) => void
+  updateEscalationThresholds: (thresholds: Partial<EscalationThresholds>) => void
+  addCorrelationRule: (rule: CorrelationRule) => void
+  removeCorrelationRule: (ruleId: string) => void
+  updateResponseAutomation: (automation: Partial<ResponseAutomation>) => void
   validateConfig: () => Promise<boolean>;
-  saveConfig: () => Promise<boolean>;
+  saveConfig: () => Promise<boolean>
   resetConfig: () => void;
-  revertChanges: () => void;
+  revertChanges: () => void }
   exportConfig: () => string;
   importConfig: (configJson: string) => boolean;
-}
+
+
 };
-  utils: {
+  utils: { 
   getConfigDiff: () => Partial<SecurityAlertingConfig>;
-  getValidationSummary: () => {,
+  getValidationSummary: () => { }
   hasErrors: boolean;
   hasWarnings: boolean;
   errorCount: number;
@@ -93,52 +92,51 @@ export interface UseSecurityAlertingConfigReturn {
 };
     getRecommendations: () => ConfigRecommendation;
   };
-}
-}
-export interface ConfigRecommendation {
-  field: string;
+
+
+export interface ConfigRecommendation { field: string;
   current: any;
   recommended: any;
   reason: string;
   impact: 'security' | 'performance' | 'compliance';
   priority: 'high' | 'medium' | 'low';
   // Default configuration
-  const DEFAULT_CONFIG: SecurityAlertingConfig = {,
-  enableRealTimeAnalytics: true,
-  enablePatternAnalysis: true,
-  enableThreatIntelligence: true,
-  enableAutomatedResponse: false,
-  alertRetentionDays: 90,
-  patternAnalysisWindow: 300000, // 5 minutes,
-  threatIntelligenceUpdate: 3600000, // 1 hour,
-  machinelearningEnabled: false,
-  escalationThresholds: {
-  criticalAlertCount: 5,
-  highAlertCount: 20,
-  correlatedAlertCount: 10,
-  timeWindowMinutes: 15,
-  failedAccessAttempts: 5,
-  dataExfiltrationThreshold: 100, // MB,
-  suspiciousPatternCount: 3,
-  riskScoreThreshold: 75,
-}
+  const DEFAULT_CONFIG: SecurityAlertingConfig = {;
+  enableRealTimeAnalytics: true;
+  enablePatternAnalysis: true;
+  enableThreatIntelligence: true;
+  enableAutomatedResponse: false;
+  alertRetentionDays: 90;
+  patternAnalysisWindow: 300000, // 5 minutes;
+  threatIntelligenceUpdate: 3600000, // 1 hour;
+  machinelearningEnabled: false;
+  escalationThresholds: {;
+  criticalAlertCount: 5;
+  highAlertCount: 20;
+  correlatedAlertCount: 10;
+  timeWindowMinutes: 15;
+  failedAccessAttempts: 5;
+  dataExfiltrationThreshold: 100, // MB;
+  suspiciousPatternCount: 3;
+  riskScoreThreshold: 75 }
+
+
 },
   correlationRules: [],
-  responseAutomation: {
+  responseAutomation: { ,
   enabledActions: [],
   approvalRequired: true,
   maxAutomatedActions: 5,
   cooldownPeriod: 900000, // 15 minutes,
-  emergencyOverride: false,
+  emergencyOverride: false }
 };
 /**
  * Hook for managing security alerting configuration
  */
-}
+
 export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig)
   options: UseSecurityAlertingConfigOptions = {}
-): UseSecurityAlertingConfigReturn => {
-  const {
+): UseSecurityAlertingConfigReturn => { const {
     configId = 'default',
     autoSave = false,
     autoSaveInterval = 30000, // 30 seconds
@@ -146,23 +144,22 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
     enableAuditLogging = true,
     onConfigChange,
     onValidationError,
-    onSaveSuccess,
+    onSaveSuccess }
     onSaveError
-  } = options;
+ = options;
   // State management
-  const [state, setState] = useState<ConfigurationState>(() => {
-    const config = initialConfig || DEFAULT_CONFIG;
+  const [state, setState] = useState<ConfigurationState>(() => { const config = initialConfig || DEFAULT_CONFIG;
     return {
-      config,
-      originalConfig: { ...config },
-      isLoading: false,
-      isSaving: false,
-      isValidating: false,
-      hasUnsavedChanges: false,
-      lastSaved: null,
-      validationErrors: [],
-      validationWarnings: [],
-      securityScore: 100,
+      config }
+      originalConfig: { ...config }
+      isLoading: false
+      isSaving: false
+      isValidating: false
+      hasUnsavedChanges: false
+      lastSaved: null
+      validationErrors: []
+      validationWarnings: []
+      securityScore: 100
       configVersion: 1;
   };
   });
@@ -171,34 +168,31 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   const validationTimerRef = useRef<NodeJS.Timeout | null>(null);
   const securityLoggerRef = useRef<SecurityLogger | null>(null);
   // Initialize security logger
-  useEffect(() => {
-  if (enableAuditLogging) {
+  useEffect(() => { if (enableAuditLogging) {
   securityLoggerRef.current = new SecurityLogger({)
-  component: 'SecurityAlertingConfig',
-  enableAuditTrail: true,
-  enableMetrics: true,
+  component: 'SecurityAlertingConfig'
+  enableAuditTrail: true
+  enableMetrics: true }
 });
   }, [enableAuditLogging]);
   // Log configuration changes
-  const logConfigChange = useCallback((field: string, oldValue: any, newValue: any) => {
-  if (securityLoggerRef.current) {
+  const logConfigChange = useCallback((field: string, oldValue: any, newValue: any) => { if (securityLoggerRef.current) {
   securityLoggerRef.current.logSecurityEvent({)
-  type: SecurityEventType.SECURITY_ALERT,
-  level: LogLevel.INFO,
-  message: 'Security alerting configuration changed',
+  type: SecurityEventType.SECURITY_ALERT
+  level: LogLevel.INFO
+  message: 'Security alerting configuration changed'
   details: {
-  configId,
-  field,
-  oldValue,
-  newValue,
-  timestamp: new Date().toISOString(),
+  configId
+  field
+  oldValue
+  newValue
+  timestamp: new Date().toISOString() }
 });
   }, [configId]);
   // Validate configuration
   const validateConfig = useCallback(async (): Promise<boolean> => {
     setState(prev => ({ ...prev, isValidating: true }));
-    try {
-  const errors: ValidationError = [];
+    try { const errors: ValidationError = [];
   const warnings: ValidationError = [];
   let score = 100;
   // Validate alert retention
@@ -207,90 +201,80 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   field: 'alertRetentionDays',
   message: 'Alert retention period below recommended 30 days minimum',
   severity: 'warning',
-  code: 'RETENTION_LOW',
+  code: 'RETENTION_LOW' }
 });
         score -= 5;
-      if (state.config.alertRetentionDays > 365) {
-  errors.push({)
+      if (state.config.alertRetentionDays > 365) { errors.push({)
   field: 'alertRetentionDays',
   message: 'Alert retention period exceeds maximum allowed 365 days',
   severity: 'error',
-  code: 'RETENTION_HIGH',
+  code: 'RETENTION_HIGH' }
 });
         score -= 15;
       // Validate escalation thresholds
       const thresholds = state.config.escalationThresholds;
-      if (thresholds.criticalAlertCount < 1 || thresholds.criticalAlertCount > 50) {
-  errors.push({)
+      if (thresholds.criticalAlertCount < 1 || thresholds.criticalAlertCount > 50) { errors.push({)
   field: 'escalationThresholds.criticalAlertCount',
   message: 'Critical alert count must be between 1 and 50',
   severity: 'error',
-  code: 'THRESHOLD_INVALID',
+  code: 'THRESHOLD_INVALID' }
 });
         score -= 20;
-      if (thresholds.timeWindowMinutes < 5) {
-  warnings.push({)
+      if (thresholds.timeWindowMinutes < 5) { warnings.push({)
   field: 'escalationThresholds.timeWindowMinutes',
   message: 'Time window below recommended 5 minute minimum',
   severity: 'warning',
-  code: 'TIMEWINDOW_LOW',
+  code: 'TIMEWINDOW_LOW' }
 });
         score -= 5;
-      if (thresholds.failedAccessAttempts < 3) {
-  warnings.push({)
+      if (thresholds.failedAccessAttempts < 3) { warnings.push({)
   field: 'escalationThresholds.failedAccessAttempts',
   message: 'Failed access attempts threshold may be too sensitive',
   severity: 'warning',
-  code: 'ACCESS_ATTEMPTS_LOW',
+  code: 'ACCESS_ATTEMPTS_LOW' }
 });
         score -= 3;
       // Security best practices
-      if (!state.config.enableRealTimeAnalytics) {
-  warnings.push({)
+      if (!state.config.enableRealTimeAnalytics) { warnings.push({)
   field: 'enableRealTimeAnalytics',
   message: 'Real-time analytics disabled - may impact threat detection',
   severity: 'warning',
-  code: 'REALTIME_DISABLED',
+  code: 'REALTIME_DISABLED' }
 });
         score -= 10;
-      if (!state.config.enableThreatIntelligence) {
-  warnings.push({)
+      if (!state.config.enableThreatIntelligence) { warnings.push({)
   field: 'enableThreatIntelligence',
   message: 'Threat intelligence disabled - may reduce detection accuracy',
   severity: 'warning',
-  code: 'THREAT_INTEL_DISABLED',
+  code: 'THREAT_INTEL_DISABLED' }
 });
         score -= 10;
-      if (state.config.enableAutomatedResponse && !state.config.responseAutomation.approvalRequired) {
-  warnings.push({)
+      if (state.config.enableAutomatedResponse && !state.config.responseAutomation.approvalRequired) { warnings.push({)
   field: 'responseAutomation.approvalRequired',
   message: 'Automated response without approval may pose security risks',
   severity: 'warning',
-  code: 'AUTO_RESPONSE_NO_APPROVAL',
+  code: 'AUTO_RESPONSE_NO_APPROVAL' }
 });
         score -= 15;
       // Update state with validation results
-      setState(prev => ({)
+      setState(prev => ({ )
   ...prev,
   isValidating: false,
   validationErrors: errors,
   validationWarnings: warnings,
-  securityScore: Math.max(0, Math.min(100, score)),
+  securityScore: Math.max(0, Math.min(100, score)) }
 }));
       // Notify about validation errors
-      if (errors.length > 0 && onValidationError) {
-        onValidationError(errors);
-      return errors.length === 0;
-    } catch (error) {
-  setState(prev => ({)
+      if (errors.length > 0 && onValidationError) { onValidationError(errors);
+      return errors.length === 0 } catch (error) { setState(prev => ({)
   ...prev,
   isValidating: false,
   validationErrors: [{,
   field: 'general',
   message: 'Configuration validation failed',
   severity: 'error',
-  code: 'VALIDATION_ERROR',
-}],
+  code: 'VALIDATION_ERROR' }
+],
         securityScore: 0;
   }));
       return false;
@@ -301,26 +285,22 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   const newConfig = { ...prev.config, ...updates };
       const hasChanges = JSON.stringify(newConfig) !== JSON.stringify(prev.originalConfig);
       // Log changes
-      Object.keys(updates).forEach(key => {)
+      Object.keys(updates).forEach(key => { )
   const field = key as keyof SecurityAlertingConfig;
         if (prev.config[field] !== updates[field]) {
-          logConfigChange(field, prev.config[field], updates[field]);
-      });
-      return {
-  ...prev,
-  config: newConfig,
-  hasUnsavedChanges: hasChanges,
-  configVersion: prev.configVersion + 1,
+          logConfigChange(field, prev.config[field], updates[field]) });
+      return { ...prev
+  config: newConfig
+  hasUnsavedChanges: hasChanges
+  configVersion: prev.configVersion + 1 }
 };
     });
     // Trigger change callback
     if (onConfigChange) {
       onConfigChange({ ...state.config, ...updates });
     // Debounced validation
-    if (validationTimerRef.current) {
-      clearTimeout(validationTimerRef.current);
-    validationTimerRef.current = setTimeout(validateConfig, validationDebounce);
-  }, [state.config, logConfigChange, onConfigChange, validateConfig, validationDebounce]);
+    if (validationTimerRef.current) { clearTimeout(validationTimerRef.current);
+    validationTimerRef.current = setTimeout(validateConfig, validationDebounce) }, [state.config, logConfigChange, onConfigChange, validateConfig, validationDebounce]);
   // Update escalation thresholds
   const updateEscalationThresholds = useCallback((thresholds: Partial<EscalationThresholds>) => {
     updateConfig({)
@@ -328,15 +308,13 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
     });
   }, [state.config.escalationThresholds, updateConfig]);
   // Add correlation rule
-  const addCorrelationRule = useCallback((rule: CorrelationRule) => {
-  updateConfig({)
-  correlationRules: [...state.config.correlationRules, rule],
+  const addCorrelationRule = useCallback((rule: CorrelationRule) => { updateConfig({)
+  correlationRules: [...state.config.correlationRules, rule] }
 });
   }, [state.config.correlationRules, updateConfig]);
   // Remove correlation rule
-  const removeCorrelationRule = useCallback((ruleId: string) => {
-  updateConfig({)
-  correlationRules: state.config.correlationRules.filter(rule => rule.id !== ruleId),
+  const removeCorrelationRule = useCallback((ruleId: string) => { updateConfig({)
+  correlationRules: state.config.correlationRules.filter(rule => rule.id !== ruleId) }
 });
   }, [state.config.correlationRules, updateConfig]);
   // Update response automation
@@ -358,103 +336,90 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
       // Simulate API call to save configuration
       await new Promise(resolve => setTimeout(resolve, 1000));
       // Log successful save
-      if (securityLoggerRef.current) {
-  securityLoggerRef.current.logSecurityEvent({)
-  type: SecurityEventType.SECURITY_ALERT,
-  level: LogLevel.INFO,
-  message: 'Security alerting configuration saved',
+      if (securityLoggerRef.current) { securityLoggerRef.current.logSecurityEvent({)
+  type: SecurityEventType.SECURITY_ALERT
+  level: LogLevel.INFO
+  message: 'Security alerting configuration saved'
   details: {
-  configId,
-  configVersion: state.configVersion,
-  timestamp: new Date().toISOString(),
+  configId
+  configVersion: state.configVersion
+  timestamp: new Date().toISOString() }
 });
-      setState(prev => ({)
-  ...prev,
-        isSaving: false,
-        hasUnsavedChanges: false,
-        lastSaved: new Date(),
+      setState(prev => ({ )
+  ...prev
+        isSaving: false
+        hasUnsavedChanges: false
+        lastSaved: new Date() }
         originalConfig: { ...prev.config }
       }));
-      if (onSaveSuccess) {
-        onSaveSuccess();
-      return true;
-    } catch (error) {
+      if (onSaveSuccess) { onSaveSuccess();
+      return true } catch (error) {
       setState(prev => ({ ...prev, isSaving: false }));
-      if (onSaveError && error instanceof Error) {
-        onSaveError(error);
-      return false;
-  }, [state.isSaving, state.configVersion, validateConfig, configId, onSaveSuccess, onSaveError]);
+      if (onSaveError && error instanceof Error) { onSaveError(error);
+      return false }, [state.isSaving, state.configVersion, validateConfig, configId, onSaveSuccess, onSaveError]);
   // Reset configuration
-  const resetConfig = useCallback(() => {
-    setState(prev => ({)
-  ...prev,
-      config: { ...DEFAULT_CONFIG },
-      hasUnsavedChanges: JSON.stringify(DEFAULT_CONFIG) !== JSON.stringify(prev.originalConfig),
-      configVersion: prev.configVersion + 1,
-      validationErrors: [],
-      validationWarnings: [],
+  const resetConfig = useCallback(() => { setState(prev => ({)
+  ...prev }
+      config: { ...DEFAULT_CONFIG }
+      hasUnsavedChanges: JSON.stringify(DEFAULT_CONFIG) !== JSON.stringify(prev.originalConfig)
+      configVersion: prev.configVersion + 1
+      validationErrors: []
+      validationWarnings: []
       securityScore: 100;
   }));
   }, []);
   // Revert changes
-  const revertChanges = useCallback(() => {
-    setState(prev => ({)
-  ...prev,
-      config: { ...prev.originalConfig },
-      hasUnsavedChanges: false,
-      configVersion: prev.configVersion + 1,
-      validationErrors: [],
-      validationWarnings: [],
+  const revertChanges = useCallback(() => { setState(prev => ({)
+  ...prev }
+      config: { ...prev.originalConfig }
+      hasUnsavedChanges: false
+      configVersion: prev.configVersion + 1
+      validationErrors: []
+      validationWarnings: []
       securityScore: 100;
   }));
   }, []);
   // Export configuration
-  const exportConfig = useCallback((): string => {
-  return JSON.stringify({)
-  config: state.config,
+  const exportConfig = useCallback((): string => { return JSON.stringify({)
+  config: state.config
   metadata: {
-  version: state.configVersion,
-  exported: new Date().toISOString(),
+  version: state.configVersion
+  exported: new Date().toISOString() }
   configId
 }, null, 2);
   }, [state.config, state.configVersion, configId]);
   // Import configuration
-  const importConfig = useCallback((configJson: string): boolean => {
-    try {
+  const importConfig = useCallback((configJson: string): boolean => { try {
       const imported = JSON.parse(configJson);
       if (imported.config && typeof imported.config === 'object') {
         setState(prev => ({)
-  ...prev,
-          config: { ...DEFAULT_CONFIG, ...imported.config },
-          hasUnsavedChanges: true,
+  ...prev }
+          config: { ...DEFAULT_CONFIG, ...imported.config }
+          hasUnsavedChanges: true
           configVersion: prev.configVersion + 1;
   }));
         return true;
       return false;
-    } catch (error) {
-      return false;
-  }, []);
+ catch (error) { return false }, []);
   // Get configuration diff
   const getConfigDiff = useCallback((): Partial<SecurityAlertingConfig> => {
     const diff: Partial<SecurityAlertingConfig> = {};
-    Object.keys(state.config).forEach(key => {)
+    Object.keys(state.config).forEach(key => { )
   const field = key as keyof SecurityAlertingConfig;
       if (JSON.stringify(state.config[field]) !== JSON.stringify(state.originalConfig[field])) {
-        diff[field] = state.config[field] as any;
-    });
+        diff[field] = state.config[field] as any });
     return diff;
   }, [state.config, state.originalConfig]);
   // Get validation summary
-  const getValidationSummary = useCallback(() => ({)
-  hasErrors: state.validationErrors.length > 0,
-  hasWarnings: state.validationWarnings.length > 0,
-  errorCount: state.validationErrors.length,
-  warningCount: state.validationWarnings.length,
-  score: state.securityScore,
+  const getValidationSummary = useCallback(() => ({ )
+  hasErrors: state.validationErrors.length > 0
+  hasWarnings: state.validationWarnings.length > 0
+  errorCount: state.validationErrors.length
+  warningCount: state.validationWarnings.length
+  score: state.securityScore }
 }), [state.validationErrors.length, state.validationWarnings.length, state.securityScore]);
   // Get recommendations
-  const getRecommendations = useCallback((): ConfigRecommendation => {
-  const recommendations: ConfigRecommendation = [];
+  const getRecommendations = useCallback((): ConfigRecommendation => { const recommendations: ConfigRecommendation = [];
   // Alert retention recommendation
   if (state.config.alertRetentionDays < 90) {
   recommendations.push({)
@@ -463,55 +428,46 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   recommended: 90,
   reason: 'Longer retention period improves forensic analysis capabilities',
   impact: 'compliance',
-  priority: 'medium',
+  priority: 'medium' }
 });
     // Real-time analytics recommendation
-    if (!state.config.enableRealTimeAnalytics) {
-  recommendations.push({)
+    if (!state.config.enableRealTimeAnalytics) { recommendations.push({)
   field: 'enableRealTimeAnalytics',
   current: false,
   recommended: true,
   reason: 'Real-time analytics essential for rapid threat detection',
   impact: 'security',
-  priority: 'high',
+  priority: 'high' }
 });
     // Machine learning recommendation
-    if (!state.config.machinelearningEnabled) {
-  recommendations.push({)
+    if (!state.config.machinelearningEnabled) { recommendations.push({)
   field: 'machinelearningEnabled',
   current: false,
   recommended: true,
   reason: 'ML analysis improves accuracy of threat detection',
   impact: 'security',
-  priority: 'medium',
+  priority: 'medium' }
 });
     return recommendations;
   }, [state.config]);
   // Auto-save functionality
-  useEffect(() => {
-    if (autoSave && state.hasUnsavedChanges && !state.isSaving) {
+  useEffect(() => { if (autoSave && state.hasUnsavedChanges && !state.isSaving) {
       if (autoSaveTimerRef.current) {
         clearTimeout(autoSaveTimerRef.current);
       autoSaveTimerRef.current = setTimeout(() => {
-        saveConfig();
-      }, autoSaveInterval);
-    return () => {
-      if (autoSaveTimerRef.current) {
-        clearTimeout(autoSaveTimerRef.current);
-    };
+        saveConfig() }, autoSaveInterval);
+    return () => { if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current) };
   }, [autoSave, state.hasUnsavedChanges, state.isSaving, autoSaveInterval, saveConfig]);
   // Cleanup
-  useEffect(() => {
-    return () => {
+  useEffect(() => { return () => {
       if (autoSaveTimerRef.current) {
         clearTimeout(autoSaveTimerRef.current);
       if (validationTimerRef.current) {
-        clearTimeout(validationTimerRef.current);
-    };
+        clearTimeout(validationTimerRef.current) };
   }, []);
-  return {
-  state,
-  actions: {
+  return { state,
+  actions: {,
   updateConfig,
   updateEscalationThresholds,
   addCorrelationRule,
@@ -521,12 +477,11 @@ export const useSecurityAlertingConfig = (initialConfig?: SecurityAlertingConfig
   saveConfig,
   resetConfig,
   revertChanges,
-  exportConfig,
+  exportConfig }
   importConfig
 },
-  utils: {
-      getConfigDiff,
-      getValidationSummary,
+  utils: { getConfigDiff,
+      getValidationSummary }
       getRecommendations
   };
 };

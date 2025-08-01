@@ -541,8 +541,7 @@ for (const attempts of this.attempts.values()) {
                                             ;
                                             a => a.timestamp > new Date(Date.now() - 5 * 60 * 1000);
                                         }, : .length,
-                                        if(last5MinuteAttempts) { }
-                                    } > 10, threatScore, 20: ,
+                                        if(last5MinuteAttempts) { } } > 10, threatScore, 20: ,
                                     // Multiple endpoints increase threat
                                     const: uniqueEndpoints = new Set(recentAttempts.map(a => a.endpoint)).size,
                                     if(uniqueEndpoints) { }
@@ -647,11 +646,7 @@ for (const attempts of this.attempts.values()) {
                             const: now = new Date(),
                             // Check per-second limit
                             const: lastSecond = attempts.filter(a => a.timestamp > new Date(now.getTime() - 1000)),
-                            if(lastSecond) { }, : .length >= limits.perSecond
-                        }
-                    }
-                }
-            }
+                            if(lastSecond) { }, : .length >= limits.perSecond } } } }
         };
         {
             return {

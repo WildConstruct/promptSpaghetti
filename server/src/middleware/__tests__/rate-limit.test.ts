@@ -28,59 +28,59 @@ class MockRedisService {
   async get(key: string): Promise<string | null> {
 
     return this.client.get(key);
-  }
+
 
   async set(key: string, value: string): Promise<void> {
 
     await this.client.set(key, value);
-  }
+
 
   async setex(key: string, seconds: number, value: string): Promise<void> {
 
     await this.client.set(key, value, { EX: seconds });
-  }
+
 
   async exists(key: string): Promise<boolean> {
 
     const value = await this.client.get(key);
     return value !== null;
-  }
+
 
   async del(key: string): Promise<void> {
 
     await this.client.del(key);
-  }
+
 
   async incr(key: string): Promise<number> {
 
     return this.client.incr(key);
-  }
+
 
   async expire(key: string, seconds: number): Promise<void> {
 
     await this.client.expire(key, seconds);
-  }
+
 
   async ttl(key: string): Promise<number> {
 
     return this.client.ttl(key);
-  }
+
 
   async healthCheck(): Promise<boolean> {
 
     const pong = await this.client.ping();
     return pong === 'PONG';
-  }
+
 
   async close(): Promise<void> {
 
     await this.client.quit();
-  }
+
 
   getClient() {
     return this.client as any;
-  }
-}
+
+
 
 describe('RateLimitMiddleware', () => {
   let fastify: FastifyInstance;
@@ -102,7 +102,7 @@ describe('RateLimitMiddleware', () => {
         defaultConfig: {
           windowMs: 60000,
           maxRequests: 5
-        }
+
       });
 
       await fastify.register(createRateLimitPlugin({ redis: mockRedis as any }));
@@ -111,7 +111,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 5
-  }
+
       }, async (request, reply) => {
         return { success: true };
       });
@@ -123,12 +123,12 @@ describe('RateLimitMiddleware', () => {
           url: '/test',
           headers: {
             'x-forwarded-for': '192.168.1.100'
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
         expect(response.headers['ratelimit-remaining']).toBe(String(4 - i));
-      }
+
     });
 
     it('should block requests over the limit', async () => {
@@ -138,14 +138,14 @@ describe('RateLimitMiddleware', () => {
           windowMs: 60000,
           maxRequests: 3,
           standardHeaders: true
-        }
+
       });
 
       fastify.get('/test', {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 3
-  }
+
       }, async (request, reply) => {
         return { success: true };
       });
@@ -157,17 +157,17 @@ describe('RateLimitMiddleware', () => {
           url: '/test',
           headers: {
             'x-forwarded-for': '192.168.1.100'
-          }
+
         });
 
         if (i < 3) {
           expect(response.statusCode).toBe(200);
-        } else {
+ else {
           expect(response.statusCode).toBe(429);
           expect(response.json()).toHaveProperty('error', 'Too Many Requests');
           expect(response.headers['retry-after']).toBeDefined();
-        }
-      }
+
+
     });
   });
 
@@ -179,14 +179,14 @@ describe('RateLimitMiddleware', () => {
         defaultConfig: {
           windowMs: 60000,
           maxRequests: 2
-        }
+
       });
 
       fastify.get('/test', {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 2
-  }
+
       }, async (request, reply) => {
         return { success: true };
       });
@@ -197,7 +197,7 @@ describe('RateLimitMiddleware', () => {
         url: '/test',
         headers: {
           'x-forwarded-for': '192.168.1.100'
-        }
+
       });
 
       const response2 = await fastify.inject({
@@ -205,7 +205,7 @@ describe('RateLimitMiddleware', () => {
         url: '/test',
         headers: {
           'x-forwarded-for': '192.168.1.101'
-        }
+
       });
 
       expect(response1.statusCode).toBe(200);
@@ -221,14 +221,14 @@ describe('RateLimitMiddleware', () => {
         defaultConfig: {
           windowMs: 60000,
           maxRequests: 2
-        }
+
       });
 
       fastify.get('/test', {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 2
-  }
+
       }, async (request, reply) => {
         return { success: true };
       });
@@ -238,7 +238,7 @@ describe('RateLimitMiddleware', () => {
         url: '/test',
         headers: {
           'x-forwarded-for': '192.168.1.100'
-  }
+
         remoteAddress: '127.0.0.1'
       });
 
@@ -254,7 +254,7 @@ describe('RateLimitMiddleware', () => {
           windowMs: 60000,
           maxRequests: 5,
           keyGenerator: (context) => `user:${context.userId || 'anonymous'}`
-        }
+
       });
 
       // Add auth middleware to set userId
@@ -266,7 +266,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 2
-  }
+
       }, async (request, reply) => {
         return { success: true, userId: request.userId };
       });
@@ -278,10 +278,10 @@ describe('RateLimitMiddleware', () => {
           url: '/test',
           headers: {
             'x-user-id': 'user1'
-          }
+
         });
         expect(response.statusCode).toBe(200);
-      }
+
 
       // User 1's 3rd request should be blocked
       const blockedResponse = await fastify.inject({
@@ -289,7 +289,7 @@ describe('RateLimitMiddleware', () => {
         url: '/test',
         headers: {
           'x-user-id': 'user1'
-        }
+
       });
       expect(blockedResponse.statusCode).toBe(429);
 
@@ -299,7 +299,7 @@ describe('RateLimitMiddleware', () => {
         url: '/test',
         headers: {
           'x-user-id': 'user2'
-        }
+
       });
       expect(user2Response.statusCode).toBe(200);
     });
@@ -321,16 +321,16 @@ describe('RateLimitMiddleware', () => {
           config: {
             windowMs: 900000, // 15 minutes
             maxRequests: 3
-          }
-  }
+
+
         {
           path: '/api/data',
           method: 'GET',
           config: {
             windowMs: 60000, // 1 minute
             maxRequests: 100
-          }
-        }
+
+
       ]);
 
       fastify.post('/api/auth/login', async () => ({ success: true }));
@@ -346,10 +346,10 @@ describe('RateLimitMiddleware', () => {
 
         if (i < 3) {
           expect(response.statusCode).toBe(200);
-        } else {
+ else {
           expect(response.statusCode).toBe(429);
-        }
-      }
+
+
 
       // Test data endpoint (lenient limit)
       for (let i = 0; i < 10; i++) {
@@ -359,7 +359,7 @@ describe('RateLimitMiddleware', () => {
           headers: { 'x-forwarded-for': '192.168.1.100' }
         });
         expect(response.statusCode).toBe(200);
-      }
+
     });
   });
 
@@ -383,7 +383,7 @@ describe('RateLimitMiddleware', () => {
             field: 'user-agent',
             operator: 'contains',
             value: 'bot'
-          }
+
         ],
         windowMs: 60000,
         maxRequests: 10,
@@ -401,7 +401,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 100 // Default limit
-  }
+
       }, async () => ({ success: true }));
 
       // Normal user agent - should have high limit
@@ -411,7 +411,7 @@ describe('RateLimitMiddleware', () => {
         headers: {
           'user-agent': 'Mozilla/5.0',
           'x-forwarded-for': '192.168.1.100'
-        }
+
       });
       expect(normalResponse.statusCode).toBe(200);
       expect(normalResponse.headers['ratelimit-limit']).toBe('100');
@@ -423,7 +423,7 @@ describe('RateLimitMiddleware', () => {
         headers: {
           'user-agent': 'Googlebot/2.1',
           'x-forwarded-for': '192.168.1.101'
-        }
+
       });
       expect(botResponse.statusCode).toBe(200);
       expect(botResponse.headers['ratelimit-limit']).toBe('10');
@@ -443,14 +443,14 @@ describe('RateLimitMiddleware', () => {
         defaultConfig: {
           windowMs: 60000,
           maxRequests: 1
-        }
+
       });
 
       fastify.get('/test', {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 1
-  }
+
       }, async () => ({ success: true }));
 
       // Should allow requests even though Redis is down
@@ -470,7 +470,7 @@ describe('RateLimitMiddleware', () => {
         errorHandler: (error, request, reply) => {
           errorHandlerCalled = true;
           reply.code(503).send({ error: 'Service unavailable' });
-        }
+
       });
 
       // Force an error by providing invalid configuration
@@ -500,20 +500,20 @@ describe('RateLimitMiddleware', () => {
         defaultConfig: {
           windowMs: 60000,
           maxRequests: 2
-        }
+
       });
 
       fastify.get('/test', {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 2
-  }
+
       }, async (request, reply) => {
         if ((request.query as any).fail) {
           reply.code(400).send({ error: 'Bad request' });
-        } else {
+ else {
           return { success: true };
-        }
+
       });
 
       // Failed requests shouldn't count
@@ -524,7 +524,7 @@ describe('RateLimitMiddleware', () => {
           headers: { 'x-forwarded-for': '192.168.1.100' }
         });
         expect(response.statusCode).toBe(400);
-      }
+
 
       // Successful requests should still be limited
       const successResponse = await fastify.inject({
@@ -560,11 +560,11 @@ describe('RateLimitMiddleware', () => {
 
         if (i < preset.maxRequests) {
           expect(response.statusCode).toBe(200);
-        } else {
+ else {
           expect(response.statusCode).toBe(429);
           expect(response.json().message).toContain('authentication');
-        }
-      }
+
+
     });
   });
 
@@ -598,7 +598,7 @@ describe('RateLimitMiddleware', () => {
           maxRequests: 100,
           standardHeaders: true,
           legacyHeaders: true
-  }
+
       }, async () => ({ success: true }));
 
       const response = await fastify.inject({
@@ -650,7 +650,7 @@ describe('RateLimitPlugin', () => {
       defaultConfig: {
         windowMs: 60000,
         maxRequests: 100
-      }
+
     }));
 
     expect(fastify.hasDecorator('rateLimit')).toBe(true);
@@ -663,7 +663,7 @@ describe('RateLimitPlugin', () => {
       defaultConfig: {
         windowMs: 60000,
         maxRequests: 2
-      }
+
     }));
 
     fastify.get('/test', async () => ({ success: true }));
@@ -678,10 +678,10 @@ describe('RateLimitPlugin', () => {
 
       if (i < 2) {
         expect(response.statusCode).toBe(200);
-      } else {
+ else {
         expect(response.statusCode).toBe(429);
-      }
-    }
+
+
   });
 
   it('should skip health check endpoints', async () => {
@@ -690,7 +690,7 @@ describe('RateLimitPlugin', () => {
       defaultConfig: {
         windowMs: 60000,
         maxRequests: 1
-      }
+
     }));
 
     fastify.get('/health', async () => ({ status: 'ok' }));
@@ -702,6 +702,6 @@ describe('RateLimitPlugin', () => {
         url: '/health'
       });
       expect(response.statusCode).toBe(200);
-    }
+
   });
 });

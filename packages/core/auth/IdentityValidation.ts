@@ -12,22 +12,22 @@
  * - Real-time verification status tracking
  */
 
-}
-export interface IdentityValidationRequest {
-  userId: string;
+
+export interface IdentityValidationRequest { userId: string;
   requestId: string;
   timestamp: number;
   type: IdentityValidationType;
   data: IdentityValidationData;
   status: ValidationStatus;
-  metadata: {
+  metadata: {;
   ipAddress: string;
   userAgent: string;
   sessionId: string;
-  requestSource: 'profile_setup' | 'manual_request' | 'system_triggered'
-}
+  requestSource: 'profile_setup' | 'manual_request' | 'system_triggered' }
+
+
   };
-}
+
 export type IdentityValidationType = 
   | 'basic_profile'
   | 'email_verification'
@@ -48,73 +48,67 @@ export type ValidationStatus =
   | 'expired'
   | 'requires_update';
 
-}
-export interface IdentityValidationData {
-  // Basic Profile Data
+
+export interface IdentityValidationData { // Basic Profile Data
   fullName?: string;
   dateOfBirth?: string;
   profilePhoto?: string;
   // Contact Information
   email?: string;
   phoneNumber?: string;
-  address?: {
+  address?: { }
   street: string;
   city: string;
   state: string;
   postalCode: string;
   country: string;
-}
+
+
 };
   // Government ID
-  governmentId?: {
-  type: 'passport' | 'drivers_license' | 'national_id';
+  governmentId?: { type: 'passport' | 'drivers_license' | 'national_id';,
   number: string;
   expirationDate: string;
   issuingAuthority: string;
-  documentImages: string; // Base64 or file URLs,
+  documentImages: string; // Base64 or file URLs }
 };
   // Professional Information
-  professionalCredentials?: {
-  role: 'director' | 'producer' | 'screenwriter' | 'cinematographer' | 'editor' | 'other';
+  professionalCredentials?: { role: 'director' | 'producer' | 'screenwriter' | 'cinematographer' | 'editor' | 'other' }
   experience: 'student' | 'emerging' | 'professional' | 'veteran';
   credentials: ProfessionalCredential;
   portfolio: PortfolioItem;
 };
   // Industry Affiliations
-  industryAffiliations?: {
-  unions: string; // DGA, WGA, etc.,
-  organizations: string; // Film societies, etc.,
+  industryAffiliations?: { unions: string; // DGA, WGA, etc.,
+  organizations: string; // Film societies, etc. }
   certifications: Certification;
 };
   // Social Media Verification
-  socialMediaProfiles?: {
-  platform: 'linkedin' | 'twitter' | 'instagram' | 'imdb' | 'website';
+  socialMediaProfiles?: { platform: 'linkedin' | 'twitter' | 'instagram' | 'imdb' | 'website' }
   url: string;
   verified: boolean;
   followerCount?: number;
   verificationDate?: number;
-}[];
+[];
   // Payment Method
-  paymentMethod?: {
-  type: 'bank_account' | 'credit_card' | 'paypal';
+  paymentMethod?: { type: 'bank_account' | 'credit_card' | 'paypal' }
   last4: string;
   verified: boolean;
   country: string;
 };
-}
-}
-export interface ProfessionalCredential {
-  type: 'degree' | 'certificate' | 'award' | 'credit';
+
+
+export interface ProfessionalCredential { type: 'degree' | 'certificate' | 'award' | 'credit' }
   title: string;
   institution: string;
   year: number;
   verificationStatus: ValidationStatus;
   documentUrl?: string;
-}
-}
-}
-export interface PortfolioItem {
-  type: 'film' | 'video' | 'demo_reel' | 'template' | 'project';
+
+
+
+
+export interface PortfolioItem { type: 'film' | 'video' | 'demo_reel' | 'template' | 'project' }
   title: string;
   description: string;
   url?: string;
@@ -123,68 +117,67 @@ export interface PortfolioItem {
   role: string;
   verificationStatus: ValidationStatus;
   imdbUrl?: string;
-}
-}
-}
-export interface Certification {
-  name: string;
+
+
+
+
+export interface Certification { name: string;
   issuingBody: string;
   certificationNumber?: string;
   issueDate: number;
   expirationDate?: number;
-  verificationStatus: ValidationStatus;
-}
-}
-}
-export interface ValidationResult {
-  requestId: string;
+  verificationStatus: ValidationStatus }
+
+
+
+export interface ValidationResult { requestId: string;
   userId: string;
   type: IdentityValidationType;
   status: ValidationStatus;
-  score: number; // 0-100,
-  confidence: number; // 0-100,
+  score: number; // 0-100;
+  confidence: number; // 0-100 }
   verifiedAt: number;
   expiresAt?: number;
   evidence: ValidationEvidence;
   flags: ValidationFlag;
   reviewNotes?: string;
   nextSteps?: string;
-}
-}
-}
-export interface ValidationEvidence {
-  type: 'document_scan' | 'api_verification' | 'manual_review' | 'third_party_check';
+
+
+
+
+export interface ValidationEvidence { type: 'document_scan' | 'api_verification' | 'manual_review' | 'third_party_check' }
   source: string;
   confidence: number;
   timestamp: number;
   data: Record<string, unknown>;
-}
-}
-}
-export interface ValidationFlag {
-  type: 'warning' | 'error' | 'info';
+
+
+
+
+export interface ValidationFlag { type: 'warning' | 'error' | 'info' }
   code: string;
   message: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   requiresAction: boolean;
-}
-}
-}
-export interface TrustScore {
-  overall: number; // 0-100,
-  components: {
+
+
+
+
+export interface TrustScore { overall: number; // 0-100;
+  components: { }
   identity: number;
   professional: number;
   community: number;
   activity: number;
-}
+
+
 };
-  tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
+  tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';,
   badges: string;
   lastUpdated: number;
-}
-export class IdentityValidationService {
-  private validationRequests: Map<string, IdentityValidationRequest> = new Map();
+
+export class IdentityValidationService { private validationRequests: Map<string, IdentityValidationRequest> = new Map();
   private validationResults: Map<string, ValidationResult> = new Map();
   private userTrustScores: Map<string, TrustScore> = new Map();
   // Third-party service integrations (mocked for now)
@@ -196,38 +189,34 @@ export class IdentityValidationService {
     this.initializeMockData();
   private initializeMockData(): void {
     // Initialize with sample verified users
-    const sampleUsers = [;
+    const sampleUsers = [
       {
-        userId: 'creator-johnsmith',
+        userId: 'creator-johnsmith'
         trustScore: {
-  overall: 92,
-          components: { identity: 95, professional: 90, community: 88, activity: 95 },
-          tier: 'professional' as const,
-          badges: ['verified_director', 'portfolio_verified', 'industry_member'],
+  overall: 92 }
+          components: { identity: 95, professional: 90, community: 88, activity: 95 }
+          tier: 'professional' as const
+          badges: ['verified_director', 'portfolio_verified', 'industry_member']
           lastUpdated: Date.now();
-  }
-      {
-        userId: 'creator-maryjones',
+
+      { userId: 'creator-maryjones'
         trustScore: {
-  overall: 88,
-          components: { identity: 90, professional: 85, community: 92, activity: 85 },
-          tier: 'verified' as const,
-          badges: ['verified_email', 'portfolio_verified', 'social_verified'],
+  overall: 88 }
+          components: { identity: 90, professional: 85, community: 92, activity: 85 }
+          tier: 'verified' as const
+          badges: ['verified_email', 'portfolio_verified', 'social_verified']
           lastUpdated: Date.now()];
-    sampleUsers.forEach(user => {)
-  this.userTrustScores.set(user.userId, user.trustScore);
-    });
+    sampleUsers.forEach(user => { )
+  this.userTrustScores.set(user.userId, user.trustScore) });
   /**
    * Submit identity validation request
    */
   public async submitValidationRequest(
-    userId: string,
-    type: IdentityValidationType,
-    data: Partial<IdentityValidationData>,
+    userId: string
+    type: IdentityValidationType
+    data: Partial<IdentityValidationData>
     metadata: Partial<IdentityValidationRequest['metadata']> = {}
-  ): Promise<{ requestId: string; status: ValidationStatus }> {
-
-  const requestId = this.generateRequestId();
+  ): Promise<{ requestId: string; status: ValidationStatus }> { const requestId = this.generateRequestId();
   const request: IdentityValidationRequest = {,
   userId,
   requestId,
@@ -235,19 +224,17 @@ export class IdentityValidationService {
   type,
   data: data as IdentityValidationData,
   status: 'pending',
-  metadata: {
+  metadata: {,
   ipAddress: metadata.ipAddress || '127.0.0.1',
   userAgent: metadata.userAgent || 'Unknown',
   sessionId: metadata.sessionId || 'session_' + Date.now(),
-  requestSource: metadata.requestSource || 'manual_request',
+  requestSource: metadata.requestSource || 'manual_request' }
 };
     this.validationRequests.set(requestId, request);
     // Start validation process asynchronously
     this.processValidationRequest(requestId);
     return { requestId, status: 'pending' };
-  private async processValidationRequest(requestId: string): Promise<void> {
-
-    const request = this.validationRequests.get(requestId);
+  private async processValidationRequest(requestId: string): Promise<void> { const request = this.validationRequests.get(requestId);
     if (!request) return;
     // Update status to in_review
     request.status = 'in_review';
@@ -259,59 +246,56 @@ export class IdentityValidationService {
       request.status = result.status;
       this.validationRequests.set(requestId, request);
       // Update user trust score
-      await this.updateUserTrustScore(request.userId);
-    } catch (error) {
-  console.error('Validation processing error:', error);
+      await this.updateUserTrustScore(request.userId) } catch (error) { console.error('Validation processing error:', error);
   request.status = 'rejected';
   this.validationRequests.set(requestId, request);
-  private async performValidation(request: IdentityValidationRequest): Promise<ValidationResult> {,
+  private async performValidation(request: IdentityValidationRequest): Promise<ValidationResult> {
   const evidence: ValidationEvidence = [];
   const flags: ValidationFlag = [];
   let score = 0;
   let confidence = 0;
   switch (request.type) {
-  case 'email_verification':,
+  case 'email_verification':
   const emailResult = await this.emailVerificationService.verify(request.data.email!);
   evidence.push({)
-  type: 'api_verification',
-  source: 'email_service',
-  confidence: emailResult.confidence,
-  timestamp: Date.now(),
-  data: emailResult,
+  type: 'api_verification'
+  source: 'email_service'
+  confidence: emailResult.confidence
+  timestamp: Date.now()
+  data: emailResult }
 });
       score = emailResult.valid ? 95 : 10;
       confidence = emailResult.confidence;
       break;
     case 'phone_verification':
       const phoneResult = await this.phoneVerificationService.verify(request.data.phoneNumber!);
-      evidence.push({)
-  type: 'api_verification',
-  source: 'phone_service',
-  confidence: phoneResult.confidence,
-  timestamp: Date.now(),
-  data: phoneResult,
+      evidence.push({ )
+  type: 'api_verification'
+  source: 'phone_service'
+  confidence: phoneResult.confidence
+  timestamp: Date.now()
+  data: phoneResult }
 });
       score = phoneResult.valid ? 90 : 10;
       confidence = phoneResult.confidence;
       break;
     case 'government_id':
       const docResult = await this.documentVerificationService.verify(request.data.governmentId!);
-      evidence.push({)
-  type: 'document_scan',
-  source: 'document_service',
-  confidence: docResult.confidence,
-  timestamp: Date.now(),
-  data: docResult,
+      evidence.push({ )
+  type: 'document_scan'
+  source: 'document_service'
+  confidence: docResult.confidence
+  timestamp: Date.now()
+  data: docResult }
 });
       score = docResult.valid ? 98 : 5;
       confidence = docResult.confidence;
-      if (docResult.expired) {
-  flags.push({)
-  type: 'warning',
-  code: 'DOCUMENT_EXPIRED',
-  message: 'Government ID has expired',
-  severity: 'high',
-  requiresAction: true,
+      if (docResult.expired) { flags.push({)
+  type: 'warning'
+  code: 'DOCUMENT_EXPIRED'
+  message: 'Government ID has expired'
+  severity: 'high'
+  requiresAction: true }
 });
         score = Math.max(score - 30, 20);
       break;
@@ -323,12 +307,12 @@ export class IdentityValidationService {
       const socialResult = await this.socialMediaVerificationService.verify(;);
           request.data.socialMediaProfiles!
       );
-      evidence.push({)
-  type: 'api_verification',
-  source: 'social_media_service',
-  confidence: socialResult.confidence,
-  timestamp: Date.now(),
-  data: socialResult,
+      evidence.push({ )
+  type: 'api_verification'
+  source: 'social_media_service'
+  confidence: socialResult.confidence
+  timestamp: Date.now()
+  data: socialResult }
 });
       score = socialResult.averageScore;
       confidence = socialResult.confidence;
@@ -337,11 +321,11 @@ export class IdentityValidationService {
       // Basic validation for other types
       score = 70;
       confidence = 80;
-      evidence.push({)
-  type: 'manual_review',
-        source: 'basic_validation',
-        confidence: 80,
-        timestamp: Date.now(),
+      evidence.push({ )
+  type: 'manual_review'
+        source: 'basic_validation'
+        confidence: 80
+        timestamp: Date.now() }
         data: { type: request.type }
       });
     // Determine status based on score and flags
@@ -350,8 +334,7 @@ export class IdentityValidationService {
     const highFlags = flags.filter(f => f.severity === 'high');
     if (criticalFlags.length > 0 || score < 30) {
       status = 'rejected'
-  } else if (highFlags.length > 0 || score < 60) {
-  status = 'requires_update';
+ else if (highFlags.length > 0 || score < 60) { status = 'requires_update';
   return {
   requestId: request.requestId,
   userId: request.userId,
@@ -364,14 +347,12 @@ export class IdentityValidationService {
   evidence,
   flags,
   reviewNotes: this.generateReviewNotes(score, flags),
-  nextSteps: this.generateNextSteps(status, flags),
+  nextSteps: this.generateNextSteps(status, flags) }
 };
   private async validateProfessionalCredentials(((
-    credentials: NonNullable<IdentityValidationData['professionalCredentials']>,
+    credentials: NonNullable<IdentityValidationData['professionalCredentials']>
     evidence: ValidationEvidence
-  ): Promise<number> {
-
-    let totalScore = 0;
+  ): Promise<number> { let totalScore = 0;
     let validCredentials = 0;
     // Validate each credential
     for (const credential of credentials.credentials) {
@@ -380,28 +361,27 @@ export class IdentityValidationService {
         validCredentials++;
         totalScore += credScore;
       evidence.push({)
-  type: 'manual_review',
-        source: 'credential_verification',
-        confidence: credScore,
-        timestamp: Date.now(),
+  type: 'manual_review'
+        source: 'credential_verification'
+        confidence: credScore
+        timestamp: Date.now() }
         data: { credential: credential.title, institution: credential.institution }
       });
     // Validate portfolio items
-    for (const item of credentials.portfolio) {
-  const portfolioScore = await this.validatePortfolioItem(item);
+    for (const item of credentials.portfolio) { const portfolioScore = await this.validatePortfolioItem(item);
   if (portfolioScore > 50) {
   validCredentials++;
   totalScore += portfolioScore * 0.8; // Portfolio weighted less than formal credentials
   return validCredentials > 0 ? totalScore / Math.max(validCredentials, 1) : 30;
-  private async validateSingleCredential(credential: ProfessionalCredential): Promise<number> {,
+  private async validateSingleCredential(credential: ProfessionalCredential): Promise<number> {
   // Mock credential validation logic
   let score = 50; // Base score;
   // Higher score for recognized institutions
-  const recognizedInstitutions = [;
-  'USC School of Cinematic Arts',
-  'NYU Tisch',
-  'AFI',
-  'UCLA School of Theater, Film and Television',
+  const recognizedInstitutions = [
+  'USC School of Cinematic Arts'
+  'NYU Tisch'
+  'AFI'
+  'UCLA School of Theater, Film and Television'
   'Chapman University'
   ];
   if (recognizedInstitutions.some(inst => )
@@ -429,7 +409,7 @@ export class IdentityValidationService {
   score += 10;
   break;
   return Math.min(score, 100);
-  private async validatePortfolioItem(item: PortfolioItem): Promise<number> {,
+  private async validatePortfolioItem(item: PortfolioItem): Promise<number> {
   let score = 40; // Base score;
   // Professional projects score higher
   if (item.type === 'film' && item.imdbUrl) {
@@ -458,15 +438,9 @@ export class IdentityValidationService {
   return now + (3 * oneYear); // 3 years
   default:,
   return now + oneYear;
-  private generateReviewNotes(score: number, flags: ValidationFlag): string {,
+  private generateReviewNotes(score: number, flags: ValidationFlag): string { }
   const notes = [];
-  if (score >= 90) {
-  notes.push('Excellent validation score with strong evidence.');
-} else if (score >= 70) {
-      notes.push('Good validation score with adequate evidence.');
-    } else if (score >= 50) {
-      notes.push('Fair validation score. Consider additional verification.');
-    } else {
+  if (score >= 90) { notes.push('Excellent validation score with strong evidence.') } else if (score >= 70) { notes.push('Good validation score with adequate evidence.') } else if (score >= 50) { notes.push('Fair validation score. Consider additional verification.') } else {
       notes.push('Low validation score. Requires improvement or additional evidence.');
     if (flags.length > 0) {
       notes.push(`${flags.length} validation flag(s) identified.`);}
@@ -492,14 +466,12 @@ export class IdentityValidationService {
   /**
    * Update user trust score based on validation results
    */
-  private async updateUserTrustScore(userId: string): Promise<void> {
-
-  const userValidations = Array.from(this.validationResults.values());
+  private async updateUserTrustScore(userId: string): Promise<void> { const userValidations = Array.from(this.validationResults.values());
   .filter(result => result.userId === userId && result.status === 'approved');
   if (userValidations.length === 0) return;
   const trustScore = this.calculateTrustScore(userValidations);
   this.userTrustScores.set(userId, trustScore);
-  private calculateTrustScore(validations: ValidationResult): TrustScore {,
+  private calculateTrustScore(validations: ValidationResult): TrustScore {
   let identityScore = 0;
   let professionalScore = 0;
   let communityScore = 0;
@@ -507,20 +479,20 @@ export class IdentityValidationService {
   const badges: string = [];
   validations.forEach(validation => {)
   switch (validation.type) {
-  case 'email_verification':,
-  case 'phone_verification':,
-  case 'government_id':,
-  case 'address_verification':,
+  case 'email_verification':
+  case 'phone_verification':
+  case 'government_id':
+  case 'address_verification':
   identityScore = Math.max(identityScore, validation.score);
   if (validation.score > 90) badges.push('verified_identity');
   break;
-  case 'professional_credentials':,
-  case 'industry_affiliation':,
-  case 'portfolio_verification':,
+  case 'professional_credentials':
+  case 'industry_affiliation':
+  case 'portfolio_verification':
   professionalScore = Math.max(professionalScore, validation.score);
   if (validation.score > 85) badges.push('verified_professional');
   break;
-  case 'social_media_verification':,
+  case 'social_media_verification': }
   communityScore = Math.max(communityScore, validation.score);
   if (validation.score > 80) badges.push('social_verified');
   break;
@@ -535,37 +507,35 @@ export class IdentityValidationService {
     else if (overall >= 80) tier = 'professional';
     else if (overall >= 65) tier = 'verified';
     else if (overall >= 40) tier = 'basic';
-    return {
-  overall,
+    return { overall
   components: {
-  identity: identityScore,
-  professional: professionalScore,
-  community: communityScore,
-  activity: activityScore,
-}
-      tier,
+  identity: identityScore
+  professional: professionalScore
+  community: communityScore
+  activity: activityScore }
+
+      tier
       badges: [...new Set(badges)], // Remove duplicates
       lastUpdated: Date.now();
   };
   /**
    * Get validation status for a request
    */
-  public getValidationStatus(requestId: string): IdentityValidationRequest | null {
-  return this.validationRequests.get(requestId) || null;
+  public getValidationStatus(requestId: string): IdentityValidationRequest | null { return this.validationRequests.get(requestId) || null;
   /**
   * Get validation result
   */
-  public getValidationResult(requestId: string): ValidationResult | null {,
+  public getValidationResult(requestId: string): ValidationResult | null {
   return this.validationResults.get(requestId) || null;
   /**
   * Get user's trust score
   */
-  public getUserTrustScore(userId: string): TrustScore | null {,
+  public getUserTrustScore(userId: string): TrustScore | null {
   return this.userTrustScores.get(userId) || null;
   /**
   * Get all validation requests for a user
   */
-  public getUserValidations(userId: string): IdentityValidationRequest {,
+  public getUserValidations(userId: string): IdentityValidationRequest {
   return Array.from(this.validationRequests.values())
   .filter(request => request.userId === userId)
   .sort((a, b) => b.timestamp - a.timestamp);
@@ -577,7 +547,7 @@ export class IdentityValidationService {
   approvedCount: number;
   pendingCount: number;
   rejectedCount: number;
-  trustScore: TrustScore | null;
+  trustScore: TrustScore | null
   completedValidations: IdentityValidationType;
   missingValidations: IdentityValidationType;
   const userRequests = this.getUserValidations(userId);
@@ -588,19 +558,19 @@ export class IdentityValidationService {
   const rejectedResults = userResults.filter(r => r.status === 'rejected');
   const completedValidations = approvedResults.map(r => r.type);
   const allValidationTypes: IdentityValidationType = [
-  'email_verification', 'phone_verification', 'government_id',
+  'email_verification', 'phone_verification', 'government_id'
   'professional_credentials', 'portfolio_verification', 'social_media_verification'
   ];
   const missingValidations = allValidationTypes.filter(type => ;);
   !completedValidations.includes(type)
   );
   return {
-  totalRequests: userRequests.length,
-  approvedCount: approvedResults.length,
-  pendingCount: pendingRequests.length,
-  rejectedCount: rejectedResults.length,
-  trustScore: this.getUserTrustScore(userId),
-  completedValidations,
+  totalRequests: userRequests.length
+  approvedCount: approvedResults.length
+  pendingCount: pendingRequests.length
+  rejectedCount: rejectedResults.length
+  trustScore: this.getUserTrustScore(userId)
+  completedValidations }
   missingValidations
 };
   private generateRequestId(): string {
@@ -608,63 +578,52 @@ export class IdentityValidationService {
 
 // Mock external service classes
 class EmailVerificationService {
-  async verify(email: string): Promise<{ valid: boolean; confidence: number; deliverable: boolean }> {
-
-  // Mock email validation
+  async verify(email: string): Promise<{ valid: boolean; confidence: number; deliverable: boolean }> { // Mock email validation
   const isValidFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const confidence = isValidFormat ? 95 : 20;
   return {
   valid: isValidFormat && !email.includes('fake'),
   confidence,
-  deliverable: isValidFormat,
+  deliverable: isValidFormat }
 };
 class PhoneVerificationService {
   async verify(phone: string): Promise<{ valid: boolean; confidence: number; type: string }> {
 
     // Mock phone validation
     const isValidFormat = /^\+?[\d\s\-\(\)]{10
-}$/.test(phone);
-    return {
-  valid: isValidFormat,
+$/.test(phone);
+    return { valid: isValidFormat,
   confidence: isValidFormat ? 90 : 20,
-  type: isValidFormat ? 'mobile' : 'unknown',
+  type: isValidFormat ? 'mobile' : 'unknown' }
 };
-class DocumentVerificationService {
-  async verify(document: NonNullable<IdentityValidationData['governmentId']>): Promise<{,
+class DocumentVerificationService { async verify(document: NonNullable<IdentityValidationData['governmentId']>): Promise<{ }
   valid: boolean;
   confidence: number;
   expired: boolean;
   documentType: string;
-}> {
-
-  // Mock document validation
+> { // Mock document validation
   const expired = new Date(document.expirationDate) < new Date();
   return {
   valid: !expired && document.number.length > 5,
   confidence: 85,
   expired,
-  documentType: document.type,
+  documentType: document.type }
 };
-class SocialMediaVerificationService {
-  async verify(profiles: NonNullable<IdentityValidationData['socialMediaProfiles']>): Promise<{,
+class SocialMediaVerificationService { async verify(profiles: NonNullable<IdentityValidationData['socialMediaProfiles']>): Promise<{ }
   averageScore: number;
   confidence: number;
   verifiedProfiles: number;
-}> {
-
-    // Mock social media validation
+> { // Mock social media validation
     const scores = profiles.map(profile => {)
   let score = 50;
       if (profile.platform === 'linkedin') score += 20;
       if (profile.followerCount && profile.followerCount > 100) score += 15;
       if (profile.url.includes('imdb')) score += 25;
-      return Math.min(score, 100);
-    });
+      return Math.min(score, 100) });
     const averageScore = scores.reduce((a, b) => a + b, 0) / scores.length;
     const verifiedProfiles = profiles.filter(p => p.verified).length;
-    return {
-  averageScore,
-  confidence: 80,
+    return { averageScore,
+  confidence: 80 }
   verifiedProfiles
 };
 

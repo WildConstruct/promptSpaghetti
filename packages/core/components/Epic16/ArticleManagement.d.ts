@@ -7,8 +7,8 @@
 import React from 'react';
 
 }
-export interface Article {
-    id: string;
+}
+export interface Article { id: string;
     title: string;
     content: string;
     excerpt: string;
@@ -33,30 +33,27 @@ export interface Article {
     seo: {
         metaTitle?: string;
         metaDescription?: string;
-        keywords?: string[];
+        keywords?: string[] }
 }
     };
-    analytics: {
-        averageRating: number;
+    analytics: { averageRating: number;
         ratingCount: number;
         completionRate: number;
-        bounceRate: number;
-    };
+        bounceRate: number };
 
 }
-export interface ArticleCategory {
-    id: string;
+}
+export interface ArticleCategory { id: string;
     name: string;
     slug: string;
     description: string;
     color: string;
     icon?: string;
     parentId?: string;
-    articleCount: number;
-
+    articleCount: number }
 }
-export interface ArticleAuthor {
-    id: string;
+}
+export interface ArticleAuthor { id: string;
     name: string;
     email: string;
     avatar?: string;
@@ -65,42 +62,40 @@ export interface ArticleAuthor {
     socialLinks?: {
         twitter?: string;
         github?: string;
-        linkedin?: string;
+        linkedin?: string }
 }
     };
 
 }
-export interface ArticleAttachment {
-    id: string;
+}
+export interface ArticleAttachment { id: string;
     name: string;
     url: string;
     type: 'image' | 'document' | 'video' | 'audio' | 'archive';
     size: number;
-    mimeType: string;
-
+    mimeType: string }
 }
-export interface ArticleFilter {
-    status?: Article['status'][];
+}
+export interface ArticleFilter { status?: Article['status'][];
     category?: string[];
     tags?: string[];
     author?: string[];
     difficulty?: Article['difficulty'][];
     dateRange?: {
         start: Date;
-        end: Date;
+        end: Date }
 }
     };
     featured?: boolean;
     searchQuery?: string;
 
 }
-export interface ArticleSort {
-    field: 'title' | 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'likeCount' | 'rating';
-    direction: 'asc' | 'desc';
-
 }
-export interface ArticleManagementProps {
-    articles: Article[];
+export interface ArticleSort { field: 'title' | 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'likeCount' | 'rating';
+    direction: 'asc' | 'desc' }
+}
+}
+export interface ArticleManagementProps { articles: Article[];
     categories: ArticleCategory[];
     currentUser: ArticleAuthor;
     onCreateArticle: (article: Partial<Article>) => Promise<Article>;
@@ -122,16 +117,14 @@ export declare const ArticleList: React.FC<{
     onDelete: (article: Article) => void;
     onDuplicate: (article: Article) => void;
     onView: (article: Article) => void;
-    currentUser: ArticleAuthor;
+    currentUser: ArticleAuthor }
 }
 }>;
-export declare const ArticleEditor: React.FC<{
-    article?: Article;
+export declare const ArticleEditor: React.FC<{ article?: Article;
     categories: ArticleCategory[];
     onSave: (article: Partial<Article>) => Promise<void>;
     onCancel: () => void;
-    onUploadAttachment: (file: File) => Promise<ArticleAttachment>;
-}>;
+    onUploadAttachment: (file: File) => Promise<ArticleAttachment> }>;
 export declare const ArticleManagement: React.FC<ArticleManagementProps>;
 export default ArticleManagement;
 //# sourceMappingURL=ArticleManagement.d.ts.map

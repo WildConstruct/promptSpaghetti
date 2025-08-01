@@ -11,7 +11,7 @@ import {
   InputLabel,
   Select,
   MenuItem
-} from '@mui/material';
+ from '@mui/material';
 import {
   ZoomIn as ZoomInIcon,
   ZoomOut as ZoomOutIcon,
@@ -20,27 +20,28 @@ import {
   PlayArrow as PlayArrowIcon,
   Pause as PauseIcon,
   Stop as StopIcon
-} from '@mui/icons-material';
-}
+ from '@mui/icons-material';
+
+
 interface Schedule {
   id: string;,
-  toggleId: string;
+  toggleId: string;,
   toggleName: string;,
   name: string;
   description?: string;
   type: 'one_time' | 'recurring' | 'conditional';,
-  action: string;
+  action: string;,
   startTime: Date;
   endTime?: Date;
   timezone: string;,
-  status: 'pending' | 'active' | 'completed' | 'cancelled' | 'failed' | 'paused';
+  status: 'pending' | 'active' | 'completed' | 'cancelled' | 'failed' | 'paused';,
   enabled: boolean;
   nextExecution?: Date;
   lastExecution?: Date;
   executionCount: number;,
-  failureCount: number;
+  failureCount: number;,
   priority: number;,
-  createdBy: string;
+  createdBy: string;,
   createdAt: Date;,
   updatedAt: Date;
   interface ScheduleTimelineProps {
@@ -54,9 +55,10 @@ interface Schedule {
   cancelled: '#9e9e9e',
   failed: '#f44336',
   paused: '#ff5722',
-}
+
+
 };
-const TIME_RANGES = [;
+const TIME_RANGES = [
   { value: '24h', label: '24 Hours', hours: 24 },
   { value: '7d', label: '7 Days', hours: 24 * 7 },
   { value: '30d', label: '30 Days', hours: 24 * 30 },
@@ -122,9 +124,9 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
   const formatTimeLabel = (date: Date): string => {
     if (timeRange === '24h') {
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    } else if (timeRange === '7d') {
+ else if (timeRange === '7d') {
       return date.toLocaleDateString([], { weekday: 'short', hour: '2-digit' });
-    } else {
+ else {
       return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   };
   const getStatusIcon = (status: string) => {
@@ -137,7 +139,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
   const handleZoom = (direction: 'in' | 'out') => {
     if (direction === 'in' && zoomLevel < 3) {
       setZoomLevel(zoomLevel + 0.5);
-    } else if (direction === 'out' && zoomLevel > 0.5) {
+ else if (direction === 'out' && zoomLevel > 0.5) {
       setZoomLevel(zoomLevel - 0.5);
   };
   const renderTimeMarkers = () => {
@@ -160,7 +162,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
             borderLeft: i === markerCount / 2 ? '2px solid' : '1px solid',
             borderColor: i === markerCount / 2 ? 'primary.main' : 'divider',
             zIndex: 1;
-  }}
+
         >
           <Typography
             variant="caption"
@@ -171,7 +173,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
   fontSize: '0.7rem',
   color: 'text.secondary',
   whiteSpace: 'nowrap',
-}}
+}
           >
             {formatTimeLabel(markerTime)}
           </Typography>
@@ -219,13 +221,13 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
             px: 0.5,
             zIndex: 2,
             transform: `translateX(-${width/2}%)`}
-}
+
             '&:hover': {
               opacity: 0.8,
               transform: `translateX(-${width/2}%) scale(1.05)`}
   },
   transition: 'all 0.2s ease';
-  }}
+
         >
           <Box display="flex" alignItems="center" gap={0.5} overflow="hidden">
             {getStatusIcon(schedule.status)}
@@ -238,7 +240,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   fontSize: '0.7rem',
-}}
+}
             >
               {schedule.name}
             </Typography>
@@ -259,7 +261,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
   borderRadius: 1,
   border: '1px solid',
   borderColor: 'divider',
-}}
+}
       >
         {trackSchedules.map((schedule, index) => renderScheduleBar(schedule, index))}
       </Box>
@@ -355,7 +357,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
 },
   transformOrigin: 'left center',
             transition: 'transform 0.3s ease';
-  }}
+
         >
           {/* Current Time Indicator */}
           <Box
@@ -367,7 +369,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
   width: 2,
   bgcolor: 'error.main',
   zIndex: 3,
-  '&::before': {
+  '&::before': {,
   content: '"Now"',
   position: 'absolute',
   top: -25,
@@ -375,7 +377,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ schedules, o
   fontSize: '0.7rem',
   color: 'error.main',
   fontWeight: 'bold',
-}}
+}
           />
           {/* Time Markers */}
           {renderTimeMarkers()}

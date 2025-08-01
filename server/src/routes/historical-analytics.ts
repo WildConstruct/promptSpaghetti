@@ -57,10 +57,10 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
             dataPoints: { type: 'array' },
             statistics: { type: 'object' },
             cacheInfo: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const query = request.body as z.infer<typeof HistoricalQuerySchema>;
@@ -81,14 +81,13 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
       const result = await historicalService.queryHistoricalData(authorizedQuery);
       
       return reply.send(result);
-
-    } catch (error) {
+ catch (error) {
       console.error('Historical query error:', error);
       return reply.code(500).send({
         error: 'Historical query failed',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -119,10 +118,10 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
             events: { type: 'array' },
             pagination: { type: 'object' },
             totalCount: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { timeRange, filter = {}, pagination = {} } = request.body as any;
@@ -156,17 +155,16 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
           limit: pagination.limit || 50,
           offset: pagination.offset || 0,
           hasMore: totalCount > (pagination.offset || 0) + events.length
-  }
+
         totalCount
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Historical events retrieval error:', error);
       return reply.code(500).send({
         error: 'Failed to retrieve historical events',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -183,10 +181,10 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
             queryPerformance: { type: 'object' },
             dataVolume: { type: 'object' },
             retentionExecution: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const authContext = await authService.createAuthContextFromRequest(request);
@@ -196,18 +194,17 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Admin access required for historical analytics metrics'
         });
-      }
+
 
       const metrics = await historicalService.getHistoricalAnalyticsMetrics();
       return reply.send(metrics);
-
-    } catch (error) {
+ catch (error) {
       console.error('Historical metrics error:', error);
       return reply.code(500).send({
         error: 'Failed to retrieve historical metrics',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -224,10 +221,10 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
           properties: {
             policyId: { type: 'string' },
             created: { type: 'boolean' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const policyData = request.body as z.infer<typeof RetentionPolicyRequestSchema>;
@@ -239,7 +236,7 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Admin access required for retention policy management'
         });
-      }
+
 
       const policyId = await historicalService.createRetentionPolicy(policyData);
       
@@ -247,14 +244,13 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
         policyId,
         created: true
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Retention policy creation error:', error);
       return reply.code(500).send({
         error: 'Failed to create retention policy',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -272,10 +268,10 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
             archived: { type: 'number' },
             deleted: { type: 'number' },
             executionTime: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const authContext = await authService.createAuthContextFromRequest(request);
@@ -285,7 +281,7 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Admin access required for retention policy execution'
         });
-      }
+
 
       const startTime = Date.now();
       const result = await historicalService.executeRetentionPolicies();
@@ -295,14 +291,13 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
         ...result,
         executionTime
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Retention policy execution error:', error);
       return reply.code(500).send({
         error: 'Failed to execute retention policies',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -318,10 +313,10 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
           properties: {
             optimized: { type: 'boolean' },
             improvements: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const authContext = await authService.createAuthContextFromRequest(request);
@@ -331,18 +326,17 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Admin access required for storage optimization'
         });
-      }
+
 
       const result = await historicalService.optimizeHistoricalStorage();
       return reply.send(result);
-
-    } catch (error) {
+ catch (error) {
       console.error('Storage optimization error:', error);
       return reply.code(500).send({
         error: 'Failed to optimize historical storage',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -368,10 +362,10 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
             exportId: { type: 'string' },
             status: { type: 'string' },
             estimatedCompletion: { type: 'number' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { timeRange, format, filter, compression } = request.body as any;
@@ -383,7 +377,7 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
         return reply.code(403).send({
           error: 'Export permission required'
         });
-      }
+
 
       // Generate export ID
       const exportId = `export_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -396,14 +390,13 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
         status: 'queued',
         estimatedCompletion: Date.now() + (5 * 60 * 1000) // 5 minutes
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Data export error:', error);
       return reply.code(500).send({
         error: 'Failed to queue data export',
         details: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -421,10 +414,10 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
             components: { type: 'object' },
             lastOptimization: { type: 'number' },
             retentionStatus: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const metrics = await historicalService.getHistoricalAnalyticsMetrics();
@@ -440,22 +433,21 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
           queryEngine: metrics.queryPerformance.slowQueries < 10 ? 'healthy' : 'degraded',
           dataStorage: metrics.dataVolume.totalEvents > 0 ? 'healthy' : 'unknown',
           retentionSystem: metrics.retentionExecution.errorsEncountered === 0 ? 'healthy' : 'error'
-  }
+
         lastOptimization: Date.now() - (24 * 60 * 60 * 1000), // Mock: 24 hours ago
         retentionStatus: {
           lastExecution: metrics.retentionExecution.lastRunTime,
           eventsProcessed: metrics.retentionExecution.eventsProcessed
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Historical health check error:', error);
       return reply.code(500).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}
+
 
 export default historicalAnalyticsRoutes;

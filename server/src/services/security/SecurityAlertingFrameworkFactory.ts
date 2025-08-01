@@ -18,19 +18,19 @@ import {
   AlertSource,
   NotificationChannel,
   EscalationRule
-} from './UnifiedSecurityAlertingFramework';
+ from './UnifiedSecurityAlertingFramework';
 import { AlertingConfigurationManager } from './AlertingConfigurationManager';
 import { 
   SecurityAlertingAnalytics,
   SecurityAlertingConfig
-} from '../../../../packages/core/security/SecurityAlertingAnalytics';
+ from '../../../../packages/core/security/SecurityAlertingAnalytics';
 import { HealthMonitoringService } from '../HealthMonitoringService';
 import { ProjectHealthAlertService } from '../project-health-alert-service';
 import { AttributionService } from '../attribution-service';
 import { AnalyticsDAO } from '../../database/analytics-dao';
 
-}
-}
+
+
 export interface FrameworkInitializationOptions {
   // Database configuration
   database: Database;
@@ -56,21 +56,23 @@ export interface FrameworkInitializationOptions {
   // Environment settings
   environment?: 'development' | 'staging' | 'production';
   logLevel?: 'error' | 'warn' | 'info' | 'debug';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FrameworkComponents {
   framework: UnifiedSecurityAlertingFramework;
   configurationManager: AlertingConfigurationManager;
   securityAnalytics: SecurityAlertingAnalytics;
   healthMonitoring: HealthMonitoringService;
   projectHealthService: ProjectHealthAlertService;
-}
-}
-}
+
+
+
+
 
 /**
  * Factory for creating and configuring the security alerting framework
@@ -129,14 +131,13 @@ export class SecurityAlertingFrameworkFactory {
         healthMonitoring,
         projectHealthService
       };
-      
-    } catch (error) {
+ catch (error) {
       logger.error('Failed to initialize Security Alerting Framework', {
         error: error instanceof Error ? error.message : String(error)
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Create framework with minimal configuration for testing
@@ -158,13 +159,13 @@ export class SecurityAlertingFrameworkFactory {
         processingTimeout: 5000,
         batchSize: 10,
         ...options.configurationOverrides
-  }
+
       ...options
     };
     
     // Synchronous creation for testing
     return this.createFrameworkSync(testOptions);
-  }
+
   
   // PRIVATE FACTORY METHODS
   
@@ -209,7 +210,7 @@ export class SecurityAlertingFrameworkFactory {
     
     // Apply configuration overrides
     return { ...defaultConfig, ...options.configurationOverrides };
-  }
+
   
   private static getEnvironmentDefaults(environment: string) {
     switch (environment) {
@@ -252,8 +253,8 @@ export class SecurityAlertingFrameworkFactory {
         processingTimeout: 10000,
         batchSize: 20
       };
-    }
-  }
+
+
   
   private static createSecurityAnalyticsConfig(options: FrameworkInitializationOptions): Partial<SecurityAlertingConfig> {
     const environment = options.environment || 'development';
@@ -275,7 +276,7 @@ export class SecurityAlertingFrameworkFactory {
         failedAccessAttempts: 5,
         dataExfiltrationThreshold: 100, // MB
         anomalyScoreThreshold: 0.8
-  }
+
       correlationRules: [],
       responseAutomation: {
         enabled: environment === 'production',
@@ -287,11 +288,11 @@ export class SecurityAlertingFrameworkFactory {
           bypassApprovers: [],
           auditRequired: true,
           timeLimit: 3600000 // 1 hour
-  }
+
         responseTemplates: []
-      }
+
     };
-  }
+
   
   private static createDefaultNotificationChannels(environment: string): NotificationChannel[] {
     const channels: NotificationChannel[] = [];
@@ -304,13 +305,13 @@ export class SecurityAlertingFrameworkFactory {
       enabled: true,
       configuration: {
         logLevel: environment === 'production' ? 'error' : 'info'
-  }
+
       conditions: [],
       rateLimits: {
         maxPerMinute: 100,
         maxPerHour: 1000,
         maxPerDay: 10000
-      }
+
     });
     
     // Email notifications for production
@@ -324,24 +325,24 @@ export class SecurityAlertingFrameworkFactory {
           recipients: ['security@company.com', 'ops@company.com'],
           subject: '[CRITICAL] Security Alert: {{title}}',
           template: 'critical-alert'
-  }
+
         conditions: [
           {
             field: 'priority',
             operator: 'IN',
             value: ['CRITICAL', 'EMERGENCY']
-          }
+
         ],
         rateLimits: {
           maxPerMinute: 5,
           maxPerHour: 50,
           maxPerDay: 200
-        }
+
       });
-    }
+
     
     return channels;
-  }
+
   
   private static createDefaultEscalationChain(environment: string): EscalationRule[] {
     const escalationRules: EscalationRule[] = [];
@@ -355,17 +356,17 @@ export class SecurityAlertingFrameworkFactory {
           {
             condition: 'priority',
             value: 'CRITICAL'
-          }
+
         ],
         actions: [
           {
             type: 'EMAIL',
             parameters: {
               recipients: ['security-oncall@company.com']
-  }
+
             conditions: [],
             enabled: true
-          }
+
         ]
       });
       
@@ -377,21 +378,21 @@ export class SecurityAlertingFrameworkFactory {
           {
             condition: 'status',
             value: 'NEW'
-  }
+
           {
             condition: 'priority',
             value: 'CRITICAL'
-          }
+
         ],
         actions: [
           {
             type: 'PAGER',
             parameters: {
               service: 'security-team'
-  }
+
             conditions: [],
             enabled: true
-          }
+
         ],
         assignTo: ['security-manager@company.com']
       });
@@ -404,21 +405,21 @@ export class SecurityAlertingFrameworkFactory {
           {
             condition: 'priority',
             value: 'EMERGENCY'
-          }
+
         ],
         actions: [
           {
             type: 'PAGER',
             parameters: {
               service: 'executive-team'
-  }
+
             conditions: [],
             enabled: true
-          }
+
         ],
         assignTo: ['ciso@company.com', 'cto@company.com']
       });
-    } else {
+ else {
       // Development/staging: simpler escalation
       escalationRules.push({
         level: 1,
@@ -427,23 +428,23 @@ export class SecurityAlertingFrameworkFactory {
           {
             condition: 'status',
             value: 'NEW'
-          }
+
         ],
         actions: [
           {
             type: 'EMAIL',
             parameters: {
               recipients: ['dev-team@company.com']
-  }
+
             conditions: [],
             enabled: true
-          }
+
         ]
       });
-    }
+
     
     return escalationRules;
-  }
+
   
   private static async createSecurityAnalytics(
     configuration: AlertingConfiguration,
@@ -453,16 +454,16 @@ export class SecurityAlertingFrameworkFactory {
     if (options.enableSecurityAnalytics === false) {
       // Return mock analytics for testing
       return {} as SecurityAlertingAnalytics;
-    }
+
     
     const analyticsConfig: SecurityAlertingConfig = {
       ...configuration.securityAnalyticsConfig,
       enableRealTimeAnalytics: configuration.enableRealTimeProcessing,
       machinelearningEnabled: configuration.enableMachineLearning
-    } as SecurityAlertingConfig;
+ as SecurityAlertingConfig;
     
     return new SecurityAlertingAnalytics(analyticsConfig);
-  }
+
   
   private static createHealthMonitoring(options: FrameworkInitializationOptions): HealthMonitoringService {
     const healthMonitoring = HealthMonitoringService.getInstance();
@@ -474,16 +475,16 @@ export class SecurityAlertingFrameworkFactory {
           // Mock database check for now
           return true;
         });
-      }
-    }
+
+
     
     return healthMonitoring;
-  }
+
   
   private static createProjectHealthService(options: FrameworkInitializationOptions): ProjectHealthAlertService {
     if (!options.database) {
       throw new Error('Database is required for ProjectHealthAlertService');
-    }
+
     
     const attributionService = options.attributionService || {} as AttributionService;
     const analyticsDAO = options.analyticsDAO || {} as AnalyticsDAO;
@@ -493,7 +494,7 @@ export class SecurityAlertingFrameworkFactory {
       attributionService,
       analyticsDAO
     );
-  }
+
   
   private static async applyAdditionalConfiguration(
     framework: UnifiedSecurityAlertingFramework,
@@ -507,14 +508,14 @@ export class SecurityAlertingFrameworkFactory {
     for (const rule of defaultRules) {
       try {
         await configurationManager.createAlertRule(rule, 'system');
-      } catch (error) {
+ catch (error) {
         logger.warn('Failed to create default alert rule', {
           ruleName: rule.name,
           error: error instanceof Error ? error.message : String(error)
         });
-      }
-    }
-  }
+
+
+
   
   private static createDefaultAlertRules(environment: string) {
     const rules = [];
@@ -530,13 +531,13 @@ export class SecurityAlertingFrameworkFactory {
           operator: 'IN' as const,
           value: ['SECURITY_INCIDENT', 'THREAT_DETECTION'],
           weight: 1.0
-  }
+
         {
           field: 'priority',
           operator: 'IN' as const,
           value: ['CRITICAL', 'EMERGENCY'],
           weight: 1.0
-        }
+
       ],
       sources: [AlertSource.SECURITY_ANALYTICS, AlertSource.THREAT_DETECTION] as AlertSource[],
       categories: [AlertCategory.SECURITY_INCIDENT, AlertCategory.THREAT_DETECTION] as AlertCategory[],
@@ -547,10 +548,10 @@ export class SecurityAlertingFrameworkFactory {
           parameters: {
             template: 'critical-security-alert',
             priority: 'high'
-  }
+
           conditions: [],
           enabled: true
-        }
+
       ],
       cooldownPeriod: 300000, // 5 minutes
       maxExecutionsPerHour: 10,
@@ -568,13 +569,13 @@ export class SecurityAlertingFrameworkFactory {
           operator: 'EQUALS' as const,
           value: 'SYSTEM_HEALTH',
           weight: 1.0
-  }
+
         {
           field: 'severity',
           operator: 'IN' as const,
           value: ['ERROR', 'CRITICAL'],
           weight: 0.8
-        }
+
       ],
       sources: [AlertSource.HEALTH_MONITORING] as AlertSource[],
       categories: [AlertCategory.SYSTEM_HEALTH] as AlertCategory[],
@@ -585,10 +586,10 @@ export class SecurityAlertingFrameworkFactory {
           parameters: {
             url: '/api/system-health/alert',
             method: 'POST'
-  }
+
           conditions: [],
           enabled: environment === 'production'
-        }
+
       ],
       cooldownPeriod: 600000, // 10 minutes
       maxExecutionsPerHour: 20,
@@ -596,7 +597,7 @@ export class SecurityAlertingFrameworkFactory {
     });
     
     return rules;
-  }
+
   
   private static async setupFrameworkIntegrations(
     framework: UnifiedSecurityAlertingFramework,
@@ -605,7 +606,7 @@ export class SecurityAlertingFrameworkFactory {
       healthMonitoring: HealthMonitoringService;
       projectHealthService: ProjectHealthAlertService;
       configurationManager: AlertingConfigurationManager;
-    }
+
   ): Promise<void> {
 
     // Setup cross-component event handlers
@@ -625,10 +626,10 @@ export class SecurityAlertingFrameworkFactory {
     // Setup health monitoring integration
     if (components.healthMonitoring.isMonitoringActive()) {
       components.healthMonitoring.startMonitoring(30000); // 30 second intervals
-    }
+
     
     logger.info('Framework integrations setup completed');
-  }
+
   
   /**
    * Synchronous framework creation for testing
@@ -656,7 +657,7 @@ export class SecurityAlertingFrameworkFactory {
       healthMonitoring,
       projectHealthService
     };
-  }
+
   
   /**
    * Validate framework prerequisites
@@ -666,27 +667,27 @@ export class SecurityAlertingFrameworkFactory {
     
     if (!options.database) {
       errors.push('Database instance is required');
-    }
+
     
     if (options.enableProjectHealth !== false && !options.attributionService) {
       errors.push('AttributionService is required when project health monitoring is enabled');
-    }
+
     
     if (options.enableProjectHealth !== false && !options.analyticsDAO) {
       errors.push('AnalyticsDAO is required when project health monitoring is enabled');
-    }
+
     
     // Validate notification channels
     if (options.notificationChannels) {
       options.notificationChannels.forEach((channel, index) => {
         if (!channel.name || !channel.type) {
           errors.push(`Notification channel ${index} is missing required fields`);
-        }
+
       });
-    }
+
     
     return errors;
-  }
-}
+
+
 
 export default SecurityAlertingFrameworkFactory;

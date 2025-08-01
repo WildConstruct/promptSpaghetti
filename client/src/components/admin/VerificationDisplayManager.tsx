@@ -31,52 +31,57 @@ import {
   Save,
   Copy,
   Download
-} from 'lucide-react';
-}
+ from 'lucide-react';
+
+
 interface VerificationDisplayConfig {
   // Display Settings
   showTrustScores: boolean;,
-  showBadgeCount: boolean;
+  showBadgeCount: boolean;,
   showVerificationLevel: boolean;,
   showReputation: boolean;
   // Style Configuration
   badgeStyle: 'compact' | 'detailed' | 'minimal';,
-  trustIndicatorSize: 'small' | 'medium' | 'large';
+  trustIndicatorSize: 'small' | 'medium' | 'large';,
   colorScheme: 'default' | 'professional' | 'vibrant';,
   animationsEnabled: boolean;
   // Visibility Rules
-  publicDisplaySettings: {
+  publicDisplaySettings: {,
   unverifiedUsers: boolean;,
-  lowReputationUsers: boolean;
+  lowReputationUsers: boolean;,
   flaggedUsers: boolean;
-}
+
+
 };
   // Thresholds
-  displayThresholds: {
+  displayThresholds: {,
   minTrustScore: number;
   minBadgeCount: number;,
   hideUnverified: boolean;
 };
-}
+
+
 interface TrustDisplayPreview {
   userId: string;,
-  username: string;
+  username: string;,
   trustScore: number;,
-  reputationLevel: string;
+  reputationLevel: string;,
   verificationLevel: string;,
-  badges: Array<{
+  badges: Array<{,
   badgeType: string;,
-  name: string;
+  name: string;,
   verified: boolean;,
   rarity: string;
-}
-}>;
+
+
+>;
   flagged: boolean;
-}
+
+
 interface VerificationDisplayManagerProps {
   className?: string;
 
-}
+
 export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProps> = ({ className }) => {
   const [previewData, setPreviewData] = useState<TrustDisplayPreview>([]);
   const [selectedDevice, setSelectedDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -93,12 +98,12 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   trustIndicatorSize: 'medium',
   colorScheme: 'default',
   animationsEnabled: true,
-  publicDisplaySettings: {
+  publicDisplaySettings: {,
   unverifiedUsers: true,
   lowReputationUsers: true,
   flaggedUsers: false,
 },
-  displayThresholds: {
+  displayThresholds: {,
   minTrustScore: 0,
   minBadgeCount: 0,
   hideUnverified: false,
@@ -111,7 +116,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   const response = await fetch('/api/admin/reputation/users?limit=6');
   const result = await response.json();
   if (result.success) {
-  const mappedData = result.data.map((user: Record<string, unknown>): TrustDisplayPreview => ({,)
+  const mappedData = result.data.map((user: Record<string, unknown>): TrustDisplayPreview => ({),
   userId: (user.userId as string) || '',
   username: (user.username as string) || '',
   trustScore: (user.overallTrustScore as number) || 0,
@@ -124,10 +129,10 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   flagged: ((user.adminNotes as Record<string, unknown>)?.flagged as boolean) || false,
 }));
         setPreviewData(mappedData);
-    } catch (err) {
+ catch (err) {
   setError('Failed to load preview data');
   console.error('Error loading preview data:', err);
-} finally {
+ finally {
       setLoading(false);
   };
   // Save configuration
@@ -142,10 +147,10 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       if (response.ok) {
         // Configuration saved successfully
         console.log('Configuration saved');
-    } catch (err) {
+ catch (err) {
   setError('Failed to save configuration');
   console.error('Error saving configuration:', err);
-} finally {
+ finally {
       setLoading(false);
   };
   // Export configuration
@@ -522,7 +527,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   selectedDevice === 'mobile' ? 'grid-cols-1' :,
   selectedDevice === 'tablet' ? 'grid-cols-2' :,
   'grid-cols-3'
-}`}>
+`}>
                     {previewData.map((user) => ()
                       /* eslint-disable-next-line react/prop-types */
                       <TrustIndicatorPreview 

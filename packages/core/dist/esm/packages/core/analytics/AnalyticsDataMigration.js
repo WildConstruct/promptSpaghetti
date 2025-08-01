@@ -66,6 +66,9 @@ export var MigrationStatus;
 ;
 backupLocation ?  : string;
 rollbackAvailable: boolean;
+lookupTable ?  : { [key]: string, any };
+conditions ?  : Array;
+defaultValue ?  : any;
 ;
 validation ?  : {
     required: boolean,
@@ -269,7 +272,7 @@ void {
                 'conditional',
                     transformation;
                 {
-                    conditions: [,
+                    conditions: [
                         { condition: 'value.includes("fraud")', value: AnalyticsEventType.FRAUD_DETECTION },
                         { condition: 'value.includes("security")', value: AnalyticsEventType.SECURITY_EVENT }
                     ],
@@ -391,10 +394,14 @@ void {
                                      * Start migration for a specific analytics system
                                      */
                                     async;
-                                    startMigration(systemName, string(sourceData, any, config, (Partial) = {}), Promise < string > {
+                                    startMigration(systemName, string());
+                                    sourceData: any,
+                                        config;
+                                    (Partial) = {};
+                                    Promise < string > {
                                         const: migrationConfig = MigrationConfigSchema.parse(config),
                                         const: migrationId = `migration_${systemName}_${Date.now()}`
-                                    });
+                                    };
                                     // Initialize migration progress
                                     const progress = {
                                         migrationId,
@@ -417,7 +424,7 @@ void {
                                         // Start migration asynchronously
                                         this: .performMigration(migrationId, systemName, sourceData, migrationConfig)
                                             .catch(error => { }),
-                                        console, : .error(`Migration ${migrationId},)}
+                                        console, : .error(`Migration ${migrationId})},
   failed:`, error)
                                     };
                                     this.updateMigrationStatus(migrationId, MigrationStatus.FAILED, error.message);
@@ -425,8 +432,9 @@ void {
                                 ;
                                 return migrationId;
                                 async;
-                                performMigration(migrationId, string);
-                                systemName: string,
+                                performMigration(migrationId, string),
+                                    systemName;
+                                string,
                                     sourceData;
                                 any,
                                     config;
@@ -534,7 +542,7 @@ void {
                                             };
                                             this.migrationResults.set(migrationId, result);
                                             this.updateMigrationStatus(migrationId, result.status, 'Migration completed');
-                                            console.log(`Migration ${migrationId},)}
+                                            console.log(`Migration ${migrationId})},
   completed:`, {}, total, sourceData.length, migrated, migratedRecords, failed, failedRecords, duration, `${duration}ms`);
                                         }
                                     }
@@ -569,8 +577,9 @@ void {
                         finally {
                             this.activeMigrations.delete(migrationId);
                             async;
-                            processBatch(batch, any);
-                            systemName: string,
+                            processBatch(batch, any),
+                                systemName;
+                            string,
                                 transformationRules;
                             DataTransformationRule,
                                 config;
@@ -644,8 +653,9 @@ void {
                             await Promise.all(promises);
                             return results;
                             async;
-                            processRecord(record, any);
-                            systemName: string,
+                            processRecord(record, any),
+                                systemName;
+                            string,
                                 transformationRules;
                             DataTransformationRule,
                                 config;

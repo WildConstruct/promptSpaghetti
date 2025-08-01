@@ -18,8 +18,9 @@ import { AuditService } from '../auth/services/AuditService';
 import { ConnectionManager } from '../websocket/ConnectionManager';
 
 // Configuration Interfaces
-}
-}
+
+
+
 export interface SessionLimitConfig {
   // Concurrent session limits
   maxConcurrentSessionsPerUser: number;
@@ -72,13 +73,14 @@ export interface SessionLimitConfig {
     highConcurrentSessions: number;
     suspiciousActivity: number;
     geographicAnomalies: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface UserLimitOverride {
   userId: string;
   overrides: Partial<SessionLimitConfig>;
@@ -86,20 +88,21 @@ export interface UserLimitOverride {
   reason: string;
   createdBy: string;
   createdAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OrganizationLimitConfig extends Partial<SessionLimitConfig> {
   organizationId: string;
   tier: 'free' | 'premium' | 'enterprise';
   customLimits?: Partial<SessionLimitConfig>;
-}
 
-}
-}
+
+
+
 export interface SessionLimitViolation {
   id: string;
   type: 'concurrent_user' | 'concurrent_ip' | 'concurrent_org' | 'concurrent_device' | 
@@ -112,12 +115,13 @@ export interface SessionLimitViolation {
   severity: 'low' | 'medium' | 'high' | 'critical';
   resolvedAt?: Date;
   createdAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionLimitMetrics {
   timestamp: Date;
   activeSessionsTotal: number;
@@ -127,8 +131,9 @@ export interface SessionLimitMetrics {
     organization: Record<string, number>;
     device: Record<string, number>;
     country: Record<string, number>;
-}
-}
+
+
+
   };
   violations: {
     total: number;
@@ -141,10 +146,10 @@ export interface SessionLimitMetrics {
     cacheHitRate: number;
     errorRate: number;
   };
-}
 
-}
-}
+
+
+
 export interface SessionEnforcementAction {
   action: 'terminate' | 'warn' | 'extend_grace' | 'upgrade_required';
   sessionId: string;
@@ -152,9 +157,10 @@ export interface SessionEnforcementAction {
   gracePeriodMinutes?: number;
   notifyUser: boolean;
   details: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export class SessionLimitManager extends EventEmitter {
   private dbService: DatabaseService;
@@ -235,11 +241,11 @@ export class SessionLimitManager extends EventEmitter {
         highConcurrentSessions: 80,
         suspiciousActivity: 5,
         geographicAnomalies: 3
-      }
+
     };
     
     this.metrics = this.initializeMetrics();
-  }
+
   
   /**
    * Initialize the SessionLimitManager
@@ -256,7 +262,7 @@ export class SessionLimitManager extends EventEmitter {
       // Start monitoring if enabled
       if (this.defaultConfig.enableRealTimeMonitoring) {
         this.startMonitoring();
-      }
+
       
       // Start cleanup processes
       this.startCleanupTasks();
@@ -266,12 +272,11 @@ export class SessionLimitManager extends EventEmitter {
       
       console.log('SessionLimitManager initialized successfully');
       this.emit('initialized');
-      
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize SessionLimitManager:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Check if a new session can be created for a user
@@ -293,7 +298,7 @@ export class SessionLimitManager extends EventEmitter {
     conflictingSessions?: string[];
     action?: SessionEnforcementAction;
     gracePeriodMinutes?: number;
-  }> {
+> {
 
     const startTime = Date.now();
     
@@ -321,7 +326,7 @@ export class SessionLimitManager extends EventEmitter {
         // Update performance metrics
         this.updatePerformanceMetrics(startTime, 'success');
         return { allowed: true };
-      }
+
       
       // Handle violations based on severity and configuration
       const mostSevereViolation = violations.reduce((prev, current) => 
@@ -353,15 +358,14 @@ export class SessionLimitManager extends EventEmitter {
         action,
         gracePeriodMinutes: action.gracePeriodMinutes
       };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error checking session limits:', error);
       this.updatePerformanceMetrics(startTime, 'error');
       
       // Fail open for availability
       return { allowed: true };
-    }
-  }
+
+
   
   /**
    * Enforce session limits and handle violations
@@ -393,7 +397,7 @@ export class SessionLimitManager extends EventEmitter {
       case 'upgrade_required':
         await this.notifyUpgradeRequired(userId, action.reason, action.details);
         break;
-      }
+
       
       // Log enforcement action
       await this.auditService.logEvent({
@@ -404,7 +408,7 @@ export class SessionLimitManager extends EventEmitter {
           sessionId,
           reason: action.reason,
           details: action.details
-  }
+
         sessionId,
         severity: 'info'
       });
@@ -414,12 +418,11 @@ export class SessionLimitManager extends EventEmitter {
         sessionId,
         action
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error enforcing session limits:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Update session limits configuration
@@ -453,8 +456,7 @@ export class SessionLimitManager extends EventEmitter {
         
         // Update default config
         Object.assign(this.defaultConfig, config);
-        
-      } else if (scope === 'organization' && targetId) {
+ else if (scope === 'organization' && targetId) {
         // Update organization-specific configuration
         await this.dbService.query(`
           INSERT INTO session_limit_configs (
@@ -470,8 +472,7 @@ export class SessionLimitManager extends EventEmitter {
           updatedBy,
           now
         ]);
-        
-      } else if (scope === 'user' && targetId) {
+ else if (scope === 'user' && targetId) {
         // Update user-specific override
         const override: UserLimitOverride = {
           userId: targetId,
@@ -496,7 +497,7 @@ export class SessionLimitManager extends EventEmitter {
         ]);
         
         this.userOverrides.set(targetId, override);
-      }
+
       
       // Invalidate cache
       await this.invalidateConfigCache(scope, targetId);
@@ -509,7 +510,7 @@ export class SessionLimitManager extends EventEmitter {
           scope,
           targetId,
           changes: config
-  }
+
         severity: 'info'
       });
       
@@ -519,12 +520,11 @@ export class SessionLimitManager extends EventEmitter {
         config,
         updatedBy
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error updating session limits configuration:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Get session limit metrics and analytics
@@ -565,13 +565,13 @@ export class SessionLimitManager extends EventEmitter {
         if (row.ip_address) {
           activeSessionsByType.ip[row.ip_address] = 
             (activeSessionsByType.ip[row.ip_address] || 0) + row.session_count;
-        }
+
         
         if (row.device_fingerprint) {
           activeSessionsByType.device[row.device_fingerprint] = 
             (activeSessionsByType.device[row.device_fingerprint] || 0) + row.session_count;
-        }
-      }
+
+
       
       // Get violations metrics
       const violationsResult = await this.dbService.query(`
@@ -598,10 +598,10 @@ export class SessionLimitManager extends EventEmitter {
         
         if (row.resolved) {
           violations.resolved += parseInt(row.count);
-        } else {
+ else {
           violations.pending += parseInt(row.count);
-        }
-      }
+
+
       
       return {
         timestamp: new Date(),
@@ -612,12 +612,11 @@ export class SessionLimitManager extends EventEmitter {
         violations,
         performance: this.metrics.performance
       };
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting session limit metrics:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Get active violations requiring attention
@@ -640,24 +639,24 @@ export class SessionLimitManager extends EventEmitter {
       if (filters?.userId) {
         query += ` AND user_id = $${paramIndex++}`;
         params.push(filters.userId);
-      }
+
       
       if (filters?.type) {
         query += ` AND type = $${paramIndex++}`;
         params.push(filters.type);
-      }
+
       
       if (filters?.severity) {
         query += ` AND severity = $${paramIndex++}`;
         params.push(filters.severity);
-      }
+
       
       query += ' ORDER BY created_at DESC';
       
       if (filters?.limit) {
         query += ` LIMIT $${paramIndex++}`;
         params.push(filters.limit);
-      }
+
       
       const result = await this.dbService.query(query, params);
       
@@ -672,12 +671,11 @@ export class SessionLimitManager extends EventEmitter {
         resolvedAt: row.resolved_at,
         createdAt: row.created_at
       }));
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error getting active violations:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Manually resolve a violation
@@ -703,7 +701,7 @@ export class SessionLimitManager extends EventEmitter {
         details: {
           violationId,
           resolution
-  }
+
         severity: 'info'
       });
       
@@ -712,12 +710,11 @@ export class SessionLimitManager extends EventEmitter {
         resolvedBy,
         resolution
       });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Error resolving violation:', error);
       throw error;
-    }
-  }
+
+
   
   /**
    * Cleanup and shutdown
@@ -726,19 +723,19 @@ export class SessionLimitManager extends EventEmitter {
 
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
-    }
+
     
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
-    }
+
     
     if (this.configRefreshInterval) {
       clearInterval(this.configRefreshInterval);
-    }
+
     
     this.emit('shutdown');
     console.log('SessionLimitManager shut down');
-  }
+
   
   // Private helper methods implementation continues...
   
@@ -806,7 +803,7 @@ export class SessionLimitManager extends EventEmitter {
       CREATE INDEX IF NOT EXISTS idx_session_limit_violations_unresolved 
       ON session_limit_violations(created_at) WHERE resolved_at IS NULL
     `);
-  }
+
   
   private async loadConfigurations(): Promise<void> {
 
@@ -819,7 +816,7 @@ export class SessionLimitManager extends EventEmitter {
     
     if (globalConfigResult.rows.length > 0) {
       Object.assign(this.defaultConfig, globalConfigResult.rows[0].config);
-    }
+
     
     // Load organization configurations
     const orgConfigsResult = await this.dbService.query(`
@@ -833,7 +830,7 @@ export class SessionLimitManager extends EventEmitter {
         tier: 'free', // Default, should be fetched from organization data
         ...row.config
       });
-    }
+
     
     // Load user overrides
     const userOverridesResult = await this.dbService.query(`
@@ -850,8 +847,8 @@ export class SessionLimitManager extends EventEmitter {
         createdBy: row.created_by,
         createdAt: row.created_at
       });
-    }
-  }
+
+
   
   // Continue with remaining private methods...
   // [Implementation continues with all the check methods, enforcement methods, etc.]
@@ -866,20 +863,19 @@ export class SessionLimitManager extends EventEmitter {
         organization: {},
         device: {},
         country: {}
-  }
+
       violations: {
         total: 0,
         byType: {},
         resolved: 0,
         pending: 0
-  }
+
       performance: {
         averageCheckTime: 0,
         cacheHitRate: 0,
         errorRate: 0
-      }
+
     };
-  }
+
   
   // Additional private methods will be implemented in separate files...
-}

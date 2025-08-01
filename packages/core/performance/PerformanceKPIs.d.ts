@@ -4,8 +4,8 @@
  */
 
 }
-export interface KPIDefinition {
-    id: string;
+}
+export interface KPIDefinition { id: string;
     name: string;
     description: string;
     category: 'runtime' | 'api' | 'bundle' | 'memory' | 'network' | 'build' | 'user-experience';
@@ -16,40 +16,33 @@ export interface KPIDefinition {
     measurement: {
         method: string;
         frequency: 'realtime' | 'interval' | 'on-demand';
-        source: string;
+        source: string }
 }
     };
     businessImpact: string;
     priority: 'critical' | 'high' | 'medium' | 'low';
 
 }
-export interface KPISnapshot {
-    kpiId: string;
+}
+export interface KPISnapshot { kpiId: string;
     value: number;
     timestamp: number;
     status: 'excellent' | 'good' | 'warning' | 'critical';
     trend: 'improving' | 'stable' | 'degrading';
-    metadata?: Record<string, any>;
-
+    metadata?: Record<string, any> }
 }
-export interface KPIThresholds {
-    excellent: {
+}
+export interface KPIThresholds { excellent: {
         min: number;
-        max?: number;
+        max?: number }
 }
     };
-    good: {
-        min: number;
-        max: number;
-    };
-    warning: {
-        min: number;
-        max: number;
-    };
-    critical: {
-        min?: number;
-        max: number;
-    };
+    good: { min: number;
+        max: number };
+    warning: { min: number;
+        max: number };
+    critical: { min?: number;
+        max: number };
 /**
  * Core Performance KPIs for the Prompt Graph System
  */
@@ -82,15 +75,13 @@ export declare function getKPIsByCategory(category: string): KPIDefinition[];
  * Get high-priority KPIs
  */
 export declare function getCriticalKPIs(): KPIDefinition[];
-declare const _default: {
-    corePerformanceKPIs: KPIDefinition[];
+declare const _default: { corePerformanceKPIs: KPIDefinition[];
     kpiThresholds: Record<string, KPIThresholds>;
     calculateKPIStatus: typeof calculateKPIStatus;
     calculateKPITrend: typeof calculateKPITrend;
     generateKPIRecommendations: typeof generateKPIRecommendations;
     getKPIDefinition: typeof getKPIDefinition;
     getKPIsByCategory: typeof getKPIsByCategory;
-    getCriticalKPIs: typeof getCriticalKPIs;
-};
+    getCriticalKPIs: typeof getCriticalKPIs };
 export default _default;
 //# sourceMappingURL=PerformanceKPIs.d.ts.map

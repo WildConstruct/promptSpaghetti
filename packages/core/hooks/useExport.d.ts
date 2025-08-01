@@ -1,5 +1,4 @@
-import { 
-  ExportTemplate,
+import { ExportTemplate,
   CreateExportTemplate,
   UpdateExportTemplate,
   ExportJob,
@@ -19,13 +18,13 @@ import {
   ExportProgress,
   ExportStatistics,
   ExportTemplateWithStats,
-  ExportJobWithTemplate,
+  ExportJobWithTemplate }
   ExportScheduleWithStats
 } from '../types/export';
 
 }
-interface UseExportState {
-    templates: ExportTemplate[];
+}
+interface UseExportState { templates: ExportTemplate[];
     jobs: ExportJob[];
     schedules: ExportSchedule[];
     shares: ExportShare[];
@@ -33,24 +32,23 @@ interface UseExportState {
     formatDefinitions: ExportFormatDefinition[];
     statistics: ExportStatistics | null;
     loading: boolean;
-    error: string | null;
-
-
+    error: string | null }
 }
-interface UseExportActions {
-    fetchTemplates: (options?: {),
+}
+interface UseExportActions { fetchTemplates: (options?: {) }
         format?: ExportFormat;
         isPublic?: boolean;
         limit?: number;
         offset?: number;
 
 }
+}
     }) => Promise<void>;
     createTemplate: (template: CreateExportTemplate) => Promise<ExportTemplate>;
     updateTemplate: (id: string, updates: UpdateExportTemplate) => Promise<ExportTemplate>;
     deleteTemplate: (id: string) => Promise<void>;
     getTemplateWithStats: (id: string) => Promise<ExportTemplateWithStats>;
-    fetchJobs: (options?: {),
+    fetchJobs: (options?: { ) }
         status?: ExportJobStatus;
         format?: ExportFormat;
         userId?: string;
@@ -72,7 +70,7 @@ interface UseExportActions {
     createShare: (share: CreateExportShare) => Promise<ExportShare>;
     updateShare: (id: string, updates: UpdateExportShare) => Promise<ExportShare>;
     deleteShare: (id: string) => Promise<void>;
-    fetchAnalytics: (options?: {),
+    fetchAnalytics: (options?: { ) }
         startDate?: string;
         endDate?: string;
         format?: ExportFormat;
@@ -80,11 +78,9 @@ interface UseExportActions {
     createAnalytics: (analytics: CreateExportAnalytics) => Promise<ExportAnalytics>;
     fetchFormatDefinitions: () => Promise<void>;
     getFormatDefinition: (formatName: string) => Promise<ExportFormatDefinition>;
-    validateFormatOptions: (formatName: string, options: any) => Promise<{
-        valid: boolean;
+    validateFormatOptions: (formatName: string, options: any) => Promise<{ valid: boolean;
         errors: string[];
-        validatedOptions: any;
-    }>;
+        validatedOptions: any }>;
     fetchStatistics: () => Promise<void>;
     getTemplates: (options?: any) => Promise<ExportTemplate[]>;
     getTemplateStats: (id: string) => Promise<any>;
@@ -104,8 +100,7 @@ interface UseExportActions {
     setLoading: (loading: boolean) => void;
 
 export type UseExportReturn = UseExportState & UseExportActions;
-export declare const useExport: ({ projectId }: {)
-    projectId: string;
-}) => UseExportReturn;
+export declare const useExport: ({ projectId }: { )
+    projectId: string }) => UseExportReturn;
 export {};
 //# sourceMappingURL=useExport.d.ts.map

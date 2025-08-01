@@ -18,7 +18,8 @@ export var ReconnectionState;
     success: boolean;
     error ?  : Error;
     backoffDelay: number;
-    connectionType: 'websocket' | 'http' | 'custom';
+    connectionType: 'websocket' | 'http' | 'custom',
+    ;
 }
 export class ReconnectionHandler extends EventEmitter {
     state = ReconnectionState.IDLE;
@@ -411,7 +412,7 @@ export class ReconnectionHandler extends EventEmitter {
      * Handle failed reconnection attempt
      */
     handleReconnectionFailure(error, duration) {
-        console.log(`Reconnection attempt ${this.currentAttempt},)}
+        console.log(`Reconnection attempt ${this.currentAttempt})},
   failed:`, error.message);
     }
 }

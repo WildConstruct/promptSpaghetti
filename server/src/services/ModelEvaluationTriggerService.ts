@@ -14,7 +14,7 @@ import { AuditService } from '../auth/services/AuditService';
 
 const exec = promisify(execCallback);
 
-}
+
 export interface ModelEvaluationTriggerRequest {
   modelId: string;
   modelName: string;
@@ -27,10 +27,11 @@ export interface ModelEvaluationTriggerRequest {
   triggeredBy: 'model_upload' | 'model_update' | 'manual_trigger';
   evaluationSuite?: 'standard' | 'comprehensive' | 'security' | 'performance';
   priority?: 'low' | 'medium' | 'high' | 'critical';
-}
-}
 
-}
+
+
+
+
 export interface ModelEvaluationJob {
   id: string;
   modelId: string;
@@ -45,16 +46,18 @@ export interface ModelEvaluationJob {
   githubRunId?: string;
   githubRunUrl?: string;
   priority: string;
-}
-}
 
-}
+
+
+
+
 export interface ModelEvaluationResults {
   overall: {
     score: number;
     status: 'passed' | 'failed' | 'warning';
     summary: string;
-}
+
+
   };
   performance: {
     accuracy?: number;
@@ -74,7 +77,7 @@ export interface ModelEvaluationResults {
       name: string;
       status: 'passed' | 'failed' | 'skipped';
       description: string;
-    }>;
+>;
     overallStatus: 'compliant' | 'non_compliant' | 'partial';
     score: number;
   };
@@ -90,9 +93,9 @@ export interface ModelEvaluationResults {
     metricsPath?: string;
     logsPath?: string;
   };
-}
 
-}
+
+
 export interface ModelEvaluationConfig {
   enabled: boolean;
   defaultEvaluationSuite: 'standard' | 'comprehensive' | 'security' | 'performance';
@@ -111,7 +114,8 @@ export interface ModelEvaluationConfig {
     development: boolean;
     staging: boolean;
     production: boolean;
-}
+
+
   };
   qualityGates: {
     minAccuracy: number;
@@ -119,7 +123,7 @@ export interface ModelEvaluationConfig {
     maxVulnerabilities: number;
     requiredCompliance: string[];
   };
-}
+
 
 export class ModelEvaluationTriggerService {
   private jobs: Map<string, ModelEvaluationJob>;
@@ -130,7 +134,7 @@ export class ModelEvaluationTriggerService {
     this.jobs = new Map();
     this.config = config;
     this.auditService = auditService;
-  }
+
 
   /**
    * Trigger model evaluation workflow
@@ -141,13 +145,13 @@ export class ModelEvaluationTriggerService {
       // Check if service is enabled
       if (!this.config.enabled) {
         throw new Error('Model evaluation triggering is disabled');
-      }
+
 
       // Check for existing running evaluation for this model
       const existingJob = this.findRunningEvaluation(request.modelId, request.version);
       if (existingJob) {
         throw new Error(`Evaluation already running for model ${request.modelId} version ${request.version}`);
-      }
+
 
       // Check concurrent evaluation limits
       const runningJobs = Array.from(this.jobs.values()).filter(
@@ -156,7 +160,7 @@ export class ModelEvaluationTriggerService {
       
       if (runningJobs.length >= this.config.maxConcurrentEvaluations) {
         throw new Error(`Maximum concurrent evaluations (${this.config.maxConcurrentEvaluations}) reached`);
-      }
+
 
       // Create evaluation job
       const job: ModelEvaluationJob = {
@@ -197,12 +201,11 @@ export class ModelEvaluationTriggerService {
           frameworks: ['AI_GOVERNANCE'],
           requirements: ['model_evaluation', 'automated_testing'],
           evidenceLevel: 'STANDARD'
-        }
+
       });
 
       return job;
-
-    } catch (error) {
+ catch (error) {
       // Log error event
       await this.auditService?.logEvent({
         eventType: 'MODEL_EVALUATION_TRIGGER_FAILED',
@@ -217,12 +220,12 @@ export class ModelEvaluationTriggerService {
           frameworks: ['AI_GOVERNANCE'],
           requirements: ['error_handling'],
           evidenceLevel: 'ENHANCED'
-        }
+
       });
 
       throw new Error(`Failed to trigger model evaluation: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Trigger GitHub Actions workflow via GitHub CLI or API
@@ -265,12 +268,12 @@ export class ModelEvaluationTriggerService {
         env: {
           ...process.env,
           GITHUB_TOKEN: this.config.githubToken
-        }
+
       });
 
       if (stderr && !stderr.includes('successfully queued')) {
         throw new Error(`GitHub CLI error: ${stderr}`);
-      }
+
 
       // Extract run ID from output (GitHub CLI doesn't return structured output)
       // In a real implementation, you might use GitHub API directly for better control
@@ -278,11 +281,10 @@ export class ModelEvaluationTriggerService {
       const runUrl = `https://github.com/${this.config.repositoryOwner}/${this.config.repositoryName}/actions/runs/${runId}`;
 
       return { runId, runUrl };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Failed to trigger GitHub workflow: ${error.message}`);
-    }
-  }
+
+
 
   /**
    * Get evaluation job status
@@ -290,7 +292,7 @@ export class ModelEvaluationTriggerService {
   async getEvaluationJob(jobId: string): Promise<ModelEvaluationJob | null> {
 
     return this.jobs.get(jobId) || null;
-  }
+
 
   /**
    * Get all evaluation jobs for a model
@@ -298,7 +300,7 @@ export class ModelEvaluationTriggerService {
   async getModelEvaluationJobs(modelId: string): Promise<ModelEvaluationJob[]> {
 
     return Array.from(this.jobs.values()).filter(job => job.modelId === modelId);
-  }
+
 
   /**
    * Update evaluation job status (called by webhook from CI)
@@ -313,7 +315,7 @@ export class ModelEvaluationTriggerService {
     const job = this.jobs.get(jobId);
     if (!job) {
       throw new Error(`Evaluation job ${jobId} not found`);
-    }
+
 
     job.status = status;
     job.results = results;
@@ -321,7 +323,7 @@ export class ModelEvaluationTriggerService {
 
     if (status === 'completed' || status === 'failed') {
       job.completedAt = new Date();
-    }
+
 
     // Log status update
     await this.auditService?.logEvent({
@@ -342,9 +344,9 @@ export class ModelEvaluationTriggerService {
         frameworks: ['AI_GOVERNANCE'],
         requirements: ['evaluation_tracking'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
-  }
+
 
   /**
    * Cancel evaluation job
@@ -354,11 +356,11 @@ export class ModelEvaluationTriggerService {
     const job = this.jobs.get(jobId);
     if (!job) {
       throw new Error(`Evaluation job ${jobId} not found`);
-    }
+
 
     if (job.status === 'completed' || job.status === 'failed') {
       throw new Error(`Cannot cancel ${job.status} evaluation`);
-    }
+
 
     job.status = 'cancelled';
     job.completedAt = new Date();
@@ -379,9 +381,9 @@ export class ModelEvaluationTriggerService {
         frameworks: ['AI_GOVERNANCE'],
         requirements: ['evaluation_control'],
         evidenceLevel: 'STANDARD'
-      }
+
     });
-  }
+
 
   /**
    * Get evaluation statistics
@@ -394,7 +396,7 @@ export class ModelEvaluationTriggerService {
     averageDuration: number;
     successRate: number;
     recentJobs: ModelEvaluationJob[];
-  }> {
+> {
     const jobs = Array.from(this.jobs.values());
     const completedJobs = jobs.filter(job => job.completedAt);
     
@@ -418,7 +420,7 @@ export class ModelEvaluationTriggerService {
     };
 
     return statistics;
-  }
+
 
   /**
    * Get service health status
@@ -426,7 +428,7 @@ export class ModelEvaluationTriggerService {
   async getHealthStatus(): Promise<{ 
     status: string; 
     details: Record<string, any> 
-  }> {
+> {
     try {
       const runningJobs = Array.from(this.jobs.values()).filter(
         job => job.status === 'running' || job.status === 'queued'
@@ -443,18 +445,18 @@ export class ModelEvaluationTriggerService {
           lastActivity: runningJobs.length > 0 
             ? Math.max(...runningJobs.map(job => job.triggeredAt.getTime()))
             : 'none'
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         details: {
           error: error.message,
           enabled: this.config.enabled
-        }
+
       };
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -464,22 +466,22 @@ export class ModelEvaluationTriggerService {
              job.version === version && 
              (job.status === 'running' || job.status === 'queued')
     );
-  }
+
 
   private generateJobId(): string {
     return `eval-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateRunId(): string {
     return Date.now().toString();
-  }
+
 
   private extractRunIdFromOutput(output: string): string | null {
     // GitHub CLI output parsing - this is a simplified version
     // In practice, you might want to use GitHub API for more reliable results
     const match = output.match(/run\s+(\d+)/i);
     return match ? match[1] : null;
-  }
+
 
   private groupBy(items: unknown[], key: string): Record<string, number> {
     const result: Record<string, number> = {};
@@ -488,8 +490,8 @@ export class ModelEvaluationTriggerService {
       result[value] = (result[value] || 0) + 1;
     });
     return result;
-  }
-}
+
+
 
 // Default configuration for development
 export const defaultModelEvaluationConfig: ModelEvaluationConfig = {
@@ -515,7 +517,7 @@ export const defaultModelEvaluationConfig: ModelEvaluationConfig = {
     maxLatency: 1000,
     maxVulnerabilities: 0,
     requiredCompliance: ['AI_GOVERNANCE']
-  }
+
 };
 
 export default ModelEvaluationTriggerService;

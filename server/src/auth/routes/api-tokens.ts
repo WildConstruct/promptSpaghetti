@@ -35,14 +35,15 @@ const AVAILABLE_SCOPES = [
   '*' // Full access (admin only)
 ];
 
-}
-}
+
+
 interface ApiTokenRouteContext {
   authService: AuthenticationService;
   tokenService: TokenService;
-}
-}
-}
+
+
+
+
 
 export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiTokenRouteContext) {
   const { authService, tokenService } = context;
@@ -62,13 +63,13 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
                   name: { type: 'string' },
                   description: { type: 'string' },
                   category: { type: 'string' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const scopeDescriptions = {
       'graphs:read': { description: 'Read access to graphs', category: 'graphs' },
@@ -98,7 +99,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
   // Create API token
   fastify.post<{
     Body: z.infer<typeof createApiTokenSchema>;
-  }>('/api-tokens', {
+>('/api-tokens', {
     preHandler: [fastify.authenticate], // JWT authentication middleware
     schema: {
       body: createApiTokenSchema,
@@ -112,10 +113,10 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
             scopes: { type: 'array', items: { type: 'string' } },
             expiresAt: { type: 'string' },
             warning: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { name, scopes, expiresIn } = request.body as z.infer<typeof createApiTokenSchema>;
@@ -127,7 +128,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       // Validate scopes
       const invalidScopes = scopes.filter(scope => !AVAILABLE_SCOPES.includes(scope));
@@ -136,7 +137,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           error: 'Invalid Scopes',
           message: `Invalid scopes: ${invalidScopes.join(', ')}`
         });
-      }
+
 
       // Check if user has permission to create tokens with these scopes
       const hasAdminRole = userRoles.includes('super_admin') || userRoles.includes('admin');
@@ -148,7 +149,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           error: 'Forbidden',
           message: 'Administrator privileges required for admin scopes'
         });
-      }
+
 
       // Get user data
       const userService = authService.getService('user');
@@ -159,7 +160,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           error: 'User Not Found',
           message: 'User not found'
         });
-      }
+
 
       // Generate API token
       const { token, tokenId } = await tokenService.generateApiToken(
@@ -183,7 +184,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           name,
           scopes,
           expiresAt
-  }
+
         ipAddress: request.ip,
         userAgent: request.headers['user-agent'],
         severity: 'info'
@@ -197,13 +198,13 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
         expiresAt: expiresAt.toISOString(),
         warning: 'Store this token securely. It will not be shown again.'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Create API token error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to create API token'
       });
-    }
+
   });
 
   // Get user's API tokens
@@ -226,13 +227,13 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
                   createdAt: { type: 'string' },
                   lastUsedAt: { type: 'string' },
                   revoked: { type: 'boolean' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -242,7 +243,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       const tokens = await tokenService.getUserApiTokens(userId);
 
@@ -257,19 +258,19 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           revoked: token.revoked
         }))
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get API tokens error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve API tokens'
       });
-    }
+
   });
 
   // Revoke API token
   fastify.post<{
     Body: z.infer<typeof revokeApiTokenSchema>;
-  }>('/api-tokens/revoke', {
+>('/api-tokens/revoke', {
     preHandler: [fastify.authenticate], // JWT authentication middleware
     schema: {
       body: revokeApiTokenSchema,
@@ -279,10 +280,10 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { tokenId } = request.body as z.infer<typeof revokeApiTokenSchema>;
@@ -293,7 +294,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       // Verify token belongs to user
       const userTokens = await tokenService.getUserApiTokens(userId);
@@ -304,14 +305,14 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           error: 'Token Not Found',
           message: 'API token not found or does not belong to user'
         });
-      }
+
 
       if (targetToken.revoked) {
         return reply.status(400).send({
           error: 'Token Already Revoked',
           message: 'API token has already been revoked'
         });
-      }
+
 
       // Revoke the token
       await tokenService.revokeApiToken(tokenId);
@@ -325,7 +326,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           tokenId,
           name: targetToken.name,
           scopes: targetToken.scopes
-  }
+
         ipAddress: request.ip,
         userAgent: request.headers['user-agent'],
         severity: 'info'
@@ -335,13 +336,13 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
         success: true,
         message: 'API token revoked successfully'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Revoke API token error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to revoke API token'
       });
-    }
+
   });
 
   // Test API token endpoint
@@ -357,10 +358,10 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
             scopes: { type: 'array', items: { type: 'string' } },
             user: { type: 'object' },
             expiresAt: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const user = request.user as any;
@@ -372,7 +373,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           error: 'Unauthorized',
           message: 'No token provided'
         });
-      }
+
 
       const payload = await tokenService.verifyAccessToken(token);
       const isApiToken = (payload as any).type === 'api';
@@ -385,16 +386,16 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           id: user.id,
           email: user.email,
           roles: user.roles
-  }
+
         expiresAt: new Date(payload.exp * 1000).toISOString()
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Test API token error:', error);
       return reply.status(401).send({
         error: 'Unauthorized',
         message: 'Invalid token'
       });
-    }
+
   });
 
   // API token usage statistics
@@ -410,10 +411,10 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
             revokedTokens: { type: 'number' },
             expiredTokens: { type: 'number' },
             recentlyUsed: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -423,7 +424,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           error: 'Unauthorized',
           message: 'User authentication required'
         });
-      }
+
 
       const dbService = authService.getService('database');
       const result = await dbService.query(`
@@ -460,12 +461,11 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
         expiredTokens: parseInt(stats.expired_tokens),
         recentlyUsed
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get API token stats error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
         message: 'Failed to retrieve token statistics'
       });
-    }
+
   });
-}

@@ -9,6 +9,7 @@
 import { EventEmitter } from 'events';
 
 }
+}
 export interface ServiceLevelObjective {
     id: string;
     name: string;
@@ -20,21 +21,18 @@ export interface ServiceLevelObjective {
         measurement_window: number;
         evaluation_period: 'daily' | 'weekly' | 'monthly' | 'quarterly'
 }
+}
   };
-    error_budget: {
-        budget_percentage: number;
+    error_budget: { budget_percentage: number;
         consumption_rate: number;
         remaining_budget: number;
         burn_rate_threshold: number;
         reset_frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
-        last_reset: number;
-    };
-    alerting: {
-        burn_rate_alerts: BurnRateAlert[];
+        last_reset: number };
+    alerting: { burn_rate_alerts: BurnRateAlert[];
         budget_exhaustion_threshold: number;
         multi_window_alerting: boolean;
-        escalation_policy: string[];
-    };
+        escalation_policy: string[] };
     performance_history: SLOPerformanceRecord[];
     created_by: string;
     created_at: number;
@@ -42,18 +40,17 @@ export interface ServiceLevelObjective {
     enabled: boolean;
 
 }
-export interface BurnRateAlert {
-    id: string;
+}
+export interface BurnRateAlert { id: string;
     name: string;
     short_window: number;
     long_window: number;
     burn_rate_threshold: number;
     severity: 'warning' | 'critical';
-    notification_channels: string[];
-
+    notification_channels: string[] }
 }
-export interface SLOPerformanceRecord {
-    timestamp: number;
+}
+export interface SLOPerformanceRecord { timestamp: number;
     measurement_window_start: number;
     measurement_window_end: number;
     actual_performance: number;
@@ -61,8 +58,8 @@ export interface SLOPerformanceRecord {
     error_budget_consumed: number;
     error_budget_remaining: number;
     incidents_affecting_slo: string[];
-    automated_actions_taken: string[];
-
+    automated_actions_taken: string[] }
+}
 }
 export interface ReliabilityIncident {
     id: string;
@@ -74,48 +71,42 @@ export interface ReliabilityIncident {
         root_cause_category: 'infrastructure' | 'software_bug' | 'human_error' | 'external_dependency' | 'capacity' | 'security';
         impact_scope: 'single_service' | 'multiple_services' | 'entire_platform' | 'customer_facing'
 }
+}
   };
-    timeline: {
-        detected_at: number;
+    timeline: { detected_at: number;
         acknowledged_at?: number;
         mitigated_at?: number;
         resolved_at?: number;
-        postmortem_completed_at?: number;
-    };
-    impact: {
-        affected_services: string[];
+        postmortem_completed_at?: number };
+    impact: { affected_services: string[];
         affected_slos: string[];
         customer_impact: 'none' | 'minimal' | 'moderate' | 'significant' | 'severe';
         error_budget_impact: Record<string, number>;
         estimated_cost: number;
-        users_affected: number;
-    };
-    response: {
-        responders: string[];
+        users_affected: number };
+    response: { responders: string[];
         incident_commander: string;
         communication_channels: string[];
         actions_taken: IncidentAction[];
         lessons_learned: string[];
-        improvement_items: ImprovementItem[];
-    };
+        improvement_items: ImprovementItem[] };
     created_by: string;
     created_at: number;
     last_updated: number;
     status: 'active' | 'mitigated' | 'resolved' | 'postmortem_pending' | 'closed';
 
 }
-export interface IncidentAction {
-    id: string;
+}
+export interface IncidentAction { id: string;
     timestamp: number;
     actor: string;
     type: 'investigation' | 'mitigation' | 'communication' | 'escalation' | 'resolution';
     description: string;
     outcome: string;
-    automated: boolean;
-
+    automated: boolean }
 }
-export interface ImprovementItem {
-    id: string;
+}
+export interface ImprovementItem { id: string;
     title: string;
     description: string;
     category: 'monitoring' | 'alerting' | 'automation' | 'documentation' | 'training' | 'architecture';
@@ -123,60 +114,49 @@ export interface ImprovementItem {
     estimated_effort: string;
     assigned_to: string;
     due_date: number;
-    status: 'planned' | 'in_progress' | 'completed' | 'cancelled';
-
+    status: 'planned' | 'in_progress' | 'completed' | 'cancelled' }
 }
-export interface ReliabilityMetrics {
-    id: string;
+}
+export interface ReliabilityMetrics { id: string;
     service: string;
     collection_period: {
         start: number;
-        end: number;
+        end: number }
 }
     };
-    availability: {
-        uptime_percentage: number;
+    availability: { uptime_percentage: number;
         downtime_minutes: number;
         mtbf: number;
         mttr: number;
-        mttd: number;
-    };
-    performance: {
-        avg_response_time: number;
+        mttd: number };
+    performance: { avg_response_time: number;
         p50_response_time: number;
         p95_response_time: number;
         p99_response_time: number;
         throughput_rps: number;
-        error_rate_percentage: number;
-    };
-    error_budget: {
-        total_budget: number;
+        error_rate_percentage: number };
+    error_budget: { total_budget: number;
         consumed_budget: number;
         remaining_budget: number;
         burn_rate: number;
-        projected_exhaustion_date?: number;
-    };
-    capacity: {
-        cpu_utilization: number;
+        projected_exhaustion_date?: number };
+    capacity: { cpu_utilization: number;
         memory_utilization: number;
         disk_utilization: number;
         network_utilization: number;
         connection_pool_utilization: number;
-        queue_depth: number;
-    };
-    dependencies: Array<{
-        service: string;
+        queue_depth: number };
+    dependencies: Array<{ service: string;
         availability: number;
         avg_response_time: number;
         error_rate: number;
-        health_score: number;
-    }>;
+        health_score: number }>;
     collected_at: number;
     collection_method: 'automated' | 'manual';
 
 }
-export interface PostmortemTemplate {
-    id: string;
+}
+export interface PostmortemTemplate { id: string;
     name: string;
     description: string;
     incident_categories: string[];
@@ -185,7 +165,7 @@ export interface PostmortemTemplate {
         description: string;
         required: boolean;
         type: 'text' | 'timeline' | 'metrics' | 'action_items' | 'root_cause_analysis';
-        template_content?: string;
+        template_content?: string }
 }
     }>;
     required_reviewers: string[];
@@ -196,38 +176,32 @@ export interface PostmortemTemplate {
     last_updated: number;
 
 }
-export interface ReliabilityReport {
-    id: string;
+}
+export interface ReliabilityReport { id: string;
     title: string;
     report_type: 'weekly' | 'monthly' | 'quarterly' | 'incident_summary' | 'slo_review';
     period: {
         start: number;
-        end: number;
+        end: number }
 }
     };
-    summary: {
-        overall_reliability_score: number;
+    summary: { overall_reliability_score: number;
         key_achievements: string[];
         major_incidents: number;
         error_budget_status: 'healthy' | 'at_risk' | 'exhausted';
-        top_reliability_risks: string[];
-    };
-    metrics: {
-        slo_performance: Array<{
+        top_reliability_risks: string[] };
+    metrics: { slo_performance: Array<{
             slo_id: string;
             slo_name: string;
             target: number;
             actual: number;
             status: 'met' | 'missed' | 'at_risk';
-            error_budget_remaining: number;
-        }>;
-        incident_statistics: {
-            total_incidents: number;
+            error_budget_remaining: number }>;
+        incident_statistics: { total_incidents: number;
             by_severity: Record<string, number>;
             by_category: Record<string, number>;
             avg_mttr: number;
-            avg_mttd: number;
-        };
+            avg_mttd: number };
         service_health: Array<{
             service: string;
             availability: number;
@@ -236,22 +210,20 @@ export interface ReliabilityReport {
             trend: 'improving' | 'stable' | 'degrading'
   }>;
     };
-    recommendations: Array<{
-        priority: 'low' | 'medium' | 'high' | 'critical';
+    recommendations: Array<{ priority: 'low' | 'medium' | 'high' | 'critical';
         category: 'monitoring' | 'capacity' | 'automation' | 'process';
         title: string;
         description: string;
         estimated_impact: string;
-        estimated_effort: string;
-    }>;
+        estimated_effort: string }>;
     generated_by: string;
     generated_at: number;
     reviewed_by?: string[];
     approved_at?: number;
 
 }
-export interface ReliabilityEvent {
-    id: string;
+}
+export interface ReliabilityEvent { id: string;
     type: 'slo_violation' | 'error_budget_alert' | 'incident_detected' | 'capacity_threshold' | 'performance_degradation';
     severity: 'info' | 'warning' | 'error' | 'critical';
     source: string;
@@ -263,20 +235,17 @@ export interface ReliabilityEvent {
         metrics?: Record<string, number>;
         thresholds?: Record<string, number>;
         projected_impact?: string;
-        recommended_actions?: string[];
+        recommended_actions?: string[] }
 }
     };
-    response: {
-        acknowledged: boolean;
+    response: { acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
         auto_resolved: boolean;
         resolved_at?: number;
-        resolution_notes?: string;
-    };
+        resolution_notes?: string };
 
-export declare class SecurityReliabilityEngineer extends EventEmitter {
-    private slos;
+export declare class SecurityReliabilityEngineer extends EventEmitter { private slos;
     private incidents;
     private metrics;
     private postmortemTemplates;
@@ -288,36 +257,31 @@ export declare class SecurityReliabilityEngineer extends EventEmitter {
         actual_performance: number;
         measurement_window_start: number;
         measurement_window_end: number;
-        incidents?: string[];
-    }): Promise<void>;
+        incidents?: string[] }): Promise<void>;
     private calculateBurnRate;
     private handleSLOViolation;
     private checkErrorBudgetAlerts;
     createIncident(incident: Omit<ReliabilityIncident, 'id' | 'created_at' | 'last_updated' | 'timeline' | 'response'>): Promise<string>;
-    updateIncidentStatus(incidentId: string, status: ReliabilityIncident['status'], updates: {)
+    updateIncidentStatus(incidentId: string, status: ReliabilityIncident['status'], updates: { )
         timeline_update?: Partial<ReliabilityIncident['timeline']>;
         actions?: IncidentAction[];
         lessons_learned?: string[];
-        improvement_items?: ImprovementItem[];
-    }): Promise<void>;
+        improvement_items?: ImprovementItem[] }): Promise<void>;
     collectServiceMetrics(service: string): Promise<string>;
     private calculateServiceHealthScore;
-    generateReliabilityReport(reportType: ReliabilityReport['report_type'], period: {)
+    generateReliabilityReport(reportType: ReliabilityReport['report_type'], period: { )
         start: number;
-        end: number;
-    }): Promise<string>;
+        end: number }): Promise<string>;
     private calculateAverageMTTR;
     private calculateAverageMTTD;
-    getSystemHealth(): {
-        overall_status: 'healthy' | 'degraded' | 'critical';
+    getSystemHealth(): { overall_status: 'healthy' | 'degraded' | 'critical';
         slo_compliance: number;
         active_incidents: number;
         error_budget_status: 'healthy' | 'at_risk' | 'exhausted';
         services: Array<{
             name: string;
             status: 'healthy' | 'degraded' | 'unhealthy';
-            health_score: number;
-        }>;
+            health_score: number }>;
     };
     private initializeDefaultSLOs;
     private startMetricsCollection;

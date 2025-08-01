@@ -11,26 +11,17 @@ import { ToggleParametersService } from '../services/ToggleParametersService';
 import { Database } from '../database/connection';
 import { ToggleType } from '../database/feature-toggle-models';
 
-}
-}
+
+
 interface ToggleParametersRouteOptions {
   db: Database;
-}
-}
-}
+
+
+
+
 
 // Request schemas for validation
-const validateParametersSchema = {
-  type: 'object',
-  required: ['toggleType', 'parameters'],
-  properties: {
-    toggleType: { 
-      type: 'string', 
-      enum: Object.values(ToggleType)
-  }
-    parameters: { type: 'object' }
-  }
-};
+const validateParametersSchema = {};
 
 const updateParametersSchema = {
   type: 'object',
@@ -38,7 +29,7 @@ const updateParametersSchema = {
   properties: {
     parameters: { type: 'object' },
     reason: { type: 'string', maxLength: 500 }
-  }
+
 };
 
 const createPresetSchema = {
@@ -50,18 +41,18 @@ const createPresetSchema = {
     toggleType: { 
       type: 'string', 
       enum: Object.values(ToggleType)
-  }
+
     parameters: { type: 'object' },
     tags: { 
       type: 'array', 
       items: { type: 'string' },
       maxItems: 10
-  }
+
     usage: { 
       type: 'string',
       enum: ['development', 'staging', 'production', 'experiment']
-    }
-  }
+
+
 };
 
 export default async function toggleParametersRoutes(
@@ -74,7 +65,7 @@ export default async function toggleParametersRoutes(
   const requireAuth = async (request: FastifyRequest, reply: FastifyReply) => {
     if (!request.user) {
       return reply.code(401).send({ error: 'Authentication required' });
-    }
+
   };
 
   // Middleware for admin permissions
@@ -82,7 +73,7 @@ export default async function toggleParametersRoutes(
     const user = (request as any).user;
     if (!user || !user.permissions?.includes('toggle.manage')) {
       return reply.code(403).send({ error: 'Admin permissions required' });
-    }
+
   };
 
   // ==========================================
@@ -107,14 +98,14 @@ export default async function toggleParametersRoutes(
         success: true,
         validation
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to validate parameters:', error);
       return reply.status(400).send({
         success: false,
         error: 'Parameter validation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // GET /api/toggle-parameters/template/:type
@@ -129,10 +120,10 @@ export default async function toggleParametersRoutes(
           type: { 
             type: 'string', 
             enum: Object.values(ToggleType)
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { type } = request.params as { type: ToggleType };
@@ -144,14 +135,14 @@ export default async function toggleParametersRoutes(
         template,
         defaultParameters
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get parameter template:', error);
       return reply.status(400).send({
         success: false,
         error: 'Failed to get parameter template',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // ==========================================
@@ -168,10 +159,10 @@ export default async function toggleParametersRoutes(
         required: ['toggleId'],
         properties: {
           toggleId: { type: 'string' }
-        }
-  }
+
+
       body: updateParametersSchema
-    }
+
   }, async (request, reply) => {
     try {
       const { toggleId } = request.params as { toggleId: string };
@@ -192,14 +183,14 @@ export default async function toggleParametersRoutes(
         success: true,
         toggle: updatedToggle
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to update toggle parameters:', error);
       return reply.status(400).send({
         success: false,
         error: 'Failed to update toggle parameters',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // GET /api/toggle-parameters/:toggleId/history
@@ -212,15 +203,15 @@ export default async function toggleParametersRoutes(
         required: ['toggleId'],
         properties: {
           toggleId: { type: 'string' }
-        }
-  }
+
+
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { toggleId } = request.params as { toggleId: string };
@@ -235,14 +226,14 @@ export default async function toggleParametersRoutes(
         success: true,
         history
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to get parameter change history:', error);
       return reply.status(400).send({
         success: false,
         error: 'Failed to get parameter change history',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // ==========================================
@@ -260,18 +251,18 @@ export default async function toggleParametersRoutes(
           toggleType: { 
             type: 'string', 
             enum: Object.values(ToggleType)
-  }
+
           usage: { 
             type: 'string',
             enum: ['development', 'staging', 'production', 'experiment']
-  }
+
           tags: { 
             type: 'array', 
             items: { type: 'string' } 
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request, reply) => {
     try {
       const { toggleType, usage, tags } = request.query as {
@@ -290,14 +281,14 @@ export default async function toggleParametersRoutes(
         success: true,
         presets
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to list parameter presets:', error);
       return reply.status(400).send({
         success: false,
         error: 'Failed to list parameter presets',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // POST /api/toggle-parameters/presets
@@ -326,14 +317,14 @@ export default async function toggleParametersRoutes(
         success: true,
         presetId
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to create parameter preset:', error);
       return reply.status(400).send({
         success: false,
         error: 'Failed to create parameter preset',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // POST /api/toggle-parameters/:toggleId/apply-preset/:presetId
@@ -347,15 +338,15 @@ export default async function toggleParametersRoutes(
         properties: {
           toggleId: { type: 'string' },
           presetId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', maxLength: 500 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { toggleId, presetId } = request.params as { 
@@ -376,14 +367,14 @@ export default async function toggleParametersRoutes(
         success: true,
         toggle: updatedToggle
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to apply parameter preset:', error);
       return reply.status(400).send({
         success: false,
         error: 'Failed to apply parameter preset',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // ==========================================
@@ -400,8 +391,8 @@ export default async function toggleParametersRoutes(
         required: ['toggleId'],
         properties: {
           toggleId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
@@ -414,11 +405,11 @@ export default async function toggleParametersRoutes(
               timestamp: { type: 'string', format: 'date-time' },
               ipAddress: { type: 'string' },
               userAgent: { type: 'string' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     try {
       const { toggleId } = request.params as { toggleId: string };
@@ -434,7 +425,7 @@ export default async function toggleParametersRoutes(
           success: false,
           error: 'Toggle not found'
         });
-      }
+
 
       // Add user context if not provided
       const evaluationContext = {
@@ -455,14 +446,14 @@ export default async function toggleParametersRoutes(
         success: true,
         result
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Failed to evaluate toggle parameters:', error);
       return reply.status(400).send({
         success: false,
         error: 'Failed to evaluate toggle parameters',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // ==========================================
@@ -481,14 +472,14 @@ export default async function toggleParametersRoutes(
       };
 
       return reply.send(health);
-    } catch (error) {
+ catch (error) {
       return reply.status(500).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
-}
+
 
 // Export route registration function
 export { toggleParametersRoutes };

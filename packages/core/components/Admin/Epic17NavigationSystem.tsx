@@ -10,8 +10,7 @@
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  Shield,
+import { Shield,
   ToggleLeft,
   Users,
   FileText,
@@ -30,86 +29,82 @@ import {
   Home,
   ArrowLeft,
   Bell,
-  HelpCircle,
+  HelpCircle }
   Zap
-} from 'lucide-react';
+ from 'lucide-react';
 import { useEpic17Authorization } from '../../../client/src/hooks/useEpic17Authorization';
 
 // Navigation configuration interfaces
 
-}
-export interface NavigationItem {
-  id: string;
+
+export interface NavigationItem { id: string;
   label: string;
   description?: string;
   icon: React.ComponentType<unknown>;
   path: string;
   children?: NavigationItem;
-  requiredPermissions?: {
+  requiredPermissions?: { }
   resource: string;
   actions: string;
-}
-}[];
+
+
+[];
   badge?: NavigationBadge;
-  metadata: {
+  metadata: { ,
   category: string;
   priority: number;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   epic?: string;
   story?: string;
-  tags: string;
-};
-}
-}
-export interface NavigationBadge {
-  type: 'count' | 'status' | 'alert' | 'info';
+  tags: string };
+
+
+export interface NavigationBadge { type: 'count' | 'status' | 'alert' | 'info' }
   value: string | number;
   color: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'gray';
   pulse?: boolean;
-}
-}
-}
-export interface NavigationContext {
-  currentPath: string;
+
+
+
+
+export interface NavigationContext { currentPath: string;
   currentSection: string;
   parentSections: string;
   breadcrumbs: BreadcrumbItem;
-  availableActions: QuickAction;
-}
-}
-}
-export interface BreadcrumbItem {
-  label: string;
+  availableActions: QuickAction }
+
+
+
+export interface BreadcrumbItem { label: string;
   path: string;
   icon?: React.ComponentType<unknown>;
-  active: boolean;
-}
-}
-}
-export interface QuickAction {
-  id: string;
+  active: boolean }
+
+
+
+export interface QuickAction { id: string;
   label: string;
   description: string;
   icon: React.ComponentType<unknown>;
   action: () => void;
   shortcut?: string;
-  category: 'primary' | 'secondary' | 'tertiary';
+  category: 'primary' | 'secondary' | 'tertiary' }
   enabled: boolean;
-}
-}
-}
-export interface NavigationState {
-  expandedSections: Set<string>;
+
+
+
+
+export interface NavigationState { expandedSections: Set<string> }
   pinnedItems: Set<string>;
   recentItems: RecentItem;
   favoriteItems: Set<string>;
   searchQuery: string;
   mobileMenuOpen: boolean;
-}
-}
-}
-export interface RecentItem {
-  id: string;
+
+
+
+
+export interface RecentItem { id: string;
   label: string;
   path: string;
   timestamp: Date;
@@ -117,427 +112,400 @@ export interface RecentItem {
   // Epic 17 Navigation Configuration
   const EPIC17_NAVIGATION: NavigationItem = [
   {
-  id: 'overview',
-  label: 'Overview',
-  description: 'System overview and dashboard',
-  icon: Home,
-  path: '/admin',
-  metadata: {
-  category: 'dashboard',
-  priority: 100,
-  riskLevel: 'low',
-  tags: ['dashboard', 'overview'],
-}
-}
-  {
-    id: 'feature-management',
+  id: 'overview';
+  label: 'Overview';
+  description: 'System overview and dashboard';
+  icon: Home;
+  path: '/admin';
+  metadata: {;
+  category: 'dashboard';
+  priority: 100;
+  riskLevel: 'low';
+  tags: ['dashboard', 'overview'] }
+
+
+
+  { id: 'feature-management',
     label: 'Feature Management',
     description: 'Feature toggles and rollout controls',
     icon: ToggleLeft,
     path: '/admin/features',
-    children: [,
+    children: [
       {
         id: 'feature-toggles',
         label: 'Feature Toggles',
         description: 'Manage feature flags and rollouts',
         icon: ToggleLeft,
-        path: '/admin/features/toggles',
+        path: '/admin/features/toggles' }
         badge: { type: 'count', value: 12, color: 'blue' },
-        metadata: {
+        metadata: { ,
   category: 'feature_toggles',
   priority: 90,
   riskLevel: 'high',
   epic: '17.1',
-  tags: ['toggles', 'rollouts', 'features'],
-}
-      {
-  id: 'toggle-dependencies',
+  tags: ['toggles', 'rollouts', 'features'] }
+
+      { id: 'toggle-dependencies',
   label: 'Dependencies',
   description: 'Manage toggle dependencies and conflicts',
   icon: Zap,
   path: '/admin/features/dependencies',
-  metadata: {
+  metadata: {,
   category: 'dependencies',
   priority: 85,
   riskLevel: 'high',
-  tags: ['dependencies', 'conflicts', 'analysis'],
-}
-      {
-  id: 'toggle-conditions',
+  tags: ['dependencies', 'conflicts', 'analysis'] }
+
+      { id: 'toggle-conditions',
   label: 'Conditions',
   description: 'Advanced targeting and conditions',
   icon: Settings,
   path: '/admin/features/conditions',
-  metadata: {
+  metadata: {,
   category: 'conditions',
   priority: 80,
   riskLevel: 'medium',
   tags: ['conditions', 'targeting', 'rules']],
-  metadata: {
+  metadata: {,
   category: 'feature_management',
   priority: 95,
   riskLevel: 'high',
   epic: '17.1',
-  tags: ['features', 'management'],
-}
-  {
-    id: 'user-management',
+  tags: ['features', 'management'] }
+
+  { id: 'user-management',
     label: 'User Management',
     description: 'User accounts and permissions',
     icon: Users,
     path: '/admin/users',
-    children: [,
+    children: [
       {
         id: 'user-accounts',
         label: 'User Accounts',
         description: 'Manage user accounts and profiles',
         icon: Users,
-        path: '/admin/users/accounts',
+        path: '/admin/users/accounts' }
         badge: { type: 'count', value: 1247, color: 'green' },
-        metadata: {
+        metadata: { ,
   category: 'user_accounts',
   priority: 80,
   riskLevel: 'critical',
-  tags: ['users', 'accounts', 'profiles'],
-}
-      {
-        id: 'permissions',
+  tags: ['users', 'accounts', 'profiles'] }
+
+      { id: 'permissions',
         label: 'Permissions',
         description: 'Role-based access control',
         icon: Shield,
-        path: '/admin/users/permissions',
+        path: '/admin/users/permissions' }
         badge: { type: 'alert', value: '!', color: 'yellow', pulse: true },
-        metadata: {
+        metadata: { ,
   category: 'permissions',
   priority: 85,
   riskLevel: 'critical',
-  tags: ['permissions', 'rbac', 'security'],
-}
-      {
-  id: 'activity-monitoring',
+  tags: ['permissions', 'rbac', 'security'] }
+
+      { id: 'activity-monitoring',
   label: 'Activity Monitoring',
   description: 'User activity and behavior tracking',
   icon: BarChart3,
   path: '/admin/users/activity',
-  metadata: {
+  metadata: {,
   category: 'monitoring',
   priority: 70,
   riskLevel: 'medium',
   tags: ['activity', 'monitoring', 'analytics']],
-  metadata: {
+  metadata: {,
   category: 'user_management',
   priority: 90,
   riskLevel: 'critical',
   epic: '17.3',
-  tags: ['users', 'permissions'],
-}
-  {
-    id: 'content-management',
+  tags: ['users', 'permissions'] }
+
+  { id: 'content-management',
     label: 'Content Management',
     description: 'Content moderation and publishing',
     icon: FileText,
     path: '/admin/content',
-    children: [,
+    children: [
       {
         id: 'content-review',
         label: 'Content Review',
         description: 'Moderate and review content',
         icon: FileText,
-        path: '/admin/content/review',
+        path: '/admin/content/review' }
         badge: { type: 'count', value: 23, color: 'red', pulse: true },
-        metadata: {
+        metadata: { ,
   category: 'content_review',
   priority: 75,
   riskLevel: 'medium',
-  tags: ['content', 'review', 'moderation'],
-}
-      {
-  id: 'content-categories',
+  tags: ['content', 'review', 'moderation'] }
+
+      { id: 'content-categories',
   label: 'Categories',
   description: 'Manage content categories and tags',
   icon: Settings,
   path: '/admin/content/categories',
-  metadata: {
+  metadata: {,
   category: 'categories',
   priority: 60,
   riskLevel: 'low',
   tags: ['categories', 'taxonomy', 'organization']],
-  metadata: {
+  metadata: {,
   category: 'content_management',
   priority: 75,
   riskLevel: 'medium',
   epic: '17.2',
-  tags: ['content', 'moderation'],
-}
-  {
-    id: 'marketplace',
+  tags: ['content', 'moderation'] }
+
+  { id: 'marketplace',
     label: 'Marketplace Admin',
     description: 'Marketplace management and transactions',
     icon: ShoppingCart,
     path: '/admin/marketplace',
-    children: [,
+    children: [
       {
         id: 'template-review',
         label: 'Template Review',
         description: 'Review and approve templates',
         icon: FileText,
-        path: '/admin/marketplace/review',
+        path: '/admin/marketplace/review' }
         badge: { type: 'count', value: 8, color: 'purple' },
-        metadata: {
+        metadata: { ,
   category: 'template_review',
   priority: 70,
   riskLevel: 'medium',
-  tags: ['templates', 'review', 'approval'],
-}
-      {
-  id: 'transactions',
+  tags: ['templates', 'review', 'approval'] }
+
+      { id: 'transactions',
   label: 'Transactions',
   description: 'Monitor transactions and payments',
   icon: BarChart3,
   path: '/admin/marketplace/transactions',
-  metadata: {
+  metadata: {,
   category: 'transactions',
   priority: 65,
   riskLevel: 'high',
   tags: ['transactions', 'payments', 'monitoring']],
-  metadata: {
+  metadata: {,
   category: 'marketplace',
   priority: 70,
   riskLevel: 'medium',
   epic: '17.5',
-  tags: ['marketplace', 'commerce'],
-}
-  {
-  id: 'system',
+  tags: ['marketplace', 'commerce'] }
+
+  { id: 'system',
   label: 'System Configuration',
   description: 'System settings and configuration',
   icon: Settings,
   path: '/admin/system',
-  children: [,
+  children: [
   {
   id: 'api-management',
   label: 'API Management',
   description: 'Manage API keys and rate limits',
   icon: Key,
   path: '/admin/system/api',
-  metadata: {
+  metadata: {,
   category: 'api_management',
   priority: 60,
   riskLevel: 'high',
-  tags: ['api', 'keys', 'rate-limiting'],
-}
-      {
-  id: 'integrations',
+  tags: ['api', 'keys', 'rate-limiting'] }
+
+      { id: 'integrations',
   label: 'Integrations',
   description: 'Third-party integrations and webhooks',
   icon: Zap,
   path: '/admin/system/integrations',
-  metadata: {
+  metadata: {,
   category: 'integrations',
   priority: 55,
   riskLevel: 'medium',
   tags: ['integrations', 'webhooks', 'third-party']],
-  metadata: {
+  metadata: {,
   category: 'system_configuration',
   priority: 65,
   riskLevel: 'high',
   epic: '17.4',
-  tags: ['system', 'configuration'],
-}
-  {
-  id: 'analytics',
+  tags: ['system', 'configuration'] }
+
+  { id: 'analytics',
   label: 'Analytics & Monitoring',
   description: 'System analytics and performance monitoring',
   icon: BarChart3,
   path: '/admin/analytics',
-  children: [,
+  children: [
   {
   id: 'dashboards',
   label: 'Dashboards',
   description: 'System health and performance dashboards',
   icon: BarChart3,
   path: '/admin/analytics/dashboards',
-  metadata: {
+  metadata: {,
   category: 'dashboards',
   priority: 50,
   riskLevel: 'low',
-  tags: ['dashboards', 'metrics', 'performance'],
-}
-      {
-        id: 'alerts',
+  tags: ['dashboards', 'metrics', 'performance'] }
+
+      { id: 'alerts',
         label: 'Alerts',
         description: 'System alerts and notifications',
         icon: Bell,
-        path: '/admin/analytics/alerts',
+        path: '/admin/analytics/alerts' }
         badge: { type: 'status', value: 'OK', color: 'green' },
-        metadata: {
+        metadata: { ,
   category: 'alerts',
   priority: 65,
   riskLevel: 'medium',
   tags: ['alerts', 'notifications', 'monitoring']],
-  metadata: {
+  metadata: {,
   category: 'analytics',
   priority: 60,
   riskLevel: 'low',
   epic: '17.4',
-  tags: ['analytics', 'monitoring'],
-}
-  {
-    id: 'audit',
+  tags: ['analytics', 'monitoring'] }
+
+  { id: 'audit',
     label: 'Audit & Security',
     description: 'Audit logs and security monitoring',
     icon: ScrollText,
-    path: '/admin/audit',
+    path: '/admin/audit' }
     badge: { type: 'info', value: 'New', color: 'blue' },
-    metadata: {
+    metadata: { ,
   category: 'audit_security',
   priority: 85,
-  riskLevel: 'critical',
+  riskLevel: 'critical' }
   tags: ['audit', 'security', 'compliance']];
-  interface Epic17NavigationSystemProps {
-  currentSection?: string;
+  interface Epic17NavigationSystemProps { currentSection?: string;
   onSectionChange?: (section: string) => void;
   variant?: 'sidebar' | 'top' | 'mobile';
   showBreadcrumbs?: boolean;
   showQuickActions?: boolean;
-  enableSearch?: boolean;
-}
-}
-export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
-  currentSection = 'overview',
-  onSectionChange,
-  variant = 'sidebar',
-  showBreadcrumbs = true,
-  showQuickActions = true,
+  enableSearch?: boolean }
+
+export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({ )
+  currentSection = 'overview'
+  onSectionChange
+  variant = 'sidebar'
+  showBreadcrumbs = true
+  showQuickActions = true }
   enableSearch = true
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { canAccess, userRoles, availableSections } = useEpic17Authorization();
   // Navigation state
-  const [state, setState] = useState<NavigationState>({)
-  expandedSections: new Set(['feature-management', 'user-management']),
-  pinnedItems: new Set(['feature-toggles', 'user-accounts']),
-  recentItems: [],
-  favoriteItems: new Set(['feature-toggles', 'permissions']),
-  searchQuery: '',
-  mobileMenuOpen: false,
+  const [state, setState] = useState<NavigationState>({ )
+  expandedSections: new Set(['feature-management', 'user-management'])
+  pinnedItems: new Set(['feature-toggles', 'user-accounts'])
+  recentItems: []
+  favoriteItems: new Set(['feature-toggles', 'permissions'])
+  searchQuery: ''
+  mobileMenuOpen: false }
 });
   // Filter navigation items based on permissions
-  const availableNavItems = useMemo(() => {
-  const filterItems = (items: NavigationItem): NavigationItem => {,
-  return items.filter(item => {)
+  const availableNavItems = useMemo(() => { const filterItems = (items: NavigationItem): NavigationItem => { }
+  return items.filter(item => { )
   // For now, return all items - in full implementation would check permissions
-  return true;
-}).map(item => ({)
-  ...item,
-  children: item.children ? filterItems(item.children) : undefined,
+  return true }).map(item => ({ )
+  ...item
+  children: item.children ? filterItems(item.children) : undefined }
 }));
     };
     return filterItems(EPIC17_NAVIGATION);
   }, [canAccess]);
   // Generate navigation context
-  const navigationContext: NavigationContext = useMemo(() => {
-  const pathSegments = location.pathname.split('/').filter(Boolean);
+  const navigationContext: NavigationContext = useMemo(() => { const pathSegments = location.pathname.split('/').filter(Boolean);
   const currentPath = location.pathname;
   // Find current item
-  const findCurrentItem = (items: NavigationItem, segments: string): NavigationItem | null => {,
-  for (const item of items) {
-  if (item.path === currentPath) return item;
+  const findCurrentItem = (items: NavigationItem, segments: string): NavigationItem | null => { }
+  for (const item of items) { if (item.path === currentPath) return item;
   if (item.children) {
   const found = findCurrentItem(item.children, segments);
   if (found) return found;
-  return null;
-};
+  return null };
     const currentItem = findCurrentItem(availableNavItems, pathSegments);
     // Generate breadcrumbs
     const breadcrumbs: BreadcrumbItem = [
       { label: 'Admin', path: '/admin', icon: Shield, active: false }
     ];
-    if (currentItem) {
-  // Add parent breadcrumbs
+    if (currentItem) { // Add parent breadcrumbs
   const parentPath = currentItem.path.split('/').slice(0, -1).join('/');
   if (parentPath !== '/admin') {
   breadcrumbs.push({)
-  label: 'Section',
-  path: parentPath,
-  active: false,
+  label: 'Section'
+  path: parentPath
+  active: false }
 });
-      breadcrumbs.push({)
-  label: currentItem.label,
-  path: currentItem.path,
-  icon: currentItem.icon,
-  active: true,
+      breadcrumbs.push({ )
+  label: currentItem.label
+  path: currentItem.path
+  icon: currentItem.icon
+  active: true }
 });
-    return {
-  currentPath,
-  currentSection: currentItem?.id || 'overview',
-  parentSections: [],
-  breadcrumbs,
-  availableActions: generateQuickActions(currentItem),
+    return { currentPath
+  currentSection: currentItem?.id || 'overview'
+  parentSections: []
+  breadcrumbs
+  availableActions: generateQuickActions(currentItem) }
 };
   }, [location.pathname, availableNavItems]);
   // Generate quick actions based on current context
-  const generateQuickActions = (currentItem: NavigationItem | null): QuickAction => {
-    const baseActions: QuickAction = [
+  const generateQuickActions = (currentItem: NavigationItem | null): QuickAction => { const baseActions: QuickAction = [
       {
-        id: 'search',
-        label: 'Search',
-        description: 'Search across all admin sections',
-        icon: Search,
-        action: () => setState(prev => ({ ...prev, searchQuery: '' })),
-        shortcut: 'Ctrl+K',
-        category: 'primary',
+        id: 'search'
+        label: 'Search'
+        description: 'Search across all admin sections'
+        icon: Search }
+        action: () => setState(prev => ({ ...prev, searchQuery: '' }))
+        shortcut: 'Ctrl+K'
+        category: 'primary'
         enabled: true;
-  }
-      {
-  id: 'help',
-  label: 'Help & Documentation',
-  description: 'Access help and documentation',
-  icon: HelpCircle,
-  action: () => window.open('/docs/epic17', '_blank'),
-  category: 'secondary',
+
+      { id: 'help'
+  label: 'Help & Documentation'
+  description: 'Access help and documentation'
+  icon: HelpCircle
+  action: () => window.open('/docs/epic17', '_blank')
+  category: 'secondary'
   enabled: true];
   // Add context-specific actions
   if (currentItem?.id === 'feature-toggles') {
   baseActions.unshift({)
-  id: 'create-toggle',
-  label: 'Create Toggle',
-  description: 'Create a new feature toggle',
-  icon: ToggleLeft,
-  action: () => navigate('/admin/features/toggles/create'),
-  shortcut: 'Ctrl+N',
-  category: 'primary',
-  enabled: true,
+  id: 'create-toggle'
+  label: 'Create Toggle'
+  description: 'Create a new feature toggle'
+  icon: ToggleLeft
+  action: () => navigate('/admin/features/toggles/create')
+  shortcut: 'Ctrl+N'
+  category: 'primary'
+  enabled: true }
 });
     return baseActions;
   };
   // Handle navigation item click
-  const handleNavItemClick = useCallback((item: NavigationItem, event: React.MouseEvent) => {
-  event.preventDefault();
+  const handleNavItemClick = useCallback((item: NavigationItem, event: React.MouseEvent) => { event.preventDefault();
   if (item.children && item.children.length > 0) {
   // Toggle expansion for items with children
   setState(prev => ({)
-  ...prev,
-  expandedSections: prev.expandedSections.has(item.id),
+  ...prev
+  expandedSections: prev.expandedSections.has(item.id)
   ? new Set([...prev.expandedSections].filter(id => id !== item.id))
-  : new Set([...prev.expandedSections, item.id]),
+  : new Set([...prev.expandedSections, item.id]) }
 }));
-    } else {
-  // Navigate to item
+ else { // Navigate to item
   navigate(item.path);
   onSectionChange?.(item.id);
   // Add to recent items
   setState(prev => ({)
-  ...prev,
-  recentItems: [,
+  ...prev
+  recentItems: [
   {
-  id: item.id,
-  label: item.label,
-  path: item.path,
-  timestamp: new Date(),
-  icon: item.icon,
-}
+  id: item.id
+  label: item.label
+  path: item.path
+  timestamp: new Date()
+  icon: item.icon }
+
           ...prev.recentItems.filter(r => r.id !== item.id).slice(0, 9)
         ]
       }));
@@ -546,14 +514,13 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
         setState(prev => ({ ...prev, mobileMenuOpen: false }));
   }, [navigate, onSectionChange, variant]);
   // Render navigation badge
-  const renderBadge = (badge: NavigationBadge) => {
-  const colorClasses = {
-  blue: 'bg-blue-500 text-white',
-  green: 'bg-green-500 text-white',
-  yellow: 'bg-yellow-500 text-yellow-900',
-  red: 'bg-red-500 text-white',
-  purple: 'bg-purple-500 text-white',
-  gray: 'bg-gray-500 text-white',
+  const renderBadge = (badge: NavigationBadge) => { const colorClasses = {
+  blue: 'bg-blue-500 text-white'
+  green: 'bg-green-500 text-white'
+  yellow: 'bg-yellow-500 text-yellow-900'
+  red: 'bg-red-500 text-white'
+  purple: 'bg-purple-500 text-white'
+  gray: 'bg-gray-500 text-white' }
 };
     return;
       <span
@@ -568,8 +535,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
     );
   };
   // Render navigation item
-  const renderNavItem = (item: NavigationItem, level = 0) => {
-  const isActive = navigationContext.currentPath === item.path;
+  const renderNavItem = (item: NavigationItem, level = 0) => { const isActive = navigationContext.currentPath === item.path;
   const isExpanded = state.expandedSections.has(item.id);
   const hasChildren = item.children && item.children.length > 0;
   const isPinned = state.pinnedItems.has(item.id);
@@ -579,7 +545,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   low: 'text-green-600',
   medium: 'text-yellow-600',
   high: 'text-orange-600',
-  critical: 'text-red-600',
+  critical: 'text-red-600' }
 };
     return;
       <div key={item.id} className={`nav-item-container ${level > 0 ? 'ml-4' : ''}`}>}
@@ -690,8 +656,8 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
                 flex items-center space-x-2 p-2 rounded-lg text-left text-sm
                 ${action.category === 'primary' }
               ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-  disabled:opacity-50 disabled:cursor-not-allowed,
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+  disabled:opacity-50 disabled:cursor-not-allowed
                 transition-colors duration-200
               `}
             >

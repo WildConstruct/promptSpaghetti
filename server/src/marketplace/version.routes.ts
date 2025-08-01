@@ -10,7 +10,7 @@ import {
   VersionDeploymentSchema,
   VersionRollbackSchema,
   VersionComparisonSchema
-} from './version.types';
+ from './version.types';
 
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
@@ -18,7 +18,7 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 export async function versionRoutes(fastify: FastifyInstance) {
   const versionService = new VersionService(fastify.pg);
@@ -27,9 +27,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
   const authenticate = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       await request.jwtVerify();
-    } catch (err) {
+ catch (err) {
       reply.code(401).send({ error: 'Unauthorized' });
-    }
+
   };
 
   // Create new version
@@ -40,9 +40,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['templateId']
-  }
+
       body: {
         type: 'object',
         required: ['version_number', 'graph_json', 'release_notes', 'compatibility_level'],
@@ -66,13 +66,13 @@ export async function versionRoutes(fastify: FastifyInstance) {
           required_features: { type: 'array', items: { type: 'string' } },
           optional_features: { type: 'array', items: { type: 'string' } },
           token_per_run_estimate: { type: 'integer', minimum: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { templateId: string };
     Body: any;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const version = await versionService.createVersion(
@@ -82,10 +82,10 @@ export async function versionRoutes(fastify: FastifyInstance) {
       );
       
       reply.code(201).send(version);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to create version' });
-    }
+
   });
 
   // Get version by ID
@@ -95,26 +95,26 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-      }
-    }
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       const version = await versionService.getVersion(request.params.id, userId);
       
       if (!version) {
         return reply.code(404).send({ error: 'Version not found' });
-      }
+
       
       reply.send(version);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to get version' });
-    }
+
   });
 
   // Get all versions for a template
@@ -124,22 +124,22 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['templateId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           include_private: { type: 'boolean', default: false },
           status: { type: 'string', enum: ['draft', 'published', 'deprecated', 'archived'] },
           visibility: { type: 'string', enum: ['public', 'private', 'beta'] }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { templateId: string };
     Querystring: { include_private?: boolean; status?: string; visibility?: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
       const versions = await versionService.getTemplateVersions(
@@ -152,16 +152,16 @@ export async function versionRoutes(fastify: FastifyInstance) {
       let filteredVersions = versions;
       if (request.query.status) {
         filteredVersions = filteredVersions.filter(v => v.status === request.query.status);
-      }
+
       if (request.query.visibility) {
         filteredVersions = filteredVersions.filter(v => v.visibility === request.query.visibility);
-      }
+
       
       reply.send(filteredVersions);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to get versions' });
-    }
+
   });
 
   // Update version
@@ -172,9 +172,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -191,22 +191,22 @@ export async function versionRoutes(fastify: FastifyInstance) {
           max_claude_version: { type: 'string' },
           required_features: { type: 'array', items: { type: 'string' } },
           optional_features: { type: 'array', items: { type: 'string' } }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Body: any;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const version = await versionService.updateVersion(request.params.id, userId, request.body);
       
       reply.send(version);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to update version' });
-    }
+
   });
 
   // Compare versions
@@ -221,9 +221,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
           to_version_id: { type: 'string', format: 'uuid' },
           include_content_diff: { type: 'boolean', default: true },
           include_metadata_diff: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Body: {
       from_version_id: string;
@@ -231,7 +231,7 @@ export async function versionRoutes(fastify: FastifyInstance) {
       include_content_diff?: boolean;
       include_metadata_diff?: boolean;
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const comparison = await versionService.compareVersions(
         request.body.from_version_id,
@@ -240,10 +240,10 @@ export async function versionRoutes(fastify: FastifyInstance) {
       );
       
       reply.send(comparison);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to compare versions' });
-    }
+
   });
 
   // Deploy version
@@ -254,9 +254,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       body: {
         type: 'object',
         properties: {
@@ -264,9 +264,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
           rollout_percentage: { type: 'integer', minimum: 0, maximum: 100, default: 100 },
           target_audience: { type: 'array', items: { type: 'string' }, default: [] },
           deployment_config: { type: 'object', default: {} }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Body: {
@@ -275,7 +275,7 @@ export async function versionRoutes(fastify: FastifyInstance) {
       target_audience?: string[];
       deployment_config?: Record<string, any>;
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const deployment = await versionService.deployVersion(
@@ -285,10 +285,10 @@ export async function versionRoutes(fastify: FastifyInstance) {
       );
       
       reply.code(201).send(deployment);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to deploy version' });
-    }
+
   });
 
   // Rollback template to previous version
@@ -299,9 +299,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['templateId']
-  }
+
       body: {
         type: 'object',
         required: ['to_version_id', 'rollback_reason', 'rollback_type', 'impact_assessment', 'rollback_plan', 'verification_steps'],
@@ -312,9 +312,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
           impact_assessment: { type: 'string', minLength: 1, maxLength: 2000 },
           rollback_plan: { type: 'string', minLength: 1, maxLength: 2000 },
           verification_steps: { type: 'array', items: { type: 'string' }, minItems: 1 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { templateId: string };
     Body: {
@@ -325,7 +325,7 @@ export async function versionRoutes(fastify: FastifyInstance) {
       rollback_plan: string;
       verification_steps: string[];
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const rollback = await versionService.rollbackVersion(
@@ -335,10 +335,10 @@ export async function versionRoutes(fastify: FastifyInstance) {
       );
       
       reply.code(201).send(rollback);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to rollback version' });
-    }
+
   });
 
   // Get version analytics
@@ -349,20 +349,20 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           period_days: { type: 'integer', minimum: 1, maximum: 365, default: 30 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Querystring: { period_days?: number };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const userId = (request.user as any).id;
       const analytics = await versionService.getVersionAnalytics(
@@ -372,10 +372,10 @@ export async function versionRoutes(fastify: FastifyInstance) {
       );
       
       reply.send(analytics);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to get analytics' });
-    }
+
   });
 
   // Get version by semantic version number
@@ -386,13 +386,13 @@ export async function versionRoutes(fastify: FastifyInstance) {
         properties: {
           templateId: { type: 'string', format: 'uuid' },
           versionNumber: { type: 'string', pattern: '^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$' }
-  }
+
         required: ['templateId', 'versionNumber']
-      }
-    }
+
+
   }, async (request: FastifyRequest<{
     Params: { templateId: string; versionNumber: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const version = await versionService.getVersionByNumber(
         request.params.templateId,
@@ -401,13 +401,13 @@ export async function versionRoutes(fastify: FastifyInstance) {
       
       if (!version) {
         return reply.code(404).send({ error: 'Version not found' });
-      }
+
       
       reply.send(version);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: error instanceof Error ? error.message : 'Failed to get version' });
-    }
+
   });
 
   // Get version statistics
@@ -418,20 +418,20 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-  }
+
         required: ['id']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           days_back: { type: 'integer', minimum: 1, maximum: 365, default: 30 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Querystring: { days_back?: number };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const daysBack = request.query.days_back || 30;
       
@@ -447,10 +447,10 @@ export async function versionRoutes(fastify: FastifyInstance) {
         avg_execution_time_ms: 0,
         adoption_trend: 'new'
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: 'Failed to get version statistics' });
-    }
+
   });
 
   // Check version compatibility
@@ -461,13 +461,13 @@ export async function versionRoutes(fastify: FastifyInstance) {
         properties: {
           fromId: { type: 'string', format: 'uuid' },
           toId: { type: 'string', format: 'uuid' }
-  }
+
         required: ['fromId', 'toId']
-      }
-    }
+
+
   }, async (request: FastifyRequest<{
     Params: { fromId: string; toId: string }
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const result = await fastify.pg.query(`
         SELECT * FROM check_version_compatibility($1, $2)
@@ -479,10 +479,10 @@ export async function versionRoutes(fastify: FastifyInstance) {
         breaking_changes_count: 0,
         migration_required: true
       });
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: 'Failed to check compatibility' });
-    }
+
   });
 
   // Get version overview (admin endpoint)
@@ -496,9 +496,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
           status: { type: 'string', enum: ['draft', 'published', 'deprecated', 'archived'] },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       template_id?: string;
@@ -506,7 +506,7 @@ export async function versionRoutes(fastify: FastifyInstance) {
       limit?: number;
       offset?: number;
     };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       // Check if user is admin
       const userId = (request.user as any).id;
@@ -516,7 +516,7 @@ export async function versionRoutes(fastify: FastifyInstance) {
       
       if (userResult.rows.length === 0 || userResult.rows[0].role !== 'admin') {
         return reply.code(403).send({ error: 'Admin access required' });
-      }
+
 
       const conditions = [];
       const params = [];
@@ -525,12 +525,12 @@ export async function versionRoutes(fastify: FastifyInstance) {
       if (request.query.template_id) {
         conditions.push(`template_id = $${paramIndex++}`);
         params.push(request.query.template_id);
-      }
+
 
       if (request.query.status) {
         conditions.push(`status = $${paramIndex++}`);
         params.push(request.query.status);
-      }
+
 
       const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
       params.push(request.query.limit || 50);
@@ -544,9 +544,8 @@ export async function versionRoutes(fastify: FastifyInstance) {
       `, params);
 
       reply.send(result.rows);
-    } catch (error) {
+ catch (error) {
       fastify.log.error(error);
       reply.code(400).send({ error: 'Failed to get version overview' });
-    }
+
   });
-}

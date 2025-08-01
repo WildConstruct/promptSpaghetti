@@ -113,7 +113,7 @@ const getContentTypeIcon = (contentType) => {
 if (!open)
     return null;
 return;
-_jsx("div", { role: "dialog", "aria-modal": "true", className: "preview-modal-backdrop", style: {
+_jsxs("div", { role: "dialog", "aria-modal": "true", className: "preview-modal-backdrop", style: {
         position: 'fixed',
         top: 0,
         left: 0,
@@ -125,79 +125,73 @@ _jsx("div", { role: "dialog", "aria-modal": "true", className: "preview-modal-ba
         alignItems: 'center',
         justifyContent: 'center',
         backdropFilter: 'blur(4px)',
-    }, children: _jsxs("div", { className: "preview-modal-content", style: {
-            background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-            borderRadius: 16,
-            padding: 32,
-            minWidth: 900,
-            maxWidth: 1200,
-            maxHeight: '90vh',
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-            color: '#ffffff',
-            boxShadow: '0 24px 48px rgba(0, 0, 0, 0.4)',
-        }, children: [_jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }, children: [_jsxs("div", { children: [_jsx("h2", { style: {
-                                    margin: 0,
-                                    fontSize: 24,
-                                    fontWeight: 600,
-                                    background: 'linear-gradient(135deg, #ffffff 0%, #b0b0b0 100%)',
-                                    WebkitBackgroundClip: 'text',
-                                    WebkitTextFillColor: 'transparent',
-                                }, children: "\uD83C\uDFAC Preview Results" }), resultStats && ()
-                                < div, " style=", {
-                                marginTop: 8,
-                                fontSize: 14,
-                                color: '#b0b0b0',
-                                display: 'flex',
-                                gap: 16,
-                            }, ">", _jsxs("span", { children: ["\uD83D\uDCCA ", resultStats.validResults, "/", resultStats.totalResults, " results"] }), _jsxs("span", { children: ["\u23F1\uFE0F Avg: ", resultStats.avgReadingTime, "s read time"] }), resultStats.avgRating > 0 && _jsxs("span", { children: ["\u2B50 ", resultStats.avgRating, "/5"] }), resultStats.selectedCount > 0 && _jsxs("span", { children: ["\u2705 ", resultStats.selectedCount, " selected"] })] }), ")}"] }), _jsx("button", { onClick: onClose, style: {
-                    background: 'transparent',
-                    border: '2px solid #666',
-                    color: '#ffffff',
-                    padding: '8px 16px',
-                    borderRadius: 8,
-                    cursor: 'pointer',
-                    fontSize: 14,
-                    fontWeight: 500,
-                    transition: 'all 0.2s',
-                    ':hover': {
+    }, children: [_jsxs("div", { className: "preview-modal-content", style: {
+                background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+                borderRadius: 16,
+                padding: 32,
+                minWidth: 900,
+                maxWidth: 1200,
+                maxHeight: '90vh',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                color: '#ffffff',
+                boxShadow: '0 24px 48px rgba(0, 0, 0, 0.4)',
+            }, children: [_jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }, children: [_jsxs("div", { children: [_jsx("h2", { style: {
+                                        margin: 0,
+                                        fontSize: 24,
+                                        fontWeight: 600,
+                                        background: 'linear-gradient(135deg, #ffffff 0%, #b0b0b0 100%)',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                    }, children: "\uD83C\uDFAC Preview Results" }), resultStats && ()
+                                    < div, " style=", {
+                                    marginTop: 8,
+                                    fontSize: 14,
+                                    color: '#b0b0b0',
+                                    display: 'flex',
+                                    gap: 16,
+                                }, ">", _jsxs("span", { children: ["\uD83D\uDCCA ", resultStats.validResults, "/", resultStats.totalResults, " results"] }), _jsxs("span", { children: ["\u23F1\uFE0F Avg: ", resultStats.avgReadingTime, "s read time"] }), resultStats.avgRating > 0 && _jsxs("span", { children: ["\u2B50 ", resultStats.avgRating, "/5"] }), resultStats.selectedCount > 0 && _jsxs("span", { children: ["\u2705 ", resultStats.selectedCount, " selected"] })] }), ")}"] }), _jsx("button", { onClick: onClose, style: {
+                        background: 'transparent',
+                        border: '2px solid #666',
+                        color: '#ffffff',
+                        padding: '8px 16px',
+                        borderRadius: 8,
+                        cursor: 'pointer',
+                        fontSize: 14,
+                        fontWeight: 500,
+                        transition: 'all 0.2s',
+                        ':hover': {},
                         borderColor: '#ffffff',
                         background: 'rgba(255, 255, 255, 0.1)',
-                    }
+                    }, children: "\u2715 Close" })] }), _jsxs("div", { style: {
+                display: 'flex',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                marginBottom: 20,
+            }, children: [[
+                    { id: 'results', label: '📋 Results', icon: '📋' },
+                    { id: 'analysis', label: '📊 Creative Analysis', icon: '📊' },
+                    { id: 'visualization', label: '📈 Visualization', icon: '📈' }
+                ].map(tab => ()
+                    < button, key = { tab, : .id }, onClick = {}()), " => setActiveTab(tab.id as any)} style=", ({
+                    flex: 1,
+                    padding: '12px 16px',
+                    border: 'none',
+                    background: activeTab === tab.id,
                 }
-                    >
-             }), "\u2715 Close"] }) });
-{ /* Tab Navigation */ }
-_jsxs("div", { style: {
-        display: 'flex',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        marginBottom: 20,
-    }, children: [[
-            { id: 'results', label: '📋 Results', icon: '📋' },
-            { id: 'analysis', label: '📊 Creative Analysis', icon: '📊' },
-            { id: 'visualization', label: '📈 Visualization', icon: '📈' }
-        ].map(tab => ()
-            < button, key = { tab, : .id }, onClick = {}()), " => setActiveTab(tab.id as any)} style=", ({
-            flex: 1,
-            padding: '12px 16px',
-            border: 'none',
-            background: activeTab === tab.id,
-        }
-            ? 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)'
-            : 'transparent',
-            color), ": activeTab === tab.id ? '#ffffff' : '#b0b0b0', fontSize: 14, fontWeight: 500, cursor: 'pointer', borderRadius: '8px 8px 0 0', transition: 'all 0.2s', position: 'relative', }} >", tab.label, activeTab === tab.id && ()
-            < div, " style=", {
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 2,
-            background: 'linear-gradient(90deg, #4f46e5, #7c3aed)',
-            borderRadius: '2px 2px 0 0',
-        }, " /> )}"] });
-div >
-    { /* Toolbar */};
+                    ? 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)'
+                    : 'transparent',
+                    color), ": activeTab === tab.id ? '#ffffff' : '#b0b0b0', fontSize: 14, fontWeight: 500, cursor: 'pointer', borderRadius: '8px 8px 0 0', transition: 'all 0.2s', position: 'relative', }} >", tab.label, activeTab === tab.id && ()
+                    < div, " style=", {
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 2,
+                    background: 'linear-gradient(90deg, #4f46e5, #7c3aed)',
+                    borderRadius: '2px 2px 0 0',
+                }, " /> )}"] }), "))}"] });
+{ /* Toolbar */ }
 {
     enableSelection && ()
         < div;

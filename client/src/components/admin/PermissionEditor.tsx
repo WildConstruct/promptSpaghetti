@@ -12,7 +12,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
 // Types for permission management
-}
+
+
 interface Permission {
   id: string;,
   name: string,
@@ -43,7 +44,8 @@ interface Permission {
   mode: 'user' | 'role' | 'resource';
   onSave?: (changes: unknown) => void;
   onCancel?: () => void;
-  }
+
+
 
 className?: string;
   interface PermissionEditorState {
@@ -58,7 +60,8 @@ className?: string;
   isLoading: boolean;,
   error: string | null,
   hasChanges: boolean;,
-  selectedPermissions: Set<string>,
+  selectedPermissions: Set<string>
+},
   selectedRoles: Set<string>;}
 
 
@@ -72,8 +75,8 @@ className?: string;
   scope: 'own',
   description: 'View project details and contents',
   category: 'Projects'
-}
-}
+
+
   {
   id: 'perm_edit_projects',
   name: 'Edit Projects',
@@ -82,7 +85,7 @@ className?: string;
   scope: 'own',
   description: 'Create and modify project files',
   category: 'Projects'
-}
+
   {
   id: 'perm_delete_projects',
   name: 'Delete Projects',
@@ -91,7 +94,7 @@ className?: string;
   scope: 'own',
   description: 'Delete project files and folders',
   category: 'Projects'
-}
+
   {
   id: 'perm_share_projects',
   name: 'Share Projects',
@@ -100,7 +103,7 @@ className?: string;
   scope: 'team',
   description: 'Share projects with team members',
   category: 'Projects'
-}
+
   {
   id: 'perm_admin_users',
   name: 'Manage Users',
@@ -109,7 +112,7 @@ className?: string;
   scope: 'organization',
   description: 'Create, edit, and deactivate user accounts',
   category: 'Administration'
-}
+
   {
   id: 'perm_admin_roles',
   name: 'Manage Roles',
@@ -118,7 +121,7 @@ className?: string;
   scope: 'organization',
   description: 'Create and modify roles and permissions',
   category: 'Administration'
-}
+
   {
   id: 'perm_view_analytics',
   name: 'View Analytics',
@@ -127,7 +130,7 @@ className?: string;
   scope: 'team',
   description: 'Access usage and performance analytics',
   category: 'Analytics'
-}
+
   {
   id: 'perm_export_data',
   name: 'Export Data',
@@ -136,7 +139,7 @@ className?: string;
   scope: 'organization',
   description: 'Export system data and reports',
   category: 'Data Management'
-}
+
   {
   id: 'perm_system_config',
   name: 'System Configuration',
@@ -154,7 +157,7 @@ className?: string;
   scope: 'organization',
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-15')
-}
+
   {
   id: 'role_editor',
   name: 'Editor',
@@ -163,12 +166,12 @@ className?: string;
   scope: 'organization',
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-15')
-}
+
   {
   id: 'role_admin',
   name: 'Administrator',
   description: 'Full administrative access',
-  permissions: [,
+  permissions: [
   'perm_read_projects', 'perm_edit_projects', 'perm_delete_projects',
   'perm_share_projects', 'perm_admin_users', 'perm_admin_roles',
   'perm_view_analytics', 'perm_export_data'
@@ -176,12 +179,12 @@ className?: string;
   scope: 'organization',
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-15')
-}
+
   {
   id: 'role_superadmin',
   name: 'Super Administrator',
   description: 'Global system administration',
-  permissions: [,
+  permissions: [
   'perm_read_projects', 'perm_edit_projects', 'perm_delete_projects',
   'perm_share_projects', 'perm_admin_users', 'perm_admin_roles',
   'perm_view_analytics', 'perm_export_data', 'perm_system_config'
@@ -197,7 +200,7 @@ className?: string;
   roles: ['role_editor'],
   directPermissions: ['perm_view_analytics'],
   isActive: true
-}
+
   {
   id: 'user_2',
   username: 'jane_smith',
@@ -205,7 +208,7 @@ className?: string;
   roles: ['role_admin'],
   directPermissions: [],
   isActive: true
-}
+
   {
   id: 'user_3',
   username: 'bob_viewer',
@@ -253,7 +256,7 @@ className?: string;
   selectedRoles: new Set(user.roles),
   isLoading: false
 }));
-      } else if (roleId && mode === 'role') {
+ else if (roleId && mode === 'role') {
   const role = mockRoles.find(r => r.id === roleId);
   if (role) {
   setState(prev => ({
@@ -262,9 +265,9 @@ className?: string;
   selectedPermissions: new Set(role.permissions),
   isLoading: false
 }));
-      } else {
+ else {
         setState(prev => ({ ...prev, isLoading: false }));
-    } catch (error) {
+ catch (error) {
   setState(prev => ({
   ...prev,
   isLoading: false,
@@ -276,7 +279,7 @@ className?: string;
   const newSelected = new Set(prev.selectedPermissions);
       if (newSelected.has(permissionId)) {
         newSelected.delete(permissionId);
-      } else {
+ else {
   newSelected.add(permissionId);
   return {
   ...prev,
@@ -290,7 +293,7 @@ className?: string;
   const newSelected = new Set(prev.selectedRoles);
       if (newSelected.has(roleId)) {
         newSelected.delete(roleId);
-      } else {
+ else {
   newSelected.add(roleId);
   return {
   ...prev,
@@ -307,7 +310,7 @@ className?: string;
       const newSelected = new Set(prev.selectedPermissions);
       if (grant) {
         categoryPermissions.forEach(id => newSelected.add(id));
-      } else {
+ else {
   categoryPermissions.forEach(id => newSelected.delete(id));
   return {
   ...prev,
@@ -331,7 +334,7 @@ className?: string;
       await new Promise(resolve => setTimeout(resolve, 1000));
       onSave?.(changes);
       setState(prev => ({ ...prev, hasChanges: false, isLoading: false }));
-    } catch (error) {
+ catch (error) {
   setState(prev => ({
   ...prev,
   isLoading: false,
@@ -361,12 +364,12 @@ className?: string;
       </div>
     );
   return;
-    <div className={`permission-editor ${className}`} style={{ }}
+    <div className={`permission-editor ${className}`} style={{ }},
   padding: '20px',
       backgroundColor: '#fff',
       borderRadius: '8px',
       border: '1px solid #ddd';
-  }}>
+}>
       {/* Header */}
       <div style={{ marginBottom: '24px' }}>
         <h2 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: 'bold' }}>
@@ -392,7 +395,7 @@ className?: string;
   borderRadius: '4px',
   color: '#c33',
   marginBottom: '16px'
-}}>
+}>
           {state.error}
         </div>
       )}
@@ -403,7 +406,7 @@ className?: string;
   marginBottom: '24px',
   alignItems: 'center',
   flexWrap: 'wrap'
-}}>
+}>
         <input
           type="text"
           placeholder="Search permissions..."
@@ -414,7 +417,7 @@ className?: string;
   border: '1px solid #ddd',
   borderRadius: '4px',
   minWidth: '200px'
-}}
+}
         />
         <select
           value={state.filterCategory}
@@ -423,7 +426,7 @@ className?: string;
   padding: '8px 12px',
   border: '1px solid #ddd',
   borderRadius: '4px'
-}}
+}
         >
           <option value="">All Categories</option>
           {categories.map(category => (
@@ -437,7 +440,7 @@ className?: string;
   padding: '8px 12px',
   border: '1px solid #ddd',
   borderRadius: '4px'
-}}
+}
         >
           <option value="">All Scopes</option>
           {scopes.map(scope => (
@@ -457,7 +460,7 @@ className?: string;
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
   gap: '12px'
-}}>
+}>
             {state.availableRoles.map(role => (
               <div
                 key={role.id}
@@ -469,7 +472,7 @@ className?: string;
                   cursor: 'pointer',
                   backgroundColor: state.selectedRoles.has(role.id) ? '#f0f8ff' : '#fff',
                   transition: 'all 0.2s ease';
-  }}
+
                 onClick={() => handleRoleToggle(role.id)}
               >
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
@@ -487,7 +490,7 @@ className?: string;
   color: 'white',
   borderRadius: '12px',
   fontSize: '10px'
-}}>
+}>
                     {role.scope}
                   </span>
                 </div>
@@ -513,7 +516,7 @@ className?: string;
   border: '1px solid #eee',
   borderRadius: '8px',
   overflow: 'hidden'
-}}>
+}>
             {/* Category Header */}
             <div style={{
   padding: '12px 16px',
@@ -522,7 +525,7 @@ className?: string;
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between'
-}}>
+}>
               <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>
                 {category}
               </h4>
@@ -537,7 +540,7 @@ className?: string;
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer'
-}}
+}
                 >
                   Grant All
                 </button>
@@ -551,7 +554,7 @@ className?: string;
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer'
-}}
+}
                 >
                   Revoke All
                 </button>
@@ -571,7 +574,7 @@ className?: string;
   marginBottom: '8px',
   cursor: 'pointer',
   backgroundColor: state.selectedPermissions.has(permission.id) ? '#f0f8ff' : '#fff'
-}}
+
                   onClick={() => handlePermissionToggle(permission.id)}
                 >
                   <input
@@ -591,7 +594,7 @@ className?: string;
   color: 'white',
   borderRadius: '10px',
   fontSize: '10px'
-}}>
+}>
                         {permission.scope}
                       </span>
                     </div>
@@ -615,7 +618,7 @@ className?: string;
   justifyContent: 'flex-end',
   paddingTop: '16px',
   borderTop: '1px solid #eee'
-}}>
+}>
         <button
           onClick={onCancel}
           style={{
@@ -624,7 +627,7 @@ className?: string;
   backgroundColor: '#fff',
   borderRadius: '4px',
   cursor: 'pointer'
-}}
+}
         >
           Cancel
         </button>
@@ -638,7 +641,7 @@ className?: string;
   color: 'white',
   borderRadius: '4px',
   cursor: state.hasChanges && !state.isLoading ? 'pointer' : 'not-allowed'
-}}
+
         >
           {state.isLoading ? 'Saving...' : 'Save Changes'}
         </button>
@@ -651,7 +654,7 @@ className?: string;
   backgroundColor: '#e7f3ff',
   border: '1px solid #b3d9ff',
   borderRadius: '4px'
-}}>
+}>
           <strong>Pending Changes:</strong>
           <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px' }}>
             <li>{Array.from(state.selectedPermissions).length} direct permissions selected</li>

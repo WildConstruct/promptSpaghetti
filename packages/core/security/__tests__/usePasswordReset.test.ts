@@ -10,27 +10,23 @@ import { passwordResetTokenManager } from '../PasswordResetTokenManager';
 import { verificationCodeManager } from '../VerificationCodeManager';
 
 // Mock the password reset managers
-jest.mock('../PasswordResetTokenManager', () => ({)
-  passwordResetTokenManager: {
-  generateToken: jest.fn<unknown, unknown>(),
-  validateToken: jest.fn<unknown, unknown>(),
-  useToken: jest.fn<unknown, unknown>(),
+jest.mock('../PasswordResetTokenManager', () => ({ )
+  passwordResetTokenManager: {,
+  generateToken: jest.fn<unknown, unknown>()
+  validateToken: jest.fn<unknown, unknown>()
+  useToken: jest.fn<unknown, unknown>() }
 }));
-jest.mock('../VerificationCodeManager', () => ({)
+jest.mock('../VerificationCodeManager', () => ({ )
   verificationCodeManager: {
-  generateCode: jest.fn<unknown, unknown>(),
-  validateCode: jest.fn<unknown, unknown>(),
-  useCode: jest.fn<unknown, unknown>(),
+  generateCode: jest.fn<unknown, unknown>()
+  validateCode: jest.fn<unknown, unknown>()
+  useCode: jest.fn<unknown, unknown>() }
 }));
 const mockPasswordResetTokenManager = passwordResetTokenManager as jest.Mocked<typeof passwordResetTokenManager>;
-describe('usePasswordReset', () => {
-  beforeEach(() => {
+describe('usePasswordReset', () => { beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
-  });
-  afterEach(() => {
-    jest.useRealTimers();
-  });
+    jest.useFakeTimers() });
+  afterEach(() => { jest.useRealTimers() });
   describe('Initial State', () => {
     test('should initialize with correct default values', () => {
       const { result } = renderHook(() => usePasswordReset());
@@ -49,39 +45,31 @@ describe('usePasswordReset', () => {
       const onStepChange = jest.fn<unknown, unknown>();
       const { result } = renderHook(() => usePasswordReset({ onStepChange }));
       expect(onStepChange).toHaveBeenCalledWith(ResetStep.REQUEST);
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
+      act(() => { result.current.setEmail('test@example.com') });
       expect(result.current.email).toBe('test@example.com');
     });
   });
   describe('Email Validation', () => {
     test('should validate email format correctly', () => {
       const { result } = renderHook(() => usePasswordReset());
-      act(() => {
-        result.current.setEmail('invalid-email');
-      });
+      act(() => { result.current.setEmail('invalid-email') });
       expect(result.current.emailValid).toBe(false);
-      act(() => {
-        result.current.setEmail('valid@example.com');
-      });
+      act(() => { result.current.setEmail('valid@example.com') });
       expect(result.current.emailValid).toBe(true);
     });
     test('should handle various email formats', () => {
       const { result } = renderHook(() => usePasswordReset());
-      const testCases = [;
-        { email: 'test@example.com', valid: true },
-        { email: 'user.name@domain.co.uk', valid: true },
-        { email: 'invalid-email', valid: false },
-        { email: 'missing@', valid: false },
-        { email: '@missing.com', valid: false },
-        { email: 'spaces @example.com', valid: false },
+      const testCases = [
+        { email: 'test@example.com', valid: true }
+        { email: 'user.name@domain.co.uk', valid: true }
+        { email: 'invalid-email', valid: false }
+        { email: 'missing@', valid: false }
+        { email: '@missing.com', valid: false }
+        { email: 'spaces @example.com', valid: false }
         { email: '', valid: false }
       ];
-      testCases.forEach(({ email, valid }) => {
-        act(() => {
-          result.current.setEmail(email);
-        });
+      testCases.forEach(({ email, valid }) => { act(() => {
+          result.current.setEmail(email) });
         expect(result.current.emailValid).toBe(valid);
       });
     });
@@ -90,23 +78,17 @@ describe('usePasswordReset', () => {
     test('should validate password strength correctly', () => {
       const { result } = renderHook(() => usePasswordReset());
       // Test weak password
-      act(() => {
-        result.current.setNewPassword('weak');
-      });
+      act(() => { result.current.setNewPassword('weak') });
       expect(result.current.passwordValidation.strength).toBe(PasswordStrength.WEAK);
       expect(result.current.passwordValidation.isValid).toBe(false);
       // Test strong password
-      act(() => {
-        result.current.setNewPassword('StrongP@ssw0rd123');
-      });
+      act(() => { result.current.setNewPassword('StrongP@ssw0rd123') });
       expect(result.current.passwordValidation.strength).toBe(PasswordStrength.STRONG);
       expect(result.current.passwordValidation.isValid).toBe(true);
     });
     test('should check password requirements', () => {
       const { result } = renderHook(() => usePasswordReset());
-      act(() => {
-        result.current.setNewPassword('Abc123!@');
-      });
+      act(() => { result.current.setNewPassword('Abc123!@') });
       const requirements = result.current.passwordValidation.requirements;
       expect(requirements.length).toBe(true);
       expect(requirements.uppercase).toBe(true);
@@ -116,421 +98,279 @@ describe('usePasswordReset', () => {
     });
     test('should detect password matching', () => {
       const { result } = renderHook(() => usePasswordReset());
-      act(() => {
-        result.current.setNewPassword('password123');
-        result.current.setConfirmPassword('password123');
-      });
+      act(() => { result.current.setNewPassword('password123');
+        result.current.setConfirmPassword('password123') });
       expect(result.current.passwordsMatch).toBe(true);
-      act(() => {
-        result.current.setConfirmPassword('different');
-      });
+      act(() => { result.current.setConfirmPassword('different') });
       expect(result.current.passwordsMatch).toBe(false);
     });
-    test('should use custom validation when provided', () => {
-  const customValidation = jest.fn(() => ({)
-  isValid: true,
-  strength: PasswordStrength.STRONG,
-  score: 100,
-  feedback: ['Custom validation passed'],
+    test('should use custom validation when provided', () => { const customValidation = jest.fn(() => ({)
+  isValid: true
+  strength: PasswordStrength.STRONG
+  score: 100
+  feedback: ['Custom validation passed']
   requirements: {
-  length: true,
-  uppercase: true,
-  lowercase: true,
-  numbers: true,
-  symbols: true,
+  length: true
+  uppercase: true
+  lowercase: true
+  numbers: true
+  symbols: true }
 }));
       const { result } = renderHook(() => usePasswordReset({ customValidation }));
-      act(() => {
-        result.current.setNewPassword('test');
-      });
+      act(() => { result.current.setNewPassword('test') });
       expect(customValidation).toHaveBeenCalledWith('test');
       expect(result.current.passwordValidation.strength).toBe(PasswordStrength.STRONG);
     });
     test('should detect common password patterns', () => {
       const { result } = renderHook(() => usePasswordReset());
       // Test repeating characters
-      act(() => {
-        result.current.setNewPassword('aaaaaaaa');
-      });
+      act(() => { result.current.setNewPassword('aaaaaaaa') });
       expect(result.current.passwordValidation.feedback).toContain('Avoid repeating characters');
       // Test sequential characters
-      act(() => {
-        result.current.setNewPassword('12345678');
-      });
+      act(() => { result.current.setNewPassword('12345678') });
       expect(result.current.passwordValidation.feedback).toContain('Avoid sequential characters');
     });
   });
   describe('Token Validation', () => {
     test('should validate token format', () => {
       const { result } = renderHook(() => usePasswordReset());
-      act(() => {
-        result.current.setToken('123');
-      });
+      act(() => { result.current.setToken('123') });
       expect(result.current.tokenValid).toBe(false);
-      act(() => {
-        result.current.setToken('123456');
-      });
+      act(() => { result.current.setToken('123456') });
       expect(result.current.tokenValid).toBe(true);
     });
   });
-  describe('Reset Flow - Request Step', () => {
-  test('should handle successful reset request', async () => {
+  describe('Reset Flow - Request Step', () => { test('should handle successful reset request', async () => {
   mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-  token: 'mock-token',
-  tokenId: 'mock-token-id',
-} as unknown as unknown);
+  token: 'mock-token'
+  tokenId: 'mock-token-id' }
+ as unknown as unknown);
       const onSecurityEvent = jest.fn<unknown, unknown>();
       const { result } = renderHook(() => usePasswordReset({ onSecurityEvent }));
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
+      act(() => { result.current.setEmail('test@example.com') });
       let requestPromise: Promise<boolean>;
-      act(() => {
-        requestPromise = result.current.requestReset();
-      });
+      act(() => { requestPromise = result.current.requestReset() });
       expect(result.current.loading).toBe(true);
-      await act(async () => {
-        const success = await requestPromise;
-        expect(success).toBe(true);
-      });
+      await act(async () => { const success = await requestPromise;
+        expect(success).toBe(true) });
       expect(result.current.loading).toBe(false);
       expect(result.current.success).toContain('Reset code sent to test@example.com');
       expect(result.current.currentStep).toBe(ResetStep.VERIFY);
       expect(result.current.resendTimer).toBeGreaterThan(0);
       expect(onSecurityEvent).toHaveBeenCalledWith()
-        'password_reset_requested',
-        expect.objectContaining({)
-  email: 'test@example.com',
-}
+        'password_reset_requested'
+        expect.objectContaining({ )
+  email: 'test@example.com' }
+
       );
     });
     test('should handle request failure', async () => {
       mockPasswordResetTokenManager.generateToken.mockResolvedValue(null as unknown as unknown);
       const onError = jest.fn<unknown, unknown>();
       const { result } = renderHook(() => usePasswordReset({ onError }));
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
+      act(() => { result.current.setEmail('test@example.com') });
       let requestPromise: Promise<boolean>;
-      act(() => {
-        requestPromise = result.current.requestReset();
-      });
-      await act(async () => {
-        const success = await requestPromise;
-        expect(success).toBe(false);
-      });
+      act(() => { requestPromise = result.current.requestReset() });
+      await act(async () => { const success = await requestPromise;
+        expect(success).toBe(false) });
       expect(result.current.error).toBeTruthy();
       expect(onError).toHaveBeenCalled();
     });
     test('should reject invalid email', async () => {
       const { result } = renderHook(() => usePasswordReset());
-      act(() => {
-        result.current.setEmail('invalid-email');
-      });
+      act(() => { result.current.setEmail('invalid-email') });
       let requestPromise: Promise<boolean>;
-      act(() => {
-        requestPromise = result.current.requestReset();
-      });
-      await act(async () => {
-        const success = await requestPromise;
-        expect(success).toBe(false);
-      });
+      act(() => { requestPromise = result.current.requestReset() });
+      await act(async () => { const success = await requestPromise;
+        expect(success).toBe(false) });
       expect(result.current.error).toContain('valid email address');
     });
   });
-  describe('Reset Flow - Verify Step', () => {
-  test('should handle successful token verification', async () => {
+  describe('Reset Flow - Verify Step', () => { test('should handle successful token verification', async () => {
   mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-  token: 'mock-token',
-  tokenId: 'mock-token-id',
-} as unknown as unknown);
-      mockPasswordResetTokenManager.validateToken.mockResolvedValue({)
-  valid: true,
+  token: 'mock-token'
+  tokenId: 'mock-token-id' }
+ as unknown as unknown);
+      mockPasswordResetTokenManager.validateToken.mockResolvedValue({ )
+  valid: true
   token: {
-  id: 'mock-token-id',
-  userId: 'user-123',
-  email: 'test@example.com',
-} as any,
+  id: 'mock-token-id'
+  userId: 'user-123'
+  email: 'test@example.com' }
+ as any
         riskScore: 10;
-  } as unknown as unknown);
+ as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
       // First request reset
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
+      act(() => { result.current.setEmail('test@example.com') });
+      await act(async () => { await result.current.requestReset() });
       // Then verify token
-      act(() => {
-        result.current.setToken('123456');
-      });
+      act(() => { result.current.setToken('123456') });
       let verifyPromise: Promise<boolean>;
-      act(() => {
-        verifyPromise = result.current.verifyToken();
-      });
-      await act(async () => {
-        const success = await verifyPromise;
-        expect(success).toBe(true);
-      });
+      act(() => { verifyPromise = result.current.verifyToken() });
+      await act(async () => { const success = await verifyPromise;
+        expect(success).toBe(true) });
       expect(result.current.success).toContain('Code verified successfully');
       expect(result.current.currentStep).toBe(ResetStep.RESET);
     });
-    test('should handle token verification failure', async () => {
-  mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-  token: 'mock-token',
-  tokenId: 'mock-token-id',
-} as unknown as unknown);
-      mockPasswordResetTokenManager.validateToken.mockResolvedValue({)
-  valid: false,
-  reason: 'token_expired',
-} as unknown as unknown);
+    test('should handle token verification failure', async () => { mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
+  token: 'mock-token'
+  tokenId: 'mock-token-id' }
+ as unknown as unknown);
+      mockPasswordResetTokenManager.validateToken.mockResolvedValue({ )
+  valid: false
+  reason: 'token_expired' }
+ as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
       // First request reset
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
+      act(() => { result.current.setEmail('test@example.com') });
+      await act(async () => { await result.current.requestReset() });
       // Then try to verify invalid token
-      act(() => {
-        result.current.setToken('000000');
-      });
+      act(() => { result.current.setToken('000000') });
       let verifyPromise: Promise<boolean>;
-      act(() => {
-        verifyPromise = result.current.verifyToken();
-      });
-      await act(async () => {
-        const success = await verifyPromise;
-        expect(success).toBe(false);
-      });
+      act(() => { verifyPromise = result.current.verifyToken() });
+      await act(async () => { const success = await verifyPromise;
+        expect(success).toBe(false) });
       expect(result.current.error).toBeTruthy();
     });
     test('should reject invalid token format', async () => {
       const { result } = renderHook(() => usePasswordReset());
-      act(() => {
-        result.current.setToken('123');
-      });
+      act(() => { result.current.setToken('123') });
       let verifyPromise: Promise<boolean>;
-      act(() => {
-        verifyPromise = result.current.verifyToken();
-      });
-      await act(async () => {
-        const success = await verifyPromise;
-        expect(success).toBe(false);
-      });
+      act(() => { verifyPromise = result.current.verifyToken() });
+      await act(async () => { const success = await verifyPromise;
+        expect(success).toBe(false) });
       expect(result.current.error).toContain('valid reset code');
     });
   });
-  describe('Reset Flow - Password Reset Step', () => {
-  const setupForPasswordReset = async (result: unknown) => {,
+  describe('Reset Flow - Password Reset Step', () => { const setupForPasswordReset = async (result: unknown) => {
   mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-  token: 'mock-token',
-  tokenId: 'mock-token-id',
-} as unknown as unknown);
-      mockPasswordResetTokenManager.validateToken.mockResolvedValue({)
-  valid: true,
-        token: { id: 'mock-token-id' } as any,
-        riskScore: 10;
-  } as unknown as unknown);
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
-      act(() => {
-        result.current.setToken('123456');
-      });
-      await act(async () => {
-        await result.current.verifyToken();
-      });
-    };
-    test('should handle successful password reset', async () => {
-      mockPasswordResetTokenManager.useToken.mockResolvedValue({)
-  success: true,
+  token: 'mock-token'
+  tokenId: 'mock-token-id' }
+ as unknown as unknown);
+      mockPasswordResetTokenManager.validateToken.mockResolvedValue({ )
+  valid: true }
         token: { id: 'mock-token-id' } as any
-      } as unknown as unknown);
+        riskScore: 10;
+ as unknown as unknown);
+      act(() => { result.current.setEmail('test@example.com') });
+      await act(async () => { await result.current.requestReset() });
+      act(() => { result.current.setToken('123456') });
+      await act(async () => { await result.current.verifyToken() });
+    };
+    test('should handle successful password reset', async () => { mockPasswordResetTokenManager.useToken.mockResolvedValue({)
+  success: true }
+        token: { id: 'mock-token-id' } as any
+ as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
       await setupForPasswordReset(result);
       const strongPassword = 'StrongP@ssw0rd123';
-      act(() => {
-        result.current.setNewPassword(strongPassword);
-        result.current.setConfirmPassword(strongPassword);
-      });
+      act(() => { result.current.setNewPassword(strongPassword);
+        result.current.setConfirmPassword(strongPassword) });
       let resetPromise: Promise<boolean>;
-      act(() => {
-        resetPromise = result.current.resetPassword();
-      });
-      await act(async () => {
-        const success = await resetPromise;
-        expect(success).toBe(true);
-      });
+      act(() => { resetPromise = result.current.resetPassword() });
+      await act(async () => { const success = await resetPromise;
+        expect(success).toBe(true) });
       expect(result.current.success).toContain('Password reset successfully');
       expect(result.current.currentStep).toBe(ResetStep.SUCCESS);
     }, 30000); // Increased timeout to 30 seconds
     test('should reject weak password', async () => {
       const { result } = renderHook(() => usePasswordReset());
       await setupForPasswordReset(result);
-      act(() => {
-        result.current.setNewPassword('weak');
-        result.current.setConfirmPassword('weak');
-      });
+      act(() => { result.current.setNewPassword('weak');
+        result.current.setConfirmPassword('weak') });
       let resetPromise: Promise<boolean>;
-      act(() => {
-        resetPromise = result.current.resetPassword();
-      });
-      await act(async () => {
-        const success = await resetPromise;
-        expect(success).toBe(false);
-      });
+      act(() => { resetPromise = result.current.resetPassword() });
+      await act(async () => { const success = await resetPromise;
+        expect(success).toBe(false) });
       expect(result.current.error).toContain('security requirements');
     });
     test('should reject mismatched passwords', async () => {
       const { result } = renderHook(() => usePasswordReset());
       await setupForPasswordReset(result);
-      act(() => {
-        result.current.setNewPassword('StrongP@ssw0rd123');
-        result.current.setConfirmPassword('DifferentPassword');
-      });
+      act(() => { result.current.setNewPassword('StrongP@ssw0rd123');
+        result.current.setConfirmPassword('DifferentPassword') });
       let resetPromise: Promise<boolean>;
-      act(() => {
-        resetPromise = result.current.resetPassword();
-      });
-      await act(async () => {
-        const success = await resetPromise;
-        expect(success).toBe(false);
-      });
+      act(() => { resetPromise = result.current.resetPassword() });
+      await act(async () => { const success = await resetPromise;
+        expect(success).toBe(false) });
       expect(result.current.error).toContain('do not match');
     });
-    test('should handle token usage failure', async () => {
-  mockPasswordResetTokenManager.useToken.mockResolvedValue({)
-  success: false,
-  reason: 'token_already_used',
-} as unknown as unknown);
+    test('should handle token usage failure', async () => { mockPasswordResetTokenManager.useToken.mockResolvedValue({)
+  success: false
+  reason: 'token_already_used' }
+ as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
       await setupForPasswordReset(result);
       const strongPassword = 'StrongP@ssw0rd123';
-      act(() => {
-        result.current.setNewPassword(strongPassword);
-        result.current.setConfirmPassword(strongPassword);
-      });
+      act(() => { result.current.setNewPassword(strongPassword);
+        result.current.setConfirmPassword(strongPassword) });
       let resetPromise: Promise<boolean>;
-      act(() => {
-        resetPromise = result.current.resetPassword();
-      });
-      await act(async () => {
-        const success = await resetPromise;
-        expect(success).toBe(false);
-      });
+      act(() => { resetPromise = result.current.resetPassword() });
+      await act(async () => { const success = await resetPromise;
+        expect(success).toBe(false) });
       expect(result.current.error).toBeTruthy();
     });
   });
-  describe('Resend Functionality', () => {
-  test('should handle successful code resend', async () => {
+  describe('Resend Functionality', () => { test('should handle successful code resend', async () => {
   mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-  token: 'new-mock-token',
-  tokenId: 'new-mock-token-id',
-} as unknown as unknown);
+  token: 'new-mock-token'
+  tokenId: 'new-mock-token-id' }
+ as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
+      act(() => { result.current.setEmail('test@example.com') });
+      await act(async () => { await result.current.requestReset() });
       // Wait for resend timer to expire
-      act(() => {
-        jest.advanceTimersByTime(60000);
-      });
-      await waitFor(() => {
-        expect(result.current.canResend).toBe(true);
-      });
+      act(() => { jest.advanceTimersByTime(60000) });
+      await waitFor(() => { expect(result.current.canResend).toBe(true) });
       let resendPromise: Promise<boolean>;
-      act(() => {
-        resendPromise = result.current.resendCode();
-      });
-      await act(async () => {
-        const success = await resendPromise;
-        expect(success).toBe(true);
-      });
+      act(() => { resendPromise = result.current.resendCode() });
+      await act(async () => { const success = await resendPromise;
+        expect(success).toBe(true) });
       expect(result.current.success).toContain('New reset code sent');
       expect(result.current.resendTimer).toBeGreaterThan(0);
     });
     test('should prevent resend during cooldown', async () => {
       const { result } = renderHook(() => usePasswordReset());
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
+      act(() => { result.current.setEmail('test@example.com') });
+      await act(async () => { await result.current.requestReset() });
       expect(result.current.canResend).toBe(false);
       let resendPromise: Promise<boolean>;
-      act(() => {
-        resendPromise = result.current.resendCode();
-      });
-      await act(async () => {
-        const success = await resendPromise;
-        expect(success).toBe(false);
-      });
+      act(() => { resendPromise = result.current.resendCode() });
+      await act(async () => { const success = await resendPromise;
+        expect(success).toBe(false) });
     });
   });
   describe('Timer Management', () => {
     test('should countdown resend timer correctly', async () => {
       const { result } = renderHook(() => usePasswordReset({ resendCooldown: 5 }));
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
+      act(() => { result.current.setEmail('test@example.com') });
+      await act(async () => { await result.current.requestReset() });
       expect(result.current.resendTimer).toBe(5);
-      act(() => {
-        jest.advanceTimersByTime(1000);
-      });
-      await waitFor(() => {
-        expect(result.current.resendTimer).toBe(4);
-      });
-      act(() => {
-        jest.advanceTimersByTime(4000);
-      });
-      await waitFor(() => {
-        expect(result.current.resendTimer).toBe(0);
-        expect(result.current.canResend).toBe(true);
-      });
+      act(() => { jest.advanceTimersByTime(1000) });
+      await waitFor(() => { expect(result.current.resendTimer).toBe(4) });
+      act(() => { jest.advanceTimersByTime(4000) });
+      await waitFor(() => { expect(result.current.resendTimer).toBe(0);
+        expect(result.current.canResend).toBe(true) });
     });
   });
   describe('Navigation', () => {
     test('should allow going back between steps', async () => {
       const { result } = renderHook(() => usePasswordReset());
       // Move to verify step
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
+      act(() => { result.current.setEmail('test@example.com') });
+      await act(async () => { await result.current.requestReset() });
       expect(result.current.currentStep).toBe(ResetStep.VERIFY);
       // Go back to request
-      act(() => {
-        result.current.goBack();
-      });
+      act(() => { result.current.goBack() });
       expect(result.current.currentStep).toBe(ResetStep.REQUEST);
     });
     test('should clear messages when going back', async () => {
       const { result } = renderHook(() => usePasswordReset());
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
+      act(() => { result.current.setEmail('test@example.com') });
+      await act(async () => { await result.current.requestReset() });
       expect(result.current.success).toBeTruthy();
-      act(() => {
-        result.current.goBack();
-      });
+      act(() => { result.current.goBack() });
       expect(result.current.success).toBeNull();
       expect(result.current.error).toBeNull();
     });
@@ -539,19 +379,13 @@ describe('usePasswordReset', () => {
     test('should reset all state', async () => {
       const { result } = renderHook(() => usePasswordReset());
       // Set some state
-      act(() => {
-        result.current.setEmail('test@example.com');
+      act(() => { result.current.setEmail('test@example.com');
         result.current.setToken('123456');
         result.current.setNewPassword('password');
-        result.current.setConfirmPassword('password');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
+        result.current.setConfirmPassword('password') });
+      await act(async () => { await result.current.requestReset() });
       // Reset everything
-      act(() => {
-        result.current.reset();
-      });
+      act(() => { result.current.reset() });
       expect(result.current.currentStep).toBe(ResetStep.REQUEST);
       expect(result.current.email).toBe('');
       expect(result.current.token).toBe('');
@@ -578,19 +412,14 @@ describe('usePasswordReset', () => {
       expect(result.current.getPasswordStrengthWidth(100)).toBe('100%');
     });
   });
-  describe('Auto-advance Configuration', () => {
-  test('should not auto-advance when disabled', async () => {
+  describe('Auto-advance Configuration', () => { test('should not auto-advance when disabled', async () => {
   mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-  token: 'mock-token',
-  tokenId: 'mock-token-id',
-} as unknown as unknown);
+  token: 'mock-token'
+  tokenId: 'mock-token-id' }
+ as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset({ autoAdvance: false }));
-      act(() => {
-        result.current.setEmail('test@example.com');
-      });
-      await act(async () => {
-        await result.current.requestReset();
-      });
+      act(() => { result.current.setEmail('test@example.com') });
+      await act(async () => { await result.current.requestReset() });
       // Should stay on request step
       expect(result.current.currentStep).toBe(ResetStep.REQUEST);
     });

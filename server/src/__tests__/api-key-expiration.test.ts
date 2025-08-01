@@ -11,7 +11,7 @@ import {
   APIKeyType,
   ExpirationPolicyEnum as ExpirationPolicy,
   APIKeyStatus
-} from '../auth/services/APIKeyExpirationService';
+ from '../auth/services/APIKeyExpirationService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
@@ -42,7 +42,7 @@ describe('API Key Expiration System', () => {
   afterEach(() => {
     if (expirationService) {
       expirationService.destroy();
-    }
+
   });
 
   describe('Service Initialization', () => {
@@ -87,7 +87,7 @@ describe('API Key Expiration System', () => {
             keyId,
             keyType: APIKeyType.API_ACCESS,
             expirationPolicy: ExpirationPolicy.FIXED_DURATION
-  }
+
   }
       );
     });
@@ -194,7 +194,7 @@ describe('API Key Expiration System', () => {
       // Use the key 8 times (80% of limit)
       for (let i = 0; i < 8; i++) {
         await expirationService.recordAPIKeyUsage('usage-test-key', usageDetails);
-      }
+
 
       const result = await expirationService.recordAPIKeyUsage('usage-test-key', usageDetails);
 
@@ -220,14 +220,14 @@ describe('API Key Expiration System', () => {
         
         if (i < 9) {
           expect(result.usageAllowed).toBe(true);
-        } else {
+ else {
           // On the 10th usage, it should expire
           expect(result.status).toBe(APIKeyStatus.EXPIRED);
           expect(result.usageAllowed).toBe(false);
           expect(result.remainingUsage).toBe(0);
           expect(result.warnings).toContain('API key has reached maximum usage limit');
-        }
-      }
+
+
     });
 
     test('should reject usage for expired key', async () => {
@@ -243,7 +243,7 @@ describe('API Key Expiration System', () => {
 
       for (let i = 0; i < 10; i++) {
         await expirationService.recordAPIKeyUsage('usage-test-key', usageDetails);
-      }
+
 
       // Try to use the expired key
       const result = await expirationService.recordAPIKeyUsage('usage-test-key', usageDetails);
@@ -371,7 +371,7 @@ describe('API Key Expiration System', () => {
           `Renewal ${i + 1}`,
           true
         );
-      }
+
 
       // Try to renew one more time
       await expect(
@@ -406,7 +406,7 @@ describe('API Key Expiration System', () => {
           resource: 'api_key:revoke-test-key',
           details: expect.objectContaining({
             reason: 'Security breach detected'
-  }
+
   }
       );
     });
@@ -776,7 +776,7 @@ describe('API Key Expiration System', () => {
             scopes: ['read']
   }
         );
-      }
+
 
       const results = await Promise.all(operations);
       expect(results).toHaveLength(10);

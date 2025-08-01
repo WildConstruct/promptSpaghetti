@@ -6,50 +6,54 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { SessionRotationService, PrivilegeChangeEvent } from './SessionRotationService';
 
-}
-}
+
+
 export interface CreateRoleData {
   name: string;
   description?: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
   permissions: CreatePermissionData[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CreatePermissionData {
   resource: string;
   action: string;
   scope: 'global' | 'organization' | 'team' | 'own';
   conditions?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AssignRoleData {
   userId: string;
   roleId: string;
   grantedBy: string;
   expiresAt?: Date;
   scopeContext?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PermissionCheckResult {
   allowed: boolean;
   reason?: string;
   matchingPermissions?: Permission[];
-}
-}
-}
+
+
+
+
 
 export class RBACService {
   private config: AuthConfig;
@@ -68,12 +72,12 @@ export class RBACService {
 
     // Start cache cleanup interval
     setInterval(() => this.cleanupCache(), this.cacheTimeoutMs);
-  }
+
 
   // Set session rotation service (injected after initialization to avoid circular dependencies)
   setSessionRotationService(sessionRotationService: SessionRotationService): void {
     this.sessionRotationService = sessionRotationService;
-  }
+
 
   // Role Management
   async createRole(
@@ -108,7 +112,7 @@ export class RBACService {
           permData.conditions ? JSON.stringify(permData.conditions) : null,
           now
         ]);
-      }
+
 
       await transaction.commit();
 
@@ -123,7 +127,7 @@ export class RBACService {
           scope: data.scope,
           organizationId: data.organizationId,
           permissionsCount: data.permissions.length
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -140,11 +144,11 @@ export class RBACService {
       };
 
       return role;
-    } catch (error) {
+ catch (error) {
       await transaction.rollback();
       throw error;
-    }
-  }
+
+
 
   async updateRole(
     roleId: string,
@@ -161,7 +165,7 @@ export class RBACService {
       const existingResult = await transaction.query('SELECT * FROM roles WHERE id = $1', [roleId]);
       if (existingResult.rows.length === 0) {
         throw new Error('Role not found');
-      }
+
 
       const existingRole = existingResult.rows[0];
 
@@ -197,8 +201,8 @@ export class RBACService {
             permData.conditions ? JSON.stringify(permData.conditions) : null,
             now
           ]);
-        }
-      }
+
+
 
       await transaction.commit();
 
@@ -214,7 +218,7 @@ export class RBACService {
         details: {
           changes: updates,
           previousName: existingRole.name
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -231,11 +235,11 @@ export class RBACService {
       };
 
       return updatedRole;
-    } catch (error) {
+ catch (error) {
       await transaction.rollback();
       throw error;
-    }
-  }
+
+
 
   async deleteRole(
     roleId: string,
@@ -249,7 +253,7 @@ export class RBACService {
       const roleResult = await transaction.query('SELECT * FROM roles WHERE id = $1', [roleId]);
       if (roleResult.rows.length === 0) {
         throw new Error('Role not found');
-      }
+
 
       const role = roleResult.rows[0];
 
@@ -262,7 +266,7 @@ export class RBACService {
       const userCount = parseInt(userRoleResult.rows[0].count);
       if (userCount > 0) {
         throw new Error(`Cannot delete role. It is assigned to ${userCount} user(s).`);
-      }
+
 
       // Delete permissions first
       await transaction.query('DELETE FROM permissions WHERE role_id = $1', [roleId]);
@@ -281,23 +285,23 @@ export class RBACService {
         details: {
           roleName: role.name,
           scope: role.scope
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
-    } catch (error) {
+ catch (error) {
       await transaction.rollback();
       throw error;
-    }
-  }
+
+
 
   async getRoles(
     filters: {
       scope?: 'global' | 'organization' | 'team';
       organizationId?: string;
       search?: string;
-    } = {},
+ = {},
     pagination: { limit?: number; offset?: number } = {}
   ): Promise<{ roles: Role[]; total: number }> {
 
@@ -311,19 +315,19 @@ export class RBACService {
       whereClause += ` AND scope = $${paramIndex}`;
       params.push(filters.scope);
       paramIndex++;
-    }
+
 
     if (filters.organizationId) {
       whereClause += ` AND organization_id = $${paramIndex}`;
       params.push(filters.organizationId);
       paramIndex++;
-    }
+
 
     if (filters.search) {
       whereClause += ` AND (name ILIKE $${paramIndex} OR description ILIKE $${paramIndex})`;
       params.push(`%${filters.search}%`);
       paramIndex++;
-    }
+
 
     // Get total count
     const countResult = await this.dbService.query(
@@ -349,7 +353,7 @@ export class RBACService {
     }));
 
     return { roles, total };
-  }
+
 
   async getRoleById(roleId: string): Promise<Role | null> {
 
@@ -357,7 +361,7 @@ export class RBACService {
     
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     return {
@@ -369,7 +373,7 @@ export class RBACService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
+
 
   async getRolePermissions(roleId: string): Promise<Permission[]> {
 
@@ -387,7 +391,7 @@ export class RBACService {
       conditions: row.conditions ? JSON.parse(row.conditions) : undefined,
       createdAt: row.created_at
     }));
-  }
+
 
   // User Role Assignment
   async assignRole(
@@ -433,7 +437,7 @@ export class RBACService {
         roleName: role?.name,
         expiresAt: data.expiresAt,
         scopeContext: data.scopeContext
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -455,11 +459,11 @@ export class RBACService {
           rotationEvent,
           context.currentSessionId
         );
-      } catch (error) {
+ catch (error) {
         console.error('Failed to rotate sessions after role assignment:', error);
         // Don't fail the role assignment if session rotation fails
-      }
-    }
+
+
 
     return {
       id: userRoleId,
@@ -470,7 +474,7 @@ export class RBACService {
       expiresAt: data.expiresAt,
       scopeContext: data.scopeContext
     };
-  }
+
 
   async removeRole(
     userId: string,
@@ -490,7 +494,7 @@ export class RBACService {
 
     if (result.rows.length === 0) {
       throw new Error('User role assignment not found');
-    }
+
 
     // Clear user permission cache
     this.clearUserPermissionCacheByUserId(userId);
@@ -508,7 +512,7 @@ export class RBACService {
         targetUserId: userId,
         roleId,
         roleName: role?.name
-  }
+
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -530,12 +534,12 @@ export class RBACService {
           rotationEvent,
           context.currentSessionId
         );
-      } catch (error) {
+ catch (error) {
         console.error('Failed to rotate sessions after role removal:', error);
         // Don't fail the role removal if session rotation fails
-      }
-    }
-  }
+
+
+
 
   async getUserRoles(userId: string): Promise<Role[]> {
 
@@ -555,7 +559,7 @@ export class RBACService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     }));
-  }
+
 
   // Permission Checking
   async checkPermission(
@@ -576,7 +580,7 @@ export class RBACService {
           allowed: false,
           reason: `No permission found for ${permission.resource}:${permission.action}`
         };
-      }
+
 
       // Check conditions for matching permissions
       for (const perm of matchingPermissions) {
@@ -585,22 +589,22 @@ export class RBACService {
             allowed: true,
             matchingPermissions: [perm]
           };
-        }
-      }
+
+
 
       return {
         allowed: false,
         reason: 'Permission conditions not met',
         matchingPermissions
       };
-    } catch (error) {
+ catch (error) {
       console.error('Permission check error:', error);
       return {
         allowed: false,
         reason: 'Permission check failed'
       };
-    }
-  }
+
+
 
   async getUserPermissions(userId: string): Promise<Permission[]> {
 
@@ -610,7 +614,7 @@ export class RBACService {
     
     if (cached && cached.expiresAt > new Date()) {
       return cached.permissions;
-    }
+
 
     // Fetch from database
     const result = await this.dbService.query(`
@@ -638,7 +642,7 @@ export class RBACService {
     });
 
     return permissions;
-  }
+
 
   // Helper Methods
   private matchesPermission(
@@ -649,20 +653,20 @@ export class RBACService {
     // Check resource match (exact or wildcard)
     if (permission.resource !== '*' && permission.resource !== check.resource) {
       return false;
-    }
+
 
     // Check action match (exact or wildcard)
     if (permission.action !== '*' && permission.action !== check.action) {
       return false;
-    }
+
 
     // Check scope
     if (!this.checkScope(permission, context)) {
       return false;
-    }
+
 
     return true;
-  }
+
 
   private checkScope(permission: Permission, context?: PermissionContext): boolean {
     switch (permission.scope) {
@@ -680,8 +684,8 @@ export class RBACService {
       
     default:
       return false;
-    }
-  }
+
+
 
   private async evaluateConditions(
     permission: Permission,
@@ -690,7 +694,7 @@ export class RBACService {
 
     if (!permission.conditions || Object.keys(permission.conditions).length === 0) {
       return true;
-    }
+
 
     // Implement condition evaluation logic
     for (const [key, value] of Object.entries(permission.conditions)) {
@@ -698,34 +702,34 @@ export class RBACService {
       case 'ownResource':
         if (value && (!context?.userId || !context?.resourceId)) {
           return false;
-        }
+
         break;
         
       case 'organizationMember':
         if (value && !context?.organizationId) {
           return false;
-        }
+
         break;
         
       case 'teamMember':
         if (value && !context?.teamId) {
           return false;
-        }
+
         break;
         
       default:
         // Custom condition evaluation can be added here
         break;
-      }
-    }
+
+
 
     return true;
-  }
+
 
   private clearUserPermissionCacheByUserId(userId: string): void {
     const cacheKey = `user_permissions_${userId}`;
     this.permissionCache.delete(cacheKey);
-  }
+
 
   private async clearUserPermissionCache(roleId: string): Promise<void> {
 
@@ -738,17 +742,17 @@ export class RBACService {
     // Clear cache for each user
     for (const row of result.rows) {
       this.clearUserPermissionCacheByUserId(row.user_id);
-    }
-  }
+
+
 
   private cleanupCache(): void {
     const now = new Date();
     for (const [key, value] of this.permissionCache.entries()) {
       if (value.expiresAt <= now) {
         this.permissionCache.delete(key);
-      }
-    }
-  }
+
+
+
 
   // Utility Methods
   async getRoleStats(): Promise<{
@@ -756,7 +760,7 @@ export class RBACService {
     rolesByScope: Record<string, number>;
     totalAssignments: number;
     recentAssignments: number;
-  }> {
+> {
     const [totalRolesResult, scopeStatsResult, totalAssignmentsResult, recentAssignmentsResult] = 
       await Promise.all([
         this.dbService.query('SELECT COUNT(*) as count FROM roles'),
@@ -776,7 +780,7 @@ export class RBACService {
       totalAssignments: parseInt(totalAssignmentsResult.rows[0].count),
       recentAssignments: parseInt(recentAssignmentsResult.rows[0].count)
     };
-  }
+
 
   async getUsersWithRole(roleId: string): Promise<any[]> {
 
@@ -800,5 +804,4 @@ export class RBACService {
       expiresAt: row.expires_at,
       grantedBy: row.granted_by
     }));
-  }
-}
+

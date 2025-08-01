@@ -12,8 +12,7 @@
  * - Integration with security monitoring
  */
 import { EventEmitter } from 'events';
-export declare enum RateLimitStrategy {
-    FIXED_WINDOW = "fixed_window",
+export declare enum RateLimitStrategy { FIXED_WINDOW = "fixed_window",
     SLIDING_WINDOW = "sliding_window",
     TOKEN_BUCKET = "token_bucket",
     LEAKY_BUCKET = "leaky_bucket"
@@ -40,50 +39,43 @@ export declare enum ThreatLevel {
 
 export declare enum RateLimitResult {
     ALLOWED = "allowed",
-    BLOCKED = "blocked",
+    BLOCKED = "blocked" }
     WARNING = "warning"
 
 }
-export interface RateLimitConfig {
-    strategy: RateLimitStrategy;
+}
+export interface RateLimitConfig { strategy: RateLimitStrategy;
     windowSize: number;
     maxRequests: number;
     backoffStrategy: BackoffStrategy;
     burstAllowance?: number;
     exemptionsEnabled: boolean;
     adaptiveEnabled: boolean;
-    threatDetectionEnabled: boolean;
-
+    threatDetectionEnabled: boolean }
 }
-export interface EndpointLimits {
-    category: EndpointCategory;
+}
+export interface EndpointLimits { category: EndpointCategory;
     endpoint: string;
     limits: {
         perSecond: number;
         perMinute: number;
         perHour: number;
-        perDay: number;
+        perDay: number }
 }
     };
-    backoff: {
-        strategy: BackoffStrategy;
+    backoff: { strategy: BackoffStrategy;
         baseDelay: number;
         maxDelay: number;
-        multiplier: number;
-    };
-    burst: {
-        enabled: boolean;
+        multiplier: number };
+    burst: { enabled: boolean;
         size: number;
-        refillRate: number;
-    };
-    adaptiveTriggers: {
-        suspiciousActivityThreshold: number;
-        threatLevelAdjustments: Record<ThreatLevel, number>;
-    };
+        refillRate: number };
+    adaptiveTriggers: { suspiciousActivityThreshold: number;
+        threatLevelAdjustments: Record<ThreatLevel, number> };
 
 }
-export interface RateLimitAttempt {
-    identifier: string;
+}
+export interface RateLimitAttempt { identifier: string;
     endpoint: string;
     timestamp: Date;
     success: boolean;
@@ -92,13 +84,13 @@ export interface RateLimitAttempt {
         location?: string;
         sessionId?: string;
         userId?: string;
-        threatLevel: ThreatLevel;
+        threatLevel: ThreatLevel }
 }
     };
 
 }
-export interface RateLimitStatus {
-    identifier: string;
+}
+export interface RateLimitStatus { identifier: string;
     endpoint: string;
     result: RateLimitResult;
     remainingRequests: number;
@@ -106,41 +98,36 @@ export interface RateLimitStatus {
     retryAfter?: number;
     backoffLevel: number;
     threatLevel: ThreatLevel;
-    adaptiveMultiplier: number;
-
+    adaptiveMultiplier: number }
 }
-export interface BackoffState {
-    identifier: string;
+}
+export interface BackoffState { identifier: string;
     endpoint: string;
     level: number;
     nextAllowedTime: Date;
     consecutiveFailures: number;
     totalFailures: number;
-    lastFailureTime: Date;
-
+    lastFailureTime: Date }
 }
-export interface ThreatContext {
-    identifier: string;
+}
+export interface ThreatContext { identifier: string;
     threatLevel: ThreatLevel;
     indicators: string[];
     geolocation?: {
         country: string;
         region: string;
-        suspicious: boolean;
+        suspicious: boolean }
 }
     };
-    behaviorPattern: {
-        rapidRequests: boolean;
+    behaviorPattern: { rapidRequests: boolean;
         unusualTiming: boolean;
         multipleEndpoints: boolean;
-        newDevice: boolean;
-    };
+        newDevice: boolean };
     confidence: number;
 /**
  * Advanced rate limiting service with threat detection and adaptive protection
  */
-export declare class RateLimitingService extends EventEmitter {
-    private attempts;
+export declare class RateLimitingService extends EventEmitter { private attempts;
     private backoffStates;
     private threatContexts;
     private endpointConfigs;
@@ -150,17 +137,17 @@ export declare class RateLimitingService extends EventEmitter {
      * Check if request should be allowed based on rate limits
      */
     checkRateLimit();
-      identifier: string,
-      endpoint: string,
+      identifier: string
+      endpoint: string
       metadata?: Partial<RateLimitAttempt['metadata']>
     ): Promise<RateLimitStatus>;
     /**
      * Record an authentication attempt
      */
     recordAttempt();
-      identifier: string,
-      endpoint: string,
-      success: boolean,
+      identifier: string
+      endpoint: string
+      success: boolean }
       metadata?: Partial<RateLimitAttempt['metadata']>
     ): void;
     /**
@@ -190,15 +177,13 @@ export declare class RateLimitingService extends EventEmitter {
     /**
      * Get rate limiting statistics
      */
-    getStatistics(): {
-        totalAttempts: number;
+    getStatistics(): { totalAttempts: number;
         blockedAttempts: number;
         activeBackoffs: number;
         threatLevels: Record<ThreatLevel, number>;
         topEndpoints: Array<{
             endpoint: string;
-            attempts: number;
-        }>;
+            attempts: number }>;
     };
     private initializeDefaultConfigs;
     private getEndpointConfig;

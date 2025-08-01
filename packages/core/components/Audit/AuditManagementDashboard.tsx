@@ -4,8 +4,7 @@
  * React dashboard providing advanced audit analytics, compliance monitoring, and management tools
  */
 import React, { useState, useEffect } from 'react';
-import { 
-  Card,
+import { Card,
   Table,
   Select,
   DatePicker,
@@ -18,12 +17,11 @@ import {
   Alert,
   Input,
   Modal,
-  Tabs,
+  Tabs }
   Progress
-} from 'antd';
+ from 'antd';
 import { Bar, Pie } from '@ant-design/plots';
-import { 
-  SecurityScanOutlined, 
+import { SecurityScanOutlined, 
   AlertOutlined, 
   UserOutlined, 
   GlobalOutlined,
@@ -33,24 +31,23 @@ import {
   ClockCircleOutlined,
   DownloadOutlined,
   SearchOutlined,
-  FilterOutlined,
+  FilterOutlined }
   ReloadOutlined
-} from '@ant-design/icons';
-import { 
-  AuditEvent, 
+ from '@ant-design/icons';
+import { AuditEvent, 
   AuditQuery, 
   AuditEventType, 
   AuditSeverity, 
   ComplianceFramework,
-  AuditStatus,
+  AuditStatus }
   auditManagementSystem 
-} from '../audit/AuditManagementSystem';
+ from '../audit/AuditManagementSystem';
 const { RangePicker } = DatePicker;
 const { Search } = Input;
 const { TabPane } = Tabs;
-}
-interface DashboardState {
-  events: AuditEvent;
+
+
+interface DashboardState { events: AuditEvent;
   totalCount: number;
   loading: boolean;
   selectedEvent: AuditEvent | null;
@@ -68,36 +65,35 @@ interface DashboardState {
   /**
   * Main Audit Management Dashboard Component
   */
-  export const AuditManagementDashboard: React.FC = () => {,
+  export const AuditManagementDashboard: React.FC = () => {;
   const [dashboardState, setDashboardState] = useState<DashboardState>({)
-  events: [],
-  totalCount: 0,
-  loading: true,
-  selectedEvent: null,
-  currentQuery: {
-  page: 1,
-  limit: 50,
-  sort_field: 'timestamp',
-  sort_order: 'desc',
-}
+  events: [];
+  totalCount: 0;
+  loading: true;
+  selectedEvent: null;
+  currentQuery: {;
+  page: 1;
+  limit: 50;
+  sort_field: 'timestamp';
+  sort_order: 'desc' }
+
+
 },
   analytics: null,
     anomalousPatterns: [];
   });
-  const [filters, setFilters] = useState<AuditFilters>({)
-  dateRange: [undefined, undefined],
-  eventTypes: [],
-  severities: [],
-  complianceFrameworks: [],
-  statuses: [],
-  searchText: '',
-  riskScoreRange: [0, 10],
+  const [filters, setFilters] = useState<AuditFilters>({ )
+  dateRange: [undefined, undefined]
+  eventTypes: []
+  severities: []
+  complianceFrameworks: []
+  statuses: []
+  searchText: ''
+  riskScoreRange: [0, 10] }
 });
   const [activeTab, setActiveTab] = useState('overview');
   // Load audit data
-  useEffect(() => {
-    loadAuditData();
-  }, [dashboardState.currentQuery]);
+  useEffect(() => { loadAuditData() }, [dashboardState.currentQuery]);
   // Detect anomalous patterns
   useEffect(() => {
     const patterns = auditManagementSystem.detectAnomalousPatterns();
@@ -105,32 +101,30 @@ interface DashboardState {
   }, [dashboardState.events]);
   const loadAuditData = async () => {
     setDashboardState(prev => ({ ...prev, loading: true }));
-    try {
-  const result = await auditManagementSystem.queryAuditEvents(dashboardState.currentQuery);
+    try { const result = await auditManagementSystem.queryAuditEvents(dashboardState.currentQuery);
   setDashboardState(prev => ({)
-  ...prev,
-  events: result.events,
-  totalCount: result.totalCount,
-  analytics: result.analytics,
-  loading: false,
+  ...prev
+  events: result.events
+  totalCount: result.totalCount
+  analytics: result.analytics
+  loading: false }
 }));
-    } catch (error) {
+ catch (error) {
       console.error('Failed to load audit data:', error);
       setDashboardState(prev => ({ ...prev, loading: false }));
   };
-  const applyFilters = () => {
-  const newQuery: AuditQuery = {,
-  ...dashboardState.currentQuery,
-  page: 1,
-  start_date: filters.dateRange[0],
-  end_date: filters.dateRange[1],
-  event_types: filters.eventTypes.length > 0 ? filters.eventTypes : undefined,
-  severities: filters.severities.length > 0 ? filters.severities : undefined,
-  compliance_frameworks: filters.complianceFrameworks.length > 0 ? filters.complianceFrameworks : undefined,
-  statuses: filters.statuses.length > 0 ? filters.statuses : undefined,
-  search_text: filters.searchText || undefined,
-  min_risk_score: filters.riskScoreRange[0],
-  max_risk_score: filters.riskScoreRange[1],
+  const applyFilters = () => { const newQuery: AuditQuery = {
+  ...dashboardState.currentQuery
+  page: 1
+  start_date: filters.dateRange[0]
+  end_date: filters.dateRange[1]
+  event_types: filters.eventTypes.length > 0 ? filters.eventTypes : undefined
+  severities: filters.severities.length > 0 ? filters.severities : undefined
+  compliance_frameworks: filters.complianceFrameworks.length > 0 ? filters.complianceFrameworks : undefined
+  statuses: filters.statuses.length > 0 ? filters.statuses : undefined
+  search_text: filters.searchText || undefined
+  min_risk_score: filters.riskScoreRange[0]
+  max_risk_score: filters.riskScoreRange[1] }
 };
     setDashboardState(prev => ({ ...prev, currentQuery: newQuery }));
   };
@@ -140,12 +134,11 @@ interface DashboardState {
     // This would integrate with the audit management system
   };
   // Render severity badge
-  const renderSeverityBadge = (severity: AuditSeverity) => {
-  const colors = {
-  [AuditSeverity.LOW]: 'green',
-  [AuditSeverity.MEDIUM]: 'orange',
-  [AuditSeverity.HIGH]: 'red',
-  [AuditSeverity.CRITICAL]: 'purple',
+  const renderSeverityBadge = (severity: AuditSeverity) => { const colors = {
+  [AuditSeverity.LOW]: 'green'
+  [AuditSeverity.MEDIUM]: 'orange'
+  [AuditSeverity.HIGH]: 'red'
+  [AuditSeverity.CRITICAL]: 'purple' }
 };
     return <Tag color={colors[severity]}>{severity.toUpperCase()}</Tag>;
   };
@@ -242,48 +235,41 @@ interface DashboardState {
     );
   };
   // Audit events table
-  const renderAuditEventsTable = () => {
-  const columns = [;
+  const renderAuditEventsTable = () => { const columns = [
   {
   title: 'Timestamp',
   dataIndex: 'timestamp',
   key: 'timestamp',
   render: (timestamp: Date) => timestamp.toLocaleString(),
-  sorter: true,
-}
-      {
-        title: 'Event Type',
+  sorter: true }
+
+      { title: 'Event Type',
         dataIndex: 'event_type',
-        key: 'event_type',
+        key: 'event_type' }
         render: (type: AuditEventType) => <Tag>{type.replace('_', ' ').toUpperCase()}</Tag>
-  }
-      {
-  title: 'Severity',
+
+      { title: 'Severity',
   dataIndex: 'severity',
   key: 'severity',
-  render: renderSeverityBadge,
-}
-      {
-  title: 'Title',
+  render: renderSeverityBadge }
+
+      { title: 'Title',
   dataIndex: 'title',
   key: 'title',
-  ellipsis: true,
-}
-      {
-        title: 'User',
+  ellipsis: true }
+
+      { title: 'User',
         dataIndex: 'user_id',
-        key: 'user_id',
+        key: 'user_id' }
         render: (userId: string) => userId ? <Tag icon={<UserOutlined />}>{userId}</Tag> : 'System'
-  }
-      {
-  title: 'Risk Score',
+
+      { title: 'Risk Score',
   dataIndex: 'risk_score',
   key: 'risk_score',
   render: renderRiskScore,
-  sorter: true,
-}
-      {
-  title: 'Status',
+  sorter: true }
+
+      { title: 'Status',
   dataIndex: 'status',
   key: 'status',
   render: (status: AuditStatus) => {,
@@ -292,25 +278,23 @@ interface DashboardState {
   [AuditStatus.RESOLVED]: 'green',
   [AuditStatus.INVESTIGATING]: 'orange',
   [AuditStatus.SUPPRESSED]: 'gray',
-  [AuditStatus.ESCALATED]: 'red',
+  [AuditStatus.ESCALATED]: 'red' }
 };
           return <Tag color={colors[status]}>{status.toUpperCase()}</Tag>;
-  }
-      {
-        title: 'Compliance',
+
+      { title: 'Compliance',
         dataIndex: 'compliance_frameworks',
         key: 'compliance_frameworks',
-        render: (frameworks: ComplianceFramework) => (),
+        render: (frameworks: ComplianceFramework) => () }
           <div>
             {frameworks.map(framework => ()
               <Tag key={framework} size="small">{framework.toUpperCase()}</Tag>
             ))}
           </div>
-  }
-      {
-        title: 'Actions',
+
+      { title: 'Actions',
         key: 'actions',
-        render: (record: AuditEvent) => (),
+        render: (record: AuditEvent) => () }
           <Space>
             <Button 
               size="small" 
@@ -325,18 +309,18 @@ interface DashboardState {
         columns={columns}
         dataSource={dashboardState.events}
         loading={dashboardState.loading}
-        pagination={{
-          current: dashboardState.currentQuery.page,
-          pageSize: dashboardState.currentQuery.limit,
-          total: dashboardState.totalCount,
-          showSizeChanger: true,
-          showQuickJumper: true,
+        pagination={ {
+          current: dashboardState.currentQuery.page
+          pageSize: dashboardState.currentQuery.limit
+          total: dashboardState.totalCount
+          showSizeChanger: true
+          showQuickJumper: true
           onChange: (page, pageSize) => {
             setDashboardState(prev => ({)
-  ...prev,
+  ...prev }
               currentQuery: { ...prev.currentQuery, page, limit: pageSize || 50 }
             }));
-        }}
+
         rowKey="id"
         scroll={{ x: 1200 }}
       />
@@ -347,14 +331,14 @@ interface DashboardState {
     if (!dashboardState.analytics) return null;
     const { analytics } = dashboardState;
     // Severity distribution pie chart
-    const severityData = Object.entries(analytics.severity_distribution || {}).map(([severity, count]) => ({)
-  type: severity,
-  value: count as number,
+    const severityData = Object.entries(analytics.severity_distribution || {}).map(([severity, count]) => ({ )
+  type: severity
+  value: count as number }
 }));
     // Event type distribution bar chart
-    const eventTypeData = Object.entries(analytics.event_type_distribution || {}).map(([type, count]) => ({)
-  type: type.replace('_', ' '),
-  value: count as number,
+    const eventTypeData = Object.entries(analytics.event_type_distribution || {}).map(([type, count]) => ({ )
+  type: type.replace('_', ' ')
+  value: count as number }
 }));
     return;
       <Row gutter={16}>
@@ -365,10 +349,10 @@ interface DashboardState {
               angleField="value"
               colorField="type"
               radius={0.8}
-              label={{
-                type: 'outer',
+              label={ {
+                type: 'outer' }
                 content: '{name} {percentage}'
-              }}
+
               height={300}
             />
           </Card>
@@ -458,8 +442,8 @@ interface DashboardState {
           <label>Date Range:</label>
           <RangePicker
             style={{ width: '100%' }}
-            onChange={(dates) => setFilters(prev => ({ )
-              ...prev, 
+            onChange={ (dates) => setFilters(prev => ({ )
+              ...prev }
               dateRange: dates ? [dates[0]?.toDate(), dates[1]?.toDate()] : [undefined, undefined] 
             }))}
           />
@@ -570,25 +554,11 @@ interface DashboardState {
 };
 
 // Compliance Reports Tab Component
-const ComplianceReportsTab: React.FC = () => {
-  const [selectedFramework, setSelectedFramework] = useState<ComplianceFramework>(ComplianceFramework.GDPR);
-  const [reportData, setReportData] = useState<unknown>(null);
-  const [loading, setLoading] = useState(false);
-  const generateComplianceReport = async () => {
-  setLoading(true);
-  try {
-  const report = auditManagementSystem.generateComplianceReport(selectedFramework, {)
-  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days,
-  end: new Date(),
-});
+const ComplianceReportsTab = () => { return null; });
       setReportData(report);
-    } catch (error) {
-  console.error('Failed to generate compliance report:', error);
-  setLoading(false);
-};
-  useEffect(() => {
-    generateComplianceReport();
-  }, [selectedFramework]);
+ catch (error) { console.error('Failed to generate compliance report:', error);
+  setLoading(false) };
+  useEffect(() => { generateComplianceReport() }, [selectedFramework]);
   return;
     <div>
       <Row gutter={16} style={{ marginBottom: 16 }}>
@@ -653,20 +623,14 @@ const ComplianceReportsTab: React.FC = () => {
 };
 
 // Real-time Monitoring Tab Component
-const RealTimeMonitoringTab: React.FC = () => {
-  const [monitoringData, setMonitoringData] = useState({)
-  eventsPerMinute: 0,
-  alertsActive: 0,
-  systemHealth: 'healthy',
-});
-  useEffect(() => {
-  // Set up real-time monitoring
+const RealTimeMonitoringTab = () => { return null; });
+  useEffect(() => { // Set up real-time monitoring
   const interval = setInterval(() => {
   // This would connect to real-time event streams
   setMonitoringData({)
   eventsPerMinute: Math.floor(Math.random() * 50),
   alertsActive: Math.floor(Math.random() * 5),
-  systemHealth: Math.random() > 0.1 ? 'healthy' : 'warning',
+  systemHealth: Math.random() > 0.1 ? 'healthy' : 'warning' }
 });
     }, 5000);
     return () => clearInterval(interval);
@@ -715,10 +679,7 @@ const RealTimeMonitoringTab: React.FC = () => {
 };
 
 // System Health Tab Component
-const SystemHealthTab: React.FC = () => {
-  return;
-    <div>
-      <Card title="Audit System Health Check" style={{ marginBottom: 16 }}>
+const SystemHealthTab = () => { return null; }>
         <Row gutter={16}>
           <Col span={8}>
             <Progress 

@@ -14,15 +14,16 @@ import {
   Save,
   X,
   AlertCircle
-} from 'lucide-react';
+ from 'lucide-react';
 import { Badge } from '../../common/Badge';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
 import { TargetingRuleBuilder } from './TargetingRuleBuilder';
 import './TargetingRuleBuilder.css';
-}
+
+
 interface TargetingRule {
   id: string;,
-  attribute: string;
+  attribute: string;,
   operator: string;,
   value: Error;
   logicalOperator?: 'AND' | 'OR';
@@ -31,9 +32,9 @@ interface TargetingRule {
   name: string;
   description?: string;
   rules: TargetingRule;,
-  isActive: boolean;
+  isActive: boolean;,
   estimatedUsers: number;,
-  createdAt: string;
+  createdAt: string;,
   updatedAt: string;,
   usageCount: number; // How many toggles use this segment,
   interface UserSegmentManagerProps {
@@ -46,7 +47,8 @@ interface TargetingRule {
   // const [testingSegment, setTestingSegment] = useState<string | null>(null); // TODO: Implement segment testing feature,
   useEffect(() => {
   fetchSegments();
-}
+
+
 }, []);
   const fetchSegments = async () => {
   setLoading(true);
@@ -57,7 +59,7 @@ interface TargetingRule {
   id: 'seg_1',
   name: 'Beta Users',
   description: 'Users who opted into beta testing',
-  rules: [,
+  rules: [
   {
   id: 'rule_1',
   attribute: 'user_type',
@@ -68,12 +70,12 @@ interface TargetingRule {
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   usageCount: 3,
-}
+
         {
   id: 'seg_2',
   name: 'Premium Users',
   description: 'Users with premium subscriptions',
-  rules: [,
+  rules: [
   {
   id: 'rule_2',
   attribute: 'subscription_tier',
@@ -84,12 +86,12 @@ interface TargetingRule {
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   usageCount: 7,
-}
+
         {
   id: 'seg_3',
   name: 'New Users',
   description: 'Users registered within the last 30 days',
-  rules: [,
+  rules: [
   {
   id: 'rule_3',
   attribute: 'registration_date',
@@ -101,9 +103,9 @@ interface TargetingRule {
   updatedAt: new Date().toISOString(),
   usageCount: 1];
   setSegments(mockSegments);
-} catch (error) {
+ catch (error) {
   console.error('Failed to fetch segments:', error);
-} finally {
+ finally {
       setLoading(false);
   };
   const testSegment = async (rules: TargetingRule): Promise<{ matches: boolean; userCount: number }> => {
@@ -129,7 +131,7 @@ interface TargetingRule {
       setSegments(prev => prev.map(seg => )
         seg.id === id ? { ...seg, isActive } : seg
       ));
-    } catch (error) {
+ catch (error) {
   console.error('Failed to toggle segment:', error);
 };
   const handleDeleteSegment = async (id: string) => {
@@ -137,7 +139,7 @@ interface TargetingRule {
   try {
   // TODO: API call to delete segment,
   setSegments(prev => prev.filter(seg => seg.id !== id));
-} catch (error) {
+ catch (error) {
   console.error('Failed to delete segment:', error);
 };
   const handleDuplicateSegment = (segment: UserSegment) => {
@@ -326,15 +328,15 @@ interface TargetingRule {
           onClose={() => {
             setShowCreateModal(false);
             setEditingSegment(null);
-          }}
+}
           onSave={(segment) => {
   if (editingSegment) {
   setSegments(prev => prev.map(s => s.id === segment.id ? segment : s));
-} else {
+ else {
               setSegments(prev => [...prev, segment]);
             setShowCreateModal(false);
             setEditingSegment(null);
-          }}
+}
           onTestRules={testSegment}
         />
       )}
@@ -343,12 +345,14 @@ interface TargetingRule {
 };
 
 // Segment Creation/Edit Modal
-}
+
+
 interface SegmentModalProps {
   segment?: UserSegment | null;
   onClose: () => void;,
   onSave: (segment: UserSegment) => void;,
-}
+
+},
   onTestRules: (rules: TargetingRule) => Promise<{ matches: boolean; userCount: number }>;
 const SegmentModal: React.FC<SegmentModalProps> = ({)
   segment,
@@ -387,9 +391,9 @@ const SegmentModal: React.FC<SegmentModalProps> = ({)
         usageCount: segment?.usageCount || 0;
   };
       onSave(segmentData);
-    } catch {
+ catch {
       setErrors({ submit: 'Failed to save segment' });
-    } finally {
+ finally {
       setSaving(false);
   };
   return;

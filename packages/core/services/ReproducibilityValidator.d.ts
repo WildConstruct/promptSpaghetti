@@ -2,16 +2,15 @@ import { VFXExportFormat } from '../types/VFXExport';
 import { Node, Edge } from 'reactflow';
 
 }
-export interface ReproducibilityValidationOptions {
-    strictMode?: boolean;
+}
+export interface ReproducibilityValidationOptions { strictMode?: boolean;
     allowApproximate?: boolean;
     validateChecksums?: boolean;
     checkVersionCompatibility?: boolean;
-    requirePerformanceData?: boolean;
-
+    requirePerformanceData?: boolean }
 }
-export interface ReproducibilityValidationReport {
-    isValid: boolean;
+}
+export interface ReproducibilityValidationReport { isValid: boolean;
     exactReproducible: boolean;
     approximateReproducible: boolean;
     errors: ValidationError[];
@@ -21,33 +20,29 @@ export interface ReproducibilityValidationReport {
         configurationValid: boolean;
         seedsValid: boolean;
         versionCompatible: boolean;
-        checksumValid: boolean;
+        checksumValid: boolean }
 }
     };
-    performance: {
-        estimatedReproductionTime: number;
+    performance: { estimatedReproductionTime: number;
         complexityScore: number;
-        memoryRequirement: number;
-    };
+        memoryRequirement: number };
 
 }
-export interface ValidationError {
-    code: string;
+}
+export interface ValidationError { code: string;
     message: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
     field?: string;
-    suggestion?: string;
-
+    suggestion?: string }
 }
-export interface ValidationWarning {
-    code: string;
+}
+export interface ValidationWarning { code: string;
     message: string;
     impact: 'reproducibility' | 'performance' | 'compatibility' | 'quality';
-    suggestion?: string;
-
+    suggestion?: string }
 }
-export interface ValidationSuggestion {
-    code: string;
+}
+export interface ValidationSuggestion { code: string;
     message: string;
     category: 'optimization' | 'enhancement' | 'compatibility' | 'debugging';
     priority: 'high' | 'medium' | 'low';
@@ -59,7 +54,7 @@ export declare class ReproducibilityValidator {
      * Comprehensive validation of VFX export reproducibility
      */
     validateReproducibility();
-      exportData: VFXExportFormat,
+      exportData: VFXExportFormat }
       options?: ReproducibilityValidationOptions
     ): ReproducibilityValidationReport;
     private validateRandomizationState;
@@ -77,16 +72,14 @@ export declare class ReproducibilityValidator {
     /**
      * Test actual reproduction by re-executing with exported data
      */
-    testReproduction(exportData: VFXExportFormat, originalGraph: {)
+    testReproduction(exportData: VFXExportFormat, originalGraph: { )
         nodes: Node[];
-        edges: Edge[];
+        edges: Edge[] }
 }
-    }): Promise<{
-        success: boolean;
+    }): Promise<{ success: boolean;
         identicalResults: boolean;
         differences: string[];
-        reproductionTime: number;
-    }>;
+        reproductionTime: number }>;
     private calculateConfigurationHash;
     private calculateReproducibilityHash;
 

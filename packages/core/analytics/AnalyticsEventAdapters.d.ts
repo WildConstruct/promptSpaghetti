@@ -10,8 +10,7 @@ import { UnifiedEventBus, UnifiedAnalyticsEvent } from './UnifiedEventBus';
  *
  * Abstract base class for creating adapters for existing analytics systems
  */
-export declare abstract class BaseAnalyticsAdapter {
-    protected eventBus: UnifiedEventBus;
+export declare abstract class BaseAnalyticsAdapter { protected eventBus: UnifiedEventBus;
     protected systemName: string;
     protected enabled: boolean;
     constructor(eventBus: UnifiedEventBus, systemName: string);
@@ -33,16 +32,14 @@ export declare abstract class BaseAnalyticsAdapter {
     getStatus(): {
         name: string;
         enabled: boolean;
-        systemName: string;
-    };
+        systemName: string };
 
 /**
  * Main Analytics Adapter
  *
  * Integrates the primary analytics system (/server/src/routes/analytics.ts)
  */
-export declare class MainAnalyticsAdapter extends BaseAnalyticsAdapter {
-    constructor(eventBus: UnifiedEventBus);
+export declare class MainAnalyticsAdapter extends BaseAnalyticsAdapter { constructor(eventBus: UnifiedEventBus);
     protected transformEvent(legacyEvent: any): Partial<UnifiedAnalyticsEvent>;
     private getEventType;
     recordGraphExecution(execution: any): Promise<string | null>;
@@ -139,28 +136,22 @@ export declare class AnalyticsAdapterManager {
     getAdapterStatus(): Array<{
         name: string;
         enabled: boolean;
-        systemName: string;
-    }>;
+        systemName: string }>;
     /**
      * Migrate data from all legacy systems
      */
-    migrateAllSystems(migrationData: {)
-        [systemName: string]: any[];
-    }): Promise<{
-        [systemName: string]: {
+    migrateAllSystems(migrationData: { )
+        [systemName: string]: any[] }): Promise<{ [systemName: string]: {
             migrated: number;
             failed: number;
-            errors: string[];
-        };
+            errors: string[] };
     }>;
     /**
      * Get consolidated analytics metrics
      */
-    getConsolidatedMetrics(): {
-        adapters: number;
+    getConsolidatedMetrics(): { adapters: number;
         enabledAdapters: number;
-        eventBusMetrics: any;
-    };
+        eventBusMetrics: any };
     /**
      * Shutdown all adapters
      */

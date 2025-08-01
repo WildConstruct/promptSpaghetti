@@ -16,8 +16,8 @@ import { Node, Edge } from 'reactflow';
 export type HelpContentType = 'getting-started' | 'node-creation' | 'connection-flow' | 'weight-adjustment' | 'preview-generation' | 'professional-workflow' | 'troubleshooting' | 'advanced-features';
 
 }
-export interface HelpContent {
-    id: string;
+}
+export interface HelpContent { id: string;
     type: HelpContentType;
     title: string;
     content: string;
@@ -29,10 +29,11 @@ export interface HelpContent {
         triggerElements?: string[];
         nodeTypes?: string[];
         actions?: string[];
-        conditions?: Record<string, any>;
+        conditions?: Record<string, any> }
 }
     };
 
+}
 }
 export interface ContextualHelpProps {
     nodes: Node[];
@@ -49,4 +50,5 @@ export interface ContextualHelpProps {
 export declare const ContextualHelpSystem: React.FC<ContextualHelpProps>;
 export default ContextualHelpSystem;
 //# sourceMappingURL=ContextualHelpSystem.d.ts.map
+}
 }

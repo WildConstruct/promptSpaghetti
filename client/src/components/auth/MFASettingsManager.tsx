@@ -24,51 +24,53 @@ import {
   Eye,
   EyeOff,
   RotateCcw
-} from 'lucide-react';
+ from 'lucide-react';
 import type { 
   MFAMethodType, 
   MFAMethodStatus,
   BaseMFAConfiguration,
   UserMFAProfile,
   MFAListResponse
-} from '../../types/MFATypes';
+ from '../../types/MFATypes';
 import { MFAEnrollmentWorkflow } from './MFAEnrollmentWorkflow';
-}
+
+
 interface MFASettingsManagerProps {
   userId: string;
   onMethodChange?: (methods: BaseMFAConfiguration) => void;
   interface SettingsState {
   profile: UserMFAProfile | null;,
-  configurations: BaseMFAConfiguration;
+  configurations: BaseMFAConfiguration;,
   isLoading: boolean;,
-  error: string | null;
+  error: string | null;,
   showEnrollment: boolean;,
-  showBackupCodes: boolean;
+  showBackupCodes: boolean;,
   showDeleteConfirm: string | null;,
-  editingMethod: BaseMFAConfiguration | null;
+  editingMethod: BaseMFAConfiguration | null;,
   generatingBackupCodes: boolean;
   const MFA_METHOD_ICONS = {
   [MFAMethodType.TOTP]: Smartphone,
   [MFAMethodType.EMAIL]: Mail,
   [MFAMethodType.SMS]: MessageSquare,
-}
+
+
 };
 const STATUS_CONFIG = {
-  [MFAMethodStatus.ACTIVE]: {
+  [MFAMethodStatus.ACTIVE]: {,
   color: 'green',
   label: 'Active',
   icon: CheckCircle,
-}
+
   [MFAMethodStatus.PENDING]: {
   color: 'yellow',
   label: 'Pending Setup',
   icon: Clock,
-}
+
   [MFAMethodStatus.DISABLED]: {
   color: 'gray',
   label: 'Disabled',
   icon: XCircle,
-}
+
   [MFAMethodStatus.REVOKED]: {
   color: 'red',
   label: 'Revoked',
@@ -103,7 +105,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
   isLoading: false,
 }));
       onMethodChange?.(data.configurations);
-    } catch (error) {
+ catch (error) {
   setState(prev => ({)
   ...prev,
   error: error.message,
@@ -126,7 +128,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       });
       if (!response.ok) throw new Error('Failed to update method status');
       await loadMFAData();
-    } catch (error) {
+ catch (error) {
       setState(prev => ({ ...prev, error: error.message }));
   };
   const deleteMethod = async (configId: string) => {
@@ -139,7 +141,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       if (!response.ok) throw new Error('Failed to delete method');
       setState(prev => ({ ...prev, showDeleteConfirm: null }));
       await loadMFAData();
-    } catch (error) {
+ catch (error) {
       setState(prev => ({ ...prev, error: error.message }));
   };
   const setPrimaryMethod = async (configId: string) => {
@@ -151,7 +153,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       });
       if (!response.ok) throw new Error('Failed to set primary method');
       await loadMFAData();
-    } catch (error) {
+ catch (error) {
       setState(prev => ({ ...prev, error: error.message }));
   };
   const generateNewBackupCodes = async () => {
@@ -165,19 +167,19 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       const { codes } = await response.json();
       downloadBackupCodes(codes);
       await loadMFAData();
-    } catch (error) {
+ catch (error) {
       setState(prev => ({ ...prev, error: error.message }));
-    } finally {
+ finally {
       setState(prev => ({ ...prev, generatingBackupCodes: false }));
   };
   const downloadBackupCodes = (codes: string) => {
-    const content = [;
+    const content = [
       'PromptScape MFA Backup Codes',
       '================================',
       `Generated: ${new Date().toISOString()}`}
-}
+
       `User: ${userId}`}
-}
+
       '',
       'IMPORTANT: Save these codes in a safe place.',
       'Each code can only be used once.',
@@ -224,7 +226,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
               <div className="flex items-center gap-3">
                 <div className={`w-3 h-3 rounded-full ${
   state.profile?.isEnabled ? 'bg-green-500' : 'bg-red-500',
-}`}></div>
+`}></div>
                 <span className="font-medium">
                   MFA Status: {state.profile?.isEnabled ? 'Enabled' : 'Disabled'}
                 </span>
@@ -428,7 +430,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       {state.showEnrollment && ()
         <Dialog open={state.showEnrollment} onOpenChange={(open) => 
           setState(prev => ({ ...prev, showEnrollment: open }))
-        }>
+>
           <DialogContent className="max-w-3xl">
             <MFAEnrollmentWorkflow
               userId={userId}
@@ -443,7 +445,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
       {state.showDeleteConfirm && ()
         <Dialog open={!!state.showDeleteConfirm} onOpenChange={(open) => 
           !open && setState(prev => ({ ...prev, showDeleteConfirm: null }))
-        }>
+>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Delete MFA Method</DialogTitle>

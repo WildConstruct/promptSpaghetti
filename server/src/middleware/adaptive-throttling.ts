@@ -12,15 +12,15 @@ import {
   ThrottlingContext, 
   ThrottlingResult,
   SystemMetrics
-} from '../../../../packages/core/security/AdaptiveThrottlingRules';
+ from '../../../../packages/core/security/AdaptiveThrottlingRules';
 import { RateLimitingService, ThreatLevel } from '../../../../packages/core/security/RateLimitingService';
 
 // ========================================
 // Middleware Configuration
 // ========================================
 
-}
-}
+
+
 export interface AdaptiveThrottlingConfig {
   enabled: boolean;
   skipHealthChecks: boolean;
@@ -33,12 +33,13 @@ export interface AdaptiveThrottlingConfig {
   customThreatAssessment?: (request: FastifyRequest) => ThreatLevel;
   onThrottled?: (request: FastifyRequest, result: ThrottlingResult) => void;
   onError?: (error: Error, request: FastifyRequest) => void;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemMonitor {
   getCPUUsage(): Promise<number>;
   getMemoryUsage(): Promise<number>;
@@ -47,9 +48,10 @@ export interface SystemMonitor {
   getAverageResponseTime(): number;
   getErrorRate(): number;
   getQueueDepth(): number;
-}
-}
-}
+
+
+
+
 
 // ========================================
 // Default System Monitor Implementation
@@ -69,40 +71,40 @@ class DefaultSystemMonitor implements SystemMonitor {
     // In production, use actual system monitoring libraries
     const loadAvg = process.cpuUsage();
     return Math.min(100, (loadAvg.user + loadAvg.system) / 1000000);
-  }
+
 
   async getMemoryUsage(): Promise<number> {
 
     const usage = process.memoryUsage();
     const totalMemory = require('os').totalmem();
     return (usage.heapUsed / totalMemory) * 100;
-  }
+
 
   getActiveConnections(): number {
     return this.activeConnections;
-  }
+
 
   getRequestsPerSecond(): number {
     const now = Date.now();
     const oneSecondAgo = now - 1000;
     const recentRequests = this.requestCounts.filter(time => time > oneSecondAgo);
     return recentRequests.length;
-  }
+
 
   getAverageResponseTime(): number {
     if (this.responseTimes.length === 0) return 0;
     const sum = this.responseTimes.reduce((a, b) => a + b, 0);
     return sum / this.responseTimes.length;
-  }
+
 
   getErrorRate(): number {
     if (this.totalRequests === 0) return 0;
     return (this.errorCount / this.totalRequests) * 100;
-  }
+
 
   getQueueDepth(): number {
     return this.queueDepth;
-  }
+
 
   recordRequest(startTime: number, isError: boolean): void {
     const now = Date.now();
@@ -112,7 +114,7 @@ class DefaultSystemMonitor implements SystemMonitor {
     
     if (isError) {
       this.errorCount++;
-    }
+
 
     // Clean up old data (keep last 60 seconds)
     const cutoff = now - 60000;
@@ -120,16 +122,16 @@ class DefaultSystemMonitor implements SystemMonitor {
     this.responseTimes = this.responseTimes.filter((_, index) => 
       this.requestCounts[index] > cutoff
     );
-  }
+
 
   setActiveConnections(count: number): void {
     this.activeConnections = count;
-  }
+
 
   setQueueDepth(depth: number): void {
     this.queueDepth = depth;
-  }
-}
+
+
 
 // ========================================
 // Adaptive Throttling Middleware
@@ -163,10 +165,10 @@ export class AdaptiveThrottlingMiddleware {
     
     if (this.config.enableMetricsCollection) {
       this.startMetricsCollection();
-    }
+
 
     this.setupEventListeners();
-  }
+
 
   /**
    * Create Fastify middleware function
@@ -175,13 +177,13 @@ export class AdaptiveThrottlingMiddleware {
     return async (request: FastifyRequest, reply: FastifyReply) => {
       if (!this.config.enabled) {
         return;
-      }
+
 
       try {
         // Skip certain requests based on configuration
         if (this.shouldSkipRequest(request)) {
           return;
-        }
+
 
         const startTime = Date.now();
         const context = await this.buildThrottlingContext(request);
@@ -189,19 +191,18 @@ export class AdaptiveThrottlingMiddleware {
 
         // Handle throttling result
         await this.handleThrottlingResult(request, reply, result, startTime);
-
-      } catch (error) {
+ catch (error) {
         console.error('Adaptive throttling middleware error:', error);
         
         if (this.config.onError) {
           this.config.onError(error as Error, request);
-        }
+
 
         // Fail open - allow request to proceed
         return;
-      }
+
     };
-  }
+
 
   /**
    * Get current engine statistics
@@ -210,14 +211,14 @@ export class AdaptiveThrottlingMiddleware {
     return {
       engine: this.engine.getStatistics(),
       systemMetrics: this.getSystemMetrics(};
-  }
+
 
   /**
    * Update system metrics manually
    */
   updateSystemMetrics(metrics: Partial<SystemMetrics>): void {
     this.engine.updateSystemMetrics(metrics);
-  }
+
 
   /**
    * Enable or disable the middleware
@@ -225,21 +226,21 @@ export class AdaptiveThrottlingMiddleware {
   setEnabled(enabled: boolean): void {
     this.config.enabled = enabled;
     this.engine.setEnabled(enabled);
-  }
+
 
   /**
    * Add a custom throttling rule
    */
   addThrottlingRule(rule: Record<string, unknown>): void {
     this.engine.addRule(rule);
-  }
+
 
   /**
    * Remove a throttling rule
    */
   removeThrottlingRule(ruleId: string): boolean {
     return this.engine.removeRule(ruleId);
-  }
+
 
   /**
    * Clean up resources
@@ -247,9 +248,9 @@ export class AdaptiveThrottlingMiddleware {
   cleanup(): void {
     if (this.metricsInterval) {
       clearInterval(this.metricsInterval);
-    }
+
     this.engine.cleanup();
-  }
+
 
   // ========================================
   // Private Implementation
@@ -260,16 +261,16 @@ export class AdaptiveThrottlingMiddleware {
     if (this.config.skipHealthChecks && 
         (request.url === '/health' || request.url === '/status')) {
       return true;
-    }
+
 
     // Skip static assets
     if (this.config.skipStaticAssets && 
         /\.(css|js|png|jpg|gif|svg|ico|woff|woff2|ttf|eot)$/i.test(request.url)) {
       return true;
-    }
+
 
     return false;
-  }
+
 
   private async buildThrottlingContext(request: FastifyRequest): Promise<ThrottlingContext> {
 
@@ -307,7 +308,7 @@ export class AdaptiveThrottlingMiddleware {
       recentFailures,
       consecutiveFailures
     };
-  }
+
 
   private extractClientIP(request: FastifyRequest): string {
     // Check for forwarded IP headers from trusted proxies
@@ -317,24 +318,24 @@ export class AdaptiveThrottlingMiddleware {
 
     if (cfConnectingIP && typeof cfConnectingIP === 'string') {
       return cfConnectingIP;
-    }
+
 
     if (realIP && typeof realIP === 'string') {
       return realIP;
-    }
+
 
     if (forwardedFor && typeof forwardedFor === 'string') {
       return forwardedFor.split(',')[0].trim();
-    }
+
 
     return request.ip || 'unknown';
-  }
+
 
   private assessThreatLevel(request: FastifyRequest): ThreatLevel {
     // Use custom threat assessment if provided
     if (this.config.customThreatAssessment) {
       return this.config.customThreatAssessment(request);
-    }
+
 
     // Default threat assessment logic
     let threatScore = 0;
@@ -343,12 +344,12 @@ export class AdaptiveThrottlingMiddleware {
     const userAgent = request.headers['user-agent'] || '';
     if (userAgent.includes('bot') || userAgent.includes('crawler') || userAgent === '') {
       threatScore += 10;
-    }
+
 
     // Check for suspicious request patterns
     if (request.url.includes('admin') || request.url.includes('config')) {
       threatScore += 15;
-    }
+
 
     // Check for common attack patterns
     const suspiciousPatterns = ['../', '<script', 'union select', 'drop table'];
@@ -361,27 +362,27 @@ export class AdaptiveThrottlingMiddleware {
     for (const pattern of suspiciousPatterns) {
       if (requestData.includes(pattern)) {
         threatScore += 25;
-      }
-    }
+
+
 
     // Determine threat level
     if (threatScore >= 50) return ThreatLevel.CRITICAL;
     if (threatScore >= 30) return ThreatLevel.HIGH;
     if (threatScore >= 15) return ThreatLevel.MEDIUM;
     return ThreatLevel.LOW;
-  }
+
 
   private calculateRecentFailures(ip: string, endpoint: string): number {
     // Simplified implementation - in production, use proper tracking
     // This would query the rate limiting service for recent failures
     return 0;
-  }
+
 
   private calculateConsecutiveFailures(ip: string, endpoint: string): number {
     // Simplified implementation - in production, use proper tracking
     // This would query the rate limiting service for consecutive failures
     return 0;
-  }
+
 
   private async handleThrottlingResult(
     request: FastifyRequest,
@@ -403,7 +404,7 @@ export class AdaptiveThrottlingMiddleware {
       if (result.delay > 0) {
         const actualDelay = Math.min(result.delay, this.config.maxDelayMs);
         await this.delay(actualDelay);
-      }
+
       
       // Set throttling headers
       reply.header('X-Throttled', 'true');
@@ -412,13 +413,13 @@ export class AdaptiveThrottlingMiddleware {
       
       if (this.config.logThrottledRequests) {
         console.log(`Request throttled: ${request.method} ${request.url} - ${result.reason} (${result.delay}ms delay)`);
-      }
+
       
       monitor.recordRequest(startTime, false);
       
       if (this.config.onThrottled) {
         this.config.onThrottled(request, result);
-      }
+
       return;
 
     case 'block':
@@ -434,11 +435,11 @@ export class AdaptiveThrottlingMiddleware {
       
       if (this.config.logThrottledRequests) {
         console.log(`Request blocked: ${request.method} ${request.url} - ${result.reason}`);
-      }
+
       
       if (this.config.onThrottled) {
         this.config.onThrottled(request, result);
-      }
+
       return;
 
     case 'shed':
@@ -454,24 +455,24 @@ export class AdaptiveThrottlingMiddleware {
       
       if (this.config.logThrottledRequests) {
         console.log(`Request shed: ${request.method} ${request.url} - load shedding`);
-      }
+
       return;
 
     default:
       // Unknown action - allow request
       monitor.recordRequest(startTime, false);
       return;
-    }
-  }
+
+
 
   private async delay(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   private generateRequestId(): string {
     return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async getSystemMetrics(): Promise<SystemMetrics> {
 
@@ -483,25 +484,25 @@ export class AdaptiveThrottlingMiddleware {
       averageResponseTime: this.monitor.getAverageResponseTime(),
       errorRate: this.monitor.getErrorRate(),
       queueDepth: this.monitor.getQueueDepth(};
-  }
+
 
   private startMetricsCollection(): void {
     this.metricsInterval = setInterval(async () => {
       try {
         const metrics = await this.getSystemMetrics();
         this.engine.updateSystemMetrics(metrics);
-      } catch (error) {
+ catch (error) {
         console.error('Error collecting system metrics:', error);
-      }
+
     }, this.config.systemMetricsInterval);
-  }
+
 
   private setupEventListeners(): void {
     // Listen to throttling events for monitoring
     this.engine.on('throttlingApplied', (event) => {
       if (this.config.logThrottledRequests) {
         console.log(`Throttling applied: ${event.rule} - ${event.result.reason}`);
-      }
+
     });
 
     this.engine.on('circuitBreakerOpened', (event) => {
@@ -511,8 +512,8 @@ export class AdaptiveThrottlingMiddleware {
     this.engine.on('circuitBreakerClosed', (event) => {
       console.info(`Circuit breaker closed: ${event.ruleId} - recovery successful`);
     });
-  }
-}
+
+
 
 // ========================================
 // Fastify Plugin
@@ -553,15 +554,16 @@ export function createAdaptiveThrottlingPlugin(
       middleware.cleanup();
     });
   };
-}
+
 
 // Type augmentation for Fastify
 declare module 'fastify' {
   interface FastifyInstance {
     adaptiveThrottling: AdaptiveThrottlingMiddleware;
-}
-}
-  }
-}
+
+
+
+
+
 
 export default AdaptiveThrottlingMiddleware;

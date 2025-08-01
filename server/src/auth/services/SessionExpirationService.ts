@@ -6,8 +6,8 @@
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
-}
-}
+
+
 export interface ExpirationPolicy {
   id: string;
   name: string;
@@ -21,8 +21,9 @@ export interface ExpirationPolicy {
     warningPeriod: number; // seconds - warning before expiration
     gracePeriod: number; // seconds - grace period after expiration
     slidingWindow: boolean; // extend on activity
-}
-}
+
+
+
   };
   
   applicability: {
@@ -57,10 +58,10 @@ export interface ExpirationPolicy {
     archiveData: boolean;
     anonymizeData: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface SessionExpiration {
   sessionId: string;
   userId: string;
@@ -73,8 +74,9 @@ export interface SessionExpiration {
     warningAt?: Date;
     expiredAt?: Date;
     cleanupAt?: Date;
-}
-}
+
+
+
   };
   
   status: 'active' | 'warning' | 'expiring' | 'expired' | 'grace' | 'cleaned';
@@ -100,7 +102,7 @@ export interface SessionExpiration {
     extendedBy: string;
     duration: number;
     reason: string;
-  }>;
+>;
   
   notifications: Array<{
     type: 'warning' | 'expiration' | 'extension';
@@ -108,11 +110,11 @@ export interface SessionExpiration {
     method: string;
     success: boolean;
     response?: string;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface ExpirationEvent {
   id: string;
   sessionId: string;
@@ -121,9 +123,10 @@ export interface ExpirationEvent {
   timestamp: Date;
   details: Record<string, any>;
   triggeredBy: string;
-}
-}
-}
+
+
+
+
 
 export class SessionExpirationService extends EventEmitter {
   private policies: Map<string, ExpirationPolicy> = new Map();
@@ -138,7 +141,7 @@ export class SessionExpirationService extends EventEmitter {
     super();
     this.initializeDefaultPolicies();
     this.startMaintenanceTasks();
-  }
+
 
   /**
    * Register a new expiration policy
@@ -163,7 +166,7 @@ export class SessionExpirationService extends EventEmitter {
 
     this.emit('policyRegistered', policy);
     return policy;
-  }
+
 
   /**
    * Initialize session expiration tracking
@@ -185,7 +188,7 @@ export class SessionExpirationService extends EventEmitter {
     const policy = await this.findApplicablePolicy(context);
     if (!policy) {
       throw new Error('No applicable expiration policy found');
-    }
+
 
     const now = new Date();
     const willExpireAt = new Date(now.getTime() + policy.timing.absoluteTimeout * 1000);
@@ -202,21 +205,21 @@ export class SessionExpirationService extends EventEmitter {
         lastActivity: now,
         willExpireAt,
         warningAt
-  }
+
       status: 'active',
       counters: {
         extensionCount: 0,
         warningsSent: 0,
         activityCount: 0,
         idleTime: 0
-  }
+
       metadata: {
         sessionType: context.sessionType,
         trustLevel: context.trustLevel,
         deviceId: context.deviceId,
         ipAddress: context.ipAddress,
         userAgent: context.userAgent
-  }
+
       extensions: [],
       notifications: []
     };
@@ -236,7 +239,7 @@ export class SessionExpirationService extends EventEmitter {
 
     this.emit('sessionInitialized', { sessionId, expiration });
     return expiration;
-  }
+
 
   /**
    * Update session activity and check expiration
@@ -247,13 +250,13 @@ export class SessionExpirationService extends EventEmitter {
       endpoint?: string;
       ipAddress?: string;
       timestamp?: Date;
-    } = {}
+ = {}
   ): Promise<{
     status: SessionExpiration['status'];
     remainingTime: number;
     requiresAction?: string[];
     extended?: boolean;
-  }> {
+> {
 
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) {
@@ -262,12 +265,12 @@ export class SessionExpirationService extends EventEmitter {
         remainingTime: 0,
         requiresAction: ['reauthenticate']
       };
-    }
+
 
     const policy = this.policies.get(expiration.policyId);
     if (!policy) {
       throw new Error('Policy not found');
-    }
+
 
     const now = context.timestamp || new Date();
     const previousActivity = expiration.timestamps.lastActivity;
@@ -280,7 +283,7 @@ export class SessionExpirationService extends EventEmitter {
     
     if (context.endpoint) {
       expiration.metadata.lastEndpoint = context.endpoint;
-    }
+
 
     // Check idle timeout
     if (idleTime > policy.timing.idleTimeout) {
@@ -290,7 +293,7 @@ export class SessionExpirationService extends EventEmitter {
         remainingTime: 0,
         requiresAction: ['reauthenticate']
       };
-    }
+
 
     // Extend session if sliding window is enabled
     let extended = false;
@@ -302,8 +305,8 @@ export class SessionExpirationService extends EventEmitter {
         
         // Reschedule timers
         this.scheduleExpirationTimers(sessionId, expiration, policy);
-      }
-    }
+
+
 
     // Calculate remaining time
     const remainingTime = Math.max(0, 
@@ -314,10 +317,10 @@ export class SessionExpirationService extends EventEmitter {
     const requiresAction = [];
     if (expiration.status === 'warning') {
       requiresAction.push('acknowledge_warning');
-    }
+
     if (remainingTime < 300 && policy.behavior.requireReauth) { // 5 minutes
       requiresAction.push('prepare_reauthentication');
-    }
+
 
     return {
       status: expiration.status,
@@ -325,7 +328,7 @@ export class SessionExpirationService extends EventEmitter {
       requiresAction: requiresAction.length > 0 ? requiresAction : undefined,
       extended
     };
-  }
+
 
   /**
    * Extend session with policy validation
@@ -340,7 +343,7 @@ export class SessionExpirationService extends EventEmitter {
     newExpiration?: Date;
     remainingExtensions?: number;
     message: string;
-  }> {
+> {
 
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) {
@@ -348,7 +351,7 @@ export class SessionExpirationService extends EventEmitter {
         success: false,
         message: 'Session not found'
       };
-    }
+
 
     const policy = this.policies.get(expiration.policyId);
     if (!policy) {
@@ -356,7 +359,7 @@ export class SessionExpirationService extends EventEmitter {
         success: false,
         message: 'Policy not found'
       };
-    }
+
 
     // Check if extensions are allowed
     if (!policy.behavior.autoExtend) {
@@ -364,7 +367,7 @@ export class SessionExpirationService extends EventEmitter {
         success: false,
         message: 'Session extensions not allowed by policy'
       };
-    }
+
 
     // Check extension limit
     if (expiration.counters.extensionCount >= policy.behavior.maxExtensions) {
@@ -372,7 +375,7 @@ export class SessionExpirationService extends EventEmitter {
         success: false,
         message: `Maximum extensions (${policy.behavior.maxExtensions}) reached`
       };
-    }
+
 
     // Check if session is eligible for extension
     if (!['active', 'warning'].includes(expiration.status)) {
@@ -380,7 +383,7 @@ export class SessionExpirationService extends EventEmitter {
         success: false,
         message: `Cannot extend session in ${expiration.status} status`
       };
-    }
+
 
     // Calculate extension duration
     const extensionDuration = duration || policy.behavior.extensionDuration;
@@ -423,7 +426,7 @@ export class SessionExpirationService extends EventEmitter {
       remainingExtensions: policy.behavior.maxExtensions - expiration.counters.extensionCount,
       message: 'Session extended successfully'
     };
-  }
+
 
   /**
    * Handle session expiration with grace period
@@ -455,9 +458,9 @@ export class SessionExpirationService extends EventEmitter {
       
       // Send expiration notification
       await this.sendExpirationNotification(expiration, 'grace_period');
-    } else {
+ else {
       await this.finalizeExpiration(sessionId);
-    }
+
 
     await this.logEvent('session_expired', sessionId, 'system', {
       reason,
@@ -470,7 +473,7 @@ export class SessionExpirationService extends EventEmitter {
       reason,
       inGracePeriod: expiration.status === 'grace'
     });
-  }
+
 
   /**
    * Get session expiration status and details
@@ -490,12 +493,12 @@ export class SessionExpirationService extends EventEmitter {
       extensionCount: number;
       policy: string;
     };
-  }> {
+> {
 
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) {
       return { exists: false };
-    }
+
 
     const policy = this.policies.get(expiration.policyId);
     const now = new Date();
@@ -524,9 +527,9 @@ export class SessionExpirationService extends EventEmitter {
         lastActivity: expiration.timestamps.lastActivity,
         extensionCount: expiration.counters.extensionCount,
         policy: policy?.name || 'Unknown'
-      }
+
     };
-  }
+
 
   /**
    * Bulk expire sessions (admin action)
@@ -537,13 +540,13 @@ export class SessionExpirationService extends EventEmitter {
       sessionTypes?: string[];
       olderThan?: Date;
       idleFor?: number; // seconds
-  }
+
     expiredBy: string,
     reason: string
   ): Promise<{
     expiredCount: number;
     sessionIds: string[];
-  }> {
+> {
 
     const sessionsToExpire = [];
     const now = new Date();
@@ -553,32 +556,32 @@ export class SessionExpirationService extends EventEmitter {
 
       if (criteria.userIds?.includes(expiration.userId)) {
         shouldExpire = true;
-      }
+
       
       if (criteria.sessionTypes?.includes(expiration.metadata.sessionType)) {
         shouldExpire = true;
-      }
+
       
       if (criteria.olderThan && expiration.timestamps.createdAt < criteria.olderThan) {
         shouldExpire = true;
-      }
+
       
       if (criteria.idleFor) {
         const idleTime = (now.getTime() - expiration.timestamps.lastActivity.getTime()) / 1000;
         if (idleTime > criteria.idleFor) {
           shouldExpire = true;
-        }
-      }
+
+
 
       if (shouldExpire && expiration.status === 'active') {
         sessionsToExpire.push(sessionId);
-      }
-    }
+
+
 
     // Expire all matching sessions
     for (const sessionId of sessionsToExpire) {
       await this.expireSession(sessionId, `bulk_expire: ${reason}`);
-    }
+
 
     await this.logEvent('bulk_expire', 'system', expiredBy, {
       criteria,
@@ -590,7 +593,7 @@ export class SessionExpirationService extends EventEmitter {
       expiredCount: sessionsToExpire.length,
       sessionIds: sessionsToExpire
     };
-  }
+
 
   // Private helper methods
 
@@ -607,31 +610,31 @@ export class SessionExpirationService extends EventEmitter {
           warningPeriod: 300, // 5 minutes
           gracePeriod: 60, // 1 minute
           slidingWindow: true
-  }
+
         applicability: {
           sessionTypes: ['web', 'mobile'],
           trustLevels: ['trusted', 'verified']
-  }
+
         behavior: {
           autoExtend: true,
           maxExtensions: 3,
           extensionDuration: 1800, // 30 minutes
           requireReauth: false,
           preserveData: true
-  }
+
         notifications: {
           warningEnabled: true,
           expirationEnabled: true,
           methods: ['websocket', 'ui'],
           templates: {}
-  }
+
         cleanup: {
           immediateCleanup: false,
           retentionPeriod: 3600, // 1 hour
           archiveData: true,
           anonymizeData: false
-        }
-  }
+
+
       {
         name: 'High Security Session',
         description: 'Strict expiration for high-security operations',
@@ -643,37 +646,37 @@ export class SessionExpirationService extends EventEmitter {
           warningPeriod: 120, // 2 minutes
           gracePeriod: 0, // No grace period
           slidingWindow: false
-  }
+
         applicability: {
           sessionTypes: ['admin', 'api'],
           trustLevels: ['verified']
-  }
+
         behavior: {
           autoExtend: false,
           maxExtensions: 0,
           extensionDuration: 0,
           requireReauth: true,
           preserveData: false
-  }
+
         notifications: {
           warningEnabled: true,
           expirationEnabled: true,
           methods: ['email', 'websocket', 'ui'],
           templates: {}
-  }
+
         cleanup: {
           immediateCleanup: true,
           retentionPeriod: 0,
           archiveData: true,
           anonymizeData: true
-        }
-      }
+
+
     ];
 
     for (const policyData of policies) {
       this.registerPolicy(policyData, 'system');
-    }
-  }
+
+
 
   private async findApplicablePolicy(context: any): Promise<ExpirationPolicy | null> {
 
@@ -688,13 +691,13 @@ export class SessionExpirationService extends EventEmitter {
       if (policy.applicability.sessionTypes && 
           !policy.applicability.sessionTypes.includes(context.sessionType)) {
         isApplicable = false;
-      }
+
 
       // Check trust level
       if (policy.applicability.trustLevels && 
           !policy.applicability.trustLevels.includes(context.trustLevel)) {
         isApplicable = false;
-      }
+
 
       // Check user roles
       if (policy.applicability.userRoles && context.userRoles) {
@@ -702,16 +705,16 @@ export class SessionExpirationService extends EventEmitter {
           context.userRoles.includes(role)
         );
         if (!hasRole) isApplicable = false;
-      }
+
 
       if (isApplicable) {
         applicablePolicies.push(policy);
-      }
-    }
+
+
 
     // Return highest priority policy
     return applicablePolicies.sort((a, b) => b.priority - a.priority)[0] || null;
-  }
+
 
   private scheduleExpirationTimers(
     sessionId: string,
@@ -731,8 +734,8 @@ export class SessionExpirationService extends EventEmitter {
           this.triggerWarning(sessionId);
         }, warningDelay);
         this.warningTimers.set(sessionId, warningTimer);
-      }
-    }
+
+
 
     // Schedule expiration timer
     const expirationDelay = expiration.timestamps.willExpireAt.getTime() - now;
@@ -741,7 +744,7 @@ export class SessionExpirationService extends EventEmitter {
         this.expireSession(sessionId, 'absolute_timeout');
       }, expirationDelay);
       this.expirationTimers.set(sessionId, expirationTimer);
-    }
+
 
     // Schedule idle check
     if (policy.timing.idleTimeout > 0) {
@@ -749,8 +752,8 @@ export class SessionExpirationService extends EventEmitter {
         this.checkIdleTimeout(sessionId);
       }, Math.min(policy.timing.idleTimeout * 1000 / 2, 60000)); // Check at half idle timeout or 1 minute
       this.expirationTimers.set(`idle-${sessionId}`, idleTimer);
-    }
-  }
+
+
 
   private clearTimers(sessionId: string): void {
     // Clear warning timer
@@ -758,36 +761,36 @@ export class SessionExpirationService extends EventEmitter {
     if (warningTimer) {
       clearTimeout(warningTimer);
       this.warningTimers.delete(sessionId);
-    }
+
 
     // Clear expiration timers
     const expirationTimer = this.expirationTimers.get(sessionId);
     if (expirationTimer) {
       clearTimeout(expirationTimer);
       this.expirationTimers.delete(sessionId);
-    }
+
 
     // Clear idle timer
     const idleTimer = this.expirationTimers.get(`idle-${sessionId}`);
     if (idleTimer) {
       clearInterval(idleTimer);
       this.expirationTimers.delete(`idle-${sessionId}`);
-    }
+
 
     // Clear grace timer
     const graceTimer = this.expirationTimers.get(`grace-${sessionId}`);
     if (graceTimer) {
       clearTimeout(graceTimer);
       this.expirationTimers.delete(`grace-${sessionId}`);
-    }
+
 
     // Clear cleanup timer
     const cleanupTimer = this.cleanupTimers.get(sessionId);
     if (cleanupTimer) {
       clearTimeout(cleanupTimer);
       this.cleanupTimers.delete(sessionId);
-    }
-  }
+
+
 
   private async triggerWarning(sessionId: string): Promise<void> {
 
@@ -802,7 +805,7 @@ export class SessionExpirationService extends EventEmitter {
       userId: expiration.userId,
       expiresIn: (expiration.timestamps.willExpireAt.getTime() - Date.now()) / 1000
     });
-  }
+
 
   private async checkIdleTimeout(sessionId: string): Promise<void> {
 
@@ -816,8 +819,8 @@ export class SessionExpirationService extends EventEmitter {
     
     if (idleTime > policy.timing.idleTimeout) {
       await this.expireSession(sessionId, 'idle_timeout');
-    }
-  }
+
+
 
   private async finalizeExpiration(sessionId: string): Promise<void> {
 
@@ -839,13 +842,13 @@ export class SessionExpirationService extends EventEmitter {
         this.cleanupSession(sessionId);
       }, cleanupDelay);
       this.cleanupTimers.set(sessionId, cleanupTimer);
-    } else {
+ else {
       await this.cleanupSession(sessionId);
-    }
+
 
     // Send final notification
     await this.sendExpirationNotification(expiration, 'expired');
-  }
+
 
   private async cleanupSession(sessionId: string): Promise<void> {
 
@@ -857,7 +860,7 @@ export class SessionExpirationService extends EventEmitter {
     // Archive data if configured
     if (policy?.cleanup.archiveData) {
       await this.archiveSessionData(expiration, policy.cleanup.anonymizeData);
-    }
+
 
     // Remove from active tracking
     this.sessionExpirations.delete(sessionId);
@@ -875,7 +878,7 @@ export class SessionExpirationService extends EventEmitter {
       sessionId,
       userId: expiration.userId
     });
-  }
+
 
   private async sendExpirationNotification(
     expiration: SessionExpiration,
@@ -899,13 +902,13 @@ export class SessionExpirationService extends EventEmitter {
         notification.method = method;
         notification.success = true;
         expiration.notifications.push({ ...notification });
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to send ${type} notification via ${method}:`, error);
-      }
-    }
+
+
 
     expiration.counters.warningsSent++;
-  }
+
 
   private async sendNotification(
     method: string,
@@ -922,7 +925,7 @@ export class SessionExpirationService extends EventEmitter {
       type,
       method
     });
-  }
+
 
   private async archiveSessionData(
     expiration: SessionExpiration,
@@ -936,17 +939,17 @@ export class SessionExpirationService extends EventEmitter {
       archiveData.userId = crypto.createHash('sha256').update(archiveData.userId).digest('hex');
       archiveData.metadata.ipAddress = 'anonymized';
       archiveData.metadata.userAgent = 'anonymized';
-    }
+
     
     // Implementation would store in archive system
     console.log(`Archiving session data for ${expiration.sessionId}`);
-  }
+
 
   private startMaintenanceTasks(): void {
     this.maintenanceInterval = setInterval(() => {
       this.performMaintenance();
     }, 60 * 1000); // Every minute
-  }
+
 
   private performMaintenance(): void {
     // Clean up old events
@@ -958,28 +961,28 @@ export class SessionExpirationService extends EventEmitter {
       if (expiration.status === 'expired' && !this.cleanupTimers.has(sessionId)) {
         // Session is expired but has no cleanup timer - clean it up
         this.cleanupSession(sessionId);
-      }
-    }
-  }
+
+
+
 
   private async validatePolicy(policy: ExpirationPolicy): Promise<void> {
 
     if (policy.timing.absoluteTimeout <= 0) {
       throw new Error('Absolute timeout must be positive');
-    }
+
     
     if (policy.timing.idleTimeout < 0) {
       throw new Error('Idle timeout cannot be negative');
-    }
+
     
     if (policy.timing.warningPeriod >= policy.timing.absoluteTimeout) {
       throw new Error('Warning period must be less than absolute timeout');
-    }
-  }
+
+
 
   private generatePolicyId(): string {
     return `EXP-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  }
+
 
   private async logEvent(
     eventType: string,
@@ -1001,26 +1004,25 @@ export class SessionExpirationService extends EventEmitter {
     this.events.push(event);
     
     console.log(`Session Expiration Event: ${eventType} for ${sessionId} by ${triggeredBy}`, details);
-  }
+
 
   destroy(): void {
     if (this.maintenanceInterval) {
       clearInterval(this.maintenanceInterval);
-    }
+
     
     // Clear all timers
     for (const timer of this.warningTimers.values()) {
       clearTimeout(timer);
-    }
+
     for (const timer of this.expirationTimers.values()) {
       if (typeof timer === 'number') {
         clearInterval(timer);
-      } else {
+ else {
         clearTimeout(timer);
-      }
-    }
+
+
     for (const timer of this.cleanupTimers.values()) {
       clearTimeout(timer);
-    }
-  }
-}
+
+

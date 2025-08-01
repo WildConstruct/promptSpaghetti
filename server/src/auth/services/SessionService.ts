@@ -7,8 +7,8 @@ import { RedisService } from '../database/RedisService';
 import { AuditService } from './AuditService';
 import { TokenService } from './TokenService';
 
-}
-}
+
+
 export interface SessionData {
   userId: string;
   deviceInfo?: {
@@ -19,8 +19,9 @@ export interface SessionData {
     version?: string;
     language?: string;
     timezone?: string;
-}
-}
+
+
+
   };
   location?: {
     ipAddress?: string;
@@ -29,20 +30,21 @@ export interface SessionData {
     timezone?: string;
   };
   rememberMe?: boolean;
-}
 
-}
-}
+
+
+
 export interface SessionValidationResult {
   valid: boolean;
   session?: UserSession;
   reason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActiveSession {
   id: string;
   deviceInfo: any;
@@ -50,9 +52,10 @@ export interface ActiveSession {
   lastAccessedAt: Date;
   createdAt: Date;
   current?: boolean;
-}
-}
-}
+
+
+
+
 
 export class SessionService {
   private config: AuthConfig;
@@ -73,7 +76,7 @@ export class SessionService {
     this.redisService = redisService;
     this.auditService = auditService;
     this.tokenService = tokenService;
-  }
+
 
   async createSession(sessionData: SessionData): Promise<UserSession> {
 
@@ -131,7 +134,7 @@ export class SessionService {
         deviceInfo: sessionData.deviceInfo,
         location: sessionData.location,
         rememberMe: sessionData.rememberMe
-  }
+
       ipAddress: sessionData.location?.ipAddress,
       userAgent: sessionData.deviceInfo?.userAgent,
       sessionId,
@@ -139,7 +142,7 @@ export class SessionService {
     });
 
     return session;
-  }
+
 
   async getSession(sessionToken: string): Promise<UserSession | null> {
 
@@ -147,7 +150,7 @@ export class SessionService {
     const cachedSession = await this.getCachedSession(sessionToken);
     if (cachedSession) {
       return cachedSession;
-    }
+
 
     // Fallback to database
     const result = await this.dbService.query(`
@@ -157,7 +160,7 @@ export class SessionService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const session = this.mapDatabaseToSession(result.rows[0]);
     
@@ -165,7 +168,7 @@ export class SessionService {
     await this.cacheSession(session);
     
     return session;
-  }
+
 
   async validateSession(sessionToken: string): Promise<SessionValidationResult> {
 
@@ -176,27 +179,27 @@ export class SessionService {
         valid: false,
         reason: 'Session not found or expired'
       };
-    }
+
 
     if (session.revoked) {
       return {
         valid: false,
         reason: 'Session has been revoked'
       };
-    }
+
 
     if (session.expiresAt < new Date()) {
       return {
         valid: false,
         reason: 'Session has expired'
       };
-    }
+
 
     return {
       valid: true,
       session
     };
-  }
+
 
   async updateSessionActivity(sessionToken: string): Promise<void> {
 
@@ -214,15 +217,15 @@ export class SessionService {
     if (cachedSession) {
       cachedSession.lastAccessedAt = now;
       await this.cacheSession(cachedSession);
-    }
-  }
+
+
 
   async renewSession(sessionToken: string): Promise<UserSession | null> {
 
     const session = await this.getSession(sessionToken);
     if (!session) {
       return null;
-    }
+
 
     // Extend session expiration
     const newExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
@@ -246,7 +249,7 @@ export class SessionService {
       details: {
         sessionId: session.id,
         newExpiresAt
-  }
+
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
       sessionId: session.id,
@@ -254,14 +257,14 @@ export class SessionService {
     });
 
     return session;
-  }
+
 
   async revokeSession(sessionToken: string, reason?: string): Promise<void> {
 
     const session = await this.getSession(sessionToken);
     if (!session) {
       return;
-    }
+
 
     const now = new Date();
     
@@ -285,13 +288,13 @@ export class SessionService {
       details: {
         sessionId: session.id,
         reason: reason || 'manual_revocation'
-  }
+
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
       sessionId: session.id,
       severity: 'info'
     });
-  }
+
 
   async revokeAllUserSessions(userId: string, exceptSessionId?: string): Promise<number> {
 
@@ -322,7 +325,7 @@ export class SessionService {
     for (const session of sessionsResult.rows) {
       await this.removeCachedSession(session.session_token);
       await this.tokenService.revokeSessionTokens(session.id);
-    }
+
 
     // Log bulk session revocation
     await this.auditService.logEvent({
@@ -332,12 +335,12 @@ export class SessionService {
         revokedCount,
         exceptSessionId,
         revokedSessionIds: result.rows.map(row => row.id)
-  }
+
       severity: 'info'
     });
 
     return revokedCount;
-  }
+
 
   async getUserActiveSessions(userId: string): Promise<ActiveSession[]> {
 
@@ -353,11 +356,11 @@ export class SessionService {
       deviceInfo: row.device_info || {},
       location: {
         ipAddress: row.ip_address
-  }
+
       lastAccessedAt: row.last_accessed_at,
       createdAt: row.created_at
     }));
-  }
+
 
   async cleanupExpiredSessions(): Promise<number> {
 
@@ -379,20 +382,20 @@ export class SessionService {
         details: {
           cleanedCount,
           cleanedSessionIds: result.rows.map(row => row.id)
-  }
+
         severity: 'info'
       });
-    }
+
 
     return cleanedCount;
-  }
+
 
   async getSessionStats(userId: string): Promise<{
     totalSessions: number;
     activeSessions: number;
     expiredSessions: number;
     revokedSessions: number;
-  }> {
+> {
 
     const result = await this.dbService.query(`
       SELECT 
@@ -411,14 +414,14 @@ export class SessionService {
       expiredSessions: parseInt(stats.expired_sessions),
       revokedSessions: parseInt(stats.revoked_sessions)
     };
-  }
+
 
   async detectSuspiciousActivity(userId: string): Promise<{
     multipleLocations: boolean;
     unusualDevices: boolean;
     suspiciousLocations: string[];
     newDevices: any[];
-  }> {
+> {
 
     // Get recent sessions (last 24 hours)
     const result = await this.dbService.query(`
@@ -460,7 +463,7 @@ export class SessionService {
       suspiciousLocations,
       newDevices
     };
-  }
+
 
   private async cacheSession(session: UserSession): Promise<void> {
 
@@ -469,8 +472,8 @@ export class SessionService {
     
     if (ttl > 0) {
       await this.redisService.setex(cacheKey, ttl, JSON.stringify(session));
-    }
-  }
+
+
 
   private async getCachedSession(sessionToken: string): Promise<UserSession | null> {
 
@@ -479,7 +482,7 @@ export class SessionService {
     
     if (!cached) {
       return null;
-    }
+
 
     try {
       const sessionData = JSON.parse(cached);
@@ -490,17 +493,17 @@ export class SessionService {
         expiresAt: new Date(sessionData.expiresAt),
         revokedAt: sessionData.revokedAt ? new Date(sessionData.revokedAt) : undefined
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error parsing cached session:', error);
       return null;
-    }
-  }
+
+
 
   private async removeCachedSession(sessionToken: string): Promise<void> {
 
     const cacheKey = `session:${sessionToken}`;
     await this.redisService.del(cacheKey);
-  }
+
 
   private mapDatabaseToSession(row: any): UserSession {
     return {
@@ -517,7 +520,7 @@ export class SessionService {
       revoked: row.revoked,
       revokedAt: row.revoked_at ? new Date(row.revoked_at) : undefined
     };
-  }
+
 
   // Session notification methods
   async notifyNewSession(session: UserSession): Promise<void> {
@@ -529,11 +532,11 @@ export class SessionService {
       details: {
         sessionId: session.id,
         type: 'new_session'
-  }
+
       sessionId: session.id,
       severity: 'info'
     });
-  }
+
 
   async notifySuspiciousActivity(userId: string, activity: any): Promise<void> {
 
@@ -544,8 +547,7 @@ export class SessionService {
       details: {
         type: 'suspicious_activity',
         activity
-  }
+
       severity: 'warning'
     });
-  }
-}
+

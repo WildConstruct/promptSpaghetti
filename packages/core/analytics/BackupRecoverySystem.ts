@@ -11,7 +11,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 // Backup Configuration Schema
-export const BackupConfigSchema = z.object({)
+export const BackupConfigSchema = z.object({ )
   backupLocation: z.string().default('/tmp/analytics_backups'),
   compressionEnabled: z.boolean().default(true),
   encryptionEnabled: z.boolean().default(false),
@@ -21,27 +21,26 @@ export const BackupConfigSchema = z.object({)
   includeMetadata: z.boolean().default(true),
   verifyBackup: z.boolean().default(true),
   maxBackupSize: z.number().min(1000000).default(1000000000), // 1GB default,
-  format: z.enum(['json', 'jsonl', 'csv', 'parquet']).default('jsonl'),
+  format: z.enum(['json', 'jsonl', 'csv', 'parquet']).default('jsonl') }
 });
 
 export type BackupConfig = z.infer<typeof BackupConfigSchema>;
 
 // Backup Status
-export enum BackupStatus {
-  PENDING = 'pending',
-  RUNNING = 'running',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-  VERIFYING = 'verifying',
-  VERIFIED = 'verified',
+export enum BackupStatus { PENDING = 'pending'
+  RUNNING = 'running'
+  COMPLETED = 'completed'
+  FAILED = 'failed'
+  VERIFYING = 'verifying'
+  VERIFIED = 'verified'
   CORRUPTED = 'corrupted'
   // Recovery Status
   export enum RecoveryStatus {
-  PENDING = 'pending',
-  RUNNING = 'running',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-  VALIDATING = 'validating',
+  PENDING = 'pending'
+  RUNNING = 'running'
+  COMPLETED = 'completed'
+  FAILED = 'failed'
+  VALIDATING = 'validating'
   VALIDATED = 'validated'
   // Backup Metadata
   export interface BackupMetadata {
@@ -54,10 +53,11 @@ export enum BackupStatus {
   size: number;
   eventCount: number;
   systemSources: string;
-  timeRange: {
+  timeRange: { }
   start: number;
   end: number;
-}
+
+
 };
   config: BackupConfig;
   filePath: string;
@@ -68,10 +68,9 @@ export enum BackupStatus {
   encrypted: boolean;
 
 // Recovery Metadata
-}
-}
-export interface RecoveryMetadata {
-  recoveryId: string;
+
+
+export interface RecoveryMetadata { recoveryId: string;
   backupId: string;
   status: RecoveryStatus;
   startedAt: number;
@@ -79,19 +78,19 @@ export interface RecoveryMetadata {
   targetSystem: string;
   recoveredEventCount: number;
   failedEventCount: number;
-  validationResults?: {
+  validationResults?: { }
   passed: boolean;
   issues: string;
-}
+
+
 };
 
 // Backup Progress
-}
-}
-export interface BackupProgress {
-  backupId: string;
+
+
+export interface BackupProgress { backupId: string;
   status: BackupStatus;
-  progress: {
+  progress: { }
   percentage: number;
   processedEvents: number;
   totalEvents: number;
@@ -99,21 +98,20 @@ export interface BackupProgress {
   totalBatches: number;
   bytesWritten: number;
   estimatedTimeRemaining: number;
-}
+
+
 };
   currentOperation: string;
-  throughput: {;
+  throughput: { ;
   eventsPerSecond: number;
-  bytesPerSecond: number;
-};
+  bytesPerSecond: number };
 /**
  * Backup and Recovery System
  * 
  * Provides comprehensive backup and recovery capabilities for analytics data
  */
-}
-export class BackupRecoverySystem {
-  private eventRepository: EventRepository;
+
+export class BackupRecoverySystem { private eventRepository: EventRepository;
   private backupMetadata: Map<string, BackupMetadata> = new Map();
   private recoveryMetadata: Map<string, RecoveryMetadata> = new Map();
   private activeBackups: Map<string, BackupProgress> = new Map();
@@ -125,8 +123,8 @@ export class BackupRecoverySystem {
    * Create backup of analytics data
    */
   async createBackup(backupName: string)
-    filter?: EventFilter,
-    config: Partial<BackupConfig> = {},
+    filter?: EventFilter }
+    config: Partial<BackupConfig> = {}
     description?: string
   ): Promise<string> {
 
@@ -140,85 +138,80 @@ export class BackupRecoverySystem {
       await fs.mkdir(backupConfig.backupLocation, { recursive: true });
       // Get events to backup
       console.log(`Starting backup ${backupId}: ${backupName}`);}
-      const events = await this.eventRepository.findMany({)
-  filter,
-  limit: 1000000 // Large limit for backup,
+      const events = await this.eventRepository.findMany({ )
+  filter
+  limit: 1000000 // Large limit for backup }
 });
-      if (events.length === 0) {
-  throw new Error('No events found matching the specified filter');
+      if (events.length === 0) { throw new Error('No events found matching the specified filter');
   // Initialize backup progress
-  const progress: BackupProgress = {,
-  backupId,
-  status: BackupStatus.RUNNING,
+  const progress: BackupProgress = {
+  backupId
+  status: BackupStatus.RUNNING
   progress: {
-  percentage: 0,
-  processedEvents: 0,
-  totalEvents: events.length,
-  currentBatch: 0,
-  totalBatches: Math.ceil(events.length / backupConfig.batchSize),
-  bytesWritten: 0,
-  estimatedTimeRemaining: 0,
-},
-  currentOperation: 'Initializing backup',
-        throughput: {
-  eventsPerSecond: 0,
-  bytesPerSecond: 0,
+  percentage: 0
+  processedEvents: 0
+  totalEvents: events.length
+  currentBatch: 0
+  totalBatches: Math.ceil(events.length / backupConfig.batchSize)
+  bytesWritten: 0
+  estimatedTimeRemaining: 0 }
+
+  currentOperation: 'Initializing backup'
+        throughput: { 
+  eventsPerSecond: 0
+  bytesPerSecond: 0 }
 };
       this.activeBackups.set(backupId, progress);
       // Create backup metadata
-      const timeRange = events.length > 0 ? {
-  start: Math.min(...events.map(e => e.timestamp)),
-  end: Math.max(...events.map(e => e.timestamp)),
-} : { start: 0, end: 0 };
+      const timeRange = events.length > 0 ? { start: Math.min(...events.map(e => e.timestamp))
+  end: Math.max(...events.map(e => e.timestamp)) }
+ : { start: 0, end: 0 };
       const systemSources = Array.from(new Set(events.map(e => e.source)));
-      const metadata: BackupMetadata = {
-  backupId,
-  backupName,
-  description,
-  status: BackupStatus.RUNNING,
-  createdAt: Date.now(),
-  size: 0,
-  eventCount: events.length,
-  systemSources,
-  timeRange,
-  config: backupConfig,
-  filePath,
-  version: '1.0.0',
-  format: backupConfig.format,
-  compressed: backupConfig.compressionEnabled,
-  encrypted: backupConfig.encryptionEnabled,
+      const metadata: BackupMetadata = { backupId
+  backupName
+  description
+  status: BackupStatus.RUNNING
+  createdAt: Date.now()
+  size: 0
+  eventCount: events.length
+  systemSources
+  timeRange
+  config: backupConfig
+  filePath
+  version: '1.0.0'
+  format: backupConfig.format
+  compressed: backupConfig.compressionEnabled
+  encrypted: backupConfig.encryptionEnabled }
 };
       this.backupMetadata.set(backupId, metadata);
       // Perform backup asynchronously
       this.performBackup(backupId, events, filePath, backupConfig)
         .then(() => {
           console.log(`Backup ${backupId} completed successfully`);}
-  }
+
         .catch(error => {)
-  console.error(`Backup ${backupId},)}
+  console.error(`Backup ${backupId})}
   failed:`, error);}
           this.updateBackupStatus(backupId, BackupStatus.FAILED);
         });
       return backupId;
-    } catch (error) {
+ catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.error(`Failed to create backup ${backupId}:`, errorMessage);}
       // Update metadata with failure
       const metadata = this.backupMetadata.get(backupId);
-      if (metadata) {
-  metadata.status = BackupStatus.FAILED;
+      if (metadata) { metadata.status = BackupStatus.FAILED;
   throw error;
   /**
   * Perform the actual backup operation
   */
   private async performBackup(backupId: string)
-  events: UnifiedAnalyticsEvent,
-  filePath: string,
-  config: BackupConfig): Promise<void> {,
+  events: UnifiedAnalyticsEvent
+  filePath: string
+  config: BackupConfig): Promise<void> { }
   const startTime = Date.now();
   let bytesWritten = 0;
-  try {
-  this.updateCurrentOperation(backupId, 'Writing backup data');
+  try { this.updateCurrentOperation(backupId, 'Writing backup data');
   // Write events in batches
   const totalBatches = Math.ceil(events.length / config.batchSize);
   // Open file for writing
@@ -227,9 +220,7 @@ export class BackupRecoverySystem {
   // Write header for non-JSONL formats
   if (config.format === 'json') {
   await fileHandle.writeFile('[\n');
-  bytesWritten += 2;
-} else if (config.format === 'csv') {
-  const headers = this.generateCSVHeaders(events[0]);
+  bytesWritten += 2 } else if (config.format === 'csv') { const headers = this.generateCSVHeaders(events[0]);
   await fileHandle.writeFile(headers + '\n');
   bytesWritten += headers.length + 1;
   // Process events in batches
@@ -251,21 +242,17 @@ export class BackupRecoverySystem {
   percentage,
   processedEvents,
   currentBatch: batchIndex + 1,
-  bytesWritten,
+  bytesWritten }
   estimatedTimeRemaining
-}, {
-            eventsPerSecond,
+}, { eventsPerSecond }
             bytesPerSecond
           });
           // Small delay to prevent overwhelming the system
-          if (batchIndex < totalBatches - 1) {
-            await this.sleep(10);
+          if (batchIndex < totalBatches - 1) { await this.sleep(10);
         // Write footer for JSON format
         if (config.format === 'json') {
           await fileHandle.writeFile('\n]');
-          bytesWritten += 2;
-      } finally {
-        await fileHandle.close();
+          bytesWritten += 2 } finally { await fileHandle.close();
       // Compress if enabled
       if (config.compressionEnabled) {
         this.updateCurrentOperation(backupId, 'Compressing backup');
@@ -290,23 +277,21 @@ export class BackupRecoverySystem {
         this.updateBackupStatus(backupId, BackupStatus.VERIFYING);
         const verificationResult = await this.verifyBackup(backupId);
         if (verificationResult.valid) {
-          this.updateBackupStatus(backupId, BackupStatus.VERIFIED);
-        } else {
+          this.updateBackupStatus(backupId, BackupStatus.VERIFIED) } else {
           this.updateBackupStatus(backupId, BackupStatus.CORRUPTED);
           throw new Error(`Backup verification failed: ${verificationResult.errors.join(', ')}`);}
       this.activeBackups.delete(backupId);
-      console.log(`Backup ${backupId},)}
+      console.log(`Backup ${backupId})},
   completed:`, {
   },
   eventCount: events.length,
         size: `${(bytesWritten / 1024 / 1024).toFixed(2)} MB`}
 },
   duration: `${Date.now() - startTime}ms`}
-}
+
         checksum
       });
-    } catch (error) {
-      this.updateBackupStatus(backupId, BackupStatus.FAILED);
+ catch (error) { this.updateBackupStatus(backupId, BackupStatus.FAILED);
       this.activeBackups.delete(backupId);
       throw error;
   /**
@@ -314,7 +299,7 @@ export class BackupRecoverySystem {
    */
   async restoreFromBackup(backupId: string)
     targetFilter?: EventFilter,
-    validateBeforeRestore: boolean = true): Promise<string> {,
+    validateBeforeRestore: boolean = true): Promise<string> { }
     const recoveryId = `recovery_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     try {
       const backup = this.backupMetadata.get(backupId);
@@ -323,14 +308,13 @@ export class BackupRecoverySystem {
       if (backup.status !== BackupStatus.COMPLETED && backup.status !== BackupStatus.VERIFIED) {
         throw new Error(`Backup ${backupId} is not in a valid state for recovery (status: ${backup.status})`);}
       // Initialize recovery metadata
-      const recovery: RecoveryMetadata = {
-  recoveryId,
-  backupId,
-  status: RecoveryStatus.PENDING,
-  startedAt: Date.now(),
-  targetSystem: 'unified-analytics',
-  recoveredEventCount: 0,
-  failedEventCount: 0,
+      const recovery: RecoveryMetadata = { recoveryId
+  backupId
+  status: RecoveryStatus.PENDING
+  startedAt: Date.now()
+  targetSystem: 'unified-analytics'
+  recoveredEventCount: 0
+  failedEventCount: 0 }
 };
       this.recoveryMetadata.set(recoveryId, recovery);
       this.activeRecoveries.set(recoveryId, recovery);
@@ -339,27 +323,26 @@ export class BackupRecoverySystem {
       this.performRecovery(recoveryId, backup, targetFilter, validateBeforeRestore)
         .then(() => {
           console.log(`Recovery ${recoveryId} completed successfully`);}
-  }
+
         .catch(error => {)
-  console.error(`Recovery ${recoveryId},)}
+  console.error(`Recovery ${recoveryId})}
   failed:`, error);}
           this.updateRecoveryStatus(recoveryId, RecoveryStatus.FAILED);
         });
       return recoveryId;
-    } catch (error) {
+ catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.error(`Failed to start recovery ${recoveryId}:`, errorMessage);}
       const recovery = this.recoveryMetadata.get(recoveryId);
-      if (recovery) {
-        recovery.status = RecoveryStatus.FAILED;
+      if (recovery) { recovery.status = RecoveryStatus.FAILED;
       throw error;
   /**
    * Perform the actual recovery operation
    */
   private async performRecovery(recoveryId: string)
-    backup: BackupMetadata,
-    targetFilter?: EventFilter,
-    validateBeforeRestore: boolean = true): Promise<void> {,
+  backup: BackupMetadata
+    targetFilter?: EventFilter
+    validateBeforeRestore: boolean = true): Promise<void> { }
     const recovery = this.recoveryMetadata.get(recoveryId);
     if (!recovery) throw new Error(`Recovery ${recoveryId} not found`);}
     try {
@@ -384,14 +367,12 @@ export class BackupRecoverySystem {
       let failedCount = 0;
       const batchSize = 1000;
       const totalBatches = Math.ceil(filteredEvents.length / batchSize);
-      for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
-        const startIdx = batchIndex * batchSize;
+      for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) { const startIdx = batchIndex * batchSize;
         const endIdx = Math.min(startIdx + batchSize, filteredEvents.length);
         const batch = filteredEvents.slice(startIdx, endIdx);
         try {
           await this.eventRepository.saveBatch(batch);
-          recoveredCount += batch.length;
-        } catch (error) {
+          recoveredCount += batch.length } catch (error) {
           console.error(`Failed to restore batch ${batchIndex + 1}/${totalBatches}:`, error);}
           failedCount += batch.length;
         // Update progress
@@ -408,14 +389,14 @@ export class BackupRecoverySystem {
         recovery.validationResults = validationResults;
         recovery.status = validationResults.passed ? RecoveryStatus.VALIDATED : RecoveryStatus.FAILED;
       this.activeRecoveries.delete(recoveryId);
-      console.log(`Recovery ${recoveryId},)}
+      console.log(`Recovery ${recoveryId})},
   completed:`, {
   },
   recoveredEvents: recoveredCount,
         failedEvents: failedCount,
         successRate: `${((recoveredCount / filteredEvents.length) * 100).toFixed(2)}%`}
       });
-    } catch (error) {
+ catch (error) {
       recovery.status = RecoveryStatus.FAILED;
       this.activeRecoveries.delete(recoveryId);
       throw error;
@@ -428,17 +409,14 @@ export class BackupRecoverySystem {
     if (!backup) {
       return { valid: false, errors: ['Backup metadata not found'] };
     const errors: string = [];
-    try {
-      // Check if file exists
+    try { // Check if file exists
       try {
-        await fs.access(backup.filePath);
-      } catch (error) {
+        await fs.access(backup.filePath) } catch (error) {
         errors.push('Backup file does not exist');
         return { valid: false, errors };
       // Verify file size
       const stats = await fs.stat(backup.filePath);
-      if (stats.size === 0) {
-        errors.push('Backup file is empty');
+      if (stats.size === 0) { errors.push('Backup file is empty');
       // Verify checksum if available
       if (backup.checksum) {
         const currentChecksum = await this.calculateFileChecksum(backup.filePath);
@@ -448,11 +426,10 @@ export class BackupRecoverySystem {
       try {
         const sampleEvents = await this.readBackupData(backup, 10); // Read first 10 events;
         if (sampleEvents.length === 0 && backup.eventCount > 0) {
-          errors.push('Unable to read events from backup file');
-      } catch (error) {
+          errors.push('Unable to read events from backup file') } catch (error) {
         errors.push(`Error reading backup data: ${error instanceof Error ? error.message : String(error)}`);}
       return { valid: errors.length === 0, errors };
-    } catch (error) {
+ catch (error) {
       errors.push(`Verification error: ${error instanceof Error ? error.message : String(error)}`);}
       return { valid: false, errors };
   /**
@@ -495,7 +472,7 @@ export class BackupRecoverySystem {
       this.backupMetadata.delete(backupId);
       console.log(`Backup ${backupId} deleted successfully`);}
       return true;
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to delete backup ${backupId}:`, error);}
       return false;
   /**
@@ -518,9 +495,9 @@ export class BackupRecoverySystem {
   /**
    * Format batch data for different formats
    */
-  private async formatBatchData(events: UnifiedAnalyticsEvent)
-    format: string,
-    isSubsequentBatch: boolean): Promise<string> {,
+  private async formatBatchData(events: UnifiedAnalyticsEvent),
+  format: string,
+    isSubsequentBatch: boolean): Promise<string> { 
     switch (format) {
       case 'json':
         const separator = isSubsequentBatch ? ',\n' : '';
@@ -535,9 +512,9 @@ export class BackupRecoverySystem {
    * Generate CSV headers
    */
   private generateCSVHeaders(event: UnifiedAnalyticsEvent): string {
-    const headers = [;
-      'id', 'type', 'category', 'severity', 'timestamp', 'source', 'version',
-      'sessionId', 'userId', 'organizationId', 'requestId', 'traceId',
+    const headers = [
+      'id', 'type', 'category', 'severity', 'timestamp', 'source', 'version'
+      'sessionId', 'userId', 'organizationId', 'requestId', 'traceId'
       'data', 'metadata', 'tags', 'environment', 'region'
     ];
     return headers.join(',');
@@ -545,45 +522,41 @@ export class BackupRecoverySystem {
    * Convert event to CSV row
    */
   private eventToCSV(event: UnifiedAnalyticsEvent): string {
-    const values = [;
-      event.id,
-      event.type,
-      event.category,
-      event.severity,
-      event.timestamp,
-      event.source,
-      event.version,
-      event.sessionId || '',
-      event.userId || '',
-      event.organizationId || '',
-      event.requestId || '',
-      event.traceId || '',
-      JSON.stringify(event.data),
-      JSON.stringify(event.metadata),
-      JSON.stringify(event.tags),
-      event.environment,
+    const values = [
+      event.id
+      event.type
+      event.category
+      event.severity
+      event.timestamp
+      event.source
+      event.version
+      event.sessionId || ''
+      event.userId || ''
+      event.organizationId || ''
+      event.requestId || ''
+      event.traceId || ''
+      JSON.stringify(event.data)
+      JSON.stringify(event.metadata)
+      JSON.stringify(event.tags)
+      event.environment }
       event.region || ''
     ];
     return values.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');}
   /**
    * Read backup data
    */
-  private async readBackupData(backup: BackupMetadata, limit?: number): Promise<UnifiedAnalyticsEvent> {
-
-  const content = await fs.readFile(backup.filePath, 'utf8');
+  private async readBackupData(backup: BackupMetadata, limit?: number): Promise<UnifiedAnalyticsEvent> { const content = await fs.readFile(backup.filePath, 'utf8');
   const events: UnifiedAnalyticsEvent = [];
   switch (backup.format) {
-  case 'json':,
+  case 'json':
   const jsonData = JSON.parse(content);
   events.push(...(Array.isArray(jsonData) ? jsonData : [jsonData]));
   break;
-  case 'jsonl':,
+  case 'jsonl': }
   const lines = content.split('\n').filter(line => line.trim());
-  for (const line of lines) {
-  try {
+  for (const line of lines) { try {
   events.push(JSON.parse(line));
-  if (limit && events.length >= limit) break;
-} catch (error) {
+  if (limit && events.length >= limit) break } catch (error) {
             console.warn('Failed to parse JSONL line:', line);
         break;
       case 'csv':
@@ -621,30 +594,26 @@ export class BackupRecoverySystem {
    * Validate recovery
    */
   private async validateRecovery(recoveryId: string)
-    backup: BackupMetadata,
-    expectedCount: number): Promise<{ passed: boolean; issues: string }> {
-
-  const issues: string = [];
+  backup: BackupMetadata
+    expectedCount: number): Promise<{ passed: boolean; issues: string }> { const issues: string = [];
   try {
   // Check if expected number of events were recovered
   const actualCount = await this.eventRepository.count({)
   startTime: backup.timeRange.start,
-  endTime: backup.timeRange.end,
+  endTime: backup.timeRange.end }
 });
       if (actualCount < expectedCount) {
         issues.push(`Expected ${expectedCount} events, but only ${actualCount} were found in repository`);}
       // Additional validation could be added here
-    } catch (error) {
+ catch (error) {
       issues.push(`Validation error: ${error instanceof Error ? error.message : String(error)}`);}
-    return {
-  passed: issues.length === 0,
+    return { passed: issues.length === 0 }
   issues
 };
   /**
    * Check if event matches filter
    */
-  private matchesFilter(event: UnifiedAnalyticsEvent, filter: EventFilter): boolean {
-  if (filter.types && !filter.types.includes(event.type as any)) return false;
+  private matchesFilter(event: UnifiedAnalyticsEvent, filter: EventFilter): boolean { if (filter.types && !filter.types.includes(event.type as any)) return false;
   if (filter.sources && !filter.sources.includes(event.source)) return false;
   if (filter.userId && event.userId !== filter.userId) return false;
   if (filter.startTime && event.timestamp < filter.startTime) return false;
@@ -653,13 +622,13 @@ export class BackupRecoverySystem {
   /**
   * Load existing backups from metadata
   */
-  private async loadExistingBackups(): Promise<void> {,
+  private async loadExistingBackups(): Promise<void> {
   // In production, this would load backup metadata from persistent storage
   console.log('Loading existing backup metadata...');
   /**
   * Update backup status
   */
-  private updateBackupStatus(backupId: string, status: BackupStatus): void {,
+  private updateBackupStatus(backupId: string, status: BackupStatus): void {
   const backup = this.backupMetadata.get(backupId);
   if (backup) {
   backup.status = status;
@@ -669,7 +638,7 @@ export class BackupRecoverySystem {
   /**
   * Update current operation
   */
-  private updateCurrentOperation(backupId: string, operation: string): void {,
+  private updateCurrentOperation(backupId: string, operation: string): void {
   const progress = this.activeBackups.get(backupId);
   if (progress) {
   progress.currentOperation = operation;
@@ -677,8 +646,8 @@ export class BackupRecoverySystem {
   * Update backup progress
   */
   private updateBackupProgress(backupId: string)
-  progressUpdate: Partial<BackupProgress['progress']>,
-  throughputUpdate: Partial<BackupProgress['throughput']>): void {,
+  progressUpdate: Partial<BackupProgress['progress']>
+  throughputUpdate: Partial<BackupProgress['throughput']>): void {
   const progress = this.activeBackups.get(backupId);
   if (progress) {
   Object.assign(progress.progress, progressUpdate);
@@ -686,7 +655,7 @@ export class BackupRecoverySystem {
   /**
   * Update recovery status
   */
-  private updateRecoveryStatus(recoveryId: string, status: RecoveryStatus): void {,
+  private updateRecoveryStatus(recoveryId: string, status: RecoveryStatus): void {
   const recovery = this.recoveryMetadata.get(recoveryId);
   if (recovery) {
   recovery.status = status;
@@ -696,7 +665,7 @@ export class BackupRecoverySystem {
   /**
   * Sleep utility
   */
-  private sleep(ms: number): Promise<void> {,
+  private sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
   /**
   * Get backup summary
@@ -711,12 +680,12 @@ export class BackupRecoverySystem {
   const backups = Array.from(this.backupMetadata.values());
   const completedBackups = backups.filter(b => b.status === BackupStatus.COMPLETED || b.status === BackupStatus.VERIFIED);
   return {
-  totalBackups: backups.length,
-  completedBackups: completedBackups.length,
-  totalSize: completedBackups.reduce((sum, b) => sum + b.size, 0),
-  totalEvents: completedBackups.reduce((sum, b) => sum + b.eventCount, 0),
-  oldestBackup: backups.length > 0 ? Math.min(...backups.map(b => b.createdAt)) : undefined,
-  newestBackup: backups.length > 0 ? Math.max(...backups.map(b => b.createdAt)) : undefined,
+  totalBackups: backups.length
+  completedBackups: completedBackups.length
+  totalSize: completedBackups.reduce((sum, b) => sum + b.size, 0)
+  totalEvents: completedBackups.reduce((sum, b) => sum + b.eventCount, 0)
+  oldestBackup: backups.length > 0 ? Math.min(...backups.map(b => b.createdAt)) : undefined
+  newestBackup: backups.length > 0 ? Math.max(...backups.map(b => b.createdAt)) : undefined }
 };
 
 export default BackupRecoverySystem;

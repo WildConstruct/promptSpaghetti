@@ -45,7 +45,7 @@ import {
   ActivityEventFilter,
   CommentFilter,
   ROLE_PERMISSIONS
-} from './workspace-models';
+ from './workspace-models';
 
 export class WorkspaceDAO {
   constructor(private db: Database) {}
@@ -228,7 +228,7 @@ export class WorkspaceDAO {
       CREATE INDEX IF NOT EXISTS idx_comments_resource ON comments(resource_id);
       CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
     `);
-  }
+
 
   // ====== WORKSPACE OPERATIONS ======
 
@@ -269,10 +269,10 @@ export class WorkspaceDAO {
         scope_type: 'workspace',
         scope_id: id
       }, userId);
-    }
+
 
     return this.getWorkspace(id)!;
-  }
+
 
   async getWorkspace(id: string): Promise<Workspace | null> {
 
@@ -292,7 +292,7 @@ export class WorkspaceDAO {
       updated_at: new Date(row.updated_at),
       archived_at: row.archived_at ? new Date(row.archived_at) : null
     };
-  }
+
 
   async getWorkspacesForUser(
     userId: string,
@@ -312,7 +312,7 @@ export class WorkspaceDAO {
     if (filter.search) {
       whereClause += ' AND (w.name ILIKE ? OR w.description ILIKE ?)';
       params.push(`%${filter.search}%`, `%${filter.search}%`);
-    }
+
 
     const countStmt = this.db.prepare(`
       SELECT COUNT(*) as total
@@ -359,7 +359,7 @@ export class WorkspaceDAO {
         invited_by: null,
         joined_at: new Date(row.joined_at),
         last_active_at: new Date(row.last_active_at)
-  }
+
       role_permissions: row.role_permissions || 0
     }));
 
@@ -372,9 +372,9 @@ export class WorkspaceDAO {
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
         has_prev: page > 1
-      }
+
     };
-  }
+
 
   async updateWorkspace(id: string, data: UpdateWorkspace): Promise<Workspace | null> {
 
@@ -384,19 +384,19 @@ export class WorkspaceDAO {
     if (data.name) {
       setClause.push('name = ?');
       params.push(data.name);
-    }
+
     if (data.description !== undefined) {
       setClause.push('description = ?');
       params.push(data.description);
-    }
+
     if (data.settings) {
       setClause.push('settings = ?');
       params.push(JSON.stringify(data.settings));
-    }
+
 
     if (setClause.length === 0) {
       return this.getWorkspace(id);
-    }
+
 
     setClause.push('updated_at = ?');
     params.push(new Date().toISOString());
@@ -410,7 +410,7 @@ export class WorkspaceDAO {
 
     stmt.run(...params);
     return this.getWorkspace(id);
-  }
+
 
   async archiveWorkspace(id: string): Promise<boolean> {
 
@@ -423,7 +423,7 @@ export class WorkspaceDAO {
     const now = new Date().toISOString();
     const result = stmt.run(now, now, id);
     return result.changes > 0;
-  }
+
 
   // ====== PROJECT OPERATIONS ======
 
@@ -458,7 +458,7 @@ export class WorkspaceDAO {
     });
 
     return this.getProject(id)!;
-  }
+
 
   async getProject(id: string): Promise<Project | null> {
 
@@ -477,7 +477,7 @@ export class WorkspaceDAO {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at)
     };
-  }
+
 
   async getProjectsInWorkspace(
     workspaceId: string,
@@ -494,17 +494,17 @@ export class WorkspaceDAO {
       const placeholders = filter.status.map(() => '?').join(',');
       whereClause += ` AND p.status IN (${placeholders})`;
       params.push(...filter.status);
-    }
+
 
     if (filter.created_by) {
       whereClause += ' AND p.created_by = ?';
       params.push(filter.created_by);
-    }
+
 
     if (filter.search) {
       whereClause += ' AND (p.name ILIKE ? OR p.description ILIKE ?)';
       params.push(`%${filter.search}%`, `%${filter.search}%`);
-    }
+
 
     const countStmt = this.db.prepare(`
       SELECT COUNT(*) as total
@@ -556,9 +556,9 @@ export class WorkspaceDAO {
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
         has_prev: page > 1
-      }
+
     };
-  }
+
 
   async updateProject(id: string, data: UpdateProject, userId: string): Promise<Project | null> {
 
@@ -568,23 +568,23 @@ export class WorkspaceDAO {
     if (data.name) {
       setClause.push('name = ?');
       params.push(data.name);
-    }
+
     if (data.description !== undefined) {
       setClause.push('description = ?');
       params.push(data.description);
-    }
+
     if (data.status) {
       setClause.push('status = ?');
       params.push(data.status);
-    }
+
     if (data.metadata) {
       setClause.push('metadata = ?');
       params.push(JSON.stringify(data.metadata));
-    }
+
 
     if (setClause.length === 0) {
       return this.getProject(id);
-    }
+
 
     setClause.push('updated_at = ?');
     params.push(new Date().toISOString());
@@ -608,10 +608,10 @@ export class WorkspaceDAO {
         event_type: 'project.updated',
         event_data: { changes: Object.keys(data) }
       });
-    }
+
 
     return project;
-  }
+
 
   // ====== RESOURCE OPERATIONS ======
 
@@ -656,10 +656,10 @@ export class WorkspaceDAO {
         event_type: 'resource.created',
         event_data: { resource_name: data.name, resource_type: data.type }
       });
-    }
+
 
     return this.getResource(id)!;
-  }
+
 
   async getResource(id: string): Promise<Resource | null> {
 
@@ -682,7 +682,7 @@ export class WorkspaceDAO {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at)
     };
-  }
+
 
   // ====== ROLE AND PERMISSION OPERATIONS ======
 
@@ -703,8 +703,8 @@ export class WorkspaceDAO {
     const now = new Date().toISOString();
     for (const role of roles) {
       stmt.run(uuidv4(), workspaceId, role.name, role.description, role.permissions, now, now);
-    }
-  }
+
+
 
   async getRole(workspaceId: string, roleName: string): Promise<ACLRole | null> {
 
@@ -723,7 +723,7 @@ export class WorkspaceDAO {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at)
     };
-  }
+
 
   async createACLAssignment(data: CreateACLAssignment, grantedBy: string): Promise<ACLAssignment> {
 
@@ -756,7 +756,7 @@ export class WorkspaceDAO {
       granted_at: new Date(now),
       expires_at: data.expires_at || undefined
     };
-  }
+
 
   async createUserMembership(data: CreateUserMembership, invitedBy?: string): Promise<UserMembership> {
 
@@ -779,7 +779,7 @@ export class WorkspaceDAO {
       joined_at: new Date(now),
       last_active_at: new Date(now)
     };
-  }
+
 
   // ====== ACTIVITY OPERATIONS ======
 
@@ -819,7 +819,7 @@ export class WorkspaceDAO {
       aggregation_key: data.aggregation_key,
       created_at: new Date(now)
     };
-  }
+
 
   async getActivityFeed(
     workspaceId: string,
@@ -835,28 +835,28 @@ export class WorkspaceDAO {
     if (filter.project_id) {
       whereClause += ' AND ae.project_id = ?';
       params.push(filter.project_id);
-    }
+
 
     if (filter.actor_id) {
       whereClause += ' AND ae.actor_id = ?';
       params.push(filter.actor_id);
-    }
+
 
     if (filter.event_types && filter.event_types.length > 0) {
       const placeholders = filter.event_types.map(() => '?').join(',');
       whereClause += ` AND ae.event_type IN (${placeholders})`;
       params.push(...filter.event_types);
-    }
+
 
     if (filter.from_date) {
       whereClause += ' AND ae.created_at >= ?';
       params.push(filter.from_date.toISOString());
-    }
+
 
     if (filter.to_date) {
       whereClause += ' AND ae.created_at <= ?';
       params.push(filter.to_date.toISOString());
-    }
+
 
     const countStmt = this.db.prepare(`
       SELECT COUNT(*) as total
@@ -906,9 +906,9 @@ export class WorkspaceDAO {
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
         has_prev: page > 1
-      }
+
     };
-  }
+
 
   async getActivityEventById(id: string): Promise<ActivityEventWithActorInfo | null> {
 
@@ -942,7 +942,7 @@ export class WorkspaceDAO {
       resource_name: row.resource_name,
       resource_type: row.resource_type
     };
-  }
+
 
   async getActivityEventTypes(workspaceId: string): Promise<string[]> {
 
@@ -955,14 +955,14 @@ export class WorkspaceDAO {
 
     const rows = stmt.all(workspaceId) as { event_type: string }[];
     return rows.map(row => row.event_type);
-  }
+
 
   async getActivityStats(workspaceId: string, days = 30): Promise<{
     total_events: number;
     events_by_type: Record<string, number>;
     events_by_day: Array<{ date: string; count: number }>;
     most_active_users: Array<{ user_id: string; count: number }>;
-  }> {
+> {
     const since = new Date();
     since.setDate(since.getDate() - days);
 
@@ -1025,7 +1025,7 @@ export class WorkspaceDAO {
       events_by_day: eventsByDay,
       most_active_users: mostActiveUsers
     };
-  }
+
 
   // ====== COMMENT OPERATIONS ======
 
@@ -1069,11 +1069,11 @@ export class WorkspaceDAO {
         target_type: data.target_type,
         target_id: data.target_id,
         content_preview: data.content.substring(0, 100)
-      }
+
     });
 
     return this.getComment(id)!;
-  }
+
 
   async getComment(id: string): Promise<Comment | null> {
 
@@ -1111,7 +1111,7 @@ export class WorkspaceDAO {
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at)
     };
-  }
+
 
   async updateComment(commentId: string, userId: string, updates: UpdateComment): Promise<Comment | null> {
 
@@ -1119,7 +1119,7 @@ export class WorkspaceDAO {
     const existingComment = await this.getComment(commentId);
     if (!existingComment || existingComment.author_id !== userId) {
       return null;
-    }
+
 
     const { content, metadata } = updates;
     
@@ -1151,18 +1151,18 @@ export class WorkspaceDAO {
         comment_id: commentId,
         target_type: existingComment.target_type,
         target_id: existingComment.target_id
-      }
+
     });
 
     return this.getComment(commentId);
-  }
+
 
   async deleteComment(commentId: string, userId: string): Promise<boolean> {
 
     const existingComment = await this.getComment(commentId);
     if (!existingComment || existingComment.author_id !== userId) {
       return false;
-    }
+
 
     const stmt = this.db.prepare(`
       UPDATE comments 
@@ -1184,12 +1184,12 @@ export class WorkspaceDAO {
           comment_id: commentId,
           target_type: existingComment.target_type,
           target_id: existingComment.target_id
-        }
+
       });
-    }
+
 
     return result.changes > 0;
-  }
+
 
   async getCommentsByTarget(
     workspaceId: string,
@@ -1264,9 +1264,9 @@ export class WorkspaceDAO {
         pages: totalPages,
         has_next: page < totalPages,
         has_prev: page > 1
-      }
+
     };
-  }
+
 
   async getCommentReplies(
     commentId: string,
@@ -1329,9 +1329,9 @@ export class WorkspaceDAO {
         pages: totalPages,
         has_next: page < totalPages,
         has_prev: page > 1
-      }
+
     };
-  }
+
 
   async getCommentsByResource(
     resourceId: string,
@@ -1399,9 +1399,9 @@ export class WorkspaceDAO {
         pages: totalPages,
         has_next: page < totalPages,
         has_prev: page > 1
-      }
+
     };
-  }
+
 
   // ====== NOTIFICATION OPERATIONS ======
 
@@ -1446,7 +1446,7 @@ export class WorkspaceDAO {
       read_at: undefined,
       delivered_at: new Date(now)
     };
-  }
+
 
   // ====== USER AUTHENTICATION OPERATIONS ======
 
@@ -1475,7 +1475,7 @@ export class WorkspaceDAO {
     );
 
     return this.findUserById(id)!;
-  }
+
 
   async findUserById(id: string): Promise<User | null> {
 
@@ -1501,7 +1501,7 @@ export class WorkspaceDAO {
       updated_at: new Date(row.updated_at),
       deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null
     };
-  }
+
 
   async findUserByEmail(email: string): Promise<User | null> {
 
@@ -1527,7 +1527,7 @@ export class WorkspaceDAO {
       updated_at: new Date(row.updated_at),
       deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null
     };
-  }
+
 
   async findUserByAuthProvider(provider: string, providerId: string): Promise<User | null> {
 
@@ -1556,7 +1556,7 @@ export class WorkspaceDAO {
       updated_at: new Date(row.updated_at),
       deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null
     };
-  }
+
 
   async updateUser(id: string, data: UpdateUser): Promise<User | null> {
 
@@ -1567,19 +1567,19 @@ export class WorkspaceDAO {
     if (data.name !== undefined) {
       updates.push('name = ?');
       values.push(data.name);
-    }
+
     if (data.avatar !== undefined) {
       updates.push('avatar = ?');
       values.push(data.avatar);
-    }
+
     if (data.email_verified !== undefined) {
       updates.push('email_verified = ?');
       values.push(data.email_verified);
-    }
+
 
     if (updates.length === 0) {
       return this.findUserById(id);
-    }
+
 
     updates.push('updated_at = ?');
     values.push(now);
@@ -1591,7 +1591,7 @@ export class WorkspaceDAO {
     stmt.run(...values);
 
     return this.findUserById(id);
-  }
+
 
   async updateUserPassword(id: string, passwordHash: string): Promise<void> {
 
@@ -1599,7 +1599,7 @@ export class WorkspaceDAO {
       UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?
     `);
     stmt.run(passwordHash, new Date().toISOString(), id);
-  }
+
 
   async updateUserMFA(id: string, mfaEnabled: boolean, mfaSecret?: string, backupCodes?: string[]): Promise<void> {
 
@@ -1618,7 +1618,7 @@ export class WorkspaceDAO {
       new Date().toISOString(),
       id
     );
-  }
+
 
   async updateUserLastLogin(id: string): Promise<void> {
 
@@ -1626,7 +1626,7 @@ export class WorkspaceDAO {
       UPDATE users SET last_login_at = ? WHERE id = ?
     `);
     stmt.run(new Date().toISOString(), id);
-  }
+
 
   async deactivateUser(id: string): Promise<void> {
 
@@ -1634,7 +1634,7 @@ export class WorkspaceDAO {
       UPDATE users SET deactivated_at = ? WHERE id = ?
     `);
     stmt.run(new Date().toISOString(), id);
-  }
+
 
   // ====== USER SESSION OPERATIONS ======
 
@@ -1671,7 +1671,7 @@ export class WorkspaceDAO {
       created_at: new Date(now),
       last_active_at: new Date(now)
     };
-  }
+
 
   async findUserSessionByToken(token: string): Promise<UserSession | null> {
 
@@ -1693,7 +1693,7 @@ export class WorkspaceDAO {
       created_at: new Date(row.created_at),
       last_active_at: new Date(row.last_active_at)
     };
-  }
+
 
   async updateSessionActivity(sessionId: string): Promise<void> {
 
@@ -1701,25 +1701,25 @@ export class WorkspaceDAO {
       UPDATE user_sessions SET last_active_at = ? WHERE id = ?
     `);
     stmt.run(new Date().toISOString(), sessionId);
-  }
+
 
   async deleteUserSession(sessionId: string): Promise<void> {
 
     const stmt = this.db.prepare('DELETE FROM user_sessions WHERE id = ?');
     stmt.run(sessionId);
-  }
+
 
   async deleteUserSessionByToken(token: string): Promise<void> {
 
     const stmt = this.db.prepare('DELETE FROM user_sessions WHERE session_token = ?');
     stmt.run(token);
-  }
+
 
   async deleteAllUserSessions(userId: string): Promise<void> {
 
     const stmt = this.db.prepare('DELETE FROM user_sessions WHERE user_id = ?');
     stmt.run(userId);
-  }
+
 
   async getUserSessions(userId: string): Promise<UserSession[]> {
 
@@ -1740,13 +1740,13 @@ export class WorkspaceDAO {
       created_at: new Date(row.created_at),
       last_active_at: new Date(row.last_active_at)
     }));
-  }
+
 
   async cleanupExpiredSessions(): Promise<void> {
 
     const stmt = this.db.prepare('DELETE FROM user_sessions WHERE expires_at <= ?');
     stmt.run(new Date().toISOString());
-  }
+
 
   // ====== OAUTH STATE OPERATIONS ======
 
@@ -1786,7 +1786,7 @@ export class WorkspaceDAO {
       expires_at: expiresAt,
       created_at: new Date(now)
     };
-  }
+
 
   async findOAuthState(state: string): Promise<OAuthState | null> {
 
@@ -1807,19 +1807,19 @@ export class WorkspaceDAO {
       expires_at: new Date(row.expires_at),
       created_at: new Date(row.created_at)
     };
-  }
+
 
   async deleteOAuthState(state: string): Promise<void> {
 
     const stmt = this.db.prepare('DELETE FROM oauth_states WHERE state = ?');
     stmt.run(state);
-  }
+
 
   async cleanupExpiredOAuthStates(): Promise<void> {
 
     const stmt = this.db.prepare('DELETE FROM oauth_states WHERE expires_at <= ?');
     stmt.run(new Date().toISOString());
-  }
+
 
   // ====== SECURITY AUDIT OPERATIONS ======
 
@@ -1851,7 +1851,7 @@ export class WorkspaceDAO {
       workspaceId || null,
       now
     );
-  }
+
 
   async getSecurityAuditLog(
     userId?: string,
@@ -1867,22 +1867,22 @@ export class WorkspaceDAO {
     if (userId) {
       query += ' AND user_id = ?';
       params.push(userId);
-    }
+
 
     if (eventTypes && eventTypes.length > 0) {
       query += ` AND event_type IN (${eventTypes.map(() => '?').join(', ')})`;
       params.push(...eventTypes);
-    }
+
 
     if (startDate) {
       query += ' AND created_at >= ?';
       params.push(startDate.toISOString());
-    }
+
 
     if (endDate) {
       query += ' AND created_at <= ?';
       params.push(endDate.toISOString());
-    }
+
 
     query += ' ORDER BY created_at DESC LIMIT ?';
     params.push(limit);
@@ -1900,7 +1900,7 @@ export class WorkspaceDAO {
       workspace_id: row.workspace_id,
       created_at: new Date(row.created_at)
     }));
-  }
+
 
   // ====== USER WORKSPACE OPERATIONS ======
 
@@ -1909,7 +1909,7 @@ export class WorkspaceDAO {
     name: string;
     role: string;
     permissions: number;
-  }>> {
+>> {
     const stmt = this.db.prepare(`
       SELECT w.id, w.name, um.role, um.permissions
       FROM workspaces w
@@ -1925,7 +1925,7 @@ export class WorkspaceDAO {
       role: row.role,
       permissions: row.permissions
     }));
-  }
+
 
   // ====== RBAC PERMISSION METHODS ======
 
@@ -1948,7 +1948,7 @@ export class WorkspaceDAO {
     const membership = membershipStmt.get(userId, workspaceId) as any;
     if (!membership) {
       return null; // User is not a member of this workspace
-    }
+
 
     // Get all roles assigned to the user in this workspace
     const rolesStmt = this.db.prepare(`
@@ -1973,7 +1973,7 @@ export class WorkspaceDAO {
     
     if (roleRows.length === 0) {
       return { permissions: 0, roles: [] }; // User has no roles assigned
-    }
+
 
     // Combine permissions from all roles using bitwise OR
     let combinedPermissions = 0;
@@ -1991,13 +1991,13 @@ export class WorkspaceDAO {
         created_at: new Date(row.created_at),
         updated_at: new Date(row.updated_at)
       });
-    }
+
 
     return {
       permissions: combinedPermissions,
       roles: roles
     };
-  }
+
 
   /**
    * Check if user has specific permissions in workspace or project
@@ -2013,16 +2013,16 @@ export class WorkspaceDAO {
     const workspace = await this.getWorkspace(workspaceId);
     if (workspace && workspace.owner_id === userId) {
       return true;
-    }
+
 
     const userPermissions = await this.getUserPermissions(userId, workspaceId);
     if (!userPermissions) {
       return false;
-    }
+
 
     // Check if user has the required permissions using bitwise AND
     return (userPermissions.permissions & requiredPermissions) === requiredPermissions;
-  }
+
 
   /**
    * Get all users with their roles in a workspace
@@ -2032,7 +2032,7 @@ export class WorkspaceDAO {
     membership: UserMembership;
     roles: ACLRole[];
     permissions: number;
-  }>> {
+>> {
     // Get all active memberships
     const memberships = await this.getWorkspaceMemberships(workspaceId, { status: 'active' });
     
@@ -2046,11 +2046,11 @@ export class WorkspaceDAO {
           roles: userPermissions.roles,
           permissions: userPermissions.permissions
         });
-      }
-    }
+
+
 
     return members;
-  }
+
 
   /**
    * Get workspace memberships with filtering
@@ -2071,12 +2071,12 @@ export class WorkspaceDAO {
     if (filter.status) {
       query += ' AND status = ?';
       params.push(filter.status);
-    }
+
     
     if (filter.user_id) {
       query += ' AND user_id = ?';
       params.push(filter.user_id);
-    }
+
     
     query += ' ORDER BY joined_at DESC';
     
@@ -2092,7 +2092,7 @@ export class WorkspaceDAO {
       joined_at: new Date(row.joined_at),
       last_active_at: new Date(row.last_active_at)
     }));
-  }
+
 
   /**
    * Update user role assignments
@@ -2108,7 +2108,7 @@ export class WorkspaceDAO {
     const newRole = await this.getRole(workspaceId, newRoleName);
     if (!newRole) {
       throw new Error(`Role '${newRoleName}' not found`);
-    }
+
 
     // Remove existing role assignments for this user in this workspace
     const removeStmt = this.db.prepare(`
@@ -2126,7 +2126,7 @@ export class WorkspaceDAO {
     }, updatedBy);
 
     return true;
-  }
+
 
   /**
    * Remove user from workspace (revoke all permissions)
@@ -2154,5 +2154,4 @@ export class WorkspaceDAO {
     assignmentStmt.run(userId, workspaceId, workspaceId);
 
     return true;
-  }
-}
+

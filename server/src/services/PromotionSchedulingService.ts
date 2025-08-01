@@ -28,8 +28,9 @@ export type RotationPattern =
   'FIXED_DURATION' | 'PERFORMANCE_THRESHOLD' | 'EQUAL_TIME' | 'WEIGHTED_ROTATION';
 
 // Core interfaces
-}
-}
+
+
+
 export interface PromotionSlot {
   id: string;
   name: string;
@@ -39,8 +40,9 @@ export interface PromotionSlot {
   traffic_allocation: number; // Percentage of traffic
   priority: number;
   metadata: {
-}
-}
+
+
+
     dimensions?: { width: number; height: number };
     position?: string;
     styling?: Record<string, any>;
@@ -48,10 +50,10 @@ export interface PromotionSlot {
   enabled: boolean;
   created_at: Date;
   updated_at: Date;
-}
 
-}
-}
+
+
+
 export interface PromotionSchedule {
   id: string;
   title: string;
@@ -87,12 +89,13 @@ export interface PromotionSchedule {
   approved_at?: Date;
   
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ContentCriteria {
   // Quality filters
   min_rating?: number;
@@ -128,22 +131,24 @@ export interface ContentCriteria {
   // Limits
   max_content_count?: number;
   diversification_rules?: DiversificationRule[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DiversificationRule {
   attribute: string; // 'category', 'creator', 'content_type'
   max_percentage: number; // Maximum percentage from same attribute
   enforce_uniqueness: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationConfig {
   // Fixed duration rotation
   duration_per_content?: number; // minutes
@@ -163,24 +168,26 @@ export interface RotationConfig {
   randomize_order: boolean;
   allow_repeat: boolean;
   cooldown_period?: number; // hours before content can be promoted again
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WeightCriteria {
   performance_weight: number; // 0-1
   recency_weight: number;
   diversity_weight: number;
   creator_tier_weight: number;
   custom_weights?: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TargetMetrics {
   target_impressions?: number;
   target_clicks?: number;
@@ -189,12 +196,13 @@ export interface TargetMetrics {
   target_ctr?: number; // Click-through rate
   target_conversion_rate?: number;
   min_engagement_time?: number; // seconds
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ActualMetrics {
   impressions: number;
   clicks: number;
@@ -205,12 +213,13 @@ export interface ActualMetrics {
   engagement_time: number;
   bounce_rate: number;
   last_updated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ABTestConfig {
   test_name: string;
   variants: ABTestVariant[];
@@ -220,31 +229,34 @@ export interface ABTestConfig {
   minimum_sample_size: number;
   test_duration_days: number;
   early_stopping_enabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ABTestVariant {
   id: string;
   name: string;
   content_ids: string[];
   config_overrides?: Partial<RotationConfig>;
   target_metrics?: Partial<TargetMetrics>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PromotionPerformanceReport {
   promotion_id: string;
   time_period: {
     start: Date;
     end: Date;
-}
-}
+
+
+
   };
   overall_performance: ActualMetrics;
   content_performance: ContentPerformanceMetrics[];
@@ -252,10 +264,10 @@ export interface PromotionPerformanceReport {
   comparison_metrics?: ComparisonMetrics;
   insights: PerformanceInsight[];
   recommendations: PromotionRecommendation[];
-}
 
-}
-}
+
+
+
 export interface ContentPerformanceMetrics {
   content_id: string;
   content_title: string;
@@ -263,12 +275,13 @@ export interface ContentPerformanceMetrics {
   metrics: ActualMetrics;
   performance_score: number; // 0-100
   rotation_efficiency: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SlotPerformanceMetrics {
   slot_id: string;
   slot_name: string;
@@ -277,34 +290,37 @@ export interface SlotPerformanceMetrics {
   conversion_rate: number;
   revenue_per_impression: number;
   utilization_rate: number; // Percentage of time slot was active
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComparisonMetrics {
   vs_previous_promotion?: MetricComparison;
   vs_baseline?: MetricComparison;
   vs_target?: MetricComparison;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MetricComparison {
   metric_name: string;
   current_value: number;
   comparison_value: number;
   percentage_change: number;
   is_improvement: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceInsight {
   type: 'positive' | 'negative' | 'neutral';
   title: string;
@@ -312,12 +328,13 @@ export interface PerformanceInsight {
   impact_score: number; // 0-100
   confidence: number; // 0-1
   supporting_data: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PromotionRecommendation {
   type: 'optimization' | 'content_selection' | 'scheduling' | 'rotation' | 'budget';
   title: string;
@@ -326,9 +343,10 @@ export interface PromotionRecommendation {
   effort_level: 'low' | 'medium' | 'high';
   priority_score: number; // 0-100
   implementation_steps: string[];
-}
-}
-}
+
+
+
+
 
 @Injectable()
 export class PromotionSchedulingService {
@@ -357,7 +375,7 @@ export class PromotionSchedulingService {
     let selectedContentIds = scheduleData.selected_content_ids;
     if (scheduleData.selection_strategy !== 'MANUAL') {
       selectedContentIds = await this.selectContent(scheduleData.content_criteria);
-    }
+
     
     const schedule: PromotionSchedule = {
       ...scheduleData,
@@ -382,12 +400,12 @@ export class PromotionSchedulingService {
         promotion_type: schedule.promotion_type,
         slot_id: schedule.slot_id,
         content_count: schedule.selected_content_ids.length
-      }
+
     });
 
     this.logger.log(`Promotion schedule created: ${scheduleId}`);
     return schedule;
-  }
+
 
   /**
    * Update promotion schedule
@@ -401,12 +419,12 @@ export class PromotionSchedulingService {
     const existingSchedule = await this.getPromotionSchedule(scheduleId);
     if (!existingSchedule) {
       throw new NotFoundException(`Promotion schedule ${scheduleId} not found`);
-    }
+
 
     // Validate changes if schedule is active
     if (existingSchedule.status === 'ACTIVE') {
       await this.validateActiveScheduleUpdates(updates);
-    }
+
 
     const updatedSchedule: PromotionSchedule = {
       ...existingSchedule,
@@ -419,7 +437,7 @@ export class PromotionSchedulingService {
     // Update system schedule if timing changed
     if (updates.start_date || updates.end_date || updates.rotation_config) {
       await this.updateSystemSchedule(updatedSchedule);
-    }
+
 
     await this.auditService.logEvent({
       userId: updatedBy,
@@ -429,7 +447,7 @@ export class PromotionSchedulingService {
     });
 
     return updatedSchedule;
-  }
+
 
   /**
    * Get promotion schedule with performance data
@@ -442,7 +460,7 @@ export class PromotionSchedulingService {
     
     const result = await this.pool.query(query, [scheduleId]);
     return result.rows[0] ? this.mapRowToSchedule(result.rows[0]) : null;
-  }
+
 
   /**
    * Get all promotion schedules with filtering
@@ -472,25 +490,25 @@ export class PromotionSchedulingService {
       query += ` AND ps.status = $${paramIndex}`;
       params.push(filters.status);
       paramIndex++;
-    }
+
 
     if (filters.promotion_type) {
       query += ` AND ps.promotion_type = $${paramIndex}`;
       params.push(filters.promotion_type);
       paramIndex++;
-    }
+
 
     if (filters.slot_id) {
       query += ` AND ps.slot_id = $${paramIndex}`;
       params.push(filters.slot_id);
       paramIndex++;
-    }
+
 
     if (filters.start_date_after) {
       query += ` AND ps.start_date >= $${paramIndex}`;
       params.push(filters.start_date_after);
       paramIndex++;
-    }
+
 
     // Add pagination
     const page = filters.page || 1;
@@ -510,7 +528,7 @@ export class PromotionSchedulingService {
       schedules: dataResult.rows.map(row => this.mapRowToSchedule(row)),
       total: parseInt(countResult.rows[0].count)
     };
-  }
+
 
   /**
    * Select content based on criteria using intelligent algorithms
@@ -537,19 +555,19 @@ export class PromotionSchedulingService {
       query += ` AND COALESCE(ta.avg_rating, 0) >= $${paramIndex}`;
       params.push(criteria.min_rating);
       paramIndex++;
-    }
+
 
     if (criteria.min_download_count) {
       query += ` AND COALESCE(ta.download_count, 0) >= $${paramIndex}`;
       params.push(criteria.min_download_count);
       paramIndex++;
-    }
+
 
     if (criteria.categories && criteria.categories.length > 0) {
       query += ` AND t.category = ANY($${paramIndex})`;
       params.push(criteria.categories);
       paramIndex++;
-    }
+
 
     if (criteria.exclude_recently_promoted) {
       query += ` AND t.id NOT IN (
@@ -558,7 +576,7 @@ export class PromotionSchedulingService {
         JOIN promotion_schedules ps ON ps.id = psc.schedule_id
         WHERE ps.end_date >= NOW() - INTERVAL '7 days'
       )`;
-    }
+
 
     // Add performance-based ordering
     query += ` 
@@ -577,7 +595,7 @@ export class PromotionSchedulingService {
     const selectedContent = this.applyDiversificationRules(result.rows, criteria.diversification_rules || []);
     
     return selectedContent.map(content => content.id);
-  }
+
 
   /**
    * Get performance report for a promotion
@@ -591,7 +609,7 @@ export class PromotionSchedulingService {
     const schedule = await this.getPromotionSchedule(scheduleId);
     if (!schedule) {
       throw new NotFoundException(`Promotion schedule ${scheduleId} not found`);
-    }
+
 
     const reportStartDate = startDate || schedule.start_date;
     const reportEndDate = endDate || schedule.end_date;
@@ -614,14 +632,14 @@ export class PromotionSchedulingService {
       time_period: {
         start: reportStartDate,
         end: reportEndDate
-  }
+
       overall_performance: overallMetrics,
       content_performance: contentPerformance,
       slot_performance: slotPerformance,
       insights,
       recommendations
     };
-  }
+
 
   // Private helper methods
 
@@ -647,8 +665,8 @@ export class PromotionSchedulingService {
     
     if (parseInt(result.rows[0].conflicts) > 0) {
       throw new BadRequestException(`Slot ${slotId} has conflicting promotions in the specified time range`);
-    }
-  }
+
+
 
   private async createSystemSchedule(schedule: PromotionSchedule): Promise<void> {
 
@@ -667,9 +685,9 @@ export class PromotionSchedulingService {
         promotion_id: schedule.id,
         promotion_type: schedule.promotion_type,
         slot_id: schedule.slot_id
-      }
+
     });
-  }
+
 
   private applyDiversificationRules(
     content: unknown[], 
@@ -688,8 +706,8 @@ export class PromotionSchedulingService {
         const attrValue = item[rule.attribute];
         if (attrValue) {
           attributeCounts.set(attrValue, (attributeCounts.get(attrValue) || 0) + 1);
-        }
-      }
+
+
       
       // Remove excess items that violate the percentage rule
       const maxAllowed = Math.floor((rule.max_percentage / 100) * totalCount);
@@ -703,14 +721,14 @@ export class PromotionSchedulingService {
             if (result[i][rule.attribute] === attrValue) {
               result.splice(i, 1);
               removed++;
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
     
     return result;
-  }
+
 
   private async storePromotionSchedule(schedule: PromotionSchedule): Promise<void> {
 
@@ -752,7 +770,7 @@ export class PromotionSchedulingService {
       schedule.updated_at,
       JSON.stringify(schedule.metadata)
     ]);
-  }
+
 
   private mapRowToSchedule(row: unknown): PromotionSchedule {
     return {
@@ -780,7 +798,7 @@ export class PromotionSchedulingService {
       approved_at: row.approved_at ? new Date(row.approved_at) : undefined,
       metadata: JSON.parse(row.metadata || '{}')
     };
-  }
+
 
   // Additional helper methods would be implemented here for:
   // - validateActiveScheduleUpdates()
@@ -792,4 +810,3 @@ export class PromotionSchedulingService {
   // - generateRecommendations()
   // - convertToRecurrencePattern()
   // - buildWhereClause()
-}

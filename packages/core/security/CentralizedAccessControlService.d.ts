@@ -12,23 +12,22 @@
  * Task: T-1752989143998-738 - Create centralized access control service
  */
 import { EventEmitter } from 'events';
-import { 
-  AccessRequest,
+import { AccessRequest,
   AccessDecision,
   RBACDecision,
   ABACDecision,
   SubjectAttributes,
   ClassificationAccessPolicy,
   PolicyObligation,
-  DataOperation,
+  DataOperation }
   DataClassificationLevel
 } from './DataClassificationAccessControl';
 import { InheritanceFramework, EffectivePermissions } from './DelegationInheritanceRules';
 import { DataClassifier } from './DataClassifier';
 
 }
-export interface AccessControlConfig {
-    enableRBAC: boolean;
+}
+export interface AccessControlConfig { enableRBAC: boolean;
     enableABAC: boolean;
     enableDelegation: boolean;
     enableInheritance: boolean;
@@ -38,12 +37,10 @@ export interface AccessControlConfig {
     realTimeMonitoring: boolean;
     strictCompliance: boolean;
     emergencyBypass: boolean;
-    performanceMode: 'HIGH_SECURITY' | 'BALANCED' | 'HIGH_PERFORMANCE';
-
-
+    performanceMode: 'HIGH_SECURITY' | 'BALANCED' | 'HIGH_PERFORMANCE' }
 }
-export interface AccessControlMetrics {
-    totalRequests: number;
+}
+export interface AccessControlMetrics { totalRequests: number;
     approvedRequests: number;
     deniedRequests: number;
     cacheHitRate: number;
@@ -53,20 +50,16 @@ export interface AccessControlMetrics {
     abacDecisions: number;
     delegatedDecisions: number;
     emergencyAccess: number;
-    complianceViolations: number;
-
-
+    complianceViolations: number }
 }
-export interface CacheEntry {
-    decision: AccessDecision;
+}
+export interface CacheEntry { decision: AccessDecision;
     timestamp: Date;
     ttl: number;
-    requestHash: string;
-
-
+    requestHash: string }
 }
-export interface AuditLogEntry {
-    id: string;
+}
+export interface AuditLogEntry { id: string;
     timestamp: Date;
     requestId: string;
     userId: string;
@@ -80,12 +73,10 @@ export interface AuditLogEntry {
     emergency: boolean;
     obligations: PolicyObligation[];
     decisionTime: number;
-    metadata: Record<string, any>;
-
-
+    metadata: Record<string, any> }
 }
-export interface SecurityAlert {
-    id: string;
+}
+export interface SecurityAlert { id: string;
     type: 'UNAUTHORIZED_ACCESS' | 'POLICY_VIOLATION' | 'ANOMALOUS_BEHAVIOR' | 'DELEGATION_ABUSE' | 'EMERGENCY_ACCESS';
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     timestamp: Date;
@@ -111,9 +102,9 @@ export declare class CentralizedAccessControlService extends EventEmitter {
     private metrics;
     private policies;
     constructor();
-      config: AccessControlConfig,
-      inheritanceFramework: InheritanceFramework,
-      dataClassifier: DataClassifier,
+      config: AccessControlConfig;
+      inheritanceFramework: InheritanceFramework;
+      dataClassifier: DataClassifier }
     );
     /**
      * Main access control decision method
@@ -278,4 +269,5 @@ export declare class CentralizedAccessControlService extends EventEmitter {
 
 export default CentralizedAccessControlService;
 //# sourceMappingURL=CentralizedAccessControlService.d.ts.map
+}
 }

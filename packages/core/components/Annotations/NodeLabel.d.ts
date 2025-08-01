@@ -9,6 +9,7 @@ import React from 'react';
 import { NodeLabelConfig, NodeLabelAction, NodeLabelDisplayMode } from '../../types/CollaborationTypes';
 
 }
+}
 interface NodeLabelProps {
     config: NodeLabelConfig;
     nodeId: string;
@@ -24,4 +25,5 @@ interface NodeLabelProps {
 export declare const NodeLabel: React.FC<NodeLabelProps>;
 export default NodeLabel;
 //# sourceMappingURL=NodeLabel.d.ts.map
+}
 }

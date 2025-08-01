@@ -4,18 +4,17 @@
  */
 import React from 'react';
 }
-interface ActivityStatsData {
-    total_events: number;
+}
+interface ActivityStatsData { total_events: number;
     events_by_type: Record<string, number>;
     events_by_day: Array<{
         date: string;
-        count: number;
+        count: number }
 }
     }>;
-    most_active_users: Array<{
-        user_id: string;
-        count: number;
-    }>;
+    most_active_users: Array<{ user_id: string;
+        count: number }>;
+}
 }
 interface ActivityStatsProps {
     stats: ActivityStatsData;
@@ -25,4 +24,5 @@ interface ActivityStatsProps {
 export declare const ActivityStats: React.FC<ActivityStatsProps>;
 export default ActivityStats;
 //# sourceMappingURL=ActivityStats.d.ts.map
+}
 }

@@ -8,12 +8,11 @@ import React from 'react';
 import { IdentityValidationType, IdentityValidationData } from '../../auth/IdentityValidation';
 
 }
-interface VerificationRequestFormProps {
-    userId: string;
+}
+interface VerificationRequestFormProps { userId: string;
     onSubmit: (type: IdentityValidationType, data: Partial<IdentityValidationData>) => Promise<{
         requestId: string;
-        status: string;
-
+        status: string }
 }
     }>;
     onCancel?: () => void;

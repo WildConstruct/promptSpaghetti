@@ -21,27 +21,30 @@ export enum WebSocketMessageType {
   HEARTBEAT = 'heartbeat',
   SUBSCRIPTION = 'subscription',
   UNSUBSCRIPTION = 'unsubscription'
-}
+
 
 /**
  * WebSocket message structure
  */
-}
-}
+
+
+
 export interface WebSocketMessage {
   type: WebSocketMessageType;
   data: any;
   timestamp: number;
   id?: string;
-}
-}
-}
+
+
+
+
 
 /**
  * Client connection info
  */
-}
-}
+
+
+
 export interface ClientConnection {
   id: string;
   socket: WebSocket;
@@ -50,15 +53,17 @@ export interface ClientConnection {
   subscriptions: Set<string>;
   lastActivity: number;
   isAuthenticated: boolean;
-}
-}
-}
+
+
+
+
 
 /**
  * Subscription configuration
  */
-}
-}
+
+
+
 export interface SubscriptionConfig {
   topic: string;
   filters?: {
@@ -66,11 +71,12 @@ export interface SubscriptionConfig {
     organizationId?: number;
     eventTypes?: string[];
     minSeverity?: 'info' | 'warning' | 'critical';
-}
-}
+
+
+
   };
   throttle?: number;
-}
+
 
 /**
  * Analytics WebSocket server
@@ -97,7 +103,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
     this.setupEventListeners();
     this.startHeartbeat();
     this.startCleanup();
-  }
+
 
   /**
    * Setup WebSocket server with Fastify
@@ -137,7 +143,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
         });
       });
     });
-  }
+
 
   /**
    * Handle new client connection
@@ -152,13 +158,13 @@ export class AnalyticsWebSocketServer extends EventEmitter {
         status: 'connected',
         clientId: client.id,
         timestamp: Date.now()
-  }
+
       timestamp: Date.now(),
       id: uuidv4()
     });
 
     this.emit('client_connected', client);
-  }
+
 
   /**
    * Handle client disconnection
@@ -175,8 +181,8 @@ export class AnalyticsWebSocketServer extends EventEmitter {
 
       this.clients.delete(clientId);
       this.emit('client_disconnected', client);
-    }
-  }
+
+
 
   /**
    * Handle incoming message from client
@@ -205,12 +211,12 @@ export class AnalyticsWebSocketServer extends EventEmitter {
         
       default:
         console.warn(`Unknown message type from client ${clientId}: ${message.type}`);
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error(`Failed to parse message from client ${clientId}:`, error);
       this.sendError(client, 'Invalid message format');
-    }
-  }
+
+
 
   /**
    * Handle client error
@@ -218,7 +224,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
   private handleError(clientId: string, error: Error): void {
     console.error(`WebSocket error for client ${clientId}:`, error);
     this.emit('client_error', { clientId, error });
-  }
+
 
   /**
    * Handle subscription request
@@ -242,22 +248,22 @@ export class AnalyticsWebSocketServer extends EventEmitter {
           timestamp: Date.now(),
           id: uuidv4()
         });
-      } else {
+ else {
         this.sendError(client, 'Authentication failed');
-      }
+
       return;
-    }
+
 
     if (!topic) {
       this.sendError(client, 'Topic is required for subscription');
       return;
-    }
+
 
     // Add client to topic subscription
     this.subscribeToTopic(clientId, topic, filters);
     
     console.log(`Client ${clientId} subscribed to topic: ${topic}`);
-  }
+
 
   /**
    * Handle unsubscription request
@@ -267,8 +273,8 @@ export class AnalyticsWebSocketServer extends EventEmitter {
     if (topic) {
       this.unsubscribeFromTopic(clientId, topic);
       console.log(`Client ${clientId} unsubscribed from topic: ${topic}`);
-    }
-  }
+
+
 
   /**
    * Handle heartbeat
@@ -282,8 +288,8 @@ export class AnalyticsWebSocketServer extends EventEmitter {
         timestamp: Date.now(),
         id: uuidv4()
       });
-    }
-  }
+
+
 
   /**
    * Subscribe client to topic
@@ -296,13 +302,13 @@ export class AnalyticsWebSocketServer extends EventEmitter {
 
     if (!this.topicSubscriptions.has(topic)) {
       this.topicSubscriptions.set(topic, new Set());
-    }
+
     
     this.topicSubscriptions.get(topic)!.add(clientId);
 
     // Send initial data for the topic
     this.sendTopicData(clientId, topic, filters);
-  }
+
 
   /**
    * Unsubscribe client from topic
@@ -311,16 +317,16 @@ export class AnalyticsWebSocketServer extends EventEmitter {
     const client = this.clients.get(clientId);
     if (client) {
       client.subscriptions.delete(topic);
-    }
+
 
     const topicClients = this.topicSubscriptions.get(topic);
     if (topicClients) {
       topicClients.delete(clientId);
       if (topicClients.size === 0) {
         this.topicSubscriptions.delete(topic);
-      }
-    }
-  }
+
+
+
 
   /**
    * Send initial data for a topic
@@ -356,7 +362,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
       default:
         console.warn(`Unknown topic: ${topic}`);
         return;
-      }
+
 
       if (data) {
         this.sendMessage(client, {
@@ -365,12 +371,12 @@ export class AnalyticsWebSocketServer extends EventEmitter {
           timestamp: Date.now(),
           id: uuidv4()
         });
-      }
-    } catch (error) {
+
+ catch (error) {
       console.error(`Failed to send topic data for ${topic}:`, error);
       this.sendError(client, `Failed to load data for topic: ${topic}`);
-    }
-  }
+
+
 
   /**
    * Broadcast message to all clients subscribed to a topic
@@ -383,9 +389,9 @@ export class AnalyticsWebSocketServer extends EventEmitter {
       const client = this.clients.get(clientId);
       if (client) {
         this.sendMessage(client, message);
-      }
+
     });
-  }
+
 
   /**
    * Send message to specific client
@@ -394,11 +400,11 @@ export class AnalyticsWebSocketServer extends EventEmitter {
     if (client.socket.readyState === WebSocket.OPEN) {
       try {
         client.socket.send(JSON.stringify(message));
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to send message to client ${client.id}:`, error);
-      }
-    }
-  }
+
+
+
 
   /**
    * Send error message to client
@@ -410,7 +416,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
       timestamp: Date.now(),
       id: uuidv4()
     });
-  }
+
 
   /**
    * Authenticate client
@@ -419,7 +425,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
     // Simple authentication check
     // In production, this would validate against a proper auth system
     return auth.apiKey && auth.apiKey.length > 0;
-  }
+
 
   /**
    * Setup event listeners for analytics events
@@ -463,7 +469,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
         id: uuidv4()
       });
     });
-  }
+
 
   /**
    * Start heartbeat to keep connections alive
@@ -478,10 +484,10 @@ export class AnalyticsWebSocketServer extends EventEmitter {
             timestamp: Date.now(),
             id: uuidv4()
           });
-        }
+
       });
     }, 30000); // Every 30 seconds
-  }
+
 
   /**
    * Start cleanup routine for dead connections
@@ -495,10 +501,10 @@ export class AnalyticsWebSocketServer extends EventEmitter {
         if (now - client.lastActivity > timeout || client.socket.readyState !== WebSocket.OPEN) {
           console.log(`Cleaning up inactive client: ${clientId}`);
           this.handleDisconnection(clientId);
-        }
+
       });
     }, 60000); // Every minute
-  }
+
 
   /**
    * Stop the WebSocket server
@@ -507,23 +513,23 @@ export class AnalyticsWebSocketServer extends EventEmitter {
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
       this.heartbeatInterval = null;
-    }
+
 
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
       this.cleanupInterval = null;
-    }
+
 
     // Close all client connections
     this.clients.forEach(client => {
       if (client.socket.readyState === WebSocket.OPEN) {
         client.socket.close();
-      }
+
     });
 
     this.clients.clear();
     this.topicSubscriptions.clear();
-  }
+
 
   /**
    * Get server statistics
@@ -533,7 +539,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
     authenticatedClients: number;
     totalSubscriptions: number;
     topicCounts: { [topic: string]: number };
-    } {
+ {
     const authenticatedClients = Array.from(this.clients.values()).filter(c => c.isAuthenticated).length;
     const totalSubscriptions = Array.from(this.clients.values()).reduce((sum, client) => sum + client.subscriptions.size, 0);
     
@@ -548,5 +554,4 @@ export class AnalyticsWebSocketServer extends EventEmitter {
       totalSubscriptions,
       topicCounts
     };
-  }
-}
+

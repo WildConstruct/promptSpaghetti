@@ -100,7 +100,7 @@ export class PasswordGuidanceService extends EventEmitter {
             difficulty;
         'easy',
             steps;
-        [,
+        [
             {
                 stepNumber: 1,
                 title: 'Access Account Settings',
@@ -130,15 +130,16 @@ export class PasswordGuidanceService extends EventEmitter {
                 helpResources: ['/help/password-confirmation'],
                 timeEstimate: '2 minutes',
                 required: true
-            }],
+            }
+        ],
             benefits;
-        [,
+        [
             'Immediately secures your account from unauthorized access',
             'Prevents further damage from the compromise',
             'Blocks ongoing attacks using your old password'
         ],
             risks;
-        [,
+        [
             'Temporary account lockout if you forget the new password',
             'Need to update password in other applications'
         ];
@@ -160,7 +161,7 @@ export class PasswordGuidanceService extends EventEmitter {
         difficulty;
     'easy',
         steps;
-    [,
+    [
         {
             stepNumber: 1,
             title: 'Review Login History',
@@ -190,15 +191,16 @@ export class PasswordGuidanceService extends EventEmitter {
             helpResources: ['/help/session-management'],
             timeEstimate: '2 minutes',
             required: true
-        }],
+        }
+    ],
         benefits;
-    [,
+    [
         'Identifies if attacker gained access to your account',
         'Helps assess the scope of the compromise',
         'Provides evidence for further security measures'
     ],
         risks;
-    [,
+    [
         'May reveal additional compromised information',
         'Could indicate need for more extensive security measures'
     ];
@@ -223,7 +225,7 @@ if (compromiseType === CompromiseType.DATA_BREACH || )
         difficulty;
     'medium',
         steps;
-    [,
+    [
         {
             stepNumber: 1,
             title: 'Identify Accounts with Same Password',
@@ -253,15 +255,16 @@ if (compromiseType === CompromiseType.DATA_BREACH || )
             helpResources: ['/help/bulk-password-update'],
             timeEstimate: '30 minutes',
             required: true
-        }],
+        }
+    ],
         benefits;
-    [,
+    [
         'Prevents credential stuffing attacks on other accounts',
         'Limits the scope of the security incident',
         'Protects your digital identity across platforms'
     ],
         risks;
-    [,
+    [
         'Time-consuming process',
         'Risk of account lockouts if done too quickly',
         'May forget to update some accounts'
@@ -313,7 +316,7 @@ private, getMFARecommendation(), SecurityRecommendation, {
         priority: ActionPriority.URGENT,
         estimatedTime: '10-15 minutes',
         difficulty: 'medium',
-        steps: [,
+        steps: [
             {
                 stepNumber: 1,
                 title: 'Choose MFA Method',
@@ -343,13 +346,14 @@ private, getMFARecommendation(), SecurityRecommendation, {
                 helpResources: ['/help/mfa-verification', '/help/backup-codes'],
                 timeEstimate: '5 minutes',
                 required: true
-            }],
-        benefits: [,
+            }
+        ],
+        benefits: [
             'Prevents account access even with compromised password',
             'Meets modern security standards',
             'Protects against most common attacks'
         ],
-        risks: [,
+        risks: [
             'Risk of lockout if phone is lost',
             'Slightly more time to log in',
             'Need to keep backup codes secure'
@@ -367,7 +371,7 @@ private, getMFARecommendation(), SecurityRecommendation, {
             priority: ActionPriority.HIGH,
             estimatedTime: '30-45 minutes',
             difficulty: 'medium',
-            steps: [,
+            steps: [
                 {
                     stepNumber: 1,
                     title: 'Choose Password Manager',
@@ -407,14 +411,15 @@ private, getMFARecommendation(), SecurityRecommendation, {
                     helpResources: ['/help/password-generation'],
                     timeEstimate: '15 minutes',
                     required: true
-                }],
-            benefits: [,
+                }
+            ],
+            benefits: [
                 'Eliminates password reuse across accounts',
                 'Generates strong, unique passwords automatically',
                 'Simplifies login process with auto-fill',
                 'Provides secure storage for all credentials'
             ],
-            risks: [,
+            risks: [
                 'Single point of failure if master password is compromised',
                 'Dependency on password manager service availability',
                 'Learning curve for new workflow'
@@ -449,7 +454,7 @@ private, getMFARecommendation(), SecurityRecommendation, {
             difficulty;
         'easy',
             steps;
-        [,
+        [
             {
                 stepNumber: 1,
                 title: 'Enable Login Alerts',
@@ -479,15 +484,16 @@ private, getMFARecommendation(), SecurityRecommendation, {
                 helpResources: ['/help/contact-verification'],
                 timeEstimate: '4 minutes',
                 required: true
-            }],
+            }
+        ],
             benefits;
-        [,
+        [
             'Early warning of account compromise attempts',
             'Real-time awareness of account activity',
             'Faster response to security incidents'
         ],
             risks;
-        [,
+        [
             'Potential for alert fatigue',
             'False positives may cause unnecessary concern'
         ];
@@ -509,7 +515,7 @@ if (riskLevel === RiskLevel.HIGH || riskLevel === RiskLevel.CRITICAL) {
         difficulty;
     'medium',
         steps;
-    [,
+    [
         {
             stepNumber: 1,
             title: 'Check Credit Reports',
@@ -529,15 +535,16 @@ if (riskLevel === RiskLevel.HIGH || riskLevel === RiskLevel.CRITICAL) {
             helpResources: ['/help/credit-monitoring'],
             timeEstimate: '10 minutes',
             required: true
-        }],
+        }
+    ],
         benefits;
-    [,
+    [
         'Early detection of identity theft',
         'Protection of credit score and financial health',
         'Peace of mind regarding financial security'
     ],
         risks;
-    [,
+    [
         'May cost money for comprehensive monitoring',
         'Potential for false alarms'
     ];
@@ -556,7 +563,7 @@ SecurityRecommendation;
             priority: ActionPriority.MEDIUM,
             estimatedTime: '30 minutes',
             difficulty: 'easy',
-            steps: [,
+            steps: [
                 {
                     stepNumber: 1,
                     title: 'Learn About Phishing',
@@ -576,13 +583,14 @@ SecurityRecommendation;
                     helpResources: ['/training/social-engineering'],
                     timeEstimate: '15 minutes',
                     required: true
-                }],
-            benefits: [,
+                }
+            ],
+            benefits: [
                 'Reduces likelihood of future compromises',
                 'Improves overall security awareness',
                 'Helps protect others by recognizing threats'
             ],
-            risks: [,
+            risks: [
                 'Time investment required',
                 'Information may become outdated'
             ]
@@ -595,7 +603,7 @@ SecurityRecommendation;
             priority: ActionPriority.LOW,
             estimatedTime: '15 minutes monthly',
             difficulty: 'easy',
-            steps: [,
+            steps: [
                 {
                     stepNumber: 1,
                     title: 'Monthly Password Review',
@@ -615,13 +623,14 @@ SecurityRecommendation;
                     helpResources: ['/help/security-review'],
                     timeEstimate: '15 minutes',
                     required: true
-                }],
-            benefits: [,
+                }
+            ],
+            benefits: [
                 'Proactive identification of security issues',
                 'Maintains strong security posture over time',
                 'Builds good security habits'
             ],
-            risks: [,
+            risks: [
                 'Requires ongoing time commitment',
                 'May become routine and less effective'
             ]
@@ -878,14 +887,14 @@ SecurityRecommendation;
                                                 getSecurityTips(riskScore, number);
                                                 string;
                                                 {
-                                                    const tips = [];
-                                                    'Use unique passwords for every account',
+                                                    const tips = [
+                                                        'Use unique passwords for every account',
                                                         'Enable two-factor authentication wherever possible',
                                                         'Keep your software and browsers updated',
                                                         'Be cautious of phishing emails and suspicious links',
                                                         'Use a reputable password manager',
-                                                        'Regularly review your account activity';
-                                                    ;
+                                                        'Regularly review your account activity'
+                                                    ];
                                                     if (riskScore > 50) {
                                                         tips.unshift();
                                                         'Your security risk is elevated - consider changing passwords',

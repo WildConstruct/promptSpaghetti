@@ -2,16 +2,18 @@
 // React component for managing user sessions with multi-device support
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-}
+
+
 interface SessionInfo {
   id: string;,
-  deviceInfo: {
+  deviceInfo: {,
   platform?: string;
   browser?: string;
   version?: string;
   userAgent?: string;
   fingerprint?: string;
-}
+
+
 };
   location: {
   ipAddress?: string;
@@ -19,33 +21,37 @@ interface SessionInfo {
   city?: string;
 };
   lastAccessedAt: string;,
-  createdAt: string;
+  createdAt: string;,
   current: boolean;
-}
+
+
 interface SessionStats {
   totalSessions: number;,
-  activeSessions: number;
+  activeSessions: number;,
   expiredSessions: number;,
   revokedSessions: number;
   interface SecurityInsights {
-  suspiciousActivity: {
+  suspiciousActivity: {,
   multipleLocations: boolean;,
-  unusualDevices: boolean;
+  unusualDevices: boolean;,
   suspiciousLocations: string;,
   newDevices: unknown;
-}
+
+
 };
   recommendations: string;
-}
+
+
 interface SessionManagerProps {
   onSessionRevoked?: (sessionId: string) => void;
   onAllSessionsRevoked?: () => void;
   showSecurityInsights?: boolean;
-  export const SessionManager: React.FC<SessionManagerProps> = ({,)
+  export const SessionManager: React.FC<SessionManagerProps> = ({),
   onSessionRevoked,
   onAllSessionsRevoked,
   showSecurityInsights = true
-}
+
+
 }) => {
   const { user } = useAuth();
   const [sessions, setSessions] = useState<SessionInfo>([]);
@@ -73,10 +79,10 @@ interface SessionManagerProps {
       const data = await response.json();
       setSessions(data.sessions);
       setStats(data.stats);
-    } catch (error) {
+ catch (error) {
   console.error('Error fetching sessions:', error);
   setError('Failed to load sessions');
-} finally {
+ finally {
       setLoading(false);
   };
   const fetchSecurityInsights = async () => {
@@ -89,7 +95,7 @@ interface SessionManagerProps {
         throw new Error('Failed to fetch security insights');
       const data = await response.json();
       setSecurityInsights(data);
-    } catch (error) {
+ catch (error) {
   console.error('Error fetching security insights:', error);
 };
   const revokeSession = async (sessionId: string, reason?: string) => {
@@ -115,10 +121,10 @@ interface SessionManagerProps {
   revokedSessions: stats.revokedSessions + 1,
 });
       onSessionRevoked?.(sessionId);
-    } catch (error) {
+ catch (error) {
   console.error('Error revoking session:', error);
   setError('Failed to revoke session');
-} finally {
+ finally {
       setRevoking(null);
   };
   const revokeAllSessions = async (exceptCurrent: boolean = true) => {
@@ -138,7 +144,7 @@ interface SessionManagerProps {
       // Update local state
       if (exceptCurrent) {
         setSessions(sessions.filter(s => s.current));
-      } else {
+ else {
   setSessions([]);
   // Update stats
   if (stats) {
@@ -148,10 +154,10 @@ interface SessionManagerProps {
   revokedSessions: stats.revokedSessions + data.revokedCount,
 });
       onAllSessionsRevoked?.();
-    } catch (error) {
+ catch (error) {
   console.error('Error revoking all sessions:', error);
   setError('Failed to revoke sessions');
-} finally {
+ finally {
       setBulkRevoking(false);
   };
   const getDeviceIcon = (deviceInfo: unknown) => {
@@ -201,7 +207,7 @@ interface SessionManagerProps {
   bulkRevoking || sessions.length <= 1
   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
   : 'bg-red-50 text-red-700 hover:bg-red-100',
-}`}
+`}
         >
           {bulkRevoking ? 'Revoking...' : 'Revoke All Others'}
         </button>
@@ -276,7 +282,7 @@ interface SessionManagerProps {
   session.current
   ? 'border-blue-200 bg-blue-50'
   : 'border-gray-200 bg-white',
-}`}
+`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -315,7 +321,7 @@ interface SessionManagerProps {
   revoking === session.id
   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
   : 'bg-red-50 text-red-700 hover:bg-red-100',
-}`}
+`}
                 >
                   {revoking === session.id ? 'Revoking...' : 'Revoke'}
                 </button>

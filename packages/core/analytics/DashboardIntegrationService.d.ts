@@ -11,40 +11,34 @@ import { WebSocketStreamingServer } from './WebSocketStreaming';
 import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 
 }
-interface DashboardIntegrationConfig {
-    enableLegacySupport: boolean;
+}
+interface DashboardIntegrationConfig { enableLegacySupport: boolean;
     migrationMode: 'gradual' | 'immediate' | 'parallel';
     cacheEnabled: boolean;
     cacheTTL: number;
     webhookEndpoints: string[];
-    alertingEnabled: boolean;
-
-
+    alertingEnabled: boolean }
 }
-interface LegacyAnalyticsSystem {
-    name: string;
+}
+interface LegacyAnalyticsSystem { name: string;
     routePath: string;
     dataFormat: 'dao' | 'rest' | 'event';
     migrationStatus: 'pending' | 'in_progress' | 'completed' | 'failed';
     lastSync: number;
     eventCount: number;
-    healthStatus: 'healthy' | 'degraded' | 'failing';
-
-
+    healthStatus: 'healthy' | 'degraded' | 'failing' }
 }
-interface WidgetPerformanceMetrics {
-    widgetId: string;
+}
+interface WidgetPerformanceMetrics { widgetId: string;
     widgetType: string;
     averageLoadTime: number;
     errorRate: number;
     cacheHitRate: number;
     queryCount: number;
-    lastUpdate: number;
-
-
+    lastUpdate: number }
 }
-interface IntegrationStatus {
-    totalSystems: number;
+}
+interface IntegrationStatus { totalSystems: number;
     integratedSystems: number;
     migrationProgress: number;
     activeConnections: number;
@@ -69,11 +63,11 @@ export declare class DashboardIntegrationService {
     private performanceMetrics;
     private integrationCache;
     constructor();
-      eventBus: UnifiedEventBus,
-      eventRepository: EventRepository,
-      authService: AnalyticsAuthorizationService,
-      wsServer: WebSocketStreamingServer,
-      adapters: AnalyticsAdapterManager,
+      eventBus: UnifiedEventBus;
+      eventRepository: EventRepository;
+      authService: AnalyticsAuthorizationService;
+      wsServer: WebSocketStreamingServer;
+      adapters: AnalyticsAdapterManager }
       config?: Partial<DashboardIntegrationConfig>
     );
     /**
@@ -87,11 +81,10 @@ export declare class DashboardIntegrationService {
     /**
      * Get consolidated dashboard data from all integrated systems
      */
-    getConsolidatedDashboardData(filter: EventFilter, authContext: AuthContext, cacheKey?: string): Promise<{
-        metrics: unknown;
+    getConsolidatedDashboardData(filter: EventFilter, authContext: AuthContext, cacheKey?: string): Promise<{ metrics: unknown;
         events: UnifiedAnalyticsEvent[];
         timeSeriesData: unknown[];
-        integrationStatus: IntegrationStatus;
+        integrationStatus: IntegrationStatus }
 }
     }>;
     /**
@@ -110,10 +103,10 @@ export declare class DashboardIntegrationService {
      * Get widget-specific performance data
      */
     getWidgetPerformanceData();
-      widgetId: string,
-      widgetType: string,
-      filter: EventFilter,
-      authContext: AuthContext,
+      widgetId: string
+      widgetType: string
+      filter: EventFilter
+      authContext: AuthContext
     ): Promise<any>;
     /**
      * Get performance widget data from performance monitoring system
@@ -168,11 +161,9 @@ export declare class DashboardIntegrationService {
     /**
      * Get integration status summary
      */
-    getIntegrationSummary(): {
-        legacySystems: LegacyAnalyticsSystem[];
+    getIntegrationSummary(): { legacySystems: LegacyAnalyticsSystem[];
         performanceMetrics: WidgetPerformanceMetrics[];
-        integrationStatus: unknown;
-    };
+        integrationStatus: unknown };
     /**
      * Force refresh of system health checks
      */
@@ -184,11 +175,9 @@ export declare class DashboardIntegrationService {
     /**
      * Get cache statistics
      */
-    getCacheStats(): {
-        totalEntries: number;
+    getCacheStats(): { totalEntries: number;
         hitRate: number;
-        memoryUsage: number;
-    };
+        memoryUsage: number };
 
 export default DashboardIntegrationService;
 //# sourceMappingURL=DashboardIntegrationService.d.ts.map

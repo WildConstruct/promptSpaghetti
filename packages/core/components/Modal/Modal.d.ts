@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 
 }
+}
 export interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -28,4 +29,5 @@ export interface ModalProps {
 export declare const Modal: React.FC<ModalProps>;
 export default Modal;
 //# sourceMappingURL=Modal.d.ts.map
+}
 }

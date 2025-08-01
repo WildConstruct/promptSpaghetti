@@ -15,18 +15,18 @@ import {
   createGunzip,
   createInflate,
   createBrotliDecompress
-} from 'zlib';
+ from 'zlib';
 import { 
   compressionService,
   CompressionAlgorithm,
   CompressionLevel,
   DataType,
   CompressionResult
-} from '../../../packages/core/utils/CompressionService';
+ from '../../../packages/core/utils/CompressionService';
 import { join, dirname, basename, extname } from 'path';
 
-}
-}
+
+
 export interface FileCompressionOptions {
   algorithm?: CompressionAlgorithm;
   level?: CompressionLevel;
@@ -41,12 +41,13 @@ export interface FileCompressionOptions {
   excludePatterns?: string[];
   maxFileSize?: number; // bytes
   minFileSize?: number; // bytes
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FileCompressionResult extends CompressionResult {
   inputPath: string;
   outputPath: string;
@@ -55,10 +56,10 @@ export interface FileCompressionResult extends CompressionResult {
   processingTime: number;
   skipped?: boolean;
   skipReason?: string;
-}
 
-}
-}
+
+
+
 export interface BatchCompressionResult {
   totalFiles: number;
   processedFiles: number;
@@ -70,13 +71,14 @@ export interface BatchCompressionResult {
   totalProcessingTime: number;
   averageCompressionRatio: number;
   results: FileCompressionResult[];
-}
-}
-  errors: Array<{ file: string; error: string }>;
-}
 
-}
-}
+
+
+  errors: Array<{ file: string; error: string }>;
+
+
+
+
 export interface ArchiveOptions {
   algorithm?: CompressionAlgorithm;
   level?: CompressionLevel;
@@ -84,9 +86,10 @@ export interface ArchiveOptions {
   followSymlinks?: boolean;
   preservePermissions?: boolean;
   includeMetadata?: boolean;
-}
-}
-}
+
+
+
+
 
 const DEFAULT_FILE_OPTIONS: FileCompressionOptions = {
   algorithm: CompressionAlgorithm.GZIP,
@@ -123,7 +126,7 @@ export class FileCompressionUtils {
       const stats = await fs.stat(inputPath);
       if (!stats.isFile()) {
         throw new Error(`Input path is not a file: ${inputPath}`);
-      }
+
       
       const inputSize = stats.size;
       
@@ -146,7 +149,7 @@ export class FileCompressionUtils {
           compressionTime: 0,
           data: Buffer.alloc(0)
         };
-      }
+
       
       if (opts.minFileSize && inputSize < opts.minFileSize) {
         return {
@@ -166,7 +169,7 @@ export class FileCompressionUtils {
           compressionTime: 0,
           data: Buffer.alloc(0)
         };
-      }
+
       
       // Determine output path
       if (!outputPath) {
@@ -176,8 +179,8 @@ export class FileCompressionUtils {
         if (opts.outputDir) {
           const filename = basename(outputPath);
           outputPath = join(opts.outputDir, filename);
-        }
-      }
+
+
       
       // Check if output already exists
       if (opts.skipExisting) {
@@ -200,10 +203,10 @@ export class FileCompressionUtils {
             compressionTime: 0,
             data: Buffer.alloc(0)
           };
-        } catch {
+ catch {
           // File doesn't exist, continue with compression
-        }
-      }
+
+
       
       // Ensure output directory exists
       await fs.mkdir(dirname(outputPath), { recursive: true });
@@ -211,11 +214,10 @@ export class FileCompressionUtils {
       // Perform streaming compression for large files
       if (inputSize > 10 * 1024 * 1024) { // 10MB
         return await this.compressFileStreaming(inputPath, outputPath, opts, inputSize, startTime);
-      } else {
+ else {
         return await this.compressFileInMemory(inputPath, outputPath, opts, inputSize, startTime);
-      }
-      
-    } catch (error) {
+
+ catch (error) {
       return {
         success: false,
         inputPath,
@@ -232,8 +234,8 @@ export class FileCompressionUtils {
         compressionTime: 0,
         data: Buffer.alloc(0)
       };
-    }
-  }
+
+
   
   /**
    * Compress multiple files in batch
@@ -270,23 +272,23 @@ export class FileCompressionUtils {
           
           if (result.skipped) {
             skippedFiles++;
-          } else if (result.success) {
+ else if (result.success) {
             successfulFiles++;
-          } else {
+ else {
             failedFiles++;
-          }
+
           
           return result;
-        } catch (error) {
+ catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
           errors.push({ file: inputPath, error: errorMessage });
           failedFiles++;
           return null;
-        }
+
       });
       
       await Promise.all(batchPromises);
-    }
+
     
     const averageCompressionRatio = totalInputSize > 0 ? totalOutputSize / totalInputSize : 1;
     
@@ -303,7 +305,7 @@ export class FileCompressionUtils {
       results,
       errors
     };
-  }
+
   
   /**
    * Compress directory recursively
@@ -316,7 +318,7 @@ export class FileCompressionUtils {
     const opts = { ...DEFAULT_FILE_OPTIONS, ...options, recursive: true };
     const files = await this.findFilesToCompress(directoryPath, opts);
     return await this.compressFiles(files, opts);
-  }
+
   
   /**
    * Create compressed archive from files/directories
@@ -358,7 +360,7 @@ export class FileCompressionUtils {
       
       if (!result.success) {
         throw new Error(result.error || 'Archive compression failed');
-      }
+
       
       // Write compressed archive to disk
       await fs.writeFile(archivePath, result.data);
@@ -367,8 +369,7 @@ export class FileCompressionUtils {
         ...result,
         compressionTime: performance.now() - startTime
       };
-      
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         originalSize: 0,
@@ -380,8 +381,8 @@ export class FileCompressionUtils {
         data: Buffer.alloc(0),
         error: error instanceof Error ? error.message : 'Archive creation failed'
       };
-    }
-  }
+
+
   
   /**
    * Decompress a file
@@ -398,7 +399,7 @@ export class FileCompressionUtils {
     outputSize: number;
     processingTime: number;
     error?: string;
-  }> {
+> {
 
     const startTime = performance.now();
     
@@ -409,12 +410,12 @@ export class FileCompressionUtils {
       // Determine output path
       if (!outputPath) {
         outputPath = this.getDecompressedFilename(inputPath);
-      }
+
       
       // Determine algorithm from file extension if not provided
       if (!algorithm) {
         algorithm = this.algorithmFromExtension(inputPath);
-      }
+
       
       // Read compressed data
       const compressedData = await fs.readFile(inputPath);
@@ -433,8 +434,7 @@ export class FileCompressionUtils {
         outputSize: decompressedData.length,
         processingTime: performance.now() - startTime
       };
-      
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         inputPath,
@@ -444,8 +444,8 @@ export class FileCompressionUtils {
         processingTime: performance.now() - startTime,
         error: error instanceof Error ? error.message : 'Decompression failed'
       };
-    }
-  }
+
+
   
   // Private Helper Methods
   
@@ -476,12 +476,12 @@ export class FileCompressionUtils {
       compressStream = createBrotliCompress({
         params: {
           [require('zlib').constants.BROTLI_PARAM_QUALITY]: level
-        }
+
       });
       break;
     default:
       throw new Error(`Streaming compression not supported for ${algorithm}`);
-    }
+
     
     // Create streams
     const readStream = createReadStream(inputPath);
@@ -509,7 +509,7 @@ export class FileCompressionUtils {
       compressionTime: performance.now() - startTime,
       data: Buffer.alloc(0) // Not loaded into memory for streaming
     };
-  }
+
   
   /**
    * Compress file in memory for smaller files
@@ -538,7 +538,7 @@ export class FileCompressionUtils {
     
     if (!result.success) {
       throw new Error(result.error || 'Compression failed');
-    }
+
     
     // Write compressed data
     await fs.writeFile(outputPath, result.data);
@@ -558,7 +558,7 @@ export class FileCompressionUtils {
       compressionTime: result.compressionTime,
       data: result.data
     };
-  }
+
   
   /**
    * Find files to compress in directory
@@ -579,19 +579,19 @@ export class FileCompressionUtils {
         if (entry.isDirectory()) {
           if (options.recursive) {
             await processDirectory(fullPath);
-          }
-        } else if (entry.isFile()) {
+
+ else if (entry.isFile()) {
           // Check if file matches patterns
           if (this.matchesPatterns(entry.name, options)) {
             files.push(fullPath);
-          }
-        }
-      }
+
+
+
     };
     
     await processDirectory(directoryPath);
     return files;
-  }
+
   
   /**
    * Check if filename matches include/exclude patterns
@@ -600,26 +600,26 @@ export class FileCompressionUtils {
     // Check hidden files
     if (!options.includeHidden && filename.startsWith('.')) {
       return false;
-    }
+
     
     // Check exclude patterns
     if (options.excludePatterns) {
       for (const pattern of options.excludePatterns) {
         if (filename.match(new RegExp(pattern))) {
           return false;
-        }
-      }
-    }
+
+
+
     
     // Check include patterns
     if (options.filePatterns) {
       return options.filePatterns.some(pattern => 
         filename.match(new RegExp(pattern))
       );
-    }
+
     
     return true;
-  }
+
   
   /**
    * Get default file suffix for compression algorithm
@@ -634,8 +634,8 @@ export class FileCompressionUtils {
       return '.br';
     default:
       return '.compressed';
-    }
-  }
+
+
   
   /**
    * Get data type from file extension
@@ -663,8 +663,8 @@ export class FileCompressionUtils {
       return DataType.TEXT;
     default:
       return DataType.BINARY;
-    }
-  }
+
+
   
   /**
    * Get decompressed filename by removing compression extension
@@ -675,11 +675,11 @@ export class FileCompressionUtils {
     for (const suffix of suffixes) {
       if (compressedPath.endsWith(suffix)) {
         return compressedPath.slice(0, -suffix.length);
-      }
-    }
+
+
     
     return compressedPath + '.decompressed';
-  }
+
   
   /**
    * Determine compression algorithm from file extension
@@ -689,7 +689,7 @@ export class FileCompressionUtils {
     if (filePath.endsWith('.zz')) return CompressionAlgorithm.DEFLATE;
     if (filePath.endsWith('.br')) return CompressionAlgorithm.BROTLI;
     return CompressionAlgorithm.GZIP; // Default
-  }
+
   
   /**
    * Collect files for archive creation
@@ -710,15 +710,15 @@ export class FileCompressionUtils {
           relativePath: basename(inputPath),
           data
         });
-      } else if (stats.isDirectory() && options.includeDirectoryStructure) {
+ else if (stats.isDirectory() && options.includeDirectoryStructure) {
         // Recursively collect directory files
         const dirFiles = await this.collectDirectoryFiles(inputPath, inputPath, options);
         files.push(...dirFiles);
-      }
-    }
+
+
     
     return files;
-  }
+
   
   /**
    * Collect files from directory for archive
@@ -742,14 +742,14 @@ export class FileCompressionUtils {
           relativePath,
           data
         });
-      } else if (entry.isDirectory()) {
+ else if (entry.isDirectory()) {
         const subFiles = await this.collectDirectoryFiles(basePath, fullPath, options);
         files.push(...subFiles);
-      }
-    }
+
+
     
     return files;
-  }
+
   
   /**
    * Create archive data structure
@@ -767,12 +767,12 @@ export class FileCompressionUtils {
       metadata: options.includeMetadata ? {
         created: new Date().toISOString(),
         checksum: require('crypto').createHash('sha256').update(file.data).digest('hex')
-      } : undefined
+ : undefined
     }));
     
     const archiveData = JSON.stringify(archiveEntries);
     return Buffer.from(archiveData, 'utf8');
-  }
-}
+
+
 
 export default FileCompressionUtils;

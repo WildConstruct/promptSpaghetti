@@ -81,13 +81,13 @@ export async function directPermissionsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof DirectPermissionGrantSchema>
-  }>('/grant', {
+>('/grant', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'manage_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -107,8 +107,7 @@ export async function directPermissionsRoutes(
         data: permission,
         message: 'Direct permission granted successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error granting direct permission:', error);
       
       if (error instanceof z.ZodError) {
@@ -117,14 +116,14 @@ export async function directPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to grant direct permission',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -133,13 +132,13 @@ export async function directPermissionsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof BulkPermissionGrantSchema>
-  }>('/bulk-grant', {
+>('/bulk-grant', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'manage_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -159,8 +158,7 @@ export async function directPermissionsRoutes(
         data: permissions,
         message: `${permissions.length} direct permissions granted successfully`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error granting bulk permissions:', error);
       
       if (error instanceof z.ZodError) {
@@ -169,14 +167,14 @@ export async function directPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to grant bulk permissions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -186,13 +184,13 @@ export async function directPermissionsRoutes(
   fastify.post<{
     Params: z.infer<typeof PermissionParamsSchema>;
     Body: z.infer<typeof RevokePermissionSchema>
-  }>('/:permissionId/revoke', {
+>('/:permissionId/revoke', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'manage_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -212,8 +210,7 @@ export async function directPermissionsRoutes(
         success: true,
         message: 'Direct permission revoked successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error revoking direct permission:', error);
       
       if (error instanceof z.ZodError) {
@@ -222,14 +219,14 @@ export async function directPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to revoke direct permission',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -239,13 +236,13 @@ export async function directPermissionsRoutes(
   fastify.get<{
     Params: z.infer<typeof UserParamsSchema>;
     Querystring: { activeOnly?: boolean }
-  }>('/users/:userId', {
+>('/users/:userId', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'read_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -267,10 +264,9 @@ export async function directPermissionsRoutes(
           expiringWithin24Hours: permissions.filter(p => 
             p.expiresAt && new Date(p.expiresAt) <= new Date(Date.now() + 24 * 60 * 60 * 1000)
           ).length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting user direct permissions:', error);
       
       if (error instanceof z.ZodError) {
@@ -279,14 +275,14 @@ export async function directPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to get user direct permissions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -295,13 +291,13 @@ export async function directPermissionsRoutes(
    */
   fastify.post<{
     Body: z.infer<typeof CheckPermissionSchema>
-  }>('/check', {
+>('/check', {
     preHandler: fastify.requirePermission([
       {
         resource: 'users',
         action: 'read_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -321,10 +317,9 @@ export async function directPermissionsRoutes(
           permission: `${checkData.resource}:${checkData.action}`,
           userId: checkData.userId,
           checkedAt: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error checking direct permission:', error);
       
       if (error instanceof z.ZodError) {
@@ -333,14 +328,14 @@ export async function directPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to check direct permission',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -349,13 +344,13 @@ export async function directPermissionsRoutes(
    */
   fastify.get<{
     Querystring: z.infer<typeof PermissionQuerySchema>
-  }>('/search', {
+>('/search', {
     preHandler: fastify.requirePermission([
       {
         resource: 'system',
         action: 'view_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -381,14 +376,13 @@ export async function directPermissionsRoutes(
           totalPages,
           hasNextPage: page < totalPages,
           hasPreviousPage: page > 1
-  }
+
         metadata: {
           searchCriteria: searchQuery,
           resultsFound: permissions.length
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error searching direct permissions:', error);
       
       if (error instanceof z.ZodError) {
@@ -397,14 +391,14 @@ export async function directPermissionsRoutes(
           error: 'Validation error',
           details: error.errors
         });
-      }
+
 
       return reply.code(500).send({
         success: false,
         error: 'Failed to search direct permissions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -413,13 +407,13 @@ export async function directPermissionsRoutes(
    */
   fastify.get<{
     Querystring: { withinHours?: number }
-  }>('/expiring', {
+>('/expiring', {
     preHandler: fastify.requirePermission([
       {
         resource: 'system',
         action: 'view_permissions',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -432,7 +426,7 @@ export async function directPermissionsRoutes(
           error: 'Invalid withinHours parameter',
           message: 'withinHours must be between 1 and 8760'
         });
-      }
+
 
       const expiringPermissions = await directPermissionService.getExpiringPermissions(withinHours);
 
@@ -444,10 +438,9 @@ export async function directPermissionsRoutes(
           expiringCount: expiringPermissions.length,
           timeframe: `${withinHours} hour${withinHours !== 1 ? 's' : ''}`,
           checkTime: new Date().toISOString()
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting expiring permissions:', error);
       
       return reply.code(500).send({
@@ -455,7 +448,7 @@ export async function directPermissionsRoutes(
         error: 'Failed to get expiring permissions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -468,7 +461,7 @@ export async function directPermissionsRoutes(
         resource: 'system',
         action: 'admin',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -479,11 +472,10 @@ export async function directPermissionsRoutes(
         data: {
           expiredCount,
           cleanupAt: new Date().toISOString()
-  }
+
         message: `Cleaned up ${expiredCount} expired permission${expiredCount !== 1 ? 's' : ''}`
       });
-
-    } catch (error) {
+ catch (error) {
       console.error('Error cleaning up expired permissions:', error);
       
       return reply.code(500).send({
@@ -491,7 +483,7 @@ export async function directPermissionsRoutes(
         error: 'Failed to cleanup expired permissions',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -504,7 +496,7 @@ export async function directPermissionsRoutes(
         resource: 'system',
         action: 'view_analytics',
         allowSuperAdmin: true
-      }
+
     ])
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -516,10 +508,9 @@ export async function directPermissionsRoutes(
         metadata: {
           generatedAt: new Date().toISOString(),
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       console.error('Error getting permission statistics:', error);
       
       return reply.code(500).send({
@@ -527,7 +518,7 @@ export async function directPermissionsRoutes(
         error: 'Failed to get permission statistics',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
 
   /**
@@ -547,7 +538,7 @@ export async function directPermissionsRoutes(
           permissionSearch: 'available',
           automaticExpiration: 'operational',
           auditLogging: 'operational'
-  }
+
         uptime: process.uptime(),
         environment: process.env.NODE_ENV || 'development'
       };
@@ -556,13 +547,11 @@ export async function directPermissionsRoutes(
         success: true,
         data: healthStatus
       });
-
-    } catch (error) {
+ catch (error) {
       return reply.code(503).send({
         success: false,
         error: 'Service unhealthy',
         message: error instanceof Error ? error.message : String(error)
       });
-    }
+
   });
-}

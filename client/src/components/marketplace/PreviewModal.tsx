@@ -3,29 +3,31 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { Badge } from '../common/Badge';
 import './PreviewModal.css';
-}
+
+
 interface PreviewModalProps {
   templateId: string;,
-  template: Error;
+  template: Error;,
   onClose: () => void;
   className?: string;
   interface PreviewMetadata {
   template_id: string;,
-  version_id: string;
+  version_id: string;,
   claude_model: string;,
-  estimated_tokens: number;
+  estimated_tokens: number;,
   estimated_cost: number;,
-  safety_score: number;
+  safety_score: number;,
   can_preview: boolean;,
   preview_limitations: string;
   interface PreviewResponse {
   output: string;,
-  cost_estimate: number;
+  cost_estimate: number;,
   quality_score: number;,
-  token_usage: {
+  token_usage: {,
   input_tokens: number;,
   output_tokens: number;
-}
+
+
 };
   cached: boolean;,
   redacted_sections: string;
@@ -53,9 +55,9 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({)
         const data = await response.json();
         setMetadata(data);
         setSelectedModel(data.claude_model);
-      } else {
+ else {
         setError('Failed to load preview information');
-    } catch (err) {
+ catch (err) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.debug('Preview metadata error:', err);
   setError('Failed to load preview information');
@@ -73,23 +75,23 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({)
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`}
   },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   version_id: metadata.version_id,
   user_input: Object.keys(userInput).length > 0 ? userInput : undefined,
   claude_model_override: selectedModel !== metadata.claude_model ? selectedModel : undefined,
-}
+
       });
       if (response.ok) {
         const data = await response.json();
         setPreview(data);
-      } else {
+ else {
         const errorData = await response.json();
         setError(errorData.error || 'Failed to generate preview');
-    } catch (err) {
+ catch (err) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   console.debug('Preview generation error:', err);
   setError('Failed to generate preview');
-} finally {
+ finally {
       setLoading(false);
   };
   const handleInputChange = (key: string, value: string) => {
@@ -349,7 +351,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({)
             onClick={() => {
   // TODO: Integrate with purchase flow,
   console.log('Purchase template:', templateId);
-}}
+}
             className="purchase-button"
           >
             {template.price_cents === 0 ? 'Get Free Template' : `Purchase for ${(template.price_cents / 100).toFixed(2)}`}

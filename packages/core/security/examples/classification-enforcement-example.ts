@@ -5,17 +5,15 @@
  * for securing data access based on classification levels
  */
 import express, { Request, Response } from 'express';
-import {
-  ClassificationEnforcer,
+import { ClassificationEnforcer }
   createClassificationEnforcer
-} from '../ClassificationEnforcer';
-import {
-  createClassificationEnforcementMiddleware,
+ from '../ClassificationEnforcer';
+import { createClassificationEnforcementMiddleware,
   createAccessControlMiddleware,
   createOperationValidationMiddleware,
-  enforceClassification,
+  enforceClassification }
   type ClassificationAwareRequest
-} from '../ClassificationEnforcementMiddleware';
+ from '../ClassificationEnforcementMiddleware';
 
 // Create Express app
 const app = express();
@@ -24,18 +22,16 @@ const app = express();
 const enforcer = createClassificationEnforcer('production');
 
 // Global classification enforcement middleware
-app.use(createClassificationEnforcementMiddleware({)
+app.use(createClassificationEnforcementMiddleware({ )
   environment: 'production',
   detailedErrors: false,
-  classificationExtractor: async (req) => {,
+  classificationExtractor: async (req) => { }
   // Custom logic to extract classification from request
   // e.g., from database based on resource ID
-  if (req.params.id) {
-  // In real app, query database for classification
+  if (req.params.id) { // In real app, query database for classification
   return 'CONFIDENTIAL';
-  return null;
-},
-  controlsExtractor: (req) => {,
+  return null },
+  controlsExtractor: (req) => { ,
     const controls = [];
     // Check for MFA
     if (req.headers['x-mfa-verified'] === 'true') {
@@ -43,15 +39,14 @@ app.use(createClassificationEnforcementMiddleware({)
     // Check for encryption
     if (req.secure) {
       controls.push('encryption-in-transit');
-    return controls;
-}));
+    return controls }));
 
 // Example 1: Public data endpoint
 app.get('/api/public/news')
   enforceClassification('PUBLIC'),
   (req: Request, res: Response) => {
     res.json({)
-  articles: [,
+  articles: [
         { title: 'Company Announces New Product', content: '...' }
       ]
     });
@@ -59,14 +54,13 @@ app.get('/api/public/news')
 
 // Example 2: Internal data with specific controls
 app.get('/api/internal/reports/:id')
-  enforceClassification('INTERNAL', {)
-  requiredControls: ['auth-standard', 'audit-standard'],
+  enforceClassification('INTERNAL', { )
+  requiredControls: ['auth-standard', 'audit-standard'] }
 }),
-  (req: Request, res: Response) => {
-    res.json({)
-  report: {
+  (req: Request, res: Response) => { res.json({)
+  report: {,
   id: req.params.id,
-        title: 'Monthly Sales Report',
+        title: 'Monthly Sales Report' }
         data: { /* ... */ }
     });
 );
@@ -75,28 +69,26 @@ app.get('/api/internal/reports/:id')
 app.get('/api/confidential/customer/:id')
   enforceClassification('CONFIDENTIAL'),
   createAccessControlMiddleware('read'),
-  async (req: ClassificationAwareRequest, res: Response) => {
-  // Access decision is available in request
+  async (req: ClassificationAwareRequest, res: Response) => { // Access decision is available in request
   const decision = req.classification?.accessDecision;
   if (decision?.conditions) {
   console.log('Access granted with conditions:', decision.conditions);
   res.json({)
-  customer: {
+  customer: {,
   id: req.params.id,
   name: 'ACME Corp',
-  revenue: 1000000,
+  revenue: 1000000 }
 });
 );
 
 // Example 4: Restricted data with full validation
 app.post('/api/restricted/financial-data')
-  enforceClassification('RESTRICTED', {)
+  enforceClassification('RESTRICTED', { )
   allowedOperations: ['write'],
-  requiredControls: ['auth-strong_mfa', 'encryption', 'approval-workflow'],
+  requiredControls: ['auth-strong_mfa', 'encryption', 'approval-workflow'] }
 }),
   createOperationValidationMiddleware(),
-  async (req: ClassificationAwareRequest, res: Response) => {
-  // Enforcement result is available
+  async (req: ClassificationAwareRequest, res: Response) => { // Enforcement result is available
   const enforcement = req.classification?.enforcement;
   if (enforcement) {
   console.log('Risk score:', enforcement.riskScore);
@@ -105,14 +97,13 @@ app.post('/api/restricted/financial-data')
   res.json({)
   success: true,
   id: 'fin-' + Date.now(),
-  message: 'Financial data securely stored',
+  message: 'Financial data securely stored' }
 });
 );
 
 // Example 5: Export operation with special handling
 app.post('/api/data/:id/export')
-  async (req: ClassificationAwareRequest, res: Response) => {
-  const dataId = req.params.id;
+  async (req: ClassificationAwareRequest, res: Response) => { const dataId = req.params.id;
   // Get data classification (in real app, from database)
   const classification = 'CONFIDENTIAL';
   // Validate export operation
@@ -125,22 +116,21 @@ app.post('/api/data/:id/export')
   environment: process.env.NODE_ENV || 'production',
   timestamp: new Date(),
   source: 'api',
-  requestId: req.headers['x-request-id'] as string || 'req-' + Date.now(),
-}
+  requestId: req.headers['x-request-id'] as string || 'req-' + Date.now() }
+
       classification,
       { id: dataId }
     );
-    if (!validation.valid) {
-  return res.status(403).json({)
+    if (!validation.valid) { return res.status(403).json({)
   error: 'Export not allowed',
   issues: validation.issues,
-  requiredControls: validation.controls,
+  requiredControls: validation.controls }
 });
     // Perform export with required controls
-    res.json({)
+    res.json({ )
   exportUrl: '/exports/' + dataId,
   controls: validation.controls,
-  expiresIn: '15 minutes',
+  expiresIn: '15 minutes' }
 });
 );
 
@@ -156,8 +146,7 @@ async function processDataOperation()
     dataId,
     classification,
     operation,
-    {
-      purpose: 'data-processing',
+    { purpose: 'data-processing' }
       environment: 'production');
   if (!decision.granted) {
     throw new Error(`Access denied: ${decision.reason}`);}
@@ -183,8 +172,7 @@ async function batchProcessData()
   userId: string,
   dataItems: Array<{ id: string; classification: any; value: any }>
   const results = [];
-  for (const item of dataItems) {
-  const enforcementResult = await enforcer.enforceClassification(;);
+  for (const item of dataItems) { const enforcementResult = await enforcer.enforceClassification(;);
   item.classification,
   {
   operation: 'read',
@@ -194,41 +182,39 @@ async function batchProcessData()
   environment: 'production',
   timestamp: new Date(),
   source: 'batch',
-  requestId: 'batch-req-' + item.id,
-}
+  requestId: 'batch-req-' + item.id }
+
       ['auth-standard', 'audit-enhanced']
     );
-    if (enforcementResult.allowed) {
-  results.push({)
+    if (enforcementResult.allowed) { results.push({)
   id: item.id,
   value: item.value,
-  riskScore: enforcementResult.riskScore,
+  riskScore: enforcementResult.riskScore }
 });
-    } else {
+ else {
       console.warn(`Access denied for item ${item.id}:`)}
         enforcementResult.violations);
   return results;
 
 // Example 8: Custom enforcement with overrides
-function createCustomEnforcer() {
-  return new ClassificationEnforcer({)
+function createCustomEnforcer() { return new ClassificationEnforcer({)
   strictMode: false,
   gracePeriodDays: 30,
   policyOverrides: new Map([),
   ['INTERNAL', {
-  access: {
+  access: {,
   authenticationLevel: 'STANDARD',
   authorizationRequired: false,
   approvalWorkflow: false,
   timeRestrictions: false,
   purposeLimitation: false,
   auditLogging: 'STANDARD',
-  exportRestrictions: false,
-}]
+  exportRestrictions: false }
+]
     ]),
-    exemptions: {
+    exemptions: { ,
   users: ['admin-user', 'system-user'],
-  roles: ['security-admin', 'data-steward'],
+  roles: ['security-admin', 'data-steward'] }
 });
 
 // Example 9: Monitoring and auditing
@@ -237,7 +223,7 @@ app.use((req: ClassificationAwareRequest, res: Response, next) => {
   res.on('finish', () => {
     if (req.classification?.enforcement) {
       const { enforcement } = req.classification;
-      console.log('Classification Enforcement Audit:', {)
+      console.log('Classification Enforcement Audit:', { )
   timestamp: new Date().toISOString(),
   userId: req.user?.id,
   path: req.path,
@@ -246,15 +232,14 @@ app.use((req: ClassificationAwareRequest, res: Response, next) => {
   allowed: enforcement.allowed,
   riskScore: enforcement.riskScore,
   violations: enforcement.violations.length,
-  auditId: enforcement.auditId,
+  auditId: enforcement.auditId }
 });
   });
   next();
 });
 
 // Example 10: Error handling
-app.use((err: Error, req: ClassificationAwareRequest, res: Response, next: any) => {
-  if (err.message.includes('Classification policy violation')) {
+app.use((err: Error, req: ClassificationAwareRequest, res: Response, next: any) => { if (err.message.includes('Classification policy violation')) {
   // Handle classification errors specially
   const enforcement = req.classification?.enforcement;
   res.status(403).json({)
@@ -264,18 +249,15 @@ app.use((err: Error, req: ClassificationAwareRequest, res: Response, next: any) 
   // Only show details in development
   ...(process.env.NODE_ENV === 'development' && {)
   violations: enforcement?.violations,
-  requiredControls: enforcement?.requiredControls,
-}
+  requiredControls: enforcement?.requiredControls }
+
     });
-  } else {
-    next(err);
-});
+ else { next(err) });
 
 // Export for use in other modules
-export {
-  app,
+export { app,
   enforcer,
   processDataOperation,
-  batchProcessData,
+  batchProcessData }
   createCustomEnforcer
 };

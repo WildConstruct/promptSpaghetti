@@ -11,14 +11,14 @@ import {
   ValidationEngineConfig,
   ValidationContext,
   ValidationReport
-} from './ValidationRulesEngine';
+ from './ValidationRulesEngine';
 
 // Export main validation engine
 export {
   ValidationRulesEngine,
   ValidationSeverity,
   ValidationCategory
-} from './ValidationRulesEngine';
+ from './ValidationRulesEngine';
 
 export type {
   ValidationRule,
@@ -26,7 +26,7 @@ export type {
   ValidationContext,
   ValidationReport,
   ValidationEngineConfig
-} from './ValidationRulesEngine';
+ from './ValidationRulesEngine';
 
 // Export additional validation rules
 export {
@@ -36,7 +36,7 @@ export {
   SensitiveContentRule,
   ProcessingTimeRule,
   MemoryUsageRule
-} from './AdditionalValidationRules';
+ from './AdditionalValidationRules';
 
 /**
  * Factory function to create a validation engine with recommended configuration
@@ -52,7 +52,7 @@ export function createValidationEngine(config?: Partial<ValidationEngineConfig>)
   };
 
   return new ValidationRulesEngine({ ...defaultConfig, ...config });
-}
+
 
 /**
  * Factory function to create a strict validation engine for production
@@ -66,7 +66,7 @@ export function createStrictValidationEngine(): ValidationRulesEngine {
     parallelExecution: true,
     enableMetrics: true
   });
-}
+
 
 /**
  * Factory function to create a development validation engine with auto-fix
@@ -80,7 +80,7 @@ export function createDevelopmentValidationEngine(): ValidationRulesEngine {
     parallelExecution: false, // Sequential for better debugging
     enableMetrics: true
   });
-}
+
 
 /**
  * Factory function to create a security-focused validation engine
@@ -94,7 +94,7 @@ export function createSecurityValidationEngine(): ValidationRulesEngine {
     parallelExecution: true,
     enableMetrics: true
   });
-}
+
 
 /**
  * Factory function to create a performance-focused validation engine
@@ -108,7 +108,7 @@ export function createPerformanceValidationEngine(): ValidationRulesEngine {
     parallelExecution: true,
     enableMetrics: true
   });
-}
+
 
 /**
  * Utility function to validate a graph with automatic platform detection
@@ -136,11 +136,11 @@ export async function validateGraph(
       edgeCount: graph.edges?.length || 0,
       complexity: calculateBasicComplexity(graph),
       estimatedTokens: estimateTokenCount(graph)
-    }
+
   };
 
   return engine.validate(context);
-}
+
 
 /**
  * Utility function to validate and auto-fix a graph
@@ -153,7 +153,7 @@ export async function validateAndFixGraph(
   report: ValidationReport;
   fixes: Array<{ ruleId: string; changes: any[]; success: boolean }>;
   modifiedGraph: any;
-}> {
+> {
   const engine = createDevelopmentValidationEngine();
   
   const detectedPlatform = targetPlatform || detectPlatformFromGraph(graph) || 'generic';
@@ -168,7 +168,7 @@ export async function validateAndFixGraph(
       edgeCount: graph.edges?.length || 0,
       complexity: calculateBasicComplexity(graph),
       estimatedTokens: estimateTokenCount(graph)
-    }
+
   };
 
   const { report, fixes } = await engine.validateAndFix(context);
@@ -178,7 +178,7 @@ export async function validateAndFixGraph(
     fixes,
     modifiedGraph: context.graph
   };
-}
+
 
 /**
  * Auto-detect platform from graph structure/content
@@ -195,20 +195,20 @@ function detectPlatformFromGraph(graph: any): string | null {
       if (model.includes('gpt') || model.includes('openai')) return 'openai';
       if (model.includes('claude')) return 'anthropic';
       if (model.includes('gemini')) return 'google';
-    }
+
     
     if (nodeData.platform) {
       return String(nodeData.platform).toLowerCase();
-    }
+
     
     // Check content for platform hints
     const content = nodeData.text || nodeData.content || nodeData.prompt || '';
     if (content.includes('--ar ') || content.includes('--style ')) return 'midjourney';
     if (content.includes('DALL-E') || content.includes('dalle')) return 'dalle';
-  }
+
   
   return null;
-}
+
 
 /**
  * Generate basic capabilities for a platform
@@ -223,7 +223,7 @@ function generateBasicCapabilities(platform: string): any {
         temperature: { min: 0, max: 2 },
         max_tokens: { min: 1, max: 4000 },
         top_p: { min: 0, max: 1 }
-      }
+
     },
     anthropic: {
       maxTokens: 8000,
@@ -232,7 +232,7 @@ function generateBasicCapabilities(platform: string): any {
       parameterLimits: {
         temperature: { min: 0, max: 1 },
         max_tokens: { min: 1, max: 8000 }
-      }
+
     },
     midjourney: {
       maxTokens: 1000,
@@ -250,11 +250,11 @@ function generateBasicCapabilities(platform: string): any {
       maxTokens: 2000,
       maxContentLength: 4000,
       supportedNodeTypes: ['output', 'input', 'transform', 'conditional']
-    }
+
   };
   
   return capabilities[platform] || capabilities.generic;
-}
+
 
 /**
  * Calculate basic complexity score for a graph
@@ -265,7 +265,7 @@ function calculateBasicComplexity(graph: any): number {
   
   // Basic cyclomatic complexity
   return Math.max(0, edgeCount - nodeCount + 2);
-}
+
 
 /**
  * Estimate token count for a graph
@@ -282,13 +282,13 @@ function estimateTokenCount(graph: any): number {
     for (const field of contentFields) {
       if (nodeData[field] && typeof nodeData[field] === 'string') {
         totalLength += nodeData[field].length;
-      }
-    }
-  }
+
+
+
   
   // Rough estimation: 1 token ≈ 4 characters
   return Math.ceil(totalLength / 4);
-}
+
 
 /**
  * Validation utility functions
@@ -313,7 +313,7 @@ export   },
     
     if (issues === 0) {
       return `✅ All ${rulesExecuted} validation rules passed (Score: ${score}/100)`;
-    }
+
     
     const parts: string[] = [];
     if (summary.critical > 0) parts.push(`${summary.critical} critical`);
@@ -322,5 +322,5 @@ export   },
     if (summary.info > 0) parts.push(`${summary.info} info`);
     
     return `⚠️ Found ${parts.join(', ')} (Score: ${score}/100)`;
-  }
+
 };

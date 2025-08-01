@@ -228,68 +228,75 @@ export class FlexibleEventSchemaManager {
             this: .validateSchemaDefinition(updated),
             this: .schemas.set(schemaId, updated),
             this: .clearCacheForSchema(schemaId)
-        }(schemaId, string, customizations, (Partial) = {}), EventSchemaDefinition, { const: template = this.getSchemaTemplate(templateName) };
-        const schema = {
-            ...template,
-            id: schemaId,
-            ...customizations,
-            metadata: {
-                ...template.metadata,
-                ...customizations.metadata,
-                createdAt: Date.now(),
-                updatedAt: Date.now(),
-            },
-            this: .registerSchema(schema),
-            return: schema,
-            schema: EventSchemaDefinition,
-            options: ValidationOptions, Promise() {
-                const startTime = Date.now();
-                const result = {
-                    isValid: true,
-                    overallScore: 100,
-                    fieldResults: new Map(),
-                    globalConstraintResults: [],
-                    transformationResults: [],
-                    performance: {
-                        totalTime: 0,
-                        validationTime: 0,
-                        transformationTime: 0,
-                        cacheHitRate: 0,
-                    },
-                    errors: [],
-                    warnings: [],
-                    metadata: {
-                        schemaVersion: schema.version,
-                        validationTimestamp: Date.now(),
-                        validatorVersion: '1.0.0',
-                        processingPipeline: [],
-                    },
-                    try: {
-                        // Validate base requirements
-                        await, this: .validateBaseRequirements(event, schema, result),
-                        // Validate individual properties
-                        await, this: .validateProperties(event, schema, result, options),
-                        // Validate global constraints
-                        await, this: .validateGlobalConstraints(event, schema, result),
-                        // Validate relationships
-                        await, this: .validateRelationships(event, schema, result),
-                        // Calculate overall score
-                        result, : .overallScore = this.calculateOverallScore(result),
-                        result, : .isValid = result.errors.length === 0
-                    }, catch(error) {
-                        result.isValid = false;
-                        result.overallScore = 0;
-                        result.errors.push({});
-                        propertyPath: 'schema',
-                            constraint;
-                        'validation_error',
-                            message;
-                        `Validation failed: ${error}`;
-                    }
-                }, severity;
-            } };
-        result.performance.validationTime = Date.now() - startTime;
-        return result;
+        }();
+        schemaId: string,
+            customizations;
+        (Partial) = {};
+        EventSchemaDefinition;
+        {
+            const template = this.getSchemaTemplate(templateName);
+            const schema = {
+                ...template,
+                id: schemaId,
+                ...customizations,
+                metadata: {
+                    ...template.metadata,
+                    ...customizations.metadata,
+                    createdAt: Date.now(),
+                    updatedAt: Date.now(),
+                },
+                this: .registerSchema(schema),
+                return: schema,
+                schema: EventSchemaDefinition,
+                options: ValidationOptions, Promise() {
+                    const startTime = Date.now();
+                    const result = {
+                        isValid: true,
+                        overallScore: 100,
+                        fieldResults: new Map(),
+                        globalConstraintResults: [],
+                        transformationResults: [],
+                        performance: {
+                            totalTime: 0,
+                            validationTime: 0,
+                            transformationTime: 0,
+                            cacheHitRate: 0,
+                        },
+                        errors: [],
+                        warnings: [],
+                        metadata: {
+                            schemaVersion: schema.version,
+                            validationTimestamp: Date.now(),
+                            validatorVersion: '1.0.0',
+                            processingPipeline: [],
+                        },
+                        try: {
+                            // Validate base requirements
+                            await, this: .validateBaseRequirements(event, schema, result),
+                            // Validate individual properties
+                            await, this: .validateProperties(event, schema, result, options),
+                            // Validate global constraints
+                            await, this: .validateGlobalConstraints(event, schema, result),
+                            // Validate relationships
+                            await, this: .validateRelationships(event, schema, result),
+                            // Calculate overall score
+                            result, : .overallScore = this.calculateOverallScore(result),
+                            result, : .isValid = result.errors.length === 0
+                        }, catch(error) {
+                            result.isValid = false;
+                            result.overallScore = 0;
+                            result.errors.push({});
+                            propertyPath: 'schema',
+                                constraint;
+                            'validation_error',
+                                message;
+                            `Validation failed: ${error}`;
+                        }
+                    }, severity;
+                } };
+            result.performance.validationTime = Date.now() - startTime;
+            return result;
+        }
     }
     schema;
     result;
@@ -324,8 +331,9 @@ for (const field of forbiddenFields) {
 severity: 'major';
 ;
 async;
-validateProperties(event, FlexibleConversionEvent);
-schema: EventSchemaDefinition,
+validateProperties(event, FlexibleConversionEvent),
+    schema;
+EventSchemaDefinition,
     result;
 SchemaValidationResult,
     options;
@@ -498,8 +506,9 @@ Promise < void  > {
                 ;
                 result.score -= ruleResult.score * 10;
                 async;
-                validateGlobalConstraints(event, FlexibleConversionEvent);
-                schema: EventSchemaDefinition,
+                validateGlobalConstraints(event, FlexibleConversionEvent),
+                    schema;
+                EventSchemaDefinition,
                     result;
                 SchemaValidationResult;
                 Promise < void  > {
@@ -533,8 +542,9 @@ Promise < void  > {
                     }
                     ;
                     async;
-                    validateRelationships(event, FlexibleConversionEvent);
-                    schema: EventSchemaDefinition,
+                    validateRelationships(event, FlexibleConversionEvent),
+                        schema;
+                    EventSchemaDefinition,
                         result;
                     SchemaValidationResult;
                     Promise < void  > {
@@ -683,8 +693,9 @@ Promise < void  > {
                                 }
                                 ;
                                 async;
-                                executeCustomRule(rule, ValidationRule);
-                                value: unknown,
+                                executeCustomRule(rule, ValidationRule),
+                                    value;
+                                unknown,
                                     event;
                                 FlexibleConversionEvent;
                                 Promise < RuleValidationResult > {
@@ -727,8 +738,9 @@ Promise < void  > {
                                     };
                                 });
                                 async;
-                                validateRelationship(event, FlexibleConversionEvent);
-                                propertyName: string,
+                                validateRelationship(event, FlexibleConversionEvent),
+                                    propertyName;
+                                string,
                                     relationship;
                                 PropertyRelationshipDefinition;
                                 Promise < RelationshipValidationResult > {
@@ -793,8 +805,9 @@ Promise < void  > {
                                         else {
                                             return false;
                                             return current !== undefined;
-                                            generateCacheKey(event, FlexibleConversionEvent);
-                                            schemaId: string,
+                                            generateCacheKey(event, FlexibleConversionEvent),
+                                                schemaId;
+                                            string,
                                                 options;
                                             ValidationOptions;
                                             string;
@@ -898,13 +911,14 @@ Promise < void  > {
                                                                                     description: 'ID of the template being tracked',
                                                                                     type: 'string',
                                                                                     required: false,
-                                                                                    constraints: [,
+                                                                                    constraints: [
                                                                                         {
                                                                                             type: 'pattern',
                                                                                             value: /^tpl-[a-z0-9]+$/,
                                                                                             errorMessage: 'Template ID must start with "tpl-"',
                                                                                             severity: 'error'
-                                                                                        }],
+                                                                                        }
+                                                                                    ],
                                                                                     typeInfo: {
                                                                                         baseType: 'string',
                                                                                         format: 'template_id',
@@ -923,12 +937,13 @@ Promise < void  > {
                                                                                             businessContext: 'Template identification',
                                                                                             dataSource: 'marketplace',
                                                                                             updateFrequency: 'on_event',
-                                                                                            examples: [,
+                                                                                            examples: [
                                                                                                 {
                                                                                                     description: 'Valid template ID',
                                                                                                     validExample: 'tpl-character-dev-001',
                                                                                                     explanation: 'Follows the required pattern'
-                                                                                                }]
+                                                                                                }
+                                                                                            ]
                                                                                         }
                                                                                     }
                                                                                 }]: 

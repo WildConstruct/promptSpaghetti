@@ -6,8 +6,8 @@
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
-}
-}
+
+
 export interface IPLimitingRule {
   id: string;
   name: string;
@@ -17,8 +17,9 @@ export interface IPLimitingRule {
   
   ipTargets: {
     specificIPs?: string[];
-}
-}
+
+
+
     ipRanges?: Array<{ start: string; end: string; cidr?: string }>;
     countries?: string[];
     regions?: string[];
@@ -68,12 +69,12 @@ export interface IPLimitingRule {
       threshold: number; // number of violations
       action: 'temp_ban' | 'perm_ban' | 'manual_review' | 'notify_admin';
       duration?: number; // milliseconds for temp bans
-    }>;
+>;
     notifications?: Array<{
       trigger: 'first_violation' | 'repeat_violation' | 'escalation';
       recipients: ('user' | 'admin' | 'security_team')[];
       methods: ('email' | 'sms' | 'webhook' | 'dashboard')[];
-    }>;
+>;
   };
   
   exemptions?: {
@@ -87,10 +88,10 @@ export interface IPLimitingRule {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-}
 
-}
-}
+
+
+
 export interface GeolocationData {
   ip: string;
   country: string;
@@ -109,12 +110,13 @@ export interface GeolocationData {
   isHosting: boolean;
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
   lastUpdated: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DeviceFingerprint {
   id: string;
   userId: string;
@@ -132,12 +134,13 @@ export interface DeviceFingerprint {
   firstSeen: Date;
   lastSeen: Date;
   violationCount: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserBehaviorProfile {
   userId: string;
   accountCreated: Date;
@@ -147,8 +150,9 @@ export interface UserBehaviorProfile {
   loginPatterns: {
     commonHours: number[]; // 0-23
     commonDays: number[]; // 0-6
-}
-}
+
+
+
     commonLocations: Array<{ country: string; region: string; frequency: number }>;
     averageSessionDuration: number; // minutes
     deviceRotation: number; // devices per month
@@ -172,10 +176,10 @@ export interface UserBehaviorProfile {
   };
   
   lastUpdated: Date;
-}
 
-}
-}
+
+
+
 export interface LimitingViolation {
   id: string;
   userId?: string;
@@ -192,15 +196,16 @@ export interface LimitingViolation {
     geolocation?: GeolocationData;
     deviceFingerprint?: string;
     sessionId?: string;
-}
-}
+
+
+
   };
   actionTaken: string[];
   resolved: boolean;
   resolvedAt?: Date;
   resolvedBy?: string;
   notes?: string;
-}
+
 
 export class IPAccountLimitingService extends EventEmitter {
   private rules: Map<string, IPLimitingRule> = new Map();
@@ -215,7 +220,7 @@ export class IPAccountLimitingService extends EventEmitter {
     super();
     this.initializeDefaultRules();
     this.startMaintenanceTasks();
-  }
+
 
   /**
    * Check if IP and account should be limited
@@ -235,7 +240,7 @@ export class IPAccountLimitingService extends EventEmitter {
     requiresAuth: string[];
     message?: string;
     banDuration?: number;
-  }> {
+> {
 
     const { ip, userId, userAgent, endpoint, method } = request;
     
@@ -251,10 +256,10 @@ export class IPAccountLimitingService extends EventEmitter {
           message: `IP banned: ${ban.reason}`,
           banDuration: ban.expiresAt ? ban.expiresAt.getTime() - Date.now() : undefined
         };
-      } else {
+ else {
         this.bannedIPs.delete(ip);
-      }
-    }
+
+
 
     // Check if IP is trusted
     if (this.trustedIPs.has(ip)) {
@@ -264,7 +269,7 @@ export class IPAccountLimitingService extends EventEmitter {
         violations: [],
         requiresAuth: []
       };
-    }
+
 
     // Get geolocation data
     const geoData = await this.getGeolocationData(ip);
@@ -273,13 +278,13 @@ export class IPAccountLimitingService extends EventEmitter {
     let deviceFingerprint: DeviceFingerprint | undefined;
     if (userId) {
       deviceFingerprint = await this.getOrCreateDeviceFingerprint(userId, userAgent, request.headers);
-    }
+
 
     // Get user behavior profile
     let userProfile: UserBehaviorProfile | undefined;
     if (userId) {
       userProfile = await this.getUserBehaviorProfile(userId);
-    }
+
 
     // Get applicable rules
     const applicableRules = await this.getApplicableRules(request, geoData, userProfile);
@@ -307,19 +312,19 @@ export class IPAccountLimitingService extends EventEmitter {
         
         if (ruleResult.blocked) {
           allowed = false;
-        }
-      }
-    }
+
+
+
 
     // Update user behavior profile
     if (userId && userProfile) {
       await this.updateUserBehaviorProfile(userId, request, violations.length > 0);
-    }
+
 
     // Store violations
     for (const violation of violations) {
       await this.recordViolation(violation);
-    }
+
 
     return {
       allowed,
@@ -328,7 +333,7 @@ export class IPAccountLimitingService extends EventEmitter {
       requiresAuth: [...new Set(requiresAuth)],
       message: violations.length > 0 ? this.generateViolationMessage(violations) : undefined
     };
-  }
+
 
   /**
    * Add IP to trusted list
@@ -341,7 +346,7 @@ export class IPAccountLimitingService extends EventEmitter {
       reason,
       timestamp: new Date()
     });
-  }
+
 
   /**
    * Ban IP address
@@ -365,7 +370,7 @@ export class IPAccountLimitingService extends EventEmitter {
       duration,
       expiresAt: ban.expiresAt?.toISOString()
     });
-  }
+
 
   /**
    * Get user risk assessment
@@ -377,9 +382,9 @@ export class IPAccountLimitingService extends EventEmitter {
       factor: string;
       score: number;
       description: string;
-    }>;
+>;
     recommendations: string[];
-  }> {
+> {
     const profile = await this.getUserBehaviorProfile(userId);
     const recentViolations = await this.getRecentViolations(userId, 30); // Last 30 days
     
@@ -449,7 +454,7 @@ export class IPAccountLimitingService extends EventEmitter {
     const recommendations = this.generateRiskRecommendations(riskScore, factors);
 
     return { riskScore, riskLevel, factors, recommendations };
-  }
+
 
   // Private helper methods
 
@@ -465,18 +470,18 @@ export class IPAccountLimitingService extends EventEmitter {
         countries: ['CN', 'RU', 'KP', 'IR'], // Example high-risk countries
         vpnDetection: true,
         torDetection: true
-  }
+
       accountTargets: {},
       behaviorTriggers: {},
       restrictions: {
         requireAdditionalAuth: ['captcha', 'mfa']
-  }
+
       actions: {
         immediate: ['flag', 'captcha']
-  }
+
       exemptions: {
         emergencyOverride: true
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -494,11 +499,11 @@ export class IPAccountLimitingService extends EventEmitter {
       behaviorTriggers: {
         rapidRequests: { requests: 10, timeWindow: 60 }, // 10 requests in 60 seconds
         failedLogins: { attempts: 5, timeWindow: 300 } // 5 failed logins in 5 minutes
-  }
+
       restrictions: {
         blockCompletely: false,
         requireAdditionalAuth: ['captcha', 'mfa']
-  }
+
       actions: {
         immediate: ['monitor', 'captcha'],
         escalation: [
@@ -506,7 +511,7 @@ export class IPAccountLimitingService extends EventEmitter {
           { threshold: 5, action: 'temp_ban', duration: 60 * 60 * 1000 }, // 1 hour
           { threshold: 10, action: 'manual_review' }
         ]
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -522,22 +527,22 @@ export class IPAccountLimitingService extends EventEmitter {
       ipTargets: {},
       accountTargets: {
         verificationLevels: ['unverified', 'email']
-  }
+
       behaviorTriggers: {
         deviceChanges: { count: 5, timeWindow: 24 }, // 5 different devices in 24 hours
         locationChanges: { distance: 1000, timeWindow: 60 } // 1000km in 60 minutes
-  }
+
       restrictions: {
         requireAdditionalAuth: ['mfa', 'email_verification']
-  }
+
       actions: {
         immediate: ['flag', 'monitor'],
         notifications: [{
           trigger: 'first_violation',
           recipients: ['user', 'security_team'],
           methods: ['email', 'dashboard']
-        }]
-  }
+]
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -546,7 +551,7 @@ export class IPAccountLimitingService extends EventEmitter {
     this.rules.set(highRiskCountryRule.id, highRiskCountryRule);
     this.rules.set(rapidLoginRule.id, rapidLoginRule);
     this.rules.set(deviceChangeRule.id, deviceChangeRule);
-  }
+
 
   private async getGeolocationData(ip: string): Promise<GeolocationData> {
 
@@ -576,10 +581,10 @@ export class IPAccountLimitingService extends EventEmitter {
       };
       
       this.geolocationCache.set(ip, geoData);
-    }
+
     
     return geoData;
-  }
+
 
   private async getOrCreateDeviceFingerprint(
     userId: string, 
@@ -623,12 +628,12 @@ export class IPAccountLimitingService extends EventEmitter {
       };
       
       this.deviceFingerprints.set(fingerprint.id, fingerprint);
-    } else {
+ else {
       fingerprint.lastSeen = new Date();
-    }
+
     
     return fingerprint;
-  }
+
 
   private async getUserBehaviorProfile(userId: string): Promise<UserBehaviorProfile> {
 
@@ -646,7 +651,7 @@ export class IPAccountLimitingService extends EventEmitter {
           commonLocations: [{ country: 'US', region: 'CA', frequency: 0.8 }],
           averageSessionDuration: 45,
           deviceRotation: 2
-  }
+
         accessPatterns: {
           commonEndpoints: [
             { endpoint: '/api/dashboard', frequency: 0.4 },
@@ -655,7 +660,7 @@ export class IPAccountLimitingService extends EventEmitter {
           dataUsage: { upload: 1024 * 1024, download: 5 * 1024 * 1024 },
           requestRate: 2.5,
           errorRate: 0.05
-  }
+
         securityEvents: {
           totalViolations: 0,
           recentViolations: 0,
@@ -663,15 +668,15 @@ export class IPAccountLimitingService extends EventEmitter {
           passwordChanges: 0,
           mfaChanges: 0,
           accountLocks: 0
-  }
+
         lastUpdated: new Date()
       };
       
       this.userProfiles.set(userId, profile);
-    }
+
     
     return profile;
-  }
+
 
   private async getApplicableRules(
     request: any,
@@ -686,11 +691,11 @@ export class IPAccountLimitingService extends EventEmitter {
       
       if (await this.ruleApplies(rule, request, geoData, userProfile)) {
         rules.push(rule);
-      }
-    }
+
+
     
     return rules.sort((a, b) => b.priority - a.priority);
-  }
+
 
   private async ruleApplies(
     rule: IPLimitingRule,
@@ -708,12 +713,12 @@ export class IPAccountLimitingService extends EventEmitter {
     // Check account targeting
     if (userProfile && rule.accountTargets.verificationLevels?.includes(userProfile.verificationLevel)) {
       return true;
-    }
+
     
     // Additional rule matching logic would be implemented here
     
     return false;
-  }
+
 
   private async checkRule(
     rule: IPLimitingRule,
@@ -731,7 +736,7 @@ export class IPAccountLimitingService extends EventEmitter {
     violations: LimitingViolation[];
     restrictions: string[];
     requiresAuth: string[];
-  }> {
+> {
 
     const violations: LimitingViolation[] = [];
     const restrictions: string[] = [];
@@ -748,23 +753,23 @@ export class IPAccountLimitingService extends EventEmitter {
           requestCount: recentRequests,
           threshold: rule.behaviorTriggers.rapidRequests.requests
         }));
-      }
-    }
+
+
 
     // Apply restrictions if violated
     if (violated) {
       if (rule.restrictions.blockCompletely) {
         blocked = true;
         restrictions.push('blocked');
-      }
+
       
       if (rule.restrictions.requireAdditionalAuth) {
         requiresAuth.push(...rule.restrictions.requireAdditionalAuth);
-      }
-    }
+
+
 
     return { violated, blocked, violations, restrictions, requiresAuth };
-  }
+
 
   private createViolation(
     rule: IPLimitingRule,
@@ -788,11 +793,11 @@ export class IPAccountLimitingService extends EventEmitter {
         geolocation: context.geoData,
         deviceFingerprint: context.deviceFingerprint?.fingerprint,
         sessionId: context.request.sessionId
-  }
+
       actionTaken: rule.actions.immediate,
       resolved: false
     };
-  }
+
 
   private calculateViolationSeverity(rule: IPLimitingRule, violationType: string): 'low' | 'medium' | 'high' | 'critical' {
     // Logic to determine severity based on rule priority and violation type
@@ -800,7 +805,7 @@ export class IPAccountLimitingService extends EventEmitter {
     if (rule.priority >= 150) return 'high';
     if (rule.priority >= 100) return 'medium';
     return 'low';
-  }
+
 
   private generateViolationMessage(violations: LimitingViolation[]): string {
     const severityCount = violations.reduce((acc, v) => {
@@ -810,14 +815,14 @@ export class IPAccountLimitingService extends EventEmitter {
 
     if (severityCount.critical) {
       return 'Critical security violations detected. Access restricted.';
-    } else if (severityCount.high) {
+ else if (severityCount.high) {
       return 'High-risk activity detected. Additional verification required.';
-    } else if (severityCount.medium) {
+ else if (severityCount.medium) {
       return 'Suspicious activity detected. Please verify your identity.';
-    } else {
+ else {
       return 'Security check required. Please complete verification.';
-    }
-  }
+
+
 
   private generateRiskRecommendations(riskScore: number, factors: any[]): string[] {
     const recommendations = [];
@@ -826,33 +831,33 @@ export class IPAccountLimitingService extends EventEmitter {
       recommendations.push('Enable multi-factor authentication immediately');
       recommendations.push('Review and update password');
       recommendations.push('Check recent account activity');
-    }
+
     
     if (riskScore >= 40) {
       recommendations.push('Verify email and phone number');
       recommendations.push('Review trusted devices');
-    }
+
     
     if (riskScore >= 20) {
       recommendations.push('Enable login notifications');
       recommendations.push('Use trusted networks when possible');
-    }
+
     
     return recommendations;
-  }
+
 
   private async getRecentRequests(ip: string, timeWindowSeconds: number): Promise<number> {
 
     // Mock implementation - would count actual recent requests
     return Math.floor(Math.random() * 20);
-  }
+
 
   private async getRecentViolations(userId: string, days: number): Promise<LimitingViolation[]> {
 
     const userViolations = this.violations.get(userId) || [];
     const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
     return userViolations.filter(v => v.timestamp >= cutoff);
-  }
+
 
   private async recordViolation(violation: LimitingViolation): Promise<void> {
 
@@ -860,7 +865,7 @@ export class IPAccountLimitingService extends EventEmitter {
     const violations = this.violations.get(key) || [];
     violations.push(violation);
     this.violations.set(key, violations);
-  }
+
 
   private async updateUserBehaviorProfile(
     userId: string,
@@ -874,18 +879,18 @@ export class IPAccountLimitingService extends EventEmitter {
       profile.securityEvents.recentViolations++;
       profile.securityEvents.totalViolations++;
       profile.securityEvents.lastSecurityEvent = new Date();
-    }
+
     
     profile.lastUpdated = new Date();
     this.userProfiles.set(userId, profile);
-  }
+
 
   private startMaintenanceTasks(): void {
     // Clean up old data every 6 hours
     setInterval(() => {
       this.cleanupOldData();
     }, 6 * 60 * 60 * 1000);
-  }
+
 
   private cleanupOldData(): void {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
@@ -895,29 +900,28 @@ export class IPAccountLimitingService extends EventEmitter {
       const recentViolations = violations.filter(v => v.timestamp >= thirtyDaysAgo);
       if (recentViolations.length === 0) {
         this.violations.delete(key);
-      } else {
+ else {
         this.violations.set(key, recentViolations);
-      }
-    }
+
+
     
     // Clean up old geolocation cache
     for (const [ip, geoData] of this.geolocationCache.entries()) {
       if (geoData.lastUpdated < thirtyDaysAgo) {
         this.geolocationCache.delete(ip);
-      }
-    }
-  }
+
+
+
 
   private generateFingerprintId(): string {
     return `DF-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private generateViolationId(): string {
     return `LV-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private async logSecurityEvent(action: string, target: string, performedBy: string, metadata: any): Promise<void> {
 
     console.log(`Security Event: ${action} for ${target} by ${performedBy}`, metadata);
-  }
-}
+

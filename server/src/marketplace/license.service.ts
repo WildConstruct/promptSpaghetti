@@ -6,7 +6,7 @@ import {
   LicenseTransfer,
   LicenseType,
   LicenseStatus
-} from './transaction.types.js';
+ from './transaction.types.js';
 import { DatabaseService } from '../database/database.service.js';
 
 export class LicenseService {
@@ -16,7 +16,7 @@ export class LicenseService {
   constructor(fastify: FastifyInstance) {
     this.fastify = fastify;
     this.db = fastify.db;
-  }
+
 
   // =============================================
   // License Generation and Management
@@ -56,7 +56,7 @@ export class LicenseService {
 
     await this.saveLicense(license);
     return license;
-  }
+
 
   async validateLicense(
     licenseKey: string,
@@ -67,7 +67,7 @@ export class LicenseService {
     valid: boolean;
     license?: TemplateLicense;
     reason?: string;
-  }> {
+> {
 
     try {
       const result = await this.db.query(
@@ -78,7 +78,7 @@ export class LicenseService {
 
       if (result.length === 0) {
         return { valid: false, reason: 'License not found' };
-      }
+
 
       const license = this.parseLicense(result[0]);
 
@@ -89,7 +89,7 @@ export class LicenseService {
           reason: `License is ${license.status}`,
           license 
         };
-      }
+
 
       // Check expiration
       if (license.valid_until && new Date() > license.valid_until) {
@@ -99,7 +99,7 @@ export class LicenseService {
           reason: 'License has expired',
           license 
         };
-      }
+
 
       // Check usage limits
       if (license.usage_limit && license.usage_count >= license.usage_limit) {
@@ -108,22 +108,21 @@ export class LicenseService {
           reason: 'Usage limit exceeded',
           license 
         };
-      }
+
 
       // Increment usage if requested
       if (incrementUsage) {
         await this.incrementUsage(license.id);
         license.usage_count += 1;
         license.last_used_at = new Date();
-      }
+
 
       return { valid: true, license };
-
-    } catch (error) {
+ catch (error) {
       this.fastify.log.error('License validation error:', error);
       return { valid: false, reason: 'Validation failed' };
-    }
-  }
+
+
 
   async getLicensesByUser(
     userId: string,
@@ -132,18 +131,18 @@ export class LicenseService {
       status?: LicenseStatus;
       licenseType?: LicenseType;
       expiring?: boolean; // Expiring in next 30 days
-    } = {},
+ = {},
     pagination: {
       page: number;
       limit: number;
-    } = { page: 1, limit: 20 }
+ = { page: 1, limit: 20 }
   ): Promise<{
     licenses: TemplateLicense[];
     total: number;
     page: number;
     limit: number;
     hasMore: boolean;
-  }> {
+> {
 
     let whereClause = 'buyer_id = ?';
     const params = [userId];
@@ -151,21 +150,21 @@ export class LicenseService {
     if (filters.templateId) {
       whereClause += ' AND template_id = ?';
       params.push(filters.templateId);
-    }
+
 
     if (filters.status) {
       whereClause += ' AND status = ?';
       params.push(filters.status);
-    }
+
 
     if (filters.licenseType) {
       whereClause += ' AND license_type = ?';
       params.push(filters.licenseType);
-    }
+
 
     if (filters.expiring) {
       whereClause += ' AND valid_until IS NOT NULL AND valid_until <= datetime("now", "+30 days")';
-    }
+
 
     const offset = (pagination.page - 1) * pagination.limit;
 
@@ -192,7 +191,7 @@ export class LicenseService {
       limit: pagination.limit,
       hasMore
     };
-  }
+
 
   // =============================================
   // License Transfer Management
@@ -209,15 +208,15 @@ export class LicenseService {
     const license = await this.getLicenseById(licenseId);
     if (!license || license.buyer_id !== fromUserId) {
       throw new Error('License not found or not owned by user');
-    }
+
 
     if (license.transfer_count >= license.max_transfers) {
       throw new Error('Maximum transfers exceeded for this license');
-    }
+
 
     if (license.status !== LicenseStatus.ACTIVE) {
       throw new Error('Only active licenses can be transferred');
-    }
+
 
     // Find target user
     const userResult = await this.db.query(
@@ -227,7 +226,7 @@ export class LicenseService {
 
     if (userResult.length === 0) {
       throw new Error('Target user not found');
-    }
+
 
     const toUser = userResult[0];
     const transferId = crypto.randomUUID();
@@ -254,7 +253,7 @@ export class LicenseService {
     this.fastify.log.info(`License transfer request created: ${transferId}`);
 
     return transfer;
-  }
+
 
   async approveTransfer(
     transferId: string,
@@ -264,16 +263,16 @@ export class LicenseService {
     const transfer = await this.getTransferById(transferId);
     if (!transfer) {
       throw new Error('Transfer request not found');
-    }
+
 
     if (transfer.approved_at) {
       throw new Error('Transfer already processed');
-    }
+
 
     const license = await this.getLicenseById(transfer.license_id);
     if (!license) {
       throw new Error('License not found');
-    }
+
 
     // Update transfer record
     await this.db.query(
@@ -292,7 +291,7 @@ export class LicenseService {
     );
 
     this.fastify.log.info(`License transferred: ${transfer.license_id} from ${transfer.from_user_id} to ${transfer.to_user_id}`);
-  }
+
 
   // =============================================
   // License Status Management
@@ -309,7 +308,7 @@ export class LicenseService {
       suspended_by: adminUserId,
       suspended_at: new Date().toISOString()
     });
-  }
+
 
   async revokeLicense(
     licenseId: string,
@@ -322,7 +321,7 @@ export class LicenseService {
       revoked_by: adminUserId,
       revoked_at: new Date().toISOString()
     });
-  }
+
 
   async reactivateLicense(
     licenseId: string,
@@ -332,18 +331,18 @@ export class LicenseService {
     const license = await this.getLicenseById(licenseId);
     if (!license) {
       throw new Error('License not found');
-    }
+
 
     // Check if license is still valid (not expired)
     if (license.valid_until && new Date() > license.valid_until) {
       throw new Error('Cannot reactivate expired license');
-    }
+
 
     await this.updateLicenseStatus(licenseId, LicenseStatus.ACTIVE, {
       reactivated_by: adminUserId,
       reactivated_at: new Date().toISOString()
     });
-  }
+
 
   // =============================================
   // License Analytics and Reporting
@@ -365,7 +364,7 @@ export class LicenseService {
       totalTransfers: number;
       pendingTransfers: number;
     };
-  }> {
+> {
     const periodDays = {
       '7d': 7,
       '30d': 30,
@@ -383,7 +382,7 @@ export class LicenseService {
     if (templateId) {
       whereClause += ' AND template_id = ?';
       params.push(templateId);
-    }
+
 
     // Get license counts
     const licenseCounts = await this.db.query(
@@ -447,13 +446,13 @@ export class LicenseService {
         totalUsage: usageStats[0]?.total_usage || 0,
         averageUsage: Math.round(usageStats[0]?.average_usage || 0),
         topUsers: topUsers || []
-  }
+
       transferStats: {
         totalTransfers: transferStats[0]?.total_transfers || 0,
         pendingTransfers: transferStats[0]?.pending_transfers || 0
-      }
+
     };
-  }
+
 
   // =============================================
   // Helper Methods
@@ -476,7 +475,7 @@ export class LicenseService {
     const random = crypto.randomBytes(4).toString('hex').toUpperCase();
 
     return `${templateHash}-${userHash}-${timestamp.toUpperCase()}-${random}`;
-  }
+
 
   private getLicenseUsageLimit(licenseType: LicenseType): number | undefined {
     const limits = {
@@ -487,7 +486,7 @@ export class LicenseService {
       [LicenseType.UNLIMITED]: undefined
     };
     return limits[licenseType];
-  }
+
 
   private getLicenseExpiration(licenseType: LicenseType): Date | undefined {
     if (licenseType === LicenseType.UNLIMITED) return undefined;
@@ -503,10 +502,10 @@ export class LicenseService {
     default:
       expiration.setFullYear(now.getFullYear() + 5); // 5 years for others
       break;
-    }
+
     
     return expiration;
-  }
+
 
   private getMaxTransfers(licenseType: LicenseType): number {
     const transfers = {
@@ -517,7 +516,7 @@ export class LicenseService {
       [LicenseType.UNLIMITED]: 5
     };
     return transfers[licenseType] || 1;
-  }
+
 
   private getLicenseRestrictions(licenseType: LicenseType): Record<string, any> {
     const restrictions = {
@@ -526,37 +525,37 @@ export class LicenseService {
         redistribution: false,
         modification: true,
         attribution_required: false
-  }
+
       [LicenseType.COMMERCIAL]: {
         commercial_use: true,
         redistribution: false,
         modification: true,
         attribution_required: false
-  }
+
       [LicenseType.ENTERPRISE]: {
         commercial_use: true,
         redistribution: true,
         modification: true,
         white_label: true,
         attribution_required: false
-  }
+
       [LicenseType.EDUCATIONAL]: {
         commercial_use: false,
         redistribution: false,
         modification: true,
         educational_only: true,
         attribution_required: true
-  }
+
       [LicenseType.UNLIMITED]: {
         commercial_use: true,
         redistribution: true,
         modification: true,
         white_label: true,
         attribution_required: false
-      }
+
     };
     return restrictions[licenseType] || {};
-  }
+
 
   private getLicenseMetadata(licenseType: LicenseType): Record<string, any> {
     return {
@@ -565,7 +564,7 @@ export class LicenseService {
       license_terms_url: `/legal/license-terms/${licenseType}`,
       support_level: licenseType === LicenseType.ENTERPRISE ? 'premium' : 'standard'
     };
-  }
+
 
   private async saveLicense(license: TemplateLicense): Promise<void> {
 
@@ -583,7 +582,7 @@ export class LicenseService {
         JSON.stringify(license.metadata), license.created_at, license.updated_at
       ]
     );
-  }
+
 
   private async incrementUsage(licenseId: string): Promise<void> {
 
@@ -593,12 +592,12 @@ export class LicenseService {
        WHERE id = ?`,
       [licenseId]
     );
-  }
+
 
   private async expireLicense(licenseId: string): Promise<void> {
 
     await this.updateLicenseStatus(licenseId, LicenseStatus.EXPIRED);
-  }
+
 
   private async updateLicenseStatus(
     licenseId: string, 
@@ -609,7 +608,7 @@ export class LicenseService {
     const license = await this.getLicenseById(licenseId);
     if (!license) {
       throw new Error('License not found');
-    }
+
 
     const updatedMetadata = { ...license.metadata, ...metadata };
 
@@ -619,7 +618,7 @@ export class LicenseService {
        WHERE id = ?`,
       [status, JSON.stringify(updatedMetadata), licenseId]
     );
-  }
+
 
   private async getLicenseById(licenseId: string): Promise<TemplateLicense | null> {
 
@@ -629,7 +628,7 @@ export class LicenseService {
     );
     
     return result.length > 0 ? this.parseLicense(result[0]) : null;
-  }
+
 
   private async getTransferById(transferId: string): Promise<LicenseTransfer | null> {
 
@@ -639,7 +638,7 @@ export class LicenseService {
     );
     
     return result.length > 0 ? result[0] : null;
-  }
+
 
   private parseLicense(row: any): TemplateLicense {
     return {
@@ -652,5 +651,4 @@ export class LicenseService {
       valid_until: row.valid_until ? new Date(row.valid_until) : undefined,
       last_used_at: row.last_used_at ? new Date(row.last_used_at) : undefined
     };
-  }
-}
+

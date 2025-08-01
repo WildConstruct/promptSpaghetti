@@ -228,207 +228,142 @@ div >
 ;
 // Helper function to create sample articles
 async function createSampleArticles(knowledgeService) {
-    const sampleArticles = [];
-    {
-        title: 'Getting Started with the Marketplace',
-            slug;
-        'getting-started-marketplace',
-            content;
-        'Welcome to our marketplace! This comprehensive guide will walk you through everything you need to know to start buying and selling templates effectively.',
-            excerpt;
-        'Learn the basics of navigating and using our marketplace platform.',
-            category;
-        KnowledgeCategory.GETTING_STARTED,
-            subcategory;
-        'basics',
-            type;
-        ArticleType.GUIDE,
-            tags;
-        ['marketplace', 'getting-started', 'beginner'],
-            keywords;
-        ['marketplace', 'templates', 'buying', 'selling'],
-            sections;
-        [,
-            {
-                id: 'section-1',
-                title: 'Creating Your Account',
-                content: 'Start by creating your account with a strong password and verified email address.',
-                order: 1,
-                type: 'text',
-                anchor: 'creating-account',
-                isCollapsible: false,
-                metadata: {}
-            },
-            {
-                id: 'section-2',
-                title: 'Browsing Templates',
-                content: 'Use our advanced search and filtering tools to find the perfect templates for your needs.',
-                order: 2,
-                type: 'text',
-                anchor: 'browsing-templates',
-                isCollapsible: false,
-                metadata: {}
-            }
-        ],
-            attachments;
-        [],
-            relatedArticles;
-        [],
-            prerequisites;
-        [],
-            author;
-        'Support Team',
-            authorId;
-        'support-1',
-            contributors;
-        [],
-            version;
-        '1.0.0',
-            lastUpdated;
-        new Date(),
-            status;
-        'published',
-            views;
-        1250,
-            ratings;
-        [,
-            { userId: 'user-1', rating: 5, helpful: true, timestamp: new Date() },
-            { userId: 'user-2', rating: 4, helpful: true, timestamp: new Date() }
-        ],
-            feedback;
-        [],
-            helpfulVotes;
-        23,
-            unhelpfulVotes;
-        2,
-            searchableText;
-        'marketplace getting started guide templates buying selling',
-            searchScore;
-        0,
-            accessibilityFeatures;
-        [],
-            readingLevel;
-        'beginner',
-            estimatedReadTime;
-        5,
-            language;
-        'en',
-            translations;
-        { }
-        interactiveElements: [],
-            codeExamples;
-        [],
-            videos;
-        [],
-            images;
-        [];
-    }
-    {
-        title: 'How to Create and Sell Templates',
-            slug;
-        'create-sell-templates',
-            content;
-        'This guide covers the complete process of creating high-quality templates and successfully selling them on our marketplace.',
-            excerpt;
-        'Learn how to create professional templates and maximize your sales.',
-            category;
-        KnowledgeCategory.TEMPLATE_CREATION,
-            subcategory;
-        'creation',
-            type;
-        ArticleType.TUTORIAL,
-            tags;
-        ['templates', 'creation', 'selling', 'design'],
-            keywords;
-        ['template', 'design', 'creation', 'selling', 'marketplace'],
-            sections;
-        [,
-            {
-                id: 'section-1',
-                title: 'Design Principles',
-                content: 'Follow these design principles to create templates that customers will love.',
-                order: 1,
-                type: 'text',
-                anchor: 'design-principles',
-                isCollapsible: false,
-                metadata: {}
-            },
-            {
-                id: 'section-2',
-                title: 'File Requirements',
-                content: 'Ensure your templates meet our technical requirements for quality and compatibility.',
-                order: 2,
-                type: 'text',
-                anchor: 'file-requirements',
-                isCollapsible: false,
-                metadata: {}
-            }
-        ],
-            attachments;
-        [],
-            relatedArticles;
-        [],
-            prerequisites;
-        [],
-            author;
-        'Design Team',
-            authorId;
-        'design-1',
-            contributors;
-        [],
-            version;
-        '1.2.0',
-            lastUpdated;
-        new Date(),
-            status;
-        'published',
-            views;
-        890,
-            ratings;
-        [,
-            { userId: 'user-3', rating: 5, helpful: true, timestamp: new Date() },
-            { userId: 'user-4', rating: 4, helpful: true, timestamp: new Date() },
-            { userId: 'user-5', rating: 5, helpful: true, timestamp: new Date() }
-        ],
-            feedback;
-        [],
-            helpfulVotes;
-        31,
-            unhelpfulVotes;
-        1,
-            searchableText;
-        'template creation design selling marketplace guide',
-            searchScore;
-        0,
-            accessibilityFeatures;
-        [],
-            readingLevel;
-        'intermediate',
-            estimatedReadTime;
-        8,
-            language;
-        'en',
-            translations;
-        { }
-        interactiveElements: [],
-            codeExamples;
-        [,
-            {
-                id: 'code-1',
-                language: 'javascript',
-                title: 'Template Validation',
-                description: 'Basic validation for template files',
-                code: 'function validateTemplate(template) {\n  return template.name && template.files.length > 0;\n}',
-                runnable: false
-            }],
-            videos;
-        [],
-            images;
-        [];
-        ;
-        for (const articleData of sampleArticles) {
-            await knowledgeService.createArticle(articleData);
-            export default Epic16KnowledgeBase;
+    const sampleArticles = [
+        {
+            title: 'Getting Started with the Marketplace',
+            slug: 'getting-started-marketplace',
+            content: 'Welcome to our marketplace! This comprehensive guide will walk you through everything you need to know to start buying and selling templates effectively.',
+            excerpt: 'Learn the basics of navigating and using our marketplace platform.',
+            category: KnowledgeCategory.GETTING_STARTED,
+            subcategory: 'basics',
+            type: ArticleType.GUIDE,
+            tags: ['marketplace', 'getting-started', 'beginner'],
+            keywords: ['marketplace', 'templates', 'buying', 'selling'],
+            sections: [
+                {
+                    id: 'section-1',
+                    title: 'Creating Your Account',
+                    content: 'Start by creating your account with a strong password and verified email address.',
+                    order: 1,
+                    type: 'text',
+                    anchor: 'creating-account',
+                    isCollapsible: false,
+                    metadata: {}
+                },
+                {
+                    id: 'section-2',
+                    title: 'Browsing Templates',
+                    content: 'Use our advanced search and filtering tools to find the perfect templates for your needs.',
+                    order: 2,
+                    type: 'text',
+                    anchor: 'browsing-templates',
+                    isCollapsible: false,
+                    metadata: {}
+                }
+            ],
+            attachments: [],
+            relatedArticles: [],
+            prerequisites: [],
+            author: 'Support Team',
+            authorId: 'support-1',
+            contributors: [],
+            version: '1.0.0',
+            lastUpdated: new Date(),
+            status: 'published',
+            views: 1250,
+            ratings: [
+                { userId: 'user-1', rating: 5, helpful: true, timestamp: new Date() },
+                { userId: 'user-2', rating: 4, helpful: true, timestamp: new Date() }
+            ],
+            feedback: [],
+            helpfulVotes: 23,
+            unhelpfulVotes: 2,
+            searchableText: 'marketplace getting started guide templates buying selling',
+            searchScore: 0,
+            accessibilityFeatures: [],
+            readingLevel: 'beginner',
+            estimatedReadTime: 5,
+            language: 'en',
+            translations: {},
+            interactiveElements: [],
+            codeExamples: [],
+            videos: [],
+            images: []
+        },
+        {
+            title: 'How to Create and Sell Templates',
+            slug: 'create-sell-templates',
+            content: 'This guide covers the complete process of creating high-quality templates and successfully selling them on our marketplace.',
+            excerpt: 'Learn how to create professional templates and maximize your sales.',
+            category: KnowledgeCategory.TEMPLATE_CREATION,
+            subcategory: 'creation',
+            type: ArticleType.TUTORIAL,
+            tags: ['templates', 'creation', 'selling', 'design'],
+            keywords: ['template', 'design', 'creation', 'selling', 'marketplace'],
+            sections: [
+                {
+                    id: 'section-1',
+                    title: 'Design Principles',
+                    content: 'Follow these design principles to create templates that customers will love.',
+                    order: 1,
+                    type: 'text',
+                    anchor: 'design-principles',
+                    isCollapsible: false,
+                    metadata: {}
+                },
+                {
+                    id: 'section-2',
+                    title: 'File Requirements',
+                    content: 'Ensure your templates meet our technical requirements for quality and compatibility.',
+                    order: 2,
+                    type: 'text',
+                    anchor: 'file-requirements',
+                    isCollapsible: false,
+                    metadata: {}
+                }
+            ],
+            attachments: [],
+            relatedArticles: [],
+            prerequisites: [],
+            author: 'Design Team',
+            authorId: 'design-1',
+            contributors: [],
+            version: '1.2.0',
+            lastUpdated: new Date(),
+            status: 'published',
+            views: 890,
+            ratings: [
+                { userId: 'user-3', rating: 5, helpful: true, timestamp: new Date() },
+                { userId: 'user-4', rating: 4, helpful: true, timestamp: new Date() },
+                { userId: 'user-5', rating: 5, helpful: true, timestamp: new Date() }
+            ],
+            feedback: [],
+            helpfulVotes: 31,
+            unhelpfulVotes: 1,
+            searchableText: 'template creation design selling marketplace guide',
+            searchScore: 0,
+            accessibilityFeatures: [],
+            readingLevel: 'intermediate',
+            estimatedReadTime: 8,
+            language: 'en',
+            translations: {},
+            interactiveElements: [],
+            codeExamples: [
+                {
+                    id: 'code-1',
+                    language: 'javascript',
+                    title: 'Template Validation',
+                    description: 'Basic validation for template files',
+                    code: 'function validateTemplate(template) {\n  return template.name && template.files.length > 0;\n}',
+                    runnable: false
+                }
+            ],
+            videos: [],
+            images: []
         }
+    ];
+    for (const articleData of sampleArticles) {
+        await knowledgeService.createArticle(articleData);
+        export default Epic16KnowledgeBase;
     }
 }

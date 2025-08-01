@@ -16,11 +16,10 @@ import { RiskFactor, FraudIndicator } from './TrustTypes';
 // Core Fraud Detection Interfaces
 // =============================================================================
 
-}
-export interface FraudDetectionResult {
-  fraudScore: number; // 0-100 (higher = more likely fraud),
+
+export interface FraudDetectionResult { fraudScore: number; // 0-100 (higher = more likely fraud);
   riskLevel: FraudRiskLevel;
-  confidence: number; // 0-100 confidence in the assessment,
+  confidence: number; // 0-100 confidence in the assessment }
   indicators: FraudIndicator;
   riskFactors: FraudRiskFactor;
   recommendations: FraudRecommendation;
@@ -29,22 +28,21 @@ export interface FraudDetectionResult {
   sessionId?: string;
   requiresReview: boolean;
   autoBlocked: boolean;
-}
-}
+
+
 export type FraudRiskLevel = 'very_low' | 'low' | 'medium' | 'high' | 'very_high' | 'critical';
 
-}
-export interface FraudRiskFactor {
-  factor: string;
+
+export interface FraudRiskFactor { factor: string;
   type: FraudFactorType;
   severity: ActionSeverity;
-  weight: number; // 0-1 contribution to overall score,
-  confidence: number; // 0-100,
+  weight: number; // 0-1 contribution to overall score;
+  confidence: number; // 0-100 }
   description: string;
   evidence: string;
   mitigationActions: string;
-}
-}
+
+
 export type FraudFactorType = 
   | 'payment' 
   | 'behavioral' 
@@ -55,16 +53,15 @@ export type FraudFactorType =
   | 'content' 
   | 'account';
 
-}
-export interface FraudRecommendation {
-  action: FraudAction;
+
+export interface FraudRecommendation { action: FraudAction;
   priority: 'immediate' | 'high' | 'medium' | 'low';
   reason: string;
   automated: boolean;
   requiresHuman: boolean;
-  estimatedImpact: number; // 0-100,
-}
-}
+  estimatedImpact: number; // 0-100 }
+
+
 export type FraudAction = 
   | 'allow' 
   | 'challenge' 
@@ -76,16 +73,15 @@ export type FraudAction =
   | 'limit_account' 
   | 'require_2fa';
 
-}
-export interface FraudDetectionMethod {
-  primary: FraudDetectionTechnique;
+
+export interface FraudDetectionMethod { primary: FraudDetectionTechnique;
   secondary: FraudDetectionTechnique;
   modelVersion?: string;
   ruleSetVersion?: string;
   mlConfidence?: number;
-  processingTime: number; // milliseconds,
-}
-}
+  processingTime: number; // milliseconds }
+
+
 export type FraudDetectionTechnique = 
   | 'ml_model' 
   | 'rule_engine' 
@@ -101,9 +97,8 @@ export type FraudDetectionTechnique =
 // Payment Fraud Detection
 // =============================================================================
 
-}
-export interface PaymentFraudAssessment {
-  transactionId: string;
+
+export interface PaymentFraudAssessment { transactionId: string;
   fraudScore: number;
   riskFactors: PaymentRiskFactor;
   velocityChecks: VelocityCheck;
@@ -113,18 +108,17 @@ export interface PaymentFraudAssessment {
   deviceRisk: DeviceRiskAssessment;
   recommendation: PaymentRecommendation;
   processingTime: number;
-  timestamp: Date;
-}
-}
-}
-export interface PaymentRiskFactor {
-  factor: PaymentRiskType;
-  score: number; // 0-100,
-  weight: number; // contribution to overall score,
+  timestamp: Date }
+
+
+
+export interface PaymentRiskFactor { factor: PaymentRiskType;
+  score: number; // 0-100;
+  weight: number; // contribution to overall score }
   description: string;
   evidence: PaymentEvidence;
-}
-}
+
+
 export type PaymentRiskType = 
   | 'high_value_transaction'
   | 'new_payment_method'
@@ -137,25 +131,24 @@ export type PaymentRiskType =
   | 'proxy_vpn_usage'
   | 'known_fraud_pattern';
 
-}
-export interface PaymentEvidence {
-  type: 'metadata' | 'behavioral' | 'device' | 'network' | 'historical';
+
+export interface PaymentEvidence { type: 'metadata' | 'behavioral' | 'device' | 'network' | 'historical' }
   data: any;
   confidence: number;
   source: string;
   timestamp: Date;
-}
-}
-}
-export interface VelocityCheck {
-  metric: VelocityMetric;
-  timeWindow: number; // minutes,
+
+
+
+
+export interface VelocityCheck { metric: VelocityMetric;
+  timeWindow: number; // minutes }
   currentValue: number;
   threshold: number;
   exceeded: boolean;
   severity: ActionSeverity;
-}
-}
+
+
 export type VelocityMetric = 
   | 'transaction_count'
   | 'transaction_value'
@@ -164,84 +157,80 @@ export type VelocityMetric =
   | 'unique_addresses'
   | 'login_attempts';
 
-}
-export interface CardTestingAnalysis {
-  isCardTesting: boolean;
+
+export interface CardTestingAnalysis { isCardTesting: boolean;
   confidence: number;
   patterns: CardTestingPattern;
-  recommendations: string;
-}
-}
-}
-export interface CardTestingPattern {
-  pattern: 'sequential_attempts' | 'multiple_cards' | 'small_amounts' | 'rapid_fire' | 'known_bin';
+  recommendations: string }
+
+
+
+export interface CardTestingPattern { pattern: 'sequential_attempts' | 'multiple_cards' | 'small_amounts' | 'rapid_fire' | 'known_bin' }
   detected: boolean;
   evidence: string;
   severity: ActionSeverity;
-}
-}
-}
-export interface ChargebackRiskAssessment {
-  riskScore: number; // 0-100,
-  predictedProbability: number; // 0-1,
+
+
+
+
+export interface ChargebackRiskAssessment { riskScore: number; // 0-100;
+  predictedProbability: number; // 0-1;
   riskFactors: string;
   historicalChargebackRate: number;
   merchantCategory: string;
-  timeToLikelyChargeback?: number; // days,
-}
-}
-}
-export interface GeolocationRisk {
-  riskScore: number;
+  timeToLikelyChargeback?: number; // days }
+
+
+
+
+export interface GeolocationRisk { riskScore: number;
   factors: GeoRiskFactor;
   vpnDetected: boolean;
   proxyDetected: boolean;
   geoMismatch: boolean;
-  suspiciousLocation: boolean;
-}
-}
-}
-export interface GeoRiskFactor {
-  factor: 'distance_from_billing' | 'high_risk_country' | 'vpn_proxy' | 'tor_exit' | 'data_center';
+  suspiciousLocation: boolean }
+
+
+
+export interface GeoRiskFactor { factor: 'distance_from_billing' | 'high_risk_country' | 'vpn_proxy' | 'tor_exit' | 'data_center' }
   detected: boolean;
   severity: ActionSeverity;
   details: string;
-}
-}
-}
-export interface DeviceRiskAssessment {
-  deviceId: string;
+
+
+
+
+export interface DeviceRiskAssessment { deviceId: string;
   riskScore: number;
   isNewDevice: boolean;
   isTrustedDevice: boolean;
   riskFactors: DeviceRiskFactor;
-  fingerprintConfidence: number;
-}
-}
-}
-export interface DeviceRiskFactor {
-  factor: 'new_device' | 'multiple_accounts' | 'suspicious_browser' | 'tampered_headers' | 'bot_behavior';
+  fingerprintConfidence: number }
+
+
+
+export interface DeviceRiskFactor { factor: 'new_device' | 'multiple_accounts' | 'suspicious_browser' | 'tampered_headers' | 'bot_behavior' }
   detected: boolean;
   score: number;
   evidence: string;
-}
-}
-}
-export interface PaymentRecommendation {
-  action: 'approve' | 'challenge' | 'decline' | 'review';
+
+
+
+
+export interface PaymentRecommendation { action: 'approve' | 'challenge' | 'decline' | 'review';
   confidence: number;
   reasons: string;
   requiredVerifications: string;
-  holdDuration?: number; // minutes for holds,
+  holdDuration?: number; // minutes for holds }
   reviewPriority?: 'low' | 'medium' | 'high' | 'urgent';
   // =============================================================================
   // Account Fraud Detection
   // =============================================================================
-}
-}
-}
-export interface AccountFraudAssessment {
-  userId: string;
+
+
+
+
+export interface AccountFraudAssessment { userId: string;
   fraudScore: number;
   accountRisk: AccountRiskProfile;
   identityVerification: IdentityVerificationStatus;
@@ -249,29 +238,27 @@ export interface AccountFraudAssessment {
   syntheticIdentityRisk: SyntheticIdentityRisk;
   accountTakeoverRisk: AccountTakeoverRisk;
   recommendation: AccountRecommendation;
-  timestamp: Date;
-}
-}
-}
-export interface AccountRiskProfile {
-  overallRisk: FraudRiskLevel;
+  timestamp: Date }
+
+
+
+export interface AccountRiskProfile { overallRisk: FraudRiskLevel;
   riskFactors: AccountRiskFactor;
   trustScore: number;
   verificationLevel: VerificationLevel;
-  accountAge: number; // days,
-  activityPattern: 'normal' | 'suspicious' | 'dormant' | 'hyperactive'
-}
-  }
-}
-export interface AccountRiskFactor {
-  factor: AccountRiskType;
+  accountAge: number; // days;
+  activityPattern: 'normal' | 'suspicious' | 'dormant' | 'hyperactive' }
+
+
+
+
+export interface AccountRiskFactor { factor: AccountRiskType;
   severity: ActionSeverity;
   confidence: number;
   firstDetected: Date;
   lastUpdated: Date;
-  evidence: string;
-}
-}
+  evidence: string }
+
 export type AccountRiskType = 
   | 'unverified_identity'
   | 'suspicious_registration'
@@ -283,84 +270,78 @@ export type AccountRiskType =
   | 'rapid_escalation'
   | 'trust_violations';
 
-}
-export interface IdentityVerificationStatus {
-  level: VerificationLevel;
+
+export interface IdentityVerificationStatus { level: VerificationLevel;
   documents: DocumentVerification;
   biometric: BiometricVerification;
   phoneVerification: PhoneVerification;
   emailVerification: EmailVerification;
   overallConfidence: number;
-  riskFlags: string;
-}
-}
+  riskFlags: string }
+
 export type VerificationLevel = 'none' | 'email' | 'phone' | 'document' | 'biometric' | 'full';
 
-}
-export interface DocumentVerification {
-  documentType: 'id_card' | 'passport' | 'drivers_license' | 'utility_bill';
+
+export interface DocumentVerification { documentType: 'id_card' | 'passport' | 'drivers_license' | 'utility_bill' }
   status: 'pending' | 'verified' | 'rejected' | 'expired';
   confidence: number;
   extractedData: any;
   riskFlags: string;
   verifiedAt?: Date;
   expiresAt?: Date;
-}
-}
-}
-export interface BiometricVerification {
-  type: 'face' | 'fingerprint' | 'voice' | 'signature';
+
+
+
+
+export interface BiometricVerification { type: 'face' | 'fingerprint' | 'voice' | 'signature' }
   status: 'pending' | 'verified' | 'failed';
   confidence: number;
   livenessCheck: boolean;
   spoofingRisk: number;
   verifiedAt?: Date;
-}
-}
-}
-export interface PhoneVerification {
-  phoneNumber: string;
+
+
+
+
+export interface PhoneVerification { phoneNumber: string;
   verified: boolean;
   riskScore: number;
   lineType: 'mobile' | 'landline' | 'voip' | 'unknown';
   carrier: string;
   country: string;
   riskFlags: string;
-  verifiedAt?: Date;
-}
-}
-}
-export interface EmailVerification {
-  email: string;
+  verifiedAt?: Date }
+
+
+
+export interface EmailVerification { email: string;
   verified: boolean;
   riskScore: number;
   domain: string;
   disposable: boolean;
   freeProvider: boolean;
   riskFlags: string;
-  verifiedAt?: Date;
-}
-}
-}
-export interface BehavioralFraudAnalysis {
-  behaviorScore: number; // 0-100,
+  verifiedAt?: Date }
+
+
+
+export interface BehavioralFraudAnalysis { behaviorScore: number; // 0-100;
   patterns: BehavioralPattern;
   anomalies: BehavioralAnomaly;
   baseline: BehavioralBaseline;
-  botProbability: number; // 0-1,
-  humanLikelihood: number; // 0-1,
-}
-}
-}
-export interface BehavioralPattern {
-  pattern: BehavioralPatternType;
+  botProbability: number; // 0-1;
+  humanLikelihood: number; // 0-1 }
+
+
+
+
+export interface BehavioralPattern { pattern: BehavioralPatternType;
   frequency: number;
   confidence: number;
   riskLevel: FraudRiskLevel;
   firstSeen: Date;
-  lastSeen: Date;
-}
-}
+  lastSeen: Date }
+
 export type BehavioralPatternType = 
   | 'click_fraud'
   | 'velocity_abuse'
@@ -370,51 +351,47 @@ export type BehavioralPatternType =
   | 'scraping_behavior'
   | 'automation_detected';
 
-}
-export interface BehavioralAnomaly {
-  anomaly: string;
+
+export interface BehavioralAnomaly { anomaly: string;
   severity: ActionSeverity;
-  deviation: number; // how far from baseline,
+  deviation: number; // how far from baseline }
   confidence: number;
   timestamp: Date;
   context: any;
-}
-}
-}
-export interface BehavioralBaseline {
-  establishedAt: Date;
+
+
+
+
+export interface BehavioralBaseline { establishedAt: Date;
   sampleSize: number;
   confidence: number;
   patterns: BaselinePattern;
-  lastUpdated: Date;
-}
-}
-}
-export interface BaselinePattern {
-  metric: string;
+  lastUpdated: Date }
+
+
+
+export interface BaselinePattern { metric: string;
   average: number;
   standardDeviation: number;
   min: number;
   max: number;
-  sampleCount: number;
-}
-}
-}
-export interface SyntheticIdentityRisk {
-  riskScore: number; // 0-100,
+  sampleCount: number }
+
+
+
+export interface SyntheticIdentityRisk { riskScore: number; // 0-100;
   indicators: SyntheticIndicator;
   confidence: number;
-  recommendation: 'allow' | 'challenge' | 'block'
-}
-  }
-}
-export interface SyntheticIndicator {
-  indicator: SyntheticIndicatorType;
+  recommendation: 'allow' | 'challenge' | 'block' }
+
+
+
+
+export interface SyntheticIndicator { indicator: SyntheticIndicatorType;
   detected: boolean;
   confidence: number;
-  evidence: string;
-}
-}
+  evidence: string }
+
 export type SyntheticIndicatorType = 
   | 'pii_mismatch'
   | 'credit_invisibility'
@@ -424,23 +401,21 @@ export type SyntheticIndicatorType =
   | 'social_footprint_missing'
   | 'identity_elements_mix';
 
-}
-export interface AccountTakeoverRisk {
-  riskScore: number;
+
+export interface AccountTakeoverRisk { riskScore: number;
   indicators: TakeoverIndicator;
   sessionRisk: SessionRiskAssessment;
-  recommendation: 'allow' | 'challenge' | 'block' | 'force_logout'
-}
-  }
-}
-export interface TakeoverIndicator {
-  indicator: TakeoverIndicatorType;
+  recommendation: 'allow' | 'challenge' | 'block' | 'force_logout' }
+
+
+
+
+export interface TakeoverIndicator { indicator: TakeoverIndicatorType;
   detected: boolean;
   severity: ActionSeverity;
   evidence: string;
-  timestamp: Date;
-}
-}
+  timestamp: Date }
+
 export type TakeoverIndicatorType = 
   | 'credential_stuffing'
   | 'unusual_login_pattern'
@@ -451,20 +426,18 @@ export type TakeoverIndicatorType =
   | 'payment_method_change'
   | 'behavioral_change';
 
-}
-export interface SessionRiskAssessment {
-  sessionId: string;
+
+export interface SessionRiskAssessment { sessionId: string;
   riskScore: number;
   deviceFingerprint: string;
   ipAddress: string;
   geolocation: SessionGeolocation;
   userAgent: string;
-  riskFactors: SessionRiskFactor;
-}
-}
-}
-export interface SessionGeolocation {
-  country: string;
+  riskFactors: SessionRiskFactor }
+
+
+
+export interface SessionGeolocation { country: string;
   region: string;
   city: string;
   latitude: number;
@@ -472,67 +445,64 @@ export interface SessionGeolocation {
   timezone: string;
   isp: string;
   vpnDetected: boolean;
-  proxyDetected: boolean;
-}
-}
-}
-export interface SessionRiskFactor {
-  factor: 'new_device' | 'new_location' | 'vpn_proxy' | 'tor_usage' | 'suspicious_timing';
+  proxyDetected: boolean }
+
+
+
+export interface SessionRiskFactor { factor: 'new_device' | 'new_location' | 'vpn_proxy' | 'tor_usage' | 'suspicious_timing' }
   detected: boolean;
   score: number;
   evidence: string;
-}
-}
-}
-export interface AccountRecommendation {
-  action: 'allow' | 'verify' | 'restrict' | 'suspend' | 'review';
+
+
+
+
+export interface AccountRecommendation { action: 'allow' | 'verify' | 'restrict' | 'suspend' | 'review';
   priority: 'low' | 'medium' | 'high' | 'urgent';
   verificationRequired: VerificationLevel;
   restrictions: string;
-  monitoringLevel: 'standard' | 'enhanced' | 'intensive';
+  monitoringLevel: 'standard' | 'enhanced' | 'intensive' }
   reviewRequired: boolean;
   // =============================================================================
   // Network and Ring Fraud Detection
   // =============================================================================
-}
-}
-}
-export interface FraudNetworkAnalysis {
-  networkId: string;
+
+
+
+
+export interface FraudNetworkAnalysis { networkId: string;
   riskScore: number;
   networkType: NetworkType;
   nodes: NetworkNode;
   connections: NetworkConnection;
   suspiciousPatterns: NetworkPattern;
   recommendation: NetworkRecommendation;
-  analysisTimestamp: Date;
-}
-}
+  analysisTimestamp: Date }
+
 export type NetworkType = 'fraud_ring' | 'bot_network' | 'affiliate_fraud' | 'collusion_ring' | 'account_farming';
 
-}
-export interface NetworkNode {
-  nodeId: string;
+
+export interface NetworkNode { nodeId: string;
   nodeType: 'user' | 'device' | 'ip' | 'payment_method' | 'address';
   riskScore: number;
   connections: number;
-  centrality: number; // importance in network,
+  centrality: number; // importance in network }
   joinedAt: Date;
   attributes: Record<string, any>;
-}
-}
-}
-export interface NetworkConnection {
-  sourceId: string;
+
+
+
+
+export interface NetworkConnection { sourceId: string;
   targetId: string;
   connectionType: ConnectionType;
-  strength: number; // 0-1,
+  strength: number; // 0-1 }
   confidence: number;
   evidence: string;
   firstSeen: Date;
   lastSeen: Date;
-}
-}
+
+
 export type ConnectionType = 
   | 'shared_device'
   | 'shared_ip'
@@ -542,15 +512,13 @@ export type ConnectionType =
   | 'behavioral_similarity'
   | 'temporal_correlation';
 
-}
-export interface NetworkPattern {
-  pattern: NetworkPatternType;
+
+export interface NetworkPattern { pattern: NetworkPatternType;
   confidence: number;
   affectedNodes: string;
   evidence: string;
-  riskLevel: FraudRiskLevel;
-}
-}
+  riskLevel: FraudRiskLevel }
+
 export type NetworkPatternType = 
   | 'circular_transactions'
   | 'burst_registrations'
@@ -559,9 +527,8 @@ export type NetworkPatternType =
   | 'velocity_pumping'
   | 'review_manipulation';
 
-}
-export interface NetworkRecommendation {
-  action: 'monitor' | 'investigate' | 'flag' | 'block_network';
+
+export interface NetworkRecommendation { action: 'monitor' | 'investigate' | 'flag' | 'block_network' }
   priority: 'low' | 'medium' | 'high' | 'critical';
   affectedAccounts: string;
   suggestedActions: string;
@@ -569,11 +536,11 @@ export interface NetworkRecommendation {
   // =============================================================================
   // Fraud Rules Engine
   // =============================================================================
-}
-}
-}
-export interface FraudRule {
-  ruleId: string;
+
+
+
+
+export interface FraudRule { ruleId: string;
   name: string;
   description: string;
   category: FraudRuleCategory;
@@ -582,9 +549,8 @@ export interface FraudRule {
   conditions: RuleCondition;
   actions: RuleAction;
   thresholds: RuleThreshold;
-  metadata: RuleMetadata;
-}
-}
+  metadata: RuleMetadata }
+
 export type FraudRuleCategory = 
   | 'payment_fraud'
   | 'account_fraud'
@@ -593,15 +559,14 @@ export type FraudRuleCategory =
   | 'content_fraud'
   | 'network_fraud';
 
-}
-export interface RuleCondition {
-  field: string;
+
+export interface RuleCondition { field: string;
   operator: RuleOperator;
   value: any;
-  weight: number; // 0-1,
+  weight: number; // 0-1 }
   required: boolean;
-}
-}
+
+
 export type RuleOperator = 
   | 'equals'
   | 'not_equals'
@@ -615,23 +580,22 @@ export type RuleOperator =
   | 'exists'
   | 'not_exists';
 
-}
-export interface RuleAction {
-  action: FraudAction;
+
+export interface RuleAction { action: FraudAction;
   parameters: Record<string, any>;
   automated: boolean;
-  priority: number;
-}
-}
-}
-export interface RuleThreshold {
-  metric: string;
+  priority: number }
+
+
+
+export interface RuleThreshold { metric: string;
   value: number;
-  timeWindow?: number; // minutes,
+  timeWindow?: number; // minutes }
   action: FraudAction;
-}
-}
-}
+
+
+
+
 export interface RuleMetadata {
   createdBy: string;
   createdAt: Date;
@@ -645,11 +609,11 @@ export interface RuleMetadata {
   // =============================================================================
   // Machine Learning Models
   // =============================================================================
-}
-}
-}
-export interface FraudMLModel {
-  modelId: string;
+
+
+
+
+export interface FraudMLModel { modelId: string;
   name: string;
   type: MLModelType;
   version: string;
@@ -657,9 +621,8 @@ export interface FraudMLModel {
   performance: ModelPerformance;
   features: ModelFeature;
   training: TrainingInfo;
-  deployment: DeploymentInfo;
-}
-}
+  deployment: DeploymentInfo }
+
 export type MLModelType = 
   | 'supervised_classification'
   | 'unsupervised_clustering'
@@ -670,59 +633,58 @@ export type MLModelType =
 
 export type MLModelStatus = 'training' | 'validating' | 'deployed' | 'deprecated' | 'failed';
 
-}
-export interface ModelPerformance {
-  accuracy: number;
+
+export interface ModelPerformance { accuracy: number;
   precision: number;
   recall: number;
   f1Score: number;
   auc: number;
   falsePositiveRate: number;
   falseNegativeRate: number;
-  lastEvaluated: Date;
-}
-}
-}
-export interface ModelFeature {
-  name: string;
+  lastEvaluated: Date }
+
+
+
+export interface ModelFeature { name: string;
   type: 'numerical' | 'categorical' | 'boolean' | 'text';
-  importance: number; // 0-1,
+  importance: number; // 0-1 }
   description: string;
   source: string;
-}
-}
-}
-export interface TrainingInfo {
-  datasetSize: number;
+
+
+
+
+export interface TrainingInfo { datasetSize: number;
   trainingPeriod: DateRange;
   algorithm: string;
   hyperparameters: Record<string, any>;
   trainedAt: Date;
-  trainingDuration: number; // minutes,
-}
-}
-}
-export interface DeploymentInfo {
-  deployedAt: Date;
+  trainingDuration: number; // minutes }
+
+
+
+
+export interface DeploymentInfo { deployedAt: Date;
   deployedBy: string;
   environment: 'development' | 'staging' | 'production';
-  rolloutPercentage: number; // 0-100,
+  rolloutPercentage: number; // 0-100 }
   performanceThreshold: number;
   autoRollback: boolean;
-}
-}
-}
+
+
+
+
 export interface DateRange {
   startDate: Date;
   endDate: Date;
   // =============================================================================
   // Fraud Analytics and Reporting
   // =============================================================================
-}
-}
-}
-export interface FraudAnalytics {
-  period: AnalyticsPeriod;
+
+
+
+
+export interface FraudAnalytics { period: AnalyticsPeriod;
   generatedAt: Date;
   // Overall fraud metrics
   overallMetrics: FraudOverallMetrics;
@@ -736,21 +698,19 @@ export interface FraudAnalytics {
   financialImpact: FinancialImpact;
   // Insights and recommendations
   insights: FraudInsight;
-  recommendations: FraudAnalyticsRecommendation;
-}
-}
-}
-export interface AnalyticsPeriod {
-  startDate: Date;
+  recommendations: FraudAnalyticsRecommendation }
+
+
+
+export interface AnalyticsPeriod { startDate: Date;
   endDate: Date;
-  timeRange: TimeRange;
-}
-}
-}
-export interface FraudOverallMetrics {
-  totalTransactions: number;
+  timeRange: TimeRange }
+
+
+
+export interface FraudOverallMetrics { totalTransactions: number;
   fraudulentTransactions: number;
-  fraudRate: number; // percentage,
+  fraudRate: number; // percentage }
   blockedTransactions: number;
   reviewedTransactions: number;
   averageFraudScore: number;
@@ -764,46 +724,44 @@ export interface FraudOverallMetrics {
   precision: number;
   recall: number;
   f1Score: number;
-}
-}
-}
-export interface DetectionMetrics {
-  byMethod: DetectionMethodMetrics;
+
+
+
+
+export interface DetectionMetrics { byMethod: DetectionMethodMetrics;
   byRiskLevel: RiskLevelMetrics;
   responseTime: ResponseTimeMetrics;
-  automationRate: number; // percentage of automated decisions,
-}
-}
-}
-export interface DetectionMethodMetrics {
-  method: FraudDetectionTechnique;
+  automationRate: number; // percentage of automated decisions }
+
+
+
+
+export interface DetectionMethodMetrics { method: FraudDetectionTechnique;
   detectionCount: number;
   accuracy: number;
   falsePositiveRate: number;
   averageConfidence: number;
-  averageProcessingTime: number;
-}
-}
-}
-export interface RiskLevelMetrics {
-  riskLevel: FraudRiskLevel;
+  averageProcessingTime: number }
+
+
+
+export interface RiskLevelMetrics { riskLevel: FraudRiskLevel;
   count: number;
   percentage: number;
   actionTaken: string;
-  accuracy: number;
-}
-}
-}
-export interface ResponseTimeMetrics {
-  averageResponseTime: number; // milliseconds,
+  accuracy: number }
+
+
+
+export interface ResponseTimeMetrics { averageResponseTime: number; // milliseconds }
   percentile95: number;
   percentile99: number;
   slowestRequests: number;
-}
-}
-}
-export interface FraudTrends {
-  fraudRateTrend: 'increasing' | 'stable' | 'decreasing';
+
+
+
+
+export interface FraudTrends { fraudRateTrend: 'increasing' | 'stable' | 'decreasing' }
   volumeTrend: 'increasing' | 'stable' | 'decreasing';
   // Time series data
   dailyFraudRates: number;
@@ -812,91 +770,89 @@ export interface FraudTrends {
   seasonalPatterns: SeasonalFraudPattern;
   // Emerging patterns
   emergingThreats: EmergingThreat;
-}
-}
-}
-export interface SeasonalFraudPattern {
-  period: 'hourly' | 'daily' | 'weekly' | 'monthly';
+
+
+
+
+export interface SeasonalFraudPattern { period: 'hourly' | 'daily' | 'weekly' | 'monthly' }
   pattern: number;
   confidence: number;
   description: string;
-}
-}
-}
-export interface EmergingThreat {
-  threatId: string;
+
+
+
+
+export interface EmergingThreat { threatId: string;
   type: string;
   description: string;
   confidence: number;
   affectedTransactions: number;
   firstDetected: Date;
-  severity: ActionSeverity;
-}
-}
-}
-export interface FalsePositiveAnalysis {
-  overallRate: number;
+  severity: ActionSeverity }
+
+
+
+export interface FalsePositiveAnalysis { overallRate: number;
   byCategory: CategoryFalsePositive;
-  costImpact: number; // lost revenue from false positives,
+  costImpact: number; // lost revenue from false positives }
   trends: FalsePositiveTrend;
   improvementOpportunities: string;
-}
-}
-}
-export interface CategoryFalsePositive {
-  category: string;
+
+
+
+
+export interface CategoryFalsePositive { category: string;
   count: number;
   rate: number;
   costImpact: number;
-  topReasons: string;
-}
-}
-}
-export interface FalsePositiveTrend {
-  date: Date;
+  topReasons: string }
+
+
+
+export interface FalsePositiveTrend { date: Date;
   rate: number;
-  volume: number;
-}
-}
-}
-export interface FinancialImpact {
-  fraudPrevented: number; // total amount saved,
-  falsePositiveCost: number; // revenue lost to false positives,
-  operationalCost: number; // cost of fraud operations,
-  netBenefit: number; // fraudPrevented - falsePositiveCost - operationalCost,
-  roi: number; // return on investment,
+  volume: number }
+
+
+
+export interface FinancialImpact { fraudPrevented: number; // total amount saved;
+  falsePositiveCost: number; // revenue lost to false positives;
+  operationalCost: number; // cost of fraud operations;
+  netBenefit: number; // fraudPrevented - falsePositiveCost - operationalCost;
+  roi: number; // return on investment }
   // Breakdown by type
   paymentFraudPrevented: number;
   accountFraudPrevented: number;
   networkFraudPrevented: number;
-}
-}
-}
-export interface FraudInsight {
-  insightId: string;
+
+
+
+
+export interface FraudInsight { insightId: string;
   type: 'trend' | 'anomaly' | 'pattern' | 'performance' | 'opportunity';
   title: string;
   description: string;
-  impact: 'low' | 'medium' | 'high' | 'critical';
+  impact: 'low' | 'medium' | 'high' | 'critical' }
   confidence: number;
   actionable: boolean;
   relatedData: any;
   generatedAt: Date;
-}
-}
-}
-export interface FraudAnalyticsRecommendation {
-  recommendationId: string;
+
+
+
+
+export interface FraudAnalyticsRecommendation { recommendationId: string;
   category: 'model_tuning' | 'rule_adjustment' | 'process_improvement' | 'investigation';
   priority: 'low' | 'medium' | 'high' | 'critical';
   title: string;
   description: string;
   expectedImpact: string;
-  implementation: {
-  effort: 'low' | 'medium' | 'high';
+  implementation: {;
+  effort: 'low' | 'medium' | 'high' }
   timeline: string;
   resources: string;
-}
+
+
 };
   successMetrics: string;
   generatedAt: Date;
@@ -904,10 +860,9 @@ export interface FraudAnalyticsRecommendation {
 // =============================================================================
 // Fraud Configuration and Settings
 // =============================================================================
-}
-}
-export interface FraudMonitoringConfig {
-  enabled: boolean;
+
+
+export interface FraudMonitoringConfig { enabled: boolean;
   realTimeMonitoring: boolean;
   mlModelsEnabled: boolean;
   rulesEngineEnabled: boolean;
@@ -920,112 +875,108 @@ export interface FraudMonitoringConfig {
   // Performance settings
   performance: PerformanceConfig;
   // Notification settings
-  notifications: NotificationConfig;
-}
-}
-}
-export interface FraudThresholds {
-  lowRisk: number; // 0-25,
-  mediumRisk: number; // 26-50,
-  highRisk: number; // 51-75,
-  veryHighRisk: number; // 76-90,
-  criticalRisk: number; // 91-100,
+  notifications: NotificationConfig }
+
+
+
+export interface FraudThresholds { lowRisk: number; // 0-25;
+  mediumRisk: number; // 26-50;
+  highRisk: number; // 51-75;
+  veryHighRisk: number; // 76-90;
+  criticalRisk: number; // 91-100 }
   // Auto-action thresholds
   autoApprove: number;
   autoChallenge: number;
   autoReview: number;
   autoBlock: number;
-}
-}
-}
-export interface FraudResponseConfig {
-  autoActions: boolean;
+
+
+
+
+export interface FraudResponseConfig { autoActions: boolean;
   challengeEnabled: boolean;
   reviewQueueEnabled: boolean;
   // Escalation settings
   escalationThresholds: EscalationThreshold;
   // Appeal settings
   appealEnabled: boolean;
-  appealWindow: number; // hours,
-}
-}
-}
-export interface EscalationThreshold {
-  condition: string;
+  appealWindow: number; // hours }
+
+
+
+
+export interface EscalationThreshold { condition: string;
   action: string;
-  delay: number; // minutes,
+  delay: number; // minutes }
   requiredRole: string;
-}
-}
-}
-export interface ExternalIntegrations {
-  fraudServices: FraudServiceIntegration;
+
+
+
+
+export interface ExternalIntegrations { fraudServices: FraudServiceIntegration;
   identityVerification: IdentityServiceIntegration;
-  paymentIntelligence: PaymentIntelligenceIntegration;
-}
-}
-}
-export interface FraudServiceIntegration {
-  service: 'sift' | 'forter' | 'kount' | 'signifyd' | 'custom';
+  paymentIntelligence: PaymentIntelligenceIntegration }
+
+
+
+export interface FraudServiceIntegration { service: 'sift' | 'forter' | 'kount' | 'signifyd' | 'custom';
   enabled: boolean;
   apiKey?: string;
   endpoint?: string;
-  confidence: number; // 0-100,
-  weight: number; // 0-1 in ensemble,
-}
-}
-}
-export interface IdentityServiceIntegration {
-  service: 'jumio' | 'onfido' | 'trulioo' | 'idology' | 'custom';
+  confidence: number; // 0-100;
+  weight: number; // 0-1 in ensemble }
+
+
+
+
+export interface IdentityServiceIntegration { service: 'jumio' | 'onfido' | 'trulioo' | 'idology' | 'custom' }
   enabled: boolean;
   apiKey?: string;
   endpoint?: string;
   verificationLevel: VerificationLevel;
-}
-}
-}
-export interface PaymentIntelligenceIntegration {
-  service: 'stripe_radar' | 'paypal_risk' | 'adyen_riskmanagement' | 'custom';
+
+
+
+
+export interface PaymentIntelligenceIntegration { service: 'stripe_radar' | 'paypal_risk' | 'adyen_riskmanagement' | 'custom';
   enabled: boolean;
   apiKey?: string;
   endpoint?: string;
-  riskScoreWeight: number; // 0-1,
-}
-}
-}
-export interface PerformanceConfig {
-  maxProcessingTime: number; // milliseconds,
+  riskScoreWeight: number; // 0-1 }
+
+
+
+
+export interface PerformanceConfig { maxProcessingTime: number; // milliseconds;
   cacheEnabled: boolean;
-  cacheTtl: number; // seconds,
+  cacheTtl: number; // seconds }
   batchProcessing: boolean;
   maxBatchSize: number;
   parallelProcessing: boolean;
   maxConcurrency: number;
-}
-}
-}
-export interface NotificationConfig {
-  realTimeAlerts: boolean;
+
+
+
+
+export interface NotificationConfig { realTimeAlerts: boolean;
   emailNotifications: boolean;
   slackIntegration?: SlackConfig;
   webhookEndpoints: WebhookConfig;
-  escalationNotifications: boolean;
-}
-}
-}
-export interface SlackConfig {
-  webhookUrl: string;
+  escalationNotifications: boolean }
+
+
+
+export interface SlackConfig { webhookUrl: string;
   channel: string;
   username: string;
-  alertLevels: FraudRiskLevel;
-}
-}
-}
-export interface WebhookConfig {
-  url: string;
+  alertLevels: FraudRiskLevel }
+
+
+
+export interface WebhookConfig { url: string;
   events: string;
   headers?: Record<string, string>;
   retryAttempts: number;
-  timeout: number; // seconds,
-}
-}
+  timeout: number; // seconds }
+
+

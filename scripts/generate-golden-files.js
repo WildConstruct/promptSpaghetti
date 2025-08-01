@@ -22,7 +22,7 @@ const GOLDEN_FILES_DIR = join(__dirname, '../tests/regression/core-engine/golden
 if (!existsSync(GOLDEN_FILES_DIR)) {
   mkdirSync(GOLDEN_FILES_DIR, { recursive: true });
   console.log(`Created golden files directory: ${GOLDEN_FILES_DIR}`);
-}
+
 
 async function main(): Promise<void> {
   console.log('🔄 Generating golden files for regression tests...');
@@ -34,7 +34,7 @@ async function main(): Promise<void> {
     
     if (typeof generateGoldenFiles !== 'function') {
       throw new Error('generateGoldenFiles function not found. Make sure the test file exports it.');
-    }
+
 
     await generateGoldenFiles();
     
@@ -49,8 +49,7 @@ async function main(): Promise<void> {
     console.log('  2. Commit the golden files to version control');
     console.log('  3. Run regression tests with: npm run test:regression');
     console.log('');
-    
-  } catch (error) {
+ catch (error) {
     console.error('❌ Failed to generate golden files:');
     console.error(error.message);
     console.error('');
@@ -59,8 +58,8 @@ async function main(): Promise<void> {
     console.error('  - Ensure the database is initialized');
     console.error('  - Check that all required modules are built');
     process.exit(1);
-  }
-}
+
+
 
 // Handle CLI usage
 if (require.main === module) {
@@ -68,6 +67,6 @@ if (require.main === module) {
     console.error('Unhandled error:', error);
     process.exit(1);
   });
-}
+
 
 module.exports = { main };

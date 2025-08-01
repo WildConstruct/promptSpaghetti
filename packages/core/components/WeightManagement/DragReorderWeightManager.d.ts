@@ -8,18 +8,16 @@
 import React from 'react';
 
 }
-export interface WeightedOption {
-    id: string;
+}
+export interface WeightedOption { id: string;
     text: string;
     weight: number;
     locked?: boolean;
     color?: string;
-    category?: string;
-
-
+    category?: string }
 }
-export interface DragReorderProps {
-    options: WeightedOption[];
+}
+export interface DragReorderProps { options: WeightedOption[];
     onChange: (options: WeightedOption[]) => void;
     disabled?: boolean;
     showWeights?: boolean;
@@ -39,9 +37,8 @@ export interface DragReorderProps {
     enableCategories?: boolean;
     enableBulkOperations?: boolean;
     enablePresets?: boolean;
-    showStatistics?: boolean;
-
-
+    showStatistics?: boolean }
+}
 }
 export interface WeightStatistics {
     totalWeight: number;
@@ -56,4 +53,5 @@ export interface WeightStatistics {
 export declare const DragReorderWeightManager: React.FC<DragReorderProps>;
 export default DragReorderWeightManager;
 //# sourceMappingURL=DragReorderWeightManager.d.ts.map
+}
 }

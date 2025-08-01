@@ -13,8 +13,8 @@
  */
 
 }
-export interface ConversionEvent {
-    id: string;
+}
+export interface ConversionEvent { id: string;
     userId: string;
     sessionId: string;
     timestamp: number;
@@ -26,7 +26,7 @@ export interface ConversionEvent {
         userAgent: string;
         referrer: string;
         campaignSource?: string;
-        experimentGroup?: string;
+        experimentGroup?: string }
 }
     };
 
@@ -34,52 +34,45 @@ export type ConversionEventType = 'user_signup' | 'email_verified' | 'profile_co
 export type ConversionCategory = 'acquisition' | 'activation' | 'retention' | 'revenue' | 'referral';
 
 }
-export interface ConversionFunnel {
-    id: string;
+}
+export interface ConversionFunnel { id: string;
     name: string;
     description: string;
     steps: ConversionStep[];
     timeWindow: number;
-    category: ConversionCategory;
-
+    category: ConversionCategory }
 }
-export interface ConversionStep {
-    id: string;
+}
+export interface ConversionStep { id: string;
     name: string;
     eventType: ConversionEventType;
     required: boolean;
     conditions?: Record<string, any>;
-    timeout?: number;
-
+    timeout?: number }
 }
-export interface ConversionMetrics {
-    funnel: string;
+}
+export interface ConversionMetrics { funnel: string;
     period: {
         start: number;
-        end: number;
+        end: number }
 }
     };
-    metrics: {
-        totalUsers: number;
+    metrics: { totalUsers: number;
         conversions: number;
         conversionRate: number;
         averageTimeToConvert: number;
         dropoffPoints: {
             step: string;
             dropoffRate: number;
-            users: number;
-        }[];
+            users: number }[];
     };
-    segmentBreakdown: {
-        [segment: string]: {
+    segmentBreakdown: { [segment: string]: {
             users: number;
             conversions: number;
-            rate: number;
-        };
+            rate: number };
     };
 
-export declare class ConversionTracker {
-    private events;
+export declare class ConversionTracker { private events;
     private funnels;
     private userSessions;
     private eventListeners;
@@ -101,17 +94,17 @@ export declare class ConversionTracker {
      * Track user engagement events
      */
     trackEngagement();
-      engagementType: 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation',
-      details?: Record<string,
+      engagementType: 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation'
+      details?: Record<string
       any>
     ): void;
     /**
      * Track business conversion events
      */
     trackBusinessEvent();
-      eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_cancelled',
-      value: number,
-      metadata?: Record<string,
+      eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_cancelled'
+      value: number
+      metadata?: Record<string }
       any>
     ): void;
     /**
@@ -121,19 +114,15 @@ export declare class ConversionTracker {
     /**
      * Get real-time conversion dashboard data
      */
-    getDashboardData(): {
-        realTimeMetrics: {
+    getDashboardData(): { realTimeMetrics: {
             activeUsers: number;
             conversionsLast24h: number;
             topConvertingFunnel: string;
-            averageSessionDuration: number;
-        };
-        funnelPerformance: {
-            [funnelId: string]: {
+            averageSessionDuration: number };
+        funnelPerformance: { [funnelId: string]: {
                 conversionRate: number;
                 trend: 'up' | 'down' | 'stable';
-                completions24h: number;
-            };
+                completions24h: number };
         };
         recentEvents: ConversionEvent[];
     };
@@ -141,10 +130,10 @@ export declare class ConversionTracker {
      * A/B testing integration
      */
     trackExperimentConversion();
-      experimentId: string,
-      variantId: string,
-      eventType: ConversionEventType,
-      properties?: Record<string,
+      experimentId: string
+      variantId: string
+      eventType: ConversionEventType
+      properties?: Record<string
       any>
     ): void;
     /**

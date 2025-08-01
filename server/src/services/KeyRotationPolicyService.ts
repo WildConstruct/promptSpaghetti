@@ -9,8 +9,8 @@ import { KeyManagementService } from './KeyManagementService';
 import { EventEmitter } from 'events';
 import * as cron from 'node-cron';
 
-}
-}
+
+
 export interface KeyRotationPolicyConfig {
   // Rotation scheduling
   enableAutomaticRotation: boolean;
@@ -34,12 +34,13 @@ export interface KeyRotationPolicyConfig {
   auditAllRotations: boolean;
   retainPolicyHistory: boolean;
   complianceReportingEnabled: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationPolicy {
   id: string;
   policyName: string;
@@ -81,12 +82,13 @@ export interface RotationPolicy {
   createdBy: string;
   isActive: boolean;
   priority: number; // Higher number = higher priority
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RotationSchedule {
   id: string;
   policyId: string;
@@ -98,8 +100,9 @@ export interface RotationSchedule {
   rotationWindow: {
     startTime: Date;
     endTime: Date;
-}
-}
+
+
+
   };
   
   // Status
@@ -127,10 +130,10 @@ export interface RotationSchedule {
   createdAt: Date;
   updatedAt: Date;
   notifications: RotationNotification[];
-}
 
-}
-}
+
+
+
 export interface RotationNotification {
   id: string;
   type: 'reminder' | 'approval_request' | 'emergency' | 'completion' | 'failure';
@@ -138,12 +141,13 @@ export interface RotationNotification {
   sentAt: Date;
   acknowledged?: boolean;
   acknowledgedAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PolicyEvaluation {
   policyId: string;
   keyId: string;
@@ -155,13 +159,14 @@ export interface PolicyEvaluation {
     affectedSystems: string[];
     downtime: number;
     riskLevel: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface RotationMetrics {
   totalRotations: number;
   successfulRotations: number;
@@ -171,9 +176,10 @@ export interface RotationMetrics {
   upcomingRotations: number;
   overdueRotations: number;
   emergencyRotations: number;
-}
-}
-}
+
+
+
+
 
 export class KeyRotationPolicyService extends EventEmitter {
   private db: DatabaseService;
@@ -200,7 +206,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     // Start background processes
     this.startRotationChecker();
     this.startNotificationProcessor();
-  }
+
 
   async createPolicy(policy: Omit<RotationPolicy, 'id' | 'createdAt' | 'updatedAt'>): Promise<RotationPolicy> {
 
@@ -282,7 +288,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       // Set up cron job if scheduled
       if (policy.rotationSchedule && policy.autoRotationEnabled) {
         this.setupCronJob(newPolicy);
-      }
+
       
       // Log policy creation
       await this.logPolicyEvent(policyId, 'policy_created', {
@@ -295,11 +301,11 @@ export class KeyRotationPolicyService extends EventEmitter {
       this.emit('policy_created', newPolicy);
       
       return newPolicy;
-    } catch (error) {
+ catch (error) {
       console.error('Error creating rotation policy:', error);
       throw new Error('Failed to create rotation policy');
-    }
-  }
+
+
 
   async evaluateKey(keyId: string): Promise<PolicyEvaluation[]> {
 
@@ -308,7 +314,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       const key = await this.keyManagementService.getMasterKey(keyId);
       if (!key) {
         throw new Error('Key not found');
-      }
+
       
       // Get applicable policies
       const policies = await this.getApplicablePolicies(key);
@@ -319,8 +325,8 @@ export class KeyRotationPolicyService extends EventEmitter {
         const evaluation = await this.evaluateKeyAgainstPolicy(key, policy);
         if (evaluation) {
           evaluations.push(evaluation);
-        }
-      }
+
+
       
       // Sort by urgency
       evaluations.sort((a, b) => {
@@ -329,11 +335,11 @@ export class KeyRotationPolicyService extends EventEmitter {
       });
       
       return evaluations;
-    } catch (error) {
+ catch (error) {
       console.error('Error evaluating key:', error);
       throw new Error('Failed to evaluate key');
-    }
-  }
+
+
 
   async scheduleRotation(
     keyId: string,
@@ -349,7 +355,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       const policy = await this.getPolicy(policyId);
       if (!policy) {
         throw new Error('Policy not found');
-      }
+
       
       // Calculate rotation window
       const rotationWindow = this.calculateRotationWindow(scheduledDate, policy);
@@ -399,7 +405,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       // Schedule notifications
       if (policy.notificationDaysBefore > 0) {
         await this.scheduleNotifications(schedule, policy);
-      }
+
       
       // Log scheduling
       await this.logPolicyEvent(policyId, 'rotation_scheduled', {
@@ -414,11 +420,11 @@ export class KeyRotationPolicyService extends EventEmitter {
       this.emit('rotation_scheduled', schedule);
       
       return schedule;
-    } catch (error) {
+ catch (error) {
       console.error('Error scheduling rotation:', error);
       throw new Error('Failed to schedule rotation');
-    }
-  }
+
+
 
   async executeRotation(scheduleId: string, executorId?: string): Promise<boolean> {
 
@@ -427,12 +433,12 @@ export class KeyRotationPolicyService extends EventEmitter {
       const schedule = await this.getRotationSchedule(scheduleId);
       if (!schedule) {
         throw new Error('Schedule not found');
-      }
+
       
       // Validate execution
       if (!this.canExecuteRotation(schedule)) {
         throw new Error('Rotation cannot be executed at this time');
-      }
+
       
       // Update status
       await this.updateScheduleStatus(scheduleId, 'in_progress');
@@ -446,7 +452,7 @@ export class KeyRotationPolicyService extends EventEmitter {
           scheduled: true,
           policyId: schedule.policyId,
           scheduleId
-        }
+
       };
       
       const newKey = await this.keyManagementService.rotateKey(schedule.keyId, context);
@@ -474,7 +480,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       this.emit('rotation_completed', { schedule, newKey });
       
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error executing rotation:', error);
       
       // Update schedule with failure
@@ -490,8 +496,8 @@ export class KeyRotationPolicyService extends EventEmitter {
       this.emit('rotation_failed', { scheduleId, error: error.message });
       
       return false;
-    }
-  }
+
+
 
   async approveRotation(scheduleId: string, approverId: string, notes?: string): Promise<boolean> {
 
@@ -499,15 +505,15 @@ export class KeyRotationPolicyService extends EventEmitter {
       const schedule = await this.getRotationSchedule(scheduleId);
       if (!schedule) {
         throw new Error('Schedule not found');
-      }
+
       
       if (!schedule.approvalRequired) {
         throw new Error('Approval not required for this rotation');
-      }
+
       
       if (schedule.status !== 'pending_approval') {
         throw new Error('Rotation is not pending approval');
-      }
+
       
       // Update approval status
       await this.db.query(`
@@ -528,11 +534,11 @@ export class KeyRotationPolicyService extends EventEmitter {
       this.emit('rotation_approved', { scheduleId, approverId });
       
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error approving rotation:', error);
       throw new Error('Failed to approve rotation');
-    }
-  }
+
+
 
   async getUpcomingRotations(days: number = 30): Promise<RotationSchedule[]> {
 
@@ -551,11 +557,11 @@ export class KeyRotationPolicyService extends EventEmitter {
       `, [days]);
       
       return result.rows.map(this.mapRowToSchedule);
-    } catch (error) {
+ catch (error) {
       console.error('Error getting upcoming rotations:', error);
       return [];
-    }
-  }
+
+
 
   async getRotationMetrics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<RotationMetrics> {
 
@@ -605,7 +611,7 @@ export class KeyRotationPolicyService extends EventEmitter {
         overdueRotations: parseInt(overdue.overdue_rotations || '0'),
         emergencyRotations: parseInt(stats.emergency_rotations || '0')
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting rotation metrics:', error);
       return {
         totalRotations: 0,
@@ -617,8 +623,8 @@ export class KeyRotationPolicyService extends EventEmitter {
         overdueRotations: 0,
         emergencyRotations: 0
       };
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -626,25 +632,25 @@ export class KeyRotationPolicyService extends EventEmitter {
     const timestamp = Date.now();
     const sanitized = policyName.toLowerCase().replace(/[^a-z0-9]/g, '_');
     return `policy_${sanitized}_${timestamp}`;
-  }
+
 
   private generateScheduleId(): string {
     return `schedule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private validatePolicy(policy: unknown): void {
     if (!policy.policyName || !policy.keyPurpose) {
       throw new Error('Policy name and key purpose are required');
-    }
+
     
     if (!policy.rotationIntervalDays && !policy.maxUsageCount && !policy.rotationThresholdDate) {
       throw new Error('At least one rotation trigger must be specified');
-    }
+
     
     if (policy.rotationSchedule && !cron.validate(policy.rotationSchedule)) {
       throw new Error('Invalid cron expression for rotation schedule');
-    }
-  }
+
+
 
   private async getApplicablePolicies(key: unknown): Promise<RotationPolicy[]> {
 
@@ -657,7 +663,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     `, [key.purpose, key.securityLevel]);
     
     return result.rows.map(this.mapRowToPolicy);
-  }
+
 
   private async evaluateKeyAgainstPolicy(key: unknown, policy: RotationPolicy): Promise<PolicyEvaluation | null> {
 
@@ -673,8 +679,8 @@ export class KeyRotationPolicyService extends EventEmitter {
         trigger = 'rotation_interval_exceeded';
         urgency = 'medium';
         reasoning.push(`Key is ${daysSinceCreation} days old, exceeding ${policy.rotationIntervalDays} day policy`);
-      }
-    }
+
+
     
     // Check usage count
     if (policy.maxUsageCount && key.usageCount >= policy.maxUsageCount) {
@@ -682,7 +688,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       urgency = 'high';
       recommendedAction = 'immediate';
       reasoning.push(`Key usage count ${key.usageCount} exceeds policy limit of ${policy.maxUsageCount}`);
-    }
+
     
     // Check threshold date
     if (policy.rotationThresholdDate && new Date() >= policy.rotationThresholdDate) {
@@ -690,7 +696,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       urgency = 'critical';
       recommendedAction = 'immediate';
       reasoning.push(`Rotation threshold date ${policy.rotationThresholdDate} has been reached`);
-    }
+
     
     // Check inactivity
     if (policy.inactivityDays && key.lastUsedAt) {
@@ -699,12 +705,12 @@ export class KeyRotationPolicyService extends EventEmitter {
         trigger = 'inactivity_threshold';
         urgency = 'medium';
         reasoning.push(`Key inactive for ${daysSinceLastUse} days, exceeding ${policy.inactivityDays} day threshold`);
-      }
-    }
+
+
     
     if (!trigger) {
       return null; // No rotation needed
-    }
+
     
     return {
       policyId: policy.id,
@@ -717,9 +723,9 @@ export class KeyRotationPolicyService extends EventEmitter {
         affectedSystems: [key.purpose],
         downtime: policy.overlapPeriodHours > 0 ? 0 : 5, // minutes
         riskLevel: urgency
-      }
+
     };
-  }
+
 
   private calculateRotationWindow(
     scheduledDate: Date,
@@ -729,7 +735,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     const endTime = new Date(scheduledDate.getTime() + this.config.rotationWindowHours * 60 * 60 * 1000);
     
     return { startTime, endTime };
-  }
+
 
   private async checkRotationConflicts(scheduledDate: Date, rotationWindow: unknown): Promise<void> {
 
@@ -747,26 +753,26 @@ export class KeyRotationPolicyService extends EventEmitter {
     const conflictCount = parseInt((conflicts.rows[0] as { count: string }).count);
     if (conflictCount >= this.config.maxConcurrentRotations) {
       throw new Error('Too many concurrent rotations scheduled for this time window');
-    }
-  }
+
+
 
   private estimateRotationDuration(_____keyId: string): number {
     // Base estimation: 15 minutes, can be enhanced with historical data
     return 15;
-  }
+
 
   private canExecuteRotation(schedule: RotationSchedule): boolean {
     if (schedule.status !== 'scheduled' && schedule.status !== 'approved') {
       return false;
-    }
+
     
     const now = new Date();
     if (now < schedule.rotationWindow.startTime || now > schedule.rotationWindow.endTime) {
       return false;
-    }
+
     
     return true;
-  }
+
 
   private calculateComplianceScore(stats: unknown): number {
     const total = parseInt(stats.total_rotations || '0');
@@ -774,7 +780,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     
     if (total === 0) return 100;
     return Math.round((successful / total) * 100);
-  }
+
 
   private mapRowToPolicy(row: unknown): RotationPolicy {
     return {
@@ -805,7 +811,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       isActive: row.is_active,
       priority: row.priority
     };
-  }
+
 
   private mapRowToSchedule(row: unknown): RotationSchedule {
     return {
@@ -817,7 +823,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       rotationWindow: {
         startTime: row.rotation_window_start,
         endTime: row.rotation_window_end
-  }
+
       status: row.status,
       priority: row.priority,
       executionAttempts: row.execution_attempts || 0,
@@ -834,7 +840,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       updatedAt: row.updated_at,
       notifications: []
     };
-  }
+
 
   private async getPolicy(policyId: string): Promise<RotationPolicy | null> {
 
@@ -845,7 +851,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     
     if (result.rows.length === 0) return null;
     return this.mapRowToPolicy(result.rows[0]);
-  }
+
 
   private async getRotationSchedule(scheduleId: string): Promise<RotationSchedule | null> {
 
@@ -856,7 +862,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     
     if (result.rows.length === 0) return null;
     return this.mapRowToSchedule(result.rows[0]);
-  }
+
 
   private async updateScheduleStatus(scheduleId: string, status: string, failureReason?: string): Promise<void> {
 
@@ -865,7 +871,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       SET status = $1, failure_reason = $2, updated_at = $3
       WHERE id = $4
     `, [status, failureReason, new Date(), scheduleId]);
-  }
+
 
   private setupCronJob(policy: RotationPolicy): void {
     if (!policy.rotationSchedule) return;
@@ -873,32 +879,32 @@ export class KeyRotationPolicyService extends EventEmitter {
     const task = cron.schedule(policy.rotationSchedule, async () => {
       try {
         await this.processScheduledRotations(policy);
-      } catch (error) {
+ catch (error) {
         console.error(`Error in scheduled rotation for policy ${policy.id}:`, error);
-      }
+
     }, { scheduled: false });
     
     this.scheduledJobs.set(policy.id, task);
     task.start();
-  }
+
 
   private async processScheduledRotations(policy: RotationPolicy): Promise<void> {
 
     // Implementation for processing scheduled rotations
     console.log(`Processing scheduled rotations for policy ${policy.id}`);
-  }
+
 
   private async scheduleNotifications(schedule: RotationSchedule, _____policy: RotationPolicy): Promise<void> {
 
     // Implementation for scheduling notifications
     console.log(`Scheduling notifications for rotation ${schedule.id}`);
-  }
+
 
   private async sendCompletionNotification(schedule: RotationSchedule, _____newKey: unknown): Promise<void> {
 
     // Implementation for sending completion notifications
     console.log(`Sending completion notification for rotation ${schedule.id}`);
-  }
+
 
   private async logPolicyEvent(policyId: string, eventType: string, details: unknown): Promise<void> {
 
@@ -912,13 +918,13 @@ export class KeyRotationPolicyService extends EventEmitter {
           policyId,
           eventType,
           ...details
-  }
+
         severity: eventType.includes('failed') ? 'error' : 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error logging policy event:', error);
-    }
-  }
+
+
 
   private startRotationChecker(): void {
     if (!this.config.enableAutomaticRotation) return;
@@ -926,31 +932,30 @@ export class KeyRotationPolicyService extends EventEmitter {
     setInterval(async () => {
       try {
         await this.checkAndExecuteRotations();
-      } catch (error) {
+ catch (error) {
         console.error('Error in rotation checker:', error);
-      }
+
     }, this.config.checkIntervalMinutes * 60 * 1000);
-  }
+
 
   private startNotificationProcessor(): void {
     setInterval(async () => {
       try {
         await this.processNotifications();
-      } catch (error) {
+ catch (error) {
         console.error('Error in notification processor:', error);
-      }
+
     }, 60 * 1000); // Check every minute
-  }
+
 
   private async checkAndExecuteRotations(): Promise<void> {
 
     // Implementation for checking and executing rotations
     console.log('Checking for rotations to execute...');
-  }
+
 
   private async processNotifications(): Promise<void> {
 
     // Implementation for processing notifications
     console.log('Processing rotation notifications...');
-  }
-}
+
